@@ -68,6 +68,7 @@
 #include <ndindex.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 
 #include <wrtsh.hxx>
 #include <view.hxx>
@@ -1996,7 +1997,7 @@ bool SwFlyFrame::IsShowUnfloatButton(SwWrtShell* pWrtSh) const
         if (pLower->IsTextFrame())
         {
             const SwTextFrame* pTextFrame = static_cast<const SwTextFrame*>(pLower);
-            if (!pTextFrame->GetText().trim().isEmpty())
+            if (!o3tl::trim(pTextFrame->GetText()).empty())
                 return false;
         }
         pLower = pLower->GetNext();

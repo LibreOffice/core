@@ -29,6 +29,7 @@
 #include <iostream>
 #include <osl/file.hxx>
 #include <osl/process.h>
+#include <o3tl/string_view.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 #include <unicode/regex.h>
@@ -1060,7 +1061,7 @@ bool lcl_isTag( const icu::UnicodeString& rString )
 
 OString XMLUtil::QuotHTML( const OString &rString )
 {
-    if( rString.trim().isEmpty() )
+    if( o3tl::trim(rString).empty() )
         return rString;
     UErrorCode nIcuErr = U_ZERO_ERROR;
     static const sal_uInt32 nSearchFlags =

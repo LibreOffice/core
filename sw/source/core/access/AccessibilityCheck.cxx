@@ -36,6 +36,7 @@
 #include <txtftn.hxx>
 #include <txtfrm.hxx>
 #include <svl/itemiter.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/vector_utils.hxx>
 #include <svx/swframetypes.hxx>
 #include <fmtanchr.hxx>
@@ -1253,7 +1254,7 @@ public:
         const uno::Reference<document::XDocumentProperties> xDocumentProperties(
             xDPS->getDocumentProperties());
         OUString sTitle = xDocumentProperties->getTitle();
-        if (sTitle.trim().isEmpty())
+        if (o3tl::trim(sTitle).empty())
         {
             lclAddIssue(m_rIssueCollection, SwResId(STR_DOCUMENT_TITLE),
                         sfx::AccessibilityIssueID::DOCUMENT_TITLE);

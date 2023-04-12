@@ -442,7 +442,7 @@ namespace dbaui
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
 
         // to get the correct value when saveValue was called by base class
-        if ( m_bUseClass && m_xEDDriverClass->get_text().trim().isEmpty() )
+        if ( m_bUseClass && o3tl::trim(m_xEDDriverClass->get_text()).empty() )
         {
             m_xEDDriverClass->set_text(m_sDefaultJdbcDriverName);
             m_xEDDriverClass->save_value();
@@ -457,7 +457,7 @@ namespace dbaui
 #if HAVE_FEATURE_JAVA
         try
         {
-            if (!m_xEDDriverClass->get_text().trim().isEmpty())
+            if (!o3tl::trim(m_xEDDriverClass->get_text()).empty())
             {
 // TODO change jvmaccess
                 ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM( m_pAdminDialog->getORB() );
@@ -478,7 +478,7 @@ namespace dbaui
     void OGeneralSpecialJDBCDetailsPage::callModifiedHdl(weld::Widget* pControl)
     {
         if (m_bUseClass && pControl == m_xEDDriverClass.get())
-            m_xTestJavaDriver->set_sensitive(!m_xEDDriverClass->get_text().trim().isEmpty());
+            m_xTestJavaDriver->set_sensitive(!o3tl::trim(m_xEDDriverClass->get_text()).empty());
 
         // tell the listener we were modified
         OGenericAdministrationPage::callModifiedHdl();

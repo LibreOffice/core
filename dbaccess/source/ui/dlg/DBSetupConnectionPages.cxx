@@ -448,7 +448,7 @@ using namespace ::com::sun::star;
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
 
         // to get the correct value when saveValue was called by base class
-        if ( m_xETDriverClass->get_text().trim().isEmpty() )
+        if ( o3tl::trim(m_xETDriverClass->get_text()).empty() )
         {
             m_xETDriverClass->set_text(m_sDefaultJdbcDriverName);
             m_xETDriverClass->save_value();
@@ -467,7 +467,7 @@ using namespace ::com::sun::star;
 #if HAVE_FEATURE_JAVA
         try
         {
-            if ( !m_xETDriverClass->get_text().trim().isEmpty() )
+            if ( !o3tl::trim(m_xETDriverClass->get_text()).empty() )
             {
 // TODO change jvmaccess
                 ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM( m_pAdminDialog->getORB() );
@@ -488,8 +488,8 @@ using namespace ::com::sun::star;
     void OGeneralSpecialJDBCConnectionPageSetup::callModifiedHdl(weld::Widget* pControl)
     {
         if (pControl == m_xETDriverClass.get())
-            m_xPBTestJavaDriver->set_sensitive( !m_xETDriverClass->get_text().trim().isEmpty() );
-        bool bRoadmapState = ((!m_xETDatabasename->get_text().isEmpty() ) && ( !m_xETHostname->get_text().isEmpty() ) && (!m_xNFPortNumber->get_text().isEmpty() ) && ( !m_xETDriverClass->get_text().trim().isEmpty() ));
+            m_xPBTestJavaDriver->set_sensitive( !o3tl::trim(m_xETDriverClass->get_text()).empty() );
+        bool bRoadmapState = ((!m_xETDatabasename->get_text().isEmpty() ) && ( !m_xETHostname->get_text().isEmpty() ) && (!m_xNFPortNumber->get_text().isEmpty() ) && ( !o3tl::trim(m_xETDriverClass->get_text()).empty() ));
         SetRoadmapStateValue(bRoadmapState);
         OGenericAdministrationPage::callModifiedHdl();
     }

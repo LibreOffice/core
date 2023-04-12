@@ -1146,7 +1146,7 @@ void Test::testUnderlineCopyPaste()
     aEditEngine.InsertText( xData, OUString(), rDoc.GetEndPaM(), true );
 
     // Assert changes
-    CPPUNIT_ASSERT_EQUAL( aTextLen + (OUString("textforunder")).getLength(), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(aTextLen + strlen("textforunder")), rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( OUString(aParaText + "textforunder" ), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Check updated text for appropriate Underline

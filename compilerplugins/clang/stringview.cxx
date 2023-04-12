@@ -43,16 +43,9 @@ public:
     bool preRun() override
     {
         auto const fn = handler.getMainFileName();
-        return !(
-            loplugin::isSamePathname(fn, SRCDIR "/sal/qa/OStringBuffer/rtl_OStringBuffer.cxx")
-            || loplugin::isSamePathname(fn, SRCDIR "/sal/qa/rtl/strings/test_ostring_concat.cxx")
-            || loplugin::isSamePathname(fn, SRCDIR "/sal/qa/rtl/strings/test_oustring_concat.cxx")
-            || loplugin::isSamePathname(fn, SRCDIR "/sal/qa/rtl/oustring/rtl_OUString2.cxx")
-            || loplugin::isSamePathname(fn, SRCDIR "/sal/qa/rtl/strings/test_oustring_compare.cxx")
-            || loplugin::isSamePathname(fn,
-                                        SRCDIR "/sal/qa/rtl/strings/test_oustring_startswith.cxx")
-            || loplugin::isSamePathname(fn, SRCDIR
-                                        "/sal/qa/rtl/strings/test_strings_defaultstringview.cxx"));
+        return !(loplugin::isSamePathname(fn, SRCDIR "/sal/qa/OStringBuffer/rtl_OStringBuffer.cxx")
+                 || loplugin::hasPathnamePrefix(fn, SRCDIR "/sal/qa/rtl/strings/")
+                 || loplugin::hasPathnamePrefix(fn, SRCDIR "/sal/qa/rtl/oustring/"));
     }
 
     virtual void run() override
@@ -368,7 +361,8 @@ bool StringView::VisitCXXMemberCallExpr(CXXMemberCallExpr const* expr)
             || dc.Function("toDouble") || dc.Function("equalsAscii") || dc.Function("equalsAsciiL")
             || dc.Function("equalsIgnoreAsciiCase") || dc.Function("compareToIgnoreAsciiCase")
             || dc.Function("matchIgnoreAsciiCase") || dc.Function("trim")
-            || dc.Function("startsWith") || dc.Function("endsWith") || dc.Function("match"))
+            || dc.Function("startsWith") || dc.Function("endsWith") || dc.Function("match")
+            || dc.Function("isEmpty") || dc.Function("getLength"))
         {
             handleSubExprThatCouldBeView(expr->getImplicitObjectArgument());
         }

@@ -790,13 +790,13 @@ namespace
         OUStringBuffer aBuf;
         sal_Int32 nTextLen;
 
-        nTextLen = OUString(OUString::number(rFormatter.GetMin())).getLength();
+        nTextLen = std::u16string_view(OUString::number(rFormatter.GetMin())).size();
         string::padToLength(aBuf, nTextLen, '9');
         Size aMinTextSize = rSpinField.CalcMinimumSizeForText(
             rFormatter.CreateFieldText(OUString::unacquired(aBuf).toInt64()));
         aBuf.setLength(0);
 
-        nTextLen = OUString(OUString::number(rFormatter.GetMax())).getLength();
+        nTextLen = std::u16string_view(OUString::number(rFormatter.GetMax())).size();
         string::padToLength(aBuf, nTextLen, '9');
         Size aMaxTextSize = rSpinField.CalcMinimumSizeForText(
             rFormatter.CreateFieldText(OUString::unacquired(aBuf).toInt64()));

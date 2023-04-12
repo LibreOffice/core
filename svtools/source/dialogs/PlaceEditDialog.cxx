@@ -176,12 +176,12 @@ void PlaceEditDialog::InitDetails( )
     // Create CMIS controls for each server type
 
     // Load the ServerType entries
-    bool bSkipGDrive = OUString( GDRIVE_CLIENT_ID ).isEmpty() ||
-                       OUString( GDRIVE_CLIENT_SECRET ).isEmpty();
-    bool bSkipAlfresco = OUString( ALFRESCO_CLOUD_CLIENT_ID ).isEmpty() ||
-                       OUString( ALFRESCO_CLOUD_CLIENT_SECRET ).isEmpty();
-    bool bSkipOneDrive= OUString( ONEDRIVE_CLIENT_ID ).isEmpty() ||
-                       OUString( ONEDRIVE_CLIENT_SECRET ).isEmpty();
+    bool bSkipGDrive = std::string_view( GDRIVE_CLIENT_ID ).empty() ||
+                       std::string_view( GDRIVE_CLIENT_SECRET ).empty();
+    bool bSkipAlfresco = std::string_view( ALFRESCO_CLOUD_CLIENT_ID ).empty() ||
+                       std::string_view( ALFRESCO_CLOUD_CLIENT_SECRET ).empty();
+    bool bSkipOneDrive= std::string_view( ONEDRIVE_CLIENT_ID ).empty() ||
+                       std::string_view( ONEDRIVE_CLIENT_SECRET ).empty();
 
     Sequence< OUString > aTypesUrlsList( officecfg::Office::Common::Misc::CmisServersUrls::get() );
     Sequence< OUString > aTypesNamesList( officecfg::Office::Common::Misc::CmisServersNames::get() );

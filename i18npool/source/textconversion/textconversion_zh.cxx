@@ -232,9 +232,9 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
                             current = entry[current] + word.getLength() + 1;
                         sal_Int32 start=current;
                         if (offset.hasElements()) {
-                            if (word.getLength() != OUString(&wordData[current]).getLength())
+                            if (word.getLength() != static_cast<sal_Int32>(std::u16string_view(&wordData[current]).size()))
                                 one2one=false;
-                            sal_Int32 convertedLength=OUString(&wordData[current]).getLength();
+                            sal_Int32 convertedLength=std::u16string_view(&wordData[current]).size();
                             while (wordData[current]) {
                                 offsetRange[count]=nStartPos + currPos + ((current-start) *
                                     word.getLength() / convertedLength);

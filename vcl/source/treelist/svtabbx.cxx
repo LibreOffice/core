@@ -77,12 +77,12 @@ static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter,
                     {
                         const OUString& rCollapsed = pBmpItem->GetBitmap1().GetStock();
                         const OUString& rExpanded = pBmpItem->GetBitmap2().GetStock();
-                        if (!rCollapsed.trim().isEmpty() || !rExpanded.trim().isEmpty())
+                        if (!o3tl::trim(rCollapsed).empty() || !o3tl::trim(rExpanded).empty())
                         {
                             auto aColumn = rJsonWriter.startStruct();
-                            if (!rCollapsed.trim().isEmpty())
+                            if (!o3tl::trim(rCollapsed).empty())
                                 rJsonWriter.put("collapsed", rCollapsed);
-                            if (!rExpanded.trim().isEmpty())
+                            if (!o3tl::trim(rExpanded).empty())
                                 rJsonWriter.put("expanded", rExpanded);
                         }
                     }

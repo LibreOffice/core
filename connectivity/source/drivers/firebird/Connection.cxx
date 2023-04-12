@@ -196,7 +196,7 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
         // External file AND/OR remote connection
         else if (url.startsWith("sdbc:firebird:"))
         {
-            m_sFirebirdURL = url.copy(OUString("sdbc:firebird:").getLength());
+            m_sFirebirdURL = url.copy(strlen("sdbc:firebird:"));
             if (m_sFirebirdURL.startsWith("file://"))
             {
                 m_bIsFile = true;

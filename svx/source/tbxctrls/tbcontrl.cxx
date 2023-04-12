@@ -96,6 +96,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <bitmaps.hlst>
 #include <sal/log.hxx>
@@ -4352,7 +4353,7 @@ void ColorListBox::createColorWindow()
 
 void ColorListBox::SelectEntry(const NamedColor& rColor)
 {
-    if (rColor.second.trim().isEmpty())
+    if (o3tl::trim(rColor.second).empty())
     {
         SelectEntry(rColor.first);
         return;

@@ -325,7 +325,7 @@ bool SmEditTextWindow::KeyInput(const KeyEvent& rKEvt)
             if (index != -1)
             {
                 selected = selected.copy(index, sal_Int32(aSelection.nEndPos-index));
-                if (selected.trim().isEmpty())
+                if (o3tl::trim(selected).empty())
                     autoClose = true;
             }
             else
@@ -336,7 +336,7 @@ bool SmEditTextWindow::KeyInput(const KeyEvent& rKEvt)
                 else
                 {
                     selected = selected.copy(aSelection.nEndPos);
-                    if (selected.trim().isEmpty())
+                    if (o3tl::trim(selected).empty())
                         autoClose = true;
                 }
             }

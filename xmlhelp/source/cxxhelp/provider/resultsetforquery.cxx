@@ -291,7 +291,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
     pCurrentVectorIndex.reset();
     aIndexFolderResultVectorVector.clear();
 
-    sal_Int32 replIdx = OUString( "#HLP#" ).getLength();
+    sal_Int32 replIdx = strlen( "#HLP#" );
     OUString replWith = "vnd.sun.star.help://";
 
     int nResultCount = aCompleteResultVector.size();

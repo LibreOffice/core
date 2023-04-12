@@ -138,7 +138,7 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                                 {
                                     nGroupOn = report::GroupOn::INTERVAL;
                                     _rImport.removeFunction(sExpression);
-                                    sExpression = sExpression.copy(OUString("INT_count_").getLength());
+                                    sExpression = sExpression.copy(std::string_view("INT_count_").size());
                                     OUString sInterval = sCompleteFormula.getToken(1,'/');
                                     sInterval = sInterval.getToken(0,')');
                                     m_xGroup->setGroupInterval(sInterval.toInt32());

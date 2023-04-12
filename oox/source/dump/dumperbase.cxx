@@ -2438,7 +2438,7 @@ void XmlStreamObject::implDumpText( TextInputStream& rTextStrm )
                     entirely. */
                 mxOut->writeString( aElem );
                 mxOut->newLine();
-                if( !aText.trim().isEmpty() )
+                if( !o3tl::trim(aText).empty() )
                 {
                     mxOut->writeString( aText );
                     mxOut->newLine();
