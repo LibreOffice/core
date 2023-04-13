@@ -48,6 +48,12 @@ public:
 
     virtual void SAL_CALL doVerb( sal_Int32 nVerbID ) override;
 
+// XCommonEmbedPersist
+
+    virtual void SAL_CALL reload(
+                const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
+                const css::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
+
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
     sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
