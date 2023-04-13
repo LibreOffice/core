@@ -1325,6 +1325,8 @@ SwXTextField::getTextFieldMaster()
     SolarMutexGuard aGuard;
 
     SwFieldType* pType = m_pImpl->GetFieldType();
+    if (!pType && !m_pImpl->m_pDoc) // tdf#152619
+        return nullptr;
     uno::Reference<beans::XPropertySet> const xRet(
             SwXFieldMaster::CreateXFieldMaster(m_pImpl->m_pDoc, pType));
     return xRet;
