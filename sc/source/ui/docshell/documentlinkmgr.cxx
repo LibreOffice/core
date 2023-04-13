@@ -135,7 +135,7 @@ bool DocumentLinkManager::hasDdeOrOleOrWebServiceLinks(bool bDde, bool bOle, boo
         sfx2::SvBaseLink* pBase = rLink.get();
         if (bDde && dynamic_cast<ScDdeLink*>(pBase))
             return true;
-        if (bOle && dynamic_cast<SdrEmbedObjectLink*>(pBase))
+        if (bOle && (dynamic_cast<SdrEmbedObjectLink*>(pBase) || dynamic_cast<SdrIFrameLink*>(pBase)))
             return true;
         if (bWebService && dynamic_cast<ScWebServiceLink*>(pBase))
             return true;
@@ -163,6 +163,13 @@ bool DocumentLinkManager::updateDdeOrOleOrWebServiceLinks(vcl::Window* pWin)
         if (pOleLink)
         {
             pOleLink->Update();
+            continue;
+        }
+
+        SdrIFrameLink* pIFrameLink = dynamic_cast<SdrIFrameLink*>(pBase);
+        if (pIFrameLink)
+        {
+            pIFrameLink->Update();
             continue;
         }
 
