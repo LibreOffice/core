@@ -3106,10 +3106,36 @@ SdXMLFloatingFrameShapeContext::~SdXMLFloatingFrameShapeContext()
 {
 }
 
+uno::Reference<drawing::XShape> SdXMLFloatingFrameShapeContext::CreateFloatingFrameShape() const
+{
+    uno::Reference<lang::XMultiServiceFactory> xServiceFact(GetImport().GetModel(), uno::UNO_QUERY);
+    if (!xServiceFact.is())
+        return nullptr;
+    uno::Reference<drawing::XShape> xShape(
+            xServiceFact->createInstance("com.sun.star.drawing.FrameShape"), uno::UNO_QUERY);
+    return xShape;
+}
+
 void SdXMLFloatingFrameShapeContext::startFastElement (sal_Int32 /*nElement*/,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/)
 {
-    AddShape("com.sun.star.drawing.FrameShape");
+    uno::Reference<drawing::XShape> xShape(SdXMLFloatingFrameShapeContext::CreateFloatingFrameShape());
+
+    uno::Reference< beans::XPropertySet > xProps(xShape, uno::UNO_QUERY);
+    // set FrameURL before AddShape, we have to do it again later because it
+    // gets cleared when the SdrOle2Obj is attached to the XShape.  But we want
+    // FrameURL to exist when AddShape triggers SetPersistName which itself
+    // triggers SdrOle2Obj::CheckFileLink_Impl and at that point we want to
+    // know what URL will end up being used. So bodge this by setting FrameURL
+    // to the temp pre-SdrOle2Obj attached properties and we can smuggle it
+    // eventually into SdrOle2Obj::SetPersistName at the right point after
+    // PersistName is set but before SdrOle2Obj::CheckFileLink_Impl is called
+    // in order to inform the link manager that this is an IFrame that links to
+    // a URL
+    if (xProps && !maHref.isEmpty())
+        xProps->setPropertyValue("FrameURL", Any(maHref));
+
+    AddShape(xShape);
 
     if( !mxShape.is() )
         return;
@@ -3119,7 +3145,6 @@ void SdXMLFloatingFrameShapeContext::startFastElement (sal_Int32 /*nElement*/,
     // set pos, size, shear and rotate
     SetTransformation();
 
-    uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
     if( xProps.is() )
     {
         if( !maFrameName.isEmpty() )

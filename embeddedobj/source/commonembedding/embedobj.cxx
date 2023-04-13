@@ -161,6 +161,37 @@ void OCommonEmbeddedObject::StateChangeNotification_Impl( bool bBeforeChange, sa
     rGuard.reset();
 }
 
+void OCommonEmbeddedObject::SetInplaceActiveState()
+{
+    if ( !m_xClientSite.is() )
+        throw embed::WrongStateException( "client site not set, yet", *this );
+
+    uno::Reference< embed::XInplaceClient > xInplaceClient( m_xClientSite, uno::UNO_QUERY );
+    if ( !xInplaceClient.is() || !xInplaceClient->canInplaceActivate() )
+        throw embed::WrongStateException(); //TODO: can't activate inplace
+    xInplaceClient->activatingInplace();
+
+    uno::Reference< embed::XWindowSupplier > xClientWindowSupplier( xInplaceClient, uno::UNO_QUERY_THROW );
+
+    m_xClientWindow = xClientWindowSupplier->getWindow();
+    m_aOwnRectangle = xInplaceClient->getPlacement();
+    m_aClipRectangle = xInplaceClient->getClipRectangle();
+    awt::Rectangle aRectangleToShow = GetRectangleInterception( m_aOwnRectangle, m_aClipRectangle );
+
+    // create own window based on the client window
+    // place and resize the window according to the rectangles
+    uno::Reference< awt::XWindowPeer > xClientWindowPeer( m_xClientWindow, uno::UNO_QUERY_THROW );
+
+    // dispatch provider may not be provided
+    uno::Reference< frame::XDispatchProvider > xContainerDP = xInplaceClient->getInplaceDispatchProvider();
+    bool bOk = m_xDocHolder->ShowInplace( xClientWindowPeer, aRectangleToShow, xContainerDP );
+    m_nObjectState = embed::EmbedStates::INPLACE_ACTIVE;
+    if ( !bOk )
+    {
+        SwitchStateTo_Impl( embed::EmbedStates::RUNNING );
+        throw embed::WrongStateException(); //TODO: can't activate inplace
+    }
+}
 
 void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
 {
@@ -234,34 +265,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
         {
             if ( nNextState == embed::EmbedStates::INPLACE_ACTIVE )
             {
-                if ( !m_xClientSite.is() )
-                    throw embed::WrongStateException( "client site not set, yet", *this );
-
-                uno::Reference< embed::XInplaceClient > xInplaceClient( m_xClientSite, uno::UNO_QUERY );
-                if ( !xInplaceClient.is() || !xInplaceClient->canInplaceActivate() )
-                    throw embed::WrongStateException(); //TODO: can't activate inplace
-                xInplaceClient->activatingInplace();
-
-                uno::Reference< embed::XWindowSupplier > xClientWindowSupplier( xInplaceClient, uno::UNO_QUERY_THROW );
-
-                m_xClientWindow = xClientWindowSupplier->getWindow();
-                m_aOwnRectangle = xInplaceClient->getPlacement();
-                m_aClipRectangle = xInplaceClient->getClipRectangle();
-                awt::Rectangle aRectangleToShow = GetRectangleInterception( m_aOwnRectangle, m_aClipRectangle );
-
-                // create own window based on the client window
-                // place and resize the window according to the rectangles
-                uno::Reference< awt::XWindowPeer > xClientWindowPeer( m_xClientWindow, uno::UNO_QUERY_THROW );
-
-                // dispatch provider may not be provided
-                uno::Reference< frame::XDispatchProvider > xContainerDP = xInplaceClient->getInplaceDispatchProvider();
-                bool bOk = m_xDocHolder->ShowInplace( xClientWindowPeer, aRectangleToShow, xContainerDP );
-                m_nObjectState = nNextState;
-                if ( !bOk )
-                {
-                    SwitchStateTo_Impl( embed::EmbedStates::RUNNING );
-                    throw embed::WrongStateException(); //TODO: can't activate inplace
-                }
+                SetInplaceActiveState();
             }
             else if ( nNextState == embed::EmbedStates::ACTIVE )
             {
