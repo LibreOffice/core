@@ -398,7 +398,7 @@ OUString WindowUIObject::get_type() const
 
 namespace {
 
-vcl::Window* findChild(vcl::Window* pParent, const OUString& rID, bool bRequireVisible = false)
+vcl::Window* findChild(vcl::Window* pParent, const OUString& rID, bool bRequireVisible = false, OUStringBuffer* debug = nullptr)
 {
     if (!pParent || pParent->isDisposed())
         return nullptr;
@@ -417,7 +417,10 @@ vcl::Window* findChild(vcl::Window* pParent, const OUString& rID, bool bRequireV
         if (pChild->get_id() == rID)
             return pChild;
 
-        vcl::Window* pResult = findChild(pChild, rID);
+        if (debug)
+            debug->append(pChild->get_id() + " ");
+
+        vcl::Window* pResult = findChild(pChild, rID, bRequireVisible, debug);
         if (pResult)
             return pResult;
     }
@@ -455,15 +458,16 @@ std::unique_ptr<UIObject> WindowUIObject::get_child(const OUString& rID)
     // in a first step try the real children before moving to the top level parent
     // This makes it easier to handle cases with the same ID as there is a way
     // to resolve conflicts
-    vcl::Window* pWindow = findChild(mxWindow.get(), rID);
+    OUStringBuffer debug;
+    vcl::Window* pWindow = findChild(mxWindow.get(), rID, false, &debug);
     if (!pWindow)
     {
         vcl::Window* pDialogParent = get_top_parent(mxWindow.get());
-        pWindow = findChild(pDialogParent, rID);
+        pWindow = findChild(pDialogParent, rID, false, &debug);
     }
 
     if (!pWindow)
-        throw css::uno::RuntimeException("Could not find child with id: " + rID);
+        throw css::uno::RuntimeException("Could not find child with id: " + rID + " children were " + std::u16string_view(debug));
 
     FactoryFunction aFunction = pWindow->GetUITestFactory();
     return aFunction(pWindow);
