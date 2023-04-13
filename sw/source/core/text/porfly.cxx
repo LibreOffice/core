@@ -109,7 +109,7 @@ bool SwFlyCntPortion::Format( SwTextFormatInfo &rInf )
         // KerningPortions at beginning of line, e.g., for grid layout
         // must be considered.
         const SwLinePortion* pLastPor = rInf.GetLast();
-        const sal_uInt16 nLeft = ( pLastPor &&
+        const auto nLeft = ( pLastPor &&
                                     ( pLastPor->IsKernPortion() ||
                                       pLastPor->IsErgoSumPortion() ) ) ?
                                pLastPor->Width() :
