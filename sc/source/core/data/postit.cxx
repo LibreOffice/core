@@ -111,9 +111,6 @@ void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc, 
 {
     SfxItemSet aItemSet = rCaption.GetMergedItemSet();
 
-    if (auto pStyleSheet = rDoc.GetStyleSheetPool()->Find(ScResId(STR_STYLENAME_NOTE), SfxStyleFamily::Frame))
-        aItemSet.Put(pStyleSheet->GetItemSet());
-
     const ScPatternAttr& rDefPattern = rDoc.GetPool()->GetDefaultItem( ATTR_PATTERN );
     rDefPattern.FillEditItemSet( &aItemSet );
 
@@ -680,6 +677,9 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
     }
     else
     {
+        if (auto pStyleSheet = mrDoc.GetStyleSheetPool()->Find(ScResId(STR_STYLENAME_NOTE), SfxStyleFamily::Frame))
+            maNoteData.mxCaption->SetStyleSheet(static_cast<SfxStyleSheet*>(pStyleSheet), true);
+
         // copy all items or set default items; reset shadow items
         ScCaptionUtil::SetDefaultItems( *maNoteData.mxCaption, mrDoc, xInitData->moItemSet ? &*xInitData->moItemSet : nullptr );
     }
@@ -879,7 +879,7 @@ rtl::Reference<SdrCaptionObj> ScNoteUtil::CreateTempCaption(
 }
 
 ScPostIt* ScNoteUtil::CreateNoteFromCaption(
-        ScDocument& rDoc, const ScAddress& rPos, SdrCaptionObj* pCaption )
+        ScDocument& rDoc, const ScAddress& rPos, SdrCaptionObj* pCaption, bool bHasStyle )
 {
     ScNoteData aNoteData( true/*bShown*/ );
     aNoteData.mxCaption = pCaption;
@@ -890,6 +890,12 @@ ScPostIt* ScNoteUtil::CreateNoteFromCaption(
 
     // ScNoteCaptionCreator c'tor updates the caption object to be part of a note
     ScNoteCaptionCreator aCreator( rDoc, rPos, aNoteData.mxCaption, true/*bShown*/ );
+
+    if (!bHasStyle)
+    {
+        if (auto pStyleSheet = rDoc.GetStyleSheetPool()->Find(ScResId(STR_STYLENAME_NOTE), SfxStyleFamily::Frame))
+            aNoteData.mxCaption->SetStyleSheet(static_cast<SfxStyleSheet*>(pStyleSheet), true);
+    }
 
     return pNote;
 }

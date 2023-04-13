@@ -193,6 +193,8 @@ public:
             The underlying ScPostIt::ScNoteData::ScCaptionPtr takes managing
             ownership of the pointer.
 
+        @param bHasStyle  Is there a drawing style set for the note.
+
         @return  Pointer to the new cell note object if insertion was
             successful (i.e. the passed cell position was valid), null
             otherwise. The Calc document is the owner of the note object. The
@@ -201,7 +203,7 @@ public:
      */
     static ScPostIt*    CreateNoteFromCaption(
                             ScDocument& rDoc, const ScAddress& rPos,
-                            SdrCaptionObj* pCaption );
+                            SdrCaptionObj* pCaption, bool bHasStyle );
 
     /** Creates a cell note based on the passed caption object data.
 

@@ -45,6 +45,8 @@
 #include <sortparam.hxx>
 #include <undomanager.hxx>
 #include <tabprotection.hxx>
+#include <globstr.hrc>
+#include <scresid.hxx>
 
 #include <orcusfilters.hxx>
 #include <filter.hxx>
@@ -1580,6 +1582,10 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testCommentSize)
     SdrCaptionObj* pCaption = pNote->GetCaption();
     CPPUNIT_ASSERT(pCaption);
 
+    // The values below depend on particular font and char size.
+    // At least assert that the corresponding style was set:
+    CPPUNIT_ASSERT_EQUAL(ScResId(STR_STYLENAME_NOTE), pCaption->GetStyleSheet()->GetName());
+
     const tools::Rectangle& rOldRect = pCaption->GetLogicRect();
     CPPUNIT_ASSERT_EQUAL(tools::Long(2899), rOldRect.getOpenWidth());
     CPPUNIT_ASSERT_EQUAL(tools::Long(939), rOldRect.getOpenHeight());
@@ -1588,7 +1594,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testCommentSize)
 
     const tools::Rectangle& rNewRect = pCaption->GetLogicRect();
     CPPUNIT_ASSERT_EQUAL(rOldRect.getOpenWidth(), rNewRect.getOpenWidth());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(1605), rNewRect.getOpenHeight());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1386), rNewRect.getOpenHeight());
 
     pDoc->GetUndoManager()->Undo();
 
