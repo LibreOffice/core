@@ -90,6 +90,7 @@
 #include <sfx2/lokhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <calbck.hxx>
+#include <flyfrms.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <svx/svxids.hrc>
 #include <osl/diagnose.h>
@@ -273,6 +274,27 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
                 pDView->UnmarkAll();
                 pDView->MarkObj( pTmpObj, Imp()->GetPageView(), bAddSelect, bEnterGroup );
                 break;
+            }
+        }
+    }
+
+    if (rMrkList.GetMarkCount() == 1)
+    {
+        SwFlyFrame* pSelFly = ::GetFlyFromMarked(&rMrkList, this);
+        if (pSelFly && pSelFly->IsFlySplitAllowed())
+        {
+            auto pMaster = static_cast<SwFlyAtContentFrame*>(pSelFly);
+            while (pMaster->IsFollow())
+            {
+                pMaster = pMaster->GetPrecede();
+            }
+            if (pMaster != pSelFly)
+            {
+                // A follow fly frame is selected, select the master instead. Selection of a follow
+                // would not be ideal, since one can't customize its vertical position (always
+                // starts at the top of the page).
+                pDView->UnmarkAll();
+                pDView->MarkObj(pMaster->DrawObj(), Imp()->GetPageView(), bAddSelect, bEnterGroup);
             }
         }
     }

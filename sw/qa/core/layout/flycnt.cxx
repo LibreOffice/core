@@ -9,6 +9,8 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <svx/svdview.hxx>
+
 #include <IDocumentLayoutAccess.hxx>
 #include <anchoredobject.hxx>
 #include <flyfrms.hxx>
@@ -26,6 +28,7 @@
 #include <frameformats.hxx>
 #include <cellfrm.hxx>
 #include <ndtxt.hxx>
+#include <dflyobj.hxx>
 
 namespace
 {
@@ -653,6 +656,36 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFly3rdRowDelete)
     auto pPage2 = dynamic_cast<SwPageFrame*>(pPage1->GetNext());
     // Without the accompanying fix in place, this test would have failed, page 3 was not deleted.
     CPPUNIT_ASSERT(!pPage2->GetNext());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFly2ndRowSelect)
+{
+    // Given a document with a multi-page floating table:
+    createSwDoc("floattable.docx");
+
+    // When selecting the second row:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    auto pPage2 = dynamic_cast<SwPageFrame*>(pPage1->GetNext());
+    SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
+    auto pPage2Fly = dynamic_cast<SwFlyAtContentFrame*>(rPage2Objs[0]);
+    const SwRect& aFollowArea = pPage2Fly->getFrameArea();
+    Point aTopCenter((aFollowArea.Left() + aFollowArea.Right()) / 2, aFollowArea.Top());
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->SelectObj(aTopCenter);
+
+    // Then make sure the first row is selected:
+    const SdrMarkList& rMarkList = pWrtShell->GetDrawView()->GetMarkedObjectList();
+    SdrObject* pSelectedObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+    auto pSelectedVirtObj = dynamic_cast<SwVirtFlyDrawObj*>(pSelectedObj);
+    auto pSelected = static_cast<SwFlyAtContentFrame*>(pSelectedVirtObj->GetFlyFrame());
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 5
+    // - Actual  : 17
+    // i.e. a follow fly was possible to select (instead of its master)
+    CPPUNIT_ASSERT_EQUAL(pPage2Fly->GetPrecede()->GetFrameId(), pSelected->GetFrameId());
 }
 }
 
