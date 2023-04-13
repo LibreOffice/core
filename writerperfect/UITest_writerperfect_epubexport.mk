@@ -13,4 +13,6 @@ $(eval $(call gb_UITest_add_modules,writerperfect_epubexport,$(SRCDIR)/writerper
 	epubexport/ \
 ))
 
+$(eval $(call gb_UITest_use_oneprocess,writerperfect_epubexport))
+
 # vim: set noet sw=4 ts=4:

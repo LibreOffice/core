@@ -13,4 +13,6 @@ $(eval $(call gb_UITest_add_modules,svx_table,$(SRCDIR)/svx/qa/uitest,\
 	table/ \
 ))
 
+$(eval $(call gb_UITest_use_oneprocess,svx_table))
+
 # vim: set noet sw=4 ts=4:

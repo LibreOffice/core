@@ -13,4 +13,6 @@ $(eval $(call gb_UITest_add_modules,cui_tabpages,$(SRCDIR)/cui/qa/uitest,\
 	tabpages/ \
 ))
 
+$(eval $(call gb_UITest_use_oneprocess,cui_tabpages))
+
 # vim: set noet sw=4 ts=4:
