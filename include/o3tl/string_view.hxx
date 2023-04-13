@@ -380,8 +380,9 @@ inline bool implIsWhitespace(sal_Unicode c)
 }
 } // namespace internal
 
-// Like OUString::trim, but for std::u16string_view:
-inline std::u16string_view trim(std::u16string_view str)
+// Like OUString::trim, but for std::[u16]string_view:
+template <typename charT, typename traits = std::char_traits<charT>>
+std::basic_string_view<charT, traits> trim(std::basic_string_view<charT, traits> str)
 {
     size_t nFirst = 0;
     size_t nLast = str.size();
@@ -399,24 +400,10 @@ inline std::u16string_view trim(std::u16string_view str)
     return { str.data() + nFirst, nLast - nFirst + 1 };
 }
 
-// Like OString::trim, but for std::string_view:
-inline std::string_view trim(std::string_view str)
-{
-    size_t nFirst = 0;
-    size_t nLast = str.size();
+// "deduction guides"
 
-    while ((nFirst < nLast) && internal::implIsWhitespace(str.data()[nFirst]))
-        ++nFirst;
-
-    if (nFirst == nLast)
-        return {};
-
-    do
-        --nLast;
-    while (internal::implIsWhitespace(str.data()[nLast]));
-
-    return { str.data() + nFirst, nLast - nFirst + 1 };
-}
+inline auto trim(std::string_view str) { return trim<>(str); }
+inline auto trim(std::u16string_view str) { return trim<>(str); }
 
 // Like OString::toInt32, but for std::string_view:
 inline sal_Int32 toInt32(std::u16string_view str, sal_Int16 radix = 10)
