@@ -396,6 +396,22 @@
           </info>
         </prop>
       </group>
+      <group oor:name="CalcTextOverflow">
+        <info>
+          <desc>Specifies the settings used for the text overflow indicator in Calc.</desc>
+        </info>
+        <prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the visibility of the text overflow indicator (true = visible).</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for the text overflow indicator.</desc>
+          </info>
+        </prop>
+      </group>
       <group oor:name="CalcDetective">
         <info>
           <desc>Specifies the settings used for audition arrows in Calc.</desc>

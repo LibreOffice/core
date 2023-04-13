@@ -105,7 +105,6 @@ void ScViewOptions::SetDefaults()
     aOptArr[ VOPT_GRID         ] = true;
     aOptArr[ VOPT_ANCHOR       ] = true;
     aOptArr[ VOPT_PAGEBREAKS   ] = true;
-    aOptArr[ VOPT_CLIPMARKS    ] = true;
     aOptArr[ VOPT_SUMMARY      ] = true;
     aOptArr[ VOPT_THEMEDCURSOR ] = false;
 
@@ -212,10 +211,9 @@ constexpr OUStringLiteral CFGPATH_DISPLAY = u"Office.Calc/Content/Display";
 #define SCDISPLAYOPT_FORMULAMARK    3
 #define SCDISPLAYOPT_VALUEHI        4
 #define SCDISPLAYOPT_ANCHOR         5
-#define SCDISPLAYOPT_TEXTOVER       6
-#define SCDISPLAYOPT_OBJECTGRA      7
-#define SCDISPLAYOPT_CHART          8
-#define SCDISPLAYOPT_DRAWING        9
+#define SCDISPLAYOPT_OBJECTGRA      6
+#define SCDISPLAYOPT_CHART          7
+#define SCDISPLAYOPT_DRAWING        8
 
 constexpr OUStringLiteral CFGPATH_GRID = u"Office.Calc/Grid";
 
@@ -254,7 +252,6 @@ Sequence<OUString> ScViewCfg::GetDisplayPropertyNames()
             "FormulaMark",              // SCDISPLAYOPT_FORMULAMARK
             "ValueHighlighting",        // SCDISPLAYOPT_VALUEHI
             "Anchor",                   // SCDISPLAYOPT_ANCHOR
-            "TextOverflow",             // SCDISPLAYOPT_TEXTOVER
             "ObjectGraphic",            // SCDISPLAYOPT_OBJECTGRA
             "Chart",                    // SCDISPLAYOPT_CHART
             "DrawingObject"};           // SCDISPLAYOPT_DRAWING;
@@ -378,9 +375,6 @@ ScViewCfg::ScViewCfg() :
                         break;
                     case SCDISPLAYOPT_ANCHOR:
                         SetOption( VOPT_ANCHOR, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
-                        break;
-                    case SCDISPLAYOPT_TEXTOVER:
-                        SetOption( VOPT_CLIPMARKS, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
                     case SCDISPLAYOPT_OBJECTGRA:
                         if ( pValues[nProp] >>= nIntVal )
@@ -546,9 +540,6 @@ IMPL_LINK_NOARG(ScViewCfg, DisplayCommitHdl, ScLinkConfigItem&, void)
                 break;
             case SCDISPLAYOPT_ANCHOR:
                 pValues[nProp] <<= GetOption( VOPT_ANCHOR );
-                break;
-            case SCDISPLAYOPT_TEXTOVER:
-                pValues[nProp] <<= GetOption( VOPT_CLIPMARKS );
                 break;
             case SCDISPLAYOPT_OBJECTGRA:
                 pValues[nProp] <<= static_cast<sal_Int32>(GetObjMode( VOBJ_TYPE_OLE ));

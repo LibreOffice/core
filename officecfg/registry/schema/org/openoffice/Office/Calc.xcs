@@ -129,14 +129,6 @@
           </info>
           <value>true</value>
         </prop>
-        <prop oor:name="TextOverflow" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
-          <info>
-            <desc>Indicates whether text overflow is marked via a small triangle.</desc>
-            <label>Text overflow</label>
-          </info>
-          <value>true</value>
-        </prop>
         <prop oor:name="ObjectGraphic" oor:type="xs:int" oor:nillable="false">
           <!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Objects -->
           <info>

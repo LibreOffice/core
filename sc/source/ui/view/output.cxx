@@ -2613,17 +2613,10 @@ void ScOutputData::DrawClipMarks()
     if (!bAnyClipped)
         return;
 
-    Color aArrowFillCol( COL_LIGHTRED );
+    Color aArrowFillCol( SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCTEXTOVERFLOW).nColor );
+    const bool bIsDarkBackground = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor.IsDark();
 
     DrawModeFlags nOldDrawMode = mpDev->GetDrawMode();
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    if ( mbUseStyleColor && rStyleSettings.GetHighContrastMode() )
-    {
-        //  use DrawMode to change the arrow's outline color
-        mpDev->SetDrawMode( nOldDrawMode | DrawModeFlags::SettingsLine );
-        //  use text color also for the fill color
-        aArrowFillCol = SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
-    }
 
     tools::Long nInitPosX = nScrX;
     if ( bLayoutRTL )
@@ -2715,6 +2708,12 @@ void ScOutputData::DrawClipMarks()
 
                     tools::Long nMarkPixel = static_cast<tools::Long>( SC_CLIPMARK_SIZE * mnPPTX );
                     Size aMarkSize( nMarkPixel, (nMarkPixel-1)*2 );
+
+                    const Color aColor = pInfo->pBackground->GetColor();
+                    if ( aColor == COL_AUTO ? bIsDarkBackground : aColor.IsDark() )
+                        mpDev->SetDrawMode( nOldDrawMode | DrawModeFlags::WhiteLine );
+                    else
+                        mpDev->SetDrawMode( nOldDrawMode | DrawModeFlags::BlackLine );
 
                     if (bVertical)
                     {

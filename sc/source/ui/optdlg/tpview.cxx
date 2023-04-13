@@ -43,7 +43,6 @@ ScTpContentOptions::ScTpContentOptions(weld::Container* pPage, weld::DialogContr
     , m_xFormulaMarkCB(m_xBuilder->weld_check_button("formulamark"))
     , m_xValueCB(m_xBuilder->weld_check_button("value"))
     , m_xAnchorCB(m_xBuilder->weld_check_button("anchor"))
-    , m_xClipMarkCB(m_xBuilder->weld_check_button("clipmark"))
     , m_xRangeFindCB(m_xBuilder->weld_check_button("rangefind"))
     , m_xObjGrfLB(m_xBuilder->weld_combo_box("objgrf"))
     , m_xDiagramLB(m_xBuilder->weld_combo_box("diagram"))
@@ -73,7 +72,6 @@ ScTpContentOptions::ScTpContentOptions(weld::Container* pPage, weld::DialogContr
     m_xFormulaMarkCB->connect_toggled(aCBHdl);
     m_xValueCB->connect_toggled(aCBHdl);
     m_xAnchorCB->connect_toggled(aCBHdl);
-    m_xClipMarkCB->connect_toggled(aCBHdl);
 
     m_xVScrollCB->connect_toggled(aCBHdl);
     m_xHScrollCB->connect_toggled(aCBHdl);
@@ -105,7 +103,6 @@ bool    ScTpContentOptions::FillItemSet( SfxItemSet* rCoreSet )
         m_xFormulaMarkCB->get_state_changed_from_saved() ||
         m_xValueCB->get_state_changed_from_saved() ||
         m_xAnchorCB->get_state_changed_from_saved() ||
-        m_xClipMarkCB->get_state_changed_from_saved() ||
         m_xObjGrfLB->get_value_changed_from_saved() ||
         m_xDiagramLB->get_value_changed_from_saved() ||
         m_xDrawLB->get_value_changed_from_saved() ||
@@ -149,7 +146,6 @@ void    ScTpContentOptions::Reset( const SfxItemSet* rCoreSet )
     m_xFormulaMarkCB->set_active(m_xLocalOptions->GetOption(VOPT_FORMULAS_MARKS));
     m_xValueCB   ->set_active(m_xLocalOptions->GetOption(VOPT_SYNTAX));
     m_xAnchorCB  ->set_active(m_xLocalOptions->GetOption(VOPT_ANCHOR));
-    m_xClipMarkCB->set_active(m_xLocalOptions->GetOption(VOPT_CLIPMARKS));
 
     m_xObjGrfLB  ->set_active( static_cast<sal_uInt16>(m_xLocalOptions->GetObjMode(VOBJ_TYPE_OLE)) );
     m_xDiagramLB ->set_active( static_cast<sal_uInt16>(m_xLocalOptions->GetObjMode(VOBJ_TYPE_CHART)) );
@@ -185,7 +181,6 @@ void    ScTpContentOptions::Reset( const SfxItemSet* rCoreSet )
     m_xFormulaMarkCB->save_state();
     m_xValueCB->save_state();
     m_xAnchorCB->save_state();
-    m_xClipMarkCB->save_state();
     m_xObjGrfLB->save_value();
     m_xDiagramLB->save_value();
     m_xDrawLB->save_value();
@@ -239,7 +234,6 @@ IMPL_LINK( ScTpContentOptions, CBHdl, weld::Toggleable&, rBtn, void )
     else if ( m_xFormulaMarkCB.get() == &rBtn )   eOption = VOPT_FORMULAS_MARKS;
     else if ( m_xValueCB.get() == &rBtn )   eOption = VOPT_SYNTAX;
     else if ( m_xAnchorCB.get() == &rBtn )   eOption = VOPT_ANCHOR;
-    else if ( m_xClipMarkCB.get() == &rBtn )   eOption = VOPT_CLIPMARKS;
     else if ( m_xVScrollCB.get()  == &rBtn )   eOption = VOPT_VSCROLL;
     else if ( m_xHScrollCB.get() == &rBtn )   eOption = VOPT_HSCROLL;
     else if ( m_xTblRegCB.get() == &rBtn )   eOption = VOPT_TABCONTROLS;

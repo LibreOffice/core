@@ -130,6 +130,7 @@ const vEntryInfo[] =
     { Group_Calc,    IDS(brkmanual) },
     { Group_Calc,    IDS(brkauto) },
     { Group_Calc,    IDS_CB(hiddencolrow) },
+    { Group_Calc,    IDS_CB(textoverflow) },
     { Group_Calc,    IDS(det) },
     { Group_Calc,    IDS(deterror) },
     { Group_Calc,    IDS(ref) },

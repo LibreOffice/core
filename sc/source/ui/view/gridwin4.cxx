@@ -703,7 +703,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     aOutputData.SetShowNullValues   ( rOpts.GetOption( VOPT_NULLVALS ) );
     aOutputData.SetShowFormulas     ( rOpts.GetOption( VOPT_FORMULAS ) );
     aOutputData.SetShowSpellErrors  ( rDoc.GetDocOptions().IsAutoSpell() );
-    aOutputData.SetMarkClipped      ( rOpts.GetOption( VOPT_CLIPMARKS ) );
+    aOutputData.SetMarkClipped      ( SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCTEXTOVERFLOW).bIsVisible );
 
     aOutputData.SetUseStyleColor( true );       // always set in table view
 

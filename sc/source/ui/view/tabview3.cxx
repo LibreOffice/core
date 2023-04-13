@@ -2430,7 +2430,7 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
         aStart.AdjustX( -nLayoutSign );      // include change marks
         aStart.AdjustY( -1 );
 
-        bool bMarkClipped = aViewData.GetOptions().GetOption( VOPT_CLIPMARKS );
+        bool bMarkClipped = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCTEXTOVERFLOW).bIsVisible;
         if (bMarkClipped)
         {
             // ScColumn::IsEmptyData has to be optimized for this

@@ -316,6 +316,14 @@
             <value xsi:nil="true"/>
           </prop>
         </node>
+        <node oor:name="CalcTextOverflow">
+          <prop oor:name="IsVisible">
+            <value>true</value>
+          </prop>
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
         <node oor:name="CalcDetective">
           <prop oor:name="Color">
             <value xsi:nil="true"/>
