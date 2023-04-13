@@ -78,6 +78,7 @@
 #include <sdr/contact/viewcontactofsdrole2obj.hxx>
 #include <svx/svdograf.hxx>
 #include <sdr/properties/oleproperties.hxx>
+#include <svx/unoshape.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xbtmpit.hxx>
@@ -598,6 +599,35 @@ void SdrEmbedObjectLink::Closed()
     SvBaseLink::Closed();
 }
 
+SdrIFrameLink::SdrIFrameLink(SdrOle2Obj* pObject)
+    : ::sfx2::SvBaseLink(::SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::SVXB)
+    , m_pObject(pObject)
+{
+    SetSynchron( false );
+}
+
+::sfx2::SvBaseLink::UpdateResult SdrIFrameLink::DataChanged(
+    const OUString&, const uno::Any& )
+{
+    uno::Reference<embed::XEmbeddedObject> xObject = m_pObject->GetObjRef();
+    uno::Reference<embed::XCommonEmbedPersist> xPersObj(xObject, uno::UNO_QUERY);
+    if (xPersObj.is())
+    {
+        // let the IFrameObject reload the link
+        try
+        {
+            xPersObj->reload(uno::Sequence<beans::PropertyValue>(), uno::Sequence<beans::PropertyValue>());
+        }
+        catch (const uno::Exception&)
+        {
+        }
+
+        m_pObject->SetChanged();
+    }
+
+    return SUCCESS;
+}
+
 class SdrOle2ObjImpl
 {
 public:
@@ -615,7 +645,7 @@ public:
     bool mbLoadingOLEObjectFailed:1; // New local var to avoid repeated loading if load of OLE2 fails
     bool mbConnected:1;
 
-    SdrEmbedObjectLink* mpObjectLink;
+    sfx2::SvBaseLink* mpObjectLink;
     OUString maLinkURL;
 
     rtl::Reference<SvxUnoShapeModifyListener> mxModifyListener;
@@ -815,7 +845,7 @@ bool SdrOle2Obj::IsEmpty() const
     return !mpImpl->mxObjRef.is();
 }
 
-void SdrOle2Obj::Connect()
+void SdrOle2Obj::Connect(SvxOle2Shape* pCreator)
 {
     if( IsEmptyPresObj() )
         return;
@@ -828,7 +858,7 @@ void SdrOle2Obj::Connect()
         return;
     }
 
-    Connect_Impl();
+    Connect_Impl(pCreator);
     AddListeners_Impl();
 }
 
@@ -927,24 +957,51 @@ void SdrOle2Obj::CheckFileLink_Impl()
     {
         try
         {
-            uno::Reference< embed::XLinkageSupport > xLinkSupport( mpImpl->mxObjRef.GetObject(), uno::UNO_QUERY );
+            uno::Reference<embed::XEmbeddedObject> xObject = mpImpl->mxObjRef.GetObject();
+            if (!xObject)
+                return;
 
-            if ( xLinkSupport.is() && xLinkSupport->isLink() )
+            bool bIFrame = false;
+
+            OUString aLinkURL;
+            uno::Reference<embed::XLinkageSupport> xLinkSupport(xObject, uno::UNO_QUERY);
+            if (xLinkSupport)
             {
-                OUString aLinkURL = xLinkSupport->getLinkURL();
-
-                if ( !aLinkURL.isEmpty() )
+                if (xLinkSupport->isLink())
+                    aLinkURL = xLinkSupport->getLinkURL();
+            }
+            else
+            {
+                // get IFrame (Floating Frames) listed and updatable from the
+                // manage links dialog
+                SvGlobalName aClassId(xObject->getClassID());
+                if (aClassId == SvGlobalName(SO3_IFRAME_CLASSID))
                 {
-                    // this is a file link so the model link manager should handle it
-                    sfx2::LinkManager* pLinkManager(getSdrModelFromSdrObject().GetLinkManager());
+                    uno::Reference<beans::XPropertySet> xSet(xObject->getComponent(), uno::UNO_QUERY);
+                    if (xSet.is())
+                        xSet->getPropertyValue("FrameURL") >>= aLinkURL;
+                    bIFrame = true;
+                }
+            }
 
-                    if ( pLinkManager )
+            if (!aLinkURL.isEmpty()) // this is a file link so the model link manager should handle it
+            {
+                sfx2::LinkManager* pLinkManager(getSdrModelFromSdrObject().GetLinkManager());
+
+                if ( pLinkManager )
+                {
+                    SdrEmbedObjectLink* pEmbedObjectLink = nullptr;
+                    if (!bIFrame)
                     {
-                        mpImpl->mpObjectLink = new SdrEmbedObjectLink( this );
-                        mpImpl->maLinkURL = aLinkURL;
-                        pLinkManager->InsertFileLink( *mpImpl->mpObjectLink, OBJECT_CLIENT_OLE, aLinkURL );
-                        mpImpl->mpObjectLink->Connect();
+                        pEmbedObjectLink = new SdrEmbedObjectLink(this);
+                        mpImpl->mpObjectLink = pEmbedObjectLink;
                     }
+                    else
+                        mpImpl->mpObjectLink = new SdrIFrameLink(this);
+                    mpImpl->maLinkURL = aLinkURL;
+                    pLinkManager->InsertFileLink( *mpImpl->mpObjectLink, OBJECT_CLIENT_OLE, aLinkURL );
+                    if (pEmbedObjectLink)
+                        pEmbedObjectLink->Connect();
                 }
             }
         }
@@ -955,7 +1012,7 @@ void SdrOle2Obj::CheckFileLink_Impl()
     }
 }
 
-void SdrOle2Obj::Connect_Impl()
+void SdrOle2Obj::Connect_Impl(SvxOle2Shape* pCreator)
 {
     if(!mpImpl->aPersistName.isEmpty() )
     {
@@ -992,6 +1049,17 @@ void SdrOle2Obj::Connect_Impl()
                     mpImpl->mxObjRef.AssignToContainer( &rContainer, mpImpl->aPersistName );
                     mpImpl->mbConnected = true;
                     mpImpl->mxObjRef.Lock();
+                }
+            }
+
+            if (pCreator)
+            {
+                OUString sFrameURL(pCreator->GetAndClearInitialFrameURL());
+                if (!sFrameURL.isEmpty() && svt::EmbeddedObjectRef::TryRunningState(mpImpl->mxObjRef.GetObject()))
+                {
+                    uno::Reference<beans::XPropertySet> xSet(mpImpl->mxObjRef->getComponent(), uno::UNO_QUERY);
+                    if (xSet.is())
+                        xSet->setPropertyValue("FrameURL", uno::Any(sFrameURL));
                 }
             }
 
@@ -1308,14 +1376,14 @@ SdrObjectUniquePtr SdrOle2Obj::getFullDragClone() const
     return createSdrGrafObjReplacement(false);
 }
 
-void SdrOle2Obj::SetPersistName( const OUString& rPersistName )
+void SdrOle2Obj::SetPersistName( const OUString& rPersistName, SvxOle2Shape* pCreator )
 {
     DBG_ASSERT( mpImpl->aPersistName.isEmpty(), "Persist name changed!");
 
     mpImpl->aPersistName = rPersistName;
     mpImpl->mbLoadingOLEObjectFailed = false;
 
-    Connect();
+    Connect(pCreator);
     SetChanged();
 }
 
