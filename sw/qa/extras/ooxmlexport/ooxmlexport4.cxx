@@ -432,7 +432,6 @@ CPPUNIT_TEST_FIXTURE(Test, testChartInFooter)
         "id",
         "rId1");
 
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
