@@ -1528,7 +1528,8 @@ bool DomainMapper_Impl::isParaSdtEndDeferred() const
 
 static void lcl_MoveBorderPropertiesToFrame(std::vector<beans::PropertyValue>& rFrameProperties,
     uno::Reference<text::XTextRange> const& xStartTextRange,
-    uno::Reference<text::XTextRange> const& xEndTextRange )
+    uno::Reference<text::XTextRange> const& xEndTextRange,
+    bool bIsRTFImport)
 {
     try
     {
@@ -1561,10 +1562,10 @@ static void lcl_MoveBorderPropertiesToFrame(std::vector<beans::PropertyValue>& r
             aValue.Value = xTextRangeProperties->getPropertyValue(sPropertyName);
             if( nProperty < 4 )
                 xTextRangeProperties->setPropertyValue( sPropertyName, uno::Any(table::BorderLine2()));
-            else if (nProperty > 5)
+            else if (nProperty > 5 || bIsRTFImport)
             {
+                // left4/right5 need to be duplicated because of INVERT_BORDER_SPACING (DOCX only)
                 // Do not duplicate the top6/bottom7 border spacing.
-                // left4/right5 need to be duplicated because of INVERT_BORDER_SPACING
                 aValue.Value <<= sal_Int32(0);
             }
             if (aValue.Value.hasValue())
@@ -1841,7 +1842,8 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion(bool bPreventOverlap)
 
     lcl_MoveBorderPropertiesToFrame(aFrameProperties,
                                     rAppendContext.pLastParagraphProperties->GetStartingRange(),
-                                    rAppendContext.pLastParagraphProperties->GetEndingRange());
+                                    rAppendContext.pLastParagraphProperties->GetEndingRange(),
+                                    IsRTFImport());
 
     //frame conversion has to be executed after table conversion, not now
     RegisterFrameConversion(rAppendContext.pLastParagraphProperties->GetStartingRange(),

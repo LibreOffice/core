@@ -205,6 +205,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf154703_framePr2, "tdf154703_framePr2.rtf")
     // framePr frames are always imported as fully transparent
     CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(getShape(1), "FillTransparence"));
 
+    // as opposed to testLibreOfficeHang (RTF != INVERT_BORDER_SPACING) do not duplicate left/right
+    uno::Reference<text::XTextRange> xTextRange(getShape(1), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextRange->getText();
+    CPPUNIT_ASSERT_EQUAL(OUString("framePr"), getParagraphOfText(1, xText)->getString());
+    sal_Int32 nFrame = getProperty<sal_Int32>(getShape(1), "LeftBorderDistance");
+    sal_Int32 nPara = getProperty<sal_Int32>(getParagraphOfText(1, xText), "LeftBorderDistance");
+    if (!isExported()) // RTF
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(529), nFrame + nPara);
+    else // DOCX
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(529*2), nFrame + nPara);
+
     if (!isExported())
     {
         // Fill the frame with a red background. It should be transferred on export to the paragraph
