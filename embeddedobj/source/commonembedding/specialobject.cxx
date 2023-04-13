@@ -48,6 +48,7 @@ uno::Any SAL_CALL OSpecialEmbeddedObject::queryInterface( const uno::Type& rType
     uno::Any aReturn = ::cppu::queryInterface( rType,
                                         static_cast< embed::XEmbeddedObject* >( this ),
                                         static_cast< embed::XInplaceObject* >( this ),
+                                        static_cast< embed::XCommonEmbedPersist* >( static_cast< embed::XEmbedPersist* >( this ) ),
                                         static_cast< embed::XVisualObject* >( this ),
                                         static_cast< embed::XClassifiedObject* >( this ),
                                         static_cast< embed::XComponentSupplier* >( this ),
@@ -161,6 +162,14 @@ void SAL_CALL OSpecialEmbeddedObject::doVerb( sal_Int32 nVerbID )
     }
     else
         OCommonEmbeddedObject::doVerb( nVerbID );
+}
+
+void SAL_CALL OSpecialEmbeddedObject::reload(
+                const uno::Sequence< beans::PropertyValue >&,
+                const uno::Sequence< beans::PropertyValue >&)
+{
+    // Allow IFrames to reload their content
+    SetInplaceActiveState();
 }
 
 OUString SAL_CALL OSpecialEmbeddedObject::getImplementationName()
