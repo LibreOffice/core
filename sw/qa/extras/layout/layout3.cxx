@@ -1574,6 +1574,34 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf54465_ColumnsWithFootnoteDoNotOccup
     assertXPath(pXmlDoc, "/root/page", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf138124)
+{
+    // When the only portion after the footnote number is a FlyCnt, and it doesn't fit into
+    // the page width, it should be moved to the next line without the footnote number, and
+    // not loop, nor OOM, nor fail assertions.
+
+    createSwDoc("wideBoxInFootnote.fodt");
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, the layout would loop, creating new FootnoteNum portions
+    // indefinitely, until OOM.
+    // If the footnote paragraph had no orphan control, then the loop would finally end,
+    // but an assertion in SwTextPainter::DrawTextLine would fail during paint.
+
+    xmlDocUniquePtr pXml = parseLayoutDump();
+    assertXPath(pXml, "/root/page", 1);
+    assertXPath(pXml, "/root/page/ftncont/ftn/txt/anchored", 1);
+
+    // And finally, if there were no assertion in SwTextPainter::DrawTextLine, it would have
+    // produced multiple lines with FootnoteNum portions, failing the following check like
+    // - Expected: 1
+    // - Actual  : 49
+
+    assertXPath(pXml,
+                "/root/page/ftncont/ftn/txt//SwFieldPortion[@type='PortionType::FootnoteNum']", 1);
+    assertXPath(pXml, "/root/page/ftncont/ftn/txt//SwLinePortion[@type='PortionType::FlyCnt']", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

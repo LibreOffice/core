@@ -1914,6 +1914,7 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
 
         // These values must not be reset by FormatReset();
         const bool bOldNumDone = GetInfo().IsNumDone();
+        const bool bOldFootnoteDone = GetInfo().IsFootnoteDone();
         const bool bOldArrowDone = GetInfo().IsArrowDone();
         const bool bOldErgoDone = GetInfo().IsErgoDone();
 
@@ -1921,6 +1922,7 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
         FormatReset( GetInfo() );
 
         GetInfo().SetNumDone( bOldNumDone );
+        GetInfo().SetFootnoteDone(bOldFootnoteDone);
         GetInfo().SetArrowDone( bOldArrowDone );
         GetInfo().SetErgoDone( bOldErgoDone );
 
