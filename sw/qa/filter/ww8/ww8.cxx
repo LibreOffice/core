@@ -119,7 +119,6 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxHyperlinkShape)
     // Given a document with a hyperlink at char positions 0 -> 6 and a shape with text anchored at
     // char position 6:
     createSwDoc();
-    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -169,7 +168,6 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxSymbolFontExport)
 {
     // Create document with symbol character and font Wingdings
     mxComponent = loadFromDesktop("private:factory/swriter");
-    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
