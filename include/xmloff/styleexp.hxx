@@ -99,12 +99,6 @@ public:
         const rtl::Reference < SvXMLExportPropertyMapper >& rPropMapper,
         bool bUsed, XmlStyleFamily nFamily,
         const OUString* pPrefix = nullptr);
-
-    void exportStyleFamily(
-        const char *pFamily, const OUString& rXMLFamily,
-        const rtl::Reference < SvXMLExportPropertyMapper >& rPropMapper,
-        bool bUsed, XmlStyleFamily nFamily,
-        const OUString* pPrefix = nullptr);
 };
 
 #endif

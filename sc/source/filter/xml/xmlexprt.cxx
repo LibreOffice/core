@@ -1988,8 +1988,8 @@ void ScXMLExport::ExportStyles_( bool bUsed )
     }
     exportDataStyles();
 
-    aStylesExp->exportStyleFamily(OUString("CellStyles"),
-        OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME), xCellStylesExportPropertySetMapper, false, XmlStyleFamily::TABLE_CELL);
+    aStylesExp->exportStyleFamily("CellStyles",
+        XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME, xCellStylesExportPropertySetMapper, false, XmlStyleFamily::TABLE_CELL);
 
     SvXMLExport::ExportStyles_(bUsed);
 }

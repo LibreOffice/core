@@ -454,17 +454,6 @@ void XMLStyleExport::exportDefaultStyle(
 }
 
 void XMLStyleExport::exportStyleFamily(
-    const char *pFamily,
-    const OUString& rXMLFamily,
-    const rtl::Reference < SvXMLExportPropertyMapper >& rPropMapper,
-    bool bUsed, XmlStyleFamily nFamily, const OUString* pPrefix)
-{
-    const OUString sFamily(OUString::createFromAscii(pFamily ));
-    exportStyleFamily( sFamily, rXMLFamily, rPropMapper, bUsed, nFamily,
-                       pPrefix);
-}
-
-void XMLStyleExport::exportStyleFamily(
     const OUString& rFamily, const OUString& rXMLFamily,
     const rtl::Reference < SvXMLExportPropertyMapper >& rPropMapper,
     bool bUsed, XmlStyleFamily nFamily, const OUString* pPrefix)
