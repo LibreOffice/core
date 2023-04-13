@@ -30,6 +30,7 @@
 #include <com/sun/star/awt/ColorStopSequence.hdl>
 
 namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
+namespace com { namespace sun { namespace star { namespace awt { struct Gradient2; } } } }
 namespace basegfx { class B2DRange; }
 
 namespace basegfx
@@ -213,6 +214,48 @@ namespace basegfx
 
     namespace utils
     {
+        /* Tooling method to extract data from given awt::Gradient2
+           to ColorStops, doing some corrections, partitally based
+           on given SingleColor.
+           This will do quite some preparations for the gradient
+           as follows:
+           - It will check for single color (resetting rSingleColor when
+             this is the case) and return with empty ColorStops
+           - It will blend ColorStops to Intensity if StartIntensity/
+             EndIntensity != 100 is set in awt::Gradient2, so applying
+             that value(s) to the gadient directly
+           - It will adapt to Border if Border != 0 is set at the
+             given awt::Gradient2, so applying that value to the gadient
+             directly
+        */
+        BASEGFX_DLLPUBLIC void prepareColorStops(
+            const com::sun::star::awt::Gradient2& rGradient,
+            ColorStops& rColorStops,
+            BColor& rSingleColor);
+
+        /* Tooling method to synchronize the given ColorStops.
+           The intention is that a color GradientStops and an
+           alpha/transparence GradientStops gets synchronized
+           for export.
+           Fo the corrections the single values for color and
+           alpha may be used, e.g. when ColorStops is given
+           and not empty, but AlphaStops is empty, it will get
+           sycronized so that it will have the same number and
+           offsets in AlphaStops as in ColorStops, but with
+           the given SingleAlpha as value.
+           At return it guarantees that both have the same
+           number of entries with the same StopOffsets, so
+           that synchonized pair of ColorStops can e.g. be used
+           to export a Gradient with defined/adapted alpha
+           being 'coupled' indirectly using the
+           'FillTransparenceGradient' method (at import time).
+        */
+        BASEGFX_DLLPUBLIC void synchronizeColorStops(
+            ColorStops& rColorStops,
+            ColorStops& rAlphaStops,
+            const BColor& rSingleColor,
+            const BColor& rSingleAlpha);
+
         /* Tooling method to linearly blend the Colors contained in
            a given ColorStop vector against a given Color using the
            given intensity values.
@@ -241,6 +284,12 @@ namespace basegfx
            When also mirroring offsets a valid sort keeps valid.
         */
         BASEGFX_DLLPUBLIC void reverseColorStops(ColorStops& rColorStops);
+
+        /* Tooling method to convert UNO API data to ColorStops.
+           This will try to extract ColorStop data from the given
+           awt::Gradient2.
+        */
+        BASEGFX_DLLPUBLIC void fillColorStopsFromGradient2(ColorStops& rColorStops, const com::sun::star::awt::Gradient2& rGradient);
 
         /* Tooling method to convert UNO API data to ColorStops.
            This will try to extract ColorStop data from the given

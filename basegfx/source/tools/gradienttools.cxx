@@ -264,6 +264,237 @@ namespace basegfx
 
     namespace utils
     {
+        /* Tooling method to extract data from given awt::Gradient2
+           to ColorStops, doing some corrections, partitally based
+           on given SingleColor.
+           This will do quite some preparations for the gradient
+           as follows:
+           - It will check for single color (resetting rSingleColor when
+             this is the case) and return with empty ColorStops
+           - It will blend ColorStops to Intensity if StartIntensity/
+             EndIntensity != 100 is set in awt::Gradient2, so applying
+             that value(s) to the gadient directly
+           - It will adapt to Border if Border != 0 is set at the
+             given awt::Gradient2, so applying that value to the gadient
+             directly
+        */
+        void prepareColorStops(
+            const com::sun::star::awt::Gradient2& rGradient,
+            ColorStops& rColorStops,
+            BColor& rSingleColor)
+        {
+            fillColorStopsFromGradient2(rColorStops, rGradient);
+
+            if (isSingleColor(rColorStops, rSingleColor))
+            {
+                // when single color, preserve value in rSingleColor
+                // and clear the ColorStops, done.
+                rColorStops.clear();
+                return;
+            }
+
+            if (rGradient.StartIntensity != 100 || rGradient.EndIntensity != 100)
+            {
+                // apply 'old' blend stuff, blend against black
+                blendColorStopsToIntensity(
+                    rColorStops,
+                    rGradient.StartIntensity * 0.01,
+                    rGradient.EndIntensity * 0.01,
+                    basegfx::BColor()); // COL_BLACK
+
+                // can lead to single color (e.g. both zero, so all black),
+                // so check again
+                if (isSingleColor(rColorStops, rSingleColor))
+                {
+                    rColorStops.clear();
+                    return;
+                }
+            }
+
+            if (rGradient.Border != 0)
+            {
+                // apply Border if set
+                // NOTE: no new start node is added. If this is needed,
+                //       do that in the caller
+                const double fFactor(rGradient.Border * 0.01);
+                ColorStops aNewStops;
+
+                for (const auto& candidate : rColorStops)
+                {
+                    aNewStops.emplace_back(candidate.getStopOffset() * fFactor, candidate.getStopColor());
+                }
+
+                rColorStops = aNewStops;
+            }
+        }
+
+        /* Tooling method to synchronize the given ColorStops.
+           The intention is that a color GradientStops and an
+           alpha/transparence GradientStops gets synchronized
+           for export.
+           Fo the corrections the single values for color and
+           alpha may be used, e.g. when ColorStops is given
+           and not empty, but AlphaStops is empty, it will get
+           sycronized so that it will have the same number and
+           offsets in AlphaStops as in ColorStops, but with
+           the given SingleAlpha as value.
+           At return it guarantees that both have the same
+           number of entries with the same StopOffsets, so
+           that synchonized pair of ColorStops can e.g. be used
+           to export a Gradient with defined/adapted alpha
+           being 'coupled' indirectly using the
+           'FillTransparenceGradient' method (at import time).
+        */
+        void synchronizeColorStops(
+            ColorStops& rColorStops,
+            ColorStops& rAlphaStops,
+            const BColor& rSingleColor,
+            const BColor& rSingleAlpha)
+        {
+            if (rColorStops.empty())
+            {
+                if (rAlphaStops.empty())
+                {
+                    // no AlphaStops and no ColorStops
+                    // create two-stop fallbacks for both
+                    rColorStops = ColorStops {
+                        ColorStop(0.0, rSingleColor),
+                        ColorStop(1.0, rSingleColor) };
+                    rAlphaStops = ColorStops {
+                        ColorStop(0.0, rSingleAlpha),
+                        ColorStop(1.0, rSingleAlpha) };
+                }
+                else
+                {
+                    // AlphaStops but no ColorStops
+                    // create fallback synched with existing AlphaStops
+                    for (const auto& cand : rAlphaStops)
+                    {
+                        rColorStops.emplace_back(cand.getStopOffset(), rSingleColor);
+                    }
+                }
+
+                // preparations complete, we are done
+                return;
+            }
+            else if (rAlphaStops.empty())
+            {
+                // ColorStops but no AlphaStops
+                // create fallback AlphaStops synched with existing ColorStops using SingleAlpha
+                for (const auto& cand : rColorStops)
+                {
+                    rAlphaStops.emplace_back(cand.getStopOffset(), rSingleAlpha);
+                }
+
+                // preparations complete, we are done
+                return;
+            }
+
+            // here we have ColorStops and AlphaStops not empty. Check if we need to
+            // synchronize both or if they are already usable/in a synched state so
+            // that they have same count and same StopOffsets
+            bool bNeedToSyncronize(rColorStops.size() != rAlphaStops.size());
+
+            if (!bNeedToSyncronize)
+            {
+                // check for same StopOffsets
+                ColorStops::const_iterator aCurrColor(rColorStops.begin());
+                ColorStops::const_iterator aCurrAlpha(rAlphaStops.begin());
+
+                while (!bNeedToSyncronize &&
+                    aCurrColor != rColorStops.end() &&
+                    aCurrAlpha != rAlphaStops.end())
+                {
+                    if (fTools::equal(aCurrColor->getStopOffset(), aCurrAlpha->getStopOffset()))
+                    {
+                        aCurrColor++;
+                        aCurrAlpha++;
+                    }
+                    else
+                    {
+                        bNeedToSyncronize = true;
+                    }
+                }
+            }
+
+            if (bNeedToSyncronize)
+            {
+                // synchronize sizes & StopOffsets
+                ColorStops::const_iterator aCurrColor(rColorStops.begin());
+                ColorStops::const_iterator aCurrAlpha(rAlphaStops.begin());
+                ColorStops aNewColor;
+                ColorStops aNewAlpha;
+                ColorStopRange aColorStopRange;
+                ColorStopRange aAlphaStopRange;
+                bool bRealChange(false);
+
+                do {
+                    const bool bColor(aCurrColor != rColorStops.end());
+                    const bool bAlpha(aCurrAlpha != rAlphaStops.end());
+
+                    if (bColor && bAlpha)
+                    {
+                        const double fColorOff(aCurrColor->getStopOffset());
+                        const double fAlphaOff(aCurrAlpha->getStopOffset());
+
+                        if (fTools::less(fColorOff, fAlphaOff))
+                        {
+                            // copy color, create alpha
+                            aNewColor.emplace_back(fColorOff, aCurrColor->getStopColor());
+                            aNewAlpha.emplace_back(fColorOff, utils::modifyBColor(rAlphaStops, fColorOff, 0, aAlphaStopRange));
+                            bRealChange = true;
+                            aCurrColor++;
+                        }
+                        else if (fTools::more(fColorOff, fAlphaOff))
+                        {
+                            // copy alpha, create color
+                            aNewColor.emplace_back(fAlphaOff, utils::modifyBColor(rColorStops, fAlphaOff, 0, aColorStopRange));
+                            aNewAlpha.emplace_back(fAlphaOff, aCurrAlpha->getStopColor());
+                            bRealChange = true;
+                            aCurrAlpha++;
+                        }
+                        else
+                        {
+                            // equal: copy both, advance
+                            aNewColor.emplace_back(fColorOff, aCurrColor->getStopColor());
+                            aNewAlpha.emplace_back(fAlphaOff, aCurrAlpha->getStopColor());
+                            aCurrColor++;
+                            aCurrAlpha++;
+                        }
+                    }
+                    else if (bColor)
+                    {
+                        const double fColorOff(aCurrColor->getStopOffset());
+                        aNewAlpha.emplace_back(fColorOff, utils::modifyBColor(rAlphaStops, fColorOff, 0, aAlphaStopRange));
+                        bRealChange = true;
+                        aCurrColor++;
+                    }
+                    else if (bAlpha)
+                    {
+                        const double fAlphaOff(aCurrAlpha->getStopOffset());
+                        aNewColor.emplace_back(fAlphaOff, utils::modifyBColor(rColorStops, fAlphaOff, 0, aColorStopRange));
+                        bRealChange = true;
+                        aCurrAlpha++;
+                    }
+                    else
+                    {
+                        // no more input, break do..while loop
+                        break;
+                    }
+                }
+                while(true);
+
+                if (bRealChange)
+                {
+                    // copy on 'real' change, that means data was added.
+                    // This should always be the cease and should have been
+                    // detected as such above, see bNeedToSyncronize
+                    rColorStops = aNewColor;
+                    rAlphaStops = aNewColor;
+                }
+            }
+        }
+
         /* Tooling method to linearly blend the Colors contained in
            a given ColorStop vector against a given Color using the
            given intensity values.
@@ -345,7 +576,31 @@ namespace basegfx
                 candidate = ColorStop(1.0 - candidate.getStopOffset(), candidate.getStopColor());
         }
 
-        /* Tooling method to convert UNO API data to ColorStops
+        /* Tooling method to convert UNO API data to ColorStops.
+           This will try to extract ColorStop data from the given
+           awt::Gradient2.
+        */
+        void fillColorStopsFromGradient2(ColorStops& rColorStops, const com::sun::star::awt::Gradient2& rGradient)
+        {
+            const sal_Int32 nLen(rGradient.ColorStops.getLength());
+
+            if (0 == nLen)
+                return;
+
+            // we have ColorStops
+            rColorStops.clear();
+            rColorStops.reserve(nLen);
+            const css::awt::ColorStop* pSourceColorStop(rGradient.ColorStops.getConstArray());
+
+            for (sal_Int32 a(0); a < nLen; a++, pSourceColorStop++)
+            {
+                rColorStops.emplace_back(
+                    pSourceColorStop->StopOffset,
+                    BColor(pSourceColorStop->StopColor.Red, pSourceColorStop->StopColor.Green, pSourceColorStop->StopColor.Blue));
+            }
+        }
+
+        /* Tooling method to convert UNO API data to ColorStops.
            This will try to extract ColorStop data from the given
            Any, so if it's of type awt::Gradient2 that data will be
            extracted, converted and copied into the given ColorStops.
@@ -356,22 +611,7 @@ namespace basegfx
             if (!(rVal >>= aGradient2))
                 return;
 
-            const sal_Int32 nLen(aGradient2.ColorStops.getLength());
-
-            if (0 == nLen)
-                return;
-
-            // we have ColorStops
-            rColorStops.clear();
-            rColorStops.reserve(nLen);
-            const css::awt::ColorStop* pSourceColorStop(aGradient2.ColorStops.getConstArray());
-
-            for (sal_Int32 a(0); a < nLen; a++, pSourceColorStop++)
-            {
-                rColorStops.emplace_back(
-                    pSourceColorStop->StopOffset,
-                    BColor(pSourceColorStop->StopColor.Red, pSourceColorStop->StopColor.Green, pSourceColorStop->StopColor.Blue));
-            }
+            fillColorStopsFromGradient2(rColorStops, aGradient2);
         }
 
         /* Tooling method to fill a awt::ColorStopSequence with

@@ -572,6 +572,28 @@ void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelp
                 // set ColorStops using UNO API
                 basegfx::utils::fillColorStopSequenceFromColorStops(aGradient.ColorStops, aColorStops);
 
+                // for compatibility, still set StartColor/EndColor
+                // NOTE: All code after adapting to multi color gradients works
+                //       using the ColorSteps, so in principle Start/EndColor might
+                //       be either
+                //        (a) ignored consequently everywhere or
+                //        (b) be set/added consequently everywhere
+                //       since this is - in principle - redundant data.
+                //       Be aware thet e.g. cases like DrawingML::EqualGradients
+                //       and others would have to be identified and adapted (!)
+                //       Since awt::Gradient2 is UNO API data there might
+                //       be cases where just awt::Gradient is transfered, so (b)
+                //       is far better backwards compatible and thus more safe, so
+                //       all changes will make use of additionally using/setting
+                //       these additionally, but will only make use of the given
+                //       ColorSteps if these are not empty, assuming that these
+                //       already contain Start/EndColor.
+                //       In principle that redundancy and that it is conflict-free
+                //       could even be checked and asserted, but consequently using
+                //       (b) methodically should be safe.
+                aGradient.StartColor = static_cast<sal_Int32>(::Color(aColorStops.front().getStopColor()));
+                aGradient.EndColor = static_cast<sal_Int32>(::Color(aColorStops.back().getStopColor()));
+
                 // push gradient or named gradient to property map
                 if (rPropMap.setProperty(ShapeProperty::FillGradient, aGradient))
                 {
@@ -590,7 +612,7 @@ void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelp
             {
                 sal_Int32 nEndTrans     = 0;
                 sal_Int32 nStartTrans   = 0;
-                awt::Gradient aGradient;
+                awt::Gradient2 aGradient;
                 aGradient.Angle = 900;
                 aGradient.StartIntensity = 100;
                 aGradient.EndIntensity = 100;
@@ -885,6 +907,13 @@ void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelp
 
                     aGradient.Border = rtl::math::round(100*nBorder);
                 }
+
+                // for temporary backward compatibility, complete data by creating ColorStops for awt::Gradient2
+                basegfx::utils::fillColorStopSequenceFromColorStops(
+                    aGradient.ColorStops,
+                    basegfx::ColorStops {
+                        basegfx::ColorStop(0.0, ::Color(ColorTransparency, aGradient.StartColor).getBColor()),
+                        basegfx::ColorStop(1.0, ::Color(ColorTransparency, aGradient.EndColor).getBColor()) });
 
                 // push gradient or named gradient to property map
                 if( rPropMap.setProperty( ShapeProperty::FillGradient, aGradient ) )

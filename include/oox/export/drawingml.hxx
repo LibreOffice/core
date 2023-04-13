@@ -58,7 +58,7 @@ enum class SvxTimeFormat;
 namespace com::sun::star {
 namespace awt {
     struct FontDescriptor;
-    struct Gradient;
+    struct Gradient2;
 }
 namespace beans {
     struct PropertyValue;
@@ -106,6 +106,11 @@ namespace core {
 }
 
 namespace drawingml {
+
+/// Tooling method to fill awt::Gradient2 from data contained in the given Any
+bool fillGradient2FromAny(
+    css::awt::Gradient2& rGradient,
+    const css::uno::Any& rVal);
 
 class OOX_DLLPUBLIC URLTransformer
 {
@@ -198,7 +203,7 @@ protected:
     const char* GetComponentDir() const;
     const char* GetRelationCompPrefix() const;
 
-    static bool EqualGradients( css::awt::Gradient aGradient1, css::awt::Gradient aGradient2 );
+    static bool EqualGradients( const css::awt::Gradient2& rGradient1, const css::awt::Gradient2& rGradient2 );
     bool IsFontworkShape(const css::uno::Reference< css::beans::XPropertySet >& rXShapePropSet);
 
     void WriteGlowEffect(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet);
@@ -244,10 +249,20 @@ public:
     void WriteSolidFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WriteGradientFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
 
-    void WriteGradientFill( css::awt::Gradient rGradient, css::awt::Gradient rTransparenceGradient,
-                            const css::uno::Reference<css::beans::XPropertySet>& rXPropSet = css::uno::Reference<css::beans::XPropertySet>());
+    /* New API for WriteGradientFill:
+       If a awt::Gradient2 is given, it will be used. Else, the 'Fix' entry will be used for
+       Color or Transparency. That way, less Pseudo(Color|Transparency)Gradients have to be
+       created at caller side.
+       NOTE: Giving no Gradient at all (both nullptr) is an error.
+    */
+    void WriteGradientFill(
+        const css::awt::Gradient2* pColorGradient, sal_Int32 nFixColor,
+        const css::awt::Gradient2* pTransparenceGradient, sal_Int32 nFixTransparence);
+    void WriteGradientFill2(
+        const css::awt::Gradient2* pColorGradient, sal_Int32 nFixColor,
+        const css::awt::Gradient2* pTransparenceGradient, sal_Int32 nFixTransparence);
 
-    void WriteGrabBagGradientFill( const css::uno::Sequence< css::beans::PropertyValue >& aGradientStops, css::awt::Gradient rGradient);
+    void WriteGrabBagGradientFill( const css::uno::Sequence< css::beans::PropertyValue >& aGradientStops, const css::awt::Gradient2& rGradient);
 
     void WriteBlipOrNormalFill(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet,
                                const OUString& rURLPropName, const css::awt::Size& rSize = {});
