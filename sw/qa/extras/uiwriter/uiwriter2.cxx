@@ -3096,7 +3096,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf139120)
         dispatchCommand(mxComponent, ".uno:Delete", {});
     }
 
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum sit amet."), pTextDoc->getText()->getString());
 
     for (int i = 0; i < 6; ++i)
