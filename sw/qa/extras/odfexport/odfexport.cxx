@@ -279,7 +279,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf125877)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextTablesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xSupplier->getTextTables(), uno::UNO_QUERY);
-    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
 
     // This was 0 (lost table during ODT export in footnotes)
     // Note: fix also tdf#95806: painting table layout is correct
