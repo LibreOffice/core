@@ -506,8 +506,8 @@ SwXFieldMaster::getSupportedServiceNames()
     return { "com.sun.star.text.TextFieldMaster", getServiceName(m_pImpl->m_nResTypeId) };
 }
 
-SwXFieldMaster::SwXFieldMaster(SwDoc *const pDoc, SwFieldIds const nResId)
-    : m_pImpl(new Impl(pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD), pDoc, nResId))
+SwXFieldMaster::SwXFieldMaster(SwDoc& rDoc, SwFieldIds const nResId)
+    : m_pImpl(new Impl(rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD), &rDoc, nResId))
 {
 }
 
@@ -534,7 +534,7 @@ SwXFieldMaster::CreateXFieldMaster(SwDoc * pDoc, SwFieldType *const pType,
     {
         SwXFieldMaster *const pFM( pType
                 ? new SwXFieldMaster(*pType, pDoc)
-                : new SwXFieldMaster(pDoc, nResId));
+                : new SwXFieldMaster(*pDoc, nResId));
         xFM.set(pFM);
         if (pType)
         {

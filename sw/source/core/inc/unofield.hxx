@@ -54,7 +54,7 @@ private:
     SwXFieldMaster(SwFieldType& rType, SwDoc * pDoc);
 
     /// descriptor
-    SwXFieldMaster(SwDoc* pDoc, SwFieldIds nResId);
+    SwXFieldMaster(SwDoc& rDoc, SwFieldIds nResId);
 
 public:
 
