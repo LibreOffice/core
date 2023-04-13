@@ -1412,7 +1412,6 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testOrgChart2)
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf131553)
 {
     createSdImpressDoc("pptx/tdf131553.pptx");
-    uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0), uno::UNO_QUERY);
 
     const SdrPage* pPage = GetPage(1);
     const SdrObjGroup* pObjGroup = dynamic_cast<SdrObjGroup*>(pPage->GetObj(0));
