@@ -42,6 +42,7 @@ namespace frame { class XModel; }
 namespace svt { class EmbeddedObjectRef; }
 
 class SdrOle2ObjImpl;
+class SvxOle2Shape;
 
 class SVXCORE_DLLPUBLIC SdrOle2Obj : public SdrRectObj
 {
@@ -49,7 +50,7 @@ private:
     std::unique_ptr<SdrOle2ObjImpl> mpImpl;
 
 private:
-    SVX_DLLPRIVATE void Connect_Impl();
+    SVX_DLLPRIVATE void Connect_Impl(SvxOle2Shape* pCreator = nullptr);
     SVX_DLLPRIVATE void Disconnect_Impl();
     SVX_DLLPRIVATE void AddListeners_Impl();
     SVX_DLLPRIVATE void RemoveListeners_Impl();
@@ -105,7 +106,7 @@ public:
     // OLE object has got a separate PersistName member now;
     // !!! use ::SetPersistName( ... ) only, if you know what you do !!!
     const OUString& GetPersistName() const;
-    void        SetPersistName( const OUString& rPersistName );
+    void        SetPersistName( const OUString& rPersistName, SvxOle2Shape* pCreator = nullptr );
 
     // One can add an application name to a SdrOle2Obj, which can be queried for
     // later on (SD needs this for presentation objects).
@@ -153,7 +154,7 @@ public:
                                          sal_Int64 nAspect );
     static bool Unload( const css::uno::Reference< css::embed::XEmbeddedObject >& xObj, sal_Int64 nAspect );
     bool Unload();
-    void Connect();
+    void Connect(SvxOle2Shape* pCreator = nullptr);
     void Disconnect();
     void ObjectLoaded();
 
@@ -198,6 +199,16 @@ public:
         const OUString& rMimeType, const css::uno::Any & rValue ) override;
 
     void                Connect() { GetRealObject(); }
+};
+
+class SVXCORE_DLLPUBLIC SdrIFrameLink final : public sfx2::SvBaseLink
+{
+    SdrOle2Obj* m_pObject;
+
+public:
+    explicit SdrIFrameLink(SdrOle2Obj* pObject);
+    virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
+        const OUString& rMimeType, const css::uno::Any & rValue ) override;
 };
 
 #endif // INCLUDED_SVX_SVDOOLE2_HXX
