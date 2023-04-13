@@ -251,6 +251,9 @@ private:
                     const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
                     const css::uno::Sequence< css::beans::PropertyValue >& lObjArgs );
 
+protected:
+    void SetInplaceActiveState();
+
 public:
     OCommonEmbeddedObject(
         css::uno::Reference< css::uno::XComponentContext > xContext,
