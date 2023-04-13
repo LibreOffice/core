@@ -584,23 +584,23 @@ void SwHTMLParser::InsertFieldText()
     }
 }
 
-void SwHTMLParser::InsertCommentText( const char *pTag )
+void SwHTMLParser::InsertCommentText( std::string_view pTag )
 {
     bool bEmpty = m_aContents.isEmpty();
     if( !bEmpty )
         m_aContents += "\n";
 
     m_aContents += aToken;
-    if( bEmpty && pTag )
+    if( bEmpty && !pTag.empty() )
     {
         m_aContents = OUString::Concat("HTML: <") + OUString::createFromAscii(pTag) + ">" + m_aContents;
     }
 }
 
-void SwHTMLParser::InsertComment( const OUString& rComment, const char *pTag )
+void SwHTMLParser::InsertComment( const OUString& rComment, std::string_view pTag )
 {
     OUString aComment( rComment );
-    if( pTag )
+    if( !pTag.empty() )
     {
         aComment += "</" +
             OUString::createFromAscii(pTag) +

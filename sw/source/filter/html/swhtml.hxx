@@ -746,8 +746,8 @@ private:
     // insert bookmark
     void InsertBookmark( const OUString& rName );
 
-    void InsertCommentText( const char *pTag );
-    void InsertComment( const OUString& rName, const char *pTag = nullptr );
+    void InsertCommentText( std::string_view pTag );
+    void InsertComment( const OUString& rName, std::string_view pTag = {} );
 
     // Has the current paragraph bookmarks?
     bool HasCurrentParaBookmarks( bool bIgnoreStack=false ) const;
