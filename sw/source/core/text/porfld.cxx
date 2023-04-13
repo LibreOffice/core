@@ -419,7 +419,7 @@ bool SwFieldPortion::Format( SwTextFormatInfo &rInf )
             {
                 pField->SetFont( std::make_unique<SwFont>( *rInf.GetFont() ) );
             }
-            if (Compress())
+            if (IsFollow() || Compress())
             {   // empty this will be deleted in SwLineLayout::CalcLine()
                 // anyway so make sure pField doesn't have a stale flag
                 pField->SetFollow( true );
