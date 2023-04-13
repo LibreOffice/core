@@ -175,31 +175,46 @@ sal_Bool SAL_CALL IFrameObject::load(
                 return false;
         }
 
+        bool bUpdateAllowed(true);
+        if (pDoc)
+        {
+            // perhaps should only check for file targets, but lets default to making it strong
+            // unless there is a known need to distinguish
+            comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = pDoc->getEmbeddedObjectContainer();
+            bUpdateAllowed = rEmbeddedObjectContainer.getUserAllowsLinkUpdate();
+        }
+        if (!bUpdateAllowed)
+            return false;
+
         OUString sReferer;
         if (pDoc && pDoc->HasName())
             sReferer = pDoc->GetMedium()->GetName();
 
-        DBG_ASSERT( !mxFrame.is(), "Frame already existing!" );
-        VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
-        VclPtr<IFrameWindow_Impl> pWin = VclPtr<IFrameWindow_Impl>::Create( pParent, maFrmDescr.IsFrameBorderOn() );
-        pWin->SetSizePixel( pParent->GetOutputSizePixel() );
-        pWin->SetBackground();
-        pWin->Show();
+        uno::Reference<css::awt::XWindow> xParentWindow(xFrame->getContainerWindow());
 
-        uno::Reference < awt::XWindow > xWindow( pWin->GetComponentInterface(), uno::UNO_QUERY );
-        xFrame->setComponent( xWindow, uno::Reference < frame::XController >() );
+        if (!mxFrame.is())
+        {
+            VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow(xParentWindow);
+            VclPtr<IFrameWindow_Impl> pWin = VclPtr<IFrameWindow_Impl>::Create( pParent, maFrmDescr.IsFrameBorderOn() );
+            pWin->SetSizePixel( pParent->GetOutputSizePixel() );
+            pWin->SetBackground();
+            pWin->Show();
 
-        // we must destroy the IFrame before the parent is destroyed
-        xWindow->addEventListener( this );
+            uno::Reference < awt::XWindow > xWindow( pWin->GetComponentInterface(), uno::UNO_QUERY );
+            xFrame->setComponent( xWindow, uno::Reference < frame::XController >() );
 
-        mxFrame = frame::Frame::create( mxContext );
-        uno::Reference < awt::XWindow > xWin( pWin->GetComponentInterface(), uno::UNO_QUERY );
-        mxFrame->initialize( xWin );
-        mxFrame->setName( maFrmDescr.GetName() );
+            // we must destroy the IFrame before the parent is destroyed
+            xWindow->addEventListener( this );
 
-        uno::Reference < frame::XFramesSupplier > xFramesSupplier( xFrame, uno::UNO_QUERY );
-        if ( xFramesSupplier.is() )
-            mxFrame->setCreator( xFramesSupplier );
+            mxFrame = frame::Frame::create( mxContext );
+            uno::Reference < awt::XWindow > xWin( pWin->GetComponentInterface(), uno::UNO_QUERY );
+            mxFrame->initialize( xWin );
+            mxFrame->setName( maFrmDescr.GetName() );
+
+            uno::Reference < frame::XFramesSupplier > xFramesSupplier( xFrame, uno::UNO_QUERY );
+            if ( xFramesSupplier.is() )
+                mxFrame->setCreator( xFramesSupplier );
+        }
 
         uno::Sequence < beans::PropertyValue > aProps{
             comphelper::makePropertyValue("PluginMode", sal_Int16(2)),
