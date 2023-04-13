@@ -89,7 +89,6 @@ private:
     void ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj);
     void ImpSetAttributesFitToSize(SdrTextObj* pTxtObj);
     void ImpSetAttributesFitToSizeVertical(SdrTextObj* pTxtObj);
-    void ImpSetAttributesFitCommon(SdrTextObj* pTxtObj);
 };
 
 } // end of namespace sd

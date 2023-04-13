@@ -509,59 +509,34 @@ bool FuText::MouseMove(const MouseEvent& rMEvt)
 
 void FuText::ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj)
 {
-    if(mpDoc->GetDocumentType() == DocumentType::Impress)
+    if( nSlotId == SID_ATTR_CHAR )
     {
-        if( nSlotId == SID_ATTR_CHAR )
-        {
-            /* Create Impress text object (rescales to line height)
-               We get the correct height during the subsequent creation of the
-               object, otherwise we draw too much */
-            SfxItemSet aSet(mpViewShell->GetPool());
-            aSet.Put(makeSdrTextMinFrameHeightItem(0));
-            aSet.Put(makeSdrTextAutoGrowWidthItem(false));
-            aSet.Put(makeSdrTextAutoGrowHeightItem(true));
-            pTxtObj->SetMergedItemSet(aSet);
-            pTxtObj->AdjustTextFrameWidthAndHeight();
-            aSet.Put(makeSdrTextMaxFrameHeightItem(pTxtObj->GetLogicRect().GetSize().Height()));
-            pTxtObj->SetMergedItemSet(aSet);
-            const SfxViewShell* pCurrentViewShell = SfxViewShell::Current();
-            if (pCurrentViewShell && (pCurrentViewShell->isLOKMobilePhone() || pCurrentViewShell->isLOKTablet()))
-                pTxtObj->SetText(SdResId(STR_PRESOBJ_TEXT_EDIT_MOBILE));
-        }
-        else if( nSlotId == SID_ATTR_CHAR_VERTICAL )
-        {
-            SfxItemSet aSet(mpViewShell->GetPool());
-            aSet.Put(makeSdrTextMinFrameWidthItem(0));
-            aSet.Put(makeSdrTextAutoGrowWidthItem(true));
-            aSet.Put(makeSdrTextAutoGrowHeightItem(false));
-
-            // Needs to be set since default is SDRTEXTHORZADJUST_BLOCK
-            aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
-            pTxtObj->SetMergedItemSet(aSet);
-            pTxtObj->AdjustTextFrameWidthAndHeight();
-            aSet.Put(makeSdrTextMaxFrameWidthItem(pTxtObj->GetLogicRect().GetSize().Width()));
-            pTxtObj->SetMergedItemSet(aSet);
-        }
+        SfxItemSet aSet(mpViewShell->GetPool());
+        aSet.Put(makeSdrTextAutoGrowWidthItem(false));
+        aSet.Put(makeSdrTextAutoGrowHeightItem(true));
+        pTxtObj->SetMergedItemSet(aSet);
+        pTxtObj->AdjustTextFrameWidthAndHeight();
+        const SfxViewShell* pCurrentViewShell = SfxViewShell::Current();
+        if (pCurrentViewShell && (pCurrentViewShell->isLOKMobilePhone() || pCurrentViewShell->isLOKTablet()))
+            pTxtObj->SetText(SdResId(STR_PRESOBJ_TEXT_EDIT_MOBILE));
     }
-    else
+    else if( nSlotId == SID_ATTR_CHAR_VERTICAL )
     {
-        if( nSlotId == SID_ATTR_CHAR_VERTICAL )
-        {
-            // draw text object, needs to be initialized when vertical text is used
-            SfxItemSet aSet(mpViewShell->GetPool());
+        // draw text object, needs to be initialized when vertical text is used
+        SfxItemSet aSet(mpViewShell->GetPool());
 
-            aSet.Put(makeSdrTextAutoGrowWidthItem(true));
-            aSet.Put(makeSdrTextAutoGrowHeightItem(false));
+        aSet.Put(makeSdrTextAutoGrowWidthItem(true));
+        aSet.Put(makeSdrTextAutoGrowHeightItem(false));
 
-            // Set defaults for vertical click-n'drag text object, pool defaults are:
-            // SdrTextVertAdjustItem: SDRTEXTVERTADJUST_TOP
-            // SdrTextHorzAdjustItem: SDRTEXTHORZADJUST_BLOCK
-            // Analog to that:
-            aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_BLOCK));
-            aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
+        // Set defaults for vertical click-n'drag text object, pool defaults are:
+        // SdrTextVertAdjustItem: SDRTEXTVERTADJUST_TOP
+        // SdrTextHorzAdjustItem: SDRTEXTHORZADJUST_BLOCK
+        // Analog to that:
+        aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_BLOCK));
+        aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
 
-            pTxtObj->SetMergedItemSet(aSet);
-        }
+        pTxtObj->SetMergedItemSet(aSet);
+        pTxtObj->AdjustTextFrameWidthAndHeight();
     }
 }
 
@@ -583,35 +558,6 @@ void FuText::ImpSetAttributesFitToSizeVertical(SdrTextObj* pTxtObj)
     aSet.Put(makeSdrTextAutoGrowHeightItem(false));
     aSet.Put(makeSdrTextAutoGrowWidthItem(false));
     pTxtObj->SetMergedItemSet(aSet);
-    pTxtObj->AdjustTextFrameWidthAndHeight();
-}
-
-void FuText::ImpSetAttributesFitCommon(SdrTextObj* pTxtObj)
-{
-    // Normal Textobject
-    if (mpDoc->GetDocumentType() != DocumentType::Impress)
-        return;
-
-    if( nSlotId == SID_ATTR_CHAR )
-    {
-        // Impress text object (rescales to line height)
-        SfxItemSet aSet(mpViewShell->GetPool());
-        aSet.Put(makeSdrTextMinFrameHeightItem(0));
-        aSet.Put(makeSdrTextMaxFrameHeightItem(0));
-        aSet.Put(makeSdrTextAutoGrowHeightItem(true));
-        aSet.Put(makeSdrTextAutoGrowWidthItem(false));
-        pTxtObj->SetMergedItemSet(aSet);
-    }
-    else if( nSlotId == SID_ATTR_CHAR_VERTICAL )
-    {
-        SfxItemSet aSet(mpViewShell->GetPool());
-        aSet.Put(makeSdrTextMinFrameWidthItem(0));
-        aSet.Put(makeSdrTextMaxFrameWidthItem(0));
-        aSet.Put(makeSdrTextAutoGrowWidthItem(true));
-        aSet.Put(makeSdrTextAutoGrowHeightItem(false));
-        pTxtObj->SetMergedItemSet(aSet);
-    }
-
     pTxtObj->AdjustTextFrameWidthAndHeight();
 }
 
@@ -758,8 +704,6 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
         }
         else
         {
-            ImpSetAttributesFitCommon(GetTextObj());
-
             // thereby the handles and the gray frame are correct
             mpView->AdjustMarkHdl();
             mpView->PickHandle(aPnt);
@@ -1355,10 +1299,6 @@ rtl::Reference<SdrObject> FuText::CreateDefaultObject(const sal_uInt16 nID, cons
             else if ( nSlotId == SID_TEXT_FITTOSIZE_VERTICAL )
             {
                 ImpSetAttributesFitToSizeVertical(pText);
-            }
-            else
-            {
-                ImpSetAttributesFitCommon(pText);
             }
 
             // Put text object into edit mode.
