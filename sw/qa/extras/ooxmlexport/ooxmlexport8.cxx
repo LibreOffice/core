@@ -153,7 +153,6 @@ graphic = image(0).Graphic
 xray graphic.Size
 xray image.AnchorType
 */
-    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     uno::Reference<drawing::XShapes> shapes(getShape(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> image;
