@@ -2062,7 +2062,6 @@ void DesktopLOKTest::testInput()
 {
     // Load a Writer document, enable change recording and press a key.
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
 
     Scheduler::ProcessEventsToIdle(); // Get focus & other bits setup.
 
