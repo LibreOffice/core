@@ -1190,10 +1190,10 @@ CPPUNIT_TEST_FIXTURE(Test, testProtectionKey)
     uno::Sequence<sal_Int8> const key1(getProperty<uno::Sequence<sal_Int8>>(xSect1, "ProtectionKey"));
     CPPUNIT_ASSERT(SvPasswordHelper::CompareHashPassword(key1, password));
     uno::Reference<beans::XPropertySet> xSect2(xSections->getByIndex(2), uno::UNO_QUERY);
-    uno::Sequence<sal_Int8> const key2(getProperty<uno::Sequence<sal_Int8>>(xSect1, "ProtectionKey"));
+    uno::Sequence<sal_Int8> const key2(getProperty<uno::Sequence<sal_Int8>>(xSect2, "ProtectionKey"));
     CPPUNIT_ASSERT(SvPasswordHelper::CompareHashPassword(key2, password));
     uno::Reference<beans::XPropertySet> xSect3(xSections->getByIndex(3), uno::UNO_QUERY);
-    uno::Sequence<sal_Int8> const key3(getProperty<uno::Sequence<sal_Int8>>(xSect1, "ProtectionKey"));
+    uno::Sequence<sal_Int8> const key3(getProperty<uno::Sequence<sal_Int8>>(xSect3, "ProtectionKey"));
     CPPUNIT_ASSERT(SvPasswordHelper::CompareHashPassword(key3, password));
 
     // we can't assume that the user entered the password; check that we
