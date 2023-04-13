@@ -185,7 +185,8 @@ sal_Bool SAL_CALL IFrameObject::load(
             sReferer = pDoc->GetMedium()->GetName();
 
         DBG_ASSERT( !mxFrame.is(), "Frame already existing!" );
-        VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+        uno::Reference<css::awt::XWindow> xParentWindow(xFrame->getContainerWindow());
+        VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow(xParentWindow);
         VclPtr<IFrameWindow_Impl> pWin = VclPtr<IFrameWindow_Impl>::Create( pParent, maFrmDescr.IsFrameBorderOn() );
         pWin->SetSizePixel( pParent->GetOutputSizePixel() );
         pWin->SetBackground();
@@ -206,7 +207,7 @@ sal_Bool SAL_CALL IFrameObject::load(
         if ( xFramesSupplier.is() )
             mxFrame->setCreator( xFramesSupplier );
 
-        uno::Reference<task::XInteractionHandler> xInteractionHandler(task::InteractionHandler::createWithParent(mxContext, xWin));
+        uno::Reference<task::XInteractionHandler> xInteractionHandler(task::InteractionHandler::createWithParent(mxContext, xParentWindow));
         uno::Sequence < beans::PropertyValue > aProps{
             comphelper::makePropertyValue("PluginMode", sal_Int16(2)),
             comphelper::makePropertyValue("ReadOnly", true),
