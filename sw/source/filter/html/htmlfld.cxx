@@ -43,7 +43,7 @@ namespace {
 
 struct HTMLNumFormatTableEntry
 {
-    const char *pName;
+    std::string_view pName;
     NfIndexTableOffset eFormat;
 };
 
@@ -82,7 +82,7 @@ HTMLNumFormatTableEntry const aHTMLDateFieldFormatTable[] =
     { "MD",             NF_DATE_DIN_MMDD        },
     { "YMD",        NF_DATE_DIN_YYMMDD      },
     { "YYMD",       NF_DATE_DIN_YYYYMMDD    },
-    { nullptr,                    NF_NUMERIC_START }
+    { {},                    NF_NUMERIC_START }
 };
 
 HTMLNumFormatTableEntry const aHTMLTimeFieldFormatTable[] =
@@ -90,7 +90,7 @@ HTMLNumFormatTableEntry const aHTMLTimeFieldFormatTable[] =
     { "SYS",     NF_TIME_HHMMSS },
     { "SSMM24",      NF_TIME_HHMM },
     { "SSMM12",      NF_TIME_HHMMAMPM },
-    { nullptr,                 NF_NUMERIC_START }
+    { {},            NF_NUMERIC_START }
 };
 
 HTMLOptionEnum<SvxNumType> const aHTMLPageNumFieldFormatTable[] =
@@ -354,7 +354,7 @@ void SwHTMLParser::NewField()
             if( pFormatOption )
             {
                 const OUString& rFormat = pFormatOption->GetString();
-                for( int k = 0; pFormatTable[k].pName; ++k )
+                for( int k = 0; !pFormatTable[k].pName.empty(); ++k )
                 {
                     if( rFormat.equalsIgnoreAsciiCaseAscii( pFormatTable[k].pName ) )
                     {
