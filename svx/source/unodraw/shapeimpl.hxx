@@ -64,8 +64,11 @@ public:
 
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
 };
+
 class SvxFrameShape : public SvxOle2Shape
 {
+private:
+    OUString m_sInitialFrameURL;
 protected:
     // override these for special property handling in subcasses. Return true if property is handled
     virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
@@ -82,6 +85,8 @@ public:
     virtual void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues ) override;
 
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
+
+    virtual OUString GetAndClearInitialFrameURL() override;
 };
 
 SvxUnoPropertyMapProvider& getSvxMapProvider();
