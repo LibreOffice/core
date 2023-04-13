@@ -53,7 +53,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableSectionMargins)
     CPPUNIT_ASSERT(xTextSection.is());
     uno::Reference<text::XTextColumns> xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xTextSection, "TextColumns");
     OUString pageStyleName = getProperty<OUString>(getParagraph(2), "PageStyleName");
-    uno::Reference<style::XStyle> pageStyle( getStyles("PageStyles")->getByName(pageStyleName), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(pageStyleName), uno::UNO_QUERY);
     uno::Reference<text::XTextColumns> xPageColumns = getProperty< uno::Reference<text::XTextColumns> >(xPageStyle, "TextColumns");
 
