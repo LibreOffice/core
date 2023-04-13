@@ -883,6 +883,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf105875_VmlShapeRotationWithFlip,
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf133363)
+{
+    loadAndSave("tdf133363.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // tdf#133363: remove extra auto space between first and second list elements
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p[2]/w:pPr/w:spacing", "before",
+                "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p[3]/w:pPr/w:spacing", "after",
+                "0");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

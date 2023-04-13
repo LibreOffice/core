@@ -2498,7 +2498,10 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                             m_xPreviousParagraph->getPropertyValue("NumberingStyleName") >>= aPreviousNumberingName;
                         }
 
-                        if (!aPreviousNumberingName.isEmpty() && aCurrentNumberingName == aPreviousNumberingName)
+                        // tdf#133363: remove extra auto space even for mixed list styles
+                        if (!aPreviousNumberingName.isEmpty()
+                            && (aCurrentNumberingName == aPreviousNumberingName
+                                || !isNumberingViaRule))
                         {
                             uno::Sequence<beans::PropertyValue> aPrevPropertiesSeq;
                             m_xPreviousParagraph->getPropertyValue("ParaInteropGrabBag") >>= aPrevPropertiesSeq;
