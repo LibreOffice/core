@@ -1032,8 +1032,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf139737)
 {
     createSwDoc("tdf139737.fodt");
 
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
