@@ -1583,7 +1583,21 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testCommentStyles)
 
         // Check that the style was imported, and survived copying
         CPPUNIT_ASSERT_EQUAL(OUString("MyStyle1"), pCaption->GetStyleSheet()->GetName());
-        // Check that the style formatting is in effect
+    }
+
+    saveAndReload("Calc Office Open XML");
+
+    {
+        ScDocument* pDoc = getScDoc();
+
+        ScAddress aPos(0, 0, 0);
+        ScPostIt* pNote = pDoc->GetNote(aPos);
+        CPPUNIT_ASSERT(pNote);
+
+        auto pCaption = pNote->GetOrCreateCaption(aPos);
+        CPPUNIT_ASSERT(pCaption);
+
+        // Check that the style formatting is preserved
         CPPUNIT_ASSERT_EQUAL(sal_uInt32(1129),
                              pCaption->GetMergedItemSet().Get(EE_CHAR_FONTHEIGHT).GetHeight());
     }

@@ -408,6 +408,7 @@ EditEngine& XclRoot::GetDrawEditEngine() const
     {
         mrData.mxDrawEditEng = std::make_shared<EditEngine>( &GetDoc().GetDrawLayer()->GetItemPool() );
         EditEngine& rEE = *mrData.mxDrawEditEng;
+        rEE.SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(GetDoc().GetDrawLayer()->GetStyleSheetPool()));
         rEE.SetRefMapMode(MapMode(MapUnit::Map100thMM));
         rEE.SetUpdateLayout( false );
         rEE.EnableUndo( false );
