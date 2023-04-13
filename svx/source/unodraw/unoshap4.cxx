@@ -174,7 +174,7 @@ bool SvxOle2Shape::setPropertyValueImpl( const OUString& rName, const SfxItemPro
 #else
             pOle = static_cast<SdrOle2Obj*>(GetSdrObject());
 #endif
-            pOle->SetPersistName( aPersistName );
+            pOle->SetPersistName( aPersistName, this );
             return true;
         }
         break;
@@ -495,10 +495,11 @@ void SvxOle2Shape::createLink( const OUString& aLinkURL )
 
 void SvxOle2Shape::resetModifiedState()
 {
-    ::comphelper::IEmbeddedHelper* pPersist = GetSdrObject()->getSdrModelFromSdrObject().GetPersist();
+    SdrObject* pObject = GetSdrObject();
+    ::comphelper::IEmbeddedHelper* pPersist = pObject ? pObject->getSdrModelFromSdrObject().GetPersist() : nullptr;
     if( pPersist && !pPersist->isEnableSetModified() )
     {
-        SdrOle2Obj* pOle = dynamic_cast< SdrOle2Obj* >( GetSdrObject() );
+        SdrOle2Obj* pOle = dynamic_cast< SdrOle2Obj* >(pObject);
         if( pOle && !pOle->IsEmpty() )
         {
             uno::Reference < util::XModifiable > xMod( pOle->GetObjRef(), uno::UNO_QUERY );
@@ -546,6 +547,11 @@ SvGlobalName SvxOle2Shape::GetClassName_Impl(OUString& rHexCLSID)
     }
 
     return aClassName;
+}
+
+OUString SvxOle2Shape::GetAndClearInitialFrameURL()
+{
+    return OUString();
 }
 
 SvxAppletShape::SvxAppletShape(SdrObject* pObject)
@@ -701,8 +707,19 @@ SvxFrameShape::~SvxFrameShape() throw()
 {
 }
 
+OUString SvxFrameShape::GetAndClearInitialFrameURL()
+{
+    OUString sRet(m_sInitialFrameURL);
+    m_sInitialFrameURL.clear();
+    return sRet;
+}
+
 void SvxFrameShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
 {
+    uno::Reference<beans::XPropertySet> xSet(static_cast<OWeakObject *>(this), uno::UNO_QUERY);
+    if (xSet)
+        xSet->getPropertyValue("FrameURL") >>= m_sInitialFrameURL;
+
     SvxShape::Create( pNewObj, pNewPage );
     const SvGlobalName aIFrameClassId( SO3_IFRAME_CLASSID );
     createObject(aIFrameClassId);
