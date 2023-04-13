@@ -311,14 +311,13 @@ namespace sdr::properties
                 rObj.SetVerticalWriting(bVertical);
 
                 // Set a cell vertical property
-                std::optional<OutlinerParaObject> pParaObj = mxCell->CreateEditOutlinerParaObject();
+                std::optional<OutlinerParaObject> pEditParaObj = mxCell->CreateEditOutlinerParaObject();
 
-                if( !pParaObj && mxCell->GetOutlinerParaObject() )
-                    pParaObj = *mxCell->GetOutlinerParaObject();
-
-                if(pParaObj)
+                if( !pEditParaObj && mxCell->GetOutlinerParaObject() )
                 {
-                    pParaObj->SetVertical(bVertical);
+                    OutlinerParaObject* pParaObj = mxCell->GetOutlinerParaObject();
+                    if(pParaObj)
+                        pParaObj->SetVertical(bVertical);
                 }
             }
 
@@ -327,22 +326,23 @@ namespace sdr::properties
                 const SvxTextRotateItem* pRotateItem = static_cast<const SvxTextRotateItem*>(pNewItem);
 
                 // Set a cell vertical property
-                std::optional<OutlinerParaObject> pParaObj = mxCell->CreateEditOutlinerParaObject();
+                std::optional<OutlinerParaObject> pEditParaObj = mxCell->CreateEditOutlinerParaObject();
 
-                if (!pParaObj && mxCell->GetOutlinerParaObject())
-                    pParaObj = *mxCell->GetOutlinerParaObject();
-
-                if (pParaObj)
+                if (!pEditParaObj && mxCell->GetOutlinerParaObject())
                 {
-                    if(pRotateItem->IsVertical() && pRotateItem->IsTopToBottom())
-                        pParaObj->SetRotation(TextRotation::TOPTOBOTTOM);
-                    else if (pRotateItem->IsVertical())
-                        pParaObj->SetRotation(TextRotation::BOTTOMTOTOP);
-                    else
-                        pParaObj->SetRotation(TextRotation::NONE);
+                    OutlinerParaObject* pParaObj = mxCell->GetOutlinerParaObject();
+                    if (pParaObj)
+                    {
+                        if(pRotateItem->IsVertical() && pRotateItem->IsTopToBottom())
+                            pParaObj->SetRotation(TextRotation::TOPTOBOTTOM);
+                        else if (pRotateItem->IsVertical())
+                            pParaObj->SetRotation(TextRotation::BOTTOMTOTOP);
+                        else
+                            pParaObj->SetRotation(TextRotation::NONE);
+                    }
                 }
 
-               // Change autogrow direction
+                // Change autogrow direction
                 SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
 
                 // rescue object size
