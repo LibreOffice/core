@@ -548,7 +548,7 @@ const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& rPrinter 
     return it != m_aPrinters.end() ? it->second.m_aInfo : aEmptyInfo;
 }
 
-bool PrinterInfoManager::checkFeatureToken( const OUString& rPrinterName, const char* pToken ) const
+bool PrinterInfoManager::checkFeatureToken( const OUString& rPrinterName, std::string_view pToken ) const
 {
     const PrinterInfo& rPrinterInfo( getPrinterInfo( rPrinterName ) );
     sal_Int32 nIndex = 0;

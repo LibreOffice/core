@@ -81,7 +81,7 @@ const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& /* rPrint
     return aEmptyInfo;
 }
 
-bool PrinterInfoManager::checkFeatureToken( const OUString& /* rPrinterName */, const char* /* pToken */ ) const
+bool PrinterInfoManager::checkFeatureToken( const OUString& /* rPrinterName */, std::string_view /* pToken */ ) const
 {
     (void) this;
 

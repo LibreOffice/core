@@ -161,7 +161,7 @@ public:
     bool getUseJobPatch() const { return m_bUseJobPatch; }
 
     // check whether a printer's feature string contains a subfeature
-    bool checkFeatureToken( const OUString& rPrinterName, const char* pToken ) const;
+    bool checkFeatureToken( const OUString& rPrinterName, std::string_view pToken ) const;
 
     virtual ~PrinterInfoManager();
 };
