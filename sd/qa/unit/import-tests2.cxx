@@ -1275,7 +1275,6 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf149206)
 {
     // Check that the image is cropped
     createSdImpressDoc("pptx/tdf149206.pptx");
-    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
 
     uno::Reference<beans::XPropertySet> xPropertySet(getShapeFromPage(/*nShape=*/0, /*nPage=*/0));
     text::GraphicCrop aCrop;
@@ -1295,7 +1294,6 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf149785)
 {
     // Without the fix in place, this test would have failed to load the file
     createSdImpressDoc("pptx/tdf149785.pptx");
-    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
 
     const SdrPage* pPage = GetPage(1);
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
@@ -1305,7 +1303,6 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf149985)
 {
     // Without the fix in place, this test would have failed to load the file
     createSdImpressDoc("pptx/tdf149985.pptx");
-    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
 
     const SdrPage* pPage = GetPage(1);
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
