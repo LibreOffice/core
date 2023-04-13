@@ -357,7 +357,6 @@ CPPUNIT_TEST_FIXTURE(Test, testLayoutInCellOfHraphics)
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
-    uno::Reference<container::XNamed> xNamedShape(xShape, uno::UNO_QUERY);
     bool bFollowingTextFlow = false;
     CPPUNIT_ASSERT(xShape->getPropertyValue("IsFollowingTextFlow") >>= bFollowingTextFlow);
     CPPUNIT_ASSERT(bFollowingTextFlow);
