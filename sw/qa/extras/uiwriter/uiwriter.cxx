@@ -854,8 +854,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testWatermarkPosition)
         uno::Reference<frame::XModel> xModel = pDoc->GetDocShell()->GetBaseModel();
         uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
         uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
-        uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"), uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName("Default Page Style"), uno::UNO_QUERY);
 
         // 1. Add additional page breaks
         for (int j = 0; j < aAdditionalPagesCount[i]; ++j)
