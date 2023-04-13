@@ -254,6 +254,9 @@ private:
 
     int ShowMsgDialog(TranslateId Msg, const OUString& sFileName);
 
+protected:
+    void SetInplaceActiveState();
+
 public:
     OCommonEmbeddedObject(
         css::uno::Reference< css::uno::XComponentContext > xContext,
