@@ -48,6 +48,13 @@ public:
     virtual void SAL_CALL changeState( sal_Int32 nNewState ) override;
 
     virtual void SAL_CALL doVerb( sal_Int32 nVerbID ) override;
+
+// XCommonEmbedPersist
+
+    virtual void SAL_CALL reload(
+                const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
+                const css::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
+
 };
 
 #endif
