@@ -28,7 +28,7 @@ class SwGrfFormatColl;
 class SwDoc;
 class SwOLENode;
 class SwOLEListener_Impl;
-class SwEmbedObjectLink;
+namespace sfx2 { class SvBaseLink; }
 class DeflateData;
 
 class SW_DLLPUBLIC SwOLEObj
@@ -90,7 +90,7 @@ class SW_DLLPUBLIC SwOLENode: public SwNoTextNode
     bool   mbOLESizeInvalid; /**< Should be considered at SwDoc::PrtOLENotify
                                    (e.g. copied). Is not persistent. */
 
-    SwEmbedObjectLink*  mpObjectLink;
+    sfx2::SvBaseLink*  mpObjectLink;
     OUString maLinkURL;
 
     SwOLENode(  const SwNodeIndex &rWhere,
