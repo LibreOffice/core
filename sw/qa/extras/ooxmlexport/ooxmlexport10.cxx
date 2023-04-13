@@ -526,6 +526,9 @@ DECLARE_OOXMLEXPORT_TEST(testLibreOfficeHang, "frame-wrap-auto.docx")
     nPara = getProperty<sal_Int32>(getParagraphOfText(1, xText), "LeftBorderDistance");
     CPPUNIT_ASSERT_EQUAL(nFrame, nPara);
     CPPUNIT_ASSERT(nPara);
+
+    // Additionally, the width of the frame needs to grow by the size of the left/right spacing
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7064), getProperty<sal_Int32>(getShape(1), "Width"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testI124106, "i124106.docx")

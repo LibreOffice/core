@@ -1554,6 +1554,21 @@ static void lcl_MoveBorderPropertiesToFrame(std::vector<beans::PropertyValue>& r
             PROP_BOTTOM_BORDER_DISTANCE
         };
 
+        // The frame width specified does not include border spacing,
+        // so the frame needs to be increased by the left/right para border spacing amount
+        sal_Int32 nWidth = 0;
+        sal_Int32 nIndexOfWidthProperty = -1;
+        sal_Int16 nType = text::SizeType::FIX;
+        for (size_t i = 0; nType == text::SizeType::FIX && i < rFrameProperties.size(); ++i)
+        {
+            if (rFrameProperties[i].Name == "WidthType")
+                rFrameProperties[i].Value >>= nType;
+            else if (rFrameProperties[i].Name == "Width")
+                nIndexOfWidthProperty = i;
+        }
+        if (nIndexOfWidthProperty > -1 && nType == text::SizeType::FIX)
+            rFrameProperties[nIndexOfWidthProperty].Value >>= nWidth;
+
         for( size_t nProperty = 0; nProperty < SAL_N_ELEMENTS( aBorderProperties ); ++nProperty)
         {
             OUString sPropertyName = getPropertyName(aBorderProperties[nProperty]);
@@ -1562,11 +1577,23 @@ static void lcl_MoveBorderPropertiesToFrame(std::vector<beans::PropertyValue>& r
             aValue.Value = xTextRangeProperties->getPropertyValue(sPropertyName);
             if( nProperty < 4 )
                 xTextRangeProperties->setPropertyValue( sPropertyName, uno::Any(table::BorderLine2()));
-            else if (nProperty > 5 || bIsRTFImport)
+            else // border spacing
             {
+                sal_Int32 nDistance = 0;
+                aValue.Value >>= nDistance;
+
                 // left4/right5 need to be duplicated because of INVERT_BORDER_SPACING (DOCX only)
                 // Do not duplicate the top6/bottom7 border spacing.
-                aValue.Value <<= sal_Int32(0);
+                if (nProperty > 5 || bIsRTFImport)
+                    aValue.Value <<= sal_Int32(0);
+
+                // frames need to be increased by the left/right para border spacing amount
+                // This is needed for RTF as well, but that requires other export/import fixes.
+                if (!bIsRTFImport && nProperty < 6 && nWidth && nDistance)
+                {
+                    nWidth += nDistance;
+                    rFrameProperties[nIndexOfWidthProperty].Value <<= nWidth;
+                }
             }
             if (aValue.Value.hasValue())
                 rFrameProperties.push_back(aValue);

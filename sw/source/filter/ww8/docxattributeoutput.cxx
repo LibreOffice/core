@@ -908,7 +908,26 @@ void DocxAttributeOutput::PopulateFrameProperties(const SwFrameFormat* pFrameFor
     const SwFormatVertOrient& rVertOrient = pFrameFormat->GetVertOrient();
     awt::Point aPos(rHoriOrient.GetPos(), rVertOrient.GetPos());
 
-    attrList->add( FSNS( XML_w, XML_w), OString::number(rSize.Width()));
+    // A few assumptions need to be made here, because framePr is a confused mixture
+    // of (multiple) paragraph's border properties being transferred to/from a frame.
+    // The frame size describes the size BEFORE the PARAGRAPH border spacing is applied.
+    // However, we can't actually look at all the paragraphs' borders because they might be
+    // different, and all MUST specify the same frame width in order to belong to the same frame.
+    // In order for them all to be consistent, the only choice is to use the frame's border spacing.
+    // During import, the frame was assigned border spacing based on the contained paragraphs.
+    // So now at export time we have to assume that none of this has been changed by the user.
+
+    // 620 (31pt) is the maximum paragraph border spacing allowed in MS Formats,
+    // so if the value is greater than that, avoid adjusting the size - the user has interferred.
+    const sal_uInt32 nLeftBorderSpacing = pFrameFormat->GetBox().GetDistance(SvxBoxItemLine::LEFT);
+    const sal_uInt32 nRighttBorderSpacing = pFrameFormat->GetBox().GetDistance(SvxBoxItemLine::RIGHT);
+    sal_uInt32 nAdjustedWidth = rSize.Width();
+    if (nLeftBorderSpacing < 621 && nRighttBorderSpacing < 621
+        && nAdjustedWidth > nLeftBorderSpacing + nRighttBorderSpacing)
+    {
+        nAdjustedWidth -= nLeftBorderSpacing + nRighttBorderSpacing;
+    }
+    attrList->add( FSNS( XML_w, XML_w), OString::number(nAdjustedWidth));
     attrList->add( FSNS( XML_w, XML_h), OString::number(rSize.Height()));
 
     attrList->add( FSNS( XML_w, XML_x), OString::number(aPos.X));
