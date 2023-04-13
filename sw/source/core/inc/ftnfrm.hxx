@@ -162,6 +162,8 @@ public:
         pointer to found last content frame. NULL, if none is found.
     */
     SwContentFrame* FindLastContent();
+
+    void dumpAsXml(xmlTextWriterPtr writer = nullptr) const override;
 };
 
 #endif

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <libxml/xmlwriter.h>
+
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
 #include <ftnidx.hxx>
@@ -2982,6 +2984,19 @@ SwContentFrame* SwFootnoteFrame::FindLastContent()
     }
 
     return pLastContentFrame;
+}
+
+void SwFootnoteFrame::dumpAsXml(xmlTextWriterPtr writer) const
+{
+    (void)xmlTextWriterStartElement(writer, reinterpret_cast<const xmlChar*>("ftn"));
+    dumpAsXmlAttributes(writer);
+
+    (void)xmlTextWriterStartElement(writer, BAD_CAST("infos"));
+    dumpInfosAsXml(writer);
+    (void)xmlTextWriterEndElement(writer);
+    dumpChildrenAsXml(writer);
+
+    (void)xmlTextWriterEndElement(writer);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
