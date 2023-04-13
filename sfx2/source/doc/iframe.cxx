@@ -180,6 +180,17 @@ sal_Bool SAL_CALL IFrameObject::load(
         if (!SfxEvents_Impl::isScriptURLAllowed(aTargetURL.Complete))
             return false;
 
+        bool bUpdateAllowed(true);
+        if (pDoc)
+        {
+            // perhaps should only check for file targets, but lets default to making it strong
+            // unless there is a known need to distinguish
+            comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = pDoc->getEmbeddedObjectContainer();
+            bUpdateAllowed = rEmbeddedObjectContainer.getUserAllowsLinkUpdate();
+        }
+        if (!bUpdateAllowed)
+            return false;
+
         OUString sReferer;
         if (pDoc && pDoc->HasName())
             sReferer = pDoc->GetMedium()->GetName();
