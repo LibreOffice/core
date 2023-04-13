@@ -607,6 +607,8 @@ public:
     bool createObject( const SvGlobalName &aClassName );
 
     void createLink( const OUString& aLinkURL );
+
+    virtual OUString GetAndClearInitialFrameURL();
 };
 
 

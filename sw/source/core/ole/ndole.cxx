@@ -147,6 +147,8 @@ void SAL_CALL SwOLEListener_Impl::disposing( const lang::EventObject& )
 // TODO/LATER: actually SwEmbedObjectLink should be used here, but because different objects are used to control
 //             embedded object different link objects with the same functionality had to be implemented
 
+namespace {
+
 class SwEmbedObjectLink : public sfx2::SvBaseLink
 {
     SwOLENode*          pOleNode;
@@ -207,6 +209,44 @@ void SwEmbedObjectLink::Closed()
 {
     pOleNode->BreakFileLink_Impl();
     SvBaseLink::Closed();
+}
+
+class SwIFrameLink : public sfx2::SvBaseLink
+{
+    SwOLENode* m_pOleNode;
+
+public:
+    explicit SwIFrameLink(SwOLENode* pNode)
+        : ::sfx2::SvBaseLink(::SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::SVXB)
+        , m_pOleNode(pNode)
+    {
+        SetSynchron( false );
+    }
+
+    ::sfx2::SvBaseLink::UpdateResult DataChanged(
+        const OUString&, const uno::Any& )
+    {
+        uno::Reference<embed::XEmbeddedObject> xObject = m_pOleNode->GetOLEObj().GetOleRef();
+        uno::Reference<embed::XCommonEmbedPersist> xPersObj(xObject, uno::UNO_QUERY);
+        if (xPersObj.is())
+        {
+            // let the IFrameObject reload the link
+            try
+            {
+                xPersObj->reload(uno::Sequence<beans::PropertyValue>(), uno::Sequence<beans::PropertyValue>());
+            }
+            catch (const uno::Exception&)
+            {
+            }
+
+            m_pOleNode->SetChanged();
+        }
+
+        return SUCCESS;
+    }
+
+};
+
 }
 
 SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
@@ -607,18 +647,49 @@ void SwOLENode::CheckFileLink_Impl()
 
     try
     {
-        uno::Reference< embed::XLinkageSupport > xLinkSupport( maOLEObj.m_xOLERef.GetObject(), uno::UNO_QUERY_THROW );
-        if ( xLinkSupport->isLink() )
+        uno::Reference<embed::XEmbeddedObject> xObject = maOLEObj.m_xOLERef.GetObject();
+        if (!xObject)
+            return;
+
+        bool bIFrame = false;
+
+        OUString aLinkURL;
+        uno::Reference<embed::XLinkageSupport> xLinkSupport(xObject, uno::UNO_QUERY);
+        if (xLinkSupport)
         {
-            const OUString aLinkURL = xLinkSupport->getLinkURL();
-            if ( !aLinkURL.isEmpty() )
+            if (xLinkSupport->isLink())
+                aLinkURL = xLinkSupport->getLinkURL();
+        }
+        else
+        {
+            // get IFrame (Floating Frames) listed and updatable from the
+            // manage links dialog
+            SvGlobalName aClassId(xObject->getClassID());
+            if (aClassId == SvGlobalName(SO3_IFRAME_CLASSID))
             {
-                // this is a file link so the model link manager should handle it
-                mpObjectLink = new SwEmbedObjectLink( this );
-                maLinkURL = aLinkURL;
-                GetDoc().getIDocumentLinksAdministration().GetLinkManager().InsertFileLink( *mpObjectLink, sfx2::SvBaseLinkObjectType::ClientOle, aLinkURL );
-                mpObjectLink->Connect();
+                uno::Reference<beans::XPropertySet> xSet(xObject->getComponent(), uno::UNO_QUERY);
+                if (xSet.is())
+                    xSet->getPropertyValue("FrameURL") >>= aLinkURL;
+                bIFrame = true;
             }
+        }
+
+        if (!aLinkURL.isEmpty()) // this is a file link so the model link manager should handle it
+        {
+            SwEmbedObjectLink* pEmbedObjectLink = nullptr;
+            if (!bIFrame)
+            {
+                pEmbedObjectLink = new SwEmbedObjectLink(this);
+                mpObjectLink = pEmbedObjectLink;
+            }
+            else
+            {
+                mpObjectLink = new SwIFrameLink(this);
+            }
+            maLinkURL = aLinkURL;
+            GetDoc().getIDocumentLinksAdministration().GetLinkManager().InsertFileLink( *mpObjectLink, sfx2::SvBaseLinkObjectType::ClientOle, aLinkURL );
+            if (pEmbedObjectLink)
+                pEmbedObjectLink->Connect();
         }
     }
     catch( uno::Exception& )

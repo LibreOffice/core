@@ -495,6 +495,8 @@ private:
     OUString maFrameName;
     OUString maHref;
 
+    css::uno::Reference<css::drawing::XShape> CreateFloatingFrameShape() const;
+
 public:
 
     SdXMLFloatingFrameShapeContext( SvXMLImport& rImport,
