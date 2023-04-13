@@ -184,28 +184,31 @@ sal_Bool SAL_CALL IFrameObject::load(
         if (pDoc && pDoc->HasName())
             sReferer = pDoc->GetMedium()->GetName();
 
-        DBG_ASSERT( !mxFrame.is(), "Frame already existing!" );
         uno::Reference<css::awt::XWindow> xParentWindow(xFrame->getContainerWindow());
-        VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow(xParentWindow);
-        VclPtr<IFrameWindow_Impl> pWin = VclPtr<IFrameWindow_Impl>::Create( pParent, maFrmDescr.IsFrameBorderOn() );
-        pWin->SetSizePixel( pParent->GetOutputSizePixel() );
-        pWin->SetBackground();
-        pWin->Show();
 
-        uno::Reference < awt::XWindow > xWindow( pWin->GetComponentInterface(), uno::UNO_QUERY );
-        xFrame->setComponent( xWindow, uno::Reference < frame::XController >() );
+        if (!mxFrame.is())
+        {
+            VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow(xParentWindow);
+            VclPtr<IFrameWindow_Impl> pWin = VclPtr<IFrameWindow_Impl>::Create( pParent, maFrmDescr.IsFrameBorderOn() );
+            pWin->SetSizePixel( pParent->GetOutputSizePixel() );
+            pWin->SetBackground();
+            pWin->Show();
 
-        // we must destroy the IFrame before the parent is destroyed
-        xWindow->addEventListener( this );
+            uno::Reference < awt::XWindow > xWindow( pWin->GetComponentInterface(), uno::UNO_QUERY );
+            xFrame->setComponent( xWindow, uno::Reference < frame::XController >() );
 
-        mxFrame = frame::Frame::create( mxContext );
-        uno::Reference < awt::XWindow > xWin( pWin->GetComponentInterface(), uno::UNO_QUERY );
-        mxFrame->initialize( xWin );
-        mxFrame->setName( maFrmDescr.GetName() );
+            // we must destroy the IFrame before the parent is destroyed
+            xWindow->addEventListener( this );
 
-        uno::Reference < frame::XFramesSupplier > xFramesSupplier( xFrame, uno::UNO_QUERY );
-        if ( xFramesSupplier.is() )
-            mxFrame->setCreator( xFramesSupplier );
+            mxFrame = frame::Frame::create( mxContext );
+            uno::Reference < awt::XWindow > xWin( pWin->GetComponentInterface(), uno::UNO_QUERY );
+            mxFrame->initialize( xWin );
+            mxFrame->setName( maFrmDescr.GetName() );
+
+            uno::Reference < frame::XFramesSupplier > xFramesSupplier( xFrame, uno::UNO_QUERY );
+            if ( xFramesSupplier.is() )
+                mxFrame->setCreator( xFramesSupplier );
+        }
 
         uno::Reference<task::XInteractionHandler> xInteractionHandler(task::InteractionHandler::createWithParent(mxContext, xParentWindow));
         uno::Sequence < beans::PropertyValue > aProps{
