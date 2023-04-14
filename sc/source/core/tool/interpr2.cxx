@@ -1036,8 +1036,21 @@ void ScInterpreter::ScRoundUp()
 
 void ScInterpreter::RoundSignificant( double fX, double fDigits, double &fRes )
 {
-    double fTemp = ::rtl::math::approxFloor( log10( std::abs(fX) ) ) + 1.0 - fDigits;
-    fRes = ::rtl::math::round( pow(10.0, -fTemp ) * fX ) * pow( 10.0, fTemp );
+    double fTemp = floor( log10( std::abs(fX) ) ) + 1.0 - fDigits;
+    double fIn = fX;
+    // Avoid inaccuracy of negative powers of 10.
+    if (fTemp < 0.0)
+        fIn *= pow(10.0, -fTemp);
+    else
+        fIn /= pow(10.0, fTemp);
+    // For very large fX there might be an overflow in fIn resulting in
+    // non-finite. rtl::math::round() handles that and it will be propagated as
+    // usual.
+    fRes = ::rtl::math::round(fIn);
+    if (fTemp < 0.0)
+        fRes /= pow(10.0, -fTemp);
+    else
+        fRes *= pow(10.0, fTemp);
 }
 
 // tdf#105931
