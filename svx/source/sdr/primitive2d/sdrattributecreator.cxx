@@ -1121,7 +1121,8 @@ namespace drawinglayer::primitive2d
         attribute::SdrLineFillEffectsTextAttribute createNewSdrLineFillEffectsTextAttribute(
             const SfxItemSet& rSet,
             const SdrText* pText,
-            bool bHasContent)
+            bool bHasContent,
+            bool bSuppressShadow)
         {
             attribute::SdrLineAttribute aLine;
             attribute::SdrFillAttribute aFill;
@@ -1171,7 +1172,8 @@ namespace drawinglayer::primitive2d
             if(bHasContent || !aLine.isDefault() || !aFill.isDefault() || !aText.isDefault())
             {
                 // try shadow
-                const attribute::SdrShadowAttribute aShadow = createNewSdrShadowAttribute(rSet);
+                const attribute::SdrShadowAttribute aShadow = !bSuppressShadow ?
+                    createNewSdrShadowAttribute(rSet) : attribute::SdrShadowAttribute();
 
                 // glow
                 const attribute::SdrGlowAttribute aGlow = createNewSdrGlowAttribute(rSet);

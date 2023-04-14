@@ -93,7 +93,8 @@ namespace drawinglayer::primitive2d
         attribute::SdrLineFillEffectsTextAttribute createNewSdrLineFillEffectsTextAttribute(
             const SfxItemSet& rSet,
             const SdrText* pText,
-            bool bHasContent); // used from OLE and graphic
+            bool bHasContent, // used from OLE and graphic
+            bool bSuppressShadow = false); // used from SC notes
 
         attribute::SdrLineFillShadowAttribute3D createNewSdrLineFillShadowAttribute(
             const SfxItemSet& rSet,

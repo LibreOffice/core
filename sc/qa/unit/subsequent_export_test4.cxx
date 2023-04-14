@@ -1557,6 +1557,11 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testCommentStyles)
         auto pCaption = pNote->GetCaption();
         CPPUNIT_ASSERT(pCaption);
 
+        // Check that we don't keep the shadow attribute as DF
+        // (see ScNoteUtil::CreateNoteFromCaption)
+        CPPUNIT_ASSERT_LESSEQUAL(SfxItemState::DEFAULT,
+                                 pCaption->GetMergedItemSet().GetItemState(SDRATTR_SHADOW, false));
+
         auto pStyleSheet = &pDoc->GetStyleSheetPool()->Make("MyStyle1", SfxStyleFamily::Frame);
         auto& rSet = pStyleSheet->GetItemSet();
         rSet.Put(SvxFontHeightItem(1129, 100, EE_CHAR_FONTHEIGHT));

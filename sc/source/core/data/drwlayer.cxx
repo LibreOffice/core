@@ -382,9 +382,7 @@ void ScDrawLayer::CreateDefaultStyles()
     pSet->Put(SdrCaptionEscDirItem(SdrCaptionEscDir::BestFit));
 
     // shadow
-    /* SdrShadowItem has false, instead the shadow is set for the rectangle
-       only with SetSpecialTextBoxShadow() when the object is created. */
-    pSet->Put(makeSdrShadowItem(false));
+    pSet->Put(makeSdrShadowItem(true));
     pSet->Put(makeSdrShadowXDistItem(100));
     pSet->Put(makeSdrShadowYDistItem(100));
 

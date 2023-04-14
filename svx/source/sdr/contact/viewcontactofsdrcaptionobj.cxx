@@ -35,6 +35,7 @@
 #include <svx/xfltrit.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/sdmetitm.hxx>
+#include <svx/sdooitm.hxx>
 #include <svx/sdprcitm.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <sdr/primitive2d/sdrdecompositiontools.hxx>
@@ -62,7 +63,7 @@ namespace sdr::contact
                 drawinglayer::primitive2d::createNewSdrLineFillEffectsTextAttribute(
                     rItemSet,
                     rCaptionObj.getText(0),
-                    false));
+                    false, rCaptionObj.GetSpecialTextBoxShadow()));
 
             // take unrotated snap rect (direct model data) for position and size
             const tools::Rectangle aRectangle(rCaptionObj.GetGeoRect());
@@ -134,10 +135,11 @@ namespace sdr::contact
                 if(!aFill.isDefault() && 1.0 != aFill.getTransparence())
                 {
                     // add shadow offset to object matrix
+                    const bool bShadow(rItemSet.Get(SDRATTR_SHADOW).GetValue());
                     const sal_uInt32 nXDist(rItemSet.Get(SDRATTR_SHADOWXDIST).GetValue());
                     const sal_uInt32 nYDist(rItemSet.Get(SDRATTR_SHADOWYDIST).GetValue());
 
-                    if(nXDist || nYDist)
+                    if (bShadow && (nXDist || nYDist))
                     {
                         // #119750# create object and shadow outline, clip shadow outline
                         // on object outline. If there is a rest, create shadow. Do this to

@@ -112,8 +112,10 @@ void ScCaptionUtil::SetExtraItems( SdrCaptionObj& rCaption, const SfxItemSet& rE
     SfxItemSet aItemSet = rCaption.GetMergedItemSet();
 
     aItemSet.Put(rExtraItemSet);
-    // reset shadow items
-    aItemSet.Put( makeSdrShadowItem( false ) );
+    // reset shadow visibility (see also ScNoteUtil::CreateNoteFromCaption)
+    aItemSet.ClearItem(SDRATTR_SHADOW);
+    // ... but not distance, as that will fallback to wrong values
+    // if the comment is shown and then opened in older versions:
     aItemSet.Put( makeSdrShadowXDistItem( 100 ) );
     aItemSet.Put( makeSdrShadowYDistItem( 100 ) );
 
@@ -885,6 +887,11 @@ ScPostIt* ScNoteUtil::CreateNoteFromCaption(
     {
         if (auto pStyleSheet = rDoc.GetStyleSheetPool()->Find(ScResId(STR_STYLENAME_NOTE), SfxStyleFamily::Frame))
             aNoteData.mxCaption->SetStyleSheet(static_cast<SfxStyleSheet*>(pStyleSheet), true);
+
+        /* We used to show a shadow despite of the shadow item being set to false.
+           Clear the existing item, so it inherits the true setting from the style.
+           Setting explicitly to true would corrupt the shadow when opened in older versions. */
+        aNoteData.mxCaption->ClearMergedItem(SDRATTR_SHADOW);
     }
 
     return pNote;
