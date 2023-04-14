@@ -80,8 +80,8 @@ public:
     static void         SetBasicCaptionSettings( SdrCaptionObj& rCaption, bool bShown );
     /** Stores the cell position of the note in the user data area of the caption. */
     static void         SetCaptionUserData( SdrCaptionObj& rCaption, const ScAddress& rPos );
-    /** Sets all default formatting attributes to the caption object. */
-    static void         SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc, const SfxItemSet* pExtraItemSet );
+    /** Sets all hard formatting attributes to the caption object. */
+    static void         SetExtraItems( SdrCaptionObj& rCaption, const SfxItemSet& rExtraItemSet );
 };
 
 void ScCaptionUtil::SetCaptionLayer( SdrCaptionObj& rCaption, bool bShown )
@@ -107,28 +107,17 @@ void ScCaptionUtil::SetCaptionUserData( SdrCaptionObj& rCaption, const ScAddress
     pObjData->meType = ScDrawObjData::CellNote;
 }
 
-void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc, const SfxItemSet* pExtraItemSet )
+void ScCaptionUtil::SetExtraItems( SdrCaptionObj& rCaption, const SfxItemSet& rExtraItemSet )
 {
     SfxItemSet aItemSet = rCaption.GetMergedItemSet();
 
-    const ScPatternAttr& rDefPattern = rDoc.GetPool()->GetDefaultItem( ATTR_PATTERN );
-    rDefPattern.FillEditItemSet( &aItemSet );
-
-    if (pExtraItemSet)
-    {
-        /* Updates caption item set according to the passed item set while removing shadow items. */
-
-        aItemSet.Put(*pExtraItemSet);
-        // reset shadow items
-        aItemSet.Put( makeSdrShadowItem( false ) );
-        aItemSet.Put( makeSdrShadowXDistItem( 100 ) );
-        aItemSet.Put( makeSdrShadowYDistItem( 100 ) );
-    }
+    aItemSet.Put(rExtraItemSet);
+    // reset shadow items
+    aItemSet.Put( makeSdrShadowItem( false ) );
+    aItemSet.Put( makeSdrShadowXDistItem( 100 ) );
+    aItemSet.Put( makeSdrShadowYDistItem( 100 ) );
 
     rCaption.SetMergedItemSet( aItemSet );
-
-    if (pExtraItemSet)
-        rCaption.SetSpecialTextBoxShadow();
 }
 
 /** Helper for creation and manipulation of caption drawing objects independent
@@ -680,8 +669,9 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
         if (auto pStyleSheet = mrDoc.GetStyleSheetPool()->Find(ScResId(STR_STYLENAME_NOTE), SfxStyleFamily::Frame))
             maNoteData.mxCaption->SetStyleSheet(static_cast<SfxStyleSheet*>(pStyleSheet), true);
 
-        // copy all items or set default items; reset shadow items
-        ScCaptionUtil::SetDefaultItems( *maNoteData.mxCaption, mrDoc, xInitData->moItemSet ? &*xInitData->moItemSet : nullptr );
+        // copy all items and reset shadow items
+        if (xInitData->moItemSet)
+            ScCaptionUtil::SetExtraItems(*maNoteData.mxCaption, *xInitData->moItemSet);
     }
 
     // set position and size of the caption object
