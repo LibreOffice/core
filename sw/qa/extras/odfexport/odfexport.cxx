@@ -291,6 +291,16 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf125877)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf150149)
+{
+    loadAndReload("tdf150149.fodt");
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    // This was 0 (lost table header in multi-column section)
+    assertXPath(pXmlDoc, "//table:table-header-rows", 1);
+    assertXPath(pXmlDoc, "//table:table-header-rows/table:table-row/table:table-cell", 3);
+}
+
 DECLARE_ODFEXPORT_TEST(testTdf103567, "tdf103567.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
