@@ -2507,7 +2507,8 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
 
         WW8FlySet aFlySet(*this, m_xWFlyPara.get(), m_xSFlyPara.get(), false);
 
-        if (pTabPos && pTabPos->bNoFly)
+        // Always map floating tables to split flys when fly split is allowed.
+        if (pTabPos && pTabPos->bNoFly && !IsFlySplitAllowed())
         {
             m_xSFlyPara->SetFlyFormat(nullptr);
         }
