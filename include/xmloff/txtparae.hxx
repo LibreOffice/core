@@ -25,6 +25,7 @@
 #include <xmloff/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.h>
+#include <xmloff/maptype.hxx>
 #include <xmloff/styleexp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/SinglePropertySetInfoCache.hxx>
@@ -41,7 +42,6 @@ class XMLTextNumRuleInfo;
 class XMLSectionExport;
 class XMLIndexMarkExport;
 class XMLRedlineExport;
-struct XMLPropertyState;
 class MultiPropertySetHelper;
 enum class XMLShapeExportFlags;
 class SvXMLExportPropertyMapper;
@@ -533,6 +533,7 @@ public:
 
 private:
         XMLTextParagraphExport(XMLTextParagraphExport const &) = delete;
+
 };
 
 inline const XMLTextListAutoStylePool&
