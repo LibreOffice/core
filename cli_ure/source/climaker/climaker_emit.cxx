@@ -2154,7 +2154,7 @@ Emit::CustomAttributeBuilder^ TypeEmitter::get_exception_attribute(
     //get_type will asked the module builder for the type or otherwise all known assemblies.
     return get_type(sName, true);
 }
-TypeEmitter::~TypeEmitter()
+void TypeEmitter::finish()
 {
     while (true)
     {

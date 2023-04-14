@@ -110,7 +110,7 @@ static ::System::Reflection::MethodAttributes c_ctor_method_attr =
         ::System::Reflection::MethodAttributes::Instance*/);
 
 
-ref class TypeEmitter : public ::System::IDisposable
+ref class TypeEmitter
 {
     ::System::Reflection::Emit::ModuleBuilder ^ m_module_builder;
     array< ::System::Reflection::Assembly^>^ m_extra_assemblies;
@@ -243,7 +243,7 @@ public:
         ::System::Reflection::Emit::ModuleBuilder ^ module_builder,
         array< ::System::Reflection::Assembly^>^ assemblies );
     // must be called to finish up uncompleted types
-    ~TypeEmitter();
+    void finish();
 
     ::System::Reflection::Assembly ^ type_resolve(
         ::System::Object ^ sender, ::System::ResolveEventArgs ^ args );

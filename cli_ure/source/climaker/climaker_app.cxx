@@ -600,7 +600,7 @@ SAL_IMPLEMENT_MAIN()
                         UNO_QUERY_THROW ) );
             }
         }
-        type_emitter->~TypeEmitter();
+        type_emitter->finish();
 
         if (g_bVerbose)
         {
