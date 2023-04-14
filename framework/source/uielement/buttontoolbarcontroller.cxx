@@ -90,21 +90,14 @@ void SAL_CALL ButtonToolbarController::release() noexcept
 void SAL_CALL ButtonToolbarController::initialize(
     const css::uno::Sequence< css::uno::Any >& aArguments )
 {
-    bool bInitialized( true );
+    SolarMutexGuard aSolarMutexGuard;
 
-    {
-        SolarMutexGuard aSolarMutexGuard;
+    if ( m_bDisposed )
+        throw DisposedException();
 
-        if ( m_bDisposed )
-            throw DisposedException();
-
-        bInitialized = m_bInitialized;
-    }
-
-    if ( bInitialized )
+    if ( m_bInitialized )
         return;
 
-    SolarMutexGuard aSolarMutexGuard;
     m_bInitialized = true;
 
     PropertyValue aPropValue;

@@ -120,21 +120,14 @@ void SAL_CALL StatusbarController::release() noexcept
 
 void SAL_CALL StatusbarController::initialize( const Sequence< Any >& aArguments )
 {
-    bool bInitialized( true );
+    SolarMutexGuard aSolarMutexGuard;
 
-    {
-        SolarMutexGuard aSolarMutexGuard;
+    if ( m_bDisposed )
+        throw DisposedException();
 
-        if ( m_bDisposed )
-            throw DisposedException();
-
-        bInitialized = m_bInitialized;
-    }
-
-    if ( bInitialized )
+    if ( m_bInitialized )
         return;
 
-    SolarMutexGuard aSolarMutexGuard;
     m_bInitialized = true;
 
     PropertyValue aPropValue;

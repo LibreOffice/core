@@ -163,21 +163,14 @@ css::uno::Sequence<css::uno::Type> ToolboxController::getTypes()
 
 void SAL_CALL ToolboxController::initialize( const Sequence< Any >& aArguments )
 {
-    bool bInitialized( true );
+    SolarMutexGuard aSolarMutexGuard;
 
-    {
-        SolarMutexGuard aSolarMutexGuard;
+    if ( m_bDisposed )
+        throw DisposedException();
 
-        if ( m_bDisposed )
-            throw DisposedException();
-
-        bInitialized = m_bInitialized;
-    }
-
-    if ( bInitialized )
+    if ( m_bInitialized )
         return;
 
-    SolarMutexGuard aSolarMutexGuard;
     m_bInitialized = true;
     m_bSupportVisible = false;
     PropertyValue aPropValue;
