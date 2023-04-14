@@ -579,7 +579,7 @@ void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelp
                 //        (a) ignored consequently everywhere or
                 //        (b) be set/added consequently everywhere
                 //       since this is - in principle - redundant data.
-                //       Be aware thet e.g. cases like DrawingML::EqualGradients
+                //       Be aware that e.g. cases like DrawingML::EqualGradients
                 //       and others would have to be identified and adapted (!)
                 //       Since awt::Gradient2 is UNO API data there might
                 //       be cases where just awt::Gradient is transferred, so (b)
