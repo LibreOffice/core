@@ -24,12 +24,13 @@ private:
     std::unique_ptr<weld::Button> mxBtnCancel;
     std::unique_ptr<weld::Button> mxBtnClose;
     std::unique_ptr<weld::Label> mxEditPreUpload;
-    std::unique_ptr<weld::TextView> mxEditPostUpload;
-    std::unique_ptr<weld::TextView> mxFtBugReport;
+    std::unique_ptr<weld::Label> mxEditPostUpload;
+    std::unique_ptr<weld::LinkButton> mxLinkButton;
+    std::unique_ptr<weld::Label> mxFtBugReport;
     std::unique_ptr<weld::CheckButton> mxCBSafeMode;
     std::unique_ptr<weld::LinkButton> mxPrivacyPolicyButton;
 
-    OUString maSuccessMsg;
+    OUString maLinkTemplate;
 
     DECL_LINK(BtnHdl, weld::Button&, void);
     DECL_STATIC_LINK(CrashReportDialog, InstallLOKNotifierHdl, void*,
