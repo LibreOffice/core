@@ -156,7 +156,7 @@ namespace xforms
 
     sal_Bool OXSDDataType::validate( const OUString& sValue )
     {
-        return bool(_validate( sValue ));
+        return bool(!_validate( sValue ));
     }
 
 
