@@ -21,6 +21,7 @@
 #include <comphelper/accessiblecontexthelper.hxx>
 #include <toolkit/awt/vclxwindows.hxx>
 
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 
 using namespace ::com::sun::star::accessibility;
@@ -29,6 +30,17 @@ using namespace ::comphelper;
 SVTXAccessibleNumericField::SVTXAccessibleNumericField(VCLXWindow* pVCLWindow)
     : ImplInheritanceHelper(pVCLWindow)
 {
+}
+
+void SVTXAccessibleNumericField::ProcessWindowEvent(const VclWindowEvent& rVclWindowEvent)
+{
+    VCLXAccessibleEdit::ProcessWindowEvent(rVclWindowEvent);
+
+    if (rVclWindowEvent.GetId() == VclEventId::EditModify)
+    {
+        css::uno::Any aNewValue = getCurrentValue();
+        NotifyAccessibleEvent(AccessibleEventId::VALUE_CHANGED, css::uno::Any(), aNewValue);
+    }
 }
 
 sal_Int16 SVTXAccessibleNumericField::getAccessibleRole() { return AccessibleRole::SPIN_BOX; }

@@ -20,6 +20,8 @@
 #pragma once
 
 #include <cppuhelper/implbase.hxx>
+#include <vcl/vclevent.hxx>
+
 #include <standard/vclxaccessibleedit.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
@@ -29,6 +31,8 @@ class SVTXAccessibleNumericField final
 {
 public:
     SVTXAccessibleNumericField(VCLXWindow* pVCLXindow);
+
+    virtual void ProcessWindowEvent(const VclWindowEvent& rVclWindowEvent) override;
 
     // XAccessibleContext
     virtual sal_Int16 SAL_CALL getAccessibleRole() override;
