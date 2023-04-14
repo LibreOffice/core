@@ -265,7 +265,7 @@ namespace basegfx
     namespace utils
     {
         /* Tooling method to extract data from given awt::Gradient2
-           to ColorStops, doing some corrections, partitally based
+           to ColorStops, doing some corrections, partially based
            on given SingleColor.
            This will do quite some preparations for the gradient
            as follows:
