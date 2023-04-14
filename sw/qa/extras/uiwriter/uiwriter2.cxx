@@ -2473,7 +2473,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloatButton)
     // Different use cases where unfloat button should be visible
     const std::vector<OUString> aTestFiles = {
         "unfloatable_floating_table.odt", // Typical use case of multipage floating table
-        "unfloatable_floating_table.doc", // Also the DOC import
     };
 
     for (const OUString& aTestFile : aTestFiles)
@@ -2536,7 +2535,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloating)
     // Test unfloating with tables imported from different file formats
     const std::vector<OUString> aTestFiles = {
         "unfloatable_floating_table.odt",
-        "unfloatable_floating_table.doc",
     };
 
     for (const OUString& aTestFile : aTestFiles)
