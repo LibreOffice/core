@@ -433,20 +433,20 @@ inline bool implIsWhitespace(sal_Unicode c)
 template <typename charT, typename traits = std::char_traits<charT>>
 std::basic_string_view<charT, traits> trim(std::basic_string_view<charT, traits> str)
 {
-    size_t nFirst = 0;
-    size_t nLast = str.size();
+    auto pFirst = str.data();
+    auto pLast = pFirst + str.size();
 
-    while ((nFirst < nLast) && internal::implIsWhitespace(str.data()[nFirst]))
-        ++nFirst;
+    while ((pFirst < pLast) && internal::implIsWhitespace(*pFirst))
+        ++pFirst;
 
-    if (nFirst == nLast)
+    if (pFirst == pLast)
         return {};
 
     do
-        --nLast;
-    while (internal::implIsWhitespace(str.data()[nLast]));
+        --pLast;
+    while (internal::implIsWhitespace(*pLast));
 
-    return { str.data() + nFirst, nLast - nFirst + 1 };
+    return std::basic_string_view<charT, traits>(pFirst, pLast - pFirst + 1);
 }
 
 // "deduction guides"
