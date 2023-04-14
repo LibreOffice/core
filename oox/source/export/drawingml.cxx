@@ -657,6 +657,15 @@ bool DrawingML::WriteSchemeColor(OUString const& rPropertyName, const uno::Refer
     return true;
 }
 
+void DrawingML::WriteGradientStop2(double fOffset, const basegfx::BColor& rColor, const basegfx::BColor& rAlpha)
+{
+    mpFS->startElementNS(XML_a, XML_gs, XML_pos, OString::number(static_cast<sal_uInt32>(fOffset * 100000)));
+    WriteColor(
+        ::Color(rColor),
+        static_cast<sal_Int32>((1.0 - rAlpha.luminance()) * oox::drawingml::MAX_PERCENT));
+    mpFS->endElementNS( XML_a, XML_gs );
+}
+
 void DrawingML::WriteGradientStop(sal_uInt16 nStop, ::Color nColor, sal_Int32 nAlpha)
 {
     mpFS->startElementNS(XML_a, XML_gs, XML_pos, OString::number(nStop * 1000));
@@ -874,35 +883,98 @@ void DrawingML::WriteGradientFill2(
     // method (at import time) will be exported again
     basegfx::utils::synchronizeColorStops(aColorStops, aAlphaStops, aSingleColor, aSingleAlpha);
 
-    if (aColorStops.size() == aAlphaStops.size())
-    {
-        // export GradientStops (with alpha)
-        mpFS->startElementNS(XML_a, XML_gsLst);
-
-        basegfx::ColorStops::const_iterator aCurrColor(aColorStops.begin());
-        basegfx::ColorStops::const_iterator aCurrAlpha(aAlphaStops.begin());
-
-        while (aCurrColor != aColorStops.end() && aCurrAlpha != aAlphaStops.end())
-        {
-            WriteGradientStop(
-                static_cast<sal_uInt16>(aCurrColor->getStopOffset() * 100.0),
-                ::Color(aCurrColor->getStopColor()),
-                sal_Int32(::Color(aCurrAlpha->getStopColor())));
-            aCurrColor++;
-            aCurrAlpha++;
-        }
-
-        mpFS->endElementNS( XML_a, XML_gsLst );
-    }
-    else
+    if (aColorStops.size() != aAlphaStops.size())
     {
         // this is an error - synchronizeColorStops above *has* to create that
         // state, see description there (!)
         assert(false && "oox::WriteGradientFill: non-synchronized gradients (!)");
+        return;
     }
 
-    if (awt::GradientStyle_LINEAR == aGradient.Style ||
-        awt::GradientStyle_AXIAL == aGradient.Style)
+    bool bRadialOrEllipticalOrRectOrSquare(false);
+    bool bLinear(false);
+    bool bAxial(false);
+
+    switch (aGradient.Style)
+    {
+        case awt::GradientStyle_LINEAR:
+        {
+            // remember being linear, nothing else to be done
+            bLinear = true;
+            break;
+        }
+        case awt::GradientStyle_AXIAL:
+        {
+            // we need to 'double' the gradient to make it appear as what we call
+            // 'axial', but also scale and mirror in doing so
+            basegfx::ColorStops aNewColorStops;
+            basegfx::ColorStops aNewAlphaStops;
+
+            // add mirrored gadients, scaled to [0.0 .. 0.5]
+            basegfx::ColorStops::const_reverse_iterator aRevCurrColor(aColorStops.rbegin());
+            basegfx::ColorStops::const_reverse_iterator aRevCurrAlpha(aAlphaStops.rbegin());
+
+            while (aRevCurrColor != aColorStops.rend() && aRevCurrAlpha != aAlphaStops.rend())
+            {
+                aNewColorStops.emplace_back((1.0 - aRevCurrColor->getStopOffset()) * 0.5, aRevCurrColor->getStopColor());
+                aNewAlphaStops.emplace_back((1.0 - aRevCurrAlpha->getStopOffset()) * 0.5, aRevCurrAlpha->getStopColor());
+                aRevCurrColor++;
+                aRevCurrAlpha++;
+            }
+
+            // add non-mirrored gradients, translated and scaled to [0.5 .. 1.0]
+            basegfx::ColorStops::const_iterator aCurrColor(aColorStops.begin());
+            basegfx::ColorStops::const_iterator aCurrAlpha(aAlphaStops.begin());
+
+            while (aCurrColor != aColorStops.end() && aCurrAlpha != aAlphaStops.end())
+            {
+                aNewColorStops.emplace_back((aCurrColor->getStopOffset() * 0.5) + 0.5, aCurrColor->getStopColor());
+                aNewAlphaStops.emplace_back((aCurrAlpha->getStopOffset() * 0.5) + 0.5, aCurrAlpha->getStopColor());
+                aCurrColor++;
+                aCurrAlpha++;
+            }
+
+            aColorStops = aNewColorStops;
+            aAlphaStops = aNewAlphaStops;
+
+            // remember being axial
+            bAxial = true;
+            break;
+        }
+        default:
+        // case awt::GradientStyle_RADIAL:
+        // case awt::GradientStyle_ELLIPTICAL:
+        // case awt::GradientStyle_RECT:
+        // case awt::GradientStyle_SQUARE:
+        {
+            // all these types need the gadiens to be mirrored
+            basegfx::utils::reverseColorStops(aColorStops);
+            basegfx::utils::reverseColorStops(aAlphaStops);
+
+            bRadialOrEllipticalOrRectOrSquare = true;
+            break;
+        }
+    }
+
+    // export GradientStops (with alpha)
+    mpFS->startElementNS(XML_a, XML_gsLst);
+
+    basegfx::ColorStops::const_iterator aCurrColor(aColorStops.begin());
+    basegfx::ColorStops::const_iterator aCurrAlpha(aAlphaStops.begin());
+
+    while (aCurrColor != aColorStops.end() && aCurrAlpha != aAlphaStops.end())
+    {
+        WriteGradientStop2(
+            aCurrColor->getStopOffset(),
+            aCurrColor->getStopColor(),
+            aCurrAlpha->getStopColor());
+        aCurrColor++;
+        aCurrAlpha++;
+    }
+
+    mpFS->endElementNS( XML_a, XML_gsLst );
+
+    if (bLinear || bAxial)
     {
         // cases where gradient rotation has to be exported
         mpFS->singleElementNS(
@@ -910,10 +982,7 @@ void DrawingML::WriteGradientFill2(
             OString::number(((3600 - aGradient.Angle + 900) * 6000) % 21600000));
     }
 
-    if (awt::GradientStyle_RADIAL == aGradient.Style ||
-        awt::GradientStyle_ELLIPTICAL == aGradient.Style ||
-        awt::GradientStyle_RECT == aGradient.Style ||
-        awt::GradientStyle_SQUARE == aGradient.Style)
+    if (bRadialOrEllipticalOrRectOrSquare)
     {
         // cases where gradient path has to be exported
         const bool bCircle(aGradient.Style == awt::GradientStyle_RADIAL ||
