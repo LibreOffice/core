@@ -2445,7 +2445,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloatButtonSmallTable)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloatButton)
 {
-    SwModelTestBase::FlySplitGuard aGuard;
     // Different use cases where unfloat button should be visible
     const std::vector<OUString> aTestFiles = {
         "unfloatable_floating_table.odt", // Typical use case of multipage floating table
@@ -2509,7 +2508,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloatButtonReadOnlyMode)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloating)
 {
-    SwModelTestBase::FlySplitGuard aGuard;
     // Test unfloating with tables imported from different file formats
     const std::vector<OUString> aTestFiles = {
         "unfloatable_floating_table.odt",

@@ -19,6 +19,9 @@
 #include <frmmgr.hxx>
 #include <frameformats.hxx>
 #include <formatflysplit.hxx>
+#include <IDocumentLayoutAccess.hxx>
+#include <rootfrm.hxx>
+#include <pagefrm.hxx>
 
 namespace
 {
@@ -225,6 +228,25 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxFloatingTableExport)
     // - XPath '//w:tbl/w:tblPr/w:tblpPr' number of nodes is incorrect
     // i.e. no floating table was exported.
     assertXPath(pXmlDoc, "//w:tbl/w:tblPr/w:tblpPr", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testDocFloatingTableImport)
+{
+    SwModelTestBase::FlySplitGuard aGuard;
+    // Given a document with 2 pages:
+    createSwDoc("floattable-compat14.doc");
+
+    // When laying out that document:
+    calcLayout();
+
+    // Make sure that the table is split between page 1 and page 2:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    // Without the accompanying fix in place, this test would have failed, the fly frame was not
+    // split between page 1 and page 2.
+    CPPUNIT_ASSERT(pPage1->GetNext());
 }
 }
 

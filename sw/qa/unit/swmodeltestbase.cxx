@@ -39,11 +39,11 @@ using namespace css;
 SwModelTestBase::FlySplitGuard::FlySplitGuard()
 {
     m_bOldValue
-        = officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::get();
+        = officecfg::Office::Writer::Filter::Import::DOC::ImportFloatingTableAsSplitFly::get();
     std::shared_ptr<comphelper::ConfigurationChanges> pChanges(
         comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(true,
-                                                                                        pChanges);
+    officecfg::Office::Writer::Filter::Import::DOC::ImportFloatingTableAsSplitFly::set(true,
+                                                                                       pChanges);
     pChanges->commit();
 }
 
@@ -51,8 +51,8 @@ SwModelTestBase::FlySplitGuard::~FlySplitGuard()
 {
     std::shared_ptr<comphelper::ConfigurationChanges> pChanges(
         comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(m_bOldValue,
-                                                                                        pChanges);
+    officecfg::Office::Writer::Filter::Import::DOC::ImportFloatingTableAsSplitFly::set(m_bOldValue,
+                                                                                       pChanges);
     pChanges->commit();
 }
 

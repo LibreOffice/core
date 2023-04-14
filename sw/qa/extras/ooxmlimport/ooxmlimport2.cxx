@@ -671,7 +671,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121804)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf114217)
 {
-    SwModelTestBase::FlySplitGuard aGuard;
     // The floating table was not split between page 1 and page 2.
     createSwDoc("tdf114217.docx");
     SwDoc* pDoc = getSwDoc();

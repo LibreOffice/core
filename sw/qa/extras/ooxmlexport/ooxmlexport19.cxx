@@ -262,7 +262,6 @@ DECLARE_OOXMLEXPORT_TEST(mathtype, "mathtype.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf8255)
 {
-    SwModelTestBase::FlySplitGuard aGuard;
     auto verify = [this]() {
         // A full-page-wide multi-page floating table should be allowed to split:
         uno::Reference<text::XTextFramesSupplier> xDocument(mxComponent, uno::UNO_QUERY);
@@ -598,7 +597,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf97371, "tdf97371.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf99140)
 {
-    SwModelTestBase::FlySplitGuard aGuard;
     auto verify = [this]() {
         // A multi-page floating table appeared only on the first page.
         SwDoc* pDoc = getSwDoc();
