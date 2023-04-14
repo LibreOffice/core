@@ -245,7 +245,7 @@ namespace basegfx
            the given SingleAlpha as value.
            At return it guarantees that both have the same
            number of entries with the same StopOffsets, so
-           that synchonized pair of ColorStops can e.g. be used
+           that synchronized pair of ColorStops can e.g. be used
            to export a Gradient with defined/adapted alpha
            being 'coupled' indirectly using the
            'FillTransparenceGradient' method (at import time).
