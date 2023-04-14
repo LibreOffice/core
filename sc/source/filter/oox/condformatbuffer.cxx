@@ -1218,7 +1218,7 @@ void CondFormatBuffer::updateImport(const ScDataBarFormatData* pTarget)
     }
 }
 
-bool CondFormatBuffer::insertColorScale(CondFormatRef const & xCondFmt, CondFormatRuleRef const & xRule)
+bool CondFormatBuffer::insertRule(CondFormatRef const & xCondFmt, CondFormatRuleRef const & xRule)
 {
     CondFormatRef xFoundFmt;
     ScRangeList aRanges = xCondFmt->getRanges();
