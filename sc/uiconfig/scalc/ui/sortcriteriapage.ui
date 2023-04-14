@@ -98,6 +98,9 @@
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
                 <property name="group">rbTopDown</property>
+                <accessibility>
+                  <relation type="labelled-by" target="lbDirection"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -110,6 +113,9 @@
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="sortcriteriapage|lbDirection">Direction:</property>
                 <property name="xalign">1</property>
+                <accessibility>
+                    <relation type="label-for" target="rbLeftRight"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -124,6 +130,9 @@
                 <property name="receives-default">False</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
+                <accessibility>
+                  <relation type="labelled-by" target="lbHeader"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -136,6 +145,9 @@
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="sortcriteriapage|lbHeader">Headers:</property>
                 <property name="xalign">1</property>
+                <accessibility>
+                    <relation type="label-for" target="cbHeader"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left-attach">0</property>

@@ -238,6 +238,9 @@
                     <property name="halign">start</property>
                     <property name="label" translatable="yes" context="sortoptionspage|label6">Language</property>
                     <property name="use-underline">True</property>
+                    <accessibility>
+                        <relation type="label-for" target="language"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -251,6 +254,9 @@
                     <property name="halign">start</property>
                     <property name="label" translatable="yes" context="sortoptionspage|algorithmft">Options</property>
                     <property name="use-underline">True</property>
+                    <accessibility>
+                        <relation type="label-for" target="algorithmlb"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -272,6 +278,9 @@
                         <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|language">Select the language for the sorting rules.</property>
                       </object>
                     </child>
+                    <accessibility>
+                        <relation type="labelled-by" target="label6"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -288,6 +297,9 @@
                         <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|algorithmlb">Select a sorting option for the language.</property>
                       </object>
                     </child>
+                    <accessibility>
+                        <relation type="labelled-by" target="algorithmft"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>

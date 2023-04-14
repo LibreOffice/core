@@ -29,6 +29,9 @@
                 <property name="AtkObject::accessible-description" translatable="yes" context="sortkey|extended_tip|sortlb">Select the column that you want to use as the primary sort key.</property>
               </object>
             </child>
+            <accessibility>
+                <relation type="labelled-by" target="lbColRow"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -82,6 +85,9 @@
             <property name="can-focus">False</property>
             <property name="label">Column/Row:</property>
             <property name="xalign">1</property>
+            <accessibility>
+                <relation type="label-for" target="sortlb"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">0</property>

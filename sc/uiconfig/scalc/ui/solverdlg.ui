@@ -140,7 +140,6 @@
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="solverdlg|result">Optimize result to</property>
                     <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">max</property>
                     <property name="xalign">0</property>
                     <property name="yalign">0</property>
                     <accessibility>
