@@ -486,7 +486,7 @@
                     <property name="halign">start</property>
                     <property name="valign">center</property>
                     <property name="activates-default">True</property>
-                    <property name="text" context="regressiondialog|confidencelevel-spin">0,95</property>
+                    <property name="text" context="regressiondialog|confidencelevel-spin">0.95</property>
                     <property name="truncate-multiline">True</property>
                     <property name="adjustment">confidencelevel-adjustment</property>
                     <property name="digits">2</property>

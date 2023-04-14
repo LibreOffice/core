@@ -573,7 +573,7 @@
                 <property name="can-focus">True</property>
                 <property name="no-show-all">True</property>
                 <property name="activates-default">True</property>
-                <property name="text">0,00</property>
+                <property name="text">0.00</property>
                 <property name="truncate-multiline">True</property>
                 <property name="adjustment">adjustment2</property>
                 <property name="digits">2</property>
@@ -588,7 +588,7 @@
                 <property name="can-focus">True</property>
                 <property name="no-show-all">True</property>
                 <property name="activates-default">True</property>
-                <property name="text">0,00</property>
+                <property name="text">0.00</property>
                 <property name="truncate-multiline">True</property>
                 <property name="adjustment">adjustment4</property>
                 <property name="digits">2</property>

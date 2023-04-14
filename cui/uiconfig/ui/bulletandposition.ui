@@ -792,7 +792,7 @@
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="activates-default">True</property>
-                            <property name="text" translatable="yes" context="bulletandposition|indentmf">0,00</property>
+                            <property name="text" translatable="yes" context="bulletandposition|indentmf">0.00</property>
                             <property name="truncate-multiline">True</property>
                             <property name="adjustment">adjustment6</property>
                             <property name="digits">2</property>
@@ -812,7 +812,7 @@
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="activates-default">True</property>
-                            <property name="text" translatable="yes" context="bulletandposition|numberingwidthmf">0,00</property>
+                            <property name="text" translatable="yes" context="bulletandposition|numberingwidthmf">0.00</property>
                             <property name="truncate-multiline">True</property>
                             <property name="adjustment">adjustment7</property>
                             <property name="digits">2</property>

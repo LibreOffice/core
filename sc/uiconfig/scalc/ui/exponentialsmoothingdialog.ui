@@ -297,7 +297,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
-                    <property name="text">0,20</property>
+                    <property name="text">0.20</property>
                     <property name="adjustment">smoothing-factor-adjustment</property>
                     <property name="digits">2</property>
                     <property name="truncate-multiline">True</property>

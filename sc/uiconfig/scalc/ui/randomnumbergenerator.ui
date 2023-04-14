@@ -288,7 +288,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
-                    <property name="text">0,0000</property>
+                    <property name="text">0.0000</property>
                     <property name="adjustment">parameter2-adjustment</property>
                     <property name="truncate-multiline">True</property>
                     <property name="digits">4</property>
