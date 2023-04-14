@@ -1886,7 +1886,7 @@ void SAL_CALL SvxUnoTextBase::insertTextContent( const uno::Reference< text::XTe
     GetEditSource()->UpdateData();
 
     uno::Reference<beans::XPropertySet> xPropSetContent(xContent, uno::UNO_QUERY);
-    if (!xContent.is())
+    if (!xPropSetContent.is())
         throw lang::IllegalArgumentException();
 
     xPropSetContent->setPropertyValue(UNO_TC_PROP_ANCHOR, uno::Any(xRange));
