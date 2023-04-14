@@ -582,7 +582,7 @@ void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelp
                 //       Be aware thet e.g. cases like DrawingML::EqualGradients
                 //       and others would have to be identified and adapted (!)
                 //       Since awt::Gradient2 is UNO API data there might
-                //       be cases where just awt::Gradient is transfered, so (b)
+                //       be cases where just awt::Gradient is transferred, so (b)
                 //       is far better backwards compatible and thus more safe, so
                 //       all changes will make use of additionally using/setting
                 //       these additionally, but will only make use of the given
