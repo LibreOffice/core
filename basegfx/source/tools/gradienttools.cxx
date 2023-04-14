@@ -332,15 +332,15 @@ namespace basegfx
            The intention is that a color GradientStops and an
            alpha/transparence GradientStops gets synchronized
            for export.
-           Fo the corrections the single values for color and
+           For the corrections the single values for color and
            alpha may be used, e.g. when ColorStops is given
            and not empty, but AlphaStops is empty, it will get
-           sycronized so that it will have the same number and
+           synchronized so that it will have the same number and
            offsets in AlphaStops as in ColorStops, but with
            the given SingleAlpha as value.
            At return it guarantees that both have the same
            number of entries with the same StopOffsets, so
-           that synchonized pair of ColorStops can e.g. be used
+           that synchronized pair of ColorStops can e.g. be used
            to export a Gradient with defined/adapted alpha
            being 'coupled' indirectly using the
            'FillTransparenceGradient' method (at import time).
