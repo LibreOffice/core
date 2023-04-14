@@ -853,7 +853,7 @@ void DrawingML::WriteGradientFill2(
         // remember basic Gradient definition to use
         aGradient = *pColorGradient;
 
-        // extract and corrrect/process ColorStops
+        // extract and correct/process ColorStops
         basegfx::utils::prepareColorStops(*pColorGradient, aColorStops, aSingleColor);
     }
 
@@ -865,7 +865,7 @@ void DrawingML::WriteGradientFill2(
             aGradient = *pTransparenceGradient;
         }
 
-        // extract and corrrect/process AlphaStops
+        // extract and correct/process AlphaStops
         basegfx::utils::prepareColorStops(*pTransparenceGradient, aAlphaStops, aSingleAlpha);
     }
 
