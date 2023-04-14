@@ -210,15 +210,15 @@ sal_Int64 SAL_CALL ValueItemAcc::getAccessibleStateSet()
         if ( !mbIsTransientChildrenDisabled )
             nStateSet |= accessibility::AccessibleStateType::TRANSIENT;
 
-        // SELECTABLE
         nStateSet |= accessibility::AccessibleStateType::SELECTABLE;
-        //      pStateSet->AddState( accessibility::AccessibleStateType::FOCUSABLE );
+        nStateSet |= accessibility::AccessibleStateType::FOCUSABLE;
 
-        // SELECTED
         if( mpParent->mrParent.GetSelectedItemId() == mpParent->mnId )
         {
+
             nStateSet |= accessibility::AccessibleStateType::SELECTED;
-            //              pStateSet->AddState( accessibility::AccessibleStateType::FOCUSED );
+            if (mpParent->mrParent.HasChildFocus())
+                nStateSet |= accessibility::AccessibleStateType::FOCUSED;
         }
     }
 
