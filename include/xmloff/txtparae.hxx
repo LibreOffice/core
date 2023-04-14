@@ -206,7 +206,7 @@ protected:
 
     void exportPageFrames( bool bProgress );
     void exportFrameFrames( bool bAutoStyles, bool bProgress,
-            const css::uno::Reference< css::text::XTextFrame > *pParentTxtFrame );
+            const css::uno::Reference< css::text::XTextFrame >& rParentTxtFrame );
 
     void exportNumStyles( bool bUsed );
 

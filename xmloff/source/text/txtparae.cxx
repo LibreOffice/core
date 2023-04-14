@@ -1498,27 +1498,27 @@ void XMLTextParagraphExport::exportPageFrames( bool bIsProgress )
 void XMLTextParagraphExport::exportFrameFrames(
         bool bAutoStyles,
         bool bIsProgress,
-        const Reference < XTextFrame > *pParentTxtFrame )
+        const Reference < XTextFrame >& rParentTxtFrame )
 {
-    const TextContentSet* const pTexts = m_pBoundFrameSets->GetTexts()->GetFrameBoundContents(*pParentTxtFrame);
+    const TextContentSet* const pTexts = m_pBoundFrameSets->GetTexts()->GetFrameBoundContents(rParentTxtFrame);
     if(pTexts)
         for(TextContentSet::const_iterator_t it = pTexts->getBegin();
             it != pTexts->getEnd();
             ++it)
             exportTextFrame(*it, bAutoStyles, bIsProgress, true);
-    const TextContentSet* const pGraphics = m_pBoundFrameSets->GetGraphics()->GetFrameBoundContents(*pParentTxtFrame);
+    const TextContentSet* const pGraphics = m_pBoundFrameSets->GetGraphics()->GetFrameBoundContents(rParentTxtFrame);
     if(pGraphics)
         for(TextContentSet::const_iterator_t it = pGraphics->getBegin();
             it != pGraphics->getEnd();
             ++it)
             exportTextGraphic(*it, bAutoStyles);
-    const TextContentSet* const pEmbeddeds = m_pBoundFrameSets->GetEmbeddeds()->GetFrameBoundContents(*pParentTxtFrame);
+    const TextContentSet* const pEmbeddeds = m_pBoundFrameSets->GetEmbeddeds()->GetFrameBoundContents(rParentTxtFrame);
     if(pEmbeddeds)
         for(TextContentSet::const_iterator_t it = pEmbeddeds->getBegin();
             it != pEmbeddeds->getEnd();
             ++it)
             exportTextEmbedded(*it, bAutoStyles);
-    const TextContentSet* const pShapes = m_pBoundFrameSets->GetShapes()->GetFrameBoundContents(*pParentTxtFrame);
+    const TextContentSet* const pShapes = m_pBoundFrameSets->GetShapes()->GetFrameBoundContents(rParentTxtFrame);
     if(pShapes)
         for(TextContentSet::const_iterator_t it = pShapes->getBegin();
             it != pShapes->getEnd();
@@ -3055,7 +3055,7 @@ void XMLTextParagraphExport::exportAnyTextFrame(
                 {
                     Reference < XTextFrame > xTxtFrame( rTxtCntnt, UNO_QUERY );
                     Reference < XText > xTxt(xTxtFrame->getText());
-                    exportFrameFrames( true, bIsProgress, &xTxtFrame );
+                    exportFrameFrames( true, bIsProgress, xTxtFrame );
                     exportText( xTxt, bAutoStyles, bIsProgress, true );
                 }
             }
@@ -3185,7 +3185,7 @@ void XMLTextParagraphExport::_exportTextFrame(
                                   XML_TEXT_BOX, true, true );
 
         // frames bound to frame
-        exportFrameFrames( false, bIsProgress, &xTxtFrame );
+        exportFrameFrames( false, bIsProgress, xTxtFrame );
 
         exportText( xTxt, false, bIsProgress, true );
     }
