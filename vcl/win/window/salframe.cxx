@@ -3110,6 +3110,11 @@ void WinSalFrame::UpdateDarkMode()
     ::UpdateDarkMode(mhWnd);
 }
 
+bool WinSalFrame::GetUseDarkMode() const
+{
+    return UseDarkMode();
+}
+
 static bool ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
                                 WPARAM wParam, LPARAM lParam )
 {

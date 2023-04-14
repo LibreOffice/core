@@ -2783,6 +2783,14 @@ void MiscSettings::SetDarkMode(int nMode)
     }
 }
 
+bool MiscSettings::GetUseDarkMode()
+{
+    vcl::Window* pDefWindow = ImplGetDefaultWindow();
+    if (pDefWindow == nullptr)
+        return false;
+    return pDefWindow->ImplGetFrame()->GetUseDarkMode();
+}
+
 int MiscSettings::GetAppColorMode()
 {
     if (utl::ConfigManager::IsFuzzing())

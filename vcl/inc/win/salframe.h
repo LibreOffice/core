@@ -140,6 +140,7 @@ public:
     virtual void                UnionClipRegion( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
     virtual void                EndSetClipRegion() override;
     virtual void                UpdateDarkMode() override;
+    virtual bool                GetUseDarkMode() const override;
 
     constexpr vcl::WindowState state() const { return m_eState; }
     void UpdateFrameState();

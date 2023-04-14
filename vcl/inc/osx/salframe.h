@@ -164,6 +164,7 @@ public:
     // done setting up the clipregion
     virtual void EndSetClipRegion() override;
     virtual void UpdateDarkMode() override;
+    virtual bool GetUseDarkMode() const override;
 
     void UpdateFrameGeometry();
 

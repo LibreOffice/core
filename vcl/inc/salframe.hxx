@@ -300,6 +300,7 @@ public:
     void NotifyModalHierarchy(bool bModal) { m_aModalHierarchyHdl.Call(bModal); }
 
     virtual void            UpdateDarkMode() {}
+    virtual bool            GetUseDarkMode() const { return false; }
 
     // Call the callback set; this sometimes necessary for implementation classes
     // that should not know more than necessary about the SalFrame implementation

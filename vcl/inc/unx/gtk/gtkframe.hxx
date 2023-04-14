@@ -612,6 +612,7 @@ public:
     virtual bool                HidePopover(void* nId) override;
     virtual weld::Window*       GetFrameWeld() const override;
     virtual void                UpdateDarkMode() override;
+    virtual bool                GetUseDarkMode() const override;
 
     static GtkSalFrame         *getFromWindow( GtkWidget *pWindow );
 

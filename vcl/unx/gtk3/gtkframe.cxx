@@ -1370,6 +1370,16 @@ void GtkSalFrame::SetColorScheme(GVariant* variant)
     g_object_set(pSettings, "gtk-application-prefer-dark-theme", bDarkIconTheme, nullptr);
 }
 
+bool GtkSalFrame::GetUseDarkMode() const
+{
+    if (!m_pWindow)
+        return false;
+    GtkSettings* pSettings = gtk_widget_get_settings(m_pWindow);
+    gboolean bDarkIconTheme = false;
+    g_object_get(pSettings, "gtk-application-prefer-dark-theme", &bDarkIconTheme, nullptr);
+    return bDarkIconTheme;
+}
+
 static void settings_portal_changed_cb(GDBusProxy*, const char*, const char* signal_name,
                                        GVariant* parameters, gpointer frame)
 {

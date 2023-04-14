@@ -1279,6 +1279,20 @@ void AquaSalFrame::UpdateDarkMode()
     }
 }
 
+bool AquaSalFrame::GetUseDarkMode() const
+{
+    if (!mpNSView)
+        return false;
+    bool bUseDarkMode(false);
+    if (@available(macOS 10.14, iOS 13, *))
+    {
+        NSAppearanceName match = [mpNSView.effectiveAppearance bestMatchFromAppearancesWithNames: @[
+                                  NSAppearanceNameAqua, NSAppearanceNameDarkAqua]];
+        bUseDarkMode = [match isEqualToString: NSAppearanceNameDarkAqua];
+    }
+    return bUseDarkMode;
+}
+
 // on OSX-Aqua the style settings are independent of the frame, so it does
 // not really belong here. Since the connection to the Appearance_Manager
 // is currently done in salnativewidgets.cxx this would be a good place.
@@ -1309,13 +1323,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
     StyleSettings aStyleSettings = rSettings.GetStyleSettings();
 
-    bool bUseDarkMode(false);
-    if (@available(macOS 10.14, iOS 13, *))
-    {
-        NSAppearanceName match = [mpNSView.effectiveAppearance bestMatchFromAppearancesWithNames: @[
-                                  NSAppearanceNameAqua, NSAppearanceNameDarkAqua]];
-        bUseDarkMode = [match isEqualToString: NSAppearanceNameDarkAqua];
-    }
+    bool bUseDarkMode(GetUseDarkMode());
     OUString sThemeName(!bUseDarkMode ? u"sukapura" : u"sukapura_dark");
     aStyleSettings.SetPreferredIconTheme(sThemeName, bUseDarkMode);
 
