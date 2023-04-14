@@ -170,7 +170,6 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
 {
     QAccessibleInterface* pQAccessibleInterface = m_pAccessibleWidget;
 
-    Reference<XAccessible> xChild;
     switch (aEvent.EventId)
     {
         case AccessibleEventId::NAME_CHANGED:
@@ -213,14 +212,29 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
         }
         case AccessibleEventId::CHILD:
         {
-            QAccessible::Event event = QAccessible::InvalidEvent;
-            if (aEvent.OldValue >>= xChild)
-                event = QAccessible::ObjectDestroyed;
+            Reference<XAccessible> xChild;
             if (aEvent.NewValue >>= xChild)
-                event = QAccessible::ObjectCreated;
-            if (event != QAccessible::InvalidEvent)
+            {
+                QAccessible::updateAccessibility(new QAccessibleEvent(
+                    QtAccessibleRegistry::getQObject(xChild), QAccessible::ObjectCreated));
+                return;
+            }
+            if (aEvent.OldValue >>= xChild)
+            {
+                // Forwarding as QAccessible::ObjectDestroyed event currently results in crashes on close
+                // e.g. after using the character font color popup in the Writer toolbar, which
+                // needs further investigation, so don't send the event for now.
+                /*
                 QAccessible::updateAccessibility(
-                    new QAccessibleEvent(pQAccessibleInterface, event));
+                    new QAccessibleEvent(QtAccessibleRegistry::getQObject(xChild), QAccessible::ObjectDestroyed));
+                */
+                SAL_WARN("vcl.qt",
+                         "Not forwarding AccessibleEventId::CHILD event for removed child "
+                         "since it may cause crashes.");
+                return;
+            }
+            SAL_WARN("vcl.qt",
+                     "Ignoring invalid AccessibleEventId::CHILD event without any child set.");
             return;
         }
         case AccessibleEventId::HYPERTEXT_CHANGED:
