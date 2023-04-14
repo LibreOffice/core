@@ -73,6 +73,7 @@ public:
     void testShapeLayerId();
     void testFunctionAccessIndirect();
     void testTdf147122();
+    void testTdf154803();
 
     CPPUNIT_TEST_SUITE(ScMacrosTest);
     CPPUNIT_TEST(testStarBasic);
@@ -109,6 +110,7 @@ public:
     CPPUNIT_TEST(testShapeLayerId);
     CPPUNIT_TEST(testFunctionAccessIndirect);
     CPPUNIT_TEST(testTdf147122);
+    CPPUNIT_TEST(testTdf154803);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -958,6 +960,38 @@ void ScMacrosTest::testTdf147122()
     // - Unexpected dialog: Error: BASIC runtime error.
     // Property or method not found: getString.
     CPPUNIT_ASSERT_EQUAL(Any(OUString("This is a test")), aRet);
+}
+
+void ScMacrosTest::testTdf154803()
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+
+    css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
+    auto xLibs = xDocScr->getBasicLibraries();
+    auto xLibrary = xLibs->createLibrary("TestLibrary");
+    xLibrary->insertByName(
+        "TestModule",
+        uno::Any(
+            OUString("Function TestExtendedMergedSelection\n"
+                     // Merge A1:B2 cell range
+                     "  oActiveSheet = ThisComponent.CurrentController.ActiveSheet\n"
+                     "  oRange = oActiveSheet.getCellRangeByName(\"A1:B2\")\n"
+                     "  ThisComponent.getCurrentController.Select(oRange)\n"
+                     "  oActiveCell = ThisComponent.CurrentSelection\n"
+                     "  oActiveCell.Merge(True)\n"
+                     // Select A1:B3 range and check for its implementation name
+                     "  oRange = oActiveSheet.getCellRangeByName(\"A1:B3\")\n"
+                     "  ThisComponent.getCurrentController.Select(oRange)\n"
+                     "  TestExtendedMergedSelection = ThisComponent.CurrentSelection.ImplementationName\n"
+                     "End Function\n")));
+
+    Any aRet = executeMacro("vnd.sun.Star.script:TestLibrary.TestModule.TestExtendedMergedSelection?"
+                            "language=Basic&location=document");
+    // Without the fix in place, this test would have failed with
+    // - Expected : ScCellRangeObj
+    // - Actual   : ScCellObj
+    // i.e. the selection was interpreted as a single cell instead of a range
+    CPPUNIT_ASSERT_EQUAL(Any(OUString("ScCellRangeObj")), aRet);
 }
 
 ScMacrosTest::ScMacrosTest()
