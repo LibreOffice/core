@@ -946,7 +946,7 @@ void DrawingML::WriteGradientFill(
 
     if (nullptr == pColorGradient)
     {
-        // create complete tempoay copy to keep orig export working
+        // create complete temporary copy to keep orig export working
         aColorGradient = *pTransparenceGradient;
 
         // change parameters specific for PseudoColorGradient
