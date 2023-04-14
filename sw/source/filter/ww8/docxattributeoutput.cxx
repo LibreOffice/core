@@ -904,7 +904,9 @@ void DocxAttributeOutput::PopulateFrameProperties(const SwFrameFormat* pFrameFor
 {
     rtl::Reference<sax_fastparser::FastAttributeList> attrList = FastSerializerHelper::createAttrList();
 
-    awt::Point aPos(pFrameFormat->GetHoriOrient().GetPos(), pFrameFormat->GetVertOrient().GetPos());
+    const SwFormatHoriOrient& rHoriOrient = pFrameFormat->GetHoriOrient();
+    const SwFormatVertOrient& rVertOrient = pFrameFormat->GetVertOrient();
+    awt::Point aPos(rHoriOrient.GetPos(), rVertOrient.GetPos());
 
     attrList->add( FSNS( XML_w, XML_w), OString::number(rSize.Width()));
     attrList->add( FSNS( XML_w, XML_h), OString::number(rSize.Height()));
@@ -920,8 +922,15 @@ void DocxAttributeOutput::PopulateFrameProperties(const SwFrameFormat* pFrameFor
     attrList->add(FSNS(XML_w, XML_hSpace), OString::number((nLeft + nRight) / 2));
     attrList->add(FSNS(XML_w, XML_vSpace), OString::number((nUpper + nLower) / 2));
 
-    OString relativeFromH = convertToOOXMLHoriOrientRel( pFrameFormat->GetHoriOrient().GetRelationOrient() );
-    OString relativeFromV = convertToOOXMLVertOrientRel( pFrameFormat->GetVertOrient().GetRelationOrient() );
+    OString relativeFromH = convertToOOXMLHoriOrientRel(rHoriOrient.GetRelationOrient());
+    OString relativeFromV = convertToOOXMLVertOrientRel(rVertOrient.GetRelationOrient());
+
+    OString aXAlign = convertToOOXMLHoriOrient(rHoriOrient.GetHoriOrient(), /*bIsPosToggle=*/false);
+    OString aYAlign = convertToOOXMLVertOrient(rVertOrient.GetVertOrient());
+    if (!aXAlign.isEmpty())
+        attrList->add(FSNS(XML_w, XML_xAlign), aXAlign);
+    if (!aYAlign.isEmpty())
+        attrList->add(FSNS(XML_w, XML_yAlign), aYAlign);
 
     switch (pFrameFormat->GetSurround().GetValue())
     {

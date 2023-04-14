@@ -1417,6 +1417,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf112287)
 
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr","vAnchor","margin");
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr","hAnchor","text");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr","xAlign","center");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr","yAlign","bottom");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf112287B)
