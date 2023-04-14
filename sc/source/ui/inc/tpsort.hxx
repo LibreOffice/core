@@ -113,6 +113,10 @@ protected:
 
 private:
     OUString            aStrUndefined;
+    OUString            aStrCommentsRowLabel;
+    OUString            aStrCommentsColLabel;
+    OUString            aStrImgRowLabel;
+    OUString            aStrImgColLabel;
 
     TypedWhichId<ScSortItem> nWhichSort;
     ScSortParam         aSortData;

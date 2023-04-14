@@ -492,6 +492,10 @@ void ScTabPageSortFields::AddSortKey( sal_uInt16 nItem )
 ScTabPageSortOptions::ScTabPageSortOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet)
     : SfxTabPage(pPage, pController, "modules/scalc/ui/sortoptionspage.ui", "SortOptionsPage", &rArgSet)
     , aStrUndefined(ScResId(SCSTR_UNDEFINED))
+    , aStrCommentsRowLabel(ScResId(SCSTR_NOTES_ROW_LABEL))
+    , aStrCommentsColLabel(ScResId(SCSTR_NOTES_COL_LABEL))
+    , aStrImgRowLabel(ScResId(SCSTR_IMAGES_ROW_LABEL))
+    , aStrImgColLabel(ScResId(SCSTR_IMAGES_COL_LABEL))
     , nWhichSort(rArgSet.GetPool()->GetWhich(SID_SORT))
     , aSortData(rArgSet.Get(nWhichSort).GetSortData())
     , pViewData(nullptr)
@@ -556,6 +560,9 @@ void ScTabPageSortOptions::Init()
         m_xLbOutPos->set_active(0);
         m_xEdOutPos->set_text(OUString());
     }
+
+    m_xBtnIncComments->set_label(aStrCommentsColLabel);
+    m_xBtnIncImages->set_label(aStrImgColLabel);
 
     FillUserSortListBox();
 
@@ -681,6 +688,17 @@ void ScTabPageSortOptions::ActivatePage( const SfxItemSet& rSet )
     ScSortDlg* pDlg = static_cast<ScSortDlg*>(GetDialogController());
     if (!pDlg)
         return;
+
+    if (aSortData.bByRow)
+    {
+        m_xBtnIncComments->set_label(aStrCommentsRowLabel);
+        m_xBtnIncImages->set_label(aStrImgRowLabel);
+    }
+    else
+    {
+        m_xBtnIncComments->set_label(aStrCommentsColLabel);
+        m_xBtnIncImages->set_label(aStrImgColLabel);
+    }
 }
 
 DeactivateRC ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
