@@ -869,7 +869,7 @@ void DrawingML::WriteGradientFill2(
         basegfx::utils::prepareColorStops(*pTransparenceGradient, aAlphaStops, aSingleAlpha);
     }
 
-    // synchronize ColorStops and AlphaStops as peparation to export
+    // synchronize ColorStops and AlphaStops as preparation to export
     // so also gradients 'coupled' indirectly using the 'FillTransparenceGradient'
     // method (at import time) will be exported again
     basegfx::utils::synchronizeColorStops(aColorStops, aAlphaStops, aSingleColor, aSingleAlpha);
