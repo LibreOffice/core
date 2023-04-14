@@ -963,20 +963,55 @@ void ScInterpreter::RoundNumber( rtl_math_RoundingMode eMode )
         fVal = ::rtl::math::round( GetDouble(), 0, eMode );
     else
     {
-        sal_Int16 nDec = GetInt16();
-        double fX = GetDouble();
+        const sal_Int16 nDec = GetInt16();
+        const double fX = GetDouble();
         if (nGlobalError == FormulaError::NONE)
         {
+            // A quite aggressive approach with 12 significant digits.
+            // However, using 14 or some other doesn't work because other
+            // values may fail, like =ROUNDDOWN(2-5E-015;13) would produce
+            // 2 (another example in tdf#124286).
+            constexpr sal_Int16 kSigDig = 12;
+
             if ( ( eMode == rtl_math_RoundingMode_Down ||
                    eMode == rtl_math_RoundingMode_Up ) &&
-                 nDec < 12 && fmod( fX, 1.0 ) != 0.0 )
+                 nDec < kSigDig && fmod( fX, 1.0 ) != 0.0 )
+
             {
-                // tdf124286 : round to 12 significant digits before rounding
+                // tdf124286 : round to significant digits before rounding
                 //             down or up to avoid unexpected rounding errors
                 //             caused by decimal -> binary -> decimal conversion
-                double fRes;
-                RoundSignificant( fX, 12, fRes );
-                fVal = ::rtl::math::round( fRes, nDec, eMode );
+
+                double fRes = fX;
+                // Similar to RoundSignificant() but omitting the back-scaling
+                // and interim integer rounding before the final rounding,
+                // which would result in double rounding. Instead, adjust the
+                // decimals and round into integer part before scaling back.
+                const double fTemp = floor( log10( std::abs(fRes))) + 1.0 - kSigDig;
+                // Avoid inaccuracy of negative powers of 10.
+                if (fTemp < 0.0)
+                    fRes *= pow(10.0, -fTemp);
+                else
+                    fRes /= pow(10.0, fTemp);
+                if (std::isfinite(fRes))
+                {
+                    // fRes is now at a decimal normalized scale.
+                    // Truncate up-rounding to opposite direction for values
+                    // like 0.0600000000000005 =ROUNDUP(8.06-8;2) that here now
+                    // is 600000000000.005 and otherwise would yield 0.07
+                    if (eMode == rtl_math_RoundingMode_Up)
+                        fRes = ::rtl::math::approxFloor(fRes);
+                    fVal = ::rtl::math::round( fRes, nDec + fTemp, eMode );
+                    if (fTemp < 0.0)
+                        fVal /= pow(10.0, -fTemp);
+                    else
+                        fVal *= pow(10.0, fTemp);
+                }
+                else
+                {
+                    // Overflow. Let our round() decide if and how to round.
+                    fVal = ::rtl::math::round( fX, nDec, eMode );
+                }
             }
             else
                 fVal = ::rtl::math::round( fX, nDec, eMode );
