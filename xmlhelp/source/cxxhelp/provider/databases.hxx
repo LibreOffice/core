@@ -146,6 +146,7 @@ namespace chelp {
         OString getImageTheme() const;
 
         OUString getInstallPathAsURL();
+        OUString getInstallPathAsURL(std::unique_lock<std::mutex>& rGuard);
 
         const std::vector< OUString >& getModuleList( const OUString& Language );
 
@@ -159,12 +160,17 @@ namespace chelp {
         helpdatafileproxy::Hdf* getHelpDataFile( std::u16string_view Module,
                          const OUString& Language, bool helpText = false,
                          const OUString* pExtensionPath = nullptr );
+        helpdatafileproxy::Hdf* getHelpDataFile(std::unique_lock<std::mutex>& rGuard,
+                         std::u16string_view Module,
+                         const OUString& Language, bool helpText = false,
+                         const OUString* pExtensionPath = nullptr );
+
 
         /**
          *  The following method returns the Collator for the given language-country combination
          */
         css::uno::Reference< css::i18n::XCollator >
-        getCollator( const OUString& Language );
+        getCollator(std::unique_lock<std::mutex>& rGuard, const OUString& Language);
 
         /**
          *  Returns the cascading style sheet used to format the HTML-output.
@@ -194,7 +200,7 @@ namespace chelp {
          */
 
         css::uno::Reference< css::container::XHierarchicalNameAccess >
-        jarFile( std::u16string_view jar,
+        jarFile(std::unique_lock<std::mutex>& rGuard, std::u16string_view jar,
                  const OUString& Language );
 
         css::uno::Reference< css::container::XHierarchicalNameAccess >
@@ -206,6 +212,7 @@ namespace chelp {
          *  Maps a given language-locale combination to language or locale.
          */
         OUString processLang( const OUString& Language );
+        OUString processLang( std::unique_lock<std::mutex>& rGuard, const OUString& Language );
 
         void replaceName( OUString& oustring ) const;
 
@@ -213,13 +220,12 @@ namespace chelp {
         const OUString& getProductVersion() const { return m_vReplacement[1]; }
 
         OUString expandURL( const OUString& aURL );
+        OUString expandURL( std::unique_lock<std::mutex>& rGuard, const OUString& aURL );
 
         static OUString expandURL( const OUString& aURL,
             const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
     private:
-        OUString expandURL( std::unique_lock<std::mutex>& rGuard, const OUString& aURL );
-        OUString processLang( std::unique_lock<std::mutex>& rGuard, const OUString& Language );
 
         std::mutex                                               m_aMutex;
         css::uno::Reference< css::uno::XComponentContext >       m_xContext;
@@ -327,6 +333,9 @@ namespace chelp {
         ( css::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
         OUString implGetFileFromPackage( std::u16string_view rFileExtension,
             const css::uno::Reference< css::deployment::XPackage >& xPackage );
+        OUString implGetFileFromPackage(std::unique_lock<std::mutex>& rGuard,
+            std::u16string_view rFileExtension,
+            const css::uno::Reference< css::deployment::XPackage >& xPackage );
         void implGetLanguageVectorFromPackage( ::std::vector< OUString > &rv,
             const css::uno::Reference< css::deployment::XPackage >& xPackage );
 
@@ -390,10 +399,10 @@ namespace chelp {
                 : ExtensionIteratorBase( xContext, rDatabases, aInitialModule, aLanguage )
         {}
         //Returns a file URL
-        OUString nextDbFile( bool& o_rbExtension );
+        OUString nextDbFile(std::unique_lock<std::mutex>& rGuard, bool& o_rbExtension);
 
     private:
-        OUString implGetDbFileFromPackage(
+        OUString implGetDbFileFromPackage(std::unique_lock<std::mutex>& rGuard,
             const css::uno::Reference< css::deployment::XPackage >& xPackage );
 
     }; // end class KeyDataBaseFileIterator
@@ -407,12 +416,14 @@ namespace chelp {
         {}
 
         css::uno::Reference< css::container::XHierarchicalNameAccess >
-            nextJarFile( css::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle,
+            nextJarFile(std::unique_lock<std::mutex>& rGuard,
+                css::uno::Reference<css::deployment::XPackage>& o_xParentPackageBundle,
                             OUString* o_pExtensionPath, OUString* o_pExtensionRegistryPath );
 
     private:
         css::uno::Reference< css::container::XHierarchicalNameAccess >
-            implGetJarFromPackage(const css::uno::Reference< css::deployment::XPackage >& xPackage,
+            implGetJarFromPackage(std::unique_lock<std::mutex>& rGuard,
+                const css::uno::Reference< css::deployment::XPackage >& xPackage,
                 OUString* o_pExtensionPath, OUString* o_pExtensionRegistryPath );
 
     }; // end class JarFileIterator

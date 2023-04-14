@@ -277,6 +277,11 @@ OUString Databases::getInstallPathAsURL()
     return m_aInstallDirectory;
 }
 
+OUString Databases::getInstallPathAsURL(std::unique_lock<std::mutex>& )
+{
+    return m_aInstallDirectory;
+}
+
 const std::vector< OUString >& Databases::getModuleList( const OUString& Language )
 {
     if( m_avModules.empty() )
@@ -430,20 +435,29 @@ OUString Databases::processLang( std::unique_lock<std::mutex>& /*rGuard*/, const
     return ret;
 }
 
-helpdatafileproxy::Hdf* Databases::getHelpDataFile( std::u16string_view Database,
+helpdatafileproxy::Hdf* Databases::getHelpDataFile(std::u16string_view Database,
                             const OUString& Language, bool helpText,
                             const OUString* pExtensionPath )
 {
+    std::unique_lock aGuard( m_aMutex );
+
+    return getHelpDataFile(aGuard, Database, Language, helpText, pExtensionPath);
+}
+
+helpdatafileproxy::Hdf* Databases::getHelpDataFile(std::unique_lock<std::mutex>& rGuard,
+        std::u16string_view Database,
+                            const OUString& Language, bool helpText,
+                            const OUString* pExtensionPath )
+
+{
     if( Database.empty() || Language.isEmpty() )
         return nullptr;
-
-    std::unique_lock aGuard( m_aMutex );
 
     OUString aFileExt( helpText ? OUString(".ht") : OUString(".db") );
     OUString dbFileName = OUString::Concat("/") + Database + aFileExt;
     OUString key;
     if( pExtensionPath == nullptr )
-        key = processLang( aGuard, Language ) + dbFileName;
+        key = processLang( rGuard, Language ) + dbFileName;
     else
         key = *pExtensionPath + Language + dbFileName;      // make unique, don't change language
 
@@ -458,7 +472,7 @@ helpdatafileproxy::Hdf* Databases::getHelpDataFile( std::u16string_view Database
 
         OUString fileURL;
         if( pExtensionPath )
-            fileURL = expandURL(aGuard, *pExtensionPath) + Language + dbFileName;
+            fileURL = expandURL(rGuard, *pExtensionPath) + Language + dbFileName;
         else
             fileURL = m_aInstallDirectory + key;
 
@@ -480,11 +494,9 @@ helpdatafileproxy::Hdf* Databases::getHelpDataFile( std::u16string_view Database
 }
 
 Reference< XCollator >
-Databases::getCollator( const OUString& Language )
+Databases::getCollator(std::unique_lock<std::mutex>&, const OUString& Language)
 {
     OUString key = Language;
-
-    std::unique_lock aGuard( m_aMutex );
 
     CollatorTable::iterator it =
         m_aCollatorTable.emplace( key, Reference< XCollator >() ).first;
@@ -728,7 +740,7 @@ KeywordInfo* Databases::getKeyword( const OUString& Database,
         bool bExtension = false;
         for (;;)
         {
-            fileURL = aDbFileIt.nextDbFile( bExtension );
+            fileURL = aDbFileIt.nextDbFile(aGuard, bExtension);
             if( fileURL.isEmpty() )
                 break;
             OUString fileNameHDFHelp( fileURL );
@@ -741,7 +753,7 @@ KeywordInfo* Databases::getKeyword( const OUString& Database,
                 helpdatafileproxy::HDFData aValue;
                 if( aHdf.startIteration() )
                 {
-                    helpdatafileproxy::Hdf* pHdf = getHelpDataFile( Database,Language );
+                    helpdatafileproxy::Hdf* pHdf = getHelpDataFile(aGuard, Database,Language );
                     if( pHdf != nullptr )
                     {
                         pHdf->releaseHashMap();
@@ -776,7 +788,7 @@ KeywordInfo* Databases::getKeyword( const OUString& Database,
         }
 
         // sorting
-        Reference< XCollator > xCollator = getCollator( Language );
+        Reference<XCollator> xCollator = getCollator(aGuard, Language);
         KeywordElementComparator aComparator( xCollator );
         std::sort(aVector.begin(),aVector.end(),aComparator);
 
@@ -786,7 +798,8 @@ KeywordInfo* Databases::getKeyword( const OUString& Database,
     return it->second.get();
 }
 
-Reference< XHierarchicalNameAccess > Databases::jarFile( std::u16string_view jar,
+Reference< XHierarchicalNameAccess > Databases::jarFile(
+        std::unique_lock<std::mutex>& rGuard, std::u16string_view jar,
                                                          const OUString& Language )
 {
     if( jar.empty() || Language.isEmpty() )
@@ -794,9 +807,7 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( std::u16string_view jar
         return Reference< XHierarchicalNameAccess >( nullptr );
     }
 
-    std::unique_lock aGuard( m_aMutex );
-
-    OUString key = processLang(aGuard, Language) + "/" + jar;
+    OUString key = processLang(rGuard, Language) + "/" + jar;
 
     ZipFileTable::iterator it =
         m_aZipFileTable.emplace( key,Reference< XHierarchicalNameAccess >(nullptr) ).first;
@@ -814,7 +825,7 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( std::u16string_view jar
                 std::u16string_view aExtensionPath = jar.substr( nQuestionMark1 + 1, nQuestionMark2 - nQuestionMark1 - 1 );
                 std::u16string_view aPureJar = jar.substr( nQuestionMark2 + 1 );
 
-                zipFile = expandURL( aGuard, OUString::Concat(aExtensionPath) + "/" + aPureJar );
+                zipFile = expandURL(rGuard, OUString::Concat(aExtensionPath) + "/" + aPureJar);
             }
             else
             {
@@ -878,12 +889,14 @@ Reference< XHierarchicalNameAccess > Databases::findJarFileForPath
         return xNA;
     }
 
+    ::std::unique_lock aGuard(m_aMutex);
+
     JarFileIterator aJarFileIt( m_xContext, *this, jar, Language );
     Reference< XHierarchicalNameAccess > xTestNA;
     Reference< deployment::XPackage > xParentPackageBundle;
     for (;;)
     {
-        xTestNA = aJarFileIt.nextJarFile( xParentPackageBundle, o_pExtensionPath, o_pExtensionRegistryPath );
+        xTestNA = aJarFileIt.nextJarFile(aGuard, xParentPackageBundle, o_pExtensionPath, o_pExtensionRegistryPath);
         if( !xTestNA.is() )
             break;
         if( xTestNA.is() && xTestNA->hasByHierarchicalName( path ) )
@@ -1292,6 +1305,40 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextBundledHelpP
 }
 
 OUString ExtensionIteratorBase::implGetFileFromPackage(
+    std::unique_lock<std::mutex> & rGuard,
+    std::u16string_view rFileExtension, const Reference< deployment::XPackage >& xPackage )
+{
+    // No extension -> search for pure language folder
+    bool bLangFolderOnly = rFileExtension.empty();
+
+    OUString aFile;
+    OUString aLanguage = m_aLanguage;
+    for( sal_Int32 iPass = 0 ; iPass < 2 ; ++iPass )
+    {
+        OUString aStr = xPackage->getRegistrationDataURL().Value + "/" + aLanguage;
+        if( !bLangFolderOnly )
+        {
+            aStr += OUString::Concat("/help") + rFileExtension;
+        }
+
+        aFile = m_rDatabases.expandURL(rGuard, aStr);
+        if( iPass == 0 )
+        {
+            if( m_xSFA->exists( aFile ) )
+                break;
+
+            ::std::vector< OUString > av;
+            implGetLanguageVectorFromPackage( av, xPackage );
+            ::std::vector< OUString >::const_iterator pFound = LanguageTag::getFallback( av, m_aLanguage );
+            if( pFound != av.end() )
+                aLanguage = *pFound;
+        }
+    }
+    return aFile;
+}
+
+
+OUString ExtensionIteratorBase::implGetFileFromPackage(
     std::u16string_view rFileExtension, const Reference< deployment::XPackage >& xPackage )
 {
     // No extension -> search for pure language folder
@@ -1467,7 +1514,7 @@ helpdatafileproxy::Hdf* DataBaseIterator::implGetHdfFromPackage( const Reference
 
 
 //returns a file URL
-OUString KeyDataBaseFileIterator::nextDbFile( bool& o_rbExtension )
+OUString KeyDataBaseFileIterator::nextDbFile(std::unique_lock<std::mutex>& rGuard, bool& o_rbExtension)
 {
     OUString aRetFile;
 
@@ -1476,8 +1523,8 @@ OUString KeyDataBaseFileIterator::nextDbFile( bool& o_rbExtension )
         switch( m_eState )
         {
             case IteratorState::InitialModule:
-                aRetFile = m_rDatabases.getInstallPathAsURL() +
-                        m_rDatabases.processLang(m_aLanguage) +
+                aRetFile = m_rDatabases.getInstallPathAsURL(rGuard) +
+                        m_rDatabases.processLang(rGuard, m_aLanguage) +
                         "/" +
                         m_aInitialModule + ".key";
 
@@ -1497,7 +1544,7 @@ OUString KeyDataBaseFileIterator::nextDbFile( bool& o_rbExtension )
                 if( !xHelpPackage.is() )
                     break;
 
-                aRetFile = implGetDbFileFromPackage( xHelpPackage );
+                aRetFile = implGetDbFileFromPackage(rGuard, xHelpPackage);
                 o_rbExtension = true;
                 break;
             }
@@ -1509,7 +1556,7 @@ OUString KeyDataBaseFileIterator::nextDbFile( bool& o_rbExtension )
                 if( !xHelpPackage.is() )
                     break;
 
-                aRetFile = implGetDbFileFromPackage( xHelpPackage );
+                aRetFile = implGetDbFileFromPackage(rGuard, xHelpPackage);
                 o_rbExtension = true;
                 break;
             }
@@ -1521,7 +1568,7 @@ OUString KeyDataBaseFileIterator::nextDbFile( bool& o_rbExtension )
                 if( !xHelpPackage.is() )
                     break;
 
-                aRetFile = implGetDbFileFromPackage( xHelpPackage );
+                aRetFile = implGetDbFileFromPackage(rGuard, xHelpPackage);
                 o_rbExtension = true;
                 break;
             }
@@ -1536,18 +1583,20 @@ OUString KeyDataBaseFileIterator::nextDbFile( bool& o_rbExtension )
 }
 
 //Returns a file URL, that does not contain macros
-OUString KeyDataBaseFileIterator::implGetDbFileFromPackage
-    ( const Reference< deployment::XPackage >& xPackage )
+OUString KeyDataBaseFileIterator::implGetDbFileFromPackage(
+    std::unique_lock<std::mutex>& rGuard,
+    const Reference<deployment::XPackage>& xPackage)
 {
     OUString aExpandedURL =
-        implGetFileFromPackage( u".key", xPackage );
+        implGetFileFromPackage(rGuard, u".key", xPackage);
 
     return aExpandedURL;
 }
 
 
-Reference< XHierarchicalNameAccess > JarFileIterator::nextJarFile
-    ( Reference< deployment::XPackage >& o_xParentPackageBundle,
+Reference<XHierarchicalNameAccess> JarFileIterator::nextJarFile(
+        std::unique_lock<std::mutex>& rGuard,
+        Reference< deployment::XPackage >& o_xParentPackageBundle,
         OUString* o_pExtensionPath, OUString* o_pExtensionRegistryPath )
 {
     Reference< XHierarchicalNameAccess > xNA;
@@ -1557,7 +1606,7 @@ Reference< XHierarchicalNameAccess > JarFileIterator::nextJarFile
         switch( m_eState )
         {
             case IteratorState::InitialModule:
-                xNA = m_rDatabases.jarFile( m_aInitialModule, m_aLanguage );
+                xNA = m_rDatabases.jarFile(rGuard, m_aInitialModule, m_aLanguage);
                 m_eState = IteratorState::UserExtensions;     // Later: SHARED_MODULE
                 break;
 
@@ -1571,7 +1620,7 @@ Reference< XHierarchicalNameAccess > JarFileIterator::nextJarFile
                 if( !xHelpPackage.is() )
                     break;
 
-                xNA = implGetJarFromPackage( xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath );
+                xNA = implGetJarFromPackage(rGuard, xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath);
                 break;
             }
 
@@ -1581,7 +1630,7 @@ Reference< XHierarchicalNameAccess > JarFileIterator::nextJarFile
                 if( !xHelpPackage.is() )
                     break;
 
-                xNA = implGetJarFromPackage( xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath );
+                xNA = implGetJarFromPackage(rGuard, xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath);
                 break;
             }
 
@@ -1591,7 +1640,7 @@ Reference< XHierarchicalNameAccess > JarFileIterator::nextJarFile
                 if( !xHelpPackage.is() )
                     break;
 
-                xNA = implGetJarFromPackage( xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath );
+                xNA = implGetJarFromPackage(rGuard, xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath);
                 break;
             }
 
@@ -1604,13 +1653,14 @@ Reference< XHierarchicalNameAccess > JarFileIterator::nextJarFile
     return xNA;
 }
 
-Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage
-( const Reference< deployment::XPackage >& xPackage, OUString* o_pExtensionPath, OUString* o_pExtensionRegistryPath )
+Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage(
+    std::unique_lock<std::mutex>& rGuard,
+    const Reference<deployment::XPackage>& xPackage, OUString* o_pExtensionPath, OUString* o_pExtensionRegistryPath)
 {
     Reference< XHierarchicalNameAccess > xNA;
 
     OUString zipFile =
-        implGetFileFromPackage( u".jar", xPackage );
+        implGetFileFromPackage(rGuard, u".jar", xPackage);
 
     try
     {
