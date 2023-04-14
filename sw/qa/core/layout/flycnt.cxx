@@ -140,7 +140,6 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyWithTable)
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyVertOffset)
 {
     // Given a document with a floattable, split on 2 pages and a positive vertical offset:
-    SwModelTestBase::FlySplitGuard aGuard;
     createSwDoc("floattable-vertoffset.docx");
 
     // When laying out that document:
@@ -184,7 +183,6 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyVertOffset)
 CPPUNIT_TEST_FIXTURE(Test, testSplitFly3Pages)
 {
     // Given a document with a floattable, split on 3 pages:
-    SwModelTestBase::FlySplitGuard aGuard;
     createSwDoc("floattable-3pages.docx");
 
     // When laying out that document:
@@ -240,7 +238,6 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFly3Pages)
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyRow)
 {
     // Given a document with a floattable, single row split on 2 pages:
-    SwModelTestBase::FlySplitGuard aGuard;
     createSwDoc("floattable-rowsplit.docx");
 
     // When laying out that document:
@@ -299,7 +296,6 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyEnable)
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyFooter)
 {
     // Given a document with a floattable, table split on 2 pages with headers/footers:
-    SwModelTestBase::FlySplitGuard aGuard;
     createSwDoc("floattable-footer.docx");
 
     // When laying out that document:
@@ -338,7 +334,6 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyFooter)
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyFooter2Rows)
 {
     // Given a document with a 2nd page that contains the second half of a split row + a last row:
-    SwModelTestBase::FlySplitGuard aGuard;
     createSwDoc("floattable-footer-2rows.docx");
 
     // When laying out that document:
@@ -359,7 +354,6 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyFooter2Rows)
 CPPUNIT_TEST_FIXTURE(Test, testSplitFly2Cols)
 {
     // Given a document with a 2nd page that contains the second half of a split row and 2 columns:
-    SwModelTestBase::FlySplitGuard aGuard;
     createSwDoc("floattable-2cols.docx");
 
     // When laying out that document:
@@ -380,7 +374,6 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFly2Cols)
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyWidow)
 {
     // Given a document with a 2nd page that contains 2 lines, due to widow control:
-    SwModelTestBase::FlySplitGuard aGuard;
     createSwDoc("floattable-widow.docx");
 
     // When laying out that document:
@@ -426,7 +419,6 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyWidow)
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyCompat14)
 {
     // Given a Word 2010 document with 2 pages, one table row each:
-    SwModelTestBase::FlySplitGuard aGuard;
     createSwDoc("floattable-compat14.docx");
 
     // When laying out that document:
@@ -465,7 +457,6 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyCompat14)
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyCompat14Nosplit)
 {
     // Given a Word 2010 document with 2 pages, 2 rows on page 1, 1 row on page 2:
-    SwModelTestBase::FlySplitGuard aGuard;
     createSwDoc("floattable-compat14-nosplit.docx");
 
     // When laying out that document:
@@ -498,7 +489,6 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyCompat14Nosplit)
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyCompat14Body)
 {
     // Given a Word 2010 document with 2 pages, 1 row on page 1, 1 row on page 2:
-    SwModelTestBase::FlySplitGuard aGuard;
     createSwDoc("floattable-compat14-body.docx");
 
     // When laying out that document:
@@ -535,7 +525,6 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyCompat14Body)
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyFollowHorizontalPosition)
 {
     // Given a document with 2 pages, master fly on page 1, follow fly on page 2:
-    SwModelTestBase::FlySplitGuard aGuard;
     createSwDoc("floattable-hori-pos.docx");
 
     // When laying out that document:
@@ -635,7 +624,6 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFly1stRowDelete)
 CPPUNIT_TEST_FIXTURE(Test, testSplitFly3rdRowDelete)
 {
     // Given a document with a floattable, split on 3 pages:
-    SwModelTestBase::FlySplitGuard aGuard;
     createSwDoc("floattable-3pages.docx");
 
     // When deleting the row of A3:

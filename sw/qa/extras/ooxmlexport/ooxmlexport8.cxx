@@ -722,7 +722,6 @@ DECLARE_OOXMLEXPORT_TEST(testN793998, "n793998.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testN779642)
 {
-    SwModelTestBase::FlySplitGuard aGuard;
     auto verify = [this]() {
         uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
 
@@ -997,7 +996,6 @@ DECLARE_OOXMLEXPORT_TEST(testPageBorderShadow, "page-border-shadow.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testN816593, "n816593.docx")
 {
-    SwModelTestBase::FlySplitGuard aGuard;
     // Two consecutive <w:tbl> without any paragraph in between, but with different tblpPr. In this
     // case we need to have 2 different tables instead of 1
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);

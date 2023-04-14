@@ -125,7 +125,6 @@ DECLARE_SW_ROUNDTRIP_TEST(testBadDocm, "bad.docm", nullptr, DocmTest)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf109063)
 {
-    SwModelTestBase::FlySplitGuard aGuard;
     auto verify = [this]() {
         // A near-page-width table should be allowed to split:
         uno::Reference<text::XTextFramesSupplier> xDocument(mxComponent, uno::UNO_QUERY);
@@ -850,7 +849,6 @@ DECLARE_OOXMLEXPORT_TEST(testBnc519228OddBreaks, "bnc519228_odd-breaksB.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf79329)
 {
-    SwModelTestBase::FlySplitGuard aGuard;
     auto verify = [this]() {
         uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
@@ -1177,7 +1175,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107033, "tdf107033.docx")
 #if HAVE_MORE_FONTS
 CPPUNIT_TEST_FIXTURE(Test, testTdf107889)
 {
-    SwModelTestBase::FlySplitGuard aGuard;
     auto verify = [this]() {
         // This was 1, multi-page table was imported as a non-split fly.
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();

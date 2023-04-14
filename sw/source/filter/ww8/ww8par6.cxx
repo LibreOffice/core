@@ -68,6 +68,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
+#include <officecfg/Office/Writer.hxx>
 #include "sortedarray.hxx"
 #include "sprmids.hxx"
 #include <node.hxx>
@@ -99,6 +100,7 @@
 #include "ww8graf.hxx"
 
 #include <fmtwrapinfluenceonobjpos.hxx>
+#include <formatflysplit.hxx>
 
 using namespace sw::util;
 using namespace sw::types;
@@ -2457,6 +2459,22 @@ bool SwWW8ImplReader::IsDropCap() const
     return false;
 }
 
+namespace
+{
+bool IsFlySplitAllowed()
+{
+    bool bRet
+        = officecfg::Office::Writer::Filter::Import::DOC::ImportFloatingTableAsSplitFly::get();
+
+    if (!bRet)
+    {
+        bRet = getenv("SW_FORCE_FLY_SPLIT") != nullptr;
+    }
+
+    return bRet;
+}
+}
+
 bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *pTabPos)
 {
     m_xWFlyPara = ConstructApo(rApo, pTabPos);
@@ -2498,6 +2516,13 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
             // ofz#34749 we shouldn't anchor anything into an 'extra' paragraph scheduled for
             // removal at end of import, but check if that scenario is happening
             m_aExtraneousParas.remove_if_present(m_pPaM->GetPointNode().GetTextNode());
+
+            if (pTabPos && IsFlySplitAllowed())
+            {
+                // Map a positioned table to a split fly.
+                aFlySet.Put(SwFormatFlySplit(true));
+            }
+
             m_xSFlyPara->SetFlyFormat(m_rDoc.MakeFlySection(WW8SwFlyPara::eAnchor,
                                                             m_pPaM->GetPoint(), &aFlySet));
             OSL_ENSURE(m_xSFlyPara->GetFlyFormat()->GetAnchor().GetAnchorId() ==
