@@ -911,6 +911,38 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf147122)
     CPPUNIT_ASSERT_EQUAL(Any(OUString("This is a test")), aRet);
 }
 
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf154803)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+
+    css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
+    auto xLibs = xDocScr->getBasicLibraries();
+    auto xLibrary = xLibs->createLibrary("TestLibrary");
+    xLibrary->insertByName(
+        "TestModule",
+        uno::Any(
+            OUString("Function TestExtendedMergedSelection\n"
+                     // Merge A1:B2 cell range
+                     "  oActiveSheet = ThisComponent.CurrentController.ActiveSheet\n"
+                     "  oRange = oActiveSheet.getCellRangeByName(\"A1:B2\")\n"
+                     "  ThisComponent.getCurrentController.Select(oRange)\n"
+                     "  oActiveCell = ThisComponent.CurrentSelection\n"
+                     "  oActiveCell.Merge(True)\n"
+                     // Select A1:B3 range and check for its implementation name
+                     "  oRange = oActiveSheet.getCellRangeByName(\"A1:B3\")\n"
+                     "  ThisComponent.getCurrentController.Select(oRange)\n"
+                     "  TestExtendedMergedSelection = ThisComponent.CurrentSelection.ImplementationName\n"
+                     "End Function\n")));
+
+    Any aRet = executeMacro("vnd.sun.Star.script:TestLibrary.TestModule.TestExtendedMergedSelection?"
+                            "language=Basic&location=document");
+    // Without the fix in place, this test would have failed with
+    // - Expected : ScCellRangeObj
+    // - Actual   : ScCellObj
+    // i.e. the selection was interpreted as a single cell instead of a range
+    CPPUNIT_ASSERT_EQUAL(Any(OUString("ScCellRangeObj")), aRet);
+}
+
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf116127)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");

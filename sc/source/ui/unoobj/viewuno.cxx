@@ -54,6 +54,7 @@
 #include <prevwsh.hxx>
 #include <docsh.hxx>
 #include <drwlayer.hxx>
+#include <attrib.hxx>
 #include <drawview.hxx>
 #include <fupoor.hxx>
 #include <sc.hrc>
@@ -873,13 +874,20 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
         ScMarkType eMarkType = rViewData.GetSimpleArea(aRange);
         if ( nTabs == 1 && (eMarkType == SC_MARK_SIMPLE) )
         {
-            // tdf#147122 - return cell object when a simple selection is merged
+            // tdf#154803 - check if range is entirely merged
             ScDocument& rDoc = pDocSh->GetDocument();
-            const ScPatternAttr* pMarkPattern = rDoc.GetPattern(aRange.aStart);
+            const ScMergeAttr* pMergeAttr = rDoc.GetAttr(aRange.aStart, ATTR_MERGE);
+            SCCOL nColSpan = 1;
+            SCROW nRowSpan = 1;
+            if (pMergeAttr && pMergeAttr->IsMerged())
+            {
+                nColSpan = pMergeAttr->GetColMerge();
+                nRowSpan = pMergeAttr->GetRowMerge();
+            }
+            // tdf#147122 - return cell object when a simple selection is entirely merged
             if (aRange.aStart == aRange.aEnd
-                || (pMarkPattern
-                    && pMarkPattern->GetItemSet().GetItemState(ATTR_MERGE, false)
-                           == SfxItemState::SET))
+                || (aRange.aEnd.Col() - aRange.aStart.Col() == nColSpan - 1
+                    && aRange.aEnd.Row() - aRange.aStart.Row() == nRowSpan - 1))
                 pObj = new ScCellObj( pDocSh, aRange.aStart );
             else
                 pObj = new ScCellRangeObj( pDocSh, aRange );
