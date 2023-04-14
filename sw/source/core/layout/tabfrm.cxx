@@ -1113,9 +1113,16 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
         // First case: One of the repeated headline does not fit to the page anymore.
         // tdf#88496 Disable repeated headline (like for #i44910#) to avoid loops and
         // to fix interoperability problems (very long tables only with headline)
+        // tdf#150149 except in multi-column sections, where it's possible to enlarge
+        // the height of the section frame instead of using this fallback
         OSL_ENSURE( !GetIndPrev(), "Table is supposed to be at beginning" );
-        m_pTable->SetRowsToRepeat(0);
-        return false;
+        if ( !IsInSct() )
+        {
+            m_pTable->SetRowsToRepeat(0);
+            return false;
+        }
+        else
+            bKeepNextRow = true;
     }
     else if ( !GetIndPrev() && nRepeat == nRowCount )
     {
