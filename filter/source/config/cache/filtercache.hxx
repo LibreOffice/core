@@ -23,6 +23,7 @@
 #include <mutex>
 
 #include "cacheitem.hxx"
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
