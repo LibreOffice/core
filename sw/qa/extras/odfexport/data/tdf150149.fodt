@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:automatic-styles>
+  <style:style style:name="Table1" style:family="table">
+   <style:table-properties style:width="5cm" table:align="left"/>
+  </style:style>
+  <style:style style:name="Sect1" style:family="section">
+   <style:section-properties text:dont-balance-text-columns="false" style:editable="false">
+    <style:columns fo:column-count="3" fo:column-gap="0.5cm">
+    </style:columns>
+   </style:section-properties>
+  </style:style>
+ </office:automatic-styles>
+ <office:body>
+  <office:text>
+   <text:section text:style-name="Sect1" text:name="Section1">
+    <table:table table:name="Table1" table:style-name="Table1">
+     <table:table-column table:number-columns-repeated="3"/>
+     <table:table-header-rows>
+     <table:table-row>
+      <table:table-cell>
+       <text:p>A</text:p>
+      </table:table-cell>
+      <table:table-cell>
+       <text:p>B</text:p>
+      </table:table-cell>
+      <table:table-cell>
+       <text:p>C</text:p>
+      </table:table-cell>
+     </table:table-row>
+     </table:table-header-rows>
+     <table:table-row>
+      <table:table-cell/>
+      <table:table-cell/>
+      <table:table-cell/>
+     </table:table-row>
+     <table:table-row>
+      <table:table-cell/>
+      <table:table-cell/>
+      <table:table-cell/>
+     </table:table-row>
+     <table:table-row>
+      <table:table-cell/>
+      <table:table-cell/>
+      <table:table-cell/>
+     </table:table-row>
+     <table:table-row>
+      <table:table-cell/>
+      <table:table-cell/>
+      <table:table-cell/>
+     </table:table-row>
+     <table:table-row>
+      <table:table-cell/>
+      <table:table-cell/>
+      <table:table-cell/>
+     </table:table-row>
+     <table:table-row>
+      <table:table-cell/>
+      <table:table-cell/>
+      <table:table-cell/>
+     </table:table-row>
+     <table:table-row>
+      <table:table-cell/>
+      <table:table-cell/>
+      <table:table-cell/>
+     </table:table-row>
+     <table:table-row>
+      <table:table-cell/>
+      <table:table-cell/>
+      <table:table-cell/>
+     </table:table-row>
+    </table:table>
+    <text:p/>
+   </text:section>
+  </office:text>
+ </office:body>
+</office:document>
+
