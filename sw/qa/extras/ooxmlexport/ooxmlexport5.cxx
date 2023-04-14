@@ -1416,6 +1416,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf112287)
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
 
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr","vAnchor","margin");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr","xAlign","center");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr","yAlign","bottom");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testZOrderInHeader)
