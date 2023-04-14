@@ -897,7 +897,7 @@ void DrawingML::WriteGradientFill2(
     else
     {
         // this is an error - synchronizeColorStops above *has* to create that
-        // state, see desciption there (!)
+        // state, see description there (!)
         assert(false && "oox::WriteGradientFill: non-synchronized gradients (!)");
     }
 
