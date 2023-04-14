@@ -223,9 +223,9 @@ namespace basegfx
              this is the case) and return with empty ColorStops
            - It will blend ColorStops to Intensity if StartIntensity/
              EndIntensity != 100 is set in awt::Gradient2, so applying
-             that value(s) to the gadient directly
+             that value(s) to the gradient directly
            - It will adapt to Border if Border != 0 is set at the
-             given awt::Gradient2, so applying that value to the gadient
+             given awt::Gradient2, so applying that value to the gradient
              directly
         */
         BASEGFX_DLLPUBLIC void prepareColorStops(
