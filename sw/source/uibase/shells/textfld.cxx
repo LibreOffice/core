@@ -188,9 +188,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                             SwCursorShell::StartOfInputFieldAtPos( *(rSh.GetCursor()->Start()) ) + 1,
                             SwCursorShell::EndOfInputFieldAtPos( *(rSh.GetCursor()->Start()) ) - 1 );
                     }
-                    else
+                    else if (SwField* pCurrentField = rSh.GetCurField(true))
                     {
-                        rSh.StartInputFieldDlg(rSh.GetCurField(true), false, false, GetView().GetFrameWeld());
+                        rSh.StartInputFieldDlg(pCurrentField, false, false, GetView().GetFrameWeld());
                     }
                     bRet = true;
                 }
