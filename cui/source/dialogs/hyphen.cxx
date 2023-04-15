@@ -161,7 +161,7 @@ OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl()
         // 2) remove all hyphenation positions from the start that are not considered by the core
         const std::u16string_view aSearchRange( aTxt.subView( 0, nPos1 ) );
         size_t nPos2 = aSearchRange.rfind( '-' );  // the '-' position the core will use by default
-        if (nPos2 != std::u16string_view::npos )
+        if (nPos2 != std::u16string_view::npos && nPos2 != 0)
         {
             OUString aLeft( aSearchRange.substr( 0, nPos2 ) );
             nPos = 0;
