@@ -28,6 +28,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
+#include <osl/thread.hxx>
 
 #include <IDocumentContentOperations.hxx>
 #include <cmdid.h>
@@ -1047,6 +1048,34 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertTextFormFieldEndnote)
     aActual = comphelper::string::removeAny(aActual, aForbidden);
     // Then this was empty: the fieldmark was inserted before the note anchor, not in the note body.
     CPPUNIT_ASSERT_EQUAL(OUString("result"), aActual);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateSelectedField)
+{
+    // Given an empty doc:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
+
+    // Insert a time field and select it:
+    dispatchCommand(mxComponent, ".uno:InsertTimeField", {});
+
+    pCursor->SetMark();
+    pCursor->Move(fnMoveBackward);
+
+    OUString aTimeFieldBefore, aTimeFieldAfter;
+    pWrtShell->GetSelectedText(aTimeFieldBefore);
+
+    // Wait for one second:
+    osl::Thread::wait(std::chrono::seconds(1));
+
+    // Update the field at cursor:
+    dispatchCommand(mxComponent, ".uno:UpdateSelectedField", {});
+    pWrtShell->GetSelectedText(aTimeFieldAfter);
+
+    // Check that the selected field has changed:
+    CPPUNIT_ASSERT(aTimeFieldAfter != aTimeFieldBefore);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -153,6 +153,16 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             }
             break;
         }
+        case FN_UPDATE_SEL_FIELD:
+        {
+            SwField *pField = rSh.GetCurField();
+
+            if (pField)
+            {
+               rSh.UpdateOneField(*pField);
+            }
+            break;
+        }
         case FN_EXECUTE_MACROFIELD:
         {
             SwField* pField = rSh.GetCurField();
@@ -1451,6 +1461,16 @@ void SwTextShell::StateField( SfxItemSet &rSet )
                     rSet.DisableItem( nWhich );
                 }
             }
+            break;
+
+        case FN_UPDATE_SEL_FIELD:
+            {
+                pField = rSh.GetCurField();
+
+                if (!pField)
+                    rSet.DisableItem( nWhich );
+            }
+
             break;
 
         case FN_EXECUTE_MACROFIELD:

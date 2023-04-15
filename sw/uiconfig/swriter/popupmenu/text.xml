@@ -22,6 +22,7 @@
   <menu:menuitem menu:id=".uno:EditCurIndex"/>
   <menu:menuitem menu:id=".uno:RemoveTableOf"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:UpdateSelectedField"/>
   <menu:menuitem menu:id=".uno:FieldDialog"/>
   <menu:menuitem menu:id=".uno:EditFootnote"/>
   <menu:menuitem menu:id=".uno:IndexEntryDialog"/>

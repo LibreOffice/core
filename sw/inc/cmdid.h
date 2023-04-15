@@ -78,6 +78,7 @@ class SwUINumRuleItem;
 #define FN_EDIT_LINK_DLG        (FN_EDIT + 9 )    /* Edit link dialog */
 
 #define FN_NUMBER_BULLETS       (FN_EDIT + 21)    /* Bullets */
+#define FN_UPDATE_SEL_FIELD     (FN_EDIT + 22 )   /* Update selected field */
 #define FN_EDIT_IDX_ENTRY_DLG   (FN_EDIT + 23)    /* Edit Index-Entry */
 #define FN_UPDATE_FIELDS        (FN_EDIT + 26)    /* Update fields */
 #define FN_EXECUTE_MACROFIELD   (FN_EDIT + 27)    /* Execute macrofield */

@@ -1246,6 +1246,24 @@ SfxVoidItem FieldDialog FN_EDIT_FIELD
     GroupId = SfxGroupId::Edit;
 ]
 
+SfxVoidItem UpdateSelectedField FN_UPDATE_SEL_FIELD
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Edit;
+]
+
 SfxBoolItem Fieldnames FN_VIEW_FIELDNAME
 
 [
