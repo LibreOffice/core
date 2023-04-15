@@ -42,9 +42,11 @@ END {
         close(cmd)
     }
     PROCINFO["sorted_in"] = "@val_num_desc"
-    print "sum total bytes included (excluding system headers): " totalsize
+    printf "Sum total bytes included (excluding system headers): %'d\n", totalsize
+    print "Total bytes\tSize\t   Occurrences\tFilename"
+    OFS="\t"
     for (inc in totals) {
-        print totals[inc], sizes[inc], includes[inc], inc
+        printf "%'13d\t%'7d\t%'8d\t%s\n", totals[inc], sizes[inc], includes[inc], inc
     }
 }
 
