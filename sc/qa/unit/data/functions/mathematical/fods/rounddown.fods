@@ -2006,41 +2006,86 @@
      <table:table-cell table:number-columns-repeated="5"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce29"/>
-     <table:table-cell table:style-name="ce38"/>
+     <table:table-cell table:formula="of:=ROUNDDOWN(726498.789999828;2)" office:value-type="float" office:value="726498.78" calcext:value-type="float">
+      <text:p>726498.78</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="726498.78" calcext:value-type="float">
+      <text:p>726498.78</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A15]=[.B15]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A15])" office:value-type="string" office:string-value="=ROUNDDOWN(726498.789999828;2)" calcext:value-type="string">
+      <text:p>=ROUNDDOWN(726498.789999828;2)</text:p>
+     </table:table-cell>
      <table:table-cell table:style-name="ce42"/>
      <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell table:style-name="ce48"/>
      <table:table-cell table:number-columns-repeated="5"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce29"/>
-     <table:table-cell table:style-name="ce38"/>
+     <table:table-cell table:formula="of:=ROUNDDOWN(2-5E-015;14)" office:value-type="float" office:value="1.99999999999999" calcext:value-type="float">
+      <text:p>1.99999999999999</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1.99999999999999" calcext:value-type="float">
+      <text:p>1.99999999999999</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A16]=[.B16]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A16])" office:value-type="string" office:string-value="=ROUNDDOWN(2-5E-015;14)" calcext:value-type="string">
+      <text:p>=ROUNDDOWN(2-5E-015;14)</text:p>
+     </table:table-cell>
      <table:table-cell table:number-columns-repeated="6"/>
      <table:table-cell table:style-name="ce49" table:number-columns-repeated="5"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce29"/>
-     <table:table-cell table:style-name="ce38"/>
+     <table:table-cell table:formula="of:=ROUNDDOWN(2-5E-015;13)" office:value-type="float" office:value="1.9999999999999" calcext:value-type="float">
+      <text:p>1.9999999999999</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1.9999999999999" calcext:value-type="float">
+      <text:p>1.9999999999999</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A17]=[.B17]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A17])" office:value-type="string" office:string-value="=ROUNDDOWN(2-5E-015;13)" calcext:value-type="string">
+      <text:p>=ROUNDDOWN(2-5E-015;13)</text:p>
+     </table:table-cell>
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce31"/>
-     <table:table-cell/>
+     <table:table-cell table:formula="of:=ROUNDDOWN(8.234567890125;11)" office:value-type="float" office:value="8.23456789012" calcext:value-type="float">
+      <text:p>8.23456789012</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="8.23456789012" calcext:value-type="float">
+      <text:p>8.23456789012</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A18]=[.B18]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A18])" office:value-type="string" office:string-value="=ROUNDDOWN(8.234567890125;11)" calcext:value-type="string">
+      <text:p>=ROUNDDOWN(8.234567890125;11)</text:p>
+     </table:table-cell>
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce27" table:content-validation-name="val1"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce49"/>
      <table:table-cell table:number-columns-repeated="5"/>
     </table:table-row>
-    <table:table-row table:style-name="ro5">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce31"/>
-     <table:table-cell table:style-name="ce39"/>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=ROUNDDOWN(-999.13;11)" office:value-type="float" office:value="-999.13" calcext:value-type="float">
+      <text:p>-999.13</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="-999.13" calcext:value-type="float">
+      <text:p>-999.13</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A19]=[.B19]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A19])" office:value-type="string" office:string-value="=ROUNDDOWN(-999.13;11)" calcext:value-type="string">
+      <text:p>=ROUNDDOWN(-999.13;11)</text:p>
+     </table:table-cell>
      <table:table-cell table:number-columns-repeated="6"/>
      <table:table-cell table:style-name="ce49" table:number-columns-repeated="4"/>
      <table:table-cell/>
