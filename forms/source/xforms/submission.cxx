@@ -55,8 +55,6 @@ using com::sun::star::form::submission::XSubmissionVetoListener;
 using com::sun::star::lang::WrappedTargetException;
 using com::sun::star::lang::NoSupportException;
 using com::sun::star::task::XInteractionHandler;
-using com::sun::star::task::XInteractionRequest;
-using com::sun::star::task::XInteractionContinuation;
 using com::sun::star::xforms::XModel;
 using com::sun::star::xforms::InvalidDataOnSubmitException;
 using com::sun::star::xml::xpath::XXPathObject;

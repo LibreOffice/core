@@ -48,11 +48,6 @@
 
 #include <comphelper/windowserrorstring.hxx>
 
-//  namespace directives
-
-using osl::MutexGuard;
-using osl::ClearableMutexGuard;
-
 namespace /* private */
 {
     const wchar_t g_szWndClsName[] = L"MtaOleReqWnd###";

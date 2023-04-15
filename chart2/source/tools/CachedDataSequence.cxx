@@ -35,8 +35,6 @@ using ::osl::MutexGuard;
 
 // necessary for MS compiler
 using ::comphelper::OPropertyContainer;
-using ::comphelper::OMutexAndBroadcastHelper;
-using ::comphelper::OPropertyArrayUsageHelper;
 using ::chart::impl::CachedDataSequence_Base;
 
 namespace

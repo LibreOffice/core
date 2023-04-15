@@ -108,7 +108,6 @@ static void unescapeXML(const char* s, const unsigned long sz, librevenge::RVNGS
 }
 
 using com::sun::star::uno::Reference;
-using com::sun::star::xml::sax::XAttributeList;
 using com::sun::star::xml::sax::XDocumentHandler;
 
 DocumentHandler::DocumentHandler(Reference<XDocumentHandler> const& xHandler)

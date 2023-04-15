@@ -24,12 +24,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-using ::com::sun::star::lang::IllegalArgumentException;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::XInterface;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Sequence;
-
 const sal_Unicode   TILDE_SIGN = L'~';
 const sal_Unicode   AMPERSAND_SIGN = L'&';
 

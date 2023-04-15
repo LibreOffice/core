@@ -51,7 +51,6 @@ using ::com::sun::star::task::PasswordRequestMode;
 using ::com::sun::star::task::PasswordRequestMode_PASSWORD_ENTER;
 using ::com::sun::star::task::PasswordRequestMode_PASSWORD_REENTER;
 using ::com::sun::star::task::XInteractionHandler;
-using ::com::sun::star::task::XInteractionRequest;
 
 using namespace ::com::sun::star;
 

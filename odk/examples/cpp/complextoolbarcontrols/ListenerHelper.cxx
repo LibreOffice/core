@@ -26,7 +26,6 @@ using com::sun::star::frame::XDispatch;
 using com::sun::star::frame::XStatusListener;
 using com::sun::star::lang::EventObject;
 using com::sun::star::uno::Reference;
-using com::sun::star::uno::RuntimeException;
 using com::sun::star::frame::FeatureStateEvent;
 
 static AllListeners aListeners;

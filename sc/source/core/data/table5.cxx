@@ -1055,8 +1055,6 @@ void lcl_syncFlags(const ScDocument* pDocument, ScFlatBoolColSegments& rColSegme
                    ScBitMaskCompressedArray<SCCOL, CRFlags>* pColFlags,
                    ScBitMaskCompressedArray<SCROW, CRFlags>* pRowFlags, const CRFlags nFlagMask)
 {
-    using ::sal::static_int_cast;
-
     CRFlags nFlagMaskComplement = ~nFlagMask;
 
     pRowFlags->AndValue(0, pDocument->MaxRow(), nFlagMaskComplement);

@@ -46,7 +46,6 @@
 using css::uno::UNO_QUERY;
 using css::uno::Reference;
 using css::uno::Exception;
-using css::uno::RuntimeException;
 using css::uno::Sequence;
 using css::lang::IllegalArgumentException;
 

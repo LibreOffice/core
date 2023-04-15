@@ -71,7 +71,6 @@
 #include <string_view>
 
 using ::osl::MutexGuard;
-using ::osl::ClearableMutexGuard;
 using ::com::sun::star::table::BorderLine;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;

@@ -79,7 +79,6 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::chart::XAxis;
-using ::osl::MutexGuard;
 
 namespace
 {

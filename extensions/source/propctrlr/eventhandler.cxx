@@ -117,7 +117,6 @@ namespace pcr
     using com::sun::star::uri::UriReferenceFactory;
     using com::sun::star::uri::XUriReferenceFactory;
     using com::sun::star::uri::XVndSunStarScriptUrlReference;
-    using ::com::sun::star::lang::XEventListener;
 
     namespace PropertyControlType = css::inspection::PropertyControlType;
     namespace PropertyAttribute = css::beans::PropertyAttribute;

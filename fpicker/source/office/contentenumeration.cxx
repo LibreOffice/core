@@ -63,7 +63,6 @@ namespace svt
     using ::com::sun::star::ucb::CommandAbortedException;
     using ::com::sun::star::ucb::XContentAccess;
     using ::com::sun::star::ucb::XCommandEnvironment;
-    using ::ucbhelper::ResultSetInclude;
     using ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
 
 
