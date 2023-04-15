@@ -4605,12 +4605,27 @@
      <table:table-cell table:style-name="ce70"/>
      <table:table-cell table:number-columns-repeated="5"/>
     </table:table-row>
-    <table:table-row table:style-name="ro6" table:number-rows-repeated="3">
-     <table:table-cell table:style-name="ce70"/>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F27];[.G27])" office:value-type="float" office:value="-999.13" calcext:value-type="float">
+      <text:p>-999.13</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="-999.13" calcext:value-type="float">
+      <text:p>-999.13</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce92" table:formula="of:=[.A27]=[.B27]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A27])" office:value-type="string" office:string-value="=ROUNDSIG(F27;G27)" calcext:value-type="string">
+      <text:p>=ROUNDSIG(F27;G27)</text:p>
+     </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce73"/>
-     <table:table-cell table:style-name="ce75" table:number-columns-repeated="2"/>
-     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell office:value-type="float" office:value="-999.13" calcext:value-type="float">
+      <text:p>-999.13</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="12" calcext:value-type="float">
+      <text:p>12</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell table:style-name="ce81"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce82"/>
@@ -4623,12 +4638,27 @@
      <table:table-cell table:style-name="ce70"/>
      <table:table-cell table:number-columns-repeated="5"/>
     </table:table-row>
-    <table:table-row table:style-name="ro6" table:number-rows-repeated="3">
-     <table:table-cell table:style-name="ce70"/>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=ORG.LIBREOFFICE.RAWSUBTRACT(ORG.LIBREOFFICE.ROUNDSIG([.F28];[.G28]);[.F28])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce92" table:formula="of:=[.A28]=[.B28]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A28])" office:value-type="string" office:string-value="=RAWSUBTRACT(ROUNDSIG(F28;G28);F28)" calcext:value-type="string">
+      <text:p>=RAWSUBTRACT(ROUNDSIG(F28;G28);F28)</text:p>
+     </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce72"/>
-     <table:table-cell table:style-name="ce75" table:number-columns-repeated="2"/>
-     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell office:value-type="float" office:value="-999.13" calcext:value-type="float">
+      <text:p>-999.13</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="12" calcext:value-type="float">
+      <text:p>12</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell table:style-name="ce81"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce82"/>
