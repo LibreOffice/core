@@ -2461,10 +2461,10 @@ bool SwWW8ImplReader::IsDropCap() const
 
 namespace
 {
-bool IsFlySplitAllowed()
+bool IsFlySplitAllowed(bool bFuzzing)
 {
-    bool bRet
-        = officecfg::Office::Writer::Filter::Import::DOC::ImportFloatingTableAsSplitFly::get();
+    bool bRet = bFuzzing ||
+        officecfg::Office::Writer::Filter::Import::DOC::ImportFloatingTableAsSplitFly::get();
 
     if (!bRet)
     {
@@ -2508,7 +2508,7 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
         WW8FlySet aFlySet(*this, m_xWFlyPara.get(), m_xSFlyPara.get(), false);
 
         // Always map floating tables to split flys when fly split is allowed.
-        if (pTabPos && pTabPos->bNoFly && !IsFlySplitAllowed())
+        if (pTabPos && pTabPos->bNoFly && !IsFlySplitAllowed(m_bFuzzing))
         {
             m_xSFlyPara->SetFlyFormat(nullptr);
         }
@@ -2518,7 +2518,7 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
             // removal at end of import, but check if that scenario is happening
             m_aExtraneousParas.remove_if_present(m_pPaM->GetPointNode().GetTextNode());
 
-            if (pTabPos && IsFlySplitAllowed())
+            if (pTabPos && IsFlySplitAllowed(m_bFuzzing))
             {
                 // Map a positioned table to a split fly.
                 aFlySet.Put(SwFormatFlySplit(true));
