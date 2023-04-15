@@ -6523,7 +6523,7 @@ find_al()
     done
 }
 
-find_dotnetsdk46()
+find_dotnetsdk()
 {
     unset frametest
 
@@ -6534,6 +6534,7 @@ find_dotnetsdk46()
             return
         fi
     done
+    AC_MSG_ERROR([The Windows NET SDK (minimum 4.6) not found, check the installation])
 }
 
 find_winsdk_version()
@@ -6887,7 +6888,7 @@ if test "$build_os" = "cygwin" -o "$build_os" = "wsl"; then
 
     dnl Check mscoree.lib / .NET Framework dir
     AC_MSG_CHECKING(.NET Framework)
-    find_dotnetsdk46
+    find_dotnetsdk
     PathFormat "$frametest"
     frametest="$formatted_path_unix"
     if test -f "$frametest/Lib/um/$WIN_BUILD_ARCH/mscoree.lib"; then
