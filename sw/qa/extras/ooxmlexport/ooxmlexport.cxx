@@ -1103,8 +1103,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf115094v3)
     createSwDoc("tdf115094v3.docx");
     {
         SwDoc* pDoc = getSwDoc();
-        SwFrameFormats& rSpzFormats = *pDoc->GetSpzFrameFormats();
-        SwFrameFormat* pFormat = rSpzFormats[0];
+        auto& rSpzFormats = *pDoc->GetSpzFrameFormats();
+        auto pFormat = rSpzFormats[0];
         // Without the fix, this has failed with:
         // - Expected: 1991
         // - Actual  : 1883

@@ -286,7 +286,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     auto [pStart, pEnd] = rPaM.StartEnd(); // SwPosition*
 
     // Set index to the Selection's start
-    for ( const auto *pFormat : *GetSpzFrameFormats() )
+    for(sw::SpzFrameFormat* pFormat: *GetSpzFrameFormats())
     {
         SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
         SwNode const*const pAnchorNode = pAnchor->GetAnchorNode();

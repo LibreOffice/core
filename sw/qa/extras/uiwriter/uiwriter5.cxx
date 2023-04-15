@@ -1459,10 +1459,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testShapePageMove)
                                                        { &aXItem, &aYItem });
 
     // Check if the shape anchor was moved to the 2nd page as well.
-    SwFrameFormats* pShapeFormats = pDoc->GetSpzFrameFormats();
+    auto pShapeFormats = pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT(!pShapeFormats->empty());
     auto it = pShapeFormats->begin();
-    SwFrameFormat* pShapeFormat = *it;
+    auto pShapeFormat = *it;
     const SwPosition* pAnchor = pShapeFormat->GetAnchor().GetContentAnchor();
     CPPUNIT_ASSERT(pAnchor);
 
@@ -2798,7 +2798,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf128603)
     rUndoManager.Undo();
 
     // Make sure the content indexes still match.
-    const SwFrameFormats& rSpzFrameFormats = *pDoc->GetSpzFrameFormats();
+    const auto& rSpzFrameFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(6), rSpzFrameFormats.size());
     const SwNodeIndex* pIndex4 = rSpzFrameFormats[4]->GetContent().GetContentIdx();
     CPPUNIT_ASSERT(pIndex4);

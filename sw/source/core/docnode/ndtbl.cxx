@@ -1662,8 +1662,7 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
 
     // #i28006# Fly frames have to be restored even if the table was
     // #alone in the section
-    const SwFrameFormats& rFlyArr = *GetDoc().GetSpzFrameFormats();
-    for( auto pFly : rFlyArr )
+    for(sw::SpzFrameFormat* pFly: *GetDoc().GetSpzFrameFormats())
     {
         SwFrameFormat *const pFormat = pFly;
         const SwFormatAnchor& rAnchor = pFormat->GetAnchor();

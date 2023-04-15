@@ -67,15 +67,11 @@ using namespace ::com::sun::star;
 
 size_t SwDoc::GetFlyCount( FlyCntType eType, bool bIgnoreTextBoxes ) const
 {
-    const SwFrameFormats& rFormats = *GetSpzFrameFormats();
-    const size_t nSize = rFormats.size();
     size_t nCount = 0;
     const SwNodeIndex* pIdx;
 
-    for ( size_t i = 0; i < nSize; ++i)
+    for(sw::SpzFrameFormat* pFlyFormat: *GetSpzFrameFormats())
     {
-        const SwFrameFormat* pFlyFormat = rFormats[ i ];
-
         if (bIgnoreTextBoxes && SwTextBoxHelper::isTextBox(pFlyFormat, RES_FLYFRMFMT))
             continue;
 
@@ -114,16 +110,12 @@ size_t SwDoc::GetFlyCount( FlyCntType eType, bool bIgnoreTextBoxes ) const
 /// @attention If you change this, also update SwXFrameEnumeration in unocoll.
 SwFrameFormat* SwDoc::GetFlyNum( size_t nIdx, FlyCntType eType, bool bIgnoreTextBoxes )
 {
-    SwFrameFormats& rFormats = *GetSpzFrameFormats();
     SwFrameFormat* pRetFormat = nullptr;
-    const size_t nSize = rFormats.size();
     const SwNodeIndex* pIdx;
     size_t nCount = 0;
 
-    for( size_t i = 0; !pRetFormat && i < nSize; ++i )
+    for(sw::SpzFrameFormat* pFlyFormat: *GetSpzFrameFormats())
     {
-        SwFrameFormat* pFlyFormat = rFormats[ i ];
-
         if (bIgnoreTextBoxes && SwTextBoxHelper::isTextBox(pFlyFormat, RES_FLYFRMFMT))
             continue;
 
@@ -159,16 +151,11 @@ SwFrameFormat* SwDoc::GetFlyNum( size_t nIdx, FlyCntType eType, bool bIgnoreText
 std::vector<SwFrameFormat const*> SwDoc::GetFlyFrameFormats(
     FlyCntType const eType, bool const bIgnoreTextBoxes)
 {
-    SwFrameFormats& rFormats = *GetSpzFrameFormats();
-    const size_t nSize = rFormats.size();
-
     std::vector<SwFrameFormat const*> ret;
-    ret.reserve(nSize);
+    ret.reserve(GetSpzFrameFormats()->size());
 
-    for (size_t i = 0; i < nSize; ++i)
+    for(sw::SpzFrameFormat* pFlyFormat: *GetSpzFrameFormats())
     {
-        SwFrameFormat const*const pFlyFormat = rFormats[ i ];
-
         if (bIgnoreTextBoxes && SwTextBoxHelper::isTextBox(pFlyFormat, RES_FLYFRMFMT))
         {
             continue;
@@ -1025,7 +1012,7 @@ SwChainRet SwDoc::Chainable( const SwFrameFormat &rSource, const SwFrameFormat &
         return SwChainRet::NOT_EMPTY;
     }
 
-    for( auto pSpzFrameFm : *GetSpzFrameFormats() )
+    for(sw::SpzFrameFormat* pSpzFrameFm: *GetSpzFrameFormats())
     {
         const SwFormatAnchor& rAnchor = pSpzFrameFm->GetAnchor();
         // #i20622# - to-frame anchored objects are allowed.

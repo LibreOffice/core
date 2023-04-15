@@ -2746,10 +2746,9 @@ bool SwCursorShell::SelectNxtPrvHyperlink( bool bNext )
 
     // then check all the Flys with a URL or image map
     {
-        const SwFrameFormats* pFormats = GetDoc()->GetSpzFrameFormats();
-        for( SwFrameFormats::size_type n = 0, nEnd = pFormats->size(); n < nEnd; ++n )
+        for(sw::SpzFrameFormat* pSpz: *GetDoc()->GetSpzFrameFormats())
         {
-            SwFlyFrameFormat* pFormat = static_cast<SwFlyFrameFormat*>((*pFormats)[ n ]);
+            auto pFormat = static_cast<SwFlyFrameFormat*>(pSpz);
             const SwFormatURL& rURLItem = pFormat->GetURL();
             if( rURLItem.GetMap() || !rURLItem.GetURL().isEmpty() )
             {

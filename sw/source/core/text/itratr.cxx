@@ -1043,11 +1043,11 @@ void SwTextNode::GetMinMaxSize( SwNodeOffset nIndex, sal_uLong& rMin, sal_uLong 
     aNodeArgs.m_nRightDiff = 0;
     if( nIndex )
     {
-        SwFrameFormats* pTmp = const_cast<SwFrameFormats*>(GetDoc().GetSpzFrameFormats());
-        if( pTmp )
+        sw::SpzFrameFormats* pSpzs = const_cast<sw::SpzFrameFormats*>(GetDoc().GetSpzFrameFormats());
+        if(pSpzs)
         {
             aNodeArgs.m_nIndex = nIndex;
-            for( SwFrameFormat *pFormat : *pTmp )
+            for(auto pFormat: *pSpzs)
                 lcl_MinMaxNode(pFormat, aNodeArgs);
         }
     }

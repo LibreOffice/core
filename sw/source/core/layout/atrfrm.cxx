@@ -2835,15 +2835,12 @@ bool SwFrameFormat::IsLowerOf( const SwFrameFormat& rFormat ) const
     const SwFormatAnchor* pAnchor = &rFormat.GetAnchor();
     if ((RndStdIds::FLY_AT_PAGE != pAnchor->GetAnchorId()) && pAnchor->GetAnchorNode())
     {
-        const SwFrameFormats& rFormats = *GetDoc()->GetSpzFrameFormats();
         const SwNode* pFlyNd = pAnchor->GetAnchorNode()->FindFlyStartNode();
         while( pFlyNd )
         {
             // then we walk up using the anchor
-            size_t n;
-            for( n = 0; n < rFormats.size(); ++n )
+            for(const sw::SpzFrameFormat* pFormat: *GetDoc()->GetSpzFrameFormats())
             {
-                const SwFrameFormat* pFormat = rFormats[ n ];
                 const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
                 if( pIdx && pFlyNd == &pIdx->GetNode() )
                 {
@@ -2860,11 +2857,6 @@ bool SwFrameFormat::IsLowerOf( const SwFrameFormat& rFormat ) const
                     pFlyNd = pAnchor->GetAnchorNode()->FindFlyStartNode();
                     break;
                 }
-            }
-            if( n >= rFormats.size() )
-            {
-                OSL_ENSURE( false, "Fly section but no format found" );
-                return false;
             }
         }
     }
@@ -2939,8 +2931,8 @@ void SwFrameFormats::dumpAsXml(xmlTextWriterPtr pWriter, const char* pName) cons
 }
 
 
-SwFlyFrameFormat::SwFlyFrameFormat( SwAttrPool& rPool, const OUString &rFormatNm, SwFrameFormat *pDrvdFrame )
-    : SwFrameFormat( rPool, rFormatNm, pDrvdFrame, RES_FLYFRMFMT )
+SwFlyFrameFormat::SwFlyFrameFormat(SwAttrPool& rPool, const OUString &rFormatName, SwFrameFormat* pDerivedFrame)
+    : sw::SpzFrameFormat(rPool, rFormatName, pDerivedFrame, RES_FLYFRMFMT)
 {}
 
 SwFlyFrameFormat::~SwFlyFrameFormat()
@@ -3014,10 +3006,8 @@ void SwFlyFrameFormat::MakeFrames()
             if ( pModify == nullptr )
             {
                 const SwNode & rNd = *aAnchorAttr.GetAnchorNode();
-                SwFrameFormats& rFormats = *GetDoc()->GetSpzFrameFormats();
-                for( size_t i = 0; i < rFormats.size(); ++i )
+                for(sw::SpzFrameFormat* pFlyFormat: *GetDoc()->GetSpzFrameFormats())
                 {
-                    SwFrameFormat* pFlyFormat = rFormats[i];
                     if( pFlyFormat->GetContent().GetContentIdx() &&
                         rNd == pFlyFormat->GetContent().GetContentIdx()->GetNode() )
                     {
@@ -3680,25 +3670,24 @@ void CheckAnchoredFlyConsistency(SwDoc const& rDoc)
             assert(rAnchor.GetAnchorNode() == pNode);
         }
     }
-    SwFrameFormats const*const pSpzFrameFormats(rDoc.GetSpzFrameFormats());
-    if (!pSpzFrameFormats)
+    if(!rDoc.GetSpzFrameFormats())
         return;
 
-    for (auto it = pSpzFrameFormats->begin(); it != pSpzFrameFormats->end(); ++it)
+    for(sw::SpzFrameFormat* pSpz: *rDoc.GetSpzFrameFormats())
     {
-        SwFormatAnchor const& rAnchor((**it).GetAnchor(false));
+        SwFormatAnchor const& rAnchor(pSpz->GetAnchor(false));
         if (RndStdIds::FLY_AT_PAGE == rAnchor.GetAnchorId())
         {
             assert(!rAnchor.GetAnchorNode()
                 // for invalid documents that lack text:anchor-page-number
                 // it may have an anchor before MakeFrames() is called
-                || (!SwIterator<SwFrame, SwFrameFormat>(**it).First()));
+                || (!SwIterator<SwFrame, SwFrameFormat>(*pSpz).First()));
         }
         else
         {
             SwNode & rNode(*rAnchor.GetAnchorNode());
             std::vector<SwFrameFormat*> const& rFlys(rNode.GetAnchoredFlys());
-            assert(std::find(rFlys.begin(), rFlys.end(), *it) != rFlys.end());
+            assert(std::find(rFlys.begin(), rFlys.end(), pSpz) != rFlys.end());
             switch (rAnchor.GetAnchorId())
             {
                 case RndStdIds::FLY_AT_FLY:

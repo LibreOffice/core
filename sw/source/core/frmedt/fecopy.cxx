@@ -93,7 +93,7 @@ void SwFEShell::Copy( SwDoc& rClpDoc, const OUString* pNewClpText )
     }
 
     // also delete surrounding FlyFrames if any
-    for( const auto pFly : *rClpDoc.GetSpzFrameFormats() )
+    for(sw::SpzFrameFormat* pFly : *rClpDoc.GetSpzFrameFormats() )
     {
         SwFormatAnchor const*const pAnchor = &pFly->GetAnchor();
         SwNode const*const pAnchorNode = pAnchor->GetAnchorNode();
@@ -144,13 +144,13 @@ void SwFEShell::Copy( SwDoc& rClpDoc, const OUString* pNewClpText )
 
         // assure the "RootFormat" is the first element in Spz-Array
         // (if necessary Flys were copied in Flys)
-        SwFrameFormats& rSpzFrameFormats = *rClpDoc.GetSpzFrameFormats();
+        sw::SpzFrameFormats& rSpzFrameFormats = *rClpDoc.GetSpzFrameFormats();
         if( rSpzFrameFormats[ 0 ] != pFlyFormat )
         {
 #ifndef NDEBUG
             bool inserted =
 #endif
-            rSpzFrameFormats.newDefault( pFlyFormat );
+            rSpzFrameFormats.newDefault(static_cast<sw::SpzFrameFormat*>(pFlyFormat));
             assert( !inserted && "Fly not contained in Spz-Array" );
         }
 
@@ -688,7 +688,7 @@ namespace {
             return false;
         }
 
-        for ( const auto& pSpzFormat : *pFormat->GetDoc()->GetSpzFrameFormats() )
+        for(const sw::SpzFrameFormat* pSpzFormat: *pFormat->GetDoc()->GetSpzFrameFormats())
         {
             if (pSpzFormat->Which() != RES_FLYFRMFMT)
             {
@@ -1043,7 +1043,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                 if(!Imp()->GetDrawView())
                     MakeDrawView();
                 ::std::vector<SwFrameFormat*> inserted;
-                for (auto const pFlyFormat : *rClpDoc.GetSpzFrameFormats())
+                for (sw::SpzFrameFormat* pFlyFormat: *rClpDoc.GetSpzFrameFormats())
                 {
                     // if anchored inside other fly, will be copied when copying
                     // top-level fly, so skip here! (other non-body anchor
@@ -1203,7 +1203,7 @@ void SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
         if( !rToFill.Imp()->GetDrawView() )
             rToFill.MakeDrawView();
 
-        for ( auto pCpyFormat : *GetDoc()->GetSpzFrameFormats() )
+        for(sw::SpzFrameFormat* pCpyFormat: *GetDoc()->GetSpzFrameFormats())
         {
             SwFormatAnchor aAnchor( pCpyFormat->GetAnchor() );
             if ((RndStdIds::FLY_AT_PAGE == aAnchor.GetAnchorId()) &&

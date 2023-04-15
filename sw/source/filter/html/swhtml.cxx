@@ -4551,12 +4551,10 @@ bool SwHTMLParser::HasCurrentParaFlys( bool bNoSurroundOnly,
 {
     SwNode& rNode = m_pPam->GetPoint()->GetNode();
 
-    const SwFrameFormats& rFrameFormatTable = *m_xDoc->GetSpzFrameFormats();
 
     bool bFound = false;
-    for ( size_t i=0; i<rFrameFormatTable.size(); i++ )
+    for(sw::SpzFrameFormat* pFormat: *m_xDoc->GetSpzFrameFormats())
     {
-        const SwFrameFormat *const pFormat = rFrameFormatTable[i];
         SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
         // A frame was found, when
         // - it is paragraph-bound, and

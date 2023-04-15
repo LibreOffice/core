@@ -62,8 +62,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFormatFlySplit)
     RndStdIds eAnchor = RndStdIds::FLY_AT_PARA;
     aMgr.InsertFlyFrame(eAnchor, aMgr.GetPos(), aMgr.GetSize());
     SwDoc* pDoc = getSwDoc();
-    SwFrameFormats& rFlys = *pDoc->GetSpzFrameFormats();
-    SwFrameFormat* pFly = rFlys[0];
+    sw::SpzFrameFormats& rFlys = *pDoc->GetSpzFrameFormats();
+    sw::SpzFrameFormat* pFly = rFlys[0];
     CPPUNIT_ASSERT(!pFly->GetAttrSet().GetFlySplit().GetValue());
 
     SfxItemSet aSet(pFly->GetAttrSet());
