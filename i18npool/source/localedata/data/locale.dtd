@@ -634,18 +634,24 @@
 
 <!ELEMENT ReservedWords  (trueWord, falseWord, quarter1Word, quarter2Word, quarter3Word, quarter4Word, aboveWord, belowWord, quarter1Abbreviation, quarter2Abbreviation, quarter3Abbreviation, quarter4Abbreviation)>
 <!-- order is significant! -->
+<!-- trueWord and falseWord are displayed (uppercased) for the BOOLEAN number
+     format keyword. "true", "false" -->
 <!ELEMENT trueWord (#PCDATA)>
 <!ELEMENT falseWord (#PCDATA)>
+<!-- quarter1Word,... are displayed for the QQ number format keyword.
+     "1st quarter", "2nd quarter", ...; "1er trimestre", "2e trimestre", ... -->
 <!ELEMENT quarter1Word (#PCDATA)>
 <!ELEMENT quarter2Word (#PCDATA)>
 <!ELEMENT quarter3Word (#PCDATA)>
 <!ELEMENT quarter4Word (#PCDATA)>
-<!ELEMENT aboveWord (#PCDATA)>
-<!ELEMENT belowWord (#PCDATA)>
 <!-- aboveWord and belowWord are used as reference field content in Writer, it
      is a "physical" object relative position, not "numerical" relative.
--->
-<!ELEMENT quarter1Abbreviation (#PCDATA)>    <!-- "Q1" (quarter), "T1" (trimestre), ... -->
+     Like section "above" and section "below". -->
+<!ELEMENT aboveWord (#PCDATA)>
+<!ELEMENT belowWord (#PCDATA)>
+<!-- quarter1Abbreviation,... are displayed for the Q number format keyword.
+     "Q1" (quarter), "T1" (trimestre), ... -->
+<!ELEMENT quarter1Abbreviation (#PCDATA)>
 <!ELEMENT quarter2Abbreviation (#PCDATA)>
 <!ELEMENT quarter3Abbreviation (#PCDATA)>
 <!ELEMENT quarter4Abbreviation (#PCDATA)>
