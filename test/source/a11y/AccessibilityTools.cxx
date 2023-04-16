@@ -34,6 +34,7 @@
 #include <vcl/scheduler.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/window.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace css;
 
@@ -165,9 +166,9 @@ bool AccessibilityTools::nameEquals(const uno::Reference<accessibility::XAccessi
                                     const std::u16string_view name)
 {
     auto ctxName = xCtx->getAccessibleName();
-    OUString rest;
+    std::u16string_view rest;
 
-    if (!ctxName.startsWith(name, &rest))
+    if (!o3tl::starts_with(ctxName, name, &rest))
         return false;
     if (rest == u"")
         return true;
@@ -193,7 +194,9 @@ bool AccessibilityTools::nameEquals(const uno::Reference<accessibility::XAccessi
     if (pVCLXAccessibleComponent)
     {
         auto windowType = pVCLXAccessibleComponent->GetWindow()->GetType();
-        if (rest == u" (Type = " + OUString::number(static_cast<sal_Int32>(windowType)) + ")")
+        if (rest
+            == Concat2View(u" (Type = " + OUString::number(static_cast<sal_Int32>(windowType))
+                           + ")"))
             return true;
     }
 #endif

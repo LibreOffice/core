@@ -140,11 +140,11 @@ void PresentationFragmentHandler::importSlideNames(XmlFilterBase& rFilter, const
                 {
                     Reference<XDrawPage> xDrawPage(xDrawPages->getByIndex(i), UNO_QUERY);
                     Reference<container::XNamed> xNamed(xDrawPage, UNO_QUERY_THROW);
-                    OUString sRest;
-                    if (xNamed->getName().startsWith(aTitleText, &sRest)
-                        && (sRest.isEmpty()
-                            || (sRest.startsWith(" (") && sRest.endsWith(")")
-                                && o3tl::toInt32(sRest.subView(2, sRest.getLength() - 3)) > 0)))
+                    std::u16string_view sRest;
+                    if (o3tl::starts_with(xNamed->getName(), aTitleText, &sRest)
+                        && (sRest.empty()
+                            || (o3tl::starts_with(sRest, u" (") && o3tl::ends_with(sRest, u")")
+                                && o3tl::toInt32(sRest.substr(2, sRest.size() - 3)) > 0)))
                         nCount++;
                 }
                 Reference<container::XNamed> xName(rSlidePersist[nPage]->getPage(), UNO_QUERY_THROW);

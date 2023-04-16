@@ -2272,17 +2272,17 @@ void SAL_CALL SdDrawPage::setName( const OUString& rName )
         return;
 
     // check if this is the default 'page1234' name
-    OUString aNumber;
-    if(aName.startsWith( sEmptyPageName, &aNumber ))
+    std::u16string_view aNumber;
+    if(o3tl::starts_with(aName, sEmptyPageName, &aNumber ))
     {
         // ok, it maybe is, aNumber is the number part after 'page'
 
         // create the page number
-        sal_Int32 nPageNumber = aNumber.toInt32();
+        sal_Int32 nPageNumber = o3tl::toInt32(aNumber);
 
         // check if there are non number characters in the number part
-        const sal_Int32 nChars = aNumber.getLength();
-        const sal_Unicode* pString = aNumber.getStr();
+        const sal_Int32 nChars = aNumber.size();
+        const sal_Unicode* pString = aNumber.data();
         sal_Int32 nChar;
         for( nChar = 0; nChar < nChars; nChar++, pString++ )
         {
