@@ -71,16 +71,6 @@ const SfxItemSet& SdrText::GetItemSet() const
 
 void SdrText::SetOutlinerParaObject( std::optional<OutlinerParaObject> pTextObject )
 {
-    // Update HitTestOutliner
-    const SdrTextObj* pTestObj(mrObject.getSdrModelFromSdrObject().GetHitTestOutliner().GetTextObj());
-
-    if(pTestObj)
-        if ( (!pTestObj->GetOutlinerParaObject() && !mpOutlinerParaObject)
-            || (pTestObj->GetOutlinerParaObject() && mpOutlinerParaObject && *pTestObj->GetOutlinerParaObject() == *mpOutlinerParaObject) )
-        {
-            mrObject.getSdrModelFromSdrObject().GetHitTestOutliner().SetTextObj(nullptr);
-        }
-
     mpOutlinerParaObject = std::move(pTextObject);
     mbPortionInfoChecked = false;
 }
@@ -98,19 +88,8 @@ const OutlinerParaObject* SdrText::GetOutlinerParaObject() const
 /** returns the current OutlinerParaObject and removes it from this instance */
 std::optional<OutlinerParaObject> SdrText::RemoveOutlinerParaObject()
 {
-    // Update HitTestOutliner
-    const SdrTextObj* pTestObj(mrObject.getSdrModelFromSdrObject().GetHitTestOutliner().GetTextObj());
-
-    if(pTestObj)
-        if ( (!pTestObj->GetOutlinerParaObject() && !mpOutlinerParaObject)
-            || (pTestObj->GetOutlinerParaObject() && mpOutlinerParaObject && *pTestObj->GetOutlinerParaObject() == *mpOutlinerParaObject) )
-        {
-            mrObject.getSdrModelFromSdrObject().GetHitTestOutliner().SetTextObj(nullptr);
-        }
-
     std::optional<OutlinerParaObject> pOPO = std::move(mpOutlinerParaObject);
     mbPortionInfoChecked = false;
-
     return pOPO;
 }
 
