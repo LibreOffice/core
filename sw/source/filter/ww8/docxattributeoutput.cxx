@@ -927,7 +927,7 @@ void DocxAttributeOutput::PopulateFrameProperties(const SwFrameFormat* pFrameFor
     // So now at export time we have to assume that none of this has been changed by the user.
 
     // 620 (31pt) is the maximum paragraph border spacing allowed in MS Formats,
-    // so if the value is greater than that, avoid adjusting the size - the user has interferred.
+    // so if the value is greater than that, avoid adjusting the size - the user has interfered.
     const sal_uInt32 nLeftBorderSpacing = pFrameFormat->GetBox().GetDistance(SvxBoxItemLine::LEFT);
     const sal_uInt32 nRighttBorderSpacing = pFrameFormat->GetBox().GetDistance(SvxBoxItemLine::RIGHT);
     sal_uInt32 nAdjustedWidth = rSize.Width();
