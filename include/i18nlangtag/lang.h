@@ -784,7 +784,7 @@ namespace o3tl
 #define LANGUAGE_USER_ENGLISH_ANTIGUA_BARBUDA LanguageType(0xB809)  /* makeLangID( 0x2E, getPrimaryLanguage( LANGUAGE_ENGLISH_UK)) */
 #define LANGUAGE_USER_SARAIKI               LanguageType(0x06B0)
 #define LANGUAGE_USER_ROHINGYA_HANIFI       LanguageType(0x06B1)
-#define LANGUAGE_USER_CREOLE_MAURITIUS      LanguageType(0x06B2)
+#define LANGUAGE_USER_MORISYEN              LanguageType(0x06B2)
 
 
 /* XXX Add new user defined LCIDs ^^^ there.
