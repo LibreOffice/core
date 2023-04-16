@@ -245,7 +245,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
                                    rNd.FindFooterStartNode();
 
             // search all new Fly's, and store them as individual Undo Objects
-            for( SwFrameFormats::size_type n = 0; n < mxDoc->GetSpzFrameFormats()->size(); ++n )
+            for( sw::FrameFormats<sw::SpzFrameFormat*>::size_type n = 0; n < mxDoc->GetSpzFrameFormats()->size(); ++n )
             {
                 SwFrameFormat* pFrameFormat = (*mxDoc->GetSpzFrameFormats())[ n ];
                 const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();

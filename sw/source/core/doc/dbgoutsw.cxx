@@ -696,12 +696,12 @@ const char * dbg_out(const SwTextFormatColl & rFormat)
     return dbg_out(lcl_dbg_out(rFormat));
 }
 
-static OUString lcl_dbg_out(const SwFrameFormats & rFrameFormats)
+static OUString lcl_dbg_out(const sw::FrameFormats<sw::SpzFrameFormat*>& rFrameFormats)
 {
-    return lcl_dbg_out_SvPtrArr<SwFrameFormats>(rFrameFormats);
+    return lcl_dbg_out_SvPtrArr<sw::FrameFormats<sw::SpzFrameFormat*>>(rFrameFormats);
 }
 
-const char * dbg_out(const SwFrameFormats & rFrameFormats)
+const char * dbg_out(const sw::FrameFormats<sw::SpzFrameFormat*>& rFrameFormats)
 {
     return dbg_out(lcl_dbg_out(rFrameFormats));
 }

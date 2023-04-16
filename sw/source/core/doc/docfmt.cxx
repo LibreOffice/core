@@ -705,7 +705,7 @@ void SwDoc::DelFrameFormat( SwFrameFormat *pFormat, bool bBroadcast )
     else
     {
         // The format has to be in the one or the other, we'll see in which one.
-        if (mpFrameFormatTable->ContainsFormat(*pFormat))
+        if (mpFrameFormatTable->ContainsFormat(pFormat))
         {
             if (bBroadcast)
                 BroadcastStyleOperation(pFormat->GetName(),
@@ -745,7 +745,7 @@ void SwDoc::DelTableFrameFormat( SwTableFormat *pFormat )
 
 SwFrameFormat* SwDoc::FindFrameFormatByName( const OUString& rName ) const
 {
-    return mpFrameFormatTable->FindFormatByName( rName );
+    return static_cast<SwFrameFormat*>(mpFrameFormatTable->FindFormatByName(rName));
 }
 
 /// Create the formats
@@ -2063,127 +2063,5 @@ namespace docfunc
         }
         return bRet;
     }
-}
-
-SwFrameFormats::SwFrameFormats()
-    : m_PosIndex( m_Array.get<0>() )
-    , m_TypeAndNameIndex( m_Array.get<1>() )
-{
-}
-
-SwFrameFormats::~SwFrameFormats()
-{
-    DeleteAndDestroyAll();
-}
-
-SwFrameFormats::const_iterator SwFrameFormats::find( const value_type& x ) const
-{
-    ByTypeAndName::iterator it = m_TypeAndNameIndex.find(
-        std::make_tuple(x->GetName(), x->Which(), x) );
-    return m_Array.project<0>( it );
-}
-
-SwFrameFormats::ByTypeAndName::const_iterator
-SwFrameFormats::findByTypeAndName( sal_uInt16 type, const OUString& name ) const
-{
-    return m_TypeAndNameIndex.find( std::make_tuple(name, type) );
-}
-
-std::pair<SwFrameFormats::ByTypeAndName::const_iterator, SwFrameFormats::ByTypeAndName::const_iterator>
-SwFrameFormats::findRangeByName( const OUString& rName ) const
-{
-    auto it = m_TypeAndNameIndex.lower_bound( std::make_tuple(rName, sal_uInt16(0)) );
-    auto itEnd = m_TypeAndNameIndex.upper_bound( std::make_tuple(rName, SAL_MAX_UINT16) );
-    return { it, itEnd };
-}
-
-SwFrameFormat* SwFrameFormats::FindFormatByName( const OUString& rName ) const
-{
-    auto it = m_TypeAndNameIndex.lower_bound( std::make_tuple(rName, sal_uInt16(0)) );
-    if (it != m_TypeAndNameIndex.end() && (*it)->GetName() == rName)
-        return *it;
-    return nullptr;
-}
-
-void SwFrameFormats::DeleteAndDestroyAll( bool keepDefault )
-{
-    if ( empty() )
-        return;
-    const int _offset = keepDefault ? 1 : 0;
-    for( const_iterator it = begin() + _offset; it != end(); ++it )
-        delete *it;
-    if ( _offset )
-        m_PosIndex.erase( begin() + _offset, end() );
-    else
-        m_Array.clear();
-}
-
-std::pair<SwFrameFormats::const_iterator,bool> SwFrameFormats::push_back( const value_type& x )
-{
-    SAL_WARN_IF(x->m_ffList != nullptr, "sw.core", "Inserting already assigned item");
-    assert(x->m_ffList == nullptr);
-    x->m_ffList = this;
-    return m_PosIndex.push_back( x );
-}
-
-bool SwFrameFormats::erase( const value_type& x )
-{
-    const_iterator const ret = find( x );
-    SAL_WARN_IF(x->m_ffList != this, "sw.core", "Removing invalid / unassigned item");
-    if (ret != end()) {
-        assert( x == *ret );
-        m_PosIndex.erase( ret );
-        x->m_ffList = nullptr;
-        return true;
-    }
-    return false;
-}
-
-void SwFrameFormats::erase( size_type index_ )
-{
-    erase( begin() + index_ );
-}
-
-void SwFrameFormats::erase( const_iterator const& position )
-{
-    (*position)->m_ffList = nullptr;
-    m_PosIndex.erase( begin() + (position - begin()) );
-}
-
-bool SwFrameFormats::ContainsFormat(const SwFrameFormat& x) const
-{
-    return (x.m_ffList == this);
-}
-
-bool SwFrameFormats::IsAlive(SwFrameFormat const*const p) const
-{
-    return find(const_cast<SwFrameFormat*>(p)) != end();
-}
-
-bool SwFrameFormats::newDefault( const value_type& x )
-{
-    std::pair<iterator,bool> res = m_PosIndex.push_front( x );
-    if( ! res.second )
-        newDefault( res.first );
-    return res.second;
-}
-
-void SwFrameFormats::newDefault( const_iterator const& position )
-{
-    if (position == begin())
-        return;
-    m_PosIndex.relocate( begin(), position );
-}
-
-void SwFrameFormats::Rename(const SwFrameFormat& rFormat, const OUString& rNewName)
-{
-    iterator it = find(const_cast<SwFrameFormat*>(&rFormat));
-    assert(end() != it);
-    const auto sOldName = rFormat.GetName();
-    auto fRenamer = [rNewName](SwFormat* pFormat) { pFormat->SwFormat::SetFormatName(rNewName, false); };
-    auto fRenamerUndo = [sOldName](SwFormat* pFormat) { pFormat->SwFormat::SetFormatName(sOldName, false); };
-    bool const renamed = m_PosIndex.modify(it, fRenamer, fRenamerUndo);
-    assert(renamed);
-    (void)renamed; // unused in NDEBUG
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

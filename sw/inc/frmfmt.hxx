@@ -64,7 +64,6 @@ namespace sw
     class SpzFrameFormat;
 }
 class SwFormatsBase;
-class SwFrameFormats;
 class SwTableFormat;
 
 /// Style of a layout element.
@@ -74,9 +73,9 @@ class SW_DLLPUBLIC SwFrameFormat
     friend class SwDoc;
     friend class SwPageDesc;    ///< Is allowed to call protected CTor.
     friend class ::sw::DocumentLayoutManager; ///< Is allowed to call protected CTor.
-    friend class SwFrameFormats;     ///< Is allowed to update the list backref.
     friend class sw::FrameFormats<SwTableFormat*>;     ///< Is allowed to update the list backref.
     friend class sw::FrameFormats<sw::SpzFrameFormat*>;     ///< Is allowed to update the list backref.
+    friend class sw::FrameFormats<SwFrameFormat*>;     ///< Is allowed to update the list backref.
     friend class SwTextBoxHelper;
     friend class SwUndoFlyBase; ///< calls SetOtherTextBoxFormat
 

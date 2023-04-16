@@ -1369,7 +1369,7 @@ static OUString lcl_GetUniqueFlyName(const SwDoc& rDoc, TranslateId pDefStrId, s
     }
 
     // All numbers are flagged accordingly, so determine the right one
-    SwFrameFormats::size_type nNum = first_available_number(aUsedNums) + 1;
+    auto nNum = first_available_number(aUsedNums) + 1;
     return aName + OUString::number(nNum);
 }
 

@@ -2922,15 +2922,6 @@ void SwFrameFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-void SwFrameFormats::dumpAsXml(xmlTextWriterPtr pWriter, const char* pName) const
-{
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST(pName));
-    for (const SwFrameFormat *pFormat : m_PosIndex)
-        pFormat->dumpAsXml(pWriter);
-    (void)xmlTextWriterEndElement(pWriter);
-}
-
-
 SwFlyFrameFormat::SwFlyFrameFormat(SwAttrPool& rPool, const OUString &rFormatName, SwFrameFormat* pDerivedFrame)
     : sw::SpzFrameFormat(rPool, rFormatName, pDerivedFrame, RES_FLYFRMFMT)
 {}

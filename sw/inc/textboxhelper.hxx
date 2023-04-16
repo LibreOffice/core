@@ -25,7 +25,6 @@ class SdrPage;
 class SdrObject;
 class SfxItemSet;
 class SwFrameFormat;
-class SwFrameFormats;
 class SwFormatAnchor;
 class SwFormatContent;
 class SwDoc;

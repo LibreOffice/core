@@ -246,7 +246,7 @@ class SW_DLLPUBLIC SwDoc final
     std::unique_ptr<SwTextFormatColl>  mpDfltTextFormatColl;  //< Defaultformatcollections
     std::unique_ptr<SwGrfFormatColl>   mpDfltGrfFormatColl;
 
-    std::unique_ptr<SwFrameFormats>    mpFrameFormatTable;    //< Format table
+    std::unique_ptr<sw::FrameFormats<SwFrameFormat*>>    mpFrameFormatTable;    //< Format table
     std::unique_ptr<SwCharFormats>     mpCharFormatTable;
     std::unique_ptr<sw::FrameFormats<sw::SpzFrameFormat*>>    mpSpzFrameFormatTable;
     std::unique_ptr<SwSectionFormats>  mpSectionFormatTable;
@@ -748,8 +748,8 @@ public:
     bool DontExpandFormat( const SwPosition& rPos, bool bFlag = true );
 
     // Formats
-    const SwFrameFormats* GetFrameFormats() const     { return mpFrameFormatTable.get(); }
-          SwFrameFormats* GetFrameFormats()           { return mpFrameFormatTable.get(); }
+    const sw::FrameFormats<SwFrameFormat*>* GetFrameFormats() const     { return mpFrameFormatTable.get(); }
+          sw::FrameFormats<SwFrameFormat*>* GetFrameFormats()           { return mpFrameFormatTable.get(); }
     const SwCharFormats* GetCharFormats() const   { return mpCharFormatTable.get();}
           SwCharFormats* GetCharFormats()         { return mpCharFormatTable.get();}
 

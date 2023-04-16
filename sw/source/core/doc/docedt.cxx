@@ -151,7 +151,7 @@ void SaveFlyInRange( const SwPaM& rPam, const SwPosition& rInsPos,
         atParaEnd.Adjust(SwNodeOffset(1));
     }
 
-    for( SwFrameFormats::size_type n = 0; n < rFormats.size(); ++n )
+    for(sw::FrameFormats<sw::SpzFrameFormat*>::size_type n = 0; n < rFormats.size(); ++n )
     {
         pFormat = rFormats[n];
         pAnchor = &pFormat->GetAnchor();

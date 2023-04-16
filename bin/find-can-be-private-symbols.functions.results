@@ -13279,21 +13279,6 @@ SwFrameFormat::dumpAsXml(_xmlTextWriter*) const
 SwFrameFormat::getSdrAllFillAttributesHelper() const
 SwFrameFormat::supportsFullDrawingLayerFillAttributeSet() const
 SwFrameFormat::~SwFrameFormat()
-SwFrameFormats::ContainsFormat(SwFrameFormat const&) const
-SwFrameFormats::DeleteAndDestroyAll(bool)
-SwFrameFormats::FindFormatByName(rtl::OUString const&) const
-SwFrameFormats::IsAlive(SwFrameFormat const*) const
-SwFrameFormats::SwFrameFormats()
-SwFrameFormats::dumpAsXml(_xmlTextWriter*, char const*) const
-SwFrameFormats::erase(SwFrameFormat* const&)
-SwFrameFormats::erase(boost::multi_index::detail::rnd_node_iterator<boost::multi_index::detail::random_access_index_node<boost::multi_index::detail::ordered_index_node<boost::multi_index::detail::null_augment_policy, boost::multi_index::detail::index_node_base<SwFrameFormat*, std::allocator<SwFrameFormat*> > > > > const&)
-SwFrameFormats::erase(unsigned long)
-SwFrameFormats::findByTypeAndName(unsigned short, rtl::OUString const&) const
-SwFrameFormats::findRangeByName(rtl::OUString const&) const
-SwFrameFormats::newDefault(SwFrameFormat* const&)
-SwFrameFormats::newDefault(boost::multi_index::detail::rnd_node_iterator<boost::multi_index::detail::random_access_index_node<boost::multi_index::detail::ordered_index_node<boost::multi_index::detail::null_augment_policy, boost::multi_index::detail::index_node_base<SwFrameFormat*, std::allocator<SwFrameFormat*> > > > > const&)
-SwFrameFormats::push_back(SwFrameFormat* const&)
-SwFrameFormats::~SwFrameFormats()
 SwGammaGrf::Clone(SfxItemPool*) const
 SwGammaGrf::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SwGammaGrf::PutValue(com::sun::star::uno::Any const&, unsigned char)
@@ -14368,7 +14353,6 @@ SwTextBoxHelper::isTextBoxShapeHasValidTextFrame(SwFrameFormat const*)
 SwTextBoxHelper::mapAnchorType(RndStdIds const&)
 SwTextBoxHelper::queryInterface(SwFrameFormat const*, com::sun::star::uno::Type const&)
 SwTextBoxHelper::restoreLinks(std::set<ZSortFly, std::less<ZSortFly>, std::allocator<ZSortFly> >&, std::vector<SwFrameFormat*, std::allocator<SwFrameFormat*> >&, std::map<SwFrameFormat const*, SwFrameFormat const*, std::less<SwFrameFormat const*>, std::allocator<std::pair<SwFrameFormat const* const, SwFrameFormat const*> > >&)
-SwTextBoxHelper::saveLinks(SwFrameFormats const&, std::map<SwFrameFormat const*, SwFrameFormat const*, std::less<SwFrameFormat const*>, std::allocator<std::pair<SwFrameFormat const* const, SwFrameFormat const*> > >&)
 SwTextBoxHelper::setWrapThrough(SwFrameFormat*)
 SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat&, SfxItemSet const&, SdrObject*)
 SwTextBoxHelper::syncProperty(SwFrameFormat*, std::basic_string_view<char16_t, std::char_traits<char16_t> >, com::sun::star::uno::Any const&, SdrObject*)

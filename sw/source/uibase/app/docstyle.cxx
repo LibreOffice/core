@@ -1757,8 +1757,7 @@ static void lcl_SaveStyles( SfxStyleFamily nFamily, std::vector<void*>& rArr, Sw
         break;
     case SfxStyleFamily::Frame:
         {
-            const SwFrameFormats& rTable = *rDoc.GetFrameFormats();
-            for(auto const& rFrame: rTable)
+            for(auto const& rFrame: *rDoc.GetFrameFormats())
             {
                 rArr.push_back(rFrame);
             }
@@ -1828,8 +1827,7 @@ static void lcl_DeleteInfoStyles( SfxStyleFamily nFamily, std::vector<void*> con
     case SfxStyleFamily::Frame:
         {
             std::deque<SwFrameFormat*> aDelArr;
-            const SwFrameFormats& rTable = *rDoc.GetFrameFormats();
-            for( auto const& rFrame: rTable )
+            for(auto const& rFrame: *rDoc.GetFrameFormats())
             {
                 if( !lcl_Contains( rArr, rFrame ))
                     aDelArr.push_front( rFrame );

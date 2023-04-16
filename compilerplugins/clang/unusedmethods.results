@@ -2976,8 +2976,6 @@ sw/inc/dbgoutsw.hxx:72
     const char * dbg_out(const SwNumRule &)
 sw/inc/dbgoutsw.hxx:73
     const char * dbg_out(const SwTextFormatColl &)
-sw/inc/dbgoutsw.hxx:74
-    const char * dbg_out(const SwFrameFormats &)
 sw/inc/dbgoutsw.hxx:75
     const char * dbg_out(const SwNumRuleTable &)
 sw/inc/dbgoutsw.hxx:76
@@ -3012,10 +3010,6 @@ sw/inc/extinput.hxx:48
     const SwExtTextInput * SwExtTextInput::GetPrev() const
 sw/inc/formatcontentcontrol.hxx:82
     SwFormatContentControl * SwFormatContentControl::CreatePoolDefault(unsigned short)
-sw/inc/frameformats.hxx:80
-    void SwFrameFormats::erase(unsigned long)
-sw/inc/frameformats.hxx:97
-    SwFrameFormat *const & SwFrameFormats::back() const
 sw/inc/IDocumentLinksAdministration.hxx:54
     _Bool IDocumentLinksAdministration::GetData(const rtl::OUString &,const rtl::OUString &,com::sun::star::uno::Any &) const
 sw/inc/IDocumentLinksAdministration.hxx:56

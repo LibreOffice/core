@@ -45,7 +45,6 @@ class SwNodeIndex;
 class GraphicObject;
 class GraphicAttr;
 class SwPageDesc;
-class SwFrameFormats;
 class SwRegionRects;
 class SwTextNode;
 namespace sw { struct Extent; }

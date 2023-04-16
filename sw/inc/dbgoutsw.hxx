@@ -41,7 +41,6 @@ class SwNodeNum;
 class SwUndo;
 class SwRect;
 class SwFrameFormat;
-class SwFrameFormats;
 class SwNumRuleTable;
 class SwNumRule;
 class SwOutlineNodes;
@@ -71,9 +70,9 @@ const char* dbg_out(const SwUndo& rUndo);
 const char* dbg_out(SwOutlineNodes const& rNodes);
 const char* dbg_out(const SwNumRule& rRule);
 const char* dbg_out(const SwTextFormatColl& rFormat);
-const char* dbg_out(const SwFrameFormats& rFrameFormats);
 const char* dbg_out(const SwNumRuleTable& rTable);
 const char* dbg_out(const SwNodeRange& rRange);
+const char* dbg_out(const sw::FrameFormats<sw::SpzFrameFormat*>& rFrameFormats);
 
 template <typename tKey, typename tMember, typename fHashFunction>
 OUString lcl_dbg_out(const std::unordered_map<tKey, tMember, fHashFunction>& rMap)
