@@ -30,6 +30,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/SinglePropertySetInfoCache.hxx>
 #include <xmloff/XMLTextListAutoStylePool.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <o3tl/span.hxx>
 #include <memory>
 #include <vector>
@@ -51,6 +52,7 @@ namespace com::sun::star
     namespace beans { class XPropertySet; class XPropertyState;
                       class XPropertySetInfo; }
     namespace container { class XEnumeration; class XIndexAccess; class XNameReplace; }
+    namespace drawing { class XShape; }
     namespace text { class XTextContent; class XTextRange; class XText;
                      class XFootnote; class XTextFrame; class XTextSection;
                      class XTextField; }
@@ -109,6 +111,9 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
 
     XMLTextListsHelper* mpTextListsHelper;
     ::std::vector< std::unique_ptr<XMLTextListsHelper> > maTextListsHelperStack;
+
+    o3tl::sorted_vector<css::uno::Reference<css::text::XTextFrame>> maFrameRecurseGuard;
+    o3tl::sorted_vector<css::uno::Reference<css::drawing::XShape>> maShapeRecurseGuard;
 
     bool mbCollected;
 

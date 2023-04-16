@@ -110,6 +110,7 @@
 #include <iterator>
 #include <officecfg/Office/Common.hxx>
 #include <o3tl/safeint.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
 using namespace ::com::sun::star;
@@ -3054,17 +3055,39 @@ void XMLTextParagraphExport::exportAnyTextFrame(
                 if ( bExportContent )
                 {
                     Reference < XTextFrame > xTxtFrame( rTxtCntnt, UNO_QUERY );
-                    Reference < XText > xTxt(xTxtFrame->getText());
-                    exportFrameFrames( true, bIsProgress, xTxtFrame );
-                    exportText( xTxt, bAutoStyles, bIsProgress, true );
+                    bool bAlreadySeen = !maFrameRecurseGuard.insert(xTxtFrame).second;
+                    if (bAlreadySeen)
+                    {
+                        SAL_WARN("xmloff", "loop in frame export, ditching");
+                    }
+                    else
+                    {
+                        comphelper::ScopeGuard const g([this, xTxtFrame]() {
+                            maFrameRecurseGuard.erase(xTxtFrame);
+                        });
+                        Reference < XText > xTxt(xTxtFrame->getText());
+                        exportFrameFrames( true, bIsProgress, xTxtFrame );
+                        exportText( xTxt, bAutoStyles, bIsProgress, true );
+                    }
                 }
             }
             break;
         case FrameType::Shape:
             {
                 Reference < XShape > xShape( rTxtCntnt, UNO_QUERY );
-                css::uno::Sequence<OUString> aAutoStylePropNames = GetAutoStylePool().GetPropertyNames();
-                GetExport().GetShapeExport()->collectShapeAutoStyles( xShape, aAutoStylePropNames );
+                bool bAlreadySeen = !maShapeRecurseGuard.insert(xShape).second;
+                if (bAlreadySeen)
+                {
+                    SAL_WARN("xmloff", "loop in shape export, ditching");
+                }
+                else
+                {
+                    comphelper::ScopeGuard const g([this, xShape]() {
+                        maShapeRecurseGuard.erase(xShape);
+                    });
+                    css::uno::Sequence<OUString> aAutoStylePropNames = GetAutoStylePool().GetPropertyNames();
+                    GetExport().GetShapeExport()->collectShapeAutoStyles( xShape, aAutoStylePropNames );
+                }
             }
             break;
         default:
