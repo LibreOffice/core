@@ -67,6 +67,16 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <formatlinebreak.hxx>
 
+#include <view.hxx>
+#include <wrtsh.hxx>
+#include <com/sun/star/text/XTextRange.hpp>
+#include <unotextrange.hxx>
+#include <SwStyleNameMapper.hxx>
+#include <unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
+#include <unomap.hxx>
+#include <com/sun/star/awt/FontSlant.hpp>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::uno;
@@ -1302,6 +1312,173 @@ void SwTextPaintInfo::DrawBorder( const SwLinePortion &rPor ) const
         PaintCharacterBorder(*m_pFnt, aDrawArea, GetTextFrame()->IsVertical(),
                              GetTextFrame()->IsVertLRBT(), rPor.GetJoinBorderWithPrev(),
                              rPor.GetJoinBorderWithNext());
+    }
+}
+
+namespace {
+
+bool HasValidPropertyValue(const uno::Any& rAny)
+{
+    if (bool bValue; rAny >>= bValue)
+    {
+        return true;
+    }
+    else if (OUString aValue; (rAny >>= aValue) && !(aValue.isEmpty()))
+    {
+        return true;
+    }
+    else if (awt::FontSlant eValue; rAny >>= eValue)
+    {
+        return true;
+    }
+    else if (tools::Long nValueLong; rAny >>= nValueLong)
+    {
+        return true;
+    }
+    else if (double fValue; rAny >>= fValue)
+    {
+        return true;
+    }
+    else if (short nValueShort; rAny >>= nValueShort)
+    {
+        return true;
+    }
+    else
+        return false;
+}
+}
+
+void SwTextPaintInfo::DrawCSDFHighlighting(const SwLinePortion &rPor) const
+{
+    // Don't use GetActiveView() as it does not work as expected when there are multiple open
+    // documents.
+    SwView* pView = SwTextFrame::GetView();
+    if (!pView)
+        return;
+
+    StylesHighlighterColorMap& rCharStylesColorMap = pView->GetStylesHighlighterCharColorMap();
+
+    if (rCharStylesColorMap.empty() && !pView->IsHighlightCharDF())
+        return;
+
+    SwRect aRect;
+    CalcRect(rPor, &aRect, nullptr, true);
+    if(!aRect.HasArea())
+        return;
+
+    SwTextFrame* pFrame = const_cast<SwTextFrame*>(GetTextFrame());
+    if (!pFrame)
+        return;
+
+    SwPosition aPosition(pFrame->MapViewToModelPos(GetIdx()));
+    SwPosition aMarkPosition(pFrame->MapViewToModelPos(GetIdx() + GetLen()));
+
+    uno::Reference<text::XTextRange> xRange(
+                SwXTextRange::CreateXTextRange(pFrame->GetDoc(), aPosition, &aMarkPosition));
+    uno::Reference<beans::XPropertySet> xPropertiesSet(xRange, uno::UNO_QUERY_THROW);
+
+    OUString sCurrentCharStyle;
+    xPropertiesSet->getPropertyValue("CharStyleName") >>= sCurrentCharStyle;
+
+    std::optional<OUString> sCSNumberOrDF; // CS number or "df" or not used
+    std::optional<Color> aFillColor;
+
+    // check for CS formatting, if not CS formatted check for direct character formatting
+    if (!sCurrentCharStyle.isEmpty())
+    {
+        if (!rCharStylesColorMap.empty())
+        {
+            OUString sCharStyleDisplayName;
+            sCharStyleDisplayName = SwStyleNameMapper::GetUIName(sCurrentCharStyle,
+                                                                 SwGetPoolIdFromName::ChrFmt);
+            if (!sCharStyleDisplayName.isEmpty()
+                    && rCharStylesColorMap.find(sCharStyleDisplayName)
+                    != rCharStylesColorMap.end())
+            {
+                aFillColor = rCharStylesColorMap[sCharStyleDisplayName].first;
+                sCSNumberOrDF = OUString::number(rCharStylesColorMap[sCharStyleDisplayName].second);
+            }
+        }
+    }
+    // not character style formatted
+    else if (pView->IsHighlightCharDF())
+    {
+        const std::vector<OUString> aHiddenProperties{ UNO_NAME_RSID,
+                    UNO_NAME_PARA_IS_NUMBERING_RESTART,
+                    UNO_NAME_PARA_STYLE_NAME,
+                    UNO_NAME_PARA_CONDITIONAL_STYLE_NAME,
+                    UNO_NAME_PAGE_STYLE_NAME,
+                    UNO_NAME_NUMBERING_START_VALUE,
+                    UNO_NAME_NUMBERING_IS_NUMBER,
+                    UNO_NAME_PARA_CONTINUEING_PREVIOUS_SUB_TREE,
+                    UNO_NAME_CHAR_STYLE_NAME,
+                    UNO_NAME_NUMBERING_LEVEL,
+                    UNO_NAME_SORTED_TEXT_ID,
+                    UNO_NAME_PARRSID,
+                    UNO_NAME_CHAR_COLOR_THEME,
+                    UNO_NAME_CHAR_COLOR_TINT_OR_SHADE };
+
+        SfxItemPropertySet const& rPropSet(
+                    *aSwMapProvider.GetPropertySet(PROPERTY_MAP_CHAR_AUTO_STYLE));
+        SfxItemPropertyMap const& rMap(rPropSet.getPropertyMap());
+
+
+        uno::Reference<beans::XPropertyState> xPropertiesState(xRange, uno::UNO_QUERY_THROW);
+        const uno::Sequence<beans::Property> aProperties
+                = xPropertiesSet->getPropertySetInfo()->getProperties();
+
+        for (const beans::Property& rProperty : aProperties)
+        {
+            const OUString& rPropName = rProperty.Name;
+
+            if (!rMap.hasPropertyByName(rPropName))
+                continue;
+
+            if (std::find(aHiddenProperties.begin(), aHiddenProperties.end(), rPropName)
+                    != aHiddenProperties.end())
+                continue;
+
+            if (xPropertiesState->getPropertyState(rPropName) == beans::PropertyState_DIRECT_VALUE)
+            {
+                const uno::Any aAny = xPropertiesSet->getPropertyValue(rPropName);
+                if (HasValidPropertyValue(aAny))
+                {
+                    sCSNumberOrDF = SwResId(STR_CHARACTER_DIRECT_FORMATTING_TAG);
+                    aFillColor = COL_LIGHTGRAY;
+                    break;
+                }
+            }
+        }
+    }
+    if (sCSNumberOrDF)
+    {
+        OutputDevice* pTmpOut = const_cast<OutputDevice*>(GetOut());
+        pTmpOut->Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR
+                      | vcl::PushFlags::TEXTLAYOUTMODE | vcl::PushFlags::FONT);
+
+        // draw a filled rectangle at the formatted CS or DF text
+        pTmpOut->SetFillColor(aFillColor.value());
+        pTmpOut->SetLineColor(aFillColor.value());
+        tools::Rectangle aSVRect(aRect.SVRect());
+        pTmpOut->DrawRect(aSVRect);
+
+        // calculate size and position for the CS number or "df" text and rectangle
+        tools::Long nWidth = pTmpOut->GetTextWidth(sCSNumberOrDF.value());
+        tools::Long nHeight = pTmpOut->GetTextHeight();
+        aSVRect.SetSize(Size(nWidth, nHeight));
+        aSVRect.Move(-(nWidth / 1.5), -(nHeight / 1.5));
+
+        vcl::Font aFont(pTmpOut->GetFont());
+        aFont.SetOrientation(Degree10(0));
+        pTmpOut->SetFont(aFont);
+
+        pTmpOut->SetLayoutMode(vcl::text::ComplexTextLayoutFlags::TextOriginLeft);
+        //pTmpOut->SetLayoutMode(vcl::text::ComplexTextLayoutFlags::BiDiStrong);
+
+        pTmpOut->SetTextFillColor(aFillColor.value());
+        pTmpOut->DrawText(aSVRect, sCSNumberOrDF.value(), DrawTextFlags::NONE);
+
+        pTmpOut->Pop();
     }
 }
 

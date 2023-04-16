@@ -3700,7 +3700,7 @@ void SalInstanceTreeView::do_insert(const weld::TreeIter* pParent, int pos, cons
         pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
     }
     if (pStr)
-        AddStringItem(pEntry, *pStr, 0);
+        AddStringItem(pEntry, *pStr, pEntry->ItemCount());
     pEntry->SetUserData(pUserData);
     m_xTreeView->Insert(pEntry, iter, nInsertPos);
 

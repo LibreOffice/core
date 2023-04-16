@@ -134,6 +134,27 @@ namespace SfxTemplate
             default:                     return 0xffff;
         }
     }
+    // converts from 1-6 to SFX_STYLE_FAMILY Ids
+    static SfxStyleFamily NIdToSfxFamilyId(sal_uInt16 nId)
+    {
+        switch (nId)
+        {
+            case 1:
+                return SfxStyleFamily::Char;
+            case 2:
+                return SfxStyleFamily::Para;
+            case 3:
+                return SfxStyleFamily::Frame;
+            case 4:
+                return SfxStyleFamily::Page;
+            case 5:
+                return SfxStyleFamily::Pseudo;
+            case 6:
+                return SfxStyleFamily::Table;
+            default:
+                return SfxStyleFamily::All;
+        }
+    }
 }
 
 void SfxCommonTemplateDialog_Impl::connect_stylelist_execute_drop(
@@ -176,6 +197,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl(SfxBindings* pB, weld
     , m_pDeletionWatcher(nullptr)
     , m_aStyleList(pBuilder, pB, this, pC, "treeview", "flatview")
     , mxPreviewCheckbox(pBuilder->weld_check_button("showpreview"))
+    , mxHighlightCheckbox(pBuilder->weld_check_button("highlightstyles"))
     , mxFilterLb(pBuilder->weld_combo_box("filter"))
     , nActFamily(0xffff)
     , nActFilter(0)
@@ -262,7 +284,13 @@ void SfxCommonTemplateDialog_Impl::Initialize()
 
     mxFilterLb->connect_changed(LINK(this, SfxCommonTemplateDialog_Impl, FilterSelectHdl));
     mxPreviewCheckbox->connect_toggled(LINK(this, SfxCommonTemplateDialog_Impl, PreviewHdl));
+    mxHighlightCheckbox->connect_toggled(LINK(this, SfxCommonTemplateDialog_Impl, HighlightHdl));
+
     m_aStyleList.Initialize();
+
+    SfxStyleFamily eFam = SfxTemplate::NIdToSfxFamilyId(nActFamily);
+    mxHighlightCheckbox->set_visible(m_aStyleList.HasStylesHighlighterFeature()
+                                && (eFam == SfxStyleFamily::Para || eFam == SfxStyleFamily::Char));
 }
 
 IMPL_LINK(SfxCommonTemplateDialog_Impl, UpdateStyles_Hdl, StyleFlags, nFlags, void)
@@ -460,6 +488,7 @@ bool SfxCommonTemplateDialog_Impl::Execute_Impl(
 // Handler Listbox of Filter
 void SfxCommonTemplateDialog_Impl::EnableHierarchical(bool const bEnable, StyleList& rStyleList)
 {
+    OUString aSelectedEntry = rStyleList.GetSelectedEntry();
     if (bEnable)
     {
         if (!rStyleList.IsHierarchical())
@@ -476,8 +505,9 @@ void SfxCommonTemplateDialog_Impl::EnableHierarchical(bool const bEnable, StyleL
         // If bHierarchical, then the family can have changed
         // minus one since hierarchical is inserted at the start
         m_bWantHierarchical = false; // before FilterSelect
-        FilterSelect(mxFilterLb->get_active() - 1, rStyleList.IsHierarchical() );
+        FilterSelect(mxFilterLb->get_active() - 1, true);
     }
+    SelectStyle(aSelectedEntry, false, rStyleList);
 }
 
 // Other filters; can be switched by the users or as a result of new or
@@ -517,14 +547,27 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, FilterSelectHdl, weld::ComboBox&, rBox, 
 }
 
 // Select-Handler for the Toolbox
-void SfxCommonTemplateDialog_Impl::FamilySelect(sal_uInt16 nEntry, StyleList&, bool bPreviewRefresh)
+void SfxCommonTemplateDialog_Impl::FamilySelect(sal_uInt16 nEntry, StyleList&, bool bRefresh)
 {
     assert((0 < nEntry && nEntry <= MAX_FAMILIES) || 0xffff == nEntry);
-    if( nEntry != nActFamily || bPreviewRefresh )
+    if( nEntry != nActFamily || bRefresh )
     {
         CheckItem(OUString::number(nActFamily), false);
         nActFamily = nEntry;
-        m_aStyleList.FamilySelect(nEntry);
+        m_aStyleList.FamilySelect(nEntry, bRefresh);
+
+        SfxStyleFamily eFam = SfxTemplate::NIdToSfxFamilyId(nActFamily);
+        mxHighlightCheckbox->set_visible(m_aStyleList.HasStylesHighlighterFeature()
+                                && (eFam == SfxStyleFamily::Para || eFam == SfxStyleFamily::Char));
+        if (mxHighlightCheckbox->is_visible())
+        {
+            bool bActive = false;
+            if (eFam == SfxStyleFamily::Para)
+                bActive = m_aStyleList.IsHighlightParaStyles();
+            else if (eFam == SfxStyleFamily::Char)
+                bActive = m_aStyleList.IsHighlightCharStyles();
+            mxHighlightCheckbox->set_active(bActive);
+        }
     }
 }
 
@@ -632,8 +675,17 @@ IMPL_LINK_NOARG(SfxCommonTemplateDialog_Impl, PreviewHdl, weld::Toggleable&, voi
     officecfg::Office::Common::StylesAndFormatting::Preview::set(bCustomPreview, batch );
     batch->commit();
 
-    m_aStyleList.EnablePreview(bCustomPreview);
+    FamilySelect(nActFamily, m_aStyleList, true);
+}
 
+IMPL_LINK_NOARG(SfxCommonTemplateDialog_Impl, HighlightHdl, weld::Toggleable&, void)
+{
+    bool bActive = mxHighlightCheckbox->get_active();
+    SfxStyleFamily eFam = SfxTemplate::NIdToSfxFamilyId(nActFamily);
+    if (eFam == SfxStyleFamily::Para)
+        m_aStyleList.SetHighlightParaStyles(bActive);
+    else if (eFam == SfxStyleFamily::Char)
+        m_aStyleList.SetHighlightCharStyles(bActive);
     FamilySelect(nActFamily, m_aStyleList, true);
 }
 

@@ -69,6 +69,7 @@ protected:
 
     StyleList m_aStyleList;
     std::unique_ptr<weld::CheckButton> mxPreviewCheckbox;
+    std::unique_ptr<weld::CheckButton> mxHighlightCheckbox;
     std::unique_ptr<weld::ComboBox> mxFilterLb;
 
     sal_uInt16 nActFamily; // Id in the ToolBox = Position - 1
@@ -97,6 +98,7 @@ protected:
 
     DECL_LINK(FilterSelectHdl, weld::ComboBox&, void );
     DECL_LINK(PreviewHdl, weld::Toggleable&, void);
+    DECL_LINK(HighlightHdl, weld::Toggleable&, void);
 
     virtual void InsertFamilyItem(sal_uInt16 nId, const SfxStyleFamilyItem& rItem) = 0;
     virtual void EnableFamilyItem(sal_uInt16 nId, bool bEnabled) = 0;
@@ -138,7 +140,7 @@ public:
 
     // Used in StyleList::UpdateStyles, StyleList::Update
     // Whenever a new family(Eg. Character, List etc.) is selected it comes into action
-    void FamilySelect(sal_uInt16 nId, StyleList& rStyleList, bool bPreviewRefresh = false);
+    void FamilySelect(sal_uInt16 nId, StyleList& rStyleList, bool bRefresh = false);
 
     // Constructor
     SfxCommonTemplateDialog_Impl(SfxBindings* pB, weld::Container*, weld::Builder* pBuilder);

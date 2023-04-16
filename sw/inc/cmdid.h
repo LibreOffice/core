@@ -170,6 +170,8 @@ class SwUINumRuleItem;
 #define FN_VIEW_FIELDNAME       (FN_VIEW + 26)  /* View field names */
 #define FN_VIEW_TABLEGRID       (FN_VIEW + 27)  /* View tablegrid */
 
+#define FN_HIGHLIGHT_CHAR_DF    (FN_VIEW + 28)
+
 #define FN_SET_PAGE             (FN_VIEW + 29)  /* Set page template to paragraph */
 
 #define FN_PRINT_LAYOUT         (FN_VIEW + 37)  /* print layout */

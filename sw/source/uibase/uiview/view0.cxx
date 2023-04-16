@@ -225,7 +225,7 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
     while(nWhich)
     {
         bool bReadonly = GetDocShell()->IsReadOnly();
-        if ( bReadonly && nWhich != FN_VIEW_GRAPHIC )
+        if (bReadonly && nWhich != FN_VIEW_GRAPHIC && nWhich != FN_HIGHLIGHT_CHAR_DF)
         {
             rSet.DisableItem(nWhich);
             nWhich = 0;
@@ -358,6 +358,9 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
             break;
             case FN_SHOW_CHANGES_IN_MARGIN:
               aBool.SetValue( pOpt->IsShowChangesInMargin() );
+            break;
+            case FN_HIGHLIGHT_CHAR_DF:
+              aBool.SetValue(m_bIsHighlightCharDF);
             break;
         }
 
@@ -547,6 +550,12 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
             bFlag = !lcl_IsViewMarks(*pOpt) ;
 
         lcl_SetViewMarks( *pOpt, bFlag );
+        break;
+
+    case FN_HIGHLIGHT_CHAR_DF:
+        if (STATE_TOGGLE == eState)
+            bFlag = !m_bIsHighlightCharDF;
+        m_bIsHighlightCharDF = bFlag;
         break;
 
     case FN_VIEW_META_CHARS:

@@ -1690,6 +1690,8 @@ public:
 
     void SetLanguage(const LanguageType eLang, const sal_uInt16 nId);
 
+    static bool HasParagraphDirectFormatting(const SwPosition& rPos);
+
 private:
     // Copies master header to left / first one, if necessary - used by ChgPageDesc().
     void CopyMasterHeader(const SwPageDesc &rChged, const SwFormatHeader &rHead, SwPageDesc &pDesc, bool bLeft, bool bFirst);

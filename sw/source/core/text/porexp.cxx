@@ -74,12 +74,15 @@ bool SwExpandPortion::Format( SwTextFormatInfo &rInf )
 
 void SwExpandPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
+    rInf.DrawCSDFHighlighting(*this); // here it detects as CS and not DF
+
     SwTextSlot aDiffText( &rInf, this, true, true );
     const SwFont aOldFont = *rInf.GetFont();
     if( GetJoinBorderWithPrev() )
         const_cast<SwTextPaintInfo&>(rInf).GetFont()->SetLeftBorder(nullptr);
     if( GetJoinBorderWithNext() )
         const_cast<SwTextPaintInfo&>(rInf).GetFont()->SetRightBorder(nullptr);
+//    rInf.DrawCSDFHighlighting(*this); // here it detects as DF and only the '/' is detected as CS
 
     rInf.DrawBackBrush( *this );
     rInf.DrawBorder( *this );

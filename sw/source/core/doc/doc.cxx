@@ -105,6 +105,12 @@
 */
 #include <docsh.hxx>
 
+#include <com/sun/star/text/XTextRange.hpp>
+#include <editeng/unoprnms.hxx>
+#include <unotextrange.hxx>
+#include <unoprnms.hxx>
+#include <unomap.hxx>
+
 using namespace ::com::sun::star;
 
 sal_Int32 SwDoc::acquire()
@@ -1857,6 +1863,55 @@ void SwDoc::SetMissingDictionaries( bool bIsMissing )
 void SwDoc::SetLanguage(const LanguageType eLang, const sal_uInt16 nId)
 {
     mpAttrPool->SetPoolDefaultItem(SvxLanguageItem(eLang, nId));
+}
+
+bool SwDoc::HasParagraphDirectFormatting(const SwPosition& rPos)
+{
+    uno::Reference<text::XTextRange> xRange(SwXTextRange::CreateXTextRange(rPos.GetDoc(), rPos,
+                                                                           &rPos));
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xRange, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xThisParagraphRange(xParaEnum->nextElement(), uno::UNO_QUERY);
+    if (xThisParagraphRange.is())
+    {
+        const std::vector<OUString> aHiddenProperties{ UNO_NAME_RSID,
+                    UNO_NAME_PARA_IS_NUMBERING_RESTART,
+                    UNO_NAME_PARA_STYLE_NAME,
+                    UNO_NAME_PARA_CONDITIONAL_STYLE_NAME,
+                    UNO_NAME_PAGE_STYLE_NAME,
+                    UNO_NAME_NUMBERING_START_VALUE,
+                    UNO_NAME_NUMBERING_IS_NUMBER,
+                    UNO_NAME_PARA_CONTINUEING_PREVIOUS_SUB_TREE,
+                    UNO_NAME_CHAR_STYLE_NAME,
+                    UNO_NAME_NUMBERING_LEVEL,
+                    UNO_NAME_SORTED_TEXT_ID,
+                    UNO_NAME_PARRSID,
+                    UNO_NAME_CHAR_COLOR_THEME,
+                    UNO_NAME_CHAR_COLOR_TINT_OR_SHADE };
+
+        SfxItemPropertySet const& rPropSet(*aSwMapProvider.GetPropertySet(
+                                               PROPERTY_MAP_PARA_AUTO_STYLE));
+        SfxItemPropertyMap const& rMap(rPropSet.getPropertyMap());
+
+        uno::Reference<beans::XPropertySet> xPropertySet(xThisParagraphRange,
+                                                         uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertyState> xPropertyState(xThisParagraphRange,
+                                                             uno::UNO_QUERY_THROW);
+        const uno::Sequence<beans::Property> aProperties
+                = xPropertySet->getPropertySetInfo()->getProperties();
+        for (const beans::Property& rProperty : aProperties)
+        {
+            const OUString& rPropName = rProperty.Name;
+            if (!rMap.hasPropertyByName(rPropName))
+                continue;
+            if (std::find(aHiddenProperties.begin(), aHiddenProperties.end(), rPropName)
+                    != aHiddenProperties.end())
+                continue;
+            if (xPropertyState->getPropertyState(rPropName) == beans::PropertyState_DIRECT_VALUE)
+                return true;
+        }
+    }
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

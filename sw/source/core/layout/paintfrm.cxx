@@ -120,6 +120,10 @@
 #include <vcl/GraphicLoader.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
+#include <svl/style.hxx>
+#include <ndtxt.hxx>
+#include <vcl/hatch.hxx>
+
 using namespace ::editeng;
 using namespace ::com::sun::star;
 
@@ -4332,13 +4336,96 @@ void SwFlyFrame::PaintDecorators() const
     }
 }
 
+SwView* SwTextFrame::GetView()
+{
+    SwWrtShell* pWrtSh = dynamic_cast<SwWrtShell*>(gProp.pSGlobalShell);
+
+    if (!pWrtSh)
+        return nullptr;
+
+    return &pWrtSh->GetView();
+}
+
+void SwTextFrame::PaintParagraphStylesHighlighting() const
+{
+    // Maybe avoid the dynamic_cast and just use GetActiveWrtShell()
+    // NO! Multiple windows will not dispay the highlighting correctly if GetActiveWrtShell is used.
+    SwWrtShell* pWrtSh = dynamic_cast<SwWrtShell*>(gProp.pSGlobalShell);
+
+    if (!pWrtSh)
+        return;
+
+    vcl::RenderContext* pRenderContext = pWrtSh->GetOut();
+    if (!pRenderContext)
+        return;
+
+    StylesHighlighterColorMap& rParaStylesColorMap
+            = pWrtSh->GetView().GetStylesHighlighterParaColorMap();
+
+    if (rParaStylesColorMap.empty())
+        return;
+
+    //  draw styles highlighter
+    OUString sStyleName = GetTextNodeFirst()->GetTextColl()->GetName();
+    if (rParaStylesColorMap.find(sStyleName) != rParaStylesColorMap.end())
+    {
+        SwRect aFrameAreaRect(getFrameArea());
+
+        if (IsRightToLeft())
+        {
+            aFrameAreaRect.AddRight(75);
+            aFrameAreaRect.Left(aFrameAreaRect.Right() + 300);
+        }
+        else
+        {
+            aFrameAreaRect.AddLeft(-375);
+            aFrameAreaRect.Right(aFrameAreaRect.Left() + 300);
+        }
+
+        const tools::Rectangle& rRect = aFrameAreaRect.SVRect();
+
+        vcl::Font aFont(OutputDevice::GetDefaultFont(DefaultFontType::UI_SANS, GetAppLanguage(),
+                                                     GetDefaultFontFlags::OnlyOne, pRenderContext));
+        aFont.SetFontSize(Size(0, 140 * pRenderContext->GetDPIScaleFactor()));
+        aFont.SetUnderline(FontLineStyle::LINESTYLE_NONE);
+        aFont.SetTransparent(false);
+        aFont.SetWeight(WEIGHT_NORMAL);
+        aFont.SetFamily(FontFamily::FAMILY_MODERN);
+        aFont.SetColor(COL_BLACK);
+
+        pRenderContext->Push(vcl::PushFlags::ALL);
+
+        pRenderContext->SetFillColor(rParaStylesColorMap[sStyleName].first);
+        pRenderContext->SetLineColor(rParaStylesColorMap[sStyleName].first);
+
+        pRenderContext->DrawRect(rRect);
+
+        // draw hatch pattern if paragraph has direct formatting
+        if (SwDoc::HasParagraphDirectFormatting(SwPosition(*GetTextNodeForParaProps())))
+        {
+            Color aHatchColor(rParaStylesColorMap[sStyleName].first);
+            // make hatch line color 41% darker than the fill color
+            aHatchColor.ApplyTintOrShade(-4100);
+            Hatch aHatch(HatchStyle::Single, aHatchColor, 50, 450_deg10);
+            pRenderContext->DrawHatch(tools::PolyPolygon(rRect), aHatch);
+        }
+
+        pRenderContext->SetFont(aFont);
+        pRenderContext->SetLayoutMode(vcl::text::ComplexTextLayoutFlags::Default);
+        pRenderContext->SetTextFillColor(rParaStylesColorMap[sStyleName].first);
+        pRenderContext->DrawText(rRect, OUString::number(rParaStylesColorMap[sStyleName].second),
+                                 DrawTextFlags::Center | DrawTextFlags::VCenter);
+
+        pRenderContext->Pop();
+    }
+}
+
 void SwTextFrame::PaintOutlineContentVisibilityButton() const
 {
     SwWrtShell* pWrtSh = dynamic_cast<SwWrtShell*>(gProp.pSGlobalShell);
     if (pWrtSh && pWrtSh->GetViewOptions()->IsShowOutlineContentVisibilityButton())
         UpdateOutlineContentVisibilityButton(pWrtSh);
 }
-
 
 void SwTabFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
 {

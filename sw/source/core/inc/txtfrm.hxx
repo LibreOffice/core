@@ -27,6 +27,8 @@
 #include <set>
 #include <utility>
 
+#include <view.hxx>
+
 namespace com::sun::star::linguistic2 { class XHyphenatedWord; }
 
 namespace sw::mark { class IMark; }
@@ -329,6 +331,8 @@ class SW_DLLPUBLIC SwTextFrame final : public SwContentFrame
 
     void UpdateOutlineContentVisibilityButton(SwWrtShell* pWrtSh) const;
     void PaintOutlineContentVisibilityButton() const;
+
+    void PaintParagraphStylesHighlighting() const;
 
     virtual void SwClientNotify(SwModify const& rModify, SfxHint const& rHint) override;
 
@@ -790,6 +794,8 @@ public:
     /// This text frame may have a split fly frames anchored to it. Is any of them a frame that has
     /// a follow, i.e. not the last in a master -> follow 1 -> ... -> last follow chain?
     bool HasNonLastSplitFlyDrawObj() const;
+
+    static SwView* GetView();
 
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const override;
 };

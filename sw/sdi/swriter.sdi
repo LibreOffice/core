@@ -4070,6 +4070,23 @@ SfxBoolItem Marks FN_VIEW_MARKS
     GroupId = SfxGroupId::View;
 ]
 
+SfxBoolItem HighlightCharDF FN_HIGHLIGHT_CHAR_DF
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::View;
+]
+
 SfxVoidItem MergeCells FN_TABLE_MERGE_CELLS
 ()
 [

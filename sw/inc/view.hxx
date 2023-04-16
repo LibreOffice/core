@@ -270,6 +270,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     int m_nMaxOutlineLevelShown = 10;
 
+    bool m_bIsHighlightCharDF = false;
+
     static constexpr sal_uInt16 MAX_ZOOM_PERCENT = 600;
     static constexpr sal_uInt16 MIN_ZOOM_PERCENT = 20;
 
@@ -706,6 +708,8 @@ public:
     virtual tools::Rectangle getLOKVisibleArea() const override;
     virtual void flushPendingLOKInvalidateTiles() override;
     virtual std::optional<OString> getLOKPayload(int nType, int nViewId) const override;
+
+    bool IsHighlightCharDF() { return m_bIsHighlightCharDF; }
 };
 
 inline tools::Long SwView::GetXScroll() const

@@ -416,6 +416,8 @@ public:
 
     void DrawCheckBox(const SwFieldFormCheckboxPortion &rPor, bool bChecked) const;
 
+    void DrawCSDFHighlighting(const SwLinePortion &rPor) const;
+
     /**
      * Calculate the rectangular area where the portion takes place.
      * @param[in]   rPor        portion for which the method specify the painting area

@@ -1468,6 +1468,10 @@
 #define STR_INFORODLG_FOLDED_PRIMARY            NC_("STR_INFORODLG_FOLDED_PRIMARY", "You are trying to delete folded (hidden) content.")
 #define STR_INFORODLG_FOLDED_SECONDARY          NC_("STR_INFORODLG_FOLDED_SECONDARY", "To delete this content, first unfold it so you can see what you intend to delete.")
 
+#define STR_PARAGRAPH_DIRECT_FORMATTING         NC_("STR_PARAGRAPH_DIRECT_FORMATTING", "Paragraph Direct Formatting")
+#define STR_CHARACTER_DIRECT_FORMATTING         NC_("STR_CHARACTER_DIRECT_FORMATTING", "Character Direct Formatting")
+#define STR_CHARACTER_DIRECT_FORMATTING_TAG     NC_("STR_CHARACTER_DIRECT_FORMATTING_TAG", "df")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

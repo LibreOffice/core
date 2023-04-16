@@ -549,6 +549,8 @@ void SwTextPortion::Paint( const SwTextPaintInfo &rInf ) const
         rInf.DrawBackBrush( *this );
         rInf.DrawBorder( *this );
 
+        rInf.DrawCSDFHighlighting(*this);
+
         // do we have to repaint a post it portion?
         if( rInf.OnWin() && mpNextPortion && !mpNextPortion->Width() )
             mpNextPortion->PrePaint( rInf, this );

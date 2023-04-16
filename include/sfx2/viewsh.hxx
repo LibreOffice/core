@@ -35,6 +35,7 @@
 #include <editeng/outliner.hxx>
 #include <functional>
 #include <unordered_set>
+#include <unordered_map>
 
 class SfxTabPage;
 class SfxBaseController;
@@ -152,6 +153,8 @@ template<class T> bool checkSfxViewShell(const SfxViewShell* pShell)
     return dynamic_cast<const T*>(pShell) != nullptr;
 }
 
+typedef std::unordered_map<OUString, std::pair<Color, int>> StylesHighlighterColorMap;
+
 /**
  * One SfxViewShell more or less represents one edit window for a document, there can be multiple
  * ones for a single opened document (SfxObjectShell).
@@ -179,6 +182,9 @@ friend class SfxPrinterController;
 
     /// Used for async export
     std::shared_ptr<SfxStoringHelper> m_xHelper;
+
+    StylesHighlighterColorMap ParaStylesColorMap;
+    StylesHighlighterColorMap CharStylesColorMap;
 
 protected:
     virtual void                Activate(bool IsMDIActivate) override;
@@ -457,6 +463,9 @@ public:
     bool isBlockedCommand(OUString command);
 
     void SetStoringHelper(std::shared_ptr<SfxStoringHelper> xHelper) { m_xHelper = xHelper; }
+
+    StylesHighlighterColorMap& GetStylesHighlighterParaColorMap() { return ParaStylesColorMap; }
+    StylesHighlighterColorMap& GetStylesHighlighterCharColorMap() { return CharStylesColorMap; }
 };
 
 #endif // INCLUDED_SFX2_VIEWSH_HXX

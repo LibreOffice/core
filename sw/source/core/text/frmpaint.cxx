@@ -501,6 +501,8 @@ SwRect SwTextFrame::GetPaintSwRect()
 
 bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
 {
+    PaintParagraphStylesHighlighting();
+
     SwViewShell *pSh = getRootFrame()->GetCurrShell();
     if( pSh && ( pSh->GetViewOptions()->IsParagraph() || bInitFont ) )
     {
@@ -792,6 +794,8 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
         if( rRepaint.HasArea() )
             rRepaint.Clear();
     }
+
+    PaintParagraphStylesHighlighting();
 
     const_cast<SwRect&>(rRect) = aOldRect;
 
