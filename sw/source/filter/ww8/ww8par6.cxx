@@ -1640,14 +1640,14 @@ void WW8FlyPara::ApplyTabPos(const WW8_TablePos *pTabPos)
 {
     if (pTabPos)
     {
-        nSp26 = pTabPos->nSp26;
-        nSp27 = pTabPos->nSp27;
-        nSp29 = pTabPos->nSp29;
-        nLeMgn = pTabPos->nLeMgn;
-        nRiMgn = pTabPos->nRiMgn;
-        nUpMgn = pTabPos->nUpMgn;
-        nLoMgn = pTabPos->nLoMgn;
-        nSp37 = pTabPos->nSp37;
+        nTDxaAbs = pTabPos->nTDxaAbs;
+        nTDyaAbs = pTabPos->nTDyaAbs;
+        nTPc = pTabPos->nTPc;
+        nLeftMargin = pTabPos->nLeftMargin;
+        nRightMargin = pTabPos->nRightMargin;
+        nUpperMargin = pTabPos->nUpperMargin;
+        nLowerMargin = pTabPos->nLowerMargin;
+        nPWr = pTabPos->nPWr;
     }
 }
 
@@ -1657,16 +1657,16 @@ WW8FlyPara::WW8FlyPara(bool bIsVer67, const WW8FlyPara* pSrc /* = 0 */)
         memcpy( this, pSrc, sizeof( WW8FlyPara ) ); // Copy-Ctor
     else
     {
-        nSp26 = 0;
-        nSp27 = 0;
+        nTDxaAbs = 0;
+        nTDyaAbs = 0;
         nSp45 = 0;
         nSp28 = 0;
-        nLeMgn = 0;
-        nRiMgn = 0;
-        nUpMgn = 0;
-        nLoMgn = 0;
-        nSp29 = 0;
-        nSp37 = 2;                                  // Default: wrapping
+        nLeftMargin = 0;
+        nRightMargin = 0;
+        nUpperMargin = 0;
+        nLowerMargin = 0;
+        nTPc = 0;
+        nPWr = 2;                                  // Default: wrapping
         bBorderLines = false;
         bGrafApo = false;
         mbVertSet = false;
@@ -1683,53 +1683,53 @@ bool WW8FlyPara::operator==(const WW8FlyPara& rSrc) const
     */
     return
        (
-         (nSp26 == rSrc.nSp26) &&
-         (nSp27 == rSrc.nSp27) &&
+         (nTDxaAbs == rSrc.nTDxaAbs) &&
+         (nTDyaAbs == rSrc.nTDyaAbs) &&
          ((nSp45 & 0x7fff) == (rSrc.nSp45 & 0x7fff)) &&
          (nSp28 == rSrc.nSp28) &&
-         (nLeMgn == rSrc.nLeMgn) &&
-         (nRiMgn == rSrc.nRiMgn) &&
-         (nUpMgn == rSrc.nUpMgn) &&
-         (nLoMgn == rSrc.nLoMgn) &&
-         (nSp29 == rSrc.nSp29) &&
-         (nSp37 == rSrc.nSp37)
+         (nLeftMargin == rSrc.nLeftMargin) &&
+         (nRightMargin == rSrc.nRightMargin) &&
+         (nUpperMargin == rSrc.nUpperMargin) &&
+         (nLowerMargin == rSrc.nLowerMargin) &&
+         (nTPc == rSrc.nTPc) &&
+         (nPWr == rSrc.nPWr)
        );
 }
 
 // Read for normal text
-void WW8FlyPara::Read(sal_uInt8 nOrigSp29, WW8PLCFx_Cp_FKP* pPap)
+void WW8FlyPara::Read(sal_uInt8 nOrigSprmTPc, WW8PLCFx_Cp_FKP* pPap)
 {
     if( bVer67 )
     {
-        SetValSprm( &nSp26, pPap, 26 ); // X-position   //sprmPDxaAbs
+        SetValSprm( &nTDxaAbs, pPap, 26 ); // X-position   //sprmPDxaAbs
         //set in me or in parent style
-        mbVertSet |= SetValSprm( &nSp27, pPap, 27 );    // Y-position   //sprmPDyaAbs
+        mbVertSet |= SetValSprm( &nTDyaAbs, pPap, 27 );    // Y-position   //sprmPDyaAbs
         SetValSprm( &nSp45, pPap, 45 ); // height       //sprmPWHeightAbs
         SetValSprm( &nSp28, pPap, 28 ); // width        //sprmPDxaWidth
-        SetValSprm( &nLeMgn, pPap, 49 ); // L-border    //sprmPDxaFromText
-        SetValSprm( &nRiMgn, pPap, 49 ); // R-border    //sprmPDxaFromText
-        SetValSprm( &nUpMgn, pPap, 48 ); // U-border    //sprmPDyaFromText
-        SetValSprm( &nLoMgn, pPap, 48 ); // D-border    //sprmPDyaFromText
+        SetValSprm( &nLeftMargin, pPap, 49 ); // L-border    //sprmPDxaFromText
+        SetValSprm( &nRightMargin, pPap, 49 ); // R-border    //sprmPDxaFromText
+        SetValSprm( &nUpperMargin, pPap, 48 ); // U-border    //sprmPDyaFromText
+        SetValSprm( &nLowerMargin, pPap, 48 ); // D-border    //sprmPDyaFromText
 
         SprmResult aS = pPap->HasSprm(NS_sprm::v6::sprmPWr);
         if (aS.pSprm && aS.nRemainingData >= 1)
-            nSp37 = *aS.pSprm;
+            nPWr = *aS.pSprm;
     }
     else
     {
-        SetValSprm( &nSp26, pPap, NS_sprm::PDxaAbs::val ); // X-position
+        SetValSprm( &nTDxaAbs, pPap, NS_sprm::PDxaAbs::val ); // X-position
         //set in me or in parent style
-        mbVertSet |= SetValSprm( &nSp27, pPap, NS_sprm::PDyaAbs::val );    // Y-position
+        mbVertSet |= SetValSprm( &nTDyaAbs, pPap, NS_sprm::PDyaAbs::val );    // Y-position
         SetValSprm( &nSp45, pPap, NS_sprm::PWHeightAbs::val ); // height
         SetValSprm( &nSp28, pPap, NS_sprm::PDxaWidth::val ); // width
-        SetValSprm( &nLeMgn, pPap, NS_sprm::PDxaFromText::val );    // L-border
-        SetValSprm( &nRiMgn, pPap, NS_sprm::PDxaFromText::val );    // R-border
-        SetValSprm( &nUpMgn, pPap, NS_sprm::PDyaFromText::val );    // U-border
-        SetValSprm( &nLoMgn, pPap, NS_sprm::PDyaFromText::val );    // D-border
+        SetValSprm( &nLeftMargin, pPap, NS_sprm::PDxaFromText::val );    // L-border
+        SetValSprm( &nRightMargin, pPap, NS_sprm::PDxaFromText::val );    // R-border
+        SetValSprm( &nUpperMargin, pPap, NS_sprm::PDyaFromText::val );    // U-border
+        SetValSprm( &nLowerMargin, pPap, NS_sprm::PDyaFromText::val );    // D-border
 
         SprmResult aS = pPap->HasSprm(NS_sprm::PWr::val);                               // wrapping
         if (aS.pSprm && aS.nRemainingData >= 1)
-            nSp37 = *aS.pSprm;
+            nPWr = *aS.pSprm;
     }
 
     if( ::lcl_ReadBorders( bVer67, brc, pPap ))     // borders
@@ -1743,17 +1743,17 @@ void WW8FlyPara::Read(sal_uInt8 nOrigSp29, WW8PLCFx_Cp_FKP* pPap)
      anchoring
     */
     if (!mbVertSet)
-        nSp29 = (nOrigSp29 & 0xCF) | 0x20;
+        nTPc = (nOrigSprmTPc & 0xCF) | 0x20;
     else
-        nSp29 = nOrigSp29;
+        nTPc = nOrigSprmTPc;
 }
 
-void WW8FlyPara::ReadFull(sal_uInt8 nOrigSp29, SwWW8ImplReader* pIo)
+void WW8FlyPara::ReadFull(sal_uInt8 nOrigSprmTPc, SwWW8ImplReader* pIo)
 {
     std::shared_ptr<WW8PLCFMan> xPlcxMan = pIo->m_xPlcxMan;
     WW8PLCFx_Cp_FKP* pPap = xPlcxMan->GetPapPLCF();
 
-    Read(nOrigSp29, pPap);    // read Apo parameter
+    Read(nOrigSprmTPc, pPap);    // read Apo parameter
 
     do{             // block for quick exit
         if( nSp45 != 0 /* || nSp28 != 0 */ )
@@ -1825,39 +1825,39 @@ void WW8FlyPara::ReadFull(sal_uInt8 nOrigSp29, SwWW8ImplReader* pIo)
 }
 
 // read for Apo definitions in Styledefs
-void WW8FlyPara::Read(sal_uInt8 nOrigSp29, WW8RStyle const * pStyle)
+void WW8FlyPara::Read(sal_uInt8 nOrigSprmTPc, WW8RStyle const * pStyle)
 {
     if (bVer67)
     {
-        SetValSprm( &nSp26, pStyle, NS_sprm::v6::sprmPDxaAbs );            // X-position
+        SetValSprm( &nTDxaAbs, pStyle, NS_sprm::v6::sprmPDxaAbs );            // X-position
         //set in me or in parent style
-        mbVertSet |= SetValSprm(&nSp27, pStyle, NS_sprm::v6::sprmPDyaAbs); // Y-position
+        mbVertSet |= SetValSprm(&nTDyaAbs, pStyle, NS_sprm::v6::sprmPDyaAbs); // Y-position
         SetValSprm( &nSp45, pStyle, NS_sprm::v6::sprmPWHeightAbs );        // height
         SetValSprm( &nSp28, pStyle, NS_sprm::v6::sprmPDxaWidth );          // width
-        SetValSprm( &nLeMgn, pStyle, NS_sprm::v6::sprmPDxaFromText );      // L-border
-        SetValSprm( &nRiMgn, pStyle, NS_sprm::v6::sprmPDxaFromText );      // R-border
-        SetValSprm( &nUpMgn, pStyle, NS_sprm::v6::sprmPDyaFromText );      // U-border
-        SetValSprm( &nLoMgn, pStyle, NS_sprm::v6::sprmPDyaFromText );      // D-border
+        SetValSprm( &nLeftMargin, pStyle, NS_sprm::v6::sprmPDxaFromText );      // L-border
+        SetValSprm( &nRightMargin, pStyle, NS_sprm::v6::sprmPDxaFromText );      // R-border
+        SetValSprm( &nUpperMargin, pStyle, NS_sprm::v6::sprmPDyaFromText );      // U-border
+        SetValSprm( &nLowerMargin, pStyle, NS_sprm::v6::sprmPDyaFromText );      // D-border
 
         SprmResult aS = pStyle->HasParaSprm( NS_sprm::v6::sprmPWr );       // wrapping
         if (aS.pSprm && aS.nRemainingData >= 1)
-            nSp37 = *aS.pSprm;
+            nPWr = *aS.pSprm;
     }
     else
     {
-        SetValSprm( &nSp26, pStyle, NS_sprm::PDxaAbs::val );            // X-position
+        SetValSprm( &nTDxaAbs, pStyle, NS_sprm::PDxaAbs::val );            // X-position
         //set in me or in parent style
-        mbVertSet |= SetValSprm(&nSp27, pStyle, NS_sprm::PDyaAbs::val); // Y-position
+        mbVertSet |= SetValSprm(&nTDyaAbs, pStyle, NS_sprm::PDyaAbs::val); // Y-position
         SetValSprm( &nSp45, pStyle, NS_sprm::PWHeightAbs::val );        // height
         SetValSprm( &nSp28, pStyle, NS_sprm::PDxaWidth::val );          // width
-        SetValSprm( &nLeMgn, pStyle, NS_sprm::PDxaFromText::val );      // L-border
-        SetValSprm( &nRiMgn, pStyle, NS_sprm::PDxaFromText::val );      // R-border
-        SetValSprm( &nUpMgn, pStyle, NS_sprm::PDyaFromText::val );      // U-border
-        SetValSprm( &nLoMgn, pStyle, NS_sprm::PDyaFromText::val );      // D-border
+        SetValSprm( &nLeftMargin, pStyle, NS_sprm::PDxaFromText::val );      // L-border
+        SetValSprm( &nRightMargin, pStyle, NS_sprm::PDxaFromText::val );      // R-border
+        SetValSprm( &nUpperMargin, pStyle, NS_sprm::PDyaFromText::val );      // U-border
+        SetValSprm( &nLowerMargin, pStyle, NS_sprm::PDyaFromText::val );      // D-border
 
         SprmResult aS = pStyle->HasParaSprm( NS_sprm::PWr::val );       // wrapping
         if (aS.pSprm && aS.nRemainingData >= 1)
-            nSp37 = *aS.pSprm;
+            nPWr = *aS.pSprm;
     }
 
     if (::lcl_ReadBorders(bVer67, brc, nullptr, pStyle))      // border
@@ -1871,9 +1871,9 @@ void WW8FlyPara::Read(sal_uInt8 nOrigSp29, WW8RStyle const * pStyle)
      anchoring
     */
     if (!mbVertSet)
-        nSp29 = (nOrigSp29 & 0xCF) | 0x20;
+        nTPc = (nOrigSprmTPc & 0xCF) | 0x20;
     else
-        nSp29 = nOrigSp29;
+        nTPc = nOrigSprmTPc;
 }
 
 bool WW8FlyPara::IsEmpty() const
@@ -1884,9 +1884,9 @@ bool WW8FlyPara::IsEmpty() const
      #107103# if wrong, so given that the empty is 2, if we are 0 then set
      empty to 0 to make 0 equiv to 2 for empty checking
     */
-    OSL_ENSURE(aEmpty.nSp37 == 2, "this is not what we expect for nSp37");
-    if (this->nSp37 == 0)
-        aEmpty.nSp37 = 0;
+    OSL_ENSURE(aEmpty.nPWr == 2, "this is not what we expect for nPWr");
+    if (this->nPWr == 0)
+        aEmpty.nPWr = 0;
     return aEmpty == *this;
 }
 
@@ -1900,10 +1900,10 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
                             const sal_Int32 nIniFlyDy ):
 nXPos(0),
 nYPos(0),
-nLeMgn(rWW.nLeMgn),
-nRiMgn(rWW.nRiMgn),
-nUpMgn(rWW.nUpMgn),
-nLoMgn(rWW.nLoMgn),
+nLeftMargin(rWW.nLeftMargin),
+nRightMargin(rWW.nRightMargin),
+nUpperMargin(rWW.nUpperMargin),
+nLowerMargin(rWW.nLowerMargin),
 nWidth(rWW.nSp28),
 nHeight(rWW.nSp45),
 nNetWidth(rWW.nSp28),
@@ -1912,9 +1912,9 @@ eHRel(text::RelOrientation::PAGE_FRAME),
 eVRel(text::RelOrientation::FRAME),
 eVAlign(text::VertOrientation::NONE),
 eHAlign(text::HoriOrientation::NONE),
-eSurround(( rWW.nSp37 > 1 ) ? css::text::WrapTextMode_DYNAMIC : css::text::WrapTextMode_NONE),
-nXBind(( rWW.nSp29 & 0xc0 ) >> 6),
-nYBind(( rWW.nSp29 & 0x30 ) >> 4),
+eSurround(( rWW.nPWr > 1 ) ? css::text::WrapTextMode_DYNAMIC : css::text::WrapTextMode_NONE),
+nXBind(( rWW.nTPc & 0xc0 ) >> 6),
+nYBind(( rWW.nTPc & 0x30 ) >> 4),
 nNewNetWidth(MINFLY),
 nLineSpace(0),
 bAutoWidth(false),
@@ -1922,7 +1922,7 @@ bTogglePos(false)
 {
     //#i119466 mapping "Around" wrap setting to "Parallel" for table
     const bool bIsTable = rIo.m_xPlcxMan->HasParaSprm(NS_sprm::PFInTable::val).pSprm;
-    if (bIsTable && rWW.nSp37 == 2)
+    if (bIsTable && rWW.nPWr == 2)
         eSurround = css::text::WrapTextMode_PARALLEL;
 
     /*
@@ -1980,12 +1980,12 @@ bTogglePos(false)
     }
 
 // #i18732#
-    switch( rWW.nSp27 )             // particular Y-positions ?
+    switch( rWW.nTDyaAbs )             // particular Y-positions ?
     {
         case -4:
             eVAlign = text::VertOrientation::TOP;
             if (nYBind < 2)
-                nUpMgn = 0;
+                nUpperMargin = 0;
             break;  // up
         case -8:
             eVAlign = text::VertOrientation::CENTER;
@@ -1993,25 +1993,25 @@ bTogglePos(false)
         case -12:
             eVAlign = text::VertOrientation::BOTTOM;
             if (nYBind < 2)
-                nLoMgn = 0;
+                nLowerMargin = 0;
             break;  // down
         default:
-            nYPos = rWW.nSp27 + static_cast<short>(nIniFlyDy);
+            nYPos = rWW.nTDyaAbs + static_cast<short>(nIniFlyDy);
             break;  // corrections from ini file
     }
 
-    switch( rWW.nSp26 )                 // particular X-positions ?
+    switch( rWW.nTDxaAbs )                 // particular X-positions ?
     {
         case 0:
             eHAlign = text::HoriOrientation::LEFT;
-            nLeMgn = 0;
+            nLeftMargin = 0;
             break;  // left
         case -4:
             eHAlign = text::HoriOrientation::CENTER;
             break;  // centered
         case -8:
             eHAlign = text::HoriOrientation::RIGHT;
-            nRiMgn = 0;
+            nRightMargin = 0;
             break;  // right
         case -12:
             eHAlign = text::HoriOrientation::LEFT;
@@ -2022,7 +2022,7 @@ bTogglePos(false)
             bTogglePos = true;
             break;  // outside
         default:
-            nXPos = rWW.nSp26 + static_cast<short>(nIniFlyDx);
+            nXPos = rWW.nTDxaAbs + static_cast<short>(nIniFlyDx);
             break;  // corrections from ini file
     }
 
@@ -2071,9 +2071,9 @@ bTogglePos(false)
         // to page text area'
         eHAlign = text::HoriOrientation::NONE;
         eHRel = text::RelOrientation::PAGE_PRINT_AREA;
-        nXPos = -nWidth - (2*nLeBorderMgn) - rWW.nRiMgn;
+        nXPos = -nWidth - (2*nLeBorderMgn) - rWW.nRightMargin;
         // re-set left wrap distance
-        nLeMgn = rWW.nLeMgn;
+        nLeftMargin = rWW.nLeftMargin;
     }
     else if ( !bAutoWidth && eHAlign == text::HoriOrientation::RIGHT && eHRel == text::RelOrientation::PAGE_FRAME )
     {
@@ -2082,9 +2082,9 @@ bTogglePos(false)
         // to right page border'
         eHAlign = text::HoriOrientation::NONE;
         eHRel = text::RelOrientation::PAGE_RIGHT;
-        nXPos = ( nRiBorderMgn - nLeBorderMgn ) + rWW.nLeMgn;
+        nXPos = ( nRiBorderMgn - nLeBorderMgn ) + rWW.nLeftMargin;
         // re-set right wrap distance
-        nRiMgn = rWW.nRiMgn;
+        nRightMargin = rWW.nRightMargin;
     }
     else if ( !bAutoWidth && eHAlign == text::HoriOrientation::LEFT && eHRel == text::RelOrientation::PAGE_PRINT_AREA )
     {
@@ -2094,7 +2094,7 @@ bTogglePos(false)
         eHRel = text::RelOrientation::PAGE_PRINT_AREA;
         nXPos = -nLeBorderMgn;
         // re-set left wrap distance
-        nLeMgn = rWW.nLeMgn;
+        nLeftMargin = rWW.nLeftMargin;
     }
     else if ( !bAutoWidth && eHAlign == text::HoriOrientation::RIGHT && eHRel == text::RelOrientation::PAGE_PRINT_AREA )
     {
@@ -2104,7 +2104,7 @@ bTogglePos(false)
         eHRel = text::RelOrientation::PAGE_RIGHT;
         nXPos = -nWidth - nLeBorderMgn;
         // re-set right wrap distance
-        nRiMgn = rWW.nRiMgn;
+        nRightMargin = rWW.nRightMargin;
     }
     else if (rWW.bBorderLines)
     {
@@ -2184,11 +2184,11 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     Put( SwFormatHoriOrient(nXPos, pFS->eHAlign, pFS->eHRel, pFS->bTogglePos ));
     Put( SwFormatVertOrient( pFS->nYPos, pFS->eVAlign, pFS->eVRel ) );
 
-    if (pFS->nLeMgn || pFS->nRiMgn)     // set borders
-        Put(SvxLRSpaceItem(pFS->nLeMgn, pFS->nRiMgn, 0, RES_LR_SPACE));
+    if (pFS->nLeftMargin || pFS->nRightMargin)     // set borders
+        Put(SvxLRSpaceItem(pFS->nLeftMargin, pFS->nRightMargin, 0, RES_LR_SPACE));
 
-    if (pFS->nUpMgn || pFS->nLoMgn)
-        Put(SvxULSpaceItem(pFS->nUpMgn, pFS->nLoMgn, RES_UL_SPACE));
+    if (pFS->nUpperMargin || pFS->nLowerMargin)
+        Put(SvxULSpaceItem(pFS->nUpperMargin, pFS->nLowerMargin, RES_UL_SPACE));
 
     //we no longer need to hack around the header/footer problems
     SwFormatSurround aSurround(pFS->eSurround);
@@ -5355,26 +5355,26 @@ bool SwWW8ImplReader::ParseTabPos(WW8_TablePos *pTabPos, WW8PLCFx_Cp_FKP* pPap)
     SprmResult aRes = pPap->HasSprm(NS_sprm::TPc::val);
     if (aRes.pSprm && aRes.nRemainingData >= 1)
     {
-        pTabPos->nSp29 = *aRes.pSprm;
-        pTabPos->nSp37 = 2;     //Possible fail area, always parallel wrap
+        pTabPos->nTPc = *aRes.pSprm;
+        pTabPos->nPWr = 2;     //Possible fail area, always parallel wrap
         aRes = pPap->HasSprm(NS_sprm::TDxaAbs::val);
         if (aRes.pSprm && aRes.nRemainingData >= 2)
-            pTabPos->nSp26 = SVBT16ToUInt16(aRes.pSprm);
+            pTabPos->nTDxaAbs = SVBT16ToUInt16(aRes.pSprm);
         aRes = pPap->HasSprm(NS_sprm::TDyaAbs::val);
         if (aRes.pSprm && aRes.nRemainingData >= 2)
-            pTabPos->nSp27 = SVBT16ToUInt16(aRes.pSprm);
+            pTabPos->nTDyaAbs = SVBT16ToUInt16(aRes.pSprm);
         aRes = pPap->HasSprm(NS_sprm::TDxaFromText::val);
         if (aRes.pSprm && aRes.nRemainingData >= 2)
-            pTabPos->nLeMgn = SVBT16ToUInt16(aRes.pSprm);
+            pTabPos->nLeftMargin = SVBT16ToUInt16(aRes.pSprm);
         aRes = pPap->HasSprm(NS_sprm::TDxaFromTextRight::val);
         if (aRes.pSprm && aRes.nRemainingData >= 2)
-            pTabPos->nRiMgn = SVBT16ToUInt16(aRes.pSprm);
+            pTabPos->nRightMargin = SVBT16ToUInt16(aRes.pSprm);
         aRes = pPap->HasSprm(NS_sprm::TDyaFromText::val);
         if (aRes.pSprm && aRes.nRemainingData >= 2)
-            pTabPos->nUpMgn = SVBT16ToUInt16(aRes.pSprm);
+            pTabPos->nUpperMargin = SVBT16ToUInt16(aRes.pSprm);
         aRes = pPap->HasSprm(NS_sprm::TDyaFromTextBottom::val);
         if (aRes.pSprm && aRes.nRemainingData >= 2)
-            pTabPos->nLoMgn = SVBT16ToUInt16(aRes.pSprm);
+            pTabPos->nLowerMargin = SVBT16ToUInt16(aRes.pSprm);
         pTabPos->bNoFly = !FloatingTableConversion(pPap);
         bRet = true;
     }

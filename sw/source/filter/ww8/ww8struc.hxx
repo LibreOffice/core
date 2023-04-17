@@ -889,14 +889,14 @@ struct WW67_ATRD                // for versions 6/7
 
 struct WW8_TablePos
 {
-    sal_Int16 nSp26;
-    sal_Int16 nSp27;
-    sal_Int16 nLeMgn;
-    sal_Int16 nRiMgn;
-    sal_Int16 nUpMgn;
-    sal_Int16 nLoMgn;
-    sal_uInt8 nSp29;
-    sal_uInt8 nSp37;
+    sal_Int16 nTDxaAbs;
+    sal_Int16 nTDyaAbs;
+    sal_Int16 nLeftMargin;
+    sal_Int16 nRightMargin;
+    sal_Int16 nUpperMargin;
+    sal_Int16 nLowerMargin;
+    sal_uInt8 nTPc;
+    sal_uInt8 nPWr;
     bool bNoFly;
 };
 

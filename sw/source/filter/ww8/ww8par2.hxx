@@ -49,8 +49,8 @@ private:
 public:
                 // part 1: directly derived Sw attributes
     sal_Int16 nXPos, nYPos;         // Position
-    sal_Int16 nLeMgn, nRiMgn;       // borders
-    sal_Int16 nUpMgn, nLoMgn;       // borders
+    sal_Int16 nLeftMargin, nRightMargin;       // borders
+    sal_Int16 nUpperMargin, nLowerMargin;       // borders
     sal_Int16 nWidth, nHeight;      // size
     sal_Int16 nNetWidth;
 
