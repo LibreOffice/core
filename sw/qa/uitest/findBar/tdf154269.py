@@ -15,21 +15,21 @@ class tdf154269(UITestCase):
     def test_tdf154269(self):
 
         with self.ui_test.create_doc_in_start_center("writer"):
-            # Open quick search
-            self.xUITest.executeCommand("vnd.sun.star.findbar:FocusToFindbar")
             xWriterDoc = self.xUITest.getTopFocusWindow()
-            xFind = xWriterDoc.getChild("find")
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
 
             # Generate a search history with more than 10 entries (A to Z)
             for searchTerm in map(chr, range(65, 91)):
-                # Search twice to generate a search history
-                xFind.executeAction("TYPE", mkPropertyValues({"KEYCODE": "CTRL+A"}))
-                xFind.executeAction("TYPE", mkPropertyValues({"KEYCODE": "BACKSPACE"}))
-                xFind.executeAction("TYPE", mkPropertyValues({"TEXT": searchTerm}))
-                xFind.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
-                xFind.executeAction("TYPE", mkPropertyValues({"KEYCODE": "ESC"}))
-                self.xUITest.executeCommand("vnd.sun.star.findbar:FocusToFindbar")
+                xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+f"}))
+                xFind = xWriterDoc.getChild("find")
+                xFindBar = xWriterDoc.getChild("FindBar")
+                xFind.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xFind.executeAction("TYPE", mkPropertyValues({"TEXT":searchTerm}))
+                xFind.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+                xFindBar.executeAction("CLICK", mkPropertyValues({"POS":"0"}))
 
+            xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+f"}))
+            xFind = xWriterDoc.getChild("find")
             # The default value of FindReplaceRememberedSearches has been respected
             self.assertEqual("10", get_state_as_dict(xFind)["EntryCount"])
 
