@@ -84,6 +84,8 @@ void MovingAverageRegressionCurveCalculator::calculateValuesCentral(
     RegressionCalculationHelper::tDoubleVectorPair aValues)
 {
     const size_t aSize = aValues.first.size();
+    if (aSize == 0)
+        return;
     for (size_t i = mPeriod - 1; i < aSize; ++i)
     {
         double yAvg = 0.0;
