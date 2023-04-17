@@ -128,6 +128,9 @@ enum class SwFontScript
 // mostly used as a "unknown script" marker
 #define SW_SCRIPTS (SwFontScript(int(SwFontScript::LAST)+1))
 
+/// To take Asian or other languages into consideration, an SwFont object consists of 3 SwSubFonts
+/// (Latin, CJK, and CTL). The m_nActual member indicates the current script, i.e. the currently
+/// active subfont.
 class SwFont
 {
     // CJK == Chinese, Japanese, Korean
