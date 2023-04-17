@@ -19,7 +19,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <ndtxt.hxx>
-#include <swdtflvr.hxx>
 #include <wrtsh.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <flyfrm.hxx>

@@ -10,7 +10,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <test/unoapi_test.hxx>
 
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>

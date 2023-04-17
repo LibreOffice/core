@@ -8,9 +8,11 @@
  */
 
 #include "rtfdocumentimpl.hxx"
+
 #include <algorithm>
 #include <memory>
 #include <string_view>
+
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
@@ -18,6 +20,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
@@ -31,7 +35,6 @@
 #include <comphelper/classids.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <svl/lngmisc.hxx>
-#include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/classificationhelper.hxx>
 #include <oox/mathml/imexport.hxx>
 #include <ooxml/resourceids.hxx>

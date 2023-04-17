@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 #include <comphelper/interfacecontainer4.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <formatcontentcontrol.hxx>

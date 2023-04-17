@@ -30,7 +30,6 @@
 #include <writer/WConnection.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <sal/log.hxx>
-#include <comphelper/servicehelper.hxx>
 
 namespace com::sun::star::text
 {

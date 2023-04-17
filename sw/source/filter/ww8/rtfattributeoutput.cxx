@@ -85,7 +85,6 @@
 #include <lineinfo.hxx>
 #include <redline.hxx>
 #include <rtf.hxx>
-#include <IDocumentSettingAccess.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <oox/mathml/imexport.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>

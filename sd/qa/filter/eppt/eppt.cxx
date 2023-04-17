@@ -12,7 +12,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
-#include <com/sun/star/util/Color.hpp>
 
 #include <test/xmldocptr.hxx>
 #include <docmodel/uno/UnoTheme.hxx>

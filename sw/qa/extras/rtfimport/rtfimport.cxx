@@ -45,7 +45,6 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/document/XDocumentInsertable.hpp>
 

@@ -29,7 +29,6 @@
 #include <itabenum.hxx>
 #include <fmtanchr.hxx>
 #include <fmtsrnd.hxx>
-#include <IDocumentContentOperations.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <fmtfsize.hxx>
 #include <fmtfollowtextflow.hxx>

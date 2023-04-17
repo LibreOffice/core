@@ -18,8 +18,6 @@
 #include <vcl/errinf.hxx>
 #include <vcl/event.hxx>
 #include <editeng/langitem.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/dispatch.hxx>
 #include <vcl/scheduler.hxx>
 #include <comphelper/propertyvalue.hxx>
 
@@ -31,7 +29,6 @@
 #include <view.hxx>
 #include <ndtxt.hxx>
 #include <swdtflvr.hxx>
-#include <cmdid.h>
 #include <unotxdoc.hxx>
 #include <UndoManager.hxx>
 #include <IDocumentRedlineAccess.hxx>

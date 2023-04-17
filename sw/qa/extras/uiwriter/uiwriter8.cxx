@@ -21,7 +21,6 @@
 #include <comphelper/propertysequence.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <frameformats.hxx>
-#include <swdtflvr.hxx>
 #include <tools/json_writer.hxx>
 #include <unotools/streamwrap.hxx>
 #include <sfx2/linkmgr.hxx>

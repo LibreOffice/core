@@ -22,7 +22,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
@@ -33,13 +32,11 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/objsh.hxx>
-#include <osl/file.hxx>
 #include <osl/thread.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
 #include <unotools/streamwrap.hxx>

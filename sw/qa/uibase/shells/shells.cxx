@@ -16,7 +16,6 @@
 
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <vcl/GraphicObject.hxx>
 #include <svx/svdpage.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/adjustitem.hxx>

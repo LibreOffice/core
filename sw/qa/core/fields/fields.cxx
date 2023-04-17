@@ -19,7 +19,6 @@
 #include <docsh.hxx>
 #include <rootfrm.hxx>
 #include <wrtsh.hxx>
-#include <ndtxt.hxx>
 
 namespace
 {

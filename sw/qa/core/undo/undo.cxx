@@ -10,8 +10,6 @@
 #include <swmodeltestbase.hxx>
 
 #include <unotools/mediadescriptor.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/dispatch.hxx>
 
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
@@ -19,8 +17,6 @@
 #include <swdtflvr.hxx>
 #include <frameformats.hxx>
 #include <fmtcntnt.hxx>
-#include <view.hxx>
-#include <cmdid.h>
 
 /// Covers sw/source/core/undo/ fixes.
 class SwCoreUndoTest : public SwModelTestBase
