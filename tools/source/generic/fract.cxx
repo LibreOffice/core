@@ -49,24 +49,36 @@ static boost::rational<sal_Int32> toRational(sal_Int32 n, sal_Int32 d)
     return boost::rational<sal_Int32>(n, d);
 }
 
+static constexpr bool isOutOfRange(sal_Int64 nNum)
+{
+    return nNum < std::numeric_limits<sal_Int32>::min()
+            || nNum > std::numeric_limits<sal_Int32>::max();
+}
+
 // Initialized by setting nNum as nominator and nDen as denominator
 // Negative values in the denominator are invalid and cause the
 // inversion of both nominator and denominator signs
 // in order to return the correct value.
 Fraction::Fraction( sal_Int64 nNum, sal_Int64 nDen ) : mnNumerator(nNum), mnDenominator(nDen)
 {
-    assert( nNum >= std::numeric_limits<sal_Int32>::min() );
-    assert( nNum <= std::numeric_limits<sal_Int32>::max( ));
-    assert( nDen >= std::numeric_limits<sal_Int32>::min() );
-    assert( nDen <= std::numeric_limits<sal_Int32>::max( ));
-    if ( nDen == 0 )
+    if ( isOutOfRange(nNum) || isOutOfRange(nDen) )
+    {
+        // tdf#143200
+        SAL_WARN("tools.fraction", "values outside of range we can represent, doing reduction, which will reduce precision");
+        do
+        {
+            mnNumerator /= 2;
+            mnDenominator /= 2;
+        } while (isOutOfRange(mnNumerator) || isOutOfRange(mnDenominator));
+    }
+    if ( mnDenominator == 0 )
     {
         mbValid = false;
         SAL_WARN( "tools.fraction", "'Fraction(" << nNum << ",0)' invalid fraction created" );
         return;
     }
-    if ((nDen == -1 && nNum == std::numeric_limits<sal_Int32>::min()) ||
-        (nNum == -1 && nDen == std::numeric_limits<sal_Int32>::min()))
+    else if ((nDen == -1 && nNum == std::numeric_limits<sal_Int32>::min()) ||
+            (nNum == -1 && nDen == std::numeric_limits<sal_Int32>::min()))
     {
         mbValid = false;
         SAL_WARN("tools.fraction", "'Fraction(" << nNum << "," << nDen << ")' invalid fraction created");
@@ -77,21 +89,9 @@ Fraction::Fraction( sal_Int64 nNum, sal_Int64 nDen ) : mnNumerator(nNum), mnDeno
 /**
  * only here to prevent passing of NaN
  */
-Fraction::Fraction( double nNum, double nDen ) : mnNumerator(sal_Int64(nNum)), mnDenominator(sal_Int64(nDen))
-{
-    assert( !std::isnan(nNum) );
-    assert( !std::isnan(nDen) );
-    assert( nNum >= std::numeric_limits<sal_Int32>::min() );
-    assert( nNum <= std::numeric_limits<sal_Int32>::max( ));
-    assert( nDen >= std::numeric_limits<sal_Int32>::min() );
-    assert( nDen <= std::numeric_limits<sal_Int32>::max( ));
-    if ( nDen == 0 )
-    {
-        mbValid = false;
-        SAL_WARN( "tools.fraction", "'Fraction(" << nNum << ",0)' invalid fraction created" );
-        return;
-    }
-}
+Fraction::Fraction( double nNum, double nDen )
+    : Fraction(sal_Int64(nNum), sal_Int64(nDen))
+{}
 
 Fraction::Fraction( double dVal )
 {
