@@ -1064,11 +1064,19 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
     auto pTextFrame = const_cast<SwTextFrame*>(rInf.GetTextFrame());
     SwTextSizeInfo aInf(pTextFrame);
     SwTextCursor aLine(pTextFrame, &aInf);
-    SwRect aStartRect;
+    SwRect aStartRect, aEndRect;
     aLine.GetCharRect(&aStartRect, nViewStart);
-    aLocation = aStartRect;
-    SwRect aEndRect;
     aLine.GetCharRect(&aEndRect, nViewEnd);
+
+    // Handling RTL text direction
+    if(rInf.GetTextFrame()->IsRightToLeft())
+    {
+        rInf.GetTextFrame()->SwitchLTRtoRTL( aStartRect );
+        rInf.GetTextFrame()->SwitchLTRtoRTL( aEndRect );
+    }
+    // TODO: handle rInf.GetTextFrame()->IsVertical()
+
+    aLocation = aStartRect;
     aLocation.Union(aEndRect);
     pDescriptor->Location = aLocation.SVRect();
 
