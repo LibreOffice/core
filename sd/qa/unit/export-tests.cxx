@@ -1468,6 +1468,14 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf152606)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xDrawPage->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf154754)
+{
+    //Without the fix in place, it would crash at export time
+    skipValidation();
+    createSdImpressDoc("odp/tdf154754.odp");
+    saveAndReload("impress8");
+}
+
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf91060)
 {
     //Without the fix in place, it would crash at import time
