@@ -208,9 +208,7 @@ void pythonInit() {
     OUString sBrandLocation("$BRAND_BASE_DIR/program");
     rtl::Bootstrap::expandMacros(sBrandLocation);
     osl::FileBase::getSystemPathFromFileURL(sBrandLocation, sBrandLocation);
-    sPath = OUStringBuffer(sPath).
-        append(static_cast<sal_Unicode>(SAL_PATHSEPARATOR)).
-        append(sBrandLocation).makeStringAndClear();
+    sPath = sPath + OUStringChar(SAL_PATHSEPARATOR) + sBrandLocation;
     osl_setEnvironment(sEnvName.pData, sPath.pData);
 #endif
 
