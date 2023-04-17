@@ -200,8 +200,8 @@ public:
     void disposeAndClear()
     {
         // hold it alive for the lifetime of this method
-        ::rtl::Reference<reference_type> aTmp(m_rInnerRef);
-        m_rInnerRef.clear(); // we should use some 'swap' method ideally ;-)
+        ::rtl::Reference<reference_type> aTmp(std::move(m_rInnerRef));
+        assert(!m_rInnerRef); // the move ctor above must take care of it
         if (aTmp.get()) {
             aTmp->disposeOnce();
         }
