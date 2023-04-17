@@ -1493,7 +1493,7 @@ bool ScXMLTableRowCellContext::IsPossibleErrorString() const
         return false;
     else if(mbNewValueType && mbErrorValue)
         return true;
-    return mbPossibleErrorCell || (mbCheckWithCompilerForError &&
+    return mbPossibleErrorCell || (mbCheckWithCompilerForError && maStringValue &&
             GetScImport().GetFormulaErrorConstant(*maStringValue) != FormulaError::NONE);
 }
 
