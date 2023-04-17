@@ -75,8 +75,7 @@ static OUString toRTTIname(OUString const& rUNOname) noexcept
     while (nPos > 0)
     {
         sal_Int32 n = rUNOname.lastIndexOf('.', nPos);
-        aRet.append(rUNOname.subView(n + 1, nPos - n - 1));
-        aRet.append('@');
+        aRet.append(OUString::Concat(rUNOname.subView(n + 1, nPos - n - 1)) + "@");
         nPos = n;
     }
     aRet.append('@');
