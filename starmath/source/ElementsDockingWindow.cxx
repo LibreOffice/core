@@ -527,7 +527,7 @@ namespace
 void SmElementsControl::addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText)
 {
     std::unique_ptr<SmNode> pNode = maParser->ParseExpression(aElementVisual);
-    VclPtr<VirtualDevice> pDevice(mpIconView->create_virtual_device());
+    ScopedVclPtr<VirtualDevice> pDevice(mpIconView->create_virtual_device());
     pDevice->SetMapMode(MapMode(SmMapUnit()));
     pDevice->SetDrawMode(DrawModeFlags::Default);
     pDevice->SetLayoutMode(vcl::text::ComplexTextLayoutFlags::Default);
