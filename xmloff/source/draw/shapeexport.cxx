@@ -1092,11 +1092,9 @@ void XMLShapeExport::seekShapes( const uno::Reference< drawing::XShapes >& xShap
         maCurrentShapesIter = maShapesInfos.find( xShapes );
         if( maCurrentShapesIter == maShapesInfos.end() )
         {
-            ImplXMLShapeExportInfoVector aNewInfoVector;
-            aNewInfoVector.resize( static_cast<ShapesInfos::size_type>(xShapes->getCount()) );
-            maShapesInfos[ xShapes ] = aNewInfoVector;
+            auto itPair = maShapesInfos.emplace( xShapes, ImplXMLShapeExportInfoVector( static_cast<ShapesInfos::size_type>(xShapes->getCount()) ) );
 
-            maCurrentShapesIter = maShapesInfos.find( xShapes );
+            maCurrentShapesIter = itPair.first;
 
             SAL_WARN_IF( maCurrentShapesIter == maShapesInfos.end(), "xmloff", "XMLShapeExport::seekShapes(): insert into stl::map failed" );
         }
