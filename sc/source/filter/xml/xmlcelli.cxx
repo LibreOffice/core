@@ -1489,10 +1489,9 @@ void ScXMLTableRowCellContext::HasSpecialCaseFormulaText()
 
 bool ScXMLTableRowCellContext::IsPossibleErrorString() const
 {
-    if(mbNewValueType && !mbErrorValue)
-        return false;
-    else if(mbNewValueType && mbErrorValue)
-        return true;
+    if(mbNewValueType)
+        return mbErrorValue;
+
     return mbPossibleErrorCell || (mbCheckWithCompilerForError && maStringValue &&
             GetScImport().GetFormulaErrorConstant(*maStringValue) != FormulaError::NONE);
 }
