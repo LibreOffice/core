@@ -910,7 +910,7 @@ void DrawingML::WriteGradientFill2(
             basegfx::ColorStops aNewColorStops;
             basegfx::ColorStops aNewAlphaStops;
 
-            // add mirrored gadients, scaled to [0.0 .. 0.5]
+            // add mirrored gradients, scaled to [0.0 .. 0.5]
             basegfx::ColorStops::const_reverse_iterator aRevCurrColor(aColorStops.rbegin());
             basegfx::ColorStops::const_reverse_iterator aRevCurrAlpha(aAlphaStops.rbegin());
 
@@ -947,7 +947,7 @@ void DrawingML::WriteGradientFill2(
         // case awt::GradientStyle_RECT:
         // case awt::GradientStyle_SQUARE:
         {
-            // all these types need the gadiens to be mirrored
+            // all these types need the gradients to be mirrored
             basegfx::utils::reverseColorStops(aColorStops);
             basegfx::utils::reverseColorStops(aAlphaStops);
 
