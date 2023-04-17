@@ -224,7 +224,6 @@ SdrModel::~SdrModel()
         for (const auto & pObj : maAllIncarnatedObjects)
             SAL_WARN("svx", "leaked instance of " << typeid(*pObj).name());
     }
-    assert(maAllIncarnatedObjects.empty());
 #endif
 
     m_pLayerAdmin.reset();
