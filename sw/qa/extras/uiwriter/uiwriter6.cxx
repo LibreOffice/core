@@ -992,8 +992,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf154771_MovingMultipleColumns)
     (void)&pWrtShell->InsertTable(TableOpt, 5, 4);
 
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
-                                                    uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xTableNames = xTablesSupplier->getTextTables();
     CPPUNIT_ASSERT(xTableNames->hasByName("Table1"));
     uno::Reference<text::XTextTable> xTable1(xTableNames->getByName("Table1"), uno::UNO_QUERY);
