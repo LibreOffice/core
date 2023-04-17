@@ -690,8 +690,7 @@ static OUString CompatDNNSS(OUString const& rDN)
         {
             if (rDN[i] == '+' || rDN[i] == ',' || rDN[i] == ';')
             {
-                buf.append('"');
-                buf.append(rDN[i]);
+                buf.append("\"" + OUStringChar(rDN[i]));
                 state = DEFAULT;
             }
             else if (rDN[i] == '\\')
