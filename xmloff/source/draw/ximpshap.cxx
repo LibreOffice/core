@@ -1532,46 +1532,46 @@ void SdXMLTextBoxShapeContext::startFastElement (sal_Int32 nElement,
         {
             if( IsXMLToken( maPresentationClass, XML_SUBTITLE ))
             {
-                // XmlShapeTypePresSubtitleShape
+                // XmlShapeType::PresSubtitleShape
                 service = "com.sun.star.presentation.SubtitleShape";
             }
             else if( IsXMLToken( maPresentationClass, XML_PRESENTATION_OUTLINE ) )
             {
-                // XmlShapeTypePresOutlinerShape
+                // XmlShapeType::PresOutlinerShape
                 service = "com.sun.star.presentation.OutlinerShape";
             }
             else if( IsXMLToken( maPresentationClass, XML_NOTES ) )
             {
-                // XmlShapeTypePresNotesShape
+                // XmlShapeType::PresNotesShape
                 service = "com.sun.star.presentation.NotesShape";
             }
             else if( IsXMLToken( maPresentationClass, XML_HEADER ) )
             {
-                // XmlShapeTypePresHeaderShape
+                // XmlShapeType::PresHeaderShape
                 service = "com.sun.star.presentation.HeaderShape";
                 bClearText = true;
             }
             else if( IsXMLToken( maPresentationClass, XML_FOOTER ) )
             {
-                // XmlShapeTypePresFooterShape
+                // XmlShapeType::PresFooterShape
                 service = "com.sun.star.presentation.FooterShape";
                 bClearText = true;
             }
             else if( IsXMLToken( maPresentationClass, XML_PAGE_NUMBER ) )
             {
-                // XmlShapeTypePresSlideNumberShape
+                // XmlShapeType::PresSlideNumberShape
                 service = "com.sun.star.presentation.SlideNumberShape";
                 bClearText = true;
             }
             else if( IsXMLToken( maPresentationClass, XML_DATE_TIME ) )
             {
-                // XmlShapeTypePresDateTimeShape
+                // XmlShapeType::PresDateTimeShape
                 service = "com.sun.star.presentation.DateTimeShape";
                 bClearText = true;
             }
             else //  IsXMLToken( maPresentationClass, XML_TITLE ) )
             {
-                // XmlShapeTypePresTitleTextShape
+                // XmlShapeType::PresTitleTextShape
                 service = "com.sun.star.presentation.TitleTextShape";
             }
             bIsPresShape = true;

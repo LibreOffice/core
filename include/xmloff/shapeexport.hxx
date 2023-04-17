@@ -67,63 +67,63 @@ namespace o3tl
 
 #define SEF_DEFAULT         XMLShapeExportFlags::POSITION|XMLShapeExportFlags::SIZE
 
-enum XmlShapeType
+enum class XmlShapeType
 {
-    XmlShapeTypeUnknown,                            // not known
+    Unknown,                            // not known
 
-    XmlShapeTypeDrawRectangleShape,                 // "com.sun.star.drawing.RectangleShape"
-    XmlShapeTypeDrawEllipseShape,                   // "com.sun.star.drawing.EllipseShape"
-    XmlShapeTypeDrawControlShape,                   // "com.sun.star.drawing.ControlShape"
-    XmlShapeTypeDrawConnectorShape,                 // "com.sun.star.drawing.ConnectorShape"
-    XmlShapeTypeDrawMeasureShape,                   // "com.sun.star.drawing.MeasureShape"
-    XmlShapeTypeDrawLineShape,                      // "com.sun.star.drawing.LineShape"
-    XmlShapeTypeDrawPolyPolygonShape,               // "com.sun.star.drawing.PolyPolygonShape"
-    XmlShapeTypeDrawPolyLineShape,                  // "com.sun.star.drawing.PolyLineShape"
-    XmlShapeTypeDrawOpenBezierShape,                // "com.sun.star.drawing.OpenBezierShape"
-    XmlShapeTypeDrawClosedBezierShape,              // "com.sun.star.drawing.ClosedBezierShape"
-    XmlShapeTypeDrawGraphicObjectShape,             // "com.sun.star.drawing.GraphicObjectShape"
-    XmlShapeTypeDrawGroupShape,                     // "com.sun.star.drawing.GroupShape"
-    XmlShapeTypeDrawTextShape,                      // "com.sun.star.drawing.TextShape"
-    XmlShapeTypeDrawOLE2Shape,                      // "com.sun.star.drawing.OLE2Shape"
-    XmlShapeTypeDrawChartShape,                     // embedded com.sun.star.chart
-    XmlShapeTypeDrawSheetShape,                     // embedded com.sun.star.sheet
-    XmlShapeTypeDrawPageShape,                      // "com.sun.star.drawing.PageShape"
-    XmlShapeTypeDrawFrameShape,                     // "com.sun.star.drawing.FrameShape"
-    XmlShapeTypeDrawCaptionShape,                   // "com.sun.star.drawing.CaptionShape"
-    XmlShapeTypeDrawAppletShape,                    // "com.sun.star.drawing.AppletShape"
-    XmlShapeTypeDrawPluginShape,                    // "com.sun.star.drawing.PlugginShape"
+    DrawRectangleShape,                 // "com.sun.star.drawing.RectangleShape"
+    DrawEllipseShape,                   // "com.sun.star.drawing.EllipseShape"
+    DrawControlShape,                   // "com.sun.star.drawing.ControlShape"
+    DrawConnectorShape,                 // "com.sun.star.drawing.ConnectorShape"
+    DrawMeasureShape,                   // "com.sun.star.drawing.MeasureShape"
+    DrawLineShape,                      // "com.sun.star.drawing.LineShape"
+    DrawPolyPolygonShape,               // "com.sun.star.drawing.PolyPolygonShape"
+    DrawPolyLineShape,                  // "com.sun.star.drawing.PolyLineShape"
+    DrawOpenBezierShape,                // "com.sun.star.drawing.OpenBezierShape"
+    DrawClosedBezierShape,              // "com.sun.star.drawing.ClosedBezierShape"
+    DrawGraphicObjectShape,             // "com.sun.star.drawing.GraphicObjectShape"
+    DrawGroupShape,                     // "com.sun.star.drawing.GroupShape"
+    DrawTextShape,                      // "com.sun.star.drawing.TextShape"
+    DrawOLE2Shape,                      // "com.sun.star.drawing.OLE2Shape"
+    DrawChartShape,                     // embedded com.sun.star.chart
+    DrawSheetShape,                     // embedded com.sun.star.sheet
+    DrawPageShape,                      // "com.sun.star.drawing.PageShape"
+    DrawFrameShape,                     // "com.sun.star.drawing.FrameShape"
+    DrawCaptionShape,                   // "com.sun.star.drawing.CaptionShape"
+    DrawAppletShape,                    // "com.sun.star.drawing.AppletShape"
+    DrawPluginShape,                    // "com.sun.star.drawing.PlugginShape"
 
-    XmlShapeTypeDraw3DSceneObject,                  // "com.sun.star.drawing.Shape3DSceneObject"
-    XmlShapeTypeDraw3DCubeObject,                   // "com.sun.star.drawing.Shape3DCubeObject"
-    XmlShapeTypeDraw3DSphereObject,                 // "com.sun.star.drawing.Shape3DSphereObject"
-    XmlShapeTypeDraw3DLatheObject,                  // "com.sun.star.drawing.Shape3DLatheObject"
-    XmlShapeTypeDraw3DExtrudeObject,                // "com.sun.star.drawing.Shape3DExtrudeObject"
+    Draw3DSceneObject,                  // "com.sun.star.drawing.Shape3DSceneObject"
+    Draw3DCubeObject,                   // "com.sun.star.drawing.Shape3DCubeObject"
+    Draw3DSphereObject,                 // "com.sun.star.drawing.Shape3DSphereObject"
+    Draw3DLatheObject,                  // "com.sun.star.drawing.Shape3DLatheObject"
+    Draw3DExtrudeObject,                // "com.sun.star.drawing.Shape3DExtrudeObject"
 
-    XmlShapeTypePresTitleTextShape,                 // "com.sun.star.presentation.TitleTextShape"
-    XmlShapeTypePresOutlinerShape,                  // "com.sun.star.presentation.OutlinerShape"
-    XmlShapeTypePresSubtitleShape,                  // "com.sun.star.presentation.SubtitleShape"
-    XmlShapeTypePresGraphicObjectShape,             // "com.sun.star.presentation.GraphicObjectShape"
-    XmlShapeTypePresPageShape,                      // "com.sun.star.presentation.PageShape"
-    XmlShapeTypePresOLE2Shape,                      // "com.sun.star.presentation.OLE2Shape"
-    XmlShapeTypePresChartShape,                     // "com.sun.star.presentation.ChartShape"
-    XmlShapeTypePresSheetShape,                     // "com.sun.star.presentation.CalcShape"
-    XmlShapeTypePresTableShape,                     // "com.sun.star.presentation.TableShape"
-    XmlShapeTypePresOrgChartShape,                  // "com.sun.star.presentation.OrgChartShape"
-    XmlShapeTypePresNotesShape,                     // "com.sun.star.presentation.NotesShape"
-    XmlShapeTypeHandoutShape,                       // "com.sun.star.presentation.HandoutShape"
+    PresTitleTextShape,                 // "com.sun.star.presentation.TitleTextShape"
+    PresOutlinerShape,                  // "com.sun.star.presentation.OutlinerShape"
+    PresSubtitleShape,                  // "com.sun.star.presentation.SubtitleShape"
+    PresGraphicObjectShape,             // "com.sun.star.presentation.GraphicObjectShape"
+    PresPageShape,                      // "com.sun.star.presentation.PageShape"
+    PresOLE2Shape,                      // "com.sun.star.presentation.OLE2Shape"
+    PresChartShape,                     // "com.sun.star.presentation.ChartShape"
+    PresSheetShape,                     // "com.sun.star.presentation.CalcShape"
+    PresTableShape,                     // "com.sun.star.presentation.TableShape"
+    PresOrgChartShape,                  // "com.sun.star.presentation.OrgChartShape"
+    PresNotesShape,                     // "com.sun.star.presentation.NotesShape"
+    HandoutShape,                       // "com.sun.star.presentation.HandoutShape"
 
-    XmlShapeTypePresHeaderShape,                    // "com.sun.star.presentation.HeaderShape"
-    XmlShapeTypePresFooterShape,                    // "com.sun.star.presentation.FooterShape"
-    XmlShapeTypePresSlideNumberShape,               // "com.sun.star.presentation.SlideNumberShape"
-    XmlShapeTypePresDateTimeShape,                  // "com.sun.star.presentation.DateTimeShape"
+    PresHeaderShape,                    // "com.sun.star.presentation.HeaderShape"
+    PresFooterShape,                    // "com.sun.star.presentation.FooterShape"
+    PresSlideNumberShape,               // "com.sun.star.presentation.SlideNumberShape"
+    PresDateTimeShape,                  // "com.sun.star.presentation.DateTimeShape"
 
-    XmlShapeTypeDrawCustomShape,                    // "com.sun.star.drawing.CustomShape"
-    XmlShapeTypeDrawMediaShape,                     // "com.sun.star.drawing.MediaShape"
-    XmlShapeTypePresMediaShape,                     // "com.sun.star.presentation.MediaShape"
+    DrawCustomShape,                    // "com.sun.star.drawing.CustomShape"
+    DrawMediaShape,                     // "com.sun.star.drawing.MediaShape"
+    PresMediaShape,                     // "com.sun.star.presentation.MediaShape"
 
-    XmlShapeTypeDrawTableShape,                     // "com.sun.star.drawing.TableShape"
+    DrawTableShape,                     // "com.sun.star.drawing.TableShape"
 
-    XmlShapeTypeNotYetSet
+    NotYetSet
 };
 
 /** caches style and type info after a collectShapeAutostyle for later use in exportShape */
@@ -136,7 +136,7 @@ struct ImplXMLShapeExportInfo
 
     css::uno::Reference< css::drawing::XShape > xCustomShapeReplacement;
 
-    ImplXMLShapeExportInfo() : mnFamily( XmlStyleFamily::SD_GRAPHICS_ID ), meShapeType( XmlShapeTypeNotYetSet ) {}
+    ImplXMLShapeExportInfo() : mnFamily( XmlStyleFamily::SD_GRAPHICS_ID ), meShapeType( XmlShapeType::NotYetSet ) {}
 };
 
 /** a vector for shape style and type cache information */
