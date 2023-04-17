@@ -508,7 +508,7 @@ struct ElementData
 void SmElementsControl::addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText)
 {
     std::unique_ptr<SmNode> pNode = maParser->ParseExpression(aElementVisual);
-    VclPtr<VirtualDevice> pDevice(mpIconView->create_virtual_device());
+    ScopedVclPtr<VirtualDevice> pDevice(mpIconView->create_virtual_device());
     pDevice->SetTextRenderModeForResolutionIndependentLayout(true);
     pDevice->SetMapMode(MapMode(MapUnit::Map100thMM));
     pDevice->SetDrawMode(DrawModeFlags::Default);
