@@ -44,6 +44,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,boost_locale,\
 	UnpackedTarball/boost/libs/locale/src/boost/locale/std/std_backend \
 	UnpackedTarball/boost/libs/locale/src/boost/locale/util/codecvt_converter \
 	UnpackedTarball/boost/libs/locale/src/boost/locale/util/default_locale \
+	UnpackedTarball/boost/libs/locale/src/boost/locale/util/encoding \
 	UnpackedTarball/boost/libs/locale/src/boost/locale/util/gregorian \
 	UnpackedTarball/boost/libs/locale/src/boost/locale/util/info \
 	UnpackedTarball/boost/libs/locale/src/boost/locale/util/locale_data \

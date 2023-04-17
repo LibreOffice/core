@@ -1,13 +1,11 @@
 --- foo/misc/boost.orig/libs/locale/src/util/locale_data.cpp.new	2022-02-17 22:41:27.730549039 +0000
 +++ foo/misc/boost/libs/locale/src/boost/locale/util/locale_data.cpp
-@@ -18,8 +18,8 @@
-         language = "C";
-         country.clear();
-         variant.clear();
--        encoding = "us-ascii";
--        utf8 = false;
-+        encoding = "UTF-8";
-+        utf8 = true;
-         parse_from_lang(locale_name);
+@@ -50,6 +50,8 @@
+     bool locale_data::parse(const std::string& locale_name)
+     {
+         reset();
++        encoding_ = "UTF-8";
++        utf8_ = true;
+         return parse_from_lang(locale_name);
      }
  
