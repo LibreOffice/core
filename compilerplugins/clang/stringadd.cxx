@@ -160,10 +160,16 @@ StringAdd::VarDeclAndSummands StringAdd::findAssignOrAdd(Stmt const* stmt)
                     // ignore the constructor that gives the buffer a default size
                     if (auto cxxConstructor = dyn_cast<CXXConstructExpr>(varDeclLHS->getInit()))
                         if (auto constructorDecl = cxxConstructor->getConstructor())
-                            if (constructorDecl->getNumParams() == 1
-                                && loplugin::TypeCheck(constructorDecl->getParamDecl(0)->getType())
-                                       .Typedef("sal_Int32")
-                                       .GlobalNamespace())
+                            if ((constructorDecl->getNumParams() == 1
+                                 && loplugin::TypeCheck(constructorDecl->getParamDecl(0)->getType())
+                                        .Typedef("sal_Int32")
+                                        .GlobalNamespace())
+                                || (constructorDecl->getNumParams() == 2
+                                    && constructorDecl->getParamDecl(0)->getType()->isIntegralType(
+                                           compiler.getASTContext())
+                                    && constructorDecl->getParamDecl(1)
+                                           ->getType()
+                                           ->isSpecificBuiltinType(BuiltinType::Int)))
                                 return {};
                 }
                 return { varDeclLHS, (isCompileTimeConstant(varDeclLHS->getInit())

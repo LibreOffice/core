@@ -297,4 +297,19 @@ void f1()
 }
 }
 
+namespace test14
+{
+void f1()
+{
+    OUStringBuffer b(16);
+    b.append("...");
+}
+
+void f2(long long n)
+{
+    OUStringBuffer b(n);
+    b.append("...");
+}
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
