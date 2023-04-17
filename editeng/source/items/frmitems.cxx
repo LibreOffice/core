@@ -1388,6 +1388,8 @@ bool SvxGutterRightMarginItem::QueryValue(uno::Any& /*rVal*/, sal_uInt8 nMemberI
             // SfxDispatchController_Impl::StateChanged calls this with hardcoded 0 triggering this; there used to be a MID_LR_MARGIN 0 but what type would it have?
             OSL_FAIL("unknown MemberId");
     }
+#else
+    (void) nMemberId;
 #endif
     return bRet;
 }
@@ -1406,6 +1408,8 @@ bool SvxGutterRightMarginItem::PutValue(const uno::Any& /*rVal*/, sal_uInt8 nMem
             OSL_FAIL("unknown MemberId");
             return false;
     }
+#else
+    (void) nMemberId;
 #endif
     return true;
 }
