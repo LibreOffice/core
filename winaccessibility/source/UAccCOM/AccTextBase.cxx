@@ -195,8 +195,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_attributes(long offset, long
         {
             strAttrs.append(';');
         }
-        strAttrs.append(pValue.Name);
-        strAttrs.append(':');
+        strAttrs.append(pValue.Name + ":");
 
         if (pValue.Name == "CharBackColor" ||
                 pValue.Name == "CharColor" ||

@@ -2551,25 +2551,17 @@ OUString CMAccessible::get_StringFromAny(Any const & pAny)
                 OUStringBuffer buf;
                 for (const css::style::TabStop& rSingleVal : val)
                 {
-                    buf.append("Position=");
-                    buf.append(rSingleVal.Position);
-                    buf.append(",TabAlign=");
-                    buf.append(sal_Int32(rSingleVal.Alignment));
-                    buf.append(",");
-
-                    buf.append("DecimalChar=");
+                    buf.append(
+                        "Position=" + OUString::number(rSingleVal.Position) + ",TabAlign="
+                        + OUString::number(sal_Int32(rSingleVal.Alignment)) + ",DecimalChar=");
                     if (rSingleVal.DecimalChar==';' || rSingleVal.DecimalChar == ':' || rSingleVal.DecimalChar == ',' ||
                         rSingleVal.DecimalChar == '=' || rSingleVal.DecimalChar == '\\')
                         buf.append('\\');
-                    buf.append(rSingleVal.DecimalChar);
-                    buf.append(",");
-
-                    buf.append("FillChar=");
+                    buf.append(OUStringChar(rSingleVal.DecimalChar) + ",FillChar=");
                     if (rSingleVal.FillChar==';' || rSingleVal.FillChar == ':' || rSingleVal.FillChar == ',' ||
                         rSingleVal.FillChar == '=' || rSingleVal.FillChar == '\\')
                         buf.append('\\');
-                    buf.append(rSingleVal.FillChar);
-                    buf.append(",");
+                    buf.append(OUStringChar(rSingleVal.FillChar) + ",");
                 }
                 return buf.makeStringAndClear();
             }
@@ -2634,24 +2626,19 @@ OUString CMAccessible::get_String4Numbering(const Any& pAny, sal_Int16 numbering
         Any aAny = pXIndex->getByIndex(numberingLevel);
         Sequence< css::beans::PropertyValue > aProps;
         aAny >>= aProps;
-        OUStringBuffer buf("Numbering:NumberingLevel=");
-        buf.append(sal_Int32(numberingLevel));
-        buf.append(',');
+        OUStringBuffer buf("Numbering:NumberingLevel=" + OUString::number(numberingLevel) + ",");
         for (const css::beans::PropertyValue& rProp : aProps)
         {
             if( (rProp.Name == "BulletChar" ) ||
                 (rProp.Name == "NumberingType" ))
             {
-                buf.append(rProp.Name);
-                buf.append('=');
+                buf.append(rProp.Name + "=");
                 auto const pTemp = CMAccessible::get_StringFromAny(rProp.Value);
-                buf.append(pTemp);
-                buf.append(',');
+                buf.append(pTemp + ",");
 
                 if (rProp.Name == "NumberingType" && !numberingPrefix.empty())
                 {
-                    buf.append("NumberingPrefix=");
-                    buf.append(numberingPrefix);
+                    buf.append(OUString::Concat("NumberingPrefix=") + numberingPrefix);
                 }
             }
         }
