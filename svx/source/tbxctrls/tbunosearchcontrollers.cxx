@@ -60,6 +60,7 @@
 #include <svx/labelitemwindow.hxx>
 #include <svx/srchdlg.hxx>
 #include <vcl/event.hxx>
+#include <unotools/viewoptions.hxx>
 
 #include <findtextfield.hxx>
 
@@ -222,17 +223,15 @@ FindTextFieldControl::FindTextFieldControl( vcl::Window* pParent,
 
 void FindTextFieldControl::Remember_Impl(const OUString& rStr)
 {
-    const sal_Int32 nCount = m_xWidget->get_count();
+    if (rStr.isEmpty())
+        return;
 
-    for (sal_Int32 i=0; i<nCount; ++i)
-    {
-        if (rStr == m_xWidget->get_text(i))
-            return;
-    }
-
-    if (nCount == m_nRememberSize)
+    // tdf#154818 - rearrange the search items
+    const auto nPos = m_xWidget->find_text(rStr);
+    if (nPos != -1)
+        m_xWidget->remove(nPos);
+    else if (m_xWidget->get_count() >= m_nRememberSize)
         m_xWidget->remove(m_nRememberSize - 1);
-
     m_xWidget->insert_text(0, rStr);
 }
 
@@ -261,10 +260,17 @@ void FindTextFieldControl::SetTextToSelected_Impl()
         m_xWidget->set_entry_text(aString);
         m_aChangeHdl.Call(*m_xWidget);
     }
-    else if (get_count() > 0)
+    else
     {
-        // Else, prepopulate with last search word (fdo#84256)
-        m_xWidget->set_entry_text(m_xWidget->get_text(0));
+        // tdf#154818 - reuse last search string
+        SvtViewOptions aDlgOpt(EViewType::Dialog, m_xWidget->get_help_id());
+        if (aDlgOpt.Exists())
+        {
+            css::uno::Any aUserItem = aDlgOpt.GetUserItem("UserItem");
+            aUserItem >>= aString;
+            // prepopulate with last search word (fdo#84256)
+            m_xWidget->set_entry_text(aString);
+        }
     }
 }
 
@@ -330,7 +336,11 @@ IMPL_LINK(FindTextFieldControl, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
 
 void FindTextFieldControl::ActivateFind(bool bShift)
 {
-    Remember_Impl(m_xWidget->get_active_text());
+    // tdf#154818 - remember last search string
+    const OUString aLastSearchString = m_xWidget->get_active_text();
+    SvtViewOptions aDlgOpt(EViewType::Dialog, m_xWidget->get_help_id());
+    aDlgOpt.SetUserItem("UserItem", css::uno::Any(aLastSearchString));
+    Remember_Impl(aLastSearchString);
 
     vcl::Window* pWindow = GetParent();
     ToolBox* pToolBox = static_cast<ToolBox*>(pWindow);

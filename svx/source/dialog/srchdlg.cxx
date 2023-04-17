@@ -1591,20 +1591,22 @@ void SvxSearchDialog::Remember_Impl( const OUString &rStr, bool _bSearch )
     std::vector<OUString>* pArr = _bSearch ? &aSearchStrings : &aReplaceStrings;
     weld::ComboBox* pListBox = _bSearch ? m_xSearchLB.get() : m_xReplaceLB.get();
 
-    // ignore identical strings
-    if (std::find(pArr->begin(), pArr->end(), rStr) != pArr->end())
-        return;
+    // tdf#154818 - rearrange the search items
+    const auto nPos = pListBox->find_text(rStr);
+    if (nPos != -1)
+    {
+        pListBox->remove(nPos);
+        pArr->erase(pArr->begin() + nPos);
+    }
+    else if (pListBox->get_count() >= nRememberSize)
+    {
+        // delete oldest entry at maximum occupancy (ListBox and Array)
+        pListBox->remove(nRememberSize - 1);
+        pArr->erase(pArr->begin() + nRememberSize - 1);
+    }
 
     pArr->insert(pArr->begin(), rStr);
     pListBox->insert_text(0, rStr);
-
-    // delete oldest entry at maximum occupancy (ListBox and Array)
-    size_t nArrSize = pArr->size();
-    if (nArrSize > nRememberSize)
-    {
-        pListBox->remove(nArrSize - 1);
-        pArr->erase(pArr->begin() + nArrSize - 1);
-    }
 }
 
 void SvxSearchDialog::TemplatesChanged_Impl( SfxStyleSheetBasePool& rPool )
