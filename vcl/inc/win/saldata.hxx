@@ -62,11 +62,11 @@ class SkiaControlsCache;
 
 struct HDCCache
 {
-    HDC         mhDC = 0;
-    HPALETTE    mhDefPal = 0;
-    HBITMAP     mhDefBmp = 0;
-    HBITMAP     mhSelBmp = 0;
-    HBITMAP     mhActBmp = 0;
+    HDC         mhDC = nullptr;
+    HPALETTE    mhDefPal = nullptr;
+    HBITMAP     mhDefBmp = nullptr;
+    HBITMAP     mhSelBmp = nullptr;
+    HBITMAP     mhActBmp = nullptr;
 };
 
 struct SalIcon
