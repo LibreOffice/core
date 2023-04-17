@@ -22,6 +22,7 @@
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <shellio.hxx>
 
@@ -39,7 +40,8 @@ protected:
 
 /// The physical access to the RTF document (for writing).
 class RtfExportFilter final
-    : public cppu::WeakImplHelper<css::document::XFilter, css::document::XExporter>
+    : public cppu::WeakImplHelper<css::document::XFilter, css::document::XExporter,
+                                  css::lang::XServiceInfo>
 {
     css::uno::Reference<css::uno::XComponentContext> m_xCtx;
     css::uno::Reference<css::lang::XComponent> m_xSrcDoc;
@@ -57,6 +59,10 @@ public:
     // XExporter
     void SAL_CALL
     setSourceDocument(const css::uno::Reference<css::lang::XComponent>& xDoc) override;
+
+    OUString SAL_CALL getImplementationName() override;
+    sal_Bool SAL_CALL supportsService(OUString const& ServiceName) override;
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     Writer& GetWriter() { return m_aWriter; }
 };

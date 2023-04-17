@@ -24,6 +24,7 @@
 #include <vcl/bitmapex.hxx>
 #include <sdpage.hxx>
 #include <cppcanvas/vclfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <osl/diagnose.h>
 
@@ -89,6 +90,18 @@ void SAL_CALL PresenterPreviewCache::initialize (const Sequence<Any>& rArguments
 {
     if (rArguments.hasElements())
         throw RuntimeException();
+}
+
+OUString PresenterPreviewCache::getImplementationName() {
+    return "com.sun.star.comp.Draw.PresenterPreviewCache";
+}
+
+sal_Bool PresenterPreviewCache::supportsService(OUString const & ServiceName) {
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> PresenterPreviewCache::getSupportedServiceNames() {
+    return {"com.sun.star.drawing.PresenterPreviewCache"};
 }
 
 //----- XSlidePreviewCache ----------------------------------------------------

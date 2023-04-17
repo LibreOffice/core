@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/outdev.hxx>
 
 #include "outdevholder.hxx"
@@ -94,6 +95,18 @@ namespace vclcanvas
     OUString SAL_CALL Canvas::getServiceName(  )
     {
         return "com.sun.star.rendering.Canvas.VCL";
+    }
+
+    OUString Canvas::getImplementationName() {
+        return "com.sun.star.comp.rendering.Canvas.VCL";
+    }
+
+    sal_Bool Canvas::supportsService(OUString const & ServiceName) {
+        return cppu::supportsService(this, ServiceName);
+    }
+
+    css::uno::Sequence<OUString> Canvas::getSupportedServiceNames() {
+        return {getServiceName()};
     }
 
     bool Canvas::repaint( const GraphicObjectSharedPtr& rGrf,

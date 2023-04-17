@@ -27,6 +27,7 @@
 #include <vcl/svapp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/awt/ImageStatus.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 
@@ -176,6 +177,7 @@ css::uno::Any ImageProducer::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
                                         static_cast< css::lang::XInitialization* >(this),
+                                        static_cast< css::lang::XServiceInfo* >(this),
                                         static_cast< css::awt::XImageProducer* >(this) );
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
@@ -479,6 +481,18 @@ void ImageProducer::initialize( const css::uno::Sequence< css::uno::Any >& aArgu
             SetImage( aURL );
         }
     }
+}
+
+OUString ImageProducer::getImplementationName() {
+    return "com.sun.star.form.ImageProducer";
+}
+
+sal_Bool ImageProducer::supportsService(OUString const & ServiceName) {
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> ImageProducer::getSupportedServiceNames() {
+    return {"com.sun.star.awt.ImageProducer"};
 }
 
 

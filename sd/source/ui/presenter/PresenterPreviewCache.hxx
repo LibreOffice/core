@@ -21,6 +21,7 @@
 
 #include <com/sun/star/drawing/XSlidePreviewCache.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <tools/gen.hxx>
 #include <comphelper/compbase.hxx>
 #include <memory>
@@ -31,6 +32,7 @@ namespace sd::presenter {
 
 typedef comphelper::WeakComponentImplHelper<
     css::lang::XInitialization,
+    css::lang::XServiceInfo,
     css::drawing::XSlidePreviewCache
 > PresenterPreviewCacheInterfaceBase;
 
@@ -51,6 +53,10 @@ public:
         preview cache can be provided via methods.
     */
     virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments) override;
+
+    OUString SAL_CALL getImplementationName() override;
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XSlidePreviewCache
 

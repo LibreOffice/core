@@ -23,10 +23,12 @@
 #include <set>
 
 #include <com/sun/star/configuration/XUpdate.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
@@ -50,7 +52,7 @@ std::set< OUString > seqToSet(
 }
 
 class Service:
-    public cppu::WeakImplHelper< css::configuration::XUpdate >
+    public cppu::WeakImplHelper< css::configuration::XUpdate, css::lang::XServiceInfo >
 {
 public:
     explicit Service(const css::uno::Reference< css::uno::XComponentContext >& context):
@@ -78,6 +80,18 @@ private:
         OUString const & fileUri,
         css::uno::Sequence< OUString > const & includedPaths,
         css::uno::Sequence< OUString > const & excludedPaths) override;
+
+    OUString SAL_CALL getImplementationName() override {
+        return "com.sun.star.comp.configuration.Update";
+    }
+
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override {
+        return cppu::supportsService(this, ServiceName);
+    }
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override {
+        return {"com.sun.star.configuration.Update_Service"};
+    }
 
     std::shared_ptr<osl::Mutex> lock_;
     css::uno::Reference< css::uno::XComponentContext > context_;

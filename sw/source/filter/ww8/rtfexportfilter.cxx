@@ -25,6 +25,7 @@
 #include <unotxdoc.hxx>
 #include <viewsh.hxx>
 
+#include <cppuhelper/supportsservice.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
@@ -93,6 +94,18 @@ void RtfExportFilter::cancel() {}
 void RtfExportFilter::setSourceDocument(const uno::Reference<lang::XComponent>& xDoc)
 {
     m_xSrcDoc = xDoc;
+}
+
+OUString RtfExportFilter::getImplementationName() { return "com.sun.star.comp.Writer.RtfExport"; }
+
+sal_Bool RtfExportFilter::supportsService(OUString const& ServiceName)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> RtfExportFilter::getSupportedServiceNames()
+{
+    return { "com.sun.star.comp.Writer.RtfExport" };
 }
 
 // UNO helpers

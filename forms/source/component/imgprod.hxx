@@ -23,6 +23,7 @@
 #include <com/sun/star/awt/XImageConsumer.hpp>
 #include <com/sun/star/awt/XImageProducer.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/weak.hxx>
 #include <vcl/graph.hxx>
 #include <memory>
@@ -36,6 +37,7 @@ namespace com::sun::star::io { class XInputStream; }
 
 class ImageProducer :   public css::awt::XImageProducer,
                         public css::lang::XInitialization,
+                        public css::lang::XServiceInfo,
                         public ::cppu::OWeakObject
 {
 private:
@@ -84,6 +86,10 @@ public:
 
     // css::lang::XInitialization
     void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+
+    OUString SAL_CALL getImplementationName() override;
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 };
 
