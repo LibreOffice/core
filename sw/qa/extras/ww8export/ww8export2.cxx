@@ -332,42 +332,36 @@ DECLARE_WW8EXPORT_TEST(testTdf99197_defaultLTR, "tdf99197_defaultLTR.doc")
         text::WritingMode2::LR_TB, getProperty<sal_Int16>(getParagraph(2), "WritingMode") );
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf107773, "tdf107773.doc")
-{
-    // This was 1, multi-page table was imported as a floating one.
-    CPPUNIT_ASSERT_EQUAL(0, getShapes());
-
-    // tdf#80635 - transfer the float orientation to the table.
-    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
-    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Horizontal Orientation", text::HoriOrientation::CENTER, getProperty<sal_Int16>(xTable, "HoriOrient"));
-}
-
-CPPUNIT_TEST_FIXTURE(Test, testTdf107773SplitFly)
+CPPUNIT_TEST_FIXTURE(Test, testTdf107773)
 {
     SwModelTestBase::FlySplitGuard aGuard;
 
+    auto verify = [this]() {
+        // This failed, multi-page table was imported as a non-split frame.
+        SwDoc* pDoc = getSwDoc();
+        SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+        auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+        CPPUNIT_ASSERT(pPage1);
+        // pPage1 has no sorted (floating) objections.
+        CPPUNIT_ASSERT(pPage1->GetSortedObjs());
+        const SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
+        auto pPage1Fly = dynamic_cast<SwFlyAtContentFrame*>(rPage1Objs[0]);
+        CPPUNIT_ASSERT(pPage1Fly);
+        auto pTab1 = dynamic_cast<SwTabFrame*>(pPage1Fly->GetLower());
+        CPPUNIT_ASSERT(pTab1);
+        // This failed, the split fly containing a table was exported back to DOC as shape+table,
+        // which can't split.
+        CPPUNIT_ASSERT(pTab1->HasFollow());
+
+        // tdf#80635 - assert the horizontal orientation.
+        const SwFormatHoriOrient& rFormatHoriOrient = pPage1Fly->GetFormat()->GetHoriOrient();
+        CPPUNIT_ASSERT_EQUAL(css::text::HoriOrientation::CENTER, rFormatHoriOrient.GetHoriOrient());
+    };
     createSwDoc("tdf107773.doc");
-
-    // This failed, multi-page table was imported as a non-split frame.
-    SwDoc* pDoc = getSwDoc();
-    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
-    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
-    CPPUNIT_ASSERT(pPage1);
-    // pPage1 has no sorted (floating) objections.
-    CPPUNIT_ASSERT(pPage1->GetSortedObjs());
-    const SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
-    auto pPage1Fly = dynamic_cast<SwFlyAtContentFrame*>(rPage1Objs[0]);
-    CPPUNIT_ASSERT(pPage1Fly);
-    auto pTab1 = dynamic_cast<SwTabFrame*>(pPage1Fly->GetLower());
-    CPPUNIT_ASSERT(pTab1);
-    CPPUNIT_ASSERT(pTab1->HasFollow());
-
-    // tdf#80635 - assert the horizontal orientation.
-    const SwFormatHoriOrient& rFormatHoriOrient = pPage1Fly->GetFormat()->GetHoriOrient();
-    CPPUNIT_ASSERT_EQUAL(css::text::HoriOrientation::CENTER, rFormatHoriOrient.GetHoriOrient());
+    verify();
+    reload(mpFilter, "tdf107773.doc");
+    verify();
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf112074_RTLtableJustification, "tdf112074_RTLtableJustification.doc")
