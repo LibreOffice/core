@@ -21,6 +21,7 @@
 #include <ado/Awrapado.hxx>
 #include <ado/Awrapadox.hxx>
 #include <comphelper/types.hxx>
+#include <o3tl/string_view.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <systools/win32/oleauto.hxx>
@@ -1619,7 +1620,7 @@ ADORecordset* WpADOConnection::getIndexInfo(
 
 ADORecordset* WpADOConnection::getTablePrivileges( const css::uno::Any& catalog,
                                                   const OUString& schemaPattern,
-                                                  const OUString& tableNamePattern )
+                                                  std::u16string_view tableNamePattern )
 {
     SAFEARRAYBOUND rgsabound[1];
     SAFEARRAY *psa = nullptr;
@@ -1639,7 +1640,7 @@ ADORecordset* WpADOConnection::getTablePrivileges( const css::uno::Any& catalog,
         varCriteria[nPos].setString(schemaPattern);
     SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
 
-    if(tableNamePattern.toChar() != '%')
+    if(!o3tl::starts_with(tableNamePattern, u"%"))
         varCriteria[nPos].setString(tableNamePattern);
     SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
 
@@ -1714,7 +1715,7 @@ ADORecordset* WpADOConnection::getCrossReference( const css::uno::Any& primaryCa
 
 ADORecordset* WpADOConnection::getProcedures( const css::uno::Any& catalog,
                                                   const OUString& schemaPattern,
-                                                  const OUString& procedureNamePattern )
+                                                  std::u16string_view procedureNamePattern )
 {
     SAFEARRAYBOUND rgsabound[1];
     SAFEARRAY *psa = nullptr;
@@ -1734,7 +1735,7 @@ ADORecordset* WpADOConnection::getProcedures( const css::uno::Any& catalog,
         varCriteria[nPos].setString(schemaPattern);
     SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
 
-    if(procedureNamePattern.toChar() != '%')
+    if(!o3tl::starts_with(procedureNamePattern, u"%"))
         varCriteria[nPos].setString(procedureNamePattern);
     SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
 
@@ -1753,8 +1754,8 @@ ADORecordset* WpADOConnection::getProcedures( const css::uno::Any& catalog,
 
 ADORecordset* WpADOConnection::getProcedureColumns( const css::uno::Any& catalog,
                                                   const OUString& schemaPattern,
-                                                  const OUString& procedureNamePattern,
-                                                  const OUString& columnNamePattern )
+                                                  std::u16string_view procedureNamePattern,
+                                                  std::u16string_view columnNamePattern )
 {
     // Create elements used in the array
     SAFEARRAYBOUND rgsabound[1];
@@ -1775,11 +1776,11 @@ ADORecordset* WpADOConnection::getProcedureColumns( const css::uno::Any& catalog
         varCriteria[nPos].setString(schemaPattern);
     SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
 
-    if(procedureNamePattern.toChar() != '%')
+    if(!o3tl::starts_with(procedureNamePattern, u"%"))
         varCriteria[nPos].setString(procedureNamePattern);
     SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
 
-    if(columnNamePattern.toChar() != '%')
+    if(!o3tl::starts_with(columnNamePattern, u"%"))
         varCriteria[nPos].setString(columnNamePattern);
     SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// COLUMN_NAME
 
@@ -1798,7 +1799,7 @@ ADORecordset* WpADOConnection::getProcedureColumns( const css::uno::Any& catalog
 
 ADORecordset* WpADOConnection::getTables( const css::uno::Any& catalog,
                                                   const OUString& schemaPattern,
-                                                  const OUString& tableNamePattern,
+                                                  std::u16string_view tableNamePattern,
                                                   const css::uno::Sequence< OUString >& types )
 {
     // Create elements used in the array
@@ -1815,7 +1816,7 @@ ADORecordset* WpADOConnection::getTables( const css::uno::Any& catalog,
         varCriteria[nPos].setString(schemaPattern);
 
     ++nPos;
-    if(tableNamePattern.toChar() != '%')
+    if(!o3tl::starts_with(tableNamePattern, u"%"))
         varCriteria[nPos].setString(tableNamePattern);
 
     ++nPos;
@@ -1861,7 +1862,7 @@ ADORecordset* WpADOConnection::getTables( const css::uno::Any& catalog,
 
 ADORecordset* WpADOConnection::getColumns( const css::uno::Any& catalog,
                                                   const OUString& schemaPattern,
-                                                  const OUString& tableNamePattern,
+                                                  std::u16string_view tableNamePattern,
                                                   std::u16string_view columnNamePattern )
 {
     // Create elements used in the array
@@ -1883,7 +1884,7 @@ ADORecordset* WpADOConnection::getColumns( const css::uno::Any& catalog,
         varCriteria[nPos].setString(schemaPattern);
     SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
 
-    if(tableNamePattern.toChar() != '%')
+    if(!o3tl::starts_with(tableNamePattern, u"%"))
         varCriteria[nPos].setString(tableNamePattern);
     SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
 
