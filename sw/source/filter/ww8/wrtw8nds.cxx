@@ -99,6 +99,7 @@
 
 #include <ndgrf.hxx>
 #include <ndole.hxx>
+#include <formatflysplit.hxx>
 
 #include <cstdio>
 
@@ -3464,7 +3465,21 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const ww8::Frame& rFormat, const P
     if (bUseEscher)
     {
         // write as escher
-        m_rWW8Export.AppendFlyInFlys(rFormat, rNdTopLeft);
+        if (rFrameFormat.GetFlySplit().GetValue())
+        {
+            // The frame can split: this was originally from a floating table, write it back as
+            // such.
+            const SwNodeIndex* pNodeIndex = rFrameFormat.GetContent().GetContentIdx();
+            SwNodeOffset nStt = pNodeIndex ? pNodeIndex->GetIndex() + 1 : SwNodeOffset(0);
+            SwNodeOffset nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : SwNodeOffset(0);
+            m_rWW8Export.SaveData(nStt, nEnd);
+            GetExport().WriteText();
+            m_rWW8Export.RestoreData();
+        }
+        else
+        {
+            m_rWW8Export.AppendFlyInFlys(rFormat, rNdTopLeft);
+        }
     }
     else
     {

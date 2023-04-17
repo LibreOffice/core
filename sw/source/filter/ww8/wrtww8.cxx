@@ -87,6 +87,7 @@
 #include <strings.hrc>
 #include <fmtline.hxx>
 #include <fmtfsize.hxx>
+#include <formatflysplit.hxx>
 #include "sprmids.hxx"
 
 #include <comphelper/sequenceashashmap.hxx>
@@ -2297,6 +2298,114 @@ void WW8AttributeOutput::TableSpacing(ww8::WW8TableNodeInfoInner::Pointer_t pTab
     }
 }
 
+void WW8AttributeOutput::TablePositioning(SwFrameFormat* pFlyFormat)
+{
+    if (!pFlyFormat || !pFlyFormat->GetFlySplit().GetValue())
+    {
+        return;
+    }
+
+    sal_uInt8 nPcVert = 0;
+    switch (pFlyFormat->GetVertOrient().GetRelationOrient())
+    {
+        case text::RelOrientation::PAGE_PRINT_AREA:
+            // relative to margin
+            nPcVert = 0;
+            break;
+        case text::RelOrientation::PAGE_FRAME:
+            // relative to page
+            nPcVert = 1;
+            break;
+        default:
+            // text::RelOrientation::FRAME
+            // relative to text
+            nPcVert = 2;
+            break;
+    }
+    sal_uInt8 nPcHorz = 0;
+    switch (pFlyFormat->GetHoriOrient().GetRelationOrient())
+    {
+        case text::RelOrientation::FRAME:
+            // relative to column
+            nPcHorz = 0;
+            break;
+        case text::RelOrientation::PAGE_PRINT_AREA:
+            // relative to margin
+            nPcHorz = 1;
+            break;
+        default:
+            // text::RelOrientation::PAGE_FRAME
+            // relative to page
+            nPcHorz = 2;
+            break;
+    }
+    sal_uInt8 nTPc = (nPcVert << 4) | (nPcHorz << 6);
+    m_rWW8Export.InsUInt16(NS_sprm::TPc::val);
+    m_rWW8Export.m_pO->push_back(nTPc);
+
+    // Similar to WW8AttributeOutput::FormatHorizOrientation(), but for tables.
+    sal_Int16 nTDxaAbs = 0;
+    switch (pFlyFormat->GetHoriOrient().GetHoriOrient())
+    {
+        case text::HoriOrientation::LEFT:
+            // left
+            nTDxaAbs = 0;
+            break;
+        case text::HoriOrientation::CENTER:
+            // centered
+            nTDxaAbs = -4;
+            break;
+        case text::HoriOrientation::RIGHT:
+            // right
+            nTDxaAbs = -8;
+            break;
+        default:
+            nTDxaAbs = pFlyFormat->GetHoriOrient().GetPos();
+            break;
+    }
+    m_rWW8Export.InsUInt16(NS_sprm::TDxaAbs::val);
+    m_rWW8Export.InsInt16(nTDxaAbs);
+
+    // Similar to WW8AttributeOutput::FormatVertOrientation(), but for tables.
+    sal_Int16 nTDyaAbs = 0;
+    switch (pFlyFormat->GetVertOrient().GetVertOrient())
+    {
+        case text::VertOrientation::TOP:
+            // up
+            nTDyaAbs = -4;
+            break;
+        case text::VertOrientation::CENTER:
+            // centered
+            nTDyaAbs = -8;
+            break;
+        case text::VertOrientation::BOTTOM:
+            // down
+            nTDyaAbs = -12;
+            break;
+        default:
+            nTDyaAbs = pFlyFormat->GetVertOrient().GetPos();
+            break;
+    }
+    m_rWW8Export.InsUInt16(NS_sprm::TDyaAbs::val);
+    m_rWW8Export.InsInt16(nTDyaAbs);
+
+    // Similar to WW8AttributeOutput::FormatULSpace(), but for tables.
+    sal_uInt16 nDyaFromText = pFlyFormat->GetULSpace().GetUpper();
+    m_rWW8Export.InsUInt16(NS_sprm::TDyaFromText::val);
+    m_rWW8Export.InsUInt16(nDyaFromText);
+    sal_uInt16 nDyaFromTextBottom = pFlyFormat->GetULSpace().GetLower();
+    m_rWW8Export.InsUInt16(NS_sprm::TDyaFromTextBottom::val);
+    m_rWW8Export.InsUInt16(nDyaFromTextBottom);
+
+    // Similar to WW8AttributeOutput::FormatLRSpace(), but for tables.
+    sal_uInt16 nDxaFromText = pFlyFormat->GetLRSpace().GetLeft();
+    m_rWW8Export.InsUInt16(NS_sprm::TDxaFromText::val);
+    m_rWW8Export.InsUInt16(nDxaFromText);
+    sal_uInt16 nDxaFromTextRight = pFlyFormat->GetLRSpace().GetRight();
+    m_rWW8Export.InsUInt16(NS_sprm::TDxaFromTextRight::val);
+    m_rWW8Export.InsUInt16(nDxaFromTextRight);
+}
+
 void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
 {
     const SwTable * pTable = pTableTextNodeInfoInner->getTable();
@@ -2426,6 +2535,9 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
         m_rWW8Export.m_pO->push_back( sal_uInt8/*ftsPercent*/ (2) );
         m_rWW8Export.InsUInt16( o3tl::narrowing<sal_uInt16>(nWidthPercent) * 50 );
     }
+
+    // Write table positioning properties in case this is a floating table.
+    TablePositioning(pTable->GetTableNode()->GetFlyFormat());
 }
 
 ww8::GridColsPtr AttributeOutputBase::GetGridCols( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner )
