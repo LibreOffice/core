@@ -422,8 +422,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
             if (!(Options & osl_Process_WAIT) || (Options & osl_Process_DETACHED))
                 flags |= CREATE_NEW_CONSOLE;
 
-            command_line.append(batch_processor);
-            command_line.append(" /c ");
+            command_line.append(batch_processor + " /c ");
         }
         else
             // should we return here in case of error?
