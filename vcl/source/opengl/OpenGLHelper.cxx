@@ -180,8 +180,8 @@ namespace
             sal_uInt8 val = pData[i];
             if( val != 0 )
                 bIsZero = false;
-            aHexStr.append( pHexData[ val & 0xf ] );
-            aHexStr.append( pHexData[ val >> 4 ] );
+            aHexStr.append(
+                OStringChar(pHexData[ val & 0xf ]) + OStringChar(pHexData[ val >> 4 ]) );
         }
         if( bIsZero )
             return OString();

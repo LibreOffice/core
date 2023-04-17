@@ -1059,23 +1059,15 @@ bool WinSalGraphics::drawEPS( tools::Long nX, tools::Long nY, tools::Long nWidth
                 {
                     RECT* pRect = &(mpClipRgnData->rdh.rcBound);
 
-                    aBuf.append( "\nnewpath\n" );
-                    aBuf.append( pRect->left );
-                    aBuf.append( " " );
-                    aBuf.append( pRect->top );
-                    aBuf.append( " moveto\n" );
-                    aBuf.append( pRect->right );
-                    aBuf.append( " " );
-                    aBuf.append( pRect->top );
-                    aBuf.append( " lineto\n" );
-                    aBuf.append( pRect->right );
-                    aBuf.append( " " );
-                    aBuf.append( pRect->bottom );
-                    aBuf.append( " lineto\n" );
-                    aBuf.append( pRect->left );
-                    aBuf.append( " " );
-                    aBuf.append( pRect->bottom );
-                    aBuf.append( " lineto\n"
+                    aBuf.append( "\nnewpath\n"
+                                 + OString::number(pRect->left) + " " + OString::number(pRect->top)
+                                 + " moveto\n"
+                                 + OString::number(pRect->right) + " " + OString::number(pRect->top)
+                                 + " lineto\n"
+                                 + OString::number(pRect->right) + " "
+                                 + OString::number(pRect->bottom) + " lineto\n"
+                                 + OString::number(pRect->left) + " "
+                                 + OString::number(pRect->bottom) + " lineto\n"
                                  "closepath\n"
                                  "clip\n"
                                  "newpath\n" );
@@ -1092,15 +1084,9 @@ bool WinSalGraphics::drawEPS( tools::Long nX, tools::Long nY, tools::Long nWidth
                 double  dM22 = nHeight / (nBoundingBox[1] - nBoundingBox[3] );
                 // reserve a sal_uInt16 again
                 aBuf.setLength( 2 );
-                aBuf.append( "\n\n[" );
-                aBuf.append( dM11 );
-                aBuf.append( " 0 0 " );
-                aBuf.append( dM22 );
-                aBuf.append( ' ' );
-                aBuf.append( nX - ( dM11 * nBoundingBox[0] ) );
-                aBuf.append( ' ' );
-                aBuf.append( nY - ( dM22 * nBoundingBox[3] ) );
-                aBuf.append( "] concat\n"
+                aBuf.append( "\n\n[" + OString::number(dM11) + " 0 0 " + OString::number(dM22) + " "
+                             + OString::number(nX - ( dM11 * nBoundingBox[0] )) + " "
+                             + OString::number(nY - ( dM22 * nBoundingBox[3] )) + "] concat\n"
                              "%%BeginDocument:\n" );
                 *reinterpret_cast<sal_uInt16*>(const_cast<char *>(aBuf.getStr())) = static_cast<sal_uInt16>( aBuf.getLength() - 2 );
                 Escape ( getHDC(), nEscape, aBuf.getLength(), aBuf.getStr(), nullptr );
