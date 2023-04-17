@@ -3133,10 +3133,21 @@ SdXMLFloatingFrameShapeContext::~SdXMLFloatingFrameShapeContext()
 {
 }
 
+uno::Reference<drawing::XShape> SdXMLFloatingFrameShapeContext::CreateFloatingFrameShape() const
+{
+    uno::Reference<lang::XMultiServiceFactory> xServiceFact(GetImport().GetModel(), uno::UNO_QUERY);
+    if (!xServiceFact.is())
+        return nullptr;
+    uno::Reference<drawing::XShape> xShape(
+            xServiceFact->createInstance("com.sun.star.drawing.FrameShape"), uno::UNO_QUERY);
+    return xShape;
+}
+
 void SdXMLFloatingFrameShapeContext::startFastElement (sal_Int32 /*nElement*/,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/)
 {
-    AddShape("com.sun.star.drawing.FrameShape");
+    uno::Reference<drawing::XShape> xShape(SdXMLFloatingFrameShapeContext::CreateFloatingFrameShape());
+    AddShape(xShape);
 
     if( !mxShape.is() )
         return;
