@@ -47,13 +47,13 @@ class SvXMLEmbeddedTextEntryArr;
 class XMLOFF_DLLPUBLIC SvXMLNumFmtExport final
 {
 private:
-    SvXMLExport&                rExport;
-    OUString                    sPrefix;
-    SvNumberFormatter*          pFormatter;
-    OUStringBuffer              sTextContent;
-    bool                        bHasText;
-    std::unique_ptr<SvXMLNumUsedList_Impl>      pUsedList;
-    std::unique_ptr<LocaleDataWrapper>          pLocaleData;
+    SvXMLExport&                m_rExport;
+    OUString                    m_sPrefix;
+    SvNumberFormatter*          m_pFormatter;
+    OUStringBuffer              m_sTextContent;
+    bool                        m_bHasText;
+    std::unique_ptr<SvXMLNumUsedList_Impl>      m_pUsedList;
+    std::unique_ptr<LocaleDataWrapper>          m_pLocaleData;
 
     SAL_DLLPRIVATE void AddCalendarAttr_Impl( const OUString& rCalendar );
     SAL_DLLPRIVATE void AddStyleAttr_Impl( bool bLong );
