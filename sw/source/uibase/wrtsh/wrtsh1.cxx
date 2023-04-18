@@ -914,8 +914,13 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
     }
     else
     {
-        aArea.Width ( tools::Long( aArea.Width()  / pCli->GetScaleWidth() ) );
-        aArea.Height( tools::Long( aArea.Height() / pCli->GetScaleHeight() ) );
+        tools::Long nWidth(pCli->GetScaleWidth());
+        tools::Long nHeight(pCli->GetScaleHeight());
+        if (nWidth && nHeight)
+        {
+            aArea.Width ( aArea.Width()  / nWidth );
+            aArea.Height( aArea.Height() / nHeight );
+        }
     }
 
     pCli->SetObjAreaAndScale( aArea.SVRect(), aScaleWidth, aScaleHeight );
