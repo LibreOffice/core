@@ -2027,7 +2027,7 @@ void MakeFrames( SwDoc *pDoc, SwNode &rSttIdx, SwNode &rEndIdx )
                     pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
     if ( pNd )
     {
-        bool bApres = *pNd < rSttIdx;
+        bool bAfter = *pNd < rSttIdx;
         SwNode2Layout aNode2Layout( *pNd, rSttIdx.GetIndex() );
         sw::FrameMode eMode = sw::FrameMode::Existing;
         ::std::vector<SwFrame*> frames;
@@ -2075,7 +2075,7 @@ void MakeFrames( SwDoc *pDoc, SwNode &rSttIdx, SwNode &rEndIdx )
                 SwFlowFrame *pTmp = SwFlowFrame::CastFlowFrame( pMove );
                 assert(pTmp);
 
-                if ( bApres )
+                if ( bAfter )
                 {
                     // The rest of this page should be empty. Thus, the following one has to move to
                     // the next page (it might also be located in the following column).
@@ -2168,12 +2168,12 @@ void MakeFrames( SwDoc *pDoc, SwNode &rSttIdx, SwNode &rEndIdx )
             else
             {
                 bool bSplit;
-                SwFrame* pPrv = bApres ? pFrame : pFrame->GetPrev();
+                SwFrame* pPrv = bAfter ? pFrame : pFrame->GetPrev();
                 // If the section frame is inserted into another one, it must be split.
                 if( pSct && rSttIdx.IsSectionNode() )
                 {
-                    bSplit = pSct->SplitSect( pFrame, bApres );
-                    if( !bSplit && !bApres )
+                    bSplit = pSct->SplitSect( pFrame, bAfter );
+                    if( !bSplit && !bAfter )
                     {
                         pUpper = pSct->GetUpper();
                         pPrv = pSct->GetPrev();

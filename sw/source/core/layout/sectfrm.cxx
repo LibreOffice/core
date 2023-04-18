@@ -516,17 +516,17 @@ void SwSectionFrame::MergeNext( SwSectionFrame* pNxt )
 |*  This is required when inserting an inner section, because the MoveFwd
 |*  cannot have the desired effect within a frame or a table cell.
 |*/
-bool SwSectionFrame::SplitSect( SwFrame* pFrame, bool bApres )
+bool SwSectionFrame::SplitSect( SwFrame* pFrame, bool bAfter )
 {
     assert(pFrame && "SplitSect: Why?");
-    SwFrame* pOther = bApres ? pFrame->FindNext() : pFrame->FindPrev();
+    SwFrame* pOther = bAfter ? pFrame->FindNext() : pFrame->FindPrev();
     if( !pOther )
         return false;
     SwSectionFrame* pSect = pOther->FindSctFrame();
     if( pSect != this )
         return false;
     // Put the content aside
-    SwFrame* pSav = ::SaveContent( this, bApres ? pOther : pFrame );
+    SwFrame* pSav = ::SaveContent( this, bAfter ? pOther : pFrame );
     OSL_ENSURE( pSav, "SplitSect: What's on?" );
     if( pSav ) // be robust
     {   // Create a new SctFrame, not as a Follower/master
