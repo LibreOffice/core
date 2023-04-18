@@ -25,6 +25,8 @@
 #include "admincontrols.hxx"
 #include "TextConnectionHelper.hxx"
 
+#include <curledit.hxx>
+
 namespace dbaui
 {
     class ODbTypeWizDialogSetup;
@@ -213,6 +215,58 @@ namespace dbaui
 
         DECL_LINK(OnSetupModeSelected, weld::Toggleable&, void);
     };
+
+    // OPostgresPageSetup
+    class OPostgresConnectionPageSetup final : public OGenericAdministrationPage
+    {
+    public:
+        OPostgresConnectionPageSetup(weld::Container* pPage, weld::DialogController* pController
+                                        , const SfxItemSet& _rCoreAttrs
+                                        , sal_uInt16 _nPortId
+                                        , TranslateId pDefaultPortResId
+                                        , TranslateId pHelpTextResId
+                                        , TranslateId pHeaderTextResId
+                                        , TranslateId pConnectionTextResId );
+    virtual ~OPostgresConnectionPageSetup() override;
+    static std::unique_ptr<OGenericAdministrationPage> CreatePostgresTabPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet );
+    ::dbaccess::ODsnTypeCollection* m_pCollection;
+
+    private:
+        DECL_LINK(OnEditModified, weld::Entry&, void);
+        virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;
+        virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
+        virtual void fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
+        virtual void fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
+        virtual bool commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
+
+        sal_uInt16              m_nPortId;
+
+        std::unique_ptr<weld::Label> m_xHeaderText;
+        std::unique_ptr<weld::Label> m_xFTHelpText;
+        std::unique_ptr<weld::Label> m_xFTDatabasename;
+        std::unique_ptr<weld::Entry> m_xETDatabasename;
+        std::unique_ptr<weld::Label> m_xFTHostname;
+        std::unique_ptr<weld::Entry> m_xETHostname;
+        std::unique_ptr<weld::Label> m_xFTPortNumber;
+        std::unique_ptr<weld::Label> m_xFTDefaultPortNumber;
+        std::unique_ptr<weld::SpinButton> m_xNFPortNumber;
+
+        std::unique_ptr<weld::Label> m_xFTConnection;
+        std::unique_ptr<OConnectionURLEdit> m_xConnectionURL;
+
+        /** used for the connection URL
+            @param  _rURL
+                The URL to check.
+        */
+        void        impl_setURL( std::u16string_view _rURL, bool _bPrefix );
+        void        setURLNoPrefix( std::u16string_view _rURL );
+        void        setURL( std::u16string_view _rURL );
+        OUString    getURLNoPrefix( ) const;
+        OUString    impl_getURL() const;
+        bool        commitURL();
+
+    };
+
 
     // OAuthentificationPageSetup
     class OAuthentificationPageSetup final : public OGenericAdministrationPage

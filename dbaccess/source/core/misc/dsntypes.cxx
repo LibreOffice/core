@@ -446,6 +446,9 @@ void ODsnTypeCollection::fillPageIds(std::u16string_view _sURL,std::vector<sal_I
         case DST_ORACLE_JDBC:
             _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_ORACLE);
             break;
+        case DST_POSTGRES:
+            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_POSTGRES);
+            break;
         case DST_LDAP:
             _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_LDAP);
             break;

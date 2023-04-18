@@ -85,11 +85,12 @@ typedef sal_Int32   ItemID;
 #define DSID_PRIMARY_KEY_SUPPORT    58
 #define DSID_MAX_ROW_SCAN           59
 #define DSID_RESPECTRESULTSETTYPE   60
+#define DSID_POSTGRES_PORTNUMBER    61
     // don't forget to adjust DSID_LAST_ITEM_ID below!
 
 // item range. Adjust this if you introduce new items above
 
 #define DSID_FIRST_ITEM_ID  DSID_NAME
-#define DSID_LAST_ITEM_ID   DSID_RESPECTRESULTSETTYPE
+#define DSID_LAST_ITEM_ID   DSID_POSTGRES_PORTNUMBER
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

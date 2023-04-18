@@ -106,6 +106,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(weld::Window* _pParent
     , m_sRM_JDBCText( DBA_RES( STR_PAGETITLE_JDBC ) )
     , m_sRM_MySQLNativePageTitle( DBA_RES( STR_PAGETITLE_MYSQL_NATIVE ) )
     , m_sRM_OracleText( DBA_RES( STR_PAGETITLE_ORACLE ) )
+    , m_sRM_PostgresText( DBA_RES( STR_PAGETITLE_POSTGRES ) )
     , m_sRM_MySQLText( DBA_RES( STR_PAGETITLE_MYSQL ) )
     , m_sRM_ODBCText( DBA_RES( STR_PAGETITLE_ODBC ) )
     , m_sRM_DocumentOrSpreadSheetText( DBA_RES( STR_PAGETITLE_DOCUMENT_OR_SPREADSHEET ) )
@@ -212,6 +213,9 @@ OUString ODbTypeWizDialogSetup::getStateDisplayName(WizardState _nState) const
             break;
         case PAGE_DBSETUPWIZARD_ORACLE:
             sRoadmapItem = m_sRM_OracleText;
+            break;
+        case PAGE_DBSETUPWIZARD_POSTGRES:
+            sRoadmapItem = m_sRM_PostgresText;
             break;
         case PAGE_DBSETUPWIZARD_MYSQL_INTRO:
             sRoadmapItem = m_sRM_MySQLText;
@@ -505,6 +509,10 @@ std::unique_ptr<BuilderPage> ODbTypeWizDialogSetup::createPage(WizardState _nSta
 
         case PAGE_DBSETUPWIZARD_ORACLE:
             xPage = OGeneralSpecialJDBCConnectionPageSetup::CreateOracleJDBCTabPage(pPageContainer, this, *m_pOutSet);
+            break;
+
+        case PAGE_DBSETUPWIZARD_POSTGRES:
+            xPage = OPostgresConnectionPageSetup::CreatePostgresTabPage(pPageContainer, this, *m_pOutSet);
             break;
 
         case PAGE_DBSETUPWIZARD_LDAP:

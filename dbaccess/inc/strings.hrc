@@ -366,6 +366,7 @@
 #define STR_PAGETITLE_JDBC                          NC_("STR_PAGETITLE_JDBC", "Set up JDBC connection" )
 #define STR_PAGETITLE_ORACLE                        NC_("STR_PAGETITLE_ORACLE", "Set up Oracle database connection" )
 #define STR_PAGETITLE_MYSQL                         NC_("STR_PAGETITLE_MYSQL", "Set up MySQL/MariaDB connection" )
+#define STR_PAGETITLE_POSTGRES                      NC_("STR_PAGETITLE_POSTGRES", "Set up PostgreSQL connection" )
 #define STR_PAGETITLE_ODBC                          NC_("STR_PAGETITLE_ODBC", "Set up ODBC connection" )
 #define STR_PAGETITLE_DOCUMENT_OR_SPREADSHEET       NC_("STR_PAGETITLE_DOCUMENT_OR_SPREADSHEET", "Set up Writer Document or Spreadsheet connection" )
 #define STR_PAGETITLE_AUTHENTIFICATION              NC_("STR_PAGETITLE_AUTHENTIFICATION", "Set up user authentication" )
@@ -397,6 +398,9 @@
 #define STR_SPREADSHEET_HELPTEXT                    NC_("STR_SPREADSHEET_HELPTEXT", "Click 'Browse...' to select a %PRODUCTNAME spreadsheet or Microsoft Excel workbook.\n%PRODUCTNAME will open this file in read-only mode." )
 #define STR_SPREADSHEETPATH                         NC_("STR_SPREADSHEETPATH", "~Location and file name" )
 
+#define STR_POSTGRES_HEADERTEXT                     NC_("STR_POSTGRES_HEADERTEXT", "Set up connection to a POSTGRESQL database using GUI" )
+#define STR_POSTGRES_HELPTEXT                       NC_("STR_POSTGRES_HELPTEXT", "Please enter the required information to connect to a PostgreSQL database either through by filling the hostname,port number and server OR by filling the connection string.\nPlease contact your system administrator if you are unsure about the following settings.")
+#define STR_POSTGRES_DEFAULT                        NC_("STR_POSTGRES_DEFAULT", "Default: 5432")
 #define STR_COMMAND_EXECUTED_SUCCESSFULLY           NC_("STR_COMMAND_EXECUTED_SUCCESSFULLY", "Command successfully executed." )
 #define STR_DIRECTSQL_CONNECTIONLOST                NC_("STR_DIRECTSQL_CONNECTIONLOST", "The connection to the database has been lost. This dialog will be closed.")
 

@@ -54,6 +54,7 @@ dbaccess/uiconfig/ui/savedialog.ui://GtkLabel[@id='descriptionft'] orphan-label
 dbaccess/uiconfig/ui/specialjdbcconnectionpage.ui://GtkLabel[@id='header'] orphan-label
 dbaccess/uiconfig/ui/specialjdbcconnectionpage.ui://GtkLabel[@id='helpLabel'] orphan-label
 dbaccess/uiconfig/ui/specialjdbcconnectionpage.ui://GtkLabel[@id='portNumDefLabel'] orphan-label
+dbaccess/uiconfig/ui/postgrespage.ui://GtkLabel[@id='portNumDefLabel'] orphan-label
 dbaccess/uiconfig/ui/sortdialog.ui://GtkLabel[@id='label2'] orphan-label
 dbaccess/uiconfig/ui/sortdialog.ui://GtkLabel[@id='label3'] orphan-label
 dbaccess/uiconfig/ui/sortdialog.ui://GtkLabel[@id='label4'] orphan-label

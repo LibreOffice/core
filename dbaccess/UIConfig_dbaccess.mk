@@ -71,6 +71,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/savedialog \
     dbaccess/uiconfig/ui/savemodifieddialog \
     dbaccess/uiconfig/ui/specialjdbcconnectionpage \
+    dbaccess/uiconfig/ui/postgrespage \
     dbaccess/uiconfig/ui/specialsettingspage \
     dbaccess/uiconfig/ui/sortdialog \
     dbaccess/uiconfig/ui/sqlexception \
