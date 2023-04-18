@@ -499,10 +499,11 @@ void SvxOle2Shape::createLink( const OUString& aLinkURL )
 
 void SvxOle2Shape::resetModifiedState()
 {
-    ::comphelper::IEmbeddedHelper* pPersist = GetSdrObject()->getSdrModelFromSdrObject().GetPersist();
+    SdrObject* pObject = GetSdrObject();
+    ::comphelper::IEmbeddedHelper* pPersist = pObject ? pObject->getSdrModelFromSdrObject().GetPersist() : nullptr;
     if( pPersist && !pPersist->isEnableSetModified() )
     {
-        SdrOle2Obj* pOle = dynamic_cast< SdrOle2Obj* >( GetSdrObject() );
+        SdrOle2Obj* pOle = dynamic_cast< SdrOle2Obj* >(pObject);
         if( pOle && !pOle->IsEmpty() )
         {
             uno::Reference < util::XModifiable > xMod( pOle->GetObjRef(), uno::UNO_QUERY );
