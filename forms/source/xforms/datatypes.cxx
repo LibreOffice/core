@@ -730,7 +730,15 @@ namespace xforms
 
     bool ODateType::_getValue( const OUString& value, double& fValue )
     {
-        Any aTypeValue = Convert::get().toAny( value, getCppuType() );
+        Any aTypeValue;
+        try
+        {
+            aTypeValue = Convert::get().toAny( value, getCppuType() );
+        }
+        catch (com::sun::star::lang::IllegalArgumentException)
+        {
+            return false;
+        }
 
         Date aValue;
         if ( !( aTypeValue >>= aValue ) )
@@ -779,7 +787,15 @@ namespace xforms
 
     bool OTimeType::_getValue( const OUString& value, double& fValue )
     {
-        Any aTypedValue = Convert::get().toAny( value, getCppuType() );
+        Any aTypedValue;
+        try
+        {
+            aTypedValue = Convert::get().toAny( value, getCppuType() );
+        }
+        catch (com::sun::star::lang::IllegalArgumentException)
+        {
+            return false;
+        }
 
         css::util::Time aValue;
         if ( !( aTypedValue >>= aValue ) )
@@ -851,7 +867,15 @@ namespace xforms
 
     bool ODateTimeType::_getValue( const OUString& value, double& fValue )
     {
-        Any aTypedValue = Convert::get().toAny( value, getCppuType() );
+        Any aTypedValue;
+        try
+        {
+            aTypedValue = Convert::get().toAny( value, getCppuType() );
+        }
+        catch (com::sun::star::uno::RuntimeException)
+        {
+            return false;
+        }
 
         DateTime aValue;
         if ( !( aTypedValue >>= aValue ) )
