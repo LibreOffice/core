@@ -210,10 +210,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135906)
     // just test round-tripping. The document was exported as corrupt and didn't re-load.
 }
 
-CPPUNIT_TEST_FIXTURE(Test, TestTdf146802)
+DECLARE_OOXMLEXPORT_TEST(testTdf146802, "tdf146802.docx")
 {
-    createSwDoc("tdf146802.docx");
-
     // First check if the load failed, as before the fix.
     CPPUNIT_ASSERT(mxComponent);
 
@@ -1083,9 +1081,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148132, "tdf148132.docx")
     }
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testTdf154481)
+DECLARE_OOXMLEXPORT_TEST(testTdf154481, "tdf154481.docx")
 {
-    createSwDoc("tdf154481.docx");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Missing pages!", 7, getPages());
 }
 

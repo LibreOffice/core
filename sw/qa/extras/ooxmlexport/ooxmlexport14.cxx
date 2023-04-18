@@ -872,16 +872,16 @@ CPPUNIT_TEST_FIXTURE(Test, testSemiTransparentText)
     CPPUNIT_ASSERT_EQUAL(nTransparence, nActual);
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testTdf147485)
+DECLARE_OOXMLEXPORT_TEST(testTdf147485, "Tdf147485.docx")
 {
     // Before the fix this was impossible.
-    createSwDoc("Tdf147485.docx");
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testTdf149546)
+DECLARE_OOXMLEXPORT_TEST(testTdf149546, "tdf149546.docx")
 {
     // Before the fix this was impossible.
-    createSwDoc("tdf149546.docx");
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testUserField)
