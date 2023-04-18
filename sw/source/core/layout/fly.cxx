@@ -2578,12 +2578,12 @@ Size SwFlyFrame::CalcRel( const SwFormatFrameSize &rSz ) const
         if ( rSz.GetHeightPercent() && rSz.GetHeightPercent() != SwFormatFrameSize::SYNCED )
             aRet.setHeight( nRelHeight * rSz.GetHeightPercent() / 100 );
 
-        if ( rSz.GetWidthPercent() == SwFormatFrameSize::SYNCED )
+        if ( rSz.GetHeight() && rSz.GetWidthPercent() == SwFormatFrameSize::SYNCED )
         {
             aRet.setWidth( aRet.Width() * ( aRet.Height()) );
             aRet.setWidth( aRet.Width() / ( rSz.GetHeight()) );
         }
-        else if ( rSz.GetHeightPercent() == SwFormatFrameSize::SYNCED )
+        else if ( rSz.GetWidth() && rSz.GetHeightPercent() == SwFormatFrameSize::SYNCED )
         {
             aRet.setHeight( aRet.Height() * ( aRet.Width()) );
             aRet.setHeight( aRet.Height() / ( rSz.GetWidth()) );
