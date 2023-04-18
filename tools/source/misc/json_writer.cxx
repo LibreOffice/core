@@ -236,7 +236,8 @@ void JsonWriter::put(std::string_view pPropName, std::string_view rPropVal)
     ++mPos;
 
     // copy and perform escaping
-    for (size_t i = 0; i < rPropVal.size(); ++i)
+    bool bReachedEnd = false;
+    for (size_t i = 0; i < rPropVal.size() && !bReachedEnd; ++i)
     {
         char ch = rPropVal[i];
         switch (ch)
@@ -250,6 +251,9 @@ void JsonWriter::put(std::string_view pPropName, std::string_view rPropVal)
             case '/':
             case '\\':
                 writeEscapedSequence(ch, mPos);
+                break;
+            case 0:
+                bReachedEnd = true;
                 break;
             case '\xE2': // Special processing of U+2028 and U+2029
                 if (i + 2 < rPropVal.size() && rPropVal[i + 1] == '\x80'
