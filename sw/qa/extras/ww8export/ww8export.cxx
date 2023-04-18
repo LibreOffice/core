@@ -761,10 +761,17 @@ DECLARE_WW8EXPORT_TEST( testTdf105570, "tdf105570.doc" )
     CPPUNIT_ASSERT_EQUAL( sal_uInt16(0), pTableNd->GetTable().GetRowsToRepeat() );
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf112346, "tdf112346.doc")
+CPPUNIT_TEST_FIXTURE(Test, testTdf112346)
 {
-    // This was 1, multi-page table was imported as a floating one.
-    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+    SwModelTestBase::FlySplitGuard aGuard;
+    auto verify = [this]() {
+        // Multi-page table was imported as a single page.
+        CPPUNIT_ASSERT_EQUAL(2, getPages());
+    };
+    createSwDoc("tdf112346.doc");
+    verify();
+    reload(mpFilter, "tdf112346.doc");
+    verify();
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf79639, "tdf79639.doc")
