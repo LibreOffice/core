@@ -695,14 +695,23 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfParagraph)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1), aStream.indexOf("<reqif-xhtml:a id="));
 }
 
-DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOleData, "reqif-ole-data.xhtml")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfOleData)
 {
-    uno::Reference<text::XTextEmbeddedObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xObjects(xSupplier->getEmbeddedObjects(),
-                                                     uno::UNO_QUERY);
-    // This was 0, <object> without URL was ignored.
-    // Then this was 0 on export, as data of OLE nodes was ignored.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xObjects->getCount());
+    auto verify = [this]() {
+        uno::Reference<text::XTextEmbeddedObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xObjects(xSupplier->getEmbeddedObjects(),
+                                                         uno::UNO_QUERY);
+        // This was 0, <object> without URL was ignored.
+        // Then this was 0 on export, as data of OLE nodes was ignored.
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xObjects->getCount());
+    };
+    setImportFilterOptions("xhtmlns=reqif-xhtml");
+    setImportFilterName("HTML (StarWriter)");
+    createSwDoc("reqif-ole-data.xhtml");
+    verify();
+    setFilterOptions("xhtmlns=reqif-xhtml");
+    reload(mpFilter, "reqif-ole-data.xhtml");
+    verify();
 }
 
 DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOleImg, "reqif-ole-img.xhtml")
