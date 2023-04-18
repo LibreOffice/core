@@ -515,10 +515,12 @@ public class SecurityDialog extends WeakBase implements
 
     public void dispose() {
 
-        XComponent xComponent =
-            UnoRuntime.queryInterface(XComponent.class, _xDialog);
+        if (_xDialog != null) {
+            XComponent xComponent =
+                UnoRuntime.queryInterface(XComponent.class, _xDialog);
 
-        xComponent.dispose();
+            xComponent.dispose();
+        }
     }
 
     public void addEventListener(com.sun.star.lang.XEventListener xListener) {
