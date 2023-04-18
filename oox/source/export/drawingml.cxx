@@ -1013,7 +1013,8 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
     mpFS->startElementNS( XML_a, XML_ln,
                           XML_cap, cap,
                           XML_w, sax_fastparser::UseIf(OString::number(nEmuLineWidth),
-                              nLineWidth == 0 || (nLineWidth > 1 && nStyleLineWidth != nLineWidth)) );
+                              nLineWidth == 0 || GetDocumentType() == DOCUMENT_XLSX    // tdf#119565 LO doesn't export the actual theme.xml in XLSX.
+                                  || (nLineWidth > 1 && nStyleLineWidth != nLineWidth)));
 
     if( bColorSet )
     {
@@ -1181,7 +1182,9 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
     {
         LineJoint eLineJoint = mAny.get<LineJoint>();
 
-        if( aStyleLineJoint == LineJoint_NONE || aStyleLineJoint != eLineJoint )
+        // tdf#119565 LO doesn't export the actual theme.xml in XLSX.
+        if (aStyleLineJoint == LineJoint_NONE || GetDocumentType() == DOCUMENT_XLSX
+            || aStyleLineJoint != eLineJoint)
         {
             // style-defined line joint does not exist, or is different from the shape's joint
             switch( eLineJoint )
