@@ -62,6 +62,7 @@
 #include <svx/algitem.hxx>
 #include <svx/rotmodit.hxx>
 #include <legacyitem.hxx>
+#include <unostyle.hxx>
 
 #include <memory>
 #include <utility>
@@ -359,6 +360,11 @@ bool SwBoxAutoFormat::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
     rStream.WriteUInt16( static_cast<sal_uInt16>(m_eSysLanguage) ).WriteUInt16( static_cast<sal_uInt16>(m_eNumFormatLanguage) );
 
     return ERRCODE_NONE == rStream.GetError();
+}
+
+void SwBoxAutoFormat::SetXObject(rtl::Reference<SwXTextCellStyle> const& xObject)
+{
+    m_xAutoFormatUnoObject = xObject.get();
 }
 
 SwTableAutoFormat::SwTableAutoFormat( OUString aName )

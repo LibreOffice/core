@@ -4314,7 +4314,7 @@ void SwXTextTableStyle::UpdateCellStylesMapping()
     for (sal_Int32 i=0; i<STYLE_COUNT; ++i)
     {
         SwBoxAutoFormat* pBoxFormat = &m_pTableAutoFormat->GetBoxFormat(aTableTemplateMap[i]);
-        uno::Reference<style::XStyle> xCellStyle(pBoxFormat->GetXObject(), uno::UNO_QUERY);
+        rtl::Reference<SwXTextCellStyle> xCellStyle(pBoxFormat->GetXObject());
         if (!xCellStyle.is())
         {
             xCellStyle.set(new SwXTextCellStyle(m_pDocShell, pBoxFormat, m_pTableAutoFormat->GetName()));
@@ -4383,12 +4383,11 @@ void SwXTextTableStyle::SetPhysical()
             for (size_t i=0; i<aTableTemplateMap.size(); ++i)
             {
                 SwBoxAutoFormat* pOldBoxFormat = &m_pTableAutoFormat->GetBoxFormat(aTableTemplateMap[i]);
-                uno::Reference<style::XStyle> xCellStyle(pOldBoxFormat->GetXObject(), uno::UNO_QUERY);
+                rtl::Reference<SwXTextCellStyle> xCellStyle(pOldBoxFormat->GetXObject());
                 if (!xCellStyle.is())
                     continue;
-                SwXTextCellStyle& rStyle = dynamic_cast<SwXTextCellStyle&>(*xCellStyle);
                 SwBoxAutoFormat& rNewBoxFormat = pTableAutoFormat->GetBoxFormat(aTableTemplateMap[i]);
-                rStyle.SetBoxFormat(&rNewBoxFormat);
+                xCellStyle->SetBoxFormat(&rNewBoxFormat);
                 rNewBoxFormat.SetXObject(xCellStyle);
             }
             m_pTableAutoFormat_Impl = nullptr;
@@ -4549,30 +4548,26 @@ void SAL_CALL SwXTextTableStyle::replaceByName(const OUString& rName, const uno:
         throw container::NoSuchElementException();
     const sal_Int32 nCellStyle = iter->second;
 
-    uno::Reference<style::XStyle> xStyle = rElement.get<uno::Reference<style::XStyle>>();
-    if (!xStyle.is())
+    rtl::Reference<SwXTextCellStyle> xStyleToReplaceWith = dynamic_cast<SwXTextCellStyle*>(rElement.get<uno::Reference<style::XStyle>>().get());
+    if (!xStyleToReplaceWith.is())
         throw lang::IllegalArgumentException();
 
-    SwXTextCellStyle* pStyleToReplaceWith = dynamic_cast<SwXTextCellStyle*>(xStyle.get());
-    if (!pStyleToReplaceWith)
-         throw lang::IllegalArgumentException();
-
     // replace only with physical ...
-    if (!pStyleToReplaceWith->IsPhysical())
+    if (!xStyleToReplaceWith->IsPhysical())
         throw lang::IllegalArgumentException();
 
     const auto& rTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
     const sal_Int32 nBoxFormat = rTableTemplateMap[nCellStyle];
 
     // move SwBoxAutoFormat to dest. SwTableAutoFormat
-    m_pTableAutoFormat->SetBoxFormat(*pStyleToReplaceWith->GetBoxFormat(), nBoxFormat);
+    m_pTableAutoFormat->SetBoxFormat(*xStyleToReplaceWith->GetBoxFormat(), nBoxFormat);
     // remove unassigned SwBoxAutoFormat, which is not anymore in use anyways
-    m_pDocShell->GetDoc()->GetCellStyles().RemoveBoxFormat(xStyle->getName());
+    m_pDocShell->GetDoc()->GetCellStyles().RemoveBoxFormat(xStyleToReplaceWith->getName());
     // make SwXTextCellStyle use new, moved SwBoxAutoFormat
-    pStyleToReplaceWith->SetBoxFormat(&m_pTableAutoFormat->GetBoxFormat(nBoxFormat));
-    m_pTableAutoFormat->GetBoxFormat(nBoxFormat).SetXObject(xStyle);
+    xStyleToReplaceWith->SetBoxFormat(&m_pTableAutoFormat->GetBoxFormat(nBoxFormat));
+    m_pTableAutoFormat->GetBoxFormat(nBoxFormat).SetXObject(xStyleToReplaceWith);
     // make this SwXTextTableStyle use new SwXTextCellStyle
-    m_aCellStyles[nCellStyle] = xStyle;
+    m_aCellStyles[nCellStyle] = xStyleToReplaceWith;
 }
 
 void SAL_CALL SwXTextTableStyle::removeByName(const OUString& /*Name*/)
@@ -4647,7 +4642,7 @@ void SwXTextCellStyle::SetPhysical()
             m_bPhysical = true;
             m_pBoxAutoFormat_Impl = nullptr;
             m_pBoxAutoFormat = pBoxAutoFormat;
-            m_pBoxAutoFormat->SetXObject(uno::Reference<style::XStyle>(this));
+            m_pBoxAutoFormat->SetXObject(this);
         }
         else
             SAL_WARN("sw.uno", "setting style physical, but SwBoxAutoFormat in document not found");
@@ -4703,7 +4698,7 @@ SwBoxAutoFormat* SwXTextCellStyle::GetBoxAutoFormat(SwDocShell* pDocShell, std::
 
 css::uno::Reference<css::style::XStyle> SwXTextCellStyle::CreateXTextCellStyle(SwDocShell* pDocShell, const OUString& sName)
 {
-    uno::Reference<style::XStyle> xTextCellStyle;
+    rtl::Reference<SwXTextCellStyle> xTextCellStyle;
 
     if (!sName.isEmpty()) // create a cell style for a physical box
     {
@@ -4718,7 +4713,7 @@ css::uno::Reference<css::style::XStyle> SwXTextCellStyle::CreateXTextCellStyle(S
             pBoxFormat = &aDefaultBoxFormat;
         }
 
-        xTextCellStyle.set(pBoxFormat->GetXObject(), uno::UNO_QUERY);
+        xTextCellStyle = pBoxFormat->GetXObject();
         if (!xTextCellStyle.is())
         {
             xTextCellStyle.set(new SwXTextCellStyle(pDocShell, pBoxFormat, sParentName));
