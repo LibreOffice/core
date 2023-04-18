@@ -788,16 +788,24 @@ DECLARE_HTMLEXPORT_TEST(testReqIfJpgImg, "reqif-jpg-img.xhtml")
 
 DECLARE_HTMLEXPORT_TEST(testReqIfTable, "reqif-table.xhtml")
 {
-    htmlDocUniquePtr pDoc = parseHtml(maTempFile);
+    SvMemoryStream aStream;
+    WrapReqifFromTempFile(aStream);
+    xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
     CPPUNIT_ASSERT(pDoc);
 
     // <div> was missing, so the XHTML fragment wasn't a valid
     // xhtml.BlkStruct.class type anymore.
-    assertXPath(pDoc, "/html/body/div/table/tr/th", 1);
+    assertXPath(pDoc,
+                "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:table/reqif-xhtml:tr/reqif-xhtml:th",
+                1);
     // Make sure that the cell background is not written using CSS.
-    assertXPathNoAttribute(pDoc, "/html/body/div/table/tr/th", "style");
+    assertXPathNoAttribute(
+        pDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:table/reqif-xhtml:tr/reqif-xhtml:th",
+        "style");
     // The attribute was present, which is not valid in reqif-xhtml.
-    assertXPathNoAttribute(pDoc, "/html/body/div/table/tr/th", "bgcolor");
+    assertXPathNoAttribute(
+        pDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:table/reqif-xhtml:tr/reqif-xhtml:th",
+        "bgcolor");
 }
 
 DECLARE_HTMLEXPORT_TEST(testReqIfTable2, "reqif-table2.odt")
