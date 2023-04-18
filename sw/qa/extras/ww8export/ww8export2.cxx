@@ -303,14 +303,22 @@ DECLARE_WW8EXPORT_TEST(testTdf80635_marginRTL, "tdf80635_marginRightRTL.doc")
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Horizontal Orientation", text::HoriOrientation::RIGHT, getProperty<sal_Int16>(xTable, "HoriOrient"));
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf80635_marginLeft, "tdf80635_marginLeft.doc")
+CPPUNIT_TEST_FIXTURE(Test, testTdf80635_marginLeft)
 {
-    // tdf#80635 - transfer the float orientation to the table.
-    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
-    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    // This was just the GetMinLeft of -199
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Table Indent", tools::Long(-2950), getProperty<tools::Long>(xTable, "LeftMargin"), 100);
+    SwModelTestBase::FlySplitGuard aGuard;
+    auto verify = [this]() {
+        // tdf#80635 - assert horizontal position of the table.
+        uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+        uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Table Indent", tools::Long(0), getProperty<tools::Long>(xTable, "LeftMargin"), 100);
+        uno::Reference<drawing::XShape> xFly = getShape(1);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-2958), getProperty<sal_Int32>(xFly, "HoriOrientPosition"));
+    };
+    createSwDoc("tdf80635_marginLeft.doc");
+    verify();
+    reload(mpFilter, "tdf80635_marginLeft.doc");
+    verify();
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf80635_pageLeft, "tdf80635_pageLeft.doc")
