@@ -40,6 +40,13 @@
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <svx/numinf.hxx>
+#include <svx/xbtmpit.hxx>
+#include <svx/xlndsit.hxx>
+#include <svx/xlnstit.hxx>
+#include <svx/xlnedit.hxx>
+#include <svx/xflgrit.hxx>
+#include <svx/xflftrit.hxx>
+#include <svx/xflhtit.hxx>
 #include <svx/zoomslideritem.hxx>
 
 #include <global.hxx>
@@ -1586,6 +1593,24 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
                     {
                         SfxItemSet& rAttr = pStyleSheet->GetItemSet();
                         sdr::properties::CleanupFillProperties(rAttr);
+
+                        // check for unique names of named items for xml
+                        auto checkForUniqueItem = [&] (auto nWhichId)
+                        {
+                            if (auto pOldItem = rAttr.GetItemIfSet(nWhichId, false))
+                            {
+                                if (auto pNewItem = pOldItem->checkForUniqueItem(&GetDrawView()->GetModel()))
+                                    rAttr.Put(std::move(pNewItem));
+                            }
+                        };
+
+                        checkForUniqueItem(XATTR_FILLBITMAP);
+                        checkForUniqueItem(XATTR_LINEDASH);
+                        checkForUniqueItem(XATTR_LINESTART);
+                        checkForUniqueItem(XATTR_LINEEND);
+                        checkForUniqueItem(XATTR_FILLGRADIENT);
+                        checkForUniqueItem(XATTR_FILLFLOATTRANSPARENCE);
+                        checkForUniqueItem(XATTR_FILLHATCH);
 
                         static_cast<SfxStyleSheet*>(pStyleSheet)->Broadcast(SfxHint(SfxHintId::DataChanged));
                         GetScDrawView()->InvalidateAttribs();

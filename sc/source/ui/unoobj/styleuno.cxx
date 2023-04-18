@@ -2025,6 +2025,13 @@ uno::Any ScStyleObj::getPropertyValue_Impl( std::u16string_view aPropertyName )
             {
                 if (!SvxUnoTextRangeBase::GetPropertyValueHelper(*pItemSet, pResultEntry, aAny))
                     aAny = SvxItemPropertySet_getPropertyValue(pResultEntry, *pItemSet);
+
+                // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
+                if (pResultEntry->aType == ::cppu::UnoType<sal_Int16>::get() &&
+                    aAny.getValueType() == ::cppu::UnoType<sal_Int32>::get())
+                {
+                    aAny <<= static_cast<sal_Int16>(aAny.get<sal_Int32>());
+                }
             }
         }
     }

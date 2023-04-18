@@ -1499,8 +1499,9 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testShapeStyles)
         uno::Reference<style::XStyle> xStyle(
             xMSF->createInstance("com.sun.star.style.GraphicStyle"), uno::UNO_QUERY_THROW);
         xGraphicStyles->insertByName("MyStyle1", Any(xStyle));
-        uno::Reference<beans::XPropertySet>(xStyle, uno::UNO_QUERY_THROW)
-            ->setPropertyValue("FillColor", Any(COL_RED));
+        uno::Reference<beans::XPropertySet> xPropertySet(xStyle, uno::UNO_QUERY_THROW);
+        xPropertySet->setPropertyValue("FillColor", Any(COL_RED));
+        xPropertySet->setPropertyValue("FillTransparence", Any(sal_Int16(40)));
 
         xStyle.set(xMSF->createInstance("com.sun.star.style.GraphicStyle"), uno::UNO_QUERY_THROW);
         xGraphicStyles->insertByName("MyStyle2", Any(xStyle));
@@ -1540,6 +1541,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testShapeStyles)
         Color nColor;
         xShape->getPropertyValue("FillColor") >>= nColor;
         CPPUNIT_ASSERT_EQUAL(COL_RED, nColor);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(40),
+                             xShape->getPropertyValue("FillTransparence").get<sal_Int16>());
     }
 }
 
