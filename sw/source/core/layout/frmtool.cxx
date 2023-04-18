@@ -1535,8 +1535,6 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                 bObjsDirect = false;
         }
     }
-    else
-        pPageMaker = nullptr;
 
     if( pLay->IsInSct() &&
         ( pLay->IsSctFrame() || pLay->GetUpper() ) ) // Hereby will newbies
