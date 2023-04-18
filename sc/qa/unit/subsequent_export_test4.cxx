@@ -39,6 +39,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -1610,6 +1611,31 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testCommentStyles)
         CPPUNIT_ASSERT_EQUAL(sal_uInt32(1129),
                              pCaption->GetMergedItemSet().Get(EE_CHAR_FONTHEIGHT).GetHeight());
     }
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf119565)
+{
+    createScDoc("xlsx/tdf119565.xlsx");
+    saveAndReload("Calc Office Open XML");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShapeProps(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 35
+    // - Actual  : 0
+    // i.e. line width inherited from theme lost after export.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(35),
+                         xShapeProps->getPropertyValue("LineWidth").get<sal_Int32>());
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 3
+    // - Actual  : 4
+    // i.e. line joint inherited from theme lost after export.
+    CPPUNIT_ASSERT_EQUAL(drawing::LineJoint_MITER,
+                         xShapeProps->getPropertyValue("LineJoint").get<drawing::LineJoint>());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
