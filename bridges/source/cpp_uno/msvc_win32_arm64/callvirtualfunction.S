@@ -42,15 +42,15 @@
         str   x3, [x29, #16]          // save rvalue
 
         // load the core argument passing registers
-        ldp   x0, x1, [sp, #0]
-        ldp   x2, x3, [sp, #16]
-        ldp   x4, x5, [sp, #32]
-        ldp   x6, x7, [sp, #48]
+        ldp   x0, x1, [sp, #-128]
+        ldp   x2, x3, [sp, #-112]
+        ldp   x4, x5, [sp, #-96]
+        ldp   x6, x7, [sp, #-80]
 
-        ldp   d0, d1, [sp, #64]
-        ldp   d2, d3, [sp, #80]
-        ldp   d4, d5, [sp, #96]
-        ldp   d6, d7, [sp, #112]
+        ldp   d0, d1, [sp, #-64]
+        ldp   d2, d3, [sp, #-48]
+        ldp   d4, d5, [sp, #-32]
+        ldp   d6, d7, [sp, #-16]
 
         blr   x9                      // call
 
