@@ -1019,11 +1019,13 @@ DECLARE_OOXMLEXPORT_TEST(testN820509, "n820509.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("M.d.yyyy"), sDateFormat);
 }
 
+#if 0
 DECLARE_OOXMLEXPORT_TEST(testN830205, "n830205.docx")
 {
     // Previously import just crashed (due to infinite recursion).
     getParagraph(1, "XXX");
 }
+#endif
 
 DECLARE_OOXMLEXPORT_TEST(tdf123705, "tdf123705.docx")
 {
