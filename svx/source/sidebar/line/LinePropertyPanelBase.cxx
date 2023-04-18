@@ -268,7 +268,7 @@ void LinePropertyPanelBase::updateLineCap(bool bDisabled, bool bSetOrDefault,
     else
     {
         mxLBCapStyle->set_sensitive(true);
-        mxLBCapStyle->set_sensitive(true);
+        mxFTCapStyle->set_sensitive(true);
     }
 
     if(bSetOrDefault)
