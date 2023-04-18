@@ -260,16 +260,8 @@ void LinePropertyPanelBase::updateLineJoint(bool bDisabled, bool bSetOrDefault,
 void LinePropertyPanelBase::updateLineCap(bool bDisabled, bool bSetOrDefault,
         const SfxPoolItem* pState)
 {
-    if(bDisabled)
-    {
-        mxLBCapStyle->set_sensitive(false);
-        mxFTCapStyle->set_sensitive(false);
-    }
-    else
-    {
-        mxLBCapStyle->set_sensitive(true);
-        mxFTCapStyle->set_sensitive(true);
-    }
+    mxLBCapStyle->set_sensitive(!bDisabled);
+    mxFTCapStyle->set_sensitive(!bDisabled);
 
     if(bSetOrDefault)
     {
