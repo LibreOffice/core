@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <rtl/ref.hxx>
 #include <svl/listener.hxx>
 #include <svl/style.hxx>
 #include "unocoll.hxx"
@@ -267,7 +268,7 @@ class SwXTextTableStyle final : public cppu::WeakImplHelper
     /// Fills m_aCellStyles with SwXTextCellStyles pointing to children of this style.
     void UpdateCellStylesMapping();
     static const CellStyleNameMap& GetCellStyleNameMap();
-    css::uno::Reference<css::style::XStyle> m_aCellStyles[STYLE_COUNT];
+    rtl::Reference<SwXTextCellStyle> m_aCellStyles[STYLE_COUNT];
 public:
     SwXTextTableStyle(SwDocShell* pDocShell, SwTableAutoFormat* pTableAutoFormat);
     /// Create non physical style

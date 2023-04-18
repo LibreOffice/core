@@ -4518,7 +4518,8 @@ uno::Any SAL_CALL SwXTextTableStyle::getByName(const OUString& rName)
     if(iter == rMap.end())
         throw css::container::NoSuchElementException();
 
-    return css::uno::Any(m_aCellStyles[(*iter).second]);
+    auto nIdx = (*iter).second;
+    return css::uno::Any(uno::Reference<XInterface>(static_cast<cppu::OWeakObject*>(m_aCellStyles[nIdx].get())));
 }
 
 css::uno::Sequence<OUString> SAL_CALL SwXTextTableStyle::getElementNames()
