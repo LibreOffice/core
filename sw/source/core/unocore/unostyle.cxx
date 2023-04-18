@@ -4285,11 +4285,11 @@ SwXTextTableStyle::SwXTextTableStyle(SwDocShell* pDocShell, const OUString& rTab
 uno::Reference<style::XStyle> SwXTextTableStyle::CreateXTextTableStyle(SwDocShell* pDocShell, const OUString& rTableAutoFormatName)
 {
     SolarMutexGuard aGuard;
-    uno::Reference<style::XStyle> xTextTableStyle;
+    rtl::Reference<SwXTextTableStyle> xTextTableStyle;
     SwTableAutoFormat* pAutoFormat = GetTableAutoFormat(pDocShell, rTableAutoFormatName);
     if (pAutoFormat && pAutoFormat->GetName() == rTableAutoFormatName)
     {
-        xTextTableStyle.set(pAutoFormat->GetXObject(), uno::UNO_QUERY);
+        xTextTableStyle = pAutoFormat->GetXObject();
         if (!xTextTableStyle.is())
         {
             xTextTableStyle.set(new SwXTextTableStyle(pDocShell, pAutoFormat));
@@ -4392,7 +4392,7 @@ void SwXTextTableStyle::SetPhysical()
             }
             m_pTableAutoFormat_Impl = nullptr;
             m_pTableAutoFormat = pTableAutoFormat;
-            m_pTableAutoFormat->SetXObject(uno::Reference<style::XStyle>(this));
+            m_pTableAutoFormat->SetXObject(this);
         }
         else
             SAL_WARN("sw.uno", "setting style physical, but SwTableAutoFormat in document not found");

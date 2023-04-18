@@ -44,6 +44,7 @@ struct SwAfVersions;
 class SvNumberFormatter;
 class SwTable;
 class SwXTextCellStyle;
+class SwXTextTableStyle;
 
 class SW_DLLPUBLIC SwBoxAutoFormat : public AutoFormatBase
 {
@@ -156,7 +157,7 @@ class SW_DLLPUBLIC SwTableAutoFormat
     friend void FinitCore();       // To destroy default pointer.
     static SwBoxAutoFormat* s_pDefaultBoxAutoFormat;
 
-    css::uno::WeakReference<css::uno::XInterface> m_wXObject;
+    unotools::WeakReference<SwXTextTableStyle> m_xUnoTextTableStyle;
 
     OUString m_aName;
     sal_uInt16 m_nStrResId;
@@ -246,10 +247,9 @@ public:
     bool Load( SvStream& rStream, const SwAfVersions& );
     bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
 
-    css::uno::WeakReference<css::uno::XInterface> const& GetXObject() const
-        { return m_wXObject; }
-    void SetXObject(css::uno::Reference<css::uno::XInterface> const& xObject)
-        { m_wXObject = xObject; }
+    unotools::WeakReference<SwXTextTableStyle> const& GetXObject() const
+        { return m_xUnoTextTableStyle; }
+    void SetXObject(rtl::Reference<SwXTextTableStyle> const& xObject);
 
     /// Returns the cell's name postfix. eg. ".1"
     OUString GetTableTemplateCellSubName(const SwBoxAutoFormat& rBoxFormat) const;

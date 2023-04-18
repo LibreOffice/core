@@ -922,6 +922,11 @@ sal_uInt8 SwTableAutoFormat::CountPos(sal_uInt32 nCol, sal_uInt32 nCols, sal_uIn
     return nRet;
 }
 
+void SwTableAutoFormat::SetXObject(rtl::Reference<SwXTextTableStyle> const& xObject)
+{
+    m_xUnoTextTableStyle = xObject.get();
+}
+
 struct SwTableAutoFormatTable::Impl
 {
     std::vector<std::unique_ptr<SwTableAutoFormat>> m_AutoFormats;
