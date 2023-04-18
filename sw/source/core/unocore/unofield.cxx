@@ -528,7 +528,7 @@ SwXFieldMaster::CreateXFieldMaster(SwDoc * pDoc, SwFieldType *const pType,
     rtl::Reference<SwXFieldMaster> xFM;
     if (pType)
     {
-        xFM = dynamic_cast<SwXFieldMaster*>(pType->GetXObject().get().get());
+        xFM = pType->GetXObject().get();
     }
     if (!xFM.is())
     {

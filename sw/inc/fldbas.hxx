@@ -28,6 +28,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <editeng/svxenum.hxx>
+#include <unotools/weakref.hxx>
+#include <rtl/ref.hxx>
 #include <vector>
 #include <climits>
 
@@ -39,6 +41,7 @@ class SwRootFrame;
 class SvNumberFormatter;
 class IDocumentRedlineAccess;
 class SwGetRefField;
+class SwXFieldMaster;
 namespace com::sun::star::uno { class Any; }
 
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
@@ -242,7 +245,7 @@ SwFieldTypesEnum SwFieldTypeFromString(std::u16string_view rString);
 
 class SW_DLLPUBLIC SwFieldType : public sw::BroadcastingModify
 {
-    css::uno::WeakReference<css::beans::XPropertySet> m_wXFieldMaster;
+    unotools::WeakReference<SwXFieldMaster> m_wXFieldMaster;
 
     SwFieldIds m_nWhich;
 
@@ -257,12 +260,10 @@ protected:
 
 public:
 
-    SAL_DLLPRIVATE css::uno::WeakReference<css::beans::XPropertySet> const& GetXObject() const {
+    unotools::WeakReference<SwXFieldMaster> const& GetXObject() const {
         return m_wXFieldMaster;
     }
-    SAL_DLLPRIVATE void SetXObject(css::uno::Reference<css::beans::XPropertySet> const& xFieldMaster) {
-        m_wXFieldMaster = xFieldMaster;
-    }
+    void SetXObject(rtl::Reference<SwXFieldMaster> const& xFieldMaster);
 
     static const OUString & GetTypeStr( SwFieldTypesEnum nTypeId );
 

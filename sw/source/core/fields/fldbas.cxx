@@ -43,6 +43,7 @@
 #include <calbck.hxx>
 #include <viewsh.hxx>
 #include <hints.hxx>
+#include <unofield.hxx>
 
 using namespace ::com::sun::star;
 using namespace nsSwDocInfoSubType;
@@ -220,6 +221,11 @@ void SwFieldType::UpdateFields()
     CallSwClientNotify(sw::LegacyModifyHint(nullptr, nullptr));
 };
 
+void SwFieldType::SetXObject(rtl::Reference<SwXFieldMaster> const& xFieldMaster)
+{
+    m_wXFieldMaster = xFieldMaster.get();
+}
+
 void SwFieldTypes::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwFieldTypes"));
@@ -228,6 +234,8 @@ void SwFieldTypes::dumpAsXml(xmlTextWriterPtr pWriter) const
         (*this)[nType]->dumpAsXml(pWriter);
     (void)xmlTextWriterEndElement(pWriter);
 }
+
+
 
 // Base class for all fields.
 // A field (multiple can exist) references a field type (can exists only once)
