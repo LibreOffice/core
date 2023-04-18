@@ -85,15 +85,24 @@ DECLARE_WW8EXPORT_TEST(testTdf55528_relativeTableWidth, "tdf55528_relativeTableW
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table relative width percent", sal_Int16(98), getProperty<sal_Int16>(xTable, "RelativeWidth"));
  }
 
-DECLARE_WW8EXPORT_TEST(testTdf128700_relativeTableWidth, "tdf128700_relativeTableWidth.doc")
+CPPUNIT_TEST_FIXTURE(Test, testTdf128700_relativeTableWidth)
 {
-    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
-    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    SwModelTestBase::FlySplitGuard aGuard;
 
-    // Since the table has been converted into a floating frame, the relative width either needed to be transferred
-    // onto the frame, or else just thrown out. Otherwise it becomes relative to the size of the frame.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Floated table can't use relative width", sal_Int16(0), getProperty<sal_Int16>(xTable, "RelativeWidth"));
+    auto verify = [this]() {
+        uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+        uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+
+        // Since the table has been converted into a floating frame, the relative width either needed to be transferred
+        // onto the frame, or else just thrown out. Otherwise it becomes relative to the size of the frame.
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Floated table can't use relative width", sal_Int16(0), getProperty<sal_Int16>(xTable, "RelativeWidth"));
+    };
+    // This also resulted in a layout loop when flys were allowed to split in footers.
+    createSwDoc("tdf128700_relativeTableWidth.doc");
+    verify();
+    reload(mpFilter, "tdf128700_relativeTableWidth.doc");
+    verify();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf116436_tableBackground)

@@ -659,6 +659,12 @@ bool SwFlyFrame::IsFlySplitAllowed() const
         return false;
     }
 
+    if (FindFooterOrHeader())
+    {
+        // Adding a new page would not increase the header/footer area.
+        return false;
+    }
+
     return GetFormat()->GetFlySplit().GetValue();
 }
 
