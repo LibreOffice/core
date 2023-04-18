@@ -223,8 +223,7 @@ public:
 
     // This method collects all automatic styles for the given XShape
     void collectShapeAutoStyles(
-        const css::uno::Reference < css::drawing::XShape >& xShape,
-        const css::uno::Sequence<OUString>& rAutoStylePropNames);
+        const css::uno::Reference < css::drawing::XShape >& xShape);
 
     // This method exports the given XShape
     void exportShape(
@@ -236,8 +235,7 @@ public:
 
     // This method collects all automatic styles for the shapes inside the given XShapes collection
     void collectShapesAutoStyles(
-        const css::uno::Reference < css::drawing::XShapes >& xShapes,
-        const css::uno::Sequence<OUString>& rAutoStylePropNames);
+        const css::uno::Reference < css::drawing::XShapes >& xShapes);
 
     // This method exports all XShape inside the given XShapes collection
     void exportShapes(

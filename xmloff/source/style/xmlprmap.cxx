@@ -355,10 +355,4 @@ void XMLPropertySetMapper::RemoveEntry( sal_Int32 nIndex )
     mpImpl->maMapEntries.erase( aEIter );
 }
 
-void XMLPropertySetMapper::GetEntryAPINames( o3tl::sorted_vector<OUString>& rNames) const
-{
-     for (const XMLPropertySetMapperEntry_Impl& rMapEntry : mpImpl->maMapEntries)
-         rNames.insert(rMapEntry.sAPIPropertyName);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

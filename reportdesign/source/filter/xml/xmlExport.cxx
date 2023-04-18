@@ -658,8 +658,7 @@ void ORptExport::exportReportComponentAutoStyles(const Reference<XSection>& _xPr
             rtl::Reference< XMLShapeExport > xShapeExport = GetShapeExport();
             xShapeExport->seekShapes(_xProp);
             SolarMutexGuard aGuard;
-            css::uno::Sequence<OUString> aAutoStylePropNames = GetAutoStylePool()->GetPropertyNames();
-            xShapeExport->collectShapeAutoStyles(xShape, aAutoStylePropNames);
+            xShapeExport->collectShapeAutoStyles(xShape);
         }
         else
         {

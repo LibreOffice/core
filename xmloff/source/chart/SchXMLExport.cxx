@@ -1589,7 +1589,6 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
                 // not the XShapes object used here. Thus the shapes have to be
                 // exported one by one
                 rtl::Reference< XMLShapeExport > rShapeExport = mrExport.GetShapeExport();
-                css::uno::Sequence<OUString> aAutoStylePropNames = mrAutoStylePool.GetPropertyNames();
                 Reference< drawing::XShape > xShape;
                 const sal_Int32 nShapeCount( mxAdditionalShapes->getCount());
                 for( sal_Int32 nShapeId = 0; nShapeId < nShapeCount; nShapeId++ )
@@ -1599,7 +1598,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
                     if( ! xShape.is())
                         continue;
 
-                    rShapeExport->collectShapeAutoStyles( xShape, aAutoStylePropNames );
+                    rShapeExport->collectShapeAutoStyles( xShape );
                 }
             }
         }

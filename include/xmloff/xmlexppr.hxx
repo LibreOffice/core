@@ -23,10 +23,8 @@
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
-#include <o3tl/sorted_vector.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 
 #include <memory>
 #include <vector>
@@ -68,8 +66,7 @@ protected:
     std::vector<XMLPropertyState> Filter_(
             SvXMLExport const& rExport,
             const css::uno::Reference<css::beans::XPropertySet>& rPropSet,
-            bool bDefault, bool bDisableFoFontFamily,
-            const css::uno::Sequence<OUString>* pOnlyTheseProps ) const;
+            bool bDefault, bool bDisableFoFontFamily ) const;
 
     /** Application-specific filter. By default do nothing. */
     virtual void ContextFilter(
@@ -119,9 +116,7 @@ public:
         filter-processes. */
     std::vector<XMLPropertyState> Filter(
         SvXMLExport const& rExport,
-        const css::uno::Reference<css::beans::XPropertySet>& rPropSet,
-        bool bEnableFoFontFamily = false,
-        const css::uno::Sequence<OUString>* pOnlyTheseProps = nullptr ) const;
+        const css::uno::Reference<css::beans::XPropertySet>& rPropSet, bool bEnableFoFontFamily = false ) const;
 
     /** Like Filter(), except that:
       * - only properties that have the map flag MID_FLAG_DEFAULT_ITEM_EXPORT
@@ -180,8 +175,6 @@ public:
 
     void SetStyleName( const OUString& rStyleName );
     const OUString& GetStyleName() const;
-
-    void GetEntryAPINames(o3tl::sorted_vector<OUString>& rNames) const;
 };
 
 #endif // INCLUDED_XMLOFF_XMLEXPPR_HXX

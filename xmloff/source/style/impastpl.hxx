@@ -151,9 +151,6 @@ public:
         css::uno::Sequence<sal_Int32>& aFamilies,
         css::uno::Sequence<OUString>& aNames );
 
-    /// retrieve the names of the properties used in the styles
-    css::uno::Sequence<OUString> GetPropertyNames();
-
     bool Add(
         OUString& rName, XmlStyleFamily nFamily,
         const OUString& rParentName,

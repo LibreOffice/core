@@ -3085,8 +3085,7 @@ void XMLTextParagraphExport::exportAnyTextFrame(
                     comphelper::ScopeGuard const g([this, xShape]() {
                         maShapeRecurseGuard.erase(xShape);
                     });
-                    css::uno::Sequence<OUString> aAutoStylePropNames = GetAutoStylePool().GetPropertyNames();
-                    GetExport().GetShapeExport()->collectShapeAutoStyles( xShape, aAutoStylePropNames );
+                    GetExport().GetShapeExport()->collectShapeAutoStyles( xShape );
                 }
             }
             break;

@@ -2029,8 +2029,6 @@ void SdXMLExport::collectAutoStyles()
     if (mbAutoStylesCollected)
         return;
 
-    css::uno::Sequence<OUString> aAutoStylePropNames = GetAutoStylePool()->GetPropertyNames();
-
     Reference< beans::XPropertySet > xInfoSet( getExportInfo() );
     if( xInfoSet.is() )
     {
@@ -2070,7 +2068,7 @@ void SdXMLExport::collectAutoStyles()
             {
                 Reference< XDrawPage > xHandoutPage( xHandoutSupp->getHandoutMasterPage() );
                 if( xHandoutPage.is() && xHandoutPage->getCount())
-                    GetShapeExport()->collectShapesAutoStyles( xHandoutPage, aAutoStylePropNames );
+                    GetShapeExport()->collectShapesAutoStyles( xHandoutPage );
             }
         }
 
@@ -2098,7 +2096,7 @@ void SdXMLExport::collectAutoStyles()
                 GetShapeExport()->setPresentationStylePrefix( aMasterPageNamePrefix );
 
                 if(xMasterPage.is() && xMasterPage->getCount())
-                    GetShapeExport()->collectShapesAutoStyles( xMasterPage, aAutoStylePropNames );
+                    GetShapeExport()->collectShapesAutoStyles( xMasterPage );
 
                 if(IsImpress())
                 {
@@ -2112,7 +2110,7 @@ void SdXMLExport::collectAutoStyles()
                             GetFormExport()->examineForms( xNotesPage );
 
                             if(xNotesPage->getCount())
-                                GetShapeExport()->collectShapesAutoStyles( xNotesPage, aAutoStylePropNames );
+                                GetShapeExport()->collectShapesAutoStyles( xNotesPage );
                         }
                     }
                 }
@@ -2163,7 +2161,7 @@ void SdXMLExport::collectAutoStyles()
 
                 // prepare object infos
                 if(xDrawPage.is() && xDrawPage->getCount())
-                    GetShapeExport()->collectShapesAutoStyles( xDrawPage, aAutoStylePropNames );
+                    GetShapeExport()->collectShapesAutoStyles( xDrawPage );
 
                 // prepare presentation notes page object infos (ONLY if presentation)
                 if(IsImpress())
@@ -2178,7 +2176,7 @@ void SdXMLExport::collectAutoStyles()
                             GetFormExport()->examineForms( xNotesPage );
 
                             if(xNotesPage->getCount())
-                                GetShapeExport()->collectShapesAutoStyles( xNotesPage, aAutoStylePropNames );
+                                GetShapeExport()->collectShapesAutoStyles( xNotesPage );
                         }
                     }
                 }
