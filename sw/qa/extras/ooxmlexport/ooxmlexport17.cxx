@@ -23,6 +23,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
@@ -38,6 +39,7 @@
 #include <wrtsh.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
+#include <xmloff/odffields.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -87,6 +89,60 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148380_createField, "tdf148380_createField.docx"
     xField.set(xFields->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("yesterday at noon"), xField->getPresentation(false));
 }
+
+DECLARE_OOXMLEXPORT_TEST(testTdf138093, "tdf138093.docx")
+{
+    if (isExported())
+    {
+        xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+        assertXPath(pXmlDoc, "//w:sdt", 3);
+        uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                        uno::UNO_QUERY);
+        uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<table::XCell> xCell = xTable->getCellByName("B1");
+        uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xCell, uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xParagraphs
+            = xParagraphsAccess->createEnumeration();
+        uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                                 uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+        uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
+
+        OUString aPortionType;
+        xTextPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+        CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aPortionType);
+
+        uno::Reference<text::XTextContent> xContentControl;
+        xTextPortion->getPropertyValue("ContentControl") >>= xContentControl;
+        uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+        bool bDate{};
+        xContentControlProps->getPropertyValue("Date") >>= bDate;
+        CPPUNIT_ASSERT(bDate);
+        uno::Reference<container::XEnumerationAccess> xContentControlEnumAccess(xContentControl,
+                                                                                uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xContentControlEnum
+            = xContentControlEnumAccess->createEnumeration();
+        uno::Reference<text::XTextRange> xTextPortionRange(xContentControlEnum->nextElement(),
+                                                           uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("2017"), xTextPortionRange->getString());
+    }
+    else
+    {
+        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+        CPPUNIT_ASSERT(pTextDoc);
+        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+        IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMarkAccess->getAllMarksCount());
+
+        ::sw::mark::IDateFieldmark* pFieldmark
+            = dynamic_cast<::sw::mark::IDateFieldmark*>(*pMarkAccess->getAllMarksBegin());
+        CPPUNIT_ASSERT(pFieldmark);
+        CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+        CPPUNIT_ASSERT_EQUAL(OUString("2017"), pFieldmark->GetContent());
+    }
+}
+
 
 DECLARE_OOXMLEXPORT_TEST(testTdf148380_fldLocked, "tdf148380_fldLocked.docx")
 {

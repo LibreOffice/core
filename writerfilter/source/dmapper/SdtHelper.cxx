@@ -380,8 +380,10 @@ void SdtHelper::createDateContentControl()
     try
     {
         xCrsr->gotoRange(m_xDateFieldStartRange, false);
+        // tdf#138093: Date selector reset, if placed inside table
+        // Modified to XOR relationship
         bool bIsInTable = (m_rDM_Impl.hasTableManager() && m_rDM_Impl.getTableManager().isInTable())
-                          || (m_rDM_Impl.m_nTableDepth > 0);
+                          != (m_rDM_Impl.m_nTableDepth > 0);
         if (bIsInTable)
             xCrsr->goRight(1, false);
         xCrsr->gotoEnd(true);
