@@ -475,6 +475,7 @@ void TableDesignWidget::ApplyStyle()
                     pBindings->Invalidate( SID_REDO );
                 }
             }
+            setDocumentModified();
         }
         else
         {
@@ -530,6 +531,7 @@ void TableDesignWidget::ApplyOptions()
             pBindings->Invalidate( SID_REDO );
         }
     }
+    setDocumentModified();
 }
 
 void TableDesignWidget::onSelectionChanged()
