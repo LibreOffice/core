@@ -3147,6 +3147,21 @@ void SdXMLFloatingFrameShapeContext::startFastElement (sal_Int32 /*nElement*/,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/)
 {
     uno::Reference<drawing::XShape> xShape(SdXMLFloatingFrameShapeContext::CreateFloatingFrameShape());
+
+    uno::Reference< beans::XPropertySet > xProps(xShape, uno::UNO_QUERY);
+    // set FrameURL before AddShape, we have to do it again later because it
+    // gets cleared when the SdrOle2Obj is attached to the XShape.  But we want
+    // FrameURL to exist when AddShape triggers SetPersistName which itself
+    // triggers SdrOle2Obj::CheckFileLink_Impl and at that point we want to
+    // know what URL will end up being used. So bodge this by setting FrameURL
+    // to the temp pre-SdrOle2Obj attached properties and we can smuggle it
+    // eventually into SdrOle2Obj::SetPersistName at the right point after
+    // PersistName is set but before SdrOle2Obj::CheckFileLink_Impl is called
+    // in order to inform the link manager that this is an IFrame that links to
+    // a URL
+    if (xProps && !maHref.isEmpty())
+        xProps->setPropertyValue("FrameURL", Any(maHref));
+
     AddShape(xShape);
 
     if( !mxShape.is() )
@@ -3157,7 +3172,6 @@ void SdXMLFloatingFrameShapeContext::startFastElement (sal_Int32 /*nElement*/,
     // set pos, size, shear and rotate
     SetTransformation();
 
-    uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
     if( xProps.is() )
     {
         if( !maFrameName.isEmpty() )
