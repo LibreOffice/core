@@ -151,6 +151,9 @@ protected:
     std::unique_ptr< XFillFloatTransparenceItem >   mpFloatTransparenceItem;
     std::unique_ptr< SfxUInt16Item >                mpTransparenceItem;
 
+    // MCGR: Preserve in-between ColorStops until we have an UI to edit these
+    basegfx::ColorStops maColorStops;
+
     DECL_DLLPRIVATE_LINK(SelectFillTypeHdl, weld::ComboBox&, void );
     DECL_DLLPRIVATE_LINK(SelectFillAttrHdl, weld::ComboBox&, void );
     DECL_DLLPRIVATE_LINK(SelectFillColorHdl, ColorListBox&, void);
@@ -165,6 +168,9 @@ protected:
     void SetTransparency(sal_uInt16 nVal);
     void SelectFillAttrHdl_Impl();
     void FillStyleChanged(bool bUpdateModel);
+
+    // MCGR: Preserve in-between ColorStops until we have an UI to edit these
+    basegfx::ColorStops createColorStops();
 };
 
 } // end of namespace svx::sidebar

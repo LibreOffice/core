@@ -297,10 +297,7 @@ void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
 
             if (pSh && pSh->GetItem(SID_COLOR_TABLE))
             {
-                XGradient aGradient(
-                    basegfx::utils::createColorStopsFromStartEndColor(
-                        mxLbFillGradFrom->GetSelectEntryColor().getBColor(),
-                        mxLbFillGradTo->GetSelectEntryColor().getBColor()));
+                XGradient aGradient(createColorStops());
                 aGradient.SetAngle(Degree10(mxMTRAngle->get_value(FieldUnit::DEGREE) * 10));
                 aGradient.SetGradientStyle(static_cast<css::awt::GradientStyle>(mxGradientStyle->get_active()));
 
@@ -491,6 +488,12 @@ void AreaPropertyPanelBase::FillStyleChanged(bool bUpdateModel)
                     mxLbFillGradFrom->SelectEntry(Color(aGradient.GetColorStops().front().getStopColor()));
                     mxLbFillGradTo->SelectEntry(Color(aGradient.GetColorStops().back().getStopColor()));
 
+                    // MCGR: preserve in-between ColorStops if given
+                    if (aGradient.GetColorStops().size() > 2)
+                        maColorStops = basegfx::ColorStops(aGradient.GetColorStops().begin() + 1, aGradient.GetColorStops().end() - 1);
+                    else
+                        maColorStops.clear();
+
                     mxMTRAngle->set_value(toDegrees(aGradient.GetAngle()), FieldUnit::DEGREE);
                     css::awt::GradientStyle eXGS = aGradient.GetGradientStyle();
                     mxGradientStyle->set_active(sal::static_int_cast<sal_Int32>(eXGS));
@@ -511,6 +514,13 @@ void AreaPropertyPanelBase::FillStyleChanged(bool bUpdateModel)
                         const XGradient aGradient = mpFillGradientItem->GetGradientValue();
                         mxLbFillGradFrom->SelectEntry(Color(aGradient.GetColorStops().front().getStopColor()));
                         mxLbFillGradTo->SelectEntry(Color(aGradient.GetColorStops().back().getStopColor()));
+
+                        // MCGR: preserve in-between ColorStops if given
+                        if (aGradient.GetColorStops().size() > 2)
+                            maColorStops = basegfx::ColorStops(aGradient.GetColorStops().begin() + 1, aGradient.GetColorStops().end() - 1);
+                        else
+                            maColorStops.clear();
+
                         mxGradientStyle->set_active(
                             sal::static_int_cast<sal_Int32>(aGradient.GetGradientStyle()));
                         if (mxGradientStyle->get_active() == sal_Int32(GradientStyle::Radial))
@@ -1353,6 +1363,22 @@ void AreaPropertyPanelBase::SetGradient (const XGradient& rGradient)
 sal_Int32 AreaPropertyPanelBase::GetSelectedTransparencyTypeIndex() const
 {
     return mxLBTransType->get_active();
+}
+
+basegfx::ColorStops AreaPropertyPanelBase::createColorStops()
+{
+    basegfx::ColorStops aColorStops;
+
+    aColorStops.emplace_back(0.0, mxLbFillGradFrom->GetSelectEntryColor().getBColor());
+
+    if(!maColorStops.empty())
+    {
+        aColorStops.insert(aColorStops.begin(), maColorStops.begin(), maColorStops.end());
+    }
+
+    aColorStops.emplace_back(1.0, mxLbFillGradTo->GetSelectEntryColor().getBColor());
+
+    return aColorStops;
 }
 
 } // end of namespace svx::sidebar

@@ -169,6 +169,9 @@ class SvxTransparenceTabPage : public SfxTabPage
     std::unique_ptr<weld::CustomWeld> m_xCtlBitmapPreview;
     std::unique_ptr<weld::CustomWeld> m_xCtlXRectPreview;
 
+    // MCGR: Preserve in-between ColorStops until we have an UI to edit these
+    basegfx::ColorStops maColorStops;
+
     DECL_LINK(ClickTransOffHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(ClickTransLinearHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(ClickTransGradientHdl_Impl, weld::Toggleable&, void );
@@ -183,6 +186,9 @@ class SvxTransparenceTabPage : public SfxTabPage
 
     bool InitPreview ( const SfxItemSet& rSet );
     void InvalidatePreview (bool bEnable = true );
+
+    // MCGR: Preserve in-between ColorStops until we have an UI to edit these
+    basegfx::ColorStops createColorStops();
 
 public:
     SvxTransparenceTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
@@ -361,6 +367,9 @@ private:
     XFillAttrSetItem    m_aXFillAttr;
     SfxItemSet&         m_rXFSet;
 
+    // MCGR: Preserve in-between ColorStops until we have an UI to edit these
+    basegfx::ColorStops m_aColorStops;
+
     SvxXRectPreview m_aCtlPreview;
     std::unique_ptr<weld::ComboBox> m_xLbGradientType;
     std::unique_ptr<weld::Label> m_xFtCenter;
@@ -399,6 +408,9 @@ private:
 
     void SetControlState_Impl( css::awt::GradientStyle eXGS );
     sal_Int32 SearchGradientList(std::u16string_view rGradientName);
+
+    // MCGR: Preserve in-between ColorStops until we have an UI to edit these
+    basegfx::ColorStops createColorStops();
 
 public:
     SvxGradientTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);

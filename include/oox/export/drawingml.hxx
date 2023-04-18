@@ -107,11 +107,6 @@ namespace core {
 
 namespace drawingml {
 
-/// Tooling method to fill awt::Gradient2 from data contained in the given Any
-bool fillGradient2FromAny(
-    css::awt::Gradient2& rGradient,
-    const css::uno::Any& rVal);
-
 class OOX_DLLPUBLIC URLTransformer
 {
 public:

@@ -84,6 +84,13 @@ void AreaTransparencyGradientPopup::InitStatus(XFillFloatTransparenceItem const 
     aEnd = Color(aGradient.GetColorStops().back().getStopColor());
     mxMtrTrgrStartValue->set_value(static_cast<sal_uInt16>(((static_cast<sal_uInt16>(aStart.GetRed()) + 1) * 100) / 255), FieldUnit::PERCENT);
     mxMtrTrgrEndValue->set_value(static_cast<sal_uInt16>(((static_cast<sal_uInt16>(aEnd.GetRed()) + 1) * 100) / 255), FieldUnit::PERCENT);
+
+    // MCGR: preserve in-between ColorStops if given
+    if (aGradient.GetColorStops().size() > 2)
+        maColorStops = basegfx::ColorStops(aGradient.GetColorStops().begin() + 1, aGradient.GetColorStops().end() - 1);
+    else
+        maColorStops.clear();
+
     mxMtrTrgrBorder->set_value(aGradient.GetBorder(), FieldUnit::PERCENT);
 }
 
@@ -125,10 +132,15 @@ void AreaTransparencyGradientPopup::ExecuteValueModify(sal_uInt8 nStartCol, sal_
     nVal = aMtrValue - nVal*360;
     mxMtrTrgrAngle->set_value(nVal, FieldUnit::DEGREE);
     //End of new code
+
+    basegfx::ColorStops aColorStops;
+    aColorStops.emplace_back(0.0, Color(nStartCol, nStartCol, nStartCol).getBColor());
+    if(!maColorStops.empty())
+        aColorStops.insert(aColorStops.begin(), maColorStops.begin(), maColorStops.end());
+    aColorStops.emplace_back(1.0, Color(nEndCol, nEndCol, nEndCol).getBColor());
+
     XGradient aTmpGradient(
-        basegfx::utils::createColorStopsFromStartEndColor(
-            Color(nStartCol, nStartCol, nStartCol).getBColor(),
-            Color(nEndCol, nEndCol, nEndCol).getBColor()),
+        aColorStops,
         static_cast<css::awt::GradientStyle>(mrAreaPropertyPanel.GetSelectedTransparencyTypeIndex()-2),
         Degree10(static_cast<sal_Int16>(mxMtrTrgrAngle->get_value(FieldUnit::DEGREE)) * 10),
         static_cast<sal_uInt16>(mxMtrTrgrCenterX->get_value(FieldUnit::PERCENT)),

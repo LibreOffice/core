@@ -191,48 +191,6 @@ const char* g_aPredefinedClrNames[] = {
 
 namespace oox::drawingml {
 
-/// Tooling method to fill awt::Gradient2 from data contained in the given Any
-bool fillGradient2FromAny(css::awt::Gradient2& rGradient, const css::uno::Any& rVal)
-{
-    bool bRetval(false);
-
-    if (rVal.has< css::awt::Gradient2 >())
-    {
-        // we can use awt::Gradient2 directly
-        bRetval = (rVal >>= rGradient);
-    }
-    else if (rVal.has< css::awt::Gradient >())
-    {
-        // 1st get awt::Gradient
-        css::awt::Gradient aTmp;
-
-        if (rVal >>= aTmp)
-        {
-            // copy all awt::Gradient data to awt::Gradient2
-            rGradient.Style = aTmp.Style;
-            rGradient.StartColor = aTmp.StartColor;
-            rGradient.EndColor = aTmp.EndColor;
-            rGradient.Angle = aTmp.Angle;
-            rGradient.Border = aTmp.Border;
-            rGradient.XOffset = aTmp.XOffset;
-            rGradient.YOffset = aTmp.YOffset;
-            rGradient.StartIntensity = aTmp.StartIntensity;
-            rGradient.EndIntensity = aTmp.EndIntensity;
-            rGradient.StepCount = aTmp.StepCount;
-
-            // complete data by creating ColorStops for awt::Gradient2
-            basegfx::utils::fillColorStopSequenceFromColorStops(
-                rGradient.ColorStops,
-                basegfx::ColorStops {
-                    basegfx::ColorStop(0.0, ::Color(ColorTransparency, aTmp.StartColor).getBColor()),
-                    basegfx::ColorStop(1.0, ::Color(ColorTransparency, aTmp.EndColor).getBColor()) });
-            bRetval = true;
-        }
-    }
-
-    return bRetval;
-}
-
 URLTransformer::~URLTransformer()
 {
 }
@@ -538,7 +496,7 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
 
     if (GetProperty(rXPropSet, "FillTransparenceGradient"))
     {
-        if (fillGradient2FromAny(aTransparenceGradient, mAny))
+        if (basegfx::utils::fillGradient2FromAny(aTransparenceGradient, mAny))
         {
             basegfx::ColorStops aColorStops;
             basegfx::utils::fillColorStopsFromAny(aColorStops, mAny);
@@ -697,7 +655,7 @@ void DrawingML::WriteGradientFill( const Reference< XPropertySet >& rXPropSet )
         return;
 
     // use fillGradient2FromAny to evtl. take care of Gradient/Gradient2
-    fillGradient2FromAny(aGradient, mAny);
+    basegfx::utils::fillGradient2FromAny(aGradient, mAny);
 
     // get InteropGrabBag and search the relevant attributes
     awt::Gradient2 aOriginalGradient;
@@ -711,7 +669,7 @@ void DrawingML::WriteGradientFill( const Reference< XPropertySet >& rXPropSet )
                 rProp.Value >>= aGradientStops;
             else if( rProp.Name == "OriginalGradFill" )
                 // use fillGradient2FromAny to evtl. take care of Gradient/Gradient2
-                fillGradient2FromAny(aOriginalGradient, rProp.Value);
+                basegfx::utils::fillGradient2FromAny(aOriginalGradient, rProp.Value);
     }
 
     // check if an ooxml gradient had been imported and if the user has modified it
