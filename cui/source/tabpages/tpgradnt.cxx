@@ -197,9 +197,7 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
     // gradient was passed (unidentified)
     {
         pXGradient.reset(new XGradient(
-                    basegfx::utils::createColorStopsFromStartEndColor(
-                        m_xLbColorFrom->GetSelectEntryColor().getBColor(),
-                        m_xLbColorTo->GetSelectEntryColor().getBColor()),
+                    createColorStops(),
                     static_cast<css::awt::GradientStyle>(m_xLbGradientType->get_active()),
                     Degree10(static_cast<sal_Int16>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10)), // should be changed in resource
                     static_cast<sal_uInt16>(m_xMtrCenterX->get_value(FieldUnit::NONE)),
@@ -297,9 +295,7 @@ void SvxGradientTabPage::ModifiedHdl_Impl( void const * pControl )
     css::awt::GradientStyle eXGS = static_cast<css::awt::GradientStyle>(m_xLbGradientType->get_active());
 
     XGradient aXGradient(
-                          basegfx::utils::createColorStopsFromStartEndColor(
-                              m_xLbColorFrom->GetSelectEntryColor().getBColor(),
-                              m_xLbColorTo->GetSelectEntryColor().getBColor()),
+                          createColorStops(),
                           eXGS,
                           Degree10(static_cast<sal_Int16>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10)), // should be changed in resource
                           static_cast<sal_uInt16>(m_xMtrCenterX->get_value(FieldUnit::NONE)),
@@ -366,9 +362,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl, weld::Button&, void)
     if( !nError )
     {
         XGradient aXGradient(
-                            basegfx::utils::createColorStopsFromStartEndColor(
-                                m_xLbColorFrom->GetSelectEntryColor().getBColor(),
-                                m_xLbColorTo->GetSelectEntryColor().getBColor()),
+                              createColorStops(),
                               static_cast<css::awt::GradientStyle>(m_xLbGradientType->get_active()),
                               Degree10(static_cast<sal_Int16>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10)), // should be changed in resource
                               static_cast<sal_uInt16>(m_xMtrCenterX->get_value(FieldUnit::NONE)),
@@ -408,9 +402,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl, weld::Button&, void)
     OUString aName( m_pGradientList->GetGradient( static_cast<sal_uInt16>(nPos) )->GetName() );
 
     XGradient aXGradient(
-                          basegfx::utils::createColorStopsFromStartEndColor(
-                              m_xLbColorFrom->GetSelectEntryColor().getBColor(),
-                              m_xLbColorTo->GetSelectEntryColor().getBColor()),
+                          createColorStops(),
                           static_cast<css::awt::GradientStyle>(m_xLbGradientType->get_active()),
                           Degree10(static_cast<sal_Int16>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10)), // should be changed in resource
                           static_cast<sal_uInt16>(m_xMtrCenterX->get_value(FieldUnit::NONE)),
@@ -557,6 +549,12 @@ void SvxGradientTabPage::ChangeGradientHdl_Impl()
     m_xLbColorTo->SetNoSelection();
     m_xLbColorTo->SelectEntry(Color(pGradient->GetColorStops().back().getStopColor()));
 
+    // MCGR: preserve in-between ColorStops if given
+    if (pGradient->GetColorStops().size() > 2)
+        m_aColorStops = basegfx::ColorStops(pGradient->GetColorStops().begin() + 1, pGradient->GetColorStops().end() - 1);
+    else
+        m_aColorStops.clear();
+
     m_xMtrAngle->set_value(pGradient->GetAngle().get() / 10, FieldUnit::NONE); // should be changed in resource
     m_xSliderAngle->set_value(pGradient->GetAngle().get() / 10);
     m_xMtrBorder->set_value(pGradient->GetBorder(), FieldUnit::NONE);
@@ -638,6 +636,22 @@ sal_Int32 SvxGradientTabPage::SearchGradientList(std::u16string_view rGradientNa
         }
     }
     return nPos;
+}
+
+basegfx::ColorStops SvxGradientTabPage::createColorStops()
+{
+    basegfx::ColorStops aColorStops;
+
+    aColorStops.emplace_back(0.0, m_xLbColorFrom->GetSelectEntryColor().getBColor());
+
+    if(!m_aColorStops.empty())
+    {
+        aColorStops.insert(aColorStops.begin(), m_aColorStops.begin(), m_aColorStops.end());
+    }
+
+    aColorStops.emplace_back(1.0, m_xLbColorTo->GetSelectEntryColor().getBColor());
+
+    return aColorStops;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1935,7 +1935,7 @@ void ChartExport::exportSolidFill(const Reference< XPropertySet >& xPropSet)
         uno::Reference< container::XNameAccess > xTransparenceGradient(xFact->createInstance("com.sun.star.drawing.TransparencyGradientTable"), uno::UNO_QUERY);
         uno::Any rTransparenceValue = xTransparenceGradient->getByName(sFillTransparenceGradientName);
 
-        if (fillGradient2FromAny(aTransparenceGradient, rTransparenceValue))
+        if (basegfx::utils::fillGradient2FromAny(aTransparenceGradient, rTransparenceValue))
         {
             basegfx::ColorStops aColorStops;
             basegfx::utils::fillColorStopsFromAny(aColorStops, rTransparenceValue);
@@ -2024,7 +2024,7 @@ void ChartExport::exportGradientFill( const Reference< XPropertySet >& xPropSet 
         uno::Any rGradientValue = xGradient->getByName( sFillGradientName );
         awt::Gradient2 aGradient;
 
-        if (fillGradient2FromAny(aGradient, rGradientValue))
+        if (basegfx::utils::fillGradient2FromAny(aGradient, rGradientValue))
         {
             awt::Gradient2 aTransparenceGradient;
             mpFS->startElementNS(XML_a, XML_gradFill);
@@ -2033,7 +2033,7 @@ void ChartExport::exportGradientFill( const Reference< XPropertySet >& xPropSet 
             {
                 uno::Reference< container::XNameAccess > xTransparenceGradient(xFact->createInstance("com.sun.star.drawing.TransparencyGradientTable"), uno::UNO_QUERY);
                 uno::Any rTransparenceValue = xTransparenceGradient->getByName(sFillTransparenceGradientName);
-                fillGradient2FromAny(aTransparenceGradient, rTransparenceValue);
+                basegfx::utils::fillGradient2FromAny(aTransparenceGradient, rTransparenceValue);
                 WriteGradientFill(&aGradient, 0, &aTransparenceGradient, 0);
             }
             else if (GetProperty(xPropSet, "FillTransparence") )

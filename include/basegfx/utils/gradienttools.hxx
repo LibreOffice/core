@@ -214,6 +214,11 @@ namespace basegfx
 
     namespace utils
     {
+        /// Tooling method to fill awt::Gradient2 from data contained in the given Any
+        BASEGFX_DLLPUBLIC bool fillGradient2FromAny(
+            com::sun::star::awt::Gradient2& rGradient,
+            const com::sun::star::uno::Any& rVal);
+
         /* Tooling method to extract data from given awt::Gradient2
            to ColorStops, doing some corrections, partially based
            on given SingleColor.

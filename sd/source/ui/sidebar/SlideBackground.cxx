@@ -403,6 +403,12 @@ void SlideBackground::Update()
             mxFillGrad1->SelectEntry(aStartColor);
             const Color aEndColor(xGradient.GetColorStops().back().getStopColor());
             mxFillGrad2->SelectEntry(aEndColor);
+
+            // MCGR: preserve in-between ColorStops if given
+            if (xGradient.GetColorStops().size() > 2)
+                maColorStops = basegfx::ColorStops(xGradient.GetColorStops().begin() + 1, xGradient.GetColorStops().end() - 1);
+            else
+                maColorStops.clear();
         }
         break;
 
@@ -1127,10 +1133,7 @@ IMPL_LINK_NOARG(SlideBackground, FillColorHdl, ColorListBox&, void)
         break;
         case drawing::FillStyle_GRADIENT:
         {
-            XGradient aGradient(
-                basegfx::utils::createColorStopsFromStartEndColor(
-                    mxFillGrad1->GetSelectEntryColor().getBColor(),
-                    mxFillGrad2->GetSelectEntryColor().getBColor()));
+            XGradient aGradient(createColorStops());
 
             // the name doesn't really matter, it'll be converted to unique one eventually,
             // but it has to be non-empty
@@ -1283,6 +1286,23 @@ IMPL_LINK_NOARG( SlideBackground, ModifyMarginHdl, weld::ComboBox&, void )
     }
 }
 
+basegfx::ColorStops SlideBackground::createColorStops()
+{
+    basegfx::ColorStops aColorStops;
+
+    aColorStops.emplace_back(0.0, mxFillGrad1->GetSelectEntryColor().getBColor());
+
+    if(!maColorStops.empty())
+    {
+        aColorStops.insert(aColorStops.begin(), maColorStops.begin(), maColorStops.end());
+    }
+
+    aColorStops.emplace_back(1.0, mxFillGrad2->GetSelectEntryColor().getBColor());
+
+    return aColorStops;
 }
+
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

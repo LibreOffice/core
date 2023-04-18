@@ -22,6 +22,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <com/sun/star/awt/Gradient2.hpp>
+#include <osl/endian.h>
 
 #include <algorithm>
 #include <cmath>
@@ -264,6 +265,80 @@ namespace basegfx
 
     namespace utils
     {
+        /* Internal helper to convert ::Color from tools::color.hxx to BColor
+           without the need to link against tools library. Be on the
+           safe side by using the same union
+        */
+        namespace {
+        struct ColorToBColorConverter
+        {
+            union {
+                sal_uInt32 mValue;
+                struct {
+#ifdef OSL_BIGENDIAN
+                    sal_uInt8 T;
+                    sal_uInt8 R;
+                    sal_uInt8 G;
+                    sal_uInt8 B;
+#else
+                    sal_uInt8 B;
+                    sal_uInt8 G;
+                    sal_uInt8 R;
+                    sal_uInt8 T;
+#endif
+                };
+            };
+
+            ColorToBColorConverter(sal_uInt32 nColor) : mValue(nColor) { T=0; }
+            BColor getBColor() const
+            {
+                return BColor(R / 255.0, G / 255.0, B / 255.0);
+            }
+        };
+        }
+
+        /// Tooling method to fill awt::Gradient2 from data contained in the given Any
+        bool fillGradient2FromAny(css::awt::Gradient2& rGradient, const css::uno::Any& rVal)
+        {
+            bool bRetval(false);
+
+            if (rVal.has< css::awt::Gradient2 >())
+            {
+                // we can use awt::Gradient2 directly
+                bRetval = (rVal >>= rGradient);
+            }
+            else if (rVal.has< css::awt::Gradient >())
+            {
+                // 1st get awt::Gradient
+                css::awt::Gradient aTmp;
+
+                if (rVal >>= aTmp)
+                {
+                    // copy all awt::Gradient data to awt::Gradient2
+                    rGradient.Style = aTmp.Style;
+                    rGradient.StartColor = aTmp.StartColor;
+                    rGradient.EndColor = aTmp.EndColor;
+                    rGradient.Angle = aTmp.Angle;
+                    rGradient.Border = aTmp.Border;
+                    rGradient.XOffset = aTmp.XOffset;
+                    rGradient.YOffset = aTmp.YOffset;
+                    rGradient.StartIntensity = aTmp.StartIntensity;
+                    rGradient.EndIntensity = aTmp.EndIntensity;
+                    rGradient.StepCount = aTmp.StepCount;
+
+                    // complete data by creating ColorStops for awt::Gradient2
+                    fillColorStopSequenceFromColorStops(
+                        rGradient.ColorStops,
+                        ColorStops {
+                            ColorStop(0.0, ColorToBColorConverter(aTmp.StartColor).getBColor()),
+                            ColorStop(1.0, ColorToBColorConverter(aTmp.EndColor).getBColor()) });
+                    bRetval = true;
+                }
+            }
+
+            return bRetval;
+        }
+
         /* Tooling method to extract data from given awt::Gradient2
            to ColorStops, doing some corrections, partially based
            on given SingleColor.
@@ -314,14 +389,30 @@ namespace basegfx
             if (rGradient.Border != 0)
             {
                 // apply Border if set
-                // NOTE: no new start node is added. If this is needed,
-                //       do that in the caller
+                // NOTE: no new start node is added. The new ColorStop
+                //       mechanism does not need entries at 0.0 and 1.0.
+                //       In case this is needed, do that in the caller
                 const double fFactor(rGradient.Border * 0.01);
                 ColorStops aNewStops;
 
                 for (const auto& candidate : rColorStops)
                 {
-                    aNewStops.emplace_back(candidate.getStopOffset() * fFactor, candidate.getStopColor());
+                    if (css::awt::GradientStyle_AXIAL == rGradient.Style)
+                    {
+                        // for axial add the 'gap' at the start due to reverse used gradient
+                        aNewStops.emplace_back((1.0 - fFactor) * candidate.getStopOffset(), candidate.getStopColor());
+                    }
+                    else
+                    {
+                        // css::awt::GradientStyle_LINEAR
+                        // case awt::GradientStyle_RADIAL
+                        // case awt::GradientStyle_ELLIPTICAL
+                        // case awt::GradientStyle_RECT
+                        // case awt::GradientStyle_SQUARE
+
+                        // for all others add the 'gap' at the end
+                        aNewStops.emplace_back(fFactor + (candidate.getStopOffset() * (1.0 - fFactor)), candidate.getStopColor());
+                    }
                 }
 
                 rColorStops = aNewStops;

@@ -533,11 +533,12 @@ uno::Reference< container::XNameContainer > SvxUnoXGradientTable_createInstance(
 uno::Any SvxUnoXGradientTable::getAny( const XPropertyEntry* pEntry ) const noexcept
 {
     const XGradient& aXGradient = static_cast<const XGradientEntry*>(pEntry)->GetGradient();
-    awt::Gradient aGradient;
+    awt::Gradient2 aGradient;
 
+    // standard values
     aGradient.Style = aXGradient.GetGradientStyle();
-    aGradient.StartColor = static_cast<sal_Int32>(Color(aXGradient.GetColorStops().front().getStopColor()));
-    aGradient.EndColor = static_cast<sal_Int32>(Color(aXGradient.GetColorStops().back().getStopColor()));
+    // aGradient.StartColor = static_cast<sal_Int32>(Color(aXGradient.GetColorStops().front().getStopColor()));
+    // aGradient.EndColor = static_cast<sal_Int32>(Color(aXGradient.GetColorStops().back().getStopColor()));
     aGradient.Angle = static_cast<short>(aXGradient.GetAngle());
     aGradient.Border = aXGradient.GetBorder();
     aGradient.XOffset = aXGradient.GetXOffset();
@@ -545,6 +546,14 @@ uno::Any SvxUnoXGradientTable::getAny( const XPropertyEntry* pEntry ) const noex
     aGradient.StartIntensity = aXGradient.GetStartIntens();
     aGradient.EndIntensity = aXGradient.GetEndIntens();
     aGradient.StepCount = aXGradient.GetSteps();
+
+    // for compatibility, still set StartColor/EndColor
+    const basegfx::ColorStops& rColorStops(aXGradient.GetColorStops());
+    aGradient.StartColor = static_cast<sal_Int32>(Color(rColorStops.front().getStopColor()));
+    aGradient.EndColor = static_cast<sal_Int32>(Color(rColorStops.back().getStopColor()));
+
+    // fill ColorStops to extended Gradient2
+    basegfx::utils::fillColorStopSequenceFromColorStops(aGradient.ColorStops, rColorStops);
 
     return uno::Any(aGradient);
 }
@@ -568,6 +577,12 @@ std::unique_ptr<XPropertyEntry> SvxUnoXGradientTable::createEntry(const OUString
     aXGradient.SetStartIntens( aGradient.StartIntensity );
     aXGradient.SetEndIntens( aGradient.EndIntensity );
     aXGradient.SetSteps( aGradient.StepCount );
+
+    // check if we have a awt::Gradient2 with a ColorStopSequence
+    basegfx::ColorStops aColorStops;
+    basegfx::utils::fillColorStopsFromAny(aColorStops, rAny);
+    if (!aColorStops.empty())
+        aXGradient.SetColorStops(aColorStops);
 
     return std::make_unique<XGradientEntry>(aXGradient, rName);
 }

@@ -139,6 +139,9 @@ private:
 
     MapUnit meUnit;
 
+    // MCGR: Preserve in-between ColorStops until we have an UI to edit these
+    basegfx::ColorStops maColorStops;
+
     DECL_LINK(FillBackgroundHdl, weld::ComboBox&, void);
     DECL_LINK(FillStyleModifyHdl, weld::ComboBox&, void);
     DECL_LINK(PaperSizeModifyHdl, weld::ComboBox&, void);
@@ -173,6 +176,9 @@ private:
     void updateMasterSlideSelection();
 
     static FieldUnit GetCurrentUnit(SfxItemState eState, const SfxPoolItem* pState);
+
+    // MCGR: Preserve in-between ColorStops until we have an UI to edit these
+    basegfx::ColorStops createColorStops();
 };
 
 }

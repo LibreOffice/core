@@ -21,6 +21,7 @@
 
 #include <vcl/weld.hxx>
 #include <svtools/toolbarmenu.hxx>
+#include <basegfx/utils/gradienttools.hxx>
 
 class XFillFloatTransparenceItem;
 
@@ -43,6 +44,9 @@ private:
     std::unique_ptr<weld::MetricSpinButton> mxMtrTrgrStartValue;
     std::unique_ptr<weld::MetricSpinButton> mxMtrTrgrEndValue;
     std::unique_ptr<weld::MetricSpinButton> mxMtrTrgrBorder;
+
+    // MCGR: Preserve in-between ColorStops until we have an UI to edit these
+    basegfx::ColorStops maColorStops;
 
     void InitStatus(XFillFloatTransparenceItem const* pGradientItem);
     void ExecuteValueModify(sal_uInt8 nStartCol, sal_uInt8 nEndCol);
