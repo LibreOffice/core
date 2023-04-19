@@ -235,7 +235,7 @@ private:
     virtual OUString get_name() const override;
 };
 
-class ExpanderUIObject : public WindowUIObject
+class ExpanderUIObject final : public WindowUIObject
 {
     VclPtr<VclExpander> mxExpander;
 

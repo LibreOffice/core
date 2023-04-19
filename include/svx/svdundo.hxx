@@ -230,7 +230,7 @@ public:
 };
 
 // Diagram ModelData changes
-class SVXCORE_DLLPUBLIC SdrUndoDiagramModelData : public SdrUndoObj
+class SVXCORE_DLLPUBLIC SdrUndoDiagramModelData final : public SdrUndoObj
 {
     std::shared_ptr< svx::diagram::DiagramDataState > m_aStartState;
     std::shared_ptr< svx::diagram::DiagramDataState > m_aEndState;

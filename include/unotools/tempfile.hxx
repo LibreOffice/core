@@ -197,7 +197,7 @@ typedef ::cppu::WeakImplHelper<
     , css::io::XInputStream
     , css::io::XOutputStream
     , css::io::XTruncate> TempFileFastService_Base;
-class UNOTOOLS_DLLPUBLIC TempFileFastService : public TempFileFastService_Base
+class UNOTOOLS_DLLPUBLIC TempFileFastService final : public TempFileFastService_Base
 {
     std::optional<utl::TempFileFast> mpTempFile;
     std::mutex maMutex;

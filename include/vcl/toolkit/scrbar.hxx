@@ -30,7 +30,7 @@
 
 struct ImplScrollBarData;
 
-class VCL_DLLPUBLIC ScrollBar : public Control
+class VCL_DLLPUBLIC ScrollBar final : public Control
                               , public Scrollable
 {
 private:

@@ -22,7 +22,7 @@
 #include <svx/svxdllapi.h>
 #include <svx/unoshape.hxx>
 
-class SVXCORE_DLLPUBLIC SvxTableShape : public SvxShape
+class SVXCORE_DLLPUBLIC SvxTableShape final : public SvxShape
 {
 protected:
     // override these for special property handling in subcasses. Return true if property is handled
