@@ -43,11 +43,6 @@ SwPageNumberDlg::SwPageNumberDlg(weld::Window* pParent)
 
 IMPL_LINK_NOARG(SwPageNumberDlg, OkHdl, weld::Button&, void) { m_xDialog->response(RET_OK); }
 
-IMPL_LINK_NOARG(SwPageNumberDlg, CancelHdl, weld::Button&, void)
-{
-    m_xDialog->response(RET_CANCEL);
-}
-
 IMPL_LINK_NOARG(SwPageNumberDlg, PositionSelectHdl, weld::ComboBox&, void)
 {
     m_aPageNumberPosition = m_xPageNumberPosition->get_active();

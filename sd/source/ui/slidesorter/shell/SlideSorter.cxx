@@ -83,19 +83,6 @@ std::shared_ptr<SlideSorter> SlideSorter::CreateSlideSorter(
     return pSlideSorter;
 }
 
-std::shared_ptr<SlideSorter> SlideSorter::CreateSlideSorter (
-    ViewShellBase& rBase,
-    vcl::Window& rParentWindow)
-{
-    std::shared_ptr<SlideSorter> pSlideSorter(
-        new SlideSorter(
-            rBase,
-            rParentWindow),
-        o3tl::default_delete<SlideSorter>());
-    pSlideSorter->Init();
-    return pSlideSorter;
-}
-
 SlideSorter::SlideSorter (
     ViewShell& rViewShell,
     sd::Window* pContentWindow,

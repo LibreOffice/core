@@ -60,12 +60,8 @@ public:
 
     // Query/direct setting of the absolute values
     tools::Long GetLeft() const { return m_nLeftMargin; }
-    void SetLeftValue(const tools::Long nLeft) { m_nLeftMargin = nLeft; }
 
     sal_uInt16 GetPropLeft() const { return m_nPropLeftMargin; }
-
-    // SfxPoolItem interface ...
-    static SfxPoolItem* CreateDefault();
 
     explicit SvxLeftMarginItem(const sal_uInt16 nId);
     SvxLeftMarginItem(const tools::Long nLeft, const sal_uInt16 nId);
@@ -108,9 +104,6 @@ public:
 
     void SetTextLeft(const tools::Long nL, const sal_uInt16 nProp = 100);
     tools::Long GetTextLeft() const;
-
-    // SfxPoolItem interface ...
-    static SfxPoolItem* CreateDefault();
 
     explicit SvxTextLeftMarginItem(const sal_uInt16 nId);
     SvxTextLeftMarginItem(const tools::Long nLeft, const sal_uInt16 nId);
@@ -158,9 +151,6 @@ public:
     void SetTextFirstLineOffsetValue(const short nValue)
                     { m_nFirstLineOffset = nValue; }
 
-    // SfxPoolItem interface ...
-    static SfxPoolItem* CreateDefault();
-
     explicit SvxFirstLineIndentItem(const sal_uInt16 nId);
     SvxFirstLineIndentItem(const short nOffset, const sal_uInt16 nId);
     SvxFirstLineIndentItem(SvxFirstLineIndentItem const &) = default; // SfxPoolItem copy function dichotomy
@@ -197,12 +187,8 @@ public:
 
     // Query/direct setting of the absolute values
     tools::Long GetRight() const { return m_nRightMargin;}
-    void SetRightValue(const tools::Long nR) { m_nRightMargin = nR; }
 
     sal_uInt16 GetPropRight() const { return m_nPropRightMargin; }
-
-    // SfxPoolItem interface ...
-    static SfxPoolItem* CreateDefault();
 
     explicit SvxRightMarginItem(const sal_uInt16 nId);
     SvxRightMarginItem(const tools::Long nRight, const sal_uInt16 nId);
@@ -238,9 +224,6 @@ public:
     void SetGutterMargin(const tools::Long nGutterMargin) { m_nGutterMargin = nGutterMargin; }
     tools::Long GetGutterMargin() const { return m_nGutterMargin; }
 
-    // SfxPoolItem interface ...
-    static SfxPoolItem* CreateDefault();
-
     explicit SvxGutterLeftMarginItem(const sal_uInt16 nId);
     SvxGutterLeftMarginItem(SvxGutterLeftMarginItem const &) = default; // SfxPoolItem copy function dichotomy
 
@@ -271,11 +254,7 @@ private:
     tools::Long m_nRightGutterMargin = 0;
 
 public:
-    void SetRightGutterMargin(const tools::Long nRightGutterMargin) { m_nRightGutterMargin = nRightGutterMargin; }
     tools::Long GetRightGutterMargin() const { return m_nRightGutterMargin; }
-
-    // SfxPoolItem interface ...
-    static SfxPoolItem* CreateDefault();
 
     explicit SvxGutterRightMarginItem(const sal_uInt16 nId);
     SvxGutterRightMarginItem(SvxGutterRightMarginItem const &) = default; // SfxPoolItem copy function dichotomy

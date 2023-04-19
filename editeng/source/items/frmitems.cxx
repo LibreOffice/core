@@ -86,12 +86,6 @@ using namespace ::com::sun::star::table::BorderLineStyle;
 
 SfxPoolItem* SvxPaperBinItem::CreateDefault() { return new  SvxPaperBinItem(0);}
 SfxPoolItem* SvxSizeItem::CreateDefault() { return new  SvxSizeItem(0);}
-SfxPoolItem* SvxLeftMarginItem::CreateDefault() { return new SvxLeftMarginItem(0); }
-SfxPoolItem* SvxTextLeftMarginItem::CreateDefault() { return new SvxTextLeftMarginItem(0); }
-SfxPoolItem* SvxFirstLineIndentItem::CreateDefault() { return new SvxFirstLineIndentItem(0); }
-SfxPoolItem* SvxRightMarginItem::CreateDefault() { return new SvxRightMarginItem(0); }
-SfxPoolItem* SvxGutterLeftMarginItem::CreateDefault() { return new SvxGutterLeftMarginItem(0); }
-SfxPoolItem* SvxGutterRightMarginItem::CreateDefault() { return new SvxGutterRightMarginItem(0); }
 SfxPoolItem* SvxLRSpaceItem::CreateDefault() { return new  SvxLRSpaceItem(0);}
 SfxPoolItem* SvxULSpaceItem::CreateDefault() { return new  SvxULSpaceItem(0);}
 SfxPoolItem* SvxProtectItem::CreateDefault() { return new  SvxProtectItem(0);}

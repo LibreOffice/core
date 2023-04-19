@@ -54,11 +54,6 @@ public:
         const OUString& rsRootName,
         const WriteMode eMode);
 
-    ConfigurationAccess(
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const OUString& rsRootName,
-        const WriteMode eMode);
-
     /** Return a configuration node below the root of the called object.
         @param rsPathToNode
             The relative path from the root (as given the constructor) to
@@ -96,39 +91,6 @@ public:
     typedef ::std::function<void (
         const OUString&,
         const std::vector<css::uno::Any>&) > Functor;
-
-    /** Execute a functor for all elements of the given container.
-        @param rxContainer
-            The container is a XNameAccess to a list of the configuration.
-            This can be a node returned by GetConfigurationNode().
-        @param rArguments
-            The functor is called with arguments that are children of each
-            element of the container.  The set of children is specified in this
-            list.
-        @param rFunctor
-            The functor to be executed for some or all of the elements in
-            the given container.
-    */
-    static void ForAll (
-        const css::uno::Reference<css::container::XNameAccess>& rxContainer,
-        const ::std::vector<OUString>& rArguments,
-        const Functor& rFunctor);
-
-    /** Fill a list with the string contents of all sub-elements in the given container.
-        @param rxContainer
-            The container is a XNameAccess to a list of the configuration.
-            This can be a node returned by GetConfigurationNode().
-        @param rsArgument
-            This specifies which string children of the elements in the
-            container are to be inserted into the list.  The specified child
-            has to be of type string.
-        @param rList
-            The list to be filled.
-    */
-    static void FillList(
-        const css::uno::Reference<css::container::XNameAccess>& rxContainer,
-        const OUString& rsArgument,
-        ::std::vector<OUString>& rList);
 
 private:
     css::uno::Reference<css::uno::XInterface> mxRoot;

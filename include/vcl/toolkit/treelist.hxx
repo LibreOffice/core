@@ -170,7 +170,6 @@ public:
     const SvTreeListEntry* GetParent( const SvTreeListEntry* pEntry ) const;
     SvTreeListEntry* GetParent( SvTreeListEntry* pEntry );
 
-    SvTreeListEntry*        GetRootLevelParent( SvTreeListEntry* pEntry ) const;
     const SvTreeListEntries& GetChildList( SvTreeListEntry* pParent ) const;
     SvTreeListEntries& GetChildList( SvTreeListEntry* pParent );
 

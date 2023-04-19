@@ -721,12 +721,6 @@ std::shared_ptr<SdTransferable::UserData> SdTransferable::GetUserData (const sal
         return std::shared_ptr<UserData>();
 }
 
-const css::uno::Sequence< sal_Int8 >& SdTransferable::getUnoTunnelId()
-{
-    static const comphelper::UnoIdInit theSdTransferableUnoTunnelId;
-    return theSdTransferableUnoTunnelId.getSeq();
-}
-
 SdTransferable* SdTransferable::getImplementation( const Reference< XInterface >& rxData ) noexcept
 {
     return dynamic_cast<SdTransferable*>(rxData.get());

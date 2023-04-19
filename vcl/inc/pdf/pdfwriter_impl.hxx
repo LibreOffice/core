@@ -1018,8 +1018,6 @@ i12626
     bool finalizeSignature();
     // writes xref and trailer
     bool emitTrailer();
-    // emit additional streams collected; also create there object numbers
-    bool emitAdditionalStreams();
     // emits info dict (if applicable)
     sal_Int32 emitInfoDict( );
 

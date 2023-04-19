@@ -53,7 +53,6 @@ public:
     NodeContext(const css::uno::Reference<css::animations::XAnimationNode>& xNode,
                 bool bMainSeqChild, bool bIsIterateChild);
     const css::uno::Reference<css::animations::XAnimationNode>& getNode() const { return mxNode; }
-    bool isMainSeqChild() const { return mbMainSeqChild; }
     sal_Int16 getEffectNodeType() const { return mnEffectNodeType; }
     sal_Int16 getEffectPresetClass() const { return mnEffectPresetClass; }
     const OUString& getEffectPresetId() const { return msEffectPresetId; }

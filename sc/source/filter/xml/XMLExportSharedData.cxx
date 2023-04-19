@@ -110,12 +110,6 @@ void ScMySharedData::SortShapesContainer()
         pShapesContainer->Sort();
 }
 
-bool ScMySharedData::HasShapes() const
-{
-    return ((pShapesContainer && pShapesContainer->HasShapes()) ||
-            (pTableShapes && !pTableShapes->empty()));
-}
-
 void ScMySharedData::AddTableShape(const sal_Int32 nTable, const uno::Reference<drawing::XShape>& xShape)
 {
     if (!pTableShapes)

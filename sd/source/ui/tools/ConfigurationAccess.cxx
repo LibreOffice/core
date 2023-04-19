@@ -34,16 +34,6 @@ using namespace ::com::sun::star::uno;
 namespace sd::tools {
 
 ConfigurationAccess::ConfigurationAccess (
-    const Reference<XComponentContext>& rxContext,
-    const OUString& rsRootName,
-    const WriteMode eMode)
-{
-    Reference<lang::XMultiServiceFactory> xProvider =
-           configuration::theDefaultProvider::get( rxContext );
-    Initialize(xProvider, rsRootName, eMode);
-}
-
-ConfigurationAccess::ConfigurationAccess (
     const OUString& rsRootName,
     const WriteMode eMode)
 {
@@ -116,56 +106,6 @@ void ConfigurationAccess::CommitChanges()
     Reference<util::XChangesBatch> xConfiguration (mxRoot, UNO_QUERY);
     if (xConfiguration.is())
         xConfiguration->commitChanges();
-}
-
-void ConfigurationAccess::ForAll (
-    const Reference<container::XNameAccess>& rxContainer,
-    const ::std::vector<OUString>& rArguments,
-    const Functor& rFunctor)
-{
-    if (!rxContainer.is())
-        return;
-
-    ::std::vector<Any> aValues(rArguments.size());
-    const Sequence<OUString> aKeys (rxContainer->getElementNames());
-    for (const OUString& rsKey : aKeys)
-    {
-        Reference<container::XNameAccess> xSetItem (rxContainer->getByName(rsKey), UNO_QUERY);
-        if (xSetItem.is())
-        {
-            // Get from the current item of the container the children
-            // that match the names in the rArguments list.
-            for (size_t nValueIndex=0; nValueIndex<aValues.size(); ++nValueIndex)
-                aValues[nValueIndex] = xSetItem->getByName(rArguments[nValueIndex]);
-        }
-        rFunctor(rsKey, aValues);
-    }
-}
-
-void ConfigurationAccess::FillList(
-    const Reference<container::XNameAccess>& rxContainer,
-    const OUString& rsArgument,
-    ::std::vector<OUString>& rList)
-{
-    try
-    {
-        if (rxContainer.is())
-        {
-            Sequence<OUString> aKeys (rxContainer->getElementNames());
-            rList.resize(aKeys.getLength());
-            for (sal_Int32 nItemIndex=0; nItemIndex<aKeys.getLength(); ++nItemIndex)
-            {
-                Reference<container::XNameAccess> xSetItem (
-                    rxContainer->getByName(aKeys[nItemIndex]), UNO_QUERY);
-                if (xSetItem.is())
-                {
-                    xSetItem->getByName(rsArgument) >>= rList[nItemIndex];
-                }
-            }
-        }
-    }
-    catch (RuntimeException&)
-    {}
 }
 
 } // end of namespace sd::tools

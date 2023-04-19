@@ -27,11 +27,6 @@ inline SdrMetricItem makeSdrTextMinFrameHeightItem(tools::Long mnHeight)
     return SdrMetricItem(SDRATTR_TEXT_MINFRAMEHEIGHT, mnHeight);
 }
 
-inline SdrMetricItem makeSdrTextMaxFrameHeightItem(tools::Long mnHeight)
-{
-    return SdrMetricItem(SDRATTR_TEXT_MAXFRAMEHEIGHT, mnHeight);
-}
-
 inline SdrMetricItem makeSdrTextMinFrameWidthItem(tools::Long mnWidth)
 {
     return SdrMetricItem(SDRATTR_TEXT_MINFRAMEWIDTH, mnWidth);

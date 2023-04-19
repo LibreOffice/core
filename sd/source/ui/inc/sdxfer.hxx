@@ -71,7 +71,6 @@ public:
 
     bool                            SetTableRTF( SdDrawDocument* );
 
-    static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
     static SdTransferable*          getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData ) noexcept;
 
     // SfxListener

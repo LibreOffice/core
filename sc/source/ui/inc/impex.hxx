@@ -161,7 +161,6 @@ public:
     void SetExportTextOptions( const ScExportTextOptions& options ) { mExportTextOptions = options; }
 
     bool GetIncludeBOM() const { return mbIncludeBOM; }
-    void SetIncludeBOM(bool bVal) { mbIncludeBOM = bVal; }
 };
 
 // Helper class for importing clipboard strings as streams.

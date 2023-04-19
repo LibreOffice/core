@@ -2691,42 +2691,6 @@ void SalColormap::GetLookupTable()
                 m_aLookupTable[i++] = sal_Lookup( m_aPalette, r, g, b, m_nUsed );
 }
 
-Color SalColormap::GetColor( Pixel nPixel ) const
-{
-    if( m_nBlackPixel == nPixel ) return COL_BLACK;
-    if( m_nWhitePixel == nPixel ) return COL_WHITE;
-
-    if( m_aVisual.GetVisual() )
-    {
-        if( m_aVisual.GetClass() == TrueColor )
-            return m_aVisual.GetTCColor( nPixel );
-
-        if( m_aPalette.empty()
-            && m_hColormap
-            && m_aVisual.GetDepth() <= 12
-            && m_aVisual.GetClass() == PseudoColor )
-            const_cast<SalColormap*>(this)->GetPalette();
-    }
-
-    if( !m_aPalette.empty() && nPixel < m_nUsed )
-        return m_aPalette[nPixel];
-
-    if( !m_hColormap )
-    {
-        SAL_WARN("vcl", "SalColormap::GetColor() !m_hColormap");
-        return Color(ColorTransparency, nPixel);
-    }
-
-    // DirectColor, StaticColor, StaticGray, GrayScale
-    XColor aColor;
-
-    aColor.pixel = nPixel;
-
-    XQueryColor( m_pDisplay->GetDisplay(), m_hColormap, &aColor );
-
-    return Color( aColor.red>>8, aColor.green>>8, aColor.blue>>8 );
-}
-
 inline bool SalColormap::GetXPixel( XColor &rColor,
                                           int     r,
                                           int     g,

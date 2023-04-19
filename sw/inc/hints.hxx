@@ -387,17 +387,6 @@ public:
     const SwNode* GetFoundNode() const { return m_pFound; }
 };
 
-class SwStringMsgPoolItem final : public SwMsgPoolItem
-{
-    OUString m_sStr;
-public:
-
-    const OUString& GetString() const { return m_sStr; }
-
-    SwStringMsgPoolItem( sal_uInt16 nId, OUString aStr )
-        : SwMsgPoolItem( nId ), m_sStr(std::move( aStr ))
-    {}
-};
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

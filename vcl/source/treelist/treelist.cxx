@@ -1009,21 +1009,6 @@ void SvTreeList::InvalidateEntry( SvTreeListEntry* pEntry )
     Broadcast( SvListAction::INVALIDATE_ENTRY, pEntry );
 }
 
-SvTreeListEntry* SvTreeList::GetRootLevelParent( SvTreeListEntry* pEntry ) const
-{
-    DBG_ASSERT(pEntry,"GetRootLevelParent:No Entry");
-    SvTreeListEntry* pCurParent = nullptr;
-    if ( pEntry )
-    {
-        pCurParent = pEntry->pParent;
-        if ( pCurParent == pRootItem.get() )
-            return pEntry; // is its own parent
-        while( pCurParent && pCurParent->pParent != pRootItem.get() )
-            pCurParent = pCurParent->pParent;
-    }
-    return pCurParent;
-}
-
 SvListView::SvListView()
     : m_pImpl(new Impl(*this))
 {

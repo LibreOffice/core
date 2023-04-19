@@ -143,7 +143,6 @@ class SwTableFormulaUpdate;
 class SwAutoFormatGetDocNode;
 class SwVirtPageNumInfo;
 class SwFindNearestNode;
-class SwStringMsgPoolItem;
 class SwFltAnchor;
 class SwFltTOX;
 class SwFltRedline;

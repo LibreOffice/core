@@ -94,11 +94,6 @@ getAllDataSequences(
 OOO_DLLPUBLIC_CHARTTOOLS rtl::Reference< ::chart::DataSource >
     getDataSource( const std::vector< rtl::Reference< ::chart::DataSeries > > & aSeries );
 
-/** Get the label of a labeled sequence including necessary automatic generation
- */
-OOO_DLLPUBLIC_CHARTTOOLS OUString getLabelForLabeledDataSequence(
-    const css::uno::Reference< css::chart2::data::XLabeledDataSequence > & xLabeledSeq );
-
 OOO_DLLPUBLIC_CHARTTOOLS void setStackModeAtSeries(
     const std::vector< rtl::Reference< ::chart::DataSeries > > & aSeries,
     const rtl::Reference< ::chart::BaseCoordinateSystem > & xCorrespondingCoordinateSystem,

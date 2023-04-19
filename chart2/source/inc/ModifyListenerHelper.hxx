@@ -197,16 +197,6 @@ void addListenerToAllMapElements(
                          impl::addListenerToMappedElementFunctor< typename Container::value_type >( xListener ));
 }
 
-template< typename T >
-void addListenerToAllSequenceElements(
-    const css::uno::Sequence< T > & rSequence,
-    const css::uno::Reference< css::util::XModifyListener > & xListener )
-{
-    if( xListener.is())
-        std::for_each( rSequence.begin(), rSequence.end(),
-                         impl::addListenerFunctor< T >( xListener ));
-}
-
 template< class InterfaceRef >
 void removeListener(
     const InterfaceRef & xObject,
@@ -257,16 +247,6 @@ void removeListenerFromAllMapElements(
     if( xListener.is())
         std::for_each( rContainer.begin(), rContainer.end(),
                          impl::removeListenerFromMappedElementFunctor< typename Container::value_type >( xListener ));
-}
-
-template< typename T >
-void removeListenerFromAllSequenceElements(
-    const css::uno::Sequence< T > & rSequence,
-    const css::uno::Reference< css::util::XModifyListener > & xListener )
-{
-    if( xListener.is())
-        std::for_each( rSequence.begin(), rSequence.end(),
-                         impl::removeListenerFunctor< T >( xListener ));
 }
 
 } //  namespace chart::ModifyListenerHelper

@@ -105,20 +105,6 @@ bool VTitle::isVisible(const rtl::Reference< Title >& xTitle) {
     return bShow;
 }
 
-bool VTitle::isVisible(const uno::Reference< XTitle >& xTitle) {
-    if (!xTitle.is()) {
-        return false;
-    }
-    bool bShow = true;
-    try {
-        uno::Reference< beans::XPropertySet > xTitleProps(xTitle, uno::UNO_QUERY_THROW);
-        xTitleProps->getPropertyValue("Visible") >>= bShow;
-    } catch (const uno::Exception &) {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-    return bShow;
-}
-
 
 void VTitle::createShapes(
       const awt::Point& rPos

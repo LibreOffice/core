@@ -68,8 +68,6 @@ private:
     bool m_bSetStandardName;
     sal_Int16 m_nStoreMode;
 
-    DECL_LINK(FilterDialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void);
-
     static bool FinishGUIStoreModel(::comphelper::SequenceAsHashMap::const_iterator& aFileNameIter,
                              ModelData_Impl& aModelData, bool bRemote, sal_Int16 nStoreMode,
                              css::uno::Sequence< css::beans::PropertyValue >& aFilterProps,

@@ -193,23 +193,6 @@ private:
     LifeTimeGuard& operator= ( const LifeTimeGuard& ) = delete;
 };
 
-template<class T>
-class NegativeGuard final
-{
-    T * m_pT;
-public:
-
-    NegativeGuard(T & t) : m_pT(&t)
-    {
-        m_pT->release();
-    }
-
-    ~NegativeGuard()
-    {
-        m_pT->acquire();
-    }
-};
-
 }//end namespace apphelper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

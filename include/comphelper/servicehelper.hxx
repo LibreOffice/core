@@ -65,16 +65,6 @@ namespace comphelper {
             css::uno::Reference<css::lang::XUnoTunnel>{ xIface, css::uno::UNO_QUERY });
     }
 
-    // Takes an Any
-    template <class T> T* getFromUnoTunnel(const css::uno::Any& rAny)
-    {
-        // For unclear reason, using a Reference ctor taking an Any
-        // gives different results compared to use of operator >>=.
-        css::uno::Reference<css::lang::XUnoTunnel> xUnoTunnel;
-        rAny >>= xUnoTunnel;
-        return getFromUnoTunnel<T>(xUnoTunnel);
-    }
-
     template <typename T>
     inline bool isUnoTunnelId(const css::uno::Sequence< sal_Int8 >& rId)
     {

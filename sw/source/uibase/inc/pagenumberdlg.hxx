@@ -36,7 +36,6 @@ class SwPageNumberDlg final : public SfxDialogController
     int m_aPageNumberAlignment;
 
     DECL_LINK(OkHdl, weld::Button&, void);
-    DECL_LINK(CancelHdl, weld::Button&, void);
     DECL_LINK(PositionSelectHdl, weld::ComboBox&, void);
     DECL_LINK(AlignmentSelectHdl, weld::ComboBox&, void);
 

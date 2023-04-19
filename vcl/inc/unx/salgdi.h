@@ -127,15 +127,6 @@ public:
     virtual css::uno::Any           GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const override;
 #endif // ENABLE_CAIRO_CANVAS
 
-    /*  use to handle GraphicsExpose/NoExpose after XCopyArea & friends
-     *  if pFrame is not NULL, corresponding Paint events are generated
-     *  and dispatched to pFrame
-     *
-     *  it is imperative to eat up graphics exposes even in case you don't need
-     *  them because the next one using XCopyArea can depend on them
-     */
-    void                            YieldGraphicsExpose();
-
 private:
     using SalGraphics::GetPixel;
 
@@ -156,11 +147,9 @@ private:
 
 public:
     Drawable GetDrawable() const { return maX11Common.GetDrawable(); }
-    const SalColormap& GetColormap() const { return maX11Common.GetColormap(); }
     const SalDisplay* GetDisplay() const { return maX11Common.GetDisplay(); }
     const SalVisual& GetVisual() const { return maX11Common.GetVisual(); }
     Display* GetXDisplay() const { return maX11Common.GetXDisplay(); }
-    Pixel GetPixel(Color nColor) const { return maX11Common.GetPixel(nColor); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

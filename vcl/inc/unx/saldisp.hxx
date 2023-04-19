@@ -142,10 +142,8 @@ public:
     const SalDisplay*   GetDisplay() const { return m_pDisplay; }
     inline  Display*            GetXDisplay() const;
     const SalVisual&    GetVisual() const { return m_aVisual; }
-    Visual*             GetXVisual() const { return m_aVisual.GetVisual(); }
     Pixel               GetWhitePixel() const { return m_nWhitePixel; }
     Pixel               GetBlackPixel() const { return m_nBlackPixel; }
-    Pixel               GetUsed() const { return m_nUsed; }
 
     bool            GetXPixels( XColor  &rColor,
                                     int      r,
@@ -156,7 +154,6 @@ public:
                                            int      g,
                                            int      b ) const;
     Pixel           GetPixel( std::optional<Color> nColor ) const;
-    Color           GetColor( Pixel nPixel ) const;
 };
 
 class SalI18N_InputMethod;
@@ -350,18 +347,14 @@ public:
     const Size&     GetScreenSize( SalX11Screen nXScreen ) const { return getDataForScreen( nXScreen ).m_aSize; }
     srv_vendor_t    GetServerVendor() const { return meServerVendor; }
     bool            IsDisplay() const { return !!pXLib_; }
-    GC              GetCopyGC( SalX11Screen nXScreen ) const { return getDataForScreen(nXScreen).m_aCopyGC; }
-    Pixmap          GetInvert50( SalX11Screen nXScreen ) const { return getDataForScreen(nXScreen).m_hInvert50; }
     const SalColormap&    GetColormap( SalX11Screen nXScreen ) const { return getDataForScreen(nXScreen).m_aColormap; }
     const SalVisual&      GetVisual( SalX11Screen nXScreen ) const { return getDataForScreen(nXScreen).m_aVisual; }
     const Pair     &GetResolution() const { return aResolution_; }
-    sal_uLong       GetMaxRequestSize() const { return nMaxRequestSize_; }
     Time            GetLastUserEventTime() const { return GetEventTimeImpl(); }
     // this is an equivalent of gdk_x11_get_server_time()
     Time            GetX11ServerTime() const { return GetEventTimeImpl( true ); }
 
     bool            XIfEventWithTimeout( XEvent*, XPointer, X_if_predicate ) const;
-    SalXLib*        GetXLib() const { return pXLib_; }
 
     SalI18N_InputMethod*        GetInputMethod()  const { return pXLib_->GetInputMethod();  }
     SalI18N_KeyboardExtension*  GetKbdExtension() const { return mpKbdExtension; }
