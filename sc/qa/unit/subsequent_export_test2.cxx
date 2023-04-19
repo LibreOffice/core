@@ -185,6 +185,7 @@ public:
     void testTdf130104_XLSXIndent();
     void testWholeRowBold();
     void testXlsxRowsOrder();
+    void testTdf91332();
     void testTdf91286();
     void testTdf148820();
     void testEmbeddedTextInDecimal();
@@ -315,6 +316,7 @@ public:
     CPPUNIT_TEST(testTdf130104_XLSXIndent);
     CPPUNIT_TEST(testWholeRowBold);
     CPPUNIT_TEST(testXlsxRowsOrder);
+    CPPUNIT_TEST(testTdf91332);
     CPPUNIT_TEST(testTdf91286);
     CPPUNIT_TEST(testTdf148820);
     CPPUNIT_TEST(testEmbeddedTextInDecimal);
@@ -2812,6 +2814,25 @@ void ScExportTest2::testXlsxRowsOrder()
     createScDoc("xlsx/tdf58243.xlsx");
     // Make sure code in SheetDataBuffer doesn't assert columns/rows sorting.
     save("Calc Office Open XML");
+}
+
+void ScExportTest2::testTdf91332()
+{
+    createScDoc("xlsx/tdf91332.xlsx");
+    saveAndReload("Calc Office Open XML");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShapeProps(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: rgba[90cf47ff]
+    // - Actual  : rgba[ffffffff]
+    // i.e. fill color inherited from theme lost after export.
+    Color nColor;
+    xShapeProps->getPropertyValue("FillColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(Color(0x90cf47), nColor);
 }
 
 void ScExportTest2::testTdf91286()

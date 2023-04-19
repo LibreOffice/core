@@ -574,7 +574,8 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
             WriteSolidFill(::Color(ColorTransparency, nFillColor & 0xffffff), nAlpha);
         }
     }
-    else if ( !sColorFillScheme.isEmpty() )
+    // tdf#91332 LO doesn't export the actual theme.xml in XLSX.
+    else if ( !sColorFillScheme.isEmpty() && GetDocumentType() != DOCUMENT_XLSX )
     {
         // the shape had a scheme color and the user didn't change it
         WriteSolidFill( sColorFillScheme, aTransformations, nAlpha );
