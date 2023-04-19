@@ -290,16 +290,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf116570_exportFootnote)
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of paragraphs in first footnote", 2, getParagraphs(xFootnoteText) );
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf80635_pageRightRTL, "tdf80635_pageRightRTL.doc")
+CPPUNIT_TEST_FIXTURE(Test, testTdf80635_pageRightRTL)
 {
-    // tdf#80635 - transfer the float orientation to the table.
-    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
-    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Horizontal Orientation", text::HoriOrientation::LEFT_AND_WIDTH, getProperty<sal_Int16>(xTable, "HoriOrient"));
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Table Indent", tools::Long(3500), getProperty<tools::Long>(xTable, "LeftMargin"), 100);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Did you fix me? Text probably should wrap here", 2, getPages() );
-    // If so, replace test with the table set to a greater preferred width so that the text shouldn't wrap
+    SwModelTestBase::FlySplitGuard aGuard;
+    auto verify = [this]() {
+        // tdf#80635 - assert horizontal position of the table.
+        uno::Reference<drawing::XShape> xFly = getShape(1);
+        CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xFly, "HoriOrientRelation"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Horizontal Orientation", text::HoriOrientation::RIGHT, getProperty<sal_Int16>(xFly, "HoriOrient"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("text probably does not wrap here", 1, getPages());
+    };
+    createSwDoc("tdf80635_pageRightRTL.doc");
+    verify();
+    reload(mpFilter, "tdf80635_pageRightRTL.doc");
+    verify();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf80635_marginRTL)
