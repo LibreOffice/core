@@ -264,7 +264,7 @@ SvxZoomDialog::SvxZoomDialog(weld::Window* pParent, const SfxItemSet& rCoreSet)
     else
     {
         // hide view layout related controls:
-        m_xViewFrame->set_sensitive(false);
+        m_xViewFrame->set_visible(false);
     }
 }
 
