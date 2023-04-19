@@ -203,10 +203,8 @@
             <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="sidebarnumberformat|leadingzeroeslabel">Leading _zeroes:</property>
             <property name="use-underline">True</property>
+            <property name="mnemonic-widget">leadingzeroes</property>
             <property name="xalign">0</property>
-            <accessibility>
-              <relation type="label-for" target="leadingzeroes"/>
-            </accessibility>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -221,9 +219,6 @@
             <property name="hexpand">True</property>
             <property name="truncate-multiline">True</property>
             <property name="adjustment">adjustment1</property>
-            <accessibility>
-              <relation type="labelled-by" target="leadingzeroeslabel"/>
-            </accessibility>
             <child internal-child="accessible">
               <object class="AtkObject" id="leadingzeroes-atkobject">
                 <property name="AtkObject::accessible-name" translatable="yes" context="sidebarnumberformat|leadingzeroes-atkobject">Leading Zeroes</property>
