@@ -101,24 +101,7 @@ BitmapEx XGradientList::CreateBitmap( tools::Long nIndex, const Size& rSize ) co
                 basegfx::B2DRange(0.0, 0.0, rSize.Width(), rSize.Height())));
 
         const XGradient& rGradient = GetGradient(nIndex)->GetGradient();
-        const sal_uInt16 nStartIntens(rGradient.GetStartIntens());
-        basegfx::BColor aStart(rGradient.GetColorStops().front().getStopColor());
-
-        if(nStartIntens != 100)
-        {
-            const basegfx::BColor aBlack;
-            aStart = interpolate(aBlack, aStart, static_cast<double>(nStartIntens) * 0.01);
-        }
-
-        const sal_uInt16 nEndIntens(rGradient.GetEndIntens());
-        basegfx::BColor aEnd(rGradient.GetColorStops().back().getStopColor());
-
-        if(nEndIntens != 100)
-        {
-            const basegfx::BColor aBlack;
-            aEnd = interpolate(aBlack, aEnd, static_cast<double>(nEndIntens) * 0.01);
-        }
-
+        basegfx::ColorStops aColorStops(rGradient.GetColorStops());
         drawinglayer::attribute::GradientStyle aGradientStyle(drawinglayer::attribute::GradientStyle::Rect);
 
         switch(rGradient.GetGradientStyle())
@@ -155,13 +138,23 @@ BitmapEx XGradientList::CreateBitmap( tools::Long nIndex, const Size& rSize ) co
             }
         }
 
+        if (rGradient.GetStartIntens() != 100 || rGradient.GetEndIntens() != 100)
+        {
+            // Need to do the (old, crazy) blend against black
+            basegfx::utils::blendColorStopsToIntensity(
+                aColorStops,
+                rGradient.GetStartIntens() * 0.01,
+                rGradient.GetEndIntens() * 0.01,
+                basegfx::BColor()); // COL_BLACK
+        }
+
         drawinglayer::attribute::FillGradientAttribute aFillGradient(
             aGradientStyle,
             static_cast<double>(rGradient.GetBorder()) * 0.01,
             static_cast<double>(rGradient.GetXOffset()) * 0.01,
             static_cast<double>(rGradient.GetYOffset()) * 0.01,
             toRadians(rGradient.GetAngle()),
-            basegfx::utils::createColorStopsFromStartEndColor(aStart, aEnd));
+            aColorStops);
 
         const drawinglayer::primitive2d::Primitive2DReference aGradientPrimitive(
             new drawinglayer::primitive2d::PolyPolygonGradientPrimitive2D(
