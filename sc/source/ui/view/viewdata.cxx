@@ -1523,6 +1523,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     bool bLOKActive = comphelper::LibreOfficeKit::isActive();
     bool bLOKPrintTwips = bLOKActive && comphelper::LibreOfficeKit::isCompatFlagSet(
             comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
+    bool bLOKLayoutRTL = bLOKActive && bLayoutRTL;
 
     bool bWasThere = false;
     if (pEditView[eWhich])
@@ -1620,6 +1621,9 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         else
             pEditView[eWhich]->SetLOKSpecialOutputArea(aPTwipsRect);
     }
+
+    if (bLOKLayoutRTL)
+        pEditView[eWhich]->SetLOKSpecialFlags(LOKSpecialFlags::LayoutRTL);
 
     tools::Rectangle aOutputArea = pWin->PixelToLogic( aPixRect, GetLogicMode() );
     pEditView[eWhich]->SetOutputArea( aOutputArea );
