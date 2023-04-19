@@ -370,6 +370,7 @@ void ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
             *pModel,
             aRect);
 
+        pBox->NbcSetStyleSheet(nullptr, true);
         pBox->SetMergedItemSetAndBroadcast(rData.GetBoxSet());
 
         pBox->SetLayer( SC_LAYER_INTERN );
@@ -413,6 +414,7 @@ void ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
         *pModel,
         SdrObjKind::Line,
         basegfx::B2DPolyPolygon(aTempPoly));
+    pArrow->NbcSetStyleSheet(nullptr, true);
     pArrow->NbcSetLogicRect(tools::Rectangle::Normalize(aStartPos,aEndPos));  //TODO: needed ???
     pArrow->SetMergedItemSetAndBroadcast(rAttrSet);
 
@@ -447,6 +449,7 @@ void ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
             *pModel,
             aRect);
 
+        pBox->NbcSetStyleSheet(nullptr, true);
         pBox->SetMergedItemSetAndBroadcast(rData.GetBoxSet());
 
         pBox->SetLayer( SC_LAYER_INTERN );
@@ -482,6 +485,7 @@ void ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
         *pModel,
         SdrObjKind::Line,
         basegfx::B2DPolyPolygon(aTempPoly));
+    pArrow->NbcSetStyleSheet(nullptr, true);
     pArrow->NbcSetLogicRect(tools::Rectangle::Normalize(aStartPos,aEndPos));  //TODO: needed ???
 
     pArrow->SetMergedItemSetAndBroadcast(rAttrSet);
@@ -554,6 +558,7 @@ void ScDetectiveFunc::DrawCircle( SCCOL nCol, SCROW nRow, ScDetectiveData& rData
         aRect);
     SfxItemSet& rAttrSet = rData.GetCircleSet();
 
+    pCircle->NbcSetStyleSheet(nullptr, true);
     pCircle->SetMergedItemSetAndBroadcast(rAttrSet);
 
     pCircle->SetLayer( SC_LAYER_INTERN );
