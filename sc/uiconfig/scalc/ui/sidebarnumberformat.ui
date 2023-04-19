@@ -40,7 +40,6 @@
             <child>
               <object class="GtkToggleToolButton" id=".uno:NumberFormatDecimal">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -51,7 +50,6 @@
             <child>
               <object class="GtkToggleToolButton" id=".uno:NumberFormatPercent">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -62,7 +60,6 @@
             <child>
               <object class="GtkMenuToolButton" id=".uno:NumberFormatCurrency">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
