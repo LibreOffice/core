@@ -4801,7 +4801,7 @@ void SalInstanceTreeView::expand_row(const weld::TreeIter& rIter)
 {
     assert(m_xTreeView->IsUpdateMode() && "don't expand when frozen");
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    if (!m_xTreeView->IsExpanded(rVclIter.iter) && signal_expanding(rIter))
+    if (!m_xTreeView->IsExpanded(rVclIter.iter) && ExpandRow(rVclIter))
         m_xTreeView->Expand(rVclIter.iter);
 }
 
@@ -5315,7 +5315,12 @@ IMPL_LINK_NOARG(SalInstanceTreeView, ExpandingHdl, SvTreeListBox*, bool)
     }
 
     // expanding
+    return ExpandRow(aIter);
+}
 
+bool SalInstanceTreeView::ExpandRow(const SalInstanceTreeIter& rIter)
+{
+    SvTreeListEntry* pEntry = rIter.iter;
     // if there's a preexisting placeholder child, required to make this
     // potentially expandable in the first place, now we remove it
     SvTreeListEntry* pPlaceHolder = GetPlaceHolderChild(pEntry);
@@ -5325,7 +5330,7 @@ IMPL_LINK_NOARG(SalInstanceTreeView, ExpandingHdl, SvTreeListBox*, bool)
         m_xTreeView->RemoveEntry(pPlaceHolder);
     }
 
-    bool bRet = signal_expanding(aIter);
+    bool bRet = signal_expanding(rIter);
 
     if (pPlaceHolder)
     {

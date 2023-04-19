@@ -1539,6 +1539,8 @@ protected:
     DECL_LINK(CustomRenderHdl, svtree_render_args, void);
     DECL_LINK(CustomMeasureHdl, svtree_measure_args, Size);
 
+    bool ExpandRow(const SalInstanceTreeIter& rIter);
+
     // Each row has a cell for the expander image, (and an optional cell for a
     // checkbutton if enable_toggle_buttons has been called) which precede
     // index 0
