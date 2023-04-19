@@ -448,33 +448,39 @@ namespace sdr::contact
                         aRetvalForShadow.append(new drawinglayer::primitive2d::TransformPrimitive2D(
                             aTransform, std::move(aCellBorderPrimitives)));
                     }
-                }
 
-                if(!aRetval.empty())
-                {
-                    // check and create evtl. shadow for created content
-                    const SfxItemSet& rObjectItemSet = rTableObj.GetMergedItemSet();
-                    const drawinglayer::attribute::SdrShadowAttribute aNewShadowAttribute(
-                        drawinglayer::primitive2d::createNewSdrShadowAttribute(rObjectItemSet));
-
-                    if(!aNewShadowAttribute.isDefault())
+                    if(!aRetval.empty())
                     {
-                        bool bDirectShadow
-                            = rObjectItemSet.Get(SDRATTR_SHADOW, /*bSrchInParent=*/false)
-                                  .GetValue();
-                        if (bDirectShadow)
+                        // check and create evtl. shadow for created content
+                        const SfxItemSet& rObjectItemSet = rTableObj.GetMergedItemSet();
+                        const drawinglayer::attribute::SdrShadowAttribute aNewShadowAttribute(
+                            drawinglayer::primitive2d::createNewSdrShadowAttribute(rObjectItemSet));
+
+                        if(!aNewShadowAttribute.isDefault())
                         {
-                            // Shadow as direct formatting: no shadow for text, to be compatible
-                            // with PowerPoint.
-                            basegfx::B2DHomMatrix aMatrix;
-                            aRetval = drawinglayer::primitive2d::createEmbeddedShadowPrimitive(
-                                std::move(aRetval), aNewShadowAttribute, aMatrix, &aRetvalForShadow);
-                        }
-                        else
-                        {
-                            // Shadow as style: shadow for text, to be backwards-compatible.
-                            aRetval = drawinglayer::primitive2d::createEmbeddedShadowPrimitive(
-                                std::move(aRetval), aNewShadowAttribute);
+                            // pass in table's transform and scale matrix, to
+                            // correctly scale and align shadows
+                            const basegfx::B2DHomMatrix aTransformScaleMatrix
+                                    = basegfx::utils::createScaleTranslateB2DHomMatrix(
+                                        aObjectRange.getRange(), aObjectRange.getMinimum());
+
+                            bool bDirectShadow
+                                    = rObjectItemSet.Get(SDRATTR_SHADOW, /*bSrchInParent=*/false)
+                                    .GetValue();
+                            if (bDirectShadow)
+                            {
+                                // Shadow as direct formatting: no shadow for text, to be compatible
+                                // with PowerPoint.
+                                aRetval = drawinglayer::primitive2d::createEmbeddedShadowPrimitive(
+                                    std::move(aRetval), aNewShadowAttribute, aTransformScaleMatrix,
+                                    &aRetvalForShadow);
+                            }
+                            else
+                            {
+                                // Shadow as style: shadow for text, to be backwards-compatible.
+                                aRetval = drawinglayer::primitive2d::createEmbeddedShadowPrimitive(
+                                    std::move(aRetval), aNewShadowAttribute, aTransformScaleMatrix);
+                            }
                         }
                     }
                 }
