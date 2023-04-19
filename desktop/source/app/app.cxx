@@ -1557,12 +1557,14 @@ int Desktop::Main()
         CheckOpenCLCompute(xDesktop);
 #endif
 
+#if !defined(EMSCRIPTEN)
         //Running the VCL graphics rendering tests
         const char * pDisplay = std::getenv("DISPLAY");
         if (!pDisplay || pDisplay[0] == ':')
         {
             runGraphicsRenderTests();
         }
+#endif
 
         // Post user event to startup first application component window
         // We have to send this OpenClients message short before execute() to
