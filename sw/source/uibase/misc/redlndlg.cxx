@@ -553,9 +553,9 @@ SwRedlineTable::size_type SwRedlineAcceptDlg::CalcDiff(SwRedlineTable::size_type
     {
         if (&pSh->GetRedline(i).GetRedlineData() == pRedlineData)
         {
+            rTreeView.thaw();
             // insert entries from nStart to i-1
             InsertParents(nStart, i - 1);
-            rTreeView.thaw();
             return nStart - 1;
         }
     }
