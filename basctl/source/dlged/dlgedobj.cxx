@@ -42,6 +42,7 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
+#include <com/sun/star/table/CellRangeAddress.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 #include <o3tl/functional.hxx>
 #include <svx/svdpagv.hxx>
@@ -1673,17 +1674,21 @@ void DlgEdObj::MakeDataAware( const Reference< frame::XModel >& xModel )
     if ( !xFac.is() )
         return;
 
-    css::table::CellAddress aApiAddress;
-
-    //tdf#90361 CellValueBinding and CellRangeListSource are unusable
+    //tdf#90361 and tdf#104011 CellValueBinding and CellRangeListSource are unusable
     //without being initialized, so use createInstanceWithArguments with a
-    //dummy BoundCell instead of createInstance. This at least results in
+    //dummy BoundCell and CellRange instead of createInstance. This at least results in
     //the dialog editor not falling.
-    css::beans::NamedValue aValue;
-    aValue.Name = "BoundCell";
-    aValue.Value <<= aApiAddress;
+    css::beans::NamedValue aCellValue;
+    aCellValue.Name = "BoundCell";
+    css::table::CellAddress aCellAddress;
+    aCellValue.Value <<= aCellAddress;
 
-    Sequence< Any > aArgs{ Any(aValue) };
+    css::beans::NamedValue aCellRange;
+    aCellRange.Name = "CellRange";
+    css::table::CellRangeAddress aRangeAddress;
+    aCellRange.Value <<= aRangeAddress;
+
+    Sequence< Any > aArgs{ Any(aCellValue), Any(aCellRange) };
 
     if ( xBindable.is() )
     {
