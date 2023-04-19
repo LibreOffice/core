@@ -505,7 +505,7 @@ void EditorWindow::Command( const CommandEvent& rCEvt )
         const CommandWheelData* pData = rCEvt.GetWheelData();
 
         // Check if it is a Ctrl+Wheel zoom command
-        if (pData->IsMod1())
+        if (pData && pData->IsMod1())
         {
             const sal_uInt16 nOldZoom = GetCurrentZoom();
             sal_uInt16 nNewZoom;
