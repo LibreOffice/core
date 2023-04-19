@@ -52,6 +52,7 @@ private:
 public:
     virtual void Paint(const UserDrawEvent& rEvt) override;
     virtual bool MouseButtonDown(const MouseEvent& rEvt) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& aArguments) override;
 
     SFX_DECL_STATUSBAR_CONTROL();
 

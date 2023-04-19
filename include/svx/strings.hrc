@@ -1324,6 +1324,7 @@
 #define RID_SVXSTR_DOC_MODIFIED_NO                          NC_("RID_SVXSTR_DOC_MODIFIED_NO", "The document has not been modified since the last save.")
 #define RID_SVXSTR_DOC_LOAD                                 NC_("RID_SVXSTR_DOC_LOAD", "Loading document...")
 #define RID_SVXSTR_FIT_SLIDE                                NC_("RID_SVXSTR_FIT_SLIDE", "Fit slide to current window.")
+#define RID_SVXSTR_FIT_PAGE                                 NC_("RID_SVXSTR_FIT_PAGE", "Fit page to current window.")
 #define RID_SVXSTR_WARN_MISSING_SMARTART                    NC_("RID_SVXSTR_WARN_MISSING_SMARTART", "Could not load all SmartArt objects. Saving in Microsoft Office 2010 or later would avoid this issue.")
 #define RID_SVXSTR_TABLECELL_HINT                           NC_("RID_SVXSTR_TABLECELL_HINT", "Table cell address. Click to open Table Properties dialog.")
 #define RID_SVXSTR_SECTION_HINT                             NC_("RID_SVXSTR_SECTION_HINT", "Section name. Click to open Edit Sections dialog.")

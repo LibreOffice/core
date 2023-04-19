@@ -39,6 +39,7 @@
 #include <bitmaps.hlst>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxZoomStatusBarControl,SvxZoomItem);
 
@@ -201,6 +202,26 @@ SvxZoomPageStatusBarControl::SvxZoomPageStatusBarControl(sal_uInt16 _nSlotId,
     , maImage(StockImage::Yes, RID_SVXBMP_ZOOM_PAGE)
 {
     GetStatusBar().SetQuickHelpText(GetId(), SvxResId(RID_SVXSTR_FIT_SLIDE));
+}
+
+void SAL_CALL SvxZoomPageStatusBarControl::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+{
+    // Call inherited initialize
+    StatusbarController::initialize(aArguments);
+
+    // Get document type
+    css::uno::Reference< css::frame::XModuleManager2 > xModuleManager = css::frame::ModuleManager::create( m_xContext );
+    OUString aModuleIdentifier = xModuleManager->identify( css::uno::Reference<XInterface>( m_xFrame, css::uno::UnoReference_Query::UNO_QUERY ) );
+
+    // Decide what to show in zoom bar
+    if ( aModuleIdentifier == "com.sun.star.drawing.DrawingDocument" )
+    {
+        GetStatusBar().SetQuickHelpText(GetId(), SvxResId(RID_SVXSTR_FIT_PAGE));
+    }
+    else if ( aModuleIdentifier == "com.sun.star.presentation.PresentationDocument" )
+    {
+        GetStatusBar().SetQuickHelpText(GetId(), SvxResId(RID_SVXSTR_FIT_SLIDE));
+    }
 }
 
 void SvxZoomPageStatusBarControl::Paint(const UserDrawEvent& rUsrEvt)
