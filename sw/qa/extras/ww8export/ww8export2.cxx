@@ -302,14 +302,18 @@ DECLARE_WW8EXPORT_TEST(testTdf80635_pageRightRTL, "tdf80635_pageRightRTL.doc")
     // If so, replace test with the table set to a greater preferred width so that the text shouldn't wrap
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf80635_marginRTL, "tdf80635_marginRightRTL.doc")
+CPPUNIT_TEST_FIXTURE(Test, testTdf80635_marginRTL)
 {
-    // tdf#80635 - transfer the float orientation to the table.
-    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
-    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    if ( !isExported() )
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Horizontal Orientation", text::HoriOrientation::RIGHT, getProperty<sal_Int16>(xTable, "HoriOrient"));
+    SwModelTestBase::FlySplitGuard aGuard;
+    auto verify = [this]() {
+        // tdf#80635 - assert the horizontal orientation of the table.
+        uno::Reference<drawing::XShape> xFly = getShape(1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Horizontal Orientation", text::HoriOrientation::RIGHT, getProperty<sal_Int16>(xFly, "HoriOrient"));
+    };
+    createSwDoc("tdf80635_marginRightRTL.doc");
+    verify();
+    reload(mpFilter, "tdf80635_marginRightRTL.doc");
+    verify();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf80635_marginLeft)
