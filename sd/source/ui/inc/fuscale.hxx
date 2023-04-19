@@ -23,7 +23,7 @@
 
 namespace sd {
 
-class FuScale
+class FuScale final
     : public FuPoor
 {
 public:

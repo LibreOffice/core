@@ -41,7 +41,7 @@ class MasterPageObserverEvent;
     listener is the master page selector control in the tool panel that
     shows the recently used master pages.
 */
-class MasterPageObserver : public SdGlobalResource
+class MasterPageObserver final : public SdGlobalResource
 {
 public:
     typedef ::std::set<OUString> MasterPageNameSet;

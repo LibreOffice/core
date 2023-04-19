@@ -23,7 +23,7 @@
 
 namespace sd {
 
-class FuSnapLine
+class FuSnapLine final
     : public FuPoor
 {
 public:

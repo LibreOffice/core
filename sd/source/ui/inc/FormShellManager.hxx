@@ -53,7 +53,7 @@ class ViewShellBase;
     The form shell is created and destroyed by the ViewShellManager by using
     a factory object provided by the FormShellManager.
 */
-class FormShellManager : public SfxListener
+class FormShellManager final : public SfxListener
 {
 public:
     FormShellManager(ViewShellBase& rBase);

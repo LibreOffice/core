@@ -121,7 +121,7 @@ protected:
     <p>For documentation of the methods please refer to the base class
     <type>IteratorImplBase</type>.</p>
 */
-class SelectionIteratorImpl
+class SelectionIteratorImpl final
     : public IteratorImplBase
 {
 public:
@@ -211,7 +211,7 @@ private:
     <p>For documentation of the methods please refer to the base class
     <type>IteratorImplBase</type>.</p>
 */
-class DocumentIteratorImpl : public ViewIteratorImpl
+class DocumentIteratorImpl final : public ViewIteratorImpl
 {
 public:
     DocumentIteratorImpl (

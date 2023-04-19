@@ -23,7 +23,7 @@
 
 namespace sd {
 
-class FuChar
+class FuChar final
     : public FuPoor
 {
 public:

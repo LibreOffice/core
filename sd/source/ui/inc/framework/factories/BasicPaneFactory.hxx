@@ -51,7 +51,7 @@ typedef comphelper::WeakComponentImplHelper <
     There are two left panes because this is (seems to be) the only way to
     show different titles for the left pane in Draw and Impress.
 */
-class BasicPaneFactory
+class BasicPaneFactory final
     : public BasicPaneFactoryInterfaceBase
 {
 public:

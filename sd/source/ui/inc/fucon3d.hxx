@@ -28,7 +28,7 @@ class SfxRequest;
 
 namespace sd {
 
-class FuConstruct3dObject
+class FuConstruct3dObject final
     : public FuConstruct
 {
 public:

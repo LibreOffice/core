@@ -24,7 +24,7 @@
 
 namespace sd {
 
-class FuInsertGraphic
+class FuInsertGraphic final
     : public FuPoor
 {
 public:
@@ -49,7 +49,7 @@ private:
 
 /************************************************************************/
 
-class FuInsertClipboard
+class FuInsertClipboard final
     : public FuPoor
 {
 public:
@@ -68,7 +68,7 @@ private:
 
 /************************************************************************/
 
-class FuInsertOLE
+class FuInsertOLE final
     : public FuPoor
 {
  public:
@@ -87,7 +87,7 @@ private:
 
 /************************************************************************/
 
-class FuInsertAVMedia
+class FuInsertAVMedia final
     : public FuPoor
 {
 public:

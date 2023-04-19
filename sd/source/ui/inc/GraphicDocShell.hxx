@@ -30,7 +30,7 @@ namespace sd
 /**
  * document shell for draw documents
  */
-class SD_DLLPUBLIC GraphicDocShell : public DrawDocShell
+class SD_DLLPUBLIC GraphicDocShell final : public DrawDocShell
 {
 public:
     SFX_DECL_INTERFACE(SD_IF_SDGRAPHICDOCSHELL)

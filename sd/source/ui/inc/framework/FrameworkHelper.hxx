@@ -50,7 +50,7 @@ namespace sd::framework {
     Note that a FrameworkHelper disposes itself when one of the resource
     controllers called by it throws a DisposedException.
 */
-class FrameworkHelper
+class FrameworkHelper final
     : public std::enable_shared_from_this<FrameworkHelper>,
       public SdGlobalResource
 {

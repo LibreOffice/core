@@ -28,7 +28,7 @@ namespace sd {
 
 class ViewShell;
 
-class FuBullet : public FuPoor
+class FuBullet final : public FuPoor
 {
 public:
 

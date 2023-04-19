@@ -26,7 +26,7 @@ namespace sd
 /** This class exists to be able to register another factory that
     creates the view shell for the Draw application.
 */
-class GraphicViewShellBase : public ViewShellBase
+class GraphicViewShellBase final : public ViewShellBase
 {
 public:
     SFX_DECL_VIEWFACTORY(GraphicViewShellBase);

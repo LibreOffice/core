@@ -36,7 +36,7 @@ class ViewShell;
  * bullet functions in outline mode
  */
 
-class FuBulletAndPosition
+class FuBulletAndPosition final
     : public FuPoor
 {
 public:

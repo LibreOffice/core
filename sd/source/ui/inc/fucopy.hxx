@@ -23,7 +23,7 @@
 
 namespace sd {
 
-class FuCopy
+class FuCopy final
     : public FuPoor
 {
 public:

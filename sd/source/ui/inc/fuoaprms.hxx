@@ -23,7 +23,7 @@
 
 namespace sd {
 
-class FuObjectAnimationParameters
+class FuObjectAnimationParameters final
     : public FuPoor
 {
 public:

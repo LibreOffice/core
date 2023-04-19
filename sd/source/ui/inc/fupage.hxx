@@ -30,7 +30,7 @@ class SdPage;
 namespace sd {
 class DrawViewShell;
 
-class FuPage
+class FuPage final
     : public FuPoor
 {
  public:

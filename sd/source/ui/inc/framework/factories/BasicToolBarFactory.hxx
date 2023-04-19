@@ -39,7 +39,7 @@ typedef comphelper::WeakComponentImplHelper <
 /** This factory provides some of the frequently used tool bars:
         private:resource/toolbar/ViewTabBar
 */
-class BasicToolBarFactory
+class BasicToolBarFactory final
     : public BasicToolBarFactoryInterfaceBase
 {
 public:

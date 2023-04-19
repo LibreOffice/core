@@ -23,7 +23,7 @@
 
 namespace sd {
 
-class FuTemplate
+class FuTemplate final
     : public FuPoor
 {
 public:

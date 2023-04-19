@@ -79,7 +79,7 @@ private:
 
 namespace sd {
 
-class SdNavigatorFloat : public SfxNavigator
+class SdNavigatorFloat final : public SfxNavigator
 {
 private:
     std::unique_ptr<SdNavigatorWin> m_xNavWin;
@@ -175,7 +175,7 @@ public:
 /**
  * ControllerItem for Navigator
  */
-class SdNavigatorControllerItem : public SfxControllerItem
+class SdNavigatorControllerItem final : public SfxControllerItem
 {
 public:
     SdNavigatorControllerItem( sal_uInt16, SdNavigatorWin*, SfxBindings*,
@@ -193,7 +193,7 @@ private:
 /**
  * ControllerItem for Navigator to show the page in the TreeLB
  */
-class SdPageNameControllerItem : public SfxControllerItem
+class SdPageNameControllerItem final : public SfxControllerItem
 {
 public:
     SdPageNameControllerItem( sal_uInt16, SdNavigatorWin*, SfxBindings*);

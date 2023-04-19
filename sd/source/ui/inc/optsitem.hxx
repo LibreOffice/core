@@ -34,7 +34,7 @@ class FrameView;
 
 class SdOptionsGeneric;
 
-class SD_DLLPUBLIC SdOptionsItem : public ::utl::ConfigItem
+class SD_DLLPUBLIC SdOptionsItem final : public ::utl::ConfigItem
 {
 
 private:
@@ -145,7 +145,7 @@ public:
     void    SetDefTab( sal_uInt16 nTab ) { if( nDefTab != nTab ) { OptionsChanged(); nDefTab = nTab; } }
 };
 
-class SD_DLLPUBLIC SdOptionsLayoutItem : public SfxPoolItem
+class SD_DLLPUBLIC SdOptionsLayoutItem final : public SfxPoolItem
 {
 public:
 
@@ -313,7 +313,7 @@ public:
     void    SetShowComments( bool bShow )  { if( bShowComments != bShow ) { OptionsChanged(); bShowComments = bShow; } }
 };
 
-class SD_DLLPUBLIC SdOptionsMiscItem : public SfxPoolItem
+class SD_DLLPUBLIC SdOptionsMiscItem final : public SfxPoolItem
 {
 public:
 
@@ -381,7 +381,7 @@ public:
     void    SetEliminatePolyPointLimitAngle( Degree100 nIn ) { if( nBezAngle != nIn ) { OptionsChanged(); nBezAngle = nIn; } }
 };
 
-class SD_DLLPUBLIC SdOptionsSnapItem : public SfxPoolItem
+class SD_DLLPUBLIC SdOptionsSnapItem final : public SfxPoolItem
 {
 public:
 
@@ -457,7 +457,7 @@ public:
     void    SetEqualGrid( bool bSet ) { if( bSet != SvxOptionsGrid::GetEqualGrid() ) { OptionsChanged(); SvxOptionsGrid::SetEqualGrid( bSet ); } }
 };
 
-class SdOptionsGridItem : public SvxGridItem
+class SdOptionsGridItem final : public SvxGridItem
 {
 
 public:
@@ -549,7 +549,7 @@ public:
     void    SetHandoutPages( sal_uInt16 nHandoutPages ) { if( nHandoutPages != mnHandoutPages ) { OptionsChanged(); mnHandoutPages = nHandoutPages; } }
 };
 
-class SD_DLLPUBLIC SdOptionsPrintItem : public SfxPoolItem
+class SD_DLLPUBLIC SdOptionsPrintItem final : public SfxPoolItem
 {
 public:
 
@@ -567,7 +567,7 @@ private:
     SdOptionsPrint  maOptionsPrint;
 };
 
-class SdOptions : public SdOptionsLayout, public SdOptionsContents,
+class SdOptions final : public SdOptionsLayout, public SdOptionsContents,
                   public SdOptionsMisc, public SdOptionsSnap,
                   public SdOptionsZoom, public SdOptionsGrid,
                   public SdOptionsPrint

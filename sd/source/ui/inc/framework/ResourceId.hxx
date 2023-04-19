@@ -45,7 +45,7 @@ typedef ::cppu::WeakImplHelper <
     service and the css::drawing::framework::XResourceId
     interface.
 */
-class ResourceId
+class ResourceId final
     : public ResourceIdInterfaceBase
 {
 public:

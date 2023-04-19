@@ -31,7 +31,7 @@ namespace basegfx {
 
 namespace sd {
 
-class FuMorph
+class FuMorph final
     : public FuPoor
 {
 public:

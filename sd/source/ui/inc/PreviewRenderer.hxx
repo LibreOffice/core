@@ -32,7 +32,7 @@ namespace sd {
 class DrawDocShell;
 class DrawView;
 
-class PreviewRenderer
+class PreviewRenderer final
     : public SfxListener
 {
 public:

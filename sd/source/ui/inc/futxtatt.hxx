@@ -23,7 +23,7 @@
 
 namespace sd {
 
-class FuTextAttrDlg
+class FuTextAttrDlg final
     : public FuPoor
 {
  public:

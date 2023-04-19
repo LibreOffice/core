@@ -23,7 +23,7 @@
 
 namespace sd {
 
-class FuExpandPage
+class FuExpandPage final
     : public FuPoor
 {
  public:

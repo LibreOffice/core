@@ -25,7 +25,7 @@
 
 namespace sd
 {
-class FuExecuteInteraction : public FuPoor
+class FuExecuteInteraction final : public FuPoor
 {
 public:
     static rtl::Reference<FuPoor> Create(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,

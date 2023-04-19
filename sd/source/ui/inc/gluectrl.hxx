@@ -50,7 +50,7 @@ public:
 /**
  * Toolbox controller for glue-point escape direction
  */
-class SdTbxCtlGlueEscDir : public SfxToolBoxControl
+class SdTbxCtlGlueEscDir final : public SfxToolBoxControl
 {
 private:
     static sal_uInt16 GetEscDirPos(SdrEscapeDirection nEscDir);

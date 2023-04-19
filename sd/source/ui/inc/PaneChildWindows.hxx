@@ -39,7 +39,7 @@ public:
 };
 
 /// The slide-sorter sidebar (on the left) in Impress.
-class LeftPaneImpressChildWindow
+class LeftPaneImpressChildWindow final
     : public PaneChildWindow
 {
 public:
@@ -50,7 +50,7 @@ public:
 };
 
 /// The pages sidebar (on the left) in Draw.
-class LeftPaneDrawChildWindow
+class LeftPaneDrawChildWindow final
     : public PaneChildWindow
 {
 public:

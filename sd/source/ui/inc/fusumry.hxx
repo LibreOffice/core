@@ -23,7 +23,7 @@
 
 namespace sd {
 
-class FuSummaryPage
+class FuSummaryPage final
     : public FuPoor
 {
 public:

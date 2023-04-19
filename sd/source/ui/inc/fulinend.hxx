@@ -23,7 +23,7 @@
 
 namespace sd {
 
-class FuLineEnd
+class FuLineEnd final
     : public FuPoor
 {
 public:

@@ -58,7 +58,7 @@ typedef comphelper::WeakComponentImplHelper <
         private:resource/view/TaskPane
     For some views in some panes this class also acts as a cache.
 */
-class BasicViewFactory
+class BasicViewFactory final
     : public BasicViewFactoryInterfaceBase
 {
 public:

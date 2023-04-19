@@ -27,7 +27,7 @@ class SfxMedium;
 
 namespace sd {
 
-class FuInsertFile
+class FuInsertFile final
     : public FuPoor
 {
 public:

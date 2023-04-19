@@ -23,7 +23,7 @@
 
 namespace sd {
 
-class FuMeasureDlg
+class FuMeasureDlg final
     : public FuPoor
 {
  public:

@@ -48,7 +48,7 @@ typedef ::cppu::WeakComponentImplHelper <
     @see css::drawing::framework::XConfigurationController
         for an extended documentation.
 */
-class ConfigurationController
+class ConfigurationController final
     : private cppu::BaseMutex,
       public ConfigurationControllerInterfaceBase
 {

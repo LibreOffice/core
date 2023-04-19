@@ -23,7 +23,7 @@
 
 namespace sd {
 
-class FuNavigation
+class FuNavigation final
     : public FuPoor
 {
 public:

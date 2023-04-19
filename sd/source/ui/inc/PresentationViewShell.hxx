@@ -26,7 +26,7 @@ namespace sd
 /** This view shell is responsible for showing the presentation of an
     Impress document.
 */
-class PresentationViewShell : public DrawViewShell
+class PresentationViewShell final : public DrawViewShell
 {
 public:
     SFX_DECL_INTERFACE(SD_IF_SDPRESVIEWSHELL)

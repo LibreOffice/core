@@ -23,7 +23,7 @@
 
 namespace sd {
 
-class FuArea : public FuPoor
+class FuArea final : public FuPoor
 {
 public:
 

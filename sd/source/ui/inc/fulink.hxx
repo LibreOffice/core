@@ -23,7 +23,7 @@
 
 namespace sd {
 
-class FuLink
+class FuLink final
     : public FuPoor
 {
 public:

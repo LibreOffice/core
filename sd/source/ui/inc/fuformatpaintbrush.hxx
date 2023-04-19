@@ -25,7 +25,7 @@ namespace sd {
 
 class DrawViewShell;
 
-class FuFormatPaintBrush : public FuText
+class FuFormatPaintBrush final : public FuText
 {
 public:
 
