@@ -1224,6 +1224,25 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf126024XLSX)
     assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship", "TargetMode", "External");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf91332)
+{
+    createScDoc("xlsx/tdf91332.xlsx");
+    saveAndReload("Calc Office Open XML");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShapeProps(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: rgba[90cf47ff]
+    // - Actual  : rgba[ffffffff]
+    // i.e. fill color inherited from theme lost after export.
+    Color nColor;
+    xShapeProps->getPropertyValue("FillColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(Color(0x90cf47), nColor);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
