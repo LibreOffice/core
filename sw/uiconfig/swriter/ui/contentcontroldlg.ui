@@ -171,11 +171,11 @@
               <object class="GtkSpinButton" id="idspinbutton">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="input-purpose">number</property>
                 <property name="input-hints">GTK_INPUT_HINT_NO_SPELLCHECK | GTK_INPUT_HINT_NO_EMOJI | GTK_INPUT_HINT_NONE</property>
                 <property name="snap-to-ticks">True</property>
                 <property name="numeric">True</property>
                 <property name="wrap">True</property>
+                <property name="truncate-multiline">True</property>
                 <accessibility>
                   <relation type="labelled-by" target="idlabel"/>
                 </accessibility>
@@ -214,10 +214,10 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="primary-icon-tooltip-text" translatable="yes" context="contentcontroldlg:tabindexspinbutton">Keyboard tab navigation order: -1 to exclude from tab stop</property>
-                <property name="input-purpose">number</property>
                 <property name="input-hints">GTK_INPUT_HINT_NO_SPELLCHECK | GTK_INPUT_HINT_NO_EMOJI | GTK_INPUT_HINT_NONE</property>
                 <property name="snap-to-ticks">True</property>
                 <property name="numeric">True</property>
+                <property name="truncate-multiline">True</property>
                 <accessibility>
                   <relation type="labelled-by" target="tabindexlabel"/>
                 </accessibility>

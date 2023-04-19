@@ -365,7 +365,7 @@
                 <child internal-child="accessible">
                   <object class="AtkObject" id="level-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="flddocumentpage|extended_tip|level">Use this option to specify which heading before the field to display. The selected heading is the first one whose outline level is less than or equal to the specified value. For example, specifying “2” will display the first heading before the field with outline level 1 or outline level 2. Heading numbers can be enabled by using “Tools - Heading Numbering“.</property>
-                </object>
+                  </object>
                 </child>
               </object>
               <packing>
