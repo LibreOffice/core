@@ -268,6 +268,9 @@ void ScViewFunctionSet::SetAnchor( SCCOL nPosX, SCROW nPosY )
 
 void ScViewFunctionSet::DestroyAnchor()
 {
+    if (pViewData->IsAnyFillMode())
+        return;
+
     bool bRefMode = SC_MOD()->IsFormulaMode();
     if (bRefMode)
         pViewData->GetView()->DoneRefMode( true );
