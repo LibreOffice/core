@@ -540,7 +540,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
     {
         const SwTextField *pTextField = rField.GetTextField();
         OSL_ENSURE( pTextField, "Where is the txt fld?" );
-        if( pTextField )
+        if( pTextField && rWrt.m_pDoc->GetDocShell() )
         {
             // ReqIF-XHTML doesn't allow specifying a background color.
             bool bFieldShadings = SwViewOption::IsFieldShadings() && !rHTMLWrt.mbReqIF;
