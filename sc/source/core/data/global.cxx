@@ -391,8 +391,10 @@ OUString ScGlobal::GetLongErrorString(FormulaError nErr)
         case FormulaError::UnknownOpCode:
         case FormulaError::UnknownStackVariable:
         case FormulaError::UnknownToken:
-        case FormulaError::NoCode:
             pErrNumber = STR_LONG_ERR_SYNTAX;
+        break;
+        case FormulaError::NoCode:
+            pErrNumber = STR_LONG_ERR_NO_CODE;
         break;
         case FormulaError::CircularReference:
             pErrNumber = STR_LONG_ERR_CIRC_REF;

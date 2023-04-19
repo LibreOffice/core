@@ -239,6 +239,7 @@
 #define STR_NO_MACRO                            NC_("STR_NO_MACRO", "#MACRO?")
 #define STR_LONG_ERR_NO_MACRO                   NC_("STR_LONG_ERR_NO_MACRO", "Error: Macro not found")
 #define STR_LONG_ERR_SYNTAX                     NC_("STR_LONG_ERR_SYNTAX", "Internal syntactical error")
+#define STR_LONG_ERR_NO_CODE                    NC_("STR_LONG_ERR_NO_CODE", "Error: No code or intersection")
 #define STR_LONG_ERR_ILL_ARG                    NC_("STR_LONG_ERR_ILL_ARG", "Error: Invalid argument")
 #define STR_LONG_ERR_ILL_PAR                    NC_("STR_LONG_ERR_ILL_PAR", "Error in parameter list")
 #define STR_LONG_ERR_ILL_CHAR                   NC_("STR_LONG_ERR_ILL_CHAR", "Error: Invalid character")
