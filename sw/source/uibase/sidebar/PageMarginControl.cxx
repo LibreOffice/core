@@ -53,19 +53,14 @@ namespace
 {
     FieldUnit lcl_GetFieldUnit()
     {
-        FieldUnit eUnit = FieldUnit::INCH;
-        const SfxUInt16Item* pItem = nullptr;
-        SfxItemState eState = SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_METRIC, pItem );
-        if ( pItem && eState >= SfxItemState::DEFAULT )
+        if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
         {
-            eUnit = static_cast<FieldUnit>(pItem->GetValue());
+            const SfxUInt16Item* pItem = nullptr;
+            SfxItemState eState = pViewFrm->GetBindings().GetDispatcher()->QueryState(SID_ATTR_METRIC, pItem);
+            if (pItem && eState >= SfxItemState::DEFAULT)
+                return static_cast<FieldUnit>(pItem->GetValue());
         }
-        else
-        {
-            return SfxModule::GetCurrentFieldUnit();
-        }
-
-        return eUnit;
+        return SfxModule::GetCurrentFieldUnit();
     }
 
     MapUnit lcl_GetUnit()
@@ -130,15 +125,15 @@ PageMarginControl::PageMarginControl(PageMarginPopup* pControl, weld::Widget* pP
     const SvxSizeItem* pSize = nullptr;
     const SvxLongLRSpaceItem* pLRItem = nullptr;
     const SvxLongULSpaceItem* pULItem = nullptr;
-    if ( SfxViewFrame::Current() )
+    if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
     {
         const SvxPageItem* pPageItem;
-        SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE, pPageItem );
+        pViewFrm->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE, pPageItem );
         bLandscape = pPageItem->IsLandscape();
         m_bMirrored = pPageItem->GetPageUsage() == SvxPageUsage::Mirror;
-        SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_SIZE, pSize );
-        SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_LRSPACE, pLRItem );
-        SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_ULSPACE, pULItem );
+        pViewFrm->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_SIZE, pSize );
+        pViewFrm->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_LRSPACE, pLRItem );
+        pViewFrm->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_ULSPACE, pULItem );
     }
 
     if ( pLRItem )
@@ -395,7 +390,8 @@ IMPL_LINK( PageMarginControl, SelectMarginHdl, weld::Button&, rControl, void )
     if ( !bApplyNewPageMargins )
         return;
 
-    const css::uno::Reference< css::document::XUndoManager > xUndoManager( getUndoManager( SfxViewFrame::Current()->GetFrame().GetFrameInterface() ) );
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+    const css::uno::Reference<css::document::XUndoManager> xUndoManager(pViewFrm ? getUndoManager(pViewFrm->GetFrame().GetFrameInterface()) : nullptr);
     if ( xUndoManager.is() )
         xUndoManager->enterUndoContext( "" );
 
@@ -418,12 +414,12 @@ void PageMarginControl::ExecuteMarginLRChange(
     const tools::Long nPageLeftMargin,
     const tools::Long nPageRightMargin )
 {
-    if ( SfxViewFrame::Current() )
+    if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
     {
         SvxLongLRSpaceItem aPageLRMarginItem( 0, 0, SID_ATTR_PAGE_LRSPACE );
         aPageLRMarginItem.SetLeft( nPageLeftMargin );
         aPageLRMarginItem.SetRight( nPageRightMargin );
-        SfxViewFrame::Current()->GetBindings().GetDispatcher()->ExecuteList( SID_ATTR_PAGE_LRSPACE,
+        pViewFrm->GetBindings().GetDispatcher()->ExecuteList( SID_ATTR_PAGE_LRSPACE,
                 SfxCallMode::RECORD, { &aPageLRMarginItem } );
     }
 }
@@ -432,23 +428,23 @@ void PageMarginControl::ExecuteMarginULChange(
     const tools::Long nPageTopMargin,
     const tools::Long nPageBottomMargin )
 {
-    if ( SfxViewFrame::Current() )
+    if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
     {
         SvxLongULSpaceItem aPageULMarginItem( 0, 0, SID_ATTR_PAGE_ULSPACE );
         aPageULMarginItem.SetUpper( nPageTopMargin );
         aPageULMarginItem.SetLower( nPageBottomMargin );
-        SfxViewFrame::Current()->GetBindings().GetDispatcher()->ExecuteList( SID_ATTR_PAGE_ULSPACE,
+        pViewFrm->GetBindings().GetDispatcher()->ExecuteList( SID_ATTR_PAGE_ULSPACE,
                 SfxCallMode::RECORD, { &aPageULMarginItem } );
     }
 }
 
 void PageMarginControl::ExecutePageLayoutChange( const bool bMirrored )
 {
-    if ( SfxViewFrame::Current() )
+    if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
     {
         SvxPageItem aPageItem( SID_ATTR_PAGE );
         aPageItem.SetPageUsage( bMirrored ? SvxPageUsage::Mirror : SvxPageUsage::All );
-        SfxViewFrame::Current()->GetBindings().GetDispatcher()->ExecuteList( SID_ATTR_PAGE,
+        pViewFrm->GetBindings().GetDispatcher()->ExecuteList( SID_ATTR_PAGE,
                 SfxCallMode::RECORD, { &aPageItem } );
     }
 }
