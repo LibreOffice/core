@@ -27,6 +27,7 @@
 
 #include <com/sun/star/xsd/DataTypeClass.hpp>
 #include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
+#include <o3tl/string_view.hxx>
 #include <tools/datetime.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
@@ -920,19 +921,76 @@ namespace xforms
         initializeTypedClone( static_cast< const OShortIntegerType& >( _rCloneSource ) );
     }
 
+    static bool lcl_getValueYear( std::u16string_view value, double& fValue )
+    {
+        if (o3tl::equalsAscii(value, "0"))
+        {
+            fValue = 0;
+            return true;
+        }
+        sal_Int32 int32Value = o3tl::toInt32(value);
+        if (
+            int32Value == 0 ||
+            int32Value < 0 ||
+            int32Value > 10000
+           )
+        {
+             fValue = 0;
+             return false;
+        }
+        fValue = static_cast<double>(static_cast<sal_Int16>(int32Value));
+        return true;
+    }
+
+    static bool lcl_getValueMonth( std::u16string_view value, double& fValue )
+    {
+        sal_Int32 int32Value = o3tl::toInt32(value);
+        if (
+            int32Value == 0 ||
+            int32Value < 1 ||
+            int32Value > 12
+           )
+        {
+             fValue = 0;
+             return false;
+        }
+        fValue = static_cast<double>(static_cast<sal_Int16>(int32Value));
+        return true;
+    }
+
+    static bool lcl_getValueDay( std::u16string_view value, double& fValue )
+    {
+        sal_Int32 int32Value = o3tl::toInt32(value);
+        if (
+            int32Value == 0 ||
+            int32Value < 1 ||
+            int32Value > 31
+           )
+        {
+             fValue = 0;
+             return false;
+        }
+        fValue = static_cast<double>(static_cast<sal_Int16>(int32Value));
+        return true;
+    }
+
     bool OShortIntegerType::_getValue( const OUString& value, double& fValue )
     {
-        fValue = static_cast<double>(static_cast<sal_Int16>(value.toInt32()));
-        // TODO/eforms
-        // this does not care for values which do not fit into a sal_Int16, but simply
-        // cuts them down. A better implementation here should probably return <FALSE/>
-        // for those values.
-        // Else, we may have a situation where the UI claims an input to be valid
-        // (say "12345678"), while internally, and at submission time, this is cut to
-        // some smaller value.
+        switch (this->getTypeClass())
+        {
+            case css::xsd::DataTypeClass::gYear:
+                return lcl_getValueYear(value, fValue);
 
-        // Additionally, this of course does not care for strings which are no numbers...
-        return true;
+            case css::xsd::DataTypeClass::gMonth:
+                return lcl_getValueMonth(value, fValue);
+
+            case css::xsd::DataTypeClass::gDay:
+                return lcl_getValueDay(value, fValue);
+            default:
+                // for the moment, the only types which derive from OShortIntegerType are:
+                // gYear, gMonth and gDay, see ODataTypeRepository ctr
+                return false;
+        }
     }
 
 
