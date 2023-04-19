@@ -25,7 +25,7 @@ class SwPageBreakWin;
     This control shows a line indicating a manual page break and a
     button providing a few actions on that page break.
   */
-class SwBreakDashedLine : public SwDashedLine, public ISwFrameControl
+class SwBreakDashedLine final : public SwDashedLine, public ISwFrameControl
 {
 private:
     VclPtr<SwPageBreakWin> m_pWin;

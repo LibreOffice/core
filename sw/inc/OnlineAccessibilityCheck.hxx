@@ -24,7 +24,7 @@ namespace sw
 {
 /// Contains the node and tracks if the node gets deleted.
 /// Note: the node needs to extend sw::BroadcastingModify.
-class WeakNodeContainer : public SvtListener
+class WeakNodeContainer final : public SvtListener
 {
 private:
     SwNode* m_pNode;

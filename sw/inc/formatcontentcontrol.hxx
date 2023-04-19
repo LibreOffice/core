@@ -107,7 +107,7 @@ public:
 };
 
 /// Stores the properties of a content control.
-class SW_DLLPUBLIC SwContentControl : public sw::BroadcastingModify
+class SW_DLLPUBLIC SwContentControl final : public sw::BroadcastingModify
 {
     unotools::WeakReference<SwXContentControl> m_wXContentControl;
 

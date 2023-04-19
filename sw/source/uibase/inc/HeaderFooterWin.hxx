@@ -34,7 +34,7 @@ class SwHeaderFooterWin;
     This control is showing the header / footer style name and provides
     a few useful actions to the user.
   */
-class SwHeaderFooterDashedLine : public SwDashedLine, public ISwFrameControl
+class SwHeaderFooterDashedLine final : public SwDashedLine, public ISwFrameControl
 {
 private:
     VclPtr<SwHeaderFooterWin> m_pWin;

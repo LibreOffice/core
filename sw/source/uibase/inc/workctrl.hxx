@@ -154,7 +154,7 @@ public:
 };
 
 typedef cppu::ImplInheritanceHelper< ::svt::ToolboxController, lang::XServiceInfo> NavElementToolBoxControl_Base;
-class NavElementToolBoxControl : public NavElementToolBoxControl_Base
+class NavElementToolBoxControl final : public NavElementToolBoxControl_Base
 {
 public:
     explicit NavElementToolBoxControl(
