@@ -1558,17 +1558,20 @@ IMPL_LINK(StyleList, CustomRenderHdl, weld::TreeView::render_args, aPayload, voi
 
     if (pStyleManager)
     {
-        const SfxStyleFamilyItem* pItem = GetFamilyItem();
-        SfxStyleSheetBase* pStyleSheet = pStyleManager->Search(rId, pItem->GetFamily());
-
-        if (pStyleSheet)
+        if (const SfxStyleFamilyItem* pItem = GetFamilyItem())
         {
-            rRenderContext.Push(vcl::PushFlags::ALL);
-            sal_Int32 nSize = aRect.GetHeight();
-            std::unique_ptr<sfx2::StylePreviewRenderer> pStylePreviewRenderer(
-                pStyleManager->CreateStylePreviewRenderer(rRenderContext, pStyleSheet, nSize));
-            bSuccess = pStylePreviewRenderer->recalculate() && pStylePreviewRenderer->render(aRect);
-            rRenderContext.Pop();
+            SfxStyleSheetBase* pStyleSheet = pStyleManager->Search(rId, pItem->GetFamily());
+
+            if (pStyleSheet)
+            {
+                rRenderContext.Push(vcl::PushFlags::ALL);
+                sal_Int32 nSize = aRect.GetHeight();
+                std::unique_ptr<sfx2::StylePreviewRenderer> pStylePreviewRenderer(
+                    pStyleManager->CreateStylePreviewRenderer(rRenderContext, pStyleSheet, nSize));
+                bSuccess
+                    = pStylePreviewRenderer->recalculate() && pStylePreviewRenderer->render(aRect);
+                rRenderContext.Pop();
+            }
         }
     }
 
