@@ -2021,7 +2021,7 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawGradient_rect_linear)
     tools::Rectangle aRect(Point(10, 10), Size(40, 40));
     pVDev->SetOutputSizePixel(Size(100, 100));
 
-    Gradient aGradient(GradientStyle::Linear, COL_RED, COL_WHITE);
+    Gradient aGradient(css::awt::GradientStyle_LINEAR, COL_RED, COL_WHITE);
     aGradient.SetBorder(100);
 
     pVDev->DrawGradient(aRect, aGradient);
@@ -2042,7 +2042,7 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawGradient_rect_axial)
     tools::Rectangle aRect(Point(10, 10), Size(40, 40));
     pVDev->SetOutputSizePixel(Size(100, 100));
 
-    Gradient aGradient(GradientStyle::Axial, COL_RED, COL_WHITE);
+    Gradient aGradient(css::awt::GradientStyle_AXIAL, COL_RED, COL_WHITE);
     aGradient.SetBorder(100);
 
     pVDev->DrawGradient(aRect, aGradient);
@@ -2064,7 +2064,7 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawGradient_polygon_linear)
 
     pVDev->SetOutputSizePixel(Size(100, 100));
 
-    Gradient aGradient(GradientStyle::Linear, COL_RED, COL_WHITE);
+    Gradient aGradient(css::awt::GradientStyle_LINEAR, COL_RED, COL_WHITE);
     aGradient.SetBorder(100);
 
     pVDev->DrawGradient(aPolyPolygon, aGradient);
@@ -2082,7 +2082,7 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawGradient_polygon_axial)
 
     pVDev->SetOutputSizePixel(Size(100, 100));
 
-    Gradient aGradient(GradientStyle::Axial, COL_RED, COL_WHITE);
+    Gradient aGradient(css::awt::GradientStyle_AXIAL, COL_RED, COL_WHITE);
     aGradient.SetBorder(100);
 
     pVDev->DrawGradient(aPolyPolygon, aGradient);
@@ -2099,7 +2099,7 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawGradient_rect_complex)
     tools::Rectangle aRect(Point(10, 10), Size(40, 40));
     pVDev->SetOutputSizePixel(Size(1000, 1000));
 
-    Gradient aGradient(GradientStyle::Square, COL_RED, COL_WHITE);
+    Gradient aGradient(css::awt::GradientStyle_SQUARE, COL_RED, COL_WHITE);
     aGradient.SetBorder(10);
     pVDev->DrawGradient(aRect, aGradient);
 

@@ -77,7 +77,7 @@ void AnnotationTextWindow::Paint(vcl::RenderContext& rRenderContext, const ::too
     if (!bHighContrast)
     {
         rRenderContext.DrawGradient(::tools::Rectangle(Point(0,0), rRenderContext.PixelToLogic(aSize)),
-                                    Gradient(GradientStyle::Linear, mrContents.maColorLight, mrContents.maColor));
+                                    Gradient(css::awt::GradientStyle_LINEAR, mrContents.maColorLight, mrContents.maColor));
     }
 
     DoPaint(rRenderContext, rRect);

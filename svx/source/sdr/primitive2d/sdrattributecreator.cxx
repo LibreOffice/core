@@ -93,37 +93,6 @@ namespace drawinglayer
 {
     namespace
     {
-        attribute::GradientStyle XGradientStyleToGradientStyle(css::awt::GradientStyle eStyle)
-        {
-            switch(eStyle)
-            {
-                case css::awt::GradientStyle_LINEAR :
-                {
-                    return attribute::GradientStyle::Linear;
-                }
-                case css::awt::GradientStyle_AXIAL :
-                {
-                    return attribute::GradientStyle::Axial;
-                }
-                case css::awt::GradientStyle_RADIAL :
-                {
-                    return attribute::GradientStyle::Radial;
-                }
-                case css::awt::GradientStyle_ELLIPTICAL :
-                {
-                    return attribute::GradientStyle::Elliptical;
-                }
-                case css::awt::GradientStyle_SQUARE :
-                {
-                    return attribute::GradientStyle::Square;
-                }
-                default :
-                {
-                    return attribute::GradientStyle::Rect; // css::awt::GradientStyle_RECT
-                }
-            }
-        }
-
         attribute::HatchStyle XHatchStyleToHatchStyle(css::drawing::HatchStyle eStyle)
         {
             switch(eStyle)
@@ -772,7 +741,7 @@ namespace drawinglayer::primitive2d
                             }
 
                             aGradient = attribute::FillGradientAttribute(
-                                XGradientStyleToGradientStyle(aXGradient.GetGradientStyle()),
+                                aXGradient.GetGradientStyle(),
                                 static_cast<double>(aXGradient.GetBorder()) * 0.01,
                                 static_cast<double>(aXGradient.GetXOffset()) * 0.01,
                                 static_cast<double>(aXGradient.GetYOffset()) * 0.01,
@@ -941,7 +910,7 @@ namespace drawinglayer::primitive2d
                     }
 
                     return attribute::FillGradientAttribute(
-                        XGradientStyleToGradientStyle(rGradient.GetGradientStyle()),
+                        rGradient.GetGradientStyle(),
                         static_cast<double>(rGradient.GetBorder()) * 0.01,
                         static_cast<double>(rGradient.GetXOffset()) * 0.01,
                         static_cast<double>(rGradient.GetYOffset()) * 0.01,

@@ -404,7 +404,7 @@ void ScZoomSlider::DoPaint(vcl::RenderContext& rRenderContext)
 
     Gradient aGradient;
     aGradient.SetAngle(0_deg10);
-    aGradient.SetStyle(GradientStyle::Linear);
+    aGradient.SetStyle(css::awt::GradientStyle_LINEAR);
 
     aGradient.SetStartColor(aStartColor);
     aGradient.SetEndColor(aEndColor);

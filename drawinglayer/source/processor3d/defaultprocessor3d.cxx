@@ -59,14 +59,15 @@ namespace drawinglayer::processor3d
             // create texture
             const attribute::FillGradientAttribute& rFillGradient = rPrimitive.getGradient();
             const basegfx::B2DRange aOutlineRange(0.0, 0.0, rPrimitive.getTextureSize().getX(), rPrimitive.getTextureSize().getY());
-            const attribute::GradientStyle aGradientStyle(rFillGradient.getStyle());
+            const css::awt::GradientStyle aGradientStyle(rFillGradient.getStyle());
             std::shared_ptr< texture::GeoTexSvx > pNewTex;
 
             if(!rFillGradient.hasSingleColor())
             {
                 switch(aGradientStyle)
                 {
-                    case attribute::GradientStyle::Linear:
+                    default: // GradientStyle_MAKE_FIXED_SIZE
+                    case css::awt::GradientStyle_LINEAR:
                     {
                         pNewTex = std::make_shared<texture::GeoTexSvxGradientLinear>(
                                 aOutlineRange,
@@ -77,7 +78,7 @@ namespace drawinglayer::processor3d
                                 rFillGradient.getAngle());
                         break;
                     }
-                    case attribute::GradientStyle::Axial:
+                    case css::awt::GradientStyle_AXIAL:
                     {
                         pNewTex = std::make_shared<texture::GeoTexSvxGradientAxial>(
                                 aOutlineRange,
@@ -88,7 +89,7 @@ namespace drawinglayer::processor3d
                                 rFillGradient.getAngle());
                         break;
                     }
-                    case attribute::GradientStyle::Radial:
+                    case css::awt::GradientStyle_RADIAL:
                     {
                         pNewTex =
                             std::make_shared<texture::GeoTexSvxGradientRadial>(
@@ -100,7 +101,7 @@ namespace drawinglayer::processor3d
                                 rFillGradient.getOffsetY());
                         break;
                     }
-                    case attribute::GradientStyle::Elliptical:
+                    case css::awt::GradientStyle_ELLIPTICAL:
                     {
                         pNewTex =
                             std::make_shared<texture::GeoTexSvxGradientElliptical>(
@@ -113,7 +114,7 @@ namespace drawinglayer::processor3d
                                 rFillGradient.getAngle());
                         break;
                     }
-                    case attribute::GradientStyle::Square:
+                    case css::awt::GradientStyle_SQUARE:
                     {
                         pNewTex =
                             std::make_shared<texture::GeoTexSvxGradientSquare>(
@@ -126,7 +127,7 @@ namespace drawinglayer::processor3d
                                 rFillGradient.getAngle());
                         break;
                     }
-                    case attribute::GradientStyle::Rect:
+                    case css::awt::GradientStyle_RECT:
                     {
                         pNewTex =
                             std::make_shared<texture::GeoTexSvxGradientRect>(

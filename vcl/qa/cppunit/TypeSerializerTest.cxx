@@ -89,7 +89,8 @@ TypeSerializerTest::~TypeSerializerTest()
 
 void TypeSerializerTest::testGradient()
 {
-    Gradient aGradient(GradientStyle::Radial, Color(0xFF, 0x00, 0x00), Color(0x00, 0xFF, 0x00));
+    Gradient aGradient(css::awt::GradientStyle_RADIAL, Color(0xFF, 0x00, 0x00),
+                       Color(0x00, 0xFF, 0x00));
     aGradient.SetAngle(900_deg10);
     aGradient.SetBorder(5);
     aGradient.SetOfsX(11);
@@ -105,7 +106,7 @@ void TypeSerializerTest::testGradient()
 
     Gradient aReadGradient;
     aSerializer.readGradient(aReadGradient);
-    CPPUNIT_ASSERT_EQUAL(GradientStyle::Radial, aReadGradient.GetStyle());
+    CPPUNIT_ASSERT_EQUAL(css::awt::GradientStyle_RADIAL, aReadGradient.GetStyle());
     CPPUNIT_ASSERT_EQUAL(Color(0xFF, 0x00, 0x00), aReadGradient.GetStartColor());
     CPPUNIT_ASSERT_EQUAL(Color(0x00, 0xFF, 0x00), aReadGradient.GetEndColor());
     CPPUNIT_ASSERT_EQUAL(sal_Int16(900), aReadGradient.GetAngle().get());

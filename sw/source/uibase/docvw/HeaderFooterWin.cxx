@@ -152,7 +152,7 @@ void SwFrameButtonPainter::PaintButton(drawinglayer::primitive2d::Primitive2DCon
         if (bOnTop)
             nAngle = 0;
 
-        FillGradientAttribute aFillAttrs(drawinglayer::attribute::GradientStyle::Linear, 0.0, 0.0, 0.0, nAngle,
+        FillGradientAttribute aFillAttrs(css::awt::GradientStyle_LINEAR, 0.0, 0.0, 0.0, nAngle,
             basegfx::utils::createColorStopsFromStartEndColor(aLighterColor, aFillColor));
         rSeq.push_back(drawinglayer::primitive2d::Primitive2DReference(
                             new drawinglayer::primitive2d::FillGradientPrimitive2D(aGradientRect, std::move(aFillAttrs))));

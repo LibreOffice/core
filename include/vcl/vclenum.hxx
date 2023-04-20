@@ -141,18 +141,6 @@ enum class ExtDateFieldFormat
     FORCE_EQUAL_SIZE=SAL_MAX_ENUM
 };
 
-// this appears to be a direct copy of css::awt::GradientStyle
-enum class GradientStyle
-{
-    Linear = 0,
-    Axial = 1,
-    Radial = 2,
-    Elliptical = 3,
-    Square = 4,
-    Rect = 5,
-    FORCE_EQUAL_SIZE = SAL_MAX_ENUM
-};
-
 enum class HatchStyle
 {
     Single = 0,

@@ -244,7 +244,7 @@ public:
         Gradient aGradient;
         aGradient.SetStartColor(COL_BLUE);
         aGradient.SetEndColor(COL_GREEN);
-        aGradient.SetStyle(GradientStyle::Linear);
+        aGradient.SetStyle(css::awt::GradientStyle_LINEAR);
         rDev.DrawGradient(r, aGradient);
     }
 
@@ -795,11 +795,11 @@ public:
                     COL_GRAY, COL_GRAY, COL_LIGHTGRAY, COL_LIGHTBLUE, COL_LIGHTCYAN,
                     COL_BLUE, COL_BLUE, COL_BLUE, COL_CYAN, COL_CYAN
                 };
-                GradientStyle eStyles[] = {
-                    GradientStyle::Linear, GradientStyle::Axial, GradientStyle::Radial, GradientStyle::Elliptical, GradientStyle::Square,
-                    GradientStyle::Rect, GradientStyle::FORCE_EQUAL_SIZE, GradientStyle::Linear, GradientStyle::Radial, GradientStyle::Linear,
-                    GradientStyle::Linear, GradientStyle::Axial, GradientStyle::Radial, GradientStyle::Elliptical, GradientStyle::Square,
-                    GradientStyle::Rect, GradientStyle::FORCE_EQUAL_SIZE, GradientStyle::Linear, GradientStyle::Radial, GradientStyle::Linear
+                css::awt::GradientStyle eStyles[] = {
+                    css::awt::GradientStyle_LINEAR, css::awt::GradientStyle_AXIAL, css::awt::GradientStyle_RADIAL, css::awt::GradientStyle_ELLIPTICAL, css::awt::GradientStyle_SQUARE,
+                    css::awt::GradientStyle_RECT, css::awt::GradientStyle::GradientStyle_MAKE_FIXED_SIZE, css::awt::GradientStyle_LINEAR, css::awt::GradientStyle_RADIAL, css::awt::GradientStyle_LINEAR,
+                    css::awt::GradientStyle_LINEAR, css::awt::GradientStyle_AXIAL, css::awt::GradientStyle_RADIAL, css::awt::GradientStyle_ELLIPTICAL, css::awt::GradientStyle_SQUARE,
+                    css::awt::GradientStyle_RECT, css::awt::GradientStyle::GradientStyle_MAKE_FIXED_SIZE, css::awt::GradientStyle_LINEAR, css::awt::GradientStyle_RADIAL, css::awt::GradientStyle_LINEAR
                 };
                 sal_uInt16 nAngles[] = {
                     0, 0, 0, 0, 0,
@@ -837,7 +837,7 @@ public:
                 Gradient aGradient;
                 aGradient.SetStartColor(COL_YELLOW);
                 aGradient.SetEndColor(COL_RED);
-                aGradient.SetStyle(GradientStyle::Rect);
+                aGradient.SetStyle(css::awt::GradientStyle_RECT);
                 aGradient.SetBorder(r.GetSize().Width()/20);
                 rDev.DrawGradient(r, aGradient);
             }

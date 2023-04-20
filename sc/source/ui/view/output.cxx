@@ -869,7 +869,7 @@ void drawDataBars(vcl::RenderContext& rRenderContext, const ScDataBarInfo* pOldD
     if(pOldDataBarInfo->mbGradient)
     {
         rRenderContext.SetLineColor(pOldDataBarInfo->maColor);
-        Gradient aGradient(GradientStyle::Linear, pOldDataBarInfo->maColor, COL_TRANSPARENT);
+        Gradient aGradient(css::awt::GradientStyle_LINEAR, pOldDataBarInfo->maColor, COL_TRANSPARENT);
         aGradient.SetSteps(255);
 
         if(pOldDataBarInfo->mnLength < 0)

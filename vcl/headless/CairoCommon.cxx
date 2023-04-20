@@ -1283,8 +1283,8 @@ bool CairoCommon::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWid
 bool CairoCommon::drawGradient(const tools::PolyPolygon& rPolyPolygon, const Gradient& rGradient,
                                bool bAntiAlias)
 {
-    if (rGradient.GetStyle() != GradientStyle::Linear
-        && rGradient.GetStyle() != GradientStyle::Radial)
+    if (rGradient.GetStyle() != css::awt::GradientStyle_LINEAR
+        && rGradient.GetStyle() != css::awt::GradientStyle_RADIAL)
         return false; // unsupported
     if (rGradient.GetSteps() != 0)
         return false; // We can't tell cairo how many colors to use in the gradient.
@@ -1323,7 +1323,7 @@ bool CairoCommon::drawGradient(const tools::PolyPolygon& rPolyPolygon, const Gra
     Color aEndColor = aGradient.GetEndColor();
 
     cairo_pattern_t* pattern;
-    if (rGradient.GetStyle() == GradientStyle::Linear)
+    if (rGradient.GetStyle() == css::awt::GradientStyle_LINEAR)
     {
         tools::Polygon aPoly(aBoundRect);
         aPoly.Rotate(aCenter, aGradient.GetAngle() % 3600_deg10);

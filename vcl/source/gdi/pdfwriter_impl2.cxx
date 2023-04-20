@@ -1947,8 +1947,8 @@ void PDFWriterImpl::DrawHatchLine_DrawLine(const Point& rStartPoint, const Point
 static bool lcl_canUsePDFAxialShading(const Gradient& rGradient) {
     switch (rGradient.GetStyle())
     {
-        case GradientStyle::Linear:
-        case GradientStyle::Axial:
+        case css::awt::GradientStyle_LINEAR:
+        case css::awt::GradientStyle_AXIAL:
             break;
         default:
             return false;

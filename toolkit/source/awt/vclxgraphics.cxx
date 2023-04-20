@@ -432,7 +432,7 @@ void VCLXGraphics::drawGradient( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_
         return;
 
     InitOutputDevice( InitOutDevFlags::COLORS );
-    Gradient aGradient(static_cast<GradientStyle>(rGradient.Style), Color(ColorTransparency, rGradient.StartColor), Color(ColorTransparency, rGradient.EndColor));
+    Gradient aGradient(rGradient.Style, Color(ColorTransparency, rGradient.StartColor), Color(ColorTransparency, rGradient.EndColor));
     aGradient.SetAngle(Degree10(rGradient.Angle));
     aGradient.SetBorder(rGradient.Border);
     aGradient.SetOfsX(rGradient.XOffset);

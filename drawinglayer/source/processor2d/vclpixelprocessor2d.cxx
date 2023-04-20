@@ -185,32 +185,6 @@ bool VclPixelProcessor2D::tryDrawPolygonStrokePrimitive2DDirect(
         rSource.getLineAttribute().getMiterMinimumAngle());
 }
 
-namespace
-{
-GradientStyle convertGradientStyle(drawinglayer::attribute::GradientStyle eGradientStyle)
-{
-    switch (eGradientStyle)
-    {
-        case drawinglayer::attribute::GradientStyle::Axial:
-            return GradientStyle::Axial;
-        case drawinglayer::attribute::GradientStyle::Radial:
-            return GradientStyle::Radial;
-        case drawinglayer::attribute::GradientStyle::Elliptical:
-            return GradientStyle::Elliptical;
-        case drawinglayer::attribute::GradientStyle::Square:
-            return GradientStyle::Square;
-        case drawinglayer::attribute::GradientStyle::Rect:
-            return GradientStyle::Rect;
-        case drawinglayer::attribute::GradientStyle::Linear:
-            return GradientStyle::Linear;
-        default:
-            assert(false);
-            return GradientStyle::Linear;
-    }
-}
-
-} // end anonymous namespace
-
 void VclPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
 {
     switch (rCandidate.getPrimitive2DID())
@@ -1053,9 +1027,8 @@ void VclPixelProcessor2D::processFillGradientPrimitive2D(
 
     // try to use vcl - since vcl uses the old gradient paint mechanisms this may
     // create wrong geometries. If so, add another case above for useDecompose
-    GradientStyle eGradientStyle = convertGradientStyle(rFillGradient.getStyle());
-
-    Gradient aGradient(eGradientStyle, Color(rFillGradient.getColorStops().front().getStopColor()),
+    Gradient aGradient(rFillGradient.getStyle(),
+                       Color(rFillGradient.getColorStops().front().getStopColor()),
                        Color(rFillGradient.getColorStops().back().getStopColor()));
 
     aGradient.SetAngle(Degree10(static_cast<int>(basegfx::rad2deg<10>(rFillGradient.getAngle()))));

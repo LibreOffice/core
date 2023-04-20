@@ -85,7 +85,7 @@ void ShadowPrimitive::create2DDecomposition(
             aRange.expand(basegfx::B2DTuple(getSecondPosition().getX(), getSecondPosition().getY() + (2.0 * getDiscreteUnit())));
 
             ::drawinglayer::attribute::FillGradientAttribute aFillGradientAttribute(
-                drawinglayer::attribute::GradientStyle::Linear,
+                css::awt::GradientStyle_LINEAR,
                 0.0,
                 0.5,
                 0.5,
@@ -104,7 +104,7 @@ void ShadowPrimitive::create2DDecomposition(
         {
             aRange.expand(basegfx::B2DTuple(getSecondPosition().getX(), getSecondPosition().getY() + (4.0 * getDiscreteUnit())));
             drawinglayer::attribute::FillGradientAttribute aFillGradientAttribute(
-                drawinglayer::attribute::GradientStyle::Linear,
+                css::awt::GradientStyle_LINEAR,
                 0.0,
                 0.5,
                 0.5,
@@ -123,7 +123,7 @@ void ShadowPrimitive::create2DDecomposition(
         {
             aRange.expand(basegfx::B2DTuple(getSecondPosition().getX(), getSecondPosition().getY() + (4.0 * getDiscreteUnit())));
             drawinglayer::attribute::FillGradientAttribute aFillGradientAttribute(
-                drawinglayer::attribute::GradientStyle::Linear,
+                css::awt::GradientStyle_LINEAR,
                 0.0,
                 0.5,
                 0.5,

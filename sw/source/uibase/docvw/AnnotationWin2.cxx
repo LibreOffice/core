@@ -469,7 +469,7 @@ void SwAnnotationWin::SetMenuButtonColors()
     tools::Rectangle aRect(Point(0, 0), aSize);
     xVirDev->SetOutputSizePixel(aSize);
 
-    Gradient aGradient(GradientStyle::Linear,
+    Gradient aGradient(css::awt::GradientStyle_LINEAR,
                              ColorFromAlphaColor(15, mColorAnchor, mColorDark),
                              ColorFromAlphaColor(80, mColorAnchor, mColorDark));
     xVirDev->DrawGradient(aRect, aGradient);

@@ -26,7 +26,7 @@
 class Gradient::Impl
 {
 public:
-    GradientStyle       meStyle;
+    css::awt::GradientStyle       meStyle;
     Color               maStartColor;
     Color               maEndColor;
     Degree10            mnAngle;
@@ -38,7 +38,7 @@ public:
     sal_uInt16          mnStepCount;
 
     Impl()
-        : meStyle (GradientStyle::Linear)
+        : meStyle (css::awt::GradientStyle_LINEAR)
         , maStartColor(COL_BLACK)
         , maEndColor(COL_WHITE)
         , mnAngle(0)
@@ -86,7 +86,7 @@ Gradient::Gradient( const Gradient& ) = default;
 
 Gradient::Gradient( Gradient&& ) = default;
 
-Gradient::Gradient( GradientStyle eStyle,
+Gradient::Gradient( css::awt::GradientStyle eStyle,
                     const Color& rStartColor, const Color& rEndColor )
 {
     mpImplGradient->meStyle         = eStyle;
@@ -97,12 +97,12 @@ Gradient::Gradient( GradientStyle eStyle,
 Gradient::~Gradient() = default;
 
 
-GradientStyle Gradient::GetStyle() const
+css::awt::GradientStyle Gradient::GetStyle() const
 {
     return mpImplGradient->meStyle;
 }
 
-void Gradient::SetStyle( GradientStyle eStyle )
+void Gradient::SetStyle( css::awt::GradientStyle eStyle )
 {
     mpImplGradient->meStyle = eStyle;
 }
@@ -202,7 +202,7 @@ void Gradient::GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle& rB
     tools::Rectangle aRect( rRect );
     Degree10 nAngle = GetAngle() % 3600_deg10;
 
-    if( GetStyle() == GradientStyle::Linear || GetStyle() == GradientStyle::Axial )
+    if( GetStyle() == css::awt::GradientStyle_LINEAR || GetStyle() == css::awt::GradientStyle_AXIAL )
     {
         const double    fAngle = toRadians(nAngle);
         const double    fWidth = aRect.GetWidth();
@@ -223,7 +223,7 @@ void Gradient::GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle& rB
     }
     else
     {
-        if( GetStyle() == GradientStyle::Square || GetStyle() == GradientStyle::Rect )
+        if( GetStyle() == css::awt::GradientStyle_SQUARE || GetStyle() == css::awt::GradientStyle_RECT )
         {
             const double    fAngle = toRadians(nAngle);
             const double    fWidth = aRect.GetWidth();
@@ -242,13 +242,13 @@ void Gradient::GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle& rB
 
         Size aSize( aRect.GetSize() );
 
-        if( GetStyle() == GradientStyle::Radial )
+        if( GetStyle() == css::awt::GradientStyle_RADIAL )
         {
             // Calculation of radii for circle
             aSize.setWidth( static_cast<tools::Long>(0.5 + std::hypot(aSize.Width(), aSize.Height())) );
             aSize.setHeight( aSize.Width() );
         }
-        else if( GetStyle() == GradientStyle::Elliptical )
+        else if( GetStyle() == css::awt::GradientStyle_ELLIPTICAL )
         {
             // Calculation of radii for ellipse
             aSize.setWidth( static_cast<tools::Long>( 0.5 + static_cast<double>(aSize.Width())  * M_SQRT2 ) );
@@ -324,7 +324,7 @@ void Gradient::AddGradientActions(tools::Rectangle const& rRect, GDIMetaFile& rM
     if (!GetSteps())
         SetSteps(GRADIENT_DEFAULT_STEPCOUNT);
 
-    if (GetStyle() == GradientStyle::Linear || GetStyle() == GradientStyle::Axial)
+    if (GetStyle() == css::awt::GradientStyle_LINEAR || GetStyle() == css::awt::GradientStyle_AXIAL)
         DrawLinearGradientToMetafile(aRect, rMetaFile);
     else
         DrawComplexGradientToMetafile(aRect, rMetaFile);
@@ -340,7 +340,7 @@ tools::Long Gradient::GetMetafileSteps(tools::Rectangle const& rRect) const
     if (nStepCount)
         return nStepCount;
 
-    if (GetStyle() == GradientStyle::Linear || GetStyle() == GradientStyle::Axial)
+    if (GetStyle() == css::awt::GradientStyle_LINEAR || GetStyle() == css::awt::GradientStyle_AXIAL)
         return rRect.GetHeight();
     else
         return std::min(rRect.GetWidth(), rRect.GetHeight());
@@ -366,7 +366,7 @@ void Gradient::DrawLinearGradientToMetafile(tools::Rectangle const& rRect, GDIMe
 
     GetBoundRect(rRect, aRect, aCenter);
 
-    bool bLinear = (GetStyle() == GradientStyle::Linear);
+    bool bLinear = (GetStyle() == css::awt::GradientStyle_LINEAR);
     double fBorder = GetBorder() * aRect.GetHeight() / 100.0;
     if ( !bLinear )
     {
@@ -593,7 +593,7 @@ void Gradient::DrawComplexGradientToMetafile(tools::Rectangle const& rRect, GDIM
     // all gradients are rendered as nested rectangles which shrink
     // equally in each dimension - except for 'square' gradients
     // which shrink to a central vertex but are not per-se square.
-    if (GetStyle() != GradientStyle::Square)
+    if (GetStyle() != css::awt::GradientStyle_SQUARE)
     {
         fScanIncY = std::min( fScanIncY, fScanIncX );
         fScanIncX = fScanIncY;
@@ -623,7 +623,7 @@ void Gradient::DrawComplexGradientToMetafile(tools::Rectangle const& rRect, GDIM
         if( ( aRect.GetWidth() < 2 ) || ( aRect.GetHeight() < 2 ) )
             break;
 
-        if (GetStyle() == GradientStyle::Radial || GetStyle() == GradientStyle::Elliptical)
+        if (GetStyle() == css::awt::GradientStyle_RADIAL || GetStyle() == css::awt::GradientStyle_ELLIPTICAL)
             aPoly = tools::Polygon( aRect.Center(), aRect.GetWidth() >> 1, aRect.GetHeight() >> 1 );
         else
             aPoly = tools::Polygon( aRect );

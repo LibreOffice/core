@@ -1080,7 +1080,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 sal_Int16 nAngle(0), nBorder(0), nOfsX(0), nOfsY(0), nIntensityStart(0), nIntensityEnd(0);
                 rIStm.ReadInt16( nAngle ).ReadInt16( nBorder ).ReadInt16( nOfsX ).ReadInt16( nOfsY ).ReadInt16( nIntensityStart ).ReadInt16( nIntensityEnd );
 
-                Gradient aGrad( static_cast<GradientStyle>(nStyle), aStartCol, aEndCol );
+                Gradient aGrad( static_cast<css::awt::GradientStyle>(nStyle), aStartCol, aEndCol );
 
                 aGrad.SetAngle( Degree10(nAngle) );
                 aGrad.SetBorder( nBorder );

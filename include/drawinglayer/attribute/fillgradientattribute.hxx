@@ -21,6 +21,7 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <o3tl/cow_wrapper.hxx>
+#include <com/sun/star/awt/GradientStyle.hpp>
 #include <vector>
 
 namespace basegfx
@@ -33,16 +34,6 @@ typedef std::vector<ColorStop> ColorStops;
 namespace drawinglayer::attribute
 {
 class ImpFillGradientAttribute;
-
-enum class GradientStyle
-{
-    Linear,
-    Axial,
-    Radial,
-    Elliptical,
-    Square,
-    Rect
-};
 
 class DRAWINGLAYER_DLLPUBLIC FillGradientAttribute
 {
@@ -73,8 +64,8 @@ public:
        but (existing) fallbacks to filled polygon can trigger.
     */
     /// constructors/assignmentoperator/destructor
-    FillGradientAttribute(GradientStyle eStyle, double fBorder, double fOffsetX, double fOffsetY,
-                          double fAngle, const basegfx::ColorStops& rColorStops,
+    FillGradientAttribute(css::awt::GradientStyle eStyle, double fBorder, double fOffsetX,
+                          double fOffsetY, double fAngle, const basegfx::ColorStops& rColorStops,
                           sal_uInt16 nSteps = 0);
     FillGradientAttribute();
     FillGradientAttribute(const FillGradientAttribute&);
@@ -100,7 +91,7 @@ public:
     bool operator==(const FillGradientAttribute& rCandidate) const;
 
     // data read access
-    GradientStyle getStyle() const;
+    css::awt::GradientStyle getStyle() const;
     double getBorder() const;
     double getOffsetX() const;
     double getOffsetY() const;

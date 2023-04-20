@@ -1994,9 +1994,9 @@ bool SkiaSalGraphicsImpl::drawAlphaRect(tools::Long nX, tools::Long nY, tools::L
 bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPolygon,
                                        const Gradient& rGradient)
 {
-    if (rGradient.GetStyle() != GradientStyle::Linear
-        && rGradient.GetStyle() != GradientStyle::Axial
-        && rGradient.GetStyle() != GradientStyle::Radial)
+    if (rGradient.GetStyle() != css::awt::GradientStyle_LINEAR
+        && rGradient.GetStyle() != css::awt::GradientStyle_AXIAL
+        && rGradient.GetStyle() != css::awt::GradientStyle_RADIAL)
         return false; // unsupported
     if (rGradient.GetSteps() != 0)
         return false; // We can't tell Skia how many colors to use in the gradient.
@@ -2031,7 +2031,7 @@ bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPolygon,
     SkColor endColor = toSkColorWithIntensity(rGradient.GetEndColor(), rGradient.GetEndIntensity());
 
     sk_sp<SkShader> shader;
-    if (rGradient.GetStyle() == GradientStyle::Linear)
+    if (rGradient.GetStyle() == css::awt::GradientStyle_LINEAR)
     {
         tools::Polygon aPoly(aBoundRect);
         aPoly.Rotate(aCenter, aGradient.GetAngle() % 3600_deg10);
@@ -2041,7 +2041,7 @@ bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPolygon,
         SkScalar pos[2] = { SkDoubleToScalar(aGradient.GetBorder() / 100.0), 1.0 };
         shader = SkGradientShader::MakeLinear(points, colors, pos, 2, SkTileMode::kClamp);
     }
-    else if (rGradient.GetStyle() == GradientStyle::Axial)
+    else if (rGradient.GetStyle() == css::awt::GradientStyle_AXIAL)
     {
         tools::Polygon aPoly(aBoundRect);
         aPoly.Rotate(aCenter, aGradient.GetAngle() % 3600_deg10);

@@ -61,7 +61,7 @@ public:
         basegfx::B2DRange definitionRange(0, 0, 100, 200);
         basegfx::B2DRange outputRange(0, 100, 100, 200); // Paint only lower half of the gradient.
         attribute::FillGradientAttribute attributes(
-            attribute::GradientStyle::Linear, 0, 0, 0, 0,
+            css::awt::GradientStyle_LINEAR, 0, 0, 0, 0,
             basegfx::utils::createColorStopsFromStartEndColor(COL_WHITE.getBColor(),
                                                               COL_BLACK.getBColor()));
         rtl::Reference<primitive2d::FillGradientPrimitive2D> gradientPrimitive(

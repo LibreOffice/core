@@ -133,7 +133,7 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
 
                     // if the clipping polypolygon is a rectangle, then it's the same size as the bounding of the
                     // polypolygon, so pass in a NULL for the clipping parameter
-                    if( aGradient.GetStyle() == GradientStyle::Linear || rGradient.GetStyle() == GradientStyle::Axial )
+                    if( aGradient.GetStyle() == css::awt::GradientStyle_LINEAR || rGradient.GetStyle() == css::awt::GradientStyle_AXIAL )
                         DrawLinearGradient( aRect, aGradient, aClixPolyPoly.IsRect() ? nullptr : &aClixPolyPoly );
                     else
                         DrawComplexGradient( aRect, aGradient, aClixPolyPoly.IsRect() ? nullptr : &aClixPolyPoly );
@@ -233,7 +233,7 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
 
     rGradient.GetBoundRect( rRect, aRect, aCenter );
 
-    bool bLinear = (rGradient.GetStyle() == GradientStyle::Linear);
+    bool bLinear = (rGradient.GetStyle() == css::awt::GradientStyle_LINEAR);
     double fBorder = rGradient.GetBorder() * aRect.GetHeight() / 100.0;
     if ( !bLinear )
     {
@@ -464,7 +464,7 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
     // all gradients are rendered as nested rectangles which shrink
     // equally in each dimension - except for 'square' gradients
     // which shrink to a central vertex but are not per-se square.
-    if( rGradient.GetStyle() != GradientStyle::Square )
+    if( rGradient.GetStyle() != css::awt::GradientStyle_SQUARE )
     {
         fScanIncY = std::min( fScanIncY, fScanIncX );
         fScanIncX = fScanIncY;
@@ -510,7 +510,7 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
         if( ( aRect.GetWidth() < 2 ) || ( aRect.GetHeight() < 2 ) )
             break;
 
-        if( rGradient.GetStyle() == GradientStyle::Radial || rGradient.GetStyle() == GradientStyle::Elliptical )
+        if( rGradient.GetStyle() == css::awt::GradientStyle_RADIAL || rGradient.GetStyle() == css::awt::GradientStyle_ELLIPTICAL )
             aPoly = tools::Polygon( aRect.Center(), aRect.GetWidth() >> 1, aRect.GetHeight() >> 1 );
         else
             aPoly = tools::Polygon( aRect );
@@ -591,7 +591,7 @@ tools::Long OutputDevice::GetGradientSteps(Gradient const& rGradient, tools::Rec
 
     tools::Long nMinRect = 0;
 
-    if (rGradient.GetStyle() == GradientStyle::Linear || rGradient.GetStyle() == GradientStyle::Axial)
+    if (rGradient.GetStyle() == css::awt::GradientStyle_LINEAR || rGradient.GetStyle() == css::awt::GradientStyle_AXIAL)
         nMinRect = rRect.GetHeight();
     else
         nMinRect = std::min(rRect.GetWidth(), rRect.GetHeight());

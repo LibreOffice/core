@@ -384,7 +384,7 @@ void PageObjectPainter::PaintBackgroundDetail (
     const Color aBottomColor(mpTheme->GetGradientColor(eColorType, Theme::GradientColorClass::Fill2));
     if (aTopColor != aBottomColor)
     {
-        Gradient gradient(GradientStyle::Linear, aTopColor, aBottomColor);
+        Gradient gradient(css::awt::GradientStyle_LINEAR, aTopColor, aBottomColor);
         rDevice.DrawGradient(aPageObjectBox, gradient);
     }
     else

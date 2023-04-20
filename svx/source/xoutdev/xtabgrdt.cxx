@@ -102,41 +102,6 @@ BitmapEx XGradientList::CreateBitmap( tools::Long nIndex, const Size& rSize ) co
 
         const XGradient& rGradient = GetGradient(nIndex)->GetGradient();
         basegfx::ColorStops aColorStops(rGradient.GetColorStops());
-        drawinglayer::attribute::GradientStyle aGradientStyle(drawinglayer::attribute::GradientStyle::Rect);
-
-        switch(rGradient.GetGradientStyle())
-        {
-            case css::awt::GradientStyle_LINEAR :
-            {
-                aGradientStyle = drawinglayer::attribute::GradientStyle::Linear;
-                break;
-            }
-            case css::awt::GradientStyle_AXIAL :
-            {
-                aGradientStyle = drawinglayer::attribute::GradientStyle::Axial;
-                break;
-            }
-            case css::awt::GradientStyle_RADIAL :
-            {
-                aGradientStyle = drawinglayer::attribute::GradientStyle::Radial;
-                break;
-            }
-            case css::awt::GradientStyle_ELLIPTICAL :
-            {
-                aGradientStyle = drawinglayer::attribute::GradientStyle::Elliptical;
-                break;
-            }
-            case css::awt::GradientStyle_SQUARE :
-            {
-                aGradientStyle = drawinglayer::attribute::GradientStyle::Square;
-                break;
-            }
-            default :
-            {
-                aGradientStyle = drawinglayer::attribute::GradientStyle::Rect; // css::awt::GradientStyle_RECT
-                break;
-            }
-        }
 
         if (rGradient.GetStartIntens() != 100 || rGradient.GetEndIntens() != 100)
         {
@@ -149,7 +114,7 @@ BitmapEx XGradientList::CreateBitmap( tools::Long nIndex, const Size& rSize ) co
         }
 
         drawinglayer::attribute::FillGradientAttribute aFillGradient(
-            aGradientStyle,
+            rGradient.GetGradientStyle(),
             static_cast<double>(rGradient.GetBorder()) * 0.01,
             static_cast<double>(rGradient.GetXOffset()) * 0.01,
             static_cast<double>(rGradient.GetYOffset()) * 0.01,

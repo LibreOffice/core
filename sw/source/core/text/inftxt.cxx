@@ -575,7 +575,7 @@ SwTransparentTextGuard::~SwTransparentTextGuard()
     Gradient aVCLGradient;
     sal_uInt8 nTransPercentVcl = 255 - m_rPaintInf.GetFont()->GetColor().GetAlpha();
     const Color aTransColor(nTransPercentVcl, nTransPercentVcl, nTransPercentVcl);
-    aVCLGradient.SetStyle(GradientStyle::Linear);
+    aVCLGradient.SetStyle(css::awt::GradientStyle_LINEAR);
     aVCLGradient.SetStartColor(aTransColor);
     aVCLGradient.SetEndColor(aTransColor);
     aVCLGradient.SetAngle(0_deg10);
