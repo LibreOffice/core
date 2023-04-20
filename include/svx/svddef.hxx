@@ -419,8 +419,8 @@ constexpr TypedWhichId<SvxBoxInfoItem>    SDRATTR_TABLE_BORDER_INNER  (SDRATTR_T
 constexpr TypedWhichId<SvxLineItem>       SDRATTR_TABLE_BORDER_TLBR   (SDRATTR_TABLE_FIRST+2);      // 1238
 constexpr TypedWhichId<SvxLineItem>       SDRATTR_TABLE_BORDER_BLTR   (SDRATTR_TABLE_FIRST+3);      // 1239
 constexpr TypedWhichId<SvxTextRotateItem> SDRATTR_TABLE_TEXT_ROTATION (SDRATTR_TABLE_FIRST+4);      // 1240
-constexpr TypedWhichId<SfxGrabBagItem>    SDRATTR_TABLE_GRABBAG       (SDRATTR_TABLE_FIRST+5);      // 1241
-constexpr sal_uInt16                      SDRATTR_TABLE_LAST          (SDRATTR_TABLE_GRABBAG);      // 1241
+constexpr TypedWhichId<SfxGrabBagItem>    SDRATTR_TABLE_CELL_GRABBAG  (SDRATTR_TABLE_FIRST+5);      // 1241
+constexpr sal_uInt16                      SDRATTR_TABLE_LAST          (SDRATTR_TABLE_CELL_GRABBAG); // 1241
 
 constexpr sal_uInt16                      SDRATTR_GLOW_FIRST (SDRATTR_TABLE_LAST+1);                // 1242
 constexpr TypedWhichId<SdrMetricItem>     SDRATTR_GLOW_RADIUS(SDRATTR_GLOW_FIRST+0);                // 1242
