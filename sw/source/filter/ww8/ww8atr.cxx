@@ -1106,7 +1106,10 @@ void WW8AttributeOutput::StartRun( const SwRedlineData* pRedlineData, sal_Int32 
     {
         const OUString &rComment = pRedlineData->GetComment();
         //Only possible to export to main text
-        if (!rComment.isEmpty() && (m_rWW8Export.m_nTextTyp == TXT_MAINTEXT))
+        if (!rComment.isEmpty() && (m_rWW8Export.m_nTextTyp == TXT_MAINTEXT) &&
+            // tdf#153016 don't export the new automatic comments added by tdf#148032
+            rComment != SwResId(STR_REDLINE_COMMENT_DELETED) &&
+            rComment != SwResId(STR_REDLINE_COMMENT_ADDED))
         {
             if (m_rWW8Export.m_pAtn->IsNewRedlineComment(pRedlineData))
             {
