@@ -5643,8 +5643,11 @@
                               <object class="sfxlo-NotebookbarToolBox" id="LineA12">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="toolbar_style">both-horiz</property>
+                                <property name="valign">center</property>
+                                <property name="vexpand">True</property>
+                                <property name="toolbar_style">both</property>
                                 <property name="show_arrow">False</property>
+                                <property name="icon_size">3</property>
                                 <child>
                                   <object class="GtkToolButton" id="Insert-InsertObjectStarMath1">
                                     <property name="visible">True</property>
