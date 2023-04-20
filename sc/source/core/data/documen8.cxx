@@ -911,12 +911,10 @@ ScDdeLink* lclGetDdeLink(
     if( pLinkManager )
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        size_t nCount = rLinks.size();
         if( pnDdePos ) *pnDdePos = 0;
-        for( size_t nIndex = 0; nIndex < nCount; ++nIndex )
+        for( const auto& nLinks : rLinks )
         {
-            ::sfx2::SvBaseLink* pLink = rLinks[ nIndex ].get();
-            if( ScDdeLink* pDdeLink = dynamic_cast<ScDdeLink*>( pLink )  )
+            if( ScDdeLink* pDdeLink = dynamic_cast<ScDdeLink*>( nLinks.get() )  )
             {
                 if( (pDdeLink->GetAppl() == rAppl) &&
                     (pDdeLink->GetTopic() == rTopic) &&
@@ -937,13 +935,10 @@ ScDdeLink* lclGetDdeLink( const sfx2::LinkManager* pLinkManager, size_t nDdePos 
 {
     if( pLinkManager )
     {
-        const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        size_t nCount = rLinks.size();
         size_t nDdeIndex = 0;       // counts only the DDE links
-        for( size_t nIndex = 0; nIndex < nCount; ++nIndex )
+        for( const auto& pLink : pLinkManager->GetLinks() )
         {
-            ::sfx2::SvBaseLink* pLink = rLinks[ nIndex ].get();
-            if( ScDdeLink* pDdeLink = dynamic_cast<ScDdeLink*>( pLink )  )
+            if( ScDdeLink* pDdeLink = dynamic_cast<ScDdeLink*>( pLink.get() )  )
             {
                 if( nDdeIndex == nDdePos )
                     return pDdeLink;
