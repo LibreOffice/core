@@ -46,7 +46,9 @@ typedef unsigned _Unwind_Word __attribute__((__mode__(__word__)));
 typedef signed   _Unwind_Sword __attribute__((__mode__(__word__)));
 typedef unsigned _Unwind_Word __attribute__((__mode__(__word__)));
 typedef unsigned _Unwind_Ptr __attribute__((__mode__(__pointer__)));
+#if !defined __IPHONE_16_4 || __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_16_4
 typedef unsigned _Unwind_Exception_Class __attribute__((__mode__(__DI__)));
+#endif
 typedef unsigned _Unwind_Internal_Ptr __attribute__((__mode__(__pointer__)));
 
 #pragma GCC visibility push(default)
