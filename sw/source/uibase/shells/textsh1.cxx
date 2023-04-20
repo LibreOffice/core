@@ -51,6 +51,7 @@
 #include <svx/SmartTagItem.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>
+#include <svx/xfillit0.hxx>
 #include <fmtinfmt.hxx>
 #include <wrtsh.hxx>
 #include <wview.hxx>
@@ -1575,7 +1576,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
                             pSet->Put(SfxStringItem(FN_DROP_CHAR_STYLE_NAME, sCharStyleName));
                         }
 
-                        const XFillGradientItem* pTempGradItem = pSet->GetItem<XFillGradientItem>(XATTR_FILLGRADIENT);
+                        const XFillStyleItem* pFS = pSet->GetItem<XFillStyleItem>(XATTR_FILLSTYLE);
+                        bool bSet = pFS && pFS->GetValue() == drawing::FillStyle_GRADIENT;
+                        const XFillGradientItem* pTempGradItem
+                            = bSet ? pSet->GetItem<XFillGradientItem>(XATTR_FILLGRADIENT) : nullptr;
                         if (pTempGradItem && pTempGradItem->GetName().isEmpty())
                         {
                             // MigrateItemSet guarantees unique gradient names
@@ -1584,7 +1588,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
                             SdrModel::MigrateItemSet(&aMigrateSet, pSet, pDrawModel);
                         }
 
-                        const XFillHatchItem* pTempHatchItem = pSet->GetItem<XFillHatchItem>(XATTR_FILLHATCH);
+                        bSet = pFS && pFS->GetValue() == drawing::FillStyle_HATCH;
+                        const XFillHatchItem* pTempHatchItem
+                            = bSet ? pSet->GetItem<XFillHatchItem>(XATTR_FILLHATCH) : nullptr;
                         if (pTempHatchItem && pTempHatchItem->GetName().isEmpty())
                         {
                             SfxItemSetFixed<XATTR_FILLHATCH, XATTR_FILLHATCH> aMigrateSet(rWrtSh.GetView().GetPool());
