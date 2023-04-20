@@ -38,7 +38,7 @@ Transliteration_caseignore::Transliteration_caseignore()
     nMappingType = MappingType::FullFolding;
     moduleLoaded = TransliterationFlags::NONE;
     transliterationName = "case ignore (generic)";
-    implementationName = "com.sun.star.i18n.Transliteration.Transliteration_caseignore";
+    implementationName = "com.sun.star.i18n.Transliteration.IGNORE_CASE";
 }
 
 void SAL_CALL

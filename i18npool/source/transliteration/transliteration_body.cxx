@@ -205,14 +205,14 @@ Transliteration_u2l::Transliteration_u2l()
 {
     nMappingType = MappingType::UpperToLower;
     transliterationName = "upper_to_lower(generic)";
-    implementationName = "com.sun.star.i18n.Transliteration.Transliteration_u2l";
+    implementationName = "com.sun.star.i18n.Transliteration.UPPERCASE_LOWERCASE";
 }
 
 Transliteration_l2u::Transliteration_l2u()
 {
     nMappingType = MappingType::LowerToUpper;
     transliterationName = "lower_to_upper(generic)";
-    implementationName = "com.sun.star.i18n.Transliteration.Transliteration_l2u";
+    implementationName = "com.sun.star.i18n.Transliteration.LOWERCASE_UPPERCASE";
 }
 
 Transliteration_togglecase::Transliteration_togglecase()
@@ -223,14 +223,14 @@ Transliteration_togglecase::Transliteration_togglecase()
     // a per character basis.
     nMappingType = MappingType::LowerToUpper | MappingType::UpperToLower;
     transliterationName = "toggle(generic)";
-    implementationName = "com.sun.star.i18n.Transliteration.Transliteration_togglecase";
+    implementationName = "com.sun.star.i18n.Transliteration.TOGGLE_CASE";
 }
 
 Transliteration_titlecase::Transliteration_titlecase()
 {
     nMappingType = MappingType::ToTitle;
     transliterationName = "title(generic)";
-    implementationName = "com.sun.star.i18n.Transliteration.Transliteration_titlecase";
+    implementationName = "com.sun.star.i18n.Transliteration.TITLE_CASE";
 }
 
 /// @throws RuntimeException
@@ -289,7 +289,7 @@ Transliteration_sentencecase::Transliteration_sentencecase()
 {
     nMappingType = MappingType::ToTitle;  // though only to be applied to the first word...
     transliterationName = "sentence(generic)";
-    implementationName = "com.sun.star.i18n.Transliteration.Transliteration_sentencecase";
+    implementationName = "com.sun.star.i18n.Transliteration.SENTENCE_CASE";
 }
 
 // this function expects to be called on a sentence-by-sentence basis,
