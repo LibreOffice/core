@@ -86,6 +86,7 @@ class SwActualSection
 {
     SwActualSection *m_pUpper;
     SwSectionFrame    *m_pSectFrame;
+    SwFrame* m_pLastPos = nullptr; // Split it *after* this child frame
     SwSectionNode   *m_pSectNode;
 public:
     SwActualSection( SwActualSection *pUpper,
@@ -97,6 +98,8 @@ public:
     SwSectionNode   *GetSectionNode()                   { return m_pSectNode;}
     void             SetUpper(SwActualSection *p)       { m_pUpper = p; }
     SwActualSection *GetUpper()                         { return m_pUpper; }
+    void SetLastPos(SwFrame* p) { m_pLastPos = p; }
+    SwFrame* GetLastPos() const { return m_pLastPos; }
 };
 
 /// Helps during the InsertCnt_ function to create new pages.

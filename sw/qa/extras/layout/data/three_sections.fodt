@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <text:p>Select the text below, copy to clipboard, and paste from clipboard, replacing the selection.</text:p>
+   <text:section text:name="Section1">
+    <text:p>&lt;-- Start selection here. Section1</text:p>
+   </text:section>
+   <text:section text:name="Section2">
+    <text:p>Section2</text:p>
+   </text:section>
+   <text:section text:name="Section3">
+    <text:p>Section3. End selection here --&gt;</text:p>
+   </text:section>
+  </office:text>
+ </office:body>
+</office:document>
