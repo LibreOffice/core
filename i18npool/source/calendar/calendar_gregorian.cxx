@@ -219,7 +219,7 @@ Calendar_hanja::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_Int16
 
 Calendar_hanja_yoil::Calendar_hanja_yoil()
 {
-    cCalendar = "com.sun.star.i18n.Calendar_Calendar_hanja_yoil";
+    cCalendar = "com.sun.star.i18n.Calendar_hanja_yoil";
 }
 
 OUString SAL_CALL
