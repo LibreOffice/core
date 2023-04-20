@@ -81,6 +81,7 @@ public:
                                     SfxObjectShell* i_document );
     static void Execute( css::uno::Sequence < css::beans::PropertyValue > const & aEventData, const css::document::DocumentEvent& aTrigger, SfxObjectShell* pDoc );
 
+private:
     /// Check if script URL whitelist exists, and if so, if current script url is part of it
     static bool isScriptURLAllowed(const OUString& aScriptURL);
 };
