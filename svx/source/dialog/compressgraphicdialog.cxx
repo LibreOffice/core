@@ -376,7 +376,11 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, CalculateClickHdl, weld::Button&, void 
     {
         OUString aSizeAsString = OUString::number(aSize / 1024);
 
-        OUString aReductionSizeAsString = OUString::number( m_aNativeSize > 0 ? (m_aNativeSize - aSize) * 100 / m_aNativeSize : 0 );
+        OUString aReductionSizeAsString;
+        if (m_aNativeSize > 0 )
+           aReductionSizeAsString = OUString::number( static_cast<sal_Int32>((m_aNativeSize - aSize) * 100.0 / m_aNativeSize) );
+        else
+           aReductionSizeAsString = "0";
 
         OUString aNewSizeString = SvxResId(STR_IMAGE_CAPACITY_WITH_REDUCTION);
         aNewSizeString = aNewSizeString.replaceAll("$(CAPACITY)", aSizeAsString);
