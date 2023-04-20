@@ -25,6 +25,7 @@
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <comphelper/diagnose_ex.hxx>
+#include <tools/color.hxx>
 
 using namespace ::com::sun::star;
 
@@ -92,9 +93,9 @@ void LinePropertiesHelper::AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LINE_STYLE, drawing::LineStyle_SOLID );
-    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_LINE_WIDTH, 0 );
-    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_LINE_COLOR, 0x000000 );  // black
-    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_LINE_TRANSPARENCE, 0 );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LINE_WIDTH, sal_Int32(0) );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LINE_COLOR, COL_BLACK );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LINE_TRANSPARENCE, sal_Int16(0) );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LINE_JOINT, drawing::LineJoint_ROUND );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LINE_CAP, drawing::LineCap_BUTT );
 }

@@ -277,13 +277,13 @@ void SceneProperties::AddDefaultsToMap(
         aMtx.Line4.Column1 = aMtx.Line4.Column2 = aMtx.Line4.Column3 = 0.0;
 
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_TRANSF_MATRIX, aMtx );
-    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_SCENE_DISTANCE, 4200 );
-    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_SCENE_FOCAL_LENGTH, 8000 );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_DISTANCE, sal_Int32(4200) );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_FOCAL_LENGTH, sal_Int32(8000) );
 
 //     PROP_SCENE_SHADOW_SLANT;
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_SHADE_MODE, drawing::ShadeMode_SMOOTH );
 
-    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >(
+    ::chart::PropertyHelper::setPropertyValueDefault(
         rOutMap, PROP_SCENE_AMBIENT_COLOR, ChartTypeHelper::getDefaultAmbientLightColor(false,nullptr));
 
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_TWO_SIDED_LIGHTING, true );
