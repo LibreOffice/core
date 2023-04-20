@@ -2468,7 +2468,7 @@ bool IsFlySplitAllowed(bool bFuzzing)
 
     if (!bRet)
     {
-        bRet = getenv("SW_FORCE_FLY_SPLIT") != nullptr;
+        bRet = getenv("SW_DISABLE_FLY_SPLIT") == nullptr;
     }
 
     return bRet;

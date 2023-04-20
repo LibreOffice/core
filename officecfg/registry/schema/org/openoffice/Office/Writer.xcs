@@ -5680,7 +5680,7 @@
               <desc>Specifies whether a floating table should be imported as a split text frame.</desc>
               <label>Import floating table as split frame.</label>
             </info>
-            <value>false</value>
+            <value>true</value>
           </prop>
         </group>
       </group>

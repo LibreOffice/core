@@ -232,7 +232,6 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxFloatingTableExport)
 
 CPPUNIT_TEST_FIXTURE(Test, testDocFloatingTableImport)
 {
-    SwModelTestBase::FlySplitGuard aGuard;
     // Given a document with 2 pages:
     createSwDoc("floattable-compat14.doc");
 
