@@ -161,6 +161,7 @@ IFrameObject::IFrameObject(const uno::Reference < uno::XComponentContext >& rxCo
         aArguments[0] >>= mxObj;
 }
 
+#if 0
 bool lcl_isScriptURLAllowed(const OUString& aScriptURL)
 {
     boost::optional<css::uno::Sequence<OUString>> allowedEvents(
@@ -185,6 +186,7 @@ bool lcl_isScriptURLAllowed(const OUString& aScriptURL)
 
     return false;
 }
+#endif
 
 sal_Bool SAL_CALL IFrameObject::load(
     const uno::Sequence < css::beans::PropertyValue >& /*lDescriptor*/,
@@ -197,23 +199,16 @@ sal_Bool SAL_CALL IFrameObject::load(
         uno::Reference < util::XURLTransformer > xTrans( util::URLTransformer::create( mxContext ) );
         xTrans->parseStrict( aTargetURL );
 
+        INetURLObject aURLObject(aTargetURL.Complete);
+        if (aURLObject.GetProtocol() == INetProtocol::Macro || aURLObject.isSchemeEqualTo(u"vnd.sun.star.script"))
+            return false;
+
         uno::Reference<frame::XFramesSupplier> xParentFrame = xFrame->getCreator();
         SfxObjectShell* pDoc = SfxMacroLoader::GetObjectShell(xParentFrame);
-
-        if (INetURLObject(aTargetURL.Complete).GetProtocol() == INetProtocol::Macro)
-        {
-            if (pDoc && !pDoc->AdjustMacroMode())
-                return false;
-        }
-
-        if (!lcl_isScriptURLAllowed(aTargetURL.Complete))
-            return false;
 
         bool bUpdateAllowed(true);
         if (pDoc)
         {
-            // perhaps should only check for file targets, but lets default to making it strong
-            // unless there is a known need to distinguish
             comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = pDoc->getEmbeddedObjectContainer();
             bUpdateAllowed = rEmbeddedObjectContainer.getUserAllowsLinkUpdate();
         }
