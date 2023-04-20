@@ -347,6 +347,48 @@ class trackedchanges(UITestCase):
                 # This was False (missing comment)
                 self.assertEqual(True, get_state_as_dict(xChild)["Text"].endswith('\tComment added'))
 
+
+    def get_annotation_count(self, document):
+            n = 0
+            textfields = document.getTextFields()
+            for textfield in textfields:
+                if textfield.supportsService("com.sun.star.text.TextField.Annotation"):
+                    n = n + 1
+            return n
+
+    def test_tdf153016_annotation_in_DOC(self):
+        # load a test document, and add a tracked comment
+        with TemporaryDirectory() as tempdir:
+                xFilePath = os.path.join(tempdir, 'temp_drop_down_form_field.doc')
+
+                with self.ui_test.load_file(get_url_for_data_file('drop_down_form_field.doc')) as document:
+
+                    self.xUITest.executeCommand(".uno:TrackChanges")
+                    self.xUITest.executeCommand('.uno:SelectAll')
+
+                    self.assertEqual(0, self.get_annotation_count(document))
+
+                    self.xUITest.executeCommand('.uno:InsertAnnotation')
+
+                    self.assertEqual(1, self.get_annotation_count(document))
+
+                    # Save Copy as
+                    with self.ui_test.execute_dialog_through_command('.uno:SaveAs', close_button="") as xDialog:
+                        xFileName = xDialog.getChild('file_name')
+                        xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'CTRL+A'}))
+                        xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'BACKSPACE'}))
+                        xFileName.executeAction('TYPE', mkPropertyValues({'TEXT': xFilePath}))
+
+                        xOpen = xDialog.getChild("open")
+                        # DOC confirmation dialog is displayed
+                        with self.ui_test.execute_dialog_through_action(xOpen, "CLICK", close_button="save"):
+                            pass
+
+                with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as document:
+                    # This was 2
+                    self.assertEqual(1, self.get_annotation_count(document))
+
+
     def test_tdf147179(self):
         with self.ui_test.load_file(get_url_for_data_file("TC-table-del-add.docx")) as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
