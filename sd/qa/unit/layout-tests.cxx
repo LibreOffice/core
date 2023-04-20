@@ -320,6 +320,27 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testFitToFrameTextFitting)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTableVerticalText)
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tcPr-vert-roundtrip.pptx"), PPTX);
+
+    std::shared_ptr<GDIMetaFile> xMetaFile = xDocShRef->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = XmlTestTools::dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Without the accompanying fix, would fail with:
+    // - Expected: -900
+    // - Actual  : 0
+    // - In <>, attribute 'orientation' of '//font[1]' incorrect value.
+    // i.e. table cell text that was supposed to be vertical (rotated 90
+    // degrees) was not vertical.
+    assertXPath(pXmlDoc, "//font[1]", "orientation", "-900");
+    assertXPath(pXmlDoc, "//font[2]", "orientation", "900");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
