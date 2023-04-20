@@ -2480,8 +2480,9 @@ GtkWindow* get_active_window()
 
 void LocalizeDecimalSeparator(guint& keyval)
 {
-    // #i1820# use locale specific decimal separator
-    if (keyval == GDK_KEY_KP_Decimal && Application::GetSettings().GetMiscSettings().GetEnableLocalizedDecimalSep())
+    const bool bDecimalKey = keyval == GDK_KEY_KP_Decimal || keyval == GDK_KEY_KP_Separator;
+    // #i1820# (and tdf#154623) use locale specific decimal separator
+    if (bDecimalKey && Application::GetSettings().GetMiscSettings().GetEnableLocalizedDecimalSep())
     {
         GtkWindow* pFocusWin = get_active_window();
         GtkWidget* pFocus = pFocusWin ? gtk_window_get_focus(pFocusWin) : nullptr;
