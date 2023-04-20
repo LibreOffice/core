@@ -160,7 +160,7 @@ namespace vclcanvas
                 aLeftBottom -= 2.0*nDiagonalLength*aDirection;
                 aRightTop += 2.0*nDiagonalLength*aDirection;
                 aRightBottom += 2.0*nDiagonalLength*aDirection;
-                Gradient vclGradient( GradientStyle::Linear, rColors[ 0 ], rColors[ 1 ] );
+                Gradient vclGradient( css::awt::GradientStyle_LINEAR, rColors[ 0 ], rColors[ 1 ] );
                 ::tools::Polygon aTempPoly( static_cast<sal_uInt16>(5) );
                 aTempPoly[0] = ::Point( ::basegfx::fround( aLeftTop.getX() ),
                                         ::basegfx::fround( aLeftTop.getY() ) );
@@ -185,7 +185,7 @@ namespace vclcanvas
                 aLeftBottom -= 2.0*nDiagonalLength*aDirection;
                 aRightTop += 2.0*nDiagonalLength*aDirection;
                 aRightBottom += 2.0*nDiagonalLength*aDirection;
-                Gradient vclGradient( GradientStyle::Axial, rColors[ 1 ], rColors[ 0 ] );
+                Gradient vclGradient( css::awt::GradientStyle_AXIAL, rColors[ 1 ], rColors[ 0 ] );
                 ::tools::Polygon aTempPoly( static_cast<sal_uInt16>(5) );
                 aTempPoly[0] = ::Point( ::basegfx::fround( aLeftTop.getX() ),
                                         ::basegfx::fround( aLeftTop.getY() ) );

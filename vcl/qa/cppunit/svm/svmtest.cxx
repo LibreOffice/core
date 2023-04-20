@@ -1271,13 +1271,13 @@ void SvmTest::testGradient()
 
     tools::Rectangle aRectangle(Point(1, 2), Size(4,5));
 
-    Gradient aGradient(GradientStyle::Linear, COL_WHITE, COL_BLACK);
+    Gradient aGradient(css::awt::GradientStyle_LINEAR, COL_WHITE, COL_BLACK);
     pVirtualDev->DrawGradient(aRectangle, aGradient);
 
     tools::Rectangle aRectangle2(Point(3, 4), Size(1,2));
 
     Gradient aGradient2;
-    aGradient2.SetStyle(GradientStyle::Radial);
+    aGradient2.SetStyle(css::awt::GradientStyle_RADIAL);
     aGradient2.SetStartColor(COL_LIGHTRED);
     aGradient2.SetEndColor(COL_LIGHTGREEN);
     aGradient2.SetAngle(Degree10(55));
@@ -1365,7 +1365,7 @@ void SvmTest::testGradientEx()
     tools::PolyPolygon aPolyPolygon(1);
     aPolyPolygon.Insert(aPolygon);
 
-    Gradient aGradient(GradientStyle::Linear, COL_WHITE, COL_BLACK);
+    Gradient aGradient(css::awt::GradientStyle_LINEAR, COL_WHITE, COL_BLACK);
     pVirtualDev->DrawGradient(aPolyPolygon, aGradient);
 
     tools::Polygon aPolygon2(2);
@@ -1381,7 +1381,7 @@ void SvmTest::testGradientEx()
     aPolyPolygon2.Insert(aPolygon3);
 
     Gradient aGradient2;
-    aGradient2.SetStyle(GradientStyle::Axial);
+    aGradient2.SetStyle(css::awt::GradientStyle_AXIAL);
     aGradient2.SetStartColor(COL_LIGHTMAGENTA);
     aGradient2.SetEndColor(COL_CYAN);
     aGradient2.SetAngle(Degree10(55));
@@ -2115,7 +2115,7 @@ void SvmTest::testFloatTransparent()
     pVirtualDev1->DrawPixel(Point(1, 8));
     pVirtualDev1->DrawPixel(Point(2, 7));
 
-    Gradient aGradient(GradientStyle::Linear, COL_WHITE, COL_BLACK);
+    Gradient aGradient(css::awt::GradientStyle_LINEAR, COL_WHITE, COL_BLACK);
 
     pVirtualDev->DrawTransparent(aGDIMetaFile1, Point(1, 2), Size(3, 4), aGradient);
 

@@ -32,14 +32,14 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-        // Get the OuterColor. Take into account that for attribute::GradientStyle::Axial
+        // Get the OuterColor. Take into account that for css::awt::GradientStyle_AXIAL
         // this is the last one due to inverted gradient usage (see constructor there)
         basegfx::BColor FillGradientPrimitive2D::getOuterColor() const
         {
             if (getFillGradient().getColorStops().empty())
                 return basegfx::BColor();
 
-            if (attribute::GradientStyle::Axial == getFillGradient().getStyle())
+            if (css::awt::GradientStyle_AXIAL == getFillGradient().getStyle())
                 return getFillGradient().getColorStops().back().getStopColor();
 
             return getFillGradient().getColorStops().front().getStopColor();
@@ -48,8 +48,8 @@ namespace drawinglayer::primitive2d
         // Get the needed UnitPolygon dependent on the GradientStyle
         basegfx::B2DPolygon FillGradientPrimitive2D::getUnitPolygon() const
         {
-            if (attribute::GradientStyle::Radial == getFillGradient().getStyle()
-                || attribute::GradientStyle::Elliptical == getFillGradient().getStyle())
+            if (css::awt::GradientStyle_RADIAL == getFillGradient().getStyle()
+                || css::awt::GradientStyle_ELLIPTICAL == getFillGradient().getStyle())
             {
                 return basegfx::utils::createPolygonFromCircle(basegfx::B2DPoint(0.0, 0.0), 1.0);
             }
@@ -62,7 +62,8 @@ namespace drawinglayer::primitive2d
         {
             switch(getFillGradient().getStyle())
             {
-                case attribute::GradientStyle::Linear:
+                default: // GradientStyle_MAKE_FIXED_SIZE
+                case css::awt::GradientStyle_LINEAR:
                 {
                     texture::GeoTexSvxGradientLinear aGradient(
                         getDefinitionRange(),
@@ -74,7 +75,7 @@ namespace drawinglayer::primitive2d
                     aGradient.appendTransformationsAndColors(aCallback);
                     break;
                 }
-                case attribute::GradientStyle::Axial:
+                case css::awt::GradientStyle_AXIAL:
                 {
                     texture::GeoTexSvxGradientAxial aGradient(
                         getDefinitionRange(),
@@ -86,7 +87,7 @@ namespace drawinglayer::primitive2d
                     aGradient.appendTransformationsAndColors(aCallback);
                     break;
                 }
-                case attribute::GradientStyle::Radial:
+                case css::awt::GradientStyle_RADIAL:
                 {
                     texture::GeoTexSvxGradientRadial aGradient(
                         getDefinitionRange(),
@@ -98,7 +99,7 @@ namespace drawinglayer::primitive2d
                     aGradient.appendTransformationsAndColors(aCallback);
                     break;
                 }
-                case attribute::GradientStyle::Elliptical:
+                case css::awt::GradientStyle_ELLIPTICAL:
                 {
                     texture::GeoTexSvxGradientElliptical aGradient(
                         getDefinitionRange(),
@@ -111,7 +112,7 @@ namespace drawinglayer::primitive2d
                     aGradient.appendTransformationsAndColors(aCallback);
                     break;
                 }
-                case attribute::GradientStyle::Square:
+                case css::awt::GradientStyle_SQUARE:
                 {
                     texture::GeoTexSvxGradientSquare aGradient(
                         getDefinitionRange(),
@@ -124,7 +125,7 @@ namespace drawinglayer::primitive2d
                     aGradient.appendTransformationsAndColors(aCallback);
                     break;
                 }
-                case attribute::GradientStyle::Rect:
+                case css::awt::GradientStyle_RECT:
                 {
                     texture::GeoTexSvxGradientRect aGradient(
                         getDefinitionRange(),

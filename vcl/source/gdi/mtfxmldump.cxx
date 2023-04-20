@@ -369,17 +369,17 @@ OUString convertFractionToString(const Fraction& aFraction)
     return OUString::createFromAscii(ss.str().c_str());
 }
 
-OUString convertGradientStyle(GradientStyle eStyle)
+OUString convertGradientStyleToOUString(css::awt::GradientStyle eStyle)
 {
     switch (eStyle)
     {
-        case GradientStyle::Linear:     return "Linear";
-        case GradientStyle::Axial:      return "Axial";
-        case GradientStyle::Radial:     return "Radial";
-        case GradientStyle::Elliptical: return "Elliptical";
-        case GradientStyle::Square:     return "Square";
-        case GradientStyle::Rect:       return "Rect";
-        case GradientStyle::FORCE_EQUAL_SIZE: return "ForceEqualSize";
+        case css::awt::GradientStyle_LINEAR:     return "Linear";
+        case css::awt::GradientStyle_AXIAL:      return "Axial";
+        case css::awt::GradientStyle_RADIAL:     return "Radial";
+        case css::awt::GradientStyle_ELLIPTICAL: return "Elliptical";
+        case css::awt::GradientStyle_SQUARE:     return "Square";
+        case css::awt::GradientStyle_RECT:       return "Rect";
+        case css::awt::GradientStyle::GradientStyle_MAKE_FIXED_SIZE: return "ForceEqualSize";
     }
     return OUString();
 }
@@ -551,7 +551,7 @@ void writeLineInfo(tools::XmlWriter& rWriter, LineInfo const& rLineInfo)
 
 void writeGradient(tools::XmlWriter& rWriter, Gradient const& rGradient)
 {
-    rWriter.attribute("style", convertGradientStyle(rGradient.GetStyle()));
+    rWriter.attribute("style", convertGradientStyleToOUString(rGradient.GetStyle()));
     rWriter.attribute("startcolor", convertColorToString(rGradient.GetStartColor()));
     rWriter.attribute("endcolor", convertColorToString(rGradient.GetEndColor()));
     rWriter.attribute("angle", rGradient.GetAngle().get());

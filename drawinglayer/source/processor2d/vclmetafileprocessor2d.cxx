@@ -285,40 +285,7 @@ void VclMetafileProcessor2D::impConvertFillGradientAttributeToVCLGradient(
     // defaults for intensity; those were computed into the start/end colors already
     o_rVCLGradient.SetStartIntensity(100);
     o_rVCLGradient.SetEndIntensity(100);
-
-    switch (rFiGrAtt.getStyle())
-    {
-        default: // attribute::GradientStyle::Linear :
-        {
-            o_rVCLGradient.SetStyle(GradientStyle::Linear);
-            break;
-        }
-        case attribute::GradientStyle::Axial:
-        {
-            o_rVCLGradient.SetStyle(GradientStyle::Axial);
-            break;
-        }
-        case attribute::GradientStyle::Radial:
-        {
-            o_rVCLGradient.SetStyle(GradientStyle::Radial);
-            break;
-        }
-        case attribute::GradientStyle::Elliptical:
-        {
-            o_rVCLGradient.SetStyle(GradientStyle::Elliptical);
-            break;
-        }
-        case attribute::GradientStyle::Square:
-        {
-            o_rVCLGradient.SetStyle(GradientStyle::Square);
-            break;
-        }
-        case attribute::GradientStyle::Rect:
-        {
-            o_rVCLGradient.SetStyle(GradientStyle::Rect);
-            break;
-        }
-    }
+    o_rVCLGradient.SetStyle(rFiGrAtt.getStyle());
 }
 
 void VclMetafileProcessor2D::impStartSvtGraphicFill(SvtGraphicFill const* pSvtGraphicFill)
@@ -2088,16 +2055,16 @@ void VclMetafileProcessor2D::processPolyPolygonGradientPrimitive2D(
 
         switch (aVCLGradient.GetStyle())
         {
-            default: // GradientStyle::Linear:
-            case GradientStyle::Axial:
+            default: // css::awt::GradientStyle_LINEAR:
+            case css::awt::GradientStyle_AXIAL:
                 eGrad = SvtGraphicFill::GradientType::Linear;
                 break;
-            case GradientStyle::Radial:
-            case GradientStyle::Elliptical:
+            case css::awt::GradientStyle_RADIAL:
+            case css::awt::GradientStyle_ELLIPTICAL:
                 eGrad = SvtGraphicFill::GradientType::Radial;
                 break;
-            case GradientStyle::Square:
-            case GradientStyle::Rect:
+            case css::awt::GradientStyle_SQUARE:
+            case css::awt::GradientStyle_RECT:
                 eGrad = SvtGraphicFill::GradientType::Rectangular;
                 break;
         }
@@ -2279,7 +2246,7 @@ void VclMetafileProcessor2D::processUnifiedTransparencePrimitive2D(
                     basegfx::fround(rUniTransparenceCandidate.getTransparence() * 255.0)));
                 const Color aTransColor(nTransPercentVcl, nTransPercentVcl, nTransPercentVcl);
 
-                aVCLGradient.SetStyle(GradientStyle::Linear);
+                aVCLGradient.SetStyle(css::awt::GradientStyle_LINEAR);
                 aVCLGradient.SetStartColor(aTransColor);
                 aVCLGradient.SetEndColor(aTransColor);
                 aVCLGradient.SetAngle(0_deg10);

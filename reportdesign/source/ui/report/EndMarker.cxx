@@ -62,7 +62,7 @@ void OEndMarker::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangl
     aStartColor.RGBtoHSB(nHue, nSat, nBri);
     nSat += 40;
     Color aEndColor(Color::HSBtoRGB(nHue, nSat, nBri));
-    Gradient aGradient(GradientStyle::Linear, aStartColor, aEndColor);
+    Gradient aGradient(css::awt::GradientStyle_LINEAR, aStartColor, aEndColor);
     aGradient.SetSteps(static_cast<sal_uInt16>(aSize.Height()));
 
     rRenderContext.DrawGradient(PixelToLogic(aPoly), aGradient);

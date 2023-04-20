@@ -523,7 +523,7 @@ void AreaPropertyPanelBase::FillStyleChanged(bool bUpdateModel)
 
                         mxGradientStyle->set_active(
                             sal::static_int_cast<sal_Int32>(aGradient.GetGradientStyle()));
-                        if (mxGradientStyle->get_active() == sal_Int32(GradientStyle::Radial))
+                        if (mxGradientStyle->get_active() == sal_Int32(css::awt::GradientStyle_RADIAL))
                             mxMTRAngle->set_sensitive(false);
                         else
                             mxMTRAngle->set_value(toDegrees(aGradient.GetAngle()),

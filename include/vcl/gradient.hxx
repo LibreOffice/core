@@ -28,6 +28,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/vclenum.hxx>
+#include <com/sun/star/awt/GradientStyle.hpp>
 
 namespace tools { class Rectangle; }
 
@@ -45,13 +46,13 @@ public:
                     Gradient();
                     Gradient( const Gradient& rGradient );
                     Gradient( Gradient&& rGradient );
-                    Gradient( GradientStyle eStyle,
+                    Gradient( css::awt::GradientStyle eStyle,
                               const Color& rStartColor,
                               const Color& rEndColor );
                     ~Gradient();
 
-    void            SetStyle( GradientStyle eStyle );
-    GradientStyle   GetStyle() const;
+    void            SetStyle( css::awt::GradientStyle eStyle );
+    css::awt::GradientStyle   GetStyle() const;
 
     void            SetStartColor( const Color& rColor );
     const Color&    GetStartColor() const;

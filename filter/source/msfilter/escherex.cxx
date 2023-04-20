@@ -408,7 +408,7 @@ void EscherPropertyContainer::CreateGradientProperties(
             nFillType = ESCHER_FillShadeScale;
             nAngle = (rGradient.Angle * 0x10000) / 10;
             nFillFocus = (sal::static_int_cast<int>(rGradient.Style) ==
-                          sal::static_int_cast<int>(GradientStyle::Linear)) ? 0 : 50;
+                          sal::static_int_cast<int>(css::awt::GradientStyle_LINEAR)) ? 0 : 50;
         }
         break;
         case awt::GradientStyle_RADIAL :

@@ -219,8 +219,8 @@ void SVGAttributeWriter::AddPaintAttr( const Color& rLineColor, const Color& rFi
 void SVGAttributeWriter::AddGradientDef( const tools::Rectangle& rObjRect, const Gradient& rGradient, OUString& rGradientId )
 {
     if( rObjRect.GetWidth() && rObjRect.GetHeight() &&
-        ( rGradient.GetStyle() == GradientStyle::Linear || rGradient.GetStyle() == GradientStyle::Axial ||
-          rGradient.GetStyle() == GradientStyle::Radial || rGradient.GetStyle() == GradientStyle::Elliptical ) )
+        ( rGradient.GetStyle() == css::awt::GradientStyle_LINEAR || rGradient.GetStyle() == css::awt::GradientStyle_AXIAL ||
+          rGradient.GetStyle() == css::awt::GradientStyle_RADIAL || rGradient.GetStyle() == css::awt::GradientStyle_ELLIPTICAL ) )
     {
         SvXMLElementExport aDesc( mrExport, XML_NAMESPACE_NONE, aXMLElemDefs, true, true );
         Color aStartColor( rGradient.GetStartColor() ), aEndColor( rGradient.GetEndColor() );
@@ -248,7 +248,7 @@ void SVGAttributeWriter::AddGradientDef( const tools::Rectangle& rObjRect, const
             std::unique_ptr< SvXMLElementExport >   apGradient;
             OUString                         aColorStr;
 
-            if( rGradient.GetStyle() == GradientStyle::Linear || rGradient.GetStyle() == GradientStyle::Axial )
+            if( rGradient.GetStyle() == css::awt::GradientStyle_LINEAR || rGradient.GetStyle() == css::awt::GradientStyle_AXIAL )
             {
                 tools::Polygon aLinePoly( 2 );
 
@@ -267,9 +267,9 @@ void SVGAttributeWriter::AddGradientDef( const tools::Rectangle& rObjRect, const
 
                 // write stop values
                 double fBorder = static_cast< double >( rGradient.GetBorder() ) *
-                                ( ( rGradient.GetStyle() == GradientStyle::Axial ) ? 0.005 : 0.01 );
+                                ( ( rGradient.GetStyle() == css::awt::GradientStyle_AXIAL ) ? 0.005 : 0.01 );
 
-                ImplGetColorStr( ( rGradient.GetStyle() == GradientStyle::Axial ) ? aEndColor : aStartColor, aColorStr );
+                ImplGetColorStr( ( rGradient.GetStyle() == css::awt::GradientStyle_AXIAL ) ? aEndColor : aStartColor, aColorStr );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrOffset, OUString::number( fBorder ) );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStopColor, aColorStr );
 
@@ -277,7 +277,7 @@ void SVGAttributeWriter::AddGradientDef( const tools::Rectangle& rObjRect, const
                     SvXMLElementExport aDesc2( mrExport, XML_NAMESPACE_NONE, aXMLElemStop, true, true );
                 }
 
-                if( rGradient.GetStyle() == GradientStyle::Axial )
+                if( rGradient.GetStyle() == css::awt::GradientStyle_AXIAL )
                 {
                     ImplGetColorStr( aStartColor, aColorStr );
                     mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrOffset, OUString::number( 0.5 ) );
@@ -288,7 +288,7 @@ void SVGAttributeWriter::AddGradientDef( const tools::Rectangle& rObjRect, const
                     }
                 }
 
-                if( rGradient.GetStyle() != GradientStyle::Axial )
+                if( rGradient.GetStyle() != css::awt::GradientStyle_AXIAL )
                     fBorder = 0.0;
 
                 ImplGetColorStr( aEndColor, aColorStr );
@@ -2314,8 +2314,8 @@ void SVGActionWriter::ImplWritePattern( const tools::PolyPolygon& rPolyPoly,
 void SVGActionWriter::ImplWriteGradientEx( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient,
                                            sal_uInt32 nWriteFlags)
 {
-    if ( rGradient.GetStyle() == GradientStyle::Linear ||
-         rGradient.GetStyle() == GradientStyle::Axial )
+    if ( rGradient.GetStyle() == css::awt::GradientStyle_LINEAR ||
+         rGradient.GetStyle() == css::awt::GradientStyle_AXIAL )
     {
         ImplWriteGradientLinear( rPolyPoly, rGradient );
     }
@@ -2375,7 +2375,7 @@ void SVGActionWriter::ImplWriteGradientLinear( const tools::PolyPolygon& rPolyPo
             const Color aEndColor = ImplGetColorWithIntensity( rGradient.GetEndColor(), rGradient.GetEndIntensity() );
             double fBorderOffset = rGradient.GetBorder() / 100.0;
             const sal_uInt16 nSteps = rGradient.GetSteps();
-            if( rGradient.GetStyle() == GradientStyle::Linear )
+            if( rGradient.GetStyle() == css::awt::GradientStyle_LINEAR )
             {
                 // Emulate non-smooth gradient
                 if( 0 < nSteps && nSteps < 100 )

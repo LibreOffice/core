@@ -31,11 +31,11 @@ namespace drawinglayer::attribute
             double                                  mfOffsetY;
             double                                  mfAngle;
             basegfx::ColorStops                     maColorStops;
-            GradientStyle                           meStyle;
+            css::awt::GradientStyle                 meStyle;
             sal_uInt16                              mnSteps;
 
             ImpFillGradientAttribute(
-                GradientStyle eStyle,
+                css::awt::GradientStyle eStyle,
                 double fBorder,
                 double fOffsetX,
                 double fOffsetY,
@@ -74,7 +74,7 @@ namespace drawinglayer::attribute
                 mfOffsetY(0.0),
                 mfAngle(0.0),
                 maColorStops(),
-                meStyle(GradientStyle::Linear),
+                meStyle(css::awt::GradientStyle_LINEAR),
                 mnSteps(0)
             {
                 // always add a fallback color, see above
@@ -82,7 +82,7 @@ namespace drawinglayer::attribute
             }
 
             // data read access
-            GradientStyle getStyle() const { return meStyle; }
+            css::awt::GradientStyle getStyle() const { return meStyle; }
             double getBorder() const { return mfBorder; }
             double getOffsetX() const { return mfOffsetX; }
             double getOffsetY() const { return mfOffsetY; }
@@ -121,7 +121,7 @@ namespace drawinglayer::attribute
         }
 
         FillGradientAttribute::FillGradientAttribute(
-            GradientStyle eStyle,
+            css::awt::GradientStyle eStyle,
             double fBorder,
             double fOffsetX,
             double fOffsetY,
@@ -179,9 +179,9 @@ namespace drawinglayer::attribute
             // is different from processing the gradient manually by drawinglayer
             // (and the Writer unittest for it fails). Keep using the drawinglayer code
             // until somebody founds out what's wrong and fixes it.
-            if (getStyle() != drawinglayer::attribute::GradientStyle::Linear
-                && getStyle() != drawinglayer::attribute::GradientStyle::Axial
-                && getStyle() != drawinglayer::attribute::GradientStyle::Radial)
+            if (getStyle() != css::awt::GradientStyle_LINEAR
+                && getStyle() != css::awt::GradientStyle_AXIAL
+                && getStyle() != css::awt::GradientStyle_RADIAL)
             {
                 return true;
             }
@@ -227,7 +227,7 @@ namespace drawinglayer::attribute
             return mpFillGradientAttribute->getAngle();
         }
 
-        GradientStyle FillGradientAttribute::getStyle() const
+        css::awt::GradientStyle FillGradientAttribute::getStyle() const
         {
             return mpFillGradientAttribute->getStyle();
         }

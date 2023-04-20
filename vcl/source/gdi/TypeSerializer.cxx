@@ -58,7 +58,7 @@ void TypeSerializer::readGradient(Gradient& rGradient)
     mrStream.ReadUInt16(nIntensityEnd);
     mrStream.ReadUInt16(nStepCount);
 
-    rGradient.SetStyle(static_cast<GradientStyle>(nStyle));
+    rGradient.SetStyle(static_cast<css::awt::GradientStyle>(nStyle));
     rGradient.SetStartColor(aStartColor);
     rGradient.SetEndColor(aEndColor);
     if (nAngle > 3600)

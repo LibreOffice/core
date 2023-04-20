@@ -675,44 +675,8 @@ namespace wmfemfhelper
             aEnd = interpolate(aBlack, aEnd, static_cast<double>(nEndIntens) * 0.01);
         }
 
-        drawinglayer::attribute::GradientStyle aGradientStyle(drawinglayer::attribute::GradientStyle::Rect);
-
-        switch(rGradient.GetStyle())
-        {
-            case GradientStyle::Linear :
-            {
-                aGradientStyle = drawinglayer::attribute::GradientStyle::Linear;
-                break;
-            }
-            case GradientStyle::Axial :
-            {
-                aGradientStyle = drawinglayer::attribute::GradientStyle::Axial;
-                break;
-            }
-            case GradientStyle::Radial :
-            {
-                aGradientStyle = drawinglayer::attribute::GradientStyle::Radial;
-                break;
-            }
-            case GradientStyle::Elliptical :
-            {
-                aGradientStyle = drawinglayer::attribute::GradientStyle::Elliptical;
-                break;
-            }
-            case GradientStyle::Square :
-            {
-                aGradientStyle = drawinglayer::attribute::GradientStyle::Square;
-                break;
-            }
-            default : // GradientStyle::Rect
-            {
-                aGradientStyle = drawinglayer::attribute::GradientStyle::Rect;
-                break;
-            }
-        }
-
         return drawinglayer::attribute::FillGradientAttribute(
-            aGradientStyle,
+            rGradient.GetStyle(),
             static_cast<double>(rGradient.GetBorder()) * 0.01,
             static_cast<double>(rGradient.GetOfsX()) * 0.01,
             static_cast<double>(rGradient.GetOfsY()) * 0.01,

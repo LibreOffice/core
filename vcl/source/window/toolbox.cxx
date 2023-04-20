@@ -322,7 +322,7 @@ void ToolBox::ImplDrawGradientBackground(vcl::RenderContext& rRenderContext)
 
     Gradient g;
     g.SetAngle(Degree10(mbHorz ? 0 : 900));
-    g.SetStyle(GradientStyle::Linear);
+    g.SetStyle(css::awt::GradientStyle_LINEAR);
 
     g.SetStartColor(startCol);
     g.SetEndColor(endCol);

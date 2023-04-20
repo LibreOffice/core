@@ -712,7 +712,7 @@ public:
             mpVDev->DrawPolyPolygon(polyPolygon);
 
             tools::Rectangle aGradientRect(Point(200, 200), Size(200 + fTime * 300, 200 + fTime * 300));
-            mpVDev->DrawGradient(aGradientRect, Gradient(GradientStyle::Linear, COL_YELLOW, COL_BLUE));
+            mpVDev->DrawGradient(aGradientRect, Gradient(css::awt::GradientStyle_LINEAR, COL_YELLOW, COL_BLUE));
 
             rRenderContext.DrawOutDev(Point(), mpVDev->GetOutputSizePixel(),
                                       Point(), mpVDev->GetOutputSizePixel(),

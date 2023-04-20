@@ -91,7 +91,7 @@ void VclGradientTest::testAddGradientActions_rect_linear()
 {
     GDIMetaFile aMtf;
     tools::Rectangle aRect(Point(10, 10), Size(40, 40));
-    Gradient aGradient(GradientStyle::Linear, COL_RED, COL_WHITE);
+    Gradient aGradient(css::awt::GradientStyle_LINEAR, COL_RED, COL_WHITE);
     aGradient.SetBorder(100);
 
     aGradient.AddGradientActions(aRect, aMtf);
@@ -166,7 +166,7 @@ void VclGradientTest::testAddGradientActions_rect_axial()
 {
     GDIMetaFile aMtf;
     tools::Rectangle aRect(Point(10, 10), Size(40, 40));
-    Gradient aGradient(GradientStyle::Axial, COL_RED, COL_WHITE);
+    Gradient aGradient(css::awt::GradientStyle_AXIAL, COL_RED, COL_WHITE);
     aGradient.SetBorder(100);
 
     aGradient.AddGradientActions(aRect, aMtf);
@@ -226,7 +226,7 @@ void VclGradientTest::testAddGradientActions_rect_complex()
 {
     GDIMetaFile aMtf;
     tools::Rectangle aRect(Point(10, 10), Size(40, 40));
-    Gradient aGradient(GradientStyle::Square, COL_RED, COL_WHITE);
+    Gradient aGradient(css::awt::GradientStyle_SQUARE, COL_RED, COL_WHITE);
     aGradient.SetBorder(10);
 
     aGradient.AddGradientActions(aRect, aMtf);

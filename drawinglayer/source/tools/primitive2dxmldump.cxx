@@ -276,22 +276,23 @@ void writeSdrFillAttribute(::tools::XmlWriter& rWriter,
         rWriter.startElement("gradient");
         switch (rGradient.getStyle())
         {
-            case drawinglayer::attribute::GradientStyle::Linear:
+            default: // GradientStyle_MAKE_FIXED_SIZE
+            case css::awt::GradientStyle_LINEAR:
                 rWriter.attribute("style", "Linear");
                 break;
-            case drawinglayer::attribute::GradientStyle::Axial:
+            case css::awt::GradientStyle_AXIAL:
                 rWriter.attribute("style", "Axial");
                 break;
-            case drawinglayer::attribute::GradientStyle::Radial:
+            case css::awt::GradientStyle_RADIAL:
                 rWriter.attribute("style", "Radial");
                 break;
-            case drawinglayer::attribute::GradientStyle::Elliptical:
+            case css::awt::GradientStyle_ELLIPTICAL:
                 rWriter.attribute("style", "Elliptical");
                 break;
-            case drawinglayer::attribute::GradientStyle::Square:
+            case css::awt::GradientStyle_SQUARE:
                 rWriter.attribute("style", "Square");
                 break;
-            case drawinglayer::attribute::GradientStyle::Rect:
+            case css::awt::GradientStyle_RECT:
                 rWriter.attribute("style", "Rect");
                 break;
         }

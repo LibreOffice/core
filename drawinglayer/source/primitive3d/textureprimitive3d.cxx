@@ -99,7 +99,7 @@ namespace drawinglayer::primitive3d
                     basegfx::ColorStop(0.0, aGray),
                     basegfx::ColorStop(1.0, aGray) };
 
-                const attribute::FillGradientAttribute aFillGradient(attribute::GradientStyle::Linear, 0.0, 0.0, 0.0, 0.0, aColorStops);
+                const attribute::FillGradientAttribute aFillGradient(css::awt::GradientStyle_LINEAR, 0.0, 0.0, 0.0, 0.0, aColorStops);
                 const Primitive3DReference xRef(new TransparenceTexturePrimitive3D(aFillGradient, getChildren(), getTextureSize()));
                 return { xRef };
             }
