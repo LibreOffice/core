@@ -1332,13 +1332,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuInsert-InsertObjectFloatingFrame">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:InsertObjectFloatingFrame</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkSeparatorMenuItem" id="MenuInsert-separator4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -5228,45 +5221,6 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Insert-Section-ObjectFloatingFrame">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="valign">center</property>
-                        <property name="vexpand">True</property>
-                        <child>
-                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom129">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="toolbar_style">both-horiz</property>
-                            <property name="show_arrow">False</property>
-                            <child>
-                              <object class="GtkToolButton" id="Insert-InsertObjectFloatingFrame">
-                                <property name="visible">True</property>
-                                <property name="action_name">.uno:InsertObjectFloatingFrame</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="homogeneous">False</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <style>
-                          <class name="priority-8"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">11</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="VclOptionalBox" id="Insert-Section-Field">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -5312,7 +5266,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">12</property>
+                        <property name="position">11</property>
                       </packing>
                     </child>
                     <child>
@@ -5396,7 +5350,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">13</property>
+                        <property name="position">12</property>
                       </packing>
                     </child>
                     <child>
@@ -5470,7 +5424,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">14</property>
+                        <property name="position">13</property>
                       </packing>
                     </child>
                     <child>
@@ -5544,7 +5498,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">15</property>
+                        <property name="position">14</property>
                       </packing>
                     </child>
                     <child>
@@ -5609,7 +5563,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">16</property>
+                        <property name="position">15</property>
                       </packing>
                     </child>
                     <child>
@@ -5657,7 +5611,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">17</property>
+                        <property name="position">16</property>
                       </packing>
                     </child>
                     <child>
@@ -5708,7 +5662,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">20</property>
+                        <property name="position">17</property>
                       </packing>
                     </child>
                     <child>
@@ -5747,7 +5701,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">21</property>
+                        <property name="position">18</property>
                       </packing>
                     </child>
                   </object>

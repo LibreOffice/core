@@ -240,12 +240,7 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:DrawText"/>
       <menu:menuitem menu:id=".uno:InsertAnnotation"/>
-      <menu:menu menu:id=".uno:InsertFrameMenu">
-        <menu:menupopup>
-          <menu:menuitem menu:id=".uno:InsertFrame"/>
-          <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame"/>
-        </menu:menupopup>
-      </menu:menu>
+      <menu:menuitem menu:id=".uno:InsertFrame"/>
       <menu:menuitem menu:id=".uno:FontworkGalleryFloater" menu:style="text"/>
       <menu:menuitem menu:id=".uno:InsertCaptionDialog" menu:style="text"/>
       <menu:menuseparator/>

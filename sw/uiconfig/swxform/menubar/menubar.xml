@@ -297,7 +297,6 @@
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:InsertFrameInteract"/>
           <menu:menuitem menu:id=".uno:InsertFrame"/>
-          <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuitem menu:id=".uno:FontworkGalleryFloater" menu:style="text"/>

@@ -1470,13 +1470,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuFrame-InsertObjectFloatingFrame">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:InsertObjectFloatingFrame</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkSeparatorMenuItem" id="MenuFrame-separator1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -1974,13 +1967,6 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertFrameInteract</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuInsert-InsertObjectFloatingFrame">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:InsertObjectFloatingFrame</property>
       </object>
     </child>
     <child>

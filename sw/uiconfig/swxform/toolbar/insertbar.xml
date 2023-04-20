@@ -21,7 +21,6 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertTable"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertSection"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertFrameInteract"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertObjectFloatingFrame" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertFootnote"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertEndnote"/>

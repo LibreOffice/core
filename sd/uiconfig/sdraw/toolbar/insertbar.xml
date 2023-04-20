@@ -20,8 +20,6 @@
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
  <toolbar:toolbaritem xlink:href=".uno:InsertPage"/>
  <toolbar:toolbarseparator/>
-    <toolbar:toolbaritem xlink:href=".uno:InsertObjectFloatingFrame" toolbar:visible="false"/>
-    <toolbar:toolbarseparator/>
     <toolbar:toolbaritem xlink:href=".uno:ImportFromFile" toolbar:visible="false"/>
     <toolbar:toolbaritem xlink:href=".uno:InsertTable"/>
     <toolbar:toolbarseparator/>

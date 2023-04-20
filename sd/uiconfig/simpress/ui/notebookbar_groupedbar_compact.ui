@@ -1731,13 +1731,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuInsert-InsertObjectFloatingFrame">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:InsertObjectFloatingFrame</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkSeparatorMenuItem" id="MenuInsert-separator4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
