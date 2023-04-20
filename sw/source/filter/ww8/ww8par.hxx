@@ -1824,7 +1824,7 @@ public:     // really private, but can only be done public
 
     void Read_TabRowEnd(        sal_uInt16, const sal_uInt8* pData, short nLen );
     void Read_TabCellEnd(        sal_uInt16, const sal_uInt8* pData, short nLen );
-    bool ParseTabPos(WW8_TablePos *aTabPos, WW8PLCFx_Cp_FKP* pPap);
+    static bool ParseTabPos(WW8_TablePos *aTabPos, WW8PLCFx_Cp_FKP* pPap);
     void Read_Shade(            sal_uInt16, const sal_uInt8* pData, short nLen );
     void Read_ANLevelNo(        sal_uInt16, const sal_uInt8* pData, short nLen );
     void Read_ANLevelDesc(      sal_uInt16, const sal_uInt8* pData, short nLen );
@@ -1918,7 +1918,6 @@ public:     // really private, but can only be done public
     bool SearchRowEnd(WW8PLCFx_Cp_FKP* pPap,WW8_CP &rStartCp, int nLevel) const;
     /// Seek to the end of the table with pPap, returns true on success.
     bool SearchTableEnd(WW8PLCFx_Cp_FKP* pPap) const;
-    bool FloatingTableConversion(WW8PLCFx_Cp_FKP* pPap);
 
     const WW8Fib& GetFib() const    { return *m_xWwFib; }
     SwDoc& GetDoc() const           { return m_rDoc; }
