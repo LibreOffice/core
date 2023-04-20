@@ -4098,6 +4098,49 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf134548)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf154113)
+{
+    createDoc("three_sections.fodt");
+    Scheduler::ProcessEventsToIdle();
+
+    lcl_dispatchCommand(mxComponent, ".uno:GoToStartOfDoc", {});
+    lcl_dispatchCommand(mxComponent, ".uno:GoToNextPara", {});
+    lcl_dispatchCommand(mxComponent, ".uno:EndOfDocumentSel", {}); // to the end of current section!
+    lcl_dispatchCommand(mxComponent, ".uno:EndOfDocumentSel", {}); // to the end of the document.
+
+    css::uno::Reference <frame::XModel> xModel(mxComponent, css::uno::UNO_QUERY_THROW);
+    css::uno::Reference <container::XIndexAccess> xSelected(xModel->getCurrentSelection(), css::uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSelected->getCount());
+    css::uno::Reference <text::XTextRange> xRange (xSelected->getByIndex(0), css::uno::UNO_QUERY_THROW);
+
+    //css::uno::Reference < css::uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("<-- Start selection here. Section1" SAL_NEWLINE_STRING
+                                  "Section2" SAL_NEWLINE_STRING "Section3. End selection here -->"),
+                         xRange->getString());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Cut", {});
+
+    xSelected = css::uno::Reference <container::XIndexAccess> (xModel->getCurrentSelection(), css::uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSelected->getCount());
+    xRange = css::uno::Reference <text::XTextRange> (xSelected->getByIndex(0), css::uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString(), xRange->getString());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    xmlDocPtr pXml = parseLayoutDump();
+
+    // Without the fix in place, this would fail with
+    // - Expected: 3
+    // - Actual  : 2
+    assertXPath(pXml, "/root/page/body/section", 3);
+    assertXPath(pXml, "/root/page/body/section[1]/txt/LineBreak", "Line",
+                "<-- Start selection here. Section1");
+    assertXPath(pXml, "/root/page/body/section[2]/txt/LineBreak", "Line",
+                "Section2");
+    assertXPath(pXml, "/root/page/body/section[3]/txt/LineBreak", "Line",
+                "Section3. End selection here -->");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
