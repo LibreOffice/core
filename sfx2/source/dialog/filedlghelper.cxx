@@ -357,7 +357,7 @@ void FileDialogHelper_Impl::SaveLastUsedFilter()
                             Any( getFilterWithExtension( getFilter() ) ) );
 }
 
-std::shared_ptr<const SfxFilter> FileDialogHelper_Impl::getCurentSfxFilter()
+std::shared_ptr<const SfxFilter> FileDialogHelper_Impl::getCurrentSfxFilter()
 {
     OUString aFilterName = getCurrentFilterUIName();
 
@@ -445,7 +445,7 @@ void FileDialogHelper_Impl::updateFilterOptionsBox()
 
     updateExtendedControl(
         ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS,
-        CheckFilterOptionsCapability( getCurentSfxFilter() )
+        CheckFilterOptionsCapability( getCurrentSfxFilter() )
     );
 }
 
@@ -469,7 +469,7 @@ void FileDialogHelper_Impl::updateExportButton()
 
     OUString sLabel = maButtonLabel;
     // filter with options -> append ellipses on export button label
-    if ( CheckFilterOptionsCapability( getCurentSfxFilter() ) )
+    if ( CheckFilterOptionsCapability( getCurrentSfxFilter() ) )
         sLabel += "...";
 
     if ( sOldLabel != sLabel )
@@ -501,7 +501,7 @@ void FileDialogHelper_Impl::updateSelectionBox()
 
     if ( bSelectionBoxFound )
     {
-        std::shared_ptr<const SfxFilter> pFilter = getCurentSfxFilter();
+        std::shared_ptr<const SfxFilter> pFilter = getCurrentSfxFilter();
         mbSelectionFltrEnabled = updateExtendedControl(
             ExtendedFilePickerElementIds::CHECKBOX_SELECTION,
             ( mbSelectionEnabled && pFilter && ( pFilter->GetFilterFlags() & SfxFilterFlags::SUPPORTSSELECTION ) ) );
@@ -517,7 +517,7 @@ void FileDialogHelper_Impl::enablePasswordBox( bool bInit )
 
     bool bWasEnabled = mbIsPwdEnabled;
 
-    std::shared_ptr<const SfxFilter> pCurrentFilter = getCurentSfxFilter();
+    std::shared_ptr<const SfxFilter> pCurrentFilter = getCurrentSfxFilter();
     mbIsPwdEnabled = updateExtendedControl(
         ExtendedFilePickerElementIds::CHECKBOX_PASSWORD,
         pCurrentFilter && ( pCurrentFilter->GetFilterFlags() & SfxFilterFlags::ENCRYPTION )
@@ -1517,7 +1517,7 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
         // set the filter
         getRealFilter( rFilter );
 
-        std::shared_ptr<const SfxFilter> pCurrentFilter = getCurentSfxFilter();
+        std::shared_ptr<const SfxFilter> pCurrentFilter = getCurrentSfxFilter();
 
         // fill the rpURLList
         implGetAndCacheFiles( mxFileDlg, rpURLList );

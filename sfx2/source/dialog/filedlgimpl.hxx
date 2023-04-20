@@ -112,7 +112,7 @@ namespace sfx2
         void                    loadConfig();
         void                    saveConfig();
 
-        std::shared_ptr<const SfxFilter>        getCurentSfxFilter();
+        std::shared_ptr<const SfxFilter>        getCurrentSfxFilter();
         bool                updateExtendedControl( sal_Int16 _nExtendedControlId, bool _bEnable );
 
         ErrCode                 getGraphic( const OUString& rURL, Graphic& rGraphic ) const;
