@@ -2459,22 +2459,6 @@ bool SwWW8ImplReader::IsDropCap() const
     return false;
 }
 
-namespace
-{
-bool IsFlySplitAllowed()
-{
-    bool bRet
-        = officecfg::Office::Writer::Filter::Import::DOC::ImportFloatingTableAsSplitFly::get();
-
-    if (!bRet)
-    {
-        bRet = getenv("SW_DISABLE_FLY_SPLIT") == nullptr;
-    }
-
-    return bRet;
-}
-}
-
 bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *pTabPos)
 {
     m_xWFlyPara = ConstructApo(rApo, pTabPos);
@@ -2507,28 +2491,20 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
 
         WW8FlySet aFlySet(*this, m_xWFlyPara.get(), m_xSFlyPara.get(), false);
 
-        // Always map floating tables to split flys when fly split is allowed.
-        if (pTabPos && pTabPos->bNoFly && !IsFlySplitAllowed())
-        {
-            m_xSFlyPara->SetFlyFormat(nullptr);
-        }
-        else
-        {
-            // ofz#34749 we shouldn't anchor anything into an 'extra' paragraph scheduled for
-            // removal at end of import, but check if that scenario is happening
-            m_aExtraneousParas.remove_if_present(m_pPaM->GetPointNode().GetTextNode());
+        // ofz#34749 we shouldn't anchor anything into an 'extra' paragraph scheduled for
+        // removal at end of import, but check if that scenario is happening
+        m_aExtraneousParas.remove_if_present(m_pPaM->GetPointNode().GetTextNode());
 
-            if (pTabPos && IsFlySplitAllowed())
-            {
-                // Map a positioned table to a split fly.
-                aFlySet.Put(SwFormatFlySplit(true));
-            }
-
-            m_xSFlyPara->SetFlyFormat(m_rDoc.MakeFlySection(WW8SwFlyPara::eAnchor,
-                                                            m_pPaM->GetPoint(), &aFlySet));
-            OSL_ENSURE(m_xSFlyPara->GetFlyFormat()->GetAnchor().GetAnchorId() ==
-                    WW8SwFlyPara::eAnchor, "Not the anchor type requested!");
+        if (pTabPos)
+        {
+            // Map a positioned table to a split fly.
+            aFlySet.Put(SwFormatFlySplit(true));
         }
+
+        m_xSFlyPara->SetFlyFormat(m_rDoc.MakeFlySection(WW8SwFlyPara::eAnchor,
+                    m_pPaM->GetPoint(), &aFlySet));
+        OSL_ENSURE(m_xSFlyPara->GetFlyFormat()->GetAnchor().GetAnchorId() ==
+                WW8SwFlyPara::eAnchor, "Not the anchor type requested!");
 
         if (SwFlyFrameFormat* pFlyFormat = m_xSFlyPara->GetFlyFormat())
         {
@@ -5361,7 +5337,6 @@ bool SwWW8ImplReader::ParseTabPos(WW8_TablePos *pTabPos, WW8PLCFx_Cp_FKP* pPap)
         aRes = pPap->HasSprm(NS_sprm::TDyaFromTextBottom::val);
         if (aRes.pSprm && aRes.nRemainingData >= 2)
             pTabPos->nLowerMargin = SVBT16ToUInt16(aRes.pSprm);
-        pTabPos->bNoFly = !FloatingTableConversion(pPap);
         bRet = true;
     }
     return bRet;

@@ -897,7 +897,6 @@ struct WW8_TablePos
     sal_Int16 nLowerMargin;
     sal_uInt8 nTPc;
     sal_uInt8 nPWr;
-    bool bNoFly;
 };
 
 struct WW8_FSPA
