@@ -75,7 +75,7 @@ Private _GridDataModel		As Object		&apos; com.sun.star.awt.grid.XGridDataModel
 Private	_ImplementationName	As String
 Private _ControlType		As String		&apos; One of the CTLxxx constants
 
-&apos;	Control position and dimensions
+&apos;	Control initial position and dimensions in APPFONT units
 Private _Left				As Long
 Private _Top				As Long
 Private _Width				As Long
@@ -173,8 +173,8 @@ Private Sub Class_Initialize()
 	_ImplementationName = &quot;&quot;
 	_ControlType = &quot;&quot;
 
-	_Left = -1
-	_Top = -1
+	_Left = SF_DialogUtils.MINPOSITION
+	_Top = SF_DialogUtils.MINPOSITION
 	_Width = -1
 	_Height = -1
 
@@ -1152,71 +1152,27 @@ Public Function Resize(Optional ByVal Left As Variant _
 								, Optional ByVal Width As Variant _
 								, Optional ByVal Height As Variant _
 								) As Boolean
-&apos;&apos;&apos;	Move the top-left corner of a dialog control to new coordinates and/or modify its dimensions
-&apos;&apos;&apos;	All distances are expressed in pixels and are measured from the top-left corner of the parent dialog.
-&apos;&apos;&apos;	Without arguments, the method resets the initial dimensions.
+&apos;&apos;&apos;	Move the top-left corner of the control to new coordinates and/or modify its dimensions
+&apos;&apos;&apos;	Without arguments, the method resets the initial dimensions and position
+&apos;&apos;&apos;	Attributes denoting the position and size of a control are expressed in &quot;Map AppFont&quot; units.
+&apos;&apos;&apos;	Map AppFont units are device and resolution independent.
+&apos;&apos;&apos;	One Map AppFont unit is equal to one eighth of the average character (Systemfont) height and one quarter of the average character width.
+&apos;&apos;&apos;	The dialog editor (= the Basic IDE) also uses Map AppFont units.
 &apos;&apos;&apos;	Args:
-&apos;&apos;&apos;		Left : the horizontal distance from the top-left corner
-&apos;&apos;&apos;		Top : the vertical distance from the top-left corner
-&apos;&apos;&apos;		Width : the horizontal width of the rectangle containing the control
-&apos;&apos;&apos;		Height : the vertical height of the rectangle containing the control
-&apos;&apos;&apos;		Negative or missing arguments are left unchanged
+&apos;&apos;&apos;		Left : the horizontal distance from the top-left corner. It may be negative.
+&apos;&apos;&apos;		Top : the vertical distance from the top-left corner. It may be negative.
+&apos;&apos;&apos;		Width : the horizontal width of the rectangle containing the Dialog. It must be positive.
+&apos;&apos;&apos;		Height : the vertical height of the rectangle containing the Dialog. It must be positive.
+&apos;&apos;&apos;		Missing arguments are left unchanged.
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		True when successful
 &apos;&apos;&apos;	Examples:
-&apos;&apos;&apos;		oControl.Resize(100, 200, Height := 6000)	&apos;	Width is not changed
-
-Dim bResize As Boolean				&apos;	Return value
-Dim oPosSize As Object				&apos;	com.sun.star.awt.Rectangle
-Dim iFlags As Integer				&apos;	com.sun.star.awt.PosSize constants
-Const cstThisSub = &quot;SFDialogs.DialogControl.Resize&quot;
-Const cstSubArgs = &quot;[Left], [Top], [Width], [Height]&quot;
-
-	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
-	bResize = False
-
-Check:
-	If IsMissing(Left) Or IsEmpty(Left) Then Left = -1
-	If IsMissing(Top) Or IsEmpty(Top) Then Top = -1
-	If IsMissing(Height) Or IsEmpty(Height) Then Height = -1
-	If IsMissing(Width) Or IsEmpty(Width) Then Width = -1
-	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not ScriptForge.SF_Utils._Validate(Left, &quot;Left&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
-		If Not ScriptForge.SF_Utils._Validate(Top, &quot;Top&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
-		If Not ScriptForge.SF_Utils._Validate(Width, &quot;Width&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
-		If Not ScriptForge.SF_Utils._Validate(Height, &quot;Height&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
-	End If
+&apos;&apos;&apos;		myControl.Resize(100, 200, Height := 600)	&apos;	Width is not changed
 
 Try:
-	With _ControlView
-		Set oPosSize = .getPosSize()
-		&apos;	Reset factory settings
-		If Left = -1 And Top = -1 And Width = -1 And Height = -1 Then
-			Left = _Left
-			Top = _Top
-			Width = _Width
-			Height = _Height
-		End If
-		&apos;	Trace the elements to change
-		iFlags = 0
-		With com.sun.star.awt.PosSize
-			If CLng(Left) &gt;= 0	Then iFlags = iFlags + .X		Else Left = oPosSize.X
-			If CLng(Top) &gt;= 0	Then iFlags = iFlags + .Y		Else Top = oPosSize.Y
-			If CLng(Width) &gt; 0	Then iFlags = iFlags + .WIDTH	Else Width = oPosSize.Width
-			If CLng(Height) &gt; 0	Then iFlags = iFlags + .HEIGHT	Else Height = oPosSize.Height
-		End With
-		&apos;	Rewrite
-		If iFlags &gt; 0 Then .setPosSize(CLng(Left), CLng(Top), CLng(Width), CLng(Height), iFlags)
-	End With
-	bResize = True
+	Resize = SF_DialogUtils._Resize([Me], Left, Top, Width, Height)
 
-Finally:
-	Resize = bResize
-	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
-	Exit Function
-Catch:
-	GoTo Finally
-End Function	&apos;	SF_Documents.SF_DialogControl.Resize
+End Function	&apos;	SFDialogss.SF_Dialog.Resize
 
 REM -----------------------------------------------------------------------------
 Public Function SetFocus() As Boolean
@@ -1776,6 +1732,7 @@ Dim lIndex As Long							&apos;	Index in StringItemList
 Dim sItem As String							&apos;	A single item
 Dim vDate As Variant						&apos;	com.sun.star.util.Date or com.sun.star.util.Time
 Dim vValues As Variant						&apos;	Array of listbox values
+Dim oPosSize As Object						&apos;	com.sun.star.awt.Rectangle
 Dim oControlEvents As Object				&apos;	com.sun.star.container.XNameContainer
 Dim sEventName As String					&apos;	Internal event name
 Dim i As Long
@@ -1844,7 +1801,11 @@ Const cstSubArgs = &quot;&quot;
 				Case Else	:	GoTo CatchType
 			End Select
 		Case UCase(&quot;Height&quot;)
-			If oSession.HasUNOMethod(_ControlView, &quot;getPosSize&quot;) Then _PropertyGet = _ControlView.getPosSize().Height
+			If [_parent]._Displayed Then	&apos;	Convert PosSize view property from pixels to APPFONT units
+				_PropertyGet = SF_DialogUtils._ConvertToAppFont(_ControlView, False).Height
+			Else
+				If oSession.HasUNOProperty(_ControlModel, &quot;Height&quot;) Then _PropertyGet = _ControlModel.Height
+			End If			
 		Case UCase(&quot;ListCount&quot;)
 			Select Case _ControlType
 				Case CTLCOMBOBOX, CTLLISTBOX
@@ -2059,11 +2020,23 @@ Const cstSubArgs = &quot;&quot;
 		Case UCase(&quot;Visible&quot;)
 			If oSession.HasUnoMethod(_ControlView, &quot;isVisible&quot;) Then _PropertyGet = CBool(_ControlView.isVisible())
 		Case UCase(&quot;Width&quot;)
-			If oSession.HasUNOMethod(_ControlView, &quot;getPosSize&quot;) Then _PropertyGet = _ControlView.getPosSize().Width
+			If [_parent]._Displayed Then	&apos;	Convert PosSize view property from pixels to APPFONT units
+				_PropertyGet = SF_DialogUtils._ConvertToAppFont(_ControlView, False).Width
+			Else
+				If oSession.HasUNOProperty(_ControlModel, &quot;Width&quot;) Then _PropertyGet = _ControlModel.Width
+			End If			
 		Case UCase(&quot;X&quot;)
-			If oSession.HasUNOMethod(_ControlView, &quot;getPosSize&quot;) Then _PropertyGet = _ControlView.getPosSize().X
+			If [_parent]._Displayed Then	&apos;	Convert PosSize view property from pixels to APPFONT units
+				_PropertyGet = SF_DialogUtils._ConvertToAppFont(_ControlView, True).X
+			Else
+				If oSession.HasUNOProperty(_ControlModel, &quot;PoistionX&quot;) Then _PropertyGet = _ControlModel.PositionX
+			End If			
 		Case UCase(&quot;Y&quot;)
-			If oSession.HasUNOMethod(_ControlView, &quot;getPosSize&quot;) Then _PropertyGet = _ControlView.getPosSize().Y
+			If [_parent]._Displayed Then	&apos;	Convert PosSize view property from piYels to APPFONT units
+				_PropertyGet = SF_DialogUtils._ConvertToAppFont(_ControlView, True).Y
+			Else
+				If oSession.HasUNOProperty(_ControlModel, &quot;PoistionY&quot;) Then _PropertyGet = _ControlModel.PositionY
+			End If			
 		Case UCase(&quot;XControlModel&quot;)
 			Set _PropertyGet = _ControlModel
 		Case UCase(&quot;XControlView&quot;)
@@ -2178,8 +2151,8 @@ Const cstSubArgs = &quot;Value&quot;
 				Case Else	:	GoTo CatchType
 			End Select
 		Case UCase(&quot;Height&quot;)
-			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Height&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
-			If oSession.HasUnoMethod(_ControlView, &quot;setPosSize&quot;) Then _ControlView.setPosSize(-1, -1, -1, CLng(pvValue), com.sun.star.awt.PosSize.HEIGHT)
+			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Height&quot;, ScriptForge.V_NUMERIC) Then GoTo Catch
+			bSet = Resize(Height := pvValue)
 		Case UCase(&quot;ListIndex&quot;)
 			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;ListIndex&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
 			Select Case _ControlType
@@ -2408,14 +2381,14 @@ Const cstSubArgs = &quot;Value&quot;
 				_ControlView.setVisible(pvValue)
 			End If
 		Case UCase(&quot;Width&quot;)
-			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Width&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
-			If oSession.HasUnoMethod(_ControlView, &quot;setPosSize&quot;) Then _ControlView.setPosSize(-1, -1, CLng(pvValue), -1, com.sun.star.awt.PosSize.WIDTH)
+			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Width&quot;, ScriptForge.V_NUMERIC) Then GoTo Catch
+			bSet = Resize(Width := pvValue)
 		Case &quot;X&quot;
-			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;X&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
-			If oSession.HasUnoMethod(_ControlView, &quot;setPosSize&quot;) Then _ControlView.setPosSize(CLng(pvValue), -1, -1, -1, com.sun.star.awt.PosSize.X)
+			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Width&quot;, ScriptForge.V_NUMERIC) Then GoTo Catch
+			bSet = Resize(Left := pvValue)
 		Case &quot;Y&quot;
-			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Y&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
-			If oSession.HasUnoMethod(_ControlView, &quot;setPosSize&quot;) Then _ControlView.setPosSize(-1, CLng(pvValue), -1, -1, com.sun.star.awt.PosSize.Y)
+			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Width&quot;, ScriptForge.V_NUMERIC) Then GoTo Catch
+			bSet = Resize(Top := pvValue)
 		Case Else
 			bSet = False
 	End Select

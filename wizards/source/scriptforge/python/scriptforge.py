@@ -1879,7 +1879,7 @@ class SFDialogs:
             l10nobj = l10n.objectreference if isinstance(l10n, SFScriptForge.SF_L10N) else l10n
             return self.ExecMethod(self.vbMethod + self.flgObject, 'GetTextsFromL10N', l10nobj)
 
-        def Resize(self, left = -1, top = -1, width = -1, height = -1):
+        def Resize(self, left = -99999, top = -99999, width = -1, height = -1):
             return self.ExecMethod(self.vbMethod + self.flgHardCode, 'Resize', left, top, width, height)
 
         def SetPageManager(self, pilotcontrols = '', tabcontrols = '', wizardcontrols = '', lastpage = 0):
@@ -1938,7 +1938,7 @@ class SFDialogs:
         def FindNode(self, displayvalue, datavalue = ScriptForge.cstSymEmpty, casesensitive = False):
             return self.ExecMethod(self.vbMethod + self.flgUno, 'FindNode', displayvalue, datavalue, casesensitive)
 
-        def Resize(self, left = -1, top = -1, width = -1, height = -1):
+        def Resize(self, left = -99999, top = -99999, width = -1, height = -1):
             return self.ExecMethod(self.vbMethod, 'Resize', left, top, width, height)
 
         def SetFocus(self):

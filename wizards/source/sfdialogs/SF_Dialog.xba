@@ -74,7 +74,7 @@ Private _DialogModel		As Object		&apos; com.sun.star.awt.XControlModel - stardiv
 Private _Displayed			As Boolean		&apos; True after Execute()
 Private _Modal				As Boolean		&apos; Set by Execute()
 
-&apos;	Dialog position and dimensions in pixels
+&apos;	Dialog initial position and dimensions in APPFONT units
 Private _Left				As Long
 Private _Top				As Long
 Private _Width				As Long
@@ -151,14 +151,17 @@ Private Sub Class_Initialize()
 	Set _DialogModel = Nothing
 	_Displayed = False
 	_Modal = True
-	_Left = -1
-	_Top = -1
+
+	_Left = SF_DialogUtils.MINPOSITION
+	_Top = SF_DialogUtils.MINPOSITION
 	_Width = -1
 	_Height = -1
+
 	_PageManagement = Array()
 	Set _ItemListener = Nothing
 	Set _ActionListener = Nothing
 	_LastPage = 0
+
 	Set _FocusListener = Nothing
 	_OnFocusGained = &quot;&quot;
 	_OnFocusLost = &quot;&quot;
@@ -682,6 +685,8 @@ Try:
 	If Modal Then
 		_Modal = True
 		_Displayed = True
+		&apos;	In dynamic dialogs, injection of sizes and positions from model to view is done with setVisible()
+		_DialogControl.setVisible(True)
 		lExecute = _DialogControl.execute()
 		Select Case lExecute
 			Case 1		:	lExecute = OKBUTTON
@@ -884,70 +889,26 @@ Public Function Resize(Optional ByVal Left As Variant _
 								, Optional ByVal Width As Variant _
 								, Optional ByVal Height As Variant _
 								) As Boolean
-&apos;&apos;&apos;	Move the top-left corner of a dialog to new coordinates and/or modify its dimensions
-&apos;&apos;&apos;	All distances are expressed in pixels.
+&apos;&apos;&apos;	Move the top-left corner of the dialog to new coordinates and/or modify its dimensions
 &apos;&apos;&apos;	Without arguments, the method resets the initial dimensions
+&apos;&apos;&apos;	Attributes denoting the position and size of a dialog are expressed in &quot;Map AppFont&quot; units.
+&apos;&apos;&apos;	Map AppFont units are device and resolution independent.
+&apos;&apos;&apos;	One Map AppFont unit is equal to one eighth of the average character (Systemfont) height and one quarter of the average character width.
+&apos;&apos;&apos;	The dialog editor (= the Basic IDE) also uses Map AppFont units.
 &apos;&apos;&apos;	Args:
-&apos;&apos;&apos;		Left : the horizontal distance from the top-left corner
-&apos;&apos;&apos;		Top : the vertical distance from the top-left corner
-&apos;&apos;&apos;		Width : the horizontal width of the rectangle containing the Dialog
-&apos;&apos;&apos;		Height : the vertical height of the rectangle containing the Dialog
-&apos;&apos;&apos;		Negative or missing arguments are left unchanged
+&apos;&apos;&apos;		Left : the horizontal distance from the top-left corner. It may be negative.
+&apos;&apos;&apos;		Top : the vertical distance from the top-left corner. It may be negative.
+&apos;&apos;&apos;		Width : the horizontal width of the rectangle containing the Dialog. It must be positive.
+&apos;&apos;&apos;		Height : the vertical height of the rectangle containing the Dialog. It must be positive.
+&apos;&apos;&apos;		Missing arguments are left unchanged.
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		True when successful
 &apos;&apos;&apos;	Examples:
-&apos;&apos;&apos;		oDialog.Resize(1000, 2000, Height := 6000)	&apos;	Width is not changed
-
-Dim bResize As Boolean				&apos;	Return value
-Dim oPosSize As Object				&apos;	com.sun.star.awt.Rectangle
-Dim iFlags As Integer				&apos;	com.sun.star.awt.PosSize constants
-Const cstThisSub = &quot;SFDialogs.Dialog.Resize&quot;
-Const cstSubArgs = &quot;[Left], [Top], [Width], [Height]&quot;
-
-	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
-	bResize = False
-
-Check:
-	If IsMissing(Left) Or IsEmpty(Left) Then Left = -1
-	If IsMissing(Top) Or IsEmpty(Top) Then Top = -1
-	If IsMissing(Height) Or IsEmpty(Height) Then Height = -1
-	If IsMissing(Width) Or IsEmpty(Width) Then Width = -1
-	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not ScriptForge.SF_Utils._Validate(Left, &quot;Left&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
-		If Not ScriptForge.SF_Utils._Validate(Top, &quot;Top&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
-		If Not ScriptForge.SF_Utils._Validate(Width, &quot;Width&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
-		If Not ScriptForge.SF_Utils._Validate(Height, &quot;Height&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
-	End If
+&apos;&apos;&apos;		oDialog.Resize(100, 200, Height := 600)	&apos;	Width is not changed
 
 Try:
-	With _DialogControl
-		Set oPosSize = .getPosSize()
-		&apos;	Reset factory settings
-		If Left = -1 And Top = -1 And Width = -1 And Height = -1 Then
-			&apos;Left = _Left		&apos;	Initial positions determination is unstable
-			&apos;Top = _Top
-			Width = _Width
-			Height = _Height
-		End If
-		&apos;	Trace the elements to change
-		iFlags = 0
-		With com.sun.star.awt.PosSize
-			If CLng(Left) &gt;= 0	Then iFlags = iFlags + .X		Else Left = oPosSize.X
-			If CLng(Top) &gt;= 0	Then iFlags = iFlags + .Y		Else Top = oPosSize.Y
-			If CLng(Width) &gt; 0	Then iFlags = iFlags + .WIDTH	Else Width = oPosSize.Width
-			If CLng(Height) &gt; 0	Then iFlags = iFlags + .HEIGHT	Else Height = oPosSize.Height
-		End With
-		&apos;	Rewrite
-		If iFlags &gt; 0 Then .setPosSize(CLng(Left), CLng(Top), CLng(Width), CLng(Height), iFlags)
-	End With
-	bResize = True
+	Resize = SF_DialogUtils._Resize([Me], Left, Top, Width, Height)
 
-Finally:
-	Resize = bResize
-	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
-	Exit Function
-Catch:
-	GoTo Finally
 End Function	&apos;	SFDialogss.SF_Dialog.Resize
 
 REM -----------------------------------------------------------------------------
@@ -1252,17 +1213,14 @@ Public Sub _Initialize()
 &apos;&apos;&apos;		- Addition of the new object in the Dialogs buffer
 &apos;&apos;&apos;		- Initialisation of persistent storage for controls
 
-Dim oPosSize As Object		&apos;	com.sun.star.awt.Rectangle
-
 Try:
 	&apos;	Keep reference to model
 	Set _DialogModel = _DialogControl.Model
 
 	&apos;	Store initial position and dimensions
-	Set oPosSize = _DialogControl.getPosSize()
-	With oPosSize
-		_Left = .X
-		_Top = .Y
+	With _DialogModel
+		_Left = .PositionX
+		_Top = .PositionY
 		_Width = .Width
 		_Height = .Height
 	End With
@@ -1370,6 +1328,7 @@ Private Function _PropertyGet(Optional ByVal psProperty As String) As Variant
 &apos;&apos;&apos;		psProperty: the name of the property
 
 Static oSession As Object					&apos;	Alias of SF_Session
+Dim oPosSize As Object						&apos;	com.sun.star.awt.Rectangle
 Dim oDialogEvents As Object					&apos;	com.sun.star.container.XNameContainer
 Dim sEventName As String					&apos;	Internal event name
 Dim cstThisSub As String
@@ -1386,7 +1345,11 @@ Const cstSubArgs = &quot;&quot;
 		Case UCase(&quot;Caption&quot;)
 			If oSession.HasUNOProperty(_DialogModel, &quot;Title&quot;) Then _PropertyGet = _DialogModel.Title
 		Case UCase(&quot;Height&quot;)
-			If oSession.HasUNOMethod(_DialogControl, &quot;getPosSize&quot;) Then _PropertyGet = _DialogControl.getPosSize().Height
+			If _Displayed Then	&apos;	Convert PosSize view property from pixels to APPFONT units
+				_PropertyGet = SF_DialogUtils._ConvertToAppFont(_DialogControl, False).Height
+			Else
+				If oSession.HasUNOProperty(_DialogModel, &quot;Height&quot;) Then _PropertyGet = _DialogModel.Height
+			End If			
 		Case UCase(&quot;Modal&quot;)
 			_PropertyGet = _Modal
 		Case UCase(&quot;Name&quot;)
@@ -1420,7 +1383,11 @@ Const cstSubArgs = &quot;&quot;
 		Case UCase(&quot;Visible&quot;)
 			If oSession.HasUnoMethod(_DialogControl, &quot;isVisible&quot;) Then _PropertyGet = CBool(_DialogControl.isVisible())
 		Case UCase(&quot;Width&quot;)
-			If oSession.HasUNOMethod(_DialogControl, &quot;getPosSize&quot;) Then _PropertyGet = _DialogControl.getPosSize().Width
+			If _Displayed Then	&apos;	Convert PosSize view property from pixels to APPFONT units
+				_PropertyGet = SF_DialogUtils._ConvertToAppFont(_DialogControl, False).Width
+			Else
+				If oSession.HasUNOProperty(_DialogModel, &quot;Width&quot;) Then _PropertyGet = _DialogModel.Width
+			End If			
 		Case UCase(&quot;XDialogModel&quot;)
 			Set _PropertyGet = _DialogModel
 		Case UCase(&quot;XDialogView&quot;)
@@ -1467,7 +1434,7 @@ Const cstSubArgs = &quot;Value&quot;
 			If oSession.HasUNOProperty(_DialogModel, &quot;Title&quot;) Then _DialogModel.Title = pvValue
 		Case UCase(&quot;Height&quot;)
 			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Height&quot;, ScriptForge.V_NUMERIC) Then GoTo Catch
-			If oSession.HasUnoMethod(_DialogControl, &quot;setPosSize&quot;) Then _DialogControl.setPosSize(-1, -1, -1, CLng(pvValue), com.sun.star.awt.PosSize.HEIGHT)
+			bSet = Resize(Height := pvValue)
 		Case UCase(&quot;OnFocusGained&quot;), UCase(&quot;OnFocusLost&quot;), UCase(&quot;OnKeyPressed&quot;), UCase(&quot;OnKeyReleased&quot;) _
 				, UCase(&quot;OnMouseDragged&quot;), UCase(&quot;OnMouseEntered&quot;), UCase(&quot;OnMouseExited&quot;), UCase(&quot;OnMouseMoved&quot;) _
 				, UCase(&quot;OnMousePressed&quot;), UCase(&quot;OnMouseReleased&quot;)
@@ -1485,7 +1452,7 @@ Const cstSubArgs = &quot;Value&quot;
 			If oSession.HasUnoMethod(_DialogControl, &quot;setVisible&quot;) Then _DialogControl.setVisible(pvValue)
 		Case UCase(&quot;Width&quot;)
 			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Width&quot;, ScriptForge.V_NUMERIC) Then GoTo Catch
-			If oSession.HasUnoMethod(_DialogControl, &quot;setPosSize&quot;) Then _DialogControl.setPosSize(-1, -1, CLng(pvValue), -1, com.sun.star.awt.PosSize.WIDTH)
+			bSet = Resize(Width := pvValue)
 		Case Else
 			bSet = False
 	End Select
