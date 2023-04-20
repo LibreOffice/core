@@ -161,7 +161,7 @@ public class SOReportJobFactory
          */
         public String getImplementationName()
         {
-            return SOReportJobFactory.class.getName();
+            return _SOReportJobFactory.class.getName();
         }
 
         private String getLocaleFromRegistry(final XSimpleRegistry simpleReg, final String path, final String value)
