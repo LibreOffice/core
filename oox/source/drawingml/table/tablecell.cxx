@@ -569,7 +569,24 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
     {
         xPropSet->setPropertyValue("TextWritingMode", Any(css::text::WritingMode_TB_RL));
     }
-    else if ( getVertToken() == XML_vert )
+
+    getTextBody()->insertAt( rFilterBase, xText, xAt, aTextStyleProps, pMasterTextListStyle );
+
+    // tdf#144092 For empty cells push character styles & endParaRPr to the Cell's properties
+    const TextParagraphVector& rParagraphs = getTextBody()->getParagraphs();
+    if (rParagraphs.size() == 1)
+    {
+        const auto pFirstParagraph = rParagraphs.at(0);
+        if (pFirstParagraph->getRuns().empty())
+        {
+            TextCharacterProperties aTextCharacterProps{ pFirstParagraph->getCharacterStyle(
+                aTextStyleProps, *pMasterTextListStyle, getTextBody()->getTextListStyle()) };
+            aTextCharacterProps.assignUsed(pFirstParagraph->getEndProperties());
+            aTextCharacterProps.pushToPropSet(aPropSet, rFilterBase);
+        }
+    }
+
+    if ( getVertToken() == XML_vert )
     {
         xPropSet->setPropertyValue("RotateAngle", Any(short(27000)));
     }
@@ -577,7 +594,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
     {
         xPropSet->setPropertyValue("RotateAngle", Any(short(9000)));
     }
-    else if ( getVertToken() != XML_horz )
+    else if ( getVertToken() != XML_horz && getVertToken() != XML_eaVert )
     {
         // put the vert value in the grab bag for roundtrip
         const Sequence<sal_Int8>& aTokenNameSeq = StaticTokenMap().getUtf8TokenName(getVertToken());
@@ -598,22 +615,6 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
             aGrabBag = { aPropertyValue };
         }
         xPropSet->setPropertyValue("CellInteropGrabBag", Any(aGrabBag));
-    }
-
-    getTextBody()->insertAt( rFilterBase, xText, xAt, aTextStyleProps, pMasterTextListStyle );
-
-    // tdf#144092 For empty cells push character styles & endParaRPr to the Cell's properties
-    const TextParagraphVector& rParagraphs = getTextBody()->getParagraphs();
-    if (rParagraphs.size() == 1)
-    {
-        const auto pFirstParagraph = rParagraphs.at(0);
-        if (pFirstParagraph->getRuns().empty())
-        {
-            TextCharacterProperties aTextCharacterProps{ pFirstParagraph->getCharacterStyle(
-                aTextStyleProps, *pMasterTextListStyle, getTextBody()->getTextListStyle()) };
-            aTextCharacterProps.assignUsed(pFirstParagraph->getEndProperties());
-            aTextCharacterProps.pushToPropSet(aPropSet, rFilterBase);
-        }
     }
 }
 
