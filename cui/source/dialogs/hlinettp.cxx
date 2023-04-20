@@ -145,7 +145,7 @@ void SvxHyperlinkInternetTp::setFTPUser(const OUString& rUser, const OUString& r
 |*
 |************************************************************************/
 
-void SvxHyperlinkInternetTp::GetCurentItemData ( OUString& rStrURL, OUString& aStrName,
+void SvxHyperlinkInternetTp::GetCurrentItemData ( OUString& rStrURL, OUString& aStrName,
                                                  OUString& aStrIntName, OUString& aStrFrame,
                                                  SvxLinkInsertMode& eMode )
 {

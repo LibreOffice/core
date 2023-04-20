@@ -52,7 +52,7 @@ private:
     static EPathType GetPathType ( std::u16string_view rStrPath );
 
     void FillDlgFields(const OUString& rStrURL) override;
-    void GetCurentItemData ( OUString& rStrURL, OUString& aStrName,
+    void GetCurrentItemData ( OUString& rStrURL, OUString& aStrName,
                              OUString& aStrIntName, OUString& aStrFrame,
                              SvxLinkInsertMode& eMode ) override;
     virtual bool   ShouldOpenMarkWnd () override {return m_bMarkWndOpen;}

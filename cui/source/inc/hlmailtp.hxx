@@ -44,7 +44,7 @@ private:
 
 protected:
     virtual void FillDlgFields(const OUString& rStrURL) override;
-    virtual void GetCurentItemData ( OUString& rStrURL, OUString& aStrName,
+    virtual void GetCurrentItemData ( OUString& rStrURL, OUString& aStrName,
                                      OUString& aStrIntName, OUString& aStrFrame,
                                      SvxLinkInsertMode& eMode ) override;
 

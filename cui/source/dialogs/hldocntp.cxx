@@ -199,7 +199,7 @@ void SvxHyperlinkNewDocTp::FillDocumentList()
 |*
 |************************************************************************/
 
-void SvxHyperlinkNewDocTp::GetCurentItemData ( OUString& rStrURL, OUString& aStrName,
+void SvxHyperlinkNewDocTp::GetCurrentItemData ( OUString& rStrURL, OUString& aStrName,
                                                OUString& aStrIntName, OUString& aStrFrame,
                                                SvxLinkInsertMode& eMode )
 {

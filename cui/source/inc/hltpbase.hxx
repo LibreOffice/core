@@ -75,7 +75,7 @@ protected:
     void InitStdControls ();
     void FillStandardDlgFields ( const SvxHyperlinkItem* pHyperlinkItem );
     virtual void FillDlgFields(const OUString& rStrURL) = 0;
-    virtual void GetCurentItemData     ( OUString& rStrURL, OUString& aStrName,
+    virtual void GetCurrentItemData     ( OUString& rStrURL, OUString& aStrName,
                                          OUString& aStrIntName, OUString& aStrFrame,
                                          SvxLinkInsertMode& eMode ) = 0;
 

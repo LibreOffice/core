@@ -42,7 +42,7 @@ private:
 
 protected:
     void FillDlgFields(const OUString& rStrURL) override;
-    void GetCurentItemData ( OUString& rStrURL, OUString& aStrName,
+    void GetCurrentItemData ( OUString& rStrURL, OUString& aStrName,
                              OUString& aStrIntName, OUString& aStrFrame,
                              SvxLinkInsertMode& eMode ) override;
 

@@ -127,7 +127,7 @@ OUString SvxHyperlinkDocTp::GetCurrentURL () const
 |* retrieve and prepare data from dialog-fields
 |*
 |************************************************************************/
-void SvxHyperlinkDocTp::GetCurentItemData ( OUString& rStrURL, OUString& aStrName,
+void SvxHyperlinkDocTp::GetCurrentItemData ( OUString& rStrURL, OUString& aStrName,
                                             OUString& aStrIntName, OUString& aStrFrame,
                                             SvxLinkInsertMode& eMode )
 {

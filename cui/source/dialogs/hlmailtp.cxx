@@ -108,7 +108,7 @@ void SvxHyperlinkMailTp::FillDlgFields(const OUString& rStrURL)
 |* retrieve and prepare data from dialog-fields
 |*
 |************************************************************************/
-void SvxHyperlinkMailTp::GetCurentItemData ( OUString& rStrURL, OUString& aStrName,
+void SvxHyperlinkMailTp::GetCurrentItemData ( OUString& rStrURL, OUString& aStrName,
                                              OUString& aStrIntName, OUString& aStrFrame,
                                              SvxLinkInsertMode& eMode )
 {
