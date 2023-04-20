@@ -639,7 +639,7 @@ void SwFmDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
                                     static_cast< cppu::OWeakObject * > ( this ) );
 
     // we're already registered in the model / SwXDrawPage::add() already called
-    if(pShape->m_pPage || pShape->m_pFormat || !pShape->m_bDescriptor )
+    if(pShape->m_pPage || !pShape->m_bDescriptor )
         return;
 
     // we're inserted elsewhere already
@@ -787,7 +787,6 @@ void SwFmDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
         {
             pFormat->SetFormatName(pSvxShape->GetSdrObject()->GetName(), false);
         }
-        pShape->SetFrameFormat(pFormat);
     }
     pShape->m_bDescriptor = false;
 
@@ -917,7 +916,6 @@ SwXShape::SwXShape(
         uno::Reference<uno::XInterface> & xShape,
         SwDoc const*const pDoc)
     : m_pPage(nullptr)
-    , m_pFormat(nullptr)
     , m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_SHAPE))
     , m_pPropertyMapEntries(aSwMapProvider.GetPropertyMapEntries(PROPERTY_MAP_TEXT_SHAPE))
     , m_pImpl(new SwShapeDescriptor_Impl(pDoc))
@@ -948,14 +946,18 @@ SwXShape::SwXShape(
     SdrObject* pObj = SdrObject::getSdrObjectFromXShape(m_xShapeAgg);
     if(pObj)
     {
-        auto pFormat = ::FindFrameFormat( pObj );
-        if(pFormat)
-            SetFrameFormat(pFormat);
-
         lcl_addShapePropertyEventFactories( *pObj, *this );
         m_pImpl->m_bInitializedPropertyNotifier = true;
     }
 
+}
+
+SwFrameFormat* SwXShape::GetFrameFormat() const
+{
+    SdrObject* pObj = SdrObject::getSdrObjectFromXShape(m_xShapeAgg);
+    if(pObj)
+        return ::FindFrameFormat( pObj );
+    return nullptr;
 }
 
 void SwXShape::AddExistingShapeToFormat( SdrObject const & _rObj )
@@ -972,12 +974,7 @@ void SwXShape::AddExistingShapeToFormat( SdrObject const & _rObj )
         if ( pSwShape )
         {
             if ( pSwShape->m_bDescriptor )
-            {
-                auto pFormat = ::FindFrameFormat( pCurrent );
-                if ( pFormat )
-                    pSwShape->SetFrameFormat(pFormat);
                 pSwShape->m_bDescriptor = false;
-            }
 
             if ( !pSwShape->m_pImpl->m_bInitializedPropertyNotifier )
             {
@@ -2091,7 +2088,6 @@ void SwXShape::Notify(const SfxHint& rHint)
 {
     if(rHint.GetId() == SfxHintId::Dying)
     {
-        m_pFormat = nullptr;
         EndListeningAll();
     }
 }
@@ -2835,12 +2831,6 @@ void SwXGroupShape::add( const uno::Reference< XShape >& xShape )
         }
     }
     pSwShape->m_bDescriptor = false;
-    //add the group member to the format of the group
-    SwFrameFormat* pShapeFormat = ::FindFrameFormat( pSvxShape->GetSdrObject() );
-
-    if(pShapeFormat)
-        pSwShape->SetFrameFormat(pShapeFormat);
-
 }
 
 void SwXGroupShape::remove( const uno::Reference< XShape >& xShape )
