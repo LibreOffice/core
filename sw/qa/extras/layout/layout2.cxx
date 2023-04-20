@@ -409,6 +409,48 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testtdf138951)
     // Without the fix the anchor differs, and the frame outside of the shape
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf154113)
+{
+    createSwDoc("three_sections.fodt");
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:GoToStartOfDoc", {});
+    dispatchCommand(mxComponent, ".uno:GoToNextPara", {});
+    dispatchCommand(mxComponent, ".uno:EndOfDocumentSel", {}); // to the end of current section!
+    dispatchCommand(mxComponent, ".uno:EndOfDocumentSel", {}); // to the end of the document.
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xSelected(xModel->getCurrentSelection(),
+                                                      uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSelected->getCount());
+    uno::Reference<text::XTextRange> xRange(xSelected->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("<-- Start selection here. Section1" SAL_NEWLINE_STRING
+                                  "Section2" SAL_NEWLINE_STRING "Section3. End selection here -->"),
+                         xRange->getString());
+
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+
+    xSelected.set(xModel->getCurrentSelection(), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSelected->getCount());
+    xRange.set(xSelected->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString(), xRange->getString());
+
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    xmlDocUniquePtr pXml = parseLayoutDump();
+
+    // Without the fix in place, this would fail with
+    // - Expected: 3
+    // - Actual  : 2
+    assertXPath(pXml, "/root/page/body/section", 3);
+    assertXPath(pXml, "/root/page/body/section[1]/txt/SwParaPortion/SwLineLayout", "portion",
+                "<-- Start selection here. Section1");
+    assertXPath(pXml, "/root/page/body/section[2]/txt/SwParaPortion/SwLineLayout", "portion",
+                "Section2");
+    assertXPath(pXml, "/root/page/body/section[3]/txt/SwParaPortion/SwLineLayout", "portion",
+                "Section3. End selection here -->");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150717)
 {
     createSwDoc("tdf150717.odt");
