@@ -99,7 +99,7 @@ void lcl_AddPropertiesToVector(
                 beans::PropertyAttribute::BOUND );
 }
 
-::chart::tPropertyValueMap GetStaticXXXDefaults()
+const ::chart::tPropertyValueMap & GetStaticXXXDefaults()
 {
     static ::chart::tPropertyValueMap aStaticDefaults =
         [](){
