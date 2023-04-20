@@ -1980,7 +1980,15 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
                      || GetInfo().CheckFootnotePortion(m_pCurr);
             if( bBuild )
             {
-                GetInfo().SetNumDone( bOldNumDone );
+                // fdo44018-2.doc: only restore m_bNumDone if a SwNumberPortion will be truncated
+                for (SwLinePortion * pPor = m_pCurr->GetNextPortion(); pPor; pPor = pPor->GetNextPortion())
+                {
+                    if (pPor->InNumberGrp())
+                    {
+                        GetInfo().SetNumDone( bOldNumDone );
+                        break;
+                    }
+                }
                 GetInfo().ResetMaxWidthDiff();
 
                 // delete old rest
