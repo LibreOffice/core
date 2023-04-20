@@ -11,6 +11,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <unotools/mediadescriptor.hxx>
 
@@ -47,17 +48,17 @@ OrcusFormatDetect::OrcusFormatDetect()
 
 OUString OrcusFormatDetect::getImplementationName()
 {
-    return OUString();
+    return "com.sun.star.comp.sc.OrcusFilterDetect";
 }
 
-sal_Bool OrcusFormatDetect::supportsService(const OUString& /*rServiceName*/)
+sal_Bool OrcusFormatDetect::supportsService(const OUString& rServiceName)
 {
-    return false;
+    return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence<OUString> OrcusFormatDetect::getSupportedServiceNames()
 {
-    return css::uno::Sequence<OUString>();
+    return {"com.sun.star.frame.ExtendedTypeDetection"};
 }
 
 OUString OrcusFormatDetect::detect(css::uno::Sequence<css::beans::PropertyValue>& rMediaDescSeq)
