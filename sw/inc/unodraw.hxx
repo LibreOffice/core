@@ -135,7 +135,6 @@ class SwXShape : public SwXShapeBaseClass, public SvtListener
     friend class SwXGroupShape;
     friend class SwFmDrawPage;
     const SwFmDrawPage* m_pPage;
-    SwFrameFormat* m_pFormat;
 
     css::uno::Reference< css::uno::XAggregation > m_xShapeAgg;
     // reference to <XShape>, determined in the
@@ -198,12 +197,6 @@ class SwXShape : public SwXShapeBaseClass, public SvtListener
         @throws css::uno::RuntimeException
     */
     css::uno::Any _getPropAtAggrObj( const OUString& _rPropertyName );
-    void SetFrameFormat(SwFrameFormat* pFormat)
-    {
-        EndListeningAll();
-        StartListening(pFormat->GetNotifier());
-        m_pFormat = pFormat;
-    }
 
 protected:
     virtual ~SwXShape() override;
@@ -255,7 +248,7 @@ public:
     virtual OUString SAL_CALL getShapeType(  ) override;
 
     SwShapeDescriptor_Impl*     GetDescImpl() {return m_pImpl.get();}
-    SwFrameFormat* GetFrameFormat() const { return m_pFormat; }
+    SwFrameFormat* GetFrameFormat() const;
     const css::uno::Reference< css::uno::XAggregation >& GetAggregationInterface() const {return m_xShapeAgg;}
 
     // helper
