@@ -150,7 +150,7 @@ public:
 
     bool SetText( const ScRefCellValue& rCell );   // TRUE -> drop pOldPattern
     void        SetHashText();
-    void SetTextToWidthOrHash( ScRefCellValue& rCell, tools::Long nWidth );
+    bool SetTextToWidthOrHash( ScRefCellValue& rCell, tools::Long nWidth );
     void        SetAutoText( const OUString& rAutoText );
 
     SvxCellOrientation      GetOrient() const        { return eAttrOrient; }
@@ -599,7 +599,7 @@ void ScDrawStringsVars::RepeatToFill( tools::Long nColWidth )
     TextChanged();
 }
 
-void ScDrawStringsVars::SetTextToWidthOrHash( ScRefCellValue& rCell, tools::Long nWidth )
+bool ScDrawStringsVars::SetTextToWidthOrHash( ScRefCellValue& rCell, tools::Long nWidth )
 {
     // #i113045# do the single-character width calculations in logic units
     if (bPixelToLogic)
@@ -608,7 +608,7 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScRefCellValue& rCell, tools::Long
     CellType eType = rCell.getType();
     if (eType != CELLTYPE_VALUE && eType != CELLTYPE_FORMULA)
         // must be a value or formula cell.
-        return;
+        return false;
 
     if (eType == CELLTYPE_FORMULA)
     {
@@ -616,11 +616,11 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScRefCellValue& rCell, tools::Long
         if (pFCell->GetErrCode() != FormulaError::NONE || pOutput->mbShowFormulas)
         {
             SetHashText();      // If the error string doesn't fit, always use "###". Also for "display formulas" (#i116691#)
-            return;
+            return true;
         }
         // If it's formula, the result must be a value.
         if (!pFCell->IsValue())
-            return;
+            return false;
     }
 
     sal_uLong nFormat = GetResultValueFormat();
@@ -628,18 +628,18 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScRefCellValue& rCell, tools::Long
     {
         // Not 'General' number format.  Set hash text and bail out.
         SetHashText();
-        return;
+        return true;
     }
 
     double fVal = rCell.getValue();
 
     const SvNumberformat* pNumFormat = pOutput->mpDoc->GetFormatTable()->GetEntry(nFormat);
     if (!pNumFormat)
-        return;
+        return false;
 
     tools::Long nMaxDigit = GetMaxDigitWidth();
     if (!nMaxDigit)
-        return;
+        return false;
 
     sal_uInt16 nNumDigits = static_cast<sal_uInt16>(nWidth / nMaxDigit);
     {
@@ -648,7 +648,7 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScRefCellValue& rCell, tools::Long
         {
             aString = sTempOut;
             // Failed to get output string.  Bail out.
-            return;
+            return false;
         }
         aString = sTempOut;
     }
@@ -687,7 +687,7 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScRefCellValue& rCell, tools::Long
         {
             aString = sTempOut;
             // Failed to get output string.  Bail out.
-            return;
+            return false;
         }
         aString = sTempOut;
     }
@@ -697,11 +697,12 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScRefCellValue& rCell, tools::Long
     {
         // Even after the decimal adjustment the text doesn't fit.  Give up.
         SetHashText();
-        return;
+        return true;
     }
 
     TextChanged();
     maLastCell.clear();   // #i113022# equal cell and format in another column may give different string
+    return false;
 }
 
 void ScDrawStringsVars::SetAutoText( const OUString& rAutoText )
@@ -1876,11 +1877,41 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic)
                 {
                     if ( bCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
                     {
+                        bool bHasHashText = false;
                         if (mbShowFormulas)
+                        {
                             aVars.SetHashText();
+                            bHasHashText = true;
+                        }
                         else
                             // Adjust the decimals to fit the available column width.
-                            aVars.SetTextToWidthOrHash(aCell, aAreaParam.mnColWidth - nTotalMargin);
+                            bHasHashText = aVars.SetTextToWidthOrHash( aCell, aAreaParam.mnColWidth - nTotalMargin );
+
+                        if ( bHasHashText )
+                        {
+                            tools::Long nMarkPixel = SC_CLIPMARK_SIZE * mnPPTX;
+
+                            if ( eOutHorJust == SvxCellHorJustify::Left )
+                            {
+                                pRowInfo[nArrY].cellInfo(nCellX).nClipMark |= ScClipMark::Right;
+                                bAnyClipped = true;
+                                aAreaParam.maClipRect.AdjustRight( -(nMarkPixel * nLayoutSign) );
+                            }
+                            else if ( eOutHorJust == SvxCellHorJustify::Right )
+                            {
+                                pRowInfo[nArrY].cellInfo(nCellX).nClipMark |= ScClipMark::Left;
+                                bAnyClipped = true;
+                                aAreaParam.maClipRect.AdjustLeft(nMarkPixel * nLayoutSign);
+                            }
+                            else
+                            {
+                                pRowInfo[nArrY].cellInfo(nCellX).nClipMark |= ScClipMark::Right;
+                                pRowInfo[nArrY].cellInfo(nCellX).nClipMark |= ScClipMark::Left;
+                                bAnyClipped = true;
+                                aAreaParam.maClipRect.AdjustRight( -(nMarkPixel * nLayoutSign) );
+                                aAreaParam.maClipRect.AdjustLeft(nMarkPixel * nLayoutSign);
+                            }
+                        }
 
                         nNeededWidth = aVars.GetTextSize().Width() +
                                     static_cast<tools::Long>( aVars.GetLeftTotal() * mnPPTX ) +
@@ -1891,10 +1922,6 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic)
                             aAreaParam.mbLeftClip = aAreaParam.mbRightClip = false;
                             aAreaParam.mnLeftClipLength = aAreaParam.mnRightClipLength = 0;
                         }
-
-                        //  If the "###" replacement doesn't fit into the cells, no clip marks
-                        //  are shown, as the "###" already denotes too little space.
-                        //  The rectangles from the first GetOutputArea call remain valid.
                     }
 
                     tools::Long nJustPosX = aAreaParam.maAlignRect.Left();     // "justified" - effect of alignment will be added
@@ -3006,8 +3033,9 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
         if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
         {
             SetEngineTextAndGetWidth( rParam, "###", nNeededPixel, ( nLeftM + nRightM ) );
-
-            //  No clip marks if "###" doesn't fit (same as in DrawStrings)
+            tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
+            ScCellInfo* pClipMarkCell = &rParam.mpThisRowInfo->cellInfo(rParam.mnX);
+            SetClipMarks( aAreaParam, pClipMarkCell, eOutHorJust, true, nLayoutSign );
         }
 
         if (eOutHorJust != SvxCellHorJustify::Left)
@@ -3179,6 +3207,38 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
     }
 
     rParam.adjustForHyperlinkInPDF(aURLStart, mpDev);
+}
+
+void ScOutputData::SetClipMarks( OutputAreaParam &aAreaParam, ScCellInfo* pClipMarkCell,
+                                 SvxCellHorJustify eOutHorJust, bool bHasHashText,
+                                 tools::Long nLayoutSign )
+{
+    if ( !bHasHashText )
+        return;
+
+    tools::Long nMarkPixel = SC_CLIPMARK_SIZE * mnPPTX;
+
+    if ( eOutHorJust == SvxCellHorJustify::Left )
+    {
+        pClipMarkCell->nClipMark |= ScClipMark::Right;
+        bAnyClipped = true;
+        aAreaParam.maClipRect.AdjustRight( -( nMarkPixel * nLayoutSign ) );
+    }
+    else if ( eOutHorJust == SvxCellHorJustify::Right )
+    {
+        pClipMarkCell->nClipMark |= ScClipMark::Left;
+        bAnyClipped = true;
+        aAreaParam.maClipRect.AdjustLeft( nMarkPixel * nLayoutSign );
+    }
+    else
+    {
+        pClipMarkCell->nClipMark |= ScClipMark::Right;
+        pClipMarkCell->nClipMark |= ScClipMark::Left;
+        bAnyClipped = true;
+        aAreaParam.maClipRect.AdjustRight( -( nMarkPixel * nLayoutSign ) );
+        aAreaParam.maClipRect.AdjustLeft( nMarkPixel * nLayoutSign );
+    }
+
 }
 
 void ScOutputData::ShowClipMarks( DrawEditParam& rParam, tools::Long nEngineWidth, const Size& aCellSize,
@@ -3852,8 +3912,9 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
         if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
         {
             nEngineWidth = SetEngineTextAndGetWidth( rParam, "###", nNeededPixel, ( nLeftM + nRightM ) );
-
-            //  No clip marks if "###" doesn't fit (same as in DrawStrings)
+            tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
+            ScCellInfo* pClipMarkCell = &rParam.mpThisRowInfo->cellInfo(rParam.mnX);
+            SetClipMarks( aAreaParam, pClipMarkCell, eOutHorJust, true, nLayoutSign );
         }
 
         if ( eOutHorJust != SvxCellHorJustify::Left )
@@ -4151,8 +4212,9 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
     if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
     {
         nEngineWidth = SetEngineTextAndGetWidth( rParam, "###", nNeededPixel, ( nLeftM + nRightM ) );
-
-        //  No clip marks if "###" doesn't fit (same as in DrawStrings)
+        tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
+        ScCellInfo* pClipMarkCell = &rParam.mpThisRowInfo->cellInfo(rParam.mnX);
+        SetClipMarks( aAreaParam, pClipMarkCell, eOutHorJust, true, nLayoutSign );
     }
 
     if (eOutHorJust != SvxCellHorJustify::Left)

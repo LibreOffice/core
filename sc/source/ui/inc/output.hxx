@@ -30,6 +30,8 @@
 #include <o3tl/deleter.hxx>
 #include <optional>
 
+struct ScCellInfo;
+
 namespace sc {
     class SpellCheckContext;
 }
@@ -277,6 +279,9 @@ private:
     void DrawEditAsianVertical(DrawEditParam& rParam);
 
     std::unique_ptr<ScFieldEditEngine> CreateOutputEditEngine();
+
+    void SetClipMarks( OutputAreaParam &aAreaParam, ScCellInfo* pClipMarkCell,
+                       SvxCellHorJustify eOutHorJust, bool bHasHashText, tools::Long nLayoutSign );
 
     void ShowClipMarks( DrawEditParam& rParam, tools::Long nEngineWidth, const Size& aCellSize,
                         bool bMerged, OutputAreaParam& aAreaParam, bool bTop );
