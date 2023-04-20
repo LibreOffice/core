@@ -109,7 +109,7 @@ public:
      * Splits the SectionFrame surrounding the pFrame up in two parts:
      * pFrame and the start of the 2nd part
      */
-    bool SplitSect( SwFrame* pFrame, bool bApres );
+    SwSectionFrame* SplitSect( SwFrame* pFrameStartAfter, SwFrame* pFramePutAfter );
     void DelEmpty( bool bRemove ); // Like Cut(), except for that Follow chaining is maintained
     SwFootnoteContFrame* ContainsFootnoteCont( const SwFootnoteContFrame* pCont = nullptr ) const;
     bool Growable() const;
