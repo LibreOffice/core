@@ -34,10 +34,7 @@ uno::Reference<media::XPlayer> SAL_CALL Manager::createPlayer(const OUString& rU
     return xPlayer;
 }
 
-OUString SAL_CALL Manager::getImplementationName()
-{
-    return "com.sun.star.comp.avmedia.ManagerGtk";
-}
+OUString SAL_CALL Manager::getImplementationName() { return "com.sun.star.comp.media.Manager_Gtk"; }
 
 sal_Bool SAL_CALL Manager::supportsService(const OUString& ServiceName)
 {

@@ -50,7 +50,7 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const OUString&
 
 OUString SAL_CALL Manager::getImplementationName(  )
 {
-    return "com.sun.star.comp.avmedia.Manager_GStreamer";
+    return "com.sun.star.comp.media.Manager_GStreamer";
 }
 
 sal_Bool SAL_CALL Manager::supportsService( const OUString& ServiceName )
