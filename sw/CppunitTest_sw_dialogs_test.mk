@@ -71,6 +71,10 @@ $(eval $(call gb_CppunitTest_use_configuration,sw_dialogs_test))
 
 $(eval $(call gb_CppunitTest_use_uiconfigs,sw_dialogs_test,\
 	modules/swriter \
+	sfx \
+	svt \
+	svx \
+	vcl \
 ))
 
 $(eval $(call gb_CppunitTest_use_packages,sw_dialogs_test,\
