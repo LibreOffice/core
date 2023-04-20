@@ -1753,6 +1753,9 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                 nIndex = pNode->EndOfSectionIndex();
             else
             {
+                if (pActualSection)
+                    pActualSection->SetLastPos(pPrv);
+
                 pFrame = pNode->MakeFrame( pLay );
                 pActualSection.reset( new SwActualSection( pActualSection.release(),
                                                 static_cast<SwSectionFrame*>(pFrame), pNode ) );
@@ -1909,33 +1912,30 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                 }
 
                 // new section frame
-                pFrame = pActualSection->GetSectionNode()->MakeFrame( pLay );
-                pFrame->InsertBehind( pLay, pPrv );
-                static_cast<SwSectionFrame*>(pFrame)->Init();
-
-                // OD 12.08.2003 #i17969# - consider horizontal/vertical layout
-                // for setting position at newly inserted frame
-                lcl_SetPos( *pFrame, *pLay );
-
-                SwSectionFrame* pOuterSectionFrame = pActualSection->GetSectionFrame();
-
-                // a follow has to be appended to the new section frame
-                SwSectionFrame* pFollow = pOuterSectionFrame ? pOuterSectionFrame->GetFollow() : nullptr;
-                if ( pFollow )
+                if (SwSectionFrame* pOuterSectionFrame = pActualSection->GetSectionFrame())
                 {
-                    pOuterSectionFrame->SetFollow( nullptr );
-                    pOuterSectionFrame->InvalidateSize();
-                    static_cast<SwSectionFrame*>(pFrame)->SetFollow( pFollow );
+                    // Splitting moves the trailing content to the next frame
+                    pFrame = pOuterSectionFrame->SplitSect(pActualSection->GetLastPos(), pPrv);
+
+                    // We don't want to leave empty parts back.
+                    if (! pOuterSectionFrame->IsColLocked() &&
+                        ! pOuterSectionFrame->ContainsContent() )
+                    {
+                        pOuterSectionFrame->DelEmpty( true );
+                        SwFrame::DestroyFrame(pOuterSectionFrame);
+                    }
+                }
+                else
+                {
+                    pFrame = pActualSection->GetSectionNode()->MakeFrame( pLay );
+                    pFrame->InsertBehind( pLay, pPrv );
+                    static_cast<SwSectionFrame*>(pFrame)->Init();
+
+                    // OD 12.08.2003 #i17969# - consider horizontal/vertical layout
+                    // for setting position at newly inserted frame
+                    lcl_SetPos( *pFrame, *pLay );
                 }
 
-                // We don't want to leave empty parts back.
-                if (pOuterSectionFrame &&
-                    ! pOuterSectionFrame->IsColLocked() &&
-                    ! pOuterSectionFrame->ContainsContent() )
-                {
-                    pOuterSectionFrame->DelEmpty( true );
-                    SwFrame::DestroyFrame(pOuterSectionFrame);
-                }
                 pActualSection->SetSectionFrame( static_cast<SwSectionFrame*>(pFrame) );
 
                 pLay = static_cast<SwLayoutFrame*>(pFrame);
@@ -2163,20 +2163,7 @@ void MakeFrames( SwDoc *pDoc, SwNode &rSttIdx, SwNode &rEndIdx )
             }
             else
             {
-                bool bSplit;
                 SwFrame* pPrv = bAfter ? pFrame : pFrame->GetPrev();
-                // If the section frame is inserted into another one, it must be split.
-                if( pSct && rSttIdx.IsSectionNode() )
-                {
-                    bSplit = pSct->SplitSect( pFrame, bAfter );
-                    if( !bSplit && !bAfter )
-                    {
-                        pUpper = pSct->GetUpper();
-                        pPrv = pSct->GetPrev();
-                    }
-                }
-                else
-                    bSplit = false;
 
                 ::InsertCnt_( pUpper, pDoc, rSttIdx.GetIndex(), false,
                               nEndIdx, pPrv, eMode );
@@ -2189,10 +2176,6 @@ void MakeFrames( SwDoc *pDoc, SwNode &rSttIdx, SwNode &rEndIdx )
                         AppendAllObjs( pTable, pUpper );
                 }
 
-                // If nothing was added (e.g. a hidden section), the split must be reversed.
-                if( bSplit && pSct && pSct->GetNext()
-                    && pSct->GetNext()->IsSctFrame() )
-                    pSct->MergeNext( static_cast<SwSectionFrame*>(pSct->GetNext()) );
                 if( pFrame->IsInFly() )
                     pFrame->FindFlyFrame()->Invalidate_();
                 if( pFrame->IsInTab() )
