@@ -995,7 +995,6 @@ SwXShape::~SwXShape()
         m_xShapeAgg->setDelegator(xRef);
     }
     m_pImpl.reset();
-    EndListeningAll();
     if(m_pPage)
        const_cast<SwFmDrawPage*>(m_pPage)->RemoveShape(this);
 }
@@ -2082,14 +2081,6 @@ void SwXShape::removeVetoableChangeListener(
     const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/)
 {
     OSL_FAIL("not implemented");
-}
-
-void SwXShape::Notify(const SfxHint& rHint)
-{
-    if(rHint.GetId() == SfxHintId::Dying)
-    {
-        EndListeningAll();
-    }
 }
 
 void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)

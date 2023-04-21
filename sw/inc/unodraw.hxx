@@ -127,7 +127,7 @@ cppu::WeakImplHelper
     css::drawing::XShape
 >
 SwXShapeBaseClass;
-class SwXShape : public SwXShapeBaseClass, public SvtListener
+class SwXShape : public SwXShapeBaseClass
 {
     friend class SwXGroupShape;
     friend class SwFmDrawPage;
@@ -200,7 +200,6 @@ protected:
 public:
     SwXShape(css::uno::Reference<css::uno::XInterface> & xShape, SwDoc const*const pDoc);
 
-    virtual void Notify(const SfxHint&) override;
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
