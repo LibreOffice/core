@@ -306,7 +306,10 @@ Reference<frame::XDispatch> SAL_CALL PresenterProtocolHandler::queryDispatch (
 
     Reference<frame::XDispatch> xDispatch;
 
-    if (rURL.Protocol == "vnd.org.libreoffice.presenterscreen:")
+    // tdf#154546 skip dispatch when presenter controller is not set
+    // mpPresenterController is sometimes unset and this will cause a
+    // crash when pressing the presenter console's Exchange button.
+    if (rURL.Protocol == "vnd.org.libreoffice.presenterscreen:" && mpPresenterController.is())
     {
         xDispatch.set(Dispatch::Create(rURL.Path, mpPresenterController));
     }
