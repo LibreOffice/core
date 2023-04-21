@@ -130,7 +130,7 @@ OUString SAL_CALL NumberText_Impl::getNumberText(const OUString& rText, const Lo
 #if defined(_WIN32)
     OUString aResult(o3tl::toU(sResult.c_str()));
 #else
-    OUString aResult = OUString::fromUtf8(Numbertext::wstring2string(sResult).c_str());
+    OUString aResult = OUString::fromUtf8(Numbertext::wstring2string(sResult));
 #endif
     return aResult;
 }

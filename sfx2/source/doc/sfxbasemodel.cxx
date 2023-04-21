@@ -3217,7 +3217,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
         std::stringstream aErrCode;
         aErrCode << nErrCode;
         throw task::ErrorCodeIOException(
-            "SfxBaseModel::impl_store <" + sURL + "> failed: " + OUString::fromUtf8(aErrCode.str().c_str()),
+            "SfxBaseModel::impl_store <" + sURL + "> failed: " + OUString::fromUtf8(aErrCode.str()),
             Reference< XInterface >(), sal_uInt32(nErrCode));
     }
 }

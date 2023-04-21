@@ -18,6 +18,8 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 
+namespace test1
+{
 void f1(bool, const OString& s);
 struct Foo
 {
@@ -41,7 +43,10 @@ void test1(Foo& foo)
         = "xx" + OUString(aVal.getStr(), aVal.getLength(), RTL_TEXTENCODING_ASCII_US);
     (void)aCompText;
 }
+}
 
+namespace test2
+{
 // call to param that takes string_view
 void f2(bool, std::string_view);
 struct Foo2
@@ -60,4 +65,24 @@ void test2(Foo2& foo)
     // expected-error@+1 {{unnecessary call to 'getStr' when passing to string_view arg [loplugin:unnecessarygetstr]}}
     foo.f2(true, OString::number(12).getStr());
 }
+}
+
+namespace test3
+{
+// call to param that takes string_view
+void f2(bool, std::string_view);
+struct Foo2
+{
+    void f2(bool, std::string_view);
+};
+void test3(Foo2& foo)
+{
+    std::string s;
+    // expected-error@+1 {{unnecessary call to 'c_str' when passing to string_view arg [loplugin:unnecessarygetstr]}}
+    f2(true, s.c_str());
+    // expected-error@+1 {{unnecessary call to 'c_str' when passing to string_view arg [loplugin:unnecessarygetstr]}}
+    foo.f2(true, s.c_str());
+}
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

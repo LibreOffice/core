@@ -136,8 +136,8 @@ void CPDManager::printerAdded (GDBusConnection *connection,
     std::stringstream uniqueName;
     uniqueName << pDest->id << ", " << pDest->backend_name;
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    OUString aPrinterName = OStringToOUString( printerName.str().c_str(), aEncoding );
-    OUString aUniqueName = OStringToOUString( uniqueName.str().c_str(), aEncoding );
+    OUString aPrinterName = OStringToOUString( printerName.str(), aEncoding );
+    OUString aUniqueName = OStringToOUString( uniqueName.str(), aEncoding );
     current->addNewPrinter(aPrinterName, aUniqueName, pDest);
 }
 
@@ -157,7 +157,7 @@ void CPDManager::printerRemoved (GDBusConnection *,
     std::stringstream uniqueName;
     uniqueName << id << ", " << backend_name;
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    OUString aUniqueName = OStringToOUString( uniqueName.str().c_str(), aEncoding );
+    OUString aUniqueName = OStringToOUString( uniqueName.str(), aEncoding );
     std::unordered_map<OUString, CPDPrinter *>::iterator it = pManager->m_aCPDDestMap.find( aUniqueName );
     if (it == pManager->m_aCPDDestMap.end()) {
         SAL_WARN("vcl.unx.print", "CPD trying to remove non-existent printer from list");

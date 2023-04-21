@@ -367,14 +367,14 @@ boost::property_tree::ptree redactionTargetToJSON(const RedactionTarget* pTarget
 std::unique_ptr<RedactionTarget>
 JSONtoRedactionTarget(const boost::property_tree::ptree::value_type& rValue)
 {
-    OUString sName = OUString::fromUtf8(rValue.second.get<std::string>("sName").c_str());
+    OUString sName = OUString::fromUtf8(rValue.second.get<std::string>("sName"));
     RedactionTargetType eType
         = static_cast<RedactionTargetType>(atoi(rValue.second.get<std::string>("eType").c_str()));
-    OUString sContent = OUString::fromUtf8(rValue.second.get<std::string>("sContent").c_str());
+    OUString sContent = OUString::fromUtf8(rValue.second.get<std::string>("sContent"));
     bool bCaseSensitive
-        = OUString::fromUtf8(rValue.second.get<std::string>("bCaseSensitive").c_str()).toBoolean();
+        = OUString::fromUtf8(rValue.second.get<std::string>("bCaseSensitive")).toBoolean();
     bool bWholeWords
-        = OUString::fromUtf8(rValue.second.get<std::string>("bWholeWords").c_str()).toBoolean();
+        = OUString::fromUtf8(rValue.second.get<std::string>("bWholeWords")).toBoolean();
     sal_uInt32 nID = atoi(rValue.second.get<std::string>("nID").c_str());
 
     return std::unique_ptr<RedactionTarget>(
@@ -607,7 +607,7 @@ SfxAutoRedactDialog::~SfxAutoRedactDialog()
 
         boost::property_tree::write_json(aStream, aTargetsTree, false);
 
-        OUString sUserDataStr(OUString::fromUtf8(aStream.str().c_str()));
+        OUString sUserDataStr(OUString::fromUtf8(aStream.str()));
 
         // Store the dialog data
         SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());

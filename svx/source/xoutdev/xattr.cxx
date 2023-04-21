@@ -2151,7 +2151,7 @@ namespace
 
             for (const auto& rPair : aTree)
             {
-                aArgs[OUString::fromUtf8(rPair.first.c_str())] = OUString::fromUtf8(rPair.second.get_value<std::string>(".").c_str());
+                aArgs[OUString::fromUtf8(rPair.first)] = OUString::fromUtf8(rPair.second.get_value<std::string>("."));
             }
         }
         return aArgs;

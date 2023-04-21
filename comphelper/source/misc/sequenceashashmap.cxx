@@ -49,7 +49,7 @@ uno::Any jsonToUnoAny(const boost::property_tree::ptree& aTree)
     uno::Sequence<uno::Reference<reflection::XIdlField>> aFields;
     uno::Reference<reflection::XIdlClass> xIdlClass
         = css::reflection::theCoreReflection::get(comphelper::getProcessComponentContext())
-              ->forName(OUString::fromUtf8(rType.c_str()));
+              ->forName(OUString::fromUtf8(rType));
     if (xIdlClass.is())
     {
         uno::TypeClass aTypeClass = xIdlClass->getTypeClass();
@@ -91,7 +91,7 @@ uno::Any jsonToUnoAny(const boost::property_tree::ptree& aTree)
             else if (aTypeClass == uno::TypeClass_DOUBLE)
                 aAny <<= o3tl::toDouble(rValue);
             else if (aTypeClass == uno::TypeClass_STRING)
-                aAny <<= OUString::fromUtf8(rValue.c_str());
+                aAny <<= OUString::fromUtf8(rValue);
         }
     }
     return aAny;
@@ -321,9 +321,9 @@ std::vector<css::beans::PropertyValue> JsonToPropertyValues(const OString& rJson
         const std::string& rValue = rPair.second.get<std::string>("value", "");
 
         beans::PropertyValue aValue;
-        aValue.Name = OUString::fromUtf8(rPair.first.c_str());
+        aValue.Name = OUString::fromUtf8(rPair.first);
         if (rType == "string")
-            aValue.Value <<= OUString::fromUtf8(rValue.c_str());
+            aValue.Value <<= OUString::fromUtf8(rValue);
         else if (rType == "boolean")
             aValue.Value <<= OString(rValue.c_str()).toBoolean();
         else if (rType == "float")

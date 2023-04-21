@@ -227,7 +227,7 @@ void ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam)
             std::ostringstream os;
             os << "ns" << index;
             std::string alias = os.str();
-            filter.set_namespace_alias(alias.c_str(), nsid);
+            filter.set_namespace_alias(alias, nsid);
         }
 
         // Set cell links.

@@ -87,18 +87,26 @@ public:
                     continue;
                 auto const t = e->getObjectType();
                 auto const tc2 = loplugin::TypeCheck(t);
-                if (!(tc2.Class("OString").Namespace("rtl").GlobalNamespace()
-                      || tc2.Class("OUString").Namespace("rtl").GlobalNamespace()
-                      || tc2.Class("OStringBuffer").Namespace("rtl").GlobalNamespace()
-                      || tc2.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()
-                      || tc2.ClassOrStruct("StringNumber").Namespace("rtl").GlobalNamespace()))
-                    continue;
-                if (!loplugin::DeclCheck(e->getMethodDecl()).Function("getStr"))
-                    continue;
-                report(DiagnosticsEngine::Warning,
-                       "unnecessary call to 'getStr' when passing to string_view arg",
-                       e->getExprLoc())
-                    << e->getSourceRange();
+                if (tc2.Class("OString").Namespace("rtl").GlobalNamespace()
+                    || tc2.Class("OUString").Namespace("rtl").GlobalNamespace()
+                    || tc2.Class("OStringBuffer").Namespace("rtl").GlobalNamespace()
+                    || tc2.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()
+                    || tc2.ClassOrStruct("StringNumber").Namespace("rtl").GlobalNamespace())
+                {
+                    if (loplugin::DeclCheck(e->getMethodDecl()).Function("getStr"))
+                        report(DiagnosticsEngine::Warning,
+                               "unnecessary call to 'getStr' when passing to string_view arg",
+                               e->getExprLoc())
+                            << e->getSourceRange();
+                }
+                else if (tc2.Class("basic_string").StdNamespace())
+                {
+                    if (loplugin::DeclCheck(e->getMethodDecl()).Function("c_str"))
+                        report(DiagnosticsEngine::Warning,
+                               "unnecessary call to 'c_str' when passing to string_view arg",
+                               e->getExprLoc())
+                            << e->getSourceRange();
+                }
             }
         }
         return true;

@@ -232,7 +232,7 @@ bool isAllowlistedLanguage(const OUString& lang)
                     continue;
 
                 std::cerr << s << " ";
-                aList.emplace_back(OStringToOUString(s.c_str(), RTL_TEXTENCODING_UTF8));
+                aList.emplace_back(OStringToOUString(s, RTL_TEXTENCODING_UTF8));
             }
             std::cerr << std::endl;
         }
