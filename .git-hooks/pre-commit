@@ -98,6 +98,10 @@ sub check_whitespaces($)
             {
                 bad_line("OOXMLEXPORT definition used in a ooxmlimport file", $_, "cxx");
             }
+            if ((/<toolbar:toolbaritem/) and not(/\/>/))
+            {
+                bad_line("Use /> to close toolbar:toolbaritem", $_, "xml");
+            }
             if (/<property name="use[-_]markup">True<\/property>/)
             {
                 bad_line("use font attributes instead of use-markup", $_, "ui");
