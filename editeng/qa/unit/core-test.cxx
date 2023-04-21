@@ -1768,8 +1768,8 @@ void Test::testSingleLine()
     aEditEngine.SetText(sText);
     aEditEngine.QuickFormatDoc(true);
     CPPUNIT_ASSERT_EQUAL(true, aEditEngine.IsFormatted());
-    CPPUNIT_ASSERT_EQUAL(1, aEditEngine.GetParagraphCount());
-    CPPUNIT_ASSERT_EQUAL(1, aEditEngine.GetLineCount(0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aEditEngine.GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aEditEngine.GetLineCount(0));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
