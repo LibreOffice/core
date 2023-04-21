@@ -42,6 +42,7 @@ typedef ::cppu::WeakAggImplHelper3  <   css::io::XPersistObject
 class OFormattedFieldWrapper final : public OFormattedFieldWrapper_Base
 {
     css::uno::Reference< css::uno::XComponentContext> m_xContext;
+    OUString m_implementationName;
 
     css::uno::Reference< css::uno::XAggregation>      m_xAggregate;
 
@@ -49,7 +50,8 @@ class OFormattedFieldWrapper final : public OFormattedFieldWrapper_Base
     // if we act as formatted this is used to write the EditModel part
     css::uno::Reference< css::io::XPersistObject>     m_xFormattedPart;
 
-    OFormattedFieldWrapper(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
+    OFormattedFieldWrapper(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory,
+                           OUString const & implementationName);
 
     virtual ~OFormattedFieldWrapper() override;
 
@@ -58,7 +60,7 @@ public:
     // to read and write the FormattedModel part
     // if bActAsFormatted is false, the state is undetermined until somebody calls
     // ::read or does anything which requires a living aggregate
-    static css::uno::Reference<css::uno::XInterface> createFormattedFieldWrapper(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory, bool bActAsFormatted);
+    static css::uno::Reference<css::uno::XInterface> createFormattedFieldWrapper(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory, bool bActAsFormatted, OUString const & implementationName);
 
     // UNO
     DECLARE_UNO3_AGG_DEFAULTS(OFormattedFieldWrapper, OWeakAggObject)

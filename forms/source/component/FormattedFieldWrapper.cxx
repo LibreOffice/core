@@ -44,14 +44,17 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-OFormattedFieldWrapper::OFormattedFieldWrapper(const Reference<XComponentContext>& _rxFactory)
+OFormattedFieldWrapper::OFormattedFieldWrapper(const Reference<XComponentContext>& _rxFactory,
+                                               OUString const & implementationName)
     :m_xContext(_rxFactory)
+    ,m_implementationName(implementationName)
 {
 }
 
-css::uno::Reference<css::uno::XInterface> OFormattedFieldWrapper::createFormattedFieldWrapper(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory, bool bActAsFormatted)
+css::uno::Reference<css::uno::XInterface> OFormattedFieldWrapper::createFormattedFieldWrapper(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory, bool bActAsFormatted, OUString const & implementationName)
 {
-    rtl::Reference<OFormattedFieldWrapper> pRef = new OFormattedFieldWrapper(_rxFactory);
+    rtl::Reference<OFormattedFieldWrapper> pRef = new OFormattedFieldWrapper(_rxFactory,
+                                                                             implementationName);
 
     if (bActAsFormatted)
     {
@@ -82,7 +85,8 @@ Reference< XCloneable > SAL_CALL OFormattedFieldWrapper::createClone()
 {
     ensureAggregate();
 
-    rtl::Reference< OFormattedFieldWrapper > xRef(new OFormattedFieldWrapper(m_xContext));
+    rtl::Reference< OFormattedFieldWrapper > xRef(new OFormattedFieldWrapper(m_xContext,
+                                                                             m_implementationName));
 
     Reference< XCloneable > xCloneAccess;
     query_aggregation( m_xAggregate, xCloneAccess );
@@ -174,7 +178,7 @@ OUString SAL_CALL OFormattedFieldWrapper::getServiceName()
 
 OUString SAL_CALL OFormattedFieldWrapper::getImplementationName(  )
 {
-    return "com.sun.star.comp.forms.OFormattedFieldWrapper_ForcedFormatted";
+    return m_implementationName;
 }
 
 sal_Bool SAL_CALL OFormattedFieldWrapper::supportsService( const OUString& _rServiceName )
@@ -342,7 +346,8 @@ com_sun_star_form_OFormattedFieldWrapper_get_implementation(css::uno::XComponent
         css::uno::Sequence<css::uno::Any> const &)
 {
     css::uno::Reference<css::uno::XInterface> inst(
-        OFormattedFieldWrapper::createFormattedFieldWrapper(component, false));
+        OFormattedFieldWrapper::createFormattedFieldWrapper(
+            component, false, "com.sun.star.form.OFormattedFieldWrapper"));
     inst->acquire();
     return inst.get();
 }
@@ -352,7 +357,8 @@ com_sun_star_comp_forms_OFormattedFieldWrapper_ForcedFormatted_get_implementatio
         css::uno::Sequence<css::uno::Any> const &)
 {
     css::uno::Reference<css::uno::XInterface> inst(
-        OFormattedFieldWrapper::createFormattedFieldWrapper(component, true));
+        OFormattedFieldWrapper::createFormattedFieldWrapper(
+            component, true, "com.sun.star.comp.forms.OFormattedFieldWrapper_ForcedFormatted"));
     inst->acquire();
     return inst.get();
 }
