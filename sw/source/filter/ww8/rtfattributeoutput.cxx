@@ -3690,29 +3690,39 @@ void RtfAttributeOutput::FormatFillGradient(const XFillGradientItem& rFillGradie
     m_aFlyProperties.push_back(std::make_pair<OString, OString>(
         "fillType", OString::number(7))); // Shade using the fillAngle
 
-    const XGradient& rGradient = rFillGradient.GetGradientValue();
-    const Color aStartColor(rGradient.GetColorStops().front().getStopColor());
-    m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-        "fillBackColor", OString::number(wwUtility::RGBToBGR(aStartColor))));
+    const XGradient& rGradient(rFillGradient.GetGradientValue());
+    const basegfx::ColorStops& rColorStops(rGradient.GetColorStops());
 
-    const Color aEndColor(rGradient.GetColorStops().back().getStopColor());
+    // MCGR: It would be best to export the full MCGR definition here
+    // with all ColorStops in rColorStops, but rtf does not support this.
+    // Best thing to do and to stay compatible is to export front/back
+    // colors as start/end and - when more than two ColorStops are defined -
+    // guess that GradientStyle_AXIAL is used and thus create a "fillFocus"
+    // entry
+    // NOTE: I also found that loading file from testTextframeGradient
+    // "textframe-gradient.rtf" and save-as *inverts* the gradient, so I
+    // exchanged here fillColor/fillBackColor to get the correct order
+    const Color aStartColor(rColorStops.front().getStopColor());
     m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-        "fillColor", OString::number(wwUtility::RGBToBGR(aEndColor))));
+        "fillColor", OString::number(wwUtility::RGBToBGR(aStartColor))));
 
-    switch (rGradient.GetGradientStyle())
+    if (rColorStops.size() < 3)
     {
-        case css::awt::GradientStyle_LINEAR:
-            break;
-        case css::awt::GradientStyle_AXIAL:
-            m_aFlyProperties.push_back(
-                std::make_pair<OString, OString>("fillFocus", OString::number(50)));
-            break;
-        case css::awt::GradientStyle_RADIAL:
-        case css::awt::GradientStyle_ELLIPTICAL:
-        case css::awt::GradientStyle_SQUARE:
-        case css::awt::GradientStyle_RECT:
-        default:
-            break;
+        // two-color version, use back as 2nd color
+        const Color aEndColor(rColorStops.back().getStopColor());
+        m_aFlyProperties.push_back(std::make_pair<OString, OString>(
+            "fillBackColor", OString::number(wwUtility::RGBToBGR(aEndColor))));
+    }
+    else
+    {
+        // assume what was formally GradientStyle_AXIAL, see above and also refer to
+        // FillModel::pushToPropMap 'fFocus' value and usage.
+        // The 2nd color is the in-between color, use it
+        const Color aEndColor(rColorStops[1].getStopColor());
+        m_aFlyProperties.push_back(std::make_pair<OString, OString>(
+            "fillBackColor", OString::number(wwUtility::RGBToBGR(aEndColor))));
+        m_aFlyProperties.push_back(
+            std::make_pair<OString, OString>("fillFocus", OString::number(50)));
     }
 }
 

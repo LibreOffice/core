@@ -33,6 +33,7 @@ $(eval $(call gb_CppunitTest_use_libraries,oox_shape, \
     test \
     unotest \
     utl \
+    basegfx \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,oox_shape))

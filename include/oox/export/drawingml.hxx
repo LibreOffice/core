@@ -354,8 +354,7 @@ public:
     void WriteColor( const OUString& sColorSchemeName, const css::uno::Sequence< css::beans::PropertyValue >& aTransformations, sal_Int32 nAlpha = MAX_PERCENT );
     void WriteColor( const ::Color nColor, const css::uno::Sequence< css::beans::PropertyValue >& aTransformations, sal_Int32 nAlpha = MAX_PERCENT );
     void WriteColorTransformations( const css::uno::Sequence< css::beans::PropertyValue >& aTransformations, sal_Int32 nAlpha = MAX_PERCENT );
-    void WriteGradientStop(sal_uInt16 nStop, ::Color nColor, sal_Int32 nAlpha = MAX_PERCENT);
-    void WriteGradientStop2(double fOffset, const basegfx::BColor& rColor, const basegfx::BColor& rAlpha);
+    void WriteGradientStop(double fOffset, const basegfx::BColor& rColor, const basegfx::BColor& rAlpha);
     void WriteLineArrow( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet, bool bLineStart );
     void WriteConnectorConnections( sal_Int32 nStartGlueId, sal_Int32 nEndGlueId, sal_Int32 nStartID, sal_Int32 nEndID );
 
@@ -376,10 +375,7 @@ public:
     */
     void WriteGradientFill(
         const css::awt::Gradient2* pColorGradient, sal_Int32 nFixColor,
-        const css::awt::Gradient2* pTransparenceGradient, sal_Int32 nFixTransparence);
-    void WriteGradientFill2(
-        const css::awt::Gradient2* pColorGradient, sal_Int32 nFixColor,
-        const css::awt::Gradient2* pTransparenceGradient, sal_Int32 nFixTransparence);
+        const css::awt::Gradient2* pTransparenceGradient, double fFixTransparence = 0.0);
 
     void WriteGrabBagGradientFill( const css::uno::Sequence< css::beans::PropertyValue >& aGradientStops, const css::awt::Gradient2& rGradient);
 

@@ -1098,11 +1098,20 @@ void SdOOXMLExportTest2::testTdf105739()
         CPPUNIT_ASSERT_EQUAL(int(drawing::FillStyle_GRADIENT), static_cast<int>(aFillStyle));
 
         // Test gradient properties
-        com::sun::star::awt::Gradient aFillGradient;
+        com::sun::star::awt::Gradient2 aFillGradient;
         aXBackgroundPropSet->getPropertyValue("FillGradient") >>= aFillGradient;
+
+        // MCGR: Use the completely imported gradient to check for correctness
+        basegfx::ColorStops aColorStops;
+        basegfx::utils::fillColorStopsFromGradient2(aColorStops, aFillGradient);
+
+        CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
+        CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
+        CPPUNIT_ASSERT_EQUAL(aColorStops[0].getStopColor(), basegfx::BColor(1.0, 0.0, 0.0));
+        CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
+        CPPUNIT_ASSERT_EQUAL(aColorStops[1].getStopColor(),
+                             basegfx::BColor(0.0, 0.69019607843137254, 0.31372549019607843));
         CPPUNIT_ASSERT_EQUAL(int(awt::GradientStyle_LINEAR), static_cast<int>(aFillGradient.Style));
-        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(ColorTransparency, aFillGradient.StartColor));
-        CPPUNIT_ASSERT_EQUAL(Color(0x00b050), Color(ColorTransparency, aFillGradient.EndColor));
     }
 }
 

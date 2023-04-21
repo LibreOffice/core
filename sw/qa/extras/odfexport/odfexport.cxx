@@ -12,7 +12,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/awt/FontSlant.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
@@ -51,6 +51,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <basegfx/utils/gradienttools.hxx>
 
 #include <docufld.hxx> // for SwHiddenTextField::ParseIfFieldDefinition() method call
 #include <unoprnms.hxx>
@@ -786,16 +787,31 @@ DECLARE_ODFEXPORT_TEST(testTextframeGradient, "textframe-gradient.odt")
 
     uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
-    awt::Gradient aGradient = getProperty<awt::Gradient>(xFrame, "FillGradient");
-    CPPUNIT_ASSERT_EQUAL(Color(0xC0504D), Color(ColorTransparency, aGradient.StartColor));
-    CPPUNIT_ASSERT_EQUAL(Color(0xD99594), Color(ColorTransparency, aGradient.EndColor));
+    awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
+
+    // MCGR: Use the completely imported gradient to check for correctness
+    basegfx::ColorStops aColorStops;
+    basegfx::utils::fillColorStopsFromGradient2(aColorStops, aGradient);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
+    CPPUNIT_ASSERT_EQUAL(aColorStops[0].getStopColor(), basegfx::BColor(0.75294117647058822, 0.31372549019607843, 0.30196078431372547));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
+    CPPUNIT_ASSERT_EQUAL(aColorStops[1].getStopColor(), basegfx::BColor(0.85098039215686272, 0.58431372549019611, 0.58039215686274515));
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aGradient.Style);
 
     xFrame.set(xIndexAccess->getByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
-    aGradient = getProperty<awt::Gradient>(xFrame, "FillGradient");
-    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(ColorTransparency, aGradient.StartColor));
-    CPPUNIT_ASSERT_EQUAL(Color(0x666666), Color(ColorTransparency, aGradient.EndColor));
+    aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
+
+    // MCGR: Use the completely imported gradient to check for correctness
+    basegfx::utils::fillColorStopsFromGradient2(aColorStops, aGradient);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
+    CPPUNIT_ASSERT_EQUAL(aColorStops[0].getStopColor(), basegfx::BColor(0.0, 0.0, 0.0));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
+    CPPUNIT_ASSERT_EQUAL(aColorStops[1].getStopColor(), basegfx::BColor(0.40000000000000002, 0.40000000000000002, 0.40000000000000002));
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aGradient.Style);
 }
 

@@ -1344,7 +1344,7 @@ void SdOOXMLExportTest1::testTdf94238()
     uno::Reference<beans::XPropertySet> xShape(getShape(0, xPage));
     CPPUNIT_ASSERT(xShape.is());
 
-    awt::Gradient aGradient;
+    awt::Gradient2 aGradient;
     CPPUNIT_ASSERT(xShape->getPropertyValue("FillGradient") >>= aGradient);
 
     // Without the accompanying fix in place, this test would have failed with
@@ -1354,13 +1354,25 @@ void SdOOXMLExportTest1::testTdf94238()
     // - aGradient.Border was 0
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_RADIAL, aGradient.Style);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(100), aGradient.YOffset);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(39), aGradient.Border);
+    // MCGR: 39->0 no border needed anyore with ooxml import
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(0), aGradient.Border);
+
+    // MCGR: Use the completely imported gradient to check for correctness
+    basegfx::ColorStops aColorStops;
+    basegfx::utils::fillColorStopsFromGradient2(aColorStops, aGradient);
 
     // Without the accompanying fix in place, this test would have failed with
     // 'Expected: 0, Actual  : 10592673', i.e. the start color of the gradient
     // was incorrect.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x0), aGradient.StartColor);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x8B8B8B), aGradient.EndColor);
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aColorStops.size());
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
+    CPPUNIT_ASSERT_EQUAL(aColorStops[0].getStopColor(), basegfx::BColor(0.0, 0.0, 0.0));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 0.39000000000000001));
+    CPPUNIT_ASSERT_EQUAL(aColorStops[1].getStopColor(), basegfx::BColor(0.0, 0.0, 0.0));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[2].getStopOffset(), 1.0));
+    CPPUNIT_ASSERT_EQUAL(
+        aColorStops[2].getStopColor(),
+        basegfx::BColor(0.54509803921568623, 0.54509803921568623, 0.54509803921568623));
 }
 
 void SdOOXMLExportTest1::testPictureTransparency()
@@ -1602,11 +1614,21 @@ void SdOOXMLExportTest1::testTdf128345GradientAxial()
     saveAndReload("Impress Office Open XML");
     uno::Reference<beans::XPropertySet> xShapePropSet(getShapeFromPage(0, 0));
 
-    awt::Gradient aTransparenceGradient;
+    awt::Gradient2 aTransparenceGradient;
     xShapePropSet->getPropertyValue("FillTransparenceGradient") >>= aTransparenceGradient;
-    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(ColorTransparency, aTransparenceGradient.StartColor));
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(ColorTransparency, aTransparenceGradient.EndColor));
-    CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aTransparenceGradient.Style);
+
+    // MCGR: Use the completely imported gradient to check for correctness
+    basegfx::ColorStops aColorStops;
+    basegfx::utils::fillColorStopsFromGradient2(aColorStops, aTransparenceGradient);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aColorStops.size());
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
+    CPPUNIT_ASSERT_EQUAL(aColorStops[0].getStopColor(), basegfx::BColor(1.0, 1.0, 1.0));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 0.5));
+    CPPUNIT_ASSERT_EQUAL(aColorStops[1].getStopColor(), basegfx::BColor(0.0, 0.0, 0.0));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[2].getStopOffset(), 1.0));
+    CPPUNIT_ASSERT_EQUAL(aColorStops[2].getStopColor(), basegfx::BColor(1.0, 1.0, 1.0));
+    CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aTransparenceGradient.Style);
 }
 
 void SdOOXMLExportTest1::testTdf134969TransparencyOnColorGradient()

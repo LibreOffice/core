@@ -282,7 +282,12 @@ void SdImportTest::testDocumentLayout()
             { u"fdo47434.pptx", u"xml/fdo47434_", u"" },
             { u"n758621.ppt", u"xml/n758621_", u"" },
             { u"fdo64586.ppt", u"xml/fdo64586_", u"" },
+
+            // needed to adapt this, the border parameter is no longer
+            // exported with MCGRs due to oox neither needing nor
+            // supporting it with now freely definable gradients
             { u"n819614.pptx", u"xml/n819614_", u"" },
+
             { u"n820786.pptx", u"xml/n820786_", u"" },
             { u"n762695.pptx", u"xml/n762695_", u"" },
             { u"n593612.pptx", u"xml/n593612_", u"" },
@@ -329,9 +334,15 @@ void SdImportTest::testDocumentLayout()
                 = OUStringToOString(createFileURL(aFilesToCompare[i].sDump), RTL_TEXTENCODING_UTF8)
                   + OString::number(j) + ".xml";
 
-            if (nUpdateMe == j)
+            if (nUpdateMe == i) // index was wrong here
             {
-                std::ofstream aStream(aFileName.getStr(),
+                // had to adapt this, std::ofstream annot write to an URL but needs a
+                // filesystem path. Seems as if no one had to adapt any of the cases
+                // for some years :-/
+                OUString sTempFilePath;
+                osl::FileBase::getSystemPathFromFileURL(OUString::fromUtf8(aFileName),
+                                                        sTempFilePath);
+                std::ofstream aStream(sTempFilePath.toUtf8().getStr(),
                                       std::ofstream::out | std::ofstream::binary);
                 aStream << aString;
                 aStream.close();

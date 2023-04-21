@@ -787,9 +787,10 @@ void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& 
                         const Color& rOuterColor = bOuterToInner ? aColor1 : aColor2;
                         const Color& rInnerColor = bOuterToInner ? aColor2 : aColor1;
 
+                        // add in order of offset
                         lcl_setGradientStop( aFillProps.maGradientProps.maGradientStops, 0.0, rOuterColor);
+                        lcl_setGradientStop( aFillProps.maGradientProps.maGradientStops, 0.5, rInnerColor);
                         lcl_setGradientStop( aFillProps.maGradientProps.maGradientStops, 1.0, rOuterColor);
-                        lcl_setGradientStop( aFillProps.maGradientProps.maGradientStops, 0.5, rInnerColor );
                     }
                     else    // focus of -100%, 0%, and 100% is linear gradient
                     {

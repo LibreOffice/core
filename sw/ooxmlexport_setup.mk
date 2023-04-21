@@ -26,7 +26,8 @@ define sw_ooxmlexport_libraries
 	unotest \
 	utl \
 	vcl \
-	svxcore
+	svxcore \
+	basegfx
 endef
 
 # template for ooxmlexport tests (there are several so that they can be run in parallel)

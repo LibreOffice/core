@@ -584,12 +584,16 @@ void ScFiltersTest::testTdf129789()
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, rStyleItemH2.GetValue());
         const XFillGradientItem& rGradientItem = pCaptionH2->GetMergedItem(XATTR_FILLGRADIENT);
+        const basegfx::ColorStops& rColorStops(rGradientItem.GetGradientValue().GetColorStops());
+
+        CPPUNIT_ASSERT_EQUAL(size_t(2), rColorStops.size());
+        CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops[0].getStopOffset(), 0.0));
         CPPUNIT_ASSERT_EQUAL(
-            Color(0xdde8cb),
-            Color(rGradientItem.GetGradientValue().GetColorStops().front().getStopColor()));
-        CPPUNIT_ASSERT_EQUAL(
-            Color(0xffd7d7),
-            Color(rGradientItem.GetGradientValue().GetColorStops().back().getStopColor()));
+            rColorStops[0].getStopColor(),
+            basegfx::BColor(0.8666666666666667, 0.90980392156862744, 0.79607843137254897));
+        CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops[1].getStopOffset(), 1.0));
+        CPPUNIT_ASSERT_EQUAL(rColorStops[1].getStopColor(),
+                             basegfx::BColor(1.0, 0.84313725490196079, 0.84313725490196079));
 
         SdrCaptionObj* const pCaptionH9 = checkCaption(*pDoc, ScAddress(7, 8, 0), false);
 
@@ -597,12 +601,16 @@ void ScFiltersTest::testTdf129789()
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, rStyleItemH9.GetValue());
         const XFillGradientItem& rGradientItem2 = pCaptionH2->GetMergedItem(XATTR_FILLGRADIENT);
+        const basegfx::ColorStops& rColorStops2(rGradientItem2.GetGradientValue().GetColorStops());
+
+        CPPUNIT_ASSERT_EQUAL(size_t(2), rColorStops2.size());
+        CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops2[0].getStopOffset(), 0.0));
         CPPUNIT_ASSERT_EQUAL(
-            Color(0xdde8cb),
-            Color(rGradientItem2.GetGradientValue().GetColorStops().front().getStopColor()));
-        CPPUNIT_ASSERT_EQUAL(
-            Color(0xffd7d7),
-            Color(rGradientItem2.GetGradientValue().GetColorStops().back().getStopColor()));
+            rColorStops2[0].getStopColor(),
+            basegfx::BColor(0.8666666666666667, 0.90980392156862744, 0.79607843137254897));
+        CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops2[1].getStopOffset(), 1.0));
+        CPPUNIT_ASSERT_EQUAL(rColorStops2[1].getStopColor(),
+                             basegfx::BColor(1.0, 0.84313725490196079, 0.84313725490196079));
     }
 
     {

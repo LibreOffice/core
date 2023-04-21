@@ -151,28 +151,6 @@ using ::sax_fastparser::FastSerializerHelper;
 
 namespace
 {
-/// Extracts start or end alpha information from a transparency gradient.
-sal_Int32 GetAlphaFromTransparenceGradient(const awt::Gradient2& rGradient, bool bStart)
-{
-    // Our alpha is a gray color value.
-    sal_uInt8 nRed(0);
-
-    if (rGradient.ColorStops.getLength() > 0)
-    {
-        if (bStart)
-            nRed = static_cast<sal_uInt8>(rGradient.ColorStops[0].StopColor.Red * 255.0);
-        else
-            nRed = static_cast<sal_uInt8>(rGradient.ColorStops[rGradient.ColorStops.getLength() - 1].StopColor.Red * 255.0);
-    }
-    else
-    {
-        nRed = ::Color(ColorTransparency, bStart ? rGradient.StartColor : rGradient.EndColor).GetRed();
-    }
-
-    // drawingML alpha is a percentage on a 0..100000 scale.
-    return (255 - nRed) * oox::drawingml::MAX_PERCENT / 255;
-}
-
 const char* g_aPredefinedClrNames[] = {
     "dk1",
     "lt1",
@@ -506,7 +484,20 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
 
         if (!bNeedGradientFill && 0 != aTransparenceGradient.StartColor)
         {
-            nAlpha = GetAlphaFromTransparenceGradient(aTransparenceGradient, true);
+            // Our alpha is a gray color value.
+            sal_uInt8 nRed(0);
+
+            if (aTransparenceGradient.ColorStops.getLength() > 0)
+            {
+                nRed = static_cast<sal_uInt8>(aTransparenceGradient.ColorStops[0].StopColor.Red * 255.0);
+            }
+            else
+            {
+                nRed = ::Color(ColorTransparency, aTransparenceGradient.StartColor).GetRed();
+            }
+
+            // drawingML alpha is a percentage on a 0..100000 scale.
+            nAlpha = (255 - nRed) * oox::drawingml::MAX_PERCENT / 255;
         }
     }
 
@@ -516,7 +507,7 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
         // no longer create copy/PseudoColorGradient, use new API of
         // WriteGradientFill to express fix fill color
         mpFS->startElementNS(XML_a, XML_gradFill, XML_rotWithShape, "0");
-        WriteGradientFill(nullptr, nFillColor, &aTransparenceGradient, 0);
+        WriteGradientFill(nullptr, nFillColor, &aTransparenceGradient);
         mpFS->endElementNS( XML_a, XML_gradFill );
     }
     else if ( nFillColor != nOriginalColor )
@@ -585,19 +576,12 @@ bool DrawingML::WriteSchemeColor(OUString const& rPropertyName, const uno::Refer
     return true;
 }
 
-void DrawingML::WriteGradientStop2(double fOffset, const basegfx::BColor& rColor, const basegfx::BColor& rAlpha)
+void DrawingML::WriteGradientStop(double fOffset, const basegfx::BColor& rColor, const basegfx::BColor& rAlpha)
 {
-    mpFS->startElementNS(XML_a, XML_gs, XML_pos, OString::number(static_cast<sal_uInt32>(fOffset * 100000)));
+    mpFS->startElementNS(XML_a, XML_gs, XML_pos, OString::number(basegfx::fround(fOffset * 100000)));
     WriteColor(
         ::Color(rColor),
-        static_cast<sal_Int32>((1.0 - rAlpha.luminance()) * oox::drawingml::MAX_PERCENT));
-    mpFS->endElementNS( XML_a, XML_gs );
-}
-
-void DrawingML::WriteGradientStop(sal_uInt16 nStop, ::Color nColor, sal_Int32 nAlpha)
-{
-    mpFS->startElementNS(XML_a, XML_gs, XML_pos, OString::number(nStop * 1000));
-    WriteColor(nColor, nAlpha);
+        basegfx::fround((1.0 - rAlpha.luminance()) * oox::drawingml::MAX_PERCENT));
     mpFS->endElementNS( XML_a, XML_gs );
 }
 
@@ -691,7 +675,7 @@ void DrawingML::WriteGradientFill( const Reference< XPropertySet >& rXPropSet )
 
         awt::Gradient2 aTransparenceGradient;
         awt::Gradient2* pTransparenceGradient(nullptr);
-        sal_Int32 nTransparency(0);
+        double fTransparency(0.0);
         OUString sFillTransparenceGradientName;
 
         if (GetProperty(rXPropSet, "FillTransparenceGradientName")
@@ -707,10 +691,13 @@ void DrawingML::WriteGradientFill( const Reference< XPropertySet >& rXPropSet )
         {
             // no longer create PseudoTransparencyGradient, use new API of
             // WriteGradientFill to express fix transparency
+            sal_Int32 nTransparency(0);
             mAny >>= nTransparency;
+            // nTransparency is [0..100]%
+            fTransparency = nTransparency * 0.01;
         }
 
-        WriteGradientFill(&aGradient, 0, pTransparenceGradient, nTransparency);
+        WriteGradientFill(&aGradient, 0, pTransparenceGradient, fTransparency);
 
         mpFS->endElementNS(XML_a, XML_gradFill);
     }
@@ -775,14 +762,14 @@ void DrawingML::WriteGrabBagGradientFill( const Sequence< PropertyValue >& aGrad
     }
 }
 
-void DrawingML::WriteGradientFill2(
+void DrawingML::WriteGradientFill(
     const awt::Gradient2* pColorGradient, sal_Int32 nFixColor,
-    const awt::Gradient2* pTransparenceGradient, sal_Int32 nFixTransparence)
+    const awt::Gradient2* pTransparenceGradient, double fFixTransparence)
 {
     basegfx::ColorStops aColorStops;
     basegfx::ColorStops aAlphaStops;
     basegfx::BColor aSingleColor(::Color(ColorTransparency, nFixColor).getBColor());
-    basegfx::BColor aSingleAlpha(::Color(ColorTransparency, nFixTransparence).getBColor().luminance());
+    basegfx::BColor aSingleAlpha(fFixTransparence);
     awt::Gradient2 aGradient;
 
     if (nullptr != pColorGradient)
@@ -850,10 +837,21 @@ void DrawingML::WriteGradientFill2(
                 aRevCurrAlpha++;
             }
 
-            // add non-mirrored gradients, translated and scaled to [0.5 .. 1.0]
             basegfx::ColorStops::const_iterator aCurrColor(aColorStops.begin());
             basegfx::ColorStops::const_iterator aCurrAlpha(aAlphaStops.begin());
 
+            if (basegfx::fTools::equalZero(aCurrColor->getStopOffset()))
+            {
+                // Caution: do not add 1st entry again, that would be double since it was
+                // already added as last element of the inverse run above. But only if
+                // the gradient has a start entry for 0.0 aka StartColor, else it is correct.
+                // Since aColorStops and aAlphaStops are already syched (see
+                // synchronizeColorStops above), testing one of them is sufficient here.
+                aCurrColor++;
+                aCurrAlpha++;
+            }
+
+            // add non-mirrored gradients, translated and scaled to [0.5 .. 1.0]
             while (aCurrColor != aColorStops.end() && aCurrAlpha != aAlphaStops.end())
             {
                 aNewColorStops.emplace_back((aCurrColor->getStopOffset() * 0.5) + 0.5, aCurrColor->getStopColor());
@@ -892,7 +890,7 @@ void DrawingML::WriteGradientFill2(
 
     while (aCurrColor != aColorStops.end() && aCurrAlpha != aAlphaStops.end())
     {
-        WriteGradientStop2(
+        WriteGradientStop(
             aCurrColor->getStopOffset(),
             aCurrColor->getStopColor(),
             aCurrAlpha->getStopColor());
@@ -917,131 +915,6 @@ void DrawingML::WriteGradientFill2(
             aGradient.Style == awt::GradientStyle_ELLIPTICAL);
 
         WriteGradientPath(aGradient, mpFS, bCircle);
-    }
-}
-
-void DrawingML::WriteGradientFill(
-    const awt::Gradient2* pColorGradient, sal_Int32 nFixColor,
-    const awt::Gradient2* pTransparenceGradient, sal_Int32 nFixTransparence)
-{
-    static bool bMCGR(nullptr != std::getenv("MCGR_TEST"));
-
-    if (bMCGR)
-    {
-        WriteGradientFill2(pColorGradient, nFixColor, pTransparenceGradient, nFixTransparence);
-        return;
-    }
-
-    // evtl need a temporary pseudo-color gradient
-    awt::Gradient2 aColorGradient;
-
-    if (nullptr == pColorGradient && nullptr == pTransparenceGradient)
-    {
-        // this is an error: *one* gradient has to be given
-        return;
-    }
-
-    if (nullptr == pColorGradient)
-    {
-        // create complete tempoay copy to keep orig export working
-        aColorGradient = *pTransparenceGradient;
-
-        // change parameters specific for PseudoColorGradient
-        aColorGradient.StartIntensity = 100;
-        aColorGradient.EndIntensity = 100;
-        aColorGradient.StartColor = nFixColor;
-        aColorGradient.EndColor = nFixColor;
-
-        basegfx::utils::fillColorStopSequenceFromColorStops(
-            aColorGradient.ColorStops,
-            basegfx::ColorStops {
-                basegfx::ColorStop(0.0, ::Color(ColorTransparency, nFixColor).getBColor()) });
-
-        pColorGradient = &aColorGradient;
-    }
-
-    sal_Int32 nStartAlpha(MAX_PERCENT);
-    sal_Int32 nEndAlpha(MAX_PERCENT);
-
-    if (nullptr == pTransparenceGradient)
-    {
-        nStartAlpha = nEndAlpha = (MAX_PERCENT - (PER_PERCENT * nFixTransparence));
-    }
-    else
-    {
-        nStartAlpha = GetAlphaFromTransparenceGradient(*pTransparenceGradient, true);
-        nEndAlpha = GetAlphaFromTransparenceGradient(*pTransparenceGradient, false);
-    }
-
-    switch( pColorGradient->Style )
-    {
-        default:
-        case awt::GradientStyle_LINEAR:
-        {
-            mpFS->startElementNS(XML_a, XML_gsLst);
-            WriteGradientStop(pColorGradient->Border, ColorWithIntensity(pColorGradient->StartColor, pColorGradient->StartIntensity),
-                              nStartAlpha);
-            WriteGradientStop(100, ColorWithIntensity(pColorGradient->EndColor, pColorGradient->EndIntensity),
-                              nEndAlpha);
-            mpFS->endElementNS( XML_a, XML_gsLst );
-            mpFS->singleElementNS(
-                XML_a, XML_lin, XML_ang,
-                OString::number(((3600 - pColorGradient->Angle + 900) * 6000) % 21600000));
-            break;
-        }
-
-        case awt::GradientStyle_AXIAL:
-        {
-            mpFS->startElementNS(XML_a, XML_gsLst);
-            WriteGradientStop(0, ColorWithIntensity(pColorGradient->EndColor, pColorGradient->EndIntensity),
-                              nEndAlpha);
-            if (pColorGradient->Border > 0 && pColorGradient->Border < 100)
-            {
-                WriteGradientStop(pColorGradient->Border/2,
-                                  ColorWithIntensity(pColorGradient->EndColor, pColorGradient->EndIntensity),
-                                  nEndAlpha);
-            }
-            WriteGradientStop(50, ColorWithIntensity(pColorGradient->StartColor, pColorGradient->StartIntensity),
-                              nStartAlpha);
-            if (pColorGradient->Border > 0 && pColorGradient->Border < 100)
-            {
-                WriteGradientStop(100 - pColorGradient->Border/2,
-                                  ColorWithIntensity(pColorGradient->EndColor, pColorGradient->EndIntensity),
-                                  nEndAlpha);
-            }
-            WriteGradientStop(100, ColorWithIntensity(pColorGradient->EndColor, pColorGradient->EndIntensity),
-                              nEndAlpha);
-            mpFS->endElementNS(XML_a, XML_gsLst);
-            mpFS->singleElementNS(
-                XML_a, XML_lin, XML_ang,
-                OString::number(((3600 - pColorGradient->Angle + 900) * 6000) % 21600000));
-            break;
-        }
-
-        case awt::GradientStyle_RADIAL:
-        case awt::GradientStyle_ELLIPTICAL:
-        case awt::GradientStyle_RECT:
-        case awt::GradientStyle_SQUARE:
-        {
-            mpFS->startElementNS(XML_a, XML_gsLst);
-            WriteGradientStop(0, ColorWithIntensity(pColorGradient->EndColor, pColorGradient->EndIntensity),
-                              nEndAlpha);
-            if (pColorGradient->Border > 0 && pColorGradient->Border < 100)
-            {
-                // Map border to an additional gradient stop, which has the
-                // same color as the final stop.
-                WriteGradientStop(100 - pColorGradient->Border,
-                                  ColorWithIntensity(pColorGradient->StartColor, pColorGradient->StartIntensity),
-                                  nStartAlpha);
-            }
-            WriteGradientStop(100,
-                              ColorWithIntensity(pColorGradient->StartColor, pColorGradient->StartIntensity),
-                              nStartAlpha);
-            mpFS->endElementNS(XML_a, XML_gsLst);
-
-            WriteGradientPath(*pColorGradient, mpFS, pColorGradient->Style == awt::GradientStyle_RADIAL || pColorGradient->Style == awt::GradientStyle_ELLIPTICAL);
-            break;
-        }
     }
 }
 

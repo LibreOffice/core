@@ -481,27 +481,6 @@ static sal_Int32 lcl_generateRandomValue()
     return comphelper::rng::uniform_int_distribution(0, 100000000-1);
 }
 
-static sal_Int32 lcl_getAlphaFromTransparenceGradient(const awt::Gradient2& rGradient, bool bStart)
-{
-    // Our alpha is a gray color value.
-    sal_uInt8 nRed(0);
-
-    if (rGradient.ColorStops.getLength() > 0)
-    {
-        if (bStart)
-            nRed = static_cast<sal_uInt8>(rGradient.ColorStops[0].StopColor.Red * 255.0);
-        else
-            nRed = static_cast<sal_uInt8>(rGradient.ColorStops[rGradient.ColorStops.getLength() - 1].StopColor.Red * 255.0);
-    }
-    else
-    {
-        nRed = ::Color(ColorTransparency, bStart ? rGradient.StartColor : rGradient.EndColor).GetRed();
-    }
-
-    // drawingML alpha is a percentage on a 0..100000 scale.
-    return (255 - nRed) * oox::drawingml::MAX_PERCENT / 255;
-}
-
 bool DataLabelsRange::empty() const
 {
     return maLabels.empty();
@@ -1945,7 +1924,20 @@ void ChartExport::exportSolidFill(const Reference< XPropertySet >& xPropSet)
 
         if (!bNeedGradientFill && 0 != aTransparenceGradient.StartColor)
         {
-            nAlpha = lcl_getAlphaFromTransparenceGradient(aTransparenceGradient, true);
+            // Our alpha is a gray color value.
+            sal_uInt8 nRed(0);
+
+            if (aTransparenceGradient.ColorStops.getLength() > 0)
+            {
+                nRed = static_cast<sal_uInt8>(aTransparenceGradient.ColorStops[0].StopColor.Red * 255.0);
+            }
+            else
+            {
+                nRed = ::Color(ColorTransparency, aTransparenceGradient.StartColor).GetRed();
+            }
+
+            // drawingML alpha is a percentage on a 0..100000 scale.
+            nAlpha = (255 - nRed) * oox::drawingml::MAX_PERCENT / 255;
         }
     }
     // write XML
@@ -1954,7 +1946,7 @@ void ChartExport::exportSolidFill(const Reference< XPropertySet >& xPropSet)
         // no longer create copy/PseudoColorGradient, use new API of
         // WriteGradientFill to express fix fill color
         mpFS->startElementNS(XML_a, XML_gradFill, XML_rotWithShape, "0");
-        WriteGradientFill(nullptr, nFillColor, &aTransparenceGradient, 0);
+        WriteGradientFill(nullptr, nFillColor, &aTransparenceGradient);
         mpFS->endElementNS(XML_a, XML_gradFill);
     }
     else
@@ -2034,7 +2026,7 @@ void ChartExport::exportGradientFill( const Reference< XPropertySet >& xPropSet 
                 uno::Reference< container::XNameAccess > xTransparenceGradient(xFact->createInstance("com.sun.star.drawing.TransparencyGradientTable"), uno::UNO_QUERY);
                 uno::Any rTransparenceValue = xTransparenceGradient->getByName(sFillTransparenceGradientName);
                 basegfx::utils::fillGradient2FromAny(aTransparenceGradient, rTransparenceValue);
-                WriteGradientFill(&aGradient, 0, &aTransparenceGradient, 0);
+                WriteGradientFill(&aGradient, 0, &aTransparenceGradient);
             }
             else if (GetProperty(xPropSet, "FillTransparence") )
             {
@@ -2042,11 +2034,12 @@ void ChartExport::exportGradientFill( const Reference< XPropertySet >& xPropSet 
                 // WriteGradientFill to express fix transparency
                 sal_Int32 nTransparency = 0;
                 mAny >>= nTransparency;
-                WriteGradientFill(&aGradient, 0, nullptr, nTransparency);
+                // nTransparency is [0..100]%
+                WriteGradientFill(&aGradient, 0, nullptr, nTransparency * 0.01);
             }
             else
             {
-                WriteGradientFill(&aGradient, 0, &aTransparenceGradient, 0);
+                WriteGradientFill(&aGradient, 0, &aTransparenceGradient);
             }
 
             mpFS->endElementNS(XML_a, XML_gradFill);
