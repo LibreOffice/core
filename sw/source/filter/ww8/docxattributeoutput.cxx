@@ -933,23 +933,30 @@ void DocxAttributeOutput::PopulateFrameProperties(const SwFrameFormat* pFrameFor
     attrList->add( FSNS( XML_w, XML_x), OString::number(aPos.X));
     attrList->add( FSNS( XML_w, XML_y), OString::number(aPos.Y));
 
-    sal_Int16 nLeft = pFrameFormat->GetLRSpace().GetLeft();
-    sal_Int16 nRight = pFrameFormat->GetLRSpace().GetRight();
-    sal_Int16 nUpper = pFrameFormat->GetULSpace().GetUpper();
-    sal_Int16 nLower = pFrameFormat->GetULSpace().GetLower();
-
-    attrList->add(FSNS(XML_w, XML_hSpace), OString::number((nLeft + nRight) / 2));
-    attrList->add(FSNS(XML_w, XML_vSpace), OString::number((nUpper + nLower) / 2));
-
-    OString relativeFromH = convertToOOXMLHoriOrientRel(rHoriOrient.GetRelationOrient());
-    OString relativeFromV = convertToOOXMLVertOrientRel(rVertOrient.GetRelationOrient());
-
     OString aXAlign = convertToOOXMLHoriOrient(rHoriOrient.GetHoriOrient(), /*bIsPosToggle=*/false);
     OString aYAlign = convertToOOXMLVertOrient(rVertOrient.GetVertOrient());
     if (!aXAlign.isEmpty())
         attrList->add(FSNS(XML_w, XML_xAlign), aXAlign);
     if (!aYAlign.isEmpty())
         attrList->add(FSNS(XML_w, XML_yAlign), aYAlign);
+
+    sal_Int16 nLeft = pFrameFormat->GetLRSpace().GetLeft();
+    sal_Int16 nRight = pFrameFormat->GetLRSpace().GetRight();
+    sal_Int16 nUpper = pFrameFormat->GetULSpace().GetUpper();
+    sal_Int16 nLower = pFrameFormat->GetULSpace().GetLower();
+
+    // To emulate, on import left was ignored (set to zero) if aligned to left,
+    // so just double up the right spacing in order to prevent cutting in half each round-trip.
+    if (rHoriOrient.GetHoriOrient() == text::HoriOrientation::LEFT)
+        nLeft = nRight;
+    else if (rHoriOrient.GetHoriOrient() == text::HoriOrientation::RIGHT)
+        nRight = nLeft;
+
+    attrList->add(FSNS(XML_w, XML_hSpace), OString::number((nLeft + nRight) / 2));
+    attrList->add(FSNS(XML_w, XML_vSpace), OString::number((nUpper + nLower) / 2));
+
+    OString relativeFromH = convertToOOXMLHoriOrientRel(rHoriOrient.GetRelationOrient());
+    OString relativeFromV = convertToOOXMLVertOrientRel(rVertOrient.GetRelationOrient());
 
     switch (pFrameFormat->GetSurround().GetValue())
     {

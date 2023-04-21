@@ -233,6 +233,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf154703_framePr2, "tdf154703_framePr2.rtf")
     assertXPath(pXmlDoc, "//w:body/w:p[3]/w:pPr/w:shd", "fill", "800000");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf154703_framePrWrapSpacing, "tdf154703_framePrWrapSpacing.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+    if (!isExported())
+        return;
+
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // before the fix, this was half of the correct value.
+    assertXPath(pXmlDoc, "//w:body/w:p/w:pPr/w:framePr", "hSpace", "2552");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf153613_anchoredAfterPgBreak, "tdf153613_anchoredAfterPgBreak.docx")
 {
     const auto& pLayout = parseLayoutDump();
