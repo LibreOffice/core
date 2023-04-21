@@ -2024,19 +2024,19 @@ Const cstSubArgs = &quot;&quot;
 				_PropertyGet = SF_DialogUtils._ConvertToAppFont(_ControlView, False).Width
 			Else
 				If oSession.HasUNOProperty(_ControlModel, &quot;Width&quot;) Then _PropertyGet = _ControlModel.Width
-			End If			
+			End If
 		Case UCase(&quot;X&quot;)
 			If [_parent]._Displayed Then	&apos;	Convert PosSize view property from pixels to APPFONT units
 				_PropertyGet = SF_DialogUtils._ConvertToAppFont(_ControlView, True).X
 			Else
-				If oSession.HasUNOProperty(_ControlModel, &quot;PoistionX&quot;) Then _PropertyGet = _ControlModel.PositionX
-			End If			
+				If oSession.HasUNOProperty(_ControlModel, &quot;PositionX&quot;) Then _PropertyGet = _ControlModel.PositionX
+			End If
 		Case UCase(&quot;Y&quot;)
 			If [_parent]._Displayed Then	&apos;	Convert PosSize view property from piYels to APPFONT units
 				_PropertyGet = SF_DialogUtils._ConvertToAppFont(_ControlView, True).Y
 			Else
-				If oSession.HasUNOProperty(_ControlModel, &quot;PoistionY&quot;) Then _PropertyGet = _ControlModel.PositionY
-			End If			
+				If oSession.HasUNOProperty(_ControlModel, &quot;PositionY&quot;) Then _PropertyGet = _ControlModel.PositionY
+			End If
 		Case UCase(&quot;XControlModel&quot;)
 			Set _PropertyGet = _ControlModel
 		Case UCase(&quot;XControlView&quot;)
