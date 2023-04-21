@@ -91,6 +91,7 @@
 #include <svl/grabbagitem.hxx>
 #include <frmatr.hxx>
 #include <swtable.hxx>
+#include <formatflysplit.hxx>
 #include "rtfexport.hxx"
 
 using namespace ::com::sun::star;
@@ -676,6 +677,108 @@ void RtfAttributeOutput::TableInfoRow(ww8::WW8TableNodeInfoInner::Pointer_t /*pT
     /* noop */
 }
 
+void RtfAttributeOutput::TablePositioning(SwFrameFormat* pFlyFormat)
+{
+    if (!pFlyFormat || !pFlyFormat->GetFlySplit().GetValue())
+    {
+        return;
+    }
+
+    switch (pFlyFormat->GetVertOrient().GetRelationOrient())
+    {
+        case text::RelOrientation::PAGE_PRINT_AREA:
+            // relative to margin
+            m_aRowDefs.append(LO_STRING_SVTOOLS_RTF_TPVMRG);
+            break;
+        case text::RelOrientation::PAGE_FRAME:
+            // relative to page
+            m_aRowDefs.append(LO_STRING_SVTOOLS_RTF_TPVPG);
+            break;
+        default:
+            // text::RelOrientation::FRAME
+            // relative to text
+            m_aRowDefs.append(LO_STRING_SVTOOLS_RTF_TPVPARA);
+            break;
+    }
+
+    switch (pFlyFormat->GetHoriOrient().GetRelationOrient())
+    {
+        case text::RelOrientation::FRAME:
+            // relative to column
+            m_aRowDefs.append(LO_STRING_SVTOOLS_RTF_TPHCOL);
+            break;
+        case text::RelOrientation::PAGE_PRINT_AREA:
+            // relative to margin
+            m_aRowDefs.append(LO_STRING_SVTOOLS_RTF_TPHMRG);
+            break;
+        default:
+            // text::RelOrientation::PAGE_FRAME
+            // relative to page
+            m_aRowDefs.append(LO_STRING_SVTOOLS_RTF_TPHPG);
+            break;
+    }
+
+    // Similar to RtfAttributeOutput::FormatHorizOrientation(), but for tables.
+    switch (pFlyFormat->GetHoriOrient().GetHoriOrient())
+    {
+        case text::HoriOrientation::LEFT:
+            // left
+            m_aRowDefs.append(LO_STRING_SVTOOLS_RTF_TPOSXL);
+            break;
+        case text::HoriOrientation::CENTER:
+            // centered
+            m_aRowDefs.append(LO_STRING_SVTOOLS_RTF_TPOSXC);
+            break;
+        case text::HoriOrientation::RIGHT:
+            // right
+            m_aRowDefs.append(LO_STRING_SVTOOLS_RTF_TPOSXR);
+            break;
+        default:
+            SwTwips nTPosX = pFlyFormat->GetHoriOrient().GetPos();
+            m_aRowDefs.append(LO_STRING_SVTOOLS_RTF_TPOSX);
+            m_aRowDefs.append(static_cast<sal_Int32>(nTPosX));
+            break;
+    }
+
+    // Similar to RtfAttributeOutput::FormatVertOrientation(), but for tables.
+    switch (pFlyFormat->GetVertOrient().GetVertOrient())
+    {
+        case text::VertOrientation::TOP:
+            // up
+            m_aRowDefs.append(LO_STRING_SVTOOLS_RTF_TPOSYT);
+            break;
+        case text::VertOrientation::CENTER:
+            // centered
+            m_aRowDefs.append(LO_STRING_SVTOOLS_RTF_TPOSYC);
+            break;
+        case text::VertOrientation::BOTTOM:
+            // down
+            m_aRowDefs.append(LO_STRING_SVTOOLS_RTF_TPOSYB);
+            break;
+        default:
+            SwTwips nTPosY = pFlyFormat->GetVertOrient().GetPos();
+            m_aRowDefs.append(LO_STRING_SVTOOLS_RTF_TPOSY);
+            m_aRowDefs.append(static_cast<sal_Int32>(nTPosY));
+            break;
+    }
+
+    // Similar to RtfAttributeOutput::FormatULSpace(), but for tables.
+    sal_uInt16 nTdfrmtxtTop = pFlyFormat->GetULSpace().GetUpper();
+    m_aRowDefs.append(LO_STRING_SVTOOLS_RTF_TDFRMTXTTOP);
+    m_aRowDefs.append(static_cast<sal_Int32>(nTdfrmtxtTop));
+    sal_uInt16 nTdfrmtxtBottom = pFlyFormat->GetULSpace().GetLower();
+    m_aRowDefs.append(LO_STRING_SVTOOLS_RTF_TDFRMTXTBOTTOM);
+    m_aRowDefs.append(static_cast<sal_Int32>(nTdfrmtxtBottom));
+
+    // Similar to RtfAttributeOutput::FormatLRSpace(), but for tables.
+    sal_uInt16 nTdfrmtxtLeft = pFlyFormat->GetLRSpace().GetLeft();
+    m_aRowDefs.append(LO_STRING_SVTOOLS_RTF_TDFRMTXTLEFT);
+    m_aRowDefs.append(static_cast<sal_Int32>(nTdfrmtxtLeft));
+    sal_uInt16 nTdfrmtxtRight = pFlyFormat->GetLRSpace().GetRight();
+    m_aRowDefs.append(LO_STRING_SVTOOLS_RTF_TDFRMTXTRIGHT);
+    m_aRowDefs.append(static_cast<sal_Int32>(nTdfrmtxtRight));
+}
+
 void RtfAttributeOutput::TableDefinition(
     ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
 {
@@ -689,6 +792,9 @@ void RtfAttributeOutput::TableDefinition(
     TableBidi(pTableTextNodeInfoInner);
     TableHeight(pTableTextNodeInfoInner);
     TableCanSplit(pTableTextNodeInfoInner);
+
+    // Write table positioning properties in case this is a floating table.
+    TablePositioning(pTable->GetTableNode()->GetFlyFormat());
 
     // Cell margins
     const SvxBoxItem& rBox = pFormat->GetBox();
@@ -1095,7 +1201,9 @@ void RtfAttributeOutput::EndTableRow()
             m_aAfterRuns.append(m_aTables.back());
             m_aTables.pop_back();
         }
-        m_aAfterRuns.append(OOO_STRING_SVTOOLS_RTF_ROW OOO_STRING_SVTOOLS_RTF_PARD);
+        // Make sure that the first word of the next paragraph is not merged with the last control
+        // word of this table row, happens with floating tables.
+        m_aAfterRuns.append(OOO_STRING_SVTOOLS_RTF_ROW OOO_STRING_SVTOOLS_RTF_PARD " ");
     }
     m_bTableRowEnded = true;
 }
@@ -2037,6 +2145,22 @@ public:
 
 void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Point& /*rNdTopLeft*/)
 {
+    const SwFrameFormat& rFrameFormat = rFrame.GetFrameFormat();
+    if (rFrameFormat.GetFlySplit().GetValue())
+    {
+        // The frame can split: this was originally from a floating table, write it back as
+        // such.
+        SaveRunState aState(*this);
+        const SwNodeIndex* pNodeIndex = rFrameFormat.GetContent().GetContentIdx();
+        SwNodeOffset nStt = pNodeIndex ? pNodeIndex->GetIndex() + 1 : SwNodeOffset(0);
+        SwNodeOffset nEnd
+            = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : SwNodeOffset(0);
+        m_rExport.SaveData(nStt, nEnd);
+        GetExport().WriteText();
+        m_rExport.RestoreData();
+        return;
+    }
+
     const SwNode* pNode = rFrame.GetContent();
     const SwGrfNode* pGrfNode = pNode ? pNode->GetGrfNode() : nullptr;
 
@@ -2083,7 +2207,6 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
             m_rExport.SetRTFFlySyntax(false);
             m_pFlyFrameSize = nullptr;
 
-            const SwFrameFormat& rFrameFormat = rFrame.GetFrameFormat();
             lcl_TextFrameShadow(m_aFlyProperties, rFrameFormat);
             lcl_TextFrameRelativeSize(m_aFlyProperties, rFrameFormat);
 
@@ -2145,7 +2268,6 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
         break;
         case ww8::Frame::eFormControl:
         {
-            const SwFrameFormat& rFrameFormat = rFrame.GetFrameFormat();
             const SdrObject* pObject = rFrameFormat.FindRealSdrObject();
 
             m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_FIELD);
@@ -2377,7 +2499,6 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
         break;
         case ww8::Frame::eOle:
         {
-            const SwFrameFormat& rFrameFormat = rFrame.GetFrameFormat();
             const SdrObject* pSdrObj = rFrameFormat.FindRealSdrObject();
             if (pSdrObj)
             {

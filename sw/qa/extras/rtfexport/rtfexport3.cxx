@@ -21,6 +21,7 @@
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <tools/UnitConversion.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
@@ -557,6 +558,65 @@ DECLARE_RTFEXPORT_TEST(testTdf152784_1, "tdf152784_1.rtf")
     uno::Reference<beans::XPropertySet> xPara(getParagraph(1, "Here should be no numbering!"),
                                               uno::UNO_QUERY);
     CPPUNIT_ASSERT(getProperty<OUString>(xPara, "NumberingStyleName").isEmpty());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFloatingTableExport)
+{
+    // Given a document with a floating table:
+    mxComponent = loadFromDesktop("private:factory/swriter");
+    // Insert a table:
+    uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("Rows", static_cast<sal_Int32>(1)),
+        comphelper::makePropertyValue("Columns", static_cast<sal_Int32>(1)),
+    };
+    dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
+    // Select it:
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    // Wrap in a fly:
+    aArgs = {
+        comphelper::makePropertyValue("AnchorType", static_cast<sal_uInt16>(0)),
+    };
+    dispatchCommand(mxComponent, ".uno:InsertFrame", aArgs);
+    // Mark it as a floating table:
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(
+        xTextFramesSupplier->getTextFrames()->getByName("Frame1"), uno::UNO_QUERY);
+    xFrame->setPropertyValue("IsSplitAllowed", uno::Any(true));
+    // Originally 10, 30 & 40 twips.
+    xFrame->setPropertyValue("VertOrientPosition", uno::Any(static_cast<sal_Int32>(18)));
+    xFrame->setPropertyValue("LeftMargin", uno::Any(static_cast<sal_Int32>(53)));
+    xFrame->setPropertyValue("RightMargin", uno::Any(static_cast<sal_Int32>(71)));
+
+    // When saving to RTF:
+    reload(mpFilter, "floating-table.rtf");
+
+    // Then make sure the floating table is there & has the expected properties:
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    xFrame.set(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    bool bIsSplitAllowed{};
+    xFrame->getPropertyValue("IsSplitAllowed") >>= bIsSplitAllowed;
+    // Without the accompanying fix in place, this test would have failed, the table was not
+    // multi-page.
+    CPPUNIT_ASSERT(bIsSplitAllowed);
+    sal_Int16 nVertOrientRelation{};
+    xFrame->getPropertyValue("VertOrientRelation") >>= nVertOrientRelation;
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, nVertOrientRelation);
+    sal_Int16 nHoriOrientRelation{};
+    xFrame->getPropertyValue("HoriOrientRelation") >>= nHoriOrientRelation;
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, nHoriOrientRelation);
+    sal_Int32 nVertOrientPosition{};
+    xFrame->getPropertyValue("VertOrientPosition") >>= nVertOrientPosition;
+    sal_Int32 nExpected = 18;
+    CPPUNIT_ASSERT_EQUAL(nExpected, nVertOrientPosition);
+    sal_Int32 nLeftMargin{};
+    xFrame->getPropertyValue("LeftMargin") >>= nLeftMargin;
+    nExpected = 53;
+    CPPUNIT_ASSERT_EQUAL(nExpected, nLeftMargin);
+    sal_Int32 nRightMargin{};
+    xFrame->getPropertyValue("RightMargin") >>= nRightMargin;
+    nExpected = 71;
+    CPPUNIT_ASSERT_EQUAL(nExpected, nRightMargin);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
