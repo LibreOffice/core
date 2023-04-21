@@ -675,6 +675,12 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFly2ndRowSelect)
     // i.e. a follow fly was possible to select (instead of its master)
     CPPUNIT_ASSERT_EQUAL(pPage2Fly->GetPrecede()->GetFrameId(), pSelected->GetFrameId());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyInSection)
+{
+    // This crashed, the layout assumed that the floating table is directly under the body frame.
+    createSwDoc("floattable-in-section.docx");
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

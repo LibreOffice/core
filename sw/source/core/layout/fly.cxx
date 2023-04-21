@@ -87,24 +87,24 @@ SwTwips GetFlyAnchorBottom(SwFlyFrame* pFly, const SwFrame& rAnchor)
 {
     SwRectFnSet aRectFnSet(pFly);
 
+    const SwPageFrame* pPage = rAnchor.FindPageFrame();
+    if (!pPage)
+    {
+        return 0;
+    }
+
+    const SwFrame* pBody = pPage->FindBodyCont();
+    if (!pBody)
+    {
+        return 0;
+    }
+
     const IDocumentSettingAccess& rIDSA = pFly->GetFrameFormat().getIDocumentSettingAccess();
     bool bLegacy = rIDSA.get(DocumentSettingId::TAB_OVER_MARGIN);
     if (bLegacy)
     {
         // Word <= 2010 style: the fly can overlap with the bottom margin / footer area in case the
         // fly height fits the body height and the fly bottom fits the page.
-        const SwPageFrame* pPage = rAnchor.FindPageFrame();
-        if (!pPage)
-        {
-            return 0;
-        }
-
-        const SwFrame* pBody = pPage->FindBodyCont();
-        if (!pBody)
-        {
-            return 0;
-        }
-
         // See if the fly height would fit at least the page height, ignoring the vertical offset.
         SwTwips nFlyHeight = aRectFnSet.GetHeight(pFly->getFrameArea());
         SwTwips nPageHeight = aRectFnSet.GetHeight(pPage->getFramePrintArea());
@@ -125,13 +125,7 @@ SwTwips GetFlyAnchorBottom(SwFlyFrame* pFly, const SwFrame& rAnchor)
     }
 
     // Word >= 2013 style: the fly has to stay inside the body frame.
-    const SwFrame* pAnchorUpper = rAnchor.GetUpper();
-    if (!pAnchorUpper)
-    {
-        return 0;
-    }
-
-    return aRectFnSet.GetPrtBottom(*pAnchorUpper);
+    return aRectFnSet.GetPrtBottom(*pBody);
 }
 }
 
