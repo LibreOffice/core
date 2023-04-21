@@ -197,10 +197,17 @@ namespace
 
     bool lcl_Lower( const SwPosition& rPos, const SwNode& rNdIdx, std::optional<sal_Int32> oContentIdx )
     {
-        return rPos.GetNode() < rNdIdx
-               || ( oContentIdx.has_value()
-                    && rPos.GetNode() == rNdIdx
-                    && rPos.GetContentIndex() < *oContentIdx );
+        if (rPos.GetNode() < rNdIdx)
+            return true;
+
+        if (rPos.GetNode() != rNdIdx || !oContentIdx)
+            return false;
+
+        if (rPos.GetContentIndex() < *oContentIdx)
+            return true;
+
+        // paragraph end selected?
+        return rNdIdx.IsTextNode() && *oContentIdx == rNdIdx.GetTextNode()->Len();
     }
 
     bool lcl_MarkOrderingByStart(const ::sw::mark::MarkBase *const pFirst,
