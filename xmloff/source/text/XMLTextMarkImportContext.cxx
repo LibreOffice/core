@@ -42,6 +42,7 @@
 #include <com/sun/star/rdf/XMetadatable.hpp>
 
 #include <com/sun/star/text/XFormField.hpp>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <RDFaImportHelper.hxx>
 
@@ -384,7 +385,7 @@ void XMLTextMarkImportContext::endFastElement(sal_Int32 nElement)
                     try {
                         xInsertionCursor->gotoRange(xStartRange, true);
                     } catch (uno::Exception&) {
-                        OSL_ENSURE(false,
+                        TOOLS_WARN_EXCEPTION("xmloff.text",
                             "cannot go to end position of bookmark");
                     }
 

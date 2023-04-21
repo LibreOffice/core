@@ -36,6 +36,7 @@
 
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <comphelper/diagnose_ex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <o3tl/safeint.hxx>
 #include <utility>
@@ -392,13 +393,13 @@ void Container::fire( const EventBroadcastHelper &helper )
         }
         catch ( css::uno::RuntimeException & )
         {
-            OSL_ENSURE( false, "exception caught" );
+            TOOLS_WARN_EXCEPTION( "connectivity.postgresql", "exception caught" );
             // loose coupling, a runtime exception shall not break anything
             // TODO: log away as warning !
         }
         catch( css::uno::Exception & )
         {
-            OSL_ENSURE( false, "exception from listener flying through" );
+            TOOLS_WARN_EXCEPTION( "connectivity.postgresql", "exception from listener flying through" );
             throw;
         }
     }

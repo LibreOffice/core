@@ -50,6 +50,7 @@
 #include <ucbhelper/content.hxx>
 
 #include <comphelper/bytereader.hxx>
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/hash.hxx>
 #include <comphelper/processfactory.hxx>
@@ -388,7 +389,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
         }
         catch ( uno::Exception& )
         {
-            OSL_ENSURE( false, "Can not create SHA256 digest!" );
+            TOOLS_WARN_EXCEPTION("comphelper", "Can not create SHA256 digest!" );
         }
 
         // MS_1252 encoding was used for SO60 document format password encoding,

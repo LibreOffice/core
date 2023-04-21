@@ -292,7 +292,7 @@ void UnoControlDialogModel::setFastPropertyValue_NoBroadcast( std::unique_lock<s
     }
     catch( const css::uno::Exception& )
     {
-        OSL_ENSURE( false, "UnoControlDialogModel::setFastPropertyValue_NoBroadcast: caught an exception while setting ImageURL properties!" );
+        TOOLS_WARN_EXCEPTION( "toolkit", "caught an exception while setting ImageURL properties" );
     }
 }
 

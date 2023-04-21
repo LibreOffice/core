@@ -16,6 +16,7 @@
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/sequence.hxx>
 #include <xmloff/odffields.hxx>
@@ -388,7 +389,8 @@ void SdtHelper::createDateContentControl()
     }
     catch (uno::Exception&)
     {
-        OSL_ENSURE(false, "Cannot get the right text range for date field");
+        TOOLS_WARN_EXCEPTION("writerfilter.dmapper",
+                             "Cannot get the right text range for date field");
         return;
     }
 

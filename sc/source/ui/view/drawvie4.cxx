@@ -50,6 +50,7 @@
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <comphelper/diagnose_ex.hxx>
 
 using namespace com::sun::star;
 
@@ -468,7 +469,7 @@ void ScDrawView::SetMarkedOriginalSize()
                         bDo = true;
                     } catch( embed::NoVisualAreaSizeException& )
                     {
-                        OSL_ENSURE( false, "Can't get the original size of the object!" );
+                        TOOLS_WARN_EXCEPTION("sc.ui", "Can't get the original size of the object!" );
                     }
                 }
             }

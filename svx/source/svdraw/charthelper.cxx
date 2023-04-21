@@ -91,7 +91,7 @@ drawinglayer::primitive2d::Primitive2DContainer ChartHelper::tryToGetChartConten
     }
     catch(uno::Exception&)
     {
-        OSL_ENSURE(false, "Unexpected exception!");
+        TOOLS_WARN_EXCEPTION("svx", "");
     }
 
     if(!aRetval.empty())

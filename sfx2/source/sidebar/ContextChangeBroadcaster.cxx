@@ -22,6 +22,7 @@
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <osl/diagnose.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/lokhelper.hxx>
@@ -116,7 +117,7 @@ OUString ContextChangeBroadcaster::GetModuleName (const css::uno::Reference<css:
     }
     catch (const Exception&)
     {
-        OSL_ENSURE(false, "can not determine module name");
+        TOOLS_WARN_EXCEPTION("sfx.sidebar", "can not determine module name");
     }
     return OUString();
 }

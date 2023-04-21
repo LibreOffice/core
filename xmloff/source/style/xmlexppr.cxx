@@ -29,6 +29,7 @@
 #include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/anycompare.hxx>
+#include <comphelper/diagnose_ex.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <osl/diagnose.h>
 #include <list>
@@ -438,7 +439,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                             catch( UnknownPropertyException& )
                             {
                                 // might be a problem of getImplementationId
-                                OSL_ENSURE( false, "unknown property in getPropertyValue" );
+                                TOOLS_WARN_EXCEPTION("xmloff.style", "unknown property in getPropertyValue" );
                             }
 
                         }
@@ -644,7 +645,7 @@ std::vector<XMLPropertyState> SvXMLExportPropertyMapper::Filter_(
         catch( UnknownPropertyException& )
         {
             // might be a problem of getImplementationId
-            OSL_ENSURE( false, "unknown property in getPropertyStates" );
+            TOOLS_WARN_EXCEPTION("xmloff.style", "unknown property in getPropertyStates" );
         }
     }
 
