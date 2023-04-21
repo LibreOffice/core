@@ -132,7 +132,7 @@ void SvxConnectionPage::Reset( const SfxItemSet* rAttrs )
     // SdrEdgeNode1HorzDistItem
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGENODE1HORZDIST );
-    SetMetricValue(*m_xMtrFldHorz1, static_cast<const SdrEdgeNode1HorzDistItem*>(pItem)->GetValue(),
+    SetMetricValue(*m_xMtrFldHorz1, pItem->StaticWhichCast(SDRATTR_EDGENODE1HORZDIST).GetValue(),
                    eUnit);
     m_xMtrFldHorz1->save_value();
 
@@ -140,7 +140,7 @@ void SvxConnectionPage::Reset( const SfxItemSet* rAttrs )
     pItem = GetItem( *rAttrs, SDRATTR_EDGENODE2HORZDIST );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGENODE2HORZDIST );
-    SetMetricValue(*m_xMtrFldHorz2, static_cast<const SdrEdgeNode2HorzDistItem*>(pItem)->GetValue(),
+    SetMetricValue(*m_xMtrFldHorz2, pItem->StaticWhichCast(SDRATTR_EDGENODE2HORZDIST).GetValue(),
                    eUnit);
     m_xMtrFldHorz2->save_value();
 
@@ -148,7 +148,7 @@ void SvxConnectionPage::Reset( const SfxItemSet* rAttrs )
     pItem = GetItem( *rAttrs, SDRATTR_EDGENODE1VERTDIST );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGENODE1VERTDIST );
-    SetMetricValue(*m_xMtrFldVert1, static_cast<const SdrEdgeNode1VertDistItem*>(pItem)->GetValue(),
+    SetMetricValue(*m_xMtrFldVert1, pItem->StaticWhichCast(SDRATTR_EDGENODE1VERTDIST).GetValue(),
                    eUnit);
     m_xMtrFldVert1->save_value();
 
@@ -156,7 +156,7 @@ void SvxConnectionPage::Reset( const SfxItemSet* rAttrs )
     pItem = GetItem( *rAttrs, SDRATTR_EDGENODE2VERTDIST );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGENODE2VERTDIST );
-    SetMetricValue(*m_xMtrFldVert2, static_cast<const SdrEdgeNode2VertDistItem*>(pItem)->GetValue(),
+    SetMetricValue(*m_xMtrFldVert2, pItem->StaticWhichCast(SDRATTR_EDGENODE2VERTDIST).GetValue(),
                    eUnit);
     m_xMtrFldVert2->save_value();
 
@@ -164,28 +164,28 @@ void SvxConnectionPage::Reset( const SfxItemSet* rAttrs )
     pItem = GetItem( *rAttrs, SDRATTR_EDGELINE1DELTA );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGELINE1DELTA );
-    SetMetricValue(*m_xMtrFldLine1, static_cast<const SdrMetricItem*>(pItem)->GetValue(), eUnit);
+    SetMetricValue(*m_xMtrFldLine1, pItem->StaticWhichCast(SDRATTR_EDGELINE1DELTA).GetValue(), eUnit);
     m_xMtrFldLine1->save_value();
 
     // SdrEdgeLine2DeltaItem
     pItem = GetItem( *rAttrs, SDRATTR_EDGELINE2DELTA );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGELINE2DELTA );
-    SetMetricValue(*m_xMtrFldLine2, static_cast<const SdrMetricItem*>(pItem)->GetValue(), eUnit);
+    SetMetricValue(*m_xMtrFldLine2, pItem->StaticWhichCast(SDRATTR_EDGELINE2DELTA).GetValue(), eUnit);
     m_xMtrFldLine2->save_value();
 
     // SdrEdgeLine3DeltaItem
     pItem = GetItem( *rAttrs, SDRATTR_EDGELINE3DELTA );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGELINE3DELTA );
-    SetMetricValue(*m_xMtrFldLine3, static_cast<const SdrMetricItem*>(pItem)->GetValue(), eUnit);
+    SetMetricValue(*m_xMtrFldLine3, pItem->StaticWhichCast(SDRATTR_EDGELINE3DELTA).GetValue(), eUnit);
     m_xMtrFldLine3->save_value();
 
     // SdrEdgeLineDeltaAnzItem
     pItem = GetItem( *rAttrs, SDRATTR_EDGELINEDELTACOUNT );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGELINEDELTACOUNT );
-    switch (static_cast<const SdrEdgeLineDeltaCountItem*>(pItem)->GetValue())
+    switch (pItem->StaticWhichCast(SDRATTR_EDGELINEDELTACOUNT).GetValue())
     {
         case 0:
             m_xFtLine1->set_sensitive(false);
@@ -209,7 +209,7 @@ void SvxConnectionPage::Reset( const SfxItemSet* rAttrs )
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGEKIND );
     m_xLbType->set_active(
-        sal::static_int_cast<sal_uInt16>(static_cast<const SdrEdgeKindItem*>(pItem)->GetValue()));
+        sal::static_int_cast<sal_uInt16>(pItem->StaticWhichCast(SDRATTR_EDGEKIND).GetValue()));
     m_xLbType->save_value();
 }
 
@@ -395,7 +395,7 @@ void SvxConnectionPage::FillTypeLB()
 
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGEKIND );
-    const SdrEdgeKindItem* pEdgeKindItem = static_cast<const SdrEdgeKindItem*>(pItem);
+    const SdrEdgeKindItem* pEdgeKindItem = &pItem->StaticWhichCast(SDRATTR_EDGEKIND);
     const sal_uInt16 nCount = pEdgeKindItem->GetValueCount();
     for (sal_uInt16 i = 0; i < nCount; i++)
     {
