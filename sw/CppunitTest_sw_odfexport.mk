@@ -32,6 +32,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_odfexport, \
     unotest \
     utl \
     vcl \
+    basegfx \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_odfexport,\

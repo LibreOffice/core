@@ -9,7 +9,7 @@
 
 #include <test/unoapi_test.hxx>
 
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -35,6 +35,7 @@
 #include <docmodel/theme/Theme.hxx>
 
 #include <comphelper/sequenceashashmap.hxx>
+#include <basegfx/utils/gradienttools.hxx>
 
 using namespace ::com::sun::star;
 
@@ -181,7 +182,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testGradientMultiStepTransparency)
     uno::Reference<container::XNamed> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Rectangle 4"), xShape->getName());
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    awt::Gradient aTransparence;
+    awt::Gradient2 aTransparence;
     xShapeProps->getPropertyValue("FillTransparenceGradient") >>= aTransparence;
 
     // Without the accompanying fix in place, this test would have failed with:
@@ -189,7 +190,13 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testGradientMultiStepTransparency)
     // - Actual  : 3487029 (0x353535)
     // i.e. the end transparency was not 100%, but was 21%, leading to an unexpected visible line on
     // the right of this shape.
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(ColorTransparency, aTransparence.EndColor));
+    // MCGR: Use the completely imported transparency gradient to check for correctness
+    basegfx::ColorStops aColorStops;
+    basegfx::utils::fillColorStopsFromGradient2(aColorStops, aTransparence);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(5), aColorStops.size());
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[4].getStopOffset(), 1.0));
+    CPPUNIT_ASSERT_EQUAL(aColorStops[4].getStopColor(), basegfx::BColor(0.0, 0.0, 0.0));
 }
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testShapeTextAlignment)

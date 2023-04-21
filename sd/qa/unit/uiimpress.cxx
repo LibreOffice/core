@@ -765,8 +765,13 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillGradient)
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, eXFS);
 
     XGradient aGradient = rPageAttr.GetItem(XATTR_FILLGRADIENT)->GetGradientValue();
-    CPPUNIT_ASSERT_EQUAL(Color(0xff0000), Color(aGradient.GetColorStops().front().getStopColor()));
-    CPPUNIT_ASSERT_EQUAL(Color(0x0000ff), Color(aGradient.GetColorStops().back().getStopColor()));
+    const basegfx::ColorStops& rColorStops(aGradient.GetColorStops());
+
+    CPPUNIT_ASSERT_EQUAL(size_t(2), rColorStops.size());
+    CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops[0].getStopOffset(), 0.0));
+    CPPUNIT_ASSERT_EQUAL(rColorStops[0].getStopColor(), basegfx::BColor(1.0, 0.0, 0.0));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops[1].getStopOffset(), 1.0));
+    CPPUNIT_ASSERT_EQUAL(rColorStops[1].getStopColor(), basegfx::BColor(0.0, 0.0, 1.0));
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf134053)

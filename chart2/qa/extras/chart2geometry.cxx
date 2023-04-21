@@ -170,6 +170,12 @@ void Chart2GeometryTest::testTdf128345ChartArea_CG_TS_export()
     // Without the patch the transparency was lost in saved pptx file.
     loadFromURL(u"odp/tdf128345_ChartArea_CG_TS.odp");
 
+    // MCGR: Similar to testTdf128345Legend_CS_TG_axial_export:
+    // Checked that it works with the existing import file,
+    // but will change with ODF MCGR im/export again.
+    // Adapting for now, but need to re-check values after
+    // ODF im/export for MCGR is integrated
+
     // Make sure the chart area has a transparency in gradient stops in saved pptx file.
     save("Impress MS PowerPoint 2007 XML");
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/charts/chart1.xml");
@@ -188,6 +194,12 @@ void Chart2GeometryTest::testTdf128345ChartArea_CG_TS_import()
     // Make sure chart area has transparency when pptx document is opened and resaved as odp.
     // As of Aug 2020, the import generates a transparency gradient. When import is changed to
     // generate solid transparency, the test needs to be adapted.
+
+    // MCGR: Similar to testTdf128345Legend_CS_TG_axial_export:
+    // Checked that it works with the existing import file,
+    // but will change with ODF MCGR im/export again. We will need to
+    // update the *.odp input file. Disable unclear values for now and
+    // adapt when ODF im/export for MCGR is integrated
     loadFromURL(u"pptx/tdf128345_ChartArea_CG_TS.pptx");
 
     // Find transparency gradient name
@@ -216,7 +228,7 @@ void Chart2GeometryTest::testTdf128345ChartArea_CG_TS_import()
     assertXPath(pXmlDoc2, sStart + " and @draw:start='30%']");
     assertXPath(pXmlDoc2, sStart + " and @draw:end='30%']");
     assertXPath(pXmlDoc2, sStart + " and @draw:angle='30deg']");
-    assertXPath(pXmlDoc2, sStart + " and @draw:border='20%']");
+    assertXPath(pXmlDoc2, sStart + " and @draw:border='0%']"); // MCGR: no border anymore 20% -> 0%
 }
 
 void Chart2GeometryTest::testTdf128345ChartWall_CS_TG_export()
@@ -283,13 +295,21 @@ void Chart2GeometryTest::testTdf128345Legend_CS_TG_axial_export()
     CPPUNIT_ASSERT(pXmlDoc);
 
     OString sPathStart("//c:chartSpace/c:chart/c:legend/c:spPr/a:gradFill");
-    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs", 3); // axial
-    // no element for 0% transparent
+
+    // MCGR: three entries due to axial being mirrored+expanded to linear
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs", 3);
+
+    // MCGR: start entry, no transparence, pos zero
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", 0);
-    // 100% transparent = opacity 0. It comes from "axial", therefore it is in the middle.
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]", "pos", "0");
+
+    // MCGR: middle entry, 100% transparence, pos 0.5
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val", "0");
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]", "pos", "50000");
+
+    // MCGR: end entry, no transparence, pos 1.0
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[3]/a:srgbClr/a:alpha", 0);
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[3]", "pos", "100000");
 }
 
 void Chart2GeometryTest::testTdf128345Legend_CS_TG_axial_import()
@@ -320,8 +340,9 @@ void Chart2GeometryTest::testTdf128345Legend_CS_TG_axial_import()
     const OString sAttribute("@draw:name='" + OU2O(sOUOpacityName) + "'");
     const OString sStart("//office:document-styles/office:styles/draw:opacity[" + sAttribute);
     assertXPath(pXmlDoc2, sStart + "]", 1);
-    assertXPath(pXmlDoc2, sStart + " and @draw:style='axial']");
-    assertXPath(pXmlDoc2, sStart + " and @draw:start='0%']");
+    // MCGR: Needs odf im/export for MCGR, then adapt.
+    assertXPath(pXmlDoc2, sStart + " and @draw:style='linear']"); // MCGR: axial -> linear
+    assertXPath(pXmlDoc2, sStart + " and @draw:start='100%']"); // MCGR: 0% -> 100%
     assertXPath(pXmlDoc2, sStart + " and @draw:end='100%']");
 }
 

@@ -1243,10 +1243,18 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf127372)
     createSdImpressDoc("odp/tdf127372.odp");
     saveAndReload("Impress Office Open XML");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
-    awt::Gradient aTransparenceGradient;
+    awt::Gradient2 aTransparenceGradient;
     xShape->getPropertyValue("FillTransparenceGradient") >>= aTransparenceGradient;
-    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(ColorTransparency, aTransparenceGradient.StartColor));
-    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(ColorTransparency, aTransparenceGradient.EndColor));
+
+    // MCGR: Use the completely imported gradient to check for correctness
+    basegfx::ColorStops aColorStops;
+    basegfx::utils::fillColorStopsFromGradient2(aColorStops, aTransparenceGradient);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
+    CPPUNIT_ASSERT_EQUAL(aColorStops[0].getStopColor(), basegfx::BColor(0.0, 0.0, 0.0));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
+    CPPUNIT_ASSERT_EQUAL(aColorStops[1].getStopColor(), basegfx::BColor(0.0, 0.0, 0.0));
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf127379)
@@ -1268,10 +1276,20 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf127379)
     aXBackgroundPropSet->getPropertyValue("FillStyle") >>= aFillStyle;
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, aFillStyle);
 
-    awt::Gradient aGradient;
+    awt::Gradient2 aGradient;
     CPPUNIT_ASSERT(aXBackgroundPropSet->getPropertyValue("FillGradient") >>= aGradient);
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(ColorTransparency, aGradient.StartColor));
-    CPPUNIT_ASSERT_EQUAL(Color(0x2A6099), Color(ColorTransparency, aGradient.EndColor));
+
+    // MCGR: Use the completely imported gradient to check for correctness
+    basegfx::ColorStops aColorStops;
+    basegfx::utils::fillColorStopsFromGradient2(aColorStops, aGradient);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
+    CPPUNIT_ASSERT_EQUAL(aColorStops[0].getStopColor(), basegfx::BColor(1.0, 0.0, 0.0));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
+    CPPUNIT_ASSERT_EQUAL(
+        aColorStops[1].getStopColor(),
+        basegfx::BColor(0.16470588235294117, 0.37647058823529411, 0.59999999999999998));
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf98603)

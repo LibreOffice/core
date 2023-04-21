@@ -280,12 +280,20 @@ void SdMiscTest::testFillGradient()
     uno::Reference<beans::XPropertySet> xPropSet2(xIndexAccess->getByIndex(0),
                                                   uno::UNO_QUERY_THROW);
     drawing::FillStyle eFillStyle;
-    awt::Gradient aGradient2;
+    awt::Gradient2 aGradient2;
     CPPUNIT_ASSERT(xPropSet2->getPropertyValue("FillStyle") >>= eFillStyle);
     CPPUNIT_ASSERT_EQUAL(int(drawing::FillStyle_GRADIENT), static_cast<int>(eFillStyle));
     CPPUNIT_ASSERT(xPropSet2->getPropertyValue("FillGradient") >>= aGradient2);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(Color(255, 0, 0)), aGradient2.StartColor);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(Color(0, 255, 0)), aGradient2.EndColor);
+
+    // MCGR: Use the completely imported gradient to check for correctness
+    basegfx::ColorStops aColorStops;
+    basegfx::utils::fillColorStopsFromGradient2(aColorStops, aGradient2);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
+    CPPUNIT_ASSERT_EQUAL(aColorStops[0].getStopColor(), basegfx::BColor(1.0, 0.0, 0.0));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
+    CPPUNIT_ASSERT_EQUAL(aColorStops[1].getStopColor(), basegfx::BColor(0.0, 1.0, 0.0));
 }
 
 void SdMiscTest::testTdf44774()
