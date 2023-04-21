@@ -126,7 +126,7 @@ TRANSLITERATION_IGNORE(ProlongedSoundMark_ja_JP)
 
 #undef TRANSLITERATION_IGNORE
 
-#define TRANSLITERATION_IGNORE( name ) \
+#define TRANSLITERATION_IGNORE( name, implname ) \
 class ignore##name final : public transliteration_Ignore {\
 public:\
         ignore##name () {\
@@ -134,7 +134,7 @@ public:\
             table = nullptr;\
             map = nullptr;\
             transliterationName = "ignore"#name;\
-            implementationName = "com.sun.star.i18n.Transliteration.ignore"#name;\
+            implementationName = "com.sun.star.i18n.Transliteration." implname;\
         };\
         OUString foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, \
                 css::uno::Sequence< sal_Int32 >* pOffset) override; \
@@ -146,9 +146,9 @@ public:\
              override;\
 };
 
-TRANSLITERATION_IGNORE(Kana)
-TRANSLITERATION_IGNORE(Width)
-TRANSLITERATION_IGNORE(Size_ja_JP)
+TRANSLITERATION_IGNORE(Kana, "IGNORE_KANA")
+TRANSLITERATION_IGNORE(Width, "IGNORE_WIDTH")
+TRANSLITERATION_IGNORE(Size_ja_JP, "ignoreSize_ja_JP")
 
 #undef TRANSLITERATION_IGNORE
 
