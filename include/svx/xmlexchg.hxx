@@ -23,6 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <vcl/transfer.hxx>
 #include <svx/svxdllapi.h>
+#include <functional>
 
 namespace com::sun::star::beans {
     class SAL_NO_VTABLE XPropertySet;
@@ -61,17 +62,17 @@ namespace svx
             virtual void        AddSupportedFormats() override;
             virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
 
-            OXFormsDescriptor m_aDescriptor;
+            std::function<OXFormsDescriptor()> m_getDescriptorFunc;
 
         public:
 
             /** construct the transferable
             */
-            OXFormsTransferable( const OXFormsDescriptor &rhs );
+            OXFormsTransferable(const std::function<OXFormsDescriptor()>& getDescriptorFunc);
 
             /** extracts an xform descriptor from the transferable given
             */
-            static const OXFormsDescriptor &extractDescriptor( const TransferableDataHelper& _rData );
+            static OXFormsDescriptor extractDescriptor( const TransferableDataHelper& _rData );
     };
 
 
