@@ -27,8 +27,8 @@ namespace svx
 
     using namespace ::com::sun::star::datatransfer;
 
-    OXFormsTransferable::OXFormsTransferable( const OXFormsDescriptor &rhs ) :
-        m_aDescriptor(rhs)
+    OXFormsTransferable::OXFormsTransferable(const std::function<OXFormsDescriptor()>& getDescriptorFunc) :
+        m_getDescriptorFunc(getDescriptorFunc)
     {
     }
 
@@ -47,13 +47,13 @@ namespace svx
         return false;
     }
 
-    const OXFormsDescriptor &OXFormsTransferable::extractDescriptor( const TransferableDataHelper &_rData ) {
-
+    OXFormsDescriptor OXFormsTransferable::extractDescriptor( const TransferableDataHelper &_rData )
+    {
         using namespace ::com::sun::star::uno;
         Reference<XTransferable> &transfer = const_cast<Reference<XTransferable> &>(_rData.GetTransferable());
         XTransferable *pInterface = transfer.get();
         OXFormsTransferable& rThis = dynamic_cast<OXFormsTransferable&>(*pInterface);
-        return rThis.m_aDescriptor;
+        return rThis.m_getDescriptorFunc();
     }
 
 }
