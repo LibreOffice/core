@@ -32,6 +32,93 @@ using namespace com::sun::star;
 
 namespace writerfilter::rtftok
 {
+bool RTFDocumentImpl::dispatchFloatingTableFlag(RTFKeyword nKeyword)
+{
+    if (!m_bBreakWrappedTables)
+    {
+        return false;
+    }
+
+    // Positioned Wrapped Tables
+    OUString aParam;
+    switch (nKeyword)
+    {
+        case RTFKeyword::TPVPARA:
+            aParam = "text";
+            break;
+        case RTFKeyword::TPVMRG:
+            aParam = "margin";
+            break;
+        case RTFKeyword::TPVPG:
+            aParam = "page";
+            break;
+        default:
+            break;
+    }
+    if (!aParam.isEmpty())
+    {
+        putNestedAttribute(m_aStates.top().getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblpPr,
+                           NS_ooxml::LN_CT_TblPPr_vertAnchor, new RTFValue(aParam));
+        return true;
+    }
+    switch (nKeyword)
+    {
+        case RTFKeyword::TPHCOL:
+            aParam = "text";
+            break;
+        case RTFKeyword::TPHMRG:
+            aParam = "margin";
+            break;
+        case RTFKeyword::TPHPG:
+            aParam = "page";
+            break;
+        default:
+            break;
+    }
+    if (!aParam.isEmpty())
+    {
+        putNestedAttribute(m_aStates.top().getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblpPr,
+                           NS_ooxml::LN_CT_TblPPr_horzAnchor, new RTFValue(aParam));
+        return true;
+    }
+    switch (nKeyword)
+    {
+        case RTFKeyword::TPOSYC:
+            aParam = "center";
+            break;
+        case RTFKeyword::TPOSYB:
+            aParam = "bottom";
+            break;
+        default:
+            break;
+    }
+    if (!aParam.isEmpty())
+    {
+        putNestedAttribute(m_aStates.top().getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblpPr,
+                           NS_ooxml::LN_CT_TblPPr_tblpYSpec, new RTFValue(aParam));
+        return true;
+    }
+    switch (nKeyword)
+    {
+        case RTFKeyword::TPOSXC:
+            aParam = "center";
+            break;
+        case RTFKeyword::TPOSXR:
+            aParam = "right";
+            break;
+        default:
+            break;
+    }
+    if (!aParam.isEmpty())
+    {
+        putNestedAttribute(m_aStates.top().getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblpPr,
+                           NS_ooxml::LN_CT_TblPPr_tblpXSpec, new RTFValue(aParam));
+        return true;
+    }
+
+    return false;
+}
+
 RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 {
     setNeedSect(true);
@@ -439,6 +526,11 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     {
         auto pValue = new RTFValue(1);
         m_aStates.top().getParagraphSprms().set(nParam, pValue);
+        return RTFError::OK;
+    }
+
+    if (dispatchFloatingTableFlag(nKeyword))
+    {
         return RTFError::OK;
     }
 
@@ -1241,6 +1333,11 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         {
             if (m_aStates.top().getDestination() == Destination::FIELD)
                 m_aStates.top().setFieldLocked(true);
+        }
+        break;
+        case RTFKeyword::NOBRKWRPTBL:
+        {
+            m_bBreakWrappedTables = true;
         }
         break;
         default:
