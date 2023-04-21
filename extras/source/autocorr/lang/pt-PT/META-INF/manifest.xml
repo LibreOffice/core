@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<manifest:manifest>
- <manifest:file-entry manifest:full-path="/" manifest:media-type=""/>
- <manifest:file-entry manifest:full-path="SentenceExceptList.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="WordExceptList.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="DocumentList.xml" manifest:media-type="text/xml"/>
-</manifest:manifest>
+<manifest>
+ <file-entry full-path="/" media-type=""/>
+ <file-entry full-path="SentenceExceptList.xml" media-type="text/xml"/>
+ <file-entry full-path="WordExceptList.xml" media-type="text/xml"/>
+ <file-entry full-path="DocumentList.xml" media-type="text/xml"/>
+</manifest>
