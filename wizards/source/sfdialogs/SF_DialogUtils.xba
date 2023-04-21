@@ -15,7 +15,7 @@ Option Private Module
 &apos;&apos;&apos;		FOR INTERNAL USE ONLY
 &apos;&apos;&apos;		Groups private functions that are common to the SF_Dialog and SF_DialogControl class modules
 &apos;&apos;&apos;
-&apos;&apos;&apos;		Topics where SF_DiaogUtils matters:
+&apos;&apos;&apos;		Topics where SF_DialogUtils matters:
 &apos;&apos;&apos;			- resizing dialog and dialog controls
 &apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
 
