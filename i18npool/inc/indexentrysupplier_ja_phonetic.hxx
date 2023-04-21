@@ -45,7 +45,7 @@ public:
 class IndexEntrySupplier_##algorithm final : public IndexEntrySupplier_ja_phonetic {\
 public:\
     IndexEntrySupplier_##algorithm (const css::uno::Reference < css::uno::XComponentContext >& rxContext) : IndexEntrySupplier_ja_phonetic (rxContext) {\
-        implementationName = "com.sun.star.i18n.IndexEntrySupplier_"#algo_descr;\
+        implementationName = "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic" algo_descr;\
     };\
     virtual sal_Bool SAL_CALL loadAlgorithm(\
         const css::lang::Locale& rLocale,\
