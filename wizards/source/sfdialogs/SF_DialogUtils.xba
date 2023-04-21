@@ -164,7 +164,7 @@ Public Function _Resize(ByRef Control As Object _
 								, Optional ByVal Width As Variant _
 								, Optional ByVal Height As Variant _
 								) As Boolean
-&apos;&apos;&apos;	Move the top-left corner of a dialog or a diaog control to new coordinates and/or modify its dimensions
+&apos;&apos;&apos;	Move the top-left corner of a dialog or a dialog control to new coordinates and/or modify its dimensions
 &apos;&apos;&apos;	Without arguments, the method resets the initial dimensions
 &apos;&apos;&apos;	Attributes denoting the position and size of a dialog are expressed in &quot;Map AppFont&quot; units.
 &apos;&apos;&apos;	Map AppFont units are device and resolution independent.
