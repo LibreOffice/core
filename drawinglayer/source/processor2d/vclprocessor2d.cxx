@@ -831,17 +831,6 @@ void VclProcessor2D::RenderPolyPolygonGraphicPrimitive2D(
     }
 }
 
-namespace
-{
-bool isRectangles(const basegfx::B2DPolyPolygon& rPolyPoly)
-{
-    for (sal_uInt32 i = 0, nCount = rPolyPoly.count(); i < nCount; ++i)
-        if (!basegfx::utils::isRectangle(rPolyPoly.getB2DPolygon(i)))
-            return false;
-    return true;
-}
-}
-
 // mask group
 void VclProcessor2D::RenderMaskPrimitive2DPixel(const primitive2d::MaskPrimitive2D& rMaskCandidate)
 {
@@ -856,7 +845,7 @@ void VclProcessor2D::RenderMaskPrimitive2DPixel(const primitive2d::MaskPrimitive
     aMask.transform(maCurrentTransformation);
 
     // Unless smooth edges are needed, simply use clipping.
-    if (isRectangles(aMask) || !getViewInformation2D().getUseAntiAliasing())
+    if (basegfx::utils::isRectangle(aMask) || !getViewInformation2D().getUseAntiAliasing())
     {
         mpOutputDevice->Push(vcl::PushFlags::CLIPREGION);
         mpOutputDevice->IntersectClipRegion(vcl::Region(aMask));
