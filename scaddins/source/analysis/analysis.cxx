@@ -555,7 +555,7 @@ double SAL_CALL AnalysisAddIn::getMround( double fNum, double fMult )
     if( fMult == 0.0 )
         return fMult;
 
-    double fRet = fMult * ::rtl::math::round( fNum / fMult );
+    double fRet = fMult * ::rtl::math::round( ::rtl::math::approxValue( fNum / fMult));
     RETURN_FINITE( fRet );
 }
 
