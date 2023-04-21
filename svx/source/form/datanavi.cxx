@@ -300,19 +300,29 @@ namespace svxform
                 return;
         }
 
-        OXFormsDescriptor desc;
-        desc.szName = m_xItemList->get_text(*m_xScratchIter);
-        if(pItemNode->m_xNode.is()) {
-            // a valid node interface tells us that we need to create a control from a binding
-            desc.szServiceName = GetServiceNameForNode(pItemNode->m_xNode);
-            desc.xPropSet = GetBindingForNode(pItemNode->m_xNode);
-            DBG_ASSERT( desc.xPropSet.is(), "DataTreeListBox::StartDrag(): invalid node binding" );
-        }
-        else {
-            desc.szServiceName = FM_COMPONENT_COMMANDBUTTON;
-            desc.xPropSet = pItemNode->m_xPropSet;
-        }
-        xTransferable = rtl::Reference<TransferDataContainer>(new OXFormsTransferable(desc));
+        OUString szName = m_xItemList->get_text(*m_xScratchIter);
+        Reference<css::xml::dom::XNode> xNode(pItemNode->m_xNode);
+        Reference<XPropertySet> xPropSet(pItemNode->m_xPropSet);
+
+        // tdf#154535 create the OXFormsDescriptor on-demand so we don't cause an unwanted
+        // Binding to be created unless we are forced to.
+        auto fnCreateFormsDescriptor = [this, szName, xNode, xPropSet](){
+            OXFormsDescriptor desc;
+            desc.szName = szName;
+            if (xNode) {
+                // a valid node interface tells us that we need to create a control from a binding
+                desc.szServiceName = GetServiceNameForNode(xNode);
+                desc.xPropSet = GetBindingForNode(xNode);
+                DBG_ASSERT( desc.xPropSet.is(), "DataTreeListBox::StartDrag(): invalid node binding" );
+            }
+            else {
+                desc.szServiceName = FM_COMPONENT_COMMANDBUTTON;
+                desc.xPropSet = xPropSet;
+            }
+            return desc;
+        };
+
+        xTransferable = rtl::Reference<TransferDataContainer>(new OXFormsTransferable(fnCreateFormsDescriptor));
         m_xItemList->enable_drag_source(xTransferable, DND_ACTION_COPY);
     }
 

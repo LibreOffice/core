@@ -3236,8 +3236,8 @@ bool SwTransferable::PasteDBData( const TransferableDataHelper& rData,
             FmFormView* pFmView = dynamic_cast<FmFormView*>( rSh.GetDrawView()  );
             if (pFmView && pDragPt)
             {
-                const OXFormsDescriptor &rDesc = OXFormsTransferable::extractDescriptor(rData);
-                rtl::Reference<SdrObject> pObj = pFmView->CreateXFormsControl(rDesc);
+                OXFormsDescriptor aDesc = OXFormsTransferable::extractDescriptor(rData);
+                rtl::Reference<SdrObject> pObj = pFmView->CreateXFormsControl(aDesc);
                 if(pObj)
                 {
                     rSh.SwFEShell::InsertDrawObj( *pObj, *pDragPt );
