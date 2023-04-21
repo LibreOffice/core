@@ -1995,6 +1995,19 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
       </rng:element>
     </rng:define>
 
+    <rng:define name="number-scientific-number">
+      <rng:element name="number:scientific-number">
+        <rng:ref name="number-scientific-number-attlist"/>
+        <rng:ref name="common-decimal-places-attlist"/>
+        <rng:ref name="common-number-attlist"/>
+        <!-- TODO no proposal -->
+        <rng:zeroOrMore>
+          <rng:ref name="number-embedded-text"/>
+        </rng:zeroOrMore>
+        <rng:empty/>
+      </rng:element>
+    </rng:define>
+
    </rng:include>
 
     <!-- TODO no proposal -->

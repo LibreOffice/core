@@ -550,6 +550,35 @@ void SvXMLNumFmtExport::WriteIntegerElement_Impl(
     }
 }
 
+void SvXMLNumFmtExport::WriteEmbeddedEntries_Impl( const SvXMLEmbeddedTextEntryArr& rEmbeddedEntries )
+{
+    auto nEntryCount = rEmbeddedEntries.size();
+    for (decltype(nEntryCount) nEntry=0; nEntry < nEntryCount; ++nEntry)
+    {
+        const SvXMLEmbeddedTextEntry *const pObj = &rEmbeddedEntries[nEntry];
+
+        //  position attribute
+        // position == 0 is between first integer digit and decimal separator
+        // position < 0 is inside decimal part
+        m_rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_POSITION,
+                                OUString::number( pObj->nFormatPos ) );
+        SvXMLElementExport aChildElem( m_rExport, XML_NAMESPACE_NUMBER, XML_EMBEDDED_TEXT,
+                                          true, false );
+
+        //  text as element content
+        OUStringBuffer aContent( pObj->aText );
+        while ( nEntry+1 < nEntryCount && rEmbeddedEntries[nEntry+1].nFormatPos == pObj->nFormatPos )
+        {
+            // The array can contain several elements for the same position in the number
+            // (for example, literal text and space from underscores). They must be merged
+            // into a single embedded-text element.
+            aContent.append(rEmbeddedEntries[nEntry+1].aText);
+            ++nEntry;
+        }
+        m_rExport.Characters( aContent.makeStringAndClear() );
+    }
+}
+
 void SvXMLNumFmtExport::WriteNumberElement_Impl(
                             sal_Int32 nDecimals, sal_Int32 nMinDecimals,
                             sal_Int32 nInteger, sal_Int32 nBlankInteger, const OUString& rDashStr,
@@ -565,10 +594,10 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
                               OUString::number( nDecimals ) );
     }
 
-    SvtSaveOptions::ODFSaneDefaultVersion eVersion = m_rExport.getSaneDefaultVersion();
     if ( nMinDecimals >= 0 )   // negative = automatic
     {
         // Export only for 1.2 with extensions or 1.3 and later.
+        SvtSaveOptions::ODFSaneDefaultVersion eVersion = m_rExport.getSaneDefaultVersion();
         if (eVersion > SvtSaveOptions::ODFSVER_012)
         {
             // OFFICE-3860 For 1.2+ use loext namespace, for 1.3 use number namespace.
@@ -603,37 +632,13 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
                               true, true );
 
     //  number:embedded-text as child elements
-
-    auto nEntryCount = rEmbeddedEntries.size();
-    for (decltype(nEntryCount) nEntry=0; nEntry < nEntryCount; ++nEntry)
-    {
-        const SvXMLEmbeddedTextEntry *const pObj = &rEmbeddedEntries[nEntry];
-
-        //  position attribute
-        // position == 0 is between first integer digit and decimal separator
-        // position < 0 is inside decimal part
-        m_rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_POSITION,
-                                OUString::number( pObj->nFormatPos ) );
-        SvXMLElementExport aChildElem( m_rExport, XML_NAMESPACE_NUMBER, XML_EMBEDDED_TEXT,
-                                          true, false );
-
-        //  text as element content
-        OUStringBuffer aContent( pObj->aText );
-        while ( nEntry+1 < nEntryCount && rEmbeddedEntries[nEntry+1].nFormatPos == pObj->nFormatPos )
-        {
-            // The array can contain several elements for the same position in the number
-            // (for example, literal text and space from underscores). They must be merged
-            // into a single embedded-text element.
-            aContent.append(rEmbeddedEntries[nEntry+1].aText);
-            ++nEntry;
-        }
-        m_rExport.Characters( aContent.makeStringAndClear() );
-    }
+    WriteEmbeddedEntries_Impl( rEmbeddedEntries );
 }
 
 void SvXMLNumFmtExport::WriteScientificElement_Impl(
                             sal_Int32 nDecimals, sal_Int32 nMinDecimals, sal_Int32 nInteger, sal_Int32 nBlankInteger,
-                            bool bGrouping, sal_Int32 nExp, sal_Int32 nExpInterval, bool bExpSign )
+                            bool bGrouping, sal_Int32 nExp, sal_Int32 nExpInterval, bool bExpSign,
+                            const SvXMLEmbeddedTextEntryArr& rEmbeddedEntries )
 {
     FinishTextElement_Impl();
 
@@ -694,6 +699,11 @@ void SvXMLNumFmtExport::WriteScientificElement_Impl(
     SvXMLElementExport aElem( m_rExport,
                               XML_NAMESPACE_NUMBER, XML_SCIENTIFIC_NUMBER,
                               true, false );
+
+    //  number:embedded-text as child elements
+    // Export only for 1.x with extensions
+    if (eVersion & SvtSaveOptions::ODFSVER_EXTENDED)
+        WriteEmbeddedEntries_Impl( rEmbeddedEntries );
 }
 
 void SvXMLNumFmtExport::WriteFractionElement_Impl(
@@ -1379,9 +1389,11 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         }
 
         //  collect strings for embedded-text (must be known before number element is written)
-
+        SvtSaveOptions::ODFSaneDefaultVersion eVersion = m_rExport.getSaneDefaultVersion();
         bool bAllowEmbedded = ( nFmtType == SvNumFormatType::ALL || nFmtType == SvNumFormatType::NUMBER ||
                                         nFmtType == SvNumFormatType::CURRENCY ||
+                                        // Export only for 1.x with extensions
+                                        ( nFmtType == SvNumFormatType::SCIENTIFIC && (eVersion & SvtSaveOptions::ODFSVER_EXTENDED) )||
                                         nFmtType == SvNumFormatType::PERCENT );
         if ( bAllowEmbedded )
         {
@@ -1586,7 +1598,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                                 // #i43959# for scientific numbers, count all integer symbols ("0", "?" and "#")
                                 // as integer digits: use nIntegerSymbols instead of nLeading
                                 // nIntegerSymbols represents exponent interval (for engineering notation)
-                                WriteScientificElement_Impl( nPrecision, nMinDecimals, nLeading, nBlankInteger, bThousand, nExpDigits, nIntegerSymbols, bExpSign );
+                                WriteScientificElement_Impl( nPrecision, nMinDecimals, nLeading, nBlankInteger, bThousand, nExpDigits, nIntegerSymbols, bExpSign,
+                                    aEmbeddedEntries );
                                 bAnyContent = true;
                                 break;
                             case SvNumFormatType::FRACTION:

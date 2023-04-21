@@ -839,9 +839,9 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SvXMLNumFmtElementCont
     sal_Int32 nElement,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    //  only number:number supports number:embedded-text child element
+    //  only number:number and number:scientific-number supports number:embedded-text child element
 
-    if ( nType == SvXMLStyleTokens::Number &&
+    if ( ( nType == SvXMLStyleTokens::Number || nType == SvXMLStyleTokens::ScientificNumber ) &&
          nElement == XML_ELEMENT(NUMBER, XML_EMBEDDED_TEXT) )
     {
         return new SvXMLNumFmtEmbeddedTextContext( GetImport(), nElement, *this, xAttrList );
