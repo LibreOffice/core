@@ -55,7 +55,7 @@ public:\
 /** descriptions formed by concatenating strings here must match names in .component file */
 INDEXENTRYSUPPLIER_JA_PHONETIC( ja_phonetic_alphanumeric_first_by_syllable,  " (alphanumeric first) (grouped by syllable)" )
 INDEXENTRYSUPPLIER_JA_PHONETIC( ja_phonetic_alphanumeric_first_by_consonant, " (alphanumeric first) (grouped by consonant)" )
-INDEXENTRYSUPPLIER_JA_PHONETIC( ja_phonetic_alphanumeric_last_by_syllable,   " (alphanumeric last) (grouped by consonant)" )
+INDEXENTRYSUPPLIER_JA_PHONETIC( ja_phonetic_alphanumeric_last_by_syllable,   " (alphanumeric last) (grouped by syllable)" )
 INDEXENTRYSUPPLIER_JA_PHONETIC( ja_phonetic_alphanumeric_last_by_consonant,  " (alphanumeric last) (grouped by consonant)" )
 
 }
