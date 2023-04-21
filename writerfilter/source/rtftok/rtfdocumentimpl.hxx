@@ -701,6 +701,8 @@ public:
     // RTFListener
     RTFError dispatchDestination(RTFKeyword nKeyword) override;
     RTFError dispatchFlag(RTFKeyword nKeyword) override;
+    /// Dispatches flags related to Positioned Wrapped Tables.
+    bool dispatchFloatingTableFlag(RTFKeyword nKeyword);
     RTFError dispatchSymbol(RTFKeyword nKeyword) override;
     RTFError dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam) override;
     RTFError dispatchValue(RTFKeyword nKeyword, int nParam) override;
@@ -989,6 +991,9 @@ private:
 
     /// Are we after a \cell, but before a \row?
     bool m_bAfterCellBeforeRow;
+
+    /// Floating tables are single-page by default.
+    bool m_bBreakWrappedTables = false;
 };
 } // namespace writerfilter::rtftok
 
