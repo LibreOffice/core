@@ -30,7 +30,6 @@ class SFX2_DLLPUBLIC SvxCharView final : public weld::CustomWidgetController
 private:
     VclPtr<VirtualDevice> mxVirDev;
     tools::Long            mnY;
-    Point           maPosition;
     vcl::Font       maFont;
     bool            maHasInsert;
     OUString        m_sText;
@@ -56,7 +55,7 @@ public:
     void            SetHasInsert( bool bInsert );
     void            InsertCharToDoc();
 
-    void            createContextMenu();
+    void            createContextMenu(const Point& rPosition);
 
     Size            get_preferred_size() const { return GetDrawingArea()->get_preferred_size(); }
 

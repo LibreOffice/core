@@ -33,7 +33,6 @@ using namespace com::sun::star;
 SvxCharView::SvxCharView(const VclPtr<VirtualDevice>& rVirDev)
     : mxVirDev(rVirDev)
     , mnY(0)
-    , maPosition(0, 0)
     , maHasInsert(true)
 {
 }
@@ -70,11 +69,9 @@ bool SvxCharView::MouseButtonDown(const MouseEvent& rMEvt)
 
     if (rMEvt.IsRight())
     {
-        Point aPosition(rMEvt.GetPosPixel());
-        maPosition = aPosition;
         GrabFocus();
         Invalidate();
-        createContextMenu();
+        createContextMenu(rMEvt.GetPosPixel());
     }
 
     return true;
@@ -107,14 +104,14 @@ void SvxCharView::InsertCharToDoc()
     comphelper::dispatchCommand(".uno:InsertSymbol", aArgs);
 }
 
-void SvxCharView::createContextMenu()
+void SvxCharView::createContextMenu(const Point& rPosition)
 {
     weld::DrawingArea* pDrawingArea = GetDrawingArea();
     std::unique_ptr<weld::Builder> xBuilder(
         Application::CreateBuilder(pDrawingArea, "sfx/ui/charviewmenu.ui"));
     std::unique_ptr<weld::Menu> xItemMenu(xBuilder->weld_menu("charviewmenu"));
     ContextMenuSelect(
-        xItemMenu->popup_at_rect(pDrawingArea, tools::Rectangle(maPosition, Size(1, 1))));
+        xItemMenu->popup_at_rect(pDrawingArea, tools::Rectangle(rPosition, Size(1, 1))));
     Invalidate();
 }
 
