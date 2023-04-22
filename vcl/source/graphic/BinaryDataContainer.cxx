@@ -54,7 +54,8 @@ class ReferencedMemoryStream : public SvMemoryStream
 
 public:
     ReferencedMemoryStream(const std::shared_ptr<std::vector<sal_uInt8>>& rData)
-        : SvMemoryStream(rData ? rData->data() : nullptr, rData->size(), StreamMode::READ)
+        : SvMemoryStream(rData ? rData->data() : nullptr, rData ? rData->size() : 0,
+                         StreamMode::READ)
         , mpData(rData)
     {
     }
