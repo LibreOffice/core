@@ -28,6 +28,7 @@
 */
 
 #include "twain32shim.hxx"
+#include <systools/win32/comtools.hxx>
 #include <tools/helpers.hxx>
 #include <twain/twain.h>
 #include <o3tl/unit_conversion.hxx>
@@ -251,11 +252,10 @@ void ImpTwain::ImplOpenSourceManager()
         if (!m_hMod)
         {
             // Windows directory might not be in DLL search path sometimes, so try the full path
-            PWSTR sPath;
+            sal::systools::CoTaskMemAllocated<wchar_t> sPath;
             if (SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Windows, 0, nullptr, &sPath)))
             {
-                std::wstring sPathAndFile = sPath;
-                CoTaskMemFree(sPath);
+                std::wstring sPathAndFile(sPath);
                 sPathAndFile += L"\\TWAIN_32.DLL";
                 m_hMod = LoadLibraryW(sPathAndFile.c_str());
             }

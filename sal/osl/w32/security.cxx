@@ -25,6 +25,7 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/file.h>
+#include <systools/win32/comtools.hxx>
 #include <systools/win32/uwinapi.h>
 #include <sddl.h>
 #include <sal/macros.h>
@@ -509,16 +510,14 @@ void SAL_CALL osl_unloadUserProfile(oslSecurity Security)
 
 static bool GetSpecialFolder(rtl_uString **strPath, REFKNOWNFOLDERID rFolder)
 {
-    bool bRet = false;
-    PWSTR PathW;
+    sal::systools::CoTaskMemAllocated<wchar_t> PathW;
     if (SUCCEEDED(SHGetKnownFolderPath(rFolder, KF_FLAG_CREATE, nullptr, &PathW)))
     {
         rtl_uString_newFromStr(strPath, o3tl::toU(PathW));
-        CoTaskMemFree(PathW);
-        bRet = true;
+        return true;
     }
 
-    return bRet;
+    return false;
 }
 
 // We use LPCTSTR here, because we use it with SE_foo_NAME constants

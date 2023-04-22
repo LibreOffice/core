@@ -61,20 +61,16 @@ IsPathDefaultForClass(sal::systools::COMReference<IApplicationAssociationRegistr
                       LPCWSTR aClassName, LPCWSTR progID)
 {
     // Make sure the Prog ID matches what we have
-    LPWSTR registeredApp;
+    sal::systools::CoTaskMemAllocated<wchar_t> registeredApp;
     HRESULT hr
         = pAAR->QueryCurrentDefault(aClassName, AT_FILEEXTENSION, AL_EFFECTIVE, &registeredApp);
-    if (FAILED(hr))
+    if (SUCCEEDED(hr))
     {
-        return hr;
+        if (wcsnicmp(registeredApp, progID, wcslen(progID)) == 0)
+            hr = S_OK;
+        else
+            hr = S_FALSE;
     }
-
-    if (!wcsnicmp(registeredApp, progID, wcslen(progID)))
-        hr = S_OK;
-    else
-        hr = S_FALSE;
-
-    CoTaskMemFree(registeredApp);
 
     return hr;
 }

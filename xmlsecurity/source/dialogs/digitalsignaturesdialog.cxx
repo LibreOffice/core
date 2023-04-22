@@ -67,7 +67,7 @@
 
 #ifdef _WIN32
 #include <o3tl/char16_t2wchar_t.hxx>
-#include <prewin.h>
+#include <systools/win32/comtools.hxx>
 #include <Shlobj.h>
 #endif
 
@@ -490,16 +490,12 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, CertMgrButtonHdl, weld::Button&, void)
                                                    u"GNU\\GnuPG\\bin\\gpa.exe",
                                                  };
     static const OUString aPath = [] {
-        OUString sRet;
-        PWSTR sPath = nullptr;
+        sal::systools::CoTaskMemAllocated<wchar_t> sPath;
         HRESULT hr
             = SHGetKnownFolderPath(FOLDERID_ProgramFilesX86, KF_FLAG_DEFAULT, nullptr, &sPath);
         if (SUCCEEDED(hr))
-        {
-            sRet = o3tl::toU(sPath);
-            CoTaskMemFree(sPath);
-        }
-        return sRet;
+            return OUString(o3tl::toU(sPath));
+        return OUString();
     }();
     if (aPath.isEmpty())
         return;
