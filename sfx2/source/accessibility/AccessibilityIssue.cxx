@@ -14,6 +14,7 @@ namespace sfx
 {
 AccessibilityIssue::AccessibilityIssue(AccessibilityIssueID eIssueID)
     : m_eIssueID(eIssueID)
+    , m_pParent(nullptr)
 {
 }
 
