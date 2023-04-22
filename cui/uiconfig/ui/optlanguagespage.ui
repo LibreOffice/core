@@ -396,7 +396,7 @@
               <object class="GtkLabel" id="label6">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="optlanguagespage|label6">Decimal separator key:</property>
+                <property name="label" translatable="yes" context="optlanguagespage|label6">Decimal key on the numpad:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">decimalseparator</property>
                 <property name="xalign">0</property>
@@ -497,7 +497,7 @@
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="decimalseparator-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|decimalseparator">Specifies to use the decimal separator key that is set in your system when you press the respective key on the number pad.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|decimalseparator">Specifies to use the numeric keypad decimal key that is set in your system when you press the respective key on the number pad.</property>
                   </object>
                 </child>
               </object>
