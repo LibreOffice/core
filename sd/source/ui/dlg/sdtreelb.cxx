@@ -182,6 +182,11 @@ void SdPageObjsTLV::SetShowAllShapes (
     }
 }
 
+void SdPageObjsTLV::SetOrderFrontToBack(const bool bOrderFrontToBack)
+{
+    m_bOrderFrontToBack = bOrderFrontToBack;
+}
+
 bool SdPageObjsTLV::IsEqualToShapeList(std::unique_ptr<weld::TreeIter>& rEntry, const SdrObjList& rList,
                                        std::u16string_view rListName)
 {
@@ -416,6 +421,7 @@ bool SdPageObjsTLV::DoDrag()
     }
 
     m_xDropTargetHelper->SetDrawView(pViewShell->GetDrawView());
+    m_xDropTargetHelper->SetOrderFrontToBack(m_bOrderFrontToBack);
     bIsInDrag = true;
 
     std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->make_iterator();
@@ -562,7 +568,7 @@ sal_Int8 SdPageObjsTLVDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt )
         m_rTreeView.iter_previous_sibling(*xTarget);
         m_rTreeView.set_cursor(*xTarget);
 
-        // Remove and insert are required for moving objects in to and out of groups.
+        // Remove and insert are required for moving objects into and out of groups.
         // PutMarked... by itself would suffice if this wasn't allowed.
 
         // Remove the source object from source parent list and insert it in the target parent list.
@@ -595,7 +601,8 @@ sal_Int8 SdPageObjsTLVDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt )
             pList->NbcInsertObject(rSourceObject.get());
         }
 
-        m_pSdrView->PutMarkedBehindObj(pTargetObject);
+        m_bOrderFrontToBack ? m_pSdrView->PutMarkedInFrontOfObj(pTargetObject) :
+                              m_pSdrView->PutMarkedBehindObj(pTargetObject);
     }
 
     return DND_ACTION_NONE;
@@ -710,6 +717,7 @@ SdPageObjsTLV::SdPageObjsTLV(std::unique_ptr<weld::TreeView> xTreeView)
     , m_pOwnMedium(nullptr)
     , m_bLinkableSelected(false)
     , m_bShowAllShapes(false)
+    , m_bOrderFrontToBack(false)
     , m_bShowAllPages(false)
     , m_bSelectionHandlerNavigates(false)
     , m_bNavigationGrabsFocus(true)

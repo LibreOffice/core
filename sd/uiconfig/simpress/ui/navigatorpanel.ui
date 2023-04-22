@@ -138,6 +138,7 @@
             <child>
               <object class="GtkToolButton" id="first">
                 <property name="visible">True</property>
+                <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="navigatorpanel|first|tooltip_text">First Slide</property>
                 <property name="icon-name">sd/res/nv03.png</property>
                 <child internal-child="accessible">
@@ -154,6 +155,7 @@
             <child>
               <object class="GtkToolButton" id="previous">
                 <property name="visible">True</property>
+                <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="navigatorpanel|previous|tooltip_text">Previous Slide</property>
                 <property name="icon-name">sd/res/nv04.png</property>
                 <child internal-child="accessible">
@@ -170,6 +172,7 @@
             <child>
               <object class="GtkToolButton" id="next">
                 <property name="visible">True</property>
+                <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="navigatorpanel|next|tooltip_text">Next Slide</property>
                 <property name="icon-name">sd/res/nv05.png</property>
                 <child internal-child="accessible">
@@ -186,6 +189,7 @@
             <child>
               <object class="GtkToolButton" id="last">
                 <property name="visible">True</property>
+                <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="navigatorpanel|last|tooltip_text">Last Slide</property>
                 <property name="icon-name">sd/res/nv06.png</property>
                 <child internal-child="accessible">
@@ -214,6 +218,7 @@
             <child>
               <object class="GtkMenuToolButton" id="dragmode">
                 <property name="visible">True</property>
+                <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="navigatorpanel|dragmode|tooltip_text">Drag Mode</property>
                 <property name="icon-name">sd/res/nv09.png</property>
                 <child internal-child="accessible">
@@ -230,6 +235,7 @@
             <child>
               <object class="GtkMenuToolButton" id="shapes">
                 <property name="visible">True</property>
+                <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="navigatorpanel|shapes|tooltip_text">Show Shapes</property>
                 <property name="icon-name">sd/res/graphic.png</property>
                 <child internal-child="accessible">
@@ -271,6 +277,7 @@
         <property name="label" translatable="yes" context="navigatorpanel|STR_NAVIGATOR_SHOW_NAMED_SHAPES">Named shapes</property>
         <property name="use-underline">True</property>
         <property name="draw-as-radio">True</property>
+        <property name="group">all</property>
       </object>
     </child>
     <child>
@@ -281,6 +288,32 @@
         <property name="use-underline">True</property>
         <property name="draw-as-radio">True</property>
         <property name="group">named</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioMenuItem" id="fronttoback">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorpanel|STR_NAVIGATOR_FRONT_TO_BACK">Front to back</property>
+        <property name="use-underline">True</property>
+        <property name="draw-as-radio">True</property>
+        <property name="group">backtofront</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioMenuItem" id="backtofront">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorpanel|STR_NAVIGATOR_BACK_TO_FRONT">Back to front</property>
+        <property name="use-underline">True</property>
+        <property name="draw-as-radio">True</property>
+        <property name="group">fronttoback</property>
       </object>
     </child>
   </object>

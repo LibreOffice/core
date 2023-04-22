@@ -309,6 +309,9 @@ IMPL_LINK(SdNavigatorWin, DropdownClickToolBoxHdl, const OUString&, rCommand, vo
         bool bAll = mxTlbObjects->GetShowAllShapes();
         mxShapeMenu->set_active("named", !bAll);
         mxShapeMenu->set_active("all", bAll);
+        bool bOrderFrontToBack = mxTlbObjects->GetOrderFrontToBack();
+        mxShapeMenu->set_active("fronttoback", bOrderFrontToBack);
+        mxShapeMenu->set_active("backtofront", !bOrderFrontToBack);
     }
 }
 
@@ -501,13 +504,19 @@ IMPL_LINK(SdNavigatorWin, MenuSelectHdl, const OUString&, rIdent, void)
 IMPL_LINK( SdNavigatorWin, ShapeFilterCallback, const OUString&, rIdent, void )
 {
     bool bShowAllShapes(mxTlbObjects->GetShowAllShapes());
+    bool bOrderFrontToBack(mxTlbObjects->GetOrderFrontToBack());
     if (rIdent == "named")
         bShowAllShapes = false;
     else if (rIdent == "all")
         bShowAllShapes = true;
+    else if (rIdent == "fronttoback")
+        bOrderFrontToBack = true;
+    else if (rIdent == "backtofront")
+        bOrderFrontToBack = false;
     else
         OSL_FAIL("SdNavigatorWin::ShapeFilterCallback called for unknown menu entry");
 
+    mxTlbObjects->SetOrderFrontToBack(bOrderFrontToBack);
     mxTlbObjects->SetShowAllShapes(bShowAllShapes, true);
 
     // Remember the selection in the FrameView.
