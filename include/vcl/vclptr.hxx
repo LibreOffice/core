@@ -201,7 +201,8 @@ public:
     {
         // hold it alive for the lifetime of this method
         ::rtl::Reference<reference_type> aTmp(std::move(m_rInnerRef));
-        assert(!m_rInnerRef); // the move ctor above must take care of it
+        // coverity[use_after_move : SUPPRESS] - the move ctor above must take care of it
+        assert(!m_rInnerRef);
         if (aTmp.get()) {
             aTmp->disposeOnce();
         }
