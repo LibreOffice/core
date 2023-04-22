@@ -5296,7 +5296,6 @@ include/linguistic/lngprophelp.hxx
 include/linguistic/misc.hxx
 include/linguistic/spelldta.hxx
 include/o3tl/any.hxx
-include/o3tl/char16_t2wchar_t.hxx
 include/o3tl/cow_wrapper.hxx
 include/o3tl/enumarray.hxx
 include/o3tl/enumrange.hxx
