@@ -3978,6 +3978,11 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
             // up to down, if the cursor is there in its last table row
             const SwSelBoxes& rBoxes = rSrcSh.GetTableCursor()->GetSelectedBoxes();
             const SwTableNode* pTableNd = rSh.IsCursorInTable();
+            if (!pTableNd)
+            {
+                SAL_WARN("sw", "presumably this case can't arise in practice");
+                return false;
+            }
             const SwTableLines& rLines = pTableNd->GetTable().GetTabLines();
             const SwStartNode& rDelPos = rBoxes.back()
                     ? *rBoxes.front()->GetSttNd()
