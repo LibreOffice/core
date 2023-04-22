@@ -24,6 +24,7 @@
 #include <property.hxx>
 #include <strings.hrc>
 #include "convert.hxx"
+#include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/xsd/DataTypeClass.hpp>
 #include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
@@ -572,6 +573,133 @@ namespace xforms
         else if (rReason)
         {
             sInfo.append(OStringType_Base::_explainInvalid(rReason));
+        }
+        return sInfo.makeStringAndClear();
+    }
+
+
+    OAnyURIType::OAnyURIType( const OUString& _rName, sal_Int16 _nTypeClass )
+        :OAnyURIType_Base( _rName, _nTypeClass )
+    {
+        m_xURLTransformer = css::util::URLTransformer::create(::comphelper::getProcessComponentContext());
+    }
+
+
+    void OAnyURIType::registerProperties()
+    {
+        OAnyURIType_Base::registerProperties();
+
+        registerMayBeVoidProperty( PROPERTY_XSD_LENGTH, PROPERTY_ID_XSD_LENGTH, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID,
+            &m_aLength, cppu::UnoType<sal_Int32>::get() );
+
+        registerMayBeVoidProperty( PROPERTY_XSD_MIN_LENGTH, PROPERTY_ID_XSD_MIN_LENGTH, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID,
+            &m_aMinLength, cppu::UnoType<sal_Int32>::get() );
+
+        registerMayBeVoidProperty( PROPERTY_XSD_MAX_LENGTH, PROPERTY_ID_XSD_MAX_LENGTH, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID,
+            &m_aMaxLength, cppu::UnoType<sal_Int32>::get() );
+    }
+
+
+    rtl::Reference<OXSDDataType> OAnyURIType::createClone( const OUString& _rName ) const
+    {
+        return new OAnyURIType( _rName, getTypeClass() );
+    }
+    void OAnyURIType::initializeClone( const OXSDDataType& _rCloneSource )
+    {
+        OAnyURIType_Base::initializeClone( _rCloneSource );
+        initializeTypedClone( static_cast< const OAnyURIType& >( _rCloneSource ) );
+    }
+
+
+
+    void OAnyURIType::initializeTypedClone( const OAnyURIType& _rCloneSource )
+    {
+        m_aLength       = _rCloneSource.m_aLength;
+        m_aMinLength    = _rCloneSource.m_aMinLength;
+        m_aMaxLength    = _rCloneSource.m_aMaxLength;
+    }
+
+
+    bool OAnyURIType::checkPropertySanity( sal_Int32 _nHandle, const Any& _rNewValue, OUString& _rErrorMessage )
+    {
+        // let the base class do the conversion
+        if ( !OAnyURIType_Base::checkPropertySanity( _nHandle, _rNewValue, _rErrorMessage ) )
+            return false;
+
+        _rErrorMessage.clear();
+        switch ( _nHandle )
+        {
+            case PROPERTY_ID_XSD_LENGTH:
+            case PROPERTY_ID_XSD_MIN_LENGTH:
+            case PROPERTY_ID_XSD_MAX_LENGTH:
+            {
+                sal_Int32 nValue( 0 );
+                OSL_VERIFY( _rNewValue >>= nValue );
+                if ( nValue <= 0 )
+                    _rErrorMessage = "Length limits must denote positive integer values.";
+                        // TODO/eforms: localize the error message
+            }
+            break;
+        }
+
+        return _rErrorMessage.isEmpty();
+    }
+
+
+    TranslateId OAnyURIType::_validate( const OUString& rValue )
+    {
+        // check regexp, whitespace etc. in parent class
+        TranslateId pReason = OAnyURIType_Base::_validate( rValue );
+
+        if (!pReason)
+        {
+            // check AnyURI constraints
+            sal_Int32 nLength = rValue.getLength();
+            sal_Int32 nLimit = 0;
+            if ( m_aLength >>= nLimit )
+            {
+                if ( nLimit != nLength )
+                    pReason = RID_STR_XFORMS_VALUE_LENGTH;
+            }
+            else
+            {
+                if ( ( m_aMaxLength >>= nLimit ) && ( nLength > nLimit ) )
+                    pReason = RID_STR_XFORMS_VALUE_MAX_LENGTH;
+                else if ( ( m_aMinLength >>= nLimit ) && ( nLength < nLimit ) )
+                    pReason = RID_STR_XFORMS_VALUE_MIN_LENGTH;
+            }
+            // check URL
+            css::util::URL aCommandURL;
+            aCommandURL.Complete = rValue;
+            if (!m_xURLTransformer->parseStrict(aCommandURL))
+                pReason = RID_STR_XFORMS_INVALID_VALUE;
+
+        }
+        return pReason;
+    }
+
+    OUString OAnyURIType::_explainInvalid(TranslateId rReason)
+    {
+        sal_Int32 nValue = 0;
+        OUStringBuffer sInfo;
+        if (rReason == RID_STR_XFORMS_VALUE_LENGTH)
+        {
+            if( m_aLength >>= nValue )
+                sInfo.append( nValue );
+        }
+        else if (rReason == RID_STR_XFORMS_VALUE_MAX_LENGTH)
+        {
+            if( m_aMaxLength >>= nValue )
+                sInfo.append( nValue );
+        }
+        else if (rReason == RID_STR_XFORMS_VALUE_MIN_LENGTH)
+        {
+            if( m_aMinLength >>= nValue )
+                sInfo.append( nValue );
+        }
+        else if (rReason)
+        {
+            sInfo.append(OAnyURIType_Base::_explainInvalid(rReason));
         }
         return sInfo.makeStringAndClear();
     }

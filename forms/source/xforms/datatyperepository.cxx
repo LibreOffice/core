@@ -52,7 +52,7 @@ namespace xforms
         m_aRepository[ sName ] = new OStringType( sName, css::xsd::DataTypeClass::STRING );
 
         sName = ResourceManager::loadString(RID_STR_DATATYPE_URL);
-        m_aRepository[ sName ] = new OStringType( sName, css::xsd::DataTypeClass::anyURI );
+        m_aRepository[ sName ] = new OAnyURIType( sName, css::xsd::DataTypeClass::anyURI );
 
         sName = ResourceManager::loadString(RID_STR_DATATYPE_BOOLEAN);
         m_aRepository[ sName ] = new OBooleanType( sName );

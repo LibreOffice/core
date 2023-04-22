@@ -36,6 +36,8 @@
 
 #include <memory>
 
+#include <com/sun/star/util/URLTransformer.hpp>
+
 
 namespace xforms
 {
@@ -252,6 +254,33 @@ namespace xforms
         virtual rtl::Reference<OXSDDataType> createClone(const OUString& _rName) const override;
         virtual void initializeClone(const OXSDDataType& _rCloneSource) override;
         void       initializeTypedClone( const OStringType& _rCloneSource );
+
+        // OXSDDataType overridables
+        virtual TranslateId     _validate( const OUString& value ) override;
+        virtual OUString _explainInvalid( TranslateId rReason ) override;
+        virtual bool            checkPropertySanity( sal_Int32 _nHandle, const css::uno::Any& _rNewValue, OUString& _rErrorMessage ) override;
+        virtual void            registerProperties() override;
+    };
+
+    class OAnyURIType;
+    typedef ODerivedDataType< OAnyURIType > OAnyURIType_Base;
+    class OAnyURIType   :public OAnyURIType_Base
+    {
+        // <properties>
+        css::uno::Any m_aLength;
+        css::uno::Any m_aMinLength;
+        css::uno::Any m_aMaxLength;
+        // </properties>
+        // helper to check URL validity
+        css::uno::Reference<css::util::XURLTransformer> m_xURLTransformer;
+
+    public:
+        OAnyURIType( const OUString& _rName, sal_Int16 _nTypeClass /* = css::xsd::DataTypeClass::anyURI */ );
+
+    protected:
+        virtual rtl::Reference<OXSDDataType> createClone(const OUString& _rName) const override;
+        virtual void initializeClone(const OXSDDataType& _rCloneSource) override;
+        void       initializeTypedClone( const OAnyURIType& _rCloneSource );
 
         // OXSDDataType overridables
         virtual TranslateId     _validate( const OUString& value ) override;
