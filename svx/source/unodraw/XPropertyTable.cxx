@@ -534,6 +534,7 @@ uno::Any SvxUnoXGradientTable::getAny( const XPropertyEntry* pEntry ) const noex
 {
     const XGradient& aXGradient = static_cast<const XGradientEntry*>(pEntry)->GetGradient();
     awt::Gradient2 aGradient;
+    assert(aGradient.ColorStops.get() && "cid#1524745 aGradient.ColorStops._pSequence won't be null here");
 
     // standard values
     aGradient.Style = aXGradient.GetGradientStyle();

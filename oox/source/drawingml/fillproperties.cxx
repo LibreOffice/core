@@ -613,6 +613,7 @@ void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelp
                 sal_Int32 nEndTrans     = 0;
                 sal_Int32 nStartTrans   = 0;
                 awt::Gradient2 aGradient;
+                assert(aGradient.ColorStops.get() && "cid#1524676 aGradient.ColorStops._pSequence won't be null here");
                 aGradient.Angle = 900;
                 aGradient.StartIntensity = 100;
                 aGradient.EndIntensity = 100;
