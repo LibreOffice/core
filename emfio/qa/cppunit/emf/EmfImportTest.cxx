@@ -50,6 +50,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     void TestDrawStringAlign();
     void TestDrawStringTransparent();
     void TestDrawStringWithBrush();
+    void TestEmfPlusDrawBeziers();
     void TestDrawLine();
     void TestDrawLineWithCaps();
     void TestDrawLineWithDash();
@@ -102,6 +103,7 @@ public:
     CPPUNIT_TEST(TestDrawStringAlign);
     CPPUNIT_TEST(TestDrawStringTransparent);
     CPPUNIT_TEST(TestDrawStringWithBrush);
+    CPPUNIT_TEST(TestEmfPlusDrawBeziers);
     CPPUNIT_TEST(TestDrawLine);
     CPPUNIT_TEST(TestDrawLineWithCaps);
     CPPUNIT_TEST(TestDrawLineWithDash);
@@ -384,6 +386,34 @@ void Test::TestDrawStringWithBrush()
     assertXPath(pDocument, aXPathPrefix + "transform/textdecoratedportion", "fontcolor", "#a50021");
     assertXPath(pDocument, aXPathPrefix + "transform/textdecoratedportion", "familyname",
                 "TIMES NEW ROMAN");
+}
+
+void Test::TestEmfPlusDrawBeziers()
+{
+    // tdf#107019 tdf#154789 EMF+ records: DrawBeziers
+    // Check if DrawBeziers is displayed correctly and text is rotated
+    Primitive2DSequence aSequence
+        = parseEmf(u"emfio/qa/cppunit/emf/data/TestEmfPlusDrawBeziers.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", 4);
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[1]", "color", "#000000");
+
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow", 9);
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[9]/line", "color", "#00ff00");
+
+    assertXPath(pDocument, aXPathPrefix + "transform", 5);
+    assertXPath(pDocument, aXPathPrefix + "transform[1]/textsimpleportion", "fontcolor", "#000000");
+    assertXPath(pDocument, aXPathPrefix + "transform[1]/textsimpleportion", "text", "% Efficiency");
+    assertXPath(pDocument, aXPathPrefix + "transform[1]", "xy11", "0");
+    assertXPath(pDocument, aXPathPrefix + "transform[1]", "xy12", "4");
+    assertXPath(pDocument, aXPathPrefix + "transform[1]", "xy13", "800");
+    assertXPath(pDocument, aXPathPrefix + "transform[1]", "xy21", "-4");
+    assertXPath(pDocument, aXPathPrefix + "transform[1]", "xy22", "0");
+    assertXPath(pDocument, aXPathPrefix + "transform[1]", "xy23", "3195");
 }
 
 void Test::TestDrawLine()
