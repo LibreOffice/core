@@ -1345,11 +1345,15 @@ namespace emfplushelper
                         rMS.ReadUInt32(aCount);
                         SAL_INFO("drawinglayer.emf", "EMF+\t DrawBeziers slot: " << (flags & 0xff));
                         SAL_INFO("drawinglayer.emf", "EMF+\t Number of points: " << aCount);
-                        SAL_WARN_IF((aCount - 1) % 3 != 0, "drawinglayer.emf", "EMF+\t Bezier Draw not support number of points other than 4, 7, 10, 13, 16...");
+                        SAL_WARN_IF((aCount - 1) % 3 != 0, "drawinglayer.emf",
+                                    "EMF+\t Bezier Draw not support number of points other than 4, 7, "
+                                    "10, 13, 16...");
 
                         if (aCount < 4)
                         {
-                            SAL_WARN("drawinglayer.emf", "EMF+\t Bezier Draw does not support less than 4 points. Number of points: " << aCount);
+                            SAL_WARN("drawinglayer.emf", "EMF+\t Bezier Draw does not support less "
+                                                         "than 4 points. Number of points: "
+                                                             << aCount);
                             break;
                         }
 
@@ -1357,29 +1361,26 @@ namespace emfplushelper
                         // We need to add first starting point
                         aStartPoint = Map(x1, y1);
                         aPolygon.append(aStartPoint);
-
+                        SAL_INFO("drawinglayer.emf",
+                                 "EMF+\t Bezier starting point: " << x1 << "," << y1);
                         for (sal_uInt32 i = 4; i <= aCount; i += 3)
                         {
                             ReadPoint(rMS, x2, y2, flags);
                             ReadPoint(rMS, x3, y3, flags);
                             ReadPoint(rMS, x4, y4, flags);
 
-                            SAL_INFO("drawinglayer.emf", "EMF+\t Bezier points: " << x1 << "," << y1 << " " << x2 << "," << y2 << " " << x3 << "," << y3 << " " << x4 << "," << y4);
+                            SAL_INFO("drawinglayer.emf",
+                                     "EMF+\t Bezier points: " << x2 << "," << y2 << " " << x3 << ","
+                                                              << y3 << " " << x4 << "," << y4);
 
-                            aStartPoint = Map(x1, y1);
                             aControlPointA = Map(x2, y2);
                             aControlPointB = Map(x3, y3);
                             aEndPoint = Map(x4, y4);
-
-                            ::basegfx::B2DCubicBezier cubicBezier(aStartPoint, aControlPointA, aControlPointB, aEndPoint);
-                            cubicBezier.adaptiveSubdivideByDistance(aPolygon, 10.0);
-
-                            EMFPPlusDrawPolygon(::basegfx::B2DPolyPolygon(aPolygon), flags & 0xff);
-
+                            aPolygon.appendBezierSegment(aControlPointA, aControlPointB, aEndPoint);
                             // The ending coordinate of one Bezier curve is the starting coordinate of the next.
-                            x1 = x4;
-                            y1 = y4;
+                            aStartPoint = aEndPoint;
                         }
+                        EMFPPlusDrawPolygon(::basegfx::B2DPolyPolygon(aPolygon), flags & 0xff);
                         break;
                     }
                     case EmfPlusRecordTypeDrawClosedCurve:
