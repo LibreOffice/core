@@ -19,6 +19,7 @@
 
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weldutils.hxx>
@@ -65,16 +66,10 @@ bool SvxCharView::MouseButtonDown(const MouseEvent& rMEvt)
         }
 
         maMouseClickHdl.Call(this);
+        return true;
     }
 
-    if (rMEvt.IsRight())
-    {
-        GrabFocus();
-        Invalidate();
-        createContextMenu(rMEvt.GetPosPixel());
-    }
-
-    return true;
+    return CustomWidgetController::MouseButtonDown(rMEvt);
 }
 
 bool SvxCharView::KeyInput(const KeyEvent& rKEvt)
@@ -90,6 +85,19 @@ bool SvxCharView::KeyInput(const KeyEvent& rKEvt)
             break;
     }
     return bRet;
+}
+
+bool SvxCharView::Command(const CommandEvent& rCommandEvent)
+{
+    if (rCommandEvent.GetCommand() == CommandEventId::ContextMenu)
+    {
+        GrabFocus();
+        Invalidate();
+        createContextMenu(rCommandEvent.GetMousePosPixel());
+        return true;
+    }
+
+    return weld::CustomWidgetController::Command(rCommandEvent);
 }
 
 void SvxCharView::InsertCharToDoc()

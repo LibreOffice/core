@@ -44,6 +44,7 @@ private:
     virtual void GetFocus() override;
     virtual void LoseFocus() override;
     virtual bool KeyInput(const KeyEvent&) override;
+    virtual bool Command(const CommandEvent&) override;
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 public:
     SvxCharView(const VclPtr<VirtualDevice>& rVirDev);
