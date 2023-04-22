@@ -66,7 +66,7 @@ FormShellManager::FormShellManager (ViewShellBase& rBase)
 
 FormShellManager::~FormShellManager()
 {
-    SetFormShell(nullptr);
+    suppress_fun_call_w_exception(SetFormShell(nullptr));
     UnregisterAtCenterPane();
 
     // Unregister from the EventMultiplexer.
