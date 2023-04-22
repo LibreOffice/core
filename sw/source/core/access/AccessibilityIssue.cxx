@@ -108,7 +108,8 @@ void AccessibilityIssue::quickFixIssue() const
             {
                 SwFlyFrameFormat* pFlyFormat
                     = const_cast<SwFlyFrameFormat*>(m_pDoc->FindFlyByName(m_sObjectID));
-                m_pDoc->SetFlyFrameTitle(*pFlyFormat, aNameDialog.GetName());
+                if (pFlyFormat)
+                    m_pDoc->SetFlyFrameTitle(*pFlyFormat, aNameDialog.GetName());
             }
         }
         break;
