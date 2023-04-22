@@ -128,7 +128,7 @@ OUString SAL_CALL NumberText_Impl::getNumberText(const OUString& rText, const Lo
     bool result = m_aNumberText.numbertext(sResult, aLangCode.getStr());
     DBG_ASSERT(result, "numbertext: false");
 #if defined(_WIN32)
-    OUString aResult(o3tl::toU(sResult.c_str()));
+    OUString aResult(o3tl::toU(sResult));
 #else
     OUString aResult = OUString::fromUtf8(Numbertext::wstring2string(sResult));
 #endif
