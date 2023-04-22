@@ -55,6 +55,8 @@
 
 #include <vcl/commandevent.hxx>
 
+#include <svx/svdview.hxx>
+
 using namespace com::sun::star;
 
 bool SdPageObjsTLV::bIsInDrag = false;
@@ -413,6 +415,7 @@ bool SdPageObjsTLV::DoDrag()
         return true;
     }
 
+    m_xDropTargetHelper->SetDrawView(pViewShell->GetDrawView());
     bIsInDrag = true;
 
     std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->make_iterator();
@@ -559,8 +562,8 @@ sal_Int8 SdPageObjsTLVDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt )
         m_rTreeView.iter_previous_sibling(*xTarget);
         m_rTreeView.set_cursor(*xTarget);
 
-        if (m_rTreeView.iter_compare(*xSourceParent, *xTargetParent) == 0 && nIterCompare < 0)
-            nTargetPos = m_rTreeView.get_iter_index_in_parent(*xTarget);
+        // Remove and insert are required for moving objects in to and out of groups.
+        // PutMarked... by itself would suffice if this wasn't allowed.
 
         // Remove the source object from source parent list and insert it in the target parent list.
         SdrObject* pSourceParentObject = weld::fromId<SdrObject*>(m_rTreeView.get_id(*xSourceParent));
@@ -585,14 +588,14 @@ sal_Int8 SdPageObjsTLVDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt )
         if (pTargetParentObject == reinterpret_cast<SdrObject*>(1))
         {
             pObjectList->NbcInsertObject(rSourceObject.get());
-            pObjectList->SetObjectNavigationPosition(*rSourceObject, nTargetPos);
         }
         else
         {
             SdrObjList* pList = pTargetParentObject->GetSubList();
-            pList->NbcInsertObject(rSourceObject.get(), nTargetPos);
-            pList->SetObjectNavigationPosition(*rSourceObject, nTargetPos);
+            pList->NbcInsertObject(rSourceObject.get());
         }
+
+        m_pSdrView->PutMarkedBehindObj(pTargetObject);
     }
 
     return DND_ACTION_NONE;

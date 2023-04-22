@@ -28,6 +28,7 @@
 #include <memory>
 #include <vector>
 
+class SdrView;
 class SdDrawDocument;
 class SfxMedium;
 class SfxViewFrame;
@@ -54,12 +55,15 @@ class SdPageObjsTLVDropTarget final : public DropTargetHelper
 {
 private:
     weld::TreeView& m_rTreeView;
+    SdrView* m_pSdrView;
 
     virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
     virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
 
 public:
     SdPageObjsTLVDropTarget(weld::TreeView& rTreeView);
+
+    void SetDrawView(SdrView* pSdrView) { m_pSdrView = pSdrView; }
 };
 
 class SD_DLLPUBLIC SdPageObjsTLV
