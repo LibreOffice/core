@@ -244,6 +244,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf154703_framePrWrapSpacing, "tdf154703_framePrWra
     assertXPath(pXmlDoc, "//w:body/w:p/w:pPr/w:framePr", "hSpace", "2552");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf154703_framePrTextDirection, "tdf154703_framePrTextDirection.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(text::WritingMode2::TB_RL), getProperty<sal_Int16>(getShape(1), "WritingMode"));
+    if (!isExported())
+        return;
+
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "//w:body/w:p/w:pPr/w:textDirection", "val", "tbRl");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf153613_anchoredAfterPgBreak, "tdf153613_anchoredAfterPgBreak.docx")
 {
     const auto& pLayout = parseLayoutDump();

@@ -133,6 +133,7 @@ class FramePrHelper
     sal_Int32 m_nTableDepth;
     bool m_bUseFrameBorders;
     bool m_bUseFrameBackground;
+    bool m_bUseFrameTextDirection;
 
 public:
     FramePrHelper()
@@ -140,6 +141,7 @@ public:
         , m_nTableDepth(0)
         , m_bUseFrameBorders(true)
         , m_bUseFrameBackground(true)
+        , m_bUseFrameTextDirection(true)
     {}
 
     ww8::Frame* Frame() { return m_pFrame; }
@@ -148,6 +150,8 @@ public:
     void SetUseFrameBorders(bool bSet) { m_bUseFrameBorders = bSet; }
     bool UseFrameBackground();
     void SetUseFrameBackground(bool bSet) { m_bUseFrameBackground = bSet; }
+    bool UseFrameTextDirection(sal_Int32 nTableDepth);
+    void SetUseFrameTextDirection(bool bSet) { m_bUseFrameTextDirection = bSet; }
 };
 
 class SdtBlockHelper

@@ -584,6 +584,7 @@ void FramePrHelper::SetFrame(ww8::Frame* pFrame, sal_Int32 nTableDepth)
     {
         m_bUseFrameBorders = true;
         m_bUseFrameBackground = true;
+        m_bUseFrameTextDirection = true;
     }
 }
 
@@ -601,6 +602,14 @@ bool FramePrHelper::UseFrameBackground()
         return false;
 
     return m_bUseFrameBackground;
+}
+
+bool FramePrHelper::UseFrameTextDirection(sal_Int32 nTableDepth)
+{
+    if (!m_pFrame || m_nTableDepth < nTableDepth)
+        return false;
+
+    return m_bUseFrameTextDirection;
 }
 
 void SdtBlockHelper::DeleteAndResetTheLists()
@@ -1571,9 +1580,24 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
             }
         }
 
+        if (m_aFramePr.UseFrameTextDirection(!m_xTableWrt ? -1 : m_tableReference.m_nTableDepth))
+        {
+            const SvxFrameDirectionItem& rFrameDir = rFrameFormat.GetFrameDir();
+            if (rFrameDir.GetValue() != SvxFrameDirection::Environment)
+            {
+                assert(!m_rExport.m_bOutPageDescs);
+                // hack: use existing variable to write out the full TextDirection attribute.
+                // This is valid for paragraphs/styles - just not native in LO, so hack for now.
+                m_rExport.m_bOutPageDescs = true;
+                FormatFrameDirection(rFrameDir);
+                m_rExport.m_bOutPageDescs = false;
+            }
+        }
+
         // reset to true in preparation for the next paragraph in the frame
         m_aFramePr.SetUseFrameBorders(true);
         m_aFramePr.SetUseFrameBackground(true);
+        m_aFramePr.SetUseFrameTextDirection(true);
     }
 
     m_pSerializer->endElementNS( XML_w, XML_pPr );
@@ -9775,6 +9799,7 @@ void DocxAttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDi
             m_pSerializer->singleElementNS(XML_w, XML_bidi, FSNS(XML_w, XML_val), "1");
         else
             m_pSerializer->singleElementNS(XML_w, XML_bidi, FSNS(XML_w, XML_val), "0");
+        m_aFramePr.SetUseFrameTextDirection(false);
     }
 }
 
