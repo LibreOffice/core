@@ -188,18 +188,20 @@ friend class SfxTabDialog;
 friend class SfxTabDialogController;
 
 private:
-    const SfxItemSet*   pSet;
-    OUString            aUserString;
-    bool                bHasExchangeSupport;
+    const SfxItemSet* mpSet;
+    OUString maUserString;
+    bool mbHasExchangeSupport;
     std::unordered_map<OUString, css::uno::Any> maAdditionalProperties;
 
-    std::unique_ptr< TabPageImpl >        pImpl;
+    std::unique_ptr<TabPageImpl> mpImpl;
 
 protected:
     SfxTabPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OUString& rID, const SfxItemSet *rAttrSet);
 
     sal_uInt16          GetWhich( sal_uInt16 nSlot, bool bDeep = true ) const
-                            { return pSet->GetPool()->GetWhich( nSlot, bDeep ); }
+    {
+        return mpSet->GetPool()->GetWhich(nSlot, bDeep);
+    }
     template<class T>
     TypedWhichId<T> GetWhich( TypedWhichId<T> nSlot, bool bDeep = true ) const
     {
@@ -223,23 +225,36 @@ public:
         m_xContainer->set_visible(bVisible);
     }
 
-    const SfxItemSet&   GetItemSet() const { return *pSet; }
+    const SfxItemSet& GetItemSet() const
+    {
+        return *mpSet;
+    }
 
     virtual bool        FillItemSet( SfxItemSet* );
     virtual void        Reset( const SfxItemSet* );
     // Allows to postpone some initialization to the first activation
     virtual bool        DeferResetToFirstActivation();
 
-    bool                HasExchangeSupport() const
-                            { return bHasExchangeSupport; }
-    void                SetExchangeSupport()
-                            { bHasExchangeSupport = true; }
+    bool HasExchangeSupport() const
+    {
+        return mbHasExchangeSupport;
+    }
+
+    void SetExchangeSupport()
+    {
+        mbHasExchangeSupport = true;
+    }
 
     virtual void            ActivatePage( const SfxItemSet& );
     virtual DeactivateRC    DeactivatePage( SfxItemSet* pSet );
-    void                    SetUserData(const OUString& rString)
-                              { aUserString = rString; }
-    const OUString&         GetUserData() const { return aUserString; }
+    void SetUserData(const OUString& rString)
+    {
+        maUserString = rString;
+    }
+    const OUString& GetUserData() const
+    {
+        return maUserString;
+    }
     virtual void            FillUserData();
     virtual bool            IsReadOnly() const;
     virtual void PageCreated (const SfxAllItemSet& aSet);
