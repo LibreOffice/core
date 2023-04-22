@@ -727,6 +727,10 @@ void* QtAccessibleWidget::interface_cast(QAccessible::InterfaceType t)
     }
     if (t == QAccessible::TableInterface && accessibleProvidesInterface<XAccessibleTable>())
         return static_cast<QAccessibleTableInterface*>(this);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+    if (t == QAccessible::SelectionInterface && accessibleProvidesInterface<XAccessibleSelection>())
+        return static_cast<QAccessibleSelectionInterface*>(this);
+#endif
     return nullptr;
 }
 
@@ -1631,55 +1635,9 @@ bool QtAccessibleWidget::selectRow(int row)
     return xTableSelection->selectRow(row);
 }
 
-int QtAccessibleWidget::selectedCellCount() const
-{
-    Reference<XAccessibleContext> xAcc = getAccessibleContextImpl();
-    if (!xAcc.is())
-        return 0;
+int QtAccessibleWidget::selectedCellCount() const { return selectedItemCount(); }
 
-    Reference<XAccessibleSelection> xSelection(xAcc, UNO_QUERY);
-    if (!xSelection.is())
-        return 0;
-
-    sal_Int64 nSelected = xSelection->getSelectedAccessibleChildCount();
-    if (nSelected > std::numeric_limits<int>::max())
-    {
-        SAL_WARN("vcl.qt",
-                 "QtAccessibleWidget::selectedCellCount: Cell count exceeds maximum int value, "
-                 "using max int.");
-        nSelected = std::numeric_limits<int>::max();
-    }
-    return nSelected;
-}
-
-QList<QAccessibleInterface*> QtAccessibleWidget::selectedCells() const
-{
-    Reference<XAccessibleContext> xAcc = getAccessibleContextImpl();
-    if (!xAcc.is())
-        return QList<QAccessibleInterface*>();
-
-    Reference<XAccessibleSelection> xSelection(xAcc, UNO_QUERY);
-    if (!xSelection.is())
-        return QList<QAccessibleInterface*>();
-
-    QList<QAccessibleInterface*> aSelectedCells;
-    sal_Int64 nSelected = xSelection->getSelectedAccessibleChildCount();
-    if (nSelected > std::numeric_limits<int>::max())
-    {
-        SAL_WARN("vcl.qt",
-                 "QtAccessibleWidget::selectedCells: Cell count exceeds maximum int value, "
-                 "using max int.");
-        nSelected = std::numeric_limits<int>::max();
-    }
-    for (sal_Int64 i = 0; i < nSelected; i++)
-    {
-        Reference<XAccessible> xChild = xSelection->getSelectedAccessibleChild(i);
-        QAccessibleInterface* pInterface
-            = QAccessible::queryAccessibleInterface(QtAccessibleRegistry::getQObject(xChild));
-        aSelectedCells.push_back(pInterface);
-    }
-    return aSelectedCells;
-}
+QList<QAccessibleInterface*> QtAccessibleWidget::selectedCells() const { return selectedItems(); }
 
 int QtAccessibleWidget::selectedColumnCount() const
 {
@@ -1896,5 +1854,163 @@ QAccessibleInterface* QtAccessibleWidget::table() const
 
     return QAccessible::queryAccessibleInterface(QtAccessibleRegistry::getQObject(xTableAcc));
 }
+
+// QAccessibleSelectionInterface
+int QtAccessibleWidget::selectedItemCount() const
+{
+    Reference<XAccessibleContext> xAcc = getAccessibleContextImpl();
+    if (!xAcc.is())
+        return 0;
+
+    Reference<XAccessibleSelection> xSelection(xAcc, UNO_QUERY);
+    if (!xSelection.is())
+        return 0;
+
+    sal_Int64 nSelected = xSelection->getSelectedAccessibleChildCount();
+    if (nSelected > std::numeric_limits<int>::max())
+    {
+        SAL_WARN("vcl.qt",
+                 "QtAccessibleWidget::selectedItemCount: Cell count exceeds maximum int value, "
+                 "using max int.");
+        nSelected = std::numeric_limits<int>::max();
+    }
+    return nSelected;
+}
+
+QList<QAccessibleInterface*> QtAccessibleWidget::selectedItems() const
+{
+    Reference<XAccessibleContext> xAcc = getAccessibleContextImpl();
+    if (!xAcc.is())
+        return QList<QAccessibleInterface*>();
+
+    Reference<XAccessibleSelection> xSelection(xAcc, UNO_QUERY);
+    if (!xSelection.is())
+        return QList<QAccessibleInterface*>();
+
+    QList<QAccessibleInterface*> aSelectedItems;
+    sal_Int64 nSelected = xSelection->getSelectedAccessibleChildCount();
+    if (nSelected > std::numeric_limits<int>::max())
+    {
+        SAL_WARN("vcl.qt",
+                 "QtAccessibleWidget::selectedItems: Cell count exceeds maximum int value, "
+                 "using max int.");
+        nSelected = std::numeric_limits<int>::max();
+    }
+    for (sal_Int64 i = 0; i < nSelected; i++)
+    {
+        Reference<XAccessible> xChild = xSelection->getSelectedAccessibleChild(i);
+        QAccessibleInterface* pInterface
+            = QAccessible::queryAccessibleInterface(QtAccessibleRegistry::getQObject(xChild));
+        aSelectedItems.push_back(pInterface);
+    }
+    return aSelectedItems;
+}
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+QAccessibleInterface* QtAccessibleWidget::selectedItem(int nSelectionIndex) const
+{
+    Reference<XAccessibleContext> xAcc = getAccessibleContextImpl();
+    if (!xAcc.is())
+        return nullptr;
+
+    Reference<XAccessibleSelection> xSelection(xAcc, UNO_QUERY);
+    if (!xSelection.is())
+        return nullptr;
+
+    if (nSelectionIndex < 0 || nSelectionIndex >= xSelection->getSelectedAccessibleChildCount())
+    {
+        SAL_WARN("vcl.qt",
+                 "QtAccessibleWidget::selectedItem called with invalid index: " << nSelectionIndex);
+        return nullptr;
+    }
+
+    Reference<XAccessible> xChild = xSelection->getSelectedAccessibleChild(nSelectionIndex);
+    if (!xChild)
+        return nullptr;
+
+    return QAccessible::queryAccessibleInterface(QtAccessibleRegistry::getQObject(xChild));
+}
+
+bool QtAccessibleWidget::isSelected(QAccessibleInterface* pItem) const
+{
+    Reference<XAccessibleContext> xAcc = getAccessibleContextImpl();
+    if (!xAcc.is())
+        return false;
+
+    Reference<XAccessibleSelection> xSelection(xAcc, UNO_QUERY);
+    if (!xSelection.is())
+        return false;
+
+    int nChildIndex = indexOfChild(pItem);
+    if (nChildIndex < 0)
+        return false;
+
+    return xSelection->isAccessibleChildSelected(nChildIndex);
+}
+
+bool QtAccessibleWidget::select(QAccessibleInterface* pItem)
+{
+    Reference<XAccessibleContext> xAcc = getAccessibleContextImpl();
+    if (!xAcc.is())
+        return false;
+
+    Reference<XAccessibleSelection> xSelection(xAcc, UNO_QUERY);
+    if (!xSelection.is())
+        return false;
+
+    int nChildIndex = indexOfChild(pItem);
+    if (nChildIndex < 0)
+        return false;
+
+    xSelection->selectAccessibleChild(nChildIndex);
+    return true;
+}
+
+bool QtAccessibleWidget::unselect(QAccessibleInterface* pItem)
+{
+    Reference<XAccessibleContext> xAcc = getAccessibleContextImpl();
+    if (!xAcc.is())
+        return false;
+
+    Reference<XAccessibleSelection> xSelection(xAcc, UNO_QUERY);
+    if (!xSelection.is())
+        return false;
+
+    int nChildIndex = indexOfChild(pItem);
+    if (nChildIndex < 0)
+        return false;
+
+    xSelection->deselectAccessibleChild(nChildIndex);
+    return true;
+}
+
+bool QtAccessibleWidget::selectAll()
+{
+    Reference<XAccessibleContext> xAcc = getAccessibleContextImpl();
+    if (!xAcc.is())
+        return false;
+
+    Reference<XAccessibleSelection> xSelection(xAcc, UNO_QUERY);
+    if (!xSelection.is())
+        return false;
+
+    xSelection->selectAllAccessibleChildren();
+    return true;
+}
+
+bool QtAccessibleWidget::clear()
+{
+    Reference<XAccessibleContext> xAcc = getAccessibleContextImpl();
+    if (!xAcc.is())
+        return false;
+
+    Reference<XAccessibleSelection> xSelection(xAcc, UNO_QUERY);
+    if (!xSelection.is())
+        return false;
+
+    xSelection->clearAccessibleSelection();
+    return true;
+}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

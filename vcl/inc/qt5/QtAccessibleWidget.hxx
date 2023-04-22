@@ -40,6 +40,9 @@ class QtAccessibleWidget final : public QAccessibleInterface,
                                  public QAccessibleActionInterface,
                                  public QAccessibleTextInterface,
                                  public QAccessibleEditableTextInterface,
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+                                 public QAccessibleSelectionInterface,
+#endif
                                  public QAccessibleTableCellInterface,
                                  public QAccessibleTableInterface,
                                  public QAccessibleValueInterface
@@ -146,6 +149,22 @@ public:
     virtual int rowExtent() const override;
     virtual int rowIndex() const override;
     virtual QAccessibleInterface* table() const override;
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+    // QAccessibleSelectionInterface
+    virtual int selectedItemCount() const override;
+    virtual QList<QAccessibleInterface*> selectedItems() const override;
+    virtual QAccessibleInterface* selectedItem(int selectionIndex) const override;
+    virtual bool isSelected(QAccessibleInterface* item) const override;
+    virtual bool select(QAccessibleInterface* item) override;
+    virtual bool unselect(QAccessibleInterface* item) override;
+    virtual bool selectAll() override;
+    virtual bool clear() override;
+#else
+    // no override, but used in QAccessibleTableInterface methods
+    virtual int selectedItemCount() const;
+    virtual QList<QAccessibleInterface*> selectedItems() const;
+#endif
 
     // Factory
     static QAccessibleInterface* customFactory(const QString& classname, QObject* object);
