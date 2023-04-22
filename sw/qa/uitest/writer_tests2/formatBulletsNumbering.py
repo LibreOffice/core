@@ -244,7 +244,7 @@ class formatBulletsNumbering(UITestCase):
                 xselector.executeAction("CHOOSE", mkPropertyValues({"POS": "1"}))
                 self.assertEqual(get_state_as_dict(xselector)["SelectedItemPos"], "0")
                 self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "1")
-                self.assertEqual(get_state_as_dict(xselector)["ItemText"], "Numeric, numeric, lowercase letters, solid small circular bullet")
+                self.assertEqual(get_state_as_dict(xselector)["ItemText"], "Uppercase Roman, uppercase letters, numeric, lowercase letters, lowercase Roman, solid small circular bullet")
 
                 # Select the GraphicPage's Selector
                 xTabs = xDialog.getChild("tabcontrol")

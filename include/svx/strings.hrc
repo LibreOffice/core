@@ -1377,6 +1377,8 @@
 #define RID_SVXSTR_BULLET_DESCRIPTION_5                     NC_("RID_SVXSTR_BULLET_DESCRIPTION_5", "Right pointing arrow bullets")
 #define RID_SVXSTR_BULLET_DESCRIPTION_6                     NC_("RID_SVXSTR_BULLET_DESCRIPTION_6", "Cross mark bullets")
 #define RID_SVXSTR_BULLET_DESCRIPTION_7                     NC_("RID_SVXSTR_BULLET_DESCRIPTION_7", "Check mark bullets")
+
+// do not translate this; instead describe the nth numbering style (LC_NumberingLevel) defined by your locale
 #define RID_SVXSTR_SINGLENUM_DESCRIPTION_0                  NC_("RID_SVXSTR_SINGLENUM_DESCRIPTION_0", "Number 1) 2) 3)")
 #define RID_SVXSTR_SINGLENUM_DESCRIPTION_1                  NC_("RID_SVXSTR_SINGLENUM_DESCRIPTION_1", "Number 1. 2. 3.")
 #define RID_SVXSTR_SINGLENUM_DESCRIPTION_2                  NC_("RID_SVXSTR_SINGLENUM_DESCRIPTION_2", "Number (1) (2) (3)")
@@ -1385,12 +1387,14 @@
 #define RID_SVXSTR_SINGLENUM_DESCRIPTION_5                  NC_("RID_SVXSTR_SINGLENUM_DESCRIPTION_5", "Lowercase letter a) b) c)")
 #define RID_SVXSTR_SINGLENUM_DESCRIPTION_6                  NC_("RID_SVXSTR_SINGLENUM_DESCRIPTION_6", "Lowercase letter (a) (b) (c)")
 #define RID_SVXSTR_SINGLENUM_DESCRIPTION_7                  NC_("RID_SVXSTR_SINGLENUM_DESCRIPTION_7", "Lowercase Roman number i. ii. iii.")
-#define RID_SVXSTR_OUTLINENUM_DESCRIPTION_0                 NC_("RID_SVXSTR_OUTLINENUM_DESCRIPTION_0", "Numeric, numeric, lowercase letters, solid small circular bullet")
-#define RID_SVXSTR_OUTLINENUM_DESCRIPTION_1                 NC_("RID_SVXSTR_OUTLINENUM_DESCRIPTION_1", "Numeric, lowercase letters, solid small circular bullet")
-#define RID_SVXSTR_OUTLINENUM_DESCRIPTION_2                 NC_("RID_SVXSTR_OUTLINENUM_DESCRIPTION_2", "Numeric, lowercase letters, lowercase Roman, uppercase letters, solid small circular bullet")
-#define RID_SVXSTR_OUTLINENUM_DESCRIPTION_3                 NC_("RID_SVXSTR_OUTLINENUM_DESCRIPTION_3", "Numeric")
-#define RID_SVXSTR_OUTLINENUM_DESCRIPTION_4                 NC_("RID_SVXSTR_OUTLINENUM_DESCRIPTION_4", "Uppercase Roman, uppercase letters, lowercase Roman, lowercase letters, solid small circular bullet")
-#define RID_SVXSTR_OUTLINENUM_DESCRIPTION_5                 NC_("RID_SVXSTR_OUTLINENUM_DESCRIPTION_5", "Uppercase letters, uppercase Roman, lowercase letters, lowercase Roman, solid small circular bullet")
+
+// do not translate this; instead describe the nth outline style (LC_OutLineNumberingLevel) defined by your locale
+#define RID_SVXSTR_OUTLINENUM_DESCRIPTION_0                 NC_("RID_SVXSTR_OUTLINENUM_DESCRIPTION_0", "Uppercase Roman, uppercase letters, numeric, lowercase letters, lowercase Roman, solid small circular bullet")
+#define RID_SVXSTR_OUTLINENUM_DESCRIPTION_1                 NC_("RID_SVXSTR_OUTLINENUM_DESCRIPTION_1", "Uppercase letters, numeric, lowercase letters, numeric, solid small circular bullet")
+#define RID_SVXSTR_OUTLINENUM_DESCRIPTION_2                 NC_("RID_SVXSTR_OUTLINENUM_DESCRIPTION_2", "Numeric")
+#define RID_SVXSTR_OUTLINENUM_DESCRIPTION_3                 NC_("RID_SVXSTR_OUTLINENUM_DESCRIPTION_3", "Numeric, numeric, lowercase letters, solid small circular bullet")
+#define RID_SVXSTR_OUTLINENUM_DESCRIPTION_4                 NC_("RID_SVXSTR_OUTLINENUM_DESCRIPTION_4", "Uppercase letters, uppercase Roman, lowercase letters, lowercase Roman, solid small circular bullet")
+#define RID_SVXSTR_OUTLINENUM_DESCRIPTION_5                 NC_("RID_SVXSTR_OUTLINENUM_DESCRIPTION_5", "Numeric, lowercase letters, numeric, uppercase letters, solid small circular bullet")
 #define RID_SVXSTR_OUTLINENUM_DESCRIPTION_6                 NC_("RID_SVXSTR_OUTLINENUM_DESCRIPTION_6", "Numeric with all sublevels")
 #define RID_SVXSTR_OUTLINENUM_DESCRIPTION_7                 NC_("RID_SVXSTR_OUTLINENUM_DESCRIPTION_7", "Right pointing bullet, right pointing arrow bullet, solid diamond bullet, solid small circular bullet")
 
