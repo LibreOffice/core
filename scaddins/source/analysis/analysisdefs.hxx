@@ -22,8 +22,12 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <cmath>
 
-#define CHK_Freq            ( nFreq != 1 && nFreq != 2 && nFreq != 4 )
-#define CHK_FINITE(d)       if( !std::isfinite( d ) ) throw css::lang::IllegalArgumentException()
-#define RETURN_FINITE(d)    if( !std::isfinite( d ) ) throw css::lang::IllegalArgumentException(); return d;
+inline bool isFreqInvalid(sal_Int32 nFreq) { return nFreq != 1 && nFreq != 2 && nFreq != 4; }
+inline double finiteOrThrow(double d)
+{
+    if (!std::isfinite(d))
+        throw css::lang::IllegalArgumentException();
+    return d;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

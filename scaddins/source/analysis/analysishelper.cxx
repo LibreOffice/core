@@ -1249,7 +1249,7 @@ static void lcl_GetCouppcd( ScaDate& rDate, const ScaDate& rSettle, const ScaDat
 
 double GetCouppcd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
 {
-    if( nSettle >= nMat || CHK_Freq )
+    if( nSettle >= nMat || isFreqInvalid(nFreq) )
         throw lang::IllegalArgumentException();
 
     ScaDate aDate;
@@ -1271,7 +1271,7 @@ static void lcl_GetCoupncd( ScaDate& rDate, const ScaDate& rSettle, const ScaDat
 
 double GetCoupncd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
 {
-    if( nSettle >= nMat || CHK_Freq )
+    if( nSettle >= nMat || isFreqInvalid(nFreq) )
         throw lang::IllegalArgumentException();
 
     ScaDate aDate;
@@ -1282,7 +1282,7 @@ double GetCoupncd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_I
 // COUPDAYBS: get day count: coupon date before settlement <-> settlement
 double GetCoupdaybs( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
 {
-    if( nSettle >= nMat || CHK_Freq )
+    if( nSettle >= nMat || isFreqInvalid(nFreq) )
         throw lang::IllegalArgumentException();
 
     ScaDate aSettle( nNullDate, nSettle, nBase );
@@ -1294,7 +1294,7 @@ double GetCoupdaybs( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal
 // COUPDAYSNC: get day count: settlement <-> coupon date after settlement
 double GetCoupdaysnc( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
 {
-    if( nSettle >= nMat || CHK_Freq )
+    if( nSettle >= nMat || isFreqInvalid(nFreq) )
         throw lang::IllegalArgumentException();
 
     if( (nBase != 0) && (nBase != 4) )
@@ -1310,7 +1310,7 @@ double GetCoupdaysnc( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sa
 // COUPDAYS: get day count: coupon date before settlement <-> coupon date after settlement
 double GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
 {
-    if( nSettle >= nMat || CHK_Freq )
+    if( nSettle >= nMat || isFreqInvalid(nFreq) )
         throw lang::IllegalArgumentException();
 
     if( nBase == 1 )
@@ -1327,7 +1327,7 @@ double GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_
 // COUPNUM: get count of coupon dates
 double GetCoupnum( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
 {
-    if( nSettle >= nMat || CHK_Freq )
+    if( nSettle >= nMat || isFreqInvalid(nFreq) )
         throw lang::IllegalArgumentException();
 
     ScaDate aMat( nNullDate, nMat, nBase );
@@ -1652,8 +1652,8 @@ bool Complex::ParseString( const OUString& rStr, Complex& rCompl )
 
 OUString Complex::GetString() const
 {
-    CHK_FINITE(r);
-    CHK_FINITE(i);
+    finiteOrThrow(r);
+    finiteOrThrow(i);
     OUStringBuffer aRet;
 
     bool bHasImag = i != 0.0;

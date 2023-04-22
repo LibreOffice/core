@@ -33,7 +33,7 @@ double SAL_CALL AnalysisAddIn::getAmordegrc( const css::uno::Reference< css::bea
         throw css::lang::IllegalArgumentException();
 
     double fRet = GetAmordegrc( GetNullDate( xOpt ), fCost, nDate, nFirstPer, fRestVal, fPer, fRate, getDateMode( xOpt, rOB ) );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
@@ -46,7 +46,7 @@ double SAL_CALL AnalysisAddIn::getAmorlinc( const css::uno::Reference< css::bean
         throw css::lang::IllegalArgumentException();
 
     double fRet = GetAmorlinc( GetNullDate( xOpt ), fCost, nDate, nFirstPer, fRestVal, fPer, fRate, getDateMode( xOpt, rOB ) );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
@@ -56,11 +56,11 @@ double SAL_CALL AnalysisAddIn::getAccrint( const css::uno::Reference< css::beans
 {
     double      fVal = aAnyConv.getDouble( xOpt, rVal, 1000.0 );
 
-    if( fRate <= 0.0 || fVal <= 0.0 || CHK_Freq || nIssue >= nSettle )
+    if( fRate <= 0.0 || fVal <= 0.0 || isFreqInvalid(nFreq) || nIssue >= nSettle)
         throw css::lang::IllegalArgumentException();
 
     double fRet = fVal * fRate * GetYearDiff( GetNullDate( xOpt ), nIssue, nSettle, getDateMode( xOpt, rOB ) );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
@@ -73,7 +73,7 @@ double SAL_CALL AnalysisAddIn::getAccrintm( const css::uno::Reference< css::bean
         throw css::lang::IllegalArgumentException();
 
     double fRet = fVal * fRate * GetYearDiff( GetNullDate( xOpt ), nIssue, nSettle, getDateMode( xOpt, rOB ) );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
@@ -84,7 +84,7 @@ double SAL_CALL AnalysisAddIn::getReceived( const css::uno::Reference< css::bean
         throw css::lang::IllegalArgumentException();
 
     double fRet = fInvest / ( 1.0 - ( fDisc * GetYearDiff( GetNullDate( xOpt ), nSettle, nMat, getDateMode( xOpt, rOB ) ) ) );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
@@ -94,18 +94,18 @@ double SAL_CALL AnalysisAddIn::getDisc( const css::uno::Reference< css::beans::X
     if( fPrice <= 0.0 || fRedemp <= 0.0 || nSettle >= nMat )
         throw css::lang::IllegalArgumentException();
     double fRet = ( 1.0 - fPrice / fRedemp ) / GetYearFrac( xOpt, nSettle, nMat, getDateMode( xOpt, rOB ) );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
 double SAL_CALL AnalysisAddIn::getDuration( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, double fCoup, double fYield, sal_Int32 nFreq, const css::uno::Any& rOB )
 {
-    if( fCoup < 0.0 || fYield < 0.0 || CHK_Freq || nSettle >= nMat )
+    if( fCoup < 0.0 || fYield < 0.0 || isFreqInvalid(nFreq) || nSettle >= nMat )
         throw css::lang::IllegalArgumentException();
 
     double fRet = GetDuration( GetNullDate( xOpt ),  nSettle, nMat, fCoup, fYield, nFreq, getDateMode( xOpt, rOB ) );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
@@ -117,7 +117,7 @@ double SAL_CALL AnalysisAddIn::getEffect( double fNominal, sal_Int32 nPeriods )
     double  fPeriods = nPeriods;
 
     double fRet = pow( 1.0 + fNominal / fPeriods, fPeriods ) - 1.0;
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
@@ -155,7 +155,7 @@ double SAL_CALL AnalysisAddIn::getCumprinc( double fRate, sal_Int32 nNumPeriods,
             fPpmt += fPmt - GetFv( fRate, double( i - 1 ), fPmt, fVal, 0 ) * fRate;
     }
 
-    RETURN_FINITE( fPpmt );
+    return finiteOrThrow( fPpmt );
 }
 
 
@@ -193,7 +193,7 @@ double SAL_CALL AnalysisAddIn::getCumipmt( double fRate, sal_Int32 nNumPeriods, 
 
     fIpmt *= fRate;
 
-    RETURN_FINITE( fIpmt );
+    return finiteOrThrow( fIpmt );
 }
 
 
@@ -201,11 +201,11 @@ double SAL_CALL AnalysisAddIn::getPrice( const css::uno::Reference< css::beans::
     sal_Int32 nSettle, sal_Int32 nMat, double fRate, double fYield, double fRedemp, sal_Int32 nFreq,
     const css::uno::Any& rOB )
 {
-    if( fYield < 0.0 || fRate < 0.0 || fRedemp <= 0.0 || CHK_Freq || nSettle >= nMat )
+    if( fYield < 0.0 || fRate < 0.0 || fRedemp <= 0.0 || isFreqInvalid(nFreq) || nSettle >= nMat )
         throw css::lang::IllegalArgumentException();
 
     double fRet = getPrice_( GetNullDate( xOpt ), nSettle, nMat, fRate, fYield, fRedemp, nFreq, getDateMode( xOpt, rOB ) );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
@@ -216,7 +216,7 @@ double SAL_CALL AnalysisAddIn::getPricedisc( const css::uno::Reference< css::bea
         throw css::lang::IllegalArgumentException();
 
     double fRet = fRedemp * ( 1.0 - fDisc * GetYearDiff( GetNullDate( xOpt ), nSettle, nMat, getDateMode( xOpt, rOB ) ) );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
@@ -238,19 +238,19 @@ double SAL_CALL AnalysisAddIn::getPricemat( const css::uno::Reference< css::bean
     fRet -= fIssSet * fRate;
     fRet *= 100.0;
 
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
 double SAL_CALL AnalysisAddIn::getMduration( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, double fCoup, double fYield, sal_Int32 nFreq, const css::uno::Any& rOB )
 {
-    if( fCoup < 0.0 || fYield < 0.0 || CHK_Freq )
+    if( fCoup < 0.0 || fYield < 0.0 || isFreqInvalid(nFreq) )
         throw css::lang::IllegalArgumentException();
 
     double      fRet = GetDuration( GetNullDate( xOpt ),  nSettle, nMat, fCoup, fYield, nFreq, getDateMode( xOpt, rOB ) );
     fRet /= 1.0 + ( fYield / double( nFreq ) );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
@@ -261,7 +261,7 @@ double SAL_CALL AnalysisAddIn::getNominal( double fRate, sal_Int32 nPeriods )
 
     double  fPeriods = nPeriods;
     double fRet = ( pow( fRate + 1.0, 1.0 / fPeriods ) - 1.0 ) * fPeriods;
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
@@ -281,7 +281,7 @@ double SAL_CALL AnalysisAddIn::getDollarfr( double fDollarDec, sal_Int32 nFrac )
 
     fRet += fInt;
 
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
@@ -301,18 +301,18 @@ double SAL_CALL AnalysisAddIn::getDollarde( double fDollarFrac, sal_Int32 nFrac 
 
     fRet += fInt;
 
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
 double SAL_CALL AnalysisAddIn::getYield( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, double fCoup, double fPrice, double fRedemp, sal_Int32 nFreq, const css::uno::Any& rOB )
 {
-    if( fCoup < 0.0 || fPrice <= 0.0 || fRedemp <= 0.0 || CHK_Freq || nSettle >= nMat )
+    if( fCoup < 0.0 || fPrice <= 0.0 || fRedemp <= 0.0 || isFreqInvalid(nFreq) || nSettle >= nMat )
         throw css::lang::IllegalArgumentException();
 
     double fRet = getYield_( GetNullDate( xOpt ), nSettle, nMat, fCoup, fPrice, fRedemp, nFreq, getDateMode( xOpt, rOB ) );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
@@ -327,7 +327,7 @@ double SAL_CALL AnalysisAddIn::getYielddisc( const css::uno::Reference< css::bea
     double fRet = ( fRedemp / fPrice ) - 1.0;
     fRet /= GetYearFrac( nNullDate, nSettle, nMat, getDateMode( xOpt, rOB ) );
 
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
@@ -338,7 +338,7 @@ double SAL_CALL AnalysisAddIn::getYieldmat( const css::uno::Reference< css::bean
         throw css::lang::IllegalArgumentException();
 
     double fRet = GetYieldmat( GetNullDate( xOpt ),  nSettle, nMat, nIssue, fRate, fPrice, getDateMode( xOpt, rOB ) );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
@@ -353,7 +353,7 @@ double SAL_CALL AnalysisAddIn::getTbilleq( const css::uno::Reference< css::beans
         throw css::lang::IllegalArgumentException();
 
     double fRet = ( 365 * fDisc ) / ( 360 - ( fDisc * double( nDiff ) ) );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
@@ -371,7 +371,7 @@ double SAL_CALL AnalysisAddIn::getTbillprice( const css::uno::Reference< css::be
         throw css::lang::IllegalArgumentException();
 
     double fRet = 100.0 * ( 1.0 - fDisc * fFraction );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
@@ -389,7 +389,7 @@ double SAL_CALL AnalysisAddIn::getTbillyield( const css::uno::Reference< css::be
     fRet /= double( nDiff );
     fRet *= 360.0;
 
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 // Encapsulation violation: We *know* that GetOddfprice() always
@@ -401,11 +401,11 @@ double SAL_CALL AnalysisAddIn::getOddfprice( const css::uno::Reference< css::bea
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, sal_Int32 nFirstCoup,
     double fRate, double fYield, double fRedemp, sal_Int32 nFreq, const css::uno::Any& rOB )
 {
-    if( fRate < 0.0 || fYield < 0.0 || CHK_Freq || nMat <= nFirstCoup || nFirstCoup <= nSettle || nSettle <= nIssue )
+    if( fRate < 0.0 || fYield < 0.0 || isFreqInvalid(nFreq) || nMat <= nFirstCoup || nFirstCoup <= nSettle || nSettle <= nIssue )
         throw css::lang::IllegalArgumentException();
 
     double fRet = GetOddfprice( GetNullDate( xOpt ), nSettle, nMat, nIssue, nFirstCoup, fRate, fYield, fRedemp, nFreq, getDateMode( xOpt, rOB ) );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 SAL_WNOUNREACHABLE_CODE_POP
@@ -419,12 +419,12 @@ double SAL_CALL AnalysisAddIn::getOddfyield( const css::uno::Reference< css::bea
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, sal_Int32 nFirstCoup,
     double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, const css::uno::Any& rOB )
 {
-    if( fRate < 0.0 || fPrice <= 0.0 || CHK_Freq || nMat <= nFirstCoup || nFirstCoup <= nSettle || nSettle <= nIssue )
+    if( fRate < 0.0 || fPrice <= 0.0 || isFreqInvalid(nFreq) || nMat <= nFirstCoup || nFirstCoup <= nSettle || nSettle <= nIssue )
         throw css::lang::IllegalArgumentException();
 
     double fRet = GetOddfyield( GetNullDate( xOpt ), nSettle, nMat, nIssue, nFirstCoup, fRate, fPrice, fRedemp, nFreq,
                         getDateMode( xOpt, rOB ) );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 SAL_WNOUNREACHABLE_CODE_POP
@@ -433,12 +433,12 @@ double SAL_CALL AnalysisAddIn::getOddlprice( const css::uno::Reference< css::bea
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest,
     double fRate, double fYield, double fRedemp, sal_Int32 nFreq, const css::uno::Any& rOB )
 {
-    if( fRate <= 0.0 || fYield < 0.0 || fRedemp <= 0.0 || CHK_Freq || nMat <= nSettle || nSettle <= nLastInterest )
+    if( fRate <= 0.0 || fYield < 0.0 || fRedemp <= 0.0 || isFreqInvalid(nFreq) || nMat <= nSettle || nSettle <= nLastInterest )
         throw css::lang::IllegalArgumentException();
 
     double fRet = GetOddlprice( GetNullDate( xOpt ), nSettle, nMat, nLastInterest, fRate, fYield, fRedemp, nFreq,
                         getDateMode( xOpt, rOB ) );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
@@ -446,12 +446,12 @@ double SAL_CALL AnalysisAddIn::getOddlyield( const css::uno::Reference< css::bea
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest,
     double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, const css::uno::Any& rOB )
 {
-    if( fRate <= 0.0 || fPrice <= 0.0 || fRedemp <= 0.0 || CHK_Freq || nMat <= nSettle || nSettle <= nLastInterest )
+    if( fRate <= 0.0 || fPrice <= 0.0 || fRedemp <= 0.0 || isFreqInvalid(nFreq) || nMat <= nSettle || nSettle <= nLastInterest )
         throw css::lang::IllegalArgumentException();
 
     double fRet = GetOddlyield( GetNullDate( xOpt ), nSettle, nMat, nLastInterest, fRate, fPrice, fRedemp, nFreq,
                         getDateMode( xOpt, rOB ) );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 // XIRR helper functions
@@ -571,7 +571,7 @@ double SAL_CALL AnalysisAddIn::getXirr(
 
     if( bContLoop )
         throw css::lang::IllegalArgumentException();
-    RETURN_FINITE( fResultRate );
+    return finiteOrThrow( fResultRate );
 }
 
 
@@ -596,7 +596,7 @@ double SAL_CALL AnalysisAddIn::getXnpv(
     for( sal_uInt32 i = 0 ; i < nNum ; i++ )
         fRet += aValList.Get( i ) / ( pow( fRate, ( aDateList.Get( i ) - fNull ) / 365.0 ) );
 
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
@@ -607,7 +607,7 @@ double SAL_CALL AnalysisAddIn::getIntrate( const css::uno::Reference< css::beans
         throw css::lang::IllegalArgumentException();
 
     double fRet = ( ( fRedemp / fInvest ) - 1.0 ) / GetYearDiff( GetNullDate( xOpt ), nSettle, nMat, getDateMode( xOpt, rOB ) );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
@@ -615,7 +615,7 @@ double SAL_CALL AnalysisAddIn::getCoupncd( const css::uno::Reference< css::beans
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const css::uno::Any& rOB )
 {
     double fRet = GetCoupncd( GetNullDate( xOpt ), nSettle, nMat, nFreq, getDateMode( xOpt, rOB ) );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
@@ -623,7 +623,7 @@ double SAL_CALL AnalysisAddIn::getCoupdays( const css::uno::Reference< css::bean
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const css::uno::Any& rOB )
 {
     double fRet = GetCoupdays( GetNullDate( xOpt ), nSettle, nMat, nFreq, getDateMode( xOpt, rOB ) );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
@@ -631,7 +631,7 @@ double SAL_CALL AnalysisAddIn::getCoupdaysnc( const css::uno::Reference< css::be
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const css::uno::Any& rOB )
 {
     double fRet = GetCoupdaysnc( GetNullDate( xOpt ), nSettle, nMat, nFreq, getDateMode( xOpt, rOB ) );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
@@ -639,7 +639,7 @@ double SAL_CALL AnalysisAddIn::getCoupdaybs( const css::uno::Reference< css::bea
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const css::uno::Any& rOB )
 {
     double fRet = GetCoupdaybs( GetNullDate( xOpt ), nSettle, nMat, nFreq, getDateMode( xOpt, rOB ) );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
@@ -647,7 +647,7 @@ double SAL_CALL AnalysisAddIn::getCouppcd( const css::uno::Reference< css::beans
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const css::uno::Any& rOB )
 {
     double fRet = GetCouppcd( GetNullDate( xOpt ), nSettle, nMat, nFreq, getDateMode( xOpt, rOB ) );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
@@ -655,7 +655,7 @@ double SAL_CALL AnalysisAddIn::getCoupnum( const css::uno::Reference< css::beans
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const css::uno::Any& rOB )
 {
     double fRet = GetCoupnum( GetNullDate( xOpt ), nSettle, nMat, nFreq, getDateMode( xOpt, rOB ) );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 
@@ -668,7 +668,7 @@ double SAL_CALL AnalysisAddIn::getFvschedule( double fPrinc, const css::uno::Seq
     for( sal_uInt32 i = 0; i < aSchedList.Count(); ++i )
         fPrinc *= 1.0 + aSchedList.Get(i);
 
-    RETURN_FINITE( fPrinc );
+    return finiteOrThrow( fPrinc );
 }
 
 

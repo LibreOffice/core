@@ -388,7 +388,7 @@ double SAL_CALL AnalysisAddIn::getYearfrac( const uno::Reference< beans::XProper
     sal_Int32 nStartDate, sal_Int32 nEndDate, const uno::Any& rMode )
 {
     double fRet = GetYearFrac( xOpt, nStartDate, nEndDate, getDateMode( xOpt, rMode ) );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 sal_Int32 SAL_CALL AnalysisAddIn::getEdate( const uno::Reference< beans::XPropertySet >& xOpt, sal_Int32 nStartDate, sal_Int32 nMonths )
@@ -513,7 +513,7 @@ AnalysisAddIn::getMultinomial( const uno::Reference< beans::XPropertySet >& xOpt
             fRet *= BinomialCoefficient(nZ, n);
         }
     }
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 double SAL_CALL AnalysisAddIn::getSeriessum( double fX, double fN, double fM, const uno::Sequence< uno::Sequence< double > >& aCoeffList )
@@ -537,7 +537,7 @@ double SAL_CALL AnalysisAddIn::getSeriessum( double fX, double fN, double fM, co
         }
     }
 
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 double SAL_CALL AnalysisAddIn::getQuotient( double fNum, double fDenom )
@@ -547,7 +547,7 @@ double SAL_CALL AnalysisAddIn::getQuotient( double fNum, double fDenom )
         fRet = ::rtl::math::approxCeil( fNum / fDenom );
     else
         fRet = ::rtl::math::approxFloor( fNum / fDenom );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 double SAL_CALL AnalysisAddIn::getMround( double fNum, double fMult )
@@ -556,13 +556,13 @@ double SAL_CALL AnalysisAddIn::getMround( double fNum, double fMult )
         return fMult;
 
     double fRet = fMult * ::rtl::math::round( ::rtl::math::approxValue( fNum / fMult));
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 double SAL_CALL AnalysisAddIn::getSqrtpi( double fNum )
 {
     double fRet = sqrt( fNum * M_PI );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 double SAL_CALL AnalysisAddIn::getRandbetween( double fMin, double fMax )
@@ -573,7 +573,7 @@ double SAL_CALL AnalysisAddIn::getRandbetween( double fMin, double fMax )
         throw lang::IllegalArgumentException();
 
     double fRet = floor(comphelper::rng::uniform_real_distribution(fMin, nextafter(fMax+1, -DBL_MAX)));
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 double SAL_CALL AnalysisAddIn::getGcd( const uno::Reference< beans::XPropertySet >& xOpt, const uno::Sequence< uno::Sequence< double > >& aVLst, const uno::Sequence< uno::Any >& aOptVLst )
@@ -592,7 +592,7 @@ double SAL_CALL AnalysisAddIn::getGcd( const uno::Reference< beans::XPropertySet
         f = GetGcd( aValList.Get(i), f );
     }
 
-    RETURN_FINITE( f );
+    return finiteOrThrow( f );
 }
 
 double SAL_CALL AnalysisAddIn::getLcm( const uno::Reference< beans::XPropertySet >& xOpt, const uno::Sequence< uno::Sequence< double > >& aVLst, const uno::Sequence< uno::Any >& aOptVLst )
@@ -623,19 +623,19 @@ double SAL_CALL AnalysisAddIn::getLcm( const uno::Reference< beans::XPropertySet
             return f;
     }
 
-    RETURN_FINITE( f );
+    return finiteOrThrow( f );
 }
 
 double SAL_CALL AnalysisAddIn::getBesseli( double fNum, sal_Int32 nOrder )
 {
     double fRet = sca::analysis::BesselI( fNum, nOrder );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 double SAL_CALL AnalysisAddIn::getBesselj( double fNum, sal_Int32 nOrder )
 {
     double fRet = sca::analysis::BesselJ( fNum, nOrder );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 double SAL_CALL AnalysisAddIn::getBesselk( double fNum, sal_Int32 nOrder )
@@ -644,7 +644,7 @@ double SAL_CALL AnalysisAddIn::getBesselk( double fNum, sal_Int32 nOrder )
         throw lang::IllegalArgumentException();
 
     double fRet = sca::analysis::BesselK( fNum, nOrder );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 double SAL_CALL AnalysisAddIn::getBessely( double fNum, sal_Int32 nOrder )
@@ -653,7 +653,7 @@ double SAL_CALL AnalysisAddIn::getBessely( double fNum, sal_Int32 nOrder )
         throw lang::IllegalArgumentException();
 
     double fRet = sca::analysis::BesselY( fNum, nOrder );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 const double    SCA_MAX2        = 511.0;            // min. val for binary numbers (9 bits + sign)
@@ -675,7 +675,7 @@ OUString SAL_CALL AnalysisAddIn::getBin2Oct( const uno::Reference< beans::XPrope
 double SAL_CALL AnalysisAddIn::getBin2Dec( const OUString& aNum )
 {
     double fRet = ConvertToDec( aNum, 2, SCA_MAXPLACES );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 OUString SAL_CALL AnalysisAddIn::getBin2Hex( const uno::Reference< beans::XPropertySet >& xOpt, const OUString& aNum, const uno::Any& rPlaces )
@@ -697,7 +697,7 @@ OUString SAL_CALL AnalysisAddIn::getOct2Bin( const uno::Reference< beans::XPrope
 double SAL_CALL AnalysisAddIn::getOct2Dec( const OUString& aNum )
 {
     double fRet = ConvertToDec( aNum, 8, SCA_MAXPLACES );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 OUString SAL_CALL AnalysisAddIn::getOct2Hex( const uno::Reference< beans::XPropertySet >& xOpt, const OUString& aNum, const uno::Any& rPlaces )
@@ -740,7 +740,7 @@ OUString SAL_CALL AnalysisAddIn::getHex2Bin( const uno::Reference< beans::XPrope
 double SAL_CALL AnalysisAddIn::getHex2Dec( const OUString& aNum )
 {
     double fRet = ConvertToDec( aNum, 16, SCA_MAXPLACES );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 OUString SAL_CALL AnalysisAddIn::getHex2Oct( const uno::Reference< beans::XPropertySet >& xOpt, const OUString& aNum, const uno::Any& rPlaces )
@@ -762,13 +762,13 @@ double SAL_CALL AnalysisAddIn::getErf( const uno::Reference< beans::XPropertySet
     bool bContainsValue = aAnyConv.getDouble( fUL, xOpt, rUL );
 
     fRet = bContainsValue ? (Erf( fUL ) - Erf( fLL )) : Erf( fLL );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 double SAL_CALL AnalysisAddIn::getErfc( double f )
 {
     double fRet = Erfc( f );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 sal_Int32 SAL_CALL AnalysisAddIn::getGestep( const uno::Reference< beans::XPropertySet >& xOpt, double fNum, const uno::Any& rStep )
@@ -779,19 +779,19 @@ sal_Int32 SAL_CALL AnalysisAddIn::getGestep( const uno::Reference< beans::XPrope
 double SAL_CALL AnalysisAddIn::getFactdouble( sal_Int32 nNum )
 {
     double fRet = FactDouble( nNum );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 double SAL_CALL AnalysisAddIn::getImabs( const OUString& aNum )
 {
     double fRet = Complex( aNum ).Abs();
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 double SAL_CALL AnalysisAddIn::getImaginary( const OUString& aNum )
 {
     double fRet = Complex( aNum ).Imag();
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 OUString SAL_CALL AnalysisAddIn::getImpower( const OUString& aNum, double f )
@@ -806,7 +806,7 @@ OUString SAL_CALL AnalysisAddIn::getImpower( const OUString& aNum, double f )
 double SAL_CALL AnalysisAddIn::getImargument( const OUString& aNum )
 {
     double fRet = Complex( aNum ).Arg();
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 OUString SAL_CALL AnalysisAddIn::getImcos( const OUString& aNum )
@@ -892,7 +892,7 @@ OUString SAL_CALL AnalysisAddIn::getImproduct( const uno::Reference< beans::XPro
 double SAL_CALL AnalysisAddIn::getImreal( const OUString& aNum )
 {
     double fRet = Complex( aNum ).Real();
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 OUString SAL_CALL AnalysisAddIn::getImsin( const OUString& aNum )
@@ -1041,7 +1041,7 @@ double SAL_CALL AnalysisAddIn::getConvert( double f, const OUString& aFU, const 
         pCDL.reset(new ConvertDataList());
 
     double fRet = pCDL->Convert( f, aFU, aTU );
-    RETURN_FINITE( fRet );
+    return finiteOrThrow( fRet );
 }
 
 OUString AnalysisAddIn::AnalysisResId(TranslateId aResId)

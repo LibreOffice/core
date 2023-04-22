@@ -45,22 +45,13 @@ constexpr OUStringLiteral ADDIN_SERVICE = u"com.sun.star.sheet.AddIn";
 constexpr OUStringLiteral MY_SERVICE = u"com.sun.star.sheet.addin.PricingFunctions";
 constexpr OUStringLiteral MY_IMPLNAME = u"com.sun.star.sheet.addin.PricingFunctionsImpl";
 
-#define UNIQUE              false   // function name does not exist in Calc
-
-#define STDPAR              false   // all parameters are described
-
-#define FUNCDATA( FuncName, CompName, ParamCount, Category, Double, IntPar )  \
-    { "get" #FuncName, PRICING_FUNCNAME_##FuncName, PRICING_FUNCDESC_##FuncName, CompName, ParamCount, Category, Double, IntPar }
-
 const ScaFuncDataBase pFuncDataArr[] =
 {
-   FUNCDATA(OptBarrier,     "OPT_BARRIER",      13, ScaCategory::Finance, UNIQUE,  STDPAR),
-   FUNCDATA(OptTouch,       "OPT_TOUCH",        11, ScaCategory::Finance, UNIQUE,  STDPAR),
-   FUNCDATA(OptProbHit,     "OPT_PROB_HIT",      6, ScaCategory::Finance, UNIQUE,  STDPAR),
-   FUNCDATA(OptProbInMoney, "OPT_PROB_INMONEY",  8, ScaCategory::Finance, UNIQUE,  STDPAR)
+    { "getOptBarrier", PRICING_FUNCNAME_OptBarrier, PRICING_FUNCDESC_OptBarrier, "OPT_BARRIER", 13, ScaCategory::Finance, false, false },
+    { "getOptTouch", PRICING_FUNCNAME_OptTouch, PRICING_FUNCDESC_OptTouch, "OPT_TOUCH", 11, ScaCategory::Finance, false, false },
+    { "getOptProbHit", PRICING_FUNCNAME_OptProbHit, PRICING_FUNCDESC_OptProbHit, "OPT_PROB_HIT", 6, ScaCategory::Finance, false, false },
+    { "getOptProbInMoney", PRICING_FUNCNAME_OptProbInMoney, PRICING_FUNCDESC_OptProbInMoney, "OPT_PROB_INMONEY", 8, ScaCategory::Finance, false, false },
 };
-
-#undef FUNCDATA
 
 ScaFuncData::ScaFuncData( const ScaFuncDataBase& rBaseData ) :
     aIntName( OUString::createFromAscii( rBaseData.pIntName ) ),
@@ -437,7 +428,9 @@ double SAL_CALL ScaPricingAddIn::getOptBarrier( double spot, double vol,
     double fRet=bs::barrier(spot,vol,r,rf,T,strike, barrier_low,barrier_up,
                             rebate,pc,kio,bcont,greek);
 
-    RETURN_FINITE( fRet );
+    if (!std::isfinite(fRet))
+        throw css::lang::IllegalArgumentException();
+    return fRet;
 }
 
 // OPT_TOUCH(...)
@@ -463,7 +456,9 @@ double SAL_CALL ScaPricingAddIn::getOptTouch( double spot, double vol,
     double fRet=bs::touch(spot,vol,r,rf,T,barrier_low,barrier_up,
                             fd,kio,bcont,greek);
 
-    RETURN_FINITE( fRet );
+    if (!std::isfinite(fRet))
+        throw css::lang::IllegalArgumentException();
+    return fRet;
 }
 
 // OPT_PRB_HIT(...)
@@ -478,7 +473,9 @@ double SAL_CALL ScaPricingAddIn::getOptProbHit( double spot, double vol,
 
     double fRet=bs::prob_hit(spot,vol,mu,T,barrier_low,barrier_up);
 
-    RETURN_FINITE( fRet );
+    if (!std::isfinite(fRet))
+        throw css::lang::IllegalArgumentException();
+    return fRet;
 }
 
 // OPT_PROB_INMONEY(...)
@@ -499,7 +496,9 @@ double SAL_CALL ScaPricingAddIn::getOptProbInMoney( double spot, double vol,
 
     double fRet=bs::prob_in_money(spot,vol,mu,T,K,barrier_low,barrier_up,pc);
 
-    RETURN_FINITE( fRet );
+    if (!std::isfinite(fRet))
+        throw css::lang::IllegalArgumentException();
+    return fRet;
 }
 
 OUString ScaPricingAddIn::ScaResId(TranslateId aResId)
