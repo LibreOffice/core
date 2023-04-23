@@ -256,12 +256,12 @@ void SfxGlobalEvents_Impl::dispose() {
         tmpEvents.clear();
         tmpModels.clear();
         g.lock();
-        m_aLegacyListeners.disposeAndClear(g, {static_cast<OWeakObject *>(this)});
-        m_aDocumentListeners.disposeAndClear(g, {static_cast<OWeakObject *>(this)});
+        m_aLegacyListeners.disposeAndClear(g, {getXWeak()});
+        m_aDocumentListeners.disposeAndClear(g, {getXWeak()});
     }
     for (auto const & i: listeners) {
         try {
-            i->disposing({static_cast< cppu::OWeakObject * >(this)});
+            i->disposing({getXWeak()});
         } catch (css::lang::DisposedException &) {}
     }
 }
@@ -280,7 +280,7 @@ void SfxGlobalEvents_Impl::addEventListener(
         }
     }
     try {
-        xListener->disposing({static_cast< cppu::OWeakObject * >(this)});
+        xListener->disposing({getXWeak()});
     } catch (css::lang::DisposedException &) {}
 }
 

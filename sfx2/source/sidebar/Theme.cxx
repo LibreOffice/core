@@ -148,7 +148,7 @@ void Theme::disposing(std::unique_lock<std::mutex>&)
     ChangeListeners aListeners;
     aListeners.swap(maChangeListeners);
 
-    const lang::EventObject aEvent (static_cast<XWeak*>(this));
+    const lang::EventObject aEvent (getXWeak());
 
     for (const auto& rContainer : aListeners)
     {
@@ -204,7 +204,7 @@ void SAL_CALL Theme::setPropertyValue (
     const Any aOldValue (maRawValues[eItem]);
 
     const beans::PropertyChangeEvent aEvent(
-        static_cast<XWeak*>(this),
+        getXWeak(),
         rsPropertyName,
         false,
         eItem,

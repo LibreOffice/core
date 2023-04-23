@@ -490,7 +490,7 @@ void ThumbnailViewAcc::ThrowIfDisposed()
         SAL_WARN("sfx", "Calling disposed object. Throwing exception:");
         throw lang::DisposedException (
             "object has been already disposed",
-            static_cast<uno::XWeak*>(this));
+            getXWeak());
     }
     else
     {
@@ -523,7 +523,7 @@ void ThumbnailViewAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOld
     accessibility::AccessibleEventObject aEvtObject;
 
     aEvtObject.EventId = nEventId;
-    aEvtObject.Source = static_cast<uno::XWeak*>(this);
+    aEvtObject.Source = getXWeak();
     aEvtObject.NewValue = rNewValue;
     aEvtObject.OldValue = rOldValue;
 

@@ -1347,7 +1347,7 @@ void SAL_CALL SfxDocumentMetaData::dispose()
     }
     WeakComponentImplHelperBase::dispose(); // superclass
     m_NotifyListeners.disposeAndClear(css::lang::EventObject(
-            static_cast< ::cppu::OWeakObject* >(this)));
+            getXWeak()));
     m_isInitialized = false;
     m_meta.clear();
     m_metaList.clear();

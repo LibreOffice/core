@@ -115,7 +115,7 @@ static void InterceptLOKStateChangeEvent( sal_uInt16 nSID, SfxViewFrame* pViewFr
 void SfxStatusDispatcher::ReleaseAll()
 {
     css::lang::EventObject aObject;
-    aObject.Source = static_cast<cppu::OWeakObject*>(this);
+    aObject.Source = getXWeak();
     std::unique_lock aGuard(maMutex);
     maListeners.disposeAndClear( aGuard, aObject );
 }

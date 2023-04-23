@@ -1115,8 +1115,7 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
     if( pItemAcc )
     {
         css::uno::Any aOldAny, aNewAny;
-        aNewAny <<= css::uno::Reference< css::uno::XInterface >(
-            static_cast< ::cppu::OWeakObject* >( pItemAcc ));
+        aNewAny <<= css::uno::Reference(getXWeak( pItemAcc ));
         ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny );
     }
 

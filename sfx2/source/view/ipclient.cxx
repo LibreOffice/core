@@ -707,8 +707,8 @@ void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject 
 {
     if ( m_xImp->m_xObject.is() && rObject != m_xImp->m_xObject )
     {
-        DBG_ASSERT( GetObject()->getClientSite() == static_cast<cppu::OWeakObject*>(m_xImp.get()), "Wrong ClientSite!" );
-        if ( GetObject()->getClientSite() == static_cast<cppu::OWeakObject*>(m_xImp.get()) )
+        DBG_ASSERT( GetObject()->getClientSite() == getXWeak(m_xImp.get()), "Wrong ClientSite!" );
+        if ( GetObject()->getClientSite() == getXWeak(m_xImp.get()) )
         {
             if ( GetObject()->getCurrentState() != embed::EmbedStates::LOADED )
                 SetObjectState( embed::EmbedStates::RUNNING );

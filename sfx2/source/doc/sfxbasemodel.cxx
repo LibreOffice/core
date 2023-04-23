@@ -1446,8 +1446,8 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership )
     if ( impl_isDisposed() || m_pData->m_bClosed || m_pData->m_bClosing )
         return;
 
-    Reference< XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >(this) );
-    lang::EventObject       aSource  ( static_cast< ::cppu::OWeakObject* >(this) );
+    Reference< XInterface > xSelfHold( getXWeak() );
+    lang::EventObject       aSource  ( getXWeak() );
     comphelper::OInterfaceContainerHelper2* pContainer = m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<util::XCloseListener>::get());
     if (pContainer!=nullptr)
     {

@@ -133,7 +133,7 @@ void SAL_CALL SfxMacroLoader::dispatchWithNotification(
     // executed a macro instead!
     frame::DispatchResultEvent aEvent;
 
-    aEvent.Source = static_cast< ::cppu::OWeakObject* >(this);
+    aEvent.Source = getXWeak();
     if( nErr == ERRCODE_NONE )
         aEvent.State = frame::DispatchResultState::SUCCESS;
     else

@@ -81,7 +81,7 @@ void SfxAppDispatchProvider::initialize(
     if (aArguments.getLength() != 1 || !(aArguments[0] >>= f)) {
         throw css::lang::IllegalArgumentException(
             "SfxAppDispatchProvider::initialize expects one XFrame argument",
-            static_cast<OWeakObject *>(this), 0);
+            getXWeak(), 0);
     }
     m_xFrame = f;
 }

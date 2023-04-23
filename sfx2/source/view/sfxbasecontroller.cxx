@@ -334,7 +334,7 @@ void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::queryClosing( const la
         bool bCanClose = pShell->PrepareClose( false );
         if ( !bCanClose )
         {
-            throw util::CloseVetoException("Controller disagree ...",static_cast< ::cppu::OWeakObject*>(this));
+            throw util::CloseVetoException("Controller disagree ...",getXWeak());
         }
     }
 }
@@ -846,7 +846,7 @@ void SfxBaseController::BorderWidthsChanged_Impl()
         return;
 
     frame::BorderWidths aBWidths = getBorder();
-    Reference< uno::XInterface > xThis( static_cast< ::cppu::OWeakObject* >(this), uno::UNO_QUERY );
+    Reference< uno::XInterface > xThis( getXWeak() );
 
     ::comphelper::OInterfaceIteratorHelper2 pIterator(*pContainer);
     while (pIterator.hasMoreElements())
@@ -1438,11 +1438,11 @@ void SAL_CALL SfxBaseController::appendInfobar(const OUString& sId, const OUStri
         || aInfobarType > static_cast<sal_Int32>(InfobarType::DANGER))
         throw lang::IllegalArgumentException("Undefined InfobarType: "
                                                  + OUString::number(aInfobarType),
-                                             static_cast<::cppu::OWeakObject*>(this), 0);
+                                             getXWeak(), 0);
     SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
     if (pViewFrame->HasInfoBarWithID(sId))
         throw lang::IllegalArgumentException("Infobar with ID '" + sId + "' already existing.",
-                                             static_cast<::cppu::OWeakObject*>(this), 0);
+                                             getXWeak(), 0);
 
     auto pInfoBar
         = pViewFrame->AppendInfoBar(sId, sPrimaryMessage, sSecondaryMessage,
@@ -1469,7 +1469,7 @@ void SAL_CALL SfxBaseController::updateInfobar(const OUString& sId, const OUStri
         || aInfobarType > static_cast<sal_Int32>(InfobarType::DANGER))
         throw lang::IllegalArgumentException("Undefined InfobarType: "
                                                  + OUString::number(aInfobarType),
-                                             static_cast<::cppu::OWeakObject*>(this), 0);
+                                             getXWeak(), 0);
     SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
     if (!pViewFrame->HasInfoBarWithID(sId))
         throw css::container::NoSuchElementException("Infobar with ID '" + sId + "' not found.");

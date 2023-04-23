@@ -138,7 +138,7 @@ sal_Int16 SAL_CALL SidebarPanelBase::getType()
 
 Reference<XInterface> SAL_CALL SidebarPanelBase::getRealInterface()
 {
-    return Reference<XInterface>(static_cast<XWeak*>(this));
+    return getXWeak();
 }
 
 Reference<accessibility::XAccessible> SAL_CALL SidebarPanelBase::createAccessible (

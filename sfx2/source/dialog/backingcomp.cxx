@@ -329,12 +329,12 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     if (m_xFrame.is())
         throw css::uno::RuntimeException(
                 "already attached",
-                static_cast< ::cppu::OWeakObject* >(this));
+                getXWeak());
 
     if (!xFrame.is())
         throw css::uno::RuntimeException(
                 "invalid frame reference",
-                static_cast< ::cppu::OWeakObject* >(this));
+                getXWeak());
 
     if (!m_xWindow.is())
         return; // disposed
@@ -513,7 +513,7 @@ void SAL_CALL BackingComp::disposing( /*IN*/ const css::lang::EventObject& aEven
     if (!aEvent.Source.is() || aEvent.Source!=m_xWindow || !m_xWindow.is())
         throw css::uno::RuntimeException(
                 "unexpected source or called twice",
-                static_cast< ::cppu::OWeakObject* >(this));
+                getXWeak());
 
     m_xWindow.clear();
 
@@ -575,7 +575,7 @@ void SAL_CALL BackingComp::addEventListener( /*IN*/ const css::uno::Reference< c
 {
     throw css::uno::RuntimeException(
             "not supported",
-            static_cast< ::cppu::OWeakObject* >(this));
+            getXWeak());
 }
 
 
@@ -618,7 +618,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
     if (m_xWindow.is())
         throw css::uno::Exception(
                 "already initialized",
-                static_cast< ::cppu::OWeakObject* >(this));
+                getXWeak());
 
     css::uno::Reference< css::awt::XWindow > xParentWindow;
     if (
@@ -629,7 +629,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
     {
         throw css::uno::Exception(
                 "wrong or corrupt argument list",
-                static_cast< ::cppu::OWeakObject* >(this));
+                getXWeak());
     }
 
     // create the component window
@@ -640,7 +640,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
     if (!m_xWindow.is())
         throw css::uno::RuntimeException(
                 "couldn't create component window",
-                static_cast< ::cppu::OWeakObject* >(this));
+                getXWeak());
 
     // start listening for window disposing
     // It's set at our owner frame as component window later too. So it will may be disposed there ...
