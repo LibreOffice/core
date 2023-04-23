@@ -142,6 +142,7 @@ Private Const CTLFIXEDLINE		= &quot;FixedLine&quot;
 Private Const CTLFIXEDTEXT		= &quot;FixedText&quot;
 Private Const CTLFORMATTEDFIELD	= &quot;FormattedField&quot;
 Private Const CTLGROUPBOX		= &quot;GroupBox&quot;
+Private Const CTLHYPERLINK		= &quot;Hyperlink&quot;
 Private Const CTLIMAGECONTROL	= &quot;ImageControl&quot;
 Private Const CTLLISTBOX		= &quot;ListBox&quot;
 Private Const CTLNUMERICFIELD	= &quot;NumericField&quot;
@@ -649,6 +650,18 @@ Property Let TripleState(Optional ByVal pvTripleState As Variant)
 End Property	&apos;	SFDialogs.SF_DialogControl.TripleState (let)
 
 REM -----------------------------------------------------------------------------
+Property Get URL() As Variant
+&apos;&apos;&apos;	The URL property refers to the URL to open when the control is clicked
+	URL = _PropertyGet(&quot;URL&quot;, &quot;&quot;)
+End Property	&apos;	SFDialogs.SF_DialogControl.URL (get)
+
+REM -----------------------------------------------------------------------------
+Property Let URL(Optional ByVal pvURL As Variant)
+&apos;&apos;&apos;	Set the updatable property URL
+	_PropertySet(&quot;URL&quot;, pvURL)
+End Property	&apos;	SFDialogs.SF_DialogControl.URL (let)
+
+REM -----------------------------------------------------------------------------
 Property Get Value() As Variant
 &apos;&apos;&apos;	The Value property specifies the data contained in the control
 	Value = _PropertyGet(&quot;Value&quot;, Empty)
@@ -1132,6 +1145,7 @@ Public Function Properties() As Variant
 					, &quot;Text&quot; _
 					, &quot;TipText&quot; _
 					, &quot;TripleState&quot; _
+					, &quot;URL&quot; _
 					, &quot;Value&quot; _
 					, &quot;Visible&quot; _
 					, &quot;Width&quot; _
@@ -1673,7 +1687,6 @@ Public Sub _Initialize()
 
 Dim vServiceName As Variant		&apos;	Split service name
 Dim sType As String				&apos;	Last component of service name
-Dim oPosSize As Object			&apos;	com.sun.star.awt.Rectangle
 
 Try:
 	_ImplementationName = _ControlModel.getImplementationName()
@@ -1685,6 +1698,8 @@ Try:
 		Case &quot;UnoControlSpinButtonModel&quot;
 			_ControlType = &quot;&quot;	&apos; Not supported
 		Case &quot;Edit&quot;					:	_ControlType = CTLTEXTFIELD
+		Case &quot;UnoControlFixedHyperlinkModel&quot;
+			_ControlType = CTLHYPERLINK
 		Case &quot;TreeControlModel&quot;
 			&apos;	Initialize the data model
 			_ControlType = CTLTREECONTROL
@@ -1698,10 +1713,9 @@ Try:
 	End Select
 
 	&apos;	Store initial position and dimensions
-	Set oPosSize = _ControlView.getPosSize()
-	With oPosSize
-		_Left = .X
-		_Top = .Y
+	With _ControlModel
+		_Left = .PositionX
+		_Top = .PositionY
 		_Width = .Width
 		_Height = .Height
 	End With
@@ -1758,7 +1772,7 @@ Const cstSubArgs = &quot;&quot;
 			End Select
 		Case UCase(&quot;Caption&quot;)
 			Select Case _ControlType
-				Case CTLBUTTON, CTLCHECKBOX, CTLFIXEDLINE, CTLFIXEDTEXT, CTLGROUPBOX, CTLRADIOBUTTON
+				Case CTLBUTTON, CTLCHECKBOX, CTLFIXEDLINE, CTLFIXEDTEXT, CTLGROUPBOX, CTLHYPERLINK, CTLRADIOBUTTON
 					If oSession.HasUNOProperty(_ControlModel, &quot;Label&quot;) Then _PropertyGet = _ControlModel.Label
 				Case Else	:	GoTo CatchType
 			End Select
@@ -1939,6 +1953,12 @@ Const cstSubArgs = &quot;&quot;
 					If oSession.HasUnoProperty(_ControlModel, &quot;TriState&quot;) Then _PropertyGet = _ControlModel.TriState
 				Case Else	:	GoTo CatchType
 			End Select
+		Case &quot;URL&quot;
+			Select Case _ControlType
+				Case CTLHYPERLINK
+					If oSession.HasUnoProperty(_ControlModel, &quot;URL&quot;) Then _PropertyGet = _ControlModel.URL
+				Case Else	:	GoTo CatchType
+			End Select
 		Case UCase(&quot;Value&quot;)	&apos;	Default values are set here by control type, not in the 2nd argument
 			vGet = pvDefault
 			Select Case _ControlType
@@ -2032,7 +2052,7 @@ Const cstSubArgs = &quot;&quot;
 				If oSession.HasUNOProperty(_ControlModel, &quot;PositionX&quot;) Then _PropertyGet = _ControlModel.PositionX
 			End If
 		Case UCase(&quot;Y&quot;)
-			If [_parent]._Displayed Then	&apos;	Convert PosSize view property from piYels to APPFONT units
+			If [_parent]._Displayed Then	&apos;	Convert PosSize view property from pixels to APPFONT units
 				_PropertyGet = SF_DialogUtils._ConvertToAppFont(_ControlView, True).Y
 			Else
 				If oSession.HasUNOProperty(_ControlModel, &quot;PositionY&quot;) Then _PropertyGet = _ControlModel.PositionY
@@ -2105,7 +2125,7 @@ Const cstSubArgs = &quot;Value&quot;
 			End Select
 		Case UCase(&quot;Caption&quot;)
 			Select Case _ControlType
-				Case CTLBUTTON, CTLCHECKBOX, CTLFIXEDLINE, CTLFIXEDTEXT, CTLGROUPBOX, CTLRADIOBUTTON
+				Case CTLBUTTON, CTLCHECKBOX, CTLFIXEDLINE, CTLFIXEDTEXT, CTLGROUPBOX, CTLHYPERLINK, CTLRADIOBUTTON
 					If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Caption&quot;, V_STRING) Then GoTo Finally
 					If oSession.HasUNOProperty(_ControlModel, &quot;Label&quot;) Then _ControlModel.Label = pvValue
 				Case Else	:	GoTo CatchType
@@ -2204,7 +2224,7 @@ Const cstSubArgs = &quot;Value&quot;
 			Select Case UCase(psProperty)
 				Case UCase(&quot;OnActionPerformed&quot;), UCase(&quot;OnItemStateChanged&quot;)
 					Select Case _ControlType
-						Case CTLBUTTON, CTLCHECKBOX, CTLCOMBOBOX, CTLLISTBOX, CTLRADIOBUTTON
+						Case CTLBUTTON, CTLCHECKBOX, CTLCOMBOBOX, CTLHYPERLINK, CTLLISTBOX, CTLRADIOBUTTON
 						Case Else	:	GoTo CatchType
 					End Select
 				Case UCase(&quot;OnAdjustmentValueChanged&quot;)
@@ -2284,6 +2304,13 @@ Const cstSubArgs = &quot;Value&quot;
 				Case CTLCHECKBOX
 					If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;TripleState&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
 					If oSession.HasUnoProperty(_ControlModel, &quot;TriState&quot;) Then _ControlModel.TriState = pvValue
+				Case Else	:	GoTo CatchType
+			End Select
+		Case &quot;URL&quot;
+			Select Case _ControlType
+				Case CTLHYPERLINK
+					If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;URL&quot;, V_STRING) Then GoTo Finally
+					If oSession.HasUnoProperty(_ControlModel, &quot;URL&quot;) Then _ControlModel.URL = pvValue
 				Case Else	:	GoTo CatchType
 			End Select
 		Case UCase(&quot;Value&quot;)

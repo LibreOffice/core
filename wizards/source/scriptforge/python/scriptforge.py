@@ -1913,9 +1913,9 @@ class SFDialogs:
                                  OnMouseReleased = True, OnNodeExpanded = True, OnNodeSelected = True,
                                  OnTextChanged = True, Page = True, Parent = False, Picture = True,
                                  RootNode = False, RowSource = True, Text = False, TipText = True,
-                                 TripleState = True, Value = True, Visible = True, Width = True, X = True, Y = True,
-                                 XControlModel = False, XControlView = False, XGridColumnModel = False,
-                                 XGridDataModel = False, XTreeDataModel = False)
+                                 TripleState = True, URL = True, Value = True, Visible = True, Width = True,
+                                 X = True, Y = True, XControlModel = False, XControlView = False,
+                                 XGridColumnModel = False, XGridDataModel = False, XTreeDataModel = False)
 
         # Root related properties do not start with X and, nevertheless, return a UNO object
         @property
