@@ -135,12 +135,12 @@ uno::Reference< uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstance( co
         || aServiceSpecifier == "com.sun.star.text.TextField.DateTime"
        )
     {
-        return static_cast<cppu::OWeakObject *>(new SvxUnoTextField( text::textfield::Type::DATE ));
+        return cppu::getXWeak(new SvxUnoTextField( text::textfield::Type::DATE ));
     }
 
     if( aServiceSpecifier == "com.sun.star.text.TextField.URL" )
     {
-        return static_cast<cppu::OWeakObject *>(new SvxUnoTextField(text::textfield::Type::URL));
+        return cppu::getXWeak(new SvxUnoTextField(text::textfield::Type::URL));
     }
 
     return SvxUnoTextCreateTextField( aServiceSpecifier );

@@ -2035,7 +2035,7 @@ static void SvxPropertyValuesToItemSet(
     {
         const SfxItemPropertyMapEntry *pEntry = pPropSet->getPropertyMap().getByName( rProp.Name );
         if (!pEntry)
-            throw beans::UnknownPropertyException( "Unknown property: " + rProp.Name, static_cast < cppu::OWeakObject * > ( nullptr ) );
+            throw beans::UnknownPropertyException( "Unknown property: " + rProp.Name );
         // Note: there is no need to take special care of the properties
         //      TextField (EE_FEATURE_FIELD) and
         //      TextPortionType (WID_PORTIONTYPE)
@@ -2043,8 +2043,8 @@ static void SvxPropertyValuesToItemSet(
 
         if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
             // should be PropertyVetoException which is not yet defined for the new import API's functions
-            throw uno::RuntimeException("Property is read-only: " + rProp.Name, static_cast < cppu::OWeakObject * > ( nullptr ) );
-            //throw PropertyVetoException ("Property is read-only: " + rProp.Name, static_cast < cppu::OWeakObject * > ( 0 ) );
+            throw uno::RuntimeException("Property is read-only: " + rProp.Name );
+            //throw PropertyVetoException ("Property is read-only: " + rProp.Name );
 
         if (pEntry->nWID == WID_FONTDESC)
         {

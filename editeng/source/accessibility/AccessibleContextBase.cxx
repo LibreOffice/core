@@ -494,7 +494,7 @@ void AccessibleContextBase::ThrowIfDisposed()
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException ("object has been already disposed",
-            static_cast<uno::XWeak*>(this));
+            getXWeak());
     }
 }
 

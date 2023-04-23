@@ -931,7 +931,7 @@ uno::Reference< uno::XInterface > SvxUnoTextCreateTextField( std::u16string_view
         }
 
         if (nId != text::textfield::Type::UNSPECIFIED)
-            xRet = static_cast<cppu::OWeakObject *>(new SvxUnoTextField( nId ));
+            xRet = getXWeak(new SvxUnoTextField( nId ));
     }
 
     return xRet;

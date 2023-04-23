@@ -351,16 +351,14 @@ namespace accessibility
     {
         if( nIndex < 0 || nIndex >= getCharacterCount() )
             throw lang::IndexOutOfBoundsException("AccessibleEditableTextPara: character index out of bounds",
-                                                  uno::Reference< uno::XInterface >
-                                                  ( static_cast< ::cppu::OWeakObject* > (this) ) ); // disambiguate hierarchy
+                                                  getXWeak() );
     }
 
     void AccessibleEditableTextPara::CheckPosition( sal_Int32 nIndex )
     {
         if( nIndex < 0 || nIndex > getCharacterCount() )
             throw lang::IndexOutOfBoundsException("AccessibleEditableTextPara: character position out of bounds",
-                                                  uno::Reference< uno::XInterface >
-                                                  ( static_cast< ::cppu::OWeakObject* > (this) ) ); // disambiguate hierarchy
+                                                  getXWeak() );
     }
 
     void AccessibleEditableTextPara::CheckRange( sal_Int32 nStart, sal_Int32 nEnd )
@@ -426,9 +424,7 @@ namespace accessibility
     {
         if( !mpEditSource )
             throw uno::RuntimeException("No edit source, object is defunct",
-                                        uno::Reference< uno::XInterface >
-                                        ( static_cast< ::cppu::OWeakObject* >
-                                          ( const_cast< AccessibleEditableTextPara* > (this) ) ) ); // disambiguate hierarchy
+                                         const_cast< AccessibleEditableTextPara* > (this)->getXWeak() );
         return *mpEditSource;
     }
 
@@ -439,15 +435,11 @@ namespace accessibility
 
         if( !pTextForwarder )
             throw uno::RuntimeException("Unable to fetch text forwarder, object is defunct",
-                                        uno::Reference< uno::XInterface >
-                                        ( static_cast< ::cppu::OWeakObject* >
-                                          ( const_cast< AccessibleEditableTextPara* > (this) ) ) ); // disambiguate hierarchy
+                                        const_cast< AccessibleEditableTextPara* > (this)->getXWeak() );
 
         if( !pTextForwarder->IsValid() )
             throw uno::RuntimeException("Text forwarder is invalid, object is defunct",
-                                        uno::Reference< uno::XInterface >
-                                        ( static_cast< ::cppu::OWeakObject* >
-                                          ( const_cast< AccessibleEditableTextPara* > (this) ) ) ); // disambiguate hierarchy
+                                        const_cast< AccessibleEditableTextPara* > (this)->getXWeak() );
         return *pTextForwarder;
     }
 
@@ -459,16 +451,12 @@ namespace accessibility
         if( !pViewForwarder )
         {
             throw uno::RuntimeException("Unable to fetch view forwarder, object is defunct",
-                                        uno::Reference< uno::XInterface >
-                                        ( static_cast< ::cppu::OWeakObject* >
-                                          ( const_cast< AccessibleEditableTextPara* > (this) ) ) ); // disambiguate hierarchy
+                                        const_cast< AccessibleEditableTextPara* > (this)->getXWeak() );
         }
 
         if( !pViewForwarder->IsValid() )
             throw uno::RuntimeException("View forwarder is invalid, object is defunct",
-                                        uno::Reference< uno::XInterface >
-                                        ( static_cast< ::cppu::OWeakObject* >
-                                          ( const_cast< AccessibleEditableTextPara* > (this) )  ) );    // disambiguate hierarchy
+                                        const_cast< AccessibleEditableTextPara* > (this)->getXWeak() );
         return *pViewForwarder;
     }
 
@@ -481,14 +469,10 @@ namespace accessibility
         {
             if( bCreate )
                 throw uno::RuntimeException("Unable to fetch view forwarder, object is defunct",
-                                            uno::Reference< uno::XInterface >
-                                            ( static_cast< ::cppu::OWeakObject* >
-                                              ( const_cast< AccessibleEditableTextPara* > (this) ) ) ); // disambiguate hierarchy
+                                            const_cast< AccessibleEditableTextPara* > (this)->getXWeak() );
             else
                 throw uno::RuntimeException("No view forwarder, object not in edit mode",
-                                            uno::Reference< uno::XInterface >
-                                            ( static_cast< ::cppu::OWeakObject* >
-                                              ( const_cast< AccessibleEditableTextPara* > (this) ) ) ); // disambiguate hierarchy
+                                            const_cast< AccessibleEditableTextPara* > (this)->getXWeak() );
         }
 
         if( pTextEditViewForwarder->IsValid() )
@@ -497,14 +481,10 @@ namespace accessibility
         {
             if( bCreate )
                 throw uno::RuntimeException("View forwarder is invalid, object is defunct",
-                                            uno::Reference< uno::XInterface >
-                                            ( static_cast< ::cppu::OWeakObject* >
-                                              ( const_cast< AccessibleEditableTextPara* > (this) )  ) );    // disambiguate hierarchy
+                                            const_cast< AccessibleEditableTextPara* > (this)->getXWeak() );
             else
                 throw uno::RuntimeException("View forwarder is invalid, object not in edit mode",
-                                            uno::Reference< uno::XInterface >
-                                            ( static_cast< ::cppu::OWeakObject* >
-                                              ( const_cast< AccessibleEditableTextPara* > (this) )  ) );    // disambiguate hierarchy
+                                            const_cast< AccessibleEditableTextPara* > (this)->getXWeak() );
         }
     }
 
@@ -653,13 +633,11 @@ namespace accessibility
 
         if( !HaveChildren() )
             throw lang::IndexOutOfBoundsException("No children available",
-                                                  uno::Reference< uno::XInterface >
-                                                  ( static_cast< ::cppu::OWeakObject* > (this) ) ); // static_cast: disambiguate hierarchy
+                                                  getXWeak() );
 
         if( i != 0 )
             throw lang::IndexOutOfBoundsException("Invalid child index",
-                                                  uno::Reference< uno::XInterface >
-                                                  ( static_cast< ::cppu::OWeakObject* > (this) ) ); // static_cast: disambiguate hierarchy
+                                                  getXWeak() );
 
         auto aChild( maImageBullet.get() );
 
@@ -759,7 +737,7 @@ namespace accessibility
                  mpParaManager->IsReferencable( nMyParaIndex - 1 ) )
             {
                 uno::Sequence<uno::Reference<XInterface> > aSequence
-                    { static_cast<cppu::OWeakObject *>(mpParaManager->GetChild( nMyParaIndex - 1 ).first.get().get()) };
+                    { cppu::getXWeak(mpParaManager->GetChild( nMyParaIndex - 1 ).first.get().get()) };
                 AccessibleRelation aAccRel( AccessibleRelationType::CONTENT_FLOWS_FROM,
                                             aSequence );
                 pAccRelSetHelper->AddRelation( aAccRel );
@@ -770,7 +748,7 @@ namespace accessibility
                  mpParaManager->IsReferencable( nMyParaIndex + 1 ) )
             {
                 uno::Sequence<uno::Reference<XInterface> > aSequence
-                    { static_cast<cppu::OWeakObject *>(mpParaManager->GetChild( nMyParaIndex + 1 ).first.get().get()) };
+                    { cppu::getXWeak(mpParaManager->GetChild( nMyParaIndex + 1 ).first.get().get()) };
                 AccessibleRelation aAccRel( AccessibleRelationType::CONTENT_FLOWS_TO,
                                             aSequence );
                 pAccRelSetHelper->AddRelation( aAccRel );
