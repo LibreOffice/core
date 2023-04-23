@@ -54,7 +54,7 @@ connectivity_flat_ODriver(
     }
     if (ret)
         ret->acquire();
-    return static_cast<cppu::OWeakObject*>(ret.get());
+    return getXWeak(ret.get());
 }
 
 Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url, const Sequence< PropertyValue >& info )

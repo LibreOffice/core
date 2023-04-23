@@ -48,7 +48,7 @@ namespace connectivity
             OSL_ENSURE(m_xDriver.is(), "ODriverWrapper::ODriverWrapper: invalid aggregate (no XDriver)!");
 
             // set ourself as delegator
-            m_xDriverAggregate->setDelegator( static_cast< XWeak* >( this ) );
+            m_xDriverAggregate->setDelegator( getXWeak() );
         }
         osl_atomic_decrement( &m_refCount );
     }

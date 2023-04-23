@@ -51,7 +51,7 @@ connectivity_dbase_ODriver(
     }
     if (ret)
         ret->acquire();
-    return static_cast<cppu::OWeakObject*>(ret.get());
+    return getXWeak(ret.get());
 }
 
 

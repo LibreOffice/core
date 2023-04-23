@@ -78,7 +78,7 @@ namespace dbtools
     void OAutoConnectionDisposer::stopPropertyListening( const Reference< XPropertySet >& _rxEventSource )
     {
         // prevent deletion of ourself while we're herein
-        Reference< XInterface > xKeepAlive(static_cast< XWeak* >(this));
+        Reference< XInterface > xKeepAlive(getXWeak());
 
         try
         {   // remove ourself as property change listener

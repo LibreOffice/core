@@ -912,7 +912,7 @@ Reference< XInterface > SAL_CALL OEvoabResultSet::getStatement(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    return static_cast<cppu::OWeakObject*>(m_pStatement);
+    return cppu::getXWeak(m_pStatement);
 }
 
 

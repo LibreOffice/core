@@ -380,7 +380,7 @@ Any SAL_CALL java_sql_Statement_Base::getWarnings(  )
         java_sql_SQLWarning_BASE        warn_base( t.pEnv, out );
         return Any(
             static_cast< css::sdbc::SQLException >(
-                java_sql_SQLWarning(warn_base,*static_cast<cppu::OWeakObject*>(this))));
+                java_sql_SQLWarning(warn_base,getXWeak())));
     }
 
     return Any();
