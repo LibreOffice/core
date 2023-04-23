@@ -91,7 +91,7 @@ void BaseContainer::impl_initFlushMode(std::unique_lock<std::mutex>& /*rGuard*/)
         m_pFlushCache = GetTheFilterCache().clone();
     if (!m_pFlushCache)
         throw css::uno::RuntimeException( "Can not create write copy of internal used cache on demand.",
-                static_cast< OWeakObject* >(this));
+                getXWeak());
 }
 
 
@@ -380,7 +380,7 @@ void SAL_CALL BaseContainer::flush()
     if (!m_pFlushCache)
         throw css::lang::WrappedTargetRuntimeException(
                 "Can not guarantee cache consistency. Special flush container does not exists!",
-                static_cast< OWeakObject* >(this),
+                getXWeak(),
                 css::uno::Any());
 
     try
@@ -402,7 +402,7 @@ void SAL_CALL BaseContainer::flush()
         // later again ...
 
         throw css::lang::WrappedTargetRuntimeException( "Flush rejected by internal container.",
-                static_cast< OWeakObject* >(this),
+                getXWeak(),
                 css::uno::Any(ex));
     }
 

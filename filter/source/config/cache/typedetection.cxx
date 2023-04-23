@@ -1097,7 +1097,7 @@ void TypeDetection::impl_openStream(utl::MediaDescriptor& rDescriptor)
     if ( !bSuccess )
         throw css::uno::Exception(
             "Could not open stream for <" + sURL + ">",
-            static_cast<OWeakObject *>(this));
+            getXWeak());
 
     if ( !bRequestedReadOnly )
     {

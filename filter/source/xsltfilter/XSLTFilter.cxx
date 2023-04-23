@@ -374,7 +374,7 @@ namespace XSLT
                                         Sequence<Any> excArgs(0);
                                         css::ucb::InteractiveAugmentedIOException exc(
                                                 "Timeout!",
-                                                static_cast< OWeakObject * >( this ),
+                                                getXWeak(),
                                                 InteractionClassification_ERROR,
                                                 css::ucb::IOErrorCode_GENERAL,
                                                  excArgs);
@@ -501,7 +501,7 @@ namespace XSLT
                                         Sequence<Any> excArgs(0);
                                         css::ucb::InteractiveAugmentedIOException exc(
                                                 "Timeout!",
-                                                static_cast< OWeakObject * >( this ),
+                                                getXWeak(),
                                                 InteractionClassification_ERROR,
                                                 css::ucb::IOErrorCode_GENERAL,
                                                  excArgs);
