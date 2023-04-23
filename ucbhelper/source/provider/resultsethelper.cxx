@@ -169,7 +169,7 @@ void SAL_CALL ResultSetImplHelper::setListener(
 
     Listener->notify(
         css::ucb::ListEvent(
-            static_cast< cppu::OWeakObject * >( this ), aActions ) );
+            getXWeak(), aActions ) );
 }
 
 

@@ -1329,7 +1329,7 @@ void ResultSet::rowCountChanged( sal_uInt32 nOld, sal_uInt32 nNew )
 
     propertyChanged(
         beans::PropertyChangeEvent(
-            static_cast< cppu::OWeakObject * >( this ),
+            getXWeak(),
             "RowCount",
             false,
             1001,
@@ -1345,7 +1345,7 @@ void ResultSet::rowCountFinal()
 
     propertyChanged(
         beans::PropertyChangeEvent(
-            static_cast< cppu::OWeakObject * >( this ),
+            getXWeak(),
             "IsRowCountFinal",
             false,
             1000,

@@ -455,7 +455,7 @@ void SAL_CALL ContentImplHelper::addProperty(
          m_pImpl->m_pPropSetChangeListeners->getLength() )
     {
         beans::PropertySetInfoChangeEvent evt(
-                    static_cast< cppu::OWeakObject * >( this ),
+                    getXWeak(),
                     Name,
                     -1, // No handle available
                     beans::PropertySetInfoChange::PROPERTY_INSERTED );
@@ -551,7 +551,7 @@ void SAL_CALL ContentImplHelper::removeProperty( const OUString& Name )
          m_pImpl->m_pPropSetChangeListeners->getLength() )
     {
         beans::PropertySetInfoChangeEvent evt(
-                    static_cast< cppu::OWeakObject * >( this ),
+                    getXWeak(),
                     Name,
                     -1, // No handle available
                     beans::PropertySetInfoChange::PROPERTY_REMOVED );
@@ -752,7 +752,7 @@ void ContentImplHelper::inserted()
     if ( xParent.is() )
     {
         css::ucb::ContentEvent aEvt(
-            static_cast< cppu::OWeakObject * >( xParent.get() ), // Source
+            xParent->getXWeak(), // Source
             css::ucb::ContentAction::INSERTED,        // Action
             this,                                                // Content
             xParent->getIdentifier() );                          // Id
@@ -771,7 +771,7 @@ void ContentImplHelper::deleted()
     {
         // Let parent notify "REMOVED" event.
         css::ucb::ContentEvent aEvt(
-            static_cast< cppu::OWeakObject * >( xParent.get() ),
+            xParent->getXWeak(),
             css::ucb::ContentAction::REMOVED,
             this,
             xParent->getIdentifier()    );
@@ -780,7 +780,7 @@ void ContentImplHelper::deleted()
 
     // Notify "DELETED" event.
     css::ucb::ContentEvent aEvt1(
-        static_cast< cppu::OWeakObject * >( this ),
+        getXWeak(),
         css::ucb::ContentAction::DELETED,
         this,
         getIdentifier() );
@@ -818,7 +818,7 @@ bool ContentImplHelper::exchange(
 
     // Notify "EXCHANGED" event.
     css::ucb::ContentEvent aEvt(
-        static_cast< cppu::OWeakObject * >( this ),
+        getXWeak(),
         css::ucb::ContentAction::EXCHANGED,
         this,
         xOldId );
