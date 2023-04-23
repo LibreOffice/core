@@ -44,7 +44,7 @@ public:
     virtual void SAL_CALL throwException() {
         throw test::types::TestException(
             rtl::OUString("test"),
-            static_cast< cppu::OWeakObject * >(this));
+            getXWeak());
     }
 
 private:
@@ -59,7 +59,7 @@ namespace CppTest {
 css::uno::Reference< css::uno::XInterface > create(
     css::uno::Reference< css::uno::XComponentContext > const &)
 {
-    return static_cast< cppu::OWeakObject * >(new Service);
+    return getXWeak(new Service);
 }
 
 rtl::OUString getImplementationName() {
