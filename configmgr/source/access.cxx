@@ -281,7 +281,7 @@ void Access::dispose() {
         if (getParentAccess().is()) {
             throw css::uno::RuntimeException(
                 "configmgr dispose inappropriate Access",
-                static_cast< cppu::OWeakObject * >(this));
+                getXWeak());
         }
         if (disposed_) {
             return;
@@ -302,7 +302,7 @@ void Access::addEventListener(
         checkLocalizedPropertyAccess();
         if (!xListener.is()) {
             throw css::uno::RuntimeException(
-                "null listener", static_cast< cppu::OWeakObject * >(this));
+                "null listener", getXWeak());
         }
         if (!disposed_) {
             disposeListeners_.insert(xListener);
@@ -311,7 +311,7 @@ void Access::addEventListener(
     }
     try {
         xListener->disposing(
-            css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
+            css::lang::EventObject(getXWeak()));
     } catch (css::lang::DisposedException &) {}
 }
 
@@ -346,7 +346,7 @@ css::uno::Type Access::getElementType() {
     default:
         assert(false);
         throw css::uno::RuntimeException(
-            "this cannot happen", static_cast< cppu::OWeakObject * >(this));
+            "this cannot happen", getXWeak());
     }
 }
 
@@ -401,7 +401,7 @@ css::uno::Any Access::getByName(OUString const & aName)
     css::uno::Any value;
     if (!getByNameFast(aName, value))
         throw css::container::NoSuchElementException(
-            aName, static_cast< cppu::OWeakObject * >(this));
+            aName, getXWeak());
     return value;
 }
 
@@ -436,7 +436,7 @@ css::uno::Any Access::getByHierarchicalName(OUString const & aName)
     rtl::Reference< ChildAccess > child(getSubChild(aName));
     if (!child.is()) {
         throw css::container::NoSuchElementException(
-            aName, static_cast< cppu::OWeakObject * >(this));
+            aName, getXWeak());
     }
     return child->asValue();
 }
@@ -461,7 +461,7 @@ void Access::replaceByHierarchicalName(
         rtl::Reference< ChildAccess > child(getSubChild(aName));
         if (!child.is()) {
             throw css::container::NoSuchElementException(
-                aName, static_cast< cppu::OWeakObject * >(this));
+                aName, getXWeak());
         }
         child->checkFinalized();
         rtl::Reference< Node > parent(child->getParentNode());
@@ -476,12 +476,12 @@ void Access::replaceByHierarchicalName(
             throw css::lang::IllegalArgumentException(
                 ("configmgr::Access::replaceByHierarchicalName does not"
                  " currently support set members"),
-                static_cast< cppu::OWeakObject * >(this), 0);
+                getXWeak(), 0);
         case Node::KIND_ROOT:
             throw css::lang::IllegalArgumentException(
                 ("configmgr::Access::replaceByHierarchicalName does not allow"
                  " changing component " + aName),
-                static_cast< cppu::OWeakObject * >(this), 0);
+                getXWeak(), 0);
         default:
             assert(false); // this cannot happen
             break;
@@ -500,7 +500,7 @@ void Access::addContainerListener(
         checkLocalizedPropertyAccess();
         if (!xListener.is()) {
             throw css::uno::RuntimeException(
-                "null listener", static_cast< cppu::OWeakObject * >(this));
+                "null listener", getXWeak());
         }
         if (!disposed_) {
             containerListeners_.insert(xListener);
@@ -509,7 +509,7 @@ void Access::addContainerListener(
     }
     try {
         xListener->disposing(
-            css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
+            css::lang::EventObject(getXWeak()));
     } catch (css::lang::DisposedException &) {}
 }
 
@@ -554,7 +554,7 @@ css::beans::Property Access::getPropertyByName(OUString const & aName)
     rtl::Reference< ChildAccess > child(getChild(aName));
     if (!child.is()) {
         throw css::beans::UnknownPropertyException(
-            aName, static_cast< cppu::OWeakObject * >(this));
+            aName, getXWeak());
     }
     return child->asProperty();
 }
@@ -595,7 +595,7 @@ OUString Access::composeHierarchicalName(
     if (aRelativeName.isEmpty() || aRelativeName[0] == '/') {
         throw css::lang::IllegalArgumentException(
             "configmgr composeHierarchicalName inappropriate relative name",
-            static_cast< cppu::OWeakObject * >(this), -1);
+            getXWeak(), -1);
     }
     OUStringBuffer path(getRelativePathRepresentation());
     if (!path.isEmpty()) {
@@ -670,7 +670,7 @@ void Access::setName(OUString const & aName)
             // but a localized property is never an extension property
             throw css::uno::RuntimeException(
                 "configmgr setName inappropriate node",
-                static_cast< cppu::OWeakObject * >(this));
+                getXWeak());
         default:
             assert(false); // this cannot happen
             break;
@@ -704,12 +704,12 @@ void Access::setPropertyValue(
         if (!getRootAccess()->isUpdate()) {
             throw css::uno::RuntimeException(
                 "configmgr setPropertyValue on non-update access",
-                static_cast< cppu::OWeakObject * >(this));
+                getXWeak());
         }
         Modifications localMods;
         if (!setChildProperty(aPropertyName, aValue, &localMods)) {
             throw css::beans::UnknownPropertyException(
-                aPropertyName, static_cast< cppu::OWeakObject * >(this));
+                aPropertyName, getXWeak());
         }
         getNotificationRoot()->initBroadcaster(localMods.getRoot(), &bc);
     }
@@ -724,7 +724,7 @@ css::uno::Any Access::getPropertyValue(OUString const & PropertyName)
     css::uno::Any value;
     if (!getByNameFast(PropertyName, value))
         throw css::beans::UnknownPropertyException(
-            PropertyName, static_cast< cppu::OWeakObject * >(this));
+            PropertyName, getXWeak());
     return value;
 }
 
@@ -738,7 +738,7 @@ void Access::addPropertyChangeListener(
         osl::MutexGuard g(*lock_);
         if (!xListener.is()) {
             throw css::uno::RuntimeException(
-                "null listener", static_cast< cppu::OWeakObject * >(this));
+                "null listener", getXWeak());
         }
         checkKnownProperty(aPropertyName);
         if (!disposed_) {
@@ -748,7 +748,7 @@ void Access::addPropertyChangeListener(
     }
     try {
         xListener->disposing(
-            css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
+            css::lang::EventObject(getXWeak()));
     } catch (css::lang::DisposedException &) {}
 }
 
@@ -783,7 +783,7 @@ void Access::addVetoableChangeListener(
         osl::MutexGuard g(*lock_);
         if (!aListener.is()) {
             throw css::uno::RuntimeException(
-                "null listener", static_cast< cppu::OWeakObject * >(this));
+                "null listener", getXWeak());
         }
         checkKnownProperty(PropertyName);
         if (!disposed_) {
@@ -794,7 +794,7 @@ void Access::addVetoableChangeListener(
     }
     try {
         aListener->disposing(
-            css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
+            css::lang::EventObject(getXWeak()));
     } catch (css::lang::DisposedException &) {}
 }
 
@@ -830,20 +830,20 @@ void Access::setPropertyValues(
         if (!getRootAccess()->isUpdate()) {
             throw css::uno::RuntimeException(
                 "configmgr setPropertyValues on non-update access",
-                static_cast< cppu::OWeakObject * >(this));
+                getXWeak());
         }
         if (aPropertyNames.getLength() != aValues.getLength()) {
             throw css::lang::IllegalArgumentException(
                 ("configmgr setPropertyValues: aPropertyNames/aValues of"
                  " different length"),
-                static_cast< cppu::OWeakObject * >(this), -1);
+                getXWeak(), -1);
         }
         Modifications localMods;
         for (sal_Int32 i = 0; i < aPropertyNames.getLength(); ++i) {
             if (!setChildProperty(aPropertyNames[i], aValues[i], &localMods)) {
                 throw css::lang::IllegalArgumentException(
                     "configmgr setPropertyValues inappropriate property name",
-                    static_cast< cppu::OWeakObject * >(this), -1);
+                    getXWeak(), -1);
             }
         }
         getNotificationRoot()->initBroadcaster(localMods.getRoot(), &bc);
@@ -863,7 +863,7 @@ css::uno::Sequence< css::uno::Any > Access::getPropertyValues(
         if (!getByNameFast(aPropertyNames[i], aValsRange[i]))
             throw css::uno::RuntimeException(
                 "configmgr getPropertyValues inappropriate property name",
-                static_cast< cppu::OWeakObject * >(this));
+                getXWeak());
     }
 
     return vals;
@@ -879,7 +879,7 @@ void Access::addPropertiesChangeListener(
         osl::MutexGuard g(*lock_);
         if (!xListener.is()) {
             throw css::uno::RuntimeException(
-                "null listener", static_cast< cppu::OWeakObject * >(this));
+                "null listener", getXWeak());
         }
         if (!disposed_) {
             propertiesChangeListeners_.insert(xListener);
@@ -888,7 +888,7 @@ void Access::addPropertiesChangeListener(
     }
     try {
         xListener->disposing(
-            css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
+            css::lang::EventObject(getXWeak()));
     } catch (css::lang::DisposedException &) {}
 }
 
@@ -915,7 +915,7 @@ void Access::firePropertiesChangeEvent(
         aPropertyNames.getLength());
     auto aEventsRange = asNonConstRange(events);
     for (sal_Int32 i = 0; i < events.getLength(); ++i) {
-        aEventsRange[i].Source = static_cast< cppu::OWeakObject * >(this);
+        aEventsRange[i].Source = getXWeak();
         aEventsRange[i].PropertyName = aPropertyNames[i];
         aEventsRange[i].Further = false;
         aEventsRange[i].PropertyHandle = -1;
@@ -940,14 +940,14 @@ void Access::setHierarchicalPropertyValue(
         if (!getRootAccess()->isUpdate()) {
             throw css::uno::RuntimeException(
                 "configmgr setHierarchicalPropertyName on non-update access",
-                static_cast< cppu::OWeakObject * >(this));
+                getXWeak());
         }
         rtl::Reference< ChildAccess > child(
             getSubChild(aHierarchicalPropertyName));
         if (!child.is()) {
             throw css::beans::UnknownPropertyException(
                 aHierarchicalPropertyName,
-                static_cast< cppu::OWeakObject * >(this));
+                getXWeak());
         }
         child->checkFinalized();
         Modifications localMods;
@@ -966,7 +966,7 @@ css::uno::Any Access::getHierarchicalPropertyValue(
     if (!child.is()) {
         throw css::beans::UnknownPropertyException(
             aHierarchicalPropertyName,
-            static_cast< cppu::OWeakObject * >(this));
+            getXWeak());
     }
     return child->asValue();
 }
@@ -982,13 +982,13 @@ void Access::setHierarchicalPropertyValues(
         if (!getRootAccess()->isUpdate()) {
             throw css::uno::RuntimeException(
                 "configmgr setPropertyValues on non-update access",
-                static_cast< cppu::OWeakObject * >(this));
+                getXWeak());
         }
         if (aHierarchicalPropertyNames.getLength() != Values.getLength()) {
             throw css::lang::IllegalArgumentException(
                 ("configmgr setHierarchicalPropertyValues:"
                  " aHierarchicalPropertyNames/Values of different length"),
-                static_cast< cppu::OWeakObject * >(this), -1);
+                getXWeak(), -1);
         }
         Modifications localMods;
         for (sal_Int32 i = 0; i < aHierarchicalPropertyNames.getLength(); ++i) {
@@ -998,7 +998,7 @@ void Access::setHierarchicalPropertyValues(
                 throw css::lang::IllegalArgumentException(
                     ("configmgr setHierarchicalPropertyValues inappropriate"
                      " property name"),
-                    static_cast< cppu::OWeakObject * >(this), -1);
+                    getXWeak(), -1);
             }
             child->checkFinalized();
             child->setProperty(Values[i], &localMods);
@@ -1023,7 +1023,7 @@ css::uno::Sequence< css::uno::Any > Access::getHierarchicalPropertyValues(
             throw css::lang::IllegalArgumentException(
                 ("configmgr getHierarchicalPropertyValues inappropriate"
                  " hierarchical property name"),
-                static_cast< cppu::OWeakObject * >(this), -1);
+                getXWeak(), -1);
         }
         aValsRange[i] = child->asValue();
     }
@@ -1038,7 +1038,7 @@ css::beans::Property Access::getPropertyByHierarchicalName(
     rtl::Reference< ChildAccess > child(getSubChild(aHierarchicalName));
     if (!child.is()) {
         throw css::beans::UnknownPropertyException(
-            aHierarchicalName, static_cast< cppu::OWeakObject * >(this));
+            aHierarchicalName, getXWeak());
     }
     return child->asProperty();
 }
@@ -1062,7 +1062,7 @@ void Access::replaceByName(
         rtl::Reference< ChildAccess > child(getChild(aName));
         if (!child.is()) {
             throw css::container::NoSuchElementException(
-                aName, static_cast< cppu::OWeakObject * >(this));
+                aName, getXWeak());
         }
         child->checkFinalized();
         Modifications localMods;
@@ -1102,14 +1102,14 @@ void Access::insertByName(
         checkFinalized();
         if (getChild(aName).is()) {
             throw css::container::ElementExistException(
-                aName, static_cast< cppu::OWeakObject * >(this));
+                aName, getXWeak());
         }
         Modifications localMods;
         switch (getNode()->kind()) {
         case Node::KIND_LOCALIZED_PROPERTY:
             if (!isValidName(aName, false)) {
                 throw css::lang::IllegalArgumentException(
-                    aName, static_cast<cppu::OWeakObject *>(this), 0);
+                    aName, getXWeak(), 0);
             }
             insertLocalizedValueChild(aName, aElement, &localMods);
             break;
@@ -1117,7 +1117,7 @@ void Access::insertByName(
             {
                 if (!isValidName(aName, false)) {
                     throw css::lang::IllegalArgumentException(
-                        aName, static_cast<cppu::OWeakObject *>(this), 0);
+                        aName, getXWeak(), 0);
                 }
                 checkValue(aElement, TYPE_ANY, true);
                 rtl::Reference child(
@@ -1133,7 +1133,7 @@ void Access::insertByName(
             {
                 if (!isValidName(aName, true)) {
                     throw css::lang::IllegalArgumentException(
-                        aName, static_cast<cppu::OWeakObject *>(this), 0);
+                        aName, getXWeak(), 0);
                 }
                 rtl::Reference< ChildAccess > freeAcc(
                     getFreeSetMember(aElement));
@@ -1163,7 +1163,7 @@ void Access::removeByName(OUString const & aName)
             child->getNode()->getMandatory() != Data::NO_LAYER)
         {
             throw css::container::NoSuchElementException(
-                aName, static_cast< cppu::OWeakObject * >(this));
+                aName, getXWeak());
         }
         if (getNode()->kind() == Node::KIND_GROUP) {
             rtl::Reference< Node > p(child->getNode());
@@ -1171,7 +1171,7 @@ void Access::removeByName(OUString const & aName)
                 !static_cast< PropertyNode * >(p.get())->isExtension())
             {
                 throw css::container::NoSuchElementException(
-                    aName, static_cast< cppu::OWeakObject * >(this));
+                    aName, getXWeak());
             }
         }
         Modifications localMods;
@@ -1195,11 +1195,11 @@ css::uno::Reference< css::uno::XInterface > Access::createInstance()
     if (!tmpl.is()) {
         throw css::uno::Exception(
             "unknown template " + tmplName,
-            static_cast< cppu::OWeakObject * >(this));
+            getXWeak());
     }
     rtl::Reference< Node > node(tmpl->clone(true));
     node->setLayer(Data::NO_LAYER);
-    return static_cast< cppu::OWeakObject * >(
+    return cppu::getXWeak(
         new ChildAccess(components_, getRootAccess(), node));
 }
 
@@ -1211,7 +1211,7 @@ css::uno::Reference< css::uno::XInterface > Access::createInstanceWithArguments(
         throw css::uno::Exception(
             ("configuration SimpleSetUpdate createInstanceWithArguments"
              " must not specify any arguments"),
-            static_cast< cppu::OWeakObject * >(this));
+            getXWeak());
     }
     return createInstance();
 }
@@ -1229,13 +1229,13 @@ void Access::initDisposeBroadcaster(Broadcaster * broadcaster) {
     {
         broadcaster->addDisposeNotification(
             disposeListener,
-            css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
+            css::lang::EventObject(getXWeak()));
     }
     for (auto const& containerListener : containerListeners_)
     {
         broadcaster->addDisposeNotification(
             containerListener,
-            css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
+            css::lang::EventObject(getXWeak()));
     }
     for (auto const& propertyChangeListener : propertyChangeListeners_)
     {
@@ -1244,7 +1244,7 @@ void Access::initDisposeBroadcaster(Broadcaster * broadcaster) {
             broadcaster->addDisposeNotification(
                 propertyChangeListenerElement,
                 css::lang::EventObject(
-                    static_cast< cppu::OWeakObject * >(this)));
+                    getXWeak()));
         }
     }
     for (auto const& vetoableChangeListener : vetoableChangeListeners_)
@@ -1254,14 +1254,14 @@ void Access::initDisposeBroadcaster(Broadcaster * broadcaster) {
             broadcaster->addDisposeNotification(
                 vetoableChangeListenerElement,
                 css::lang::EventObject(
-                    static_cast< cppu::OWeakObject * >(this)));
+                    getXWeak()));
         }
     }
     for (auto const& propertiesChangeListener : propertiesChangeListeners_)
     {
         broadcaster->addDisposeNotification(
             propertiesChangeListener,
-            css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
+            css::lang::EventObject(getXWeak()));
     }
     //TODO: iterate over children w/ listeners (incl. unmodified ones):
     for (ModifiedChildren::iterator i(modifiedChildren_.begin());
@@ -1355,7 +1355,7 @@ void Access::checkLocalizedPropertyAccess() {
     {
         throw css::uno::RuntimeException(
             "configmgr Access to specialized LocalizedPropertyNode",
-            static_cast< cppu::OWeakObject * >(this));
+            getXWeak());
     }
 }
 
@@ -1515,7 +1515,7 @@ void Access::checkValue(css::uno::Any const & value, Type type, bool nillable) {
     if (!ok) {
         throw css::lang::IllegalArgumentException(
             "configmgr inappropriate property value",
-            static_cast< cppu::OWeakObject * >(this), -1);
+            getXWeak(), -1);
     }
 }
 
@@ -1632,8 +1632,7 @@ void Access::initBroadcasterAndChanges(
                                 addContainerElementReplacedNotification(
                                     containerListener,
                                     css::container::ContainerEvent(
-                                        static_cast< cppu::OWeakObject * >(
-                                            this),
+                                        getXWeak(),
                                         css::uno::Any(i.first),
                                         css::uno::Any(), css::uno::Any()));
                                 //TODO: non-void Element, ReplacedElement
@@ -1646,8 +1645,7 @@ void Access::initBroadcasterAndChanges(
                                 broadcaster->addPropertyChangeNotification(
                                     propertyChangeListenerElement,
                                     css::beans::PropertyChangeEvent(
-                                        static_cast< cppu::OWeakObject * >(
-                                            this),
+                                        getXWeak(),
                                         i.first, false, -1, css::uno::Any(),
                                         css::uno::Any()));
                             }
@@ -1659,8 +1657,7 @@ void Access::initBroadcasterAndChanges(
                                 broadcaster->addPropertyChangeNotification(
                                     propertyChangeListenerElement,
                                     css::beans::PropertyChangeEvent(
-                                        static_cast< cppu::OWeakObject * >(
-                                            this),
+                                        getXWeak(),
                                         i.first, false, -1, css::uno::Any(),
                                         css::uno::Any()));
                             }
@@ -1675,7 +1672,7 @@ void Access::initBroadcasterAndChanges(
                         }
                         if (collectPropChanges) {
                             propChanges.emplace_back(
-                                    static_cast< cppu::OWeakObject * >(this),
+                                    getXWeak(),
                                     i.first, false, -1, css::uno::Any(),
                                     css::uno::Any());
                         }
@@ -1690,7 +1687,7 @@ void Access::initBroadcasterAndChanges(
                     broadcaster->addContainerElementReplacedNotification(
                         containerListener,
                         css::container::ContainerEvent(
-                            static_cast< cppu::OWeakObject * >(this),
+                            getXWeak(),
                             css::uno::Any(i.first), child->asValue(),
                             css::uno::Any()));
                         //TODO: distinguish add/modify; non-void ReplacedElement
@@ -1712,7 +1709,7 @@ void Access::initBroadcasterAndChanges(
                         broadcaster->addContainerElementReplacedNotification(
                             containerListener,
                             css::container::ContainerEvent(
-                                static_cast< cppu::OWeakObject * >(this),
+                                getXWeak(),
                                 css::uno::Any(i.first), child->asValue(),
                                 css::uno::Any()));
                             //TODO: distinguish add/remove/modify; non-void
@@ -1726,7 +1723,7 @@ void Access::initBroadcasterAndChanges(
                             broadcaster->addPropertyChangeNotification(
                                 propertyChangeListenerElement,
                                 css::beans::PropertyChangeEvent(
-                                    static_cast< cppu::OWeakObject * >(this),
+                                    getXWeak(),
                                     i.first, false, -1, css::uno::Any(),
                                     css::uno::Any()));
                         }
@@ -1738,7 +1735,7 @@ void Access::initBroadcasterAndChanges(
                             broadcaster->addPropertyChangeNotification(
                                 propertyChangeListenerElement,
                                 css::beans::PropertyChangeEvent(
-                                    static_cast< cppu::OWeakObject * >(this),
+                                    getXWeak(),
                                     i.first, false, -1, css::uno::Any(),
                                     css::uno::Any()));
                         }
@@ -1753,7 +1750,7 @@ void Access::initBroadcasterAndChanges(
                     }
                     if (collectPropChanges) {
                         propChanges.emplace_back(
-                                static_cast< cppu::OWeakObject * >(this),
+                                getXWeak(),
                                 i.first, false, -1, css::uno::Any(),
                                 css::uno::Any());
                     }
@@ -1769,8 +1766,7 @@ void Access::initBroadcasterAndChanges(
                                 addContainerElementInsertedNotification(
                                     containerListener,
                                     css::container::ContainerEvent(
-                                        static_cast< cppu::OWeakObject * >(
-                                            this),
+                                        getXWeak(),
                                         css::uno::Any(i.first),
                                         child->asValue(), css::uno::Any()));
                         }
@@ -1806,7 +1802,7 @@ void Access::initBroadcasterAndChanges(
                     broadcaster->addContainerElementRemovedNotification(
                         containerListener,
                         css::container::ContainerEvent(
-                            static_cast< cppu::OWeakObject * >(this),
+                            getXWeak(),
                             css::uno::Any(i.first), css::uno::Any(),
                             css::uno::Any()));
                         //TODO: non-void ReplacedElement
@@ -1833,7 +1829,7 @@ void Access::initBroadcasterAndChanges(
                         broadcaster->addContainerElementRemovedNotification(
                             containerListener,
                             css::container::ContainerEvent(
-                                static_cast< cppu::OWeakObject * >(this),
+                                getXWeak(),
                                 css::uno::Any(i.first), css::uno::Any(),
                                 css::uno::Any()));
                             //TODO: non-void ReplacedElement
@@ -1846,7 +1842,7 @@ void Access::initBroadcasterAndChanges(
                             broadcaster->addPropertyChangeNotification(
                                 propertyChangeListenerElement,
                                 css::beans::PropertyChangeEvent(
-                                    static_cast< cppu::OWeakObject * >(this),
+                                    getXWeak(),
                                     i.first, false, -1, css::uno::Any(),
                                     css::uno::Any()));
                         }
@@ -1858,7 +1854,7 @@ void Access::initBroadcasterAndChanges(
                             broadcaster->addPropertyChangeNotification(
                                 propertyChangeListenerElement,
                                 css::beans::PropertyChangeEvent(
-                                    static_cast< cppu::OWeakObject * >(this),
+                                    getXWeak(),
                                     i.first, false, -1, css::uno::Any(),
                                     css::uno::Any()));
                         }
@@ -1878,7 +1874,7 @@ void Access::initBroadcasterAndChanges(
                     }
                     if (collectPropChanges) {
                         propChanges.emplace_back(
-                                static_cast< cppu::OWeakObject * >(this),
+                                getXWeak(),
                                 i.first, false, -1, css::uno::Any(),
                                 css::uno::Any());
                     }
@@ -1892,7 +1888,7 @@ void Access::initBroadcasterAndChanges(
                         broadcaster->addContainerElementRemovedNotification(
                             containerListener,
                             css::container::ContainerEvent(
-                                static_cast< cppu::OWeakObject * >(this),
+                                getXWeak(),
                                 css::uno::Any(i.first),
                                 css::uno::Any(), css::uno::Any()));
                             //TODO: non-void ReplacedElement
@@ -2135,7 +2131,7 @@ void Access::checkFinalized() {
     if (isFinalized()) {
         throw css::lang::IllegalArgumentException(
             "configmgr modification of finalized item",
-            static_cast< cppu::OWeakObject * >(this), -1);
+            getXWeak(), -1);
     }
 }
 
@@ -2163,7 +2159,7 @@ void Access::checkKnownProperty(OUString const & descriptor) {
         }
     }
     throw css::beans::UnknownPropertyException(
-        descriptor, static_cast< cppu::OWeakObject * >(this));
+        descriptor, getXWeak());
 }
 
 rtl::Reference< ChildAccess > Access::getFreeSetMember(
@@ -2178,7 +2174,7 @@ rtl::Reference< ChildAccess > Access::getFreeSetMember(
     {
         throw css::lang::IllegalArgumentException(
             "configmgr inappropriate set element",
-            static_cast< cppu::OWeakObject * >(this), 1);
+            getXWeak(), 1);
     }
     assert(dynamic_cast< SetNode * >(getNode().get()) != nullptr);
     if (!static_cast< SetNode * >(getNode().get())->isValidTemplate(
@@ -2186,7 +2182,7 @@ rtl::Reference< ChildAccess > Access::getFreeSetMember(
     {
         throw css::lang::IllegalArgumentException(
             "configmgr inappropriate set element",
-            static_cast< cppu::OWeakObject * >(this), 1);
+            getXWeak(), 1);
     }
     return freeAcc;
 }

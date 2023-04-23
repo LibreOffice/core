@@ -118,7 +118,7 @@ void RootAccess::addChangesListener(
         checkLocalizedPropertyAccess();
         if (!aListener.is()) {
             throw css::uno::RuntimeException(
-                "null listener", static_cast< cppu::OWeakObject * >(this));
+                "null listener", getXWeak());
         }
         if (!isDisposed()) {
             changesListeners_.insert(aListener);
@@ -127,7 +127,7 @@ void RootAccess::addChangesListener(
     }
     try {
         aListener->disposing(
-            css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
+            css::lang::EventObject(getXWeak()));
     } catch (css::lang::DisposedException &) {}
 }
 
@@ -269,7 +269,7 @@ void RootAccess::initDisposeBroadcaster(Broadcaster * broadcaster) {
     {
         broadcaster->addDisposeNotification(
             changesListener,
-            css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
+            css::lang::EventObject(getXWeak()));
     }
     Access::initDisposeBroadcaster(broadcaster);
 }

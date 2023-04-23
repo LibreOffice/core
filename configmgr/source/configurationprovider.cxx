@@ -248,7 +248,7 @@ Service::createInstanceWithArguments(
         throw css::uno::Exception(
             ("com.sun.star.configuration.ConfigurationProvider does not support"
              " service " + ServiceSpecifier),
-            static_cast< cppu::OWeakObject * >(this));
+            getXWeak());
     }
     osl::MutexGuard guard(*lock_);
     Components & components = Components::getSingleton(context_);
@@ -258,10 +258,10 @@ Service::createInstanceWithArguments(
         throw css::uno::Exception(
             ("com.sun.star.configuration.ConfigurationProvider: there is a leaf"
              " value at nodepath " + nodepath),
-            static_cast< cppu::OWeakObject * >(this));
+            getXWeak());
     }
     components.addRootAccess(root);
-    return static_cast< cppu::OWeakObject * >(root.get());
+    return root->getXWeak();
 }
 
 css::uno::Sequence< OUString > Service::getAvailableServiceNames()
@@ -273,7 +273,7 @@ void Service::refresh() {
     //TODO
     std::unique_lock g(m_aMutex);
     if (maRefreshListeners.getLength(g)) {
-        css::lang::EventObject ev(static_cast< cppu::OWeakObject * >(this));
+        css::lang::EventObject ev(getXWeak());
         maRefreshListeners.notifyEach(g, &css::util::XRefreshListener::refreshed, ev);
     }
 }
@@ -296,7 +296,7 @@ void Service::flush() {
     flushModifications();
     std::unique_lock g(m_aMutex);
     if (maFlushListeners.getLength(g)) {
-        css::lang::EventObject ev(static_cast< cppu::OWeakObject * >(this));
+        css::lang::EventObject ev(getXWeak());
         maFlushListeners.notifyEach(g, &css::util::XFlushListener::flushed, ev);
     }
 }
@@ -400,7 +400,7 @@ com_sun_star_comp_configuration_ConfigurationProvider_get_implementation(
 css::uno::Reference< css::uno::XInterface > createDefault(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
-    return static_cast< cppu::OWeakObject * >(new Service(context));
+    return getXWeak(new Service(context));
 }
 
 }

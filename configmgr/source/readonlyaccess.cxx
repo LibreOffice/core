@@ -86,12 +86,12 @@ void Service::initialize(css::uno::Sequence< css::uno::Any > const & aArguments)
     if (aArguments.getLength() != 1 || !(aArguments[0] >>= locale)) {
         throw css::lang::IllegalArgumentException(
             "not exactly one string argument",
-            static_cast< cppu::OWeakObject * >(this), -1);
+            getXWeak(), -1);
     }
     std::unique_lock g1(mutex_);
     if (root_.is()) {
         throw css::uno::RuntimeException(
-            "already initialized", static_cast< cppu::OWeakObject * >(this));
+            "already initialized", getXWeak());
     }
     osl::MutexGuard g2(*lock());
     Components & components = Components::getSingleton(context_);
@@ -103,7 +103,7 @@ rtl::Reference< RootAccess > Service::getRoot() {
     std::unique_lock g(mutex_);
     if (!root_.is()) {
         throw css::lang::NotInitializedException(
-            "not initialized", static_cast< cppu::OWeakObject * >(this));
+            "not initialized", getXWeak());
     }
     return root_;
 }

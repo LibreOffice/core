@@ -141,7 +141,7 @@ css::uno::Reference< css::uno::XInterface > ChildAccess::getParent()
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    return static_cast< cppu::OWeakObject * >(parent_.get());
+    return cppu::getXWeak(parent_.get());
 }
 
 void ChildAccess::setParent(css::uno::Reference< css::uno::XInterface > const &)
@@ -150,7 +150,7 @@ void ChildAccess::setParent(css::uno::Reference< css::uno::XInterface > const &)
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     throw css::lang::NoSupportException(
-        "setParent", static_cast< cppu::OWeakObject * >(this));
+        "setParent", getXWeak());
 }
 
 void ChildAccess::bind(
@@ -245,8 +245,7 @@ css::uno::Any ChildAccess::asValue()
                 return child.is() ? child->asValue() : css::uno::Any();
             }
         }
-        value <<= css::uno::Reference< css::uno::XInterface >(
-                            static_cast< cppu::OWeakObject * >(this));
+        value <<= css::uno::Reference(getXWeak());
     }
     return value;
 }
