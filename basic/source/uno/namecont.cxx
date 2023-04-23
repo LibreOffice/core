@@ -144,7 +144,7 @@ void NameContainer::replaceByName( const OUString& aName, const Any& aElement )
     const Type& aAnyType = aElement.getValueType();
     if( mType != aAnyType )
     {
-        throw IllegalArgumentException("types do not match", static_cast<cppu::OWeakObject*>(this), 2);
+        throw IllegalArgumentException("types do not match", getXWeak(), 2);
     }
     NameContainerNameMap::iterator aIt = mHashMap.find( aName );
     if( aIt == mHashMap.end() )
@@ -195,7 +195,7 @@ void NameContainer::insertNoCheck(const OUString& aName, const Any& aElement)
     const Type& aAnyType = aElement.getValueType();
     if( mType != aAnyType )
     {
-        throw IllegalArgumentException("types do not match", static_cast<cppu::OWeakObject*>(this), 2);
+        throw IllegalArgumentException("types do not match", getXWeak(), 2);
     }
 
     sal_Int32 nCount = mNames.size();
@@ -288,7 +288,7 @@ void SAL_CALL NameContainer::addContainerListener( const Reference< XContainerLi
 {
     if( !xListener.is() )
     {
-        throw RuntimeException("addContainerListener called with null xListener",static_cast< cppu::OWeakObject * >(this));
+        throw RuntimeException("addContainerListener called with null xListener",getXWeak());
     }
     maContainerListeners.addInterface( xListener );
 }
@@ -297,7 +297,7 @@ void SAL_CALL NameContainer::removeContainerListener( const Reference< XContaine
 {
     if( !xListener.is() )
     {
-        throw RuntimeException("removeContainerListener called with null xListener",static_cast< cppu::OWeakObject * >(this));
+        throw RuntimeException("removeContainerListener called with null xListener",getXWeak());
     }
     maContainerListeners.removeInterface( xListener );
 }
@@ -307,7 +307,7 @@ void SAL_CALL NameContainer::addChangesListener( const Reference< XChangesListen
 {
     if( !xListener.is() )
     {
-        throw RuntimeException("addChangesListener called with null xListener",static_cast< cppu::OWeakObject * >(this));
+        throw RuntimeException("addChangesListener called with null xListener",getXWeak());
     }
     maChangesListeners.addInterface( xListener );
 }
@@ -316,7 +316,7 @@ void SAL_CALL NameContainer::removeChangesListener( const Reference< XChangesLis
 {
     if( !xListener.is() )
     {
-        throw RuntimeException("removeChangesListener called with null xListener",static_cast< cppu::OWeakObject * >(this));
+        throw RuntimeException("removeChangesListener called with null xListener",getXWeak());
     }
     maChangesListeners.removeInterface( xListener );
 }
@@ -422,7 +422,7 @@ void SAL_CALL SfxLibraryContainer::setRootStorage( const Reference< XStorage >& 
     LibraryContainerMethodGuard aGuard( *this );
     if ( !_rxRootStorage.is() )
     {
-        throw IllegalArgumentException("no root storage", static_cast<cppu::OWeakObject*>(this), 1);
+        throw IllegalArgumentException("no root storage", getXWeak(), 1);
     }
     mxStorage = _rxRootStorage;
     onNewRootStorage();
@@ -433,7 +433,7 @@ void SAL_CALL SfxLibraryContainer::storeLibrariesToStorage( const Reference< XSt
     LibraryContainerMethodGuard aGuard( *this );
     if ( !_rxRootStorage.is() )
     {
-        throw IllegalArgumentException("no root storage", static_cast<cppu::OWeakObject*>(this), 1);
+        throw IllegalArgumentException("no root storage", getXWeak(), 1);
     }
     try
     {
@@ -2211,7 +2211,7 @@ void SAL_CALL SfxLibraryContainer::removeLibrary( const OUString& Name )
     SfxLibrary* pImplLib = static_cast< SfxLibrary* >( xNameAccess.get() );
     if( pImplLib->mbReadOnly && !pImplLib->mbLink )
     {
-        throw IllegalArgumentException("readonly && !link", static_cast<cppu::OWeakObject*>(this), 1);
+        throw IllegalArgumentException("readonly && !link", getXWeak(), 1);
     }
     // Remove from container
     maNameContainer->removeByName( Name );
@@ -2317,7 +2317,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
                  " storage!"));
             if ( !xLibrariesStor.is() )
             {
-                throw uno::RuntimeException("null returned from openStorageElement",static_cast< cppu::OWeakObject * >(this));
+                throw uno::RuntimeException("null returned from openStorageElement",getXWeak());
             }
 
             xLibraryStor = xLibrariesStor->openStorageElement( Name, embed::ElementModes::READ );
@@ -2327,7 +2327,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
                  " storage!"));
             if ( !xLibrariesStor.is() )
             {
-                throw uno::RuntimeException("null returned from openStorageElement",static_cast< cppu::OWeakObject * >(this));
+                throw uno::RuntimeException("null returned from openStorageElement",getXWeak());
             }
 #if OSL_DEBUG_LEVEL > 0
         }
@@ -2434,7 +2434,7 @@ OUString SAL_CALL SfxLibraryContainer::getLibraryLinkURL( const OUString& Name )
     bool bLink = pImplLib->mbLink;
     if( !bLink )
     {
-        throw IllegalArgumentException("!link", static_cast<cppu::OWeakObject*>(this), 1);
+        throw IllegalArgumentException("!link", getXWeak(), 1);
     }
     OUString aRetStr = pImplLib->maLibInfoFileURL;
     return aRetStr;
@@ -2612,7 +2612,7 @@ void SAL_CALL SfxLibraryContainer::initialize( const Sequence< Any >& _rArgument
     LibraryContainerMethodGuard aGuard( *this );
     sal_Int32 nArgCount = _rArguments.getLength();
     if ( nArgCount != 1 )
-        throw IllegalArgumentException("too many args", static_cast<cppu::OWeakObject*>(this), -1);
+        throw IllegalArgumentException("too many args", getXWeak(), -1);
 
     OUString sInitialDocumentURL;
     Reference< XStorageBasedDocument > xDocument;
@@ -2627,7 +2627,7 @@ void SAL_CALL SfxLibraryContainer::initialize( const Sequence< Any >& _rArgument
         initializeFromDocument( xDocument );
         return;
     }
-    throw IllegalArgumentException("arg1 unknown type", static_cast<cppu::OWeakObject*>(this), 1);
+    throw IllegalArgumentException("arg1 unknown type", getXWeak(), 1);
 
 }
 
@@ -2652,7 +2652,7 @@ void SfxLibraryContainer::initializeFromDocument( const Reference< XStorageBased
 
     if ( !xDocStorage.is() )
     {
-        throw IllegalArgumentException("no doc storage", static_cast<cppu::OWeakObject*>(this), 1);
+        throw IllegalArgumentException("no doc storage", getXWeak(), 1);
     }
     init( OUString(), xDocStorage );
 }
@@ -2706,7 +2706,7 @@ void SAL_CALL SfxLibraryContainer::changeLibraryPassword(const OUString&, const 
 void SAL_CALL SfxLibraryContainer::addContainerListener( const Reference< XContainerListener >& xListener )
 {
     LibraryContainerMethodGuard aGuard( *this );
-    maNameContainer->setEventSource( static_cast< XInterface* >( static_cast<OWeakObject*>(this) ) );
+    maNameContainer->setEventSource( getXWeak() );
     maNameContainer->addContainerListener( xListener );
 }
 
@@ -2778,7 +2778,7 @@ OUString SAL_CALL SfxLibraryContainer::getOriginalLibraryLinkURL( const OUString
     bool bLink = pImplLib->mbLink;
     if( !bLink )
     {
-        throw IllegalArgumentException("!link", static_cast<cppu::OWeakObject*>(this), 1);
+        throw IllegalArgumentException("!link", getXWeak(), 1);
     }
     OUString aRetStr = pImplLib->maOriginalStorageURL;
     return aRetStr;
@@ -2889,7 +2889,7 @@ void SAL_CALL SfxLibraryContainer::setPropertyValue(const OUString& aPropertyNam
                                                     const uno::Any& aValue)
 {
     if (aPropertyName != sVBATextEncodingPropName)
-        throw UnknownPropertyException(aPropertyName, static_cast<uno::XWeak*>(this));
+        throw UnknownPropertyException(aPropertyName, getXWeak());
     aValue >>= meVBATextEncoding;
 }
 
@@ -2897,7 +2897,7 @@ css::uno::Any SAL_CALL SfxLibraryContainer::getPropertyValue(const OUString& aPr
 {
     if (aPropertyName == sVBATextEncodingPropName)
         return uno::Any(meVBATextEncoding);
-    throw UnknownPropertyException(aPropertyName, static_cast<uno::XWeak*>(this));
+    throw UnknownPropertyException(aPropertyName, getXWeak());
 }
 
 void SAL_CALL SfxLibraryContainer::addPropertyChangeListener(
@@ -3157,7 +3157,7 @@ Sequence< sal_Int8 > SfxLibrary::getImplementationId()
 // Methods XContainer
 void SAL_CALL SfxLibrary::addContainerListener( const Reference< XContainerListener >& xListener )
 {
-    maNameContainer->setEventSource( static_cast< XInterface* >( static_cast<OWeakObject*>(this) ) );
+    maNameContainer->setEventSource( getXWeak() );
     maNameContainer->addContainerListener( xListener );
 }
 
@@ -3169,7 +3169,7 @@ void SAL_CALL SfxLibrary::removeContainerListener( const Reference< XContainerLi
 // Methods XChangesNotifier
 void SAL_CALL SfxLibrary::addChangesListener( const Reference< XChangesListener >& xListener )
 {
-    maNameContainer->setEventSource( static_cast< XInterface* >( static_cast<OWeakObject*>(this) ) );
+    maNameContainer->setEventSource( getXWeak() );
     maNameContainer->addChangesListener( xListener );
 }
 

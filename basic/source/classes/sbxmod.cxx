@@ -165,7 +165,7 @@ DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar )
         instances that are acquired during the call are released
         before m_refCount is decremented again */
     {
-        m_xAggProxy->setDelegator( static_cast< cppu::OWeakObject * >( this ) );
+        m_xAggProxy->setDelegator( getXWeak() );
     }
 
     osl_atomic_decrement( &m_refCount );

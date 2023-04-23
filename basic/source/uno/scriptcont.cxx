@@ -363,7 +363,7 @@ sal_Bool SAL_CALL SfxScriptLibraryContainer::isLibraryPasswordVerified( const OU
     SfxLibrary* pImplLib = getImplLib( Name );
     if( !pImplLib->mbPasswordProtected )
     {
-        throw IllegalArgumentException("!passwordProtected", static_cast<cppu::OWeakObject*>(this), 1);
+        throw IllegalArgumentException("!passwordProtected", getXWeak(), 1);
     }
     bool bRet = pImplLib->mbPasswordVerified;
     return bRet;
@@ -376,7 +376,7 @@ sal_Bool SAL_CALL SfxScriptLibraryContainer::verifyLibraryPassword
     SfxLibrary* pImplLib = getImplLib( Name );
     if( !pImplLib->mbPasswordProtected || pImplLib->mbPasswordVerified )
     {
-        throw IllegalArgumentException("!PasswordProtected || PasswordVerified", static_cast<cppu::OWeakObject*>(this), 1);
+        throw IllegalArgumentException("!PasswordProtected || PasswordVerified", getXWeak(), 1);
     }
     // Test password
     bool bSuccess = false;

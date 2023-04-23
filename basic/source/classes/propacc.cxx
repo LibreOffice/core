@@ -129,7 +129,7 @@ Sequence< PropertyValue > SbPropertyValues::getPropertyValues()
 void SbPropertyValues::setPropertyValues(const Sequence< PropertyValue >& rPropertyValues )
 {
     if (!m_aPropVals.empty())
-        throw IllegalArgumentException("m_aPropVals not empty", static_cast<cppu::OWeakObject*>(this), -1);
+        throw IllegalArgumentException("m_aPropVals not empty", getXWeak(), -1);
 
     for (const PropertyValue& i : rPropertyValues)
     {
@@ -150,26 +150,23 @@ void RTL_Impl_CreatePropertySet( SbxArray& rPar )
 
     // Get class names of struct
 
-    Reference< XInterface > xInterface = static_cast<OWeakObject*>(new SbPropertyValues());
+    Reference xInterface(getXWeak(new SbPropertyValues()));
 
     SbxVariableRef refVar = rPar.Get(0);
-    if( xInterface.is() )
-    {
-        // Set PropertyValues
-        Any aArgAsAny = sbxToUnoValue(rPar.Get(1),
-                cppu::UnoType<Sequence<PropertyValue>>::get() );
-        auto pArg = o3tl::doAccess<Sequence<PropertyValue>>(aArgAsAny);
-        Reference< XPropertyAccess > xPropAcc( xInterface, UNO_QUERY );
-        xPropAcc->setPropertyValues( *pArg );
+    // Set PropertyValues
+    Any aArgAsAny = sbxToUnoValue(rPar.Get(1),
+            cppu::UnoType<Sequence<PropertyValue>>::get() );
+    auto pArg = o3tl::doAccess<Sequence<PropertyValue>>(aArgAsAny);
+    Reference< XPropertyAccess > xPropAcc( xInterface, UNO_QUERY );
+    xPropAcc->setPropertyValues( *pArg );
 
-        // Build a SbUnoObject and return it
-        auto xUnoObj = tools::make_ref<SbUnoObject>( "stardiv.uno.beans.PropertySet", Any(xInterface) );
-        if( xUnoObj->getUnoAny().hasValue() )
-        {
-            // Return object
-            refVar->PutObject( xUnoObj.get() );
-            return;
-        }
+    // Build a SbUnoObject and return it
+    auto xUnoObj = tools::make_ref<SbUnoObject>( "stardiv.uno.beans.PropertySet", Any(xInterface) );
+    if( xUnoObj->getUnoAny().hasValue() )
+    {
+        // Return object
+        refVar->PutObject( xUnoObj.get() );
+        return;
     }
 
     // Object could not be created
