@@ -332,7 +332,7 @@ void Bridge::terminate(bool final) {
             try {
                 listener->disposing(
                     css::lang::EventObject(
-                        static_cast< cppu::OWeakObject * >(this)));
+                        getXWeak()));
             } catch (const css::uno::RuntimeException & e) {
                 SAL_WARN("binaryurp", "caught " << e);
             }
@@ -612,7 +612,7 @@ bool Bridge::makeCall(
     {
         throw css::lang::DisposedException(
             "Binary URP bridge disposed during call",
-            static_cast< cppu::OWeakObject * >(this));
+            getXWeak());
     }
     *returnValue = resp->returnValue;
     if (!resp->exception) {
@@ -675,7 +675,7 @@ void Bridge::handleRequestChangeReply(
     if (n != exp) {
         throw css::uno::RuntimeException(
             "URP: requestChange reply with unexpected return value received",
-            static_cast< cppu::OWeakObject * >(this));
+            getXWeak());
     }
     decrementCalls();
     switch (exp) {
@@ -758,7 +758,7 @@ void Bridge::handleRequestChangeRequest(
     default:
         throw css::uno::RuntimeException(
             "URP: unexpected requestChange request received",
-            static_cast< cppu::OWeakObject * >(this));
+            getXWeak());
     }
 }
 
@@ -809,7 +809,7 @@ void Bridge::handleCommitChangeRequest(
     default:
         throw css::uno::RuntimeException(
             "URP: unexpected commitChange request received",
-            static_cast< cppu::OWeakObject * >(this));
+            getXWeak());
     }
 }
 
@@ -854,7 +854,7 @@ css::uno::Reference< css::uno::XInterface > Bridge::getInstance(
     if (sInstanceName.isEmpty()) {
         throw css::uno::RuntimeException(
             "XBridge::getInstance sInstanceName must be non-empty",
-            static_cast< cppu::OWeakObject * >(this));
+            getXWeak());
     }
     for (sal_Int32 i = 0; i != sInstanceName.getLength(); ++i) {
         if (sInstanceName[i] > 0x7F) {
@@ -935,7 +935,7 @@ void Bridge::addEventListener(
         }
     }
     xListener->disposing(
-        css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
+        css::lang::EventObject(getXWeak()));
 }
 
 void Bridge::removeEventListener(
@@ -1045,7 +1045,7 @@ void Bridge::checkDisposed() {
     if (state_ != STATE_STARTED) {
         throw css::lang::DisposedException(
             "Binary URP bridge already disposed",
-            static_cast< cppu::OWeakObject * >(this));
+            getXWeak());
     }
 }
 

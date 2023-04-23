@@ -93,17 +93,17 @@ css::uno::Reference< css::bridge::XBridge > BridgeFactory::createBridge(
         if (rBHelper.bDisposed) {
             throw css::lang::DisposedException(
                 "BridgeFactory disposed",
-                static_cast< cppu::OWeakObject * >(this));
+                getXWeak());
         }
         if (named_.find(sName) != named_.end()) {
             throw css::bridge::BridgeExistsException(
-                sName, static_cast< cppu::OWeakObject * >(this));
+                sName, getXWeak());
         }
         if (sProtocol != "urp" || !aConnection.is()) {
             throw css::lang::IllegalArgumentException(
                 ("BridgeFactory::createBridge: sProtocol != urp ||"
                  " aConnection == null"),
-                static_cast< cppu::OWeakObject * >(this), -1);
+                getXWeak(), -1);
         }
         b.set(new Bridge(this, sName, aConnection, anInstanceProvider));
         if (sName.isEmpty()) {
@@ -131,13 +131,13 @@ BridgeFactory::getExistingBridges() {
     if (unnamed_.size() > SAL_MAX_INT32) {
         throw css::uno::RuntimeException(
             "BridgeFactory::getExistingBridges: too many",
-            static_cast< cppu::OWeakObject * >(this));
+            getXWeak());
     }
     sal_Int32 n = static_cast< sal_Int32 >(unnamed_.size());
     if (named_.size() > o3tl::make_unsigned(SAL_MAX_INT32 - n)) {
         throw css::uno::RuntimeException(
             "BridgeFactory::getExistingBridges: too many",
-            static_cast< cppu::OWeakObject * >(this));
+            getXWeak());
     }
     n = static_cast< sal_Int32 >(n + named_.size());
     css::uno::Sequence< css::uno::Reference< css::bridge::XBridge > > s(n);
