@@ -956,7 +956,7 @@ void SAL_CALL GrammarCheckingIterator::processLinguServiceEvent(
 
     try
     {
-         uno::Reference< uno::XInterface > xThis( static_cast< OWeakObject * >(this) );
+         uno::Reference< uno::XInterface > xThis( getXWeak() );
          linguistic2::LinguServiceEvent aEvent( xThis, linguistic2::LinguServiceEventFlags::PROOFREAD_AGAIN );
          m_aNotifyListeners.notifyEach(
                 &linguistic2::XLinguServiceEventListener::processLinguServiceEvent,
