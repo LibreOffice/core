@@ -550,7 +550,7 @@ void SAL_CALL OLESimpleStorage::dispose()
 
     if ( m_aListenersContainer.getLength(aGuard) )
     {
-        lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
+        lang::EventObject aSource( getXWeak() );
         m_aListenersContainer.disposeAndClear( aGuard, aSource );
     }
 

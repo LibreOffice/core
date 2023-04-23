@@ -147,7 +147,7 @@ sal_Int32 SAL_CALL FileStreamWrapper_Impl::readBytes(Sequence< sal_Int8 >& aData
     checkConnected();
 
     if (nBytesToRead < 0)
-        throw BufferSizeExceededException(OUString(),static_cast<XWeak*>(this));
+        throw BufferSizeExceededException(OUString(), getXWeak());
 
     std::scoped_lock aGuard( m_aMutex );
 
@@ -176,7 +176,7 @@ sal_Int32 SAL_CALL FileStreamWrapper_Impl::readSomeBytes(Sequence< sal_Int8 >& a
     checkError();
 
     if (nMaxBytesToRead < 0)
-        throw BufferSizeExceededException(OUString(),static_cast<XWeak*>(this));
+        throw BufferSizeExceededException(OUString(), getXWeak());
 
     if (m_pSvStream->eof())
     {
@@ -278,7 +278,7 @@ sal_Int64 SAL_CALL FileStreamWrapper_Impl::getLength(  )
 void FileStreamWrapper_Impl::checkConnected()
 {
     if ( m_aURL.isEmpty() )
-        throw NotConnectedException(OUString(), static_cast<XWeak*>(this));
+        throw NotConnectedException(OUString(), getXWeak());
     if ( !m_pSvStream )
     {
         m_pSvStream = ::utl::UcbStreamHelper::CreateStream( m_aURL, StreamMode::STD_READ );
@@ -295,7 +295,7 @@ void FileStreamWrapper_Impl::checkError()
 
     if (m_pSvStream->SvStream::GetError() != ERRCODE_NONE)
         // TODO: really evaluate the error
-        throw NotConnectedException(OUString(), static_cast<XWeak*>(this));
+        throw NotConnectedException(OUString(), getXWeak());
 }
 
 
