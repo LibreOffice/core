@@ -259,7 +259,7 @@ void SAL_CALL ScDispatch::addStatusListener(
     //  initial state
     frame::FeatureStateEvent aEvent;
     aEvent.IsEnabled = true;
-    aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
+    aEvent.Source = getXWeak();
     aEvent.FeatureURL = aURL;
 
     if ( aURL.Complete == cURLDocDataSource )
@@ -336,7 +336,7 @@ void SAL_CALL ScDispatch::selectionChanged( const css::lang::EventObject& /* aEv
         return;
 
     frame::FeatureStateEvent aEvent;
-    aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
+    aEvent.Source = getXWeak();
     aEvent.FeatureURL.Complete = cURLDocDataSource;
 
     lcl_FillDataSource( aEvent, aNewImport );       // modifies State, IsEnabled
@@ -356,7 +356,7 @@ void SAL_CALL ScDispatch::disposing( const css::lang::EventObject& rSource )
     bListeningToView = false;
 
     lang::EventObject aEvent;
-    aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
+    aEvent.Source = getXWeak();
     for (uno::Reference<frame::XStatusListener> & xDataSourceListener : aDataSourceListeners)
         xDataSourceListener->disposing( aEvent );
 

@@ -140,7 +140,7 @@ void lcl_ChartInit(const uno::Reference <embed::XEmbeddedObject>& xObj, ScViewDa
 
     xReceiver->attachDataProvider(xDataProvider);
 
-    uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( static_cast<cppu::OWeakObject*>(pDocShell->GetModel()), uno::UNO_QUERY );
+    uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( getXWeak(pDocShell->GetModel()), uno::UNO_QUERY );
     xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
 
     // Same behavior as with old chart: Always assume data series in columns

@@ -139,7 +139,7 @@ void SAL_CALL TablePivotCharts::addNewByName(OUString const & rName,
     {
         xReceiver->attachDataProvider(xDataProvider);
 
-        uno::Reference<util::XNumberFormatsSupplier> xNumberFormatsSupplier(static_cast<cppu::OWeakObject*>(m_pDocShell->GetModel()), uno::UNO_QUERY);
+        uno::Reference<util::XNumberFormatsSupplier> xNumberFormatsSupplier(cppu::getXWeak(m_pDocShell->GetModel()), uno::UNO_QUERY);
         xReceiver->attachNumberFormatsSupplier(xNumberFormatsSupplier);
 
         uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({

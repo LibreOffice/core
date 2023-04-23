@@ -926,7 +926,7 @@ uno::Any SAL_CALL ScStyleFamilyObj::getPropertyValue( const OUString& sPropertyN
 
     if ( sPropertyName != "DisplayName" )
     {
-        throw beans::UnknownPropertyException( "unknown property: " + sPropertyName, static_cast<OWeakObject *>(this) );
+        throw beans::UnknownPropertyException( "unknown property: " + sPropertyName, getXWeak() );
     }
 
     SolarMutexGuard aGuard;

@@ -2892,7 +2892,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
             {
                 m_xDataArray.reset(new std::vector<Item>);
                 lang::EventObject aEvent;
-                aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
+                aEvent.Source = getXWeak();
 
                 if( m_pDocument )
                 {

@@ -469,12 +469,12 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const OUString& aName,
             case ScRangeData::IsNameValidType::NAME_INVALID_CELL_REF:
                 throw uno::RuntimeException(
                     "Invalid name. Reference to a cell, or a range of cells not allowed",
-                    uno::Reference<uno::XInterface>(static_cast<::cppu::OWeakObject*>(this)));
+                    getXWeak());
                 break;
             case ScRangeData::IsNameValidType::NAME_INVALID_BAD_STRING:
                 throw uno::RuntimeException(
                     "Invalid name. Start with a letter, use only letters, numbers and underscore",
-                    uno::Reference<uno::XInterface>(static_cast<::cppu::OWeakObject*>(this)));
+                    getXWeak());
                 break;
             case ScRangeData::IsNameValidType::NAME_VALID:
                 if (ScRangeName* pNames = GetRangeName_Impl();

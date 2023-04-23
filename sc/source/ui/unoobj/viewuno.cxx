@@ -941,7 +941,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
         }
     }
 
-    return uno::Any(uno::Reference<uno::XInterface>(static_cast<cppu::OWeakObject*>(pObj.get())));
+    return uno::Any(uno::Reference(cppu::getXWeak(pObj.get())));
 }
 
 // XEnumerationAccess
@@ -1295,7 +1295,7 @@ bool ScTabViewObj::MouseReleased( const awt::MouseEvent& e )
 void ScTabViewObj::EndMouseListening()
 {
     lang::EventObject aEvent;
-    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+    aEvent.Source = getXWeak();
     for (const auto& rListener : aMouseClickHandlers)
     {
         try
@@ -1312,7 +1312,7 @@ void ScTabViewObj::EndMouseListening()
 void ScTabViewObj::EndActivationListening()
 {
     lang::EventObject aEvent;
-    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+    aEvent.Source = getXWeak();
     for (const auto& rListener : aActivationListeners)
     {
         try
@@ -1661,7 +1661,7 @@ void ScTabViewObj::SelectionChanged()
     SfxRequest aReq( SID_STYLE_END_PREVIEW, SfxCallMode::SLOT, reqList );
     aShell.ExecuteStyle( aReq );
     lang::EventObject aEvent;
-    aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
+    aEvent.Source.set(getXWeak());
     for (const auto& rListener : aSelectionChgListeners)
         rListener->selectionChanged( aEvent );
 
@@ -1940,7 +1940,7 @@ void SAL_CALL ScTabViewObj::removeVetoableChangeListener( const OUString& /* Pro
 void ScTabViewObj::VisAreaChanged()
 {
     beans::PropertyChangeEvent aEvent;
-    aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
+    aEvent.Source.set(getXWeak());
     for (const auto& rListener : aPropertyChgListeners)
         rListener->propertyChange( aEvent );
 }
@@ -2029,7 +2029,7 @@ void SAL_CALL ScTabViewObj::removeRangeSelectionChangeListener(
 void ScTabViewObj::RangeSelDone( const OUString& rText )
 {
     sheet::RangeSelectionEvent aEvent;
-    aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
+    aEvent.Source.set(getXWeak());
     aEvent.RangeDescriptor = rText;
 
     // copy on the stack because listener could remove itself
@@ -2042,7 +2042,7 @@ void ScTabViewObj::RangeSelDone( const OUString& rText )
 void ScTabViewObj::RangeSelAborted( const OUString& rText )
 {
     sheet::RangeSelectionEvent aEvent;
-    aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
+    aEvent.Source.set(getXWeak());
     aEvent.RangeDescriptor = rText;
 
     // copy on the stack because listener could remove itself
@@ -2055,7 +2055,7 @@ void ScTabViewObj::RangeSelAborted( const OUString& rText )
 void ScTabViewObj::RangeSelChanged( const OUString& rText )
 {
     sheet::RangeSelectionEvent aEvent;
-    aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
+    aEvent.Source.set(getXWeak());
     aEvent.RangeDescriptor = rText;
 
     // copy on the stack because listener could remove itself

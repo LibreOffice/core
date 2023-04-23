@@ -167,7 +167,7 @@ void PivotTableDataProvider::Notify(SfxBroadcaster& /*rBroadcaster*/, const SfxH
                 m_bNeedsUpdate = true;
                 for (uno::Reference<util::XModifyListener> const & xListener : m_aValueListeners)
                 {
-                    css::chart::ChartDataChangeEvent aEvent(static_cast<cppu::OWeakObject*>(this),
+                    css::chart::ChartDataChangeEvent aEvent(getXWeak(),
                                                             css::chart::ChartDataChangeType_ALL,
                                                             0, 0, 0, 0);
                     xListener->modified(aEvent);

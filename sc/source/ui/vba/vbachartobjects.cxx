@@ -75,7 +75,7 @@ public:
             css::uno::Any anyEx(cppu::getCaughtException());
             throw lang::WrappedTargetException(
                     "Error creating ScVbaChartObject!",
-                    static_cast < OWeakObject * > ( this ),
+                    getXWeak(),
                     anyEx );
         }
         return ret;

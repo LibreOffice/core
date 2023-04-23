@@ -133,7 +133,7 @@ namespace calc
     void OCellListSource::checkInitialized()
     {
         if ( !m_bInitialized )
-            throw NotInitializedException("CellListSource is not initialized", static_cast<cppu::OWeakObject*>(this));
+            throw NotInitializedException("CellListSource is not initialized", getXWeak());
     }
 
     OUString SAL_CALL OCellListSource::getImplementationName(  )
@@ -347,7 +347,7 @@ namespace calc
     void SAL_CALL OCellListSource::initialize( const Sequence< Any >& _rArguments )
     {
         if ( m_bInitialized )
-            throw RuntimeException("CellListSource is already initialized", static_cast<cppu::OWeakObject*>(this));
+            throw RuntimeException("CellListSource is already initialized", getXWeak());
 
         // get the cell address
         CellRangeAddress aRangeAddress;
@@ -370,7 +370,7 @@ namespace calc
         }
 
         if ( !bFoundAddress )
-            throw RuntimeException("Cell not found", static_cast<cppu::OWeakObject*>(this));
+            throw RuntimeException("Cell not found", getXWeak());
 
         // determine the range we're bound to
         try
@@ -404,7 +404,7 @@ namespace calc
         }
 
         if ( !m_xRange.is() )
-            throw RuntimeException("Failed to retrieve cell range", static_cast<cppu::OWeakObject*>(this));
+            throw RuntimeException("Failed to retrieve cell range", getXWeak());
 
         Reference<XModifyBroadcaster> xBroadcaster( m_xRange, UNO_QUERY );
         if ( xBroadcaster.is() )

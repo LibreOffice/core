@@ -45,7 +45,7 @@ rtl::Reference<SdrPage> ScDrawPage::CloneSdrPage(SdrModel& rTargetModel) const
 
 css::uno::Reference< css::uno::XInterface > ScDrawPage::createUnoPage()
 {
-    return static_cast<cppu::OWeakObject*>( new ScPageObj( this ) );
+    return cppu::getXWeak( new ScPageObj( this ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

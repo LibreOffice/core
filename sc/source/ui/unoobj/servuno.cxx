@@ -511,18 +511,18 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
 
         // Support creation of GraphicStorageHandler and EmbeddedObjectResolver
         case Type::EXPORT_GRAPHIC_STORAGE_HANDLER:
-            xRet.set(static_cast<cppu::OWeakObject *>(new SvXMLGraphicHelper( SvXMLGraphicHelperMode::Write )));
+            xRet.set(getXWeak(new SvXMLGraphicHelper( SvXMLGraphicHelperMode::Write )));
             break;
         case Type::IMPORT_GRAPHIC_STORAGE_HANDLER:
-            xRet.set(static_cast<cppu::OWeakObject *>(new SvXMLGraphicHelper( SvXMLGraphicHelperMode::Read )));
+            xRet.set(getXWeak(new SvXMLGraphicHelper( SvXMLGraphicHelperMode::Read )));
             break;
         case Type::EXPORT_EOR:
             if (pDocShell)
-                xRet.set(static_cast<cppu::OWeakObject *>(new SvXMLEmbeddedObjectHelper( *pDocShell, SvXMLEmbeddedObjectHelperMode::Write )));
+                xRet.set(getXWeak(new SvXMLEmbeddedObjectHelper( *pDocShell, SvXMLEmbeddedObjectHelperMode::Write )));
             break;
         case Type::IMPORT_EOR:
             if (pDocShell)
-                xRet.set(static_cast<cppu::OWeakObject *>(new SvXMLEmbeddedObjectHelper( *pDocShell, SvXMLEmbeddedObjectHelperMode::Read )));
+                xRet.set(getXWeak(new SvXMLEmbeddedObjectHelper( *pDocShell, SvXMLEmbeddedObjectHelperMode::Read )));
             break;
         case Type::VALBIND:
         case Type::LISTCELLBIND:

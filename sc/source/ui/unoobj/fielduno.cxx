@@ -292,7 +292,7 @@ ScCellFieldsObj::~ScCellFieldsObj()
     if (maRefreshListeners.getLength(g))
     {
         lang::EventObject aEvent;
-        aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
+        aEvent.Source.set(getXWeak());
         maRefreshListeners.disposeAndClear(g, aEvent);
     }
 }
@@ -430,7 +430,7 @@ ScHeaderFieldsObj::~ScHeaderFieldsObj()
     if (maRefreshListeners.getLength(g))
     {
         lang::EventObject aEvent;
-        aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+        aEvent.Source = getXWeak();
         maRefreshListeners.disposeAndClear(g, aEvent);
     }
 }

@@ -400,7 +400,7 @@ namespace calc
     void OCellValueBinding::checkInitialized()
     {
         if ( !m_bInitialized )
-            throw NotInitializedException("CellValueBinding is not initialized", static_cast<cppu::OWeakObject*>(this));
+            throw NotInitializedException("CellValueBinding is not initialized", getXWeak());
     }
 
     void OCellValueBinding::checkValueType( const Type& _rType ) const
@@ -493,7 +493,7 @@ namespace calc
     void SAL_CALL OCellValueBinding::initialize( const Sequence< Any >& _rArguments )
     {
         if ( m_bInitialized )
-            throw RuntimeException("CellValueBinding is already initialized", static_cast<cppu::OWeakObject*>(this));
+            throw RuntimeException("CellValueBinding is already initialized", getXWeak());
 
         // get the cell address
         CellAddress aAddress;
@@ -516,7 +516,7 @@ namespace calc
         }
 
         if ( !bFoundAddress )
-            throw RuntimeException("Cell not found", static_cast<cppu::OWeakObject*>(this));
+            throw RuntimeException("Cell not found", getXWeak());
 
         // get the cell object
         try
@@ -548,7 +548,7 @@ namespace calc
         }
 
         if ( !m_xCell.is() )
-            throw RuntimeException("Failed to retrieve cell object", static_cast<cppu::OWeakObject*>(this));
+            throw RuntimeException("Failed to retrieve cell object", getXWeak());
 
         m_xCellText.set(m_xCell, css::uno::UNO_QUERY);
 

@@ -253,7 +253,7 @@ css::uno::Reference< css::accessibility::XAccessible > ScEditWindow::CreateAcces
 {
     rtl::Reference<ScAccessibleEditControlObject> tmp = new ScAccessibleEditControlObject(this, ScAccessibleEditObject::EditControl);
     mxAcc = tmp.get();
-    return css::uno::Reference<css::accessibility::XAccessible>(static_cast<cppu::OWeakObject*>(tmp.get()), css::uno::UNO_QUERY_THROW);
+    return tmp;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

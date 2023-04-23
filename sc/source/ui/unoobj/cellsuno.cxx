@@ -1521,7 +1521,7 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
             //  dispose listeners
 
             lang::EventObject aEvent;
-            aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
+            aEvent.Source = getXWeak();
             for (uno::Reference<util::XModifyListener> & xValueListener : aValueListeners)
                 xValueListener->disposing( aEvent );
 
@@ -1547,7 +1547,7 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
             //  SfxHintId::DataChanged.
 
             lang::EventObject aEvent;
-            aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
+            aEvent.Source = getXWeak();
 
             // the EventObject holds a Ref to this object until after the listener calls
 
@@ -3829,7 +3829,7 @@ uno::Reference<uno::XInterface> ScCellRangesBase::Find_Impl(
                 if (bFound)
                 {
                     ScAddress aFoundPos( nCol, nRow, nTab );
-                    xRet.set(static_cast<cppu::OWeakObject*>(new ScCellObj( pDocShell, aFoundPos )));
+                    xRet.set(cppu::getXWeak(new ScCellObj( pDocShell, aFoundPos )));
                 }
             }
         }

@@ -1892,7 +1892,7 @@ void SAL_CALL ScDatabaseRangeObj::removeRefreshListener(
 void ScDatabaseRangeObj::Refreshed_Impl()
 {
     lang::EventObject aEvent;
-    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+    aEvent.Source = getXWeak();
     for (uno::Reference<util::XRefreshListener> & xRefreshListener : aRefreshListeners)
         xRefreshListener->refreshed( aEvent );
 }

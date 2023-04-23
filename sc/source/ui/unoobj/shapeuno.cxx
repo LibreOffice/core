@@ -99,7 +99,7 @@ ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape ) :
     {
         xShape = nullptr;      // during setDelegator, mxShapeAgg must be the only ref
 
-        mxShapeAgg->setDelegator( static_cast<cppu::OWeakObject*>(this) );
+        mxShapeAgg->setDelegator( getXWeak() );
 
         xShape.set(uno::Reference<drawing::XShape>( mxShapeAgg, uno::UNO_QUERY ));
 
@@ -316,7 +316,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
     {
         uno::Reference<sheet::XCellRangeAddressable> xRangeAdd(aValue, uno::UNO_QUERY);
         if (!xRangeAdd.is())
-            throw lang::IllegalArgumentException("only XCell or XSpreadsheet objects allowed", static_cast<cppu::OWeakObject*>(this), 0);
+            throw lang::IllegalArgumentException("only XCell or XSpreadsheet objects allowed", getXWeak(), 0);
 
         SdrObject *pObj = GetSdrObject();
         if (pObj)
@@ -702,9 +702,9 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
                         {
                             uno::Reference< uno::XInterface > xAnchor;
                             if (ScDrawObjData *pAnchor = ScDrawLayer::GetObjDataTab(pObj, nTab))
-                                xAnchor.set(static_cast<cppu::OWeakObject*>(new ScCellObj( pDocSh, pAnchor->maStart)));
+                                xAnchor.set(cppu::getXWeak(new ScCellObj( pDocSh, pAnchor->maStart)));
                             else
-                                xAnchor.set(static_cast<cppu::OWeakObject*>(new ScTableSheetObj( pDocSh, nTab )));
+                                xAnchor.set(cppu::getXWeak(new ScTableSheetObj( pDocSh, nTab )));
                             aAny <<= xAnchor;
                         }
                     }
@@ -1292,7 +1292,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScShapeObj::getParent()
                 {
                     const ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( pObj, nTab );
                     if( pCaptData )
-                        return static_cast< ::cppu::OWeakObject* >( new ScCellObj( pDocSh, pCaptData->maStart ) );
+                        return cppu::getXWeak( new ScCellObj( pDocSh, pCaptData->maStart ) );
                 }
             }
         }

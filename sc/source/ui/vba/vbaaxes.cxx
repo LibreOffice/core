@@ -131,7 +131,7 @@ public:
             css::uno::Any anyEx = cppu::getCaughtException();
             throw css::lang::WrappedTargetException(
                    "Error Getting Index!",
-                   static_cast < OWeakObject * > ( this ),
+                   getXWeak(),
                    anyEx );
         }
     }

@@ -429,7 +429,7 @@ uno::Reference< uno::XAggregation> const & ScModelObj::GetFormatter()
         xFormatter = nullptr;
 
         if (xNumberAgg.is())
-            xNumberAgg->setDelegator( static_cast<cppu::OWeakObject*>(this) );
+            xNumberAgg->setDelegator( getXWeak() );
         osl_atomic_decrement( &m_refCount );
     } // if ( !xNumberAgg.is() )
     return xNumberAgg;
@@ -3302,7 +3302,7 @@ void ScModelObj::NotifyChanges( const OUString& rOperation, const ScRangeList& r
     if ( pDocShell && HasChangesListeners() )
     {
         util::ChangesEvent aEvent;
-        aEvent.Source.set( static_cast< cppu::OWeakObject* >( this ) );
+        aEvent.Source.set(getXWeak());
         aEvent.Base <<= aEvent.Source;
 
         size_t nRangeCount = rRanges.size();
@@ -3376,12 +3376,12 @@ void ScModelObj::NotifyChanges( const OUString& rOperation, const ScRangeList& r
                     {
                         ScRange const & rRange = aTabRanges[ 0 ];
                         if ( rRange.aStart == rRange.aEnd )
-                            xTarget.set( static_cast<cppu::OWeakObject*>( new ScCellObj( pDocShell, rRange.aStart ) ) );
+                            xTarget.set( cppu::getXWeak( new ScCellObj( pDocShell, rRange.aStart ) ) );
                         else
-                            xTarget.set( static_cast<cppu::OWeakObject*>( new ScCellRangeObj( pDocShell, rRange ) ) );
+                            xTarget.set( cppu::getXWeak( new ScCellRangeObj( pDocShell, rRange ) ) );
                     }
                     else
-                        xTarget.set( static_cast<cppu::OWeakObject*>( new ScCellRangesObj( pDocShell, aTabRanges ) ) );
+                        xTarget.set( cppu::getXWeak( new ScCellRangesObj( pDocShell, aTabRanges ) ) );
 
                     uno::Sequence<uno::Any> aParams{ uno::Any(xTarget) };
 
