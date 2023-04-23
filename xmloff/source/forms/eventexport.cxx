@@ -86,7 +86,7 @@ namespace xmloff
     void SAL_CALL OEventDescriptorMapper::replaceByName( const OUString&, const Any& )
     {
         throw IllegalArgumentException(
-            "replacing is not implemented for this wrapper class.", static_cast< ::cppu::OWeakObject* >(this), 1);
+            "replacing is not implemented for this wrapper class.", getXWeak(), 1);
     }
 
     Any SAL_CALL OEventDescriptorMapper::getByName( const OUString& _rName )
@@ -95,7 +95,7 @@ namespace xmloff
         if (m_aMappedEvents.end() == aPos)
             throw NoSuchElementException(
                 "There is no element named " + _rName,
-                static_cast< ::cppu::OWeakObject* >(this));
+                getXWeak());
 
         return Any(aPos->second);
     }

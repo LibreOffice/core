@@ -256,7 +256,7 @@ namespace xmloff
         {
             if (aTranslatedNames.getLength() != aTranslatedValues.getLength())
                     throw css::lang::IllegalArgumentException(
-                        "lengths do not match", static_cast<cppu::OWeakObject*>(this), -1);
+                        "lengths do not match", getXWeak(), -1);
             aTranslatedNames.getArray()[ nParaAlignPos ] = getAlignProperty();
             valueParaAdjustToAlign( aTranslatedValues.getArray()[ nParaAlignPos ] );
         }

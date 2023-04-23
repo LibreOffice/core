@@ -63,7 +63,7 @@ Property SAL_CALL lcl_ColorPropertySetInfo::getPropertyByName( const OUString& a
 {
     if( aName == g_aColorPropName )
         return m_aColorProp;
-    throw UnknownPropertyException( g_aColorPropName, static_cast< uno::XWeak * >( this ));
+    throw UnknownPropertyException( g_aColorPropName, getXWeak());
 }
 
 sal_Bool SAL_CALL lcl_ColorPropertySetInfo::hasPropertyByName( const OUString& Name )
