@@ -18,6 +18,7 @@
  */
 #include <ReportComponent.hxx>
 
+#include <comphelper/solarmutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
@@ -41,6 +42,7 @@ namespace reportdesign
 
 static void lcl_getDefaultFonts( vcl::Font& rLatinFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont, LanguageType  _eLatin, LanguageType _eCJK, LanguageType _eCTL )
 {
+        SolarMutexGuard g;
         LanguageType eLatin = _eLatin;
 
         //      If the UI language is Korean, the default Latin font has to
