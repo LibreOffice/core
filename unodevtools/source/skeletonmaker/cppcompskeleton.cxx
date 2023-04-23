@@ -160,7 +160,7 @@ static void generateCompHelperDefinition(std::ostream & o,
     o << "css::uno::Reference< css::uno::XInterface > SAL_CALL _create("
          "\n    const css::uno::Reference< css::uno::XComponentContext > & "
          "context)\n{\n"
-         "    return static_cast< ::cppu::OWeakObject * >(new "
+         "    return getXWeak(new "
       << classname <<  "(context));\n}\n\n";
 
     // close namespace
