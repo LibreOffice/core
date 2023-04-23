@@ -141,7 +141,7 @@ public:
         uno::Sequence<beans::PropertyValue> props;
         if (!(rElement >>= props))
             throw lang::IllegalArgumentException("invalid type",
-                    static_cast< ::cppu::OWeakObject*>(this), 1);
+                    getXWeak(), 1);
 
         SolarMutexGuard g;
         SwNumFormat aNumberFormat;

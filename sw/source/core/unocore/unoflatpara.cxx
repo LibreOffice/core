@@ -93,7 +93,7 @@ void SAL_CALL
 SwXFlatParagraph::setPropertyValue(const OUString&, const uno::Any&)
 {
     throw lang::IllegalArgumentException("no values can be set",
-            static_cast< ::cppu::OWeakObject*>(this), 0);
+            getXWeak(), 0);
 }
 
 uno::Any SAL_CALL

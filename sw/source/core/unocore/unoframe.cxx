@@ -1287,7 +1287,7 @@ SwXFrame::CreateXFrame(SwDoc & rDoc, SwFrameFormat *const pFrameFormat)
                 : new NameLookupIsHard(&rDoc);
         if (pFrameFormat)
         {
-            pFrameFormat->SetXObject(static_cast<cppu::OWeakObject*>(xFrame.get()));
+            pFrameFormat->SetXObject(cppu::getXWeak(xFrame.get()));
         }
         // need a permanent Reference to initialize m_wThis
         xFrame->SwXFrame::m_pImpl->m_wThis = uno::Reference<XWeak>(xFrame.get());
@@ -1426,7 +1426,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
     {
         // Hack to skip the dummy CursorNotIgnoreTables property
         if (rPropertyName != "CursorNotIgnoreTables")
-            throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast <cppu::OWeakObject*> (this));
+            throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, getXWeak());
         return;
     }
 
@@ -1467,7 +1467,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
     {
         bool bNextFrame = false;
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-            throw beans::PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::PropertyVetoException("Property is read-only: " + rPropertyName, getXWeak() );
 
         SwDoc* pDoc = pFormat->GetDoc();
         if ( ((m_eType == FLYCNTTYPE_GRF) && isGRFATR(pEntry->nWID)) ||
@@ -2014,7 +2014,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     SwFrameFormat* pFormat = GetFrameFormat();
     const SfxItemPropertyMapEntry* pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
-        throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, getXWeak() );
 
     const sal_uInt8 nMemberId(pEntry->nMemberId);
 
@@ -2444,7 +2444,7 @@ uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
         {
             const SfxItemPropertyMapEntry* pEntry = m_pPropSet->getPropertyMap().getByName(pNames[i]);
             if (!pEntry)
-                throw beans::UnknownPropertyException("Unknown property: " + pNames[i], static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::UnknownPropertyException("Unknown property: " + pNames[i], getXWeak() );
 
             if(pEntry->nWID == FN_UNO_ANCHOR_TYPES||
                 pEntry->nWID == FN_PARAM_LINK_DISPLAY_NAME||
@@ -2522,9 +2522,9 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
     {
         const SfxItemPropertyMapEntry* pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
         if (!pEntry)
-            throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, getXWeak() );
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-            throw uno::RuntimeException("setPropertyToDefault: property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw uno::RuntimeException("setPropertyToDefault: property is read-only: " + rPropertyName, getXWeak() );
 
         if(OWN_ATTR_FILLBMP_MODE == pEntry->nWID)
         {
@@ -2614,7 +2614,7 @@ uno::Any SwXFrame::getPropertyDefault( const OUString& rPropertyName )
     {
         const SfxItemPropertyMapEntry* pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
         if(!pEntry)
-            throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, getXWeak() );
 
         if ( pEntry->nWID < RES_FRMATR_END )
         {

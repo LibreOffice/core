@@ -287,10 +287,10 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
 
     const SfxItemPropertyMapEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
     if(!pEntry)
-        throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, getXWeak() );
 
     if ( pEntry->nFlags & PropertyAttribute::READONLY)
-        throw PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw PropertyVetoException("Property is read-only: " + rPropertyName, getXWeak() );
     SwFootnoteInfo aFootnoteInfo(m_pDoc->GetFootnoteInfo());
     switch(pEntry->nWID)
     {
@@ -408,7 +408,7 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
 
     const SfxItemPropertyMapEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
     if(!pEntry)
-        throw UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw UnknownPropertyException("Unknown property: " + rPropertyName, getXWeak() );
 
     const SwFootnoteInfo& rFootnoteInfo = m_pDoc->GetFootnoteInfo();
     switch(pEntry->nWID)
@@ -566,10 +566,10 @@ void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const
 
     const SfxItemPropertyMapEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
     if(!pEntry)
-        throw UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw UnknownPropertyException("Unknown property: " + rPropertyName, getXWeak() );
 
     if ( pEntry->nFlags & PropertyAttribute::READONLY)
-        throw PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw PropertyVetoException("Property is read-only: " + rPropertyName, getXWeak() );
     SwEndNoteInfo aEndInfo(m_pDoc->GetEndNoteInfo());
     switch(pEntry->nWID)
     {
@@ -640,7 +640,7 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
     {
         const SfxItemPropertyMapEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
         if(!pEntry)
-            throw UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw UnknownPropertyException("Unknown property: " + rPropertyName, getXWeak() );
 
         const SwEndNoteInfo& rEndInfo = m_pDoc->GetEndNoteInfo();
         switch(pEntry->nWID)
@@ -769,10 +769,10 @@ void SwXLineNumberingProperties::setPropertyValue(
 
     const SfxItemPropertyMapEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
     if(!pEntry)
-        throw UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw UnknownPropertyException("Unknown property: " + rPropertyName, getXWeak() );
 
     if ( pEntry->nFlags & PropertyAttribute::READONLY)
-        throw PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw PropertyVetoException("Property is read-only: " + rPropertyName, getXWeak() );
     SwLineNumberInfo  aFontMetric(m_pDoc->GetLineNumberInfo());
     switch(pEntry->nWID)
     {
@@ -883,7 +883,7 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
 
     const SfxItemPropertyMapEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
     if(!pEntry)
-        throw UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw UnknownPropertyException("Unknown property: " + rPropertyName, getXWeak() );
 
     const SwLineNumberInfo& rInfo = m_pDoc->GetLineNumberInfo();
     switch(pEntry->nWID)

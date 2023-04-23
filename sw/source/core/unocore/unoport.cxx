@@ -427,7 +427,7 @@ uno::Sequence< uno::Any > SwXTextPortion::GetPropertyValues_Impl(
         {
             const SfxItemPropertyMapEntry* pEntry = rMap.getByName(pPropertyNames[nProp]);
             if(!pEntry)
-                throw beans::UnknownPropertyException( "Unknown property: " + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::UnknownPropertyException( "Unknown property: " + pPropertyNames[nProp], getXWeak() );
             GetPropertyValue( pValues[nProp], *pEntry, &rUnoCursor, pSet );
         }
     }
@@ -448,7 +448,7 @@ void SwXTextPortion::SetPropertyValues_Impl(
 {
     if (rPropertyNames.getLength() != rValues.getLength())
         throw lang::IllegalArgumentException("lengths do not match",
-                                             static_cast<cppu::OWeakObject*>(this), -1);
+                                             getXWeak(), -1);
 
     SwUnoCursor& rUnoCursor = GetCursor();
 
@@ -462,9 +462,9 @@ void SwXTextPortion::SetPropertyValues_Impl(
         {
             const SfxItemPropertyMapEntry* pEntry = rMap.getByName(pPropertyNames[nProp]);
             if (!pEntry)
-                throw beans::UnknownPropertyException( "Unknown property: " + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::UnknownPropertyException( "Unknown property: " + pPropertyNames[nProp], getXWeak() );
             if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-                throw beans::PropertyVetoException ("Property is read-only: " + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::PropertyVetoException ("Property is read-only: " + pPropertyNames[nProp], getXWeak() );
 
             aValuesRange[nProp].Name = pPropertyNames[nProp];
             aValuesRange[nProp].Value = pValues[nProp];
@@ -509,13 +509,13 @@ uno::Sequence< uno::Any > SwXTextPortion::getPropertyValues(
     {
         css::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException("Unknown property exception caught",
-                static_cast < cppu::OWeakObject * > ( this ), anyEx );
+                getXWeak(), anyEx );
     }
     catch (lang::WrappedTargetException &)
     {
         css::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException("WrappedTargetException caught",
-                static_cast < cppu::OWeakObject * > ( this ), anyEx );
+                getXWeak(), anyEx );
     }
 
     return aValues;
@@ -675,7 +675,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SwXTextPortion::GetPrope
                 {
                     const SfxItemPropertyMapEntry* pEntry = rPropMap.getByName( pProp[i] );
                     if (!pEntry)
-                        throw beans::UnknownPropertyException( "Unknown property: " + pProp[i], static_cast < cppu::OWeakObject * > ( this ) );
+                        throw beans::UnknownPropertyException( "Unknown property: " + pProp[i], getXWeak() );
                     aResult.State  = pPropertyStates[i];
 
                     aResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_FAILURE;

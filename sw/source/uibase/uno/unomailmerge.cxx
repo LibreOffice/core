@@ -467,7 +467,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         else if (rName == UNO_NAME_CONNECTION)
             bOK = rValue >>= xCurConnection;
         else if (rName == UNO_NAME_MODEL)
-            throw PropertyVetoException("Property is read-only: " + rName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw PropertyVetoException("Property is read-only: " + rName, getXWeak() );
         else if (rName == UNO_NAME_DATA_SOURCE_NAME)
             bOK = rValue >>= aCurDataSourceName;
         else if (rName == UNO_NAME_DAD_COMMAND)
@@ -479,7 +479,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             bOK = rValue >>= aCurDocumentURL;
             if (!aCurDocumentURL.isEmpty()
                 && !LoadFromURL_impl( xCurModel, xCurDocSh, aCurDocumentURL, false ))
-                throw RuntimeException("Failed to create document from URL: " + aCurDocumentURL, static_cast < cppu::OWeakObject * > ( this ) );
+                throw RuntimeException("Failed to create document from URL: " + aCurDocumentURL, getXWeak() );
         }
         else if (rName == UNO_NAME_OUTPUT_URL)
         {
@@ -487,9 +487,9 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             if (!aCurOutputURL.isEmpty())
             {
                 if (!UCB_IsDirectory(aCurOutputURL))
-                    throw IllegalArgumentException("URL does not point to a directory: " + aCurOutputURL, static_cast < cppu::OWeakObject * > ( this ), 0 );
+                    throw IllegalArgumentException("URL does not point to a directory: " + aCurOutputURL, getXWeak(), 0 );
                 if (UCB_IsReadOnlyFileName(aCurOutputURL))
-                    throw IllegalArgumentException("URL is read-only: " + aCurOutputURL, static_cast < cppu::OWeakObject * > ( this ), 0 );
+                    throw IllegalArgumentException("URL is read-only: " + aCurOutputURL, getXWeak(), 0 );
             }
         }
         else if (rName == UNO_NAME_FILE_NAME_PREFIX)
@@ -537,10 +537,10 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         else if (rName == UNO_NAME_OUT_SERVER_PASSWORD)
             bOK = rValue >>= m_sOutServerPassword;
         else
-            throw UnknownPropertyException( "Property is unknown: " + rName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw UnknownPropertyException( "Property is unknown: " + rName, getXWeak() );
 
         if (!bOK)
-            throw IllegalArgumentException("Property type mismatch or property not set: " + rName, static_cast < cppu::OWeakObject * > ( this ), 0 );
+            throw IllegalArgumentException("Property type mismatch or property not set: " + rName, getXWeak(), 0 );
     }
 
     // need to translate the selection: the API here requires a sequence of bookmarks, but the Merge
@@ -579,7 +579,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         {
             throw IllegalArgumentException(
                 "The current 'Selection' does not describe a valid array of bookmarks, relative to the current 'ResultSet'.",
-                static_cast < cppu::OWeakObject * > ( this ),
+                getXWeak(),
                 0
             );
         }
@@ -605,7 +605,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         if (aCurDataSourceName.isEmpty() || aCurDataCommand.isEmpty() )
         {
             OSL_FAIL("PropertyValues missing or unset");
-            throw IllegalArgumentException("Either the ResultSet or DataSourceName and DataCommand must be set.", static_cast < cppu::OWeakObject * > ( this ), 0 );
+            throw IllegalArgumentException("Either the ResultSet or DataSourceName and DataCommand must be set.", getXWeak(), 0 );
         }
 
         // build ResultSet from DataSourceName, DataCommand and DataCommandType
@@ -658,7 +658,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         case MailMergeType::MAIL    : nMergeType = DBMGR_MERGE_EMAIL; break;
         case MailMergeType::SHELL   : nMergeType = DBMGR_MERGE_SHELL; break;
         default:
-            throw IllegalArgumentException("Invalid value of property: OutputType", static_cast < cppu::OWeakObject * > ( this ), 0 );
+            throw IllegalArgumentException("Invalid value of property: OutputType", getXWeak(), 0 );
     }
 
     SwWrtShell &rSh = pView->GetWrtShell();
@@ -712,7 +712,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             else    // default empty document without URL
             {
                 if (aCurOutputURL.isEmpty())
-                    throw RuntimeException("OutputURL is not set and can not be obtained.", static_cast < cppu::OWeakObject * > ( this ) );
+                    throw RuntimeException("OutputURL is not set and can not be obtained.", getXWeak() );
             }
 
             aURLObj.SetSmartURL( aCurOutputURL );
@@ -739,7 +739,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             {
                 aMergeDesc.sDBcolumn = m_sAddressFromColumn;
                 if(m_sAddressFromColumn.isEmpty())
-                    throw RuntimeException("Mail address column not set.", static_cast < cppu::OWeakObject * > ( this ) );
+                    throw RuntimeException("Mail address column not set.", getXWeak() );
                 aMergeDesc.sSaveToFilter     = m_sAttachmentFilter;
                 aMergeDesc.sSubject          = m_sSubject;
                 aMergeDesc.sMailBody         = m_sMailBody;
@@ -757,7 +757,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
                         xInService,
                         m_sInServerPassword, m_sOutServerPassword );
                 if( !aMergeDesc.xSmtpServer.is() || !aMergeDesc.xSmtpServer->isConnected())
-                    throw RuntimeException("Failed to connect to mail server.", static_cast < cppu::OWeakObject * > ( this ) );
+                    throw RuntimeException("Failed to connect to mail server.", getXWeak() );
             }
         break;
     }
@@ -783,7 +783,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         }
     }
     if ( !bStoredAsTemporary )
-        throw RuntimeException("Failed to save temporary file.", static_cast < cppu::OWeakObject * > ( this ) );
+        throw RuntimeException("Failed to save temporary file.", getXWeak() );
 
     pMgr->SetMergeSilent( true );       // suppress dialogs, message boxes, etc.
     const SwXMailMerge *pOldSrc = pMgr->GetMailMergeEvtSrc();
@@ -804,7 +804,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     // (in case it wasn't a temporary model, it will be closed in the dtor, at the latest)
 
     if (!bSucc)
-        throw Exception("Mail merge failed. Sorry, no further information available.", static_cast < cppu::OWeakObject * > ( this ) );
+        throw Exception("Mail merge failed. Sorry, no further information available.", getXWeak() );
 
     //de-initialize services
     if(xInService.is() && xInService->isConnected())
@@ -930,7 +930,7 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
                 bOK = rValue >>= aText;
                 if (!aText.isEmpty()
                     && !LoadFromURL_impl( m_xModel, m_xDocSh, aText, true ))
-                    throw RuntimeException("Failed to create document from URL: " + aText, static_cast < cppu::OWeakObject * > ( this ) );
+                    throw RuntimeException("Failed to create document from URL: " + aText, getXWeak() );
                 m_aDocumentURL = aText;
             }
             else if (pData == &m_aOutputURL)
@@ -940,9 +940,9 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
                 if (!aText.isEmpty())
                 {
                     if (!UCB_IsDirectory(aText))
-                        throw IllegalArgumentException("URL does not point to a directory: " + aText, static_cast < cppu::OWeakObject * > ( this ), 0 );
+                        throw IllegalArgumentException("URL does not point to a directory: " + aText, getXWeak(), 0 );
                     if (UCB_IsReadOnlyFileName(aText))
-                        throw IllegalArgumentException("URL is read-only: " + aText, static_cast < cppu::OWeakObject * > ( this ), 0 );
+                        throw IllegalArgumentException("URL is read-only: " + aText, getXWeak(), 0 );
                 }
                 m_aOutputURL = aText;
             }
@@ -997,7 +997,7 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
             bChanged = true;
         }
         if (!bOK)
-            throw IllegalArgumentException("Property type mismatch or property not set: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ), 0 );
+            throw IllegalArgumentException("Property type mismatch or property not set: " + rPropertyName, getXWeak(), 0 );
 
         if (bChanged)
         {

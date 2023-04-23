@@ -376,7 +376,7 @@ void SAL_CALL SwXContentControl::dispose()
     if (m_pImpl->m_bIsDescriptor)
     {
         m_pImpl->m_pTextPortions.reset();
-        lang::EventObject aEvent(static_cast<::cppu::OWeakObject&>(*this));
+        lang::EventObject aEvent(getXWeak());
         std::unique_lock aGuard(m_pImpl->m_Mutex);
         m_pImpl->m_EventListeners.disposeAndClear(aGuard, aEvent);
         m_pImpl->m_bIsDisposed = true;
@@ -417,7 +417,7 @@ void SwXContentControl::AttachImpl(const uno::Reference<text::XTextRange>& xText
     if (!m_pImpl->m_bIsDescriptor)
     {
         throw uno::RuntimeException("SwXContentControl::AttachImpl(): already attached",
-                                    static_cast<::cppu::OWeakObject*>(this));
+                                    getXWeak());
     }
 
     SwXTextRange* pRange = dynamic_cast<SwXTextRange*>(xTextRange.get());
@@ -426,16 +426,14 @@ void SwXContentControl::AttachImpl(const uno::Reference<text::XTextRange>& xText
     if (!pRange && !pCursor)
     {
         throw lang::IllegalArgumentException(
-            "SwXContentControl::AttachImpl(): argument not supported type",
-            static_cast<::cppu::OWeakObject*>(this), 0);
+            "SwXContentControl::AttachImpl(): argument not supported type", getXWeak(), 0);
     }
 
     SwDoc* pDoc = pRange ? &pRange->GetDoc() : pCursor->GetDoc();
     if (!pDoc)
     {
         throw lang::IllegalArgumentException(
-            "SwXContentControl::AttachImpl(): argument has no SwDoc",
-            static_cast<::cppu::OWeakObject*>(this), 0);
+            "SwXContentControl::AttachImpl(): argument has no SwDoc", getXWeak(), 0);
     }
 
     SwUnoInternalPaM aPam(*pDoc);
@@ -486,14 +484,13 @@ void SwXContentControl::AttachImpl(const uno::Reference<text::XTextRange>& xText
     {
         throw lang::IllegalArgumentException(
             "SwXContentControl::AttachImpl(): cannot create content control: invalid range",
-            static_cast<::cppu::OWeakObject*>(this), 1);
+            getXWeak(), 1);
     }
     if (!pTextAttr)
     {
         SAL_WARN("sw.core", "content control inserted, but has no text attribute?");
         throw uno::RuntimeException(
-            "SwXContentControl::AttachImpl(): cannot create content control",
-            static_cast<::cppu::OWeakObject*>(this));
+            "SwXContentControl::AttachImpl(): cannot create content control", getXWeak());
     }
 
     m_pImpl->EndListeningAll();
@@ -522,8 +519,7 @@ uno::Reference<text::XTextRange> SAL_CALL SwXContentControl::getAnchor()
     }
     if (m_pImpl->m_bIsDescriptor)
     {
-        throw uno::RuntimeException("SwXContentControl::getAnchor(): not inserted",
-                                    static_cast<::cppu::OWeakObject*>(this));
+        throw uno::RuntimeException("SwXContentControl::getAnchor(): not inserted", getXWeak());
     }
 
     SwTextNode* pTextNode;
@@ -533,8 +529,7 @@ uno::Reference<text::XTextRange> SAL_CALL SwXContentControl::getAnchor()
     if (!bSuccess)
     {
         SAL_WARN("sw.core", "no pam");
-        throw lang::DisposedException("SwXContentControl::getAnchor(): not attached",
-                                      static_cast<::cppu::OWeakObject*>(this));
+        throw lang::DisposedException("SwXContentControl::getAnchor(): not attached", getXWeak());
     }
 
     SwPosition aStart(*pTextNode, nContentControlStart - 1); // -1 due to CH_TXTATR
@@ -1392,8 +1387,7 @@ uno::Reference<container::XEnumeration> SAL_CALL SwXContentControl::createEnumer
     }
     if (m_pImpl->m_bIsDescriptor)
     {
-        throw uno::RuntimeException("createEnumeration(): not inserted",
-                                    static_cast<::cppu::OWeakObject*>(this));
+        throw uno::RuntimeException("createEnumeration(): not inserted", getXWeak());
     }
 
     SwTextNode* pTextNode;

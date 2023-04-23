@@ -375,7 +375,7 @@ void SwXDocumentIndex::Impl::Notify(const SfxHint& rHint)
             return;
         }
         std::unique_lock g(m_Mutex);
-        lang::EventObject const ev(static_cast<cppu::OWeakObject*>(xThis.get()));
+        lang::EventObject const ev(xThis->getXWeak());
         m_RefreshListeners.disposeAndClear(g, ev);
         m_EventListeners.disposeAndClear(g, ev);
     }
@@ -416,7 +416,7 @@ SwXDocumentIndex::CreateXDocumentIndex(
                 : new SwXDocumentIndex(eTypes, rDoc);
         if (pSection)
         {
-            pSection->GetFormat()->SetXObject(static_cast<cppu::OWeakObject*>(xIndex.get()));
+            pSection->GetFormat()->SetXObject(xIndex->getXWeak());
         }
         // need a permanent Reference to initialize m_wThis
         xIndex->m_pImpl->m_wThis = xIndex.get();
@@ -523,13 +523,13 @@ SwXDocumentIndex::setPropertyValue(
     {
         throw beans::UnknownPropertyException(
             "Unknown property: " + rPropertyName,
-            static_cast<cppu::OWeakObject *>(this));
+            getXWeak());
     }
     if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
     {
         throw beans::PropertyVetoException(
             "Property is read-only: " + rPropertyName,
-            static_cast<cppu::OWeakObject *>(this));
+            getXWeak());
     }
 
     SwSectionFormat *const pSectionFormat(m_pImpl->GetSectionFormat());
@@ -873,7 +873,7 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
     {
         throw beans::UnknownPropertyException(
             "Unknown property: " + rPropertyName,
-            static_cast< cppu::OWeakObject * >(this));
+            getXWeak());
     }
     // TODO: is this the best approach to tell API clients about the change?
     if (pEntry->nWID == RES_BACKGROUND && pEntry->nMemberId == MID_GRAPHIC_URL)
@@ -1271,7 +1271,7 @@ void SAL_CALL SwXDocumentIndex::refresh()
         {
             throw uno::RuntimeException(
                     "SwXDocumentIndex::refresh: must be in attached state",
-                     static_cast< ::cppu::OWeakObject*>(this));
+                     getXWeak());
         }
         pTOXBase->Update(nullptr, m_pImpl->m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
 
@@ -1285,7 +1285,7 @@ void SAL_CALL SwXDocumentIndex::refresh()
     std::unique_lock g(m_pImpl->m_Mutex);
     if (m_pImpl->m_RefreshListeners.getLength(g))
     {
-        lang::EventObject const event(static_cast< ::cppu::OWeakObject*>(this));
+        lang::EventObject const event(getXWeak());
         m_pImpl->m_RefreshListeners.notifyEach(g, & util::XRefreshListener::refreshed, event);
     }
 }
@@ -1353,7 +1353,7 @@ SwXDocumentIndex::attach(const uno::Reference< text::XTextRange > & xTextRange)
 
     // update page numbers
     m_pImpl->SetSectionFormat(*pTOX->GetFormat());
-    pTOX->GetFormat()->SetXObject(static_cast< ::cppu::OWeakObject*>(this));
+    pTOX->GetFormat()->SetXObject(getXWeak());
     pTOX->UpdatePageNum();
 
     m_pImpl->m_oProps.reset();
@@ -1575,8 +1575,7 @@ public:
             InsertTOXMark(rTOXType, rMark, rPam, nullptr);
         } catch (...) {
             OSL_FAIL("ReplaceTOXMark() failed!");
-            lang::EventObject const ev(
-                    static_cast< ::cppu::OWeakObject&>(m_rThis));
+            lang::EventObject const ev(m_rThis.getXWeak());
             std::unique_lock aGuard(m_Mutex);
             m_EventListeners.disposeAndClear(aGuard, ev);
             throw;
@@ -1595,7 +1594,7 @@ void SwXDocumentIndexMark::Impl::Invalidate()
         // fdo#72695: if UNO object is already dead, don't revive it with event
         if (xThis.is())
         {
-            lang::EventObject const ev(static_cast<cppu::OWeakObject*>(xThis.get()));
+            lang::EventObject const ev(xThis->getXWeak());
             std::unique_lock aGuard(m_Mutex);
             m_EventListeners.disposeAndClear(aGuard, ev);
         }
@@ -2051,13 +2050,13 @@ SwXDocumentIndexMark::setPropertyValue(
     {
         throw beans::UnknownPropertyException(
             "Unknown property: " + rPropertyName,
-            static_cast<cppu::OWeakObject *>(this));
+            getXWeak());
     }
     if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
     {
         throw beans::PropertyVetoException(
             "Property is read-only: " + rPropertyName,
-            static_cast<cppu::OWeakObject *>(this));
+            getXWeak());
     }
 
     SwTOXType *const pType = m_pImpl->GetTOXType();
@@ -2180,7 +2179,7 @@ SwXDocumentIndexMark::getPropertyValue(const OUString& rPropertyName)
     {
         throw beans::UnknownPropertyException(
             "Unknown property: " + rPropertyName,
-            static_cast<cppu::OWeakObject *>(this));
+            getXWeak());
     }
     if (::sw::GetDefaultTextContentValue(aRet, rPropertyName, pEntry->nWID))
     {

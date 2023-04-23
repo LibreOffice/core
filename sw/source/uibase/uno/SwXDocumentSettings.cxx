@@ -365,7 +365,7 @@ void SwXDocumentSettings::_preSetValues ()
 void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const uno::Any &rValue )
 {
     if (rInfo.mnAttributes & PropertyAttribute::READONLY)
-        throw PropertyVetoException ("Property is read-only: " + rInfo.maName, static_cast < cppu::OWeakObject * > ( nullptr ) );
+        throw PropertyVetoException ("Property is read-only: " + rInfo.maName);
 
     switch( rInfo.mnHandle )
     {

@@ -855,7 +855,7 @@ SwXMeta::dispose()
     if (m_pImpl->m_bIsDescriptor)
     {
         m_pImpl->m_pTextPortions.reset();
-        lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(*this));
+        lang::EventObject const ev(getXWeak());
         std::unique_lock aGuard(m_pImpl->m_Mutex);
         m_pImpl->m_EventListeners.disposeAndClear(aGuard, ev);
         m_pImpl->m_bIsDisposed = true;
@@ -895,7 +895,7 @@ SwXMeta::AttachImpl(const uno::Reference< text::XTextRange > & i_xTextRange,
     {
         throw uno::RuntimeException(
             "SwXMeta::attach(): already attached",
-            static_cast< ::cppu::OWeakObject* >(this));
+            getXWeak());
     }
 
     SwXTextRange *const pRange(dynamic_cast<SwXTextRange*>(i_xTextRange.get()));
@@ -904,7 +904,7 @@ SwXMeta::AttachImpl(const uno::Reference< text::XTextRange > & i_xTextRange,
     {
         throw lang::IllegalArgumentException(
             "SwXMeta::attach(): argument not supported type",
-            static_cast< ::cppu::OWeakObject* >(this), 0);
+            getXWeak(), 0);
     }
 
     SwDoc * const pDoc(
@@ -913,7 +913,7 @@ SwXMeta::AttachImpl(const uno::Reference< text::XTextRange > & i_xTextRange,
     {
         throw lang::IllegalArgumentException(
             "SwXMeta::attach(): argument has no SwDoc",
-            static_cast< ::cppu::OWeakObject* >(this), 0);
+            getXWeak(), 0);
     }
 
     SwUnoInternalPaM aPam(*pDoc);
@@ -940,14 +940,14 @@ SwXMeta::AttachImpl(const uno::Reference< text::XTextRange > & i_xTextRange,
     {
         throw lang::IllegalArgumentException(
             "SwXMeta::attach(): cannot create meta: range invalid?",
-            static_cast< ::cppu::OWeakObject* >(this), 1);
+            getXWeak(), 1);
     }
     if (!pTextAttr)
     {
         OSL_FAIL("meta inserted, but has no text attribute?");
         throw uno::RuntimeException(
             "SwXMeta::attach(): cannot create meta",
-            static_cast< ::cppu::OWeakObject* >(this));
+            getXWeak());
     }
 
     m_pImpl->EndListeningAll();
@@ -980,7 +980,7 @@ SwXMeta::getAnchor()
     {
         throw uno::RuntimeException(
                 "SwXMeta::getAnchor(): not inserted",
-                static_cast< ::cppu::OWeakObject* >(this));
+                getXWeak());
     }
 
     SwTextNode * pTextNode;
@@ -992,7 +992,7 @@ SwXMeta::getAnchor()
     {
         throw lang::DisposedException(
                 "SwXMeta::getAnchor(): not attached",
-                static_cast< ::cppu::OWeakObject* >(this));
+                getXWeak());
     }
 
     const SwPosition start(*pTextNode, nMetaStart - 1); // -1 due to CH_TXTATR
@@ -1138,7 +1138,7 @@ SwXMeta::createEnumeration()
     {
         throw uno::RuntimeException(
                 "createEnumeration(): not inserted",
-                static_cast< ::cppu::OWeakObject* >(this));
+                getXWeak());
     }
 
     SwTextNode * pTextNode;

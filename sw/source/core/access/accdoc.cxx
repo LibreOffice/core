@@ -228,7 +228,7 @@ awt::Rectangle SAL_CALL SwAccessibleDocumentBase::getBounds()
         vcl::Window *pWin = GetWindow();
         if (!pWin)
         {
-            throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
+            throw uno::RuntimeException("no Window", getXWeak());
         }
 
         tools::Rectangle aPixBounds( pWin->GetWindowExtentsRelative( *pWin->GetAccessibleParentWindow() ) );
@@ -250,7 +250,7 @@ awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
     vcl::Window *pWin = GetWindow();
     if (!pWin)
     {
-        throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
+        throw uno::RuntimeException("no Window", getXWeak());
     }
 
     Point aPixPos( pWin->GetWindowExtentsRelative( *pWin->GetAccessibleParentWindow() ).TopLeft() );
@@ -266,7 +266,7 @@ css::awt::Point SAL_CALL SwAccessibleDocumentBase::getLocationOnScreen()
     vcl::Window *pWin = GetWindow();
     if (!pWin)
     {
-        throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
+        throw uno::RuntimeException("no Window", getXWeak());
     }
 
     Point aPixPos( pWin->GetWindowExtentsAbsolute().TopLeft() );
@@ -282,7 +282,7 @@ css::awt::Size SAL_CALL SwAccessibleDocumentBase::getSize()
     vcl::Window *pWin = GetWindow();
     if (!pWin)
     {
-        throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
+        throw uno::RuntimeException("no Window", getXWeak());
     }
 
     Size aPixSize( pWin->GetWindowExtentsAbsolute().GetSize() );
@@ -299,7 +299,7 @@ sal_Bool SAL_CALL SwAccessibleDocumentBase::containsPoint(
     vcl::Window *pWin = GetWindow();
     if (!pWin)
     {
-        throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
+        throw uno::RuntimeException("no Window", getXWeak());
     }
 
     tools::Rectangle aPixBounds( pWin->GetWindowExtentsAbsolute() );
@@ -321,7 +321,7 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleDocumentBase::getAccessibleAt
         vcl::Window *pWin = GetWindow();
         if (!pWin)
         {
-            throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
+            throw uno::RuntimeException("no Window", getXWeak());
         }
         if (pWin->isDisposed()) // tdf#147967
             return nullptr;

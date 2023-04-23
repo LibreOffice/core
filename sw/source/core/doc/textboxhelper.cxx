@@ -465,8 +465,7 @@ static void lcl_queryInterface(const SwFrameFormat* pShape, uno::Any& rAny, SdrO
         = SwTextBoxHelper::getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT, pObj))
     {
         uno::Reference<T> const xInterface(
-            static_cast<cppu::OWeakObject*>(
-                SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat).get()),
+            getXWeak(SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat).get()),
             uno::UNO_QUERY);
         rAny <<= xInterface;
     }

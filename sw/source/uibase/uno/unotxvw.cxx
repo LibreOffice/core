@@ -292,7 +292,7 @@ uno::Any SwXTextView::getSelection()
                 SwFrameFormat *const pFormat = rSh.GetFlyFrameFormat();
                 if (pFormat)
                 {
-                    aRef = static_cast<cppu::OWeakObject*>(SwXTextFrame::CreateXTextFrame(
+                    aRef = cppu::getXWeak(SwXTextFrame::CreateXTextFrame(
                             *pFormat->GetDoc(), pFormat).get());
                 }
             }
@@ -302,7 +302,7 @@ uno::Any SwXTextView::getSelection()
                 SwFrameFormat *const pFormat = rSh.GetFlyFrameFormat();
                 if (pFormat)
                 {
-                    aRef = static_cast<cppu::OWeakObject*>(SwXTextGraphicObject::CreateXTextGraphicObject(
+                    aRef = cppu::getXWeak(SwXTextGraphicObject::CreateXTextGraphicObject(
                             *pFormat->GetDoc(), pFormat).get());
                 }
             }
@@ -312,7 +312,7 @@ uno::Any SwXTextView::getSelection()
                 SwFrameFormat *const pFormat = rSh.GetFlyFrameFormat();
                 if (pFormat)
                 {
-                    aRef = static_cast<cppu::OWeakObject*>(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
+                    aRef = cppu::getXWeak(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
                             *pFormat->GetDoc(), pFormat).get());
                 }
             }
@@ -641,10 +641,7 @@ void SwXTextView::NotifySelChanged()
 {
     OSL_ENSURE( m_pView, "view is missing" );
 
-    uno::Reference<uno::XInterface> const xInt(
-        static_cast<cppu::OWeakObject*>(static_cast<SfxBaseController*>(this)));
-
-    lang::EventObject const aEvent(xInt);
+    lang::EventObject const aEvent(getXWeak());
     m_SelChangedListeners.notifyEach(
             &view::XSelectionChangeListener::selectionChanged, aEvent);
 }
@@ -870,7 +867,7 @@ void SwXTextViewCursor::collapseToStart()
         throw uno::RuntimeException();
 
     if (!IsTextSelection())
-        throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
+        throw  uno::RuntimeException("no text selection", getXWeak() );
 
     SwWrtShell& rSh = m_pView->GetWrtShell();
     if(rSh.HasSelection())
@@ -892,7 +889,7 @@ void SwXTextViewCursor::collapseToEnd()
         throw uno::RuntimeException();
 
     if (!IsTextSelection())
-        throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
+        throw  uno::RuntimeException("no text selection", getXWeak() );
 
     SwWrtShell& rSh = m_pView->GetWrtShell();
     if(rSh.HasSelection())
@@ -915,7 +912,7 @@ sal_Bool SwXTextViewCursor::isCollapsed()
         throw uno::RuntimeException();
 
     if (!IsTextSelection())
-        throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
+        throw  uno::RuntimeException("no text selection", getXWeak() );
 
     const SwWrtShell& rSh = m_pView->GetWrtShell();
     bRet = !rSh.HasSelection();
@@ -932,7 +929,7 @@ sal_Bool SwXTextViewCursor::goLeft(sal_Int16 nCount, sal_Bool bExpand)
         throw uno::RuntimeException();
 
     if (!IsTextSelection())
-        throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
+        throw  uno::RuntimeException("no text selection", getXWeak() );
 
     bRet = m_pView->GetWrtShell().Left( SwCursorSkipMode::Chars, bExpand, nCount, true );
 
@@ -947,7 +944,7 @@ sal_Bool SwXTextViewCursor::goRight(sal_Int16 nCount, sal_Bool bExpand)
         throw uno::RuntimeException();
 
     if (!IsTextSelection())
-        throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
+        throw  uno::RuntimeException("no text selection", getXWeak() );
 
     bRet = m_pView->GetWrtShell().Right( SwCursorSkipMode::Chars, bExpand, nCount, true );
 
@@ -964,7 +961,7 @@ void SwXTextViewCursor::gotoRange(
         throw uno::RuntimeException();
 
     if (!IsTextSelection())
-        throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
+        throw  uno::RuntimeException("no text selection", getXWeak() );
 
     SwUnoInternalPaM rDestPam(*m_pView->GetDocShell()->GetDoc());
     if (!::sw::XTextRangeToSwPaM(rDestPam, xRange))
@@ -1092,7 +1089,7 @@ void SwXTextViewCursor::gotoStart(sal_Bool bExpand)
         throw uno::RuntimeException();
 
     if (!IsTextSelection())
-        throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
+        throw  uno::RuntimeException("no text selection", getXWeak() );
 
     m_pView->GetWrtShell().StartOfSection( bExpand );
 
@@ -1106,7 +1103,7 @@ void SwXTextViewCursor::gotoEnd(sal_Bool bExpand)
         throw uno::RuntimeException();
 
     if (!IsTextSelection())
-        throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
+        throw  uno::RuntimeException("no text selection", getXWeak() );
 
     m_pView->GetWrtShell().EndOfSection( bExpand );
 
@@ -1263,7 +1260,7 @@ uno::Reference< text::XText >  SwXTextViewCursor::getText()
         throw uno::RuntimeException();
 
     if (!IsTextSelection( false ))
-        throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
+        throw  uno::RuntimeException("no text selection", getXWeak() );
 
     SwWrtShell& rSh = m_pView->GetWrtShell();
     SwPaM* pShellCursor = rSh.GetCursor();
@@ -1281,7 +1278,7 @@ uno::Reference< text::XTextRange > SwXTextViewCursor::getStart()
         throw uno::RuntimeException();
 
     if (!IsTextSelection())
-        throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
+        throw  uno::RuntimeException("no text selection", getXWeak() );
 
     SwWrtShell& rSh = m_pView->GetWrtShell();
     SwPaM* pShellCursor = rSh.GetCursor();
@@ -1299,7 +1296,7 @@ uno::Reference< text::XTextRange > SwXTextViewCursor::getEnd()
         throw uno::RuntimeException();
 
     if (!IsTextSelection())
-        throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
+        throw  uno::RuntimeException("no text selection", getXWeak() );
 
     SwWrtShell& rSh = m_pView->GetWrtShell();
     SwPaM* pShellCursor = rSh.GetCursor();
@@ -1317,7 +1314,7 @@ OUString SwXTextViewCursor::getString()
     {
         if (!IsTextSelection( false ))
         {
-            SAL_WARN("sw.uno", "no text selection in getString() " << static_cast<cppu::OWeakObject*>(this));
+            SAL_WARN("sw.uno", "no text selection in getString() " << getXWeak());
             return uRet;
         }
 
@@ -1352,7 +1349,7 @@ void SwXTextViewCursor::setString(const OUString& aString)
         return;
 
     if (!IsTextSelection( false ))
-        throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
+        throw  uno::RuntimeException("no text selection", getXWeak() );
 
     ShellMode eSelMode = m_pView->GetShellMode();
     switch(eSelMode)
@@ -1499,7 +1496,7 @@ sal_Bool SwXTextViewCursor::goDown(sal_Int16 nCount, sal_Bool bExpand)
         throw uno::RuntimeException();
 
     if (!IsTextSelection())
-        throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
+        throw  uno::RuntimeException("no text selection", getXWeak() );
 
     bRet = m_pView->GetWrtShell().Down( bExpand, nCount, true );
 
@@ -1515,7 +1512,7 @@ sal_Bool SwXTextViewCursor::goUp(sal_Int16 nCount, sal_Bool bExpand)
         throw uno::RuntimeException();
 
     if (!IsTextSelection())
-        throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
+        throw  uno::RuntimeException("no text selection", getXWeak() );
 
     bRet = m_pView->GetWrtShell().Up( bExpand, nCount, true );
 
@@ -1530,7 +1527,7 @@ sal_Bool SwXTextViewCursor::isAtStartOfLine()
         throw uno::RuntimeException();
 
     if (!IsTextSelection( false ))
-        throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
+        throw  uno::RuntimeException("no text selection", getXWeak() );
 
     bRet = m_pView->GetWrtShell().IsAtLeftMargin();
 
@@ -1545,7 +1542,7 @@ sal_Bool SwXTextViewCursor::isAtEndOfLine()
         throw uno::RuntimeException();
 
     if (!IsTextSelection( false ))
-        throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
+        throw  uno::RuntimeException("no text selection", getXWeak() );
 
     bRet = m_pView->GetWrtShell().IsAtRightMargin();
 
@@ -1559,7 +1556,7 @@ void SwXTextViewCursor::gotoEndOfLine(sal_Bool bExpand)
         throw uno::RuntimeException();
 
     if (!IsTextSelection( false ))
-        throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
+        throw  uno::RuntimeException("no text selection", getXWeak() );
 
     m_pView->GetWrtShell().RightMargin(bExpand, true);
 
@@ -1572,7 +1569,7 @@ void SwXTextViewCursor::gotoStartOfLine(sal_Bool bExpand)
         throw uno::RuntimeException();
 
     if (!IsTextSelection( false ))
-        throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
+        throw  uno::RuntimeException("no text selection", getXWeak() );
 
     m_pView->GetWrtShell().LeftMargin(bExpand, true);
 

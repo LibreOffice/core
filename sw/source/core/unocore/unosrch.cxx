@@ -417,10 +417,10 @@ void SwXTextSearch::setPropertyValue(const OUString& rPropertyName, const uno::A
     SolarMutexGuard aGuard;
     const SfxItemPropertyMapEntry*  pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
     if(!pEntry)
-        throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, getXWeak() );
 
     if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-        throw beans::PropertyVetoException ("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw beans::PropertyVetoException ("Property is read-only: " + rPropertyName, getXWeak() );
     bool bVal = false;
     if(auto b = o3tl::tryAccess<bool>(aValue))
         bVal = *b;
@@ -450,7 +450,7 @@ uno::Any SwXTextSearch::getPropertyValue(const OUString& rPropertyName)
     const SfxItemPropertyMapEntry*  pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
     bool bSet = false;
     if(!pEntry)
-        throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, getXWeak() );
 
     sal_Int16 nSet = 0;
     switch(pEntry->nWID)

@@ -599,7 +599,7 @@ void SAL_CALL SwXFieldMaster::setPropertyValue(
             {
                 throw beans::UnknownPropertyException(
                     "Unknown property: " + rPropertyName,
-                    static_cast< cppu::OWeakObject * >( this ) );
+                    getXWeak() );
             }
 
             pType->PutValue( rValue, nMemberValueId );
@@ -756,7 +756,7 @@ void SAL_CALL SwXFieldMaster::setPropertyValue(
             }
             break;
         default:
-            throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, getXWeak() );
         }
     }
 }
@@ -823,7 +823,7 @@ SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
             {
                 throw beans::UnknownPropertyException(
                         "Unknown property: " + rPropertyName,
-                        static_cast<cppu::OWeakObject *>(this));
+                        getXWeak());
             }
             pType->QueryValue( aRet, nMId );
 
@@ -904,7 +904,7 @@ SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
                 }
                 break;
             default:
-                throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, getXWeak() );
             }
         }
     }
@@ -2141,9 +2141,9 @@ SwXTextField::setPropertyValue(
     const SfxItemPropertyMapEntry*   pEntry = _pPropSet->getPropertyMap().getByName(rPropertyName);
 
     if (!pEntry)
-        throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, getXWeak() );
     if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-        throw beans::PropertyVetoException( "Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw beans::PropertyVetoException( "Property is read-only: " + rPropertyName, getXWeak() );
 
     if(pField)
     {
@@ -2306,7 +2306,7 @@ uno::Any SAL_CALL SwXTextField::getPropertyValue(const OUString& rPropertyName)
         pEntry = _pParaPropSet->getPropertyMap().getByName(rPropertyName);
     }
     if (!pEntry)
-        throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, getXWeak() );
 
     switch( pEntry->nWID )
     {
@@ -2863,7 +2863,7 @@ SwXTextFieldTypes::~SwXTextFieldTypes()
 void SwXTextFieldTypes::Invalidate()
 {
     SwUnoCollection::Invalidate();
-    lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(*this));
+    lang::EventObject const ev(getXWeak());
     std::unique_lock aGuard(m_pImpl->m_Mutex);
     m_pImpl->m_RefreshListeners.disposeAndClear(aGuard, ev);
 }
@@ -2900,7 +2900,7 @@ void SAL_CALL SwXTextFieldTypes::refresh()
         GetDoc()->getIDocumentFieldsAccess().UpdateFields(false);
     }
     // call refresh listeners (without SolarMutex locked)
-    lang::EventObject const event(static_cast< ::cppu::OWeakObject*>(this));
+    lang::EventObject const event(getXWeak());
     std::unique_lock aGuard(m_pImpl->m_Mutex);
     m_pImpl->m_RefreshListeners.notifyEach(aGuard,
             & util::XRefreshListener::refreshed, event);
@@ -2986,7 +2986,7 @@ SwXFieldEnumeration::SwXFieldEnumeration(SwDoc & rDoc)
     IDocumentMarkAccess& rMarksAccess(*rDoc.getIDocumentMarkAccess());
     for (auto iter = rMarksAccess.getFieldmarksBegin(); iter != rMarksAccess.getFieldmarksEnd(); ++iter)
     {
-        m_pImpl->m_Items.emplace_back(static_cast<cppu::OWeakObject*>(SwXFieldmark::CreateXFieldmark(rDoc, *iter).get()), uno::UNO_QUERY);
+        m_pImpl->m_Items.emplace_back(cppu::getXWeak(SwXFieldmark::CreateXFieldmark(rDoc, *iter).get()), uno::UNO_QUERY);
     }
 }
 

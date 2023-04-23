@@ -326,7 +326,7 @@ void SAL_CALL SwXBookmark::setName(const OUString& rName)
     if(pMarkAccess->findMark(rName) != pMarkAccess->getAllMarksEnd())
     {
         throw uno::RuntimeException("setName(): name already in use",
-                static_cast<::cppu::OWeakObject*>(this));
+                getXWeak());
     }
 
     SwPaM aPam(m_pImpl->m_pRegisteredBookmark->GetMarkPos());
@@ -430,7 +430,7 @@ SwXBookmark::setPropertyValue(const OUString& PropertyName,
 
     // nothing to set here
     throw lang::IllegalArgumentException("Property is read-only: "
-            + PropertyName, static_cast< cppu::OWeakObject * >(this), 0 );
+            + PropertyName, getXWeak(), 0 );
 }
 
 uno::Any SAL_CALL SwXBookmark::getPropertyValue(const OUString& rPropertyName)

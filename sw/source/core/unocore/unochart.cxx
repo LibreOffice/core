@@ -2200,7 +2200,7 @@ void SAL_CALL SwChartDataSequence::disposing( const lang::EventObject& rSource )
 {
     if (m_bDisposed)
         throw lang::DisposedException();
-    if (rSource.Source == static_cast<cppu::OWeakObject*>(m_xDataProvider.get()))
+    if (rSource.Source == cppu::getXWeak(m_xDataProvider.get()))
     {
         m_xDataProvider.clear();
     }

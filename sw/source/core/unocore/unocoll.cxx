@@ -522,45 +522,45 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
     {
         case  SwServiceType::TypeTextTable:
         {
-            xRet = static_cast<cppu::OWeakObject*>(SwXTextTable::CreateXTextTable(nullptr).get());
+            xRet = getXWeak(SwXTextTable::CreateXTextTable(nullptr).get());
         }
         break;
         case  SwServiceType::TypeTextFrame:
         {
-            xRet = static_cast<cppu::OWeakObject*>(SwXTextFrame::CreateXTextFrame(rDoc, nullptr).get());
+            xRet = getXWeak(SwXTextFrame::CreateXTextFrame(rDoc, nullptr).get());
         }
         break;
         case  SwServiceType::TypeGraphic  :
         case  SwServiceType::TypeTextGraphic /* #i47503# */ :
         {
-            xRet = static_cast<cppu::OWeakObject*>(SwXTextGraphicObject::CreateXTextGraphicObject(rDoc, nullptr).get());
+            xRet = getXWeak(SwXTextGraphicObject::CreateXTextGraphicObject(rDoc, nullptr).get());
 
         }
         break;
         case  SwServiceType::TypeOLE      :
         {
-            xRet = static_cast<cppu::OWeakObject*>(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(rDoc, nullptr).get());
+            xRet = getXWeak(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(rDoc, nullptr).get());
         }
         break;
         case  SwServiceType::TypeBookmark :
         {
-            xRet = static_cast<cppu::OWeakObject*>(SwXBookmark::CreateXBookmark(rDoc, nullptr).get());
+            xRet = getXWeak(SwXBookmark::CreateXBookmark(rDoc, nullptr).get());
         }
         break;
         case  SwServiceType::TypeFieldMark :
         {
-            xRet = static_cast<cppu::OWeakObject*>(SwXFieldmark::CreateXFieldmark(rDoc, nullptr).get());
+            xRet = getXWeak(SwXFieldmark::CreateXFieldmark(rDoc, nullptr).get());
         }
         break;
         case  SwServiceType::TypeFormFieldMark :
         {
-            xRet = static_cast<cppu::OWeakObject*>(SwXFieldmark::CreateXFieldmark(rDoc, nullptr, true).get());
+            xRet = getXWeak(SwXFieldmark::CreateXFieldmark(rDoc, nullptr, true).get());
         }
         break;
         case  SwServiceType::VbaObjectProvider :
 #if HAVE_FEATURE_SCRIPTING
         {
-            xRet = static_cast<cppu::OWeakObject*>(new SwVbaObjectForCodeNameProvider(rDoc.GetDocShell()));
+            xRet = getXWeak(new SwVbaObjectForCodeNameProvider(rDoc.GetDocShell()));
         }
 #endif
         break;
@@ -569,7 +569,7 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
         {
             if (rDoc.GetDocShell() && ooo::vba::isAlienWordDoc(*rDoc.GetDocShell()))
             {
-                xRet = static_cast<cppu::OWeakObject*>(new SwVbaCodeNameProvider(rDoc.GetDocShell()));
+                xRet = getXWeak(new SwVbaCodeNameProvider(rDoc.GetDocShell()));
             }
         }
 #endif
@@ -605,10 +605,10 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
         break;
 
         case  SwServiceType::TypeFootnote :
-            xRet = static_cast<cppu::OWeakObject*>(SwXFootnote::CreateXFootnote(rDoc, nullptr).get());
+            xRet = getXWeak(SwXFootnote::CreateXFootnote(rDoc, nullptr).get());
         break;
         case  SwServiceType::TypeEndnote  :
-            xRet = static_cast<cppu::OWeakObject*>(SwXFootnote::CreateXFootnote(rDoc, nullptr, true).get());
+            xRet = getXWeak(SwXFootnote::CreateXFootnote(rDoc, nullptr, true).get());
         break;
         case  SwServiceType::ContentIndexMark :
         case  SwServiceType::UserIndexMark    :
@@ -619,7 +619,7 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
                 eType = TOX_CONTENT;
             else if(SwServiceType::UserIndexMark == nObjectType)
                 eType = TOX_USER;
-            xRet = static_cast<cppu::OWeakObject*>(SwXDocumentIndexMark::CreateXDocumentIndexMark(rDoc, nullptr, eType).get());
+            xRet = getXWeak(SwXDocumentIndexMark::CreateXDocumentIndexMark(rDoc, nullptr, eType).get());
         }
         break;
         case  SwServiceType::ContentIndex      :
@@ -651,17 +651,17 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
             {
                 eType = TOX_TABLES;
             }
-            xRet = static_cast<cppu::OWeakObject*>(SwXDocumentIndex::CreateXDocumentIndex(rDoc, nullptr, eType).get());
+            xRet = getXWeak(SwXDocumentIndex::CreateXDocumentIndex(rDoc, nullptr, eType).get());
         }
         break;
         case SwServiceType::IndexHeaderSection :
         case SwServiceType::TextSection :
-            xRet = static_cast<cppu::OWeakObject*>(SwXTextSection::CreateXTextSection(nullptr,
+            xRet = getXWeak(SwXTextSection::CreateXTextSection(nullptr,
                     (SwServiceType::IndexHeaderSection == nObjectType)).get());
 
         break;
         case SwServiceType::ReferenceMark :
-            xRet = static_cast<cppu::OWeakObject*>(SwXReferenceMark::CreateXReferenceMark(rDoc, nullptr).get());
+            xRet = getXWeak(SwXReferenceMark::CreateXReferenceMark(rDoc, nullptr).get());
         break;
         case SwServiceType::StyleCharacter:
         case SwServiceType::StyleParagraph:
@@ -756,10 +756,10 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
         case SwServiceType::FieldTypeDropdown:
         case SwServiceType::FieldTypeTableFormula:
             // NOTE: the sw.SwXAutoTextEntry unoapi test depends on pDoc = 0
-            xRet = static_cast<cppu::OWeakObject*>(SwXTextField::CreateXTextField(nullptr, nullptr, nObjectType).get());
+            xRet = getXWeak(SwXTextField::CreateXTextField(nullptr, nullptr, nObjectType).get());
             break;
         case SwServiceType::FieldTypeAnnotation:
-            xRet = static_cast<cppu::OWeakObject*>(SwXTextField::CreateXTextField(&rDoc, nullptr, nObjectType).get());
+            xRet = getXWeak(SwXTextField::CreateXTextField(&rDoc, nullptr, nObjectType).get());
             break;
         case SwServiceType::FieldMasterUser:
         case SwServiceType::FieldMasterDDE:
@@ -775,7 +775,7 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
                 case SwServiceType::FieldMasterDatabase: nResId = SwFieldIds::Database; break;
                 default: break;
             }
-            xRet = static_cast<cppu::OWeakObject*>(SwXFieldMaster::CreateXFieldMaster(&rDoc, nullptr, nResId).get());
+            xRet = getXWeak(SwXFieldMaster::CreateXFieldMaster(&rDoc, nullptr, nResId).get());
         }
         break;
         case SwServiceType::FieldMasterBibliography:
@@ -786,20 +786,20 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
                 SwAuthorityFieldType aType(&rDoc);
                 pType = rDoc.getIDocumentFieldsAccess().InsertFieldType(aType);
             }
-            xRet = static_cast<cppu::OWeakObject*>(SwXFieldMaster::CreateXFieldMaster(&rDoc, pType).get());
+            xRet = getXWeak(SwXFieldMaster::CreateXFieldMaster(&rDoc, pType).get());
         }
         break;
         case SwServiceType::Paragraph:
-            xRet = static_cast<cppu::OWeakObject*>(SwXParagraph::CreateXParagraph(rDoc, nullptr, nullptr).get());
+            xRet = getXWeak(SwXParagraph::CreateXParagraph(rDoc, nullptr, nullptr).get());
         break;
         case SwServiceType::NumberingRules:
-            xRet = static_cast<cppu::OWeakObject*>(new SwXNumberingRules(rDoc));
+            xRet = getXWeak(new SwXNumberingRules(rDoc));
         break;
         case SwServiceType::TextColumns:
             xRet = SvxXTextColumns_createInstance();
         break;
         case SwServiceType::Defaults:
-            xRet = static_cast<cppu::OWeakObject*>(new SwXTextDefaults(&rDoc));
+            xRet = getXWeak(new SwXTextDefaults(&rDoc));
         break;
         case SwServiceType::IMapRectangle:
             xRet = SvUnoImageMapRectangleObject_createInstance( sw_GetSupportedMacroItems() );
@@ -816,23 +816,23 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
             // This should not happen during copy/paste, as this will unlink
             // charts using table data.
             if (rDoc.GetDocShell()->GetCreateMode() != SfxObjectCreateMode::EMBEDDED)
-                xRet = static_cast<cppu::OWeakObject*>(rDoc.getIDocumentChartDataProviderAccess().GetChartDataProvider( true /* create - if not yet available */ ));
+                xRet = getXWeak(rDoc.getIDocumentChartDataProviderAccess().GetChartDataProvider( true /* create - if not yet available */ ));
             else
                 SAL_WARN("sw.uno",
                     "not creating chart data provider for embedded object");
 
         break;
         case SwServiceType::TypeMeta:
-            xRet = static_cast<cppu::OWeakObject*>(SwXMeta::CreateXMeta(rDoc, false).get());
+            xRet = getXWeak(SwXMeta::CreateXMeta(rDoc, false).get());
         break;
         case SwServiceType::FieldTypeMetafield:
-            xRet = static_cast<cppu::OWeakObject*>(SwXMeta::CreateXMeta(rDoc, true).get());
+            xRet = getXWeak(SwXMeta::CreateXMeta(rDoc, true).get());
         break;
         case SwServiceType::LineBreak:
-            xRet = static_cast<cppu::OWeakObject*>(SwXLineBreak::CreateXLineBreak(nullptr).get());
+            xRet = getXWeak(SwXLineBreak::CreateXLineBreak(nullptr).get());
             break;
         case SwServiceType::ContentControl:
-            xRet = static_cast<cppu::OWeakObject*>(SwXContentControl::CreateXContentControl(rDoc).get());
+            xRet = getXWeak(SwXContentControl::CreateXContentControl(rDoc).get());
         break;
         default:
             throw uno::RuntimeException();

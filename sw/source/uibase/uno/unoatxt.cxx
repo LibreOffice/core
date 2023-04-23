@@ -384,7 +384,7 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
         css::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
                "Error Getting AutoText!",
-               static_cast < OWeakObject * > ( this ),
+               getXWeak(),
                anyEx );
     }
 

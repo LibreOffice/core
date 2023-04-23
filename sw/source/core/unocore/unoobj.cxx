@@ -1862,8 +1862,7 @@ uno::Any SwUnoCursorHelper::GetPropertyValue(
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
-            OUString::Concat("Unknown property: ") + rPropertyName,
-            static_cast<cppu::OWeakObject *>(nullptr));
+            OUString::Concat("Unknown property: ") + rPropertyName);
     }
 
     beans::PropertyState eTemp;
@@ -1992,9 +1991,9 @@ void SwUnoCursorHelper::SetPropertyValues(
     }
 
     if (!aUnknownExMsg.isEmpty())
-        throw beans::UnknownPropertyException(aUnknownExMsg, static_cast<cppu::OWeakObject *>(nullptr));
+        throw beans::UnknownPropertyException(aUnknownExMsg);
     if (!aPropertyVetoExMsg.isEmpty())
-        throw beans::PropertyVetoException(aPropertyVetoExMsg, static_cast<cppu::OWeakObject *>(nullptr));
+        throw beans::PropertyVetoException(aPropertyVetoExMsg);
 }
 
 namespace
@@ -2041,8 +2040,7 @@ SwUnoCursorHelper::GetPropertyStates(
             else
             {
                 throw beans::UnknownPropertyException(
-                    "Unknown property: " + pNames[i],
-                    static_cast<cppu::OWeakObject *>(nullptr));
+                    "Unknown property: " + pNames[i]);
             }
         }
         if (((SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION == eCaller)  ||
@@ -2155,8 +2153,7 @@ void SwUnoCursorHelper::SetPropertyToDefault(
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
-            OUString::Concat("Unknown property: ") + rPropertyName,
-            static_cast<cppu::OWeakObject *>(nullptr));
+            OUString::Concat("Unknown property: ") + rPropertyName);
     }
 
     if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
@@ -2193,8 +2190,7 @@ uno::Any SwUnoCursorHelper::GetPropertyDefault(
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
-            OUString::Concat("Unknown property: ") + rPropertyName,
-            static_cast<cppu::OWeakObject *>(nullptr));
+            OUString::Concat("Unknown property: ") + rPropertyName);
     }
 
     uno::Any aRet;
@@ -2582,13 +2578,13 @@ SwXTextCursor::setPropertiesToDefault(
             }
             throw beans::UnknownPropertyException(
                 "Unknown property: " + rName,
-                static_cast<cppu::OWeakObject *>(this));
+                getXWeak());
         }
         if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
         {
             throw uno::RuntimeException(
                 "setPropertiesToDefault: property is read-only: " + rName,
-                static_cast<cppu::OWeakObject *>(this));
+                getXWeak());
         }
 
         if (pEntry->nWID < RES_FRMATR_END)
@@ -2646,8 +2642,7 @@ SwXTextCursor::getPropertyDefaults(
                     continue;
                 }
                 throw beans::UnknownPropertyException(
-                    "Unknown property: " + pNames[i],
-                    static_cast<cppu::OWeakObject *>(nullptr));
+                    "Unknown property: " + pNames[i]);
             }
             if (pEntry->nWID < RES_FRMATR_END)
             {

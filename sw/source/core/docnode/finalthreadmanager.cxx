@@ -405,7 +405,7 @@ void SAL_CALL FinalThreadManager::notifyTermination( const css::lang::EventObjec
     }
 
     // get reference of this
-    css::uno::Reference< css::uno::XInterface > aOwnRef( static_cast< cppu::OWeakObject* >( this ));
+    css::uno::Reference< css::uno::XInterface > aOwnRef( getXWeak());
     // notify <SwThreadJoiner> to release its reference
     SwThreadJoiner::ReleaseThreadJoiner();
 }

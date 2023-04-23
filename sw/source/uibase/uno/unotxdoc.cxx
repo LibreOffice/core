@@ -429,7 +429,7 @@ void SwXTextDocument::GetNumberFormatter()
             m_xNumFormatAgg = pNumFormat;
         }
         if(m_xNumFormatAgg.is())
-            m_xNumFormatAgg->setDelegator(static_cast<cppu::OWeakObject*>(static_cast<SwXTextDocumentBaseClass*>(this)));
+            m_xNumFormatAgg->setDelegator(getXWeak());
     }
     else
     {
@@ -1631,7 +1631,7 @@ css::uno::Reference<css::uno::XInterface> SwXTextDocument::create(
     }
     if (rServiceName == "com.sun.star.document.ImportEmbeddedObjectResolver")
     {
-        return static_cast<cppu::OWeakObject *>(
+        return cppu::getXWeak(
             new SvXMLEmbeddedObjectHelper(
                 *m_pDocShell, SvXMLEmbeddedObjectHelperMode::Read));
     }
@@ -1790,8 +1790,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
         case  WID_DOC_WORD_COUNT     :
             throw RuntimeException(
                 "bad WID",
-                static_cast< cppu::OWeakObject * >(
-                    static_cast< SwXTextDocumentBaseClass * >(this)));
+                getXWeak());
         case  WID_DOC_WORD_SEPARATOR :
         {
             OUString sDelim;
@@ -4710,7 +4709,7 @@ Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(SwCreateDrawTable 
             break;
             case  SwCreateDrawTable::Defaults:
                 if(!m_xDrawDefaults.is())
-                    m_xDrawDefaults = static_cast<cppu::OWeakObject*>(new SwSvxUnoDrawPool(*m_pDoc));
+                    m_xDrawDefaults = cppu::getXWeak(new SwSvxUnoDrawPool(*m_pDoc));
                 xRet = m_xDrawDefaults;
             break;
 #if OSL_DEBUG_LEVEL > 0

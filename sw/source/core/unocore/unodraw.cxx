@@ -333,17 +333,17 @@ uno::Reference< drawing::XShape > SwFmDrawPage::CreateShape( SdrObject *pObj ) c
                 const SwNode* pNd = pDoc->GetNodes()[ pIdx->GetIndex() + 1 ];
                 if(!pNd->IsNoTextNode())
                 {
-                    xRet.set(static_cast<cppu::OWeakObject*>(SwXTextFrame::CreateXTextFrame(*pDoc, pFlyFormat).get()),
+                    xRet.set(cppu::getXWeak(SwXTextFrame::CreateXTextFrame(*pDoc, pFlyFormat).get()),
                             uno::UNO_QUERY);
                 }
                 else if( pNd->IsGrfNode() )
                 {
-                    xRet.set(static_cast<cppu::OWeakObject*>(SwXTextGraphicObject::CreateXTextGraphicObject(
+                    xRet.set(cppu::getXWeak(SwXTextGraphicObject::CreateXTextGraphicObject(
                                 *pDoc, pFlyFormat).get()), uno::UNO_QUERY);
                 }
                 else if( pNd->IsOLENode() )
                 {
-                    xRet.set(static_cast<cppu::OWeakObject*>(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
+                    xRet.set(cppu::getXWeak(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
                                 *pDoc, pFlyFormat).get()), uno::UNO_QUERY);
                 }
             }
@@ -420,7 +420,7 @@ void SwFmDrawPage::setPropertyValue(const OUString& rPropertyName, const uno::An
             break;
 
         default:
-            throw beans::UnknownPropertyException(rPropertyName, static_cast<cppu::OWeakObject*>(this));
+            throw beans::UnknownPropertyException(rPropertyName, getXWeak());
     }
 }
 
@@ -465,7 +465,7 @@ uno::Any SwFmDrawPage::getPropertyValue(const OUString& rPropertyName)
             break;
 
         default:
-            throw beans::UnknownPropertyException(rPropertyName, static_cast<cppu::OWeakObject*>(this));
+            throw beans::UnknownPropertyException(rPropertyName, getXWeak());
     }
     return aAny;
 }
@@ -631,7 +631,7 @@ void SwFmDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     // this is not a writer shape
     if(!pShape)
         throw uno::RuntimeException("illegal object",
-                                    static_cast< cppu::OWeakObject * > ( this ) );
+                                    getXWeak() );
 
     // we're already registered in the model / SwXDrawPage::add() already called
     if(pShape->m_pPage || !pShape->m_bDescriptor )
@@ -927,7 +927,7 @@ SwXShape::SwXShape(
     xShape = nullptr;
     osl_atomic_increment(&m_refCount);
     if( m_xShapeAgg.is() )
-        m_xShapeAgg->setDelegator( static_cast<cppu::OWeakObject*>(this) );
+        m_xShapeAgg->setDelegator( getXWeak() );
     osl_atomic_decrement(&m_refCount);
 }
 
@@ -1057,7 +1057,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
     if(pEntry)
     {
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-            throw beans::PropertyVetoException ("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::PropertyVetoException ("Property is read-only: " + rPropertyName, getXWeak() );
         // with the layout it is possible to move the anchor without changing the position
         if(pFormat)
         {
@@ -1933,7 +1933,7 @@ void SwXShape::setPropertyToDefault( const OUString& rPropertyName )
     if(pEntry)
     {
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-            throw uno::RuntimeException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw uno::RuntimeException("Property is read-only: " + rPropertyName, getXWeak() );
         if(pFormat)
         {
             const SfxItemSet& rSet = pFormat->GetAttrSet();
@@ -2091,7 +2091,7 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
             uno::Any aPos;
             aPos <<= xTextRange;
             setPropertyValue("TextRange", aPos);
-            uno::Reference< drawing::XShape > xTemp( static_cast<cppu::OWeakObject*>(this), uno::UNO_QUERY );
+            uno::Reference< drawing::XShape > xTemp( getXWeak(), uno::UNO_QUERY );
             xDP->add( xTemp );
         }
     }

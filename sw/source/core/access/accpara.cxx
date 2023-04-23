@@ -720,7 +720,7 @@ lang::Locale SAL_CALL SwAccessibleParagraph::getLocale()
     const SwTextFrame *pTextFrame = GetFrame()->DynCastTextFrame();
     if( !pTextFrame )
     {
-        throw uno::RuntimeException("no SwTextFrame", static_cast<cppu::OWeakObject*>(this));
+        throw uno::RuntimeException("no SwTextFrame", getXWeak());
     }
 
     lang::Locale aLoc(g_pBreakIt->GetLocale(pTextFrame->GetLangOfChar(TextFrameIndex(0), 0, true)));
@@ -1128,7 +1128,7 @@ css::uno::Sequence< css::style::TabStop > SwAccessibleParagraph::GetCurrentTabSt
         vcl::Window *pWin = GetWindow();
         if (!pWin)
         {
-            throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
+            throw uno::RuntimeException("no Window", getXWeak());
         }
 
         SwRect aTmpRect(0, 0, tabs[0].Position, 0);
@@ -2075,7 +2075,7 @@ awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
     vcl::Window *pWin = GetWindow();
     if (!pWin)
     {
-        throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
+        throw uno::RuntimeException("no Window", getXWeak());
     }
 
     tools::Rectangle aScreenRect( GetMap()->CoreToPixel( aCoreRect ));
@@ -2109,7 +2109,7 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
     vcl::Window *pWin = GetWindow();
     if (!pWin)
     {
-        throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
+        throw uno::RuntimeException("no Window", getXWeak());
     }
     Point aPoint( rPoint.X, rPoint.Y );
     SwRect aLogBounds( GetBounds( *(GetMap()), GetFrame() ) ); // twip rel to doc root
@@ -2501,7 +2501,7 @@ sal_Bool SwAccessibleParagraph::scrollSubstringTo( sal_Int32 nStartIndex,
 
     vcl::Window *pWin = GetWindow();
     if ( ! pWin )
-        throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
+        throw uno::RuntimeException("no Window", getXWeak());
 
     /* Start and end character bounds, in pixels, relative to the paragraph */
     awt::Rectangle startR, endR;
@@ -3305,7 +3305,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getNumberOfLineWithCaret()
                 vcl::Window *pWin = GetWindow();
                 if (!pWin)
                 {
-                    throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
+                    throw uno::RuntimeException("no Window", getXWeak());
                 }
 
                 tools::Rectangle aScreenRect( GetMap()->CoreToPixel( aCursorCoreRect ));

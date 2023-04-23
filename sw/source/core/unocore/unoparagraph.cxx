@@ -389,12 +389,12 @@ void SwXParagraph::Impl::SetPropertyValues_Impl(
             if (SfxItemPropertyMapEntry const* const pEntry = rMap.getByName(name); !pEntry)
             {
                 throw beans::UnknownPropertyException("Unknown property: " + name,
-                                                      static_cast<cppu::OWeakObject*>(&m_rThis));
+                                                      m_rThis.getXWeak());
             }
             else if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
             {
                 throw beans::PropertyVetoException("Property is read-only: " + name,
-                                                   static_cast<cppu::OWeakObject*>(&m_rThis));
+                                                   m_rThis.getXWeak());
             }
             return comphelper::makePropertyValue(name, value);
         });
@@ -407,7 +407,7 @@ void SAL_CALL SwXParagraph::setPropertyValues(
 {
     if (rPropertyNames.getLength() != rValues.getLength())
         throw lang::IllegalArgumentException("lengths do not match",
-                                             static_cast<cppu::OWeakObject*>(this), -1);
+                                             getXWeak(), -1);
 
     SolarMutexGuard aGuard;
 
@@ -556,7 +556,7 @@ uno::Sequence< uno::Any > SwXParagraph::Impl::GetPropertyValues_Impl(
         {
             throw beans::UnknownPropertyException(
                 "Unknown property: " + pPropertyNames[nProp],
-                static_cast< cppu::OWeakObject * >(&m_rThis));
+                m_rThis.getXWeak());
         }
         if (! ::sw::GetDefaultTextContentValue(
                 pValues[nProp], pPropertyNames[nProp], pEntry->nWID))
@@ -588,13 +588,13 @@ SwXParagraph::getPropertyValues(const uno::Sequence< OUString >& rPropertyNames)
     {
         css::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException("Unknown property exception caught",
-                static_cast < cppu::OWeakObject * > ( this ), anyEx );
+                getXWeak(), anyEx );
     }
     catch (lang::WrappedTargetException &)
     {
         css::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException("WrappedTargetException caught",
-                static_cast < cppu::OWeakObject * > ( this ), anyEx );
+                getXWeak(), anyEx );
     }
 
     return aValues;
@@ -1031,7 +1031,7 @@ SwXParagraph::getPropertyState(const OUString& rPropertyName)
     {
         throw beans::UnknownPropertyException(
             "Unknown property: " + rPropertyName,
-            static_cast<cppu::OWeakObject *>(this));
+            getXWeak());
     }
     bool bDummy = false;
     const beans::PropertyState eRet =
@@ -1063,7 +1063,7 @@ SwXParagraph::getPropertyStates(
         {
             throw beans::UnknownPropertyException(
                 "Unknown property: " + *pNames,
-                static_cast<cppu::OWeakObject *>(this));
+                getXWeak());
         }
 
         if (bAttrSetFetched && !pSet && isATR(pEntry->nWID))
@@ -1104,14 +1104,14 @@ SwXParagraph::setPropertyToDefault(const OUString& rPropertyName)
     {
         throw beans::UnknownPropertyException(
             "Unknown property: " + rPropertyName,
-            static_cast<cppu::OWeakObject *>(this));
+            getXWeak());
     }
 
     if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
     {
         throw uno::RuntimeException(
             "Property is read-only: " + rPropertyName,
-            static_cast<cppu::OWeakObject *>(this));
+            getXWeak());
     }
 
     const bool bBelowFrameAtrEnd(pEntry->nWID < RES_FRMATR_END);
@@ -1187,7 +1187,7 @@ SwXParagraph::getPropertyDefault(const OUString& rPropertyName)
     {
         throw beans::UnknownPropertyException(
             "Unknown property: " + rPropertyName,
-            static_cast<cppu::OWeakObject *>(this));
+            getXWeak());
     }
 
     const bool bBelowFrameAtrEnd(pEntry->nWID < RES_FRMATR_END);
@@ -1237,7 +1237,7 @@ void SAL_CALL SwXParagraph::dispose()
     {
         SwCursor aCursor( SwPosition( *pTextNode ), nullptr );
         pTextNode->GetDoc().getIDocumentContentOperations().DelFullPara(aCursor);
-        lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(*this));
+        lang::EventObject const ev(getXWeak());
         std::unique_lock aGuard2(m_pImpl->m_Mutex);
         m_pImpl->m_EventListeners.disposeAndClear(aGuard2, ev);
     }
