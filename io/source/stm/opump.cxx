@@ -263,14 +263,14 @@ void Pump::run()
 
             if( ! rInput.is() )
             {
-                throw NotConnectedException( "no input stream set", static_cast<OWeakObject*>(this) );
+                throw NotConnectedException( "no input stream set", getXWeak() );
             }
             Sequence< sal_Int8 > aData;
             while( rInput->readSomeBytes( aData, 65536 ) )
             {
                 if( ! rOutput.is() )
                 {
-                    throw NotConnectedException( "no output stream set", static_cast<OWeakObject*>(this) );
+                    throw NotConnectedException( "no output stream set", getXWeak() );
                 }
                 rOutput->writeBytes( aData );
                 osl_yieldThread();
