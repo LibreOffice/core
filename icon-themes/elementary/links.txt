@@ -2309,11 +2309,6 @@ sw/res/nc20013.png cmd/sc_insertendnote.png
 sw/res/one_left.png dbaccess/res/one_left.png
 sw/res/one_right.png dbaccess/res/one_right.png
 
-sw/res/re01.png cmd/lc_unsetcellsreadonly.png
-sw/res/re02.png cmd/lc_unsetcellsreadonly.png
-sw/res/re03.png cmd/sc_protect.png
-sw/res/re04.png cmd/sc_protect.png
-
 sw/res/sc20171.png cmd/sc_downsearch.png
 sw/res/sc20172.png cmd/sc_prevrecord.png
 sw/res/sc20173.png cmd/sc_nextrecord.png

@@ -2477,10 +2477,6 @@ sw/res/nc20010.png cmd/sc_shownote.png
 sw/res/nc20011.png cmd/sc_insertdraw.png
 sw/res/nc20012.png cmd/sc_insertfootnote.png
 sw/res/nc20013.png cmd/sc_insertendnote.png
-sw/res/re01.png cmd/lc_unsetcellsreadonly.png
-sw/res/re02.png cmd/lc_unsetcellsreadonly.png
-sw/res/re03.png cmd/sc_protect.png
-sw/res/re04.png cmd/sc_protect.png
 sw/res/sc20175.png cmd/sc_nextrecord.png
 sw/res/sc20177.png cmd/sc_insertfooter.png
 sw/res/sc20179.png cmd/sc_insertheader.png
