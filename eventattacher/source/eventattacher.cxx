@@ -158,7 +158,7 @@ Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName,
     }
 
     AllEventObject aAllEvent;
-    aAllEvent.Source = static_cast<OWeakObject*>(this);
+    aAllEvent.Source = getXWeak();
     aAllEvent.Helper = m_Helper;
     aAllEvent.ListenerType = Type(m_xListenerType->getTypeClass(), m_xListenerType->getName());
     aAllEvent.MethodName = FunctionName;
