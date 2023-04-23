@@ -115,7 +115,6 @@ $(instsetoo_installer_targets): $(SRCDIR)/solenv/bin/make_installer.pl \
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/install.phony: $(instsetoo_installer_targets)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
-	$(if $(LODE_HOME),$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/msicreator/create_installer.py $(BUILDDIR) $(SRCDIR) $(LIBO_VERSION) $(PRODUCTNAME_WITHOUT_SPACES))
 ifeq (TRUE,$(LIBO_TEST_INSTALL))
 	unzip -q -d $(TESTINSTALLDIR) $(instsetoo_OUT)/$(PRODUCTNAME_WITHOUT_SPACES)/archive/install/en-US/LibreOffice*_archive.zip
 	mv $(TESTINSTALLDIR)/LibreOffice*_archive/LibreOffice*/* $(TESTINSTALLDIR)/
