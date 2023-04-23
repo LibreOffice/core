@@ -528,7 +528,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 lingucomponent_LanguageToolGrammarChecker_get_implementation(
     css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(new LanguageToolGrammarChecker()));
+    return cppu::acquire(new LanguageToolGrammarChecker());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
