@@ -83,8 +83,7 @@ private:
 /// @note for external binding
 Reference < XInterface > SAL_CALL OSaxParserTest_CreateInstance( const Reference < XMultiServiceFactory > & rSMgr ) throw(Exception)
 {
-    OSaxParserTest *p = new OSaxParserTest( rSMgr );
-    return Reference < XInterface > ( (static_cast< OWeakObject *  >(p)) );
+    return getXWeak(new OSaxParserTest( rSMgr ));
 }
 
 OUString     OSaxParserTest_getServiceName( ) throw ()

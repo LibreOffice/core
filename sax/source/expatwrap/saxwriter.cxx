@@ -1035,8 +1035,8 @@ public: // XActiveDataSource
         }
         catch (const SAXException& e)
         {
-            throw css::lang::WrappedTargetRuntimeException(
-                e.Message, static_cast<OWeakObject*>(this), e.WrappedException);
+            throw css::lang::WrappedTargetRuntimeException(e.Message, getXWeak(),
+                                                           e.WrappedException);
         }
     }
     virtual Reference<XOutputStream> SAL_CALL getOutputStream() override { return m_out; }
