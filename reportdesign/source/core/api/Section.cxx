@@ -157,7 +157,7 @@ void SAL_CALL OSection::dispose()
 
 void SAL_CALL OSection::disposing()
 {
-    lang::EventObject aDisposeEvent( static_cast< ::cppu::OWeakObject* >( this ) );
+    lang::EventObject aDisposeEvent( getXWeak() );
     m_aContainerListeners.disposeAndClear( aDisposeEvent );
 }
 

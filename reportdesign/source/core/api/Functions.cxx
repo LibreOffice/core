@@ -56,7 +56,7 @@ void SAL_CALL OFunctions::disposing()
     for (auto& rFunction : m_aFunctions)
         rFunction->dispose();
     m_aFunctions.clear();
-    lang::EventObject aDisposeEvent( static_cast< ::cppu::OWeakObject* >( this ) );
+    lang::EventObject aDisposeEvent( getXWeak() );
     m_aContainerListeners.disposeAndClear( aDisposeEvent );
     m_xContext.clear();
 }

@@ -56,7 +56,7 @@ void SAL_CALL OGroups::disposing()
     for(auto& rGroup : m_aGroups)
         rGroup->dispose();
     m_aGroups.clear();
-    lang::EventObject aDisposeEvent( static_cast< ::cppu::OWeakObject* >( this ) );
+    lang::EventObject aDisposeEvent( getXWeak() );
     m_aContainerListeners.disposeAndClear( aDisposeEvent );
     m_xContext.clear();
 }

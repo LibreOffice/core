@@ -159,31 +159,31 @@ uno::Reference< uno::XInterface > OReportModel::createShape(const OUString& aSer
         }
         else if ( aServiceSpecifier == SERVICE_FIXEDTEXT)
         {
-            xRet = static_cast<cppu::OWeakObject*>(new OFixedText(m_pReportDefinition->getContext(),m_pReportDefinition,_rShape));
+            xRet = getXWeak(new OFixedText(m_pReportDefinition->getContext(),m_pReportDefinition,_rShape));
             if ( _rShape.is() )
                 throw uno::Exception("no shape", nullptr);
         }
         else if ( aServiceSpecifier == SERVICE_FIXEDLINE)
         {
-            xRet = static_cast<cppu::OWeakObject*>(new OFixedLine(m_pReportDefinition->getContext(),m_pReportDefinition,_rShape,nOrientation));
+            xRet = getXWeak(new OFixedLine(m_pReportDefinition->getContext(),m_pReportDefinition,_rShape,nOrientation));
             if ( _rShape.is() )
                 throw uno::Exception("no shape", nullptr);
         }
         else if ( aServiceSpecifier == SERVICE_IMAGECONTROL )
         {
-            xRet = static_cast<cppu::OWeakObject*>(new OImageControl(m_pReportDefinition->getContext(),m_pReportDefinition,_rShape));
+            xRet = getXWeak(new OImageControl(m_pReportDefinition->getContext(),m_pReportDefinition,_rShape));
             if ( _rShape.is() )
                 throw uno::Exception("no shape", nullptr);
         }
         else if ( aServiceSpecifier == SERVICE_REPORTDEFINITION )
         {
-            xRet = static_cast<cppu::OWeakObject*>(new OReportDefinition(m_pReportDefinition->getContext(),m_pReportDefinition,_rShape));
+            xRet = getXWeak(new OReportDefinition(m_pReportDefinition->getContext(),m_pReportDefinition,_rShape));
             if ( _rShape.is() )
                 throw uno::Exception("no shape", nullptr);
         }
         else if ( _rShape.is() )
         {
-            xRet = static_cast<cppu::OWeakObject*>(new OShape(m_pReportDefinition->getContext(),m_pReportDefinition,_rShape,aServiceSpecifier));
+            xRet = getXWeak(new OShape(m_pReportDefinition->getContext(),m_pReportDefinition,_rShape,aServiceSpecifier));
             if ( _rShape.is() )
                 throw uno::Exception("no shape", nullptr);
         }

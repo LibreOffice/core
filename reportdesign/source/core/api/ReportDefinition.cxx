@@ -609,7 +609,7 @@ void OReportDefinition::init()
             if ( sMediaType.isEmpty() )
                 xStorProps->setPropertyValue("MediaType",uno::Any(OUString(MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII)));
         }
-        m_pImpl->m_pObjectContainer = std::make_shared<comphelper::EmbeddedObjectContainer>(m_pImpl->m_xStorage , static_cast<cppu::OWeakObject*>(this) );
+        m_pImpl->m_pObjectContainer = std::make_shared<comphelper::EmbeddedObjectContainer>(m_pImpl->m_xStorage , getXWeak() );
     }
     catch (const uno::Exception&)
     {
@@ -629,7 +629,7 @@ void SAL_CALL OReportDefinition::disposing()
 
     uno::Reference< frame::XModel > xHoldAlive( this );
 
-    lang::EventObject aDisposeEvent( static_cast< ::cppu::OWeakObject* >( this ) );
+    lang::EventObject aDisposeEvent( getXWeak() );
     m_pImpl->m_aModifyListeners.disposeAndClear( aDisposeEvent );
     m_pImpl->m_aCloseListener.disposeAndClear( aDisposeEvent );
     m_pImpl->m_aLegacyEventListeners.disposeAndClear( aDisposeEvent );
@@ -1069,7 +1069,7 @@ void SAL_CALL OReportDefinition::close(sal_Bool bDeliverOwnership)
     ::osl::ResettableMutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     // notify our container listeners
-    lang::EventObject aEvt( static_cast< ::cppu::OWeakObject* >( this ) );
+    lang::EventObject aEvt( getXWeak() );
     aGuard.clear();
     m_pImpl->m_aCloseListener.forEach(
         [&aEvt, &bDeliverOwnership] (uno::Reference<util::XCloseListener> const& xListener) {
@@ -1258,7 +1258,7 @@ void OReportDefinition::impl_loadFromStorage_nolck_throw( const uno::Reference< 
             uno::UNO_QUERY_THROW );
 
         uno::Reference< document::XImporter> xImporter(xFilter,uno::UNO_QUERY_THROW);
-        uno::Reference<XComponent> xComponent(static_cast<OWeakObject*>(this),uno::UNO_QUERY);
+        uno::Reference<XComponent> xComponent(getXWeak(),uno::UNO_QUERY);
         xImporter->setTargetDocument(xComponent);
 
         utl::MediaDescriptor aTemp;
@@ -1345,7 +1345,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     pDelegatorArguments[nArgsLen++] <<= xGraphicStorageHandler;
     pDelegatorArguments[nArgsLen++] <<= xObjectResolver;
 
-    uno::Reference<XComponent> xCom(static_cast<OWeakObject*>(this),uno::UNO_QUERY);
+    uno::Reference<XComponent> xCom(getXWeak(),uno::UNO_QUERY);
     // Try to write to settings.xml, meta.xml, and styles.xml; only really care about success of
     // write to content.xml (keeping logic of commit 94ccba3eebc83b58e74e18f0e028c6a995ce6aa6)
     xInfoSet->setPropertyValue("StreamName", uno::Any(OUString("settings.xml")));
@@ -1423,7 +1423,7 @@ void SAL_CALL OReportDefinition::switchToStorage(
     // notify our container listeners
     m_pImpl->m_aStorageChangeListeners.forEach(
         [this, &xStorage] (uno::Reference<document::XStorageChangeListener> const& xListener) {
-            return xListener->notifyStorageChange(static_cast<OWeakObject*>(this), xStorage);
+            return xListener->notifyStorageChange(getXWeak(), xStorage);
         });
 }
 
@@ -2007,7 +2007,7 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstanceWith
                 aValue.Value >>= xStorage;
         }
         m_pImpl->m_pObjectContainer->SwitchPersistence(xStorage);
-        xRet = static_cast< ::cppu::OWeakObject* >(SvXMLEmbeddedObjectHelper::Create( xStorage,*this, SvXMLEmbeddedObjectHelperMode::Read ).get());
+        xRet = cppu::getXWeak(SvXMLEmbeddedObjectHelper::Create( xStorage,*this, SvXMLEmbeddedObjectHelperMode::Read ).get());
     }
     return xRet;
 }
@@ -2090,20 +2090,18 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstance( co
         return m_pImpl->m_xMarkerTable;
     }
     else if ( aServiceSpecifier == "com.sun.star.document.ImportEmbeddedObjectResolver" )
-        return static_cast< ::cppu::OWeakObject* >(SvXMLEmbeddedObjectHelper::Create( m_pImpl->m_xStorage,*this, SvXMLEmbeddedObjectHelperMode::Read ).get());
+        return cppu::getXWeak(SvXMLEmbeddedObjectHelper::Create( m_pImpl->m_xStorage,*this, SvXMLEmbeddedObjectHelperMode::Read ).get());
     else if ( aServiceSpecifier == "com.sun.star.document.ExportEmbeddedObjectResolver" )
-        return static_cast< ::cppu::OWeakObject* >(SvXMLEmbeddedObjectHelper::Create( m_pImpl->m_xStorage,*this, SvXMLEmbeddedObjectHelperMode::Write ).get());
+        return cppu::getXWeak(SvXMLEmbeddedObjectHelper::Create( m_pImpl->m_xStorage,*this, SvXMLEmbeddedObjectHelperMode::Write ).get());
     else if (aServiceSpecifier == "com.sun.star.document.ImportGraphicStorageHandler")
     {
         rtl::Reference<SvXMLGraphicHelper> xGraphicHelper = SvXMLGraphicHelper::Create(m_pImpl->m_xStorage,SvXMLGraphicHelperMode::Write);
-        uno::Reference< uno::XInterface> xRet(static_cast< ::cppu::OWeakObject* >(xGraphicHelper.get()));
-        return xRet;
+        return cppu::getXWeak(xGraphicHelper.get());
     }
     else if (aServiceSpecifier == "com.sun.star.document.ExportGraphicStorageHandler")
     {
         rtl::Reference<SvXMLGraphicHelper> xGraphicHelper = SvXMLGraphicHelper::Create(m_pImpl->m_xStorage,SvXMLGraphicHelperMode::Write);
-        uno::Reference< uno::XInterface> xRet(static_cast< ::cppu::OWeakObject* >(xGraphicHelper.get()));
-        return xRet;
+        return cppu::getXWeak(xGraphicHelper.get());
     }
     else if ( aServiceSpecifier == "com.sun.star.chart2.data.DataProvider" )
     {
@@ -2628,7 +2626,7 @@ uno::Any SAL_CALL OReportDefinition::getTransferData( const datatransfer::DataFl
     uno::Any aResult;
     if( !isDataFlavorSupported( aFlavor ) )
     {
-        throw datatransfer::UnsupportedFlavorException(aFlavor.MimeType, static_cast< ::cppu::OWeakObject* >( this ));
+        throw datatransfer::UnsupportedFlavorException(aFlavor.MimeType, getXWeak());
     }
 
     try
