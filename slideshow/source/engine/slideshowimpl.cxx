@@ -668,7 +668,7 @@ void SlideShowImpl::disposing()
 
     // send all listeners a disposing() that we are going down:
     maListenerContainer.disposeAndClear(
-        lang::EventObject( static_cast<cppu::OWeakObject *>(this) ) );
+        lang::EventObject( getXWeak() ) );
 
     maViewContainer.dispose();
 

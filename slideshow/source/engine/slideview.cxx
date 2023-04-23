@@ -1025,7 +1025,7 @@ struct WeakRefWrapper
 
     WeakRefWrapper(SlideView & rObj, std::function<void (SlideView&)> func)
         : m_rObj(rObj)
-        , m_wObj(static_cast<::cppu::OWeakObject*>(&rObj))
+        , m_wObj(rObj.getXWeak())
         , m_func(std::move(func))
     {
     }
