@@ -726,7 +726,7 @@ void SfxStyleSheetBasePool::Remove( SfxStyleSheetBase* p )
     // this works well under normal conditions (checked breaking and counting
     // on SfxStyleSheetBase constructors and destructors)
 
-    // css::uno::Reference< css::lang::XComponent > xComp( static_cast< ::cppu::OWeakObject* >((*aIter).get()), css::uno::UNO_QUERY );
+    // css::uno::Reference< css::lang::XComponent > xComp( getXWeak((*aIter).get()), css::uno::UNO_QUERY );
     // if( xComp.is() ) try
     // {
     //  xComp->dispose();

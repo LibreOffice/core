@@ -230,7 +230,7 @@ void SAL_CALL OFSInputStreamContainer::dispose(  )
 
     m_xInputStream->closeInput();
 
-    lang::EventObject aSource( static_cast< ::cppu::OWeakObject*>( this ) );
+    lang::EventObject aSource( getXWeak() );
     m_aListenersContainer.disposeAndClear( aGuard, aSource );
 
     m_bDisposed = true;

@@ -45,12 +45,10 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstance()
         aTempURL, uno::Reference< ucb::XCommandEnvironment >(),
         comphelper::getProcessComponentContext() );
 
-    return uno::Reference< uno::XInterface >(
-        static_cast< OWeakObject* >(
+    return cppu::getXWeak(
             new FSStorage(  aResultContent,
                             embed::ElementModes::READWRITE,
-                            m_xContext ) ),
-        uno::UNO_QUERY );
+                            m_xContext ) );
 }
 
 /**
@@ -79,7 +77,7 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
                 ("second argument to css.embed.FileSystemStorageFactory."
                  "createInstanceWithArguments must be a"
                  " css.embed.ElementModes"),
-                static_cast< OWeakObject * >(this), -1);
+                getXWeak(), -1);
         }
         // it's always possible to read written storage in this implementation
         nStorageMode |= embed::ElementModes::READ;
@@ -94,7 +92,7 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
             ("first argument to"
              " css.embed.FileSystemStorageFactory.createInstanceWithArguments"
              " must be a (non-empty) URL"),
-            static_cast< OWeakObject * >(this), -1);
+            getXWeak(), -1);
     }
 
     // allow to use other ucp's
@@ -107,7 +105,7 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
             ("URL \"" + aURL + "\" passed as first argument to"
              " css.embed.FileSystemStorageFactory.createInstanceWithArguments"
              " must be a file URL denoting a directory"),
-            static_cast< OWeakObject * >(this), -1);
+            getXWeak(), -1);
     }
 
     if ( ( nStorageMode & embed::ElementModes::WRITE ) && !( nStorageMode & embed::ElementModes::NOCREATE ) )
@@ -117,18 +115,16 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
             ("URL \"" + aURL + "\" passed to"
              " css.embed.FileSystemStorageFactory.createInstanceWithArguments"
              " does not denote an existing directory"),
-            static_cast< OWeakObject * >(this));
+            getXWeak());
 
     ::ucbhelper::Content aResultContent(
         aURL, uno::Reference< ucb::XCommandEnvironment >(),
         comphelper::getProcessComponentContext() );
 
     // create storage based on source
-    return uno::Reference< uno::XInterface >(
-        static_cast< OWeakObject* >( new FSStorage( aResultContent,
+    return cppu::getXWeak( new FSStorage( aResultContent,
                                                     nStorageMode,
-                                                    m_xContext ) ),
-        uno::UNO_QUERY );
+                                                    m_xContext ) );
 }
 
 OUString SAL_CALL FSStorageFactory::getImplementationName()

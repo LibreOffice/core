@@ -246,7 +246,7 @@ void SAL_CALL FSStorage::copyToStorage( const uno::Reference< embed::XStorage >&
 {
     std::unique_lock aGuard( m_aMutex );
 
-    if ( !xDest.is() || xDest == uno::Reference< uno::XInterface >( static_cast< OWeakObject*> ( this ), uno::UNO_QUERY ) )
+    if ( !xDest.is() || xDest == getXWeak() )
         throw lang::IllegalArgumentException(); // TODO:
 
     try
@@ -775,7 +775,7 @@ uno::Any SAL_CALL FSStorage::getByName( const OUString& aName )
     {
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw lang::WrappedTargetException( "Can not open element!",
-                                            static_cast< OWeakObject* >( this ),
+                                            getXWeak(),
                                             aCaught );
     }
 
@@ -816,7 +816,7 @@ uno::Sequence< OUString > SAL_CALL FSStorage::getElementNames()
         {
             uno::Any aCaught( ::cppu::getCaughtException() );
             throw lang::WrappedTargetRuntimeException( "Can not open storage!",
-                                            static_cast< OWeakObject* >( this ),
+                                            getXWeak(),
                                             aCaught );
         }
     }
@@ -828,7 +828,7 @@ uno::Sequence< OUString > SAL_CALL FSStorage::getElementNames()
     {
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException( "Can not open storage!",
-                                            static_cast< OWeakObject* >( this ),
+                                            getXWeak(),
                                             aCaught );
     }
 
@@ -890,7 +890,7 @@ void FSStorage::disposeImpl(std::unique_lock<std::mutex>& rGuard)
 {
     if ( m_aListenersContainer.getLength(rGuard) )
     {
-        lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
+        lang::EventObject aSource( getXWeak() );
         m_aListenersContainer.disposeAndClear( rGuard, aSource );
     }
 }
