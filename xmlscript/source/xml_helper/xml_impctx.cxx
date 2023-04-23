@@ -400,7 +400,7 @@ OUString DocumentHandlerImpl::getUriByUid( sal_Int32 Uid )
         if (rURIUid.second == Uid)
             return rURIUid.first;
     }
-    throw container::NoSuchElementException( "no such xmlns uid!" , static_cast< OWeakObject * >(this) );
+    throw container::NoSuchElementException( "no such xmlns uid!" , getXWeak() );
 }
 
 // XDocumentHandler
