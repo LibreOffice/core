@@ -195,7 +195,7 @@ void SAL_CALL SoundHandler::dispatchWithNotification(const css::util::URL&      
         m_xPlayer.set( avmedia::MediaWindow::createPlayer( aURL.Complete, aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_REFERRER, OUString()) ), css::uno::UNO_SET_THROW );
         // OK- we can start async playing ...
         // Count this request and initialize self-holder against dying by uno ref count ...
-        m_xSelfHold.set(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+        m_xSelfHold.set(getXWeak());
         m_xPlayer->start();
         m_aUpdateIdle.SetPriority( TaskPriority::HIGH_IDLE );
         m_aUpdateIdle.Start();

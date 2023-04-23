@@ -163,7 +163,7 @@ void GtkPlayer::notifyListeners()
         return;
 
     css::lang::EventObject aEvent;
-    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+    aEvent.Source = getXWeak();
 
     comphelper::OInterfaceIteratorHelper2 pIterator(*pContainer);
     while (pIterator.hasMoreElements())
@@ -374,7 +374,7 @@ GtkPlayer::addPlayerListener(const css::uno::Reference<css::media::XPlayerListen
     if (gtk_media_stream_is_prepared(m_pStream))
     {
         css::lang::EventObject aEvent;
-        aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+        aEvent.Source = getXWeak();
         rListener->preferredPlayerWindowSizeAvailable(aEvent);
     }
     else
