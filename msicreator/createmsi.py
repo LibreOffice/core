@@ -571,7 +571,7 @@ class PackageGenerator:
         })
 
     def build_package(self):
-        wixdir = 'c:\\Program Files\\Wix Toolset v3.11\\bin'
+        wixdir = 'c:\\Program Files (x86)\\Wix Toolset v3.11\\bin'
         if platform.system() != "Windows":
             wixdir = '/usr/bin'
         if not os.path.isdir(wixdir):
