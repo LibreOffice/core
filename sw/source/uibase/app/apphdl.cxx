@@ -1119,11 +1119,11 @@ void NewXForms( SfxRequest& rReq )
     // copied & excerpted from SwModule::InsertLab(..)
 
     // create new document
-    SfxObjectShellLock xDocSh( new SwDocShell( SfxObjectCreateMode::STANDARD) );
+    SwDocShellRef xDocSh( new SwDocShell( SfxObjectCreateMode::STANDARD) );
     xDocSh->DoInitNew();
 
     // initialize XForms
-    static_cast<SwDocShell*>( &xDocSh )->GetDoc()->initXForms( true );
+    xDocSh->GetDoc()->initXForms(true);
 
     // load document into frame
     SfxViewFrame::DisplayNewDocument( *xDocSh, rReq );
