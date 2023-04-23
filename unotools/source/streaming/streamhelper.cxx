@@ -31,10 +31,10 @@ namespace utl
 sal_Int32 SAL_CALL OInputStreamHelper::readBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
 {
     if (!m_xLockBytes.is())
-        throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::NotConnectedException(OUString(), getXWeak());
 
     if (nBytesToRead < 0)
-        throw css::io::BufferSizeExceededException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::BufferSizeExceededException(OUString(), getXWeak());
 
     std::scoped_lock aGuard( m_aMutex );
     if (aData.getLength() < nBytesToRead)
@@ -45,7 +45,7 @@ sal_Int32 SAL_CALL OInputStreamHelper::readBytes(css::uno::Sequence< sal_Int8 >&
     m_nActPos += nRead;
 
     if (nError != ERRCODE_NONE)
-        throw css::io::IOException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::IOException(OUString(), getXWeak());
 
     // adjust sequence if data read is lower than the desired data
     if (nRead < o3tl::make_unsigned(aData.getLength()))
@@ -87,10 +87,10 @@ void SAL_CALL OInputStreamHelper::skipBytes(sal_Int32 nBytesToSkip)
 {
     std::scoped_lock aGuard( m_aMutex );
     if (!m_xLockBytes.is())
-        throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::NotConnectedException(OUString(), getXWeak());
 
     if (nBytesToSkip < 0)
-        throw css::io::BufferSizeExceededException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::BufferSizeExceededException(OUString(), getXWeak());
 
     m_nActPos += nBytesToSkip;
 }
@@ -99,7 +99,7 @@ sal_Int32 SAL_CALL OInputStreamHelper::available()
 {
     std::scoped_lock aGuard( m_aMutex );
     if (!m_xLockBytes.is())
-        throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::NotConnectedException(OUString(), getXWeak());
 
     return m_nAvailable;
 }
@@ -108,7 +108,7 @@ void SAL_CALL OInputStreamHelper::closeInput()
 {
     std::scoped_lock aGuard( m_aMutex );
     if (!m_xLockBytes.is())
-        throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::NotConnectedException(OUString(), getXWeak());
 
     m_xLockBytes = nullptr;
 }

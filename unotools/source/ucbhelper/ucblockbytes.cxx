@@ -459,11 +459,11 @@ Moderator::Moderator(
 
     Reference < XActiveDataSink > xActiveSink(*pxSink,UNO_QUERY);
     if(xActiveSink.is())
-        pxSink->set( static_cast<cppu::OWeakObject*>(new ModeratorsActiveDataSink(*this)));
+        pxSink->set(getXWeak(new ModeratorsActiveDataSink(*this)));
 
     Reference<XActiveDataStreamer> xStreamer( *pxSink, UNO_QUERY );
     if ( xStreamer.is() )
-        pxSink->set( static_cast<cppu::OWeakObject*>(new ModeratorsActiveDataStreamer(*this)));
+        pxSink->set(getXWeak(new ModeratorsActiveDataStreamer(*this)));
 
     if(dec == 0)
         m_aArg.Argument <<= aPostArg;

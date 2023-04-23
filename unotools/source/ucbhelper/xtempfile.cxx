@@ -109,11 +109,11 @@ sal_Int32 SAL_CALL OTempFileService::readBytes( css::uno::Sequence< sal_Int8 >& 
 {
     std::unique_lock aGuard( maMutex );
     if ( mbInClosed )
-        throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
+        throw css::io::NotConnectedException ( OUString(), getXWeak() );
 
     checkConnected();
     if (nBytesToRead < 0)
-        throw css::io::BufferSizeExceededException( OUString(), static_cast< css::uno::XWeak * >(this));
+        throw css::io::BufferSizeExceededException( OUString(), getXWeak());
 
     if (aData.getLength() < nBytesToRead)
         aData.realloc(nBytesToRead);
@@ -131,13 +131,13 @@ sal_Int32 SAL_CALL OTempFileService::readSomeBytes( css::uno::Sequence< sal_Int8
     {
         std::unique_lock aGuard( maMutex );
         if ( mbInClosed )
-            throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
+            throw css::io::NotConnectedException ( OUString(), getXWeak() );
 
         checkConnected();
         checkError();
 
         if (nMaxBytesToRead < 0)
-            throw css::io::BufferSizeExceededException( OUString(), static_cast < css::uno::XWeak * >( this ) );
+            throw css::io::BufferSizeExceededException( OUString(), getXWeak() );
 
         if (mpStream->eof())
         {
@@ -151,7 +151,7 @@ void SAL_CALL OTempFileService::skipBytes( sal_Int32 nBytesToSkip )
 {
     std::unique_lock aGuard( maMutex );
     if ( mbInClosed )
-        throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
+        throw css::io::NotConnectedException ( OUString(), getXWeak() );
 
     checkConnected();
     checkError();
@@ -162,7 +162,7 @@ sal_Int32 SAL_CALL OTempFileService::available(  )
 {
     std::unique_lock aGuard( maMutex );
     if ( mbInClosed )
-        throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
+        throw css::io::NotConnectedException ( OUString(), getXWeak() );
 
     checkConnected();
 
@@ -175,7 +175,7 @@ void SAL_CALL OTempFileService::closeInput(  )
 {
     std::unique_lock aGuard( maMutex );
     if ( mbInClosed )
-        throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
+        throw css::io::NotConnectedException ( OUString(), getXWeak() );
 
     mbInClosed = true;
 
@@ -193,19 +193,19 @@ void SAL_CALL OTempFileService::writeBytes( const css::uno::Sequence< sal_Int8 >
 {
     std::unique_lock aGuard( maMutex );
     if ( mbOutClosed )
-        throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
+        throw css::io::NotConnectedException ( OUString(), getXWeak() );
 
     checkConnected();
     sal_uInt32 nWritten = mpStream->WriteBytes(aData.getConstArray(), aData.getLength());
     checkError();
     if  ( nWritten != static_cast<sal_uInt32>(aData.getLength()))
-        throw css::io::BufferSizeExceededException( OUString(),static_cast < css::uno::XWeak * > ( this ) );
+        throw css::io::BufferSizeExceededException( OUString(), getXWeak() );
 }
 void SAL_CALL OTempFileService::flush(  )
 {
     std::unique_lock aGuard( maMutex );
     if ( mbOutClosed )
-        throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
+        throw css::io::NotConnectedException ( OUString(), getXWeak() );
 
     checkConnected();
     mpStream->Flush();
@@ -215,7 +215,7 @@ void SAL_CALL OTempFileService::closeOutput(  )
 {
     std::unique_lock aGuard( maMutex );
     if ( mbOutClosed )
-        throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
+        throw css::io::NotConnectedException ( OUString(), getXWeak() );
 
     mbOutClosed = true;
     if (mpStream)
@@ -236,7 +236,7 @@ void SAL_CALL OTempFileService::closeOutput(  )
 void OTempFileService::checkError () const
 {
     if (!mpStream || mpStream->SvStream::GetError () != ERRCODE_NONE )
-        throw css::io::NotConnectedException ( OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
+        throw css::io::NotConnectedException ( OUString(), const_cast < OTempFileService * > (this)->getXWeak() );
 }
 void OTempFileService::checkConnected ()
 {
@@ -249,7 +249,7 @@ void OTempFileService::checkConnected ()
     }
 
     if (!mpStream)
-        throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
+        throw css::io::NotConnectedException ( OUString(), getXWeak() );
 }
 
 // XSeekable
