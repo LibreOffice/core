@@ -69,7 +69,7 @@ namespace oglcanvas
     {
         canvas::tools::verifyArgs(aNewPos, viewState, renderState,
                                   __func__,
-                                  static_cast< ::cppu::OWeakObject* >(this));
+                                  getXWeak());
 
         ::osl::MutexGuard aGuard( m_aMutex );
         ::basegfx::B2DHomMatrix aTransform;

@@ -179,9 +179,8 @@ com_sun_star_comp_rendering_SpriteCanvas_VCL_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
 {
     rtl::Reference<vclcanvas::SpriteCanvas> p = new vclcanvas::SpriteCanvas(args, context);
-    cppu::acquire(p.get());
     p->initialize();
-    return static_cast<cppu::OWeakObject*>(p.get());
+    return cppu::acquire(p.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

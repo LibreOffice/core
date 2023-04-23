@@ -225,9 +225,8 @@ com_sun_star_comp_rendering_SpriteCanvas_Cairo_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
 {
     rtl::Reference<cairocanvas::SpriteCanvas> p = new cairocanvas::SpriteCanvas(args, context);
-    p->acquire();
     p->initialize();
-    return static_cast<cppu::OWeakObject*>(p.get());
+    return cppu::acquire(p.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

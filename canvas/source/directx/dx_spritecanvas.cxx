@@ -183,8 +183,7 @@ namespace dxcanvas
     {
         rtl::Reference<SpriteCanvas> xCanvas(new SpriteCanvas(args, context));
         xCanvas->initialize();
-        xCanvas->acquire();
-        return static_cast<cppu::OWeakObject*>(xCanvas.get());
+        return cppu::acquire(xCanvas.get());
     }
 
 }

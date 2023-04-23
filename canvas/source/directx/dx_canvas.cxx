@@ -240,8 +240,7 @@ namespace dxcanvas
     {
         rtl::Reference<Canvas> xCanvas(new Canvas(args, context));
         xCanvas->initialize();
-        xCanvas->acquire();
-        return static_cast<cppu::OWeakObject*>(xCanvas.get());
+        return cppu::acquire(xCanvas.get());
     }
 
     extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
@@ -250,8 +249,7 @@ namespace dxcanvas
     {
         rtl::Reference<BitmapCanvas> xCanvas(new BitmapCanvas(args, context));
         xCanvas->initialize();
-        xCanvas->acquire();
-        return static_cast<cppu::OWeakObject*>(xCanvas.get());
+        return cppu::acquire(xCanvas.get());
     }
 }
 

@@ -80,7 +80,7 @@ namespace dxcanvas
         catch (...) {
 
             throw lang::NoSupportException( "Could not create DirectX device!",
-                static_cast< ::cppu::OWeakObject* >(&rSpriteCanvas) );
+                rSpriteCanvas.getXWeak() );
         }
 
         // create the surfaceproxy manager
