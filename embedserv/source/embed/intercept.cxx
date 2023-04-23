@@ -85,7 +85,7 @@ Interceptor::Interceptor(
     DocumentHolder* pDocH,
     bool bLink )
     : m_xOleAccess( xOleAccess ),
-      m_xDocHLocker( static_cast< ::cppu::OWeakObject* >( pDocH ) ),
+      m_xDocHLocker( cppu::getXWeak( pDocH ) ),
       m_pDocH(pDocH),
       m_pDisposeEventListeners(nullptr),
       m_pStatCL(nullptr),
