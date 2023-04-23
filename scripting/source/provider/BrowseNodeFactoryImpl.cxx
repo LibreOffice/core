@@ -374,7 +374,7 @@ public:
            before m_refCount is decremented again */
         {
             m_xAggProxy->setDelegator(
-                static_cast< cppu::OWeakObject * >( this ) );
+                getXWeak() );
         }
 
         osl_atomic_decrement( &m_refCount );

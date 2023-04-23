@@ -149,7 +149,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                     if ( xListener.is() )
                     {
                         css::frame::DispatchResultEvent aEvent(
-                                static_cast< ::cppu::OWeakObject* >( this ),
+                                getXWeak(),
                                 css::frame::DispatchResultState::FAILURE,
                                 invokeResult );
                         try
@@ -265,7 +265,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     // executed a macro instead!
     css::frame::DispatchResultEvent aEvent;
 
-    aEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
+    aEvent.Source = getXWeak();
     aEvent.Result = invokeResult;
     if ( bSuccess )
     {

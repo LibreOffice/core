@@ -603,7 +603,7 @@ void StringResourceImpl::implModified(std::unique_lock<std::mutex>& rGuard)
 void StringResourceImpl::implNotifyListeners(std::unique_lock<std::mutex>& rGuard)
 {
     EventObject aEvent;
-    aEvent.Source = static_cast< XInterface* >( static_cast<OWeakObject*>(this) );
+    aEvent.Source = getXWeak();
     m_aListenerContainer.forEach(rGuard,
         [&aEvent](const css::uno::Reference<XModifyListener>& xListener)
         {
