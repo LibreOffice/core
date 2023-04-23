@@ -72,7 +72,7 @@ namespace svx
 
     Reference< XInterface > NamespaceMap_createInstance( sal_uInt16* pWhichIds, SfxItemPool* pPool )
     {
-        return static_cast<XWeak*>(new NamespaceMap( pWhichIds, pPool ));
+        return getXWeak(new NamespaceMap( pWhichIds, pPool ));
     }
 
     static Sequence< OUString > NamespaceMap_getSupportedServiceNames()

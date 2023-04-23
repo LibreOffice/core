@@ -1119,7 +1119,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
         }
         }
     }
-    throw UnknownPropertyException( rPropertyName, static_cast<cppu::OWeakObject*>(this));
+    throw UnknownPropertyException( rPropertyName, getXWeak());
 }
 
 
@@ -1218,7 +1218,7 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName )
         }
         }
     }
-    throw UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
+    throw UnknownPropertyException( PropertyName, getXWeak());
 }
 
 
@@ -1255,7 +1255,7 @@ void SAL_CALL Cell::setPropertyValues( const Sequence< OUString >& aPropertyName
     const sal_Int32 nCount = aPropertyNames.getLength();
     if (nCount != aValues.getLength())
         throw css::lang::IllegalArgumentException("lengths do not match",
-                                                  static_cast<cppu::OWeakObject*>(this), -1);
+                                                  getXWeak(), -1);
 
     const OUString* pNames = aPropertyNames.getConstArray();
     const Any* pValues = aValues.getConstArray();
@@ -1550,7 +1550,7 @@ void SAL_CALL Cell::setPropertyToDefault( const OUString& PropertyName )
         GetObject().getSdrModelFromSdrObject().SetChanged();
         return;
     }
-    throw UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
+    throw UnknownPropertyException( PropertyName, getXWeak());
 }
 
 
@@ -1592,7 +1592,7 @@ Any SAL_CALL Cell::getPropertyDefault( const OUString& aPropertyName )
         }
         }
     }
-    throw UnknownPropertyException( aPropertyName, static_cast<cppu::OWeakObject*>(this));
+    throw UnknownPropertyException( aPropertyName, getXWeak());
 }
 
 

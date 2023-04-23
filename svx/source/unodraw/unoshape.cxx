@@ -1531,7 +1531,7 @@ void SvxShape::_setPropertyValue( const OUString& rPropertyName, const uno::Any&
         // reduce log noise by ignoring two properties that higher level code queries for on all objects
         SAL_WARN_IF(rPropertyName != "FromWordArt" && rPropertyName != "GraphicColorMode",
             "svx.uno", "Unknown Property: " << rPropertyName);
-        throw beans::UnknownPropertyException( rPropertyName, static_cast<cppu::OWeakObject*>(this));
+        throw beans::UnknownPropertyException( rPropertyName, getXWeak());
     }
 
     if ((pMap->nFlags & beans::PropertyAttribute::READONLY) != 0)
@@ -1633,7 +1633,7 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
     if(HasSdrObject())
     {
         if(pMap == nullptr )
-            throw beans::UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
+            throw beans::UnknownPropertyException( PropertyName, getXWeak());
 
         if( !getPropertyValueImpl( PropertyName, pMap, aAny ) )
         {
@@ -1688,7 +1688,7 @@ void SAL_CALL SvxShape::setPropertyValues( const css::uno::Sequence< OUString >&
     const sal_Int32 nCount = aPropertyNames.getLength();
     if (nCount != aValues.getLength())
         throw css::lang::IllegalArgumentException("lengths do not match",
-                                                  static_cast<cppu::OWeakObject*>(this), -1);
+                                                  getXWeak(), -1);
 
     const OUString* pNames = aPropertyNames.getConstArray();
     const uno::Any* pValues = aValues.getConstArray();
@@ -1907,7 +1907,7 @@ beans::PropertyState SvxShape::_getPropertyState( const OUString& PropertyName )
     const SfxItemPropertyMapEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
 
     if( !HasSdrObject() || pMap == nullptr )
-        throw beans::UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
+        throw beans::UnknownPropertyException( PropertyName, getXWeak());
 
     beans::PropertyState eState;
     if( !getPropertyStateImpl( pMap, eState ) )
@@ -3034,7 +3034,7 @@ void SvxShape::_setPropertyToDefault( const OUString& PropertyName )
     const SfxItemPropertyMapEntry* pProperty = mpPropSet->getPropertyMapEntry(PropertyName);
 
     if( !HasSdrObject() || pProperty == nullptr )
-        throw beans::UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
+        throw beans::UnknownPropertyException( PropertyName, getXWeak());
 
     if( !setPropertyToDefaultImpl( pProperty ) )
     {
@@ -3064,7 +3064,7 @@ uno::Any SvxShape::_getPropertyDefault( const OUString& aPropertyName )
     const SfxItemPropertyMapEntry* pMap = mpPropSet->getPropertyMapEntry(aPropertyName);
 
     if( !HasSdrObject() || pMap == nullptr )
-        throw beans::UnknownPropertyException( aPropertyName, static_cast<cppu::OWeakObject*>(this));
+        throw beans::UnknownPropertyException( aPropertyName, getXWeak());
 
     if(( pMap->nWID >= OWN_ATTR_VALUE_START && pMap->nWID <= OWN_ATTR_VALUE_END ) ||
        ( pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST ))
@@ -3074,7 +3074,7 @@ uno::Any SvxShape::_getPropertyDefault( const OUString& aPropertyName )
 
     // get default from ItemPool
     if(!SfxItemPool::IsWhich(pMap->nWID))
-        throw beans::UnknownPropertyException( "No WhichID " + OUString::number(pMap->nWID) + " for " + aPropertyName, static_cast<cppu::OWeakObject*>(this));
+        throw beans::UnknownPropertyException( "No WhichID " + OUString::number(pMap->nWID) + " for " + aPropertyName, getXWeak());
 
     SfxItemSet aSet( GetSdrObject()->getSdrModelFromSdrObject().GetItemPool(), pMap->nWID, pMap->nWID );
     aSet.Put(GetSdrObject()->getSdrModelFromSdrObject().GetItemPool().GetDefaultItem(pMap->nWID));

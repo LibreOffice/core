@@ -451,7 +451,7 @@ void TableDesignStyle::setPropertyValue( const OUString&, const Any& )
 Any TableDesignStyle::getPropertyValue( const OUString& PropertyName )
 {
     if (PropertyName != "IsPhysical")
-        throw UnknownPropertyException("unknown property: " + PropertyName, static_cast<OWeakObject *>(this));
+        throw UnknownPropertyException("unknown property: " + PropertyName, getXWeak());
 
     return Any(mbModified || mbUserDefined);
 }
@@ -495,7 +495,7 @@ void SAL_CALL TableDesignStyle::addModifyListener( const Reference< XModifyListe
     if (m_bDisposed)
     {
         aGuard.unlock();
-        EventObject aEvt( static_cast< OWeakObject * >( this ) );
+        EventObject aEvt( getXWeak() );
         xListener->disposing( aEvt );
     }
     else
@@ -518,7 +518,7 @@ void TableDesignStyle::notifyModifyListener()
 
     if( maModifyListeners.getLength(aGuard) )
     {
-        EventObject aEvt( static_cast< OWeakObject * >( this ) );
+        EventObject aEvt( getXWeak() );
         maModifyListeners.forEach(aGuard,
             [&] (Reference<XModifyListener> const& xListener)
                 { return xListener->modified(aEvt); });
@@ -777,7 +777,7 @@ Any TableDesignFamily::getPropertyValue( const OUString& PropertyName )
 {
     if ( PropertyName != "DisplayName" )
     {
-        throw UnknownPropertyException( "unknown property: " + PropertyName, static_cast<OWeakObject *>(this) );
+        throw UnknownPropertyException( "unknown property: " + PropertyName, getXWeak() );
     }
 
     OUString sDisplayName( SvxResId( RID_SVXSTR_STYLEFAMILY_TABLEDESIGN ) );

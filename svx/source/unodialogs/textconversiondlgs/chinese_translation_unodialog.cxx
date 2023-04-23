@@ -188,7 +188,7 @@ uno::Any SAL_CALL ChineseTranslation_UnoDialog::getPropertyValue( const OUString
     }
     else
     {
-        throw beans::UnknownPropertyException( rPropertyName, static_cast<cppu::OWeakObject*>(this));
+        throw beans::UnknownPropertyException( rPropertyName, getXWeak());
     }
     return aRet;
 

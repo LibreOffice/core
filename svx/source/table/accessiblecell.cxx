@@ -288,7 +288,7 @@ css::awt::Rectangle SAL_CALL AccessibleCell::getBounds()
 
         // Transform coordinates from internal to pixel.
         if (maShapeTreeInfo.GetViewForwarder() == nullptr)
-            throw uno::RuntimeException ("AccessibleCell has no valid view forwarder",static_cast<uno::XWeak*>(this));
+            throw uno::RuntimeException ("AccessibleCell has no valid view forwarder", getXWeak());
 
         ::Size aPixelSize( maShapeTreeInfo.GetViewForwarder()->LogicToPixel(::Size(aCellRect.GetWidth(), aCellRect.GetHeight())) );
         ::Point aPixelPosition( maShapeTreeInfo.GetViewForwarder()->LogicToPixel( aCellRect.TopLeft() ));

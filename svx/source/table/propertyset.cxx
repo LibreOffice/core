@@ -56,7 +56,7 @@ const Property& FastPropertySetInfo::getProperty( const OUString& aName )
 {
     PropertyMap::iterator aIter( maMap.find( aName ) );
     if( aIter == maMap.end() )
-        throw UnknownPropertyException( aName, static_cast<cppu::OWeakObject*>(this));
+        throw UnknownPropertyException( aName, getXWeak());
     return maProperties[(*aIter).second];
 }
 

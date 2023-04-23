@@ -935,7 +935,7 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
                 css::uno::Any exc = cppu::getCaughtException();
                 throw css::lang::WrappedTargetException(
                         "ContentCreationException Setting InputStream!",
-                        static_cast<OWeakObject *>(this),
+                        getXWeak(),
                         exc);
             }
             catch (const css::ucb::CommandFailedException&)
@@ -943,7 +943,7 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
                 css::uno::Any anyEx = cppu::getCaughtException();
                 throw css::lang::WrappedTargetException(
                         "CommandFailedException Setting InputStream!",
-                        static_cast<OWeakObject *>(this),
+                        getXWeak(),
                         anyEx);
             }
 #endif
@@ -1028,14 +1028,14 @@ bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPr
                     css::uno::Any anyEx = cppu::getCaughtException();
                     throw css::lang::WrappedTargetException(
                             "ContentCreationException Getting InputStream!",
-                            static_cast < OWeakObject * > ( this ), anyEx );
+                            getXWeak(), anyEx );
                 }
                 catch (const css::ucb::CommandFailedException&)
                 {
                     css::uno::Any anyEx = cppu::getCaughtException();
                     throw css::lang::WrappedTargetException(
                             "CommandFailedException Getting InputStream!",
-                            static_cast < OWeakObject * > ( this ), anyEx );
+                            getXWeak(), anyEx );
                 }
 
                 break;

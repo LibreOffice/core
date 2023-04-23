@@ -44,7 +44,7 @@ using namespace ::svxform;
     {
         SdrModel& rTargetModel(getSdrModelFromUnoModel());
         rtl::Reference<SdrObject> pObj = new FmFormObj(rTargetModel);
-        xRet = static_cast<cppu::OWeakObject*>(static_cast<SvxShape_UnoImplHelper*>(new SvxShapeControl(pObj.get())));
+        xRet = getXWeak(new SvxShapeControl(pObj.get()));
     }
 
     if (!xRet.is())

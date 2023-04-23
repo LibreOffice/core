@@ -239,7 +239,7 @@ SdrModel::~SdrModel()
     // the DrawingEngine may need it in its destructor
     if( mxStyleSheetPool.is() )
     {
-        uno::Reference<lang::XComponent> xComponent( static_cast< cppu::OWeakObject* >( mxStyleSheetPool.get() ), uno::UNO_QUERY );
+        uno::Reference<lang::XComponent> xComponent( getXWeak( mxStyleSheetPool.get() ), uno::UNO_QUERY );
         if( xComponent.is() ) try
         {
             xComponent->dispose();

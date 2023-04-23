@@ -1524,7 +1524,7 @@ void FormController::impl_onModify()
             m_bModified = true;
     }
 
-    EventObject aEvt(static_cast<cppu::OWeakObject*>(this));
+    EventObject aEvt(getXWeak());
     m_aModifyListeners.notifyEach( &XModifyListener::modified, aEvt );
 }
 

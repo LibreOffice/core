@@ -345,7 +345,7 @@ uno::Reference<XAccessible> SAL_CALL
     else
         throw lang::IndexOutOfBoundsException (
             "shape has no child with index " + OUString::number(nIndex),
-            static_cast<uno::XWeak*>(this));
+            getXWeak());
 
     return xChild;
 }
@@ -534,7 +534,7 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds()
         if (maShapeTreeInfo.GetViewForwarder() == nullptr)
             throw uno::RuntimeException (
                 "AccessibleShape has no valid view forwarder",
-                static_cast<uno::XWeak*>(this));
+                getXWeak());
         ::Size aPixelSize = maShapeTreeInfo.GetViewForwarder()->LogicToPixel (
             ::Size (aBoundingBox.Width, aBoundingBox.Height));
         ::Point aPixelPosition = maShapeTreeInfo.GetViewForwarder()->LogicToPixel (

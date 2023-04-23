@@ -560,7 +560,7 @@ OUString SAL_CALL SvXMLEmbeddedObjectHelper::resolveEmbeddedObjectURL(const OUSt
         css::uno::Any anyEx = cppu::getCaughtException();
         throw WrappedTargetRuntimeException(
             "SvXMLEmbeddedObjectHelper::resolveEmbeddedObjectURL non-RuntimeException",
-            static_cast<uno::XWeak*>(this), anyEx);
+            getXWeak(), anyEx);
     }
     return sRet;
 }

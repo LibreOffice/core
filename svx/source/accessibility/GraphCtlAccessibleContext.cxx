@@ -302,7 +302,7 @@ void SvxGraphCtrlAccessibleContext::CommitChange (
     const uno::Any& rOldValue)
 {
     AccessibleEventObject aEvent (
-        static_cast<uno::XWeak*>(this),
+        getXWeak(),
         nEventId,
         rNewValue,
         rOldValue, -1);

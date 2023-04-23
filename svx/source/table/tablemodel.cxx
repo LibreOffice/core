@@ -553,7 +553,7 @@ void TableModel::notifyModification()
         if( pModifyListeners )
         {
             lang::EventObject aSource;
-            aSource.Source = static_cast< ::cppu::OWeakObject* >(this);
+            aSource.Source = getXWeak();
             pModifyListeners->notifyEach(&util::XModifyListener::modified, aSource);
         }
     }

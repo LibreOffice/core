@@ -1779,9 +1779,7 @@ uno::Reference< uno::XInterface > const & SdrPage::getUnoPage()
 
 uno::Reference< uno::XInterface > SdrPage::createUnoPage()
 {
-    css::uno::Reference< css::uno::XInterface > xInt =
-        static_cast<cppu::OWeakObject*>( new SvxFmDrawPage( this ) );
-    return xInt;
+    return cppu::getXWeak(new SvxFmDrawPage(this));
 }
 
 SfxStyleSheet* SdrPage::GetTextStyleSheetForObject( SdrObject* pObj ) const

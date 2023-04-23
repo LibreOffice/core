@@ -173,14 +173,12 @@ css::uno::Reference<css::uno::XInterface> create(
         {
             SdrInventor nI = IsInventorE3D(*nType) ? SdrInventor::E3d : SdrInventor::Default;
 
-            return uno::Reference< uno::XInterface >( static_cast<drawing::XShape*>(SvxDrawPage::CreateShapeByTypeAndInventor( *nType, nI, nullptr, nullptr, referer ).get()) );
+            return cppu::getXWeak(SvxDrawPage::CreateShapeByTypeAndInventor( *nType, nI, nullptr, nullptr, referer ).get());
         }
     }
     else if (rServiceSpecifier == "com.sun.star.document.ImportGraphicStorageHandler")
     {
-        rtl::Reference<SvXMLGraphicHelper> pGraphicHelper = SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode::Read );
-        uno::Reference< uno::XInterface> xRet( static_cast< ::cppu::OWeakObject* >( pGraphicHelper.get() ) );
-        return xRet;
+        return cppu::getXWeak( SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode::Read ).get() );
     }
     else if (rServiceSpecifier == "com.sun.star.text.TextColumns")
     {
@@ -368,7 +366,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( c
 
     if( aServiceSpecifier == "com.sun.star.text.TextField.DateTime" )
     {
-        return static_cast<cppu::OWeakObject *>(new SvxUnoTextField(text::textfield::Type::DATE));
+        return cppu::getXWeak(new SvxUnoTextField(text::textfield::Type::DATE));
     }
 
     uno::Reference< uno::XInterface > xRet;
@@ -454,7 +452,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( c
         if( pShape )
             pShape->SetShapeType(aServiceSpecifier);
 
-        xRet = static_cast<uno::XWeak*>(pShape);
+        xRet = cppu::getXWeak(pShape);
     }
     else
     {

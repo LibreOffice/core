@@ -42,7 +42,7 @@ void SvxShapeCollection::release() noexcept
         {
             if (! bDisposed)
             {
-                uno::Reference< uno::XInterface > xHoldAlive( static_cast<uno::XWeak*>(this) );
+                uno::Reference< uno::XInterface > xHoldAlive( getXWeak() );
                 // First dispose
                 try
                 {

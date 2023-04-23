@@ -391,7 +391,7 @@ void SAL_CALL FmXGridControl::dispose()
     SolarMutexGuard aGuard;
 
     EventObject aEvt;
-    aEvt.Source = static_cast< ::cppu::OWeakObject* >(this);
+    aEvt.Source = getXWeak();
     m_aModifyListeners.disposeAndClear(aEvt);
     m_aUpdateListeners.disposeAndClear(aEvt);
     m_aContainerListeners.disposeAndClear(aEvt);
@@ -1022,7 +1022,7 @@ void FmXGridPeer::selectionChanged()
 {
     std::unique_lock g(m_aMutex);
     EventObject aSource;
-    aSource.Source = static_cast< ::cppu::OWeakObject* >(this);
+    aSource.Source = getXWeak();
     m_aSelectionListeners.notifyEach( g, &XSelectionChangeListener::selectionChanged, aSource);
 }
 
@@ -1313,7 +1313,7 @@ void FmXGridPeer::CellModified()
 {
     std::unique_lock g(m_aMutex);
     EventObject aEvt;
-    aEvt.Source = static_cast< ::cppu::OWeakObject* >(this);
+    aEvt.Source = getXWeak();
     m_aModifyListeners.notifyEach( g, &XModifyListener::modified, aEvt );
 }
 
@@ -1452,7 +1452,7 @@ sal_Bool FmXGridPeer::commit()
         return true;
 
     std::unique_lock g(m_aMutex);
-    EventObject aEvt(static_cast< ::cppu::OWeakObject* >(this));
+    EventObject aEvt(getXWeak());
     ::comphelper::OInterfaceIteratorHelper4 aIter(g, m_aUpdateListeners);
     bool bCancel = false;
     while (aIter.hasMoreElements() && !bCancel)
@@ -2042,7 +2042,7 @@ void FmXGridPeer::dispose()
     {
         std::unique_lock g(m_aMutex);
         EventObject aEvt;
-        aEvt.Source = static_cast< ::cppu::OWeakObject* >(this);
+        aEvt.Source = getXWeak();
         m_aModifyListeners.disposeAndClear(g, aEvt);
         m_aUpdateListeners.disposeAndClear(g, aEvt);
         m_aContainerListeners.disposeAndClear(g, aEvt);
