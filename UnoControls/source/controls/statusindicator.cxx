@@ -139,7 +139,7 @@ void SAL_CALL StatusIndicator::start( const OUString& sText, sal_Int32 nRange )
     m_xText->setText( sText );
     m_xProgressBar->setRange( 0, nRange );
     // force repaint ... fixedtext has changed !
-    impl_recalcLayout ( WindowEvent(static_cast< OWeakObject* >(this),0,0,impl_getWidth(),impl_getHeight(),0,0,0,0) );
+    impl_recalcLayout ( WindowEvent(getXWeak(),0,0,impl_getWidth(),impl_getHeight(),0,0,0,0) );
 }
 
 //  XStatusIndicator
@@ -311,7 +311,7 @@ void SAL_CALL StatusIndicator::setPosSize (
        )
     {
         // calc new layout for controls
-        impl_recalcLayout ( WindowEvent(static_cast< OWeakObject* >(this),0,0,nWidth,nHeight,0,0,0,0) );
+        impl_recalcLayout ( WindowEvent(getXWeak(),0,0,nWidth,nHeight,0,0,0,0) );
         // clear background (!)
         // [Children were repainted in "recalcLayout" by setPosSize() automatically!]
         getPeer()->invalidate(2);

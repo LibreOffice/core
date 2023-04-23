@@ -252,7 +252,7 @@ sal_Bool FrameControl::convertFastPropertyValue(        Any&        rConvertedVa
 
     if ( !bReturn )
     {
-        throw IllegalArgumentException("unknown handle " + OUString::number(nHandle), static_cast<cppu::OWeakObject*>(this), 1);
+        throw IllegalArgumentException("unknown handle " + OUString::number(nHandle), getXWeak(), 1);
     }
 
     return bReturn;

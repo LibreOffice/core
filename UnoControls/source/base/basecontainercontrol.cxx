@@ -185,7 +185,7 @@ void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Re
     maControlInfoList.emplace_back( aNewControl );
 
     // initialize new control
-    aNewControl.xControl->setContext       ( static_cast<OWeakObject*>(this)    );
+    aNewControl.xControl->setContext       (getXWeak());
     aNewControl.xControl->addEventListener ( static_cast< XEventListener* >( static_cast< XWindowListener* >( this ) ) );
 
     // when container has a peer...
