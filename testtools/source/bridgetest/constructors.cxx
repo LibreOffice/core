@@ -407,7 +407,7 @@ css::uno::Reference< css::uno::XInterface > create(
     SAL_UNUSED_PARAMETER css::uno::Reference< css::uno::XComponentContext >
         const &)
 {
-    return static_cast< ::cppu::OWeakObject * >(new Impl);
+    return getXWeak(new Impl);
 }
 
 OUString getImplementationName() {
@@ -423,7 +423,7 @@ css::uno::Reference< css::uno::XInterface > create2(
     SAL_UNUSED_PARAMETER css::uno::Reference< css::uno::XComponentContext >
         const &)
 {
-    return static_cast< ::cppu::OWeakObject * >(new Impl2);
+    return getXWeak(new Impl2);
 }
 
 OUString getImplementationName2() {

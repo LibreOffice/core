@@ -1303,8 +1303,7 @@ Sequence< OUString > TestBridgeImpl::getSupportedServiceNames()
 static Reference< XInterface > TestBridgeImpl_create(
     const Reference< XComponentContext > & xContext )
 {
-    return Reference< XInterface >(
-        static_cast< OWeakObject * >( new TestBridgeImpl( xContext ) ) );
+    return getXWeak( new TestBridgeImpl( xContext ) );
 }
 
 }
