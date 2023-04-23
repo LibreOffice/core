@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <office:styles xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0">
     <style:style style:name="Heading" style:family="table-cell" style:parent-style-name="Default">
-        <style:text-properties fo:color="#000000" fo:font-size="24pt" fo:font-style="normal" fo:font-weight="bold"/>
+        <style:text-properties fo:color="#000000" fo:font-size="24pt" fo:font-style="normal" fo:font-weight="bold" style:font-size-asian="24pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-size-complex="24pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
     </style:style>
     <style:style style:name="Heading 1" style:family="table-cell" style:parent-style-name="Heading">
-        <style:text-properties fo:font-size="18pt"/>
+        <style:text-properties fo:font-size="18pt" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
     </style:style>
     <style:style style:name="Heading 2" style:family="table-cell" style:parent-style-name="Heading">
-        <style:text-properties fo:font-size="12pt"/>
+        <style:text-properties fo:font-size="12pt" style:font-size-asian="12pt" style:font-size-complex="12pt"/>
     </style:style>
 
     <style:style style:name="Text" style:family="table-cell" style:parent-style-name="Default"/>
@@ -16,7 +16,7 @@
         <style:text-properties fo:color="#333333"/>
     </style:style>
     <style:style style:name="Footnote" style:family="table-cell" style:parent-style-name="Text">
-        <style:text-properties fo:color="#808080" fo:font-style="italic"/>
+        <style:text-properties fo:color="#808080" fo:font-style="italic" style:font-style-asian="italic" style:font-style-complex="italic"/>
     </style:style>
     <style:style style:name="Hyperlink" style:family="table-cell" style:parent-style-name="Text">
         <style:text-properties fo:color="#0000ee" style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color"/>
@@ -40,11 +40,11 @@
     </style:style>
     <style:style style:name="Error" style:family="table-cell" style:parent-style-name="Status">
         <style:table-cell-properties fo:background-color="#cc0000"/>
-        <style:text-properties fo:color="#ffffff" fo:font-weight="bold"/>
+        <style:text-properties fo:color="#ffffff" fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
     </style:style>
 
     <style:style style:name="Accent" style:family="table-cell" style:parent-style-name="Default">
-        <style:text-properties fo:font-weight="bold"/>
+        <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
     </style:style>
     <style:style style:name="Accent 1" style:family="table-cell" style:parent-style-name="Accent">
         <style:table-cell-properties fo:background-color="#000000"/>
@@ -59,6 +59,6 @@
     </style:style>
 
     <style:style style:name="Result" style:family="table-cell" style:parent-style-name="Default">
-        <style:text-properties fo:font-weight="bold" fo:font-style="italic" style:text-underline-style="solid"/>
+        <style:text-properties fo:font-weight="bold" fo:font-style="italic" style:font-weight-asian="bold" style:font-style-asian="italic" style:font-weight-complex="bold" style:font-style-complex="italic" style:text-underline-style="solid"/>
     </style:style>
 </office:styles>
