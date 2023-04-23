@@ -288,7 +288,7 @@ OUString UnoGridControl::GetComponentServiceName() const
 void SAL_CALL UnoGridControl::dispose(  )
 {
     lang::EventObject aEvt;
-    aEvt.Source = static_cast<cppu::OWeakObject*>(this);
+    aEvt.Source = getXWeak();
     m_aSelectionListeners.disposeAndClear( aEvt );
     UnoControl::dispose();
 }

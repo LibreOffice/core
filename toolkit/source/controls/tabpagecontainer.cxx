@@ -139,7 +139,7 @@ void SAL_CALL UnoControlTabPageContainerModel::insertByIndex( ::sal_Int32 nIndex
     SolarMutexGuard aSolarGuard;
     uno::Reference < XTabPageModel > xTabPageModel;
     if(!(aElement >>= xTabPageModel))
-        throw IllegalArgumentException( WRONG_TYPE_EXCEPTION, static_cast<OWeakObject *>(this), 2 );
+        throw IllegalArgumentException( WRONG_TYPE_EXCEPTION, getXWeak(), 2 );
 
     if ( sal_Int32( m_aTabPageVector.size()) ==nIndex )
         m_aTabPageVector.push_back( xTabPageModel );
@@ -150,7 +150,7 @@ void SAL_CALL UnoControlTabPageContainerModel::insertByIndex( ::sal_Int32 nIndex
         m_aTabPageVector.insert( aIter, xTabPageModel );
     }
     else
-        throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
+        throw IndexOutOfBoundsException( OUString(), getXWeak() );
     ContainerEvent aEvent;
     aEvent.Source = *this;
     aEvent.Element = aElement;
@@ -220,7 +220,7 @@ OUString UnoControlTabPageContainer::GetComponentServiceName() const
 void SAL_CALL UnoControlTabPageContainer::dispose(  )
 {
     lang::EventObject aEvt;
-    aEvt.Source = static_cast<cppu::OWeakObject*>(this);
+    aEvt.Source = getXWeak();
     m_aTabPageListeners.disposeAndClear( aEvt );
     UnoControl::dispose();
 }

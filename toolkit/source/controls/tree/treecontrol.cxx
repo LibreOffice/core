@@ -430,7 +430,7 @@ void SAL_CALL UnoTreeControl::removeTreeEditListener( const Reference< XTreeEdit
 void SAL_CALL UnoTreeControl::dispose(  )
 {
     lang::EventObject aEvt;
-    aEvt.Source = static_cast< ::cppu::OWeakObject* >(this);
+    aEvt.Source = getXWeak();
     maSelectionListeners.disposeAndClear( aEvt );
     maTreeExpansionListeners.disposeAndClear( aEvt );
     UnoControl::dispose();

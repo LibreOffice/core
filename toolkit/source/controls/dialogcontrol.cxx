@@ -331,7 +331,7 @@ void UnoDialogControl::dispose()
     SolarMutexGuard aGuard;
 
     EventObject aEvt;
-    aEvt.Source = static_cast< ::cppu::OWeakObject* >( this );
+    aEvt.Source = getXWeak();
     maTopWindowListeners.disposeAndClear( aEvt );
     ControlContainerBase::dispose();
 }
@@ -689,7 +689,7 @@ void SAL_CALL UnoMultiPageControl::disposing(const EventObject&)
 void SAL_CALL UnoMultiPageControl::dispose()
 {
     lang::EventObject aEvt;
-    aEvt.Source = static_cast<cppu::OWeakObject*>(this);
+    aEvt.Source = getXWeak();
     maTabListeners.disposeAndClear( aEvt );
     ControlContainerBase::dispose();
 }

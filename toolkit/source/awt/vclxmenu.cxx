@@ -98,7 +98,7 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclMenuEvent&, rMenuEvent, void )
             if ( maMenuListeners.getLength() )
             {
                 css::awt::MenuEvent aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.Source = getXWeak();
                 aEvent.MenuId = mpMenu->GetCurItemId();
                 maMenuListeners.itemSelected( aEvent );
             }
@@ -114,7 +114,7 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclMenuEvent&, rMenuEvent, void )
             if ( maMenuListeners.getLength() )
             {
                 css::awt::MenuEvent aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.Source = getXWeak();
                 aEvent.MenuId = mpMenu->GetCurItemId();
                 maMenuListeners.itemHighlighted( aEvent );
             }
@@ -125,7 +125,7 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclMenuEvent&, rMenuEvent, void )
             if ( maMenuListeners.getLength() )
             {
                 css::awt::MenuEvent aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.Source = getXWeak();
                 aEvent.MenuId = mpMenu->GetCurItemId();
                 maMenuListeners.itemActivated( aEvent );
             }
@@ -136,7 +136,7 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclMenuEvent&, rMenuEvent, void )
             if ( maMenuListeners.getLength() )
             {
                 css::awt::MenuEvent aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.Source = getXWeak();
                 aEvent.MenuId = mpMenu->GetCurItemId();
                 maMenuListeners.itemDeactivated( aEvent );
             }

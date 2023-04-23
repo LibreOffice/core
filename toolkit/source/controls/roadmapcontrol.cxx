@@ -116,18 +116,14 @@ namespace toolkit
 
     Reference< XInterface > SAL_CALL UnoControlRoadmapModel::createInstance(  )
     {
-        rtl::Reference<ORoadmapEntry> pRoadmapItem = new ORoadmapEntry();
-        Reference< XInterface > xNewRoadmapItem = static_cast<cppu::OWeakObject*>(pRoadmapItem.get());
-        return xNewRoadmapItem;
+        return cppu::getXWeak(new ORoadmapEntry());
     }
 
 
     Reference< XInterface > SAL_CALL UnoControlRoadmapModel::createInstanceWithArguments( const Sequence< Any >& /*aArguments*/ )
     {
         // Todo: implementation of the arguments handling
-        rtl::Reference<ORoadmapEntry> pRoadmapItem = new ORoadmapEntry();
-        Reference< XInterface > xNewRoadmapItem = static_cast<cppu::OWeakObject*>(pRoadmapItem.get());
-        return xNewRoadmapItem;
+        return cppu::getXWeak(new ORoadmapEntry());
     }
 
 
@@ -385,7 +381,7 @@ sal_Bool SAL_CALL UnoRoadmapControl::setModel(const Reference< XControlModel >& 
     void UnoRoadmapControl::dispose()
     {
         EventObject aEvt;
-        aEvt.Source = static_cast<cppu::OWeakObject*>(this);
+        aEvt.Source = getXWeak();
         maItemListeners.disposeAndClear( aEvt );
         UnoControl::dispose();
     }

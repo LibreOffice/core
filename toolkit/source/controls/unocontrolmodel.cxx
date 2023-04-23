@@ -1259,7 +1259,7 @@ void UnoControlModel::setPropertyValuesImpl( std::unique_lock<std::mutex>& rGuar
     sal_Int32 nProps = rPropertyNames.getLength();
     if (nProps != Values.getLength())
         throw css::lang::IllegalArgumentException("lengths do not match",
-                                                  static_cast<cppu::OWeakObject*>(this), -1);
+                                                  getXWeak(), -1);
 
 //  sal_Int32* pHandles = new sal_Int32[nProps];
         // don't do this - it leaks in case of an exception

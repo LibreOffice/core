@@ -132,7 +132,7 @@ namespace toolkit
     void UnoScrollBarControl::dispose()
     {
         lang::EventObject aEvt;
-        aEvt.Source = static_cast<cppu::OWeakObject*>(this);
+        aEvt.Source = getXWeak();
         maAdjustmentListeners.disposeAndClear( aEvt );
         UnoControl::dispose();
     }

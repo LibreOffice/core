@@ -152,7 +152,7 @@ void MutableTreeDataModel::broadcastImpl( std::unique_lock<std::mutex>& rGuard, 
     if( !maTreeDataModelListeners.getLength(rGuard) )
         return;
 
-    Reference< XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
+    Reference< XInterface > xSource( getXWeak() );
     const Sequence< Reference< XTreeNode > > aNodes { rNode };
     TreeDataModelEvent aEvent( xSource, aNodes, xParentNode );
 
@@ -229,7 +229,7 @@ void SAL_CALL MutableTreeDataModel::dispose()
     {
         mbDisposed = true;
         css::lang::EventObject aEvent;
-        aEvent.Source.set( static_cast< ::cppu::OWeakObject* >( this ) );
+        aEvent.Source.set( getXWeak() );
         maTreeDataModelListeners.disposeAndClear( aGuard, aEvent );
         maEventListeners.disposeAndClear( aGuard, aEvent );
     }

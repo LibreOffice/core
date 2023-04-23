@@ -329,8 +329,7 @@ Reference< XInterface > ControlModelContainerBase::createInstance( const OUStrin
         }
     }
 
-    Reference< XInterface > xNewModel = static_cast<cppu::OWeakObject*>(pNewModel.get());
-    return xNewModel;
+    return cppu::getXWeak(pNewModel.get());
 }
 
 Reference< XInterface > ControlModelContainerBase::createInstanceWithArguments( const OUString& ServiceSpecifier, const Sequence< Any >& i_arguments )
@@ -1342,7 +1341,7 @@ void ControlContainerBase::ImplSetPosSize( Reference< XControl >& rxCtrl )
 void ControlContainerBase::dispose()
 {
     EventObject aEvt;
-    aEvt.Source = static_cast< ::cppu::OWeakObject* >( this );
+    aEvt.Source = getXWeak();
     // Notify our listener helper about dispose
     // --- SAFE ---
 

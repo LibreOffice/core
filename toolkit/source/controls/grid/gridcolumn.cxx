@@ -75,7 +75,7 @@ namespace toolkit
     void GridColumn::broadcast_changed( char const * const i_asciiAttributeName, const Any& i_oldValue, const Any& i_newValue,
         std::unique_lock<std::mutex>& i_Guard )
     {
-        Reference< XInterface > const xSource( static_cast< ::cppu::OWeakObject* >( this ) );
+        Reference< XInterface > const xSource( getXWeak() );
         GridColumnEvent const aEvent(
             xSource, OUString::createFromAscii( i_asciiAttributeName ),
             i_oldValue, i_newValue, m_nIndex

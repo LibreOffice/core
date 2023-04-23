@@ -758,7 +758,7 @@ OUString UnoButtonControl::GetComponentServiceName() const
 void UnoButtonControl::dispose()
 {
     lang::EventObject aEvt;
-    aEvt.Source = static_cast<cppu::OWeakObject*>(this);
+    aEvt.Source = getXWeak();
     maActionListeners.disposeAndClear( aEvt );
     maItemListeners.disposeAndClear( aEvt );
     UnoControlBase::dispose();
@@ -1006,7 +1006,7 @@ OUString UnoImageControlControl::GetComponentServiceName() const
 void UnoImageControlControl::dispose()
 {
     lang::EventObject aEvt;
-    aEvt.Source = static_cast<cppu::OWeakObject*>(this);
+    aEvt.Source = getXWeak();
     maActionListeners.disposeAndClear( aEvt );
     UnoControl::dispose();
 }
@@ -1133,7 +1133,7 @@ OUString UnoRadioButtonControl::GetComponentServiceName() const
 void UnoRadioButtonControl::dispose()
 {
     lang::EventObject aEvt;
-    aEvt.Source = static_cast<cppu::OWeakObject*>(this);
+    aEvt.Source = getXWeak();
     maItemListeners.disposeAndClear( aEvt );
     UnoControlBase::dispose();
 }
@@ -1364,7 +1364,7 @@ OUString UnoCheckBoxControl::GetComponentServiceName() const
 void UnoCheckBoxControl::dispose()
 {
     lang::EventObject aEvt;
-    aEvt.Source = static_cast<cppu::OWeakObject*>(this);
+    aEvt.Source = getXWeak();
     maItemListeners.disposeAndClear( aEvt );
     UnoControlBase::dispose();
 }
@@ -1641,7 +1641,7 @@ awt::Size UnoFixedHyperlinkControl::calcAdjustedSize( const awt::Size& rNewSize 
 void UnoFixedHyperlinkControl::dispose()
 {
     lang::EventObject aEvt;
-    aEvt.Source = static_cast<cppu::OWeakObject*>(this);
+    aEvt.Source = getXWeak();
     maActionListeners.disposeAndClear( aEvt );
     UnoControlBase::dispose();
 }
@@ -2518,7 +2518,7 @@ css::uno::Sequence<OUString> UnoListBoxControl::getSupportedServiceNames()
 void UnoListBoxControl::dispose()
 {
     lang::EventObject aEvt;
-    aEvt.Source = static_cast<cppu::OWeakObject*>(this);
+    aEvt.Source = getXWeak();
     maActionListeners.disposeAndClear( aEvt );
     maItemListeners.disposeAndClear( aEvt );
     UnoControl::dispose();
@@ -3014,7 +3014,7 @@ OUString UnoComboBoxControl::GetComponentServiceName() const
 void UnoComboBoxControl::dispose()
 {
     lang::EventObject aEvt;
-    aEvt.Source = static_cast<cppu::OWeakObject*>(this);
+    aEvt.Source = getXWeak();
     maActionListeners.disposeAndClear( aEvt );
     maItemListeners.disposeAndClear( aEvt );
     UnoControl::dispose();

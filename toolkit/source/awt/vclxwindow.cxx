@@ -427,7 +427,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     if (mpImpl->mbDisposing)
         return;
-    css::uno::Reference< css::uno::XInterface > xThis( static_cast<cppu::OWeakObject*>(this) );
+    css::uno::Reference< css::uno::XInterface > xThis( getXWeak() );
 
     switch ( rVclWindowEvent.GetId() )
     {
@@ -448,7 +448,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getPaintListeners().getLength() )
             {
                 css::awt::PaintEvent aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.Source = getXWeak();
                 aEvent.UpdateRect = AWTRectangle( *static_cast<tools::Rectangle*>(rVclWindowEvent.GetData()) );
                 aEvent.Count = 0;
                 mpImpl->getPaintListeners().windowPaint( aEvent );
@@ -460,7 +460,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getWindowListeners().getLength() )
             {
                 css::awt::WindowEvent aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.Source = getXWeak();
                 ImplInitWindowEvent( aEvent, rVclWindowEvent.GetWindow() );
                 mpImpl->getWindowListeners().windowMoved( aEvent );
             }
@@ -471,7 +471,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getWindowListeners().getLength() )
             {
                 css::awt::WindowEvent aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.Source = getXWeak();
                 ImplInitWindowEvent( aEvent, rVclWindowEvent.GetWindow() );
                 mpImpl->getWindowListeners().windowResized( aEvent );
             }
@@ -482,7 +482,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getWindowListeners().getLength() )
             {
                 css::awt::WindowEvent aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.Source = getXWeak();
                 ImplInitWindowEvent( aEvent, rVclWindowEvent.GetWindow() );
                 mpImpl->getWindowListeners().windowShown( aEvent );
             }
@@ -491,7 +491,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getTopWindowListeners().getLength() )
             {
                 css::lang::EventObject aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.Source = getXWeak();
                 mpImpl->getTopWindowListeners().windowOpened( aEvent );
             }
         }
@@ -501,7 +501,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getWindowListeners().getLength() )
             {
                 css::awt::WindowEvent aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.Source = getXWeak();
                 ImplInitWindowEvent( aEvent, rVclWindowEvent.GetWindow() );
                 mpImpl->getWindowListeners().windowHidden( aEvent );
             }
@@ -510,7 +510,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getTopWindowListeners().getLength() )
             {
                 css::lang::EventObject aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.Source = getXWeak();
                 mpImpl->getTopWindowListeners().windowClosed( aEvent );
             }
         }
@@ -548,7 +548,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             }
 
             css::lang::EventObject aEvent;
-            aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+            aEvent.Source = getXWeak();
             if (rVclWindowEvent.GetId() == VclEventId::WindowActivate)
                 mpImpl->getTopWindowListeners().windowActivated( aEvent );
             else
@@ -560,13 +560,13 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getDockableWindowListeners().getLength() )
             {
                 css::lang::EventObject aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.Source = getXWeak();
                 mpImpl->getDockableWindowListeners().notifyEach( &XDockableWindowListener::closed, aEvent );
             }
             if ( mpImpl->getTopWindowListeners().getLength() )
             {
                 css::lang::EventObject aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.Source = getXWeak();
                 mpImpl->getTopWindowListeners().windowClosing( aEvent );
             }
         }
@@ -585,7 +585,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 if ( mpImpl->getFocusListeners().getLength() )
                 {
                     css::awt::FocusEvent aEvent;
-                    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                    aEvent.Source = getXWeak();
                     aEvent.FocusFlags = static_cast<sal_Int16>(rVclWindowEvent.GetWindow()->GetGetFocusFlags());
                     aEvent.Temporary = false;
                     mpImpl->getFocusListeners().focusGained( aEvent );
@@ -607,7 +607,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 if ( mpImpl->getFocusListeners().getLength() )
                 {
                     css::awt::FocusEvent aEvent;
-                    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                    aEvent.Source = getXWeak();
                     aEvent.FocusFlags = static_cast<sal_Int16>(rVclWindowEvent.GetWindow()->GetGetFocusFlags());
                     aEvent.Temporary = false;
 
@@ -622,7 +622,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                             pNext = pNextC;
 
                         pNext->GetComponentInterface();
-                        aEvent.NextFocus = static_cast<cppu::OWeakObject*>(pNext->GetWindowPeer());
+                        aEvent.NextFocus = cppu::getXWeak(pNext->GetWindowPeer());
                     }
                     mpImpl->getFocusListeners().focusLost( aEvent );
                 }
@@ -634,7 +634,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getTopWindowListeners().getLength() )
             {
                 css::lang::EventObject aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.Source = getXWeak();
                 mpImpl->getTopWindowListeners().windowMinimized( aEvent );
             }
         }
@@ -644,7 +644,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getTopWindowListeners().getLength() )
             {
                 css::lang::EventObject aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.Source = getXWeak();
                 mpImpl->getTopWindowListeners().windowNormalized( aEvent );
             }
         }
@@ -756,7 +756,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 if( pData )
                 {
                     css::awt::DockingEvent aEvent;
-                    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                    aEvent.Source = getXWeak();
                     aEvent.TrackingRectangle = AWTRectangle( pData->maTrackRect );
                     aEvent.MousePos.X = pData->maMousePos.X();
                     aEvent.MousePos.Y = pData->maMousePos.Y();
@@ -777,7 +777,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 if( pData )
                 {
                     css::awt::DockingEvent aEvent;
-                    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                    aEvent.Source = getXWeak();
                     aEvent.TrackingRectangle = AWTRectangle( pData->maTrackRect );
                     aEvent.MousePos.X = pData->maMousePos.X();
                     aEvent.MousePos.Y = pData->maMousePos.Y();
@@ -808,7 +808,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 if( pData )
                 {
                     css::awt::EndDockingEvent aEvent;
-                    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                    aEvent.Source = getXWeak();
                     aEvent.WindowRectangle = AWTRectangle( pData->maWindowRect );
                     aEvent.bFloating = pData->mbFloating;
                     aEvent.bCancelled = pData->mbCancelled;
@@ -824,7 +824,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 sal_Bool *p_bFloating = static_cast<sal_Bool*>(rVclWindowEvent.GetData());
 
                 css::lang::EventObject aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.Source = getXWeak();
 
                 Reference< XDockableWindowListener > xFirstListener;
                 ::comphelper::OInterfaceIteratorHelper3 aIter( mpImpl->getDockableWindowListeners() );
@@ -842,7 +842,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getDockableWindowListeners().getLength() )
             {
                 css::lang::EventObject aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.Source = getXWeak();
                 mpImpl->getDockableWindowListeners().notifyEach( &XDockableWindowListener::toggleFloatingMode, aEvent );
             }
         }
@@ -856,7 +856,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 if( pData )
                 {
                     css::awt::EndPopupModeEvent aEvent;
-                    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                    aEvent.Source = getXWeak();
                     aEvent.FloatingPosition.X = pData->maFloatingPos.X();
                     aEvent.FloatingPosition.Y = pData->maFloatingPos.Y();
                     aEvent.bTearoff = pData->mbTearoff;

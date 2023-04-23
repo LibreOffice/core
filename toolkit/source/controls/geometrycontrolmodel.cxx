@@ -92,7 +92,7 @@ constexpr OUStringLiteral GCM_PROPERTY_RESOURCERESOLVER = u"ResourceResolver";
             }
 
             setAggregation(m_xAggregate);
-            m_xAggregate->setDelegator(static_cast< XWeak* >(this));
+            m_xAggregate->setDelegator(getXWeak());
         }
         osl_atomic_decrement(&m_refCount);
 
@@ -125,7 +125,7 @@ constexpr OUStringLiteral GCM_PROPERTY_RESOURCERESOLVER = u"ResourceResolver";
             // now it should be the 1 we need here ...
 
             setAggregation(m_xAggregate);
-            m_xAggregate->setDelegator(static_cast< XWeak* >(this));
+            m_xAggregate->setDelegator(getXWeak());
         }
         osl_atomic_decrement(&m_refCount);
 

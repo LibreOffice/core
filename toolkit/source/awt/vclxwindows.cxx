@@ -388,7 +388,7 @@ void VCLXButton::dispose()
     SolarMutexGuard aGuard;
 
     css::lang::EventObject aObj;
-    aObj.Source = static_cast<cppu::OWeakObject*>(this);
+    aObj.Source = getXWeak();
     maActionListeners.disposeAndClear( aObj );
     maItemListeners.disposeAndClear( aObj );
     VCLXGraphicControl::dispose();
@@ -581,7 +581,7 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( maActionListeners.getLength() )
             {
                 css::awt::ActionEvent aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.Source = getXWeak();
                 aEvent.ActionCommand = maActionCommand;
 
                 Callback aCallback = [ this, aEvent ]()
@@ -600,7 +600,7 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( maItemListeners.getLength() )
             {
                 css::awt::ItemEvent aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.Source = getXWeak();
                 aEvent.Selected = ( rButton.GetState() == TRISTATE_TRUE ) ? 1 : 0;
                 maItemListeners.itemStateChanged( aEvent );
             }
@@ -789,7 +789,7 @@ void VCLXCheckBox::dispose()
     SolarMutexGuard aGuard;
 
     css::lang::EventObject aObj;
-    aObj.Source = static_cast<cppu::OWeakObject*>(this);
+    aObj.Source = getXWeak();
     maItemListeners.disposeAndClear( aObj );
     VCLXGraphicControl::dispose();
 }
@@ -1005,7 +1005,7 @@ void VCLXCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 if ( maItemListeners.getLength() )
                 {
                     css::awt::ItemEvent aEvent;
-                    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                    aEvent.Source = getXWeak();
                     aEvent.Highlighted = 0;
                     aEvent.Selected = pCheckBox->GetState();
                     maItemListeners.itemStateChanged( aEvent );
@@ -1013,7 +1013,7 @@ void VCLXCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 if ( !IsSynthesizingVCLEvent() && maActionListeners.getLength() )
                 {
                     css::awt::ActionEvent aEvent;
-                    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                    aEvent.Source = getXWeak();
                     aEvent.ActionCommand = maActionCommand;
                     maActionListeners.actionPerformed( aEvent );
                 }
@@ -1073,7 +1073,7 @@ void VCLXRadioButton::dispose()
     SolarMutexGuard aGuard;
 
     css::lang::EventObject aObj;
-    aObj.Source = static_cast<cppu::OWeakObject*>(this);
+    aObj.Source = getXWeak();
     maItemListeners.disposeAndClear( aObj );
     VCLXGraphicControl::dispose();
 }
@@ -1261,7 +1261,7 @@ void VCLXRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
             if ( !IsSynthesizingVCLEvent() && maActionListeners.getLength() )
             {
                 css::awt::ActionEvent aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.Source = getXWeak();
                 aEvent.ActionCommand = maActionCommand;
                 maActionListeners.actionPerformed( aEvent );
             }
@@ -1286,7 +1286,7 @@ void VCLXRadioButton::ImplClickedOrToggled( bool bToggled )
     if ( pRadioButton && ( pRadioButton->IsRadioCheckEnabled() == bToggled ) && ( bToggled || pRadioButton->IsStateChanged() ) && maItemListeners.getLength() )
     {
         css::awt::ItemEvent aEvent;
-        aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+        aEvent.Source = getXWeak();
         aEvent.Highlighted = 0;
         aEvent.Selected = pRadioButton->IsChecked() ? 1 : 0;
         maItemListeners.itemStateChanged( aEvent );
@@ -1388,7 +1388,7 @@ void VCLXSpinField::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( maSpinListeners.getLength() )
             {
                 css::awt::SpinEvent aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.Source = getXWeak();
                 switch ( rVclWindowEvent.GetId() )
                 {
                     case VclEventId::SpinfieldUp:     maSpinListeners.up( aEvent );
@@ -1460,7 +1460,7 @@ void VCLXListBox::dispose()
     SolarMutexGuard aGuard;
 
     css::lang::EventObject aObj;
-    aObj.Source = static_cast<cppu::OWeakObject*>(this);
+    aObj.Source = getXWeak();
     maItemListeners.disposeAndClear( aObj );
     maActionListeners.disposeAndClear( aObj );
     VCLXWindow::dispose();
@@ -1753,7 +1753,7 @@ void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 {
                     // Call ActionListener on DropDown event
                     css::awt::ActionEvent aEvent;
-                    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                    aEvent.Source = getXWeak();
                     aEvent.ActionCommand = pListBox->GetSelectedEntry();
                     maActionListeners.actionPerformed( aEvent );
                 }
@@ -1770,7 +1770,7 @@ void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( GetWindow() && maActionListeners.getLength() )
             {
                 css::awt::ActionEvent aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.Source = getXWeak();
                 aEvent.ActionCommand = GetAs<ListBox>()->GetSelectedEntry();
                 maActionListeners.actionPerformed( aEvent );
             }
@@ -2014,7 +2014,7 @@ void VCLXListBox::ImplCallItemListeners()
     if ( pListBox && maItemListeners.getLength() )
     {
         css::awt::ItemEvent aEvent;
-        aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+        aEvent.Source = getXWeak();
         aEvent.Highlighted = 0;
 
         // Set to 0xFFFF on multiple selection, selected entry ID otherwise
@@ -2403,7 +2403,7 @@ void SAL_CALL VCLXMultiPage::dispose()
     SolarMutexGuard aGuard;
 
     css::lang::EventObject aObj;
-    aObj.Source = static_cast<cppu::OWeakObject*>(this);
+    aObj.Source = getXWeak();
     maTabListeners.disposeAndClear( aObj );
     VCLXContainer::dispose();
 }
@@ -2747,7 +2747,7 @@ void VCLXFixedHyperlink::dispose()
         SolarMutexGuard aGuard;
 
         css::lang::EventObject aObj;
-        aObj.Source = static_cast<cppu::OWeakObject*>(this);
+        aObj.Source = getXWeak();
         maActionListeners.disposeAndClear( aObj );
         VCLXWindow::dispose();
 }
@@ -2761,7 +2761,7 @@ void VCLXFixedHyperlink::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
             if ( maActionListeners.getLength() )
             {
                 css::awt::ActionEvent aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.Source = getXWeak();
                 maActionListeners.actionPerformed( aEvent );
             }
             [[fallthrough]];
@@ -3161,7 +3161,7 @@ void VCLXScrollBar::dispose()
     SolarMutexGuard aGuard;
 
     css::lang::EventObject aObj;
-    aObj.Source = static_cast<cppu::OWeakObject*>(this);
+    aObj.Source = getXWeak();
     maAdjustmentListeners.disposeAndClear( aObj );
     VCLXWindow::dispose();
 }
@@ -3534,7 +3534,7 @@ void VCLXScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 if( pScrollBar )
                 {
                     css::awt::AdjustmentEvent aEvent;
-                    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                    aEvent.Source = getXWeak();
                     aEvent.Value = pScrollBar->GetThumbPos();
 
                     // set adjustment type
@@ -3630,7 +3630,7 @@ void VCLXEdit::dispose()
     SolarMutexGuard aGuard;
 
     css::lang::EventObject aObj;
-    aObj.Source = static_cast<cppu::OWeakObject*>(this);
+    aObj.Source = getXWeak();
     maTextListeners.disposeAndClear( aObj );
     VCLXWindow::dispose();
 }
@@ -3924,7 +3924,7 @@ void VCLXEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( GetTextListeners().getLength() )
             {
                 css::awt::TextEvent aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.Source = getXWeak();
                 GetTextListeners().textChanged( aEvent );
             }
         }
@@ -3998,7 +3998,7 @@ void VCLXComboBox::dispose()
     SolarMutexGuard aGuard;
 
     css::lang::EventObject aObj;
-    aObj.Source = static_cast<cppu::OWeakObject*>(this);
+    aObj.Source = getXWeak();
     maItemListeners.disposeAndClear( aObj );
     maActionListeners.disposeAndClear( aObj );
     VCLXEdit::dispose();
@@ -4275,7 +4275,7 @@ void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                     if ( !pComboBox->IsTravelSelect() )
                     {
                         css::awt::ItemEvent aEvent;
-                        aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                        aEvent.Source = getXWeak();
                         aEvent.Highlighted = 0;
 
                         // Set to 0xFFFF on multiple selection, selected entry ID otherwise
@@ -4291,7 +4291,7 @@ void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( maActionListeners.getLength() )
             {
                 css::awt::ActionEvent aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.Source = getXWeak();
 //              aEvent.ActionCommand = ...;
                 maActionListeners.actionPerformed( aEvent );
             }
@@ -6435,7 +6435,7 @@ IMPL_LINK_NOARG(VCLXFileControl, ModifyHdl, Edit&, void)
 void VCLXFileControl::ModifyHdl()
 {
     css::awt::TextEvent aEvent;
-    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+    aEvent.Source = getXWeak();
     maTextListeners.textChanged( aEvent );
 }
 
@@ -7055,7 +7055,7 @@ void SVTXFormattedField::NotifyTextListeners()
     if ( GetTextListeners().getLength() )
     {
         css::awt::TextEvent aEvent;
-        aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+        aEvent.Source = getXWeak();
         GetTextListeners().textChanged( aEvent );
     }
 }
@@ -7731,7 +7731,7 @@ void VCLXMultiLineEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEven
             if ( maTextListeners.getLength() )
             {
                 css::awt::TextEvent aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                aEvent.Source = getXWeak();
                 maTextListeners.textChanged( aEvent );
             }
         }

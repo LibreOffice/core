@@ -972,7 +972,7 @@ void SAL_CALL VCLXToolkit::disposing()
         m_bKeyListener = false;
     }
     css::lang::EventObject aEvent(
-        static_cast< ::cppu::OWeakObject * >(this));
+        getXWeak());
     m_aTopWindowListeners.disposeAndClear(aEvent);
     m_aKeyHandlers.disposeAndClear(aEvent);
     m_aFocusListeners.disposeAndClear(aEvent);
@@ -2189,7 +2189,7 @@ void SAL_CALL VCLXToolkit::addTopWindowListener(
         aGuard.clear();
         rListener->disposing(
             css::lang::EventObject(
-                static_cast< ::cppu::OWeakObject * >(this)));
+                getXWeak()));
     }
     else if (m_aTopWindowListeners.addInterface(rListener) == 1
              && !m_bEventListener)
@@ -2224,7 +2224,7 @@ void SAL_CALL VCLXToolkit::addKeyHandler(
         aGuard.clear();
         rHandler->disposing(
             css::lang::EventObject(
-                static_cast< ::cppu::OWeakObject * >(this)));
+                getXWeak()));
     }
     else if (m_aKeyHandlers.addInterface(rHandler) == 1 && !m_bKeyListener)
     {
@@ -2257,7 +2257,7 @@ void SAL_CALL VCLXToolkit::addFocusListener(
         aGuard.clear();
         rListener->disposing(
             css::lang::EventObject(
-                static_cast< ::cppu::OWeakObject * >(this)));
+                getXWeak()));
     }
     else if (m_aFocusListeners.addInterface(rListener) == 1
              && !m_bEventListener)

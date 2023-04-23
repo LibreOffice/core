@@ -321,7 +321,7 @@ void TreeControlPeer::updateEntry( UnoTreeListEntry* pEntry )
 
 void TreeControlPeer::onSelectionChanged()
 {
-    Reference< XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
+    Reference< XInterface > xSource( getXWeak() );
     EventObject aEvent( xSource );
     maSelectionListeners.selectionChanged( aEvent );
 }
@@ -331,7 +331,7 @@ void TreeControlPeer::onRequestChildNodes( const Reference< XTreeNode >& xNode )
 {
     try
     {
-        Reference< XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
+        Reference< XInterface > xSource( getXWeak() );
         TreeExpansionEvent aEvent( xSource, xNode );
         maTreeExpansionListeners.requestChildNodes( aEvent );
     }
@@ -345,7 +345,7 @@ bool TreeControlPeer::onExpanding( const Reference< XTreeNode >& xNode, bool bEx
 {
     try
     {
-        Reference< XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
+        Reference< XInterface > xSource( getXWeak() );
         TreeExpansionEvent aEvent( xSource, xNode );
         if( bExpanding )
         {
@@ -368,7 +368,7 @@ void TreeControlPeer::onExpanded( const Reference< XTreeNode >& xNode, bool bExp
 {
     try
     {
-        Reference< XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
+        Reference< XInterface > xSource( getXWeak() );
         TreeExpansionEvent aEvent( xSource, xNode );
 
         if( bExpanding )

@@ -92,7 +92,7 @@ private:
     {
         std::unique_lock aGuard(m_aMutex);
         if (m_bDisposed)
-            throw css::lang::DisposedException( OUString(), static_cast<cppu::OWeakObject*>(this) );
+            throw css::lang::DisposedException( OUString(), getXWeak() );
         if ( io_attribute == i_newValue )
             return;
 
