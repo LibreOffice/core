@@ -372,7 +372,7 @@ sal_Bool SAL_CALL VCLXAccessibleBox::doAccessibleAction (sal_Int32 nIndex)
                 ("VCLXAccessibleBox::doAccessibleAction: index "
                  + OUString::number(nIndex) + " not among 0.."
                  + OUString::number(getAccessibleActionCount())),
-                static_cast<OWeakObject*>(this));
+                getXWeak());
 
         if (m_aBoxType == COMBOBOX)
         {

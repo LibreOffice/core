@@ -118,7 +118,7 @@ void Paragraph::notifyEvent(::sal_Int16 nEventId,
 {
     if (m_nClientId)
         comphelper::AccessibleEventNotifier::addEvent( m_nClientId, css::accessibility::AccessibleEventObject(
-                             static_cast< ::cppu::OWeakObject * >(this),
+                             getXWeak(),
                              nEventId, rNewValue, rOldValue) );
 }
 
@@ -145,7 +145,7 @@ Paragraph::getAccessibleChild(sal_Int64)
     throw css::lang::IndexOutOfBoundsException(
         "textwindowaccessibility.cxx:"
         " Paragraph::getAccessibleChild",
-        static_cast< css::uno::XWeak * >(this));
+        getXWeak());
 }
 
 // virtual
@@ -558,7 +558,7 @@ css::accessibility::TextSegment SAL_CALL Paragraph::getTextAtLineWithCaret(  )
         throw css::lang::WrappedTargetRuntimeException(
             "textwindowaccessibility.cxx:"
             " Paragraph::getTextAtLineWithCaret",
-            static_cast< css::uno::XWeak * >( this ), anyEx );
+            getXWeak(), anyEx );
     }
 }
 
@@ -583,7 +583,7 @@ void SAL_CALL Paragraph::addAccessibleEventListener(
     {
         aGuard.clear();
         rListener->disposing(css::lang::EventObject(
-                                static_cast< ::cppu::OWeakObject * >(this)));
+                                getXWeak()));
     }
     else
     {
@@ -697,7 +697,7 @@ void Paragraph::checkDisposed()
     if (!(rBHelper.bDisposed || rBHelper.bInDispose))
         return;
     throw css::lang::DisposedException(
-        OUString(), static_cast< css::uno::XWeak * >(this));
+        OUString(), getXWeak());
 }
 
 Document::Document(::VCLXWindow * pVclXWindow, ::TextEngine & rEngine,
@@ -863,7 +863,7 @@ Document::retrieveCharacterBounds(Paragraph const * pParagraph,
         throw css::lang::IndexOutOfBoundsException(
             "textwindowaccessibility.cxx:"
             " Document::retrieveCharacterAttributes",
-            static_cast< css::uno::XWeak * >(this));
+            getXWeak());
     css::awt::Rectangle aBounds( 0, 0, 0, 0 );
     if ( nIndex == nLength )
     {
@@ -988,7 +988,7 @@ Document::retrieveCharacterAttributes(
         throw css::lang::IndexOutOfBoundsException(
             "textwindowaccessibility.cxx:"
             " Document::retrieveCharacterAttributes",
-            static_cast< css::uno::XWeak * >(this));
+            getXWeak());
 
 
     // retrieve run attributes
@@ -1081,7 +1081,7 @@ Document::retrieveRunAttributes(
         throw css::lang::IndexOutOfBoundsException(
             "textwindowaccessibility.cxx:"
             " Document::retrieveRunAttributes",
-            static_cast< css::uno::XWeak * >( this ) );
+            getXWeak() );
 
     tPropValMap aRunAttrSeq;
     retrieveRunAttributesImpl( pParagraph, Index, RequestedAttributes, aRunAttrSeq );
@@ -1116,7 +1116,7 @@ void Document::changeParagraphText(Paragraph const * pParagraph,
             throw css::lang::IndexOutOfBoundsException(
                 "textwindowaccessibility.cxx:"
                 " Document::changeParagraphText",
-                static_cast< css::uno::XWeak * >(this));
+                getXWeak());
         changeParagraphText(nNumber, static_cast< ::sal_uInt16 >(nBegin),
                             static_cast< ::sal_uInt16 >(nEnd), bCut, bPaste, rText);
             // XXX  numeric overflow (2x)
@@ -1136,7 +1136,7 @@ void Document::copyParagraphText(Paragraph const * pParagraph,
             throw css::lang::IndexOutOfBoundsException(
                 "textwindowaccessibility.cxx:"
                 " Document::copyParagraphText",
-                static_cast< css::uno::XWeak * >(this));
+                getXWeak());
         m_rView.SetSelection(
             ::TextSelection(::TextPaM(nNumber, nBegin),
                             ::TextPaM(nNumber, nEnd)));
@@ -1159,7 +1159,7 @@ void Document::changeParagraphAttributes(
             throw css::lang::IndexOutOfBoundsException(
                 "textwindowaccessibility.cxx:"
                 " Document::changeParagraphAttributes",
-                static_cast< css::uno::XWeak * >(this));
+                getXWeak());
 
         // FIXME  The new attributes are added to any attributes already set,
         // they do not replace the old attributes as required by
@@ -1191,7 +1191,7 @@ void Document::changeParagraphSelection(Paragraph const * pParagraph,
             throw css::lang::IndexOutOfBoundsException(
                 "textwindowaccessibility.cxx:"
                 " Document::changeParagraphSelection",
-                static_cast< css::uno::XWeak * >(this));
+                getXWeak());
         m_rView.SetSelection(
             ::TextSelection(::TextPaM(nNumber, nBegin),
                             ::TextPaM(nNumber, nEnd)));
@@ -1215,7 +1215,7 @@ Document::retrieveParagraphLineBoundary( Paragraph const * pParagraph,
             throw css::lang::IndexOutOfBoundsException(
                 "textwindowaccessibility.cxx:"
                 " Document::retrieveParagraphLineBoundary",
-                static_cast< css::uno::XWeak * >( this ) );
+                getXWeak() );
         ::sal_Int32 nLineStart = 0;
         ::sal_Int32 nLineEnd = 0;
         ::sal_uInt16 nLineCount = m_rEngine.GetLineCount( nNumber );
@@ -1253,7 +1253,7 @@ Document::retrieveParagraphBoundaryOfLine( Paragraph const * pParagraph,
             throw css::lang::IndexOutOfBoundsException(
                 "textwindowaccessibility.cxx:"
                 " Document::retrieveParagraphBoundaryOfLine",
-                static_cast< css::uno::XWeak * >( this ) );
+                getXWeak() );
         ::sal_Int32 nLineStart = 0;
         ::sal_Int32 nLineEnd = 0;
         for ( ::sal_Int32 nLine = 0; nLine <= nLineNo; ++nLine )
@@ -1326,7 +1326,7 @@ Document::getAccessibleChild(sal_Int64 i)
         throw css::lang::IndexOutOfBoundsException(
             "textwindowaccessibility.cxx:"
             " Document::getAccessibleChild",
-            static_cast< css::uno::XWeak * >(this));
+            getXWeak());
     return getAccessibleChild(m_aVisibleBegin
                               + static_cast< Paragraphs::size_type >(i));
 }

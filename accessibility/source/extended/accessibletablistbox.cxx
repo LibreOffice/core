@@ -100,7 +100,7 @@ namespace accessibility
             xRet = implGetTable();
 
         if ( !xRet.is() )
-            throw RuntimeException("getAccessibleChild called with NULL xRet",static_cast< cppu::OWeakObject * >(this));
+            throw RuntimeException("getAccessibleChild called with NULL xRet",getXWeak());
 
         return xRet;
     }

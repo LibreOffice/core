@@ -164,7 +164,7 @@ namespace accessibility
         if ( !pEntry )
             throw RuntimeException("getAccessibleChild: Entry "
                                    + OUString::number(i) + " not found",
-                static_cast<OWeakObject*>(this));
+                getXWeak());
 
         return new AccessibleIconChoiceCtrlEntry( *pCtrl, i, this );
     }
