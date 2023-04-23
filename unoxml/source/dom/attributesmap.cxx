@@ -164,7 +164,7 @@ namespace DOM
         if (!xAttr.is()) {
             throw DOMException(
                 "CAttributesMap::removeNamedItem: no such attribute",
-                static_cast<OWeakObject*>(this),
+                getXWeak(),
                 DOMExceptionType_NOT_FOUND_ERR);
         }
         return m_pElement->removeAttributeNode(xAttr);
@@ -183,7 +183,7 @@ namespace DOM
         if (!xAttr.is()) {
             throw DOMException(
                 "CAttributesMap::removeNamedItemNS: no such attribute",
-                static_cast<OWeakObject*>(this),
+                getXWeak(),
                 DOMExceptionType_NOT_FOUND_ERR);
         }
         return m_pElement->removeAttributeNode(xAttr);
@@ -199,7 +199,7 @@ namespace DOM
         if (!xNode.is()) {
             throw DOMException(
                 "CAttributesMap::setNamedItem: XAttr argument expected",
-                static_cast<OWeakObject*>(this),
+                getXWeak(),
                 DOMExceptionType_HIERARCHY_REQUEST_ERR);
         }
         // no MutexGuard needed: m_pElement is const
@@ -216,7 +216,7 @@ namespace DOM
         if (!xNode.is()) {
             throw DOMException(
                 "CAttributesMap::setNamedItemNS: XAttr argument expected",
-                static_cast<OWeakObject*>(this),
+                getXWeak(),
                 DOMExceptionType_HIERARCHY_REQUEST_ERR);
         }
         // no MutexGuard needed: m_pElement is const
