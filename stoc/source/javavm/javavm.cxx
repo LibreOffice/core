@@ -486,11 +486,11 @@ JavaVirtualMachine::initialize(css::uno::Sequence< css::uno::Any > const &
     osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)
         throw css::lang::DisposedException(
-            "", static_cast< cppu::OWeakObject * >(this));
+            "", getXWeak());
     if (m_xUnoVirtualMachine.is())
         throw css::uno::RuntimeException(
             "bad call to initialize",
-            static_cast< cppu::OWeakObject * >(this));
+            getXWeak());
     css::beans::NamedValue val;
     if (rArguments.getLength() == 1 && (rArguments[0] >>= val) && val.Name == "UnoVirtualMachine" )
     {
@@ -519,7 +519,7 @@ JavaVirtualMachine::initialize(css::uno::Sequence< css::uno::Any > const &
                 css::uno::Any anyEx = cppu::getCaughtException();
                 throw css::lang::WrappedTargetRuntimeException(
                     "jvmaccess::UnoVirtualMachine::CreationException",
-                    static_cast< cppu::OWeakObject * >(this), anyEx );
+                    getXWeak(), anyEx );
             }
         }
     }
@@ -531,7 +531,7 @@ JavaVirtualMachine::initialize(css::uno::Sequence< css::uno::Any > const &
             " non-null pointer to a jvmaccess:UnoVirtualMachine, or (b)"
             " a hyper representing a non-null pointer to a"
             " jvmaccess::VirtualMachine required",
-            static_cast< cppu::OWeakObject * >(this), 0);
+            getXWeak(), 0);
     }
     m_xVirtualMachine = m_xUnoVirtualMachine->getVirtualMachine();
 }
@@ -559,7 +559,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
     osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)
         throw css::lang::DisposedException(
-            "", static_cast< cppu::OWeakObject * >(this));
+            "", getXWeak());
     css::uno::Sequence< sal_Int8 > aId(16);
     rtl_getGlobalProcessId(reinterpret_cast< sal_uInt8 * >(aId.getArray()));
     enum ReturnType {
@@ -623,7 +623,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
                 css::java::JavaNotFoundException exc(
                     "JavaVirtualMachine::getJavaVM failed because"
                     " No suitable JRE found!",
-                    static_cast< cppu::OWeakObject * >(this));
+                    getXWeak());
                 askForRetry(css::uno::Any(exc));
                 return css::uno::Any();
             }
@@ -644,7 +644,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             css::java::InvalidJavaSettingsException exc(
                 "JavaVirtualMachine::getJavaVM failed because"
                 " Java settings have changed!",
-                static_cast< cppu::OWeakObject * >(this));
+                getXWeak());
             askForRetry(css::uno::Any(exc));
             return css::uno::Any();
         }
@@ -659,7 +659,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             //enable the use of a JRE now?
             css::java::JavaDisabledException exc(
                 "JavaVirtualMachine::getJavaVM failed because Java is disabled!",
-                static_cast< cppu::OWeakObject * >(this));
+                getXWeak());
             if( ! askForRetry(css::uno::Any(exc)))
                 return css::uno::Any();
             continue;
@@ -696,7 +696,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             //and select it under Tools - Options - %PRODUCTNAME - Java.
             css::java::JavaVMCreationFailureException exc(
                 "JavaVirtualMachine::getJavaVM failed because Java is defective!",
-                static_cast< cppu::OWeakObject * >(this), 0);
+                getXWeak(), 0);
             askForRetry(css::uno::Any(exc));
             return css::uno::Any();
         }
@@ -714,7 +714,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             css::java::RestartRequiredException exc(
                 "JavaVirtualMachine::getJavaVM failed because "
                 "Office must be restarted before Java can be used!",
-                static_cast< cppu::OWeakObject * >(this));
+                getXWeak());
             askForRetry(css::uno::Any(exc));
             return css::uno::Any();
         }
@@ -752,7 +752,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             css::uno::Any anyEx = cppu::getCaughtException();
             throw css::lang::WrappedTargetRuntimeException(
                 "jvmaccess::VirtualMachine::AttachGuard::CreationException occurred",
-                static_cast< cppu::OWeakObject * >(this), anyEx );
+                getXWeak(), anyEx );
         }
     }
     switch (returnType) {
@@ -761,7 +761,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             throw css::uno::RuntimeException(
                 "JavaVirtualMachine service was initialized in a way"
                 " that the requested JavaVM pointer is not available",
-                static_cast< cppu::OWeakObject * >(this));
+                getXWeak());
         }
         return css::uno::Any(reinterpret_cast< sal_IntPtr >(m_pJavaVm));
     case RETURN_VIRTUALMACHINE:
@@ -781,7 +781,7 @@ sal_Bool SAL_CALL JavaVirtualMachine::isVMStarted()
     osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)
         throw css::lang::DisposedException(
-            OUString(), static_cast< cppu::OWeakObject * >(this));
+            OUString(), getXWeak());
     return m_xUnoVirtualMachine.is();
 }
 
@@ -791,7 +791,7 @@ sal_Bool SAL_CALL JavaVirtualMachine::isVMEnabled()
         osl::MutexGuard aGuard(m_aMutex);
         if (m_bDisposed)
             throw css::lang::DisposedException(
-                OUString(), static_cast< cppu::OWeakObject * >(this));
+                OUString(), getXWeak());
     }
 //    stoc_javavm::JVM aJvm;
 //    initVMConfiguration(&aJvm, m_xContext->getServiceManager(), m_xContext);
@@ -808,7 +808,7 @@ sal_Bool SAL_CALL JavaVirtualMachine::isThreadAttached()
     osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)
         throw css::lang::DisposedException(
-            OUString(), static_cast< cppu::OWeakObject * >(this));
+            OUString(), getXWeak());
     // TODO isThreadAttached only returns true if the thread was attached via
     // registerThread:
     GuardStack * pStack
@@ -821,11 +821,11 @@ void SAL_CALL JavaVirtualMachine::registerThread()
     osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)
         throw css::lang::DisposedException(
-            "", static_cast< cppu::OWeakObject * >(this));
+            "", getXWeak());
     if (!m_xUnoVirtualMachine.is())
         throw css::uno::RuntimeException(
             "JavaVirtualMachine::registerThread: null VirtualMachine",
-            static_cast< cppu::OWeakObject * >(this));
+            getXWeak());
     GuardStack * pStack
         = static_cast< GuardStack * >(m_aAttachGuards.getData());
     if (pStack == nullptr)
@@ -845,7 +845,7 @@ void SAL_CALL JavaVirtualMachine::registerThread()
         throw css::lang::WrappedTargetRuntimeException(
             "JavaVirtualMachine::registerThread: jvmaccess::"
             "VirtualMachine::AttachGuard::CreationException",
-            static_cast< cppu::OWeakObject * >(this), anyEx );
+            getXWeak(), anyEx );
     }
 }
 
@@ -854,17 +854,17 @@ void SAL_CALL JavaVirtualMachine::revokeThread()
     osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)
         throw css::lang::DisposedException(
-            "", static_cast< cppu::OWeakObject * >(this));
+            "", getXWeak());
     if (!m_xUnoVirtualMachine.is())
         throw css::uno::RuntimeException(
             "JavaVirtualMachine::revokeThread: null VirtualMachine",
-            static_cast< cppu::OWeakObject * >(this));
+            getXWeak());
     GuardStack * pStack
         = static_cast< GuardStack * >(m_aAttachGuards.getData());
     if (pStack == nullptr || pStack->empty())
         throw css::uno::RuntimeException(
             "JavaVirtualMachine::revokeThread: no matching registerThread",
-            static_cast< cppu::OWeakObject * >(this));
+            getXWeak());
     delete pStack->top();
     pStack->pop();
 }
@@ -1116,7 +1116,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
         css::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
             "jvmaccess::VirtualMachine::AttachGuard::CreationException",
-            static_cast< cppu::OWeakObject * >(this), anyEx );
+            getXWeak(), anyEx );
     }
 }
 
@@ -1356,7 +1356,7 @@ void JavaVirtualMachine::setUpUnoVirtualMachine(JNIEnv * environment) {
         css::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
             "css::lang::IllegalArgumentException",
-            static_cast< cppu::OWeakObject * >(this), anyEx );
+            getXWeak(), anyEx );
     }
     OUString classPath;
     try {
@@ -1457,7 +1457,7 @@ void JavaVirtualMachine::setUpUnoVirtualMachine(JNIEnv * environment) {
         css::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
             "jvmaccess::UnoVirtualMachine::CreationException",
-            static_cast< cppu::OWeakObject * >(this), anyEx );
+            getXWeak(), anyEx );
     }
 }
 
@@ -1469,7 +1469,7 @@ void JavaVirtualMachine::handleJniException(JNIEnv * environment) {
 #endif
     throw css::uno::RuntimeException(
         "JNI exception occurred",
-        static_cast< cppu::OWeakObject * >(this));
+        getXWeak());
 }
 
 

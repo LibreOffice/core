@@ -264,7 +264,7 @@ Reference< XIdlClass > IdlReflectionServiceImpl::forType( typelib_TypeDescriptio
     }
     throw RuntimeException(
         "IdlReflectionServiceImpl::forType() failed!",
-        static_cast<XWeak *>(static_cast<OWeakObject *>(this)) );
+        getXWeak() );
 }
 
 
@@ -281,7 +281,7 @@ const Mapping & IdlReflectionServiceImpl::getCpp2Uno()
             {
                 throw RuntimeException(
                     "cannot get c++ to uno mapping!",
-                    static_cast<XWeak *>(static_cast<OWeakObject *>(this)) );
+                    getXWeak() );
             }
         }
     }
@@ -301,7 +301,7 @@ const Mapping & IdlReflectionServiceImpl::getUno2Cpp()
             {
                 throw RuntimeException(
                     "cannot get uno to c++ mapping!",
-                    static_cast<XWeak *>(static_cast<OWeakObject *>(this)) );
+                    getXWeak() );
             }
         }
     }
@@ -317,7 +317,7 @@ uno_Interface * IdlReflectionServiceImpl::mapToUno(
 
     throw RuntimeException(
         "illegal object given!",
-        static_cast<XWeak *>(static_cast<OWeakObject *>(this)) );
+        getXWeak() );
 }
 
 }

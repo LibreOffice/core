@@ -1562,7 +1562,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
         osl::MutexGuard g(m_aMutex);
         if (rBHelper.bDisposed || rBHelper.bInDispose) {
             throw css::lang::DisposedException(
-                getImplementationName(), static_cast<OWeakObject *>(this));
+                getImplementationName(), getXWeak());
         }
         reflection = reflection_;
     }
@@ -1628,7 +1628,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
         osl::MutexGuard g(m_aMutex);
         if (rBHelper.bDisposed || rBHelper.bInDispose) {
             throw css::lang::DisposedException(
-                getImplementationName(), static_cast<OWeakObject *>(this));
+                getImplementationName(), getXWeak());
         }
         TypeKey key(xPropSetInfo, SupportedTypesSeq);
         pAccess = typeCache_.find(key);

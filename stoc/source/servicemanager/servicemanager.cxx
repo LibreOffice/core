@@ -413,7 +413,7 @@ void OServiceManager::check_undisposed() const
     {
         throw lang::DisposedException(
             "service manager instance has already been disposed!",
-            static_cast<OWeakObject *>(const_cast<OServiceManager *>(this)) );
+            const_cast<OServiceManager *>(this)->getXWeak() );
     }
 }
 
@@ -522,7 +522,7 @@ void SAL_CALL OServiceManagerWrapper::setPropertyValue(
         {
             throw IllegalArgumentException(
                 "no XComponentContext given!",
-                static_cast<OWeakObject *>(this), 1 );
+                getXWeak(), 1 );
         }
 
         MutexGuard aGuard( m_aMutex );
@@ -659,7 +659,7 @@ void OServiceManager::setPropertyValue(
     {
         throw UnknownPropertyException(
             "unknown property " + PropertyName,
-            static_cast<OWeakObject *>(this) );
+            getXWeak() );
     }
 
     Reference< XComponentContext > xContext;
@@ -667,7 +667,7 @@ void OServiceManager::setPropertyValue(
     {
         throw IllegalArgumentException(
             "no XComponentContext given!",
-            static_cast<OWeakObject *>(this), 1 );
+            getXWeak(), 1 );
     }
 
     MutexGuard aGuard( m_aMutex );
@@ -1071,7 +1071,7 @@ void OServiceManager::remove( const Any & Element )
         {
             throw NoSuchElementException(
                 "element is not in: " + *implName,
-                static_cast< OWeakObject * >(this) );
+                getXWeak() );
         }
         xEle = iFind->second;
     }
@@ -1093,7 +1093,7 @@ void OServiceManager::remove( const Any & Element )
     {
         throw NoSuchElementException(
             "element not found",
-            static_cast< OWeakObject * >(this) );
+            getXWeak() );
     }
     //First remove all factories which have been loaded by ORegistryServiceManager.
     m_SetLoadedFactories.erase( *aIt);

@@ -392,7 +392,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::parse(
                 css::uno::Any anyEx = cppu::getCaughtException();
                 throw css::lang::WrappedTargetRuntimeException(
                     "creating service " + serviceName,
-                    static_cast< cppu::OWeakObject * >(this),
+                    getXWeak(),
                     anyEx);
             }
             if (service.is()) {

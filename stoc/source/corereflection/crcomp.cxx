@@ -137,7 +137,7 @@ Any IdlCompFieldImpl::get( const Any & rObj )
     }
     throw IllegalArgumentException(
         "expected struct or exception, got " + rObj.getValueType().getTypeName(),
-        static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 0 );
+        getXWeak(), 0 );
 }
 
 void IdlCompFieldImpl::set( const Any & rObj, const Any & rValue )
@@ -161,7 +161,7 @@ void IdlCompFieldImpl::set( const Any & rObj, const Any & rValue )
             {
                 throw IllegalArgumentException(
                     "cannot assign value to destination",
-                    static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 1 );
+                    getXWeak(), 1 );
             }
             return;
         }
@@ -169,7 +169,7 @@ void IdlCompFieldImpl::set( const Any & rObj, const Any & rValue )
     }
     throw IllegalArgumentException(
         "expected struct or exception, got " + rObj.getValueType().getTypeName(),
-        static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 0 );
+        getXWeak(), 0 );
 }
 
 
@@ -194,7 +194,7 @@ void IdlCompFieldImpl::set( Any & rObj, const Any & rValue )
             {
                 throw IllegalArgumentException(
                     "cannot assign to destination",
-                    static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 1 );
+                    getXWeak(), 1 );
             }
             return;
         }
@@ -202,7 +202,7 @@ void IdlCompFieldImpl::set( Any & rObj, const Any & rValue )
     }
     throw IllegalArgumentException(
         "expected struct or exception, got " + rObj.getValueType().getTypeName(),
-        static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 0 );
+        getXWeak(), 0 );
 }
 
 

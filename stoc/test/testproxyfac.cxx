@@ -92,7 +92,7 @@ Any TargetObject::queryInterface( Type const & type )
         return ret;
     throw lang::DisposedException(
         OUString( "my test exception" ),
-        static_cast< OWeakObject * >(this) );
+        getXWeak() );
 }
 
 int TargetObject::s_obj = 0;
@@ -146,7 +146,7 @@ Reference< XInterface > TestMaster::create(
     Reference< reflection::XProxyFactory > const & xProxyFac )
 {
     TestMaster * that = new TestMaster;
-    Reference< XInterface > xRet( static_cast< OWeakObject * >( that ) );
+    Reference< XInterface > xRet( getXWeak( that ) );
     {
         Reference< XAggregation > xAgg( xProxyFac->createProxy( xTarget ) );
         // ownership take over
@@ -162,7 +162,7 @@ Reference< XInterface > TestMaster::create(
     Reference< reflection::XProxyFactory > const & xProxyFac )
 {
     return create(
-        static_cast< OWeakObject * >( new TargetObject ), xProxyFac );
+        getXWeak( new TargetObject ), xProxyFac );
 }
 
 
@@ -268,7 +268,7 @@ SAL_IMPLEMENT_MAIN()
 
             Reference< XAggregation > x(
                 xProxyFac->createProxy(
-                    static_cast< OWeakObject * >( new TargetObject ) ) );
+                    getXWeak( new TargetObject ) ) );
             // no call
 
             {
@@ -303,7 +303,7 @@ SAL_IMPLEMENT_MAIN()
 
             test_proxyfac(
                 xProxyFac->createProxy(
-                    static_cast< OWeakObject * >( new TargetObject ) ),
+                    getXWeak( new TargetObject ) ),
                 OUString( "target" ),
                 xProxyFac );
             uno_dumpEnvironment( stdout, cpp_env.get(), 0 );

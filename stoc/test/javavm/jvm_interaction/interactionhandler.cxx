@@ -75,8 +75,7 @@ Any SAL_CALL Context::getValueByName( const OUString& Name) throw (RuntimeExcept
     Any retVal;
     if( Name.equals( INTERACTION_HANDLER_NAME))
     {
-        Reference<XInteractionHandler> handler( static_cast<XWeak*>(new InteractionHandler()),
-                                                UNO_QUERY);
+        Reference<XInteractionHandler> handler(new InteractionHandler());
         retVal <<= handler;
     }
     return retVal;
@@ -119,7 +118,7 @@ void SAL_CALL InteractionHandler::handle( const Reference< XInteractionRequest >
 sal_Bool test1(const Reference< XMultiServiceFactory > & xMgr )
 {
     sal_Bool retVal= sal_True;
-    setCurrentContext( Reference<XCurrentContext>( static_cast<XWeak*>(new Context()), UNO_QUERY));
+    setCurrentContext(Reference<XCurrentContext>(new Context());
 
       OUString sVMService("com.sun.star.java.JavaVirtualMachine");
     Reference<XInterface> xXInt= xMgr->createInstance(sVMService);

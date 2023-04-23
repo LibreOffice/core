@@ -538,7 +538,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
             if (!aDestTD.is()) {
                 throw css::lang::IllegalArgumentException(
                     "Bad XTypeConverter::convertTo destination " + aDestType.getTypeName(),
-                    static_cast<cppu::OWeakObject *>(this), 1);
+                    getXWeak(), 1);
             }
             typelib_TypeDescription * pSourceElementTD = nullptr;
             TYPELIB_DANGER_GET(

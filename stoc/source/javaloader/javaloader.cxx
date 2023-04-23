@@ -471,7 +471,7 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
             css::uno::Any anyEx = cppu::getCaughtException();
             throw css::lang::WrappedTargetRuntimeException(
                 "jvmaccess::VirtualMachine::AttachGuard::CreationException",
-                static_cast< cppu::OWeakObject * >(this), anyEx );
+                getXWeak(), anyEx );
         }
 
         // set the service manager at the javaloader

@@ -40,13 +40,13 @@ void ArrayIdlClassImpl::realloc( Any & rArray, sal_Int32 nLen )
     {
         throw IllegalArgumentException(
             "expected sequence, but found " + rArray.getValueType().getTypeName(),
-            static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 0 );
+            getXWeak(), 0 );
     }
     if (nLen < 0)
     {
         throw IllegalArgumentException(
             "negative length given!",
-            static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 1 );
+            getXWeak(), 1 );
     }
 
     uno_Sequence ** ppSeq = const_cast<uno_Sequence **>(static_cast<uno_Sequence * const *>(rArray.getValue()));
@@ -64,7 +64,7 @@ sal_Int32 ArrayIdlClassImpl::getLen( const Any & rArray )
     {
         throw IllegalArgumentException(
             "expected sequence, but found " + rArray.getValueType().getTypeName(),
-            static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 0 );
+            getXWeak(), 0 );
     }
 
     return (*static_cast<uno_Sequence * const *>(rArray.getValue()))->nElements;
@@ -77,7 +77,7 @@ Any ArrayIdlClassImpl::get( const Any & rArray, sal_Int32 nIndex )
     {
         throw IllegalArgumentException(
             "expected sequence, but found " + rArray.getValueType().getTypeName(),
-            static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 0 );
+            getXWeak(), 0 );
     }
 
     uno_Sequence * pSeq = *static_cast<uno_Sequence * const *>(rArray.getValue());
@@ -85,7 +85,7 @@ Any ArrayIdlClassImpl::get( const Any & rArray, sal_Int32 nIndex )
     {
         throw ArrayIndexOutOfBoundsException(
             "illegal index given, index " + OUString::number(nIndex) + " is < " + OUString::number(pSeq->nElements),
-            static_cast<XWeak *>(static_cast<OWeakObject *>(this)) );
+            getXWeak() );
     }
 
     Any aRet;
@@ -107,7 +107,7 @@ void ArrayIdlClassImpl::set( Any & rArray, sal_Int32 nIndex, const Any & rNewVal
     {
         throw IllegalArgumentException(
             "expected sequence, but found " + rArray.getValueType().getTypeName(),
-            static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 0 );
+            getXWeak(), 0 );
     }
 
     uno_Sequence * pSeq = *static_cast<uno_Sequence * const *>(rArray.getValue());
@@ -115,7 +115,7 @@ void ArrayIdlClassImpl::set( Any & rArray, sal_Int32 nIndex, const Any & rNewVal
     {
         throw ArrayIndexOutOfBoundsException(
             "illegal index given, index " + OUString::number(nIndex) + " is < " + OUString::number(pSeq->nElements),
-            static_cast<XWeak *>(static_cast<OWeakObject *>(this)) );
+            getXWeak() );
     }
 
     uno_Sequence ** ppSeq = const_cast<uno_Sequence **>(static_cast<uno_Sequence * const *>(rArray.getValue()));
@@ -135,7 +135,7 @@ void ArrayIdlClassImpl::set( Any & rArray, sal_Int32 nIndex, const Any & rNewVal
         TYPELIB_DANGER_RELEASE( pElemTypeDescr );
         throw IllegalArgumentException(
             "sequence element is not assignable by given value!",
-            static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 2 );
+            getXWeak(), 2 );
     }
     TYPELIB_DANGER_RELEASE( pElemTypeDescr );
 }

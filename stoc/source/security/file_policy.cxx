@@ -374,7 +374,7 @@ void FilePolicy::refresh()
     {
         throw RuntimeException(
             "name of policy file unknown!",
-            static_cast<OWeakObject *>(this) );
+            getXWeak() );
     }
 
     PolicyReader reader( fileName, m_ac );
