@@ -253,7 +253,7 @@ void AquaClipboard::fireClipboardChangedEvent()
 
     if (!mClipboardListeners.empty())
     {
-        aEvent = datatransfer::clipboard::ClipboardEvent(static_cast<OWeakObject*>(this), getContents());
+        aEvent = datatransfer::clipboard::ClipboardEvent(getXWeak(), getContents());
     }
 
     aGuard.clear();

@@ -192,8 +192,7 @@ dtrans_ClipboardManager_get_implementation(
         return nullptr;
     if (!g_Instance)
         g_Instance.set(new ClipboardManager());
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(g_Instance.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -97,7 +97,7 @@ static Sequence<OUString> dragSource_getSupportedServiceNames()
 {
     (void)anImage;
     (void)aPoint;
-    DragSourceDragEvent dsde(static_cast<OWeakObject*>(mDragSource),
+    DragSourceDragEvent dsde(mDragSource->getXWeak(),
                              new DragSourceContext,
                              mDragSource,
                              DNDConstants::ACTION_COPY,
@@ -116,7 +116,7 @@ static Sequence<OUString> dragSource_getSupportedServiceNames()
     if( DragSource::g_DropSuccessSet )
         bDropSuccess = DragSource::g_DropSuccess;
 
-    DragSourceDropEvent dsde(static_cast<OWeakObject*>(mDragSource),
+    DragSourceDropEvent dsde(mDragSource->getXWeak(),
                              new DragSourceContext,
                              static_cast< XDragSource* >(mDragSource),
                              SystemToOfficeDragActions(operation),
@@ -130,7 +130,7 @@ static Sequence<OUString> dragSource_getSupportedServiceNames()
 {
     (void)draggedImage;
     (void)screenPoint;
-    DragSourceDragEvent dsde(static_cast<OWeakObject*>(mDragSource),
+    DragSourceDragEvent dsde(mDragSource->getXWeak(),
                              new DragSourceContext,
                              mDragSource,
                              DNDConstants::ACTION_COPY,
@@ -163,7 +163,7 @@ void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
   if (aArguments.getLength() < 2)
   {
       throw Exception("DragSource::initialize: Not enough parameter.",
-                      static_cast<OWeakObject*>(this));
+                      getXWeak());
   }
 
   Any pNSView = aArguments[1];
@@ -181,13 +181,13 @@ void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
       ![mView respondsToSelector: @selector(unregisterMouseEventListener:)])
   {
       throw Exception("DragSource::initialize: Provided view doesn't support mouse listener",
-                      static_cast<OWeakObject*>(this));
+                      getXWeak());
   }
   NSWindow* pWin = [mView window];
   if( ! pWin || ![pWin respondsToSelector: @selector(getSalFrame)] )
   {
       throw Exception("DragSource::initialize: Provided view is not attached to a vcl frame",
-                      static_cast<OWeakObject*>(this));
+                      getXWeak());
   }
   mpFrame = reinterpret_cast<AquaSalFrame*>([pWin performSelector: @selector(getSalFrame)]);
 
@@ -196,7 +196,7 @@ void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
   if (mDragSourceHelper == nil)
   {
       throw Exception("DragSource::initialize: Cannot initialize DragSource",
-                      static_cast<OWeakObject*>(this));
+                      getXWeak());
   }
 
   [static_cast<id <MouseEventListener>>(mView) registerMouseEventListener: mDragSourceHelper];

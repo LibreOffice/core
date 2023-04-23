@@ -417,7 +417,7 @@ Reference< XInterface > SalInstance::CreateClipboard( const Sequence< Any >& arg
             "non-empty SalInstance::CreateClipboard arguments", {}, -1);
     }
 #ifdef IOS
-    return Reference< XInterface >( static_cast<cppu::OWeakObject *>(new vcl::GenericClipboard()) );
+    return getXWeak(new vcl::GenericClipboard());
 #else
     if (comphelper::LibreOfficeKit::isActive()) {
         // In LOK, each document view shall have its own clipboard instance (whereas
@@ -432,7 +432,7 @@ Reference< XInterface > SalInstance::CreateClipboard( const Sequence< Any >& arg
 #endif
     DBG_TESTSOLARMUTEX();
     if (!m_clipboard.is()) {
-        m_clipboard = static_cast<cppu::OWeakObject *>(new vcl::GenericClipboard());
+        m_clipboard = getXWeak(new vcl::GenericClipboard());
     }
     return m_clipboard;
 }
@@ -447,7 +447,7 @@ Reference< XInterface > SalInstance::CreateDragSource(const SystemEnvData* pSysE
     // We run unit tests in parallel, which is a problem when touching a shared resource
     // the system clipboard, so rather use the dummy GenericClipboard.
     if (Application::IsHeadlessModeEnabled() || IsRunningUnitTest())
-        return Reference<XInterface>(static_cast<cppu::OWeakObject*>(new vcl::GenericDragSource()));
+        return getXWeak(new vcl::GenericDragSource());
     return ImplCreateDragSource(pSysEnv);
 }
 
@@ -460,7 +460,7 @@ Reference< XInterface > SalInstance::CreateDropTarget(const SystemEnvData* pSysE
 {
     // see SalInstance::CreateDragSource
     if (Application::IsHeadlessModeEnabled() || IsRunningUnitTest())
-        return Reference<XInterface>(static_cast<cppu::OWeakObject*>(new vcl::GenericDropTarget()));
+        return getXWeak(new vcl::GenericDropTarget());
     return ImplCreateDropTarget(pSysEnv);
 }
 

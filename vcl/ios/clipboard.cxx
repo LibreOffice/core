@@ -121,8 +121,7 @@ void iOSClipboard::fireClipboardChangedEvent(
 
     if (!listeners.empty())
     {
-        aEvent = css::datatransfer::clipboard::ClipboardEvent(static_cast<OWeakObject*>(this),
-                                                              xNewContents);
+        aEvent = css::datatransfer::clipboard::ClipboardEvent(getXWeak(), xNewContents);
     }
 
     aGuard.clear();
@@ -177,8 +176,7 @@ css::uno::Sequence<OUString> SAL_CALL iOSClipboard::getSupportedServiceNames()
 css::uno::Reference<css::uno::XInterface>
 IosSalInstance::CreateClipboard(const css::uno::Sequence<css::uno::Any>&)
 {
-    return css::uno::Reference<css::uno::XInterface>(
-        static_cast<cppu::OWeakObject*>(new iOSClipboard()));
+    return getXWeak(new iOSClipboard());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

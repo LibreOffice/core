@@ -52,7 +52,7 @@ css::uno::Reference<css::uno::XInterface> QtClipboard::create(const OUString& aM
 
     auto iter = aNameToClipboardMap.find(aModeString);
     if (iter != aNameToClipboardMap.end() && isSupported(iter->second))
-        return static_cast<cppu::OWeakObject*>(new QtClipboard(aModeString, iter->second));
+        return cppu::getXWeak(new QtClipboard(aModeString, iter->second));
     SAL_WARN("vcl.qt", "Ignoring unrecognized clipboard type: '" << aModeString << "'");
     return css::uno::Reference<css::uno::XInterface>();
 }

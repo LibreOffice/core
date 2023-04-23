@@ -1754,7 +1754,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
                             if( xActiveDataSource.is() )
                             {
                                 const css::uno::Reference< css::uno::XInterface > xStmIf(
-                                    static_cast< ::cppu::OWeakObject* >( new ImpFilterOutputStream( *rTempStm ) ) );
+                                    getXWeak( new ImpFilterOutputStream( *rTempStm ) ) );
 
                                 SvMemoryStream aMemStm( 65535, 65535 );
 

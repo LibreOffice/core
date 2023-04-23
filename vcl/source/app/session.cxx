@@ -391,7 +391,7 @@ void VCLSession::disposing() {
         osl::MutexGuard g(m_aMutex);
         vector.swap(m_aListeners);
     }
-    css::lang::EventObject src(static_cast<OWeakObject *>(this));
+    css::lang::EventObject src(getXWeak());
     for (auto const & listener: vector) {
         try {
             listener.m_xListener->disposing(src);

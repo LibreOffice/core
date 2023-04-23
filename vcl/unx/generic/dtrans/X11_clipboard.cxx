@@ -101,7 +101,7 @@ void X11Clipboard::fireChangedContentsEvent()
     ::std::vector< Reference< XClipboardListener > > listeners( m_aListeners );
     aGuard.clear();
 
-    ClipboardEvent aEvent( static_cast<OWeakObject*>(this), m_aContents);
+    ClipboardEvent aEvent(getXWeak(), m_aContents);
     for (auto const& listener : listeners)
     {
         if( listener.is() )
@@ -210,7 +210,7 @@ void X11Clipboard::fireContentsChanged()
 
 Reference< XInterface > X11Clipboard::getReference() noexcept
 {
-    return Reference< XInterface >( static_cast< OWeakObject* >(this) );
+    return getXWeak();
 }
 
 OUString SAL_CALL X11Clipboard::getImplementationName(  )

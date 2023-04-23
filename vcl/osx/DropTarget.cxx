@@ -216,7 +216,7 @@ NSDragOperation DropTarget::draggingEntered(id sender)
         uno::Reference<XTransferable> xTransferable = DragSource::g_XTransferable.is() ?
                                                       DragSource::g_XTransferable : mXCurrentDragClipboard->getContents();
 
-        DropTargetDragEnterEvent dtdee(static_cast<OWeakObject*>(this),
+        DropTargetDragEnterEvent dtdee(getXWeak(),
                                         0,
                                         this,
                                         currentAction,
@@ -251,7 +251,7 @@ NSDragOperation DropTarget::draggingUpdated(id sender)
         sal_Int32 posX = static_cast<sal_Int32>(dragLocation.x);
         sal_Int32 posY = static_cast<sal_Int32>(dragLocation.y);
 
-        DropTargetDragEvent dtde(static_cast<OWeakObject*>(this),
+        DropTargetDragEvent dtde(getXWeak(),
                                0,
                                this,
                                currentAction,
@@ -281,7 +281,7 @@ NSDragOperation DropTarget::draggingUpdated(id sender)
 
 void DropTarget::draggingExited(id /*sender*/)
 {
-    DropTargetEvent dte(static_cast<OWeakObject*>(this), 0);
+    DropTargetEvent dte(getXWeak(), 0);
     fire_dragExit(dte);
     mDragSourceSupportedActions = DNDConstants::ACTION_NONE;
     mSelectedDropAction = DNDConstants::ACTION_NONE;
@@ -317,7 +317,7 @@ BOOL DropTarget::performDragOperation()
         sal_Int32 posX = static_cast<sal_Int32>(dragLocation.x);
         sal_Int32 posY = static_cast<sal_Int32>(dragLocation.y);
 
-        DropTargetDropEvent dtde(static_cast<OWeakObject*>(this),
+        DropTargetDropEvent dtde(getXWeak(),
                                0,
                                this,
                                mSelectedDropAction,
@@ -354,7 +354,7 @@ void SAL_CALL DropTarget::initialize(const Sequence< Any >& aArguments)
     if (aArguments.getLength() < 2)
     {
         throw RuntimeException("DropTarget::initialize: Cannot install window event handler",
-                               static_cast<OWeakObject*>(this));
+                               getXWeak());
     }
 
     Any pNSView = aArguments[0];

@@ -1599,7 +1599,7 @@ Reference< XInterface > GtkInstance::CreateClipboard(const Sequence< Any >& argu
     if (m_aClipboards[eSelection].is())
         return m_aClipboards[eSelection];
 
-    Reference<XInterface> xClipboard(static_cast<cppu::OWeakObject *>(new VclGtkClipboard(eSelection)));
+    Reference<XInterface> xClipboard(getXWeak(new VclGtkClipboard(eSelection)));
     m_aClipboards[eSelection] = xClipboard;
     return xClipboard;
 }
@@ -1649,7 +1649,7 @@ void GtkInstDropTarget::initialize(const Sequence<Any>& rArguments)
     if (rArguments.getLength() < 2)
     {
         throw RuntimeException("DropTarget::initialize: Cannot install window event handler",
-                               static_cast<OWeakObject*>(this));
+                               getXWeak());
     }
 
     sal_IntPtr nFrame = 0;
@@ -1658,7 +1658,7 @@ void GtkInstDropTarget::initialize(const Sequence<Any>& rArguments)
     if (!nFrame)
     {
         throw RuntimeException("DropTarget::initialize: missing SalFrame",
-                               static_cast<OWeakObject*>(this));
+                               getXWeak());
     }
 
     m_pFrame = reinterpret_cast<GtkSalFrame*>(nFrame);
@@ -1785,7 +1785,7 @@ void GtkInstDragSource::initialize(const css::uno::Sequence<css::uno::Any >& rAr
     if (rArguments.getLength() < 2)
     {
         throw RuntimeException("DragSource::initialize: Cannot install window event handler",
-                               static_cast<OWeakObject*>(this));
+                               getXWeak());
     }
 
     sal_IntPtr nFrame = 0;
@@ -1794,7 +1794,7 @@ void GtkInstDragSource::initialize(const css::uno::Sequence<css::uno::Any >& rAr
     if (!nFrame)
     {
         throw RuntimeException("DragSource::initialize: missing SalFrame",
-                               static_cast<OWeakObject*>(this));
+                               getXWeak());
     }
 
     m_pFrame = reinterpret_cast<GtkSalFrame*>(nFrame);
