@@ -319,7 +319,7 @@ void SAL_CALL UniversalContentBroker::initialize( const css::uno::Sequence< Any 
             {
                 throw IllegalArgumentException(
                     "UCB reinitialized with different arguments",
-                    static_cast< cppu::OWeakObject * >(this), 0);
+                    getXWeak(), 0);
             }
             return;
         }
@@ -581,7 +581,7 @@ Any SAL_CALL UniversalContentBroker::execute(
                 ucbhelper::cancelCommandExecution(
                     Any( IllegalArgumentException(
                                     "Wrong argument type!",
-                                    static_cast< cppu::OWeakObject * >( this ),
+                                    getXWeak(),
                                     -1 ) ),
                     Environment );
                 // Unreachable
@@ -605,7 +605,7 @@ Any SAL_CALL UniversalContentBroker::execute(
             ucbhelper::cancelCommandExecution(
                 Any( IllegalArgumentException(
                                 "Wrong argument type!",
-                                static_cast< cppu::OWeakObject * >( this ),
+                                getXWeak(),
                                 -1 ) ),
                 Environment );
             // Unreachable
@@ -621,7 +621,7 @@ Any SAL_CALL UniversalContentBroker::execute(
         ucbhelper::cancelCommandExecution(
             Any( UnsupportedCommandException(
                             OUString(),
-                            static_cast< cppu::OWeakObject * >( this ) ) ),
+                            getXWeak() ) ),
             Environment );
         // Unreachable
     }

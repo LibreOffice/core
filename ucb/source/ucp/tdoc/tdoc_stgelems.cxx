@@ -108,7 +108,7 @@ Storage::Storage( const uno::Reference< uno::XComponentContext > & rxContext,
         // is completed (See impl. of XInterface::release())!
 
         m_xAggProxy->setDelegator(
-            static_cast< cppu::OWeakObject * >( this ) );
+            getXWeak() );
     }
     osl_atomic_decrement( &m_refCount );
 }
@@ -498,7 +498,7 @@ OutputStream::OutputStream(
         // is completed (See impl. of XInterface::release())!
 
         m_xAggProxy->setDelegator(
-            static_cast< cppu::OWeakObject * >( this ) );
+            getXWeak() );
     }
     osl_atomic_decrement( &m_refCount );
 }
@@ -666,7 +666,7 @@ Stream::Stream(
         // is completed (See impl. of XInterface::release())!
 
         m_xAggProxy->setDelegator(
-            static_cast< cppu::OWeakObject * >( this ) );
+            getXWeak() );
     }
     osl_atomic_decrement( &m_refCount );
 }

@@ -73,7 +73,7 @@ namespace cmis
     {
         return uno::Any( lang::IllegalArgumentException(
             "Wrong argument type!",
-            static_cast< cppu::OWeakObject * >( this ), -1) );
+            getXWeak(), -1) );
     }
 
     uno::Reference< sdbc::XRow > RepoContent::getPropertyValues(

@@ -80,8 +80,7 @@ void ExpandContentProviderImpl::check() const
         throw lang::DisposedException(
             "expand content provider instance has "
             "already been disposed!",
-            static_cast< OWeakObject * >(
-                const_cast< ExpandContentProviderImpl * >(this) ) );
+            const_cast< ExpandContentProviderImpl * >(this)->getXWeak() );
     }
 }
 
@@ -116,8 +115,7 @@ OUString ExpandContentProviderImpl::expandUri(
     {
         throw ucb::IllegalIdentifierException(
             "expected protocol vnd.sun.star.expand!",
-            static_cast< OWeakObject * >(
-                const_cast< ExpandContentProviderImpl * >(this) ) );
+            const_cast< ExpandContentProviderImpl * >(this)->getXWeak() );
     }
     // decode uric class chars
     OUString str = ::rtl::Uri::decode(uri, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);

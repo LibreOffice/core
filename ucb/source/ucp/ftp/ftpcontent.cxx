@@ -392,7 +392,7 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                 {
                     aRet <<= IllegalArgumentException(
                                 "Wrong argument type!",
-                                static_cast< cppu::OWeakObject * >(this),
+                                getXWeak(),
                                 -1);
                     ucbhelper::cancelCommandExecution(aRet,Environment);
                 }
@@ -406,7 +406,7 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                 if( ! ( aCommand.Argument >>= propertyValues ) ) {
                     aRet <<= IllegalArgumentException(
                                 "Wrong argument type!",
-                                static_cast< cppu::OWeakObject * >(this),
+                                getXWeak(),
                                 -1);
                     ucbhelper::cancelCommandExecution(aRet,Environment);
                 }
@@ -427,7 +427,7 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                 if ( ! ( aCommand.Argument >>= aInsertArgument ) ) {
                     aRet <<= IllegalArgumentException(
                                 "Wrong argument type!",
-                                static_cast< cppu::OWeakObject * >(this),
+                                getXWeak(),
                                 -1);
                     ucbhelper::cancelCommandExecution(aRet,Environment);
                 }
@@ -442,7 +442,7 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                 if ( !( aCommand.Argument >>= aOpenCommand ) ) {
                     aRet <<= IllegalArgumentException(
                                 "Wrong argument type!",
-                                static_cast< cppu::OWeakObject * >(this),
+                                getXWeak(),
                                 -1);
 
                     ucbhelper::cancelCommandExecution(aRet,Environment);
@@ -484,7 +484,7 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                     else {
                         aRet <<= UnsupportedDataSinkException(
                             OUString(),
-                            static_cast< cppu::OWeakObject * >(this),
+                            getXWeak(),
                             aOpenCommand.Sink);
                         ucbhelper::cancelCommandExecution(aRet,Environment);
                     }
@@ -511,14 +511,14 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                     // Unsupported OpenMode
                     aRet <<= UnsupportedOpenModeException(
                         OUString(),
-                        static_cast< cppu::OWeakObject * >(this),
+                        getXWeak(),
                         static_cast< sal_Int16 >(aOpenCommand.Mode));
                     ucbhelper::cancelCommandExecution(aRet,Environment);
                 }
                 else {
                     aRet <<= IllegalArgumentException(
                                 "Unexpected OpenMode!",
-                                static_cast< cppu::OWeakObject * >(this),
+                                getXWeak(),
                                 -1);
 
                     ucbhelper::cancelCommandExecution(aRet,Environment);
@@ -530,7 +530,7 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                         Any(
                             IllegalArgumentException(
                                 "Wrong argument type!",
-                                static_cast< cppu::OWeakObject * >(this),
+                                getXWeak(),
                                 -1)),
                         Environment);
                     // Unreachable
@@ -539,7 +539,7 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
             } else {
                 aRet <<= UnsupportedCommandException(
                     aCommand.Name,
-                    static_cast< cppu::OWeakObject * >(this));
+                    getXWeak());
                 ucbhelper::cancelCommandExecution(aRet,Environment);
             }
 
@@ -836,7 +836,7 @@ Sequence<Any> FTPContent::setPropertyValues(
                         //props[j].Attributes & PropertyAttribute::READONLY
                         //    ? "Property is read-only!"
                         //    : "Access denied!"),
-                    static_cast< cppu::OWeakObject * >( this ));
+                    getXWeak());
             }
         }
     }

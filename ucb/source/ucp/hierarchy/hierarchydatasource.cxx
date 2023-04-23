@@ -403,9 +403,7 @@ HierarchyDataSource::createInstanceWithArguments(
         return xConfigAccess;
     }
 
-    return uno::Reference< uno::XInterface >(
-                static_cast< cppu::OWeakObject * >(
-                    new HierarchyDataAccess( xConfigAccess, bReadOnly ) ) );
+    return cppu::getXWeak(new HierarchyDataAccess(xConfigAccess, bReadOnly));
 }
 
 

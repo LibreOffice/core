@@ -137,7 +137,7 @@ ContentProvider::createDocumentContentIdentifier(
     {
         throw lang::IllegalArgumentException(
             "No Document Manager!",
-            static_cast< cppu::OWeakObject * >( this ),
+            getXWeak(),
             1 );
     }
 
@@ -146,7 +146,7 @@ ContentProvider::createDocumentContentIdentifier(
     {
         throw lang::IllegalArgumentException(
             "Unable to obtain document id from model!",
-            static_cast< cppu::OWeakObject * >( this ),
+            getXWeak(),
             1 );
     }
 
@@ -184,7 +184,7 @@ ContentProvider::createDocumentContent(
     // no content.
     throw lang::IllegalArgumentException(
         "Illegal Content Identifier!",
-        static_cast< cppu::OWeakObject * >( this ),
+        getXWeak(),
         1 );
 }
 

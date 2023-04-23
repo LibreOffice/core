@@ -509,7 +509,7 @@ XResultSet_impl::setListener(
 
     Listener->notify(
         ucb::ListEvent(
-            static_cast< cppu::OWeakObject * >( this ), aActions ) );
+            getXWeak(), aActions ) );
 }
 
 

@@ -98,7 +98,7 @@ DocumentContentFactory::createDocumentContent(
 
     throw uno::RuntimeException(
         "Unable to obtain document content factory!",
-        static_cast< cppu::OWeakObject * >( this ) );
+        getXWeak() );
 }
 
 

@@ -240,7 +240,7 @@ void OFileAccess::transferImpl( const OUString& rSource,
                 css::uno::Any anyEx = cppu::getCaughtException();
                 throw css::lang::WrappedTargetRuntimeException(
                     "OFileAccess::transferrImpl - Unable to obtain destination folder URL!",
-                    static_cast< cppu::OWeakObject * >( this ), anyEx );
+                    getXWeak(), anyEx );
             }
 
             transferImpl( rSource, aDestURL, bMoveData );
@@ -249,7 +249,7 @@ void OFileAccess::transferImpl( const OUString& rSource,
 
         throw RuntimeException(
                "OFileAccess::transferrImpl - Unable to obtain destination folder URL!",
-                static_cast< cppu::OWeakObject * >( this ) );
+                getXWeak() );
 
     }
 

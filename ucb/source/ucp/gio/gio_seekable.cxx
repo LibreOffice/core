@@ -46,11 +46,11 @@ void SAL_CALL Seekable::truncate()
 
     if (!g_seekable_can_truncate(mpStream))
         throw css::io::IOException("Truncate unsupported",
-            static_cast< cppu::OWeakObject * >(this));
+            getXWeak());
 
     GError *pError=nullptr;
     if (!g_seekable_truncate(mpStream, 0, nullptr, &pError))
-        convertToIOException(pError, static_cast< cppu::OWeakObject * >(this));
+        convertToIOException(pError, getXWeak());
 }
 
 void SAL_CALL Seekable::seek( sal_Int64 location )
@@ -60,11 +60,11 @@ void SAL_CALL Seekable::seek( sal_Int64 location )
 
     if (!g_seekable_can_seek(mpStream))
         throw css::io::IOException("Seek unsupported",
-            static_cast< cppu::OWeakObject * >(this));
+            getXWeak());
 
     GError *pError=nullptr;
     if (!g_seekable_seek(mpStream, location, G_SEEK_SET, nullptr, &pError))
-        convertToIOException(pError, static_cast< cppu::OWeakObject * >(this));
+        convertToIOException(pError, getXWeak());
 }
 
 sal_Int64 SAL_CALL Seekable::getPosition()
@@ -102,7 +102,7 @@ sal_Int64 SAL_CALL Seekable::getLength()
         GError *pError=nullptr;
         sal_Int64 nCurr = getPosition();
         if (!g_seekable_seek(mpStream, 0, G_SEEK_END, nullptr, &pError))
-            convertToIOException(pError, static_cast< cppu::OWeakObject * >(this));
+            convertToIOException(pError, getXWeak());
         nSize = getPosition();
         seek(nCurr);
     }

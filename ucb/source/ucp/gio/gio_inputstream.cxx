@@ -76,7 +76,7 @@ sal_Int32 SAL_CALL InputStream::readBytes( css::uno::Sequence< sal_Int8 >& aData
     gsize nBytesRead = 0;
     GError *pError=nullptr;
     if (!g_input_stream_read_all(G_INPUT_STREAM(mpStream), aData.getArray(), nBytesToRead, &nBytesRead, nullptr, &pError))
-        convertToIOException(pError, static_cast< cppu::OWeakObject * >(this));
+        convertToIOException(pError, getXWeak());
     aData.realloc(nBytesRead);
     return nBytesRead;
 }

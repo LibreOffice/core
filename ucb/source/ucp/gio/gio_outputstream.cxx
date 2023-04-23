@@ -46,7 +46,7 @@ void SAL_CALL OutputStream::writeBytes( const css::uno::Sequence< sal_Int8 >& rD
 
     GError *pError=nullptr;
     if (!g_output_stream_write_all(G_OUTPUT_STREAM(mpStream), rData.getConstArray(), rData.getLength(), nullptr, nullptr, &pError))
-        convertToIOException(pError, static_cast< cppu::OWeakObject * >(this));
+        convertToIOException(pError, getXWeak());
 }
 
 void SAL_CALL OutputStream::flush()
@@ -56,7 +56,7 @@ void SAL_CALL OutputStream::flush()
 
     GError *pError=nullptr;
     if (!g_output_stream_flush(G_OUTPUT_STREAM(mpStream), nullptr, &pError))
-        convertToIOException(pError, static_cast< cppu::OWeakObject * >(this));
+        convertToIOException(pError, getXWeak());
 }
 
 void SAL_CALL OutputStream::closeOutput()

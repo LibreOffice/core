@@ -143,7 +143,7 @@ namespace cmis
         if ( location < 0 || location > m_nLength )
             throw lang::IllegalArgumentException(
                     "Location can't be negative or greater than the length",
-                    static_cast< cppu::OWeakObject* >( this ), 0 );
+                    getXWeak(), 0 );
 
         if (!m_pStream)
             throw io::IOException( );

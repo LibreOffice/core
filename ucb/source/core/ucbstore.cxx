@@ -1166,7 +1166,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValue( const OUString& aProperty
                         xRootHierNameAccess->getByHierarchicalName( aValueName )
                             >>= nHandle;
 
-                        aEvt.Source         = static_cast<OWeakObject*>(this);
+                        aEvt.Source         = getXWeak();
                         aEvt.PropertyName   = aPropertyName;
                         aEvt.PropertyHandle = nHandle;
                         aEvt.Further        = false;
@@ -1416,7 +1416,7 @@ void SAL_CALL PersistentPropertySet::addProperty(
                 if ( m_aPropSetChangeListeners.getLength(aGuard) )
                 {
                     PropertySetInfoChangeEvent evt(
-                                    static_cast< OWeakObject * >( this ),
+                                    getXWeak(),
                                     Name,
                                     -1,
                                     PropertySetInfoChange::PROPERTY_INSERTED );
@@ -1572,7 +1572,7 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
                 if (  m_aPropSetChangeListeners.getLength(aGuard) )
                 {
                     PropertySetInfoChangeEvent evt(
-                                    static_cast< OWeakObject * >( this ),
+                                    getXWeak(),
                                     Name,
                                     nHandle,
                                     PropertySetInfoChange::PROPERTY_REMOVED );
@@ -1826,7 +1826,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
                         if ( m_aPropertyChangeListeners.hasContainedTypes(aCGuard) )
                         {
                             PropertyChangeEvent aEvt;
-                            aEvt.Source         = static_cast<OWeakObject*>(this);
+                            aEvt.Source         = getXWeak();
                             aEvt.PropertyName   = rNewValue.Name;
                             aEvt.PropertyHandle = rNewValue.Handle;
                             aEvt.Further        = false;

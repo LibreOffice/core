@@ -283,7 +283,7 @@ void XStream_impl::waitForCompletion()
     if (m_nIsOpen && m_aFile.sync() != osl::FileBase::E_None) {
         throw io::IOException(
             "could not synchronize file to disc",
-            static_cast< OWeakObject * >(this));
+            getXWeak());
     }
 }
 
