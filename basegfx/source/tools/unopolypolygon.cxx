@@ -97,7 +97,7 @@ namespace basegfx::unotools
                     throw lang::IllegalArgumentException(
                         "UnoPolyPolygon::addPolyPolygon(): Invalid input "
                         "poly-polygon, cannot retrieve vertex data",
-                        static_cast<cppu::OWeakObject*>(this), 1);
+                        getXWeak(), 1);
 
                 aSrcPoly = unotools::polyPolygonFromPoint2DSequenceSequence(
                     xLinePoly->getPoints( 0,
