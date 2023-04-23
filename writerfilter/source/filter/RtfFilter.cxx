@@ -167,7 +167,7 @@ sal_Bool RtfFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescripto
     {
         css::uno::Any anyEx = cppu::getCaughtException();
         // cannot throw WrongFormatException directly :(
-        throw lang::WrappedTargetRuntimeException("", static_cast<OWeakObject*>(this), anyEx);
+        throw lang::WrappedTargetRuntimeException("", getXWeak(), anyEx);
     }
     catch (const uno::Exception&)
     {

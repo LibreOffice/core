@@ -211,15 +211,13 @@ sal_Bool WriterFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescri
         {
             // note: SfxObjectShell checks for WrongFormatException
             io::WrongFormatException wfe(lcl_GetExceptionMessage(e));
-            throw lang::WrappedTargetRuntimeException("", static_cast<OWeakObject*>(this),
-                                                      uno::Any(wfe));
+            throw lang::WrappedTargetRuntimeException("", getXWeak(), uno::Any(wfe));
         }
         catch (xml::sax::SAXException const& e)
         {
             // note: SfxObjectShell checks for WrongFormatException
             io::WrongFormatException wfe(lcl_GetExceptionMessage(e));
-            throw lang::WrappedTargetRuntimeException("", static_cast<OWeakObject*>(this),
-                                                      uno::Any(wfe));
+            throw lang::WrappedTargetRuntimeException("", getXWeak(), uno::Any(wfe));
         }
         catch (uno::RuntimeException const&)
         {
@@ -230,7 +228,7 @@ sal_Bool WriterFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescri
             css::uno::Any anyEx = cppu::getCaughtException();
             SAL_WARN("writerfilter",
                      "WriterFilter::filter(): failed with " << exceptionToString(anyEx));
-            throw lang::WrappedTargetRuntimeException("", static_cast<OWeakObject*>(this), anyEx);
+            throw lang::WrappedTargetRuntimeException("", getXWeak(), anyEx);
         }
 
         // Adding some properties to the document's grab bag for interoperability purposes:
