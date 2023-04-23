@@ -387,7 +387,7 @@ void ValueItemAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValu
     accessibility::AccessibleEventObject                                                        aEvtObject;
 
     aEvtObject.EventId = nEventId;
-    aEvtObject.Source = static_cast<uno::XWeak*>(this);
+    aEvtObject.Source = getXWeak();
     aEvtObject.NewValue = rNewValue;
     aEvtObject.OldValue = rOldValue;
 
@@ -418,7 +418,7 @@ void ValueSetAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue
     accessibility::AccessibleEventObject                                                        aEvtObject;
 
     aEvtObject.EventId = nEventId;
-    aEvtObject.Source = static_cast<uno::XWeak*>(this);
+    aEvtObject.Source = getXWeak();
     aEvtObject.NewValue = rNewValue;
     aEvtObject.OldValue = rOldValue;
 
@@ -952,7 +952,7 @@ void ValueSetAcc::ThrowIfDisposed()
         SAL_WARN("svx", "Calling disposed object. Throwing exception:");
         throw lang::DisposedException (
             "object has been already disposed",
-            static_cast<uno::XWeak*>(this));
+            getXWeak());
     }
     else
     {

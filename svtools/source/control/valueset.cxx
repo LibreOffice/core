@@ -804,7 +804,7 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
             {
                 Any aOldAny;
                 Any aNewAny;
-                aOldAny <<= Reference<XInterface>(static_cast<cppu::OWeakObject*>(pItemAcc));
+                aOldAny <<= Reference(getXWeak(pItemAcc));
                 ImplFireAccessibleEvent(AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny );
             }
         }
@@ -827,7 +827,7 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
     {
         Any aOldAny;
         Any aNewAny;
-        aNewAny <<= Reference<XInterface>(static_cast<cppu::OWeakObject*>(pItemAcc));
+        aNewAny <<= Reference(getXWeak(pItemAcc));
         ImplFireAccessibleEvent(AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny);
     }
 
