@@ -286,7 +286,7 @@ uno::Any SAL_CALL OZipFileAccess::getByName( const OUString& aName )
     {
         css::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetException( "This package is unusable!",
-                  static_cast < OWeakObject * > ( this ), anyEx);
+                  getXWeak(), anyEx);
     }
 
     if ( !xEntryStream.is() )
@@ -412,7 +412,7 @@ void SAL_CALL OZipFileAccess::dispose()
 
     if ( m_pListenersContainer )
     {
-        lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
+        lang::EventObject aSource( getXWeak() );
         m_pListenersContainer->disposeAndClear( aSource );
         m_pListenersContainer.reset();
     }

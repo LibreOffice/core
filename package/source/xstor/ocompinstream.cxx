@@ -189,7 +189,7 @@ void OInputCompStream::InternalDispose()
 
     // the source object is also a kind of locker for the current object
     // since the listeners could dispose the object while being notified
-    lang::EventObject aSource( static_cast< ::cppu::OWeakObject*>( this ) );
+    lang::EventObject aSource( getXWeak() );
 
     if ( m_pInterfaceContainer )
         m_pInterfaceContainer->disposeAndClear( aSource );
@@ -213,7 +213,7 @@ void SAL_CALL OInputCompStream::dispose(  )
 
     if ( m_pInterfaceContainer )
     {
-        lang::EventObject aSource( static_cast< ::cppu::OWeakObject*>( this ) );
+        lang::EventObject aSource( getXWeak() );
         m_pInterfaceContainer->disposeAndClear( aSource );
     }
 

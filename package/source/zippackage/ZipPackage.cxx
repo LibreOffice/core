@@ -728,7 +728,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
         {
             // The URL is not acceptable
             throw css::uno::Exception (THROW_WHERE "Bad arguments.",
-                static_cast < ::cppu::OWeakObject * > ( this ) );
+                getXWeak() );
         }
     }
 
@@ -785,7 +785,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
 
         throw css::packages::zip::ZipIOException (
             THROW_WHERE "Bad Zip File, " + message,
-            static_cast < ::cppu::OWeakObject * > ( this ) );
+            getXWeak() );
     }
 }
 
@@ -799,7 +799,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
 
     if (aName == "/")
         // root directory.
-        return Any ( uno::Reference < XInterface > ( static_cast<cppu::OWeakObject*>(m_xRootFolder.get()) ) );
+        return Any ( uno::Reference( cppu::getXWeak(m_xRootFolder.get()) ) );
 
     nStreamIndex = aName.lastIndexOf ( '/' );
     bool bFolder = nStreamIndex == nIndex-1; // last character is '/'.
@@ -822,7 +822,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
                 sTemp = aName.copy ( nDirIndex == -1 ? 0 : nDirIndex+1, nStreamIndex-nDirIndex-1 );
 
                 if (pFolder && sTemp == pFolder->getName())
-                    return Any(uno::Reference<XInterface>(static_cast<cppu::OWeakObject*>(pFolder)));
+                    return Any(uno::Reference(cppu::getXWeak(pFolder)));
             }
             else
             {
@@ -868,7 +868,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
     {
         if ( nStreamIndex != -1 )
             m_aRecent[sDirName] = pPrevious; // cache it.
-        return Any ( uno::Reference < XInterface > ( static_cast<cppu::OWeakObject*>(pCurrent) ) );
+        return Any ( uno::Reference( cppu::getXWeak(pCurrent) ) );
     }
 
     sTemp = aName.copy( nOldIndex );
@@ -1032,7 +1032,7 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
         css::uno::Any anyEx = cppu::getCaughtException();
         throw WrappedTargetException(
                 THROW_WHERE "Error adding mimetype to the ZipOutputStream!",
-                static_cast < OWeakObject * > ( this ),
+                getXWeak(),
                 anyEx );
     }
 }
@@ -1327,7 +1327,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
 
             throw WrappedTargetException(
                     THROW_WHERE "Problem writing the original content!",
-                    static_cast < OWeakObject * > ( this ),
+                    getXWeak(),
                     aCaught );
         }
         else
@@ -1337,7 +1337,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
             OUString aErrTxt(THROW_WHERE "This package is unusable!");
             embed::UseBackupException aException( aErrTxt, uno::Reference< uno::XInterface >(), OUString() );
             throw WrappedTargetException( aErrTxt,
-                                            static_cast < OWeakObject * > ( this ),
+                                            getXWeak(),
                                             Any ( aException ) );
         }
     }
@@ -1406,7 +1406,7 @@ void SAL_CALL ZipPackage::commitChanges()
     {
         IOException aException;
         throw WrappedTargetException(THROW_WHERE "This package is read only!",
-                static_cast < OWeakObject * > ( this ), Any ( aException ) );
+                getXWeak(), Any ( aException ) );
     }
     // first the writeTempFile is called, if it returns a stream the stream should be written to the target
     // if no stream was returned, the file was written directly, nothing should be done
@@ -1419,7 +1419,7 @@ void SAL_CALL ZipPackage::commitChanges()
     {
         css::uno::Any anyEx = cppu::getCaughtException();
         throw WrappedTargetException(THROW_WHERE "Temporary file should be creatable!",
-                    static_cast < OWeakObject * > ( this ), anyEx );
+                    getXWeak(), anyEx );
     }
     if ( xTempInStream.is() )
     {
@@ -1433,7 +1433,7 @@ void SAL_CALL ZipPackage::commitChanges()
         {
             css::uno::Any anyEx = cppu::getCaughtException();
             throw WrappedTargetException(THROW_WHERE "Temporary file should be seekable!",
-                    static_cast < OWeakObject * > ( this ), anyEx );
+                    getXWeak(), anyEx );
         }
 
         try
@@ -1445,7 +1445,7 @@ void SAL_CALL ZipPackage::commitChanges()
         {
             css::uno::Any anyEx = cppu::getCaughtException();
             throw WrappedTargetException(THROW_WHERE "Temporary file should be connectable!",
-                    static_cast < OWeakObject * > ( this ), anyEx );
+                    getXWeak(), anyEx );
         }
 
         if ( m_eMode == e_IMode_XStream )
@@ -1474,7 +1474,7 @@ void SAL_CALL ZipPackage::commitChanges()
             {
                 css::uno::Any anyEx = cppu::getCaughtException();
                 throw WrappedTargetException(THROW_WHERE "This package is read only!",
-                        static_cast < OWeakObject * > ( this ), anyEx );
+                        getXWeak(), anyEx );
             }
 
             try
@@ -1574,7 +1574,7 @@ void SAL_CALL ZipPackage::commitChanges()
                     css::uno::Any anyEx = cppu::getCaughtException();
                     throw WrappedTargetException(
                                                 THROW_WHERE "This package may be read only!",
-                                                static_cast < OWeakObject * > ( this ),
+                                                getXWeak(),
                                                 anyEx );
                 }
             }
@@ -1609,7 +1609,7 @@ void ZipPackage::DisconnectFromTargetAndThrowException_Impl( const uno::Referenc
     OUString aErrTxt(THROW_WHERE "This package is read only!");
     embed::UseBackupException aException( aErrTxt, uno::Reference< uno::XInterface >(), aTempURL );
     throw WrappedTargetException( aErrTxt,
-                                    static_cast < OWeakObject * > ( this ),
+                                    getXWeak(),
                                     Any ( aException ) );
 }
 

@@ -197,7 +197,7 @@ ZipContentInfo& ZipPackageFolder::doGetByName( const OUString& aName )
 
 uno::Any SAL_CALL ZipPackageFolder::getByName( const OUString& aName )
 {
-    return uno::Any ( uno::Reference<XInterface>(static_cast<cppu::OWeakObject*>(doGetByName ( aName ).xPackageEntry.get())) );
+    return uno::Any ( uno::Reference(cppu::getXWeak(doGetByName ( aName ).xPackageEntry.get())) );
 }
 uno::Sequence< OUString > SAL_CALL ZipPackageFolder::getElementNames(  )
 {

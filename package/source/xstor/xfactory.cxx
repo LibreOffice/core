@@ -74,7 +74,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstance()
     // TODO: reimplement TempStream service to support XStream interface
     uno::Reference < io::XStream > xTempStream(new utl::TempFileFastService);
 
-    return static_cast<OWeakObject*>(new OStorage(xTempStream, embed::ElementModes::READWRITE,
+    return cppu::getXWeak(new OStorage(xTempStream, embed::ElementModes::READWRITE,
                                                   uno::Sequence<beans::PropertyValue>(), m_xContext,
                                                   embed::StorageFormats::PACKAGE));
 }
@@ -239,7 +239,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
         if ( !CheckPackageSignature_Impl( xInputStream, xSeekable ) )
             throw io::IOException("package signature check failed, probably not a package file", nullptr); // TODO: this is not a package file
 
-        return static_cast<OWeakObject*>(
+        return cppu::getXWeak(
             new OStorage(xInputStream, nStorageMode, aPropsToSet, m_xContext, nStorageType));
     }
     else if ( xStream.is() )
@@ -258,7 +258,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
         if ( !CheckPackageSignature_Impl( xStream->getInputStream(), xSeekable ) )
             throw io::IOException(); // TODO: this is not a package file
 
-        return static_cast<OWeakObject*>(
+        return cppu::getXWeak(
             new OStorage(xStream, nStorageMode, aPropsToSet, m_xContext, nStorageType));
     }
 

@@ -78,7 +78,7 @@ void SAL_CALL ZipPackageEntry::setName( const OUString& aName )
 uno::Reference< XInterface > SAL_CALL ZipPackageEntry::getParent(  )
 {
     // return uno::Reference< XInterface >( xParent, UNO_QUERY );
-    return uno::Reference< XInterface >( static_cast< ::cppu::OWeakObject* >( mpParent ), UNO_QUERY );
+    return cppu::getXWeak( mpParent );
 }
 
 void ZipPackageEntry::doSetParent ( ZipPackageFolder * pNewParent )

@@ -1796,7 +1796,7 @@ void OStorage::InternalDispose( bool bNotifyImpl )
 
     // the source object is also a kind of locker for the current object
     // since the listeners could dispose the object while being notified
-    lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
+    lang::EventObject aSource( getXWeak() );
     m_aListenersContainer.disposeAndClear( aSource );
 
     if ( !m_pImpl )
@@ -1891,7 +1891,7 @@ void OStorage::BroadcastModifiedIfNecessary()
 
     SAL_WARN_IF( m_bReadOnlyWrap, "package.xstor", "The storage can not be modified at all!" );
 
-    lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
+    lang::EventObject aSource( getXWeak() );
 
     comphelper::OInterfaceContainerHelper2* pContainer =
             m_aListenersContainer.getContainer(
@@ -1923,7 +1923,7 @@ void OStorage::BroadcastTransaction( sal_Int8 nMessage )
 
     SAL_WARN_IF( m_bReadOnlyWrap, "package.xstor", "The storage can not be modified at all!" );
 
-    lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
+    lang::EventObject aSource( getXWeak() );
 
     comphelper::OInterfaceContainerHelper2* pContainer =
             m_aListenersContainer.getContainer(
@@ -2161,7 +2161,7 @@ void SAL_CALL OStorage::copyToStorage( const uno::Reference< embed::XStorage >& 
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    if ( !xDest.is() || xDest == uno::Reference< uno::XInterface >( static_cast< OWeakObject*> ( this ), uno::UNO_QUERY ) )
+    if ( !xDest.is() || xDest == getXWeak() )
         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
 
     try {
@@ -2934,7 +2934,7 @@ void SAL_CALL OStorage::copyElementTo(  const OUString& aElementName,
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
     if ( !xDest.is() )
-        // || xDest == uno::Reference< uno::XInterface >( static_cast< OWeakObject* >( this ), uno::UNO_QUERY ) )
+        // || xDest == getXWeak() )
         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 2 );
 
     if ( m_pImpl->m_nStorageType == embed::StorageFormats::OFOPXML && ( aElementName == "_rels" || aNewName == "_rels" ) )
@@ -3018,10 +3018,7 @@ void SAL_CALL OStorage::moveElementTo(  const OUString& aElementName,
             throw lang::IllegalArgumentException(THROW_WHERE "Unexpected entry name syntax.",
                                                  uno::Reference<uno::XInterface>(), 1);
 
-        if (!xDest.is()
-            || xDest
-                   == uno::Reference<uno::XInterface>(static_cast<OWeakObject*>(this),
-                                                      uno::UNO_QUERY))
+        if (!xDest.is() || xDest == getXWeak())
             throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference<uno::XInterface>(), 2);
 
         if (m_pImpl->m_nStorageType == embed::StorageFormats::OFOPXML
@@ -3565,7 +3562,7 @@ void SAL_CALL OStorage::commit()
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
 
         throw embed::StorageWrappedTargetException( THROW_WHERE "Problems on commit!",
-                                  static_cast< ::cppu::OWeakObject* >( this ),
+                                  getXWeak(),
                                   aCaught );
     }
 
@@ -3634,7 +3631,7 @@ void SAL_CALL OStorage::revert()
             SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
 
             throw embed::StorageWrappedTargetException(THROW_WHERE "Problems on revert!",
-                                                       static_cast<::cppu::OWeakObject*>(this),
+                                                       getXWeak(),
                                                        aCaught);
         }
     }
@@ -3798,7 +3795,7 @@ uno::Any SAL_CALL OStorage::getByName( const OUString& aName )
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
 
         throw lang::WrappedTargetException( THROW_WHERE "Can not open storage!",
-                                            static_cast< OWeakObject* >( this ),
+                                            getXWeak(),
                                             aCaught );
     }
 
@@ -3830,7 +3827,7 @@ uno::Sequence< OUString > SAL_CALL OStorage::getElementNames()
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
 
         throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open storage!",
-                                            static_cast< OWeakObject* >( this ),
+                                            getXWeak(),
                                             aCaught );
     }
 }
@@ -3867,7 +3864,7 @@ sal_Bool SAL_CALL OStorage::hasByName( const OUString& aName )
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
 
         throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open storage!",
-                                            static_cast< OWeakObject* >( this ),
+                                            getXWeak(),
                                             aCaught );
     }
 
@@ -3913,7 +3910,7 @@ sal_Bool SAL_CALL OStorage::hasElements()
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
 
         throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open storage!",
-                                            static_cast< OWeakObject* >( this ),
+                                            getXWeak(),
                                             aCaught );
     }
 }
@@ -3944,7 +3941,7 @@ void SAL_CALL OStorage::dispose()
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
 
         throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open storage!",
-                                            static_cast< OWeakObject* >( this ),
+                                            getXWeak(),
                                             aCaught );
     }
 }
@@ -4017,7 +4014,7 @@ void SAL_CALL OStorage::removeEncryption()
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
 
         throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
-                                            static_cast< OWeakObject* >( this ),
+                                            getXWeak(),
                                             aCaught );
     }
 
@@ -4081,7 +4078,7 @@ void SAL_CALL OStorage::setEncryptionData( const uno::Sequence< beans::NamedValu
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
 
         throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
-                            static_cast< OWeakObject* >( this ),
+                            getXWeak(),
                             aCaught );
     }
 
@@ -4146,7 +4143,7 @@ void SAL_CALL OStorage::setEncryptionAlgorithms( const uno::Sequence< beans::Nam
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
 
         throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
-                                            static_cast< OWeakObject* >( this ),
+                                            getXWeak(),
                                             aCaught );
     }
 
@@ -4167,7 +4164,7 @@ void SAL_CALL OStorage::setEncryptionAlgorithms( const uno::Sequence< beans::Nam
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
 
         throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
-                                            static_cast< OWeakObject* >( this ),
+                                            getXWeak(),
                                             aCaught );
     }
 }
@@ -4206,7 +4203,7 @@ void SAL_CALL OStorage::setGpgProperties( const uno::Sequence< uno::Sequence< be
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
 
         throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
-                                            static_cast< OWeakObject* >( this ),
+                                            getXWeak(),
                                             aCaught );
     }
 
@@ -4227,7 +4224,7 @@ void SAL_CALL OStorage::setGpgProperties( const uno::Sequence< uno::Sequence< be
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
 
         throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
-                                            static_cast< OWeakObject* >( this ),
+                                            getXWeak(),
                                             aCaught );
     }
 }
@@ -4263,7 +4260,7 @@ uno::Sequence< beans::NamedValue > SAL_CALL OStorage::getEncryptionAlgorithms()
             SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
 
             throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
-                                                static_cast< OWeakObject* >( this ),
+                                                getXWeak(),
                                                 aCaught );
         }
 
@@ -4283,7 +4280,7 @@ uno::Sequence< beans::NamedValue > SAL_CALL OStorage::getEncryptionAlgorithms()
             SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
 
             throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
-                                                static_cast< OWeakObject* >( this ),
+                                                getXWeak(),
                                                 aCaught );
         }
     }
@@ -4435,7 +4432,7 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const OUString& aPropertyName )
 
             throw lang::WrappedTargetException(
                                         "Can't read contents!",
-                                        static_cast< OWeakObject* >( this ),
+                                        getXWeak(),
                                         aCaught );
         }
 
@@ -4491,7 +4488,7 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const OUString& aPropertyName )
                 SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
 
                 throw lang::WrappedTargetException( THROW_WHERE "Can not open package!",
-                                                    static_cast< OWeakObject* >( this ),
+                                                    getXWeak(),
                                                     aCaught );
             }
         }
@@ -4991,7 +4988,7 @@ void SAL_CALL OStorage::copyElementDirectlyTo(
       || aNewName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aNewName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
-    if ( !xDest.is() || xDest == uno::Reference< uno::XInterface >( static_cast< OWeakObject* >( this ), uno::UNO_QUERY ) )
+    if ( !xDest.is() || xDest == getXWeak() )
         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 2 );
 
     if ( m_pImpl->m_nStorageType == embed::StorageFormats::OFOPXML && ( aElementName == "_rels" || aNewName == "_rels" ) )

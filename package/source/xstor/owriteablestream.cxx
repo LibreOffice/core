@@ -1305,9 +1305,7 @@ void OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io:
 
     uno::Reference < io::XSeekable > xTempSeek( xTempFile, uno::UNO_QUERY_THROW );
 
-    uno::Reference < io::XOutputStream > xTempOut = xTempFile->getOutputStream();
-    if ( !xTempOut.is() )
-        throw uno::RuntimeException();
+    uno::Reference < io::XOutputStream > xTempOut(xTempFile->getOutputStream(), uno::UNO_SET_THROW);
 
     if ( xDataToCopy.is() )
         ::comphelper::OStorageHelper::CopyInputToOutput( xDataToCopy, xTempOut );
@@ -1322,9 +1320,7 @@ void OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io:
     // TODO: remember last state of m_bUseCommonEncryption
     if ( !xTargetStream.is() )
         xTargetStream.set(
-            static_cast< ::cppu::OWeakObject* >(
-                new OInputSeekStream( xInStream, InsertOwnProps( aProps, m_bUseCommonEncryption ), m_nStorageType ) ),
-            uno::UNO_QUERY_THROW );
+            new OInputSeekStream( xInStream, InsertOwnProps( aProps, m_bUseCommonEncryption ), m_nStorageType ) );
 }
 
 void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTargetStream )
@@ -1989,7 +1985,7 @@ uno::Reference< io::XOutputStream > SAL_CALL OWriteStream::getOutputStream()
     catch( const io::IOException& r )
     {
         throw lang::WrappedTargetRuntimeException("OWriteStream::getOutputStream: Could not create backing temp file",
-                static_cast < OWeakObject * > ( this ), css::uno::Any ( r ) );
+                getXWeak(), css::uno::Any ( r ) );
     }
 
     if ( !m_pImpl )
@@ -2329,7 +2325,7 @@ void SAL_CALL OWriteStream::dispose()
                 uno::Any aCaught( ::cppu::getCaughtException() );
                 SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
                 throw lang::WrappedTargetRuntimeException("Can not commit/revert the storage!",
-                                                static_cast< OWeakObject* >( this ),
+                                                getXWeak(),
                                                 aCaught );
             }
         }
@@ -2341,7 +2337,7 @@ void SAL_CALL OWriteStream::dispose()
     // for now the listener is just notified at the end of the method to workaround the problem
     // in future a more elegant way should be found
 
-    lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
+    lang::EventObject aSource( getXWeak() );
     m_aListenersContainer.disposeAndClear( aSource );
 }
 
@@ -2458,7 +2454,7 @@ sal_Bool SAL_CALL OWriteStream::hasEncryptionData()
         uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
         throw lang::WrappedTargetRuntimeException( "Problems on hasEncryptionData!",
-                                  static_cast< ::cppu::OWeakObject* >( this ),
+                                  getXWeak(),
                                   aCaught );
     }
 
@@ -3011,7 +3007,7 @@ void OWriteStream::BroadcastTransaction( sal_Int8 nMessage )
         throw lang::DisposedException();
     }
 
-    lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
+    lang::EventObject aSource( getXWeak() );
 
     comphelper::OInterfaceContainerHelper2* pContainer =
             m_aListenersContainer.getContainer(
@@ -3090,7 +3086,7 @@ void SAL_CALL OWriteStream::commit()
         uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
         throw embed::StorageWrappedTargetException( "Problems on commit!",
-                                  static_cast< ::cppu::OWeakObject* >( this ),
+                                  getXWeak(),
                                   aCaught );
     }
 
@@ -3146,7 +3142,7 @@ void SAL_CALL OWriteStream::revert()
             uno::Any aCaught(::cppu::getCaughtException());
             SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
             throw embed::StorageWrappedTargetException("Problems on revert!",
-                static_cast<::cppu::OWeakObject*>(this),
+                getXWeak(),
                 aCaught);
         }
     }
