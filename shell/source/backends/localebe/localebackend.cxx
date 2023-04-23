@@ -286,7 +286,7 @@ void LocaleBackend::setPropertyValue(
 {
     throw css::lang::IllegalArgumentException(
         "setPropertyValue not supported",
-        static_cast< cppu::OWeakObject * >(this), -1);
+        getXWeak(), -1);
 }
 
 css::uno::Any LocaleBackend::getPropertyValue(
@@ -302,7 +302,7 @@ css::uno::Any LocaleBackend::getPropertyValue(
         return css::uno::Any(getUILocale());
     } else {
         throw css::beans::UnknownPropertyException(
-            PropertyName, static_cast< cppu::OWeakObject * >(this));
+            PropertyName, getXWeak());
     }
 }
 

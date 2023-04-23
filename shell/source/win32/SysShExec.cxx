@@ -234,7 +234,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                 "XSystemShellExecute.execute URIS_ONLY with"
                          " non-absolute URI reference "
                  + aCommand,
-                static_cast< cppu::OWeakObject * >(this), 0);
+                getXWeak(), 0);
         }
         if (uri->getScheme().equalsIgnoreAsciiCase("file")) {
             // ShellExecuteExW appears to ignore the fragment of a file URL anyway, so remove it:

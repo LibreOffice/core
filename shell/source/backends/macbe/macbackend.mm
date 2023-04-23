@@ -186,7 +186,7 @@ void MacOSXBackend::setPropertyValue(
 {
     throw css::lang::IllegalArgumentException(
         "setPropertyValue not supported",
-        static_cast< cppu::OWeakObject * >(this), -1);
+        getXWeak(), -1);
 }
 
 css::uno::Any MacOSXBackend::getPropertyValue(
@@ -365,7 +365,7 @@ css::uno::Any MacOSXBackend::getPropertyValue(
         return css::uno::Any(css::beans::Optional< css::uno::Any >());
     } else {
         throw css::beans::UnknownPropertyException(
-            PropertyName, static_cast< cppu::OWeakObject * >(this));
+            PropertyName, getXWeak());
     }
 }
 

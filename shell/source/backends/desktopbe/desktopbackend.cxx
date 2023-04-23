@@ -106,7 +106,7 @@ void Default::setPropertyValue(OUString const &, css::uno::Any const &)
 {
     throw css::lang::IllegalArgumentException(
         "setPropertyValue not supported",
-        static_cast< cppu::OWeakObject * >(this), -1);
+        getXWeak(), -1);
 }
 
 OUString xdg_user_dir_lookup (const char *type, bool bAllowHomeDir)
@@ -252,7 +252,7 @@ css::uno::Any Default::getPropertyValue(OUString const & PropertyName)
     }
 
     throw css::beans::UnknownPropertyException(
-        PropertyName, static_cast< cppu::OWeakObject * >(this));
+        PropertyName, getXWeak());
 }
 
 css::uno::Reference< css::uno::XInterface > createBackend(
@@ -290,7 +290,7 @@ shell_DesktopBackend_get_implementation(
         backend = createBackend(context,
             "com.sun.star.configuration.backend.KF5Backend");
     if (!backend)
-        backend = static_cast< cppu::OWeakObject * >(new Default);
+        backend = getXWeak(new Default);
     backend->acquire();
     return backend.get();
 }

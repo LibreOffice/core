@@ -129,7 +129,7 @@ void SAL_CALL JumpListImpl::beginList(const OUString& sApplication)
         throw IllegalArgumentException(
             "Parameter 'application' must be one of 'Writer', 'Calc', 'Impress', 'Draw', "
             "'Math', 'Base', 'Startcenter'.",
-            static_cast<OWeakObject*>(this), 1);
+            getXWeak(), 1);
     }
     OUString sApplicationID("TheDocumentFoundation.LibreOffice." + sApplication);
 
@@ -157,8 +157,7 @@ void SAL_CALL JumpListImpl::appendCategory(const OUString& sCategory,
 
     if (sCategory.isEmpty())
     {
-        throw IllegalArgumentException("Parameter 'category' must not be empty",
-                                       static_cast<OWeakObject*>(this), 1);
+        throw IllegalArgumentException("Parameter 'category' must not be empty", getXWeak(), 1);
     }
 
     try
@@ -241,7 +240,7 @@ void SAL_CALL JumpListImpl::appendCategory(const OUString& sCategory,
             throw IllegalArgumentException(
                 "No valid items given. `jumpListItems` is either empty, or contains only items "
                 "which were removed by the user. See `XJumpList::getRemovedItems()`.",
-                static_cast<OWeakObject*>(this), 1);
+                getXWeak(), 1);
         }
 
         ThrowIfFailed(
@@ -329,7 +328,7 @@ void SAL_CALL JumpListImpl::addTasks(const Sequence<JumpListItem>& aJumpListItem
         if (nItems == 0)
         {
             throw IllegalArgumentException("No valid items given. `jumpListItems` is empty.",
-                                           static_cast<OWeakObject*>(this), 1);
+                                           getXWeak(), 1);
         }
 
         ThrowIfFailed(m_aDestinationList->AddUserTasks(pObjectArray), "AddUserTasks failed.");
@@ -417,7 +416,7 @@ void SAL_CALL JumpListImpl::deleteList(const OUString& sApplication)
         throw IllegalArgumentException(
             "Parameter 'application' must be one of 'Writer', 'Calc', 'Impress', 'Draw', "
             "'Math', 'Base', 'Startcenter'.",
-            static_cast<OWeakObject*>(this), 1);
+            getXWeak(), 1);
     }
     OUString sApplicationID("TheDocumentFoundation.LibreOffice." + sApplication);
 
@@ -442,7 +441,7 @@ Sequence<JumpListItem> SAL_CALL JumpListImpl::getRemovedItems(const OUString& sA
         throw IllegalArgumentException(
             "Parameter 'application' must be one of 'Writer', 'Calc', 'Impress', 'Draw', "
             "'Math', 'Base', 'Startcenter'.",
-            static_cast<OWeakObject*>(this), 1);
+            getXWeak(), 1);
     }
     OUString sApplicationID("TheDocumentFoundation.LibreOffice." + sApplication);
 

@@ -107,7 +107,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
             throw RuntimeException(
                 "Cannot translate URI reference to external format: "
                  + aCommand,
-                static_cast< cppu::OWeakObject * >(this));
+                getXWeak());
         }
 
 #ifdef MACOSX
@@ -205,7 +205,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
             "XSystemShellExecute.execute URIS_ONLY with non-absolute"
                      " URI reference "
              + aCommand,
-            static_cast< cppu::OWeakObject * >(this), 0);
+            getXWeak(), 0);
     } else {
         escapeForShell(aBuffer, OUStringToOString(aCommand, osl_getThreadTextEncoding()));
         aBuffer.append(" ");

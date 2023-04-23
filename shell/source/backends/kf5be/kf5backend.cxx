@@ -220,8 +220,7 @@ Service::Service()
 
 void Service::setPropertyValue(OUString const&, css::uno::Any const&)
 {
-    throw css::lang::IllegalArgumentException("setPropertyValue not supported",
-                                              static_cast<cppu::OWeakObject*>(this), -1);
+    throw css::lang::IllegalArgumentException("setPropertyValue not supported", getXWeak(), -1);
 }
 
 css::uno::Any Service::getPropertyValue(OUString const& PropertyName)
@@ -247,7 +246,7 @@ css::uno::Any Service::getPropertyValue(OUString const& PropertyName)
         return css::uno::Any(css::beans::Optional<css::uno::Any>());
         //TODO: obtain values from KDE?
     }
-    throw css::beans::UnknownPropertyException(PropertyName, static_cast<cppu::OWeakObject*>(this));
+    throw css::beans::UnknownPropertyException(PropertyName, getXWeak());
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
