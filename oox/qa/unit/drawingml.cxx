@@ -327,10 +327,16 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf142605_CurveSize)
     saveAndReload("Impress Office Open XML");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
+    auto xPage = xDrawPagesSupplier->getDrawPages()->getByIndex(0);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xPage, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShape.is());
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShapeProps.is());
+    uno::Reference<container::XNamed> xShapeNamed(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShapeNamed.is());
+    CPPUNIT_ASSERT_EQUAL(OUString(u"Bézier curve 1"), xShapeNamed->getName());
+
     css::awt::Rectangle aBoundRect;
     xShapeProps->getPropertyValue("BoundRect") >>= aBoundRect;
     // Without fix, size was 6262 x 3509, and position was 10037|6790.
