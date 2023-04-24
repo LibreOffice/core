@@ -337,7 +337,8 @@ const struct {
     { "en_IL",  lcl_DATA_OTHERS },  // needs to be in OTHERS instead of EN because inherits from he_IL
     { "pdc_US", lcl_DATA_OTHERS },
     { "dv_MV",  lcl_DATA_OTHERS },
-    { "mfe_MU", lcl_DATA_OTHERS }
+    { "mfe_MU", lcl_DATA_OTHERS },
+    { "sat_IN", lcl_DATA_OTHERS }
 };
 
 #else
