@@ -276,8 +276,8 @@ findInPair(std::u16string_view str1, const std::deque<OUString>& rContainer1,
 {
     assert(rContainer1.size() == rContainer2.size());
 
-    if (auto it1 = std::find(rContainer1.begin(), rContainer1.end(), str1);
-        it1 != rContainer1.end())
+    for (auto it1 = std::find(rContainer1.begin(), rContainer1.end(), str1);
+         it1 != rContainer1.end(); it1 = std::find(std::next(it1), rContainer1.end(), str1))
     {
         auto it2 = rContainer2.begin() + (it1 - rContainer1.begin());
         if (*it2 == str2)
