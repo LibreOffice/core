@@ -1306,6 +1306,8 @@ void MetaHatchAction::Execute( OutputDevice* pOut )
 {
     if (!AllowRect(pOut->LogicToPixel(maPolyPoly.GetBoundRect())))
         return;
+    if (!AllowDim(pOut->LogicToPixel(Point(maHatch.GetDistance(), 0)).X()))
+        return;
 
     pOut->DrawHatch( maPolyPoly, maHatch );
 }
