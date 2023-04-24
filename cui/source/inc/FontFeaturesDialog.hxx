@@ -29,21 +29,27 @@ struct FontFeatureItem
         , m_xCombo(m_xBuilder->weld_combo_box("combo"))
         , m_xCheck(m_xBuilder->weld_check_button("check"))
     {
+        m_xCheck->connect_toggled(LINK(this, FontFeatureItem, CheckBoxToggledHdl));
     }
 
     sal_uInt32 m_aFeatureCode;
     sal_Int32 m_nDefault;
+    weld::TriStateEnabled m_aTriStateEnabled;
+    Link<weld::Toggleable&, void> m_aToggleHdl;
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Widget> m_xContainer;
     std::unique_ptr<weld::Label> m_xText;
     std::unique_ptr<weld::ComboBox> m_xCombo;
     std::unique_ptr<weld::CheckButton> m_xCheck;
+
+private:
+    DECL_LINK(CheckBoxToggledHdl, weld::Toggleable&, void);
 };
 
 class FontFeaturesDialog : public weld::GenericDialogController
 {
 private:
-    std::vector<FontFeatureItem> m_aFeatureItems;
+    std::vector<std::unique_ptr<FontFeatureItem>> m_aFeatureItems;
     OUString m_sFontName;
     OUString m_sResultFontName;
 
