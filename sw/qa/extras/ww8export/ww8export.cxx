@@ -763,7 +763,6 @@ DECLARE_WW8EXPORT_TEST( testTdf105570, "tdf105570.doc" )
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf112346)
 {
-    SwModelTestBase::FlySplitGuard aGuard;
     auto verify = [this]() {
         // Multi-page table was imported as a single page.
         CPPUNIT_ASSERT_EQUAL(2, getPages());

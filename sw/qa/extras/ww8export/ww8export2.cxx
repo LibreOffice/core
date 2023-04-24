@@ -87,8 +87,6 @@ DECLARE_WW8EXPORT_TEST(testTdf55528_relativeTableWidth, "tdf55528_relativeTableW
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf128700_relativeTableWidth)
 {
-    SwModelTestBase::FlySplitGuard aGuard;
-
     auto verify = [this]() {
         uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
@@ -292,7 +290,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf116570_exportFootnote)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf80635_pageRightRTL)
 {
-    SwModelTestBase::FlySplitGuard aGuard;
     auto verify = [this]() {
         // tdf#80635 - assert horizontal position of the table.
         uno::Reference<drawing::XShape> xFly = getShape(1);
@@ -308,7 +305,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf80635_pageRightRTL)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf80635_marginRTL)
 {
-    SwModelTestBase::FlySplitGuard aGuard;
     auto verify = [this]() {
         // tdf#80635 - assert the horizontal orientation of the table.
         uno::Reference<drawing::XShape> xFly = getShape(1);
@@ -322,7 +318,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf80635_marginRTL)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf80635_marginLeft)
 {
-    SwModelTestBase::FlySplitGuard aGuard;
     auto verify = [this]() {
         // tdf#80635 - assert horizontal position of the table.
         uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -340,7 +335,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf80635_marginLeft)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf80635_pageLeft)
 {
-    SwModelTestBase::FlySplitGuard aGuard;
     auto verify = [this]() {
         // tdf#80635 - assert horizontal orient relation of the table.
         uno::Reference<drawing::XShape> xFly = getShape(1);
@@ -365,8 +359,6 @@ DECLARE_WW8EXPORT_TEST(testTdf99197_defaultLTR, "tdf99197_defaultLTR.doc")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf107773)
 {
-    SwModelTestBase::FlySplitGuard aGuard;
-
     auto verify = [this]() {
         // This failed, multi-page table was imported as a non-split frame.
         SwDoc* pDoc = getSwDoc();
