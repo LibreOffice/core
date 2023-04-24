@@ -2683,6 +2683,25 @@
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=MROUND(1.45;0.1)" office:value-type="float" office:value="1.5" calcext:value-type="float">
+      <text:p>1.5</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1.5" calcext:value-type="float">
+      <text:p>1.5</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce14" table:formula="of:=ROUND([.A22];12)=ROUND([.B22];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=FORMULA([.A22])" office:value-type="string" office:string-value="=MROUND(1.45;0.1)" calcext:value-type="string">
+      <text:p>=MROUND(1.45;0.1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell table:style-name="ce31"/>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce30" table:number-columns-repeated="3"/>
+     <table:table-cell/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce15"/>
      <table:table-cell table:style-name="ce20"/>
