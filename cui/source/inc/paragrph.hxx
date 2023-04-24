@@ -68,6 +68,7 @@ private:
     std::unique_ptr<weld::ComboBox> m_xLineDist;
     std::unique_ptr<weld::MetricSpinButton> m_xLineDistAtPercentBox;
     std::unique_ptr<weld::MetricSpinButton> m_xLineDistAtMetricBox;
+    std::unique_ptr<weld::MetricSpinButton> m_xLineDistAtPlaceHolderBox;
     std::unique_ptr<weld::Label> m_xLineDistAtLabel;
     std::unique_ptr<weld::Label> m_xAbsDist;
 
