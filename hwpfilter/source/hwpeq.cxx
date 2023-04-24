@@ -708,17 +708,17 @@ static char eq2ltxconv(OString& sstr, std::istream *strm, const char *sentinel)
     make_keyword(key, token);
     const hwpeq *eq = nullptr;
     if( (eq = lookup_eqn(key)) != nullptr ) {
+      const bool bUpperFollowingChar = ( (eq->flag & EQ_CASE)
+          && rtl::isAsciiUpperCase(static_cast<unsigned char>(token[0])) );
+
       if( eq->latex )
-        strcpy(key, eq->latex);
+        token = eq->latex;
       else {
-        key[0] = '\\';
-        strcpy(key + 1, eq->key);
+        token = OString::Concat("\\") + eq->key;
       }
-      if( (eq->flag & EQ_CASE)
-          && rtl::isAsciiUpperCase(static_cast<unsigned char>(token[0])) )
-        key[1] = sal::static_int_cast<char>(
-            rtl::toAsciiUpperCase(static_cast<unsigned char>(key[1])));
-      token = key;
+
+      if (bUpperFollowingChar)
+        token = token.replaceAt(1, 1, token.copy(1, 1).toAsciiUpperCase());
     }
 
     if( token[0] == '{' ) { // grouping
