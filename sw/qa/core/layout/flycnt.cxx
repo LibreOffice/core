@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <svx/svdview.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <IDocumentLayoutAccess.hxx>
 #include <anchoredobject.hxx>
@@ -680,6 +681,23 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyInSection)
 {
     // This crashed, the layout assumed that the floating table is directly under the body frame.
     createSwDoc("floattable-in-section.docx");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyThenTable)
+{
+    // Given a document with a 2 page floating table, followed by an other table:
+    // Intentionally load the document as hidden to avoid layout during load (see TestTdf150616):
+    uno::Sequence<beans::PropertyValue> aFilterOptions = {
+        comphelper::makePropertyValue("Hidden", true),
+    };
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/core/layout/data/")
+                                      + "floattable-then-table.docx",
+                                  "com.sun.star.text.TextDocument", aFilterOptions);
+
+    // When layout is calculated during PDF export:
+    // Then make sure that finishes without errors:
+    // This crashed, due to a stack overflow in layout code.
+    save("writer_pdf_Export");
 }
 }
 

@@ -51,6 +51,7 @@
 #include <fmtfollowtextflow.hxx>
 #include <unoprnms.hxx>
 #include <rootfrm.hxx>
+#include <bodyfrm.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1577,7 +1578,17 @@ SwLayoutFrame *SwFrame::GetNextFlyLeaf( MakePageType eMakePage )
             bool bLeftBody = bBody && !pLayLeaf->IsInDocBody();
             // If the candidate is in a fly, make sure that the candidate is a child of our follow.
             bool bLeftFly = pLayLeaf->IsInFly() && pLayLeaf->FindFlyFrame() != pFly->GetFollow();
-            if (bLeftBody || bLeftFly)
+            bool bSameBody = false;
+            if (bBody && pLayLeaf->IsInDocBody())
+            {
+                // Make sure the candidate is not inside the same body frame, that would prevent
+                // inserting a new page.
+                if (pFlyAnchor->FindBodyFrame() == pLayLeaf->FindBodyFrame())
+                {
+                    bSameBody = true;
+                }
+            }
+            if (bLeftBody || bLeftFly || bSameBody)
             {
                 // The above conditions are not held, reject.
                 pOldLayLeaf = pLayLeaf;
@@ -1609,7 +1620,8 @@ SwLayoutFrame *SwFrame::GetNextFlyLeaf( MakePageType eMakePage )
             // Split the anchor at char 0: all the content goes to the follow of the anchor.
             pFlyAnchor->SplitFrame(TextFrameIndex(0));
             auto pNext = static_cast<SwTextFrame*>(pFlyAnchor->GetNext());
-            pNext->MoveSubTree(pLayLeaf);
+            // Move the new anchor frame, before the first child of pLayLeaf.
+            pNext->MoveSubTree(pLayLeaf, pLayLeaf->Lower());
 
             // Now create the follow of the fly and anchor it in the master of the anchor.
             pNew = new SwFlyAtContentFrame(*pFly);
