@@ -426,6 +426,8 @@ public:
     // Cache also the type of the redline associated to the changed table row.
     SwRedlineTable::size_type UpdateTextChangesOnly(
         SwRedlineTable::size_type& rRedlinePos, bool bUpdateProperty = true) const;
+    // is it a tracked row
+    bool IsTracked(SwRedlineTable::size_type& rRedlinePos, bool bOnlyDeleted = false) const;
     // is it a tracked deleted row
     bool IsDeleted(SwRedlineTable::size_type& rRedlinePos) const;
     // set/get (if it's possible, cached) redline type

@@ -1892,17 +1892,23 @@ SwRedlineTable::size_type SwTableLine::UpdateTextChangesOnly(
     return nRet;
 }
 
-bool SwTableLine::IsDeleted(SwRedlineTable::size_type& rRedlinePos) const
+bool SwTableLine::IsTracked(SwRedlineTable::size_type& rRedlinePos, bool bOnlyDeleted) const
 {
    SwRedlineTable::size_type nPos = UpdateTextChangesOnly(rRedlinePos);
    if ( nPos != SwRedlineTable::npos )
    {
        const SwRedlineTable& aRedlineTable =
            GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
-       if ( RedlineType::Delete == aRedlineTable[nPos]->GetType() )
+       if ( RedlineType::Delete == aRedlineTable[nPos]->GetType() ||
+            ( !bOnlyDeleted && RedlineType::Insert == aRedlineTable[nPos]->GetType() ) )
            return true;
    }
    return false;
+}
+
+bool SwTableLine::IsDeleted(SwRedlineTable::size_type& rRedlinePos) const
+{
+   return IsTracked(rRedlinePos, true);
 }
 
 RedlineType SwTableLine::GetRedlineType() const
