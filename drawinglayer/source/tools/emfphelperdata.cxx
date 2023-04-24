@@ -1340,7 +1340,6 @@ namespace emfplushelper
                     {
                         sal_uInt32 aCount;
                         float x1, y1, x2, y2, x3, y3, x4, y4;
-                        ::basegfx::B2DPoint aStartPoint, aControlPointA, aControlPointB, aEndPoint;
                         ::basegfx::B2DPolygon aPolygon;
                         rMS.ReadUInt32(aCount);
                         SAL_INFO("drawinglayer.emf", "EMF+\t DrawBeziers slot: " << (flags & 0xff));
@@ -1359,8 +1358,7 @@ namespace emfplushelper
 
                         ReadPoint(rMS, x1, y1, flags);
                         // We need to add first starting point
-                        aStartPoint = Map(x1, y1);
-                        aPolygon.append(aStartPoint);
+                        aPolygon.append(Map(x1, y1));
                         SAL_INFO("drawinglayer.emf",
                                  "EMF+\t Bezier starting point: " << x1 << "," << y1);
                         for (sal_uInt32 i = 4; i <= aCount; i += 3)
@@ -1372,13 +1370,7 @@ namespace emfplushelper
                             SAL_INFO("drawinglayer.emf",
                                      "EMF+\t Bezier points: " << x2 << "," << y2 << " " << x3 << ","
                                                               << y3 << " " << x4 << "," << y4);
-
-                            aControlPointA = Map(x2, y2);
-                            aControlPointB = Map(x3, y3);
-                            aEndPoint = Map(x4, y4);
-                            aPolygon.appendBezierSegment(aControlPointA, aControlPointB, aEndPoint);
-                            // The ending coordinate of one Bezier curve is the starting coordinate of the next.
-                            aStartPoint = aEndPoint;
+                            aPolygon.appendBezierSegment(Map(x2, y2), Map(x3, y3), Map(x4, y4));
                         }
                         EMFPPlusDrawPolygon(::basegfx::B2DPolyPolygon(aPolygon), flags & 0xff);
                         break;
