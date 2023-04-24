@@ -27,7 +27,7 @@ template <>
 inline std::string
 CppUnit::assertion_traits<std::u16string_view>::toString(std::u16string_view const& x)
 {
-    return OUStringToOString(x, RTL_TEXTENCODING_UTF8).getStr();
+    return std::string(OUStringToOString(x, RTL_TEXTENCODING_UTF8));
 }
 
 namespace

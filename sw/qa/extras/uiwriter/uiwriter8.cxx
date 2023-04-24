@@ -1634,13 +1634,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf132603)
     tools::JsonWriter aJsonWriter;
     pTextDoc->getPostIts(aJsonWriter);
     OString pChar = aJsonWriter.finishAndGetAsOString();
-    std::stringstream aStream(pChar.getStr());
+    std::stringstream aStream((std::string(pChar)));
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
     for (const boost::property_tree::ptree::value_type& rValue : aTree.get_child("comments"))
     {
         const boost::property_tree::ptree& rComment = rValue.second;
-        OString aText(rComment.get<std::string>("text").c_str());
+
+        OString aText(rComment.get<std::string>("text"));
         CPPUNIT_ASSERT_EQUAL(OString("Comment"), aText);
     }
 }

@@ -293,7 +293,7 @@ void FormulaLogger::writeAscii( const char* s, size_t n )
 
 void FormulaLogger::write( std::u16string_view ou )
 {
-    OString s = OUStringToOString(ou, RTL_TEXTENCODING_UTF8).getStr();
+    OString s = OUStringToOString(ou, RTL_TEXTENCODING_UTF8);
     writeAscii(s.getStr(), s.getLength());
 }
 

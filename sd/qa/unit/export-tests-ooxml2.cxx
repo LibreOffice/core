@@ -60,12 +60,12 @@ static void assertMotionPath(std::u16string_view rStr1, std::u16string_view rStr
 
         if (checkBeginWithNumber(aToken1) && checkBeginWithNumber(aToken2))
             assertDoubleEquals(aToken1.toDouble(), aToken2.toDouble(), DBL_EPSILON, rSourceLine,
-                               sMessage.getStr());
+                               std::string(sMessage));
         else
-            assertEquals(aToken1, aToken2, rSourceLine, sMessage.getStr());
+            assertEquals(aToken1, aToken2, rSourceLine, std::string(sMessage));
     }
-    assertEquals(sal_Int32(-1), nIdx1, rSourceLine, sMessage.getStr());
-    assertEquals(sal_Int32(-1), nIdx2, rSourceLine, sMessage.getStr());
+    assertEquals(sal_Int32(-1), nIdx1, rSourceLine, std::string(sMessage));
+    assertEquals(sal_Int32(-1), nIdx2, rSourceLine, std::string(sMessage));
 }
 
 class SdOOXMLExportTest2 : public SdModelTestBase

@@ -197,7 +197,7 @@ private:
                 rLine.maCells.clear();
                 mpStream->ReadLine(rLine.maLine);
                 CSVHandler aHdl(rLine, mnColCount);
-                orcus::csv_parser<CSVHandler> parser(rLine.maLine.getStr(), aHdl, maConfig);
+                orcus::csv_parser<CSVHandler> parser(rLine.maLine, aHdl, maConfig);
                 parser.parse();
             }
 

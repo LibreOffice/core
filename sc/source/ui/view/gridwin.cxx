@@ -5007,7 +5007,7 @@ void ScGridWindow::updateLOKInputHelp(const OUString& title, const OUString& con
 
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_VALIDITY_INPUT_HELP, aStream.str().c_str());
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_VALIDITY_INPUT_HELP, OString(aStream.str()));
 }
 
 void ScGridWindow::updateLOKValListButton( bool bVisible, const ScAddress& rPos ) const
@@ -5017,7 +5017,7 @@ void ScGridWindow::updateLOKValListButton( bool bVisible, const ScAddress& rPos 
     std::stringstream ss;
     ss << nX << ", " << nY << ", " << static_cast<unsigned int>(bVisible);
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_VALIDITY_LIST_BUTTON, ss.str().c_str());
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_VALIDITY_LIST_BUTTON, OString(ss.str()));
 }
 
 void ScGridWindow::notifyKitCellFollowJump( ) const

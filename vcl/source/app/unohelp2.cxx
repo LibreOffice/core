@@ -69,7 +69,7 @@ namespace vcl::unohelper {
                 aTree.put("mimeType", "text/plain");
                 std::stringstream aStream;
                 boost::property_tree::write_json(aStream, aTree);
-                pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_CLIPBOARD_CHANGED, aStream.str().c_str());
+                pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_CLIPBOARD_CHANGED, OString(aStream.str()));
             }
         }
         catch( const uno::Exception& )

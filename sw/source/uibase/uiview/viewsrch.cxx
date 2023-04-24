@@ -118,7 +118,7 @@ static void lcl_emitSearchResultCallbacks(SvxSearchItem const * pSearchItem, SwW
 
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
-    OString aPayload = aStream.str().c_str();
+    OString aPayload( aStream.str() );
 
     pWrtShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload);
 

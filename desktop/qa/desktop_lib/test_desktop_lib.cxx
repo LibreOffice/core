@@ -855,7 +855,7 @@ void DesktopLOKTest::testRowColumnHeaders()
     {
         sal_Int32 nSize = o3tl::toInt32(rValue.second.get<std::string>("size"));
         nSize = o3tl::convert(nSize, o3tl::Length::px, o3tl::Length::twip);
-        OString aText(rValue.second.get<std::string>("text").c_str());
+        OString aText(rValue.second.get<std::string>("text"));
 
         if (bFirstHeader)
         {
@@ -884,7 +884,7 @@ void DesktopLOKTest::testRowColumnHeaders()
     {
         sal_Int32 nSize = o3tl::toInt32(rValue.second.get<std::string>("size"));
         nSize = o3tl::convert(nSize, o3tl::Length::px, o3tl::Length::twip);
-        OString aText(rValue.second.get<std::string>("text").c_str());
+        OString aText(rValue.second.get<std::string>("text"));
         if (bFirstHeader)
         {
             CPPUNIT_ASSERT(nSize <= nX);
@@ -958,7 +958,7 @@ void DesktopLOKTest::testCellCursor()
 
     boost::property_tree::read_json(aStream, aTree);
 
-    OString aRectangle(aTree.get<std::string>("commandValues").c_str());
+    OString aRectangle(aTree.get<std::string>("commandValues"));
     // cell cursor geometry + col + row
     CPPUNIT_ASSERT_EQUAL(OString("0, 0, 1274, 254, 0, 0"), aRectangle);
 }
@@ -990,7 +990,7 @@ void DesktopLOKTest::testCommandResult()
     m_aCommandResultCondition.wait(aTimeValue);
 
     boost::property_tree::ptree aTree;
-    std::stringstream aStream(m_aCommandResult.getStr());
+    std::stringstream aStream((std::string(m_aCommandResult)));
     boost::property_tree::read_json(aStream, aTree);
 
     CPPUNIT_ASSERT_EQUAL(std::string(".uno:Bold"), aTree.get_child("commandName").get_value<std::string>());
@@ -1990,14 +1990,14 @@ void DesktopLOKTest::testBinaryCallback()
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
 
     const tools::Rectangle rect1(Point(10,15),Size(20,25));
-    const std::string rect1String(rect1.toString().getStr());
+    const std::string rect1String(rect1.toString());
     // Verify that using queue() and libreOfficeKitViewInvalidateTilesCallback() has the same result.
     {
         std::vector<std::tuple<int, std::string>> notifs;
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackBinaryCallbackTest, &notifs));
         handler->setViewId(SfxLokHelper::getView());
 
-        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, rect1String.c_str());
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, OString(rect1String));
 
         Scheduler::ProcessEventsToIdle();
 

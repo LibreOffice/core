@@ -573,7 +573,7 @@ static OString convertToHashString(std::vector<unsigned char> const & rHash)
         aStringStream << std::setw(2) << std::setfill('0') << std::hex << int(rByte);
     }
 
-    return aStringStream.str().c_str();
+    return OString(aStringStream.str());
 }
 
 static OString getFileHash(OUString const & rFileUrl)

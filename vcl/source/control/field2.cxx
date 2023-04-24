@@ -2318,7 +2318,7 @@ static bool ImplIsValidTimePortion( bool _bSkipInvalidCharacters, const OUString
 
 static bool ImplCutTimePortion( OUStringBuffer& _rStr, sal_Int32 _nSepPos, bool _bSkipInvalidCharacters, short* _pPortion )
 {
-    OUString sPortion(_rStr.getStr(), _nSepPos );
+    OUString sPortion(_rStr.subView(0, _nSepPos));
 
     if (_nSepPos < _rStr.getLength())
         _rStr.remove(0, _nSepPos + 1);

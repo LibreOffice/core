@@ -433,7 +433,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo(sal_Int32 parameterIndex, co
             {
                 OString sAscii
                     = OUStringToOString(sValue, getOwnConnection()->getConnectionEncoding());
-                std::stringstream sStream{ sAscii.getStr() };
+                std::stringstream sStream{ std::string(sAscii) };
                 sStream >> nValue;
                 m_binds[nIndex].buffer_type = MYSQL_TYPE_DOUBLE;
                 mysqlc_sdbc_driver::resetSqlVar(&m_binds[nIndex].buffer, &nValue, MYSQL_TYPE_DOUBLE,

@@ -21281,7 +21281,7 @@ private:
             nRet += (m_nMRUCount + 1);
         }
 
-        OString aStr(OUStringToOString(rStr, RTL_TEXTENCODING_UTF8).getStr());
+        OString aStr(OUStringToOString(rStr, RTL_TEXTENCODING_UTF8));
         do
         {
             gchar* pStr;

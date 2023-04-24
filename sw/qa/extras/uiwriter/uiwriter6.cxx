@@ -1586,14 +1586,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf65535)
     tools::JsonWriter aJsonWriter;
     pTextDoc->getPostIts(aJsonWriter);
     OString pChar = aJsonWriter.finishAndGetAsOString();
-    std::stringstream aStream(pChar.getStr());
+    std::stringstream aStream((std::string(pChar)));
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
     OString sCommentText;
     for (const boost::property_tree::ptree::value_type& rValue : aTree.get_child("comments"))
     {
         const boost::property_tree::ptree& rComment = rValue.second;
-        sCommentText = OString(rComment.get<std::string>("text").c_str());
+        sCommentText = OString(rComment.get<std::string>("text"));
     }
     // This was false (lost comment with spelling replacement)
     CPPUNIT_ASSERT_EQUAL(OString("with comment"), sCommentText);

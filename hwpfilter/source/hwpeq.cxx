@@ -775,7 +775,7 @@ void eq2latex(OString& outs, char const *s)
 
   std::istringstream tstrm(s);
   bool eqnarray = eq_sentence(tstr, &tstrm);
-  std::istringstream strm(tstr.getStr());
+  std::istringstream strm((std::string(tstr)));
 
   if( eqnarray )
     outs += "\\begin{array}{rllll}" SAL_NEWLINE_STRING;

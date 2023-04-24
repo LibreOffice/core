@@ -19,7 +19,7 @@ namespace model::theme
 bool convertFromJSON(OString const& rJsonString, model::ThemeColor& rThemeColor)
 {
     model::ThemeColor aThemeColor;
-    std::stringstream aStream(rJsonString.getStr());
+    std::stringstream aStream((std::string(rJsonString)));
     boost::property_tree::ptree aRootTree;
     try
     {
@@ -95,7 +95,7 @@ OString convertToJSON(model::ThemeColor const& rThemeColor)
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
 
-    return OString(aStream.str().c_str());
+    return OString(aStream.str());
 }
 
 } // end model::theme

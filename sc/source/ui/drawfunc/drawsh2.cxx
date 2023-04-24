@@ -353,7 +353,7 @@ static void setupFillColorForChart(const SfxViewShell* pShell, SfxItemSet& rSet)
 
         if (comphelper::LibreOfficeKit::isActive())
             pShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
-                    (".uno:FillColor=" + std::to_string(nFillColor)).c_str());
+                    (".uno:FillColor=" + OString::number(nFillColor)));
     }
 
     if (!(comphelper::LibreOfficeKit::isActive() && xInfo->hasPropertyByName("FillGradientName")))

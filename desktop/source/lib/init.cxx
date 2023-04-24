@@ -2063,7 +2063,7 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
 {
     const OString& payload = aCallbackData.getPayload();
 
-    boost::property_tree::ptree& aTree = aCallbackData.setJson(payload.getStr());
+    boost::property_tree::ptree& aTree = aCallbackData.setJson(std::string(payload));
     const unsigned nLOKWindowId = aTree.get<unsigned>("id", 0);
     const std::string aAction = aTree.get<std::string>("action", "");
     if (aAction == "invalidate")
@@ -4340,7 +4340,7 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
                     bFirst = false;
                 else
                     sPayload += ", ";
-                sPayload += "\"" + std::string(f.toUtf8().getStr()) + "\"";
+                sPayload += "\"" + std::string(f.toUtf8()) + "\"";
             }
             sPayload += " ] }";
             pCallback(LOK_CALLBACK_FONTS_MISSING, sPayload.c_str(), pData);

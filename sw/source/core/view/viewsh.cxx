@@ -1142,12 +1142,11 @@ void SwViewShell::SizeChgNotify()
             if (comphelper::LibreOfficeKit::isActive())
             {
                 Size aDocSize = GetDocSize();
-                std::stringstream ss;
-                ss << aDocSize.Width() + 2 * DOCUMENTBORDER << ", " << aDocSize.Height() + 2 * DOCUMENTBORDER;
-                OString sSize = ss.str().c_str();
+                OString sPayload = OString::number(aDocSize.Width() + 2 * DOCUMENTBORDER) +
+                    ", " + OString::number(aDocSize.Height() + 2 * DOCUMENTBORDER);
 
                 SwXTextDocument* pModel = comphelper::getFromUnoTunnel<SwXTextDocument>(GetSfxViewShell()->GetCurrentDocument());
-                SfxLokHelper::notifyDocumentSizeChanged(GetSfxViewShell(), sSize, pModel);
+                SfxLokHelper::notifyDocumentSizeChanged(GetSfxViewShell(), sPayload, pModel);
             }
         }
     }

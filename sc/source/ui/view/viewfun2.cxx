@@ -2195,7 +2195,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
 
                 std::stringstream aStream;
                 boost::property_tree::write_json(aStream, aTree);
-                OString aPayload = aStream.str().c_str();
+                OString aPayload( aStream.str() );
                 SfxViewShell* pViewShell = GetViewData().GetViewShell();
                 pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload);
 

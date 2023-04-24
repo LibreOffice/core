@@ -126,7 +126,7 @@ bool SearchResultLocator::tryParseJSON(const char* pPayload,
             OUString sObjectName;
             if (!sJsonObjectName.empty())
             {
-                OString sObjectNameOString(sJsonObjectName.c_str());
+                OString sObjectNameOString(sJsonObjectName);
                 sObjectName = OStringToOUString(sObjectNameOString, RTL_TEXTENCODING_UTF8);
             }
 

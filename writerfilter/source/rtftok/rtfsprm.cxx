@@ -49,7 +49,7 @@ std::string RTFSprm::toString() const
         aBuf.append(sResult.c_str());
     aBuf.append("', '" + m_pValue->toString() + "')");
 
-    return aBuf.makeStringAndClear().getStr();
+    return std::string(aBuf);
 }
 #endif
 

@@ -363,7 +363,7 @@ OString getColorStr(const ::Color nColor)
 
         sBuf.append(sColor);
 
-        sColor = sBuf.getStr();
+        sColor = sBuf.toString();
     }
     return sColor;
 }

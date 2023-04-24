@@ -1453,7 +1453,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                             LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, aMessageParams);
                 else
                     pThisShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR,
-                            aMessageParams.get<std::string>("rectangle").c_str());
+                            OString(aMessageParams.get<std::string>("rectangle")));
             }
         }
 

@@ -162,7 +162,7 @@ namespace writerfilter
 #ifdef DBG_UTIL
     void TagLogger::attribute(const std::string & name, std::u16string_view value)
     {
-        attribute( name, OUStringToOString( value, RTL_TEXTENCODING_ASCII_US ).getStr() );
+        attribute( name, std::string(OUStringToOString( value, RTL_TEXTENCODING_ASCII_US )) );
     }
 
     void TagLogger::attribute(const std::string & name, sal_uInt32 value)
@@ -223,7 +223,7 @@ namespace writerfilter
 
     void TagLogger::chars(std::u16string_view rChars)
     {
-        chars(OUStringToOString(rChars, RTL_TEXTENCODING_ASCII_US).getStr());
+        chars(std::string(OUStringToOString(rChars, RTL_TEXTENCODING_ASCII_US)));
     }
 
     void TagLogger::endElement()

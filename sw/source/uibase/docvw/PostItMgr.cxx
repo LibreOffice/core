@@ -186,7 +186,7 @@ namespace {
 
         if (pView)
         {
-            pView->libreOfficeKitViewCallback(LOK_CALLBACK_COMMENT, aPayload.c_str());
+            pView->libreOfficeKitViewCallback(LOK_CALLBACK_COMMENT, OString(aPayload));
         }
     }
 

@@ -444,7 +444,7 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
     // call lok::Document::getDocumentSize().
     std::stringstream ss;
     ss << aNewSize.Width() << ", " << aNewSize.Height();
-    OString sSize = ss.str().c_str();
+    OString sSize( ss.str() );
     ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(aViewData.GetViewShell()->GetCurrentDocument());
     SfxLokHelper::notifyDocumentSizeChanged(aViewData.GetViewShell(), sSize, pModel, false);
 }

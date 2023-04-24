@@ -407,7 +407,7 @@ void SwRedlineTable::LOKRedlineNotification(RedlineNotification nType, SwRangeRe
     while (pViewShell)
     {
         if (pView && pView->GetDocId() == pViewShell->GetDocId())
-            pViewShell->libreOfficeKitViewCallback(nType == RedlineNotification::Modify ? LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED : LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED, aPayload.c_str());
+            pViewShell->libreOfficeKitViewCallback(nType == RedlineNotification::Modify ? LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED : LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED, OString(aPayload));
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }

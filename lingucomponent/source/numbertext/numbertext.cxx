@@ -102,7 +102,7 @@ void NumberText_Impl::EnsureInitialized()
     const rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
 #endif
     OString path = OUStringToOString(aPhysPath, eEnc);
-    m_aNumberText.set_prefix(path.getStr());
+    m_aNumberText.set_prefix(std::string(path));
 }
 
 OUString SAL_CALL NumberText_Impl::getNumberText(const OUString& rText, const Locale& rLocale)
@@ -123,9 +123,9 @@ OUString SAL_CALL NumberText_Impl::getNumberText(const OUString& rText, const Lo
     std::wstring sResult(o3tl::toW(rText.getStr()));
 #else
     OString aInput(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
-    std::wstring sResult = Numbertext::string2wstring(aInput.getStr());
+    std::wstring sResult = Numbertext::string2wstring(std::string(aInput));
 #endif
-    bool result = m_aNumberText.numbertext(sResult, aLangCode.getStr());
+    bool result = m_aNumberText.numbertext(sResult, std::string(aLangCode));
     DBG_ASSERT(result, "numbertext: false");
 #if defined(_WIN32)
     OUString aResult(o3tl::toU(sResult));

@@ -660,7 +660,7 @@ bool SdOutliner::SearchAndReplaceAll()
 
             std::stringstream aStream;
             boost::property_tree::write_json(aStream, aTree);
-            OString aPayload = aStream.str().c_str();
+            OString aPayload( aStream.str() );
             rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload);
         }
     }
@@ -796,7 +796,7 @@ void SdOutliner::sendLOKSearchResultCallback(const std::shared_ptr<sd::ViewShell
 
         std::stringstream aStream;
         boost::property_tree::write_json(aStream, aTree);
-        aPayload = aStream.str().c_str();
+        aPayload = OString(aStream.str());
         rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload);
 
         if (rVectorGraphicSearchContext.mbCurrentIsVectorGraphic)

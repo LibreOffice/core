@@ -194,7 +194,7 @@ uno::Sequence< OUString > OOXMLDocPropHandler::GetKeywordsSet( std::u16string_vi
 {
     if ( !aChars.empty() )
     {
-        std::string aUtf8Chars = OUStringToOString( aChars, RTL_TEXTENCODING_UTF8 ).getStr();
+        std::string aUtf8Chars( OUStringToOString( aChars, RTL_TEXTENCODING_UTF8 ) );
         std::vector<std::string> aUtf8Result;
         boost::split( aUtf8Result, aUtf8Chars, boost::is_any_of(" ,;:\t"), boost::token_compress_on );
 

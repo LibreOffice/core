@@ -975,7 +975,7 @@ static void LOKSendSpellPopupMenu(const weld::Menu& rMenu, LanguageType nGuessLa
 
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aRoot, true);
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CONTEXT_MENU, aStream.str().c_str());
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CONTEXT_MENU, OString(aStream.str()));
 }
 
 bool EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbackInfo&,void> &rCallBack)

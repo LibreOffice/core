@@ -1615,7 +1615,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                     std::stringstream aStream;
                     boost::property_tree::write_json(aStream, aRootTree);
-                    rSh.GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TAB_STOP_LIST, aStream.str().c_str());
+                    rSh.GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TAB_STOP_LIST, OString(aStream.str()));
                 }
             }
             break;

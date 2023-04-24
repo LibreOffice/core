@@ -134,8 +134,8 @@ static void checkCompareGlyphs( const SalLayoutGlyphs& aGlyphs1, const SalLayout
     // And check it's the same.
     for( int level = 0; level < MAX_FALLBACK; ++level )
     {
-        const std::string messageLevel = OString(message.c_str()
-            + OString::Concat(", level: ") + OString::number(level)).getStr();
+        const std::string messageLevel( Concat2View(OString::Concat(std::string_view(message))
+            + ", level: " + OString::number(level)) );
         if( aGlyphs1.Impl(level) == nullptr)
         {
             CPPUNIT_ASSERT_MESSAGE(messageLevel, aGlyphs2.Impl(level) == nullptr);
@@ -155,7 +155,7 @@ static void checkCompareGlyphs( const SalLayoutGlyphs& aGlyphs1, const SalLayout
 
 static void testCachedGlyphs( const OUString& aText, const OUString& aFontName )
 {
-    const std::string message = OUString("Font: " + aFontName + ", text: '" + aText + "'").toUtf8().getStr();
+    const std::string message( OUString("Font: " + aFontName + ", text: '" + aText + "'").toUtf8() );
     ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
     vcl::Font aFont( aFontName, Size(0, 12));
     pOutputDevice->SetFont( aFont );
@@ -188,7 +188,7 @@ void VclComplexTextTest::testCaching()
 
 static void testCachedGlyphsSubstring( const OUString& aText, const OUString& aFontName, bool rtl )
 {
-    const std::string prefix = OUString("Font: " + aFontName + ", text: '" + aText + "'").toUtf8().getStr();
+    const std::string prefix( OUString("Font: " + aFontName + ", text: '" + aText + "'").toUtf8() );
     ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
     // BiDiStrong is needed, otherwise SalLayoutGlyphsImpl::cloneCharRange() will not do anything.
     vcl::text::ComplexTextLayoutFlags layoutFlags = vcl::text::ComplexTextLayoutFlags::BiDiStrong;

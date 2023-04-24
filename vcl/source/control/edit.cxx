@@ -835,7 +835,7 @@ void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, bool 
 
                 // the text that needs to be checked is only the one
                 // before the current cursor position
-                const OUString aOldText( maText.getStr(), nTmpPos);
+                const OUString aOldText( maText.subView(0, nTmpPos) );
                 OUString aTmpText( aOldText );
                 if (officecfg::Office::Common::I18N::CTL::CTLSequenceCheckingTypeAndReplace::get())
                 {

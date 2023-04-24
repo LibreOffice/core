@@ -694,7 +694,7 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
                 //replace it with a hard-hyphen (0x2d)
                 //-> this fixes missing hyphen export in PDF etc.
                 // see tdf#101626
-                std::string sLevelText = rVal.getString().replace(0xad, 0x2d).toUtf8().getStr();
+                std::string sLevelText( rVal.getString().replace(0xad, 0x2d).toUtf8() );
 
                 // DOCX level-text contains levels definition in format "%1.%2.%3"
                 // we need to convert it to LO internal representation: "%1%.%2%.%3%"

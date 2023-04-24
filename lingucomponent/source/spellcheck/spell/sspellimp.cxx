@@ -332,7 +332,7 @@ sal_Int16 SpellChecker::GetSpellFailure(const OUString &rWord, const Locale &rLo
 
                 OString aWrd(OU2ENC(nWord,eEnc));
 #if defined(H_DEPRECATED)
-                bool bVal = pMS->spell(std::string(aWrd.getStr()), &rInfo);
+                bool bVal = pMS->spell(std::string(aWrd), &rInfo);
 #else
                 bool bVal = pMS->spell(aWrd.getStr(), &rInfo) != 0;
 #endif
@@ -355,7 +355,7 @@ sal_Int16 SpellChecker::GetSpellFailure(const OUString &rWord, const Locale &rLo
                         OUString aWord(aBuf.makeStringAndClear());
                         OString bWrd(OU2ENC(aWord, eEnc));
 #if defined(H_DEPRECATED)
-                        bVal = pMS->spell(std::string(bWrd.getStr()), &rInfo);
+                        bVal = pMS->spell(std::string(bWrd), &rInfo);
 #else
                         bVal = pMS->spell(bWrd.getStr(), &rInfo) != 0;
 #endif
@@ -472,7 +472,7 @@ Reference< XSpellAlternatives >
             {
                 OString aWrd(OU2ENC(nWord,eEnc));
 #if defined(H_DEPRECATED)
-                std::vector<std::string> suglst = pMS->suggest(std::string(aWrd.getStr()));
+                std::vector<std::string> suglst = pMS->suggest(std::string(aWrd));
                 if (!suglst.empty())
                 {
                     aStr.realloc(numsug + suglst.size());

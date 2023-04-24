@@ -2145,7 +2145,7 @@ namespace
         StringMap aArgs;
         if (rJSON.size() && rJSON[0] != '\0')
         {
-            std::stringstream aStream(OUStringToOString(rJSON, RTL_TEXTENCODING_ASCII_US).getStr());
+            std::stringstream aStream(std::string(OUStringToOString(rJSON, RTL_TEXTENCODING_ASCII_US)));
             boost::property_tree::ptree aTree;
             boost::property_tree::read_json(aStream, aTree);
 

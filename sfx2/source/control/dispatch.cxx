@@ -1852,7 +1852,7 @@ void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window* pWin, c
         std::stringstream aStream;
         boost::property_tree::write_json(aStream, aRoot, true);
         if (SfxViewShell* pViewShell = xImp->pFrame->GetViewShell())
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CONTEXT_MENU, aStream.str().c_str());
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CONTEXT_MENU, OString(aStream.str()));
     }
     else
     {

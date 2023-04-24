@@ -16,7 +16,7 @@
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 
-#define OUSTR_TO_STDSTR( oustr ) std::string( OUStringToOString( oustr, RTL_TEXTENCODING_ASCII_US ).getStr() )
+#define OUSTR_TO_STDSTR( oustr ) std::string( OUStringToOString( oustr, RTL_TEXTENCODING_ASCII_US ) )
 
 template<> inline std::string CPPUNIT_NS::assertion_traits<INetProtocol>::toString(
     const INetProtocol& x )

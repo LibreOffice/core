@@ -465,7 +465,7 @@ static void sendErrorToLOK(ErrCode error)
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
 
-    SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_ERROR, aStream.str().c_str());
+    SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_ERROR, OString(aStream.str()));
 }
 
 namespace

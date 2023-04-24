@@ -36,62 +36,48 @@ public:
     {
     }
 
-    bool VisitCallExpr(CallExpr* callExpr)
+    bool VisitCallExpr(const CallExpr* callExpr)
     {
         if (ignoreLocation(callExpr))
             return true;
         const FunctionDecl* func = callExpr->getDirectCallee();
         if (!func)
             return true;
-        unsigned const n = std::min(func->getNumParams(), callExpr->getNumArgs());
-        for (unsigned i = 0; i != n; ++i)
-        {
-            auto arg = callExpr->getArg(i);
-            if (auto matTemp = dyn_cast<MaterializeTemporaryExpr>(arg))
-            {
-                auto cxxConstruct = dyn_cast<CXXConstructExpr>(matTemp->IgnoreImplicit());
-                if (!cxxConstruct || cxxConstruct->getNumArgs() < 1
-                    || cxxConstruct->getNumArgs() > 2)
-                    continue;
-                auto const tc1 = loplugin::TypeCheck(cxxConstruct->getConstructor()->getParent());
-                if (!(tc1.Class("OString").Namespace("rtl").GlobalNamespace()
-                      || tc1.Class("OUString").Namespace("rtl").GlobalNamespace()))
-                    continue;
-                auto e = dyn_cast<CXXMemberCallExpr>(cxxConstruct->getArg(0)->IgnoreImplicit());
-                if (!e)
-                    continue;
-                auto const t = e->getObjectType();
-                auto const tc2 = loplugin::TypeCheck(t);
-                if (!(tc2.Class("OString").Namespace("rtl").GlobalNamespace()
-                      || tc2.Class("OUString").Namespace("rtl").GlobalNamespace()
-                      || tc2.Class("OStringBuffer").Namespace("rtl").GlobalNamespace()
-                      || tc2.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()
-                      || tc2.ClassOrStruct("StringNumber").Namespace("rtl").GlobalNamespace()))
-                    continue;
-                if (!loplugin::DeclCheck(e->getMethodDecl()).Function("getStr"))
-                    continue;
-                report(DiagnosticsEngine::Warning,
-                       "unnecessary call to 'getStr' when passing to OString arg", e->getExprLoc())
-                    << e->getSourceRange();
-            }
-            else if (auto impCast = dyn_cast<ImplicitCastExpr>(arg))
-            {
-                auto cxxConstruct = dyn_cast<CXXConstructExpr>(impCast->getSubExpr());
-                if (!cxxConstruct || cxxConstruct->getNumArgs() < 1
-                    || cxxConstruct->getNumArgs() > 2)
-                    continue;
-                auto const tc1 = loplugin::TypeCheck(cxxConstruct->getConstructor()->getParent());
-                if (!(tc1.ClassOrStruct("basic_string_view").StdNamespace()))
-                    continue;
-                checkForGetStr(cxxConstruct->getArg(0), "string_view arg");
-            }
-        }
         if (loplugin::DeclCheck(func)
                 .Function("createFromAscii")
                 .Class("OUString")
-                .Namespace("rtl"))
+                .Namespace("rtl")
+                .GlobalNamespace())
         {
             checkForGetStr(callExpr->getArg(0), "OUString::createFromAscii");
+        }
+        return true;
+    }
+
+    bool VisitCXXConstructExpr(const CXXConstructExpr* constructExpr)
+    {
+        if (ignoreLocation(constructExpr))
+            return true;
+        auto tc = loplugin::TypeCheck(constructExpr->getType());
+        if (tc.ClassOrStruct("basic_string").StdNamespace())
+        {
+            if (constructExpr->getNumArgs() == 2)
+                checkForGetStr(constructExpr->getArg(0), "string constructor");
+        }
+        else if (tc.ClassOrStruct("basic_string_view").StdNamespace())
+        {
+            if (constructExpr->getNumArgs() == 1)
+                checkForGetStr(constructExpr->getArg(0), "string_view constructor");
+        }
+        else if (tc.Class("OString").Namespace("rtl").GlobalNamespace())
+        {
+            if (constructExpr->getNumArgs() == 1 || constructExpr->getNumArgs() == 2)
+                checkForGetStr(constructExpr->getArg(0), "OString constructor");
+        }
+        else if (tc.Class("OUString").Namespace("rtl").GlobalNamespace())
+        {
+            if (constructExpr->getNumArgs() == 2)
+                checkForGetStr(constructExpr->getArg(0), "OUString constructor");
         }
         return true;
     }
@@ -108,7 +94,7 @@ public:
     }
 
 private:
-    void checkForGetStr(Expr* arg, const char* msg)
+    void checkForGetStr(const Expr* arg, const char* msg)
     {
         auto e = dyn_cast<CXXMemberCallExpr>(arg->IgnoreImplicit());
         if (!e)
@@ -122,9 +108,14 @@ private:
             || tc2.ClassOrStruct("StringNumber").Namespace("rtl").GlobalNamespace())
         {
             if (loplugin::DeclCheck(e->getMethodDecl()).Function("getStr"))
-                report(DiagnosticsEngine::Warning,
-                       "unnecessary call to 'getStr' when passing to %0", e->getExprLoc())
-                    << msg << e->getSourceRange();
+            {
+                StringRef fileName = getFilenameOfLocation(
+                    compiler.getSourceManager().getSpellingLoc(e->getBeginLoc()));
+                if (!loplugin::hasPathnamePrefix(fileName, SRCDIR "/include/rtl/"))
+                    report(DiagnosticsEngine::Warning,
+                           "unnecessary call to 'getStr' when passing to %0", e->getExprLoc())
+                        << msg << e->getSourceRange();
+            }
         }
         else if (tc2.Class("basic_string").StdNamespace())
         {

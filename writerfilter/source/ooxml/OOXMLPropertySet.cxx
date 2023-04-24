@@ -281,7 +281,7 @@ OUString OOXMLStringValue::getString() const
 #ifdef DBG_UTIL
 std::string OOXMLStringValue::toString() const
 {
-    return OUStringToOString(mStr, RTL_TEXTENCODING_ASCII_US).getStr();
+    return std::string(OUStringToOString(mStr, RTL_TEXTENCODING_ASCII_US));
 }
 #endif
 

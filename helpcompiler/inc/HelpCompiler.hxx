@@ -72,7 +72,7 @@ namespace fs
             osl::File::getSystemPathFromFileURL(data, ustrSystemPath);
             OString tmp(OUStringToOString(ustrSystemPath, FileNameEnc()));
             HCDBG(std::cerr << "native_file_string is " << tmp.getStr() << std::endl);
-            return std::string(tmp.getStr());
+            return std::string(tmp);
         }
 #ifdef _WIN32
         std::wstring native_file_string_w() const
@@ -85,7 +85,7 @@ namespace fs
         std::string toUTF8() const
         {
             OString tmp(OUStringToOString(data, RTL_TEXTENCODING_UTF8));
-            return std::string(tmp.getStr());
+            return std::string(tmp);
         }
         bool empty() const { return data.isEmpty(); }
         path operator/(const std::string &in) const

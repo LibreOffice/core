@@ -274,8 +274,8 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
                     std::stringstream aStream(pPayload);
                     boost::property_tree::read_json(aStream, aTree);
                     boost::property_tree::ptree &aChild = aTree.get_child("hyperlink");
-                    m_sHyperlinkText = aChild.get("text", "").c_str();
-                    m_sHyperlinkLink = aChild.get("link", "").c_str();
+                    m_sHyperlinkText = OString(aChild.get("text", ""));
+                    m_sHyperlinkLink = OString(aChild.get("link", ""));
                 }
             }
             break;
@@ -813,7 +813,7 @@ namespace {
                             std::stringstream aStream(pPayload);
                             boost::property_tree::ptree aTree;
                             boost::property_tree::read_json(aStream, aTree);
-                            sRect = aTree.get_child("rectangle").get_value<std::string>().c_str();
+                            sRect = OString(aTree.get_child("rectangle").get_value<std::string>());
                             m_nOwnCursorInvalidatedBy = aTree.get_child("viewId").get_value<int>();
                         }
                         else
@@ -836,7 +836,7 @@ namespace {
                         std::stringstream aStream(pPayload);
                         boost::property_tree::ptree aTree;
                         boost::property_tree::read_json(aStream, aTree);
-                        OString aRect = aTree.get_child("rectangle").get_value<std::string>().c_str();
+                        OString aRect( aTree.get_child("rectangle").get_value<std::string>() );
 
                         uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::fromUtf8(aRect));
                         if (std::string_view("EMPTY") == pPayload)
@@ -1756,7 +1756,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineColors)
     // Assert that info about exactly one author is returned.
     tools::JsonWriter aJsonWriter;
     pXTextDocument->getTrackedChangeAuthors(aJsonWriter);
-    std::stringstream aStream(aJsonWriter.finishAndGetAsOString().getStr());
+    std::stringstream aStream((std::string(aJsonWriter.finishAndGetAsOString())));
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aTree.get_child("authors").size());
@@ -1815,7 +1815,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCommentInsert)
     ViewCallback aView;
     comphelper::dispatchCommand(".uno:InsertAnnotation", xFrame, aPropertyValues);
     Scheduler::ProcessEventsToIdle();
-    OString aAnchorPos(aView.m_aComment.get_child("anchorPos").get_value<std::string>().c_str());
+    OString aAnchorPos(aView.m_aComment.get_child("anchorPos").get_value<std::string>());
     // Without the accompanying fix in place, this test would have failed with
     // - Expected: 1418, 1418, 0, 0
     // - Actual  : 1418, 1418, 1024, 1024
@@ -3046,17 +3046,17 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButton)
 
     CPPUNIT_ASSERT(!m_aFormFieldButton.isEmpty());
     {
-        std::stringstream aStream(m_aFormFieldButton.getStr());
+        std::stringstream aStream((std::string(m_aFormFieldButton)));
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
 
-        OString sAction = aTree.get_child("action").get_value<std::string>().c_str();
+        OString sAction( aTree.get_child("action").get_value<std::string>() );
         CPPUNIT_ASSERT_EQUAL(OString("show"), sAction);
 
-        OString sType = aTree.get_child("type").get_value<std::string>().c_str();
+        OString sType( aTree.get_child("type").get_value<std::string>() );
         CPPUNIT_ASSERT_EQUAL(OString("drop-down"), sType);
 
-        OString sTextArea = aTree.get_child("textArea").get_value<std::string>().c_str();
+        OString sTextArea( aTree.get_child("textArea").get_value<std::string>() );
         CPPUNIT_ASSERT_EQUAL(OString("1538, 1418, 1026, 275"), sTextArea);
 
         boost::property_tree::ptree aItems = aTree.get_child("params").get_child("items");
@@ -3070,10 +3070,10 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButton)
         }
         CPPUNIT_ASSERT_EQUAL(OString("2019/2020;2020/2021;2021/2022;2022/2023;2023/2024;2024/2025;"), aItemList.toString());
 
-        OString sSelected = aTree.get_child("params").get_child("selected").get_value<std::string>().c_str();
+        OString sSelected( aTree.get_child("params").get_child("selected").get_value<std::string>() );
         CPPUNIT_ASSERT_EQUAL(OString("1"), sSelected);
 
-        OString sPlaceholder = aTree.get_child("params").get_child("placeholderText").get_value<std::string>().c_str();
+        OString sPlaceholder( aTree.get_child("params").get_child("placeholderText").get_value<std::string>() );
         CPPUNIT_ASSERT_EQUAL(OString("No Item specified"), sPlaceholder);
     }
 
@@ -3082,14 +3082,14 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButton)
 
     CPPUNIT_ASSERT(!m_aFormFieldButton.isEmpty());
     {
-        std::stringstream aStream(m_aFormFieldButton.getStr());
+        std::stringstream aStream((std::string(m_aFormFieldButton)));
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
 
-        OString sAction = aTree.get_child("action").get_value<std::string>().c_str();
+        OString sAction( aTree.get_child("action").get_value<std::string>() );
         CPPUNIT_ASSERT_EQUAL(OString("hide"), sAction);
 
-        OString sType = aTree.get_child("type").get_value<std::string>().c_str();
+        OString sType( aTree.get_child("type").get_value<std::string>() );
         CPPUNIT_ASSERT_EQUAL(OString("drop-down"), sType);
     }
 }
@@ -3120,11 +3120,11 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButtonEditing)
     // The item with the index '1' is selected by default
     CPPUNIT_ASSERT(!m_aFormFieldButton.isEmpty());
     {
-        std::stringstream aStream(m_aFormFieldButton.getStr());
+        std::stringstream aStream((std::string(m_aFormFieldButton)));
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
 
-        OString sSelected = aTree.get_child("params").get_child("selected").get_value<std::string>().c_str();
+        OString sSelected( aTree.get_child("params").get_child("selected").get_value<std::string>() );
         CPPUNIT_ASSERT_EQUAL(OString("1"), sSelected);
     }
     m_aFormFieldButton = "";
@@ -3142,11 +3142,11 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButtonEditing)
 
     CPPUNIT_ASSERT(!m_aFormFieldButton.isEmpty());
     {
-        std::stringstream aStream(m_aFormFieldButton.getStr());
+        std::stringstream aStream((std::string(m_aFormFieldButton)));
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
 
-        OString sSelected = aTree.get_child("params").get_child("selected").get_value<std::string>().c_str();
+        OString sSelected( aTree.get_child("params").get_child("selected").get_value<std::string>() );
         CPPUNIT_ASSERT_EQUAL(OString("3"), sSelected);
     }
 }
@@ -3177,11 +3177,11 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButtonNoSelectio
     // None of the items is selected
     CPPUNIT_ASSERT(!m_aFormFieldButton.isEmpty());
     {
-        std::stringstream aStream(m_aFormFieldButton.getStr());
+        std::stringstream aStream((std::string(m_aFormFieldButton)));
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
 
-        OString sSelected = aTree.get_child("params").get_child("selected").get_value<std::string>().c_str();
+        OString sSelected( aTree.get_child("params").get_child("selected").get_value<std::string>() );
         CPPUNIT_ASSERT_EQUAL(OString("-1"), sSelected);
     }
 }
@@ -3189,7 +3189,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButtonNoSelectio
 static void lcl_extractHandleParameters(std::string_view selection, sal_Int32& id, sal_Int32& x, sal_Int32& y)
 {
     OString extraInfo( selection.substr(selection.find("{")) );
-    std::stringstream aStream(extraInfo.getStr());
+    std::stringstream aStream((std::string(extraInfo)));
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
     boost::property_tree::ptree
@@ -3263,14 +3263,14 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButtonNoItem)
     // There is not item specified for the field
     CPPUNIT_ASSERT(!m_aFormFieldButton.isEmpty());
     {
-        std::stringstream aStream(m_aFormFieldButton.getStr());
+        std::stringstream aStream((std::string(m_aFormFieldButton)));
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
 
         boost::property_tree::ptree aItems = aTree.get_child("params").get_child("items");
         CPPUNIT_ASSERT_EQUAL(size_t(0), aItems.size());
 
-        OString sSelected = aTree.get_child("params").get_child("selected").get_value<std::string>().c_str();
+        OString sSelected( aTree.get_child("params").get_child("selected").get_value<std::string>() );
         CPPUNIT_ASSERT_EQUAL(OString("-1"), sSelected);
     }
 }
@@ -3325,7 +3325,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTableCommentRemoveCallback)
     Scheduler::ProcessEventsToIdle();
 
     //check for comment remove callback
-    OString sAction(aView.m_aComment.get_child("action").get_value<std::string>().c_str());
+    OString sAction(aView.m_aComment.get_child("action").get_value<std::string>());
     CPPUNIT_ASSERT_EQUAL(OString("Remove"), sAction);
 }
 
@@ -3569,17 +3569,17 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testContentControl)
     // Without the accompanying fix in place, this test would have failed, no callback was emitted.
     CPPUNIT_ASSERT(!m_aContentControl.isEmpty());
     {
-        std::stringstream aStream(m_aContentControl.getStr());
+        std::stringstream aStream((std::string(m_aContentControl)));
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
-        OString sAction = aTree.get_child("action").get_value<std::string>().c_str();
+        OString sAction( aTree.get_child("action").get_value<std::string>() );
         CPPUNIT_ASSERT_EQUAL(OString("show"), sAction);
-        OString sRectangles = aTree.get_child("rectangles").get_value<std::string>().c_str();
+        OString sRectangles( aTree.get_child("rectangles").get_value<std::string>() );
         CPPUNIT_ASSERT(!sRectangles.isEmpty());
         // Without the accompanying fix in place, this test would have failed width:
         // uncaught exception of type std::exception (or derived).
         // - No such node (alias)
-        OString sAlias = aTree.get_child("alias").get_value<std::string>().c_str();
+        OString sAlias( aTree.get_child("alias").get_value<std::string>() );
         CPPUNIT_ASSERT_EQUAL(OString("my alias"), sAlias);
     }
 
@@ -3587,10 +3587,10 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testContentControl)
     pWrtShell->SttEndDoc(/*bStt=*/true);
 
     // Then make sure that the callback is emitted again:
-    std::stringstream aStream(m_aContentControl.getStr());
+    std::stringstream aStream((std::string(m_aContentControl)));
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
-    OString sAction = aTree.get_child("action").get_value<std::string>().c_str();
+    OString sAction( aTree.get_child("action").get_value<std::string>() );
     CPPUNIT_ASSERT_EQUAL(OString("hide"), sAction);
 }
 
@@ -3637,12 +3637,12 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownContentControl)
     // Then make sure that the callback is emitted:
     CPPUNIT_ASSERT(!m_aContentControl.isEmpty());
     {
-        std::stringstream aStream(m_aContentControl.getStr());
+        std::stringstream aStream((std::string(m_aContentControl)));
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
-        OString sAction = aTree.get_child("action").get_value<std::string>().c_str();
+        OString sAction( aTree.get_child("action").get_value<std::string>() );
         CPPUNIT_ASSERT_EQUAL(OString("show"), sAction);
-        OString sRectangles = aTree.get_child("rectangles").get_value<std::string>().c_str();
+        OString sRectangles( aTree.get_child("rectangles").get_value<std::string>() );
         CPPUNIT_ASSERT(!sRectangles.isEmpty());
         boost::optional<boost::property_tree::ptree&> oItems = aTree.get_child_optional("items");
         CPPUNIT_ASSERT(oItems);
@@ -3712,10 +3712,10 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPictureContentControl)
     // Then make sure that the callback is emitted:
     // Without the accompanying fix in place, this test would have failed, no callback was emitted.
     CPPUNIT_ASSERT(!m_aContentControl.isEmpty());
-    std::stringstream aStream(m_aContentControl.getStr());
+    std::stringstream aStream((std::string(m_aContentControl)));
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
-    OString sAction = aTree.get_child("action").get_value<std::string>().c_str();
+    OString sAction( aTree.get_child("action").get_value<std::string>() );
     CPPUNIT_ASSERT_EQUAL(OString("change-picture"), sAction);
 
     // And when replacing the image:
@@ -3764,12 +3764,12 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDateContentControl)
     // Then make sure that the callback is emitted:
     CPPUNIT_ASSERT(!m_aContentControl.isEmpty());
     {
-        std::stringstream aStream(m_aContentControl.getStr());
+        std::stringstream aStream((std::string(m_aContentControl)));
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
-        OString sAction = aTree.get_child("action").get_value<std::string>().c_str();
+        OString sAction( aTree.get_child("action").get_value<std::string>() );
         CPPUNIT_ASSERT_EQUAL(OString("show"), sAction);
-        OString sRectangles = aTree.get_child("rectangles").get_value<std::string>().c_str();
+        OString sRectangles( aTree.get_child("rectangles").get_value<std::string>() );
         CPPUNIT_ASSERT(!sRectangles.isEmpty());
         boost::optional<boost::property_tree::ptree&> oDate = aTree.get_child_optional("date");
         CPPUNIT_ASSERT(oDate);

@@ -26,7 +26,7 @@
 
 #define OU2ENC(rtlOUString, rtlEncoding) \
     OString((rtlOUString).getStr(), (rtlOUString).getLength(), \
-    rtlEncoding, RTL_UNICODETOTEXT_FLAGS_UNDEFINED_QUESTIONMARK).getStr()
+    rtlEncoding, RTL_UNICODETOTEXT_FLAGS_UNDEFINED_QUESTIONMARK)
 
 struct SvtLinguConfigDictionaryEntry;
 

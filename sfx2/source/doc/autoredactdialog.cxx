@@ -402,7 +402,7 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, LoadHdl, sfx2::FileDialogHelper*, void)
     try
     {
         // Create path string, and read JSON from file
-        std::string sPathStr(OUStringToOString(sTargetsFile, RTL_TEXTENCODING_UTF8).getStr());
+        std::string sPathStr(OUStringToOString(sTargetsFile, RTL_TEXTENCODING_UTF8));
 
         boost::property_tree::ptree aTargetsJSON;
 
@@ -459,7 +459,7 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, SaveHdl, sfx2::FileDialogHelper*, void)
         aTargetsTree.add_child("RedactionTargets", aTargetsArray);
 
         // Create path string, and write JSON to file
-        std::string sPathStr(OUStringToOString(sTargetsFile, RTL_TEXTENCODING_UTF8).getStr());
+        std::string sPathStr(OUStringToOString(sTargetsFile, RTL_TEXTENCODING_UTF8));
 
         boost::property_tree::write_json(sPathStr, aTargetsTree);
     }

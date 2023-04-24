@@ -2622,7 +2622,7 @@ OString ScViewData::describeCellCursorAt(SCCOL nX, SCROW nY, bool bPixelAligned)
             << nX << ", " << nY;
     }
 
-    return ss.str().c_str();
+    return OString(ss.str());
 }
 
 //      Number of cells on a screen

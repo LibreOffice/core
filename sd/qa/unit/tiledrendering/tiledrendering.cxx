@@ -2511,7 +2511,7 @@ namespace
 void lcl_extractHandleParameters(std::string_view selection, sal_uInt32& id, sal_uInt32& x, sal_uInt32& y)
 {
     OString extraInfo( selection.substr(selection.find("{")) );
-    std::stringstream aStream(extraInfo.getStr());
+    std::stringstream aStream((std::string(extraInfo)));
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
     boost::property_tree::ptree

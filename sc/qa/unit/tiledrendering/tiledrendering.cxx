@@ -678,7 +678,7 @@ namespace
 void lcl_extractHandleParameters(std::string_view selection, sal_uInt32& id, sal_uInt32& x, sal_uInt32& y)
 {
     OString extraInfo( selection.substr(selection.find("{")) );
-    std::stringstream aStream(extraInfo.getStr());
+    std::stringstream aStream((std::string(extraInfo)));
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
     boost::property_tree::ptree
@@ -2047,7 +2047,7 @@ struct SheetDimData
             }
 
             // Get the tree's value for the property key ("sizes"/"hidden"/"filtered").
-            OString aTreeValue = rTree.get<std::string>(rEntry.aKey.getStr()).c_str();
+            OString aTreeValue(rTree.get<std::string>(rEntry.aKey.getStr()));
 
             CPPUNIT_ASSERT_EQUAL(aExpectedEncoding, aTreeValue);
         }
@@ -2075,10 +2075,10 @@ public:
     {
         // Assumes all flags passed to getSheetGeometryData() are true.
         boost::property_tree::ptree aTree;
-        std::stringstream aStream(rJSON.getStr());
+        std::stringstream aStream((std::string(rJSON)));
         boost::property_tree::read_json(aStream, aTree);
 
-        CPPUNIT_ASSERT_EQUAL(OString(".uno:SheetGeometryData"), OString(aTree.get<std::string>("commandName").c_str()));
+        CPPUNIT_ASSERT_EQUAL(OString(".uno:SheetGeometryData"), OString(aTree.get<std::string>("commandName")));
 
         aCols.testPropertyTree(aTree.get_child("columns"), true);
         aRows.testPropertyTree(aTree.get_child("rows"), false);

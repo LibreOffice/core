@@ -478,7 +478,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
 
                     if( IsParserWorking() && !rInput.eof() )
                     {
-                        OUString sEntity(sEntityBuffer.getStr(), nPos);
+                        std::u16string_view sEntity(sEntityBuffer.subView(0, nPos));
                         cChar = GetHTMLCharName( sEntity );
 
                         // not found ( == 0 ): plain text
@@ -492,7 +492,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                             {
                                 nNextCh = sEntityBuffer[i];
                                 sEntityBuffer.setLength( i );
-                                sEntity = OUString(sEntityBuffer.getStr(), i);
+                                sEntity = sEntityBuffer.subView(0, i);
                                 cChar = GetHTMLCharName( sEntity );
                                 if( cChar )
                                 {

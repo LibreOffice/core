@@ -575,7 +575,7 @@ OString toHexString(const std::vector<unsigned char>& a)
         aStrm << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i);
     }
 
-    return OString(aStrm.str().c_str());
+    return OString(aStrm.str());
 }
 
 void writeBitmapContentChecksum(tools::XmlWriter& rWriter, Bitmap const& rBitmap)

@@ -28,13 +28,13 @@ struct Foo
 void test1(Foo& foo)
 {
     OString s;
-    // expected-error@+1 {{unnecessary call to 'getStr' when passing to OString arg [loplugin:unnecessarygetstr]}}
+    // expected-error@+1 {{unnecessary call to 'getStr' when passing to OString constructor [loplugin:unnecessarygetstr]}}
     f1(true, s.getStr());
-    // expected-error@+1 {{unnecessary call to 'getStr' when passing to OString arg [loplugin:unnecessarygetstr]}}
+    // expected-error@+1 {{unnecessary call to 'getStr' when passing to OString constructor [loplugin:unnecessarygetstr]}}
     foo.f1(true, s.getStr());
-    // expected-error@+1 {{unnecessary call to 'getStr' when passing to OString arg [loplugin:unnecessarygetstr]}}
+    // expected-error@+1 {{unnecessary call to 'getStr' when passing to OString constructor [loplugin:unnecessarygetstr]}}
     foo.f1(true, OString::boolean(true).getStr());
-    // expected-error@+1 {{unnecessary call to 'getStr' when passing to OString arg [loplugin:unnecessarygetstr]}}
+    // expected-error@+1 {{unnecessary call to 'getStr' when passing to OString constructor [loplugin:unnecessarygetstr]}}
     foo.f1(true, OString::number(12).getStr());
 
     // avoid false +
@@ -49,21 +49,35 @@ namespace test2
 {
 // call to param that takes string_view
 void f2(bool, std::string_view);
+void f2(bool, std::u16string_view);
 struct Foo2
 {
     void f2(bool, std::string_view);
+    void f2(bool, std::u16string_view);
 };
-void test2(Foo2& foo)
+void testOString(Foo2& foo)
 {
     OString s;
-    // expected-error@+1 {{unnecessary call to 'getStr' when passing to string_view arg [loplugin:unnecessarygetstr]}}
+    // expected-error@+1 {{unnecessary call to 'getStr' when passing to string_view constructor [loplugin:unnecessarygetstr]}}
     f2(true, s.getStr());
-    // expected-error@+1 {{unnecessary call to 'getStr' when passing to string_view arg [loplugin:unnecessarygetstr]}}
+    // expected-error@+1 {{unnecessary call to 'getStr' when passing to string_view constructor [loplugin:unnecessarygetstr]}}
     foo.f2(true, s.getStr());
-    // expected-error@+1 {{unnecessary call to 'getStr' when passing to string_view arg [loplugin:unnecessarygetstr]}}
+    // expected-error@+1 {{unnecessary call to 'getStr' when passing to string_view constructor [loplugin:unnecessarygetstr]}}
     foo.f2(true, OString::boolean(true).getStr());
-    // expected-error@+1 {{unnecessary call to 'getStr' when passing to string_view arg [loplugin:unnecessarygetstr]}}
+    // expected-error@+1 {{unnecessary call to 'getStr' when passing to string_view constructor [loplugin:unnecessarygetstr]}}
     foo.f2(true, OString::number(12).getStr());
+}
+void testOUString(Foo2& foo)
+{
+    OUString s;
+    // expected-error@+1 {{unnecessary call to 'getStr' when passing to string_view constructor [loplugin:unnecessarygetstr]}}
+    f2(true, s.getStr());
+    // expected-error@+1 {{unnecessary call to 'getStr' when passing to string_view constructor [loplugin:unnecessarygetstr]}}
+    foo.f2(true, s.getStr());
+    // expected-error@+1 {{unnecessary call to 'getStr' when passing to string_view constructor [loplugin:unnecessarygetstr]}}
+    foo.f2(true, OUString::boolean(true).getStr());
+    // expected-error@+1 {{unnecessary call to 'getStr' when passing to string_view constructor [loplugin:unnecessarygetstr]}}
+    foo.f2(true, OUString::number(12).getStr());
 }
 }
 
@@ -78,9 +92,9 @@ struct Foo2
 void test3(Foo2& foo)
 {
     std::string s;
-    // expected-error@+1 {{unnecessary call to 'c_str' when passing to string_view arg [loplugin:unnecessarygetstr]}}
+    // expected-error@+1 {{unnecessary call to 'c_str' when passing to string_view constructor [loplugin:unnecessarygetstr]}}
     f2(true, s.c_str());
-    // expected-error@+1 {{unnecessary call to 'c_str' when passing to string_view arg [loplugin:unnecessarygetstr]}}
+    // expected-error@+1 {{unnecessary call to 'c_str' when passing to string_view constructor [loplugin:unnecessarygetstr]}}
     foo.f2(true, s.c_str());
 }
 }
@@ -92,6 +106,17 @@ void test()
     std::string s;
     // expected-error@+1 {{unnecessary call to 'c_str' when passing to OUString::createFromAscii [loplugin:unnecessarygetstr]}}
     OUString::createFromAscii(s.c_str());
+}
+}
+
+namespace test5
+{
+void test(std::string v, OString o)
+{
+    // expected-error@+1 {{unnecessary call to 'c_str' when passing to string_view constructor [loplugin:unnecessarygetstr]}}
+    std::string_view s1(v.c_str());
+    // expected-error@+1 {{unnecessary call to 'getStr' when passing to string constructor [loplugin:unnecessarygetstr]}}
+    std::string s2(o.getStr());
 }
 }
 

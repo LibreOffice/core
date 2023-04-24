@@ -336,7 +336,7 @@ void ScInputHandler::SendReferenceMarks( const SfxViewShell* pViewShell,
 
     ss <<  " ] }";
 
-    OString aPayload = ss.str().c_str();
+    OString aPayload( ss.str() );
     pViewShell->libreOfficeKitViewCallback(
                 LOK_CALLBACK_REFERENCE_MARKS, aPayload );
 }

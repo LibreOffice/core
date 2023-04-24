@@ -1216,13 +1216,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testImageComment)
     tools::JsonWriter aJsonWriter;
     pTextDoc->getPostIts(aJsonWriter);
     OString pChar = aJsonWriter.finishAndGetAsOString();
-    std::stringstream aStream(pChar.getStr());
+    std::stringstream aStream((std::string(pChar)));
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
     for (const boost::property_tree::ptree::value_type& rValue : aTree.get_child("comments"))
     {
         const boost::property_tree::ptree& rComment = rValue.second;
-        OString aAnchorPos(rComment.get<std::string>("anchorPos").c_str());
+        OString aAnchorPos(rComment.get<std::string>("anchorPos"));
         OString aExpected
             = OString::number(nFrameLeft) + ", " + OString::number(nFrameTop) + ", 0, 0";
         CPPUNIT_ASSERT_EQUAL(aExpected, aAnchorPos);

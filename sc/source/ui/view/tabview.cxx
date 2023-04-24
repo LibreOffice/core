@@ -2688,7 +2688,7 @@ void lcl_ExtendTiledDimension(bool bColumn, const SCCOLROW nEnd, const SCCOLROW 
     // Provide size in the payload, so clients don't have to query for that.
     std::stringstream ss;
     ss << aNewSize.Width() << ", " << aNewSize.Height();
-    OString sSize = ss.str().c_str();
+    OString sSize( ss.str() );
     ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(
         rViewData.GetViewShell()->GetCurrentDocument());
     SfxLokHelper::notifyDocumentSizeChanged(rViewData.GetViewShell(), sSize, pModel, false);
@@ -2945,7 +2945,7 @@ OString ScTabView::getSheetGeometryData(bool bColumns, bool bRows, bool bSizes, 
     if ((!bSizes && !bHidden && !bFiltered && !bGroups) ||
         (!bColumns && !bRows))
     {
-        return getJSONString(aTree).c_str();
+        return OString(getJSONString(aTree));
     }
 
     struct GeomEntry
@@ -2997,7 +2997,7 @@ OString ScTabView::getSheetGeometryData(bool bColumns, bool bRows, bool bSizes, 
         aTree.add_child(rDimEntry.pKey, aDimTree);
     }
 
-    return getJSONString(aTree).c_str();
+    return OString(getJSONString(aTree));
 }
 
 void ScTabView::extendTiledAreaIfNeeded()

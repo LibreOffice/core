@@ -1131,7 +1131,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
 
             std::stringstream aStream;
             boost::property_tree::write_json(aStream, aTableJsonTree);
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TABLE_SELECTED, aStream.str().c_str());
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TABLE_SELECTED, OString(aStream.str()));
         }
         else if (!getSdrModelFromSdrView().IsWriter())
         {

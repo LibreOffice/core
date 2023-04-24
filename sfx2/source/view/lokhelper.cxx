@@ -18,6 +18,7 @@
 #include <com/sun/star/ui/ContextChangeEventObject.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <o3tl/string_view.hxx>
 #include <rtl/strbuf.hxx>
 #include <vcl/lok.hxx>
 #include <vcl/svapp.hxx>
@@ -408,8 +409,7 @@ static OString lcl_generateJSON(const SfxViewShell* pView, const boost::property
     aMessageProps.put("mode", pView->getEditMode());
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aMessageProps, false /* pretty */);
-    const std::string aString = aStream.str();
-    return OString(aString.c_str(), aString.size()).trim();
+    return OString(o3tl::trim(aStream.str()));
 }
 
 static inline OString lcl_generateJSON(const SfxViewShell* pView, int nViewId, std::string_view rKey,
@@ -552,7 +552,7 @@ void SfxLokHelper::sendUnoStatus(const SfxViewShell* pShell, const SfxPoolItem* 
 
         std::stringstream aStream;
         boost::property_tree::write_json(aStream, aItem);
-        pShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aStream.str().c_str());
+        pShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, OString(aStream.str()));
     }
 }
 
@@ -969,7 +969,7 @@ void SfxLokHelper::notifyMediaUpdate(boost::property_tree::ptree& json)
     boost::property_tree::write_json(aStream, json, /*pretty=*/ false);
     const std::string str = aStream.str();
 
-    SfxLokHelper::notifyAllViews(LOK_CALLBACK_MEDIA_SHAPE, str.c_str());
+    SfxLokHelper::notifyAllViews(LOK_CALLBACK_MEDIA_SHAPE, OString(str));
 }
 
 bool SfxLokHelper::testInPlaceComponentMouseEventHit(SfxViewShell* pViewShell, int nType, int nX,

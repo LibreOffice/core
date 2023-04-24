@@ -284,7 +284,7 @@ void ChartLinePanel::updateLineWidth(bool bDisabled, bool bSetOrDefault, const S
     if (comphelper::LibreOfficeKit::isActive() && pViewShell)
     {
         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
-                        (".uno:LineWidth=" + std::to_string(mnWidthCoreValue)).c_str());
+                        ".uno:LineWidth=" + OString::number(mnWidthCoreValue));
     }
 }
 

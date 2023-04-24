@@ -154,7 +154,7 @@ namespace Translate
 #endif
         OString sPath(OUStringToOString(path, eEncoding));
 #endif
-        gen.add_messages_path(sPath.getStr());
+        gen.add_messages_path(std::string(sPath));
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID && !defined EMSCRIPTEN
         // allow gettext to find these .mo files e.g. so gtk dialogs can use them
         bindtextdomain(aPrefixName.data(), sPath.getStr());
@@ -202,7 +202,7 @@ namespace Translate
 
 #endif
 
-        std::locale aRet(gen(sIdentifier.getStr()));
+        std::locale aRet(gen(std::string(sIdentifier)));
 
         aCache[sUnique] = aRet;
         return aRet;

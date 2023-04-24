@@ -227,7 +227,7 @@ void SidebarController::disposeDecks()
             const std::string hide = UnoNameFromDeckId(msCurrentDeckId, GetCurrentContext());
             if (!hide.empty())
                 pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
-                                                       (hide + "=false").c_str());
+                                                       OString(hide + "=false"));
         }
 
         if (mpParentWindow)
@@ -802,13 +802,13 @@ void SidebarController::SwitchToDeck (
                 const std::string hide = UnoNameFromDeckId(msCurrentDeckId, GetCurrentContext());
                 if (!hide.empty())
                     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
-                                                           (hide + "=false").c_str());
+                                                           OString(hide + "=false"));
             }
 
             const std::string show = UnoNameFromDeckId(rDeckDescriptor.msId, GetCurrentContext());
             if (!show.empty())
                 pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
-                                                       (show + "=true").c_str());
+                                                       OString(show + "=true"));
         }
     }
 
@@ -1320,7 +1320,7 @@ void SidebarController::UpdateDeckOpenState()
                     const std::string uno = UnoNameFromDeckId(msCurrentDeckId, GetCurrentContext());
                     if (!uno.empty())
                         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
-                                                                (uno + "=true").c_str());
+                                                                OString(uno + "=true"));
                 }
             }
         }
@@ -1358,7 +1358,7 @@ void SidebarController::UpdateDeckOpenState()
                     const std::string uno = UnoNameFromDeckId(msCurrentDeckId, GetCurrentContext());
                     if (!uno.empty())
                         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
-                                                                (uno + "=false").c_str());
+                                                                OString(uno + "=false"));
                 }
             }
         }

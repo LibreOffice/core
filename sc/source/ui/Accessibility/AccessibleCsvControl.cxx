@@ -420,7 +420,7 @@ OUString SAL_CALL ScAccessibleCsvRuler::getText()
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return OUString( maBuffer.getStr(), implGetTextLength() );
+    return OUString(maBuffer.subView( 0, implGetTextLength() ));
 }
 
 OUString SAL_CALL ScAccessibleCsvRuler::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )

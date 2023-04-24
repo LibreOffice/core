@@ -2585,7 +2585,7 @@ void ScDocShell::LOKCommentNotify(LOKCommentNotificationType nType, const ScDocu
     while (pViewShell)
     {
         if (pThisViewShell == nullptr || pViewShell->GetDocId() == pThisViewShell->GetDocId())
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_COMMENT, aPayload.c_str());
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_COMMENT, OString(aPayload));
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }

@@ -1478,8 +1478,9 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testAutofilterHiddenButton)
     CPPUNIT_ASSERT(pDocXml);
     for (int i = 1; i <= 5; i++)
     {
-        auto sPath = "/x:table/x:autoFilter/x:filterColumn[" + std::to_string(i) + "]";
-        assertXPath(pDocXml, sPath.c_str(), "hiddenButton", "1");
+        OString sPath
+            = OString::Concat("/x:table/x:autoFilter/x:filterColumn[") + OString::number(i) + "]";
+        assertXPath(pDocXml, sPath, "hiddenButton", "1");
     }
 }
 
