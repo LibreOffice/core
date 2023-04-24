@@ -64,9 +64,9 @@ FormShellManager::FormShellManager (ViewShellBase& rBase)
     RegisterAtCenterPane();
 }
 
-FormShellManager::~FormShellManager()
+void FormShellManager::ImplDestroy()
 {
-    suppress_fun_call_w_exception(SetFormShell(nullptr));
+    SetFormShell(nullptr);
     UnregisterAtCenterPane();
 
     // Unregister from the EventMultiplexer.
@@ -79,6 +79,11 @@ FormShellManager::~FormShellManager()
         if (pShell != nullptr)
             mrBase.GetViewShellManager()->RemoveSubShellFactory(pShell,mpSubShellFactory);
     }
+}
+
+FormShellManager::~FormShellManager()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 void FormShellManager::SetFormShell (FmFormShell* pFormShell)

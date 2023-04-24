@@ -132,6 +132,9 @@ private:
         (and may be removed in the future.)
     */
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
+
+    /** dtor body */
+    void ImplDestroy();
 };
 
 } // end of namespace sd
