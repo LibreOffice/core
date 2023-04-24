@@ -139,6 +139,7 @@ cui/uiconfig/ui/paragalignpage.ui://GtkLabel[@id='labelST_LEFTALIGN_ASIAN'] orph
 cui/uiconfig/ui/paraindentspacing.ui://GtkLabel[@id='labelST_LINEDIST_ABS'] orphan-label
 cui/uiconfig/ui/paraindentspacing.ui://GtkComboBoxText[@id='comboLB_LINEDIST'] no-labelled-by
 cui/uiconfig/ui/paraindentspacing.ui://GtkLabel[@id='labelFT_LINEDIST'] orphan-label
+cui/uiconfig/ui/paraindentspacing.ui://GtkSpinButton[@id='spinED_BLANK'] no-labelled-by
 cui/uiconfig/ui/paraindentspacing.ui://GtkSpinButton[@id='spinED_LINEDISTPERCENT'] no-labelled-by
 cui/uiconfig/ui/paraindentspacing.ui://GtkSpinButton[@id='spinED_LINEDISTMETRIC'] no-labelled-by
 cui/uiconfig/ui/password.ui://GtkLabel[@id='label1'] orphan-label

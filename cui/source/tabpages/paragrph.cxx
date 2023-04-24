@@ -677,6 +677,7 @@ SvxStdParagraphTabPage::SvxStdParagraphTabPage(weld::Container* pPage, weld::Dia
     , m_xLineDist(m_xBuilder->weld_combo_box("comboLB_LINEDIST"))
     , m_xLineDistAtPercentBox(m_xBuilder->weld_metric_spin_button("spinED_LINEDISTPERCENT", FieldUnit::PERCENT))
     , m_xLineDistAtMetricBox(m_xBuilder->weld_metric_spin_button("spinED_LINEDISTMETRIC", FieldUnit::CM))
+    , m_xLineDistAtPlaceHolderBox(m_xBuilder->weld_metric_spin_button("spinED_BLANK", FieldUnit::CM))
     , m_xLineDistAtLabel(m_xBuilder->weld_label("labelFT_LINEDIST"))
     , m_xAbsDist(m_xBuilder->weld_label("labelST_LINEDIST_ABS"))
     , m_xRegisterCB(m_xBuilder->weld_check_button("checkCB_REGISTER"))
@@ -688,6 +689,8 @@ SvxStdParagraphTabPage::SvxStdParagraphTabPage(weld::Container* pPage, weld::Dia
     SetExchangeSupport();
 
     m_xLineDistAtMetricBox->hide();
+    m_xLineDistAtPlaceHolderBox->hide();
+    m_xLineDistAtPlaceHolderBox->set_text(OUString());
 
     Init_Impl();
     m_xFLineIndent->set_min(-9999, FieldUnit::NONE);    // is set to 0 on default
@@ -791,10 +794,9 @@ IMPL_LINK(SvxStdParagraphTabPage, LineDistHdl_Impl, weld::ComboBox&, rBox, void)
         case LLINESPACE_15:
         case LLINESPACE_2:
             m_xLineDistAtLabel->set_sensitive(false);
-            m_xLineDistAtPercentBox->set_sensitive(false);
-            m_xLineDistAtPercentBox->set_text(OUString());
-            m_xLineDistAtMetricBox->set_sensitive(false);
-            m_xLineDistAtMetricBox->set_text(OUString());
+            m_xLineDistAtPercentBox->hide();
+            m_xLineDistAtMetricBox->hide();
+            m_xLineDistAtPlaceHolderBox->show();
             break;
 
         case LLINESPACE_DURCH:
@@ -802,32 +804,32 @@ IMPL_LINK(SvxStdParagraphTabPage, LineDistHdl_Impl, weld::ComboBox&, rBox, void)
             // limit MS min(10, aPageSize)
             m_xLineDistAtMetricBox->set_min(0, FieldUnit::NONE);
 
-            if (m_xLineDistAtMetricBox->get_text().isEmpty())
+            if (m_xLineDistAtPlaceHolderBox->get_visible())
                 m_xLineDistAtMetricBox->set_value(m_xLineDistAtMetricBox->normalize(1), FieldUnit::NONE);
+            m_xLineDistAtPlaceHolderBox->hide();
             m_xLineDistAtPercentBox->hide();
             m_xLineDistAtMetricBox->show();
-            m_xLineDistAtMetricBox->set_sensitive(true);
             m_xLineDistAtLabel->set_sensitive(true);
             break;
 
         case LLINESPACE_MIN:
             m_xLineDistAtMetricBox->set_min(0, FieldUnit::NONE);
 
-            if (m_xLineDistAtMetricBox->get_text().isEmpty())
+            if (m_xLineDistAtPlaceHolderBox->get_visible())
                 m_xLineDistAtMetricBox->set_value(m_xLineDistAtMetricBox->normalize(10), FieldUnit::TWIP);
+            m_xLineDistAtPlaceHolderBox->hide();
             m_xLineDistAtPercentBox->hide();
             m_xLineDistAtMetricBox->show();
-            m_xLineDistAtMetricBox->set_sensitive(true);
             m_xLineDistAtLabel->set_sensitive(true);
             break;
 
         case LLINESPACE_PROP:
 
-            if (m_xLineDistAtPercentBox->get_text().isEmpty())
+            if (m_xLineDistAtPlaceHolderBox->get_visible())
                 m_xLineDistAtPercentBox->set_value(m_xLineDistAtPercentBox->normalize(100), FieldUnit::TWIP);
+            m_xLineDistAtPlaceHolderBox->hide();
             m_xLineDistAtMetricBox->hide();
             m_xLineDistAtPercentBox->show();
-            m_xLineDistAtPercentBox->set_sensitive(true);
             m_xLineDistAtLabel->set_sensitive(true);
             break;
         case LLINESPACE_FIX:
@@ -839,9 +841,9 @@ IMPL_LINK(SvxStdParagraphTabPage, LineDistHdl_Impl, weld::ComboBox&, rBox, void)
             // it is time for the default
             if (m_xLineDistAtMetricBox->get_value(FieldUnit::NONE) != nTemp)
                 SetMetricValue( *m_xLineDistAtMetricBox, FIX_DIST_DEF, MapUnit::MapTwip ); // fix is only in Writer
+            m_xLineDistAtPlaceHolderBox->hide();
             m_xLineDistAtPercentBox->hide();
             m_xLineDistAtMetricBox->show();
-            m_xLineDistAtMetricBox->set_sensitive(true);
             m_xLineDistAtLabel->set_sensitive(true);
         }
         break;
