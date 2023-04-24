@@ -317,13 +317,13 @@ struct EditCursorMessage final {
         else
             return; // happens in testTextBoxInsert test
 
-        uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(aVal.c_str()));
+        uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(aVal));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aSeq.getLength());
         m_aRefPoint.setX(aSeq[0].toInt32());
         m_aRefPoint.setY(aSeq[1].toInt32());
 
         aVal = aTree.get_child("relrect").get_value<std::string>();
-        aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(aVal.c_str()));
+        aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(aVal));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aSeq.getLength());
         m_aRelRect.SetLeft(aSeq[0].toInt32());
         m_aRelRect.SetTop(aSeq[1].toInt32());
@@ -369,7 +369,7 @@ struct TextSelectionMessage
         std::string aRefPointString = (nRefDelimStart == std::string::npos) ?
             std::string("0, 0") :
             aStr.substr(nRefDelimStart + 2, aStr.length() - 2 - nRefDelimStart);
-        uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(aRefPointString.c_str()));
+        uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(aRefPointString));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aSeq.getLength());
         m_aRefPoint.setX(aSeq[0].toInt32());
         m_aRefPoint.setY(aSeq[1].toInt32());
@@ -382,7 +382,7 @@ struct TextSelectionMessage
         {
             std::string aRectString = aRectListString.substr(nStart, nEnd - nStart);
             {
-                aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(aRectString.c_str()));
+                aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(aRectString));
                 CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aSeq.getLength());
                 tools::Rectangle aRect;
                 aRect.SetLeft(aSeq[0].toInt32());
@@ -1123,7 +1123,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
             pTabViewShell->SetCursor(3, 100);
         aArgs = comphelper::InitPropertySequence(
         {
-            {"Id", uno::Any(OUString::createFromAscii(aCommentId.c_str()))},
+            {"Id", uno::Any(OUString::createFromAscii(aCommentId))},
             {"Text", uno::Any(OUString("Edited comment"))},
             {"Author", uno::Any(OUString("LOK User2"))},
         });
@@ -1146,7 +1146,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
             pTabViewShell->SetCursor(4, 43);
         aArgs = comphelper::InitPropertySequence(
         {
-            {"Id", uno::Any(OUString::createFromAscii(aCommentId.c_str()))}
+            {"Id", uno::Any(OUString::createFromAscii(aCommentId))}
         });
         dispatchCommand(mxComponent, ".uno:DeleteNote", aArgs);
 

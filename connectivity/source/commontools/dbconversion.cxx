@@ -81,7 +81,7 @@ namespace dbtools
         ostr << setw(4) << rDate.Year  << "-"
              << setw(2) << rDate.Month << "-"
              << setw(2) << rDate.Day;
-        return OUString::createFromAscii(ostr.str().c_str());
+        return OUString::createFromAscii(ostr.str());
     }
 
     OUString DBTypeConversion::toTimeStringS(const css::util::Time& rTime)
@@ -92,7 +92,7 @@ namespace dbtools
         ostr << setw(2) << rTime.Hours   << ":"
              << setw(2) << rTime.Minutes << ":"
              << setw(2) << rTime.Seconds;
-        return OUString::createFromAscii(ostr.str().c_str());
+        return OUString::createFromAscii(ostr.str());
     }
 
     OUString DBTypeConversion::toTimeString(const css::util::Time& rTime)
@@ -104,7 +104,7 @@ namespace dbtools
              << setw(2) << rTime.Minutes << ":"
              << setw(2) << rTime.Seconds << "."
              << setw(9) << rTime.NanoSeconds;
-        return OUString::createFromAscii(ostr.str().c_str());
+        return OUString::createFromAscii(ostr.str());
     }
 
     OUString DBTypeConversion::toDateTimeString(const css::util::DateTime& _rDateTime)

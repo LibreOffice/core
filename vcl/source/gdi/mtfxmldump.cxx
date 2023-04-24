@@ -371,7 +371,7 @@ OUString convertFractionToString(const Fraction& aFraction)
 
     ss << aFraction;
 
-    return OUString::createFromAscii(ss.str().c_str());
+    return OUString::createFromAscii(ss.str());
 }
 
 OUString convertGradientStyleToOUString(css::awt::GradientStyle eStyle)
@@ -405,7 +405,7 @@ OUString convertLanguageTypeToString(LanguageType rLanguageType)
 {
     std::stringstream ss;
     ss << std::hex << std::setfill ('0') << std::setw(4) << rLanguageType.get();
-    return "#" + OUString::createFromAscii(ss.str().c_str());
+    return "#" + OUString::createFromAscii(ss.str());
 }
 
 OUString convertWallpaperStyleToString(WallpaperStyle eWallpaperStyle)
@@ -480,7 +480,7 @@ OUString hex32(sal_uInt32 nNumber)
 {
     std::stringstream ss;
     ss << std::hex << std::setfill('0') << std::setw(8) << nNumber;
-    return OUString::createFromAscii(ss.str().c_str());
+    return OUString::createFromAscii(ss.str());
 }
 
 OUString toHexString(const sal_uInt8* nData, sal_uInt32 nDataSize){
@@ -491,7 +491,7 @@ OUString toHexString(const sal_uInt8* nData, sal_uInt32 nDataSize){
         aStrm << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(nData[i]);
     }
 
-    return OUString::createFromAscii(aStrm.str().c_str());
+    return OUString::createFromAscii(aStrm.str());
 }
 
 void writePoint(tools::XmlWriter& rWriter, Point const& rPoint)

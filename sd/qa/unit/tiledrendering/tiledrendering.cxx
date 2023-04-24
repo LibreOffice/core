@@ -1688,7 +1688,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     int nComment1 = aView1.m_aCommentCallbackResult.get<int>("id");
     CPPUNIT_ASSERT_EQUAL(nComment1, aView2.m_aCommentCallbackResult.get<int>("id"));
     css::util::DateTime aDateTime;
-    OUString aDateTimeString = OUString::createFromAscii(aView1.m_aCommentCallbackResult.get<std::string>("dateTime").c_str());
+    OUString aDateTimeString = OUString::createFromAscii(aView1.m_aCommentCallbackResult.get<std::string>("dateTime"));
     CPPUNIT_ASSERT(utl::ISO8601parseDateTime(aDateTimeString, aDateTime));
     CPPUNIT_ASSERT_EQUAL(std::string("LOK User1"), aView1.m_aCommentCallbackResult.get<std::string>("author"));
     CPPUNIT_ASSERT_EQUAL(std::string("LOK User1"), aView2.m_aCommentCallbackResult.get<std::string>("author"));
@@ -1713,8 +1713,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     CPPUNIT_ASSERT_EQUAL(nComment1, aView2.m_aCommentCallbackResult.get<int>("id"));
     CPPUNIT_ASSERT_EQUAL(std::string("LOK User2"), aView1.m_aCommentCallbackResult.get<std::string>("author"));
     CPPUNIT_ASSERT_EQUAL(std::string("LOK User2"), aView2.m_aCommentCallbackResult.get<std::string>("author"));
-    OUString aReplyTextView1 = OUString::createFromAscii(aView1.m_aCommentCallbackResult.get<std::string>("text").c_str());
-    OUString aReplyTextView2 = OUString::createFromAscii(aView2.m_aCommentCallbackResult.get<std::string>("text").c_str());
+    OUString aReplyTextView1 = OUString::createFromAscii(aView1.m_aCommentCallbackResult.get<std::string>("text"));
+    OUString aReplyTextView2 = OUString::createFromAscii(aView2.m_aCommentCallbackResult.get<std::string>("text"));
     CPPUNIT_ASSERT(aReplyTextView1.startsWith("Reply to LOK User1"));
     CPPUNIT_ASSERT(aReplyTextView1.endsWith("Reply to comment"));
     CPPUNIT_ASSERT(aReplyTextView2.startsWith("Reply to LOK User1"));

@@ -2347,7 +2347,7 @@ void DesktopLOKTest::testCommentsWriter()
         CPPUNIT_ASSERT(!rComment.second.get<std::string>("text").empty());
         // Has a valid iso 8601 date time string
         css::util::DateTime aDateTime;
-        OUString aDateTimeString = OUString::createFromAscii(rComment.second.get<std::string>("dateTime").c_str());
+        OUString aDateTimeString = OUString::createFromAscii(rComment.second.get<std::string>("dateTime"));
         CPPUNIT_ASSERT(utl::ISO8601parseDateTime(aDateTimeString, aDateTime));
 
         // This comment has a marked text range
@@ -2447,7 +2447,7 @@ void DesktopLOKTest::testCommentsImpress()
                 CPPUNIT_ASSERT_EQUAL(std::string("This is comment1"), rComment.second.get<std::string>("text"));
                 CPPUNIT_ASSERT_EQUAL(std::string("LOK User1"), rComment.second.get<std::string>("author"));
                 css::util::DateTime aDateTime;
-                OUString aDateTimeString = OUString::createFromAscii(rComment.second.get<std::string>("dateTime").c_str());
+                OUString aDateTimeString = OUString::createFromAscii(rComment.second.get<std::string>("dateTime"));
                 CPPUNIT_ASSERT(utl::ISO8601parseDateTime(aDateTimeString, aDateTime));
             }
             break;
@@ -2457,7 +2457,7 @@ void DesktopLOKTest::testCommentsImpress()
                 CPPUNIT_ASSERT_EQUAL(std::string("This is comment2"), rComment.second.get<std::string>("text"));
                 CPPUNIT_ASSERT_EQUAL(std::string("LOK User2"), rComment.second.get<std::string>("author"));
                 css::util::DateTime aDateTime;
-                OUString aDateTimeString = OUString::createFromAscii(rComment.second.get<std::string>("dateTime").c_str());
+                OUString aDateTimeString = OUString::createFromAscii(rComment.second.get<std::string>("dateTime"));
                 CPPUNIT_ASSERT(utl::ISO8601parseDateTime(aDateTimeString, aDateTime));
             }
             break;

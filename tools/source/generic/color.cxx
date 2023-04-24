@@ -195,14 +195,14 @@ OUString Color::AsRGBHexString() const
 {
     std::stringstream ss;
     ss << std::hex << std::setfill ('0') << std::setw(6) << sal_uInt32(GetRGBColor());
-    return OUString::createFromAscii(ss.str().c_str());
+    return OUString::createFromAscii(ss.str());
 }
 
 OUString Color::AsRGBHEXString() const
 {
     std::stringstream ss;
     ss << std::hex << std::uppercase << std::setfill ('0') << std::setw(6) << sal_uInt32(GetRGBColor());
-    return OUString::createFromAscii(ss.str().c_str());
+    return OUString::createFromAscii(ss.str());
 }
 
 void Color::ApplyTintOrShade(sal_Int16 n100thPercent)

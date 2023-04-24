@@ -14,6 +14,7 @@
 
 #include "check.hxx"
 #include "plugin.hxx"
+#include "config_clang.h"
 
 // Find matches of
 //
@@ -82,39 +83,57 @@ public:
                 auto const tc1 = loplugin::TypeCheck(cxxConstruct->getConstructor()->getParent());
                 if (!(tc1.ClassOrStruct("basic_string_view").StdNamespace()))
                     continue;
-                auto e = dyn_cast<CXXMemberCallExpr>(cxxConstruct->getArg(0)->IgnoreImplicit());
-                if (!e)
-                    continue;
-                auto const t = e->getObjectType();
-                auto const tc2 = loplugin::TypeCheck(t);
-                if (tc2.Class("OString").Namespace("rtl").GlobalNamespace()
-                    || tc2.Class("OUString").Namespace("rtl").GlobalNamespace()
-                    || tc2.Class("OStringBuffer").Namespace("rtl").GlobalNamespace()
-                    || tc2.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()
-                    || tc2.ClassOrStruct("StringNumber").Namespace("rtl").GlobalNamespace())
-                {
-                    if (loplugin::DeclCheck(e->getMethodDecl()).Function("getStr"))
-                        report(DiagnosticsEngine::Warning,
-                               "unnecessary call to 'getStr' when passing to string_view arg",
-                               e->getExprLoc())
-                            << e->getSourceRange();
-                }
-                else if (tc2.Class("basic_string").StdNamespace())
-                {
-                    if (loplugin::DeclCheck(e->getMethodDecl()).Function("c_str"))
-                        report(DiagnosticsEngine::Warning,
-                               "unnecessary call to 'c_str' when passing to string_view arg",
-                               e->getExprLoc())
-                            << e->getSourceRange();
-                }
+                checkForGetStr(cxxConstruct->getArg(0), "string_view arg");
             }
+        }
+        if (loplugin::DeclCheck(func)
+                .Function("createFromAscii")
+                .Class("OUString")
+                .Namespace("rtl"))
+        {
+            checkForGetStr(callExpr->getArg(0), "OUString::createFromAscii");
         }
         return true;
     }
 
-    bool preRun() override { return compiler.getLangOpts().CPlusPlus; }
+    bool preRun() override
+    {
+        if (!compiler.getLangOpts().CPlusPlus)
+            return false;
+        std::string fn(handler.getMainFileName());
+        loplugin::normalizeDotDotInFilePath(fn);
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sal/qa/"))
+            return false;
+        return true;
+    }
 
 private:
+    void checkForGetStr(Expr* arg, const char* msg)
+    {
+        auto e = dyn_cast<CXXMemberCallExpr>(arg->IgnoreImplicit());
+        if (!e)
+            return;
+        auto const t = e->getObjectType();
+        auto const tc2 = loplugin::TypeCheck(t);
+        if (tc2.Class("OString").Namespace("rtl").GlobalNamespace()
+            || tc2.Class("OUString").Namespace("rtl").GlobalNamespace()
+            || tc2.Class("OStringBuffer").Namespace("rtl").GlobalNamespace()
+            || tc2.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()
+            || tc2.ClassOrStruct("StringNumber").Namespace("rtl").GlobalNamespace())
+        {
+            if (loplugin::DeclCheck(e->getMethodDecl()).Function("getStr"))
+                report(DiagnosticsEngine::Warning,
+                       "unnecessary call to 'getStr' when passing to %0", e->getExprLoc())
+                    << msg << e->getSourceRange();
+        }
+        else if (tc2.Class("basic_string").StdNamespace())
+        {
+            if (loplugin::DeclCheck(e->getMethodDecl()).Function("c_str"))
+                report(DiagnosticsEngine::Warning, "unnecessary call to 'c_str' when passing to %0",
+                       e->getExprLoc())
+                    << msg << e->getSourceRange();
+        }
+    }
     void run() override
     {
         if (preRun())

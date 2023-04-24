@@ -69,7 +69,7 @@ OUString   GetTableColName(sal_Int32 col)
     {
         ch = 'A' + col -1;
         strOut += ch;
-        return OUString::createFromAscii(strOut.c_str());
+        return OUString::createFromAscii(strOut);
     }
 
     while( col>26 )
@@ -82,7 +82,7 @@ OUString   GetTableColName(sal_Int32 col)
 
     ch = 'A' + remain -1;
     strOut += ch;
-    return OUString::createFromAscii(strOut.c_str());
+    return OUString::createFromAscii(strOut);
 }
 
 //tool functions:

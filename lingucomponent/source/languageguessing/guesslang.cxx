@@ -169,8 +169,8 @@ Locale SAL_CALL LangGuess_Impl::guessPrimaryLanguage(
     OString o( OUStringToOString( rText.subView(nStartPos, nLen), RTL_TEXTENCODING_UTF8 ) );
     Guess g = m_aGuesser.GuessPrimaryLanguage(o.getStr());
     lang::Locale aRes;
-    aRes.Language   = OUString::createFromAscii( g.GetLanguage().c_str() );
-    aRes.Country    = OUString::createFromAscii( g.GetCountry().c_str() );
+    aRes.Language   = OUString::createFromAscii( g.GetLanguage() );
+    aRes.Country    = OUString::createFromAscii( g.GetCountry() );
     return aRes;
 }
 
@@ -200,8 +200,8 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getAvailableLanguages(  )
 
     for(size_t i = 0; i < gs.size() ; i++ ){
         css::lang::Locale current_aRes;
-        current_aRes.Language   = OUString::createFromAscii( gs[i].GetLanguage().c_str() );
-        current_aRes.Country    = OUString::createFromAscii( gs[i].GetCountry().c_str() );
+        current_aRes.Language   = OUString::createFromAscii( gs[i].GetLanguage() );
+        current_aRes.Country    = OUString::createFromAscii( gs[i].GetCountry() );
         pRes[i] = current_aRes;
     }
 
@@ -222,8 +222,8 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getEnabledLanguages(  )
 
     for(size_t i = 0; i < gs.size() ; i++ ){
         css::lang::Locale current_aRes;
-        current_aRes.Language   = OUString::createFromAscii( gs[i].GetLanguage().c_str() );
-        current_aRes.Country    = OUString::createFromAscii( gs[i].GetCountry().c_str() );
+        current_aRes.Language   = OUString::createFromAscii( gs[i].GetLanguage() );
+        current_aRes.Country    = OUString::createFromAscii( gs[i].GetCountry() );
         pRes[i] = current_aRes;
     }
 
@@ -244,8 +244,8 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getDisabledLanguages(  )
 
     for(size_t i = 0; i < gs.size() ; i++ ){
         css::lang::Locale current_aRes;
-        current_aRes.Language   = OUString::createFromAscii( gs[i].GetLanguage().c_str() );
-        current_aRes.Country    = OUString::createFromAscii( gs[i].GetCountry().c_str() );
+        current_aRes.Language   = OUString::createFromAscii( gs[i].GetLanguage() );
+        current_aRes.Country    = OUString::createFromAscii( gs[i].GetCountry() );
         pRes[i] = current_aRes;
     }
 

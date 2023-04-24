@@ -3041,7 +3041,7 @@ static bool lo_signDocument(LibreOfficeKit* /*pThis*/,
     std::string aCertificateBase64String = extractCertificate(aCertificateString);
     if (!aCertificateBase64String.empty())
     {
-        OUString aBase64OUString = OUString::createFromAscii(aCertificateBase64String.c_str());
+        OUString aBase64OUString = OUString::createFromAscii(aCertificateBase64String);
         comphelper::Base64::decode(aCertificateSequence, aBase64OUString);
     }
     else
@@ -3055,7 +3055,7 @@ static bool lo_signDocument(LibreOfficeKit* /*pThis*/,
     std::string aPrivateKeyBase64String = extractPrivateKey(aPrivateKeyString);
     if (!aPrivateKeyBase64String.empty())
     {
-        OUString aBase64OUString = OUString::createFromAscii(aPrivateKeyBase64String.c_str());
+        OUString aBase64OUString = OUString::createFromAscii(aPrivateKeyBase64String);
         comphelper::Base64::decode(aPrivateKeySequence, aBase64OUString);
     }
     else
@@ -6718,7 +6718,7 @@ static bool doc_insertCertificate(LibreOfficeKitDocument* pThis,
     std::string aCertificateBase64String = extractCertificate(aCertificateString);
     if (!aCertificateBase64String.empty())
     {
-        OUString aBase64OUString = OUString::createFromAscii(aCertificateBase64String.c_str());
+        OUString aBase64OUString = OUString::createFromAscii(aCertificateBase64String);
         comphelper::Base64::decode(aCertificateSequence, aBase64OUString);
     }
     else
@@ -6732,7 +6732,7 @@ static bool doc_insertCertificate(LibreOfficeKitDocument* pThis,
     std::string aPrivateKeyBase64String = extractPrivateKey(aPrivateKeyString);
     if (!aPrivateKeyBase64String.empty())
     {
-        OUString aBase64OUString = OUString::createFromAscii(aPrivateKeyBase64String.c_str());
+        OUString aBase64OUString = OUString::createFromAscii(aPrivateKeyBase64String);
         comphelper::Base64::decode(aPrivateKeySequence, aBase64OUString);
     }
     else
@@ -6790,7 +6790,7 @@ static bool doc_addCertificate(LibreOfficeKitDocument* pThis,
     std::string aCertificateBase64String = extractCertificate(aCertificateString);
     if (!aCertificateBase64String.empty())
     {
-        OUString aBase64OUString = OUString::createFromAscii(aCertificateBase64String.c_str());
+        OUString aBase64OUString = OUString::createFromAscii(aCertificateBase64String);
         comphelper::Base64::decode(aCertificateSequence, aBase64OUString);
     }
     else
