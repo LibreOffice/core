@@ -446,17 +446,13 @@ static void lcl_TabGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLi
     rBorderLine.SetColor(pBorderLine->GetColor());
 }
 
-static bool lcl_BoxesInDeletedRows(SwWrtShell &rSh, const SwSelBoxes& rBoxes)
+static bool lcl_BoxesInTrackedRows(SwWrtShell &rSh, const SwSelBoxes& rBoxes)
 {
-    // cursor and selection are there only in deleted rows in Show Changes mode
-    if ( rSh.GetLayout()->IsHideRedlines() )
-        return false;
-
-    // not selected or all selected rows are deleted
+    // cursor and selection are there only in tracked rows
     bool bRet = true;
     SwRedlineTable::size_type nRedlinePos = 0;
     if ( rBoxes.empty() )
-        bRet = rSh.GetCursor()->GetPointNode().GetTableBox()->GetUpper()->IsDeleted(nRedlinePos);
+        bRet = rSh.GetCursor()->GetPointNode().GetTableBox()->GetUpper()->IsTracked(nRedlinePos);
     else
     {
         tools::Long nBoxes = rBoxes.size();
@@ -465,7 +461,7 @@ static bool lcl_BoxesInDeletedRows(SwWrtShell &rSh, const SwSelBoxes& rBoxes)
         {
             SwTableLine* pLine = rBoxes[i]->GetUpper();
             if ( pLine != pPrevLine )
-                bRet &= pLine->IsDeleted(nRedlinePos);
+                bRet &= pLine->IsTracked(nRedlinePos);
             pPrevLine = pLine;
         }
     }
@@ -1451,7 +1447,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                 {
                     SwSelBoxes aBoxes;
                     ::GetTableSel( rSh, aBoxes, SwTableSearchType::Row );
-                    if( ::HasProtectedCells( aBoxes ) || lcl_BoxesInDeletedRows( rSh, aBoxes ) )
+                    if( ::HasProtectedCells( aBoxes ) || lcl_BoxesInTrackedRows( rSh, aBoxes ) )
                         rSet.DisableItem( nSlot );
                 }
                 break;
