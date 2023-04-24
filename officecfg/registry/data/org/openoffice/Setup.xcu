@@ -404,7 +404,7 @@
           <value>swxform</value>
         </prop>
         <prop oor:name="ooSetupFactoryUIName">
-          <value>XML Form Document</value>
+          <value xml:lang="en-US">XML Form Document</value>
         </prop>
         <prop oor:name="ooSetupFactoryWindowStateConfigRef">
           <value>XFormsWindowState</value>
