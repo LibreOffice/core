@@ -36,7 +36,7 @@ class SvXMLExport;
 class XMLOFF_DLLPUBLIC XMLFontAutoStylePool : public salhelper::SimpleReferenceObject
 {
 private:
-    SvXMLExport& rExport;
+    SvXMLExport& m_rExport;
 
     std::unique_ptr<XMLFontAutoStylePool_Impl> m_pFontAutoStylePool;
     std::set<OUString> m_aNames;
@@ -53,7 +53,7 @@ protected:
     bool m_bEmbedAsianScript;
     bool m_bEmbedComplexScript;
 
-    SvXMLExport& GetExport() { return rExport; }
+    SvXMLExport& GetExport() { return m_rExport; }
 
 public:
     XMLFontAutoStylePool( SvXMLExport& rExport, bool tryToEmbedFonts = false );

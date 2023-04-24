@@ -62,8 +62,8 @@ constexpr OUStringLiteral gsOutlineLevel( u"OutlineLevel" );
 XMLStyleExport::XMLStyleExport(
         SvXMLExport& rExp,
         SvXMLAutoStylePoolP *pAutoStyleP ) :
-    rExport( rExp ),
-    pAutoStylePool( pAutoStyleP  )
+    m_rExport( rExp ),
+    m_pAutoStylePool( pAutoStyleP  )
 {
 }
 
@@ -526,8 +526,8 @@ void XMLStyleExport::exportStyleFamily(
 
         // if an auto style pool is given, remember this style's name as a
         // style name that must not be used by automatic styles.
-        if (pAutoStylePool)
-            pAutoStylePool->RegisterName( nFamily, xStyle->getName() );
+        if (m_pAutoStylePool)
+            m_pAutoStylePool->RegisterName( nFamily, xStyle->getName() );
     }
 
     if( !xExportedStyles )

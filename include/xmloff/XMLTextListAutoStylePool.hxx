@@ -39,13 +39,13 @@ class SvXMLExport;
 
 class XMLOFF_DLLPUBLIC XMLTextListAutoStylePool
 {
-    SvXMLExport& rExport;
+    SvXMLExport& m_rExport;
 
-    OUString sPrefix;
+    OUString m_sPrefix;
 
-    std::unique_ptr<XMLTextListAutoStylePool_Impl> pPool;
+    std::unique_ptr<XMLTextListAutoStylePool_Impl> m_pPool;
     XMLTextListAutoStylePoolNames_Impl m_aNames;
-    sal_uInt32 nName;
+    sal_uInt32 m_nName;
 
     /** this is an optional NumRule compare component for applications where
         the NumRules don't have names */

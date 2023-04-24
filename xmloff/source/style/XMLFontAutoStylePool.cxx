@@ -150,7 +150,7 @@ class XMLFontAutoStylePool_Impl : public o3tl::sorted_vector<std::unique_ptr<XML
 };
 
 XMLFontAutoStylePool::XMLFontAutoStylePool(SvXMLExport& rExp, bool bTryToEmbedFonts) :
-    rExport( rExp ),
+    m_rExport( rExp ),
     m_pFontAutoStylePool( new XMLFontAutoStylePool_Impl ),
     m_bTryToEmbedFonts( bTryToEmbedFonts ),
     m_bEmbedUsedOnly(false),

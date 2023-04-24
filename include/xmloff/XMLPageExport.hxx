@@ -50,21 +50,21 @@ struct XMLPageExportNameEntry
 
 class XMLOFF_DLLPUBLIC XMLPageExport : public salhelper::SimpleReferenceObject
 {
-    SvXMLExport& rExport;
+    SvXMLExport& m_rExport;
 
-    css::uno::Reference< css::container::XNameAccess > xPageStyles;
+    css::uno::Reference< css::container::XNameAccess > m_xPageStyles;
 
-    ::std::vector< XMLPageExportNameEntry > aNameVector;
+    ::std::vector< XMLPageExportNameEntry > m_aNameVector;
 
-    rtl::Reference < XMLPropertyHandlerFactory > xPageMasterPropHdlFactory;
-    rtl::Reference < XMLPropertySetMapper > xPageMasterPropSetMapper;
-    rtl::Reference < SvXMLExportPropertyMapper > xPageMasterExportPropMapper;
+    rtl::Reference < XMLPropertyHandlerFactory > m_xPageMasterPropHdlFactory;
+    rtl::Reference < XMLPropertySetMapper > m_xPageMasterPropSetMapper;
+    rtl::Reference < SvXMLExportPropertyMapper > m_xPageMasterExportPropMapper;
     rtl::Reference<XMLPropertySetMapper> m_xPageMasterDrawingPagePropSetMapper;
     rtl::Reference<SvXMLExportPropertyMapper> m_xPageMasterDrawingPageExportPropMapper;
 
 protected:
 
-    SvXMLExport& GetExport() { return rExport; }
+    SvXMLExport& GetExport() { return m_rExport; }
 
     void collectPageMasterAutoStyle(
                 const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
