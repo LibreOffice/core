@@ -404,6 +404,24 @@ void ScColorScaleFormat::AddEntry( ScColorScaleEntry* pEntry )
     maColorScales.back()->SetRepaintCallback(mpParent);
 }
 
+bool ScColorScaleFormat::IsEqual(const ScFormatEntry& rOther, bool /*bIgnoreSrcPos*/) const
+{
+    if (GetType() != rOther.GetType())
+        return false;
+
+    const ScColorScaleFormat& r = static_cast<const ScColorScaleFormat&>(rOther);
+
+    for (size_t i = 0; i < maColorScales.size(); ++i)
+    {
+        if (!maColorScales[i]->GetColor().IsRGBEqual(r.maColorScales[i]->GetColor().GetRGBColor())
+            || maColorScales[i]->GetType() != r.maColorScales[i]->GetType()
+            || maColorScales[i]->GetValue() != r.maColorScales[i]->GetValue())
+            return false;
+    }
+
+    return true;
+}
+
 double ScColorScaleFormat::GetMinValue() const
 {
     ScColorScaleEntries::const_iterator itr = maColorScales.begin();
