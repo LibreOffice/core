@@ -1321,12 +1321,25 @@ void SfxDispatcher::FlushImpl()
         else
         {
             // Actually pop
-            SfxShell* pPopped = nullptr;
             bool bFound = false;
-            do
+            if (!i->bUntil)
+            {
+                // pop exactly the requested shell
+                if (auto it = std::find(xImp->aStack.begin(), xImp->aStack.end(), i->pCluster);
+                    it != xImp->aStack.end())
+                {
+                    xImp->aStack.erase(it);
+                    i->pCluster->SetDisableFlags(SfxDisableFlags::NONE);
+                    bFound = true;
+
+                    // Mark the moved Shell
+                    aToDoCopy.push_front(SfxToDo_Impl(false, i->bDelete, false, *i->pCluster));
+                }
+            }
+            while (!bFound)
             {
                 DBG_ASSERT( !xImp->aStack.empty(), "popping from empty stack" );
-                pPopped = xImp->aStack.back();
+                SfxShell* pPopped = xImp->aStack.back();
                 xImp->aStack.pop_back();
                 pPopped->SetDisableFlags( SfxDisableFlags::NONE );
                 bFound = (pPopped == i->pCluster);
@@ -1334,7 +1347,6 @@ void SfxDispatcher::FlushImpl()
                 // Mark the moved Shell
                 aToDoCopy.push_front(SfxToDo_Impl(false, i->bDelete, false, *pPopped));
             }
-            while(i->bUntil && !bFound);
             DBG_ASSERT( bFound, "wrong SfxShell popped" );
         }
     }
