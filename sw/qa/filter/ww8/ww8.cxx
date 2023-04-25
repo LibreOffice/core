@@ -10,7 +10,9 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/awt/CharSet.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
 
 #include <docsh.hxx>
 #include <formatcontentcontrol.hxx>
@@ -248,6 +250,35 @@ CPPUNIT_TEST_FIXTURE(Test, testDocFloatingTableImport)
     // Without the accompanying fix in place, this test would have failed, the fly frame was not
     // split between page 1 and page 2.
     CPPUNIT_ASSERT(pPage1->GetNext());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testWrapThroughLayoutInCell)
+{
+    // Given a document with a shape, "keep inside text boundaries" is off, wrap type is set to
+    // "through":
+    createSwDoc();
+    uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+    xShape->setSize(awt::Size(10000, 10000));
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    xShapeProps->setPropertyValue("AnchorType", uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+    xShapeProps->setPropertyValue("Surround", uno::Any(text::WrapTextMode_THROUGH));
+    xShapeProps->setPropertyValue("HoriOrientRelation", uno::Any(text::RelOrientation::FRAME));
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    xDrawPageSupplier->getDrawPage()->add(xShape);
+
+    // When saving to docx:
+    save("Office Open XML Text");
+
+    // Then make sure that layoutInCell is undoing the effect of the import-time tweak:
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - attribute 'layoutInCell' of '//wp:anchor' incorrect value.
+    // i.e. layoutInCell was disabled, leading to bad layout in Word.
+    assertXPath(pXmlDoc, "//wp:anchor", "layoutInCell", "1");
 }
 }
 
