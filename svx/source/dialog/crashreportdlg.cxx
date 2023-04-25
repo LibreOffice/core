@@ -80,7 +80,7 @@ IMPL_LINK(CrashReportDialog, BtnHdl, weld::Button&, rBtn, void)
         std::string response;
         bool bSuccess = CrashReporter::readSendConfig(response);
 
-        OUString aCrashID = OUString::createFromAscii(response.c_str());
+        OUString aCrashID = OUString::createFromAscii(response);
 
         if (bSuccess)
         {

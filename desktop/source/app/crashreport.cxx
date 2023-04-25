@@ -234,7 +234,7 @@ void CrashReporter::updateMinidumpLocation()
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
     OUString aURL = getCrashDirectory();
     OString aOStringUrl = OUStringToOString(aURL, RTL_TEXTENCODING_UTF8);
-    google_breakpad::MinidumpDescriptor descriptor(aOStringUrl.getStr());
+    google_breakpad::MinidumpDescriptor descriptor(std::string{aOStringUrl});
     mpExceptionHandler->set_minidump_descriptor(descriptor);
 #elif defined _WIN32
     OUString aURL = getCrashDirectory();
@@ -292,7 +292,7 @@ std::string CrashReporter::getIniFileName()
 {
     OUString url = getCrashDirectory() + "dump.ini";
     OString aUrl = OUStringToOString(url, RTL_TEXTENCODING_UTF8);
-    std::string aRet(aUrl.getStr());
+    std::string aRet(aUrl);
     return aRet;
 }
 
