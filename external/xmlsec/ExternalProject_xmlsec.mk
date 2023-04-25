@@ -49,7 +49,7 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 		$(if $(filter AIX,$(OS)),ACLOCAL="aclocal -I /opt/freeware/share/aclocal") \
 		autoreconf \
 		&& $(gb_RUN_CONFIGURE) ./configure \
-			--with-pic --disable-shared --disable-crypto-dl --without-libxslt --without-gnutls --without-gcrypt --disable-apps --disable-docs \
+			--with-pic --disable-shared --disable-crypto-dl --without-libxslt --without-gnutls --without-gcrypt --disable-apps --disable-docs --disable-pedantic \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			CFLAGS="$(CFLAGS) $(call gb_ExternalProject_get_build_flags,xmlsec) $(gb_VISIBILITY_FLAGS)" \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
