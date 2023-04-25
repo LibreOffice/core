@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_INC_SWABSTDLG_HXX
 #define INCLUDED_SW_INC_SWABSTDLG_HXX
 
+#include <editeng/svxenum.hxx>
 #include <rtl/ustring.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -237,6 +238,8 @@ protected:
 public:
     virtual int GetPageNumberPosition() const = 0;
     virtual int GetPageNumberAlignment() const = 0;
+    virtual SvxNumType GetPageNumberType() const = 0;
+    virtual void SetPageNumberType(SvxNumType nSet) = 0;
 };
 
 /**

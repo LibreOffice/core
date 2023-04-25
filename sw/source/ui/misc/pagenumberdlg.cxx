@@ -18,6 +18,7 @@
  */
 
 #include <pagenumberdlg.hxx>
+#include <svx/SvxNumOptionsTabPageHelper.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/BitmapTools.hxx>
@@ -29,6 +30,7 @@ SwPageNumberDlg::SwPageNumberDlg(weld::Window* pParent)
     , m_xCancel(m_xBuilder->weld_button("cancel"))
     , m_xPageNumberPosition(m_xBuilder->weld_combo_box("positionCombo"))
     , m_xPageNumberAlignment(m_xBuilder->weld_combo_box("alignmentCombo"))
+    , m_xPageNumberTypeLB(new SvxPageNumberListBox(m_xBuilder->weld_combo_box("numfmtlb")))
     , m_xPreviewImage(m_xBuilder->weld_image("previewImage"))
     , m_aPageNumberPosition(1) // bottom
     , m_aPageNumberAlignment(1) // center
@@ -38,6 +40,9 @@ SwPageNumberDlg::SwPageNumberDlg(weld::Window* pParent)
     m_xPageNumberAlignment->connect_changed(LINK(this, SwPageNumberDlg, AlignmentSelectHdl));
     m_xPageNumberPosition->set_active(m_aPageNumberPosition);
     m_xPageNumberAlignment->set_active(m_aPageNumberAlignment);
+    SvxNumOptionsTabPageHelper::GetI18nNumbering(m_xPageNumberTypeLB->get_widget(),
+                                                 ::std::numeric_limits<sal_uInt16>::max());
+    m_xPageNumberTypeLB->connect_changed(LINK(this, SwPageNumberDlg, NumberTypeSelectHdl));
     updateImage();
 }
 
@@ -53,6 +58,17 @@ IMPL_LINK_NOARG(SwPageNumberDlg, AlignmentSelectHdl, weld::ComboBox&, void)
 {
     m_aPageNumberAlignment = m_xPageNumberAlignment->get_active();
     updateImage();
+}
+
+IMPL_LINK_NOARG(SwPageNumberDlg, NumberTypeSelectHdl, weld::ComboBox&, void)
+{
+    m_nPageNumberType = m_xPageNumberTypeLB->get_active_id();
+}
+
+void SwPageNumberDlg::SetPageNumberType(SvxNumType nSet)
+{
+    m_nPageNumberType = nSet;
+    m_xPageNumberTypeLB->set_active_id(nSet);
 }
 
 void SwPageNumberDlg::updateImage()
