@@ -2377,8 +2377,6 @@ void ScOutputData::DrawSparklines(vcl::RenderContext& rRenderContext)
 void ScOutputData::DrawNoteMarks(vcl::RenderContext& rRenderContext)
 {
 
-    bool bFirst = true;
-
     tools::Long nInitPosX = nScrX;
     if ( bLayoutRTL )
         nInitPosX += nMirrorW - 1;              // always in pixels
@@ -2409,18 +2407,19 @@ void ScOutputData::DrawNoteMarks(vcl::RenderContext& rRenderContext)
                 if (!mpDoc->ColHidden(nX, nTab) && mpDoc->GetNote(nX, pRowInfo[nArrY].nRowNo, nTab)
                     && (bIsMerged || (!pInfo->bHOverlapped && !pInfo->bVOverlapped)))
                 {
-                    if (bFirst)
-                    {
+
+                    const bool bIsDarkBackground = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor.IsDark();
+                    const Color aColor = pInfo->pBackground->GetColor();
+                    if ( aColor == COL_AUTO ? bIsDarkBackground : aColor.IsDark() )
                         rRenderContext.SetLineColor(COL_WHITE);
+                    else
+                        rRenderContext.SetLineColor(COL_BLACK);
 
-                        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-                        if ( mbUseStyleColor && rStyleSettings.GetHighContrastMode() )
-                            rRenderContext.SetFillColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
-                        else
-                            rRenderContext.SetFillColor(COL_LIGHTRED);
-
-                        bFirst = false;
-                    }
+                    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+                    if ( mbUseStyleColor && rStyleSettings.GetHighContrastMode() )
+                        rRenderContext.SetFillColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
+                    else
+                        rRenderContext.SetFillColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCCOMMENTS).nColor );
 
                     tools::Long nMarkX = nPosX + ( pRowInfo[0].basicCellInfo(nX).nWidth - 2 ) * nLayoutSign;
                     if ( bIsMerged || pInfo->bMerged )

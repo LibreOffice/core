@@ -324,6 +324,11 @@
             <value xsi:nil="true"/>
           </prop>
         </node>
+        <node oor:name="CalcComments">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
         <node oor:name="CalcDetective">
           <prop oor:name="Color">
             <value xsi:nil="true"/>

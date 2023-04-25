@@ -827,7 +827,7 @@
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
         <child>
-          <!-- n-columns=2 n-rows=14 -->
+          <!-- n-columns=2 n-rows=15 -->
           <object class="GtkGrid" id="gdCalc">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -976,7 +976,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">6</property>
+                <property name="top-attach">7</property>
               </packing>
             </child>
             <child>
@@ -993,7 +993,7 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
-                <property name="top-attach">6</property>
+                <property name="top-attach">7</property>
               </packing>
             </child>
             <child>
@@ -1010,7 +1010,7 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
-                <property name="top-attach">7</property>
+                <property name="top-attach">8</property>
               </packing>
             </child>
             <child>
@@ -1025,7 +1025,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">7</property>
+                <property name="top-attach">8</property>
               </packing>
             </child>
             <child>
@@ -1042,7 +1042,7 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
-                <property name="top-attach">8</property>
+                <property name="top-attach">9</property>
               </packing>
             </child>
             <child>
@@ -1057,7 +1057,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">8</property>
+                <property name="top-attach">9</property>
               </packing>
             </child>
             <child>
@@ -1074,7 +1074,7 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
-                <property name="top-attach">9</property>
+                <property name="top-attach">10</property>
               </packing>
             </child>
             <child>
@@ -1089,7 +1089,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">9</property>
+                <property name="top-attach">10</property>
               </packing>
             </child>
             <child>
@@ -1106,7 +1106,7 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
-                <property name="top-attach">10</property>
+                <property name="top-attach">11</property>
               </packing>
             </child>
             <child>
@@ -1121,7 +1121,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">10</property>
+                <property name="top-attach">11</property>
               </packing>
             </child>
             <child>
@@ -1138,7 +1138,7 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
-                <property name="top-attach">11</property>
+                <property name="top-attach">12</property>
               </packing>
             </child>
             <child>
@@ -1153,7 +1153,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">11</property>
+                <property name="top-attach">12</property>
               </packing>
             </child>
             <child>
@@ -1170,7 +1170,7 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
-                <property name="top-attach">12</property>
+                <property name="top-attach">13</property>
               </packing>
             </child>
             <child>
@@ -1185,7 +1185,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">12</property>
+                <property name="top-attach">13</property>
               </packing>
             </child>
             <child>
@@ -1202,7 +1202,7 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
-                <property name="top-attach">13</property>
+                <property name="top-attach">14</property>
               </packing>
             </child>
             <child>
@@ -1217,7 +1217,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">13</property>
+                <property name="top-attach">14</property>
               </packing>
             </child>
             <child>
@@ -1304,6 +1304,43 @@
               <packing>
                 <property name="left-attach">1</property>
                 <property name="top-attach">5</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkMenuButton" id="comments_lb">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="halign">end</property>
+                <property name="xalign">0</property>
+                <property name="draw-indicator">True</property>
+                <child>
+                  <placeholder/>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="comments_lb-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="colorconfigwin|comments_lb">Comments color</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">6</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="comments">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="valign">center</property>
+                <property name="label" translatable="yes" context="colorconfigwin|comments">Comments</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">comments_lb</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">6</property>
               </packing>
             </child>
           </object>
