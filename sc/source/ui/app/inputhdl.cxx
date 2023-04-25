@@ -364,7 +364,7 @@ void ScInputHandler::InitRangeFinder( const OUString& rFormula )
     ScDocument& rDoc = pDocSh->GetDocument();
     const sal_Unicode cSheetSep = rDoc.GetSheetSeparator();
 
-    OUString aDelimiters = ScEditUtil::ModifyDelimiters(" !~\"\t\n");
+    OUString aDelimiters = ScEditUtil::ModifyDelimiters(" !~%\"\t\n");
         // delimiters (in addition to ScEditUtil): only characters that are
         // allowed in formulas next to references and the quotation mark (so
         // string constants can be skipped)
