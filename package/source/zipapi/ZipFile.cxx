@@ -1175,6 +1175,12 @@ bool ZipFile::checkSizeAndCRC( const ZipEntry& aEntry )
     if( aEntry.nMethod == STORED )
         return ( getCRC( aEntry.nOffset, aEntry.nSize ) == aEntry.nCrc );
 
+    if (aEntry.nCompressedSize < 0)
+    {
+        SAL_WARN("package", "bogus compressed size of: " << aEntry.nCompressedSize);
+        return false;
+    }
+
     getSizeAndCRC( aEntry.nOffset, aEntry.nCompressedSize, &nSize, &nCRC );
     return ( aEntry.nSize == nSize && aEntry.nCrc == nCRC );
 }
