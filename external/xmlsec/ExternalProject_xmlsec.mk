@@ -38,7 +38,7 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 		$(if $(filter AIX,$(OS)),ACLOCAL="aclocal -I /opt/freeware/share/aclocal") \
 		autoreconf \
 		&& ./configure \
-			--with-pic --disable-shared --disable-crypto-dl --without-libxslt --without-gnutls --without-gcrypt --disable-apps --disable-docs \
+			--with-pic --disable-shared --disable-crypto-dl --without-libxslt --without-gnutls --without-gcrypt --disable-apps --disable-docs --disable-pedantic \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			CFLAGS="$(CFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) $(if $(debug),$(gb_DEBUGINFO_FLAGS)) $(gb_VISIBILITY_FLAGS)" \
 			--without-openssl \
