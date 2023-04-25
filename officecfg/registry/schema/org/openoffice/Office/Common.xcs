@@ -4769,15 +4769,6 @@
           <info>
             <desc>Specifies default settings of PDF export dialog.</desc>
           </info>
-          <prop oor:name="CompressMode" oor:type="xs:int" oor:nillable="false">
-            <info>
-              <deprecated>Use following properties instead:
-              UseLosslessCompression, Quality, UseResolutionReduction,
-              ResolutionReduction</deprecated>
-              <desc>Deprecated.</desc>
-            </info>
-            <value>1</value>
-          </prop>
           <prop oor:name="UseLosslessCompression" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies if graphics are exported to PDF using a lossless
