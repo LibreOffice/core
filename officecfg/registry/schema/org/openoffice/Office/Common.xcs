@@ -632,44 +632,6 @@
         <value>true</value>
       </prop>
     </group>
-    <group oor:name="PersonasEntry">
-      <info>
-        <desc>Stores the details of the installed personas.</desc>
-      </info>
-      <prop oor:name="Slug" oor:type="xs:string" oor:nillable="false">
-        <info>
-          <desc>Unique pretty id of the persona, also part of its url</desc>
-        </info>
-      </prop>
-      <prop oor:name="Name" oor:type="xs:string" oor:nillable="false">
-        <info>
-          <desc>The Persona's name</desc>
-        </info>
-      </prop>
-      <prop oor:name="Preview" oor:type="xs:string" oor:nillable="false">
-        <info>
-          <desc>Name of the preview file for the Persona to show in the UI</desc>
-        </info>
-      </prop>
-      <prop oor:name="Header" oor:type="xs:string" oor:nillable="false">
-        <info>
-          <desc>Name of the header file for the Persona</desc>
-        </info>
-        <value/>
-      </prop>
-      <prop oor:name="Footer" oor:type="xs:string" oor:nillable="false">
-        <info>
-          <desc>Name of the footer file for the Persona</desc>
-        </info>
-        <value/>
-      </prop>
-      <prop oor:name="TextColor" oor:type="xs:string" oor:nillable="false">
-        <info>
-          <desc>Value of the text color for the Persona</desc>
-        </info>
-        <value/>
-      </prop>
-    </group>
     <group oor:name="LastDirectory">
       <info>
         <desc>Stores the last selected directory for the filepicker for different contexts.</desc>
@@ -5557,11 +5519,6 @@
           <desc>List of names of the CMIS servers in the place edition dialog.</desc>
         </info>
       </prop>
-      <set oor:name="PersonasList" oor:node-type="PersonasEntry">
-        <info>
-          <desc>Contains the Personas installed through extensions</desc>
-        </info>
-      </set>
       <prop oor:name="FindReplaceRememberedSearches" oor:type="xs:int" oor:nillable="false">
         <info>
           <desc>Number of saved searches in the Find and Replace dialog.</desc>
