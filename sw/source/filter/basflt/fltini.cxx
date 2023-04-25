@@ -193,17 +193,6 @@ bool StgWriter::IsStgWriter() const { return true; }
 
 /*
 <FilterFlags>
-        <Excel_Lotus>
-                <MinRow cfg:type="long">0</MinRow>
-                <MaxRow cfg:type="long">0</MaxRow>
-                <MinCol cfg:type="long">0</MinCol>
-                <MaxCol cfg:type="long">0</MaxCol>
-        </Excel_Lotus>
-        <W4W>
-                <W4WHD cfg:type="long">0</W4WHD>
-                <W4WFT cfg:type="long">0</W4WFT>
-                <W4W000 cfg:type="long">0</W4W000>
-        </W4W>
         <WinWord>
                 <WW1F cfg:type="long">0</WW1F>
                 <WW cfg:type="long">0</WW>
@@ -220,9 +209,6 @@ bool StgWriter::IsStgWriter() const { return true; }
                 <WWFT cfg:type="long">0</WWFT>
                 <WWWR cfg:type="long">0</WWWR>
         </WinWord>
-        <Writer>
-                <SW3Imp cfg:type="long">0</SW3Imp>
-        </Writer>
 </FilterFlags>
 */
 
