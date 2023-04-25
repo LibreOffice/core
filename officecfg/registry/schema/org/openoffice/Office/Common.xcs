@@ -2596,51 +2596,6 @@
           </info>
           <value/>
         </prop>
-        <prop oor:name="OfficeBasic" oor:type="xs:int" oor:nillable="false">
-          <!-- UIHints: Tools - Options - Browser -->
-          <info>
-            <desc>Determines how Office Basic scripts should be handled.</desc>
-          </info>
-          <constraints>
-            <enumeration oor:value="0">
-              <info>
-                <desc>Never</desc>
-              </info>
-            </enumeration>
-            <enumeration oor:value="1">
-              <info>
-                <desc>According to Path List</desc>
-              </info>
-            </enumeration>
-            <enumeration oor:value="2">
-              <info>
-                <desc>Always</desc>
-              </info>
-            </enumeration>
-          </constraints>
-          <value>1</value>
-        </prop>
-        <prop oor:name="ExecutePlugins" oor:type="xs:boolean" oor:nillable="false">
-          <info>
-            <desc>Specifies whether execution of plugins found inside a document
-            is allowed.</desc>
-          </info>
-          <value>true</value>
-        </prop>
-        <prop oor:name="Warning" oor:type="xs:boolean" oor:nillable="false">
-          <info>
-            <desc>Specifies whether a warning box should be displayed before
-            executing a script.</desc>
-          </info>
-          <value>false</value>
-        </prop>
-        <prop oor:name="Confirmation" oor:type="xs:boolean" oor:nillable="false">
-          <info>
-            <desc>Specifies whether the user must confirm before a basic script
-            can be executed.</desc>
-          </info>
-          <value>true</value>
-        </prop>
         <prop oor:name="WarnSaveOrSendDoc" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Specifies whether to warn when saving or sending documents with
