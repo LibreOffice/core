@@ -699,6 +699,14 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyThenTable)
     // This crashed, due to a stack overflow in layout code.
     save("writer_pdf_Export");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyInTextSection)
+{
+    // The document contains a DOCX cont sect break, which is mapped to a TextSection.
+    // This crashed, the anchor was split directly, so the follow anchor was moved outside the
+    // section frame, which is broken.
+    createSwDoc("floattable-in-text-section.docx");
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
