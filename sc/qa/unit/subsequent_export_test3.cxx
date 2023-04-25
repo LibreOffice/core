@@ -1024,12 +1024,6 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSwappedOutImageExport)
 {
     std::vector<OUString> aFilterNames{ "calc8", "MS Excel 97", "Calc Office Open XML" };
 
-    // Set cache size to a very small value to make sure one of the images is swapped out
-    std::shared_ptr<comphelper::ConfigurationChanges> xBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::set(sal_Int32(1), xBatch);
-    xBatch->commit();
-
     for (size_t i = 0; i < aFilterNames.size(); ++i)
     {
         // Check whether the export code swaps in the image which was swapped out before.
@@ -1149,12 +1143,6 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testLinkedGraphicRT)
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testImageWithSpecialID)
 {
     std::vector<OUString> aFilterNames{ "calc8", "MS Excel 97", "Calc Office Open XML" };
-
-    // Trigger swap out mechanism to test swapped state factor too.
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::set(sal_Int32(1), batch);
-    batch->commit();
 
     for (size_t i = 0; i < aFilterNames.size(); ++i)
     {

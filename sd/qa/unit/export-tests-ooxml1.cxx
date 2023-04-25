@@ -779,11 +779,6 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testFdo79731)
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTableCellFillProperties)
 {
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::set(sal_Int32(1), batch);
-    batch->commit();
-
     // Load the original file
     createSdImpressDoc("odp/Table_with_Cell_Fill.odp");
 
