@@ -23,6 +23,7 @@
 #include "svgdocument.hxx"
 #include <cppuhelper/implbase.hxx>
 
+class SvStream;
 namespace svgio::svgreader { class SvgCharacterNode; }
 
 namespace svgio::svgreader
@@ -59,5 +60,7 @@ namespace svgio::svgreader
         };
 
 } // end of namespace svgio::svgreader
+
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportSVG(SvStream& rStream);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

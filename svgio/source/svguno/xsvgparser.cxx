@@ -22,6 +22,7 @@
 #include <com/sun/star/graphic/XSvgParser.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/xml/sax/XParser.hpp>
@@ -30,6 +31,8 @@
 #include <svgdocumenthandler.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <rtl/ref.hxx>
+#include <tools/stream.hxx>
+#include <unotools/streamwrap.hxx>
 
 #include <svgvisitor.hxx>
 #include <utility>
@@ -194,6 +197,13 @@ svgio_XSvgParser_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
     return cppu::acquire(new svgio::svgreader::XSvgParser(context));
+}
+
+extern "C" bool TestImportSVG(SvStream& rStream)
+{
+    css::uno::Reference<css::io::XInputStream> xStream(new utl::OInputStreamWrapper(rStream));
+    rtl::Reference<svgio::svgreader::XSvgParser> xSvgParser(new svgio::svgreader::XSvgParser(comphelper::getProcessComponentContext()));
+    return xSvgParser->getDecomposition(xStream, OUString()).getLength() != 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

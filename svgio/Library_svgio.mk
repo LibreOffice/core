@@ -45,6 +45,7 @@ $(eval $(call gb_Library_use_libraries,svgio,\
     sax \
     vcl \
     svt \
+    utl \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,svgio,\
