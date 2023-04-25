@@ -478,15 +478,6 @@
       </prop>
     </node>
   </node>
-  <node oor:name="Path">
-    <node oor:name="Current">
-      <prop oor:name="Temp" oor:type="xs:string">
-        <value install:module="macosx">$(userurl)/temp</value>
-        <value install:module="unx">$(temp)</value>
-        <value install:module="wnt">$(temp)</value>
-      </prop>
-    </node>
-  </node>
   <node oor:name="ExternalMailer" install:module="unixdesktop">
     <prop oor:name="Program">
       <value oor:external="com.sun.star.configuration.backend.DesktopBackend ExternalMailer"/>

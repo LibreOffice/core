@@ -1663,22 +1663,6 @@
             <it>$(progpath)/plugin</it>
           </value>
         </prop>
-        <prop oor:name="Storage" oor:type="xs:string" oor:nillable="false">
-          <info>
-            <deprecated>Without replacement.</deprecated>
-            <desc>Specifies the location where misc data are stored.</desc>
-          </info>
-          <value>$(userpath)/store</value>
-        </prop>
-        <prop oor:name="Temp" oor:type="xs:string">
-          <info>
-            <deprecated>Replaced by
-            org.openoffice.Office.Paths/Temp</deprecated>
-            <desc>Specifies the base directory used by the Office to store temp
-            files.</desc>
-          </info>
-          <value/>
-        </prop>
         <prop oor:name="Template" oor:type="oor:string-list">
           <info>
             <desc>Specifies the templates originate from these folders and
