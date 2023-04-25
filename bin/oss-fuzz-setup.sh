@@ -143,6 +143,7 @@ curl --no-progress-meter -S \
     -C - -O https://dev-www.libreoffice.org/corpus/pptxfuzzer_seed_corpus.zip \
     -C - -O https://dev-www.libreoffice.org/corpus/mmlfuzzer_seed_corpus.zip \
     -C - -O https://dev-www.libreoffice.org/corpus/mtpfuzzer_seed_corpus.zip \
-    -C - -O https://dev-www.libreoffice.org/corpus/htmlfuzzer_seed_corpus.zip
+    -C - -O https://dev-www.libreoffice.org/corpus/htmlfuzzer_seed_corpus.zip \
+    -C - -O https://dev-www.libreoffice.org/corpus/zipfuzzer_seed_corpus.zip
 
 echo end downloading dependencies at `date -u`
