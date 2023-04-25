@@ -548,6 +548,12 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testRGBAColor)
     CPPUNIT_ASSERT_EQUAL(nBackColor, getProperty<Color>(xRun, "CharBackColor"));
 }
 
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf155011)
+{
+    load(mpTestDocumentPath, "tdf155011.html");
+    // Must not crash / fail asserts
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
