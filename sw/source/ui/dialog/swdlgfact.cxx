@@ -642,6 +642,16 @@ int AbstractSwPageNumberDlg_Impl::GetPageNumberAlignment() const
     return m_xDlg->GetPageNumberAlignment();
 }
 
+SvxNumType AbstractSwPageNumberDlg_Impl::GetPageNumberType() const
+{
+    return m_xDlg->GetPageNumberType();
+}
+
+void AbstractSwPageNumberDlg_Impl::SetPageNumberType(SvxNumType nSet)
+{
+    m_xDlg->SetPageNumberType(nSet);
+}
+
 bool AbstractInsFootNoteDlg_Impl::IsEndNote()
 {
     return m_xDlg->IsEndNote();

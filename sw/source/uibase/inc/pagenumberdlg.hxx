@@ -20,6 +20,7 @@
 #pragma once
 
 #include <sfx2/basedlgs.hxx>
+#include <svx/pagenumberlistbox.hxx>
 
 class SwWrtShell;
 
@@ -30,15 +31,19 @@ class SwPageNumberDlg : public SfxDialogController
     std::unique_ptr<weld::Button> m_xCancel;
     std::unique_ptr<weld::ComboBox> m_xPageNumberPosition;
     std::unique_ptr<weld::ComboBox> m_xPageNumberAlignment;
+    std::unique_ptr<SvxPageNumberListBox> m_xPageNumberTypeLB;
+
     std::unique_ptr<weld::Image> m_xPreviewImage;
 
     int m_aPageNumberPosition;
     int m_aPageNumberAlignment;
+    SvxNumType m_nPageNumberType;
 
     DECL_LINK(OkHdl, weld::Button&, void);
     DECL_LINK(CancelHdl, weld::Button&, void);
     DECL_LINK(PositionSelectHdl, weld::ComboBox&, void);
     DECL_LINK(AlignmentSelectHdl, weld::ComboBox&, void);
+    DECL_LINK(NumberTypeSelectHdl, weld::ComboBox&, void);
 
     void updateImage();
 
@@ -46,6 +51,8 @@ public:
     SwPageNumberDlg(weld::Window* pParent);
     int GetPageNumberPosition() const { return m_aPageNumberPosition; }
     int GetPageNumberAlignment() const { return m_aPageNumberAlignment; }
+    SvxNumType GetPageNumberType() const { return m_nPageNumberType; }
+    void SetPageNumberType(SvxNumType nSet);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

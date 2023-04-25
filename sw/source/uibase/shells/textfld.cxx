@@ -61,6 +61,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
+#include <svx/pageitem.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <IMark.hxx>
 #include <officecfg/Office/Compatibility.hxx>
@@ -1027,6 +1028,12 @@ FIELD_INSERT:
         VclPtr<AbstractSwPageNumberDlg> pDlg(
                 pFact->CreateSwPageNumberDlg(GetView().GetFrameWeld()));
         auto pShell = GetShellPtr();
+
+        const SvxPageItem* pPageItem;
+        rSh.GetView().GetDispatcher().QueryState(SID_ATTR_PAGE, pPageItem);
+        if (pPageItem)
+            pDlg->SetPageNumberType(pPageItem->GetNumType());
+
         pDlg->StartExecuteAsync([pShell, &rSh, pDlg](int nResult) {
             if ( nResult == RET_OK )
             {
@@ -1042,6 +1049,15 @@ FIELD_INSERT:
                 sal_uInt16 nPageNumberPosition = bFooter ?
                     FN_INSERT_PAGEFOOTER : FN_INSERT_PAGEHEADER;
                 SfxBoolItem aItem(FN_PARAM_1, true);
+
+                SvxPageItem aPageItem(SID_ATTR_PAGE);
+                aPageItem.SetNumType(pDlg->GetPageNumberType());
+                rSh.GetView().GetDispatcher().ExecuteList(SID_ATTR_PAGE,
+                                                          SfxCallMode::API | SfxCallMode::SYNCHRON,
+                                                          { &aPageItem });
+
+
+
                 rSh.GetView().GetDispatcher().ExecuteList(
                     nPageNumberPosition,
                     SfxCallMode::API | SfxCallMode::SYNCHRON,
