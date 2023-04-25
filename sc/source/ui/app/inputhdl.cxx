@@ -341,6 +341,20 @@ void ScInputHandler::SendReferenceMarks( const SfxViewShell* pViewShell,
                 LOK_CALLBACK_REFERENCE_MARKS, aPayload );
 }
 
+static inline void incPos( const sal_Unicode c, sal_Int32& rPos, ESelection& rSel )
+{
+    ++rPos;
+    if (c == '\n')
+    {
+        ++rSel.nEndPara;
+        rSel.nEndPos = 0;
+    }
+    else
+    {
+        ++rSel.nEndPos;
+    }
+}
+
 void ScInputHandler::InitRangeFinder( const OUString& rFormula )
 {
     DeleteRangeFinder();
@@ -350,7 +364,7 @@ void ScInputHandler::InitRangeFinder( const OUString& rFormula )
     ScDocument& rDoc = pDocSh->GetDocument();
     const sal_Unicode cSheetSep = rDoc.GetSheetSeparator();
 
-    OUString aDelimiters = ScEditUtil::ModifyDelimiters(" !~\"");
+    OUString aDelimiters = ScEditUtil::ModifyDelimiters(" !~\"\t\n");
         // delimiters (in addition to ScEditUtil): only characters that are
         // allowed in formulas next to references and the quotation mark (so
         // string constants can be skipped)
@@ -366,6 +380,7 @@ void ScInputHandler::InitRangeFinder( const OUString& rFormula )
     sal_Int32 nLen = rFormula.getLength();
     sal_Int32 nPos = 0;
     sal_Int32 nStart = 0;
+    ESelection aSel;
     sal_uInt16 nCount = 0;
     ScRange aRange;
     while ( nPos < nLen && nCount < RANGEFIND_MAX )
@@ -375,14 +390,16 @@ void ScInputHandler::InitRangeFinder( const OUString& rFormula )
         {
             if ( pChar[nPos] == '"' )                       // String
             {
-                ++nPos;
+                incPos( pChar[nPos], nPos, aSel);
                 while (nPos<nLen && pChar[nPos] != '"')     // Skip until end
-                    ++nPos;
+                    incPos( pChar[nPos], nPos, aSel);
             }
-            ++nPos; // Separator or closing quote
+            incPos( pChar[nPos], nPos, aSel);  // Separator or closing quote
         }
 
-        //  text between separators
+        // Text between separators. We only consider within one line/paragraph.
+        aSel.nStartPara = aSel.nEndPara;
+        aSel.nStartPos = aSel.nEndPos;
         nStart = nPos;
 handle_r1c1:
         {
@@ -400,7 +417,7 @@ handle_r1c1:
                     if (ScGlobal::UnicodeStrChr(aDelimiters.getStr(), pChar[nPos]))
                         break;
                 }
-                ++nPos;
+                incPos( pChar[nPos], nPos, aSel);
             }
         }
 
@@ -411,7 +428,7 @@ handle_r1c1:
             '-' == pChar[nPos] && '[' == pChar[nPos-1] &&
             formula::FormulaGrammar::CONV_XL_R1C1 == rDoc.GetAddressConvention() )
         {
-            nPos++;
+            incPos( pChar[nPos], nPos, aSel);
             goto handle_r1c1;
         }
 
@@ -443,9 +460,8 @@ handle_r1c1:
                     pRangeFindList.reset(new ScRangeFindList( pDocSh->GetTitle() ));
                 }
 
-                Color nColor = pRangeFindList->Insert( ScRangeFindData( aRange, nFlags, nStart, nPos ) );
+                Color nColor = pRangeFindList->Insert( ScRangeFindData( aRange, nFlags, aSel));
 
-                ESelection aSel( 0, nStart, 0, nPos );
                 SfxItemSet aSet( mpEditEngine->GetEmptyItemSet() );
                 aSet.Put( SvxColorItem( nColor, EE_CHAR_COLOR ) );
                 mpEditEngine->QuickSetAttribs( aSet, aSel );
@@ -620,8 +636,9 @@ static void lcl_Replace( EditView* pView, const OUString& rNewStr, const ESelect
     // To do that we need to cancel the selection from above (before QuickInsertText)
     pView->InsertText( OUString() );
 
-    sal_Int32 nLen = pEngine->GetTextLen(0);
-    ESelection aSel( 0, nLen, 0, nLen );
+    const sal_Int32 nPara = pEngine->GetParagraphCount() - 1;
+    const sal_Int32 nLen = pEngine->GetTextLen(nPara);
+    ESelection aSel( nPara, nLen, nPara, nLen );
     pView->SetSelection( aSel ); // Set cursor to the end
 }
 
@@ -631,8 +648,6 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
     if ( pDocView && pRangeFindList && nIndex < pRangeFindList->Count() )
     {
         ScRangeFindData& rData = pRangeFindList->GetObject( nIndex );
-        sal_Int32 nOldStart = rData.nSelStart;
-        sal_Int32 nOldEnd = rData.nSelEnd;
         Color nNewColor = pRangeFindList->FindColor( rNew, nIndex );
 
         ScRange aJustified = rNew;
@@ -640,32 +655,39 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
         ScDocument& rDoc = pDocView->GetViewData().GetDocument();
         const ScAddress::Details aAddrDetails( rDoc, aCursorPos );
         OUString aNewStr(aJustified.Format(rDoc, rData.nFlags, aAddrDetails));
-        ESelection aOldSel( 0, nOldStart, 0, nOldEnd );
         SfxItemSet aSet( mpEditEngine->GetEmptyItemSet() );
 
         DataChanging();
 
-        lcl_Replace( pTopView, aNewStr, aOldSel );
-        lcl_Replace( pTableView, aNewStr, aOldSel );
+        lcl_Replace( pTopView, aNewStr, rData.maSel );
+        lcl_Replace( pTableView, aNewStr, rData.maSel );
+
+        // We are within one paragraph.
+        const sal_Int32 nDiff = aNewStr.getLength() - (rData.maSel.nEndPos - rData.maSel.nStartPos);
+        rData.maSel.nEndPos += nDiff;
+
         aSet.Put( SvxColorItem( nNewColor, EE_CHAR_COLOR ) );
-        mpEditEngine->QuickSetAttribs( aSet, aOldSel );
+        mpEditEngine->QuickSetAttribs( aSet, rData.maSel );
 
         bInRangeUpdate = true;
         DataChanged();
         bInRangeUpdate = false;
 
-        tools::Long nDiff = aNewStr.getLength() - static_cast<tools::Long>(nOldEnd-nOldStart);
-
         rData.aRef = rNew;
-        rData.nSelEnd = rData.nSelEnd + nDiff;
         rData.nColor = nNewColor;
 
-        sal_uInt16 nCount = static_cast<sal_uInt16>(pRangeFindList->Count());
-        for (sal_uInt16 i=nIndex+1; i<nCount; i++)
+        if (nDiff)
         {
-            ScRangeFindData& rNext = pRangeFindList->GetObject( i );
-            rNext.nSelStart = rNext.nSelStart + nDiff;
-            rNext.nSelEnd   = rNext.nSelEnd   + nDiff;
+            const size_t nCount = pRangeFindList->Count();
+            for (size_t i = nIndex + 1; i < nCount; ++i)
+            {
+                ScRangeFindData& rNext = pRangeFindList->GetObject( i );
+                if (rNext.maSel.nStartPara != rData.maSel.nStartPara)
+                    break;
+
+                rNext.maSel.nStartPos += nDiff;
+                rNext.maSel.nEndPos   += nDiff;
+            }
         }
 
         EditView* pActiveView = pTopView ? pTopView : pTableView;
