@@ -194,7 +194,7 @@
 #define STR_POOLCOLL_DOC_TITLE                  NC_("STR_POOLCOLL_DOC_TITEL", "Title")
 #define STR_POOLCOLL_DOC_SUBTITLE               NC_("STR_POOLCOLL_DOC_SUBTITEL", "Subtitle")
 #define STR_POOLCOLL_DOC_APPENDIX               NC_("STR_POOLCOLL_DOC_APPENDIX", "Appendix")
-#define STR_POOLCOLL_HTML_BLOCKQUOTE            NC_("STR_POOLCOLL_HTML_BLOCKQUOTE", "Quotations")
+#define STR_POOLCOLL_HTML_BLOCKQUOTE            NC_("STR_POOLCOLL_HTML_BLOCKQUOTE", "Block Quotation")
 #define STR_POOLCOLL_HTML_PRE                   NC_("STR_POOLCOLL_HTML_PRE", "Preformatted Text")
 #define STR_POOLCOLL_HTML_HR                    NC_("STR_POOLCOLL_HTML_HR", "Horizontal Line")
 #define STR_POOLCOLL_HTML_DD                    NC_("STR_POOLCOLL_HTML_DD", "List Contents")

@@ -3710,15 +3710,15 @@
       </node>
       <node oor:name=".uno:StyleApply?Style:string=Quotations&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Quotations</value>
+          <value xml:lang="en-US">~Block Quotation</value>
         </prop>
       </node>
       <node oor:name=".uno:QuoteParaStyle" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Quotations</value>
+          <value xml:lang="en-US">~Block Quotation</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Quotations Paragraph Style</value>
+          <value xml:lang="en-US">Block Quotation Paragraph Style</value>
         </prop>
         <prop oor:name="TargetURL" oor:type="xs:string">
           <value>.uno:StyleApply?Style:string=Quotations&amp;FamilyName:string=ParagraphStyles</value>
