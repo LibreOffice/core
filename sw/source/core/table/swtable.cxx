@@ -1892,6 +1892,20 @@ SwRedlineTable::size_type SwTableLine::UpdateTextChangesOnly(
     return nRet;
 }
 
+SwRedlineTable::size_type SwTableLine::GetTableRedline() const
+{
+    const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    const SwPosition aLineStart(*GetTabBoxes().front()->GetSttNd());
+    const SwPosition aLineEnd(*GetTabBoxes().back()->GetSttNd());
+    SwRedlineTable::size_type n = 0;
+
+    const SwRangeRedline* pFnd = aRedlineTable.FindAtPosition( aLineStart, n, /*next=*/false );
+    if( pFnd && *pFnd->Start() < aLineStart && *pFnd->End() > aLineEnd )
+        return n;
+
+    return SwRedlineTable::npos;
+}
+
 bool SwTableLine::IsTracked(SwRedlineTable::size_type& rRedlinePos, bool bOnlyDeleted) const
 {
    SwRedlineTable::size_type nPos = UpdateTextChangesOnly(rRedlinePos);

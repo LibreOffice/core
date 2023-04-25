@@ -625,6 +625,10 @@ void DocxAttributeOutput::TableRowRedline(
     // check table row property "HasTextChangesOnly"
     SwRedlineTable::size_type nPos(0);
     SwRedlineTable::size_type nChange = pTabLine->UpdateTextChangesOnly(nPos);
+    // tdf#150824 if no tracked table row, is the table in a single redline?
+    // if yes, convert the row to a tracked table row instead of losing its tracking
+    if (nChange == SwRedlineTable::npos)
+        nChange = pTabLine->GetTableRedline();
     if (nChange != SwRedlineTable::npos)
     {
         const SwRedlineTable& aRedlineTable

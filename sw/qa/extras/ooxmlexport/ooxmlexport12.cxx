@@ -1310,6 +1310,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf143510_within_table2, "TC-table-rowDND-front.doc
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf150824, "tdf150824.fodt")
+{
+    // check tracked table row insertion (stored in a single redline)
+    if (isExported())
+    {
+        xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+        // This was 0 (missing tracked table row deletion/insertion)
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:trPr/w:ins", 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:trPr/w:ins", 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:trPr/w:ins", 1);
+    }
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf113608_runAwayNumbering, "tdf113608_runAwayNumbering.docx")
 {
     // check that an incorrect numbering style is not applied
