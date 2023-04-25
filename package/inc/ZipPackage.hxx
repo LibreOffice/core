@@ -37,6 +37,7 @@
 #include <vector>
 #include <optional>
 
+class SvStream;
 class ZipOutputStream;
 class ZipPackageFolder;
 class ZipFile;
@@ -157,5 +158,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 #endif
+
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportZip(SvStream& rStream);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

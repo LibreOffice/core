@@ -42,6 +42,7 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <comphelper/fileurl.hxx>
+#include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
@@ -61,6 +62,7 @@
 #include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <unotools/streamwrap.hxx>
 #include <unotools/tempfile.hxx>
 #include <com/sun/star/io/XAsyncOutputMonitor.hpp>
 
@@ -1819,6 +1821,16 @@ package_ZipPackage_get_implementation(
     css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
     return cppu::acquire(new ZipPackage(context));
+}
+
+extern "C" bool TestImportZip(SvStream& rStream)
+{
+    // explicitly tests the "RepairPackage" recovery mode
+    rtl::Reference<ZipPackage> xPackage(new ZipPackage(comphelper::getProcessComponentContext()));
+    css::uno::Reference<css::io::XInputStream> xStream(new utl::OInputStreamWrapper(rStream));
+    css::uno::Sequence<Any> aArgs{ Any(xStream), Any(NamedValue("RepairPackage", Any(true))) };
+    xPackage->initialize(aArgs);
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
