@@ -2189,7 +2189,11 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
                 ( m_aFlags.bSetINetAttr &&
                     (nPos == TextFrameIndex(pText->getLength()) || IsSpace((*pText)[sal_Int32(nPos)])) &&
                     SetRedlineText( STR_AUTOFMTREDL_DETECT_URL ) &&
-                    pATst->FnSetINetAttr(aACorrDoc, *pText, sal_Int32(nLastBlank), sal_Int32(nPos), eLang)))
+                    pATst->FnSetINetAttr(aACorrDoc, *pText, sal_Int32(nLastBlank), sal_Int32(nPos), eLang)) ||
+                ( m_aFlags.bSetDOIAttr &&
+                    (nPos == TextFrameIndex(pText->getLength()) || IsSpace((*pText)[sal_Int32(nPos)])) &&
+                    SetRedlineText( STR_AUTOFMTREDL_DETECT_DOI ) &&
+                    pATst->FnSetDOIAttr(aACorrDoc, *pText, sal_Int32(nLastBlank), sal_Int32(nPos), eLang)))
             {
                 nPos = m_pCurTextFrame->MapModelToViewPos(*m_aDelPam.GetPoint());
             }
@@ -2779,7 +2783,8 @@ void SwEditShell::AutoFormatBySplitNode()
         SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
         if( pACorr && !pACorr->IsAutoCorrFlag( ACFlags::CapitalStartSentence | ACFlags::CapitalStartWord |
                                 ACFlags::AddNonBrkSpace | ACFlags::ChgOrdinalNumber | ACFlags::TransliterateRTL |
-                                ACFlags::ChgToEnEmDash | ACFlags::SetINetAttr | ACFlags::Autocorrect ))
+                                ACFlags::ChgToEnEmDash | ACFlags::SetINetAttr | ACFlags::Autocorrect |
+                                ACFlags::SetDOIAttr ))
             pACorr = nullptr;
 
         if( pACorr )

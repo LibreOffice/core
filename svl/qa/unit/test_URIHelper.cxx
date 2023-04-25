@@ -181,11 +181,14 @@ public:
 
     void testFindFirstURLInText();
 
+    void testFindFirstDOIInText();
+
     void testResolveIdnaHost();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testNormalizedMakeRelative);
     CPPUNIT_TEST(testFindFirstURLInText);
+    CPPUNIT_TEST(testFindFirstDOIInText);
     CPPUNIT_TEST(testResolveIdnaHost);
     CPPUNIT_TEST(finish);
     CPPUNIT_TEST_SUITE_END();
@@ -372,6 +375,57 @@ void Test::testFindFirstURLInText() {
         sal_Int32 end = input.getLength();
         OUString result(
             URIHelper::FindFirstURLInText(input, begin, end, charClass));
+        bool ok = tests[i].result == nullptr
+            ? (result.getLength() == 0 && begin == input.getLength()
+               && end == input.getLength())
+            : (result.equalsAscii(tests[i].result) && begin == tests[i].begin
+               && end == tests[i].end);
+        OString msg;
+        if (!ok) {
+            OStringBuffer buf;
+            buf.append(OString::Concat("\"")
+                + tests[i].input
+                + "\" -> ");
+            buf.append(tests[i].result == nullptr ? "none" : tests[i].result);
+            buf.append(" ("
+                + OString::number(tests[i].begin)
+                + ", "
+                + OString::number(tests[i].end)
+                + ")"
+                " != "
+                + OUStringToOString(result, RTL_TEXTENCODING_UTF8)
+                + " (" + OString::number(begin) + ", " + OString::number(end) +")");
+            msg = buf.makeStringAndClear();
+        }
+        CPPUNIT_ASSERT_MESSAGE(msg.getStr(), ok);
+    }
+}
+
+void Test::testFindFirstDOIInText() {
+    struct Data {
+        char const * input;
+        char const * result;
+        sal_Int32 begin;
+        sal_Int32 end;
+    };
+    static Data const tests[] = {
+        { "doi:10.1000/182", "https://doi.org/10.1000/182", 0, 15 }, // valid doi suffix with only digits
+        { "doi:10.1038/nature03001", "https://doi.org/10.1038/nature03001", 0, 23 }, // valid doi suffix with alphanumeric characters
+        { "doi:10.1093/ajae/aaq063", "https://doi.org/10.1093/ajae/aaq063", 0, 23 }, // valid doi suffix with multiple slash
+        { "doi:10.1016/S0735-1097(98)00347-7", "https://doi.org/10.1016/S0735-1097(98)00347-7", 0, 33 }, // valid doi suffix with characters apart from alphanumeric
+        { "doi:10.109/ajae/aaq063", nullptr, 0, 0 }, // # of digits after doi;10. is not between 4 and 9
+        { "doi:10.1234567890/ajae/aaq063", nullptr, 0, 0 }, // # of digits after doi;10. is not between 4 and 9
+        { "doi:10.1093/ajae/aaq063/", nullptr, 0, 0 }, // nothing after slash
+        { "doi:10.1093", nullptr, 0, 0 }, // no slash
+        { "doi:11.1093/ajae/aaq063", nullptr, 0, 0 }, // doesn't begin with doi:10.
+    };
+    CharClass charClass( m_context, LanguageTag( css::lang::Locale("en", "US", "")));
+    for (std::size_t i = 0; i < SAL_N_ELEMENTS(tests); ++i) {
+        OUString input(OUString::createFromAscii(tests[i].input));
+        sal_Int32 begin = 0;
+        sal_Int32 end = input.getLength();
+        OUString result(
+            URIHelper::FindFirstDOIInText(input, begin, end, charClass));
         bool ok = tests[i].result == nullptr
             ? (result.getLength() == 0 && begin == input.getLength()
                && end == input.getLength())

@@ -57,6 +57,7 @@ private:
     OUString m_sStartCap;
     OUString m_sBoldUnderline;
     OUString m_sURL;
+    OUString m_sDOI;
     OUString m_sNoDblSpaces;
     OUString m_sDash;
     OUString m_sAccidentalCaps;
@@ -92,6 +93,7 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
     OUString        sNoDblSpaces;
     OUString        sCorrectCapsLock;
     OUString        sDetectURL;
+    OUString        sDetectDOI;
     OUString        sDash;
     OUString        sRightMargin;
     OUString        sNum;

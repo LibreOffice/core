@@ -4173,6 +4173,14 @@
             </info>
             <value>true</value>
           </prop>
+          <prop oor:name="SetDOIAttribute" oor:type="xs:boolean" oor:nillable="false">
+            <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - DOI citation recognition -->
+            <info>
+              <desc>Specifies whether character strings which could represent a DOI are converted to a hyperlink.</desc>
+              <label>Detect DOI</label>
+            </info>
+            <value>true</value>
+          </prop>
           <prop oor:name="ChangeOrdinalNumber" oor:type="xs:boolean" oor:nillable="false">
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Replace 1st... -->
             <info>

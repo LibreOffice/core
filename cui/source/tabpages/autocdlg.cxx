@@ -189,6 +189,7 @@ OfaAutocorrOptionsPage::OfaAutocorrOptionsPage(weld::Container* pPage, weld::Dia
     , m_sStartCap(CuiResId(RID_CUISTR_CPTL_STT_SENT))
     , m_sBoldUnderline(CuiResId(RID_CUISTR_BOLD_UNDER))
     , m_sURL(CuiResId(RID_CUISTR_DETECT_URL))
+    , m_sDOI(CuiResId(RID_CUISTR_DETECT_DOI))
     , m_sNoDblSpaces(CuiResId(RID_CUISTR_NO_DBL_SPACES))
     , m_sDash(CuiResId(RID_CUISTR_DASH))
     , m_sAccidentalCaps(CuiResId(RID_CUISTR_CORRECT_ACCIDENTAL_CAPS_LOCK))
@@ -223,6 +224,7 @@ bool OfaAutocorrOptionsPage::FillItemSet( SfxItemSet* )
     pAutoCorrect->SetAutoCorrFlag(ACFlags::CapitalStartSentence, m_xCheckLB->get_toggle(nPos++) == TRISTATE_TRUE);
     pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgWeightUnderl,      m_xCheckLB->get_toggle(nPos++) == TRISTATE_TRUE);
     pAutoCorrect->SetAutoCorrFlag(ACFlags::SetINetAttr,          m_xCheckLB->get_toggle(nPos++) == TRISTATE_TRUE);
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::SetDOIAttr,           m_xCheckLB->get_toggle(nPos++) == TRISTATE_TRUE);
     pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgToEnEmDash,        m_xCheckLB->get_toggle(nPos++) == TRISTATE_TRUE);
     pAutoCorrect->SetAutoCorrFlag(ACFlags::IgnoreDoubleSpace,    m_xCheckLB->get_toggle(nPos++) == TRISTATE_TRUE);
     pAutoCorrect->SetAutoCorrFlag(ACFlags::CorrectCapsLock,      m_xCheckLB->get_toggle(nPos++) == TRISTATE_TRUE);
@@ -263,6 +265,7 @@ void OfaAutocorrOptionsPage::Reset( const SfxItemSet* )
     InsertEntry(m_sStartCap);
     InsertEntry(m_sBoldUnderline);
     InsertEntry(m_sURL);
+    InsertEntry(m_sDOI);
     InsertEntry(m_sDash);
     InsertEntry(m_sNoDblSpaces);
     InsertEntry(m_sAccidentalCaps);
@@ -273,6 +276,7 @@ void OfaAutocorrOptionsPage::Reset( const SfxItemSet* )
     m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::CapitalStartSentence) ? TRISTATE_TRUE : TRISTATE_FALSE );
     m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::ChgWeightUnderl) ? TRISTATE_TRUE : TRISTATE_FALSE );
     m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::SetINetAttr) ? TRISTATE_TRUE : TRISTATE_FALSE );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::SetDOIAttr) ? TRISTATE_TRUE : TRISTATE_FALSE );
     m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::ChgToEnEmDash) ? TRISTATE_TRUE : TRISTATE_FALSE );
     m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::IgnoreDoubleSpace) ? TRISTATE_TRUE : TRISTATE_FALSE );
     m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::CorrectCapsLock) ? TRISTATE_TRUE : TRISTATE_FALSE );
@@ -333,6 +337,7 @@ enum OfaAutoFmtOptions
     BEGIN_UPPER,
     BOLD_UNDERLINE,
     DETECT_URL,
+    DETECT_DOI,
     REPLACE_DASHES,
     DEL_SPACES_AT_STT_END,
     DEL_SPACES_BETWEEN_LINES,
@@ -363,6 +368,7 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage(weld::Container* pPage, weld::D
     , sNoDblSpaces(CuiResId(RID_CUISTR_NO_DBL_SPACES))
     , sCorrectCapsLock(CuiResId(RID_CUISTR_CORRECT_ACCIDENTAL_CAPS_LOCK))
     , sDetectURL(CuiResId(RID_CUISTR_DETECT_URL))
+    , sDetectDOI(CuiResId(RID_CUISTR_DETECT_DOI))
     , sDash(CuiResId(RID_CUISTR_DASH))
     , sRightMargin(CuiResId(RID_CUISTR_RIGHT_MARGIN))
     , sNum(CuiResId(RID_CUISTR_NUM))
@@ -454,6 +460,12 @@ bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet*  )
     pOpt->bSetINetAttr = bCheck;
     pAutoCorrect->SetAutoCorrFlag(ACFlags::SetINetAttr,
                         m_xCheckLB->get_toggle(DETECT_URL, CBCOL_SECOND) == TRISTATE_TRUE);
+
+    bCheck = m_xCheckLB->get_toggle(DETECT_DOI, CBCOL_FIRST) == TRISTATE_TRUE;
+    bModified |= pOpt->bSetDOIAttr != bCheck;
+    pOpt->bSetDOIAttr = bCheck;
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::SetDOIAttr,
+                        m_xCheckLB->get_toggle(DETECT_DOI, CBCOL_SECOND) == TRISTATE_TRUE);
 
     bCheck = m_xCheckLB->get_toggle(DEL_EMPTY_NODE, CBCOL_FIRST) == TRISTATE_TRUE;
     bModified |= pOpt->bDelEmptyNode != bCheck;
@@ -558,6 +570,7 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet* )
     CreateEntry(sCapitalStartSentence, CBCOL_BOTH  );
     CreateEntry(sBoldUnder,         CBCOL_BOTH  );
     CreateEntry(sDetectURL,         CBCOL_BOTH  );
+    CreateEntry(sDetectDOI,         CBCOL_BOTH  );
     CreateEntry(sDash,              CBCOL_BOTH  );
     CreateEntry(sDelSpaceAtSttEnd,  CBCOL_BOTH  );
     CreateEntry(sDelSpaceBetweenLines, CBCOL_BOTH  );
@@ -583,6 +596,8 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet* )
     m_xCheckLB->set_toggle(BOLD_UNDERLINE, bool(nFlags & ACFlags::ChgWeightUnderl) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
     m_xCheckLB->set_toggle(DETECT_URL, pOpt->bSetINetAttr ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
     m_xCheckLB->set_toggle(DETECT_URL, bool(nFlags & ACFlags::SetINetAttr) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
+    m_xCheckLB->set_toggle(DETECT_DOI, pOpt->bSetDOIAttr ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
+    m_xCheckLB->set_toggle(DETECT_DOI, bool(nFlags & ACFlags::SetDOIAttr) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
     m_xCheckLB->set_toggle(REPLACE_DASHES, pOpt->bChgToEnEmDash ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
     m_xCheckLB->set_toggle(REPLACE_DASHES, bool(nFlags & ACFlags::ChgToEnEmDash) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
     m_xCheckLB->set_toggle(DEL_SPACES_AT_STT_END, pOpt->bAFormatDelSpacesAtSttEnd ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);

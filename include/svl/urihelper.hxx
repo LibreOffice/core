@@ -120,6 +120,11 @@ SVL_DLLPUBLIC OUString FindFirstURLInText(OUString const & rText,
                                           INetURLObject::EncodeMechanism eMechanism = INetURLObject::EncodeMechanism::WasEncoded,
                                           rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
+SVL_DLLPUBLIC OUString FindFirstDOIInText(OUString const & rText,
+                                          sal_Int32 & rBegin,
+                                          sal_Int32 & rEnd,
+                                          CharClass const & rCharClass);
+
 /** Remove any password component from both absolute and relative URLs.
 
     @ATT  The current implementation will not remove a password from a

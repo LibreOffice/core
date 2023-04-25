@@ -2570,7 +2570,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     pACorr->IsAutoCorrFlag( ACFlags::CapitalStartSentence | ACFlags::CapitalStartWord |
                                             ACFlags::ChgOrdinalNumber | ACFlags::AddNonBrkSpace |
                                             ACFlags::ChgToEnEmDash | ACFlags::SetINetAttr |
-                                            ACFlags::Autocorrect | ACFlags::TransliterateRTL ) &&
+                                            ACFlags::Autocorrect | ACFlags::TransliterateRTL |
+                                            ACFlags::SetDOIAttr ) &&
                     '\"' != aCh && '\'' != aCh && '*' != aCh && '_' != aCh
                     )
                 {
@@ -2608,7 +2609,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 pACorr->IsAutoCorrFlag( ACFlags::CapitalStartSentence | ACFlags::CapitalStartWord |
                                         ACFlags::ChgOrdinalNumber | ACFlags::TransliterateRTL |
                                         ACFlags::ChgToEnEmDash | ACFlags::SetINetAttr |
-                                        ACFlags::Autocorrect ) &&
+                                        ACFlags::Autocorrect | ACFlags::SetDOIAttr ) &&
                 !rSh.HasReadonlySel() )
             {
                 FlushInBuffer();

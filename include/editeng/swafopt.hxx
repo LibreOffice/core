@@ -109,6 +109,7 @@ struct EDITENG_DLLPUBLIC SvxSwAutoFormatFlags
     bool bChgAngleQuotes : 1;
     bool bChgWeightUnderl : 1;
     bool bSetINetAttr : 1;
+    bool bSetDOIAttr : 1;
 
     bool bSetBorder : 1;
     bool bCreateTable : 1;

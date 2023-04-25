@@ -332,6 +332,7 @@
 #define RID_CUISTR_BOLD_UNDER                       NC_("RID_SVXSTR_BOLD_UNDER", "Automatic *bold*, /italic/, -strikeout- and _underline_")
 #define RID_CUISTR_NO_DBL_SPACES                    NC_("RID_SVXSTR_NO_DBL_SPACES", "Ignore double spaces")
 #define RID_CUISTR_DETECT_URL                       NC_("RID_SVXSTR_DETECT_URL", "URL Recognition")
+#define RID_CUISTR_DETECT_DOI                       NC_("RID_SVXSTR_DETECT_DOI", "DOI citation recognition")
 #define RID_CUISTR_DASH                             NC_("RID_SVXSTR_DASH", "Replace dashes")
 #define RID_CUISTR_CORRECT_ACCIDENTAL_CAPS_LOCK     NC_("RID_SVXSTR_CORRECT_ACCIDENTAL_CAPS_LOCK", "Correct accidental use of cAPS LOCK key")
 #define RID_CUISTR_NON_BREAK_SPACE                  NC_("RID_SVXSTR_NON_BREAK_SPACE", "Add non-breaking space before specific punctuation marks in French text")

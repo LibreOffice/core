@@ -289,6 +289,7 @@ ACFlags SvxAutoCorrect::GetDefaultFlags()
                     | ACFlags::ChgAngleQuotes
                     | ACFlags::ChgWeightUnderl
                     | ACFlags::SetINetAttr
+                    | ACFlags::SetDOIAttr
                     | ACFlags::ChgQuotes
                     | ACFlags::SaveWordCplSttLst
                     | ACFlags::SaveWordWordStartLst
@@ -746,6 +747,18 @@ bool SvxAutoCorrect::FnSetINetAttr( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
 {
     OUString sURL( URIHelper::FindFirstURLInText( rTxt, nSttPos, nEndPos,
                                                 GetCharClass( eLang ) ));
+    bool bRet = !sURL.isEmpty();
+    if( bRet )          // so, set attribute:
+        rDoc.SetINetAttr( nSttPos, nEndPos, sURL );
+    return bRet;
+}
+
+// DOI citation recognition
+bool SvxAutoCorrect::FnSetDOIAttr( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
+                                    sal_Int32 nSttPos, sal_Int32 nEndPos,
+                                    LanguageType eLang )
+{
+    OUString sURL( URIHelper::FindFirstDOIInText( rTxt, nSttPos, nEndPos, GetCharClass( eLang ) ));
     bool bRet = !sURL.isEmpty();
     if( bRet )          // so, set attribute:
         rDoc.SetINetAttr( nSttPos, nEndPos, sURL );
@@ -1609,7 +1622,10 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                 FnChgOrdinalNumber( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) ) ||
             ( IsAutoCorrFlag( ACFlags::SetINetAttr ) &&
                 ( ' ' == cChar || '\t' == cChar || 0x0a == cChar || !cChar ) &&
-                FnSetINetAttr( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) ) )
+                FnSetINetAttr( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) ) ||
+            ( IsAutoCorrFlag( ACFlags::SetDOIAttr ) &&
+                ( ' ' == cChar || '\t' == cChar || 0x0a == cChar || !cChar ) &&
+                FnSetDOIAttr( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) ) )
             ;
         else
         {

@@ -173,7 +173,8 @@ static SvxAutoCorrect* lcl_IsAutoCorr()
     SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
     if( pACorr && !pACorr->IsAutoCorrFlag( ACFlags::CapitalStartSentence | ACFlags::CapitalStartWord |
                             ACFlags::AddNonBrkSpace | ACFlags::ChgOrdinalNumber | ACFlags::TransliterateRTL |
-                            ACFlags::ChgToEnEmDash | ACFlags::SetINetAttr | ACFlags::Autocorrect ))
+                            ACFlags::ChgToEnEmDash | ACFlags::SetINetAttr | ACFlags::Autocorrect |
+                            ACFlags::SetDOIAttr ))
         pACorr = nullptr;
     return pACorr;
 }

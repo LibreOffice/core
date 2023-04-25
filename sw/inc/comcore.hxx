@@ -43,8 +43,9 @@
 #define STR_AUTOFMTREDL_DEL_MORELINES           20
 #define STR_AUTOFMTREDL_NON_BREAK_SPACE         21
 #define STR_AUTOFMTREDL_TRANSLITERATE_RTL       22
+#define STR_AUTOFMTREDL_DETECT_DOI              23
 // !!!!!!!!!!!!!!!!!!!!!!!!!!  always set the correct end !!!!!!!!!!!!
-#define STR_AUTOFMTREDL_END                     23
+#define STR_AUTOFMTREDL_END                     24
 
 #endif
 

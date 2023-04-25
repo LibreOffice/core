@@ -36,6 +36,7 @@ SvxSwAutoFormatFlags::SvxSwAutoFormatFlags()
     bChgToEnEmDash =
     bChgWeightUnderl =
     bSetINetAttr =
+    bSetDOIAttr =
     bAFormatDelSpacesAtSttEnd =
     bAFormatDelSpacesBetweenLines =
     bAFormatByInpDelSpacesAtSttEnd =

@@ -76,13 +76,14 @@ enum class ACFlags : sal_uInt32 {
     CorrectCapsLock      = 0x00002000,   // Correct accidental use of cAPS LOCK key
     TransliterateRTL     = 0x00004000,   // Transliterate RTL text
     ChgAngleQuotes       = 0x00008000,   // >>, << -> angle quotes in some languages
+    SetDOIAttr           = 0x00010000,   // Set DOIAttribut
 
     ChgWordLstLoad       = 0x20000000,   // Replacement list loaded
     CplSttLstLoad        = 0x40000000,   // Exception list for Capital letters Start loaded
     WordStartLstLoad        = 0x80000000,   // Exception list for Word Start loaded
 };
 namespace o3tl {
-    template<> struct typed_flags<ACFlags> : is_typed_flags<ACFlags, 0xe000ffff> {};
+    template<> struct typed_flags<ACFlags> : is_typed_flags<ACFlags, 0xe001ffff> {};
 }
 
 enum class ACQuotes
@@ -414,6 +415,9 @@ public:
                                 sal_Int32 nEndPos,
                                 LanguageType eLang, bool& io_bNbspRunNext );
     bool FnSetINetAttr( SvxAutoCorrDoc&, const OUString&,
+                                sal_Int32 nSttPos, sal_Int32 nEndPos,
+                                LanguageType eLang );
+    bool FnSetDOIAttr( SvxAutoCorrDoc&, const OUString&,
                                 sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang );
     bool FnChgWeightUnderl( SvxAutoCorrDoc&, const OUString&,
