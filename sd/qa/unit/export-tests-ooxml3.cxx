@@ -2100,8 +2100,8 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTableCellVerticalPropertyRoundtrip)
 
     xmlDocUniquePtr pXml = parseExport(tempFile, "ppt/slides/slide1.xml");
 
-    assertXPath(pXml, "(//a:tcPr)[1]", "vert", "vert270");
-    assertXPath(pXml, "(//a:tcPr)[2]", "vert", "vert");
+    assertXPath(pXml, "(//a:tcPr)[1]", "vert", "vert");
+    assertXPath(pXml, "(//a:tcPr)[2]", "vert", "vert270");
     assertXPath(pXml, "(//a:tcPr)[3]", "vert", "wordArtVert");
 }
 
