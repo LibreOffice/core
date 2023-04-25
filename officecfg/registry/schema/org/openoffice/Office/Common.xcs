@@ -2401,14 +2401,6 @@
         </info>
         <value>false</value>
       </prop>
-      <prop oor:name="ShowOfficeUpdateDialog" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-          <desc>Specifies whether the office update dialog should be shown in
-          case the loaded document has newer ODF version than the maximal
-          supported one.</desc>
-        </info>
-        <value>true</value>
-      </prop>
       <prop oor:name="DetectWebDAVRedirection" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Determines whether to use WebDAV when a file is loaded from a mapped WebDAV drive.</desc>
