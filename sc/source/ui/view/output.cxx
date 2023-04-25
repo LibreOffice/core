@@ -2709,7 +2709,7 @@ void ScOutputData::DrawClipMarks()
                     tools::Long nMarkPixel = static_cast<tools::Long>( SC_CLIPMARK_SIZE * mnPPTX );
                     Size aMarkSize( nMarkPixel, (nMarkPixel-1)*2 );
 
-                    const Color aColor = pInfo->pBackground->GetColor();
+                    const Color aColor = pInfo->pBackground ? pInfo->pBackground->GetColor() : COL_AUTO;
                     if ( aColor == COL_AUTO ? bIsDarkBackground : aColor.IsDark() )
                         mpDev->SetDrawMode( nOldDrawMode | DrawModeFlags::WhiteLine );
                     else
