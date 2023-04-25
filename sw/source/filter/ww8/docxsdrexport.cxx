@@ -869,6 +869,15 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
             if (xShapeProps.is())
                 xShapeProps->getPropertyValue("IsFollowingTextFlow") >>= bLclInTabCell;
         }
+
+        if (pFrameFormat->GetSurround().GetValue() == text::WrapTextMode_THROUGH
+            && pFrameFormat->GetHoriOrient().GetRelationOrient() == text::RelOrientation::FRAME)
+        {
+            // "In front of text" and horizontal positioning relative to Column is ignored on
+            // import, add it back here.
+            bLclInTabCell = true;
+        }
+
         if (bLclInTabCell)
             attrList->add(XML_layoutInCell, "1");
         else
