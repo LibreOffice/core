@@ -1106,10 +1106,9 @@ void ZipFile::recover()
                             sal_Int32 nDescrLength =
                                 ( aEntry.nMethod == DEFLATED && ( aEntry.nFlag & 8 ) ) ? 16 : 0;
 
-                            sal_Int64 nDataSize = ( aEntry.nMethod == DEFLATED ) ? aEntry.nCompressedSize : aEntry.nSize;
-                            sal_Int64 nBlockLength = nDataSize + aEntry.nPathLen + aEntry.nExtraLen + 30 + nDescrLength;
+                            sal_Int64 nBlockHeaderLength = aEntry.nPathLen + aEntry.nExtraLen + 30 + nDescrLength;
                             if ( aEntry.nPathLen >= 0 && aEntry.nExtraLen >= 0
-                                && ( nGenPos + nPos + nBlockLength ) <= nLength )
+                                && ( nGenPos + nPos + nBlockHeaderLength ) <= nLength )
                             {
                                 // read always in UTF8, some tools seem not to set UTF8 bit
                                 if( nPos + 30 + aEntry.nPathLen <= nBufSize )
@@ -1150,19 +1149,25 @@ void ZipFile::recover()
                                     }
                                 }
 
-                                aEntry.nCompressedSize = nCompressedSize;
-                                aEntry.nSize = nSize;
+                                sal_Int64 nDataSize = ( aEntry.nMethod == DEFLATED ) ? nCompressedSize : nSize;
+                                sal_Int64 nBlockLength = nDataSize + nBlockHeaderLength;
 
-                                aEntry.nOffset = nGenPos + nPos + 30 + aEntry.nPathLen + aEntry.nExtraLen;
-
-                                if ( ( aEntry.nSize || aEntry.nCompressedSize ) && !checkSizeAndCRC( aEntry ) )
+                                if (( nGenPos + nPos + nBlockLength ) <= nLength )
                                 {
-                                    aEntry.nCrc = 0;
-                                    aEntry.nCompressedSize = 0;
-                                    aEntry.nSize = 0;
-                                }
+                                    aEntry.nCompressedSize = nCompressedSize;
+                                    aEntry.nSize = nSize;
 
-                                aEntries.emplace( aEntry.sPath, aEntry );
+                                    aEntry.nOffset = nGenPos + nPos + 30 + aEntry.nPathLen + aEntry.nExtraLen;
+
+                                    if ( ( aEntry.nSize || aEntry.nCompressedSize ) && !checkSizeAndCRC( aEntry ) )
+                                    {
+                                        aEntry.nCrc = 0;
+                                        aEntry.nCompressedSize = 0;
+                                        aEntry.nSize = 0;
+                                    }
+
+                                    aEntries.emplace( aEntry.sPath, aEntry );
+                                }
                             }
                         }
                     }
