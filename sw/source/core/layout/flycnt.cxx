@@ -1558,7 +1558,14 @@ SwLayoutFrame *SwFrame::GetNextFlyLeaf( MakePageType eMakePage )
     bool bBody = pFlyAnchor && pFlyAnchor->IsInDocBody();
     SwLayoutFrame *pLayLeaf = nullptr;
     // Look up the first candidate.
-    if (IsTabFrame())
+    SwSectionFrame* pFlyAnchorSection = pFlyAnchor ? pFlyAnchor->FindSctFrame() : nullptr;
+    if (pFlyAnchorSection)
+    {
+        // We can't just move the split anchor to the next page, that would be outside the section.
+        // Rather split that section as well.
+        pLayLeaf = pFlyAnchorSection->GetNextSctLeaf(eMakePage);
+    }
+    else if (IsTabFrame())
     {
         // If we're in a table, try to find the next frame of the table's last content.
         SwFrame* pContent = static_cast<SwTabFrame*>(this)->FindLastContentOrTable();
