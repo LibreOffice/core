@@ -48,7 +48,7 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 		$(if $(filter iOS MACOSX,$(OS_FOR_BUILD)),ACLOCAL="aclocal -I $(SRCDIR)/m4/mac") \
 		autoreconf \
 		&& $(gb_RUN_CONFIGURE) ./configure \
-			--with-pic --disable-shared --disable-crypto-dl --without-libxslt --without-gnutls --without-gcrypt --disable-apps --disable-docs \
+			--with-pic --disable-shared --disable-crypto-dl --without-libxslt --without-gnutls --without-gcrypt --disable-apps --disable-docs --disable-pedantic \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			CFLAGS="$(CFLAGS) $(call gb_ExternalProject_get_build_flags,xmlsec) $(gb_VISIBILITY_FLAGS) -Wno-unknown-warning-option -Wno-strict-prototypes" \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
