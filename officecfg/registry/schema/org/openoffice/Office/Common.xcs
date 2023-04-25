@@ -6550,20 +6550,6 @@
       <info>
         <desc>Contains various language/localization specific settings.</desc>
       </info>
-      <group oor:name="InputMethod">
-        <info>
-          <desc>Contains settings for (language/localization specific) input
-          methods.</desc>
-        </info>
-        <prop oor:name="ShowStatusWindow" oor:type="xs:boolean">
-          <info>
-            <desc>Controls the behavior of the IIIMP status window on Unix. If
-            true, the status window is always displayed. If false, the status
-            window is never displayed. If nil (the default), the status window
-            is displayed depending on the current locale.</desc>
-          </info>
-        </prop>
-      </group>
       <group oor:name="CJK">
         <info>
           <desc>Contains settings for the Asian languages (Chinese, Japanese,
