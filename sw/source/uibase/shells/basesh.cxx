@@ -3082,8 +3082,18 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 if (pTheme)
                 {
                     std::shared_ptr<svx::IThemeColorChanger> pChanger(new sw::ThemeColorChanger(pDocumentShell));
-                    auto pDialog = std::make_shared<svx::ThemeDialog>(pMDI, pTheme.get(), pChanger);
-                    weld::DialogController::runAsync(pDialog, [](int) {});
+                    auto pDialog = std::make_shared<svx::ThemeDialog>(pMDI, pTheme.get());
+                    weld::DialogController::runAsync(pDialog, [pDialog, pChanger](sal_uInt32 nResult) {
+                        if (RET_OK != nResult)
+                            return;
+
+                        auto oColorSet = pDialog->getCurrentColorSet();
+                        if (oColorSet)
+                        {
+                            auto& rColorSet = (*oColorSet).get();
+                            pChanger->apply(rColorSet);
+                        }
+                    });
                 }
             }
         }

@@ -13,8 +13,8 @@
 
 namespace svx
 {
-constexpr tools::Long BORDER = 3;
-constexpr tools::Long SIZE = 14;
+constexpr tools::Long BORDER = 4;
+constexpr tools::Long SIZE = 16;
 constexpr tools::Long LABEL_HEIGHT = 16;
 constexpr tools::Long LABEL_TEXT_HEIGHT = 14;
 constexpr tools::Long constElementNumber = 8;

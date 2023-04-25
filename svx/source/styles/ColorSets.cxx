@@ -11,6 +11,7 @@
 #include <svx/ColorSets.hxx>
 
 #include <utility>
+#include <unordered_set>
 #include <docmodel/theme/ColorSet.hxx>
 
 using namespace com::sun::star;
@@ -157,20 +158,56 @@ model::ColorSet const* ColorSets::getColorSet(std::u16string_view rName) const
     }
     return nullptr;
 }
-
-void ColorSets::insert(model::ColorSet const& rNewColorSet)
+namespace
 {
-    for (model::ColorSet& rColorSet : maColorSets)
-    {
-        if (rColorSet.getName() == rNewColorSet.getName())
-        {
-            rColorSet = rNewColorSet;
-            return;
-        }
-    }
 
-    // color set not found, so insert it
-    maColorSets.push_back(rNewColorSet);
+OUString findUniqueName(std::unordered_set<OUString> const& rNames, OUString const& rNewName)
+{
+    auto iterator = rNames.find(rNewName);
+    if (iterator == rNames.cend())
+        return rNewName;
+
+    int i = 1;
+    OUString aName;
+    do
+    {
+        aName = rNewName + "_" + OUString::number(i);
+        i++;
+        iterator = rNames.find(aName);
+    } while (iterator != rNames.cend());
+
+    return aName;
+}
+
+} // end anonymous namespace
+
+void ColorSets::insert(model::ColorSet const& rNewColorSet, IdenticalNameAction eAction)
+{
+    if (eAction == IdenticalNameAction::Overwrite)
+    {
+        for (model::ColorSet& rColorSet : maColorSets)
+        {
+            if (rColorSet.getName() == rNewColorSet.getName())
+            {
+                rColorSet = rNewColorSet;
+                return;
+            }
+        }
+        // color set not found, so insert it
+        maColorSets.push_back(rNewColorSet);
+    }
+    else if (eAction == IdenticalNameAction::AutoRename)
+    {
+        std::unordered_set<OUString> aNames;
+        for (model::ColorSet& rColorSet : maColorSets)
+            aNames.insert(rColorSet.getName());
+
+        OUString aName = findUniqueName(aNames, rNewColorSet.getName());
+
+        model::ColorSet aNewColorSet = rNewColorSet;
+        aNewColorSet.setName(aName);
+        maColorSets.push_back(aNewColorSet);
+    }
 }
 
 } // end of namespace svx
