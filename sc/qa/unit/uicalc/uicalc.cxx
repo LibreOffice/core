@@ -1290,6 +1290,22 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf146994)
     CPPUNIT_ASSERT_EQUAL(OUString("Sheet1.D3:Sheet1.D4"), aMarkedAreaString);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf154991)
+{
+    createScDoc("tdf154991.ods");
+    ScDocument* pDoc = getScDoc();
+
+    goToCell("A1");
+    dispatchCommand(mxComponent, ".uno:SelectColumn", {});
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:HideColumn", {});
+    CPPUNIT_ASSERT(pDoc->ColHidden(0, 0));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT(!pDoc->ColHidden(0, 0));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf95306)
 {
     createScDoc();
