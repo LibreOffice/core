@@ -30,8 +30,8 @@ SwPageNumberDlg::SwPageNumberDlg(weld::Window* pParent)
     , m_xPageNumberPosition(m_xBuilder->weld_combo_box("positionCombo"))
     , m_xPageNumberAlignment(m_xBuilder->weld_combo_box("alignmentCombo"))
     , m_xPreviewImage(m_xBuilder->weld_image("previewImage"))
-    , m_aPageNumberPosition(1)
-    , m_aPageNumberAlignment(0)
+    , m_aPageNumberPosition(1) // bottom
+    , m_aPageNumberAlignment(1) // center
 {
     m_xOk->connect_clicked(LINK(this, SwPageNumberDlg, OkHdl));
     m_xPageNumberPosition->connect_changed(LINK(this, SwPageNumberDlg, PositionSelectHdl));
