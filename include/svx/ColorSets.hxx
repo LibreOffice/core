@@ -27,6 +27,7 @@ private:
     ColorSets();
     void init();
 public:
+    enum class IdenticalNameAction { Overwrite, AutoRename };
     static ColorSets& get();
 
     const std::vector<model::ColorSet>& getColorSetVector() const
@@ -41,7 +42,7 @@ public:
 
     model::ColorSet const* getColorSet(std::u16string_view rName) const;
 
-    void insert(model::ColorSet const& rColorSet);
+    void insert(model::ColorSet const& rColorSet, IdenticalNameAction eAction = IdenticalNameAction::Overwrite);
 };
 
 } // end of namespace svx

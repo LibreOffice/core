@@ -29,6 +29,8 @@ class DOCMODEL_DLLPUBLIC ColorSet
 public:
     ColorSet(OUString const& rName);
 
+    void setName(OUString const& rName) { maName = rName; }
+
     void add(model::ThemeColorType Type, Color aColorData);
 
     const OUString& getName() const { return maName; }

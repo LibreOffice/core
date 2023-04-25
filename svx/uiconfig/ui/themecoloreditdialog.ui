@@ -1,0 +1,601 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.40.0 -->
+<interface domain="svx">
+  <requires lib="gtk+" version="3.20"/>
+  <object class="GtkDialog" id="ThemeColorEditDialog">
+    <property name="width-request">400</property>
+    <property name="height-request">300</property>
+    <property name="can-focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
+    <property name="border-width">6</property>
+    <property name="title" translatable="yes" context="themedialog|Title">Theme Color Edit</property>
+    <property name="type-hint">dialog</property>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="dialogBox1">
+        <property name="can-focus">False</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="dialogButtons">
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
+            <child>
+              <object class="GtkButton" id="help">
+                <property name="label" translatable="yes" context="stock">_Help</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="ok">
+                <property name="label" translatable="yes" context="stock">_OK</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="has-default">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="cancel">
+                <property name="label" translatable="yes" context="stock">_Cancel</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack-type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <!-- n-columns=2 n-rows=1 -->
+          <object class="GtkGrid">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <child>
+              <object class="GtkEntry" id="entryThemeColorsName">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="margin-start">12</property>
+                <property name="margin-end">12</property>
+                <property name="margin-top">6</property>
+                <property name="margin-bottom">6</property>
+                <property name="hexpand">True</property>
+                <property name="truncate-multiline">True</property>
+                <accessibility>
+                  <relation type="labelled-by" target="labelThemeColorsName"/>
+                </accessibility>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="labelThemeColorsName">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-start">6</property>
+                <property name="margin-end">6</property>
+                <property name="margin-top">6</property>
+                <property name="margin-bottom">6</property>
+                <property name="label" translatable="yes" context="themecoloreditdialog|labelThemeColorsName">Name:</property>
+                <accessibility>
+                  <relation type="label-for" target="entryThemeColorsName"/>
+                </accessibility>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkFrame">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label-xalign">0.019999999552965164</property>
+            <property name="shadow-type">in</property>
+            <child>
+              <!-- n-columns=4 n-rows=6 -->
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-start">12</property>
+                <property name="margin-end">12</property>
+                <property name="margin-top">12</property>
+                <property name="margin-bottom">12</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="row-spacing">6</property>
+                <property name="column-spacing">6</property>
+                <child>
+                  <object class="GtkMenuButton" id="buttonDark1">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw-indicator">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <accessibility>
+                      <relation type="labelled-by" target="labelDark1"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkMenuButton" id="buttonLight1">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw-indicator">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <accessibility>
+                      <relation type="labelled-by" target="labelLight1"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkMenuButton" id="buttonDark2">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw-indicator">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <accessibility>
+                      <relation type="labelled-by" target="labelDark2"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="labelDark1">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-start">6</property>
+                    <property name="margin-end">12</property>
+                    <property name="label" translatable="yes" context="themecoloreditdialog|labelDark">Dark 1:</property>
+                    <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="buttonDark1"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="labelLight1">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-start">6</property>
+                    <property name="margin-end">12</property>
+                    <property name="label" translatable="yes" context="themecoloreditdialog|labelLight1">Light1:</property>
+                    <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="buttonLight1"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="labelDark2">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-start">6</property>
+                    <property name="margin-end">12</property>
+                    <property name="label" translatable="yes" context="themecoloreditdialog|labelDark2">Dark 2:</property>
+                    <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="buttonDark2"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="labelLight2">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-start">6</property>
+                    <property name="margin-end">12</property>
+                    <property name="label" translatable="yes" context="themecoloreditdialog|labelLight2">Light2:</property>
+                    <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="buttonLight2"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkMenuButton" id="buttonLight2">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw-indicator">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <accessibility>
+                      <relation type="labelled-by" target="labelLight2"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="labelAccent1">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-start">6</property>
+                    <property name="margin-end">12</property>
+                    <property name="label" translatable="yes" context="themecoloreditdialog|labelAccent1">Accent 1:</property>
+                    <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="buttonAccent1"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="labelAccent2">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-start">6</property>
+                    <property name="margin-end">12</property>
+                    <property name="label" translatable="yes" context="themecoloreditdialog|labelAccent2">Accent 2:</property>
+                    <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="buttonAccent2"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkMenuButton" id="buttonAccent1">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw-indicator">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <accessibility>
+                      <relation type="labelled-by" target="labelAccent1"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">3</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkMenuButton" id="buttonAccent2">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw-indicator">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <accessibility>
+                      <relation type="labelled-by" target="labelAccent2"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">3</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="labelAccent3">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-start">6</property>
+                    <property name="margin-end">12</property>
+                    <property name="label" translatable="yes" context="themecoloreditdialog|labelAccent3">Accent 3:</property>
+                    <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="buttonAccent3"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="labelAccent4">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-start">6</property>
+                    <property name="margin-end">12</property>
+                    <property name="label" translatable="yes" context="themecoloreditdialog|labelAccent4">Accent 4:</property>
+                    <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="buttonAccent4"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="labelAccent5">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-start">6</property>
+                    <property name="margin-end">12</property>
+                    <property name="label" translatable="yes" context="themecoloreditdialog|labelAccent5">Accent 5:</property>
+                    <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="buttonAccent5"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="labelAccent6">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-start">6</property>
+                    <property name="margin-end">12</property>
+                    <property name="label" translatable="yes" context="themecoloreditdialog|labelAccent6">Accent 6:</property>
+                    <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="buttonAccent6"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkMenuButton" id="buttonAccent3">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw-indicator">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <accessibility>
+                      <relation type="labelled-by" target="labelAccent3"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">3</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkMenuButton" id="buttonAccent4">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw-indicator">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <accessibility>
+                      <relation type="labelled-by" target="labelAccent4"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">3</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkMenuButton" id="buttonAccent5">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw-indicator">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <accessibility>
+                      <relation type="labelled-by" target="labelAccent5"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">3</property>
+                    <property name="top-attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkMenuButton" id="buttonAccent6">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw-indicator">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <accessibility>
+                      <relation type="labelled-by" target="labelAccent6"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">3</property>
+                    <property name="top-attach">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="labelHyperlink">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-start">6</property>
+                    <property name="margin-end">12</property>
+                    <property name="label" translatable="yes" context="themecoloreditdialog|labelHyperlink">Hyperlink:</property>
+                    <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="buttonHyperlink"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="labelFollowHyperlink">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-start">6</property>
+                    <property name="margin-end">12</property>
+                    <property name="label" translatable="yes" context="themecoloreditdialog|labelFollowHyperlink">Follow Hyperlink:</property>
+                    <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="buttonFollowHyperlink"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkMenuButton" id="buttonHyperlink">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw-indicator">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <accessibility>
+                      <relation type="labelled-by" target="labelHyperlink"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkMenuButton" id="buttonFollowHyperlink">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw-indicator">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <accessibility>
+                      <relation type="labelled-by" target="labelFollowHyperlink"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">5</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="frameLabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="themecoloreditdialog|frameLabel">Colors</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="-11">help</action-widget>
+      <action-widget response="-5">ok</action-widget>
+      <action-widget response="-6">cancel</action-widget>
+    </action-widgets>
+  </object>
+</interface>

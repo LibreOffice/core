@@ -14,32 +14,45 @@
 #include <svx/svdpage.hxx>
 #include <svx/theme/IThemeColorChanger.hxx>
 #include <svx/dialog/ThemeColorValueSet.hxx>
+#include <functional>
 
 namespace model
 {
 class Theme;
 }
 
+class ColorListBox;
+
 namespace svx
 {
 class SVX_DLLPUBLIC ThemeDialog final : public weld::GenericDialogController
 {
 private:
+    weld::Window* mpWindow;
     model::Theme* mpTheme;
     std::vector<model::ColorSet> maColorSets;
 
-    std::shared_ptr<IThemeColorChanger> mpChanger;
-
     std::unique_ptr<svx::ThemeColorValueSet> mxValueSetThemeColors;
     std::unique_ptr<weld::CustomWeld> mxValueSetThemeColorsWindow;
+    std::unique_ptr<weld::Button> mxAdd;
+
+    std::optional<std::reference_wrapper<model::ColorSet>> moCurrentColorSet;
+
+    void runThemeColorEditDialog();
+    void initColorSets();
 
 public:
-    ThemeDialog(weld::Window* pParent, model::Theme* pTheme,
-                std::shared_ptr<IThemeColorChanger> const& pChanger);
+    ThemeDialog(weld::Window* pParent, model::Theme* pTheme);
     virtual ~ThemeDialog() override;
 
     DECL_LINK(DoubleClickValueSetHdl, ValueSet*, void);
-    void DoubleClickHdl();
+    DECL_LINK(SelectItem, ValueSet*, void);
+    DECL_LINK(ButtonClicked, weld::Button&, void);
+
+    std::optional<std::reference_wrapper<model::ColorSet>> const& getCurrentColorSet()
+    {
+        return moCurrentColorSet;
+    }
 };
 
 } // end svx namespace
