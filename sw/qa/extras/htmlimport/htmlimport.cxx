@@ -605,6 +605,12 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf153341)
     CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xB3, 0xFF, 0x00, 0x00), getProperty<Color>(xRun3, "CharColor"));
 }
 
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf155011)
+{
+    createSwWebDoc("tdf155011.html");
+    // Must not crash / fail asserts
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
