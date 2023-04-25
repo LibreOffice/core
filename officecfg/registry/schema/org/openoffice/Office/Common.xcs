@@ -1974,12 +1974,6 @@
         </prop>
       </group>
     </group>
-    <group oor:name="Gallery">
-      <info>
-        <desc>Specifies Gallery options.</desc>
-        <label>Gallery Options</label>
-      </info>
-    </group>
     <group oor:name="Menus">
       <info>
         <desc>Contains information about configurable menus.</desc>
