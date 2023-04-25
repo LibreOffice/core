@@ -39,9 +39,6 @@
       <prop oor:name="InfoURL" oor:type="xs:string">
         <value>${STARTCENTER_INFO_URL}</value>
       </prop>
-      <prop oor:name="TemplateRepositoryURL" oor:type="xs:string">
-        <value>${STARTCENTER_TEMPLREP_URL}</value>
-      </prop>
     </node>
     <prop oor:name="System">
       <value install:module="unx">UNIX</value>

@@ -3462,13 +3462,6 @@
           </info>
           <value/>
         </prop>
-        <prop oor:name="TemplateRepositoryURL" oor:type="xs:string" oor:nillable="false">
-          <info>
-            <desc>Contains a string specifying the URL to be browsed for
-            additional template documents</desc>
-          </info>
-          <value/>
-        </prop>
         <prop oor:name="StartCenterThumbnailsBackgroundColor" oor:type="xs:int" oor:nillable="false">
           <!-- Default 6710886 = 0x666666 as specified in tdf#90452, comment 45 -->
           <info>
