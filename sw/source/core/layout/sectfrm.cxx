@@ -522,9 +522,9 @@ void SwSectionFrame::MergeNext( SwSectionFrame* pNxt )
 |*/
 SwSectionFrame* SwSectionFrame::SplitSect( SwFrame* pFrameStartAfter, SwFrame* pFramePutAfter )
 {
-    assert(!pFrameStartAfter || pFrameStartAfter->FindSctFrame() == this);
+    assert(!pFrameStartAfter || IsAnLower(pFrameStartAfter));
     SwFrame* pSav = pFrameStartAfter ? pFrameStartAfter->FindNext() : ContainsAny();
-    if (pSav && pSav->FindSctFrame() != this)
+    if (pSav && !IsAnLower(pSav))
         pSav = nullptr; // we are at the very end
 
     // Put the content aside
