@@ -214,6 +214,8 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"svx/ui/findreplacedialog.ui"
         || rUIFile == u"svx/ui/fontworkgallerydialog.ui"
         || rUIFile == u"svx/ui/headfootformatpage.ui"
+        || rUIFile == u"svx/ui/themecoloreditdialog.ui"
+        || rUIFile == u"svx/ui/themedialog.ui"
         // uui
         || rUIFile == u"uui/ui/macrowarnmedium.ui"
         // vcl
