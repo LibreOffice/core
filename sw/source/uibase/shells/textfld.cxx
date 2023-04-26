@@ -1034,11 +1034,11 @@ FIELD_INSERT:
         auto pShell = GetShellPtr();
 
         const SvxPageItem* pPageItem;
-        GetView().GetViewFrame().GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE, pPageItem);
+        rSh.GetView().GetDispatcher().QueryState(SID_ATTR_PAGE, pPageItem);
         if (pPageItem)
             pDlg->SetPageNumberType(pPageItem->GetNumType());
 
-        pDlg->StartExecuteAsync([this, pShell, &rSh, pDlg](int nResult) {
+        pDlg->StartExecuteAsync([pShell, &rSh, pDlg](int nResult) {
             if ( nResult == RET_OK )
             {
                 auto rDoc = rSh.GetDoc();
@@ -1055,8 +1055,9 @@ FIELD_INSERT:
 
                 SvxPageItem aPageItem(SID_ATTR_PAGE);
                 aPageItem.SetNumType(pDlg->GetPageNumberType());
-                GetView().GetViewFrame().GetBindings().GetDispatcher()->ExecuteList(
-                    SID_ATTR_PAGE, SfxCallMode::RECORD, { &aPageItem });
+                rSh.GetView().GetDispatcher().ExecuteList(SID_ATTR_PAGE,
+                                                          SfxCallMode::API | SfxCallMode::SYNCHRON,
+                                                          { &aPageItem });
 
                 // Insert header/footer
                 const bool bHeader = !pDlg->GetPageNumberPosition();
