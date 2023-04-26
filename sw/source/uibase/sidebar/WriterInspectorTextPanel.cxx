@@ -359,18 +359,13 @@ static svx::sidebar::TreeNode BorderToTreeNode(const OUString& rName, const css:
     aCurNode.sNodeName = PropertyNametoRID(rName);
     aCurNode.NodeType = svx::sidebar::TreeNode::ComplexProperty;
 
-    aCurNode.children.push_back(SimplePropToTreeNode("BorderColor", css::uno::Any(aBorder.Color)));
-    aCurNode.children.push_back(
-        SimplePropToTreeNode("BorderLineWidth", css::uno::Any(aBorder.LineWidth)));
-    aCurNode.children.push_back(
-        SimplePropToTreeNode("BorderLineStyle", css::uno::Any(aBorder.LineStyle)));
-    aCurNode.children.push_back(
-        SimplePropToTreeNode("BorderLineDistance", css::uno::Any(aBorder.LineDistance)));
-    aCurNode.children.push_back(
-        SimplePropToTreeNode("BorderInnerLineWidth", css::uno::Any(aBorder.InnerLineWidth)));
-    aCurNode.children.push_back(
-        SimplePropToTreeNode("BorderOuterLineWidth", css::uno::Any(aBorder.OuterLineWidth)));
-
+    aCurNode.children
+        = { SimplePropToTreeNode("BorderColor", css::uno::Any(aBorder.Color)),
+            SimplePropToTreeNode("BorderLineWidth", css::uno::Any(aBorder.LineWidth)),
+            SimplePropToTreeNode("BorderLineStyle", css::uno::Any(aBorder.LineStyle)),
+            SimplePropToTreeNode("BorderLineDistance", css::uno::Any(aBorder.LineDistance)),
+            SimplePropToTreeNode("BorderInnerLineWidth", css::uno::Any(aBorder.InnerLineWidth)),
+            SimplePropToTreeNode("BorderOuterLineWidth", css::uno::Any(aBorder.OuterLineWidth)) };
     return aCurNode;
 }
 
