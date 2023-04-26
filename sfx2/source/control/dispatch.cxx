@@ -1346,6 +1346,13 @@ void SfxDispatcher::FlushImpl()
 
                 // Mark the moved Shell
                 aToDoCopy.push_front(SfxToDo_Impl(false, i->bDelete, false, *pPopped));
+                if (!i->bUntil)
+                {
+                    // We get here only when the requested shell was not on the stack.
+                    // I don't know how correct to pop a single random other shell and exit
+                    // in this case, but I just make sure that the previous logic is kept.
+                    break;
+                }
             }
             DBG_ASSERT( bFound, "wrong SfxShell popped" );
         }
