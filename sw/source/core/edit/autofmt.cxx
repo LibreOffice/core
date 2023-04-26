@@ -2400,6 +2400,8 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
                     // delete all blanks at beginning/end and in between
                     //JP 29.04.98: first only "all in between"
                     DelMoreLinesBlanks();
+                    // auto correct paragraphs that fail to enter state HAS_FMTCOLL
+                    AutoCorrect();
                     break;
                 }
 
@@ -2682,6 +2684,8 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
                             BuildText();
                     }
                 }
+                // force auto correct
+                AutoCorrect();
             }
             break;
 
