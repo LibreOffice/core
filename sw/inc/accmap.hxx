@@ -89,7 +89,6 @@ class SwAccessibleMap final : public ::accessibility::IAccessibleViewForwarder,
                         public ::accessibility::IAccessibleParent
                 , public std::enable_shared_from_this<SwAccessibleMap>
 {
-    mutable ::osl::Mutex maMutex;
     ::osl::Mutex maEventMutex;
     std::unique_ptr<SwAccessibleContextMap_Impl> mpFrameMap;
     std::unique_ptr<SwAccessibleShapeMap_Impl> mpShapeMap;
