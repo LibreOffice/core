@@ -3522,7 +3522,6 @@
                                         <child>
                                           <object class="GtkMenuToolButton" id="Home-SetBorderStyle">
                                             <property name="visible">True</property>
-                                            <property name="toolti_text" translatable="yes" context="CalcNotebookbar|bordertype|tooltip_text">Specify the borders of the selected cells.</property>
                                             <property name="halign">start</property>
                                             <property name="action_name">.uno:SetBorderStyle</property>
                                           </object>
@@ -3799,7 +3798,6 @@
                                     <child>
                                       <object class="GtkToolButton" id="Home-IncrementIndent">
                                         <property name="visible">True</property>
-                                        <property name="toolti_text" translatable="yes" context="CalcNotebookbar|increaseindent1|tooltip_text">Increase Indent</property>
                                         <property name="is_important">True</property>
                                         <property name="action_name">.uno:IncrementIndent</property>
                                         <property name="use_underline">True</property>
@@ -3812,7 +3810,6 @@
                                     <child>
                                       <object class="GtkToolButton" id="Home-DecrementIndent">
                                         <property name="visible">True</property>
-                                        <property name="toolti_text" translatable="yes" context="CalcNotebookbar|decreaseindent1|tooltip_text">Decrease Indent</property>
                                         <property name="is_important">True</property>
                                         <property name="action_name">.uno:DecrementIndent</property>
                                         <property name="use_underline">True</property>
@@ -6359,7 +6356,6 @@
                                 <child>
                                   <object class="GtkMenuToolButton" id="Layout-RowOperations">
                                     <property name="visible">True</property>
-                                    <property name="toolti_text" translatable="yes" context="CalcNotebookbar|objectalign|tooltip_text">Object Align</property>
                                     <property name="halign">start</property>
                                     <property name="action_name">.uno:RowOperations</property>
                                   </object>
@@ -6384,7 +6380,6 @@
                                 <child>
                                   <object class="GtkMenuToolButton" id="Layout-ColumnOperations">
                                     <property name="visible">True</property>
-                                    <property name="toolti_text" translatable="yes" context="CalcNotebookbar|objectalign|tooltip_text">Object Align</property>
                                     <property name="halign">start</property>
                                     <property name="action_name">.uno:ColumnOperations</property>
                                   </object>
@@ -6812,7 +6807,6 @@
                                 <child>
                                   <object class="GtkMenuToolButton" id="Layout-ObjectAlign">
                                     <property name="visible">True</property>
-                                    <property name="toolti_text" translatable="yes" context="CalcNotebookbar|objectalign|tooltip_text">Object Align</property>
                                     <property name="halign">start</property>
                                     <property name="action_name">.uno:ObjectAlign</property>
                                   </object>
