@@ -2701,42 +2701,6 @@
           <value>false</value>
         </prop>
       </group>
-      <group oor:name="AppWindow">
-        <info>
-          <desc>Contains settings on how the application window should be
-          displayed.</desc>
-        </info>
-        <prop oor:name="FullScreen" oor:type="xs:boolean" oor:nillable="false">
-          <info>
-            <desc>Specifies whether the application window should be opened in
-            Fullscreen mode.</desc>
-          </info>
-          <value>false</value>
-        </prop>
-        <prop oor:name="Preference" oor:type="xs:int" oor:nillable="false">
-          <info>
-            <desc>Specifies the preferred view of the application window.</desc>
-          </info>
-          <constraints>
-            <enumeration oor:value="0">
-              <info>
-                <desc>Use last setting</desc>
-              </info>
-            </enumeration>
-            <enumeration oor:value="1">
-              <info>
-                <desc>Show in task bar</desc>
-              </info>
-            </enumeration>
-            <enumeration oor:value="2">
-              <info>
-                <desc>Open in Fullscreen mode</desc>
-              </info>
-            </enumeration>
-          </constraints>
-          <value>0</value>
-        </prop>
-      </group>
       <group oor:name="Dialog">
         <info>
           <desc>Contains settings which specify how dialogs and toolbars should
