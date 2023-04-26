@@ -101,6 +101,7 @@ mkdir -p $SRC/sample-sft-fonts/adobe
 curl --no-progress-meter -S \
     -C - -o $SRC/sample-sft-fonts/adobe/AdobeVFPrototype.otf https://github.com/adobe-fonts/adobe-variable-font-prototype/releases/download/1.001/AdobeVFPrototype.otf
 zip -qr $SRC/sftfuzzer_seed_corpus.zip $SRC/sample-sft-fonts
+curl --no-progress-meter -S -C - https://storage.googleapis.com/skia-fuzzer/oss-fuzz/svg_seed_corpus.zip -o svgfuzzer_seed_corpus.zip
 curl --no-progress-meter -S \
     -C - -O https://dev-www.libreoffice.org/corpus/wmffuzzer_seed_corpus.zip \
     -C - -O https://dev-www.libreoffice.org/corpus/xbmfuzzer_seed_corpus.zip \
