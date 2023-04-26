@@ -588,7 +588,7 @@ struct PDFStructureElement
     sal_Int32                                           m_nParentElement; // index into structure vector
     sal_Int32                                           m_nFirstPageObject;
     bool                                                m_bOpenMCSeq;
-    std::list< sal_Int32 >                              m_aChildren; // indexes into structure vector
+    std::vector< sal_Int32 >                            m_aChildren; // indexes into structure vector
     std::list< PDFStructureElementKid >                 m_aKids;
     std::map<PDFWriter::StructAttribute, PDFStructureAttribute >
                                                         m_aAttributes;

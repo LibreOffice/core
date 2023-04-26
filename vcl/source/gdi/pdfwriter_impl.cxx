@@ -10728,7 +10728,7 @@ sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, 
         // silently insert structure into document again if one properly exists
         if( ! m_aStructure[ 0 ].m_aChildren.empty() )
         {
-            const std::list< sal_Int32 >& rRootChildren = m_aStructure[0].m_aChildren;
+            const std::vector< sal_Int32 >& rRootChildren = m_aStructure[0].m_aChildren;
             auto it = std::find_if(rRootChildren.begin(), rRootChildren.end(),
                 [&](sal_Int32 nElement) { return m_aStructure[ nElement ].m_eType == PDFWriter::Document; });
             if( it != rRootChildren.end() )
@@ -10889,7 +10889,7 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
     //then we need to add the containers for the kids elements
     // a list to be used for the new kid element
     std::list< PDFStructureElementKid > aNewKids;
-    std::list< sal_Int32 > aNewChildren;
+    std::vector< sal_Int32 > aNewChildren;
 
     // add Div in RoleMap, in case no one else did (TODO: is it needed? Is it dangerous?)
     OString aAliasName("Div");
@@ -10912,7 +10912,7 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
         aNewKids.emplace_back( rEleNew.m_nObject );
         aNewChildren.push_back( nNewId );
 
-        std::list< sal_Int32 >::iterator aChildEndIt( rEle.m_aChildren.begin() );
+        std::vector< sal_Int32 >::iterator aChildEndIt( rEle.m_aChildren.begin() );
         std::list< PDFStructureElementKid >::iterator aKidEndIt( rEle.m_aKids.begin() );
         advance( aChildEndIt, ncMaxPDFArraySize );
         advance( aKidEndIt, ncMaxPDFArraySize );
@@ -10921,10 +10921,11 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
                                 rEle.m_aKids,
                                 rEle.m_aKids.begin(),
                                 aKidEndIt );
-        rEleNew.m_aChildren.splice( rEleNew.m_aChildren.begin(),
-                                    rEle.m_aChildren,
+        rEleNew.m_aChildren.insert( rEleNew.m_aChildren.begin(),
                                     rEle.m_aChildren.begin(),
                                     aChildEndIt );
+        rEle.m_aChildren.erase( rEle.m_aChildren.begin(), aChildEndIt );
+
         // set the kid's new parent
         for (auto const& child : rEleNew.m_aChildren)
         {
