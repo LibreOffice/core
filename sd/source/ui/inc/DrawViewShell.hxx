@@ -398,6 +398,8 @@ protected:
 private:
     void Construct (DrawDocShell* pDocSh, PageKind ePageKind);
 
+    void ImplDestroy();
+
     /** Depending on the given request create a new page or duplicate an
         existing one.  See ViewShell::CreateOrDuplicatePage() for more
         information.

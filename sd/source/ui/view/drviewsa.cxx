@@ -133,6 +133,11 @@ DrawViewShell::DrawViewShell( ViewShellBase& rViewShellBase, vcl::Window* pParen
 
 DrawViewShell::~DrawViewShell()
 {
+    suppress_fun_call_w_exception(ImplDestroy());
+}
+
+void DrawViewShell::ImplDestroy()
+{
     SD_MOD()->GetColorConfig().RemoveListener(this);
 
     mpSelectionChangeHandler->Disconnect();
