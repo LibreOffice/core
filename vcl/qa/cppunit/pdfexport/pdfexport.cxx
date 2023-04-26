@@ -4638,6 +4638,59 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testRexportResourceItemReference)
     CPPUNIT_ASSERT(pFontWidths);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf152246)
+{
+    // Import the bugdoc and export as PDF.
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    saveAsPDF(u"content-control-rtl.docx");
+
+    // Parse the export result.
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    // Position array
+    constexpr double aPos[5][4] = { { 56.699, 707.701, 131.401, 721.499 },
+                                    { 198.499, 707.701, 273.201, 721.499 },
+                                    { 303.349, 680.101, 378.051, 693.899 },
+                                    { 480.599, 680.101, 555.301, 693.899 },
+                                    { 56.699, 652.501, 131.401, 666.299 } };
+
+    // Get page annotations.
+    auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"));
+    CPPUNIT_ASSERT(pAnnots);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), pAnnots->GetElements().size());
+    for (sal_Int32 i = 0; i < 5; ++i)
+    {
+        auto pAnnotReference
+            = dynamic_cast<vcl::filter::PDFReferenceElement*>(pAnnots->GetElements()[i]);
+        CPPUNIT_ASSERT(pAnnotReference);
+        vcl::filter::PDFObjectElement* pAnnot = pAnnotReference->LookupObject();
+        CPPUNIT_ASSERT(pAnnot);
+        CPPUNIT_ASSERT_EQUAL(
+            OString("Annot"),
+            static_cast<vcl::filter::PDFNameElement*>(pAnnot->Lookup("Type"))->GetValue());
+        CPPUNIT_ASSERT_EQUAL(
+            OString("Widget"),
+            static_cast<vcl::filter::PDFNameElement*>(pAnnot->Lookup("Subtype"))->GetValue());
+
+        auto pRect = dynamic_cast<vcl::filter::PDFArrayElement*>(pAnnot->Lookup("Rect"));
+        CPPUNIT_ASSERT(pRect);
+        const auto& rElements = pRect->GetElements();
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), rElements.size());
+        for (sal_Int32 nIdx = 0; nIdx < 4; ++nIdx)
+        {
+            const auto* pNumElement = dynamic_cast<vcl::filter::PDFNumberElement*>(rElements[nIdx]);
+            CPPUNIT_ASSERT(pNumElement);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aPos[i][nIdx], pNumElement->GetValue(), 1e-6);
+        }
+    }
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
