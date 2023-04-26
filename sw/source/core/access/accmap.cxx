@@ -89,10 +89,10 @@ public:
     typedef const SwFrame *                                               key_type;
     typedef uno::WeakReference < XAccessible >                          mapped_type;
     typedef std::pair<const key_type,mapped_type>                       value_type;
-    typedef std::map<key_type, mapped_type>::iterator iterator;
-    typedef std::map<key_type, mapped_type>::const_iterator const_iterator;
+    typedef std::unordered_map<key_type, mapped_type>::iterator iterator;
+    typedef std::unordered_map<key_type, mapped_type>::const_iterator const_iterator;
 private:
-    std::map <key_type, mapped_type> maMap;
+    std::unordered_map <key_type, mapped_type> maMap;
 public:
 
 #if OSL_DEBUG_LEVEL > 0
