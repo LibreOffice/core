@@ -707,6 +707,36 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyInTextSection)
     // section frame, which is broken.
     createSwDoc("floattable-in-text-section.docx");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyTableRowKeep)
+{
+    // Given a document with a floating table, 2.5 rows on the first page:
+    createSwDoc("floattable-table-row-keep.docx");
+
+    // When laying out that document:
+    calcLayout();
+
+    // Then make sure that the expected amount of rows is on the first page:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    const SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
+    auto pPage1Fly = dynamic_cast<SwFlyAtContentFrame*>(rPage1Objs[0]);
+    CPPUNIT_ASSERT(pPage1Fly);
+    SwFrame* pTab1 = pPage1Fly->GetLower();
+    SwFrame* pRow1 = pTab1->GetLower();
+    CPPUNIT_ASSERT(pRow1);
+    SwFrame* pRow2 = pRow1->GetNext();
+    // Without the accompanying fix in place, this test would have failed, the table on the first
+    // page only had 1 row, due to TableRowKeep kicking in for floating tables, which is incorrect.
+    CPPUNIT_ASSERT(pRow2);
+    SwFrame* pRow3 = pRow2->GetNext();
+    CPPUNIT_ASSERT(pRow3);
+    auto pCell3 = dynamic_cast<SwCellFrame*>(pRow3->GetLower());
+    CPPUNIT_ASSERT(pCell3->GetFollowCell());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

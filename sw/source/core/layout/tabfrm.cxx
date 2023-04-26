@@ -1976,7 +1976,15 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
 
     // Indicates that two individual rows may keep together, based on the keep
     // attribute set at the first paragraph in the first cell.
-    const bool bTableRowKeep = !bDontSplit && GetFormat()->GetDoc()->GetDocumentSettingManager().get(DocumentSettingId::TABLE_ROW_KEEP);
+    bool bTableRowKeep = !bDontSplit && GetFormat()->GetDoc()->GetDocumentSettingManager().get(DocumentSettingId::TABLE_ROW_KEEP);
+    if (SwFlyFrame* pFly = FindFlyFrame())
+    {
+        if (pFly->IsFlySplitAllowed())
+        {
+            // Ignore the above text node -> row inheritance for floating tables.
+            bTableRowKeep = false;
+        }
+    }
 
     // The Magic Move: Used for the table row keep feature.
     // If only the last row of the table wants to keep (implicitly by setting
