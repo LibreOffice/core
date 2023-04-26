@@ -151,6 +151,7 @@ LibreOffice.VC.VC.opendb
 *.pro.user
 *.pro.user.*
 .qtc_clangd
+.cache
 
 # doxygen output
 /docs
@@ -158,9 +159,10 @@ LibreOffice.VC.VC.opendb
 # make dump-deps output
 /lo.png
 
-# gdb config
+# gdb specific
 /.gdbinit
 /.gdb_history
+gdbtrace.log
 
 # Codelite IDE specific
 *.project
