@@ -1231,10 +1231,21 @@ ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >::Mak
     return SortedCacheIndexer(rCells, nStartRow, nEndRow, sortedCache);
 }
 
-static bool CanBeUsedForSorterCache(ScDocument& rDoc, const ScQueryParam& rParam,
-    SCTAB nTab, const ScFormulaCell* cell, const ScComplexRefData* refData,
-    ScInterpreterContext& context)
+static bool CanBeUsedForSorterCache(ScDocument& /*rDoc*/, const ScQueryParam& /*rParam*/,
+    SCTAB /*nTab*/, const ScFormulaCell* /*cell*/, const ScComplexRefData* /*refData*/,
+    ScInterpreterContext& /*context*/)
 {
+#if 1
+    /* TODO: tdf#151958 broken by string query of binary search on sorted
+     * cache, use the direct query instead for releases and fix SortedCache
+     * implementation after. Not only COUNTIF() is broken, but also COUNTIFS(),
+     * and maybe lcl_LookupQuery() for VLOOKUP() etc. as well. Just disable
+     * this for now.
+     * Can't just return false because below would be unreachable code. Can't
+     * just #if/#else/#endif either because parameters would be unused. Crap
+     * this and comment out parameter names. */
+    return false;
+#else
     if(!rParam.GetEntry(0).bDoQuery || rParam.GetEntry(1).bDoQuery
         || rParam.GetEntry(0).GetQueryItems().size() != 1 )
         return false;
@@ -1290,6 +1301,7 @@ static bool CanBeUsedForSorterCache(ScDocument& rDoc, const ScQueryParam& rParam
             return false;
     }
     return true;
+#endif
 }
 
 // Generic query implementation.
