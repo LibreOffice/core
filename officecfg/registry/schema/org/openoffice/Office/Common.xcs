@@ -92,21 +92,6 @@
         </info>
       </prop>
     </group>
-    <group oor:name="DialogSize">
-      <info>
-        <desc>Contains the width and height of the dialog size.</desc>
-      </info>
-      <prop oor:name="Height" oor:type="xs:int">
-        <info>
-          <desc>Contains the height of the dialog [UNIT=pixel].</desc>
-        </info>
-      </prop>
-      <prop oor:name="Width" oor:type="xs:int">
-        <info>
-          <desc>Contains the width of the dialog [UNIT=pixel].</desc>
-        </info>
-      </prop>
-    </group>
     <group oor:name="Font">
       <info>
         <desc>Describes the characteristics of a font.</desc>
