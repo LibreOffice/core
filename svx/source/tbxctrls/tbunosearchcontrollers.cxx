@@ -268,9 +268,12 @@ void FindTextFieldControl::SetTextToSelected_Impl()
         {
             css::uno::Any aUserItem = aDlgOpt.GetUserItem("UserItem");
             aUserItem >>= aString;
-            // prepopulate with last search word (fdo#84256)
-            m_xWidget->set_entry_text(aString);
         }
+        else if (get_count() > 0)
+            aString = m_xWidget->get_text(0);
+
+        // prepopulate with last search word (fdo#84256)
+        m_xWidget->set_entry_text(aString);
     }
 }
 
