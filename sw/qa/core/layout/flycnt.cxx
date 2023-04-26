@@ -737,6 +737,31 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyTableRowKeep)
     auto pCell3 = dynamic_cast<SwCellFrame*>(pRow3->GetLower());
     CPPUNIT_ASSERT(pCell3->GetFollowCell());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyDeletedAnchor)
+{
+    // Given a document with a floating table that spans over 3 pages:
+    createSwDoc("floattable-deleted-anchor.docx");
+
+    // When laying out that document:
+    calcLayout();
+
+    // Then make sure that there are 3 anchors for the 3 pages:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    SwFrame* pBody1 = pPage1->GetLower();
+    CPPUNIT_ASSERT(pBody1);
+    auto pAnchor1 = dynamic_cast<SwTextFrame*>(pBody1->GetLower()->GetNext());
+    CPPUNIT_ASSERT(pAnchor1);
+    SwTextFrame* pAnchor2 = pAnchor1->GetFollow();
+    CPPUNIT_ASSERT(pAnchor2);
+    SwTextFrame* pAnchor3 = pAnchor2->GetFollow();
+    // Without the accompanying fix in place, this test would have failed, the fly frame on the 3rd
+    // page was anchored to a text frame on the 2nd page, leading to a negative frame height.
+    CPPUNIT_ASSERT(pAnchor3);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
