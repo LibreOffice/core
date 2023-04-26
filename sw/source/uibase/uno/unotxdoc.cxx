@@ -3417,8 +3417,10 @@ OString SwXTextDocument::getViewRenderState()
                 aState.append('P');
             if (pVOpt->IsOnlineSpell())
                 aState.append('S');
-            if (pVOpt->GetThemeName() == u"COLOR_SCHEME_LIBREOFFICE_DARK")
-                aState.append('D');
+            aState.append(';');
+
+            OString aThemeName = OUStringToOString(pVOpt->GetThemeName(), RTL_TEXTENCODING_UTF8);
+            aState.append(aThemeName);
         }
     }
     return aState.makeStringAndClear();
