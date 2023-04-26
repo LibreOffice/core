@@ -7868,26 +7868,6 @@ static void lo_destroy(LibreOfficeKit* pThis)
     SAL_INFO("lok", "LO Destroy Done");
 }
 
-#ifdef IOS
-
-// Used by the unmaintained LibreOfficeLight app. Once that has been retired, get rid of this, too.
-
-__attribute__((visibility("default")))
-void temporaryHackToInvokeCallbackHandlers(LibreOfficeKitDocument* pThis)
-{
-    SolarMutexGuard aGuard;
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
-
-    int nOrigViewId = doc_getView(pThis);
-
-    if (nOrigViewId >= 0 && pDocument->mpCallbackFlushHandlers[nOrigViewId])
-    {
-        pDocument->mpCallbackFlushHandlers[nOrigViewId]->Invoke();
-    }
-}
-
-#endif
-
 } // extern "C"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
