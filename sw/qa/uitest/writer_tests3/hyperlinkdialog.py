@@ -91,6 +91,20 @@ class HyperlinkDialog(UITestCase):
             xedit.executeAction("SELECT", mkPropertyValues({"START_POS": "0", "END_POS": "29"}))
             self.assertEqual(get_state_as_dict(xedit)["SelectedText"], "http://www.libreoffice.org:80")
 
+    def test_tdf90496(self):
+        with self.ui_test.create_doc_in_start_center("writer"):
+            with self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog", close_button="cancel") as xDialog:
+                # Select a random tab to check the preselection in the hyperlink dialog
+                xTab = xDialog.getChild("tabcontrol")
+                select_pos(xTab, "1")
+
+            with self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog", close_button="cancel") as xDialog:
+                xTab = xDialog.getChild("tabcontrol")
+                # Without the fix in place, this test would have failed with
+                # AssertionError: '1' != '0'
+                # i.e. the last used tab in the hyperlink dialog was not remembered
+                self.assertEqual("1", get_state_as_dict(xTab)["CurrPagePos"])
+
 
     def test_tdf141166(self):
         # Skip this test for --with-help=html and --with-help=online, as that would fail with a
