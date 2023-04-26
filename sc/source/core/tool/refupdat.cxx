@@ -291,8 +291,6 @@ ScRefUpdateRes ScRefUpdate::Update( const ScDocument* pDoc, UpdateRefMode eUpdat
                 eRet = UR_INVALID;
                 theTab2 = theTab1;
             }
-            else if (bCut2 && theTab2 == 0)
-                eRet = UR_INVALID;
             else if ( bCut1 || bCut2 )
                 eRet = UR_UPDATED;
             if ( bExp )
