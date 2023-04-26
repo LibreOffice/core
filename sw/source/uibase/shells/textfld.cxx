@@ -37,6 +37,7 @@
 #include <svx/hlnkitem.hxx>
 #include <svx/svxdlg.hxx>
 #include <osl/diagnose.h>
+#include <fmthdft.hxx>
 #include <fmtinfmt.hxx>
 #include <fldwrap.hxx>
 #include <redline.hxx>
@@ -1047,24 +1048,27 @@ FIELD_INSERT:
                 rSh.SwCursorShell::Push();
                 rDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT_PAGE_NUMBER, nullptr);
 
-                // Insert header/footer
-                bool bFooter = (pDlg->GetPageNumberPosition() == 1);
-                sal_uInt16 nPageNumberPosition = bFooter ?
-                    FN_INSERT_PAGEFOOTER : FN_INSERT_PAGEHEADER;
-                SfxBoolItem aItem(FN_PARAM_1, true);
+                const size_t nPageDescIndex = rSh.GetCurPageDesc();
+                const SwPageDesc& rDesc = rSh.GetPageDesc(nPageDescIndex);
+                const bool bHeaderAlreadyOn = rDesc.GetMaster().GetHeader().IsActive();
+                const bool bFooterAlreadyOn = rDesc.GetMaster().GetFooter().IsActive();
 
                 SvxPageItem aPageItem(SID_ATTR_PAGE);
                 aPageItem.SetNumType(pDlg->GetPageNumberType());
                 GetView().GetViewFrame().GetBindings().GetDispatcher()->ExecuteList(
                     SID_ATTR_PAGE, SfxCallMode::RECORD, { &aPageItem });
 
+                // Insert header/footer
+                const bool bHeader = !pDlg->GetPageNumberPosition();
+                if (bHeader && !bHeaderAlreadyOn)
+                    rSh.ChangeHeaderOrFooter(rDesc.GetName(), bHeader, /*On=*/true, /*Warn=*/false);
+                else if (!bHeader && !bFooterAlreadyOn)
+                    rSh.ChangeHeaderOrFooter(rDesc.GetName(), false, /*On=*/true, /*Warn=*/false);
 
-
-                rSh.GetView().GetDispatcher().ExecuteList(
-                    nPageNumberPosition,
-                    SfxCallMode::API | SfxCallMode::SYNCHRON,
-                    {&aItem}
-                );
+                if (bHeader)
+                    rSh.GotoHeaderText();
+                else
+                    rSh.GotoFooterText();
 
                 SwTextNode* pTextNode = rSh.GetCursor()->GetPoint()->GetNode().GetTextNode();
 
@@ -1072,13 +1076,13 @@ FIELD_INSERT:
                 if (pTextNode && !pTextNode->GetText().isEmpty())
                 {
                     rDoc->getIDocumentContentOperations().SplitNode(*rSh.GetCursor()->GetPoint(), false);
-                }
 
-                // Go back to start of header/footer
-                if (bFooter)
-                    rSh.GotoFooterText();
-                else
-                    rSh.GotoHeaderText();
+                    // Go back to start of header/footer
+                    if (bHeader)
+                        rSh.GotoHeaderText();
+                    else
+                        rSh.GotoFooterText();
+                }
 
                 // Set alignment for the new line
                 switch (pDlg->GetPageNumberAlignment())
