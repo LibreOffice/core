@@ -1,20 +1,20 @@
 --- configure
 +++ configure
-@@ -21506,7 +21468,7 @@
+@@ -21637,7 +21637,7 @@
      char a;
      union { long long x; sem_t y; } b;
    };
--  exit((int)&((struct s*)0)->b);
-+  exit((int)&((struct s*)1024)->b - 1024);
+-  return (int)&((struct s*)0)->b;
++  return (int)&((struct s*)1024)->b - 1024;
  }
  _ACEOF
  if ac_fn_c_try_run "$LINENO"; then :
-@@ -21541,7 +21503,7 @@
+@@ -21672,7 +21672,7 @@
      char a;
      double b;
    };
--  exit((int)&((struct s*)0)->b);
-+  exit((int)&((struct s*)1024)->b - 1024);
+-  return (int)&((struct s*)0)->b;
++  return (int)&((struct s*)1024)->b - 1024;
  }
  _ACEOF
  if ac_fn_c_try_run "$LINENO"; then :
@@ -86,15 +86,6 @@
  			return *this;
  		}
  		StringType& assign(const_pointer s)
---- src/common/common.h
-+++ src/common/common.h
-@@ -1002,6 +1002,5 @@
- }
- 
- #undef UCHAR_TYPE
--#define UCHAR_TYPE uint16_t
- 
- #endif /* COMMON_COMMON_H */
 --- src/common/unicode_util.cpp
 +++ src/common/unicode_util.cpp
 @@ -187,7 +187,7 @@

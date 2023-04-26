@@ -1,6 +1,6 @@
 --- builds/posix/Makefile.in
 +++ builds/posix/Makefile.in
-@@ -323,8 +323,8 @@
+@@ -364,8 +364,8 @@
  
  metadata.fdb:	$(RUN_ISQL) $(SRC_ROOT)/dbs/metadata.sql
  	-$(RM) $@
@@ -11,16 +11,16 @@
  	$(CHMOD) 0444 $@
  
  $(HELP_FDB):	help.fdb
-@@ -333,7 +333,7 @@
+@@ -374,7 +374,7 @@
  	$(CHMOD) 0444 $@
  
  help.fdb:	$(BLD_ROOT)/misc/help.gbak
--	$(RUN_GBAK) -MODE read_only -R $< $@
-+	$(LIBO_TUNNEL_LIBRARY_PATH) $(RUN_GBAK) -MODE read_only -R $< $@
+-	$(RUN_GBAK) -MODE read_only -replace $< $@
++	$(LIBO_TUNNEL_LIBRARY_PATH) $(RUN_GBAK) -MODE read_only -replace $< $@
  	$(CHMOD) 0444 $@
  
  $(SECURITY_FDB):	security.fdb
-@@ -343,18 +343,18 @@
+@@ -384,18 +384,18 @@
  security.fdb:	$(SRC_ROOT)/dbs/security.sql
  	-$(RM) $@
  	-$(RM) $(SECURITY_TMP)
@@ -46,7 +46,7 @@
  	$(TOUCH) $@
  
  
-@@ -560,7 +560,7 @@
+@@ -603,7 +603,7 @@
  message_file:	$(FIREBIRD_MSG)
  
  $(FIREBIRD_MSG):	$(BUILD_FILE) msg.timestamp

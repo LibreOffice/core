@@ -47,9 +47,9 @@ diff -ur builds/posix/make.defaults builds/posix/make.defaults
  # Clear out dependancies files created by the gcc compiler
  # since when .o and other files are deleted the dependant
 diff -ur builds/posix/make.rules builds/posix/make.rules
---- builds/posix/make.rules	2016-07-07 13:56:13.036235166 +0200
-+++ builds/posix/make.rules	2016-07-07 14:31:16.116291485 +0200
-@@ -92,21 +92,21 @@
+--- builds/posix/make.rules	2023-11-11 16:29:34.391837300 +0900
++++ builds/posix/make.rules	2023-11-11 17:08:33.694764600 +0900
+@@ -85,24 +85,24 @@
  	$(LIBO_TUNNEL_LIBRARY_PATH) $(GPRE_CURRENT) $(GPRE_FLAGS) $(firstword $<) $@
  
  
@@ -62,6 +62,10 @@ diff -ur builds/posix/make.rules builds/posix/make.rules
  
 -$(OBJ)/%.o: $(SRC_ROOT)/%.c
 +$(OBJ)/%.$(OBJ_EXT): $(SRC_ROOT)/%.c
+ 	$(CC) $(WCFLAGS) -c $(firstword $<) -o $@
+ 
+-$(OBJ)/%.o: $(SRC_ROOT)/%.m
++$(OBJ)/%.$(OBJ_EXT): $(SRC_ROOT)/%.m
  	$(CC) $(WCFLAGS) -c $(firstword $<) -o $@
  
 -$(OBJ)/%.o: $(OBJ)/%.cpp
@@ -77,15 +81,15 @@ diff -ur builds/posix/make.rules builds/posix/make.rules
  	$(CC) $(WCFLAGS) -c $(firstword $<) -o $@
  
  .SUFFIXES: .epp .e
---- builds/posix/make.shared.variables.orig	2020-11-12 19:36:29.773409900 +0100
-+++ builds/posix/make.shared.variables	2020-11-12 19:37:14.976503300 +0100
+--- builds/posix/make.shared.variables.orig	2023-08-03 22:46:32.000000000 +0900
++++ builds/posix/make.shared.variables	2023-11-11 17:11:03.453261500 +0900
 @@ -1,5 +1,5 @@
  # Helper functions
--doObjects= $(patsubst %.y,%.o,$(patsubst %.epp,%.o,$(patsubst %.c,%.o,$(1:.cpp=.o))))
-+doObjects= $(patsubst %.y,%.$(OBJ_EXT),$(patsubst %.epp,%.$(OBJ_EXT),$(patsubst %.c,%.$(OBJ_EXT),$(1:.cpp=.$(OBJ_EXT)))))
+-doObjects= $(patsubst %.m,%.o,$(patsubst %.y,%.o,$(patsubst %.epp,%.o,$(patsubst %.c,%.o,$(1:.cpp=.o)))))
++doObjects= $(patsubst %.m,%.$(OBJ_EXT),$(patsubst %.y,%.$(OBJ_EXT),$(patsubst %.epp,%.$(OBJ_EXT),$(patsubst %.c,%.$(OBJ_EXT),$(1:.cpp=.$(OBJ_EXT))))))
  makeObjects= $(addprefix $(OBJ)/$(patsubst ../%,%,$(1))/,$(call doObjects,$2))
  dirFiles= $(notdir $(wildcard ../src/$(1)/*.cpp)) $(notdir $(wildcard ../src/$(1)/*.c)) \
- 		  $(notdir $(wildcard ../src/$(1)/*.epp)) $(notdir $(wildcard ../src/$(1)/*.y))
+ 		  $(notdir $(wildcard ../src/$(1)/*.epp)) $(notdir $(wildcard ../src/$(1)/*.y)) \
 --- src/include/gen/autoconfig.h.in.orig	2020-11-12 20:52:49.835722200 +0100
 +++ src/include/gen/autoconfig.h.in	2020-11-12 20:53:18.148311100 +0100
 @@ -773,7 +773,9 @@
@@ -163,8 +167,8 @@ diff -ur builds/posix/make.rules builds/posix/make.rules
 +symtab.obj: defs.h
 +verbose.obj: defs.h
 +warshall.obj: defs.h
---- extern/cloop/Makefile.orig	2020-11-13 10:59:53.282923700 +0100
-+++ extern/cloop/Makefile	2020-11-13 11:00:24.267079900 +0100
+--- extern/cloop/Makefile.orig	2023-11-11 15:59:43.477031600 +0900
++++ extern/cloop/Makefile	2023-11-11 17:22:56.976163500 +0900
 @@ -24,8 +24,8 @@
  SRCS_C := $(foreach sdir,$(SRC_DIRS),$(wildcard $(sdir)/*.c))
  SRCS_CPP := $(foreach sdir,$(SRC_DIRS),$(wildcard $(sdir)/*.cpp))
@@ -189,7 +193,7 @@ diff -ur builds/posix/make.rules builds/posix/make.rules
  	$(CXX) -c $$(CXX_FLAGS) $$< -o $$@
  endef
  
-@@ -75,11 +75,11 @@
+@@ -79,11 +79,11 @@
  -include $(addsuffix .d,$(basename $(OBJS_CPP)))
  
  $(BIN_DIR)/cloop$(EXE_EXT): \
@@ -206,7 +210,7 @@ diff -ur builds/posix/make.rules builds/posix/make.rules
  	| $(BIN_DIR)
  
  	$(LD) $^ -o $@
-@@ -105,24 +105,24 @@
+@@ -110,24 +110,24 @@
  $(SRC_DIR)/tests/test1/CppTest.cpp: $(SRC_DIR)/tests/test1/CalcCppApi.h
  
  $(BIN_DIR)/test1-c$(SHRLIB_EXT): \
@@ -250,9 +254,9 @@ diff -ur builds/posix/make.rules builds/posix/make.rules
  #ifdef _MSC_VER // don't know if this is useful for MinGW
  #define NOATOM
 diff -ur builds/posix/Makefile.in.examples builds/posix/Makefile.in.examples
---- builds/posix/Makefile.in.examples	2016-07-07 13:56:13.048235166 +0200
-+++ builds/posix/Makefile.in.examples	2016-07-07 14:37:36.904301682 +0200
-@@ -65,9 +65,9 @@
+--- builds/posix/Makefile.in.examples	2023-08-03 22:46:32.000000000 +0900
++++ builds/posix/Makefile.in.examples	2023-11-11 17:50:22.666278400 +0900
+@@ -67,9 +67,9 @@
  EXAMPLES_SRC=	$(ROOT)/examples
  
  
@@ -264,7 +268,7 @@ diff -ur builds/posix/Makefile.in.examples builds/posix/Makefile.in.examples
  
  INPUT_Files   =	empddl.sql empdml.sql indexoff.sql indexon.sql \
  		job.inp lang.inp proj.inp qtr.inp
-@@ -172,3 +175,6 @@
+@@ -173,3 +173,6 @@
  
  $(EXAMPLES_DEST)/%.h: $(EXAMPLES_SRC)/common/%.h
  	$(CP) $^ $@

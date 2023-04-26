@@ -1,0 +1,180 @@
+From f1d64f5eb4569fe722f312d84a3c084c2255e03f Mon Sep 17 00:00:00 2001
+From: Taichi Haradaguchi <20001722@ymail.ne.jp>
+Date: Wed, 22 Nov 2023 21:34:00 +0900
+Subject: [PATCH] Revert "Backported fix for #7122: Invalid state of mapping
+ cache after replacement of database"
+
+This reverts commit 585b2d133a3891b58b7aeb4ddd3ccd124168abf0.
+---
+ src/include/consts_pub.h          |  1 -
+ src/include/gen/Firebird.pas      |  1 -
+ src/jrd/Mapping.h                 |  2 +-
+ src/jrd/jrd.cpp                   | 14 --------------
+ src/jrd/shut.cpp                  |  7 -------
+ src/utilities/nbackup/nbackup.cpp | 14 +-------------
+ 6 files changed, 2 insertions(+), 37 deletions(-)
+
+diff --git a/src/include/consts_pub.h b/src/include/consts_pub.h
+index 769a3e372b..6107e0975a 100644
+--- a/src/include/consts_pub.h
++++ b/src/include/consts_pub.h
+@@ -123,7 +123,6 @@
+ #define isc_dpb_nolinger				  88
+ #define isc_dpb_reset_icu				  89
+ #define isc_dpb_map_attach                90
+-#define isc_dpb_clear_map                 96
+ 
+ /**************************************************/
+ /* clumplet tags used inside isc_dpb_address_path */
+diff --git a/src/include/gen/Firebird.pas b/src/include/gen/Firebird.pas
+index a891103b53..66be146060 100644
+--- a/src/include/gen/Firebird.pas
++++ b/src/include/gen/Firebird.pas
+@@ -3233,7 +3233,6 @@ const
+ 	isc_dpb_nolinger = byte(88);
+ 	isc_dpb_reset_icu = byte(89);
+ 	isc_dpb_map_attach = byte(90);
+-	isc_dpb_clear_map = byte(96);
+ 	isc_dpb_address = byte(1);
+ 	isc_dpb_addr_protocol = byte(1);
+ 	isc_dpb_addr_endpoint = byte(2);
+diff --git a/src/jrd/Mapping.h b/src/jrd/Mapping.h
+index b5e068d5a0..3ab1c70c92 100644
+--- a/src/jrd/Mapping.h
++++ b/src/jrd/Mapping.h
+@@ -44,7 +44,7 @@ bool mapUser(Firebird::string& name, Firebird::string& trusted_role, Firebird::s
+ void clearMap(const char* dbName);
+ void shutdownMappingIpc();
+ 
+-class GlobalMappingScan : public VirtualTableScan
++class GlobalMappingScan: public VirtualTableScan
+ {
+ public:
+ 	GlobalMappingScan(CompilerScratch* csb, const Firebird::string& alias,
+diff --git a/src/jrd/jrd.cpp b/src/jrd/jrd.cpp
+index 43be48c5a6..4200780aa6 100644
+--- a/src/jrd/jrd.cpp
++++ b/src/jrd/jrd.cpp
+@@ -958,7 +958,6 @@ public:
+ 	bool	dpb_reset_icu;
+ 	bool	dpb_map_attach;
+ 	ULONG	dpb_remote_flags;
+-	bool	dpb_clear_map;
+ 
+ 	// here begin compound objects
+ 	// for constructor to work properly dpb_user_name
+@@ -1473,12 +1472,6 @@ JAttachment* JProvider::internalAttach(CheckStatusWrapper* user_status, const ch
+ 			if (ISC_check_if_remote(expanded_name, true))
+ 				ERR_post(Arg::Gds(isc_unavailable));
+ 
+-			// Clear old mapping cache data on request.
+-			// Unfortunately have to do it w/o access rights check - to check access rights engine
+-			// needs correct mapping which sometimes can't be guaranteed before cleaning cache.
+-			if (options.dpb_clear_map)
+-				clearMap(expanded_name.c_str());
+-
+ 			// Check for correct credentials supplied
+ 			if (existingId)
+ 				userId = *existingId;
+@@ -2726,9 +2719,6 @@ JAttachment* JProvider::createDatabase(CheckStatusWrapper* user_status, const ch
+ 
+ 			dbb->dbb_tip_cache = FB_NEW_POOL(*dbb->dbb_permanent) TipCache(dbb);
+ 
+-			// Clear old mapping cache data (if present)
+-			clearMap(dbb->dbb_filename.c_str());
+-
+ 			// Initialize backup difference subsystem. This must be done before WAL and shadowing
+ 			// is enabled because nbackup it is a lower level subsystem
+ 			dbb->dbb_backup_manager = FB_NEW_POOL(*dbb->dbb_permanent) BackupManager(tdbb,
+@@ -6043,10 +6033,6 @@ void DatabaseOptions::get(const UCHAR* dpb, USHORT dpb_length, bool& invalid_cli
+ 			getString(rdr, dpb_config);
+ 			break;
+ 
+-		case isc_dpb_clear_map:
+-			dpb_clear_map = rdr.getBoolean();
+-			break;
+-
+ 		default:
+ 			break;
+ 		}
+diff --git a/src/jrd/shut.cpp b/src/jrd/shut.cpp
+index acfd5e136d..9783e2cab3 100644
+--- a/src/jrd/shut.cpp
++++ b/src/jrd/shut.cpp
+@@ -26,7 +26,6 @@
+ #include "../jrd/scl.h"
+ #include "../jrd/nbak.h"
+ #include "../jrd/ods.h"
+-#include "../jrd/Mapping.h"
+ #include "../jrd/cch_proto.h"
+ #include "../jrd/cmp_proto.h"
+ #include "../jrd/err_proto.h"
+@@ -223,9 +222,6 @@ void SHUT_database(thread_db* tdbb, SSHORT flag, SSHORT delay, Sync* guard)
+ 		check_backup_state(tdbb);
+ 	}
+ 
+-	// Clear old mapping cache data (if present)
+-	clearMap(dbb->dbb_filename.c_str());
+-
+ 	attachment->att_flags |= ATT_shutdown_manager;
+ 
+ 	// Database is being shutdown. First notification gives shutdown type and delay in seconds.
+@@ -409,9 +405,6 @@ void SHUT_online(thread_db* tdbb, SSHORT flag, Sync* guard)
+ 		check_backup_state(tdbb);
+ 	}
+ 
+-	// Clear old mapping cache data (if present)
+-	clearMap(dbb->dbb_filename.c_str());
+-
+ 	// Reset shutdown flag on database header page
+ 
+ 	WIN window(HEADER_PAGE_NUMBER);
+diff --git a/src/utilities/nbackup/nbackup.cpp b/src/utilities/nbackup/nbackup.cpp
+index e5384bf67a..4703079d67 100644
+--- a/src/utilities/nbackup/nbackup.cpp
++++ b/src/utilities/nbackup/nbackup.cpp
+@@ -281,7 +281,7 @@ public:
+ 		username(_username), role(_role), password(_password),
+ 		run_db_triggers(_run_db_triggers), direct_io(_direct_io),
+ 		dbase(0), backup(0), decompress(_deco), childId(0), db_size_pages(0),
+-		m_odsNumber(0), m_silent(false), m_printed(false), m_flash_map(false)
++		m_odsNumber(0), m_silent(false), m_printed(false)
+ 	{
+ 		// Recognition of local prefix allows to work with
+ 		// database using TCP/IP loopback while reading file locally.
+@@ -347,7 +347,6 @@ private:
+ 	USHORT m_odsNumber;
+ 	bool m_silent;		// are we already handling an exception?
+ 	bool m_printed;		// pr_error() was called to print status vector
+-	bool m_flash_map;	// clear mapping cache on attach
+ 
+ 	// IO functions
+ 	FB_SIZE_T read_file(FILE_HANDLE &file, void *buffer, FB_SIZE_T bufsize);
+@@ -954,9 +953,6 @@ void NBackup::attach_database()
+ 	if (!run_db_triggers)
+ 		dpb.insertByte(isc_dpb_no_db_triggers, 1);
+ 
+-	if (m_flash_map)
+-		dpb.insertByte(isc_dpb_clear_map, 1);
+-
+ 	if (m_silent)
+ 	{
+ 		ISC_STATUS_ARRAY temp;
+@@ -1578,14 +1574,6 @@ void NBackup::restore_database(const BackupFiles& files)
+ 				{
+ 					close_database();
+ 					fixup_database();
+-
+-					m_silent = true;
+-					m_flash_map = true;
+-					run_db_triggers = false;
+-
+-					attach_database();
+-					detach_database();
+-
+ 					delete[] page_buffer;
+ 					return;
+ 				}
+-- 
+2.42.1
+
