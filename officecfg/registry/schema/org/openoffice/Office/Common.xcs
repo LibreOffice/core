@@ -5129,13 +5129,6 @@
           be open at the same time. NIL will be interpreted as infinite!</desc>
         </info>
       </prop>
-      <prop oor:name="EmojiFont" oor:type="xs:string" oor:nillable="false">
-        <!-- UIHints: Emoji Control -->
-        <info>
-          <desc>Special font for rendering of emojis</desc>
-        </info>
-        <value>Segoe UI Emoji,Apple Color Emoji,Noto Color Emoji</value>
-      </prop>
       <prop oor:name="FontsUseWinMetrics" oor:type="oor:string-list" oor:nillable="false">
         <info>
           <desc>
