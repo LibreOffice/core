@@ -666,21 +666,6 @@
         </info>
       </prop>
     </group>
-    <group oor:name="NameCounter">
-      <info>
-        <desc>Stores an association between a numeric value and a name.</desc>
-      </info>
-      <prop oor:name="Name" oor:type="xs:string">
-        <info>
-          <desc>Specifies a name that is associated with a counter.</desc>
-        </info>
-      </prop>
-      <prop oor:name="Counter" oor:type="xs:int">
-        <info>
-          <desc>Specifies a number that is associated with a name.</desc>
-        </info>
-      </prop>
-    </group>
     <group oor:name="TrustedAuthor">
       <info>
         <desc>All Certificate information needed to handle and identify the
