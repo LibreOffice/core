@@ -990,6 +990,9 @@ public:
     SCROW       LastNonFilteredRow(SCROW nStartRow, SCROW nEndRow) const;
     SCROW       CountNonFilteredRows(SCROW nStartRow, SCROW nEndRow) const;
 
+    Color GetCellBackgroundColor(ScAddress aPos) const;
+    Color GetCellTextColor(ScAddress aPos) const;
+
     bool IsManualRowHeight(SCROW nRow) const;
 
     bool HasUniformRowHeight( SCROW nRow1, SCROW nRow2 ) const;

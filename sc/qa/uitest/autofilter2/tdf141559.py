@@ -38,6 +38,7 @@ class tdf141559(UITestCase):
             xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
             xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
             xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
             xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
             xSubFloatWindow = self.xUITest.getFloatWindow()
             xSubMenu = xSubFloatWindow.getChild("menu")
@@ -76,9 +77,10 @@ class tdf141559(UITestCase):
 
             # check last item: 'Clear Filter'
             nLastIdx = int(get_state_as_dict(xMenu)['Children']) - 1
-            self.assertEqual(5, nLastIdx)
+            self.assertEqual(6, nLastIdx)
             self.assertEqual('Clear Filter', get_state_as_dict(xMenu.getChild(str(nLastIdx)))['Text'])
 
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
             xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
             xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
             xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))

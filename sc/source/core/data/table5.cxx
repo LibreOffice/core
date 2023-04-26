@@ -37,9 +37,13 @@
 #include <bcaslot.hxx>
 #include <compressedarray.hxx>
 #include <userdat.hxx>
+#include <conditio.hxx>
+#include <colorscale.hxx>
 
 #include <com/sun/star/sheet/TablePageBreakData.hpp>
 
+#include <editeng/brushitem.hxx>
+#include <editeng/colritem.hxx>
 #include <osl/diagnose.h>
 
 #include <algorithm>
@@ -1041,6 +1045,65 @@ SCROW ScTable::CountNonFilteredRows(SCROW nStartRow, SCROW nEndRow) const
         nRow = aData.mnRow2 + 1;
     }
     return nCount;
+}
+
+Color ScTable::GetCellBackgroundColor(ScAddress aPos) const
+{
+    Color backgroundColor;
+    bool bHasConditionalBackgroundColor = false;
+    // Check background color from cond. formatting
+    const ScPatternAttr* pPattern = GetDoc().GetPattern(aPos.Col(), aPos.Row(), aPos.Tab());
+    if (pPattern)
+    {
+        if (!pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData().empty())
+        {
+            const SfxItemSet* pCondSet = GetDoc().GetCondResult(aPos.Col(), aPos.Row(), aPos.Tab());
+            const SvxBrushItem* pBackgroundColor = &pPattern->GetItem(ATTR_BACKGROUND, pCondSet);
+            backgroundColor = pBackgroundColor->GetColor();
+            bHasConditionalBackgroundColor = true;
+        }
+    }
+
+    // Color scale needs a different handling
+    ScConditionalFormat* pCondFormat = GetDoc().GetCondFormat(aPos.Col(), aPos.Row(), aPos.Tab());
+    if (pCondFormat)
+    {
+        for (size_t i = 0; i < pCondFormat->size(); i++)
+        {
+            auto aEntry = pCondFormat->GetEntry(i);
+            if (aEntry->GetType() == ScFormatEntry::Type::Colorscale)
+            {
+                const ScColorScaleFormat* pColFormat
+                    = static_cast<const ScColorScaleFormat*>(aEntry);
+                std::optional<Color> oColor = pColFormat->GetColor(aPos);
+                if (oColor)
+                {
+                    backgroundColor = oColor.value();
+                    bHasConditionalBackgroundColor = true;
+                }
+            }
+        }
+    }
+    return bHasConditionalBackgroundColor ? backgroundColor
+                                          : GetDoc().GetAttr(aPos, ATTR_BACKGROUND)->GetColor();
+}
+
+Color ScTable::GetCellTextColor(ScAddress aPos) const
+{
+    // Check text & background color from cond. formatting
+    const ScPatternAttr* pPattern = GetDoc().GetPattern(aPos.Col(), aPos.Row(), aPos.Tab());
+    if (pPattern)
+    {
+        if (!pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData().empty())
+        {
+            const SfxItemSet* pCondSet = GetDoc().GetCondResult(aPos.Col(), aPos.Row(), aPos.Tab());
+            const SvxColorItem* pColor = &pPattern->GetItem(ATTR_FONT_COLOR, pCondSet);
+            return pColor->GetValue();
+        }
+    }
+
+    const SvxColorItem* pColor = GetDoc().GetAttr(aPos, ATTR_FONT_COLOR);
+    return pColor->GetValue();
 }
 
 bool ScTable::IsManualRowHeight(SCROW nRow) const

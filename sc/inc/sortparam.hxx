@@ -24,17 +24,26 @@
 #include <vector>
 
 #include "address.hxx"
+#include <editeng/colritem.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include "scdllapi.h"
 
 struct ScSubTotalParam;
 struct ScQueryParam;
 
+enum class ScColorSortMode {
+    None,
+    TextColor,
+    BackgroundColor
+};
+
 struct ScSortKeyState
 {
     SCCOLROW nField;
     bool     bDoSort;
     bool     bAscending;
+    ScColorSortMode aColorSortMode;
+    Color    aColorSortColor;
 };
 
 /** Struct to hold non-data extended area, used with

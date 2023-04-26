@@ -43,6 +43,7 @@
 #define SCSTR_FILTER_BACKGROUND_COLOR_COND          NC_("STANDARDFILTERDIALOG_COND", "Background color")
 #define SCSTR_FILTER_NO_FILL                        NC_("SCSTR_FILTER_NO_FILL", "No Fill")
 #define SCSTR_FILTER_AUTOMATIC_COLOR                NC_("SCSTR_FILTER_AUTOMATIC_COLOR", "Automatic")
+#define SCSTR_SORT_COLOR                            NC_("SCSTR_SORT_COLOR", "Sort by Color")
 #define SCSTR_NONAME                                NC_("SCSTR_NONAME", "unnamed")
 #define SCSTR_INSERT_RTL                            NC_("SCSTR_INSERT_RTL", "Shift cells left")
 // "%1 is replaced to column letter, such as 'Column A'"

@@ -1531,6 +1531,37 @@ short ScTable::CompareCell(
 
     CellType eType1 = rCell1.getType(), eType2 = rCell2.getType();
 
+    // tdf#95520 Sort by color - selected color goes on top, everything else according to compare function
+    if (aSortParam.maKeyState[nSort].aColorSortMode == ScColorSortMode::TextColor
+        || aSortParam.maKeyState[nSort].aColorSortMode == ScColorSortMode::BackgroundColor)
+    {
+        ScAddress aPos1(nCell1Col, nCell1Row, GetTab());
+        ScAddress aPos2(nCell2Col, nCell2Row, GetTab());
+        Color aTheChosenColor = aSortParam.maKeyState[nSort].aColorSortColor;
+        Color aColor1;
+        Color aColor2;
+        if (aSortParam.maKeyState[nSort].aColorSortMode == ScColorSortMode::TextColor)
+        {
+            aColor1 = GetCellTextColor(aPos1);
+            aColor2 = GetCellTextColor(aPos2);
+        }
+        else
+        {
+            aColor1 = GetCellBackgroundColor(aPos1);
+            aColor2 = GetCellBackgroundColor(aPos2);
+        }
+        if (aTheChosenColor == aColor1)
+            return -1;
+        if (aTheChosenColor == aColor2)
+            return 1;
+        if (aColor1 == aColor2)
+            return 0;
+        if (aColor1 > aColor2)
+            return 1;
+        if (aColor1 < aColor2)
+            return -1;
+    }
+
     if (!rCell1.isEmpty())
     {
         if (!rCell2.isEmpty())

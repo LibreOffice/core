@@ -392,7 +392,7 @@ sal_uInt16 ScTabPageSortFields::GetFieldSelPos( SCCOLROW nField )
 void ScTabPageSortFields::SetLastSortKey( sal_uInt16 nItem )
 {
     // Extend local SortParam copy
-    const ScSortKeyState atempKeyState = { 0, false, true };
+    const ScSortKeyState atempKeyState = { 0, false, true, ScColorSortMode::None, Color() };
     aSortData.maKeyState.push_back( atempKeyState );
 
     // Add Sort Key Item

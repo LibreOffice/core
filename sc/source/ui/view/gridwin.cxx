@@ -643,11 +643,75 @@ public:
     }
 };
 
+class AutoFilterSortColorAction : public AutoFilterSubMenuAction
+{
+private:
+    Color m_aColor;
+    ScViewData& m_rViewData;
+
+public:
+    AutoFilterSortColorAction(ScGridWindow* p, ScListSubMenuControl* pSubMenu, ScGridWindow::AutoFilterMode eMode, const Color& rColor, ScViewData& rViewData)
+        : AutoFilterSubMenuAction(p, pSubMenu, eMode)
+        , m_aColor(rColor)
+        , m_rViewData(rViewData)
+    {
+    }
+
+    virtual bool execute() override
+    {
+        const AutoFilterData* pData =
+            static_cast<const AutoFilterData*>(m_pSubMenu->getExtendedData());
+
+        if (!pData)
+            return false;
+
+        ScDBData* pDBData = pData->mpData;
+        if (!pDBData)
+            return false;
+
+        const ScAddress& rPos = pData->maPos;
+        SCCOL nCol = rPos.Col();
+        ScSortParam aSortParam;
+        pDBData->GetSortParam(aSortParam);
+        if (nCol < aSortParam.nCol1 || nCol > aSortParam.nCol2)
+            // out of bound
+            return false;
+
+        bool bHasHeader = pDBData->HasHeader();
+
+        aSortParam.bHasHeader = bHasHeader;
+        aSortParam.bByRow = true;
+        aSortParam.bCaseSens = false;
+        aSortParam.bNaturalSort = false;
+        aSortParam.aDataAreaExtras.mbCellNotes = false;
+        aSortParam.aDataAreaExtras.mbCellDrawObjects = true;
+        aSortParam.aDataAreaExtras.mbCellFormats = true;
+        aSortParam.bInplace = true;
+        aSortParam.maKeyState[0].bDoSort = true;
+        aSortParam.maKeyState[0].nField = nCol;
+        aSortParam.maKeyState[0].bAscending = true;
+        aSortParam.maKeyState[0].aColorSortMode = meMode == ScGridWindow::AutoFilterMode::TextColor
+                                                      ? ScColorSortMode::TextColor
+                                                      : ScColorSortMode::BackgroundColor;
+        aSortParam.maKeyState[0].aColorSortColor = m_aColor;
+
+        for (size_t i = 1; i < aSortParam.GetSortKeyCount(); ++i)
+            aSortParam.maKeyState[i].bDoSort = false;
+
+        m_rViewData.GetViewShell()->UISort(aSortParam);
+
+        return true;
+    }
+};
+
 class AutoFilterColorPopupStartAction : public AutoFilterSubMenuAction
 {
+private:
+    bool mbIsFilter;
 public:
-    AutoFilterColorPopupStartAction(ScGridWindow* p, ScListSubMenuControl* pSubMenu)
-        : AutoFilterSubMenuAction(p, pSubMenu, ScGridWindow::AutoFilterMode::Normal)
+    AutoFilterColorPopupStartAction(ScGridWindow* p, ScListSubMenuControl* pSubMenu, bool bIsFilter)
+        : AutoFilterSubMenuAction(p, pSubMenu, ScGridWindow::AutoFilterMode::Normal),
+        mbIsFilter(bIsFilter)
     {
     }
 
@@ -748,8 +812,18 @@ public:
                     OUString sText = eMode == ScGridWindow::AutoFilterMode::TextColor
                                          ? ScResId(SCSTR_FILTER_AUTOMATIC_COLOR)
                                          : ScResId(SCSTR_FILTER_NO_FILL);
-                    m_pSubMenu->addMenuColorItem(sText, bActive, *xDev, nMenu,
-                                                 new AutoFilterColorAction(mpWindow, m_pSubMenu, eMode, rColor));
+                    if (mbIsFilter)
+                    {
+                        m_pSubMenu->addMenuColorItem(
+                            sText, bActive, *xDev, nMenu,
+                            new AutoFilterColorAction(mpWindow, m_pSubMenu, eMode, rColor));
+                    }
+                    else
+                    {
+                        m_pSubMenu->addMenuColorItem(
+                            sText, bActive, *xDev, nMenu,
+                            new AutoFilterSortColorAction(mpWindow, m_pSubMenu, eMode, rColor, rViewData));
+                    }
                 }
                 else
                 {
@@ -769,8 +843,19 @@ public:
                     if (!bFoundColorName)
                         sName = "#" + rColor.AsRGBHexString().toAsciiUpperCase();
 
-                    m_pSubMenu->addMenuColorItem(sName, bActive, *xDev, nMenu,
-                                                 new AutoFilterColorAction(mpWindow, m_pSubMenu, eMode, rColor));
+                    if (mbIsFilter)
+                    {
+                        m_pSubMenu->addMenuColorItem(
+                            sName, bActive, *xDev, nMenu,
+                            new AutoFilterColorAction(mpWindow, m_pSubMenu, eMode, rColor));
+                    }
+                    else
+                    {
+                        m_pSubMenu->addMenuColorItem(
+                            sName, bActive, *xDev, nMenu,
+                            new AutoFilterSortColorAction(mpWindow, m_pSubMenu, eMode, rColor,
+                                                          rViewData));
+                    }
                 }
             }
 
@@ -993,8 +1078,10 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
         ScResId(STR_MENU_SORT_DESC),
         new AutoFilterAction(this, AutoFilterMode::SortDescending));
     mpAutoFilterPopup->addSeparator();
+    if (ScListSubMenuControl* pSubMenu = mpAutoFilterPopup->addSubMenuItem(ScResId(SCSTR_SORT_COLOR), true, true))
+        pSubMenu->setPopupStartAction(new AutoFilterColorPopupStartAction(this, pSubMenu, false));
     if (ScListSubMenuControl* pSubMenu = mpAutoFilterPopup->addSubMenuItem(ScResId(SCSTR_FILTER_COLOR), true, true))
-        pSubMenu->setPopupStartAction(new AutoFilterColorPopupStartAction(this, pSubMenu));
+        pSubMenu->setPopupStartAction(new AutoFilterColorPopupStartAction(this, pSubMenu, true));
     if (ScListSubMenuControl* pSubMenu = mpAutoFilterPopup->addSubMenuItem(ScResId(SCSTR_FILTER_CONDITION), true, false))
     {
         pSubMenu->addMenuItem(
@@ -1086,6 +1173,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
             aSortParam.maKeyState[0].bDoSort = true;
             aSortParam.maKeyState[0].nField = nCol;
             aSortParam.maKeyState[0].bAscending = (eMode == AutoFilterMode::SortAscending);
+            aSortParam.maKeyState[0].aColorSortMode = ScColorSortMode::None;
 
             for (size_t i = 1; i < aSortParam.GetSortKeyCount(); ++i)
                 aSortParam.maKeyState[i].bDoSort = false;
