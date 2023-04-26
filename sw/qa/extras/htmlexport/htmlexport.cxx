@@ -714,50 +714,60 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfOleData)
     verify();
 }
 
-DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOleImg, "reqif-ole-img.xhtml")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfOleImg)
 {
-    uno::Reference<text::XTextEmbeddedObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xObjects(xSupplier->getEmbeddedObjects(),
-                                                     uno::UNO_QUERY);
-    uno::Reference<document::XEmbeddedObjectSupplier2> xObject(xObjects->getByIndex(0),
-                                                               uno::UNO_QUERY);
-    // This failed, OLE object had no replacement image.
-    // And then it also failed when the export lost the replacement image.
-    uno::Reference<graphic::XGraphic> xGraphic = xObject->getReplacementGraphic();
-    // This failed when query and fragment of file:// URLs were not ignored.
-    CPPUNIT_ASSERT(xGraphic.is());
+    auto verify = [this]() {
+        uno::Reference<text::XTextEmbeddedObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xObjects(xSupplier->getEmbeddedObjects(),
+                                                         uno::UNO_QUERY);
+        uno::Reference<document::XEmbeddedObjectSupplier2> xObject(xObjects->getByIndex(0),
+                                                                   uno::UNO_QUERY);
+        // This failed, OLE object had no replacement image.
+        // And then it also failed when the export lost the replacement image.
+        uno::Reference<graphic::XGraphic> xGraphic = xObject->getReplacementGraphic();
+        // This failed when query and fragment of file:// URLs were not ignored.
+        CPPUNIT_ASSERT(xGraphic.is());
 
-    uno::Reference<drawing::XShape> xShape(xObject, uno::UNO_QUERY);
-    OutputDevice* pDevice = Application::GetDefaultDevice();
-    Size aPixel(64, 64);
-    // Expected to be 1693.
-    Size aLogic(pDevice->PixelToLogic(aPixel, MapMode(MapUnit::Map100thMM)));
-    awt::Size aSize = xShape->getSize();
-    // This was only 1247, size was not set explicitly.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(aLogic.getWidth()), aSize.Width);
+        uno::Reference<drawing::XShape> xShape(xObject, uno::UNO_QUERY);
+        OutputDevice* pDevice = Application::GetDefaultDevice();
+        Size aPixel(64, 64);
+        // Expected to be 1693.
+        Size aLogic(pDevice->PixelToLogic(aPixel, MapMode(MapUnit::Map100thMM)));
+        awt::Size aSize = xShape->getSize();
+        // This was only 1247, size was not set explicitly.
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(aLogic.getWidth()), aSize.Width);
 
-    // Check mime/media types.
-    CPPUNIT_ASSERT_EQUAL(OUString("image/png"), getProperty<OUString>(xGraphic, "MimeType"));
+        // Check mime/media types.
+        CPPUNIT_ASSERT_EQUAL(OUString("image/png"), getProperty<OUString>(xGraphic, "MimeType"));
 
-    uno::Reference<beans::XPropertySet> xObjectProps(xObject, uno::UNO_QUERY);
-    uno::Reference<io::XActiveDataStreamer> xStreamProvider(
-        xObjectProps->getPropertyValue("EmbeddedObject"), uno::UNO_QUERY);
-    uno::Reference<io::XSeekable> xStream(xStreamProvider->getStream(), uno::UNO_QUERY);
-    // This was empty when either import or export handling was missing.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(37888), xStream->getLength());
+        uno::Reference<beans::XPropertySet> xObjectProps(xObject, uno::UNO_QUERY);
+        uno::Reference<io::XActiveDataStreamer> xStreamProvider(
+            xObjectProps->getPropertyValue("EmbeddedObject"), uno::UNO_QUERY);
+        uno::Reference<io::XSeekable> xStream(xStreamProvider->getStream(), uno::UNO_QUERY);
+        // This was empty when either import or export handling was missing.
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(37888), xStream->getLength());
 
-    // Check alternate text (it was empty, for export the 'alt' attribute was used).
-    CPPUNIT_ASSERT_EQUAL(OUString("OLE Object"), getProperty<OUString>(xObject, "Title").trim());
+        // Check alternate text (it was empty, for export the 'alt' attribute was used).
+        CPPUNIT_ASSERT_EQUAL(OUString("OLE Object"),
+                             getProperty<OUString>(xObject, "Title").trim());
 
-    if (!isExported())
-        return;
+        if (!isExported())
+            return;
 
-    // "type" attribute was missing for the inner <object> element.
-    SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
-    CPPUNIT_ASSERT(pStream);
-    sal_uInt64 nLength = pStream->TellEnd();
-    OString aStream(read_uInt8s_ToOString(*pStream, nLength));
-    CPPUNIT_ASSERT(aStream.indexOf("type=\"image/png\"") != -1);
+        // "type" attribute was missing for the inner <object> element.
+        SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
+        CPPUNIT_ASSERT(pStream);
+        sal_uInt64 nLength = pStream->TellEnd();
+        OString aStream(read_uInt8s_ToOString(*pStream, nLength));
+        CPPUNIT_ASSERT(aStream.indexOf("type=\"image/png\"") != -1);
+    };
+    setImportFilterOptions("xhtmlns=reqif-xhtml");
+    setImportFilterName("HTML (StarWriter)");
+    createSwDoc("reqif-ole-img.xhtml");
+    verify();
+    setFilterOptions("xhtmlns=reqif-xhtml");
+    reload(mpFilter, "reqif-ole-img.xhtml");
+    verify();
 }
 
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIfPngImg)
