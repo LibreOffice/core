@@ -30,6 +30,7 @@ SwPageNumberDlg::SwPageNumberDlg(weld::Window* pParent)
     , m_xCancel(m_xBuilder->weld_button("cancel"))
     , m_xPageNumberPosition(m_xBuilder->weld_combo_box("positionCombo"))
     , m_xPageNumberAlignment(m_xBuilder->weld_combo_box("alignmentCombo"))
+    , m_xMirrorOnEvenPages(m_xBuilder->weld_check_button("mirrorCheckbox"))
     , m_xPageNumberTypeLB(new SvxPageNumberListBox(m_xBuilder->weld_combo_box("numfmtlb")))
     , m_xPreviewImage(m_xBuilder->weld_image("previewImage"))
     , m_aPageNumberPosition(1) // bottom
@@ -41,6 +42,8 @@ SwPageNumberDlg::SwPageNumberDlg(weld::Window* pParent)
     m_xPageNumberAlignment->connect_changed(LINK(this, SwPageNumberDlg, AlignmentSelectHdl));
     m_xPageNumberPosition->set_active(m_aPageNumberPosition);
     m_xPageNumberAlignment->set_active(m_aPageNumberAlignment);
+    m_xMirrorOnEvenPages->set_sensitive(false);
+    m_xMirrorOnEvenPages->set_state(TRISTATE_TRUE);
     SvxNumOptionsTabPageHelper::GetI18nNumbering(m_xPageNumberTypeLB->get_widget(),
                                                  ::std::numeric_limits<sal_uInt16>::max());
     m_xPageNumberTypeLB->connect_changed(LINK(this, SwPageNumberDlg, NumberTypeSelectHdl));
@@ -64,11 +67,22 @@ IMPL_LINK_NOARG(SwPageNumberDlg, AlignmentSelectHdl, weld::ComboBox&, void)
 {
     m_aPageNumberAlignment = m_xPageNumberAlignment->get_active();
     updateImage();
+
+    if (m_aPageNumberAlignment == 1) // centered
+        m_xMirrorOnEvenPages->set_sensitive(false);
+    else
+        m_xMirrorOnEvenPages->set_sensitive(true);
 }
 
 IMPL_LINK_NOARG(SwPageNumberDlg, NumberTypeSelectHdl, weld::ComboBox&, void)
 {
     m_nPageNumberType = m_xPageNumberTypeLB->get_active_id();
+}
+
+bool SwPageNumberDlg::GetMirrorOnEvenPages()
+{
+    return m_xMirrorOnEvenPages->get_sensitive()
+           && m_xMirrorOnEvenPages->get_state() == TRISTATE_TRUE;
 }
 
 void SwPageNumberDlg::SetPageNumberType(SvxNumType nSet)

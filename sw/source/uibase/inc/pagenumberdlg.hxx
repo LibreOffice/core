@@ -31,6 +31,7 @@ class SwPageNumberDlg : public SfxDialogController
     std::unique_ptr<weld::Button> m_xCancel;
     std::unique_ptr<weld::ComboBox> m_xPageNumberPosition;
     std::unique_ptr<weld::ComboBox> m_xPageNumberAlignment;
+    std::unique_ptr<weld::CheckButton> m_xMirrorOnEvenPages;
     std::unique_ptr<SvxPageNumberListBox> m_xPageNumberTypeLB;
 
     std::unique_ptr<weld::Image> m_xPreviewImage;
@@ -51,6 +52,7 @@ public:
     SwPageNumberDlg(weld::Window* pParent);
     int GetPageNumberPosition() const { return m_aPageNumberPosition; }
     int GetPageNumberAlignment() const { return m_aPageNumberAlignment; }
+    bool GetMirrorOnEvenPages();
     SvxNumType GetPageNumberType() const { return m_nPageNumberType; }
     void SetPageNumberType(SvxNumType nSet);
 };

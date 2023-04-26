@@ -189,7 +189,7 @@ bool SwCursorShell::GotoFooterText()
     return nullptr != pFrame;
 }
 
-bool SwCursorShell::SetCursorInHdFt( size_t nDescNo, bool bInHeader )
+bool SwCursorShell::SetCursorInHdFt(size_t nDescNo, bool bInHeader, bool bEven, bool bFirst)
 {
     SwDoc *pMyDoc = GetDoc();
     const SwPageDesc* pDesc = nullptr;
@@ -216,14 +216,17 @@ bool SwCursorShell::SetCursorInHdFt( size_t nDescNo, bool bInHeader )
     const SwFormatContent* pCnt = nullptr;
     if( bInHeader )
     {
-        // mirrored pages? ignore for now
-        const SwFormatHeader& rHd = pDesc->GetMaster().GetHeader();
+        const SwFormatHeader& rHd
+            = bEven ? bFirst ? pDesc->GetFirstLeft().GetHeader() : pDesc->GetLeft().GetHeader()
+                    : bFirst ? pDesc->GetFirstMaster().GetHeader() : pDesc->GetMaster().GetHeader();
         if( rHd.GetHeaderFormat() )
             pCnt = &rHd.GetHeaderFormat()->GetContent();
     }
     else
     {
-        const SwFormatFooter& rFt = pDesc->GetMaster().GetFooter();
+        const SwFormatFooter& rFt
+            = bEven ? bFirst ? pDesc->GetFirstLeft().GetFooter() : pDesc->GetLeft().GetFooter()
+                    : bFirst ? pDesc->GetFirstMaster().GetFooter() : pDesc->GetMaster().GetFooter();
         if( rFt.GetFooterFormat() )
             pCnt = &rFt.GetFooterFormat()->GetContent();
     }

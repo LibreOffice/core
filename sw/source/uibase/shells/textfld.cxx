@@ -1049,6 +1049,8 @@ FIELD_INSERT:
                 const SwPageDesc& rDesc = rSh.GetPageDesc(nPageDescIndex);
                 const bool bHeaderAlreadyOn = rDesc.GetMaster().GetHeader().IsActive();
                 const bool bFooterAlreadyOn = rDesc.GetMaster().GetFooter().IsActive();
+                const bool bIsSinglePage = rDesc.GetFollow() != &rDesc;
+                const size_t nMirrorPagesNeeded = rDesc.IsFirstShared() ? 2 : 3;
 
                 SvxPageItem aPageItem(SID_ATTR_PAGE);
                 aPageItem.SetNumType(pDlg->GetPageNumberType());
@@ -1063,10 +1065,76 @@ FIELD_INSERT:
                 else if (!bHeader && !bFooterAlreadyOn)
                     rSh.ChangeHeaderOrFooter(rDesc.GetName(), false, /*On=*/true, /*Warn=*/false);
 
-                if (bHeader)
-                    rSh.GotoHeaderText();
+                const bool bCreateMirror = !bIsSinglePage && pDlg->GetMirrorOnEvenPages()
+                    && nMirrorPagesNeeded <= rSh.GetPageCnt();
+                if (bCreateMirror)
+                {
+                    // Use different left/right header/footer
+                    if ((bHeader && rDesc.IsHeaderShared()) || (!bHeader && rDesc.IsFooterShared()))
+                    {
+                        SwPageDesc rNewDesc(rSh.GetPageDesc(nPageDescIndex));
+
+                        if (bHeader)
+                            rNewDesc.ChgHeaderShare(false);
+                        else
+                            rNewDesc.ChgFooterShare(false);
+
+                        rSh.ChgPageDesc(nPageDescIndex, rNewDesc);
+                    }
+                }
+
+                // Go to the header or footer insert position
+                bool bInHF = false;
+                bool bSkipMirror = true;
+                size_t nEvenPage = 0;
+                if (bCreateMirror)
+                {
+                    // There are enough pages that there probably is a valid odd page.
+                    // However, that is not guaranteed: perhaps the page style switched,
+                    // or a blank page was forced, or some other complexity.
+                    bInHF = rSh.SetCursorInHdFt(nPageDescIndex, bHeader, /*Even=*/true);
+                    if (bInHF)
+                    {
+                        // Remember valid EVEN page. Mirror it if also a valid ODD or FIRST page
+                        nEvenPage = rSh.GetVirtPageNum();
+                        assert (nEvenPage && "couldn't find page number. Use a bool instead");
+                    }
+
+                    bInHF = rSh.SetCursorInHdFt(nPageDescIndex, bHeader, /*Even=*/false);
+                    if (bInHF && nEvenPage)
+                    {
+                        // Even though the cursor may be on a FIRST page,
+                        // the user requested mirrored pages, and we have both ODD and EVEN,
+                        // so set page numbers on these two pages, and leave FIRST alone.
+                        bSkipMirror = false;
+                    }
+                    if (!bInHF)
+                    {
+                        // no ODD page, look for FIRST page
+                        bInHF = rSh.SetCursorInHdFt(nPageDescIndex, bHeader, false, /*First=*/true);
+                        if (bInHF && nEvenPage)
+                        {
+                            // Unlikely but valid situation: EVEN and FIRST pages, but no ODD page.
+                            // In this case, the first header gets the specified page number
+                            // and the even header is mirrored, with an empty odd header,
+                            // as the user (somewhat) requested.
+                            bSkipMirror = false;
+                        }
+                    }
+                    assert((bInHF || nEvenPage) && "Impossible - why couldn't the move happen?");
+                    assert((bInHF || nEvenPage == rSh.GetVirtPageNum()) && "Unexpected move");
+                }
                 else
-                    rSh.GotoFooterText();
+                {
+                    // CurrFrame is lost when mirror is created. Goto*Text crashes if no CurrFrame
+                    assert(rSh.GetCurrFrame()); // not guaranteed, but normally assumed
+
+                    if (bHeader)
+                        bInHF = rSh.GotoHeaderText();
+                    else
+                        bInHF = rSh.GotoFooterText();
+                    assert(bInHF && "shouldn't have a problem going to text when no mirroring");
+                }
 
                 SwTextNode* pTextNode = rSh.GetCursor()->GetPoint()->GetNode().GetTextNode();
 
@@ -1110,6 +1178,35 @@ FIELD_INSERT:
                 SwInsertField_Data aData(SwFieldTypesEnum::PageNumber, 0,
                             OUString(), OUString(), SVX_NUM_PAGEDESC);
                 aMgr.InsertField(aData);
+
+                // Mirror on the even pages
+                if (!bSkipMirror && bCreateMirror
+                    && rSh.SetCursorInHdFt(nPageDescIndex, bHeader, /*Even=*/true))
+                {
+                    assert(nEvenPage && "what? no even page and yet we got here?");
+                    pTextNode = rSh.GetCursor()->GetPoint()->GetNode().GetTextNode();
+
+                    // Insert new line if there is already text in header/footer
+                    if (pTextNode && !pTextNode->GetText().isEmpty())
+                    {
+                        rDoc->getIDocumentContentOperations().SplitNode(
+                            *rSh.GetCursor()->GetPoint(), false);
+                        // Go back to start of header/footer
+                        rSh.SetCursorInHdFt(nPageDescIndex, bHeader, /*Even=*/true);
+                    }
+
+                    // mirror the adjustment
+                    assert(pDlg->GetPageNumberAlignment() != 1 && "cannot have Center and bMirror");
+                    SvxAdjust eAdjust = SvxAdjust::Left;
+                    if (!pDlg->GetPageNumberAlignment())
+                        eAdjust = SvxAdjust::Right;
+                    SvxAdjustItem aMirrorAdjustItem(eAdjust, RES_PARATR_ADJUST);
+                    rSh.SetAttrItem(aMirrorAdjustItem);
+
+                    // Insert page number
+                    SwFieldMgr aEvenMgr(pShell);
+                    aEvenMgr.InsertField(aData);
+                }
 
                 rSh.SwCursorShell::Pop(SwCursorShell::PopMode::DeleteCurrent);
                 rSh.EndAllAction();

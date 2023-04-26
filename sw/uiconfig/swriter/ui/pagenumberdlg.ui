@@ -153,6 +153,26 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkCheckButton" id="mirrorCheckbox">
+                    <property name="label" translatable="yes" context="numberingoptionspage|mirrorCheckbox">Mirror on even pages</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="mirrorCheckbox-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|mirrorCheckbox">Creates separate left/right pages with mirrored page number placements</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">4</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkLabel" id="numfmtLabel">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -173,7 +193,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">4</property>
+                    <property name="position">5</property>
                   </packing>
                 </child>
                 <child>
@@ -192,7 +212,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">5</property>
+                    <property name="position">6</property>
                   </packing>
                 </child>
               </object>

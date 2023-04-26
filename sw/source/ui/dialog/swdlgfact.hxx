@@ -165,6 +165,7 @@ public:
     virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
     virtual int GetPageNumberPosition() const override;
     virtual int GetPageNumberAlignment() const override;
+    bool GetMirrorOnEvenPages() const override;
     SvxNumType GetPageNumberType() const override;
     void SetPageNumberType(SvxNumType nSet) override;
 };
