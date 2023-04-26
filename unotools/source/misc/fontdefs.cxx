@@ -18,6 +18,7 @@
  */
 
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/fontcfg.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -509,11 +510,10 @@ std::u16string_view GetNextFontToken( std::u16string_view rTokenStr, sal_Int32& 
 
 static bool ImplIsFontToken( std::u16string_view rName, std::u16string_view rToken )
 {
-    OUString      aTempName;
     sal_Int32  nIndex = 0;
     do
     {
-        aTempName = GetNextFontToken( rName, nIndex );
+        std::u16string_view aTempName = GetNextFontToken( rName, nIndex );
         if ( rToken == aTempName )
             return true;
     }
@@ -572,9 +572,9 @@ OUString GetSubsFontName( std::u16string_view rName, SubsFontFlags nFlags )
 bool IsOpenSymbol(std::u16string_view rFontName)
 {
     sal_Int32 nIndex = 0;
-    OUString sFamilyNm(GetNextFontToken(rFontName, nIndex));
-    return (sFamilyNm.equalsIgnoreAsciiCase("starsymbol") ||
-        sFamilyNm.equalsIgnoreAsciiCase("opensymbol"));
+    std::u16string_view sFamilyNm(GetNextFontToken(rFontName, nIndex));
+    return (o3tl::equalsIgnoreAsciiCase(sFamilyNm, "starsymbol") ||
+        o3tl::equalsIgnoreAsciiCase(sFamilyNm, "opensymbol"));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
