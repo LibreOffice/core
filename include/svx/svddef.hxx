@@ -180,269 +180,268 @@ class SvXMLAttrContainerItem;
 class SvxFrameDirectionItem;
 
 constexpr sal_uInt16 SDRATTR_START (XATTR_START);                    /* 1000   */
-                                                                                                             /* Pool V4*/ /* Pool V3*/ /* Pool V2*/
-constexpr sal_uInt16                   SDRATTR_SHADOW_FIRST       (XATTR_END + 1);                           /* 1067   */ /* 1067   */ /* 1050   */ /* Pool V1: 1036 */
-constexpr TypedWhichId<SdrOnOffItem>   SDRATTR_SHADOW             (SDRATTR_SHADOW_FIRST+ 0);                 /*   1067 */ /*   1067 */ /*   1050 */
-constexpr TypedWhichId<XColorItem>     SDRATTR_SHADOWCOLOR        (SDRATTR_SHADOW_FIRST+ 1);                 /*   1068 */ /*   1068 */ /*   1051 */
-constexpr TypedWhichId<SdrMetricItem>  SDRATTR_SHADOWXDIST        (SDRATTR_SHADOW_FIRST+ 2);                 /*   1069 */ /*   1069 */ /*   1052 */
-constexpr TypedWhichId<SdrMetricItem>  SDRATTR_SHADOWYDIST        (SDRATTR_SHADOW_FIRST+ 3);                 /*   1070 */ /*   1070 */ /*   1053 */
-constexpr TypedWhichId<SdrPercentItem> SDRATTR_SHADOWTRANSPARENCE (SDRATTR_SHADOW_FIRST+ 4);                 /*   1071 */ /*   1071 */ /*   1054 */ /* Pool V2 */
-constexpr TypedWhichId<SfxVoidItem>    SDRATTR_SHADOW3D           (SDRATTR_SHADOW_FIRST+ 5);                 /*   1072 */ /*   1072 */ /*   1055 */ /* Pool V2 */
-constexpr TypedWhichId<SfxVoidItem>    SDRATTR_SHADOWPERSP        (SDRATTR_SHADOW_FIRST+ 6);                 /*   1073 */ /*   1073 */ /*   1056 */ /* Pool V2 */
-constexpr TypedWhichId<SdrMetricItem>  SDRATTR_SHADOWSIZEX        (SDRATTR_SHADOW_FIRST+ 7);
-constexpr TypedWhichId<SdrMetricItem>  SDRATTR_SHADOWSIZEY        (SDRATTR_SHADOW_FIRST+ 8);
-constexpr TypedWhichId<SdrMetricItem>  SDRATTR_SHADOWBLUR         (SDRATTR_SHADOW_FIRST+ 9);
-constexpr TypedWhichId<SvxRectangleAlignmentItem> SDRATTR_SHADOWALIGNMENT(SDRATTR_SHADOW_FIRST + 10);
-constexpr sal_uInt16                   SDRATTR_SHADOW_LAST        (SDRATTR_SHADOWALIGNMENT);                 /* 1078   */ /* 1078   */ /* 1061   */ /* Pool V1: 1039 */
+constexpr sal_uInt16                   SDRATTR_SHADOW_FIRST       (XATTR_END + 1);                           // 1048
+constexpr TypedWhichId<SdrOnOffItem>   SDRATTR_SHADOW             (SDRATTR_SHADOW_FIRST+ 0);                 // 1048
+constexpr TypedWhichId<XColorItem>     SDRATTR_SHADOWCOLOR        (SDRATTR_SHADOW_FIRST+ 1);                 // 1049
+constexpr TypedWhichId<SdrMetricItem>  SDRATTR_SHADOWXDIST        (SDRATTR_SHADOW_FIRST+ 2);                 // 1050
+constexpr TypedWhichId<SdrMetricItem>  SDRATTR_SHADOWYDIST        (SDRATTR_SHADOW_FIRST+ 3);                 // 1051
+constexpr TypedWhichId<SdrPercentItem> SDRATTR_SHADOWTRANSPARENCE (SDRATTR_SHADOW_FIRST+ 4);                 // 1052
+constexpr TypedWhichId<SfxVoidItem>    SDRATTR_SHADOW3D           (SDRATTR_SHADOW_FIRST+ 5);                 // 1053
+constexpr TypedWhichId<SfxVoidItem>    SDRATTR_SHADOWPERSP        (SDRATTR_SHADOW_FIRST+ 6);                 // 1054
+constexpr TypedWhichId<SdrMetricItem>  SDRATTR_SHADOWSIZEX        (SDRATTR_SHADOW_FIRST+ 7);                 // 1055
+constexpr TypedWhichId<SdrMetricItem>  SDRATTR_SHADOWSIZEY        (SDRATTR_SHADOW_FIRST+ 8);                 // 1056
+constexpr TypedWhichId<SdrMetricItem>  SDRATTR_SHADOWBLUR         (SDRATTR_SHADOW_FIRST+ 9);                 // 1057
+constexpr TypedWhichId<SvxRectangleAlignmentItem> SDRATTR_SHADOWALIGNMENT(SDRATTR_SHADOW_FIRST + 10);        // 1058
+constexpr sal_uInt16                   SDRATTR_SHADOW_LAST        (SDRATTR_SHADOWALIGNMENT);                 // 1058
 
-constexpr sal_uInt16                             SDRATTR_CAPTION_FIRST     (SDRATTR_SHADOW_LAST + 1);        /* 1080   */ /* 1080   */ /* 1063   */ /* Pool V1: 1041 */
-constexpr TypedWhichId<SdrCaptionTypeItem>       SDRATTR_CAPTIONTYPE       (SDRATTR_CAPTION_FIRST+ 0);       /*   1080 */ /*   1080 */ /*   1063 */
-constexpr TypedWhichId<SdrOnOffItem>             SDRATTR_CAPTIONFIXEDANGLE (SDRATTR_CAPTION_FIRST+ 1);       /*   1081 */ /*   1081 */ /*   1064 */
-constexpr TypedWhichId<SdrAngleItem>             SDRATTR_CAPTIONANGLE      (SDRATTR_CAPTION_FIRST+ 2);       /*   1082 */ /*   1082 */ /*   1065 */
-constexpr TypedWhichId<SdrMetricItem>            SDRATTR_CAPTIONGAP        (SDRATTR_CAPTION_FIRST+ 3);       /*   1083 */ /*   1083 */ /*   1066 */
-constexpr TypedWhichId<SdrCaptionEscDirItem>     SDRATTR_CAPTIONESCDIR     (SDRATTR_CAPTION_FIRST+ 4);       /*   1084 */ /*   1084 */ /*   1067 */
-constexpr TypedWhichId<SdrCaptionEscIsRelItem>   SDRATTR_CAPTIONESCISREL   (SDRATTR_CAPTION_FIRST+ 5);       /*   1085 */ /*   1085 */ /*   1068 */
-constexpr TypedWhichId<SdrCaptionEscRelItem>     SDRATTR_CAPTIONESCREL     (SDRATTR_CAPTION_FIRST+ 6);       /*   1086 */ /*   1086 */ /*   1069 */
-constexpr TypedWhichId<SdrCaptionEscAbsItem>     SDRATTR_CAPTIONESCABS     (SDRATTR_CAPTION_FIRST+ 7);       /*   1087 */ /*   1087 */ /*   1070 */
-constexpr TypedWhichId<SdrCaptionLineLenItem>    SDRATTR_CAPTIONLINELEN    (SDRATTR_CAPTION_FIRST+ 8);       /*   1088 */ /*   1088 */ /*   1071 */
-constexpr TypedWhichId<SdrCaptionFitLineLenItem> SDRATTR_CAPTIONFITLINELEN (SDRATTR_CAPTION_FIRST+ 9);       /*   1089 */ /*   1089 */ /*   1072 */
-constexpr sal_uInt16                             SDRATTR_CAPTION_LAST      (SDRATTR_CAPTIONFITLINELEN);      /* 1094   */ /* 1094   */ /* 1077   */ /* Pool V1: 1050 */
+constexpr sal_uInt16                             SDRATTR_CAPTION_FIRST     (SDRATTR_SHADOW_LAST + 1);        // 1059
+constexpr TypedWhichId<SdrCaptionTypeItem>       SDRATTR_CAPTIONTYPE       (SDRATTR_CAPTION_FIRST+ 0);       // 1059
+constexpr TypedWhichId<SdrOnOffItem>             SDRATTR_CAPTIONFIXEDANGLE (SDRATTR_CAPTION_FIRST+ 1);       // 1060
+constexpr TypedWhichId<SdrAngleItem>             SDRATTR_CAPTIONANGLE      (SDRATTR_CAPTION_FIRST+ 2);       // 1061
+constexpr TypedWhichId<SdrMetricItem>            SDRATTR_CAPTIONGAP        (SDRATTR_CAPTION_FIRST+ 3);       // 1062
+constexpr TypedWhichId<SdrCaptionEscDirItem>     SDRATTR_CAPTIONESCDIR     (SDRATTR_CAPTION_FIRST+ 4);       // 1063
+constexpr TypedWhichId<SdrCaptionEscIsRelItem>   SDRATTR_CAPTIONESCISREL   (SDRATTR_CAPTION_FIRST+ 5);       // 1064
+constexpr TypedWhichId<SdrCaptionEscRelItem>     SDRATTR_CAPTIONESCREL     (SDRATTR_CAPTION_FIRST+ 6);       // 1065
+constexpr TypedWhichId<SdrCaptionEscAbsItem>     SDRATTR_CAPTIONESCABS     (SDRATTR_CAPTION_FIRST+ 7);       // 1066
+constexpr TypedWhichId<SdrCaptionLineLenItem>    SDRATTR_CAPTIONLINELEN    (SDRATTR_CAPTION_FIRST+ 8);       // 1067
+constexpr TypedWhichId<SdrCaptionFitLineLenItem> SDRATTR_CAPTIONFITLINELEN (SDRATTR_CAPTION_FIRST+ 9);       // 1068
+constexpr sal_uInt16                             SDRATTR_CAPTION_LAST      (SDRATTR_CAPTIONFITLINELEN);      // 1068
 
-constexpr sal_uInt16                               SDRATTR_MISC_FIRST              (SDRATTR_CAPTION_LAST + 1);   /* 1097   */ /* 1097   */ /* 1080   */ /* Pool V1: 1053 */
-constexpr TypedWhichId<SdrMetricItem>              SDRATTR_CORNER_RADIUS           (SDRATTR_MISC_FIRST + 0);     /*   1097 */ /*   1097 */ /*   1080 long, def=0       */
-constexpr TypedWhichId<SdrMetricItem>              SDRATTR_TEXT_MINFRAMEHEIGHT     (SDRATTR_MISC_FIRST + 1);     /*   1098 */ /*   1098 */ /*   1081 long, def=0       */
-constexpr TypedWhichId<SdrOnOffItem>               SDRATTR_TEXT_AUTOGROWHEIGHT     (SDRATTR_MISC_FIRST + 2);     /*   1099 */ /*   1099 */ /*   1082 sal_Bool, def=sal_True    */
-constexpr TypedWhichId<SdrTextFitToSizeTypeItem>   SDRATTR_TEXT_FITTOSIZE          (SDRATTR_MISC_FIRST + 3);     /*   1100 */ /*   1100 */ /*   1083 enum, def=css::drawing::TextFitToSizeType_NONE */
-constexpr TypedWhichId<SdrMetricItem>              SDRATTR_TEXT_LEFTDIST           (SDRATTR_MISC_FIRST + 4);     /*   1101 */ /*   1101 */ /*   1084 long, def=0 */ /* Pool V2 */
-constexpr TypedWhichId<SdrMetricItem>              SDRATTR_TEXT_RIGHTDIST          (SDRATTR_MISC_FIRST + 5);     /*   1102 */ /*   1102 */ /*   1085 long, def=0 */ /* Pool V2 */
-constexpr TypedWhichId<SdrMetricItem>              SDRATTR_TEXT_UPPERDIST          (SDRATTR_MISC_FIRST + 6);     /*   1103 */ /*   1103 */ /*   1086 long, def=0 */ /* Pool V2 */
-constexpr TypedWhichId<SdrMetricItem>              SDRATTR_TEXT_LOWERDIST          (SDRATTR_MISC_FIRST + 7);     /*   1104 */ /*   1104 */ /*   1087 long, def=0 */ /* Pool V2 */
-constexpr TypedWhichId<SdrTextVertAdjustItem>      SDRATTR_TEXT_VERTADJUST         (SDRATTR_MISC_FIRST + 8);     /*   1105 */ /*   1105 */ /*   1088 enum, def=SDRTEXTVERTADJUST_TOP */ /* Pool V2 */
-constexpr TypedWhichId<SdrMetricItem>              SDRATTR_TEXT_MAXFRAMEHEIGHT     (SDRATTR_MISC_FIRST + 9);     /*   1106 */ /*   1106 */ /*   1089 long, def=0     - Pool V2 */
-constexpr TypedWhichId<SdrMetricItem>              SDRATTR_TEXT_MINFRAMEWIDTH      (SDRATTR_MISC_FIRST +10);     /*   1107 */ /*   1107 */ /*   1090 long, def=0     - Pool V2 */
-constexpr TypedWhichId<SdrMetricItem>              SDRATTR_TEXT_MAXFRAMEWIDTH      (SDRATTR_MISC_FIRST +11);     /*   1108 */ /*   1108 */ /*   1091 long, def=0     - Pool V2 */
-constexpr TypedWhichId<SdrOnOffItem>               SDRATTR_TEXT_AUTOGROWWIDTH      (SDRATTR_MISC_FIRST +12);     /*   1109 */ /*   1109 */ /*   1092 sal_Bool, def=sal_False - Pool V2 */
-constexpr TypedWhichId<SdrTextHorzAdjustItem>      SDRATTR_TEXT_HORZADJUST         (SDRATTR_MISC_FIRST +13);     /*   1110 */ /*   1110 */ /*   1093 enum, def=SDRTEXTHORZADJUST_LEFT */ /* Pool V2+ (04-12-1995) */
-constexpr TypedWhichId<SdrTextAniKindItem>         SDRATTR_TEXT_ANIKIND            (SDRATTR_MISC_FIRST +14);     /*   1111 */ /*   1111 */ /*   1094 enum, def=SdrTextAniKind::NONE - Pool V2/V4 */
-constexpr TypedWhichId<SdrTextAniDirectionItem>    SDRATTR_TEXT_ANIDIRECTION       (SDRATTR_MISC_FIRST +15);     /*   1112 */ /*   1112 */ /*   1095 enum, def=SdrTextAniDirection::Left - Pool V2/V4 */
-constexpr TypedWhichId<SdrTextAniStartInsideItem>  SDRATTR_TEXT_ANISTARTINSIDE     (SDRATTR_MISC_FIRST +16);     /*   1113 */ /*   1113 */ /*   1096 sal_Bool, def=sal_False - Pool V2/V4 */
-constexpr TypedWhichId<SdrTextAniStopInsideItem>   SDRATTR_TEXT_ANISTOPINSIDE      (SDRATTR_MISC_FIRST +17);     /*   1114 */ /*   1114 */ /*   1097 sal_Bool, def=sal_False - Pool V2/V4 */
-constexpr TypedWhichId<SdrTextAniCountItem>        SDRATTR_TEXT_ANICOUNT           (SDRATTR_MISC_FIRST +18);     /*   1115 */ /*   1115 */ /*   1098 sal_uInt16, def=0   - Pool V2/V4 */
-constexpr TypedWhichId<SdrTextAniDelayItem>        SDRATTR_TEXT_ANIDELAY           (SDRATTR_MISC_FIRST +19);     /*   1116 */ /*   1116 */ /*   1099 sal_uInt16, def=0   - Pool V2/V4 */
-constexpr TypedWhichId<SdrTextAniAmountItem>       SDRATTR_TEXT_ANIAMOUNT          (SDRATTR_MISC_FIRST +20);     /*   1117 */ /*   1117 */ /*   1100 sal_uInt16, def=0   - Pool V2/V4 */
-constexpr TypedWhichId<SdrOnOffItem>               SDRATTR_TEXT_CONTOURFRAME       (SDRATTR_MISC_FIRST +21);     /*   1118 */ /*   1118 */ /*   1101 */             /* Pool V2 */
-constexpr TypedWhichId<SvXMLAttrContainerItem>     SDRATTR_XMLATTRIBUTES           (SDRATTR_MISC_FIRST +22);     /*   1120 */ /*   1120 */ /*   1103 */             /* Pool V2 */
-constexpr TypedWhichId<SdrTextFixedCellHeightItem> SDRATTR_TEXT_USEFIXEDCELLHEIGHT (SDRATTR_MISC_FIRST +23);     /*   1121 */ /*   1121 */ /*   1104 */             /* Pool V2 */
-constexpr TypedWhichId<SdrOnOffItem>               SDRATTR_TEXT_WORDWRAP           (SDRATTR_MISC_FIRST +24);     /*   1122 */ /*   1122 */ /*   1105 */             /* Pool V2 */
-constexpr TypedWhichId<SfxStringItem>              SDRATTR_TEXT_CHAINNEXTNAME      (SDRATTR_MISC_FIRST +25);     /*   1123 */ /*   1123 */ /*   1106 */             /* Pool V2 */
-constexpr TypedWhichId<SdrOnOffItem>               SDRATTR_TEXT_CLIPVERTOVERFLOW   (SDRATTR_MISC_FIRST +26);
-constexpr sal_uInt16                               SDRATTR_MISC_LAST               (SDRATTR_TEXT_CLIPVERTOVERFLOW); /* 1126   */ /* 1125   */ /* 1108   */ /* Pool V1: 1056 */
+constexpr sal_uInt16                               SDRATTR_MISC_FIRST              (SDRATTR_CAPTION_LAST + 1);   // 1069
+constexpr TypedWhichId<SdrMetricItem>              SDRATTR_CORNER_RADIUS           (SDRATTR_MISC_FIRST + 0);     // 1069 long, def=0
+constexpr TypedWhichId<SdrMetricItem>              SDRATTR_TEXT_MINFRAMEHEIGHT     (SDRATTR_MISC_FIRST + 1);     // 1070 long, def=0
+constexpr TypedWhichId<SdrOnOffItem>               SDRATTR_TEXT_AUTOGROWHEIGHT     (SDRATTR_MISC_FIRST + 2);     // 1071 sal_Bool, def=sal_True
+constexpr TypedWhichId<SdrTextFitToSizeTypeItem>   SDRATTR_TEXT_FITTOSIZE          (SDRATTR_MISC_FIRST + 3);     // 1072 enum, def=css::drawing::TextFitToSizeType_NONE
+constexpr TypedWhichId<SdrMetricItem>              SDRATTR_TEXT_LEFTDIST           (SDRATTR_MISC_FIRST + 4);     // 1073 long, def=0
+constexpr TypedWhichId<SdrMetricItem>              SDRATTR_TEXT_RIGHTDIST          (SDRATTR_MISC_FIRST + 5);     // 1074 long, def=0
+constexpr TypedWhichId<SdrMetricItem>              SDRATTR_TEXT_UPPERDIST          (SDRATTR_MISC_FIRST + 6);     // 1075 long, def=0
+constexpr TypedWhichId<SdrMetricItem>              SDRATTR_TEXT_LOWERDIST          (SDRATTR_MISC_FIRST + 7);     // 1076 long, def=0
+constexpr TypedWhichId<SdrTextVertAdjustItem>      SDRATTR_TEXT_VERTADJUST         (SDRATTR_MISC_FIRST + 8);     // 1077 enum, def=SDRTEXTVERTADJUST_TOP
+constexpr TypedWhichId<SdrMetricItem>              SDRATTR_TEXT_MAXFRAMEHEIGHT     (SDRATTR_MISC_FIRST + 9);     // 1078 long, def=0
+constexpr TypedWhichId<SdrMetricItem>              SDRATTR_TEXT_MINFRAMEWIDTH      (SDRATTR_MISC_FIRST +10);     // 1079 long, def=0
+constexpr TypedWhichId<SdrMetricItem>              SDRATTR_TEXT_MAXFRAMEWIDTH      (SDRATTR_MISC_FIRST +11);     // 1080 long, def=0
+constexpr TypedWhichId<SdrOnOffItem>               SDRATTR_TEXT_AUTOGROWWIDTH      (SDRATTR_MISC_FIRST +12);     // 1081 sal_Bool, def=sal_False
+constexpr TypedWhichId<SdrTextHorzAdjustItem>      SDRATTR_TEXT_HORZADJUST         (SDRATTR_MISC_FIRST +13);     // 1082 enum, def=SDRTEXTHORZADJUST_LEFT
+constexpr TypedWhichId<SdrTextAniKindItem>         SDRATTR_TEXT_ANIKIND            (SDRATTR_MISC_FIRST +14);     // 1083 enum, def=SdrTextAniKind::NONE - Pool V2/V4
+constexpr TypedWhichId<SdrTextAniDirectionItem>    SDRATTR_TEXT_ANIDIRECTION       (SDRATTR_MISC_FIRST +15);     // 1084 enum, def=SdrTextAniDirection::Left - Pool V2/V4
+constexpr TypedWhichId<SdrTextAniStartInsideItem>  SDRATTR_TEXT_ANISTARTINSIDE     (SDRATTR_MISC_FIRST +16);     // 1085 sal_Bool, def=sal_False - Pool V2/V4
+constexpr TypedWhichId<SdrTextAniStopInsideItem>   SDRATTR_TEXT_ANISTOPINSIDE      (SDRATTR_MISC_FIRST +17);     // 1086 sal_Bool, def=sal_False - Pool V2/V4
+constexpr TypedWhichId<SdrTextAniCountItem>        SDRATTR_TEXT_ANICOUNT           (SDRATTR_MISC_FIRST +18);     // 1087 sal_uInt16, def=0   - Pool V2/V4
+constexpr TypedWhichId<SdrTextAniDelayItem>        SDRATTR_TEXT_ANIDELAY           (SDRATTR_MISC_FIRST +19);     // 1088 sal_uInt16, def=0   - Pool V2/V4
+constexpr TypedWhichId<SdrTextAniAmountItem>       SDRATTR_TEXT_ANIAMOUNT          (SDRATTR_MISC_FIRST +20);     // 1089 sal_uInt16, def=0   - Pool V2/V4
+constexpr TypedWhichId<SdrOnOffItem>               SDRATTR_TEXT_CONTOURFRAME       (SDRATTR_MISC_FIRST +21);     // 1090 Pool V2
+constexpr TypedWhichId<SvXMLAttrContainerItem>     SDRATTR_XMLATTRIBUTES           (SDRATTR_MISC_FIRST +22);     // 1091 Pool V2
+constexpr TypedWhichId<SdrTextFixedCellHeightItem> SDRATTR_TEXT_USEFIXEDCELLHEIGHT (SDRATTR_MISC_FIRST +23);     // 1092 Pool V2
+constexpr TypedWhichId<SdrOnOffItem>               SDRATTR_TEXT_WORDWRAP           (SDRATTR_MISC_FIRST +24);     // 1093 Pool V2
+constexpr TypedWhichId<SfxStringItem>              SDRATTR_TEXT_CHAINNEXTNAME      (SDRATTR_MISC_FIRST +25);     // 1094 Pool V2
+constexpr TypedWhichId<SdrOnOffItem>               SDRATTR_TEXT_CLIPVERTOVERFLOW   (SDRATTR_MISC_FIRST +26);     // 1095
+constexpr sal_uInt16                               SDRATTR_MISC_LAST               (SDRATTR_TEXT_CLIPVERTOVERFLOW); // 1095
 
-constexpr sal_uInt16                              SDRATTR_EDGE_FIRST         (SDRATTR_MISC_LAST + 1);    /* 1127   */ /* Pool V4 */
-constexpr TypedWhichId<SdrEdgeKindItem>           SDRATTR_EDGEKIND           (SDRATTR_EDGE_FIRST + 0);   /*   1127 */ /* Pool V4 */
-constexpr TypedWhichId<SdrEdgeNode1HorzDistItem>  SDRATTR_EDGENODE1HORZDIST  (SDRATTR_EDGE_FIRST + 1);   /*   1128 */ /* Pool V4 */
-constexpr TypedWhichId<SdrEdgeNode1VertDistItem>  SDRATTR_EDGENODE1VERTDIST  (SDRATTR_EDGE_FIRST + 2);   /*   1129 */ /* Pool V4 */
-constexpr TypedWhichId<SdrEdgeNode2HorzDistItem>  SDRATTR_EDGENODE2HORZDIST  (SDRATTR_EDGE_FIRST + 3);   /*   1130 */ /* Pool V4 */
-constexpr TypedWhichId<SdrEdgeNode2VertDistItem>  SDRATTR_EDGENODE2VERTDIST  (SDRATTR_EDGE_FIRST + 4);   /*   1131 */ /* Pool V4 */
-constexpr TypedWhichId<SdrEdgeNode1GlueDistItem>  SDRATTR_EDGENODE1GLUEDIST  (SDRATTR_EDGE_FIRST + 5);   /*   1132 */ /* Pool V4 */
-constexpr TypedWhichId<SdrEdgeNode2GlueDistItem>  SDRATTR_EDGENODE2GLUEDIST  (SDRATTR_EDGE_FIRST + 6);   /*   1133 */ /* Pool V4 */
-constexpr TypedWhichId<SdrEdgeLineDeltaCountItem> SDRATTR_EDGELINEDELTACOUNT (SDRATTR_EDGE_FIRST + 7);   /*   1134 */ /* Pool V4 */
-constexpr TypedWhichId<SdrMetricItem>             SDRATTR_EDGELINE1DELTA     (SDRATTR_EDGE_FIRST + 8);   /*   1135 */ /* Pool V4 */
-constexpr TypedWhichId<SdrMetricItem>             SDRATTR_EDGELINE2DELTA     (SDRATTR_EDGE_FIRST + 9);   /*   1136 */ /* Pool V4 */
-constexpr TypedWhichId<SdrMetricItem>             SDRATTR_EDGELINE3DELTA     (SDRATTR_EDGE_FIRST +10);   /*   1137 */ /* Pool V4 */
-constexpr sal_uInt16                              SDRATTR_EDGE_LAST          (SDRATTR_EDGELINE3DELTA);   /* 1145   */ /* Pool V4 */
+constexpr sal_uInt16                              SDRATTR_EDGE_FIRST         (SDRATTR_MISC_LAST + 1);    // 1096
+constexpr TypedWhichId<SdrEdgeKindItem>           SDRATTR_EDGEKIND           (SDRATTR_EDGE_FIRST + 0);   // 1096
+constexpr TypedWhichId<SdrEdgeNode1HorzDistItem>  SDRATTR_EDGENODE1HORZDIST  (SDRATTR_EDGE_FIRST + 1);   // 1097
+constexpr TypedWhichId<SdrEdgeNode1VertDistItem>  SDRATTR_EDGENODE1VERTDIST  (SDRATTR_EDGE_FIRST + 2);   // 1098
+constexpr TypedWhichId<SdrEdgeNode2HorzDistItem>  SDRATTR_EDGENODE2HORZDIST  (SDRATTR_EDGE_FIRST + 3);   // 1099
+constexpr TypedWhichId<SdrEdgeNode2VertDistItem>  SDRATTR_EDGENODE2VERTDIST  (SDRATTR_EDGE_FIRST + 4);   // 1100
+constexpr TypedWhichId<SdrEdgeNode1GlueDistItem>  SDRATTR_EDGENODE1GLUEDIST  (SDRATTR_EDGE_FIRST + 5);   // 1101
+constexpr TypedWhichId<SdrEdgeNode2GlueDistItem>  SDRATTR_EDGENODE2GLUEDIST  (SDRATTR_EDGE_FIRST + 6);   // 1102
+constexpr TypedWhichId<SdrEdgeLineDeltaCountItem> SDRATTR_EDGELINEDELTACOUNT (SDRATTR_EDGE_FIRST + 7);   // 1103
+constexpr TypedWhichId<SdrMetricItem>             SDRATTR_EDGELINE1DELTA     (SDRATTR_EDGE_FIRST + 8);   // 1104
+constexpr TypedWhichId<SdrMetricItem>             SDRATTR_EDGELINE2DELTA     (SDRATTR_EDGE_FIRST + 9);   // 1105
+constexpr TypedWhichId<SdrMetricItem>             SDRATTR_EDGELINE3DELTA     (SDRATTR_EDGE_FIRST +10);   // 1106
+constexpr sal_uInt16                              SDRATTR_EDGE_LAST          (SDRATTR_EDGELINE3DELTA);   // 1106
 
-constexpr sal_uInt16                                   SDRATTR_MEASURE_FIRST            (SDRATTR_EDGE_LAST + 1);        /* 1147   */ /* Pool V4 */
-constexpr TypedWhichId<SdrMeasureKindItem>             SDRATTR_MEASUREKIND              (SDRATTR_MEASURE_FIRST+ 0);     /*   1147 */ /* Pool V4 */
-constexpr TypedWhichId<SdrMeasureTextHPosItem>         SDRATTR_MEASURETEXTHPOS          (SDRATTR_MEASURE_FIRST+ 1);     /*   1148 */ /* Pool V4 */
-constexpr TypedWhichId<SdrMeasureTextVPosItem>         SDRATTR_MEASURETEXTVPOS          (SDRATTR_MEASURE_FIRST+ 2);     /*   1149 */ /* Pool V4 */
-constexpr TypedWhichId<SdrMetricItem>                  SDRATTR_MEASURELINEDIST          (SDRATTR_MEASURE_FIRST+ 3);     /*   1150 */ /* Pool V4 */
-constexpr TypedWhichId<SdrMetricItem>                  SDRATTR_MEASUREHELPLINEOVERHANG  (SDRATTR_MEASURE_FIRST+ 4);     /*   1151 */ /* Pool V4 */
-constexpr TypedWhichId<SdrMetricItem>                  SDRATTR_MEASUREHELPLINEDIST      (SDRATTR_MEASURE_FIRST+ 5);     /*   1152 */ /* Pool V4 */
-constexpr TypedWhichId<SdrMetricItem>                  SDRATTR_MEASUREHELPLINE1LEN      (SDRATTR_MEASURE_FIRST+ 6);     /*   1153 */ /* Pool V4 */
-constexpr TypedWhichId<SdrMetricItem>                  SDRATTR_MEASUREHELPLINE2LEN      (SDRATTR_MEASURE_FIRST+ 7);     /*   1154 */ /* Pool V4 */
-constexpr TypedWhichId<SdrMeasureBelowRefEdgeItem>     SDRATTR_MEASUREBELOWREFEDGE      (SDRATTR_MEASURE_FIRST+ 8);     /*   1155 */ /* Pool V4 */
-constexpr TypedWhichId<SdrMeasureTextRota90Item>       SDRATTR_MEASURETEXTROTA90        (SDRATTR_MEASURE_FIRST+ 9);     /*   1156 */ /* Pool V4 */
-constexpr TypedWhichId<SdrYesNoItem>                   SDRATTR_MEASURETEXTUPSIDEDOWN    (SDRATTR_MEASURE_FIRST+10);     /*   1157 */ /* Pool V4 */
-constexpr TypedWhichId<SdrMeasureOverhangItem>         SDRATTR_MEASUREOVERHANG          (SDRATTR_MEASURE_FIRST+11);     /*   1158 */ /* Pool V4 */
-constexpr TypedWhichId<SdrMeasureUnitItem>             SDRATTR_MEASUREUNIT              (SDRATTR_MEASURE_FIRST+12);     /*   1159 */ /* Pool V4 */
-constexpr TypedWhichId<SdrMeasureScaleItem>            SDRATTR_MEASURESCALE             (SDRATTR_MEASURE_FIRST+13);     /*   1160 */ /* Pool V4 */
-constexpr TypedWhichId<SdrYesNoItem>                   SDRATTR_MEASURESHOWUNIT          (SDRATTR_MEASURE_FIRST+14);     /*   1161 */ /* Pool V4 */
-constexpr TypedWhichId<SdrMeasureFormatStringItem>     SDRATTR_MEASUREFORMATSTRING      (SDRATTR_MEASURE_FIRST+15);     /*   1162 */ /* Pool V4 */
-constexpr TypedWhichId<SdrMeasureTextAutoAngleItem>    SDRATTR_MEASURETEXTAUTOANGLE     (SDRATTR_MEASURE_FIRST+16);     /*   1163 */ /* Pool V4, Correction 25-9-1996 */
-constexpr TypedWhichId<SdrAngleItem>                   SDRATTR_MEASURETEXTAUTOANGLEVIEW (SDRATTR_MEASURE_FIRST+17);     /*   1164 */ /* Pool V4, Correction 25-9-1996  */
-constexpr TypedWhichId<SdrMeasureTextIsFixedAngleItem> SDRATTR_MEASURETEXTISFIXEDANGLE  (SDRATTR_MEASURE_FIRST+18);     /*   1165 */ /* Pool V4, Correction 25-9-1996  */
-constexpr TypedWhichId<SdrMeasureTextFixedAngleItem>   SDRATTR_MEASURETEXTFIXEDANGLE    (SDRATTR_MEASURE_FIRST+19);     /*   1166 */ /* Pool V4, Correction 25-9-1996  */
-constexpr TypedWhichId<SdrMeasureDecimalPlacesItem>    SDRATTR_MEASUREDECIMALPLACES     (SDRATTR_MEASURE_FIRST+20);     /*   1167 */ /* Pool V4 */
-constexpr sal_uInt16                                   SDRATTR_MEASURE_LAST             (SDRATTR_MEASUREDECIMALPLACES); /* 1170   */ /* Pool V4 */
+constexpr sal_uInt16                                   SDRATTR_MEASURE_FIRST            (SDRATTR_EDGE_LAST + 1);        // 1107
+constexpr TypedWhichId<SdrMeasureKindItem>             SDRATTR_MEASUREKIND              (SDRATTR_MEASURE_FIRST+ 0);     // 1107
+constexpr TypedWhichId<SdrMeasureTextHPosItem>         SDRATTR_MEASURETEXTHPOS          (SDRATTR_MEASURE_FIRST+ 1);     // 1108
+constexpr TypedWhichId<SdrMeasureTextVPosItem>         SDRATTR_MEASURETEXTVPOS          (SDRATTR_MEASURE_FIRST+ 2);     // 1109
+constexpr TypedWhichId<SdrMetricItem>                  SDRATTR_MEASURELINEDIST          (SDRATTR_MEASURE_FIRST+ 3);     // 1110
+constexpr TypedWhichId<SdrMetricItem>                  SDRATTR_MEASUREHELPLINEOVERHANG  (SDRATTR_MEASURE_FIRST+ 4);     // 1111
+constexpr TypedWhichId<SdrMetricItem>                  SDRATTR_MEASUREHELPLINEDIST      (SDRATTR_MEASURE_FIRST+ 5);     // 1112
+constexpr TypedWhichId<SdrMetricItem>                  SDRATTR_MEASUREHELPLINE1LEN      (SDRATTR_MEASURE_FIRST+ 6);     // 1113
+constexpr TypedWhichId<SdrMetricItem>                  SDRATTR_MEASUREHELPLINE2LEN      (SDRATTR_MEASURE_FIRST+ 7);     // 1114
+constexpr TypedWhichId<SdrMeasureBelowRefEdgeItem>     SDRATTR_MEASUREBELOWREFEDGE      (SDRATTR_MEASURE_FIRST+ 8);     // 1115
+constexpr TypedWhichId<SdrMeasureTextRota90Item>       SDRATTR_MEASURETEXTROTA90        (SDRATTR_MEASURE_FIRST+ 9);     // 1116
+constexpr TypedWhichId<SdrYesNoItem>                   SDRATTR_MEASURETEXTUPSIDEDOWN    (SDRATTR_MEASURE_FIRST+10);     // 1117
+constexpr TypedWhichId<SdrMeasureOverhangItem>         SDRATTR_MEASUREOVERHANG          (SDRATTR_MEASURE_FIRST+11);     // 1118
+constexpr TypedWhichId<SdrMeasureUnitItem>             SDRATTR_MEASUREUNIT              (SDRATTR_MEASURE_FIRST+12);     // 1119
+constexpr TypedWhichId<SdrMeasureScaleItem>            SDRATTR_MEASURESCALE             (SDRATTR_MEASURE_FIRST+13);     // 1120
+constexpr TypedWhichId<SdrYesNoItem>                   SDRATTR_MEASURESHOWUNIT          (SDRATTR_MEASURE_FIRST+14);     // 1121
+constexpr TypedWhichId<SdrMeasureFormatStringItem>     SDRATTR_MEASUREFORMATSTRING      (SDRATTR_MEASURE_FIRST+15);     // 1122
+constexpr TypedWhichId<SdrMeasureTextAutoAngleItem>    SDRATTR_MEASURETEXTAUTOANGLE     (SDRATTR_MEASURE_FIRST+16);     // 1123
+constexpr TypedWhichId<SdrAngleItem>                   SDRATTR_MEASURETEXTAUTOANGLEVIEW (SDRATTR_MEASURE_FIRST+17);     // 1124
+constexpr TypedWhichId<SdrMeasureTextIsFixedAngleItem> SDRATTR_MEASURETEXTISFIXEDANGLE  (SDRATTR_MEASURE_FIRST+18);     // 1125
+constexpr TypedWhichId<SdrMeasureTextFixedAngleItem>   SDRATTR_MEASURETEXTFIXEDANGLE    (SDRATTR_MEASURE_FIRST+19);     // 1126
+constexpr TypedWhichId<SdrMeasureDecimalPlacesItem>    SDRATTR_MEASUREDECIMALPLACES     (SDRATTR_MEASURE_FIRST+20);     // 1127
+constexpr sal_uInt16                                   SDRATTR_MEASURE_LAST             (SDRATTR_MEASUREDECIMALPLACES); // 1127
 
-constexpr sal_uInt16                    SDRATTR_CIRC_FIRST     (SDRATTR_MEASURE_LAST+ 1); /* 1172   */ /* Pool V4+ */
-constexpr TypedWhichId<SdrCircKindItem> SDRATTR_CIRCKIND       (SDRATTR_CIRC_FIRST+ 0);   /*   1172 */ /* Pool V4+ */
-constexpr TypedWhichId<SdrAngleItem>    SDRATTR_CIRCSTARTANGLE (SDRATTR_CIRC_FIRST+ 1);   /*   1173 */ /* Pool V4+ */
-constexpr TypedWhichId<SdrAngleItem>    SDRATTR_CIRCENDANGLE   (SDRATTR_CIRC_FIRST+ 2);   /*   1174 */ /* Pool V4+ */
-constexpr sal_uInt16                    SDRATTR_CIRC_LAST      (SDRATTR_CIRCENDANGLE);    /*   1178 */ /* Pool V4+ */
+constexpr sal_uInt16                    SDRATTR_CIRC_FIRST     (SDRATTR_MEASURE_LAST+ 1); // 1128
+constexpr TypedWhichId<SdrCircKindItem> SDRATTR_CIRCKIND       (SDRATTR_CIRC_FIRST+ 0);   // 1128
+constexpr TypedWhichId<SdrAngleItem>    SDRATTR_CIRCSTARTANGLE (SDRATTR_CIRC_FIRST+ 1);   // 1129
+constexpr TypedWhichId<SdrAngleItem>    SDRATTR_CIRCENDANGLE   (SDRATTR_CIRC_FIRST+ 2);   // 1130
+constexpr sal_uInt16                    SDRATTR_CIRC_LAST      (SDRATTR_CIRCENDANGLE);    // 1130
 
 // Only for Interfacing, not yet implemented. / * + * V4 /
-constexpr sal_uInt16                           SDRATTR_NOTPERSIST_FIRST (SDRATTR_CIRC_LAST + 1);      /* 1180   */ /* 1172   */ /* 1127   */ /* 1110   */ /* Pool V1: 1058 */
-constexpr TypedWhichId<SdrYesNoItem>           SDRATTR_OBJMOVEPROTECT  (SDRATTR_NOTPERSIST_FIRST+ 0); /*   1180  sal_Bool,   def=sal_False */
-constexpr TypedWhichId<SdrYesNoItem>           SDRATTR_OBJSIZEPROTECT  (SDRATTR_NOTPERSIST_FIRST+ 1); /*   1181  sal_Bool,   def=sal_False */
-constexpr TypedWhichId<SdrObjPrintableItem>    SDRATTR_OBJPRINTABLE    (SDRATTR_NOTPERSIST_FIRST+ 2); /*   1182  sal_Bool,   def=sal_True  */
-constexpr TypedWhichId<SdrLayerIdItem>         SDRATTR_LAYERID         (SDRATTR_NOTPERSIST_FIRST+ 3); /*   1183  sal_uInt16, def=0     */
-constexpr TypedWhichId<SdrLayerNameItem>       SDRATTR_LAYERNAME       (SDRATTR_NOTPERSIST_FIRST+ 4); /*   1184  String, def=""    */
-constexpr TypedWhichId<SfxStringItem>          SDRATTR_OBJECTNAME      (SDRATTR_NOTPERSIST_FIRST+ 5); /*   1185  String, def=""    */
-constexpr TypedWhichId<SdrAllPositionXItem>    SDRATTR_ALLPOSITIONX    (SDRATTR_NOTPERSIST_FIRST+ 6); /*   1186  long,   def=0     */
-constexpr TypedWhichId<SdrAllPositionYItem>    SDRATTR_ALLPOSITIONY    (SDRATTR_NOTPERSIST_FIRST+ 7); /*   1187  long,   def=0     */
-constexpr TypedWhichId<SdrAllSizeWidthItem>    SDRATTR_ALLSIZEWIDTH    (SDRATTR_NOTPERSIST_FIRST+ 8); /*   1188  long,   def=0     */
-constexpr TypedWhichId<SdrAllSizeHeightItem>   SDRATTR_ALLSIZEHEIGHT   (SDRATTR_NOTPERSIST_FIRST+ 9); /*   1189  long,   def=0     */
-constexpr TypedWhichId<SdrOnePositionXItem>    SDRATTR_ONEPOSITIONX    (SDRATTR_NOTPERSIST_FIRST+10); /*   1190  long,   def=0     */
-constexpr TypedWhichId<SdrOnePositionYItem>    SDRATTR_ONEPOSITIONY    (SDRATTR_NOTPERSIST_FIRST+11); /*   1191  long,   def=0     */
-constexpr TypedWhichId<SdrOneSizeWidthItem>    SDRATTR_ONESIZEWIDTH    (SDRATTR_NOTPERSIST_FIRST+12); /*   1192  long,   def=0     */
-constexpr TypedWhichId<SdrOneSizeHeightItem>   SDRATTR_ONESIZEHEIGHT   (SDRATTR_NOTPERSIST_FIRST+13); /*   1193  long,   def=0     */
-constexpr TypedWhichId<SdrLogicSizeWidthItem>  SDRATTR_LOGICSIZEWIDTH  (SDRATTR_NOTPERSIST_FIRST+14); /*   1194  long,   def=0     */
-constexpr TypedWhichId<SdrLogicSizeHeightItem> SDRATTR_LOGICSIZEHEIGHT (SDRATTR_NOTPERSIST_FIRST+15); /*   1195  long,   def=0     */
-constexpr TypedWhichId<SdrAngleItem>           SDRATTR_ROTATEANGLE     (SDRATTR_NOTPERSIST_FIRST+16); /*   1196  long,   def=0     */
-constexpr TypedWhichId<SdrShearAngleItem>      SDRATTR_SHEARANGLE      (SDRATTR_NOTPERSIST_FIRST+17); /*   1197  long,   def=0     */
-constexpr TypedWhichId<SdrMoveXItem>           SDRATTR_MOVEX           (SDRATTR_NOTPERSIST_FIRST+18); /*   1198  long,   def=0     */
-constexpr TypedWhichId<SdrMoveYItem>           SDRATTR_MOVEY           (SDRATTR_NOTPERSIST_FIRST+19); /*   1199  long,   def=0     */
-constexpr TypedWhichId<SdrResizeXOneItem>      SDRATTR_RESIZEXONE      (SDRATTR_NOTPERSIST_FIRST+20); /*   1200  long,   def=0     */
-constexpr TypedWhichId<SdrResizeYOneItem>      SDRATTR_RESIZEYONE      (SDRATTR_NOTPERSIST_FIRST+21); /*   1201  long,   def=0     */
-constexpr TypedWhichId<SdrRotateOneItem>       SDRATTR_ROTATEONE       (SDRATTR_NOTPERSIST_FIRST+22); /*   1202  long,   def=0     */
-constexpr TypedWhichId<SdrHorzShearOneItem>    SDRATTR_HORZSHEARONE    (SDRATTR_NOTPERSIST_FIRST+23); /*   1203  long,   def=0     */
-constexpr TypedWhichId<SdrVertShearOneItem>    SDRATTR_VERTSHEARONE    (SDRATTR_NOTPERSIST_FIRST+24); /*   1204  long,   def=0     */
-constexpr TypedWhichId<SdrResizeXAllItem>      SDRATTR_RESIZEXALL      (SDRATTR_NOTPERSIST_FIRST+25); /*   1205  long,   def=0     */
-constexpr TypedWhichId<SdrResizeYAllItem>      SDRATTR_RESIZEYALL      (SDRATTR_NOTPERSIST_FIRST+26); /*   1206  long,   def=0     */
-constexpr TypedWhichId<SdrRotateAllItem>       SDRATTR_ROTATEALL       (SDRATTR_NOTPERSIST_FIRST+27); /*   1207  long,   def=0     */
-constexpr TypedWhichId<SdrHorzShearAllItem>    SDRATTR_HORZSHEARALL    (SDRATTR_NOTPERSIST_FIRST+28); /*   1208  long,   def=0     */
-constexpr TypedWhichId<SdrVertShearAllItem>    SDRATTR_VERTSHEARALL    (SDRATTR_NOTPERSIST_FIRST+29); /*   1209  long,   def=0     */
-constexpr TypedWhichId<SdrTransformRef1XItem>  SDRATTR_TRANSFORMREF1X  (SDRATTR_NOTPERSIST_FIRST+30); /*   1210  long,   def=0     */
-constexpr TypedWhichId<SdrTransformRef1YItem>  SDRATTR_TRANSFORMREF1Y  (SDRATTR_NOTPERSIST_FIRST+31); /*   1211  long,   def=0     */
-constexpr TypedWhichId<SdrTransformRef2XItem>  SDRATTR_TRANSFORMREF2X  (SDRATTR_NOTPERSIST_FIRST+32); /*   1212  long,   def=0     */
-constexpr TypedWhichId<SdrTransformRef2YItem>  SDRATTR_TRANSFORMREF2Y  (SDRATTR_NOTPERSIST_FIRST+33); /*   1213  long,   def=0     */
-constexpr TypedWhichId<SvxWritingModeItem>     SDRATTR_TEXTDIRECTION   (SDRATTR_NOTPERSIST_FIRST+34); /*   1214 V4+++  long,   def=0     */
-constexpr TypedWhichId<SdrObjVisibleItem>      SDRATTR_OBJVISIBLE      (SDRATTR_NOTPERSIST_FIRST+35);
-constexpr sal_uInt16                           SDRATTR_NOTPERSIST_LAST (SDRATTR_OBJVISIBLE);          /*   1228 V4+++*/ /* 1213*/  /*  1085 */ /*  1040 */ /*  1123 */ /* Pool V1: 1065 */
+constexpr sal_uInt16                           SDRATTR_NOTPERSIST_FIRST (SDRATTR_CIRC_LAST + 1);      // 1131
+constexpr TypedWhichId<SdrYesNoItem>           SDRATTR_OBJMOVEPROTECT  (SDRATTR_NOTPERSIST_FIRST+ 0); // 1131  sal_Bool,   def=sal_False
+constexpr TypedWhichId<SdrYesNoItem>           SDRATTR_OBJSIZEPROTECT  (SDRATTR_NOTPERSIST_FIRST+ 1); // 1132  sal_Bool,   def=sal_False
+constexpr TypedWhichId<SdrObjPrintableItem>    SDRATTR_OBJPRINTABLE    (SDRATTR_NOTPERSIST_FIRST+ 2); // 1133  sal_Bool,   def=sal_True
+constexpr TypedWhichId<SdrLayerIdItem>         SDRATTR_LAYERID         (SDRATTR_NOTPERSIST_FIRST+ 3); // 1134  sal_uInt16, def=0
+constexpr TypedWhichId<SdrLayerNameItem>       SDRATTR_LAYERNAME       (SDRATTR_NOTPERSIST_FIRST+ 4); // 1135  String, def=""
+constexpr TypedWhichId<SfxStringItem>          SDRATTR_OBJECTNAME      (SDRATTR_NOTPERSIST_FIRST+ 5); // 1136  String, def=""
+constexpr TypedWhichId<SdrAllPositionXItem>    SDRATTR_ALLPOSITIONX    (SDRATTR_NOTPERSIST_FIRST+ 6); // 1137  long,   def=0
+constexpr TypedWhichId<SdrAllPositionYItem>    SDRATTR_ALLPOSITIONY    (SDRATTR_NOTPERSIST_FIRST+ 7); // 1138  long,   def=0
+constexpr TypedWhichId<SdrAllSizeWidthItem>    SDRATTR_ALLSIZEWIDTH    (SDRATTR_NOTPERSIST_FIRST+ 8); // 1139  long,   def=0
+constexpr TypedWhichId<SdrAllSizeHeightItem>   SDRATTR_ALLSIZEHEIGHT   (SDRATTR_NOTPERSIST_FIRST+ 9); // 1140  long,   def=0
+constexpr TypedWhichId<SdrOnePositionXItem>    SDRATTR_ONEPOSITIONX    (SDRATTR_NOTPERSIST_FIRST+10); // 1141  long,   def=0
+constexpr TypedWhichId<SdrOnePositionYItem>    SDRATTR_ONEPOSITIONY    (SDRATTR_NOTPERSIST_FIRST+11); // 1142  long,   def=0
+constexpr TypedWhichId<SdrOneSizeWidthItem>    SDRATTR_ONESIZEWIDTH    (SDRATTR_NOTPERSIST_FIRST+12); // 1143  long,   def=0
+constexpr TypedWhichId<SdrOneSizeHeightItem>   SDRATTR_ONESIZEHEIGHT   (SDRATTR_NOTPERSIST_FIRST+13); // 1144  long,   def=0
+constexpr TypedWhichId<SdrLogicSizeWidthItem>  SDRATTR_LOGICSIZEWIDTH  (SDRATTR_NOTPERSIST_FIRST+14); // 1145  long,   def=0
+constexpr TypedWhichId<SdrLogicSizeHeightItem> SDRATTR_LOGICSIZEHEIGHT (SDRATTR_NOTPERSIST_FIRST+15); // 1146  long,   def=0
+constexpr TypedWhichId<SdrAngleItem>           SDRATTR_ROTATEANGLE     (SDRATTR_NOTPERSIST_FIRST+16); // 1147  long,   def=0
+constexpr TypedWhichId<SdrShearAngleItem>      SDRATTR_SHEARANGLE      (SDRATTR_NOTPERSIST_FIRST+17); // 1148  long,   def=0
+constexpr TypedWhichId<SdrMoveXItem>           SDRATTR_MOVEX           (SDRATTR_NOTPERSIST_FIRST+18); // 1149  long,   def=0
+constexpr TypedWhichId<SdrMoveYItem>           SDRATTR_MOVEY           (SDRATTR_NOTPERSIST_FIRST+19); // 1150  long,   def=0
+constexpr TypedWhichId<SdrResizeXOneItem>      SDRATTR_RESIZEXONE      (SDRATTR_NOTPERSIST_FIRST+20); // 1151  long,   def=0
+constexpr TypedWhichId<SdrResizeYOneItem>      SDRATTR_RESIZEYONE      (SDRATTR_NOTPERSIST_FIRST+21); // 1152  long,   def=0
+constexpr TypedWhichId<SdrRotateOneItem>       SDRATTR_ROTATEONE       (SDRATTR_NOTPERSIST_FIRST+22); // 1153  long,   def=0
+constexpr TypedWhichId<SdrHorzShearOneItem>    SDRATTR_HORZSHEARONE    (SDRATTR_NOTPERSIST_FIRST+23); // 1154  long,   def=0
+constexpr TypedWhichId<SdrVertShearOneItem>    SDRATTR_VERTSHEARONE    (SDRATTR_NOTPERSIST_FIRST+24); // 1155  long,   def=0
+constexpr TypedWhichId<SdrResizeXAllItem>      SDRATTR_RESIZEXALL      (SDRATTR_NOTPERSIST_FIRST+25); // 1156  long,   def=0
+constexpr TypedWhichId<SdrResizeYAllItem>      SDRATTR_RESIZEYALL      (SDRATTR_NOTPERSIST_FIRST+26); // 1157  long,   def=0
+constexpr TypedWhichId<SdrRotateAllItem>       SDRATTR_ROTATEALL       (SDRATTR_NOTPERSIST_FIRST+27); // 1158  long,   def=0
+constexpr TypedWhichId<SdrHorzShearAllItem>    SDRATTR_HORZSHEARALL    (SDRATTR_NOTPERSIST_FIRST+28); // 1159  long,   def=0
+constexpr TypedWhichId<SdrVertShearAllItem>    SDRATTR_VERTSHEARALL    (SDRATTR_NOTPERSIST_FIRST+29); // 1160  long,   def=0
+constexpr TypedWhichId<SdrTransformRef1XItem>  SDRATTR_TRANSFORMREF1X  (SDRATTR_NOTPERSIST_FIRST+30); // 1161  long,   def=0
+constexpr TypedWhichId<SdrTransformRef1YItem>  SDRATTR_TRANSFORMREF1Y  (SDRATTR_NOTPERSIST_FIRST+31); // 1162  long,   def=0
+constexpr TypedWhichId<SdrTransformRef2XItem>  SDRATTR_TRANSFORMREF2X  (SDRATTR_NOTPERSIST_FIRST+32); // 1163  long,   def=0
+constexpr TypedWhichId<SdrTransformRef2YItem>  SDRATTR_TRANSFORMREF2Y  (SDRATTR_NOTPERSIST_FIRST+33); // 1164  long,   def=0
+constexpr TypedWhichId<SvxWritingModeItem>     SDRATTR_TEXTDIRECTION   (SDRATTR_NOTPERSIST_FIRST+34); // 1165  long,   def=0
+constexpr TypedWhichId<SdrObjVisibleItem>      SDRATTR_OBJVISIBLE      (SDRATTR_NOTPERSIST_FIRST+35); // 1166
+constexpr sal_uInt16                           SDRATTR_NOTPERSIST_LAST (SDRATTR_OBJVISIBLE);          // 1166
 // no SetItem for this
 
-constexpr sal_uInt16                            SDRATTR_GRAF_FIRST       (SDRATTR_NOTPERSIST_LAST+1); /*  1229 V4+++*/
-constexpr TypedWhichId<SdrGrafRedItem>          SDRATTR_GRAFRED          (SDRATTR_GRAF_FIRST+0);      /*  1229 V4+++*/
-constexpr TypedWhichId<SdrGrafGreenItem>        SDRATTR_GRAFGREEN        (SDRATTR_GRAF_FIRST+1);      /*  1230 V4+++*/
-constexpr TypedWhichId<SdrGrafBlueItem>         SDRATTR_GRAFBLUE         (SDRATTR_GRAF_FIRST+2);      /*  1231 V4+++*/
-constexpr TypedWhichId<SdrGrafLuminanceItem>    SDRATTR_GRAFLUMINANCE    (SDRATTR_GRAF_FIRST+3);      /*  1232 V4+++*/
-constexpr TypedWhichId<SdrGrafContrastItem>     SDRATTR_GRAFCONTRAST     (SDRATTR_GRAF_FIRST+4);      /*  1233 V4+++*/
-constexpr TypedWhichId<SdrGrafGamma100Item>     SDRATTR_GRAFGAMMA        (SDRATTR_GRAF_FIRST+5);      /*  1234 V4+++*/
-constexpr TypedWhichId<SdrGrafTransparenceItem> SDRATTR_GRAFTRANSPARENCE (SDRATTR_GRAF_FIRST+6);      /*  1235 V4+++*/
-constexpr TypedWhichId<SdrGrafInvertItem>       SDRATTR_GRAFINVERT       (SDRATTR_GRAF_FIRST+7);      /*  1236 V4+++*/
-constexpr TypedWhichId<SdrGrafModeItem>         SDRATTR_GRAFMODE         (SDRATTR_GRAF_FIRST+8);      /*  1237 V4+++*/
-constexpr TypedWhichId<SdrGrafCropItem>         SDRATTR_GRAFCROP         (SDRATTR_GRAF_FIRST+9);      /*  1238 V4+++*/
-constexpr sal_uInt16                            SDRATTR_GRAF_LAST        (SDRATTR_GRAFCROP);          /*  1242 V4+++*/
+constexpr sal_uInt16                            SDRATTR_GRAF_FIRST       (SDRATTR_NOTPERSIST_LAST+1); // 1167
+constexpr TypedWhichId<SdrGrafRedItem>          SDRATTR_GRAFRED          (SDRATTR_GRAF_FIRST+0);      // 1167
+constexpr TypedWhichId<SdrGrafGreenItem>        SDRATTR_GRAFGREEN        (SDRATTR_GRAF_FIRST+1);      // 1168
+constexpr TypedWhichId<SdrGrafBlueItem>         SDRATTR_GRAFBLUE         (SDRATTR_GRAF_FIRST+2);      // 1169
+constexpr TypedWhichId<SdrGrafLuminanceItem>    SDRATTR_GRAFLUMINANCE    (SDRATTR_GRAF_FIRST+3);      // 1170
+constexpr TypedWhichId<SdrGrafContrastItem>     SDRATTR_GRAFCONTRAST     (SDRATTR_GRAF_FIRST+4);      // 1171
+constexpr TypedWhichId<SdrGrafGamma100Item>     SDRATTR_GRAFGAMMA        (SDRATTR_GRAF_FIRST+5);      // 1172
+constexpr TypedWhichId<SdrGrafTransparenceItem> SDRATTR_GRAFTRANSPARENCE (SDRATTR_GRAF_FIRST+6);      // 1173
+constexpr TypedWhichId<SdrGrafInvertItem>       SDRATTR_GRAFINVERT       (SDRATTR_GRAF_FIRST+7);      // 1174
+constexpr TypedWhichId<SdrGrafModeItem>         SDRATTR_GRAFMODE         (SDRATTR_GRAF_FIRST+8);      // 1175
+constexpr TypedWhichId<SdrGrafCropItem>         SDRATTR_GRAFCROP         (SDRATTR_GRAF_FIRST+9);      // 1176
+constexpr sal_uInt16                            SDRATTR_GRAF_LAST        (SDRATTR_GRAFCROP);          // 1176
 
-constexpr sal_uInt16 SDRATTR_3D_FIRST (SDRATTR_GRAF_LAST + 1);     /* 1244 V4+++*/
+constexpr sal_uInt16 SDRATTR_3D_FIRST (SDRATTR_GRAF_LAST + 1);     // 1177
 
-constexpr sal_uInt16                                SDRATTR_3DOBJ_FIRST                  (SDRATTR_3D_FIRST);          /* 1244 V4+++*/
-constexpr TypedWhichId<SfxUInt16Item>               SDRATTR_3DOBJ_PERCENT_DIAGONAL       (SDRATTR_3DOBJ_FIRST + 0);   /* 1244 V4+++*/
-constexpr TypedWhichId<SfxUInt16Item>               SDRATTR_3DOBJ_BACKSCALE              (SDRATTR_3DOBJ_FIRST + 1);   /* 1245 V4+++*/
-constexpr TypedWhichId<SfxUInt32Item>               SDRATTR_3DOBJ_DEPTH                  (SDRATTR_3DOBJ_FIRST + 2);   /* 1246 V4+++*/
-constexpr TypedWhichId<SfxUInt32Item>               SDRATTR_3DOBJ_HORZ_SEGS              (SDRATTR_3DOBJ_FIRST + 3);   /* 1247 V4+++*/
-constexpr TypedWhichId<SfxUInt32Item>               SDRATTR_3DOBJ_VERT_SEGS              (SDRATTR_3DOBJ_FIRST + 4);   /* 1248 V4+++*/
-constexpr TypedWhichId<SfxUInt32Item>               SDRATTR_3DOBJ_END_ANGLE              (SDRATTR_3DOBJ_FIRST + 5);   /* 1249 V4+++*/
-constexpr TypedWhichId<SfxBoolItem>                 SDRATTR_3DOBJ_DOUBLE_SIDED           (SDRATTR_3DOBJ_FIRST + 6);   /* 1250 V4+++*/
-constexpr TypedWhichId<Svx3DNormalsKindItem>        SDRATTR_3DOBJ_NORMALS_KIND           (SDRATTR_3DOBJ_FIRST + 7);   /* 1251 V4+++*/
-constexpr TypedWhichId<SfxBoolItem>                 SDRATTR_3DOBJ_NORMALS_INVERT         (SDRATTR_3DOBJ_FIRST + 8);   /* 1252 V4+++*/
-constexpr TypedWhichId<Svx3DTextureProjectionXItem> SDRATTR_3DOBJ_TEXTURE_PROJ_X         (SDRATTR_3DOBJ_FIRST + 9);   /* 1253 V4+++*/
-constexpr TypedWhichId<Svx3DTextureProjectionYItem> SDRATTR_3DOBJ_TEXTURE_PROJ_Y         (SDRATTR_3DOBJ_FIRST + 10);  /* 1254 V4+++*/
-constexpr TypedWhichId<SfxBoolItem>                 SDRATTR_3DOBJ_SHADOW_3D              (SDRATTR_3DOBJ_FIRST + 11);  /* 1255 V4+++*/
-constexpr TypedWhichId<SvxColorItem>                SDRATTR_3DOBJ_MAT_COLOR              (SDRATTR_3DOBJ_FIRST + 12);  /* 1256 V4+++*/
-constexpr TypedWhichId<SvxColorItem>                SDRATTR_3DOBJ_MAT_EMISSION           (SDRATTR_3DOBJ_FIRST + 13);  /* 1257 V4+++*/
-constexpr TypedWhichId<SvxColorItem>                SDRATTR_3DOBJ_MAT_SPECULAR           (SDRATTR_3DOBJ_FIRST + 14);  /* 1258 V4+++*/
-constexpr TypedWhichId<SfxUInt16Item>               SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY (SDRATTR_3DOBJ_FIRST + 15);  /* 1259 V4+++*/
-constexpr TypedWhichId<Svx3DTextureKindItem>        SDRATTR_3DOBJ_TEXTURE_KIND           (SDRATTR_3DOBJ_FIRST + 16);  /* 1260 V4+++*/
-constexpr TypedWhichId<Svx3DTextureModeItem>        SDRATTR_3DOBJ_TEXTURE_MODE           (SDRATTR_3DOBJ_FIRST + 17);  /* 1261 V4+++*/
-constexpr TypedWhichId<SfxBoolItem>                 SDRATTR_3DOBJ_TEXTURE_FILTER         (SDRATTR_3DOBJ_FIRST + 18);  /* 1262 V4+++*/
+constexpr sal_uInt16                                SDRATTR_3DOBJ_FIRST                  (SDRATTR_3D_FIRST);          // 1177
+constexpr TypedWhichId<SfxUInt16Item>               SDRATTR_3DOBJ_PERCENT_DIAGONAL       (SDRATTR_3DOBJ_FIRST + 0);   // 1177
+constexpr TypedWhichId<SfxUInt16Item>               SDRATTR_3DOBJ_BACKSCALE              (SDRATTR_3DOBJ_FIRST + 1);   // 1178
+constexpr TypedWhichId<SfxUInt32Item>               SDRATTR_3DOBJ_DEPTH                  (SDRATTR_3DOBJ_FIRST + 2);   // 1179
+constexpr TypedWhichId<SfxUInt32Item>               SDRATTR_3DOBJ_HORZ_SEGS              (SDRATTR_3DOBJ_FIRST + 3);   // 1180
+constexpr TypedWhichId<SfxUInt32Item>               SDRATTR_3DOBJ_VERT_SEGS              (SDRATTR_3DOBJ_FIRST + 4);   // 1181
+constexpr TypedWhichId<SfxUInt32Item>               SDRATTR_3DOBJ_END_ANGLE              (SDRATTR_3DOBJ_FIRST + 5);   // 1182
+constexpr TypedWhichId<SfxBoolItem>                 SDRATTR_3DOBJ_DOUBLE_SIDED           (SDRATTR_3DOBJ_FIRST + 6);   // 1183
+constexpr TypedWhichId<Svx3DNormalsKindItem>        SDRATTR_3DOBJ_NORMALS_KIND           (SDRATTR_3DOBJ_FIRST + 7);   // 1184
+constexpr TypedWhichId<SfxBoolItem>                 SDRATTR_3DOBJ_NORMALS_INVERT         (SDRATTR_3DOBJ_FIRST + 8);   // 1185
+constexpr TypedWhichId<Svx3DTextureProjectionXItem> SDRATTR_3DOBJ_TEXTURE_PROJ_X         (SDRATTR_3DOBJ_FIRST + 9);   // 1186
+constexpr TypedWhichId<Svx3DTextureProjectionYItem> SDRATTR_3DOBJ_TEXTURE_PROJ_Y         (SDRATTR_3DOBJ_FIRST + 10);  // 1187
+constexpr TypedWhichId<SfxBoolItem>                 SDRATTR_3DOBJ_SHADOW_3D              (SDRATTR_3DOBJ_FIRST + 11);  // 1188
+constexpr TypedWhichId<SvxColorItem>                SDRATTR_3DOBJ_MAT_COLOR              (SDRATTR_3DOBJ_FIRST + 12);  // 1189
+constexpr TypedWhichId<SvxColorItem>                SDRATTR_3DOBJ_MAT_EMISSION           (SDRATTR_3DOBJ_FIRST + 13);  // 1190
+constexpr TypedWhichId<SvxColorItem>                SDRATTR_3DOBJ_MAT_SPECULAR           (SDRATTR_3DOBJ_FIRST + 14);  // 1191
+constexpr TypedWhichId<SfxUInt16Item>               SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY (SDRATTR_3DOBJ_FIRST + 15);  // 1192
+constexpr TypedWhichId<Svx3DTextureKindItem>        SDRATTR_3DOBJ_TEXTURE_KIND           (SDRATTR_3DOBJ_FIRST + 16);  // 1193
+constexpr TypedWhichId<Svx3DTextureModeItem>        SDRATTR_3DOBJ_TEXTURE_MODE           (SDRATTR_3DOBJ_FIRST + 17);  // 1194
+constexpr TypedWhichId<SfxBoolItem>                 SDRATTR_3DOBJ_TEXTURE_FILTER         (SDRATTR_3DOBJ_FIRST + 18);  // 1195
 
 // #107245# New items for 3d objects use former range SDRATTR_3DOBJ_RESERVED_01
 // up to SDRATTR_3DOBJ_RESERVED_05
-constexpr TypedWhichId<Svx3DSmoothNormalsItem> SDRATTR_3DOBJ_SMOOTH_NORMALS (SDRATTR_3DOBJ_FIRST + 19);  /* 1263 V4+++*/
-constexpr TypedWhichId<Svx3DSmoothLidsItem>    SDRATTR_3DOBJ_SMOOTH_LIDS    (SDRATTR_3DOBJ_FIRST + 20);  /* 1264 V4+++*/
-constexpr TypedWhichId<Svx3DCharacterModeItem> SDRATTR_3DOBJ_CHARACTER_MODE (SDRATTR_3DOBJ_FIRST + 21);  /* 1265 V4+++*/
-constexpr TypedWhichId<Svx3DCloseFrontItem>    SDRATTR_3DOBJ_CLOSE_FRONT    (SDRATTR_3DOBJ_FIRST + 22);  /* 1266 V4+++*/
-constexpr TypedWhichId<Svx3DCloseBackItem>     SDRATTR_3DOBJ_CLOSE_BACK     (SDRATTR_3DOBJ_FIRST + 23);  /* 1267 V4+++*/
+constexpr TypedWhichId<Svx3DSmoothNormalsItem> SDRATTR_3DOBJ_SMOOTH_NORMALS (SDRATTR_3DOBJ_FIRST + 19);  // 1196
+constexpr TypedWhichId<Svx3DSmoothLidsItem>    SDRATTR_3DOBJ_SMOOTH_LIDS    (SDRATTR_3DOBJ_FIRST + 20);  // 1197
+constexpr TypedWhichId<Svx3DCharacterModeItem> SDRATTR_3DOBJ_CHARACTER_MODE (SDRATTR_3DOBJ_FIRST + 21);  // 1198
+constexpr TypedWhichId<Svx3DCloseFrontItem>    SDRATTR_3DOBJ_CLOSE_FRONT    (SDRATTR_3DOBJ_FIRST + 22);  // 1199
+constexpr TypedWhichId<Svx3DCloseBackItem>     SDRATTR_3DOBJ_CLOSE_BACK     (SDRATTR_3DOBJ_FIRST + 23);  // 1200
 
 // #i28528#
 // Added extra Item (Bool) for chart2 to be able to show reduced line geometry
-constexpr TypedWhichId<Svx3DReducedLineGeometryItem> SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY (SDRATTR_3DOBJ_FIRST + 24);  /* 1268 V4+++*/
+constexpr TypedWhichId<Svx3DReducedLineGeometryItem> SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY (SDRATTR_3DOBJ_FIRST + 24);  // 1201
 
-constexpr sal_uInt16 SDRATTR_3DOBJ_LAST (SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY);   /* 1282 V4+++*/
+constexpr sal_uInt16 SDRATTR_3DOBJ_LAST (SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY);   // 1201
 
-constexpr sal_uInt16                         SDRATTR_3DSCENE_FIRST              (SDRATTR_3DOBJ_LAST + 1);        /* 1283 V4+++*/
-constexpr TypedWhichId<Svx3DPerspectiveItem> SDRATTR_3DSCENE_PERSPECTIVE        (SDRATTR_3DSCENE_FIRST + 0);     /* 1283 V4+++*/
-constexpr TypedWhichId<SfxUInt32Item>        SDRATTR_3DSCENE_DISTANCE           (SDRATTR_3DSCENE_FIRST + 1);     /* 1284 V4+++*/
-constexpr TypedWhichId<SfxUInt32Item>        SDRATTR_3DSCENE_FOCAL_LENGTH       (SDRATTR_3DSCENE_FIRST + 2);     /* 1285 V4+++*/
-constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_TWO_SIDED_LIGHTING (SDRATTR_3DSCENE_FIRST + 3);     /* 1286 V4+++*/
-constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_1       (SDRATTR_3DSCENE_FIRST + 4);     /* 1287 V4+++*/
-constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_2       (SDRATTR_3DSCENE_FIRST + 5);     /* 1288 V4+++*/
-constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_3       (SDRATTR_3DSCENE_FIRST + 6);     /* 1289 V4+++*/
-constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_4       (SDRATTR_3DSCENE_FIRST + 7);     /* 1290 V4+++*/
-constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_5       (SDRATTR_3DSCENE_FIRST + 8);     /* 1291 V4+++*/
-constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_6       (SDRATTR_3DSCENE_FIRST + 9);     /* 1292 V4+++*/
-constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_7       (SDRATTR_3DSCENE_FIRST + 10);    /* 1293 V4+++*/
-constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_8       (SDRATTR_3DSCENE_FIRST + 11);    /* 1294 V4+++*/
-constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_AMBIENTCOLOR       (SDRATTR_3DSCENE_FIRST + 12);    /* 1295 V4+++*/
-constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_1          (SDRATTR_3DSCENE_FIRST + 13);    /* 1296 V4+++*/
-constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_2          (SDRATTR_3DSCENE_FIRST + 14);    /* 1297 V4+++*/
-constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_3          (SDRATTR_3DSCENE_FIRST + 15);    /* 1298 V4+++*/
-constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_4          (SDRATTR_3DSCENE_FIRST + 16);    /* 1299 V4+++*/
-constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_5          (SDRATTR_3DSCENE_FIRST + 17);    /* 1300 V4+++*/
-constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_6          (SDRATTR_3DSCENE_FIRST + 18);    /* 1301 V4+++*/
-constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_7          (SDRATTR_3DSCENE_FIRST + 19);    /* 1302 V4+++*/
-constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_8          (SDRATTR_3DSCENE_FIRST + 20);    /* 1303 V4+++*/
-constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_1   (SDRATTR_3DSCENE_FIRST + 21);    /* 1304 V4+++*/
-constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_2   (SDRATTR_3DSCENE_FIRST + 22);    /* 1305 V4+++*/
-constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_3   (SDRATTR_3DSCENE_FIRST + 23);    /* 1306 V4+++*/
-constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_4   (SDRATTR_3DSCENE_FIRST + 24);    /* 1307 V4+++*/
-constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_5   (SDRATTR_3DSCENE_FIRST + 25);    /* 1308 V4+++*/
-constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_6   (SDRATTR_3DSCENE_FIRST + 26);    /* 1309 V4+++*/
-constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_7   (SDRATTR_3DSCENE_FIRST + 27);    /* 1310 V4+++*/
-constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_8   (SDRATTR_3DSCENE_FIRST + 28);    /* 1311 V4+++*/
-constexpr TypedWhichId<SfxUInt16Item>        SDRATTR_3DSCENE_SHADOW_SLANT       (SDRATTR_3DSCENE_FIRST + 29);    /* 1312 V4+++*/
-constexpr TypedWhichId<Svx3DShadeModeItem>   SDRATTR_3DSCENE_SHADE_MODE         (SDRATTR_3DSCENE_FIRST + 30);    /* 1313 V4+++*/
-constexpr sal_uInt16                         SDRATTR_3DSCENE_LAST               (SDRATTR_3DSCENE_SHADE_MODE);    /* 1333 V4+++*/
-constexpr sal_uInt16                         SDRATTR_3D_LAST                    (SDRATTR_3DSCENE_LAST);          /* 1333 V4+++*/
+constexpr sal_uInt16                         SDRATTR_3DSCENE_FIRST              (SDRATTR_3DOBJ_LAST + 1);        // 1202
+constexpr TypedWhichId<Svx3DPerspectiveItem> SDRATTR_3DSCENE_PERSPECTIVE        (SDRATTR_3DSCENE_FIRST + 0);     // 1202
+constexpr TypedWhichId<SfxUInt32Item>        SDRATTR_3DSCENE_DISTANCE           (SDRATTR_3DSCENE_FIRST + 1);     // 1203
+constexpr TypedWhichId<SfxUInt32Item>        SDRATTR_3DSCENE_FOCAL_LENGTH       (SDRATTR_3DSCENE_FIRST + 2);     // 1204
+constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_TWO_SIDED_LIGHTING (SDRATTR_3DSCENE_FIRST + 3);     // 1205
+constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_1       (SDRATTR_3DSCENE_FIRST + 4);     // 1206
+constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_2       (SDRATTR_3DSCENE_FIRST + 5);     // 1207
+constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_3       (SDRATTR_3DSCENE_FIRST + 6);     // 1208
+constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_4       (SDRATTR_3DSCENE_FIRST + 7);     // 1209
+constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_5       (SDRATTR_3DSCENE_FIRST + 8);     // 1210
+constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_6       (SDRATTR_3DSCENE_FIRST + 9);     // 1211
+constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_7       (SDRATTR_3DSCENE_FIRST + 10);    // 1212
+constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_8       (SDRATTR_3DSCENE_FIRST + 11);    // 1213
+constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_AMBIENTCOLOR       (SDRATTR_3DSCENE_FIRST + 12);    // 1214
+constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_1          (SDRATTR_3DSCENE_FIRST + 13);    // 1215
+constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_2          (SDRATTR_3DSCENE_FIRST + 14);    // 1216
+constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_3          (SDRATTR_3DSCENE_FIRST + 15);    // 1217
+constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_4          (SDRATTR_3DSCENE_FIRST + 16);    // 1218
+constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_5          (SDRATTR_3DSCENE_FIRST + 17);    // 1219
+constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_6          (SDRATTR_3DSCENE_FIRST + 18);    // 1220
+constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_7          (SDRATTR_3DSCENE_FIRST + 19);    // 1221
+constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_8          (SDRATTR_3DSCENE_FIRST + 20);    // 1222
+constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_1   (SDRATTR_3DSCENE_FIRST + 21);    // 1223
+constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_2   (SDRATTR_3DSCENE_FIRST + 22);    // 1224
+constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_3   (SDRATTR_3DSCENE_FIRST + 23);    // 1225
+constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_4   (SDRATTR_3DSCENE_FIRST + 24);    // 1226
+constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_5   (SDRATTR_3DSCENE_FIRST + 25);    // 1227
+constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_6   (SDRATTR_3DSCENE_FIRST + 26);    // 1228
+constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_7   (SDRATTR_3DSCENE_FIRST + 27);    // 1229
+constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_8   (SDRATTR_3DSCENE_FIRST + 28);    // 1230
+constexpr TypedWhichId<SfxUInt16Item>        SDRATTR_3DSCENE_SHADOW_SLANT       (SDRATTR_3DSCENE_FIRST + 29);    // 1231
+constexpr TypedWhichId<Svx3DShadeModeItem>   SDRATTR_3DSCENE_SHADE_MODE         (SDRATTR_3DSCENE_FIRST + 30);    // 1232
+constexpr sal_uInt16                         SDRATTR_3DSCENE_LAST               (SDRATTR_3DSCENE_SHADE_MODE);    // 1232
+constexpr sal_uInt16                         SDRATTR_3D_LAST                    (SDRATTR_3DSCENE_LAST);          // 1232
 
-constexpr sal_uInt16                               SDRATTR_CUSTOMSHAPE_FIRST    (SDRATTR_3D_LAST + 1);           /* 1334 V4+++*/
-constexpr TypedWhichId<SfxStringItem>              SDRATTR_CUSTOMSHAPE_ENGINE   (SDRATTR_CUSTOMSHAPE_FIRST + 0); /* 1334 V4+++*/
-constexpr TypedWhichId<SfxStringItem>              SDRATTR_CUSTOMSHAPE_DATA     (SDRATTR_CUSTOMSHAPE_FIRST + 1); /* 1335 V4+++*/
-constexpr TypedWhichId<SdrCustomShapeGeometryItem> SDRATTR_CUSTOMSHAPE_GEOMETRY (SDRATTR_CUSTOMSHAPE_FIRST + 2); /* 1336 V4+++*/
-constexpr sal_uInt16                               SDRATTR_CUSTOMSHAPE_LAST     (SDRATTR_CUSTOMSHAPE_GEOMETRY);  /* 1357 V4+++*/
+constexpr sal_uInt16                               SDRATTR_CUSTOMSHAPE_FIRST    (SDRATTR_3D_LAST + 1);           // 1233
+constexpr TypedWhichId<SfxStringItem>              SDRATTR_CUSTOMSHAPE_ENGINE   (SDRATTR_CUSTOMSHAPE_FIRST + 0); // 1233
+constexpr TypedWhichId<SfxStringItem>              SDRATTR_CUSTOMSHAPE_DATA     (SDRATTR_CUSTOMSHAPE_FIRST + 1); // 1234
+constexpr TypedWhichId<SdrCustomShapeGeometryItem> SDRATTR_CUSTOMSHAPE_GEOMETRY (SDRATTR_CUSTOMSHAPE_FIRST + 2); // 1235
+constexpr sal_uInt16                               SDRATTR_CUSTOMSHAPE_LAST     (SDRATTR_CUSTOMSHAPE_GEOMETRY);  // 1235
 
-constexpr sal_uInt16                      SDRATTR_TABLE_FIRST         (SDRATTR_CUSTOMSHAPE_LAST+1);
-constexpr TypedWhichId<SvxBoxItem>        SDRATTR_TABLE_BORDER        (SDRATTR_TABLE_FIRST+0);
-constexpr TypedWhichId<SvxBoxInfoItem>    SDRATTR_TABLE_BORDER_INNER  (SDRATTR_TABLE_FIRST+1);
-constexpr TypedWhichId<SvxLineItem>       SDRATTR_TABLE_BORDER_TLBR   (SDRATTR_TABLE_FIRST+2);
-constexpr TypedWhichId<SvxLineItem>       SDRATTR_TABLE_BORDER_BLTR   (SDRATTR_TABLE_FIRST+3);
-constexpr TypedWhichId<SvxTextRotateItem> SDRATTR_TABLE_TEXT_ROTATION (SDRATTR_TABLE_FIRST+4);
-constexpr TypedWhichId<SfxGrabBagItem>    SDRATTR_TABLE_GRABBAG       (SDRATTR_TABLE_FIRST+5);
-constexpr sal_uInt16                      SDRATTR_TABLE_LAST          (SDRATTR_TABLE_GRABBAG);
+constexpr sal_uInt16                      SDRATTR_TABLE_FIRST         (SDRATTR_CUSTOMSHAPE_LAST+1); // 1236
+constexpr TypedWhichId<SvxBoxItem>        SDRATTR_TABLE_BORDER        (SDRATTR_TABLE_FIRST+0);      // 1236
+constexpr TypedWhichId<SvxBoxInfoItem>    SDRATTR_TABLE_BORDER_INNER  (SDRATTR_TABLE_FIRST+1);      // 1237
+constexpr TypedWhichId<SvxLineItem>       SDRATTR_TABLE_BORDER_TLBR   (SDRATTR_TABLE_FIRST+2);      // 1238
+constexpr TypedWhichId<SvxLineItem>       SDRATTR_TABLE_BORDER_BLTR   (SDRATTR_TABLE_FIRST+3);      // 1239
+constexpr TypedWhichId<SvxTextRotateItem> SDRATTR_TABLE_TEXT_ROTATION (SDRATTR_TABLE_FIRST+4);      // 1240
+constexpr TypedWhichId<SfxGrabBagItem>    SDRATTR_TABLE_GRABBAG       (SDRATTR_TABLE_FIRST+5);      // 1241
+constexpr sal_uInt16                      SDRATTR_TABLE_LAST          (SDRATTR_TABLE_GRABBAG);      // 1241
 
-constexpr sal_uInt16                  SDRATTR_GLOW_FIRST (SDRATTR_TABLE_LAST+1);
-constexpr TypedWhichId<SdrMetricItem> SDRATTR_GLOW_RADIUS   (SDRATTR_GLOW_FIRST+0);
-constexpr TypedWhichId<XColorItem>    SDRATTR_GLOW_COLOR (SDRATTR_GLOW_FIRST+1);
-constexpr TypedWhichId<SdrPercentItem> SDRATTR_GLOW_TRANSPARENCY(SDRATTR_GLOW_FIRST + 2);
-constexpr sal_uInt16                  SDRATTR_GLOW_LAST  (SDRATTR_GLOW_TRANSPARENCY);
+constexpr sal_uInt16                      SDRATTR_GLOW_FIRST (SDRATTR_TABLE_LAST+1);                // 1242
+constexpr TypedWhichId<SdrMetricItem>     SDRATTR_GLOW_RADIUS(SDRATTR_GLOW_FIRST+0);                // 1242
+constexpr TypedWhichId<XColorItem>        SDRATTR_GLOW_COLOR (SDRATTR_GLOW_FIRST+1);                // 1243
+constexpr TypedWhichId<SdrPercentItem>    SDRATTR_GLOW_TRANSPARENCY(SDRATTR_GLOW_FIRST+2);          // 1244
+constexpr sal_uInt16                      SDRATTR_GLOW_LAST(SDRATTR_GLOW_TRANSPARENCY);             // 1244
 
-constexpr sal_uInt16                  SDRATTR_SOFTEDGE_FIRST(SDRATTR_GLOW_LAST + 1);
-constexpr TypedWhichId<SdrMetricItem> SDRATTR_SOFTEDGE_RADIUS(SDRATTR_SOFTEDGE_FIRST + 0);
-constexpr sal_uInt16                  SDRATTR_SOFTEDGE_LAST(SDRATTR_SOFTEDGE_RADIUS);
+constexpr sal_uInt16                      SDRATTR_SOFTEDGE_FIRST(SDRATTR_GLOW_LAST+1);              // 1245
+constexpr TypedWhichId<SdrMetricItem>     SDRATTR_SOFTEDGE_RADIUS(SDRATTR_SOFTEDGE_FIRST+0);        // 1245
+constexpr sal_uInt16                      SDRATTR_SOFTEDGE_LAST(SDRATTR_SOFTEDGE_RADIUS);           // 1245
 
-constexpr sal_uInt16 SDRATTR_TEXTCOLUMNS_FIRST(SDRATTR_SOFTEDGE_LAST + 1);
-constexpr TypedWhichId<SfxInt16Item> SDRATTR_TEXTCOLUMNS_NUMBER(SDRATTR_TEXTCOLUMNS_FIRST + 0);
-constexpr TypedWhichId<SdrMetricItem> SDRATTR_TEXTCOLUMNS_SPACING(SDRATTR_TEXTCOLUMNS_FIRST + 1);
-constexpr sal_uInt16 SDRATTR_TEXTCOLUMNS_LAST(SDRATTR_TEXTCOLUMNS_SPACING);
+constexpr sal_uInt16                      SDRATTR_TEXTCOLUMNS_FIRST(SDRATTR_SOFTEDGE_LAST+1);       // 1246
+constexpr TypedWhichId<SfxInt16Item>      SDRATTR_TEXTCOLUMNS_NUMBER(SDRATTR_TEXTCOLUMNS_FIRST+0);  // 1246
+constexpr TypedWhichId<SdrMetricItem>     SDRATTR_TEXTCOLUMNS_SPACING(SDRATTR_TEXTCOLUMNS_FIRST+1); // 1247
+constexpr sal_uInt16                      SDRATTR_TEXTCOLUMNS_LAST(SDRATTR_TEXTCOLUMNS_SPACING);    // 1247
 
-constexpr sal_uInt16                          SDRATTR_WRITINGMODE2_FIRST(SDRATTR_TEXTCOLUMNS_LAST + 1);
-constexpr TypedWhichId<SvxFrameDirectionItem> SDRATTR_WRITINGMODE2(SDRATTR_WRITINGMODE2_FIRST + 0);
-constexpr sal_uInt16                          SDRATTR_WRITINGMODE2_LAST(SDRATTR_WRITINGMODE2);
+constexpr sal_uInt16                          SDRATTR_WRITINGMODE2_FIRST(SDRATTR_TEXTCOLUMNS_LAST+1);// 1248
+constexpr TypedWhichId<SvxFrameDirectionItem> SDRATTR_WRITINGMODE2(SDRATTR_WRITINGMODE2_FIRST+0);    // 1248
+constexpr sal_uInt16                          SDRATTR_WRITINGMODE2_LAST(SDRATTR_WRITINGMODE2);       // 1248
 
-constexpr sal_uInt16 SDRATTR_END (SDRATTR_WRITINGMODE2_LAST);      /* 1357 */ /* 1333 V4+++*/ /* 1243 V4+++*/  /*1213*/ /*1085*/ /*1040*/ /*Pool V2: 1123,V1: 1065 */
+constexpr sal_uInt16 SDRATTR_END (SDRATTR_WRITINGMODE2_LAST);      // 1248
 
 #endif // INCLUDED_SVX_SVDDEF_HXX
 
