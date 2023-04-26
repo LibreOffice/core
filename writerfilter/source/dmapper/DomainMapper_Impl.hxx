@@ -1023,9 +1023,6 @@ public:
 
     DeletableTabStop                m_aCurrentTabStop;
 
-    /// If we're right after the end of a table.
-    bool m_bConvertedTable = false;
-
     bool IsOOXMLImport() const { return m_eDocumentType == SourceDocumentType::OOXML; }
 
     bool IsRTFImport() const { return m_eDocumentType == SourceDocumentType::RTF; }
