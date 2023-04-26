@@ -1395,6 +1395,30 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testAutoSum)
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B207:D207)"), pDoc->GetFormula(4, 206, 0));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf152577)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    insertStringToCell("A1", u"1");
+    insertStringToCell("A2", u"2");
+    insertStringToCell("B1", u"3");
+    insertStringToCell("B2", u"4");
+
+    ScDBData* pDBData = new ScDBData("testDB", 0, 0, 0, 1, 1);
+    bool bInserted
+        = pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
+    CPPUNIT_ASSERT(bInserted);
+
+    insertNewSheet(*pDoc);
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "Index", uno::Any(sal_uInt16(2)) } }));
+    dispatchCommand(mxComponent, ".uno:Remove", aArgs);
+
+    ScDBCollection* pDBs = pDoc->GetDBCollection();
+    CPPUNIT_ASSERT(!pDBs->empty());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
