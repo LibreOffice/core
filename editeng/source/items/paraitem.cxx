@@ -977,7 +977,7 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 return false;
             if (bConvert)
                 nNewDefaultDistance = o3tl::toTwips(nNewDefaultDistance, o3tl::Length::mm100);
-            if (nNewDefaultDistance <= 0)
+            if (nNewDefaultDistance < 0)
                 return false;
             mnDefaultDistance = nNewDefaultDistance;
             break;
