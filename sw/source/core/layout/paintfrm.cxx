@@ -7519,7 +7519,7 @@ void SwFrame::Retouch( const SwPageFrame * pPage, const SwRect &rRect ) const
  * considered for - adjusted to the frame, from which the background brush is
  * taken.
  *
- * @parem bLowerMode
+ * @param bLowerMode
  * input parameter - boolean indicating, if background brush should *not* be
  * taken from parent.
  *
