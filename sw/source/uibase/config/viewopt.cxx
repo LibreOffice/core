@@ -237,6 +237,7 @@ void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, bool b
 }
 
 SwViewOption::SwViewOption() :
+    m_sThemeName( "Default" ),
     m_sSymbolFont( "symbol" ),
     m_aRetouchColor( COL_TRANSPARENT ),
     mnViewLayoutColumns( 0 ),

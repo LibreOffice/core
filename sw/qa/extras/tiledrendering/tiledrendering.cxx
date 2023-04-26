@@ -1639,10 +1639,11 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetViewRenderState)
         aViewOptions.SetOnlineSpell(true);
         pXTextDocument->GetDocShell()->GetWrtShell()->ApplyViewOptions(aViewOptions);
     }
-    CPPUNIT_ASSERT_EQUAL(OString("PS"), pXTextDocument->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL(OString("PS;Default"), pXTextDocument->getViewRenderState());
 
     // Create a second view
     SfxLokHelper::createView();
+    int nSecondViewId = SfxLokHelper::getView();
     ViewCallback aView2;
     {
         // Give the second view different options
@@ -1651,11 +1652,29 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetViewRenderState)
         aViewOptions.SetOnlineSpell(true);
         pXTextDocument->GetDocShell()->GetWrtShell()->ApplyViewOptions(aViewOptions);
     }
-    CPPUNIT_ASSERT_EQUAL(OString("S"), pXTextDocument->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL(OString("S;Default"), pXTextDocument->getViewRenderState());
 
     // Switch back to the first view, and check that the options string is the same
     SfxLokHelper::setView(nFirstViewId);
-    CPPUNIT_ASSERT_EQUAL(OString("PS"), pXTextDocument->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL(OString("PS;Default"), pXTextDocument->getViewRenderState());
+
+    // Switch back to the second view, and change to dark mode
+    SfxLokHelper::setView(nSecondViewId);
+    {
+        SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
+        SwView* pView = pDoc->GetDocShell()->GetView();
+        uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
+        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+            {
+                { "NewTheme", uno::Any(OUString("Dark")) },
+            }
+        );
+        comphelper::dispatchCommand(".uno:ChangeTheme", xFrame, aPropertyValues);
+    }
+    CPPUNIT_ASSERT_EQUAL(OString("S;Dark"), pXTextDocument->getViewRenderState());
+    // Switch back to the first view, and check that the options string is the same
+    SfxLokHelper::setView(nFirstViewId);
+    CPPUNIT_ASSERT_EQUAL(OString("PS;Default"), pXTextDocument->getViewRenderState());
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSetViewGraphicSelection)
