@@ -2742,24 +2742,6 @@
           <desc>Contains settings which specify how dialogs and toolbars should
           be displayed.</desc>
         </info>
-        <prop oor:name="ButtonLarge" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: Tools  Options - General  View  [Section] Buttons -->
-          <info>
-            <desc>Specifies whether toolbar buttons should be drawn large or
-            small. True means large.</desc>
-            <label>Large buttons</label>
-          </info>
-          <value>false</value>
-        </prop>
-        <prop oor:name="ButtonFlat" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: Tools  Options - General  View  [Section] Buttons -->
-          <info>
-            <desc>Specifies whether toolbox buttons should be drawn with a flat
-            or 3D design. True means flat design.</desc>
-            <label>Flat buttons</label>
-          </info>
-          <value>true</value>
-        </prop>
         <prop oor:name="MousePositioning" oor:type="xs:short" oor:nillable="false">
           <!-- UIHints: Tools  Options - General  View  [Section] Mouse
                positioning -->
