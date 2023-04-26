@@ -775,18 +775,6 @@
         <value>false</value>
       </prop>
     </group>
-    <group oor:name="Dictionaries">
-      <info>
-        <desc>Contains settings related to dictionaries.</desc>
-      </info>
-      <prop oor:name="RepositoryURL" oor:type="xs:string" oor:nillable="false">
-        <info>
-          <desc>Specifies a repository URL where users can download additional
-          dictionaries.</desc>
-        </info>
-        <value/>
-      </prop>
-    </group>
     <group oor:name="Drawinglayer">
       <info>
         <desc>Specifies settings for the Drawinglayer.</desc>
