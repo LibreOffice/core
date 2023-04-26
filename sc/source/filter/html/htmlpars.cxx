@@ -768,8 +768,7 @@ void ScHTMLLayoutParser::SetWidths()
             for (auto it = pLocalColOffset->begin(); it != pLocalColOffset->end(); ++it)
             {
                 // Only exact offsets, do not use MakeColNoRef().
-                if (maColOffset.find(*it) == maColOffset.end())
-                    maColOffset.insert(*it);
+                maColOffset.insert(*it);
             }
         }
     }

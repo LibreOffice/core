@@ -3345,10 +3345,8 @@ void ChartExport::_exportAxis(
     }
 
     // only export each axis only once non-deleted
-    bool bDeleted = maExportedAxis.find(rAxisIdPair.nAxisType) != maExportedAxis.end();
-
-    if (!bDeleted)
-        maExportedAxis.insert(rAxisIdPair.nAxisType);
+    auto aItInsertedPair = maExportedAxis.insert(rAxisIdPair.nAxisType);
+    bool bDeleted = !aItInsertedPair.second;
 
     pFS->singleElement(FSNS(XML_c, XML_delete), XML_val, !bDeleted && bVisible ? "0" : "1");
 

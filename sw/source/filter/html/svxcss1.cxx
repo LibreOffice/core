@@ -925,11 +925,9 @@ void SvxCSS1Parser::InsertMapEntry( const OUString& rKey,
                                     const SvxCSS1PropertyInfo& rProp,
                                     CSS1Map& rMap )
 {
-    CSS1Map::iterator itr = rMap.find(rKey);
-    if (itr == rMap.end())
-    {
-        rMap.insert(std::make_pair(rKey, std::make_unique<SvxCSS1MapEntry>(rItemSet, rProp)));
-    }
+    auto [itr,inserted] = rMap.insert(std::make_pair(rKey, nullptr));
+    if (inserted)
+        itr->second = std::make_unique<SvxCSS1MapEntry>(rItemSet, rProp);
     else
     {
         SvxCSS1MapEntry *const p = itr->second.get();

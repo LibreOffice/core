@@ -1379,10 +1379,10 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
                     GetMergedRange(nColLeft, nRowTop, nColRight, nRowBottom, nCol, nRow);
                     const sal_Int32 nIndexOfMergedCell(mxImpl->GetIndex(nColLeft, nRowTop));
 
-                    if(aMergedCells.end() == aMergedCells.find(nIndexOfMergedCell))
+                    auto aItInsertedPair = aMergedCells.insert(nIndexOfMergedCell);
+                    if(aItInsertedPair.second)
                     {
-                        // not found, so not yet handled. Add now to mark as handled
-                        aMergedCells.insert(nIndexOfMergedCell);
+                        // not found, so not yet handled.
 
                         // Get and check if diagonal styles are used
                         // Note: For GetCellStyleBLTR below I tried to use nRowBottom

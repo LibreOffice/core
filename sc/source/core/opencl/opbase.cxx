@@ -114,12 +114,9 @@ int DynamicKernelArgument::GetStringId( const rtl_uString* string )
         return 0;
     if( stringIdsMap == nullptr )
         stringIdsMap = new std::unordered_map<const rtl_uString*, int>;
-    std::unordered_map<const rtl_uString*, int>::iterator it = stringIdsMap->find( string );
-    if( it != stringIdsMap->end())
-        return it->second;
     int newId = stringIdsMap->size() + 1;
-    stringIdsMap->insert( std::pair( string, newId ));
-    return newId;
+    auto aItInsertedPair = stringIdsMap->insert( std::pair( string, newId ));
+    return aItInsertedPair.first->second;
 }
 
 void DynamicKernelArgument::ClearStringIds()

@@ -352,12 +352,11 @@ bool ValueParser::endElement() {
             case Node::KIND_LOCALIZED_PROPERTY:
                 {
                     NodeMap & members = node_->getMembers();
-                    NodeMap::iterator i(members.find(localizedName_));
+                    auto [i, bInserted] = members.insert(NodeMap::value_type(localizedName_, nullptr));
                     LocalizedValueNode *pLVNode;
-                    if (i == members.end()) {
+                    if (bInserted) {
                         pLVNode = new LocalizedValueNode(layer_);
-                        members.insert(
-                            NodeMap::value_type(localizedName_, pLVNode ));
+                        i->second = pLVNode;
                     } else {
                         pLVNode = static_cast< LocalizedValueNode * >(i->second.get());
                     }

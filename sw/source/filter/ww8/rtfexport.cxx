@@ -1432,13 +1432,11 @@ OString* RtfExport::GetStyle(sal_uInt16 nId)
 
 sal_uInt16 RtfExport::GetRedline(const OUString& rAuthor)
 {
-    auto it = m_aRedlineTable.find(rAuthor);
-    if (it != m_aRedlineTable.end())
-        return it->second;
-
     const sal_uInt16 nId = m_aRedlineTable.size();
-    m_aRedlineTable.insert(std::pair<OUString, sal_uInt16>(rAuthor, nId));
-    return nId;
+    // insert if we don't already have one
+    auto[it, inserted] = m_aRedlineTable.insert(std::pair<OUString, sal_uInt16>(rAuthor, nId));
+    (void)inserted;
+    return it->second;
 }
 
 const OUString* RtfExport::GetRedline(sal_uInt16 nId)

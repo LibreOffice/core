@@ -170,8 +170,7 @@ void SfxShell::PutItem
     if (it != pImpl->m_Items.end())
     {
         // Replace Item
-        pImpl->m_Items.erase( it );
-        pImpl->m_Items.insert(std::make_pair(nWhich, std::unique_ptr<SfxPoolItem>(pItem)));
+        it->second = std::unique_ptr<SfxPoolItem>(pItem);
 
         // if active, notify Bindings
         SfxDispatcher *pDispat = GetDispatcher();
