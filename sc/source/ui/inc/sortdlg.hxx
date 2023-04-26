@@ -26,6 +26,7 @@ class ScSortDlg : public SfxTabDialogController
 {
 public:
     ScSortDlg(weld::Window* pParent, const SfxItemSet* pArgSet);
+    virtual ~ScSortDlg() override;
 };
 
 class ScSortWarningDlg : public weld::GenericDialogController

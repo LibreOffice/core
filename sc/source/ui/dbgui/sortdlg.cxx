@@ -22,12 +22,26 @@
 #include <scui_def.hxx>
 #include <tpsort.hxx>
 #include <sortdlg.hxx>
+#include <unotools/viewoptions.hxx>
 
 ScSortDlg::ScSortDlg(weld::Window* pParent, const SfxItemSet* pArgSet)
     : SfxTabDialogController(pParent, "modules/scalc/ui/sortdialog.ui", "SortDialog", pArgSet)
 {
     AddTabPage("criteria", ScTabPageSortFields::Create, nullptr);
     AddTabPage("options", ScTabPageSortOptions::Create, nullptr);
+
+    // restore dialog size
+    SvtViewOptions aDlgOpt(EViewType::Dialog, "SortDialog");
+    if (aDlgOpt.Exists())
+        m_xDialog->set_window_state(aDlgOpt.GetWindowState());
+}
+
+ScSortDlg::~ScSortDlg()
+{
+    // tdf#153852 - Make of sort dialog resizable (and remember size)
+    SvtViewOptions aDlgOpt(EViewType::Dialog, "SortDialog");
+    OUString sWindowState = m_xDialog->get_window_state(vcl::WindowDataMask::PosSize);
+    aDlgOpt.SetWindowState(sWindowState);
 }
 
 ScSortWarningDlg::ScSortWarningDlg(weld::Window* pParent,
