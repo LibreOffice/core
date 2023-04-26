@@ -116,26 +116,31 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
     mbHasControls(false),
     mbWasShapeInPara(false)
 {
-    // #i24363# tab stops relative to indent
-    m_pImpl->SetDocumentSettingsProperty(
-        getPropertyName( PROP_TABS_RELATIVE_TO_INDENT ),
-        uno::Any( false ) );
-    m_pImpl->SetDocumentSettingsProperty(
-        getPropertyName( PROP_SURROUND_TEXT_WRAP_SMALL ),
-        uno::Any( true ) );
-    m_pImpl->SetDocumentSettingsProperty(
-        getPropertyName( PROP_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING ),
-        uno::Any( true ) );
+    if (m_pImpl->IsNewDoc())
+    {
+        // #i24363# tab stops relative to indent
+        m_pImpl->SetDocumentSettingsProperty(
+            getPropertyName(PROP_TABS_RELATIVE_TO_INDENT),
+            uno::Any(false));
+        m_pImpl->SetDocumentSettingsProperty(
+            getPropertyName(PROP_SURROUND_TEXT_WRAP_SMALL),
+            uno::Any(true));
+        m_pImpl->SetDocumentSettingsProperty(
+            getPropertyName(PROP_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING),
+            uno::Any(true));
 
-    // Don't load the default style definitions to avoid weird mix
-    m_pImpl->SetDocumentSettingsProperty("StylesNoDefault", uno::Any(true));
-    m_pImpl->SetDocumentSettingsProperty("MsWordCompTrailingBlanks", uno::Any(true));
-    m_pImpl->SetDocumentSettingsProperty("HeaderSpacingBelowLastPara",
-                                         uno::Any(true));
-    m_pImpl->SetDocumentSettingsProperty("FrameAutowidthWithMorePara", uno::Any(true));
-    m_pImpl->SetDocumentSettingsProperty("FootnoteInColumnToPageEnd", uno::Any(true));
-    m_pImpl->SetDocumentSettingsProperty("TabAtLeftIndentForParagraphsInList", uno::Any(true));
-    m_pImpl->SetDocumentSettingsProperty("NoNumberingShowFollowBy", uno::Any(true));
+        // Don't load the default style definitions to avoid weird mix
+        m_pImpl->SetDocumentSettingsProperty("StylesNoDefault", uno::Any(true));
+        m_pImpl->SetDocumentSettingsProperty("MsWordCompTrailingBlanks", uno::Any(true));
+        m_pImpl->SetDocumentSettingsProperty("HeaderSpacingBelowLastPara",
+            uno::Any(true));
+        m_pImpl->SetDocumentSettingsProperty("FrameAutowidthWithMorePara", uno::Any(true));
+        m_pImpl->SetDocumentSettingsProperty("FootnoteInColumnToPageEnd", uno::Any(true));
+        m_pImpl->SetDocumentSettingsProperty("TabAtLeftIndentForParagraphsInList", uno::Any(true));
+
+        // Enable only for new documents, since pasting from clipboard can influence existing doc
+        m_pImpl->SetDocumentSettingsProperty("NoNumberingShowFollowBy", uno::Any(true));
+    }
 
     // Initialize RDF metadata, to be able to add statements during the import.
     try
