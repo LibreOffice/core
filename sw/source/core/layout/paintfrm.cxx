@@ -4349,7 +4349,7 @@ SwView* SwTextFrame::GetView()
 void SwTextFrame::PaintParagraphStylesHighlighting() const
 {
     // Maybe avoid the dynamic_cast and just use GetActiveWrtShell()
-    // NO! Multiple windows will not dispay the highlighting correctly if GetActiveWrtShell is used.
+    // NO! Multiple windows will not display the highlighting correctly if GetActiveWrtShell is used.
     SwWrtShell* pWrtSh = dynamic_cast<SwWrtShell*>(gProp.pSGlobalShell);
 
     if (!pWrtSh)
