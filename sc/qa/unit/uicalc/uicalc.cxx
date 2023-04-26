@@ -3144,6 +3144,33 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testUnallocatedColumnsAttributes)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf152577)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    insertStringToCell(*pModelObj, "A1", "1");
+    insertStringToCell(*pModelObj, "A2", "2");
+    insertStringToCell(*pModelObj, "B1", "3");
+    insertStringToCell(*pModelObj, "B2", "4");
+
+    ScDBData* pDBData = new ScDBData("testDB", 0, 0, 0, 1, 1);
+    bool bInserted
+        = pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
+    CPPUNIT_ASSERT(bInserted);
+
+    insertNewSheet(*pDoc);
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "Index", uno::Any(sal_uInt16(2)) } }));
+    dispatchCommand(mxComponent, ".uno:Remove", aArgs);
+
+    ScDBCollection* pDBs = pDoc->GetDBCollection();
+    CPPUNIT_ASSERT(!pDBs->empty());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
