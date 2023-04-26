@@ -2473,9 +2473,6 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         rAppendContext.m_aAnchoredObjects.clear();
                     }
 
-                    // We're no longer right after a table conversion.
-                    m_bConvertedTable = false;
-
                     if (xCursor.is())
                     {
                         xCursor->goLeft(1, true);

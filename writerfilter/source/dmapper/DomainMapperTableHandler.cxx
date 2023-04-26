@@ -1586,9 +1586,6 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                 AfterConvertToTextFrame(m_rDMapper_Impl, aFramedRedlines, redPos, redLen, redCell, redTable);
             }
         }
-
-        // We're right after a table conversion.
-        m_rDMapper_Impl.m_bConvertedTable = true;
     }
 
     m_aTableProperties.clear();
