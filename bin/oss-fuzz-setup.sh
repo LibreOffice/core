@@ -78,12 +78,19 @@ cd $SRC
 
 #fuzzing dictionaries
 curl --no-progress-meter -S \
-    -C - -O https://raw.githubusercontent.com/rc0r/afl-fuzz/master/dictionaries/gif.dict \
-    -C - -O https://raw.githubusercontent.com/rc0r/afl-fuzz/master/dictionaries/jpeg.dict \
-    -C - -O https://raw.githubusercontent.com/rc0r/afl-fuzz/master/dictionaries/png.dict \
-    -C - -O https://raw.githubusercontent.com/rc0r/afl-fuzz/master/dictionaries/tiff.dict \
-    -C - -O https://raw.githubusercontent.com/rc0r/afl-fuzz/master/dictionaries/xml.dict \
-    -C - -O https://raw.githubusercontent.com/rc0r/afl-fuzz/master/dictionaries/html_tags.dict
+    -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/gif.dict \
+    -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/jpeg.dict \
+    -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/png.dict \
+    -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/tiff.dict \
+    -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/xml.dict \
+    -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/html.dict \
+    -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/svg.dict \
+    -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/bmp.dict \
+    -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/otf.dict \
+    -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/psd.dict \
+    -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/rtf.dict \
+    -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/webp.dict \
+    -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/zip.dict
 #fuzzing corpuses
 #afl jpeg, gif, bmp, png, webp
 curl --no-progress-meter -S -C - -O https://lcamtuf.coredump.cx/afl/demo/afl_testcases.tgz
