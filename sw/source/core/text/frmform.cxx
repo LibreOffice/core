@@ -633,6 +633,13 @@ void SwTextFrame::AdjustFollow_( SwTextFormatter &rLine,
         while( GetFollow() && GetFollow()->GetFollow() &&
                nNewOfst >= GetFollow()->GetFollow()->GetOffset() )
         {
+            if (HasNonLastSplitFlyDrawObj())
+            {
+                // A non-last split fly is anchored to us, don't move content from the last frame to
+                // this one and don't join.
+                return;
+            }
+
             JoinFrame();
         }
     }
@@ -1109,7 +1116,11 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
         // AdjustFollow might execute JoinFrame() because of this.
         // Else, nEnd is the end of the last line in the Master.
         TextFrameIndex nOld = nEnd;
-        nEnd = rLine.GetEnd();
+        // Make sure content from the last floating table anchor is not shifted to previous anchors.
+        if (!HasNonLastSplitFlyDrawObj())
+        {
+            nEnd = rLine.GetEnd();
+        }
         if( GetFollow() )
         {
             if( nNew && nOld < nEnd )
