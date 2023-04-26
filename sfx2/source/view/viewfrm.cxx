@@ -595,7 +595,10 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             }
 
             rReq.AppendItem( SfxBoolItem(SID_FORCERELOAD,
-                    rReq.GetSlot() == SID_EDITDOC || bNeedsReload) );
+                    (rReq.GetSlot() == SID_EDITDOC
+                     // tdf#151715 exclude files loaded from /tmp to avoid Notebookbar bugs
+                     && (!pSh->IsOriginallyReadOnlyMedium() || pSh->IsOriginallyLoadedReadOnlyMedium()))
+                    || bNeedsReload) );
             rReq.AppendItem( SfxBoolItem( SID_SILENT, true ));
 
             [[fallthrough]]; //TODO ???
