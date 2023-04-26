@@ -1119,13 +1119,6 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
                           const int nCanvasWidth, const int nCanvasHeight,
                           const int nTilePosX, const int nTilePosY,
                           const int nTileWidth, const int nTileHeight);
-#ifdef IOS
-static void doc_paintTileToCGContext(LibreOfficeKitDocument* pThis,
-                                     void* rCGContext,
-                                     const int nCanvasWidth, const int nCanvasHeight,
-                                     const int nTilePosX, const int nTilePosY,
-                                     const int nTileWidth, const int nTileHeight);
-#endif
 static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                               unsigned char* pBuffer,
                               const int nPart,
@@ -1392,9 +1385,6 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
         m_pDocumentClass->setPartMode = doc_setPartMode;
         m_pDocumentClass->getEditMode = doc_getEditMode;
         m_pDocumentClass->paintTile = doc_paintTile;
-#ifdef IOS
-        m_pDocumentClass->paintTileToCGContext = doc_paintTileToCGContext;
-#endif
         m_pDocumentClass->paintPartTile = doc_paintPartTile;
         m_pDocumentClass->getTileMode = doc_getTileMode;
         m_pDocumentClass->getDocumentSize = doc_getDocumentSize;
@@ -2585,41 +2575,6 @@ LibLibreOffice_Impl::~LibLibreOffice_Impl()
 
 namespace
 {
-
-#ifdef IOS
-void paintTileToCGContext(ITiledRenderable* pDocument,
-                          void* rCGContext, const Size nCanvasSize,
-                          const int nTilePosX, const int nTilePosY,
-                          const int nTileWidth, const int nTileHeight)
-{
-    SystemGraphicsData aData;
-    aData.rCGContext = reinterpret_cast<CGContextRef>(rCGContext);
-
-    ScopedVclPtrInstance<VirtualDevice> pDevice(aData, Size(1, 1), DeviceFormat::WITHOUT_ALPHA);
-    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
-    pDevice->SetOutputSizePixel(nCanvasSize);
-    pDocument->paintTile(*pDevice, nCanvasSize.Width(), nCanvasSize.Height(),
-                    nTilePosX, nTilePosY, nTileWidth, nTileHeight);
-}
-
-void paintTileIOS(LibreOfficeKitDocument* pThis,
-             unsigned char* pBuffer,
-             const int nCanvasWidth, const int nCanvasHeight, const double fDPIScale,
-             const int nTilePosX, const int nTilePosY,
-             const int nTileWidth, const int nTileHeight)
-{
-    CGContextRef pCGContext = CGBitmapContextCreate(pBuffer, nCanvasWidth, nCanvasHeight, 8,
-                                                    nCanvasWidth * 4, CGColorSpaceCreateDeviceRGB(),
-                                                    kCGImageAlphaPremultipliedFirst | kCGImageByteOrder32Little);
-
-    CGContextTranslateCTM(pCGContext, 0, nCanvasHeight);
-    CGContextScaleCTM(pCGContext, fDPIScale, -fDPIScale);
-
-    doc_paintTileToCGContext(pThis, (void*) pCGContext, nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
-
-    CGContextRelease(pCGContext);
-}
-#endif
 
 void setLanguageAndLocale(OUString const & aLangISO)
 {
@@ -3933,8 +3888,31 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
     comphelper::ScopeGuard dpiScaleGuard([]() { comphelper::LibreOfficeKit::setDPIScale(1.0); });
 
 #if defined(IOS)
-    double fDPIScaleX = 1.0;
-    paintTileIOS(pThis, pBuffer, nCanvasWidth, nCanvasHeight, fDPIScaleX, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+    double fDPIScale = 1.0;
+
+    CGContextRef pCGContext = CGBitmapContextCreate(pBuffer, nCanvasWidth, nCanvasHeight, 8,
+                                                    nCanvasWidth * 4, CGColorSpaceCreateDeviceRGB(),
+                                                    kCGImageAlphaPremultipliedFirst | kCGImageByteOrder32Little);
+
+    CGContextTranslateCTM(pCGContext, 0, nCanvasHeight);
+    CGContextScaleCTM(pCGContext, fDPIScale, -fDPIScale);
+
+    SAL_INFO( "lok.tiledrendering", "doc_paintTile: painting [" << nTileWidth << "x" << nTileHeight <<
+              "]@(" << nTilePosX << ", " << nTilePosY << ") to [" <<
+              nCanvasWidth << "x" << nCanvasHeight << "]px" );
+
+    Size aCanvasSize(nCanvasWidth, nCanvasHeight);
+
+    SystemGraphicsData aData;
+    aData.rCGContext = reinterpret_cast<CGContextRef>(pCGContext);
+
+    ScopedVclPtrInstance<VirtualDevice> pDevice(aData, Size(1, 1), DeviceFormat::WITHOUT_ALPHA);
+    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+    pDevice->SetOutputSizePixel(aCanvasSize);
+    pDoc->paintTile(*pDevice, aCanvasSize.Width(), aCanvasSize.Height(),
+                    nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+
+    CGContextRelease(pCGContext);
 #else
     ScopedVclPtrInstance< VirtualDevice > pDevice(DeviceFormat::WITHOUT_ALPHA);
 
@@ -3996,36 +3974,6 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
     (void) pBuffer;
 #endif
 }
-
-#ifdef IOS
-
-// This function is separate only to be used by LibreOfficeLight. If that app can be retired, this
-// function's code can be inlined.
-static void doc_paintTileToCGContext(LibreOfficeKitDocument* pThis,
-                                     void* rCGContext,
-                                     const int nCanvasWidth, const int nCanvasHeight,
-                                     const int nTilePosX, const int nTilePosY,
-                                     const int nTileWidth, const int nTileHeight)
-{
-    SolarMutexGuard aGuard;
-    SetLastExceptionMsg();
-
-    SAL_INFO( "lok.tiledrendering", "paintTileToCGContext: painting [" << nTileWidth << "x" << nTileHeight <<
-              "]@(" << nTilePosX << ", " << nTilePosY << ") to [" <<
-              nCanvasWidth << "x" << nCanvasHeight << "]px" );
-
-    ITiledRenderable* pDoc = getTiledRenderable(pThis);
-    if (!pDoc)
-    {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
-        return;
-    }
-
-    Size aCanvasSize(nCanvasWidth, nCanvasHeight);
-    paintTileToCGContext(pDoc, rCGContext, aCanvasSize, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
-}
-
-#endif
 
 static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                               unsigned char* pBuffer,
