@@ -50,6 +50,7 @@
 #include <vcl/weldutils.hxx>
 #include <sot/formats.hxx>
 #include <comphelper/classids.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <svx/svdview.hxx>
 #include <svx/svdocapt.hxx>
@@ -344,6 +345,18 @@ static bool lcl_GetHyperlinkCell(
     while ( !bFound );
 
     return bFound;
+}
+
+static void lcl_GetMirror(Point& rPoint, tools::Rectangle& rRect, const tools::Long nWidth)
+{
+    tools::Long nLeft = rRect.Left();
+    tools::Long nRight = rRect.Right();
+    tools::Long nMirrorPX = o3tl::convert(nWidth, o3tl::Length::twip, o3tl::Length::px);
+    tools::Long nMirrorMM = o3tl::convert(nWidth, o3tl::Length::twip, o3tl::Length::mm100);
+
+    rPoint.setX(nMirrorPX - rPoint.X());
+    rRect.SetLeft(nMirrorMM - nRight);
+    rRect.SetRight(nMirrorMM - nLeft);
 }
 
 //  WB_DIALOGCONTROL needed for UNO-Controls
@@ -1851,7 +1864,25 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
 
             pScMod->SetInputMode( SC_INPUT_TABLE );
             bEEMouse = true;
-            pEditView->MouseButtonDown( rMEvt );
+
+            if (comphelper::LibreOfficeKit::isActive() && rDoc.IsLayoutRTL(mrViewData.GetTabNo()))
+            {
+                Point aMouse = rMEvt.GetPosPixel();
+                tools::Rectangle aOutputArea = pEditView->GetOutputArea();
+                comphelper::ScopeGuard aOutputGuard(
+                    [pEditView, aOutputArea] {
+                        pEditView->SetOutputArea(aOutputArea);
+                    });
+
+                lcl_GetMirror(aMouse, aOutputArea, mrViewData.getLOKVisibleArea().GetWidth());
+                pEditView->SetOutputArea(aOutputArea);
+
+                MouseEvent aEvent(aMouse, rMEvt.GetClicks(), rMEvt.GetMode(),
+                                  rMEvt.GetButtons(), rMEvt.GetModifier());
+                pEditView->MouseButtonDown( aEvent );
+            }
+            else
+                pEditView->MouseButtonDown( rMEvt );
             return;
         }
     }
@@ -2119,7 +2150,25 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         SCCOL       nEditCol;
         SCROW       nEditRow;
         mrViewData.GetEditView( eWhich, pEditView, nEditCol, nEditRow );
-        pEditView->MouseButtonUp( rMEvt );
+
+        if (comphelper::LibreOfficeKit::isActive() && rDoc.IsLayoutRTL(mrViewData.GetTabNo()))
+        {
+            Point aMouse = rMEvt.GetPosPixel();
+            tools::Rectangle aOutputArea = pEditView->GetOutputArea();
+            comphelper::ScopeGuard aOutputGuard(
+                [pEditView, aOutputArea] {
+                    pEditView->SetOutputArea(aOutputArea);
+                });
+
+            lcl_GetMirror(aMouse, aOutputArea, mrViewData.getLOKVisibleArea().GetWidth());
+            pEditView->SetOutputArea(aOutputArea);
+
+            MouseEvent aEvent(aMouse, rMEvt.GetClicks(), rMEvt.GetMode(),
+                              rMEvt.GetButtons(), rMEvt.GetModifier());
+            pEditView->MouseButtonUp( aEvent );
+        }
+        else
+            pEditView->MouseButtonUp( rMEvt );
 
         if ( rMEvt.IsMiddle() &&
                  GetSettings().GetMouseSettings().GetMiddleButtonAction() == MouseMiddleButtonAction::PasteSelection )
@@ -2612,7 +2661,26 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
         SCCOL       nEditCol;
         SCROW       nEditRow;
         mrViewData.GetEditView( eWhich, pEditView, nEditCol, nEditRow );
-        pEditView->MouseMove( rMEvt );
+
+        if (comphelper::LibreOfficeKit::isActive() && mrViewData.GetDocument().IsLayoutRTL(mrViewData.GetTabNo()))
+        {
+            Point aMouse = rMEvt.GetPosPixel();
+            tools::Rectangle aOutputArea = pEditView->GetOutputArea();
+            comphelper::ScopeGuard aOutputGuard(
+                [pEditView, aOutputArea] {
+                    pEditView->SetOutputArea(aOutputArea);
+                });
+
+            lcl_GetMirror(aMouse, aOutputArea, mrViewData.getLOKVisibleArea().GetWidth());
+            pEditView->SetOutputArea(aOutputArea);
+
+            MouseEvent aEvent(aMouse, rMEvt.GetClicks(), rMEvt.GetMode(),
+                              rMEvt.GetButtons(), rMEvt.GetModifier());
+
+            pEditView->MouseMove( aEvent );
+        }
+        else
+            pEditView->MouseMove( rMEvt );
         return;
     }
 
