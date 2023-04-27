@@ -5046,15 +5046,6 @@ void DomainMapper_Impl::PushTextBoxContent()
     if (m_bIsInTextBox)
         return;
 
-    // tdf#154481: check for TOC creation with empty field stack,
-    // and close TOC, unless pages will lost. FIXME.
-    if (IsInTOC() && m_aFieldStack.size() == 0)
-    {
-        m_bStartTOC = false;
-        SAL_WARN("writerfilter.dmapper",
-                 "broken TOC creation in textbox, but field stack is empty, so closing TOC!");
-    }
-
     try
     {
         uno::Reference<text::XTextFrame> xTBoxFrame(
@@ -6558,7 +6549,13 @@ uno::Reference<beans::XPropertySet> DomainMapper_Impl::createSectionForRange(
             if (stepLeft)
                 xCursor->goLeft(1, true);
             uno::Reference< text::XTextContent > xSection( m_xTextFactory->createInstance(sObjectType), uno::UNO_QUERY_THROW );
-            xSection->attach( uno::Reference< text::XTextRange >( xCursor, uno::UNO_QUERY_THROW) );
+            try
+            {
+                xSection->attach( uno::Reference< text::XTextRange >( xCursor, uno::UNO_QUERY_THROW) );
+            }
+            catch(const uno::Exception&)
+            {
+            }
             xRet.set(xSection, uno::UNO_QUERY );
         }
         catch(const uno::Exception&)
