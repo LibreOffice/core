@@ -214,8 +214,8 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxFloatingTableExport)
     pWrtShell->StartAllAction();
     aMgr.InsertFlyFrame(RndStdIds::FLY_AT_PARA, aMgr.GetPos(), aMgr.GetSize());
     // Mark it as a floating table:
-    auto& rFlys = *pDoc->GetSpzFrameFormats();
-    auto pFly = rFlys[0];
+    SwFrameFormats& rFlys = *pDoc->GetSpzFrameFormats();
+    SwFrameFormat* pFly = rFlys[0];
     SwAttrSet aSet(pFly->GetAttrSet());
     aSet.Put(SwFormatFlySplit(true));
     pDoc->SetAttr(aSet, *pFly);

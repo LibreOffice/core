@@ -976,10 +976,10 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
     if( DelContentType::Fly & nDelContentType )
     {
         sal_uInt16 nChainInsPos = m_pHistory ? m_pHistory->Count() : 0;
-        const sw::SpzFrameFormats& rSpzArr = *rDoc.GetSpzFrameFormats();
+        const SwFrameFormats& rSpzArr = *rDoc.GetSpzFrameFormats();
         if( !rSpzArr.empty() )
         {
-            sw::SpzFrameFormat* pFormat;
+            SwFrameFormat* pFormat;
             const SwFormatAnchor* pAnchor;
             size_t n = rSpzArr.size();
             const SwPosition* pAPos;

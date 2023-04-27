@@ -48,7 +48,7 @@ CPPUNIT_TEST_FIXTURE(Test, testShiftClickOnImage)
     pWrtShell->SttEndDoc(/*bStt=*/false);
 
     // When shift-clicking on that fly frame:
-    auto& rSpzFormats = *pDoc->GetSpzFrameFormats();
+    SwFrameFormats& rSpzFormats = *pDoc->GetSpzFrameFormats();
     auto pFrameFormat = dynamic_cast<SwFlyFrameFormat*>(rSpzFormats[0]);
     CPPUNIT_ASSERT(pFrameFormat);
     SwFlyFrame* pFlyFrame = pFrameFormat->GetFrame();
@@ -163,7 +163,7 @@ CPPUNIT_TEST_FIXTURE(Test, testShiftDoubleClickOnImage)
     xRegistration->registerDispatchProviderInterceptor(pInterceptor);
 
     // When shift-double-clicking on that fly frame:
-    auto& rSpzFormats = *pDoc->GetSpzFrameFormats();
+    SwFrameFormats& rSpzFormats = *pDoc->GetSpzFrameFormats();
     auto pFrameFormat = dynamic_cast<SwFlyFrameFormat*>(rSpzFormats[0]);
     CPPUNIT_ASSERT(pFrameFormat);
     SwFlyFrame* pFlyFrame = pFrameFormat->GetFrame();

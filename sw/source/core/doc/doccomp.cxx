@@ -1795,14 +1795,14 @@ namespace
                                   std::make_shared<CompareMainText>(rDestDoc, true));
 
         //if we have the same number of frames then try to compare within them
-        const sw::SpzFrameFormats* pSrcFrameFormats = rSrcDoc.GetSpzFrameFormats();
-        const sw::SpzFrameFormats* pDestFrameFormats = rDestDoc.GetSpzFrameFormats();
+        const SwFrameFormats *pSrcFrameFormats = rSrcDoc.GetSpzFrameFormats();
+        const SwFrameFormats *pDestFrameFormats = rDestDoc.GetSpzFrameFormats();
         if (pSrcFrameFormats->size() == pDestFrameFormats->size())
         {
-            for(sw::FrameFormats<sw::SpzFrameFormat*>::size_type i = 0; i < pSrcFrameFormats->size(); ++i)
+            for (size_t i = 0; i < pSrcFrameFormats->size(); ++i)
             {
-                const sw::SpzFrameFormat& rSrcFormat = *(*pSrcFrameFormats)[i];
-                const sw::SpzFrameFormat& rDestFormat = *(*pDestFrameFormats)[i];
+                const SwFrameFormat& rSrcFormat = *(*pSrcFrameFormats)[i];
+                const SwFrameFormat& rDestFormat = *(*pDestFrameFormats)[i];
                 const SwNodeIndex* pSrcIdx = rSrcFormat.GetContent().GetContentIdx();
                 const SwNodeIndex* pDestIdx = rDestFormat.GetContent().GetContentIdx();
                 if (!pSrcIdx && !pDestIdx)

@@ -324,7 +324,7 @@ DECLARE_OOXMLEXPORT_TEST(testBtlrShape, "btlr-textbox.docx")
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
-    const auto& rFormats = *pDoc->GetSpzFrameFormats();
+    const SwFrameFormats& rFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rFormats.size());
     CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(RES_DRAWFRMFMT), rFormats[0]->Which());
     CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(RES_FLYFRMFMT), rFormats[1]->Which());

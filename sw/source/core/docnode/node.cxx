@@ -547,15 +547,16 @@ const SwPageDesc* SwNode::FindPageDesc( SwNodeOffset* pPgDescNdIdx ) const
         {
             // Find the right Anchor first
             const SwFrameFormat* pFormat = nullptr;
-            const sw::SpzFrameFormats& rFormats = *rDoc.GetSpzFrameFormats();
+            const SwFrameFormats& rFormats = *rDoc.GetSpzFrameFormats();
 
-            for(sw::SpzFrameFormat* pSpz: rFormats)
+            for( size_t n = 0; n < rFormats.size(); ++n )
             {
-                const SwFormatContent& rContent = pSpz->GetContent();
+                const SwFrameFormat* pFrameFormat = rFormats[ n ];
+                const SwFormatContent& rContent = pFrameFormat->GetContent();
                 if( rContent.GetContentIdx() &&
                     &rContent.GetContentIdx()->GetNode() == static_cast<SwNode const *>(pSttNd) )
                 {
-                    pFormat = pSpz;
+                    pFormat = pFrameFormat;
                     break;
                 }
             }
@@ -750,17 +751,18 @@ SwFrameFormat* SwNode::GetFlyFormat() const
         if( !pRet )
         {
             // The hard way through the Doc is our last way out
-            const sw::SpzFrameFormats& rSpzs = *GetDoc().GetSpzFrameFormats();
-            for(sw::SpzFrameFormat* pSpz: rSpzs)
+            const SwFrameFormats& rFrameFormatTable = *GetDoc().GetSpzFrameFormats();
+            for( size_t n = 0; n < rFrameFormatTable.size(); ++n )
             {
+                SwFrameFormat* pFormat = rFrameFormatTable[n];
                 // Only Writer fly frames can contain Writer nodes.
-                if (pSpz->Which() != RES_FLYFRMFMT)
+                if (pFormat->Which() != RES_FLYFRMFMT)
                     continue;
-                const SwFormatContent& rContent = pSpz->GetContent();
+                const SwFormatContent& rContent = pFormat->GetContent();
                 if( rContent.GetContentIdx() &&
                     &rContent.GetContentIdx()->GetNode() == pSttNd )
                 {
-                    pRet = pSpz;
+                    pRet = pFormat;
                     break;
                 }
             }

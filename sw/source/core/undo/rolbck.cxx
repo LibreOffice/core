@@ -935,7 +935,7 @@ void SwHistoryChangeFlyAnchor::SetInDoc( SwDoc* pDoc, bool )
 {
     ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
-    if (!pDoc->GetSpzFrameFormats()->IsAlive(static_cast<SwFlyFrameFormat*>(&m_rFormat))) // Format does still exist
+    if (!pDoc->GetSpzFrameFormats()->IsAlive(&m_rFormat)) // Format does still exist
         return;
 
     SwFormatAnchor aTmp( m_rFormat.GetAnchor() );

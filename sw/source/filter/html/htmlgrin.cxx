@@ -1456,10 +1456,11 @@ void SwHTMLParser::StripTrailingPara()
         if( pCNd && pCNd->StartOfSectionIndex() + 2 <
             pCNd->EndOfSectionIndex() && CanRemoveNode(nNodeIdx))
         {
+            const SwFrameFormats& rFrameFormatTable = *m_xDoc->GetSpzFrameFormats();
 
-            for(sw::SpzFrameFormat* pSpz: *m_xDoc->GetSpzFrameFormats())
+            for( auto pFormat : rFrameFormatTable )
             {
-                SwFormatAnchor const*const pAnchor = &pSpz->GetAnchor();
+                SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
                 SwNode const*const pAnchorNode = pAnchor->GetAnchorNode();
                 if (pAnchorNode &&
                     ((RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()) ||

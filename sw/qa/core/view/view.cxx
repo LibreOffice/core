@@ -49,11 +49,13 @@ CPPUNIT_TEST_FIXTURE(Test, testUpdateOleObjectPreviews)
     pWrtShell->UpdateOleObjectPreviews();
 
     // Then make sure that the working preview of those objects are not lost:
-    const auto pFormats = pDoc->GetSpzFrameFormats();
+    const SwFrameFormats* pFormats = pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT(pFormats);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pFormats->size());
-    for (auto pFormat : *pFormats)
+    for (size_t i = 0; i < pFormats->size(); ++i)
     {
+        SwFrameFormat* pFormat = (*pFormats)[i];
+
         const SwNodeIndex* pNodeIndex = pFormat->GetContent().GetContentIdx();
         CPPUNIT_ASSERT(pNodeIndex);
         SwNode* pNode = pDoc->GetNodes()[pNodeIndex->GetIndex() + 1];

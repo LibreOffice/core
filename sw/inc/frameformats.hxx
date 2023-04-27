@@ -19,7 +19,6 @@
 #pragma once
 
 #include "docary.hxx"
-#include "frmfmt.hxx"
 #include "swtblfmt.hxx"
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/composite_key.hpp>
@@ -154,10 +153,6 @@ template <class value_type> class FrameFormats final : public SwFormatsBase
     friend class ::SwFrameFormat;
 
 public:
-    // getting from T* to T const* ...
-    typedef typename std::add_pointer<
-        typename std::add_const<typename std::remove_pointer<value_type>::type>::type>::type
-        const_value_type;
     typedef typename FrameFormatsContainer::size_type size_type;
     typedef typename FrameFormatsContainer::template index<ByPos>::type index_type;
     typedef typename index_type::iterator iterator;
@@ -279,12 +274,7 @@ public:
     bool ContainsFormat(const value_type& rpFormat) const { return rpFormat->m_ffList == this; };
 
     /// not so fast check that given format is still alive (i.e. contained here)
-    bool IsAlive(const_value_type pFrameFormat) const
-    {
-        auto pThisNonConst
-            = const_cast<typename std::remove_const<sw::FrameFormats<value_type>>::type*>(this);
-        return pThisNonConst->find(const_cast<value_type>(pFrameFormat)) != pThisNonConst->end();
-    };
+    bool IsAlive(value_type const* p) const { return find(*p) != end(); };
 
     void DeleteAndDestroyAll(bool keepDefault = false)
     {
@@ -324,10 +314,8 @@ public:
     };
 };
 typedef FrameFormats<::SwTableFormat*> TableFrameFormats;
-typedef FrameFormats<sw::SpzFrameFormat*> SpzFrameFormats;
 }
 
 template class SW_DLLPUBLIC sw::FrameFormats<SwTableFormat*>;
-template class SW_DLLPUBLIC sw::FrameFormats<sw::SpzFrameFormat*>;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

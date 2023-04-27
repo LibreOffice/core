@@ -101,9 +101,11 @@ namespace
     bool lcl_ChkFlyFly( SwDoc& rDoc, SwNodeOffset nSttNd, SwNodeOffset nEndNd,
                         SwNodeOffset nInsNd )
     {
+        const SwFrameFormats& rFrameFormatTable = *rDoc.GetSpzFrameFormats();
 
-        for(sw::SpzFrameFormat* pFormat: *rDoc.GetSpzFrameFormats())
+        for( size_t n = 0; n < rFrameFormatTable.size(); ++n )
         {
+            SwFrameFormat const*const  pFormat = rFrameFormatTable[n];
             SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
             SwNode const*const pAnchorNode = pAnchor->GetAnchorNode();
             if (pAnchorNode &&
@@ -2308,7 +2310,7 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
             // If there are FlyFrames left, delete these too
             for( size_t n = 0; n < m_rDoc.GetSpzFrameFormats()->size(); ++n )
             {
-                sw::SpzFrameFormat* pFly = (*m_rDoc.GetSpzFrameFormats())[n];
+                SwFrameFormat* pFly = (*m_rDoc.GetSpzFrameFormats())[n];
                 const SwFormatAnchor* pAnchor = &pFly->GetAnchor();
                 SwNode const*const pAnchorNode = pAnchor->GetAnchorNode();
                 if (pAnchorNode &&

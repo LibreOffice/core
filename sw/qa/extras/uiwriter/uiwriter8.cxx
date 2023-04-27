@@ -1072,7 +1072,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf130805)
     createSwDoc("tdf130805.odt");
     SwDoc* pDoc = getSwDoc();
 
-    const auto& rFrmFormats = *pDoc->GetSpzFrameFormats();
+    const SwFrameFormats& rFrmFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT(rFrmFormats.size() >= size_t(o3tl::make_unsigned(1)));
     auto pShape = rFrmFormats.front();
     CPPUNIT_ASSERT(pShape);
@@ -1097,9 +1097,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf107893)
     SwDoc* pDoc = getSwDoc();
 
     //Get the format of the shape
-    const auto& rFrmFormats = *pDoc->GetSpzFrameFormats();
+    const SwFrameFormats& rFrmFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT(rFrmFormats.size() >= size_t(o3tl::make_unsigned(1)));
-    auto pShape = rFrmFormats.front();
+    SwFrameFormat* pShape = rFrmFormats.front();
     CPPUNIT_ASSERT(pShape);
 
     //Add a textbox
@@ -1150,9 +1150,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, TestTextBoxCrashAfterLineDel)
     SwDoc* pDoc = getSwDoc();
 
     // Get the format of the shape
-    const auto& rFrmFormats = *pDoc->GetSpzFrameFormats();
+    const SwFrameFormats& rFrmFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT(rFrmFormats.size() >= size_t(o3tl::make_unsigned(1)));
-    auto pShape = rFrmFormats.front();
+    SwFrameFormat* pShape = rFrmFormats.front();
     CPPUNIT_ASSERT(pShape);
 
     // Add a textbox
@@ -1974,7 +1974,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, AtPageTextBoxCrash)
     SwDoc* pDoc = getSwDoc();
 
     // Get the format of the shape
-    const auto& rFrmFormats = *pDoc->GetSpzFrameFormats();
+    const SwFrameFormats& rFrmFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT(rFrmFormats.size() >= size_t(o3tl::make_unsigned(1)));
     auto pShape = rFrmFormats.front();
     CPPUNIT_ASSERT(pShape);

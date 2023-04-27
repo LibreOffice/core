@@ -248,19 +248,20 @@ void DocumentLayoutManager::DelLayoutFormat( SwFrameFormat *pFormat )
                 pContentIdx = pFormat->GetContent().GetContentIdx();
             if (pContentIdx)
             {
-                sw::SpzFrameFormats* pSpzs = pFormat->GetDoc()->GetSpzFrameFormats();
-                if ( pSpzs )
+                const SwFrameFormats* pTable = pFormat->GetDoc()->GetSpzFrameFormats();
+                if ( pTable )
                 {
                     std::vector<SwFrameFormat*> aToDeleteFrameFormats;
                     const SwNodeOffset nNodeIdxOfFlyFormat( pContentIdx->GetIndex() );
 
-                    for(sw::SpzFrameFormat* pSpz: *pSpzs)
+                    for ( size_t i = 0; i < pTable->size(); ++i )
                     {
-                        const SwFormatAnchor &rAnch = pSpz->GetAnchor();
+                        SwFrameFormat* pTmpFormat = (*pTable)[i];
+                        const SwFormatAnchor &rAnch = pTmpFormat->GetAnchor();
                         if ( rAnch.GetAnchorId() == RndStdIds::FLY_AT_FLY &&
                              rAnch.GetAnchorNode()->GetIndex() == nNodeIdxOfFlyFormat )
                         {
-                            aToDeleteFrameFormats.push_back(pSpz);
+                            aToDeleteFrameFormats.push_back( pTmpFormat );
                         }
                     }
 

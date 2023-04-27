@@ -901,7 +901,7 @@ bool IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam )
     if( bRet )
     {
         // now check for paragraph bound flies
-        const sw::SpzFrameFormats& rFormats = *rPam.GetDoc().GetSpzFrameFormats();
+        const SwFrameFormats& rFormats = *rPam.GetDoc().GetSpzFrameFormats();
         SwNodeOffset nSttIdx = rPam.GetPoint()->GetNodeIndex(),
               nEndIdx = rBox.GetSttNd()->EndOfSectionIndex(),
               nIdx;

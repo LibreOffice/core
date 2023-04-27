@@ -1079,9 +1079,17 @@ template<FlyCntType T>
 SwXFrameEnumeration<T>::SwXFrameEnumeration(const SwDoc& rDoc)
 {
     SolarMutexGuard aGuard;
-    for(sw::SpzFrameFormat* pFormat: *rDoc.GetSpzFrameFormats())
+    const SwFrameFormats* const pFormats = rDoc.GetSpzFrameFormats();
+    if (pFormats->empty())
+        return;
+    // #i104937#
+    const size_t nSize = pFormats->size();
+    // #i104937#
+    SwFrameFormat* pFormat( nullptr );
+    for( size_t i = 0; i < nSize; ++i )
     {
         // #i104937#
+        pFormat = (*pFormats)[i];
         if(pFormat->Which() != RES_FLYFRMFMT || SwTextBoxHelper::isTextBox(pFormat, RES_FLYFRMFMT))
             continue;
         const SwNodeIndex* pIdx =  pFormat->GetContent().GetContentIdx();

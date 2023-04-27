@@ -149,8 +149,8 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testCreateTextRangeByPixelPositionGraphic)
         = xController->createTextRangeByPixelPosition(aPoint);
 
     // Then make sure that the anchor of the image is returned:
-    const auto& rFormats = *pDoc->GetSpzFrameFormats();
-    const auto pFormat = rFormats[0];
+    const SwFrameFormats& rFormats = *pDoc->GetSpzFrameFormats();
+    const SwFrameFormat* pFormat = rFormats[0];
     SwPosition aAnchorPos(*pFormat->GetAnchor().GetContentAnchor());
     auto pTextRange = dynamic_cast<SwXTextRange*>(xTextRange.get());
     SwPaM aPaM(pDoc->GetNodes());

@@ -1004,7 +1004,7 @@ void SwFEShell::GetPageObjs( std::vector<SwFrameFormat*>& rFillArr )
 {
     rFillArr.clear();
 
-    for(sw::SpzFrameFormat* pFormat : *mxDoc->GetSpzFrameFormats() )
+    for( auto pFormat : *mxDoc->GetSpzFrameFormats() )
     {
         if (RndStdIds::FLY_AT_PAGE == pFormat->GetAnchor().GetAnchorId())
         {
@@ -1026,7 +1026,7 @@ void SwFEShell::SetPageObjsNewPage( std::vector<SwFrameFormat*>& rFillArr )
     bool bTmpAssert = false;
     for( auto pFormat : rFillArr )
     {
-        if (mxDoc->GetSpzFrameFormats()->IsAlive(static_cast<sw::SpzFrameFormat*>(pFormat)))
+        if (mxDoc->GetSpzFrameFormats()->IsAlive(pFormat))
         {
             // FlyFormat is still valid, therefore process
 
@@ -1443,7 +1443,7 @@ SwFrameFormat* SwFEShell::WizardGetFly()
 {
     // do not search the Fly via the layout. Now we can delete a frame
     // without a valid layout. ( e.g. for the wizards )
-    sw::SpzFrameFormats& rSpzArr = *mxDoc->GetSpzFrameFormats();
+    SwFrameFormats& rSpzArr = *mxDoc->GetSpzFrameFormats();
     if( !rSpzArr.empty() )
     {
         SwNode& rCursorNd = GetCursor()->GetPoint()->GetNode();

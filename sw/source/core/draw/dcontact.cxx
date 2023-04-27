@@ -751,10 +751,10 @@ SwDrawContact::~SwDrawContact()
 
 void SwDrawContact::GetTextObjectsFromFormat(std::list<SdrTextObj*>& o_rTextObjects, SwDoc& rDoc)
 {
-    for(sw::SpzFrameFormat* pFly: *rDoc.GetSpzFrameFormats())
+    for(auto& rpFly : *rDoc.GetSpzFrameFormats())
     {
-        if(dynamic_cast<const SwDrawFrameFormat*>(pFly))
-            pFly->CallSwClientNotify(sw::CollectTextObjectsHint(o_rTextObjects));
+        if(dynamic_cast<const SwDrawFrameFormat*>(rpFly))
+            rpFly->CallSwClientNotify(sw::CollectTextObjectsHint(o_rTextObjects));
     }
 }
 
@@ -1877,7 +1877,8 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
                         else
                         {
                             const SwNode& rIdx = *pAnch->GetAnchorNode();
-                            for(sw::SpzFrameFormat* pFlyFormat :*(pDrawFrameFormat->GetDoc()->GetSpzFrameFormats()))
+                            SwFrameFormats& rFormats = *(pDrawFrameFormat->GetDoc()->GetSpzFrameFormats());
+                            for( auto pFlyFormat : rFormats )
                             {
                                 if( pFlyFormat->GetContent().GetContentIdx() &&
                                     rIdx == pFlyFormat->GetContent().GetContentIdx()->GetNode() )

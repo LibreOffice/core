@@ -1927,8 +1927,11 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
         // HYPERLINKS (Graphics, Frames, OLEs )
 
-        for(sw::SpzFrameFormat* pFrameFormat: *pDoc->GetSpzFrameFormats())
+        SwFrameFormats* pTable = pDoc->GetSpzFrameFormats();
+        const size_t nSpzFrameFormatsCount = pTable->size();
+        for( size_t n = 0; n < nSpzFrameFormatsCount; ++n )
         {
+            SwFrameFormat* pFrameFormat = (*pTable)[n];
             const SwFormatURL* pItem;
             if ( RES_DRAWFRMFMT != pFrameFormat->Which() &&
                 GetFrameOfModify(mrSh.GetLayout(), *pFrameFormat, SwFrameType::Fly) &&

@@ -370,12 +370,12 @@ void ContentIdxStoreImpl::SaveFlys(SwDoc& rDoc, SwNodeOffset nNode, sal_Int32 nC
 
 void ContentIdxStoreImpl::RestoreFlys(SwDoc& rDoc, updater_t const & rUpdater, bool bAuto, bool bAtStart)
 {
-    sw::SpzFrameFormats* pSpz = rDoc.GetSpzFrameFormats();
+    SwFrameFormats* pSpz = rDoc.GetSpzFrameFormats();
     for (const MarkEntry& aEntry : m_aFlyEntries)
     {
         if(!aEntry.m_bOther)
         {
-            sw::SpzFrameFormat* pFrameFormat = (*pSpz)[ aEntry.m_nIdx ];
+            SwFrameFormat *pFrameFormat = (*pSpz)[ aEntry.m_nIdx ];
             const SwFormatAnchor& rFlyAnchor = pFrameFormat->GetAnchor();
             if( rFlyAnchor.GetContentAnchor() )
             {

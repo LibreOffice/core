@@ -55,7 +55,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testMathInsertAnchorType)
     pShell->InsertObject(svt::EmbeddedObjectRef(), &aGlobalName);
 
     // Then the anchor type should be as-char.
-    sw::SpzFrameFormats& rFormats = *pDoc->GetSpzFrameFormats();
+    SwFrameFormats& rFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rFormats.size());
     const SwFrameFormat& rFormat = *rFormats[0];
     const SwFormatAnchor& rAnchor = rFormat.GetAnchor();
@@ -72,7 +72,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTextboxTextRotateAngle)
     // Check the writing direction of the only TextFrame in the document.
     createSwDoc("textbox-textrotateangle.odt");
     SwDoc* pDoc = getSwDoc();
-    sw::SpzFrameFormats& rFrameFormats = *pDoc->GetSpzFrameFormats();
+    SwFrameFormats& rFrameFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rFrameFormats.size());
     CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(RES_DRAWFRMFMT), rFrameFormats[0]->Which());
     CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(RES_FLYFRMFMT), rFrameFormats[1]->Which());
@@ -132,9 +132,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTextBoxZOrder)
 {
     createSwDoc("textbox-zorder.docx");
     SwDoc* pDoc = getSwDoc();
-    sw::SpzFrameFormats& rFormats = *pDoc->GetSpzFrameFormats();
+    SwFrameFormats& rFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), rFormats.size());
-    const sw::SpzFrameFormat* pEllipse = rFormats[2];
+    const SwFrameFormat* pEllipse = rFormats[2];
     const SdrObject* pEllipseShape = pEllipse->FindRealSdrObject();
     // Make sure we test the right shape.
     CPPUNIT_ASSERT_EQUAL(OUString("Shape3"), pEllipseShape->GetName());
@@ -291,9 +291,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCopyBookmarks)
 
     // Also, when checking the # of non-copy images in the resulting doc model:
     nActual = 0;
-    for (auto pSpz : *pDoc->GetSpzFrameFormats())
+    SwFrameFormats& rFrameFormats = *pDoc->GetSpzFrameFormats();
+    for (size_t i = 0; i < rFrameFormats.size(); ++i)
     {
-        if (pSpz->GetName().indexOf("Copy") == -1)
+        if (rFrameFormats[i]->GetName().indexOf("Copy") == -1)
         {
             ++nActual;
         }

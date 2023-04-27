@@ -953,8 +953,11 @@ void SwContentNotify::ImplDestroy()
             // the page is known. Thus, this data can be corrected now.
 
             const SwPageFrame *pPage = nullptr;
-            for(sw::SpzFrameFormat* pFormat: *rDoc.GetSpzFrameFormats())
+            SwFrameFormats *pTable = rDoc.GetSpzFrameFormats();
+
+            for ( size_t i = 0; i < pTable->size(); ++i )
             {
+                SwFrameFormat *pFormat = (*pTable)[i];
                 const SwFormatAnchor &rAnch = pFormat->GetAnchor();
                 if ( RndStdIds::FLY_AT_PAGE != rAnch.GetAnchorId() ||
                      rAnch.GetAnchorNode() == nullptr )
@@ -1225,7 +1228,7 @@ void RemoveHiddenObjsOfNode(SwTextNode const& rNode,
     }
 }
 
-void AppendObjsOfNode(sw::FrameFormats<sw::SpzFrameFormat*> const*const pTable, SwNodeOffset const nIndex,
+void AppendObjsOfNode(SwFrameFormats const*const pTable, SwNodeOffset const nIndex,
     SwFrame *const pFrame, SwPageFrame *const pPage, SwDoc *const pDoc,
     std::vector<sw::Extent>::const_iterator const*const pIter,
     std::vector<sw::Extent>::const_iterator const*const pEnd,
@@ -1233,8 +1236,9 @@ void AppendObjsOfNode(sw::FrameFormats<sw::SpzFrameFormat*> const*const pTable, 
 {
 #if OSL_DEBUG_LEVEL > 0
     std::vector<SwFrameFormat*> checkFormats;
-    for(auto pFormat: *pTable)
+    for ( size_t i = 0; i < pTable->size(); ++i )
     {
+        SwFrameFormat *pFormat = (*pTable)[i];
         const SwFormatAnchor &rAnch = pFormat->GetAnchor();
         if ( rAnch.GetAnchorNode() &&
             IsShown(nIndex, rAnch, pIter, pEnd, pFirstNode, pLastNode))
@@ -1271,7 +1275,7 @@ void AppendObjsOfNode(sw::FrameFormats<sw::SpzFrameFormat*> const*const pTable, 
 }
 
 
-void AppendObjs(const sw::FrameFormats<sw::SpzFrameFormat*> *const pTable, SwNodeOffset const nIndex,
+void AppendObjs(const SwFrameFormats *const pTable, SwNodeOffset const nIndex,
         SwFrame *const pFrame, SwPageFrame *const pPage, SwDoc *const pDoc)
 {
     if (pFrame->IsTextFrame())
@@ -1374,7 +1378,7 @@ bool IsAnchoredObjShown(SwTextFrame const& rFrame, SwFormatAnchor const& rAnchor
     return ret;
 }
 
-void AppendAllObjs(const sw::FrameFormats<sw::SpzFrameFormat*>* pTable, const SwFrame* pSib)
+void AppendAllObjs(const SwFrameFormats* pTable, const SwFrame* pSib)
 {
     //Connecting of all Objects, which are described in the SpzTable with the
     //layout.
@@ -1510,7 +1514,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
     const bool bStartPercent = bPages && !nEndIndex;
 
     SwPageFrame *pPage = pLay->FindPageFrame();
-    sw::SpzFrameFormats* pTable = pDoc->GetSpzFrameFormats();
+    const SwFrameFormats *pTable = pDoc->GetSpzFrameFormats();
     SwFrame       *pFrame = nullptr;
     std::unique_ptr<SwActualSection> pActualSection;
     std::unique_ptr<SwLayHelper> pPageMaker;
@@ -2167,7 +2171,7 @@ void MakeFrames( SwDoc *pDoc, SwNode &rSttIdx, SwNode &rEndIdx )
                 // depend on value of <bAllowMove>
                 if( !isFlyCreationSuppressed )
                 {
-                    const sw::SpzFrameFormats* pTable = pDoc->GetSpzFrameFormats();
+                    const SwFrameFormats *pTable = pDoc->GetSpzFrameFormats();
                     if( !pTable->empty() )
                         AppendAllObjs( pTable, pUpper );
                 }

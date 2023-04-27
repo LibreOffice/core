@@ -74,7 +74,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTextBoxCopyAnchor)
     pWrtShell->SttEndDoc(/*bStart=*/false);
     pWrtShell->Paste(aClipboard);
 
-    const auto& rFormats = *pShell->GetDoc()->GetSpzFrameFormats();
+    const SwFrameFormats& rFormats = *pShell->GetDoc()->GetSpzFrameFormats();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 4
     // - Actual  : 6
@@ -176,7 +176,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testFlyAnchorUndo)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDocShell* pShell = pTextDoc->GetDocShell();
     SwDoc* pDoc = pShell->GetDoc();
-    const auto& rSpz = *pDoc->GetSpzFrameFormats();
+    const SwFrameFormats& rSpz = *pDoc->GetSpzFrameFormats();
     sal_Int32 nExpected = rSpz[0]->GetAnchor().GetAnchorContentOffset();
 
     // When deleting that last character and undoing it:

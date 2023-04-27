@@ -155,9 +155,12 @@ void CollectFrameAtNode( const SwNode& rNd,
     }
     else
     {
-        for(sw::SpzFrameFormat* pSpz: *rDoc.GetSpzFrameFormats())
+        const SwFrameFormats& rFormats = *rDoc.GetSpzFrameFormats();
+        const size_t nSize = rFormats.size();
+        for ( size_t i = 0; i < nSize; i++)
         {
-            const SwFormatAnchor& rAnchor = pSpz->GetAnchor();
+            const SwFrameFormat* pFormat = rFormats[ i ];
+            const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
             const SwNode* pAnchorNode;
             if( rAnchor.GetAnchorId() == nChkType &&
                 nullptr != (pAnchorNode = rAnchor.GetAnchorNode()) &&
@@ -169,7 +172,7 @@ void CollectFrameAtNode( const SwNode& rNd,
                 const sal_Int32 nIndex = rAnchor.GetAnchorContentOffset();
                 sal_uInt32 nOrder = rAnchor.GetOrder();
 
-                rFrames.emplace_back(nIndex, nOrder, std::make_unique<sw::FrameClient>(pSpz));
+                rFrames.emplace_back(nIndex, nOrder, std::make_unique<sw::FrameClient>(const_cast<SwFrameFormat*>(pFormat)));
             }
         }
         std::sort(rFrames.begin(), rFrames.end(), FrameClientSortListLess());

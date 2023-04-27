@@ -728,8 +728,15 @@ void SwViewShell::UpdateFields(bool bCloseDB)
 void SwViewShell::UpdateOleObjectPreviews()
 {
     SwDoc* pDoc = GetDoc();
-    for(sw::SpzFrameFormat* pFormat: *pDoc->GetSpzFrameFormats())
+    const SwFrameFormats* const pFormats = pDoc->GetSpzFrameFormats();
+    if (pFormats->empty())
     {
+        return;
+    }
+
+    for (size_t i = 0; i < pFormats->size(); ++i)
+    {
+        SwFrameFormat* pFormat = (*pFormats)[i];
         if (pFormat->Which() != RES_FLYFRMFMT)
         {
             continue;

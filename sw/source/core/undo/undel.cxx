@@ -54,16 +54,17 @@
     ( == AUTO ), if the anchor frame has be moved via MoveNodes(..) and
     DelFrames(..)
 */
-static void lcl_MakeAutoFrames(const sw::FrameFormats<sw::SpzFrameFormat*>& rSpzs, SwNodeOffset nMovedIndex )
+static void lcl_MakeAutoFrames( const SwFrameFormats& rSpzArr, SwNodeOffset nMovedIndex )
 {
-    for(auto pSpz: rSpzs)
+    for( size_t n = 0; n < rSpzArr.size(); ++n )
     {
-        const SwFormatAnchor* pAnchor = &pSpz->GetAnchor();
+        SwFrameFormat * pFormat = rSpzArr[n];
+        const SwFormatAnchor* pAnchor = &pFormat->GetAnchor();
         if (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_CHAR)
         {
             const SwNode* pAnchorNode = pAnchor->GetAnchorNode();
             if( pAnchorNode && nMovedIndex == pAnchorNode->GetIndex() )
-                pSpz->MakeFrames();
+                pFormat->MakeFrames();
         }
     }
 }
@@ -816,20 +817,25 @@ SwRewriter SwUndoDelete::GetRewriter() const
 }
 
 // Every object, anchored "AtContent" will be reanchored at rPos
-static void lcl_ReAnchorAtContentFlyFrames(const sw::FrameFormats<sw::SpzFrameFormat*>& rSpzs, const SwPosition &rPos, SwNodeOffset nOldIdx )
+static void lcl_ReAnchorAtContentFlyFrames( const SwFrameFormats& rSpzArr, const SwPosition &rPos, SwNodeOffset nOldIdx )
 {
+    if( rSpzArr.empty() )
+        return;
+
+    SwFrameFormat* pFormat;
     const SwFormatAnchor* pAnchor;
-    for(auto pSpz: rSpzs)
+    for( size_t n = 0; n < rSpzArr.size(); ++n )
     {
-        pAnchor = &pSpz->GetAnchor();
+        pFormat = rSpzArr[n];
+        pAnchor = &pFormat->GetAnchor();
         if (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_PARA)
         {
-            SwNode* pAnchorNode = pAnchor->GetAnchorNode();
+            SwNode* pAnchorNode =  pAnchor->GetAnchorNode();
             if( pAnchorNode && nOldIdx == pAnchorNode->GetIndex() )
             {
                 SwFormatAnchor aAnch( *pAnchor );
                 aAnch.SetAnchor( &rPos );
-                pSpz->SetFormatAttr( aAnch );
+                pFormat->SetFormatAttr( aAnch );
             }
         }
     }

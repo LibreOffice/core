@@ -402,7 +402,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf122789)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
-    const auto& rFormats = *pDoc->GetSpzFrameFormats();
+    const SwFrameFormats& rFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rFormats.size());
     // This failed, the image had an absolute size, not a relative one.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(70), rFormats[0]->GetAttrSet().GetFrameSize().GetWidthPercent());

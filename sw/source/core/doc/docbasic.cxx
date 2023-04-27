@@ -157,10 +157,10 @@ sal_uInt16 SwDoc::CallEvent( SvMacroItemId nEvent, const SwCallMouseEvent& rCall
     case EVENT_OBJECT_URLITEM:
     case EVENT_OBJECT_IMAGE:
         {
-            const auto pSpz = static_cast<const sw::SpzFrameFormat*>(rCallEvent.PTR.pFormat);
+            const SwFrameFormat* pFormat = rCallEvent.PTR.pFormat;
             if( bCheckPtr )
             {
-                if (GetSpzFrameFormats()->IsAlive(pSpz))
+                if (GetSpzFrameFormats()->IsAlive(pFormat))
                     bCheckPtr = false;      // misuse as a flag
                 else
                     // this shouldn't be possible now that SwCallMouseEvent
@@ -168,7 +168,7 @@ sal_uInt16 SwDoc::CallEvent( SvMacroItemId nEvent, const SwCallMouseEvent& rCall
                     assert(false);
             }
             if( !bCheckPtr )
-                pTable = &pSpz->GetMacro().GetMacroTable();
+                pTable = &pFormat->GetMacro().GetMacroTable();
         }
         break;
 
@@ -177,10 +177,10 @@ sal_uInt16 SwDoc::CallEvent( SvMacroItemId nEvent, const SwCallMouseEvent& rCall
             const IMapObject* pIMapObj = rCallEvent.PTR.IMAP.pIMapObj;
             if( bCheckPtr )
             {
-                const auto pSpz = static_cast<const sw::SpzFrameFormat*>(rCallEvent.PTR.IMAP.pFormat);
-                if (GetSpzFrameFormats()->IsAlive(pSpz))
+                const SwFrameFormat* pFormat = rCallEvent.PTR.IMAP.pFormat;
+                if (GetSpzFrameFormats()->IsAlive(pFormat))
                 {
-                    const ImageMap* pIMap = pSpz->GetURL().GetMap();
+                    const ImageMap* pIMap = pFormat->GetURL().GetMap();
                     if (pIMap)
                     {
                         for( size_t nPos = pIMap->GetIMapObjectCount(); nPos; )
