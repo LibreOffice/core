@@ -183,14 +183,15 @@ void SetAntiAliasing( bool bOn, bool bTemporary )
                 comphelper::ConfigurationChanges::create();
         officecfg::Office::Common::Drawinglayer::AntiAliasing::set(bOn, batch);
         batch->commit();
-
-        if(!gbAntiAliasingForwardInitial || gbAntiAliasingForwardLast != bOn)
-        {
-            gbAntiAliasingForwardInitial = true;
-            gbAntiAliasingForwardLast = bOn;
-            drawinglayer::geometry::ViewInformation2D::forwardAntiAliasing(bOn);
-        }
     }
+
+    if (!gbAntiAliasingForwardInitial || gbAntiAliasingForwardLast != bOn)
+    {
+        gbAntiAliasingForwardInitial = true;
+        gbAntiAliasingForwardLast = bOn;
+        drawinglayer::geometry::ViewInformation2D::forwardAntiAliasing(bOn);
+    }
+
     gbAntiAliasing = bOn;
 }
 
