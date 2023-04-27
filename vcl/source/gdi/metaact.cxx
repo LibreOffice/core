@@ -913,8 +913,12 @@ static bool AllowScale(const Size& rSource, const Size& rDest)
 
 void MetaBmpScaleAction::Execute( OutputDevice* pOut )
 {
-    if (!AllowScale(maBmp.GetSizePixel(), pOut->LogicToPixel(maSz)))
+    Size aPixelSize(pOut->LogicToPixel(maSz));
+    if (!AllowRect(tools::Rectangle(pOut->LogicToPixel(maPt), aPixelSize)) ||
+        !AllowScale(maBmp.GetSizePixel(), aPixelSize))
+    {
         return;
+    }
 
     pOut->DrawBitmap( maPt, maSz, maBmp );
 }
