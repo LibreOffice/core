@@ -262,6 +262,11 @@
         <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="generalpagewizard|noembeddeddbLabel">It is not possible to create a new database, because neither HSQLDB, nor Firebird is
 available in this setup.</property>
+        <child internal-child="accessible">
+          <object class="AtkObject">
+            <property name="AtkObject::accessible-role">static</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left-attach">0</property>
