@@ -1261,8 +1261,8 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
             pHeadline->InsertBefore( pFoll, nullptr );
 
             SwPageFrame *pPage = pHeadline->FindPageFrame();
-            const SwFrameFormats *pTable = GetFormat()->GetDoc()->GetSpzFrameFormats();
-            if( !pTable->empty() )
+            const sw::SpzFrameFormats* pSpzs = GetFormat()->GetDoc()->GetSpzFrameFormats();
+            if( !pSpzs->empty() )
             {
                 SwNodeOffset nIndex;
                 SwContentFrame* pFrame = pHeadline->ContainsContent();
@@ -1273,7 +1273,7 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
                     nIndex = pFrame->IsTextFrame()
                         ? static_cast<SwTextFrame*>(pFrame)->GetTextNodeFirst()->GetIndex()
                         : static_cast<SwNoTextFrame*>(pFrame)->GetNode()->GetIndex();
-                    AppendObjs( pTable, nIndex, pFrame, pPage, GetFormat()->GetDoc());
+                    AppendObjs(pSpzs, nIndex, pFrame, pPage, GetFormat()->GetDoc());
                     pFrame = pFrame->GetNextContentFrame();
                     if( !pHeadline->IsAnLower( pFrame ) )
                         break;

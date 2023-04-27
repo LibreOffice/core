@@ -243,7 +243,7 @@ DECLARE_RTFEXPORT_TEST(testAnchoredAtSamePosition, "anchor.fodt")
 
     CPPUNIT_ASSERT_EQUAL(OUString("foobar"), getParagraph(1)->getString());
 
-    SwFrameFormats& rFlys(*pDoc->GetSpzFrameFormats());
+    auto& rFlys = *pDoc->GetSpzFrameFormats();
     if (isExported())
     { // 2, not 3: the form control becomes a field on export...
         CPPUNIT_ASSERT_EQUAL(size_t(2), rFlys.size());

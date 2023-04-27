@@ -234,7 +234,7 @@ SwDoc::SwDoc()
     mpDfltGrfFormatColl( new SwGrfFormatColl( GetAttrPool(), "Graphikformatvorlage" ) ),
     mpFrameFormatTable( new SwFrameFormats() ),
     mpCharFormatTable( new SwCharFormats ),
-    mpSpzFrameFormatTable( new SwFrameFormats() ),
+    mpSpzFrameFormatTable( new sw::FrameFormats<sw::SpzFrameFormat*>() ),
     mpSectionFormatTable( new SwSectionFormats ),
     mpTableFrameFormatTable( new sw::TableFrameFormats() ),
     mpTextFormatCollTable( new SwTextFormatColls() ),
@@ -1291,7 +1291,7 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
         }
 
         // finally copy page bound frames
-        for ( auto pCpyFormat : *rSource.GetSpzFrameFormats() )
+        for(sw::SpzFrameFormat* pCpyFormat: *rSource.GetSpzFrameFormats())
         {
             const SwFrameFormat& rCpyFormat = *pCpyFormat;
             SwFormatAnchor aAnchor( rCpyFormat.GetAnchor() );

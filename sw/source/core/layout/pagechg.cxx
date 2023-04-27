@@ -408,14 +408,13 @@ static void lcl_FormatLay( SwLayoutFrame *pLay )
 }
 
 /// Create Flys or register draw objects
-static void lcl_MakeObjs( const SwFrameFormats &rTable, SwPageFrame *pPage )
+static void lcl_MakeObjs(const sw::FrameFormats<sw::SpzFrameFormat*>& rSpzs, SwPageFrame* pPage)
 {
     // formats are in the special table of the document
-
-    for ( size_t i = 0; i < rTable.size(); ++i )
+    for(size_t i = 0; i < rSpzs.size(); ++i )
     {
-        SwFrameFormat *pFormat = rTable[i];
-        const SwFormatAnchor &rAnch = pFormat->GetAnchor();
+        auto pSpz = rSpzs[i];
+        const SwFormatAnchor &rAnch = pSpz->GetAnchor();
         if ( rAnch.GetPageNum() == pPage->GetPhyPageNum() )
         {
             if( rAnch.GetAnchorNode() )
@@ -424,19 +423,19 @@ static void lcl_MakeObjs( const SwFrameFormats &rTable, SwPageFrame *pPage )
                 {
                     SwFormatAnchor aAnch( rAnch );
                     aAnch.SetAnchor( nullptr );
-                    pFormat->SetFormatAttr( aAnch );
+                    pSpz->SetFormatAttr( aAnch );
                 }
                 else
                     continue;
             }
 
             // is it a border or a SdrObject?
-            bool bSdrObj = RES_DRAWFRMFMT == pFormat->Which();
+            bool bSdrObj = RES_DRAWFRMFMT == pSpz->Which();
             SdrObject *pSdrObj = nullptr;
-            if ( bSdrObj  && nullptr == (pSdrObj = pFormat->FindSdrObject()) )
+            if ( bSdrObj  && nullptr == (pSdrObj = pSpz->FindSdrObject()) )
             {
                 OSL_FAIL( "DrawObject not found." );
-                pFormat->GetDoc()->DelFrameFormat( pFormat );
+                pSpz->GetDoc()->DelFrameFormat( pSpz );
                 --i;
                 continue;
             }
@@ -469,7 +468,7 @@ static void lcl_MakeObjs( const SwFrameFormats &rTable, SwPageFrame *pPage )
             }
             else
             {
-                SwIterator<SwFlyFrame,SwFormat> aIter( *pFormat );
+                SwIterator<SwFlyFrame,SwFormat> aIter( *pSpz );
                 SwFlyFrame *pFly = aIter.First();
                 if ( pFly)
                 {
@@ -477,7 +476,7 @@ static void lcl_MakeObjs( const SwFrameFormats &rTable, SwPageFrame *pPage )
                         pFly->AnchorFrame()->RemoveFly( pFly );
                 }
                 else
-                    pFly = new SwFlyLayFrame( static_cast<SwFlyFrameFormat*>(pFormat), pPg, pPg );
+                    pFly = new SwFlyLayFrame( static_cast<SwFlyFrameFormat*>(pSpz), pPg, pPg );
                 pPg->AppendFly( pFly );
                 ::RegistFlys( pPg, pFly );
             }
@@ -1571,17 +1570,17 @@ void SwRootFrame::AssertFlyPages()
     mbAssertFlyPages = false;
 
     SwDoc *pDoc = GetFormat()->GetDoc();
-    const SwFrameFormats *pTable = pDoc->GetSpzFrameFormats();
+    const sw::SpzFrameFormats* pSpzs = pDoc->GetSpzFrameFormats();
 
     // what page targets the "last" Fly?
     // note the needed pages in a set
     sal_uInt16 nMaxPg(0);
     o3tl::sorted_vector< sal_uInt16 > neededPages;
-    neededPages.reserve(pTable->size());
+    neededPages.reserve(pSpzs->size());
 
-    for ( size_t i = 0; i < pTable->size(); ++i )
+    for(auto pSpz: *pSpzs )
     {
-        const SwFormatAnchor &rAnch = (*pTable)[i]->GetAnchor();
+        const SwFormatAnchor &rAnch = pSpz->GetAnchor();
         if(!rAnch.GetAnchorNode())
         {
             const sal_uInt16 nPageNum(rAnch.GetPageNum());

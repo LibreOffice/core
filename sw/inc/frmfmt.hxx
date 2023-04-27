@@ -23,20 +23,27 @@
 #include <com/sun/star/text/PositionLayoutDir.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <tools/gen.hxx>
+namespace sw
+{
+    template<class T> class FrameFormats;
+    class SpzFrameFormat;
+}
 #include "format.hxx"
 #include "hintids.hxx"
 #include "swdllapi.h"
 #include <list>
 #include "textboxhelper.hxx"
 
-class SwFlyFrame;
-class SwFlyDrawContact;
-class SwAnchoredObject;
 class Graphic;
-class ImageMap;
 class IMapObject;
-class SwRect;
+class ImageMap;
 class SdrObject;
+class SwAnchoredObject;
+class SwDrawFrameFormat;
+class SwFlyDrawContact;
+class SwFlyFrame;
+class SwFlyFrameFormat;
+class SwRect;
 class SwRootFrame;
 class SwTableBox;
 
@@ -54,6 +61,7 @@ namespace sw
         virtual ~FindSdrObjectHint() override;
     };
     template<class T> class FrameFormats;
+    class SpzFrameFormat;
 }
 class SwFormatsBase;
 class SwFrameFormats;
@@ -68,6 +76,7 @@ class SW_DLLPUBLIC SwFrameFormat
     friend class ::sw::DocumentLayoutManager; ///< Is allowed to call protected CTor.
     friend class SwFrameFormats;     ///< Is allowed to update the list backref.
     friend class sw::FrameFormats<SwTableFormat*>;     ///< Is allowed to update the list backref.
+    friend class sw::FrameFormats<sw::SpzFrameFormat*>;     ///< Is allowed to update the list backref.
     friend class SwTextBoxHelper;
     friend class SwUndoFlyBase; ///< calls SetOtherTextBoxFormat
 
@@ -190,9 +199,25 @@ public:
     virtual bool IsVisible() const;
 };
 
+namespace sw
+{
+    class SW_DLLPUBLIC SpzFrameFormat: public SwFrameFormat {
+        friend ::SwDrawFrameFormat;
+        friend ::SwFlyFrameFormat;
+        SpzFrameFormat(
+            SwAttrPool& rPool,
+            const OUString& rFormatName,
+            SwFrameFormat* pDerivedFrame,
+            sal_uInt16 nFormatWhich)
+            : SwFrameFormat(rPool, rFormatName, pDerivedFrame, nFormatWhich)
+        {
+            assert(nFormatWhich == RES_DRAWFRMFMT || nFormatWhich == RES_FLYFRMFMT);
+        };
+    };
+}
 // The FlyFrame-Format
 
-class SW_DLLPUBLIC SwFlyFrameFormat final : public SwFrameFormat
+class SW_DLLPUBLIC SwFlyFrameFormat final : public sw::SpzFrameFormat
 {
     friend class SwDoc;
     OUString msTitle;
@@ -380,7 +405,7 @@ namespace sw
     };
 }
 
-class SW_DLLPUBLIC SwDrawFrameFormat final : public SwFrameFormat
+class SW_DLLPUBLIC SwDrawFrameFormat final : public sw::SpzFrameFormat
 {
     friend class SwDoc;
 
@@ -396,15 +421,12 @@ class SW_DLLPUBLIC SwDrawFrameFormat final : public SwFrameFormat
 
     bool mbPosAttrSet;
 
-    SwDrawFrameFormat( SwAttrPool& rPool, const OUString &rFormatNm,
-                    SwFrameFormat *pDrvdFrame )
-        : SwFrameFormat( rPool, rFormatNm, pDrvdFrame, RES_DRAWFRMFMT ),
+    SwDrawFrameFormat(SwAttrPool& rPool, const OUString& rFormatName, SwFrameFormat* pDerivedFrame)
+        : sw::SpzFrameFormat(rPool, rFormatName, pDerivedFrame, RES_DRAWFRMFMT),
           m_pSdrObjectCached(nullptr),
-          meLayoutDir( SwFrameFormat::HORI_L2R ),
-
-          mnPositionLayoutDir( css::text::PositionLayoutDir::PositionInLayoutDirOfAnchor ),
-
-          mbPosAttrSet( false )
+          meLayoutDir(SwFrameFormat::HORI_L2R),
+          mnPositionLayoutDir(css::text::PositionLayoutDir::PositionInLayoutDirOfAnchor),
+          mbPosAttrSet(false)
     {}
 
 public:

@@ -921,9 +921,9 @@ void SwHistorySetAttrSet::SetInDoc( SwDoc* pDoc, bool )
     }
 }
 
-SwHistoryChangeFlyAnchor::SwHistoryChangeFlyAnchor( SwFrameFormat& rFormat )
+SwHistoryChangeFlyAnchor::SwHistoryChangeFlyAnchor(sw::SpzFrameFormat& rFormat)
     : SwHistoryHint( HSTRY_CHGFLYANCHOR )
-    , m_rFormat( rFormat )
+    , m_rFormat(rFormat)
     , m_nOldNodeIndex( rFormat.GetAnchor().GetAnchorNode()->GetIndex() )
     , m_nOldContentIndex( (RndStdIds::FLY_AT_CHAR == rFormat.GetAnchor().GetAnchorId())
             ?   rFormat.GetAnchor().GetAnchorContentOffset()
@@ -935,6 +935,8 @@ void SwHistoryChangeFlyAnchor::SetInDoc( SwDoc* pDoc, bool )
 {
     ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
+    // One would expect m_rFormat to only contain FlyFormats, given the name of
+    // this class, but apparently it is also used for DrawFormats.
     if (!pDoc->GetSpzFrameFormats()->IsAlive(&m_rFormat)) // Format does still exist
         return;
 
@@ -1139,9 +1141,9 @@ void SwHistory::Add(const ::sw::mark::IMark& rBkmk, bool bSavePos, bool bSaveOth
     m_SwpHstry.push_back( std::move(pHt) );
 }
 
-void SwHistory::AddChangeFlyAnchor(SwFrameFormat& rFormat)
+void SwHistory::AddChangeFlyAnchor(sw::SpzFrameFormat& rFormat)
 {
-    std::unique_ptr<SwHistoryHint> pHt(new SwHistoryChangeFlyAnchor( rFormat ));
+    std::unique_ptr<SwHistoryHint> pHt(new SwHistoryChangeFlyAnchor(rFormat));
     m_SwpHstry.push_back( std::move(pHt) );
 }
 

@@ -689,10 +689,10 @@ DECLARE_WW8EXPORT_TEST(testTdf112535, "tdf112535.doc")
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     CPPUNIT_ASSERT(pDoc->GetSpzFrameFormats());
 
-    SwFrameFormats& rFormats = *pDoc->GetSpzFrameFormats();
+    auto& rFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT(!rFormats.empty());
 
-    const SwFrameFormat* pFormat = rFormats[0];
+    const auto pFormat = rFormats[0];
     CPPUNIT_ASSERT(pFormat);
 
     // Without the accompanying fix in place, this test would have failed: auto-contour was enabled

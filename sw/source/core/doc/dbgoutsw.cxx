@@ -407,15 +407,14 @@ static OUString lcl_AnchoredFrames(const SwNode & rNode)
     OUStringBuffer aResult("[");
 
     const SwDoc& rDoc = rNode.GetDoc();
-    const SwFrameFormats * pFrameFormats = rDoc.GetSpzFrameFormats();
+    const sw::SpzFrameFormats* pSpzs = rDoc.GetSpzFrameFormats();
 
-    if (pFrameFormats)
+    if (pSpzs)
     {
         bool bFirst = true;
-        for (SwFrameFormats::const_iterator i(pFrameFormats->begin());
-             i != pFrameFormats->end(); ++i)
+        for(const sw::SpzFrameFormat* pSpz: *pSpzs)
         {
-            const SwFormatAnchor & rAnchor = (*i)->GetAnchor();
+            const SwFormatAnchor& rAnchor = pSpz->GetAnchor();
             const SwNode * pPos = rAnchor.GetAnchorNode();
 
             if (pPos && *pPos == rNode)
@@ -423,8 +422,8 @@ static OUString lcl_AnchoredFrames(const SwNode & rNode)
                 if (! bFirst)
                     aResult.append(", ");
 
-                if (*i)
-                    aResult.append(lcl_dbg_out(**i));
+                if (pSpz)
+                    aResult.append(lcl_dbg_out(*pSpz));
                 bFirst = false;
             }
         }

@@ -723,13 +723,14 @@ void SwDoc::DelFrameFormat( SwFrameFormat *pFormat, bool bBroadcast )
         }
         else
         {
-            bool contains = GetSpzFrameFormats()->ContainsFormat(*pFormat);
-            OSL_ENSURE( contains, "FrameFormat not found." );
-            if( contains )
+            auto pSpz = static_cast<sw::SpzFrameFormat*>(pFormat);
+            if(GetSpzFrameFormats()->ContainsFormat(pSpz))
             {
-                GetSpzFrameFormats()->erase( pFormat );
-                delete pFormat;
+                GetSpzFrameFormats()->erase(pSpz);
+                delete pSpz;
             }
+            else
+                SAL_WARN("sw", "FrameFormat not found.");
         }
     }
 }

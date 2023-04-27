@@ -33,6 +33,9 @@
 namespace sfx2 {
     class MetadatableUndo;
 }
+namespace sw {
+    class SpzFrameFormat;
+}
 
 class SwDoc;
 class SwFormatColl;
@@ -317,12 +320,12 @@ public:
 
 class SwHistoryChangeFlyAnchor final : public SwHistoryHint
 {
-    SwFrameFormat & m_rFormat;
+    sw::SpzFrameFormat& m_rFormat; // despite the name, this is not only used for flys, but also for draw formats(!)
     const SwNodeOffset m_nOldNodeIndex;
     const sal_Int32 m_nOldContentIndex;
 
 public:
-    SwHistoryChangeFlyAnchor( SwFrameFormat& rFormat );
+    SwHistoryChangeFlyAnchor(sw::SpzFrameFormat& rFormat);
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 };
 
@@ -370,7 +373,7 @@ public:
     void Add( SwTextAttr* pTextHt, SwNodeOffset nNodeIdx, bool bNewAttr );
     void Add( SwFormatColl*, SwNodeOffset nNodeIdx, SwNodeType nWhichNd );
     void Add( const ::sw::mark::IMark&, bool bSavePos, bool bSaveOtherPos );
-    void AddChangeFlyAnchor( SwFrameFormat& rFormat );
+    void AddChangeFlyAnchor(sw::SpzFrameFormat& rFormat);
     void AddDeleteFly( SwFrameFormat&, sal_uInt16& rSetPos );
     void Add( const SwTextFootnote& );
     void Add( const SfxItemSet & rSet, const SwCharFormat & rCharFormat);

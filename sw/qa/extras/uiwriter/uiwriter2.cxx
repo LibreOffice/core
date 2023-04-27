@@ -753,7 +753,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137245)
         CPPUNIT_ASSERT(pFly != nullptr);
     }
 
-    const SwFrameFormats& rFormats = *pDoc->GetSpzFrameFormats();
+    const auto& rFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), rFormats.size());
 
     // move cursor back to body
@@ -2692,12 +2692,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122942)
     pWrtShell->EndCreate(SdrCreateCmd::ForceEnd);
 
     // Make sure that the shape is inserted.
-    const SwFrameFormats& rFormats = *pDoc->GetSpzFrameFormats();
+    const auto& rFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rFormats.size());
 
     reload("writer8", "tdf122942.odt");
     pDoc = getSwDoc();
-    const SwFrameFormats& rFormats2 = *pDoc->GetSpzFrameFormats();
+    const auto& rFormats2 = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rFormats2.size());
 
     // Make sure the top of the inserted shape does not move outside the existing shape, even after

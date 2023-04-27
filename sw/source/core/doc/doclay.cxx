@@ -488,7 +488,7 @@ SwPosFlyFrames SwDoc::GetAllFlyFormats( const SwPaM* pCmpRange, bool bDrawAlso,
     SwPosFlyFrames aRetval;
 
     // collect all anchored somehow to paragraphs
-    for( auto pFly : *GetSpzFrameFormats() )
+    for(sw::SpzFrameFormat* pFly: *GetSpzFrameFormats())
     {
         bool bDrawFormat = bDrawAlso && RES_DRAWFRMFMT == pFly->Which();
         bool bFlyFormat = RES_FLYFRMFMT == pFly->Which();
@@ -1337,14 +1337,11 @@ static OUString lcl_GetUniqueFlyName(const SwDoc& rDoc, TranslateId pDefStrId, s
     OUString aName(SwResId(pDefStrId));
     sal_Int32 nNmLen = aName.getLength();
 
-    const SwFrameFormats& rFormats = *rDoc.GetSpzFrameFormats();
-
     std::vector<unsigned int> aUsedNums;
-    aUsedNums.reserve(rFormats.size());
+    aUsedNums.reserve(rDoc.GetSpzFrameFormats()->size());
 
-    for( SwFrameFormats::size_type n = 0; n < rFormats.size(); ++n )
+    for(sw::SpzFrameFormat* pFlyFormat: *rDoc.GetSpzFrameFormats())
     {
-        const SwFrameFormat* pFlyFormat = rFormats[ n ];
         if (eType != pFlyFormat->Which())
             continue;
         if (eType == RES_DRAWFRMFMT)
@@ -1564,7 +1561,7 @@ bool SwDoc::IsInHeaderFooter( const SwNode& rIdx ) const
         // get up by using the Anchor
 #if OSL_DEBUG_LEVEL > 0
         std::vector<const SwFrameFormat*> checkFormats;
-        for( auto pFormat : *GetSpzFrameFormats() )
+        for(sw::SpzFrameFormat* pFormat: *GetSpzFrameFormats())
         {
             const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
             if( pIdx && pFlyNd == &pIdx->GetNode() )

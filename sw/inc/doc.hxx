@@ -248,7 +248,7 @@ class SW_DLLPUBLIC SwDoc final
 
     std::unique_ptr<SwFrameFormats>    mpFrameFormatTable;    //< Format table
     std::unique_ptr<SwCharFormats>     mpCharFormatTable;
-    std::unique_ptr<SwFrameFormats>    mpSpzFrameFormatTable;
+    std::unique_ptr<sw::FrameFormats<sw::SpzFrameFormat*>>    mpSpzFrameFormatTable;
     std::unique_ptr<SwSectionFormats>  mpSectionFormatTable;
     std::unique_ptr<sw::TableFrameFormats>    mpTableFrameFormatTable; //< For tables
     std::unique_ptr<SwTextFormatColls> mpTextFormatCollTable;   //< FormatCollections
@@ -754,8 +754,8 @@ public:
           SwCharFormats* GetCharFormats()         { return mpCharFormatTable.get();}
 
     // LayoutFormats (frames, DrawObjects), sometimes const sometimes not
-    const SwFrameFormats* GetSpzFrameFormats() const   { return mpSpzFrameFormatTable.get(); }
-          SwFrameFormats* GetSpzFrameFormats()         { return mpSpzFrameFormatTable.get(); }
+    const sw::FrameFormats<sw::SpzFrameFormat*>* GetSpzFrameFormats() const   { return mpSpzFrameFormatTable.get(); }
+          sw::FrameFormats<sw::SpzFrameFormat*>* GetSpzFrameFormats()         { return mpSpzFrameFormatTable.get(); }
 
     const SwFrameFormat *GetDfltFrameFormat() const   { return mpDfltFrameFormat.get(); }
           SwFrameFormat *GetDfltFrameFormat()         { return mpDfltFrameFormat.get(); }

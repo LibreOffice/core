@@ -1318,20 +1318,18 @@ void SwHTMLWriter::GetControls()
     }
 
     // and now the ones in a character-bound frame
-    const SwFrameFormats* pSpzFrameFormats = m_pDoc->GetSpzFrameFormats();
-    for( size_t i=0; i<pSpzFrameFormats->size(); i++ )
+    for(sw::SpzFrameFormat* pSpz: *m_pDoc->GetSpzFrameFormats())
     {
-        const SwFrameFormat *pFrameFormat = (*pSpzFrameFormats)[i];
-        if( RES_DRAWFRMFMT != pFrameFormat->Which() )
+        if( RES_DRAWFRMFMT != pSpz->Which() )
             continue;
 
-        const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
+        const SwFormatAnchor& rAnchor = pSpz->GetAnchor();
         const SwNode *pAnchorNode = rAnchor.GetAnchorNode();
         if ((RndStdIds::FLY_AS_CHAR != rAnchor.GetAnchorId()) || !pAnchorNode)
             continue;
 
         const SdrObject *pSdrObj =
-            SwHTMLWriter::GetHTMLControl( *static_cast<const SwDrawFrameFormat*>(pFrameFormat) );
+            SwHTMLWriter::GetHTMLControl(*static_cast<SwDrawFrameFormat*>(pSpz) );
         if( !pSdrObj )
             continue;
 

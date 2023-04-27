@@ -349,8 +349,7 @@ sal_Int32 SwTextBoxHelper::getCount(SdrPage const* pPage)
 sal_Int32 SwTextBoxHelper::getCount(const SwDoc& rDoc)
 {
     sal_Int32 nRet = 0;
-    const SwFrameFormats& rSpzFrameFormats = *rDoc.GetSpzFrameFormats();
-    for (const auto pFormat : rSpzFrameFormats)
+    for (const sw::SpzFrameFormat* pFormat : *rDoc.GetSpzFrameFormats())
     {
         if (isTextBox(pFormat, RES_FLYFRMFMT))
             ++nRet;
@@ -960,7 +959,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
     xPropertySet->setPropertyValue(aPropertyName, aValue);
 }
 
-void SwTextBoxHelper::saveLinks(const SwFrameFormats& rFormats,
+void SwTextBoxHelper::saveLinks(const sw::FrameFormats<sw::SpzFrameFormat*>& rFormats,
                                 std::map<const SwFrameFormat*, const SwFrameFormat*>& rLinks)
 {
     for (const auto pFormat : rFormats)
