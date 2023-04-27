@@ -188,11 +188,10 @@ void SwFEShell::Copy( SwDoc& rClpDoc, const OUString* pNewClpText )
                 aAnchor.SetAnchor( &aPos );
                 aSet.Put( aAnchor );
 
-                SdrObject *const pNew =
-                    rClpDoc.CloneSdrObj( *pObj );
+                rtl::Reference<SdrObject> xNew = rClpDoc.CloneSdrObj( *pObj );
 
                 SwPaM aTemp(aPos);
-                rClpDoc.getIDocumentContentOperations().InsertDrawObj(aTemp, *pNew, aSet );
+                rClpDoc.getIDocumentContentOperations().InsertDrawObj(aTemp, *xNew, aSet );
             }
             else
             {
@@ -311,10 +310,10 @@ bool SwFEShell::CopyDrawSel( SwFEShell& rDestShell, const Point& rSttPt,
                 (RndStdIds::FLY_AS_CHAR != rAnchor.GetAnchorId()) )
 
             {
-                SdrObject* pNew = pDestDoc->CloneSdrObj( *pObj, bIsMove &&
+                rtl::Reference<SdrObject> xNew = pDestDoc->CloneSdrObj( *pObj, bIsMove &&
                                         GetDoc() == pDestDoc, false );
-                pNew->NbcMove( aSiz );
-                pDestDrwView->InsertObjectAtView( pNew, *pDestPgView );
+                xNew->NbcMove( aSiz );
+                pDestDrwView->InsertObjectAtView( xNew.get(), *pDestPgView );
                 bInsWithFormat = false;
             }
         }
@@ -373,9 +372,9 @@ bool SwFEShell::CopyDrawSel( SwFEShell& rDestShell, const Point& rSttPt,
                 {
                     SfxItemSet aSet( pDestDoc->GetAttrPool(),aFrameFormatSetRange);
                     aSet.Put( aAnchor );
-                    SdrObject* pNew = pDestDoc->CloneSdrObj( *pObj, bIsMove &&
+                    rtl::Reference<SdrObject> xNew = pDestDoc->CloneSdrObj( *pObj, bIsMove &&
                                                 GetDoc() == pDestDoc );
-                    pFormat = pDestDoc->getIDocumentContentOperations().InsertDrawObj( *rDestShell.GetCursor(), *pNew, aSet );
+                    pFormat = pDestDoc->getIDocumentContentOperations().InsertDrawObj( *rDestShell.GetCursor(), *xNew, aSet );
                 }
                 else
                     pFormat = pDestDoc->getIDocumentLayoutAccess().CopyLayoutFormat( *pFormat, aAnchor, true, true );
@@ -721,25 +720,25 @@ namespace {
             const SdrObject* pSdrObj = pCpyFormat->FindSdrObject();
             if(pSdrObj)
             {
-                SdrObject* pNew = rDoc.CloneSdrObj(*pSdrObj, false, false);
+                rtl::Reference<SdrObject> xNew = rDoc.CloneSdrObj(*pSdrObj, false, false);
                 // Insert object sets any anchor position to 0.
                 // Therefore we calculate the absolute position here
                 // and after the insert the anchor of the object
                 // is set to the anchor of the group object.
-                tools::Rectangle aSnapRect = pNew->GetSnapRect();
-                if(pNew->GetAnchorPos().X() || pNew->GetAnchorPos().Y())
+                tools::Rectangle aSnapRect = xNew->GetSnapRect();
+                if(xNew->GetAnchorPos().X() || xNew->GetAnchorPos().Y())
                 {
                     const Point aPoint(0, 0);
                     // OD 2004-04-05 #i26791# - direct drawing object
                     // positioning for group members
-                    pNew->NbcSetAnchorPos(aPoint);
-                    pNew->NbcSetSnapRect(aSnapRect);
+                    xNew->NbcSetAnchorPos(aPoint);
+                    xNew->NbcSetSnapRect(aSnapRect);
                 }
 
-                rDrawView.InsertObjectAtView(pNew, *rImp.GetPageView());
+                rDrawView.InsertObjectAtView(xNew.get(), *rImp.GetPageView());
 
                 Point aGrpAnchor(0, 0);
-                SdrObjList* pList = pNew->getParentSdrObjListFromSdrObject();
+                SdrObjList* pList = xNew->getParentSdrObjListFromSdrObject();
                 if(pList)
                 {
                     SdrObjGroup* pOwner(dynamic_cast<SdrObjGroup*>(pList->getSdrObjectFromSdrObjList()));
@@ -750,8 +749,8 @@ namespace {
 
                 // OD 2004-04-05 #i26791# - direct drawing object
                 // positioning for group members
-                pNew->NbcSetAnchorPos(aGrpAnchor);
-                pNew->SetSnapRect(aSnapRect);
+                xNew->NbcSetAnchorPos(aGrpAnchor);
+                xNew->SetSnapRect(aSnapRect);
                 return nullptr;
             }
         }

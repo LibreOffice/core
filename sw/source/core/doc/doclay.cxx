@@ -105,7 +105,7 @@ static bool lcl_IsItemSet(const SwContentNode & rNode, sal_uInt16 which)
     return bResult;
 }
 
-SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveWithinDoc,
+rtl::Reference<SdrObject> SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveWithinDoc,
                                 bool bInsInPage )
 {
     // #i52858# - method name changed
@@ -150,7 +150,7 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveWithinDoc,
     }
     pObj->SetLayer( nLayerIdForClone );
 
-    return pObj.get();
+    return pObj;
 }
 
 SwFlyFrameFormat* SwDoc::MakeFlySection_( const SwPosition& rAnchPos,
