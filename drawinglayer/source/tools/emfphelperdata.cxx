@@ -1255,7 +1255,9 @@ namespace emfplushelper
                     {
                         // Silent MSVC warning C4701: potentially uninitialized local variable 'brushIndexOrColor' used
                         sal_uInt32 brushIndexOrColor = 999;
-                        sal_Int32 rectangles;
+                        ::basegfx::B2DPolyPolygon polyPolygon;
+                        sal_uInt32 rectangles;
+                        float x, y, width, height;
                         const bool isColor = (flags & 0x8000);
                         ::basegfx::B2DPolygon polygon;
 
@@ -1270,11 +1272,9 @@ namespace emfplushelper
                             SAL_INFO("drawinglayer.emf", "EMF+\t DrawRects");
                         }
 
-                        rMS.ReadInt32(rectangles);
-
-                        for (int i = 0; i < rectangles; i++)
+                        rMS.ReadUInt32(rectangles);
+                        for (sal_uInt32 i = 0; i < rectangles; i++)
                         {
-                            float x, y, width, height;
                             ReadRectangle(rMS, x, y, width, height, bool(flags & 0x4000));
                             polygon.clear();
                             polygon.append(Map(x, y));
@@ -1284,13 +1284,12 @@ namespace emfplushelper
                             polygon.setClosed(true);
 
                             SAL_INFO("drawinglayer.emf", "EMF+\t\t rectangle: " << x << ", "<< y << " " << width << "x" << height);
-
-                            ::basegfx::B2DPolyPolygon polyPolygon(polygon);
-                            if (type == EmfPlusRecordTypeFillRects)
-                                EMFPPlusFillPolygon(polyPolygon, isColor, brushIndexOrColor);
-                            else
-                                EMFPPlusDrawPolygon(polyPolygon, flags & 0xff);
+                            polyPolygon.append(polygon);
                         }
+                        if (type == EmfPlusRecordTypeFillRects)
+                            EMFPPlusFillPolygon(polyPolygon, isColor, brushIndexOrColor);
+                        else
+                            EMFPPlusDrawPolygon(polyPolygon, flags & 0xff);
                         break;
                     }
                     case EmfPlusRecordTypeFillPolygon:
