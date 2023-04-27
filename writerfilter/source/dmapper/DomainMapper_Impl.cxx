@@ -6539,7 +6539,13 @@ uno::Reference<beans::XPropertySet> DomainMapper_Impl::createSectionForRange(
             if (stepLeft)
                 xCursor->goLeft(1, true);
             uno::Reference< text::XTextContent > xSection( m_xTextFactory->createInstance(sObjectType), uno::UNO_QUERY_THROW );
-            xSection->attach( uno::Reference< text::XTextRange >( xCursor, uno::UNO_QUERY_THROW) );
+            try
+            {
+                xSection->attach( uno::Reference< text::XTextRange >( xCursor, uno::UNO_QUERY_THROW) );
+            }
+            catch(const uno::Exception&)
+            {
+            }
             xRet.set(xSection, uno::UNO_QUERY );
         }
         catch(const uno::Exception&)
