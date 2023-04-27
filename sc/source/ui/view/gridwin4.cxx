@@ -35,6 +35,7 @@
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/lokcomponenthelpers.hxx>
 
@@ -1210,6 +1211,11 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                             // Avoid sending wrong cursor/selection messages by the 'other' view, as the output-area is going
                             // to be tweaked temporarily to match the current view's zoom.
                             SuppressEditViewMessagesGuard aGuard(*pOtherEditView);
+                            comphelper::ScopeGuard aOutputGuard(
+                                [pOtherEditView, aOrigOutputArea, bLokRTL] {
+                                    if (bLokRTL && aOrigOutputArea != pOtherEditView->GetOutputArea())
+                                        pOtherEditView->SetOutputArea(aOrigOutputArea);
+                                });
 
                             aEditRect = rDevice.PixelToLogic(aEditRect);
                             if (bIsTiledRendering)
