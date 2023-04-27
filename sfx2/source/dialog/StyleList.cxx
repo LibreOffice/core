@@ -63,6 +63,7 @@
 #include <StyleList.hxx>
 
 #include <vcl/virdev.hxx>
+#include <basegfx/color/bcolortools.hxx>
 
 using namespace css;
 using namespace css::beans;
@@ -94,42 +95,21 @@ public:
 
 namespace
 {
-Color ColorHash(const OUString& rString)
+Color ColorHash(std::u16string_view rString)
 {
-    // method 1
-    //Color aColor(rString.hashCode() & 0xFFFFFF);
+    static std::vector aSaturationArray{ 0.90, 0.75, 0.60 };
+    static std::vector aLightnessArray = aSaturationArray;
 
-    // method 2 borrowed from https://github.com/RolandR/ColorHash/blob/master/colorhash.js
-    //sal_Int32 nSum = 0;
+    sal_uInt32 nStringHash = OUString(rString).hashCode();
 
-    //for (int i = 0; i < rString.getLength(); i++)
-    //{
-    //    nSum += rString[i];
-    //}
+    double nHue = nStringHash % 359;
+    double nSaturation = aSaturationArray[nStringHash / 360 % aSaturationArray.size()];
+    double nLightness
+        = aLightnessArray[nStringHash / 360 / aSaturationArray.size() % aLightnessArray.size()];
 
-    //sal_uInt8 nRed = OUString("0." + OUString(OUString::number(std::sin(nSum + 1))).copy(6)).toDouble() * 256;
-    //sal_uInt8 nGreen = OUString("0." + OUString(OUString::number(std::sin(nSum + 2))).copy(6)).toDouble() * 256;
-    //sal_uInt8 nBlue = OUString("0." + OUString(OUString::number(std::sin(nSum + 3))).copy(6)).toDouble() * 256;
+    basegfx::BColor aHSLColor(nHue, nSaturation, nLightness);
 
-    //Color aColor(nRed, nGreen, nBlue);
-
-    // method 3 std::hash
-    //const std::hash<OUString> hasher;
-    //Color aColor(hasher(rString) & 0xFFFFFF);
-
-    // method 4
-    sal_uInt32 nLen = rString.getLength();
-    sal_uInt32 nHashCode = nLen;
-    while (nLen > 0)
-    {
-        nHashCode = (nHashCode * 107) + rString[nLen - 1];
-        nLen--;
-    }
-    sal_uInt32 nColor = nHashCode & 0xFFFFFF;
-    Color aColor(ColorTransparency, nColor);
-    aColor.ApplyTintOrShade(5000);
-
-    return aColor;
+    return Color(basegfx::utils::hsl2rgb(aHSLColor));
 }
 
 // used to disallow the default character style in the styles highlighter character styles color map
