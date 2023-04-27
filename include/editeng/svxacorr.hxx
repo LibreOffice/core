@@ -76,7 +76,7 @@ enum class ACFlags : sal_uInt32 {
     CorrectCapsLock      = 0x00002000,   // Correct accidental use of cAPS LOCK key
     TransliterateRTL     = 0x00004000,   // Transliterate RTL text
     ChgAngleQuotes       = 0x00008000,   // >>, << -> angle quotes in some languages
-    SetDOIAttr           = 0x00010000,   // Set DOIAttribut
+    SetDOIAttr           = 0x00010000,   // Set DOIAttribute
 
     ChgWordLstLoad       = 0x20000000,   // Replacement list loaded
     CplSttLstLoad        = 0x40000000,   // Exception list for Capital letters Start loaded
