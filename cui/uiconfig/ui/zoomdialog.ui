@@ -194,7 +194,7 @@
                         <property name="spacing">12</property>
                         <child>
                           <object class="GtkRadioButton" id="variable">
-                            <property name="label" translatable="yes" context="zoomdialog|variable">Variable:</property>
+                            <property name="label" translatable="yes" context="zoomdialog|variable">Custom:</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -228,7 +228,7 @@
                             <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="zoomsb-atkobject">
-                                <property name="AtkObject::accessible-name" translatable="yes" context="zoomdialog|zoomsb-atkobject">Variable</property>
+                                <property name="AtkObject::accessible-name" translatable="yes" context="zoomdialog|zoomsb-atkobject">Custom</property>
                                 <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|zoomsb">Enter the zoom factor at which you want to display the document. Enter a percentage in the box.</property>
                               </object>
                             </child>
