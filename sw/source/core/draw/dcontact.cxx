@@ -1567,11 +1567,12 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
     {
         auto pDrawFormatLayoutCopyHint = static_cast<const sw::DrawFormatLayoutCopyHint*>(&rHint);
         const SwDrawFrameFormat& rFormat = static_cast<const SwDrawFrameFormat&>(rMod);
-        new SwDrawContact(
-                &pDrawFormatLayoutCopyHint->m_rDestFormat,
+        rtl::Reference<SdrObject> xNewObj =
                 pDrawFormatLayoutCopyHint->m_rDestDoc.CloneSdrObj(
                         *GetMaster(),
-                        pDrawFormatLayoutCopyHint->m_rDestDoc.IsCopyIsMove() && &pDrawFormatLayoutCopyHint->m_rDestDoc == rFormat.GetDoc()));
+                        pDrawFormatLayoutCopyHint->m_rDestDoc.IsCopyIsMove() && &pDrawFormatLayoutCopyHint->m_rDestDoc == rFormat.GetDoc());
+        new SwDrawContact(
+                &pDrawFormatLayoutCopyHint->m_rDestFormat, xNewObj.get() );
         // #i49730# - notify draw frame format that position attributes are
         // already set, if the position attributes are already set at the
         // source draw frame format.
