@@ -461,4 +461,72 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf99729)
                                  nonwhitecounts[1]);
 }
 
+CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf155048)
+{
+    loadFromURL(u"odg/diagonalLine.fodg");
+
+    uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
+        = drawing::GraphicExportFilter::create(getComponentContext());
+    CPPUNIT_ASSERT(xGraphicExporter);
+
+    uno::Reference<drawing::XDrawPagesSupplier> xSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<lang::XComponent> xPage(xSupplier->getDrawPages()->getByIndex(0),
+                                           uno::UNO_QUERY_THROW);
+    xGraphicExporter->setSourceDocument(xPage);
+
+    // 1. AA disabled
+    {
+        css::uno::Sequence<css::beans::PropertyValue> aFilterData{
+            comphelper::makePropertyValue("PixelWidth", sal_Int32(200)),
+            comphelper::makePropertyValue("PixelHeight", sal_Int32(200)),
+            comphelper::makePropertyValue("AntiAliasing", false),
+        };
+
+        css::uno::Sequence<css::beans::PropertyValue> aDescriptor{
+            comphelper::makePropertyValue("URL", maTempFile.GetURL()),
+            comphelper::makePropertyValue("FilterName", OUString("PNG")),
+            comphelper::makePropertyValue("FilterData", aFilterData)
+        };
+
+        xGraphicExporter->filter(aDescriptor);
+
+        BitmapEx bmp = vcl::PngImageReader(*maTempFile.GetStream(StreamMode::READ)).read();
+        std::set<Color> foundColors;
+        for (tools::Long x = 0; x < bmp.GetSizePixel().Width(); ++x)
+            for (tools::Long y = 0; y < bmp.GetSizePixel().Height(); ++y)
+                foundColors.insert(bmp.GetPixelColor(x, y));
+
+        // There must be only two colors (white and blue) in the bitmap generated without AA
+        CPPUNIT_ASSERT_EQUAL(size_t(2), foundColors.size());
+        maTempFile.CloseStream();
+    }
+
+    // 2. AA enabled
+    {
+        css::uno::Sequence<css::beans::PropertyValue> aFilterData{
+            comphelper::makePropertyValue("PixelWidth", sal_Int32(200)),
+            comphelper::makePropertyValue("PixelHeight", sal_Int32(200)),
+            comphelper::makePropertyValue("AntiAliasing", true),
+        };
+
+        css::uno::Sequence<css::beans::PropertyValue> aDescriptor{
+            comphelper::makePropertyValue("URL", maTempFile.GetURL()),
+            comphelper::makePropertyValue("FilterName", OUString("PNG")),
+            comphelper::makePropertyValue("FilterData", aFilterData)
+        };
+
+        xGraphicExporter->filter(aDescriptor);
+
+        BitmapEx bmp = vcl::PngImageReader(*maTempFile.GetStream(StreamMode::READ)).read();
+        std::set<Color> foundColors;
+        for (tools::Long x = 0; x < bmp.GetSizePixel().Width(); ++x)
+            for (tools::Long y = 0; y < bmp.GetSizePixel().Height(); ++y)
+                foundColors.insert(bmp.GetPixelColor(x, y));
+
+        // With AA, the number of colors will be greater - it is 19 on my system
+        CPPUNIT_ASSERT_GREATER(size_t(2), foundColors.size());
+        maTempFile.CloseStream();
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
