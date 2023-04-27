@@ -115,6 +115,7 @@ public:
 };
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportFODT(SvStream &rStream);
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestPDFExportFODT(SvStream &rStream);
 
 #endif
 

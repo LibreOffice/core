@@ -23,8 +23,10 @@
 #include <cassert>
 
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
+#include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 
@@ -60,8 +62,12 @@
 #include <svx/xmlgrhlp.hxx>
 #include <svx/xmleohlp.hxx>
 #include <sfx2/printer.hxx>
+#include <sfx2/sfxmodelfactory.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <unotools/fcm.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <unotools/streamwrap.hxx>
+#include <unotools/tempfile.hxx>
 #include <tools/UnitConversion.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
@@ -1763,6 +1769,83 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODT(SvStream &rStream)
     xDocSh->SetLoading(SfxLoadedFlags::ALL);
 
     xDocSh->DoClose();
+
+    return ret;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
+{
+    Reference<css::frame::XDesktop2> xDesktop = css::frame::Desktop::create(comphelper::getProcessComponentContext());
+    Reference<css::frame::XFrame> xTargetFrame = xDesktop->findFrame("_blank", 0);
+
+    Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+    Reference<css::frame::XModel2> xModel(xContext->getServiceManager()->createInstanceWithContext(
+                "com.sun.star.text.TextDocument", xContext), UNO_QUERY_THROW);
+
+    Reference<css::frame::XLoadable> xModelLoad(xModel, UNO_QUERY_THROW);
+    xModelLoad->initNew();
+
+    css::uno::Reference<css::frame::XController2> xController(xModel->createDefaultViewController(xTargetFrame), UNO_SET_THROW);
+
+    utl::ConnectFrameControllerModel(xTargetFrame, xController, xModel);
+
+    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
+    uno::Reference<io::XInputStream> xStream(new utl::OSeekableInputStreamWrapper(rStream));
+    uno::Reference<uno::XInterface> xInterface(xMultiServiceFactory->createInstance("com.sun.star.comp.Writer.XmlFilterAdaptor"), uno::UNO_SET_THROW);
+
+    css::uno::Sequence<OUString> aUserData
+    {
+        "com.sun.star.comp.filter.OdfFlatXml",
+        "",
+        "com.sun.star.comp.Writer.XMLOasisImporter",
+        "com.sun.star.comp.Writer.XMLOasisExporter",
+        "",
+        "",
+        "true"
+    };
+    uno::Sequence<beans::PropertyValue> aAdaptorArgs(comphelper::InitPropertySequence(
+    {
+        { "UserData", uno::Any(aUserData) },
+    }));
+    css::uno::Sequence<uno::Any> aOuterArgs{ uno::Any(aAdaptorArgs) };
+
+    uno::Reference<lang::XInitialization> xInit(xInterface, uno::UNO_QUERY_THROW);
+    xInit->initialize(aOuterArgs);
+
+    uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+    {
+        { "InputStream", uno::Any(xStream) },
+        { "URL", uno::Any(OUString("private:stream")) },
+    }));
+    xImporter->setTargetDocument(xModel);
+
+    uno::Reference<document::XFilter> xFODTFilter(xInterface, uno::UNO_QUERY_THROW);
+    bool ret = xFODTFilter->filter(aArgs);
+
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+
+    utl::TempFileNamed aTempFile;
+    aTempFile.EnableKillingFile();
+
+    uno::Reference<document::XFilter> xPDFFilter(
+        xMultiServiceFactory->createInstance("com.sun.star.document.PDFFilter"), uno::UNO_QUERY);
+    uno::Reference<document::XExporter> xExporter(xPDFFilter, uno::UNO_QUERY);
+    xExporter->setSourceDocument(xModel);
+
+    SvFileStream aOutputStream(aTempFile.GetURL(), StreamMode::WRITE);
+    uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aOutputStream));
+
+    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence({
+        { "FilterName", uno::Any(OUString("writer_pdf_Export")) },
+        { "OutputStream", uno::Any(xOutputStream) }
+    }));
+    xPDFFilter->filter(aDescriptor);
+    aOutputStream.Close();
+
+    css::uno::Reference<css::util::XCloseable> xClose(xModel, css::uno::UNO_QUERY);
+    xClose->close(false);
 
     return ret;
 }
