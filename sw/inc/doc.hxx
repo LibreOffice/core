@@ -1539,7 +1539,7 @@ public:
     void Unchain( SwFrameFormat &rFormat );
 
     // For Copy/Move from FrameShell.
-    SdrObject* CloneSdrObj( const SdrObject&, bool bMoveWithinDoc = false,
+    rtl::Reference<SdrObject> CloneSdrObj( const SdrObject&, bool bMoveWithinDoc = false,
                             bool bInsInPage = true );
 
     // FeShell - Interface end
