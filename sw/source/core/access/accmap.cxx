@@ -197,13 +197,8 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
     if (rHint.GetId() != SfxHintId::ThisIsAnSdrHint)
         return;
     const SdrHint *pSdrHint = static_cast<const SdrHint*>( &rHint );
-    if (pSdrHint->GetObject() &&
-           ( dynamic_cast< const SwFlyDrawObj* >(pSdrHint->GetObject()) !=  nullptr ||
-              dynamic_cast< const SwVirtFlyDrawObj* >(pSdrHint->GetObject()) !=  nullptr ||
-             isType<SdrObject>(pSdrHint->GetObject()) ) )
-    {
+    if (pSdrHint->GetObject() )
         return;
-    }
 
     OSL_ENSURE( mpDrawModel, "draw model listener is disposed" );
     if( !mpDrawModel )
