@@ -137,19 +137,6 @@ rtl::Reference<SdrObject> SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveW
     else if( bInsInPage )
         pPg->InsertObjectThenMakeNameUnique( pObj.get() );
 
-    // For drawing objects: set layer of cloned object to invisible layer
-    SdrLayerID nLayerIdForClone = rObj.GetLayer();
-    if ( dynamic_cast<const SwFlyDrawObj*>( pObj.get() ) ==  nullptr &&
-         dynamic_cast<const SwVirtFlyDrawObj*>( pObj.get() ) ==  nullptr &&
-         !isType<SdrObject>(pObj.get()) )
-    {
-        if ( getIDocumentDrawModelAccess().IsVisibleLayerId( nLayerIdForClone ) )
-        {
-            nLayerIdForClone = getIDocumentDrawModelAccess().GetInvisibleLayerIdByVisibleOne( nLayerIdForClone );
-        }
-    }
-    pObj->SetLayer( nLayerIdForClone );
-
     return pObj;
 }
 
