@@ -2530,7 +2530,7 @@ class FilterEntriesHandler
     ScColumn& mrColumn;
     ScFilterEntries& mrFilterEntries;
 
-    void processCell(const ScColumn& rColumn, SCROW nRow, ScRefCellValue& rCell)
+    void processCell(const ScColumn& rColumn, SCROW nRow, ScRefCellValue& rCell, bool bIsEmptyCell=false)
     {
         SvNumberFormatter* pFormatter = mrColumn.GetDoc().GetFormatTable();
         sal_uLong nFormat = mrColumn.GetNumberFormat(mrColumn.GetDoc().GetNonThreadedContext(), nRow);
@@ -2597,6 +2597,16 @@ class FilterEntriesHandler
             backgroundColor = pBrush->GetColor();
         }
         mrFilterEntries.addBackgroundColor(backgroundColor);
+
+        if (bIsEmptyCell)
+        {
+            if (!mrFilterEntries.mbHasEmpties)
+            {
+                mrFilterEntries.push_back(ScTypedStrData(OUString()));
+                mrFilterEntries.mbHasEmpties = true;
+            }
+            return;
+        }
 
         if (rCell.hasString())
         {
@@ -2693,17 +2703,8 @@ public:
 
     void operator() (const int nElemType, size_t nRow, size_t /* nDataSize */)
     {
-        if ( nElemType == sc::element_type_empty )
-        {
-            if (!mrFilterEntries.mbHasEmpties)
-            {
-                mrFilterEntries.push_back(ScTypedStrData(OUString()));
-                mrFilterEntries.mbHasEmpties = true;
-            }
-            return;
-        }
         ScRefCellValue aCell = mrColumn.GetCellValue(nRow);
-        processCell(mrColumn, nRow, aCell);
+        processCell(mrColumn, nRow, aCell, nElemType == sc::element_type_empty);
     }
 };
 
