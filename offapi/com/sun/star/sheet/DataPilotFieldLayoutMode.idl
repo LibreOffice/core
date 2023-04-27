@@ -68,6 +68,8 @@ constants DataPilotFieldLayoutMode
         the subtotals take up more than one row (manually selected, or because there
         are several data fields), they are always shown below the item's data,
         regardless of the setting.</p>
+
+        @since LibreOffice 7.6
      */
 
     const long COMPACT_LAYOUT = 3;
