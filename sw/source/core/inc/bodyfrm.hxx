@@ -33,6 +33,8 @@ public:
     SwBodyFrame( SwFrameFormat*, SwFrame* );
 
     virtual void PaintSubsidiaryLines( const SwPageFrame*, const SwRect& ) const override;
+
+    void dumpAsXml(xmlTextWriterPtr writer = nullptr) const override;
 };
 
 #endif
