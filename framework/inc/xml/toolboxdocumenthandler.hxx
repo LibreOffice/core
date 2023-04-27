@@ -100,14 +100,6 @@ class OReadToolBoxDocumentHandler final : public OReadToolBoxDocumentHandler_Bas
         css::uno::Reference< css::container::XIndexContainer >    m_rItemContainer;
         css::uno::Reference< css::xml::sax::XLocator >            m_xLocator;
 
-        sal_Int32                                                 m_nHashCode_Style_Radio;
-        sal_Int32                                                 m_nHashCode_Style_Left;
-        sal_Int32                                                 m_nHashCode_Style_AutoSize;
-        sal_Int32                                                 m_nHashCode_Style_DropDown;
-        sal_Int32                                                 m_nHashCode_Style_Repeat;
-        sal_Int32                                                 m_nHashCode_Style_DropDownOnly;
-        sal_Int32                                                 m_nHashCode_Style_Text;
-        sal_Int32                                                 m_nHashCode_Style_Image;
         OUString                                                  m_aType;
         OUString                                                  m_aLabel;
         OUString                                                  m_aStyle;

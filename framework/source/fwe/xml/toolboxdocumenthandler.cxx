@@ -149,16 +149,6 @@ OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XInde
         }
     }
 
-    // pre-calculate a hash code for all style strings to speed up xml read process
-    m_nHashCode_Style_Radio         = OUString( ATTRIBUTE_ITEMSTYLE_RADIO ).hashCode();
-    m_nHashCode_Style_Left          = OUString( ATTRIBUTE_ITEMSTYLE_LEFT ).hashCode();
-    m_nHashCode_Style_AutoSize      = OUString( ATTRIBUTE_ITEMSTYLE_AUTOSIZE ).hashCode();
-    m_nHashCode_Style_DropDown      = OUString( ATTRIBUTE_ITEMSTYLE_DROPDOWN ).hashCode();
-    m_nHashCode_Style_Repeat        = OUString( ATTRIBUTE_ITEMSTYLE_REPEAT ).hashCode();
-    m_nHashCode_Style_DropDownOnly  = OUString( ATTRIBUTE_ITEMSTYLE_DROPDOWNONLY ).hashCode();
-    m_nHashCode_Style_Text          = OUString( ATTRIBUTE_ITEMSTYLE_TEXT ).hashCode();
-    m_nHashCode_Style_Image         = OUString( ATTRIBUTE_ITEMSTYLE_IMAGE ).hashCode();
-
     m_bToolBarStartFound            = false;
     m_bToolBarItemStartFound        = false;
     m_bToolBarSpaceStartFound       = false;
@@ -310,22 +300,21 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
                                 OUString aToken  = aTemp.getToken( 0, ' ', nIndex );
                                 if ( !aToken.isEmpty() )
                                 {
-                                    sal_Int32 nHashCode = aToken.hashCode();
-                                    if ( nHashCode == m_nHashCode_Style_Radio )
+                                    if ( aToken == ATTRIBUTE_ITEMSTYLE_RADIO )
                                         nItemBits |= css::ui::ItemStyle::RADIO_CHECK;
-                                    else if ( nHashCode == m_nHashCode_Style_Left )
+                                    else if ( aToken == ATTRIBUTE_ITEMSTYLE_LEFT )
                                         nItemBits |= css::ui::ItemStyle::ALIGN_LEFT;
-                                    else if ( nHashCode == m_nHashCode_Style_AutoSize )
+                                    else if ( aToken == ATTRIBUTE_ITEMSTYLE_AUTOSIZE )
                                         nItemBits |= css::ui::ItemStyle::AUTO_SIZE;
-                                    else if ( nHashCode == m_nHashCode_Style_Repeat )
+                                    else if ( aToken == ATTRIBUTE_ITEMSTYLE_REPEAT )
                                         nItemBits |= css::ui::ItemStyle::REPEAT;
-                                    else if ( nHashCode == m_nHashCode_Style_DropDownOnly )
+                                    else if ( aToken == ATTRIBUTE_ITEMSTYLE_DROPDOWNONLY )
                                         nItemBits |= css::ui::ItemStyle::DROPDOWN_ONLY;
-                                    else if ( nHashCode == m_nHashCode_Style_DropDown )
+                                    else if ( aToken == ATTRIBUTE_ITEMSTYLE_DROPDOWN )
                                         nItemBits |= css::ui::ItemStyle::DROP_DOWN;
-                                    else if ( nHashCode == m_nHashCode_Style_Text )
+                                    else if ( aToken == ATTRIBUTE_ITEMSTYLE_TEXT )
                                         nItemBits |= css::ui::ItemStyle::TEXT;
-                                    else if ( nHashCode == m_nHashCode_Style_Image )
+                                    else if ( aToken == ATTRIBUTE_ITEMSTYLE_IMAGE )
                                         nItemBits |= css::ui::ItemStyle::ICON;
                                 }
                             }
