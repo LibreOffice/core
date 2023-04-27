@@ -23,6 +23,11 @@
 
 #include <sal/types.h>
 
+// Cf. xmlsec's configure.in:
+#if SAL_TYPES_SIZEOFPOINTER != 4 && !defined SYSTEM_XMLSEC
+#define XMLSEC_NO_SIZE_T
+#endif
+
 #include <xmlsec/base64.h>
 #include <xmlsec/bn.h>
 #include <xmlsec/errors.h>
