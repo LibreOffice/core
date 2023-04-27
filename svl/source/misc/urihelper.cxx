@@ -757,7 +757,7 @@ OUString URIHelper::FindFirstDOIInText(OUString const & rText,
     sal_Int32 count = rEnd-rBegin;
     OUString candidate(rText.subView(rBegin, count));
     // Match with regex "doi:10\.\d{4,9}\/[-._;()\/:a-zA-Z0-9]+"
-    if (candidate.startsWith("doi:10."))
+    if (candidate.startsWithIgnoreAsciiCase("doi:10."))
     {
         bool flag = true;
         sal_Int32 digit = 0;
@@ -797,7 +797,7 @@ OUString URIHelper::FindFirstDOIInText(OUString const & rText,
         }
         if (flag && digit==-1)
         {
-            return candidate.replaceFirst("doi:","https://doi.org/");
+            return OUString::Concat("https://doi.org/")+candidate.subView(4);
         }
     }
     rBegin = rEnd;
