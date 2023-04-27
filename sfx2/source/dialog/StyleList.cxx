@@ -100,7 +100,7 @@ Color ColorHash(std::u16string_view rString)
     static std::vector aSaturationArray{ 0.90, 0.75, 0.60 };
     static std::vector aLightnessArray = aSaturationArray;
 
-    sal_uInt32 nStringHash = OUString(rString).hashCode();
+    sal_uInt32 nStringHash = rtl_ustr_hashCode_WithLength(rString.data(), rString.length());
 
     double nHue = nStringHash % 359;
     double nSaturation = aSaturationArray[nStringHash / 360 % aSaturationArray.size()];
