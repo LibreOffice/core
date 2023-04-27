@@ -185,7 +185,16 @@ void SheetDataContext::onEndElement()
             mrSheetData.setValueCell( maCellData, maCellValue.toDouble() );
         break;
         case XML_b:
-            mrSheetData.setBooleanCell( maCellData, maCellValue.toDouble() != 0.0 );
+            {
+                // Some generators may write true or false instead of 1 or 0.
+                /* XXX NOTE: PivotCacheItem::readBool() may suffer from this as
+                 * well, but for now let's assume that software writing this
+                 * here wrong won't write pivot caches at all.. */
+                bool bValue = (maCellValue.toDouble() != 0.0);
+                if (!bValue && maCellValue.equalsIgnoreAsciiCase(u"true"))
+                    bValue = true;
+                mrSheetData.setBooleanCell( maCellData, bValue );
+            }
         break;
         case XML_e:
             mrSheetData.setErrorCell( maCellData, maCellValue );
