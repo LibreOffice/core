@@ -1110,7 +1110,7 @@ void ScDPOutput::Output()
     std::vector<bool> vbSetBorder;
     vbSetBorder.resize( nTabEndRow - nDataStartRow + 1, false );
     size_t nFieldColOffset = 0;
-    size_t nFieldIndentLevel = 0; // To calulate indent level for fields packed in a column.
+    size_t nFieldIndentLevel = 0; // To calculate indent level for fields packed in a column.
     size_t nNumRowFields = pRowFields.size();
     for (size_t nField=0; nField<nNumRowFields; nField++)
     {
