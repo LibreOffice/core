@@ -14,6 +14,8 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/style/BreakType.hpp>
 
 using namespace ::com::sun::star;
 
@@ -56,6 +58,29 @@ CPPUNIT_TEST_FIXTURE(Test, testNestedFloatingTable)
     // Without the accompanying fix in place, this test would have failed, the nested floating table
     // was partly positioned outside the table cell, leading to overlapping text.
     CPPUNIT_ASSERT(bIsFollowingTextFlow);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFloatingTableBreakBefore)
+{
+    // Given a 3 pages document: page break, then a multi-page floating table on pages 2 and 3:
+    // When laying out that document:
+    loadFromURL(u"floattable-break-before.docx");
+
+    // Then make sure the page break property is on the anchor of the floating table, otherwise it
+    // has no effect:
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xText->createEnumeration();
+    xParagraphs->nextElement();
+    xParagraphs->nextElement();
+    uno::Reference<beans::XPropertySet> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
+    style::BreakType eBreakType{};
+    xParagraph->getPropertyValue("BreakType") >>= eBreakType;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4 (style::BreakType_PAGE_BEFORE)
+    // - Actual  : 0 (style::BreakType_NONE)
+    // i.e. the page break was lost.
+    CPPUNIT_ASSERT_EQUAL(style::BreakType_PAGE_BEFORE, eBreakType);
 }
 }
 

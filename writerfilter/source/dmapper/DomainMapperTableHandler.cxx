@@ -50,6 +50,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/style/BreakType.hpp>
 #include <boost/lexical_cast.hpp>
 #include <officecfg/Office/Writer.hxx>
 
@@ -1542,6 +1543,15 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
             // A non-zero left margin would move the table out of the frame, move the frame itself instead.
             xTableProperties->setPropertyValue("LeftMargin", uno::Any(sal_Int32(0)));
 
+            style::BreakType eBreakType{};
+            xTableProperties->getPropertyValue("BreakType") >>= eBreakType;
+            if (eBreakType != style::BreakType_NONE)
+            {
+                // A break before the table was requested. Reset that break here, since the table
+                // will be at the start of the fly frame, not in the body frame.
+                xTableProperties->setPropertyValue("BreakType", uno::Any(style::BreakType_NONE));
+            }
+
             if (nestedTableLevel >= 2)
             {
                 // Floating tables inside a table always stay inside the cell.
@@ -1573,6 +1583,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
             // Multi-page floating tables works if an outer/toplevel table is floating, but not
             // when an inner table would float.
             bool bToplevelSplitFly = nestedTableLevel <= 1;
+            uno::Reference<beans::XPropertySet> xFrameAnchor;
             if (xTextAppendAndConvert.is() && (!bTableStartsAtCellStart || bToplevelSplitFly))
             {
                 std::deque<css::uno::Any> aFramedRedlines = m_rDMapper_Impl.m_aStoredRedlines[StoredRedlines::FRAME];
@@ -1581,9 +1592,16 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                 std::vector<OUString> redTable;
                 BeforeConvertToTextFrame(aFramedRedlines, redPos, redLen, redCell, redTable);
 
-                xTextAppendAndConvert->convertToTextFrame(xStart, xEnd, comphelper::containerToSequence(aFrameProperties));
+                uno::Reference<text::XTextContent> xContent = xTextAppendAndConvert->convertToTextFrame(xStart, xEnd, comphelper::containerToSequence(aFrameProperties));
+                xFrameAnchor.set(xContent->getAnchor(), uno::UNO_QUERY);
 
                 AfterConvertToTextFrame(m_rDMapper_Impl, aFramedRedlines, redPos, redLen, redCell, redTable);
+            }
+
+            if (xFrameAnchor.is() && eBreakType != style::BreakType_NONE)
+            {
+                // A break before the table was requested. Restore that on the anchor.
+                xFrameAnchor->setPropertyValue("BreakType", uno::Any(eBreakType));
             }
         }
     }
