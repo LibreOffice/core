@@ -86,6 +86,16 @@ enum class ScrollRangeCheck
     PaperWidthTextSize = 2,   // VisArea must be within paper width, Text Size
 };
 
+enum class LOKSpecialFlags {
+    NONE               = 0x0000,
+    LayoutRTL          = 0x0001,
+};
+
+namespace o3tl
+{
+    template<> struct typed_flags<LOKSpecialFlags> : is_typed_flags<LOKSpecialFlags, 0x77> {};
+}
+
 // Helper class that allows to set a callback at the EditView. When
 // set, Invalidates and repaints are suppressed at the EditView, but
 // EditViewInvalidate() will be triggered to allow the consumer to
@@ -376,6 +386,8 @@ public:
     void SetLOKSpecialVisArea(const tools::Rectangle& rVisArea);
     tools::Rectangle GetLOKSpecialVisArea() const;
     bool HasLOKSpecialPositioning() const;
+
+    void SetLOKSpecialFlags(LOKSpecialFlags eFlags);
 
     void SuppressLOKMessages(bool bSet);
     bool IsSuppressLOKMessages() const;

@@ -233,6 +233,9 @@ public:
     Point            GetWindowPos(const Point& rDocPos, MapUnit eDocPosUnit) const;
     tools::Rectangle GetWindowPos(const tools::Rectangle& rDocRect, MapUnit eDocRectUnit) const;
 
+    void SetFlags(LOKSpecialFlags eFlags) { meFlags = eFlags; }
+    bool IsLayoutRTL() { return bool(meFlags & LOKSpecialFlags::LayoutRTL); }
+
     Point GetRefPoint() const;
 
 private:
@@ -243,6 +246,7 @@ private:
     tools::Rectangle maOutArea;
     Point maVisDocStartPos;
     MapUnit meUnit;
+    LOKSpecialFlags meFlags;
 };
 
 
@@ -465,6 +469,8 @@ public:
     void SetLOKSpecialVisArea(const tools::Rectangle& rVisArea);
     tools::Rectangle GetLOKSpecialVisArea() const;
     bool HasLOKSpecialPositioning() const;
+
+    void SetLOKSpecialFlags(LOKSpecialFlags eFlags);
 
     void SuppressLOKMessages(bool bSet) { mbSuppressLOKMessages = bSet; }
     bool IsSuppressLOKMessages() const { return mbSuppressLOKMessages; }
