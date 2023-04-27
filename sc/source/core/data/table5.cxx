@@ -39,12 +39,15 @@
 #include <userdat.hxx>
 #include <conditio.hxx>
 #include <colorscale.hxx>
+#include <cellform.hxx>
 
 #include <com/sun/star/sheet/TablePageBreakData.hpp>
 
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
 #include <osl/diagnose.h>
+#include <svl/numformat.hxx>
+#include <svl/zformat.hxx>
 
 #include <algorithm>
 #include <limits>
@@ -1099,6 +1102,19 @@ Color ScTable::GetCellTextColor(ScAddress aPos) const
             const SfxItemSet* pCondSet = GetDoc().GetCondResult(aPos.Col(), aPos.Row(), aPos.Tab());
             const SvxColorItem* pColor = &pPattern->GetItem(ATTR_FONT_COLOR, pCondSet);
             return pColor->GetValue();
+        }
+
+        if (pPattern->GetItem(ATTR_VALUE_FORMAT).GetValue())
+        {
+            SvNumberFormatter* pNumberFormatter = GetDoc().GetFormatTable();
+            const SfxUInt32Item pItem = pPattern->GetItem(ATTR_VALUE_FORMAT);
+            auto& rDoc = const_cast<ScDocument&>(GetDoc());
+            const Color* pColor;
+            ScRefCellValue aCell(rDoc, aPos);
+            ScCellFormat::GetString(rDoc, aPos, pItem.GetValue(), &pColor, *pNumberFormatter, false,
+                                    false);
+            if (pColor)
+                return *pColor;
         }
     }
 

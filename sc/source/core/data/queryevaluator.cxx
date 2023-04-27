@@ -593,26 +593,7 @@ std::pair<bool, bool> ScQueryEvaluator::compareByTextColor(SCCOL nCol, SCROW nRo
                                                            const ScQueryEntry::Item& rItem)
 {
     ScAddress aPos(nCol, nRow, mrTab.GetTab());
-    Color color;
-    bool bHasConditionalColor = false;
-    // Text color can be set via conditional formatting - check that first
-    const ScPatternAttr* pPattern = mrDoc.GetPattern(nCol, nRow, mrTab.GetTab());
-    if (pPattern)
-    {
-        if (!pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData().empty())
-        {
-            const SfxItemSet* pCondSet = mrDoc.GetCondResult(nCol, nRow, mrTab.GetTab());
-            const SvxColorItem* pColor = &pPattern->GetItem(ATTR_FONT_COLOR, pCondSet);
-            color = pColor->GetValue();
-            bHasConditionalColor = true;
-        }
-    }
-
-    if (!bHasConditionalColor)
-    {
-        const SvxColorItem* pColor = mrDoc.GetAttr(aPos, ATTR_FONT_COLOR);
-        color = pColor->GetValue();
-    }
+    Color color = mrTab.GetCellTextColor(aPos);
 
     bool bMatch = rItem.maColor == color;
     return std::pair<bool, bool>(bMatch, false);
@@ -622,43 +603,7 @@ std::pair<bool, bool> ScQueryEvaluator::compareByBackgroundColor(SCCOL nCol, SCR
                                                                  const ScQueryEntry::Item& rItem)
 {
     ScAddress aPos(nCol, nRow, mrTab.GetTab());
-    Color color;
-
-    // Background color can be set via conditional formatting - check that first
-    bool bHasConditionalColor = false;
-    const ScPatternAttr* pPattern = mrDoc.GetPattern(nCol, nRow, mrTab.GetTab());
-    if (pPattern)
-    {
-        if (!pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData().empty())
-        {
-            const SfxItemSet* pCondSet = mrDoc.GetCondResult(nCol, nRow, mrTab.GetTab());
-            const SvxBrushItem* pBackgroundColor = &pPattern->GetItem(ATTR_BACKGROUND, pCondSet);
-            color = pBackgroundColor->GetColor();
-            bHasConditionalColor = true;
-        }
-    }
-
-    ScConditionalFormat* pCondFormat = mrDoc.GetCondFormat(nCol, nRow, mrTab.GetTab());
-    if (pCondFormat)
-    {
-        for (size_t i = 0; i < pCondFormat->size(); i++)
-        {
-            auto aEntry = pCondFormat->GetEntry(i);
-            if (aEntry->GetType() == ScFormatEntry::Type::Colorscale)
-            {
-                const ScColorScaleFormat* pColFormat
-                    = static_cast<const ScColorScaleFormat*>(aEntry);
-                color = *(pColFormat->GetColor(aPos));
-                bHasConditionalColor = true;
-            }
-        }
-    }
-
-    if (!bHasConditionalColor)
-    {
-        const SvxBrushItem* pBrush = mrDoc.GetAttr(aPos, ATTR_BACKGROUND);
-        color = pBrush->GetColor();
-    }
+    Color color = mrTab.GetCellBackgroundColor(aPos);
 
     bool bMatch = rItem.maColor == color;
     return std::pair<bool, bool>(bMatch, false);
