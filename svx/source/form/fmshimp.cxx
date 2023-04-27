@@ -92,6 +92,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <unotools/configmgr.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -3461,6 +3462,10 @@ void FmXFormShell::CreateExternalView_Lock()
 
 void FmXFormShell::implAdjustConfigCache_Lock()
 {
+    const bool bFuzzing(utl::ConfigManager::IsFuzzing());
+    if (bFuzzing)
+        return;
+
     // get (cache) the wizard usage flag
     Sequence< OUString > aNames { "FormControlPilotsEnabled" };
     Sequence< Any > aFlags = GetProperties(aNames);
