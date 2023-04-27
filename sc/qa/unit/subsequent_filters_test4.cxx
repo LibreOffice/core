@@ -1319,6 +1319,21 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf153444)
     CPPUNIT_ASSERT_EQUAL(OUString(u"ß, µm/m"), pDoc->GetString(5, 0, 0));
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf151958)
+{
+    // Without the fix in place, this test would have failed with
+    // sal_uInt64 ScCountIfCellIterator<accessType>::GetCount(): Assertion `false' failed.
+    createScDoc("ods/tdf151958.ods");
+
+    ScDocument* pDoc = getScDoc();
+
+    double aValues[13] = { 17.0, 6.0, 6.0, 6.0, 5.0, 5.0, 4.0, 4.0, 4.0, 3.0, 3.0, 3.0, 2.0 };
+    for (size_t i = 3; i < 15; ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL(aValues[i - 3], pDoc->GetValue(6, i, 0));
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf151046)
 {
     createScDoc("ods/tdf151046.ods");
