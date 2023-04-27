@@ -15,6 +15,7 @@
 #include <svx/ColorSets.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/colorbox.hxx>
+#include <comphelper/lok.hxx>
 
 namespace svx
 {
@@ -65,7 +66,8 @@ void ThemeDialog::initColorSets()
 IMPL_LINK_NOARG(ThemeDialog, DoubleClickValueSetHdl, ValueSet*, void)
 {
     SelectItem(nullptr);
-    m_xDialog->response(RET_OK);
+    if (!comphelper::LibreOfficeKit::isActive())
+        m_xDialog->response(RET_OK);
 }
 
 IMPL_LINK_NOARG(ThemeDialog, SelectItem, ValueSet*, void)
