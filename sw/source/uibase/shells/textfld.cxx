@@ -1054,6 +1054,12 @@ FIELD_INSERT:
 
                 SvxPageItem aPageItem(SID_ATTR_PAGE);
                 aPageItem.SetNumType(pDlg->GetPageNumberType());
+                // Might as well turn on margin mirroring too - if appropriate
+                if (!bHeaderAlreadyOn && !bFooterAlreadyOn && !bIsSinglePage
+                    && pDlg->GetMirrorOnEvenPages() && (rDesc.GetUseOn() & UseOnPage::All))
+                {
+                    aPageItem.SetPageUsage(SvxPageUsage::Mirror);
+                }
                 rSh.GetView().GetDispatcher().ExecuteList(SID_ATTR_PAGE,
                                                           SfxCallMode::API | SfxCallMode::SYNCHRON,
                                                           { &aPageItem });
