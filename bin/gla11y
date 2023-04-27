@@ -26,6 +26,10 @@
 
 # Take LibreOffice (glade) .ui files and check for non accessible widgets
 
+# A white paper documents the rationale of the implementation:
+#
+# https://inria.hal.science/hal-02957129
+
 from __future__ import print_function
 
 import os
