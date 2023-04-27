@@ -468,6 +468,7 @@ void SdPageObjsTLV::OnDragFinished()
 SdPageObjsTLVDropTarget::SdPageObjsTLVDropTarget(weld::TreeView& rTreeView)
     : DropTargetHelper(rTreeView.get_drop_target())
     , m_rTreeView(rTreeView)
+    , m_pSdrView(nullptr)
 {
 }
 
@@ -552,7 +553,7 @@ sal_Int8 SdPageObjsTLVDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt )
     if (pTargetObject == reinterpret_cast<SdrObject*>(1))
         pTargetObject = nullptr;
 
-    if (pTargetObject != nullptr && pSourceObject != nullptr)
+    if (pTargetObject != nullptr && pSourceObject != nullptr && m_pSdrView)
     {
         SdrPage* pObjectList = pSourceObject->getSdrPageFromSdrObject();
 
