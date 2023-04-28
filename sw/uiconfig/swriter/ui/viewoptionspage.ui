@@ -324,7 +324,7 @@
                   <object class="GtkLabel" id="changeslabel">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="viewoptionspage|changeslabel">Display tracked changes</property>
+                    <property name="label" translatable="yes" context="viewoptionspage|changeslabel">Display Tracked Changes</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
