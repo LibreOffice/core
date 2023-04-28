@@ -197,10 +197,11 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
     if (rHint.GetId() != SfxHintId::ThisIsAnSdrHint)
         return;
     const SdrHint *pSdrHint = static_cast<const SdrHint*>( &rHint );
-    if (pSdrHint->GetObject() &&
-           ( dynamic_cast< const SwFlyDrawObj* >(pSdrHint->GetObject()) !=  nullptr ||
-              dynamic_cast< const SwVirtFlyDrawObj* >(pSdrHint->GetObject()) !=  nullptr ||
-             isType<SdrObject>(pSdrHint->GetObject()) ) )
+    const SdrObject* pObj = pSdrHint->GetObject();
+    if (pObj &&
+           ( dynamic_cast< const SwFlyDrawObj* >(pObj) ||
+             dynamic_cast< const SwVirtFlyDrawObj* >(pObj) ||
+             pObj->GetObjIdentifier() == SdrObjKind::NewFrame ) )
     {
         return;
     }

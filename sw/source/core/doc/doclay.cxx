@@ -141,7 +141,7 @@ rtl::Reference<SdrObject> SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveW
     SdrLayerID nLayerIdForClone = rObj.GetLayer();
     if ( dynamic_cast<const SwFlyDrawObj*>( pObj.get() ) ==  nullptr &&
          dynamic_cast<const SwVirtFlyDrawObj*>( pObj.get() ) ==  nullptr &&
-         !isType<SdrObject>(pObj.get()) )
+         pObj->GetObjIdentifier() != SdrObjKind::NewFrame )
     {
         if ( getIDocumentDrawModelAccess().IsVisibleLayerId( nLayerIdForClone ) )
         {
