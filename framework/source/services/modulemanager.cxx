@@ -36,6 +36,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/enumhelper.hxx>
+#include <unotools/configmgr.hxx>
 #include <utility>
 
 namespace {
@@ -127,10 +128,13 @@ private:
 ModuleManager::ModuleManager(css::uno::Reference< css::uno::XComponentContext >  xContext)
     : m_xContext(std::move(xContext))
 {
-    m_xCFG.set( comphelper::ConfigurationHelper::openConfig(
-                m_xContext, "/org.openoffice.Setup/Office/Factories",
-                comphelper::EConfigurationModes::ReadOnly ),
-            css::uno::UNO_QUERY_THROW );
+    if (!utl::ConfigManager::IsFuzzing())
+    {
+        m_xCFG.set( comphelper::ConfigurationHelper::openConfig(
+                    m_xContext, "/org.openoffice.Setup/Office/Factories",
+                    comphelper::EConfigurationModes::ReadOnly ),
+                css::uno::UNO_QUERY_THROW );
+    }
 }
 
 OUString ModuleManager::getImplementationName()
@@ -244,7 +248,8 @@ css::uno::Any SAL_CALL ModuleManager::getByName(const OUString& sName)
 {
     // get access to the element
     css::uno::Reference< css::container::XNameAccess > xModule;
-    m_xCFG->getByName(sName) >>= xModule;
+    if (m_xCFG)
+        m_xCFG->getByName(sName) >>= xModule;
     if (!xModule.is())
     {
         throw css::uno::RuntimeException(
@@ -267,12 +272,12 @@ css::uno::Any SAL_CALL ModuleManager::getByName(const OUString& sName)
 
 css::uno::Sequence< OUString > SAL_CALL ModuleManager::getElementNames()
 {
-    return m_xCFG->getElementNames();
+    return m_xCFG ? m_xCFG->getElementNames() : css::uno::Sequence<OUString>();
 }
 
 sal_Bool SAL_CALL ModuleManager::hasByName(const OUString& sName)
 {
-    return m_xCFG->hasByName(sName);
+    return m_xCFG && m_xCFG->hasByName(sName);
 }
 
 css::uno::Type SAL_CALL ModuleManager::getElementType()
@@ -282,7 +287,7 @@ css::uno::Type SAL_CALL ModuleManager::getElementType()
 
 sal_Bool SAL_CALL ModuleManager::hasElements()
 {
-    return m_xCFG->hasElements();
+    return m_xCFG && m_xCFG->hasElements();
 }
 
 css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::createSubSetEnumerationByQuery(const OUString&)

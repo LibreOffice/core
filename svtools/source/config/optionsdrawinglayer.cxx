@@ -22,6 +22,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <unotools/configmgr.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <mutex>
 
@@ -59,33 +60,33 @@ sal_uInt16 GetStripeLength()
 
 bool IsOverlayBuffer_Calc()
 {
-    return officecfg::Office::Common::Drawinglayer::OverlayBuffer_Calc::get();
+    return !utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Drawinglayer::OverlayBuffer_Calc::get();
 }
 
 bool IsOverlayBuffer_Writer()
 {
-    return officecfg::Office::Common::Drawinglayer::OverlayBuffer_Writer::get();
+    return !utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Drawinglayer::OverlayBuffer_Writer::get();
 }
 
 bool IsOverlayBuffer_DrawImpress()
 {
-    return officecfg::Office::Common::Drawinglayer::OverlayBuffer_DrawImpress::get();
+    return !utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Drawinglayer::OverlayBuffer_DrawImpress::get();
 }
 
 // #i74769#, #i75172#
 bool IsPaintBuffer_Calc()
 {
-    return officecfg::Office::Common::Drawinglayer::PaintBuffer_Calc::get();
+    return !utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Drawinglayer::PaintBuffer_Calc::get();
 }
 
 bool IsPaintBuffer_Writer()
 {
-    return officecfg::Office::Common::Drawinglayer::PaintBuffer_Writer::get();
+    return !utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Drawinglayer::PaintBuffer_Writer::get();
 }
 
 bool IsPaintBuffer_DrawImpress()
 {
-    return officecfg::Office::Common::Drawinglayer::PaintBuffer_DrawImpress::get();
+    return !utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Drawinglayer::PaintBuffer_DrawImpress::get();
 }
 
 // #i4219#

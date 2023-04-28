@@ -479,15 +479,19 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     aContext.DocumentInfo.Keywords = ::comphelper::string::convertCommaSeparated(xDocumentProps->getKeywords());
                 }
             }
-            // getting the string for the producer
-            OUString aProducerOverride = officecfg::Office::Common::Save::Document::GeneratorOverride::get();
-            if( !aProducerOverride.isEmpty())
-                aContext.DocumentInfo.Producer = aProducerOverride;
-            else
-                aContext.DocumentInfo.Producer =
-                    utl::ConfigManager::getProductName() +
-                    " " +
-                    utl::ConfigManager::getProductVersion();
+
+            if (!utl::ConfigManager::IsFuzzing())
+            {
+                // getting the string for the producer
+                OUString aProducerOverride = officecfg::Office::Common::Save::Document::GeneratorOverride::get();
+                if (!aProducerOverride.isEmpty())
+                    aContext.DocumentInfo.Producer = aProducerOverride;
+                else
+                    aContext.DocumentInfo.Producer =
+                        utl::ConfigManager::getProductName() +
+                        " " +
+                        utl::ConfigManager::getProductVersion();
+            }
 
             aContext.DocumentInfo.Creator = aCreator;
 

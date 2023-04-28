@@ -51,6 +51,7 @@
 #include <rtl/digest.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <svl/cryptosign.hxx>
 #include <sal/log.hxx>
 #include <svl/urihelper.hxx>
 #include <tools/fract.hxx>
@@ -58,7 +59,7 @@
 #include <tools/helpers.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/zcodec.hxx>
-#include <svl/cryptosign.hxx>
+#include <unotools/configmgr.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -1201,8 +1202,8 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
         m_nCurrentStructElement( 0 ),
         m_bEmitStructure( true ),
         m_nNextFID( 1 ),
-        m_aPDFBmpCache(
-            officecfg::Office::Common::VCL::PDFExportImageCacheSize::get() ),
+        m_aPDFBmpCache(utl::ConfigManager::IsFuzzing() ? 15 :
+            officecfg::Office::Common::VCL::PDFExportImageCacheSize::get()),
         m_nCurrentPage( -1 ),
         m_nCatalogObject(0),
         m_nSignatureObject( -1 ),

@@ -178,7 +178,8 @@ void OnlineAccessibilityCheck::initialCheck()
 void OnlineAccessibilityCheck::updateCheckerActivity()
 {
     bool bOnlineCheckStatus
-        = officecfg::Office::Common::Accessibility::OnlineAccessibilityCheck::get();
+        = !utl::ConfigManager::IsFuzzing()
+          && officecfg::Office::Common::Accessibility::OnlineAccessibilityCheck::get();
 
     if (bOnlineCheckStatus != m_bOnlineCheckStatus)
     {

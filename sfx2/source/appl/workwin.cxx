@@ -41,6 +41,7 @@
 #include <svl/eitem.hxx>
 #include <tools/svborder.hxx>
 #include <tools/debug.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/frame/LayoutManagerEvents.hpp>
@@ -1162,6 +1163,9 @@ css::uno::Reference< css::frame::XFrame > SfxWorkWindow::GetFrameInterface()
 
 void SfxWorkWindow::UpdateObjectBars_Impl2()
 {
+    if (utl::ConfigManager::IsFuzzing())
+        return;
+
     // Lock SplitWindows (which means suppressing the Resize-Reaction of the
     // DockingWindows)
     for ( sal_uInt16 n=0; n<SFX_SPLITWINDOWS_MAX; n++ )

@@ -165,12 +165,12 @@ bool isTrustedLocationUriForUpdatingLinks(OUString const & uri)
 
 sal_Int32 GetMacroSecurityLevel()
 {
-    return officecfg::Office::Common::Security::Scripting::MacroSecurityLevel::get();
+    return utl::ConfigManager::IsFuzzing() ? 3 : officecfg::Office::Common::Security::Scripting::MacroSecurityLevel::get();
 }
 
 void SetMacroSecurityLevel( sal_Int32 _nLevel )
 {
-    if( officecfg::Office::Common::Security::Scripting::MacroSecurityLevel::isReadOnly() )
+    if (utl::ConfigManager::IsFuzzing() || officecfg::Office::Common::Security::Scripting::MacroSecurityLevel::isReadOnly())
         return;
 
     if( _nLevel > 3 || _nLevel < 0 )
@@ -183,7 +183,7 @@ void SetMacroSecurityLevel( sal_Int32 _nLevel )
 
 bool IsMacroDisabled()
 {
-    return officecfg::Office::Common::Security::Scripting::DisableMacrosExecution::get();
+    return utl::ConfigManager::IsFuzzing() || officecfg::Office::Common::Security::Scripting::DisableMacrosExecution::get();
 }
 
 std::vector< SvtSecurityOptions::Certificate > GetTrustedAuthors()

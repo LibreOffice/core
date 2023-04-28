@@ -809,8 +809,13 @@ SwView::SwView(SfxViewFrame& _rFrame, SfxViewShell* pOldSh)
 
     bDocSzUpdated = true;
 
-    CreateScrollbar( true );
-    CreateScrollbar( false );
+    static bool bFuzzing = utl::ConfigManager::IsFuzzing();
+
+    if (!bFuzzing)
+    {
+        CreateScrollbar( true );
+        CreateScrollbar( false );
+    }
 
     m_pViewImpl.reset(new SwView_Impl(this));
     SetName("View");
@@ -983,7 +988,7 @@ SwView::SwView(SfxViewFrame& _rFrame, SfxViewShell* pOldSh)
     SAL_WARN_IF(
         officecfg::Office::Common::Undo::Steps::get() <= 0,
         "sw.ui", "/org.openoffice.Office.Common/Undo/Steps <= 0");
-    if (!utl::ConfigManager::IsFuzzing() && 0 < officecfg::Office::Common::Undo::Steps::get())
+    if (!bFuzzing && 0 < officecfg::Office::Common::Undo::Steps::get())
     {
         m_pWrtShell->DoUndo();
     }
@@ -995,7 +1000,8 @@ SwView::SwView(SfxViewFrame& _rFrame, SfxViewShell* pOldSh)
 
     m_bVScrollbarEnabled = aUsrPref.IsViewVScrollBar();
     m_bHScrollbarEnabled = aUsrPref.IsViewHScrollBar();
-    m_pHScrollbar->SetAuto(bBrowse);
+    if (m_pHScrollbar)
+        m_pHScrollbar->SetAuto(bBrowse);
     if( aUsrPref.IsViewHRuler() )
         CreateTab();
     if( aUsrPref.IsViewVRuler() )
@@ -1079,15 +1085,19 @@ SwView::SwView(SfxViewFrame& _rFrame, SfxViewShell* pOldSh)
         rDocSh.EnableSetModified();
     InvalidateBorder();
 
-    if( !m_pHScrollbar->IsScrollbarVisible(true) )
-        ShowHScrollbar( false );
-    if( !m_pVScrollbar->IsScrollbarVisible(true) )
-        ShowVScrollbar( false );
+    if (!bFuzzing)
+    {
+        if (!m_pHScrollbar->IsScrollbarVisible(true))
+            ShowHScrollbar( false );
+        if (!m_pVScrollbar->IsScrollbarVisible(true))
+            ShowVScrollbar( false );
+    }
 
     if (m_pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
         m_pWrtShell->InvalidateOutlineContentVisibility();
 
-    GetViewFrame().GetWindow().AddChildEventListener( LINK( this, SwView, WindowChildEventListener ) );
+    if (!bFuzzing)
+        GetViewFrame().GetWindow().AddChildEventListener(LINK(this, SwView, WindowChildEventListener));
 }
 
 SwViewGlueDocShell::SwViewGlueDocShell(SwView& rView, SwDocShell& rDocSh)

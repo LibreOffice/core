@@ -122,6 +122,7 @@
 
 #include <svl/style.hxx>
 #include <ndtxt.hxx>
+#include <unotools/configmgr.hxx>
 #include <vcl/hatch.hxx>
 
 using namespace ::editeng;
@@ -1752,7 +1753,7 @@ bool DrawFillAttributes(
             // This must probably be removed again when we will be able to get all Writer visualization
             // as primitives and Writer prepares all it's stuff in high precision coordinates (also
             // needs to avoid moving boundaries around to better show overlapping stuff...)
-            if(SvtOptionsDrawinglayer::IsAntiAliasing())
+            if (utl::ConfigManager::IsFuzzing() || SvtOptionsDrawinglayer::IsAntiAliasing())
             {
                 // if AAed in principle expand by 0.5 in all directions. Since painting edges of
                 // AAed regions does not add to no transparence (0.5 opacity covered by 0.5 opacity

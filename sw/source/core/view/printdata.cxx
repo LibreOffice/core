@@ -30,6 +30,7 @@
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <vcl/outdev.hxx>
 #include <osl/diagnose.h>
@@ -163,7 +164,7 @@ SwPrintUIOptions::SwPrintUIOptions(
 {
     // printing HTML sources does not have any valid UI options.
     // It's just the source code that gets printed...
-    if (bSwSrcView)
+    if (bSwSrcView || utl::ConfigManager::IsFuzzing())
     {
         m_aUIProperties.clear();
         return;

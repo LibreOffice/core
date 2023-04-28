@@ -21,6 +21,7 @@
 
 #include <docsh.hxx>
 #include <swmodule.hxx>
+#include <unotools/configmgr.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace com::sun::star;
@@ -32,7 +33,9 @@ SwSmartTagMgr& SwSmartTagMgr::Get()
 {
     if (!spTheSwSmartTagMgr)
     {
-        spTheSwSmartTagMgr = new SwSmartTagMgr(SwDocShell::Factory().GetModuleName());
+        OUString sModuleName
+            = !utl::ConfigManager::IsFuzzing() ? SwDocShell::Factory().GetModuleName() : "Writer";
+        spTheSwSmartTagMgr = new SwSmartTagMgr(sModuleName);
         spTheSwSmartTagMgr->Init(u"Writer");
     }
     return *spTheSwSmartTagMgr;

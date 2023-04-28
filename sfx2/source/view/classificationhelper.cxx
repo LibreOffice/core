@@ -26,6 +26,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <sfx2/infobar.hxx>
 #include <comphelper/processfactory.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
@@ -940,6 +941,8 @@ const OUString& SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY()
 
 SfxClassificationPolicyType SfxClassificationHelper::getPolicyType()
 {
+    if (utl::ConfigManager::IsFuzzing())
+        return SfxClassificationPolicyType::IntellectualProperty;
     sal_Int32 nPolicyTypeNumber = officecfg::Office::Common::Classification::Policy::get();
     auto eType = static_cast<SfxClassificationPolicyType>(nPolicyTypeNumber);
     return eType;
