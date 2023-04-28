@@ -1330,7 +1330,7 @@ static void lcl_convertFormulaRanges(const uno::Reference<text::XTextTable> & xT
     }
 }
 
-void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTableStartsAtCellStart)
+void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool /*bTableStartsAtCellStart*/)
 {
 #ifdef DBG_UTIL
     TagLogger::getInstance().startElement("tablehandler.endTable");
@@ -1577,14 +1577,9 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
             m_aTableProperties->getValue(TablePropertyMap::TABLE_WIDTH_TYPE, nTableWidthType);
             // m_xText points to the body text, get the current xText from m_rDMapper_Impl, in case e.g. we would be in a header.
             uno::Reference<text::XTextAppendAndConvert> xTextAppendAndConvert(m_rDMapper_Impl.GetTopTextAppend(), uno::UNO_QUERY);
-            // Only execute the conversion if the table is not anchored at
-            // the start of an outer table cell, that's not yet
-            // implemented.
-            // Multi-page floating tables works if an outer/toplevel table is floating, but not
-            // when an inner table would float.
-            bool bToplevelSplitFly = nestedTableLevel <= 1;
+            // Only execute the conversion for top-level tables.
             uno::Reference<beans::XPropertySet> xFrameAnchor;
-            if (xTextAppendAndConvert.is() && (!bTableStartsAtCellStart || bToplevelSplitFly))
+            if (xTextAppendAndConvert.is() && nestedTableLevel <= 1)
             {
                 std::deque<css::uno::Any> aFramedRedlines = m_rDMapper_Impl.m_aStoredRedlines[StoredRedlines::FRAME];
                 std::vector<sal_Int32> redPos, redLen;
