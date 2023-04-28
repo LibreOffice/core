@@ -119,53 +119,25 @@ sal_uInt32 GetMaximumPaperBottomMargin()
     return officecfg::Office::Common::Drawinglayer::MaximumPaperBottomMargin::get();
 }
 
-static std::mutex gaAntiAliasMutex;
-static bool gbAntiAliasingInit = false;
-static bool gbAntiAliasing = false;
-static bool gbAllowAAInit = false;
-static bool gbAllowAA = false;
-
-static bool gbAntiAliasingForwardInitial(false);
-static bool gbAntiAliasingForwardLast(true);
-
 static bool gbPixelSnapHairlineForwardInitial(false);
 static bool gbPixelSnapHairlineForwardLast(true);
 
 bool IsAAPossibleOnThisSystem()
 {
-    std::scoped_lock aGuard(gaAntiAliasMutex);
-    if (!gbAllowAAInit)
-    {
-        gbAllowAAInit = true;
-        gbAllowAA = Application::GetDefaultDevice()->SupportsOperation( OutDevSupportType::TransparentRect );
-    }
+    static const bool gbAllowAA
+        = Application::GetDefaultDevice()->SupportsOperation(OutDevSupportType::TransparentRect);
     return gbAllowAA;
 }
 
 
 bool IsAntiAliasing()
 {
-    bool bAntiAliasing;
+    bool bAntiAliasing = drawinglayer::geometry::ViewInformation2D::getGlobalAntiAliasing();
+    if (bAntiAliasing && !IsAAPossibleOnThisSystem())
     {
-        std::scoped_lock aGuard(gaAntiAliasMutex);
-        if (!gbAntiAliasingInit)
-        {
-            gbAntiAliasingInit = true;
-            gbAntiAliasing = officecfg::Office::Common::Drawinglayer::AntiAliasing::get();
-        }
-        bAntiAliasing = gbAntiAliasing;
+        drawinglayer::geometry::ViewInformation2D::setGlobalAntiAliasing(false, true);
+        bAntiAliasing = false;
     }
-
-    bAntiAliasing = bAntiAliasing && IsAAPossibleOnThisSystem();
-
-    //
-    if (!gbAntiAliasingForwardInitial || gbAntiAliasingForwardLast != bAntiAliasing)
-    {
-        gbAntiAliasingForwardInitial = true;
-        gbAntiAliasingForwardLast = bAntiAliasing;
-        drawinglayer::geometry::ViewInformation2D::forwardAntiAliasing(bAntiAliasing);
-    }
-
     return bAntiAliasing;
 }
 
@@ -176,23 +148,7 @@ bool IsAntiAliasing()
   */
 void SetAntiAliasing( bool bOn, bool bTemporary )
 {
-    std::scoped_lock aGuard(gaAntiAliasMutex);
-    if (!bTemporary)
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> batch =
-                comphelper::ConfigurationChanges::create();
-        officecfg::Office::Common::Drawinglayer::AntiAliasing::set(bOn, batch);
-        batch->commit();
-    }
-
-    if (!gbAntiAliasingForwardInitial || gbAntiAliasingForwardLast != bOn)
-    {
-        gbAntiAliasingForwardInitial = true;
-        gbAntiAliasingForwardLast = bOn;
-        drawinglayer::geometry::ViewInformation2D::forwardAntiAliasing(bOn);
-    }
-
-    gbAntiAliasing = bOn;
+    drawinglayer::geometry::ViewInformation2D::setGlobalAntiAliasing(bOn, bTemporary);
 }
 
 

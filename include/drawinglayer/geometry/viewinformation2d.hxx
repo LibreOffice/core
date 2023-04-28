@@ -159,7 +159,8 @@ public:
     bool getPixelSnapHairline() const;
     void setPixelSnapHairline(bool bNew);
 
-    static void forwardAntiAliasing(bool bAntiAliasing);
+    static void setGlobalAntiAliasing(bool bAntiAliasing, bool bTemporary);
+    static bool getGlobalAntiAliasing();
     static void forwardPixelSnapHairline(bool bPixelSnapHairline);
 };
 

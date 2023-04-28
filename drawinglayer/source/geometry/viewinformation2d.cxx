@@ -25,8 +25,11 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
+#include <o3tl/temporary.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <unotools/configmgr.hxx>
+
+#include <atomic>
 #include <utility>
 
 using namespace com::sun::star;
@@ -48,7 +51,6 @@ constexpr OUStringLiteral g_PropertyName_PixelSnapHairline = u"PixelSnapHairline
 namespace
 {
 bool bForwardsAreInitialized(false);
-bool bForwardedAntiAliasing(true);
 bool bForwardPixelSnapHairline(true);
 }
 
@@ -105,8 +107,8 @@ public:
         , mxVisualizedPage()
         , mfViewTime(0.0)
         , mbReducedDisplayQuality(false)
-        , mbUseAntiAliasing(bForwardedAntiAliasing)
-        , mbPixelSnapHairline(bForwardedAntiAliasing && bForwardPixelSnapHairline)
+        , mbUseAntiAliasing(ViewInformation2D::getGlobalAntiAliasing())
+        , mbPixelSnapHairline(mbUseAntiAliasing && bForwardPixelSnapHairline)
     {
     }
 
@@ -227,13 +229,12 @@ ViewInformation2D::ViewInformation2D()
         bForwardsAreInitialized = true;
         if (!utl::ConfigManager::IsFuzzing())
         {
-            bForwardedAntiAliasing = officecfg::Office::Common::Drawinglayer::AntiAliasing::get();
             bForwardPixelSnapHairline
                 = officecfg::Office::Common::Drawinglayer::SnapHorVerLinesToDiscrete::get();
         }
     }
 
-    setUseAntiAliasing(bForwardedAntiAliasing);
+    setUseAntiAliasing(ViewInformation2D::getGlobalAntiAliasing());
     setPixelSnapHairline(bForwardPixelSnapHairline);
 }
 
@@ -352,10 +353,30 @@ void ViewInformation2D::setPixelSnapHairline(bool bNew)
         mpViewInformation2D->setPixelSnapHairline(bNew);
 }
 
-void ViewInformation2D::forwardAntiAliasing(bool bAntiAliasing)
+static std::atomic<bool>& globalAntiAliasing()
 {
-    bForwardedAntiAliasing = bAntiAliasing;
+    static std::atomic<bool> g_GlobalAntiAliasing
+        = utl::ConfigManager::IsFuzzing()
+          || officecfg::Office::Common::Drawinglayer::AntiAliasing::get();
+    return g_GlobalAntiAliasing;
 }
+
+/**
+  * Some code like to turn this stuff on and off during a drawing operation
+  * so it can "tunnel" information down through several layers,
+  * so we don't want to actually do a config write all the time.
+  */
+void ViewInformation2D::setGlobalAntiAliasing(bool bAntiAliasing, bool bTemporary)
+{
+    if (globalAntiAliasing().compare_exchange_strong(o3tl::temporary(!bAntiAliasing), bAntiAliasing)
+        && !bTemporary)
+    {
+        auto batch = comphelper::ConfigurationChanges::create();
+        officecfg::Office::Common::Drawinglayer::AntiAliasing::set(bAntiAliasing, batch);
+        batch->commit();
+    }
+}
+bool ViewInformation2D::getGlobalAntiAliasing() { return globalAntiAliasing(); }
 
 void ViewInformation2D::forwardPixelSnapHairline(bool bPixelSnapHairline)
 {
