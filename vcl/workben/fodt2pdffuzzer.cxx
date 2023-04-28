@@ -52,8 +52,10 @@ extern "C" int LLVMFuzzerInitialize(int* argc, char*** argv)
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
 {
     SvMemoryStream aStream(const_cast<uint8_t*>(data), size, StreamMode::READ);
-    (void)TestPDFExportFODT(aStream);
-    return 0;
+    bool bFODTLoaded = TestPDFExportFODT(aStream);
+    // if the fodt didn't load then reject so that input will not be added to the corpus
+    // we're not interested in input that doesn't go on to exercise the pdf export
+    return bFODTLoaded ? 0 : -1;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
