@@ -647,6 +647,11 @@ bool AbstractSwPageNumberDlg_Impl::GetMirrorOnEvenPages() const
     return m_xDlg->GetMirrorOnEvenPages();
 }
 
+bool AbstractSwPageNumberDlg_Impl::GetIncludePageTotal() const
+{
+    return m_xDlg->GetIncludePageTotal();
+}
+
 SvxNumType AbstractSwPageNumberDlg_Impl::GetPageNumberType() const
 {
     return m_xDlg->GetPageNumberType();

@@ -166,6 +166,7 @@ public:
     virtual int GetPageNumberPosition() const override;
     virtual int GetPageNumberAlignment() const override;
     bool GetMirrorOnEvenPages() const override;
+    bool GetIncludePageTotal() const override;
     SvxNumType GetPageNumberType() const override;
     void SetPageNumberType(SvxNumType nSet) override;
 };

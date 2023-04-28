@@ -173,6 +173,28 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkCheckButton" id="pagetotalCheckbox">
+                    <property name="label" translatable="yes" context="pagenumberdlg|pagetotalCheckbox">Include page total</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="margin-start">18</property>
+                    <property name="margin-top">3</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="pagetotalCheckbox-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pagenumberdlg|extended_tip|pagetotalCheckbox">Also insert the total number of pages</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">5</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkLabel" id="numfmtLabel">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -193,7 +215,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">5</property>
+                    <property name="position">6</property>
                   </packing>
                 </child>
                 <child>
@@ -212,7 +234,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">6</property>
+                    <property name="position">7</property>
                   </packing>
                 </child>
               </object>
