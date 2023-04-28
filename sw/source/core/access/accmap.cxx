@@ -196,30 +196,21 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
     // are no shapes that need to know about them.
     if (rHint.GetId() != SfxHintId::ThisIsAnSdrHint)
         return;
+    const SdrHint *pSdrHint = static_cast<const SdrHint*>( &rHint );
+    if (pSdrHint->GetObject() &&
+           ( dynamic_cast< const SwFlyDrawObj* >(pSdrHint->GetObject()) !=  nullptr ||
+              dynamic_cast< const SwVirtFlyDrawObj* >(pSdrHint->GetObject()) !=  nullptr ||
+             isType<SdrObject>(pSdrHint->GetObject()) ) )
+    {
+        return;
+    }
 
     OSL_ENSURE( mpDrawModel, "draw model listener is disposed" );
     if( !mpDrawModel )
         return;
 
-    const SdrHint *pSdrHint = static_cast<const SdrHint*>( &rHint );
-
     document::EventObject aEvent;
     if( !SvxUnoDrawMSFactory::createEvent( mpDrawModel, pSdrHint, aEvent ) )
-        return;
-
-
-    // right now, we're only handling the specific event necessary to fix this performance problem
-    if (pSdrHint->GetKind() == SdrHintKind::ObjectChange)
-    {
-        auto pSdrObject = const_cast<SdrObject*>(pSdrHint->GetObject());
-        uno::Reference<drawing::XShape> xShape(pSdrObject->getUnoShape(), uno::UNO_QUERY);
-        std::unique_lock aGuard(maListenerMutex);
-        auto [itBegin, itEnd] = maShapeListeners.equal_range(xShape);
-        for (auto it = itBegin; it != itEnd; ++it)
-            it->second->notifyShapeEvent(aEvent);
-    }
-
-    if (pSdrHint->GetObject() )
         return;
 
     {
@@ -238,6 +229,16 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
         }
     }
 
+    // right now, we're only handling the specific event necessary to fix this performance problem
+    if (pSdrHint->GetKind() == SdrHintKind::ObjectChange)
+    {
+        auto pSdrObject = const_cast<SdrObject*>(pSdrHint->GetObject());
+        uno::Reference<drawing::XShape> xShape(pSdrObject->getUnoShape(), uno::UNO_QUERY);
+        std::unique_lock aGuard(maListenerMutex);
+        auto [itBegin, itEnd] = maShapeListeners.equal_range(xShape);
+        for (auto it = itBegin; it != itEnd; ++it)
+            it->second->notifyShapeEvent(aEvent);
+    }
 }
 
 void SwDrawModellListener_Impl::Dispose()
