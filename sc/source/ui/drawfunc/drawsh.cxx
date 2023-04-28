@@ -161,9 +161,15 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
             }
             break;
 
-        case SID_TEXT_STANDARD: // delete hard text attributes
+        case SID_CELL_FORMAT_RESET:
+        case SID_TEXT_STANDARD:
             {
-                SfxItemSetFixed<EE_ITEMS_START, EE_ITEMS_END> aEmptyAttr(GetPool());
+                SfxItemSetFixed<SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_MINFRAMEHEIGHT,
+                                SDRATTR_TEXT_MAXFRAMEHEIGHT, SDRATTR_TEXT_MAXFRAMEWIDTH> aEmptyAttr(GetPool());
+
+                if (ScDrawLayer::IsNoteCaption(pSingleSelectedObj))
+                    aEmptyAttr.Put(pView->GetAttrFromMarked(true));
+
                 pView->SetAttributes(aEmptyAttr, true);
             }
             break;

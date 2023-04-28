@@ -47,6 +47,7 @@ interface TableDrawText
     SID_THESAURUS       [ ExecMethod = Execute; StateMethod = GetState; ]
     // attribute:
     SID_TEXT_STANDARD           [ ExecMethod = ExecuteAttr; StateMethod = GetState; ]
+    SID_CELL_FORMAT_RESET       [ ExecMethod = ExecuteAttr; StateMethod = GetState; ]
     SID_DRAWTEXT_ATTR_DLG       [ ExecMethod = ExecuteAttr; StateMethod = GetState; ]
     SID_ATTR_CHAR_FONT          [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_ATTR_CHAR_FONTHEIGHT    [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]

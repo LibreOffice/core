@@ -37,6 +37,7 @@ interface TableDraw
     SID_DRAW_CHART              [ StateMethod = StateDisableItems; ]
 
     SID_TEXT_STANDARD       [ ExecMethod = ExecDrawAttr; StateMethod = NoState; ]
+    SID_CELL_FORMAT_RESET   [ ExecMethod = ExecDrawAttr; StateMethod = NoState; ]
     SID_DRAWTEXT_ATTR_DLG   [ ExecMethod = ExecDrawAttr; StateMethod = NoState; ]
 
     // ---- Slot-IDs for Objectbar:

@@ -791,7 +791,8 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
     {
         switch ( nSlot )
         {
-            case SID_TEXT_STANDARD: // delete hard text attributes
+            case SID_CELL_FORMAT_RESET:
+            case SID_TEXT_STANDARD:
             {
                 OutlinerView* pOutView = pView->IsTextEdit() ?
                                 pView->GetTextEditOutlinerView() : nullptr;
@@ -799,7 +800,17 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
                     pOutView->Paint( tools::Rectangle() );
 
                 SfxItemSetFixed<EE_ITEMS_START, EE_ITEMS_END> aEmptyAttr( *aEditAttr.GetPool() );
+                SfxItemSetFixed<SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_MINFRAMEHEIGHT,
+                                SDRATTR_TEXT_MAXFRAMEHEIGHT, SDRATTR_TEXT_MAXFRAMEWIDTH> aSizeAttr(*aEditAttr.GetPool());
+
+                aSizeAttr.Put(pView->GetAttrFromMarked(true));
                 pView->SetAttributes( aEmptyAttr, true );
+
+                if (IsNoteEdit())
+                {
+                    pView->SetAttributes(aSizeAttr, false);
+                    pView->GetTextEditObject()->AdjustTextFrameWidthAndHeight();
+                }
 
                 if ( pOutView )
                 {
