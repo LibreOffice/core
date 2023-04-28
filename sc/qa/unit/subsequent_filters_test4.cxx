@@ -1570,6 +1570,17 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testSheetNamesXLSX)
     CPPUNIT_ASSERT_EQUAL(OUString("C>D"), aTabNames[4]);
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf155046)
+{
+    createScDoc("xlsx/tdf155046.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: TRUE
+    // - Actual  : FALSE
+    CPPUNIT_ASSERT_EQUAL(OUString("TRUE"), pDoc->GetString(ScAddress(2, 2, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf150599)
 {
     createScDoc("dif/tdf150599.dif");
