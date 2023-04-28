@@ -239,6 +239,7 @@ public:
     virtual int GetPageNumberPosition() const = 0;
     virtual int GetPageNumberAlignment() const = 0;
     virtual bool GetMirrorOnEvenPages() const = 0;
+    virtual bool GetIncludePageTotal() const = 0;
     virtual SvxNumType GetPageNumberType() const = 0;
     virtual void SetPageNumberType(SvxNumType nSet) = 0;
 };

@@ -1204,16 +1204,27 @@ FIELD_INSERT:
                     }
                 }
 
+                sal_Int32 nStartContentIndex = rSh.GetCursor()->Start()->GetContentIndex();
+                assert(!nStartContentIndex && "earlier split node if not empty, but not zero?");
+
                 // Insert page number
                 SwFieldMgr aMgr(pShell);
                 SwInsertField_Data aData(SwFieldTypesEnum::PageNumber, 0,
                             OUString(), OUString(), SVX_NUM_PAGEDESC);
                 aMgr.InsertField(aData);
+                if (pDlg->GetIncludePageTotal())
+                {
+                    rDoc->getIDocumentContentOperations().InsertString(*rSh.GetCursor(), " - ");
+                    SwInsertField_Data aPageTotalData(SwFieldTypesEnum::DocumentStatistics, DS_PAGE,
+                                                      OUString(), OUString(), SVX_NUM_PAGEDESC);
+                    aMgr.InsertField(aPageTotalData);
+                }
 
+                // Mark inserted fields with a bookmark - so it can be found/removed if re-run
                 SwPaM aNewBookmarkPaM(*rSh.GetCursor()->Start());
                 aNewBookmarkPaM.SetMark();
-                rSh.GetCursor()->Left(1);
-                *aNewBookmarkPaM.Start() = *rSh.GetCursor()->Start();
+                assert(aNewBookmarkPaM.GetPointContentNode() && "only SetContent on content node");
+                aNewBookmarkPaM.Start()->SetContent(nStartContentIndex);
                 rIDMA.makeMark(aNewBookmarkPaM,
                                sBookmarkName + OUString::number(rSh.GetVirtPageNum()),
                                IDocumentMarkAccess::MarkType::BOOKMARK,
@@ -1250,14 +1261,24 @@ FIELD_INSERT:
                     SvxAdjustItem aMirrorAdjustItem(eAdjust, RES_PARATR_ADJUST);
                     rSh.SetAttrItem(aMirrorAdjustItem);
 
+                    nStartContentIndex = rSh.GetCursor()->Start()->GetContentIndex();
+
                     // Insert page number
                     SwFieldMgr aEvenMgr(pShell);
                     aEvenMgr.InsertField(aData);
+                    if (pDlg->GetIncludePageTotal())
+                    {
+                        rDoc->getIDocumentContentOperations().InsertString(*rSh.GetCursor(), " - ");
+                        SwInsertField_Data aPageTotalData(SwFieldTypesEnum::DocumentStatistics,
+                                                          DS_PAGE, OUString(), OUString(),
+                                                          SVX_NUM_PAGEDESC);
+                        aMgr.InsertField(aPageTotalData);
+                    }
 
+                    // Mark inserted fields with a bookmark - so it can be found/removed if re-run
                     SwPaM aNewEvenBookmarkPaM(*rSh.GetCursor()->Start());
                     aNewEvenBookmarkPaM.SetMark();
-                    rSh.GetCursor()->Left(1);
-                    *aNewEvenBookmarkPaM.Start() = *rSh.GetCursor()->Start();
+                    aNewEvenBookmarkPaM.Start()->SetContent(nStartContentIndex);
                     rIDMA.makeMark(aNewEvenBookmarkPaM,
                                    sBookmarkName + OUString::number(rSh.GetVirtPageNum()),
                                    IDocumentMarkAccess::MarkType::BOOKMARK,
