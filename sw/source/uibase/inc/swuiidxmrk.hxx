@@ -87,6 +87,7 @@ class SwIndexMarkPane
     std::unique_ptr<weld::Button> m_xNextSameBT;
     std::unique_ptr<weld::Button> m_xPrevBT;
     std::unique_ptr<weld::Button> m_xNextBT;
+    std::unique_ptr<weld::Label> m_xForSelectedEntry;
 
     void            Apply();
     void            InitControls();

@@ -582,8 +582,8 @@
             </child>
             <child type="label">
               <object class="GtkLabel" id="selectedentrytitle">
-                <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
                 <property name="label" translatable="yes" context="indexentry|selectedentrytitle">For Selected Entry</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>

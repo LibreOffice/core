@@ -168,6 +168,7 @@ SwIndexMarkPane::SwIndexMarkPane(std::shared_ptr<weld::Dialog> xDialog, weld::Bu
     , m_xNextSameBT(rBuilder.weld_button("last"))
     , m_xPrevBT(rBuilder.weld_button("previous"))
     , m_xNextBT(rBuilder.weld_button("next"))
+    , m_xForSelectedEntry(rBuilder.weld_label("selectedentrytitle"))
 {
     m_xSyncED->show();
 
@@ -345,6 +346,7 @@ void SwIndexMarkPane::InitControls()
             //to include all equal entries may only be allowed in the body and even there
             //only when a simple selection exists
             const FrameTypeFlags nFrameType = m_pSh->GetFrameType(nullptr,true);
+            m_xForSelectedEntry->show();
             m_xApplyToAllCB->show();
             m_xSearchCaseSensitiveCB->show();
             m_xSearchCaseWordOnlyCB->show();
