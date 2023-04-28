@@ -59,13 +59,8 @@ void QtAccessibleEventListener::HandleStateChangedEvent(
     switch (nState)
     {
         case AccessibleStateType::ACTIVE:
-            // ignore for now, since it somehow causes Orca to become unresponsive quite quickly
-            // TODO: analyze further and fix root cause
-            /*
             aState.active = true;
             break;
-            */
-            return;
         case AccessibleStateType::BUSY:
             aState.busy = true;
             break;
