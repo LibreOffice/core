@@ -134,6 +134,9 @@ class SwContentTree final : public SfxListener
     bool m_bDocHasChanged = true;
     bool m_bIgnoreDocChange = false; // used to prevent tracking update
 
+    ImplSVEvent* m_nRowActivateEventId = nullptr;
+    bool m_bSelectTo = false;
+
     std::unique_ptr<weld::TreeIter> m_xOverlayCompareEntry;
     std::unique_ptr<sdr::overlay::OverlayObject> m_xOverlayObject;
 
@@ -199,6 +202,7 @@ class SwContentTree final : public SfxListener
     /** Collapse - Remember the state for content types. */
     DECL_LINK(CollapseHdl, const weld::TreeIter&, bool);
     DECL_LINK(ContentDoubleClickHdl, weld::TreeView&, bool);
+    DECL_LINK(AsyncContentDoubleClickHdl, void*, void);
     DECL_LINK(SelectHdl, weld::TreeView&, void);
     DECL_LINK(FocusInHdl, weld::Widget&, void);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
@@ -208,6 +212,7 @@ class SwContentTree final : public SfxListener
     DECL_LINK(TimerUpdate, Timer *, void);
     DECL_LINK(OverlayObjectDelayTimerHdl, Timer *, void);
     DECL_LINK(MouseMoveHdl, const MouseEvent&, bool);
+    DECL_LINK(MousePressHdl, const MouseEvent&, bool);
 
 public:
     SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNavigationPI* pDialog);

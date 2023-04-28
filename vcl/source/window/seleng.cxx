@@ -181,6 +181,7 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
             {
                 ReleaseMouse();
                 nFlags &= ~SelectionEngineFlags::IN_SEL;
+                pFunctionSet->SetCursorAtPoint(aPos);
                 return false;
             }
             if ( nFlags & SelectionEngineFlags::ADD_ALW )

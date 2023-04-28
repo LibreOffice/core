@@ -1102,6 +1102,7 @@ SwContentTree::SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNaviga
     m_xTreeView->connect_query_tooltip(LINK(this, SwContentTree, QueryTooltipHdl));
     m_xTreeView->connect_drag_begin(LINK(this, SwContentTree, DragBeginHdl));
     m_xTreeView->connect_mouse_move(LINK(this, SwContentTree, MouseMoveHdl));
+    m_xTreeView->connect_mouse_press(LINK(this, SwContentTree, MousePressHdl));
 
     for (ContentTypeId i : o3tl::enumrange<ContentTypeId>())
     {
@@ -1140,6 +1141,12 @@ SwContentTree::~SwContentTree()
     clear(); // If applicable erase content types previously.
     m_aUpdTimer.Stop();
     SetActiveShell(nullptr);
+}
+
+IMPL_LINK(SwContentTree, MousePressHdl, const MouseEvent&, rMEvt, bool)
+{
+    m_bSelectTo = rMEvt.IsShift() && (m_pConfig->IsNavigateOnSelect() || rMEvt.GetClicks() == 2);
+    return false;
 }
 
 IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
@@ -2332,7 +2339,34 @@ IMPL_LINK(SwContentTree, CollapseHdl, const weld::TreeIter&, rParent, bool)
 // Also on double click will be initially opened only.
 IMPL_LINK_NOARG(SwContentTree, ContentDoubleClickHdl, weld::TreeView&, bool)
 {
+    if (m_nRowActivateEventId)
+        Application::RemoveUserEvent(m_nRowActivateEventId);
+    // post the event to process row activate after mouse press event to be able to set key
+    // modifier for selection feature (tdf#154211)
+    m_nRowActivateEventId
+            = Application::PostUserEvent(LINK(this, SwContentTree, AsyncContentDoubleClickHdl));
+
     bool bConsumed = false;
+
+    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
+    if (m_xTreeView->get_cursor(xEntry.get()) && lcl_IsContent(*xEntry, *m_xTreeView) &&
+            (State::HIDDEN != m_eState))
+    {
+        SwContent* pCnt = weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry));
+        assert(pCnt && "no UserData");
+        if (pCnt && !pCnt->IsInvisible())
+        {
+            // fdo#36308 don't expand outlines on double-click
+            bConsumed = pCnt->GetParent()->GetType() == ContentTypeId::OUTLINE;
+        }
+    }
+
+    return bConsumed; // false/true == allow/disallow more to be done, i.e. expand/collapse children
+}
+
+IMPL_LINK_NOARG(SwContentTree, AsyncContentDoubleClickHdl, void*, void)
+{
+    m_nRowActivateEventId = nullptr;
 
     std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
     bool bEntry = m_xTreeView->get_cursor(xEntry.get());
@@ -2358,13 +2392,9 @@ IMPL_LINK_NOARG(SwContentTree, ContentDoubleClickHdl, weld::TreeView&, bool)
                 }
                 //Jump to content type:
                 GotoContent(pCnt);
-                // fdo#36308 don't expand outlines on double-click
-                bConsumed = pCnt->GetParent()->GetType() == ContentTypeId::OUTLINE;
             }
         }
     }
-
-    return bConsumed; // false/true == allow/disallow more to be done, i.e. expand/collapse children
 }
 
 namespace
@@ -4191,6 +4221,10 @@ IMPL_LINK(SwContentTree, KeyInputHdl, const KeyEvent&, rEvent, bool)
                     else
                         ContentDoubleClickHdl(*m_xTreeView);
                 break;
+                case KEY_SHIFT:
+                    m_bSelectTo = true;
+                    ContentDoubleClickHdl(*m_xTreeView);
+                break;
             }
         }
     }
@@ -5169,13 +5203,18 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
 static void lcl_AssureStdModeAtShell(SwWrtShell* pWrtShell)
 {
     // deselect any drawing or frame and leave editing mode
-    SdrView* pSdrView = pWrtShell->GetDrawView();
-    if (pSdrView && pSdrView->IsTextEdit() )
+    if (SdrView* pSdrView = pWrtShell->GetDrawView())
     {
-        bool bLockView = pWrtShell->IsViewLocked();
-        pWrtShell->LockView(true);
-        pWrtShell->EndTextEdit();
-        pWrtShell->LockView(bLockView);
+        if (pSdrView->IsTextEdit())
+        {
+            bool bLockView = pWrtShell->IsViewLocked();
+            pWrtShell->LockView(true);
+            pWrtShell->EndTextEdit();
+            pWrtShell->LockView(bLockView);
+        }
+        // go out of the frame
+        Point aPt(LONG_MIN, LONG_MIN);
+        pWrtShell->SelectObj(aPt, SW_LEAVE_FRAME);
     }
 
     if (pWrtShell->IsSelFrameMode() || pWrtShell->IsObjSelected())
@@ -5219,9 +5258,27 @@ void SwContentTree::CopyOutlineSelections()
 
 void SwContentTree::GotoContent(const SwContent* pCnt)
 {
+    if (m_bSelectTo)
+    {
+        if (m_pActiveShell->IsCursorInTable() ||
+                (m_pActiveShell->GetCursor()->GetPoint()->nNode.GetIndex() <=
+                 m_pActiveShell->GetDoc()->GetNodes().GetEndOfExtras().GetIndex()))
+        {
+            m_bSelectTo = false;
+            m_pActiveShell->GetView().GetEditWin().GrabFocus();
+            return;
+        }
+    }
+
     m_nLastGotoContentWasOutlinePos = SwOutlineNodes::npos;
     m_sSelectedItem = "";
     lcl_AssureStdModeAtShell(m_pActiveShell);
+
+    std::optional<std::unique_ptr<SwPosition>> oPosition;
+    if (m_bSelectTo)
+        oPosition.emplace(new SwPosition(m_pActiveShell->GetCursor()->GetPoint()->nNode,
+                                         m_pActiveShell->GetCursor()->GetPoint()->nContent));
+
     switch(m_nLastSelType = pCnt->GetParent()->GetType())
     {
         case ContentTypeId::TEXTFIELD:
@@ -5306,25 +5363,50 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
         default: break;
     }
 
-    if (m_pActiveShell->IsFrameSelected() || m_pActiveShell->IsObjSelected())
+    if (m_bSelectTo)
     {
-        m_pActiveShell->HideCursor();
-        m_pActiveShell->EnterSelFrameMode();
+        m_pActiveShell->SttCursorMove();
+        while (m_pActiveShell->IsCursorInTable())
+        {
+            m_pActiveShell->MoveTable(GotoCurrTable, fnTableStart);
+            if (!m_pActiveShell->Left(SwCursorSkipMode::Chars, false, 1, false))
+                break; // Table is at the beginning of the document. It can't be selected this way.
+        }
+        m_pActiveShell->EndCursorMove();
+
+        lcl_AssureStdModeAtShell(m_pActiveShell);
+
+        m_pActiveShell->SetMark();
+        m_pActiveShell->GetCursor()->GetMark()->nNode = oPosition.value()->nNode;
+        m_pActiveShell->GetCursor()->GetMark()->nContent = oPosition.value()->nContent;
+        m_pActiveShell->UpdateCursor();
+
+        m_pActiveShell->GetView().GetEditWin().GrabFocus();
+
+        m_bSelectTo = false;
     }
-
-    SwView& rView = m_pActiveShell->GetView();
-    rView.StopShellTimer();
-    rView.GetPostItMgr()->SetActiveSidebarWin(nullptr);
-    rView.GetEditWin().GrabFocus();
-
-    // Assure cursor is in visible view area.
-    // (tdf#147041) Always show the navigated outline at the top of the visible view area.
-    if (pCnt->GetParent()->GetType() == ContentTypeId::OUTLINE ||
-            (!m_pActiveShell->IsCursorVisible() && !m_pActiveShell->IsFrameSelected() &&
-            !m_pActiveShell->IsObjSelected()))
+    else
     {
-        Point aPoint(rView.GetVisArea().getX(), m_pActiveShell->GetCursorDocPos().getY());
-        rView.SetVisArea(aPoint);
+        if (m_pActiveShell->IsFrameSelected() || m_pActiveShell->IsObjSelected())
+        {
+            m_pActiveShell->HideCursor();
+            m_pActiveShell->EnterSelFrameMode();
+        }
+
+        SwView& rView = m_pActiveShell->GetView();
+        rView.StopShellTimer();
+        rView.GetPostItMgr()->SetActiveSidebarWin(nullptr);
+        rView.GetEditWin().GrabFocus();
+
+        // Assure cursor is in visible view area.
+        // (tdf#147041) Always show the navigated outline at the top of the visible view area.
+        if (pCnt->GetParent()->GetType() == ContentTypeId::OUTLINE ||
+                (!m_pActiveShell->IsCursorVisible() && !m_pActiveShell->IsFrameSelected() &&
+                 !m_pActiveShell->IsObjSelected()))
+        {
+            Point aPoint(rView.GetVisArea().getX(), m_pActiveShell->GetCursorDocPos().getY());
+            rView.SetVisArea(aPoint);
+        }
     }
 }
 
