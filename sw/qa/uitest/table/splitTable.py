@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 
 #Writer Split Table
 
@@ -63,5 +63,25 @@ class splitTable(UITestCase):
             #undo -> verify 1 tables
             self.xUITest.executeCommand(".uno:Undo")
             self.assertEqual(writer_doc.TextTables.getCount(), 1)
+
+    def test_tdf115572_remember_split_table_option(self):
+        with self.ui_test.load_file(get_url_for_data_file("splitTable.odt")) as writer_doc:
+            # Go to second row
+            self.xUITest.executeCommand(".uno:GoDown")
+            self.xUITest.executeCommand(".uno:GoDown")
+
+            # Split table using a non default option
+            with self.ui_test.execute_dialog_through_command(".uno:SplitTable") as xDialog:
+                xRadioNoHeading = xDialog.getChild("noheading")
+                xRadioNoHeading.executeAction("CLICK", tuple())
+
+            # Reopen split table dialog and check preselection
+            self.xUITest.executeCommand(".uno:GoDown")
+            with self.ui_test.execute_dialog_through_command(".uno:SplitTable") as xDialog:
+                xRadioNoHeading = xDialog.getChild("noheading")
+                # Without the fix in place, this test would have failed with
+                # AssertionError: 'true' != 'false'
+                # i.e. the last used option in the split table dialog was not remembered
+                self.assertEqual("true", get_state_as_dict(xRadioNoHeading)["Checked"])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

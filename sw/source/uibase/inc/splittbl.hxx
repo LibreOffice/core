@@ -21,6 +21,7 @@
 
 #include <vcl/weld.hxx>
 #include <tblenum.hxx>
+#include <unotools/viewoptions.hxx>
 
 class SwWrtShell;
 
@@ -33,6 +34,9 @@ private:
 
     SwWrtShell& m_rShell;
     SplitTable_HeadlineOption m_nSplit;
+
+    // tdf#131759 - remember last used option in split table dialog
+    static SplitTable_HeadlineOption m_eRememberedSplitOption;
 
     void Apply();
 
@@ -56,6 +60,10 @@ public:
             nSplit = SplitTable_HeadlineOption::BoxAttrCopy;
         else if (m_xBorderCopyRB->get_active())
             nSplit = SplitTable_HeadlineOption::BorderCopy;
+
+        // tdf#131759 - remember last used option in split table dialog
+        m_eRememberedSplitOption = nSplit;
+
         return nSplit;
     }
 };

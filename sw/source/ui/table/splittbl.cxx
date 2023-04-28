@@ -21,6 +21,9 @@
 #include <splittbl.hxx>
 #include <tblenum.hxx>
 
+SplitTable_HeadlineOption SwSplitTableDlg::m_eRememberedSplitOption
+    = SplitTable_HeadlineOption::ContentCopy;
+
 SwSplitTableDlg::SwSplitTableDlg(weld::Window* pParent, SwWrtShell& rSh)
     : GenericDialogController(pParent, "modules/swriter/ui/splittable.ui", "SplitTableDialog")
     , m_xBoxAttrCopyWithParaRB(m_xBuilder->weld_radio_button("customheadingapplystyle"))
@@ -29,6 +32,25 @@ SwSplitTableDlg::SwSplitTableDlg(weld::Window* pParent, SwWrtShell& rSh)
     , m_rShell(rSh)
     , m_nSplit(SplitTable_HeadlineOption::ContentCopy)
 {
+    // tdf#131759 - remember last used option in split table dialog
+    m_nSplit = m_eRememberedSplitOption;
+    switch (m_nSplit)
+    {
+        case SplitTable_HeadlineOption::BoxAttrAllCopy:
+            m_xBoxAttrCopyWithParaRB->set_active(true);
+            break;
+        case SplitTable_HeadlineOption::BoxAttrCopy:
+            m_xBoxAttrCopyNoParaRB->set_active(true);
+            break;
+        case SplitTable_HeadlineOption::BorderCopy:
+            m_xBorderCopyRB->set_active(true);
+            break;
+        case SplitTable_HeadlineOption::NONE:
+        case SplitTable_HeadlineOption::ContentCopy:
+        default:
+            // Use the default value in case of an invalid option
+            m_nSplit = SplitTable_HeadlineOption::ContentCopy;
+    }
 }
 
 void SwSplitTableDlg::Apply()
@@ -40,6 +62,9 @@ void SwSplitTableDlg::Apply()
         m_nSplit = SplitTable_HeadlineOption::BoxAttrCopy;
     else if (m_xBorderCopyRB->get_active())
         m_nSplit = SplitTable_HeadlineOption::BorderCopy;
+
+    // tdf#131759 - remember last used option in split table dialog
+    m_eRememberedSplitOption = m_nSplit;
 
     m_rShell.SplitTable(m_nSplit);
 }
