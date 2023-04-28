@@ -2381,6 +2381,42 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf144748)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf147180)
+{
+    // load a tracked table insertion (single redline)
+    createSwDoc("tdf147180.fodt");
+    SwDoc* pDoc = getSwDoc();
+
+    // turn on red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    // there is a table in the text
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+
+    // insert a character in the first cell with change tracking
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("x");
+
+    // reject all the changes, including table insertion
+
+    IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
+    rIDRA.AcceptAllRedline(/*bAccept=*/false);
+
+    // no table left in the text
+
+    // This was 1 (lost tracking of the table after modifying its text content)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf128335)
 {
     // Load the bugdoc, which has 3 textboxes.

@@ -25,6 +25,7 @@
 #include <tools/datetimeutils.hxx>
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>
+#include <editeng/prntitem.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -593,6 +594,19 @@ bool SwRedlineTable::InsertWithValidRanges(SwRangeRedline*& p, size_type* pInsPo
         auto pTmpRedline = pRedline.release();
         if (Insert(pTmpRedline, nInsPos))
         {
+            // tdf#147180 set table tracking to the table row
+            // TODO handle also empty rows
+            SwDoc& rDoc = pTmpRedline->GetDoc();
+            if ( rDoc.GetIDocumentUndoRedo().DoesUndo() &&
+                 pTmpRedline->GetPointNode().GetTableBox() )
+            {
+                SvxPrintItem aSetTracking(RES_PRINT, false);
+                SwNodeIndex aInsPos( *(pTmpRedline->GetPointNode().GetTableBox()->GetSttNd()), 1);
+                SwCursor aCursor( SwPosition(aInsPos), nullptr );
+                ::sw::UndoGuard const undoGuard(pTmpRedline->GetDoc().GetIDocumentUndoRedo());
+                rDoc.SetRowNotTracked( aCursor, aSetTracking );
+            }
+
             pTmpRedline->CallDisplayFunc(nInsPos);
             bAnyIns = true;
             if (pInsPos && *pInsPos < nInsPos)
