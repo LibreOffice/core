@@ -512,9 +512,10 @@ DECLARE_OOXMLEXPORT_TEST(testTDF91260, "tdf91260.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo74357, "fdo74357.docx")
 {
-    // Floating table wasn't converted to a textframe.
-    // This was 0.
-    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    // Normal outer table, floating inner table.
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
 
     // Bottom margin of the first paragraph was too large, causing a layout problem.
     // This was 494.

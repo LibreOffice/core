@@ -50,14 +50,11 @@ CPPUNIT_TEST_FIXTURE(Test, test1cellInsidevRightborder)
 CPPUNIT_TEST_FIXTURE(Test, testNestedFloatingTable)
 {
     loadFromURL(u"nested-floating-table.docx");
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<beans::XPropertySet> xFrame(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    bool bIsFollowingTextFlow = false;
-    xFrame->getPropertyValue("IsFollowingTextFlow") >>= bIsFollowingTextFlow;
-    // Without the accompanying fix in place, this test would have failed, the nested floating table
-    // was partly positioned outside the table cell, leading to overlapping text.
-    CPPUNIT_ASSERT(bIsFollowingTextFlow);
+    // Normal outer table, floating inner tables.
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xIndexAccess->getCount());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFloatingTableBreakBefore)
@@ -81,6 +78,21 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableBreakBefore)
     // - Actual  : 0 (style::BreakType_NONE)
     // i.e. the page break was lost.
     CPPUNIT_ASSERT_EQUAL(style::BreakType_PAGE_BEFORE, eBreakType);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, test3NestedFloatingTables)
+{
+    // Given a document with nested tables: outer and inner one is normal, middle one is floating:
+    // When laying out that document:
+    loadFromURL(u"floattable-nested-3tables.docx");
+
+    // Then make sure we don't crash and create the 3 tables:
+    // Without the accompanying fix in place, this would have crashed, layout can't handle nested
+    // floating tables currently.
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xIndexAccess->getCount());
 }
 }
 
