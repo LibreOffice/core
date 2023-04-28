@@ -228,18 +228,15 @@ void SvxShowCharSet::getFavCharacterList()
     comphelper::sequenceToContainer(maFavCharFontList, rFavCharFontList);
 }
 
-bool SvxShowCharSet::isFavChar(const OUString& sTitle, const OUString& rFont)
+bool SvxShowCharSet::isFavChar(std::u16string_view sTitle, std::u16string_view rFont)
 {
-    auto isFavCharTitleExists = std::any_of(maFavCharList.begin(),
-         maFavCharList.end(),
-         [sTitle] (const OUString & a) { return a == sTitle; });
-
-    auto isFavCharFontExists = std::any_of(maFavCharFontList.begin(),
-         maFavCharFontList.end(),
-         [rFont] (const OUString & a) { return a == rFont; });
-
-    // if Fav char to be added is already in list, return true
-    return isFavCharTitleExists && isFavCharFontExists;
+    assert(maFavCharList.size() == maFavCharFontList.size());
+    for (size_t i = 0; i < maFavCharList.size(); i++)
+    {
+        if (maFavCharList[i] == sTitle && maFavCharFontList[i] == rFont)
+            return true;
+    }
+    return false;
 }
 
 void SvxShowCharSet::createContextMenu(const Point& rPosition)
@@ -300,54 +297,32 @@ void SvxShowCharSet::CopyToClipboard(const OUString& rOUStr)
 
 void SvxShowCharSet::updateFavCharacterList(const OUString& sTitle, const OUString& rFont)
 {
-    if(isFavChar(sTitle, rFont))
+    if (isFavChar(sTitle, rFont))
     {
-        auto itChar = std::find(maFavCharList.begin(), maFavCharList.end(), sTitle);
-        auto itChar2 = std::find(maFavCharFontList.begin(), maFavCharFontList.end(), rFont);
-
-        // if Fav char to be added is already in list, remove it
-        if( itChar != maFavCharList.end() &&  itChar2 != maFavCharFontList.end() )
+        assert(maFavCharList.size() == maFavCharFontList.size());
+        auto fontIt = maFavCharFontList.begin();
+        for (auto charIt = maFavCharList.begin(); charIt != maFavCharList.end(); charIt++)
         {
-            maFavCharList.erase( itChar );
-            maFavCharFontList.erase( itChar2);
+            if (*charIt == sTitle && *fontIt == rFont)
+            {
+                maFavCharList.erase(charIt);
+                maFavCharFontList.erase(fontIt);
+                break;
+            }
+            fontIt++;
+        }
+    }
+    else
+    {
+        if (maFavCharList.size() == 16)
+        {
+            maFavCharList.pop_back();
+            maFavCharFontList.pop_back();
         }
 
-        css::uno::Sequence< OUString > aFavCharList(maFavCharList.size());
-        auto aFavCharListRange = asNonConstRange(aFavCharList);
-        css::uno::Sequence< OUString > aFavCharFontList(maFavCharFontList.size());
-        auto aFavCharFontListRange = asNonConstRange(aFavCharFontList);
-
-        for (size_t i = 0; i < maFavCharList.size(); ++i)
-        {
-            aFavCharListRange[i] = maFavCharList[i];
-            aFavCharFontListRange[i] = maFavCharFontList[i];
-        }
-
-        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::set(aFavCharList, batch);
-        officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::set(aFavCharFontList, batch);
-        batch->commit();
-        return;
+        maFavCharList.push_back(sTitle);
+        maFavCharFontList.push_back(rFont);
     }
-
-    auto itChar = std::find(maFavCharList.begin(), maFavCharList.end(), sTitle);
-    auto itChar2 = std::find(maFavCharFontList.begin(), maFavCharFontList.end(), rFont);
-
-    // if Fav char to be added is already in list, remove it
-    if( itChar != maFavCharList.end() &&  itChar2 != maFavCharFontList.end() )
-    {
-        maFavCharList.erase( itChar );
-        maFavCharFontList.erase( itChar2);
-    }
-
-    if (maFavCharList.size() == 16)
-    {
-        maFavCharList.pop_back();
-        maFavCharFontList.pop_back();
-    }
-
-    maFavCharList.push_back(sTitle);
-    maFavCharFontList.push_back(rFont);
 
     css::uno::Sequence< OUString > aFavCharList(maFavCharList.size());
     auto aFavCharListRange = asNonConstRange(aFavCharList);
