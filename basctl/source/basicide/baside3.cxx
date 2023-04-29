@@ -623,7 +623,7 @@ void DialogWindow::SaveDialog()
     if( aDlg.Execute() != ERRCODE_NONE )
         return;
 
-    Sequence< OUString > aPaths = xFP->getSelectedFiles();
+    OUString aSelectedFileURL = xFP->getSelectedFiles()[0];
 
     // export dialog model to xml
     Reference< container::XNameContainer > xDialogModel = GetDialog();
@@ -635,9 +635,9 @@ void DialogWindow::SaveDialog()
     Reference< XOutputStream > xOutput;
     try
     {
-        if( xSFI->exists( aPaths[0] ) )
-            xSFI->kill( aPaths[0] );
-        xOutput = xSFI->openFileWrite( aPaths[0] );
+        if( xSFI->exists(aSelectedFileURL) )
+            xSFI->kill(aSelectedFileURL);
+        xOutput = xSFI->openFileWrite(aSelectedFileURL);
     }
     catch(const Exception& )
     {}
@@ -680,7 +680,7 @@ void DialogWindow::SaveDialog()
 
         if( bResource )
         {
-            INetURLObject aURLObj(u"");
+            INetURLObject aURLObj(aSelectedFileURL);
             aURLObj.removeExtension();
             OUString aDialogName( aURLObj.getName() );
             aURLObj.removeSegment();
