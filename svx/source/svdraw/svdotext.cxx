@@ -1272,78 +1272,10 @@ void SdrTextObj::ImpAutoFitText( SdrOutliner& rOutliner ) const
 void SdrTextObj::ImpAutoFitText(SdrOutliner& rOutliner, const Size& rTextSize,
                                 bool bIsVerticalWriting) const
 {
-    if (!bIsVerticalWriting)
-    {
-        autoFitTextForCompatibility(rOutliner, rTextSize);
-        return;
-    }
-
-    // EditEngine formatting is unstable enough for
-    // line-breaking text that we need some more samples
-
-    // loop early-exits if we detect an already attained value
-    double nMinStretchX = 0.0;
-    double nMinStretchY = 0.0;
-    std::array<sal_Int32, 10> aOldStretchXVals = {0,0,0,0,0,0,0,0,0,0};
-    rOutliner.setRoundFontSizeToPt(false);
-    for (size_t i = 0; i < aOldStretchXVals.size(); ++i)
-    {
-        const Size aCurrTextSize = rOutliner.CalcTextSizeNTP();
-        double fFactor = 1.0;
-        if (aCurrTextSize.Width() != 0)
-            fFactor = double(rTextSize.Width())/aCurrTextSize.Width();
-
-        // fFactor scales in both x and y directions
-        // - this is fine for bulleted words
-        // - but it scales too much for a long paragraph
-        // - taking sqrt scales long paragraphs the best
-        // - bulleted words will have to go through more iterations
-        fFactor = std::sqrt(fFactor);
-
-        double nCurrStretchX, nCurrStretchY;
-        rOutliner.getGlobalScale(nCurrStretchX, nCurrStretchY, o3tl::temporary(double()), o3tl::temporary(double()));
-
-        if (fFactor >= 0.98)
-        {
-            // resulting text area fits into available shape rect -
-            // err on the larger stretching, to optimally fill area
-            nMinStretchX = std::max(nMinStretchX, nCurrStretchX);
-            nMinStretchY = std::max(nMinStretchY, nCurrStretchY);
-        }
-
-        aOldStretchXVals[i] = basegfx::fround(nCurrStretchX * 10.0);
-        if (std::find(aOldStretchXVals.begin(), aOldStretchXVals.begin() + i, basegfx::fround(nCurrStretchX * 10.0)) != aOldStretchXVals.begin() + i)
-            break; // same value already attained once; algo is looping, exit
-
-        if (fFactor < 1.0 || nCurrStretchX != 100)
-        {
-            nCurrStretchX = double(basegfx::fround(nCurrStretchX * fFactor * 100.0)) / 100.00;
-            nCurrStretchY = double(basegfx::fround(nCurrStretchY * fFactor * 100.0)) / 100.00;
-
-            double nStretchX = std::min(100.0, nCurrStretchX);
-            double nStretchY = std::min(100.0, nCurrStretchY);
-
-            rOutliner.setGlobalScale(nStretchX, nStretchY, nStretchX, nStretchY);
-            SAL_INFO("svx", "zoom is " << nCurrStretchX);
-        }
-    }
-
-    const SdrTextFitToSizeTypeItem& rItem = GetObjectItem(SDRATTR_TEXT_FITTOSIZE);
-    if (rItem.GetMaxScale() > 0.0)
-    {
-        nMinStretchX = std::min(rItem.GetMaxScale(), nMinStretchX);
-        nMinStretchY = std::min(rItem.GetMaxScale(), nMinStretchY);
-    }
-
-    SAL_INFO("svx", "final zoom is " << nMinStretchX);
-
-    nMinStretchX = std::min(100.0, nMinStretchX);
-    nMinStretchY = std::min(100.0, nMinStretchY);
-
-    rOutliner.setGlobalScale(nMinStretchX, nMinStretchY, nMinStretchX, nMinStretchY);
+    autoFitTextForCompatibility(rOutliner, rTextSize, bIsVerticalWriting);
 }
 
-void SdrTextObj::autoFitTextForCompatibility(SdrOutliner& rOutliner, const Size& rTextBoxSize) const
+void SdrTextObj::autoFitTextForCompatibility(SdrOutliner& rOutliner, const Size& rTextBoxSize, bool bIsVerticalWriting) const
 {
     rOutliner.setRoundFontSizeToPt(true);
 
@@ -1364,7 +1296,12 @@ void SdrTextObj::autoFitTextForCompatibility(SdrOutliner& rOutliner, const Size&
 
     tools::Long nExtendTextBoxBy = -50;
     aCurrentTextBoxSize.extendBy(0, nExtendTextBoxBy);
-    double fCurrentFitFactor = double(rTextBoxSize.Height()) / aCurrentTextBoxSize.Height();
+    double fCurrentFitFactor = 1.0;
+
+    if (bIsVerticalWriting)
+        fCurrentFitFactor = double(rTextBoxSize.Width()) / aCurrentTextBoxSize.Width();
+    else
+        fCurrentFitFactor = double(rTextBoxSize.Height()) / aCurrentTextBoxSize.Height();
 
     if (fCurrentFitFactor >= 1.0)
         return;
@@ -1404,7 +1341,11 @@ void SdrTextObj::autoFitTextForCompatibility(SdrOutliner& rOutliner, const Size&
 
             aCurrentTextBoxSize = rOutliner.CalcTextSizeNTP();
             aCurrentTextBoxSize.extendBy(0, nExtendTextBoxBy);
-            fCurrentFitFactor = double(rTextBoxSize.Height()) / aCurrentTextBoxSize.Height();
+            if (bIsVerticalWriting)
+                fCurrentFitFactor = double(rTextBoxSize.Width()) / aCurrentTextBoxSize.Width();
+            else
+                fCurrentFitFactor = double(rTextBoxSize.Height()) / aCurrentTextBoxSize.Height();
+
 
             if (fCurrentSpacing == 100.0)
             {
