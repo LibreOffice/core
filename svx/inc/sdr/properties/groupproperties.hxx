@@ -29,7 +29,7 @@ namespace sdr::properties
         class GroupProperties final : public BaseProperties
         {
             // the to be used ItemSet
-            mutable std::optional<SfxItemSet> mxItemSet;
+            mutable std::optional<SfxItemSet> moMergedItemSet;
         public:
             // basic constructor
             explicit GroupProperties(SdrObject& rObj);

@@ -57,12 +57,12 @@ namespace sdr::properties
         const SfxItemSet& GroupProperties::GetMergedItemSet() const
         {
             // prepare ItemSet
-            if(mxItemSet)
+            if(moMergedItemSet)
                 // clear local itemset for merge
-                mxItemSet->ClearItem();
-            else if(!mxItemSet)
+                moMergedItemSet->ClearItem();
+            else if(!moMergedItemSet)
                 // force local itemset
-                mxItemSet.emplace(GetSdrObject().GetObjectItemPool());
+                moMergedItemSet.emplace(GetSdrObject().GetObjectItemPool());
 
             // collect all ItemSets in mpItemSet
             const SdrObjList* pSub(static_cast<const SdrObjGroup&>(GetSdrObject()).GetSubList());
@@ -79,11 +79,11 @@ namespace sdr::properties
                 {
                     if(SfxItemState::DONTCARE == aIter.GetItemState(false))
                     {
-                        mxItemSet->InvalidateItem(nWhich);
+                        moMergedItemSet->InvalidateItem(nWhich);
                     }
                     else
                     {
-                        mxItemSet->MergeValue(rSet.Get(nWhich), true);
+                        moMergedItemSet->MergeValue(rSet.Get(nWhich), true);
                     }
 
                     nWhich = aIter.NextWhich();
@@ -92,7 +92,7 @@ namespace sdr::properties
 
             // For group properties, do not call parent since groups do
             // not have local ItemSets.
-            return *mxItemSet;
+            return *moMergedItemSet;
         }
 
         void GroupProperties::SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems)
