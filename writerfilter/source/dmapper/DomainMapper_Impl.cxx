@@ -2402,9 +2402,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
             if (pPropertyMap)
             {
                 aProperties = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(pPropertyMap->GetPropertyValues());
-            }
-            if (pPropertyMap)
-            {
+
                 // tdf#64222 filter out the "paragraph marker" formatting and
                 // set it as a separate paragraph property, not a empty hint at
                 // end of paragraph
