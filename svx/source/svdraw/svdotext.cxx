@@ -1360,6 +1360,9 @@ void SdrTextObj::autoFitTextForCompatibility(SdrOutliner& rOutliner, const Size&
     }
 
     Size aCurrentTextBoxSize = rOutliner.CalcTextSizeNTP();
+    if (aCurrentTextBoxSize.Height() == 0)
+        return;
+
     tools::Long nExtendTextBoxBy = -50;
     aCurrentTextBoxSize.extendBy(0, nExtendTextBoxBy);
     double fCurrentFitFactor = double(rTextBoxSize.Height()) / aCurrentTextBoxSize.Height();
