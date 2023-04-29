@@ -601,18 +601,12 @@ void DialogWindow::UpdateBrowser()
 
 void DialogWindow::SaveDialog()
 {
-    Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
-    sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD,
+    sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
                                 FileDialogFlags::NONE, this->GetFrameWeld());
     aDlg.SetContext(sfx2::FileDialogHelper::BasicExportDialog);
     Reference<XFilePicker3> xFP = aDlg.GetFilePicker();
 
-    Reference< XFilePickerControlAccess > xFPControl(xFP, UNO_QUERY);
-    xFPControl->enableControl(ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, false);
-    Any aValue;
-    aValue <<= true;
-    xFPControl->setValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue);
-
+    xFP.queryThrow<XFilePickerControlAccess>()->setValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, Any(true));
     xFP->setDefaultName( GetName() );
 
     OUString aDialogStr(IDEResId(RID_STR_STDDIALOGNAME));
@@ -625,11 +619,7 @@ void DialogWindow::SaveDialog()
 
     OUString aSelectedFileURL = xFP->getSelectedFiles()[0];
 
-    // export dialog model to xml
-    Reference< container::XNameContainer > xDialogModel = GetDialog();
-    Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext, GetDocument().isDocument() ? GetDocument().getDocument() : Reference< frame::XModel >() );
-    Reference< XInputStream > xInput( xISP->createInputStream() );
-
+    Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
     Reference< XSimpleFileAccess3 > xSFI( SimpleFileAccess::create(xContext) );
 
     Reference< XOutputStream > xOutput;
@@ -642,108 +632,94 @@ void DialogWindow::SaveDialog()
     catch(const Exception& )
     {}
 
-    if( xOutput.is() )
-    {
-        Sequence< sal_Int8 > bytes;
-        sal_Int32 nRead = xInput->readBytes( bytes, xInput->available() );
-        for (;;)
-        {
-            if( nRead )
-                xOutput->writeBytes( bytes );
-
-            nRead = xInput->readBytes( bytes, 1024 );
-            if (! nRead)
-                break;
-        }
-
-        // With resource?
-        Reference< beans::XPropertySet > xDialogModelPropSet( xDialogModel, UNO_QUERY );
-        Reference< resource::XStringResourceResolver > xStringResourceResolver;
-        if( xDialogModelPropSet.is() )
-        {
-            try
-            {
-                Any aResourceResolver = xDialogModelPropSet->getPropertyValue( "ResourceResolver" );
-                aResourceResolver >>= xStringResourceResolver;
-            }
-            catch(const beans::UnknownPropertyException& )
-            {}
-        }
-
-        bool bResource = false;
-        if( xStringResourceResolver.is() )
-        {
-            Sequence< lang::Locale > aLocaleSeq = xStringResourceResolver->getLocales();
-            if( aLocaleSeq.hasElements() )
-                bResource = true;
-        }
-
-        if( bResource )
-        {
-            INetURLObject aURLObj(aSelectedFileURL);
-            aURLObj.removeExtension();
-            OUString aDialogName( aURLObj.getName() );
-            aURLObj.removeSegment();
-            OUString aURL( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
-            OUString aComment = "# " + aDialogName + " strings" ;
-            Reference< task::XInteractionHandler > xDummyHandler;
-
-            // Remove old properties files in case of overwriting Dialog files
-            if( xSFI->isFolder( aURL ) )
-            {
-                Sequence< OUString > aContentSeq = xSFI->getFolderContents( aURL, false );
-
-                OUString aDialogName_ = aDialogName + "_" ;
-                for( const OUString& rCompleteName : aContentSeq )
-                {
-                    OUString aPureName;
-                    OUString aExtension;
-                    sal_Int32 iDot = rCompleteName.lastIndexOf( '.' );
-                    sal_Int32 iSlash = rCompleteName.lastIndexOf( '/' );
-                    if( iDot != -1 )
-                    {
-                        sal_Int32 iCopyFrom = (iSlash != -1) ? iSlash + 1 : 0;
-                        aPureName = rCompleteName.copy( iCopyFrom, iDot-iCopyFrom );
-                        aExtension = rCompleteName.copy( iDot + 1 );
-                    }
-
-                    if( aExtension == "properties" || aExtension == "default" )
-                    {
-                        if( aPureName.startsWith( aDialogName_ ) )
-                        {
-                            try
-                            {
-                                xSFI->kill( rCompleteName );
-                            }
-                            catch(const uno::Exception& )
-                            {}
-                        }
-                    }
-                }
-            }
-
-            Reference< XStringResourceWithLocation > xStringResourceWithLocation =
-                StringResourceWithLocation::create( xContext, aURL, false/*bReadOnly*/,
-                    xStringResourceResolver->getDefaultLocale(), aDialogName, aComment, xDummyHandler );
-
-            // Add locales
-            Sequence< lang::Locale > aLocaleSeq = xStringResourceResolver->getLocales();
-            for( const lang::Locale& rLocale : aLocaleSeq )
-            {
-                xStringResourceWithLocation->newLocale( rLocale );
-            }
-
-            LocalizationMgr::copyResourceForDialog( xDialogModel,
-                xStringResourceResolver, xStringResourceWithLocation );
-
-            xStringResourceWithLocation->store();
-        }
-    }
-    else
+    if (!xOutput)
     {
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                   VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_COULDNTWRITE)));
         xBox->run();
+        return;
+    }
+
+    // export dialog model to xml
+    auto xInput(xmlscript::exportDialogModel(GetDialog(), xContext, GetDocument().getDocumentOrNull())->createInputStream());
+
+    for (Sequence<sal_Int8> bytes; xInput->readBytes(bytes, xInput->available());)
+        xOutput->writeBytes(bytes);
+
+    // With resource?
+    Reference< resource::XStringResourceResolver > xStringResourceResolver;
+    if (auto xDialogModelPropSet = GetDialog().query<beans::XPropertySet>())
+    {
+        try
+        {
+            Any aResourceResolver = xDialogModelPropSet->getPropertyValue( "ResourceResolver" );
+            aResourceResolver >>= xStringResourceResolver;
+        }
+        catch(const beans::UnknownPropertyException& )
+        {}
+    }
+
+    Sequence<lang::Locale> aLocaleSeq;
+    if (xStringResourceResolver)
+        aLocaleSeq = xStringResourceResolver->getLocales();
+    if (aLocaleSeq.hasElements())
+    {
+        INetURLObject aURLObj(aSelectedFileURL);
+        aURLObj.removeExtension();
+        OUString aDialogName( aURLObj.getName() );
+        aURLObj.removeSegment();
+        OUString aURL( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+        OUString aComment = "# " + aDialogName + " strings" ;
+        Reference< task::XInteractionHandler > xDummyHandler;
+
+        // Remove old properties files in case of overwriting Dialog files
+        if( xSFI->isFolder( aURL ) )
+        {
+            Sequence< OUString > aContentSeq = xSFI->getFolderContents( aURL, false );
+
+            OUString aDialogName_ = aDialogName + "_" ;
+            for( const OUString& rCompleteName : aContentSeq )
+            {
+                OUString aPureName;
+                OUString aExtension;
+                sal_Int32 iDot = rCompleteName.lastIndexOf( '.' );
+                if( iDot != -1 )
+                {
+                    sal_Int32 iSlash = rCompleteName.lastIndexOf( '/' );
+                    sal_Int32 iCopyFrom = (iSlash != -1) ? iSlash + 1 : 0;
+                    aPureName = rCompleteName.copy( iCopyFrom, iDot-iCopyFrom );
+                    aExtension = rCompleteName.copy( iDot + 1 );
+                }
+
+                if( aExtension == "properties" || aExtension == "default" )
+                {
+                    if( aPureName.startsWith( aDialogName_ ) )
+                    {
+                        try
+                        {
+                            xSFI->kill( rCompleteName );
+                        }
+                        catch(const uno::Exception& )
+                        {}
+                    }
+                }
+            }
+        }
+
+        Reference< XStringResourceWithLocation > xStringResourceWithLocation =
+            StringResourceWithLocation::create( xContext, aURL, false/*bReadOnly*/,
+                xStringResourceResolver->getDefaultLocale(), aDialogName, aComment, xDummyHandler );
+
+        // Add locales
+        for( const lang::Locale& rLocale : aLocaleSeq )
+        {
+            xStringResourceWithLocation->newLocale( rLocale );
+        }
+
+        LocalizationMgr::copyResourceForDialog( GetDialog(),
+            xStringResourceResolver, xStringResourceWithLocation );
+
+        xStringResourceWithLocation->store();
     }
 }
 
