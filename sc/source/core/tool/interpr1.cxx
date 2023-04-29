@@ -7072,7 +7072,8 @@ void ScInterpreter::ScLookup()
         if (pResMat)
         {
             VectorMatrixAccessor aResMatAcc(*pResMat, bVertical);
-            // result array is matrix.
+            // Result array is matrix.
+            // Note this does not replicate the other dimension.
             if (o3tl::make_unsigned(nDelta) >= aResMatAcc.GetElementCount())
             {
                 PushNA();
@@ -7206,6 +7207,12 @@ void ScInterpreter::ScLookup()
     {
         VectorMatrixAccessor aResMatAcc(*pResMat, bVertical);
         // Use the matrix result array.
+        // Note this does not replicate the other dimension.
+        if (o3tl::make_unsigned(nDelta) >= aResMatAcc.GetElementCount())
+        {
+            PushNA();
+            return;
+        }
         if (aResMatAcc.IsValue(nDelta))
             PushDouble(aResMatAcc.GetDouble(nDelta));
         else
