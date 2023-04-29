@@ -791,12 +791,6 @@ bool implImportDialog(weld::Window* pWin, const ScriptDocument& rDocument, const
     aDlg.SetContext(sfx2::FileDialogHelper::BasicImportDialog);
     Reference<XFilePicker3> xFP = aDlg.GetFilePicker();
 
-    Reference< XFilePickerControlAccess > xFPControl(xFP, UNO_QUERY);
-    xFPControl->enableControl(ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, false);
-    Any aValue;
-    aValue <<= true;
-    xFPControl->setValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue);
-
     OUString aDialogStr(IDEResId(RID_STR_STDDIALOGNAME));
     xFP->appendFilter( aDialogStr, "*.xdl" );
     xFP->appendFilter( IDEResId(RID_STR_FILTER_ALLFILES), FilterMask_All );
