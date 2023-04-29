@@ -170,17 +170,13 @@ ErrCode SwASCWriter::WriteStream()
                             case RTL_TEXTENCODING_UCS2:
 #ifdef OSL_LITENDIAN
                                 Strm().SetEndian(SvStreamEndian::LITTLE);
-                                if( bIncludeBOM )
-                                {
-                                    Strm().WriteUChar( 0xFF ).WriteUChar( 0xFE );
-                                }
 #else
                                 Strm().SetEndian(SvStreamEndian::BIG);
+#endif
                                 if( bIncludeBOM )
                                 {
-                                    Strm().WriteUChar( 0xFE ).WriteUChar( 0xFF );
+                                    Strm().StartWritingUnicodeText();
                                 }
-#endif
                                 break;
 
                         }
