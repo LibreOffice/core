@@ -1476,6 +1476,12 @@ void HwpReader::makePageStyle()
      HWPInfo& hwpinfo = hwpfile.GetHWPInfo();
      int pmCount = hwpfile.getColumnCount();
 
+     if (pmCount > 512 && utl::ConfigManager::IsFuzzing())
+     {
+         SAL_WARN("filter.hwp", "too many pages: " << pmCount << " clip to " << 512);
+         pmCount = 512;
+     }
+
      for( int i = 0 ; i < pmCount ; i++ ){
          mxList->addAttribute("style:name", sXML_CDATA, "pm" + OUString::number(i + 1));
          startEl("style:page-master");
