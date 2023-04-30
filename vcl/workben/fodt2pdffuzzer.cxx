@@ -39,7 +39,7 @@ extern "C" int LLVMFuzzerInitialize(int* argc, char*** argv)
 
     // create and hold a reference to XToolkit here to avoid the lsan warning about its leak
     // due to getting created in the unusual case of no vcl main loop
-    static css::uno::Reference<awt::XToolkit> xTk(
+    static css::uno::Reference<css::awt::XToolkit> xTk(
         comphelper::getProcessServiceFactory()->createInstance("com.sun.star.awt.Toolkit"),
         css::uno::UNO_QUERY_THROW);
 
