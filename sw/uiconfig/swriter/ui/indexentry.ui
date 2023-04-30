@@ -60,6 +60,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="indexentry|tooltip_text|close">Close dialog without saving non-applied changes.</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -104,7 +105,7 @@
             </child>
             <child>
               <object class="GtkButton" id="ok">
-                <property name="label" translatable="yes" context="stock">_OK</property>
+                <property name="label" translatable="yes" context="stock">_Apply</property>
                 <property name="can-focus">True</property>
                 <property name="can-default">True</property>
                 <property name="has-default">True</property>
