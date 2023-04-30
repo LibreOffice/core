@@ -1433,7 +1433,6 @@ void SwAutoFormat::BuildText()
         bBreak = !IsFastFullLine(*m_pCurTextFrame)
                 || IsBlanksInString(*m_pCurTextFrame)
                 || IsSentenceAtEnd(*m_pCurTextFrame);
-    SetColl( RES_POOLCOLL_TEXT, true );
     if( !bBreak )
     {
         SetRedlineText( STR_AUTOFMTREDL_DEL_MORELINES );
@@ -2418,6 +2417,12 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
                 {
                     eStat = HAS_FMTCOLL;
                     break;
+                }
+
+                // replace custom styles with text body
+                if ( IsPoolUserFormat( nPoolId ) && m_aFlags.bChgUserColl )
+                {
+                    SetColl( RES_POOLCOLL_TEXT, true );
                 }
 
                 // check for left margin set by the style
