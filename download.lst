@@ -597,8 +597,8 @@ WPD_TARBALL := libwpd-0.10.$(WPD_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-WPG_SHA256SUM := 99b3f7f8832385748582ab8130fbb9e5607bd5179bebf9751ac1d51a53099d1c
-WPG_VERSION_MICRO := 3
+WPG_SHA256SUM := b55fda9440d1e070630eb2487d8b8697cf412c214a27caee9df69cec7c004de3
+WPG_VERSION_MICRO := 4
 WPG_TARBALL := libwpg-0.3.$(WPG_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
