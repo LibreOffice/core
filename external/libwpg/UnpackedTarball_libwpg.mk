@@ -15,10 +15,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libwpg,0))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libwpg))
 
-$(eval $(call gb_UnpackedTarball_add_patches,libwpg, \
-    external/libwpg/rpath.patch \
-))
-
 ifneq ($(OS),MACOSX)
 ifneq ($(OS),WNT)
 ifneq ($(OS),iOS)
