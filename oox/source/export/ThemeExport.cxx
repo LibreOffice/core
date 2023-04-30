@@ -161,32 +161,32 @@ void ThemeExport::writeColorTransformations(
     }
 }
 
-void ThemeExport::writeColorRGB(model::ColorDefinition const& rColorDefinition)
+void ThemeExport::writeColorRGB(model::ComplexColor const& rComplexColor)
 {
-    auto aColor = rColorDefinition.getRGBColor();
+    auto aColor = rComplexColor.getRGBColor();
     mpFS->startElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(sal_Int32(aColor)));
     mpFS->endElementNS(XML_a, XML_srgbClr);
 }
 
-void ThemeExport::writeColorCRGB(model::ColorDefinition const& rColorDefinition)
+void ThemeExport::writeColorCRGB(model::ComplexColor const& rComplexColor)
 {
-    mpFS->startElementNS(XML_a, XML_scrgbClr, XML_r, OString::number(rColorDefinition.mnComponent1),
-                         XML_g, OString::number(rColorDefinition.mnComponent2), XML_b,
-                         OString::number(rColorDefinition.mnComponent3));
-    writeColorTransformations(rColorDefinition.maTransformations);
+    mpFS->startElementNS(XML_a, XML_scrgbClr, XML_r, OString::number(rComplexColor.mnComponent1),
+                         XML_g, OString::number(rComplexColor.mnComponent2), XML_b,
+                         OString::number(rComplexColor.mnComponent3));
+    writeColorTransformations(rComplexColor.maTransformations);
     mpFS->endElementNS(XML_a, XML_scrgbClr);
 }
 
-void ThemeExport::writeColorHSL(model::ColorDefinition const& rColorDefinition)
+void ThemeExport::writeColorHSL(model::ComplexColor const& rComplexColor)
 {
-    mpFS->startElementNS(XML_a, XML_hslClr, XML_hue, OString::number(rColorDefinition.mnComponent1),
-                         XML_sat, OString::number(rColorDefinition.mnComponent2), XML_lum,
-                         OString::number(rColorDefinition.mnComponent3));
-    writeColorTransformations(rColorDefinition.maTransformations);
+    mpFS->startElementNS(XML_a, XML_hslClr, XML_hue, OString::number(rComplexColor.mnComponent1),
+                         XML_sat, OString::number(rComplexColor.mnComponent2), XML_lum,
+                         OString::number(rComplexColor.mnComponent3));
+    writeColorTransformations(rComplexColor.maTransformations);
     mpFS->endElementNS(XML_a, XML_hslClr);
 }
 
-void ThemeExport::writeColorScheme(model::ColorDefinition const& rColorDefinition)
+void ThemeExport::writeColorScheme(model::ComplexColor const& rComplexColor)
 {
     static std::unordered_map<model::ThemeColorType, const char*> constThemeColorTypeTokenMap
         = { { model::ThemeColorType::Dark1, "dk1" },
@@ -201,17 +201,17 @@ void ThemeExport::writeColorScheme(model::ColorDefinition const& rColorDefinitio
             { model::ThemeColorType::Accent6, "accent6" },
             { model::ThemeColorType::Hyperlink, "hlink" },
             { model::ThemeColorType::FollowedHyperlink, "folHlink" } };
-    auto iterator = constThemeColorTypeTokenMap.find(rColorDefinition.meSchemeType);
+    auto iterator = constThemeColorTypeTokenMap.find(rComplexColor.meSchemeType);
     if (iterator != constThemeColorTypeTokenMap.end())
     {
         const char* sValue = iterator->second;
         mpFS->startElementNS(XML_a, XML_schemeClr, XML_val, sValue);
-        writeColorTransformations(rColorDefinition.maTransformations);
+        writeColorTransformations(rComplexColor.maTransformations);
         mpFS->endElementNS(XML_a, XML_schemeClr);
     }
 }
 
-void ThemeExport::writeColorSystem(model::ColorDefinition const& rColorDefinition)
+void ThemeExport::writeColorSystem(model::ComplexColor const& rComplexColor)
 {
     static std::unordered_map<model::SystemColorType, const char*> constThemeColorTypeTokenMap = {
         { model::SystemColorType::DarkShadow3D, "3dDkShadow" },
@@ -245,49 +245,49 @@ void ThemeExport::writeColorSystem(model::ColorDefinition const& rColorDefinitio
         { model::SystemColorType::WindowFrame, "windowFrame" },
         { model::SystemColorType::WindowText, "windowText" },
     };
-    auto iterator = constThemeColorTypeTokenMap.find(rColorDefinition.meSystemColorType);
+    auto iterator = constThemeColorTypeTokenMap.find(rComplexColor.meSystemColorType);
     if (iterator != constThemeColorTypeTokenMap.end())
     {
         const char* sValue = iterator->second;
         mpFS->startElementNS(XML_a, XML_sysClr, XML_val, sValue);
         //XML_lastClr
-        writeColorTransformations(rColorDefinition.maTransformations);
+        writeColorTransformations(rComplexColor.maTransformations);
         mpFS->endElementNS(XML_a, XML_schemeClr);
     }
 }
 
-void ThemeExport::writeColorPlaceholder(model::ColorDefinition const& rColorDefinition)
+void ThemeExport::writeColorPlaceholder(model::ComplexColor const& rComplexColor)
 {
     mpFS->startElementNS(XML_a, XML_schemeClr, XML_val, "phClr");
-    writeColorTransformations(rColorDefinition.maTransformations);
+    writeColorTransformations(rComplexColor.maTransformations);
     mpFS->endElementNS(XML_a, XML_schemeClr);
 }
 
-void ThemeExport::writeColorDefinition(model::ColorDefinition const& rColorDefinition)
+void ThemeExport::writeComplexColor(model::ComplexColor const& rComplexColor)
 {
-    switch (rColorDefinition.meType)
+    switch (rComplexColor.meType)
     {
         case model::ColorType::Unused:
             break;
         case model::ColorType::RGB:
-            writeColorRGB(rColorDefinition);
+            writeColorRGB(rComplexColor);
             break;
         case model::ColorType::CRGB:
-            writeColorCRGB(rColorDefinition);
+            writeColorCRGB(rComplexColor);
             break;
         case model::ColorType::HSL:
-            writeColorHSL(rColorDefinition);
+            writeColorHSL(rComplexColor);
             break;
         case model::ColorType::Scheme:
-            writeColorScheme(rColorDefinition);
+            writeColorScheme(rComplexColor);
             break;
         case model::ColorType::Palette:
             break;
         case model::ColorType::System:
-            writeColorSystem(rColorDefinition);
+            writeColorSystem(rComplexColor);
             break;
         case model::ColorType::Placeholder:
-            writeColorPlaceholder(rColorDefinition);
+            writeColorPlaceholder(rComplexColor);
             break;
     }
 }
@@ -295,7 +295,7 @@ void ThemeExport::writeColorDefinition(model::ColorDefinition const& rColorDefin
 void ThemeExport::writeSolidFill(model::SolidFill const& rSolidFill)
 {
     mpFS->startElementNS(XML_a, XML_solidFill);
-    writeColorDefinition(rSolidFill.maColorDefinition);
+    writeComplexColor(rSolidFill.maColor);
     mpFS->endElementNS(XML_a, XML_solidFill);
 }
 
@@ -307,7 +307,7 @@ void ThemeExport::writeGradientFill(model::GradientFill const& rGradientFill)
     {
         mpFS->startElementNS(XML_a, XML_gs, XML_pos,
                              OString::number(sal_Int32(rStop.mfPosition * 100000.0)));
-        writeColorDefinition(rStop.maColor);
+        writeComplexColor(rStop.maColor);
         mpFS->endElementNS(XML_a, XML_gs);
     }
     mpFS->endElementNS(XML_a, XML_gsLst);
@@ -523,11 +523,11 @@ void ThemeExport::writePatternFill(model::PatternFill const& rPatternFill)
         mpFS->startElementNS(XML_a, XML_pattFill, XML_prst, sPresetType);
 
         mpFS->startElementNS(XML_a, XML_fgClr);
-        writeColorDefinition(rPatternFill.maForegroundColor);
+        writeComplexColor(rPatternFill.maForegroundColor);
         mpFS->endElementNS(XML_a, XML_fgClr);
 
         mpFS->startElementNS(XML_a, XML_bgClr);
-        writeColorDefinition(rPatternFill.maBackgroundColor);
+        writeComplexColor(rPatternFill.maBackgroundColor);
         mpFS->endElementNS(XML_a, XML_bgClr);
 
         mpFS->endElementNS(XML_a, XML_pattFill);

@@ -26,7 +26,7 @@ class BlipFill;
 class PatternFill;
 class GradientFill;
 class SolidFill;
-struct ColorDefinition;
+struct ComplexColor;
 struct Transformation;
 }
 
@@ -58,13 +58,13 @@ private:
     void writePatternFill(model::PatternFill const& rPatternFill);
     void writeGradientFill(model::GradientFill const& rGradientFill);
     void writeSolidFill(model::SolidFill const& rSolidFill);
-    void writeColorDefinition(model::ColorDefinition const& rColorDefinition);
-    void writeColorPlaceholder(model::ColorDefinition const& rColorDefinition);
-    void writeColorSystem(model::ColorDefinition const& rColorDefinition);
-    void writeColorScheme(model::ColorDefinition const& rColorDefinition);
-    void writeColorHSL(model::ColorDefinition const& rColorDefinition);
-    void writeColorCRGB(model::ColorDefinition const& rColorDefinition);
-    void writeColorRGB(model::ColorDefinition const& rColorDefinition);
+    void writeComplexColor(model::ComplexColor const& rComplexColor);
+    void writeColorPlaceholder(model::ComplexColor const& rComplexColor);
+    void writeColorSystem(model::ComplexColor const& rComplexColor);
+    void writeColorScheme(model::ComplexColor const& rComplexColor);
+    void writeColorHSL(model::ComplexColor const& rComplexColor);
+    void writeColorCRGB(model::ComplexColor const& rComplexColor);
+    void writeColorRGB(model::ComplexColor const& rComplexColor);
     void writeColorTransformations(std::vector<model::Transformation> const& rTransformations);
 };
 

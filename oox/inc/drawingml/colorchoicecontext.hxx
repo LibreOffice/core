@@ -34,7 +34,7 @@ class Color;
 class ColorValueContext final : public ::oox::core::ContextHandler2
 {
 public:
-    explicit ColorValueContext(::oox::core::ContextHandler2Helper const & rParent, Color& rColor, model::ColorDefinition* pColorDefinition = nullptr);
+    explicit ColorValueContext(::oox::core::ContextHandler2Helper const & rParent, Color& rColor, model::ComplexColor* pComplexColor = nullptr);
 
     virtual void onStartElement(const ::oox::AttributeList& rAttribs) override;
 
@@ -43,7 +43,7 @@ public:
 
 private:
     Color& mrColor;
-    model::ColorDefinition* mpColorDefinition;
+    model::ComplexColor* mpComplexColor;
 };
 
 
@@ -52,7 +52,7 @@ private:
 class ColorContext : public ::oox::core::ContextHandler2
 {
 public:
-    explicit ColorContext(::oox::core::ContextHandler2Helper const & rParent, Color& rColor, model::ColorDefinition* pColorDefinition = nullptr);
+    explicit ColorContext(::oox::core::ContextHandler2Helper const & rParent, Color& rColor, model::ComplexColor* pComplexColor = nullptr);
 
     virtual ::oox::core::ContextHandlerRef onCreateContext(
         sal_Int32 nElement, const ::oox::AttributeList& rAttribs) override;
@@ -61,7 +61,7 @@ private:
     Color& mrColor;
 
 protected:
-    model::ColorDefinition* mpColorDefinition;
+    model::ComplexColor* mpComplexColor;
 };
 
 /// Same as ColorContext, but handles multiple colors.
