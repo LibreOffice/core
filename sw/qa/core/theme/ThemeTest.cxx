@@ -54,8 +54,8 @@ void checkFillStyles(std::vector<model::FillStyle> const& rStyleList)
         CPPUNIT_ASSERT(rFillStyle.mpFill);
         CPPUNIT_ASSERT_EQUAL(model::FillType::Solid, rFillStyle.mpFill->meType);
         auto* pSolidFill = static_cast<model::SolidFill*>(rFillStyle.mpFill.get());
-        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, pSolidFill->maColorDefinition.meType);
-        CPPUNIT_ASSERT_EQUAL(size_t(0), pSolidFill->maColorDefinition.maTransformations.size());
+        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, pSolidFill->maColor.meType);
+        CPPUNIT_ASSERT_EQUAL(size_t(0), pSolidFill->maColor.maTransformations.size());
     }
 
     // Fill style 2
@@ -238,8 +238,8 @@ void checkLineStyles(std::vector<model::LineStyle> const& rStyleList)
         CPPUNIT_ASSERT(rFillStyle.mpFill);
         CPPUNIT_ASSERT_EQUAL(model::FillType::Solid, rFillStyle.mpFill->meType);
         auto* pSolidFill = static_cast<model::SolidFill*>(rFillStyle.mpFill.get());
-        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, pSolidFill->maColorDefinition.meType);
-        CPPUNIT_ASSERT_EQUAL(size_t(0), pSolidFill->maColorDefinition.maTransformations.size());
+        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, pSolidFill->maColor.meType);
+        CPPUNIT_ASSERT_EQUAL(size_t(0), pSolidFill->maColor.maTransformations.size());
     }
 
     // Line style 2
@@ -257,8 +257,8 @@ void checkLineStyles(std::vector<model::LineStyle> const& rStyleList)
         CPPUNIT_ASSERT(rFillStyle.mpFill);
         CPPUNIT_ASSERT_EQUAL(model::FillType::Solid, rFillStyle.mpFill->meType);
         auto* pSolidFill = static_cast<model::SolidFill*>(rFillStyle.mpFill.get());
-        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, pSolidFill->maColorDefinition.meType);
-        CPPUNIT_ASSERT_EQUAL(size_t(0), pSolidFill->maColorDefinition.maTransformations.size());
+        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, pSolidFill->maColor.meType);
+        CPPUNIT_ASSERT_EQUAL(size_t(0), pSolidFill->maColor.maTransformations.size());
     }
 
     // Line style 3
@@ -276,8 +276,8 @@ void checkLineStyles(std::vector<model::LineStyle> const& rStyleList)
         CPPUNIT_ASSERT(rFillStyle.mpFill);
         CPPUNIT_ASSERT_EQUAL(model::FillType::Solid, rFillStyle.mpFill->meType);
         auto* pSolidFill = static_cast<model::SolidFill*>(rFillStyle.mpFill.get());
-        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, pSolidFill->maColorDefinition.meType);
-        CPPUNIT_ASSERT_EQUAL(size_t(0), pSolidFill->maColorDefinition.maTransformations.size());
+        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, pSolidFill->maColor.meType);
+        CPPUNIT_ASSERT_EQUAL(size_t(0), pSolidFill->maColor.maTransformations.size());
     }
 }
 

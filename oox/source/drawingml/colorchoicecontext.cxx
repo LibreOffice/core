@@ -98,10 +98,10 @@ const std::unordered_map<sal_Int32, model::TransformationType> constTransformTyp
 
 }
 
-ColorValueContext::ColorValueContext(ContextHandler2Helper const & rParent, Color& rColor, model::ColorDefinition* pColorDefinition)
+ColorValueContext::ColorValueContext(ContextHandler2Helper const & rParent, Color& rColor, model::ComplexColor* pComplexColor)
     : ContextHandler2(rParent)
     , mrColor(rColor)
-    , mpColorDefinition(pColorDefinition)
+    , mpComplexColor(pComplexColor)
 {
 }
 
@@ -115,9 +115,9 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
                 rAttribs.getInteger( XML_r, 0 ),
                 rAttribs.getInteger( XML_g, 0 ),
                 rAttribs.getInteger( XML_b, 0 ) );
-            if (mpColorDefinition)
+            if (mpComplexColor)
             {
-                mpColorDefinition->setCRGB(
+                mpComplexColor->setCRGB(
                     rAttribs.getInteger(XML_r, 0),
                     rAttribs.getInteger(XML_g, 0),
                     rAttribs.getInteger(XML_b, 0));
@@ -128,9 +128,9 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
         case A_TOKEN(srgbClr):
         {
             mrColor.setSrgbClr(rAttribs.getIntegerHex(XML_val, 0));
-            if (mpColorDefinition)
+            if (mpComplexColor)
             {
-                mpColorDefinition->setRGB(rAttribs.getIntegerHex(XML_val, 0));
+                mpComplexColor->setRGB(rAttribs.getIntegerHex(XML_val, 0));
             }
         }
         break;
@@ -142,9 +142,9 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
                 rAttribs.getInteger( XML_sat, 0 ),
                 rAttribs.getInteger( XML_lum, 0 ) );
 
-            if (mpColorDefinition)
+            if (mpComplexColor)
             {
-                mpColorDefinition->setHSL(
+                mpComplexColor->setHSL(
                     rAttribs.getInteger(XML_hue, 0),
                     rAttribs.getInteger(XML_sat, 0),
                     rAttribs.getInteger(XML_lum, 0));
@@ -159,14 +159,14 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
 
             mrColor.setSysClr(nToken, nLastColor);
 
-            if (mpColorDefinition)
+            if (mpComplexColor)
             {
                 auto aIterator = constSystemColorMap.find(nToken);
                 if (aIterator != constSystemColorMap.end())
                 {
                     auto const& aPair = *aIterator;
                     model::SystemColorType eType = aPair.second;
-                    mpColorDefinition->setSystemColor(eType, nLastColor);
+                    mpComplexColor->setSystemColor(eType, nLastColor);
                 }
             }
         }
@@ -181,16 +181,16 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
             {
                 mrColor.setSchemeName(*sSchemeName);
 
-                if (mpColorDefinition)
+                if (mpComplexColor)
                 {
                     if (nToken == XML_phClr)
                     {
-                        mpColorDefinition->setSchemePlaceholder();
+                        mpComplexColor->setSchemePlaceholder();
                     }
                     else
                     {
                         model::ThemeColorType eType = schemeNameToThemeColorType(*sSchemeName);
-                        mpColorDefinition->setSchemeColor(eType);
+                        mpComplexColor->setSchemeColor(eType);
                     }
                 }
             }
@@ -201,14 +201,14 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
         {
             sal_Int32 nToken = rAttribs.getToken(XML_val, XML_TOKEN_INVALID);
             mrColor.setPrstClr(nToken);
-            if (mpColorDefinition)
+            if (mpComplexColor)
             {
                 // TODO - just converted to RGB for now
                 ::Color nRgbValue = Color::getDmlPresetColor(nToken, API_RGB_TRANSPARENT);
-                mpColorDefinition->mnComponent1 = nRgbValue.GetRed();
-                mpColorDefinition->mnComponent2 = nRgbValue.GetGreen();
-                mpColorDefinition->mnComponent3 = nRgbValue.GetBlue();
-                mpColorDefinition->meType = model::ColorType::RGB;
+                mpComplexColor->mnComponent1 = nRgbValue.GetRed();
+                mpComplexColor->mnComponent2 = nRgbValue.GetGreen();
+                mpComplexColor->mnComponent3 = nRgbValue.GetBlue();
+                mpComplexColor->meType = model::ColorType::RGB;
             }
         }
         break;
@@ -264,7 +264,7 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
         break;
     }
 
-    if (mpColorDefinition)
+    if (mpComplexColor)
     {
         auto aIterator = constTransformTypeMap.find(getBaseToken(nElement));
         if (aIterator != constTransformTypeMap.end())
@@ -279,17 +279,17 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
             else
                 nValue = rAttribs.getInteger(XML_val, 0);
 
-            mpColorDefinition->maTransformations.push_back({eType, sal_Int16(nValue / 10.0)});
+            mpComplexColor->maTransformations.push_back({eType, sal_Int16(nValue / 10)});
         }
     }
 
     return nullptr;
 }
 
-ColorContext::ColorContext(ContextHandler2Helper const & rParent, Color& rColor, model::ColorDefinition* pColorDefinition)
+ColorContext::ColorContext(ContextHandler2Helper const & rParent, Color& rColor, model::ComplexColor* pComplexColor)
     : ContextHandler2(rParent)
     , mrColor(rColor)
-    , mpColorDefinition(pColorDefinition)
+    , mpComplexColor(pComplexColor)
 {
 }
 
@@ -304,7 +304,7 @@ ColorContext::ColorContext(ContextHandler2Helper const & rParent, Color& rColor,
         case A_TOKEN( sysClr ):
         case A_TOKEN( schemeClr ):
         case A_TOKEN( prstClr ):
-            return new ColorValueContext(*this, mrColor, mpColorDefinition);
+            return new ColorValueContext(*this, mrColor, mpComplexColor);
     }
     return nullptr;
 }

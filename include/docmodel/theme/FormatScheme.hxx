@@ -13,115 +13,11 @@
 #include <docmodel/dllapi.h>
 #include <tools/color.hxx>
 #include <docmodel/theme/ThemeColor.hxx>
+#include <docmodel/color/ComplexColor.hxx>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
 namespace model
 {
-enum class ColorType
-{
-    Unused,
-    RGB,
-    CRGB,
-    HSL,
-    Scheme,
-    Palette,
-    System,
-    Placeholder
-};
-
-enum class SystemColorType
-{
-    Unused,
-    DarkShadow3D,
-    Light3D,
-    ActiveBorder,
-    ActiveCaption,
-    AppWorkspace,
-    Background,
-    ButtonFace,
-    ButtonHighlight,
-    ButtonShadow,
-    ButtonText,
-    CaptionText,
-    GradientActiveCaption,
-    GradientInactiveCaption,
-    GrayText,
-    Highlight,
-    HighlightText,
-    HotLight,
-    InactiveBorder,
-    InactiveCaption,
-    InactiveCaptionText,
-    InfoBack,
-    InfoText,
-    Menu,
-    MenuBar,
-    MenuHighlight,
-    MenuText,
-    ScrollBar,
-    Window,
-    WindowFrame,
-    WindowText
-};
-
-struct DOCMODEL_DLLPUBLIC ColorDefinition
-{
-    ColorType meType = ColorType::Unused;
-
-    sal_Int32 mnComponent1 = 0; // Red, Hue
-    sal_Int32 mnComponent2 = 0; // Green, Saturation
-    sal_Int32 mnComponent3 = 0; // Blue, Luminance
-    sal_Int32 mnAlpha = 0; // Percentage
-
-    SystemColorType meSystemColorType = SystemColorType::Unused;
-    ::Color maLastColor;
-
-    ThemeColorType meSchemeType = ThemeColorType::Unknown;
-    std::vector<Transformation> maTransformations;
-
-    Color getRGBColor() const { return Color(mnComponent1, mnComponent2, mnComponent3); }
-
-    void setCRGB(sal_Int32 nR, sal_Int32 nG, sal_Int32 nB)
-    {
-        mnComponent1 = nR;
-        mnComponent2 = nG;
-        mnComponent3 = nB;
-        meType = ColorType::CRGB;
-    }
-
-    void setRGB(sal_Int32 nRGB)
-    {
-        ::Color aColor(ColorTransparency, nRGB);
-        mnComponent1 = aColor.GetRed();
-        mnComponent2 = aColor.GetGreen();
-        mnComponent3 = aColor.GetBlue();
-        meType = ColorType::RGB;
-    }
-
-    void setHSL(sal_Int32 nH, sal_Int32 nS, sal_Int32 nL)
-    {
-        mnComponent1 = nH;
-        mnComponent2 = nS;
-        mnComponent3 = nL;
-        meType = ColorType::HSL;
-    }
-
-    void setSystemColor(SystemColorType eSystemColorType, sal_Int32 nRGB)
-    {
-        maLastColor = ::Color(ColorTransparency, nRGB);
-        meSystemColorType = eSystemColorType;
-        meType = ColorType::System;
-    }
-
-    void setSchemePlaceholder() { meType = ColorType::Placeholder; }
-
-    void setSchemeColor(ThemeColorType eType)
-    {
-        meSchemeType = eType;
-        meType = ColorType::Scheme;
-    }
-};
-
 enum class FillType
 {
     None,
@@ -154,7 +50,7 @@ public:
 class DOCMODEL_DLLPUBLIC SolidFill : public Fill
 {
 public:
-    ColorDefinition maColorDefinition;
+    ComplexColor maColor;
 
     SolidFill()
         : Fill(FillType::Solid)
@@ -166,7 +62,7 @@ class DOCMODEL_DLLPUBLIC GradientStop
 {
 public:
     double mfPosition = 0.0; // 0.0 - 1.0
-    ColorDefinition maColor;
+    ComplexColor maColor;
 };
 
 enum class GradientType
@@ -271,8 +167,8 @@ class DOCMODEL_DLLPUBLIC PatternFill : public Fill
 {
 public:
     PatternPreset mePatternPreset = PatternPreset::Unused;
-    ColorDefinition maForegroundColor;
-    ColorDefinition maBackgroundColor;
+    ComplexColor maForegroundColor;
+    ComplexColor maBackgroundColor;
 
     PatternFill()
         : Fill(FillType::Pattern)
@@ -339,8 +235,8 @@ public:
     BlipEffectType meType = BlipEffectType::None;
 
     sal_Int32 mnThreshold = 0; // AlphaBiLevel, BiLevel
-    ColorDefinition maColor1; // AlphaInverse, ColorReplace, DuoTone, ColorChange (from)
-    ColorDefinition maColor2; // DuoTone, ColorChange (to)
+    ComplexColor maColor1; // AlphaInverse, ColorReplace, DuoTone, ColorChange (from)
+    ComplexColor maColor2; // DuoTone, ColorChange (to)
     sal_Int32 mnAmount = 0; // AlphaModulateFixed, Tint
     sal_Int32 mnRadius = 0; // Blur
     bool mbGrow = false; // Blur
@@ -352,8 +248,8 @@ public:
     sal_Int32 mnBrightness = 0; // Luminance
     sal_Int32 mnContrast = 0; // Luminance
 
-    ColorDefinition& getColorFrom() { return maColor1; }
-    ColorDefinition& getColorTo() { return maColor2; }
+    ComplexColor& getColorFrom() { return maColor1; }
+    ComplexColor& getColorTo() { return maColor2; }
 };
 
 class DOCMODEL_DLLPUBLIC BlipFill : public Fill
@@ -526,7 +422,7 @@ public:
     sal_Int32 mnScewY = 0;
     RectangleAlignment meAlignment = RectangleAlignment::Bottom;
     bool mbRotateWithShape = true;
-    ColorDefinition maColor;
+    ComplexColor maColor;
     double mnEndAlpha = 100.0;
     double mnEndPosition = 0.0;
     double mnStartAlpha = 0.0;
@@ -579,19 +475,19 @@ public:
         {
             FillStyle* pFillStyle = pThis->addFillStyle();
             auto pFill = std::make_shared<SolidFill>();
-            pFill->maColorDefinition.meType = model::ColorType::Placeholder;
+            pFill->maColor.meType = model::ColorType::Placeholder;
             pFillStyle->mpFill = pFill;
         }
         {
             FillStyle* pFillStyle = pThis->addFillStyle();
             auto pFill = std::make_shared<SolidFill>();
-            pFill->maColorDefinition.meType = model::ColorType::Placeholder;
+            pFill->maColor.meType = model::ColorType::Placeholder;
             pFillStyle->mpFill = pFill;
         }
         {
             FillStyle* pFillStyle = pThis->addFillStyle();
             auto pFill = std::make_shared<SolidFill>();
-            pFill->maColorDefinition.meType = model::ColorType::Placeholder;
+            pFill->maColor.meType = model::ColorType::Placeholder;
             pFillStyle->mpFill = pFill;
         }
     }
@@ -622,7 +518,7 @@ public:
             pLineStyle->maLineDash.mePresetType = PresetDashType::Solid;
             pLineStyle->maLineJoin.meType = LineJoinType::Miter;
             auto pFill = std::make_shared<SolidFill>();
-            pFill->maColorDefinition.meType = model::ColorType::Placeholder;
+            pFill->maColor.meType = model::ColorType::Placeholder;
             pLineStyle->maLineFillStyle.mpFill = pFill;
         }
         {
@@ -634,7 +530,7 @@ public:
             pLineStyle->maLineDash.mePresetType = PresetDashType::Solid;
             pLineStyle->maLineJoin.meType = LineJoinType::Miter;
             auto pFill = std::make_shared<SolidFill>();
-            pFill->maColorDefinition.meType = model::ColorType::Placeholder;
+            pFill->maColor.meType = model::ColorType::Placeholder;
             pLineStyle->maLineFillStyle.mpFill = pFill;
         }
         {
@@ -646,7 +542,7 @@ public:
             pLineStyle->maLineDash.mePresetType = PresetDashType::Solid;
             pLineStyle->maLineJoin.meType = LineJoinType::Miter;
             auto pFill = std::make_shared<SolidFill>();
-            pFill->maColorDefinition.meType = model::ColorType::Placeholder;
+            pFill->maColor.meType = model::ColorType::Placeholder;
             pLineStyle->maLineFillStyle.mpFill = pFill;
         }
     }
@@ -696,19 +592,19 @@ public:
         {
             FillStyle* pFillStyle = pThis->addBackgroundFillStyle();
             auto pFill = std::make_shared<SolidFill>();
-            pFill->maColorDefinition.meType = model::ColorType::Placeholder;
+            pFill->maColor.meType = model::ColorType::Placeholder;
             pFillStyle->mpFill = pFill;
         }
         {
             FillStyle* pFillStyle = pThis->addBackgroundFillStyle();
             auto pFill = std::make_shared<SolidFill>();
-            pFill->maColorDefinition.meType = model::ColorType::Placeholder;
+            pFill->maColor.meType = model::ColorType::Placeholder;
             pFillStyle->mpFill = pFill;
         }
         {
             FillStyle* pFillStyle = pThis->addBackgroundFillStyle();
             auto pFill = std::make_shared<SolidFill>();
-            pFill->maColorDefinition.meType = model::ColorType::Placeholder;
+            pFill->maColor.meType = model::ColorType::Placeholder;
             pFillStyle->mpFill = pFill;
         }
     }

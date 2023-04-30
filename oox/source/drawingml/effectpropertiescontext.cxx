@@ -89,7 +89,7 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
             mrEffectProperties.maShadow.moShadowBlur = rAttribs.getInteger( XML_blurRad, 0 );
             mrEffectProperties.maShadow.moShadowAlignment = convertToRectangleAlignment( rAttribs.getToken(XML_algn, XML_b) );
 
-            model::ColorDefinition* pColor = nullptr;
+            model::ComplexColor* pColor = nullptr;
             if (mpEffectStyle)
             {
                 auto& rEffect = mpEffectStyle->maEffectList.emplace_back();
@@ -117,7 +117,7 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
             mrEffectProperties.maShadow.moShadowDist = rAttribs.getInteger( XML_dist, 0 );
             mrEffectProperties.maShadow.moShadowDir = rAttribs.getInteger( XML_dir, 0 );
 
-            model::ColorDefinition* pColor = nullptr;
+            model::ComplexColor* pColor = nullptr;
             if (mpEffectStyle)
             {
                 auto& rEffect = mpEffectStyle->maEffectList.emplace_back();
@@ -136,7 +136,7 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
             // undo push_back to effects
             mrEffectProperties.m_Effects.pop_back();
 
-            model::ColorDefinition* pColor = nullptr;
+            model::ComplexColor* pColor = nullptr;
             if (mpEffectStyle)
             {
                 auto& rEffect = mpEffectStyle->maEffectList.emplace_back();
@@ -163,7 +163,7 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
             mrEffectProperties.m_Effects[nPos]->msName = "reflection";
             saveUnsupportedAttribs(*mrEffectProperties.m_Effects[nPos], rAttribs);
 
-            model::ColorDefinition* pColor = nullptr;
+            model::ComplexColor* pColor = nullptr;
             if (mpEffectStyle)
             {
                 auto& rEffect = mpEffectStyle->maEffectList.emplace_back();
@@ -194,7 +194,7 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
             mrEffectProperties.m_Effects[nPos]->msName = "blur";
             saveUnsupportedAttribs(*mrEffectProperties.m_Effects[nPos], rAttribs);
 
-            model::ColorDefinition* pColor = nullptr;
+            model::ComplexColor* pColor = nullptr;
             if (mpEffectStyle)
             {
                 auto& rEffect = mpEffectStyle->maEffectList.emplace_back();

@@ -38,7 +38,7 @@ using ::oox::core::ContextHandlerRef;
 namespace oox::drawingml {
 
 SolidFillContext::SolidFillContext(ContextHandler2Helper const & rParent, FillProperties& rFillProps, model::SolidFill* pSolidFill)
-    : ColorContext(rParent, rFillProps.maFillColor, pSolidFill ? &pSolidFill->maColorDefinition : nullptr)
+    : ColorContext(rParent, rFillProps.maFillColor, pSolidFill ? &pSolidFill->maColor : nullptr)
 {
 }
 
@@ -72,15 +72,15 @@ ContextHandlerRef GradientFillContext::onCreateContext(
                 double fPosition = getLimitedValue<double>(rAttribs.getDouble(XML_pos, 0.0) / 100000.0, 0.0, 1.0);
                 auto aElement = mrGradientProps.maGradientStops.emplace(fPosition, Color());
 
-                model::ColorDefinition* pColorDefinition = nullptr;
+                model::ComplexColor* pComplexColor = nullptr;
                 if (mpGradientFill)
                 {
                     model::GradientStop& rStop = mpGradientFill->maGradientStops.emplace_back();
                     rStop.mfPosition = fPosition;
-                    pColorDefinition = &rStop.maColor;
+                    pComplexColor = &rStop.maColor;
                 }
 
-                return new ColorContext(*this, aElement->second, pColorDefinition);
+                return new ColorContext(*this, aElement->second, pComplexColor);
             }
         break;
 
@@ -227,17 +227,17 @@ PatternFillContext::PatternFillContext(ContextHandler2Helper const & rParent,
 ContextHandlerRef PatternFillContext::onCreateContext(
         sal_Int32 nElement, const AttributeList& )
 {
-    model::ColorDefinition* pColorDefinition = nullptr;
+    model::ComplexColor* pComplexColor = nullptr;
     switch( nElement )
     {
         case A_TOKEN( bgClr ):
             if (mpPatternFill)
-                pColorDefinition = &mpPatternFill->maBackgroundColor;
-            return new ColorContext(*this, mrPatternProps.maPattBgColor, pColorDefinition);
+                pComplexColor = &mpPatternFill->maBackgroundColor;
+            return new ColorContext(*this, mrPatternProps.maPattBgColor, pComplexColor);
         case A_TOKEN( fgClr ):
             if (mpPatternFill)
-                pColorDefinition = &mpPatternFill->maForegroundColor;
-            return new ColorContext(*this, mrPatternProps.maPattFgColor, pColorDefinition);
+                pComplexColor = &mpPatternFill->maForegroundColor;
+            return new ColorContext(*this, mrPatternProps.maPattFgColor, pComplexColor);
     }
     return nullptr;
 }
@@ -268,23 +268,23 @@ ColorChangeContext::~ColorChangeContext()
 ContextHandlerRef ColorChangeContext::onCreateContext(
         sal_Int32 nElement, const AttributeList& )
 {
-    model::ColorDefinition* pColorDefinition = nullptr;
+    model::ComplexColor* pComplexColor = nullptr;
     switch (nElement)
     {
         case A_TOKEN(clrFrom):
             if (mpBlipFill)
             {
                 auto& rEffect = mpBlipFill->maBlipEffects.back();
-                pColorDefinition = &rEffect.getColorFrom();
+                pComplexColor = &rEffect.getColorFrom();
             }
-            return new ColorContext(*this, mrBlipProps.maColorChangeFrom, pColorDefinition);
+            return new ColorContext(*this, mrBlipProps.maColorChangeFrom, pComplexColor);
         case A_TOKEN(clrTo):
             if (mpBlipFill)
             {
                 auto& rEffect = mpBlipFill->maBlipEffects.back();
-                pColorDefinition = &rEffect.getColorTo();
+                pComplexColor = &rEffect.getColorTo();
             }
-            return new ColorContext(*this, mrBlipProps.maColorChangeTo, pColorDefinition);
+            return new ColorContext(*this, mrBlipProps.maColorChangeTo, pComplexColor);
     }
     return nullptr;
 }
