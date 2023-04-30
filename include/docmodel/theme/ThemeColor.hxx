@@ -13,61 +13,11 @@
 #include <docmodel/dllapi.h>
 #include <vector>
 #include <docmodel/theme/ThemeColorType.hxx>
+#include <docmodel/color/Transformation.hxx>
 #include <tools/color.hxx>
 
 namespace model
 {
-/** Color transfomation type */
-enum class TransformationType
-{
-    Undefined,
-    Red,
-    RedMod,
-    RedOff,
-    Green,
-    GreenMod,
-    GreenOff,
-    Blue,
-    BlueMod,
-    BlueOff,
-    Alpha,
-    AlphaMod,
-    AlphaOff,
-    Hue,
-    HueMod,
-    HueOff,
-    Sat,
-    SatMod,
-    SatOff,
-    Lum,
-    LumMod,
-    LumOff,
-    Shade,
-    Tint,
-    Gray,
-    Comp,
-    Inv,
-    Gamma,
-    InvGamma
-};
-
-/** Definition of a color transformation.
- *
- * This just defines how a color should be transformed (changed). The
- * type defines what kind of transformation should occur and the value
- * defines by how much.
- */
-struct DOCMODEL_DLLPUBLIC Transformation
-{
-    TransformationType meType = TransformationType::Undefined;
-    sal_Int16 mnValue = 0; /// percentage value -10000 to +10000
-
-    bool operator==(const Transformation& rTransformation) const
-    {
-        return meType == rTransformation.meType && mnValue == rTransformation.mnValue;
-    }
-};
-
 /** Definition of a theme color
  *
  * A theme color is defined by the type of theme color and a set of
