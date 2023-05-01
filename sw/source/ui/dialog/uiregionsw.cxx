@@ -400,15 +400,11 @@ SwEditRegionDlg::SwEditRegionDlg(weld::Window* pParent, SwWrtShell& rWrtSh)
 
     if(comphelper::LibreOfficeKit::isActive())
     {
-        m_xBuilder->weld_label("label8")->hide(); // Link
-        m_xFileCB->hide();
         m_xDDECB->hide();
         m_xDDECommandFT->hide();
         m_xFileNameFT->hide();
         m_xFileNameED->hide();
         m_xFilePB->hide();
-        m_xSubRegionFT->hide();
-        m_xSubRegionED->hide();
     }
 }
 
@@ -1172,7 +1168,8 @@ IMPL_LINK(SwEditRegionDlg, DDEHdl, weld::Toggleable&, rButton, void)
     {
         m_xDDECommandFT->hide();
         m_xFileNameFT->set_sensitive(bFile);
-        m_xFileNameFT->show();
+        if(!comphelper::LibreOfficeKit::isActive())
+            m_xFileNameFT->show();
         m_xSubRegionED->show();
         m_xSubRegionFT->show();
         m_xSubRegionED->set_sensitive(bFile);
@@ -1741,7 +1738,8 @@ IMPL_LINK( SwInsertSectionTabPage, DDEHdl, weld::Toggleable&, rButton, void )
     {
         m_xDDECommandFT->hide();
         m_xFileNameFT->set_sensitive(bFile);
-        m_xFileNameFT->show();
+        if(!comphelper::LibreOfficeKit::isActive())
+            m_xFileNameFT->show();
         m_xSubRegionFT->show();
         m_xSubRegionED->show();
         m_xSubRegionED->set_sensitive(bFile);
