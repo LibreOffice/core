@@ -746,6 +746,9 @@ void ScGridWindow::UpdateDPPopupMenuForFieldChange()
         return;
 
     tools::Long nIndex = mpDPFieldPopup->getField();
+    if (nIndex < 0)
+        return;
+
     tools::Long nDimIndex = pDPData->maFieldIndices[nIndex];
     if (nDimIndex == pDPData->mnDim)
         return;
