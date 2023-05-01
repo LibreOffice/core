@@ -56,12 +56,15 @@
 #include <doc.hxx>
 #include <PostItMgr.hxx>
 #include <swmodule.hxx>
+
+#include <editeng/ulspitem.hxx>
 #include <xmloff/odffields.hxx>
 #include <IDocumentContentOperations.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/pageitem.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <IMark.hxx>
@@ -1030,10 +1033,8 @@ FIELD_INSERT:
                 pFact->CreateSwPageNumberDlg(GetView().GetFrameWeld()));
         auto pShell = GetShellPtr();
 
-        const SvxPageItem* pPageItem;
-        rSh.GetView().GetDispatcher().QueryState(SID_ATTR_PAGE, pPageItem);
-        if (pPageItem)
-            pDlg->SetPageNumberType(pPageItem->GetNumType());
+        const SwPageDesc& rCurrDesc = rSh.GetPageDesc(rSh.GetCurPageDesc());
+        pDlg->SetPageNumberType(rCurrDesc.GetNumType().GetNumberingType());
 
         pDlg->StartExecuteAsync([pShell, &rSh, pDlg](int nResult) {
             if ( nResult == RET_OK )
@@ -1066,23 +1067,47 @@ FIELD_INSERT:
                     rDoc->getIDocumentContentOperations().DeleteAndJoin(aDeleteOldPageNum);
                 }
 
-                SvxPageItem aPageItem(SID_ATTR_PAGE);
-                aPageItem.SetNumType(pDlg->GetPageNumberType());
-                // Might as well turn on margin mirroring too - if appropriate
-                if (!bHeaderAlreadyOn && !bFooterAlreadyOn && !bIsSinglePage
-                    && pDlg->GetMirrorOnEvenPages() && (rDesc.GetUseOn() & UseOnPage::All))
+                SwPageDesc aNewDesc(rDesc);
+                bool bChangePageDesc = false;
+                if (pDlg->GetPageNumberType() != aNewDesc.GetNumType().GetNumberingType())
                 {
-                    aPageItem.SetPageUsage(SvxPageUsage::Mirror);
+                    bChangePageDesc = true;
+                    SvxNumberType aNewType(rDesc.GetNumType());
+                    aNewType.SetNumberingType(pDlg->GetPageNumberType());
+                    aNewDesc.SetNumType(aNewType);
                 }
-                rSh.GetView().GetDispatcher().ExecuteList(SID_ATTR_PAGE,
-                                                          SfxCallMode::API | SfxCallMode::SYNCHRON,
-                                                          { &aPageItem });
 
                 // Insert header/footer
-                if (bHeader && !bHeaderAlreadyOn)
-                    rSh.ChangeHeaderOrFooter(rDesc.GetName(), bHeader, /*On=*/true, /*Warn=*/false);
-                else if (!bHeader && !bFooterAlreadyOn)
-                    rSh.ChangeHeaderOrFooter(rDesc.GetName(), false, /*On=*/true, /*Warn=*/false);
+                if ((bHeader && !bHeaderAlreadyOn) || (!bHeader && !bFooterAlreadyOn))
+                {
+                    bChangePageDesc = true;
+                    SwFrameFormat &rMaster = aNewDesc.GetMaster();
+                    if (bHeader)
+                        rMaster.SetFormatAttr(SwFormatHeader(/*On=*/true));
+                    else
+                        rMaster.SetFormatAttr(SwFormatFooter(/*On=*/true));
+
+                    // Init copied from ChangeHeaderOrFooter: keep in sync
+                    constexpr tools::Long constTwips_5mm = o3tl::toTwips(5, o3tl::Length::mm);
+                    const SvxULSpaceItem aUL(bHeader ? 0 : constTwips_5mm,
+                                             bHeader ? constTwips_5mm : 0,
+                                             RES_UL_SPACE);
+                    const XFillStyleItem aFill(drawing::FillStyle_NONE);
+                    SwFrameFormat& rFormat
+                        = bHeader
+                              ? const_cast<SwFrameFormat&>(*rMaster.GetHeader().GetHeaderFormat())
+                              : const_cast<SwFrameFormat&>(*rMaster.GetFooter().GetFooterFormat());
+                    rFormat.SetFormatAttr(aUL);
+                    rFormat.SetFormatAttr(aFill);
+
+                    // Might as well turn on margin mirroring too - if appropriate
+                    if (pDlg->GetMirrorOnEvenPages() && !bHeaderAlreadyOn && !bFooterAlreadyOn
+                        && !bIsSinglePage
+                        && (aNewDesc.ReadUseOn() & UseOnPage::Mirror) == UseOnPage::All)
+                    {
+                        aNewDesc.WriteUseOn(rDesc.ReadUseOn() | UseOnPage::Mirror);
+                    }
+                }
 
                 const bool bCreateMirror = !bIsSinglePage && pDlg->GetMirrorOnEvenPages()
                     && nMirrorPagesNeeded <= rSh.GetPageCnt();
@@ -1091,16 +1116,16 @@ FIELD_INSERT:
                     // Use different left/right header/footer
                     if ((bHeader && rDesc.IsHeaderShared()) || (!bHeader && rDesc.IsFooterShared()))
                     {
-                        SwPageDesc rNewDesc(rSh.GetPageDesc(nPageDescIndex));
-
+                        bChangePageDesc = true;
                         if (bHeader)
-                            rNewDesc.ChgHeaderShare(false);
+                            aNewDesc.ChgHeaderShare(/*Share=*/false);
                         else
-                            rNewDesc.ChgFooterShare(false);
-
-                        rSh.ChgPageDesc(nPageDescIndex, rNewDesc);
+                            aNewDesc.ChgFooterShare(/*Share=*/false);
                     }
                 }
+
+                if (bChangePageDesc)
+                    rSh.ChgPageDesc(nPageDescIndex, aNewDesc);
 
                 // Go to the header or footer insert position
                 bool bInHF = false;

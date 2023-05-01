@@ -2193,6 +2193,7 @@ void SwWrtShell::ChangeHeaderOrFooter(
                     rMaster.SetFormatAttr( SwFormatFooter( bOn ));
                 if( bOn )
                 {
+                    // keep in sync with FN_PGNUMBER_WIZARD
                     constexpr tools::Long constTwips_5mm = o3tl::toTwips(5, o3tl::Length::mm);
                     SvxULSpaceItem aUL(bHeader ? 0 : constTwips_5mm, bHeader ? constTwips_5mm : 0, RES_UL_SPACE );
                     SwFrameFormat* pFormat = bHeader ?
