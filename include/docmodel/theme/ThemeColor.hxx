@@ -38,6 +38,11 @@ public:
 
     void clearTransformations() { maTransformations.clear(); }
 
+    void setTransformations(std::vector<Transformation> const& rTransformations)
+    {
+        maTransformations = rTransformations;
+    }
+
     void addTransformation(Transformation const& rTransform)
     {
         maTransformations.push_back(rTransform);

@@ -26,7 +26,7 @@ class BlipFill;
 class PatternFill;
 class GradientFill;
 class SolidFill;
-struct ComplexColor;
+class ComplexColor;
 struct Transformation;
 }
 

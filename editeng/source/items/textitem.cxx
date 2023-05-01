@@ -1368,10 +1368,10 @@ SvxColorItem::SvxColorItem( const Color& rCol, const sal_uInt16 nId ) :
 {
 }
 
-SvxColorItem::SvxColorItem(Color const& rColor, model::ThemeColor const& rThemeColor, const sal_uInt16 nId)
+SvxColorItem::SvxColorItem(Color const& rColor, model::ComplexColor const& rComplexColor, const sal_uInt16 nId)
     : SfxPoolItem(nId)
     , mColor(rColor)
-    , maThemeColor(rThemeColor)
+    , maComplexColor(rComplexColor)
 {
 }
 
@@ -1385,7 +1385,7 @@ bool SvxColorItem::operator==( const SfxPoolItem& rAttr ) const
     const SvxColorItem& rColorItem = static_cast<const SvxColorItem&>(rAttr);
 
     return mColor == rColorItem.mColor &&
-           maThemeColor == rColorItem.maThemeColor;
+           maComplexColor == rColorItem.maComplexColor;
 }
 
 bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -1406,13 +1406,13 @@ bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
         case MID_COLOR_THEME_INDEX:
         {
-            rVal <<= sal_Int16(maThemeColor.getType());
+            rVal <<= sal_Int16(maComplexColor.meSchemeType);
             break;
         }
         case MID_COLOR_TINT_OR_SHADE:
         {
             sal_Int16 nValue = 0;
-            for (auto const& rTransform : maThemeColor.getTransformations())
+            for (auto const& rTransform : maComplexColor.getTransformations())
             {
                 if (rTransform.meType == model::TransformationType::Tint)
                     nValue = rTransform.mnValue;
@@ -1425,7 +1425,7 @@ bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_COLOR_LUM_MOD:
         {
             sal_Int16 nValue = 10000;
-            for (auto const& rTransform : maThemeColor.getTransformations())
+            for (auto const& rTransform : maComplexColor.getTransformations())
             {
                 if (rTransform.meType == model::TransformationType::LumMod)
                     nValue = rTransform.mnValue;
@@ -1436,7 +1436,7 @@ bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_COLOR_LUM_OFF:
         {
             sal_Int16 nValue = 0;
-            for (auto const& rTransform : maThemeColor.getTransformations())
+            for (auto const& rTransform : maComplexColor.getTransformations())
             {
                 if (rTransform.meType == model::TransformationType::LumOff)
                     nValue = rTransform.mnValue;
@@ -1446,13 +1446,15 @@ bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
         case MID_COLOR_THEME_REFERENCE:
         {
-            auto xThemeColor = model::theme::createXThemeColor(maThemeColor);
+            model::ThemeColor aThemeColor = maComplexColor.createThemeColor();
+            auto xThemeColor = model::theme::createXThemeColor(aThemeColor);
             rVal <<= xThemeColor;
             break;
         }
         case MID_COLOR_THEME_REFERENCE_JSON:
         {
-            rVal <<= OStringToOUString(model::theme::convertToJSON(maThemeColor), RTL_TEXTENCODING_UTF8);
+            model::ThemeColor aThemeColor = maComplexColor.createThemeColor();
+            rVal <<= OStringToOUString(model::theme::convertToJSON(aThemeColor), RTL_TEXTENCODING_UTF8);
             break;
         }
         case MID_COLOR_RGB:
@@ -1491,7 +1493,7 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nIndex = -1;
             if (!(rVal >>= nIndex))
                 return false;
-            maThemeColor.setType(model::convertToThemeColorType(nIndex));
+            maComplexColor.setSchemeColor(model::convertToThemeColorType(nIndex));
         }
         break;
         case MID_COLOR_TINT_OR_SHADE:
@@ -1500,15 +1502,15 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if (!(rVal >>= nTintShade))
                 return false;
 
-            maThemeColor.removeTransformations(model::TransformationType::Tint);
-            maThemeColor.removeTransformations(model::TransformationType::Shade);
+            maComplexColor.removeTransformations(model::TransformationType::Tint);
+            maComplexColor.removeTransformations(model::TransformationType::Shade);
 
             if (nTintShade > 0)
-                maThemeColor.addTransformation({model::TransformationType::Tint, nTintShade});
+                maComplexColor.addTransformation({model::TransformationType::Tint, nTintShade});
             else if (nTintShade < 0)
             {
                 sal_Int16 nShade = o3tl::narrowing<sal_Int16>(-nTintShade);
-                maThemeColor.addTransformation({model::TransformationType::Shade, nShade});
+                maComplexColor.addTransformation({model::TransformationType::Shade, nShade});
             }
         }
         break;
@@ -1517,8 +1519,8 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nLumMod = 10000;
             if (!(rVal >>= nLumMod))
                 return false;
-            maThemeColor.removeTransformations(model::TransformationType::LumMod);
-            maThemeColor.addTransformation({model::TransformationType::LumMod, nLumMod});
+            maComplexColor.removeTransformations(model::TransformationType::LumMod);
+            maComplexColor.addTransformation({model::TransformationType::LumMod, nLumMod});
         }
         break;
         case MID_COLOR_LUM_OFF:
@@ -1526,8 +1528,8 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nLumOff = 0;
             if (!(rVal >>= nLumOff))
                 return false;
-            maThemeColor.removeTransformations(model::TransformationType::LumOff);
-            maThemeColor.addTransformation({model::TransformationType::LumOff, nLumOff});
+            maComplexColor.removeTransformations(model::TransformationType::LumOff);
+            maComplexColor.addTransformation({model::TransformationType::LumOff, nLumOff});
         }
         break;
         case MID_COLOR_THEME_REFERENCE:
@@ -1538,7 +1540,11 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
             if (xThemeColor.is())
             {
-                model::theme::setFromXThemeColor(maThemeColor, xThemeColor);
+                model::ThemeColor aThemeColor;
+                model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
+                maComplexColor = model::ComplexColor();
+                maComplexColor.setSchemeColor(aThemeColor.getType());
+                maComplexColor.setTransformations(aThemeColor.getTransformations());
             }
         }
         break;
@@ -1554,7 +1560,11 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 return false;
             }
             OString aJSON = OUStringToOString(sThemeJson, RTL_TEXTENCODING_ASCII_US);
-            model::theme::convertFromJSON(aJSON, maThemeColor);
+            model::ThemeColor aThemeColor;
+            model::theme::convertFromJSON(aJSON, aThemeColor);
+            maComplexColor = model::ComplexColor();
+            maComplexColor.setSchemeColor(aThemeColor.getType());
+            maComplexColor.setTransformations(aThemeColor.getTransformations());
         }
         break;
 
@@ -1599,12 +1609,12 @@ void SvxColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     GetPresentation( SfxItemPresentation::Complete, MapUnit::Map100thMM, MapUnit::Map100thMM, aStr, aIntlWrapper);
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(OUStringToOString(aStr, RTL_TEXTENCODING_UTF8).getStr()));
 
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("theme-color"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("complex-color"));
 
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("theme-index"),
-                                      BAD_CAST(OString::number(sal_Int16(maThemeColor.getType())).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"),
+                                      BAD_CAST(OString::number(sal_Int16(maComplexColor.meType)).getStr()));
 
-    for (auto const& rTransform : maThemeColor.getTransformations())
+    for (auto const& rTransform : maComplexColor.getTransformations())
     {
         (void)xmlTextWriterStartElement(pWriter, BAD_CAST("transformation"));
         (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"),

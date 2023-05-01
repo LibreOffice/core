@@ -72,11 +72,11 @@ public:
                 std::shared_ptr<SfxItemSet> pStyleHandle(rAutoFormatPool.GetStyleHandle());
                 if (const SvxColorItem* pItem = pStyleHandle->GetItemIfSet(RES_CHRATR_COLOR))
                 {
-                    model::ThemeColor const& rThemeColor = pItem->GetThemeColor();
-                    auto eThemeType = rThemeColor.getType();
-                    if (eThemeType != model::ThemeColorType::Unknown)
+                    model::ComplexColor const& rComplexColor = pItem->getComplexColor();
+                    auto eSchemeType = rComplexColor.meSchemeType;
+                    if (eSchemeType != model::ThemeColorType::Unknown)
                     {
-                        Color aNewColor = mrColorSet.resolveColor(rThemeColor);
+                        Color aNewColor = mrColorSet.resolveColor(rComplexColor);
                         auto pNew = pItem->Clone();
                         pNew->SetValue(aNewColor);
 
@@ -122,12 +122,14 @@ void changeColor(SwFormat* pFormat, model::ColorSet const& rColorSet, SwDoc* pDo
     std::unique_ptr<SfxItemSet> pNewSet = rAttrSet.Clone();
 
     SvxColorItem aColorItem(rAttrSet.GetColor());
-    model::ThemeColor const& rThemeColor = aColorItem.GetThemeColor();
-    auto eThemeType = rThemeColor.getType();
+    model::ComplexColor const& rComplexColor = aColorItem.getComplexColor();
+    if (rComplexColor.meType != model::ColorType::Scheme)
+        return;
+    auto eThemeType = rComplexColor.meSchemeType;
     if (eThemeType != model::ThemeColorType::Unknown)
     {
         Color aColor = rColorSet.getColor(eThemeType);
-        aColor = rThemeColor.applyTransformations(aColor);
+        aColor = rComplexColor.applyTransformations(aColor);
         aColorItem.SetValue(aColor);
         pNewSet->Put(aColorItem);
         pDocument->ChgFormat(*pFormat, *pNewSet);
