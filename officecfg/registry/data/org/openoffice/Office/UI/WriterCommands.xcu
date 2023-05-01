@@ -2625,7 +2625,7 @@
       </node>
       <node oor:name=".uno:IndexMarkToIndex" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Index Mark to Index</value>
+          <value xml:lang="en-US">Index Entry to Index</value>
         </prop>
       </node>
       <node oor:name=".uno:JumpToFootnoteArea" oor:op="replace">
@@ -2806,12 +2806,12 @@
       </node>
       <node oor:name=".uno:GotoNextIndexMark" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Go to Next Index Mark</value>
+          <value xml:lang="en-US">Go to Next Index Entry</value>
         </prop>
       </node>
       <node oor:name=".uno:GotoPrevIndexMark" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Go to Previous Index Mark</value>
+          <value xml:lang="en-US">Go to Previous Index Entry</value>
         </prop>
       </node>
       <node oor:name=".uno:GotoNextTableFormula" oor:op="replace">
