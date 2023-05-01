@@ -802,7 +802,9 @@ bool ScMatrixImpl::IsStringOrEmpty( SCSIZE nIndex ) const
 
 bool ScMatrixImpl::IsStringOrEmpty( SCSIZE nC, SCSIZE nR ) const
 {
-    ValidColRowReplicated( nC, nR );
+    if (!ValidColRowOrReplicated( nC, nR ))
+        return false;
+
     switch (maMat.get_type(nR, nC))
     {
         case mdds::mtm::element_empty:
@@ -816,27 +818,33 @@ bool ScMatrixImpl::IsStringOrEmpty( SCSIZE nC, SCSIZE nR ) const
 
 bool ScMatrixImpl::IsEmpty( SCSIZE nC, SCSIZE nR ) const
 {
+    if (!ValidColRowOrReplicated( nC, nR ))
+        return false;
+
     // Flag must indicate an 'empty' or 'empty cell' or 'empty result' element,
     // but not an 'empty path' element.
-    ValidColRowReplicated( nC, nR );
     return maMat.get_type(nR, nC) == mdds::mtm::element_empty &&
         maMatFlag.get_integer(nR, nC) != SC_MATFLAG_EMPTYPATH;
 }
 
 bool ScMatrixImpl::IsEmptyCell( SCSIZE nC, SCSIZE nR ) const
 {
+    if (!ValidColRowOrReplicated( nC, nR ))
+        return false;
+
     // Flag must indicate an 'empty cell' element instead of an
     // 'empty' or 'empty result' or 'empty path' element.
-    ValidColRowReplicated( nC, nR );
     return maMat.get_type(nR, nC) == mdds::mtm::element_empty &&
         maMatFlag.get_type(nR, nC) == mdds::mtm::element_empty;
 }
 
 bool ScMatrixImpl::IsEmptyResult( SCSIZE nC, SCSIZE nR ) const
 {
+    if (!ValidColRowOrReplicated( nC, nR ))
+        return false;
+
     // Flag must indicate an 'empty result' element instead of an
     // 'empty' or 'empty cell' or 'empty path' element.
-    ValidColRowReplicated( nC, nR );
     return maMat.get_type(nR, nC) == mdds::mtm::element_empty &&
         maMatFlag.get_integer(nR, nC) == SC_MATFLAG_EMPTYRESULT;
 }
@@ -860,7 +868,9 @@ bool ScMatrixImpl::IsValue( SCSIZE nIndex ) const
 
 bool ScMatrixImpl::IsValue( SCSIZE nC, SCSIZE nR ) const
 {
-    ValidColRowReplicated(nC, nR);
+    if (!ValidColRowOrReplicated( nC, nR ))
+        return false;
+
     switch (maMat.get_type(nR, nC))
     {
         case mdds::mtm::element_boolean:
@@ -874,7 +884,9 @@ bool ScMatrixImpl::IsValue( SCSIZE nC, SCSIZE nR ) const
 
 bool ScMatrixImpl::IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const
 {
-    ValidColRowReplicated(nC, nR);
+    if (!ValidColRowOrReplicated( nC, nR ))
+        return false;
+
     switch (maMat.get_type(nR, nC))
     {
         case mdds::mtm::element_boolean:
@@ -889,7 +901,9 @@ bool ScMatrixImpl::IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const
 
 bool ScMatrixImpl::IsBoolean( SCSIZE nC, SCSIZE nR ) const
 {
-    ValidColRowReplicated( nC, nR );
+    if (!ValidColRowOrReplicated( nC, nR ))
+        return false;
+
     return maMat.get_type(nR, nC) == mdds::mtm::element_boolean;
 }
 
