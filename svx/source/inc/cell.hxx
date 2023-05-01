@@ -37,7 +37,7 @@
 class SfxItemSet;
 class OutlinerParaObject;
 class SdrObject;
-namespace sdr::properties { class TextProperties; }
+namespace sdr::properties { class CellProperties; }
 
 
 namespace sdr::table {
@@ -173,9 +173,7 @@ public:
     using SvxUnoTextRangeBase::setPropertyValue;
     using SvxUnoTextRangeBase::getPropertyValue;
 
-    SVX_DLLPRIVATE sdr::properties::TextProperties* CloneProperties( SdrObject& rNewObj, Cell& rNewCell );
-
-    SVX_DLLPRIVATE static sdr::properties::TextProperties* CloneProperties( sdr::properties::TextProperties const * pProperties, SdrObject& rNewObj, Cell& rNewCell );
+    SVX_DLLPRIVATE sdr::properties::CellProperties* CloneProperties( SdrObject& rNewObj, Cell& rNewCell );
 
     SVX_DLLPRIVATE void notifyModified();
 
@@ -196,7 +194,7 @@ private:
 
     const SvxItemPropertySet* mpPropSet;
 
-    std::unique_ptr<sdr::properties::TextProperties> mpProperties;
+    std::unique_ptr<sdr::properties::CellProperties> mpProperties;
 
     css::table::CellContentType mnCellContentType;
 

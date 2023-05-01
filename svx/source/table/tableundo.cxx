@@ -18,7 +18,7 @@
  */
 
 
-#include <sdr/properties/textproperties.hxx>
+#include <sdr/properties/cellproperties.hxx>
 #include <editeng/outlobj.hxx>
 
 #include <cell.hxx>
@@ -57,10 +57,8 @@ CellUndo::~CellUndo()
 void CellUndo::dispose()
 {
     mxCell.clear();
-    delete maUndoData.mpProperties;
-    maUndoData.mpProperties = nullptr;
-    delete maRedoData.mpProperties;
-    maRedoData.mpProperties = nullptr;
+    maUndoData.mxProperties.reset();
+    maRedoData.mxProperties.reset();
     maUndoData.mpOutlinerParaObject.reset();
     maRedoData.mpOutlinerParaObject.reset();
 }
@@ -74,7 +72,7 @@ void CellUndo::Undo()
 {
     if( mxCell.is() && mbUndo )
     {
-        if( maRedoData.mpProperties == nullptr )
+        if( !maRedoData.mxProperties )
             getDataFromCell( maRedoData );
 
         setDataToCell( maUndoData );
@@ -99,8 +97,8 @@ bool CellUndo::Merge( SfxUndoAction *pNextAction )
 
 void CellUndo::setDataToCell( const Data& rData )
 {
-    if( rData.mpProperties )
-        mxCell->mpProperties.reset(Cell::CloneProperties( rData.mpProperties, *mxObjRef.get(), *mxCell ));
+    if( rData.mxProperties )
+        mxCell->mpProperties.reset(new properties::CellProperties( *rData.mxProperties, *mxObjRef.get(), mxCell.get() ));
     else
         mxCell->mpProperties.reset();
 
@@ -131,7 +129,7 @@ void CellUndo::getDataFromCell( Data& rData )
         return;
 
     if( mxCell->mpProperties )
-        rData.mpProperties = mxCell->CloneProperties( *mxObjRef.get(), *mxCell);
+        rData.mxProperties.reset( mxCell->CloneProperties( *mxObjRef.get(), *mxCell) );
 
     if( mxCell->GetOutlinerParaObject() )
         rData.mpOutlinerParaObject = *mxCell->GetOutlinerParaObject();

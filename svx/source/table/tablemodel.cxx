@@ -39,6 +39,7 @@
 #include "tablecolumns.hxx"
 #include "tableundo.hxx"
 #include <o3tl/safeint.hxx>
+#include <sdr/properties/cellproperties.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/strings.hrc>

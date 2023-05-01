@@ -36,6 +36,7 @@
 #include <libxml/xmlwriter.h>
 
 #include <sdr/properties/textproperties.hxx>
+#include <sdr/properties/cellproperties.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/writingmodeitem.hxx>
 #include <svx/svdotable.hxx>
@@ -108,22 +109,8 @@ static const SvxItemPropertySet* ImplGetSvxCellPropertySet()
     return &aSvxCellPropertySet;
 }
 
-namespace
+namespace sdr::properties
 {
-
-class CellTextProvider : public svx::ITextProvider
-{
-public:
-    explicit CellTextProvider(sdr::table::CellRef xCell);
-    virtual ~CellTextProvider();
-
-private:
-    virtual sal_Int32 getTextCount() const override;
-    virtual SdrText* getText(sal_Int32 nIndex) const override;
-
-private:
-    const sdr::table::CellRef m_xCell;
-};
 
 CellTextProvider::CellTextProvider(sdr::table::CellRef xCell)
     : m_xCell(std::move(xCell))
@@ -145,40 +132,6 @@ SdrText* CellTextProvider::getText(sal_Int32 nIndex) const
     assert(nIndex == 0);
     return m_xCell.get();
 }
-
-}
-
-namespace sdr::properties
-{
-        class CellProperties : public TextProperties
-        {
-        protected:
-            // create a new itemset
-            SfxItemSet CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
-
-            const svx::ITextProvider& getTextProvider() const override;
-
-        public:
-            // basic constructor
-            CellProperties(SdrObject& rObj, sdr::table::Cell* pCell );
-
-            // constructor for copying, but using new object
-            CellProperties(const CellProperties& rProps, SdrObject& rObj, sdr::table::Cell* pCell);
-
-            // Clone() operator, normally just calls the local copy constructor
-            std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const override;
-
-            void ForceDefaultAttributes() override;
-
-            void ItemSetChanged(o3tl::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich) override;
-
-            void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) override;
-
-            sdr::table::CellRef mxCell;
-
-        private:
-            const CellTextProvider maTextProvider;
-        };
 
         // create a new itemset
         SfxItemSet CellProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
@@ -213,6 +166,10 @@ namespace sdr::properties
         :   TextProperties(rProps, rObj)
         ,   mxCell( pCell )
         ,   maTextProvider(mxCell)
+        {
+        }
+
+        CellProperties::~CellProperties()
         {
         }
 
@@ -826,19 +783,11 @@ void Cell::AddUndo()
     }
 }
 
-
-sdr::properties::TextProperties* Cell::CloneProperties( sdr::properties::TextProperties const * pProperties, SdrObject& rNewObj, Cell& rNewCell )
+sdr::properties::CellProperties* Cell::CloneProperties( SdrObject& rNewObj, Cell& rNewCell )
 {
-    if( pProperties )
-        return new sdr::properties::CellProperties( *static_cast<sdr::properties::CellProperties const *>(pProperties), rNewObj, &rNewCell );
-    else
+    if (!mpProperties)
         return nullptr;
-}
-
-
-sdr::properties::TextProperties* Cell::CloneProperties( SdrObject& rNewObj, Cell& rNewCell )
-{
-    return CloneProperties(mpProperties.get(),rNewObj,rNewCell);
+    return new sdr::properties::CellProperties( *mpProperties, rNewObj, &rNewCell );
 }
 
 

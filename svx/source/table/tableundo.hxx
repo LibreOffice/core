@@ -22,6 +22,7 @@
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 
+#include <sdr/properties/cellproperties.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdundo.hxx>
@@ -54,7 +55,7 @@ public:
 private:
     struct Data
     {
-        sdr::properties::TextProperties* mpProperties;
+        std::unique_ptr<sdr::properties::CellProperties> mxProperties;
         std::optional<OutlinerParaObject> mpOutlinerParaObject;
 
         OUString        msFormula;
@@ -65,8 +66,7 @@ private:
         ::sal_Int32     mnColSpan;
 
         Data()
-            : mpProperties(nullptr)
-            , mfValue(0)
+            : mfValue(0)
             , mnError(0)
             , mbMerged(false)
             , mnRowSpan(0)
