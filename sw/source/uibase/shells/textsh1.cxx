@@ -1693,7 +1693,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 // otherwise, it'll be the color for the next text to be typed
                 if (!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_EXT)
                 {
-                    rWrtSh.SetAttrItem(SvxColorItem(pColorItem->GetValue(), pColorItem->GetThemeColor(), RES_CHRATR_COLOR));
+                    rWrtSh.SetAttrItem(SvxColorItem(pColorItem->GetValue(), pColorItem->getComplexColor(), RES_CHRATR_COLOR));
                 }
 
                 rReq.Done();

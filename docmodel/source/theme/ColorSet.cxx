@@ -50,6 +50,18 @@ Color ColorSet::resolveColor(model::ThemeColor const& rThemeColor) const
     return rThemeColor.applyTransformations(aColor);
 }
 
+Color ColorSet::resolveColor(model::ComplexColor const& rComplexColor) const
+{
+    auto eSchemeType = rComplexColor.meSchemeType;
+    if (eSchemeType == model::ThemeColorType::Unknown)
+    {
+        SAL_WARN("svx", "ColorSet::resolveColor with ThemeColorType::Unknown");
+        return COL_AUTO;
+    }
+    Color aColor = getColor(eSchemeType);
+    return rComplexColor.applyTransformations(aColor);
+}
+
 void ColorSet::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("ColorSet"));

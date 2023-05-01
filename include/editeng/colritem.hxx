@@ -22,7 +22,7 @@
 #include <svl/poolitem.hxx>
 #include <tools/color.hxx>
 #include <editeng/editengdllapi.h>
-#include <docmodel/theme/ThemeColor.hxx>
+#include <docmodel/color/ComplexColor.hxx>
 
 #define VERSION_USEAUTOCOLOR    1
 
@@ -32,14 +32,14 @@ class EDITENG_DLLPUBLIC SvxColorItem final : public SfxPoolItem
 {
 private:
     Color mColor;
-    model::ThemeColor maThemeColor;
+    model::ComplexColor maComplexColor;
 
 public:
     static SfxPoolItem* CreateDefault();
 
     explicit SvxColorItem(const sal_uInt16 nId);
     SvxColorItem(const Color& aColor, const sal_uInt16 nId);
-    SvxColorItem(const Color& aColor, model::ThemeColor const& rThemeColor, const sal_uInt16 nId);
+    SvxColorItem(const Color& aColor, model::ComplexColor const& rComplexColor, const sal_uInt16 nId);
     virtual ~SvxColorItem() override;
 
     // "pure virtual Methods" from SfxPoolItem
@@ -60,14 +60,8 @@ public:
     }
     void SetValue(const Color& rNewColor);
 
-    model::ThemeColor& GetThemeColor() { return maThemeColor; }
-
-    const model::ThemeColor& GetThemeColor() const { return maThemeColor; }
-
-    void setThemeColor(model::ThemeColor const& rThemeColor)
-    {
-        maThemeColor = rThemeColor;
-    }
+    model::ComplexColor const& getComplexColor() const { return maComplexColor; }
+    void setComplexColor(model::ComplexColor const& rComplexColor) { maComplexColor = rComplexColor; }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };

@@ -1142,7 +1142,7 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
             switch (pMap->nMemberId)
             {
                 case MID_COLOR_THEME_INDEX:
-                    if (pColor->GetThemeColor().getType() == model::ThemeColorType::Unknown)
+                    if (pColor->getComplexColor().meSchemeType == model::ThemeColorType::Unknown)
                     {
                         eItemState = SfxItemState::DEFAULT;
                     }
@@ -1150,7 +1150,7 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
                 case MID_COLOR_LUM_MOD:
                 {
                     sal_Int16 nLumMod = 10000;
-                    for (auto const& rTransform : pColor->GetThemeColor().getTransformations())
+                    for (auto const& rTransform : pColor->getComplexColor().getTransformations())
                     {
                         if (rTransform.meType == model::TransformationType::LumMod)
                             nLumMod = rTransform.mnValue;
@@ -1164,7 +1164,7 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
                 case MID_COLOR_LUM_OFF:
                 {
                     sal_Int16 nLumOff = 0;
-                    for (auto const& rTransform : pColor->GetThemeColor().getTransformations())
+                    for (auto const& rTransform : pColor->getComplexColor().getTransformations())
                     {
                         if (rTransform.meType == model::TransformationType::LumOff)
                             nLumOff = rTransform.mnValue;
@@ -1176,7 +1176,7 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
                     break;
                 }
                 case MID_COLOR_THEME_REFERENCE:
-                    if (pColor->GetThemeColor().getType() == model::ThemeColorType::Unknown)
+                    if (pColor->getComplexColor().meType == model::ColorType::Unused)
                     {
                         eItemState = SfxItemState::DEFAULT;
                     }
