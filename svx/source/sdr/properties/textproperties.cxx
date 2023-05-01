@@ -135,8 +135,7 @@ namespace sdr::properties
                             // force ItemSet
                             GetObjectItemSet();
 
-                            SfxItemSet aNewSet(pOutliner->GetParaAttribs(0));
-                            mxItemSet->Put(aNewSet);
+                            mxItemSet->Put(pOutliner->GetParaAttribs(0));
                         }
 
                         std::optional<OutlinerParaObject> pTemp = pOutliner->CreateParaObject(0, nParaCount);
