@@ -67,6 +67,8 @@ using namespace ::xmloff::token;
 
 constexpr OUStringLiteral gsParaStyleServiceName( u"com.sun.star.style.ParagraphStyle" );
 constexpr OUStringLiteral gsTextStyleServiceName( u"com.sun.star.style.CharacterStyle" );
+constexpr OUStringLiteral gsParagraphStyles(u"ParagraphStyles");
+constexpr OUStringLiteral gsCharacterStyles(u"CharacterStyles");
 
 void SvXMLStyleContext::SetAttribute( sal_Int32 nElement,
                                       const OUString& rValue )
@@ -606,25 +608,19 @@ Reference < XAutoStyleFamily > SvXMLStylesContext::GetAutoStyles( XmlStyleFamily
     if( XmlStyleFamily::TEXT_TEXT == nFamily || XmlStyleFamily::TEXT_PARAGRAPH == nFamily)
     {
         bool bPara = XmlStyleFamily::TEXT_PARAGRAPH == nFamily;
-        if( !bPara && mxTextAutoStyles.is() )
-            xAutoStyles = mxTextAutoStyles;
-        else if( bPara && mxParaAutoStyles.is() )
-            xAutoStyles = mxParaAutoStyles;
-        else
+        const Reference<XAutoStyleFamily>& rxAutoStyles = bPara ? mxParaAutoStyles : mxTextAutoStyles;
+        if (!rxAutoStyles)
         {
-            OUString sName(bPara ? std::u16string_view( u"ParagraphStyles" ): std::u16string_view( u"CharacterStyles" ));
+            OUString sName(bPara ? gsParagraphStyles : gsCharacterStyles);
             Reference< XAutoStylesSupplier > xAutoStylesSupp(   GetImport().GetModel(), UNO_QUERY );
             Reference< XAutoStyles > xAutoStyleFamilies = xAutoStylesSupp->getAutoStyles();
             if (xAutoStyleFamilies->hasByName(sName))
             {
                 Any aAny = xAutoStyleFamilies->getByName( sName );
-                aAny >>= xAutoStyles;
-                if( bPara )
-                    const_cast<SvXMLStylesContext *>(this)->mxParaAutoStyles = xAutoStyles;
-                else
-                    const_cast<SvXMLStylesContext *>(this)->mxTextAutoStyles = xAutoStyles;
+                aAny >>= const_cast<Reference<XAutoStyleFamily>&>(rxAutoStyles);
             }
         }
+        xAutoStyles = rxAutoStyles;
     }
     return xAutoStyles;
 }
@@ -633,48 +629,25 @@ Reference < XNameContainer > SvXMLStylesContext::GetStylesContainer(
                                                 XmlStyleFamily nFamily ) const
 {
     Reference < XNameContainer > xStyles;
-    OUString sName;
-    switch( nFamily )
+    if (XmlStyleFamily::TEXT_TEXT == nFamily || XmlStyleFamily::TEXT_PARAGRAPH == nFamily)
     {
-    case XmlStyleFamily::TEXT_PARAGRAPH:
-        if( mxParaStyles.is() )
-            xStyles = mxParaStyles;
-        else
-            sName = "ParagraphStyles";
-        break;
-
-    case XmlStyleFamily::TEXT_TEXT:
-        if( mxTextStyles.is() )
-            xStyles = mxTextStyles;
-        else
-            sName = "CharacterStyles";
-        break;
-    default: break;
-    }
-    if( !xStyles.is() && !sName.isEmpty() )
-    {
-        Reference< XStyleFamiliesSupplier > xFamiliesSupp(
-                                        GetImport().GetModel(), UNO_QUERY );
-        if ( xFamiliesSupp.is() )
+        bool bPara = XmlStyleFamily::TEXT_PARAGRAPH == nFamily;
+        const Reference<XNameContainer>& rxStyles = bPara ? mxParaStyles : mxTextStyles;
+        if (!rxStyles)
         {
-            Reference< XNameAccess > xFamilies = xFamiliesSupp->getStyleFamilies();
-            if (xFamilies->hasByName(sName))
+            OUString sName(bPara ? gsParagraphStyles : gsCharacterStyles);
+            Reference<XStyleFamiliesSupplier> xFamiliesSupp(GetImport().GetModel(), UNO_QUERY);
+            if (xFamiliesSupp.is())
             {
-                xStyles.set(xFamilies->getByName( sName ),uno::UNO_QUERY);
-
-                switch( nFamily )
+                Reference<XNameAccess> xFamilies = xFamiliesSupp->getStyleFamilies();
+                if (xFamilies->hasByName(sName))
                 {
-                case XmlStyleFamily::TEXT_PARAGRAPH:
-                    const_cast<SvXMLStylesContext *>(this)->mxParaStyles = xStyles;
-                    break;
-
-                case XmlStyleFamily::TEXT_TEXT:
-                    const_cast<SvXMLStylesContext *>(this)->mxTextStyles = xStyles;
-                    break;
-                default: break;
+                    Any aAny = xFamilies->getByName(sName);
+                    aAny >>= const_cast<Reference<XNameContainer>&>(rxStyles);
                 }
             }
         }
+        xStyles = rxStyles;
     }
 
     return xStyles;
