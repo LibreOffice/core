@@ -1072,6 +1072,9 @@
       </node>
       <node oor:name=".uno:PageNumberWizard" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Page Number Wizard</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Page Number...</value>
         </prop>
       </node>
