@@ -1051,6 +1051,11 @@ namespace xforms
 
     static bool lcl_getValueYear( std::u16string_view value, double& fValue )
     {
+        if (value.size() > 4)
+        {
+             fValue = 0;
+             return false;
+        }
         if (o3tl::equalsAscii(value, "0"))
         {
             fValue = 0;
@@ -1072,6 +1077,11 @@ namespace xforms
 
     static bool lcl_getValueMonth( std::u16string_view value, double& fValue )
     {
+        if (value.size() > 2)
+        {
+             fValue = 0;
+             return false;
+        }
         sal_Int32 int32Value = o3tl::toInt32(value);
         if (
             int32Value == 0 ||
@@ -1088,6 +1098,11 @@ namespace xforms
 
     static bool lcl_getValueDay( std::u16string_view value, double& fValue )
     {
+        if (value.size() > 2)
+        {
+             fValue = 0;
+             return false;
+        }
         sal_Int32 int32Value = o3tl::toInt32(value);
         if (
             int32Value == 0 ||
