@@ -108,8 +108,8 @@
                     <property name="can-focus">False</property>
                     <property name="active">1</property>
                     <items>
-                      <item translatable="yes" context="pagenumberdlg|liststore2">Top of page (Header)</item>
-                      <item translatable="yes" context="pagenumberdlg|liststore2">Bottom of page (Footer)</item>
+                      <item translatable="yes" context="pagenumberdlg|positionCombo">Top of page (Header)</item>
+                      <item translatable="yes" context="pagenumberdlg|positionCombo">Bottom of page (Footer)</item>
                     </items>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="positionCombo-atkobject">
@@ -128,7 +128,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
-                    <property name="margin-top">6</property>
+                    <property name="margin-top">3</property>
                     <property name="label" translatable="yes" context="pagenumberdlg|alignmentLabel">Alignment:</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">alignmentCombo</property>
@@ -150,9 +150,9 @@
                     <property name="can-focus">False</property>
                     <property name="active">0</property>
                     <items>
-                      <item translatable="yes" context="pagenumberdlg|liststore1">Left</item>
-                      <item translatable="yes" context="pagenumberdlg|liststore1">Center</item>
-                      <item translatable="yes" context="pagenumberdlg|liststore1">Right</item>
+                      <item translatable="yes" context="pagenumberdlg|alignmentCombo">Left</item>
+                      <item translatable="yes" context="pagenumberdlg|alignmentCombo">Center</item>
+                      <item translatable="yes" context="pagenumberdlg|alignmentCombo">Right</item>
                     </items>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="alignmentCombo-atkobject">
@@ -168,15 +168,16 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="mirrorCheckbox">
-                    <property name="label" translatable="yes" context="numberingoptionspage|mirrorCheckbox">Mirror on even pages</property>
+                    <property name="label" translatable="yes" context="pagenumberdlg|mirrorCheckbox">Mirror on even pages</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
+                    <property name="margin-start">18</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="mirrorCheckbox-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|mirrorCheckbox">Creates separate left/right pages with mirrored page number placements</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pagenumberdlg|extended_tip|mirrorCheckbox">Creates separate left/right pages with mirrored page number placements</property>
                       </object>
                     </child>
                   </object>
@@ -213,7 +214,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
-                    <property name="margin-top">6</property>
+                    <property name="margin-top">3</property>
                     <property name="label" translatable="yes" context="pagenumberdlg|numfmtLabel">Page numbers:</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">numfmtlb</property>
@@ -241,7 +242,7 @@
                     </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="numfmtlb-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|numfmtlb">Select a numbering scheme for the page numbering.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pagenumberdlg|extended_tip|numfmtlb">Select a numbering scheme for the page numbering.</property>
                       </object>
                     </child>
                   </object>
