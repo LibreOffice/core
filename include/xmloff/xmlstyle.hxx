@@ -41,7 +41,7 @@ class XMLOFF_DLLPUBLIC SvXMLStyleContext : public SvXMLImportContext
 {
     OUString     maName;
     OUString     maDisplayName;
-    OUString     maAutoName;
+    css::uno::Any maAutoName;
     OUString     maParentName;// Will be moved to XMLPropStyle soon!!!!
     OUString     maFollow;    // Will be moved to XMLPropStyle soon!!!!
     OUString     maLinked;
@@ -51,7 +51,7 @@ class XMLOFF_DLLPUBLIC SvXMLStyleContext : public SvXMLImportContext
 
     bool         mbValid : 1; // Set this to false in CreateAndInsert
                               // if the style shouldn't be processed
-                              // by Finish() or si somehow invalid.
+                              // by Finish() or is somehow invalid.
     bool         mbNew : 1;   // Set this to false in CreateAnsInsert
                               // if the style is already existing.
     bool         mbDefaultStyle : 1;
@@ -61,7 +61,7 @@ protected:
     virtual void SetAttribute( sal_Int32 nElement, const OUString& rValue );
 
     void SetFamily( XmlStyleFamily nSet ) { mnFamily = nSet; }
-    void SetAutoName( const OUString& rName ) { maAutoName = rName; }
+    void SetAutoName( const css::uno::Any& rName ) { maAutoName = rName; }
 
 public:
 
@@ -77,7 +77,7 @@ public:
 
     const OUString&  GetName() const { return maName; }
     const OUString&  GetDisplayName() const { return maDisplayName.getLength() ? maDisplayName : maName; }
-    const OUString&  GetAutoName() const { return maAutoName; }
+    const css::uno::Any& GetAutoName() const { return maAutoName; }
     const OUString&  GetParentName() const { return maParentName; }
     const OUString&  GetFollow() const { return maFollow; }
     const OUString&  GetLinked() const { return maLinked; }

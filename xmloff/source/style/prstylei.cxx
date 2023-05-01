@@ -341,9 +341,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
                     Sequence< Any > aAny = xAutoStyle->getPropertyValues( aPropNames );
                     if( aAny.hasElements() )
                     {
-                        OUString aName;
-                        aAny[0] >>= aName;
-                        SetAutoName( aName );
+                        SetAutoName(aAny[0]);
                     }
                 }
             }

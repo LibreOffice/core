@@ -431,7 +431,7 @@ void XMLTextStyleContext::FillPropertySet(
     {
         bAutomatic = true;
 
-        if( !GetAutoName().isEmpty() )
+        if( GetAutoName().hasValue() )
         {
             OUString sAutoProp = ( GetFamily() == XmlStyleFamily::TEXT_TEXT ) ?
                 OUString( "CharAutoStyleName" ):
@@ -446,7 +446,7 @@ void XMLTextStyleContext::FillPropertySet(
 
                 if ( xInfo->hasPropertyByName( sAutoProp ) )
                 {
-                    rPropSet->setPropertyValue( sAutoProp, Any(GetAutoName()) );
+                    rPropSet->setPropertyValue( sAutoProp, GetAutoName() );
                 }
                 else
                 {
