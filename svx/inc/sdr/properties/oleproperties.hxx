@@ -42,10 +42,6 @@ namespace sdr::properties
 
             // Clone() operator, normally just calls the local copy constructor
             virtual std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const override;
-
-            // force default attributes for a specific object type, called from
-            // DefaultProperties::GetObjectItemSet() if a new ItemSet is created
-            virtual void ForceDefaultAttributes() override;
         };
 } // end of namespace sdr::properties
 

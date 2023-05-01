@@ -60,15 +60,6 @@ namespace sdr::properties
         {
             return std::unique_ptr<BaseProperties>(new OleProperties(*this, rObj));
         }
-
-        void OleProperties::ForceDefaultAttributes()
-        {
-            // call parent
-            RectangleProperties::ForceDefaultAttributes();
-
-            // force ItemSet
-            GetObjectItemSet();
-        }
 } // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
