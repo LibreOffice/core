@@ -398,8 +398,8 @@
 #define STR_SPREADSHEET_HELPTEXT                    NC_("STR_SPREADSHEET_HELPTEXT", "Click 'Browse...' to select a %PRODUCTNAME spreadsheet or Microsoft Excel workbook.\n%PRODUCTNAME will open this file in read-only mode." )
 #define STR_SPREADSHEETPATH                         NC_("STR_SPREADSHEETPATH", "~Location and file name" )
 
-#define STR_POSTGRES_HEADERTEXT                     NC_("STR_POSTGRES_HEADERTEXT", "Set up connection to a POSTGRESQL database using GUI" )
-#define STR_POSTGRES_HELPTEXT                       NC_("STR_POSTGRES_HELPTEXT", "Please enter the required information to connect to a PostgreSQL database either through by filling the hostname,port number and server OR by filling the connection string.\nPlease contact your system administrator if you are unsure about the following settings.")
+#define STR_POSTGRES_HEADERTEXT                     NC_("STR_POSTGRES_HEADERTEXT", "Set up a connection to a PostgreSQL database" )
+#define STR_POSTGRES_HELPTEXT                       NC_("STR_POSTGRES_HELPTEXT", "Please enter the required information to connect to a PostgreSQL database, either by entering the host name, port number and server, or by entering the connection string.\nPlease contact your system administrator if you are unsure about the following settings.")
 #define STR_POSTGRES_DEFAULT                        NC_("STR_POSTGRES_DEFAULT", "Default: 5432")
 #define STR_COMMAND_EXECUTED_SUCCESSFULLY           NC_("STR_COMMAND_EXECUTED_SUCCESSFULLY", "Command successfully executed." )
 #define STR_DIRECTSQL_CONNECTIONLOST                NC_("STR_DIRECTSQL_CONNECTIONLOST", "The connection to the database has been lost. This dialog will be closed.")
