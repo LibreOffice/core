@@ -815,8 +815,14 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIfPngImg)
     verify(/*bExported=*/true);
 }
 
-DECLARE_HTMLEXPORT_TEST(testReqIfJpgImg, "reqif-jpg-img.xhtml")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfJpgImg)
 {
+    setImportFilterOptions("xhtmlns=reqif-xhtml");
+    setImportFilterName("HTML (StarWriter)");
+    createSwDoc("reqif-jpg-img.xhtml");
+    setFilterOptions("xhtmlns=reqif-xhtml");
+    save(OUString::createFromAscii(mpFilter));
+
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
     sal_uInt64 nLength = pStream->TellEnd();
