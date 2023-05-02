@@ -21,9 +21,10 @@
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <comphelper/interfacecontainer4.hxx>
 
+#include <limits>
 #include <map>
 #include <memory>
-#include <limits>
+#include <unordered_map>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -36,7 +37,7 @@ typedef std::pair< AccessibleEventNotifier::TClientId,
         AccessibleEventObject > ClientEvent;
 
 typedef ::comphelper::OInterfaceContainerHelper4<XAccessibleEventListener> ListenerContainer;
-typedef std::map< AccessibleEventNotifier::TClientId, ListenerContainer* > ClientMap;
+typedef std::unordered_map< AccessibleEventNotifier::TClientId, ListenerContainer > ClientMap;
 
 /// key is the end of the interval, value is the start of the interval
 typedef std::map<AccessibleEventNotifier::TClientId,
@@ -154,10 +155,8 @@ AccessibleEventNotifier::TClientId AccessibleEventNotifier::registerClient()
     // generate a new client id
     TClientId nNewClientId = generateId( );
 
-    // the event listeners for the new client
-    ListenerContainer * pNewListeners = new ListenerContainer();
     // add the client
-    gaClients.emplace( nNewClientId, pNewListeners );
+    gaClients.emplace( nNewClientId, ListenerContainer{} );
 
     // outta here
     return nNewClientId;
@@ -173,7 +172,6 @@ void AccessibleEventNotifier::revokeClient( const TClientId _nClient )
         return;
 
     // remove it from the clients map
-    delete aClientPos->second;
     gaClients.erase( aClientPos );
     releaseId(_nClient);
 }
@@ -189,7 +187,7 @@ void AccessibleEventNotifier::revokeClientNotifyDisposing(
         return;
 
     // notify the listeners
-    std::unique_ptr<ListenerContainer> pListeners(aClientPos->second);
+    ListenerContainer aListeners(std::move(aClientPos->second));
 
     // we do not need the entry in the clients map anymore
     // (do this before actually notifying, because some client
@@ -203,7 +201,7 @@ void AccessibleEventNotifier::revokeClientNotifyDisposing(
     aDisposalEvent.Source = _rxEventSource;
 
     // now really do the notification
-    pListeners->disposeAndClear( aGuard, aDisposalEvent );
+    aListeners.disposeAndClear( aGuard, aDisposalEvent );
 }
 
 sal_Int32 AccessibleEventNotifier::addEventListener(
@@ -217,9 +215,9 @@ sal_Int32 AccessibleEventNotifier::addEventListener(
         return 0;
 
     if ( _rxListener.is() )
-        aClientPos->second->addInterface( aGuard, _rxListener );
+        aClientPos->second.addInterface( aGuard, _rxListener );
 
-    return aClientPos->second->getLength(aGuard);
+    return aClientPos->second.getLength(aGuard);
 }
 
 sal_Int32 AccessibleEventNotifier::removeEventListener(
@@ -233,9 +231,9 @@ sal_Int32 AccessibleEventNotifier::removeEventListener(
         return 0;
 
     if ( _rxListener.is() )
-        aClientPos->second->removeInterface( aGuard,  _rxListener );
+        aClientPos->second.removeInterface( aGuard,  _rxListener );
 
-    return aClientPos->second->getLength(aGuard);
+    return aClientPos->second.getLength(aGuard);
 }
 
 void AccessibleEventNotifier::addEvent( const TClientId _nClient, const AccessibleEventObject& _rEvent )
@@ -251,7 +249,7 @@ void AccessibleEventNotifier::addEvent( const TClientId _nClient, const Accessib
             return;
 
         // since we're synchronous, again, we want to notify immediately
-        aListeners = aClientPos->second->getElements(aGuard);
+        aListeners = aClientPos->second.getElements(aGuard);
     }
 
     // default handling: loop through all listeners, and notify them

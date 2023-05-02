@@ -231,6 +231,10 @@ public:
                            void (SAL_CALL ListenerT::*NotificationMethod)(const EventT&),
                            const EventT& Event) const;
 
+    // this is moveable, but not copyable
+    OInterfaceContainerHelper4(OInterfaceContainerHelper4&&) = default;
+    OInterfaceContainerHelper4& operator=(OInterfaceContainerHelper4&&) = default;
+
 private:
     friend class OInterfaceIteratorHelper4<ListenerT>;
     o3tl::cow_wrapper<std::vector<css::uno::Reference<ListenerT>>,
