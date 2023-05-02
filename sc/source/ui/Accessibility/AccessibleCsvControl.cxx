@@ -48,6 +48,7 @@
 #include <svtools/colorcfg.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <o3tl/string_view.hxx>
 
 using ::utl::AccessibleRelationSetHelper;
 using ::accessibility::AccessibleStaticTextBase;
@@ -454,7 +455,10 @@ TextSegment SAL_CALL ScAccessibleCsvRuler::getTextAtIndex( sal_Int32 nIndex, sal
         case AccessibleTextType::CHARACTER:
         {
             aResult.SegmentStart = nIndex;
-            aResultText.append(maBuffer[nIndex]);
+            aResult.SegmentEnd = nIndex;
+            o3tl::iterateCodePoints(maBuffer, &aResult.SegmentEnd);
+            for (; nIndex < aResult.SegmentEnd; nIndex++)
+                aResultText.append(maBuffer[nIndex]);
         }
         break;
 
@@ -512,7 +516,10 @@ TextSegment SAL_CALL ScAccessibleCsvRuler::getTextBeforeIndex( sal_Int32 nIndex,
         // single character
         case AccessibleTextType::CHARACTER:
             if( nIndex > 0 )
-                aResult = getTextAtIndex( nIndex - 1, nTextType );
+            {
+                o3tl::iterateCodePoints(maBuffer, &nIndex, -1);
+                aResult = getTextAtIndex(nIndex, nTextType);
+            }
             // else empty
         break;
 
@@ -565,7 +572,10 @@ TextSegment SAL_CALL ScAccessibleCsvRuler::getTextBehindIndex( sal_Int32 nIndex,
         // single character
         case AccessibleTextType::CHARACTER:
             if( nIndex < nLastValid )
-                aResult = getTextAtIndex( nIndex + 1, nTextType );
+            {
+                o3tl::iterateCodePoints(maBuffer, &nIndex);
+                aResult = getTextAtIndex(nIndex, nTextType);
+            }
             // else empty
         break;
 

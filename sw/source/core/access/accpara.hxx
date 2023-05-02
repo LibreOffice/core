@@ -195,6 +195,7 @@ protected:
     //helpers for word boundaries
 
     bool GetCharBoundary( css::i18n::Boundary& rBound,
+                              std::u16string_view text,
                               sal_Int32 nPos );
     bool GetWordBoundary( css::i18n::Boundary& rBound,
                               const OUString& rText,

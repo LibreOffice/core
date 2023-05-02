@@ -628,9 +628,12 @@ css::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextAtIndex( sa
     aResult.SegmentEnd = -1;
     if ( (AccessibleTextType::CHARACTER == aTextType)  &&  (nIndex < aTxt.getLength()) )
     {
-        aResult.SegmentText = aTxt.copy(nIndex, 1);
+        auto nIndexEnd = nIndex;
+        aTxt.iterateCodePoints(&nIndexEnd);
+
+        aResult.SegmentText = aTxt.copy(nIndex, nIndexEnd - nIndex);
         aResult.SegmentStart = nIndex;
-        aResult.SegmentEnd = nIndex+1;
+        aResult.SegmentEnd = nIndexEnd;
     }
     return aResult;
 }
@@ -647,11 +650,14 @@ css::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextBeforeIndex
     aResult.SegmentStart = -1;
     aResult.SegmentEnd = -1;
 
-    if ( (AccessibleTextType::CHARACTER == aTextType)  && nIndex )
+    if ( (AccessibleTextType::CHARACTER == aTextType)  && nIndex > 0 )
     {
-        aResult.SegmentText = aTxt.copy(nIndex-1, 1);
-        aResult.SegmentStart = nIndex-1;
-        aResult.SegmentEnd = nIndex;
+        aTxt.iterateCodePoints(&nIndex, -1);
+        auto nIndexEnd = nIndex;
+        aTxt.iterateCodePoints(&nIndexEnd);
+        aResult.SegmentText = aTxt.copy(nIndex, nIndexEnd - nIndex);
+        aResult.SegmentStart = nIndex;
+        aResult.SegmentEnd = nIndexEnd;
     }
     return aResult;
 }
@@ -668,12 +674,14 @@ css::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextBehindIndex
     aResult.SegmentStart = -1;
     aResult.SegmentEnd = -1;
 
-    nIndex++; // text *behind*
-    if ( (AccessibleTextType::CHARACTER == aTextType)  &&  (nIndex < aTxt.getLength()) )
+    if ( (AccessibleTextType::CHARACTER == aTextType)  &&  (nIndex + 1 < aTxt.getLength()) )
     {
-        aResult.SegmentText = aTxt.copy(nIndex, 1);
+        aTxt.iterateCodePoints(&nIndex);
+        auto nIndexEnd = nIndex;
+        aTxt.iterateCodePoints(&nIndexEnd);
+        aResult.SegmentText = aTxt.copy(nIndex, nIndexEnd - nIndex);
         aResult.SegmentStart = nIndex;
-        aResult.SegmentEnd = nIndex+1;
+        aResult.SegmentEnd = nIndexEnd;
     }
     return aResult;
 }

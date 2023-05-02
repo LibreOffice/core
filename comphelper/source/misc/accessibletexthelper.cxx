@@ -297,9 +297,12 @@ namespace comphelper
             {
                 if ( implIsValidIndex( nIndex, nLength ) )
                 {
-                    aResult.SegmentText = sText.copy( nIndex, 1 );
+                    auto nIndexEnd = nIndex;
+                    sText.iterateCodePoints(&nIndexEnd);
+
+                    aResult.SegmentText = sText.copy( nIndex, nIndexEnd - nIndex );
                     aResult.SegmentStart = nIndex;
-                    aResult.SegmentEnd = nIndex+1;
+                    aResult.SegmentEnd = nIndexEnd;
                 }
             }
             break;
@@ -401,9 +404,12 @@ namespace comphelper
             {
                 if ( implIsValidIndex( nIndex - 1, nLength ) )
                 {
-                    aResult.SegmentText = sText.copy( nIndex - 1, 1 );
-                    aResult.SegmentStart = nIndex-1;
-                    aResult.SegmentEnd = nIndex;
+                    sText.iterateCodePoints(&nIndex, -1);
+                    auto nIndexEnd = nIndex;
+                    sText.iterateCodePoints(&nIndexEnd);
+                    aResult.SegmentText = sText.copy(nIndex, nIndexEnd - nIndex);
+                    aResult.SegmentStart = nIndex;
+                    aResult.SegmentEnd = nIndexEnd;
                 }
             }
             break;
@@ -525,9 +531,12 @@ namespace comphelper
             {
                 if ( implIsValidIndex( nIndex + 1, nLength ) )
                 {
-                    aResult.SegmentText = sText.copy( nIndex + 1, 1 );
-                    aResult.SegmentStart = nIndex+1;
-                    aResult.SegmentEnd = nIndex+2;
+                    sText.iterateCodePoints(&nIndex);
+                    auto nIndexEnd = nIndex;
+                    sText.iterateCodePoints(&nIndexEnd);
+                    aResult.SegmentText = sText.copy(nIndex, nIndexEnd - nIndex);
+                    aResult.SegmentStart = nIndex;
+                    aResult.SegmentEnd = nIndexEnd;
                 }
             }
             break;
