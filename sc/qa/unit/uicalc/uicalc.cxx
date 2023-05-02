@@ -1667,6 +1667,19 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteAsLink)
                                  WEIGHT_NORMAL, aFont.GetWeight());
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119659)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    insertArrayToCell("A1:C1", u"={1;2;3}");
+
+    insertStringToCell("A2", u"=LOOKUP(3; A1:C1; {1,2})");
+
+    // Without the fix in place, this test would have crashed here
+    CPPUNIT_ASSERT_EQUAL(OUString("#N/A"), pDoc->GetString(ScAddress(0, 1, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf131442)
 {
     createScDoc();
