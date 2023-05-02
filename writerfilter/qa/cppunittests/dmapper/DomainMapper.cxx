@@ -12,6 +12,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 
 #include <tools/UnitConversion.hxx>
 
@@ -99,6 +100,24 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtDropdownNoDisplayText)
     // - Actual  : 0
     // i.e. the list item was lost on import.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aListItems.getLength());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFloattableThenTable)
+{
+    // Given a document with an in-section floating table, followed by a table:
+    // When laying out that document:
+    loadFromURL(u"floattable-then-table.docx");
+
+    // Then make sure that instead of crashing, the floating table is anchored inside the body text
+    // (and not a cell):
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xBodyText = xTextDocument->getText();
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<text::XTextContent> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xAnchor = xShape->getAnchor();
+    // Make sure the anchor text is the body text, not some cell.
+    CPPUNIT_ASSERT_EQUAL(xBodyText, xAnchor->getText());
 }
 }
 
