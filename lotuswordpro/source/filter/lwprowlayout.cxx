@@ -192,6 +192,8 @@ void LwpRowLayout::ConvertRow(rtl::Reference<XFTable> const & pXFTable,sal_uInt8
     if (!pTableLayout)
         throw std::runtime_error("missing TableLayout");
     LwpTable* pTable = pTableLayout->GetTable();
+    if (!pTable)
+        throw std::runtime_error("missing Table");
 
     //calculate the connected cell position
     sal_Int32 nMarkConnCell = FindMarkConnCell(nStartCol,nEndCol);
