@@ -541,7 +541,7 @@ SwHTMLWriter& OutHTML_SwFormatField( SwHTMLWriter& rWrt, const SfxPoolItem& rHt 
     {
         const SwTextField *pTextField = rField.GetTextField();
         OSL_ENSURE( pTextField, "Where is the txt fld?" );
-        if( pTextField && rWrt.m_pDoc->GetDocShell() )
+        if (pTextField && rWrt.m_pDoc->GetDocShell() && rWrt.m_pDoc->GetDocShell()->GetView())
         {
             // ReqIF-XHTML doesn't allow specifying a background color.
             const SwViewOption* pViewOptions = rWrt.m_pDoc->GetDocShell()->GetView()->GetWrtShell().GetViewOptions();
