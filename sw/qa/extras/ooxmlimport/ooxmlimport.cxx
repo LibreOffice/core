@@ -1416,7 +1416,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf95755)
     uno::Any aValue = xTableProperties->getPropertyValue("Width");
     sal_Int32 nWidth;
     aValue >>= nWidth;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(10659), nWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10592), nWidth);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf60351)

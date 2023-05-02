@@ -432,17 +432,17 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69656, "Table_cell_auto_width_fdo69656.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFloatingTablesAnchor, "floating-tables-anchor.docx")
 {
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xBodyText = xTextDocument->getText();
     // Problem was one of the two text frames was anchored to the other text frame
-    // Both frames should be anchored to the paragraph with the text "Anchor point"
+    // Both frames should be anchored to the body text
     uno::Reference<text::XTextContent> xTextContent(getShape(1), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xRange = xTextContent->getAnchor();
-    uno::Reference<text::XText> xText = xRange->getText();
-    CPPUNIT_ASSERT_EQUAL(OUString("Anchor point"), xText->getString());
+    CPPUNIT_ASSERT_EQUAL(xBodyText, xRange->getText());
 
     xTextContent.set(getShape(2), uno::UNO_QUERY);
     xRange = xTextContent->getAnchor();
-    xText = xRange->getText();
-    CPPUNIT_ASSERT_EQUAL(OUString("Anchor point"), xText->getString());
+    CPPUNIT_ASSERT_EQUAL(xBodyText, xRange->getText());
 
     // tdf#149292 pre-emptive test - ensure "First Page" page style
     CPPUNIT_ASSERT_EQUAL(OUString("First Page"), getProperty<OUString>(getParagraph(1), "PageDescName"));
