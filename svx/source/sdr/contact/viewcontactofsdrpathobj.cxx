@@ -49,8 +49,9 @@ namespace sdr::contact
             for(auto const& rPolygon : std::as_const(rUnitPolyPolygon))
             {
                 nPointCount += rPolygon.count();
+                // return early if we definitely have geometry
                 if (nPointCount > 1)
-                    return false;
+                    return nPolyCount == 1;
             }
 
             if(!nPointCount)
