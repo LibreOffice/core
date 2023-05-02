@@ -540,6 +540,15 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                     SwKernPortion* pKrn =
                         new SwKernPortion( *rInf.GetLast(), nLstHeight,
                                            pLast->InFieldGrp() && pPor->InFieldGrp() );
+
+                    // ofz#58550 Direct-leak, pKrn adds itself as the NextPortion
+                    // of rInf.GetLast(), but may use CopyLinePortion to add a copy
+                    // of itself, which will then be left dangling with the following
+                    // SetNextPortion(nullptr)
+                    SwLinePortion *pNext = rInf.GetLast()->GetNextPortion();
+                    if (pNext != pKrn)
+                        delete pNext;
+
                     rInf.GetLast()->SetNextPortion( nullptr );
                     InsertPortion( rInf, pKrn );
                 }
