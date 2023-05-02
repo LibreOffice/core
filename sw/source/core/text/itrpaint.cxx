@@ -456,6 +456,24 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                  pNext && pNext->IsHolePortion() ) ?
                pNext :
                nullptr;
+        if (!pPor) // check if the end of the list label is off-screen
+        {
+            while (pNext)
+            {
+                if (!roTaggedParagraph && pNext->InNumberGrp()
+                    && !static_cast<SwNumberPortion const*>(pNext)->HasFollow())
+                {
+                    if (roTaggedLabel)
+                    {
+                        roTaggedLabel.reset();
+                    } // else, if the numbering isn't visible at all, no Lbl
+                    Frame_Info aFrameInfo(*m_pFrame); // open LBody
+                    roTaggedParagraph.emplace(nullptr, &aFrameInfo, nullptr, *GetInfo().GetOut());
+                    break;
+                }
+                pNext = pNext->GetNextPortion();
+            }
+        }
     }
 
     // delete underline font
