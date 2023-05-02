@@ -238,33 +238,16 @@ sal_Int32 AccessibleEventNotifier::removeEventListener(
 
 void AccessibleEventNotifier::addEvent( const TClientId _nClient, const AccessibleEventObject& _rEvent )
 {
-    std::vector< Reference< XAccessibleEventListener > > aListeners;
+    std::unique_lock aGuard( GetLocalMutex() );
 
-    {
-        std::unique_lock aGuard( GetLocalMutex() );
+    ClientMap::iterator aClientPos;
+    if ( !implLookupClient( _nClient, aClientPos ) )
+        // already asserted in implLookupClient
+        return;
 
-        ClientMap::iterator aClientPos;
-        if ( !implLookupClient( _nClient, aClientPos ) )
-            // already asserted in implLookupClient
-            return;
+    // since we're synchronous, again, we want to notify immediately
+    aClientPos->second.notifyEach(aGuard, &XAccessibleEventListener::notifyEvent, _rEvent);
 
-        // since we're synchronous, again, we want to notify immediately
-        aListeners = aClientPos->second.getElements(aGuard);
-    }
-
-    // default handling: loop through all listeners, and notify them
-    for ( const auto& rListener : aListeners )
-    {
-        try
-        {
-            rListener->notifyEvent( _rEvent );
-        }
-        catch( const Exception& )
-        {
-            // no assertion, because a broken access remote bridge or something like this
-            // can cause this exception
-        }
-    }
 }
 
 } // namespace comphelper
