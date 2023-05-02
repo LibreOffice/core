@@ -2922,8 +2922,7 @@ static SwHTMLWriter& OutHTML_SwFlyCnt( SwHTMLWriter& rWrt, const SfxPoolItem& rH
     const SwFrameFormat& rFormat = *rFlyCnt.GetFrameFormat();
     const SdrObject *pSdrObj = nullptr;
 
-    SwHTMLFrameType eType =
-        static_cast<SwHTMLFrameType>(rWrt.GuessFrameType( rFormat, pSdrObj ));
+    SwHTMLFrameType eType = rWrt.GuessFrameType( rFormat, pSdrObj );
     AllHtmlFlags nMode = aHTMLOutFrameAsCharTable[eType][rWrt.m_nExportMode];
     rWrt.OutFrameFormat( nMode, rFormat, pSdrObj );
     return rWrt;

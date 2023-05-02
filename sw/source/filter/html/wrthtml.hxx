@@ -544,9 +544,9 @@ public:
 
     static sal_uInt32 ToPixel( sal_uInt32 nVal, const bool bVert );
 
-    sal_uInt16 GuessFrameType( const SwFrameFormat& rFrameFormat,
+    SwHTMLFrameType GuessFrameType( const SwFrameFormat& rFrameFormat,
                          const SdrObject*& rpStrObj );
-    static sal_uInt16 GuessOLENodeFrameType( const SwNode& rNd );
+    static SwHTMLFrameType GuessOLENodeFrameType( const SwNode& rNd );
 
     void CollectFlyFrames();
 

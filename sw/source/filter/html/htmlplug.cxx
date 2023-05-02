@@ -1190,7 +1190,7 @@ void SwHTMLParser::InsertFloatingFrame()
     ++m_nFloatingFrames;
 }
 
-sal_uInt16 SwHTMLWriter::GuessOLENodeFrameType( const SwNode& rNode )
+SwHTMLFrameType SwHTMLWriter::GuessOLENodeFrameType( const SwNode& rNode )
 {
     SwHTMLFrameType eType = HTML_FRMTYPE_OLE;
 
@@ -1215,7 +1215,7 @@ sal_uInt16 SwHTMLWriter::GuessOLENodeFrameType( const SwNode& rNode )
     }
 #endif
 
-    return static_cast< sal_uInt16 >(eType);
+    return eType;
 }
 
 SwHTMLWriter& OutHTML_FrameFormatOLENode( SwHTMLWriter& rWrt, const SwFrameFormat& rFrameFormat,

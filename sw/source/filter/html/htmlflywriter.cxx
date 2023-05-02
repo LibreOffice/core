@@ -158,7 +158,7 @@ HTMLOutEvent const aIMapEventTable[] =
     { nullptr, nullptr, SvMacroItemId::NONE }
 };
 
-sal_uInt16 SwHTMLWriter::GuessFrameType( const SwFrameFormat& rFrameFormat,
+SwHTMLFrameType SwHTMLWriter::GuessFrameType( const SwFrameFormat& rFrameFormat,
                                    const SdrObject*& rpSdrObj )
 {
     SwHTMLFrameType eType;
@@ -205,7 +205,7 @@ sal_uInt16 SwHTMLWriter::GuessFrameType( const SwFrameFormat& rFrameFormat,
         else if( pNd->IsOLENode() )
         {
             // applet, plugin, floating frame
-            eType = static_cast<SwHTMLFrameType>(GuessOLENodeFrameType( *pNd ));
+            eType = GuessOLENodeFrameType( *pNd );
         }
         else
         {
@@ -282,7 +282,7 @@ sal_uInt16 SwHTMLWriter::GuessFrameType( const SwFrameFormat& rFrameFormat,
         }
     }
 
-    return static_cast< sal_uInt16 >(eType);
+    return eType;
 }
 
 void SwHTMLWriter::CollectFlyFrames()
@@ -299,7 +299,7 @@ void SwHTMLWriter::CollectFlyFrames()
         const SdrObject *pSdrObj = nullptr;
         const SwNode *pAnchorNode;
         const SwContentNode *pACNd;
-        SwHTMLFrameType eType = static_cast<SwHTMLFrameType>(GuessFrameType( rFrameFormat, pSdrObj ));
+        SwHTMLFrameType eType = GuessFrameType( rFrameFormat, pSdrObj );
 
         AllHtmlFlags nMode;
         const SwFormatAnchor& rAnchor = rFrameFormat.GetAnchor();
