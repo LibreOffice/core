@@ -187,15 +187,28 @@ void AtkListener::handleChildRemoved(
     sal_Int32 nIndex = -1;
 
     // Locate the child in the children list
-    size_t n, nmax = m_aChildList.size();
-    for( n = 0; n < nmax; ++n )
+    const size_t nmax = m_aChildList.size();
+    for( size_t n = 0; n < nmax; ++n )
     {
-        if( rxChild == m_aChildList[n] )
+        // Comparing via uno::Reference::operator== is expensive
+        // with lots of objects, so assume we can find it the cheap way
+        // first, which works most of the time.
+        if( rxChild.get() == m_aChildList[n].get() )
         {
             nIndex = n;
             break;
         }
     }
+    // The cheap way failed, find it via the more expensive path
+    if (nIndex == -1)
+        for( size_t n = 0; n < nmax; ++n )
+        {
+            if( rxChild == m_aChildList[n] )
+            {
+                nIndex = n;
+                break;
+            }
+        }
 
     // FIXME: two problems here:
     // a) we get child-removed events for objects that are no real children
