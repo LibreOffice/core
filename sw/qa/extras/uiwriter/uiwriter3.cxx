@@ -1757,6 +1757,34 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, TestAsCharTextBox)
     // Without the fix in place the two texboxes has been fallen apart, and  asserts will broken.
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf155028)
+{
+    createSwDoc("tdf155028.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), xGroupShape->getCount());
+
+    selectShape(1);
+    dispatchCommand(mxComponent, ".uno:EnterGroup", {});
+
+    // Select a shape in the group
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    // Without the fix in place, this test would have crashed
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), xGroupShape->getCount());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), xGroupShape->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135581)
 {
     createSwDoc("tdf135581.odt");
