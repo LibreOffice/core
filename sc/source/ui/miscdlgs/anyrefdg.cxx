@@ -263,16 +263,12 @@ void ScFormulaReferenceHelper::ShowReference(const OUString& rStr)
     if( !m_bEnableColorRef )
         return;
 
-    if( rStr.indexOf('(') != -1 ||
-        rStr.indexOf('+') != -1 ||
-        rStr.indexOf('*') != -1 ||
-        rStr.indexOf('-') != -1 ||
-        rStr.indexOf('/') != -1 ||
-        rStr.indexOf('&') != -1 ||
-        rStr.indexOf('<') != -1 ||
-        rStr.indexOf('>') != -1 ||
-        rStr.indexOf('=') != -1 ||
-        rStr.indexOf('^') != -1 )
+    // Exclude ';' semicolon as it is the separator for ParseWithNames() used
+    // in ShowSimpleReference(). Also sheet separator '.' dot is part of simple
+    // reference (could be array col/row separator as well but then in '{' '}'
+    // braces). Prefer '!' exclamation mark to be intersection operator rather
+    // than Excel sheet separator.
+    if (comphelper::string::indexOfAny( rStr, u"()+-*/^%&=<>~! #[]{},|\\@", 0) != -1)
     {
         ShowFormulaReference(rStr);
     }
