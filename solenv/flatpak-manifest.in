@@ -688,6 +688,7 @@
         "--socket=pulseaudio",
         "--device=dri",
         "--filesystem=xdg-config/gtk-3.0",
+        "--filesystem=xdg-config/fontconfig:ro",
         "--filesystem=xdg-run/gvfsd",
         "--filesystem=host",
         "--env=GIO_EXTRA_MODULES=/app/lib/gio/modules",
