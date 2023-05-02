@@ -1061,7 +1061,7 @@ FIELD_INSERT:
                 IDocumentMarkAccess& rIDMA = *rSh.getIDocumentMarkAccess();
 
                 // Allow wizard to be re-run: delete previously wizard-inserted page number.
-                // Try before creating non-shared header: avoid coping ODD bookmark onto EVEN page.
+                // Try before creating non-shared header: avoid copying ODD bookmark onto EVEN page.
                 IDocumentMarkAccess::const_iterator_t ppMark = rIDMA.findMark(
                     sBookmarkName + OUString::number(rSh.GetVirtPageNum()));
                 if (ppMark != rIDMA.getAllMarksEnd() && *ppMark)
