@@ -2899,7 +2899,7 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8 const * pEncoding,
 {
     int nMapped = 0;
     for (auto n = 0u; n < nGlyphs; ++n)
-        if( pCodeUnits[pEncToUnicodeIndex[n]] && pCodeUnitsPerGlyph[n] )
+        if (pCodeUnitsPerGlyph[n] && pCodeUnits[pEncToUnicodeIndex[n]])
             nMapped++;
 
     if( nMapped == 0 )
@@ -2927,7 +2927,7 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8 const * pEncoding,
     int nCount = 0;
     for (auto n = 0u; n < nGlyphs; ++n)
     {
-        if( pCodeUnits[pEncToUnicodeIndex[n]] && pCodeUnitsPerGlyph[n] )
+        if (pCodeUnitsPerGlyph[n] && pCodeUnits[pEncToUnicodeIndex[n]])
         {
             if( (nCount % 100) == 0 )
             {
