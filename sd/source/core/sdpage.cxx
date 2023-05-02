@@ -176,7 +176,8 @@ SdPage::~SdPage()
 
     clearChildNodes(mxAnimationNode);
 
-    // disconnect the UserCall link
+    // disconnect the UserCall link, so we don't get calls
+    // back into this dying object when the child objects die
     SdrObjListIter aIter( this, SdrIterMode::DeepWithGroups );
     while( aIter.IsMore() )
     {
@@ -184,9 +185,6 @@ SdPage::~SdPage()
         if( pChild->GetUserCall() == this )
             pChild->SetUserCall(nullptr);
     }
-
-    // clear SdrObjects with broadcasting
-    ClearSdrObjList();
 }
 
 namespace {
