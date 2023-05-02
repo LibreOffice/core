@@ -406,9 +406,8 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
         // multiple numbering portions are possible :(
         if (pPor->InNumberGrp() // also footnote label
-            && !static_cast<SwNumberPortion const*>(pPor)->IsFollow())
+            && !roTaggedLabel) // note: CalcPaintOfst may skip some portions
         {
-            assert(!roTaggedLabel);
             assert(isPDFTaggingEnabled); (void) isPDFTaggingEnabled;
             Por_Info aPorInfo(*pPor, *this, true); // open Lbl
             roTaggedLabel.emplace(nullptr, nullptr, &aPorInfo, *pOut);
