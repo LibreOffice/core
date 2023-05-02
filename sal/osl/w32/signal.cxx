@@ -33,12 +33,43 @@ namespace
 {
 long WINAPI signalHandlerFunction(LPEXCEPTION_POINTERS lpEP);
 
+// Similar to SIGINT handler in sal/osl/unx/signal.cxx
+BOOL WINAPI CtrlHandlerFunction(DWORD dwCtrlType)
+{
+    switch (dwCtrlType)
+    {
+        case CTRL_C_EVENT:
+        case CTRL_BREAK_EVENT:
+        case CTRL_CLOSE_EVENT:
+            switch (oslSignalInfo Info{ osl_Signal_Terminate }; callSignalHandler(&Info))
+            {
+                case osl_Signal_ActCallNextHdl:
+                    break; // Fall through to call the next handler
+
+                case osl_Signal_ActAbortApp:
+                    abort();
+                    break;
+
+                case osl_Signal_ActKillApp:
+                    _exit(255);
+                    break;
+
+                default:
+                    return TRUE; // do not call the next handler
+            }
+            [[fallthrough]];
+        default:
+            return FALSE; // call the next handler
+    }
+}
+
 LPTOP_LEVEL_EXCEPTION_FILTER pPreviousHandler = nullptr;
 }
 
 bool onInitSignal()
 {
     pPreviousHandler = SetUnhandledExceptionFilter(signalHandlerFunction);
+    SetConsoleCtrlHandler(CtrlHandlerFunction, TRUE);
 
     WerAddExcludedApplication(L"SOFFICE.EXE", FALSE);
 
@@ -47,6 +78,7 @@ bool onInitSignal()
 
 bool onDeInitSignal()
 {
+    SetConsoleCtrlHandler(CtrlHandlerFunction, FALSE);
     SetUnhandledExceptionFilter(pPreviousHandler);
 
     return false;
