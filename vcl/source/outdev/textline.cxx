@@ -353,7 +353,7 @@ void OutputDevice::ImplDrawStraightTextLine( tools::Long nBaseX, tools::Long nBa
                                              bool bIsAbove )
 {
     static bool bFuzzing = utl::ConfigManager::IsFuzzing();
-    if (bFuzzing && nWidth > 1000000)
+    if (bFuzzing && nWidth > 100000)
     {
         SAL_WARN("vcl.gdi", "drawLine, skipping suspicious TextLine of length: "
                                 << nWidth << " for fuzzing performance");
