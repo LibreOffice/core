@@ -30,17 +30,6 @@
 #include <docsort.hxx>
 #include <node2lay.hxx>
 
-// Undo for Sorting
-SwSortUndoElement::~SwSortUndoElement()
-{
-    // are there string pointers saved?
-    if( 0xffffffff != SORT_TXT_TBL.TXT.nID )
-    {
-        delete SORT_TXT_TBL.TBL.pSource;
-        delete SORT_TXT_TBL.TBL.pTarget;
-    }
-}
-
 SwUndoSort::SwUndoSort(const SwPaM& rRg, const SwSortOptions& rOpt)
     : SwUndo(SwUndoId::SORT_TXT, &rRg.GetDoc())
     , SwUndRng(rRg)
@@ -91,12 +80,10 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
         const SwTable& rTable = pTableNd->GetTable();
 
         SwMovedBoxes aMovedList;
-        for (const std::unique_ptr<SwSortUndoElement> & i : m_SortList)
+        for (std::unique_ptr<SwSortUndoElement> const& pElement : m_SortList)
         {
-            const SwTableBox* pSource = rTable.GetTableBox(
-                    *i->SORT_TXT_TBL.TBL.pSource );
-            const SwTableBox* pTarget = rTable.GetTableBox(
-                    *i->SORT_TXT_TBL.TBL.pTarget );
+            const SwTableBox* pSource = rTable.GetTableBox(pElement->maSourceString);
+            const SwTableBox* pTarget = rTable.GetTableBox(pElement->maTargetString);
 
             // move back
             MoveCell(&rDoc, pTarget, pSource,
@@ -125,12 +112,11 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
 
         for (size_t i = 0; i < m_SortList.size(); ++i)
         {
-            for (const std::unique_ptr<SwSortUndoElement> & j : m_SortList)
+            for (std::unique_ptr<SwSortUndoElement> const& pElement : m_SortList)
             {
-                if (j->SORT_TXT_TBL.TXT.nSource == sal_Int32(m_nSttNode + SwNodeOffset(i)))
+                if (pElement->mnSourceNodeOffset == (m_nSttNode + SwNodeOffset(i)))
                 {
-                    aIdxList.push_back( SwNodeIndex( rDoc.GetNodes(),
-                                            j->SORT_TXT_TBL.TXT.nTarget ) );
+                    aIdxList.push_back( SwNodeIndex(rDoc.GetNodes(), pElement->mnTargetNodeOffset));
                     break;
                 }
             }
@@ -168,12 +154,10 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
         const SwTable& rTable = pTableNd->GetTable();
 
         SwMovedBoxes aMovedList;
-        for (const std::unique_ptr<SwSortUndoElement> & i : m_SortList)
+        for (std::unique_ptr<SwSortUndoElement> const& pElement: m_SortList)
         {
-            const SwTableBox* pSource = rTable.GetTableBox(
-                    *i->SORT_TXT_TBL.TBL.pSource );
-            const SwTableBox* pTarget = rTable.GetTableBox(
-                    *i->SORT_TXT_TBL.TBL.pTarget );
+            const SwTableBox* pSource = rTable.GetTableBox(pElement->maSourceString);
+            const SwTableBox* pTarget = rTable.GetTableBox(pElement->maTargetString);
 
             // move back
             MoveCell(&rDoc, pSource, pTarget,
@@ -205,8 +189,7 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
 
         for (size_t i = 0; i < m_SortList.size(); ++i)
         {   // current position is starting point
-            aIdxList.push_back( SwNodeIndex( rDoc.GetNodes(),
-                                             m_SortList[i]->SORT_TXT_TBL.TXT.nSource) );
+            aIdxList.push_back( SwNodeIndex(rDoc.GetNodes(), m_SortList[i]->mnSourceNodeOffset) );
         }
 
         for (size_t i = 0; i < m_SortList.size(); ++i)
@@ -242,7 +225,7 @@ void SwUndoSort::RepeatImpl(::sw::RepeatContext & rContext)
 
 void SwUndoSort::Insert( const OUString& rOrgPos, const OUString& rNewPos)
 {
-    m_SortList.push_back(std::make_unique< SwSortUndoElement>(rOrgPos, rNewPos));
+    m_SortList.push_back(std::make_unique<SwSortUndoElement>(rOrgPos, rNewPos));
 }
 
 void SwUndoSort::Insert( SwNodeOffset nOrgPos, SwNodeOffset nNewPos)

@@ -34,30 +34,20 @@ class SwUndoAttrTable;
 
 struct SwSortUndoElement
 {
-    union {
-        struct {
-            sal_uLong nID;
-            // we cannot store these as SwNodeOffset (even though they are)
-            // because SwNodeOffset has no default constructor
-            sal_Int32 nSource, nTarget;
-        } TXT;
-        struct {
-            OUString *pSource, *pTarget;
-        } TBL;
-    } SORT_TXT_TBL;
+    OUString maSourceString;
+    OUString maTargetString;
+    SwNodeOffset mnSourceNodeOffset;
+    SwNodeOffset mnTargetNodeOffset;
 
-    SwSortUndoElement( const OUString& aS, const OUString& aT )
-    {
-        SORT_TXT_TBL.TBL.pSource = new OUString( aS );
-        SORT_TXT_TBL.TBL.pTarget = new OUString( aT );
-    }
-    SwSortUndoElement( SwNodeOffset nS, SwNodeOffset nT )
-    {
-        SORT_TXT_TBL.TXT.nSource = sal_Int32(nS);
-        SORT_TXT_TBL.TXT.nTarget = sal_Int32(nT);
-        SORT_TXT_TBL.TXT.nID   = 0xffffffff;
-    }
-    ~SwSortUndoElement();
+    SwSortUndoElement(const OUString& aSource, const OUString& aTarget)
+        : maSourceString(aSource)
+        , maTargetString(aTarget)
+    {}
+
+    SwSortUndoElement(SwNodeOffset nSource, SwNodeOffset nTarget)
+        : mnSourceNodeOffset(nSource)
+        , mnTargetNodeOffset(nTarget)
+    {}
 };
 
 class SwUndoSort final : public SwUndo, private SwUndRng
@@ -67,8 +57,7 @@ class SwUndoSort final : public SwUndo, private SwUndRng
     std::unique_ptr<SwUndoAttrTable>  m_pUndoAttrTable;
     SwNodeOffset         m_nTableNode;
 
-public:
-    SwUndoSort( const SwPaM&, const SwSortOptions& );
+public:    SwUndoSort( const SwPaM&, const SwSortOptions& );
     SwUndoSort( SwNodeOffset nStt, SwNodeOffset nEnd, const SwTableNode&,
                 const SwSortOptions&, bool bSaveTable );
 
