@@ -1932,9 +1932,9 @@ SvXMLImport::AddRDFa(const uno::Reference<rdf::XMetadatable>& i_xObject,
 
 bool SvXMLImport::embeddedFontAlreadyProcessed( const OUString& url )
 {
-    if( embeddedFontUrlsKnown.count( url ) != 0 )
+    if( m_embeddedFontUrlsKnown.count( url ) != 0 )
         return true;
-    embeddedFontUrlsKnown.insert( url );
+    m_embeddedFontUrlsKnown.insert( url );
     return false;
 }
 

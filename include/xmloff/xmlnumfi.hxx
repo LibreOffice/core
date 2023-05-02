@@ -69,7 +69,7 @@ class LocaleDataWrapper;
 
 class SvXMLNumFmtHelper
 {
-    std::unique_ptr<SvXMLNumImpData> pData;
+    std::unique_ptr<SvXMLNumImpData> m_pData;
 
 public:
     SvXMLNumFmtHelper(
@@ -87,7 +87,7 @@ public:
                 const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
                 SvXMLStylesContext& rStyles);
 
-    SvXMLNumImpData* getData() { return pData.get(); }
+    SvXMLNumImpData* getData() { return m_pData.get(); }
 
     LanguageType GetLanguageForKey(sal_Int32 nKey) const;
 
@@ -127,40 +127,40 @@ public:
 
 private:
 
-    SvXMLNumImpData*    pData;
-    SvXMLStylesContext*             pStyles;
-    std::vector <MyCondition>   aMyConditions;
-    SvXMLStylesTokens nType;
-    sal_Int32           nKey;
+    SvXMLNumImpData*    m_pData;
+    SvXMLStylesContext*             m_pStyles;
+    std::vector <MyCondition>   m_aMyConditions;
+    SvXMLStylesTokens m_nType;
+    sal_Int32           m_nKey;
 //  OUString       sFormatName;
-    OUString       sFormatTitle;
+    OUString       m_sFormatTitle;
 //  OUString       sMapName;
-    OUString       sCalendar;
-    OUString       aImplicitCalendar[2];
-    ImplicitCalendar eImplicitCalendar;
-    LanguageType   nFormatLang;
-    bool            bAutoOrder;
-    bool            bFromSystem;
-    bool            bTruncate;
-    bool            bAutoDec;       // set in AddNumber
-    bool            bAutoInt;       // set in AddNumber
-    bool            bHasExtraText;
-    bool            bHasTrailingEmptyText;
-    OUStringBuffer aFormatCode{64};
-    OUStringBuffer aConditions{32};
-    bool            bHasLongDoW;
-    bool            bHasDateTime;
-    bool            bRemoveAfterUse;
+    OUString       m_sCalendar;
+    OUString       m_aImplicitCalendar[2];
+    ImplicitCalendar m_eImplicitCalendar;
+    LanguageType   m_nFormatLang;
+    bool            m_bAutoOrder;
+    bool            m_bFromSystem;
+    bool            m_bTruncate;
+    bool            m_bAutoDec;       // set in AddNumber
+    bool            m_bAutoInt;       // set in AddNumber
+    bool            m_bHasExtraText;
+    bool            m_bHasTrailingEmptyText;
+    OUStringBuffer m_aFormatCode{64};
+    OUStringBuffer m_aConditions{32};
+    bool            m_bHasLongDoW;
+    bool            m_bHasDateTime;
+    bool            m_bRemoveAfterUse;
 
     //  contained date elements, used to recognize default date formats
-    SvXMLDateElementAttributes  eDateDOW;
-    SvXMLDateElementAttributes  eDateDay;
-    SvXMLDateElementAttributes  eDateMonth;
-    SvXMLDateElementAttributes  eDateYear;
-    SvXMLDateElementAttributes  eDateHours;
-    SvXMLDateElementAttributes  eDateMins;
-    SvXMLDateElementAttributes  eDateSecs;
-    bool                        bDateNoDefault;
+    SvXMLDateElementAttributes  m_eDateDOW;
+    SvXMLDateElementAttributes  m_eDateDay;
+    SvXMLDateElementAttributes  m_eDateMonth;
+    SvXMLDateElementAttributes  m_eDateYear;
+    SvXMLDateElementAttributes  m_eDateHours;
+    SvXMLDateElementAttributes  m_eDateMins;
+    SvXMLDateElementAttributes  m_eDateSecs;
+    bool                        m_bDateNoDefault;
 
     SAL_DLLPRIVATE sal_Int32 PrivateGetKey();
 
@@ -186,14 +186,14 @@ public:
     sal_Int32 GetKey();
     sal_Int32 CreateAndInsert( SvNumberFormatter* pFormatter );
     sal_Int32 CreateAndInsert( css::uno::Reference< css::util::XNumberFormatsSupplier > const & xFormatsSupplier );
-    SvXMLStylesTokens GetType() const           { return nType; }   // SvXMLStylesTokens
+    SvXMLStylesTokens GetType() const           { return m_nType; }   // SvXMLStylesTokens
 
-    bool HasLongDoW() const                     { return bHasLongDoW; }
-    void SetHasLongDoW(bool bSet)               { bHasLongDoW = bSet; }
-    void SetHasTrailingEmptyText(bool bSet)     { bHasTrailingEmptyText = bSet; }
+    bool HasLongDoW() const                     { return m_bHasLongDoW; }
+    void SetHasLongDoW(bool bSet)               { m_bHasLongDoW = bSet; }
+    void SetHasTrailingEmptyText(bool bSet)     { m_bHasTrailingEmptyText = bSet; }
 
     void UpdateCalendar( const OUString& rNewCalendar );
-    ImplicitCalendar GetImplicitCalendarState() const { return eImplicitCalendar; }
+    ImplicitCalendar GetImplicitCalendarState() const { return m_eImplicitCalendar; }
 
     const LocaleDataWrapper& GetLocaleData() const;
 

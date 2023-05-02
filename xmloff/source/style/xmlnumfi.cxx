@@ -1140,30 +1140,30 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
                                     const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
                                     SvXMLStylesContext& rStyles ) :
     SvXMLStyleContext( rImport ),
-    pData( pNewData ),
-    pStyles( &rStyles ),
-    nType( nNewType ),
-    nKey(-1),
-    eImplicitCalendar(ImplicitCalendar::DEFAULT),
-    nFormatLang( LANGUAGE_SYSTEM ),
-    bAutoOrder( false ),
-    bFromSystem( false ),
-    bTruncate( true ),
-    bAutoDec( false ),
-    bAutoInt( false ),
-    bHasExtraText( false ),
-    bHasTrailingEmptyText( false ),
-    bHasLongDoW( false ),
-    bHasDateTime( false ),
-    bRemoveAfterUse( false ),
-    eDateDOW( XML_DEA_NONE ),
-    eDateDay( XML_DEA_NONE ),
-    eDateMonth( XML_DEA_NONE ),
-    eDateYear( XML_DEA_NONE ),
-    eDateHours( XML_DEA_NONE ),
-    eDateMins( XML_DEA_NONE ),
-    eDateSecs( XML_DEA_NONE ),
-    bDateNoDefault( false )
+    m_pData( pNewData ),
+    m_pStyles( &rStyles ),
+    m_nType( nNewType ),
+    m_nKey(-1),
+    m_eImplicitCalendar(ImplicitCalendar::DEFAULT),
+    m_nFormatLang( LANGUAGE_SYSTEM ),
+    m_bAutoOrder( false ),
+    m_bFromSystem( false ),
+    m_bTruncate( true ),
+    m_bAutoDec( false ),
+    m_bAutoInt( false ),
+    m_bHasExtraText( false ),
+    m_bHasTrailingEmptyText( false ),
+    m_bHasLongDoW( false ),
+    m_bHasDateTime( false ),
+    m_bRemoveAfterUse( false ),
+    m_eDateDOW( XML_DEA_NONE ),
+    m_eDateDay( XML_DEA_NONE ),
+    m_eDateMonth( XML_DEA_NONE ),
+    m_eDateYear( XML_DEA_NONE ),
+    m_eDateHours( XML_DEA_NONE ),
+    m_eDateMins( XML_DEA_NONE ),
+    m_eDateSecs( XML_DEA_NONE ),
+    m_bDateNoDefault( false )
 {
     LanguageTagODF aLanguageTagODF;
     css::i18n::NativeNumberXmlAttributes aNatNumAttr;
@@ -1190,24 +1190,24 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
                 aLanguageTagODF.maCountry = aIter.toString();
                 break;
             case XML_ELEMENT(NUMBER, XML_TITLE):
-                sFormatTitle = aIter.toString();
+                m_sFormatTitle = aIter.toString();
                 break;
             case XML_ELEMENT(NUMBER, XML_AUTOMATIC_ORDER):
                 if (::sax::Converter::convertBool( bAttrBool, aIter.toView() ))
-                    bAutoOrder = bAttrBool;
+                    m_bAutoOrder = bAttrBool;
                 break;
             case XML_ELEMENT(NUMBER, XML_FORMAT_SOURCE):
-                SvXMLUnitConverter::convertEnum( bFromSystem, aIter.toView(), aFormatSourceMap );
+                SvXMLUnitConverter::convertEnum( m_bFromSystem, aIter.toView(), aFormatSourceMap );
                 break;
             case XML_ELEMENT(NUMBER, XML_TRUNCATE_ON_OVERFLOW):
                 if (::sax::Converter::convertBool( bAttrBool, aIter.toView() ))
-                    bTruncate = bAttrBool;
+                    m_bTruncate = bAttrBool;
                 break;
             case XML_ELEMENT(STYLE, XML_VOLATILE):
                 //  volatile formats can be removed after importing
                 //  if not used in other styles
                 if (::sax::Converter::convertBool( bAttrBool, aIter.toView() ))
-                    bRemoveAfterUse = bAttrBool;
+                    m_bRemoveAfterUse = bAttrBool;
                 break;
             case XML_ELEMENT(NUMBER, XML_TRANSLITERATION_FORMAT):
                 aNatNumAttr.Format = aIter.toString();
@@ -1232,9 +1232,9 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
 
     if (!aLanguageTagODF.isEmpty())
     {
-        nFormatLang = aLanguageTagODF.getLanguageTag().getLanguageType( false);
-        if ( nFormatLang == LANGUAGE_DONTKNOW )
-            nFormatLang = LANGUAGE_SYSTEM;          //! error handling for unknown locales?
+        m_nFormatLang = aLanguageTagODF.getLanguageTag().getLanguageType( false);
+        if ( m_nFormatLang == LANGUAGE_DONTKNOW )
+            m_nFormatLang = LANGUAGE_SYSTEM;          //! error handling for unknown locales?
     }
 
     if (aNatNumAttr.Format.isEmpty() && aSpellout.isEmpty())
@@ -1247,27 +1247,27 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     // NatNum12 spell out formula (cardinal, ordinal, ordinal-feminine etc.)
     if ( !aSpellout.isEmpty() )
     {
-        aFormatCode.append( "[NatNum12 " );
-        aFormatCode.append( aSpellout );
+        m_aFormatCode.append( "[NatNum12 " );
+        m_aFormatCode.append( aSpellout );
     } else {
-        SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
+        SvNumberFormatter* pFormatter = m_pData->GetNumberFormatter();
         if ( !pFormatter ) return;
 
         sal_Int32 nNatNum = pFormatter->GetNatNum()->convertFromXmlAttributes( aNatNumAttr );
-        aFormatCode.append( "[NatNum" );
-        aFormatCode.append( nNatNum );
+        m_aFormatCode.append( "[NatNum" );
+        m_aFormatCode.append( nNatNum );
     }
 
     LanguageType eLang = aLanguageTag.getLanguageType( false );
     if ( eLang == LANGUAGE_DONTKNOW )
         eLang = LANGUAGE_SYSTEM;            //! error handling for unknown locales?
-    if ( eLang != nFormatLang && eLang != LANGUAGE_SYSTEM )
+    if ( eLang != m_nFormatLang && eLang != LANGUAGE_SYSTEM )
     {
-        aFormatCode.append( "][$-" );
+        m_aFormatCode.append( "][$-" );
         // language code in upper hex:
-        aFormatCode.append(OUString::number(static_cast<sal_uInt16>(eLang), 16).toAsciiUpperCase());
+        m_aFormatCode.append(OUString::number(static_cast<sal_uInt16>(eLang), 16).toAsciiUpperCase());
     }
-    aFormatCode.append( ']' );
+    m_aFormatCode.append( ']' );
 }
 
 SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
@@ -1276,30 +1276,30 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
                                     const sal_Int32 nTempKey, LanguageType nLang,
                                     SvXMLStylesContext& rStyles ) :
     SvXMLStyleContext( rImport, XmlStyleFamily::DATA_STYLE ),
-    pData( nullptr ),
-    pStyles( &rStyles ),
-    nType( SvXMLStylesTokens::NUMBER_STYLE ),
-    nKey(nTempKey),
-    eImplicitCalendar(ImplicitCalendar::DEFAULT),
-    nFormatLang( nLang ),
-    bAutoOrder( false ),
-    bFromSystem( false ),
-    bTruncate( true ),
-    bAutoDec( false ),
-    bAutoInt( false ),
-    bHasExtraText( false ),
-    bHasTrailingEmptyText( false ),
-    bHasLongDoW( false ),
-    bHasDateTime( false ),
-    bRemoveAfterUse( false ),
-    eDateDOW( XML_DEA_NONE ),
-    eDateDay( XML_DEA_NONE ),
-    eDateMonth( XML_DEA_NONE ),
-    eDateYear( XML_DEA_NONE ),
-    eDateHours( XML_DEA_NONE ),
-    eDateMins( XML_DEA_NONE ),
-    eDateSecs( XML_DEA_NONE ),
-    bDateNoDefault( false )
+    m_pData( nullptr ),
+    m_pStyles( &rStyles ),
+    m_nType( SvXMLStylesTokens::NUMBER_STYLE ),
+    m_nKey(nTempKey),
+    m_eImplicitCalendar(ImplicitCalendar::DEFAULT),
+    m_nFormatLang( nLang ),
+    m_bAutoOrder( false ),
+    m_bFromSystem( false ),
+    m_bTruncate( true ),
+    m_bAutoDec( false ),
+    m_bAutoInt( false ),
+    m_bHasExtraText( false ),
+    m_bHasTrailingEmptyText( false ),
+    m_bHasLongDoW( false ),
+    m_bHasDateTime( false ),
+    m_bRemoveAfterUse( false ),
+    m_eDateDOW( XML_DEA_NONE ),
+    m_eDateDay( XML_DEA_NONE ),
+    m_eDateMonth( XML_DEA_NONE ),
+    m_eDateYear( XML_DEA_NONE ),
+    m_eDateHours( XML_DEA_NONE ),
+    m_eDateMins( XML_DEA_NONE ),
+    m_eDateSecs( XML_DEA_NONE ),
+    m_bDateNoDefault( false )
 {
     SetAttribute(XML_ELEMENT(STYLE, XML_NAME), rName);
 }
@@ -1420,27 +1420,27 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SvXMLNumFormatContext:
 
 sal_Int32 SvXMLNumFormatContext::GetKey()
 {
-    if (nKey > -1)
+    if (m_nKey > -1)
     {
-        if (bRemoveAfterUse)
+        if (m_bRemoveAfterUse)
         {
             //  format is used -> don't remove
-            bRemoveAfterUse = false;
-            if (pData)
-                pData->SetUsed(nKey);
+            m_bRemoveAfterUse = false;
+            if (m_pData)
+                m_pData->SetUsed(m_nKey);
 
             //  Add to import's list of keys now - CreateAndInsert didn't add
             //  the style if bRemoveAfterUse was set.
-            GetImport().AddNumberStyle( nKey, GetName() );
+            GetImport().AddNumberStyle( m_nKey, GetName() );
         }
-        return nKey;
+        return m_nKey;
     }
     else
     {
         // reset bRemoveAfterUse before CreateAndInsert, so AddKey is called without bRemoveAfterUse set
-        bRemoveAfterUse = false;
+        m_bRemoveAfterUse = false;
         CreateAndInsert(true);
-        return nKey;
+        return m_nKey;
     }
 }
 
@@ -1448,18 +1448,18 @@ sal_Int32 SvXMLNumFormatContext::PrivateGetKey()
 {
     //  used for map elements in CreateAndInsert - don't reset bRemoveAfterUse flag
 
-    if (nKey > -1)
-        return nKey;
+    if (m_nKey > -1)
+        return m_nKey;
     else
     {
         CreateAndInsert(true);
-        return nKey;
+        return m_nKey;
     }
 }
 
 sal_Int32 SvXMLNumFormatContext::CreateAndInsert( css::uno::Reference< css::util::XNumberFormatsSupplier > const & xFormatsSupplier )
 {
-    if (nKey <= -1)
+    if (m_nKey <= -1)
     {
         SvNumberFormatter* pFormatter = nullptr;
         SvNumberFormatsSupplierObj* pObj =
@@ -1473,13 +1473,13 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert( css::uno::Reference< css::util
             return -1;
     }
     else
-        return nKey;
+        return m_nKey;
 }
 
 void SvXMLNumFormatContext::CreateAndInsert(bool /*bOverwrite*/)
 {
-    if (nKey <= -1)
-        CreateAndInsert(pData->GetNumberFormatter());
+    if (m_nKey <= -1)
+        CreateAndInsert(m_pData->GetNumberFormatter());
 }
 
 sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
@@ -1492,10 +1492,10 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
 
     sal_uInt32 nIndex = NUMBERFORMAT_ENTRY_NOT_FOUND;
 
-    for (size_t i = 0; i < aMyConditions.size(); i++)
+    for (size_t i = 0; i < m_aMyConditions.size(); i++)
     {
-        SvXMLNumFormatContext* pStyle = const_cast<SvXMLNumFormatContext*>( static_cast<const SvXMLNumFormatContext *>(pStyles->FindStyleChildContext(
-            XmlStyleFamily::DATA_STYLE, aMyConditions[i].sMapName)));
+        SvXMLNumFormatContext* pStyle = const_cast<SvXMLNumFormatContext*>( static_cast<const SvXMLNumFormatContext *>(m_pStyles->FindStyleChildContext(
+            XmlStyleFamily::DATA_STYLE, m_aMyConditions[i].sMapName)));
         if (this == pStyle)
         {
             SAL_INFO("xmloff.style", "invalid style:map references containing style");
@@ -1509,56 +1509,56 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
     }
 
     sal_Int32 nBufLen;
-    if ( aFormatCode.isEmpty() )
+    if ( m_aFormatCode.isEmpty() )
     {
         //  insert empty format as empty string (with quotes)
         //  #93901# this check has to be done before inserting the conditions
-        aFormatCode.append("\"\"");    // ""
+        m_aFormatCode.append("\"\"");    // ""
     }
-    else if (bHasTrailingEmptyText && (nBufLen = aFormatCode.getLength()) >= 3)
+    else if (m_bHasTrailingEmptyText && (nBufLen = m_aFormatCode.getLength()) >= 3)
     {
         // Remove a trailing empty text. Earlier this may had been written to
         // file, like in "General;General" written with elements for
         // 'General"";General""' (whyever); when reading, empty text was
         // ignored, which it isn't anymore, so get rid of those.
-        if (aFormatCode[nBufLen-1] == '"' && aFormatCode[nBufLen-2] == '"')
-            aFormatCode.truncate( nBufLen - 2);
+        if (m_aFormatCode[nBufLen-1] == '"' && m_aFormatCode[nBufLen-2] == '"')
+            m_aFormatCode.truncate( nBufLen - 2);
     }
 
-    aFormatCode.insert( 0, aConditions );
-    aConditions.setLength(0);
-    OUString sFormat = aFormatCode.makeStringAndClear();
+    m_aFormatCode.insert( 0, m_aConditions );
+    m_aConditions.setLength(0);
+    OUString sFormat = m_aFormatCode.makeStringAndClear();
 
     //  test special cases
 
-    if ( bAutoDec )         // automatic decimal places
+    if ( m_bAutoDec )         // automatic decimal places
     {
         //  #99391# adjust only if the format contains no text elements, no conditions
         //  and no color definition (detected by the '[' at the start)
 
-        if ( nType == SvXMLStylesTokens::NUMBER_STYLE && !bHasExtraText &&
-                aMyConditions.empty() && sFormat.toChar() != '[' )
-            nIndex = pFormatter->GetStandardIndex( nFormatLang );
+        if ( m_nType == SvXMLStylesTokens::NUMBER_STYLE && !m_bHasExtraText &&
+                m_aMyConditions.empty() && sFormat.toChar() != '[' )
+            nIndex = pFormatter->GetStandardIndex( m_nFormatLang );
     }
-    if ( bAutoInt )         // automatic integer digits
+    if ( m_bAutoInt )         // automatic integer digits
     {
         //! only if two decimal places was set?
 
-        if ( nType == SvXMLStylesTokens::NUMBER_STYLE && !bHasExtraText &&
-                aMyConditions.empty() && sFormat.toChar() != '[' )
-            nIndex = pFormatter->GetFormatIndex( NF_NUMBER_SYSTEM, nFormatLang );
+        if ( m_nType == SvXMLStylesTokens::NUMBER_STYLE && !m_bHasExtraText &&
+                m_aMyConditions.empty() && sFormat.toChar() != '[' )
+            nIndex = pFormatter->GetFormatIndex( NF_NUMBER_SYSTEM, m_nFormatLang );
     }
 
-    if ( nType == SvXMLStylesTokens::BOOLEAN_STYLE && !bHasExtraText &&
-            aMyConditions.empty() && sFormat.toChar() != '[' )
-        nIndex = pFormatter->GetFormatIndex( NF_BOOLEAN, nFormatLang );
+    if ( m_nType == SvXMLStylesTokens::BOOLEAN_STYLE && !m_bHasExtraText &&
+            m_aMyConditions.empty() && sFormat.toChar() != '[' )
+        nIndex = pFormatter->GetFormatIndex( NF_BOOLEAN, m_nFormatLang );
 
     //  check for default date formats
-    if ( nType == SvXMLStylesTokens::DATE_STYLE && bAutoOrder && !bDateNoDefault )
+    if ( m_nType == SvXMLStylesTokens::DATE_STYLE && m_bAutoOrder && !m_bDateNoDefault )
     {
         NfIndexTableOffset eFormat = static_cast<NfIndexTableOffset>(SvXMLNumFmtDefaults::GetDefaultDateFormat(
-            eDateDOW, eDateDay, eDateMonth, eDateYear,
-            eDateHours, eDateMins, eDateSecs, bFromSystem ));
+            m_eDateDOW, m_eDateDay, m_eDateMonth, m_eDateYear,
+            m_eDateHours, m_eDateMins, m_eDateSecs, m_bFromSystem ));
         if ( eFormat < NF_INDEX_TABLE_RESERVED_START )
         {
             //  #109651# if a date format has the automatic-order attribute and
@@ -1566,7 +1566,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
             //  use that default format, with the element order and separators
             //  from the current locale settings
 
-            nIndex = pFormatter->GetFormatIndex( eFormat, nFormatLang );
+            nIndex = pFormatter->GetFormatIndex( eFormat, m_nFormatLang );
         }
     }
 
@@ -1575,17 +1575,17 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
         //  insert by format string
 
         OUString aFormatStr( sFormat );
-        nIndex = pFormatter->GetEntryKey( aFormatStr, nFormatLang );
+        nIndex = pFormatter->GetEntryKey( aFormatStr, m_nFormatLang );
         if ( nIndex == NUMBERFORMAT_ENTRY_NOT_FOUND )
         {
             sal_Int32  nErrPos = 0;
             SvNumFormatType l_nType = SvNumFormatType::ALL;
-            bool bOk = pFormatter->PutEntry( aFormatStr, nErrPos, l_nType, nIndex, nFormatLang );
+            bool bOk = pFormatter->PutEntry( aFormatStr, nErrPos, l_nType, nIndex, m_nFormatLang );
             if ( !bOk && nErrPos == 0 && aFormatStr != sFormat )
             {
                 //  if the string was modified by PutEntry, look for an existing format
                 //  with the modified string
-                nIndex = pFormatter->GetEntryKey( aFormatStr, nFormatLang );
+                nIndex = pFormatter->GetEntryKey( aFormatStr, m_nFormatLang );
                 if ( nIndex != NUMBERFORMAT_ENTRY_NOT_FOUND )
                     bOk = true;
             }
@@ -1595,7 +1595,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
     }
 
 //! I18N doesn't provide SYSTEM or extended date information yet
-    if ( nIndex != NUMBERFORMAT_ENTRY_NOT_FOUND && !bAutoOrder )
+    if ( nIndex != NUMBERFORMAT_ENTRY_NOT_FOUND && !m_bAutoOrder )
     {
         //  use fixed-order formats instead of SYS... if bAutoOrder is false
         //  (only if the format strings are equal for the locale)
@@ -1603,7 +1603,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
         NfIndexTableOffset eOffset = pFormatter->GetIndexTableOffset( nIndex );
         if ( eOffset == NF_DATE_SYS_DMMMYYYY )
         {
-            sal_uInt32 nNewIndex = pFormatter->GetFormatIndex( NF_DATE_DIN_DMMMYYYY, nFormatLang );
+            sal_uInt32 nNewIndex = pFormatter->GetFormatIndex( NF_DATE_DIN_DMMMYYYY, m_nFormatLang );
             const SvNumberformat* pOldEntry = pFormatter->GetEntry( nIndex );
             const SvNumberformat* pNewEntry = pFormatter->GetEntry( nNewIndex );
             if ( pOldEntry && pNewEntry && pOldEntry->GetFormatstring() == pNewEntry->GetFormatstring() )
@@ -1611,7 +1611,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
         }
         else if ( eOffset == NF_DATE_SYS_DMMMMYYYY )
         {
-            sal_uInt32 nNewIndex = pFormatter->GetFormatIndex( NF_DATE_DIN_DMMMMYYYY, nFormatLang );
+            sal_uInt32 nNewIndex = pFormatter->GetFormatIndex( NF_DATE_DIN_DMMMMYYYY, m_nFormatLang );
             const SvNumberformat* pOldEntry = pFormatter->GetEntry( nIndex );
             const SvNumberformat* pNewEntry = pFormatter->GetEntry( nNewIndex );
             if ( pOldEntry && pNewEntry && pOldEntry->GetFormatstring() == pNewEntry->GetFormatstring() )
@@ -1619,62 +1619,62 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
         }
     }
 
-    if ((nIndex != NUMBERFORMAT_ENTRY_NOT_FOUND) && !sFormatTitle.isEmpty())
+    if ((nIndex != NUMBERFORMAT_ENTRY_NOT_FOUND) && !m_sFormatTitle.isEmpty())
     {
         SvNumberformat* pFormat = const_cast<SvNumberformat*>(pFormatter->GetEntry( nIndex ));
         if (pFormat)
         {
-            pFormat->SetComment(sFormatTitle);
+            pFormat->SetComment(m_sFormatTitle);
         }
     }
 
     if ( nIndex == NUMBERFORMAT_ENTRY_NOT_FOUND )
     {
         OSL_FAIL("invalid number format");
-        nIndex = pFormatter->GetStandardIndex( nFormatLang );
+        nIndex = pFormatter->GetStandardIndex( m_nFormatLang );
     }
 
-    pData->AddKey( nIndex, GetName(), bRemoveAfterUse );
-    nKey = nIndex;
+    m_pData->AddKey( nIndex, GetName(), m_bRemoveAfterUse );
+    m_nKey = nIndex;
 
     //  Add to import's list of keys (shared between styles and content import)
     //  only if not volatile - formats are removed from NumberFormatter at the
     //  end of each import (in SvXMLNumFmtHelper dtor).
     //  If bRemoveAfterUse is reset later in GetKey, AddNumberStyle is called there.
 
-    if (!bRemoveAfterUse)
-        GetImport().AddNumberStyle( nKey, GetName() );
+    if (!m_bRemoveAfterUse)
+        GetImport().AddNumberStyle( m_nKey, GetName() );
 
-    return nKey;
+    return m_nKey;
 }
 
 const LocaleDataWrapper& SvXMLNumFormatContext::GetLocaleData() const
 {
-    return pData->GetLocaleData( nFormatLang );
+    return m_pData->GetLocaleData( m_nFormatLang );
 }
 
 void SvXMLNumFormatContext::AddToCode( sal_Unicode c )
 {
-    aFormatCode.append( c );
-    bHasExtraText = true;
+    m_aFormatCode.append( c );
+    m_bHasExtraText = true;
 }
 
 void SvXMLNumFormatContext::AddToCode( std::u16string_view rString )
 {
-    aFormatCode.append( rString );
-    bHasExtraText = true;
-    bHasTrailingEmptyText = false;  // is set by caller again if so
+    m_aFormatCode.append( rString );
+    m_bHasExtraText = true;
+    m_bHasTrailingEmptyText = false;  // is set by caller again if so
 }
 
 void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
 {
-    SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
+    SvNumberFormatter* pFormatter = m_pData->GetNumberFormatter();
     if (!pFormatter)
         return;
 
     //  store special conditions
-    bAutoDec = ( rInfo.nDecimals < 0 );
-    bAutoInt = ( rInfo.nInteger < 0 );
+    m_bAutoDec = ( rInfo.nDecimals < 0 );
+    m_bAutoInt = ( rInfo.nInteger < 0 );
 
     sal_uInt16 nPrec = 0;
     sal_uInt16 nLeading = 0;
@@ -1683,14 +1683,14 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
     if ( rInfo.nInteger >= 0 )                      //  < 0 : Default
         nLeading = static_cast<sal_uInt16>(rInfo.nInteger);
 
-    if ( bAutoDec )
+    if ( m_bAutoDec )
     {
-        if ( nType == SvXMLStylesTokens::CURRENCY_STYLE )
+        if ( m_nType == SvXMLStylesTokens::CURRENCY_STYLE )
         {
             //  for currency formats, "automatic decimals" is used for the automatic
             //  currency format with (fixed) decimals from the locale settings
 
-            const LocaleDataWrapper& rLoc = pData->GetLocaleData( nFormatLang );
+            const LocaleDataWrapper& rLoc = m_pData->GetLocaleData( m_nFormatLang );
             nPrec = rLoc.getCurrDigits();
         }
         else
@@ -1698,11 +1698,11 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
             //  for other types, "automatic decimals" means dynamic determination of
             //  decimals, as achieved with the "general" keyword
 
-            aFormatCode.append( pFormatter->GetStandardName( nFormatLang ) );
+            m_aFormatCode.append( pFormatter->GetStandardName( m_nFormatLang ) );
             return;
         }
     }
-    if ( bAutoInt )
+    if ( m_bAutoInt )
     {
         //!...
     }
@@ -1718,8 +1718,8 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
     if ( nEmbeddedCount && rInfo.m_EmbeddedElements.rbegin()->first > 0 )
         bGrouping = false;      // grouping and embedded characters in integer part can't be used together
 
-    sal_uInt32 nStdIndex = pFormatter->GetStandardIndex( nFormatLang );
-    OUStringBuffer aNumStr(pFormatter->GenerateFormat( nStdIndex, nFormatLang,
+    sal_uInt32 nStdIndex = pFormatter->GetStandardIndex( m_nFormatLang );
+    OUStringBuffer aNumStr(pFormatter->GenerateFormat( nStdIndex, m_nFormatLang,
                                                          bGrouping, false, nGenPrec, nLeading ));
 
     if ( rInfo.nExpDigits >= 0 && nLeading == 0 && !bGrouping && nEmbeddedCount == 0 )
@@ -1779,7 +1779,7 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
         sal_Unicode cAdd = rInfo.bDecReplace ? '-' : ( rInfo.bDecAlign ? '?': '#' );
 
         if ( rInfo.nMinDecimalDigits == 0 )
-            aNumStr.append( pData->GetLocaleData( nFormatLang ).getNumDecimalSep() );
+            aNumStr.append( m_pData->GetLocaleData( m_nFormatLang ).getNumDecimalSep() );
         for ( sal_uInt16 i=rInfo.nMinDecimalDigits; i<nPrec; i++)
             aNumStr.append( cAdd );
     }
@@ -1790,7 +1790,7 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
         //  support integer (position >=0) and decimal (position <0) part
         //  nZeroPos is the string position where format position 0 is inserted
 
-        sal_Int32 nZeroPos = aNumStr.indexOf( pData->GetLocaleData( nFormatLang ).getNumDecimalSep() );
+        sal_Int32 nZeroPos = aNumStr.indexOf( m_pData->GetLocaleData( m_nFormatLang ).getNumDecimalSep() );
         if ( nZeroPos < 0 )
         {
             nZeroPos = aNumStr.getLength();
@@ -1826,7 +1826,7 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
         }
     }
 
-    aFormatCode.append( aNumStr );
+    m_aFormatCode.append( aNumStr );
 
     //  add extra thousands separators for display factor
 
@@ -1839,9 +1839,9 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
     sal_Int32 nSepCount = static_cast<sal_Int32>(::rtl::math::round( log10(rInfo.fDisplayFactor) / 3.0 ));
     if ( nSepCount > 0 )
     {
-        OUString aSep = pData->GetLocaleData( nFormatLang ).getNumThousandSep();
+        OUString aSep = m_pData->GetLocaleData( m_nFormatLang ).getNumThousandSep();
         for ( sal_Int32 i=0; i<nSepCount; i++ )
-            aFormatCode.append( aSep );
+            m_aFormatCode.append( aSep );
     }
 }
 
@@ -1851,10 +1851,10 @@ void SvXMLNumFormatContext::AddCurrency( const OUString& rContent, LanguageType 
     OUString aSymbol = rContent;
     if ( aSymbol.isEmpty())
     {
-        SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
+        SvNumberFormatter* pFormatter = m_pData->GetNumberFormatter();
         if ( pFormatter )
         {
-            pFormatter->ChangeIntl( nFormatLang );
+            pFormatter->ChangeIntl( m_nFormatLang );
             OUString sCurString, sDummy;
             pFormatter->GetCompatibilityCurrency( sCurString, sDummy );
             aSymbol = sCurString;
@@ -1873,102 +1873,102 @@ void SvXMLNumFormatContext::AddCurrency( const OUString& rContent, LanguageType 
         //  remove unnecessary quotes before automatic symbol (formats like "-(0DM)")
         //  otherwise the currency symbol isn't recognized (#94048#)
 
-        sal_Int32 nLength = aFormatCode.getLength();
-        if ( nLength > 1 && aFormatCode[nLength - 1] == '"' )
+        sal_Int32 nLength = m_aFormatCode.getLength();
+        if ( nLength > 1 && m_aFormatCode[nLength - 1] == '"' )
         {
             //  find start of quoted string
             //  When SvXMLNumFmtElementContext::EndElement creates escaped quotes,
             //  they must be handled here, too.
 
             sal_Int32 nFirst = nLength - 2;
-            while ( nFirst >= 0 && aFormatCode[nFirst] != '"' )
+            while ( nFirst >= 0 && m_aFormatCode[nFirst] != '"' )
                 --nFirst;
             if ( nFirst >= 0 )
             {
                 //  remove both quotes from aFormatCode
-                OUString aOld = aFormatCode.makeStringAndClear();
+                OUString aOld = m_aFormatCode.makeStringAndClear();
                 if ( nFirst > 0 )
-                    aFormatCode.append( aOld.subView( 0, nFirst ) );
+                    m_aFormatCode.append( aOld.subView( 0, nFirst ) );
                 if ( nLength > nFirst + 2 )
-                    aFormatCode.append( aOld.subView( nFirst + 1, nLength - nFirst - 2 ) );
+                    m_aFormatCode.append( aOld.subView( nFirst + 1, nLength - nFirst - 2 ) );
             }
         }
     }
 
     if (!bAutomatic)
-        aFormatCode.append( "[$" );            // intro for "new" currency symbols
+        m_aFormatCode.append( "[$" );            // intro for "new" currency symbols
 
-    aFormatCode.append( aSymbol );
+    m_aFormatCode.append( aSymbol );
 
     if (!bAutomatic)
     {
         if ( nLang != LANGUAGE_SYSTEM )
         {
             //  '-' sign and language code in hex:
-            aFormatCode.append("-" + OUString(OUString::number(sal_uInt16(nLang), 16)).toAsciiUpperCase());
+            m_aFormatCode.append("-" + OUString(OUString::number(sal_uInt16(nLang), 16)).toAsciiUpperCase());
         }
 
-        aFormatCode.append( ']' );    // end of "new" currency symbol
+        m_aFormatCode.append( ']' );    // end of "new" currency symbol
     }
 }
 
 void SvXMLNumFormatContext::AddNfKeyword( sal_uInt16 nIndex )
 {
-    SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
+    SvNumberFormatter* pFormatter = m_pData->GetNumberFormatter();
     if (!pFormatter)
         return;
 
     if ( nIndex == NF_KEY_NNNN )
     {
         nIndex = NF_KEY_NNN;
-        bHasLongDoW = true;         // to remove string constant with separator
+        m_bHasLongDoW = true;         // to remove string constant with separator
     }
 
-    OUString sKeyword = pFormatter->GetKeyword( nFormatLang, nIndex );
+    OUString sKeyword = pFormatter->GetKeyword( m_nFormatLang, nIndex );
 
     if ( nIndex == NF_KEY_H  || nIndex == NF_KEY_HH  ||
          nIndex == NF_KEY_MI || nIndex == NF_KEY_MMI ||
          nIndex == NF_KEY_S  || nIndex == NF_KEY_SS )
     {
-        if ( !bTruncate && !bHasDateTime )
+        if ( !m_bTruncate && !m_bHasDateTime )
         {
             //  with truncate-on-overflow = false, add "[]" to first time part
-            aFormatCode.append("[" + sKeyword + "]");
+            m_aFormatCode.append("[" + sKeyword + "]");
         }
         else
         {
-            aFormatCode.append( sKeyword );
+            m_aFormatCode.append( sKeyword );
         }
-        bHasDateTime = true;
+        m_bHasDateTime = true;
     }
     else
     {
-        aFormatCode.append( sKeyword );
+        m_aFormatCode.append( sKeyword );
     }
     //  collect the date elements that the format contains, to recognize default date formats
     switch ( nIndex )
     {
-        case NF_KEY_NN:     eDateDOW = XML_DEA_SHORT;       break;
+        case NF_KEY_NN:     m_eDateDOW = XML_DEA_SHORT;       break;
         case NF_KEY_NNN:
-        case NF_KEY_NNNN:   eDateDOW = XML_DEA_LONG;        break;
-        case NF_KEY_D:      eDateDay = XML_DEA_SHORT;       break;
-        case NF_KEY_DD:     eDateDay = XML_DEA_LONG;        break;
-        case NF_KEY_M:      eDateMonth = XML_DEA_SHORT;     break;
-        case NF_KEY_MM:     eDateMonth = XML_DEA_LONG;      break;
-        case NF_KEY_MMM:    eDateMonth = XML_DEA_TEXTSHORT; break;
-        case NF_KEY_MMMM:   eDateMonth = XML_DEA_TEXTLONG;  break;
-        case NF_KEY_YY:     eDateYear = XML_DEA_SHORT;      break;
-        case NF_KEY_YYYY:   eDateYear = XML_DEA_LONG;       break;
-        case NF_KEY_H:      eDateHours = XML_DEA_SHORT;     break;
-        case NF_KEY_HH:     eDateHours = XML_DEA_LONG;      break;
-        case NF_KEY_MI:     eDateMins = XML_DEA_SHORT;      break;
-        case NF_KEY_MMI:    eDateMins = XML_DEA_LONG;       break;
-        case NF_KEY_S:      eDateSecs = XML_DEA_SHORT;      break;
-        case NF_KEY_SS:     eDateSecs = XML_DEA_LONG;       break;
+        case NF_KEY_NNNN:   m_eDateDOW = XML_DEA_LONG;        break;
+        case NF_KEY_D:      m_eDateDay = XML_DEA_SHORT;       break;
+        case NF_KEY_DD:     m_eDateDay = XML_DEA_LONG;        break;
+        case NF_KEY_M:      m_eDateMonth = XML_DEA_SHORT;     break;
+        case NF_KEY_MM:     m_eDateMonth = XML_DEA_LONG;      break;
+        case NF_KEY_MMM:    m_eDateMonth = XML_DEA_TEXTSHORT; break;
+        case NF_KEY_MMMM:   m_eDateMonth = XML_DEA_TEXTLONG;  break;
+        case NF_KEY_YY:     m_eDateYear = XML_DEA_SHORT;      break;
+        case NF_KEY_YYYY:   m_eDateYear = XML_DEA_LONG;       break;
+        case NF_KEY_H:      m_eDateHours = XML_DEA_SHORT;     break;
+        case NF_KEY_HH:     m_eDateHours = XML_DEA_LONG;      break;
+        case NF_KEY_MI:     m_eDateMins = XML_DEA_SHORT;      break;
+        case NF_KEY_MMI:    m_eDateMins = XML_DEA_LONG;       break;
+        case NF_KEY_S:      m_eDateSecs = XML_DEA_SHORT;      break;
+        case NF_KEY_SS:     m_eDateSecs = XML_DEA_LONG;       break;
         case NF_KEY_AP:
         case NF_KEY_AMPM:   break;          // AM/PM may or may not be in date/time formats -> ignore by itself
         default:
-            bDateNoDefault = true;      // any other element -> no default format
+            m_bDateNoDefault = true;      // any other element -> no default format
     }
 }
 
@@ -1992,19 +1992,19 @@ bool SvXMLNumFormatContext::ReplaceNfKeyword( sal_uInt16 nOld, sal_uInt16 nNew )
 {
     //  replaces one keyword with another if it is found at the end of the code
 
-    SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
+    SvNumberFormatter* pFormatter = m_pData->GetNumberFormatter();
     if (!pFormatter)
         return false;
 
-    OUString sOldStr = pFormatter->GetKeyword( nFormatLang, nOld );
-    if ( lcl_IsAtEnd( aFormatCode, sOldStr ) )
+    OUString sOldStr = pFormatter->GetKeyword( m_nFormatLang, nOld );
+    if ( lcl_IsAtEnd( m_aFormatCode, sOldStr ) )
     {
         // remove old keyword
-        aFormatCode.setLength( aFormatCode.getLength() - sOldStr.getLength() );
+        m_aFormatCode.setLength( m_aFormatCode.getLength() - sOldStr.getLength() );
 
         // add new keyword
-        OUString sNewStr = pFormatter->GetKeyword( nFormatLang, nNew );
-        aFormatCode.append( sNewStr );
+        OUString sNewStr = pFormatter->GetKeyword( m_nFormatLang, nNew );
+        m_aFormatCode.append( sNewStr );
 
         return true;    // changed
     }
@@ -2013,10 +2013,10 @@ bool SvXMLNumFormatContext::ReplaceNfKeyword( sal_uInt16 nOld, sal_uInt16 nNew )
 
 void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
 {
-    OUString rApplyName = aMyConditions[nIndex].sMapName;
-    OUString rCondition = aMyConditions[nIndex].sCondition;
-    SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
-    sal_uInt32 l_nKey = pData->GetKeyForName( rApplyName );
+    OUString rApplyName = m_aMyConditions[nIndex].sMapName;
+    OUString rCondition = m_aMyConditions[nIndex].sCondition;
+    SvNumberFormatter* pFormatter = m_pData->GetNumberFormatter();
+    sal_uInt32 l_nKey = m_pData->GetKeyForName( rApplyName );
 
     OUString sRealCond;
     if ( !(pFormatter && l_nKey != NUMBERFORMAT_ENTRY_NOT_FOUND &&
@@ -2030,10 +2030,10 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
 
     //! collect all conditions first and adjust default to >=0, >0 or <0 depending on count
     //! allow blanks in conditions
-    if ( aConditions.isEmpty() && aMyConditions.size() == 1 && sRealCond == ">=0" )
+    if ( m_aConditions.isEmpty() && m_aMyConditions.size() == 1 && sRealCond == ">=0" )
         bDefaultCond = true;
 
-    if ( nType == SvXMLStylesTokens::TEXT_STYLE && static_cast<size_t>(nIndex) == aMyConditions.size() - 1 )
+    if ( m_nType == SvXMLStylesTokens::TEXT_STYLE && static_cast<size_t>(nIndex) == m_aMyConditions.size() - 1 )
     {
         //  The last condition in a number format with a text part can only
         //  be "all other numbers", the condition string must be empty.
@@ -2059,14 +2059,14 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
                 sRealCond = sRealCond.replaceAt( nPos, 1, rDecSep );
             }
         }
-        aConditions.append("[" + sRealCond + "]");
+        m_aConditions.append("[" + sRealCond + "]");
     }
 
     const SvNumberformat* pFormat = pFormatter->GetEntry(l_nKey);
     if ( pFormat )
-        aConditions.append( pFormat->GetFormatstring() );
+        m_aConditions.append( pFormat->GetFormatstring() );
 
-    aConditions.append( ';' );
+    m_aConditions.append( ';' );
 }
 
 void SvXMLNumFormatContext::AddCondition( const OUString& rCondition, const OUString& rApplyName )
@@ -2074,12 +2074,12 @@ void SvXMLNumFormatContext::AddCondition( const OUString& rCondition, const OUSt
     MyCondition aCondition;
     aCondition.sCondition = rCondition;
     aCondition.sMapName = rApplyName;
-    aMyConditions.push_back(aCondition);
+    m_aMyConditions.push_back(aCondition);
 }
 
 void SvXMLNumFormatContext::AddColor( Color const nColor )
 {
-    SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
+    SvNumberFormatter* pFormatter = m_pData->GetNumberFormatter();
     if (!pFormatter)
         return;
 
@@ -2087,7 +2087,7 @@ void SvXMLNumFormatContext::AddColor( Color const nColor )
     for ( sal_uInt16 i=0; i<XML_NUMF_COLORCOUNT; i++ )
         if (nColor == aNumFmtStdColors[i])
         {
-            aColName = pFormatter->GetKeyword( nFormatLang, sal::static_int_cast< sal_uInt16 >(NF_KEY_FIRSTCOLOR + i) );
+            aColName = pFormatter->GetKeyword( m_nFormatLang, sal::static_int_cast< sal_uInt16 >(NF_KEY_FIRSTCOLOR + i) );
             break;
         }
 
@@ -2095,79 +2095,79 @@ void SvXMLNumFormatContext::AddColor( Color const nColor )
     {
         aColName.insert( 0, '[' );
         aColName.append( ']' );
-        aFormatCode.insert( 0, aColName );
+        m_aFormatCode.insert( 0, aColName );
     }
 }
 
 void SvXMLNumFormatContext::UpdateCalendar( const OUString& rNewCalendar )
 {
-    if ( rNewCalendar == sCalendar )
+    if ( rNewCalendar == m_sCalendar )
         return;
 
-    if (rNewCalendar.isEmpty() || rNewCalendar == aImplicitCalendar[0])
+    if (rNewCalendar.isEmpty() || rNewCalendar == m_aImplicitCalendar[0])
     {
-        eImplicitCalendar = (eImplicitCalendar == ImplicitCalendar::OTHER ?
+        m_eImplicitCalendar = (m_eImplicitCalendar == ImplicitCalendar::OTHER ?
                 ImplicitCalendar::DEFAULT_FROM_OTHER : ImplicitCalendar::DEFAULT);
     }
-    else if (aImplicitCalendar[0].isEmpty() && rNewCalendar == GetLocaleData().getDefaultCalendar()->Name)
+    else if (m_aImplicitCalendar[0].isEmpty() && rNewCalendar == GetLocaleData().getDefaultCalendar()->Name)
     {
-        eImplicitCalendar = (eImplicitCalendar == ImplicitCalendar::OTHER ?
+        m_eImplicitCalendar = (m_eImplicitCalendar == ImplicitCalendar::OTHER ?
                 ImplicitCalendar::DEFAULT_FROM_OTHER : ImplicitCalendar::DEFAULT);
-        aImplicitCalendar[0] = rNewCalendar;
+        m_aImplicitCalendar[0] = rNewCalendar;
     }
-    else if (rNewCalendar == aImplicitCalendar[1])
+    else if (rNewCalendar == m_aImplicitCalendar[1])
     {
-        eImplicitCalendar = (eImplicitCalendar == ImplicitCalendar::OTHER ?
+        m_eImplicitCalendar = (m_eImplicitCalendar == ImplicitCalendar::OTHER ?
                 ImplicitCalendar::SECONDARY_FROM_OTHER : ImplicitCalendar::SECONDARY);
     }
-    else if (aImplicitCalendar[1].isEmpty() && GetLocaleData().doesSecondaryCalendarUseEC( rNewCalendar))
+    else if (m_aImplicitCalendar[1].isEmpty() && GetLocaleData().doesSecondaryCalendarUseEC( rNewCalendar))
     {
-        eImplicitCalendar = (eImplicitCalendar == ImplicitCalendar::OTHER ?
+        m_eImplicitCalendar = (m_eImplicitCalendar == ImplicitCalendar::OTHER ?
                 ImplicitCalendar::SECONDARY_FROM_OTHER : ImplicitCalendar::SECONDARY);
-        aImplicitCalendar[1] = rNewCalendar;
+        m_aImplicitCalendar[1] = rNewCalendar;
     }
     else
     {
-        eImplicitCalendar = ImplicitCalendar::OTHER;
+        m_eImplicitCalendar = ImplicitCalendar::OTHER;
     }
 
-    if (eImplicitCalendar != ImplicitCalendar::DEFAULT && eImplicitCalendar != ImplicitCalendar::SECONDARY)
+    if (m_eImplicitCalendar != ImplicitCalendar::DEFAULT && m_eImplicitCalendar != ImplicitCalendar::SECONDARY)
     {
         // A switch from empty default calendar to named default calendar or
         // vice versa is not a switch.
         bool bSameDefault = false;
-        if (sCalendar.isEmpty() || rNewCalendar.isEmpty())
+        if (m_sCalendar.isEmpty() || rNewCalendar.isEmpty())
         {
             // As both are not equal, only one can be empty here, the other
             // can not.
             const OUString& rDefaultCalendar = GetLocaleData().getDefaultCalendar()->Name;
             // So if one is the named default calendar the other is the
             // empty default calendar.
-            bSameDefault = (rNewCalendar == rDefaultCalendar || sCalendar == rDefaultCalendar);
+            bSameDefault = (rNewCalendar == rDefaultCalendar || m_sCalendar == rDefaultCalendar);
         }
         if (!bSameDefault)
         {
-            aFormatCode.append( "[~" );   // intro for calendar code
+            m_aFormatCode.append( "[~" );   // intro for calendar code
             if (rNewCalendar.isEmpty())
             {
                 // Empty calendar name here means switching to default calendar
                 // from a different calendar. Needs to be explicitly stated in
                 // format code.
-                aFormatCode.append( GetLocaleData().getDefaultCalendar()->Name );
+                m_aFormatCode.append( GetLocaleData().getDefaultCalendar()->Name );
             }
             else
             {
-                aFormatCode.append( rNewCalendar );
+                m_aFormatCode.append( rNewCalendar );
             }
-            aFormatCode.append( ']' );    // end of calendar code
+            m_aFormatCode.append( ']' );    // end of calendar code
         }
     }
-    sCalendar = rNewCalendar;
+    m_sCalendar = rNewCalendar;
 }
 
 bool SvXMLNumFormatContext::IsSystemLanguage() const
 {
-    return nFormatLang == LANGUAGE_SYSTEM;
+    return m_nFormatLang == LANGUAGE_SYSTEM;
 }
 
 
@@ -2186,7 +2186,7 @@ SvXMLNumFmtHelper::SvXMLNumFmtHelper(
     if (pObj)
         pFormatter = pObj->GetNumberFormatter();
 
-    pData = std::make_unique<SvXMLNumImpData>( pFormatter, rxContext );
+    m_pData = std::make_unique<SvXMLNumImpData>( pFormatter, rxContext );
 }
 
 SvXMLNumFmtHelper::SvXMLNumFmtHelper(
@@ -2195,13 +2195,13 @@ SvXMLNumFmtHelper::SvXMLNumFmtHelper(
 {
     SAL_WARN_IF( !rxContext.is(), "xmloff", "got no service manager" );
 
-    pData = std::make_unique<SvXMLNumImpData>( pNumberFormatter, rxContext );
+    m_pData = std::make_unique<SvXMLNumImpData>( pNumberFormatter, rxContext );
 }
 
 SvXMLNumFmtHelper::~SvXMLNumFmtHelper()
 {
     //  remove temporary (volatile) formats from NumberFormatter
-    pData->RemoveVolatileFormats();
+    m_pData->RemoveVolatileFormats();
 }
 
 
@@ -2239,14 +2239,14 @@ SvXMLStyleContext*  SvXMLNumFmtHelper::CreateChildContext( SvXMLImport& rImport,
             return nullptr;
     }
     return new SvXMLNumFormatContext( rImport, nElement,
-                                      pData.get(), nStyleToken, xAttrList, rStyles );
+                                      m_pData.get(), nStyleToken, xAttrList, rStyles );
 }
 
 LanguageType SvXMLNumFmtHelper::GetLanguageForKey(sal_Int32 nKey) const
 {
-    if (pData->GetNumberFormatter())
+    if (m_pData->GetNumberFormatter())
     {
-        const SvNumberformat* pEntry = pData->GetNumberFormatter()->GetEntry(nKey);
+        const SvNumberformat* pEntry = m_pData->GetNumberFormatter()->GetEntry(nKey);
         if (pEntry)
             return pEntry->GetLanguage();
     }

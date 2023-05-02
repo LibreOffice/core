@@ -62,7 +62,7 @@ using ::com::sun::star::beans::PropertyVetoException;
 SvXMLImportPropertyMapper::SvXMLImportPropertyMapper(
         rtl::Reference< XMLPropertySetMapper > xMapper,
         SvXMLImport& rImp ):
-    rImport(rImp),
+    m_rImport(rImp),
     maPropMapper  (std::move( xMapper ))
 {
 }
@@ -265,7 +265,7 @@ void SvXMLImportPropertyMapper::importXMLAttribute(
                     if( !bNoWarning &&
                         ((nFlags & MID_FLAG_MULTI_PROPERTY) == 0) )
                     {
-                        rImport.SetError( XMLERROR_FLAG_WARNING |
+                        m_rImport.SetError( XMLERROR_FLAG_WARNING |
                                           XMLERROR_STYLE_ATTR_VALUE,
                                           { rAttrName, sValue } );
                     }
@@ -437,7 +437,7 @@ bool SvXMLImportPropertyMapper::FillPropertySet(
 
     Reference< XTolerantMultiPropertySet > xTolPropSet( rPropSet, UNO_QUERY );
     if (xTolPropSet.is())
-        bSet = FillTolerantMultiPropertySet_( aProperties, xTolPropSet, maPropMapper, rImport,
+        bSet = FillTolerantMultiPropertySet_( aProperties, xTolPropSet, maPropMapper, m_rImport,
                                             pSpecialContextIds );
 
     if (!bSet)
@@ -455,12 +455,12 @@ bool SvXMLImportPropertyMapper::FillPropertySet(
                                         pSpecialContextIds );
             if ( !bSet )
                 bSet = FillPropertySet_( aProperties, rPropSet,
-                                        xInfo, maPropMapper, rImport,
+                                        xInfo, maPropMapper, m_rImport,
                                         pSpecialContextIds);
         }
         else
             bSet = FillPropertySet_( aProperties, rPropSet, xInfo,
-                                    maPropMapper, rImport,
+                                    maPropMapper, m_rImport,
                                     pSpecialContextIds );
     }
 

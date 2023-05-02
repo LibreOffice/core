@@ -227,7 +227,7 @@ class XMLOFF_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") SvXMLImport : public c
     SAL_DLLPRIVATE void InitCtor_();
 
     SvXMLImportFlags  mnImportFlags;
-    std::set< OUString > embeddedFontUrlsKnown;
+    std::set< OUString > m_embeddedFontUrlsKnown;
     css::uno::Reference< css::xml::sax::XFastParser > mxParser;
     rtl::Reference< SvXMLImportFastNamespaceHandler > maNamespaceHandler;
     rtl::Reference < comphelper::AttributeList > maNamespaceAttrList;
