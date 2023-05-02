@@ -74,10 +74,11 @@ OUString sal::backtrace_to_string(BacktraceState* backtraceState)
     OUStringBuffer aBuf;
     for( int i = 0; i < nFrames; i++ )
     {
-        SymFromAddr( hProcess, reinterpret_cast<DWORD64>(backtraceState->buffer[ i ]), nullptr, pSymbol );
+        auto pSymAddr = reinterpret_cast<DWORD64>(backtraceState->buffer[ i ]);
+        SymFromAddr( hProcess, pSymAddr, nullptr, pSymbol );
         aBuf.append( OUString::number(nFrames - i - 1) + ": " );
         aBuf.appendAscii( pSymbol->Name );
-        aBuf.append( " - 0x" + OUString::number(pSymbol->Address, 16) + "\n" );
+        aBuf.append( " - 0x" + OUString::number(pSymAddr, 16) + "\n" );
     }
 
     free( pSymbol );
