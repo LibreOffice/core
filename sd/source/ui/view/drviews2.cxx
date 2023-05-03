@@ -3343,16 +3343,27 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_NAVIGATOR:
         {
-            if ( rReq.GetArgs() )
-                GetViewFrame()->SetChildWindow(SID_NAVIGATOR,
-                                        static_cast<const SfxBoolItem&>(rReq.GetArgs()->
-                                        Get(SID_NAVIGATOR)).GetValue());
-            else
-                GetViewFrame()->ToggleChildWindow( SID_NAVIGATOR );
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                GetViewFrame()->ShowChildWindow(SID_SIDEBAR);
+                OUString panelId = "SdNavigatorPanel";
+                ::sfx2::sidebar::Sidebar::TogglePanel(
+                    panelId, GetViewFrame()->GetFrame().GetFrameInterface());
 
-            GetViewFrame()->GetBindings().Invalidate(SID_NAVIGATOR);
-            Cancel();
-            rReq.Ignore ();
+                Cancel();
+                rReq.Done();
+            } else {
+                if ( rReq.GetArgs() )
+                    GetViewFrame()->SetChildWindow(SID_NAVIGATOR,
+                                            static_cast<const SfxBoolItem&>(rReq.GetArgs()->
+                                            Get(SID_NAVIGATOR)).GetValue());
+                else
+                    GetViewFrame()->ToggleChildWindow( SID_NAVIGATOR );
+
+                GetViewFrame()->GetBindings().Invalidate(SID_NAVIGATOR);
+                Cancel();
+                rReq.Ignore ();
+            }
         }
         break;
 

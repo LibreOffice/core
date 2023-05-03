@@ -3414,6 +3414,17 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
         rReq.Done();
         return;
     }
+    if (nSID == SID_NAVIGATOR)
+    {
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            ShowChildWindow(SID_SIDEBAR);
+            OUString panelId = "SdNavigatorPanel";
+            ::sfx2::sidebar::Sidebar::TogglePanel(panelId, GetFrame().GetFrameInterface());
+            rReq.Done();
+            return;
+        }
+    }
 
     bool bHasChild = HasChildWindow(nSID);
     bool bShow = pShowItem ? pShowItem->GetValue() : !bHasChild;
