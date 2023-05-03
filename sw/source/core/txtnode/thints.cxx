@@ -2699,7 +2699,7 @@ void SwpHints::NoteInHistory( SwTextAttr *pAttr, const bool bNew )
 namespace {
 struct Portion {
     SwTextAttr* pTextAttr;
-    int nKey;
+    sal_Int32 nKey;
     bool isRsidOnlyAutoFormat;
 };
 typedef std::vector< Portion > PortionMap;
