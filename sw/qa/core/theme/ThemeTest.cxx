@@ -18,6 +18,8 @@
 #include <svx/svdpage.hxx>
 #include <docmodel/uno/UnoThemeColor.hxx>
 #include <docmodel/theme/Theme.hxx>
+#include <ThemeColorChanger.hxx>
+#include <svx/ColorSets.hxx>
 
 using namespace css;
 
@@ -390,6 +392,82 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsODT)
     CPPUNIT_ASSERT_EQUAL(Color(0x637052), pTheme->GetColor(model::ThemeColorType::Dark2));
     CPPUNIT_ASSERT_EQUAL(Color(0xFFFFFF), pTheme->GetColor(model::ThemeColorType::Light1));
     CPPUNIT_ASSERT_EQUAL(Color(0xCCDDEA), pTheme->GetColor(model::ThemeColorType::Light2));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testThemeChanging)
+{
+    createSwDoc("ThemeColorInHeading.docx");
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    CPPUNIT_ASSERT(pPage);
+
+    // Check current theme colors
+    {
+        auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
+        CPPUNIT_ASSERT(pTheme);
+        CPPUNIT_ASSERT_EQUAL(OUString(u"Office Theme"), pTheme->GetName());
+
+        auto pColorSet = pTheme->getColorSet();
+        CPPUNIT_ASSERT(pColorSet);
+        CPPUNIT_ASSERT_EQUAL(OUString(u"Orange"), pColorSet->getName());
+        CPPUNIT_ASSERT_EQUAL(Color(0xE48312), pTheme->GetColor(model::ThemeColorType::Accent1));
+    }
+
+    // Change theme colors
+    {
+        auto const& rColorSets = svx::ColorSets::get();
+        model::ColorSet const& rNewColorSet = rColorSets.getColorSet(0);
+        // check that the theme colors are as expected
+        CPPUNIT_ASSERT_EQUAL(OUString(u"LibreOffice"), rNewColorSet.getName());
+
+        sw::ThemeColorChanger aChanger(pDoc->GetDocShell());
+        aChanger.apply(rNewColorSet);
+    }
+
+    // Check new theme colors
+    {
+        auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
+        CPPUNIT_ASSERT(pTheme);
+        CPPUNIT_ASSERT_EQUAL(OUString(u"Office Theme"), pTheme->GetName());
+
+        auto pColorSet = pTheme->getColorSet();
+        CPPUNIT_ASSERT(pColorSet);
+        CPPUNIT_ASSERT_EQUAL(OUString(u"LibreOffice"), pColorSet->getName());
+        CPPUNIT_ASSERT_EQUAL(Color(0x18A303), pTheme->GetColor(model::ThemeColorType::Accent1));
+    }
+
+    // Undo
+    pWrtShell->Undo();
+
+    // Check theme colors have been reverted
+    {
+        auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
+        CPPUNIT_ASSERT(pTheme);
+        CPPUNIT_ASSERT_EQUAL(OUString(u"Office Theme"), pTheme->GetName());
+
+        auto pColorSet = pTheme->getColorSet();
+        CPPUNIT_ASSERT(pColorSet);
+        CPPUNIT_ASSERT_EQUAL(OUString(u"Orange"), pColorSet->getName());
+        CPPUNIT_ASSERT_EQUAL(Color(0xE48312), pTheme->GetColor(model::ThemeColorType::Accent1));
+    }
+
+    // Redo
+    pWrtShell->Redo();
+
+    // Check theme colors have been applied again
+    {
+        auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
+        CPPUNIT_ASSERT(pTheme);
+        CPPUNIT_ASSERT_EQUAL(OUString(u"Office Theme"), pTheme->GetName());
+
+        auto pColorSet = pTheme->getColorSet();
+        CPPUNIT_ASSERT(pColorSet);
+        CPPUNIT_ASSERT_EQUAL(OUString(u"LibreOffice"), pColorSet->getName());
+        CPPUNIT_ASSERT_EQUAL(Color(0x18A303), pTheme->GetColor(model::ThemeColorType::Accent1));
+    }
 }
 
 } // end anonymous namnespace

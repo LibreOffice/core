@@ -21,6 +21,7 @@
 #include <DocumentContentOperationsManager.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <UndoThemeChange.hxx>
 
 #include <sal/config.h>
 #include <svx/svdpage.hxx>
@@ -154,17 +155,21 @@ void ThemeColorChanger::apply(model::ColorSet const& rColorSet)
     pDocument->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
 
     SdrPage* pPage = pDocument->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+
     auto pTheme = pPage->getSdrPageProperties().GetTheme();
-    if (pTheme)
-    {
-        pTheme->setColorSet(std::make_shared<model::ColorSet>(rColorSet));
-    }
-    else
+    if (!pTheme)
     {
         pTheme = std::make_shared<model::Theme>("Office");
         pPage->getSdrPageProperties().SetTheme(pTheme);
-        pTheme->setColorSet(std::make_shared<model::ColorSet>(rColorSet));
     }
+
+    auto pNewColorSet = std::make_shared<model::ColorSet>(rColorSet);
+    auto pOldColorSet = pTheme->getColorSet();
+    pTheme->setColorSet(pNewColorSet);
+
+    auto pUndoThemeChange
+        = std::make_unique<sw::UndoThemeChange>(*pDocument, pOldColorSet, pNewColorSet);
+    pDocument->GetIDocumentUndoRedo().AppendUndo(std::move(pUndoThemeChange));
 
     SfxStyleSheetBasePool* pPool = mpDocSh->GetStyleSheetPool();
     SwDocStyleSheet* pStyle;

@@ -676,6 +676,9 @@ OUString GetUndoComment(SwUndoId eId)
         case SwUndoId::UPDATE_SECTIONS:
             pId = STR_UPDATE_SECTIONS;
             break;
+        case SwUndoId::CHANGE_THEME:
+            pId = STR_UNDO_CHANGE_THEME_COLORS;
+            break;
     }
 
     assert(pId);
