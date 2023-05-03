@@ -1895,8 +1895,15 @@ SwRedlineTable::size_type SwTableLine::UpdateTextChangesOnly(
 SwRedlineTable::size_type SwTableLine::GetTableRedline() const
 {
     const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
-    const SwPosition aLineStart(*GetTabBoxes().front()->GetSttNd());
-    const SwPosition aLineEnd(*GetTabBoxes().back()->GetSttNd());
+    const SwStartNode* pFirstBox = GetTabBoxes().front()->GetSttNd();
+    const SwStartNode* pLastBox = GetTabBoxes().back()->GetSttNd();
+
+    // Box with no start node
+    if ( !pFirstBox || !pLastBox )
+        return SwRedlineTable::npos;
+
+    const SwPosition aLineStart(*pFirstBox);
+    const SwPosition aLineEnd(*pLastBox);
     SwRedlineTable::size_type n = 0;
 
     const SwRangeRedline* pFnd = aRedlineTable.FindAtPosition( aLineStart, n, /*next=*/false );

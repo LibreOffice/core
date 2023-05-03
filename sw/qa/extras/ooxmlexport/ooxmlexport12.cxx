@@ -1323,6 +1323,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf150824, "tdf150824.fodt")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf150824_regression, "ooo30436-1-minimized.sxw")
+{
+    // There should be no crash during loading of the document
+    // so, let's check just how much pages we have
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf113608_runAwayNumbering, "tdf113608_runAwayNumbering.docx")
 {
     // check that an incorrect numbering style is not applied
