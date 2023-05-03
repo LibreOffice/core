@@ -2396,7 +2396,9 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 }
                 else if (m_bONECalcLowers)
                 {
-                    lcl_RecalcRow(*static_cast<SwRowFrame*>(Lower()), LONG_MAX);
+                    // tdf#147526 is a case of a macro which results in a null Lower() result
+                    if (SwRowFrame* pLower = static_cast<SwRowFrame*>(Lower()))
+                        lcl_RecalcRow(*pLower, LONG_MAX);
                     m_bONECalcLowers = false;
                 }
             }
