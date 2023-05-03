@@ -25,7 +25,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer4.hxx>
 #include <com/sun/star/presentation/ClickAction.hpp>
-#include <com/sun/star/presentation/XSlideShowListener.hpp>
+#include <com/sun/star/presentation/XSlideShowNavigationListener.hpp>
 #include <com/sun/star/presentation/XSlideShowController.hpp>
 #include <com/sun/star/presentation/XShapeEventListener.hpp>
 
@@ -80,7 +80,7 @@ struct WrappedShapeEventImpl
 typedef std::shared_ptr< WrappedShapeEventImpl > WrappedShapeEventImplPtr;
 
 class SlideShowListenerProxy :
-        public ::cppu::WeakImplHelper< css::presentation::XSlideShowListener, css::presentation::XShapeEventListener >
+        public ::cppu::WeakImplHelper< css::presentation::XSlideShowNavigationListener, css::presentation::XShapeEventListener >
 {
 public:
     SlideShowListenerProxy( rtl::Reference< SlideshowImpl > xController, css::uno::Reference< css::presentation::XSlideShow > xSlideShow );
@@ -108,6 +108,9 @@ public:
     virtual void SAL_CALL slideAnimationsEnded() override;
     virtual void SAL_CALL slideEnded(sal_Bool bReverse) override;
     virtual void SAL_CALL hyperLinkClicked(const OUString & hyperLink) override;
+
+    // css::presentation::XSlideShowNavigationListener:
+    virtual void SAL_CALL contextMenuShow(const css::awt::Point& point) override;
 
     // css::lang::XEventListener:
     virtual void SAL_CALL disposing(const css::lang::EventObject & Source) override;
@@ -182,6 +185,7 @@ public:
 
     // will be called from the SlideShowListenerProxy when this event is fired from the XSlideShow
     void slideEnded(const bool bReverse);
+    void contextMenuShow(const css::awt::Point& point);
     /// @throws css::uno::RuntimeException
     void hyperLinkClicked(const OUString & hyperLink);
     void click(const css::uno::Reference< css::drawing::XShape > & xShape);

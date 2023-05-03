@@ -31,6 +31,8 @@
 
 #include "unoview.hxx"
 
+namespace basegfx { class B2DPoint; }
+
 namespace com::sun::star::drawing { class XShape; }
 
 namespace slideshow::internal {
@@ -647,6 +649,12 @@ public:
     /** Notifies that a hyperlink has been clicked.
     */
     void notifyHyperlinkClicked( OUString const& hyperLink );
+
+    basegfx::B2DPoint toMatrixPoint(css::uno::Reference<css::uno::XInterface> xInterface,
+                                    basegfx::B2DPoint pnt);
+
+    basegfx::B2DPoint toNormalPoint(css::uno::Reference<css::uno::XInterface> xInterface,
+                                    basegfx::B2DPoint pnt);
 
 private:
     std::unique_ptr<EventMultiplexerImpl> mpImpl;

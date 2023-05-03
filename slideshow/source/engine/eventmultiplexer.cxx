@@ -321,6 +321,10 @@ struct EventMultiplexerImpl
     /// Schedules tick events, if mbIsAutoMode is true
     void handleTicks();
 
+    basegfx::B2DPoint toMatrixPoint(uno::Reference<presentation::XSlideShowView> xView,
+                                    basegfx::B2DPoint pnt);
+    basegfx::B2DPoint toNormalPoint(uno::Reference<presentation::XSlideShowView> xView,
+                                    basegfx::B2DPoint pnt);
 
     EventQueue&                         mrEventQueue;
     UnoViewContainer const&             mrViewContainer;
@@ -573,6 +577,54 @@ void EventMultiplexerImpl::handleTicks()
     scheduleTick();
 }
 
+basegfx::B2DPoint
+EventMultiplexerImpl::toNormalPoint(uno::Reference<presentation::XSlideShowView> xView,
+                                    basegfx::B2DPoint pnt)
+{
+    UnoViewVector::const_iterator aIter;
+    const UnoViewVector::const_iterator aEnd(mrViewContainer.end());
+    if ((aIter = std::find_if(
+             mrViewContainer.begin(), aEnd,
+             [&xView](const UnoViewSharedPtr& pView) { return xView == pView->getUnoView(); }))
+        == aEnd)
+    {
+        return pnt;
+    }
+
+    basegfx::B2DPoint aPosition(pnt.getX(), pnt.getY());
+    basegfx::B2DHomMatrix aMatrix((*aIter)->getTransformation());
+    aPosition *= aMatrix;
+
+    aPosition.setX(basegfx::fround(aPosition.getX()));
+    aPosition.setY(basegfx::fround(aPosition.getY()));
+    return aPosition;
+}
+
+basegfx::B2DPoint
+EventMultiplexerImpl::toMatrixPoint(uno::Reference<presentation::XSlideShowView> xView,
+                                    basegfx::B2DPoint pnt)
+{
+    UnoViewVector::const_iterator aIter;
+    const UnoViewVector::const_iterator aEnd(mrViewContainer.end());
+    if ((aIter = std::find_if(
+             mrViewContainer.begin(), aEnd,
+             [&xView](const UnoViewSharedPtr& pView) { return xView == pView->getUnoView(); }))
+        == aEnd)
+    {
+        return pnt;
+    }
+
+    basegfx::B2DPoint aPosition(pnt.getX(), pnt.getY());
+    basegfx::B2DHomMatrix aMatrix((*aIter)->getTransformation());
+    if (!aMatrix.invert())
+        ENSURE_OR_THROW(false, "EventMultiplexer::notifyHandlers():"
+                               " view matrix singular");
+    aPosition *= aMatrix;
+
+    aPosition.setX(basegfx::fround(aPosition.getX()));
+    aPosition.setY(basegfx::fround(aPosition.getY()));
+    return aPosition;
+}
 
 void EventMultiplexerImpl::clear()
 {
@@ -1231,6 +1283,20 @@ void EventMultiplexer::notifyHyperlinkClicked(
     mpImpl->maHyperlinkHandlers.apply(
         [&hyperLink]( const PrioritizedHandlerEntry< HyperlinkHandler >& pHandler )
         { return pHandler.getHandler()->handleHyperlink( hyperLink ); } );
+}
+
+basegfx::B2DPoint EventMultiplexer::toMatrixPoint(uno::Reference<uno::XInterface> xInterface,
+                                                  basegfx::B2DPoint pnt)
+{
+    uno::Reference<presentation::XSlideShowView> xView(xInterface, uno::UNO_QUERY_THROW);
+    return mpImpl->toMatrixPoint(xView, pnt);
+}
+
+basegfx::B2DPoint EventMultiplexer::toNormalPoint(uno::Reference<uno::XInterface> xInterface,
+                                                  basegfx::B2DPoint pnt)
+{
+    uno::Reference<presentation::XSlideShowView> xView(xInterface, uno::UNO_QUERY_THROW);
+    return mpImpl->toNormalPoint(xView, pnt);
 }
 
 } // namespace presentation

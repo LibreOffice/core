@@ -44,7 +44,7 @@
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/presentation/XSlideShow.hpp>
-#include <com/sun/star/presentation/XSlideShowListener.hpp>
+#include <com/sun/star/presentation/XSlideShowNavigationListener.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -80,6 +80,7 @@
 #include "effectrewinder.hxx"
 #include <framerate.hxx>
 #include "pointersymbol.hxx"
+#include "slideoverlaybutton.hxx"
 
 #include <map>
 #include <thread>
@@ -436,6 +437,11 @@ private:
 
     std::shared_ptr<RehearseTimingsActivity> mpRehearseTimingsActivity;
     std::shared_ptr<WaitSymbol>           mpWaitSymbol;
+
+    // navigation buttons
+    std::shared_ptr<SlideOverlayButton>  mpNavigationPrev;
+    std::shared_ptr<SlideOverlayButton>  mpNavigationMenu;
+    std::shared_ptr<SlideOverlayButton>  mpNavigationNext;
 
     std::shared_ptr<PointerSymbol>        mpPointerSymbol;
 
@@ -1723,6 +1729,56 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
                                            maScreenUpdater,
                                            maEventMultiplexer,
                                            maViewContainer );
+
+        return true;
+    }
+
+    if (rProperty.Name == "NavigationSlidePrev")
+    {
+        uno::Reference<rendering::XBitmap> xBitmap;
+        if (!(rProperty.Value >>= xBitmap))
+            return false;
+
+        mpNavigationPrev = SlideOverlayButton::create(
+            xBitmap, { 20, 10 }, [this](basegfx::B2DPoint) { notifySlideEnded(true); },
+            maScreenUpdater, maEventMultiplexer, maViewContainer);
+
+        return true;
+    }
+
+    if (rProperty.Name == "NavigationSlideMenu")
+    {
+        uno::Reference<rendering::XBitmap> xBitmap;
+        if (!(rProperty.Value >>= xBitmap))
+            return false;
+
+        mpNavigationMenu = SlideOverlayButton::create(
+            xBitmap, { 80, 10 },
+            [this](basegfx::B2DPoint pos) {
+                maListenerContainer.forEach(
+                    [pos](const uno::Reference<presentation::XSlideShowListener>& xListener) {
+                        uno::Reference<presentation::XSlideShowNavigationListener> xNavListener(
+                            xListener, uno::UNO_QUERY);
+                        if (xNavListener.is())
+                            xNavListener->contextMenuShow(
+                                css::awt::Point(static_cast<sal_Int32>(floor(pos.getX())),
+                                                static_cast<sal_Int32>(floor(pos.getY()))));
+                    });
+            },
+            maScreenUpdater, maEventMultiplexer, maViewContainer);
+
+        return true;
+    }
+
+    if (rProperty.Name == "NavigationSlideNext")
+    {
+        uno::Reference<rendering::XBitmap> xBitmap;
+        if (!(rProperty.Value >>= xBitmap))
+            return false;
+
+        mpNavigationNext = SlideOverlayButton::create(
+            xBitmap, { 140, 10 }, [this](basegfx::B2DPoint) { notifySlideEnded(false); },
+            maScreenUpdater, maEventMultiplexer, maViewContainer);
 
         return true;
     }

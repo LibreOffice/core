@@ -208,6 +208,13 @@ inline constexpr OUStringLiteral BMP_MENU_PREV = u"cmd/sc_prevrecord.png";
 inline constexpr OUStringLiteral BMP_MENU_FIRST = u"cmd/sc_firstrecord.png";
 inline constexpr OUStringLiteral BMP_MENU_LAST = u"cmd/sc_lastrecord.png";
 
+inline constexpr OUStringLiteral BMP_PREV_SLIDE = u"sd/res/prevslide.png";
+inline constexpr OUStringLiteral BMP_PREV_SLIDE_MOUSE_OVER = u"sd/res/prevslide_mouseover.png";
+inline constexpr OUStringLiteral BMP_NEXT_SLIDE = u"sd/res/nextslide.png";
+inline constexpr OUStringLiteral BMP_NEXT_SLIDE_MOUSE_OVER = u"sd/res/nextslide_mouseover.png";
+inline constexpr OUStringLiteral BMP_MENU_SLIDE = u"sd/res/slideshowmenu.png";
+inline constexpr OUStringLiteral BMP_MENU_SLIDE_MOUSE_OVER = u"sd/res/slideshowmenu_mouseover.png";
+
 inline constexpr OUStringLiteral SFX_BMP_CLOSE_DOC = u"sfx2/res/closedoc.png";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

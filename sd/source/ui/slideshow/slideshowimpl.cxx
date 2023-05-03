@@ -756,6 +756,7 @@ bool SlideshowImpl::startPreview(
         maPresSettings.mbMouseAsPen = false;
         maPresSettings.mbLockedPages = false;
         maPresSettings.mbAlwaysOnTop = false;
+        maPresSettings.mbUseNavigation = false;
         maPresSettings.mbFullScreen = false;
         maPresSettings.mbAnimationAllowed = true;
         maPresSettings.mnPauseTimeout = 0;
@@ -876,6 +877,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx const * pPresSettings )
             maPresSettings.mbMouseAsPen = false;
             maPresSettings.mnPauseTimeout = 0;
             maPresSettings.mbShowPauseLogo = false;
+            maPresSettings.mbUseNavigation = false;
         }
 
         if( pStartPage )
@@ -1076,6 +1078,37 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
                         -1,
                         Any( xPointerBitmap ),
                         beans::PropertyState_DIRECT_VALUE ) );
+            }
+
+            if (maPresSettings.mbUseNavigation)
+            {
+                BitmapEx prevSlideBm(BMP_PREV_SLIDE);
+                const Reference<rendering::XBitmap> xPrevSBitmap(
+                    vcl::unotools::xBitmapFromBitmapEx(prevSlideBm));
+                if (xPrevSBitmap.is())
+                {
+                    mxShow->setProperty(beans::PropertyValue("NavigationSlidePrev", -1,
+                                                             Any(xPrevSBitmap),
+                                                             beans::PropertyState_DIRECT_VALUE));
+                }
+                BitmapEx menuSlideBm(BMP_MENU_SLIDE);
+                const Reference<rendering::XBitmap> xMenuSBitmap(
+                    vcl::unotools::xBitmapFromBitmapEx(menuSlideBm));
+                if (xMenuSBitmap.is())
+                {
+                    mxShow->setProperty(beans::PropertyValue("NavigationSlideMenu", -1,
+                                                             Any(xMenuSBitmap),
+                                                             beans::PropertyState_DIRECT_VALUE));
+                }
+                BitmapEx nextSlideBm(BMP_NEXT_SLIDE);
+                const Reference<rendering::XBitmap> xNextSBitmap(
+                    vcl::unotools::xBitmapFromBitmapEx(nextSlideBm));
+                if (xNextSBitmap.is())
+                {
+                    mxShow->setProperty(beans::PropertyValue("NavigationSlideNext", -1,
+                                                             Any(xNextSBitmap),
+                                                             beans::PropertyState_DIRECT_VALUE));
+                }
             }
         }
 
@@ -1577,6 +1610,12 @@ sal_Int32 SlideshowImpl::getSlideNumberForBookmark( const OUString& rStrBookmark
         return -1;
 
     return ( nPgNum - 1) >> 1;
+}
+
+void SlideshowImpl::contextMenuShow(const css::awt::Point& point)
+{
+    maPopupMousePos = { point.X, point.Y };
+    mnContextMenuEvent = Application::PostUserEvent(LINK(this, SlideshowImpl, ContextMenuHdl));
 }
 
 void SlideshowImpl::hyperLinkClicked( OUString const& aHyperLink )
@@ -3344,6 +3383,13 @@ void SAL_CALL SlideShowListenerProxy::click( const Reference< XShape >& xShape, 
     SolarMutexGuard aSolarGuard;
     if( mxController.is() )
         mxController->click(xShape );
+}
+
+void SAL_CALL SlideShowListenerProxy::contextMenuShow(const css::awt::Point& point)
+{
+    SolarMutexGuard aSolarGuard;
+    if (mxController.is())
+        mxController->contextMenuShow(point);
 }
 
 } // namespace ::sd

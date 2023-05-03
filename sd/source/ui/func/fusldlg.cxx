@@ -99,6 +99,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_ANIMATION_ALLOWED, rPresentationSettings.mbAnimationAllowed ) );
     aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_CHANGE_PAGE, !rPresentationSettings.mbLockedPages ) );
     aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_ALWAYS_ON_TOP, rPresentationSettings.mbAlwaysOnTop ) );
+    aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_SHOW_NAVIGATION_BUTTONS, rPresentationSettings.mbUseNavigation ) );
     aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_FULLSCREEN, rPresentationSettings.mbFullScreen ) );
     aDlgSet.Put( SfxUInt32Item( ATTR_PRESENT_PAUSE_TIMEOUT, rPresentationSettings.mnPauseTimeout ) );
     aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_SHOW_PAUSELOGO, rPresentationSettings.mbShowPauseLogo ) );
@@ -191,6 +192,13 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     {
         bValuesChanged = true;
         rPresentationSettings.mbAlwaysOnTop = bValue;
+    }
+
+    bValue = ITEMVALUE(aDlgSet, ATTR_PRESENT_SHOW_NAVIGATION_BUTTONS, SfxBoolItem);
+    if (bValue != rPresentationSettings.mbUseNavigation)
+    {
+        bValuesChanged = true;
+        rPresentationSettings.mbUseNavigation = bValue;
     }
 
     bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_FULLSCREEN, SfxBoolItem );

@@ -54,6 +54,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCbxAnimationAllowed;
     std::unique_ptr<weld::CheckButton> m_xCbxChangePage;
     std::unique_ptr<weld::CheckButton> m_xCbxAlwaysOnTop;
+    std::unique_ptr<weld::CheckButton> m_xCbxShowNavigationButton;
 
     std::unique_ptr<weld::Label> m_xFtMonitor;
     std::unique_ptr<weld::ComboBox> m_xLBMonitor;

@@ -417,6 +417,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             aDlgSet.Put(SfxBoolItem(ATTR_PRESENT_ANIMATION_ALLOWED, rPresentationSettings.mbAnimationAllowed));
             aDlgSet.Put(SfxBoolItem(ATTR_PRESENT_CHANGE_PAGE, !rPresentationSettings.mbLockedPages));
             aDlgSet.Put(SfxBoolItem(ATTR_PRESENT_ALWAYS_ON_TOP, rPresentationSettings.mbAlwaysOnTop));
+            aDlgSet.Put(SfxBoolItem(ATTR_PRESENT_SHOW_NAVIGATION_BUTTONS, rPresentationSettings.mbUseNavigation));
             aDlgSet.Put(SfxBoolItem(ATTR_PRESENT_FULLSCREEN, rPresentationSettings.mbFullScreen));
             aDlgSet.Put(SfxUInt32Item(ATTR_PRESENT_PAUSE_TIMEOUT, rPresentationSettings.mnPauseTimeout));
             aDlgSet.Put(SfxBoolItem(ATTR_PRESENT_SHOW_PAUSELOGO, rPresentationSettings.mbShowPauseLogo));
