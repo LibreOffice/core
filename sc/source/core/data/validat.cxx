@@ -764,6 +764,7 @@ bool ScValidationData::GetSelectionFromFormula(
     rMatch = -1;
 
     SvNumberFormatter* pFormatter = GetDocument()->GetFormatTable();
+    sal_uInt32 nDestFormat = pDocument->GetNumberFormat(rPos.Col(), rPos.Row(), rPos.Tab());
 
     SCSIZE  nCol, nRow, nCols, nRows, n = 0;
     pValues->GetDimensions( nCols, nRows );
@@ -865,7 +866,7 @@ bool ScValidationData::GetSelectionFromFormula(
                     }
                     else
                     {
-                        pFormatter->GetInputLineString( nMatVal.fVal, 0, aValStr );
+                        pFormatter->GetInputLineString( nMatVal.fVal, nDestFormat, aValStr );
                     }
                 }
 
