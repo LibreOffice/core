@@ -654,7 +654,7 @@
                     <property name="row-spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="pdfa">
-                        <property name="label" translatable="yes" context="pdfgeneralpage|pdfa">Archive (P_DF/A, ISO 19005)</property>
+                        <property name="label" translatable="yes" context="pdfgeneralpage|pdfa">Archival (P_DF/A, ISO 19005)</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
