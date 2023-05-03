@@ -1222,7 +1222,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf94238)
     // - aGradient.Border was 0
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_RADIAL, aGradient.Style);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(100), aGradient.YOffset);
-    // MCGR: 39->0 no border needed anyore with ooxml import
+    // MCGR: 39->0 no border needed anymore with ooxml import
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(0), aGradient.Border);
 
     // MCGR: Use the completely imported gradient to check for correctness
