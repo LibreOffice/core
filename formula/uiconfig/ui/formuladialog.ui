@@ -205,7 +205,7 @@
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="halign">end</property>
-                            <property name="label" translatable="yes" context="formuladialog|label2">Function result</property>
+                            <property name="label" translatable="yes" context="formuladialog|label2">Function result:</property>
                             <property name="use-underline">True</property>
                             <property name="mnemonic-widget">result</property>
                           </object>
@@ -324,6 +324,9 @@
                             <property name="wrap">True</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
+                            <attributes>
+                              <attribute name="scale" value="0.9"/>
+                            </attributes>
                           </object>
                           <packing>
                             <property name="left-attach">0</property>
@@ -350,7 +353,7 @@
                             <property name="can-focus">False</property>
                             <property name="halign">start</property>
                             <property name="hexpand">True</property>
-                            <property name="label" translatable="yes" context="formuladialog|formula">For_mula</property>
+                            <property name="label" translatable="yes" context="formuladialog|formula">For_mula:</property>
                             <property name="use-underline">True</property>
                             <property name="mnemonic-widget">ed_formula</property>
                             <property name="yalign">1</property>
@@ -365,7 +368,7 @@
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="halign">end</property>
-                            <property name="label" translatable="yes" context="formuladialog|label1">Result</property>
+                            <property name="label" translatable="yes" context="formuladialog|label1">Result:</property>
                             <property name="use-underline">True</property>
                             <property name="mnemonic-widget">formula_result</property>
                           </object>
