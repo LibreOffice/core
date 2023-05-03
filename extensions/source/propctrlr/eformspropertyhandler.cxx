@@ -281,7 +281,7 @@ namespace pcr
         {
             if ( m_pHelper->canBindToAnyDataType() )
             {
-                aProperties.reserve( 7 );
+                aProperties.reserve( 8 );
                 addStringPropertyDescription( aProperties, PROPERTY_XML_DATA_MODEL );
                 addStringPropertyDescription( aProperties, PROPERTY_BINDING_NAME );
                 addStringPropertyDescription( aProperties, PROPERTY_BIND_EXPRESSION );

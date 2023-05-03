@@ -171,7 +171,7 @@ namespace pcr
 
             if ( bAllowBinding )
             {
-                aProperties.reserve( 12 );
+                aProperties.reserve( 28 );
 
                 addStringPropertyDescription( aProperties, PROPERTY_XSD_DATA_TYPE   );
                 addInt16PropertyDescription ( aProperties, PROPERTY_XSD_WHITESPACES );
