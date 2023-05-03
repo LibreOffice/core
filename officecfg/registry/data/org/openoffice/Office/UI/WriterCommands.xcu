@@ -1080,7 +1080,13 @@
       </node>
       <node oor:name=".uno:InsertPageNumberField" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Page Number Field</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Page Number</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Page Number</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
