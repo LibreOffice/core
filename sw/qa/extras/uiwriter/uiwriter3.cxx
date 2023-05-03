@@ -2294,6 +2294,62 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130680)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(23), xIndexAccess->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf150457)
+{
+    createSwDoc();
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'a', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:InsertFootnote", {});
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'a', 0);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'b', 0);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    auto xFootnotes = pTextDoc->getFootnotes();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xFootnotes->getCount());
+    auto xParagraph = uno::Reference<text::XTextRange>(xFootnotes->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("abc"), xParagraph->getString());
+
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_PAGEUP);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'd', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:InsertFootnote", {});
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'd', 0);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'e', 0);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'f', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xFootnotes->getCount());
+    xParagraph = uno::Reference<text::XTextRange>(xFootnotes->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("def"), xParagraph->getString());
+
+    // This key sequence deletes a footnote and its number (without the fix applied)
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_UP);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_HOME);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_DOWN);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DELETE);
+
+    // Page up moves the cursor from the footnote area to the main text, then
+    // doing select all and pressing delete removes all the text and footenote references,
+    // thus removing all the footnotes
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_PAGEUP);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::SELECT_ALL);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DELETE);
+
+    // Without having fix in place, segfault happens after running next line
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix, the above action should have already created a crash,
+    // but here we also check to make sure that the number of footnotes are
+    // exactly zero, as expected
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xFootnotes->getCount());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
