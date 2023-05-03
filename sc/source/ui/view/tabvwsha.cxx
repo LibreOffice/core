@@ -31,6 +31,7 @@
 #include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
 #include <svl/int64item.hxx>
+#include <svl/ptitem.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/srchdefs.hxx>
 #include <svl/stritem.hxx>
@@ -457,9 +458,11 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
             case SID_WINDOW_FIX_COL:
             case SID_WINDOW_FIX_ROW:
                 {
+                    Point aPos;
                     bool bIsCol = (nWhich == SID_WINDOW_FIX_COL);
-                    sal_Int32 nFreezeIndex = rViewData.GetLOKSheetFreezeIndex(bIsCol);
-                    rSet.Put(SfxInt32Item(nWhich, nFreezeIndex));
+                    aPos.setX(rViewData.GetLOKSheetFreezeIndex(bIsCol));
+                    aPos.setY(rViewData.GetTabNo());
+                    rSet.Put(SfxPointItem(nWhich, aPos));
                 }
                 break;
 
