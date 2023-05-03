@@ -717,15 +717,19 @@ lcl_ExportHints(
     SwDoc& rDoc = pUnoCursor->GetDoc();
     //search for special text attributes - first some ends
     size_t nEndIndex = 0;
-    sal_Int32 nNextEnd = 0;
     const auto nHintsCount = pHints->Count();
-    while(nEndIndex < nHintsCount &&
-        (!pHints->GetSortedByEnd(nEndIndex)->GetEnd() ||
-        nCurrentIndex >= (nNextEnd = (*pHints->GetSortedByEnd(nEndIndex)->GetEnd()))))
+    for (;;)
     {
-        if(pHints->GetSortedByEnd(nEndIndex)->GetEnd())
+        if (nEndIndex >= nHintsCount)
+            break;
+        SwTextAttr * const pAttr = pHints->GetSortedByEnd(nEndIndex);
+        const sal_Int32* pAttrEnd = pAttr->GetEnd();
+        sal_Int32 nNextEnd = 0;
+        if (pAttrEnd &&
+            nCurrentIndex < (nNextEnd = (*pAttrEnd)))
+            break;
+        if(pAttrEnd)
         {
-            SwTextAttr * const pAttr = pHints->GetSortedByEnd(nEndIndex);
             if (nNextEnd == nCurrentIndex)
             {
                 const sal_uInt16 nWhich( pAttr->Which() );
@@ -1037,7 +1041,7 @@ lcl_ExportHints(
             nStartIndex++;
 
         nEndIndex = 0;
-        nNextEnd = 0;
+        sal_Int32 nNextEnd = 0;
         while(nEndIndex < pHints->Count() &&
             nCurrentIndex >= (nNextEnd = pHints->GetSortedByEnd(nEndIndex)->GetAnyEnd()))
             nEndIndex++;
