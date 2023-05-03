@@ -1115,9 +1115,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "StatusSelectionMode" ||
              aEvent.FeatureURL.Path == "Signature" ||
              aEvent.FeatureURL.Path == "SelectionMode" ||
-             aEvent.FeatureURL.Path == "StatusBarFunc" ||
-             aEvent.FeatureURL.Path == "FreezePanesColumn" ||
-             aEvent.FeatureURL.Path == "FreezePanesRow")
+             aEvent.FeatureURL.Path == "StatusBarFunc")
     {
         sal_Int32 aInt32;
 
@@ -1201,7 +1199,9 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
             aBuffer.append("disabled");
         }
     }
-    else if (aEvent.FeatureURL.Path == "Position")
+    else if (aEvent.FeatureURL.Path == "Position" ||
+             aEvent.FeatureURL.Path == "FreezePanesColumn" ||
+             aEvent.FeatureURL.Path == "FreezePanesRow")
     {
         css::awt::Point aPoint;
 

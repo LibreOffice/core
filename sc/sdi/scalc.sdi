@@ -1947,7 +1947,7 @@ SfxVoidItem FreezePanes SID_WINDOW_FIX
     GroupId = SfxGroupId::View;
 ]
 
-SfxInt32Item FreezePanesColumn SID_WINDOW_FIX_COL
+SfxPointItem FreezePanesColumn SID_WINDOW_FIX_COL
 
 [
     AutoUpdate = FALSE,
@@ -1964,7 +1964,7 @@ SfxInt32Item FreezePanesColumn SID_WINDOW_FIX_COL
     GroupId = SfxGroupId::View;
 ]
 
-SfxInt32Item FreezePanesRow SID_WINDOW_FIX_ROW
+SfxPointItem FreezePanesRow SID_WINDOW_FIX_ROW
 
 [
     AutoUpdate = FALSE,
