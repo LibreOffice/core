@@ -2782,15 +2782,16 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
         RsidOnlyAutoFormatFlagMap[nKey] = isRsidOnlyAutoFormat;
     }
 
-    // we add data strictly in-order, so we can binary-search the vector
+    // we add data strictly in-order, so we can forward-search the vector
     auto equal_range = [](PortionMap::const_iterator startIt, PortionMap::const_iterator endIt, int i)
     {
-        Portion key { nullptr, i, false  };
-        return std::equal_range(startIt, endIt, key,
-            [] (const Portion& lhs, const Portion& rhs) -> bool
-            {
-                return lhs.nKey < rhs.nKey;
-            });
+        auto it1 = startIt;
+        while (it1 != endIt && it1->nKey < i)
+            ++it1;
+        auto it2 = it1;
+        while (it2 != endIt && it2->nKey == i)
+            ++it2;
+        return std::pair<PortionMap::const_iterator, PortionMap::const_iterator>{ it1, it2 };
     };
 
     // check if portion i can be merged with portion i+1:
@@ -2798,13 +2799,14 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
     // IgnoreEnd at first / last portion
     int i = 0;
     int j = i + 1;
-    // Store these outside the loop, because we limit the search area on subsequent searches.
+    // Store this outside the loop, because we limit the search area on subsequent searches.
     std::pair< PortionMap::const_iterator, PortionMap::const_iterator > aRange1 { aPortionMap.begin(), aPortionMap.begin() + aPortionMap.size() };
     while ( i <= nKey )
     {
         aRange1 = equal_range( aRange1.first, aPortionMap.begin() + aPortionMap.size(), i );
+        // start the search for this one from where the first search ended.
         std::pair< PortionMap::const_iterator, PortionMap::const_iterator > aRange2
-            = equal_range( aRange1.first, aPortionMap.begin() + aPortionMap.size(), j );
+            = equal_range( aRange1.second, aPortionMap.begin() + aPortionMap.size(), j );
 
         MergeResult eMerge = lcl_Compare_Attributes(i, j, aRange1, aRange2, RsidOnlyAutoFormatFlagMap);
 
