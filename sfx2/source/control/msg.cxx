@@ -45,7 +45,10 @@ sal_uInt16 SfxSlot::GetWhich( const SfxItemPool &rPool ) const
 
 OUString SfxSlot::GetCommand() const
 {
-    return ".uno:" + pUnoName;
+    if("FocusToFindbar" == pUnoName)
+        return "vnd.sun.star.findbar:" + pUnoName;
+    else
+        return ".uno:" + pUnoName;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

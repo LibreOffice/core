@@ -3912,6 +3912,22 @@ SfxVoidItem ScrollBodyPageDown SID_MAIL_SCROLLBODY_PAGEDOWN
     GroupId = SfxGroupId::Explorer;
 ]
 
+SfxBoolItem FocusToFindbar SID_SEARCH
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Edit;
+]
+
 
 SfxBoolItem SearchDialog SID_SEARCH_DLG
 [

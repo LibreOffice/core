@@ -156,6 +156,11 @@ interface Window
     [
     ]
 
+    // Only for Accelerator-Command field
+    SID_SEARCH
+    [
+    ]
+
     // Only for Designers: Slot must be present
     SID_STYLE_DRAGHIERARCHIE
     [

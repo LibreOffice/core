@@ -101,6 +101,12 @@ def newcommand(unocommand):
            'arguments': ''}
     return cmd
 
+def get_uno(cmd):
+    if cmd.startswith('FocusToFindbar'):
+        cmd = 'vnd.sun.star.findbar:' + cmd
+    else:
+        cmd = '.uno:' + cmd
+    return cmd
 
 def analyze_xcu(all_commands):
     for filename in XCU_FILES:
@@ -115,7 +121,7 @@ def analyze_xcu(all_commands):
                 elif popups is True and line == '    </node>':
                     popups = False
                     continue
-                if '<node oor:name=".uno:' not in line:
+                if '<node oor:name=".uno:' not in line and '<node oor:name="vnd.' not in line:
                     continue
 
                 cmdln = ln
@@ -196,7 +202,7 @@ def analyze_hxx(all_commands):
                     line = next(fh)
                 tmp = line.split('"')
                 try:
-                    command_name = '.uno:' + tmp[1]
+                    command_name = get_uno(tmp[1])
                 except IndexError:
                     print("Warning: expected \" in line '%s' from file %s" % (line.strip(), filename),
                             file=sys.stderr)
@@ -275,7 +281,7 @@ def analyze_sdi(all_commands):
                 elif comment is False and square is False and command is False and len(line) == 0:
                     pass
                 elif command is False:
-                    command_name = '.uno:' + line.split(' ')[1]
+                    command_name = get_uno(line.split(' ')[1])
                     if command_name not in all_commands:
                         all_commands[command_name] = newcommand(command_name)
                     all_commands[command_name]['sdifile'] = SDI_FILES.index(filename)
@@ -305,7 +311,7 @@ def analyze_sdi(all_commands):
 def categorize(all_commands):
     # Clean black listed commands
     for command in BLACKLIST:
-        cmd = '.uno:' + command
+        cmd = get_uno(command)
         if cmd in all_commands:
             del all_commands[cmd]
     # Set category based on the file name where the command was found first
