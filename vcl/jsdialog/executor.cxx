@@ -441,7 +441,8 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, StringMap
                     std::unique_ptr<weld::TreeIter> itEntry(pTreeView->make_iterator());
                     pTreeView->get_iter_abs_pos(*itEntry, nAbsPos);
                     pTreeView->select(*itEntry);
-                    pTreeView->set_cursor(*itEntry);
+                    pTreeView->set_cursor_without_notify(*itEntry);
+                    pTreeView->grab_focus();
                     LOKTrigger::trigger_changed(*pTreeView);
                     return true;
                 }
@@ -450,8 +451,11 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, StringMap
                     sal_Int32 nRow = o3tl::toInt32(rData["data"]);
 
                     pTreeView->unselect_all();
+                    std::unique_ptr<weld::TreeIter> itEntry(pTreeView->make_iterator());
+                    pTreeView->get_iter_abs_pos(*itEntry, nRow);
                     pTreeView->select(nRow);
-                    pTreeView->set_cursor(nRow);
+                    pTreeView->set_cursor_without_notify(*itEntry);
+                    pTreeView->grab_focus();
                     LOKTrigger::trigger_changed(*pTreeView);
                     LOKTrigger::trigger_row_activated(*pTreeView);
                     return true;
@@ -461,6 +465,8 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, StringMap
                     sal_Int32 nAbsPos = o3tl::toInt32(rData["data"]);
                     std::unique_ptr<weld::TreeIter> itEntry(pTreeView->make_iterator());
                     pTreeView->get_iter_abs_pos(*itEntry, nAbsPos);
+                    pTreeView->set_cursor_without_notify(*itEntry);
+                    pTreeView->grab_focus();
                     pTreeView->expand_row(*itEntry);
                     return true;
                 }
