@@ -1117,7 +1117,8 @@ sal_uLong ScDocument::TransferTab( ScDocument& rSrcDoc, SCTAB nSrcPos,
                 OUString sSrcCodeName;
                 rSrcDoc.GetCodeName( nSrcPos, sSrcCodeName );
                 OUString sRTLSource;
-                xLib->getByName( sSrcCodeName ) >>= sRTLSource;
+                if (xLib->hasByName( sSrcCodeName ))
+                    xLib->getByName( sSrcCodeName ) >>= sRTLSource;
                 sSource = sRTLSource;
             }
             VBA_InsertModule( *this, nDestPos, sSource );
