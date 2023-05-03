@@ -68,6 +68,8 @@ private:
     std::vector< std::unique_ptr<IconChoicePageData> > maPageList;
 
     OUString msCurrentPageId;
+    // tdf#90496 - remember last used view in hyperlink dialog
+    static OUString msRememberedPageId;
 
     const SfxItemSet*       pSet;
     std::unique_ptr<SfxItemSet>     pOutSet;

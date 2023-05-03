@@ -23,7 +23,6 @@
 #include <cassert>
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
-#include <unotools/viewoptions.hxx>
 
 /**********************************************************************
 |
@@ -150,8 +149,7 @@ void SvxHpLinkDlg::ActivatePageImpl()
     m_xDialog->set_help_id(pData->xPage->GetHelpId());
 
     // tdf#90496 - remember last used view in hyperlink dialog
-    SvtViewOptions aViewOpt(EViewType::TabDialog, m_xDialog->get_accessible_name());
-    aViewOpt.SetPageID(msCurrentPageId);
+    msRememberedPageId = msCurrentPageId;
 
     m_xResetBtn->show();
 }

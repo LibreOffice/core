@@ -79,6 +79,9 @@ void SvxHlinkCtrl::StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItemState e
     }
 }
 
+// tdf#90496 - remember last used view in hyperlink dialog
+OUString SvxHpLinkDlg::msRememberedPageId("internet");
+
 //#                                                                      #
 //# Hyperlink - Dialog                                                   #
 //#                                                                      #
@@ -135,15 +138,7 @@ SvxHpLinkDlg::SvxHpLinkDlg(SfxBindings* pBindings, SfxChildWindow* pChild, weld:
     }
 
     // tdf#90496 - remember last used view in hyperlink dialog
-    OUString sPageId("internet");
-    SvtViewOptions aViewOpt(EViewType::TabDialog, m_xDialog->get_accessible_name());
-    if (aViewOpt.Exists())
-    {
-        const OUString sSavedPageId = aViewOpt.GetPageID();
-        if (GetPageData(sSavedPageId))
-            sPageId = sSavedPageId;
-    }
-    SetCurPageId(sPageId);
+    SetCurPageId(msRememberedPageId);
 
     // Init Dialog
     Start();
