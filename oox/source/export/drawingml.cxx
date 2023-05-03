@@ -860,7 +860,7 @@ void DrawingML::WriteGradientFill(
                 // Caution: do not add 1st entry again, that would be double since it was
                 // already added as last element of the inverse run above. But only if
                 // the gradient has a start entry for 0.0 aka StartColor, else it is correct.
-                // Since aColorStops and aAlphaStops are already syched (see
+                // Since aColorStops and aAlphaStops are already synched (see
                 // synchronizeColorStops above), testing one of them is sufficient here.
                 aCurrColor++;
                 aCurrAlpha++;
