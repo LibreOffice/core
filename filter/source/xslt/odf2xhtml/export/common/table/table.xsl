@@ -63,9 +63,9 @@
 
 
     <xsl:template match="table:table" name="table:table">
-        <xsl:text>&#xa;</xsl:text>
         <xsl:param name="globalData" />
 
+        <xsl:text>&#xa;</xsl:text>
         <!-- The table will only be created if the table:scenario is active -->
         <xsl:if test="not(table:scenario) or table:scenario/@table:is-active">
             <xsl:call-template name="create-table">
