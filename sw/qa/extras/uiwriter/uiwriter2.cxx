@@ -85,6 +85,27 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf47471_paraStyleBackground)
                          getProperty<OUString>(getParagraph(3), "ParaStyleName"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf148956_directEndFormatting)
+{
+    createSwDoc("tdf148956_directEndFormatting.docx");
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    pWrtShell->EndPara(/*bSelect=*/true);
+    CPPUNIT_ASSERT_MESSAGE(
+        "Has direct formatting",
+        pWrtShell->GetCursor()->GetMark()->GetNode().GetTextNode()->GetpSwpHints());
+
+    dispatchCommand(mxComponent, ".uno:ResetAttributes", {});
+
+    dispatchCommand(mxComponent, ".uno:GotoStartOfPara", {});
+    dispatchCommand(mxComponent, ".uno:GotoEndOfPara", {});
+
+    CPPUNIT_ASSERT_MESSAGE(
+        "Direct formatting cleared",
+        !pWrtShell->GetCursor()->GetMark()->GetNode().GetTextNode()->GetpSwpHints());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdfChangeNumberingListAutoFormat)
 {
     createSwDoc("tdf117923.docx");

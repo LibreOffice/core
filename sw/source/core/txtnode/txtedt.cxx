@@ -436,7 +436,8 @@ void SwTextNode::RstTextAttr(
     SwTextAttr *pHt = nullptr;
     while ( (i < m_pSwpHints->Count())
             && ( ( ( nAttrStart = m_pSwpHints->GetWithoutResorting(i)->GetStart()) < nEnd )
-                 || nLen==0 ) && !bExactRange)
+                 || nLen==0 || (nEnd == nAttrStart && nAttrStart == m_Text.getLength()))
+            && !bExactRange)
     {
         pHt = m_pSwpHints->GetWithoutResorting(i);
 
