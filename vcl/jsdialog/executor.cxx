@@ -311,6 +311,10 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                     if (rData["data"] == "undefined")
                         return true;
 
+                    // The Document will not scroll if that is in focus
+                    // maybe we could send a message with: sAction == "grab_focus"
+                    pWidget->grab_focus();
+
                     double nValue = o3tl::toDouble(rData["data"]);
                     pSpinField->set_value(nValue
                                           * weld::SpinButton::Power10(pSpinField->get_digits()));
