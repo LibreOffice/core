@@ -646,6 +646,9 @@ OUString GetUndoComment(SwUndoId eId)
         case SwUndoId::INSERT_PAGE_NUMBER:
             pId = STR_UNDO_INSERT_PAGE_NUMBER;
             break;
+        case SwUndoId::CHANGE_THEME:
+            pId = STR_UNDO_CHANGE_THEME_COLORS;
+            break;
     }
 
     assert(pId);

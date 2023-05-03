@@ -9,13 +9,14 @@
  */
 #pragma once
 
+#include <swdllapi.h>
 #include <docsh.hxx>
 #include <docmodel/theme/ColorSet.hxx>
 #include <svx/theme/ThemeColorChanger.hxx>
 
 namespace sw
 {
-class ThemeColorChanger : public svx::IThemeColorChanger
+class SW_DLLPUBLIC ThemeColorChanger : public svx::IThemeColorChanger
 {
 private:
     SwDocShell* mpDocSh;

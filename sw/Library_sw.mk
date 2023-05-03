@@ -482,6 +482,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/undo/unspnd \
     sw/source/core/undo/untbl \
     sw/source/core/undo/untblk \
+    sw/source/core/undo/UndoThemeChange \
     sw/source/core/unocore/SwXTextDefaults \
     sw/source/core/unocore/TextCursorHelper  \
     sw/source/core/unocore/XMLRangeHelper \

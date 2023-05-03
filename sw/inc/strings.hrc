@@ -589,6 +589,8 @@
 #define STR_UNDO_TABLE_DELETE                   NC_("STR_UNDO_TABLE_DELETE", "Delete table")
 #define STR_UNDO_INSERT_FORM_FIELD              NC_("STR_UNDO_INSERT_FORM_FIELD", "Insert form field")
 #define STR_UNDO_INSERT_PAGE_NUMBER             NC_("STR_UNDO_INSERT_PAGE_NUMBER", "Insert page number")
+#define STR_UNDO_CHANGE_THEME_COLORS            NC_("STR_UNDO_CHANGE_THEME_COLORS", "Change document theme color")
+
 #define STR_DROP_DOWN_FIELD_ITEM_LIMIT          NC_("STR_DROP_DOWN_FIELD_ITEM_LIMIT", "You can specify maximum of 25 items for a drop-down form field.")
 
 #define STR_ACCESS_DOC_NAME                     NC_("STR_ACCESS_DOC_NAME", "Document view")
