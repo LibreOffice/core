@@ -267,7 +267,6 @@
                  </xsl:when>
                  <xsl:otherwise>en-US</xsl:otherwise>
              </xsl:choose>
-             <xsl:text>&#xa;</xsl:text>
         </xsl:variable>
 
         <xsl:variable name="prov">
@@ -277,7 +276,6 @@
                  </xsl:when>
                  <xsl:otherwise />
              </xsl:choose>
-             <xsl:text>&#xa;</xsl:text>
         </xsl:variable>
 
         <xsl:variable name="keywords">
@@ -287,7 +285,6 @@
                         <xsl:text>, </xsl:text>
                     </xsl:if>
             </xsl:for-each>
-            <xsl:text>&#xa;</xsl:text>
         </xsl:variable>
 
         <xsl:text>&#xa;</xsl:text>
