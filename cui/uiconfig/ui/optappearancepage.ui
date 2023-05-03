@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkBox" id="OptAppearancePage">
@@ -11,106 +11,6 @@
     <property name="orientation">vertical</property>
     <property name="spacing">12</property>
     <child>
-      <object class="GtkFrame" id="frame1">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="hexpand">True</property>
-        <property name="label-xalign">0</property>
-        <property name="shadow-type">none</property>
-        <child>
-          <!-- n-columns=4 n-rows=1 -->
-          <object class="GtkGrid" id="grid1">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-start">12</property>
-            <property name="margin-top">6</property>
-            <property name="hexpand">True</property>
-            <property name="column-spacing">12</property>
-            <child>
-              <object class="GtkLabel" id="label3">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="optappearancepage|label3">_Scheme:</property>
-                <property name="use-underline">True</property>
-                <property name="mnemonic-widget">colorschemelb</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="save">
-                <property name="label" translatable="yes" context="optappearancepage|save">_Save</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <property name="use-underline">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="save-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|save">Saves the current settings as a color scheme that you can reload later.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">2</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="delete">
-                <property name="label" translatable="yes" context="stock">_Delete</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <property name="use-underline">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="delete-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|delete">Deletes the color scheme shown in the Scheme box. You cannot delete the Default scheme.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">3</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBoxText" id="colorschemelb">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="hexpand">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="colorschemelb-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|colorschemelb">Selects the color scheme you want to use.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-          </object>
-        </child>
-        <child type="label">
-          <object class="GtkLabel" id="label1">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="optappearancepage|label1">Color Scheme</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkFrame" id="frame2">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -119,9 +19,10 @@
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
         <child>
-          <!-- n-columns=1 n-rows=2 -->
+          <!-- n-columns=1 n-rows=3 -->
           <object class="GtkGrid" id="table">
             <property name="visible">True</property>
+            <property name="sensitive">False</property>
             <property name="can-focus">False</property>
             <property name="margin-start">12</property>
             <property name="margin-top">6</property>
@@ -179,7 +80,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
+                <property name="top-attach">2</property>
               </packing>
             </child>
             <child>
@@ -187,6 +88,7 @@
               <object class="GtkGrid" id="grid3">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="margin-top">6</property>
                 <property name="hexpand">True</property>
                 <property name="column-spacing">6</property>
                 <child>
@@ -230,6 +132,116 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <!-- n-columns=6 n-rows=1 -->
+              <object class="GtkGrid" id="grid1">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-start">12</property>
+                <property name="margin-top">6</property>
+                <property name="hexpand">True</property>
+                <property name="column-spacing">6</property>
+                <child>
+                  <object class="GtkLabel" id="label3">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="optappearancepage|label3">_Scheme:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">colorschemelb</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="save">
+                    <property name="label" translatable="yes" context="optappearancepage|save">_Save</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="use-underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="save-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|save">Saves the current settings as a color scheme that you can reload later.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="delete">
+                    <property name="label" translatable="yes" context="stock">_Delete</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="use-underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="delete-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|delete">Deletes the color scheme shown in the Scheme box. You cannot delete the Default scheme.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">3</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="colorschemelb">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="colorschemelb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|colorschemelb">Selects the color scheme you want to use.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="autocolor">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-start">12</property>
+                    <property name="label" translatable="yes" context="optappearancepage|autocolor">_Automatic:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">autocolorlb</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">4</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="autocolorlb">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="active">1</property>
+                    <items>
+                      <item id="0" translatable="yes" context="optappearancepage|cbSchemeEntry1">System Theme</item>
+                      <item id="1" translatable="yes" context="optappearancepage|cbSchemeEntry2">Light</item>
+                      <item id="2" translatable="yes" context="optappearancepage|cbSchemeEntry3">Dark</item>
+                    </items>
+                  </object>
+                  <packing>
+                    <property name="left-attach">5</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
                 <property name="top-attach">0</property>
               </packing>
             </child>
@@ -249,7 +261,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">1</property>
+        <property name="position">0</property>
       </packing>
     </child>
     <child internal-child="accessible">

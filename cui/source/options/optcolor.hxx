@@ -31,6 +31,7 @@ class SvxColorOptionsTabPage : public SfxTabPage
 
     ImplSVEvent* m_nSizeAllocEventId;
 
+    std::unique_ptr<weld::ComboBox> m_xAutoColorLB;
     std::unique_ptr<weld::ComboBox> m_xColorSchemeLB;
     std::unique_ptr<weld::Button> m_xSaveSchemePB;
     std::unique_ptr<weld::Button> m_xDeleteSchemePB;
@@ -38,6 +39,7 @@ class SvxColorOptionsTabPage : public SfxTabPage
     std::unique_ptr<weld::Widget> m_xTable;
     std::unique_ptr<weld::Label> m_xOnFT;
     std::unique_ptr<weld::Label> m_xColorFT;
+
     weld::Widget& m_rWidget1;
     weld::Widget& m_rWidget2;
 
@@ -45,6 +47,7 @@ class SvxColorOptionsTabPage : public SfxTabPage
     std::unique_ptr<svtools::EditableExtendedColorConfig> pExtColorConfig;
 
     DECL_LINK(SchemeChangedHdl_Impl, weld::ComboBox&, void);
+    DECL_LINK(onAutoColorChanged, weld::ComboBox&, void);
     DECL_LINK(SaveDeleteHdl_Impl, weld::Button&, void);
     DECL_LINK(CheckNameHdl_Impl, AbstractSvxNameDialog&, bool);
     DECL_LINK(AdjustHeaderBar, const Size&, void);

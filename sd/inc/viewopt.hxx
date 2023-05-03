@@ -28,7 +28,7 @@ struct SdViewOptions
     // The color of the document background
     Color mnDocBackgroundColor;
     // The name of the color scheme
-    OUString msColorSchemeName;
+    OUString msColorSchemeName = "Default";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

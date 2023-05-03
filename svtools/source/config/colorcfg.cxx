@@ -362,60 +362,64 @@ ColorConfig::~ColorConfig()
 
 Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
 {
-    static const Color aAutoColors[] =
-    {
-        COL_WHITE, // DOCCOLOR
-        COL_LIGHTGRAY, // DOCBOUNDARIES
-        Color(0xDFDFDE), // APPBACKGROUND
-        COL_LIGHTGRAY, // OBJECTBOUNDARIES
-        COL_LIGHTGRAY, // TABLEBOUNDARIES
-        COL_BLACK, // FONTCOLOR
-        COL_BLUE, // LINKS
-        Color(0x0000cc), // LINKSVISITED
-        COL_LIGHTRED, // SPELL
-        COL_LIGHTBLUE, // GRAMMAR
-        COL_LIGHTMAGENTA, // SMARTTAGS
-        COL_GRAY, // SHADOWCOLOR
-        COL_LIGHTGRAY, // WRITERTEXTGRID
-        COL_LIGHTGRAY, // WRITERFIELDSHADIN
-        COL_LIGHTGRAY, // WRITERIDXSHADINGS
-        COL_BLACK, // WRITERDIRECTCURSOR
-        COL_GREEN, //WRITERSCRIPTINDICATOR
-        COL_LIGHTGRAY, //WRITERSECTIONBOUNDARIES
-        Color(0x0369a3), //WRITERHEADERFOOTERMARK,
-        COL_BLUE, //WRITERPAGEBREAKS,
-        COL_LIGHTBLUE, // HTMLSGML
-        COL_LIGHTGREEN, // HTMLCOMMENT
-        COL_LIGHTRED, // HTMLKEYWORD
-        COL_GRAY, // HTMLUNKNOWN
-        COL_GRAY3, // CALCGRID
-        COL_BLUE, //CALCPAGEBREAK
-        Color(0x2300dc), //CALCPAGEBREAKMANUAL
-        COL_GRAY7, //CALCPAGEBREAKAUTOMATIC
-        Color(0x2300dc), //CALCHIDDENCOLROW
-        COL_LIGHTBLUE, // CALCDETECTIVE
-        COL_LIGHTRED, // CALCDETECTIVEERROR
-        Color(0xef0fff), // CALCREFERENCE
-        Color(0xffffc0), // CALCNOTESBACKGROUND
-        COL_LIGHTBLUE, // CALCVALUE
-        COL_GREEN, // CALCFORMULA
-        COL_BLACK, // CALCTEXT
-        COL_LIGHTGRAY, // CALCPROTECTEDBACKGROUND
-        COL_GRAY7, // DRAWGRID
-        COL_GREEN, // BASICIDENTIFIER,
-        COL_GRAY, // BASICCOMMENT,
-        COL_LIGHTRED, // BASICNUMBER,
-        COL_LIGHTRED, // BASICSTRING,
-        COL_BLUE, // BASICOPERATOR,
-        COL_BLUE, // BASICKEYWORD,
-        COL_RED, //BASICERROR
-        Color(0x009900), // SQLIDENTIFIER
-        COL_BLACK, // SQLNUMBER
-        Color(0xCE7B00), // SQLSTRING
-        COL_BLACK, // SQLOPERATOR
-        Color(0x0000E6), // SQLKEYWORD
-        Color(0x259D9D), // SQLPARAMETER
-        COL_GRAY, // SQLCOMMENT
+    enum ColorType { clLight = 0,
+                    clDark,
+                    nColorTypes };
+
+    static const Color cAutoColors[][nColorTypes] = {
+        { COL_WHITE,        Color(0x1C1C1C) }, // DOCCOLOR
+        { COL_LIGHTGRAY,    Color(0x808080) }, // DOCBOUNDARIES
+        { Color(0xDFDFDE),  Color(0x333333) }, // APPBACKGROUND
+        { COL_LIGHTGRAY,    Color(0x808080) }, // OBJECTBOUNDARIES
+        { COL_LIGHTGRAY,    Color(0x1C1C1C) }, // TABLEBOUNDARIES
+        { COL_BLACK,        COL_BLACK       }, // FONTCOLOR
+        { COL_BLUE,         Color(0x1D99F3) }, // LINKS
+        { Color(0x0000cc),  Color(0x9B59B6) }, // LINKSVISITED
+        { COL_LIGHTRED,     Color(0xC9211E) }, // SPELL
+        { COL_LIGHTBLUE,    Color(0x729FCF) }, // GRAMMAR
+        { COL_LIGHTMAGENTA, Color(0x780373) }, // SMARTTAGS
+        { COL_GRAY,         Color(0x1C1C1C) }, // SHADOWCOLOR
+        { COL_LIGHTGRAY,    Color(0x808080) }, // WRITERTEXTGRID
+        { COL_LIGHTGRAY,    COL_LIGHTGRAY   }, // WRITERFIELDSHADING
+        { COL_LIGHTGRAY,    Color(0x1C1C1C) }, // WRITERIDXSHADINGS
+        { COL_BLACK,        COL_BLACK       }, // WRITERDIRECTCURSOR
+        { COL_GREEN,        Color(0x1E6A39) }, // WRITERSCRIPTINDICATOR
+        { COL_LIGHTGRAY,    Color(0x666666) }, // WRITERSECTIONBOUNDARIES
+        { Color(0x0369a3),  Color(0xB4C7DC) }, // WRITERHEADERFOOTERMARK
+        { COL_BLUE,         Color(0x729FCF) }, // WRITERPAGEBREAKS
+        { COL_LIGHTBLUE,    COL_LIGHTBLUE   }, // HTMLSGML
+        { COL_LIGHTGREEN,   COL_LIGHTGREEN  }, // HTMLCOMMENT
+        { COL_LIGHTRED,     COL_LIGHTRED    }, // HTMLKEYWORD
+        { COL_GRAY,         COL_GRAY        }, // HTMLUNKNOWN
+        { COL_GRAY3,        COL_GRAY7       }, // CALCGRID
+        { COL_BLUE,         COL_BLUE        }, // CALCPAGEBREAK
+        { Color(0x2300dc),  Color(0x2300DC) }, // CALCPAGEBREAKMANUAL
+        { COL_GRAY7,        COL_GRAY7       }, // CALCPAGEBREAKAUTOMATIC
+        { Color(0x2300dc),  Color(0x2300DC) }, // CALCHIDDENCOLROW
+        { COL_LIGHTBLUE,    Color(0x355269) }, // CALCDETECTIVE
+        { COL_LIGHTRED,     Color(0xC9211E) }, // CALCDETECTIVEERROR
+        { Color(0xef0fff),  Color(0x0D23D5) }, // CALCREFERENCE
+        { Color(0xffffc0),  Color(0xE8A202) }, // CALCNOTESBACKGROUND
+        { COL_LIGHTBLUE,    Color(0x729FCF) }, // CALCVALUE
+        { COL_GREEN,        Color(0x77BC65) }, // CALCFORMULA
+        { COL_BLACK,        Color(0xEEEEEE) }, // CALCTEXT
+        { COL_LIGHTGRAY,    Color(0x1C1C1C) }, // CALCPROTECTEDBACKGROUND
+        { COL_GRAY7,        COL_GRAY7       }, // DRAWGRID
+        { COL_WHITE,        Color(0x1C1C1C) }, // BASICEDITOR
+        { COL_GREEN,        Color(0xDDE8CB) }, // BASICIDENTIFIER
+        { COL_GRAY,         Color(0xEEEEEE) }, // BASICCOMMENT
+        { COL_LIGHTRED,     Color(0xFFA6A6) }, // BASICNUMBER
+        { COL_LIGHTRED,     Color(0xFFA6A6) }, // BASICSTRING
+        { COL_BLUE,         Color(0xB4C7DC) }, // BASICOPERATOR
+        { COL_BLUE,         Color(0xB4C7DC) }, // BASICKEYWORD
+        { COL_RED,          Color(0xFF3838) }, // BASICERROR
+        { Color(0x009900),  Color(0x009900) }, // SQLIDENTIFIER
+        { COL_BLACK,        COL_BLACK       }, // SQLNUMBER
+        { Color(0xCE7B00),  Color(0xCE7B00) }, // SQLSTRING
+        { COL_BLACK,        COL_BLACK       }, // SQLOPERATOR
+        { Color(0x0000E6),  Color(0x0000E6) }, // SQLKEYWORD
+        { Color(0x259D9D),  Color(0x259D9D) }, // SQLPARAMETER
+        { COL_GRAY,         COL_GRAY        }, // SQLCOMMENT
     };
     Color aRet;
     switch(eEntry)
@@ -433,7 +437,14 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
             break;
 
         default:
-            aRet = aAutoColors[eEntry];
+            int nAppMod;
+            switch (MiscSettings::GetAppColorMode()) {
+                case 0: nAppMod = clLight; break; // UseDarkMode() ? clDark : clLight; break;
+                case 1: nAppMod = clLight; break;
+                case 2: nAppMod = clDark; break;
+                default: nAppMod = clLight;
+            }
+            aRet = cAutoColors[eEntry][nAppMod];
     }
     // fdo#71511: if in a11y HC mode, do pull background color from theme
     if (Application::GetSettings().GetStyleSettings().GetHighContrastMode())

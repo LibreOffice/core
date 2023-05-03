@@ -691,7 +691,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     tools::Long nScrY = aOutputData.nScrY;
 
     const svtools::ColorConfig& rColorCfg = pScMod->GetColorConfig();
-    Color aGridColor( rColorCfg.GetColorValue( svtools::CALCGRID, false ).nColor );
+    Color aGridColor( rColorCfg.GetColorValue( svtools::CALCGRID ).nColor );
     if ( aGridColor == COL_TRANSPARENT )
     {
         //  use view options' grid color only if color config has "automatic" color

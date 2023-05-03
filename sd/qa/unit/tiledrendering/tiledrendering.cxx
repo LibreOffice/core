@@ -132,6 +132,7 @@ public:
     void testDeleteTable();
     void testPasteUndo();
     void testShapeEditInMultipleViews();
+    void testGetViewRenderState();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testCreateDestroy);
@@ -192,6 +193,7 @@ public:
     CPPUNIT_TEST(testDeleteTable);
     CPPUNIT_TEST(testPasteUndo);
     CPPUNIT_TEST(testShapeEditInMultipleViews);
+    CPPUNIT_TEST(testGetViewRenderState);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2538,8 +2540,34 @@ void SdTiledRenderingTest::testCutSelectionChange()
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(0), m_aSelection.size());
 }
 
+void SdTiledRenderingTest::testGetViewRenderState()
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    int nFirstViewId = SfxLokHelper::getView();
+    ViewCallback aView1;
+    CPPUNIT_ASSERT_EQUAL(OString(";Default"), pXImpressDocument->getViewRenderState());
+    // Create a second view
+    SfxLokHelper::createView();
+    int nSecondViewId = SfxLokHelper::getView();
+    ViewCallback aView2;
+    CPPUNIT_ASSERT_EQUAL(OString(";Default"), pXImpressDocument->getViewRenderState());
+    // Set to dark scheme
+    {
+        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+            {
+                { "NewTheme", uno::Any(OUString("Dark")) },
+            }
+        );
+        dispatchCommand(mxComponent, ".uno:ChangeTheme", aPropertyValues);
+    }
+    CPPUNIT_ASSERT_EQUAL(OString(";Dark"), pXImpressDocument->getViewRenderState());
+    // Switch back to the first view, and check that the options string is the same
+    SfxLokHelper::setView(nFirstViewId);
+    CPPUNIT_ASSERT_EQUAL(OString(";Default"), pXImpressDocument->getViewRenderState());
+}
+
 // Helper function to get a tile to a bitmap and check the pixel color
-static void assertTilePixelColor(SdXImpressDocument* pXTextDocument, int nPixelX, int nPixelY, Color aColor)
+static void assertTilePixelColor(SdXImpressDocument* pXImpressDocument, int nPixelX, int nPixelY, Color aColor)
 {
     size_t nCanvasSize = 1024;
     size_t nTileSize = 256;
@@ -2548,7 +2576,7 @@ static void assertTilePixelColor(SdXImpressDocument* pXTextDocument, int nPixelX
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasSize, nCanvasSize),
             Fraction(1.0), Point(), aPixmap.data());
-    pXTextDocument->paintTile(*pDevice, nCanvasSize, nCanvasSize, 0, 0, 15360, 7680);
+    pXImpressDocument->paintTile(*pDevice, nCanvasSize, nCanvasSize, 0, 0, 15360, 7680);
     pDevice->EnableMapMode(false);
     Bitmap aBitmap = pDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
     Bitmap::ScopedReadAccess pAccess(aBitmap);
@@ -2559,42 +2587,70 @@ static void assertTilePixelColor(SdXImpressDocument* pXTextDocument, int nPixelX
 // Test that changing the theme in one view doesn't change it in the other view
 void SdTiledRenderingTest::testThemeViewSeparation()
 {
-    SdXImpressDocument* pXTextDocument = createDoc("dummy.odp");
+    Color aDarkColor(0x1c, 0x1c, 0x1c);
+    // Add a minimal dark scheme
+    {
+        svtools::EditableColorConfig aColorConfig;
+        svtools::ColorConfigValue aValue;
+        aValue.bIsVisible = true;
+        aValue.nColor = aDarkColor;
+        aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
+        aColorConfig.AddScheme(u"Dark");
+    }
+    // Add a minimal light scheme
+    {
+        svtools::EditableColorConfig aColorConfig;
+        svtools::ColorConfigValue aValue;
+        aValue.bIsVisible = true;
+        aValue.nColor = COL_WHITE;
+        aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
+        aColorConfig.AddScheme(u"Light");
+    }
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     int nFirstViewId = SfxLokHelper::getView();
     ViewCallback aView1;
-    // First view is at light mode
-    assertTilePixelColor(pXTextDocument, 255, 255, COL_WHITE);
+    // Switch first view to light scheme
+    {
+        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+            {
+                { "NewTheme", uno::Any(OUString("Light")) },
+            }
+        );
+        dispatchCommand(mxComponent, ".uno:ChangeTheme", aPropertyValues);
+    }
+    // First view is at light scheme
+    assertTilePixelColor(pXImpressDocument, 255, 255, COL_WHITE);
     // Create second view
     SfxLokHelper::createView();
     int nSecondViewId = SfxLokHelper::getView();
     ViewCallback aView2;
-    // Set second view to dark mode
+    // Set second view to dark scheme
     {
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", uno::Any(OUString("COLOR_SCHEME_LIBREOFFICE_DARK")) },
+                { "NewTheme", uno::Any(OUString("Dark")) },
             }
         );
         dispatchCommand(mxComponent, ".uno:ChangeTheme", aPropertyValues);
     }
-    assertTilePixelColor(pXTextDocument, 255, 255, Color(0x1c, 0x1c, 0x1c));
-    // First view still in light mode
+    assertTilePixelColor(pXImpressDocument, 255, 255, aDarkColor);
+    // First view still in light scheme
     SfxLokHelper::setView(nFirstViewId);
-    assertTilePixelColor(pXTextDocument, 255, 255, COL_WHITE);
-    // Second view still in dark mode
+    assertTilePixelColor(pXImpressDocument, 255, 255, COL_WHITE);
+    // Second view still in dark scheme
     SfxLokHelper::setView(nSecondViewId);
-    assertTilePixelColor(pXTextDocument, 255, 255, Color(0x1c, 0x1c, 0x1c));
-    // Switch second view back to light mode
+    assertTilePixelColor(pXImpressDocument, 255, 255, aDarkColor);
+    // Switch second view back to light scheme
     {
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", uno::Any(OUString("COLOR_SCHEME_LIBREOFFICE_AUTOMATIC")) },
+                { "NewTheme", uno::Any(OUString("Light")) },
             }
         );
         dispatchCommand(mxComponent, ".uno:ChangeTheme", aPropertyValues);
     }
-    // Now in light mode
-    assertTilePixelColor(pXTextDocument, 255, 255, COL_WHITE);
+    // Now in light scheme
+    assertTilePixelColor(pXImpressDocument, 255, 255, COL_WHITE);
 }
 
 void SdTiledRenderingTest::testRegenerateDiagram()

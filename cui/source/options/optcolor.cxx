@@ -34,7 +34,8 @@
 #include <dialmgr.hxx>
 #include "optcolor.hxx"
 #include <strings.hrc>
-
+#include <svtools/miscopt.hxx>
+#include <officecfg/Office/Common.hxx>
 using namespace ::com::sun::star;
 using namespace ::svtools;
 
@@ -164,7 +165,6 @@ const std::map<OUString, OUString> &getColorSchemes()
 {
     static std::map<OUString, OUString> const vColorSchemes = {
         {"COLOR_SCHEME_LIBREOFFICE_AUTOMATIC", CuiResId(RID_COLOR_SCHEME_LIBREOFFICE_AUTOMATIC)},
-        {"COLOR_SCHEME_LIBREOFFICE_DARK",      CuiResId(RID_COLOR_SCHEME_LIBREOFFICE_DARK)}
     };
     return vColorSchemes;
 };
@@ -203,6 +203,7 @@ public:
                   Link<weld::Widget&,void> const&,
                   weld::ScrolledWindow& rScroll);
     void Update(EditableColorConfig const*, EditableExtendedColorConfig const*);
+    void UpdateEntries();
     void ClickHdl(EditableColorConfig*, const weld::Toggleable&);
     void ColorHdl(EditableColorConfig*, EditableExtendedColorConfig*, const ColorListBox*);
 
@@ -527,6 +528,16 @@ void ColorConfigWindow_Impl::Update (
     }
 }
 
+void ColorConfigWindow_Impl::UpdateEntries()
+{
+    for (unsigned i = 0; i != ColorConfigEntryCount; ++i)
+    {
+        ColorConfigEntry const aEntry = static_cast<ColorConfigEntry>(i);
+        Color aColor = ColorConfig::GetDefaultColor(aEntry);
+        vEntries[i]->m_xColorList->SetAutoDisplayColor(aColor);
+    }
+}
+
 // ClickHdl()
 void ColorConfigWindow_Impl::ClickHdl(EditableColorConfig* pConfig, const weld::Toggleable& rBox)
 {
@@ -626,6 +637,7 @@ public:
     void SetConfig (EditableColorConfig& rConfig) { pColorConfig = &rConfig; }
     void SetExtendedConfig (EditableExtendedColorConfig& rConfig) { pExtColorConfig = &rConfig; }
     void Update();
+    void UpdateEntries();
     tools::Long GetScrollPosition() const
     {
         return m_xVScroll->vadjustment_get_value();
@@ -667,6 +679,11 @@ void ColorConfigCtrl_Impl::Update ()
 {
     DBG_ASSERT(pColorConfig, "Configuration not set");
     m_xScrollWindow->Update(pColorConfig, pExtColorConfig);
+}
+
+void ColorConfigCtrl_Impl::UpdateEntries()
+{
+    m_xScrollWindow->UpdateEntries();
 }
 
 IMPL_LINK(ColorConfigCtrl_Impl, ClickHdl, weld::Toggleable&, rBox, void)
@@ -725,6 +742,7 @@ SvxColorOptionsTabPage::SvxColorOptionsTabPage(weld::Container* pPage, weld::Dia
     : SfxTabPage(pPage, pController, "cui/ui/optappearancepage.ui", "OptAppearancePage", &rCoreSet)
     , bFillItemSetCalled(false)
     , m_nSizeAllocEventId(nullptr)
+    , m_xAutoColorLB(m_xBuilder->weld_combo_box("autocolorlb"))
     , m_xColorSchemeLB(m_xBuilder->weld_combo_box("colorschemelb"))
     , m_xSaveSchemePB(m_xBuilder->weld_button("save"))
     , m_xDeleteSchemePB(m_xBuilder->weld_button("delete"))
@@ -737,6 +755,7 @@ SvxColorOptionsTabPage::SvxColorOptionsTabPage(weld::Container* pPage, weld::Dia
 {
     m_xColorSchemeLB->make_sorted();
     m_xColorSchemeLB->connect_changed(LINK(this, SvxColorOptionsTabPage, SchemeChangedHdl_Impl));
+    m_xAutoColorLB->connect_changed(LINK(this, SvxColorOptionsTabPage, onAutoColorChanged));
     Link<weld::Button&,void> aLk = LINK(this, SvxColorOptionsTabPage, SaveDeleteHdl_Impl );
     m_xSaveSchemePB->connect_clicked(aLk);
     m_xDeleteSchemePB->connect_clicked(aLk);
@@ -811,6 +830,8 @@ void SvxColorOptionsTabPage::Reset( const SfxItemSet* )
     pExtColorConfig.reset(new EditableExtendedColorConfig);
     m_xColorConfigCT->SetExtendedConfig(*pExtColorConfig);
 
+    m_xAutoColorLB->set_active( MiscSettings::GetAppColorMode() );
+
     OUString sUser = GetUserData();
     //has to be called always to speed up accessibility tools
     m_xColorConfigCT->SetScrollPosition(sUser.toInt32());
@@ -835,6 +856,17 @@ void SvxColorOptionsTabPage::UpdateColorConfig()
 {
     //update the color config control
     m_xColorConfigCT->Update();
+}
+
+IMPL_LINK_NOARG(SvxColorOptionsTabPage, onAutoColorChanged, weld::ComboBox&, void)
+{
+    MiscSettings::SetAppColorMode( m_xAutoColorLB->get_active() );
+
+    m_xColorConfigCT->UpdateEntries();
+
+    pColorConfig->LoadScheme(lcl_TranslatedNameToSchemeId(m_xColorSchemeLB->get_active_text()));
+    pExtColorConfig->LoadScheme(lcl_TranslatedNameToSchemeId(m_xColorSchemeLB->get_active_text()));
+    UpdateColorConfig();
 }
 
 IMPL_LINK(SvxColorOptionsTabPage, SchemeChangedHdl_Impl, weld::ComboBox&, rBox, void)

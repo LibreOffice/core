@@ -58,6 +58,8 @@ enum ScVObjType
 #define MAX_OPT             sal_uInt16(VOPT_CLIPMARKS)+1
 #define MAX_TYPE            sal_uInt16(VOBJ_TYPE_DRAW)+1
 
+// SC_STD_GRIDCOLOR is obsolete since tdf#152184 since GridColor == COL_AUTO
+// converts now to either light or dark but still used on options > view > visual aids
 #define SC_STD_GRIDCOLOR    COL_LIGHTGRAY
 
 // SvxGrid options with standard operators

@@ -648,7 +648,8 @@ public:
     // 0 auto, 1 light, 2, dark
     static void                     SetDarkMode(int nMode);
     static int                      GetDarkMode();
-
+    static void                     SetAppColorMode(int nMode);
+    static int                      GetAppColorMode();
     bool                            operator ==( const MiscSettings& rSet ) const;
     bool                            operator !=( const MiscSettings& rSet ) const;
 };

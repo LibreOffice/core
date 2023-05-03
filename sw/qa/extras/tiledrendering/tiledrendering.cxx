@@ -1685,7 +1685,6 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetViewRenderState)
         pXTextDocument->GetDocShell()->GetWrtShell()->ApplyViewOptions(aViewOptions);
     }
     CPPUNIT_ASSERT_EQUAL(OString("PS;Default"), pXTextDocument->getViewRenderState());
-
     // Create a second view
     SfxLokHelper::createView();
     int nSecondViewId = SfxLokHelper::getView();
@@ -1698,11 +1697,9 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetViewRenderState)
         pXTextDocument->GetDocShell()->GetWrtShell()->ApplyViewOptions(aViewOptions);
     }
     CPPUNIT_ASSERT_EQUAL(OString("S;Default"), pXTextDocument->getViewRenderState());
-
     // Switch back to the first view, and check that the options string is the same
     SfxLokHelper::setView(nFirstViewId);
     CPPUNIT_ASSERT_EQUAL(OString("PS;Default"), pXTextDocument->getViewRenderState());
-
     // Switch back to the second view, and change to dark mode
     SfxLokHelper::setView(nSecondViewId);
     {
@@ -1743,47 +1740,78 @@ static void assertTilePixelColor(SwXTextDocument* pXTextDocument, int nPixelX, i
 // Test that changing the theme in one view doesn't change it in the other view
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeViewSeparation)
 {
+    Color aDarkColor(0x1c, 0x1c, 0x1c);
+    // Add a minimal dark scheme
+    {
+        svtools::EditableColorConfig aColorConfig;
+        svtools::ColorConfigValue aValue;
+        aValue.bIsVisible = true;
+        aValue.nColor = aDarkColor;
+        aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
+        aColorConfig.AddScheme(u"Dark");
+    }
+    // Add a minimal light scheme
+    {
+        svtools::EditableColorConfig aColorConfig;
+        svtools::ColorConfigValue aValue;
+        aValue.bIsVisible = true;
+        aValue.nColor = COL_WHITE;
+        aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
+        aColorConfig.AddScheme(u"Light");
+    }
     SwXTextDocument* pXTextDocument = createDoc();
     int nFirstViewId = SfxLokHelper::getView();
     ViewCallback aView1;
-    // First view is at light mode
+    // Set first view to light scheme
+    {
+        SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
+        SwView* pView = pDoc->GetDocShell()->GetView();
+        uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame()->GetFrame().GetFrameInterface();
+        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+            {
+                { "NewTheme", uno::Any(OUString("Light")) },
+            }
+        );
+        comphelper::dispatchCommand(".uno:ChangeTheme", xFrame, aPropertyValues);
+    }
+    // First view is in light scheme
     assertTilePixelColor(pXTextDocument, 255, 255, COL_WHITE);
     // Create second view
     SfxLokHelper::createView();
     int nSecondViewId = SfxLokHelper::getView();
     ViewCallback aView2;
-    // Set second view to dark mode
+    // Set second view to dark scheme
     {
         SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
         SwView* pView = pDoc->GetDocShell()->GetView();
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame()->GetFrame().GetFrameInterface();
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", uno::Any(OUString("COLOR_SCHEME_LIBREOFFICE_DARK")) },
+                { "NewTheme", uno::Any(OUString("Dark")) },
             }
         );
         comphelper::dispatchCommand(".uno:ChangeTheme", xFrame, aPropertyValues);
     }
-    assertTilePixelColor(pXTextDocument, 255, 255, Color(0x1c, 0x1c, 0x1c));
-    // First view still in light mode
+    assertTilePixelColor(pXTextDocument, 255, 255, aDarkColor);
+    // First view still in light scheme
     SfxLokHelper::setView(nFirstViewId);
     assertTilePixelColor(pXTextDocument, 255, 255, COL_WHITE);
-    // Second view still in dark mode
+    // Second view still in dark scheme
     SfxLokHelper::setView(nSecondViewId);
-    assertTilePixelColor(pXTextDocument, 255, 255, Color(0x1c, 0x1c, 0x1c));
-    // Switch second view back to light mode
+    assertTilePixelColor(pXTextDocument, 255, 255, aDarkColor);
+    // Switch second view back to light scheme
     {
         SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
         SwView* pView = pDoc->GetDocShell()->GetView();
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame()->GetFrame().GetFrameInterface();
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", uno::Any(OUString("COLOR_SCHEME_LIBREOFFICE_AUTOMATIC")) },
+                { "NewTheme", uno::Any(OUString("Light")) },
             }
         );
         comphelper::dispatchCommand(".uno:ChangeTheme", xFrame, aPropertyValues);
     }
-    // Now in light mode
+    // Now in light scheme
     assertTilePixelColor(pXTextDocument, 255, 255, COL_WHITE);
 }
 

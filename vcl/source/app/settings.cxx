@@ -2786,6 +2786,18 @@ void MiscSettings::SetDarkMode(int nMode)
     }
 }
 
+int MiscSettings::GetAppColorMode()
+{
+    return officecfg::Office::Common::Misc::ApplicationAppearance::get();
+}
+
+void MiscSettings::SetAppColorMode(int nMode)
+{
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Misc::ApplicationAppearance::set(nMode, batch);
+    batch->commit();
+}
+
 HelpSettings::HelpSettings()
     : mxData(std::make_shared<ImplHelpData>())
 {

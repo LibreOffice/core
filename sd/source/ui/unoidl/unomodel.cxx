@@ -2308,8 +2308,10 @@ OString SdXImpressDocument::getViewRenderState()
     if (pView)
     {
         const SdViewOptions& pVOpt = pView->GetViewOptions();
-        if (pVOpt.msColorSchemeName == u"COLOR_SCHEME_LIBREOFFICE_DARK")
-            aState.append('D');
+        aState.append(';');
+
+        OString aThemeName = OUStringToOString(pVOpt.msColorSchemeName, RTL_TEXTENCODING_UTF8);
+        aState.append(aThemeName);
     }
     return aState.makeStringAndClear();
 }

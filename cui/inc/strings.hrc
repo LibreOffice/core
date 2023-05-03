@@ -406,6 +406,5 @@
 
 // Translatable names of color schemes
 #define RID_COLOR_SCHEME_LIBREOFFICE_AUTOMATIC      NC_("RID_COLOR_SCHEME_LIBREOFFICE_AUTOMATIC", "Automatic")
-#define RID_COLOR_SCHEME_LIBREOFFICE_DARK           NC_("RID_COLOR_SCHEME_LIBREOFFICE_DARK", "Dark")
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
