@@ -2783,10 +2783,10 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
     }
 
     // we add data strictly in-order, so we can binary-search the vector
-    auto equal_range = [&aPortionMap](int i)
+    auto equal_range = [](PortionMap::const_iterator startIt, PortionMap::const_iterator endIt, int i)
     {
         Portion key { nullptr, i, false  };
-        return std::equal_range(aPortionMap.begin(), aPortionMap.end(), key,
+        return std::equal_range(startIt, endIt, key,
             [] (const Portion& lhs, const Portion& rhs) -> bool
             {
                 return lhs.nKey < rhs.nKey;
@@ -2798,10 +2798,13 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
     // IgnoreEnd at first / last portion
     int i = 0;
     int j = i + 1;
+    // Store these outside the loop, because we limit the search area on subsequent searches.
+    std::pair< PortionMap::const_iterator, PortionMap::const_iterator > aRange1 { aPortionMap.begin(), aPortionMap.begin() + aPortionMap.size() };
     while ( i <= nKey )
     {
-        std::pair< PortionMap::const_iterator, PortionMap::const_iterator > aRange1 = equal_range( i );
-        std::pair< PortionMap::const_iterator, PortionMap::const_iterator > aRange2 = equal_range( j );
+        aRange1 = equal_range( aRange1.first, aPortionMap.begin() + aPortionMap.size(), i );
+        std::pair< PortionMap::const_iterator, PortionMap::const_iterator > aRange2
+            = equal_range( aRange1.first, aPortionMap.begin() + aPortionMap.size(), j );
 
         MergeResult eMerge = lcl_Compare_Attributes(i, j, aRange1, aRange2, RsidOnlyAutoFormatFlagMap);
 
@@ -2827,7 +2830,7 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
             ++j;
 
             // change all attributes with key i
-            aRange1 = equal_range( i );
+            aRange1 = equal_range( aRange1.first, aPortionMap.begin() + aPortionMap.size(), i );
             for ( auto aIter1 = aRange1.first; aIter1 != aRange1.second; ++aIter1 )
             {
                 SwTextAttr *const p1 = aIter1->pTextAttr;
