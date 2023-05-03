@@ -1672,7 +1672,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119659)
     createScDoc();
     ScDocument* pDoc = getScDoc();
 
-    insertArrayToCell("A1:C1", u"={1;2;3}");
+    insertArrayToCell("A1:C1", u"={1,2,3}");
 
     insertStringToCell("A2", u"=LOOKUP(3; A1:C1; {1,2})");
 
