@@ -211,4 +211,26 @@ class findReplace(UITestCase):
 
                 self.assertEqual(document.Text.String, "ß")
 
+    def test_tdf154818_search_history(self):
+        with self.ui_test.create_doc_in_start_center("writer"):
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
+                xSearchTerm = xDialog.getChild("searchterm")
+                # Search for an entry and check for the search history (A -> B -> C -> B)
+                searchTerms = ["A", "B", "C", "B"]
+                for searchTerm in searchTerms:
+                    xSearchTerm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                    xSearchTerm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                    xSearchTerm.executeAction("TYPE", mkPropertyValues({"TEXT":searchTerm}))
+                    xSearchNext = xDialog.getChild("search")
+                    xSearchNext.executeAction("CLICK", tuple())
+
+                # Check if the search history was respected
+                searchTerms = ["B", "C", "A"]
+                for searchTerm in searchTerms:
+                    select_pos(xSearchTerm, str(searchTerms.index(searchTerm)))
+                    # Without the fix in place, this test would have failed with
+                    # AssertionError: 'B' != 'C'
+                    # i.e., the search history was not respected
+                    self.assertEqual(searchTerm, get_state_as_dict(xSearchTerm)["Text"])
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

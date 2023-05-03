@@ -60,7 +60,6 @@
 #include <svx/labelitemwindow.hxx>
 #include <svx/srchdlg.hxx>
 #include <vcl/event.hxx>
-#include <unotools/viewoptions.hxx>
 
 #include <findtextfield.hxx>
 
@@ -192,6 +191,9 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
 
 }
 
+// tdf#154818 - remember last search string
+OUString FindTextFieldControl::m_sRememberedSearchString;
+
 FindTextFieldControl::FindTextFieldControl( vcl::Window* pParent,
     css::uno::Reference< css::frame::XFrame > xFrame,
     css::uno::Reference< css::uno::XComponentContext > xContext) :
@@ -260,20 +262,12 @@ void FindTextFieldControl::SetTextToSelected_Impl()
         m_xWidget->set_entry_text(aString);
         m_aChangeHdl.Call(*m_xWidget);
     }
-    else
+    // tdf#154818 - reuse last search string
+    else if (!m_sRememberedSearchString.isEmpty() || get_count() > 0)
     {
-        // tdf#154818 - reuse last search string
-        SvtViewOptions aDlgOpt(EViewType::Dialog, m_xWidget->get_help_id());
-        if (aDlgOpt.Exists())
-        {
-            css::uno::Any aUserItem = aDlgOpt.GetUserItem("UserItem");
-            aUserItem >>= aString;
-        }
-        else if (get_count() > 0)
-            aString = m_xWidget->get_text(0);
-
         // prepopulate with last search word (fdo#84256)
-        m_xWidget->set_entry_text(aString);
+        m_xWidget->set_entry_text(m_sRememberedSearchString.isEmpty() ? m_xWidget->get_text(0)
+                                                                      : m_sRememberedSearchString);
     }
 }
 
@@ -340,10 +334,8 @@ IMPL_LINK(FindTextFieldControl, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
 void FindTextFieldControl::ActivateFind(bool bShift)
 {
     // tdf#154818 - remember last search string
-    const OUString aLastSearchString = m_xWidget->get_active_text();
-    SvtViewOptions aDlgOpt(EViewType::Dialog, m_xWidget->get_help_id());
-    aDlgOpt.SetUserItem("UserItem", css::uno::Any(aLastSearchString));
-    Remember_Impl(aLastSearchString);
+    m_sRememberedSearchString = m_xWidget->get_active_text();
+    Remember_Impl(m_sRememberedSearchString);
 
     vcl::Window* pWindow = GetParent();
     ToolBox* pToolBox = static_cast<ToolBox*>(pWindow);
