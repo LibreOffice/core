@@ -112,14 +112,9 @@ void SdrObjList::ClearSdrObjList()
 
 SdrObjList::~SdrObjList()
 {
-    // clear SdrObjects without broadcasting
-    while(!maList.empty())
-    {
-        // remove last object from list
-        SdrObject& rObj = *maList.back();
-        rObj.setParentOfSdrObject(nullptr);
-        maList.pop_back();
-    }
+    // Clear SdrObjects without broadcasting.
+    for (auto& rxObj : maList)
+        rxObj->setParentOfSdrObject(nullptr);
 }
 
 SdrPage* SdrObjList::getSdrPageFromSdrObjList() const
