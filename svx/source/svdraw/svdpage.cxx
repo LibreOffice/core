@@ -1224,8 +1224,8 @@ SdrPageProperties::SdrPageProperties(SdrPage& rSdrPage)
         auto const* pColorSet = svx::ColorSets::get().getColorSet(u"LibreOffice");
         if (pColorSet)
         {
-            std::unique_ptr<model::ColorSet> pDefaultColorSet(new model::ColorSet(*pColorSet));
-            mpTheme->SetColorSet(std::move(pDefaultColorSet));
+            std::shared_ptr<model::ColorSet> pDefaultColorSet(new model::ColorSet(*pColorSet));
+            mpTheme->setColorSet(pDefaultColorSet);
         }
     }
 }
@@ -1300,7 +1300,7 @@ void SdrPageProperties::SetTheme(std::shared_ptr<model::Theme> const& pTheme)
 {
     mpTheme = pTheme;
 
-    if (mpTheme && mpTheme->GetColorSet() && mpSdrPage->IsMasterPage())
+    if (mpTheme && mpTheme->getColorSet() && mpSdrPage->IsMasterPage())
     {
         SdrModel& rModel = mpSdrPage->getSdrModelFromSdrPage();
         sal_uInt16 nPageCount = rModel.GetPageCount();
@@ -1313,7 +1313,7 @@ void SdrPageProperties::SetTheme(std::shared_ptr<model::Theme> const& pTheme)
             }
 
             svx::ThemeColorChanger aChanger(pPage);
-            aChanger.apply(*mpTheme->GetColorSet());
+            aChanger.apply(*mpTheme->getColorSet());
         }
     }
 }

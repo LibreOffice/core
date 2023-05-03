@@ -83,7 +83,7 @@ XMLColorTableContext::XMLColorTableContext(
             case XML_ELEMENT(LO_EXT, XML_NAME):
             {
                 OUString aName = rAttribute.toString();
-                mpColorSet.reset(new model::ColorSet(aName));
+                m_pColorSet.reset(new model::ColorSet(aName));
                 break;
             }
         }
@@ -92,8 +92,8 @@ XMLColorTableContext::XMLColorTableContext(
 
 XMLColorTableContext::~XMLColorTableContext()
 {
-    if (mpColorSet)
-        mrTheme.SetColorSet(std::move(mpColorSet));
+    if (m_pColorSet)
+        mrTheme.setColorSet(m_pColorSet);
 }
 
 uno::Reference<xml::sax::XFastContextHandler> SAL_CALL XMLColorTableContext::createFastChildContext(
@@ -101,8 +101,8 @@ uno::Reference<xml::sax::XFastContextHandler> SAL_CALL XMLColorTableContext::cre
 {
     if (nElement == XML_ELEMENT(LO_EXT, XML_COLOR))
     {
-        if (mpColorSet)
-            return new XMLColorContext(GetImport(), xAttribs, mpColorSet);
+        if (m_pColorSet)
+            return new XMLColorContext(GetImport(), xAttribs, m_pColorSet);
     }
 
     return nullptr;
@@ -110,7 +110,7 @@ uno::Reference<xml::sax::XFastContextHandler> SAL_CALL XMLColorTableContext::cre
 
 XMLColorContext::XMLColorContext(SvXMLImport& rImport,
                                  const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
-                                 std::unique_ptr<model::ColorSet>& rpColorSet)
+                                 std::shared_ptr<model::ColorSet>& rpColorSet)
     : SvXMLImportContext(rImport)
 {
     OUString aName;

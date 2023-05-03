@@ -400,10 +400,10 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPptxTheme)
     auto pTheme = pUnoTheme->getTheme();
 
     CPPUNIT_ASSERT_EQUAL(OUString("Office Theme"), pTheme->GetName());
-    CPPUNIT_ASSERT_EQUAL(OUString("Office"), pTheme->GetColorSet()->getName());
+    CPPUNIT_ASSERT_EQUAL(OUString("Office"), pTheme->getColorSet()->getName());
 
     CPPUNIT_ASSERT_EQUAL(Color(0x954F72),
-                         pTheme->GetColorSet()->getColor(model::ThemeColorType::FollowedHyperlink));
+                         pTheme->getColorSet()->getColor(model::ThemeColorType::FollowedHyperlink));
 
     // Check the reference to that theme:
     uno::Reference<drawing::XShapes> xDrawPageShapes(xDrawPage, uno::UNO_QUERY);

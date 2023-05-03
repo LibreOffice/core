@@ -961,7 +961,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testThemeExport)
     uno::Reference<beans::XPropertySet> xPageProps(xDrawPage, uno::UNO_QUERY);
 
     auto pTheme = std::make_shared<model::Theme>("My Theme");
-    std::unique_ptr<model::ColorSet> pColorSet(new model::ColorSet("My Color Scheme"));
+    auto pColorSet = std::make_shared<model::ColorSet>("My Color Scheme");
     pColorSet->add(model::ThemeColorType::Dark1, 0x101010);
     pColorSet->add(model::ThemeColorType::Light1, 0x202020);
     pColorSet->add(model::ThemeColorType::Dark2, 0x303030);
@@ -974,7 +974,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testThemeExport)
     pColorSet->add(model::ThemeColorType::Accent6, 0xa0a0a0);
     pColorSet->add(model::ThemeColorType::Hyperlink, 0xb0b0b0);
     pColorSet->add(model::ThemeColorType::FollowedHyperlink, 0xc0c0c0);
-    pTheme->SetColorSet(std::move(pColorSet));
+    pTheme->setColorSet(pColorSet);
 
     uno::Reference<util::XTheme> xTheme = model::theme::createXTheme(pTheme);
     xPageProps->setPropertyValue("Theme", uno::Any(xTheme));

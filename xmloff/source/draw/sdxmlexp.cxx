@@ -2388,7 +2388,7 @@ void SdXMLExport::ExportThemeElement(const uno::Reference<drawing::XDrawPage>& x
         AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, pTheme->GetName());
     SvXMLElementExport aTheme(*this, XML_NAMESPACE_LO_EXT, XML_THEME, true, true);
 
-    auto* pColorSet = pTheme->GetColorSet();
+    auto pColorSet = pTheme->getColorSet();
     if (!pColorSet->getName().isEmpty())
         AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, pColorSet->getName());
     SvXMLElementExport aColorTable(*this, XML_NAMESPACE_LO_EXT, XML_COLOR_TABLE, true, true);
