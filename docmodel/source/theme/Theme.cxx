@@ -33,19 +33,10 @@ Theme::Theme(OUString const& rName)
 
 Theme::Theme(Theme const& rTheme)
     : maName(rTheme.maName)
-    , mpColorSet(new ColorSet(*rTheme.GetColorSet()))
+    , mpColorSet(new ColorSet(*rTheme.getColorSet()))
     , maFontScheme(rTheme.maFontScheme)
 {
 }
-
-void Theme::SetColorSet(std::unique_ptr<model::ColorSet> pColorSet)
-{
-    mpColorSet = std::move(pColorSet);
-}
-
-const model::ColorSet* Theme::GetColorSet() const { return mpColorSet.get(); }
-
-model::ColorSet* Theme::GetColorSet() { return mpColorSet.get(); }
 
 void Theme::SetName(const OUString& rName) { maName = rName; }
 
@@ -94,7 +85,7 @@ std::unique_ptr<Theme> Theme::FromAny(const uno::Any& rVal)
 {
     comphelper::SequenceAsHashMap aMap(rVal);
     std::unique_ptr<Theme> pTheme;
-    model::ColorSet* pColorSet = nullptr;
+    std::shared_ptr<model::ColorSet> pColorSet;
 
     auto it = aMap.find("Name");
     if (it != aMap.end())
@@ -109,9 +100,8 @@ std::unique_ptr<Theme> Theme::FromAny(const uno::Any& rVal)
     {
         OUString aName;
         it->second >>= aName;
-        auto pSet = std::make_unique<model::ColorSet>(aName);
-        pTheme->SetColorSet(std::move(pSet));
-        pColorSet = pTheme->GetColorSet();
+        pColorSet = std::make_shared<model::ColorSet>(aName);
+        pTheme->setColorSet(pColorSet);
     }
 
     it = aMap.find("ColorScheme");

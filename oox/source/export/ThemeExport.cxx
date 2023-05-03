@@ -53,7 +53,7 @@ void ThemeExport::write(OUString const& rPath, model::Theme const& rTheme)
 
     mpFS->startElementNS(XML_a, XML_themeElements);
 
-    const model::ColorSet* pColorSet = rTheme.GetColorSet();
+    const auto pColorSet = rTheme.getColorSet();
 
     mpFS->startElementNS(XML_a, XML_clrScheme, XML_name, pColorSet->getName());
     writeColorSet(rTheme);
@@ -859,7 +859,7 @@ bool ThemeExport::writeColorSet(model::Theme const& rTheme)
         = { XML_dk1,     XML_lt1,     XML_dk2,     XML_lt2,     XML_accent1, XML_accent2,
             XML_accent3, XML_accent4, XML_accent5, XML_accent6, XML_hlink,   XML_folHlink };
 
-    const model::ColorSet* pColorSet = rTheme.GetColorSet();
+    const auto pColorSet = rTheme.getColorSet();
     if (!pColorSet)
         return false;
 

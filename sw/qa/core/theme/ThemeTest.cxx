@@ -329,7 +329,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsDOCX)
     CPPUNIT_ASSERT(pTheme);
     CPPUNIT_ASSERT_EQUAL(OUString(u"Office Theme"), pTheme->GetName());
 
-    model::ColorSet* pColorSet = pTheme->GetColorSet();
+    auto pColorSet = pTheme->getColorSet();
     CPPUNIT_ASSERT(pColorSet);
     CPPUNIT_ASSERT_EQUAL(OUString(u"Orange"), pColorSet->getName());
 
@@ -376,7 +376,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsODT)
     CPPUNIT_ASSERT(pTheme);
     CPPUNIT_ASSERT_EQUAL(OUString(u"Office Theme"), pTheme->GetName());
 
-    model::ColorSet* pColorSet = pTheme->GetColorSet();
+    auto pColorSet = pTheme->getColorSet();
     CPPUNIT_ASSERT(pColorSet);
     CPPUNIT_ASSERT_EQUAL(OUString(u"Orange"), pColorSet->getName());
 

@@ -42,7 +42,7 @@ public:
 class XMLColorTableContext : public SvXMLImportContext
 {
     model::Theme& mrTheme;
-    std::unique_ptr<model::ColorSet> mpColorSet;
+    std::shared_ptr<model::ColorSet> m_pColorSet;
     std::vector<css::util::Color> m_aColorScheme;
 
 public:
@@ -62,7 +62,7 @@ class XMLColorContext : public SvXMLImportContext
 public:
     XMLColorContext(SvXMLImport& rImport,
                     css::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList,
-                    std::unique_ptr<model::ColorSet>& rpColorSet);
+                    std::shared_ptr<model::ColorSet>& rpColorSet);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -50,7 +50,7 @@ ThemeDialog::~ThemeDialog() = default;
 void ThemeDialog::initColorSets()
 {
     if (mpTheme)
-        maColorSets.push_back(*mpTheme->GetColorSet());
+        maColorSets.push_back(*mpTheme->getColorSet());
 
     auto const& rColorSetVector = ColorSets::get().getColorSetVector();
     maColorSets.insert(maColorSets.end(), rColorSetVector.begin(), rColorSetVector.end());

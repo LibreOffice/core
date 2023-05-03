@@ -1151,7 +1151,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testThemeShapeInsert)
                                                     uno::UNO_QUERY);
 
     auto pTheme = std::make_shared<model::Theme>("mytheme");
-    std::unique_ptr<model::ColorSet> pColorSet(new model::ColorSet("mycolorscheme"));
+    auto pColorSet = std::make_shared<model::ColorSet>("mycolorscheme");
     pColorSet->add(model::ThemeColorType::Dark1, 0x0);
     pColorSet->add(model::ThemeColorType::Light1, 0x1);
     pColorSet->add(model::ThemeColorType::Dark2, 0x2);
@@ -1164,7 +1164,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testThemeShapeInsert)
     pColorSet->add(model::ThemeColorType::Accent6, 0x9);
     pColorSet->add(model::ThemeColorType::Hyperlink, 0xa);
     pColorSet->add(model::ThemeColorType::FollowedHyperlink, 0xb);
-    pTheme->SetColorSet(std::move(pColorSet));
+    pTheme->setColorSet(pColorSet);
 
     xMasterPage->setPropertyValue("Theme", uno::Any(model::theme::createXTheme(pTheme)));
 

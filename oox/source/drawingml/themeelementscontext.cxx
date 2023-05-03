@@ -327,10 +327,10 @@ ContextHandlerRef ThemeElementsContext::onCreateContext(sal_Int32 nElement, cons
         case A_TOKEN( clrScheme ):  // CT_ColorScheme
         {
             OUString aColorSchemeName = rAttribs.getStringDefaulted(XML_name);
-            mrTheme.SetColorSet(std::make_unique<model::ColorSet>(aColorSchemeName));
+            mrTheme.setColorSet(std::make_shared<model::ColorSet>(aColorSchemeName));
             if (rAttribs.hasAttribute(XML_name))
                 mrOoxTheme.getClrScheme().SetName(rAttribs.getStringDefaulted(XML_name));
-            return new clrSchemeContext(*this, mrOoxTheme.getClrScheme(), *mrTheme.GetColorSet());
+            return new clrSchemeContext(*this, mrOoxTheme.getClrScheme(), *mrTheme.getColorSet());
         }
         case A_TOKEN( fontScheme ): // CT_FontScheme
         {

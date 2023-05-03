@@ -22,7 +22,7 @@ OUString UnoTheme::getName() { return mpTheme->GetName(); }
 css::uno::Sequence<sal_Int32> UnoTheme::getColorSet()
 {
     std::vector<sal_Int32> aColorScheme(12);
-    auto* pColorSet = mpTheme->GetColorSet();
+    auto pColorSet = mpTheme->getColorSet();
     if (pColorSet)
     {
         size_t i = 0;

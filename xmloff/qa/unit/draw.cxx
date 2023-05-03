@@ -134,7 +134,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeExport)
     uno::Reference<beans::XPropertySet> xMasterPage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
 
     auto pTheme = std::make_shared<model::Theme>("mytheme");
-    std::unique_ptr<model::ColorSet> pColorSet(new model::ColorSet("mycolorscheme"));
+    auto pColorSet = std::make_shared<model::ColorSet>("mycolorscheme");
     pColorSet->add(model::ThemeColorType::Dark1, 0x0);
     pColorSet->add(model::ThemeColorType::Light1, 0x1);
     pColorSet->add(model::ThemeColorType::Dark2, 0x2);
@@ -147,7 +147,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeExport)
     pColorSet->add(model::ThemeColorType::Accent6, 0x9);
     pColorSet->add(model::ThemeColorType::Hyperlink, 0xa);
     pColorSet->add(model::ThemeColorType::FollowedHyperlink, 0xb);
-    pTheme->SetColorSet(std::move(pColorSet));
+    pTheme->setColorSet(pColorSet);
 
     uno::Reference<util::XTheme> xTheme = model::theme::createXTheme(pTheme);
     xMasterPage->setPropertyValue("Theme", uno::Any(xTheme));
@@ -230,10 +230,10 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeImport)
     CPPUNIT_ASSERT(pTheme);
 
     CPPUNIT_ASSERT_EQUAL(OUString("Office Theme"), pTheme->GetName());
-    CPPUNIT_ASSERT_EQUAL(OUString("Office"), pTheme->GetColorSet()->getName());
+    CPPUNIT_ASSERT_EQUAL(OUString("Office"), pTheme->getColorSet()->getName());
 
     CPPUNIT_ASSERT_EQUAL(Color(0x954F72),
-                         pTheme->GetColorSet()->getColor(model::ThemeColorType::FollowedHyperlink));
+                         pTheme->getColorSet()->getColor(model::ThemeColorType::FollowedHyperlink));
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeColorExportImport)
