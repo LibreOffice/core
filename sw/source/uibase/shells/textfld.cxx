@@ -1134,8 +1134,14 @@ FIELD_INSERT:
                 bool bInHF = false;
                 bool bSkipMirror = true;
                 size_t nEvenPage = 0;
-                if (bCreateMirror)
+                if (bCreateMirror || !rSh.GetCurrFrame())
                 {
+                    // Come here if Currframe can't be found, otherwise Goto*Text will crash.
+                    // Get*PageNum will also be invalid (0), so we have no idea where we are.
+                    // (Since not asking for mirror, the likelihood is that the bHeader is shared,
+                    // in which case it doesn't matter anyway, and we just hope for the best.)
+                    // Read the code in this block assuming that bCreateMirror is true.
+
                     // There are enough pages that there probably is a valid odd page.
                     // However, that is not guaranteed: perhaps the page style switched,
                     // or a blank page was forced, or some other complexity.
@@ -1173,9 +1179,6 @@ FIELD_INSERT:
                 }
                 else
                 {
-                    // CurrFrame is lost when mirror is created. Goto*Text crashes if no CurrFrame
-                    assert(rSh.GetCurrFrame()); // not guaranteed, but normally assumed
-
                     if (bHeader)
                         bInHF = rSh.GotoHeaderText();
                     else
