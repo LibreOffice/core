@@ -712,9 +712,9 @@ void SdrEditView::ForceMarkedObjToAnotherPage()
     }
 }
 
-std::vector<SdrObject*> SdrEditView::DeleteMarkedList(SdrMarkList const& rMark)
+std::vector<rtl::Reference<SdrObject>> SdrEditView::DeleteMarkedList(SdrMarkList const& rMark)
 {
-    std::vector<SdrObject*> ret;
+    std::vector<rtl::Reference<SdrObject>> ret;
     if (rMark.GetMarkCount()!=0)
     {
         rMark.ForceSort();
@@ -761,13 +761,13 @@ std::vector<SdrObject*> SdrEditView::DeleteMarkedList(SdrMarkList const& rMark)
                     aUpdaters.push_back(new E3DModifySceneSnapRectUpdater(pObj));
                 }
 
-                pOL->RemoveObject(nOrdNum);
-
                 if( !bUndo )
                 {
-                    // tdf#108863 don't delete objects before EndUndo()
+                    // tdf#108863 and tdf#108889 don't delete objects before EndUndo()
                     ret.push_back(pObj);
                 }
+
+                pOL->RemoveObject(nOrdNum);
             }
 
             // fire scene updaters
@@ -865,10 +865,7 @@ void SdrEditView::DeleteMarkedObj()
         // original stuff: remove selected objects. Handle clear will
         // do something only once
         auto temp(DeleteMarkedList(GetMarkedObjectList()));
-        for (auto p : temp)
-        {
-            lazyDeleteObjects.push_back(p);
-        }
+        lazyDeleteObjects.insert(lazyDeleteObjects.end(), temp.begin(), temp.end());
         GetMarkedObjectListWriteAccess().Clear();
         maHdlList.Clear();
 

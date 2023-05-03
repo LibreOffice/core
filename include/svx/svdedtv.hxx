@@ -154,7 +154,7 @@ protected:
     // Removes all objects of the MarkList from their ObjLists including Undo.
     // The entries in rMark remain.
     // @return a list of objects that must be deleted after the outermost EndUndo
-    std::vector<SdrObject *> DeleteMarkedList(SdrMarkList const& rMark); // DeleteMarked -> DeleteMarkedList
+    std::vector<rtl::Reference<SdrObject>> DeleteMarkedList(SdrMarkList const& rMark); // DeleteMarked -> DeleteMarkedList
 
     // Check possibilities of all marked objects
     virtual void CheckPossibilities();
