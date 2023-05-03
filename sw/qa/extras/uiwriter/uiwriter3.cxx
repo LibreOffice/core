@@ -112,6 +112,31 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf139843)
     CPPUNIT_ASSERT_EQUAL(nPages, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf143574)
+{
+    createSwDoc("tdf143574.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xGroupShape->getCount());
+
+    uno::Reference<beans::XPropertySet> xProperties(xGroupShape->getByIndex(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(false, xProperties->getPropertyValue("TextBox").get<bool>());
+
+    selectShape(1);
+    dispatchCommand(mxComponent, ".uno:EnterGroup", {});
+
+    // Select a shape in the group
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, this test would have crashed
+    dispatchCommand(mxComponent, ".uno:AddTextBox", {});
+
+    CPPUNIT_ASSERT_EQUAL(true, xProperties->getPropertyValue("TextBox").get<bool>());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf146848)
 {
     // Reuse existing document
