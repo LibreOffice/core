@@ -2314,7 +2314,36 @@ SwXText::convertToTable(
         {
             try
             {
-                xPrSet->setPropertyValue(rTableProperty.Name, rTableProperty.Value);
+                static const std::initializer_list<std::u16string_view> vDenylist = {
+                    u"BottomBorder",
+                    u"CharAutoKerning",
+                    u"CharFontName",
+                    u"CharFontNameAsian",
+                    u"CharFontNameComplex",
+                    u"CharHeight",
+                    u"CharHeightAsian",
+                    u"CharHeightComplex",
+                    u"CharInteropGrabBag",
+                    u"CharLocale",
+                    u"CharLocaleAsian",
+                    u"CharLocaleComplex",
+                    u"HorizontalBorder",
+                    u"LeftBorder",
+                    u"ParaAdjust",
+                    u"ParaBottomMargin",
+                    u"ParaIsHyphenation",
+                    u"ParaLineSpacing",
+                    u"ParaOrphans",
+                    u"ParaTopMargin",
+                    u"ParaWidows",
+                    u"RightBorder",
+                    u"TopBorder",
+                    u"VerticalBorder",
+                };
+                if (std::find(vDenylist.begin(), vDenylist.end(), rTableProperty.Name) == vDenylist.end())
+                {
+                    xPrSet->setPropertyValue(rTableProperty.Name, rTableProperty.Value);
+                }
             }
             catch (const uno::Exception&)
             {
