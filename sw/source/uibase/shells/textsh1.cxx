@@ -1004,6 +1004,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 { RES_CHRATR_CJK_LANGUAGE + 1, RES_CHRATR_CTL_LANGUAGE - 1 },
                 { RES_CHRATR_CTL_LANGUAGE + 1, RES_CHRATR_END - 1 },
                 { RES_PARATR_BEGIN, RES_PARATR_END - 1 },
+                { RES_PARATR_LIST_AUTOFMT, RES_PARATR_LIST_AUTOFMT },
                 { RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER },
                 { RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1 },
             };

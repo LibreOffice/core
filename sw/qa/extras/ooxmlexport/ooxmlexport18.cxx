@@ -32,6 +32,7 @@
 
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
+#include <ndtxt.hxx>
 #include <wrtsh.hxx>
 
 class Test : public SwModelTestBase
@@ -69,6 +70,36 @@ CPPUNIT_TEST_FIXTURE(Test, testCellSdtRedline)
     // Without the accompanying fix in place, this test would have failed with an assertion failure,
     // we produced not-well-formed XML on save.
     loadAndSave("cell-sdt-redline.docx");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf148956_directEndFormatting, "tdf148956_directEndFormatting.docx")
+{
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // pWrtShell->EndPara(/*bSelect=*/true);
+    dispatchCommand(mxComponent, ".uno:GotoEndOfPara", {});
+    if (!isExported())
+    {
+        CPPUNIT_ASSERT_MESSAGE(
+            "Has direct formatting",
+            pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode()->GetpSwpHints());
+    }
+    else
+    {
+        CPPUNIT_ASSERT_MESSAGE(
+            "Direct formatting cleared",
+            !pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode()->GetpSwpHints());
+    }
+
+    pWrtShell->SttPara(/*bSelect=*/true);
+    dispatchCommand(mxComponent, ".uno:ResetAttributes", {});
+
+    dispatchCommand(mxComponent, ".uno:GotoEndOfPara", {});
+
+    CPPUNIT_ASSERT_MESSAGE(
+        "Direct formatting cleared",
+        !pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode()->GetpSwpHints());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf147646, "tdf147646_mergedCellNumbering.docx")
