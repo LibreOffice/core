@@ -410,11 +410,11 @@ void Test::testFindFirstDOIInText() {
     };
     static Data const tests[] = {
         { "doi:10.1000/182", "https://doi.org/10.1000/182", 0, 15 }, // valid doi suffix with only digits
-        { "Doi:10.1000/182", "https://doi.org/10.1000/182", 0, 15 }, // valid doi suffix with some of the the first three character being capitalized
-        { "DoI:10.1000/182", "https://doi.org/10.1000/182", 0, 15 }, // valid doi suffix with some of the the first three character being capitalized
-        { "DOI:10.1000/182", "https://doi.org/10.1000/182", 0, 15 }, // valid doi suffix with some of the the first three character being capitalized
-        { "dOI:10.1000/182", "https://doi.org/10.1000/182", 0, 15 }, // valid doi suffix with some of the the first three character being capitalized
-        { "dOi:10.1000/182", "https://doi.org/10.1000/182", 0, 15 }, // valid doi suffix with some of the the first three character being capitalized
+        { "Doi:10.1000/182", "https://doi.org/10.1000/182", 0, 15 }, // valid doi suffix with some of the first three characters being capitalized
+        { "DoI:10.1000/182", "https://doi.org/10.1000/182", 0, 15 }, // valid doi suffix with some of the first three characters being capitalized
+        { "DOI:10.1000/182", "https://doi.org/10.1000/182", 0, 15 }, // valid doi suffix with some of the first three characters being capitalized
+        { "dOI:10.1000/182", "https://doi.org/10.1000/182", 0, 15 }, // valid doi suffix with some of the first three characters being capitalized
+        { "dOi:10.1000/182", "https://doi.org/10.1000/182", 0, 15 }, // valid doi suffix with some of the first three characters being capitalized
         { "doi:10.1038/nature03001", "https://doi.org/10.1038/nature03001", 0, 23 }, // valid doi suffix with alphanumeric characters
         { "doi:10.1093/ajae/aaq063", "https://doi.org/10.1093/ajae/aaq063", 0, 23 }, // valid doi suffix with multiple slash
         { "doi:10.1016/S0735-1097(98)00347-7", "https://doi.org/10.1016/S0735-1097(98)00347-7", 0, 33 }, // valid doi suffix with characters apart from alphanumeric
