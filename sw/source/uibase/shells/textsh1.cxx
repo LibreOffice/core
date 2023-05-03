@@ -401,7 +401,7 @@ void UpdateSections(SfxRequest& rReq, SwWrtShell& rWrtSh)
         pSections->GetValue() >>= aSections;
     }
 
-    rWrtSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSSECTION, nullptr);
+    rWrtSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::UPDATE_SECTIONS, nullptr);
     rWrtSh.StartAction();
 
     SwDoc* pDoc = rWrtSh.GetDoc();
@@ -449,7 +449,7 @@ void UpdateSections(SfxRequest& rReq, SwWrtShell& rWrtSh)
     }
 
     rWrtSh.EndAction();
-    rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSSECTION, nullptr);
+    rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::UPDATE_SECTIONS, nullptr);
 }
 
 void DeleteSections(SfxRequest& rReq, SwWrtShell& rWrtSh)

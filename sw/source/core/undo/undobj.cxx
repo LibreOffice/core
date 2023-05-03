@@ -673,6 +673,9 @@ OUString GetUndoComment(SwUndoId eId)
         case SwUndoId::DELETE_FIELDS:
             pId = STR_DELETE_FIELDS;
             break;
+        case SwUndoId::UPDATE_SECTIONS:
+            pId = STR_UPDATE_SECTIONS;
+            break;
     }
 
     assert(pId);
