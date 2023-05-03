@@ -2556,7 +2556,7 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
             nFontDescriptor = emitFontDescriptor(pFace, aSubsetInfo, rSubset.m_nFontID, 0);
 
         if (nToUnicodeStream)
-            nToUnicodeStream = createToUnicodeCMap(pEncoding, aCodeUnits.data(), pCodeUnitsPerGlyph,
+            nToUnicodeStream = createToUnicodeCMap(pEncoding, aCodeUnits, pCodeUnitsPerGlyph,
                                                    pEncToUnicodeIndex, nGlyphs);
 
         // write font object
@@ -2865,14 +2865,14 @@ static void appendSubsetName( int nSubsetID, std::u16string_view rPSName, OStrin
 }
 
 sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8 const * pEncoding,
-                                              const sal_Ucs* pCodeUnits,
+                                              const std::vector<sal_Ucs>& rCodeUnits,
                                               const sal_Int32* pCodeUnitsPerGlyph,
                                               const sal_Int32* pEncToUnicodeIndex,
                                               uint32_t nGlyphs )
 {
     int nMapped = 0;
     for (auto n = 0u; n < nGlyphs; ++n)
-        if (pCodeUnitsPerGlyph[n] && pCodeUnits[pEncToUnicodeIndex[n]])
+        if (pCodeUnitsPerGlyph[n] && rCodeUnits[pEncToUnicodeIndex[n]])
             nMapped++;
 
     if( nMapped == 0 )
@@ -2900,7 +2900,7 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8 const * pEncoding,
     int nCount = 0;
     for (auto n = 0u; n < nGlyphs; ++n)
     {
-        if (pCodeUnitsPerGlyph[n] && pCodeUnits[pEncToUnicodeIndex[n]])
+        if (pCodeUnitsPerGlyph[n] && rCodeUnits[pEncToUnicodeIndex[n]])
         {
             if( (nCount % 100) == 0 )
             {
@@ -2916,8 +2916,8 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8 const * pEncoding,
             sal_Int32 nIndex = pEncToUnicodeIndex[n];
             for( sal_Int32 j = 0; j < pCodeUnitsPerGlyph[n]; j++ )
             {
-                appendHex( static_cast<sal_Int8>(pCodeUnits[nIndex + j] / 256), aContents );
-                appendHex( static_cast<sal_Int8>(pCodeUnits[nIndex + j] & 255), aContents );
+                appendHex( static_cast<sal_Int8>(rCodeUnits[nIndex + j] / 256), aContents );
+                appendHex( static_cast<sal_Int8>(rCodeUnits[nIndex + j] & 255), aContents );
             }
             aContents.append( ">\n" );
             nCount++;
@@ -3184,7 +3184,7 @@ bool PDFWriterImpl::emitFonts()
                 sal_Int32 nFontDescriptor = emitFontDescriptor( subset.first, aSubsetInfo, s_subset.m_nFontID, nFontStream );
 
                 if( nToUnicodeStream )
-                    nToUnicodeStream = createToUnicodeCMap( pEncoding, aCodeUnits.data(), pCodeUnitsPerGlyph, pEncToUnicodeIndex, nGlyphs );
+                    nToUnicodeStream = createToUnicodeCMap( pEncoding, aCodeUnits, pCodeUnitsPerGlyph, pEncToUnicodeIndex, nGlyphs );
 
                 sal_Int32 nFontObject = createObject();
                 if ( !updateObject( nFontObject ) ) return false;
