@@ -260,8 +260,7 @@ void ResourceManager::ReadDeckList()
         if (comphelper::LibreOfficeKit::isActive())
         {
             // Hide these decks in LOK as they aren't fully functional.
-            if (aDeckName == "GalleryDeck" || aDeckName == "NavigatorDeck"
-                || aDeckName == "StyleListDeck")
+            if (aDeckName == "GalleryDeck" || aDeckName == "StyleListDeck")
                 continue;
         }
 

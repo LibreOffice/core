@@ -143,7 +143,8 @@ std::unique_ptr<tools::JsonWriter> JSDialogNotifyIdle::generateFullUpdate() cons
         return aJsonWriter;
 
     m_aContentWindow->DumpAsPropertyTree(*aJsonWriter);
-    aJsonWriter->put("id", m_aNotifierWindow->GetLOKWindowId());
+    if (m_aNotifierWindow)
+        aJsonWriter->put("id", m_aNotifierWindow->GetLOKWindowId());
     aJsonWriter->put("jsontype", m_sTypeOfJSON);
 
     return aJsonWriter;
@@ -159,7 +160,8 @@ JSDialogNotifyIdle::generateWidgetUpdate(VclPtr<vcl::Window> pWindow) const
 
     aJsonWriter->put("jsontype", m_sTypeOfJSON);
     aJsonWriter->put("action", "update");
-    aJsonWriter->put("id", m_aNotifierWindow->GetLOKWindowId());
+    if (m_aNotifierWindow)
+        aJsonWriter->put("id", m_aNotifierWindow->GetLOKWindowId());
     {
         auto aEntries = aJsonWriter->startNode("control");
         pWindow->DumpAsPropertyTree(*aJsonWriter);
@@ -187,7 +189,8 @@ JSDialogNotifyIdle::generateActionMessage(VclPtr<vcl::Window> pWindow,
 
     aJsonWriter->put("jsontype", m_sTypeOfJSON);
     aJsonWriter->put("action", "action");
-    aJsonWriter->put("id", m_aNotifierWindow->GetLOKWindowId());
+    if (m_aNotifierWindow)
+        aJsonWriter->put("id", m_aNotifierWindow->GetLOKWindowId());
 
     {
         auto aDataNode = aJsonWriter->startNode("data");
