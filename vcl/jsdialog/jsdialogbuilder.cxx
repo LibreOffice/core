@@ -2021,16 +2021,47 @@ void JSTreeView::clear()
     sendUpdate();
 }
 
+void JSTreeView::set_cursor_without_notify(const weld::TreeIter& rIter)
+{
+    SalInstanceTreeView::set_cursor(rIter);
+}
+
+void JSTreeView::set_cursor(const weld::TreeIter& rIter)
+{
+    SalInstanceTreeView::set_cursor(rIter);
+    sendUpdate();
+}
+
+void JSTreeView::set_cursor(int pos)
+{
+    SalInstanceTreeView::set_cursor(pos);
+    sendUpdate();
+}
+
 void JSTreeView::expand_row(const weld::TreeIter& rIter)
 {
+    bool bNotify = false;
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    if (!m_xTreeView->IsExpanded(rVclIter.iter))
+        bNotify = true;
+
     SalInstanceTreeView::expand_row(rIter);
-    sendUpdate();
+
+    if (bNotify)
+        sendUpdate();
 }
 
 void JSTreeView::collapse_row(const weld::TreeIter& rIter)
 {
+    bool bNotify = false;
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    if (m_xTreeView->IsExpanded(rVclIter.iter))
+        bNotify = true;
+
     SalInstanceTreeView::collapse_row(rIter);
-    sendUpdate();
+
+    if (bNotify)
+        sendUpdate();
 }
 
 JSExpander::JSExpander(JSDialogSender* pSender, ::VclExpander* pExpander,
