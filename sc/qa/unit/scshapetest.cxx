@@ -145,12 +145,9 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf143619_validation_circle_pos)
 
     // Error was, that deleting row and col before E6 does not move circle to D5, but to B3.
     // Delete first row and first column.
-    uno::Sequence<beans::PropertyValue> aPropertyValues = {
-        comphelper::makePropertyValue("ToPoint", OUString("$A$1")),
-    };
-    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+    goToCell("$A$1");
     dispatchCommand(mxComponent, ".uno:DeleteRows", {});
-    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+    goToCell("$A$1");
     dispatchCommand(mxComponent, ".uno:DeleteColumns", {});
 
     // Without fix in place the position was (2007, 833)
@@ -566,10 +563,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf137576_LogicRectInDefaultMeasureline)
     pTabViewShell->SetDrawShell(false);
 
     // Hide column A.
-    uno::Sequence<beans::PropertyValue> aPropertyValues = {
-        comphelper::makePropertyValue("ToPoint", OUString("$A$1")),
-    };
-    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+    goToCell("$A$1");
     dispatchCommand(mxComponent, ".uno:HideColumn", {});
 
     // Get current position. I will not use absolute values for comparison, because document is loaded
@@ -676,10 +670,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testHideColsShow)
     tools::Rectangle aSnapRectOrig(pObj->GetSnapRect());
 
     // Hide cols C and D.
-    uno::Sequence<beans::PropertyValue> aPropertyValues = {
-        comphelper::makePropertyValue("ToPoint", OUString("$C$1:$D$1")),
-    };
-    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+    goToCell("$C$1:$D$1");
 
     ScTabViewShell* pViewShell = getViewShell();
     pViewShell->GetViewData().GetDispatcher().Execute(FID_COL_HIDE);
@@ -688,10 +679,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testHideColsShow)
     CPPUNIT_ASSERT_MESSAGE("Hide: Object should be invisible", !pObj->IsVisible());
 
     // Show cols C and D
-    aPropertyValues = {
-        comphelper::makePropertyValue("ToPoint", OUString("$C$1:$D$1")),
-    };
-    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+    goToCell("$C$1:$D$1");
     pViewShell->GetViewData().GetDispatcher().Execute(FID_COL_SHOW);
 
     // Check object is visible and has old size
@@ -744,10 +732,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf138138_MoveCellWithRotatedShape)
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectedRect, aSnapRect, 1);
 
     // Insert two columns after column B
-    uno::Sequence<beans::PropertyValue> aPropertyValues = {
-        comphelper::makePropertyValue("ToPoint", OUString("$A$1:$B$1")),
-    };
-    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+    goToCell("$A$1:$B$1");
 
     ScTabViewShell* pViewShell = getViewShell();
     pViewShell->GetViewData().GetDispatcher().Execute(FID_INS_COLUMNS_AFTER);
@@ -840,10 +825,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf137355_UndoHideRows)
 
     // Hide rows 3 to 6 in UI. [Note: Simple pDoc->SetRowHidden(2,5,0,true) does not work, because it
     // does not produce the needed undo items.]
-    uno::Sequence<beans::PropertyValue> aPropertyValues = {
-        comphelper::makePropertyValue("ToPoint", OUString("$A$3:$A$6")),
-    };
-    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+    goToCell("$A$3:$A$6");
     ScTabViewShell* pViewShell = getViewShell();
     pViewShell->GetViewData().GetDispatcher().Execute(FID_ROW_HIDE);
 
@@ -871,10 +853,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf152081_UndoHideColsWithNotes)
     CPPUNIT_ASSERT_MESSAGE("Load: Note object should be visible", pObj->IsVisible());
 
     // Hide B column
-    uno::Sequence<beans::PropertyValue> aPropertyValues = {
-        comphelper::makePropertyValue("ToPoint", OUString("$B$2:$B$2")),
-    };
-    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+    goToCell("$B$2:$B$2");
     ScTabViewShell* pViewShell = getViewShell();
     pViewShell->GetViewData().GetDispatcher().Execute(FID_COL_HIDE);
 
