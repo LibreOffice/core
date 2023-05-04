@@ -5430,25 +5430,6 @@
         </info>
         <value/>
       </prop>
-      <prop oor:name="ToolboxStyle" oor:type="xs:short" oor:nillable="false">
-        <!-- UIHints: Tools  Options General View -->
-        <info>
-          <desc>Specifies which button style the toolbars should use.</desc>
-        </info>
-        <constraints>
-          <enumeration oor:value="0">
-            <info>
-              <desc>3D style</desc>
-            </info>
-          </enumeration>
-          <enumeration oor:value="1">
-            <info>
-              <desc>Flat style</desc>
-            </info>
-          </enumeration>
-        </constraints>
-        <value>1</value>
-      </prop>
       <prop oor:name="FormControlPilotsEnabled" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Enables/Disables the usage of AutoPilots for form
