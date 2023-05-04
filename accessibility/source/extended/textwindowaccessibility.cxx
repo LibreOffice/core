@@ -119,7 +119,7 @@ void Paragraph::notifyEvent(::sal_Int16 nEventId,
     if (m_nClientId)
         comphelper::AccessibleEventNotifier::addEvent( m_nClientId, css::accessibility::AccessibleEventObject(
                              getXWeak(),
-                             nEventId, rNewValue, rOldValue) );
+                             nEventId, rNewValue, rOldValue, -1) );
 }
 
 // virtual

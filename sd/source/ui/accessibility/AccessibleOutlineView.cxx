@@ -206,7 +206,7 @@ void SAL_CALL
     {
         // The current page changed. Update the children accordingly.
         UpdateChildren();
-        CommitChange(AccessibleEventId::PAGE_CHANGED,rEventObject.NewValue, rEventObject.OldValue);
+        CommitChange(AccessibleEventId::PAGE_CHANGED,rEventObject.NewValue, rEventObject.OldValue, -1);
     }
     else if ( rEventObject.PropertyName == "VisibleArea" )
     {

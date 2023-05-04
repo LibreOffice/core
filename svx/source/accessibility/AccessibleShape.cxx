@@ -906,7 +906,7 @@ void SAL_CALL
     CommitChange (
         AccessibleEventId::VISIBLE_DATA_CHANGED,
         uno::Any(),
-        uno::Any());
+        uno::Any(), -1);
 
     // Name and Description may have changed.  Update the local
     // values accordingly.
@@ -923,7 +923,7 @@ void AccessibleShape::ViewForwarderChanged()
     // and/or position) of the shape has changed.
     CommitChange (AccessibleEventId::VISIBLE_DATA_CHANGED,
         uno::Any(),
-        uno::Any());
+        uno::Any(), -1);
 
     // Tell children manager of the modified view forwarder.
     if (mpChildrenManager != nullptr)
@@ -976,7 +976,7 @@ OUString AccessibleShape::GetFullAccessibleName (AccessibleShape *shape)
         CommitChange(
             AccessibleEventId::NAME_CHANGED,
             aNewValue,
-            aOldValue);
+            aOldValue, -1);
     }
     aAccName = sName;
     return sName;

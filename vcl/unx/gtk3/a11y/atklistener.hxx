@@ -53,12 +53,14 @@ private:
     // Process CHILD_EVENT notifications with a new child added
     void handleChildAdded(
         const css::uno::Reference< css::accessibility::XAccessibleContext >& rxParent,
-        const css::uno::Reference< css::accessibility::XAccessible>& rxChild);
+        const css::uno::Reference< css::accessibility::XAccessible>& rxChild,
+        int nIndexHint);
 
     // Process CHILD_EVENT notifications with a child removed
     void handleChildRemoved(
         const css::uno::Reference< css::accessibility::XAccessibleContext >& rxParent,
-        const css::uno::Reference< css::accessibility::XAccessible>& rxChild);
+        const css::uno::Reference< css::accessibility::XAccessible>& rxChild,
+        int nIndexHint);
 
     // Process INVALIDATE_ALL_CHILDREN notification
     void handleInvalidateChildren(

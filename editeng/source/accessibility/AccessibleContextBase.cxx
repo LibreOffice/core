@@ -89,7 +89,7 @@ bool AccessibleContextBase::SetState (sal_Int64 aState)
             CommitChange(
                 AccessibleEventId::STATE_CHANGED,
                 aNewValue,
-                uno::Any());
+                uno::Any(), -1);
         }
         return true;
     }
@@ -112,7 +112,7 @@ bool AccessibleContextBase::ResetState (sal_Int64 aState)
         CommitChange(
             AccessibleEventId::STATE_CHANGED,
             uno::Any(),
-            aOldValue);
+            aOldValue, -1);
         return true;
     }
     else
@@ -144,7 +144,7 @@ void AccessibleContextBase::SetRelationSet (
     for (int i=0; aRelationDescriptors[i].first!=AccessibleRelationType::INVALID; i++)
         if (mxRelationSet->containsRelation(aRelationDescriptors[i].first)
         != rxNewRelationSet->containsRelation(aRelationDescriptors[i].first))
-        CommitChange (aRelationDescriptors[i].second, uno::Any(), uno::Any());
+        CommitChange (aRelationDescriptors[i].second, uno::Any(), uno::Any(), -1);
 
     mxRelationSet = rxNewRelationSet;
 }
@@ -425,7 +425,7 @@ void AccessibleContextBase::SetAccessibleDescription (
     CommitChange(
         AccessibleEventId::DESCRIPTION_CHANGED,
         aNewValue,
-        aOldValue);
+        aOldValue, -1);
 }
 
 
@@ -447,7 +447,7 @@ void AccessibleContextBase::SetAccessibleName (
     CommitChange(
         AccessibleEventId::NAME_CHANGED,
         aNewValue,
-        aOldValue);
+        aOldValue, -1);
 }
 
 
@@ -460,7 +460,8 @@ OUString AccessibleContextBase::CreateAccessibleName()
 void AccessibleContextBase::CommitChange (
     sal_Int16 nEventId,
     const uno::Any& rNewValue,
-    const uno::Any& rOldValue)
+    const uno::Any& rOldValue,
+    sal_Int32 nValueIndex)
 {
     // Do not call FireEvent and do not even create the event object when no
     // listener has been registered yet.  Creating the event object can
@@ -471,7 +472,8 @@ void AccessibleContextBase::CommitChange (
             static_cast<XAccessibleContext*>(this),
             nEventId,
             rNewValue,
-            rOldValue);
+            rOldValue,
+            nValueIndex);
 
         FireEvent (aEvent);
     }

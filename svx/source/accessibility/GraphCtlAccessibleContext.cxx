@@ -305,7 +305,7 @@ void SvxGraphCtrlAccessibleContext::CommitChange (
         static_cast<uno::XWeak*>(this),
         nEventId,
         rNewValue,
-        rOldValue);
+        rOldValue, -1);
 
     if (mnClientId)
         comphelper::AccessibleEventNotifier::addEvent( mnClientId, aEvent );
@@ -712,7 +712,7 @@ void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& /*rBC*/, const SfxHi
                         rtl::Reference<AccessibleShape> pShape((*iter).second);
 
                         if( pShape.is() )
-                            pShape->CommitChange( AccessibleEventId::VISIBLE_DATA_CHANGED, uno::Any(), uno::Any() );
+                            pShape->CommitChange( AccessibleEventId::VISIBLE_DATA_CHANGED, uno::Any(), uno::Any(), -1 );
                     }
                 }
                 break;

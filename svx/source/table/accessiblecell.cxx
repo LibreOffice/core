@@ -461,7 +461,7 @@ void AccessibleCell::ViewForwarderChanged()
 {
     // Inform all listeners that the graphical representation (i.e. size
     // and/or position) of the shape has changed.
-    CommitChange(AccessibleEventId::VISIBLE_DATA_CHANGED, Any(), Any());
+    CommitChange(AccessibleEventId::VISIBLE_DATA_CHANGED, Any(), Any(), -1);
 
     // update our children that our screen position might have changed
     if( mpText )

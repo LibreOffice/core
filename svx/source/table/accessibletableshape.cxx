@@ -305,7 +305,7 @@ void SAL_CALL AccessibleTableShapeImpl::modified( const EventObject& /*aEvent*/ 
         //notify bridge to update the acc cache.
         AccessibleTableShape *pAccTable = dynamic_cast <AccessibleTableShape *> (mxAccessible.get());
         if (pAccTable)
-            pAccTable->CommitChange(AccessibleEventId::INVALIDATE_ALL_CHILDREN, Any(), Any());
+            pAccTable->CommitChange(AccessibleEventId::INVALIDATE_ALL_CHILDREN, Any(), Any(), -1);
     }
     catch( const Exception& )
     {
@@ -911,17 +911,17 @@ void  SAL_CALL AccessibleTableShape::selectionChanged (const EventObject& rEvent
     if (mnPreviousSelectionCount == 0 && nCount > 0 && bSelected)
     {
         xAccCell->SetState(AccessibleStateType::SELECTED);
-        xAccCell->CommitChange(AccessibleEventId::SELECTION_CHANGED, Any(), Any());
+        xAccCell->CommitChange(AccessibleEventId::SELECTION_CHANGED, Any(), Any(), -1);
     }
     else if (bSelected)
     {
         xAccCell->SetState(AccessibleStateType::SELECTED);
-        xAccCell->CommitChange(AccessibleEventId::SELECTION_CHANGED_ADD, Any(), Any());
+        xAccCell->CommitChange(AccessibleEventId::SELECTION_CHANGED_ADD, Any(), Any(), -1);
     }
     else
     {
         xAccCell->ResetState(AccessibleStateType::SELECTED);
-        xAccCell->CommitChange(AccessibleEventId::SELECTION_CHANGED_REMOVE, Any(), Any());
+        xAccCell->CommitChange(AccessibleEventId::SELECTION_CHANGED_REMOVE, Any(), Any(), -1);
     }
     mnPreviousSelectionCount = nCount;
 }

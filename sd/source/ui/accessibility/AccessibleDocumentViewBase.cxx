@@ -599,7 +599,7 @@ void AccessibleDocumentViewBase::SetAccessibleOLEObject (
             CommitChange (
                 AccessibleEventId::CHILD,
                 uno::Any(),
-                uno::Any (mxAccessibleOLEObject));
+                uno::Any (mxAccessibleOLEObject), -1);
 
     // Assume that the accessible OLE Object disposes itself correctly.
 
@@ -613,7 +613,7 @@ void AccessibleDocumentViewBase::SetAccessibleOLEObject (
         CommitChange (
             AccessibleEventId::CHILD,
             uno::Any (mxAccessibleOLEObject),
-            uno::Any());
+            uno::Any(), -1);
 }
 
 //=====  methods from AccessibleSelectionBase ==================================================

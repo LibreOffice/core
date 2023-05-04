@@ -82,7 +82,8 @@ public:
     */
     void CommitChange (sal_Int16 aEventId,
         const css::uno::Any& rNewValue,
-        const css::uno::Any& rOldValue);
+        const css::uno::Any& rOldValue,
+        sal_Int32 nValueIndex);
 
     /** Set a new description and, provided that the new name differs from
         the old one, broadcast an accessibility event.

@@ -116,7 +116,7 @@ namespace accessibility
                                                    const css::uno::Any& _aNewValue )
     {
         Reference< uno::XInterface > xSource( *this );
-        AccessibleEventObject aEventObj( xSource, _nEventId, _aNewValue, _aOldValue );
+        AccessibleEventObject aEventObj( xSource, _nEventId, _aNewValue, _aOldValue, -1 );
 
         if (m_nClientId)
             comphelper::AccessibleEventNotifier::addEvent( m_nClientId, aEventObj );

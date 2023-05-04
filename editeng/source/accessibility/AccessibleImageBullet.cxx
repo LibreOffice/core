@@ -408,7 +408,7 @@ namespace accessibility
 
         uno::Reference < XAccessibleContext > xThis( const_cast< AccessibleImageBullet* > (this)->getAccessibleContext() );
 
-        AccessibleEventObject aEvent(xThis, nEventId, rNewValue, rOldValue);
+        AccessibleEventObject aEvent(xThis, nEventId, rNewValue, rOldValue, -1);
 
         // #106234# Delegate to EventNotifier
         ::comphelper::AccessibleEventNotifier::addEvent( getNotifierClientId(),

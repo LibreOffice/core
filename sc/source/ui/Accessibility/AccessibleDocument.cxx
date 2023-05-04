@@ -1452,7 +1452,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 static_cast< ::accessibility::AccessibleShape* >(xAccessible.get())->
                     CommitChange(AccessibleEventId::STATE_CHANGED,
                                 aNewValue,
-                                uno::Any() );
+                                uno::Any(), -1 );
             }
             else
             {

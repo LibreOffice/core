@@ -350,7 +350,7 @@ void AccessibleBase::BroadcastAccEvent(
     // the const cast is needed, because UNO parameters are never const
     const AccessibleEventObject aEvent(
         const_cast< uno::XWeak * >( static_cast< const uno::XWeak * >( this )),
-        nId, rNew, rOld );
+        nId, rNew, rOld, -1 );
 
     // let the notifier handle this event
     ::comphelper::AccessibleEventNotifier::addEvent( m_nEventNotifierId, aEvent );

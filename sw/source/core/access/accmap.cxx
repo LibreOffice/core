@@ -1531,7 +1531,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
         ::accessibility::AccessibleShape *pAccShape = rpShape.get();
         if (pAccShape)
         {
-            pAccShape->CommitChange(AccessibleEventId::SELECTION_CHANGED_REMOVE, uno::Any(), uno::Any());
+            pAccShape->CommitChange(AccessibleEventId::SELECTION_CHANGED_REMOVE, uno::Any(), uno::Any(), -1);
         }
     }
 
@@ -1585,7 +1585,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
             ::accessibility::AccessibleShape *pAccShape = rpShape.get();
             if (pAccShape)
             {
-                pAccShape->CommitChange(nEventID, uno::Any(), uno::Any());
+                pAccShape->CommitChange(nEventID, uno::Any(), uno::Any(), -1);
             }
         }
     }

@@ -163,28 +163,40 @@ void AtkListener::updateChildList(
 
 void AtkListener::handleChildAdded(
     const uno::Reference< accessibility::XAccessibleContext >& rxParent,
-    const uno::Reference< accessibility::XAccessible>& rxAccessible)
+    const uno::Reference< accessibility::XAccessible>& rxAccessible,
+    sal_Int32 nIndexHint)
 {
     AtkObject * pChild = rxAccessible.is() ? atk_object_wrapper_ref( rxAccessible ) : nullptr;
 
-    if( pChild )
+    if( !pChild )
+        return;
+
+    if (nIndexHint != -1)
     {
+        sal_Int64 nStateSet = rxParent->getAccessibleStateSet();
+        if( !(nStateSet & accessibility::AccessibleStateType::DEFUNC)
+              || (nStateSet & accessibility::AccessibleStateType::MANAGES_DESCENDANTS) )
+        {
+            m_aChildList.insert(m_aChildList.begin() + nIndexHint, rxAccessible);
+        }
+    }
+    else
         updateChildList(rxParent);
 
-        atk_object_wrapper_add_child( mpWrapper, pChild,
-            atk_object_get_index_in_parent( pChild ));
+    atk_object_wrapper_add_child( mpWrapper, pChild,
+        atk_object_get_index_in_parent( pChild ));
 
-        g_object_unref( pChild );
-    }
+    g_object_unref( pChild );
 }
 
 /*****************************************************************************/
 
 void AtkListener::handleChildRemoved(
     const uno::Reference< accessibility::XAccessibleContext >& rxParent,
-    const uno::Reference< accessibility::XAccessible>& rxChild)
+    const uno::Reference< accessibility::XAccessible>& rxChild,
+    int nChildIndexHint)
 {
-    sal_Int32 nIndex = -1;
+    sal_Int32 nIndex = nChildIndexHint;
 
     // Locate the child in the children list
     const size_t nmax = m_aChildList.size();
@@ -231,7 +243,14 @@ void AtkListener::handleChildRemoved(
         xBroadcaster->removeAccessibleEventListener(xListener);
     }
 
-    updateChildList(rxParent);
+    // update child list
+    sal_Int64 nStateSet = rxParent->getAccessibleStateSet();
+    if(!( (nStateSet & accessibility::AccessibleStateType::DEFUNC)
+        || (nStateSet & accessibility::AccessibleStateType::MANAGES_DESCENDANTS) ))
+    {
+        assert( m_aChildList[nIndex] == rxParent->getAccessibleChild(nIndex) );
+        m_aChildList.erase(m_aChildList.begin() + nIndex);
+    }
 
     AtkObject * pChild = atk_object_wrapper_ref( rxChild, false );
     if( pChild )
@@ -442,10 +461,10 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             g_return_if_fail( xParent.is() );
 
             if( aEvent.OldValue >>= xChild )
-                handleChildRemoved(xParent, xChild);
+                handleChildRemoved(xParent, xChild, aEvent.IndexHint);
 
             if( aEvent.NewValue >>= xChild )
-                handleChildAdded(xParent, xChild);
+                handleChildAdded(xParent, xChild, aEvent.IndexHint);
             break;
         }
 

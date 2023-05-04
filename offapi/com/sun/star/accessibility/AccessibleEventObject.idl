@@ -48,6 +48,13 @@ struct AccessibleEventObject: ::com::sun::star::lang::EventObject
         Depending on the #EventId, this can be void.
     */
     any OldValue;
+
+    /**
+        For events like add/remove/update of a child, this specifies the index of the object.
+        For anything else, it should be -1.
+        @since LibreOffice 7.6
+    */
+    long IndexHint;
 };
 
 }; }; }; };
