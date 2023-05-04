@@ -2299,14 +2299,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf150457)
     createSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'a', 0);
-    Scheduler::ProcessEventsToIdle();
-
+    emulateTyping(*pTextDoc, u"a");
     dispatchCommand(mxComponent, ".uno:InsertFootnote", {});
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'a', 0);
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'b', 0);
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', 0);
-    Scheduler::ProcessEventsToIdle();
+    emulateTyping(*pTextDoc, u"abc");
 
     auto xFootnotes = pTextDoc->getFootnotes();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xFootnotes->getCount());
@@ -2315,14 +2310,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf150457)
 
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_PAGEUP);
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'd', 0);
-    Scheduler::ProcessEventsToIdle();
+    emulateTyping(*pTextDoc, u"d");
 
     dispatchCommand(mxComponent, ".uno:InsertFootnote", {});
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'd', 0);
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'e', 0);
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'f', 0);
-    Scheduler::ProcessEventsToIdle();
+    emulateTyping(*pTextDoc, u"def");
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xFootnotes->getCount());
     xParagraph = uno::Reference<text::XTextRange>(xFootnotes->getByIndex(1), uno::UNO_QUERY);
