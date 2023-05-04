@@ -858,6 +858,36 @@ public:
         mpDoc->pClass->setViewTimezone(mpDoc, nId, timezone);
     }
 
+    /**
+     * Enable/Disable accessibility support for the window with the specified nId.
+     *
+     * @param nId a view ID, returned by createView().
+     * @param nEnabled true/false
+     */
+    void setAccessibilityState(int nId, bool nEnabled)
+    {
+        mpDoc->pClass->setAccessibilityState(mpDoc, nId, nEnabled);
+    }
+
+    /**
+     *  Get the current focused paragraph info:
+     *  {
+     *      "content": paragraph content
+     *      "start": selection start
+     *      "end": selection end
+     *  }
+     */
+    char* getA11yFocusedParagraph()
+    {
+        return mpDoc->pClass->getA11yFocusedParagraph(mpDoc);
+    }
+
+    /// Get the current text cursor position.
+    int getA11yCaretPosition()
+    {
+        return mpDoc->pClass->getA11yCaretPosition(mpDoc);
+    }
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

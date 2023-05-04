@@ -212,6 +212,7 @@ private:
     static void InitInterface_Impl();
 
     LOKDocumentFocusListener& GetLOKDocumentFocusListener();
+    const LOKDocumentFocusListener& GetLOKDocumentFocusListener() const;
 
 public:
 
@@ -448,6 +449,9 @@ public:
     bool isBlockedCommand(OUString command);
 
     void SetStoringHelper(std::shared_ptr<SfxStoringHelper> xHelper) { m_xHelper = xHelper; }
+
+    OUString getA11yFocusedParagraph() const;
+    int getA11yCaretPosition() const;
 };
 
 

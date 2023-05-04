@@ -1312,6 +1312,10 @@ static void doc_sendContentControlEvent(LibreOfficeKitDocument* pThis, const cha
 static void doc_setViewTimezone(LibreOfficeKitDocument* pThis, int nId, const char* timezone);
 
 static void doc_setAccessibilityState(LibreOfficeKitDocument* pThis, int nId, bool bEnabled);
+
+static char* doc_getA11yFocusedParagraph(LibreOfficeKitDocument* pThis);
+
+static int doc_getA11yCaretPosition(LibreOfficeKitDocument* pThis);
 } // extern "C"
 
 namespace {
@@ -1462,6 +1466,9 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
         m_pDocumentClass->setViewTimezone = doc_setViewTimezone;
 
         m_pDocumentClass->setAccessibilityState = doc_setAccessibilityState;
+
+        m_pDocumentClass->getA11yFocusedParagraph = doc_getA11yFocusedParagraph;
+        m_pDocumentClass->getA11yCaretPosition = doc_getA11yCaretPosition;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -1769,6 +1776,9 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
         case LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
         case LOK_CALLBACK_REFERENCE_MARKS:
         case LOK_CALLBACK_CELL_AUTO_FILL_AREA:
+        case LOK_CALLBACK_A11Y_FOCUS_CHANGED:
+        case LOK_CALLBACK_A11Y_CARET_CHANGED:
+        case LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED:
         {
             const auto& pos = std::find(m_queue1.rbegin(), m_queue1.rend(), type);
             auto pos2 = toQueue2(pos);
@@ -1827,6 +1837,9 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
             case LOK_CALLBACK_SET_PART:
             case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
             case LOK_CALLBACK_RULER_UPDATE:
+            case LOK_CALLBACK_A11Y_FOCUS_CHANGED:
+            case LOK_CALLBACK_A11Y_CARET_CHANGED:
+            case LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED:
             {
                 if (removeAll(type))
                     SAL_INFO("lok", "Removed dups of [" << type << "]: [" << aCallbackData.getPayload() << "].");
@@ -3774,6 +3787,46 @@ static char* doc_getPartPageRectangles(LibreOfficeKitDocument* pThis)
     }
 
     return convertOUString(pDoc->getPartPageRectangles());
+}
+
+static char* doc_getA11yFocusedParagraph(LibreOfficeKitDocument* pThis)
+{
+    SolarMutexGuard aGuard;
+
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        return nullptr;
+    }
+
+    if (SfxViewShell* pViewShell = SfxViewShell::Current())
+    {
+        return convertOUString(pViewShell->getA11yFocusedParagraph());
+
+    }
+    return nullptr;
+}
+
+static int  doc_getA11yCaretPosition(LibreOfficeKitDocument* pThis)
+{
+    SolarMutexGuard aGuard;
+
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        return -1;
+    }
+    if (SfxViewShell* pViewShell = SfxViewShell::Current())
+    {
+        return pViewShell->getA11yCaretPosition();
+
+    }
+    return -1;
+
 }
 
 static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart)
@@ -6401,12 +6454,9 @@ static void doc_setViewLanguage(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*p
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    SAL_DEBUG("doc_setViewLanguage: nId: " << nId);
     OUString sLanguage = OStringToOUString(language, RTL_TEXTENCODING_UTF8);
     SfxLokHelper::setViewLanguage(nId, sLanguage);
     SfxLokHelper::setViewLocale(nId, sLanguage);
-
-    SfxLokHelper::setAccessibilityState(nId, true);
 }
 
 unsigned char* doc_renderFont(LibreOfficeKitDocument* pThis,
@@ -6950,8 +7000,12 @@ static void doc_setViewTimezone(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*p
     }
 }
 
-static void doc_setAccessibilityState(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId, bool nEnabled)
+static void doc_setAccessibilityState(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis, int nId, bool nEnabled)
 {
+    int nDocType = doc_getDocumentType(pThis);
+    if (nDocType != LOK_DOCTYPE_TEXT)
+        return;
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
