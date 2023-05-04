@@ -64,6 +64,8 @@ void FuText::StopEditMode()
 
     ScDocShell* pDocShell = rViewData.GetDocShell();
     SfxUndoManager* pUndoMgr = rDoc.IsUndoEnabled() ? pDocShell->GetUndoManager() : nullptr;
+    if (pUndoMgr && !pUndoMgr->GetMaxUndoActionCount()) // tdf#134308 if max undo is 0, treat as if no undo
+        pUndoMgr = nullptr;
     bool bNewNote = false;
     if( pNote && pUndoMgr )
     {

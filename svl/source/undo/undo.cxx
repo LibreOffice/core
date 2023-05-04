@@ -376,7 +376,6 @@ bool SfxUndoManager::ImplIsUndoEnabled_Lock() const
     return m_xData->mbUndoEnabled;
 }
 
-
 void SfxUndoManager::SetMaxUndoActionCount( size_t nMaxUndoActionCount )
 {
     UndoManagerGuard aGuard( *m_xData );
@@ -411,6 +410,10 @@ void SfxUndoManager::SetMaxUndoActionCount( size_t nMaxUndoActionCount )
     ImplCheckEmptyActions();
 }
 
+size_t SfxUndoManager::GetMaxUndoActionCount() const
+{
+    return m_xData->pActUndoArray->nMaxUndoActions;
+}
 
 void SfxUndoManager::ImplClearCurrentLevel_NoNotify( UndoManagerGuard& i_guard )
 {
