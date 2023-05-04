@@ -400,6 +400,13 @@ bool SidebarTextControl::MouseButtonUp(const MouseEvent& rMEvt)
     return bRet;
 }
 
+bool SidebarTextControl::MouseMove(const MouseEvent& rMEvt)
+{
+    if (rMEvt.IsEnterWindow())
+        GetDrawingArea()->set_cursor(PointerStyle::Text);
+    return WeldEditView::MouseMove(rMEvt);
+}
+
 IMPL_LINK( SidebarTextControl, OnlineSpellCallback, SpellCallbackInfo&, rInfo, void )
 {
     if ( rInfo.nCommand == SpellCallbackCommand::STARTSPELLDLG )

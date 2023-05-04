@@ -66,6 +66,7 @@ class SidebarTextControl : public WeldEditView
         virtual bool KeyInput(const KeyEvent& rKeyEvt) override;
         virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
         virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
+        virtual bool MouseMove(const MouseEvent& rMEvt) override;
 
         void SetMapMode(const MapMode& rNewMapMode)
         {
