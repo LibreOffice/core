@@ -2326,7 +2326,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf150457)
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DELETE);
 
     // Page up moves the cursor from the footnote area to the main text, then
-    // doing select all and pressing delete removes all the text and footenote references,
+    // doing select all and pressing delete removes all the text and footnote references,
     // thus removing all the footnotes
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_PAGEUP);
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::SELECT_ALL);
