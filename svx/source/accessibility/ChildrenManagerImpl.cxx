@@ -40,11 +40,11 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <comphelper/types.hxx>
 #include <o3tl/safeint.hxx>
-#include <o3tl/sorted_vector.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/debug.hxx>
 #include <svx/SvxShapeTypes.hxx>
 #include <vcl/window.hxx>
+#include <shapecollection.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -861,16 +861,22 @@ void ChildrenManagerImpl::UpdateSelection()
         }
 
         // tdf#139220 to quickly find if a given drawing::XShape is selected
-        o3tl::sorted_vector<css::uno::Reference<css::drawing::XShape>> aSortedSelectedShapes;
+        std::vector<css::uno::Reference<css::drawing::XShape>> aSortedSelectedShapes;
         if (!xSelectedShape.is() && xSelectedShapeAccess.is())
         {
             sal_Int32 nCount = xSelectedShapeAccess->getCount();
             aSortedSelectedShapes.reserve(nCount);
-            for (sal_Int32 i = 0; i < nCount; ++i)
+            if (auto pSvxShape = dynamic_cast<SvxShapeCollection*>(xSelectedShapeAccess.get()))
             {
-                css::uno::Reference<css::drawing::XShape> xShape(xSelectedShapeAccess->getByIndex(i), uno::UNO_QUERY);
-                aSortedSelectedShapes.insert(xShape);
+                pSvxShape->getAllShapes(aSortedSelectedShapes);
             }
+            else
+                for (sal_Int32 i = 0; i < nCount; ++i)
+                {
+                    css::uno::Reference<css::drawing::XShape> xShape(xSelectedShapeAccess->getByIndex(i), uno::UNO_QUERY);
+                    aSortedSelectedShapes.push_back(xShape);
+                }
+            std::sort(aSortedSelectedShapes.begin(), aSortedSelectedShapes.end());
         }
 
         for (const auto& rChild : maVisibleChildren)
@@ -899,7 +905,7 @@ void ChildrenManagerImpl::UpdateSelection()
                 }
                 else if (!aSortedSelectedShapes.empty())
                 {
-                    if (aSortedSelectedShapes.find(rChild.mxShape) != aSortedSelectedShapes.end())
+                    if (std::binary_search(aSortedSelectedShapes.begin(), aSortedSelectedShapes.end(), rChild.mxShape))
                     {
                         bShapeIsSelected = true;
                         // In a multi-selection no shape has the focus.

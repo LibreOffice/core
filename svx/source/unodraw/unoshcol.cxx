@@ -18,62 +18,15 @@
  */
 
 #include <com/sun/star/document/EventObject.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <cppuhelper/implbase3.hxx>
-#include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <mutex>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <shapecollection.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-
-namespace {
-
-class SvxShapeCollection :
-    public cppu::WeakAggImplHelper3<drawing::XShapes, lang::XServiceInfo, lang::XComponent>
-{
-private:
-    std::mutex m_aMutex;
-    std::vector<uno::Reference<drawing::XShape>> maShapeContainer;
-    comphelper::OInterfaceContainerHelper4<lang::XEventListener> maEventListeners;
-    bool bDisposed = false;
-    bool bInDispose = false;
-
-public:
-    SvxShapeCollection() noexcept;
-
-    // XInterface
-    virtual void SAL_CALL release() noexcept override;
-
-    // XComponent
-    virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
-
-    // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override ;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
-
-    // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
-
-    // XShapes
-    virtual void SAL_CALL add( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
-    virtual void SAL_CALL remove( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-};
 
 SvxShapeCollection::SvxShapeCollection() noexcept
 {
@@ -245,6 +198,9 @@ uno::Sequence< OUString > SAL_CALL SvxShapeCollection::getSupportedServiceNames(
     return { "com.sun.star.drawing.Shapes", "com.sun.star.drawing.ShapeCollection" };
 }
 
+void SvxShapeCollection::getAllShapes(std::vector<css::uno::Reference<css::drawing::XShape>>& rShapes) const
+{
+    rShapes = maShapeContainer;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
