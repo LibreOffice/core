@@ -174,9 +174,6 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
 
     switch ( GetType(  ) )
     {
-    case SwFrameType::Fly:
-        name = "fly";
-        break;
     case SwFrameType::Section:
         name = "section";
         break;
@@ -298,11 +295,6 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
         else
         {
             dumpChildrenAsXml( writer );
-            if (IsFlyFrame())
-            {
-                auto pFlyFrame = static_cast<const SwFlyFrame*>(this);
-                pFlyFrame->SwAnchoredObject::dumpAsXml(writer);
-            }
         }
         (void)xmlTextWriterEndElement( writer );
     }

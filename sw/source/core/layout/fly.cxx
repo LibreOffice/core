@@ -3075,6 +3075,33 @@ SwFlyFrameFormat * SwFlyFrame::GetFormat()
     return static_cast< SwFlyFrameFormat * >( GetDep() );
 }
 
+void SwFlyFrame::dumpAsXml(xmlTextWriterPtr writer) const
+{
+    (void)xmlTextWriterStartElement(writer, reinterpret_cast<const xmlChar*>("fly"));
+    dumpAsXmlAttributes(writer);
+
+    (void)xmlTextWriterStartElement(writer, BAD_CAST("infos"));
+    dumpInfosAsXml(writer);
+    (void)xmlTextWriterEndElement(writer);
+    const SwSortedObjs* pAnchored = GetDrawObjs();
+    if (pAnchored && pAnchored->size() > 0)
+    {
+        (void)xmlTextWriterStartElement(writer, BAD_CAST("anchored"));
+
+        for (SwAnchoredObject* pObject : *pAnchored)
+        {
+            pObject->dumpAsXml(writer);
+        }
+
+        (void)xmlTextWriterEndElement(writer);
+    }
+    dumpChildrenAsXml(writer);
+
+    SwAnchoredObject::dumpAsXml(writer);
+
+    (void)xmlTextWriterEndElement(writer);
+}
+
 void SwFlyFrame::Calc(vcl::RenderContext* pRenderContext) const
 {
     if ( !m_bValidContentPos )

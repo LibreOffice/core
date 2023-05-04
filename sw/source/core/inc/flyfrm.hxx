@@ -289,7 +289,7 @@ public:
     virtual const SwFlyFrameFormat *GetFormat() const override;
     virtual       SwFlyFrameFormat *GetFormat() override;
 
-    virtual void dumpAsXml( xmlTextWriterPtr writer ) const override { SwLayoutFrame::dumpAsXml( writer ); };
+    virtual void dumpAsXml(xmlTextWriterPtr writer = nullptr) const override;
 
     virtual void Calc(vcl::RenderContext* pRenderContext) const override;
 
