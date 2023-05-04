@@ -5699,13 +5699,6 @@
           <desc>specifies settings for the property browser used for forms and
           form controls.</desc>
         </info>
-        <prop oor:name="ExperimentalProperties" oor:type="xs:boolean" oor:nillable="false">
-          <info>
-            <desc>Enables or disables the property browser's access to
-            form/control properties which are not officially supported.</desc>
-          </info>
-          <value>false</value>
-        </prop>
         <prop oor:name="DirectHelp" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Enables or disables a help section at the bottom of the
