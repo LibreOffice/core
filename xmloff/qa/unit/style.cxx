@@ -337,7 +337,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_OldToNew)
     saveAndReload("draw8");
 
     // Examine file markup
-    // For compatibilty the file should still have the old attributes 'start-color' and 'end-color'
+    // For compatibility the file should still have the old attributes 'start-color' and 'end-color'
     xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
     OString sPath = "/office:document-styles/office:styles/draw:gradient[@draw:name='red2yellow']";
     assertXPath(pXmlDoc, sPath, "start-color", "#ff0000");
@@ -390,7 +390,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_OldToNew_opacity)
     saveAndReload("draw8");
 
     // Examine file markup
-    // For compatibilty the file should still have the old attributes.
+    // For compatibility the file should still have the old attributes.
     xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
     OString sPath = "/office:document-styles/office:styles/draw:opacity";
     assertXPath(pXmlDoc, sPath, "start", "10%"); // UI 90% transparency
@@ -452,7 +452,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_threeStops)
     saveAndReload("draw8");
 
     // Examine file markup
-    // For compatibilty the file should still have the old attributes 'start-color' and 'end-color'
+    // For compatibility the file should still have the old attributes 'start-color' and 'end-color'
     xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
     OString sPath = "/office:document-styles/office:styles/draw:gradient[@draw:name='threeStops']";
     assertXPath(pXmlDoc, sPath, "start-color", "#ff0000");
