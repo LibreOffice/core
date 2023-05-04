@@ -5011,9 +5011,9 @@ SfxUInt16Item PageOffsetDialog FN_CHANGE_PAGENUM
     RecordPerSet;
     Asynchron;
 
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Options;
 ]
 
