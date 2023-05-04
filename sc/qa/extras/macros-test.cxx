@@ -8,7 +8,7 @@
  */
 
 #include <sal/config.h>
-#include <test/unoapixml_test.hxx>
+#include <helper/qahelper.hxx>
 #include <sal/log.hxx>
 #include <unotools/tempfile.hxx>
 #include <svx/svdpage.hxx>
@@ -33,7 +33,7 @@ using namespace ::com::sun::star::uno;
 
 /* Implementation of Macros test */
 
-class ScMacrosTest : public UnoApiXmlTest
+class ScMacrosTest : public ScModelTestBase
 {
 public:
     ScMacrosTest();
@@ -47,7 +47,7 @@ public:
 // module, we could move the test there then ) - relates to fdo#67547
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testMSP)
 {
-    loadFromURL(u"MasterScriptProviderProblem.ods");
+    createScDoc("MasterScriptProviderProblem.ods");
 
     Any aRet = executeMacro("vnd.sun.Star.script:Standard.Module1.TestMSP?language=Basic&location=document");
     OUString sResult;
@@ -59,128 +59,104 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testMSP)
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testPasswordProtectedStarBasic)
 {
-    loadFromURL(u"testTypePassword.ods");
-
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
-    ScDocument& rDoc = pDocSh->GetDocument();
+    createScDoc("testTypePassword.ods");
+    ScDocument* pDoc = getScDoc();
 
     // User defined types
-
     executeMacro("vnd.sun.Star.script:Standard.Module1.LoadAndExecuteTest?language=Basic&location=document");
 
-    OUString aValue = rDoc.GetString(0,0,0);
+    OUString aValue = pDoc->GetString(0,0,0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("User defined types script did not change the value of Sheet1.A1", OUString("success"), aValue);
 
     // Big Module
 
     executeMacro("vnd.sun.Star.script:MyLibrary.BigModule.bigMethod?language=Basic&location=document");
 
-    aValue = rDoc.GetString(1,0,0);
+    aValue = pDoc->GetString(1,0,0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Big module script did not change the value of Sheet1.B1", OUString("success"), aValue);
 
     // far big method tdf#94617
 
     executeMacro("vnd.sun.Star.script:MyLibrary.BigModule.farBigMethod?language=Basic&location=document");
 
-    aValue = rDoc.GetString(2,0,0);
+    aValue = pDoc->GetString(2,0,0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Far Method script did not change the value of Sheet1.C1", OUString("success"), aValue);
 }
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf142391)
 {
-    loadFromURL(u"tdf142391.ods");
-
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
-    ScDocument& rDoc = pDocSh->GetDocument();
+    createScDoc("tdf142391.ods");
+    ScDocument* pDoc = getScDoc();
 
     // User defined types
     executeMacro(
         "vnd.sun.Star.script:Standard.Module1.LoadAndExecuteTest?language=Basic&location=document");
-    OUString aValue = rDoc.GetString(0, 0, 0);
+    OUString aValue = pDoc->GetString(0, 0, 0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("User defined types script did not change the value of Sheet1.A1",
                                  OUString("success"), aValue);
 
     // Big Module
     executeMacro(
         "vnd.sun.Star.script:MyLibrary.BigModule.bigMethod?language=Basic&location=document");
-    aValue = rDoc.GetString(1, 0, 0);
+    aValue = pDoc->GetString(1, 0, 0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Big module script did not change the value of Sheet1.B1",
                                  OUString("success"), aValue);
 
     // tdf#142391 - method exceeds 0xffff offset for methods
     executeMacro(
         "vnd.sun.Star.script:MyLibrary.BigModule.farBigMethod?language=Basic&location=document");
-    aValue = rDoc.GetString(2, 0, 0);
+    aValue = pDoc->GetString(2, 0, 0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Far Method script did not change the value of Sheet1.C1",
                                  OUString("success"), aValue);
 }
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testStarBasic)
 {
-    loadFromURL(u"StarBasic.ods");
-
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
-    ScDocument& rDoc = pDocSh->GetDocument();
+    createScDoc("StarBasic.ods");
+    ScDocument* pDoc = getScDoc();
 
     executeMacro("vnd.sun.Star.script:Standard.Module1.Macro1?language=Basic&location=document");
-    double aValue = rDoc.GetValue(0,0,0);
+    double aValue = pDoc->GetValue(0,0,0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("script did not change the value of Sheet1.A1",2.0, aValue, 0.00001);
 }
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testRowColumn)
 {
-    loadFromURL(u"StarBasic.ods");
-
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
-    ScDocument& rDoc = pDocSh->GetDocument();
+    createScDoc("StarBasic.ods");
+    ScDocument* pDoc = getScDoc();
 
     executeMacro("vnd.sun.Star.script:Standard.Module1.Macro_RowHeight?language=Basic&location=document");
 
-    sal_uInt16 nHeight = o3tl::convert(rDoc.GetRowHeight(0, 0), o3tl::Length::twip, o3tl::Length::mm100);
+    sal_uInt16 nHeight = o3tl::convert(pDoc->GetRowHeight(0, 0), o3tl::Length::twip, o3tl::Length::mm100);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(2000), nHeight);
 
     executeMacro("vnd.sun.Star.script:Standard.Module1.Macro_ColumnWidth?language=Basic&location=document");
-    sal_uInt16 nWidth  = o3tl::convert(rDoc.GetColWidth(0, 0), o3tl::Length::twip, o3tl::Length::mm100);
+    sal_uInt16 nWidth  = o3tl::convert(pDoc->GetColWidth(0, 0), o3tl::Length::twip, o3tl::Length::mm100);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(4001), nWidth);
 }
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf146742)
 {
-    loadFromURL(u"tdf146742.ods");
+    createScDoc("tdf146742.ods");
 
     // Export to ODS and reload the file
     saveAndReload("calc8");
+    ScDocument* pDoc = getScDoc();
 
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
-    ScDocument& rDoc = pDocSh->GetDocument();
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), pDoc->GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2"), pDoc->GetString(ScAddress(0,1,0)));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("1"), rDoc.GetString(ScAddress(0,0,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("2"), rDoc.GetString(ScAddress(0,1,0)));
-
-    CPPUNIT_ASSERT_EQUAL(OUString("TRUE"), rDoc.GetString(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("TRUE"), pDoc->GetString(ScAddress(1,0,0)));
     // Without the fix in place, this test would have failed with
     // - Expected: FALSE
     // - Actual  : TRUE
-    CPPUNIT_ASSERT_EQUAL(OUString("FALSE"), rDoc.GetString(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("FALSE"), pDoc->GetString(ScAddress(1,1,0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testMacroButtonFormControlXlsxExport)
 {
     // Given a button form control with an associated macro:
-    loadFromURL(u"macro-button-form-control.xlsm");
+    createScDoc("macro-button-form-control.xlsm");
 
     // When exporting to XLSM:
     save("Calc MS Excel 2007 VBA XML");
@@ -202,39 +178,29 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testMacroButtonFormControlXlsxExport)
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf104902)
 {
-    loadFromURL(u"tdf104902.ods");
+    createScDoc("tdf104902.ods");
 
     executeMacro("vnd.sun.Star.script:Standard.Module1.display_bug?language=Basic&location=document");
 
     // Export to ODS
     saveAndReload("calc8");
+    ScDocument* pDoc = getScDoc();
 
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
-    ScDocument& rDoc = pDocSh->GetDocument();
-
-    CPPUNIT_ASSERT_EQUAL(OUString("string no newlines"), rDoc.GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("string no newlines"), pDoc->GetString(ScAddress(0, 0, 0)));
 
     // Without the fix in place, this test would have failed with
     // - Expected: string with
     // newlines
     // - Actual  : string withnewlines
-    CPPUNIT_ASSERT_EQUAL(OUString(u"string with" + OUStringChar(u'\xA') + u"newlines"), rDoc.GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"string with" + OUStringChar(u'\xA') + u"newlines"), pDoc->GetString(ScAddress(0, 1, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf64639)
 {
-    loadFromURL(u"tdf64639.ods");
+    createScDoc("tdf64639.ods");
+    ScDocument* pDoc = getScDoc();
 
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
-    ScDocument& rDoc = pDocSh->GetDocument();
-
-    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
     const SdrPage* pPage = pDrawLayer->GetPage(0);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pPage->GetObjCount());
@@ -255,33 +221,28 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf64639)
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf142033)
 {
-    loadFromURL(u"tdf142033.ods");
+    createScDoc("tdf142033.ods");
 
     executeMacro("vnd.sun.Star.script:Standard.Module1.display_bug?language=Basic&location=document");
 
     // Export to ODS
     saveAndReload("calc8");
+    ScDocument* pDoc = getScDoc();
 
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
-    ScDocument& rDoc = pDocSh->GetDocument();
-
-    CPPUNIT_ASSERT_EQUAL(OUString("string no newlines"), rDoc.GetString(ScAddress(0,0,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("string no newlines"), rDoc.GetString(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("string no newlines"), pDoc->GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("string no newlines"), pDoc->GetString(ScAddress(0,1,0)));
 
     // Without the fix in place, this test would have failed with
     // - Expected: string with
     // newlines
     // - Actual  : string withnewlines
-    CPPUNIT_ASSERT_EQUAL(OUString(u"string with" + OUStringChar(u'\xA') + u"newlines"), rDoc.GetString(ScAddress(1,0,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString(u"string with" + OUStringChar(u'\xA') + u"newlines"), rDoc.GetString(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"string with" + OUStringChar(u'\xA') + u"newlines"), pDoc->GetString(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"string with" + OUStringChar(u'\xA') + u"newlines"), pDoc->GetString(ScAddress(1,1,0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf89920)
 {
-    loadFromURL(u"tdf89920.ods");
+    createScDoc("tdf89920.ods");
 
     executeMacro("vnd.sun.Star.script:Standard.Module1.SearchAndReplaceNewline?language=Basic&"
                  "location=document");
@@ -312,7 +273,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testPasswordProtectedUnicodeString)
         u"vnd.sun.Star.script:Protected.Module1.TestUnicodeString?language=Basic&location=document");
     static const OUStringLiteral sLibName(u"Protected");
 
-    loadFromURL(u"tdf57113.ods");
+    createScDoc("tdf57113.ods");
 
     // Check that loading password-protected macro image correctly loads Unicode strings
     {
@@ -352,7 +313,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testPasswordProtectedArrayInUserType)
         u"vnd.sun.Star.script:Protected.Module1.TestMyType?language=Basic&location=document");
     static const OUStringLiteral sLibName(u"Protected");
 
-    loadFromURL(u"ProtectedArrayInCustomType.ods");
+    createScDoc("ProtectedArrayInCustomType.ods");
 
     // Check that loading password-protected macro image correctly loads array bounds
     {
@@ -388,7 +349,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testPasswordProtectedArrayInUserType)
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf114427)
 {
-    loadFromURL(u"tdf114427.ods");
+    createScDoc("tdf114427.ods");
 
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIA(xDoc->getSheets(), UNO_QUERY_THROW);
@@ -413,7 +374,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf131296_legacy)
         { "TestDoubleConst", "Double: 123" },
     });
 
-    loadFromURL(u"tdf131296_legacy.ods");
+    createScDoc("tdf131296_legacy.ods");
     {
         for (auto& [sTestName, sExpected] : aTests)
         {
@@ -439,7 +400,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf131296_new)
         { "TestCurrencyConst", "Currency: 123.0000" },
     });
 
-    loadFromURL(u"tdf131296_new.ods");
+    createScDoc("tdf131296_new.ods");
     {
         for (auto& [sTestName, sExpected] : aTests)
         {
@@ -455,35 +416,30 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf131296_new)
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf46119)
 {
-    loadFromURL(u"tdf46119.ods");
-
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
-    ScDocument& rDoc = pDocSh->GetDocument();
+    createScDoc("tdf46119.ods");
+    ScDocument* pDoc = getScDoc();
 
     executeMacro("vnd.sun.Star.script:Standard.Module1.Main?language=Basic&location=document");
 
-    CPPUNIT_ASSERT_EQUAL(OUString("0.074"), rDoc.GetString(ScAddress(2, 24, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("0.067"), rDoc.GetString(ScAddress(2, 25, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("0.273"), rDoc.GetString(ScAddress(2, 26, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("0.259"), rDoc.GetString(ScAddress(2, 27, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("0.074"), pDoc->GetString(ScAddress(2, 24, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("0.067"), pDoc->GetString(ScAddress(2, 25, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("0.273"), pDoc->GetString(ScAddress(2, 26, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("0.259"), pDoc->GetString(ScAddress(2, 27, 0)));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("0.097"), rDoc.GetString(ScAddress(3, 24, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("0.087"), rDoc.GetString(ScAddress(3, 25, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("0.311"), rDoc.GetString(ScAddress(3, 26, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("0.296"), rDoc.GetString(ScAddress(3, 27, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("0.097"), pDoc->GetString(ScAddress(3, 24, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("0.087"), pDoc->GetString(ScAddress(3, 25, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("0.311"), pDoc->GetString(ScAddress(3, 26, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("0.296"), pDoc->GetString(ScAddress(3, 27, 0)));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("0.149"), rDoc.GetString(ScAddress(4, 24, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("0.134"), rDoc.GetString(ScAddress(4, 25, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("0.386"), rDoc.GetString(ScAddress(4, 26, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("0.366"), rDoc.GetString(ScAddress(4, 27, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("0.149"), pDoc->GetString(ScAddress(4, 24, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("0.134"), pDoc->GetString(ScAddress(4, 25, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("0.386"), pDoc->GetString(ScAddress(4, 26, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("0.366"), pDoc->GetString(ScAddress(4, 27, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf128218)
 {
-    loadFromURL(u"tdf128218.ods");
+    createScDoc("tdf128218.ods");
 
     Any aRet = executeMacro("vnd.sun.Star.script:Standard.Module1.TestRAND?language=Basic&location=document");
 
@@ -499,8 +455,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf128218)
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf71271)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-
+    createScDoc();
     {
         uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<container::XIndexAccess> xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
@@ -525,57 +480,44 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf71271)
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf43003)
 {
-    loadFromURL(u"tdf43003.ods");
-
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
-    CPPUNIT_ASSERT(pFoundShell);
-
-    ScDocShellRef xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(xDocSh);
-
-    ScDocument& rDoc = xDocSh->GetDocument();
+    createScDoc("tdf43003.ods");
+    ScDocument* pDoc = getScDoc();
 
     // Without the fix in place, the values of the specified cells won't be changed
-    rDoc.SetValue(ScAddress(0, 0, 0), 2);
-    CPPUNIT_ASSERT_EQUAL(3.0, rDoc.GetValue(ScAddress(1, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(4.0, rDoc.GetValue(ScAddress(2, 0, 0)));
+    pDoc->SetValue(ScAddress(0, 0, 0), 2);
+    CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, pDoc->GetValue(ScAddress(2, 0, 0)));
 }
 
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf75263)
 {
-    loadFromURL(u"tdf75263.xlsm");
+    createScDoc("tdf75263.xlsm");
 
     {
-        SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
-        CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-        ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
-        ScDocument& rDoc = pDocSh->GetDocument();
-        rDoc.CalcAll();
+        ScDocument* pDoc = getScDoc();
+        pDoc->CalcAll();
 
         // A1 contains formula with user-defined function, and the function is defined in VBA.
-        CPPUNIT_ASSERT_EQUAL(OUString(u"проба"), rDoc.GetString(ScAddress(0, 0, 0)));
+        CPPUNIT_ASSERT_EQUAL(OUString(u"проба"), pDoc->GetString(ScAddress(0, 0, 0)));
     }
 
     saveAndReload("Calc MS Excel 2007 VBA XML");
 
     {
-        SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
-        CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-        ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
-        ScDocument& rDoc = pDocSh->GetDocument();
-        rDoc.CalcAll();
+        ScDocument* pDoc = getScDoc();
+        pDoc->CalcAll();
 
         // Without the accompanying fix in place, this test would have failed with:
         // - Expected: проба (sample)
         // - Actual  : ?????
-        CPPUNIT_ASSERT_EQUAL(OUString(u"проба"), rDoc.GetString(ScAddress(0, 0, 0)));
+        CPPUNIT_ASSERT_EQUAL(OUString(u"проба"), pDoc->GetString(ScAddress(0, 0, 0)));
     }
 }
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf133887)
 {
-    loadFromURL(u"tdf133887.ods");
+    createScDoc("tdf133887.ods");
 
     css::uno::Any aRet;
     css::uno::Sequence<sal_Int16> aOutParamIndex;
@@ -599,7 +541,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf133887)
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf133889)
 {
-    loadFromURL(u"tdf133889.ods");
+    createScDoc("tdf133889.ods");
 
     css::uno::Any aRet;
     css::uno::Sequence<sal_Int16> aOutParamIndex;
@@ -623,7 +565,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf133889)
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf143582)
 {
-    loadFromURL(u"tdf143582.ods");
+    createScDoc("tdf143582.ods");
 
     Any aRet = executeMacro("vnd.sun.Star.script:Standard.Module1.TestScriptInvoke?language=Basic&location=document");
 
@@ -638,7 +580,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf143582)
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf144085)
 {
-    loadFromURL(u"tdf144085.ods");
+    createScDoc("tdf144085.ods");
 
     Any aRet = executeMacro("vnd.sun.Star.script:Standard.Module1.TestScriptInvoke?language=Basic&location=document");
 
@@ -653,15 +595,10 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf144085)
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf125800)
 {
-    loadFromURL(u"tdf125800.ods");
+    createScDoc("tdf125800.ods");
+    ScDocument* pDoc = getScDoc();
 
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
-    ScDocument& rDoc = pDocSh->GetDocument();
-
-    ScConditionalFormat* pFormat = rDoc.GetCondFormat(1, 2, 0);
+    ScConditionalFormat* pFormat = pDoc->GetCondFormat(1, 2, 0);
     CPPUNIT_ASSERT(!pFormat);
 
     // Without the fix in place, this test would have failed with
@@ -672,7 +609,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf125800)
     OUString aReturnValue;
     aRet >>= aReturnValue;
 
-    pFormat = rDoc.GetCondFormat(1, 2, 0);
+    pFormat = pDoc->GetCondFormat(1, 2, 0);
     CPPUNIT_ASSERT(pFormat);
 
     const ScFormatEntry* pEntry = pFormat->GetEntry(0);
@@ -685,7 +622,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf125800)
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf130307)
 {
-    loadFromURL(u"tdf130307.ods");
+    createScDoc("tdf130307.ods");
 
     Any aRet = executeMacro("vnd.sun.Star.script:Standard.Module1.ForEachSheets?language=Basic&location=document");
 
@@ -698,18 +635,13 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf130307)
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf144970)
 {
-    loadFromURL(u"tdf144970.ods");
-
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
-    ScDocument& rDoc = pDocSh->GetDocument();
+    createScDoc("tdf144970.ods");
+    ScDocument* pDoc = getScDoc();
 
     formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_ENGLISH_XL_A1;
-    rDoc.SetGrammar(eGram);
+    pDoc->SetGrammar(eGram);
 
-    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
     const SdrPage* pPage = pDrawLayer->GetPage(0);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pPage->GetObjCount());
@@ -726,17 +658,12 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf144970)
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf138646)
 {
-    loadFromURL(u"tdf138646.ods");
-
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-
-    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(pDocSh);
+    createScDoc("tdf138646.ods");
+    ScDocument* pDoc = getScDoc();
 
     // Without the fix in place, changing the grammar from GRAM_NATIVE to either GRAM_NATIVE_XL_A1
     // or GRAM_NATIVE_XL_R1C1 would cause a Basic exception/error in the following script.
-    pDocSh->GetDocument().SetGrammar(formula::FormulaGrammar::Grammar::GRAM_NATIVE_XL_R1C1);
+    pDoc->SetGrammar(formula::FormulaGrammar::Grammar::GRAM_NATIVE_XL_R1C1);
 
     const std::vector<std::pair<OUString, OUString>> aTests({
         { "GlobalNamedCell", "GlobalNamedCell" },
@@ -760,24 +687,18 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf138646)
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf105558)
 {
-    loadFromURL(u"tdf105558.ods");
-
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
-    CPPUNIT_ASSERT(pFoundShell);
-
-    ScDocShellRef xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(xDocSh);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    createScDoc("tdf105558.ods");
+    ScDocument* pDoc = getScDoc();
 
     // Without the fix in place, this test would have failed with
     // - Expected: 5.5
     // - Actual  : 0
-    CPPUNIT_ASSERT_EQUAL(5.5, rDoc.GetValue(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(5.5, pDoc->GetValue(ScAddress(0, 0, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf107572)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    createScDoc();
 
     // insert initial library
     css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
@@ -790,19 +711,15 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf107572)
                      "  thisComponent.Sheets(0).getCellRangeByName(\"A1:F14\").autoformat(\"Default\")\n"
                      "End Function\n")));
 
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
-    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(pDocSh);
-
     // Without the fix in place, this test would have crashed
     executeMacro("vnd.sun.Star.script:TestLibrary.TestModule.Main?language=Basic&location=document");
 
-    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDocument* pDoc = getScDoc();
 
     //Check the autoformat has been applied
     for (SCCOL i = 0; i < 5; ++i)
     {
-        const ScPatternAttr* pAttr = rDoc.GetPattern(i, 0, 0);
+        const ScPatternAttr* pAttr = pDoc->GetPattern(i, 0, 0);
         const SfxPoolItem& rItem = pAttr->GetItem(ATTR_BACKGROUND);
         const SvxBrushItem& rBackground = static_cast<const SvxBrushItem&>(rItem);
         const Color& rColor = rBackground.GetColor();
@@ -812,14 +729,14 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf107572)
 
     for (SCROW i = 1; i < 13; ++i)
     {
-        const ScPatternAttr* pAttr = rDoc.GetPattern(0, i, 0);
+        const ScPatternAttr* pAttr = pDoc->GetPattern(0, i, 0);
         const SfxPoolItem& rItem = pAttr->GetItem(ATTR_BACKGROUND);
         const SvxBrushItem& rBackground = static_cast<const SvxBrushItem&>(rItem);
         const Color& rColor = rBackground.GetColor();
 
         CPPUNIT_ASSERT_EQUAL(Color(0x4d, 0x4d, 0x4d), rColor);
 
-        const ScPatternAttr* pAttr2 = rDoc.GetPattern(5, i, 0);
+        const ScPatternAttr* pAttr2 = pDoc->GetPattern(5, i, 0);
         const SfxPoolItem& rItem2 = pAttr2->GetItem(ATTR_BACKGROUND);
         const SvxBrushItem& rBackground2 = static_cast<const SvxBrushItem&>(rItem2);
         const Color& rColor2 = rBackground2.GetColor();
@@ -830,7 +747,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf107572)
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testShapeLayerId)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    createScDoc();
 
     // insert initial library
     css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
@@ -881,7 +798,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testFunctionAccessIndirect)
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf147122)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    createScDoc();
 
     css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
     auto xLibs = xDocScr->getBasicLibraries();
@@ -913,7 +830,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf147122)
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf154803)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    createScDoc();
 
     css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
     auto xLibs = xDocScr->getBasicLibraries();
@@ -945,7 +862,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf154803)
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf116127)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    createScDoc();
 
     css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
     auto xLibs = xDocScr->getBasicLibraries();
@@ -981,7 +898,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf116127)
 }
 
 ScMacrosTest::ScMacrosTest()
-      : UnoApiXmlTest("/sc/qa/extras/testdocuments")
+      : ScModelTestBase("/sc/qa/extras/testdocuments")
 {
 }
 
