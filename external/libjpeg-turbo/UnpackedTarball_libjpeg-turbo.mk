@@ -13,6 +13,10 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libjpeg-turbo,$(LIBJPEG_TURBO_TARBA
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,libjpeg-turbo,0))
 
+$(eval $(call gb_UnpackedTarball_add_patches,libjpeg-turbo, \
+    external/libjpeg-turbo/include.patch \
+))
+
 # jconfigint.h and jconfig.h generated via
 # cmake -DENABLE_STATIC:BOOL=ON -DENABLE_SHARED:BOOL=NO -DWITH_JAVA:BOOL=OFF -DWITH_TURBOJPEG:BOOL=OFF -DWITH_SIMD:BOOL=ON
 # and then tweaking
