@@ -26,6 +26,9 @@
 #include <string>
 
 #include <config_options.h>
+#include <o3tl/intcmp.hxx>
+#include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
 #include <osl/mutex.h>
@@ -769,43 +772,17 @@ sal_uInt32 SAL_CALL rtl_uString_iterateCodePoints(
     rtl_uString const * string, sal_Int32 * indexUtf16,
     sal_Int32 incrementCodePoints)
 {
-    sal_Int32 n;
-    sal_Unicode cu;
-    sal_uInt32 cp;
     assert(string != nullptr && indexUtf16 != nullptr);
-    n = *indexUtf16;
-    assert(n >= 0 && n <= string->length);
-    while (incrementCodePoints < 0) {
-        assert(n > 0);
-        cu = string->buffer[--n];
-        if (rtl::isLowSurrogate(cu) && n != 0 &&
-            rtl::isHighSurrogate(string->buffer[n - 1]))
-        {
-            --n;
-        }
-        ++incrementCodePoints;
-    }
-    assert(n >= 0 && n < string->length);
-    cu = string->buffer[n];
-    if (rtl::isHighSurrogate(cu) && string->length - n >= 2 &&
-        rtl::isLowSurrogate(string->buffer[n + 1]))
-    {
-        cp = rtl::combineSurrogates(cu, string->buffer[n + 1]);
-    } else {
-        cp = cu;
-    }
-    while (incrementCodePoints > 0) {
-        assert(n < string->length);
-        cu = string->buffer[n++];
-        if (rtl::isHighSurrogate(cu) && n != string->length &&
-            rtl::isLowSurrogate(string->buffer[n]))
-        {
-            ++n;
-        }
-        --incrementCodePoints;
-    }
-    assert(n >= 0 && n <= string->length);
-    *indexUtf16 = n;
+    assert(
+        *indexUtf16 >= 0
+        && o3tl::cmp_less_equal(*indexUtf16, std::numeric_limits<std::size_t>::max()));
+        // using o3tl::cmp_less_equal nicely avoids potential
+        // -Wtautological-constant-out-of-range-compare
+    std::size_t i = *indexUtf16;
+    auto const cp = o3tl::iterateCodePoints(
+        std::u16string_view(string->buffer, string->length), &i, incrementCodePoints);
+    assert(i <= o3tl::make_unsigned(std::numeric_limits<sal_Int32>::max()));
+    *indexUtf16 = i;
     return cp;
 }
 
