@@ -455,6 +455,16 @@ void AquaSalFrame::Show(bool bVisible, bool bNoActivate)
 
     OSX_SALDATA_RUNINMAIN( Show(bVisible, bNoActivate) )
 
+    // tdf#152173 Don't display tooltip windows when application is inactive
+    // Starting with macOS 13 Ventura, inactive applications receive mouse
+    // move events so when LibreOffice is inactive, a mouse move event causes
+    // a tooltip to be displayed. Since the tooltip window is attached to its
+    // parent window (to ensure that the tooltip is above the parent window),
+    // displaying a tooltip pulls the parent window in front of the windows
+    // of all other inactive applications.
+    if (bVisible && (mnStyle & SalFrameStyleFlags::TOOLTIP) && ![NSApp isActive])
+        return;
+
     mbShown = bVisible;
     if(bVisible)
     {
