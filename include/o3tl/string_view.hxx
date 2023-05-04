@@ -508,7 +508,7 @@ inline double toDouble(std::string_view str)
     return rtl_math_stringToDouble(str.data(), str.data() + str.size(), '.', 0, nullptr, nullptr);
 }
 
-// Similar to OUString::iterateCodePoins, but for std::string_view.
+// Similar to OUString::iterateCodePoints, but for std::string_view.
 // If preAdjustIndex is true: prior to any other operation, *indexUtf16 is adjusted by -1 if it
 // originally pointed into the middle of a surrogate pair.
 inline sal_uInt32 iterateCodePoints(std::u16string_view string, std::size_t* indexUtf16,
