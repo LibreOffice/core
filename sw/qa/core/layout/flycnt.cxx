@@ -762,6 +762,28 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyDeletedAnchor)
     // page was anchored to a text frame on the 2nd page, leading to a negative frame height.
     CPPUNIT_ASSERT(pAnchor3);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyMultiCol)
+{
+    // Given a document with a floating table that is in a multi-col section:
+    createSwDoc("floattable-multi-col.docx");
+
+    // When laying out that document:
+    calcLayout();
+
+    // Then make sure that the fly frame is not split, matching Word:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    const SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
+    auto pPage1Fly = dynamic_cast<SwFlyAtContentFrame*>(rPage1Objs[0]);
+    CPPUNIT_ASSERT(pPage1Fly);
+    // Without the accompanying fix in place, this test would have failed, we tried to split and
+    // then hit an assertion failure.
+    CPPUNIT_ASSERT(!pPage1Fly->GetFollow());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
