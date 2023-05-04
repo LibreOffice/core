@@ -12,6 +12,7 @@
 #include <string>
 #include <iostream>
 
+#include "check.hxx"
 #include "plugin.hxx"
 #include "clang/AST/CXXInheritance.h"
 
@@ -54,6 +55,15 @@ bool RangedForCopy::VisitCXXForRangeStmt( const CXXForRangeStmt* stmt )
     const QualType type = varDecl->getType();
     if (type->isRecordType() && !type->isReferenceType() && !type->isPointerType())
     {
+        if (loplugin::TypeCheck(type).Class("__bit_const_reference").StdNamespace())
+        {
+            // With libc++ without _LIBCPP_ABI_BITSET_VECTOR_BOOL_CONST_SUBSCRIPT_RETURN_BOOL,
+            // iterating over a const std::vector<bool> non-compliantly uses a variable of some
+            // internal __bit_const_reference class type, rather than of type bool (see
+            // <https://reviews.llvm.org/D123851> "[libc++] Change
+            // vector<bool>::const_iterator::reference to bool in ABIv2"):
+            return true;
+        }
         std::string name = type.getAsString();
         report(
                DiagnosticsEngine::Warning,

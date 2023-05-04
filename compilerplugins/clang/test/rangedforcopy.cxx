@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <vector>
+
 struct S
 {
     int i1;
@@ -24,6 +26,14 @@ void f(S const (&a)[2])
     {
         (void)i1;
         (void)i2;
+    }
+}
+
+void f(std::vector<bool> const& v)
+{
+    for (auto b : v)
+    {
+        (void)b;
     }
 }
 
