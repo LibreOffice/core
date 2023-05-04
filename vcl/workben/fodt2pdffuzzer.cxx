@@ -12,6 +12,7 @@
 #include <com/sun/star/awt/XToolkit.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
+#include <libxml/parser.h>
 #include "commonfuzzer.hxx"
 
 extern "C" void* SwCreateDialogFactory() { return nullptr; }
@@ -47,6 +48,31 @@ extern "C" int LLVMFuzzerInitialize(int* argc, char*** argv)
         __lsan_enable();
 
     return 0;
+}
+
+extern "C" size_t LLVMFuzzerMutate(uint8_t* Data, size_t Size, size_t MaxSize);
+
+static void silent_error_func(void*, const char* /*format*/, ...) {}
+
+extern "C" size_t LLVMFuzzerCustomMutator(uint8_t* Data, size_t Size, size_t MaxSize,
+                                          unsigned int /*Seed*/)
+{
+    size_t Ret = LLVMFuzzerMutate(Data, Size, MaxSize);
+
+    // an effort to only generate valid xml, in this fuzzer we only really care
+    // about the deeper levels of turning valid input into writer layout and
+    // pdf export
+
+    xmlParserCtxtPtr ctxt = xmlNewParserCtxt();
+    xmlSetGenericErrorFunc(nullptr, silent_error_func);
+    xmlDocPtr Doc = xmlCtxtReadMemory(ctxt, reinterpret_cast<const char*>(Data), Ret, nullptr,
+                                      nullptr, XML_PARSE_NONET);
+    if (Doc == nullptr)
+        Ret = 0;
+    else
+        xmlFreeDoc(Doc);
+    xmlFreeParserCtxt(ctxt);
+    return Ret;
 }
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
