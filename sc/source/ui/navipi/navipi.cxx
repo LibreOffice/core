@@ -423,6 +423,12 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, weld::Widget* pParent, SfxNaviga
     else
         eNavMode = NAV_LMODE_AREAS;
     SetListMode(eNavMode);
+
+    if(comphelper::LibreOfficeKit::isActive())
+    {
+        m_xBuilder->weld_container("gridbuttons")->hide();
+        m_xLbDocuments->hide();
+    }
 }
 
 weld::Window* ScNavigatorDlg::GetFrameWeld() const

@@ -49,6 +49,8 @@
 
 #include <workctrl.hxx>
 
+#include <comphelper/lok.hxx>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 
@@ -682,6 +684,14 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     m_xDocListBox->set_accessible_name(m_aStatusArr[3]);
 
     m_aExpandedSize = m_xContainer->get_preferred_size();
+
+    if(comphelper::LibreOfficeKit::isActive())
+    {
+        m_xBuilder->weld_container("gridcontent16")->hide();
+        m_xDocListBox->hide();
+        m_xGlobalBox->hide();
+        m_xGlobalToolBox->hide();
+    }
 }
 
 weld::Window* SwNavigationPI::GetFrameWeld() const
@@ -765,12 +775,15 @@ void SwNavigationPI::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState /*eState*/,
     }
     else if (nSID == FN_STAT_PAGE)
     {
-        SwView *pActView = GetCreateView();
-        if(pActView)
+        if(!comphelper::LibreOfficeKit::isActive())
         {
-            SwWrtShell &rSh = pActView->GetWrtShell();
-            m_xEdit->set_max(rSh.GetPageCnt());
-            m_xEdit->set_width_chars(3);
+            SwView *pActView = GetCreateView();
+            if(pActView)
+            {
+                SwWrtShell &rSh = pActView->GetWrtShell();
+                m_xEdit->set_max(rSh.GetPageCnt());
+                m_xEdit->set_width_chars(3);
+            }
         }
     }
 }
@@ -1045,6 +1058,12 @@ void SwNavigationPI::SetRegionDropMode(RegionMode nNewMode)
 
 void SwNavigationPI::ToggleTree()
 {
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        m_xGlobalTree->HideTree();
+        return;
+    }
+
     bool bGlobalDoc = IsGlobalDoc();
     if (!IsGlobalMode() && bGlobalDoc)
     {
