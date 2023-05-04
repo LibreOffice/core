@@ -244,7 +244,7 @@
             <property name="row-spacing">6</property>
             <property name="column-spacing">12</property>
             <child>
-              <object class="GtkBox">
+              <object class="GtkBox" id="gridcontent16">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="hexpand">True</property>

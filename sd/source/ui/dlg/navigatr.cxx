@@ -48,6 +48,7 @@
 #include <utility>
 
 #include <vcl/commandevent.hxx>
+#include <comphelper/lok.hxx>
 
 /**
  * SdNavigatorWin - FloatingWindow
@@ -93,6 +94,11 @@ SdNavigatorWin::SdNavigatorWin(weld::Widget* pParent, SfxBindings* pInBindings, 
     mxToolbox->connect_key_press(LINK(this, SdNavigatorWin, KeyInputHdl));
     mxTlbObjects->connect_key_press(LINK(this, SdNavigatorWin, KeyInputHdl));
     mxLbDocs->connect_key_press(LINK(this, SdNavigatorWin, KeyInputHdl));
+    if(comphelper::LibreOfficeKit::isActive())
+    {
+        mxToolbox->hide();
+        mxLbDocs->hide();
+    }
 }
 
 void SdNavigatorWin::FirstFocus()
