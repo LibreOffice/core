@@ -1004,6 +1004,13 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="MenuInsert-PageNumberWizard">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:PageNumberWizard</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkSeparatorMenuItem" id="separator4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -1275,6 +1282,13 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:TitlePageDialog</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuPage-PageNumberWizard">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:PageNumberWizard</property>
       </object>
     </child>
     <child>
