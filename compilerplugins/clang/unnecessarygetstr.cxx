@@ -61,7 +61,7 @@ public:
         auto tc = loplugin::TypeCheck(constructExpr->getType());
         if (tc.ClassOrStruct("basic_string").StdNamespace())
         {
-            if (constructExpr->getNumArgs() == 2)
+            if (constructExpr->getNumArgs() == 1 || constructExpr->getNumArgs() == 2)
                 checkForGetStr(constructExpr->getArg(0), "string constructor");
         }
         else if (tc.ClassOrStruct("basic_string_view").StdNamespace())
