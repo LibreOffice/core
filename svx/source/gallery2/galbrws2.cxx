@@ -486,20 +486,20 @@ void GalleryBrowser2::TogglePreview()
     GetViewWindow()->grab_focus();
 }
 
-void GalleryBrowser2::ShowContextMenu(const CommandEvent& rCEvt)
+bool GalleryBrowser2::ShowContextMenu(const CommandEvent& rCEvt)
 {
     Point aMousePos = rCEvt.GetMousePosPixel();
     Point aSelPos;
     const sal_uInt32 nItemId = ImplGetSelectedItemId( rCEvt.IsMouseEvent() ? &aMousePos : nullptr, aSelPos );
 
     if( !(mpCurTheme && nItemId && ( nItemId <= mpCurTheme->GetObjectCount() )) )
-        return;
+        return false;
 
     ImplSelectItemId( nItemId );
 
     css::uno::Reference< css::frame::XFrame > xFrame( GetFrame() );
     if ( !xFrame.is() )
-        return;
+        return false;
 
     weld::Widget* pParent = GetViewWindow();
     mnCurActionPos = nItemId - 1;
@@ -511,6 +511,7 @@ void GalleryBrowser2::ShowContextMenu(const CommandEvent& rCEvt)
             GALLERYBROWSERMODE_PREVIEW == GetMode(),
             this ) );
     xPopup->ExecutePopup(pParent, aSelPos);
+    return true;
 }
 
 bool GalleryBrowser2::ViewBoxHasFocus() const

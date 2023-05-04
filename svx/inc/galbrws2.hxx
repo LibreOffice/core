@@ -143,7 +143,7 @@ public:
     sal_Int8            ExecuteDrop( const ExecuteDropEvent& rEvt );
     bool                StartDrag();
     void                TogglePreview();
-    void                ShowContextMenu(const CommandEvent& rCEvt);
+    bool                ShowContextMenu(const CommandEvent& rCEvt);
     bool                KeyInput(const KeyEvent& rEvt);
     bool                ViewBoxHasFocus() const;
 

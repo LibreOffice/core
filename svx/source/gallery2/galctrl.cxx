@@ -384,9 +384,9 @@ bool GalleryIconView::Command(const CommandEvent& rCEvt)
 {
     bool bRet = ValueSet::Command(rCEvt);
 
-    if (rCEvt.GetCommand() == CommandEventId::ContextMenu)
+    if (!bRet && rCEvt.GetCommand() == CommandEventId::ContextMenu)
     {
-        mpParent->ShowContextMenu(rCEvt);
+        bRet = mpParent->ShowContextMenu(rCEvt);
     }
 
     return bRet;
