@@ -659,6 +659,15 @@ bool SwFlyFrame::IsFlySplitAllowed() const
         return false;
     }
 
+    const SwFrame* pFlyAnchor = GetAnchorFrame();
+    if (pFlyAnchor && pFlyAnchor->FindColFrame())
+    {
+        // No split in multi-column sections, so GetFlyAnchorBottom() can assume that our innermost
+        // body frame and the page's body frame is the same.
+        // This is also consistent with the Word behavior.
+        return false;
+    }
+
     return GetFormat()->GetFlySplit().GetValue();
 }
 
