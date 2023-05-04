@@ -1733,6 +1733,8 @@ void SdrEditView::DismantleMarkedObjects(bool bMakeLines)
     }
 
     SdrObjList* pOL0=nullptr;
+    const bool bWasLocked = GetModel().isLocked();
+    GetModel().setLock(true);
     for (size_t nm=GetMarkedObjectCount(); nm>0;) {
         --nm;
         SdrMark* pM=GetSdrMarkByIndex(nm);
@@ -1759,6 +1761,7 @@ void SdrEditView::DismantleMarkedObjects(bool bMakeLines)
             pOL->RemoveObject(nPos0);
         }
     }
+    GetModel().setLock(bWasLocked);
 
     if( bUndo )
     {
