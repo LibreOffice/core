@@ -1298,6 +1298,25 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
 
     aGuard.clear();
 
+    // tdf#150886 if false use the same settings for widgets regardless of theme
+    // for consistency of document across platforms and in pdf/print output
+    // note: tdf#155029 do this before updateFromModel
+    if (xInfo->hasPropertyByName("StandardTheme"))
+    {
+        aVal = xPSet->getPropertyValue("StandardTheme");
+        bool bUseStandardTheme = false;
+        aVal >>= bUseStandardTheme;
+        if (bUseStandardTheme)
+        {
+            VclPtr<vcl::Window> pVclPeer = VCLUnoHelper::GetWindow(getPeer());
+            AllSettings aAllSettings = pVclPeer->GetSettings();
+            StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
+            aStyleSettings.SetStandardStyles();
+            aAllSettings.SetStyleSettings(aStyleSettings);
+            pVclPeer->SetSettings(aAllSettings);
+        }
+    }
+
     // the updateFromModel is done without a locked mutex, too.
     // The reason is that the only thing this method does  is firing property changes, and this in general has
     // to be done without locked mutexes (as every notification to external listeners).
@@ -1316,24 +1335,6 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
         xWindow->setEnable( aComponentInfos.bEnable );
 
     xView->setGraphics( xGraphics );
-
-    // tdf#150886 if false use the same settings for widgets regardless of theme
-    // for consistency of document across platforms and in pdf/print output
-    if (xInfo->hasPropertyByName("StandardTheme"))
-    {
-        aVal = xPSet->getPropertyValue("StandardTheme");
-        bool bUseStandardTheme = false;
-        aVal >>= bUseStandardTheme;
-        if (bUseStandardTheme)
-        {
-            VclPtr<vcl::Window> pVclPeer = VCLUnoHelper::GetWindow(getPeer());
-            AllSettings aAllSettings = pVclPeer->GetSettings();
-            StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
-            aStyleSettings.SetStandardStyles();
-            aAllSettings.SetStyleSettings(aStyleSettings);
-            pVclPeer->SetSettings(aAllSettings);
-        }
-    }
 
     peerCreated();
 
