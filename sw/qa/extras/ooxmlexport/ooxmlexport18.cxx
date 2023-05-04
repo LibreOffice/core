@@ -151,6 +151,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153042_noTab, "tdf153042_noTab.docx")
     assertXPath(pLayout, "//SwFixPortion", "width", "10");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf154478)
+{
+    loadAndSave("tdf154478.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/comments.xml");
+
+    OUString aValues[5] = { "Comment1 seen.", "Comment2 seen.", "Comment3 NOTseen.", "Comment4 NOTseen.", "Comment5 NOTseen." };
+    for (size_t i = 1; i < 6; ++i)
+    {
+        OString sPath = "/w:comments/w:comment[" + OString::number(i) + "]/w:p/w:r/w:t";
+
+        // Without the fix in place, this test would have failed with
+        // - In <>, XPath '/w:comments/w:comment[3]/w:p/w:r/w:t' not found
+        assertXPathContent(pXmlDoc, sPath, aValues[i - 1]);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf153592_columnBreaks)
 {
     loadAndSave("tdf153592_columnBreaks.docx");
