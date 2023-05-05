@@ -181,6 +181,7 @@ public:
                                bool bTemplate = false ) const override;
 
     virtual std::set<Color> GetDocColors() override;
+    virtual std::vector<Color> GetThemeColors() override;
 
     virtual bool    InitNew( const css::uno::Reference< css::embed::XStorage >& ) override;
     virtual bool    Load( SfxMedium& rMedium ) override;
