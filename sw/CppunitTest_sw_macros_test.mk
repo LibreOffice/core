@@ -11,7 +11,10 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sw_macros_test))
 
-$(eval $(call gb_CppunitTest_use_external,sw_macros_test,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,sw_macros_test,\
+	boost_headers \
+	libxml2 \
+))
 
 $(eval $(call gb_CppunitTest_use_common_precompiled_header,sw_macros_test))
 

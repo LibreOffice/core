@@ -28,6 +28,8 @@
 #include <boost/multi_index/ordered_index.hpp>
 #include <boost/multi_index/random_access_index.hpp>
 #include <boost/multi_index/tag.hpp>
+#include <libxml/xmlstring.h>
+#include <libxml/xmlwriter.h>
 
 class SwFrameFormat;
 class SwTableFormat;
@@ -154,13 +156,12 @@ public:
     const_iterator begin() const { return GetByPos().begin(); }
     const_iterator end() const { return GetByPos().end(); }
 
-    void dumpAsXml(xmlTextWriterPtr pWriter, const char*) const
+    void dumpAsXml(xmlTextWriterPtr pWriter, const char* pName) const
     {
-        // TODO
-        //(void)xmlTextWriterStartElement(pWriter, BAD_CAST(pName));
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST(pName));
         for (const auto pFormat : GetByPos())
             pFormat->dumpAsXml(pWriter);
-        //(void)xmlTextWriterEndElement(pWriter);
+        (void)xmlTextWriterEndElement(pWriter);
     };
 
     virtual size_t GetFormatCount() const override { return m_vContainer.size(); }
