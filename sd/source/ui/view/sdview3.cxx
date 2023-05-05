@@ -1568,19 +1568,17 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
 bool View::PasteRTFTable( const ::tools::SvRef<SotTempStream>& xStm, SdrPage* pPage, SdrInsertFlags nPasteOptions )
 {
-    SdDrawDocument aModel( DocumentType::Impress, mpDocSh );
-    aModel.NewOrLoadCompleted(DocCreationMode::New);
-    aModel.GetItemPool().SetDefaultMetric(MapUnit::Map100thMM);
-    aModel.InsertPage(aModel.AllocPage(false).get());
+    DrawDocShellRef xShell = new DrawDocShell(SfxObjectCreateMode::INTERNAL, false, DocumentType::Impress);
+    xShell->DoInitNew();
 
-    Reference< XComponent > xComponent( new SdXImpressDocument( &aModel, true ) );
-    aModel.setUnoModel( Reference< XInterface >::query( xComponent ) );
+    SdDrawDocument* pModel = xShell->GetDoc();
+    pModel->GetItemPool().SetDefaultMetric(MapUnit::Map100thMM);
+    pModel->InsertPage(pModel->AllocPage(false).get());
 
-    CreateTableFromRTF( *xStm, &aModel );
-    bool bRet = Paste(aModel, maDropPos, pPage, nPasteOptions);
+    CreateTableFromRTF(*xStm, pModel);
+    bool bRet = Paste(*pModel, maDropPos, pPage, nPasteOptions);
 
-    xComponent->dispose();
-    xComponent.clear();
+    xShell->DoClose();
 
     return bRet;
 }
