@@ -92,6 +92,15 @@ curl --no-progress-meter -S \
     -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/webp.dict \
     -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/zip.dict \
     -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/mathml.dict
+# build our own fuzz dict for odf, following the pattern of svg.dict
+echo "# Keywords taken from libreoffice/schema/odf1.3/OpenDocument-v1.3-schema.rng" > odf.dict
+echo "# tags" >> odf.dict
+grep "rng:element name=" libreoffice/schema/odf1.3/OpenDocument-v1.3-schema.rng | sed 's#<rng:element name="#"<#;s#^[[:blank:]]*##;s#[[:blank:]>]*$##' >> odf.dict
+echo "# attributes " >> odf.dict
+grep "rng:attribute name=" libreoffice/schema/odf1.3/OpenDocument-v1.3-schema.rng | sed 's#<rng:attribute name="#"#;s#^[[:blank:]]*##;s#[[:blank:]>]*$##' >> odf.dict
+echo "# attributes' values" >> odf.dict
+grep "rng:value" libreoffice/schema/odf1.3/OpenDocument-v1.3-schema.rng | sed 's#<rng:value>#"#;s#</rng:value>#"#;s#^[[:blank:]]*##;s#[[:blank:]>]*$##' | sort | uniq >> odf.dict
+
 #fuzzing corpuses
 #afl jpeg, gif, bmp, png, webp
 curl --no-progress-meter -S -C - -O https://lcamtuf.coredump.cx/afl/demo/afl_testcases.tgz
