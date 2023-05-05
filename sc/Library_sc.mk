@@ -72,6 +72,7 @@ $(eval $(call gb_Library_use_libraries,sc,\
     dbtools \
     drawinglayercore \
     drawinglayer \
+    docmodel \
     editeng \
     for \
     forui \

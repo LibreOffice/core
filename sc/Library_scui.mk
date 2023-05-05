@@ -50,6 +50,7 @@ $(eval $(call gb_Library_use_libraries,scui,\
 	comphelper \
 	cppu \
 	cppuhelper \
+	docmodel \
 	editeng \
 	for \
 	forui \

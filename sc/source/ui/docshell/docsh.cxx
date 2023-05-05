@@ -79,6 +79,9 @@
 #include <sot/formats.hxx>
 #include <svx/compatflags.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/svdpagv.hxx>
+#include <svx/svdpage.hxx>
+#include <docmodel/theme/Theme.hxx>
 
 #include <formulacell.hxx>
 #include <global.hxx>
@@ -214,6 +217,31 @@ void ScDocShell::FillClass( SvGlobalName* pClassName,
 std::set<Color> ScDocShell::GetDocColors()
 {
     return m_pDocument->GetDocColors();
+}
+
+std::shared_ptr<model::ColorSet> ScDocShell::GetThemeColors()
+{
+    ScTabViewShell* pShell = GetBestViewShell();
+    if (!pShell)
+        return {};
+
+    ScTabView* pTabView = pShell->GetViewData().GetView();
+    if (!pTabView)
+        return {};
+
+    ScDrawView* pView = pTabView->GetScDrawView();
+    if (!pView)
+        return {};
+
+    SdrPage* pPage = pView->GetSdrPageView()->GetPage();
+    if (!pPage)
+        return {};
+
+    auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
+    if (!pTheme)
+        return {};
+
+    return pTheme->getColorSet();
 }
 
 void ScDocShell::DoEnterHandler()
