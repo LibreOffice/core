@@ -81,7 +81,7 @@
     <!-- *************** -->
 
     <!-- ID / NAME of text-box -->
-    <xsl:template match="@draw:name">
+    <xsl:template match="@draw:name | @text:id | @xml:id">
         <xsl:attribute name="id">
             <xsl:choose>
                 <xsl:when test="number(substring(.,1,1))">
