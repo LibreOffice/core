@@ -724,16 +724,6 @@ template <typename T, class S> T toInt(S str, sal_Int16 nRadix)
 /* ======================================================================= */
 
 template <class rtl_tString> using Char_T = std::remove_extent_t<decltype(rtl_tString::buffer)>;
-template <typename C> struct STRINGDATA_;
-template <> struct STRINGDATA_<char>
-{
-    using T = rtl_String;
-};
-template <> struct STRINGDATA_<sal_Unicode>
-{
-    using T = rtl_uString;
-};
-template <typename C> using STRINGDATA = typename STRINGDATA_<C>::T;
 
 template <typename rtl_tString> rtl_tString* Alloc(sal_Int32 nLen)
 {
@@ -1756,7 +1746,7 @@ void doubleToString(rtl_tString** pResult, sal_Int32* pResultCapacity, sal_Int32
 template <sal_Int32 maxLen, typename C, typename T> sal_Int32 SAL_CALL valueOfFP(C* pStr, T f)
 {
     assert(pStr);
-    STRINGDATA<C>* pResult = nullptr;
+    rtl_String* pResult = nullptr;
     doubleToString(&pResult, nullptr, 0, f, rtl_math_StringFormat_G,
                    maxLen - std::size("-x.E-xxx") + 1, '.', nullptr, 0, true);
     const sal_Int32 nLen = pResult->length;
