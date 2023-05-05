@@ -2093,7 +2093,8 @@
                                                     <xsl:apply-templates select="text:number" mode="listnumber"/>
                                                 </xsl:when>
                                                 <xsl:when test="name($listLevelStyle) = 'text:list-level-style-bullet'">
-                                                    <xsl:value-of select="$listLevelStyle/@style:num-prefix"/>
+                                                    <!-- not viewed in LO similar to tdf146264
+                                                    <xsl:value-of select="$listLevelStyle/@style:num-prefix"/>-->
                                                     <xsl:value-of select="$listLevelStyle/@text:bullet-char"/>
                                                     <!-- not viewed in LO see tdf146264
                                                     <xsl:value-of select="$listLevelStyle/@style:num-suffix"/>-->
