@@ -2136,6 +2136,7 @@ void ScAccessibleDocument::AddChild(const uno::Reference<XAccessible>& xAcc, boo
             aEvent.Source = uno::Reference<XAccessibleContext>(this);
             aEvent.EventId = AccessibleEventId::CHILD;
             aEvent.NewValue <<= mxTempAcc;
+            aEvent.IndexHint = getAccessibleChildCount() - 1;
             CommitChange( aEvent );
         }
     }
@@ -2154,6 +2155,7 @@ void ScAccessibleDocument::RemoveChild(const uno::Reference<XAccessible>& xAcc, 
         aEvent.Source = uno::Reference<XAccessibleContext>(this);
         aEvent.EventId = AccessibleEventId::CHILD;
         aEvent.OldValue <<= mxTempAcc;
+        aEvent.IndexHint = -1;
         CommitChange( aEvent );
     }
     mxTempAcc = nullptr;

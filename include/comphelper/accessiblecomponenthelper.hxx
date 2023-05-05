@@ -128,7 +128,8 @@ namespace comphelper
         void NotifyAccessibleEvent(
                     const sal_Int16 _nEventId,
                     const css::uno::Any& _rOldValue,
-                    const css::uno::Any& _rNewValue
+                    const css::uno::Any& _rNewValue,
+                    sal_Int32 nIndexHint = -1
                 );
 
         // life time control

@@ -246,8 +246,21 @@ void AccessibleEventNotifier::addEvent( const TClientId _nClient, const Accessib
         return;
 
     // since we're synchronous, again, we want to notify immediately
-    aClientPos->second.notifyEach(aGuard, &XAccessibleEventListener::notifyEvent, _rEvent);
-
+    OInterfaceIteratorHelper4 aIt(aGuard, aClientPos->second);
+    // no need to hold lock here, and we don't want to hold lock while calling listeners
+    aGuard.unlock();
+    while (aIt.hasMoreElements())
+    {
+        try
+        {
+            aIt.next()->notifyEvent(_rEvent);
+        }
+        catch (Exception&)
+        {
+            // no assertion, because a broken access remote bridge or something like this
+            // can cause this exception
+        }
+    }
 }
 
 } // namespace comphelper

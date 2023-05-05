@@ -113,7 +113,7 @@ namespace comphelper
 
 
     void OCommonAccessibleComponent::NotifyAccessibleEvent( const sal_Int16 _nEventId,
-        const Any& _rOldValue, const Any& _rNewValue )
+        const Any& _rOldValue, const Any& _rNewValue, sal_Int32 nIndexHint )
     {
         if ( !m_nClientId )
             // if we don't have a client id for the notifier, then we don't have listeners, then
@@ -126,6 +126,7 @@ namespace comphelper
         aEvent.EventId = _nEventId;
         aEvent.OldValue = _rOldValue;
         aEvent.NewValue = _rNewValue;
+        aEvent.IndexHint = nIndexHint;
 
         // let the notifier handle this event
         AccessibleEventNotifier::addEvent( m_nClientId, aEvent );

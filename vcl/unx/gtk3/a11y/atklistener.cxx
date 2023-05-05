@@ -171,16 +171,23 @@ void AtkListener::handleChildAdded(
     if( !pChild )
         return;
 
+    bool bNeedToFullFullChildList = true;
     if (nIndexHint != -1)
     {
+        bNeedToFullFullChildList = false;
         sal_Int64 nStateSet = rxParent->getAccessibleStateSet();
         if( !(nStateSet & accessibility::AccessibleStateType::DEFUNC)
               || (nStateSet & accessibility::AccessibleStateType::MANAGES_DESCENDANTS) )
         {
             m_aChildList.insert(m_aChildList.begin() + nIndexHint, rxAccessible);
+            if (m_aChildList[nIndexHint] != rxParent->getAccessibleChild(nIndexHint))
+            {
+                SAL_WARN("vcl", "wrong index hint, falling back to updating full child list");
+                bNeedToFullFullChildList = true;
+            }
         }
     }
-    else
+    if (bNeedToFullFullChildList)
         updateChildList(rxParent);
 
     atk_object_wrapper_add_child( mpWrapper, pChild,
@@ -197,20 +204,32 @@ void AtkListener::handleChildRemoved(
     int nChildIndexHint)
 {
     sal_Int32 nIndex = nChildIndexHint;
-
-    // Locate the child in the children list
-    const size_t nmax = m_aChildList.size();
-    for( size_t n = 0; n < nmax; ++n )
+    if (nIndex < 0 || nIndex >= static_cast<sal_Int32>(m_aChildList.size()))
     {
-        // Comparing via uno::Reference::operator== is expensive
-        // with lots of objects, so assume we can find it the cheap way
-        // first, which works most of the time.
-        if( rxChild.get() == m_aChildList[n].get() )
-        {
-            nIndex = n;
-            break;
-        }
+        SAL_WARN("vcl", "index hint out of range, ignoring");
+        nIndex = -1;
     }
+    if (nIndex != -1 && rxChild != m_aChildList[nIndex])
+    {
+        SAL_WARN("vcl", "index hint points to wrong child, somebody forgot to send accessibility update event");
+        nIndex = -1;
+    }
+
+    // if the hint did not work, search
+    const size_t nmax = m_aChildList.size();
+    if (nIndex == -1)
+        // Locate the child in the children list
+        for( size_t n = 0; n < nmax; ++n )
+        {
+            // Comparing via uno::Reference::operator== is expensive
+            // with lots of objects, so assume we can find it the cheap way
+            // first, which works most of the time.
+            if( rxChild.get() == m_aChildList[n].get() )
+            {
+                nIndex = n;
+                break;
+            }
+        }
     // The cheap way failed, find it via the more expensive path
     if (nIndex == -1)
         for( size_t n = 0; n < nmax; ++n )
@@ -248,7 +267,6 @@ void AtkListener::handleChildRemoved(
     if(!( (nStateSet & accessibility::AccessibleStateType::DEFUNC)
         || (nStateSet & accessibility::AccessibleStateType::MANAGES_DESCENDANTS) ))
     {
-        assert( m_aChildList[nIndex] == rxParent->getAccessibleChild(nIndex) );
         m_aChildList.erase(m_aChildList.begin() + nIndex);
     }
 
