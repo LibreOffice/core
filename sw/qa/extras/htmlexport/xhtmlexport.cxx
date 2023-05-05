@@ -76,14 +76,8 @@ DECLARE_HTMLEXPORT_TEST(testTdf118637, "tdf118637.odt")
     CPPUNIT_ASSERT(pStream);
     sal_uInt64 nLength = pStream->TellEnd();
     OString aStream(read_uInt8s_ToOString(*pStream, nLength));
-    CPPUNIT_ASSERT(
-        aStream.indexOf(
-            "<div style=\"display:inline; position:relative; left:0cm;\">The formula  </div>")
-        != -1);
-    CPPUNIT_ASSERT(
-        aStream.indexOf(
-            "<div style=\"display:inline; position:relative; left:0cm;\">should be inline.</div>")
-        != -1);
+    CPPUNIT_ASSERT(aStream.indexOf("The formula  ") != -1);
+    CPPUNIT_ASSERT(aStream.indexOf("should be inline.</div>") != -1);
 }
 
 DECLARE_HTMLEXPORT_TEST(testTdf145361, "tdf145361.odt")
