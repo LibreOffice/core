@@ -1651,8 +1651,9 @@ void SwRootFrame::DeleteEmptyFlys_()
     {
         SwFlyFrame* pFly = *mpFlyDestroy->begin();
         mpFlyDestroy->erase( mpFlyDestroy->begin() );
-        if (!pFly->getFrameArea().HasArea() && !pFly->ContainsContent()
-            && !pFly->IsDeleteForbidden())
+        // Allow deletion of non-empty flys: a fly with no content is still formatted to have a
+        // height of MINLAY.
+        if (!pFly->ContainsContent() && !pFly->IsDeleteForbidden())
         {
             SwFrame::DestroyFrame(pFly);
         }

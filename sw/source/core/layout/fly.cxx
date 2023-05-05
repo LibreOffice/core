@@ -955,6 +955,15 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 pNewFormatFrameSize = const_cast<SwFormatFrameSize*>(static_cast<const SwFormatFrameSize*>(pNew));
             else if (nWhich == RES_FMT_CHG)
                 pOldFormatChg = const_cast<SwFormatChg*>(static_cast<const SwFormatChg*>(pOld));
+            else if (nWhich == RES_FLY_SPLIT)
+            {
+                // If the fly frame has a table lower, invalidate that, so it joins its follow tab
+                // frames and re-splits according to the new fly split rule.
+                if (Lower() && Lower()->IsTabFrame())
+                {
+                    Lower()->InvalidateAll_();
+                }
+            }
 
             if (aURL.GetMap() && (pNewFormatFrameSize || pOldFormatChg))
             {

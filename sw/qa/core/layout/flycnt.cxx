@@ -52,9 +52,9 @@ void Test::Create1x2SplitFly()
     SwDoc* pDoc = getSwDoc();
     SwPageDesc aStandard(pDoc->GetPageDesc(0));
     SwFormatFrameSize aPageSize(aStandard.GetMaster().GetFrameSize());
-    // 5cm for the page height, 2cm are the top and bottom margins, so 1cm remains for the body
+    // 10 cm for the page height, 2cm are the top and bottom margins, so 6cm remains for the body
     // frame:
-    aPageSize.SetHeight(2834);
+    aPageSize.SetHeight(5669);
     aStandard.GetMaster().SetFormatAttr(aPageSize);
     pDoc->ChgPageDesc(0, aStandard);
     // Insert a table:
@@ -64,8 +64,13 @@ void Test::Create1x2SplitFly()
     pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
     pWrtShell->GoPrevCell();
     pWrtShell->Insert("A1");
+    SwFormatFrameSize aRowSize(SwFrameSize::Minimum);
+    // 4 cm, so 2 rows don't fit 1 page.
+    aRowSize.SetHeight(2267);
+    pWrtShell->SetRowHeight(aRowSize);
     pWrtShell->GoNextCell();
     pWrtShell->Insert("A2");
+    pWrtShell->SetRowHeight(aRowSize);
     // Select cell:
     pWrtShell->SelAll();
     // Select table:
@@ -292,6 +297,42 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyEnable)
     auto pPage2 = dynamic_cast<SwPageFrame*>(pPage1->GetNext());
     // Without the accompanying fix in place, this test would have failed, there was no 2nd page.
     CPPUNIT_ASSERT(pPage2);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyDisable)
+{
+    // Given a document with a floating talbe, table split on 2 pages:
+    Create1x2SplitFly();
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    CPPUNIT_ASSERT(pPage1->GetNext());
+    const SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
+    auto pPage1Fly = dynamic_cast<SwFlyAtContentFrame*>(rPage1Objs[0]);
+    CPPUNIT_ASSERT(pPage1Fly);
+    CPPUNIT_ASSERT(pPage1Fly->GetFollow());
+
+    // When turning the "split fly" checkbox off:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->StartAllAction();
+    auto& rFlys = *pDoc->GetSpzFrameFormats();
+    auto pFly = rFlys[0];
+    SwAttrSet aSet(pFly->GetAttrSet());
+    // Note how the UI puts a SwFormatFrameSize into this item set with a slightly different size
+    // (e.g. 3823 twips width -> 3821). This means that by accident the UI works even without the
+    // explicit RES_FLY_SPLIT handling in SwFlyFrame::UpdateAttr_(), but this test will fail when
+    // that is missing.
+    aSet.Put(SwFormatFlySplit(false));
+    pDoc->SetAttr(aSet, *pFly);
+    pWrtShell->EndAllAction();
+
+    // Then make sure the extra page and follow fly frame is joined:
+    CPPUNIT_ASSERT(!pPage1->GetNext());
+    // Without the accompanying fix in place, this test would have failed, the follow fly frame was
+    // moved to page 1, but it wasn't deleted.
+    CPPUNIT_ASSERT(!pPage1Fly->GetFollow());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyFooter)
