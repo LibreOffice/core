@@ -39,6 +39,51 @@ public:
     }
 };
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf151974)
+{
+    createSwDoc("tdf151974.odt");
+
+    CPPUNIT_ASSERT_EQUAL(int(8), getParagraphs());
+
+    auto pLayout = parseLayoutDump();
+    for (size_t i = 1; i < 9; ++i)
+    {
+        OString sPath("/root/page[1]/body/txt[" + OString::number(i)
+                      + "]/SwParaPortion/SwLineLayout");
+        assertXPathChildren(pLayout, sPath, 1);
+    }
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, ".uno:GoDown", {});
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // Paste special as RTF
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        { { "SelectedFormat", uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
+
+    dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aPropertyValues);
+
+    CPPUNIT_ASSERT_EQUAL(int(16), getParagraphs());
+
+    dumpLayout(mxComponent);
+    pLayout = parseLayoutDump();
+    for (size_t i = 1; i < 16; ++i)
+    {
+        OString sPath("/root/page[1]/body/txt[" + OString::number(i)
+                      + "]/SwParaPortion/SwLineLayout");
+
+        // Without the fix in place, this test would have failed with
+        // - Expected: 1
+        // - Actual  : 2
+        // - In <>, XPath '/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout' number of child-nodes is incorrect
+        assertXPathChildren(pLayout, sPath, 1);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf145731)
 {
     createSwDoc("tdf145731.odt");
