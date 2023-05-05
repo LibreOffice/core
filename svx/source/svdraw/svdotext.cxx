@@ -1367,7 +1367,11 @@ void SdrTextObj::autoFitTextForCompatibility(SdrOutliner& rOutliner, const Size&
     aCurrentTextBoxSize.extendBy(0, nExtendTextBoxBy);
     double fCurrentFitFactor = double(rTextBoxSize.Height()) / aCurrentTextBoxSize.Height();
 
-    if (fCurrentFitFactor >= 1.0)
+    double fInitialFontScaleY = 0.0;
+    double fInitialSpacing = 0.0;
+    rOutliner.getGlobalScale(o3tl::temporary(double()), fInitialFontScaleY, o3tl::temporary(double()), fInitialSpacing);
+
+    if (fCurrentFitFactor >= 1.0 && fInitialFontScaleY >= 100.0 && fInitialSpacing >= 100.0)
         return;
 
     sal_Int32 nFontHeight = GetObjectItemSet().Get(EE_CHAR_FONTHEIGHT).GetHeight();
@@ -1377,8 +1381,20 @@ void SdrTextObj::autoFitTextForCompatibility(SdrOutliner& rOutliner, const Size&
     double fMaxY = fMaxScale;
 
     double fBestFontScale = 0.0;
-    double fBestSpacing = fMaxScale;
+    double fBestSpacing = 100.0;
     double fBestFitFactor = fCurrentFitFactor;
+
+    if (fCurrentFitFactor >= 1.0)
+    {
+        fMinY = fInitialFontScaleY;
+        fBestFontScale = fInitialFontScaleY;
+        fBestSpacing = fInitialSpacing;
+        fBestFitFactor = fCurrentFitFactor;
+    }
+    else
+    {
+        fMaxY = std::min(fInitialFontScaleY, fMaxScale);
+    }
 
     double fInTheMidle = 0.5;
 
