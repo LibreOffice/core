@@ -36,6 +36,7 @@ const sal_Int64 DIST_CHI_SQUARED         = 5;
 const sal_Int64 DIST_GEOMETRIC           = 6;
 const sal_Int64 DIST_NEGATIVE_BINOMIAL   = 7;
 const sal_Int64 DIST_UNIFORM_INTEGER     = 8;
+const sal_Int64 DIST_POISSON             = 9;
 
 const sal_Int64 PRECISION   = 10000;
 const sal_Int64 DIGITS      = 4;
@@ -225,13 +226,6 @@ void ScRandomNumberGeneratorDialog::SelectGeneratorAndGenerateNumbers()
             GenerateNumbers(rng, STR_DISTRIBUTION_BINOMIAL, aDecimalPlaces);
             break;
         }
-        case DIST_NEGATIVE_BINOMIAL:
-        {
-            std::negative_binomial_distribution<> distribution(parameterInteger2, parameter1);
-            auto rng = std::bind(distribution, seed);
-            GenerateNumbers(rng, STR_DISTRIBUTION_NEGATIVE_BINOMIAL, aDecimalPlaces);
-            break;
-        }
         case DIST_CHI_SQUARED:
         {
             std::chi_squared_distribution<> distribution(parameter1);
@@ -244,6 +238,20 @@ void ScRandomNumberGeneratorDialog::SelectGeneratorAndGenerateNumbers()
             std::geometric_distribution<> distribution(parameter1);
             auto rng = std::bind(distribution, seed);
             GenerateNumbers(rng, STR_DISTRIBUTION_GEOMETRIC, aDecimalPlaces);
+            break;
+        }
+        case DIST_NEGATIVE_BINOMIAL:
+        {
+            std::negative_binomial_distribution<> distribution(parameterInteger2, parameter1);
+            auto rng = std::bind(distribution, seed);
+            GenerateNumbers(rng, STR_DISTRIBUTION_NEGATIVE_BINOMIAL, aDecimalPlaces);
+            break;
+        }
+        case DIST_POISSON:
+        {
+            std::poisson_distribution<> distribution(parameter1);
+            auto rng = std::bind(distribution, seed);
+            GenerateNumbers(rng, STR_DISTRIBUTION_POISSON, aDecimalPlaces);
             break;
         }
     }
@@ -472,6 +480,16 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, DistributionChanged, weld::ComboB
         {
             mxParameter1Text->set_label(ScResId(STR_RNG_PARAMETER_STANDARD_NU_VALUE));
 
+            mxParameter2Text->hide();
+            mxParameter2Value->hide();
+            break;
+        }
+        case DIST_POISSON:
+        {
+            mxParameter1Text->set_label(ScResId(STR_RNG_PARAMETER_MEAN));
+            mxParameter1Value->set_value(PRECISION);
+            mxParameter1Value->set_increments(1000, 10000);
+            mxParameter1Value->set_min(1000);
             mxParameter2Text->hide();
             mxParameter2Value->hide();
             break;

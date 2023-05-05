@@ -240,6 +240,7 @@
                       <item id="5" translatable="yes" context="randomnumbergenerator|distribution-liststore">Chi Squared</item>
                       <item id="6" translatable="yes" context="randomnumbergenerator|distribution-liststore">Geometric</item>
                       <item id="7" translatable="yes" context="randomnumbergenerator|distribution-liststore">Negative Binomial</item>
+                      <item id="9" translatable="yes" context="randomnumbergenerator|distribution-liststore">Poisson</item>
                     </items>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="distribution-combo-atkobject">
