@@ -23,8 +23,10 @@ class moveCopySheet(UITestCase):
                 newName.executeAction("TYPE", mkPropertyValues({"TEXT":"newName"}))
             #verify, the file has 2 sheets; first one "newName" is selected
             self.assertEqual(document.Sheets.getCount(), 2)
-            # dialog move/copy sheet ; Move is selected; select -move to end position - ; New Name = moveName
+            # dialog move/copy sheet ; Copy is selected; Select move and -move to end position - ; New Name = moveName
             with self.ui_test.execute_dialog_through_command(".uno:Move") as xDialog:
+                xMoveButton = xDialog.getChild("move")
+                xMoveButton.executeAction("CLICK", tuple())
                 insertBefore = xDialog.getChild("insertBefore")
 
                 xTreeEntry = insertBefore.getChild('2')
@@ -76,6 +78,29 @@ class moveCopySheet(UITestCase):
                 self.assertEqual(get_state_as_dict(xMoveButton)["Checked"], "false")
                 self.assertEqual(get_state_as_dict(xMoveButton)["Enabled"], "false")
 
+    # tdf#96854 - remember last used option for copy/move sheet
+    def test_tdf96854_remember_copy_move_option(self):
+        with self.ui_test.create_doc_in_start_center("calc"):
+            # Add a second sheet to the calc document
+            with self.ui_test.execute_dialog_through_command(".uno:Move") as xDialog:
+                pass
+
+            # Check if the copy option was remembered
+            with self.ui_test.execute_dialog_through_command(".uno:Move") as xDialog:
+                xCopyButton = xDialog.getChild("copy")
+                self.assertEqual(get_state_as_dict(xCopyButton)["Checked"], "true")
+                xMoveButton = xDialog.getChild("move")
+                self.assertEqual(get_state_as_dict(xMoveButton)["Checked"], "false")
+                # Move selected sheet and check if option was remembered
+                xMoveButton.executeAction("CLICK", tuple())
+
+            # Check if move option was remembered
+            with self.ui_test.execute_dialog_through_command(".uno:Move") as xDialog:
+                xCopyButton = xDialog.getChild("copy")
+                self.assertEqual(get_state_as_dict(xCopyButton)["Checked"], "false")
+                xMoveButton = xDialog.getChild("move")
+                self.assertEqual(get_state_as_dict(xMoveButton)["Checked"], "true")
+
     #tdf#139464 Set OK button label to selected action: Move or Copy
     def test_tdf139464_move_sheet(self):
         with self.ui_test.create_doc_in_start_center("calc"):
@@ -87,11 +112,10 @@ class moveCopySheet(UITestCase):
                 xOkButton = xDialog.getChild("ok")
                 xCopyButton = xDialog.getChild("copy")
                 xMoveButton = xDialog.getChild("move")
-                self.assertEqual(get_state_as_dict(xMoveButton)['Text'], get_state_as_dict(xOkButton)['Text'])
-                xCopyButton.executeAction("CLICK", tuple())
                 self.assertEqual(get_state_as_dict(xCopyButton)['Text'], get_state_as_dict(xOkButton)['Text'])
                 xMoveButton.executeAction("CLICK", tuple())
                 self.assertEqual(get_state_as_dict(xMoveButton)['Text'], get_state_as_dict(xOkButton)['Text'])
-
+                xCopyButton.executeAction("CLICK", tuple())
+                self.assertEqual(get_state_as_dict(xCopyButton)['Text'], get_state_as_dict(xOkButton)['Text'])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

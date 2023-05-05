@@ -61,6 +61,9 @@ private:
     bool            bRenameTable:1;
     bool            mbEverEdited:1;
 
+    // tdf#96854 - remember last used option for copy/move sheet
+    static bool mbRememeberedCopy;
+
     std::unique_ptr<weld::RadioButton> m_xBtnMove;
     std::unique_ptr<weld::RadioButton> m_xBtnCopy;
     std::unique_ptr<weld::Label> m_xFtDoc;

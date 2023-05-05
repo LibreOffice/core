@@ -27,6 +27,9 @@
 #include <comphelper/lok.hxx>
 #include <utility>
 
+// tdf#96854 - remember last used option for copy/move sheet
+bool ScMoveTableDlg::mbRememeberedCopy = false;
+
 ScMoveTableDlg::ScMoveTableDlg(weld::Window* pParent, OUString aDefault)
     : GenericDialogController(pParent, "modules/scalc/ui/movecopysheet.ui", "MoveCopySheetDialog")
     , maDefaultName(std::move(aDefault))
@@ -188,8 +191,10 @@ void ScMoveTableDlg::Init()
     m_xBtnCopy->connect_toggled(LINK(this, ScMoveTableDlg, CheckBtnHdl));
     m_xBtnMove->connect_toggled(LINK(this, ScMoveTableDlg, CheckBtnHdl));
     m_xEdTabName->connect_changed(LINK(this, ScMoveTableDlg, CheckNameHdl));
-    m_xBtnMove->set_active(true);
-    m_xBtnCopy->set_active(false);
+
+    // tdf#96854 - remember last used option for copy/move sheet
+    m_xBtnMove->set_active(!mbRememeberedCopy);
+    m_xBtnCopy->set_active(mbRememeberedCopy);
     m_xEdTabName->set_sensitive(false);
     m_xFtWarn->hide();
     InitDocListBox();
@@ -241,9 +246,11 @@ void ScMoveTableDlg::InitDocListBox()
 
 void ScMoveTableDlg::SetOkBtnLabel()
 {
+    const bool bIsCopyActive = m_xBtnCopy->get_active();
     // tdf#139464 Write "Copy" or "Move" on OK button
-    m_xBtnOk->set_label(m_xBtnCopy->get_active() ? m_xBtnCopy->get_label()
-                                                 : m_xBtnMove->get_label());
+    m_xBtnOk->set_label(bIsCopyActive ? m_xBtnCopy->get_label() : m_xBtnMove->get_label());
+    // tdf#96854 - remember last used option for copy/move sheet
+    mbRememeberedCopy = bIsCopyActive;
 }
 
 // Handler:
