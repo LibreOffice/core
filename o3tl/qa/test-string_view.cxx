@@ -57,6 +57,7 @@ private:
     CPPUNIT_TEST(testEndsWithRest);
     CPPUNIT_TEST(testEqualsIgnoreAsciiCase);
     CPPUNIT_TEST(testGetToken);
+    CPPUNIT_TEST(testIterateCodePoints);
     CPPUNIT_TEST_SUITE_END();
 
     void testStartsWith()
@@ -729,6 +730,34 @@ private:
                                    o3tl::endsWithIgnoreAsciiCase(u"aa", "a"));
             CPPUNIT_ASSERT_MESSAGE("endsWithIgnoreAsciiCase",
                                    o3tl::endsWithIgnoreAsciiCase(u"aa", u"a"));
+        }
+    }
+
+    void testIterateCodePoints()
+    {
+        {
+            std::size_t i = 1;
+            auto const c = o3tl::iterateCodePoints(u"\U00010000", &i, 1, false);
+            CPPUNIT_ASSERT_EQUAL(std::size_t(2), i);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt32(0xDC00), c);
+        }
+        {
+            std::size_t i = 1;
+            auto const c = o3tl::iterateCodePoints(u"\U00010000", &i, 1, true);
+            CPPUNIT_ASSERT_EQUAL(std::size_t(2), i);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x10000), c);
+        }
+        {
+            std::size_t i = 2;
+            auto const c = o3tl::iterateCodePoints(u"a\U00010000", &i, -1, false);
+            CPPUNIT_ASSERT_EQUAL(std::size_t(1), i);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x10000), c);
+        }
+        {
+            std::size_t i = 2;
+            auto const c = o3tl::iterateCodePoints(u"a\U00010000", &i, -1, true);
+            CPPUNIT_ASSERT_EQUAL(std::size_t(0), i);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt32('a'), c);
         }
     }
 };
