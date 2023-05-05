@@ -301,7 +301,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyEnable)
 
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyDisable)
 {
-    // Given a document with a floating talbe, table split on 2 pages:
+    // Given a document with a floating table, table split on 2 pages:
     Create1x2SplitFly();
     SwDoc* pDoc = getSwDoc();
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
