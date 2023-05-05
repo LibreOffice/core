@@ -24,8 +24,9 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/awt/ColorStop.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <comphelper/processfactory.hxx>
@@ -46,6 +47,7 @@
 #include <svx/xmlgrhlp.hxx>
 
 #include <xmlxtimp.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace com::sun::star;
@@ -77,7 +79,6 @@ protected:
     void importMarker( const uno::Reference< XFastAttributeList >& xAttrList, Any& rAny, OUString& rName );
     void importDash( const uno::Reference< XFastAttributeList >& xAttrList, Any& rAny, OUString& rName );
     void importHatch( const uno::Reference< XFastAttributeList >& xAttrList, Any& rAny, OUString& rName );
-    void importGradient( const uno::Reference< XFastAttributeList >& xAttrList, Any& rAny, OUString& rName );
     void importBitmap( const uno::Reference< XFastAttributeList >& xAttrList, Any& rAny, OUString& rName );
 
 private:
@@ -92,6 +93,93 @@ SvxXMLTableImportContext::SvxXMLTableImportContext( SvXMLImport& rImport, SvxXML
 : SvXMLImportContext( rImport ), mxTable(std::move( xTable )), meContext( eContext ),
     mbOOoFormat( bOOoFormat )
 {
+}
+
+namespace
+{
+    // MCGR: Helper ImportContext to be able to parse sub-content
+    // entries like XMLGradientStopContext which are allowed now
+    // for importing Gradients
+    class XMLGradientHelperContext : public SvXMLImportContext
+    {
+    private:
+        uno::Reference< XNameContainer > mxTable;
+        css::uno::Any          maAny;
+        OUString               maStrName;
+        std::vector<css::awt::ColorStop> maColorStopVec;
+
+    public:
+        XMLGradientHelperContext(
+            SvXMLImport& rImport,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+            const css::uno::Reference< XNameContainer >& rxTable);
+        virtual ~XMLGradientHelperContext() override;
+        virtual css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+            sal_Int32 nElement,
+            const css::uno::Reference<css::xml::sax::XFastAttributeList>& AttrList) override;
+        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    };
+
+    XMLGradientHelperContext::XMLGradientHelperContext(
+        SvXMLImport& rImport,
+        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+        const uno::Reference< XNameContainer >& rxTable)
+    :   SvXMLImportContext(rImport),
+        mxTable(rxTable)
+    {
+        try
+        {
+            // Import GradientStyle
+            XMLGradientStyleImport aGradientStyle( GetImport() );
+            aGradientStyle.importXML( xAttrList, maAny, maStrName );
+        }
+        catch (const uno::Exception&)
+        {
+            DBG_UNHANDLED_EXCEPTION("svx");
+        }
+    }
+
+    XMLGradientHelperContext::~XMLGradientHelperContext()
+    {
+        // if GradientStyle was imported, add to List
+        if( !maStrName.isEmpty() && maAny.hasValue() )
+        {
+            if( mxTable->hasByName( maStrName ) )
+            {
+                mxTable->replaceByName( maStrName, maAny );
+            }
+            else
+            {
+                mxTable->insertByName( maStrName, maAny );
+            }
+        }
+    }
+
+    css::uno::Reference<css::xml::sax::XFastContextHandler> XMLGradientHelperContext::createFastChildContext(
+            sal_Int32 nElement,
+            const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
+    {
+        // be prepared & import GradientStop entries
+        if (nElement == XML_ELEMENT(LO_EXT, xmloff::token::XML_GRADIENT_STOP))
+        {
+            return new XMLGradientStopContext(GetImport(), nElement, xAttrList, maColorStopVec);
+        }
+
+        return nullptr;
+    }
+
+    void XMLGradientHelperContext::endFastElement(sal_Int32 )
+    {
+        // correcting invalid StopOffset values is done at the model. Therefore we import them here
+        // without any change.
+        if (!maColorStopVec.empty())
+        {
+            awt::Gradient2 aGradient;
+            maAny >>= aGradient;
+            aGradient.ColorStops = comphelper::containerToSequence(maColorStopVec);
+            maAny <<= aGradient;
+        }
+    }
 }
 
 css::uno::Reference< css::xml::sax::XFastContextHandler >
@@ -140,6 +228,15 @@ css::uno::Reference< css::xml::sax::XFastContextHandler >
             }
         }
     }
+
+    if (nElement == XML_ELEMENT(DRAW, XML_GRADIENT))
+    {
+        // MCGR: for Gradients, no longer use fixed import but use an own
+        // ImportContext to be able to import now possible sub-entries like
+        // ColorStop entries
+        return new XMLGradientHelperContext( GetImport(), rAttrList, mxTable );
+    }
+
     try
     {
         rtl::Reference<sax_fastparser::FastAttributeList> xFastList = new sax_fastparser::FastAttributeList(nullptr);
@@ -163,11 +260,13 @@ css::uno::Reference< css::xml::sax::XFastContextHandler >
         case SvxXMLTableImportContextEnum::Hatch:
             importHatch( xFastList, aAny, aName  );
             break;
-        case SvxXMLTableImportContextEnum::Gradient:
-            importGradient( xFastList, aAny, aName  );
-            break;
         case SvxXMLTableImportContextEnum::Bitmap:
             importBitmap( xFastList, aAny, aName  );
+            break;
+        default:
+            // SvxXMLTableImportContextEnum::Gradient
+            // is no longer imported hee as 'fixed content'
+            // but dynamicalloy using an own ImportContext
             break;
         }
 
@@ -253,19 +352,6 @@ void SvxXMLTableImportContext::importHatch( const uno::Reference< XFastAttribute
     }
 }
 
-void SvxXMLTableImportContext::importGradient( const uno::Reference< XFastAttributeList >& xAttrList, Any& rAny, OUString& rName )
-{
-    try
-    {
-        XMLGradientStyleImport aGradientStyle( GetImport() );
-        aGradientStyle.importXML( xAttrList, rAny, rName );
-    }
-    catch (const Exception&)
-    {
-        TOOLS_WARN_EXCEPTION("svx", "");
-    }
-}
-
 void SvxXMLTableImportContext::importBitmap( const uno::Reference< XFastAttributeList >& xAttrList, Any& rAny, OUString& rName )
 {
     try
@@ -311,6 +397,9 @@ SvxXMLXTableImport::SvxXMLXTableImport(
     GetNamespaceMap().Add( "___draw",
                         GetXMLToken(XML_N_DRAW_OOO),
                         XML_NAMESPACE_DRAW );
+    GetNamespaceMap().Add( "___loext",
+                        GetXMLToken(XML_N_LO_EXT),
+                        XML_NAMESPACE_LO_EXT);
 }
 
 SvxXMLXTableImport::~SvxXMLXTableImport() noexcept

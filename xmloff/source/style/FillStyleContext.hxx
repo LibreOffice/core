@@ -51,18 +51,6 @@ public:
     virtual bool IsTransient() const override;
 };
 
-class XMLGradientStopContext: public SvXMLStyleContext
-{
-private:
-
-public:
-
-    XMLGradientStopContext(SvXMLImport& rImport, sal_Int32 nElement,
-                           const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
-                           std::vector<css::awt::ColorStop>& rColorStopVec);
-    virtual ~XMLGradientStopContext() override;
-};
-
 // draw:hatch context
 
 class XMLHatchStyleContext: public SvXMLStyleContext
