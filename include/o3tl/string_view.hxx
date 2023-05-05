@@ -508,11 +508,9 @@ inline double toDouble(std::string_view str)
     return rtl_math_stringToDouble(str.data(), str.data() + str.size(), '.', 0, nullptr, nullptr);
 }
 
-// Similar to OUString::iterateCodePoints, but for std::string_view.
-// If preAdjustIndex is true: prior to any other operation, *indexUtf16 is adjusted by -1 if it
-// originally pointed into the middle of a surrogate pair.
+// Like OUString::iterateCodePoints, but for std::string_view:
 inline sal_uInt32 iterateCodePoints(std::u16string_view string, std::size_t* indexUtf16,
-                                    sal_Int32 incrementCodePoints = 1, bool preAdjustIndex = false)
+                                    sal_Int32 incrementCodePoints = 1)
 {
     std::size_t n;
     char16_t cu;
@@ -520,11 +518,6 @@ inline sal_uInt32 iterateCodePoints(std::u16string_view string, std::size_t* ind
     assert(indexUtf16 != nullptr);
     n = *indexUtf16;
     assert(n <= string.length());
-    if (preAdjustIndex && n != 0 && rtl::isHighSurrogate(string[n - 1])
-        && rtl::isLowSurrogate(string[n]))
-    {
-        --n;
-    }
     while (incrementCodePoints < 0)
     {
         assert(n > 0);
