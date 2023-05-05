@@ -178,7 +178,7 @@ private:
     void setupInternational( const css::lang::Locale& rLocale );
 
     /// Implementation of getCharacterType() for one single character
-    static sal_Int32 getCharType( const OUString& Text, sal_Int32 *nPos, sal_Int32 increment);
+    static sal_Int32 getCharType( std::u16string_view Text, sal_Int32 *nPos, sal_Int32 increment);
 
 };
 

@@ -736,15 +736,15 @@ private:
     void testIterateCodePoints()
     {
         {
-            std::size_t i = 1;
+            sal_Int32 i = 1;
             auto const c = o3tl::iterateCodePoints(u"\U00010000", &i, 1);
-            CPPUNIT_ASSERT_EQUAL(std::size_t(2), i);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(2), i);
             CPPUNIT_ASSERT_EQUAL(sal_uInt32(0xDC00), c);
         }
         {
-            std::size_t i = 2;
+            sal_Int32 i = 2;
             auto const c = o3tl::iterateCodePoints(u"a\U00010000", &i, -1);
-            CPPUNIT_ASSERT_EQUAL(std::size_t(1), i);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), i);
             CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x10000), c);
         }
     }

@@ -26,6 +26,7 @@
 #include <unotools/configmgr.hxx>
 #include <TextLayoutCache.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <unicode/ubidi.h>
 #include <unicode/uchar.h>
@@ -238,7 +239,7 @@ SalLayoutGlyphsCache* SalLayoutGlyphsCache::self()
     return cache.get();
 }
 
-static UBiDiDirection getBiDiDirection(const OUString& text, sal_Int32 index, sal_Int32 len)
+static UBiDiDirection getBiDiDirection(std::u16string_view text, sal_Int32 index, sal_Int32 len)
 {
     // Return whether all character are LTR, RTL, neutral or whether it's mixed.
     // This is sort of ubidi_getBaseDirection() and ubidi_getDirection(),
@@ -247,7 +248,7 @@ static UBiDiDirection getBiDiDirection(const OUString& text, sal_Int32 index, sa
     UBiDiDirection direction = UBIDI_NEUTRAL;
     while (index < end)
     {
-        switch (u_charDirection(text.iterateCodePoints(&index)))
+        switch (u_charDirection(o3tl::iterateCodePoints(text, &index)))
         {
             // Only characters with strong direction.
             case U_LEFT_TO_RIGHT:
@@ -269,7 +270,7 @@ static UBiDiDirection getBiDiDirection(const OUString& text, sal_Int32 index, sa
 }
 
 static SalLayoutGlyphs makeGlyphsSubset(const SalLayoutGlyphs& source,
-                                        const OutputDevice* outputDevice, const OUString& text,
+                                        const OutputDevice* outputDevice, std::u16string_view text,
                                         sal_Int32 index, sal_Int32 len)
 {
     // tdf#149264: We need to check if the text is LTR, RTL or mixed. Apparently

@@ -95,4 +95,19 @@ void f11(const OUString& f11rString)
     buf.append(f11rString);
 }
 
+// expected-error-re@+1 {{replace function parameter of type 'const {{(rtl::)?}}OUString &' with 'std::u16string_view' [loplugin:stringviewparam]}}
+sal_uInt32 decimalStringToNumber(OUString const& str, sal_Int32 nStart, sal_Int32 nLength)
+{
+    sal_uInt32 result = 0;
+    for (sal_Int32 i = nStart; i < nStart + nLength;)
+    {
+        sal_uInt32 c = str.iterateCodePoints(&i);
+        sal_uInt32 value = 0;
+        if (c <= 0x0039)
+            value = c - 0x0030;
+        result = result * 10 + value;
+    }
+    return result;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

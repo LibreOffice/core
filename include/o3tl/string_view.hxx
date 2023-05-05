@@ -509,7 +509,7 @@ inline double toDouble(std::string_view str)
 }
 
 // Like OUString::iterateCodePoints, but for std::string_view:
-inline sal_uInt32 iterateCodePoints(std::u16string_view string, std::size_t* indexUtf16,
+inline sal_uInt32 iterateCodePoints(std::u16string_view string, sal_Int32* indexUtf16,
                                     sal_Int32 incrementCodePoints = 1)
 {
     std::size_t n;

@@ -778,11 +778,8 @@ sal_uInt32 SAL_CALL rtl_uString_iterateCodePoints(
         && o3tl::cmp_less_equal(*indexUtf16, std::numeric_limits<std::size_t>::max()));
         // using o3tl::cmp_less_equal nicely avoids potential
         // -Wtautological-constant-out-of-range-compare
-    std::size_t i = *indexUtf16;
     auto const cp = o3tl::iterateCodePoints(
-        std::u16string_view(string->buffer, string->length), &i, incrementCodePoints);
-    assert(i <= o3tl::make_unsigned(std::numeric_limits<sal_Int32>::max()));
-    *indexUtf16 = i;
+        std::u16string_view(string->buffer, string->length), indexUtf16, incrementCodePoints);
     return cp;
 }
 

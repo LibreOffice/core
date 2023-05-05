@@ -27,6 +27,7 @@
 #include <breakiteratorImpl.hxx>
 #include <transliteration_body.hxx>
 #include <rtl/ref.hxx>
+#include <o3tl/string_view.hxx>
 #include <utility>
 
 using namespace ::com::sun::star;
@@ -147,10 +148,10 @@ cclass_Unicode::getScript( const OUString& Text, sal_Int32 nPos ) {
 
 
 sal_Int32
-cclass_Unicode::getCharType( const OUString& Text, sal_Int32* nPos, sal_Int32 increment) {
+cclass_Unicode::getCharType( std::u16string_view Text, sal_Int32* nPos, sal_Int32 increment) {
     using namespace ::com::sun::star::i18n::KCharacterType;
 
-    sal_uInt32 ch = Text.iterateCodePoints(nPos, increment);
+    sal_uInt32 ch = o3tl::iterateCodePoints(Text, nPos, increment);
     switch ( u_charType(ch) ) {
     // Upper
     case U_UPPERCASE_LETTER :

@@ -263,13 +263,12 @@ sal_Int32 getTokenCount(std::u16string_view rIn, sal_Unicode cTok)
     return tmpl_getTokenCount<std::u16string_view, sal_Unicode>(rIn, cTok);
 }
 
-static sal_uInt32 decimalStringToNumber(
-    OUString const & str, sal_Int32 nStart, sal_Int32 nLength )
+sal_uInt32 decimalStringToNumber(std::u16string_view str)
 {
     sal_uInt32 result = 0;
-    for( sal_Int32 i = nStart; i < nStart + nLength; )
+    for( sal_Int32 i = 0; i < static_cast<sal_Int32>(str.size()); )
     {
-        sal_uInt32 c = str.iterateCodePoints(&i);
+        sal_uInt32 c = o3tl::iterateCodePoints(str, &i);
         sal_uInt32 value = 0;
         if( c <= 0x0039)    // ASCII decimal digits, most common
             value = c - 0x0030;
@@ -360,12 +359,6 @@ static sal_uInt32 decimalStringToNumber(
     return result;
 }
 
-sal_uInt32 decimalStringToNumber(
-    OUString const & str )
-{
-    return decimalStringToNumber(str, 0, str.getLength());
-}
-
 using namespace ::com::sun::star;
 
 // convert between sequence of string and comma separated string
@@ -435,8 +428,8 @@ sal_Int32 compareNatural( const OUString & rLHS, const OUString & rRHS,
 
     if (nStartsDigitLHS > 0 && nStartsDigitRHS > 0)
     {
-        sal_uInt32 nLHS = comphelper::string::decimalStringToNumber(rLHS, 0, nStartsDigitLHS);
-        sal_uInt32 nRHS = comphelper::string::decimalStringToNumber(rRHS, 0, nStartsDigitRHS);
+        sal_uInt32 nLHS = comphelper::string::decimalStringToNumber(rLHS.subView(0, nStartsDigitLHS));
+        sal_uInt32 nRHS = comphelper::string::decimalStringToNumber(rRHS.subView(0, nStartsDigitRHS));
 
         if (nLHS != nRHS)
             return nLHS < nRHS ? -1 : 1;
@@ -484,8 +477,8 @@ sal_Int32 compareNatural( const OUString & rLHS, const OUString & rRHS,
         //numbers outside of the normal 0-9 range, e.g. see GetLocalizedChar in
         //vcl
 
-        sal_uInt32 nLHS = comphelper::string::decimalStringToNumber(rLHS, nLHSFirstDigitPos, nLHSChunkLen);
-        sal_uInt32 nRHS = comphelper::string::decimalStringToNumber(rRHS, nRHSFirstDigitPos, nRHSChunkLen);
+        sal_uInt32 nLHS = comphelper::string::decimalStringToNumber(rLHS.subView(nLHSFirstDigitPos, nLHSChunkLen));
+        sal_uInt32 nRHS = comphelper::string::decimalStringToNumber(rRHS.subView(nRHSFirstDigitPos, nRHSChunkLen));
 
         if (nLHS != nRHS)
         {

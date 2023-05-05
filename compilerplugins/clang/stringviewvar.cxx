@@ -129,7 +129,7 @@ DeclRefExpr const* relevantCXXMemberCallExpr(CXXMemberCallExpr const* expr)
             || n == "indexOf" || n == "lastIndexOf" || n == "compareTo" || n == "match"
             || n == "trim" || n == "toInt32" || n == "toInt64" || n == "toDouble"
             || n == "equalsIgnoreAsciiCase" || n == "compareToIgnoreAsciiCase" || n == "getToken"
-            || n == "copy")
+            || n == "copy" || n == "iterateCodePoints")
         {
             good = true;
         }

@@ -23,6 +23,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <unicode/uchar.h>
 #include <i18nutil/unicode.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <com/sun/star/i18n/CharType.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -72,7 +73,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::previousCharacters( const OUString& Text, 
 
 #define isZWSP(c) (ch == 0x200B)
 
-static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, sal_Int16 rWordType, bool bDirection)
+static sal_Int32 skipSpace(std::u16string_view Text, sal_Int32 nPos, sal_Int32 len, sal_Int16 rWordType, bool bDirection)
 {
     sal_uInt32 ch=0;
     sal_Int32 pos=nPos;
@@ -81,7 +82,7 @@ static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, 
             if (bDirection)
                 while (nPos < len)
                 {
-                    ch = Text.iterateCodePoints(&pos);
+                    ch = o3tl::iterateCodePoints(Text, &pos);
                     if (!u_isUWhiteSpace(ch) && !isZWSP(ch))
                         break;
                     nPos = pos;
@@ -89,7 +90,7 @@ static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, 
             else
                 while (nPos > 0)
                 {
-                    ch = Text.iterateCodePoints(&pos, -1);
+                    ch = o3tl::iterateCodePoints(Text, &pos, -1);
                     if (!u_isUWhiteSpace(ch) && !isZWSP(ch))
                         break;
                     nPos = pos;
@@ -99,7 +100,7 @@ static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, 
             if (bDirection)
                 while (nPos < len)
                 {
-                    ch = Text.iterateCodePoints(&pos);
+                    ch = o3tl::iterateCodePoints(Text, &pos);
                     if (!u_isWhitespace(ch) && !isZWSP(ch) && (ch == 0x002E || u_isalnum(ch)))
                         break;
                     nPos = pos;
@@ -107,7 +108,7 @@ static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, 
             else
                 while (nPos > 0)
                 {
-                    ch = Text.iterateCodePoints(&pos, -1);
+                    ch = o3tl::iterateCodePoints(Text, &pos, -1);
                     if (!u_isWhitespace(ch) && !isZWSP(ch) && (ch == 0x002E || u_isalnum(ch)))
                         break;
                     nPos = pos;
@@ -117,7 +118,7 @@ static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, 
             if (bDirection)
                 while (nPos < len)
                 {
-                    ch = Text.iterateCodePoints(&pos);
+                    ch = o3tl::iterateCodePoints(Text, &pos);
                     if (!u_isUWhiteSpace(ch) && !isZWSP(ch))
                         break;
                     nPos = pos;
@@ -125,7 +126,7 @@ static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, 
             else
                 while (nPos > 0)
                 {
-                    ch = Text.iterateCodePoints(&pos, -1);
+                    ch = o3tl::iterateCodePoints(Text, &pos, -1);
                     if (!u_isUWhiteSpace(ch) && !isZWSP(ch))
                         break;
                     nPos = pos;

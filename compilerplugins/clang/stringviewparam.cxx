@@ -140,8 +140,8 @@ DeclRefExpr const* relevantCXXMemberCallExpr(CXXMemberCallExpr const* expr)
         if (!(n == "getLength" || n == "getStr" || n == "convertToString" || n == "replace"
               || n == "replaceAll" || n == "replaceAt" || n == "replaceFirst"
               || n == "toAsciiLowerCase" || n == "toAsciiUpperCase" || n == "toUtf8"
-              || n == "iterateCodePoints" || n == "startsWithIgnoreAsciiCase" || n == "toUInt64"
-              || n == "toFloat" || n == "toBoolean"))
+              || n == "startsWithIgnoreAsciiCase" || n == "toUInt64" || n == "toFloat"
+              || n == "toBoolean"))
         {
             good = true;
         }

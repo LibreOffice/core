@@ -362,7 +362,8 @@ bool StringView::VisitCXXMemberCallExpr(CXXMemberCallExpr const* expr)
             || dc.Function("equalsIgnoreAsciiCase") || dc.Function("compareToIgnoreAsciiCase")
             || dc.Function("matchIgnoreAsciiCase") || dc.Function("trim")
             || dc.Function("startsWith") || dc.Function("endsWith") || dc.Function("match")
-            || dc.Function("isEmpty") || dc.Function("getLength"))
+            || dc.Function("isEmpty") || dc.Function("getLength")
+            || dc.Function("iterateCodePoints"))
         {
             handleSubExprThatCouldBeView(expr->getImplicitObjectArgument());
         }
