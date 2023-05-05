@@ -87,35 +87,20 @@ template <typename C> struct with_length
     auto end() const { return p + len; }
 };
 
-struct ToAsciiLower
+template <bool (&fApplicable)(sal_uInt32), sal_uInt32 (&fReplace)(sal_uInt32)> struct CaseReplace
 {
-    template <typename C> static bool Applicable(C c)
-    {
-        return rtl::isAsciiUpperCase(UChar(c));
-    }
-    template <typename C> static C Replace(C c)
-    {
-        return rtl::toAsciiLowerCase(UChar(c));
-    }
-} constexpr toAsciiLower;
-
-struct ToAsciiUpper
-{
-    template <typename C> static bool Applicable(C c)
-    {
-        return rtl::isAsciiLowerCase(UChar(c));
-    }
-    template <typename C> static C Replace(C c)
-    {
-        return rtl::toAsciiUpperCase(UChar(c));
-    }
-} constexpr toAsciiUpper;
+    static auto Applicable() { return [](auto c) { return fApplicable(UChar(c)); }; }
+    template <typename C> static C Replace(C c) { return fReplace(UChar(c)); }
+};
+constexpr CaseReplace<rtl::isAsciiUpperCase, rtl::toAsciiLowerCase> toAsciiLower;
+constexpr CaseReplace<rtl::isAsciiLowerCase, rtl::toAsciiUpperCase> toAsciiUpper;
 
 template <typename C> struct FromTo
 {
     C from;
     C to;
     FromTo(C cFrom, C cTo) : from(cFrom), to(cTo) {}
+    auto Applicable() const { return [this](C c) { return c == from; }; }
     C Replace(C c) const { return c == from ? to : c; }
 };
 
@@ -1112,14 +1097,14 @@ void newReplaceStrAt(rtl_tString** ppThis, rtl_tString* pStr, sal_Int32 nIndex, 
 
 /* ----------------------------------------------------------------------- */
 
-template <class Traits, typename rtl_tString>
-void newReplaceChars(rtl_tString** ppThis, rtl_tString* pStr)
+template <typename rtl_tString, class Replacer>
+void newReplaceChars(rtl_tString** ppThis, rtl_tString* pStr, Replacer replacer)
 {
     assert(ppThis);
     assert(pStr);
 
     const auto pEnd = pStr->buffer + pStr->length;
-    auto pCharStr = std::find_if(pStr->buffer, pEnd, [](auto c) { return Traits::Applicable(c); });
+    auto pCharStr = std::find_if(pStr->buffer, pEnd, replacer.Applicable());
     if (pCharStr != pEnd)
     {
         rtl_tString* pOrg = *ppThis;
@@ -1133,7 +1118,7 @@ void newReplaceChars(rtl_tString** ppThis, rtl_tString* pStr)
         /* replace/copy rest of the string */
         do
         {
-            *pNewCharStr = Traits::Replace(*pCharStr);
+            *pNewCharStr = replacer.Replace(*pCharStr);
             pNewCharStr++;
             pCharStr++;
         } while (pCharStr != pEnd);
@@ -1365,13 +1350,6 @@ void newReplaceAllFromIndex(S** s, S* s1, CharTypeFrom const* from, sal_Int32 fr
         assign(s, s1);
 
     RTL_LOG_STRING_NEW(*s);
-}
-
-template <typename rtl_tString>
-void newReplace(rtl_tString** ppThis, rtl_tString* pStr,
-                Char_T<rtl_tString> cOld, Char_T<rtl_tString> cNew)
-{
-    return newReplaceAllFromIndex(ppThis, pStr, &cOld, 1, &cNew, 1, 0);
 }
 
 template <class rtl_tString, typename C1, typename C2>

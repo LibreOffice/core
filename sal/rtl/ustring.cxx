@@ -1272,19 +1272,19 @@ void SAL_CALL rtl_uString_newReplaceStrAtUtf16L(rtl_uString** ppThis, rtl_uStrin
 void SAL_CALL rtl_uString_newReplace(rtl_uString** ppThis, rtl_uString* pStr, sal_Unicode cOld,
                                      sal_Unicode cNew) SAL_THROW_EXTERN_C()
 {
-    rtl::str::newReplace(ppThis, pStr, cOld, cNew);
+    rtl::str::newReplaceChars(ppThis, pStr, rtl::str::FromTo(cOld, cNew));
 }
 
 void SAL_CALL rtl_uString_newToAsciiLowerCase(rtl_uString** ppThis, rtl_uString* pStr)
     SAL_THROW_EXTERN_C()
 {
-    rtl::str::newReplaceChars<rtl::str::ToAsciiLower>(ppThis, pStr);
+    rtl::str::newReplaceChars(ppThis, pStr, rtl::str::toAsciiLower);
 }
 
 void SAL_CALL rtl_uString_newToAsciiUpperCase(rtl_uString** ppThis, rtl_uString* pStr)
     SAL_THROW_EXTERN_C()
 {
-    rtl::str::newReplaceChars<rtl::str::ToAsciiUpper>(ppThis, pStr);
+    rtl::str::newReplaceChars(ppThis, pStr, rtl::str::toAsciiUpper);
 }
 
 void SAL_CALL rtl_uString_newTrim(rtl_uString** ppThis, rtl_uString* pStr) SAL_THROW_EXTERN_C()

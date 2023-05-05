@@ -638,19 +638,19 @@ void SAL_CALL rtl_string_newReplaceStrAt_WithLength(rtl_String** ppThis, rtl_Str
 void SAL_CALL rtl_string_newReplace(rtl_String** ppThis, rtl_String* pStr, char cOld, char cNew)
     SAL_THROW_EXTERN_C()
 {
-    rtl::str::newReplace(ppThis, pStr, cOld, cNew);
+    rtl::str::newReplaceChars(ppThis, pStr, rtl::str::FromTo(cOld, cNew));
 }
 
 void SAL_CALL rtl_string_newToAsciiLowerCase(rtl_String** ppThis, rtl_String* pStr)
     SAL_THROW_EXTERN_C()
 {
-    rtl::str::newReplaceChars<rtl::str::ToAsciiLower>(ppThis, pStr);
+    rtl::str::newReplaceChars(ppThis, pStr, rtl::str::toAsciiLower);
 }
 
 void SAL_CALL rtl_string_newToAsciiUpperCase(rtl_String** ppThis, rtl_String* pStr)
     SAL_THROW_EXTERN_C()
 {
-    rtl::str::newReplaceChars<rtl::str::ToAsciiUpper>(ppThis, pStr);
+    rtl::str::newReplaceChars(ppThis, pStr, rtl::str::toAsciiUpper);
 }
 
 void SAL_CALL rtl_string_newTrim(rtl_String** ppThis, rtl_String* pStr) SAL_THROW_EXTERN_C()
