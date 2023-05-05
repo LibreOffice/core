@@ -422,6 +422,7 @@
       <menu:menuitem menu:id=".uno:ConditionalFormatMenu"/>
       <menu:menuitem menu:id=".uno:AutoFormat"/>
       <menu:menuitem menu:id=".uno:ChooseDesign"/>
+      <menu:menuitem menu:id=".uno:ThemeDialog"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:FormatImageMenu">
         <menu:menupopup>
