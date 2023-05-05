@@ -348,8 +348,7 @@ public:
     template<std::size_t N>
     OStringBuffer & operator =(OStringNumber<N> && n)
     {
-        *this = OStringBuffer( std::move ( n ));
-        return *this;
+        return operator =(std::string_view(n));
     }
 #endif
 
@@ -543,7 +542,7 @@ public:
      */
     OStringBuffer & append(const OString &str)
     {
-        return append( str.getStr(), str.getLength() );
+        return insert(getLength(), str);
     }
 #endif
 
@@ -561,13 +560,13 @@ public:
     template< typename T >
     typename libreoffice_internal::CharPtrDetector< T, OStringBuffer& >::Type append( const T& str )
     {
-        return append( str, rtl_str_getLength( str ) );
+        return insert(getLength(), str);
     }
 
     template< typename T >
     typename libreoffice_internal::NonConstCharArrayDetector< T, OStringBuffer& >::Type append( T& str )
     {
-        return append( str, rtl_str_getLength( str ) );
+        return insert(getLength(), str);
     }
 
     /**
@@ -578,12 +577,7 @@ public:
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, OStringBuffer& >::Type append( T& literal )
     {
-        RTL_STRING_CONST_FUNCTION
-        assert(
-            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
-        return append(
-            libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
-            libreoffice_internal::ConstCharArrayDetector<T>::length);
+        return insert(getLength(), literal);
     }
 
     /**
@@ -601,9 +595,7 @@ public:
      */
     OStringBuffer & append( const char * str, sal_Int32 len)
     {
-        assert( len == 0 || str != NULL ); // cannot assert that in rtl_stringbuffer_insert
-        rtl_stringbuffer_insert( &pData, &nCapacity, getLength(), str, len );
-        return *this;
+        return insert(getLength(), str, len);
     }
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
@@ -615,24 +607,9 @@ public:
     OStringBuffer& append( OStringConcat< T1, T2 >&& c )
     {
         sal_Int32 l = c.length();
-        if( l == 0 )
-            return *this;
-        l += pData->length;
-        rtl_stringbuffer_ensureCapacity( &pData, &nCapacity, l );
-        char* end = c.addData( pData->buffer + pData->length );
-        *end = '\0';
-        pData->length = l;
+        if (l != 0)
+            c.addData(appendUninitialized(l));
         return *this;
-    }
-
-    /**
-     @overload
-     @internal
-    */
-    template< std::size_t N >
-    OStringBuffer& append( OStringNumber< N >&& c )
-    {
-        return append( c.buf, c.length );
     }
 
     /**
@@ -641,7 +618,7 @@ public:
      */
     OStringBuffer& append( std::string_view s )
     {
-        return append( s.data(), s.size() );
+        return insert(getLength(), s);
     }
 
 #endif
@@ -659,8 +636,7 @@ public:
      */
     OStringBuffer & append(sal_Bool b)
     {
-        char sz[RTL_STR_MAX_VALUEOFBOOLEAN];
-        return append( sz, rtl_str_valueOfBoolean( sz, b ) );
+        return insert(getLength(), b);
     }
 
     /**
@@ -678,8 +654,7 @@ public:
      */
     OStringBuffer & append(bool b)
     {
-        char sz[RTL_STR_MAX_VALUEOFBOOLEAN];
-        return append( sz, rtl_str_valueOfBoolean( sz, b ) );
+        return insert(getLength(), b);
     }
 
     /// @cond INTERNAL
@@ -704,7 +679,7 @@ public:
      */
     OStringBuffer & append(char c)
     {
-        return append( &c, 1 );
+        return insert(getLength(), c);
     }
 
     /**
@@ -721,8 +696,7 @@ public:
      */
     OStringBuffer & append(sal_Int32 i, sal_Int16 radix = 10 )
     {
-        char sz[RTL_STR_MAX_VALUEOFINT32];
-        return append( sz, rtl_str_valueOfInt32( sz, i, radix ) );
+        return insert(getLength(), i, radix);
     }
 
     /**
@@ -739,8 +713,7 @@ public:
      */
     OStringBuffer & append(sal_Int64 l, sal_Int16 radix = 10 )
     {
-        char sz[RTL_STR_MAX_VALUEOFINT64];
-        return append( sz, rtl_str_valueOfInt64( sz, l, radix ) );
+        return insert(getLength(), l, radix);
     }
 
     /**
