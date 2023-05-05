@@ -23,7 +23,7 @@
 
 
     <!-- *** Properties with a 'fo:' prefix *** -->
-    <xsl:template match="@fo:background-color">
+    <xsl:template match="@fo:background-color | @draw:fill-color">
         <xsl:text>background-color:</xsl:text>
         <xsl:value-of select="."/>
         <xsl:text>; </xsl:text>
