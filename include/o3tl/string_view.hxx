@@ -527,7 +527,7 @@ inline sal_uInt32 iterateCodePoints(std::u16string_view string, std::size_t* ind
     }
     while (incrementCodePoints < 0)
     {
-        assert(n >= 0);
+        assert(n > 0);
         cu = string[--n];
         if (rtl::isLowSurrogate(cu) && n != 0 && rtl::isHighSurrogate(string[n - 1]))
         {
