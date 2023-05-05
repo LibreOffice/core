@@ -1315,11 +1315,7 @@ void ResultSet::propertyChanged( const beans::PropertyChangeEvent& rEvt ) const
         = m_pImpl->m_pPropertyChangeListeners->getContainer( aGuard, OUString() );
     if ( pPropsContainer )
     {
-        comphelper::OInterfaceIteratorHelper4 aIter( aGuard, *pPropsContainer );
-        while ( aIter.hasMoreElements() )
-        {
-            aIter.next()->propertyChange( rEvt );
-        }
+        pPropsContainer->notifyEach( aGuard, &beans::XPropertyChangeListener::propertyChange, rEvt);
     }
 }
 

@@ -2076,14 +2076,16 @@ void SAL_CALL AnimationNode::removeChangesListener( const Reference< XChangesLis
 
 void AnimationNode::fireChangeListener(std::unique_lock<std::mutex>& l)
 {
-    OInterfaceIteratorHelper4 aIterator( l, maChangeListener );
-    if( aIterator.hasMoreElements() )
+    if( maChangeListener.getLength(l) != 0 )
     {
         Reference< XInterface > xSource( static_cast<OWeakObject*>(this), UNO_QUERY );
         Sequence< ElementChange > aChanges;
         const ChangesEvent aEvent( xSource, Any( css::uno::Reference<XInterface>(static_cast<cppu::OWeakObject*>(mxParent.get().get())) ), aChanges );
+        OInterfaceIteratorHelper4 aIterator( l, maChangeListener );
+        l.unlock();
         while( aIterator.hasMoreElements() )
             aIterator.next()->changesOccurred( aEvent );
+        l.lock();
     }
 
     //fdo#69645 use WeakReference of mxParent to test if mpParent is still valid

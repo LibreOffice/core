@@ -217,6 +217,7 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
     {
         std::unique_lock g(maListenerMutex);
         ::comphelper::OInterfaceIteratorHelper4 aIter( g, maEventListeners );
+        g.unlock();
         while( aIter.hasMoreElements() )
         {
             try

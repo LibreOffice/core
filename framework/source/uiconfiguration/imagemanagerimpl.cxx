@@ -1169,6 +1169,7 @@ void ImageManagerImpl::implts_notifyContainerListener( const ConfigurationEvent&
 {
     std::unique_lock aGuard(m_mutex);
     comphelper::OInterfaceIteratorHelper4 pIterator( aGuard, m_aConfigListeners );
+    aGuard.unlock();
     while ( pIterator.hasMoreElements() )
     {
         try
@@ -1188,7 +1189,9 @@ void ImageManagerImpl::implts_notifyContainerListener( const ConfigurationEvent&
         }
         catch( const css::uno::RuntimeException& )
         {
+            aGuard.lock();
             pIterator.remove(aGuard);
+            aGuard.unlock();
         }
     }
 }

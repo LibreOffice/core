@@ -107,12 +107,15 @@ sal_uInt32 DNDListenerContainer::fireDropEvent( const Reference< XDropTargetDrop
         Reference< XDropTargetListener > xListener( aIterator.next() );
         try
         {
-            g.unlock();
             // fire drop until the first one has accepted
             if( m_xDropTargetDropContext.is() )
+            {
+                g.unlock();
                 xListener->drop( aEvent );
+            }
             else
             {
+                g.unlock();
                 DropTargetEvent aDTEvent( static_cast < XDropTarget * > (this), 0 );
                 xListener->dragExit( aDTEvent );
             }
@@ -151,24 +154,24 @@ sal_uInt32 DNDListenerContainer::fireDragExitEvent()
 
     sal_uInt32 nRet = 0;
 
-    comphelper::OInterfaceIteratorHelper4 aIterator( g, maDropTargetListeners );
-
     // do not construct the event before you are sure at least one listener is registered
     DropTargetEvent aEvent( static_cast < XDropTarget * > (this), 0 );
 
+    comphelper::OInterfaceIteratorHelper4 aIterator( g, maDropTargetListeners );
+    g.unlock();
     while (aIterator.hasMoreElements())
     {
         Reference< XDropTargetListener > xListener( aIterator.next() );
         try
         {
-            g.unlock();
             xListener->dragExit( aEvent );
             nRet++;
-            g.lock();
         }
         catch (const RuntimeException&)
         {
+            g.lock();
             aIterator.remove( g );
+            g.unlock();
         }
     }
 
@@ -354,25 +357,25 @@ sal_uInt32 DNDListenerContainer::fireDragGestureEvent( sal_Int8 dragAction, sal_
 
     sal_uInt32 nRet = 0;
 
-    comphelper::OInterfaceIteratorHelper4 aIterator( g, maDragGestureListeners );
-
     // do not construct the event before you are sure at least one listener is registered
     DragGestureEvent aEvent( static_cast < XDragGestureRecognizer * > (this), dragAction,
         dragOriginX, dragOriginY, dragSource, triggerEvent );
 
+    comphelper::OInterfaceIteratorHelper4 aIterator( g, maDragGestureListeners );
+    g.unlock();
     while( aIterator.hasMoreElements() )
     {
         Reference< XDragGestureListener > xListener( aIterator.next() );
         try
         {
-            g.unlock();
             xListener->dragGestureRecognized( aEvent );
-            g.lock();
             nRet++;
         }
         catch (const RuntimeException&)
         {
+            g.lock();
             aIterator.remove( g );
+            g.unlock();
         }
     }
 

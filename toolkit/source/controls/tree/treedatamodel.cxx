@@ -157,9 +157,9 @@ void MutableTreeDataModel::broadcastImpl( std::unique_lock<std::mutex>& rGuard, 
     TreeDataModelEvent aEvent( xSource, aNodes, xParentNode );
 
     comphelper::OInterfaceIteratorHelper4 aListIter(rGuard, maTreeDataModelListeners);
+    rGuard.unlock();
     while(aListIter.hasMoreElements())
     {
-        rGuard.unlock();
         XTreeDataModelListener* pListener = aListIter.next().get();
         switch( eType )
         {
@@ -168,7 +168,6 @@ void MutableTreeDataModel::broadcastImpl( std::unique_lock<std::mutex>& rGuard, 
         case nodes_removed:     pListener->treeNodesRemoved(aEvent); break;
         case structure_changed: pListener->treeStructureChanged(aEvent); break;
         }
-        rGuard.lock();
     }
 }
 
