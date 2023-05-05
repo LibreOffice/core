@@ -1971,7 +1971,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
     const SwBorderAttrs *pAttrs = oAccess->Get();
 
     // All rows should keep together
-    const bool bDontSplit = !IsFollow() &&
+    bool bDontSplit = !IsFollow() &&
                             ( !GetFormat()->GetLayoutSplit().GetValue() );
 
     // The number of repeated headlines
@@ -1990,6 +1990,12 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         {
             // Ignore the above text node -> row inheritance for floating tables.
             bTableRowKeep = false;
+        }
+        else if (!pFly->GetNextLink())
+        {
+            // If the fly is not allowed to split and is not chained, then it makes no sense to
+            // split the table.
+            bDontSplit = true;
         }
     }
 
@@ -3848,7 +3854,15 @@ void SwTabFrame::Cut()
                 !(pFly = pUp->FindFlyFrame())->ContainsContent() &&
                 !pFly->ContainsAny())
         {
-            if (pUp == pFly && pFly->IsFlySplitAllowed())
+            bool bSplitFly = pFly->IsFlySplitAllowed();
+            if (!bSplitFly && pFly->IsFlyAtContentFrame())
+            {
+                // If the fly is not allowed to split, it's still possible that it was allowed to
+                // split. That is definitely the case when the fly is a follow.
+                auto pFlyAtContent = static_cast<SwFlyAtContentFrame*>(pFly);
+                bSplitFly = pFlyAtContent->IsFollow();
+            }
+            if (pUp == pFly && bSplitFly)
             {
                 auto pFlyAtContent = static_cast<SwFlyAtContentFrame*>(pFly);
                 pFlyAtContent->DelEmpty();
