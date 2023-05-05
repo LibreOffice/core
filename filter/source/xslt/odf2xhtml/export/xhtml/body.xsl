@@ -1115,7 +1115,7 @@
                                 <xsl:text>cm; </xsl:text>
                             </xsl:if>
                         </xsl:when>
-                        <!-- @text:anchor-type='' -->
+                        <!-- if there is no attribute @text:anchor-type -->
                         <xsl:otherwise>
                                 <xsl:text> position:absolute; left:</xsl:text>
                                     <xsl:value-of select="$leftPosition" />
@@ -2095,7 +2095,8 @@
                                                 <xsl:when test="name($listLevelStyle) = 'text:list-level-style-bullet'">
                                                     <xsl:value-of select="$listLevelStyle/@style:num-prefix"/>
                                                     <xsl:value-of select="$listLevelStyle/@text:bullet-char"/>
-                                                    <xsl:value-of select="$listLevelStyle/@style:num-suffix"/>
+                                                    <!-- not viewed in LO see tdf146264
+                                                    <xsl:value-of select="$listLevelStyle/@style:num-suffix"/>-->
                                                 </xsl:when>
                                                 <xsl:when test="name($listLevelStyle) = 'text:list-level-style-number'">
                                                     <xsl:value-of select="$listLevelStyle/@style:num-prefix"/>
