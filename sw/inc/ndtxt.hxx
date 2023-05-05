@@ -278,6 +278,8 @@ public:
     OUString InsertText( const OUString & rStr, const SwPosition & rIdx,
                      const SwInsertFlags nMode
                          = SwInsertFlags::DEFAULT );
+    /// Add a dummy character to the redline of the table changes
+    void InsertDummy() { m_Text = OUStringChar(CH_TXT_TRACKED_DUMMY_CHAR); }
 
     /** delete text content
         ATTENTION: must not be called with a range that overlaps the start of
