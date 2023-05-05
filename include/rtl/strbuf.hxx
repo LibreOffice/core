@@ -756,8 +756,7 @@ public:
      */
     OStringBuffer & append(float f)
     {
-        char sz[RTL_STR_MAX_VALUEOFFLOAT];
-        return append( sz, rtl_str_valueOfFloat( sz, f ) );
+        return insert(getLength(), f);
     }
 
     /**
@@ -773,8 +772,7 @@ public:
      */
     OStringBuffer & append(double d)
     {
-        char sz[RTL_STR_MAX_VALUEOFDOUBLE];
-        return append( sz, rtl_str_valueOfDouble( sz, d ) );
+        return insert(getLength(), d);
     }
 
     /**
@@ -1032,8 +1030,11 @@ public:
      */
     OStringBuffer & insert(sal_Int32 offset, float f)
     {
-        char sz[RTL_STR_MAX_VALUEOFFLOAT];
-        return insert( offset, sz, rtl_str_valueOfFloat( sz, f ) );
+        // Same as rtl::str::valueOfFP, used for rtl_str_valueOfFloat
+        rtl_math_doubleToString(&pData, &nCapacity, offset, f, rtl_math_StringFormat_G,
+                                RTL_STR_MAX_VALUEOFFLOAT - SAL_N_ELEMENTS("-x.E-xxx") + 1, '.',
+                                NULL, 0, true);
+        return *this;
     }
 
     /**
@@ -1055,8 +1056,11 @@ public:
      */
     OStringBuffer & insert(sal_Int32 offset, double d)
     {
-        char sz[RTL_STR_MAX_VALUEOFDOUBLE];
-        return insert( offset, sz, rtl_str_valueOfDouble( sz, d ) );
+        // Same as rtl::str::valueOfFP, used for rtl_str_valueOfDouble
+        rtl_math_doubleToString(&pData, &nCapacity, offset, d, rtl_math_StringFormat_G,
+                                RTL_STR_MAX_VALUEOFDOUBLE - SAL_N_ELEMENTS("-x.E-xxx") + 1, '.',
+                                NULL, 0, true);
+        return *this;
     }
 
     /**

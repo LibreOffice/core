@@ -916,8 +916,7 @@ public:
      */
     OUStringBuffer & append(float f)
     {
-        sal_Unicode sz[RTL_USTR_MAX_VALUEOFFLOAT];
-        return append( sz, rtl_ustr_valueOfFloat( sz, f ) );
+        return insert(getLength(), f);
     }
 
     /**
@@ -933,8 +932,7 @@ public:
      */
     OUStringBuffer & append(double d)
     {
-        sal_Unicode sz[RTL_USTR_MAX_VALUEOFDOUBLE];
-        return append( sz, rtl_ustr_valueOfDouble( sz, d ) );
+        return insert(getLength(), d);
     }
 
     /**
@@ -1288,8 +1286,11 @@ public:
      */
     OUStringBuffer & insert(sal_Int32 offset, float f)
     {
-        sal_Unicode sz[RTL_USTR_MAX_VALUEOFFLOAT];
-        return insert( offset, sz, rtl_ustr_valueOfFloat( sz, f ) );
+        // Same as rtl::str::valueOfFP, used for rtl_ustr_valueOfFloat
+        rtl_math_doubleToUString(&pData, &nCapacity, offset, f, rtl_math_StringFormat_G,
+                                 RTL_USTR_MAX_VALUEOFFLOAT - SAL_N_ELEMENTS("-x.E-xxx") + 1, '.',
+                                 NULL, 0, true);
+        return *this;
     }
 
     /**
@@ -1312,8 +1313,11 @@ public:
      */
     OUStringBuffer & insert(sal_Int32 offset, double d)
     {
-        sal_Unicode sz[RTL_USTR_MAX_VALUEOFDOUBLE];
-        return insert( offset, sz, rtl_ustr_valueOfDouble( sz, d ) );
+        // Same as rtl::str::valueOfFP, used for rtl_ustr_valueOfDouble
+        rtl_math_doubleToUString(&pData, &nCapacity, offset, d, rtl_math_StringFormat_G,
+                                 RTL_USTR_MAX_VALUEOFDOUBLE - SAL_N_ELEMENTS("-x.E-xxx") + 1, '.',
+                                 NULL, 0, true);
+        return *this;
     }
 
     /**
