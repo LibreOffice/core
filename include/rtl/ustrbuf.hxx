@@ -1286,7 +1286,7 @@ public:
         @return     this string buffer.
         @exception  StringIndexOutOfBoundsException  if the offset is invalid.
      */
-    OUStringBuffer insert(sal_Int32 offset, float f)
+    OUStringBuffer & insert(sal_Int32 offset, float f)
     {
         sal_Unicode sz[RTL_USTR_MAX_VALUEOFFLOAT];
         return insert( offset, sz, rtl_ustr_valueOfFloat( sz, f ) );

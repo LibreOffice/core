@@ -1030,7 +1030,7 @@ public:
         @param      f        a <code>float</code>.
         @return     this string buffer.
      */
-    OStringBuffer insert(sal_Int32 offset, float f)
+    OStringBuffer & insert(sal_Int32 offset, float f)
     {
         char sz[RTL_STR_MAX_VALUEOFFLOAT];
         return insert( offset, sz, rtl_str_valueOfFloat( sz, f ) );
