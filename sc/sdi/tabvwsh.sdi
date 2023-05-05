@@ -184,6 +184,7 @@ interface TableEditView
     SID_JUMPTOMARK      [ ExecMethod = Execute; StateMethod = NoState; ] // status(final|play)
 
     SID_PRINTPREVIEW    [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_THEME_DIALOG    [ ExecMethod = Execute; StateMethod = GetState; ]
 
 
     // search/replace
