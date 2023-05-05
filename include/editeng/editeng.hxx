@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-// MyEDITENG, due to exported EditEng
+
 #ifndef INCLUDED_EDITENG_EDITENG_HXX
 #define INCLUDED_EDITENG_EDITENG_HXX
 
@@ -40,6 +40,7 @@
 #include <tools/lineend.hxx>
 #include <tools/degree.hxx>
 #include <tools/long.hxx>
+#include <basegfx/tuple/b2dtuple.hxx>
 
 #include <editeng/eedata.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -419,7 +420,9 @@ public:
     void setGlobalScale(double fFontScaleX, double fFontScaleY, double fSpacingScaleX, double fSpacingScaleY);
 
     void getGlobalSpacingScale(double& rX, double& rY) const;
+    basegfx::B2DTuple getGlobalSpacingScale() const;
     void getGlobalFontScale(double& rX, double& rY) const;
+    basegfx::B2DTuple getGlobalFontScale() const;
 
     void setRoundFontSizeToPt(bool bRound) const;
 

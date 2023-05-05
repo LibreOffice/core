@@ -2285,9 +2285,25 @@ void EditEngine::getGlobalSpacingScale(double& rX, double& rY) const
     pImpEditEngine->getSpacingScale(rX, rY);
 }
 
+basegfx::B2DTuple EditEngine::getGlobalSpacingScale() const
+{
+    double x = 0.0;
+    double y = 0.0;
+    pImpEditEngine->getSpacingScale(x, y);
+    return {x, y};
+}
+
 void EditEngine::getGlobalFontScale(double& rX, double& rY) const
 {
     pImpEditEngine->getFontScale(rX, rY);
+}
+
+basegfx::B2DTuple EditEngine::getGlobalFontScale() const
+{
+    double x = 0.0;
+    double y = 0.0;
+    pImpEditEngine->getFontScale(x, y);
+    return {x, y};
 }
 
 void EditEngine::setRoundFontSizeToPt(bool bRound) const
