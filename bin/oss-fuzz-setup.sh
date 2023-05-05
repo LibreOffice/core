@@ -90,7 +90,8 @@ curl --no-progress-meter -S \
     -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/psd.dict \
     -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/rtf.dict \
     -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/webp.dict \
-    -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/zip.dict
+    -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/zip.dict \
+    -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/mathml.dict
 #fuzzing corpuses
 #afl jpeg, gif, bmp, png, webp
 curl --no-progress-meter -S -C - -O https://lcamtuf.coredump.cx/afl/demo/afl_testcases.tgz
