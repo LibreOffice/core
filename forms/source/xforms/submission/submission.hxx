@@ -119,11 +119,7 @@ public:
         , m_xContext(::comphelper::getProcessComponentContext())
     {}
 
-    bool IsWebProtocol() const
-    {
-        INetProtocol eProtocol = m_aURLObj.GetProtocol();
-        return eProtocol == INetProtocol::Http || eProtocol == INetProtocol::Https;
-    }
+    const INetURLObject& GetURLObject() const { return m_aURLObj; }
 
     virtual ~CSubmission() {}
 

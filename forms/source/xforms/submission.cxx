@@ -42,11 +42,16 @@
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/task/XInteractionContinuation.hpp>
 #include <com/sun/star/xforms/InvalidDataOnSubmitException.hpp>
+#include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
+#include <frm_resource.hxx>
+#include <strings.hrc>
 #include <memory>
 #include <string_view>
 
@@ -238,8 +243,31 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
         return false;
     }
 
-    if (!xSubmission->IsWebProtocol())
-        return false;
+    const INetURLObject& rURLObject = xSubmission->GetURLObject();
+    INetProtocol eProtocol = rURLObject.GetProtocol();
+    // tdf#154337 continue to allow submitting to http[s]: without further
+    // interaction. Don't allow for other protocols, except for file:
+    // where the user has to agree first.
+    if (eProtocol != INetProtocol::Http && eProtocol != INetProtocol::Https)
+    {
+        if (eProtocol != INetProtocol::File)
+            return false;
+        else
+        {
+            Reference<css::form::runtime::XFormController> xFormController(xHandler, UNO_QUERY);
+            Reference<css::awt::XControl> xContainerControl(xFormController ? xFormController->getContainer() : nullptr, UNO_QUERY);
+            Reference<css::awt::XWindow> xParent(xContainerControl ? xContainerControl->getPeer() : nullptr, UNO_QUERY);
+
+            OUString aFileName(rURLObject.getFSysPath(FSysStyle::Detect));
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(Application::GetFrameWeld(xParent),
+                                                           VclMessageType::Question, VclButtonsType::YesNo,
+                                                           frm::ResourceManager::loadString(RID_STR_XFORMS_WARN_TARGET_IS_FILE).replaceFirst("$", aFileName)));
+            xQueryBox->set_default_response(RET_NO);
+
+            if (xQueryBox->run() != RET_YES)
+                return false;
+        }
+    }
 
     CSubmission::SubmissionResult aResult = xSubmission->submit( xHandler );
 

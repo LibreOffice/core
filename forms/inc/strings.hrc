@@ -82,5 +82,6 @@
 #define RID_STR_XFORMS_PATTERN_DOESNT_MATCH         NC_("RID_STR_XFORMS_PATTERN_DOESNT_MATCH", "The string '$1' does not match the required regular expression '$2'.")
 #define RID_STR_XFORMS_BINDING_UI_NAME              NC_("RID_STR_XFORMS_BINDING_UI_NAME", "Binding" )
 #define RID_STR_XFORMS_CANT_REMOVE_TYPE             NC_("RID_STR_XFORMS_CANT_REMOVE_TYPE", "This is a built-in type and cannot be removed." )
+#define RID_STR_XFORMS_WARN_TARGET_IS_FILE          NC_("RID_STR_XFORMS_WARN_TARGET_IS_FILE", "Are you sure you want to write to local file \"$\"?" )
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
