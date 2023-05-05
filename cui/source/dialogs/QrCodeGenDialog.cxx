@@ -138,7 +138,7 @@ OString GenerateQRCode(std::u16string_view aQRText, tools::Long aQRECC, int aQRB
     }
 
     OString o = OUStringToOString(aQRText, RTL_TEXTENCODING_UTF8);
-    std::string QRText(o.getStr(), o.getLength());
+    std::string QRText(o);
     ZXing::BarcodeFormat format = ZXing::BarcodeFormatFromString(GetBarCodeType(aQRType));
     auto writer = ZXing::MultiFormatWriter(format).setMargin(aQRBorder).setEccLevel(bqrEcc);
     writer.setEncoding(ZXing::CharacterSet::UTF8);
