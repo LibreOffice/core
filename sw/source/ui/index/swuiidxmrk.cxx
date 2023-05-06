@@ -1094,7 +1094,7 @@ class SwCreateAuthEntryDlg_Impl : public weld::GenericDialogController
     std::unique_ptr<weld::CheckButton> m_xLocalPageCB;
     std::unique_ptr<weld::SpinButton> m_xLocalPageSB;
     std::unique_ptr<weld::ComboBox> m_xTargetTypeListBox;
-    weld::Entry* m_xTargetURLField;
+    weld::Entry* m_pTargetURLField;
 
     DECL_LINK(IdentifierHdl, weld::ComboBox&, void);
     DECL_LINK(ShortNameHdl, weld::Entry&, void);
@@ -1592,6 +1592,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
     , m_xBox(m_xBuilder->weld_container("box"))
     , m_xLeft(m_xBuilder->weld_container("leftgrid"))
     , m_xRight(m_xBuilder->weld_container("rightgrid"))
+    , m_pTargetURLField(nullptr)
 {
     bool bLeft = true;
     sal_Int32 nLeftRow(0), nRightRow(0);
@@ -1696,8 +1697,9 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
 
             if (AUTH_FIELD_TARGET_URL == aCurInfo.nToxField)
             {
-                m_xTargetURLField = m_pEdits[nIndex].get();
-                m_xTargetURLField->set_sensitive(
+                m_pTargetURLField = m_pEdits[nIndex].get();
+                assert(m_xTargetTypeListBox);
+                m_pTargetURLField->set_sensitive(
                     m_xTargetTypeListBox->get_active() == SwAuthorityField::TargetType::UseTargetURL);
             }
 
@@ -1858,7 +1860,8 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, EnableHdl, weld::ComboBox&, rBox, void)
 
 IMPL_LINK(SwCreateAuthEntryDlg_Impl, TargetTypeHdl, weld::ComboBox&, rBox, void)
 {
-    m_xTargetURLField->set_sensitive(rBox.get_active() == SwAuthorityField::TargetType::UseTargetURL);
+    assert(m_pTargetURLField);
+    m_pTargetURLField->set_sensitive(rBox.get_active() == SwAuthorityField::TargetType::UseTargetURL);
 }
 
 IMPL_LINK(SwCreateAuthEntryDlg_Impl, BrowseHdl, weld::Button&, rButton, void)
