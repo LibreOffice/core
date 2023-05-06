@@ -912,7 +912,7 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 size
         {
             bool bAnimated = false;
             Size aLogicSize;
-            if (eLinkType == GfxLinkType::NativeGif)
+            if (eLinkType == GfxLinkType::NativeGif && !aGraphicContent.isEmpty())
             {
                 std::shared_ptr<SvStream> pMemoryStream = aGraphicContent.getAsStream();
                 bAnimated = IsGIFAnimated(*pMemoryStream, aLogicSize);
