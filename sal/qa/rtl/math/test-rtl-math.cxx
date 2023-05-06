@@ -328,6 +328,14 @@ public:
                     '.', aGroups, ',', true);
         CPPUNIT_ASSERT_EQUAL( OUString("1,000"), aRes);
 
+        // Check non-ASCII separators: Arabic decimal separator U+066B, thousand separator U+066C
+        fVal = 123456.78;
+        aRes = rtl::math::doubleToUString( fVal,
+                    rtl_math_StringFormat_Automatic,
+                    2,
+                    u'٫', aGroups, u'٬', true);
+        CPPUNIT_ASSERT_EQUAL( OUString(u"1٬23٬456٫78"), aRes);
+
         fVal = 4503599627370495.0;
         aRes = rtl::math::doubleToUString( fVal,
                     rtl_math_StringFormat_Automatic,

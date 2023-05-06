@@ -1416,7 +1416,7 @@ void doubleToString(rtl_tString** pResult, sal_Int32* pResultCapacity, sal_Int32
         return (n + d / 2) / d * d;
     };
 
-    auto append = [](rtl_tString** s, sal_Int32* pCapacity, sal_Int32 rOffset, std::string_view sv)
+    auto append = [](rtl_tString** s, sal_Int32* pCapacity, sal_Int32 rOffset, auto sv)
     {
         if (!pCapacity)
             newFromStr_WithLength(s, sv.data(), sv.size());
@@ -1569,8 +1569,8 @@ void doubleToString(rtl_tString** pResult, sal_Int32* pResultCapacity, sal_Int32
     // max(nDigits) = max(nDecPlaces) + 1 + max(nExp) + 1 = 20 + 1 + 308 + 1 = 330
     // max(nBuf) = max(nDigits) + max(nDecPlaces) + 10 + max(nDigits) * 2 = 330 * 3 + 20 + 10 = 1020
     assert(nBuf <= 1024);
-    char* const pBuf = static_cast<char*>(alloca(nBuf));
-    char* p = pBuf;
+    auto* const pBuf = static_cast<Char_T<rtl_tString>*>(alloca(nBuf * sizeof(Char_T<rtl_tString>)));
+    auto* p = pBuf;
     if (bSign)
         *p++ = '-';
 
@@ -1718,7 +1718,7 @@ void doubleToString(rtl_tString** pResult, sal_Int32* pResultCapacity, sal_Int32
         *p++ = nExp % 10 + '0';
     }
 
-    append(pResult, pResultCapacity, nResultOffset, std::string_view(pBuf, p - pBuf));
+    append(pResult, pResultCapacity, nResultOffset, std::basic_string_view(pBuf, p - pBuf));
 }
 
 template <sal_Int32 maxLen, typename C, typename T> sal_Int32 SAL_CALL valueOfFP(C* pStr, T f)
