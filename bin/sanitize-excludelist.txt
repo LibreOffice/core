@@ -5,6 +5,7 @@ src:*/scaddins/source/analysis/analysis.cxx
 src:*/scaddins/source/analysis/financial.cxx
 [memory]
 fun:generate_hash_secret_salt
+fun:LLVMFuzzerCustomMutator
 [signed-integer-overflow]
 fun:_cairo_*
 src:cairo*.c
