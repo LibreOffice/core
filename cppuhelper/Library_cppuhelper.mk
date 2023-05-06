@@ -45,10 +45,16 @@ $(eval $(call gb_Library_add_cxxflags,cppuhelper,\
 ))
 endif
 
+$(eval $(call gb_Library_set_include,cppuhelper,\
+    -I$(SRCDIR)/cppuhelper/inc \
+    $$(INCLUDE) \
+))
+
 $(eval $(call gb_Library_add_exception_objects,cppuhelper,\
 	cppuhelper/source/access_control \
 	cppuhelper/source/bootstrap \
 	cppuhelper/source/compat \
+	cppuhelper/source/compbase \
 	cppuhelper/source/component_context \
 	cppuhelper/source/component \
 	cppuhelper/source/defaultbootstrap \
@@ -68,6 +74,7 @@ $(eval $(call gb_Library_add_exception_objects,cppuhelper,\
 	cppuhelper/source/tdmgr \
 	cppuhelper/source/typemanager \
 	cppuhelper/source/typeprovider \
+	cppuhelper/source/unoimplbase \
 	cppuhelper/source/unourl \
 	cppuhelper/source/weak \
 ))

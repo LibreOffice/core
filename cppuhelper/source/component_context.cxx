@@ -31,6 +31,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <compbase2.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -57,20 +58,24 @@ using namespace ::com::sun::star;
 namespace cppu
 {
 
-static void try_dispose( Reference< XInterface > const & xInstance )
+static void try_dispose( std::unique_lock<std::mutex>& rGuard, Reference< XInterface > const & xInstance )
 {
     Reference< lang::XComponent > xComp( xInstance, UNO_QUERY );
     if (xComp.is())
     {
+        rGuard.unlock();
         xComp->dispose();
+        rGuard.lock();
     }
 }
 
-static void try_dispose( Reference< lang::XComponent > const & xComp )
+static void try_dispose( std::unique_lock<std::mutex>& rGuard, Reference< lang::XComponent > const & xComp )
 {
     if (xComp.is())
     {
+        rGuard.unlock();
         xComp->dispose();
+        rGuard.lock();
     }
 }
 
@@ -116,8 +121,7 @@ void DisposingForwarder::disposing( lang::EventObject const & )
 namespace {
 
 class ComponentContext
-    : private cppu::BaseMutex
-    , public WeakComponentImplHelper< XComponentContext,
+    : public cppuhelper::WeakComponentImplHelper2< XComponentContext,
                                       container::XNameContainer >
 {
 protected:
@@ -141,7 +145,7 @@ protected:
 protected:
     Any lookupMap( OUString const & rName );
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 public:
     ComponentContext(
         ContextEntry_Init const * pEntries, sal_Int32 nEntries,
@@ -179,7 +183,7 @@ void ComponentContext::insertByName(
             /* lateInit_: */
             name.startsWith( "/singletons/" ) &&
             !element.hasValue() );
-    MutexGuard guard( m_aMutex );
+    std::unique_lock guard( m_aMutex );
     std::pair<t_map::iterator, bool> insertion( m_map.emplace(
         name, entry ) );
     if (! insertion.second)
@@ -191,7 +195,7 @@ void ComponentContext::insertByName(
 
 void ComponentContext::removeByName( OUString const & name )
 {
-    MutexGuard guard( m_aMutex );
+    std::unique_lock guard( m_aMutex );
     t_map::iterator iFind( m_map.find( name ) );
     if (iFind == m_map.end())
         throw container::NoSuchElementException(
@@ -206,7 +210,7 @@ void ComponentContext::removeByName( OUString const & name )
 void ComponentContext::replaceByName(
     OUString const & name, Any const & element )
 {
-    MutexGuard guard( m_aMutex );
+    std::unique_lock guard( m_aMutex );
     t_map::iterator iFind( m_map.find( name ) );
     if (iFind == m_map.end())
         throw container::NoSuchElementException(
@@ -235,14 +239,14 @@ Any ComponentContext::getByName( OUString const & name )
 
 Sequence<OUString> ComponentContext::getElementNames()
 {
-    MutexGuard guard( m_aMutex );
+    std::unique_lock guard( m_aMutex );
     return comphelper::mapKeysToSequence(m_map);
 }
 
 
 sal_Bool ComponentContext::hasByName( OUString const & name )
 {
-    MutexGuard guard( m_aMutex );
+    std::unique_lock guard( m_aMutex );
     return m_map.find( name ) != m_map.end();
 }
 
@@ -256,14 +260,14 @@ Type ComponentContext::getElementType()
 
 sal_Bool ComponentContext::hasElements()
 {
-    MutexGuard guard( m_aMutex );
+    std::unique_lock guard( m_aMutex );
     return ! m_map.empty();
 }
 
 
 Any ComponentContext::lookupMap( OUString const & rName )
 {
-    ResettableMutexGuard guard( m_aMutex );
+    std::unique_lock guard( m_aMutex );
     t_map::iterator iFind( m_map.find( rName ) );
     if (iFind == m_map.end())
         return Any();
@@ -274,7 +278,7 @@ Any ComponentContext::lookupMap( OUString const & rName )
 
     // late init singleton entry
     Reference< XInterface > xInstance;
-    guard.clear();
+    guard.unlock();
 
     try
     {
@@ -334,7 +338,7 @@ Any ComponentContext::lookupMap( OUString const & rName )
             "cppuhelper", "no service object raising singleton " << rName);
 
     Any ret;
-    guard.reset();
+    guard.lock();
     iFind = m_map.find( rName );
     if (iFind != m_map.end())
     {
@@ -347,9 +351,8 @@ Any ComponentContext::lookupMap( OUString const & rName )
         }
         ret = rEntry.value;
     }
-    guard.clear();
     if (ret != xInstance) {
-        try_dispose( xInstance );
+        try_dispose( guard, xInstance );
     }
     return ret;
 }
@@ -384,7 +387,7 @@ Reference< lang::XMultiComponentFactory > ComponentContext::getServiceManager()
     return m_xSMgr;
 }
 
-void ComponentContext::disposing()
+void ComponentContext::disposing(std::unique_lock<std::mutex>& rGuard)
 {
     Reference< lang::XComponent > xTDMgr, xAC; // to be disposed separately
 
@@ -398,7 +401,6 @@ void ComponentContext::disposing()
             if (rEntry.lateInit)
             {
                 // late init
-                MutexGuard guard( m_aMutex );
                 if (rEntry.lateInit)
                 {
                     rEntry.value.clear(); // release factory
@@ -421,19 +423,21 @@ void ComponentContext::disposing()
                 }
                 else // dispose immediately
                 {
+                    rGuard.unlock();
                     xComp->dispose();
+                    rGuard.lock();
                 }
             }
         }
     }
 
     // dispose service manager
-    try_dispose( m_xSMgr );
+    try_dispose( rGuard, m_xSMgr );
     m_xSMgr.clear();
     // dispose ac
-    try_dispose( xAC );
+    try_dispose( rGuard, xAC );
     // dispose tdmgr; revokes callback from cppu runtime
-    try_dispose( xTDMgr );
+    try_dispose( rGuard, xTDMgr );
 
     m_map.clear();
 
@@ -459,8 +463,7 @@ void ComponentContext::disposing()
 ComponentContext::ComponentContext(
     ContextEntry_Init const * pEntries, sal_Int32 nEntries,
     Reference< XComponentContext > const & xDelegate )
-    : WeakComponentImplHelper( m_aMutex ),
-      m_xDelegate( xDelegate )
+    : m_xDelegate( xDelegate )
 {
     for ( sal_Int32 nPos = 0; nPos < nEntries; ++nPos )
     {
