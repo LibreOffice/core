@@ -51,7 +51,6 @@
 #include <comphelper/propertyvalue.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/style/BreakType.hpp>
-#include <boost/lexical_cast.hpp>
 #include <officecfg/Office/Writer.hxx>
 
 #ifdef DBG_UTIL
@@ -1248,15 +1247,16 @@ static void lcl_convertFormulaRanges(const uno::Reference<text::XTextTable> & xT
                                         sLastCell = xCell->getPropertyValue("CellName").get<OUString>();
                                         if (sNextCell.isEmpty())
                                             sNextCell = sLastCell;
-                                        try
-                                        {
-                                            // accept numbers with comma and percent
-                                            OUString sCellText = xText->getString().replace(',', '.');
-                                            if (sCellText.endsWith("%"))
-                                                sCellText = sCellText.copy(0, sCellText.getLength()-1);
-                                            boost::lexical_cast<double>(sCellText);
-                                        }
-                                        catch( boost::bad_lexical_cast const& )
+
+                                        // accept numbers with comma and percent
+                                        OUString sCellText = xText->getString().replace(',', '.');
+                                        if (sCellText.endsWith("%"))
+                                            sCellText = sCellText.copy(0, sCellText.getLength()-1);
+
+                                        rtl_math_ConversionStatus eConversionStatus;
+                                        sal_Int32 nParsedEnd;
+                                        rtl::math::stringToDouble(sCellText, '.', ',', &eConversionStatus, &nParsedEnd);
+                                        if ( eConversionStatus != rtl_math_ConversionStatus_Ok || nParsedEnd == 0 )
                                         {
                                             if ( !bFoundFirst )
                                             {
