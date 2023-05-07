@@ -321,10 +321,10 @@
                 <property name="can-focus">False</property>
                 <property name="column-spacing">12</property>
                 <child>
-                  <object class="GtkLabel" id="tapstoplabel">
+                  <object class="GtkLabel" id="tabstoplabel">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="optimpressgeneralpage|tapstoplabel">Ta_b stops:</property>
+                    <property name="label" translatable="yes" context="optimpressgeneralpage|tabstoplabel">Ta_b stops:</property>
                     <property name="use-underline">True</property>
                     <property name="justify">fill</property>
                     <property name="mnemonic-widget">metricFields</property>
@@ -709,7 +709,7 @@
   <object class="GtkSizeGroup" id="sizegroupLabel">
     <widgets>
       <widget name="label6"/>
-      <widget name="tapstoplabel"/>
+      <widget name="tabstoplabel"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroupWidget">
