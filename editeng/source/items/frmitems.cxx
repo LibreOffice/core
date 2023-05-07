@@ -756,6 +756,15 @@ bool SvxTextLeftMarginItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId) cons
     nMemberId &= ~CONVERT_TWIPS;
     switch (nMemberId)
     {
+        // tdf#154282 - return both values for the hardcoded 0 in SfxDispatchController_Impl::StateChanged
+        case 0:
+        {
+            css::frame::status::LeftRightMarginScale aLRSpace;
+            aLRSpace.TextLeft = static_cast<sal_Int32>(bConvert ? convertTwipToMm100(GetTextLeft()) : GetTextLeft());
+            aLRSpace.ScaleLeft = static_cast<sal_Int16>(m_nPropLeftMargin);
+            rVal <<= aLRSpace;
+            break;
+        }
         case MID_TXT_LMARGIN :
             rVal <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100(GetTextLeft()) : GetTextLeft());
         break;
@@ -1102,6 +1111,15 @@ bool SvxRightMarginItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId) const
     nMemberId &= ~CONVERT_TWIPS;
     switch (nMemberId)
     {
+        // tdf#154282 - return both values for the hardcoded 0 in SfxDispatchController_Impl::StateChanged
+        case 0:
+        {
+            css::frame::status::LeftRightMarginScale aLRSpace;
+            aLRSpace.Right = static_cast<sal_Int32>(bConvert ? convertTwipToMm100(m_nRightMargin) : m_nRightMargin);
+            aLRSpace.ScaleRight = static_cast<sal_Int16>(m_nPropRightMargin);
+            rVal <<= aLRSpace;
+            break;
+        }
         case MID_R_MARGIN:
             rVal <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100(m_nRightMargin) : m_nRightMargin);
             break;
