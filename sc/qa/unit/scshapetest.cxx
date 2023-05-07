@@ -1046,6 +1046,129 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf155093_double_names)
     CPPUNIT_ASSERT(pObjOrig->GetName() != pObjPasted->GetName());
 }
 
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf155095_shape_collapsed_group)
+{
+    // Load a document, which has a shape in range C9:C16, anchored 'To cell (resize with cell)'.
+    // The rows 11 to 14 are in a collapsed group. So the shape effectively spans 4 rows. When
+    // copying the range B5:C19 and pasting it to B22, the group is expanded and the shape should
+    // increase its height so that it spans 8 rows.
+    createScDoc("ods/tdf155095_shape_over_collapsed_group.ods");
+    ScDocument* pDoc = getScDoc();
+
+    // Copy and paste
+    goToCell("$B$5:$C$19");
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    goToCell("$B$22");
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    // Make sure the shape has the correct size and spans C26:C33
+    SdrObject* pObj = lcl_getSdrObjectWithAssert(*pDoc, 1); // pasted shape
+    // Without fix the shape had position(6708,11564) and size(407,2013).
+    tools::Rectangle aExpectedRect(tools::Rectangle(Point(6708, 10743), Size(407, 3473)));
+    tools::Rectangle aSnapRect(pObj->GetSnapRect());
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectedRect, aSnapRect, 1);
+
+    // Without fix the shape spans C28:C32
+    ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pObj);
+    ScAddress aExpectedStart(SCCOL(2), SCROW(25), SCTAB(0)); // zero based
+    ScAddress aExpectedEnd(SCCOL(2), SCROW(32), SCTAB(0));
+    CPPUNIT_ASSERT_EQUAL(aExpectedStart, (*pObjData).maStart);
+    CPPUNIT_ASSERT_EQUAL(aExpectedEnd, (*pObjData).maEnd);
+}
+
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf155094_paste_transposed)
+{
+    // Load a document, which has a page anchored shape "Red" in C4, a cell anchored shape "Green" in
+    // D4 and a cell anchored shape "Blue" with 'resize with cell' in E4. The range C3:E5 is copied
+    // and pasted with 'Transpose all' to cell K6. The pasted content had these errors:
+    // Pasted shape "Red" was missing.
+    // Pasted shape "Green" was resized although 'resize with cell' was not set.
+    // Pasted shape "Blue" was in cell K5 instead of L8.
+    // The behavior of paste transposed is changed since LO 7.6 so that no shape is resized.
+    createScDoc("ods/tdf155094_paste_transposed.ods");
+    ScDocument* pDoc = getScDoc();
+
+    // Copy and paste
+    goToCell("$C$3:$E$5");
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    goToCell("$K$6");
+    uno::Sequence<beans::PropertyValue> aPropertyValues
+        = { comphelper::makePropertyValue("Flags", OUString("A")),
+            comphelper::makePropertyValue("FormulaCommand", sal_uInt16(0)),
+            comphelper::makePropertyValue("SkipEmptyCells", false),
+            comphelper::makePropertyValue("Transpose", true),
+            comphelper::makePropertyValue("AsLink", false),
+            comphelper::makePropertyValue("MoveMode", sal_uInt16(4)) };
+    dispatchCommand(mxComponent, ".uno:InsertContents", aPropertyValues);
+
+    // Without fix there had been only 5 object.
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("No ScDrawLayer", pDrawLayer);
+    const SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("No draw page", pPage);
+    CPPUNIT_ASSERT_EQUAL(size_t(6), pPage->GetObjCount());
+
+    // Without fix pasted object had position(7972, 8616) and size(1805×801).
+    SdrObject* pObjGreen = lcl_getSdrObjectWithAssert(*pDoc, 4); // pasted shape "Green"
+    tools::Rectangle aExpectedRect(tools::Rectangle(Point(12489, 12609), Size(800, 800)));
+    tools::Rectangle aSnapRect(pObjGreen->GetSnapRect());
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectedRect, aSnapRect, 1);
+
+    // Without fix the pasted object was at wrong position(10230,8616).
+    // Since LO 7.6 the pasted object has the same size as the original shape "Blue".
+    SdrObject* pObjBlue = lcl_getSdrObjectWithAssert(*pDoc, 5);
+    aExpectedRect = tools::Rectangle(Point(12489, 14612), Size(800, 800));
+    aSnapRect = pObjBlue->GetSnapRect();
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectedRect, aSnapRect, 1);
+}
+
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf155091_paste_duplicates)
+{
+    // Load a document, which has a shape in range C6:C16, anchored 'To cell (resize with cell)'.
+    // The rows 6 to 9 are filtered. When copying the range B5:C19 and paste it to B23, the
+    // shape was pasted twice.
+    createScDoc("ods/tdf155091_paste_duplicates.ods");
+    ScDocument* pDoc = getScDoc();
+
+    // Copy and paste
+    goToCell("$B$5:$C$19");
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    goToCell("$B$23");
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    // Make sure there is no third object but only original and pasted one.
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("No ScDrawLayer", pDrawLayer);
+    const SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("No draw page", pPage);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->GetObjCount());
+}
+
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf125938_anchor_after_copy_paste)
+{
+    // Load a document, which has an image in cell $sheet1.$B$3, anchored to cell. When the range
+    // A3:C3 was copied and pasted to D9:D11 in sheet2, the image was displayed in cell D10, but
+    // its anchor was in B3.
+    createScDoc("ods/tdf125938_anchor_after_copy_paste.ods");
+    ScDocument* pDoc = getScDoc();
+
+    // Copy and paste
+    goToCell("$Sheet1.$A$3:$C$3");
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    goToCell("$Sheet2.$D$9");
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    // Get pasted shape
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    const SdrPage* pPage = pDrawLayer->GetPage(1);
+    SdrObject* pObj = pPage->GetObj(0);
+
+    // Make sure object is anchored to E9
+    ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pObj);
+    ScAddress aExpectedAddress(SCCOL(4), SCROW(8), SCTAB(1)); // zero based
+    CPPUNIT_ASSERT_EQUAL(aExpectedAddress, (*pObjData).maStart);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
