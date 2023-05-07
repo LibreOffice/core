@@ -29,7 +29,7 @@ inline constexpr OUStringLiteral ARGUMENT_PARENTFRAME = u"ParentFrame"; // XFram
  */
 inline constexpr OUStringLiteral ARGUMENT_FRAMENAME = u"FrameName"; // OUString
 
-/// [bool] If it's set to sal_True we will make the new created frame visible.
+/// [bool] If it's set to true we will make the new created frame visible.
 inline constexpr OUStringLiteral ARGUMENT_MAKEVISIBLE = u"MakeVisible"; // bool
 
 /** [bool] If not "ContainerWindow" property is set it force creation of a
