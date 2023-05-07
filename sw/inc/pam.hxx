@@ -27,6 +27,7 @@
 #include "nodeoffset.hxx"
 
 #include <iostream>
+#include <utility>
 
 class SwDoc;
 class SwPaM;
@@ -230,7 +231,7 @@ public:
 
     void DeleteMark()
     {
-        if (m_pMark != m_pPoint)
+        if (HasMark())
         {
             /** clear the mark position; this helps if mark's SwContentIndex is
                registered at some node, and that node is then deleted */
@@ -238,20 +239,11 @@ public:
             m_pMark = m_pPoint;
         }
     }
-#ifdef DBG_UTIL
-    void Exchange();
-
-#else
     void Exchange()
     {
-        if (m_pPoint != m_pMark)
-        {
-            SwPosition *pTmp = m_pPoint;
-            m_pPoint = m_pMark;
-            m_pMark = pTmp;
-        }
+        if (HasMark())
+            std::swap(m_pPoint, m_pMark);
     }
-#endif
 
     /** A PaM marks a selection if Point and Mark are distinct positions.
         @return     true if the PaM spans a selection

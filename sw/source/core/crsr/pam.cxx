@@ -652,18 +652,6 @@ void SwPaM::SetMark()
     (*m_pMark) = *m_pPoint;
 }
 
-#ifdef DBG_UTIL
-void SwPaM::Exchange()
-{
-    if (m_pPoint != m_pMark)
-    {
-        SwPosition *pTmp = m_pPoint;
-        m_pPoint = m_pMark;
-        m_pMark = pTmp;
-    }
-}
-#endif
-
 /// movement of cursor
 bool SwPaM::Move( SwMoveFnCollection const & fnMove, SwGoInDoc fnGo )
 {
