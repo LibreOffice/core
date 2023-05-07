@@ -283,7 +283,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
             {
                 pVDev->DrawBitmapEx(rAnimationFrame.maPositionPixel,
                                     rAnimationFrame.maBitmapEx);
-                Bitmap aMask = rAnimationFrame.maBitmapEx.GetAlphaMask();
+                AlphaMask aMask = rAnimationFrame.maBitmapEx.GetAlphaMask();
 
                 if( aMask.IsEmpty() )
                 {

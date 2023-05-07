@@ -1294,7 +1294,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             {
                 const MetaBmpExAction*  pA = static_cast<const MetaBmpExAction *>(pAction);
                 Bitmap                  aBmp( pA->GetBitmapEx().GetBitmap() );
-                Bitmap                  aMsk( pA->GetBitmapEx().GetAlphaMask() );
+                AlphaMask               aMsk( pA->GetBitmapEx().GetAlphaMask() );
 
                 if( !aMsk.IsEmpty() )
                 {
@@ -1312,7 +1312,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             {
                 const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
                 Bitmap                      aBmp( pA->GetBitmapEx().GetBitmap() );
-                Bitmap                      aMsk( pA->GetBitmapEx().GetAlphaMask() );
+                AlphaMask                   aMsk( pA->GetBitmapEx().GetAlphaMask() );
 
                 if( !aMsk.IsEmpty() )
                 {
@@ -1332,7 +1332,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 BitmapEx                        aBmpEx( pA->GetBitmapEx() );
                 aBmpEx.Crop( tools::Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
                 Bitmap                          aBmp( aBmpEx.GetBitmap() );
-                Bitmap                          aMsk( aBmpEx.GetAlphaMask() );
+                AlphaMask                       aMsk( aBmpEx.GetAlphaMask() );
 
                 if( !aMsk.IsEmpty() )
                 {
