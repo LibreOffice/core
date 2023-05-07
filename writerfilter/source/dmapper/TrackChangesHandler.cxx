@@ -6,6 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#include <comphelper/propertyvalue.hxx>
 #include "TrackChangesHandler.hxx"
 #include "PropertyMap.hxx"
 #include "ConversionHelper.hxx"
@@ -56,9 +57,6 @@ void TrackChangesHandler::lcl_attribute(Id rName, Value & rVal)
 
 uno::Sequence<beans::PropertyValue> TrackChangesHandler::getRedlineProperties() const
 {
-    uno::Sequence< beans::PropertyValue > aRedlineProperties(3);
-    beans::PropertyValue* pRedlineProperties = aRedlineProperties.getArray();
-
     OUString sType;
     switch ( m_pRedlineParams->m_nToken & 0xffff )
     {
@@ -75,17 +73,12 @@ uno::Sequence<beans::PropertyValue> TrackChangesHandler::getRedlineProperties() 
             sType = getPropertyName( PROP_TABLE_CELL_DELETE );
             break;
     }
-
-    pRedlineProperties[0].Name = getPropertyName( PROP_REDLINE_TYPE );
-    pRedlineProperties[0].Value <<= sType;
-    pRedlineProperties[1].Name = getPropertyName( PROP_REDLINE_AUTHOR );
-    pRedlineProperties[1].Value <<= m_pRedlineParams->m_sAuthor;
-    pRedlineProperties[2].Name = getPropertyName( PROP_REDLINE_DATE_TIME );
-    pRedlineProperties[2].Value <<= ConversionHelper::ConvertDateStringToDateTime( m_pRedlineParams->m_sDate );
-    //pRedlineProperties[3].Name = getPropertyName( PROP_REDLINE_REVERT_PROPERTIES );
-    //pRedlineProperties[3].Value <<= pRedline->m_aRevertProperties;
-
-    return aRedlineProperties;
+    return {
+               comphelper::makePropertyValue(getPropertyName(PROP_REDLINE_TYPE ), uno::Any(sType)),
+               comphelper::makePropertyValue(getPropertyName(PROP_REDLINE_AUTHOR), uno::Any(m_pRedlineParams->m_sAuthor)),
+               comphelper::makePropertyValue(getPropertyName(PROP_REDLINE_DATE_TIME), uno::Any(ConversionHelper::ConvertDateStringToDateTime( m_pRedlineParams->m_sDate )))
+               //comphelper::makePropertyValue(getPropertyName(PROP_REDLINE_REVERT_PROPERTIES), uno::Any(pRedline->m_aRevertProperties))
+           };
 }
 
 void TrackChangesHandler::lcl_sprm(Sprm &) {}
