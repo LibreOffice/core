@@ -71,36 +71,15 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
     if ( ! xCreator.is())
         xCreator = css::frame::TaskCreator::create(m_xContext);
 
-    css::uno::Sequence< css::uno::Any > lArgs(6);
-    auto plArgs = lArgs.getArray();
-    css::beans::NamedValue              aArg;
-
-    aArg.Name    = ARGUMENT_PARENTFRAME;
-    aArg.Value <<= css::uno::Reference< css::frame::XFrame >( css::frame::Desktop::create( m_xContext ), css::uno::UNO_QUERY_THROW);
-    plArgs[0]   <<= aArg;
-
-    aArg.Name    = ARGUMENT_CREATETOPWINDOW;
-    aArg.Value <<= true;
-    plArgs[1]   <<= aArg;
-
-    aArg.Name    = ARGUMENT_MAKEVISIBLE;
-    aArg.Value <<= false;
-    plArgs[2]   <<= aArg;
-
-    aArg.Name    = ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE;
-    aArg.Value <<= true;
-    plArgs[3]   <<= aArg;
-
-    aArg.Name    = ARGUMENT_FRAMENAME;
-    aArg.Value <<= sName;
-    plArgs[4]   <<= aArg;
-
-    bool bHidden
-        = rDescriptor.getUnpackedValueOrDefault("HiddenForConversion", false);
-    aArg.Name = "HiddenForConversion";
-    aArg.Value <<= bHidden;
-    plArgs[5] <<= aArg;
-
+    css::uno::Sequence< css::uno::Any > lArgs
+    {
+        css::uno::Any(css::beans::NamedValue(ARGUMENT_PARENTFRAME, css::uno::Any(css::uno::Reference< css::frame::XFrame >( css::frame::Desktop::create( m_xContext ), css::uno::UNO_QUERY_THROW)))) ,
+        css::uno::Any(css::beans::NamedValue(ARGUMENT_CREATETOPWINDOW, css::uno::Any(true))),
+        css::uno::Any(css::beans::NamedValue(ARGUMENT_MAKEVISIBLE, css::uno::Any(false))),
+        css::uno::Any(css::beans::NamedValue(ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE, css::uno::Any(true))),
+        css::uno::Any(css::beans::NamedValue(ARGUMENT_FRAMENAME, css::uno::Any(sName))),
+        css::uno::Any(css::beans::NamedValue("HiddenForConversion", css::uno::Any(rDescriptor.getUnpackedValueOrDefault("HiddenForConversion", false))))
+    };
     css::uno::Reference< css::frame::XFrame > xTask(xCreator->createInstanceWithArguments(lArgs), css::uno::UNO_QUERY_THROW);
     return xTask;
 }
