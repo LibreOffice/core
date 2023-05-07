@@ -961,6 +961,7 @@ bool SwScanner::NextWord()
     if ( m_nWordType == i18n::WordType::WORD_COUNT )
         m_nLength = forceEachAsianCodePointToWord(m_aText, m_nBegin, m_nLength);
 
+    m_aPrevWord = m_aWord;
     m_aWord = m_aPreDashReplacementText.copy( m_nBegin, m_nLength );
 
     return true;
@@ -1035,8 +1036,11 @@ bool SwTextNode::Spell(SwSpellArgs* pArgs)
         SwScanner aScanner( *this, m_Text, nullptr, ModelToViewHelper(),
                             WordType::DICTIONARY_WORD,
                             nBegin, nEnd );
-        while( !pArgs->xSpellAlt.is() && aScanner.NextWord() )
+        bool bNextWord = aScanner.NextWord();
+        while( !pArgs->xSpellAlt.is() && bNextWord )
         {
+            bool bCalledNextWord = false;
+
             const OUString& rWord = aScanner.GetWord();
 
             // get next language for next word, consider language attributes
@@ -1066,25 +1070,45 @@ bool SwTextNode::Spell(SwSpellArgs* pArgs)
                     }
                     else
                     {
-                        // make sure the selection build later from the data
-                        // below does not include "in word" character to the
-                        // left and right in order to preserve those. Therefore
-                        // count those "in words" in order to modify the
-                        // selection accordingly.
-                        const sal_Unicode* pChar = rWord.getStr();
-                        sal_Int32 nLeft = 0;
-                        while (*pChar++ == CH_TXTATR_INWORD)
-                            ++nLeft;
-                        pChar = rWord.getLength() ? rWord.getStr() + rWord.getLength() - 1 : nullptr;
-                        sal_Int32 nRight = 0;
-                        while (pChar && *pChar-- == CH_TXTATR_INWORD)
-                            ++nRight;
+                        OUString sPrevWord = aScanner.GetPrevWord();
+                        auto nWordBegin = aScanner.GetBegin();
+                        auto nWordEnd = aScanner.GetEnd();
+                        bNextWord = aScanner.NextWord();
+                        const OUString& rActualWord = aScanner.GetPrevWord();
+                        bCalledNextWord = true;
+                        // check space separated word pairs in the dictionary, e.g. "vice versa"
+                        if ( !((bNextWord && pArgs->xSpeller->isValid( rActualWord + " " + aScanner.GetWord(),
+                                static_cast<sal_uInt16>(eActLang), Sequence< PropertyValue >() )) ||
+                           ( !sPrevWord.isEmpty() && pArgs->xSpeller->isValid( sPrevWord + " " + rActualWord,
+                                static_cast<sal_uInt16>(eActLang), Sequence< PropertyValue >() ))) )
+                        {
+                            // make sure the selection build later from the data
+                            // below does not include "in word" character to the
+                            // left and right in order to preserve those. Therefore
+                            // count those "in words" in order to modify the
+                            // selection accordingly.
+                            const sal_Unicode* pChar = aScanner.GetPrevWord().getStr();
+                            sal_Int32 nLeft = 0;
+                            while (*pChar++ == CH_TXTATR_INWORD)
+                                ++nLeft;
+                            pChar = rActualWord.getLength() ? rActualWord.getStr() + rActualWord.getLength() - 1 : nullptr;
+                            sal_Int32 nRight = 0;
+                            while (pChar && *pChar-- == CH_TXTATR_INWORD)
+                                ++nRight;
 
-                        pArgs->pStartPos->Assign(*this, aScanner.GetEnd() - nRight );
-                        pArgs->pEndPos->Assign(*this, aScanner.GetBegin() + nLeft );
+                            pArgs->pStartPos->Assign(*this, nWordEnd - nRight );
+                            pArgs->pEndPos->Assign(*this, nWordBegin + nLeft );
+                        }
+                        else
+                        {
+                            pArgs->xSpellAlt = nullptr;
+                        }
                     }
                 }
             }
+
+            if ( !bCalledNextWord )
+                bNextWord = aScanner.NextWord();
         }
     }
 
@@ -1342,11 +1366,13 @@ SwRect SwTextFrame::AutoSpell_(SwTextNode & rNode, sal_Int32 nActPos)
         SwScanner aScanner( *pNode, pNode->GetText(), nullptr, ModelToViewHelper(),
                             WordType::DICTIONARY_WORD, nBegin, nEnd);
 
-        while( aScanner.NextWord() )
+        bool bNextWord = aScanner.NextWord();
+        while( bNextWord )
         {
             const OUString& rWord = aScanner.GetWord();
             nBegin = aScanner.GetBegin();
             sal_Int32 nLen = aScanner.GetLen();
+            bool bCalledNextWord = false;
 
             // get next language for next word, consider language attributes
             // within the word
@@ -1365,30 +1391,48 @@ SwRect SwTextFrame::AutoSpell_(SwTextNode & rNode, sal_Int32 nActPos)
                     ((!bRestoreString && !bContainsComments) || !xSpell->isValid( rWord.replaceAll(OUStringChar(CH_TXTATR_INWORD), ""),
                             static_cast<sal_uInt16>(eActLang), Sequence< PropertyValue >() ) ) )
                 {
-                    sal_Int32 nSmartTagStt = nBegin;
-                    sal_Int32 nDummy = 1;
-                    if ( !pNode->GetSmartTags() || !pNode->GetSmartTags()->InWrongWord( nSmartTagStt, nDummy ) )
+                    OUString sPrevWord = aScanner.GetPrevWord();
+                    bNextWord = aScanner.NextWord();
+                    bCalledNextWord = true;
+                    // check space separated word pairs in the dictionary, e.g. "vice versa"
+                    if ( !((bNextWord && xSpell->isValid( aScanner.GetPrevWord() + " " + aScanner.GetWord(),
+                                static_cast<sal_uInt16>(eActLang), Sequence< PropertyValue >() )) ||
+                           (!sPrevWord.isEmpty() && xSpell->isValid( sPrevWord + " " + aScanner.GetPrevWord(),
+                                static_cast<sal_uInt16>(eActLang), Sequence< PropertyValue >() ))) )
                     {
-                        if( !pNode->GetWrong() )
+                        sal_Int32 nSmartTagStt = nBegin;
+                        sal_Int32 nDummy = 1;
+                        if ( !pNode->GetSmartTags() || !pNode->GetSmartTags()->InWrongWord( nSmartTagStt, nDummy ) )
                         {
-                            pNode->SetWrong( std::make_unique<SwWrongList>( WRONGLIST_SPELL ) );
-                            pNode->GetWrong()->SetInvalid( 0, nEnd );
+                            if( !pNode->GetWrong() )
+                            {
+                                pNode->SetWrong( std::make_unique<SwWrongList>( WRONGLIST_SPELL ) );
+                                pNode->GetWrong()->SetInvalid( 0, nEnd );
+                            }
+                            SwWrongList::FreshState const eState(pNode->GetWrong()->Fresh(
+                                nChgStart, nChgEnd, nBegin, nLen, nInsertPos, nActPos));
+                            switch (eState)
+                            {
+                                case SwWrongList::FreshState::FRESH:
+                                    pNode->GetWrong()->Insert(OUString(), nullptr, nBegin, nLen, nInsertPos++);
+                                    break;
+                                case SwWrongList::FreshState::CURSOR:
+                                    bPending = true;
+                                    [[fallthrough]]; // to mark as invalid
+                                case SwWrongList::FreshState::NOTHING:
+                                    nInvStart = nBegin;
+                                    nInvEnd = nBegin + nLen;
+                                    break;
+                            }
                         }
-                        SwWrongList::FreshState const eState(pNode->GetWrong()->Fresh(
-                            nChgStart, nChgEnd, nBegin, nLen, nInsertPos, nActPos));
-                        switch (eState)
-                        {
-                            case SwWrongList::FreshState::FRESH:
-                                pNode->GetWrong()->Insert(OUString(), nullptr, nBegin, nLen, nInsertPos++);
-                                break;
-                            case SwWrongList::FreshState::CURSOR:
-                                bPending = true;
-                                [[fallthrough]]; // to mark as invalid
-                            case SwWrongList::FreshState::NOTHING:
-                                nInvStart = nBegin;
-                                nInvEnd = nBegin + nLen;
-                                break;
-                        }
+                    }
+                    else if( bAddAutoCmpl && rACW.GetMinWordLen() <= aScanner.GetPrevWord().getLength() )
+                    {
+                        // tdf#119695 only add the word if the cursor position is outside the word
+                        // so that the incomplete words are not added as autocomplete candidates
+                        bool bCursorOutsideWord = nActPos > nBegin + nLen || nActPos < nBegin;
+                        if (bCursorOutsideWord)
+                            rACW.InsertWord(aScanner.GetPrevWord(), rDoc);
                     }
                 }
                 else if( bAddAutoCmpl && rACW.GetMinWordLen() <= rWord.getLength() )
@@ -1400,6 +1444,9 @@ SwRect SwTextFrame::AutoSpell_(SwTextNode & rNode, sal_Int32 nActPos)
                         rACW.InsertWord(rWord, rDoc);
                 }
             }
+
+            if ( !bCalledNextWord )
+                 bNextWord = aScanner.NextWord();
         }
     }
 

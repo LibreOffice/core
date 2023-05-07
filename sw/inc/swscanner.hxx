@@ -33,6 +33,7 @@ class SwScanner
 {
     std::function<LanguageType (sal_Int32, sal_Int32, bool)> m_pGetLangOfChar;
     OUString m_aWord;
+    OUString m_aPrevWord;
     const OUString m_aPreDashReplacementText;
     OUString m_aText;
     const LanguageType* m_pLanguage;
@@ -62,6 +63,7 @@ public:
     bool NextWord();
 
     const OUString& GetWord() const    { return m_aWord; }
+    const OUString& GetPrevWord() const { return m_aPrevWord; }
 
     sal_Int32 GetBegin() const         { return m_nBegin; }
     sal_Int32 GetEnd() const           { return m_nBegin + m_nLength; }
