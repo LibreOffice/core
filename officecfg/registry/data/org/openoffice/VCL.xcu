@@ -899,12 +899,6 @@
         <prop oor:name="SubstFontsMS">
           <value>Arial</value>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Helvetica</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>sans-serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -921,12 +915,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>Arial</value>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Helvetica</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>sans-serif</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -945,12 +933,6 @@
         <prop oor:name="SubstFontsMS">
           <value>comic</value>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -966,12 +948,6 @@
           <value>starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -991,12 +967,6 @@
         <prop oor:name="SubstFontsMS">
           <value>Trebuchet</value>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>sans-serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -1013,12 +983,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>Arial Unicode MS</value>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>sans-serif</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -1037,12 +1001,6 @@
         <prop oor:name="SubstFontsMS">
           <value>Arial Unicode MS</value>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>sans-serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -1059,12 +1017,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -1083,12 +1035,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>sans-serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -1102,12 +1048,6 @@
       <node oor:name="arial" oor:op="replace">
         <prop oor:name="SubstFonts">
           <value>liberationsans;albanyamt;albany;arimo;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Helvetica</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>sans-serif</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -1140,12 +1080,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>sans-serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -1162,12 +1096,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>arial</value>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>helvetica</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>sans-serif</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -1186,12 +1114,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -1207,12 +1129,6 @@
           <value>centurygothic;avantgarde;itcavantgarde;gothic;avantgardegothic;conga;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -1232,12 +1148,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -1254,12 +1164,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>바탕</value>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -1278,12 +1182,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -1300,12 +1198,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -1349,10 +1241,7 @@
         <prop oor:name="SubstFonts">
           <value>dejavusansmono;cumberlandamt;cumberland;couriernew;nimbusmonol;liberationmono</value>
         </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
-        </prop>
-        <prop oor:name="FontWeight">
+                <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
         <prop oor:name="FontWidth">
@@ -1368,12 +1257,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -1392,12 +1275,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -1414,12 +1291,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -1438,12 +1309,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -1460,12 +1325,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -1484,12 +1343,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -1505,12 +1358,6 @@
           <value>broadway;mtbroadway;broadwaymt;falstaff;widelatin;latinwide;impact</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -1570,10 +1417,7 @@
         <prop oor:name="FontType">
           <value>Normal,SansSerif,Fixed</value>
         </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
-        </prop>
-      </node>
+              </node>
       <node oor:name="constantia" oor:op="replace">
         <prop oor:name="FontType">
           <value>Normal,Serif</value>
@@ -1596,12 +1440,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -1617,12 +1455,6 @@
           <value>monotypeoldstyleboldoutline;monotypeoldstyleoutline;chevaraoutline;imprintmtshadow;imprintshadow;imprint;colonnamt;castellar;imprintmtshadow;imprintshadow;imprint;chevaraoutline;chevara;gallia;colonnamt;algerian;castellar;imprintmtshadow;imprintshadow;imprint;chevara;gallia;algerian</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -1642,12 +1474,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -1663,12 +1489,6 @@
           <value>centurygothic;avantgarde;itcavantgarde;gothic;avantgardegothic;conga;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -1688,12 +1508,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -1711,12 +1525,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -1732,12 +1540,6 @@
           <value>fangsong;fzfangsong;cfangsong;simkai;fzkai;zycjkkai;mkai;kai;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -1757,12 +1559,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Times</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -1778,12 +1574,6 @@
           <value>zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley;andymt;comicsansms;andy;kidprint;</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -1803,12 +1593,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -1824,12 +1608,6 @@
           <value>imprintmtshadow;imprintshadow;imprint;chevara;gallia;algerian;imprintmtshadow;imprintshadow;imprint;chevaraoutline;chevara;gallia;colonnamt;algerian;castellar;monotypeoldstyleboldoutline;monotypeoldstyleoutline;chevaraoutline;imprintmtshadow;imprintshadow;imprint;colonnamt;castellar</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -1849,12 +1627,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -1871,12 +1643,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Helvetica</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>sans-serif</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -1895,12 +1661,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -1916,12 +1676,6 @@
           <value>albanyamt;albany;arial;dejavusans;cmusansserif;freesans;nimbussansl;helvetica;lucida;geneva;helmet;andalesansui;arialunicodems;lucidasansunicode;tahoma</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -1941,12 +1695,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -1962,12 +1710,6 @@
           <value>cumberlandamt;cumberland;couriernew;dejavusansmono;cmutypewritertext;freemono;nimbusmonol;courier;lucidasanstypewriter;lucidatypewriter;monaco;monospaced</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -1987,12 +1729,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -2009,12 +1745,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -2033,12 +1763,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -2054,12 +1778,6 @@
           <value>sheffield;conga;centurygothic;copperlategothic;felixtitling;centurygothic;avantgarde;itcavantgarde;gothic;avantgardegothic;conga;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -2079,12 +1797,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -2101,12 +1813,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -2125,12 +1831,6 @@
         <prop oor:name="SubstFontsMS">
           <value>Courier New</value>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -2144,12 +1844,6 @@
       <node oor:name="couriernew" oor:op="replace">
         <prop oor:name="SubstFonts">
           <value>cumberlandamt;cumberland;cousine;liberationmono;dejavusansmono;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol</value>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Courier</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -2168,12 +1862,6 @@
         <prop oor:name="SubstFontsMS">
           <value>Courier New</value>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Courier</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -2190,12 +1878,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>Courier New</value>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Courier</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -2214,12 +1896,6 @@
         <prop oor:name="SubstFontsMS">
           <value>Courier New</value>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Courier</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -2237,12 +1913,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -2259,12 +1929,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -2308,10 +1972,7 @@
         <prop oor:name="SubstFonts">
           <value>bitstreamverasansmono;cumberlandamt;cumberland;couriernew;nimbusmonol;liberationmono</value>
         </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
-        </prop>
-        <prop oor:name="FontWeight">
+                <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
         <prop oor:name="FontWidth">
@@ -2350,12 +2011,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -2371,12 +2026,6 @@
           <value>starsymbol;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;opensymbol;starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -2396,12 +2045,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -2417,12 +2060,6 @@
           <value>Noto Sans KR;Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;돋음;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋음;UnDotum;백묵 굴림;Baekmuk Gulim;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -2442,12 +2079,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -2464,12 +2095,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -2488,12 +2113,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -2511,12 +2130,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -2532,12 +2145,6 @@
           <value>sheffield;conga;centurygothic;copperlategothic;felixtitling;centurygothic;avantgarde;itcavantgarde;gothic;avantgardegothic;conga;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -2557,12 +2164,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -2578,12 +2179,6 @@
           <value>falstaff;widelatin;latinwide;impact;broadway;mtbroadway;broadwaymt</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -2603,12 +2198,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -2624,12 +2213,6 @@
           <value>imprintmtshadow;imprintshadow;imprint;chevaraoutline;chevara;gallia;colonnamt;algerian;castellar;monotypeoldstyleboldoutline;monotypeoldstyleoutline;chevaraoutline;imprintmtshadow;imprintshadow;imprint;colonnamt;castellar;imprintmtshadow;imprintshadow;imprint;chevara;gallia;algerian</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -2649,12 +2232,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -2672,12 +2249,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -2693,12 +2264,6 @@
           <value>cumberlandamt;cumberland;couriernew;dejavusansmono;cmutypewritertext;freemono;nimbusmonol;courier;lucidasanstypewriter;lucidatypewriter;monaco;monospaced</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -2718,12 +2283,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -2739,12 +2298,6 @@
           <value>thorndaleamt;thorndale;timesnewroman;dejavuserif;cmuserif;freeserif;nimbusromanno9l;luxiserif;times;lucidaserif;lucidabright;timmons;newyork;serif</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -2764,12 +2317,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -2785,12 +2332,6 @@
           <value>albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -2810,12 +2351,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -2831,12 +2366,6 @@
           <value>simhei;fzhei;zycjkhei;mhei;hei;andalesansui;fzsongti;msunglightsc;simsun;nsimsun;zycjksun;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -2856,12 +2385,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -2877,12 +2400,6 @@
           <value>imprintmtshadow;imprintshadow;imprint;chevara;gallia;algerian;imprintmtshadow;imprintshadow;imprint;chevaraoutline;chevara;gallia;colonnamt;algerian;castellar;monotypeoldstyleboldoutline;monotypeoldstyleoutline;chevaraoutline;imprintmtshadow;imprintshadow;imprint;colonnamt;castellar</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -2902,12 +2419,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -2924,12 +2435,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>sans-serif</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -2948,12 +2453,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Helvetica</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>sans-serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -2970,12 +2469,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -2994,12 +2487,6 @@
         <prop oor:name="SubstFontsMS">
           <value>msgothic</value>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -3016,12 +2503,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>msgothic</value>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -3040,12 +2521,6 @@
         <prop oor:name="SubstFontsMS">
           <value>msgothic</value>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -3061,12 +2536,6 @@
           <value>Noto Sans KR;Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;돋음;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋음;UnDotum;백묵 굴림;Baekmuk Gulim;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -3086,12 +2555,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -3107,12 +2570,6 @@
           <value>궁서;gungsuh;궁서체;gungsuhche;은 궁서;Un Gungsuh;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -3132,12 +2589,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -3153,12 +2604,6 @@
           <value>hei;andalesansui;simhei;fzhei;zycjkhei;mhei;fzmingti;msunglighttc;mingliu;pmingliu;ming;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -3178,12 +2623,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -3201,12 +2640,6 @@
         <prop oor:name="SubstFontsMS">
           <value>Arial</value>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Helvetica</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>sans-serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -3222,12 +2655,6 @@
           <value>arialnarrow;helveticanarrow;dejavusanscondensed;nimbussanslcondensed;nimbussanscondensed</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -3247,12 +2674,6 @@
         <prop oor:name="SubstFontsMS">
           <value>Arial</value>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Helvetica</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>sans-serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -3270,12 +2691,6 @@
         <prop oor:name="SubstFontsMS">
           <value>Arial</value>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>sans-serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -3291,12 +2706,6 @@
           <value>liberationsansnarrow;arialnarrow;helmetcondensed;dejavusanscondensed;nimbussanslcondensed;nimbussanscondensed</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -3316,12 +2725,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -3337,12 +2740,6 @@
           <value>starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -3362,12 +2759,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -3383,12 +2774,6 @@
           <value>falstaff;widelatin;latinwide;impact;broadway;mtbroadway;broadwaymt</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -3408,12 +2793,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -3429,12 +2808,6 @@
           <value>imprintmtshadow;imprintshadow;imprint;chevaraoutline;chevara;gallia;colonnamt;algerian;castellar;monotypeoldstyleboldoutline;monotypeoldstyleoutline;chevaraoutline;imprintmtshadow;imprintshadow;imprint;colonnamt;castellar;imprintmtshadow;imprintshadow;imprint;chevara;gallia;algerian</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -3454,12 +2827,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -3477,12 +2844,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -3498,12 +2859,6 @@
           <value>kai;simkai;fzkai;zycjkkai;mkai;fzmingti;msunglighttc;mingliu;pmingliu;ming;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -3523,12 +2878,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -3545,12 +2894,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -3569,12 +2912,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -3590,12 +2927,6 @@
           <value>falstaff;widelatin;latinwide;impact;broadway;mtbroadway;broadwaymt</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -3615,12 +2946,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -3637,12 +2962,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>Arial</value>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Helvetica</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>sans-serif</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -3661,12 +2980,6 @@
         <prop oor:name="SubstFontsMS">
           <value>Times New Roman</value>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Times</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -3683,12 +2996,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>Courier New</value>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Courier</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -3707,12 +3014,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -3730,12 +3031,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -3751,12 +3046,6 @@
           <value>onyx;arialnarrow;helveticanarrow;helmetcondensed;dejavusanscondensed;nimbussanslcondensed;nimbussanscondensed</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -3776,12 +3065,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Times</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -3798,12 +3081,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -3822,12 +3099,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -3845,12 +3116,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -3866,12 +3131,6 @@
           <value>starsymbol;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;opensymbol;starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -3891,12 +3150,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -3914,12 +3167,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Helvetica</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>sans-serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -3935,12 +3182,6 @@
           <value>starsymbol;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;opensymbol;starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -3960,12 +3201,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -3982,12 +3217,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -4006,12 +3235,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>sans-serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -4029,12 +3252,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -4050,12 +3267,6 @@
           <value>starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -4075,12 +3286,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -4097,12 +3302,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -4121,12 +3320,6 @@
         <prop oor:name="SubstFontsMS">
           <value></value>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -4144,12 +3337,6 @@
         <prop oor:name="SubstFontsMS">
           <value></value>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -4165,12 +3352,6 @@
           <value>msmincho;ipamicho;ipapmincho;mspmincho;minchol;mincho;heiseimin;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -4190,12 +3371,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -4211,12 +3386,6 @@
           <value>fzmingti;msunglighttc;mingliu;pmingliu;ming;hei;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -4236,12 +3405,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -4257,12 +3420,6 @@
           <value>simkai;fzkai;zycjkkai;mkai;kai;fangsong;fzfangsong;cfangsong;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -4282,12 +3439,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Courier</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -4303,12 +3454,6 @@
           <value>cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -4328,12 +3473,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -4349,12 +3488,6 @@
           <value>cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -4374,12 +3507,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -4395,12 +3522,6 @@
           <value>starsymbol;wingdings;morewingbats;opensymbol;starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -4518,12 +3639,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -4555,12 +3670,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -4576,12 +3685,6 @@
           <value>song;fzsongyi;fzsong;msong;shusong;fzshusong;fzsongti;msunglightsc;simsun;nsimsun;arplshanheisununi;arplshanheisununi;zycjksun;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -4601,12 +3704,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -4622,12 +3719,6 @@
           <value>mspgothic;msgothic;ipauigothic;gothic;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -4647,12 +3738,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -4668,12 +3753,6 @@
           <value>fzsongti;msunglightsc;simsun;nsimsun;arplshanheisununi;zycjksun;song;fzsongyi;fzsong;msong;shusong;fzshusong;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -4693,12 +3772,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -4714,12 +3787,6 @@
           <value>fzmingti;msunglighttc;mingliu;pmingliu;ming;hei;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -4739,12 +3806,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Black</value>
         </prop>
@@ -4760,12 +3821,6 @@
           <value>Noto Serif KR;Noto Serif CJK KR;Source Han Serif KR;나눔명조;NanumMyeongjo;나눔명조 옛한글;NanumMyeongjo YetHangul;KoPubWorld바탕체;KoPubWorld Batang;KoPub바탕체;애플명조;AppleMyungjo;바탕;Batang;바탕체;BatangChe;명조;Myeongjo;은 바탕;UnBatang;백묵 바탕;Baekmuk Batang;백묵 명조;Baekmuk Myeongjo;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -4785,12 +3840,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -4807,12 +3856,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -4831,12 +3874,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Times</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -4853,12 +3890,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>Times New Roman</value>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Times</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -4877,12 +3908,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -4899,12 +3924,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>Arial</value>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Helvetica</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>sans-serif</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -4923,12 +3942,6 @@
         <prop oor:name="SubstFontsMS">
           <value>Times New Roman</value>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Times</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -4946,12 +3959,6 @@
         <prop oor:name="SubstFontsMS">
           <value>Courier New</value>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>courier</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -4967,12 +3974,6 @@
           <value>fzsongti;msunglightsc;simsun;nsimsun;arplshanheisununi;zycjksun;song;fzsongyi;fzsong;msong;shusong;fzshusong;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -4992,12 +3993,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -5015,12 +4010,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>sans-serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -5036,12 +4025,6 @@
           <value>losangeles;arialnarrow;helveticanarrow;helmetcondensed;dejavusanscondensed;nimbussanslcondensed;nimbussanscondensed</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -5061,12 +4044,6 @@
         <prop oor:name="SubstFontsMS">
           <value>Arial Unicode MS</value>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -5082,12 +4059,6 @@
           <value>starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -5107,13 +4078,7 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
-        </prop>
-        <prop oor:name="FontWeight">
+                <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
         <prop oor:name="FontWidth">
@@ -5129,12 +4094,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -5153,12 +4112,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -5176,12 +4129,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -5197,12 +4144,6 @@
           <value>zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley;andymt;comicsansms;andy;kidprint;</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -5222,12 +4163,6 @@
         <prop oor:name="SubstFontsMS">
           <value>mspgothic</value>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -5244,12 +4179,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -5268,12 +4197,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -5291,12 +4214,6 @@
         <prop oor:name="SubstFontsMS">
           <value></value>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -5312,12 +4229,6 @@
           <value>fzmingti;msunglighttc;mingliu;pmingliu;ming;hei;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -5337,12 +4248,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -5359,12 +4264,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -5383,12 +4282,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -5405,12 +4298,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -5429,12 +4316,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -5451,12 +4332,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -5475,12 +4350,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -5498,12 +4367,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -5519,12 +4382,6 @@
           <value>albanyamt;albany;arial;nimbussansl;helvetica;bitstreamvera;verdana;luxisans;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -5544,12 +4401,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -5567,12 +4418,6 @@
         <prop oor:name="SubstFontsMS">
           <value>Verdana</value>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -5588,12 +4433,6 @@
           <value>liberationsansnarrow;arialnarrow;helveticanarrow;helmetcondensed;nimbussanslcondensed;nimbussanscondensed;dejavusanscondensed</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -5613,12 +4452,6 @@
         <prop oor:name="SubstFontsMS">
           <value>Arial</value>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -5635,12 +4468,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -5659,12 +4486,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -5680,12 +4501,6 @@
           <value>albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -5705,12 +4520,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -5726,12 +4535,6 @@
           <value>sheffield;conga;centurygothic;copperlategothic;felixtitling;centurygothic;avantgarde;itcavantgarde;gothic;avantgardegothic;conga;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -5751,12 +4554,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -5772,12 +4569,6 @@
           <value>song;fzsongyi;fzsong;msong;shusong;fzshusong;fzsongti;msunglightsc;simsun;nsimsun;arplshanheisununi;zycjksun;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -5797,12 +4588,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -5818,12 +4603,6 @@
           <value>simkai;fzkai;zycjkkai;mkai;kai;fangsong;fzfangsong;cfangsong;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -5843,12 +4622,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -5864,12 +4637,6 @@
           <value>fzsongti;msunglightsc;simsun;nsimsun;arplshanheisununi;zycjksun;song;fzsongyi;fzsong;msong;shusong;fzshusong;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -5889,12 +4656,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -5910,12 +4671,6 @@
           <value>song;fzsongyi;fzsong;msong;shusong;fzshusong;fzsongti;msunglightsc;simsun;nsimsun;arplshanheisununi;zycjksun;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -5935,12 +4690,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -5956,12 +4705,6 @@
           <value>starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -5981,12 +4724,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -6002,12 +4739,6 @@
           <value>sheffield;conga;centurygothic;copperlategothic;felixtitling;centurygothic;avantgarde;itcavantgarde;gothic;avantgardegothic;conga;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -6027,12 +4758,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -6048,12 +4773,6 @@
           <value>starsymbol;symbol;standardsymbols;standardsymbolsl;mtsymbol;opensymbol;starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -6073,12 +4792,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -6094,12 +4807,6 @@
           <value>starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -6119,12 +4826,6 @@
         <prop oor:name="SubstFontsMS">
           <value>Arial Unicode MS</value>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -6142,12 +4843,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>sans-serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -6163,12 +4858,6 @@
           <value>dejavuserifcondensed;liberationsansnarrow;arialnarrow;helveticanarrow;helmetcondensed;nimbussanslcondensed;nimbussanscondensed</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -6188,12 +4877,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -6209,12 +4892,6 @@
           <value>andalesansui;arialunicodems;lucidaunicode;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -6234,12 +4911,6 @@
         <prop oor:name="SubstFontsMS">
           <value>Times New Roman</value>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Times</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -6256,12 +4927,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>Times New Roman</value>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Times</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -6280,12 +4945,6 @@
         <prop oor:name="SubstFontsMS">
           <value>Times New Roman</value>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -6302,12 +4961,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Times</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -6326,12 +4979,6 @@
         <prop oor:name="SubstFontsMS">
           <value>Times New Roman</value>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -6348,12 +4995,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>Times New Roman</value>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Times</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -6372,12 +5013,6 @@
         <prop oor:name="SubstFontsMS">
           <value>Times New Roman</value>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Times</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -6394,12 +5029,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>Times New Roman</value>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Times</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -6418,12 +5047,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>sans-serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -6441,12 +5064,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Helvetica</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>sans-serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -6462,12 +5079,6 @@
           <value>arialnarrow;helveticanarrow;dejavucondensed;helmetcondensed;nimbussanslcondensed;nimbussanscondensed</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -6487,12 +5098,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -6510,12 +5115,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -6531,12 +5130,6 @@
           <value>starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -6556,12 +5149,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>sans-serif</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -6578,12 +5165,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -6602,12 +5183,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -6625,12 +5200,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -6646,12 +5215,6 @@
           <value>starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -6671,12 +5234,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -6692,12 +5249,6 @@
           <value>starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -6717,12 +5268,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Black</value>
         </prop>
@@ -6738,12 +5283,6 @@
           <value>starsymbol;wingdings;morewingbats;opensymbol;starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -6763,12 +5302,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -6784,12 +5317,6 @@
           <value>starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -6809,12 +5336,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -6831,12 +5352,6 @@
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -6855,12 +5370,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>cursive</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -6876,12 +5385,6 @@
           <value>zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley;andymt;comicsansms;andy;kidprint;</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -6901,12 +5404,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -6922,12 +5419,6 @@
           <value>simhei;fzhei;zycjkhei;mhei;hei;andalesansui;fzsongti;msunglightsc;simsun;nsimsun;zycjksun;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -6947,12 +5438,6 @@
         <prop oor:name="SubstFontsMS">
           <value/>
         </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value/>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -6968,12 +5453,6 @@
           <value>fzsongti;msunglightsc;simsun;nsimsun;arplshanheisununi;zycjksun;song;fzsongyi;fzsong;msong;shusong;fzshusong;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value/>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value/>
         </prop>
         <prop oor:name="FontWeight">
@@ -7278,9 +5757,6 @@
         <prop oor:name="SubstFontsMS">
           <value>angsananew</value>
         </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>angsananew</value>
-        </prop>
       </node>
       <node oor:name="oonaksit" oor:op="replace">
         <prop oor:name="SubstFonts">
@@ -7290,9 +5766,6 @@
           <value>CTL</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value>angsananew</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value>angsananew</value>
         </prop>
       </node>
@@ -7306,9 +5779,6 @@
         <prop oor:name="SubstFontsMS">
           <value>angsananew</value>
         </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>angsananew</value>
-        </prop>
       </node>
       <node oor:name="oosawasdee" oor:op="replace">
         <prop oor:name="SubstFonts">
@@ -7318,9 +5788,6 @@
           <value>CTL</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value>angsananew</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value>angsananew</value>
         </prop>
       </node>
@@ -7334,9 +5801,6 @@
         <prop oor:name="SubstFontsMS">
           <value>angsananew</value>
         </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>angsananew</value>
-        </prop>
       </node>
       <node oor:name="garuda" oor:op="replace">
         <prop oor:name="SubstFonts">
@@ -7348,9 +5812,6 @@
         <prop oor:name="SubstFontsMS">
           <value>angsananew</value>
         </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>angsananew</value>
-        </prop>
       </node>
       <node oor:name="norasi" oor:op="replace">
         <prop oor:name="SubstFonts">
@@ -7360,9 +5821,6 @@
           <value>CTL</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value>angsananew</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
           <value>angsananew</value>
         </prop>
       </node>

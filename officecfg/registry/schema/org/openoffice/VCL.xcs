@@ -36,16 +36,6 @@
           <desc>Contains a list of substitute fonts used in MS export filters.</desc>
         </info>
       </prop>
-      <prop oor:name="SubstFontsPS" oor:type="xs:string">
-        <info>
-          <desc>Unused. Used to contain a list of substitute fonts used in a PostScript context (for example, EPS export).</desc>
-        </info>
-      </prop>
-      <prop oor:name="SubstFontsHTML" oor:type="xs:string">
-        <info>
-          <desc>Unused. Used to contain a list of substitute fonts used in a HTML context (for example, HTML import/export).</desc>
-        </info>
-      </prop>
       <prop oor:name="FontWeight" oor:type="xs:string">
         <info>
           <desc>Specifies the font weight. Valid values are "thin", "ultralight", "light", "semilight", "normal", "medium", "semibold", "bold", "ultrabold", "black" (in ascending order of weight) and "unknown".</desc>
