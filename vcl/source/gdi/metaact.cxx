@@ -893,13 +893,13 @@ static bool AllowScale(const Size& rSource, const Size& rDest)
 
         auto nSourceHeight = rSource.Height();
         auto nDestHeight = rDest.Height();
-        if (nSourceHeight && nDestHeight > nSourceHeight && nDestHeight / nSourceHeight > nMaxScaleWhenFuzzing)
+        if (nSourceHeight && std::abs(nDestHeight / nSourceHeight) > nMaxScaleWhenFuzzing)
         {
             SAL_WARN("vcl", "skipping large vertical scaling: " << nSourceHeight << " to " << nDestHeight);
             return false;
         }
 
-        if (nDestHeight && nSourceHeight > nDestHeight && nSourceHeight / nDestHeight > nMaxScaleWhenFuzzing)
+        if (nDestHeight && std::abs(nSourceHeight / nDestHeight) > nMaxScaleWhenFuzzing)
         {
             SAL_WARN("vcl", "skipping large vertical scaling: " << nSourceHeight << " to " << nDestHeight);
             return false;
@@ -907,13 +907,13 @@ static bool AllowScale(const Size& rSource, const Size& rDest)
 
         auto nSourceWidth = rSource.Width();
         auto nDestWidth = rDest.Width();
-        if (nSourceWidth && nDestWidth > nSourceWidth && nDestWidth / nSourceWidth > nMaxScaleWhenFuzzing)
+        if (nSourceWidth && std::abs(nDestWidth / nSourceWidth) > nMaxScaleWhenFuzzing)
         {
             SAL_WARN("vcl", "skipping large horizontal scaling: " << nSourceWidth << " to " << nDestWidth);
             return false;
         }
 
-        if (nDestWidth && nSourceWidth > nDestWidth && nSourceWidth / nDestWidth > nMaxScaleWhenFuzzing)
+        if (nDestWidth && std::abs(nSourceWidth / nDestWidth) > nMaxScaleWhenFuzzing)
         {
             SAL_WARN("vcl", "skipping large horizontal scaling: " << nSourceWidth << " to " << nDestWidth);
             return false;
