@@ -176,7 +176,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
     }
     css::uno::Reference< css::frame::XFrame2 > xFrame = implts_createFrame(xParentFrame, xContainerWindow, sRightName);
 
-    // special freature:
+    // special feature:
     // A special listener will restore pos/size states in case
     // a component was loaded into the frame first time.
     if (bSupportPersistentWindowState)
@@ -189,7 +189,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
     if (bTopLevelDocumentWindow)
         implts_establishDocModifyListener (xFrame);
 
-    // special freature:
+    // special feature:
     // A special listener will update title bar (text and icon)
     // if component of frame will be changed.
     if (bEnableTitleBarUpdate)
