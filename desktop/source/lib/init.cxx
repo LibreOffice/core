@@ -1368,6 +1368,45 @@ vcl::Font FindFont_FallbackToDefault(std::u16string_view rFontName)
     return OutputDevice::GetDefaultFont(DefaultFontType::SANS_UNICODE, LANGUAGE_NONE,
                                         GetDefaultFontFlags::NONE);
 }
+
+static int getDocumentType (LibreOfficeKitDocument* pThis)
+{
+    SetLastExceptionMsg();
+
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+
+    try
+    {
+        uno::Reference<lang::XServiceInfo> xDocument(pDocument->mxComponent, uno::UNO_QUERY_THROW);
+
+        if (xDocument->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
+        {
+            return LOK_DOCTYPE_SPREADSHEET;
+        }
+        else if (xDocument->supportsService("com.sun.star.presentation.PresentationDocument"))
+        {
+            return LOK_DOCTYPE_PRESENTATION;
+        }
+        else if (xDocument->supportsService("com.sun.star.drawing.DrawingDocument"))
+        {
+            return LOK_DOCTYPE_DRAWING;
+        }
+        else if (xDocument->supportsService("com.sun.star.text.TextDocument") || xDocument->supportsService("com.sun.star.text.WebDocument"))
+        {
+            return LOK_DOCTYPE_TEXT;
+        }
+        else
+        {
+            SetLastExceptionMsg("unknown document type");
+        }
+    }
+    catch (const uno::Exception& exception)
+    {
+        SetLastExceptionMsg("exception: " + exception.Message);
+    }
+    return LOK_DOCTYPE_OTHER;
+}
+
 } // anonymous namespace
 
 LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xComponent, int nDocumentId)
@@ -3634,40 +3673,7 @@ static int doc_getDocumentType (LibreOfficeKitDocument* pThis)
     comphelper::ProfileZone aZone("doc_getDocumentType");
 
     SolarMutexGuard aGuard;
-    SetLastExceptionMsg();
-
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
-
-    try
-    {
-        uno::Reference<lang::XServiceInfo> xDocument(pDocument->mxComponent, uno::UNO_QUERY_THROW);
-
-        if (xDocument->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
-        {
-            return LOK_DOCTYPE_SPREADSHEET;
-        }
-        else if (xDocument->supportsService("com.sun.star.presentation.PresentationDocument"))
-        {
-            return LOK_DOCTYPE_PRESENTATION;
-        }
-        else if (xDocument->supportsService("com.sun.star.drawing.DrawingDocument"))
-        {
-            return LOK_DOCTYPE_DRAWING;
-        }
-        else if (xDocument->supportsService("com.sun.star.text.TextDocument") || xDocument->supportsService("com.sun.star.text.WebDocument"))
-        {
-            return LOK_DOCTYPE_TEXT;
-        }
-        else
-        {
-            SetLastExceptionMsg("unknown document type");
-        }
-    }
-    catch (const uno::Exception& exception)
-    {
-        SetLastExceptionMsg("exception: " + exception.Message);
-    }
-    return LOK_DOCTYPE_OTHER;
+    return getDocumentType(pThis);
 }
 
 static int doc_getParts (LibreOfficeKitDocument* pThis)
@@ -3792,7 +3798,7 @@ static char* doc_getPartPageRectangles(LibreOfficeKitDocument* pThis)
 static char* doc_getA11yFocusedParagraph(LibreOfficeKitDocument* pThis)
 {
     SolarMutexGuard aGuard;
-
+    SetLastExceptionMsg();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
@@ -3812,7 +3818,7 @@ static char* doc_getA11yFocusedParagraph(LibreOfficeKitDocument* pThis)
 static int  doc_getA11yCaretPosition(LibreOfficeKitDocument* pThis)
 {
     SolarMutexGuard aGuard;
-
+    SetLastExceptionMsg();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
@@ -7002,13 +7008,12 @@ static void doc_setViewTimezone(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*p
 
 static void doc_setAccessibilityState(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis, int nId, bool nEnabled)
 {
-    int nDocType = doc_getDocumentType(pThis);
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    int nDocType = getDocumentType(pThis);
     if (nDocType != LOK_DOCTYPE_TEXT)
         return;
-
-    SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
 
     SfxLokHelper::setAccessibilityState(nId, nEnabled);
 }

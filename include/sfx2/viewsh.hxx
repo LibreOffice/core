@@ -171,7 +171,7 @@ friend class SfxPrinterController;
     LanguageTag                 maLOKLocale;
     LOKDeviceFormFactor         maLOKDeviceFormFactor;
     bool                        mbLOKAccessibilityEnabled;
-    std::unique_ptr<LOKDocumentFocusListener>   mpLOKDocumentFocusListener;
+    rtl::Reference<LOKDocumentFocusListener>   mpLOKDocumentFocusListener;
     std::unordered_set<OUString>    mvLOKBlockedCommandList;
     OUString maLOKTimezone;
     bool maLOKIsTimezoneSet;

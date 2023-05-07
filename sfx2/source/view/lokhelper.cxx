@@ -147,10 +147,11 @@ void SfxLokHelper::destroyView(int nId)
     const ViewShellId nViewShellId(nId);
     std::vector<SfxViewShell*>& rViewArr = pApp->GetViewShells_Impl();
 
-    for (const SfxViewShell* pViewShell : rViewArr)
+    for (SfxViewShell* pViewShell : rViewArr)
     {
         if (pViewShell->GetViewShellId() == nViewShellId)
         {
+            pViewShell->SetLOKAccessibilityState(false);
             SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
             SfxRequest aRequest(pViewFrame, SID_CLOSEWIN);
             pViewFrame->Exec_Impl(aRequest);

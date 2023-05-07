@@ -238,6 +238,8 @@ void SAL_CALL SfxClipboardChangeListener::changedContents( const datatransfer::c
 class LOKDocumentFocusListener :
     public ::cppu::WeakImplHelper< accessibility::XAccessibleEventListener >
 {
+    static constexpr sal_Int64 MAX_ATTACHABLE_CHILDREN = 30;
+
     const SfxViewShell* m_pViewShell;
     std::set< uno::Reference< uno::XInterface > > m_aRefList;
     OUString m_sFocusedParagraph;
@@ -395,7 +397,6 @@ void LOKDocumentFocusListener::notifyTextSelectionChanged()
 
 void LOKDocumentFocusListener::disposing( const lang::EventObject& aEvent )
 {
-
     // Unref the object here, but do not remove as listener since the object
     // might no longer be in a state that safely allows this.
     if( aEvent.Source.is() )
@@ -814,17 +815,20 @@ void LOKDocumentFocusListener::attachRecursive(
         SAL_INFO("lok.a11y", "LOKDocumentFocusListener::attachRecursive(3) #3: m_aRefList.insert(xInterface).second");
         xBroadcaster->addAccessibleEventListener(static_cast< accessibility::XAccessibleEventListener *>(this));
 
-        const sal_Int32 MAX_ATTACHABLE_CHILDREN = 10;
-        sal_Int32 n, nmax = xContext->getAccessibleChildCount();
-        if( ( nStateSet & accessibility::AccessibleStateType::MANAGES_DESCENDANTS ) && nmax > MAX_ATTACHABLE_CHILDREN )
-            nmax = MAX_ATTACHABLE_CHILDREN;
 
-        for( n = 0; n < nmax; n++ )
+        if( !(nStateSet & accessibility::AccessibleStateType::MANAGES_DESCENDANTS) )
         {
-            uno::Reference< accessibility::XAccessible > xChild( xContext->getAccessibleChild( n ) );
+            sal_Int64 nmax = xContext->getAccessibleChildCount();
+            if( nmax > MAX_ATTACHABLE_CHILDREN )
+                nmax = MAX_ATTACHABLE_CHILDREN;
 
-            if( xChild.is() )
-                attachRecursive(xChild);
+            for( sal_Int64 n = 0; n < nmax; n++ )
+            {
+                uno::Reference< accessibility::XAccessible > xChild( xContext->getAccessibleChild( n ) );
+
+                if( xChild.is() )
+                    attachRecursive(xChild);
+            }
         }
     }
 }
@@ -878,10 +882,13 @@ void LOKDocumentFocusListener::detachRecursive(
     {
         xBroadcaster->removeAccessibleEventListener(static_cast< accessibility::XAccessibleEventListener *>(this));
 
-        if( ( nStateSet & accessibility::AccessibleStateType::MANAGES_DESCENDANTS ) == 0 )
+        if( !( nStateSet & accessibility::AccessibleStateType::MANAGES_DESCENDANTS ) )
         {
-            sal_Int32 n, nmax = xContext->getAccessibleChildCount();
-            for( n = 0; n < nmax; n++ )
+            sal_Int64 nmax = xContext->getAccessibleChildCount();
+            if( nmax > MAX_ATTACHABLE_CHILDREN )
+                nmax = MAX_ATTACHABLE_CHILDREN;
+
+            for( sal_Int64 n = 0; n < nmax; n++ )
             {
                 uno::Reference< accessibility::XAccessible > xChild( xContext->getAccessibleChild( n ) );
 
@@ -2334,7 +2341,7 @@ LOKDocumentFocusListener& SfxViewShell::GetLOKDocumentFocusListener()
     if (mpLOKDocumentFocusListener)
         return *mpLOKDocumentFocusListener;
 
-    mpLOKDocumentFocusListener.reset(new LOKDocumentFocusListener(this));
+    mpLOKDocumentFocusListener = new LOKDocumentFocusListener(this);
     return *mpLOKDocumentFocusListener;
 }
 
@@ -2349,7 +2356,6 @@ void SfxViewShell::SetLOKAccessibilityState(bool bEnabled)
         return;
     mbLOKAccessibilityEnabled = bEnabled;
 
-    SAL_DEBUG("SfxViewShell::SetLOKAccessibilityState: bEnabled: " << bEnabled);
     LOKDocumentFocusListener& rDocumentFocusListener = GetLOKDocumentFocusListener();
 
     if (!pWindow)
