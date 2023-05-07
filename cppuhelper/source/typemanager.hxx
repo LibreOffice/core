@@ -20,8 +20,7 @@
 #include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <compbase2.hxx>
 #include <rtl/ref.hxx>
 #include <sal/types.h>
 
@@ -37,12 +36,12 @@ namespace unoidl {
 
 namespace cppuhelper {
 
-typedef cppu::WeakComponentImplHelper<
+typedef WeakComponentImplHelper2<
     css::lang::XServiceInfo, css::container::XHierarchicalNameAccess,
     css::container::XSet, css::reflection::XTypeDescriptionEnumerationAccess >
 TypeManager_Base;
 
-class TypeManager: private cppu::BaseMutex, public TypeManager_Base {
+class TypeManager: public TypeManager_Base {
 public:
     TypeManager();
 
@@ -58,8 +57,6 @@ public:
 
 private:
     virtual ~TypeManager() noexcept override;
-
-    virtual void SAL_CALL disposing() override;
 
     virtual OUString SAL_CALL getImplementationName() override;
 

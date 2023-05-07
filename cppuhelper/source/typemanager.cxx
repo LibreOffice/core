@@ -1825,7 +1825,6 @@ void Enumeration::findNextMatch() {
 }
 
 cppuhelper::TypeManager::TypeManager():
-    TypeManager_Base(m_aMutex),
     manager_(new unoidl::Manager)
 {}
 
@@ -1905,8 +1904,6 @@ cppuhelper::TypeManager::resolve(OUString const & name) {
 }
 
 cppuhelper::TypeManager::~TypeManager() noexcept {}
-
-void cppuhelper::TypeManager::disposing() {} //TODO
 
 OUString cppuhelper::TypeManager::getImplementationName()
 {
