@@ -1670,25 +1670,9 @@ bool ReadDIBBitmapEx(
 
                         bRetval = ImplReadDIB(aMask, nullptr, rIStm, true);
 
-                        if(bRetval)
-                        {
-                            if(!aMask.IsEmpty())
-                            {
-                                // do we have an alpha mask?
-                                if (aMask.getPixelFormat() == vcl::PixelFormat::N8_BPP && aMask.HasGreyPalette8Bit())
-                                {
-                                    AlphaMask aAlpha;
+                        if(bRetval && !aMask.IsEmpty())
+                            rTarget = BitmapEx(aBmp, aMask);
 
-                                    // create alpha mask quickly (without greyscale conversion)
-                                    aAlpha.ImplSetBitmap(aMask);
-                                    rTarget = BitmapEx(aBmp, aAlpha);
-                                }
-                                else
-                                {
-                                    rTarget = BitmapEx(aBmp, aMask);
-                                }
-                            }
-                        }
                         break;
                     }
                 case 1: // backwards compat for old option TransparentType::Color
