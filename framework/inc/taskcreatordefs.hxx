@@ -29,13 +29,13 @@ inline constexpr OUStringLiteral ARGUMENT_PARENTFRAME = u"ParentFrame"; // XFram
  */
 inline constexpr OUStringLiteral ARGUMENT_FRAMENAME = u"FrameName"; // OUString
 
-/// [sal_Bool] If it's set to sal_True we will make the new created frame visible.
-inline constexpr OUStringLiteral ARGUMENT_MAKEVISIBLE = u"MakeVisible"; // sal_Bool
+/// [bool] If it's set to sal_True we will make the new created frame visible.
+inline constexpr OUStringLiteral ARGUMENT_MAKEVISIBLE = u"MakeVisible"; // bool
 
-/** [sal_Bool] If not "ContainerWindow" property is set it force creation of a
+/** [bool] If not "ContainerWindow" property is set it force creation of a
                top level window as new container window.
  */
-inline constexpr OUStringLiteral ARGUMENT_CREATETOPWINDOW = u"CreateTopWindow"; // sal_Bool
+inline constexpr OUStringLiteral ARGUMENT_CREATETOPWINDOW = u"CreateTopWindow"; // bool
 
 /// [Rectangle] Place the new created frame on this place and resize the container window.
 inline constexpr OUStringLiteral ARGUMENT_POSSIZE = u"PosSize"; // Rectangle
@@ -43,17 +43,16 @@ inline constexpr OUStringLiteral ARGUMENT_POSSIZE = u"PosSize"; // Rectangle
 /// [XWindow] an outside created window, used as container window of the new created frame.
 inline constexpr OUStringLiteral ARGUMENT_CONTAINERWINDOW = u"ContainerWindow"; // XWindow
 
-/** [sal_Bool] enable/disable special mode, where this frame will be part of
+/** [bool] enable/disable special mode, where this frame will be part of
                the persistent window state feature suitable for any office module window
  */
 inline constexpr OUStringLiteral ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE
-    = u"SupportPersistentWindowState"; // sal_Bool
+    = u"SupportPersistentWindowState"; // bool
 
-/** [sal_Bool] enable/disable special mode, where the title bar of our
+/** [bool] enable/disable special mode, where the title bar of our
                the new created frame will be updated automatically.
                Default = ON !
  */
-inline constexpr OUStringLiteral ARGUMENT_ENABLE_TITLEBARUPDATE
-    = u"EnableTitleBarUpdate"; // sal_Bool
+inline constexpr OUStringLiteral ARGUMENT_ENABLE_TITLEBARUPDATE = u"EnableTitleBarUpdate"; // bool
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
