@@ -795,7 +795,7 @@ void cppuhelper::ServiceManager::loadImplementation(
 {
     assert(implementation);
     {
-        osl::MutexGuard g(rBHelper.rMutex);
+        std::unique_lock g(m_aMutex);
         if (implementation->status == Data::Implementation::STATUS_LOADED) {
             return;
         }
@@ -871,8 +871,8 @@ void cppuhelper::ServiceManager::loadImplementation(
     //TODO: There is a race here, as the relevant service factory can be removed
     // while the mutex is unlocked and loading can thus fail, as the entity from
     // which to load can disappear once the service factory is removed.
-    osl::MutexGuard g(rBHelper.rMutex);
-    if (!(isDisposed()
+    std::unique_lock g(m_aMutex);
+    if (!(m_bDisposed
           || implementation->status == Data::Implementation::STATUS_LOADED))
     {
         implementation->status = Data::Implementation::STATUS_LOADED;
@@ -882,12 +882,11 @@ void cppuhelper::ServiceManager::loadImplementation(
     }
 }
 
-void cppuhelper::ServiceManager::disposing() {
+void cppuhelper::ServiceManager::disposing(std::unique_lock<std::mutex>& rGuard) {
     std::vector< css::uno::Reference<css::lang::XComponent> > sngls;
     std::vector< css::uno::Reference< css::lang::XComponent > > comps;
     Data clear;
     {
-        osl::MutexGuard g(rBHelper.rMutex);
         for (const auto& rEntry : data_.namedImplementations)
         {
             assert(rEntry.second);
@@ -916,6 +915,7 @@ void cppuhelper::ServiceManager::disposing() {
         data_.services.swap(clear.services);
         data_.singletons.swap(clear.singletons);
     }
+    rGuard.unlock();
     for (const auto& rxSngl : sngls)
     {
         try {
@@ -928,6 +928,7 @@ void cppuhelper::ServiceManager::disposing() {
     {
         removeEventListenerFromComponent(rxComp);
     }
+    rGuard.lock();
 }
 
 void cppuhelper::ServiceManager::initialize(
@@ -983,8 +984,8 @@ cppuhelper::ServiceManager::createInstanceWithArguments(
 css::uno::Sequence< OUString >
 cppuhelper::ServiceManager::getAvailableServiceNames()
 {
-    osl::MutexGuard g(rBHelper.rMutex);
-    if (isDisposed()) {
+    std::unique_lock g(m_aMutex);
+    if (m_bDisposed) {
         return css::uno::Sequence< OUString >();
     }
     if (data_.services.size() > o3tl::make_unsigned(SAL_MAX_INT32)) {
@@ -1025,7 +1026,7 @@ css::uno::Type cppuhelper::ServiceManager::getElementType()
 
 sal_Bool cppuhelper::ServiceManager::hasElements()
 {
-    osl::MutexGuard g(rBHelper.rMutex);
+    std::unique_lock g(m_aMutex);
     return
         !(data_.namedImplementations.empty()
           && data_.dynamicImplementations.empty());
@@ -1138,7 +1139,7 @@ cppuhelper::ServiceManager::createContentEnumeration(
 {
     std::vector< std::shared_ptr< Data::Implementation > > impls;
     {
-        osl::MutexGuard g(rBHelper.rMutex);
+        std::unique_lock g(m_aMutex);
         Data::ImplementationMap::const_iterator i(
             data_.services.find(aServiceName));
         if (i != data_.services.end()) {
@@ -1151,8 +1152,8 @@ cppuhelper::ServiceManager::createContentEnumeration(
         Data::Implementation * impl = rxImpl.get();
         assert(impl != nullptr);
         {
-            osl::MutexGuard g(rBHelper.rMutex);
-            if (isDisposed()) {
+            std::unique_lock g(m_aMutex);
+            if (m_bDisposed) {
                 factories.clear();
                 break;
             }
@@ -1572,8 +1573,8 @@ void cppuhelper::ServiceManager::insertLegacyFactory(
 
 bool cppuhelper::ServiceManager::insertExtraData(Data const & extra) {
     {
-        osl::MutexGuard g(rBHelper.rMutex);
-        if (isDisposed()) {
+        std::unique_lock g(m_aMutex);
+        if (m_bDisposed) {
             return false;
         }
         auto i = std::find_if(extra.namedImplementations.begin(), extra.namedImplementations.end(),
@@ -1651,7 +1652,7 @@ void cppuhelper::ServiceManager::removeRdbFiles(
     // it is called with a uris vector of size one):
     std::vector< std::shared_ptr< Data::Implementation > > clear;
     {
-        osl::MutexGuard g(rBHelper.rMutex);
+        std::unique_lock g(m_aMutex);
         for (const auto& rUri : uris)
         {
             for (Data::NamedImplementations::iterator j(
@@ -1686,11 +1687,11 @@ bool cppuhelper::ServiceManager::removeLegacyFactory(
     std::shared_ptr< Data::Implementation > clear;
     css::uno::Reference< css::lang::XComponent > comp;
     {
-        osl::MutexGuard g(rBHelper.rMutex);
+        std::unique_lock g(m_aMutex);
         Data::DynamicImplementations::iterator i(
             data_.dynamicImplementations.find(factoryInfo));
         if (i == data_.dynamicImplementations.end()) {
-            return isDisposed();
+            return m_bDisposed;
         }
         assert(i->second);
         clear = i->second;
@@ -1718,8 +1719,8 @@ void cppuhelper::ServiceManager::removeImplementation(const OUString & name) {
     // but the assumption is that it is rarely called:
     std::shared_ptr< Data::Implementation > clear;
     {
-        osl::MutexGuard g(rBHelper.rMutex);
-        if (isDisposed()) {
+        std::unique_lock g(m_aMutex);
+        if (m_bDisposed) {
             return;
         }
         Data::NamedImplementations::iterator i(
@@ -1752,7 +1753,7 @@ cppuhelper::ServiceManager::findServiceImplementation(
     std::shared_ptr< Data::Implementation > impl;
     bool loaded;
     {
-        osl::MutexGuard g(rBHelper.rMutex);
+        std::unique_lock g(m_aMutex);
         Data::ImplementationMap::const_iterator i(
             data_.services.find(specifier));
         if (i == data_.services.end()) {
@@ -1814,7 +1815,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
     abort();
 #else
     OUString aUri;
-    osl::MutexGuard g(rBHelper.rMutex);
+    std::unique_lock g(m_aMutex);
     css::uno::Environment aSourceEnv(css::uno::Environment::getCurrent());
 
     std::cerr << "preload:";

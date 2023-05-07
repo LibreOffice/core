@@ -12,10 +12,11 @@
 #include <sal/config.h>
 
 #include <cassert>
-#include <unordered_map>
+#include <functional>
 #include <memory>
 #include <mutex>
 #include <string_view>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -29,8 +30,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <compbase2.hxx>
 #include <rtl/ustring.hxx>
 
 namespace com::sun::star::lang {
@@ -53,7 +53,7 @@ typedef css::uno::XInterface * ImplementationConstructorFn(
 
 typedef std::function<css::uno::XInterface * (css::uno::XComponentContext *, css::uno::Sequence<css::uno::Any> const&)> WrapperConstructorFn;
 
-typedef cppu::WeakComponentImplHelper<
+typedef WeakComponentImplHelper2<
     css::lang::XServiceInfo, css::lang::XMultiServiceFactory,
     css::lang::XMultiComponentFactory, css::container::XSet,
     css::container::XContentEnumerationAccess, css::beans::XPropertySet,
@@ -61,8 +61,7 @@ typedef cppu::WeakComponentImplHelper<
     css::lang::XInitialization>
 ServiceManagerBase;
 
-class ServiceManager:
-    private cppu::BaseMutex, public ServiceManagerBase
+class ServiceManager : public ServiceManagerBase
 {
 public:
     struct Data {
@@ -184,7 +183,7 @@ public:
         ImplementationMap singletons;
     };
 
-    ServiceManager(): ServiceManagerBase(m_aMutex) {}
+    ServiceManager() {}
 
     ServiceManager(const ServiceManager&) = delete;
     const ServiceManager& operator=(const ServiceManager&) = delete;
@@ -219,7 +218,7 @@ public:
 private:
     virtual ~ServiceManager() override;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     virtual OUString SAL_CALL getImplementationName() override;
 
@@ -307,9 +306,6 @@ private:
     virtual void SAL_CALL initialize(
         css::uno::Sequence<css::uno::Any> const & aArguments)
         override;
-
-    // needs to be called with rBHelper.rMutex locked:
-    bool isDisposed() const { return rBHelper.bDisposed || rBHelper.bInDispose; }
 
     void removeEventListenerFromComponent(
         css::uno::Reference< css::lang::XComponent > const & component);
