@@ -43,6 +43,7 @@
 #include <osl/diagnose.h>
 #include <comphelper/diagnose_ex.hxx>
 #include <officecfg/Office/Recovery.hxx>
+#include <unotools/confignode.hxx>
 
 #include <sfx2/fcontnr.hxx>
 
@@ -106,13 +107,20 @@ SvxSaveTabPage::SvxSaveTabPage(weld::Container* pPage, weld::DialogController* p
     m_xODFVersionLB->set_id(4, OUString::number(SvtSaveOptions::ODFVER_013)); // 1.3
     m_xODFVersionLB->set_id(5, OUString::number(SvtSaveOptions::ODFVER_LATEST)); // 1.3 Extended (recommended)
 
-    m_xDocTypeLB->set_id(0, OUString::number(APP_WRITER)       );
-    m_xDocTypeLB->set_id(1, OUString::number(APP_WRITER_WEB)   );
-    m_xDocTypeLB->set_id(2, OUString::number(APP_WRITER_GLOBAL));
-    m_xDocTypeLB->set_id(3, OUString::number(APP_CALC)         );
-    m_xDocTypeLB->set_id(4, OUString::number(APP_IMPRESS)      );
-    m_xDocTypeLB->set_id(5, OUString::number(APP_DRAW)         );
-    m_xDocTypeLB->set_id(6, OUString::number(APP_MATH)         );
+    auto aFilterClassesNode = utl::OConfigurationTreeRoot::createWithComponentContext(
+            comphelper::getProcessComponentContext(),
+            "org.openoffice.Office.UI/FilterClassification/GlobalFilters/Classes",
+            -1,
+            utl::OConfigurationTreeRoot::CM_READONLY
+        );
+
+    m_xDocTypeLB->append(OUString::number(APP_WRITER), aFilterClassesNode.getNodeValue("com.sun.star.text.TextDocument/DisplayName").get<OUString>());
+    m_xDocTypeLB->append(OUString::number(APP_WRITER_WEB), aFilterClassesNode.getNodeValue("com.sun.star.text.WebDocument/DisplayName").get<OUString>());
+    m_xDocTypeLB->append(OUString::number(APP_WRITER_GLOBAL), aFilterClassesNode.getNodeValue("com.sun.star.text.GlobalDocument/DisplayName").get<OUString>());
+    m_xDocTypeLB->append(OUString::number(APP_CALC), aFilterClassesNode.getNodeValue("com.sun.star.sheet.SpreadsheetDocument/DisplayName").get<OUString>());
+    m_xDocTypeLB->append(OUString::number(APP_IMPRESS), aFilterClassesNode.getNodeValue("com.sun.star.presentation.PresentationDocument/DisplayName").get<OUString>());
+    m_xDocTypeLB->append(OUString::number(APP_DRAW), aFilterClassesNode.getNodeValue("com.sun.star.drawing.DrawingDocument/DisplayName").get<OUString>());
+    m_xDocTypeLB->append(OUString::number(APP_MATH), aFilterClassesNode.getNodeValue("com.sun.star.formula.FormulaProperties/DisplayName").get<OUString>());
 
     m_xAutoSaveCB->connect_toggled( LINK( this, SvxSaveTabPage, AutoClickHdl_Impl ) );
 
@@ -434,7 +442,23 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
                     pImpl->aODFArr[nData] = lODFList;
                 }
             }
-            m_xDocTypeLB->set_active(0);
+            OUString sModule = OfaTreeOptionsDialog::getCurrentFactory_Impl(GetFrame());
+            sal_Int32 docId = 0;
+            if (sModule == "com.sun.star.text.TextDocument")
+                docId = APP_WRITER;
+            else if (sModule == "com.sun.star.text.WebDocument")
+                docId = APP_WRITER_WEB;
+            else if (sModule == "com.sun.star.text.GlobalDocument")
+                docId = APP_WRITER_GLOBAL;
+            else if (sModule == "com.sun.star.sheet.SpreadsheetDocument")
+                docId = APP_CALC;
+            else if (sModule == "com.sun.star.presentation.PresentationDocument")
+                docId = APP_IMPRESS;
+            else if (sModule == "com.sun.star.drawing.DrawingDocument")
+                docId = APP_DRAW;
+            else if (sModule == "com.sun.star.formula.FormulaProperties")
+                docId = APP_MATH;
+            m_xDocTypeLB->set_active_id(OUString::number(docId));
             FilterHdl_Impl(*m_xDocTypeLB);
         }
         catch(Exception const &)

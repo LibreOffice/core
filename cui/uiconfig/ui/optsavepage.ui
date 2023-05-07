@@ -418,15 +418,6 @@
               <object class="GtkComboBoxText" id="doctype">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <items>
-                  <item translatable="yes" context="optsavepage|doctype">Text document</item>
-                  <item translatable="yes" context="optsavepage|doctype">HTML document</item>
-                  <item translatable="yes" context="optsavepage|doctype">Master document</item>
-                  <item translatable="yes" context="optsavepage|doctype">Spreadsheet</item>
-                  <item translatable="yes" context="optsavepage|doctype">Presentation</item>
-                  <item translatable="yes" context="optsavepage|doctype">Drawing</item>
-                  <item translatable="yes" context="optsavepage|doctype">Formula</item>
-                </items>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="doctype-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="doctype">Specifies the document type for which you want to define the default file format.</property>

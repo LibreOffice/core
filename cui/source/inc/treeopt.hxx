@@ -142,6 +142,7 @@ private:
 
     css::uno::Reference < css::awt::XContainerWindowProvider >
                     m_xContainerWinProvider;
+    css::uno::Reference<css::frame::XFrame> m_xFrame;
 
     static LastPageSaver*   pLastPageSaver;
 
@@ -193,6 +194,7 @@ public:
 
     // helper functions to call the language settings TabPage from the SpellDialog
     static void         ApplyLanguageOptions(const SfxItemSet& rSet);
+    static OUString     getCurrentFactory_Impl( const css::uno::Reference< css::frame::XFrame >& _xFrame );
 
     void                SetNeedsRestart( svtools::RestartReason eReason );
 };

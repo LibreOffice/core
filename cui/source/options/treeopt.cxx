@@ -930,6 +930,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
         {
             SvtViewOptions aTabPageOpt( EViewType::TabPage, OUString::number( pPageInfo->m_nPageId) );
             pPageInfo->m_xPage->SetUserData( GetViewOptUserItem( aTabPageOpt ) );
+            pPageInfo->m_xPage->SetFrame( m_xFrame );
             pPageInfo->m_xPage->Reset( &*pGroupInfo->m_pInItemSet );
         }
     }
@@ -1276,7 +1277,7 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
     }
 }
 
-static OUString getCurrentFactory_Impl( const Reference< XFrame >& _xFrame )
+OUString OfaTreeOptionsDialog::getCurrentFactory_Impl( const Reference< XFrame >& _xFrame )
 {
     OUString sIdentifier;
     Reference < XFrame > xCurrentFrame( _xFrame );
@@ -1308,6 +1309,7 @@ static OUString getCurrentFactory_Impl( const Reference< XFrame >& _xFrame )
 
 void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
 {
+    m_xFrame = _xFrame;
     sal_uInt16 nGroup = 0;
 
     SvtOptionsDialogOptions aOptionsDlgOpt;

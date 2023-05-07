@@ -23,7 +23,7 @@
       <node oor:name="Classes">
         <node oor:name="com.sun.star.text.TextDocument" oor:op="replace">
           <prop oor:name="DisplayName">
-            <value xml:lang="en-US">Text documents</value>
+            <value xml:lang="en-US">Text documents (Writer)</value>
           </prop>
           <prop oor:name="Filters">
             <value oor:separator=";">AportisDoc Palm DB;HTML (StarWriter);LotusWordPro;MS Word 2003 XML;MS Word 2007 XML;MS Word 2007 XML Template;MS Word 97;MS Word 97 Vorlage;MS_Works;Office Open XML Text;Office Open XML Text Template;OpenDocument Text Flat XML;PocketWord File;Rich Text Format;StarOffice XML (Writer);Text;WordPerfect;WordPerfect;writer_MIZI_Hwp_97;writer_StarOffice_XML_Writer_Template;writer8;writer8_template;writerglobal8;writerweb8_writer_template</value>
@@ -31,7 +31,7 @@
         </node>
         <node oor:name="com.sun.star.sheet.SpreadsheetDocument" oor:op="replace">
           <prop oor:name="DisplayName">
-            <value xml:lang="en-US">Spreadsheets</value>
+            <value xml:lang="en-US">Spreadsheets (Calc)</value>
           </prop>
           <prop oor:name="Filters">
             <value oor:separator=";">ADO Rowset XML;Calc MS Excel 2007 Binary;Calc MS Excel 2007 XML;Calc MS Excel 2007 XML Template;calc_StarOffice_XML_Calc_Template;calc8;calc8_template;chart8;DIF;Lotus;MiniCalc (Palm);MS Excel 2003 XML;MS Excel 97;MS Excel 97 Vorlage/Template;OpenDocument Spreadsheet Flat XML;Pocket Excel;Quattro Pro 6.0;StarOffice XML (Calc);StarOffice XML (Chart);Text - txt - csv (StarCalc)</value>
@@ -39,7 +39,7 @@
         </node>
         <node oor:name="com.sun.star.presentation.PresentationDocument" oor:op="replace">
           <prop oor:name="DisplayName">
-            <value xml:lang="en-US">Presentations</value>
+            <value xml:lang="en-US">Presentations (Impress)</value>
           </prop>
           <prop oor:name="Filters">
             <value oor:separator=";">Impress MS PowerPoint 2007 XML;Impress MS PowerPoint 2007 XML AutoPlay;Impress MS PowerPoint 2007 XML Template;impress_StarOffice_XML_Draw;impress_StarOffice_XML_Impress_Template;impress8;impress8_template;MS PowerPoint 97;MS PowerPoint 97 AutoPlay;MS PowerPoint 97 Vorlage;OpenDocument Presentation Flat XML</value>
@@ -47,7 +47,7 @@
         </node>
         <node oor:name="com.sun.star.drawing.DrawingDocument" oor:op="replace">
           <prop oor:name="DisplayName">
-            <value xml:lang="en-US">Drawings</value>
+            <value xml:lang="en-US">Drawings (Draw)</value>
           </prop>
           <prop oor:name="Filters">
             <value oor:separator=";">draw_StarOffice_XML_Draw_Template;StarOffice XML (Draw);draw8;draw8_template;Visio Document;SVG - Scalable Vector Graphics;Corel Draw Document;Publisher Document</value>
@@ -55,7 +55,7 @@
         </node>
         <node oor:name="com.sun.star.text.WebDocument" oor:op="replace">
           <prop oor:name="DisplayName">
-            <value xml:lang="en-US">Web pages</value>
+            <value xml:lang="en-US">Web pages (Writer)</value>
           </prop>
           <prop oor:name="Filters">
             <value oor:separator=";">HTML;writer_web_StarOffice_XML_Writer_Web_Template;writerweb8_writer_template</value>
@@ -63,7 +63,7 @@
         </node>
         <node oor:name="com.sun.star.text.GlobalDocument" oor:op="replace">
           <prop oor:name="DisplayName">
-            <value xml:lang="en-US">Master documents</value>
+            <value xml:lang="en-US">Master documents (Writer)</value>
           </prop>
           <prop oor:name="Filters">
             <value oor:separator=";">writer_globaldocument_StarOffice_XML_Writer_GlobalDocument;writerglobal8</value>
@@ -71,7 +71,7 @@
         </node>
         <node oor:name="com.sun.star.formula.FormulaProperties" oor:op="replace">
           <prop oor:name="DisplayName">
-            <value xml:lang="en-US">Formulas</value>
+            <value xml:lang="en-US">Formulas (Math)</value>
           </prop>
           <prop oor:name="Filters">
             <value oor:separator=";">MathML XML (Math);MathType 3.x;StarOffice XML (Math);math8</value>
@@ -79,7 +79,7 @@
         </node>
         <node oor:name="com.sun.star.sdb.OfficeDatabaseDocument" oor:op="replace">
           <prop oor:name="DisplayName">
-            <value xml:lang="en-US">Database documents</value>
+            <value xml:lang="en-US">Database documents (Base)</value>
           </prop>
           <prop oor:name="Filters">
             <value oor:separator=";">StarOffice XML (Base)</value>
