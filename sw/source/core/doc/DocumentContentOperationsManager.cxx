@@ -4317,7 +4317,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
         // the other views out of the deletion range.
         // Except for itself!
         SwPaM aDelPam( *rPam.GetMark(), *rPam.GetPoint() );
-        ::PaMCorrAbs( aDelPam, *aDelPam.GetPoint() );
+        ::PaMCorrAbs( aDelPam, *aDelPam.End() );
 
         SwPosition *pStt = aDelPam.Start(),
                    *pEnd = aDelPam.End();
