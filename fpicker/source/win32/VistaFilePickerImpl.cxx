@@ -170,12 +170,15 @@ using TFolderPickerDialogImpl = TDialogImpl<TFileOpenDialog, CLSID_FileOpenDialo
 static OUString lcl_getURLFromShellItem (IShellItem* pItem)
 {
     sal::systools::CoTaskMemAllocated<wchar_t> pStr;
-    if (SUCCEEDED(pItem->GetDisplayName(SIGDN_URL, &pStr)))
-        return OUString(o3tl::toU(pStr));
-
     HRESULT hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pStr);
     if (FAILED(hr))
     {
+        // tdf#155176: One could think that querying SIGDN_URL would go first. But Windows uses
+        // current 8-bit codepage for the filenames, and URL-encodes those octets. So check it
+        // only after SIGDN_FILESYSPATH query failed (can it ever happen?)
+        if (SUCCEEDED(pItem->GetDisplayName(SIGDN_URL, &pStr)))
+            return OUString(o3tl::toU(pStr));
+
         hr = pItem->GetDisplayName(SIGDN_PARENTRELATIVEPARSING, &pStr);
         if (SUCCEEDED(hr))
         {
