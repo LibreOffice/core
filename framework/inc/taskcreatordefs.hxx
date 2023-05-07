@@ -55,4 +55,9 @@ inline constexpr OUStringLiteral ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE
  */
 inline constexpr OUStringLiteral ARGUMENT_ENABLE_TITLEBARUPDATE = u"EnableTitleBarUpdate"; // bool
 
+/** [bool] enable/disable if the frame is explicitly requested to be hidden
+               Default = OFF !
+ */
+inline constexpr OUStringLiteral ARGUMENT_HIDDENFORCONVERSION = u"HiddenForConversion"; // bool
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -78,7 +78,7 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
         css::uno::Any(css::beans::NamedValue(ARGUMENT_MAKEVISIBLE, css::uno::Any(false))),
         css::uno::Any(css::beans::NamedValue(ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE, css::uno::Any(true))),
         css::uno::Any(css::beans::NamedValue(ARGUMENT_FRAMENAME, css::uno::Any(sName))),
-        css::uno::Any(css::beans::NamedValue("HiddenForConversion", css::uno::Any(rDescriptor.getUnpackedValueOrDefault("HiddenForConversion", false))))
+        css::uno::Any(css::beans::NamedValue(ARGUMENT_HIDDENFORCONVERSION, css::uno::Any(rDescriptor.getUnpackedValueOrDefault(ARGUMENT_HIDDENFORCONVERSION, false))))
     };
     css::uno::Reference< css::frame::XFrame > xTask(xCreator->createInstanceWithArguments(lArgs), css::uno::UNO_QUERY_THROW);
     return xTask;
