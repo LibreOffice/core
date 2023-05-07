@@ -29,6 +29,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/view/DuplexMode.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <svl/itemset.hxx>
 #include <svl/lstner.hxx>
 #include <unotools/tempfile.hxx>
@@ -266,37 +267,17 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter()
     if ( !pPrinter )
         return uno::Sequence< beans::PropertyValue >();
 
-    uno::Sequence< beans::PropertyValue > aPrinter(8);
-
-    aPrinter.getArray()[7].Name = "CanSetPaperSize";
-    aPrinter.getArray()[7].Value <<= pPrinter->HasSupport( PrinterSupport::SetPaperSize );
-
-    aPrinter.getArray()[6].Name = "CanSetPaperFormat";
-    aPrinter.getArray()[6].Value <<= pPrinter->HasSupport( PrinterSupport::SetPaper );
-
-    aPrinter.getArray()[5].Name = "CanSetPaperOrientation";
-    aPrinter.getArray()[5].Value <<= pPrinter->HasSupport( PrinterSupport::SetOrientation );
-
-    aPrinter.getArray()[4].Name = "IsBusy";
-    aPrinter.getArray()[4].Value <<= pPrinter->IsPrinting();
-
-    aPrinter.getArray()[3].Name = "PaperSize";
-    awt::Size aSize = impl_Size_Object2Struct(pPrinter->GetPaperSize() );
-    aPrinter.getArray()[3].Value <<= aSize;
-
-    aPrinter.getArray()[2].Name = "PaperFormat";
-    view::PaperFormat eFormat = convertToPaperFormat(pPrinter->GetPaper());
-    aPrinter.getArray()[2].Value <<= eFormat;
-
-    aPrinter.getArray()[1].Name = "PaperOrientation";
-    view::PaperOrientation eOrient = static_cast<view::PaperOrientation>(pPrinter->GetOrientation());
-    aPrinter.getArray()[1].Value <<= eOrient;
-
-    aPrinter.getArray()[0].Name = "Name";
-    OUString sStringTemp = pPrinter->GetName() ;
-    aPrinter.getArray()[0].Value <<= sStringTemp;
-
-    return aPrinter;
+    return
+    {
+        comphelper::makePropertyValue("Name", pPrinter->GetName()),
+        comphelper::makePropertyValue("PaperOrientation", static_cast<view::PaperOrientation>(pPrinter->GetOrientation())),
+        comphelper::makePropertyValue("PaperFormat", convertToPaperFormat(pPrinter->GetPaper())),
+        comphelper::makePropertyValue("PaperSize", impl_Size_Object2Struct(pPrinter->GetPaperSize() )),
+        comphelper::makePropertyValue("IsBusy", pPrinter->IsPrinting()),
+        comphelper::makePropertyValue("CanSetPaperOrientation", pPrinter->HasSupport( PrinterSupport::SetOrientation )),
+        comphelper::makePropertyValue("CanSetPaperFormat", pPrinter->HasSupport( PrinterSupport::SetPaper )),
+        comphelper::makePropertyValue("CanSetPaperSize", pPrinter->HasSupport( PrinterSupport::SetPaperSize ))
+    };
 }
 
 
