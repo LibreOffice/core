@@ -560,8 +560,11 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
     xLinguSrvcMgr = LinguServiceManager::create(xContext);
 
     const Locale& rCurrentLocale = Application::GetSettings().GetLanguageTag().getLocale();
-    Sequence<Any> aArgs(2);//second arguments has to be empty!
-    aArgs.getArray()[0] <<= LinguMgr::GetLinguPropertySet();
+    Sequence<Any> aArgs
+    {
+        Any(LinguMgr::GetLinguPropertySet()),
+        Any() // second argument has to be empty!
+    };
 
     //read spell checker
     const Sequence< OUString > aSpellNames = xLinguSrvcMgr->getAvailableServices(
