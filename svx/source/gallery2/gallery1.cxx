@@ -43,7 +43,7 @@
 #include <svx/galmisc.hxx>
 #include <svx/galtheme.hxx>
 #include <svx/gallery1.hxx>
-#include <gallerybinaryengineentry.hxx>
+#include <galleryfilestorageentry.hxx>
 #include <vcl/weld.hxx>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
@@ -121,10 +121,10 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
 
     if (bCreateUniqueURL)
     {
-        GalleryBinaryEngineEntry::CreateUniqueURL(rBaseURL,aURL);
+        GalleryFileStorageEntry::CreateUniqueURL(rBaseURL,aURL);
     }
 
-    mpGalleryStorageEngineEntry = std::make_unique<GalleryBinaryEngineEntry>();
+    mpGalleryStorageEngineEntry = std::make_unique<GalleryFileStorageEntry>();
     setStorageLocations(aURL);
 
     SetModified( _bNewFile );
@@ -448,7 +448,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                                     }
                                 }
 
-                                GalleryThemeEntry* pEntry = GalleryBinaryEngineEntry::CreateThemeEntry( aThmURL, rbDirIsReadOnly || bReadOnly );
+                                GalleryThemeEntry* pEntry = GalleryFileStorageEntry::CreateThemeEntry( aThmURL, rbDirIsReadOnly || bReadOnly );
 
                                 if( pEntry )
                                     aThemeList.emplace_back( pEntry );

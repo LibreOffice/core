@@ -31,7 +31,7 @@
 
 class Gallery;
 class GalleryBinaryEngine;
-class GalleryBinaryEngineEntry;
+class GalleryFileStorageEntry;
 class GalleryObjectCollection;
 class GalleryStorageLocations;
 class GalleryTheme;
@@ -40,7 +40,7 @@ class SVXCORE_DLLPUBLIC GalleryThemeEntry
 {
 private:
 
-    std::unique_ptr<GalleryBinaryEngineEntry>     mpGalleryStorageEngineEntry;
+    std::unique_ptr<GalleryFileStorageEntry> mpGalleryStorageEngineEntry;
     OUString                aName;
     sal_uInt32              nId;
     bool                    bReadOnly;
@@ -55,7 +55,7 @@ public:
                                                sal_uInt32 nId, bool bThemeNameFromResource );
     ~GalleryThemeEntry();
     
-    const std::unique_ptr<GalleryBinaryEngineEntry>& getGalleryStorageEngineEntry() const { return mpGalleryStorageEngineEntry; }
+    const std::unique_ptr<GalleryFileStorageEntry>& getGalleryStorageEngineEntry() const { return mpGalleryStorageEngineEntry; }
 
     GalleryStorageLocations& getGalleryStorageLocations() const;
 

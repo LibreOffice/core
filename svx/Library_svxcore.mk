@@ -205,7 +205,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/gallery2/galtheme \
     svx/source/gallery2/GalleryControl \
     svx/source/gallery2/gallerybinaryengine \
-    svx/source/gallery2/gallerybinaryengineentry \
     svx/source/gallery2/galleryobjectcollection \
     svx/source/gallery2/galleryfilestorage \
     svx/source/gallery2/galleryfilestorageentry \

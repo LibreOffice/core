@@ -19,10 +19,48 @@
 
 #pragma once
 
-class GalleryFileStorageEntry
+#include <tools/urlobj.hxx>
+#include <svx/galtheme.hxx>
+#include "gallerybinaryengine.hxx"
+#include "gallerystoragelocations.hxx"
+#include "galleryfilestorageentry.hxx"
+
+class GalleryObjectCollection;
+class GalleryBinaryEngine;
+
+class GalleryFileStorageEntry final
 {
+private:
+    std::unique_ptr<GalleryStorageLocations> mpGalleryStorageLocations;
+
 public:
-    virtual ~GalleryFileStorageEntry() = 0;
+    GalleryFileStorageEntry();
+    static void CreateUniqueURL(const INetURLObject& rBaseURL, INetURLObject& aURL);
+
+    OUString ReadStrFromIni(std::u16string_view aKeyName) const;
+
+    const INetURLObject& GetThmURL() const { return mpGalleryStorageLocations->GetThmURL(); }
+    const INetURLObject& GetSdgURL() const { return mpGalleryStorageLocations->GetSdgURL(); }
+    const INetURLObject& GetSdvURL() const { return mpGalleryStorageLocations->GetSdvURL(); }
+    const INetURLObject& GetStrURL() const { return mpGalleryStorageLocations->GetStrURL(); }
+
+    const std::unique_ptr<GalleryStorageLocations>& getGalleryStorageLocations() const
+    {
+        return mpGalleryStorageLocations;
+    }
+
+    static GalleryThemeEntry* CreateThemeEntry(const INetURLObject& rURL, bool bReadOnly);
+
+    void removeTheme();
+
+    std::unique_ptr<GalleryTheme>& getCachedTheme(std::unique_ptr<GalleryTheme>& pNewTheme);
+
+    void setStorageLocations(INetURLObject& rURL);
+
+    std::unique_ptr<GalleryBinaryEngine>
+    createGalleryStorageEngine(GalleryObjectCollection& mrGalleryObjectCollection, bool& bReadOnly);
 };
+
+SvStream& ReadGalleryTheme(SvStream& rIn, GalleryTheme& rTheme);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
