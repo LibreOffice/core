@@ -1087,7 +1087,7 @@
                     <xsl:text> padding:0; </xsl:text>
                     <xsl:choose>
                         <xsl:when test="@text:anchor-type='as-char'">
-                            <!-- images being used as character are not floating and ar not positioned (CSS position:static being the default)-->
+                            <!-- images being used as character are not floating and are not positioned (CSS position:static being the default)-->
                             <!--<xsl:text> position:static;</xsl:text>-->
                         </xsl:when>
                         <xsl:when test="@text:anchor-type!='as-char'">
