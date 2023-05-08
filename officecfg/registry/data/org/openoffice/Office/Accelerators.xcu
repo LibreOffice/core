@@ -1002,12 +1002,6 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="en-US" install:module="unxwnt">.uno:RepeatSearch</value>
           </prop>
         </node>
-        <node oor:name="F_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">vnd.sun.star.findbar:FocusToFindbar</value>
-          </prop>
-        </node>
         <node oor:name="F_MOD1_MOD2" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -2526,12 +2520,6 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="en-US">.uno:UpdateInputFields</value>
           </prop>
         </node>
-        <node oor:name="F_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">vnd.sun.star.findbar:FocusToFindbar</value>
-          </prop>
-        </node>
         <node oor:name="F_MOD1_MOD2" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -3193,12 +3181,6 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:TextFitToSize</value>
-          </prop>
-        </node>
-        <node oor:name="F_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">vnd.sun.star.findbar:FocusToFindbar</value>
           </prop>
         </node>
         <node oor:name="F_MOD1_MOD2" oor:op="replace">
@@ -4018,12 +4000,6 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="en-US">.uno:UpdateInputFields</value>
           </prop>
         </node>
-        <node oor:name="F_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">vnd.sun.star.findbar:FocusToFindbar</value>
-          </prop>
-        </node>
         <node oor:name="F_MOD1_MOD2" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -4803,12 +4779,6 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:UpdateInputFields</value>
-          </prop>
-        </node>
-        <node oor:name="F_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">vnd.sun.star.findbar:FocusToFindbar</value>
           </prop>
         </node>
         <node oor:name="F_MOD1_MOD2" oor:op="replace">
@@ -5596,12 +5566,6 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="de">.uno:Bold</value>
             <value xml:lang="en-US" install:module="unxwnt">.uno:RepeatSearch</value>
-          </prop>
-        </node>
-        <node oor:name="F_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">vnd.sun.star.findbar:FocusToFindbar</value>
           </prop>
         </node>
         <node oor:name="F_MOD1_MOD2" oor:op="replace">
@@ -6441,12 +6405,6 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:UpdateInputFields</value>
-          </prop>
-        </node>
-        <node oor:name="F_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">vnd.sun.star.findbar:FocusToFindbar</value>
           </prop>
         </node>
         <node oor:name="F_MOD1_MOD2" oor:op="replace">
@@ -7295,12 +7253,6 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:UpdateInputFields</value>
-          </prop>
-        </node>
-        <node oor:name="F_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">vnd.sun.star.findbar:FocusToFindbar</value>
           </prop>
         </node>
         <node oor:name="F_MOD1_MOD2" oor:op="replace">
