@@ -28,20 +28,20 @@
 
 class SvI18NMapEntry_Key
 {
-    sal_uInt16      nKind;
-    OUString   aName;
+    sal_uInt16      m_nKind;
+    OUString   m_aName;
 public:
     SvI18NMapEntry_Key( sal_uInt16 nKnd, OUString sName ) :
-        nKind( nKnd ),
-        aName(std::move( sName ))
+        m_nKind( nKnd ),
+        m_aName(std::move( sName ))
     {
     }
 
     bool operator<( const SvI18NMapEntry_Key& r ) const
     {
-        return nKind < r.nKind ||
-               ( nKind == r.nKind &&
-                 aName < r.aName);
+        return m_nKind < r.m_nKind ||
+               ( m_nKind == r.m_nKind &&
+                 m_aName < r.m_aName);
     }
 };
 

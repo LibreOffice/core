@@ -31,37 +31,37 @@ inline constexpr OUStringLiteral XML_PROGRESSREPEAT = u"ProgressRepeat";
 
 class XMLOFF_DLLPUBLIC ProgressBarHelper
 {
-            css::uno::Reference < css::task::XStatusIndicator >   xStatusIndicator;
-            sal_Int32                                             nRange;
-            sal_Int32                                             nReference;
-            sal_Int32                                             nValue;
-            double                                                fOldPercent;
-            bool                                                  bStrict;
+            css::uno::Reference < css::task::XStatusIndicator >   m_xStatusIndicator;
+            sal_Int32                                             m_nRange;
+            sal_Int32                                             m_nReference;
+            sal_Int32                                             m_nValue;
+            double                                                m_fOldPercent;
+            bool                                                  m_bStrict;
             // #96469#; if the value goes over the Range the progressbar starts again
-            bool                                                  bRepeat;
+            bool                                                  m_bRepeat;
 
 #ifdef DBG_UTIL
-            bool                                                  bFailure;
+            bool                                                  m_bFailure;
 #endif
 public:
             ProgressBarHelper(css::uno::Reference < css::task::XStatusIndicator> xStatusIndicator,
                                 const bool bStrict);
             ~ProgressBarHelper();
 
-            void SetRange(sal_Int32 nVal) { nRange = nVal; }
-            void SetReference(sal_Int32 nVal) { nReference = nVal; }
+            void SetRange(sal_Int32 nVal) { m_nRange = nVal; }
+            void SetReference(sal_Int32 nVal) { m_nReference = nVal; }
             void SetValue(sal_Int32 nValue);
-            void SetRepeat(bool bValue) { bRepeat = bValue; }
-            void Increment(sal_Int32 nInc = 1) { SetValue( nValue+nInc ); }
-            void End() { if (xStatusIndicator.is()) xStatusIndicator->end(); }
+            void SetRepeat(bool bValue) { m_bRepeat = bValue; }
+            void Increment(sal_Int32 nInc = 1) { SetValue( m_nValue+nInc ); }
+            void End() { if (m_xStatusIndicator.is()) m_xStatusIndicator->end(); }
 
             // set the new reference and returns the new value which gives the
             // Progress Bar the same position as before
             void ChangeReference(sal_Int32 nNewReference);
 
-            sal_Int32 GetReference() const { return nReference; }
-            sal_Int32 GetValue() const { return nValue; }
-            bool GetRepeat() const { return bRepeat; }
+            sal_Int32 GetReference() const { return m_nReference; }
+            sal_Int32 GetValue() const { return m_nValue; }
+            bool GetRepeat() const { return m_bRepeat; }
 };
 
 #endif

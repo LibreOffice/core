@@ -34,7 +34,7 @@ XMLBase64ImportContext::XMLBase64ImportContext(
         SvXMLImport& rImport,
         const Reference< XOutputStream >& rOut ) :
     SvXMLImportContext( rImport ),
-    xOut( rOut )
+    m_xOut( rOut )
 {
 }
 
@@ -49,10 +49,10 @@ void XMLBase64ImportContext::endFastElement(sal_Int32 )
     {
         Sequence< sal_Int8 > aBuffer( (sChars.size() / 4) * 3 );
         ::comphelper::Base64::decodeSomeChars( aBuffer, sChars );
-        xOut->writeBytes( aBuffer );
+        m_xOut->writeBytes( aBuffer );
     }
     maCharBuffer.setLength(0);
-    xOut->closeOutput();
+    m_xOut->closeOutput();
 }
 
 void XMLBase64ImportContext::characters( const OUString& rChars )

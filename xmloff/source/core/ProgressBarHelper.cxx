@@ -29,15 +29,15 @@ const float fProgressStep = 0.5;
 
 ProgressBarHelper::ProgressBarHelper(css::uno::Reference < css::task::XStatusIndicator> xTempStatusIndicator,
                                     const bool bTempStrict)
-: xStatusIndicator(std::move(xTempStatusIndicator))
-, nRange(nDefaultProgressBarRange)
-, nReference(100)
-, nValue(0)
-, fOldPercent(0.0)
-, bStrict(bTempStrict)
-, bRepeat(true)
+: m_xStatusIndicator(std::move(xTempStatusIndicator))
+, m_nRange(nDefaultProgressBarRange)
+, m_nReference(100)
+, m_nValue(0)
+, m_fOldPercent(0.0)
+, m_bStrict(bTempStrict)
+, m_bRepeat(true)
 #ifdef DBG_UTIL
-, bFailure(false)
+, m_bFailure(false)
 #endif
 {
 }
@@ -48,59 +48,59 @@ ProgressBarHelper::~ProgressBarHelper()
 
 void ProgressBarHelper::ChangeReference(sal_Int32 nNewReference)
 {
-    if((nNewReference <= 0) || (nNewReference == nReference))
+    if((nNewReference <= 0) || (nNewReference == m_nReference))
         return;
 
-    if (nReference)
+    if (m_nReference)
     {
-        double fPercent(static_cast<double>(nNewReference) / nReference);
-        double fValue(nValue * fPercent);
-        nValue = static_cast<sal_Int32>(fValue);
-        nReference = nNewReference;
+        double fPercent(static_cast<double>(nNewReference) / m_nReference);
+        double fValue(m_nValue * fPercent);
+        m_nValue = static_cast<sal_Int32>(fValue);
+        m_nReference = nNewReference;
     }
     else
     {
-        nReference = nNewReference;
-        nValue = 0;
+        m_nReference = nNewReference;
+        m_nValue = 0;
     }
 }
 
 void ProgressBarHelper::SetValue(sal_Int32 nTempValue)
 {
-    if (!xStatusIndicator.is() || (nReference <= 0))
+    if (!m_xStatusIndicator.is() || (m_nReference <= 0))
         return;
 
-    if ((nTempValue >= nValue) && (!bStrict || (nTempValue <= nReference)))
+    if ((nTempValue >= m_nValue) && (!m_bStrict || (nTempValue <= m_nReference)))
     {
         // #91317# no progress bar with values > 100%
-        if (nTempValue > nReference)
+        if (nTempValue > m_nReference)
         {
-            if (!bRepeat)
-                nValue = nReference;
+            if (!m_bRepeat)
+                m_nValue = m_nReference;
             else
             {
-                xStatusIndicator->reset();
-                nValue = 0;
+                m_xStatusIndicator->reset();
+                m_nValue = 0;
             }
         }
         else
-            nValue = nTempValue;
+            m_nValue = nTempValue;
 
-        double fValue(nValue);
-        double fNewValue ((fValue * nRange) / nReference);
+        double fValue(m_nValue);
+        double fNewValue ((fValue * m_nRange) / m_nReference);
 
-        double fPercent((fNewValue * 100) / nRange);
-        if (fPercent >= (fOldPercent + fProgressStep) || fPercent < fOldPercent)
+        double fPercent((fNewValue * 100) / m_nRange);
+        if (fPercent >= (m_fOldPercent + fProgressStep) || fPercent < m_fOldPercent)
         {
-            xStatusIndicator->setValue(static_cast<sal_Int32>(fNewValue));
-            fOldPercent = fPercent;
+            m_xStatusIndicator->setValue(static_cast<sal_Int32>(fNewValue));
+            m_fOldPercent = fPercent;
         }
     }
 #ifdef DBG_UTIL
-    else if (!bFailure)
+    else if (!m_bFailure)
     {
         OSL_FAIL("tried to set a wrong value on the progressbar");
-        bFailure = true;
+        m_bFailure = true;
     }
 #endif
 }

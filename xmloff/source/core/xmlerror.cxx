@@ -96,7 +96,7 @@ void XMLErrors::AddRecord(
     const OUString& rPublicId,
     const OUString& rSystemId )
 {
-    aErrors.emplace_back( nId, rParams, rExceptionMessage,
+    m_aErrors.emplace_back( nId, rParams, rExceptionMessage,
                                     nRow, nColumn, rPublicId, rSystemId );
 
 #ifdef DBG_UTIL
@@ -186,12 +186,12 @@ void XMLErrors::AddRecord(
 void XMLErrors::ThrowErrorAsSAXException(sal_Int32 nIdMask)
 {
     // search first error/warning that matches the nIdMask
-    for( const auto& rError : aErrors )
+    for( const auto& rError : m_aErrors )
     {
         if ( (rError.nId & nIdMask) != 0 )
         {
             // we throw the error
-            ErrorRecord& rErr = aErrors[0];
+            ErrorRecord& rErr = m_aErrors[0];
             throw SAXParseException(
                 rErr.sExceptionMessage, nullptr, Any(rErr.aParams),
                 rErr.sPublicId, rErr.sSystemId, rErr.nRow, rErr.nColumn );

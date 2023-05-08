@@ -104,7 +104,7 @@ class XMLErrors
     /// definition of type for error list
     typedef ::std::vector<ErrorRecord> ErrorList;
 
-    ErrorList aErrors;  /// list of error records
+    ErrorList m_aErrors;  /// list of error records
 
 public:
 
