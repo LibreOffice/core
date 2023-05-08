@@ -171,6 +171,12 @@ void AtkListener::handleChildAdded(
     if( !pChild )
         return;
 
+    if (nIndexHint != -1 && (nIndexHint < 0 || nIndexHint >= static_cast<sal_Int32>(m_aChildList.size())))
+    {
+        SAL_WARN("vcl", "index hint out of range, ignoring");
+        nIndexHint = -1;
+    }
+
     bool bNeedToFullFullChildList = true;
     if (nIndexHint != -1)
     {
