@@ -637,7 +637,8 @@ bool SwView::ExecSpellPopup(const Point& rPt)
         {
             const bool bOldViewLock = m_pWrtShell->IsViewLocked();
             m_pWrtShell->LockView( true );
-            m_pWrtShell->Push();
+            if (!comphelper::LibreOfficeKit::isActive())
+                m_pWrtShell->Push();
             SwRect aToFill;
 
             SwCursorShell *pCursorShell = m_pWrtShell.get();
