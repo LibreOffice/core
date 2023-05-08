@@ -6252,6 +6252,13 @@ void PDFWriterImpl::registerGlyph(const sal_GlyphId nFontGlyphId,
                                   sal_uInt8& nMappedGlyph, sal_Int32& nMappedFontObject)
 {
     auto bVariations = !pFace->GetVariations(*pFont).empty();
+    // tdf#155161
+    // PDF doesn’t support CFF2 table and we currently don’t convert them to
+    // Type 1 (like we do with CFF table), so treat it like fonts with
+    // variations and embed as Type 3 fonts.
+    if (!pFace->GetRawFontData(HB_TAG('C', 'F', 'F', '2')).empty())
+        bVariations = true;
+
     if (pFace->IsColorFont() || bVariations)
     {
         // Font has colors, check if this glyph has color layers or bitmap.
