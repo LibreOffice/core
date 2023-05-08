@@ -247,7 +247,8 @@ void SfxObjectShell::EnableSetModified( bool bEnable )
 
 bool SfxObjectShell::IsEnableSetModified() const
 {
-    return pImpl->m_bEnableSetModified && !IsReadOnly();
+    // Don't allow when user explicitly requested read only (IsLoadReadonly() or IsOriginallyLoadedReadOnlyMedium())
+    return pImpl->m_bEnableSetModified && ! (IsLoadReadonly() || IsOriginallyLoadedReadOnlyMedium());
 }
 
 
