@@ -30,7 +30,7 @@
 #include <vector>
 
 class Gallery;
-class GalleryBinaryEngine;
+class GalleryFileStorage;
 class GalleryFileStorageEntry;
 class GalleryObjectCollection;
 class GalleryStorageLocations;
@@ -61,7 +61,7 @@ public:
 
     GalleryTheme* createGalleryTheme(Gallery* pGallery);
 
-    std::unique_ptr<GalleryBinaryEngine> createGalleryStorageEngine(GalleryObjectCollection& mrGalleryObjectCollection);
+    std::unique_ptr<GalleryFileStorage> createGalleryStorageEngine(GalleryObjectCollection& mrGalleryObjectCollection);
 
     const OUString&         GetThemeName() const { return aName; }
 

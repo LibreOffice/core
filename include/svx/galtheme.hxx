@@ -31,7 +31,7 @@
 #include <svx/galmisc.hxx>
 #include <memory>
 
-class GalleryBinaryEngine;
+class GalleryFileStorage;
 class GalleryThemeEntry;
 class SgaObject;
 class SotStorageStream;
@@ -57,7 +57,7 @@ class SVXCORE_DLLPUBLIC GalleryTheme final : public SfxBroadcaster
 
 private:
 
-    std::unique_ptr<GalleryBinaryEngine>     mpGalleryStorageEngine;
+    std::unique_ptr<GalleryFileStorage>     mpGalleryStorageEngine;
     GalleryObjectCollection     maGalleryObjectCollection;
     Gallery*                    pParent;
     GalleryThemeEntry*          pThm;
@@ -67,7 +67,7 @@ private:
     bool                        bDragging;
     bool                        bAbortActualize;
 
-    const std::unique_ptr<GalleryBinaryEngine>& getGalleryStorageEngine() const { return mpGalleryStorageEngine; }
+    const std::unique_ptr<GalleryFileStorage>& getGalleryStorageEngine() const { return mpGalleryStorageEngine; }
 
     SAL_DLLPRIVATE void         ImplSetModified( bool bModified );
     SAL_DLLPRIVATE void         ImplBroadcast(sal_uInt32 nUpdatePos);

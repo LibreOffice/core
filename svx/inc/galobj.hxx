@@ -44,7 +44,7 @@ enum GalSoundType
 class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SgaObject
 {
     friend class GalleryTheme;
-    friend class GalleryBinaryEngine;
+    friend class GalleryFileStorage;
 
 private:
 

@@ -21,12 +21,11 @@
 
 #include <tools/urlobj.hxx>
 #include <svx/galtheme.hxx>
-#include "gallerybinaryengine.hxx"
+#include "galleryfilestorage.hxx"
 #include "gallerystoragelocations.hxx"
 #include "galleryfilestorageentry.hxx"
 
 class GalleryObjectCollection;
-class GalleryBinaryEngine;
 
 class GalleryFileStorageEntry final
 {
@@ -57,7 +56,7 @@ public:
 
     void setStorageLocations(INetURLObject& rURL);
 
-    std::unique_ptr<GalleryBinaryEngine>
+    std::unique_ptr<GalleryFileStorage>
     createGalleryStorageEngine(GalleryObjectCollection& mrGalleryObjectCollection, bool& bReadOnly);
 };
 

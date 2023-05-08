@@ -176,7 +176,7 @@ GalleryTheme* GalleryThemeEntry::createGalleryTheme(Gallery* pGallery)
     return new GalleryTheme(pGallery,this);
 }
 
-std::unique_ptr<GalleryBinaryEngine> GalleryThemeEntry::createGalleryStorageEngine(GalleryObjectCollection& mrGalleryObjectCollection)
+std::unique_ptr<GalleryFileStorage> GalleryThemeEntry::createGalleryStorageEngine(GalleryObjectCollection& mrGalleryObjectCollection)
 {
     return mpGalleryStorageEngineEntry->createGalleryStorageEngine(mrGalleryObjectCollection, bReadOnly);
 }

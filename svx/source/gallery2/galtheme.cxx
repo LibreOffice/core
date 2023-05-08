@@ -41,7 +41,7 @@
 #include <svx/galtheme.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/galleryobjectcollection.hxx>
-#include <gallerybinaryengine.hxx>
+#include <galleryfilestorage.hxx>
 #include <galobj.hxx>
 #include <svx/gallery1.hxx>
 #include "gallerydrawmodel.hxx"
@@ -523,7 +523,7 @@ bool GalleryTheme::InsertFileOrDirURL(const INetURLObject& rFileOrDirURL, sal_uI
 {
     bool bRet = false;
     std::vector< INetURLObject > aURLVector;
-    GalleryBinaryEngine::insertFileOrDirURL(rFileOrDirURL, aURLVector);
+    GalleryFileStorage::insertFileOrDirURL(rFileOrDirURL, aURLVector);
 
     for( const auto& rURL : aURLVector )
         bRet = bRet || InsertURL( rURL, nInsertPos );
