@@ -193,6 +193,7 @@ public:
     void testTotalsRowFunction();
     void testAutofilterHiddenButton();
     void testTdf119565();
+    void testTdf152980();
 
     CPPUNIT_TEST_SUITE(ScExportTest2);
 
@@ -325,6 +326,7 @@ public:
     CPPUNIT_TEST(testTotalsRowFunction);
     CPPUNIT_TEST(testAutofilterHiddenButton);
     CPPUNIT_TEST(testTdf119565);
+    CPPUNIT_TEST(testTdf152980);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2967,6 +2969,33 @@ void ScExportTest2::testTdf119565()
     // i.e. line joint inherited from theme lost after export.
     CPPUNIT_ASSERT_EQUAL(drawing::LineJoint_MITER,
                          xShapeProps->getPropertyValue("LineJoint").get<drawing::LineJoint>());
+}
+
+void ScExportTest2::testTdf152980()
+{
+    createScDoc("csv/tdf152980.csv");
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
+    saveAndReload("Calc Office Open XML");
+    pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
+
+    ScDocument* pDoc = getScDoc();
+
+    // - Expected: The part between a and b does not change
+    // - Actual  : Only the characters a and b remain
+    CPPUNIT_ASSERT_EQUAL(OUString("a_x1_b"), pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("a_x01_b"), pDoc->GetString(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("a_x001_b"), pDoc->GetString(0, 2, 0));
+
+    // The character code does not change in both cases
+    CPPUNIT_ASSERT_EQUAL(OUString("a_x0001_b"), pDoc->GetString(0, 3, 0));
+
+    // The escape characters are handled correctly in both cases
+    CPPUNIT_ASSERT_EQUAL(OUString("a_xfoo\nb"), pDoc->GetString(0, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("a\tb"), pDoc->GetString(0, 5, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("a\nb"), pDoc->GetString(0, 6, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("a\n\nb"), pDoc->GetString(0, 7, 0));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest2);
