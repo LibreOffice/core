@@ -87,6 +87,7 @@ namespace sw {
     class MetaFieldManager;
 }
 
+/// SwFormatMeta is a pool item subclass that owns a Meta.
 class SwFormatMeta final
     : public SfxPoolItem
 {
@@ -124,6 +125,12 @@ public:
 
 namespace sw {
 
+/// Meta is an annotation on a range of text. There is no UI to insert such annotations, but the UNO
+/// API can do so.
+///
+/// See
+/// <https://wiki.documentfoundation.org/Documentation/DevGuide/Office_Development#Annotated_text_range>
+/// for more details.
 class Meta
     : public ::sfx2::Metadatable
     , public sw::BroadcastingModify
