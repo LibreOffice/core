@@ -98,6 +98,9 @@ OUString AttributeConversion::decodeXString( const OUString& rValue )
     // string shorter than one encoded character - no need to decode
     if( rValue.getLength() < XSTRING_ENCCHAR_LEN )
         return rValue;
+    if (rValue.indexOf(u"_x") == -1)
+        return rValue;
+
     OUStringBuffer aBuffer;
     const sal_Unicode* pcStr = rValue.getStr();
     const sal_Unicode* pcEnd = pcStr + rValue.getLength();
