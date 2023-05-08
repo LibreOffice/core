@@ -42,10 +42,6 @@
 
 #include <mutex>
 
-using namespace com::sun::star::lang;
-using namespace com::sun::star::uri;
-using namespace com::sun::star::uno;
-
 namespace desktop
 {
 
