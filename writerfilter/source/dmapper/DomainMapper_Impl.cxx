@@ -6638,7 +6638,10 @@ void DomainMapper_Impl::handleIndex
     {
         sValue = sValue.replaceAll("\"", "");
         uno::Reference<text::XTextColumns> xTextColumns;
-        xTOC->getPropertyValue(getPropertyName( PROP_TEXT_COLUMNS )) >>= xTextColumns;
+        if (xTOC.is())
+        {
+            xTOC->getPropertyValue(getPropertyName( PROP_TEXT_COLUMNS )) >>= xTextColumns;
+        }
         if (xTextColumns.is())
         {
             xTextColumns->setColumnCount( sValue.toInt32() );
