@@ -888,11 +888,19 @@ void SlotManager::RenameSlide(const SfxRequest& rRequest)
     // master slides or normal ones
     OUString aTitle;
     if( rRequest.GetSlot() == SID_RENAME_MASTER_PAGE )
-        aTitle = SdResId( STR_TITLE_RENAMEMASTER );
-    else if (pDrView->GetDoc().GetDocumentType() == DocumentType::Draw)
-        aTitle = SdResId( STR_TITLE_RENAMEPAGE );
+    {
+        if (pDrView->GetDoc().GetDocumentType() == DocumentType::Draw)
+            aTitle = SdResId( STR_TITLE_RENAMEMASTERPAGE );
+        else
+            aTitle = SdResId( STR_TITLE_RENAMEMASTERSLIDE );
+    }
     else
-        aTitle = SdResId( STR_TITLE_RENAMESLIDE );
+    {
+        if (pDrView->GetDoc().GetDocumentType() == DocumentType::Draw)
+            aTitle = SdResId( STR_TITLE_RENAMEPAGE );
+        else
+            aTitle = SdResId( STR_TITLE_RENAMESLIDE );
+    }
 
     OUString aDescr( SdResId( STR_DESC_RENAMESLIDE ) );
     OUString aPageName = pSelectedPage->GetName();

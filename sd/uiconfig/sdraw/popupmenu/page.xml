@@ -47,6 +47,6 @@
     </menu:menupopup>
   </menu:menu>
   <menu:menuitem menu:id=".uno:SaveBackground"/>
-  <menu:menuitem menu:id=".uno:PresentationLayout"/>
+  <menu:menuitem menu:id=".uno:DrawingLayout"/>
   <menu:menuitem menu:id=".uno:PageSetup"/>
 </menu:menupopup>

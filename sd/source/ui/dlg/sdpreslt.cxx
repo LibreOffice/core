@@ -47,7 +47,18 @@ SdPresLayoutDlg::SdPresLayoutDlg(::sd::DrawDocShell* pDocShell,
     , m_xBtnLoad(m_xBuilder->weld_button("load"))
     , m_xVS(new ValueSet(m_xBuilder->weld_scrolled_window("selectwin", true)))
     , m_xVSWin(new weld::CustomWeld(*m_xBuilder, "select", *m_xVS))
+    , m_xLabel(m_xBuilder->weld_label("label1"))
 {
+    if (mpDocSh->GetDoc()->GetDocumentType() == DocumentType::Draw)
+    {
+        m_xDialog->set_title(SdResId(STR_AVAILABLE_MASTERPAGE));
+        m_xLabel->set_label(SdResId(STR_SELECT_PAGE));
+    }
+    else
+    {
+        m_xDialog->set_title(SdResId(STR_AVAILABLE_MASTERSLIDE));
+        m_xLabel->set_label(SdResId(STR_SELECT_SLIDE));
+    }
     m_xVSWin->set_size_request(m_xBtnLoad->get_approximate_digit_width() * 60,
                                m_xBtnLoad->get_text_height() * 20);
 
@@ -172,7 +183,10 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLayoutHdl, ValueSet*, void)
 IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl, weld::Button&, void)
 {
     SfxNewFileDialog aDlg(m_xDialog.get(), SfxNewFileDialogMode::Preview);
-    aDlg.set_title(SdResId(STR_LOAD_PRESENTATION_LAYOUT));
+    if (mpDocSh->GetDoc()->GetDocumentType() == DocumentType::Draw)
+        aDlg.set_title(SdResId(STR_LOAD_DRAWING_LAYOUT));
+    else
+        aDlg.set_title(SdResId(STR_LOAD_PRESENTATION_LAYOUT));
     sal_uInt16 nResult = aDlg.run();
 
     bool   bCancel = false;

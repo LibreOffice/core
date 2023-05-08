@@ -1103,7 +1103,7 @@
       </node>
       <node oor:name=".uno:DrawingLayout" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Master Page...</value>
+          <value xml:lang="en-US">Change Master Page...</value>
         </prop>
         <prop oor:name="TargetURL" oor:type="xs:string">
           <value>.uno:PresentationLayout</value>

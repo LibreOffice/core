@@ -159,7 +159,12 @@
 
 // Strings for animation effects
 #define STR_INSERT_TEXT                                 NC_("STR_INSERT_TEXT", "Insert Text")
+#define STR_AVAILABLE_MASTERSLIDE                       NC_("STR_AVAILABLE_MASTERSLIDE", "Available Master Slides")
+#define STR_AVAILABLE_MASTERPAGE                        NC_("STR_AVAILABLE_MASTERPAGE", "Available Master Pages")
+#define STR_SELECT_SLIDE                                NC_("STR_SELECT_SLIDE", "Select a Slide Design")
+#define STR_SELECT_PAGE                                 NC_("STR_SELECT_PAGE", "Select a Page Design")
 #define STR_LOAD_PRESENTATION_LAYOUT                    NC_("STR_LOAD_PRESENTATION_LAYOUT", "Load Master Slide")
+#define STR_LOAD_DRAWING_LAYOUT                         NC_("STR_LOAD_DRAWING_LAYOUT", "Load Master Page")
 #define STR_GLUE_ESCDIR_SMART                           NC_("STR_GLUE_ESCDIR_SMART", "Smart")
 #define STR_GLUE_ESCDIR_LEFT                            NC_("STR_GLUE_ESCDIR_LEFT", "Left")
 #define STR_GLUE_ESCDIR_RIGHT                           NC_("STR_GLUE_ESCDIR_RIGHT", "Right")
@@ -238,7 +243,8 @@
 #define STR_TITLE_RENAMEPAGE                            NC_("STR_TITLE_RENAMEPAGE", "Rename Page")
 #define STR_TOOLTIP_RENAME                              NC_("STR_TOOLTIP_RENAME", "Duplicate or empty names are not possible")
 #define STR_DESC_RENAMESLIDE                            NC_("STR_DESC_RENAMESLIDE", "Name")
-#define STR_TITLE_RENAMEMASTER                          NC_("STR_TITLE_RENAMEMASTER", "Rename Master Slide")
+#define STR_TITLE_RENAMEMASTERSLIDE                     NC_("STR_TITLE_RENAMEMASTERSLIDE", "Rename Master Slide")
+#define STR_TITLE_RENAMEMASTERPAGE                      NC_("STR_TITLE_RENAMEMASTERPAGE", "Rename Master Page")
 #define STR_PLACEHOLDER_DESCRIPTION_TITLE               NC_("STR_PLACEHOLDER_DESCRIPTION_TITLE", "Title Area for AutoLayouts" )
 #define STR_PLACEHOLDER_DESCRIPTION_OUTLINE             NC_("STR_PLACEHOLDER_DESCRIPTION_OUTLINE", "Object Area for AutoLayouts" )
 #define STR_PLACEHOLDER_DESCRIPTION_FOOTER              NC_("STR_PLACEHOLDER_DESCRIPTION_FOOTER", "Footer Area" )

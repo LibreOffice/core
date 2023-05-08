@@ -16,5 +16,5 @@
   <menu:menuitem menu:id=".uno:DeleteMasterPage"/>
   <menu:menuitem menu:id=".uno:RenameMasterPage"/>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:PresentationLayout"/>
+  <menu:menuitem menu:id=".uno:DrawingLayout"/>
 </menu:menupopup>

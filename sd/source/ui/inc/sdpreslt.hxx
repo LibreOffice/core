@@ -62,6 +62,7 @@ private:
     std::unique_ptr<weld::Button> m_xBtnLoad;
     std::unique_ptr<ValueSet> m_xVS;
     std::unique_ptr<weld::CustomWeld> m_xVSWin;
+    std::unique_ptr<weld::Label> m_xLabel;
 
     void                FillValueSet();
     void                Reset();
