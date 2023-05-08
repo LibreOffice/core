@@ -246,10 +246,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf114973)
 {
     createSwDoc("tdf114973.fodt");
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-
     SwDoc* const pDoc = getSwDoc();
     SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(true);
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
     // bug: cursor jumped into header
     CPPUNIT_ASSERT(!pWrtShell->IsInHeaderFooter());
 
@@ -1702,6 +1704,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126504)
     //Use selectAll 2 times in a row
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
 
@@ -1739,6 +1742,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133982)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
 
     //Use selectAll 3 times in a row
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
