@@ -22,17 +22,16 @@
 #include <tools/urlobj.hxx>
 #include <svx/galtheme.hxx>
 #include "gallerybinaryengine.hxx"
-#include "gallerybinarystoragelocations.hxx"
+#include "gallerystoragelocations.hxx"
 #include "galleryfilestorageentry.hxx"
 
-class GalleryBinaryStorageLocations;
 class GalleryObjectCollection;
 class GalleryBinaryEngine;
 
 class GalleryBinaryEngineEntry final : public GalleryFileStorageEntry
 {
 private:
-    std::unique_ptr<GalleryBinaryStorageLocations> mpGalleryStorageLocations;
+    std::unique_ptr<GalleryStorageLocations> mpGalleryStorageLocations;
 
 public:
     GalleryBinaryEngineEntry();
@@ -45,7 +44,7 @@ public:
     const INetURLObject& GetSdvURL() const { return mpGalleryStorageLocations->GetSdvURL(); }
     const INetURLObject& GetStrURL() const { return mpGalleryStorageLocations->GetStrURL(); }
 
-    const std::unique_ptr<GalleryBinaryStorageLocations>& getGalleryStorageLocations() const
+    const std::unique_ptr<GalleryStorageLocations>& getGalleryStorageLocations() const
     {
         return mpGalleryStorageLocations;
     }

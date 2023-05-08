@@ -56,7 +56,6 @@ merge FmXFormShell_Base_Disambiguation with FmXFormShell
 merge GLWindow with GLX11Window
 merge GalleryFileStorage with GalleryBinaryEngine
 merge GalleryFileStorageEntry with GalleryBinaryEngineEntry
-merge GalleryStorageLocations with GalleryBinaryStorageLocations
 merge GroupTable with PPTWriterBase
 merge HostDetailsContainer with DavDetailsContainer
 merge IDocumentChartDataProviderAccess with sw::DocumentChartDataProviderManager

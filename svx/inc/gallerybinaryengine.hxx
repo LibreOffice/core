@@ -22,7 +22,7 @@
 #include <svx/galmisc.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/fmmodel.hxx>
-#include "gallerybinarystoragelocations.hxx"
+#include "gallerystoragelocations.hxx"
 #include "galleryfilestorage.hxx"
 #include <tools/urlobj.hxx>
 #include <sot/storage.hxx>
@@ -32,8 +32,6 @@
 
 #include <memory>
 
-class GalleryStorageLocations;
-class GalleryBinaryStorageLocations;
 class GalleryObjectCollection;
 class SgaObjectSvDraw;
 class SgaObjectBmp;
@@ -48,7 +46,7 @@ class SVXCORE_DLLPUBLIC GalleryBinaryEngine final : public GalleryFileStorage
 {
 private:
     tools::SvRef<SotStorage> m_aSvDrawStorageRef;
-    const GalleryBinaryStorageLocations& maGalleryStorageLocations;
+    const GalleryStorageLocations& maGalleryStorageLocations;
     GalleryObjectCollection& mrGalleryObjectCollection;
     bool mbReadOnly;
     OUString m_aDestDir;
@@ -60,7 +58,7 @@ private:
     const INetURLObject& GetThmURL() const { return maGalleryStorageLocations.GetThmURL(); }
 
 public:
-    GalleryBinaryEngine(const GalleryBinaryStorageLocations& rGalleryStorageLocations,
+    GalleryBinaryEngine(const GalleryStorageLocations& rGalleryStorageLocations,
                         GalleryObjectCollection& rGalleryObjectCollection, bool bReadOnly);
     SAL_DLLPRIVATE ~GalleryBinaryEngine();
 

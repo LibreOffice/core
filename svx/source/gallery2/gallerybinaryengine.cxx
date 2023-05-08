@@ -51,7 +51,7 @@
 using namespace ::com::sun::star;
 
 GalleryBinaryEngine::GalleryBinaryEngine(
-    const GalleryBinaryStorageLocations& rGalleryBinaryStorageLocations,
+    const GalleryStorageLocations& rGalleryBinaryStorageLocations,
     GalleryObjectCollection& rGalleryObjectCollection, bool bReadOnly)
     : maGalleryStorageLocations(rGalleryBinaryStorageLocations)
     , mrGalleryObjectCollection(rGalleryObjectCollection)

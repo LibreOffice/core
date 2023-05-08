@@ -18,6 +18,7 @@
  */
 
 #include <gallerybinaryengineentry.hxx>
+#include <gallerystoragelocations.hxx>
 #include <svx/galmisc.hxx>
 #include <svx/gallery1.hxx>
 
@@ -36,7 +37,7 @@ static bool FileExists(const INetURLObject& rURL, std::u16string_view rExt)
 
 GalleryBinaryEngineEntry::GalleryBinaryEngineEntry()
 {
-    mpGalleryStorageLocations = std::make_unique<GalleryBinaryStorageLocations>();
+    mpGalleryStorageLocations = std::make_unique<GalleryStorageLocations>();
 }
 
 void GalleryBinaryEngineEntry::setStorageLocations(INetURLObject& rURL)
@@ -53,7 +54,7 @@ std::unique_ptr<GalleryBinaryEngine> GalleryBinaryEngineEntry::createGalleryStor
 
 void GalleryBinaryEngineEntry::CreateUniqueURL(const INetURLObject& rBaseURL, INetURLObject& aURL)
 {
-    INetURLObject aBaseNoCase(GalleryBinaryStorageLocations::ImplGetURLIgnoreCase(rBaseURL));
+    INetURLObject aBaseNoCase(GalleryStorageLocations::ImplGetURLIgnoreCase(rBaseURL));
     aURL = aBaseNoCase;
     static sal_Int32 nIdx = 0;
     while (FileExists(aURL, u"thm"))
