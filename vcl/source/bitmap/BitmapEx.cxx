@@ -423,7 +423,7 @@ bool BitmapEx::CopyPixel( const tools::Rectangle& rRectDst, const tools::Rectang
                     else
                     {
                         sal_uInt8 cBlack = 0;
-                        std::unique_ptr<AlphaMask> pAlpha(new AlphaMask(GetSizePixel(), &cBlack));
+                        std::optional<AlphaMask> pAlpha(std::in_place, GetSizePixel(), &cBlack);
 
                         maAlphaMask = pAlpha->ImplGetBitmap();
                         pAlpha.reset();

@@ -160,11 +160,11 @@ BitmapEx CreateFromData(sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHei
     assert(pWrite.get());
     if( !pWrite )
         return BitmapEx();
-    std::unique_ptr<AlphaMask> pAlphaMask;
+    std::optional<AlphaMask> pAlphaMask;
     AlphaScopedWriteAccess xMaskAcc;
     if (nBitCount == 32)
     {
-        pAlphaMask.reset( new AlphaMask( Size(nWidth, nHeight) ) );
+        pAlphaMask.emplace( Size(nWidth, nHeight) );
         xMaskAcc = AlphaScopedWriteAccess(*pAlphaMask);
     }
     if (nBitCount == 1)
@@ -244,11 +244,11 @@ BitmapEx CreateFromData( RawBitmap&& rawBitmap )
     assert(pWrite.get());
     if( !pWrite )
         return BitmapEx();
-    std::unique_ptr<AlphaMask> pAlphaMask;
+    std::optional<AlphaMask> pAlphaMask;
     AlphaScopedWriteAccess xMaskAcc;
     if (nBitCount == 32)
     {
-        pAlphaMask.reset( new AlphaMask( rawBitmap.maSize ) );
+        pAlphaMask.emplace( rawBitmap.maSize );
         xMaskAcc = AlphaScopedWriteAccess(*pAlphaMask);
     }
 

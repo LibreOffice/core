@@ -179,8 +179,8 @@ JPEGReader::JPEGReader( SvStream& rStream, GraphicFilterImportFlags nImportFlags
 
     if (!(nImportFlags & GraphicFilterImportFlags::UseExistingBitmap))
     {
-        mpBitmap.reset(new Bitmap());
-        mpIncompleteAlpha.reset(new Bitmap());
+        mpBitmap.emplace();
+        mpIncompleteAlpha.emplace();
     }
 }
 
@@ -199,7 +199,7 @@ bool JPEGReader::CreateBitmap(JPEGCreateBitmapParam const & rParam)
     Size aSize(rParam.nWidth, rParam.nHeight);
     bool bGray = rParam.bGray;
 
-    mpBitmap.reset(new Bitmap());
+    mpBitmap.emplace();
 
     sal_uInt64 nSize = aSize.Width() * aSize.Height();
 
@@ -216,11 +216,11 @@ bool JPEGReader::CreateBitmap(JPEGCreateBitmapParam const & rParam)
             aGrayPal[ n ] = BitmapColor( cGray, cGray, cGray );
         }
 
-        mpBitmap.reset(new Bitmap(aSize, vcl::PixelFormat::N8_BPP, &aGrayPal));
+        mpBitmap.emplace(aSize, vcl::PixelFormat::N8_BPP, &aGrayPal);
     }
     else
     {
-        mpBitmap.reset(new Bitmap(aSize, vcl::PixelFormat::N24_BPP));
+        mpBitmap.emplace(aSize, vcl::PixelFormat::N24_BPP);
     }
 
     if (mbSetLogSize)
@@ -249,7 +249,7 @@ Graphic JPEGReader::CreateIntermediateGraphic(tools::Long nLines)
 
     if (!mnLastLines)
     {
-        mpIncompleteAlpha.reset(new Bitmap(aSizePixel, vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256)));
+        mpIncompleteAlpha.emplace(aSizePixel, vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
         mpIncompleteAlpha->Erase(COL_WHITE);
     }
 

@@ -48,8 +48,8 @@ struct JPEGCreateBitmapParam
 class JPEGReader : public GraphicReader
 {
     SvStream&           mrStream;
-    std::unique_ptr<Bitmap> mpBitmap;
-    std::unique_ptr<Bitmap> mpIncompleteAlpha;
+    std::optional<Bitmap> mpBitmap;
+    std::optional<Bitmap> mpIncompleteAlpha;
 
     tools::Long                mnLastPos;
     tools::Long                mnLastLines;
