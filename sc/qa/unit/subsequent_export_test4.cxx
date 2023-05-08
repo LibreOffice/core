@@ -1638,6 +1638,33 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf119565)
                          xShapeProps->getPropertyValue("LineJoint").get<drawing::LineJoint>());
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf152980)
+{
+    createScDoc("csv/tdf152980.csv");
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
+    saveAndReload("Calc Office Open XML");
+    pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
+
+    ScDocument* pDoc = getScDoc();
+
+    // - Expected: The part between a and b does not change
+    // - Actual  : Only the characters a and b remain
+    CPPUNIT_ASSERT_EQUAL(OUString("a_x1_b"), pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("a_x01_b"), pDoc->GetString(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("a_x001_b"), pDoc->GetString(0, 2, 0));
+
+    // The character code does not change in both cases
+    CPPUNIT_ASSERT_EQUAL(OUString("a_x0001_b"), pDoc->GetString(0, 3, 0));
+
+    // The escape characters are handled correctly in both cases
+    CPPUNIT_ASSERT_EQUAL(OUString("a_xfoo\nb"), pDoc->GetString(0, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("a\tb"), pDoc->GetString(0, 5, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("a\nb"), pDoc->GetString(0, 6, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("a\n\nb"), pDoc->GetString(0, 7, 0));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
