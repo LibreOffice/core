@@ -591,56 +591,290 @@ bool SwCursorShell::SttEndDoc( bool bStt )
     return bRet;
 }
 
+const SwTableNode* SwCursorShell::IsCursorInTable() const
+{
+    if (m_pTableCursor)
+    {   // find the table that has the selected boxes
+        return m_pTableCursor->GetSelectedBoxes()[0]->GetSttNd()->FindTableNode();
+    }
+    return m_pCurrentCursor->GetPointNode().FindTableNode();
+}
+
+// fun cases to consider:
+// * outermost table
+//   - into para => SA/ESA
+//   - into prev/next table => continue...
+//   - no prev/next => done
+// * inner table
+//   - into containing cell => SA/ESA
+//   - into prev/next of containing cell
+//      + into para
+//      + into table nested in prev/next cell
+//   - out of table -> as above
+// => iterate in one direction until a node is reached that is a parent or a sibling of a parent of the current table
+// - parent reached => SA/ESA depending
+// - not in parent but in *prev/next* sibling of outer cell => TrySelectOuterTable
+// - not in parent but in *prev/next* sibling of outer table => TrySelectOuterTable
+//   => select-all cannot select a sequence of table with no para at same level; only 1 table
+// - no parent, no prev/next => TrySelectOuterTable
+
+bool SwCursorShell::MoveOutOfTable()
+{
+    SwPosition const point(*getShellCursor(false)->GetPoint());
+    SwPosition const mark(*getShellCursor(false)->GetMark());
+
+    for (auto const fnMove : {&fnMoveBackward, &fnMoveForward})
+    {
+        Push();
+        SwCursor *const pCursor(getShellCursor(false));
+
+        pCursor->Normalize(fnMove == &fnMoveBackward);
+        pCursor->DeleteMark();
+        SwTableNode const*const pTable(pCursor->GetPoint()->GetNode().FindTableNode());
+        assert(pTable);
+        while (MovePara(GoInContent, *fnMove))
+        {
+            SwStartNode const*const pBox(pCursor->GetPoint()->GetNode().FindTableBoxStartNode());
+            if (!pBox)
+            {
+                Pop(SwCursorShell::PopMode::DeleteStack);
+                return true; // moved to paragraph at top-level of text
+            }
+            if (pBox->GetIndex() < pTable->GetIndex()
+                && pTable->EndOfSectionIndex() < pBox->EndOfSectionIndex())
+            {
+                Pop(SwCursorShell::PopMode::DeleteStack);
+                return true; // pBox contains start position (pTable)
+            }
+        }
+
+        Pop(SwCursorShell::PopMode::DeleteCurrent);
+        // FIXME: Pop doesn't restore original cursor if nested tables
+        *getShellCursor(false)->GetPoint() = point;
+        getShellCursor(false)->SetMark();
+        *getShellCursor(false)->GetMark() = mark;
+    }
+    return false;
+}
+
+bool SwCursorShell::TrySelectOuterTable()
+{
+    assert(m_pTableCursor);
+    SwTableNode const& rInnerTable(*m_pTableCursor->GetPoint()->GetNode().FindTableNode());
+    SwNodes const& rNodes(rInnerTable.GetNodes());
+    SwTableNode const*const pOuterTable(rInnerTable.GetNodes()[rInnerTable.GetIndex()-1]->FindTableNode());
+    if (!pOuterTable)
+    {
+        return false;
+    }
+
+    // manually select boxes of pOuterTable
+    SwNodeIndex firstCell(*pOuterTable, +1);
+    SwNodeIndex lastCell(*rNodes[pOuterTable->EndOfSectionIndex()-1]->StartOfSectionNode());
+    SwSelBoxes aNew;
+    pOuterTable->GetTable().CreateSelection(&firstCell.GetNode(), &lastCell.GetNode(),
+            aNew, SwTable::SEARCH_NONE, false);
+    // set table cursor to 1st / last content which may be in inner table
+    SwContentNode *const pStart = rNodes.GoNext(&firstCell);
+    assert(pStart); // must at least find the previous point node
+    lastCell = *lastCell.GetNode().EndOfSectionNode();
+    SwContentNode *const pEnd = SwNodes::GoPrevious(&lastCell);
+    assert(pEnd); // must at least find the previous point node
+    delete m_pTableCursor;
+    m_pTableCursor = new SwShellTableCursor(*this, SwPosition(*pStart, 0), Point(),
+            SwPosition(*pEnd, 0), Point());
+    m_pTableCursor->ActualizeSelection( aNew );
+    m_pTableCursor->IsCursorMovedUpdate(); // clear this so GetCursor() doesn't recreate our SwSelBoxes
+
+    // this will update m_pCurrentCursor based on m_pTableCursor
+    UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
+
+    return true;
+}
+
+/// find XText start node
+static SwStartNode const* FindTextStart(SwPosition const& rPos)
+{
+    SwStartNode const* pStartNode(rPos.GetNode().StartOfSectionNode());
+    while (pStartNode && (pStartNode->IsSectionNode() || pStartNode->IsTableNode()))
+    {
+        pStartNode = pStartNode->StartOfSectionNode();
+    }
+    return pStartNode;
+}
+
+static SwStartNode const* FindParentText(SwShellCursor const& rCursor)
+{
+    // find closest section containing both start and end - ignore Sections
+    SwStartNode const* pStartNode(FindTextStart(*rCursor.Start()));
+    SwEndNode const* pEndNode(FindTextStart(*rCursor.End())->EndOfSectionNode());
+    while (pStartNode->EndOfSectionNode()->GetIndex() < pEndNode->GetIndex())
+    {
+        pStartNode = pStartNode->StartOfSectionNode();
+    }
+    while (pStartNode->GetIndex() < pEndNode->StartOfSectionNode()->GetIndex())
+    {
+        pEndNode = pEndNode->StartOfSectionNode()->StartOfSectionNode()->EndOfSectionNode();
+    }
+    assert(pStartNode->EndOfSectionNode() == pEndNode);
+
+    return (pStartNode->IsSectionNode() || pStartNode->IsTableNode())
+        ? FindTextStart(SwPosition(*pStartNode))
+        : pStartNode;
+}
+
+bool SwCursorShell::MoveStartText()
+{
+    SwPosition const old(*m_pCurrentCursor->GetPoint());
+    SwStartNode const*const pStartNode(FindParentText(*getShellCursor(false)));
+    assert(pStartNode);
+    SwTableNode const*const pTable(pStartNode->FindTableNode());
+    m_pCurrentCursor->GetPoint()->Assign(*pStartNode);
+    GetDoc()->GetNodes().GoNext(m_pCurrentCursor->GetPoint());
+    while (m_pCurrentCursor->GetPoint()->GetNode().FindTableNode() != pTable
+        && (!pTable || pTable->GetIndex() < m_pCurrentCursor->GetPoint()->GetNode().FindTableNode()->GetIndex())
+        && MoveOutOfTable());
+    UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
+    return old != *m_pCurrentCursor->GetPoint();
+}
+
+// select all inside the current XText, with table or hidden para at start/end
 void SwCursorShell::ExtendedSelectAll(bool bFootnotes)
 {
+    // find common ancestor node of both ends of cursor
+    SwStartNode const*const pStartNode(FindParentText(*getShellCursor(false)));
+    assert(pStartNode);
+    if (IsTableMode())
+    {   // convert m_pTableCursor to m_pCurrentCursor after determining pStartNode
+        TableCursorToCursor();
+    }
     SwNodes& rNodes = GetDoc()->GetNodes();
+    m_pCurrentCursor->Normalize(true);
     SwPosition* pPos = m_pCurrentCursor->GetPoint();
-    pPos->Assign( bFootnotes ? rNodes.GetEndOfPostIts() : rNodes.GetEndOfAutotext() );
+    pPos->Assign(bFootnotes ? rNodes.GetEndOfPostIts() : static_cast<SwNode const&>(*pStartNode));
     rNodes.GoNext( pPos );
     pPos = m_pCurrentCursor->GetMark();
-    pPos->Assign(rNodes.GetEndOfContent());
+    pPos->Assign(bFootnotes ? rNodes.GetEndOfContent() : static_cast<SwNode const&>(*pStartNode->EndOfSectionNode()));
     SwContentNode* pCNd = SwNodes::GoPrevious( pPos );
     if (pCNd)
         pPos->AssignEndIndex(*pCNd);
 }
 
-bool SwCursorShell::ExtendedSelectedAll()
+static typename SwCursorShell::StartsWith StartsWith(SwStartNode const& rStart)
 {
+    for (auto i = rStart.GetIndex() + 1; i < rStart.EndOfSectionIndex(); ++i)
+    {
+        SwNode const& rNode(*rStart.GetNodes()[i]);
+        switch (rNode.GetNodeType())
+        {
+            case SwNodeType::Section:
+                continue;
+            case SwNodeType::Table:
+                return SwCursorShell::StartsWith::Table;
+            case SwNodeType::Text:
+                if (rNode.GetTextNode()->IsHidden())
+                {
+                    return SwCursorShell::StartsWith::HiddenPara;
+                }
+                return SwCursorShell::StartsWith::None;
+            default:
+                return SwCursorShell::StartsWith::None;
+        }
+    }
+    return SwCursorShell::StartsWith::None;
+}
+
+static typename SwCursorShell::StartsWith EndsWith(SwStartNode const& rStart)
+{
+    for (auto i = rStart.EndOfSectionIndex() - 1; rStart.GetIndex() < i; --i)
+    {
+        SwNode const& rNode(*rStart.GetNodes()[i]);
+        switch (rNode.GetNodeType())
+        {
+            case SwNodeType::End:
+                if (rNode.StartOfSectionNode()->IsTableNode())
+                {
+                    return SwCursorShell::StartsWith::Table;
+                }
+//TODO buggy SwUndoRedline in testTdf137503?                assert(rNode.StartOfSectionNode()->IsSectionNode());
+            break;
+            case SwNodeType::Text:
+                if (rNode.GetTextNode()->IsHidden())
+                {
+                    return SwCursorShell::StartsWith::HiddenPara;
+                }
+                return SwCursorShell::StartsWith::None;
+            default:
+                return SwCursorShell::StartsWith::None;
+        }
+    }
+    return SwCursorShell::StartsWith::None;
+}
+
+// return the node that is the start of the extended selection (to include table
+// or section start nodes; looks like extending for end nodes is not required)
+SwNode const* SwCursorShell::ExtendedSelectedAll() const
+{
+    if (m_pTableCursor)
+    {
+        return nullptr;
+    }
+
     SwNodes& rNodes = GetDoc()->GetNodes();
-    SwNodeIndex nNode(rNodes.GetEndOfAutotext());
+    SwShellCursor const*const pShellCursor = getShellCursor(false);
+    SwStartNode const* pStartNode(FindParentText(*pShellCursor));
+
+    SwNodeIndex nNode(*pStartNode);
     SwContentNode* pStart = rNodes.GoNext(&nNode);
     if (!pStart)
-        return false;
+    {
+        return nullptr;
+    }
 
-    nNode = rNodes.GetEndOfContent();
+    nNode = *pStartNode->EndOfSectionNode();
     SwContentNode* pEnd = SwNodes::GoPrevious(&nNode);
     if (!pEnd)
-        return false;
+    {
+        return nullptr;
+    }
 
     SwPosition aStart(*pStart, 0);
     SwPosition aEnd(*pEnd, pEnd->Len());
-    SwShellCursor* pShellCursor = getShellCursor(false);
-    return aStart == *pShellCursor->Start() && aEnd == *pShellCursor->End();
+    if (!(aStart == *pShellCursor->Start() && aEnd == *pShellCursor->End()))
+    {
+        return nullptr;
+    }
+
+    if (::StartsWith(*pStartNode) == StartsWith::None
+        && ::EndsWith(*pStartNode) == StartsWith::None)
+    {
+        return nullptr; // "ordinary" selection will work
+    }
+
+    // tdf#133990 ensure directly containing section is included in SwUndoDelete
+    while (pStartNode->IsSectionNode()
+        && pStartNode->GetIndex() == pStartNode->StartOfSectionNode()->GetIndex() + 1
+        && pStartNode->EndOfSectionNode()->GetIndex() + 1 == pStartNode->StartOfSectionNode()->EndOfSectionNode()->GetIndex())
+    {
+        pStartNode = pStartNode->StartOfSectionNode();
+    }
+
+    // pStartNode is the node that fully contains the selection - the first
+    // node of the selection is the first node inside pStartNode
+    return pStartNode->GetNodes()[pStartNode->GetIndex() + 1];
 }
 
 typename SwCursorShell::StartsWith SwCursorShell::StartsWith_()
 {
-    SwNodes& rNodes = GetDoc()->GetNodes();
-    SwNodeIndex nNode(rNodes.GetEndOfExtras());
-    SwContentNode* pContentNode = rNodes.GoNext(&nNode);
-    if (pContentNode->FindTableNode())
+    SwShellCursor const*const pShellCursor = getShellCursor(false);
+    SwStartNode const*const pStartNode(FindParentText(*pShellCursor));
+    if (auto const ret = ::StartsWith(*pStartNode); ret != StartsWith::None)
     {
-        return StartsWith::Table;
+        return ret;
     }
-    if (pContentNode->GetTextNode()->IsHidden())
+    if (auto const ret = ::EndsWith(*pStartNode); ret != StartsWith::None)
     {
-        return StartsWith::HiddenPara;
-    }
-    nNode = rNodes.GetEndOfContent();
-    pContentNode = SwNodes::GoPrevious(&nNode);
-    if (pContentNode->GetTextNode()->IsHidden())
-    {
-        return StartsWith::HiddenPara;
+        return ret;
     }
     return StartsWith::None;
 }
@@ -2316,7 +2550,7 @@ bool SwCursorShell::Pop(PopMode const eDelete,
 
     if (PopMode::DeleteCurrent == eDelete)
     {
-        SwCursorSaveState aSaveState( *m_pCurrentCursor );
+        ::std::optional<SwCursorSaveState> oSaveState( *m_pCurrentCursor );
 
         // If the visible SSelection was not changed
         const Point& rPoint = pOldStack->GetPtPos();
@@ -2344,6 +2578,7 @@ bool SwCursorShell::Pop(PopMode const eDelete,
             !m_pCurrentCursor->IsSelOvr( SwCursorSelOverFlags::Toggle |
                                  SwCursorSelOverFlags::ChangePos ) )
         {
+            oSaveState.reset(); // prevent UAF
             UpdateCursor(); // update current cursor
             if (m_pTableCursor)
             { // tdf#106929 ensure m_pCurrentCursor ring is recreated from table
