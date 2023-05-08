@@ -22,8 +22,8 @@
 #include <svx/galmisc.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/fmmodel.hxx>
-#include <svx/gallerybinarystoragelocations.hxx>
-#include <svx/galleryfilestorage.hxx>
+#include "gallerybinarystoragelocations.hxx"
+#include "galleryfilestorage.hxx"
 #include <tools/urlobj.hxx>
 #include <sot/storage.hxx>
 #include <vcl/salctype.hxx>

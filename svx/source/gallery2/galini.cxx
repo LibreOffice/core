@@ -17,7 +17,7 @@
 #include <sal/log.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
-#include <svx/gallerybinaryengineentry.hxx>
+#include <gallerybinaryengineentry.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

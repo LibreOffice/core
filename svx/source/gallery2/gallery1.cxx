@@ -43,7 +43,7 @@
 #include <svx/galmisc.hxx>
 #include <svx/galtheme.hxx>
 #include <svx/gallery1.hxx>
-#include <svx/gallerybinaryengineentry.hxx>
+#include <gallerybinaryengineentry.hxx>
 #include <vcl/weld.hxx>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
@@ -162,6 +162,9 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
     if( aName.isEmpty() )
         aName = rName;
 }
+
+GalleryThemeEntry::~GalleryThemeEntry()
+{}
 
 void GalleryThemeEntry::setStorageLocations(INetURLObject & rURL)
 {
@@ -719,6 +722,11 @@ void Gallery::ReleaseTheme( GalleryTheme* pTheme, SfxListener& rListener )
 bool GalleryThemeEntry::IsDefault() const
 {
     return nId > 0 && nId != GALLERY_THEME_MYTHEME;
+}
+
+GalleryStorageLocations& GalleryThemeEntry::getGalleryStorageLocations() const
+{
+    return *mpGalleryStorageEngineEntry->getGalleryStorageLocations();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -41,6 +41,7 @@
 #include <svx/galtheme.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/galleryobjectcollection.hxx>
+#include <gallerybinaryengine.hxx>
 #include <galobj.hxx>
 #include <svx/gallery1.hxx>
 #include "gallerydrawmodel.hxx"
@@ -774,5 +775,6 @@ bool GalleryTheme::IsReadOnly() const { return pThm->IsReadOnly(); }
 bool GalleryTheme::IsDefault() const { return pThm->IsDefault(); }
 
 const OUString& GalleryTheme::GetName() const { return pThm->GetThemeName(); }
+const INetURLObject& GalleryTheme::getThemeURL() const { return mpGalleryStorageEngine->getThemeURL(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

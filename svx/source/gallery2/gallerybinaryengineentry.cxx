@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/gallerybinaryengineentry.hxx>
+#include <gallerybinaryengineentry.hxx>
 #include <svx/galmisc.hxx>
 #include <svx/gallery1.hxx>
 

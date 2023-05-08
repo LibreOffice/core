@@ -22,7 +22,6 @@
 
 #include <svx/svxdllapi.h>
 #include <svx/galleryobjectcollection.hxx>
-#include <svx/gallerybinaryengine.hxx>
 
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
@@ -32,19 +31,21 @@
 #include <svx/galmisc.hxx>
 #include <memory>
 
-namespace weld { class ComboBox; }
-
-class SotStorageStream;
-
+class GalleryBinaryEngine;
 class GalleryThemeEntry;
 class SgaObject;
+class SotStorageStream;
 class FmFormModel;
 class Gallery;
-
 namespace unogallery
 {
-    class GalleryTheme;
     class GalleryItem;
+    class GalleryTheme;
+}
+namespace weld
+{
+    class ComboBox;
+    class Widget;
 }
 
 class SVXCORE_DLLPUBLIC GalleryTheme final : public SfxBroadcaster
@@ -152,7 +153,7 @@ public:
 
     DateTime getModificationDate() const;
 
-    const INetURLObject& getThemeURL() const { return mpGalleryStorageEngine->getThemeURL(); }
+    const INetURLObject& getThemeURL() const;
 
 public:
 

@@ -19,8 +19,9 @@
 
 #include <svx/unomodel.hxx>
 #include <svx/fmmodel.hxx>
+#include <svx/galtheme.hxx>
 #include <galobj.hxx>
-#include <svx/gallerybinaryengine.hxx>
+#include <gallerybinaryengine.hxx>
 #include <svx/galleryobjectcollection.hxx>
 #include <svx/gallery1.hxx>
 #include <osl/thread.hxx>

@@ -15,9 +15,9 @@
 
 #include <svx/gallery1.hxx>
 #include <svx/galtheme.hxx>
-#include <svx/gallerybinarystoragelocations.hxx>
-#include <svx/gallerystoragelocations.hxx>
+#include <gallerystoragelocations.hxx>
 #include <galobj.hxx>
+#include <gallerybinarystoragelocations.hxx>
 
 #include <cppunit/TestAssert.h>
 #include <cppunit/extensions/HelperMacros.h>

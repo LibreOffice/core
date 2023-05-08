@@ -21,9 +21,9 @@
 
 #include <tools/urlobj.hxx>
 #include <svx/galtheme.hxx>
-#include <svx/gallerybinaryengine.hxx>
-#include <svx/gallerybinarystoragelocations.hxx>
-#include <svx/galleryfilestorageentry.hxx>
+#include "gallerybinaryengine.hxx"
+#include "gallerybinarystoragelocations.hxx"
+#include "galleryfilestorageentry.hxx"
 
 class GalleryBinaryStorageLocations;
 class GalleryObjectCollection;

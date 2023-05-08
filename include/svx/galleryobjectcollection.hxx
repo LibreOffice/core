@@ -28,7 +28,9 @@
 #include <optional>
 #include <vector>
 
-struct GalleryObject
+class GalleryObjectStorage;
+
+struct SVXCORE_DLLPUBLIC GalleryObject
 {
     std::optional<INetURLObject> m_oStorageUrl;
     sal_uInt32 nOffset;

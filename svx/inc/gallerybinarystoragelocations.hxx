@@ -21,7 +21,7 @@
 
 #include <tools/urlobj.hxx>
 #include <svx/svxdllapi.h>
-#include <svx/gallerystoragelocations.hxx>
+#include "gallerystoragelocations.hxx"
 
 class SVXCORE_DLLPUBLIC GalleryBinaryStorageLocations final : public GalleryStorageLocations
 {

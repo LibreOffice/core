@@ -24,18 +24,19 @@
 #include <svl/SfxBroadcaster.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/urlobj.hxx>
-#include <svx/gallerybinaryengineentry.hxx>
-#include <svx/gallerybinaryengine.hxx>
 
 #include <cstdio>
 #include <memory>
 #include <vector>
 
+class Gallery;
+class GalleryBinaryEngine;
 class GalleryBinaryEngineEntry;
+class GalleryObjectCollection;
 class GalleryStorageLocations;
 class GalleryTheme;
 
-class GalleryThemeEntry
+class SVXCORE_DLLPUBLIC GalleryThemeEntry
 {
 private:
 
@@ -52,10 +53,11 @@ public:
                                                const OUString& rName,
                                                bool bReadOnly, bool bNewFile,
                                                sal_uInt32 nId, bool bThemeNameFromResource );
-
+    ~GalleryThemeEntry();
+    
     const std::unique_ptr<GalleryBinaryEngineEntry>& getGalleryStorageEngineEntry() const { return mpGalleryStorageEngineEntry; }
 
-    GalleryStorageLocations& getGalleryStorageLocations() const { return *mpGalleryStorageEngineEntry->getGalleryStorageLocations(); }
+    GalleryStorageLocations& getGalleryStorageLocations() const;
 
     GalleryTheme* createGalleryTheme(Gallery* pGallery);
 

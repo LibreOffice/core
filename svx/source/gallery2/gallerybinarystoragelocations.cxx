@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/gallerybinarystoragelocations.hxx>
+#include <gallerybinarystoragelocations.hxx>
 #include <svx/galmisc.hxx>
 
 INetURLObject GalleryBinaryStorageLocations::ImplGetURLIgnoreCase(const INetURLObject& rURL)
