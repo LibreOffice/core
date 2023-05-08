@@ -467,7 +467,11 @@ namespace drawinglayer::texture
                     // set and add at target
                     aCallback(
                         maGradientInfo.getTextureTransform() * basegfx::utils::createScaleB2DHomMatrix(fSize, fSize),
-                        interpolate(aCStart, aCEnd, double(innerLoop) / double(nSteps - 1)));
+                        interpolate(
+                            aCStart, aCEnd,
+                            nSteps == 1
+                                ? std::numeric_limits<double>::infinity()
+                                : double(innerLoop) / double(nSteps - 1)));
                 }
             }
 
