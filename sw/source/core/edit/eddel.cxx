@@ -33,7 +33,9 @@
 
 void SwEditShell::DeleteSel(SwPaM& rPam, bool const isArtificialSelection, bool *const pUndo)
 {
-    bool bSelectAll = StartsWith_() != SwCursorShell::StartsWith::None && ExtendedSelectedAll();
+    SwNode const*const pSelectAllStart(StartsWith_() != SwCursorShell::StartsWith::None
+        ? ExtendedSelectedAll()
+        : nullptr);
     // only for selections
     if (!rPam.HasMark()
         || (*rPam.GetPoint() == *rPam.GetMark()
@@ -49,7 +51,7 @@ void SwEditShell::DeleteSel(SwPaM& rPam, bool const isArtificialSelection, bool 
     // 3. Point and Mark are at the document start and end, Point is in a table: delete selection as usual
     if( rPam.GetPointNode().FindTableNode() &&
         rPam.GetPointNode().StartOfSectionNode() !=
-        rPam.GetMarkNode().StartOfSectionNode() && !bSelectAll )
+        rPam.GetMarkNode().StartOfSectionNode() && pSelectAllStart == nullptr)
     {
         // group the Undo in the table
         if( pUndo && !*pUndo )
@@ -93,23 +95,13 @@ void SwEditShell::DeleteSel(SwPaM& rPam, bool const isArtificialSelection, bool 
     {
         std::optional<SwPaM> pNewPam;
         SwPaM * pPam = &rPam;
-        if (bSelectAll)
+        if (pSelectAllStart)
         {
             assert(dynamic_cast<SwShellCursor*>(&rPam)); // must be corrected pam
             pNewPam.emplace(*rPam.GetMark(), *rPam.GetPoint());
             // Selection starts at the first para of the first cell, but we
             // want to delete the table node before the first cell as well.
-            while (SwTableNode const* pTableNode =
-                pNewPam->Start()->GetNode().StartOfSectionNode()->FindTableNode())
-            {
-                pNewPam->Start()->Assign(*pTableNode);
-            }
-            // tdf#133990 ensure section is included in SwUndoDelete
-            while (SwSectionNode const* pSectionNode =
-                pNewPam->Start()->GetNode().StartOfSectionNode()->FindSectionNode())
-            {
-                pNewPam->Start()->Assign(*pSectionNode);
-            }
+            pNewPam->Start()->Assign(*pSelectAllStart);
             pPam = &*pNewPam;
         }
         // delete everything
