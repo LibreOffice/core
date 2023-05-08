@@ -70,7 +70,8 @@ LOKSpecialPositioning::LOKSpecialPositioning(const ImpEditView& rImpEditView, Ma
                                              mrImpEditView(rImpEditView),
                                              maOutArea(rOutputArea),
                                              maVisDocStartPos(rVisDocStartPos),
-                                             meUnit(eUnit)
+                                             meUnit(eUnit),
+                                             meFlags(LOKSpecialFlags::NONE)
 {
 }
 
