@@ -35,20 +35,17 @@ static bool FileExists(const INetURLObject& rURL, std::u16string_view rExt)
     return FileExists(aURL);
 }
 
-GalleryFileStorageEntry::GalleryFileStorageEntry()
-{
-    mpGalleryStorageLocations = std::make_unique<GalleryStorageLocations>();
-}
+GalleryFileStorageEntry::GalleryFileStorageEntry() {}
 
 void GalleryFileStorageEntry::setStorageLocations(INetURLObject& rURL)
 {
-    mpGalleryStorageLocations->SetStorageLocations(rURL);
+    maGalleryStorageLocations.SetStorageLocations(rURL);
 }
 
 std::unique_ptr<GalleryFileStorage> GalleryFileStorageEntry::createGalleryStorageEngine(
     GalleryObjectCollection& mrGalleryObjectCollection, bool& bReadOnly)
 {
-    return std::make_unique<GalleryFileStorage>(*mpGalleryStorageLocations,
+    return std::make_unique<GalleryFileStorage>(maGalleryStorageLocations,
                                                 mrGalleryObjectCollection, bReadOnly);
 }
 

@@ -30,7 +30,7 @@ class GalleryObjectCollection;
 class GalleryFileStorageEntry final
 {
 private:
-    std::unique_ptr<GalleryStorageLocations> mpGalleryStorageLocations;
+    GalleryStorageLocations maGalleryStorageLocations;
 
 public:
     GalleryFileStorageEntry();
@@ -38,15 +38,16 @@ public:
 
     OUString ReadStrFromIni(std::u16string_view aKeyName) const;
 
-    const INetURLObject& GetThmURL() const { return mpGalleryStorageLocations->GetThmURL(); }
-    const INetURLObject& GetSdgURL() const { return mpGalleryStorageLocations->GetSdgURL(); }
-    const INetURLObject& GetSdvURL() const { return mpGalleryStorageLocations->GetSdvURL(); }
-    const INetURLObject& GetStrURL() const { return mpGalleryStorageLocations->GetStrURL(); }
+    const INetURLObject& GetThmURL() const { return maGalleryStorageLocations.GetThmURL(); }
+    const INetURLObject& GetSdgURL() const { return maGalleryStorageLocations.GetSdgURL(); }
+    const INetURLObject& GetSdvURL() const { return maGalleryStorageLocations.GetSdvURL(); }
+    const INetURLObject& GetStrURL() const { return maGalleryStorageLocations.GetStrURL(); }
 
-    const std::unique_ptr<GalleryStorageLocations>& getGalleryStorageLocations() const
+    const GalleryStorageLocations& getGalleryStorageLocations() const
     {
-        return mpGalleryStorageLocations;
+        return maGalleryStorageLocations;
     }
+    GalleryStorageLocations& getGalleryStorageLocations() { return maGalleryStorageLocations; }
 
     static GalleryThemeEntry* CreateThemeEntry(const INetURLObject& rURL, bool bReadOnly);
 

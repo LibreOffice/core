@@ -726,7 +726,7 @@ bool GalleryThemeEntry::IsDefault() const
 
 GalleryStorageLocations& GalleryThemeEntry::getGalleryStorageLocations() const
 {
-    return *mpGalleryStorageEngineEntry->getGalleryStorageLocations();
+    return mpGalleryStorageEngineEntry->getGalleryStorageLocations();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
