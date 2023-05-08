@@ -156,7 +156,7 @@ public:
     {
         if (run() == RET_OK)
         {
-            m_rParent.CalcWish(sal_uInt8(m_xRowEdit->get_value()), sal_uInt8(m_xColEdit->get_value()));
+            m_rParent.CalcWish(m_xRowEdit->get_value(), m_xColEdit->get_value());
         }
     }
 };
@@ -218,12 +218,12 @@ void  SwPagePreviewWin::Paint(vcl::RenderContext& rRenderContext, const tools::R
     }
 }
 
-void SwPagePreviewWin::CalcWish( sal_uInt8 nNewRow, sal_uInt8 nNewCol )
+void SwPagePreviewWin::CalcWish( sal_Int16 nNewRow, sal_Int16 nNewCol )
 {
     if( !mpViewShell || !mpViewShell->GetLayout() )
         return;
 
-    const sal_uInt8 nOldCol = mnCol;
+    const sal_Int16 nOldCol = mnCol;
     mnRow = nNewRow;
     mnCol = nNewCol;
     const sal_uInt16 nPages = mnRow * mnCol;
@@ -514,7 +514,7 @@ void SwPagePreviewWin::MouseButtonDown( const MouseEvent& rMEvt )
 
 // Set user prefs or view options
 
-void SwPagePreviewWin::SetPagePreview( sal_uInt8 nRow, sal_uInt8 nCol )
+void SwPagePreviewWin::SetPagePreview( sal_Int16 nRow, sal_Int16 nCol )
 {
     SwMasterUsrPref *pOpt = const_cast<SwMasterUsrPref *>(SW_MOD()->GetUsrPref(false));
 
@@ -656,7 +656,7 @@ void SwPagePreview::ExecPgUpAndPgDown( const bool  _bPgUp,
 void  SwPagePreview::Execute( SfxRequest &rReq )
 {
     int eMvMode = SwPagePreviewWin::MV_DOC_END;
-    sal_uInt8 nRow = 1;
+    sal_Int16 nRow = 1;
     bool bRefresh = true;
 
     switch(rReq.GetSlot())
@@ -671,8 +671,8 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
             const SfxItemSet *pArgs = rReq.GetArgs();
             if( pArgs && pArgs->Count() >= 2 )
             {
-                sal_uInt8 nCols = static_cast<sal_uInt8>(pArgs->Get(SID_ATTR_TABLE_COLUMN).GetValue());
-                sal_uInt8 nRows = static_cast<sal_uInt8>(pArgs->Get(SID_ATTR_TABLE_ROW).GetValue());
+                sal_Int16 nCols = pArgs->Get(SID_ATTR_TABLE_COLUMN).GetValue();
+                sal_Int16 nRows = pArgs->Get(SID_ATTR_TABLE_ROW).GetValue();
                 m_pViewWin->CalcWish( nRows, nCols );
 
             }

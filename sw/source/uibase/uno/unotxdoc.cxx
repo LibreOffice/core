@@ -941,9 +941,9 @@ Sequence< beans::PropertyValue > SwXTextDocument::getPagePrintSettings()
     if(pData)
         aData = *pData;
     Any aVal;
-    aVal <<= static_cast<sal_Int16>(aData.GetRow());
+    aVal <<= aData.GetRow();
     pArray[0] = beans::PropertyValue("PageRows", -1, aVal, PropertyState_DIRECT_VALUE);
-    aVal <<= static_cast<sal_Int16>(aData.GetCol());
+    aVal <<= aData.GetCol();
     pArray[1] = beans::PropertyValue("PageColumns", -1, aVal, PropertyState_DIRECT_VALUE);
     aVal <<= static_cast<sal_Int32>(convertTwipToMm100(aData.GetLeftSpace()));
     pArray[2] = beans::PropertyValue("LeftMargin", -1, aVal, PropertyState_DIRECT_VALUE);
@@ -1026,13 +1026,13 @@ void SwXTextDocument::setPagePrintSettings(const Sequence< beans::PropertyValue 
         {
             if(!nVal || nVal > 0xff)
                 throw RuntimeException("Invalid value");
-            aData.SetRow(static_cast<sal_uInt8>(nVal));
+            aData.SetRow(nVal);
         }
         else if(sName == "PageColumns")
         {
             if(!nVal  || nVal > 0xff)
                 throw RuntimeException("Invalid value");
-            aData.SetCol(static_cast<sal_uInt8>(nVal));
+            aData.SetCol(nVal);
         }
         else if(sName == "LeftMargin")
         {

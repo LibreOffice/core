@@ -47,8 +47,8 @@ class SAL_DLLPUBLIC_RTTI SwPagePreviewWin final : public vcl::Window
 {
     SwViewShell* mpViewShell;
     sal_uInt16 mnSttPage;
-    sal_uInt8 mnRow;
-    sal_uInt8 mnCol;
+    sal_Int16 mnRow;
+    sal_Int16 mnCol;
     Size maPxWinSize;
     Fraction maScale;
     SwPagePreview& mrView;
@@ -56,7 +56,7 @@ class SAL_DLLPUBLIC_RTTI SwPagePreviewWin final : public vcl::Window
     tools::Rectangle maPaintedPreviewDocRect;
     SwPagePreviewLayout* mpPgPreviewLayout;
 
-    void SetPagePreview( sal_uInt8 nRow, sal_uInt8 nCol );
+    void SetPagePreview( sal_Int16 nRow, sal_Int16 nCol );
 
     using Window::Scroll;
 
@@ -78,12 +78,12 @@ public:
         return mpViewShell;
     }
 
-    sal_uInt8 GetRow() const
+    sal_Int16 GetRow() const
     {
         return mnRow;
     }
 
-    sal_uInt8 GetCol() const
+    sal_Int16 GetCol() const
     {
         return mnCol;
     }
@@ -114,7 +114,7 @@ public:
     // If we only have one column we do not have a oth page
     sal_uInt16 GetDefSttPage() const   { return 1 == mnCol ? 1 : 0; }
 
-    void CalcWish( sal_uInt8 nNewRow, sal_uInt8 nNewCol );
+    void CalcWish( sal_Int16 nNewRow, sal_Int16 nNewCol );
 
     void SetWinSize( const Size& rNewSize );
 

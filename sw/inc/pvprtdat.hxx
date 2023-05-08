@@ -27,7 +27,7 @@ class SwPagePreviewPrtData
 
     sal_Int32 m_nLeftSpace, m_nRightSpace, m_nTopSpace, m_nBottomSpace,
             m_nHorzSpace, m_nVertSpace;
-    sal_uInt8 m_nRow, m_nCol;
+    sal_Int16 m_nRow, m_nCol;
     bool m_bLandscape : 1;
 public:
     SwPagePreviewPrtData()
@@ -54,11 +54,11 @@ public:
     sal_Int32 GetVertSpace() const          { return m_nVertSpace; }
     void SetVertSpace( sal_Int32 n )        { m_nVertSpace = n; }
 
-    sal_uInt8 GetRow() const                { return m_nRow; }
-    void SetRow(sal_uInt8 n )               { m_nRow = n; }
+    sal_Int16 GetRow() const                { return m_nRow; }
+    void SetRow(sal_Int16 n )               { m_nRow = n; }
 
-    sal_uInt8 GetCol() const                { return m_nCol; }
-    void SetCol( sal_uInt8 n )              { m_nCol = n; }
+    sal_Int16 GetCol() const                { return m_nCol; }
+    void SetCol( sal_Int16 n )              { m_nCol = n; }
 
     bool GetLandscape() const               { return m_bLandscape; }
     void SetLandscape( bool b )         { m_bLandscape = b; }
