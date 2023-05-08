@@ -265,8 +265,8 @@ css::uno::Reference< css::xml::sax::XFastContextHandler >
             break;
         default:
             // SvxXMLTableImportContextEnum::Gradient
-            // is no longer imported hee as 'fixed content'
-            // but dynamicalloy using an own ImportContext
+            // is no longer imported as 'fixed content'
+            // but dynamically using an own ImportContext
             break;
         }
 
