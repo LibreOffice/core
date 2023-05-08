@@ -255,7 +255,7 @@ void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEnt
                 ::GalleryTheme* pGalTheme = ( isValid() ? mpTheme->implGetTheme() : nullptr );
 
                 if( pGalTheme )
-                    *pValue <<= implGetObject()->getURL().GetMainURL( INetURLObject::DecodeMechanism::NONE );
+                    *pValue <<= implGetObject()->m_oStorageUrl->GetMainURL( INetURLObject::DecodeMechanism::NONE );
             }
             break;
 

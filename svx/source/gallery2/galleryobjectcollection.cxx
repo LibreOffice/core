@@ -27,7 +27,7 @@ const GalleryObject* GalleryObjectCollection::searchObjectWithURL(const INetURLO
 {
     for (auto const& pObject : m_aObjectList)
     {
-        if (pObject->getURL() == rURL)
+        if (*pObject->m_oStorageUrl == rURL)
             return pObject.get();
     }
     return nullptr;
@@ -53,7 +53,7 @@ const INetURLObject g_aInvalidURL;
 const INetURLObject& GalleryObjectCollection::getURLForPosition(sal_uInt32 nPos) const
 {
     if (nPos < size())
-        return get(nPos)->getURL();
+        return *get(nPos)->m_oStorageUrl;
     return g_aInvalidURL;
 }
 

@@ -41,7 +41,6 @@
 #include <svx/galtheme.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/galleryobjectcollection.hxx>
-#include <galleryobjectbinarystorage.hxx>
 #include <galobj.hxx>
 #include <svx/gallery1.hxx>
 #include "gallerydrawmodel.hxx"
@@ -124,7 +123,7 @@ bool GalleryTheme::InsertObject(const SgaObject& rObj, sal_uInt32 nInsertPos)
     sal_uInt32 iFoundPos = 0;
     for (sal_uInt32 n = maGalleryObjectCollection.size(); iFoundPos < n; ++iFoundPos)
     {
-        if (maGalleryObjectCollection.get(iFoundPos)->getURL() == rObj.GetURL())
+        if (*maGalleryObjectCollection.get(iFoundPos)->m_oStorageUrl == rObj.GetURL())
         {
             pFoundEntry = maGalleryObjectCollection.get(iFoundPos).get();
             break;
@@ -223,7 +222,7 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
 
         GalleryObject* pEntry = maGalleryObjectCollection.get(i).get();
 
-        const INetURLObject aURL( pEntry->getURL());
+        const INetURLObject aURL( *pEntry->m_oStorageUrl );
 
         rActualizeLink.Call( aURL );
 
@@ -683,8 +682,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
 
             aFileName = OStringToOUString(aTempFileName, osl_getThreadTextEncoding());
 
-            pObj->m_pGalleryObjectStorage.reset();
-            pObj->m_pGalleryObjectStorage = std::make_unique<GalleryObjectBinaryStorage>();
+            pObj->m_oStorageUrl.emplace();
 
             if( bRel )
             {
@@ -696,9 +694,9 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
 
                 aPath += aFileName;
 
-                pObj->m_pGalleryObjectStorage->setURL(INetURLObject(aPath));
+                pObj->m_oStorageUrl = INetURLObject(aPath);
 
-                if (!FileExists(pObj->getURL()))
+                if (!FileExists(*pObj->m_oStorageUrl))
                 {
                     aPath = aRelURL2.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
@@ -708,7 +706,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
                     aPath += aFileName;
 
                     // assign this URL, even in the case it is not valid (#94482)
-                    pObj->m_pGalleryObjectStorage->setURL(INetURLObject(aPath));
+                    pObj->m_oStorageUrl = INetURLObject(aPath);
                 }
             }
             else
@@ -716,18 +714,18 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
                 if( SgaObjKind::SvDraw == pObj->eObjKind )
                 {
                     OUString aDummyURL = "gallery/svdraw/" + aFileName;
-                    pObj->m_pGalleryObjectStorage->setURL(INetURLObject(aDummyURL, INetProtocol::PrivSoffice));
+                    pObj->m_oStorageUrl = INetURLObject(aDummyURL, INetProtocol::PrivSoffice);
                 }
                 else
                 {
                     OUString aLocalURL;
 
-                    pObj->m_pGalleryObjectStorage->setURL(INetURLObject(aFileName));
+                    pObj->m_oStorageUrl = INetURLObject(aFileName);
 
-                    if( ( pObj->getURL().GetProtocol() == INetProtocol::NotValid ) &&
+                    if( ( pObj->m_oStorageUrl->GetProtocol() == INetProtocol::NotValid ) &&
                         osl::FileBase::getFileURLFromSystemPath( aFileName, aLocalURL ) == osl::FileBase::E_None )
                     {
-                        pObj->m_pGalleryObjectStorage->setURL(INetURLObject(aLocalURL));
+                        pObj->m_oStorageUrl = INetURLObject(aLocalURL);
                     }
                 }
             }
