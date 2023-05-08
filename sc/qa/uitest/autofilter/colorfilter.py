@@ -102,6 +102,46 @@ class ColorFilterTest(UITestCase):
             self.assertTrue(is_row_hidden(doc, 6))
             self.assertFalse(is_row_hidden(doc, 7))
 
+    def test_tdf144549(self):
+        with self.ui_test.load_file(get_url_for_data_file("tdf144549.ods")) as doc:
+
+            xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+            xGridWin.executeAction("SELECT", mkPropertyValues({"CELL": "B1"}))
+
+            for i in range(12):
+                self.assertFalse(is_row_hidden(doc, i))
+
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter") as xDialog:
+                xField1 = xDialog.getChild("field1")
+                xCond1 = xDialog.getChild("cond1")
+
+                self.assertEqual("Value", get_state_as_dict(xField1)['DisplayText'])
+
+                select_by_text(xCond1, "Font color")
+                self.assertEqual("Font color", get_state_as_dict(xCond1)['DisplayText'])
+
+                xColor1 = xDialog.getChild("color1")
+
+                # Without the fix in place, this test would have failed with
+                # AssertionError: '3' != '1'
+                self.assertEqual('3', get_state_as_dict(xColor1)["EntryCount"])
+
+                select_pos(xColor1, "0")
+
+            self.assertFalse(is_row_hidden(doc, 0))
+            self.assertTrue(is_row_hidden(doc, 1))
+            self.assertTrue(is_row_hidden(doc, 2))
+            self.assertTrue(is_row_hidden(doc, 3))
+            self.assertFalse(is_row_hidden(doc, 4))
+            self.assertFalse(is_row_hidden(doc, 5))
+            self.assertTrue(is_row_hidden(doc, 6))
+            self.assertTrue(is_row_hidden(doc, 7))
+            self.assertTrue(is_row_hidden(doc, 8))
+            self.assertTrue(is_row_hidden(doc, 9))
+            self.assertFalse(is_row_hidden(doc, 10))
+            self.assertTrue(is_row_hidden(doc, 11))
+            self.assertTrue(is_row_hidden(doc, 12))
+
     def test_tdf142579_conditional_format(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf142579_cond_format.ods")) as doc:
 
