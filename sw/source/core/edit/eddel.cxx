@@ -42,7 +42,9 @@
 
 void SwEditShell::DeleteSel(SwPaM& rPam, bool const isArtificialSelection, bool *const pUndo)
 {
-    bool bSelectAll = StartsWith_() != SwCursorShell::StartsWith::None && ExtendedSelectedAll();
+    SwNode const*const pSelectAllStart(StartsWith_() != SwCursorShell::StartsWith::None
+        ? ExtendedSelectedAll()
+        : nullptr);
     // only for selections
     if (!rPam.HasMark()
         || (*rPam.GetPoint() == *rPam.GetMark()
@@ -58,7 +60,7 @@ void SwEditShell::DeleteSel(SwPaM& rPam, bool const isArtificialSelection, bool 
     // 3. Point and Mark are at the document start and end, Point is in a table: delete selection as usual
     if( rPam.GetNode().FindTableNode() &&
         rPam.GetNode().StartOfSectionNode() !=
-        rPam.GetNode(false).StartOfSectionNode() && !bSelectAll )
+        rPam.GetNode(false).StartOfSectionNode() && pSelectAllStart == nullptr)
     {
         // group the Undo in the table
         if( pUndo && !*pUndo )
@@ -102,24 +104,13 @@ void SwEditShell::DeleteSel(SwPaM& rPam, bool const isArtificialSelection, bool 
     {
         std::unique_ptr<SwPaM> pNewPam;
         SwPaM * pPam = &rPam;
-        if (bSelectAll)
+        if (pSelectAllStart)
         {
             assert(dynamic_cast<SwShellCursor*>(&rPam)); // must be corrected pam
             pNewPam.reset(new SwPaM(*rPam.GetMark(), *rPam.GetPoint()));
             // Selection starts at the first para of the first cell, but we
             // want to delete the table node before the first cell as well.
-            while (SwTableNode const* pTableNode =
-                pNewPam->Start()->nNode.GetNode().StartOfSectionNode()->FindTableNode())
-            {
-                pNewPam->Start()->nNode = *pTableNode;
-            }
-            // tdf#133990 ensure section is included in SwUndoDelete
-            while (SwSectionNode const* pSectionNode =
-                pNewPam->Start()->nNode.GetNode().StartOfSectionNode()->FindSectionNode())
-            {
-                pNewPam->Start()->nNode = *pSectionNode;
-            }
-            pNewPam->Start()->nContent.Assign(nullptr, 0);
+            *pNewPam->Start() = SwPosition(*pSelectAllStart);
             pPam = pNewPam.get();
         }
         // delete everything
