@@ -11,7 +11,7 @@
 
 #include <sal/config.h>
 
-#include <docmodel/uno/UnoThemeColor.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -37,21 +37,20 @@ constexpr const std::array<XMLTokenEnum, 12> constThemeColorTypeToToken{
 void XMLThemeColorExport::exportXML(const uno::Any& rAny, sal_uInt16 nPrefix,
                                     const OUString& rLocalName)
 {
-    uno::Reference<util::XThemeColor> xThemeColor;
-    rAny >>= xThemeColor;
-    if (!xThemeColor.is())
+    uno::Reference<util::XComplexColor> xComplexColor;
+    rAny >>= xComplexColor;
+    if (!xComplexColor.is())
         return;
 
-    model::ThemeColor aThemeColor;
-    model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
-    if (aThemeColor.getType() == model::ThemeColorType::Unknown)
+    model::ComplexColor aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+    if (aComplexColor.getSchemeType() == model::ThemeColorType::Unknown)
         return;
 
-    XMLTokenEnum nToken = constThemeColorTypeToToken[sal_Int16(aThemeColor.getType())];
+    XMLTokenEnum nToken = constThemeColorTypeToToken[sal_Int16(aComplexColor.getSchemeType())];
     mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_TYPE, nToken);
-    SvXMLElementExport aThemeColorElement(mrExport, nPrefix, rLocalName, true, true);
+    SvXMLElementExport aComplexColorElement(mrExport, nPrefix, rLocalName, true, true);
 
-    for (auto const& rTransform : aThemeColor.getTransformations())
+    for (auto const& rTransform : aComplexColor.getTransformations())
     {
         OUString aType;
         switch (rTransform.meType)

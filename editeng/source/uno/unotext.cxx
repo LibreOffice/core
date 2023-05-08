@@ -1175,7 +1175,7 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
                     }
                     break;
                 }
-                case MID_COLOR_THEME_REFERENCE:
+                case MID_COMPLEX_COLOR:
                     if (pColor->getComplexColor().meType == model::ColorType::Unused)
                     {
                         eItemState = SfxItemState::DEFAULT;

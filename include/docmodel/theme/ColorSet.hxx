@@ -36,8 +36,6 @@ public:
 
     const OUString& getName() const { return maName; }
 
-    Color resolveColor(model::ThemeColor const& rThemeColor) const;
-
     Color resolveColor(model::ComplexColor const& rComplexColor) const;
 
     Color getColor(model::ThemeColorType eType) const;

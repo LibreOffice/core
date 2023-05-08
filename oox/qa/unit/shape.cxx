@@ -24,7 +24,7 @@
 #include <rtl/math.hxx>
 #include <svx/svdoashp.hxx>
 #include <tools/color.hxx>
-#include <docmodel/uno/UnoThemeColor.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 
 using namespace ::com::sun::star;
 
@@ -300,15 +300,14 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf54095_SmartArtThemeTextColor)
     // - Actual  : 16777215 (0xFFFFFF), that is text was white
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x1F497D), nActualColor);
 
-    // clrScheme. For map between name in docx and index from CharColorThemeReference see
+    // clrScheme. For map between name in docx and index from CharComplexColor see
     // oox::drawingml::Color::getSchemeColorIndex()
     // Without fix the color scheme was "lt1" (1) but should be "dk2" (2).
-    uno::Reference<util::XThemeColor> xThemeColor;
-    CPPUNIT_ASSERT(xPortion->getPropertyValue("CharColorThemeReference") >>= xThemeColor);
-    CPPUNIT_ASSERT(xThemeColor.is());
-    model::ThemeColor aThemeColor;
-    model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
-    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Dark2, aThemeColor.getType());
+    uno::Reference<util::XComplexColor> xComplexColor;
+    xPortion->getPropertyValue("CharComplexColor") >>= xComplexColor;
+    CPPUNIT_ASSERT(xComplexColor.is());
+    auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Dark2, aComplexColor.getSchemeType());
 
     if (!bUseGroup)
     {

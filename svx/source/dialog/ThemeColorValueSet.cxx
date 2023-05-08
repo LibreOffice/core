@@ -8,7 +8,7 @@
  */
 
 #include <svx/dialog/ThemeColorValueSet.hxx>
-#include <docmodel/uno/UnoThemeColor.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 #include <vcl/event.hxx>
 
 namespace svx

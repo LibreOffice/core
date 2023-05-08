@@ -13,14 +13,14 @@
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
 #include <editeng/unoprnms.hxx>
-#include <docmodel/uno/UnoThemeColor.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 #include <docmodel/theme/ColorSet.hxx>
 
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/util/XThemeColor.hpp>
+#include <com/sun/star/util/XComplexColor.hpp>
 
 using namespace css;
 
@@ -34,22 +34,22 @@ namespace
 void updateTextPortionColorSet(model::ColorSet const& rColorSet,
                                const uno::Reference<beans::XPropertySet>& xPortion)
 {
-    if (!xPortion->getPropertySetInfo()->hasPropertyByName(
-            UNO_NAME_EDIT_CHAR_COLOR_THEME_REFERENCE))
+    if (!xPortion->getPropertySetInfo()->hasPropertyByName(UNO_NAME_EDIT_CHAR_COMPLEX_COLOR))
+    {
+        return;
+    }
+
+    uno::Reference<util::XComplexColor> xComplexColor;
+    xPortion->getPropertyValue(UNO_NAME_EDIT_CHAR_COMPLEX_COLOR) >>= xComplexColor;
+    if (!xComplexColor.is())
         return;
 
-    uno::Reference<util::XThemeColor> xThemeColor;
-    xPortion->getPropertyValue(UNO_NAME_EDIT_CHAR_COLOR_THEME_REFERENCE) >>= xThemeColor;
-    if (!xThemeColor.is())
+    auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+
+    if (aComplexColor.getSchemeType() == model::ThemeColorType::Unknown)
         return;
 
-    model::ThemeColor aThemeColor;
-    model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
-
-    if (aThemeColor.getType() == model::ThemeColorType::Unknown)
-        return;
-
-    Color aColor = rColorSet.resolveColor(aThemeColor);
+    Color aColor = rColorSet.resolveColor(aComplexColor);
     xPortion->setPropertyValue(UNO_NAME_EDIT_CHAR_COLOR, uno::Any(static_cast<sal_Int32>(aColor)));
 }
 
@@ -57,21 +57,20 @@ void updateTextPortionColorSet(model::ColorSet const& rColorSet,
 void updateFillColorSet(model::ColorSet const& rColorSet,
                         const uno::Reference<beans::XPropertySet>& xShape)
 {
-    if (!xShape->getPropertySetInfo()->hasPropertyByName(UNO_NAME_FILLCOLOR_THEME_REFERENCE))
+    if (!xShape->getPropertySetInfo()->hasPropertyByName(UNO_NAME_FILL_COMPLEX_COLOR))
         return;
 
-    uno::Reference<util::XThemeColor> xThemeColor;
-    xShape->getPropertyValue(UNO_NAME_FILLCOLOR_THEME_REFERENCE) >>= xThemeColor;
-    if (!xThemeColor.is())
+    uno::Reference<util::XComplexColor> xComplexColor;
+    xShape->getPropertyValue(UNO_NAME_FILL_COMPLEX_COLOR) >>= xComplexColor;
+    if (!xComplexColor.is())
         return;
 
-    model::ThemeColor aThemeColor;
-    model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
+    auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
 
-    if (aThemeColor.getType() == model::ThemeColorType::Unknown)
+    if (aComplexColor.getSchemeType() == model::ThemeColorType::Unknown)
         return;
 
-    Color aColor = rColorSet.resolveColor(aThemeColor);
+    Color aColor = rColorSet.resolveColor(aComplexColor);
     xShape->setPropertyValue(UNO_NAME_FILLCOLOR, uno::Any(static_cast<sal_Int32>(aColor)));
 }
 
@@ -79,21 +78,20 @@ void updateFillColorSet(model::ColorSet const& rColorSet,
 void updateLineColorSet(model::ColorSet const& rColorSet,
                         const uno::Reference<beans::XPropertySet>& xShape)
 {
-    if (!xShape->getPropertySetInfo()->hasPropertyByName(UNO_NAME_LINECOLOR_THEME_REFERENCE))
+    if (!xShape->getPropertySetInfo()->hasPropertyByName(UNO_NAME_LINE_COMPLEX_COLOR))
         return;
 
-    uno::Reference<util::XThemeColor> xThemeColor;
-    xShape->getPropertyValue(UNO_NAME_LINECOLOR_THEME_REFERENCE) >>= xThemeColor;
-    if (!xThemeColor.is())
+    uno::Reference<util::XComplexColor> xComplexColor;
+    xShape->getPropertyValue(UNO_NAME_LINE_COMPLEX_COLOR) >>= xComplexColor;
+    if (!xComplexColor.is())
         return;
 
-    model::ThemeColor aThemeColor;
-    model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
+    auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
 
-    if (aThemeColor.getType() == model::ThemeColorType::Unknown)
+    if (aComplexColor.getSchemeType() == model::ThemeColorType::Unknown)
         return;
 
-    Color aColor = rColorSet.resolveColor(aThemeColor);
+    Color aColor = rColorSet.resolveColor(aComplexColor);
     xShape->setPropertyValue(UNO_NAME_LINECOLOR, uno::Any(static_cast<sal_Int32>(aColor)));
 }
 

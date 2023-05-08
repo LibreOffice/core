@@ -11,12 +11,13 @@
 #pragma once
 
 #include <docmodel/dllapi.h>
-#include <docmodel/theme/ThemeColor.hxx>
+#include <docmodel/color/ComplexColor.hxx>
 
-namespace model::theme
+namespace model::color
 {
-DOCMODEL_DLLPUBLIC OString convertToJSON(model::ThemeColor const& rThemeColor);
-DOCMODEL_DLLPUBLIC bool convertFromJSON(OString const& rJsonString, model::ThemeColor& rThemeColor);
+DOCMODEL_DLLPUBLIC OString convertToJSON(model::ComplexColor const& rComplexColor);
+DOCMODEL_DLLPUBLIC bool convertFromJSON(OString const& rJsonString,
+                                        model::ComplexColor& rComplexColor);
 
 } // end of namespace model
 

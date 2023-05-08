@@ -9,12 +9,12 @@
 
 #pragma once
 
-#include <docmodel/uno/UnoThemeColor.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 
 using namespace ::xmloff::token;
 using namespace css;
 
-class XMLThemeColorHandler : public XMLPropertyHandler
+class XMLComplexColorHandler : public XMLPropertyHandler
 {
 public:
     bool importXML(const OUString& /*rStrImpValue*/, css::uno::Any& /*rValue*/,
@@ -31,16 +31,13 @@ public:
 
     bool equals(const css::uno::Any& rAny1, const css::uno::Any& rAny2) const override
     {
-        uno::Reference<util::XThemeColor> xThemeColor1;
-        uno::Reference<util::XThemeColor> xThemeColor2;
-        rAny1 >>= xThemeColor1;
-        rAny2 >>= xThemeColor2;
-        model::ThemeColor aThemeColor1;
-        model::ThemeColor aThemeColor2;
-        model::theme::setFromXThemeColor(aThemeColor1, xThemeColor1);
-        model::theme::setFromXThemeColor(aThemeColor2, xThemeColor2);
-
-        return aThemeColor1 == aThemeColor2;
+        uno::Reference<util::XComplexColor> xComplexColor1;
+        uno::Reference<util::XComplexColor> xComplexColor2;
+        rAny1 >>= xComplexColor1;
+        rAny2 >>= xComplexColor2;
+        model::ComplexColor aComplexColor1 = model::color::getFromXComplexColor(xComplexColor1);
+        model::ComplexColor aComplexColor2 = model::color::getFromXComplexColor(xComplexColor2);
+        return aComplexColor1 == aComplexColor2;
     }
 };
 

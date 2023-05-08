@@ -46,7 +46,7 @@
 #include <o3tl/enumrange.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdpage.hxx>
-#include <docmodel/theme/ThemeColor.hxx>
+#include <docmodel/theme/ThemeColorType.hxx>
 #include <docmodel/theme/Theme.hxx>
 
 

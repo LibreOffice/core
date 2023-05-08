@@ -109,7 +109,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( PROP_FillStyle,                      XML_NAMESPACE_DRAW, XML_FILL,                   XML_SD_TYPE_FILLSTYLE, CTF_FILLSTYLE ),
     GMAP_D(PROP_FillColor,                     XML_NAMESPACE_DRAW, XML_FILL_COLOR,             XML_TYPE_COLOR, CTF_FILLCOLOR ),
     GMAP_D(PROP_FillColor2,                    XML_NAMESPACE_DRAW, XML_SECONDARY_FILL_COLOR,   XML_TYPE_COLOR, 0),
-    GMAPV( PROP_FillColorThemeReference,       XML_NAMESPACE_LO_EXT, XML_FILL_COLOR_THEME_REFERENCE, XML_TYPE_THEME_COLOR|MID_FLAG_ELEMENT_ITEM, CTF_THEME_COLOR, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV( PROP_FillComplexColor,              XML_NAMESPACE_LO_EXT, XML_FILL_COMPLEX_COLOR, XML_TYPE_COMPLEX_COLOR|MID_FLAG_ELEMENT_ITEM, CTF_COMPLEX_COLOR, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
     GMAP( PROP_FillGradientName,               XML_NAMESPACE_DRAW, XML_FILL_GRADIENT_NAME,     XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLGRADIENTNAME ),
     GMAP( PROP_FillGradientStepCount,          XML_NAMESPACE_DRAW, XML_GRADIENT_STEP_COUNT,    XML_TYPE_NUMBER16, 0 ),
     GMAP( PROP_FillHatchName,                  XML_NAMESPACE_DRAW, XML_FILL_HATCH_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLHATCHNAME ),
@@ -1307,8 +1307,8 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             case XML_TYPE_TEXT_COLUMNS:
                 pHdl = new XMLTextColumnsPropertyHandler;
                 break;
-            case XML_TYPE_THEME_COLOR:
-                pHdl = new XMLThemeColorHandler;
+            case XML_TYPE_COMPLEX_COLOR:
+                pHdl = new XMLComplexColorHandler;
                 break;
         }
 

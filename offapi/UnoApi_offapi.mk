@@ -4179,7 +4179,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/util,\
 	XCloseable \
 	XComplexColor \
 	XTheme \
-	XThemeColor \
 	XDataEditor \
 	XDataEditorListener \
 	XFlushListener \

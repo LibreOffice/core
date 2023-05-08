@@ -1958,7 +1958,8 @@ beans::PropertyState SvxShape::_getPropertyState( const OUString& PropertyName )
                 if (pMap->nMemberId == MID_COLOR_THEME_INDEX)
                 {
                     const XFillColorItem* pColor = rSet.GetItem<XFillColorItem>(pMap->nWID);
-                    if (pColor->GetThemeColor().getType() == model::ThemeColorType::Unknown)
+                    if (pColor->getComplexColor().getType() == model::ColorType::Unused ||
+                        pColor->getComplexColor().getSchemeType() == model::ThemeColorType::Unknown)
                     {
                         eState = beans::PropertyState_DEFAULT_VALUE;
                     }
@@ -1967,7 +1968,7 @@ beans::PropertyState SvxShape::_getPropertyState( const OUString& PropertyName )
                 {
                     const XFillColorItem* pColor = rSet.GetItem<XFillColorItem>(pMap->nWID);
                     sal_Int16 nLumMod = 10000;
-                    for (auto const& rTransform : pColor->GetThemeColor().getTransformations())
+                    for (auto const& rTransform : pColor->getComplexColor().getTransformations())
                     {
                         if (rTransform.meType == model::TransformationType::LumMod)
                             nLumMod = rTransform.mnValue;
@@ -1981,7 +1982,7 @@ beans::PropertyState SvxShape::_getPropertyState( const OUString& PropertyName )
                 {
                     const XFillColorItem* pColor = rSet.GetItem<XFillColorItem>(pMap->nWID);
                     sal_Int16 nLumOff = 0;
-                    for (auto const& rTransform : pColor->GetThemeColor().getTransformations())
+                    for (auto const& rTransform : pColor->getComplexColor().getTransformations())
                     {
                         if (rTransform.meType == model::TransformationType::LumOff)
                             nLumOff = rTransform.mnValue;
@@ -1991,20 +1992,20 @@ beans::PropertyState SvxShape::_getPropertyState( const OUString& PropertyName )
                         eState = beans::PropertyState_DEFAULT_VALUE;
                     }
                 }
-                else if (pMap->nMemberId == MID_COLOR_THEME_REFERENCE)
+                else if (pMap->nMemberId == MID_COMPLEX_COLOR)
                 {
-                    const XFillColorItem* pColor = rSet.GetItem<XFillColorItem>(pMap->nWID);
-                    if (pColor->GetThemeColor().getType() == model::ThemeColorType::Unknown)
+                    auto const* pColor = rSet.GetItem<XFillColorItem>(pMap->nWID);
+                    if (pColor->getComplexColor().getType() == model::ColorType::Unused)
                     {
                         eState = beans::PropertyState_DEFAULT_VALUE;
                     }
                 }
                 break;
             case XATTR_LINECOLOR:
-                if (pMap->nMemberId == MID_COLOR_THEME_REFERENCE)
+                if (pMap->nMemberId == MID_COMPLEX_COLOR)
                 {
                     auto const* pColor = rSet.GetItem<XLineColorItem>(pMap->nWID);
-                    if (pColor->GetThemeColor().getType() == model::ThemeColorType::Unknown)
+                    if (pColor->getComplexColor().getType() == model::ColorType::Unused)
                     {
                         eState = beans::PropertyState_DEFAULT_VALUE;
                     }

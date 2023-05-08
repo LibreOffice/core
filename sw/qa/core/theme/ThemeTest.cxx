@@ -16,7 +16,7 @@
 #include <drawdoc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <svx/svdpage.hxx>
-#include <docmodel/uno/UnoThemeColor.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 #include <docmodel/theme/Theme.hxx>
 #include <ThemeColorChanger.hxx>
 #include <svx/ColorSets.hxx>
@@ -40,11 +40,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testThemeColorInHeading)
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
 
-    auto xThemeColor = getProperty<uno::Reference<util::XThemeColor>>(getParagraph(1),
-                                                                      "CharColorThemeReference");
-    model::ThemeColor aThemeColor;
-    model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
-    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aThemeColor.getType());
+    auto xComplexColor
+        = getProperty<uno::Reference<util::XComplexColor>>(getParagraph(1), "CharComplexColor");
+    auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getSchemeType());
 }
 
 void checkFillStyles(std::vector<model::FillStyle> const& rStyleList)

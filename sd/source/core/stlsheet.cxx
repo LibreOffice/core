@@ -1359,7 +1359,7 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
                 if (pEntry->nMemberId == MID_COLOR_THEME_INDEX)
                 {
                     const XFillColorItem* pColor = rStyleSet.GetItem<XFillColorItem>(pEntry->nWID);
-                    if (pColor->GetThemeColor().getType() == model::ThemeColorType::Unknown)
+                    if (pColor->getComplexColor().getSchemeType() == model::ThemeColorType::Unknown)
                     {
                         eState = PropertyState_DEFAULT_VALUE;
                     }
@@ -1368,7 +1368,7 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
                 {
                     const XFillColorItem* pColor = rStyleSet.GetItem<XFillColorItem>(pEntry->nWID);
                     sal_Int16 nLumMod = 10000;
-                    for (auto const& rTransform : pColor->GetThemeColor().getTransformations())
+                    for (auto const& rTransform : pColor->getComplexColor().getTransformations())
                     {
                         if (rTransform.meType == model::TransformationType::LumMod)
                             nLumMod = rTransform.mnValue;
@@ -1382,7 +1382,7 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
                 {
                     const XFillColorItem* pColor = rStyleSet.GetItem<XFillColorItem>(pEntry->nWID);
                     sal_Int16 nLumOff = 0;
-                    for (auto const& rTransform : pColor->GetThemeColor().getTransformations())
+                    for (auto const& rTransform : pColor->getComplexColor().getTransformations())
                     {
                         if (rTransform.meType == model::TransformationType::LumOff)
                             nLumOff = rTransform.mnValue;
@@ -1392,20 +1392,20 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
                         eState = PropertyState_DEFAULT_VALUE;
                     }
                 }
-                else if (pEntry->nMemberId == MID_COLOR_THEME_REFERENCE)
+                else if (pEntry->nMemberId == MID_COMPLEX_COLOR)
                 {
-                    const XFillColorItem* pColor = rStyleSet.GetItem<XFillColorItem>(pEntry->nWID);
-                    if (pColor->GetThemeColor().getType() == model::ThemeColorType::Unknown)
+                    auto const* pColor = rStyleSet.GetItem<XFillColorItem>(pEntry->nWID);
+                    if (pColor->getComplexColor().getType() == model::ColorType::Unused)
                     {
                         eState = PropertyState_DEFAULT_VALUE;
                     }
                 }
                 break;
             case XATTR_LINECOLOR:
-                if (pEntry->nMemberId == MID_COLOR_THEME_REFERENCE)
+                if (pEntry->nMemberId == MID_COMPLEX_COLOR)
                 {
                     auto const* pColor = rStyleSet.GetItem<XLineColorItem>(pEntry->nWID);
-                    if (pColor->GetThemeColor().getType() == model::ThemeColorType::Unknown)
+                    if (pColor->getComplexColor().getType() == model::ColorType::Unused)
                     {
                         eState = PropertyState_DEFAULT_VALUE;
                     }

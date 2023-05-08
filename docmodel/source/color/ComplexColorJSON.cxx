@@ -8,18 +8,18 @@
  *
  */
 
-#include <docmodel/theme/ThemeColorJSON.hxx>
+#include <docmodel/color/ComplexColorJSON.hxx>
 #include <sstream>
 #include <utility>
 #include <sal/log.hxx>
 #include <boost/property_tree/json_parser.hpp>
 
-namespace model::theme
+namespace model::color
 {
-bool convertFromJSON(OString const& rJsonString, model::ThemeColor& rThemeColor)
+bool convertFromJSON(OString const& rJsonString, model::ComplexColor& rComplexColor)
 {
-    model::ThemeColor aThemeColor;
-    std::stringstream aStream(rJsonString.getStr());
+    model::ComplexColor aComplexColor;
+    std::stringstream aStream((std::string(rJsonString)));
     boost::property_tree::ptree aRootTree;
     try
     {
@@ -31,7 +31,7 @@ bool convertFromJSON(OString const& rJsonString, model::ThemeColor& rThemeColor)
     }
 
     sal_Int32 nThemeType = aRootTree.get<sal_Int32>("ThemeIndex", -1);
-    aThemeColor.setType(model::convertToThemeColorType(nThemeType));
+    aComplexColor.setSchemeColor(model::convertToThemeColorType(nThemeType));
     boost::property_tree::ptree aTransformTree = aRootTree.get_child("Transformations");
     for (const auto& rEachTransformationNode :
          boost::make_iterator_range(aTransformTree.equal_range("")))
@@ -51,19 +51,19 @@ bool convertFromJSON(OString const& rJsonString, model::ThemeColor& rThemeColor)
             eType = model::TransformationType::Shade;
 
         if (eType != model::TransformationType::Undefined)
-            aThemeColor.addTransformation({ eType, nValue });
+            aComplexColor.addTransformation({ eType, nValue });
     }
-    rThemeColor = aThemeColor;
+    rComplexColor = aComplexColor;
     return true;
 }
 
-OString convertToJSON(model::ThemeColor const& rThemeColor)
+OString convertToJSON(model::ComplexColor const& rComplexColor)
 {
     boost::property_tree::ptree aTree;
-    aTree.put("ThemeIndex", sal_Int16(rThemeColor.getType()));
+    aTree.put("ThemeIndex", sal_Int16(rComplexColor.getSchemeType()));
 
     boost::property_tree::ptree aTransformationsList;
-    for (auto const& rTransformation : rThemeColor.getTransformations())
+    for (auto const& rTransformation : rComplexColor.getTransformations())
     {
         std::string aType;
         switch (rTransformation.meType)

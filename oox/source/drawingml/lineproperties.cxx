@@ -34,8 +34,7 @@
 #include <oox/helper/graphichelper.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/token/properties.hxx>
-#include <docmodel/uno/UnoThemeColor.hxx>
-
+#include <docmodel/uno/UnoComplexColor.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -501,28 +500,28 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
         if( aLineColor.hasTransparency() )
             rPropMap.setProperty( ShapeProperty::LineTransparency, aLineColor.getTransparency() );
 
-        model::ThemeColor aThemeColor;
+        model::ComplexColor aComplexColor;
 
         if (aColor == nPhClr)
         {
-            aThemeColor.setType(model::convertToThemeColorType(nPhClrTheme));
-            rPropMap.setProperty(PROP_LineColorThemeReference, model::theme::createXThemeColor(aThemeColor));
+            aComplexColor.setSchemeColor(model::convertToThemeColorType(nPhClrTheme));
+            rPropMap.setProperty(PROP_LineComplexColor, model::color::createXComplexColor(aComplexColor));
         }
         else
         {
-            aThemeColor.setType(model::convertToThemeColorType(aLineColor.getSchemeColorIndex()));
+            aComplexColor.setSchemeColor(model::convertToThemeColorType(aLineColor.getSchemeColorIndex()));
             if (aLineColor.getLumMod() != 10000)
-                aThemeColor.addTransformation({model::TransformationType::LumMod, aLineColor.getLumMod()});
+                aComplexColor.addTransformation({model::TransformationType::LumMod, aLineColor.getLumMod()});
             if (aLineColor.getLumOff() != 0)
-                aThemeColor.addTransformation({model::TransformationType::LumOff, aLineColor.getLumOff()});
+                aComplexColor.addTransformation({model::TransformationType::LumOff, aLineColor.getLumOff()});
             if (aLineColor.getTintOrShade() > 0)
-                aThemeColor.addTransformation({model::TransformationType::Tint, aLineColor.getTintOrShade()});
+                aComplexColor.addTransformation({model::TransformationType::Tint, aLineColor.getTintOrShade()});
             if (aLineColor.getTintOrShade() < 0)
             {
                 sal_Int16 nShade = o3tl::narrowing<sal_Int16>(-aLineColor.getTintOrShade());
-                aThemeColor.addTransformation({model::TransformationType::Shade, nShade});
+                aComplexColor.addTransformation({model::TransformationType::Shade, nShade});
             }
-            rPropMap.setProperty(PROP_LineColorThemeReference, model::theme::createXThemeColor(aThemeColor));
+            rPropMap.setProperty(PROP_LineComplexColor, model::color::createXComplexColor(aComplexColor));
         }
     }
 

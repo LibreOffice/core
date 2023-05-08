@@ -53,12 +53,12 @@ Change
 CharBackColor
 CharCaseMap
 CharColor
-CharColorThemeReference
 CharContoured
 CharColorTheme
 CharColorTintOrShade
 CharColorLumMod
 CharColorLumOff
+CharComplexColor
 CharEscapement
 CharEscapementHeight
 CharFontCharSet
@@ -177,7 +177,7 @@ FillColor
 FillColorTheme
 FillColorLumMod
 FillColorLumOff
-FillColorThemeReference
+FillComplexColor
 FillGradient
 FillGradientName
 FillHatch
@@ -316,7 +316,7 @@ LeftPageHeaderContent
 LegacyFragment
 LineCap
 LineColor
-LineColorThemeReference
+LineComplexColor
 LineCount
 LineDash
 LineDashName

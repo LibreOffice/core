@@ -3486,8 +3486,8 @@ namespace xmloff::token {
         XML_LINKED_STYLE_NAME,
 
         XML_THEME,
-        XML_CHAR_COLOR_THEME_REFERENCE,
-        XML_FILL_COLOR_THEME_REFERENCE,
+        XML_CHAR_COMPLEX_COLOR,
+        XML_FILL_COMPLEX_COLOR,
         XML_DK1,
         XML_LT1,
         XML_DK2,

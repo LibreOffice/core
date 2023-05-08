@@ -89,6 +89,11 @@ public:
     ThemeColorType meSchemeType = ThemeColorType::Unknown;
     std::vector<Transformation> maTransformations;
 
+public:
+    ColorType getType() const { return meType; }
+
+    ThemeColorType getSchemeType() const { return meSchemeType; }
+
     Color getRGBColor() const { return Color(mnComponent1, mnComponent2, mnComponent3); }
 
     std::vector<Transformation> const& getTransformations() const { return maTransformations; }
@@ -111,6 +116,8 @@ public:
                                                }),
                                 maTransformations.end());
     }
+
+    void clearTransformations() { maTransformations.clear(); }
 
     void setCRGB(sal_Int32 nR, sal_Int32 nG, sal_Int32 nB)
     {

@@ -30,7 +30,7 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/util/XTheme.hpp>
 
-#include <docmodel/uno/UnoThemeColor.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 #include <docmodel/uno/UnoTheme.hxx>
 #include <docmodel/theme/Theme.hxx>
 
@@ -415,18 +415,17 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPptxTheme)
 
     // Check the theme colors are as expected
     {
-        uno::Reference<util::XThemeColor> xThemeColor;
-        CPPUNIT_ASSERT(xPortion->getPropertyValue("CharColorThemeReference") >>= xThemeColor);
-        CPPUNIT_ASSERT(xThemeColor.is());
-        model::ThemeColor aThemeColor;
-        model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
-        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aThemeColor.getType());
+        uno::Reference<util::XComplexColor> xComplexColor;
+        CPPUNIT_ASSERT(xPortion->getPropertyValue("CharComplexColor") >>= xComplexColor);
+        CPPUNIT_ASSERT(xComplexColor.is());
+        auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getSchemeType());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod,
-                             aThemeColor.getTransformations()[0].meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(6000), aThemeColor.getTransformations()[0].mnValue);
+                             aComplexColor.getTransformations()[0].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(6000), aComplexColor.getTransformations()[0].mnValue);
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff,
-                             aThemeColor.getTransformations()[1].meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), aThemeColor.getTransformations()[1].mnValue);
+                             aComplexColor.getTransformations()[1].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), aComplexColor.getTransformations()[1].mnValue);
     }
 }
 
@@ -471,28 +470,26 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColorTint_Table)
 
     // check theme color
     {
-        uno::Reference<util::XThemeColor> xThemeColor;
-        CPPUNIT_ASSERT(xA1->getPropertyValue("FillColorThemeReference") >>= xThemeColor);
-        CPPUNIT_ASSERT(xThemeColor.is());
-        model::ThemeColor aThemeColor;
-        model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
-        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aThemeColor.getType());
+        uno::Reference<util::XComplexColor> xComplexColor;
+        CPPUNIT_ASSERT(xA1->getPropertyValue("FillComplexColor") >>= xComplexColor);
+        CPPUNIT_ASSERT(xComplexColor.is());
+        auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getSchemeType());
         {
-            auto const& rTrans = aThemeColor.getTransformations();
+            auto const& rTrans = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(0), rTrans.size());
         }
     }
 
     {
-        uno::Reference<util::XThemeColor> xThemeColor;
         uno::Reference<beans::XPropertySet> xA2(xTable->getCellByPosition(0, 1), uno::UNO_QUERY);
-        CPPUNIT_ASSERT(xA2->getPropertyValue("FillColorThemeReference") >>= xThemeColor);
-        CPPUNIT_ASSERT(xThemeColor.is());
-        model::ThemeColor aThemeColor;
-        model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
-        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aThemeColor.getType());
+        uno::Reference<util::XComplexColor> xComplexColor;
+        CPPUNIT_ASSERT(xA2->getPropertyValue("FillComplexColor") >>= xComplexColor);
+        CPPUNIT_ASSERT(xComplexColor.is());
+        auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getSchemeType());
         {
-            auto const& rTrans = aThemeColor.getTransformations();
+            auto const& rTrans = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(1), rTrans.size());
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTrans[0].meType);
             CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), rTrans[0].mnValue);
@@ -513,16 +510,15 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColor_Shape)
 
     // check line and fill theme color of shape1
     {
-        model::ThemeColor aThemeColor;
-        uno::Reference<util::XThemeColor> xThemeColor;
         uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-
-        CPPUNIT_ASSERT(xShape->getPropertyValue("FillColorThemeReference") >>= xThemeColor);
-        CPPUNIT_ASSERT(xThemeColor.is());
-        model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
-        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent6, aThemeColor.getType());
+        uno::Reference<util::XComplexColor> xComplexColor;
+        CPPUNIT_ASSERT(xShape->getPropertyValue("FillComplexColor") >>= xComplexColor);
+        CPPUNIT_ASSERT(xComplexColor.is());
         {
-            auto const& rTrans = aThemeColor.getTransformations();
+            auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+            CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent6, aComplexColor.getSchemeType());
+
+            auto const& rTrans = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(2), rTrans.size());
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrans[0].meType);
             CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), rTrans[0].mnValue);
@@ -530,12 +526,13 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColor_Shape)
             CPPUNIT_ASSERT_EQUAL(sal_Int16(6000), rTrans[1].mnValue);
         }
 
-        CPPUNIT_ASSERT(xShape->getPropertyValue("LineColorThemeReference") >>= xThemeColor);
-        CPPUNIT_ASSERT(xThemeColor.is());
-        model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
-        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent6, aThemeColor.getType());
+        CPPUNIT_ASSERT(xShape->getPropertyValue("LineComplexColor") >>= xComplexColor);
+        CPPUNIT_ASSERT(xComplexColor.is());
         {
-            auto const& rTrans = aThemeColor.getTransformations();
+            auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+            CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent6, aComplexColor.getSchemeType());
+
+            auto const& rTrans = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(1), rTrans.size());
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrans[0].meType);
             CPPUNIT_ASSERT_EQUAL(sal_Int16(5000), rTrans[0].mnValue);
@@ -543,25 +540,25 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColor_Shape)
     }
     // check line and fill theme color of shape2
     {
-        model::ThemeColor aThemeColor;
-        uno::Reference<util::XThemeColor> xThemeColor;
+        uno::Reference<util::XComplexColor> xComplexColor;
         uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
-
-        CPPUNIT_ASSERT(xShape->getPropertyValue("FillColorThemeReference") >>= xThemeColor);
-        CPPUNIT_ASSERT(xThemeColor.is());
-        model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
-        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aThemeColor.getType());
+        CPPUNIT_ASSERT(xShape->getPropertyValue("FillComplexColor") >>= xComplexColor);
+        CPPUNIT_ASSERT(xComplexColor.is());
         {
-            auto const& rTrans = aThemeColor.getTransformations();
+            auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+            CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getSchemeType());
+
+            auto const& rTrans = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(0), rTrans.size());
         }
 
-        CPPUNIT_ASSERT(xShape->getPropertyValue("LineColorThemeReference") >>= xThemeColor);
-        CPPUNIT_ASSERT(xThemeColor.is());
-        model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
-        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aThemeColor.getType());
+        CPPUNIT_ASSERT(xShape->getPropertyValue("LineComplexColor") >>= xComplexColor);
+        CPPUNIT_ASSERT(xComplexColor.is());
         {
-            auto const& rTrans = aThemeColor.getTransformations();
+            auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+            CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getSchemeType());
+
+            auto const& rTrans = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(1), rTrans.size());
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrans[0].meType);
             CPPUNIT_ASSERT_EQUAL(sal_Int16(7500), rTrans[0].mnValue);

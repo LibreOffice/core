@@ -38,18 +38,6 @@ Color ColorSet::getColor(model::ThemeColorType eType) const
     return maColors[size_t(eType)];
 }
 
-Color ColorSet::resolveColor(model::ThemeColor const& rThemeColor) const
-{
-    auto eType = rThemeColor.getType();
-    if (eType == model::ThemeColorType::Unknown)
-    {
-        SAL_WARN("svx", "ColorSet::resolveColor with ThemeColorType::Unknown");
-        return COL_AUTO;
-    }
-    Color aColor = getColor(eType);
-    return rThemeColor.applyTransformations(aColor);
-}
-
 Color ColorSet::resolveColor(model::ComplexColor const& rComplexColor) const
 {
     auto eSchemeType = rComplexColor.meSchemeType;

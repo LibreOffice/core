@@ -172,8 +172,8 @@ item BOOL                   SvxAutoKernItem;
 
 struct SvxColor
 {
-    INT32  Color              MID_COLOR_RGB;
-    String ThemeReferenceJSON MID_COLOR_THEME_REFERENCE_JSON;
+    INT32  Color            MID_COLOR_RGB;
+    String ComplexColorJSON MID_COMPLEX_COLOR_JSON;
 };
 item SvxColor SvxColorItem;
 

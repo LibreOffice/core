@@ -11,11 +11,11 @@
 
 #include <memory>
 #include "XMLElementPropertyContext.hxx"
-#include <docmodel/uno/UnoThemeColor.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 
 class XMLThemeColorContext final : public XMLElementPropertyContext
 {
-    model::ThemeColor aThemeColor;
+    model::ComplexColor maComplexColor;
     sal_Int32 mnRootElement;
 
 public:

@@ -69,7 +69,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextPropertySetCont
                                                    rProperties );
         break;
 
-    case CTF_THEME_COLOR:
+    case CTF_COMPLEX_COLOR:
         return new XMLThemeColorContext(GetImport(), nElement, xAttrList, rProp, rProperties);
         break;
 

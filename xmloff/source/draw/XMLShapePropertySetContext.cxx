@@ -83,7 +83,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLShapePropertySetCon
     case CTF_TEXTCOLUMNS:
         return new XMLTextColumnsContext(GetImport(), nElement, xAttrList, rProp, rProperties);
 
-    case CTF_THEME_COLOR:
+    case CTF_COMPLEX_COLOR:
         return new XMLThemeColorContext(GetImport(), nElement, xAttrList, rProp, rProperties);
     }
 
