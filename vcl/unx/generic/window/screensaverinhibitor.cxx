@@ -207,6 +207,16 @@ void ScreenSaverInhibitor::inhibitFDOPM( bool bInhibit, const char* appname, con
 #endif // ENABLE_GIO
 }
 
+#if ENABLE_GIO
+enum ApplicationInhibitFlags
+{
+    APPLICATION_INHIBIT_LOGOUT  = (1 << 0),
+    APPLICATION_INHIBIT_SWITCH  = (1 << 1),
+    APPLICATION_INHIBIT_SUSPEND = (1 << 2),
+    APPLICATION_INHIBIT_IDLE    = (1 << 3) // Inhibit the session being marked as idle
+};
+#endif
+
 void ScreenSaverInhibitor::inhibitGSM( bool bInhibit, const char* appname, const char* reason, const unsigned int xid )
 {
 #if ENABLE_GIO
@@ -218,7 +228,7 @@ void ScreenSaverInhibitor::inhibitGSM( bool bInhibit, const char* appname, const
                                                                   appname,
                                                                   xid,
                                                                   reason,
-                                                                  8 //Inhibit the session being marked as idle
+                                                                  APPLICATION_INHIBIT_IDLE
                                                                  ),
                                                     G_DBUS_CALL_FLAGS_NONE, -1, nullptr, &error );
                  },
