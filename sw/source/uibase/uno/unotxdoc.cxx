@@ -931,36 +931,27 @@ Reference< XInterface >  SwXTextDocument::findNext(const Reference< XInterface >
 Sequence< beans::PropertyValue > SwXTextDocument::getPagePrintSettings()
 {
     SolarMutexGuard aGuard;
-    Sequence< beans::PropertyValue > aSeq(9);
     if(!IsValid())
         throw DisposedException("", static_cast< XTextDocument* >(this));
 
-    beans::PropertyValue* pArray = aSeq.getArray();
     SwPagePreviewPrtData aData;
     const SwPagePreviewPrtData* pData = m_pDocShell->GetDoc()->GetPreviewPrtData();
-    if(pData)
-        aData = *pData;
-    Any aVal;
-    aVal <<= aData.GetRow();
-    pArray[0] = beans::PropertyValue("PageRows", -1, aVal, PropertyState_DIRECT_VALUE);
-    aVal <<= aData.GetCol();
-    pArray[1] = beans::PropertyValue("PageColumns", -1, aVal, PropertyState_DIRECT_VALUE);
-    aVal <<= static_cast<sal_Int32>(convertTwipToMm100(aData.GetLeftSpace()));
-    pArray[2] = beans::PropertyValue("LeftMargin", -1, aVal, PropertyState_DIRECT_VALUE);
-    aVal <<= static_cast<sal_Int32>(convertTwipToMm100(aData.GetRightSpace()));
-    pArray[3] = beans::PropertyValue("RightMargin", -1, aVal, PropertyState_DIRECT_VALUE);
-    aVal <<= static_cast<sal_Int32>(convertTwipToMm100(aData.GetTopSpace()));
-    pArray[4] = beans::PropertyValue("TopMargin", -1, aVal, PropertyState_DIRECT_VALUE);
-    aVal <<= static_cast<sal_Int32>(convertTwipToMm100(aData.GetBottomSpace()));
-    pArray[5] = beans::PropertyValue("BottomMargin", -1, aVal, PropertyState_DIRECT_VALUE);
-    aVal <<= static_cast<sal_Int32>(convertTwipToMm100(aData.GetHorzSpace()));
-    pArray[6] = beans::PropertyValue("HoriMargin", -1, aVal, PropertyState_DIRECT_VALUE);
-    aVal <<= static_cast<sal_Int32>(convertTwipToMm100(aData.GetVertSpace()));
-    pArray[7] = beans::PropertyValue("VertMargin", -1, aVal, PropertyState_DIRECT_VALUE);
-    aVal <<= aData.GetLandscape();
-    pArray[8] = beans::PropertyValue("IsLandscape", -1, aVal, PropertyState_DIRECT_VALUE);
+    if (!pData)
+        return {};
 
-    return aSeq;
+    aData = *pData;
+    return
+    {
+        beans::PropertyValue("PageRows", -1, Any(aData.GetRow()), PropertyState_DIRECT_VALUE),
+        beans::PropertyValue("PageColumns", -1, Any(aData.GetCol()), PropertyState_DIRECT_VALUE),
+        beans::PropertyValue("LeftMargin", -1, Any(convertTwipToMm100(aData.GetLeftSpace())), PropertyState_DIRECT_VALUE),
+        beans::PropertyValue("RightMargin", -1, Any(convertTwipToMm100(aData.GetRightSpace())), PropertyState_DIRECT_VALUE),
+        beans::PropertyValue("TopMargin", -1, Any(convertTwipToMm100(aData.GetTopSpace())), PropertyState_DIRECT_VALUE),
+        beans::PropertyValue("BottomMargin", -1, Any(convertTwipToMm100(aData.GetBottomSpace())), PropertyState_DIRECT_VALUE),
+        beans::PropertyValue("HoriMargin", -1, Any(convertTwipToMm100(aData.GetHorzSpace())), PropertyState_DIRECT_VALUE),
+        beans::PropertyValue("VertMargin", -1, Any(convertTwipToMm100(aData.GetVertSpace())), PropertyState_DIRECT_VALUE),
+        beans::PropertyValue("IsLandscape", -1, Any(aData.GetLandscape()), PropertyState_DIRECT_VALUE)
+    };
 }
 
 static sal_uInt32 lcl_Any_To_ULONG(const Any& rValue, bool& bException)
