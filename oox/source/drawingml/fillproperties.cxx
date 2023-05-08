@@ -26,7 +26,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/BitmapFilter.hxx>
 #include <vcl/BitmapMonochromeFilter.hxx>
-#include <docmodel/uno/UnoThemeColor.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 #include <basegfx/utils/gradienttools.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -427,27 +427,27 @@ void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelp
                 if( maFillColor.hasTransparency() )
                     rPropMap.setProperty( ShapeProperty::FillTransparency, maFillColor.getTransparency() );
 
-                model::ThemeColor aThemeColor;
+                model::ComplexColor aComplexColor;
                 if (aFillColor == nPhClr)
                 {
-                    aThemeColor.setType(model::convertToThemeColorType(nPhClrTheme));
-                    rPropMap.setProperty(PROP_FillColorThemeReference, model::theme::createXThemeColor(aThemeColor));
+                    aComplexColor.setSchemeColor(model::convertToThemeColorType(nPhClrTheme));
+                    rPropMap.setProperty(PROP_FillComplexColor, model::color::createXComplexColor(aComplexColor));
                 }
                 else
                 {
-                    aThemeColor.setType(model::convertToThemeColorType(maFillColor.getSchemeColorIndex()));
+                    aComplexColor.setSchemeColor(model::convertToThemeColorType(maFillColor.getSchemeColorIndex()));
                     if (maFillColor.getLumMod() != 10000)
-                        aThemeColor.addTransformation({model::TransformationType::LumMod, maFillColor.getLumMod()});
+                        aComplexColor.addTransformation({model::TransformationType::LumMod, maFillColor.getLumMod()});
                     if (maFillColor.getLumOff() != 0)
-                        aThemeColor.addTransformation({model::TransformationType::LumOff, maFillColor.getLumOff()});
+                        aComplexColor.addTransformation({model::TransformationType::LumOff, maFillColor.getLumOff()});
                     if (maFillColor.getTintOrShade() > 0)
-                        aThemeColor.addTransformation({model::TransformationType::Tint, maFillColor.getTintOrShade()});
+                        aComplexColor.addTransformation({model::TransformationType::Tint, maFillColor.getTintOrShade()});
                     if (maFillColor.getTintOrShade() < 0)
                     {
                         sal_Int16 nShade = o3tl::narrowing<sal_Int16>(-maFillColor.getTintOrShade());
-                        aThemeColor.addTransformation({model::TransformationType::Shade, nShade});
+                        aComplexColor.addTransformation({model::TransformationType::Shade, nShade});
                     }
-                    rPropMap.setProperty(PROP_FillColorThemeReference, model::theme::createXThemeColor(aThemeColor));
+                    rPropMap.setProperty(PROP_FillComplexColor, model::color::createXComplexColor(aComplexColor));
                 }
 
                 eFillStyle = FillStyle_SOLID;

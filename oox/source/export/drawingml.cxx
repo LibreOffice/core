@@ -128,7 +128,7 @@
 #include <editeng/flditem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/unonrule.hxx>
-#include <docmodel/uno/UnoThemeColor.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdtrans.hxx>
@@ -516,7 +516,7 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
     else if ( nFillColor != nOriginalColor )
     {
         // the user has set a different color for the shape
-        if (!WriteSchemeColor(u"FillColorThemeReference", rXPropSet))
+        if (!WriteSchemeColor(u"FillComplexColor", rXPropSet))
         {
             WriteSolidFill(::Color(ColorTransparency, nFillColor & 0xffffff), nAlpha);
         }
@@ -540,19 +540,18 @@ bool DrawingML::WriteSchemeColor(OUString const& rPropertyName, const uno::Refer
     if (!xPropertySet->getPropertySetInfo()->hasPropertyByName(rPropertyName))
         return false;
 
-    uno::Reference<util::XThemeColor> xThemeColor;
-    xPropertySet->getPropertyValue(rPropertyName) >>= xThemeColor;
-    if (!xThemeColor.is())
+    uno::Reference<util::XComplexColor> xComplexColor;
+    xPropertySet->getPropertyValue(rPropertyName) >>= xComplexColor;
+    if (!xComplexColor.is())
         return false;
 
-    model::ThemeColor aThemeColor;
-    model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
-    if (aThemeColor.getType() == model::ThemeColorType::Unknown)
+    auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+    if (aComplexColor.getSchemeType() == model::ThemeColorType::Unknown)
         return false;
-    const char* pColorName = g_aPredefinedClrNames[sal_Int16(aThemeColor.getType())];
+    const char* pColorName = g_aPredefinedClrNames[sal_Int16(aComplexColor.getSchemeType())];
     mpFS->startElementNS(XML_a, XML_solidFill);
     mpFS->startElementNS(XML_a, XML_schemeClr, XML_val, pColorName);
-    for (auto const& rTransform : aThemeColor.getTransformations())
+    for (auto const& rTransform : aComplexColor.getTransformations())
     {
         switch (rTransform.meType)
         {
@@ -574,13 +573,12 @@ bool DrawingML::WriteSchemeColor(OUString const& rPropertyName, const uno::Refer
     }
     // Alpha is actually not contained in maTransformations although possible (as of Mar 2023).
     sal_Int16 nAPITransparency(0);
-    if ((rPropertyName == u"FillColorThemeReference"
-         && GetProperty(xPropertySet, "FillTransparence"))
-        || (rPropertyName == u"LineColorThemeReference"
-            && GetProperty(xPropertySet, "LineTransparence"))
-        || (rPropertyName == u"CharColorThemeReference"
-            && GetProperty(xPropertySet, "CharTransparence")))
+    if ((rPropertyName == u"FillComplexColor" && GetProperty(xPropertySet, "FillTransparence"))
+        || (rPropertyName == u"LineComplexColor" && GetProperty(xPropertySet, "LineTransparence"))
+        || (rPropertyName == u"CharComplexColor" && GetProperty(xPropertySet, "CharTransparence")))
+    {
         mAny >>= nAPITransparency;
+    }
     if (nAPITransparency != 0)
         mpFS->singleElementNS(XML_a, XML_alpha, XML_val,
                               OString::number(MAX_PERCENT - (PER_PERCENT * nAPITransparency)));
@@ -1145,8 +1143,8 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
         if( nColor != nOriginalColor )
         {
             // the user has set a different color for the line
-            if (!WriteSchemeColor(u"LineColorThemeReference", rXPropSet))
-                    WriteSolidFill(nColor, nColorAlpha);
+            if (!WriteSchemeColor(u"LineComplexColor", rXPropSet))
+                WriteSolidFill(nColor, nColorAlpha);
         }
         else if( !sColorFillScheme.isEmpty() )
         {
@@ -2673,7 +2671,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
                 else
                 {
                     color.SetAlpha(255);
-                    if (!WriteSchemeColor(u"CharColorThemeReference", rXPropSet))
+                    if (!WriteSchemeColor(u"CharComplexColor", rXPropSet))
                         WriteSolidFill(color, nTransparency);
                 }
                 mpFS->endElementNS(XML_a, XML_ln);
@@ -2686,7 +2684,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
             {
                 color.SetAlpha(255);
                 // TODO: special handle embossed/engraved
-                if (!WriteSchemeColor(u"CharColorThemeReference", rXPropSet))
+                if (!WriteSchemeColor(u"CharComplexColor", rXPropSet))
                 {
                     WriteSolidFill(color, nTransparency);
                 }

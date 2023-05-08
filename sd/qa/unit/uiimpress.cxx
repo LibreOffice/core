@@ -42,7 +42,7 @@
 #include <svl/stritem.hxx>
 #include <undo/undomanager.hxx>
 #include <vcl/scheduler.hxx>
-#include <docmodel/uno/UnoThemeColor.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <docmodel/uno/UnoTheme.hxx>
@@ -986,18 +986,17 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testCharColorTheme)
     uno::Reference<beans::XPropertySet> xPortion(xPara->createEnumeration()->nextElement(),
                                                  uno::UNO_QUERY);
     {
-        uno::Reference<util::XThemeColor> xThemeColor;
-        CPPUNIT_ASSERT(xPortion->getPropertyValue("CharColorThemeReference") >>= xThemeColor);
-        CPPUNIT_ASSERT(xThemeColor.is());
-        model::ThemeColor aThemeColor;
-        model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
-        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aThemeColor.getType());
+        uno::Reference<util::XComplexColor> xComplexColor;
+        CPPUNIT_ASSERT(xPortion->getPropertyValue("CharComplexColor") >>= xComplexColor);
+        CPPUNIT_ASSERT(xComplexColor.is());
+        auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getSchemeType());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod,
-                             aThemeColor.getTransformations()[0].meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(2000), aThemeColor.getTransformations()[0].mnValue);
+                             aComplexColor.getTransformations()[0].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(2000), aComplexColor.getTransformations()[0].mnValue);
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff,
-                             aThemeColor.getTransformations()[1].meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(8000), aThemeColor.getTransformations()[1].mnValue);
+                             aComplexColor.getTransformations()[1].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(8000), aComplexColor.getTransformations()[1].mnValue);
     }
 }
 
@@ -1025,18 +1024,17 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testFillColorTheme)
 
     // Then make sure the theme index is not lost when the sidebar sets it:
     {
-        uno::Reference<util::XThemeColor> xThemeColor;
-        CPPUNIT_ASSERT(xShape->getPropertyValue("FillColorThemeReference") >>= xThemeColor);
-        CPPUNIT_ASSERT(xThemeColor.is());
-        model::ThemeColor aThemeColor;
-        model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
-        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aThemeColor.getType());
+        uno::Reference<util::XComplexColor> xComplexColor;
+        CPPUNIT_ASSERT(xShape->getPropertyValue("FillComplexColor") >>= xComplexColor);
+        CPPUNIT_ASSERT(xComplexColor.is());
+        auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getSchemeType());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod,
-                             aThemeColor.getTransformations()[0].meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), aThemeColor.getTransformations()[0].mnValue);
+                             aComplexColor.getTransformations()[0].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), aComplexColor.getTransformations()[0].mnValue);
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff,
-                             aThemeColor.getTransformations()[1].meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(6000), aThemeColor.getTransformations()[1].mnValue);
+                             aComplexColor.getTransformations()[1].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(6000), aComplexColor.getTransformations()[1].mnValue);
     }
 }
 

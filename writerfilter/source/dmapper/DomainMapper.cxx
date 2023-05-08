@@ -69,7 +69,7 @@
 #include <com/sun/star/text/FontEmphasis.hpp>
 #include <com/sun/star/awt/CharSet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/util/XThemeColor.hpp>
+#include <com/sun/star/util/XComplexColor.hpp>
 #include <comphelper/types.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/sequence.hxx>
@@ -2217,22 +2217,22 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 auto eType = TDefTableHandler::getThemeColorTypeIndex(pThemeColorHandler->mnIndex);
                 if (eType != model::ThemeColorType::Unknown)
                 {
-                    model::ThemeColor aThemeColor;
-                    aThemeColor.setType(eType);
+                    model::ComplexColor aComplexColor;
+                    aComplexColor.setSchemeColor(eType);
 
                     if (pThemeColorHandler->mnTint > 0 )
                     {
                         sal_Int16 nTint = sal_Int16((256 - pThemeColorHandler->mnTint) * 10000 / 256);
-                        aThemeColor.addTransformation({model::TransformationType::Tint, nTint});
+                        aComplexColor.addTransformation({model::TransformationType::Tint, nTint});
                     }
                     if (pThemeColorHandler->mnShade > 0)
                     {
                         sal_Int16 nShade = sal_Int16((256 - pThemeColorHandler->mnShade) * 10000 / 256);
-                        aThemeColor.addTransformation({model::TransformationType::Shade, nShade});
+                        aComplexColor.addTransformation({model::TransformationType::Shade, nShade});
                     }
 
-                    auto xThemeColor = model::theme::createXThemeColor(aThemeColor);
-                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_COLOR_THEME_REFERENCE, uno::Any(xThemeColor));
+                    auto xComplexColor = model::color::createXComplexColor(aComplexColor);
+                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_COMPLEX_COLOR, uno::Any(xComplexColor));
                 }
 
                 uno::Any aColorAny(msfilter::util::ConvertColorOU(Color(ColorTransparency, pThemeColorHandler->mnColor)));

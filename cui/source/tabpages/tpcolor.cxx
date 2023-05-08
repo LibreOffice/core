@@ -247,16 +247,16 @@ bool SvxColorTabPage::FillItemSet( SfxItemSet* rSet )
     model::ThemeColorType eType = model::convertToThemeColorType(aCurrentColor.m_nThemeIndex);
     if (eType != model::ThemeColorType::Unknown)
     {
-        aColorItem.GetThemeColor().setType(eType);
+        aColorItem.getComplexColor().setSchemeColor(eType);
     }
-    aColorItem.GetThemeColor().clearTransformations();
+    aColorItem.getComplexColor().clearTransformations();
     if (aCurrentColor.m_nLumMod != 10000)
     {
-        aColorItem.GetThemeColor().addTransformation({model::TransformationType::LumMod, aCurrentColor.m_nLumMod});
+        aColorItem.getComplexColor().addTransformation({model::TransformationType::LumMod, aCurrentColor.m_nLumMod});
     }
     if (aCurrentColor.m_nLumOff != 0)
     {
-        aColorItem.GetThemeColor().addTransformation({model::TransformationType::LumOff, aCurrentColor.m_nLumOff});
+        aColorItem.getComplexColor().addTransformation({model::TransformationType::LumOff, aCurrentColor.m_nLumOff});
     }
     rSet->Put( aColorItem );
     rSet->Put( XFillStyleItem( drawing::FillStyle_SOLID ) );

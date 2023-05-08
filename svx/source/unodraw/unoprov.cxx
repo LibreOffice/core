@@ -566,7 +566,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxControlShapePropertyM
         { UNO_NAME_EDIT_CHAR_COLOR,           0,  cppu::UnoType<sal_Int32>::get(),        0, MID_COLOR_RGB },
         { UNO_NAME_EDIT_CHAR_COLOR_THEME,     0,  cppu::UnoType<sal_Int16>::get(),        0, MID_COLOR_THEME_INDEX },
         { UNO_NAME_EDIT_CHAR_COLOR_TINT_OR_SHADE, 0, cppu::UnoType<sal_Int16>::get(),     0, MID_COLOR_TINT_OR_SHADE },
-        { UNO_NAME_EDIT_CHAR_COLOR_THEME_REFERENCE, 0,  cppu::UnoType<css::util::XThemeColor>::get(), 0, MID_COLOR_THEME_REFERENCE },
+        { UNO_NAME_EDIT_CHAR_COMPLEX_COLOR,    0,  cppu::UnoType<css::util::XComplexColor>::get(), 0, MID_COMPLEX_COLOR },
         { u"CharBackColor",                    0,  cppu::UnoType<sal_Int32>::get(),        0, 0 },
         { u"CharBackTransparent",              0,  cppu::UnoType<bool>::get(),             0, 0 },
         { u"CharRelief",                       0,  cppu::UnoType<sal_Int16>::get(),        0, 0 },

@@ -26,7 +26,7 @@
 #include <sal/config.h>
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
-#include <docmodel/uno/UnoThemeColor.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 #include <docmodel/theme/Theme.hxx>
 #include <editeng/unoprnms.hxx>
 #include <com/sun/star/text/XTextRange.hpp>

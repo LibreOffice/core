@@ -1412,8 +1412,8 @@ static const XMLPropertyHandler *GetPropertyHandler
     case XML_TYPE_GRAPHIC:
         pHdl = new XMLGraphicPropertyHandler;
         break;
-    case XML_TYPE_THEME_COLOR:
-        pHdl = new XMLThemeColorHandler;
+    case XML_TYPE_COMPLEX_COLOR:
+        pHdl = new XMLComplexColorHandler;
         break;
     default:
     {

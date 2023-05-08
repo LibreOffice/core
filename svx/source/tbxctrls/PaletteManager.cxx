@@ -41,8 +41,8 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
-#include <docmodel/theme/ThemeColor.hxx>
-#include <docmodel/theme/ThemeColorJSON.hxx>
+#include <docmodel/color/ComplexColor.hxx>
+#include <docmodel/color/ComplexColorJSON.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/memberids.h>
 
@@ -445,17 +445,17 @@ void PaletteManager::DispatchColorCommand(const OUString& aCommand, const svx::N
 
     if (rColor.m_nThemeIndex != -1)
     {
-        model::ThemeColor aThemeColor;
-        aThemeColor.setType(model::convertToThemeColorType(rColor.m_nThemeIndex));
+        model::ComplexColor aComplexColor;
+        aComplexColor.setSchemeColor(model::convertToThemeColorType(rColor.m_nThemeIndex));
         if (rColor.m_nLumMod != 10000)
-            aThemeColor.addTransformation({model::TransformationType::LumMod, rColor.m_nLumMod});
+            aComplexColor.addTransformation({model::TransformationType::LumMod, rColor.m_nLumMod});
         if (rColor.m_nLumMod != 0)
-            aThemeColor.addTransformation({model::TransformationType::LumOff, rColor.m_nLumOff});
+            aComplexColor.addTransformation({model::TransformationType::LumOff, rColor.m_nLumOff});
 
         uno::Any aAny;
-        aAny <<= OStringToOUString(model::theme::convertToJSON(aThemeColor), RTL_TEXTENCODING_UTF8);
+        aAny <<= OStringToOUString(model::color::convertToJSON(aComplexColor), RTL_TEXTENCODING_UTF8);
 
-        aArgs.push_back(comphelper::makePropertyValue(aObj.GetURLPath() + ".ThemeReferenceJSON", aAny));
+        aArgs.push_back(comphelper::makePropertyValue(aObj.GetURLPath() + ".ComplexColorJSON", aAny));
     }
 
     URL aTargetURL;

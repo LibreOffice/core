@@ -19,7 +19,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <svx/xoutbmp.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
-#include <docmodel/uno/UnoThemeColor.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 
 using namespace com::sun::star;
 
@@ -103,28 +103,27 @@ CPPUNIT_TEST_FIXTURE(XOutdevTest, testFillColorThemeUnoApi)
     uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
     // Set theme color
     {
-        model::ThemeColor aThemeColor;
-        aThemeColor.setType(model::ThemeColorType::Accent1);
-        aThemeColor.addTransformation({ model::TransformationType::LumMod, 2000 });
-        aThemeColor.addTransformation({ model::TransformationType::LumOff, 8000 });
-        xShape->setPropertyValue("FillColorThemeReference",
-                                 uno::Any(model::theme::createXThemeColor(aThemeColor)));
+        model::ComplexColor aComplexColor;
+        aComplexColor.setSchemeColor(model::ThemeColorType::Accent1);
+        aComplexColor.addTransformation({ model::TransformationType::LumMod, 2000 });
+        aComplexColor.addTransformation({ model::TransformationType::LumOff, 8000 });
+        xShape->setPropertyValue("FillComplexColor",
+                                 uno::Any(model::color::createXComplexColor(aComplexColor)));
     }
 
     // Then make sure the value we read back is the expected one:
     {
-        uno::Reference<util::XThemeColor> xThemeColor;
-        CPPUNIT_ASSERT(xShape->getPropertyValue("FillColorThemeReference") >>= xThemeColor);
-        CPPUNIT_ASSERT(xThemeColor.is());
-        model::ThemeColor aThemeColor;
-        model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
-        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aThemeColor.getType());
+        uno::Reference<util::XComplexColor> xComplexColor;
+        CPPUNIT_ASSERT(xShape->getPropertyValue("FillComplexColor") >>= xComplexColor);
+        CPPUNIT_ASSERT(xComplexColor.is());
+        auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getSchemeType());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod,
-                             aThemeColor.getTransformations()[0].meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(2000), aThemeColor.getTransformations()[0].mnValue);
+                             aComplexColor.getTransformations()[0].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(2000), aComplexColor.getTransformations()[0].mnValue);
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff,
-                             aThemeColor.getTransformations()[1].meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(8000), aThemeColor.getTransformations()[1].mnValue);
+                             aComplexColor.getTransformations()[1].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(8000), aComplexColor.getTransformations()[1].mnValue);
     }
 }
 

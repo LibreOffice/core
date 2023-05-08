@@ -449,7 +449,7 @@ class XFillGradientItem;
 #define SID_ATTR_TEXTCOLUMNS_NUMBER                     ( SID_SVX_START + 340 )
 #define SID_ATTR_TEXTCOLUMNS_SPACING                    ( SID_SVX_START + 341 )
 
-#define SID_ATTR_COLOR_THEME_REFERENCE                  TypedWhichId<SvxColorItem>( SID_SVX_START + 342 )
+// FREE                                                 ( SID_SVX_START + 342 )
 #define SID_ATTR_COLOR_THEME_INDEX                      TypedWhichId<SfxInt16Item>( SID_SVX_START + 343 )
 #define SID_ATTR_COLOR_LUM_MOD                          TypedWhichId<SfxInt16Item>( SID_SVX_START + 344 )
 #define SID_ATTR_COLOR_LUM_OFF                          TypedWhichId<SfxInt16Item>( SID_SVX_START + 345 )

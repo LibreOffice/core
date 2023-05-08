@@ -45,7 +45,7 @@ XMLThemeColorContext::XMLThemeColorContext(
                 sal_Int16 nValue = -1;
                 if (SvXMLUnitConverter::convertEnum(nValue, aIter.toView(), pXML_ThemeColor_Enum))
                 {
-                    aThemeColor.setType(model::convertToThemeColorType(nValue));
+                    maComplexColor.setSchemeColor(model::convertToThemeColorType(nValue));
                 }
                 break;
             }
@@ -93,7 +93,7 @@ XMLThemeColorContext::createFastChildContext(
                     break;
             }
         }
-        aThemeColor.addTransformation({ eTransformationType, nTransformationValue });
+        maComplexColor.addTransformation({ eTransformationType, nTransformationValue });
         return this;
     }
     XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
@@ -104,9 +104,9 @@ void XMLThemeColorContext::endFastElement(sal_Int32 nElement)
 {
     if (nElement == mnRootElement)
     {
-        if (aThemeColor.getType() != model::ThemeColorType::Unknown)
+        if (maComplexColor.getSchemeType() != model::ThemeColorType::Unknown)
         {
-            aProp.maValue <<= model::theme::createXThemeColor(aThemeColor);
+            aProp.maValue <<= model::color::createXComplexColor(maComplexColor);
             SetInsert(true);
         }
     }

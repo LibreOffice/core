@@ -9,7 +9,6 @@
 
 #include <svx/dialog/ThemeDialog.hxx>
 #include <svx/dialog/ThemeColorEditDialog.hxx>
-#include <docmodel/theme/ThemeColor.hxx>
 #include <docmodel/theme/ColorSet.hxx>
 #include <docmodel/theme/Theme.hxx>
 #include <svx/ColorSets.hxx>

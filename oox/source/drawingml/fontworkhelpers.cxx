@@ -23,7 +23,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <docmodel/uno/UnoThemeColor.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 #include <drawingml/customshapeproperties.hxx>
 #include <drawingml/presetgeometrynames.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
@@ -51,7 +51,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/util/XThemeColor.hpp>
+#include <com/sun/star/util/XComplexColor.hpp>
 
 #include <array>
 #include <map>
@@ -849,12 +849,9 @@ void FontworkHelpers::collectCharColorProps(const uno::Reference<text::XText>& r
                 continue;
 
             // We have found a non-empty run. Collect its simple color properties.
-            const std::array<OUString, 6> aNamesArray = { u"CharColor",
-                                                          u"CharLumMod",
-                                                          u"CharLumOff",
-                                                          u"CharColorTheme",
-                                                          u"CharColorThemeReference",
-                                                          u"CharTransparence" };
+            const std::array<OUString, 6> aNamesArray
+                = { u"CharColor",      u"CharLumMod",       u"CharLumOff",
+                    u"CharColorTheme", u"CharComplexColor", u"CharTransparence" };
             for (const auto& propName : aNamesArray)
             {
                 if (xRunPropSetInfo->hasPropertyByName(propName))
@@ -934,10 +931,10 @@ void FontworkHelpers::createCharFillPropsFromShape(
     }
 
     const std::array<OUString, 5> aCharPropNames
-        = { u"CharColorLumMod", u"CharColorLumOff", u"CharColorTheme", u"CharColorThemeReference",
+        = { u"CharColorLumMod", u"CharColorLumOff", u"CharColorTheme", u"CharComplexColor",
             u"CharTransparence" };
     const std::array<OUString, 5> aShapePropNames
-        = { u"FillColorLumMod", u"FillColorLumOff", u"FillColorTheme", u"FillColorThemeReference",
+        = { u"FillColorLumMod", u"FillColorLumOff", u"FillColorTheme", u"FillComplexColor",
             u"FillTransparence" };
     for (size_t i = 0; i < 5; i++)
     {
@@ -1004,17 +1001,17 @@ bool FontworkHelpers::createPrstDashFromLineDash(const drawing::LineDash& rLineD
 
 bool FontworkHelpers::getThemeColorFromShape(
     OUString const& rPropertyName, const uno::Reference<beans::XPropertySet>& xPropertySet,
-    model::ThemeColor& aThemeColor)
+    model::ComplexColor& rComplexColor)
 {
     auto xPropSetInfo = xPropertySet->getPropertySetInfo();
     if (!xPropSetInfo.is())
         return false;
-    uno::Reference<util::XThemeColor> xThemeColor;
+    uno::Reference<util::XComplexColor> xComplexColor;
     if (xPropSetInfo->hasPropertyByName(rPropertyName)
-        && (xPropertySet->getPropertyValue(rPropertyName) >>= xThemeColor) && xThemeColor.is())
+        && (xPropertySet->getPropertyValue(rPropertyName) >>= xComplexColor) && xComplexColor.is())
     {
-        model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
-        if (aThemeColor.getType() == model::ThemeColorType::Unknown)
+        rComplexColor = model::color::getFromXComplexColor(xComplexColor);
+        if (rComplexColor.getSchemeType() == model::ThemeColorType::Unknown)
             return false;
         else
             return true;
@@ -1030,7 +1027,7 @@ struct GradientStopColor
     // RGBColor contains no transformations. In case TTColor has other type than
     // ThemeColorType::Unknown, it has precedence. The color transformations in TTColor are used
     // for RGBColor as well.
-    model::ThemeColor TTColor; // ThemeColorType and color transformations
+    model::ComplexColor TTColor; // ThemeColorType and color transformations
     ::Color RGBColor;
 };
 }
@@ -1043,36 +1040,36 @@ typedef std::multimap<sal_Int32, GradientStopColor> ColorMapType;
 namespace
 {
 // Returns the string to be used in w14:schemeClr in case of w14:textOutline or w14:textFill
-OUString lcl_getW14MarkupStringForThemeColor(const model::ThemeColor& rThemeColor)
+OUString lcl_getW14MarkupStringForThemeColor(const model::ComplexColor& rComplexColor)
 {
     const std::array<OUString, 12> W14ColorNames
         = { u"tx1",     u"bg1",     u"tx2",     u"bg2",     u"accent1", u"accent2",
             u"accent3", u"accent4", u"accent5", u"accent6", u"hlink",   u"folHlink" };
     const sal_uInt8 nClrNameIndex = std::clamp<sal_uInt8>(
-        sal_Int32(rThemeColor.getType()), sal_Int32(model::ThemeColorType::Dark1),
+        sal_Int32(rComplexColor.getSchemeType()), sal_Int32(model::ThemeColorType::Dark1),
         sal_Int32(model::ThemeColorType::FollowedHyperlink));
     return W14ColorNames[nClrNameIndex];
 }
 
 // Returns the string to be used in w:themeColor. It is exported via CharThemeColor.
-OUString lcl_getWMarkupStringForThemeColor(const model::ThemeColor& rThemeColor)
+OUString lcl_getWMarkupStringForThemeColor(const model::ComplexColor& rComplexColor)
 {
     const std::array<OUString, 12> WColorNames
         = { u"text1",   u"background1", u"text2",     u"background2",
             u"accent1", u"accent2",     u"accent3",   u"accent4",
             u"accent5", u"accent6",     u"hyperlink", u"followedHyperlink" };
     const sal_uInt8 nClrNameIndex = std::clamp<sal_uInt8>(
-        sal_Int32(rThemeColor.getType()), sal_Int32(model::ThemeColorType::Dark1),
+        sal_Int32(rComplexColor.getSchemeType()), sal_Int32(model::ThemeColorType::Dark1),
         sal_Int32(model::ThemeColorType::FollowedHyperlink));
     return WColorNames[nClrNameIndex];
 }
 
-// Puts the value of the first occurrence of rType in rThemeColor into rValue and returns true.
+// Puts the value of the first occurrence of rType in rComplexColor into rValue and returns true.
 // If such does not exist, rValue is unchanged and the method returns false.
-bool lcl_getThemeColorTransformationValue(const model::ThemeColor& rThemeColor,
+bool lcl_getThemeColorTransformationValue(const model::ComplexColor& rComplexColor,
                                           const model::TransformationType& rType, sal_Int16& rValue)
 {
-    const std::vector<model::Transformation> aTransVec(rThemeColor.getTransformations());
+    const std::vector<model::Transformation> aTransVec(rComplexColor.getTransformations());
     auto bItemFound
         = [rType](const model::Transformation& rTrans) { return rType == rTrans.meType; };
     auto pIt = std::find_if(aTransVec.begin(), aTransVec.end(), bItemFound);
@@ -1083,14 +1080,14 @@ bool lcl_getThemeColorTransformationValue(const model::ThemeColor& rThemeColor,
 }
 
 // Adds the child elements 'lumMod' and 'lumOff' to 'schemeClr' maCurrentElement of pGrabStack,
-// if such exist in rThemeColor. 'alpha' is contained in the maTransformations of rThemeColor
+// if such exist in rComplexColor. 'alpha' is contained in the maTransformations of rComplexColor
 // in case of gradient fill.
-void lcl_addColorTransformationToGrabBagStack(const model::ThemeColor& rThemeColor,
+void lcl_addColorTransformationToGrabBagStack(const model::ComplexColor& rComplexColor,
                                               std::unique_ptr<oox::GrabBagStack>& pGrabBagStack)
 {
     if (pGrabBagStack == nullptr)
         return;
-    for (auto const& rColorTransform : rThemeColor.getTransformations())
+    for (auto const& rColorTransform : rComplexColor.getTransformations())
     {
         switch (rColorTransform.meType)
         {
@@ -1215,7 +1212,6 @@ sal_Int16 lcl_getAlphaFromTransparenceGradient(const awt::Gradient& rTransparenc
         / (100.0 - nBorder) * 100 / 255.0);
 }
 
-// GradientStopColor has components ::Color RGBColor and model::ThemeColor TTColor
 GradientStopColor
 lcl_createGradientStopColor(const uno::Reference<beans::XPropertySet>& rXPropSet,
                             const uno::Reference<beans::XPropertySetInfo>& rXPropSetInfo,
@@ -1235,7 +1231,6 @@ lcl_createGradientStopColor(const uno::Reference<beans::XPropertySet>& rXPropSet
         {
             // a color gradient is yet not enabled to use theme colors
             aStopColor.RGBColor = lcl_getColorFromColorGradient(rColorGradient, rnPos);
-            aStopColor.TTColor.setType(model::ThemeColorType::Unknown);
             sal_Int16 nIntensity = lcl_getIntensityFromColorGradient(rColorGradient, rnPos);
             if (nIntensity != 100)
                 aStopColor.TTColor.addTransformation(
@@ -1246,7 +1241,7 @@ lcl_createGradientStopColor(const uno::Reference<beans::XPropertySet>& rXPropSet
         else // solid color
         {
             // fill color might be a theme color
-            if (!(FontworkHelpers::getThemeColorFromShape("FillColorThemeReference", rXPropSet,
+            if (!(FontworkHelpers::getThemeColorFromShape("FillComplexColor", rXPropSet,
                                                           aStopColor.TTColor)))
             {
                 // no theme color, use FillColor
@@ -1254,7 +1249,7 @@ lcl_createGradientStopColor(const uno::Reference<beans::XPropertySet>& rXPropSet
                 if (rXPropSetInfo->hasPropertyByName("FillColor"))
                     rXPropSet->getPropertyValue(u"FillColor") >>= nFillColor;
                 aStopColor.RGBColor = ::Color(ColorTransparency, nFillColor);
-                aStopColor.TTColor.setType(model::ThemeColorType::Unknown);
+                aStopColor.TTColor = model::ComplexColor();
             }
         }
 
@@ -1280,7 +1275,7 @@ lcl_createGradientStopColor(const uno::Reference<beans::XPropertySet>& rXPropSet
     {
         // a color gradient is yet not enabled to use theme colors
         aStopColor.RGBColor = lcl_getColorFromColorGradient(rColorGradient, rnPos);
-        aStopColor.TTColor.setType(model::ThemeColorType::Unknown);
+        aStopColor.TTColor = model::ComplexColor();
         sal_Int16 nIntensity = lcl_getIntensityFromColorGradient(rColorGradient, rnPos);
         if (nIntensity != 100)
             aStopColor.TTColor.addTransformation(
@@ -1292,7 +1287,7 @@ lcl_createGradientStopColor(const uno::Reference<beans::XPropertySet>& rXPropSet
     {
         // solid color and solid transparency
         SAL_WARN("oox.drawingml", "method should not be called in this case");
-        if (!(FontworkHelpers::getThemeColorFromShape("FillColorThemeReference", rXPropSet,
+        if (!(FontworkHelpers::getThemeColorFromShape("FillComplexColor", rXPropSet,
                                                       aStopColor.TTColor)))
         {
             // no theme color, use FillColor
@@ -1300,7 +1295,7 @@ lcl_createGradientStopColor(const uno::Reference<beans::XPropertySet>& rXPropSet
             if (rXPropSetInfo->hasPropertyByName(u"FillColor"))
                 rXPropSet->getPropertyValue(u"FillColor") >>= nFillColor;
             aStopColor.RGBColor = ::Color(ColorTransparency, nFillColor);
-            aStopColor.TTColor.setType(model::ThemeColorType::Unknown);
+            aStopColor.TTColor = model::ComplexColor();
         }
     }
 
@@ -1462,7 +1457,7 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
                 pGrabBagStack->push("attributes");
                 pGrabBagStack->addInt32("pos", (*it).first);
                 pGrabBagStack->pop();
-                if ((*it).second.TTColor.getType() == model::ThemeColorType::Unknown)
+                if ((*it).second.TTColor.getSchemeType() == model::ThemeColorType::Unknown)
                 {
                     pGrabBagStack->push("srgbClr");
                     pGrabBagStack->push("attributes");
@@ -1542,16 +1537,16 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
         case drawing::FillStyle_SOLID:
         {
             pGrabBagStack->push("solidFill");
-            model::ThemeColor aThemeColor;
+            model::ComplexColor aComplexColor;
             // It is either "schemeClr" or "srgbClr".
-            if (FontworkHelpers::getThemeColorFromShape("FillColorThemeReference", rXPropSet,
-                                                        aThemeColor))
+            if (FontworkHelpers::getThemeColorFromShape("FillComplexColor", rXPropSet,
+                                                        aComplexColor))
             {
                 pGrabBagStack->push("schemeClr");
                 pGrabBagStack->push("attributes");
-                pGrabBagStack->addString("val", lcl_getW14MarkupStringForThemeColor(aThemeColor));
+                pGrabBagStack->addString("val", lcl_getW14MarkupStringForThemeColor(aComplexColor));
                 pGrabBagStack->pop(); // maCurrentElement:'schemeClr', maPropertyList:'attributes'
-                lcl_addColorTransformationToGrabBagStack(aThemeColor, pGrabBagStack);
+                lcl_addColorTransformationToGrabBagStack(aComplexColor, pGrabBagStack);
                 // maCurrentElement:'schemeClr', maPropertyList:'attributes', maybe 'lumMod' and
                 // maybe 'lumOff'
             }
@@ -1630,15 +1625,14 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
     {
         pGrabBagStack->push("solidFill");
         // It is either "schemeClr" or "srgbClr".
-        model::ThemeColor aThemeColor;
-        if (FontworkHelpers::getThemeColorFromShape("LineColorThemeReference", rXPropSet,
-                                                    aThemeColor))
+        model::ComplexColor aComplexColor;
+        if (FontworkHelpers::getThemeColorFromShape("LineComplexColor", rXPropSet, aComplexColor))
         {
             pGrabBagStack->push("schemeClr");
             pGrabBagStack->push("attributes");
-            pGrabBagStack->addString("val", lcl_getW14MarkupStringForThemeColor(aThemeColor));
+            pGrabBagStack->addString("val", lcl_getW14MarkupStringForThemeColor(aComplexColor));
             pGrabBagStack->pop();
-            lcl_addColorTransformationToGrabBagStack(aThemeColor, pGrabBagStack);
+            lcl_addColorTransformationToGrabBagStack(aComplexColor, pGrabBagStack);
             // maCurrentElement:'schemeClr', maPropertylist:'attributes'
         }
         else // not a theme color
@@ -1725,13 +1719,13 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
     // CharThemeOriginalColor, CharThemeColor, and CharThemeColorShade or CharThemeColorTint will be
     // used for <w:color> element. That is evaluated by applications, which do not understand w14
     // namespace, or if w14:textFill is omitted.
-    model::ThemeColor aThemeColor;
-    if (FontworkHelpers::getThemeColorFromShape("FillColorThemeReference", rXPropSet, aThemeColor))
+    model::ComplexColor aComplexColor;
+    if (FontworkHelpers::getThemeColorFromShape("FillComplexColor", rXPropSet, aComplexColor))
     {
         // CharThemeColor
         beans::PropertyValue aCharThemeColor;
         aCharThemeColor.Name = u"CharThemeColor";
-        aCharThemeColor.Value <<= lcl_getWMarkupStringForThemeColor(aThemeColor);
+        aCharThemeColor.Value <<= lcl_getWMarkupStringForThemeColor(aComplexColor);
         rUpdatePropVec.push_back(aCharThemeColor);
 
         // CharThemeColorShade or CharThemeColorTint
@@ -1740,12 +1734,12 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
         // We made two assumption here: (1) If LumOff exists and is not zero, it is a 'tint'.
         // (2) LumMod + LumOff == 10000;
         sal_Int16 nLumMod;
-        if (lcl_getThemeColorTransformationValue(aThemeColor, model::TransformationType::LumMod,
+        if (lcl_getThemeColorTransformationValue(aComplexColor, model::TransformationType::LumMod,
                                                  nLumMod))
         {
             sal_Int16 nLumOff;
             bool bIsTint = lcl_getThemeColorTransformationValue(
-                               aThemeColor, model::TransformationType::LumOff, nLumOff)
+                               aComplexColor, model::TransformationType::LumOff, nLumOff)
                            && nLumOff != 0;
             sal_uInt8 nValue
                 = std::clamp<sal_uInt8>(lround(double(nLumMod) * 255.0 / 10000.0), 0, 255);
@@ -1758,7 +1752,7 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
         }
     }
     // ToDo: Are FillColorLumMod, FillColorLumOff and FillColorTheme possible without
-    // FillColorThemeReference? If yes, we need an 'else' part here.
+    // FillComplexColor? If yes, we need an 'else' part here.
 
     // CharThemeOriginalColor.
     beans::PropertyValue aCharThemeOriginalColor;

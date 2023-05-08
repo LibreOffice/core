@@ -17,7 +17,7 @@
 #include "PropertyIds.hxx"
 
 #include <oox/helper/grabbagstack.hxx>
-#include <docmodel/uno/UnoThemeColor.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 
 #include <memory>
 #include <optional>

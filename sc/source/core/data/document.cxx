@@ -5049,11 +5049,12 @@ void ScDocument::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, bool b
                                     double nPPTX, double nPPTY,
                                     const Fraction& rZoomX, const Fraction& rZoomY )
 {
-    for (const auto& a : maTabs)
+    for (const auto& rTab : maTabs)
     {
-        if (a)
-            a->StyleSheetChanged
-                ( pStyleSheet, bRemoved, pDev, nPPTX, nPPTY, rZoomX, rZoomY );
+        if (rTab)
+        {
+            rTab->StyleSheetChanged(pStyleSheet, bRemoved, pDev, nPPTX, nPPTY, rZoomX, rZoomY);
+        }
     }
 }
 
@@ -5075,9 +5076,9 @@ bool ScDocument::IsStyleSheetUsed( const ScStyleSheet& rStyle ) const
 
         bool bIsUsed = false;
 
-        for (const auto& a : maTabs)
+        for (const auto& rTab : maTabs)
         {
-            if (a && a->IsStyleSheetUsed( rStyle ) )
+            if (rTab && rTab->IsStyleSheetUsed( rStyle ) )
                 bIsUsed = true;
         }
 

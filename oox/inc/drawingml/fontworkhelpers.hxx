@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <docmodel/theme/ThemeColor.hxx>
+#include <docmodel/color/ComplexColor.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <svx/msdffdef.hxx>
@@ -53,7 +53,7 @@ void putCustomShapeIntoTextPathMode(
 OString GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType);
 
 /** Collects the properties "CharColor", "CharLumMod", "CharLumOff", "CharColorTheme",
-    "CharColorThemeReference" and "CharTransparence" from the first non-empty run in rXText and puts
+    "CharComplexColor" and "CharTransparence" from the first non-empty run in rXText and puts
     them into rCharPropVec.*/
 void collectCharColorProps(const css::uno::Reference<css::text::XText>& rXText,
                            std::vector<css::beans::PropertyValue>& rCharPropVec);
@@ -64,8 +64,8 @@ void applyPropsToRuns(const std::vector<css::beans::PropertyValue>& rTextPropVec
                       css::uno::Reference<css::text::XText>& rXText);
 
 /** Generates the properties "CharColor", "CharLumMod", "CharLumOff", "CharColorTheme",
-    "CharColorThemeReference" and "CharTransparence" from the shape properties "FillColor",
-    "FillColorLumMod, "FillColorLumOff", "FillColorTheme", "FillColorThemeReference" and
+    "CharComplexColor" and "CharTransparence" from the shape properties "FillColor",
+    "FillColorLumMod, "FillColorLumOff", "FillColorTheme", "FillComplexColor" and
     "FillTransparence" and puts them into rCharPropVec.*/
 void createCharFillPropsFromShape(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet,
                                   std::vector<css::beans::PropertyValue>& rCharPropVec);
@@ -92,11 +92,11 @@ bool createPrstDashFromLineDash(const css::drawing::LineDash& rLineDash,
                                 const css::drawing::LineCap& rLineCap, OUString& rsPrstDash);
 
 /** Returns true if a theme color with other type than model::ThemeColorType::Unknown was found.
-    The theme color is then in aThemeColor.
-    Returns false otherwise. aThemeColor is then unchanged or its type is
+    The theme color is then in rComplexColor.
+    Returns false otherwise. rComplexColor is then unchanged or its type is
     model::ThemeColorType::Unknown */
 bool getThemeColorFromShape(const OUString& rPropertyName,
                             const css::uno::Reference<css::beans::XPropertySet>& xPropertySet,
-                            model::ThemeColor& aThemeColor);
+                            model::ComplexColor& rComplexColor);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

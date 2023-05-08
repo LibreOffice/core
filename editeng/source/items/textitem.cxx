@@ -77,8 +77,9 @@
 #include <editeng/charreliefitem.hxx>
 #include <editeng/itemtype.hxx>
 #include <editeng/eerdll.hxx>
-#include <docmodel/uno/UnoThemeColor.hxx>
-#include <docmodel/theme/ThemeColorJSON.hxx>
+#include <docmodel/color/ComplexColorJSON.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
+#include <docmodel/color/ComplexColor.hxx>
 #include <libxml/xmlwriter.h>
 
 using namespace ::com::sun::star;
@@ -1444,17 +1445,15 @@ bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= nValue;
             break;
         }
-        case MID_COLOR_THEME_REFERENCE:
+        case MID_COMPLEX_COLOR_JSON:
         {
-            model::ThemeColor aThemeColor = maComplexColor.createThemeColor();
-            auto xThemeColor = model::theme::createXThemeColor(aThemeColor);
-            rVal <<= xThemeColor;
+            rVal <<= OStringToOUString(model::color::convertToJSON(maComplexColor), RTL_TEXTENCODING_UTF8);
             break;
         }
-        case MID_COLOR_THEME_REFERENCE_JSON:
+        case MID_COMPLEX_COLOR:
         {
-            model::ThemeColor aThemeColor = maComplexColor.createThemeColor();
-            rVal <<= OStringToOUString(model::theme::convertToJSON(aThemeColor), RTL_TEXTENCODING_UTF8);
+            auto xComplexColor = model::color::createXComplexColor(maComplexColor);
+            rVal <<= xComplexColor;
             break;
         }
         case MID_COLOR_RGB:
@@ -1532,42 +1531,30 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             maComplexColor.addTransformation({model::TransformationType::LumOff, nLumOff});
         }
         break;
-        case MID_COLOR_THEME_REFERENCE:
+        case MID_COMPLEX_COLOR_JSON:
         {
-            css::uno::Reference<css::util::XThemeColor> xThemeColor;
-            if (!(rVal >>= xThemeColor))
+            OUString sComplexColorJson;
+            if (!(rVal >>= sComplexColorJson))
                 return false;
 
-            if (xThemeColor.is())
-            {
-                model::ThemeColor aThemeColor;
-                model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
-                maComplexColor = model::ComplexColor();
-                maComplexColor.setSchemeColor(aThemeColor.getType());
-                maComplexColor.setTransformations(aThemeColor.getTransformations());
-            }
-        }
-        break;
-
-        case MID_COLOR_THEME_REFERENCE_JSON:
-        {
-            OUString sThemeJson;
-            if (!(rVal >>= sThemeJson))
-                return false;
-
-            if (sThemeJson.isEmpty())
+            if (sComplexColorJson.isEmpty())
             {
                 return false;
             }
-            OString aJSON = OUStringToOString(sThemeJson, RTL_TEXTENCODING_ASCII_US);
-            model::ThemeColor aThemeColor;
-            model::theme::convertFromJSON(aJSON, aThemeColor);
-            maComplexColor = model::ComplexColor();
-            maComplexColor.setSchemeColor(aThemeColor.getType());
-            maComplexColor.setTransformations(aThemeColor.getTransformations());
+            OString aJSON = OUStringToOString(sComplexColorJson, RTL_TEXTENCODING_ASCII_US);
+            model::color::convertFromJSON(aJSON, maComplexColor);
         }
         break;
+        case MID_COMPLEX_COLOR:
+        {
+            css::uno::Reference<css::util::XComplexColor> xComplexColor;
+            if (!(rVal >>= xComplexColor))
+                return false;
 
+            if (xComplexColor.is())
+                maComplexColor = model::color::getFromXComplexColor(xComplexColor);
+        }
+        break;
         case MID_COLOR_RGB:
         default:
         {

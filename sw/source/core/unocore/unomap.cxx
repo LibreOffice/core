@@ -46,7 +46,7 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/XTheme.hpp>
-#include <com/sun/star/util/XThemeColor.hpp>
+#include <com/sun/star/util/XComplexColor.hpp>
 #include <com/sun/star/view/PaperOrientation.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
@@ -1470,7 +1470,7 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPropertyM
                     { UNO_NAME_CHAR_COLOR,               RES_CHRATR_COLOR, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE,  0 },
                     { UNO_NAME_CHAR_COLOR_THEME,         RES_CHRATR_COLOR, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE, MID_COLOR_THEME_INDEX },
                     { UNO_NAME_CHAR_COLOR_TINT_OR_SHADE, RES_CHRATR_COLOR, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE, MID_COLOR_TINT_OR_SHADE },
-                    { UNO_NAME_CHAR_COLOR_THEME_REFERENCE, RES_CHRATR_COLOR, cppu::UnoType<css::util::XThemeColor>::get(), PROPERTY_NONE, MID_COLOR_THEME_REFERENCE },
+                    { UNO_NAME_CHAR_COMPLEX_COLOR, RES_CHRATR_COLOR, cppu::UnoType<css::util::XComplexColor>::get(), PROPERTY_NONE, MID_COMPLEX_COLOR },
                     // SvxShadowedItem
                     { UNO_NAME_CHAR_SHADOWED,          RES_CHRATR_SHADOWED,    cppu::UnoType<bool>::get(),               PROPERTY_NONE,  0                                    },
                     // SvxContouredItem
