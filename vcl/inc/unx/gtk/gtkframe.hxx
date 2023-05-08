@@ -202,7 +202,7 @@ class GtkSalFrame final : public SalFrame
     bool                            m_bGraphics;
     ModKeyFlags                     m_nKeyModifiers;
     PointerStyle                    m_ePointerStyle;
-    ScreenSaverInhibitor            m_ScreenSaverInhibitor;
+    SessionManagerInhibitor         m_SessionManagerInhibitor;
     gulong                          m_nSetFocusSignalId;
     bool                            m_bFullscreen;
     bool                            m_bDefaultPos;

@@ -102,7 +102,7 @@ class VCLPLUG_QT_PUBLIC QtFrame : public QObject, public SalFrame
     QRect m_aRestoreGeometry;
 
 #if CHECK_ANY_QT_USING_X11
-    ScreenSaverInhibitor m_ScreenSaverInhibitor;
+    SessionManagerInhibitor m_SessionManagerInhibitor;
     ModKeyFlags m_nKeyModifiers;
 #endif
 

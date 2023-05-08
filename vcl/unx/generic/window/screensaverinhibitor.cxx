@@ -26,9 +26,9 @@
 #if ENABLE_GIO
 #include <gio/gio.h>
 
-#define FDO_DBUS_SERVICE        "org.freedesktop.ScreenSaver"
-#define FDO_DBUS_PATH           "/org/freedesktop/ScreenSaver"
-#define FDO_DBUS_INTERFACE      "org.freedesktop.ScreenSaver"
+#define FDOSS_DBUS_SERVICE        "org.freedesktop.ScreenSaver"
+#define FDOSS_DBUS_PATH           "/org/freedesktop/ScreenSaver"
+#define FDOSS_DBUS_INTERFACE      "org.freedesktop.ScreenSaver"
 
 #define FDOPM_DBUS_SERVICE      "org.freedesktop.PowerManagement.Inhibit"
 #define FDOPM_DBUS_PATH         "/org/freedesktop/PowerManagement/Inhibit"
@@ -46,30 +46,27 @@
 
 #include <sal/log.hxx>
 
-void ScreenSaverInhibitor::inhibit( bool bInhibit, std::u16string_view sReason,
-                                    bool bIsX11, const std::optional<unsigned int>& xid, std::optional<Display*> pDisplay )
+void SessionManagerInhibitor::inhibit(bool bInhibit, std::u16string_view sReason, ApplicationInhibitFlags eType,
+                                      unsigned int window_system_id, std::optional<Display*> pDisplay)
 {
     const char* appname = SalGenericSystem::getFrameClassName();
     const OString aReason = OUStringToOString( sReason, RTL_TEXTENCODING_UTF8 );
 
-    inhibitFDO( bInhibit, appname, aReason.getStr() );
-    inhibitFDOPM( bInhibit, appname, aReason.getStr() );
+    if (eType == APPLICATION_INHIBIT_IDLE)
+    {
+        inhibitFDOSS( bInhibit, appname, aReason.getStr() );
+        inhibitFDOPM( bInhibit, appname, aReason.getStr() );
+    }
 
-    if ( !bIsX11 )
-        return;
-
-    if (pDisplay)
+    if (eType == APPLICATION_INHIBIT_IDLE && pDisplay)
     {
         inhibitXScreenSaver( bInhibit, *pDisplay );
         inhibitXAutoLock( bInhibit, *pDisplay );
         inhibitDPMS( bInhibit, *pDisplay );
     }
 
-    if (xid)
-    {
-        inhibitGSM( bInhibit, appname, aReason.getStr(), *xid );
-        inhibitMSM( bInhibit, appname, aReason.getStr(), *xid );
-    }
+    inhibitGSM(bInhibit, appname, aReason.getStr(), eType, window_system_id);
+    inhibitMSM(bInhibit, appname, aReason.getStr(), eType, window_system_id);
 }
 
 #if ENABLE_GIO
@@ -159,11 +156,11 @@ static void dbusInhibit( bool bInhibit,
 }
 #endif // ENABLE_GIO
 
-void ScreenSaverInhibitor::inhibitFDO( bool bInhibit, const char* appname, const char* reason )
+void SessionManagerInhibitor::inhibitFDOSS( bool bInhibit, const char* appname, const char* reason )
 {
 #if ENABLE_GIO
     dbusInhibit( bInhibit,
-                 FDO_DBUS_SERVICE, FDO_DBUS_PATH, FDO_DBUS_INTERFACE,
+                 FDOSS_DBUS_SERVICE, FDOSS_DBUS_PATH, FDOSS_DBUS_INTERFACE,
                  [appname, reason] ( GDBusProxy *proxy, GError*& error ) -> GVariant* {
                      return g_dbus_proxy_call_sync( proxy, "Inhibit",
                                                     g_variant_new("(ss)", appname, reason),
@@ -174,7 +171,7 @@ void ScreenSaverInhibitor::inhibitFDO( bool bInhibit, const char* appname, const
                                                     g_variant_new("(u)", nCookie),
                                                     G_DBUS_CALL_FLAGS_NONE, -1, nullptr, &error );
                  },
-                 mnFDOCookie );
+                 mnFDOSSCookie );
 #else
     (void) this;
     (void) bInhibit;
@@ -183,7 +180,7 @@ void ScreenSaverInhibitor::inhibitFDO( bool bInhibit, const char* appname, const
 #endif // ENABLE_GIO
 }
 
-void ScreenSaverInhibitor::inhibitFDOPM( bool bInhibit, const char* appname, const char* reason )
+void SessionManagerInhibitor::inhibitFDOPM( bool bInhibit, const char* appname, const char* reason )
 {
 #if ENABLE_GIO
     dbusInhibit( bInhibit,
@@ -207,28 +204,18 @@ void ScreenSaverInhibitor::inhibitFDOPM( bool bInhibit, const char* appname, con
 #endif // ENABLE_GIO
 }
 
-#if ENABLE_GIO
-enum ApplicationInhibitFlags
-{
-    APPLICATION_INHIBIT_LOGOUT  = (1 << 0),
-    APPLICATION_INHIBIT_SWITCH  = (1 << 1),
-    APPLICATION_INHIBIT_SUSPEND = (1 << 2),
-    APPLICATION_INHIBIT_IDLE    = (1 << 3) // Inhibit the session being marked as idle
-};
-#endif
-
-void ScreenSaverInhibitor::inhibitGSM( bool bInhibit, const char* appname, const char* reason, const unsigned int xid )
+void SessionManagerInhibitor::inhibitGSM( bool bInhibit, const char* appname, const char* reason, ApplicationInhibitFlags eType, unsigned int window_system_id )
 {
 #if ENABLE_GIO
     dbusInhibit( bInhibit,
                  GSM_DBUS_SERVICE, GSM_DBUS_PATH, GSM_DBUS_INTERFACE,
-                 [appname, reason, xid] ( GDBusProxy *proxy, GError*& error ) -> GVariant* {
+                 [appname, reason, eType, window_system_id] ( GDBusProxy *proxy, GError*& error ) -> GVariant* {
                      return g_dbus_proxy_call_sync( proxy, "Inhibit",
                                                     g_variant_new("(susu)",
                                                                   appname,
-                                                                  xid,
+                                                                  window_system_id,
                                                                   reason,
-                                                                  APPLICATION_INHIBIT_IDLE
+                                                                  eType
                                                                  ),
                                                     G_DBUS_CALL_FLAGS_NONE, -1, nullptr, &error );
                  },
@@ -243,22 +230,23 @@ void ScreenSaverInhibitor::inhibitGSM( bool bInhibit, const char* appname, const
     (void) bInhibit;
     (void) appname;
     (void) reason;
-    (void) xid;
+    (void) eType;
+    (void) window_system_id;
 #endif // ENABLE_GIO
 }
 
-void ScreenSaverInhibitor::inhibitMSM( bool bInhibit, const char* appname, const char* reason, const unsigned int xid )
+void SessionManagerInhibitor::inhibitMSM( bool bInhibit, const char* appname, const char* reason, ApplicationInhibitFlags eType, unsigned int window_system_id )
 {
 #if ENABLE_GIO
     dbusInhibit( bInhibit,
                  MSM_DBUS_SERVICE, MSM_DBUS_PATH, MSM_DBUS_INTERFACE,
-                 [appname, reason, xid] ( GDBusProxy *proxy, GError*& error ) -> GVariant* {
+                 [appname, reason, eType, window_system_id] ( GDBusProxy *proxy, GError*& error ) -> GVariant* {
                      return g_dbus_proxy_call_sync( proxy, "Inhibit",
                                                     g_variant_new("(susu)",
                                                                   appname,
-                                                                  xid,
+                                                                  window_system_id,
                                                                   reason,
-                                                                  8 //Inhibit the session being marked as idle
+                                                                  eType
                                                                  ),
                                                     G_DBUS_CALL_FLAGS_NONE, -1, nullptr, &error );
                  },
@@ -273,7 +261,8 @@ void ScreenSaverInhibitor::inhibitMSM( bool bInhibit, const char* appname, const
     (void) bInhibit;
     (void) appname;
     (void) reason;
-    (void) xid;
+    (void) eType;
+    (void) window_system_id;
 #endif // ENABLE_GIO
 }
 
@@ -283,7 +272,7 @@ void ScreenSaverInhibitor::inhibitMSM( bool bInhibit, const char* appname, const
  * Worth noting: xscreensaver explicitly ignores this and does its own
  * timeout handling.
  */
-void ScreenSaverInhibitor::inhibitXScreenSaver( bool bInhibit, Display* pDisplay )
+void SessionManagerInhibitor::inhibitXScreenSaver( bool bInhibit, Display* pDisplay )
 {
     int nTimeout, nInterval, bPreferBlanking, bAllowExposures;
     XGetScreenSaver( pDisplay, &nTimeout, &nInterval,
@@ -312,7 +301,7 @@ void ScreenSaverInhibitor::inhibitXScreenSaver( bool bInhibit, Display* pDisplay
 #define XAUTOLOCK_DISABLE 1
 #define XAUTOLOCK_ENABLE  2
 
-void ScreenSaverInhibitor::inhibitXAutoLock( bool bInhibit, Display* pDisplay )
+void SessionManagerInhibitor::inhibitXAutoLock( bool bInhibit, Display* pDisplay )
 {
     ::Window aRootWindow = RootWindowOfScreen( ScreenOfDisplay( pDisplay, 0 ) );
 
@@ -337,7 +326,7 @@ void ScreenSaverInhibitor::inhibitXAutoLock( bool bInhibit, Display* pDisplay )
                      sizeof( nMessage ) );
 }
 
-void ScreenSaverInhibitor::inhibitDPMS( bool bInhibit, Display* pDisplay )
+void SessionManagerInhibitor::inhibitDPMS( bool bInhibit, Display* pDisplay )
 {
 #if !defined(__sun)
     int dummy;

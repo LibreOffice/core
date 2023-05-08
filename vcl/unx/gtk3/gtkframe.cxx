@@ -2472,21 +2472,18 @@ void GtkSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
 
 void GtkSalFrame::StartPresentation( bool bStart )
 {
-    std::optional<guint> aWindow;
+    guint nWindow(0);
     std::optional<Display*> aDisplay;
 
-    bool bX11 = DLSYM_GDK_IS_X11_DISPLAY(getGdkDisplay());
-    if (bX11)
+    if (DLSYM_GDK_IS_X11_DISPLAY(getGdkDisplay()))
     {
-        aWindow = GtkSalFrame::GetNativeWindowHandle(m_pWindow);
+        nWindow = GtkSalFrame::GetNativeWindowHandle(m_pWindow);
         aDisplay = gdk_x11_display_get_xdisplay(getGdkDisplay());
     }
 
-    m_ScreenSaverInhibitor.inhibit( bStart,
-                                    u"presentation",
-                                    bX11,
-                                    aWindow,
-                                    aDisplay );
+    m_SessionManagerInhibitor.inhibit(bStart, u"presentation",
+                                      APPLICATION_INHIBIT_IDLE,
+                                      nWindow, aDisplay);
 }
 
 void GtkSalFrame::SetAlwaysOnTop( bool bOnTop )

@@ -19,17 +19,25 @@
 #include <optional>
 #include <string_view>
 
-class VCL_PLUGIN_PUBLIC ScreenSaverInhibitor
+enum ApplicationInhibitFlags
+{
+    APPLICATION_INHIBIT_LOGOUT = (1 << 0),
+    APPLICATION_INHIBIT_SWITCH = (1 << 1),
+    APPLICATION_INHIBIT_SUSPEND = (1 << 2),
+    APPLICATION_INHIBIT_IDLE = (1 << 3) // Inhibit the session being marked as idle
+};
+
+class VCL_PLUGIN_PUBLIC SessionManagerInhibitor
 {
 public:
-    void inhibit(bool bInhibit, std::u16string_view sReason, bool bIsX11,
-                 const std::optional<unsigned int>& xid, std::optional<Display*> pDisplay);
+    void inhibit(bool bInhibit, std::u16string_view sReason, ApplicationInhibitFlags eType,
+                 unsigned int window_system_id, std::optional<Display*> pDisplay);
 
 private:
     // These are all used as guint, however this header may be included
     // in kde/tde/etc backends, where we would ideally avoid having
     // any glib dependencies, hence the direct use of unsigned int.
-    std::optional<unsigned int> mnFDOCookie; // FDO ScreenSaver Inhibit
+    std::optional<unsigned int> mnFDOSSCookie; // FDO ScreenSaver Inhibit
     std::optional<unsigned int> mnFDOPMCookie; // FDO PowerManagement Inhibit
     std::optional<unsigned int> mnGSMCookie;
     std::optional<unsigned int> mnMSMCookie;
@@ -49,18 +57,20 @@ private:
     // all encompassing standard, hence we should just try all of them.
     //
     // The current APIs we have: (note: the list of supported environments is incomplete)
-    // FDO: org.freedesktop.ScreenSaver::Inhibit - appears to be supported only by KDE?
+    // FDSSO: org.freedesktop.ScreenSaver::Inhibit - appears to be supported only by KDE?
     // FDOPM: org.freedesktop.PowerManagement.Inhibit::Inhibit - XFCE, (KDE) ?
     //        (KDE: doesn't inhibit screensaver, but does inhibit PowerManagement)
     // GSM: org.gnome.SessionManager::Inhibit - gnome 3
     // MSM: org.mate.Sessionmanager::Inhibit - Mate <= 1.10, is identical to GSM
     //       (This is replaced by the GSM interface from Mate 1.12 onwards)
     //
-    // Note: the Uninhibit call has different spelling in FDO (UnInhibit) vs GSM (Uninhibit)
-    void inhibitFDO(bool bInhibit, const char* appname, const char* reason);
+    // Note: the Uninhibit call has different spelling in FDOSS (UnInhibit) vs GSM (Uninhibit)
+    void inhibitFDOSS(bool bInhibit, const char* appname, const char* reason);
     void inhibitFDOPM(bool bInhibit, const char* appname, const char* reason);
-    void inhibitGSM(bool bInhibit, const char* appname, const char* reason, const unsigned int xid);
-    void inhibitMSM(bool bInhibit, const char* appname, const char* reason, const unsigned int xid);
+    void inhibitGSM(bool bInhibit, const char* appname, const char* reason,
+                    ApplicationInhibitFlags eType, unsigned int window_system_id);
+    void inhibitMSM(bool bInhibit, const char* appname, const char* reason,
+                    ApplicationInhibitFlags eType, unsigned int window_system_id);
 
     void inhibitXScreenSaver(bool bInhibit, Display* pDisplay);
     static void inhibitXAutoLock(bool bInhibit, Display* pDisplay);

@@ -105,7 +105,7 @@ class X11SalFrame final : public SalFrame
     int             m_nWorkArea;
     bool            m_bSetFocusOnMap;
 
-    ScreenSaverInhibitor maScreenSaverInhibitor;
+    SessionManagerInhibitor maSessionManagerInhibitor;
     tools::Rectangle       maPaintRegion;
 
     Timer           maAlwaysOnTopRaiseTimer;
