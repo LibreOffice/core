@@ -3431,6 +3431,17 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:AccessibilityCheck" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Accessibility Check...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:SidebarDeck.A11yCheckDeck</value>
+        </prop>
+      </node>
       <node oor:name=".uno:StylesMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Styl~es</value>
