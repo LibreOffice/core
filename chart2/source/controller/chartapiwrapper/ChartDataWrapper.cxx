@@ -577,14 +577,11 @@ void ChartDataWrapper::switchToInternalDataProvider()
     rtl::Reference< ChartModel > xChartDoc( m_spChart2ModelContact->getDocumentModel() );
     if( xChartDoc.is() )
         xChartDoc->createInternalDataProvider( true /*bCloneExistingData*/ );
-    m_xDataAccess.clear();
     initDataAccess();
 }
 
 void ChartDataWrapper::initDataAccess()
 {
-    if (m_xDataAccess)
-        return;
     rtl::Reference< ChartModel > xChartDoc( m_spChart2ModelContact->getDocumentModel() );
     if( !xChartDoc.is() )
         return;
