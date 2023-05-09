@@ -32,7 +32,7 @@
 #include <vcl/idle.hxx>
 #include <vcl/sysdata.hxx>
 #include <unx/saltype.h>
-#include <unx/screensaverinhibitor.hxx>
+#include <unx/sessioninhibitor.hxx>
 
 #include <tools/link.hxx>
 
@@ -187,6 +187,9 @@ class GtkSalFrame final : public SalFrame
 #endif
     gulong                          m_nPortalSettingChangedSignalId;
     GDBusProxy*                     m_pSettingsPortal;
+    gulong                          m_nSessionClientSignalId;
+    GDBusProxy*                     m_pSessionManager;
+    GDBusProxy*                     m_pSessionClient;
 #if !GTK_CHECK_VERSION(4, 0, 0)
     GdkWindow*                      m_pForeignParent;
     GdkNativeWindow                 m_aForeignParentWindow;
@@ -425,6 +428,8 @@ class GtkSalFrame final : public SalFrame
 
     void ListenPortalSettings();
 
+    void ListenSessionManager();
+
     void UpdateGeometryFromEvent(int x_root, int y_root, int nEventX, int nEventY);
 
 public:
@@ -653,6 +658,8 @@ public:
     const cairo_font_options_t* get_font_options();
 
     void SetColorScheme(GVariant* variant);
+
+    void SessionManagerInhibit(bool bStart, ApplicationInhibitFlags eType, std::u16string_view sReason, const char* application_id);
 
     void DisallowCycleFocusOut();
     bool IsCycleFocusOutDisallowed() const;

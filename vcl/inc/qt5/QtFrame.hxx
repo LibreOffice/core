@@ -34,7 +34,7 @@
 #include <QtCore/QObject>
 
 #if CHECK_ANY_QT_USING_X11
-#include <unx/screensaverinhibitor.hxx>
+#include <unx/sessioninhibitor.hxx>
 // any better way to get rid of the X11 / Qt type clashes?
 #undef Bool
 #undef CursorShape

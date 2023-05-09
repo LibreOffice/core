@@ -579,7 +579,7 @@ endif
 
 ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/unx/generic/window/screensaverinhibitor \
+    vcl/unx/generic/window/sessioninhibitor \
     vcl/unx/generic/printer/cpdmgr \
 ))
 

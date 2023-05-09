@@ -24,7 +24,7 @@
 
 #include <unx/saltype.h>
 #include <unx/saldisp.hxx>
-#include <unx/screensaverinhibitor.hxx>
+#include <unx/sessioninhibitor.hxx>
 #include <salframe.hxx>
 #include <salwtype.hxx>
 #include <salinst.hxx>

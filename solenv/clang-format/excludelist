@@ -14978,7 +14978,7 @@ vcl/unx/generic/printer/ppdparser.cxx
 vcl/unx/generic/printer/printerinfomanager.cxx
 vcl/unx/generic/window/salframe.cxx
 vcl/unx/generic/window/salobj.cxx
-vcl/unx/generic/window/screensaverinhibitor.cxx
+vcl/unx/generic/window/sessioninhibitor.cxx
 vcl/unx/gtk3/a11y/atklistener.hxx
 vcl/unx/gtk3/a11y/atkwrapper.hxx
 vcl/unx/gtk3/a11y/atkaction.cxx

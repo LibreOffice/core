@@ -506,7 +506,7 @@ certain functionality.
 @li @c vcl.quartz
 @li @c vcl.schedule - scheduler / main-loop information
 @li @c vcl.schedule.deinit
-@li @c vcl.screensaverinhibitor
+@li @c vcl.sessioninhibitor
 @li @c vcl.scrollbar - Scroll Bars
 @li @c vcl.se - VCL Session Manager
 @li @c vcl.se.debug

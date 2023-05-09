@@ -12,7 +12,7 @@
 #include <functional>
 
 #include <unx/gensys.h>
-#include <unx/screensaverinhibitor.hxx>
+#include <unx/sessioninhibitor.hxx>
 
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
@@ -47,9 +47,10 @@
 #include <sal/log.hxx>
 
 void SessionManagerInhibitor::inhibit(bool bInhibit, std::u16string_view sReason, ApplicationInhibitFlags eType,
-                                      unsigned int window_system_id, std::optional<Display*> pDisplay)
+                                      unsigned int window_system_id, std::optional<Display*> pDisplay,
+                                      const char* application_id)
 {
-    const char* appname = SalGenericSystem::getFrameClassName();
+    const char* appname = application_id ? application_id : SalGenericSystem::getFrameClassName();
     const OString aReason = OUStringToOString( sReason, RTL_TEXTENCODING_UTF8 );
 
     if (eType == APPLICATION_INHIBIT_IDLE)
@@ -85,10 +86,10 @@ static void dbusInhibit( bool bInhibit,
     GError          *error = nullptr;
     GDBusConnection *session_connection = g_bus_get_sync( G_BUS_TYPE_SESSION, nullptr, &error );
     if (session_connection == nullptr) {
-        SAL_WARN( "vcl.screensaverinhibitor", "failed to connect to dbus session bus" );
+        SAL_WARN( "vcl.sessioninhibitor", "failed to connect to dbus session bus" );
 
         if (error != nullptr) {
-            SAL_WARN( "vcl.screensaverinhibitor", "Error: " << error->message );
+            SAL_WARN( "vcl.sessioninhibitor", "Error: " << error->message );
             g_error_free( error );
         }
 
@@ -107,7 +108,7 @@ static void dbusInhibit( bool bInhibit,
     g_object_unref( G_OBJECT( session_connection ) );
 
     if (proxy == nullptr) {
-        SAL_INFO( "vcl.screensaverinhibitor", "could not get dbus proxy: " << service );
+        SAL_INFO( "vcl.sessioninhibitor", "could not get dbus proxy: " << service );
         return;
     }
 
@@ -128,7 +129,7 @@ static void dbusInhibit( bool bInhibit,
         }
         else
         {
-            SAL_INFO( "vcl.screensaverinhibitor", service << ".Inhibit failed");
+            SAL_INFO( "vcl.sessioninhibitor", service << ".Inhibit failed");
         }
     }
     else
@@ -142,13 +143,13 @@ static void dbusInhibit( bool bInhibit,
         }
         else
         {
-            SAL_INFO( "vcl.screensaverinhibitor", service << ".UnInhibit failed" );
+            SAL_INFO( "vcl.sessioninhibitor", service << ".UnInhibit failed" );
         }
     }
 
     if (error != nullptr)
     {
-        SAL_INFO( "vcl.screensaverinhibitor", "Error: " << error->message );
+        SAL_INFO( "vcl.sessioninhibitor", "Error: " << error->message );
         g_error_free( error );
     }
 

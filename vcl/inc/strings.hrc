@@ -122,6 +122,9 @@
 #define STR_QUIRKY                                  NC_("STR_QUIRKY", "Quirky Tests: %1")
 #define STR_FAILED                                  NC_("STR_FAILED", "Failed Tests: %1")
 #define STR_SKIPPED                                 NC_("STR_SKIPPED", "Skipped Tests: %1")
+
+#define STR_UNSAVED_DOCUMENTS                       NC_("STR_UNSAVED_DOCUMENTS", "There are unsaved documents")
+
 #endif // INCLUDED_VCL_INC_STRINGS_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

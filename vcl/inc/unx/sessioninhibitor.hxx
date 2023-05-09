@@ -31,7 +31,8 @@ class VCL_PLUGIN_PUBLIC SessionManagerInhibitor
 {
 public:
     void inhibit(bool bInhibit, std::u16string_view sReason, ApplicationInhibitFlags eType,
-                 unsigned int window_system_id, std::optional<Display*> pDisplay);
+                 unsigned int window_system_id, std::optional<Display*> pDisplay,
+                 const char* application_id = nullptr);
 
 private:
     // These are all used as guint, however this header may be included
