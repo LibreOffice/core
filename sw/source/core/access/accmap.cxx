@@ -2679,7 +2679,9 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
 
     for (SwAccessibleParagraph* pAccPara : m_setParaRemove)
     {
-        if(pAccPara && pAccPara->getSelectedAccessibleChildCount() == 0 && pAccPara->getSelectedText().getLength() == 0)
+        if (pAccPara && !pAccPara->IsDisposed() &&
+            pAccPara->getSelectedAccessibleChildCount() == 0 &&
+            pAccPara->getSelectedText().getLength() == 0)
         {
             if(pAccPara->SetSelectedState(false))
             {

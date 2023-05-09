@@ -518,9 +518,14 @@ bool SwAccessibleContext::IsEditableState()
     return bRet;
 }
 
+bool SwAccessibleContext::IsDisposed() const
+{
+    return !(GetFrame() && GetMap());
+}
+
 void SwAccessibleContext::ThrowIfDisposed()
 {
-    if (!(GetFrame() && GetMap()))
+    if (IsDisposed())
     {
         throw lang::DisposedException("object is nonfunctional",
                 static_cast<cppu::OWeakObject*>(this));
