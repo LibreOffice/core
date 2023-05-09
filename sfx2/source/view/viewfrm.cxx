@@ -3419,8 +3419,7 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
         if (comphelper::LibreOfficeKit::isActive())
         {
             ShowChildWindow(SID_SIDEBAR);
-            OUString panelId = "SdNavigatorPanel";
-            ::sfx2::sidebar::Sidebar::TogglePanel(panelId, GetFrame().GetFrameInterface());
+            ::sfx2::sidebar::Sidebar::ShowDeck(u"NavigatorDeck", this, true);
             rReq.Done();
             return;
         }
