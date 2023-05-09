@@ -1780,6 +1780,21 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134253)
     CPPUNIT_ASSERT_EQUAL(6, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testNotebookBar)
+{
+    createSwDoc();
+
+    //tdf#154282: Without the fix in place, this test would have crashed
+    dispatchCommand(mxComponent, ".uno:ToolbarMode?Mode:string=notebookbar.ui", {});
+    dispatchCommand(mxComponent, ".uno:ToolbarMode?Mode:string=Single", {});
+    dispatchCommand(mxComponent, ".uno:ToolbarMode?Mode:string=Sidebar", {});
+    dispatchCommand(mxComponent, ".uno:ToolbarMode?Mode:string=notebookbar_compact.ui", {});
+    dispatchCommand(mxComponent, ".uno:ToolbarMode?Mode:string=notebookbar_groupedbar_compact.ui",
+                    {});
+    dispatchCommand(mxComponent, ".uno:ToolbarMode?Mode:string=notebookbar_single.ui", {});
+    dispatchCommand(mxComponent, ".uno:ToolbarMode?Mode:string=Default", {});
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, TestAsCharTextBox)
 {
     // Related tickets:
