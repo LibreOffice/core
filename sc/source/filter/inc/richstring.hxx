@@ -208,7 +208,7 @@ class RichString
 public:
 
     /** Appends and returns an index of a portion object for a plain string (t element). */
-    sal_Int32 importText();
+    sal_Int32 importText(const AttributeList& rAttribs);
     /** Appends and returns an index of a portion object for a new formatting run (r element). */
     sal_Int32 importRun();
     /** Appends and returns a phonetic text object for a new phonetic run (rPh element). */
@@ -236,6 +236,10 @@ public:
 
     RichStringPortion& getPortion(sal_Int32 nPortionIdx) { return maTextPortions[nPortionIdx]; }
 
+    void                setAttributes(const AttributeList& rAttribs);
+
+    bool                isPreserveSpace() const { return mbPreserveSpace; }
+
 private:
     /** Creates, appends, and returns a new empty string portion. */
     sal_Int32 createPortion();
@@ -253,6 +257,7 @@ private:
     std::vector<RichStringPortion>  maTextPortions; /// String portions with font data.
     std::unique_ptr<PhoneticSettings> mxPhonSettings; /// Phonetic settings for this string.
     PhoneticVector      maPhonPortions; /// Phonetic text portions.
+    bool mbPreserveSpace = false;
 };
 
 typedef std::shared_ptr< RichString > RichStringRef;
