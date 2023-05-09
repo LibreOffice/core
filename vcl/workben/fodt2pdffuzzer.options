@@ -1,3 +1,3 @@
 [libfuzzer]
-max_len = 3072
+max_len = 4096
 dict = odf.dict
