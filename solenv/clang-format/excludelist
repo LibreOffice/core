@@ -5842,7 +5842,6 @@ include/svx/imapdlg.hxx
 include/svx/itextprovider.hxx
 include/svx/langbox.hxx
 include/svx/lathe3d.hxx
-include/svx/legacyitem.hxx
 include/svx/linectrl.hxx
 include/svx/msdffdef.hxx
 include/svx/nbdtmg.hxx
@@ -11232,6 +11231,7 @@ svx/inc/extrud3d.hxx
 svx/inc/galbrws2.hxx
 svx/inc/galobj.hxx
 svx/inc/helpids.h
+svx/inc/legacyitem.hxx
 svx/inc/palettes.hxx
 svx/inc/sdgcoitm.hxx
 svx/inc/sdginitm.hxx

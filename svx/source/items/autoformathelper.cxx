@@ -21,7 +21,7 @@
 #include <tools/stream.hxx>
 #include <svl/legacyitem.hxx>
 #include <editeng/legacyitem.hxx>
-#include <svx/legacyitem.hxx>
+#include <legacyitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/wghtitem.hxx>

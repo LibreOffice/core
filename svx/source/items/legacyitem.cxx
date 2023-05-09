@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/legacyitem.hxx>
+#include <legacyitem.hxx>
 #include <tools/stream.hxx>
 #include <svx/algitem.hxx>
 #include <svx/rotmodit.hxx>
