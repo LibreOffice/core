@@ -7,51 +7,20 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <officecfg/Office/Common.hxx>
-
 #include "sdmodeltestbase.hxx"
 
-#include <com/sun/star/uno/Reference.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <com/sun/star/frame/Desktop.hpp>
 
-#include <com/sun/star/awt/Gradient.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
-#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/drawing/XDrawPages.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/table/XTable.hpp>
-#include <com/sun/star/table/XMergeableCellRange.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <vcl/scheduler.hxx>
+#include <svx/svdview.hxx>
+#include <svx/svdpagv.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editobj.hxx>
 
 #include <DrawDocShell.hxx>
-#include <editeng/editeng.hxx>
-#include <drawdoc.hxx>
-#include <vcl/scheduler.hxx>
-#include <svx/sdr/table/tablecontroller.hxx>
-#include <sfx2/request.hxx>
-#include <svx/svdpagv.hxx>
-#include <svx/svxids.hrc>
-#include <editeng/eeitem.hxx>
-#include <editeng/adjustitem.hxx>
-#include <editeng/outlobj.hxx>
-#include <editeng/editobj.hxx>
-#include <undo/undomanager.hxx>
-#include <GraphicViewShell.hxx>
-#include <sdpage.hxx>
-#include <comphelper/base64.hxx>
-#include <LayerTabBar.hxx>
-#include <vcl/event.hxx>
-#include <vcl/keycodes.hxx>
-#include <svx/svdoashp.hxx>
-#include <tools/gen.hxx>
-#include <svx/view3d.hxx>
-#include <svx/scene3d.hxx>
-#include <svx/sdmetitm.hxx>
 #include <unomodel.hxx>
+#include <sdpage.hxx>
+#include <ViewShell.hxx>
 
 using namespace css;
 
