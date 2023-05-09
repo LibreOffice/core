@@ -28,6 +28,7 @@
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/propertyset.hxx>
+#include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <editutil.hxx>
 
@@ -403,14 +404,23 @@ void PhoneticPortionModelList::importPortions( SequenceInputStream& rStrm )
     }
 }
 
-sal_Int32 RichString::importText()
+sal_Int32 RichString::importText(const AttributeList& rAttribs)
 {
+    setAttributes(rAttribs);
+
     return createPortion();
 }
 
 sal_Int32 RichString::importRun()
 {
     return createPortion();
+}
+
+void  RichString::setAttributes(const AttributeList& rAttribs)
+{
+    auto aAttrSpace = rAttribs.getString(oox::NMSP_xml | oox::XML_space);
+    if (aAttrSpace.has() && aAttrSpace.get() == "preserve")
+        mbPreserveSpace = true;
 }
 
 RichStringPhoneticRef RichString::importPhoneticRun( const AttributeList& rAttribs )

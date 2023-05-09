@@ -33,7 +33,7 @@ ContextHandlerRef RichStringContext::onCreateContext( sal_Int32 nElement, const 
         switch( nElement )
         {
             case XLS_TOKEN( t ):
-                mnPortionIdx = mxString->importText();
+                mnPortionIdx = mxString->importText(rAttribs);
                 return this;    // collect text in onCharacters()
             case XLS_TOKEN( r ):
                 mnPortionIdx = mxString->importRun();
@@ -57,6 +57,7 @@ ContextHandlerRef RichStringContext::onCreateContext( sal_Int32 nElement, const 
                 break;
 
                 case XLS_TOKEN( t ):
+                    mxString->setAttributes(rAttribs);
                     return this;    // collect portion text in onCharacters()
             }
         break;
@@ -65,6 +66,7 @@ ContextHandlerRef RichStringContext::onCreateContext( sal_Int32 nElement, const 
             switch( nElement )
             {
                 case XLS_TOKEN( t ):
+                    mxString->setAttributes(rAttribs);
                     return this;    // collect phonetic text in onCharacters()
             }
         break;
