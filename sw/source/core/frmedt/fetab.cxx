@@ -276,6 +276,49 @@ bool SwFEShell::DeleteCol()
     }
 
     CurrShell aCurr( this );
+
+    // tracked deletion: remove only textbox content,
+    // and set IsNoTracked table box property to false
+    if ( GetDoc()->GetDocShell()->IsChangeRecording() )
+    {
+        StartUndo(SwUndoId::COL_DELETE);
+        StartAllAction();
+
+        if ( SwWrtShell* pWrtShell = dynamic_cast<SwWrtShell*>(this) )
+            pWrtShell->SelectTableCol();
+
+        // search boxes via the layout
+        SwSelBoxes aBoxes;
+        GetTableSel( *this, aBoxes, SwTableSearchType::Col );
+
+        TableWait aWait( 20, pFrame, *GetDoc()->GetDocShell(), aBoxes.size() );
+
+        for (size_t i = 0; i < aBoxes.size(); ++i)
+        {
+            SwTableBox *pBox = aBoxes[i];
+            if ( pBox->GetSttNd() )
+            {
+                SwNodeIndex aIdx( *pBox->GetSttNd(), 1 );
+                SwCursor aCursor( SwPosition(aIdx), nullptr );
+                SvxPrintItem aHasTextChangesOnly(RES_PRINT, false);
+                GetDoc()->SetBoxAttr( aCursor, aHasTextChangesOnly );
+            }
+        }
+
+        SwEditShell* pEditShell = GetDoc()->GetEditShell();
+        SwRedlineTable::size_type nPrev = pEditShell->GetRedlineCount();
+        pEditShell->Delete();
+
+        EndAllActionAndCall();
+        EndUndo(SwUndoId::COL_DELETE);
+
+        // track column deletion only if there were tracked text changes
+        // FIXME redline count can be the same in special cases, e.g. adding a
+        // new tracked deletion with removing an own tracked insertion...
+        if ( nPrev != pEditShell->GetRedlineCount() )
+            return true;
+    }
+
     StartAllAction();
 
     // search boxes via the layout
@@ -349,11 +392,11 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
     StartAllAction();
 
     // tracked deletion: remove only textbox content,
-    // and set IsNoTracked table line property to false
+    // and set HasTextChangesOnly table line property to false
     if ( bRecordChanges )
     {
-        SvxPrintItem aNotTracked(RES_PRINT, false);
-        GetDoc()->SetRowNotTracked( *getShellCursor( false ), aNotTracked );
+        SvxPrintItem aHasTextChangesOnly(RES_PRINT, false);
+        GetDoc()->SetRowNotTracked( *getShellCursor( false ), aHasTextChangesOnly );
 
         if ( SwWrtShell* pWrtShell = dynamic_cast<SwWrtShell*>(this) )
             pWrtShell->SelectTableRow();

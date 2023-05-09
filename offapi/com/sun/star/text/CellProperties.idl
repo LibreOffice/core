@@ -130,6 +130,12 @@ published service CellProperties
         @since LibreOffice 6.3
      */
     [optional, readonly, property] com::sun::star::text::XText ParentText;
+
+    /** If TRUE, the table cell wasn't deleted or inserted with its tracked cell content
+
+        @since LibreOffice 7.6
+     */
+    [optional, property, maybevoid] boolean HasTextChangesOnly;
 };
 
 

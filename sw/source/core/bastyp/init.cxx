@@ -204,8 +204,8 @@ WhichRangesContainer const aTableSetRange(svl::Items<
 
 WhichRangesContainer const aTableLineSetRange(svl::Items<
     RES_FILL_ORDER,     RES_FRM_SIZE,
-    // HasTextChangesOnly
     RES_LR_SPACE,       RES_UL_SPACE,
+    // HasTextChangesOnly
     RES_PRINT,          RES_PRINT,
     RES_PROTECT,        RES_PROTECT,
     RES_VERT_ORIENT,    RES_VERT_ORIENT,
@@ -218,6 +218,8 @@ WhichRangesContainer const aTableLineSetRange(svl::Items<
 WhichRangesContainer const aTableBoxSetRange(svl::Items<
     RES_FILL_ORDER,     RES_FRM_SIZE,
     RES_LR_SPACE,       RES_UL_SPACE,
+    // HasTextChangesOnly
+    RES_PRINT,          RES_PRINT,
     RES_PROTECT,        RES_PROTECT,
     RES_VERT_ORIENT,    RES_VERT_ORIENT,
     RES_BACKGROUND,     RES_SHADOW,

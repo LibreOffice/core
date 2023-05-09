@@ -2453,6 +2453,109 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf147180_empty_rows)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableColumnDeletion)
+{
+    // load a table, and delete the first column with enabled change tracking:
+    // now the column is not deleted silently, but keeps the deleted cell content,
+    // and only accepting it will result the deletion of the table column.
+    createSwDoc("tdf118311.fodt");
+    SwDoc* pDoc = getSwDoc();
+
+    // turn on red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // check table
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 2);
+
+    // delete table column with enabled change tracking
+    // (HasTextChangesOnly property of the cell will be false)
+    dispatchCommand(mxComponent, ".uno:DeleteColumns", {});
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+    // This was 1 (deleted cell without change tracking)
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 2);
+
+    // accept the deletion
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), pEditShell->GetRedlineCount());
+    pEditShell->AcceptRedline(0);
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+    // deleted column
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 1);
+
+    // Undo, and repeat the previous test, but only with deletion of the text content of the cells
+    // (HasTextChangesOnly property will be removed by Undo)
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    // first column exists again
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 2);
+
+    // delete table column with enabled change tracking
+    dispatchCommand(mxComponent, ".uno:SelectColumn", {});
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+
+    // Table column still exists
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 2);
+
+    // accept the deletion of the content of the first cell
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), pEditShell->GetRedlineCount());
+    pEditShell->AcceptRedline(0);
+
+    // table column was still not deleted
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 2);
+
+    // Undo, and delete the column without change tracking
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    // table exists again
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 2);
+
+    // disable change tracking
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+
+    CPPUNIT_ASSERT_MESSAGE("redlining should be off",
+                           !pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+
+    // delete table column without change tracking
+    dispatchCommand(mxComponent, ".uno:DeleteColumns", {});
+
+    // the table column was deleted
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf128335)
 {
     // Load the bugdoc, which has 3 textboxes.
