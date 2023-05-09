@@ -67,6 +67,23 @@ static OUString getNormDicEntry_Impl(std::u16string_view rText)
     return aTmp.replaceAll("=", "");
 }
 
+// tdf#154499 separate words of a phrase only by a single space,
+// i.e. trim terminating spaces and replace space sequences with single spaces
+static OUString fixSpace(OUString sText)
+{
+    sText = sText.trim();
+
+    sal_Int32 nLen;
+    do
+    {
+        nLen = sText.getLength();
+        sText = sText.replaceAll("  ", " ");
+    }
+    while ( sText.getLength() < nLen );
+
+    return sText;
+}
+
 namespace {
 
 // Compare Dictionary Entry  result
@@ -280,10 +297,6 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(weld::Window* pParent, std::u16
     }
 
     m_xLangLB->SetLanguageList( SvxLanguageListFlags::ALL, true, true );
-
-    Link<OUString&,bool> aLink = LINK(this, SvxEditDictionaryDialog, InsertTextHdl);
-    m_xReplaceED->connect_insert_text(aLink);
-    m_xWordED->connect_insert_text(aLink);
 
     if ( nCount > 0 )
     {
@@ -598,9 +611,9 @@ bool SvxEditDictionaryDialog::NewDelHdl(const weld::Widget* pBtn)
     if (pBtn == m_xNewReplacePB.get() || m_xNewReplacePB->get_sensitive())
     {
         int nEntry = m_pWordsLB->get_selected_index();
-        OUString aNewWord(m_xWordED->get_text());
+        OUString aNewWord(fixSpace(m_xWordED->get_text()));
         OUString sEntry(aNewWord);
-        OUString aReplaceStr(m_xReplaceED->get_text());
+        OUString aReplaceStr(fixSpace(m_xReplaceED->get_text()));
 
         DictionaryError nAddRes = DictionaryError::UNKNOWN;
         int nPos = m_xAllDictsLB->get_active();
@@ -673,7 +686,7 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, weld::Entry&, rEdt, void)
     OUString rEntry = rEdt.get_text();
 
     sal_Int32 nWordLen = rEntry.getLength();
-    const OUString& rRepString = m_xReplaceED->get_text();
+    const OUString& rRepString = fixSpace(m_xReplaceED->get_text());
 
     bool bEnableNewReplace  = false;
     bool bEnableDelete      = false;
@@ -754,21 +767,15 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, weld::Entry&, rEdt, void)
             bEnableDelete = true;
         }
         bool bIsChange =
-                CDE_EQUAL != cmpDicEntry_Impl(m_xWordED->get_text(), aWordText)
-             || CDE_EQUAL != cmpDicEntry_Impl(m_xReplaceED->get_text(), aReplaceText);
-        if (!m_xWordED->get_text().isEmpty()  &&  bIsChange)
+                CDE_EQUAL != cmpDicEntry_Impl(fixSpace(m_xWordED->get_text()), aWordText)
+             || CDE_EQUAL != cmpDicEntry_Impl(fixSpace(m_xReplaceED->get_text()), aReplaceText);
+        if (!fixSpace(m_xWordED->get_text()).isEmpty() && bIsChange)
             bEnableNewReplace = true;
     }
 
     m_xNewReplacePB->set_label(aNewReplaceText);
     m_xNewReplacePB->set_sensitive(bEnableNewReplace && !IsDicReadonly_Impl());
     m_xDeletePB->set_sensitive(bEnableDelete && !IsDicReadonly_Impl());
-}
-
-IMPL_STATIC_LINK(SvxEditDictionaryDialog, InsertTextHdl, OUString&, rText, bool)
-{
-    rText = rText.replaceAll(" ", "");
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
