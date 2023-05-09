@@ -24,12 +24,9 @@
 
 #include <vcl/svapp.hxx>
 
+#include <comphelper/compbase.hxx>
 #include <comphelper/diagnose_ex.hxx>
-
 #include <comphelper/processfactory.hxx>
-
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
 
 namespace basctl
 {
@@ -47,7 +44,7 @@ namespace basctl
 
     // DocumentEventNotifier::Impl
 
-    typedef ::cppu::WeakComponentImplHelper<   XDocumentEventListener
+    typedef ::comphelper::WeakComponentImplHelper<   XDocumentEventListener
                                            >   DocumentEventNotifier_Impl_Base;
 
     namespace {
@@ -62,8 +59,7 @@ namespace basctl
 
     /** impl class for DocumentEventNotifier
     */
-    class DocumentEventNotifier::Impl   :public ::cppu::BaseMutex
-                                        ,public DocumentEventNotifier_Impl_Base
+    class DocumentEventNotifier::Impl : public DocumentEventNotifier_Impl_Base
     {
     public:
         // noncopyable
@@ -79,18 +75,18 @@ namespace basctl
         // XEventListener
         virtual void SAL_CALL disposing( const css::lang::EventObject& Event ) override;
 
-        // ComponentHelper
-        virtual void SAL_CALL disposing() override;
+        // WeakComponentImplHelper
+        virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     private:
         /// determines whether the instance is already disposed
-        bool    impl_isDisposed_nothrow() const { return m_pListener == nullptr; }
+        bool    impl_isDisposed_nothrow(std::unique_lock<std::mutex>& /*rGuard*/) const { return m_pListener == nullptr; }
 
         /// disposes the instance
-        void    impl_dispose_nothrow();
+        void    impl_dispose_nothrow(std::unique_lock<std::mutex>& rGuard);
 
         /// registers or revokes the instance as listener at the global event broadcaster
-        void    impl_listenerAction_nothrow( ListenerAction _eAction );
+        void    impl_listenerAction_nothrow( std::unique_lock<std::mutex>& rGuard, ListenerAction _eAction );
 
     private:
         DocumentEventListener*  m_pListener;
@@ -98,18 +94,19 @@ namespace basctl
     };
 
     DocumentEventNotifier::Impl::Impl (DocumentEventListener& rListener, Reference<XModel> const& rxDocument) :
-        DocumentEventNotifier_Impl_Base(m_aMutex),
         m_pListener(&rListener),
         m_xModel(rxDocument)
     {
+        std::unique_lock aGuard(m_aMutex);
         osl_atomic_increment( &m_refCount );
-        impl_listenerAction_nothrow( RegisterListener );
+        impl_listenerAction_nothrow( aGuard, RegisterListener );
         osl_atomic_decrement( &m_refCount );
     }
 
     DocumentEventNotifier::Impl::~Impl ()
     {
-        if ( !impl_isDisposed_nothrow() )
+        std::unique_lock aGuard(m_aMutex);
+        if ( !impl_isDisposed_nothrow(aGuard) )
         {
             acquire();
             dispose();
@@ -118,10 +115,10 @@ namespace basctl
 
     void SAL_CALL DocumentEventNotifier::Impl::documentEventOccured( const DocumentEvent& _rEvent )
     {
-        ::osl::ClearableMutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
-        OSL_PRECOND( !impl_isDisposed_nothrow(), "DocumentEventNotifier::Impl::notifyEvent: disposed, but still getting events?" );
-        if ( impl_isDisposed_nothrow() )
+        OSL_PRECOND( !impl_isDisposed_nothrow(aGuard), "DocumentEventNotifier::Impl::notifyEvent: disposed, but still getting events?" );
+        if ( impl_isDisposed_nothrow(aGuard) )
             return;
 
         Reference< XModel > xDocument( _rEvent.Source, UNO_QUERY );
@@ -155,11 +152,11 @@ namespace basctl
             {
                 // the listener implementations usually require the SolarMutex, so lock it here.
                 // But ensure the proper order of locking the solar and the own mutex
-                aGuard.clear();
+                aGuard.unlock();
                 SolarMutexGuard aSolarGuard;
-                ::osl::MutexGuard aGuard2( m_aMutex );
+                std::unique_lock aGuard2( m_aMutex );
 
-                if ( impl_isDisposed_nothrow() )
+                if ( impl_isDisposed_nothrow(aGuard2) )
                     // somebody took the chance to dispose us -> bail out
                     return;
 
@@ -172,25 +169,25 @@ namespace basctl
     void SAL_CALL DocumentEventNotifier::Impl::disposing( const css::lang::EventObject& /*Event*/ )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
-        if ( !impl_isDisposed_nothrow() )
-            impl_dispose_nothrow();
+        if ( !impl_isDisposed_nothrow(aGuard) )
+            impl_dispose_nothrow(aGuard);
     }
 
-    void SAL_CALL DocumentEventNotifier::Impl::disposing()
+    void DocumentEventNotifier::Impl::disposing(std::unique_lock<std::mutex>& rGuard)
     {
-        impl_listenerAction_nothrow( RemoveListener );
-        impl_dispose_nothrow();
+        impl_listenerAction_nothrow( rGuard, RemoveListener );
+        impl_dispose_nothrow(rGuard);
     }
 
-    void DocumentEventNotifier::Impl::impl_dispose_nothrow()
+    void DocumentEventNotifier::Impl::impl_dispose_nothrow(std::unique_lock<std::mutex>& /*rGuard*/)
     {
         m_pListener = nullptr;
         m_xModel.clear();
     }
 
-    void DocumentEventNotifier::Impl::impl_listenerAction_nothrow( ListenerAction _eAction )
+    void DocumentEventNotifier::Impl::impl_listenerAction_nothrow( std::unique_lock<std::mutex>& rGuard, ListenerAction _eAction )
     {
         try
         {
@@ -206,7 +203,10 @@ namespace basctl
 
             void ( SAL_CALL XDocumentEventBroadcaster::*listenerAction )( const Reference< XDocumentEventListener >& ) =
                 ( _eAction == RegisterListener ) ? &XDocumentEventBroadcaster::addDocumentEventListener : &XDocumentEventBroadcaster::removeDocumentEventListener;
+
+            rGuard.unlock();
             (xBroadcaster.get()->*listenerAction)( this );
+            rGuard.lock();
         }
         catch( const Exception& )
         {
