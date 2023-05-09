@@ -68,7 +68,7 @@ public:
     void testStatisticalFormulaBinomDist();
     void testStatisticalFormulaVarP();
     void testMathFormulaCeil();
-    // void testMathFormulaKombin();
+    void testMathFormulaKombin();
     void testStatisticalFormulaDevSq();
     void testStatisticalFormulaStDev();
     void testStatisticalFormulaSlope();
@@ -182,8 +182,7 @@ public:
     CPPUNIT_TEST(testStatisticalFormulaBinomDist);
     CPPUNIT_TEST(testStatisticalFormulaVarP);
     CPPUNIT_TEST(testMathFormulaCeil);
-    // This test fails MacOS 10.8. Disabled temporarily
-    // CPPUNIT_TEST(testMathFormulaKombin);
+    CPPUNIT_TEST(testMathFormulaKombin);
     CPPUNIT_TEST(testStatisticalFormulaDevSq);
     CPPUNIT_TEST(testStatisticalFormulaStDev);
     CPPUNIT_TEST(testStatisticalFormulaSlope);
@@ -1177,7 +1176,6 @@ void ScOpenCLTest2::testMathFormulaProduct()
     }
 }
 
-#if 0 //Disabled temporarily
 void ScOpenCLTest2::testMathFormulaKombin()
 {
     initTestEnv(u"ods/opencl/math/Kombin.ods");
@@ -1193,7 +1191,6 @@ void ScOpenCLTest2::testMathFormulaKombin()
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
-#endif
 
 void ScOpenCLTest2:: testArrayFormulaSumX2MY2()
 {
