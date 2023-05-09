@@ -22,6 +22,7 @@
 #include <algorithm>
 
 #include <osl/diagnose.h>
+#include <rtl/character.hxx>
 
 #include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
@@ -101,6 +102,10 @@ adjust_boundaries( css::uno::Reference<css::accessibility::XAccessibleText> cons
         switch(boundary_type)
         {
         case ATK_TEXT_BOUNDARY_CHAR:
+            if ((rTextSegment.SegmentEnd - rTextSegment.SegmentStart) == 1
+                && rtl::isSurrogate(rTextSegment.SegmentText[0]))
+                return nullptr;
+            [[fallthrough]];
         case ATK_TEXT_BOUNDARY_LINE_START:
         case ATK_TEXT_BOUNDARY_LINE_END:
         case ATK_TEXT_BOUNDARY_SENTENCE_START:
@@ -351,7 +356,7 @@ text_wrapper_get_character_at_offset (AtkText          *text,
                                       gint             offset)
 {
     gint start, end;
-    gunichar uc = 0;
+    gunichar uc = 0xFFFFFFFF;
 
     gchar * char_as_string =
         text_wrapper_get_text_at_offset(text, offset, ATK_TEXT_BOUNDARY_CHAR,
