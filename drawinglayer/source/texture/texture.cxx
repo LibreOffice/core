@@ -244,11 +244,7 @@ namespace drawinglayer::texture
                     // set and add at target
                     aCallback(
                         maGradientInfo.getTextureTransform() * aNew,
-                        interpolate(
-                            aCStart, aCEnd,
-                            nSteps == 1
-                                ? std::numeric_limits<double>::infinity()
-                                : double(innerLoop) / double(nSteps - 1)));
+                        1 == nSteps ? aCStart : basegfx::BColor(interpolate(aCStart, aCEnd, double(innerLoop) / double(nSteps - 1))));
                 }
             }
 
@@ -372,7 +368,7 @@ namespace drawinglayer::texture
                     // set and add at target
                     aCallback(
                         maGradientInfo.getTextureTransform() * aNew,
-                        interpolate(aCStart, aCEnd, double(innerLoop) / double(nSteps - 1)));
+                        1 == nSteps ? aCStart : basegfx::BColor(interpolate(aCStart, aCEnd, double(innerLoop) / double(nSteps - 1))));
                 }
             }
 
@@ -467,11 +463,7 @@ namespace drawinglayer::texture
                     // set and add at target
                     aCallback(
                         maGradientInfo.getTextureTransform() * basegfx::utils::createScaleB2DHomMatrix(fSize, fSize),
-                        interpolate(
-                            aCStart, aCEnd,
-                            nSteps == 1
-                                ? std::numeric_limits<double>::infinity()
-                                : double(innerLoop) / double(nSteps - 1)));
+                        1 == nSteps ? aCStart : basegfx::BColor(interpolate(aCStart, aCEnd, double(innerLoop) / double(nSteps - 1))));
                 }
             }
 
@@ -572,7 +564,7 @@ namespace drawinglayer::texture
                         * basegfx::utils::createScaleB2DHomMatrix(
                             1.0 - (bMTO ? fSize / fAR : fSize),
                             1.0 - (bMTO ? fSize : fSize * fAR)),
-                        interpolate(aCStart, aCEnd, double(innerLoop) / double(nSteps - 1)));
+                        1 == nSteps ? aCStart : basegfx::BColor(interpolate(aCStart, aCEnd, double(innerLoop) / double(nSteps - 1))));
                 }
             }
 
@@ -666,7 +658,7 @@ namespace drawinglayer::texture
                     // set and add at target
                     aCallback(
                         maGradientInfo.getTextureTransform() * basegfx::utils::createScaleB2DHomMatrix(fSize, fSize),
-                        interpolate(aCStart, aCEnd, double(innerLoop) / double(nSteps - 1)));
+                        1 == nSteps ? aCStart : basegfx::BColor(interpolate(aCStart, aCEnd, double(innerLoop) / double(nSteps - 1))));
                 }
             }
 
@@ -767,7 +759,7 @@ namespace drawinglayer::texture
                         * basegfx::utils::createScaleB2DHomMatrix(
                             1.0 - (bMTO ? fSize / fAR : fSize),
                             1.0 - (bMTO ? fSize : fSize * fAR)),
-                        interpolate(aCStart, aCEnd, double(innerLoop) / double(nSteps - 1)));
+                        1 == nSteps ? aCStart : basegfx::BColor(interpolate(aCStart, aCEnd, double(innerLoop) / double(nSteps - 1))));
                 }
             }
 
