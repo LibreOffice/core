@@ -339,12 +339,6 @@ void Application::notifyInvalidation(tools::Rectangle const* /*pRect*/) const
 {
 }
 
-IMPL_STATIC_LINK_NOARG( ImplSVAppData, ImplPrepareExitMsg, void*, void )
-{
-    //now close top level frames
-    (void)GetpApp()->QueryExit();
-}
-
 void Application::Execute()
 {
     ImplSVData* pSVData = ImplGetSVData();
