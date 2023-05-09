@@ -349,6 +349,8 @@ public:
     virtual bool SetSelectedState(bool bSelected);
     bool  IsSelectedInDoc() const { return m_isSelectedInDoc; }
 
+    bool IsDisposed() const;
+
     static OUString GetResource(TranslateId pResId,
                                 const OUString *pArg1 = nullptr,
                                 const OUString *pArg2 = nullptr);
