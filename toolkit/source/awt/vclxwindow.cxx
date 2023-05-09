@@ -37,7 +37,7 @@
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
-#include <toolkit/helper/property.hxx>
+#include <helper/property.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <utility>

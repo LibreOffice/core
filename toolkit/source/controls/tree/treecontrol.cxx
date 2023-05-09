@@ -25,7 +25,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
 #include <toolkit/controls/unocontrolbase.hxx>
-#include <toolkit/helper/property.hxx>
+#include <helper/property.hxx>
 #include <osl/diagnose.h>
 #include <cppuhelper/implbase1.hxx>
 

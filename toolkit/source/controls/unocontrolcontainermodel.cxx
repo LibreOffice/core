@@ -19,7 +19,7 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <controls/unocontrolcontainermodel.hxx>
-#include <toolkit/helper/property.hxx>
+#include <helper/property.hxx>
 
 #include <helper/unopropertyarrayhelper.hxx>
 

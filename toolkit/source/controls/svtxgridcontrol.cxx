@@ -27,7 +27,7 @@
 #include "unocontroltablemodel.hxx"
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <toolkit/helper/property.hxx>
+#include <helper/property.hxx>
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
 #include <com/sun/star/awt/grid/GridInvalidDataException.hpp>
 #include <com/sun/star/awt/grid/GridInvalidModelException.hpp>

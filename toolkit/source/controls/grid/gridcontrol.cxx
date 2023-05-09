@@ -30,7 +30,7 @@
 #include <com/sun/star/awt/grid/DefaultGridDataModel.hpp>
 #include <com/sun/star/awt/grid/SortableGridDataModel.hpp>
 #include <com/sun/star/awt/grid/DefaultGridColumnModel.hpp>
-#include <toolkit/helper/property.hxx>
+#include <helper/property.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <toolkit/controls/unocontrolbase.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>

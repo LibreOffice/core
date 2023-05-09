@@ -18,7 +18,7 @@
  */
 
 
-#include <toolkit/helper/property.hxx>
+#include <helper/property.hxx>
 #include <map>
 
 #include <helper/unopropertyarrayhelper.hxx>

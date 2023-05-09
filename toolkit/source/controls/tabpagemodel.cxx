@@ -20,7 +20,7 @@
 #include <controls/tabpagemodel.hxx>
 
 #include <vcl/svapp.hxx>
-#include <toolkit/helper/property.hxx>
+#include <helper/property.hxx>
 #include <com/sun/star/awt/UnoControlDialogModelProvider.hpp>
 #include <com/sun/star/awt/tab/XTabPage.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

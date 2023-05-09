@@ -23,7 +23,7 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 
 #include <toolkit/controls/unocontrolbase.hxx>
-#include <toolkit/helper/property.hxx>
+#include <helper/property.hxx>
 
 #include <tools/debug.hxx>
 

@@ -22,7 +22,7 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
-#include <toolkit/helper/property.hxx>
+#include <helper/property.hxx>
 #include <vcl/image.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>

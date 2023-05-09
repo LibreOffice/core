@@ -22,7 +22,7 @@
 #include <vcl/svapp.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/mutex.hxx>
-#include <toolkit/helper/property.hxx>
+#include <helper/property.hxx>
 #include <helper/servicenames.hxx>
 #include <controls/geometrycontrolmodel.hxx>
 #include <toolkit/controls/unocontrols.hxx>

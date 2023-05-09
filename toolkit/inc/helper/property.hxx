@@ -20,8 +20,6 @@
 #ifndef INCLUDED_TOOLKIT_HELPER_PROPERTY_HXX
 #define INCLUDED_TOOLKIT_HELPER_PROPERTY_HXX
 
-#include <toolkit/dllapi.h>
-
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
@@ -234,7 +232,7 @@ namespace com::sun::star::uno {
 #define PROPERTY_ALIGN_RIGHT                    2
 
 
-TOOLKIT_DLLPUBLIC sal_uInt16        GetPropertyId( const OUString& rPropertyName );
+sal_uInt16        GetPropertyId( const OUString& rPropertyName );
 const css::uno::Type*  GetPropertyType( sal_uInt16 nPropertyId );
 const OUString&        GetPropertyName( sal_uInt16 nPropertyId );
 sal_Int16                           GetPropertyAttribs( sal_uInt16 nPropertyId );

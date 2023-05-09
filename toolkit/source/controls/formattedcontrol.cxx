@@ -18,7 +18,7 @@
  */
 
 #include <controls/formattedcontrol.hxx>
-#include <toolkit/helper/property.hxx>
+#include <helper/property.hxx>
 
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

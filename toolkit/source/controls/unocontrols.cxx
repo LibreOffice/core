@@ -31,7 +31,7 @@
 #include <o3tl/safeint.hxx>
 #include <controls/formattedcontrol.hxx>
 #include <toolkit/controls/unocontrols.hxx>
-#include <toolkit/helper/property.hxx>
+#include <helper/property.hxx>
 #include <toolkit/helper/macros.hxx>
 
 // for introspection

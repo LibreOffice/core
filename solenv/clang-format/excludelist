@@ -5270,7 +5270,6 @@ include/framework/desktop.hxx
 include/framework/documentundoguard.hxx
 include/framework/framecontainer.hxx
 include/framework/framelistanalyzer.hxx
-include/framework/gate.hxx
 include/framework/generictoolbarcontroller.hxx
 include/framework/imutex.hxx
 include/framework/sfxhelperfunctions.hxx
@@ -6107,7 +6106,6 @@ include/toolkit/helper/accessiblefactory.hxx
 include/toolkit/helper/convert.hxx
 include/toolkit/helper/listenermultiplexer.hxx
 include/toolkit/helper/macros.hxx
-include/toolkit/helper/property.hxx
 include/toolkit/helper/vclunohelper.hxx
 include/tools/b3dtrans.hxx
 include/tools/bigint.hxx
@@ -13563,6 +13561,7 @@ toolkit/inc/controls/unocontrolcontainermodel.hxx
 toolkit/inc/helper/accessibilityclient.hxx
 toolkit/inc/helper/btndlg.hxx
 toolkit/inc/helper/imagealign.hxx
+toolkit/inc/helper/property.hxx
 toolkit/inc/helper/scrollabledialog.hxx
 toolkit/inc/helper/unopropertyarrayhelper.hxx
 toolkit/inc/helper/unowrapper.hxx

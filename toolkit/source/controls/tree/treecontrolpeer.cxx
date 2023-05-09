@@ -23,7 +23,7 @@
 #include <com/sun/star/view/SelectionType.hpp>
 #include <com/sun/star/util/VetoException.hpp>
 #include <o3tl/any.hxx>
-#include <toolkit/helper/property.hxx>
+#include <helper/property.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/awt/tree/XMutableTreeNode.hpp>

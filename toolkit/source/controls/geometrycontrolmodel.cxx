@@ -23,7 +23,7 @@
 #include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
 #include <controls/eventcontainer.hxx>
-#include <toolkit/helper/property.hxx>
+#include <helper/property.hxx>
 #include <algorithm>
 #include <functional>
 #include <utility>

@@ -85,7 +85,7 @@
 #include <awt/animatedimagespeer.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <toolkit/helper/property.hxx>
+#include <helper/property.hxx>
 
 #include <toolkit/helper/convert.hxx>
 #include <controls/filectrl.hxx>

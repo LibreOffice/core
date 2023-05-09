@@ -36,7 +36,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/debug.hxx>
 #include <tools/long.hxx>
-#include <toolkit/helper/property.hxx>
+#include <helper/property.hxx>
 #include <toolkit/helper/emptyfontdescriptor.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/configmgr.hxx>

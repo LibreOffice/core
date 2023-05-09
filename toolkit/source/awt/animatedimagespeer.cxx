@@ -19,7 +19,7 @@
 
 
 #include <awt/animatedimagespeer.hxx>
-#include <toolkit/helper/property.hxx>
+#include <helper/property.hxx>
 
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>

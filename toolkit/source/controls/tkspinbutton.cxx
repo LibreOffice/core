@@ -26,7 +26,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/controls/unocontrolbase.hxx>
-#include <toolkit/helper/property.hxx>
+#include <helper/property.hxx>
 
 #include <helper/unopropertyarrayhelper.hxx>
 

@@ -18,7 +18,7 @@
  */
 
 #include <awt/vclxspinbutton.hxx>
-#include <toolkit/helper/property.hxx>
+#include <helper/property.hxx>
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 
 #include <vcl/toolkit/spin.hxx>

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <toolkit/helper/property.hxx>
+#include <helper/property.hxx>
 
 #include <tools/debug.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>

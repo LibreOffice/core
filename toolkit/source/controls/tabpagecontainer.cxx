@@ -21,7 +21,7 @@
 #include <controls/geometrycontrolmodel.hxx>
 #include <controls/tabpagecontainer.hxx>
 #include <controls/tabpagemodel.hxx>
-#include <toolkit/helper/property.hxx>
+#include <helper/property.hxx>
 
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>

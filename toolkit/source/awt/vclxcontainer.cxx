@@ -26,7 +26,7 @@
 #include <vcl/tabpage.hxx>
 #include <tools/debug.hxx>
 #include <helper/scrollabledialog.hxx>
-#include <toolkit/helper/property.hxx>
+#include <helper/property.hxx>
 
 void VCLXContainer::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
