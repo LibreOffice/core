@@ -12,7 +12,7 @@ from uitest.uihelper.common import get_state_as_dict, select_pos
 class tdf104487(UITestCase):
     def test_tdf104487_remember_function_category(self):
         with self.ui_test.create_doc_in_start_center("calc"):
-            # Open function dialog and select select a function category
+            # Open function dialog and select a function category
             with self.ui_test.execute_modeless_dialog_through_command(".uno:FunctionDialog") as xDialog:
                 xCategory = xDialog.getChild("category")
                 select_pos(xCategory, "3")
