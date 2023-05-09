@@ -831,8 +831,14 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfJpgImg)
     CPPUNIT_ASSERT(aStream.indexOf("type=\"image/png\"") != -1);
 }
 
-DECLARE_HTMLEXPORT_TEST(testReqIfTable, "reqif-table.xhtml")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfTable)
 {
+    setImportFilterOptions("xhtmlns=reqif-xhtml");
+    setImportFilterName("HTML (StarWriter)");
+    createSwDoc("reqif-table.xhtml");
+    setFilterOptions("xhtmlns=reqif-xhtml");
+    save(OUString::createFromAscii(mpFilter));
+
     SvMemoryStream aStream;
     WrapReqifFromTempFile(aStream);
     xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
