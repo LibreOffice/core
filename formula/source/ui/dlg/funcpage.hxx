@@ -48,6 +48,9 @@ private:
     ::std::vector< TFunctionDesc >  aLRUList;
     OUString    m_aHelpId;
 
+    // tdf#104487 - remember last used function category
+    static sal_Int32 m_nRememberedFunctionCategory;
+
     void impl_addFunctions(const IFunctionCategory* _pCategory);
 
     DECL_LINK(SelComboBoxHdl, weld::ComboBox&, void);
@@ -70,6 +73,9 @@ public:
     sal_Int32       GetCategoryEntryCount() const;
     sal_Int32       GetFunction() const;
     sal_Int32       GetFunctionEntryCount() const;
+
+    // tdf#104487 - remember last used function category
+    static sal_Int32 GetRememeberdFunctionCategory() { return m_nRememberedFunctionCategory; };
 
     sal_Int32       GetFuncPos(const IFunctionDescription* _pDesc);
     const IFunctionDescription* GetFuncDesc( sal_Int32  nPos ) const;

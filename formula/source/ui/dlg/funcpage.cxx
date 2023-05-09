@@ -37,6 +37,9 @@ IMPL_LINK(FuncPage, KeyInputHdl, const KeyEvent&, rKEvt, bool)
     return false;
 }
 
+// tdf#104487 - remember last used function category - set default to All category
+sal_Int32 FuncPage::m_nRememberedFunctionCategory = 1;
+
 FuncPage::FuncPage(weld::Container* pParent, const IFunctionManager* _pFunctionManager)
     : m_xBuilder(Application::CreateBuilder(pParent, "formula/ui/functionpage.ui"))
     , m_xContainer(m_xBuilder->weld_container("FunctionPage"))
@@ -58,7 +61,8 @@ FuncPage::FuncPage(weld::Container* pParent, const IFunctionManager* _pFunctionM
         m_xLbCategory->append(sId, pCategory->getName());
     }
 
-    m_xLbCategory->set_active(1);
+    // tdf#104487 - remember last used function category
+    m_xLbCategory->set_active(m_nRememberedFunctionCategory);
     OUString searchStr = m_xLbFunctionSearchString->get_text();
     UpdateFunctionList(searchStr);
     // lock to its initial size
@@ -96,6 +100,8 @@ void FuncPage::UpdateFunctionList(const OUString& aStr)
     m_xLbFunction->freeze();
 
     const sal_Int32 nSelPos = m_xLbCategory->get_active();
+    // tdf#104487 - remember last used function category
+    m_nRememberedFunctionCategory = nSelPos;
 
     if (aStr.isEmpty() || nSelPos == 0)
     {
@@ -217,6 +223,8 @@ IMPL_LINK_NOARG(FuncPage, ModifyHdl, weld::Entry&, void)
 
 void FuncPage::SetCategory(sal_Int32 nCat)
 {
+    // tdf#104487 - remember last used function category
+    m_nRememberedFunctionCategory = nCat;
     m_xLbCategory->set_active(nCat);
     UpdateFunctionList(OUString());
 }

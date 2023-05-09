@@ -828,7 +828,8 @@ void FormulaDlg_Impl::FillListboxes()
     }
     else if ( pData )
     {
-        m_xFuncPage->SetCategory( 1 );
+        // tdf#104487 - remember last used function category
+        m_xFuncPage->SetCategory(FuncPage::GetRememeberdFunctionCategory());
         m_xFuncPage->SetFunction( -1 );
     }
     FuncSelHdl(*m_xFuncPage);
