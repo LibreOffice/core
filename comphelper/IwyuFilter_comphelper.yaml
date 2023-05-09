@@ -68,9 +68,6 @@ excludelist:
     # Stop warnings about include/
     - com/sun/star/beans/PropertyValue.hpp
     - com/sun/star/beans/NamedValue.hpp
-    include/comphelper/servicedecl.hxx:
-    # Stop warnings about include/
-    - com/sun/star/uno/XComponentContext.hpp
     comphelper/source/misc/simplefileaccessinteraction.cxx:
     # Needed for UnoType template
     - com/sun/star/task/XInteractionAbort.hpp

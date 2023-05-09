@@ -193,10 +193,6 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/io/XInputStream.hpp
     - com/sun/star/io/XSeekable.hpp
-    include/comphelper/servicedecl.hxx:
-    # base class has to be a complete type
-    - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/uno/XComponentContext.hpp
     include/comphelper/servicehelper.hxx:
     # Needed for macro
     - rtl/instance.hxx

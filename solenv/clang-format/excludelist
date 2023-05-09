@@ -1390,7 +1390,6 @@ comphelper/source/misc/officerestartmanager.cxx
 comphelper/source/misc/officerestartmanager.hxx
 comphelper/source/misc/proxyaggregation.cxx
 comphelper/source/misc/sequenceashashmap.cxx
-comphelper/source/misc/servicedecl.cxx
 comphelper/source/misc/sharedmutex.cxx
 comphelper/source/misc/solarmutex.cxx
 comphelper/source/misc/stillreadwriteinteraction.cxx
@@ -4909,7 +4908,6 @@ include/comphelper/seekableinput.hxx
 include/comphelper/seqstream.hxx
 include/comphelper/sequence.hxx
 include/comphelper/sequenceashashmap.hxx
-include/comphelper/servicedecl.hxx
 include/comphelper/servicehelper.hxx
 include/comphelper/sharedmutex.hxx
 include/comphelper/simplefileaccessinteraction.hxx
