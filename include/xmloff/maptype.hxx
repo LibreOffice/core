@@ -102,7 +102,7 @@ struct XMLPropertyMapEntry
     static constexpr OUStringLiteral EMPTY{u""};
 
     template<std::size_t N>
-    XMLPropertyMapEntry(
+    constexpr XMLPropertyMapEntry(
             const OUStringLiteral<N>& sApiName,
             sal_uInt16      nNameSpace,
             enum ::xmloff::token::XMLTokenEnum eXMLName,
@@ -118,7 +118,7 @@ struct XMLPropertyMapEntry
     {}
 
     /// used to mark the end of the array
-    XMLPropertyMapEntry(std::nullptr_t)
+    constexpr XMLPropertyMapEntry(std::nullptr_t)
         :
         msApiName(EMPTY),
         meXMLName(xmloff::token::XML_TOKEN_INVALID), mnNameSpace(0), mnType(0),
