@@ -132,6 +132,38 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testRotatedImageODS)
     CPPUNIT_ASSERT(sY.endsWith("mm"));
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf120177)
+{
+    createScDoc("xls/tdf120177.xls");
+
+    // Error: unexpected attribute "form:input-required"
+    skipValidation();
+
+    save("calc8");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Without the fix in place, this test would have failed with
+    // no attribute 'value' exist
+    assertXPath(pXmlDoc,
+                "/office:document-content/office:body/office:spreadsheet/table:table/office:forms/"
+                "form:form/form:radio[1]",
+                "value", "1");
+    assertXPath(pXmlDoc,
+                "/office:document-content/office:body/office:spreadsheet/table:table/office:forms/"
+                "form:form/form:radio[2]",
+                "value", "2");
+    const OUString sGroupName1 = getXPath(pXmlDoc,
+                                          "/office:document-content/office:body/office:spreadsheet/"
+                                          "table:table/office:forms/form:form/form:radio[1]",
+                                          "group-name");
+    const OUString sGroupName2 = getXPath(pXmlDoc,
+                                          "/office:document-content/office:body/office:spreadsheet/"
+                                          "table:table/office:forms/form:form/form:radio[2]",
+                                          "group-name");
+    CPPUNIT_ASSERT_EQUAL(sGroupName1, sGroupName2);
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf85553)
 {
     createScDoc("ods/tdf85553.ods");
