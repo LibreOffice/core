@@ -25,6 +25,15 @@ Sub verify_testConstants()
         TestUtil.AssertEqual(vbNewLine, vbLf, "vbNewline")
     End If
 
+    ' tdf#153543 - check for vba shell constants
+    ' See https://learn.microsoft.com/en-us/office/vba/language/reference/user-interface-help/shell-constants
+    TestUtil.AssertEqual(vbHide,             0, "vbHide")
+    TestUtil.AssertEqual(vbNormalFocus,      1, "vbNormalFocus")
+    TestUtil.AssertEqual(vbMinimizedFocus,   2, "vbMinimizedFocus")
+    TestUtil.AssertEqual(vbMaximizedFocus,   3, "vbMaximizedFocus")
+    TestUtil.AssertEqual(vbNormalNoFocus,    4, "vbNormalNoFocus")
+    TestUtil.AssertEqual(vbMinimizedNoFocus, 6, "vbMinimizedNoFocus")
+
     ' tdf#131563 - check for vba color constants
     ' See https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/color-constants
     TestUtil.AssertEqual(vbBlack,   RGB(0, 0, 0),       "vbBlack")
