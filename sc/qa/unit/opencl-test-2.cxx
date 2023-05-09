@@ -8,9 +8,7 @@
 
 #include <docsh.hxx>
 #include <document.hxx>
-#include <formulagroup.hxx>
 
-#include <com/sun/star/document/MacroExecMode.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 
@@ -22,13 +20,6 @@ class ScOpenCLTest2
 {
 public:
     ScOpenCLTest2();
-
-    /**
-     * Turn on OpenCL group interpreter. Call this after the document is
-     * loaded and before performing formula calculation.
-     */
-    void enableOpenCL();
-    void disableOpenCL();
 
     void testStatisticalFormulaFDist();
     void testStatisticalFormulaVar();
@@ -257,64 +248,7 @@ public:
     CPPUNIT_TEST(testStatisticalFormulaStDevPA1);
     CPPUNIT_TEST(testFinancialMDurationFormula1);
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    void initTestEnv(std::u16string_view fileName);
-
-    ScDocument* getScDoc2();
 };
-
-void ScOpenCLTest2::initTestEnv(std::u16string_view fileName)
-{
-    // Some documents contain macros, disable them, otherwise
-    // the "Error, BASIC runtime error." dialog is prompted
-    // and it crashes in tearDown
-    std::vector<beans::PropertyValue> args;
-    beans::PropertyValue aMacroValue;
-    aMacroValue.Name = "MacroExecutionMode";
-    aMacroValue.Handle = -1;
-    aMacroValue.Value <<= document::MacroExecMode::NEVER_EXECUTE;
-    aMacroValue.State = beans::PropertyState_DIRECT_VALUE;
-    args.push_back(aMacroValue);
-
-    disableOpenCL();
-    CPPUNIT_ASSERT(!ScCalcConfig::isOpenCLEnabled());
-
-    // Open the document with OpenCL disabled
-    mxComponent = mxDesktop->loadComponentFromURL(
-        createFileURL(fileName), "_default", 0, comphelper::containerToSequence(args));
-
-    enableOpenCL();
-    CPPUNIT_ASSERT(ScCalcConfig::isOpenCLEnabled());
-
-    // it's not possible to open the same document twice, thus, create a temp file
-    createTempCopy(fileName);
-
-    // Open the document with OpenCL enabled
-    mxComponent2 = mxDesktop->loadComponentFromURL(
-        maTempFile.GetURL(), "_default", 0, comphelper::containerToSequence(args));
-
-    // Check there are 2 documents
-    uno::Reference<frame::XFrames> xFrames = mxDesktop->getFrames();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xFrames->getCount());
-}
-
-ScDocument* ScOpenCLTest2::getScDoc2()
-{
-    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent2);
-    CPPUNIT_ASSERT(pModelObj);
-    return pModelObj->GetDocument();
-}
-
-void ScOpenCLTest2::enableOpenCL()
-{
-    sc::FormulaGroupInterpreter::enableOpenCL_UnitTestsOnly();
-}
-
-void ScOpenCLTest2::disableOpenCL()
-{
-    sc::FormulaGroupInterpreter::disableOpenCL_UnitTestsOnly();
-}
 
 void ScOpenCLTest2::testMathFormulaPi()
 {

@@ -20,6 +20,7 @@ $(eval $(call gb_Library_use_externals,scqahelper, \
 	mdds_headers \
 	cppunit \
 	libxml2 \
+	$(call gb_Helper_optional,OPENCL,clew) \
 ))
 
 ifneq ($(SYSTEM_LIBORCUS),)

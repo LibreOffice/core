@@ -156,9 +156,14 @@ public:
 
     void createScDoc(const char* pName = nullptr, const char* pPassword = nullptr, bool bCheckErrorCode = true);
     ScDocument* getScDoc();
+    ScDocument* getScDoc2();
     ScDocShell* getScDocShell();
     ScTabViewShell* getViewShell();
     void miscRowHeightsTest( TestParam const * aTestValues, unsigned int numElems);
+
+    void enableOpenCL();
+    void disableOpenCL();
+    void initTestEnv(std::u16string_view fileName);
 
     void testFile(const OUString& aFileName, ScDocument& rDoc, SCTAB nTab, StringType aStringFormat = StringType::StringValue);
 

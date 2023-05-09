@@ -19,6 +19,7 @@
 #include <conditio.hxx>
 #include <stlsheet.hxx>
 #include <formulacell.hxx>
+#include <formulagroup.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoole2.hxx>
 #include <tools/UnitConversion.hxx>
@@ -45,6 +46,7 @@
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include <com/sun/star/document/MacroExecMode.hpp>
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -546,6 +548,13 @@ ScDocument* ScModelTestBase::getScDoc()
     return pModelObj->GetDocument();
 }
 
+ScDocument* ScModelTestBase::getScDoc2()
+{
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent2);
+    CPPUNIT_ASSERT(pModelObj);
+    return pModelObj->GetDocument();
+}
+
 ScDocShell* ScModelTestBase::getScDocShell()
 {
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
@@ -598,6 +607,55 @@ void ScModelTestBase::miscRowHeightsTest( TestParam const * aTestValues, unsigne
             }
         }
     }
+}
+
+void ScModelTestBase::enableOpenCL()
+{
+    /**
+     * Turn on OpenCL group interpreter. Call this after the document is
+     * loaded and before performing formula calculation.
+     */
+    sc::FormulaGroupInterpreter::enableOpenCL_UnitTestsOnly();
+}
+
+void ScModelTestBase::disableOpenCL()
+{
+    sc::FormulaGroupInterpreter::disableOpenCL_UnitTestsOnly();
+}
+
+void ScModelTestBase::initTestEnv(std::u16string_view fileName)
+{
+    // Some documents contain macros, disable them, otherwise
+    // the "Error, BASIC runtime error." dialog is prompted
+    // and it crashes in tearDown
+    std::vector<beans::PropertyValue> args;
+    beans::PropertyValue aMacroValue;
+    aMacroValue.Name = "MacroExecutionMode";
+    aMacroValue.Handle = -1;
+    aMacroValue.Value <<= document::MacroExecMode::NEVER_EXECUTE;
+    aMacroValue.State = beans::PropertyState_DIRECT_VALUE;
+    args.push_back(aMacroValue);
+
+    disableOpenCL();
+    CPPUNIT_ASSERT(!ScCalcConfig::isOpenCLEnabled());
+
+    // Open the document with OpenCL disabled
+    mxComponent = mxDesktop->loadComponentFromURL(
+        createFileURL(fileName), "_default", 0, comphelper::containerToSequence(args));
+
+    enableOpenCL();
+    CPPUNIT_ASSERT(ScCalcConfig::isOpenCLEnabled());
+
+    // it's not possible to open the same document twice, thus, create a temp file
+    createTempCopy(fileName);
+
+    // Open the document with OpenCL enabled
+    mxComponent2 = mxDesktop->loadComponentFromURL(
+        maTempFile.GetURL(), "_default", 0, comphelper::containerToSequence(args));
+
+    // Check there are 2 documents
+    uno::Reference<frame::XFrames> xFrames = mxDesktop->getFrames();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xFrames->getCount());
 }
 
 ScRange ScUcalcTestBase::insertRangeData(
