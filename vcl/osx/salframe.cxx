@@ -462,7 +462,10 @@ void AquaSalFrame::Show(bool bVisible, bool bNoActivate)
     // parent window (to ensure that the tooltip is above the parent window),
     // displaying a tooltip pulls the parent window in front of the windows
     // of all other inactive applications.
-    if (bVisible && (mnStyle & SalFrameStyleFlags::TOOLTIP) && ![NSApp isActive])
+    // Also, don't display tooltips when mousing over non-key windows even if
+    // the application is active as the tooltip window will pull the non-key
+    // window in front of the key window.
+    if (bVisible && (mnStyle & SalFrameStyleFlags::TOOLTIP) && (![NSApp isActive] || (mpParent && ![ mpParent->mpNSWindow isKeyWindow])))
         return;
 
     mbShown = bVisible;
