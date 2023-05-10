@@ -1513,11 +1513,6 @@ static void lcl_CreatePortions(
             // text portion because there may be a hyperlink attribute
             xRef = new SwXTextPortion(pUnoCursor, i_xParentText, PORTION_TEXT);
         }
-        else if (bAtEnd && !xRef.is() && pTextNode->GetSwAttrSet().HasItem(RES_PARATR_LIST_AUTOFMT))
-        {
-            // We have explicit paragraph marker formatting, export it.
-            xRef = new SwXTextPortion(pUnoCursor, i_xParentText, PORTION_LIST_AUTOFMT);
-        }
         else if (bAtEnd && !xRef.is() && pHints)
         {
             // See if there is an empty autofmt at the paragraph end. If so, export it, since that

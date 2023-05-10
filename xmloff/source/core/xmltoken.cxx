@@ -1222,6 +1222,7 @@ namespace xmloff::token {
         TOKEN( "linked-cell",                     XML_LINKED_CELL ),
         TOKEN( "link-to-source-data",             XML_LINK_TO_SOURCE_DATA ),
         TOKEN( "list",                            XML_LIST ),
+        TOKEN( "marker-style-name",               XML_MARKER_STYLE_NAME ),
         TOKEN( "list-block",                      XML_LIST_BLOCK ),
         TOKEN( "list-header",                     XML_LIST_HEADER ),
         TOKEN( "list-info",                       XML_LIST_INFO ),

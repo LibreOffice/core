@@ -26,6 +26,7 @@
 #include <comphelper/diagnose_ex.hxx>
 
 #include <cmdid.h>
+#include <fmtautofmt.hxx>
 #include <unomid.h>
 #include <unoparaframeenum.hxx>
 #include <unotext.hxx>
@@ -539,6 +540,20 @@ uno::Sequence< uno::Any > SwXParagraph::Impl::GetPropertyValues_Impl(
     const SwAttrSet& rAttrSet( rTextNode.GetSwAttrSet() );
     for (sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
     {
+        if (pPropertyNames[nProp] == "ParaMarkerAutoStyleSpan")
+        {
+            // A hack to tunnel the fake text span to ODF export
+            // see XMLTextParagraphExport::exportParagraph
+            if (rTextNode.GetAttr(RES_PARATR_LIST_AUTOFMT).GetStyleHandle())
+            {
+                SwUnoCursor aEndCursor(*aPam.GetMark());
+                css::uno::Reference<css::beans::XPropertySet> xFakeSpan(
+                    new SwXTextPortion(&aEndCursor, {}, PORTION_LIST_AUTOFMT));
+                pValues[nProp] <<= xFakeSpan;
+            }
+            continue;
+        }
+
         SfxItemPropertyMapEntry const*const pEntry =
             rMap.getByName( pPropertyNames[nProp] );
         if (!pEntry)
