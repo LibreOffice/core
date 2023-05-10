@@ -1381,5 +1381,26 @@ CPPUNIT_TEST_FIXTURE(Test, testForcepoint108)
     mxComponent = mxDesktop->loadComponentFromURL(createFileURL(u"forcepoint108.fodt"), "_default", 0, {});
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testEmptyTrailingSpans)
+{
+    createSwDoc("emptyParagraphLoosesFontHeight.fodt");
+
+    CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
+
+    auto xPara2 = getParagraph(2);
+    CPPUNIT_ASSERT_EQUAL(float(11), getProperty<float>(xPara2, "CharHeight"));
+    auto xRun = getRun(xPara2, 1);
+    CPPUNIT_ASSERT_EQUAL(float(8), getProperty<float>(xRun, "CharHeight"));
+    // Both empty spans merge -> no more runs
+    CPPUNIT_ASSERT_THROW(getRun(xPara2, 2), css::container::NoSuchElementException);
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    auto height1 = getXPath(pXmlDoc, "/root/page/body/txt[1]/infos/bounds", "height").toInt32();
+    auto height2 = getXPath(pXmlDoc, "/root/page/body/txt[2]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_EQUAL(height1, height2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(184, height2, 1); // allow a bit of room for rounding just in case
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

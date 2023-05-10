@@ -223,6 +223,8 @@ public:
             const OUString& rName ) const;
     XMLPropStyleContext* FindPageMaster(
             const OUString& rName ) const;
+    XMLPropStyleContext* FindAutoCharStyle(const OUString& rName) const;
+
     XMLPropStyleContext* FindDrawingPage(OUString const& rName) const;
 
     const css::uno::Reference< css::container::XNameContainer> & GetParaStyles() const;

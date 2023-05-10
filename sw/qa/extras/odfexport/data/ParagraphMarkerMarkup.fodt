@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:styles>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text">
+   <style:text-properties fo:font-size="11pt"/>
+  </style:style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="T1" style:family="text">
+   <style:text-properties fo:font-size="8pt"/>
+  </style:style>
+  <style:style style:name="T2" style:family="text">
+   <style:text-properties fo:font-size="9pt" fo:color="#ff0000"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:body>
+  <office:text>
+   <text:p text:style-name="Standard" loext:marker-style-name="T2"><text:span text:style-name="T1">text</text:span></text:p>
+  </office:text>
+ </office:body>
+</office:document>

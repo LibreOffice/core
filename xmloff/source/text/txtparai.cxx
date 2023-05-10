@@ -41,6 +41,7 @@
 
 #include <sax/tools/converter.hxx>
 
+#include <xmloff/prstylei.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -1675,6 +1676,10 @@ XMLParaContext::XMLParaContext(
                 nStartValue = sal::static_int_cast< sal_Int16 >(aIter.toInt32());
             }
             break;
+        case XML_ELEMENT(LO_EXT, XML_MARKER_STYLE_NAME):
+            if (auto pStyle = rImport.GetTextImport()->FindAutoCharStyle(aIter.toString()))
+                m_aMarkerStyleName = pStyle->GetAutoName();
+            break;
         default:
             XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
@@ -1719,6 +1724,21 @@ void XMLParaContext::endFastElement(sal_Int32 )
 
     // insert a paragraph break
     xTxtImport->InsertControlCharacter( ControlCharacter::APPEND_PARAGRAPH );
+
+    if (!m_aMarkerStyleName.isEmpty())
+    {
+        if (css::uno::Reference<css::beans::XPropertySet> xPropSet{ xStart, css::uno::UNO_QUERY })
+        {
+            try
+            {
+                xPropSet->setPropertyValue("ListAutoFormat", css::uno::Any(m_aMarkerStyleName));
+            }
+            catch (const css::beans::UnknownPropertyException&)
+            {
+                // no problem
+            }
+        }
+    }
 
     // create a cursor that select the whole last paragraph
     Reference < XTextCursor > xAttrCursor;
@@ -1832,7 +1852,7 @@ void XMLParaContext::endFastElement(sal_Int32 )
     {
         bool bSetNoFormatAttr = false;
         uno::Reference<beans::XPropertySet> xCursorProps(xAttrCursor, uno::UNO_QUERY);
-        if (m_xHints->GetHints().size() > 1)
+        if (m_xHints->GetHints().size() > 1 || !m_aMarkerStyleName.isEmpty())
         {
             // We have multiple hints, then make try to ask the cursor to not upgrade our character
             // attributes to paragraph-level formatting, which would lead to incorrect rendering.

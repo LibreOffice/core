@@ -42,6 +42,7 @@ class XMLParaContext : public SvXMLImportContext
     OUString             m_sProperty;
     OUString             m_sContent;
     OUString             m_sDatatype;
+    OUString             m_aMarkerStyleName;
     bool                 m_bHaveAbout;
     sal_Int8             nOutlineLevel;
     std::unique_ptr<XMLHints_Impl> m_xHints;
