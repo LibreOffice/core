@@ -159,11 +159,10 @@ BitmapEx BitmapMosaicFilter::execute(BitmapEx const& rBitmapEx) const
         if (pWriteAcc == pReadAcc)
             pWriteAcc = nullptr;
         Bitmap::ReleaseAccess(pReadAcc);
+        Bitmap::ReleaseAccess(pWriteAcc);
 
         if (pNewBmp)
         {
-            Bitmap::ReleaseAccess(pWriteAcc);
-
             if (bRet)
             {
                 const MapMode aMap(aBitmap.GetPrefMapMode());
