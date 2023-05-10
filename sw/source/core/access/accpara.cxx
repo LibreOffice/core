@@ -2326,7 +2326,7 @@ OUString SwAccessibleParagraph::getTextRange(
     }
 
     // now skip to previous word
-    if (nTextType==2 || nTextType == 3)
+    if (nTextType == AccessibleTextType::WORD || nTextType == AccessibleTextType::SENTENCE)
     {
         i18n::Boundary preBound = aBound;
         while(preBound.startPos==aBound.startPos && nIndex > 0)
@@ -2409,7 +2409,7 @@ OUString SwAccessibleParagraph::getTextRange(
         sal_Bool bWord = sal_False;
     bWord = GetTextBoundary( aBound, rText, nIndex, nTextType );
 
-        if (nTextType==2)
+        if (nTextType == AccessibleTextType::WORD)
         {
                 Boundary nexBound=aBound;
 
