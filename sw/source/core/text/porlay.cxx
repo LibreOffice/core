@@ -2695,6 +2695,10 @@ bool SwParaPortion::HasNumberingPortion(FootnoteOrNot const eFootnote) const
             pPortion = pPortion->GetNextPortion();
         }
     }
+    if (pPortion && pPortion->InHyphGrp())
+    {   // weird special case, bullet with soft hyphen
+        pPortion = pPortion->GetNextPortion();
+    }
     return pPortion && pPortion->InNumberGrp()
         && (eFootnote == SwParaPortion::FootnoteToo || !pPortion->IsFootnoteNumPortion());
 }

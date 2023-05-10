@@ -405,7 +405,9 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         }
 
         // multiple numbering portions are possible :(
-        if (pPor->InNumberGrp() // also footnote label
+        if ((pPor->InNumberGrp() // also footnote label
+                // weird special case, bullet with soft hyphen
+             || (pPor->InHyphGrp() && pNext && pNext->InNumberGrp()))
             && !roTaggedLabel) // note: CalcPaintOfst may skip some portions
         {
             assert(isPDFTaggingEnabled);
