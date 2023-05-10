@@ -408,7 +408,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         if (pPor->InNumberGrp() // also footnote label
             && !roTaggedLabel) // note: CalcPaintOfst may skip some portions
         {
-            assert(isPDFTaggingEnabled); (void) isPDFTaggingEnabled;
+            assert(isPDFTaggingEnabled);
             Por_Info aPorInfo(*pPor, *this, true); // open Lbl
             roTaggedLabel.emplace(nullptr, nullptr, &aPorInfo, *pOut);
         }
@@ -456,22 +456,39 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                  pNext && pNext->IsHolePortion() ) ?
                pNext :
                nullptr;
-        if (!pPor) // check if the end of the list label is off-screen
-        {
-            while (pNext)
-            {
-                if (!roTaggedParagraph && pNext->InNumberGrp()
-                    && !static_cast<SwNumberPortion const*>(pNext)->HasFollow())
+        if (!pPor && isPDFTaggingEnabled && !roTaggedParagraph)
+        {   // check if the end of the list label is off-screen
+            auto FindEndOfNumbering = [&](SwLinePortion const* pP) {
+                while (pP)
                 {
-                    if (roTaggedLabel)
+                    if (pP->InNumberGrp()
+                        && !static_cast<SwNumberPortion const*>(pP)->HasFollow())
                     {
-                        roTaggedLabel.reset();
-                    } // else, if the numbering isn't visible at all, no Lbl
-                    Frame_Info aFrameInfo(*m_pFrame); // open LBody
-                    roTaggedParagraph.emplace(nullptr, &aFrameInfo, nullptr, *GetInfo().GetOut());
-                    break;
+                        if (roTaggedLabel)
+                        {
+                            roTaggedLabel.reset();
+                        } // else, if the numbering isn't visible at all, no Lbl
+                        Frame_Info aFrameInfo(*m_pFrame); // open LBody
+                        roTaggedParagraph.emplace(nullptr, &aFrameInfo, nullptr, *GetInfo().GetOut());
+                        return true;
+                    }
+                    pP = pP->GetNextPortion();
                 }
-                pNext = pNext->GetNextPortion();
+                return false;
+            };
+            if (!FindEndOfNumbering(pNext)) // check rest of current line
+            {
+                // check lines that will be cut off
+                if (rPaint.Bottom() < Y() + GetLineHeight())
+                {
+                    for (SwLineLayout const* pLine = GetNext(); pLine; pLine = pLine->GetNext())
+                    {
+                        if (FindEndOfNumbering(pLine->GetFirstPortion()))
+                        {
+                            break;
+                        }
+                    }
+                }
             }
         }
     }
