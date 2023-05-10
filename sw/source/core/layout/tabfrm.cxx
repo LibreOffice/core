@@ -2860,10 +2860,14 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
                 //   at the page frame, the table is on, but it's anchor character
                 //   text frame has already changed its page.
                 const SwTextFrame* pAnchorCharFrame = pFly->FindAnchorCharFrame();
+                const SwFormatHoriOrient& rHori = pFly->GetFormat()->GetHoriOrient();
+                // Only consider invalid Writer fly frames if they'll be shifted down.
+                bool bIgnoreFlyValidity
+                    = bAddVerticalFlyOffsets && rHori.GetHoriOrient() == text::HoriOrientation::NONE;
                 bool bConsiderFly =
                     // #i46807# - do not consider invalid
                     // Writer fly frames.
-                    (pFly->isFrameAreaDefinitionValid() || bAddVerticalFlyOffsets) &&
+                    (pFly->isFrameAreaDefinitionValid() || bIgnoreFlyValidity) &&
                     // fly anchored at character or at paragraph
                     pFly->IsFlyAtContentFrame() &&
                     // fly overlaps with corresponding table rectangle
@@ -2907,7 +2911,6 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
                 if ( bConsiderFly )
                 {
                     const SwFormatSurround   &rSur = pFly->GetFormat()->GetSurround();
-                    const SwFormatHoriOrient &rHori= pFly->GetFormat()->GetHoriOrient();
                     bool bShiftDown = css::text::WrapTextMode_NONE == rSur.GetSurround();
                     if (!bShiftDown && bAddVerticalFlyOffsets)
                     {
