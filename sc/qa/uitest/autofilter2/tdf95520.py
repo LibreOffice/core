@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_url_for_data_file
+from uitest.uihelper.common import get_url_for_data_file, get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import get_cell_by_position
 
@@ -27,9 +27,17 @@ class tdf95520(UITestCase):
             xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
             xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 
-            # Choose Red
             xSubFloatWindow = self.xUITest.getFloatWindow()
             xSubMenu = xSubFloatWindow.getChild("textcolor")
+            self.assertEqual(3, len(xSubMenu.getChildren()))
+            self.assertEqual('false', get_state_as_dict(xSubMenu.getChild('0'))['IsChecked'])
+            self.assertEqual('#00FF00', get_state_as_dict(xSubMenu.getChild('0'))['Text'])
+            self.assertEqual('false', get_state_as_dict(xSubMenu.getChild('1'))['IsChecked'])
+            self.assertEqual('Red', get_state_as_dict(xSubMenu.getChild('1'))['Text'])
+            self.assertEqual('false', get_state_as_dict(xSubMenu.getChild('2'))['IsChecked'])
+            self.assertEqual('Yellow', get_state_as_dict(xSubMenu.getChild('2'))['Text'])
+
+            # Choose Red
             xSubMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
             xSubMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 
