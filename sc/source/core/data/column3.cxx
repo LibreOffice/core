@@ -2575,9 +2575,11 @@ class FilterEntriesHandler
 
         // Colors
         ScAddress aPos(rColumn.GetCol(), nRow, rColumn.GetTab());
-        ScTable* pTable = rColumn.GetDoc().FetchTable(rColumn.GetTab());
-        mrFilterEntries.addTextColor(pTable->GetCellTextColor(aPos));
-        mrFilterEntries.addBackgroundColor(pTable->GetCellBackgroundColor(aPos));
+        if (ScTable* pTable = rColumn.GetDoc().FetchTable(rColumn.GetTab()))
+        {
+            mrFilterEntries.addTextColor(pTable->GetCellTextColor(aPos));
+            mrFilterEntries.addBackgroundColor(pTable->GetCellBackgroundColor(aPos));
+        }
 
         if (rCell.hasString())
         {
