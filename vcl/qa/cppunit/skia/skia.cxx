@@ -232,12 +232,12 @@ void SkiaTest::testAlphaBlendWith()
     if (!SkiaHelper::isVCLSkiaEnabled())
         return;
     AlphaMask alpha(Size(10, 10));
-    Bitmap bitmap(Size(10, 10), vcl::PixelFormat::N24_BPP);
+    AlphaMask bitmap(Size(10, 10));
     // Test with erase colors set.
     alpha.Erase(64);
     SkiaSalBitmap* skiaAlpha = dynamic_cast<SkiaSalBitmap*>(alpha.ImplGetSalBitmap().get());
     CPPUNIT_ASSERT(skiaAlpha->unittestHasEraseColor());
-    bitmap.Erase(Color(64, 64, 64));
+    bitmap.Erase(64);
     SkiaSalBitmap* skiaBitmap = dynamic_cast<SkiaSalBitmap*>(bitmap.ImplGetSalBitmap().get());
     CPPUNIT_ASSERT(skiaBitmap->unittestHasEraseColor());
     alpha.BlendWith(bitmap);
@@ -254,7 +254,7 @@ void SkiaTest::testAlphaBlendWith()
     skiaAlpha->GetSkImage();
     CPPUNIT_ASSERT(!skiaAlpha->unittestHasEraseColor());
     CPPUNIT_ASSERT(skiaAlpha->unittestHasImage());
-    bitmap.Erase(Color(64, 64, 64));
+    bitmap.Erase(64);
     Bitmap::ScopedReadAccess(bitmap)->GetColor(0, 0); // Reading a pixel will create pixel data.
     skiaBitmap = dynamic_cast<SkiaSalBitmap*>(bitmap.ImplGetSalBitmap().get());
     skiaBitmap->GetSkImage();
@@ -271,7 +271,7 @@ void SkiaTest::testAlphaBlendWith()
     alpha.Erase(64);
     skiaAlpha = dynamic_cast<SkiaSalBitmap*>(alpha.ImplGetSalBitmap().get());
     CPPUNIT_ASSERT(skiaAlpha->unittestHasEraseColor());
-    bitmap.Erase(Color(64, 64, 64));
+    bitmap.Erase(64);
     Bitmap::ScopedReadAccess(bitmap)->GetColor(0, 0); // Reading a pixel will create pixel data.
     skiaBitmap = dynamic_cast<SkiaSalBitmap*>(bitmap.ImplGetSalBitmap().get());
     skiaBitmap->GetSkImage();

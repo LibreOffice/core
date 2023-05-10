@@ -49,7 +49,7 @@ public:
     Bitmap const & GetBitmap() const;
 
     void        Erase( sal_uInt8 cTransparency );
-    void        BlendWith(const Bitmap& rOther);
+    void        BlendWith(const AlphaMask& rOther);
 
     // check if alpha is used, returns true if at least one pixel has transparence
     bool        hasAlpha() const;

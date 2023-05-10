@@ -80,7 +80,7 @@ void AlphaMask::Erase( sal_uInt8 cTransparency )
     Bitmap::Erase( Color( cTransparency, cTransparency, cTransparency ) );
 }
 
-void AlphaMask::BlendWith(const Bitmap& rOther)
+void AlphaMask::BlendWith(const AlphaMask& rOther)
 {
     std::shared_ptr<SalBitmap> xImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
     if (xImpBmp->Create(*ImplGetSalBitmap()) && xImpBmp->AlphaBlendWith(*rOther.ImplGetSalBitmap()))
@@ -88,8 +88,7 @@ void AlphaMask::BlendWith(const Bitmap& rOther)
         ImplSetSalBitmap(xImpBmp);
         return;
     }
-    AlphaMask aOther(rOther); // to 8 bits
-    Bitmap::ScopedReadAccess pOtherAcc(aOther);
+    Bitmap::ScopedReadAccess pOtherAcc(const_cast<AlphaMask&>(rOther));
     AlphaScopedWriteAccess pAcc(*this);
     assert (pOtherAcc && pAcc && pOtherAcc->GetBitCount() == 8 && pAcc->GetBitCount() == 8 && "cannot BlendWith this combination");
     if (!(pOtherAcc && pAcc && pOtherAcc->GetBitCount() == 8 && pAcc->GetBitCount() == 8))
