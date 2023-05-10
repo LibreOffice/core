@@ -21,6 +21,7 @@
 #include <comphelper/sequence.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <comphelper/diagnose_ex.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
     #include <cppuhelper/exc_hlp.hxx>
@@ -87,6 +88,8 @@ void copyProperties(const Reference<XPropertySet>& _rxSource,
             catch (Exception&)
             {
 #if OSL_DEBUG_LEVEL > 0
+                TOOLS_WARN_EXCEPTION("comphelper", "Caught exception copying properties");
+
                 OUStringBuffer aBuffer(
                         "::comphelper::copyProperties: could not copy property '"
                         + rSourceProp.Name
