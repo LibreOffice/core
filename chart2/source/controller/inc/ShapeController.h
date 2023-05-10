@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART_SHAPECONTROLLER_H
-#define CHART_SHAPECONTROLLER_H
+#pragma once
 
 //Shape Controller Command Ids:
 enum ShapeControllerCommandID
@@ -35,7 +34,5 @@ enum ShapeControllerCommandID
     COMMAND_ID_FONT_DIALOG              = 15,
     COMMAND_ID_PARAGRAPH_DIALOG         = 16
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
