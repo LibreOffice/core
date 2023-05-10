@@ -2038,7 +2038,7 @@
                                 <xsl:otherwise>
                                     <xsl:variable name="listLabelWidth">
                                         <xsl:choose>
-                                            <xsl:when test="$minLabelWidth">
+                                            <xsl:when test="$minLabelWidth &gt; 0">
                                                 <xsl:value-of select="$minLabelWidth"/>
                                             </xsl:when>
                                             <xsl:otherwise>
