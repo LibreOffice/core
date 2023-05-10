@@ -73,10 +73,10 @@
 #define STR_POOLFRM_LABEL                       NC_("STR_POOLFRM_LABEL", "Labels")
 // Template names
 #define STR_POOLCOLL_STANDARD                   NC_("STR_POOLCOLL_STANDARD", "Default Paragraph Style")
-#define STR_POOLCOLL_TEXT                       NC_("STR_POOLCOLL_TEXT", "Text Body")
+#define STR_POOLCOLL_TEXT                       NC_("STR_POOLCOLL_TEXT", "Body Text")
 #define STR_POOLCOLL_TEXT_IDENT                 NC_("STR_POOLCOLL_TEXT_IDENT", "First Line Indent")
 #define STR_POOLCOLL_TEXT_NEGIDENT              NC_("STR_POOLCOLL_TEXT_NEGIDENT", "Hanging Indent")
-#define STR_POOLCOLL_TEXT_MOVE                  NC_("STR_POOLCOLL_TEXT_MOVE", "Text Body Indent")
+#define STR_POOLCOLL_TEXT_MOVE                  NC_("STR_POOLCOLL_TEXT_MOVE", "Body Text, Indented")
 #define STR_POOLCOLL_GREETING                   NC_("STR_POOLCOLL_GREETING", "Complimentary Close")
 #define STR_POOLCOLL_SIGNATURE                  NC_("STR_POOLCOLL_SIGNATURE", "Signature")
 #define STR_POOLCOLL_HEADLINE_BASE              NC_("STR_POOLCOLL_HEADLINE_BASE", "Heading")

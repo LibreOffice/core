@@ -110,7 +110,7 @@ BitmapEx GenerateStylePreview(SfxObjectShell& rSource, OUString const & aName)
     }
     {
         tools::Rectangle aRenderRect(Point(nMargin, y), aSize);
-        renderPreview(pStyleManager, *pVirtualDev, u"Text Body", nTextBodyHeight, aRenderRect);
+        renderPreview(pStyleManager, *pVirtualDev, u"Body Text", nTextBodyHeight, aRenderRect);
     }
 
     return pVirtualDev->GetBitmapEx(Point(), aSize);

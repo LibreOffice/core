@@ -1271,7 +1271,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf103091)
     // check that all conditional paragraph style conditions are imported
     uno::Reference<container::XNameAccess> xParaStyles(getStyles("ParagraphStyles"));
     uno::Reference<beans::XPropertySet> xStyle1(xParaStyles->getByName(
-            "Text Body"), uno::UNO_QUERY);
+            "Text body"), uno::UNO_QUERY);
     auto conditions(getProperty<uno::Sequence<beans::NamedValue>>(xStyle1, "ParaStyleConditions"));
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(28), conditions.getLength());

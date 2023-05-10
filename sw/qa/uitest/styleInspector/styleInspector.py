@@ -110,7 +110,7 @@ class styleNavigator(UITestCase):
             self.assertEqual(3, len(xParStyle.getChildren()))
             self.assertEqual("Default Paragraph Style\t", get_state_as_dict(xParStyle.getChild('0'))['Text'])
             self.assertEqual(140, len(xParStyle.getChild('0').getChildren()))
-            self.assertEqual("Text Body\t", get_state_as_dict(xParStyle.getChild('1'))['Text'])
+            self.assertEqual("Body Text\t", get_state_as_dict(xParStyle.getChild('1'))['Text'])
             self.assertEqual(6, len(xParStyle.getChild('1').getChildren()))
 
             xCustomStyle = xParStyle.getChild('2')

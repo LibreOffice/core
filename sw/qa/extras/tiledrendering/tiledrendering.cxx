@@ -3604,7 +3604,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCondCollCopy)
     // Given a document with a custom Text Body cond style:
     SwXTextDocument* pXTextDocument = createDoc("cond-coll-copy.odt");
     uno::Sequence<beans::PropertyValue> aPropertyValues
-        = { comphelper::makePropertyValue("Style", OUString("Text Body")),
+        = { comphelper::makePropertyValue("Style", OUString("Text body")),
             comphelper::makePropertyValue("FamilyName", OUString("ParagraphStyles")) };
     dispatchCommand(mxComponent, ".uno:StyleApply", aPropertyValues);
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
