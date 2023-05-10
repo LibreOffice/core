@@ -907,6 +907,12 @@ typedef enum
      * "file:///tmp/hello-world.pdf"
      */
     LOK_CALLBACK_EXPORT_FILE = 59,
+
+    /**
+     * Informs that the document password has been succesfully changed.
+     * The payload contains the the new password and the type.
+    */
+    LOK_CALLBACK_DOCUMENT_PASSWORD_RESET = 62
 }
 LibreOfficeKitCallbackType;
 
@@ -1055,6 +1061,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_MEDIA_SHAPE";
     case LOK_CALLBACK_EXPORT_FILE:
         return "LOK_CALLBACK_EXPORT_FILE";
+    case LOK_CALLBACK_DOCUMENT_PASSWORD_RESET:
+        return "LOK_CALLBACK_DOCUMENT_PASSWORD_RESET";
     }
 
     assert(!"Unknown LibreOfficeKitCallbackType type.");
