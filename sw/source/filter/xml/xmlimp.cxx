@@ -1775,6 +1775,14 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODT(SvStream &rStream)
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
 {
+    // do the same sort of check as FilterDetect::detect
+    OString const str(read_uInt8s_ToOString(rStream, 4000));
+    rStream.Seek(STREAM_SEEK_TO_BEGIN);
+    OUString resultString(str.getStr(), str.getLength(), RTL_TEXTENCODING_ASCII_US,
+                          RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT|OSTRING_TO_OUSTRING_CVTFLAGS);
+    if (resultString.indexOf("office:mimetype=\"application/vnd.oasis.opendocument.text\"") == -1)
+        return false;
+
     Reference<css::frame::XDesktop2> xDesktop = css::frame::Desktop::create(comphelper::getProcessComponentContext());
     Reference<css::frame::XFrame> xTargetFrame = xDesktop->findFrame("_blank", 0);
 
