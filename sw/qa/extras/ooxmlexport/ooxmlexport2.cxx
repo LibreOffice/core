@@ -861,8 +861,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo64238_b, "fdo64238_b.docx")
         xRunEnum->nextElement();
         numOfRuns++;
     }
-    // "This is the ", "ODD", " [", "LEFT", "] header" and the colored paragraph marker
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), numOfRuns);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), numOfRuns);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo56679, "fdo56679.docx")

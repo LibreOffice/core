@@ -1061,6 +1061,16 @@ DECLARE_ODFEXPORT_TEST(testTdf78510, "WordTest_edit.odt")
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testParagraphMarkerMarkupRoundtrip)
+{
+    loadAndReload("ParagraphMarkerMarkup.fodt");
+    // Test that the markup stays at save-and-reload
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p", "marker-style-name", "T2");
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:name='T2']/style:text-properties", "font-size", "9pt");
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:name='T2']/style:text-properties", "color", "#ff0000");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

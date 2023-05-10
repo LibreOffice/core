@@ -32,6 +32,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
@@ -2185,6 +2186,37 @@ void XMLTextParagraphExport::exportParagraph(
                         }
                     }
                 }
+            }
+        }
+
+        if (GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
+        {
+            try
+            {
+                // ParaMarkerAutoStyleSpan is a hidden property, just to pass the autostyle here
+                // See SwXParagraph::Impl::GetPropertyValues_Impl
+                css::uno::Any aVal = xPropSet->getPropertyValue("ParaMarkerAutoStyleSpan");
+                if (auto xFakeSpan = aVal.query<css::beans::XPropertySet>())
+                {
+                    if (bAutoStyles)
+                    {
+                        Add(XmlStyleFamily::TEXT_TEXT, xFakeSpan);
+                    }
+                    else
+                    {
+                        bool bIsUICharStyle, bHasAutoStyle;
+                        OUString sStyle = FindTextStyle(xFakeSpan, bIsUICharStyle, bHasAutoStyle);
+                        if (!sStyle.isEmpty())
+                        {
+                            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_MARKER_STYLE_NAME,
+                                                     sStyle);
+                        }
+                    }
+                }
+            }
+            catch (const css::beans::UnknownPropertyException&)
+            {
+                // No problem
             }
         }
     }

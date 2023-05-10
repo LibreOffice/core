@@ -428,6 +428,7 @@ inline constexpr OUStringLiteral PROP_LineTransparence = u"LineTransparence";
 inline constexpr OUStringLiteral PROP_LineWidth = u"LineWidth";
 inline constexpr OUStringLiteral PROP_Lines = u"Lines";
 inline constexpr OUStringLiteral PROP_LinkNumberFormatToSource = u"LinkNumberFormatToSource";
+inline constexpr OUStringLiteral PROP_ListAutoFormat = u"ListAutoFormat";
 inline constexpr OUStringLiteral PROP_Logarithmic = u"Logarithmic";
 inline constexpr OUStringLiteral PROP_MajorOrigin = u"MajorOrigin";
 inline constexpr OUStringLiteral PROP_MarkPosition = u"MarkPosition";

@@ -2037,6 +2037,15 @@ XMLPropStyleContext* XMLTextImportHelper::FindPageMaster(
     return pStyle;
 }
 
+XMLPropStyleContext* XMLTextImportHelper::FindAutoCharStyle(const OUString& rName) const
+{
+    if (!m_xImpl->m_xAutoStyles)
+        return nullptr;
+    auto pStyle
+        = m_xImpl->m_xAutoStyles->FindStyleChildContext(XmlStyleFamily::TEXT_TEXT, rName, true);
+    return dynamic_cast<XMLPropStyleContext*>(const_cast<SvXMLStyleContext*>(pStyle));
+}
+
 XMLPropStyleContext * XMLTextImportHelper::FindDrawingPage(OUString const& rName) const
 {
     if (!m_xImpl->m_xAutoStyles.is())
