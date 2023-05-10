@@ -107,7 +107,7 @@ private:
                                 ImplSalPrinterErrorCodeToVCL( SalPrinterError nError );
 
     SAL_DLLPRIVATE void         ImplPrintTransparent (
-                                    const Bitmap& rBmp, const Bitmap& rMask,
+                                    const Bitmap& rBmp,
                                     const Point& rDestPt, const Size& rDestSize,
                                     const Point& rSrcPtPixel, const Size& rSrcSizePixel );
 

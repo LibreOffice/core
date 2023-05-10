@@ -94,7 +94,7 @@ void ImplUpdateJobSetupPaper( JobSetup& rJobSetup )
     }
 }
 
-void Printer::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask,
+void Printer::ImplPrintTransparent( const Bitmap& rBmp,
                                          const Point& rDestPt, const Size& rDestSize,
                                          const Point& rSrcPtPixel, const Size& rSrcSizePixel )
 {
@@ -107,11 +107,8 @@ void Printer::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask,
     if( rBmp.IsEmpty() || !aSrcRect.GetWidth() || !aSrcRect.GetHeight() || !aDestSz.Width() || !aDestSz.Height() )
         return;
 
-    Bitmap  aPaint( rBmp ), aMask( rMask );
+    Bitmap  aPaint( rBmp );
     BmpMirrorFlags nMirrFlags = BmpMirrorFlags::NONE;
-
-    if (aMask.getPixelFormat() >= vcl::PixelFormat::N8_BPP)
-        aMask.Convert( BmpConversion::N1BitThreshold );
 
     // mirrored horizontally
     if( aDestSz.Width() < 0 )
@@ -133,22 +130,17 @@ void Printer::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask,
     if( aSrcRect != tools::Rectangle( Point(), aPaint.GetSizePixel() ) )
     {
         aPaint.Crop( aSrcRect );
-        aMask.Crop( aSrcRect );
     }
 
     // destination mirrored
     if( nMirrFlags != BmpMirrorFlags::NONE )
     {
         aPaint.Mirror( nMirrFlags );
-        aMask.Mirror( nMirrFlags );
     }
 
     // we always want to have a mask
-    if( aMask.IsEmpty() )
-    {
-        aMask = Bitmap(aSrcRect.GetSize(), vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
-        aMask.Erase( COL_BLACK );
-    }
+    AlphaMask aAlphaMask(aSrcRect.GetSize());
+    aAlphaMask.Erase( 0 );
 
     // do painting
     const tools::Long nSrcWidth = aSrcRect.GetWidth(), nSrcHeight = aSrcRect.GetHeight();
@@ -166,24 +158,15 @@ void Printer::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask,
     for( nY = 0; nY <= nSrcHeight; nY++ )
         pMapY[ nY ] = aDestPt.Y() + FRound( static_cast<double>(aDestSz.Height()) * nY / nSrcHeight );
 
-    // walk through all rectangles of mask
-    const vcl::Region aWorkRgn(aMask.CreateRegion(COL_BLACK, tools::Rectangle(Point(), aMask.GetSizePixel())));
-    RectangleVector aRectangles;
-    aWorkRgn.GetRegionRectangles(aRectangles);
+    tools::Rectangle rectangle { Point(0,0), aSrcRect.GetSize() };
+    const Point aMapPt(pMapX[rectangle.Left()], pMapY[rectangle.Top()]);
+    const Size aMapSz( pMapX[rectangle.Right() + 1] - aMapPt.X(),      // pMapX[L + W] -> L + ((R - L) + 1) -> R + 1
+                       pMapY[rectangle.Bottom() + 1] - aMapPt.Y());    // same for Y
+    Bitmap aBandBmp(aPaint);
 
-    for (auto const& rectangle : aRectangles)
-    {
-        const Point aMapPt(pMapX[rectangle.Left()], pMapY[rectangle.Top()]);
-        const Size aMapSz( pMapX[rectangle.Right() + 1] - aMapPt.X(),      // pMapX[L + W] -> L + ((R - L) + 1) -> R + 1
-                           pMapY[rectangle.Bottom() + 1] - aMapPt.Y());    // same for Y
-        Bitmap aBandBmp(aPaint);
-
-        aBandBmp.Crop(rectangle);
-        DrawBitmap(aMapPt, aMapSz, Point(), aBandBmp.GetSizePixel(), aBandBmp);
-    }
+    DrawBitmap(aMapPt, aMapSz, Point(), aBandBmp.GetSizePixel(), aBandBmp);
 
     mbMap = bOldMap;
-
 }
 
 bool Printer::DrawTransformBitmapExDirect(
@@ -221,7 +204,7 @@ void Printer::DrawDeviceBitmapEx( const Point& rDestPt, const Size& rDestSize,
     else
     {
         Bitmap aBmp( rBmpEx.GetBitmap() );
-        ImplPrintTransparent( aBmp, Bitmap(), rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
+        ImplPrintTransparent( aBmp, rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
     }
 }
 
