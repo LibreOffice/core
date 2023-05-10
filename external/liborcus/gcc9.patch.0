@@ -1,6 +1,6 @@
 --- include/orcus/types.hpp
 +++ include/orcus/types.hpp
-@@ -7,6 +7,14 @@
+@@ -7,7 +7,16 @@
  
  #ifndef INCLUDED_ORCUS_TYPES_HPP
  #define INCLUDED_ORCUS_TYPES_HPP
@@ -13,8 +13,10 @@
 +#pragma GCC diagnostic ignored "-Wshadow"
 +#endif
  
++#include <cstdint>
  #include <cstdlib>
  #include <vector>
+ #include <string>
 @@ -145,6 +152,10 @@
  typedef ::std::vector<xml_token_attr_t> xml_attrs_t;
  
