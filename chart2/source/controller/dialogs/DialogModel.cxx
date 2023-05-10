@@ -598,7 +598,8 @@ uno::Reference< chart2::data::XLabeledDataSequence > DialogModel::getCategories(
         if( m_xChartDocument.is())
         {
             rtl::Reference< Diagram > xDiagram( m_xChartDocument->getFirstChartDiagram());
-            xResult = xDiagram->getCategories();
+            if (xDiagram.is())
+                xResult = xDiagram->getCategories();
         }
     }
     catch( const uno::Exception & )
@@ -652,7 +653,7 @@ OUString DialogModel::getCategoriesRange() const
 bool DialogModel::isCategoryDiagram() const
 {
     bool bRet = false;
-    if( m_xChartDocument.is())
+    if( m_xChartDocument.is() && m_xChartDocument->getFirstChartDiagram())
         bRet = m_xChartDocument->getFirstChartDiagram()->isCategory();
     return bRet;
 }
