@@ -21,6 +21,7 @@
 #include <documentlinkmgr.hxx>
 #include <datastream.hxx>
 #include <ddelink.hxx>
+#include <externalrefmgr.hxx>
 #include <webservicelink.hxx>
 #include <strings.hrc>
 #include <scresid.hxx>
@@ -147,6 +148,23 @@ bool DocumentLinkManager::hasDdeOrOleOrWebServiceLinks(bool bDde, bool bOle, boo
         if (bOle && (dynamic_cast<SdrEmbedObjectLink*>(pBase) || dynamic_cast<SdrIFrameLink*>(pBase)))
             return true;
         if (bWebService && dynamic_cast<ScWebServiceLink*>(pBase))
+            return true;
+    }
+
+    return false;
+}
+
+bool DocumentLinkManager::hasExternalRefLinks() const
+{
+    sfx2::LinkManager* pMgr = mpImpl->mpLinkManager;
+    if (!pMgr)
+        return false;
+
+    const sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
+    for (const auto & rLink : rLinks)
+    {
+        sfx2::SvBaseLink* pBase = rLink.get();
+        if (dynamic_cast<ScExternalRefLink*>(pBase))
             return true;
     }
 

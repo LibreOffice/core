@@ -54,6 +54,7 @@ public:
 
     bool hasDdeLinks() const;
     bool hasDdeOrOleOrWebServiceLinks() const;
+    bool hasExternalRefLinks() const;
 
     bool updateDdeOrOleOrWebServiceLinks(weld::Window* pWin);
 
