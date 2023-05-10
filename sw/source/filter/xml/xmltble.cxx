@@ -334,9 +334,11 @@ static OUString lcl_xmltble_appendBoxPrefix(std::u16string_view rNamePrefix,
                                                 false );
     const SvXMLAttrContainerItem *pAttCnt = rItemSet.GetItemIfSet( RES_UNKNOWNATR_CONTAINER,
                                                 false );
+    const SvxPrintItem *pHasTextChangesOnly = rItemSet.GetItemIfSet( RES_PRINT, false);
 
     // empty styles have not to be exported
-    if( !pVertOrient && !pBrush && !pBox && !pNumFormat && !pFrameDir && !pAttCnt )
+    if( !pVertOrient && !pBrush && !pBox && !pNumFormat && !pFrameDir && !pAttCnt &&
+        !pHasTextChangesOnly )
     {
         m_rFormatMap.try_emplace(&rFrameFormat); // empty just to enable assert
         return {};
@@ -357,6 +359,7 @@ static OUString lcl_xmltble_appendBoxPrefix(std::u16string_view rNamePrefix,
         const SwTableBoxNumFormat *pTestNumFormat = nullptr;
         const SvxFrameDirectionItem *pTestFrameDir = nullptr;
         const SvXMLAttrContainerItem *pTestAttCnt = nullptr;
+        const SvxPrintItem *pTestHasTextChangesOnly = rItemSet.GetItemIfSet( RES_PRINT, false);
         const SwFrameFormat* pTestFormat = *i;
         const SfxItemSet& rTestSet = pTestFormat->GetAttrSet();
         if( const SwFormatVertOrient* pItem = rTestSet.GetItemIfSet( RES_VERT_ORIENT, false ) )
@@ -443,6 +446,19 @@ static OUString lcl_xmltble_appendBoxPrefix(std::u16string_view rNamePrefix,
 
         }
 
+        if( const SvxPrintItem* pItem = rTestSet.GetItemIfSet( RES_PRINT, false ) )
+        {
+            if( !pHasTextChangesOnly )
+                break;
+
+            pTestHasTextChangesOnly = pItem;
+        }
+        else
+        {
+            if( pHasTextChangesOnly )
+                continue;
+        }
+
         if( pVertOrient &&
             pVertOrient->GetVertOrient() != pTestVertOrient->GetVertOrient() )
             continue;
@@ -460,6 +476,9 @@ static OUString lcl_xmltble_appendBoxPrefix(std::u16string_view rNamePrefix,
             continue;
 
         if( pAttCnt && ( *pAttCnt != *pTestAttCnt ) )
+            continue;
+
+        if( pHasTextChangesOnly && (!pHasTextChangesOnly->GetValue() != !pTestHasTextChangesOnly->GetValue()) )
             continue;
 
         // found!

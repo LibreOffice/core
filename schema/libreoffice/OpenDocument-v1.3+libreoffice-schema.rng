@@ -3210,6 +3210,15 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
+  <!-- TODO no proposal -->
+  <rng:define name="style-table-cell-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:text-changes-only">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
   <!-- https://issues.oasis-open.org/browse/OFFICE-4108 -->
   <rng:define name="common-num-format-prefix-suffix-attlist" combine="interleave">
     <rng:optional>

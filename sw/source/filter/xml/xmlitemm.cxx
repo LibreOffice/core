@@ -219,7 +219,8 @@ const SvXMLItemMapEntry aTableCellItemMap[] =
     // RES_FOOTER
     // not required
     // RES_PRINT
-    // not required
+    // M_E_SE( STYLE, TEXT_CHANGES_ONLY, RES_PRINT, 0 ),
+    M_E_SE( LO_EXT, TEXT_CHANGES_ONLY, RES_PRINT, 0 ),
     // RES_OPAQUE
     // not required
     // RES_PROTECT
