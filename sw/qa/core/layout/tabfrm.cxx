@@ -30,6 +30,22 @@ public:
     }
 };
 
+CPPUNIT_TEST_FIXTURE(Test, testTablePrintAreaLeft)
+{
+    // Given a document with a header containing an image, and also with an overlapping table:
+    createSwDoc("table-print-area-left.docx");
+
+    // When laying out that document & parsing the left margin of the table:
+    SwTwips nTablePrintLeft = parseDump("//tab/infos/prtBounds", "left").toInt32();
+
+    // Then make sure it has ~no left margin:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 5
+    // - Actual  : 10646
+    // i.e. the table was shifted outside the page, was invisible.
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(5), nTablePrintLeft);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTableMissingJoin)
 {
     // Given a document with a table on page 2:
