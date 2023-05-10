@@ -2050,7 +2050,7 @@ void DelBookmarks(
         if( lcl_Greater( *pREnd, rStt, oStartContentIdx ) && lcl_Lower( *pREnd, rEnd, oEndContentIdx ))
         {
             pREnd->Assign( rStt );
-            if( oStartContentIdx )
+            if (oStartContentIdx && rStt.IsContentNode())
                 pREnd->SetContent( *oStartContentIdx );
             else
             {
