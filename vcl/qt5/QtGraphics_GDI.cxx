@@ -198,19 +198,10 @@ void QtGraphicsBackend::drawLine(tools::Long nX1, tools::Long nY1, tools::Long n
     QtPainter aPainter(*this);
     aPainter.drawLine(nX1, nY1, nX2, nY2);
 
-    tools::Long tmp;
     if (nX1 > nX2)
-    {
-        tmp = nX1;
-        nX1 = nX2;
-        nX2 = tmp;
-    }
+        std::swap(nX1, nX2);
     if (nY1 > nY2)
-    {
-        tmp = nY1;
-        nY1 = nY2;
-        nY2 = tmp;
-    }
+        std::swap(nY1, nY2);
     aPainter.update(nX1, nY1, nX2 - nX1 + 1, nY2 - nY1 + 1);
 }
 
