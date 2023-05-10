@@ -365,9 +365,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf123206CustomLabelField)
     // File contains the deprecated "custom-label-field" attribute of the
     // "data-point" element. It should be interpreted and stored as a data point
     // property.
-    uno::Reference<chart2::XChartDocument> xChartDoc(
-        getChartDocFromImpress(u"/chart2/qa/extras/data/odp/", "tdf123206.odp"),
-        uno::UNO_QUERY_THROW);
+    loadFromURL(u"odp/tdf123206.odp");
+    uno::Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0),
+                                                     uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
     CPPUNIT_ASSERT(xChartDoc.is());
     Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);

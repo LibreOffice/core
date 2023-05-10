@@ -80,9 +80,7 @@ public:
     {
     }
 
-    uno::Sequence < OUString > getImpressChartColumnDescriptions( std::u16string_view pDir, const char* pName );
-
-    uno::Reference< chart::XChartDocument > getChartDocFromImpress( std::u16string_view pDir, const char* pName );
+    uno::Sequence < OUString > getImpressChartColumnDescriptions(sal_Int32 nPage, sal_Int32 nShape);
 
     uno::Reference<chart::XChartDocument> getChartDocFromDrawImpress( sal_Int32 nPage, sal_Int32 nShape );
     uno::Reference<chart::XChartDocument> getChartDocFromDrawImpressNamed( sal_Int32 nPage, std::u16string_view rName);
@@ -388,23 +386,6 @@ std::vector<uno::Sequence<uno::Any> > getDataSeriesLabelsFromChartType( const Re
     return aRet;
 }
 
-uno::Reference< chart::XChartDocument > ChartTest::getChartDocFromImpress( std::u16string_view pDir, const char* pName )
-{
-    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(pDir) + OUString::createFromAscii(pName), "com.sun.star.comp.Draw.PresentationDocument");
-    uno::Reference< drawing::XDrawPagesSupplier > xDoc(mxComponent, uno::UNO_QUERY_THROW );
-    uno::Reference< drawing::XDrawPage > xPage(
-        xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
-    uno::Reference< beans::XPropertySet > xShapeProps(
-        xPage->getByIndex(0), uno::UNO_QUERY );
-    CPPUNIT_ASSERT(xShapeProps.is());
-    uno::Reference< frame::XModel > xDocModel;
-    xShapeProps->getPropertyValue("Model") >>= xDocModel;
-    CPPUNIT_ASSERT(xDocModel.is());
-    uno::Reference< chart::XChartDocument > xChartDoc( xDocModel, uno::UNO_QUERY_THROW );
-
-    return xChartDoc;
-}
-
 uno::Reference<chart::XChartDocument> ChartTest::getChartDocFromDrawImpress(
     sal_Int32 nPage, sal_Int32 nShape )
 {
@@ -486,9 +467,9 @@ uno::Reference<chart::XChartDocument> ChartTest::getChartDocFromWriter( sal_Int3
     return xChartDoc;
 }
 
-uno::Sequence < OUString > ChartTest::getImpressChartColumnDescriptions( std::u16string_view pDir, const char* pName )
+uno::Sequence < OUString > ChartTest::getImpressChartColumnDescriptions(sal_Int32 nPage, sal_Int32 nShape)
 {
-    uno::Reference< chart::XChartDocument > xChartDoc = getChartDocFromImpress( pDir, pName );
+    uno::Reference< chart::XChartDocument > xChartDoc = getChartDocFromDrawImpress( nPage, nShape );
     uno::Reference< chart::XChartDataArray > xChartData ( xChartDoc->getData(), uno::UNO_QUERY_THROW);
     uno::Sequence < OUString > seriesList = xChartData->getColumnDescriptions();
     return seriesList;

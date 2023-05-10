@@ -342,7 +342,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testDOCXChartValuesSize)
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTChartSeries)
 {
     //test chart series names for ppt
-    uno::Sequence < OUString > seriesList = getImpressChartColumnDescriptions(u"/chart2/qa/extras/data/ppt/", "chart.ppt");
+    loadFromURL(u"ppt/chart.ppt");
+    uno::Sequence < OUString > seriesList = getImpressChartColumnDescriptions(0, 0);
 
     CPPUNIT_ASSERT_EQUAL(OUString("Column 1"), seriesList[0]);
     CPPUNIT_ASSERT_EQUAL(OUString("Column 2"), seriesList[1]);
@@ -573,7 +574,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTXStackedNonStackedYAxis)
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testODPChartSeries)
 {
     //test chart series names for odp
-    uno::Sequence < OUString > seriesList = getImpressChartColumnDescriptions(u"/chart2/qa/extras/data/odp/", "chart.odp");
+    loadFromURL(u"odp/chart.odp");
+    uno::Sequence < OUString > seriesList = getImpressChartColumnDescriptions(0, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("Column 1"), seriesList[0]);
     CPPUNIT_ASSERT_EQUAL(OUString("Column 2"), seriesList[1]);
     CPPUNIT_ASSERT_EQUAL(OUString("Column 3"), seriesList[2]);
@@ -582,7 +584,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testODPChartSeries)
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testBnc864396)
 {
-    uno::Reference< chart2::XChartDocument > xChartDoc(getChartDocFromImpress(u"/chart2/qa/extras/data/pptx/", "bnc864396.pptx"), uno::UNO_QUERY_THROW);
+    loadFromURL(u"pptx/bnc864396.pptx");
+    uno::Reference< chart2::XChartDocument > xChartDoc(getChartDocFromDrawImpress(0,0), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xChartDoc->hasInternalDataProvider());
 
     uno::Reference< chart2::XInternalDataProvider > xDataProvider( xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW );
@@ -1584,7 +1587,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf140489MultiSeriesChartAxisXLSX)
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testInternalDataProvider)
 {
-    uno::Reference< chart2::XChartDocument > xChartDoc(getChartDocFromImpress(u"/chart2/qa/extras/data/odp/", "chart.odp"), uno::UNO_QUERY_THROW);
+    loadFromURL(u"odp/chart.odp");
+    uno::Reference< chart2::XChartDocument > xChartDoc(getChartDocFromDrawImpress(0,0), uno::UNO_QUERY_THROW);
     const uno::Reference< chart2::data::XDataProvider >& rxDataProvider = xChartDoc->getDataProvider();
 
     // Parse 42 array
