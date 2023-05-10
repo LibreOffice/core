@@ -2475,9 +2475,7 @@ void LgstCommonSubseq::FindL( int *pL, int nStt1, int nEnd1,
             else
                 currL[j] = std::max( currL[j - 1], prevL[j] );
         }
-        int *tmp = currL;
-        currL = prevL;
-        prevL = tmp;
+        std::swap( currL, prevL );
     }
     memcpy( pL, prevL, ( nLen2 + 1 ) * sizeof( *prevL ) );
 }
