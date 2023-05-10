@@ -2960,6 +2960,23 @@ void SwTableBox::ActualiseValueBox()
     }
 }
 
+RedlineType SwTableBox::GetRedlineType() const
+{
+    const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    if ( aRedlineTable.empty() )
+        return RedlineType::None;
+
+    // check table row property "HasTextChangesOnly", if it's defined and its value is
+    // false, return with RedlineType::Delete
+    // TODO add support for RedlineType::Insert
+    const SvxPrintItem *pHasTextChangesOnlyProp =
+            GetFrameFormat()->GetAttrSet().GetItem<SvxPrintItem>(RES_PRINT);
+    if ( pHasTextChangesOnlyProp && !pHasTextChangesOnlyProp->GetValue() )
+        return RedlineType::Delete;
+
+    return RedlineType::None;
+}
+
 struct SwTableCellInfo::Impl
 {
     const SwTable * m_pTable;

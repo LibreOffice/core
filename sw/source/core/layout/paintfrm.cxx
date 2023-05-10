@@ -6540,7 +6540,17 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
             bBack = true;
         }
     }
-    else if ( bBack && IsCellFrame() && !getRootFrame()->IsHideRedlines() &&
+    else if ( IsCellFrame() && !getRootFrame()->IsHideRedlines() )
+    {
+        RedlineType eType = static_cast<const SwCellFrame*>(this)->GetTabBox()->GetRedlineType();
+        if ( RedlineType::Delete == eType || RedlineType::Insert == eType )
+        {
+            pCol = RedlineType::Delete == eType ? COL_AUTHOR_TABLE_DEL : COL_AUTHOR_TABLE_INS;
+            bBack = true;
+        }
+    }
+
+    if ( bBack && IsCellFrame() && !getRootFrame()->IsHideRedlines() &&
         // skip cell background to show the row colored according to its tracked change
         RedlineType::None != static_cast<const SwRowFrame*>(GetUpper())->GetTabLine()->GetRedlineType() )
     {

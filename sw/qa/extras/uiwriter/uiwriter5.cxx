@@ -2603,6 +2603,42 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf150673_RedlineTableColumnDeletionWi
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab");
     assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 1);
+
+    // check removing HasTextChangesOnly at acceptance of the deletion
+
+    // Undo, and delete the column without change tracking
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    // table column exists again
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 2);
+
+    // reject deletion, setting HasTextChangesOnly to TRUE
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), pEditShell->GetRedlineCount());
+    pEditShell->RejectRedline(0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(0), pEditShell->GetRedlineCount());
+
+    // delete table column with enabled change tracking
+    dispatchCommand(mxComponent, ".uno:SelectColumn", {});
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+
+    // Table column still exists
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 2);
+
+    // reject the deletion of the content of the first cell
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), pEditShell->GetRedlineCount());
+    pEditShell->AcceptRedline(0);
+
+    // table column is still not deleted
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf128335)

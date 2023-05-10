@@ -509,6 +509,21 @@ namespace
         if ( !pBox )
             return;
 
+        // tracked column deletion
+
+        const SvxPrintItem *pHasBoxTextChangesOnlyProp =
+                pBox->GetFrameFormat()->GetAttrSet().GetItem<SvxPrintItem>(RES_PRINT);
+        // table cell property "HasTextChangesOnly" is set and its value is false
+        if ( bRejectDeletion && pHasBoxTextChangesOnlyProp &&
+                !pHasBoxTextChangesOnlyProp->GetValue() )
+        {
+            SvxPrintItem aUnsetTracking(RES_PRINT, true);
+            SwCursor aCursor( *pPos, nullptr );
+            pPos->GetDoc().SetBoxAttr( aCursor, aUnsetTracking );
+        }
+
+        // tracked row deletion
+
         const SwTableLine* pLine = pBox->GetUpper();
         const SvxPrintItem *pHasTextChangesOnlyProp =
                 pLine->GetFrameFormat()->GetAttrSet().GetItem<SvxPrintItem>(RES_PRINT);
