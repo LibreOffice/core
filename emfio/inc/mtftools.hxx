@@ -180,7 +180,9 @@ namespace emfio
         TA_RIGHT_CENTER = (TA_RIGHT | TA_CENTER),
         TA_TOP          = 0x0000,
         TA_BOTTOM       = 0x0008,
-        TA_BASELINE     = 0x0018,
+        // In [MS-WMF] 2.1.2.3, TA_BASELINE value is wrong.
+        // It is 0x0018 and it should be 0x0010.
+        TA_BASELINE     = 0x0010,
         TA_RTLREADING   = 0x0100
     };
 
