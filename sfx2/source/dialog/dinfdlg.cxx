@@ -39,6 +39,8 @@
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <tools/json_writer.hxx>
 
 #include <memory>
 
@@ -71,6 +73,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <vcl/abstdlg.hxx>
+#include <sfx2/viewsh.hxx>
 
 #include <documentfontsdialog.hxx>
 #include <dinfdlg.hrc>
@@ -792,6 +795,12 @@ IMPL_LINK_NOARG(SfxDocumentPage, ChangePassHdl, weld::Button&, void)
                 {
                     sfx2::SetPassword(pFilter, pMedSet, m_xPasswordDialog->GetPasswordToOpen(),
                                       m_xPasswordDialog->GetPasswordToOpen(), true);
+                    tools::JsonWriter payloadJson;
+                    payloadJson.put("password", m_xPasswordDialog->GetPasswordToOpen());
+                    payloadJson.put("isToModify", false);
+                    pShell->GetViewShell()->libreOfficeKitViewCallback(
+                        LOK_CALLBACK_DOCUMENT_PASSWORD_RESET,
+                        payloadJson.extractAsOString().getStr());
                     pShell->SetModified();
                 }
                 m_xPasswordDialog->disposeOnce();
