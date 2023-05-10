@@ -213,8 +213,9 @@ InsertDeleteFlags ScInsertContentsDlg::GetInsContentsCmdBits() const
         ScInsertContentsDlg::nPreviousChecks |= InsertDeleteFlags::DATETIME;
     if ( mxBtnInsFormulas->get_active())
         ScInsertContentsDlg::nPreviousChecks |= InsertDeleteFlags::FORMULA;
+    // tdf#139858 - do not delete existing cell contents when pasting notes
     if ( mxBtnInsNotes->get_active()   )
-        ScInsertContentsDlg::nPreviousChecks |= InsertDeleteFlags::NOTE;
+        ScInsertContentsDlg::nPreviousChecks |= InsertDeleteFlags::ADDNOTES;
     if ( mxBtnInsAttrs->get_active()   )
         ScInsertContentsDlg::nPreviousChecks |= InsertDeleteFlags::ATTRIB;
     if ( mxBtnInsObjects->get_active() )
