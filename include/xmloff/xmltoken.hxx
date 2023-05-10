@@ -1208,6 +1208,7 @@ namespace xmloff::token {
         XML_LINKED_CELL,
         XML_LINK_TO_SOURCE_DATA,
         XML_LIST,
+        XML_MARKER_STYLE_NAME,
         XML_LIST_BLOCK,
         XML_LIST_HEADER,
         XML_LIST_INFO,
