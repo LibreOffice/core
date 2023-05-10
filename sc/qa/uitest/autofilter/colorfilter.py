@@ -177,4 +177,61 @@ class ColorFilterTest(UITestCase):
             self.assertFalse(is_row_hidden(doc, 6))
             self.assertFalse(is_row_hidden(doc, 7))
 
+    def test_tdf76258(self):
+        # Reuse existing document
+        with self.ui_test.load_file(get_url_for_data_file("tdf142579.xlsx")) as doc:
+            calcDoc = self.xUITest.getTopFocusWindow()
+            xGridWin = calcDoc.getChild("grid_window")
+
+            # Blue Background Color rows are displayed
+            self.assertFalse(is_row_hidden(doc, 0))
+            self.assertFalse(is_row_hidden(doc, 1))
+            self.assertTrue(is_row_hidden(doc, 2))
+            self.assertTrue(is_row_hidden(doc, 3))
+            self.assertTrue(is_row_hidden(doc, 4))
+            self.assertTrue(is_row_hidden(doc, 5))
+            self.assertTrue(is_row_hidden(doc, 6))
+            self.assertTrue(is_row_hidden(doc, 7))
+
+            xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xMenu = xFloatWindow.getChild("menu")
+
+            # Filter by Color
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+
+            xSubFloatWindow = self.xUITest.getFloatWindow()
+            xSubMenu = xSubFloatWindow.getChild("background")
+            self.assertEqual(7, len(xSubMenu.getChildren()))
+            self.assertEqual('true', get_state_as_dict(xSubMenu.getChild('0'))['IsChecked'])
+            self.assertEqual('#5A8AC6', get_state_as_dict(xSubMenu.getChild('0'))['Text'])
+            self.assertEqual('false', get_state_as_dict(xSubMenu.getChild('1'))['IsChecked'])
+            self.assertEqual('#90B0D9', get_state_as_dict(xSubMenu.getChild('1'))['Text'])
+            self.assertEqual('false', get_state_as_dict(xSubMenu.getChild('2'))['IsChecked'])
+            self.assertEqual('#C6D6EC', get_state_as_dict(xSubMenu.getChild('2'))['Text'])
+            self.assertEqual('false', get_state_as_dict(xSubMenu.getChild('3'))['IsChecked'])
+            self.assertEqual('#F8696B', get_state_as_dict(xSubMenu.getChild('3'))['Text'])
+            self.assertEqual('false', get_state_as_dict(xSubMenu.getChild('4'))['IsChecked'])
+            self.assertEqual('#FA9A9D', get_state_as_dict(xSubMenu.getChild('4'))['Text'])
+            self.assertEqual('false', get_state_as_dict(xSubMenu.getChild('5'))['IsChecked'])
+            self.assertEqual('#FBCBCE', get_state_as_dict(xSubMenu.getChild('5'))['Text'])
+            self.assertEqual('false', get_state_as_dict(xSubMenu.getChild('6'))['IsChecked'])
+            self.assertEqual('#FCFCFF', get_state_as_dict(xSubMenu.getChild('6'))['Text'])
+
+            # Choose another one
+            xSubMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xSubMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+
+            self.assertFalse(is_row_hidden(doc, 0))
+            self.assertTrue(is_row_hidden(doc, 1))
+            self.assertFalse(is_row_hidden(doc, 2))
+            self.assertTrue(is_row_hidden(doc, 3))
+            self.assertTrue(is_row_hidden(doc, 4))
+            self.assertTrue(is_row_hidden(doc, 5))
+            self.assertTrue(is_row_hidden(doc, 6))
+            self.assertTrue(is_row_hidden(doc, 7))
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
