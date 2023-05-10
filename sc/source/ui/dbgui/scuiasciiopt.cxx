@@ -933,7 +933,7 @@ IMPL_LINK( ScImportAsciiDlg, ColTypeHdl, ScCsvTableBox&, rTableBox, void )
 
     if (bEmpty)
         mxLbType->set_active(-1);
-    else
+    else if (bEnable)
         mxLbType->set_active(nType);
 }
 
