@@ -2034,7 +2034,7 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
             // #i106452#
             // check page description not only in situation with sections.
             if ( !bSamePage &&
-                 ( m_rThis.GetPageDescItem().GetPageDesc() ||
+                 ((!IsFollow() && m_rThis.GetPageDescItem().GetPageDesc()) ||
                    pOldPage->GetPageDesc()->GetFollow() != pNewPage->GetPageDesc() ) )
             {
                 SwFrame::CheckPageDescs( pNewPage, false );
