@@ -231,6 +231,7 @@ public:
 
     virtual void startRendering() override;
     virtual void endRendering() override;
+    virtual void updateValues() override;
 
 protected:
     std::vector<double>& getValues() const;

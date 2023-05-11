@@ -251,6 +251,7 @@ public:
 
     virtual void startRendering();
     virtual void endRendering();
+    virtual void updateValues();
 protected:
     ScDocument* mpDoc;
 
@@ -598,6 +599,8 @@ public:
     void startRendering();
     void endRendering();
 
+    void updateValues();
+
     // Forced recalculation for formulas
     void CalcAll();
 };
@@ -682,6 +685,8 @@ public:
 
     void startRendering();
     void endRendering();
+
+    void updateValues();
 
     sal_uInt32 getMaxKey() const;
 
