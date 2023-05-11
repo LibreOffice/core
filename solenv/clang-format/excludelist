@@ -5268,6 +5268,7 @@ include/framework/desktop.hxx
 include/framework/documentundoguard.hxx
 include/framework/framecontainer.hxx
 include/framework/framelistanalyzer.hxx
+include/framework/gate.hxx
 include/framework/generictoolbarcontroller.hxx
 include/framework/imutex.hxx
 include/framework/sfxhelperfunctions.hxx
