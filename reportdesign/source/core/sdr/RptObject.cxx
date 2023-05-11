@@ -99,7 +99,7 @@ rtl::Reference<SdrObject> OObjectBase::createObject(
                 rtl::Reference<OUnoObject> pUnoObj = new OUnoObject(
                     rTargetModel,
                     _xComponent,
-                    OUString("com.sun.star.form.component.FixedText"),
+                    "com.sun.star.form.component.FixedText",
                     SdrObjKind::ReportDesignFixedText);
                 pNewObj = pUnoObj;
 
@@ -112,14 +112,14 @@ rtl::Reference<SdrObject> OObjectBase::createObject(
             pNewObj = new OUnoObject(
                 rTargetModel,
                 _xComponent,
-                OUString("com.sun.star.form.component.DatabaseImageControl"),
+                "com.sun.star.form.component.DatabaseImageControl",
                 SdrObjKind::ReportDesignImageControl);
             break;
         case SdrObjKind::ReportDesignFormattedField:
             pNewObj = new OUnoObject(
                 rTargetModel,
                 _xComponent,
-                OUString("com.sun.star.form.component.FormattedField"),
+                "com.sun.star.form.component.FormattedField",
                 SdrObjKind::ReportDesignFormattedField);
             break;
         case SdrObjKind::ReportDesignHorizontalFixedLine:
@@ -127,7 +127,7 @@ rtl::Reference<SdrObject> OObjectBase::createObject(
             pNewObj = new OUnoObject(
                 rTargetModel,
                 _xComponent,
-                OUString("com.sun.star.awt.UnoControlFixedLineModel"),
+                "com.sun.star.awt.UnoControlFixedLineModel",
                 nType);
             break;
         case SdrObjKind::CustomShape:
@@ -314,6 +314,7 @@ OObjectBase::OObjectBase(OUString _sComponentName)
 :m_sComponentName(std::move(_sComponentName))
 ,m_bIsListening(false)
 {
+    assert(!m_sComponentName.isEmpty());
 }
 
 OObjectBase::~OObjectBase()
@@ -438,10 +439,9 @@ OCustomShape::OCustomShape(
 }
 
 OCustomShape::OCustomShape(
-    SdrModel& rSdrModel,
-    const OUString& _sComponentName)
+    SdrModel& rSdrModel)
 :   SdrObjCustomShape(rSdrModel)
-    ,OObjectBase(_sComponentName)
+    ,OObjectBase(SERVICE_SHAPE)
 {
     m_bIsListening = true;
 }
@@ -545,13 +545,37 @@ void OCustomShape::setUnoShape( const uno::Reference< drawing::XShape >& rxUnoSh
     m_xReportComponent.clear();
 }
 
+static OUString ObjectTypeToServiceName(SdrObjKind _nObjectType)
+{
+    switch (_nObjectType)
+    {
+    case SdrObjKind::ReportDesignFixedText:
+        return SERVICE_FIXEDTEXT;
+    case SdrObjKind::ReportDesignImageControl:
+        return SERVICE_IMAGECONTROL;
+    case SdrObjKind::ReportDesignFormattedField:
+        return SERVICE_FORMATTEDFIELD;
+    case SdrObjKind::ReportDesignVerticalFixedLine:
+    case SdrObjKind::ReportDesignHorizontalFixedLine:
+        return SERVICE_FIXEDLINE;
+    case SdrObjKind::CustomShape:
+        return SERVICE_SHAPE;
+    case SdrObjKind::ReportDesignSubReport:
+        return SERVICE_REPORTDEFINITION;
+    case SdrObjKind::OLE2:
+        return "com.sun.star.chart2.ChartDocument";
+    default:
+        break;
+    }
+    assert(false && "Unknown object id");
+    return "";
+}
 OUnoObject::OUnoObject(
     SdrModel& rSdrModel,
-    const OUString& _sComponentName,
     const OUString& rModelName,
     SdrObjKind _nObjectType)
 :   SdrUnoObj(rSdrModel, rModelName)
-    ,OObjectBase(_sComponentName)
+    ,OObjectBase(ObjectTypeToServiceName(_nObjectType))
     ,m_nObjectType(_nObjectType)
     // tdf#119067
     ,m_bSetDefaultLabel(false)
@@ -563,7 +587,7 @@ OUnoObject::OUnoObject(
 OUnoObject::OUnoObject(
     SdrModel& rSdrModel, OUnoObject const & rSource)
 :   SdrUnoObj(rSdrModel, rSource)
-    ,OObjectBase(rSource.getServiceName())
+    ,OObjectBase(ObjectTypeToServiceName(rSource.m_nObjectType)) // source may not have a service name
     ,m_nObjectType(rSource.m_nObjectType)
     // tdf#119067
     ,m_bSetDefaultLabel(rSource.m_bSetDefaultLabel)
@@ -900,10 +924,9 @@ OOle2Obj::OOle2Obj(
 
 OOle2Obj::OOle2Obj(
     SdrModel& rSdrModel,
-    const OUString& _sComponentName,
     SdrObjKind _nType)
 :   SdrOle2Obj(rSdrModel)
-    ,OObjectBase(_sComponentName)
+    ,OObjectBase(ObjectTypeToServiceName(_nType))
     ,m_nType(_nType)
     ,m_bOnlyOnce(true)
 {

@@ -49,25 +49,25 @@ IMPL_STATIC_LINK(
         switch( aParams.nObjIdentifier )
         {
             case SdrObjKind::ReportDesignFixedText:
-                    pNewObj = new OUnoObject(aParams.rSdrModel, SERVICE_FIXEDTEXT
-                                                        ,OUString("com.sun.star.form.component.FixedText")
+                    pNewObj = new OUnoObject(aParams.rSdrModel
+                                                        ,"com.sun.star.form.component.FixedText"
                                                         ,SdrObjKind::ReportDesignFixedText);
                     break;
             case SdrObjKind::ReportDesignImageControl:
-                    pNewObj = new OUnoObject(aParams.rSdrModel, SERVICE_IMAGECONTROL
-                                                        ,OUString("com.sun.star.form.component.DatabaseImageControl")
+                    pNewObj = new OUnoObject(aParams.rSdrModel
+                                                        ,"com.sun.star.form.component.DatabaseImageControl"
                                                         ,SdrObjKind::ReportDesignImageControl);
                     break;
             case SdrObjKind::ReportDesignFormattedField:
-                    pNewObj = new OUnoObject(aParams.rSdrModel, SERVICE_FORMATTEDFIELD
-                                                        ,OUString("com.sun.star.form.component.FormattedField")
+                    pNewObj = new OUnoObject(aParams.rSdrModel
+                                                        ,"com.sun.star.form.component.FormattedField"
                                                         ,SdrObjKind::ReportDesignFormattedField);
                     break;
             case SdrObjKind::ReportDesignVerticalFixedLine:
             case SdrObjKind::ReportDesignHorizontalFixedLine:
                 {
-                    rtl::Reference<OUnoObject> pObj = new OUnoObject(aParams.rSdrModel, SERVICE_FIXEDLINE
-                                                        ,OUString("com.sun.star.awt.UnoControlFixedLineModel")
+                    rtl::Reference<OUnoObject> pObj = new OUnoObject(aParams.rSdrModel
+                                                        ,"com.sun.star.awt.UnoControlFixedLineModel"
                                                         ,aParams.nObjIdentifier);
                     pNewObj = pObj;
                     if ( aParams.nObjIdentifier == SdrObjKind::ReportDesignHorizontalFixedLine )
@@ -78,13 +78,13 @@ IMPL_STATIC_LINK(
                 }
                 break;
             case SdrObjKind::CustomShape:
-                pNewObj = new OCustomShape(aParams.rSdrModel, SERVICE_SHAPE);
+                pNewObj = new OCustomShape(aParams.rSdrModel);
                 break;
             case SdrObjKind::ReportDesignSubReport:
-                pNewObj = new OOle2Obj(aParams.rSdrModel, SERVICE_REPORTDEFINITION, SdrObjKind::ReportDesignSubReport);
+                pNewObj = new OOle2Obj(aParams.rSdrModel, SdrObjKind::ReportDesignSubReport);
                 break;
             case SdrObjKind::OLE2:
-                pNewObj = new OOle2Obj(aParams.rSdrModel, "com.sun.star.chart2.ChartDocument", SdrObjKind::OLE2);
+                pNewObj = new OOle2Obj(aParams.rSdrModel, SdrObjKind::OLE2);
                 break;
             default:
                 OSL_FAIL("Unknown object id");

@@ -145,8 +145,7 @@ private:
         SdrModel& rSdrModel,
         const css::uno::Reference< css::report::XReportComponent>& _xComponent);
     OCustomShape(
-        SdrModel& rSdrModel,
-        const OUString& _sComponentName);
+        SdrModel& rSdrModel);
 
     virtual void NbcMove( const Size& rSize ) override;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
@@ -195,7 +194,6 @@ private:
         SdrObjKind _nType);
     OOle2Obj(
         SdrModel& rSdrModel,
-        const OUString& _sComponentName,
         SdrObjKind _nType);
     // copy constructor
     OOle2Obj(SdrModel& rSdrModel, const OOle2Obj& rSource);
@@ -228,7 +226,6 @@ class REPORTDESIGN_DLLPUBLIC OUnoObject final : public SdrUnoObj , public OObjec
     bool         m_bSetDefaultLabel;
 
     OUnoObject(SdrModel& rSdrModel,
-        const OUString& _sComponentName,
         const OUString& rModelName,
         SdrObjKind _nObjectType);
     OUnoObject(
