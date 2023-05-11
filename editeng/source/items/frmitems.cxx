@@ -33,6 +33,7 @@
 #include <com/sun/star/frame/status/LeftRightMarginScale.hpp>
 #include <com/sun/star/drawing/ShadingPattern.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/util/XComplexColor.hpp>
 
 #include <osl/diagnose.h>
 #include <i18nutil/unicode.hxx>
@@ -75,6 +76,7 @@
 #include <sal/log.hxx>
 #include <vcl/GraphicLoader.hxx>
 #include <unotools/securityoptions.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 
 #include <boost/property_tree/ptree.hpp>
 
@@ -3857,6 +3859,18 @@ SvxBrushItem::SvxBrushItem(const Color& rColor, sal_uInt16 _nWhich)
 {
 }
 
+SvxBrushItem::SvxBrushItem(Color const& rColor, model::ComplexColor const& rComplexColor, sal_uInt16 nWhich)
+    : SfxPoolItem(nWhich)
+    , aColor(rColor)
+    , maComplexColor(rComplexColor)
+    , aFilterColor(COL_TRANSPARENT)
+    , nShadingValue(ShadingPattern::CLEAR)
+    , nGraphicTransparency(0)
+    , eGraphicPos(GPOS_NONE)
+    , bLoadAgain(true)
+{
+}
+
 SvxBrushItem::SvxBrushItem(const Graphic& rGraphic, SvxGraphicPosition ePos, sal_uInt16 _nWhich)
     : SfxPoolItem(_nWhich)
     , aColor(COL_TRANSPARENT)
@@ -3901,6 +3915,7 @@ SvxBrushItem::SvxBrushItem(OUString aLink, OUString aFilter,
 SvxBrushItem::SvxBrushItem(const SvxBrushItem& rItem)
     : SfxPoolItem(rItem)
     , aColor(rItem.aColor)
+    , maComplexColor(rItem.maComplexColor)
     , aFilterColor(rItem.aFilterColor)
     , nShadingValue(rItem.nShadingValue)
     , xGraphicObject(rItem.xGraphicObject ? new GraphicObject(*rItem.xGraphicObject) : nullptr)
@@ -3915,6 +3930,7 @@ SvxBrushItem::SvxBrushItem(const SvxBrushItem& rItem)
 SvxBrushItem::SvxBrushItem(SvxBrushItem&& rItem)
     : SfxPoolItem(std::move(rItem))
     , aColor(std::move(rItem.aColor))
+    , maComplexColor(std::move(rItem.maComplexColor))
     , aFilterColor(std::move(rItem.aFilterColor))
     , nShadingValue(std::move(rItem.nShadingValue))
     , xGraphicObject(std::move(rItem.xGraphicObject))
@@ -3974,6 +3990,15 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_BACK_COLOR_TRANSPARENCY:
             rVal <<= SvxBrushItem::TransparencyToPercent(255 - aColor.GetAlpha());
         break;
+
+        case MID_BACKGROUND_COMPLEX_COLOR:
+        {
+            auto xComplexColor = model::color::createXComplexColor(maComplexColor);
+            rVal <<= xComplexColor;
+            break;
+        }
+        break;
+
         case MID_GRAPHIC_POSITION:
             rVal <<= static_cast<style::GraphicLocation>(static_cast<sal_Int16>(eGraphicPos));
         break;
@@ -4044,6 +4069,17 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if ( !( rVal >>= nTrans ) || nTrans < 0 || nTrans > 100 )
                 return false;
             aColor.SetAlpha(255 - lcl_PercentToTransparency(nTrans));
+        }
+        break;
+
+        case MID_BACKGROUND_COMPLEX_COLOR:
+        {
+            css::uno::Reference<css::util::XComplexColor> xComplexColor;
+            if (!(rVal >>= xComplexColor))
+                return false;
+
+            if (xComplexColor.is())
+                maComplexColor = model::color::getFromXComplexColor(xComplexColor);
         }
         break;
 

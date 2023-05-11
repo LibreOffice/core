@@ -58,7 +58,19 @@ public:
     {
         return mColor;
     }
-    void SetValue(const Color& rNewColor);
+    void SetValue(const Color& rNewColor)
+    {
+        mColor = rNewColor;
+    }
+
+    const Color& getColor() const
+    {
+        return mColor;
+    }
+    void setColor(const Color& rNewColor)
+    {
+        mColor = rNewColor;
+    }
 
     model::ComplexColor const& getComplexColor() const { return maComplexColor; }
     void setComplexColor(model::ComplexColor const& rComplexColor) { maComplexColor = rComplexColor; }

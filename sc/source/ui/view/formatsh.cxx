@@ -1224,7 +1224,8 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
 
                     SvxBrushItem aBrushItem(
                         pTabViewShell->GetSelectionPattern()->GetItem( ATTR_BACKGROUND ) );
-                    aBrushItem.SetColor( aColor );
+                    aBrushItem.SetColor(aColor);
+                    aBrushItem.setComplexColor(rNewColorItem.getComplexColor());
 
                     pTabViewShell->ApplyAttr( aBrushItem, false );
                 }
@@ -1237,6 +1238,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     const SvxBrushItem& rNewBrushItem = static_cast<const SvxBrushItem&>(
                                             pNewAttrs->Get( GetPool().GetWhich(nSlot) ) );
                     aBrushItem.SetColor(rNewBrushItem.GetColor());
+                    aBrushItem.setComplexColor(rNewBrushItem.getComplexColor());
                     pTabViewShell->ApplyAttr( aBrushItem );
                 }
                 break;

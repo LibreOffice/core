@@ -1616,11 +1616,6 @@ void SvxColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-void SvxColorItem::SetValue( const Color& rNewCol )
-{
-    mColor = rNewCol;
-}
-
 // class SvxKerningItem --------------------------------------------------
 
 SvxKerningItem::SvxKerningItem( const short nKern, const sal_uInt16 nId ) :

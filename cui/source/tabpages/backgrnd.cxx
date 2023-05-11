@@ -166,13 +166,13 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
             XFillColorItem aColorItem( maSet.Get( XATTR_FILLCOLOR ) );
             if ( SID_ATTR_CHAR_BACK_COLOR == nSlot )
             {
-                maSet.Put( SvxColorItem( aColorItem.GetColorValue(), nWhich ) );
-                rCoreSet->Put( SvxColorItem( aColorItem.GetColorValue(), nWhich ) );
+                maSet.Put( SvxColorItem( aColorItem.GetColorValue(), aColorItem.getComplexColor(), nWhich ) );
+                rCoreSet->Put( SvxColorItem( aColorItem.GetColorValue(), aColorItem.getComplexColor(), nWhich ) );
             }
             else
             {
-                maSet.Put( SvxBrushItem( aColorItem.GetColorValue(), nWhich ) );
-                rCoreSet->Put( SvxBrushItem( aColorItem.GetColorValue(), nWhich ) );
+                maSet.Put( SvxBrushItem( aColorItem.GetColorValue(), aColorItem.getComplexColor(), nWhich ) );
+                rCoreSet->Put( SvxBrushItem( aColorItem.GetColorValue(), aColorItem.getComplexColor(), nWhich ) );
             }
             break;
         }

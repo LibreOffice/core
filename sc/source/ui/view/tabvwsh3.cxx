@@ -62,7 +62,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/dialog/ThemeDialog.hxx>
-#include <svx/theme/ThemeColorChanger.hxx>
+#include <ThemeColorChanger.hxx>
 
 namespace
 {
@@ -1352,7 +1352,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 ScViewData& rViewData = GetViewData();
                 vcl::Window* pWin = rViewData.GetActiveWin();
                 auto pDialog = std::make_shared<svx::ThemeDialog>(pWin ? pWin->GetFrameWeld() : nullptr, pTheme.get());
-                weld::DialogController::runAsync(pDialog, [pDialog, pPage](sal_uInt32 nResult) {
+                weld::DialogController::runAsync(pDialog, [this, pDialog](sal_uInt32 nResult) {
                     if (RET_OK != nResult)
                         return;
 
@@ -1360,7 +1360,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     if (oColorSet)
                     {
                         auto& rColorSet = (*oColorSet).get();
-                        svx::ThemeColorChanger aChanger(pPage);
+                        sc::ThemeColorChanger aChanger(*GetViewData().GetDocShell());
                         aChanger.apply(rColorSet);
                     }
                 });

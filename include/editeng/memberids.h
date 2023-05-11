@@ -169,6 +169,7 @@
 #define MID_BACK_COLOR_R_G_B    8
 #define MID_BACK_COLOR_TRANSPARENCY 9
 #define MID_SHADING_VALUE       10
+#define MID_BACKGROUND_COMPLEX_COLOR 11
 
 //SvxFormatBreakItem
 #define MID_BREAK_BEFORE        0
