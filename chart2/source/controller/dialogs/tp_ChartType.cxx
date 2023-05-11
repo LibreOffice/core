@@ -245,15 +245,18 @@ void ChartTypeTabPage::selectMainType()
     m_pCurrentMainType->adjustParameterToMainType( aParameter );
     commitToModel( aParameter );
     //detect the new ThreeDLookScheme
-    aParameter.eThreeDLookScheme = m_xChartModel->getFirstChartDiagram()->detectScheme();
+    aParameter.eThreeDLookScheme = ThreeDLookScheme::ThreeDLookScheme_Unknown;
+    rtl::Reference< Diagram > xDiagram = m_xChartModel->getFirstChartDiagram();
+    if (xDiagram)
+        aParameter.eThreeDLookScheme = m_xChartModel->getFirstChartDiagram()->detectScheme();
     if (!aParameter.b3DLook
         && aParameter.eThreeDLookScheme != ThreeDLookScheme::ThreeDLookScheme_Realistic)
         aParameter.eThreeDLookScheme = ThreeDLookScheme::ThreeDLookScheme_Realistic;
 
-    rtl::Reference< Diagram > xDiagram = m_xChartModel->getFirstChartDiagram();
     try
     {
-        xDiagram->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
+        if (xDiagram)
+            xDiagram->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
     }
     catch ( const uno::Exception& )
     {
@@ -305,8 +308,9 @@ void ChartTypeTabPage::initializePage()
         return;
     rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = m_xChartModel->getTypeManager();
     rtl::Reference< Diagram > xDiagram = m_xChartModel->getFirstChartDiagram();
-    Diagram::tTemplateWithServiceName aTemplate =
-        xDiagram->getTemplate( xChartTypeManager );
+    Diagram::tTemplateWithServiceName aTemplate;
+    if (xDiagram)
+        aTemplate = xDiagram->getTemplate( xChartTypeManager );
     OUString aServiceName( aTemplate.sServiceName );
 
     bool bFound = false;

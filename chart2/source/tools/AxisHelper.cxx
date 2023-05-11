@@ -849,11 +849,15 @@ void AxisHelper::getAxisOrGridPossibilities( Sequence< sal_Bool >& rPossibilityL
     rPossibilityList.realloc(6);
     sal_Bool* pPossibilityList = rPossibilityList.getArray();
 
-    sal_Int32 nDimensionCount = xDiagram->getDimension();
+    sal_Int32 nDimensionCount = -1;
+    if (xDiagram)
+        nDimensionCount = xDiagram->getDimension();
 
     //set possibilities:
     sal_Int32 nIndex=0;
-    rtl::Reference< ChartType > xChartType = xDiagram->getChartTypeByIndex( 0 );
+    rtl::Reference< ChartType > xChartType;
+    if (xDiagram)
+        xChartType = xDiagram->getChartTypeByIndex( 0 );
     for(nIndex=0;nIndex<3;nIndex++)
         pPossibilityList[nIndex]=ChartTypeHelper::isSupportingMainAxis(xChartType,nDimensionCount,nIndex);
     for(nIndex=3;nIndex<6;nIndex++)

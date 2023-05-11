@@ -315,8 +315,9 @@ void ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
     // locked controllers
     ControllerLockGuardUNO aCtrlLockGuard( xChartModel );
     rtl::Reference< Diagram > xDiagram = xChartModel->getFirstChartDiagram();
-    Diagram::tTemplateWithServiceName aTemplateWithService(
-        xDiagram->getTemplate( xTemplateManager ));
+    Diagram::tTemplateWithServiceName aTemplateWithService;
+    if (xDiagram)
+        aTemplateWithService = xDiagram->getTemplate( xTemplateManager );
     if( aTemplateWithService.xChartTypeTemplate.is())
         aTemplateWithService.xChartTypeTemplate->resetStyles2( xDiagram );
     xTemplate->changeDiagram( xDiagram );

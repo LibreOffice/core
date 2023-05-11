@@ -95,6 +95,8 @@ void ReferenceSizeProvider::setValuesAtTitle(
 void ReferenceSizeProvider::setValuesAtAllDataSeries()
 {
     rtl::Reference< Diagram > xDiagram( m_xChartDoc->getFirstChartDiagram());
+    if (!xDiagram)
+        return;
 
     // DataSeries/Points
     std::vector< rtl::Reference< DataSeries > > aSeries =
