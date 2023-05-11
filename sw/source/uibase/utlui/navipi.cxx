@@ -691,6 +691,7 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
         m_xDocListBox->hide();
         m_xGlobalBox->hide();
         m_xGlobalToolBox->hide();
+        m_xGlobalTree->HideTree();
     }
 }
 
