@@ -33,6 +33,7 @@ $(eval $(call gb_Library_use_libraries,subsequenttest,\
 	utl \
 	unotest \
 	vcl \
+	docmodel \
 ))
 
 $(eval $(call gb_Library_use_externals,subsequenttest,\
