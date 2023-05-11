@@ -125,9 +125,11 @@ using namespace ::com::sun::star::container;
 using namespace com::sun::star::style;
 using namespace svx::sidebar;
 
-static void sw_CharDialogResult(const SfxItemSet* pSet, SwWrtShell &rWrtSh, std::shared_ptr<SfxItemSet> const & pCoreSet, bool bSel, bool bSelectionPut, SfxRequest *pReq);
+static void sw_CharDialogResult(const SfxItemSet* pSet, SwWrtShell &rWrtSh, std::shared_ptr<SfxItemSet> const & pCoreSet, bool bSel,
+                                bool bSelectionPut, bool bApplyToParagraph, SfxRequest *pReq);
 
-static void sw_CharDialog(SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot, const SfxItemSet *pArgs, SfxRequest *pReq )
+static void sw_CharDialog(SwWrtShell& rWrtSh, bool bUseDialog, bool bApplyToParagraph,
+                          sal_uInt16 nSlot, const SfxItemSet* pArgs, SfxRequest* pReq)
 {
     FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( &rWrtSh.GetView()) != nullptr );
     SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
@@ -199,24 +201,35 @@ static void sw_CharDialog(SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,
             pRequest = std::make_shared<SfxRequest>(*pReq);
             pReq->Ignore(); // the 'old' request is not relevant any more
         }
-        pDlg->StartExecuteAsync([pDlg, &rWrtSh, pCoreSet, bSel, bSelectionPut, pRequest](sal_Int32 nResult){
+        pDlg->StartExecuteAsync([pDlg, &rWrtSh, pCoreSet, bSel, bSelectionPut, bApplyToParagraph, pRequest](sal_Int32 nResult){
             if (nResult == RET_OK)
             {
-                sw_CharDialogResult(pDlg->GetOutputItemSet(), rWrtSh, pCoreSet, bSel, bSelectionPut, pRequest.get());
+                sw_CharDialogResult(pDlg->GetOutputItemSet(), rWrtSh, pCoreSet, bSel, bSelectionPut,
+                                    bApplyToParagraph, pRequest.get());
             }
             pDlg->disposeOnce();
         });
     }
     else if (pArgs)
     {
-        sw_CharDialogResult(pArgs, rWrtSh, pCoreSet, bSel, bSelectionPut, pReq);
+        sw_CharDialogResult(pArgs, rWrtSh, pCoreSet, bSel, bSelectionPut, bApplyToParagraph, pReq);
     }
 }
 
-static void sw_CharDialogResult(const SfxItemSet* pSet, SwWrtShell &rWrtSh, std::shared_ptr<SfxItemSet> const & pCoreSet, bool bSel, bool bSelectionPut, SfxRequest *pReq)
+static void sw_CharDialogResult(const SfxItemSet* pSet, SwWrtShell& rWrtSh, std::shared_ptr<SfxItemSet> const & pCoreSet, bool bSel,
+                                bool bSelectionPut, bool bApplyToParagraph, SfxRequest* pReq)
 {
     SfxItemSet aTmpSet( *pSet );
     ::ConvertAttrGenToChar(aTmpSet, *pCoreSet);
+
+    const bool bWasLocked = rWrtSh.IsViewLocked();
+    if (bApplyToParagraph)
+    {
+        rWrtSh.StartAction();
+        rWrtSh.LockView(true);
+        rWrtSh.Push();
+        SwLangHelper::SelectCurrentPara(rWrtSh);
+    }
 
     const SfxStringItem* pSelectionItem;
     bool bInsert = false;
@@ -266,6 +279,12 @@ static void sw_CharDialogResult(const SfxItemSet* pSet, SwWrtShell &rWrtSh, std:
         rWrtSh.EndAction();
     }
 
+    if (bApplyToParagraph)
+    {
+        rWrtSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
+        rWrtSh.LockView(bWasLocked);
+        rWrtSh.EndAction();
+    }
 }
 
 
@@ -1400,15 +1419,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case SID_CHAR_DLG_EFFECT:
         case SID_CHAR_DLG_POSITION:
         {
-            sw_CharDialog( rWrtSh, bUseDialog, nSlot, pArgs, &rReq );
+            sw_CharDialog(rWrtSh, bUseDialog, /*ApplyToParagraph*/false, nSlot, pArgs, &rReq);
         }
         break;
         case SID_CHAR_DLG_FOR_PARAGRAPH:
         {
-            rWrtSh.Push();          //save current cursor
-            SwLangHelper::SelectCurrentPara( rWrtSh );
-            sw_CharDialog( rWrtSh, bUseDialog, nSlot, pArgs, &rReq );
-            rWrtSh.Pop(SwCursorShell::PopMode::DeleteCurrent); // restore old cursor
+            sw_CharDialog(rWrtSh, /*UseDialog*/true, /*ApplyToParagraph*/true, nSlot, pArgs, &rReq);
         }
         break;
         case SID_ATTR_LRSPACE :
@@ -1831,7 +1847,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 const auto& rAuthorityField = *static_cast<const SwAuthorityField*>(pField);
                 OUString targetURL = "";
-                
+
                 if (auto targetType = rAuthorityField.GetTargetType();
                     targetType == SwAuthorityField::TargetType::UseDisplayURL
                     || targetType == SwAuthorityField::TargetType::UseTargetURL)
@@ -1839,7 +1855,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     // Bibliography entry with URL also provides a hyperlink.
                     targetURL = rAuthorityField.GetAbsoluteURL();
                 }
-                
+
                 if (targetURL.getLength() > 0)
                 {
                     if (nSlot == SID_OPEN_HYPERLINK)
