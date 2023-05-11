@@ -50,6 +50,7 @@ inline constexpr OUStringLiteral SC_UNO_HASDRAWPAGES         = u"HasDrawPages";
 
 //  CharacterProperties
 inline constexpr OUStringLiteral SC_UNONAME_CCOLOR           = u"CharColor";
+inline constexpr OUStringLiteral SC_UNONAME_CHAR_COMPLEX_COLOR = u"CharComplexColor";
 inline constexpr OUStringLiteral SC_UNONAME_CHEIGHT          = u"CharHeight";
 inline constexpr OUStringLiteral SC_UNONAME_CUNDER           = u"CharUnderline";
 inline constexpr OUStringLiteral SC_UNONAME_CUNDLCOL         = u"CharUnderlineColor";
@@ -97,6 +98,7 @@ inline constexpr OUStringLiteral SC_UNO_CTL_CLOCAL           = u"CharLocaleCompl
 //  CellProperties
 inline constexpr OUStringLiteral SC_UNONAME_CELLSTYL         = u"CellStyle";
 inline constexpr OUStringLiteral SC_UNONAME_CELLBACK         = u"CellBackColor";
+inline constexpr OUStringLiteral SC_UNONAME_CELL_BACKGROUND_COMPLEX_COLOR = u"CellBackgroundComplexColor";
 inline constexpr OUStringLiteral SC_UNONAME_CELLTRAN         = u"IsCellBackgroundTransparent";
 inline constexpr OUStringLiteral SC_UNONAME_CELLPRO          = u"CellProtection";
 inline constexpr OUStringLiteral SC_UNONAME_CELLHJUS         = u"HoriJustify";
