@@ -59,15 +59,32 @@ public:
 ScStyleObj::ScStyleObj()
     : UnoApiTest("/sc/qa/extras/testdocuments")
     , XNamed("ScStyleObj")
-    , XPropertySet({
-          "BottomBorder",          "BottomBorder2",     "CellProtection", "CharLocale",
-          "CharLocaleAsian",       "CharLocaleComplex", "CharPosture",    "CharPostureAsian",
-          "CharPostureComplex",    "DiagonalBLTR",      "DiagonalBLTR2",  "DiagonalTLBR",
-          "DiagonalTLBR2",         "HoriJustify",       "LeftBorder",     "LeftBorder2",
-          "NumberFormat",          "Orientation",       "RightBorder",    "RightBorder2",
-          "ShadowFormat",          "TableBorder",       "TopBorder",      "TopBorder2",
-          "UserDefinedAttributes",
-      })
+    , XPropertySet({ "BottomBorder",
+                     "BottomBorder2",
+                     "CellProtection",
+                     "CharLocale",
+                     "CharLocaleAsian",
+                     "CharLocaleComplex",
+                     "CharPosture",
+                     "CharPostureAsian",
+                     "CharPostureComplex",
+                     "DiagonalBLTR",
+                     "DiagonalBLTR2",
+                     "DiagonalTLBR",
+                     "DiagonalTLBR2",
+                     "HoriJustify",
+                     "LeftBorder",
+                     "LeftBorder2",
+                     "NumberFormat",
+                     "Orientation",
+                     "RightBorder",
+                     "RightBorder2",
+                     "ShadowFormat",
+                     "TableBorder",
+                     "TopBorder",
+                     "TopBorder2",
+                     "UserDefinedAttributes",
+                     "CellBackgroundComplexColor" })
 {
 }
 

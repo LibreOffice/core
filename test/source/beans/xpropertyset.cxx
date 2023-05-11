@@ -17,12 +17,14 @@
 #include <com/sun/star/beans/XVetoableChangeListener.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/XComplexColor.hpp>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Type.h>
 
 #include <cppuhelper/implbase.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 #include <rtl/ref.hxx>
 
 #include <cppunit/TestAssert.h>
@@ -241,6 +243,13 @@ bool XPropertySet::isPropertyValueChangeable(const OUString& rName)
             util::DateTime aDT = any.get<util::DateTime>();
             aDT.Year += 1;
             xPropSet->setPropertyValue(rName, Any(aDT));
+        }
+        else if (type == cppu::UnoType<uno::Reference<util::XComplexColor>>::get())
+        {
+            auto xComplexColor = any.get<uno::Reference<util::XComplexColor>>();
+            auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+            xPropSet->setPropertyValue(rName,
+                                       Any(model::color::createXComplexColor(aComplexColor)));
         }
         else
         {
