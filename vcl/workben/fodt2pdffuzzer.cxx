@@ -19,6 +19,8 @@ extern "C" void* SwCreateDialogFactory() { return nullptr; }
 
 extern "C" bool TestPDFExportFODT(SvStream& rStream);
 
+static void silent_error_func(void*, const char* /*format*/, ...) {}
+
 extern "C" int LLVMFuzzerInitialize(int* argc, char*** argv)
 {
     if (__lsan_disable)
@@ -47,12 +49,13 @@ extern "C" int LLVMFuzzerInitialize(int* argc, char*** argv)
     if (__lsan_enable)
         __lsan_enable();
 
+    xmlInitParser();
+    xmlSetGenericErrorFunc(nullptr, silent_error_func);
+
     return 0;
 }
 
 extern "C" size_t LLVMFuzzerMutate(uint8_t* Data, size_t Size, size_t MaxSize);
-
-static void silent_error_func(void*, const char* /*format*/, ...) {}
 
 extern "C" size_t LLVMFuzzerCustomMutator(uint8_t* Data, size_t Size, size_t MaxSize,
                                           unsigned int /*Seed*/)
@@ -64,7 +67,6 @@ extern "C" size_t LLVMFuzzerCustomMutator(uint8_t* Data, size_t Size, size_t Max
     // pdf export
 
     xmlParserCtxtPtr ctxt = xmlNewParserCtxt();
-    xmlSetGenericErrorFunc(nullptr, silent_error_func);
     xmlDocPtr Doc = xmlCtxtReadMemory(ctxt, reinterpret_cast<const char*>(Data), Ret, nullptr,
                                       nullptr, XML_PARSE_NONET);
     if (Doc == nullptr)
