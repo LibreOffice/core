@@ -74,6 +74,10 @@ void ScFormatEntry::endRendering()
 {
 }
 
+void ScFormatEntry::updateValues()
+{
+}
+
 static bool lcl_HasRelRef( ScDocument* pDoc, const ScTokenArray* pFormula, sal_uInt16 nRecursion = 0 )
 {
     if (pFormula)
@@ -2041,6 +2045,14 @@ void ScConditionalFormat::endRendering()
     }
 }
 
+void ScConditionalFormat::updateValues()
+{
+    for(auto& rxEntry : maEntries)
+    {
+        rxEntry->updateValues();
+    }
+}
+
 void ScConditionalFormat::CalcAll()
 {
     for(const auto& rxEntry : maEntries)
@@ -2285,6 +2297,14 @@ void ScConditionalFormatList::endRendering()
     for (auto const& it : m_ConditionalFormats)
     {
         it->endRendering();
+    }
+}
+
+void ScConditionalFormatList::updateValues()
+{
+    for (auto const& it : m_ConditionalFormats)
+    {
+        it->updateValues();
     }
 }
 
