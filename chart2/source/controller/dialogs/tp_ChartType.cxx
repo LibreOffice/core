@@ -253,7 +253,8 @@ void ChartTypeTabPage::selectMainType()
     rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram(m_xChartModel);
     try
     {
-        xDiagram->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
+        if (xDiagram)
+            xDiagram->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
     }
     catch ( const uno::Exception& )
     {
