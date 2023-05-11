@@ -135,7 +135,7 @@ published service CellProperties
 
         @since LibreOffice 7.6
      */
-    [optional, property, maybevoid] boolean HasTextChangesOnly;
+    [optional, property] boolean HasTextChangesOnly;
 };
 
 
