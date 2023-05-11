@@ -36,7 +36,10 @@ public:
     model::ComplexColor const& getComplexColor() const { return maColor; }
 
     // XComplexColor
-    css::util::Color SAL_CALL getColor() override;
+    sal_Int32 SAL_CALL getType() override;
+    sal_Int32 SAL_CALL getSchemeColorType() override;
+    css::util::Color SAL_CALL
+    resolveColor(css::uno::Reference<css::util::XTheme> const& xTheme) override;
 };
 
 namespace model::color
