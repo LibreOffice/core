@@ -124,10 +124,14 @@ sal_Int32 Data::parseSegment(
         *setElement = false;
         return i;
     }
-    if (templateName != nullptr) {
-        if (i - index == 1 && path[index] == '*') {
+    if (i - index == 1 && path[index] == '*') {
+        *setElement = true;
+        if (templateName != nullptr) {
             templateName->clear();
-        } else {
+        }
+    } else {
+        *setElement = i != index;
+        if (templateName != nullptr) {
             *templateName = path.copy(index, i - index);
         }
     }
@@ -144,7 +148,6 @@ sal_Int32 Data::parseSegment(
     {
         return -1;
     }
-    *setElement = true;
     return j + 2;
 }
 

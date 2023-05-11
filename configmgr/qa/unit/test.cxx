@@ -205,12 +205,23 @@ void Test::setUp()
 
 void Test::testKeyFetch()
 {
-    OUString s;
-    CPPUNIT_ASSERT(
-        getKey(
-            "/org.openoffice.System",
-            "L10N/Locale") >>=
-        s);
+    {
+        OUString s;
+        CPPUNIT_ASSERT(
+            getKey(
+                "/org.openoffice.System",
+                "L10N/Locale") >>=
+            s);
+    }
+    {
+        auto const v = getKey(
+            "/org.openoffice.Office.Embedding",
+            "MimeTypeClassIDRelations/['application/vnd.sun.xml.report.chart']");
+        OUString s;
+        CPPUNIT_ASSERT(v >>= s);
+        CPPUNIT_ASSERT_EQUAL(OUString("80243D39-6741-46C5-926E-069164FF87BB"), s);
+            // cf. officecfg/registry/data/org/openoffice/Office/Embedding.xcu
+    }
 }
 
 void Test::testKeySet()
