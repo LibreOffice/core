@@ -17447,6 +17447,11 @@ public:
         m_aCustomFont.use_custom_font(&rFont, u"spinbutton");
     }
 
+    void set_update_policy_if_valid()
+    {
+        gtk_spin_button_set_update_policy(m_pButton, GTK_UPDATE_IF_VALID);
+    }
+
     virtual void disable_notify_events() override
     {
         g_signal_handler_block(m_pButton, m_nValueChangedSignalId);
@@ -24293,7 +24298,13 @@ public:
 
     virtual std::unique_ptr<weld::MetricSpinButton> weld_metric_spin_button(const OString& id, FieldUnit eUnit) override
     {
-        return std::make_unique<weld::MetricSpinButton>(weld_spin_button(id), eUnit);
+        std::unique_ptr<weld::SpinButton> xButton(weld_spin_button(id));
+        if (xButton)
+        {
+            GtkInstanceSpinButton& rButton = dynamic_cast<GtkInstanceSpinButton&>(*xButton);
+            rButton.set_update_policy_if_valid();
+        }
+        return std::make_unique<weld::MetricSpinButton>(std::move(xButton), eUnit);
     }
 
     virtual std::unique_ptr<weld::FormattedSpinButton> weld_formatted_spin_button(const OString &id) override
