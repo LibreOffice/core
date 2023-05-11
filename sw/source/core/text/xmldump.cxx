@@ -174,9 +174,6 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
 
     switch ( GetType(  ) )
     {
-    case SwFrameType::Section:
-        name = "section";
-        break;
     case SwFrameType::Tab:
         name = "tab";
         break;

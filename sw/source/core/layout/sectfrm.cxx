@@ -2941,4 +2941,17 @@ bool SwSectionFrame::IsBalancedSection() const
     return bRet;
 }
 
+void SwSectionFrame::dumpAsXml(xmlTextWriterPtr writer) const
+{
+    (void)xmlTextWriterStartElement(writer, reinterpret_cast<const xmlChar*>("section"));
+    dumpAsXmlAttributes(writer);
+
+    (void)xmlTextWriterStartElement(writer, BAD_CAST("infos"));
+    dumpInfosAsXml(writer);
+    (void)xmlTextWriterEndElement(writer);
+    dumpChildrenAsXml(writer);
+
+    (void)xmlTextWriterEndElement(writer);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
