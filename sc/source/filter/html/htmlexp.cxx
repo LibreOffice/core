@@ -65,6 +65,8 @@
 #include <editutil.hxx>
 #include <ftools.hxx>
 #include <cellvalue.hxx>
+#include <conditio.hxx>
+#include <colorscale.hxx>
 #include <mtvelements.hxx>
 
 #include <editeng/flditem.hxx>
@@ -881,10 +883,27 @@ void ScHTMLExport::WriteTables()
 
 void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
+    std::optional<Color> aColorScale;
     ScAddress aPos( nCol, nRow, nTab );
     ScRefCellValue aCell(*pDoc, aPos, rBlockPos);
     const ScPatternAttr* pAttr = pDoc->GetPattern( nCol, nRow, nTab );
     const SfxItemSet* pCondItemSet = pDoc->GetCondResult( nCol, nRow, nTab, &aCell );
+    if (!pCondItemSet)
+    {
+        ScConditionalFormatList* pCondList = pDoc->GetCondFormList(nTab);
+        const ScCondFormatItem& rCondItem = pAttr->GetItem(ATTR_CONDITIONAL);
+        const ScCondFormatIndexes& rCondIndex = rCondItem.GetCondFormatData();
+        if (rCondIndex.size() > 0)
+        {
+            ScConditionalFormat* pCondFmt = pCondList->GetFormat(rCondIndex[0]);
+            if (pCondFmt)
+            {
+                const ScColorScaleFormat* pEntry = dynamic_cast<const ScColorScaleFormat*>(pCondFmt->GetEntry(0));
+                if (pEntry)
+                    aColorScale = pEntry->GetColor(aPos);
+            }
+        }
+    }
 
     const ScMergeFlagAttr& rMergeFlagAttr = pAttr->GetItem( ATTR_MERGE_FLAG, pCondItemSet );
     if ( rMergeFlagAttr.IsOverlapped() )
@@ -1023,7 +1042,9 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
             ATTR_BACKGROUND, pCondItemSet );
 
     Color aBgColor;
-    if ( rBrushItem.GetColor().GetAlpha() == 0 )
+    if ( aColorScale )
+        aBgColor = *aColorScale;
+    else if ( rBrushItem.GetColor().GetAlpha() == 0 )
         aBgColor = aHTMLStyle.aBackgroundColor; // No unwanted background color
     else
         aBgColor = rBrushItem.GetColor();
