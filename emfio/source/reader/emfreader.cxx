@@ -944,11 +944,9 @@ namespace emfio
 
                     case EMR_POLYDRAW:
                     {
-                        sal_uInt32 nPointsCount, nBezierCount = 0;
+                        sal_uInt32 nPointsCount(0), nBezierCount(0);
                         std::vector<Point> aPoints;
-                        sal_Int32 nX, nY;
                         bool wrongFile = false;
-                        unsigned char nPointType;
                         std::vector<unsigned char> aPointTypes;
                         mpInputStream->ReadInt32(nX32)
                             .ReadInt32(nY32)
@@ -956,15 +954,17 @@ namespace emfio
                             .ReadInt32(ny32)
                             .ReadUInt32(nPointsCount);
 
-                        aPoints.reserve(nPointsCount);
+                        aPoints.reserve(std::min<size_t>(nPointsCount, mpInputStream->remainingSize() / (sizeof(sal_Int32) * 2)));
                         for (sal_uInt32 i = 0; i < nPointsCount && mpInputStream->good(); i++)
                         {
+                            sal_Int32 nX, nY;
                             *mpInputStream >> nX >> nY;
                             aPoints.push_back(Point(nX, nY));
                         }
-                        aPointTypes.reserve(nPointsCount);
+                        aPointTypes.reserve(std::min<size_t>(nPointsCount, mpInputStream->remainingSize()));
                         for (sal_uInt32 i = 0; i < nPointsCount && mpInputStream->good(); i++)
                         {
+                            unsigned char nPointType(0);
                             mpInputStream->ReadUChar(nPointType);
                             aPointTypes.push_back(nPointType);
                             SAL_INFO_IF(aPointTypes[i] == PT_MOVETO, "emfio",
