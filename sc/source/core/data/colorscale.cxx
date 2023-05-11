@@ -378,6 +378,9 @@ ScColorScaleFormat::ScColorScaleFormat(ScDocument* pDoc, const ScColorScaleForma
     {
         maColorScales.emplace_back(new ScColorScaleEntry(pDoc, *rxEntry));
     }
+
+    auto aCache = rFormat.GetCache();
+    SetCache(aCache);
 }
 
 ScColorFormat* ScColorScaleFormat::Clone(ScDocument* pDoc) const
@@ -455,6 +458,18 @@ void ScColorScaleFormat::calcMinMax(double& rMin, double& rMax) const
 const ScRangeList& ScColorFormat::GetRange() const
 {
     return mpParent->GetRange();
+}
+
+std::vector<double> ScColorFormat::GetCache() const
+{
+    std::vector<double> empty;
+    return mpCache ? mpCache->maValues : empty;
+}
+
+void ScColorFormat::SetCache(const std::vector<double>& aValues)
+{
+    mpCache.reset(new ScColorFormatCache);
+    mpCache->maValues = aValues;
 }
 
 std::vector<double>& ScColorFormat::getValues() const

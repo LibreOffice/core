@@ -224,6 +224,8 @@ public:
     virtual ~ScColorFormat() override;
 
     const ScRangeList& GetRange() const;
+    void SetCache(const std::vector<double>& aValues);
+    std::vector<double> GetCache() const;
 
     virtual void SetParent(ScConditionalFormat* pParent) override;
 
