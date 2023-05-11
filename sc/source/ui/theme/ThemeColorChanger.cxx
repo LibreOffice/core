@@ -21,6 +21,8 @@
 #include <stlsheet.hxx>
 #include <scitems.hxx>
 #include <document.hxx>
+#include <address.hxx>
+#include <dociter.hxx>
 
 namespace sc
 {
@@ -33,10 +35,9 @@ ThemeColorChanger::~ThemeColorChanger() = default;
 
 namespace
 {
-void paragraphStyleChange(ScStyleSheet* pStyle, model::ColorSet const& rColorSet)
+void changeCellItems(SfxItemSet& rItemSet, model::ColorSet const& rColorSet)
 {
     const SfxPoolItem* pItem = nullptr;
-    auto& rItemSet = pStyle->GetItemSet();
 
     if (rItemSet.HasItem(ATTR_FONT_COLOR, &pItem))
     {
@@ -87,8 +88,26 @@ void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
     pStyle = static_cast<ScStyleSheet*>(pPool->First(SfxStyleFamily::Para));
     while (pStyle)
     {
-        paragraphStyleChange(pStyle, *pColorSet);
+        auto& rItemSet = pStyle->GetItemSet();
+        changeCellItems(rItemSet, *pColorSet);
         pStyle = static_cast<ScStyleSheet*>(pPool->Next());
+    }
+
+    // Change Cell / Text attributes
+    for (SCTAB nTab = 0; nTab < rDocument.GetTableCount(); nTab++)
+    {
+        ScDocAttrIterator aAttributeIterator(rDocument, nTab, 0, 0, rDocument.MaxCol(),
+                                             rDocument.MaxRow());
+        SCCOL nCol = 0;
+        SCROW nRow1 = 0;
+        SCROW nRow2 = 0;
+
+        while (const ScPatternAttr* pPattern = aAttributeIterator.GetNext(nCol, nRow1, nRow2))
+        {
+            auto* pNonConstPattern = const_cast<ScPatternAttr*>(pPattern);
+            auto& rItemSet = pNonConstPattern->GetItemSet();
+            changeCellItems(rItemSet, *pColorSet);
+        }
     }
 }
 
