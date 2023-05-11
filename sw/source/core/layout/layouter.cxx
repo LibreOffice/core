@@ -183,12 +183,10 @@ void SwLooping::Control( SwPageFrame* pPage )
         static bool bNoLouie = false;
         if( bNoLouie )
             return;
+#endif
 
         // FME 2007-08-30 #i81146# new loop control
-        OSL_ENSURE( 0 != mnLoopControlStage, "Looping Louie: Stage 1!" );
-        OSL_ENSURE( 1 != mnLoopControlStage, "Looping Louie: Stage 2!!" );
-        OSL_ENSURE( 2 >  mnLoopControlStage, "Looping Louie: Stage 3!!!" );
-#endif
+        SAL_WARN("sw.layout", "Looping Louie: Stage " << (mnLoopControlStage + 1) << "!");
 
         Drastic( pPage->Lower() );
         if( nNew > nMinPage && pPage->GetPrev() )
@@ -235,7 +233,7 @@ void SwLayouter::InsertEndnotes( SwSectionFrame const * pSect )
 
 void SwLayouter::LoopControl( SwPageFrame* pPage )
 {
-    OSL_ENSURE( mpLooping, "Looping: Lost control" );
+    assert(mpLooping);
     mpLooping->Control( pPage );
 }
 
@@ -243,9 +241,7 @@ void SwLayouter::LoopingLouieLight( const SwDoc& rDoc, const SwTextFrame& rFrame
 {
     if ( mpLooping && mpLooping->IsLoopingLouieLight() )
     {
-#if OSL_DEBUG_LEVEL > 1
-        OSL_FAIL( "Looping Louie (Light): Fixating fractious frame" );
-#endif
+        SAL_WARN("sw.layout", "Looping Louie (Light): Fixating fractious frame");
         SwLayouter::InsertMovedFwdFrame( rDoc, rFrame, rFrame.FindPageFrame()->GetPhyPageNum() );
     }
 }
@@ -289,7 +285,7 @@ bool SwLayouter::Collecting( SwDoc* pDoc, SwSectionFrame const * pSect, SwFootno
 
 bool SwLayouter::StartLoopControl( SwDoc* pDoc, SwPageFrame const *pPage )
 {
-    OSL_ENSURE( pDoc, "No doc, no fun" );
+    assert(pDoc);
     if( !pDoc->getIDocumentLayoutAccess().GetLayouter() )
         pDoc->getIDocumentLayoutAccess().SetLayouter( new SwLayouter() );
     return !pDoc->getIDocumentLayoutAccess().GetLayouter()->mpLooping &&

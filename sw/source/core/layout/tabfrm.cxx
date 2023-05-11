@@ -1538,9 +1538,7 @@ bool SwContentFrame::CalcLowers(SwLayoutFrame & rLay, SwLayoutFrame const& rDont
                         continue;
                     }
 
-#if OSL_DEBUG_LEVEL > 1
-                    OSL_FAIL( "LoopControl in SwContentFrame::CalcLowers" );
-#endif
+                    SAL_WARN("sw.layout", "LoopControl in SwContentFrame::CalcLowers");
                 }
             }
             if (!rDontLeave.IsAnLower(pCnt)) // moved backward?
