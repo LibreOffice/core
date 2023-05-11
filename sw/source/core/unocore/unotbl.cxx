@@ -785,12 +785,6 @@ const SwStartNode *SwXCell::GetStartNode() const
     return pSttNd;
 }
 
-uno::Reference< text::XTextCursor >
-SwXCell::CreateCursor()
-{
-    return createTextCursor();
-}
-
 bool SwXCell::IsValid() const
 {
     // FIXME: this is now a const method, to make SwXText::IsValid invisible
@@ -901,9 +895,8 @@ sal_Int32 SwXCell::getError()
     return sal_Int32(sContent == SwViewShell::GetShellRes()->aCalc_Error);
 }
 
-uno::Reference<text::XTextCursor> SwXCell::createTextCursor()
+rtl::Reference< SwXTextCursor > SwXCell::createXTextCursor()
 {
-    SolarMutexGuard aGuard;
     if(!m_pStartNode && !IsValid())
         throw uno::RuntimeException();
     const SwStartNode* pSttNd = m_pStartNode ? m_pStartNode : m_pBox->GetSttNd();
@@ -912,12 +905,11 @@ uno::Reference<text::XTextCursor> SwXCell::createTextCursor()
         new SwXTextCursor(*GetDoc(), this, CursorType::TableText, aPos);
     auto& rUnoCursor(pXCursor->GetCursor());
     rUnoCursor.Move(fnMoveForward, GoInNode);
-    return static_cast<text::XWordCursor*>(pXCursor.get());
+    return pXCursor;
 }
 
-uno::Reference<text::XTextCursor> SwXCell::createTextCursorByRange(const uno::Reference< text::XTextRange > & xTextPosition)
+rtl::Reference<SwXTextCursor> SwXCell::createXTextCursorByRange(const uno::Reference< text::XTextRange > & xTextPosition)
 {
-    SolarMutexGuard aGuard;
     SwUnoInternalPaM aPam(*GetDoc());
     if((!m_pStartNode && !IsValid()) || !::sw::XTextRangeToSwPaM(aPam, xTextPosition))
         throw uno::RuntimeException();
@@ -928,9 +920,8 @@ uno::Reference<text::XTextCursor> SwXCell::createTextCursorByRange(const uno::Re
         p1 = p1->StartOfSectionNode();
     if( p1 != pSttNd )
         return nullptr;
-    return static_cast<text::XWordCursor*>(
-        new SwXTextCursor(*GetDoc(), this, CursorType::TableText,
-        *aPam.GetPoint(), aPam.GetMark()));
+    return new SwXTextCursor(*GetDoc(), this, CursorType::TableText,
+                *aPam.GetPoint(), aPam.GetMark());
 }
 
 uno::Reference< beans::XPropertySetInfo >  SwXCell::getPropertySetInfo()

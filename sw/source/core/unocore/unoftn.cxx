@@ -386,17 +386,9 @@ const SwStartNode *SwXFootnote::GetStartNode() const
     return nullptr;
 }
 
-uno::Reference< text::XTextCursor >
-SwXFootnote::CreateCursor()
+rtl::Reference< SwXTextCursor >
+SwXFootnote::createXTextCursor()
 {
-    return createTextCursor();
-}
-
-uno::Reference< text::XTextCursor > SAL_CALL
-SwXFootnote::createTextCursor()
-{
-    SolarMutexGuard aGuard;
-
     SwFormatFootnote const& rFormat( m_pImpl->GetFootnoteFormatOrThrow() );
 
     SwTextFootnote const*const pTextFootnote = rFormat.GetTextFootnote();
@@ -405,15 +397,13 @@ SwXFootnote::createTextCursor()
         new SwXTextCursor(*GetDoc(), this, CursorType::Footnote, aPos);
     auto& rUnoCursor(pXCursor->GetCursor());
     rUnoCursor.Move(fnMoveForward, GoInNode);
-    return static_cast<text::XWordCursor*>(pXCursor.get());
+    return pXCursor;
 }
 
-uno::Reference< text::XTextCursor > SAL_CALL
-SwXFootnote::createTextCursorByRange(
+rtl::Reference< SwXTextCursor >
+SwXFootnote::createXTextCursorByRange(
     const uno::Reference< text::XTextRange > & xTextPosition)
 {
-    SolarMutexGuard aGuard;
-
     SwFormatFootnote const& rFormat( m_pImpl->GetFootnoteFormatOrThrow() );
 
     SwUnoInternalPaM aPam(*GetDoc());
@@ -431,10 +421,9 @@ SwXFootnote::createTextCursorByRange(
         throw uno::RuntimeException();
     }
 
-    const uno::Reference< text::XTextCursor > xRet =
-        static_cast<text::XWordCursor*>(
+    const rtl::Reference< SwXTextCursor > xRet =
                 new SwXTextCursor(*GetDoc(), this, CursorType::Footnote,
-                    *aPam.GetPoint(), aPam.GetMark()));
+                    *aPam.GetPoint(), aPam.GetMark());
     return xRet;
 }
 

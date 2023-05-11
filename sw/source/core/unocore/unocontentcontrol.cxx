@@ -53,7 +53,6 @@ private:
 
 protected:
     const SwStartNode* GetStartNode() const override;
-    uno::Reference<text::XTextCursor> CreateCursor() override;
 
 public:
     SwXContentControlText(SwDoc& rDoc, SwXContentControl& rContentControl);
@@ -69,9 +68,9 @@ public:
     uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
 
     // XText
-    uno::Reference<text::XTextCursor> SAL_CALL createTextCursor() override;
-    uno::Reference<text::XTextCursor> SAL_CALL
-    createTextCursorByRange(const uno::Reference<text::XTextRange>& xTextPosition) override;
+    virtual rtl::Reference<SwXTextCursor> createXTextCursor() override;
+    virtual rtl::Reference<SwXTextCursor> createXTextCursorByRange(
+        const ::css::uno::Reference<::css::text::XTextRange>& aTextPosition) override;
 };
 }
 
@@ -96,9 +95,9 @@ void SwXContentControlText::PrepareForAttach(uno::Reference<text::XTextRange>& x
                           *rPam.GetPoint(), (rPam.HasMark()) ? rPam.GetMark() : nullptr));
 }
 
-uno::Reference<text::XTextCursor> SwXContentControlText::CreateCursor()
+rtl::Reference<SwXTextCursor> SwXContentControlText::createXTextCursor()
 {
-    uno::Reference<text::XTextCursor> xRet;
+    rtl::Reference<SwXTextCursor> xRet;
     if (IsValid())
     {
         SwTextNode* pTextNode;
@@ -109,8 +108,8 @@ uno::Reference<text::XTextCursor> SwXContentControlText::CreateCursor()
         if (bSuccess)
         {
             SwPosition aPos(*pTextNode, nContentControlStart);
-            xRet = static_cast<text::XWordCursor*>(
-                new SwXTextCursor(*GetDoc(), &m_rContentControl, CursorType::ContentControl, aPos));
+            xRet = new SwXTextCursor(*GetDoc(), &m_rContentControl, CursorType::ContentControl,
+                                     aPos);
         }
     }
     return xRet;
@@ -122,15 +121,11 @@ uno::Sequence<sal_Int8> SAL_CALL SwXContentControlText::getImplementationId()
 }
 
 // XText
-uno::Reference<text::XTextCursor> SAL_CALL SwXContentControlText::createTextCursor()
-{
-    return CreateCursor();
-}
 
-uno::Reference<text::XTextCursor> SAL_CALL SwXContentControlText::createTextCursorByRange(
+rtl::Reference<SwXTextCursor> SwXContentControlText::createXTextCursorByRange(
     const uno::Reference<text::XTextRange>& xTextPosition)
 {
-    const uno::Reference<text::XTextCursor> xCursor(CreateCursor());
+    const rtl::Reference<SwXTextCursor> xCursor(createXTextCursor());
     xCursor->gotoRange(xTextPosition, false);
     return xCursor;
 }

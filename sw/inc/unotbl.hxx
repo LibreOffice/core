@@ -77,9 +77,6 @@ class SwXCell final : public SwXCellBaseClass,
 
     virtual const SwStartNode *GetStartNode() const override;
 
-    virtual css::uno::Reference< css::text::XTextCursor >
-        CreateCursor() override;
-
     bool IsValid() const;
 
     virtual ~SwXCell() override;
@@ -110,8 +107,9 @@ public:
     virtual sal_Int32 SAL_CALL getError(  ) override;
 
     //XText
-    virtual css::uno::Reference< css::text::XTextCursor >  SAL_CALL createTextCursor() override;
-    virtual css::uno::Reference< css::text::XTextCursor >  SAL_CALL createTextCursorByRange(const css::uno::Reference< css::text::XTextRange > & aTextPosition) override;
+    virtual rtl::Reference< SwXTextCursor > createXTextCursor() override;
+    virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
+            const ::css::uno::Reference< ::css::text::XTextRange >& aTextPosition ) override;
     virtual void SAL_CALL  setString(const OUString& aString) override;
 
     //XPropertySet

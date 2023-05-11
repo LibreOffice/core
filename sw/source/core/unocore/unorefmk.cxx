@@ -485,8 +485,6 @@ private:
 
 protected:
     virtual const SwStartNode *GetStartNode() const override;
-    virtual uno::Reference< text::XTextCursor >
-        CreateCursor() override;
 
 public:
     SwXMetaText(SwDoc & rDoc, SwXMeta & rMeta);
@@ -503,12 +501,9 @@ public:
         getImplementationId() override;
 
     // XText
-    virtual uno::Reference< text::XTextCursor >  SAL_CALL
-        createTextCursor() override;
-    virtual uno::Reference< text::XTextCursor >  SAL_CALL
-        createTextCursorByRange(
-            const uno::Reference< text::XTextRange > & xTextPosition) override;
-
+    virtual rtl::Reference< SwXTextCursor > createXTextCursor() override;
+    virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
+            const ::css::uno::Reference< ::css::text::XTextRange >& aTextPosition ) override;
 };
 
 }
@@ -540,9 +535,9 @@ bool SwXMetaText::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
     return m_rMeta.CheckForOwnMemberMeta(rPam, bAbsorb);
 }
 
-uno::Reference< text::XTextCursor > SwXMetaText::CreateCursor()
+rtl::Reference< SwXTextCursor > SwXMetaText::createXTextCursor()
 {
-    uno::Reference< text::XTextCursor > xRet;
+    rtl::Reference< SwXTextCursor > xRet;
     if (IsValid())
     {
         SwTextNode * pTextNode;
@@ -553,8 +548,7 @@ uno::Reference< text::XTextCursor > SwXMetaText::CreateCursor()
         if (bSuccess)
         {
             SwPosition aPos(*pTextNode, nMetaStart);
-            xRet = static_cast<text::XWordCursor*>(
-                    new SwXTextCursor(*GetDoc(), &m_rMeta, CursorType::Meta, aPos));
+            xRet = new SwXTextCursor(*GetDoc(), &m_rMeta, CursorType::Meta, aPos);
         }
     }
     return xRet;
@@ -567,17 +561,12 @@ SwXMetaText::getImplementationId()
 }
 
 // XText
-uno::Reference< text::XTextCursor > SAL_CALL
-SwXMetaText::createTextCursor()
-{
-    return CreateCursor();
-}
 
-uno::Reference< text::XTextCursor > SAL_CALL
-SwXMetaText::createTextCursorByRange(
+rtl::Reference< SwXTextCursor >
+SwXMetaText::createXTextCursorByRange(
         const uno::Reference<text::XTextRange> & xTextPosition)
 {
-    const uno::Reference<text::XTextCursor> xCursor( CreateCursor() );
+    const rtl::Reference< SwXTextCursor > xCursor( createXTextCursor() );
     xCursor->gotoRange(xTextPosition, false);
     return xCursor;
 }

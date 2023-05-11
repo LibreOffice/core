@@ -39,6 +39,7 @@
 #include <textboxhelper.hxx>
 #include <ndtxt.hxx>
 #include <unocrsr.hxx>
+#include <unotextcursor.hxx>
 #include <swundo.hxx>
 #include <rootfrm.hxx>
 #include <ftnidx.hxx>
@@ -1101,26 +1102,24 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
     // if it's a text then create a temporary cursor there and re-use
     // the pCursor variable
     // #i108489#: Reference in outside scope to keep cursor alive
-    uno::Reference< text::XTextCursor > xTextCursor;
+    rtl::Reference< SwXTextCursor > xTextCursor;
     if (pHeadText)
     {
         // if it is a header / footer text, and eMode == TextRangeMode::AllowTableNode
         // then set the cursor to the beginning of the text
         // if it is started with a table then set into the table
-        xTextCursor.set(pHeadText->CreateTextCursor(true));
+        xTextCursor = pHeadText->CreateTextCursor(true);
         xTextCursor->gotoEnd(true);
-        pCursor = dynamic_cast<OTextCursorHelper*>(xTextCursor.get());
-        assert(pCursor && "cant must succeed");
+        pCursor = xTextCursor.get();
         pCursor->GetPaM()->Normalize();
     }
-    else
-    if (pText)
+    else if (pText)
     {
-        xTextCursor.set( pText->CreateCursor() );
+        xTextCursor = pText->createXTextCursor();
         xTextCursor->gotoEnd(true);
-        pCursor = dynamic_cast<OTextCursorHelper*>(xTextCursor.get());
-        assert(pCursor && "cant must succeed");
+        pCursor = xTextCursor.get();
     }
+
     if(pRange && &pRange->GetDoc() == &rToFill.GetDoc())
     {
         bRet = pRange->GetPositions(rToFill, eMode);

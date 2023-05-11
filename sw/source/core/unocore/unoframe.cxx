@@ -3290,15 +3290,8 @@ const SwStartNode *SwXTextFrame::GetStartNode() const
     return pSttNd;
 }
 
-uno::Reference< text::XTextCursor >
-SwXTextFrame::CreateCursor()
+rtl::Reference<SwXTextCursor>  SwXTextFrame::createXTextCursor()
 {
-    return createTextCursor();
-}
-
-uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursor()
-{
-    SolarMutexGuard aGuard;
     SwFrameFormat* pFormat = GetFrameFormat();
     if(!pFormat)
         throw uno::RuntimeException();
@@ -3327,13 +3320,12 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursor()
         throw aExcept;
     }
 
-    return static_cast<text::XWordCursor*>(new SwXTextCursor(
-             *pFormat->GetDoc(), this, CursorType::Frame, *aPam.GetPoint()));
+    return new SwXTextCursor(
+             *pFormat->GetDoc(), this, CursorType::Frame, *aPam.GetPoint());
 }
 
-uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursorByRange(const uno::Reference< text::XTextRange > & aTextPosition)
+rtl::Reference< SwXTextCursor > SwXTextFrame::createXTextCursorByRange(const uno::Reference< text::XTextRange > & aTextPosition)
 {
-    SolarMutexGuard aGuard;
     SwFrameFormat* pFormat = GetFrameFormat();
     if (!pFormat)
         throw uno::RuntimeException();
@@ -3341,13 +3333,12 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursorByRange(const
     if (!::sw::XTextRangeToSwPaM(aPam, aTextPosition))
         throw uno::RuntimeException();
 
-    uno::Reference<text::XTextCursor>  aRef;
+    rtl::Reference< SwXTextCursor > aRef;
     SwNode& rNode = pFormat->GetContent().GetContentIdx()->GetNode();
     if(aPam.GetPointNode().FindFlyStartNode() == rNode.FindFlyStartNode())
     {
-        aRef = static_cast<text::XWordCursor*>(
-                new SwXTextCursor(*pFormat->GetDoc(), this, CursorType::Frame,
-                    *aPam.GetPoint(), aPam.GetMark()));
+        aRef = new SwXTextCursor(*pFormat->GetDoc(), this, CursorType::Frame,
+                    *aPam.GetPoint(), aPam.GetMark());
     }
 
     return aRef;

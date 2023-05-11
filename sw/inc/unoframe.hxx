@@ -174,9 +174,6 @@ class SAL_DLLPUBLIC_RTTI SwXTextFrame final : public SwXTextFrameBaseClass,
 
     virtual const SwStartNode *GetStartNode() const override;
 
-    virtual css::uno::Reference< css::text::XTextCursor >
-        CreateCursor() override;
-
     virtual ~SwXTextFrame() override;
 
     SwXTextFrame(SwDoc *pDoc);
@@ -201,8 +198,9 @@ public:
     virtual SW_DLLPUBLIC css::uno::Reference< css::text::XText >  SAL_CALL getText() override;
 
     //XText
-    virtual css::uno::Reference< css::text::XTextCursor >  SAL_CALL createTextCursor() override;
-    virtual css::uno::Reference< css::text::XTextCursor >  SAL_CALL createTextCursorByRange(const css::uno::Reference< css::text::XTextRange > & aTextPosition) override;
+    virtual rtl::Reference< SwXTextCursor > createXTextCursor() override;
+    virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
+            const ::css::uno::Reference< ::css::text::XTextRange >& aTextPosition ) override;
 
     //XEnumerationAccess - frueher XParagraphEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration >  SAL_CALL createEnumeration() override;

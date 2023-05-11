@@ -50,8 +50,6 @@ class SwXFootnote final
 
     virtual const SwStartNode *GetStartNode() const override;
 
-    virtual css::uno::Reference< css::text::XTextCursor > CreateCursor() override;
-
     virtual ~SwXFootnote() override;
 
     SwXFootnote(SwDoc & rDoc, SwFormatFootnote & rFormat);
@@ -128,12 +126,9 @@ public:
     virtual void SAL_CALL setLabel(const OUString& rLabel) override;
 
     // XSimpleText
-    virtual css::uno::Reference< css::text::XTextCursor >  SAL_CALL
-        createTextCursor() override;
-    virtual css::uno::Reference< css::text::XTextCursor >  SAL_CALL
-        createTextCursorByRange(
-            const css::uno::Reference< css::text::XTextRange > & xTextPosition) override;
-
+    virtual rtl::Reference< SwXTextCursor > createXTextCursor() override;
+    virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
+            const ::css::uno::Reference< ::css::text::XTextRange >& aTextPosition ) override;
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNOFOOTNOTE_HXX

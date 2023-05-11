@@ -79,11 +79,9 @@ public:
     rtl::Reference< SwXParagraphEnumeration > createParagraphEnumeration();
 
     // XSimpleText
-    virtual css::uno::Reference< css::text::XTextCursor >  SAL_CALL
-        createTextCursor() override;
-    virtual css::uno::Reference< css::text::XTextCursor >  SAL_CALL
-        createTextCursorByRange(
-            const css::uno::Reference< css::text::XTextRange > & xTextPosition) override;
+    virtual rtl::Reference< SwXTextCursor > createXTextCursor() override;
+    virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
+            const ::css::uno::Reference< ::css::text::XTextRange >& aTextPosition ) override;
 
 };
 
@@ -100,8 +98,6 @@ class SwXHeadFootText final
     ::sw::UnoImplPtr<Impl> m_pImpl;
 
     virtual const SwStartNode *GetStartNode() const override;
-    virtual css::uno::Reference< css::text::XTextCursor >
-        CreateCursor() override;
 
     virtual ~SwXHeadFootText() override;
 
@@ -112,7 +108,7 @@ public:
     static css::uno::Reference< css::text::XText >
         CreateXHeadFootText(SwFrameFormat & rHeadFootFormat, const bool bIsHeader);
 
-    css::uno::Reference<css::text::XTextCursor> CreateTextCursor(const bool bIgnoreTables = false);
+    rtl::Reference< SwXTextCursor > CreateTextCursor(const bool bIgnoreTables = false);
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface(
@@ -142,11 +138,9 @@ public:
         createEnumeration() override;
 
     // XSimpleText
-    virtual css::uno::Reference< css::text::XTextCursor >  SAL_CALL
-        createTextCursor() override;
-    virtual css::uno::Reference< css::text::XTextCursor >  SAL_CALL
-        createTextCursorByRange(
-            const css::uno::Reference< css::text::XTextRange > & xTextPosition) override;
+    virtual rtl::Reference< SwXTextCursor > createXTextCursor() override;
+    virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
+            const ::css::uno::Reference< ::css::text::XTextRange >& aTextPosition ) override;
 
 };
 

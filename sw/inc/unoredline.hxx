@@ -39,9 +39,6 @@ class SwXRedlineText final :
     SwNodeIndex m_aNodeIndex;
     virtual const SwStartNode *GetStartNode() const override;
 
-    virtual css::uno::Reference< css::text::XTextCursor >
-        CreateCursor() override;
-
 public:
     SwXRedlineText(SwDoc* pDoc, const SwNodeIndex& aNodeIndex);
 
@@ -53,8 +50,9 @@ public:
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     //XText
-    virtual css::uno::Reference< css::text::XTextCursor >  SAL_CALL createTextCursor() override;
-    virtual css::uno::Reference< css::text::XTextCursor >  SAL_CALL createTextCursorByRange(const css::uno::Reference< css::text::XTextRange > & aTextPosition) override;
+    virtual rtl::Reference< SwXTextCursor > createXTextCursor() override;
+    virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
+            const ::css::uno::Reference< ::css::text::XTextRange >& aTextPosition ) override;
 
     //XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration >  SAL_CALL createEnumeration() override;
@@ -86,8 +84,9 @@ public:
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     //XText
-    virtual css::uno::Reference< css::text::XTextCursor >  SAL_CALL createTextCursor() override;
-    virtual css::uno::Reference< css::text::XTextCursor >  SAL_CALL createTextCursorByRange(const css::uno::Reference< css::text::XTextRange > & aTextPosition) override;
+    virtual rtl::Reference< SwXTextCursor > createXTextCursor() override;
+    virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
+            const ::css::uno::Reference< ::css::text::XTextRange >& aTextPosition ) override;
 
     //XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
