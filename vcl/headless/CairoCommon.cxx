@@ -879,6 +879,13 @@ bool CairoCommon::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
         return true;
 
     cairo_t* cr = getCairoContext(true, bAntiAlias);
+    if (cairo_status(cr) != CAIRO_STATUS_SUCCESS)
+    {
+        SAL_WARN("vcl.gdi",
+                 "cannot render to surface: " << cairo_status_to_string(cairo_status(cr)));
+        releaseCairoContext(cr, true, basegfx::B2DRange());
+        return true;
+    }
     clipRegion(cr);
 
     // Set full (Object-to-Device) transformation - if used
@@ -1648,6 +1655,14 @@ bool CairoCommon::drawAlphaBitmap(const SalTwoRect& rTR, const SalBitmap& rSourc
     }
 
     cairo_t* cr = getCairoContext(false, bAntiAlias);
+    if (cairo_status(cr) != CAIRO_STATUS_SUCCESS)
+    {
+        SAL_WARN("vcl.gdi",
+                 "cannot render to surface: " << cairo_status_to_string(cairo_status(cr)));
+        releaseCairoContext(cr, false, basegfx::B2DRange());
+        return true;
+    }
+
     clipRegion(cr);
 
     cairo_rectangle(cr, rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight);
