@@ -480,6 +480,8 @@ void AccessibleDocumentViewBase::impl_dispose()
     mxController = nullptr;
 
     maShapeTreeInfo.SetDocumentWindow (nullptr);
+    maShapeTreeInfo.dispose();
+    mxAccessibleOLEObject.clear();
 }
 
 //=====  XEventListener  ======================================================

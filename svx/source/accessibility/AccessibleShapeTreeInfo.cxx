@@ -74,8 +74,11 @@ AccessibleShapeTreeInfo& AccessibleShapeTreeInfo::operator= (const AccessibleSha
 
 AccessibleShapeTreeInfo::~AccessibleShapeTreeInfo()
 {
-    SolarMutexGuard g;
-    mpWindow.reset();
+    if (mpWindow)
+    {
+        SolarMutexGuard g;
+        mpWindow.reset();
+    }
 }
 
 void AccessibleShapeTreeInfo::SetDocumentWindow (

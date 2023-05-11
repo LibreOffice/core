@@ -404,6 +404,8 @@ void SAL_CALL AccessibleContextBase::disposing()
         comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( mnClientId, *this );
         mnClientId =  0;
     }
+    mxParent.clear();
+    mxRelationSet.clear();
 }
 
 

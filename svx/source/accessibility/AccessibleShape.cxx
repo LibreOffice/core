@@ -887,6 +887,10 @@ void AccessibleShape::disposing (const lang::EventObject& aEvent)
     {
         TOOLS_WARN_EXCEPTION("svx", "caught exception while disposing");
     }
+    mpChildrenManager.reset();
+    mxShape.clear();
+    maShapeTreeInfo.dispose();
+    mpText.reset();
 }
 
 // document::XShapeEventListener
