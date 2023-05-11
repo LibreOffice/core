@@ -993,6 +993,7 @@ namespace emfio
                             }
                         }
                         if (wrongFile) break;
+                        nPointsCount = std::min(aPoints.size(), aPointTypes.size());
                         for (sal_uInt32 i = 0; i < nPointsCount; i++)
                         {
                             if (aPointTypes[i] == PT_MOVETO)
