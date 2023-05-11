@@ -266,6 +266,7 @@ Formatter::Formatter()
     ,m_bAutoColor(false)
     ,m_bEnableNaN(false)
     ,m_bDisableRemainderFactor(false)
+    ,m_bDefaultValueSet(false)
     ,m_ValueState(valueDirty)
     ,m_dCurrentValue(0)
     ,m_dDefaultValue(0)
@@ -791,7 +792,11 @@ bool Formatter::ImplGetValue(double& dNewVal)
     if (m_ValueState == valueDouble)
         return true;
 
-    dNewVal = m_dDefaultValue;
+    // tdf#155241 default to m_dDefaultValue only if explicitly set
+    // otherwise default to m_dCurrentValue
+    if (m_bDefaultValueSet)
+        dNewVal = m_dDefaultValue;
+
     OUString sText(GetEntryText());
     if (sText.isEmpty())
         return true;
