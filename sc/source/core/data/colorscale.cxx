@@ -544,6 +544,12 @@ void ScColorFormat::endRendering()
     mpCache.reset();
 }
 
+void ScColorFormat::updateValues()
+{
+    getMinValue();
+    getMaxValue();
+}
+
 namespace {
 
 sal_uInt8 GetColorValue( double nVal, double nVal1, sal_uInt8 nColVal1, double nVal2, sal_uInt8 nColVal2 )

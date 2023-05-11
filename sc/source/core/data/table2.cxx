@@ -532,7 +532,10 @@ void ScTable::CopyToClip(
         for (SCCOL i = nCol1; i <= nCol2; i++)
             pTable->aCol[i].RemoveProtected(nRow1, nRow2);
 
+    mpCondFormatList->startRendering();
+    mpCondFormatList->updateValues();
     pTable->mpCondFormatList.reset(new ScConditionalFormatList(pTable->rDocument, *mpCondFormatList));
+    mpCondFormatList->endRendering();
 }
 
 void ScTable::CopyToClip(
