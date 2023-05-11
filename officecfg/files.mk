@@ -108,6 +108,5 @@ officecfg_XCSFILES := \
     VCL \
     ucb/Configuration \
     ucb/Hierarchy \
-    ucb/InteractionHandler \
     ucb/Store \
 

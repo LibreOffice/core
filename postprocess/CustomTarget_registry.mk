@@ -201,7 +201,6 @@ postprocess_FILES_main := \
 	$(postprocess_XCS)/VCL.xcs \
 	$(postprocess_XCS)/ucb/Configuration.xcs \
 	$(postprocess_XCS)/ucb/Hierarchy.xcs \
-	$(postprocess_XCS)/ucb/InteractionHandler.xcs \
 	$(postprocess_XCS)/ucb/Store.xcs \
 	$(postprocess_XCU)/Inet.xcu \
 	$(postprocess_XCU)/Interaction.xcu \
