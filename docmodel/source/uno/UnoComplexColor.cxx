@@ -13,7 +13,14 @@
 
 using namespace css;
 
-css::util::Color UnoComplexColor::getColor() { return css::util::Color(maColor.getRGBColor()); }
+sal_Int32 UnoComplexColor::getType() { return sal_Int32(maColor.getType()); }
+
+sal_Int32 UnoComplexColor::getSchemeColorType() { return sal_Int32(maColor.getSchemeType()); }
+
+util::Color UnoComplexColor::resolveColor(uno::Reference<util::XTheme> const& /*xTheme*/)
+{
+    return util::Color(maColor.getRGBColor());
+}
 
 namespace model::color
 {
@@ -22,8 +29,7 @@ uno::Reference<util::XComplexColor> createXComplexColor(model::ComplexColor cons
     return new UnoComplexColor(rColor);
 }
 
-model::ComplexColor
-getFromXComplexColor(css::uno::Reference<css::util::XComplexColor> const& rxColor)
+model::ComplexColor getFromXComplexColor(uno::Reference<util::XComplexColor> const& rxColor)
 {
     model::ComplexColor aComplexColor;
     UnoComplexColor const* pUnoComplexColor = static_cast<UnoComplexColor const*>(rxColor.get());
