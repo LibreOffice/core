@@ -380,6 +380,7 @@
 #define RID_SVXSTR_REGISTERED_DATABASES             NC_("RID_SVXSTR_REGISTERED_DATABASES", "Registered Databases")
 
 #define RID_SVXSTR_CANNOTCONVERTURL_ERR             NC_("RID_SVXSTR_CANNOTCONVERTURL_ERR", "The URL <%1> cannot be converted to a filesystem path.")
+#define RID_CUISTR_OPT_READONLY                     NC_("RID_CUISTR_OPT_READONLY", "This property is locked for editing.")
 
 #define RID_SVXSTR_ABOUT_VERSION                    NC_("aboutdialog|textbuffer1", "Version: %ABOUTBOXPRODUCTVERSION%ABOUTBOXPRODUCTVERSIONSUFFIX")
 #define RID_SVXSTR_ABOUT_COPYRIGHT                  NC_("aboutdialog|copyright", "Copyright © 2000–2021 LibreOffice contributors.")

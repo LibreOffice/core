@@ -14,6 +14,10 @@
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/UnknownPropertyException.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/configuration/ReadWriteAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/container/XHierarchicalName.hpp>
@@ -22,9 +26,13 @@
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <unotools/textsearch.hxx>
 #include <vcl/event.hxx>
+#include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
+
+#include <dialmgr.hxx>
+#include <strings.hrc>
 
 #include <memory>
 #include <vector>
@@ -54,18 +62,21 @@ struct Prop_Impl
 struct UserData
 {
     bool bIsPropertyPath;
+    bool bIsReadOnly;
     OUString sPropertyPath;
     int aLineage;
     Reference<XNameAccess> aXNameAccess;
 
-    explicit UserData( OUString const & rPropertyPath )
+    explicit UserData( OUString const & rPropertyPath, bool isReadOnly )
         : bIsPropertyPath( true )
+        , bIsReadOnly( isReadOnly )
         , sPropertyPath(rPropertyPath)
         , aLineage(0)
     {}
 
     explicit UserData( Reference<XNameAccess> const & rXNameAccess, int rIndex )
         : bIsPropertyPath( false )
+        , bIsReadOnly( false )
         , aLineage(rIndex)
         , aXNameAccess( rXNameAccess )
     {}
@@ -200,9 +211,9 @@ CuiAboutConfigTabPage::~CuiAboutConfigTabPage()
 
 void CuiAboutConfigTabPage::InsertEntry(const OUString& rPropertyPath, const OUString& rProp, const OUString& rStatus,
                                         const OUString& rType, const OUString& rValue, const weld::TreeIter* pParentEntry,
-                                        bool bInsertToPrefBox)
+                                        bool bInsertToPrefBox, bool bIsReadOnly)
 {
-    m_vectorUserData.push_back(std::make_unique<UserData>(rPropertyPath));
+    m_vectorUserData.push_back(std::make_unique<UserData>(rPropertyPath, bIsReadOnly));
     if (bInsertToPrefBox)
     {
         OUString sId(OUString::number(reinterpret_cast<sal_Int64>(m_vectorUserData.back().get())));
@@ -307,6 +318,22 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
                       && rEntry.sStatus == sPropertyName;
               }
             );
+
+            css::uno::Reference<css::configuration::XReadWriteAccess> m_xReadWriteAccess;
+            m_xReadWriteAccess = css::configuration::ReadWriteAccess::create(
+                ::comphelper::getProcessComponentContext(), "*");
+            beans::Property aProperty;
+            bool bReadOnly = false;
+            try
+            {
+                aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName(sPath + "/"
+                                                                              + sPropertyName);
+                bReadOnly = (aProperty.Attributes & beans::PropertyAttribute::READONLY) != 0;
+            }
+            catch (css::beans::UnknownPropertyException)
+            {
+                SAL_WARN("cui.options", "unknown property: " << sPath + "/" + sPropertyName);
+            }
 
             OUString sType = aNode.getValueTypeName();
             OUStringBuffer sValue;
@@ -469,7 +496,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
             for(int j = 1; j < lineage; ++j)
                 index = sPath.indexOf("/", index + 1);
 
-            InsertEntry(sPath, sPath.copy(index+1), seqItems[i], sType, sValue.makeStringAndClear(), pParentEntry, !bLoadAll);
+            InsertEntry(sPath, sPath.copy(index+1), seqItems[i], sType, sValue.makeStringAndClear(), pParentEntry, !bLoadAll, bReadOnly);
         }
     }
 }
@@ -573,6 +600,15 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void )
         return;
 
     UserData *pUserData = reinterpret_cast<UserData*>(m_xPrefBox->get_id(*m_xScratchIter).toInt64());
+    if (pUserData && pUserData->bIsReadOnly)
+    {
+        std::unique_ptr<weld::MessageDialog> xMessageBox(
+            Application::CreateMessageDialog(m_xDialog.get(), VclMessageType::Info, VclButtonsType::Ok,
+                                             CuiResId(RID_CUISTR_OPT_READONLY)));
+        xMessageBox->run();
+        return;
+    }
+
     if (pUserData && pUserData->bIsPropertyPath)
     {
         //if selection is a node
