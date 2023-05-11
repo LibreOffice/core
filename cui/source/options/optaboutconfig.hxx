@@ -55,6 +55,7 @@ private:
     static std::vector< OUString > commaStringToSequence( std::u16string_view rCommaSepString );
     void InsertEntry(const prefBoxEntry& rEntry);
 
+    DECL_LINK(QueryTooltip, const weld::TreeIter& rIter, OUString);
     DECL_LINK(StandardHdl_Impl, weld::Button&, void);
     DECL_LINK(DoubleClickHdl_Impl, weld::TreeView&, bool);
     DECL_LINK(ResetBtnHdl_Impl, weld::Button&, void);
@@ -66,7 +67,7 @@ public:
    explicit CuiAboutConfigTabPage(weld::Window* pParent);
    virtual ~CuiAboutConfigTabPage() override;
    void     InsertEntry(const OUString &rPropertyPath, const OUString& rProp, const OUString& rStatus, const OUString& rType, const OUString& rValue,
-                        const weld::TreeIter* pParentEntry, bool bInsertToPrefBox);
+                        const weld::TreeIter* pParentEntry, bool bInsertToPrefBox, bool bIsReadOnly);
    void     Reset();
    void     FillItems(const css::uno::Reference<css::container::XNameAccess>& xNameAccess,
                       const weld::TreeIter* pParentEntry = nullptr, int lineage = 0, bool bLoadAll = false);

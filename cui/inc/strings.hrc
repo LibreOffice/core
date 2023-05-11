@@ -404,6 +404,7 @@
 #define RID_CUISTR_CLICK_RESULT                     NC_("RID_CUISTR_CLICK_RESULT", "(Click on any test to view its resultant bitmap image)")
 #define RID_CUISTR_ZIPFAIL                          NC_("RID_CUISTR_ZIPFAIL", "Creation of ZIP file failed.")
 #define RID_CUISTR_SAVED                            NC_("RID_CUISTR_SAVED", "The results have been successfully saved in the file 'GraphicTestResults.zip'!")
+#define RID_CUISTR_OPT_READONLY                     NC_("RID_CUISTR_OPT_READONLY", "This property is locked for editing.")
 
 #define RID_LANGUAGETOOL_LEAVE_EMPTY                NC_("RID_LANGUAGETOOL_LEAVE_EMPTY", "Leave this field empty to use the free version")
 
