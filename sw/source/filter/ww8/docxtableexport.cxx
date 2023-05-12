@@ -697,52 +697,64 @@ void DocxAttributeOutput::TableCellRedline(
     bool bRemovePersonalInfo
         = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo);
 
-    // search next Redline
-    const SwExtraRedlineTable& aExtraRedlineTable
-        = m_rExport.m_rDoc.getIDocumentRedlineAccess().GetExtraRedlineTable();
-    for (sal_uInt16 nCurRedlinePos = 0; nCurRedlinePos < aExtraRedlineTable.GetSize();
-         ++nCurRedlinePos)
+    // check table row property "HasTextChangesOnly"
+    SwRedlineTable::size_type nChange = pTabBox->GetRedline();
+    if (nChange != SwRedlineTable::npos)
     {
-        SwExtraRedline* pExtraRedline = aExtraRedlineTable.GetRedline(nCurRedlinePos);
-        const SwTableCellRedline* pTableCellRedline
-            = dynamic_cast<const SwTableCellRedline*>(pExtraRedline);
-        if (pTableCellRedline && &pTableCellRedline->GetTableBox() == pTabBox)
-        {
-            // Redline for this table cell
-            const SwRedlineData& aRedlineData = pTableCellRedline->GetRedlineData();
-            RedlineType nRedlineType = aRedlineData.GetType();
-            switch (nRedlineType)
-            {
-                case RedlineType::TableCellInsert:
-                case RedlineType::TableCellDelete:
-                {
-                    OString aId(OString::number(m_nRedlineId++));
-                    const OUString& rAuthor(SW_MOD()->GetRedlineAuthor(aRedlineData.GetAuthor()));
-                    OString aAuthor(OUStringToOString(
-                        bRemovePersonalInfo
-                            ? "Author" + OUString::number(GetExport().GetInfoID(rAuthor))
-                            : rAuthor,
-                        RTL_TEXTENCODING_UTF8));
+        const SwRedlineTable& aRedlineTable
+            = m_rExport.m_rDoc.getIDocumentRedlineAccess().GetRedlineTable();
+        const SwRangeRedline* pRedline = aRedlineTable[nChange];
+        SwTableCellRedline* pTableCellRedline = nullptr;
+        bool bIsInExtra = false;
 
-                    sal_Int32 nElement
-                        = nRedlineType == RedlineType::TableCellInsert ? XML_cellIns : XML_cellDel;
-                    const DateTime aDateTime = aRedlineData.GetTimeStamp();
-                    bool bNoDate = bRemovePersonalInfo
-                                   || (aDateTime.GetYear() == 1970 && aDateTime.GetMonth() == 1
-                                       && aDateTime.GetDay() == 1);
-                    if (bNoDate)
-                        m_pSerializer->singleElementNS(XML_w, nElement, FSNS(XML_w, XML_id), aId,
-                                                       FSNS(XML_w, XML_author), aAuthor);
-                    else
-                        m_pSerializer->singleElementNS(
-                            XML_w, nElement, FSNS(XML_w, XML_id), aId, FSNS(XML_w, XML_author),
-                            aAuthor, FSNS(XML_w, XML_date), DateTimeToOString(aDateTime));
-                }
+        // use the original DOCX redline data stored in ExtraRedlineTable,
+        // if it exists and its type wasn't changed
+        const SwExtraRedlineTable& aExtraRedlineTable
+            = m_rExport.m_rDoc.getIDocumentRedlineAccess().GetExtraRedlineTable();
+        for (sal_uInt16 nCurRedlinePos = 0; nCurRedlinePos < aExtraRedlineTable.GetSize();
+             ++nCurRedlinePos)
+        {
+            SwExtraRedline* pExtraRedline = aExtraRedlineTable.GetRedline(nCurRedlinePos);
+            pTableCellRedline = dynamic_cast<SwTableCellRedline*>(pExtraRedline);
+            if (pTableCellRedline && &pTableCellRedline->GetTableBox() == pTabBox)
+            {
+                bIsInExtra = true;
                 break;
-                default:
-                    break;
             }
         }
+
+        const SwRedlineData& aRedlineData
+            = bIsInExtra &&
+                      // still the same type (an inserted cell could become a tracked deleted one)
+                      pRedline->GetRedlineData().GetType() == pRedline->GetRedlineData().GetType()
+                  ? pTableCellRedline->GetRedlineData()
+                  : pRedline->GetRedlineData();
+
+        // Note: all redline ranges and table row redline (with the same author and timestamp)
+        // use the same redline id in OOXML exported by MSO, but it seems, the recent solution
+        // (different IDs for different ranges, also row changes) is also portable.
+        OString aId(OString::number(m_nRedlineId++));
+        const OUString& rAuthor(SW_MOD()->GetRedlineAuthor(aRedlineData.GetAuthor()));
+        OString aAuthor(OUStringToOString(
+            bRemovePersonalInfo ? "Author" + OUString::number(GetExport().GetInfoID(rAuthor))
+                                : rAuthor,
+            RTL_TEXTENCODING_UTF8));
+
+        const DateTime aDateTime = aRedlineData.GetTimeStamp();
+        bool bNoDate = bRemovePersonalInfo
+                       || (aDateTime.GetYear() == 1970 && aDateTime.GetMonth() == 1
+                           && aDateTime.GetDay() == 1);
+
+        if (bNoDate)
+            m_pSerializer->singleElementNS(
+                XML_w, RedlineType::Delete == pRedline->GetType() ? XML_cellDel : XML_cellIns,
+                FSNS(XML_w, XML_id), aId, FSNS(XML_w, XML_author), aAuthor);
+        else
+            m_pSerializer->singleElementNS(
+                XML_w, RedlineType::Delete == pRedline->GetType() ? XML_cellDel : XML_cellIns,
+                FSNS(XML_w, XML_id), aId, FSNS(XML_w, XML_author), aAuthor, FSNS(XML_w, XML_date),
+                DateTimeToOString(aDateTime));
+        return;
     }
 }
 

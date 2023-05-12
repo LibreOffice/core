@@ -1497,7 +1497,8 @@ void makeTableCellRedline( SwTableBox& rTableBox,
     std::u16string_view rRedlineType,
     const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
 {
-    IDocumentRedlineAccess* pRedlineAccess = &rTableBox.GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess();
+    SwDoc* pDoc = rTableBox.GetFrameFormat()->GetDoc();
+    IDocumentRedlineAccess* pRedlineAccess = &pDoc->getIDocumentRedlineAccess();
 
     RedlineType eType;
     if ( rRedlineType == u"TableCellInsert" )
@@ -1511,6 +1512,31 @@ void makeTableCellRedline( SwTableBox& rTableBox,
     else
     {
         throw lang::IllegalArgumentException();
+    }
+
+    // set table row property "HasTextChangesOnly" to false
+    // to handle tracked deletion or insertion of the table row on the UI
+    const SvxPrintItem *pHasTextChangesOnlyProp =
+         rTableBox.GetFrameFormat()->GetAttrSet().GetItem<SvxPrintItem>(RES_PRINT);
+    if ( !pHasTextChangesOnlyProp || pHasTextChangesOnlyProp->GetValue() )
+    {
+        SvxPrintItem aSetTracking(RES_PRINT, false);
+        SwNodeIndex aInsPos( *rTableBox.GetSttNd(), 1 );
+        // as a workaround for the cells without text content,
+        // add a redline with invisible text CH_TXT_TRACKED_DUMMY_CHAR
+        if ( rTableBox.IsEmpty() )
+        {
+            SwPaM aPaM(aInsPos);
+            pDoc->getIDocumentContentOperations().InsertString( aPaM,
+                    OUStringChar(CH_TXT_TRACKED_DUMMY_CHAR) );
+            aPaM.SetMark();
+            aPaM.GetMark()->SetContent(0);
+            makeRedline(aPaM, RedlineType::TableCellInsert == eType
+                    ? u"Insert"
+                    : u"Delete", rRedlineProperties);
+        }
+        SwCursor aCursor( SwPosition(aInsPos), nullptr );
+        pDoc->SetBoxAttr( aCursor, aSetTracking );
     }
 
     comphelper::SequenceAsHashMap aPropMap( rRedlineProperties );

@@ -552,6 +552,8 @@ public:
         sal_uInt16 nMaxStep ) const
         { return const_cast<SwTableBox*>(this)->FindEndOfRowSpan( rTable, nMaxStep ); }
     void RegisterToFormat( SwFormat& rFormat ) ;
+    // get redline for the table cell, if it exists
+    SwRedlineTable::size_type GetRedline() const;
     // get redline type
     RedlineType GetRedlineType() const;
 };

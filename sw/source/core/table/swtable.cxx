@@ -2960,6 +2960,37 @@ void SwTableBox::ActualiseValueBox()
     }
 }
 
+SwRedlineTable::size_type SwTableBox::GetRedline() const
+{
+    const SwStartNode *pSttNd = GetSttNd();
+
+    if ( !pSttNd || GetRedlineType() == RedlineType::None )
+        return SwRedlineTable::npos;
+
+    SwPosition aCellStart( *GetSttNd(), SwNodeOffset(0) );
+    SwPosition aCellEnd( *GetSttNd()->EndOfSectionNode(), SwNodeOffset(-1) );
+    SwNodeIndex pEndNodeIndex(aCellEnd.GetNode());
+    const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    SwRedlineTable::size_type nRedlinePos = 0;
+    for( ; nRedlinePos < aRedlineTable.size(); ++nRedlinePos )
+    {
+        const SwRangeRedline* pRedline = aRedlineTable[ nRedlinePos ];
+
+        if ( pRedline->Start()->GetNodeIndex() > pEndNodeIndex.GetIndex() )
+        {
+            // no more redlines in the actual cell,
+            // check the next ones
+            break;
+        }
+
+        // redline in the cell
+        if ( aCellStart <= *pRedline->Start() )
+            return nRedlinePos;
+    }
+
+    return SwRedlineTable::npos;
+}
+
 RedlineType SwTableBox::GetRedlineType() const
 {
     const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
