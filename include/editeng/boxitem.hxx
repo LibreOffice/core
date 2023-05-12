@@ -54,16 +54,17 @@ constexpr sal_uInt16 BOX_BORDER_STYLE_VERSION = 2;
 
 class EDITENG_DLLPUBLIC SvxBoxItem final : public SfxPoolItem
 {
-    std::unique_ptr<editeng::SvxBorderLine>
-                    pTop,
-                    pBottom,
-                    pLeft,
-                    pRight;
-    sal_Int16       nTopDist,
-                    nBottomDist,
-                    nLeftDist,
-                    nRightDist;
-    bool            bRemoveAdjCellBorder;
+    std::unique_ptr<editeng::SvxBorderLine> mpTopBorderLine;
+    std::unique_ptr<editeng::SvxBorderLine> mpBottomBorderLine;
+    std::unique_ptr<editeng::SvxBorderLine> mpLeftBorderLine;
+    std::unique_ptr<editeng::SvxBorderLine> mpRightBorderLine;
+
+    sal_Int16 mnTopDistance = 0;
+    sal_Int16 mnBottomDistance = 0;
+    sal_Int16 mnLeftDistance = 0;
+    sal_Int16 mnRightDistance = 0;
+
+    bool mbRemoveAdjCellBorder = false;
 
 public:
     static SfxPoolItem* CreateDefault();
@@ -87,10 +88,22 @@ public:
     virtual void             ScaleMetrics( tools::Long nMult, tools::Long nDiv ) override;
     virtual bool             HasMetrics() const override;
 
-    const   editeng::SvxBorderLine* GetTop()    const { return pTop.get(); }
-    const   editeng::SvxBorderLine* GetBottom() const { return pBottom.get(); }
-    const   editeng::SvxBorderLine* GetLeft()   const { return pLeft.get(); }
-    const   editeng::SvxBorderLine* GetRight()  const { return pRight.get(); }
+    const editeng::SvxBorderLine* GetTop() const
+    {
+        return mpTopBorderLine.get();
+    }
+    const editeng::SvxBorderLine* GetBottom() const
+    {
+        return mpBottomBorderLine.get();
+    }
+    const editeng::SvxBorderLine* GetLeft() const
+    {
+        return mpLeftBorderLine.get();
+    }
+    const editeng::SvxBorderLine* GetRight() const
+    {
+        return mpRightBorderLine.get();
+    }
 
     const   editeng::SvxBorderLine* GetLine( SvxBoxItemLine nLine ) const;
 
@@ -100,12 +113,15 @@ public:
     sal_Int16  GetDistance( SvxBoxItemLine nLine, bool bAllowNegative = false ) const;
     sal_uInt16  GetSmallestDistance() const;
 
-    bool IsRemoveAdjacentCellBorder() const { return bRemoveAdjCellBorder; }
+    bool IsRemoveAdjacentCellBorder() const { return mbRemoveAdjCellBorder; }
 
     void    SetDistance( sal_Int16 nNew, SvxBoxItemLine nLine );
-    inline void SetAllDistances( sal_Int16 nNew );
+    void SetAllDistances(sal_Int16 nNew)
+    {
+        mnTopDistance = mnBottomDistance = mnLeftDistance = mnRightDistance = nNew;
+    }
 
-    void SetRemoveAdjacentCellBorder( bool bSet ) { bRemoveAdjCellBorder = bSet; }
+    void SetRemoveAdjacentCellBorder( bool bSet ) { mbRemoveAdjCellBorder = bSet; }
 
     // Line width plus Space plus inward distance
     // bEvenIfNoLine = TRUE -> Also return distance, when no Line is set
@@ -119,11 +135,6 @@ public:
     virtual boost::property_tree::ptree dumpAsJSON() const override;
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
-
-inline void SvxBoxItem::SetAllDistances(sal_Int16 const nNew)
-{
-    nTopDist = nBottomDist = nLeftDist = nRightDist = nNew;
-}
 
 // class SvxBoxInfoItem --------------------------------------------------
 
@@ -160,11 +171,11 @@ namespace o3tl
 
 class EDITENG_DLLPUBLIC SvxBoxInfoItem final : public SfxPoolItem
 {
-    std::unique_ptr<editeng::SvxBorderLine> pHori;   //inner horizontal Line
-    std::unique_ptr<editeng::SvxBorderLine> pVert;   //inner vertical Line
+    std::unique_ptr<editeng::SvxBorderLine> mpHorizontalLine; //inner horizontal Line
+    std::unique_ptr<editeng::SvxBorderLine> mpVerticalLine; //inner vertical Line
 
-    bool                mbEnableHor;   /// true = Enable inner horizontal line.
-    bool                mbEnableVer;   /// true = Enable inner vertical line.
+    bool mbEnableHorizontalLine = false; /// true = Enable inner horizontal line.
+    bool mbEnableVerticalLine = false; /// true = Enable inner vertical line.
 
     /*
      Currently only for StarWriter: distance inward from SvxBoxItem. If the
@@ -176,11 +187,11 @@ class EDITENG_DLLPUBLIC SvxBoxInfoItem final : public SfxPoolItem
      forth to the dialogue.
     */
 
-    bool        bDist      :1;  // TRUE, Unlock Distance.
-    bool        bMinDist   :1;  // TRUE, Going below minimum Distance is prohibited
+    bool mbDistance :1;  // TRUE, Unlock Distance.
+    bool mbMinimumDistance :1;  // TRUE, Going below minimum Distance is prohibited
 
-    SvxBoxInfoItemValidFlags nValidFlags;
-    sal_uInt16  nDefDist;       // The default or minimum distance.
+    SvxBoxInfoItemValidFlags mnValidFlags;
+    sal_uInt16 mnDefaultMinimumDistance = 0; // The default or minimum distance.
 
 public:
     static SfxPoolItem* CreateDefault();
@@ -202,37 +213,42 @@ public:
     virtual void            ScaleMetrics( tools::Long nMult, tools::Long nDiv ) override;
     virtual bool            HasMetrics() const override;
 
-    const editeng::SvxBorderLine*   GetHori() const { return pHori.get(); }
-    const editeng::SvxBorderLine*   GetVert() const { return pVert.get(); }
+    const editeng::SvxBorderLine*   GetHori() const { return mpHorizontalLine.get(); }
+    const editeng::SvxBorderLine*   GetVert() const { return mpVerticalLine.get(); }
 
     //The Pointers are being copied!
     void                    SetLine( const editeng::SvxBorderLine* pNew, SvxBoxInfoItemLine nLine );
 
-    bool                    IsTable() const             { return mbEnableHor && mbEnableVer; }
-    void                    SetTable( bool bNew )       { mbEnableHor = mbEnableVer = bNew; }
+    bool IsTable() const { return mbEnableHorizontalLine && mbEnableVerticalLine; }
+    void SetTable(bool bNew) { mbEnableHorizontalLine = mbEnableVerticalLine = bNew; }
 
-    bool             IsHorEnabled() const { return mbEnableHor; }
-    void             EnableHor( bool bEnable ) { mbEnableHor = bEnable; }
-    bool             IsVerEnabled() const { return mbEnableVer; }
-    void             EnableVer( bool bEnable ) { mbEnableVer = bEnable; }
+    bool IsHorEnabled() const { return mbEnableHorizontalLine; }
+    void EnableHor( bool bEnable ) { mbEnableHorizontalLine = bEnable; }
+    bool IsVerEnabled() const { return mbEnableVerticalLine; }
+    void EnableVer( bool bEnable ) { mbEnableVerticalLine = bEnable; }
 
-    bool                    IsDist() const              { return bDist; }
-    void                    SetDist( bool bNew )        { bDist = bNew; }
-    bool                    IsMinDist() const           { return bMinDist; }
-    void                    SetMinDist( bool bNew )     { bMinDist = bNew; }
-    sal_uInt16              GetDefDist() const            { return nDefDist; }
-    void                    SetDefDist( sal_uInt16 nNew ) { nDefDist = nNew; }
+    bool IsDist() const { return mbDistance; }
+    void SetDist(bool bNew)
+    {
+        mbDistance = bNew;
+    }
+    bool IsMinDist() const { return mbMinimumDistance; }
+    void SetMinDist(bool bNew) { mbMinimumDistance = bNew; }
+    sal_uInt16 GetDefDist() const { return mnDefaultMinimumDistance; }
+    void SetDefDist(sal_uInt16 nNew) { mnDefaultMinimumDistance = nNew; }
 
-    bool                    IsValid( SvxBoxInfoItemValidFlags nValid ) const
-                                { return bool( nValidFlags & nValid ); }
-    void                    SetValid( SvxBoxInfoItemValidFlags nValid, bool bValid = true )
+    bool IsValid( SvxBoxInfoItemValidFlags nValid ) const
+    {
+        return bool(mnValidFlags & nValid);
+    }
+    void SetValid(SvxBoxInfoItemValidFlags nValid, bool bValid = true)
     {
         if (bValid)
-            nValidFlags |= nValid;
+            mnValidFlags |= nValid;
         else
-            nValidFlags &= ~nValid;
+            mnValidFlags &= ~nValid;
     }
-    void                    ResetFlags();
+    void ResetFlags();
 
     virtual boost::property_tree::ptree dumpAsJSON() const override;
 };
