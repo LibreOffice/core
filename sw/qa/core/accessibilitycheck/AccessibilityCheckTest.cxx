@@ -48,15 +48,14 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testTableSplitMergeAndAltText)
     sw::AccessibilityCheck aCheck(pDoc);
     aCheck.check();
     auto& aIssues = aCheck.getIssueCollection().getIssues();
-    CPPUNIT_ASSERT_EQUAL(size_t(7), aIssues.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(6), aIssues.size());
 
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::NO_ALT_GRAPHIC, aIssues[0]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::NO_ALT_OLE, aIssues[1]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TABLE_MERGE_SPLIT, aIssues[1]->m_eIssueID);
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TABLE_MERGE_SPLIT, aIssues[2]->m_eIssueID);
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TABLE_MERGE_SPLIT, aIssues[3]->m_eIssueID);
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TABLE_MERGE_SPLIT, aIssues[4]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TABLE_MERGE_SPLIT, aIssues[5]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::NO_ALT_SHAPE, aIssues[6]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::NO_ALT_SHAPE, aIssues[5]->m_eIssueID);
 }
 
 CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckParagraphIssues)

@@ -13,7 +13,7 @@
 
 #define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-#define STR_NO_ALT                      NC_("STR_NO_ALT", "No alt text for graphic “%OBJECT_NAME%”.")
+#define STR_NO_ALT                      NC_("STR_NO_ALT", "No alt or description text for graphic “%OBJECT_NAME%”.")
 #define STR_TABLE_MERGE_SPLIT           NC_("STR_TABLE_MERGE_SPLIT", "Table “%OBJECT_NAME%” contains merges or splits.")
 #define STR_FAKE_NUMBERING              NC_("STR_FAKE_NUMBERING", "Simulated numbering “%NUMBERING%”.")
 #define STR_HYPERLINK_TEXT_IS_LINK      NC_("STR_HYPERLINK_TEXT_IS_LINK", "Hyperlink text is the same as the link address “%LINK%”.")

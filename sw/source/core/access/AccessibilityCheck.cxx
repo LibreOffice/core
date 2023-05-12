@@ -97,8 +97,7 @@ class NoTextNodeAltTextCheck : public NodeCheck
         if (!pNoTextNode)
             return;
 
-        OUString sAlternative = pNoTextNode->GetTitle();
-        if (!sAlternative.isEmpty())
+        if (!pNoTextNode->GetTitle().isEmpty() || !pNoTextNode->GetDescription().isEmpty())
             return;
 
         OUString sName = pNoTextNode->GetFlyFormat()->GetName();
