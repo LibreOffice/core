@@ -23,19 +23,21 @@ void DrawViewShell::ConfigurationChanged( utl::ConfigurationBroadcaster* pCb, Co
 {
     svtools::ColorConfig *pColorConfig = dynamic_cast<svtools::ColorConfig*>(pCb);
     ConfigureAppBackgroundColor(pColorConfig);
-    SfxViewShell* pCurrentShell = SfxViewShell::Current();
-    if (comphelper::LibreOfficeKit::isActive() && pCurrentShell)
+    if (comphelper::LibreOfficeKit::isActive())
     {
-        DrawViewShell* pCurrentDrawShell = nullptr;
+        SfxViewShell* pCurrentShell = SfxViewShell::Current();
         ViewShellBase* pShellBase = dynamic_cast<ViewShellBase*>(pCurrentShell);
-        if(pShellBase)
-            pCurrentDrawShell = dynamic_cast<DrawViewShell*>(pShellBase->GetMainViewShell().get());
-        pCurrentDrawShell->maViewOptions.mnDocBackgroundColor = pColorConfig->GetColorValue(svtools::DOCCOLOR).nColor;
-        pCurrentDrawShell->maViewOptions.msColorSchemeName = pColorConfig->GetCurrentSchemeName();
+        if (!pShellBase)
+            return;
+        if (DrawViewShell* pCurrentDrawShell = dynamic_cast<DrawViewShell*>(pShellBase->GetMainViewShell().get()))
+        {
+            pCurrentDrawShell->maViewOptions.mnDocBackgroundColor = pColorConfig->GetColorValue(svtools::DOCCOLOR).nColor;
+            pCurrentDrawShell->maViewOptions.msColorSchemeName = pColorConfig->GetCurrentSchemeName();
+        }
         SdXImpressDocument* pDoc = comphelper::getFromUnoTunnel<SdXImpressDocument>(pCurrentShell->GetCurrentDocument());
         SfxLokHelper::notifyViewRenderState(pCurrentShell, pDoc);
         Color aFillColor(pColorConfig->GetColorValue(svtools::APPBACKGROUND).nColor);
-        SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_APPLICATION_BACKGROUND_COLOR,
+        pCurrentShell->libreOfficeKitViewCallback(LOK_CALLBACK_APPLICATION_BACKGROUND_COLOR,
                     aFillColor.AsRGBHexString().toUtf8().getStr());
     }
 }
