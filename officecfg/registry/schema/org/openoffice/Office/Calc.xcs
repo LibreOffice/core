@@ -1347,30 +1347,6 @@
           </info>
           <value>true</value>
         </prop>
-        <prop oor:name="FormulaSyntax" oor:type="xs:int">
-          <!-- UIHints: Tools - Options  Spreadsheet  Calculate -->
-          <!-- This node is deprecated, but we still need to keep it for migration purposes. -->
-          <info>
-            <desc>Specifies what formula syntax type to use.</desc>
-          </info>
-          <constraints>
-            <enumeration oor:value="0">
-              <info>
-                <desc>Calc A1</desc>
-              </info>
-            </enumeration>
-            <enumeration oor:value="1">
-              <info>
-                <desc>Excel A1</desc>
-              </info>
-            </enumeration>
-            <enumeration oor:value="2">
-              <info>
-                <desc>Excel R1C1</desc>
-              </info>
-            </enumeration>
-          </constraints>
-        </prop>
         <node-ref oor:name="Date" oor:node-type="Date">
           <info>
             <desc>Specifies the date that is represented by the number 0.</desc>
