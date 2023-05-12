@@ -297,7 +297,7 @@ void SwTextBoxHelper::destroy(const SwFrameFormat* pShape, const SdrObject* pObj
 bool SwTextBoxHelper::isTextBox(const SwFrameFormat* pFormat, sal_uInt16 nType,
                                 const SdrObject* pObject)
 {
-    SolarMutexGuard aGuard;
+    DBG_TESTSOLARMUTEX();
     assert(nType == RES_FLYFRMFMT || nType == RES_DRAWFRMFMT);
     if (!pFormat || pFormat->Which() != nType)
         return false;
