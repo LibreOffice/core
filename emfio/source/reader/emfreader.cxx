@@ -967,6 +967,10 @@ namespace emfio
                             unsigned char nPointType(0);
                             mpInputStream->ReadUChar(nPointType);
                             aPointTypes.push_back(nPointType);
+                        }
+                        nPointsCount = std::min(aPoints.size(), aPointTypes.size());
+                        for (sal_uInt32 i = 0; i < nPointsCount; i++)
+                        {
                             SAL_INFO_IF(aPointTypes[i] == PT_MOVETO, "emfio",
                                         "\t\t" << i << "/" << nPointsCount - 1 << " PT_MOVETO, "
                                                << aPoints[i].getX() << ", " << aPoints[i].getY());
@@ -980,7 +984,7 @@ namespace emfio
                                         "\t\t" << i << "/" << nPointsCount - 1 << " PT_BEZIERTO, "
                                                << aPoints[i].getX() << ", " << aPoints[i].getY());
 
-                            if ((aPointTypes[i] != PT_MOVETO) && (nPointType & PT_BEZIERTO))
+                            if ((aPointTypes[i] != PT_MOVETO) && (aPointTypes[i] & PT_BEZIERTO))
                                 nBezierCount++;
                             else if (nBezierCount % 3 == 0)
                                 nBezierCount = 0;
@@ -993,7 +997,6 @@ namespace emfio
                             }
                         }
                         if (wrongFile) break;
-                        nPointsCount = std::min(aPoints.size(), aPointTypes.size());
                         for (sal_uInt32 i = 0; i < nPointsCount; i++)
                         {
                             if (aPointTypes[i] == PT_MOVETO)
