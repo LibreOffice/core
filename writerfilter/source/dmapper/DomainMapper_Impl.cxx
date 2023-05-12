@@ -1571,7 +1571,7 @@ static void lcl_MoveBorderPropertiesToFrame(std::vector<beans::PropertyValue>& r
 
         for( size_t nProperty = 0; nProperty < SAL_N_ELEMENTS( aBorderProperties ); ++nProperty)
         {
-            OUString sPropertyName = getPropertyName(aBorderProperties[nProperty]);
+            const OUString & sPropertyName = getPropertyName(aBorderProperties[nProperty]);
             beans::PropertyValue aValue;
             aValue.Name = sPropertyName;
             aValue.Value = xTextRangeProperties->getPropertyValue(sPropertyName);
@@ -4130,7 +4130,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                                 if ( bOnlyApplyCharHeight && eId != PROP_CHAR_HEIGHT )
                                     continue;
 
-                                const OUString sPropName = getPropertyName(eId);
+                                const OUString & sPropName = getPropertyName(eId);
                                 if ( beans::PropertyState_DEFAULT_VALUE == xShapePropertyState->getPropertyState(sPropName) )
                                 {
                                     const uno::Any aProp = GetPropertyFromStyleSheet(eId, pEntry, /*bDocDefaults=*/true, /*bPara=*/true);

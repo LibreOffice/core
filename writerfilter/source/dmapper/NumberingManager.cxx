@@ -276,9 +276,9 @@ void ListLevel::AddParaProperties( uno::Sequence< beans::PropertyValue >* props 
 {
     uno::Sequence< beans::PropertyValue >& aProps = *props;
 
-    OUString sFirstLineIndent = getPropertyName(
+    const OUString & sFirstLineIndent = getPropertyName(
             PROP_FIRST_LINE_INDENT );
-    OUString sIndentAt = getPropertyName(
+    const OUString & sIndentAt = getPropertyName(
             PROP_INDENT_AT );
 
     bool hasFirstLineIndent = lcl_findProperty( aProps, sFirstLineIndent );
@@ -292,9 +292,9 @@ void ListLevel::AddParaProperties( uno::Sequence< beans::PropertyValue >* props 
     // ParaFirstLineIndent -> FirstLineIndent
     // ParaLeftMargin -> IndentAt
 
-    OUString sParaIndent = getPropertyName(
+    const OUString & sParaIndent = getPropertyName(
             PROP_PARA_FIRST_LINE_INDENT );
-    OUString sParaLeftMargin = getPropertyName(
+    const OUString & sParaLeftMargin = getPropertyName(
             PROP_PARA_LEFT_MARGIN );
 
     for ( const auto& rParaProp : aParaProps )
@@ -613,7 +613,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
         }
 
         // Create the numbering style for these rules
-        OUString sNumRulesName = getPropertyName( PROP_NUMBERING_RULES );
+        const OUString & sNumRulesName = getPropertyName( PROP_NUMBERING_RULES );
         xStyle->setPropertyValue( sNumRulesName, uno::Any( m_xNumRules ) );
     }
     catch( const lang::IllegalArgumentException& )
