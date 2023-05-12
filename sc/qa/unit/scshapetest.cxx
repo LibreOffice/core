@@ -1169,6 +1169,52 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf125938_anchor_after_copy_paste)
     CPPUNIT_ASSERT_EQUAL(aExpectedAddress, (*pObjData).maStart);
 }
 
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf154821_shape_in_group)
+{
+    // The document contains a shape in A7, a group spanning rows 2 to 4 and a second group spanning
+    // rows 6 to 10. Error was, that when the document was saved with collapsed groups, the shape
+    // lost its position.
+    createScDoc("ods/tdf154821_shape_in_group.ods");
+
+    // Get snap rectangle before collapse and save
+    ScDocument* pDoc = getScDoc();
+    SdrObject* pObj = lcl_getSdrObjectWithAssert(*pDoc, 0);
+    tools::Rectangle aRectOrig = pObj->GetSnapRect();
+
+    // Collapse the lower group
+    ScTabViewShell* pViewShell = getViewShell();
+    pViewShell->GetViewData().SetCurX(0);
+    pViewShell->GetViewData().SetCurY(5);
+    pViewShell->GetViewData().GetDispatcher().Execute(SID_OUTLINE_HIDE);
+    // Collapse the upper group
+    pViewShell->GetViewData().SetCurX(0);
+    pViewShell->GetViewData().SetCurY(1);
+    pViewShell->GetViewData().GetDispatcher().Execute(SID_OUTLINE_HIDE);
+
+    // Save and reload
+    // FIXME: validation fails with
+    // Error: unexpected attribute "drawooo:display"
+    skipValidation();
+    saveAndReload("calc8");
+
+    // Expand the lower group
+    pViewShell = getViewShell();
+    pViewShell->GetViewData().SetCurX(0);
+    pViewShell->GetViewData().SetCurY(5);
+    pViewShell->GetViewData().GetDispatcher().Execute(SID_OUTLINE_SHOW);
+    // Expande the upper group
+    pViewShell = getViewShell();
+    pViewShell->GetViewData().SetCurX(0);
+    pViewShell->GetViewData().SetCurY(1);
+    pViewShell->GetViewData().GetDispatcher().Execute(SID_OUTLINE_SHOW);
+
+    // Verify shape position is not changed besides rounding errors from twips<->mm
+    pDoc = getScDoc();
+    pObj = lcl_getSdrObjectWithAssert(*pDoc, 0);
+    tools::Rectangle aRectReload = pObj->GetSnapRect();
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aRectOrig, aRectReload, 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

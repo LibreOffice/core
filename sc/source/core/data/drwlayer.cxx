@@ -776,15 +776,6 @@ void lcl_SetLogicRectFromAnchor(SdrObject* pObj, const ScDrawObjData& rAnchor, c
     if (!pObj || !pDoc || !rAnchor.maEnd.IsValid() || !rAnchor.maStart.IsValid())
         return;
 
-    SCROW nHiddenRows = 0;
-    SCCOL nHiddenCols = 0;
-    // tdf#154005: Handle hidden row/col: remove hidden row/cols size from the ScDrawObjData shape size in case of forms
-    if (pObj->GetObjIdentifier() == SdrObjKind::UNO && pObj->GetObjInventor() == SdrInventor::FmForm)
-    {
-        nHiddenRows = pDoc->CountHiddenRows(rAnchor.maStart.Row(), rAnchor.maEnd.Row(), rAnchor.maStart.Tab());
-        nHiddenCols = pDoc->CountHiddenCols(rAnchor.maStart.Col(), rAnchor.maEnd.Col(), rAnchor.maStart.Tab());
-    }
-
     // In case of a vertical mirrored custom shape, LibreOffice uses internally an additional 180deg
     // in aGeo.nRotationAngle and in turn has a different logic rectangle position. We remove flip,
     // set the logic rectangle, and apply flip again. You cannot simple use a 180deg-rotated
@@ -808,8 +799,9 @@ void lcl_SetLogicRectFromAnchor(SdrObject* pObj, const ScDrawObjData& rAnchor, c
     aStartPoint.AdjustY(rAnchor.maStartOffset.getY());
 
     const tools::Rectangle aEndCellRect(
-        pDoc->GetMMRect(rAnchor.maEnd.Col() - nHiddenCols, rAnchor.maEnd.Row() - nHiddenRows, rAnchor.maEnd.Col() - nHiddenCols,
-                        rAnchor.maEnd.Row() - nHiddenRows, rAnchor.maEnd.Tab(), false /*bHiddenAsZero*/));
+        pDoc->GetMMRect(rAnchor.maEnd.Col(), rAnchor.maEnd.Row(), rAnchor.maEnd.Col(),
+                        rAnchor.maEnd.Row(), rAnchor.maEnd.Tab(), false /*bHiddenAsZero*/));
+
     Point aEndPoint(aEndCellRect.Left(), aEndCellRect.Top());
     aEndPoint.AdjustX(rAnchor.maEndOffset.getX());
     aEndPoint.AdjustY(rAnchor.maEndOffset.getY());
@@ -1057,6 +1049,14 @@ void ScDrawLayer::InitializeCellAnchoredObj(SdrObject* pObj, ScDrawObjData& rDat
             GetCellAnchorFromPosition(aObjRect, rNoRotatedAnchor, *pDoc, rData.maStart.Tab(),
                                       false /*bHiddenAsZero*/);
         }
+        else if (pObj->IsResizeProtect())
+        {
+            // tdf#154005: This is a workaround for documents created with LO 6 and older.
+            rNoRotatedAnchor.mbResizeWithCell = false;
+            rData.mbResizeWithCell = false;
+            UpdateCellAnchorFromPositionEnd(*pObj, rNoRotatedAnchor, *pDoc, nTab1,
+                                            true /*bUseLogicRect*/);
+        }
         else
         {
             // In case there are hidden rows or cols, versions 7.0 and earlier have written width and
@@ -1067,7 +1067,7 @@ void ScDrawLayer::InitializeCellAnchoredObj(SdrObject* pObj, ScDrawObjData& rDat
             lcl_SetLogicRectFromAnchor(pObj, rNoRotatedAnchor, pDoc);
         }
     }
-    else // aAnchorType == SCA_CELL, other types will not occur here.
+    else // aAnchorType == SCA_CELL
     {
         // XML has no end cell address in this case. We generate it from position.
         UpdateCellAnchorFromPositionEnd(*pObj, rNoRotatedAnchor, *pDoc, nTab1,

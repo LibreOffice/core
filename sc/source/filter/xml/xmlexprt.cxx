@@ -120,6 +120,7 @@
 #include <svx/svdoashp.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdocapt.hxx>
+#include <svx/svdomeas.hxx>
 #include <vcl/svapp.hxx>
 
 #include <comphelper/processfactory.hxx>
@@ -3484,135 +3485,134 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
 
     for (const auto& rShape : rMyCell.aShapeList)
     {
-        if (rShape.xShape.is())
+        // Skip the shape if requirements are not met. The tests should not fail, but allow
+        // shorter conditions in main part below.
+        if (!rShape.xShape.is())
+            continue;
+        SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rShape.xShape);
+        if (!pObj)
+            continue;
+        ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pObj);
+        if (!pObjData)
+            continue;
+        ScAddress aSnapStartAddress = pObjData->maStart;
+        if (!aSnapStartAddress.IsValid())
+            continue;
+
+        // The current object geometry is based on bHiddenAsZero=true, but ODF file format
+        // needs it as if there were no hidden rows or columns. We termine a fictive snap
+        // rectangle from the anchor as if all column/rows are shown. Then we move and resize
+        // (in case of "resize with cell") the object to meet this snap rectangle. We need to
+        // manipulate the object itself, because the used methods in xmloff do not evaluate the
+        // ObjData. This manipulation is only done temporarily for export. Thus we stash the geometry
+        // and restore it when export is done and we use NbcFoo methods.
+        bool bNeedsRestore = false;
+        std::unique_ptr<SdrObjGeoData> pGeoData = pObj->GetGeoData();
+
+        // Determine top point of fictive snap rectangle ('Full' rectangle).
+        SCTAB aTab(aSnapStartAddress.Tab());
+        SCCOL aCol(aSnapStartAddress.Col());
+        SCROW aRow(aSnapStartAddress.Row());
+        tools::Rectangle aFullStartCellRect
+            = pDoc->GetMMRect(aCol, aRow, aCol, aRow, aTab, false /*bHiddenAsZero*/);
+        // The reference corner for the offset is top-left in case of LTR and top-right for RTL.
+        Point aFullTopPoint;
+        if (bNegativePage)
+            aFullTopPoint.setX(aFullStartCellRect.Right() - pObjData->maStartOffset.X());
+        else
+            aFullTopPoint.setX(aFullStartCellRect.Left() + pObjData->maStartOffset.X());
+        aFullTopPoint.setY(aFullStartCellRect.Top() + pObjData->maStartOffset.Y());
+
+        // Compare actual top point and full top point and move object accordingly.
+        tools::Rectangle aOrigSnapRect(pObj->GetSnapRect());
+        Point aActualTopPoint = bNegativePage ? aOrigSnapRect.TopRight() : aOrigSnapRect.TopLeft();
+        if (aFullTopPoint != aActualTopPoint)
         {
-            // The current object geometry is based on bHiddenAsZero=true, but ODF file format
-            // needs it as if there were no hidden rows or columns. We manipulate the geometry
-            // accordingly for writing xml markup and restore geometry later.
-            bool bNeedsRestore = false;
-            SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rShape.xShape);
-            // Remember original geometry
-            std::unique_ptr<SdrObjGeoData> pGeoData;
-            if (pObj)
-                pGeoData = pObj->GetGeoData();
+            bNeedsRestore = true;
+            Point aMoveBy = aFullTopPoint - aActualTopPoint;
+            pObj->NbcMove(Size(aMoveBy.X(), aMoveBy.Y()));
+        }
 
-            // Hiding row or column affects the shape based on its snap rect. So we need start and
-            // end cell address of snap rect. In case of a transformed shape, it is not in rMyCell.
-            ScAddress aSnapStartAddress = rMyCell.maCellAddress;
-            ScDrawObjData* pObjData = nullptr;
-            if (pObj)
-            {
-                pObjData = ScDrawLayer::GetObjData(pObj);
-                if (pObjData)
-                    aSnapStartAddress = pObjData->maStart;
-            }
+        ScAddress aSnapEndAddress = pObjData->maEnd;
+        // tdf#154005: We treat the combination of "To cell (resize with cell)" with 'size protected'
+        // as being "To cell".
+        if (pObjData->mbResizeWithCell && aSnapEndAddress.IsValid() && !pObj->IsResizeProtect())
+        {
+            // Object is anchored "To cell (resize with cell)". Compare size of actual snap rectangle
+            // and fictive full one. Resize object accordingly.
+            tools::Rectangle aActualSnapRect(pObj->GetSnapRect());
+            Point aSnapEndOffset(pObjData->maEndOffset);
+            aCol = aSnapEndAddress.Col();
+            aRow = aSnapEndAddress.Row();
+            tools::Rectangle aFullEndCellRect
+                = pDoc->GetMMRect(aCol, aRow, aCol, aRow, aTab, false /*bHiddenAsZero*/);
+            Point aFullBottomPoint;
+            if (bNegativePage)
+                aFullBottomPoint.setX(aFullEndCellRect.Right() - aSnapEndOffset.X());
+            else
+                aFullBottomPoint.setX(aFullEndCellRect.Left() + aSnapEndOffset.X());
+            aFullBottomPoint.setY(aFullEndCellRect.Top() + aSnapEndOffset.Y());
+            tools::Rectangle aFullSnapRect(aFullTopPoint, aFullBottomPoint);
+            aFullSnapRect.Normalize();
 
-            // In case rows or columns are hidden above or before the snap rect, move the shape to the
-            // position it would have, if these rows and columns are visible.
-            tools::Rectangle aRectFull = pDoc->GetMMRect(
-                aSnapStartAddress.Col(), aSnapStartAddress.Row(), aSnapStartAddress.Col(),
-                aSnapStartAddress.Row(), aSnapStartAddress.Tab(), false /*bHiddenAsZero*/);
-            tools::Rectangle aRectReduced = pDoc->GetMMRect(
-                aSnapStartAddress.Col(), aSnapStartAddress.Row(), aSnapStartAddress.Col(),
-                aSnapStartAddress.Row(), aSnapStartAddress.Tab(), true /*bHiddenAsZero*/);
-            const tools::Long nLeftDiff(aRectFull.Left() - aRectReduced.Left());
-            const tools::Long nTopDiff(aRectFull.Top() - aRectReduced.Top());
-            if (pObj && (abs(nLeftDiff) > 1 || abs(nTopDiff) > 1))
+            if (aFullSnapRect != aActualSnapRect)
             {
                 bNeedsRestore = true;
-                pObj->NbcMove(Size(nLeftDiff, nTopDiff));
+                Fraction aScaleWidth(aFullSnapRect.getOpenWidth(), aActualSnapRect.getOpenWidth());
+                if (!aScaleWidth.IsValid())
+                    aScaleWidth = Fraction(1, 1);
+                Fraction aScaleHeight(aFullSnapRect.getOpenHeight(),
+                                      aActualSnapRect.getOpenHeight());
+                if (!aScaleHeight.IsValid())
+                    aScaleHeight = Fraction(1, 1);
+                pObj->NbcResize(aFullTopPoint, aScaleWidth, aScaleHeight);
             }
+        }
 
-            // tdf#137033 In case the shape is anchored "To Cell (resize with cell)" hiding rows or
-            // columns inside the snap rect has not only changed size of the shape but rotate and shear
-            // angle too. We resize the shape to full size. That will recover the original angles too.
-            if (rShape.bResizeWithCell && pObjData) // implies pObj & aSnapStartAddress = pObjData->maStart
-            {
-                // Get original size from anchor
-                const Point aSnapStartOffset = pObjData->maStartOffset;
-                // In case of 'resize with cell' maEnd and maEndOffset should be valid.
-                const ScAddress aSnapEndAddress(pObjData->maEnd);
-                const Point aSnapEndOffset = pObjData->maEndOffset;
-                const tools::Rectangle aStartCellRect = pDoc->GetMMRect(
-                    aSnapStartAddress.Col(), aSnapStartAddress.Row(), aSnapStartAddress.Col(),
-                    aSnapStartAddress.Row(), aSnapStartAddress.Tab(), false /*bHiddenAsZero*/);
-                const tools::Rectangle aEndCellRect = pDoc->GetMMRect(
-                    aSnapEndAddress.Col(), aSnapEndAddress.Row(), aSnapEndAddress.Col(),
-                    aSnapEndAddress.Row(), aSnapEndAddress.Tab(), false /*bHiddenAsZero*/);
-                if (bNegativePage)
-                {
-                    aRectFull.SetLeft(aEndCellRect.Right() - aSnapEndOffset.X());
-                    aRectFull.SetRight(aStartCellRect.Right() - aSnapStartOffset.X());
-                }
-                else
-                {
-                    aRectFull.SetLeft(aStartCellRect.Left() + aSnapStartOffset.X());
-                    aRectFull.SetRight(aEndCellRect.Left() + aSnapEndOffset.X());
-                }
-                aRectFull.SetTop(aStartCellRect.Top() + aSnapStartOffset.Y());
-                aRectFull.SetBottom(aEndCellRect.Top() + aSnapEndOffset.Y());
-                aRectReduced = pObjData->getShapeRect();
-                if(abs(aRectFull.getOpenWidth() - aRectReduced.getOpenWidth()) > 1
-                   || abs(aRectFull.getOpenHeight() - aRectReduced.getOpenHeight()) > 1)
-                {
-                    bNeedsRestore = true;
-                    Fraction aScaleWidth(aRectFull.getOpenWidth(), aRectReduced.getOpenWidth());
-                    if (!aScaleWidth.IsValid())
-                        aScaleWidth = Fraction(1.0);
-                    Fraction aScaleHeight(aRectFull.getOpenHeight(), aRectReduced.getOpenHeight());
-                    if (!aScaleHeight.IsValid())
-                        aScaleHeight = Fraction(1.0);
-                    pObj->NbcResize(pObj->GetRelativePos(), aScaleWidth, aScaleHeight);
-                }
-            }
+        // The existance of an end address is equivalent to anchor mode "To Cell (resize with cell)".
+        // XML needs end address in regard of untransformed shape. Those are contained in rShape but
+        // could be received from NonRotatedObjData as well.
+        // tdf#154005: We treat the combination of "To Cell (resize with cell)" anchor with 'size
+        // protected' property as being "To cell" anchor.
+        if (pObjData->mbResizeWithCell && !pObj->IsResizeProtect())
+        {
+            OUString sEndAddress;
+            ScRangeStringConverter::GetStringFromAddress(sEndAddress, rShape.aEndAddress, pDoc,
+                                                         FormulaGrammar::CONV_OOO);
+            AddAttribute(XML_NAMESPACE_TABLE, XML_END_CELL_ADDRESS, sEndAddress);
+            OUStringBuffer sBuffer;
+            GetMM100UnitConverter().convertMeasureToXML(sBuffer, rShape.nEndX);
+            AddAttribute(XML_NAMESPACE_TABLE, XML_END_X, sBuffer.makeStringAndClear());
+            GetMM100UnitConverter().convertMeasureToXML(sBuffer, rShape.nEndY);
+            AddAttribute(XML_NAMESPACE_TABLE, XML_END_Y, sBuffer.makeStringAndClear());
+        }
 
-            // We only write the end address if we want the shape to resize with the cell
-            if ( rShape.bResizeWithCell &&
-                rShape.xShape->getShapeType() != "com.sun.star.drawing.CaptionShape" )
+        // Correct above calculated reference point for these cases:
+        // a) For a RTL-sheet translate from matrix is not suitable, because the shape
+        // from xml (which is always LTR) is not mirrored to negative page but shifted.
+        // b) In case of horizontal mirrored, 'resize with cell' anchored custom shape, translate from
+        // matrix has wrong values. FixMe: Why is translate wrong?
+        if (bNegativePage
+            || (pObj->GetObjIdentifier() == SdrObjKind::CustomShape
+                && static_cast<SdrObjCustomShape*>(pObj)->IsMirroredX()
+                && pObjData->mbResizeWithCell))
+        {
+            // In these cases we set reference point so that the offset calculation in XML export
+            // (=  matrix translate - reference point) results in maStartOffset.
+            ScDrawObjData* pNRObjData = ScDrawLayer::GetNonRotatedObjData(pObj);
+            if (pNRObjData)
             {
-                OUString sEndAddress;
-                ScRangeStringConverter::GetStringFromAddress(sEndAddress, rShape.aEndAddress, pDoc, FormulaGrammar::CONV_OOO);
-                AddAttribute(XML_NAMESPACE_TABLE, XML_END_CELL_ADDRESS, sEndAddress);
-                OUStringBuffer sBuffer;
-                GetMM100UnitConverter().convertMeasureToXML(
-                        sBuffer, rShape.nEndX);
-                AddAttribute(XML_NAMESPACE_TABLE, XML_END_X, sBuffer.makeStringAndClear());
-                GetMM100UnitConverter().convertMeasureToXML(
-                        sBuffer, rShape.nEndY);
-                AddAttribute(XML_NAMESPACE_TABLE, XML_END_Y, sBuffer.makeStringAndClear());
-            }
-
-            // Correct above calculated reference point for some cases:
-            // a) For a RTL-sheet translate from matrix is not suitable, because the shape
-            // from xml (which is always LTR) is not mirrored to negative page but shifted.
-            // b) In case of horizontal mirrored, 'resize with cell' anchored custom shape, translate
-            // has wrong values. FixMe: Why is translate wrong?
-            // c) Measure lines do not use transformation matrix but use start and end point directly.
-            ScDrawObjData* pNRObjData = nullptr;
-            if (pObj && bNegativePage
-                && rShape.xShape->getShapeType() == "com.sun.star.drawing.MeasureShape")
-            {
-                // inverse of shift when import
-                tools::Rectangle aSnapRect = pObj->GetSnapRect();
-                aPoint.X = aSnapRect.Left() + aSnapRect.Right() - aPoint.X;
-            }
-            else if (pObj && (pNRObjData = ScDrawLayer::GetNonRotatedObjData(pObj))
-                     && ((rShape.bResizeWithCell && pObj->GetObjIdentifier() == SdrObjKind::CustomShape
-                          && static_cast<SdrObjCustomShape*>(pObj)->IsMirroredX())
-                         || bNegativePage))
-            {
-                //In these cases we set reference Point = matrix translate - startOffset.
                 awt::Point aMatrixTranslate = rShape.xShape->getPosition();
                 aPoint.X = aMatrixTranslate.X - pNRObjData->maStartOffset.X();
                 aPoint.Y = aMatrixTranslate.Y - pNRObjData->maStartOffset.Y();
             }
-
-            ExportShape(rShape.xShape, &aPoint);
-
-            // Restore object geometry
-            if (bNeedsRestore && pObj && pGeoData)
-                pObj->SetGeoData(*pGeoData);
         }
+
+        ExportShape(rShape.xShape, &aPoint);
+
+        // Restore object geometry
+        if (bNeedsRestore && pGeoData)
+            pObj->SetGeoData(*pGeoData);
     }
 }
 
