@@ -904,6 +904,26 @@ SwLayoutFrame *SwFrame::GetLeaf( MakePageType eMakePage, bool bFwd )
     return bFwd ? GetNextLeaf( eMakePage ) : GetPrevLeaf();
 }
 
+namespace sw {
+
+bool HasPageBreakBefore(SwPageFrame const& rPage)
+{
+    SwFrame const* pFlow(rPage.FindFirstBodyContent());
+    if (!pFlow)
+    {
+        return false;
+    }
+    while (pFlow->GetUpper()->IsInTab())
+    {
+        pFlow = pFlow->GetUpper()->FindTabFrame();
+    }
+    return pFlow->GetPageDescItem().GetPageDesc()
+        || pFlow->GetBreakItem().GetBreak() == SvxBreak::PageBefore
+        || pFlow->GetBreakItem().GetBreak() == SvxBreak::PageBoth;
+};
+
+} // namespace sw
+
 bool SwFrame::WrongPageDesc( SwPageFrame* pNew )
 {
     // Now it's getting a bit complicated:

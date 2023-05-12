@@ -1756,7 +1756,8 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
             // case pLayLeaf points to our section's cell's follow, which is
             // fine to be on the same page. New page creation is handled when
             // creating / moving the cell frame.
-            if( WrongPageDesc( pNxtPg ) && !bLayLeafTableAllowed )
+            // It doesn't make sense to move to a page that starts with break?
+            if ((WrongPageDesc(pNxtPg) || HasPageBreakBefore(*pNxtPg)) && !bLayLeafTableAllowed)
             {
                 if( bWrongPage )
                     break; // there's a column between me and my right page

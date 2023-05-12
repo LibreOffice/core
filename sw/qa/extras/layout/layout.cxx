@@ -5117,6 +5117,40 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf54465_ColumnsWithFootnoteDoNotOccupy
     assertXPath(pXmlDoc, "/root/page", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf155324)
+{
+    createSwDoc("tox-update-wrong-pages.odt");
+
+    dispatchCommand(mxComponent, ".uno:UpdateAllIndexes", {});
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // the problem was that the first entry was on page 7, 2nd on page 9 etc.
+    assertXPath(pXmlDoc,
+                "/root/page[1]/body/section[2]/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "portion", "Foo");
+    assertXPath(pXmlDoc,
+                "/root/page[1]/body/section[2]/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "portion", "5");
+    assertXPath(pXmlDoc,
+                "/root/page[1]/body/section[2]/txt[2]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "portion", "bar");
+    assertXPath(pXmlDoc,
+                "/root/page[1]/body/section[2]/txt[2]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "portion", "7");
+    assertXPath(pXmlDoc,
+                "/root/page[1]/body/section[2]/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "portion", "Three");
+    assertXPath(pXmlDoc,
+                "/root/page[1]/body/section[2]/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "portion", "7");
+
+    // check first content page has the footnotes
+    assertXPath(pXmlDoc, "/root/page[5]/body/txt[1]/SwParaPortion/SwLineLayout", "portion", "Foo");
+    assertXPath(pXmlDoc, "/root/page[4]/ftncont", 0);
+    assertXPath(pXmlDoc, "/root/page[5]/ftncont/ftn", 5);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
