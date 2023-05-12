@@ -612,7 +612,7 @@ void SectionPropertyMap::ApplyBorderToPageStyles( DomainMapper_Impl& rDM_Impl,
     {
         if ( m_oBorderLines[nBorder] )
         {
-            const OUString sBorderName = getPropertyName( aBorderIds[nBorder] );
+            const OUString & sBorderName = getPropertyName( aBorderIds[nBorder] );
             if ( xFirst.is() )
                 xFirst->setPropertyValue( sBorderName, uno::Any( *m_oBorderLines[nBorder] ) );
             if ( xSecond.is() )
@@ -665,8 +665,8 @@ void SectionPropertyMap::SetBorderDistance( const uno::Reference< beans::XProper
 {
     if (!xStyle.is())
         return;
-    const OUString sMarginName = getPropertyName( eMarginId );
-    const OUString sBorderDistanceName = getPropertyName( eDistId );
+    const OUString & sMarginName = getPropertyName( eMarginId );
+    const OUString & sBorderDistanceName = getPropertyName( eDistId );
     uno::Any aMargin = xStyle->getPropertyValue( sMarginName );
     sal_Int32 nMargin = 0;
     aMargin >>= nMargin;
@@ -760,7 +760,7 @@ uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties( 
     assert( m_nColumnCount > 1 && "ApplyColumnProperties called without any columns" );
     try
     {
-        const OUString sTextColumns = getPropertyName( PROP_TEXT_COLUMNS );
+        const OUString & sTextColumns = getPropertyName( PROP_TEXT_COLUMNS );
         if ( xColumnContainer.is() )
             xColumnContainer->getPropertyValue( sTextColumns ) >>= xColumns;
         uno::Reference< beans::XPropertySet > xColumnPropSet( xColumns, uno::UNO_QUERY_THROW );
@@ -863,7 +863,7 @@ void SectionPropertyMap::CopyHeaderFooterTextProperty( const uno::Reference< bea
                                                        PropertyIds ePropId )
 {
     try {
-        OUString sName = getPropertyName( ePropId );
+        const OUString & sName = getPropertyName( ePropId );
 
         SAL_INFO( "writerfilter", "Copying " << sName );
         uno::Reference< text::XTextCopy > xTxt;
@@ -897,8 +897,8 @@ void SectionPropertyMap::CopyHeaderFooter( const DomainMapper_Impl& rDM_Impl,
     }
     bool bHasPrevHeader = false;
     bool bHeaderIsShared = true;
-    OUString sHeaderIsOn = getPropertyName( PROP_HEADER_IS_ON );
-    OUString sHeaderIsShared = getPropertyName( PROP_HEADER_IS_SHARED );
+    const OUString & sHeaderIsOn = getPropertyName( PROP_HEADER_IS_ON );
+    const OUString & sHeaderIsShared = getPropertyName( PROP_HEADER_IS_SHARED );
     if ( xPrevStyle.is() )
     {
         xPrevStyle->getPropertyValue( sHeaderIsOn ) >>= bHasPrevHeader;
@@ -925,8 +925,8 @@ void SectionPropertyMap::CopyHeaderFooter( const DomainMapper_Impl& rDM_Impl,
 
     bool bHasPrevFooter = false;
     bool bFooterIsShared = true;
-    OUString sFooterIsOn = getPropertyName( PROP_FOOTER_IS_ON );
-    OUString sFooterIsShared = getPropertyName( PROP_FOOTER_IS_SHARED );
+    const OUString & sFooterIsOn = getPropertyName( PROP_FOOTER_IS_ON );
+    const OUString & sFooterIsShared = getPropertyName( PROP_FOOTER_IS_SHARED );
     if ( xPrevStyle.is() )
     {
         xPrevStyle->getPropertyValue( sFooterIsOn ) >>= bHasPrevFooter;
@@ -1801,7 +1801,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     }
     if ( nParagraphWidth > 0 )
     {
-        const OUString sPropRelativeWidth = getPropertyName(PROP_RELATIVE_WIDTH);
+        const OUString & sPropRelativeWidth = getPropertyName(PROP_RELATIVE_WIDTH);
         for ( const auto& xShape : m_xRelativeWidthShapes )
         {
             const uno::Reference<beans::XPropertySet> xShapePropertySet( xShape, uno::UNO_QUERY );

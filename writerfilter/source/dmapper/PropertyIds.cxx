@@ -18,357 +18,352 @@
  */
 #include <rtl/ustring.hxx>
 #include "PropertyIds.hxx"
+#include <unordered_map>
 
 namespace writerfilter::dmapper{
 
-OUString getPropertyName( PropertyIds eId )
+const OUString & getPropertyName( PropertyIds eId )
 {
-    OUString sName;
-    switch(eId) {
-        case PROP_CHAR_WEIGHT:     sName = "CharWeight"; break;
-        case PROP_CHAR_POSTURE:    sName = "CharPosture"; break;
-        case PROP_CHAR_STRIKEOUT:  sName = "CharStrikeout"; break;
-        case PROP_CHAR_CONTOURED:  sName = "CharContoured"; break;
-        case PROP_CHAR_SHADOWED:   sName = "CharShadowed"; break;
-        case PROP_CHAR_CASE_MAP:   sName = "CharCaseMap"; break;
-        case PROP_CHAR_COLOR:      sName = "CharColor"; break;
-        case PROP_CHAR_COMPLEX_COLOR: sName = "CharComplexColor"; break;
-        case PROP_CHAR_RELIEF:     sName = "CharRelief"; break;
-        case PROP_CHAR_UNDERLINE:  sName = "CharUnderline"; break;
-        case PROP_CHAR_UNDERLINE_COLOR:  sName = "CharUnderlineColor"; break;
-        case PROP_CHAR_UNDERLINE_HAS_COLOR:  sName = "CharUnderlineHasColor"; break;
-        case PROP_CHAR_WORD_MODE:  sName = "CharWordMode"; break;
-        case PROP_CHAR_ESCAPEMENT       :     sName = "CharEscapement"; break;
-        case PROP_CHAR_ESCAPEMENT_HEIGHT:     sName = "CharEscapementHeight"; break;
-        case PROP_CHAR_HEIGHT:     sName = "CharHeight"; break;
-        case PROP_CHAR_HEIGHT_COMPLEX:     sName = "CharHeightComplex"; break;
-        case PROP_CHAR_LOCALE:     sName = "CharLocale"; break;
-        case PROP_CHAR_LOCALE_ASIAN:     sName = "CharLocaleAsian"; break;
-        case PROP_CHAR_LOCALE_COMPLEX:     sName = "CharLocaleComplex"; break;
-        case PROP_CHAR_WEIGHT_COMPLEX :  sName = "CharWeightComplex"; break;
-        case PROP_CHAR_POSTURE_COMPLEX:  sName = "CharPostureComplex"; break;
-        case PROP_CHAR_CHAR_KERNING:     sName = "CharKerning"; break;
-        case PROP_CHAR_AUTO_KERNING:     sName = "CharAutoKerning"; break;
-        case PROP_CHAR_SCALE_WIDTH:      sName = "CharScaleWidth"; break;
-        case PROP_CHAR_STYLE_NAME:      sName = "CharStyleName"; break;
-        case PROP_CHAR_FONT_NAME:                sName = "CharFontName"; break;
-        case PROP_CHAR_FONT_CHAR_SET:            sName = "CharFontCharSet"; break;
-        case PROP_CHAR_FONT_NAME_ASIAN     :     sName = "CharFontNameAsian"; break;
-        case PROP_CHAR_HEIGHT_ASIAN        :     sName = "CharHeightAsian"; break;
-        case PROP_CHAR_FONT_NAME_COMPLEX   :     sName = "CharFontNameComplex"; break;
-        case PROP_CHAR_HIDDEN           :     sName = "CharHidden"; break;
-        case PROP_CHAR_WEIGHT_ASIAN     :     sName = "CharWeightAsian"; break;
-        case PROP_CHAR_POSTURE_ASIAN    :     sName = "CharPostureAsian"; break;
-        case PROP_CHAR_BACK_COLOR:     sName = "CharBackColor"; break;
-        case PROP_CHAR_EMPHASIS:     sName = "CharEmphasis"; break;
-        case PROP_CHAR_COMBINE_IS_ON:     sName = "CharCombineIsOn"; break;
-        case PROP_CHAR_COMBINE_PREFIX:     sName = "CharCombinePrefix"; break;
-        case PROP_CHAR_COMBINE_SUFFIX:     sName = "CharCombineSuffix"; break;
-        case PROP_CHAR_ROTATION:     sName = "CharRotation"; break;
-        case PROP_CHAR_ROTATION_IS_FIT_TO_LINE:     sName = "CharRotationIsFitToLine"; break;
-        case PROP_CHAR_FLASH:     sName = "CharFlash"; break;
-        case PROP_CHAR_LEFT_BORDER: sName = "CharLeftBorder";break;
-        case PROP_CHAR_RIGHT_BORDER: sName = "CharRightBorder";break;
-        case PROP_CHAR_TOP_BORDER: sName = "CharTopBorder";break;
-        case PROP_CHAR_BOTTOM_BORDER: sName = "CharBottomBorder";break;
-        case PROP_CHAR_LEFT_BORDER_DISTANCE: sName = "CharLeftBorderDistance"; break;
-        case PROP_CHAR_RIGHT_BORDER_DISTANCE: sName = "CharRightBorderDistance"; break;
-        case PROP_CHAR_TOP_BORDER_DISTANCE: sName = "CharTopBorderDistance";break;
-        case PROP_CHAR_BOTTOM_BORDER_DISTANCE: sName = "CharBottomBorderDistance"; break;
-        case PROP_CHAR_SHADOW_FORMAT: sName = "CharShadowFormat"; break;
-        case PROP_CHAR_HIGHLIGHT: sName = "CharHighlight"; break;
-        case PROP_PARA_STYLE_NAME:      sName = "ParaStyleName"; break;
-        case PROP_PARA_ADJUST:     sName = "ParaAdjust"; break;
-        case PROP_PARA_VERT_ALIGNMENT: sName = "ParaVertAlignment"; break;
-        case PROP_PARA_LAST_LINE_ADJUST:     sName = "ParaLastLineAdjust"; break;
-        case PROP_PARA_RIGHT_MARGIN     :    sName = "ParaRightMargin"; break;
-        case PROP_PARA_LEFT_MARGIN      :    sName = "ParaLeftMargin"; break;
-        case PROP_PARA_FIRST_LINE_INDENT:    sName = "ParaFirstLineIndent"; break;
-        case PROP_PARA_KEEP_TOGETHER:       sName = "ParaKeepTogether"; break;
-        case PROP_PARA_TOP_MARGIN:       sName = "ParaTopMargin"; break;
-        case PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING:       sName = "ParaTopMarginBeforeAutoSpacing"; break;
-        case PROP_PARA_BOTTOM_MARGIN_AFTER_AUTO_SPACING:       sName = "ParaBottomMarginAfterAutoSpacing"; break;
-        case PROP_PARA_CONTEXT_MARGIN:       sName = "ParaContextMargin"; break;
-        case PROP_PARA_BOTTOM_MARGIN:       sName = "ParaBottomMargin"; break;
-        case PROP_PARA_IS_HYPHENATION:     sName = "ParaIsHyphenation"; break;
-        case PROP_PARA_HYPHENATION_NO_CAPS: sName = "ParaHyphenationNoCaps"; break;
-        case PROP_PARA_HYPHENATION_ZONE: sName = "ParaHyphenationZone"; break;
-        case PROP_PARA_LINE_NUMBER_COUNT:     sName = "ParaLineNumberCount"; break;
-        case PROP_PARA_IS_HANGING_PUNCTUATION: sName = "ParaIsHangingPunctuation"; break;
-        case PROP_PARA_LINE_SPACING:     sName = "ParaLineSpacing"; break;
-        case PROP_PARA_TAB_STOPS:       sName = "ParaTabStops"; break;
-        case PROP_PARA_WIDOWS:          sName = "ParaWidows"; break;
-        case PROP_PARA_ORPHANS:         sName = "ParaOrphans"; break;
-        case PROP_PARA_LINE_NUMBER_START_VALUE:    sName = "ParaLineNumberStartValue"; break;
-        case PROP_NUMBERING_LEVEL:  sName = "NumberingLevel"; break;
-        case PROP_NUMBERING_RULES:  sName = "NumberingRules"; break;
-        case PROP_NUMBERING_TYPE:   sName = "NumberingType"; break;
-        case PROP_START_WITH:       sName = "StartWith"; break;
-        case PROP_ADJUST:           sName = "Adjust"; break;
-        case PROP_PARENT_NUMBERING: sName = "ParentNumbering"; break;
-        case PROP_RIGHT_MARGIN     :    sName = "RightMargin"; break;
-        case PROP_LEFT_MARGIN      :    sName = "LeftMargin"; break;
-        case PROP_TOP_MARGIN          :    sName = "TopMargin"; break;
-        case PROP_BOTTOM_MARGIN       :    sName = "BottomMargin"; break;
-        case PROP_FIRST_LINE_OFFSET:    sName = "FirstLineOffset"; break;
-        case PROP_LEFT_BORDER           :    sName = "LeftBorder";break;
-        case PROP_RIGHT_BORDER          :    sName = "RightBorder";break;
-        case PROP_TOP_BORDER            :    sName = "TopBorder";break;
-        case PROP_BOTTOM_BORDER         :    sName = "BottomBorder";break;
-        case PROP_TABLE_BORDER         :    sName = "TableBorder";break;
-        case PROP_TABLE_ROW_DELETE      :    sName = "TableRowDelete"; break;
-        case PROP_TABLE_ROW_INSERT      :    sName = "TableRowInsert"; break;
-        case PROP_TABLE_CELL_DELETE     :    sName = "TableCellDelete"; break;
-        case PROP_TABLE_CELL_INSERT     :    sName = "TableCellInsert"; break;
-        case PROP_LEFT_BORDER_DISTANCE  :    sName = "LeftBorderDistance"; break;
-        case PROP_RIGHT_BORDER_DISTANCE :    sName = "RightBorderDistance"; break;
-        case PROP_TOP_BORDER_DISTANCE   :    sName = "TopBorderDistance";break;
-        case PROP_BOTTOM_BORDER_DISTANCE:    sName = "BottomBorderDistance"; break;
-        case PROP_CURRENT_PRESENTATION  :    sName = "CurrentPresentation"; break;
-        case PROP_IS_FIXED              :    sName = "IsFixed"; break;
-        case PROP_SUB_TYPE              :    sName = "SubType"; break;
-        case PROP_FILE_FORMAT           :    sName = "FileFormat"; break;
-        case PROP_HYPER_LINK_U_R_L      :    sName = "HyperLinkURL"; break;
-        case PROP_HYPERLINK             :    sName = "Hyperlink"; break;
-        case PROP_NUMBER_FORMAT         :    sName = "NumberFormat"; break;
-        case PROP_NAME                  :    sName = "Name"; break;
-        case PROP_IS_INPUT              :    sName = "IsInput"; break;
-        case PROP_HINT                  :    sName = "Hint"; break;
-        case PROP_FULL_NAME             :    sName = "FullName"; break;
-        case PROP_DESCRIPTION           :    sName = "Description"; break;
-        case PROP_MACRO_NAME            :    sName = "MacroName"; break;
-        case PROP_TITLE                 :    sName = "Title"; break;
-        case PROP_CONTENT               :    sName = "Content"; break;
-        case PROP_INPUT_STREAM          :    sName = "InputStream"; break;
-        case PROP_GRAPHIC               :    sName = "Graphic"; break;
-        case PROP_ANCHOR_TYPE           :    sName = "AnchorType"; break;
-        case PROP_SIZE                  :    sName = "Size"; break;
-        case PROP_HORI_ORIENT           :    sName = "HoriOrient"; break;
-        case PROP_HORI_ORIENT_POSITION  :    sName = "HoriOrientPosition"; break;
-        case PROP_HORI_ORIENT_RELATION  :    sName = "HoriOrientRelation"; break;
-        case PROP_VERT_ORIENT           :    sName = "VertOrient"; break;
-        case PROP_VERT_ORIENT_POSITION  :    sName = "VertOrientPosition"; break;
-        case PROP_VERT_ORIENT_RELATION  :    sName = "VertOrientRelation"; break;
-        case PROP_SIZE100th_M_M         :    sName = "Size100thMM"; break;
-        case PROP_SIZE_PIXEL            :    sName = "SizePixel"; break;
-        case PROP_SURROUND              :    sName = "Surround"; break;
-        case PROP_SURROUND_CONTOUR      :    sName = "SurroundContour"; break;
-        case PROP_ADJUST_CONTRAST       :    sName = "AdjustContrast"; break;
-        case PROP_ADJUST_LUMINANCE      :    sName = "AdjustLuminance"; break;
-        case PROP_GRAPHIC_COLOR_MODE    :    sName = "GraphicColorMode"; break;
-        case PROP_CONTOUR_OUTSIDE      :    sName = "ContourOutside"; break;
-        case PROP_CONTOUR_POLY_POLYGON :    sName = "ContourPolyPolygon"; break;
-        case PROP_PAGE_TOGGLE          :    sName = "PageToggle"; break;
-        case PROP_BACK_COLOR           :    sName = "BackColor"; break;
-        case PROP_BACK_COLOR_TRANSPARENCY:  sName = "BackColorTransparency"; break;
-        case PROP_ALTERNATIVE_TEXT     :    sName = "AlternativeText"; break;
-        case PROP_HEADER_TEXT_LEFT     :    sName = "HeaderTextLeft"; break;
-        case PROP_HEADER_TEXT          :    sName = "HeaderText"; break;
-        case PROP_HEADER_IS_SHARED     :    sName = "HeaderIsShared"; break;
-        case PROP_HEADER_IS_ON         :    sName = "HeaderIsOn"; break;
-        case PROP_FOOTER_TEXT_LEFT     :    sName = "FooterTextLeft"; break;
-        case PROP_FOOTER_TEXT          :    sName = "FooterText"; break;
-        case PROP_FOOTER_IS_SHARED     :    sName = "FooterIsShared"; break;
-        case PROP_FOOTER_IS_ON         :    sName = "FooterIsOn"; break;
-        case PROP_FOOTNOTE_COUNTING    :    sName = "FootnoteCounting"; break;
-        case PROP_FOOTNOTE_LINE_ADJUST :    sName = "FootnoteLineAdjust"; break;
-        case PROP_WIDTH                :    sName = "Width"; break;
-        case PROP_HEIGHT               :    sName = "Height"; break;
-        case PROP_TEXT_COLUMNS         :    sName = "TextColumns"; break;
-        case PROP_AUTOMATIC_DISTANCE   :    sName = "AutomaticDistance"; break;
-        case PROP_IS_LANDSCAPE         :    sName = "IsLandscape"; break;
-        case PROP_FIRST_PAGE       :    sName = "First Page"; break;
-        case PROP_PAGE_DESC_NAME   :    sName = "PageDescName"; break;
-        case PROP_PAGE_NUMBER_OFFSET:    sName = "PageNumberOffset"; break;
-        case PROP_BREAK_TYPE       :    sName = "BreakType"; break;
-        case PROP_FOOTER_IS_DYNAMIC_HEIGHT:  sName = "FooterIsDynamicHeight"; break;
-        case PROP_FOOTER_DYNAMIC_SPACING:    sName = "FooterDynamicSpacing"; break;
-        case PROP_FOOTER_HEIGHT         :    sName = "FooterHeight"; break;
-        case PROP_FOOTER_BODY_DISTANCE  :    sName = "FooterBodyDistance"; break;
-        case PROP_HEADER_IS_DYNAMIC_HEIGHT:  sName = "HeaderIsDynamicHeight"; break;
-        case PROP_HEADER_DYNAMIC_SPACING:    sName = "HeaderDynamicSpacing"; break;
-        case PROP_HEADER_HEIGHT         :    sName = "HeaderHeight"; break;
-        case PROP_HEADER_BODY_DISTANCE  :    sName = "HeaderBodyDistance"; break;
-        case PROP_WRITING_MODE          :    sName = "WritingMode"; break;
-        case PROP_GRID_MODE             :    sName = "GridMode"; break;
-        case PROP_GRID_DISPLAY          :    sName = "GridDisplay"; break;
-        case PROP_GRID_PRINT            :    sName = "GridPrint"; break;
-        case PROP_GRID_LINES            :    sName = "GridLines"; break;
-        case PROP_GRID_BASE_HEIGHT      :    sName = "GridBaseHeight"; break;
-        case PROP_GRID_BASE_WIDTH       :    sName = "GridBaseWidth"; break;
-        case PROP_GRID_RUBY_HEIGHT      :    sName = "GridRubyHeight"; break;
-        case PROP_GRID_STANDARD_MODE     :    sName = "StandardPageMode"; break;
-        case PROP_IS_ON                  :    sName = "IsOn"; break;
-        case PROP_RESTART_AT_EACH_PAGE   :    sName = "RestartAtEachPage"; break;
-        case PROP_COUNT_EMPTY_LINES      :    sName = "CountEmptyLines"; break;
-        case PROP_COUNT_LINES_IN_FRAMES  :    sName = "CountLinesInFrames"; break;
-        case PROP_INTERVAL               :    sName = "Interval"; break;
-        case PROP_DISTANCE               :    sName = "Distance"; break;
-        case PROP_NUMBER_POSITION        :    sName = "NumberPosition"; break;
-        case PROP_LEVEL                  :    sName = "Level"; break;
-        case PROP_LEVEL_FOLLOW           :    sName = "LabelFollowedBy"; break;
-        case PROP_LEVEL_PARAGRAPH_STYLES :    sName = "LevelParagraphStyles"; break;
-        case PROP_LEVEL_FORMAT           :    sName = "LevelFormat"; break;
-        case PROP_LIST_FORMAT            :    sName = "ListFormat"; break;
-        case PROP_TOKEN_TYPE             :    sName = "TokenType"; break;
-        case PROP_TOKEN_HYPERLINK_START  :    sName = "TokenHyperlinkStart"; break;
-        case PROP_TOKEN_HYPERLINK_END    :    sName = "TokenHyperlinkEnd"; break;
-        case PROP_TOKEN_CHAPTER_INFO     :    sName = "TokenChapterInfo"; break;
-        case PROP_CHAPTER_FORMAT         :    sName = "ChapterFormat"; break;
-        case PROP_TOKEN_TEXT             :    sName = "TokenText"; break;
-        case PROP_TEXT                   :    sName = "Text"; break;
-        case PROP_CREATE_FROM_OUTLINE    :    sName = "CreateFromOutline"; break;
-        case PROP_CREATE_FROM_MARKS      :    sName = "CreateFromMarks"; break;
-        case PROP_STANDARD               :    sName = "Standard"; break;
-        case PROP_SPLIT                  :    sName = "Split"; break;
-        case PROP_IS_SPLIT_ALLOWED       :    sName = "IsSplitAllowed"; break;
-        case META_PROP_VERTICAL_BORDER   :    sName = "VerticalBorder"; break;
-        case META_PROP_HORIZONTAL_BORDER :    sName = "HorizontalBorder"; break;
-        case PROP_HEADER_ROW_COUNT      :    sName = "HeaderRowCount"; break;
-        case PROP_SIZE_TYPE             :    sName = "SizeType"; break;
-        case PROP_TABLE_COLUMN_SEPARATORS:   sName = "TableColumnSeparators"; break;
-        case META_PROP_TABLE_STYLE_NAME  :    sName = "TableStyleName"; break;
-        case PROP_TABLE_REDLINE_PARAMS  :    sName = "TableRedlineParams"; break;
-        case PROP_REDLINE_AUTHOR        :    sName = "RedlineAuthor"; break;
-        case PROP_REDLINE_DATE_TIME     :    sName = "RedlineDateTime"; break;
-        case PROP_REDLINE_TYPE          :    sName = "RedlineType"; break;
-        case PROP_REDLINE_REVERT_PROPERTIES: sName = "RedlineRevertProperties"; break;
-        case PROP_IS_PROTECTED          :    sName = "IsProtected"; break;
-        case PROP_SIZE_PROTECTED        :    sName = "SizeProtected"; break;
-        case PROP_POSITION_PROTECTED    :    sName = "PositionProtected"; break;
-        case PROP_OPAQUE                :    sName = "Opaque"; break;
-        case PROP_VERTICAL_MERGE   :    sName = "VerticalMerge"; break;
-        case PROP_BULLET_CHAR      :    sName = "BulletChar"; break;
-        case PROP_BULLET_FONT_NAME :    sName = "BulletFontName"; break;
-        case PROP_TABS_RELATIVE_TO_INDENT:    sName = "TabsRelativeToIndent"; break;
-        case PROP_CREATE_FROM_LEVEL_PARAGRAPH_STYLES:    sName = "CreateFromLevelParagraphStyles"; break;
-        case PROP_DROP_CAP_FORMAT  :    sName = "DropCapFormat"; break;
-        case PROP_REFERENCE_FIELD_PART :    sName = "ReferenceFieldPart"; break;
-        case PROP_SOURCE_NAME:    sName = "SourceName"; break;
-        case PROP_REFERENCE_FIELD_SOURCE :    sName = "ReferenceFieldSource"; break;
-        case PROP_WIDTH_TYPE :    sName = "WidthType"; break;
-        case PROP_TBL_LOOK : sName = "TblLook"; break;
-        case PROP_TEXT_RANGE:    sName = "TextRange"; break;
-        case PROP_TEXT_VERTICAL_ADJUST     :    sName = "TextVerticalAdjust"; break;
-        case PROP_SERVICE_CHAR_STYLE       :    sName = "com.sun.star.style.CharacterStyle"; break;
-        case PROP_SERVICE_PARA_STYLE       :    sName = "com.sun.star.style.ParagraphStyle"; break;
-        case PROP_CHARACTER_STYLES :    sName = "CharacterStyles"; break;
-        case PROP_PARAGRAPH_STYLES :    sName = "ParagraphStyles"; break;
-        case PROP_TABLE_BORDER_DISTANCES:    sName = "TableBorderDistances"; break;
-        case META_PROP_CELL_MAR_TOP    :    sName = "MetaPropCellMarTop"; break;
-        case META_PROP_CELL_MAR_BOTTOM :    sName = "MetaPropCellMarBottom"; break;
-        case META_PROP_CELL_MAR_LEFT   :    sName = "MetaPropCellMarLeft"; break;
-        case META_PROP_CELL_MAR_RIGHT  :    sName = "MetaPropCellMarRight"; break;
-        case PROP_START_AT :    sName = "StartAt"; break;
-        case PROP_CHAR_PROP_HEIGHT        :    sName = "CharPropHeight"; break;
-        case PROP_CHAR_PROP_HEIGHT_ASIAN  :    sName = "CharPropHeightAsian"; break;
-        case PROP_CHAR_PROP_HEIGHT_COMPLEX:    sName = "CharPropHeightComplex"; break;
-        case PROP_FORMAT   :    sName = "Format"; break;
-        case PROP_INSERT   :    sName = "Insert"; break;
-        case PROP_DELETE   :    sName = "Delete"; break;
-        case PROP_PARAGRAPH_FORMAT : sName = "ParagraphFormat"; break;
-        case PROP_STREAM_NAME:    sName = "StreamName"; break;
-        case PROP_BITMAP :    sName = "Bitmap"; break;
-        case PROP_IS_DATE :   sName = "IsDate"; break;
-        case PROP_TAB_STOP_DISTANCE :    sName = "TabStopDistance"; break;
-        case PROP_INDENT_AT :    sName = "IndentAt"; break;
-        case PROP_FIRST_LINE_INDENT :    sName = "FirstLineIndent"; break;
-        case PROP_NUMBERING_STYLE_NAME  :    sName = "NumberingStyleName"; break;
-        case PROP_OUTLINE_LEVEL  :    sName = "OutlineLevel"; break;
-        case PROP_LISTTAB_STOP_POSITION :    sName = "ListtabStopPosition"; break;
-        case PROP_POSITION_AND_SPACE_MODE :    sName = "PositionAndSpaceMode"; break;
-        case PROP_PARA_SPLIT:    sName = "ParaSplit"; break;
-        case PROP_HELP:    sName = "Help"; break;
-        case PROP_HEADING_STYLE_NAME:    sName = "HeadingStyleName"; break;
-        case PROP_FRM_DIRECTION:        sName = "FRMDirection"; break;
-        case PROP_EMBEDDED_OBJECT           :    sName = "EmbeddedObject"; break;
-        case PROP_IS_VISIBLE: sName = "IsVisible"; break;
-        case PROP_PAGE_STYLE_LAYOUT: sName = "PageStyleLayout"; break;
-        case PROP_Z_ORDER: sName = "ZOrder"; break;
-        case PROP_EMBED_FONTS: sName = "EmbedFonts"; break;
-        case PROP_EMBED_SYSTEM_FONTS: sName = "EmbedSystemFonts"; break;
-        case PROP_SHADOW_FORMAT: sName = "ShadowFormat"; break;
-        case PROP_RELATIVE_WIDTH: sName = "RelativeWidth"; break;
-        case PROP_IS_WIDTH_RELATIVE: sName = "IsWidthRelative"; break;
-        case PROP_GRAPHIC_BITMAP: sName = "GraphicBitmap"; break;
-        case PROP_GRAPHIC_SIZE: sName = "GraphicSize"; break;
-        case PROP_CHAR_SHADING_VALUE: sName = "CharShadingValue"; break;
-        case PROP_CHAR_SHADING_MARKER: sName = "CharShadingMarker"; break;
-        case PROP_LABEL_CATEGORY: sName = "LabelCategory"; break;
-        case PROP_MIRROR_INDENTS : sName = "MirrorIndents"; break;
-        case PROP_SURROUND_TEXT_WRAP_SMALL: sName = "SurroundTextWrapSmall"; break;
-        case PROP_PARA_SHADOW_FORMAT: sName = "ParaShadowFormat"; break;
-        case PROP_FOOTNOTE_LINE_RELATIVE_WIDTH: sName = "FootnoteLineRelativeWidth"; break;
-        case PROP_TBL_HEADER: sName = "TblHeader"; break;
-        case PROP_CHAR_THEME_NAME_ASCII         :   sName = "CharThemeNameAscii"; break;
-        case PROP_CHAR_THEME_NAME_CS            :   sName = "CharThemeNameCs"; break;
-        case PROP_CHAR_THEME_NAME_H_ANSI        :   sName = "CharThemeNameHAnsi"; break;
-        case PROP_CHAR_THEME_NAME_EAST_ASIA     :   sName = "CharThemeNameEastAsia"; break;
-        case PROP_CHAR_THEME_FONT_NAME_ASCII    :   sName = "CharThemeFontNameAscii"; break;
-        case PROP_CHAR_THEME_FONT_NAME_CS       :   sName = "CharThemeFontNameCs"; break;
-        case PROP_CHAR_THEME_FONT_NAME_EAST_ASIA:   sName = "CharThemeFontNameEastAsia"; break;
-        case PROP_CHAR_THEME_COLOR              :   sName = "CharThemeColor"; break;
-        case PROP_CHAR_THEME_ORIGINAL_COLOR     :   sName = "CharThemeOriginalColor"; break;
-        case PROP_CHAR_THEME_COLOR_SHADE        :   sName = "CharThemeColorShade"; break;
-        case PROP_CHAR_THEME_FILL               :   sName = "CharThemeFill"; break;
-        case PROP_HORIZONTAL_MERGE: sName = "HorizontalMerge"; break;
-        case PROP_HIDE_TAB_LEADER_AND_PAGE_NUMBERS      :    sName = "HideTabLeaderAndPageNumber" ; break ;
-        case PROP_TAB_IN_TOC : sName = "TabInTOC"; break ;
-        case PROP_TOC_BOOKMARK: sName = "TOCBookmark"; break;
-        case PROP_TOC_NEW_LINE: sName = "TOCNewLine"; break;
-        case PROP_TOC_PARAGRAPH_OUTLINE_LEVEL   :   sName = "TOCParagraphOutlineLevel"; break;
-        case PROP_CHAR_THEME_COLOR_TINT         :   sName = "CharThemeColorTint"; break;
-        case PROP_CHAR_GLOW_TEXT_EFFECT          :   sName = "CharGlowTextEffect"; break;
-        case PROP_CHAR_SHADOW_TEXT_EFFECT        :   sName = "CharShadowTextEffect"; break;
-        case PROP_CHAR_REFLECTION_TEXT_EFFECT    :   sName = "CharReflectionTextEffect"; break;
-        case PROP_CHAR_TEXTOUTLINE_TEXT_EFFECT   :   sName = "CharTextOutlineTextEffect"; break;
-        case PROP_CHAR_TEXTFILL_TEXT_EFFECT      :   sName = "CharTextFillTextEffect"; break;
-        case PROP_CHAR_SCENE3D_TEXT_EFFECT       :   sName = "CharScene3DTextEffect"; break;
-        case PROP_CHAR_PROPS3D_TEXT_EFFECT       :   sName = "CharProps3DTextEffect"; break;
-        case PROP_CHAR_LIGATURES_TEXT_EFFECT     :   sName = "CharLigaturesTextEffect"; break;
-        case PROP_CHAR_NUMFORM_TEXT_EFFECT       :   sName = "CharNumFormTextEffect"; break;
-        case PROP_CHAR_NUMSPACING_TEXT_EFFECT    :   sName = "CharNumSpacingTextEffect"; break;
-        case PROP_CHAR_STYLISTICSETS_TEXT_EFFECT :   sName = "CharStylisticSetsTextEffect"; break;
-        case PROP_CHAR_CNTXTALTS_TEXT_EFFECT     :   sName = "CharCntxtAltsTextEffect"; break;
-        case PROP_SDTPR                          :   sName = "SdtPr"; break;
-        case PROP_CELL_INTEROP_GRAB_BAG          :   sName = "CellInteropGrabBag"; break;
-        case PROP_TABLE_INTEROP_GRAB_BAG         :   sName = "TableInteropGrabBag"; break;
-        case PROP_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING : sName = "ApplyParagraphMarkFormatToNumbering"; break;
-        case PROP_SDT_END_BEFORE: sName = "SdtEndBefore"; break;
-        case PROP_PARA_SDT_END_BEFORE: sName = "ParaSdtEndBefore"; break;
-        case META_PROP_TABLE_LOOK: sName = "TableStyleLook"; break;
-        case PROP_PARA_CNF_STYLE: sName = "ParaCnfStyle"; break;
-        case PROP_CELL_CNF_STYLE: sName = "CellCnfStyle"; break;
-        case PROP_ROW_CNF_STYLE: sName = "RowCnfStyle"; break;
-        case PROP_CELL_HIDE_MARK: sName = "CellHideMark"; break;
-        case PROP_FOLLOW_TEXT_FLOW: sName = "IsFollowingTextFlow"; break;
-        case PROP_FILL_STYLE: sName = "FillStyle"; break;
-        case PROP_FILL_COLOR: sName = "FillColor"; break;
-        case PROP_SNAP_TO_GRID: sName = "SnapToGrid"; break;
-        case PROP_GRID_SNAP_TO_CHARS: sName = "GridSnapToChars"; break;
-        case PROP_RUBY_STYLE: sName = "RubyCharStyleName"; break;
-        case PROP_RUBY_TEXT: sName = "RubyText"; break;
-        case PROP_RUBY_ADJUST: sName = "RubyAdjust"; break;
-        case PROP_RUBY_POSITION: sName = "RubyPosition"; break;
-        case PROP_DATABASE_NAME: sName = "DataBaseName"; break;
-        case PROP_COMMAND_TYPE: sName = "DataCommandType"; break;
-        case PROP_DATATABLE_NAME: sName = "DataTableName"; break;
-        case PROP_DATACOLUMN_NAME: sName = "DataColumnName"; break;
-        case PROP_CHAR_TRANSPARENCE: sName = "CharTransparence"; break;
-        case PROP_CELL_FORMULA: sName = "CellFormula"; break;
-        case PROP_CELL_FORMULA_CONVERTED: sName = "CellFormulaConverted"; break;
-        case PROP_GUTTER_MARGIN:
-            sName = "GutterMargin";
-            break;
-        case PROP_RTL_GUTTER:
-            sName = "RtlGutter";
-            break;
-        case PROP_CURSOR_NOT_IGNORE_TABLES_IN_HF: sName = "CursorNotIgnoreTables"; break;
-        case PROP_PARA_CONNECT_BORDERS: sName= "ParaIsConnectBorder"; break;
-        case PROP_DECORATIVE: sName = "Decorative"; break;
-    }
-    assert(sName.getLength()>0);
-    return sName;
+    static const std::unordered_map<PropertyIds, OUString> map {
+        { PROP_CHAR_WEIGHT, u"CharWeight"},
+        { PROP_CHAR_POSTURE, u"CharPosture"},
+        { PROP_CHAR_STRIKEOUT, u"CharStrikeout"},
+        { PROP_CHAR_CONTOURED, u"CharContoured"},
+        { PROP_CHAR_SHADOWED, u"CharShadowed"},
+        { PROP_CHAR_CASE_MAP, u"CharCaseMap"},
+        { PROP_CHAR_COLOR, u"CharColor"},
+        { PROP_CHAR_COMPLEX_COLOR, u"CharComplexColor"},
+        { PROP_CHAR_RELIEF, u"CharRelief"},
+        { PROP_CHAR_UNDERLINE, u"CharUnderline"},
+        { PROP_CHAR_UNDERLINE_COLOR, u"CharUnderlineColor"},
+        { PROP_CHAR_UNDERLINE_HAS_COLOR, u"CharUnderlineHasColor"},
+        { PROP_CHAR_WORD_MODE, u"CharWordMode"},
+        { PROP_CHAR_ESCAPEMENT, u"CharEscapement"},
+        { PROP_CHAR_ESCAPEMENT_HEIGHT, u"CharEscapementHeight"},
+        { PROP_CHAR_HEIGHT, u"CharHeight"},
+        { PROP_CHAR_HEIGHT_COMPLEX, u"CharHeightComplex"},
+        { PROP_CHAR_LOCALE, u"CharLocale"},
+        { PROP_CHAR_LOCALE_ASIAN, u"CharLocaleAsian"},
+        { PROP_CHAR_LOCALE_COMPLEX, u"CharLocaleComplex"},
+        { PROP_CHAR_WEIGHT_COMPLEX, u"CharWeightComplex"},
+        { PROP_CHAR_POSTURE_COMPLEX, u"CharPostureComplex"},
+        { PROP_CHAR_CHAR_KERNING, u"CharKerning"},
+        { PROP_CHAR_AUTO_KERNING, u"CharAutoKerning"},
+        { PROP_CHAR_SCALE_WIDTH, u"CharScaleWidth"},
+        { PROP_CHAR_STYLE_NAME, u"CharStyleName"},
+        { PROP_CHAR_FONT_NAME, u"CharFontName"},
+        { PROP_CHAR_FONT_CHAR_SET, u"CharFontCharSet"},
+        { PROP_CHAR_FONT_NAME_ASIAN, u"CharFontNameAsian"},
+        { PROP_CHAR_HEIGHT_ASIAN, u"CharHeightAsian"},
+        { PROP_CHAR_FONT_NAME_COMPLEX, u"CharFontNameComplex"},
+        { PROP_CHAR_HIDDEN, u"CharHidden"},
+        { PROP_CHAR_WEIGHT_ASIAN, u"CharWeightAsian"},
+        { PROP_CHAR_POSTURE_ASIAN, u"CharPostureAsian"},
+        { PROP_CHAR_BACK_COLOR, u"CharBackColor"},
+        { PROP_CHAR_EMPHASIS, u"CharEmphasis"},
+        { PROP_CHAR_COMBINE_IS_ON, u"CharCombineIsOn"},
+        { PROP_CHAR_COMBINE_PREFIX, u"CharCombinePrefix"},
+        { PROP_CHAR_COMBINE_SUFFIX, u"CharCombineSuffix"},
+        { PROP_CHAR_ROTATION, u"CharRotation"},
+        { PROP_CHAR_ROTATION_IS_FIT_TO_LINE, u"CharRotationIsFitToLine"},
+        { PROP_CHAR_FLASH, u"CharFlash"},
+        { PROP_CHAR_LEFT_BORDER, u"CharLeftBorder"},
+        { PROP_CHAR_RIGHT_BORDER, u"CharRightBorder"},
+        { PROP_CHAR_TOP_BORDER, u"CharTopBorder"},
+        { PROP_CHAR_BOTTOM_BORDER, u"CharBottomBorder"},
+        { PROP_CHAR_LEFT_BORDER_DISTANCE, u"CharLeftBorderDistance"},
+        { PROP_CHAR_RIGHT_BORDER_DISTANCE, u"CharRightBorderDistance"},
+        { PROP_CHAR_TOP_BORDER_DISTANCE, u"CharTopBorderDistance"},
+        { PROP_CHAR_BOTTOM_BORDER_DISTANCE, u"CharBottomBorderDistance"},
+        { PROP_CHAR_SHADOW_FORMAT, u"CharShadowFormat"},
+        { PROP_CHAR_HIGHLIGHT, u"CharHighlight"},
+        { PROP_PARA_STYLE_NAME, u"ParaStyleName"},
+        { PROP_PARA_ADJUST, u"ParaAdjust"},
+        { PROP_PARA_VERT_ALIGNMENT, u"ParaVertAlignment"},
+        { PROP_PARA_LAST_LINE_ADJUST, u"ParaLastLineAdjust"},
+        { PROP_PARA_RIGHT_MARGIN, u"ParaRightMargin"},
+        { PROP_PARA_LEFT_MARGIN, u"ParaLeftMargin"},
+        { PROP_PARA_FIRST_LINE_INDENT, u"ParaFirstLineIndent"},
+        { PROP_PARA_KEEP_TOGETHER, u"ParaKeepTogether"},
+        { PROP_PARA_TOP_MARGIN, u"ParaTopMargin"},
+        { PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING, u"ParaTopMarginBeforeAutoSpacing"},
+        { PROP_PARA_BOTTOM_MARGIN_AFTER_AUTO_SPACING, u"ParaBottomMarginAfterAutoSpacing"},
+        { PROP_PARA_CONTEXT_MARGIN, u"ParaContextMargin"},
+        { PROP_PARA_BOTTOM_MARGIN, u"ParaBottomMargin"},
+        { PROP_PARA_IS_HYPHENATION, u"ParaIsHyphenation"},
+        { PROP_PARA_HYPHENATION_NO_CAPS, u"ParaHyphenationNoCaps"},
+        { PROP_PARA_HYPHENATION_ZONE, u"ParaHyphenationZone"},
+        { PROP_PARA_LINE_NUMBER_COUNT, u"ParaLineNumberCount"},
+        { PROP_PARA_IS_HANGING_PUNCTUATION, u"ParaIsHangingPunctuation"},
+        { PROP_PARA_LINE_SPACING, u"ParaLineSpacing"},
+        { PROP_PARA_TAB_STOPS, u"ParaTabStops"},
+        { PROP_PARA_WIDOWS, u"ParaWidows"},
+        { PROP_PARA_ORPHANS, u"ParaOrphans"},
+        { PROP_PARA_LINE_NUMBER_START_VALUE, u"ParaLineNumberStartValue"},
+        { PROP_NUMBERING_LEVEL, u"NumberingLevel"},
+        { PROP_NUMBERING_RULES, u"NumberingRules"},
+        { PROP_NUMBERING_TYPE, u"NumberingType"},
+        { PROP_START_WITH, u"StartWith"},
+        { PROP_ADJUST, u"Adjust"},
+        { PROP_PARENT_NUMBERING, u"ParentNumbering"},
+        { PROP_RIGHT_MARGIN, u"RightMargin"},
+        { PROP_LEFT_MARGIN, u"LeftMargin"},
+        { PROP_TOP_MARGIN, u"TopMargin"},
+        { PROP_BOTTOM_MARGIN, u"BottomMargin"},
+        { PROP_FIRST_LINE_OFFSET, u"FirstLineOffset"},
+        { PROP_LEFT_BORDER, u"LeftBorder"},
+        { PROP_RIGHT_BORDER, u"RightBorder"},
+        { PROP_TOP_BORDER, u"TopBorder"},
+        { PROP_BOTTOM_BORDER, u"BottomBorder"},
+        { PROP_TABLE_BORDER, u"TableBorder"},
+        { PROP_TABLE_ROW_DELETE, u"TableRowDelete"},
+        { PROP_TABLE_ROW_INSERT, u"TableRowInsert"},
+        { PROP_TABLE_CELL_DELETE, u"TableCellDelete"},
+        { PROP_TABLE_CELL_INSERT, u"TableCellInsert"},
+        { PROP_LEFT_BORDER_DISTANCE, u"LeftBorderDistance"},
+        { PROP_RIGHT_BORDER_DISTANCE, u"RightBorderDistance"},
+        { PROP_TOP_BORDER_DISTANCE, u"TopBorderDistance"},
+        { PROP_BOTTOM_BORDER_DISTANCE, u"BottomBorderDistance"},
+        { PROP_CURRENT_PRESENTATION, u"CurrentPresentation"},
+        { PROP_IS_FIXED, u"IsFixed"},
+        { PROP_SUB_TYPE, u"SubType"},
+        { PROP_FILE_FORMAT, u"FileFormat"},
+        { PROP_HYPER_LINK_U_R_L, u"HyperLinkURL"},
+        { PROP_HYPERLINK, u"Hyperlink"},
+        { PROP_NUMBER_FORMAT, u"NumberFormat"},
+        { PROP_NAME, u"Name"},
+        { PROP_IS_INPUT, u"IsInput"},
+        { PROP_HINT, u"Hint"},
+        { PROP_FULL_NAME, u"FullName"},
+        { PROP_DESCRIPTION, u"Description"},
+        { PROP_MACRO_NAME, u"MacroName"},
+        { PROP_TITLE, u"Title"},
+        { PROP_CONTENT, u"Content"},
+        { PROP_INPUT_STREAM, u"InputStream"},
+        { PROP_GRAPHIC, u"Graphic"},
+        { PROP_ANCHOR_TYPE, u"AnchorType"},
+        { PROP_SIZE, u"Size"},
+        { PROP_HORI_ORIENT, u"HoriOrient"},
+        { PROP_HORI_ORIENT_POSITION, u"HoriOrientPosition"},
+        { PROP_HORI_ORIENT_RELATION, u"HoriOrientRelation"},
+        { PROP_VERT_ORIENT, u"VertOrient"},
+        { PROP_VERT_ORIENT_POSITION, u"VertOrientPosition"},
+        { PROP_VERT_ORIENT_RELATION, u"VertOrientRelation"},
+        { PROP_SIZE100th_M_M, u"Size100thMM"},
+        { PROP_SIZE_PIXEL, u"SizePixel"},
+        { PROP_SURROUND, u"Surround"},
+        { PROP_SURROUND_CONTOUR, u"SurroundContour"},
+        { PROP_ADJUST_CONTRAST, u"AdjustContrast"},
+        { PROP_ADJUST_LUMINANCE, u"AdjustLuminance"},
+        { PROP_GRAPHIC_COLOR_MODE, u"GraphicColorMode"},
+        { PROP_CONTOUR_OUTSIDE, u"ContourOutside"},
+        { PROP_CONTOUR_POLY_POLYGON, u"ContourPolyPolygon"},
+        { PROP_PAGE_TOGGLE, u"PageToggle"},
+        { PROP_BACK_COLOR, u"BackColor"},
+        { PROP_BACK_COLOR_TRANSPARENCY, u"BackColorTransparency"},
+        { PROP_ALTERNATIVE_TEXT, u"AlternativeText"},
+        { PROP_HEADER_TEXT_LEFT, u"HeaderTextLeft"},
+        { PROP_HEADER_TEXT, u"HeaderText"},
+        { PROP_HEADER_IS_SHARED, u"HeaderIsShared"},
+        { PROP_HEADER_IS_ON, u"HeaderIsOn"},
+        { PROP_FOOTER_TEXT_LEFT, u"FooterTextLeft"},
+        { PROP_FOOTER_TEXT, u"FooterText"},
+        { PROP_FOOTER_IS_SHARED, u"FooterIsShared"},
+        { PROP_FOOTER_IS_ON, u"FooterIsOn"},
+        { PROP_FOOTNOTE_COUNTING, u"FootnoteCounting"},
+        { PROP_FOOTNOTE_LINE_ADJUST, u"FootnoteLineAdjust"},
+        { PROP_WIDTH, u"Width"},
+        { PROP_HEIGHT, u"Height"},
+        { PROP_TEXT_COLUMNS, u"TextColumns"},
+        { PROP_AUTOMATIC_DISTANCE, u"AutomaticDistance"},
+        { PROP_IS_LANDSCAPE, u"IsLandscape"},
+        { PROP_FIRST_PAGE, u"First Page"},
+        { PROP_PAGE_DESC_NAME, u"PageDescName"},
+        { PROP_PAGE_NUMBER_OFFSET, u"PageNumberOffset"},
+        { PROP_BREAK_TYPE, u"BreakType"},
+        { PROP_FOOTER_IS_DYNAMIC_HEIGHT, u"FooterIsDynamicHeight"},
+        { PROP_FOOTER_DYNAMIC_SPACING, u"FooterDynamicSpacing"},
+        { PROP_FOOTER_HEIGHT, u"FooterHeight"},
+        { PROP_FOOTER_BODY_DISTANCE, u"FooterBodyDistance"},
+        { PROP_HEADER_IS_DYNAMIC_HEIGHT, u"HeaderIsDynamicHeight"},
+        { PROP_HEADER_DYNAMIC_SPACING, u"HeaderDynamicSpacing"},
+        { PROP_HEADER_HEIGHT, u"HeaderHeight"},
+        { PROP_HEADER_BODY_DISTANCE, u"HeaderBodyDistance"},
+        { PROP_WRITING_MODE, u"WritingMode"},
+        { PROP_GRID_MODE, u"GridMode"},
+        { PROP_GRID_DISPLAY, u"GridDisplay"},
+        { PROP_GRID_PRINT, u"GridPrint"},
+        { PROP_GRID_LINES, u"GridLines"},
+        { PROP_GRID_BASE_HEIGHT, u"GridBaseHeight"},
+        { PROP_GRID_BASE_WIDTH, u"GridBaseWidth"},
+        { PROP_GRID_RUBY_HEIGHT, u"GridRubyHeight"},
+        { PROP_GRID_STANDARD_MODE, u"StandardPageMode"},
+        { PROP_IS_ON, u"IsOn"},
+        { PROP_RESTART_AT_EACH_PAGE, u"RestartAtEachPage"},
+        { PROP_COUNT_EMPTY_LINES, u"CountEmptyLines"},
+        { PROP_COUNT_LINES_IN_FRAMES, u"CountLinesInFrames"},
+        { PROP_INTERVAL, u"Interval"},
+        { PROP_DISTANCE, u"Distance"},
+        { PROP_NUMBER_POSITION, u"NumberPosition"},
+        { PROP_LEVEL, u"Level"},
+        { PROP_LEVEL_FOLLOW, u"LabelFollowedBy"},
+        { PROP_LEVEL_PARAGRAPH_STYLES, u"LevelParagraphStyles"},
+        { PROP_LEVEL_FORMAT, u"LevelFormat"},
+        { PROP_LIST_FORMAT, u"ListFormat"},
+        { PROP_TOKEN_TYPE, u"TokenType"},
+        { PROP_TOKEN_HYPERLINK_START, u"TokenHyperlinkStart"},
+        { PROP_TOKEN_HYPERLINK_END, u"TokenHyperlinkEnd"},
+        { PROP_TOKEN_CHAPTER_INFO, u"TokenChapterInfo"},
+        { PROP_CHAPTER_FORMAT, u"ChapterFormat"},
+        { PROP_TOKEN_TEXT, u"TokenText"},
+        { PROP_TEXT, u"Text"},
+        { PROP_CREATE_FROM_OUTLINE, u"CreateFromOutline"},
+        { PROP_CREATE_FROM_MARKS, u"CreateFromMarks"},
+        { PROP_STANDARD, u"Standard"},
+        { PROP_SPLIT, u"Split"},
+        { PROP_IS_SPLIT_ALLOWED, u"IsSplitAllowed"},
+        { META_PROP_VERTICAL_BORDER, u"VerticalBorder"},
+        { META_PROP_HORIZONTAL_BORDER, u"HorizontalBorder"},
+        { PROP_HEADER_ROW_COUNT, u"HeaderRowCount"},
+        { PROP_SIZE_TYPE, u"SizeType"},
+        { PROP_TABLE_COLUMN_SEPARATORS, u"TableColumnSeparators"},
+        { META_PROP_TABLE_STYLE_NAME, u"TableStyleName"},
+        { PROP_TABLE_REDLINE_PARAMS, u"TableRedlineParams"},
+        { PROP_REDLINE_AUTHOR, u"RedlineAuthor"},
+        { PROP_REDLINE_DATE_TIME, u"RedlineDateTime"},
+        { PROP_REDLINE_TYPE, u"RedlineType"},
+        { PROP_REDLINE_REVERT_PROPERTIES, u"RedlineRevertProperties"},
+        { PROP_IS_PROTECTED, u"IsProtected"},
+        { PROP_SIZE_PROTECTED, u"SizeProtected"},
+        { PROP_POSITION_PROTECTED, u"PositionProtected"},
+        { PROP_OPAQUE, u"Opaque"},
+        { PROP_VERTICAL_MERGE, u"VerticalMerge"},
+        { PROP_BULLET_CHAR, u"BulletChar"},
+        { PROP_BULLET_FONT_NAME, u"BulletFontName"},
+        { PROP_TABS_RELATIVE_TO_INDENT, u"TabsRelativeToIndent"},
+        { PROP_CREATE_FROM_LEVEL_PARAGRAPH_STYLES, u"CreateFromLevelParagraphStyles"},
+        { PROP_DROP_CAP_FORMAT, u"DropCapFormat"},
+        { PROP_REFERENCE_FIELD_PART, u"ReferenceFieldPart"},
+        { PROP_SOURCE_NAME, u"SourceName"},
+        { PROP_REFERENCE_FIELD_SOURCE, u"ReferenceFieldSource"},
+        { PROP_WIDTH_TYPE, u"WidthType"},
+        { PROP_TBL_LOOK, u"TblLook"},
+        { PROP_TEXT_RANGE, u"TextRange"},
+        { PROP_TEXT_VERTICAL_ADJUST, u"TextVerticalAdjust"},
+        { PROP_SERVICE_CHAR_STYLE, u"com.sun.star.style.CharacterStyle"},
+        { PROP_SERVICE_PARA_STYLE, u"com.sun.star.style.ParagraphStyle"},
+        { PROP_CHARACTER_STYLES, u"CharacterStyles"},
+        { PROP_PARAGRAPH_STYLES, u"ParagraphStyles"},
+        { PROP_TABLE_BORDER_DISTANCES, u"TableBorderDistances"},
+        { META_PROP_CELL_MAR_TOP, u"MetaPropCellMarTop"},
+        { META_PROP_CELL_MAR_BOTTOM, u"MetaPropCellMarBottom"},
+        { META_PROP_CELL_MAR_LEFT, u"MetaPropCellMarLeft"},
+        { META_PROP_CELL_MAR_RIGHT, u"MetaPropCellMarRight"},
+        { PROP_START_AT, u"StartAt"},
+        { PROP_CHAR_PROP_HEIGHT, u"CharPropHeight"},
+        { PROP_CHAR_PROP_HEIGHT_ASIAN, u"CharPropHeightAsian"},
+        { PROP_CHAR_PROP_HEIGHT_COMPLEX, u"CharPropHeightComplex"},
+        { PROP_FORMAT, u"Format"},
+        { PROP_INSERT, u"Insert"},
+        { PROP_DELETE, u"Delete"},
+        { PROP_PARAGRAPH_FORMAT, u"ParagraphFormat"},
+        { PROP_STREAM_NAME, u"StreamName"},
+        { PROP_BITMAP, u"Bitmap"},
+        { PROP_IS_DATE, u"IsDate"},
+        { PROP_TAB_STOP_DISTANCE, u"TabStopDistance"},
+        { PROP_INDENT_AT, u"IndentAt"},
+        { PROP_FIRST_LINE_INDENT, u"FirstLineIndent"},
+        { PROP_NUMBERING_STYLE_NAME, u"NumberingStyleName"},
+        { PROP_OUTLINE_LEVEL, u"OutlineLevel"},
+        { PROP_LISTTAB_STOP_POSITION, u"ListtabStopPosition"},
+        { PROP_POSITION_AND_SPACE_MODE, u"PositionAndSpaceMode"},
+        { PROP_PARA_SPLIT, u"ParaSplit"},
+        { PROP_HELP, u"Help"},
+        { PROP_HEADING_STYLE_NAME, u"HeadingStyleName"},
+        { PROP_FRM_DIRECTION, u"FRMDirection"},
+        { PROP_EMBEDDED_OBJECT, u"EmbeddedObject"},
+        { PROP_IS_VISIBLE, u"IsVisible"},
+        { PROP_PAGE_STYLE_LAYOUT, u"PageStyleLayout"},
+        { PROP_Z_ORDER, u"ZOrder"},
+        { PROP_EMBED_FONTS, u"EmbedFonts"},
+        { PROP_EMBED_SYSTEM_FONTS, u"EmbedSystemFonts"},
+        { PROP_SHADOW_FORMAT, u"ShadowFormat"},
+        { PROP_RELATIVE_WIDTH, u"RelativeWidth"},
+        { PROP_IS_WIDTH_RELATIVE, u"IsWidthRelative"},
+        { PROP_GRAPHIC_BITMAP, u"GraphicBitmap"},
+        { PROP_GRAPHIC_SIZE, u"GraphicSize"},
+        { PROP_CHAR_SHADING_VALUE, u"CharShadingValue"},
+        { PROP_CHAR_SHADING_MARKER, u"CharShadingMarker"},
+        { PROP_LABEL_CATEGORY, u"LabelCategory"},
+        { PROP_MIRROR_INDENTS, u"MirrorIndents"},
+        { PROP_SURROUND_TEXT_WRAP_SMALL, u"SurroundTextWrapSmall"},
+        { PROP_PARA_SHADOW_FORMAT, u"ParaShadowFormat"},
+        { PROP_FOOTNOTE_LINE_RELATIVE_WIDTH, u"FootnoteLineRelativeWidth"},
+        { PROP_TBL_HEADER, u"TblHeader"},
+        { PROP_CHAR_THEME_NAME_ASCII, u"CharThemeNameAscii"},
+        { PROP_CHAR_THEME_NAME_CS, u"CharThemeNameCs"},
+        { PROP_CHAR_THEME_NAME_H_ANSI, u"CharThemeNameHAnsi"},
+        { PROP_CHAR_THEME_NAME_EAST_ASIA, u"CharThemeNameEastAsia"},
+        { PROP_CHAR_THEME_FONT_NAME_ASCII, u"CharThemeFontNameAscii"},
+        { PROP_CHAR_THEME_FONT_NAME_CS, u"CharThemeFontNameCs"},
+        { PROP_CHAR_THEME_FONT_NAME_EAST_ASIA, u"CharThemeFontNameEastAsia"},
+        { PROP_CHAR_THEME_COLOR, u"CharThemeColor"},
+        { PROP_CHAR_THEME_ORIGINAL_COLOR, u"CharThemeOriginalColor"},
+        { PROP_CHAR_THEME_COLOR_SHADE, u"CharThemeColorShade"},
+        { PROP_CHAR_THEME_FILL, u"CharThemeFill"},
+        { PROP_HORIZONTAL_MERGE, u"HorizontalMerge"},
+        { PROP_HIDE_TAB_LEADER_AND_PAGE_NUMBERS, u"HideTabLeaderAndPageNumber"},
+        { PROP_TAB_IN_TOC, u"TabInTOC"},
+        { PROP_TOC_BOOKMARK, u"TOCBookmark"},
+        { PROP_TOC_NEW_LINE, u"TOCNewLine"},
+        { PROP_TOC_PARAGRAPH_OUTLINE_LEVEL, u"TOCParagraphOutlineLevel"},
+        { PROP_CHAR_THEME_COLOR_TINT, u"CharThemeColorTint"},
+        { PROP_CHAR_GLOW_TEXT_EFFECT, u"CharGlowTextEffect"},
+        { PROP_CHAR_SHADOW_TEXT_EFFECT, u"CharShadowTextEffect"},
+        { PROP_CHAR_REFLECTION_TEXT_EFFECT, u"CharReflectionTextEffect"},
+        { PROP_CHAR_TEXTOUTLINE_TEXT_EFFECT, u"CharTextOutlineTextEffect"},
+        { PROP_CHAR_TEXTFILL_TEXT_EFFECT, u"CharTextFillTextEffect"},
+        { PROP_CHAR_SCENE3D_TEXT_EFFECT, u"CharScene3DTextEffect"},
+        { PROP_CHAR_PROPS3D_TEXT_EFFECT, u"CharProps3DTextEffect"},
+        { PROP_CHAR_LIGATURES_TEXT_EFFECT, u"CharLigaturesTextEffect"},
+        { PROP_CHAR_NUMFORM_TEXT_EFFECT, u"CharNumFormTextEffect"},
+        { PROP_CHAR_NUMSPACING_TEXT_EFFECT, u"CharNumSpacingTextEffect"},
+        { PROP_CHAR_STYLISTICSETS_TEXT_EFFECT, u"CharStylisticSetsTextEffect"},
+        { PROP_CHAR_CNTXTALTS_TEXT_EFFECT, u"CharCntxtAltsTextEffect"},
+        { PROP_SDTPR, u"SdtPr"},
+        { PROP_CELL_INTEROP_GRAB_BAG, u"CellInteropGrabBag"},
+        { PROP_TABLE_INTEROP_GRAB_BAG, u"TableInteropGrabBag"},
+        { PROP_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING, u"ApplyParagraphMarkFormatToNumbering"},
+        { PROP_SDT_END_BEFORE, u"SdtEndBefore"},
+        { PROP_PARA_SDT_END_BEFORE, u"ParaSdtEndBefore"},
+        { META_PROP_TABLE_LOOK, u"TableStyleLook"},
+        { PROP_PARA_CNF_STYLE, u"ParaCnfStyle"},
+        { PROP_CELL_CNF_STYLE, u"CellCnfStyle"},
+        { PROP_ROW_CNF_STYLE, u"RowCnfStyle"},
+        { PROP_CELL_HIDE_MARK, u"CellHideMark"},
+        { PROP_FOLLOW_TEXT_FLOW, u"IsFollowingTextFlow"},
+        { PROP_FILL_STYLE, u"FillStyle"},
+        { PROP_FILL_COLOR, u"FillColor"},
+        { PROP_SNAP_TO_GRID, u"SnapToGrid"},
+        { PROP_GRID_SNAP_TO_CHARS, u"GridSnapToChars"},
+        { PROP_RUBY_STYLE, u"RubyCharStyleName"},
+        { PROP_RUBY_TEXT, u"RubyText"},
+        { PROP_RUBY_ADJUST, u"RubyAdjust"},
+        { PROP_RUBY_POSITION, u"RubyPosition"},
+        { PROP_DATABASE_NAME, u"DataBaseName"},
+        { PROP_COMMAND_TYPE, u"DataCommandType"},
+        { PROP_DATATABLE_NAME, u"DataTableName"},
+        { PROP_DATACOLUMN_NAME, u"DataColumnName"},
+        { PROP_CHAR_TRANSPARENCE, u"CharTransparence"},
+        { PROP_CELL_FORMULA, u"CellFormula"},
+        { PROP_CELL_FORMULA_CONVERTED, u"CellFormulaConverted"},
+        { PROP_GUTTER_MARGIN, u"GutterMargin"},
+        { PROP_RTL_GUTTER, u"RtlGutter"},
+        { PROP_CURSOR_NOT_IGNORE_TABLES_IN_HF, u"CursorNotIgnoreTables"},
+        { PROP_PARA_CONNECT_BORDERS, u"ParaIsConnectBorder"},
+        { PROP_DECORATIVE, u"Decorative"},
+    };
+    return map.at(eId);
 }
 
 bool isCharacterProperty( const PropertyIds eId )
