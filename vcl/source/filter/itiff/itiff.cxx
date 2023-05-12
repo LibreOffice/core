@@ -161,6 +161,16 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
         bool bOk = !o3tl::checked_multiply(w, h, nPixelsRequired) && nPixelsRequired <= nMaxPixelsAllowed / 2;
         SAL_WARN_IF(!bOk, "filter.tiff", "skipping oversized tiff image " << w << " x " << h);
 
+        if (!TIFFIsTiled(tif))
+        {
+            size_t nStripSize = TIFFStripSize(tif);
+            if (nStripSize > SAL_MAX_INT32)
+            {
+                SAL_WARN("filter.tiff", "skipping oversized tiff strip size " << nStripSize);
+                bOk = false;
+            }
+        }
+
         if (bOk && bFuzzing)
         {
             const uint64_t MAX_PIXEL_SIZE = 120000000;
