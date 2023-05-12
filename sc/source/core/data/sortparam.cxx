@@ -198,6 +198,7 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
                 key.bDoSort = true;
                 key.nField = nThisField;
                 key.bAscending = rOld.maKeyState[i].bAscending;
+                key.aColorSortMode = ScColorSortMode::None;
                 maKeyState.push_back(key);
             }
         }
