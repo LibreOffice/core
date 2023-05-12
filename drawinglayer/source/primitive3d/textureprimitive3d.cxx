@@ -95,9 +95,9 @@ namespace drawinglayer::primitive3d
                 const basegfx::BColor aGray(getTransparence(), getTransparence(), getTransparence());
 
                 // create ColorStops with StartColor == EndColor == aGray
-                const basegfx::ColorStops aColorStops {
-                    basegfx::ColorStop(0.0, aGray),
-                    basegfx::ColorStop(1.0, aGray) };
+                const basegfx::BColorStops aColorStops {
+                    basegfx::BColorStop(0.0, aGray),
+                    basegfx::BColorStop(1.0, aGray) };
 
                 const attribute::FillGradientAttribute aFillGradient(css::awt::GradientStyle_LINEAR, 0.0, 0.0, 0.0, 0.0, aColorStops);
                 const Primitive3DReference xRef(new TransparenceTexturePrimitive3D(aFillGradient, getChildren(), getTextureSize()));

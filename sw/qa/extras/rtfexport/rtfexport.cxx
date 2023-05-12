@@ -631,8 +631,8 @@ DECLARE_RTFEXPORT_TEST(testTextframeGradient, "textframe-gradient.rtf")
     const basegfx::BColor aColD(0.0, 0.0, 0.0);
 
     // MCGR: Use the completely imported transparency gradient to check for correctness
-    basegfx::ColorStops aColorStops;
-    basegfx::utils::fillColorStopsFromGradient2(aColorStops, aGradient);
+    basegfx::BColorStops aColorStops(aGradient.ColorStops);
+
     CPPUNIT_ASSERT_EQUAL(size_t(3), aColorStops.size());
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
@@ -648,7 +648,8 @@ DECLARE_RTFEXPORT_TEST(testTextframeGradient, "textframe-gradient.rtf")
     aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
 
     // MCGR: Use the completely imported transparency gradient to check for correctness
-    basegfx::utils::fillColorStopsFromGradient2(aColorStops, aGradient);
+    aColorStops = basegfx::BColorStops(aGradient.ColorStops);
+
     CPPUNIT_ASSERT_EQUAL(size_t(3), aColorStops.size());
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));

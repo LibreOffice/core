@@ -41,7 +41,6 @@
 #include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xbtmpit.hxx>
-#include <svx/xgrad.hxx>
 #include <svx/xhatch.hxx>
 #include <svx/sdshitm.hxx>
 #include <com/sun/star/awt/Size.hpp>
@@ -2800,24 +2799,24 @@ void EnhancedCustomShape2d::AdaptObjColor(
         }
         case drawing::FillStyle_GRADIENT:
         {
-            XGradient aXGradient(rObj.GetMergedItem(XATTR_FILLGRADIENT).GetGradientValue());
+            basegfx::BGradient aBGradient(rObj.GetMergedItem(XATTR_FILLGRADIENT).GetGradientValue());
 
             if ( nColorCount || 0.0 != dBrightness )
             {
-                basegfx::ColorStops aColorStops(aXGradient.GetColorStops());
+                basegfx::BColorStops aColorStops(aBGradient.GetColorStops());
                 for (auto& candidate : aColorStops)
                 {
-                    candidate = basegfx::ColorStop(
+                    candidate = basegfx::BColorStop(
                         candidate.getStopOffset(),
                         GetColorData(
                             Color(candidate.getStopColor()),
                             std::min(nColorIndex, nColorCount-1),
                             dBrightness ).getBColor());
                 }
-                aXGradient.SetColorStops(aColorStops);
+                aBGradient.SetColorStops(aColorStops);
             }
 
-            rObj.SetMergedItem( XFillGradientItem( "", aXGradient ) );
+            rObj.SetMergedItem( XFillGradientItem( "", aBGradient ) );
             break;
         }
         case drawing::FillStyle_HATCH:

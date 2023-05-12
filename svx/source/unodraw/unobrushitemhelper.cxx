@@ -156,7 +156,7 @@ static sal_uInt16 getTransparenceForSvxBrushItem(const SfxItemSet& rSourceSet, b
     if((pGradientItem = rSourceSet.GetItemIfSet(XATTR_FILLFLOATTRANSPARENCE, bSearchInParents))
         && pGradientItem->IsEnabled())
     {
-        const XGradient& rGradient = pGradientItem->GetGradientValue();
+        const basegfx::BGradient& rGradient = pGradientItem->GetGradientValue();
         const sal_uInt16 nStartLuminance(Color(rGradient.GetColorStops().front().getStopColor()).GetLuminance());
         const sal_uInt16 nEndLuminance(Color(rGradient.GetColorStops().back().getStopColor()).GetLuminance());
 
@@ -223,9 +223,9 @@ std::unique_ptr<SvxBrushItem> getSvxBrushItemFromSourceSet(const SfxItemSet& rSo
         case drawing::FillStyle_GRADIENT:
         {
             // cannot be directly supported, but do the best possible
-            const XGradient aXGradient(rSourceSet.Get(XATTR_FILLGRADIENT).GetGradientValue());
-            const basegfx::BColor aStartColor(aXGradient.GetColorStops().front().getStopColor() * (aXGradient.GetStartIntens() * 0.01));
-            const basegfx::BColor aEndColor(aXGradient.GetColorStops().back().getStopColor() * (aXGradient.GetEndIntens() * 0.01));
+            const basegfx::BGradient aBGradient(rSourceSet.Get(XATTR_FILLGRADIENT).GetGradientValue());
+            const basegfx::BColor aStartColor(aBGradient.GetColorStops().front().getStopColor() * (aBGradient.GetStartIntens() * 0.01));
+            const basegfx::BColor aEndColor(aBGradient.GetColorStops().back().getStopColor() * (aBGradient.GetEndIntens() * 0.01));
 
             // use half/half mixed color from gradient start and end
             Color aMixedColor((aStartColor + aEndColor) * 0.5);

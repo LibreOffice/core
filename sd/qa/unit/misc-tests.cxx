@@ -291,8 +291,7 @@ void SdMiscTest::testFillGradient()
     CPPUNIT_ASSERT(xPropSet2->getPropertyValue("FillGradient") >>= aGradient2);
 
     // MCGR: Use the completely imported gradient to check for correctness
-    basegfx::ColorStops aColorStops;
-    basegfx::utils::fillColorStopsFromGradient2(aColorStops, aGradient2);
+    const basegfx::BColorStops aColorStops(aGradient2.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));

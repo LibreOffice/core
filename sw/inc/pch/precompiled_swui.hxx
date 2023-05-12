@@ -470,7 +470,6 @@
 #include <svx/unomod.hxx>
 #include <svx/xdash.hxx>
 #include <svx/xdef.hxx>
-#include <svx/xgrad.hxx>
 #include <svx/xhatch.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>

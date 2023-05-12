@@ -46,7 +46,7 @@ private:
     std::unique_ptr<weld::MetricSpinButton> mxMtrTrgrBorder;
 
     // MCGR: Preserve in-between ColorStops until we have an UI to edit these
-    basegfx::ColorStops maColorStops;
+    basegfx::BColorStops maColorStops;
 
     void InitStatus(XFillFloatTransparenceItem const* pGradientItem);
     void ExecuteValueModify(sal_uInt8 nStartCol, sal_uInt8 nEndCol);

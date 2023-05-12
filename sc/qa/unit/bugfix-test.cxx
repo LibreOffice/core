@@ -584,7 +584,7 @@ void ScFiltersTest::testTdf129789()
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, rStyleItemH2.GetValue());
         const XFillGradientItem& rGradientItem = pCaptionH2->GetMergedItem(XATTR_FILLGRADIENT);
-        const basegfx::ColorStops& rColorStops(rGradientItem.GetGradientValue().GetColorStops());
+        const basegfx::BColorStops& rColorStops(rGradientItem.GetGradientValue().GetColorStops());
 
         CPPUNIT_ASSERT_EQUAL(size_t(2), rColorStops.size());
         CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops[0].getStopOffset(), 0.0));
@@ -601,7 +601,7 @@ void ScFiltersTest::testTdf129789()
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, rStyleItemH9.GetValue());
         const XFillGradientItem& rGradientItem2 = pCaptionH2->GetMergedItem(XATTR_FILLGRADIENT);
-        const basegfx::ColorStops& rColorStops2(rGradientItem2.GetGradientValue().GetColorStops());
+        const basegfx::BColorStops& rColorStops2(rGradientItem2.GetGradientValue().GetColorStops());
 
         CPPUNIT_ASSERT_EQUAL(size_t(2), rColorStops2.size());
         CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops2[0].getStopOffset(), 0.0));

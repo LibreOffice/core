@@ -2494,8 +2494,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                     case drawing::FillStyle_GRADIENT:
                     {
-                        const XGradient& xGradient = aSet.GetItem<XFillGradientItem>( XATTR_FILLGRADIENT )->GetGradientValue();
-                        XFillGradientItem aFillGradientItem( OUString(), xGradient, SID_ATTR_PAGE_GRADIENT  );
+                        const basegfx::BGradient& aBGradient = aSet.GetItem<XFillGradientItem>( XATTR_FILLGRADIENT )->GetGradientValue();
+                        XFillGradientItem aFillGradientItem( OUString(), aBGradient, SID_ATTR_PAGE_GRADIENT  );
                         rSet.Put( aFillGradientItem );
                     }
                     break;

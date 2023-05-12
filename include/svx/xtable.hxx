@@ -23,7 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <svx/xdash.hxx>
 #include <svx/xhatch.hxx>
-#include <svx/xgrad.hxx>
+#include <basegfx/utils/bgradient.hxx>
 
 #include <tools/color.hxx>
 
@@ -101,13 +101,13 @@ public:
 class SVXCORE_DLLPUBLIC XGradientEntry final : public XPropertyEntry
 {
 private:
-    XGradient  aGradient;
+    basegfx::BGradient  aGradient;
 
 public:
-    XGradientEntry(const XGradient& rGradient, const OUString& rName);
+    XGradientEntry(const basegfx::BGradient& rGradient, const OUString& rName);
     XGradientEntry(const XGradientEntry& rOther);
 
-    const XGradient& GetGradient() const
+    const basegfx::BGradient& GetGradient() const
     {
         return aGradient;
     }

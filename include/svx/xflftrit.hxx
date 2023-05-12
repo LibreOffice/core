@@ -37,8 +37,8 @@ public:
 
                             static SfxPoolItem* CreateDefault();
                             XFillFloatTransparenceItem();
-                            XFillFloatTransparenceItem(const OUString& rName, const XGradient& rGradient, bool bEnable = true );
-                            XFillFloatTransparenceItem( const XGradient& rTheGradient, bool bEnable = true );
+                            XFillFloatTransparenceItem(const OUString& rName, const basegfx::BGradient& rGradient, bool bEnable = true );
+                            XFillFloatTransparenceItem( const basegfx::BGradient& rTheGradient, bool bEnable = true );
                             XFillFloatTransparenceItem( const XFillFloatTransparenceItem& rItem );
 
     virtual bool            operator==( const SfxPoolItem& rItem ) const override;

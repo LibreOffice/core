@@ -1829,7 +1829,7 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
                 if (SfxItemState::SET == pArgs->GetItemState(SID_FILL_GRADIENT_JSON, false, &pItem))
                 {
                     const SfxStringItem* pJSON = static_cast<const SfxStringItem*>(pItem);
-                    XFillGradientItem aGradientItem( XGradient::fromJSON(pJSON->GetValue()) );
+                    XFillGradientItem aGradientItem( basegfx::BGradient::fromJSON(pJSON->GetValue()) );
 
                     // MigrateItemSet guarantees unique gradient names
                     SfxItemSetFixed<XATTR_FILLGRADIENT, XATTR_FILLGRADIENT> aMigrateSet( mpDrawView->GetModel()->GetItemPool() );

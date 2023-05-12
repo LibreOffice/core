@@ -2373,8 +2373,8 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
 
     const ::Color aNullLineCol(COL_DEFAULT_SHAPE_STROKE); // #i121448# Use defined default color
     const ::Color aNullFillCol(COL_DEFAULT_SHAPE_FILLING); // #i121448# Use defined default color
-    // XGradient() default already creates [COL_BLACK, COL_WHITE] as defaults
-    const XGradient aNullGrad;
+    // basegfx::BGradient() default already creates [COL_BLACK, COL_WHITE] as defaults
+    const basegfx::BGradient aNullGrad;
     const XHatch aNullHatch(aNullLineCol);
 
     std::vector<SfxPoolItem*> pDefaults

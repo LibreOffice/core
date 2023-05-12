@@ -1421,8 +1421,7 @@ void SdOOXMLExportTest3::testTdf127372()
     xShape->getPropertyValue("FillTransparenceGradient") >>= aTransparenceGradient;
 
     // MCGR: Use the completely imported gradient to check for correctness
-    basegfx::ColorStops aColorStops;
-    basegfx::utils::fillColorStopsFromGradient2(aColorStops, aTransparenceGradient);
+    const basegfx::BColorStops aColorStops(aTransparenceGradient.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
@@ -1454,8 +1453,7 @@ void SdOOXMLExportTest3::testTdf127379()
     CPPUNIT_ASSERT(aXBackgroundPropSet->getPropertyValue("FillGradient") >>= aGradient);
 
     // MCGR: Use the completely imported gradient to check for correctness
-    basegfx::ColorStops aColorStops;
-    basegfx::utils::fillColorStopsFromGradient2(aColorStops, aGradient);
+    const basegfx::BColorStops aColorStops(aGradient.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));

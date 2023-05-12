@@ -459,8 +459,8 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
             {
                 // use awt::Gradient2, prepare ColorStops
                 awt::Gradient2 aGradient;
-                basegfx::ColorStops aColorStops;
-                basegfx::ColorStops aTransparencyStops;
+                basegfx::BColorStops aColorStops;
+                basegfx::BColorStops aTransparencyStops;
                 bool bContainsTransparency(false);
 
                 // set defaults
@@ -469,7 +469,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 aGradient.EndIntensity = 100;
                 aGradient.Style = awt::GradientStyle_LINEAR;
 
-                // convert to ColorStops, check for contained transparency
+                // convert to BColorStops, check for contained transparency
                 for (const auto& rCandidate : maGradientProps.maGradientStops)
                 {
                     const ::Color aColor(rCandidate.second.getColor(rGraphicHelper, nPhClr));
@@ -477,7 +477,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     bContainsTransparency = bContainsTransparency || rCandidate.second.hasTransparency();
                 }
 
-                // if we have transparency, convert to ColorStops
+                // if we have transparency, convert to BColorStops
                 if (bContainsTransparency)
                 {
                     for (const auto& rCandidate : maGradientProps.maGradientStops)
@@ -524,8 +524,8 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                         aGradient.Style = awt::GradientStyle_RECT;
                     }
 
-                    basegfx::utils::reverseColorStops(aColorStops);
-                    basegfx::utils::reverseColorStops(aTransparencyStops);
+                    aColorStops.reverseColorStops();
+                    aTransparencyStops.reverseColorStops();
                 }
                 else if (!maGradientProps.maGradientStops.empty())
                 {
@@ -541,8 +541,8 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     aGradient.Angle = static_cast< sal_Int16 >( (8100 - (nDmlAngle / (PER_DEGREE / 10))) % 3600 );
                 }
 
-                // set ColorStops using UNO API
-                basegfx::utils::fillColorStopSequenceFromColorStops(aGradient.ColorStops, aColorStops);
+                // set BColorStops using UNO API
+                aGradient.ColorStops = aColorStops.getAsColorStopSequence();
 
                 // for compatibility, still set StartColor/EndColor
                 // NOTE: All code after adapting to multi color gradients works
@@ -551,10 +551,10 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 //        (a) ignored consequently everywhere or
                 //        (b) be set/added consequently everywhere
                 //       since this is - in principle - redundant data.
-                //       Be aware thet e.g. cases like DrawingML::EqualGradients
+                //       Be aware that e.g. cases like DrawingML::EqualGradients
                 //       and others would have to be identified and adapted (!)
                 //       Since awt::Gradient2 is UNO API data there might
-                //       be cases where just awt::Gradient is transfered, so (b)
+                //       be cases where just awt::Gradient is transferred, so (b)
                 //       is far better backwards compatible and thus more safe, so
                 //       all changes will make use of additionally using/setting
                 //       these additionally, but will only make use of the given
@@ -575,7 +575,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 // push gradient transparency to property map if it exists
                 if (!aTransparencyStops.empty())
                 {
-                    basegfx::utils::fillColorStopSequenceFromColorStops(aGradient.ColorStops, aTransparencyStops);
+                    aGradient.ColorStops = aTransparencyStops.getAsColorStopSequence();
                     rPropMap.setProperty(ShapeProperty::GradientTransparency, aGradient);
                 }
             }

@@ -72,7 +72,7 @@ namespace drawinglayer::texture
         GeoTexSvxGradient::GeoTexSvxGradient(
             const basegfx::B2DRange& rDefinitionRange,
             sal_uInt32 nRequestedSteps,
-            const basegfx::ColorStops& rColorStops,
+            const basegfx::BColorStops& rColorStops,
             double fBorder)
         : maDefinitionRange(rDefinitionRange)
         , mnRequestedSteps(nRequestedSteps)
@@ -98,47 +98,11 @@ namespace drawinglayer::texture
                 && mfBorder == pCompare->mfBorder);
         }
 
-        bool GeoTexSvxGradient::checkPenultimate()
-        {
-            // not needed when no ColorStops
-            if (mnColorStops.empty())
-                return false;
-
-            // not needed when last ColorStop at the end or outside
-            if (basegfx::fTools::moreOrEqual(mnColorStops.back().getStopOffset(), 1.0))
-                return false;
-
-            // get penultimate entry
-            const auto penultimate(mnColorStops.rbegin() + 1);
-
-            // if there is none, we need no correction and are done
-            if (penultimate == mnColorStops.rend())
-                return false;
-
-            // not needed when the last two ColorStops have different offset, then
-            // a visible range will be processed already
-            if (!basegfx::fTools::equal(mnColorStops.back().getStopOffset(), penultimate->getStopOffset()))
-                return false;
-
-            // not needed when the last two ColorStops have the same Color, then the
-            // range before solves the problem
-            if (mnColorStops.back().getStopColor() == penultimate->getStopColor())
-                return false;
-
-            // Here we need to temporarily add a ColorStop entry with the
-            // same color as the last entry to correctly 'close' the
-            // created gradient geometry.
-            // The simplest way is to temporarily add an entry to the local
-            // ColorStops for this at 1.0 (using same color)
-            mnColorStops.emplace_back(1.0, mnColorStops.back().getStopColor());
-            return true;
-        }
-
         GeoTexSvxGradientLinear::GeoTexSvxGradientLinear(
             const basegfx::B2DRange& rDefinitionRange,
             const basegfx::B2DRange& rOutputRange,
             sal_uInt32 nRequestedSteps,
-            const basegfx::ColorStops& rColorStops,
+            const basegfx::BColorStops& rColorStops,
             double fBorder,
             double fAngle)
         : GeoTexSvxGradient(rDefinitionRange, nRequestedSteps, rColorStops, fBorder)
@@ -179,7 +143,17 @@ namespace drawinglayer::texture
                 return;
 
             // check if we need last-ColorStop-correction
-            const bool bPenultimateUsed(checkPenultimate());
+            const bool bPenultimateUsed(mnColorStops.checkPenultimate());
+
+            if (bPenultimateUsed)
+            {
+                // Here we need to temporarily add a ColorStop entry with the
+                // same color as the last entry to correctly 'close' the
+                // created gradient geometry.
+                // The simplest way is to temporarily add an entry to the local
+                // ColorStops for this at 1.0 (using same color)
+                mnColorStops.emplace_back(1.0, mnColorStops.back().getStopColor());
+            }
 
             // prepare unit range transform
             basegfx::B2DHomMatrix aPattern;
@@ -199,7 +173,7 @@ namespace drawinglayer::texture
                 const double fOffsetStart(cs_l->getStopOffset());
                 const double fOffsetEnd(cs_r->getStopOffset());
 
-                // same offset, empty ColorStopRange, continue with next step
+                // same offset, empty BColorStopRange, continue with next step
                 if (basegfx::fTools::equal(fOffsetStart, fOffsetEnd))
                     continue;
 
@@ -248,7 +222,10 @@ namespace drawinglayer::texture
             }
 
             if (bPenultimateUsed)
+            {
+                // correct temporary change
                 mnColorStops.pop_back();
+            }
         }
 
         void GeoTexSvxGradientLinear::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
@@ -266,14 +243,14 @@ namespace drawinglayer::texture
 
             // texture-back-transform X/Y -> t [0.0..1.0] and determine color
             const double fScaler(basegfx::utils::getLinearGradientAlpha(rUV, maGradientInfo));
-            rBColor = basegfx::utils::modifyBColor(mnColorStops, fScaler, mnRequestedSteps, maLastColorStopRange);
+            rBColor = mnColorStops.getInterpolatedBColor(fScaler, mnRequestedSteps, maLastColorStopRange);
         }
 
         GeoTexSvxGradientAxial::GeoTexSvxGradientAxial(
             const basegfx::B2DRange& rDefinitionRange,
             const basegfx::B2DRange& rOutputRange,
             sal_uInt32 nRequestedSteps,
-            const basegfx::ColorStops& rColorStops,
+            const basegfx::BColorStops& rColorStops,
             double fBorder,
             double fAngle)
         : GeoTexSvxGradient(rDefinitionRange, nRequestedSteps, rColorStops, fBorder)
@@ -284,7 +261,7 @@ namespace drawinglayer::texture
             // with the other gradients. Either stay 'thinking reverse' for the
             // rest of time or adapt it here and go in same order as the other five,
             // so unifications/tooling will be possible
-            basegfx::utils::reverseColorStops(mnColorStops);
+            mnColorStops.reverseColorStops();
 
             maGradientInfo = basegfx::utils::createAxialODFGradientInfo(
                 rDefinitionRange,
@@ -318,7 +295,13 @@ namespace drawinglayer::texture
                 return;
 
             // check if we need last-ColorStop-correction
-            const bool bPenultimateUsed(checkPenultimate());
+            const bool bPenultimateUsed(mnColorStops.checkPenultimate());
+
+            if (bPenultimateUsed)
+            {
+                // temporarily add a ColorStop entry
+                mnColorStops.emplace_back(1.0, mnColorStops.back().getStopColor());
+            }
 
             // prepare unit range transform
             basegfx::B2DHomMatrix aPattern;
@@ -338,7 +321,7 @@ namespace drawinglayer::texture
                 const double fOffsetStart(cs_l->getStopOffset());
                 const double fOffsetEnd(cs_r->getStopOffset());
 
-                // same offset, empty ColorStopRange, continue with next step
+                // same offset, empty BColorStopRange, continue with next step
                 if (basegfx::fTools::equal(fOffsetStart, fOffsetEnd))
                     continue;
 
@@ -372,7 +355,10 @@ namespace drawinglayer::texture
             }
 
             if (bPenultimateUsed)
+            {
+                // correct temporary change
                 mnColorStops.pop_back();
+            }
         }
 
         void GeoTexSvxGradientAxial::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
@@ -393,14 +379,14 @@ namespace drawinglayer::texture
             const double fScaler(basegfx::utils::getAxialGradientAlpha(rUV, maGradientInfo));
 
                 // we use the reverse ColorSteps here, so mirror scaler value
-            rBColor = basegfx::utils::modifyBColor(mnColorStops, 1.0 - fScaler, mnRequestedSteps, maLastColorStopRange);
+            rBColor = mnColorStops.getInterpolatedBColor(1.0 - fScaler, mnRequestedSteps, maLastColorStopRange);
         }
 
 
         GeoTexSvxGradientRadial::GeoTexSvxGradientRadial(
             const basegfx::B2DRange& rDefinitionRange,
             sal_uInt32 nRequestedSteps,
-            const basegfx::ColorStops& rColorStops,
+            const basegfx::BColorStops& rColorStops,
             double fBorder,
             double fOffsetX,
             double fOffsetY)
@@ -429,7 +415,13 @@ namespace drawinglayer::texture
                 return;
 
             // check if we need last-ColorStop-correction
-            const bool bPenultimateUsed(checkPenultimate());
+            const bool bPenultimateUsed(mnColorStops.checkPenultimate());
+
+            if (bPenultimateUsed)
+            {
+                // temporarily add a ColorStop entry
+                mnColorStops.emplace_back(1.0, mnColorStops.back().getStopColor());
+            }
 
             // outer loop over ColorStops, each is from cs_l to cs_r
             for (auto cs_l(mnColorStops.begin()), cs_r(cs_l + 1); cs_r != mnColorStops.end(); cs_l++, cs_r++)
@@ -438,7 +430,7 @@ namespace drawinglayer::texture
                 const double fOffsetStart(cs_l->getStopOffset());
                 const double fOffsetEnd(cs_r->getStopOffset());
 
-                // same offset, empty ColorStopRange, continue with next step
+                // same offset, empty BColorStopRange, continue with next step
                 if (basegfx::fTools::equal(fOffsetStart, fOffsetEnd))
                     continue;
 
@@ -467,7 +459,10 @@ namespace drawinglayer::texture
             }
 
             if (bPenultimateUsed)
+            {
+                // correct temporary change
                 mnColorStops.pop_back();
+            }
         }
 
         void GeoTexSvxGradientRadial::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
@@ -485,14 +480,14 @@ namespace drawinglayer::texture
 
             // texture-back-transform X/Y -> t [0.0..1.0] and determine color
             const double fScaler(basegfx::utils::getRadialGradientAlpha(rUV, maGradientInfo));
-            rBColor = basegfx::utils::modifyBColor(mnColorStops, fScaler, mnRequestedSteps, maLastColorStopRange);
+            rBColor = mnColorStops.getInterpolatedBColor(fScaler, mnRequestedSteps, maLastColorStopRange);
         }
 
 
         GeoTexSvxGradientElliptical::GeoTexSvxGradientElliptical(
             const basegfx::B2DRange& rDefinitionRange,
             sal_uInt32 nRequestedSteps,
-            const basegfx::ColorStops& rColorStops,
+            const basegfx::BColorStops& rColorStops,
             double fBorder,
             double fOffsetX,
             double fOffsetY,
@@ -523,7 +518,13 @@ namespace drawinglayer::texture
                 return;
 
             // check if we need last-ColorStop-correction
-            const bool bPenultimateUsed(checkPenultimate());
+            const bool bPenultimateUsed(mnColorStops.checkPenultimate());
+
+            if (bPenultimateUsed)
+            {
+                // temporarily add a ColorStop entry
+                mnColorStops.emplace_back(1.0, mnColorStops.back().getStopColor());
+            }
 
             // prepare vars dependent on aspect ratio
             const double fAR(maGradientInfo.getAspectRatio());
@@ -536,7 +537,7 @@ namespace drawinglayer::texture
                 const double fOffsetStart(cs_l->getStopOffset());
                 const double fOffsetEnd(cs_r->getStopOffset());
 
-                // same offset, empty ColorStopRange, continue with next step
+                // same offset, empty BColorStopRange, continue with next step
                 if (basegfx::fTools::equal(fOffsetStart, fOffsetEnd))
                     continue;
 
@@ -568,7 +569,10 @@ namespace drawinglayer::texture
             }
 
             if (bPenultimateUsed)
+            {
+                // correct temporary change
                 mnColorStops.pop_back();
+            }
         }
 
         void GeoTexSvxGradientElliptical::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
@@ -586,14 +590,14 @@ namespace drawinglayer::texture
 
             // texture-back-transform X/Y -> t [0.0..1.0] and determine color
             const double fScaler(basegfx::utils::getEllipticalGradientAlpha(rUV, maGradientInfo));
-            rBColor = basegfx::utils::modifyBColor(mnColorStops, fScaler, mnRequestedSteps, maLastColorStopRange);
+            rBColor = mnColorStops.getInterpolatedBColor(fScaler, mnRequestedSteps, maLastColorStopRange);
         }
 
 
         GeoTexSvxGradientSquare::GeoTexSvxGradientSquare(
             const basegfx::B2DRange& rDefinitionRange,
             sal_uInt32 nRequestedSteps,
-            const basegfx::ColorStops& rColorStops,
+            const basegfx::BColorStops& rColorStops,
             double fBorder,
             double fOffsetX,
             double fOffsetY,
@@ -624,7 +628,13 @@ namespace drawinglayer::texture
                 return;
 
             // check if we need last-ColorStop-correction
-            const bool bPenultimateUsed(checkPenultimate());
+            const bool bPenultimateUsed(mnColorStops.checkPenultimate());
+
+            if (bPenultimateUsed)
+            {
+                // temporarily add a ColorStop entry
+                mnColorStops.emplace_back(1.0, mnColorStops.back().getStopColor());
+            }
 
             // outer loop over ColorStops, each is from cs_l to cs_r
             for (auto cs_l(mnColorStops.begin()), cs_r(cs_l + 1); cs_r != mnColorStops.end(); cs_l++, cs_r++)
@@ -633,7 +643,7 @@ namespace drawinglayer::texture
                 const double fOffsetStart(cs_l->getStopOffset());
                 const double fOffsetEnd(cs_r->getStopOffset());
 
-                // same offset, empty ColorStopRange, continue with next step
+                // same offset, empty BColorStopRange, continue with next step
                 if (basegfx::fTools::equal(fOffsetStart, fOffsetEnd))
                     continue;
 
@@ -662,7 +672,10 @@ namespace drawinglayer::texture
             }
 
             if (bPenultimateUsed)
+            {
+                // correct temporary change
                 mnColorStops.pop_back();
+            }
         }
 
         void GeoTexSvxGradientSquare::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
@@ -680,14 +693,14 @@ namespace drawinglayer::texture
 
             // texture-back-transform X/Y -> t [0.0..1.0] and determine color
             const double fScaler(basegfx::utils::getSquareGradientAlpha(rUV, maGradientInfo));
-            rBColor = basegfx::utils::modifyBColor(mnColorStops, fScaler, mnRequestedSteps, maLastColorStopRange);
+            rBColor = mnColorStops.getInterpolatedBColor(fScaler, mnRequestedSteps, maLastColorStopRange);
         }
 
 
         GeoTexSvxGradientRect::GeoTexSvxGradientRect(
             const basegfx::B2DRange& rDefinitionRange,
             sal_uInt32 nRequestedSteps,
-            const basegfx::ColorStops& rColorStops,
+            const basegfx::BColorStops& rColorStops,
             double fBorder,
             double fOffsetX,
             double fOffsetY,
@@ -718,7 +731,13 @@ namespace drawinglayer::texture
                 return;
 
             // check if we need last-ColorStop-correction
-            const bool bPenultimateUsed(checkPenultimate());
+            const bool bPenultimateUsed(mnColorStops.checkPenultimate());
+
+            if (bPenultimateUsed)
+            {
+                // temporarily add a ColorStop entry
+                mnColorStops.emplace_back(1.0, mnColorStops.back().getStopColor());
+            }
 
             // prepare vars dependent on aspect ratio
             const double fAR(maGradientInfo.getAspectRatio());
@@ -731,7 +750,7 @@ namespace drawinglayer::texture
                 const double fOffsetStart(cs_l->getStopOffset());
                 const double fOffsetEnd(cs_r->getStopOffset());
 
-                // same offset, empty ColorStopRange, continue with next step
+                // same offset, empty BColorStopRange, continue with next step
                 if (basegfx::fTools::equal(fOffsetStart, fOffsetEnd))
                     continue;
 
@@ -763,7 +782,10 @@ namespace drawinglayer::texture
             }
 
             if (bPenultimateUsed)
+            {
+                // correct temporary change
                 mnColorStops.pop_back();
+            }
         }
 
         void GeoTexSvxGradientRect::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
@@ -781,7 +803,7 @@ namespace drawinglayer::texture
 
             // texture-back-transform X/Y -> t [0.0..1.0] and determine color
             const double fScaler(basegfx::utils::getRectangularGradientAlpha(rUV, maGradientInfo));
-            rBColor = basegfx::utils::modifyBColor(mnColorStops, fScaler, mnRequestedSteps, maLastColorStopRange);
+            rBColor = mnColorStops.getInterpolatedBColor(fScaler, mnRequestedSteps, maLastColorStopRange);
         }
 
 

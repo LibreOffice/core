@@ -3690,8 +3690,8 @@ void RtfAttributeOutput::FormatFillGradient(const XFillGradientItem& rFillGradie
     m_aFlyProperties.push_back(std::make_pair<OString, OString>(
         "fillType", OString::number(7))); // Shade using the fillAngle
 
-    const XGradient& rGradient(rFillGradient.GetGradientValue());
-    const basegfx::ColorStops& rColorStops(rGradient.GetColorStops());
+    const basegfx::BGradient& rGradient(rFillGradient.GetGradientValue());
+    const basegfx::BColorStops& rColorStops(rGradient.GetColorStops());
 
     // MCGR: It would be best to export the full MCGR definition here
     // with all ColorStops in rColorStops, but rtf does not support this.

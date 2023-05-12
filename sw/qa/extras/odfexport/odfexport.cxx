@@ -790,8 +790,7 @@ DECLARE_ODFEXPORT_TEST(testTextframeGradient, "textframe-gradient.odt")
     awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
 
     // MCGR: Use the completely imported gradient to check for correctness
-    basegfx::ColorStops aColorStops;
-    basegfx::utils::fillColorStopsFromGradient2(aColorStops, aGradient);
+    basegfx::BColorStops aColorStops(aGradient.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
@@ -805,7 +804,7 @@ DECLARE_ODFEXPORT_TEST(testTextframeGradient, "textframe-gradient.odt")
     aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
 
     // MCGR: Use the completely imported gradient to check for correctness
-    basegfx::utils::fillColorStopsFromGradient2(aColorStops, aGradient);
+    aColorStops = basegfx::BColorStops(aGradient.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));

@@ -9379,7 +9379,7 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
     {
         AddToAttrList( m_rExport.SdrExporter().getFlyFillAttrList(), XML_type, "gradient" );
 
-        const XGradient& rGradient = rFillGradient.GetGradientValue();
+        const basegfx::BGradient& rGradient = rFillGradient.GetGradientValue();
         OString sStartColor = msfilter::util::ConvertColor(Color(rGradient.GetColorStops().front().getStopColor()));
         OString sEndColor = msfilter::util::ConvertColor(Color(rGradient.GetColorStops().back().getStopColor()));
 

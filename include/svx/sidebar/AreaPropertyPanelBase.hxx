@@ -23,7 +23,7 @@
 #include <svx/sidebar/AreaTransparencyGradientPopup.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <svx/colorbox.hxx>
-#include <svx/xgrad.hxx>
+#include <basegfx/utils/bgradient.hxx>
 #include <svx/xfilluseslidebackgrounditem.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
@@ -68,8 +68,8 @@ public:
     const static sal_Int32 DEFAULT_ENDVALUE;
     const static sal_Int32 DEFAULT_BORDER;
 
-    const XGradient& GetGradient (const css::awt::GradientStyle eStyle) const;
-    void SetGradient (const XGradient& rGradient);
+    const basegfx::BGradient& GetGradient (const css::awt::GradientStyle eStyle) const;
+    void SetGradient (const basegfx::BGradient& rGradient);
     sal_Int32 GetSelectedTransparencyTypeIndex() const;
 
     // constructor/destructor
@@ -110,12 +110,12 @@ protected:
     sal_Int32                                           mnLastPosPattern;
     sal_uInt16                                          mnLastTransSolid;
 
-    XGradient                                           maGradientLinear;
-    XGradient                                           maGradientAxial;
-    XGradient                                           maGradientRadial;
-    XGradient                                           maGradientElliptical;
-    XGradient                                           maGradientSquare;
-    XGradient                                           maGradientRect;
+    basegfx::BGradient                                  maGradientLinear;
+    basegfx::BGradient                                  maGradientAxial;
+    basegfx::BGradient                                  maGradientRadial;
+    basegfx::BGradient                                  maGradientElliptical;
+    basegfx::BGradient                                  maGradientSquare;
+    basegfx::BGradient                                  maGradientRect;
 
     //ui controls
     std::unique_ptr<weld::Label> mxColorTextFT;
@@ -152,7 +152,7 @@ protected:
     std::unique_ptr< SfxUInt16Item >                mpTransparenceItem;
 
     // MCGR: Preserve in-between ColorStops until we have an UI to edit these
-    basegfx::ColorStops maColorStops;
+    basegfx::BColorStops maColorStops;
 
     DECL_DLLPRIVATE_LINK(SelectFillTypeHdl, weld::ComboBox&, void );
     DECL_DLLPRIVATE_LINK(SelectFillAttrHdl, weld::ComboBox&, void );
@@ -170,7 +170,7 @@ protected:
     void FillStyleChanged(bool bUpdateModel);
 
     // MCGR: Preserve in-between ColorStops until we have an UI to edit these
-    basegfx::ColorStops createColorStops();
+    basegfx::BColorStops createColorStops();
 };
 
 } // end of namespace svx::sidebar

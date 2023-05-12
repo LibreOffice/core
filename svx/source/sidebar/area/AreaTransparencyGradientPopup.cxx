@@ -20,7 +20,6 @@
 #include <svx/sidebar/AreaTransparencyGradientPopup.hxx>
 #include <svx/sidebar/AreaPropertyPanelBase.hxx>
 #include <svx/xflftrit.hxx>
-#include <svx/xgrad.hxx>
 
 namespace svx::sidebar {
 
@@ -56,9 +55,9 @@ AreaTransparencyGradientPopup::~AreaTransparencyGradientPopup()
 
 void AreaTransparencyGradientPopup::InitStatus(XFillFloatTransparenceItem const * pGradientItem)
 {
-    const XGradient& rGradient = pGradientItem->GetGradientValue();
+    const basegfx::BGradient& rGradient = pGradientItem->GetGradientValue();
 
-    XGradient aGradient;
+    basegfx::BGradient aGradient;
     Color aStart(rGradient.GetColorStops().front().getStopColor());
     Color aEnd(rGradient.GetColorStops().back().getStopColor());
 
@@ -87,7 +86,7 @@ void AreaTransparencyGradientPopup::InitStatus(XFillFloatTransparenceItem const 
 
     // MCGR: preserve in-between ColorStops if given
     if (aGradient.GetColorStops().size() > 2)
-        maColorStops = basegfx::ColorStops(aGradient.GetColorStops().begin() + 1, aGradient.GetColorStops().end() - 1);
+        maColorStops = basegfx::BColorStops(aGradient.GetColorStops().begin() + 1, aGradient.GetColorStops().end() - 1);
     else
         maColorStops.clear();
 
@@ -97,7 +96,7 @@ void AreaTransparencyGradientPopup::InitStatus(XFillFloatTransparenceItem const 
 void AreaTransparencyGradientPopup::Rearrange(XFillFloatTransparenceItem const * pGradientItem)
 {
     InitStatus(pGradientItem);
-    const XGradient& rGradient = pGradientItem->GetGradientValue();
+    const basegfx::BGradient& rGradient = pGradientItem->GetGradientValue();
     css::awt::GradientStyle eXGS(rGradient.GetGradientStyle());
 
     switch(eXGS)
@@ -133,13 +132,13 @@ void AreaTransparencyGradientPopup::ExecuteValueModify(sal_uInt8 nStartCol, sal_
     mxMtrTrgrAngle->set_value(nVal, FieldUnit::DEGREE);
     //End of new code
 
-    basegfx::ColorStops aColorStops;
+    basegfx::BColorStops aColorStops;
     aColorStops.emplace_back(0.0, Color(nStartCol, nStartCol, nStartCol).getBColor());
     if(!maColorStops.empty())
         aColorStops.insert(aColorStops.begin(), maColorStops.begin(), maColorStops.end());
     aColorStops.emplace_back(1.0, Color(nEndCol, nEndCol, nEndCol).getBColor());
 
-    XGradient aTmpGradient(
+    basegfx::BGradient aTmpGradient(
         aColorStops,
         static_cast<css::awt::GradientStyle>(mrAreaPropertyPanel.GetSelectedTransparencyTypeIndex()-2),
         Degree10(static_cast<sal_Int16>(mxMtrTrgrAngle->get_value(FieldUnit::DEGREE)) * 10),

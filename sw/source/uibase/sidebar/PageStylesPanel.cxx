@@ -192,10 +192,10 @@ void PageStylesPanel::Update()
             mxBgColorLB->show();
             mxBgGradientLB->show();
 
-            const XGradient xGradient = GetGradientSetOrDefault();
-            const Color aStartColor(xGradient.GetColorStops().front().getStopColor());
+            const basegfx::BGradient aBGradient = GetGradientSetOrDefault();
+            const Color aStartColor(aBGradient.GetColorStops().front().getStopColor());
             mxBgColorLB->SelectEntry(aStartColor);
-            const Color aEndColor(xGradient.GetColorStops().back().getStopColor());
+            const Color aEndColor(aBGradient.GetColorStops().back().getStopColor());
             mxBgGradientLB->SelectEntry(aEndColor);
         }
         break;
@@ -256,11 +256,11 @@ Color const & PageStylesPanel::GetColorSetOrDefault()
    return mpBgColorItem->GetColorValue();
 }
 
-XGradient const & PageStylesPanel::GetGradientSetOrDefault()
+basegfx::BGradient const & PageStylesPanel::GetGradientSetOrDefault()
 {
     if( !mpBgGradientItem )
     {
-        XGradient aGradient;
+        basegfx::BGradient aGradient;
         OUString aGradientName;
         if (SfxObjectShell* pSh = SfxObjectShell::Current())
         {
@@ -550,8 +550,8 @@ void PageStylesPanel::ModifyFillColor()
         break;
         case GRADIENT:
         {
-            XGradient aGradient(
-                basegfx::utils::createColorStopsFromStartEndColor(
+            basegfx::BGradient aGradient(
+                basegfx::BColorStops(
                     mxBgColorLB->GetSelectEntryColor().getBColor(),
                     mxBgGradientLB->GetSelectEntryColor().getBColor()));
 

@@ -71,18 +71,18 @@ bool XGradientList::Create()
     sal_Int32 nLen = aStr.getLength() - 1;
 
     // XGradient() default already creates [COL_BLACK, COL_WHITE] as defaults
-    Insert(std::make_unique<XGradientEntry>(XGradient(),aStr.toString()));
+    Insert(std::make_unique<XGradientEntry>(basegfx::BGradient(),aStr.toString()));
 
     aStr[nLen] = '2';
-    Insert(std::make_unique<XGradientEntry>(XGradient(basegfx::utils::createColorStopsFromStartEndColor(COL_BLUE.getBColor(),    COL_RED.getBColor()),     css::awt::GradientStyle_AXIAL     ,  300_deg10,20,20,10,100,100),aStr.toString()));
+    Insert(std::make_unique<XGradientEntry>(basegfx::BGradient(basegfx::BColorStops(COL_BLUE.getBColor(),    COL_RED.getBColor()),     css::awt::GradientStyle_AXIAL     ,  300_deg10,20,20,10,100,100),aStr.toString()));
     aStr[nLen] = '3';
-    Insert(std::make_unique<XGradientEntry>(XGradient(basegfx::utils::createColorStopsFromStartEndColor(COL_RED.getBColor(),     COL_YELLOW.getBColor()),  css::awt::GradientStyle_RADIAL    ,  600_deg10,30,30,20,100,100),aStr.toString()));
+    Insert(std::make_unique<XGradientEntry>(basegfx::BGradient(basegfx::BColorStops(COL_RED.getBColor(),     COL_YELLOW.getBColor()),  css::awt::GradientStyle_RADIAL    ,  600_deg10,30,30,20,100,100),aStr.toString()));
     aStr[nLen] = '4';
-    Insert(std::make_unique<XGradientEntry>(XGradient(basegfx::utils::createColorStopsFromStartEndColor(COL_YELLOW.getBColor(),  COL_GREEN.getBColor()),   css::awt::GradientStyle_ELLIPTICAL,  900_deg10,40,40,30,100,100),aStr.toString()));
+    Insert(std::make_unique<XGradientEntry>(basegfx::BGradient(basegfx::BColorStops(COL_YELLOW.getBColor(),  COL_GREEN.getBColor()),   css::awt::GradientStyle_ELLIPTICAL,  900_deg10,40,40,30,100,100),aStr.toString()));
     aStr[nLen] = '5';
-    Insert(std::make_unique<XGradientEntry>(XGradient(basegfx::utils::createColorStopsFromStartEndColor(COL_GREEN.getBColor(),   COL_MAGENTA.getBColor()), css::awt::GradientStyle_SQUARE    , 1200_deg10,50,50,40,100,100),aStr.toString()));
+    Insert(std::make_unique<XGradientEntry>(basegfx::BGradient(basegfx::BColorStops(COL_GREEN.getBColor(),   COL_MAGENTA.getBColor()), css::awt::GradientStyle_SQUARE    , 1200_deg10,50,50,40,100,100),aStr.toString()));
     aStr[nLen] = '6';
-    Insert(std::make_unique<XGradientEntry>(XGradient(basegfx::utils::createColorStopsFromStartEndColor(COL_MAGENTA.getBColor(), COL_YELLOW.getBColor()),  css::awt::GradientStyle_RECT      , 1900_deg10,60,60,50,100,100),aStr.toString()));
+    Insert(std::make_unique<XGradientEntry>(basegfx::BGradient(basegfx::BColorStops(COL_MAGENTA.getBColor(), COL_YELLOW.getBColor()),  css::awt::GradientStyle_RECT      , 1900_deg10,60,60,50,100,100),aStr.toString()));
 
     return true;
 }
@@ -101,15 +101,14 @@ BitmapEx XGradientList::CreateBitmap( tools::Long nIndex, const Size& rSize ) co
             basegfx::utils::createPolygonFromRect(
                 basegfx::B2DRange(0.0, 0.0, rSize.Width(), rSize.Height())));
 
-        const XGradient& rGradient = GetGradient(nIndex)->GetGradient();
-        basegfx::ColorStops aColorStops(rGradient.GetColorStops());
+        const basegfx::BGradient& rGradient = GetGradient(nIndex)->GetGradient();
+        basegfx::BColorStops aColorStops(rGradient.GetColorStops());
 
         if (rGradient.GetStartIntens() != 100 || rGradient.GetEndIntens() != 100)
         {
             // Need to do the (old, crazy) blend against black
-            basegfx::utils::blendColorStopsToIntensity(
-                aColorStops,
-                rGradient.GetStartIntens() * 0.01,
+            aColorStops.blendToIntensity(
+                    rGradient.GetStartIntens() * 0.01,
                 rGradient.GetEndIntens() * 0.01,
                 basegfx::BColor()); // COL_BLACK
         }

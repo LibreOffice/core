@@ -494,7 +494,6 @@
 #include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
-#include <svx/xgrad.hxx>
 #include <svx/xhatch.hxx>
 #include <svx/xit.hxx>
 #include <svx/xpoly.hxx>

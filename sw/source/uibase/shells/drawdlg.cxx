@@ -264,7 +264,7 @@ namespace
         }
         if (const SfxStringItem* pJSON = pArgs->GetItemIfSet(SID_FILL_GRADIENT_JSON, false))
         {
-            XGradient aGradient = XGradient::fromJSON(pJSON->GetValue());
+            basegfx::BGradient aGradient = basegfx::BGradient::fromJSON(pJSON->GetValue());
             XFillGradientItem aItem(aGradient);
             pArgs->Put(aItem);
         }
@@ -348,7 +348,7 @@ static void lcl_unifyFillTransparencyItems(const SfxItemSet& rSet)
     if (!pFillTranspItem)
         return;
 
-    XGradient aTmpGradient = pFillFloatTranspItem->GetGradientValue();
+    basegfx::BGradient aTmpGradient = pFillFloatTranspItem->GetGradientValue();
     sal_uInt16 nTranspPercent = pFillTranspItem->GetValue();
     // Encode transparency percentage as intensity
     sal_uInt16 nIntensity = 100 - std::min<sal_uInt16>

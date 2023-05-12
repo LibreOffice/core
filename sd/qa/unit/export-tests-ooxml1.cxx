@@ -1358,8 +1358,7 @@ void SdOOXMLExportTest1::testTdf94238()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(0), aGradient.Border);
 
     // MCGR: Use the completely imported gradient to check for correctness
-    basegfx::ColorStops aColorStops;
-    basegfx::utils::fillColorStopsFromGradient2(aColorStops, aGradient);
+    const basegfx::BColorStops aColorStops(aGradient.ColorStops);
 
     // Without the accompanying fix in place, this test would have failed with
     // 'Expected: 0, Actual  : 10592673', i.e. the start color of the gradient
@@ -1618,8 +1617,7 @@ void SdOOXMLExportTest1::testTdf128345GradientAxial()
     xShapePropSet->getPropertyValue("FillTransparenceGradient") >>= aTransparenceGradient;
 
     // MCGR: Use the completely imported gradient to check for correctness
-    basegfx::ColorStops aColorStops;
-    basegfx::utils::fillColorStopsFromGradient2(aColorStops, aTransparenceGradient);
+    const basegfx::BColorStops aColorStops(aTransparenceGradient.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(3), aColorStops.size());
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));

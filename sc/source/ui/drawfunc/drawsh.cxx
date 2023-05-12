@@ -117,7 +117,7 @@ namespace
         }
         if (const SfxStringItem* pJSON = rArgs.GetItemIfSet(SID_FILL_GRADIENT_JSON, false))
         {
-            XGradient aGradient = XGradient::fromJSON(pJSON->GetValue());
+            basegfx::BGradient aGradient = basegfx::BGradient::fromJSON(pJSON->GetValue());
             XFillGradientItem aItem(aGradient);
             rArgs.Put(aItem);
         }

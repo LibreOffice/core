@@ -476,10 +476,9 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
     {
         if (basegfx::utils::fillGradient2FromAny(aTransparenceGradient, mAny))
         {
-            basegfx::ColorStops aColorStops;
-            basegfx::utils::fillColorStopsFromAny(aColorStops, mAny);
+            const basegfx::BColorStops aColorStops(mAny);
             basegfx::BColor aSingleColor;
-            bNeedGradientFill = !basegfx::utils::isSingleColor(aColorStops, aSingleColor);
+            bNeedGradientFill = !aColorStops.isSingleColor(aSingleColor);
         }
 
         if (!bNeedGradientFill && 0 != aTransparenceGradient.StartColor)
@@ -766,8 +765,8 @@ void DrawingML::WriteGradientFill(
     const awt::Gradient2* pColorGradient, sal_Int32 nFixColor,
     const awt::Gradient2* pTransparenceGradient, double fFixTransparence)
 {
-    basegfx::ColorStops aColorStops;
-    basegfx::ColorStops aAlphaStops;
+    basegfx::BColorStops aColorStops;
+    basegfx::BColorStops aAlphaStops;
     basegfx::BColor aSingleColor(::Color(ColorTransparency, nFixColor).getBColor());
     basegfx::BColor aSingleAlpha(fFixTransparence);
     awt::Gradient2 aGradient;
@@ -822,12 +821,12 @@ void DrawingML::WriteGradientFill(
         {
             // we need to 'double' the gradient to make it appear as what we call
             // 'axial', but also scale and mirror in doing so
-            basegfx::ColorStops aNewColorStops;
-            basegfx::ColorStops aNewAlphaStops;
+            basegfx::BColorStops aNewColorStops;
+            basegfx::BColorStops aNewAlphaStops;
 
-            // add mirrored gadients, scaled to [0.0 .. 0.5]
-            basegfx::ColorStops::const_reverse_iterator aRevCurrColor(aColorStops.rbegin());
-            basegfx::ColorStops::const_reverse_iterator aRevCurrAlpha(aAlphaStops.rbegin());
+            // add mirrored gradients, scaled to [0.0 .. 0.5]
+            basegfx::BColorStops::const_reverse_iterator aRevCurrColor(aColorStops.rbegin());
+            basegfx::BColorStops::const_reverse_iterator aRevCurrAlpha(aAlphaStops.rbegin());
 
             while (aRevCurrColor != aColorStops.rend() && aRevCurrAlpha != aAlphaStops.rend())
             {
@@ -837,8 +836,8 @@ void DrawingML::WriteGradientFill(
                 aRevCurrAlpha++;
             }
 
-            basegfx::ColorStops::const_iterator aCurrColor(aColorStops.begin());
-            basegfx::ColorStops::const_iterator aCurrAlpha(aAlphaStops.begin());
+            basegfx::BColorStops::const_iterator aCurrColor(aColorStops.begin());
+            basegfx::BColorStops::const_iterator aCurrAlpha(aAlphaStops.begin());
 
             if (basegfx::fTools::equalZero(aCurrColor->getStopOffset()))
             {
@@ -873,9 +872,9 @@ void DrawingML::WriteGradientFill(
         // case awt::GradientStyle_RECT:
         // case awt::GradientStyle_SQUARE:
         {
-            // all these types need the gadiens to be mirrored
-            basegfx::utils::reverseColorStops(aColorStops);
-            basegfx::utils::reverseColorStops(aAlphaStops);
+            // all these types need the gradients to be mirrored
+            aColorStops.reverseColorStops();
+            aAlphaStops.reverseColorStops();
 
             bRadialOrEllipticalOrRectOrSquare = true;
             break;
@@ -885,8 +884,8 @@ void DrawingML::WriteGradientFill(
     // export GradientStops (with alpha)
     mpFS->startElementNS(XML_a, XML_gsLst);
 
-    basegfx::ColorStops::const_iterator aCurrColor(aColorStops.begin());
-    basegfx::ColorStops::const_iterator aCurrAlpha(aAlphaStops.begin());
+    basegfx::BColorStops::const_iterator aCurrColor(aColorStops.begin());
+    basegfx::BColorStops::const_iterator aCurrAlpha(aAlphaStops.begin());
 
     while (aCurrColor != aColorStops.end() && aCurrAlpha != aAlphaStops.end())
     {

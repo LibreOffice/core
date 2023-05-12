@@ -154,8 +154,8 @@ void SdDrawDocument::CreateLayoutTemplates()
     Color    aNullCol(COL_DEFAULT_SHAPE_STROKE);
 
     XDash     aNullDash;
-    XGradient aNullGrad(
-        basegfx::utils::createColorStopsFromStartEndColor(
+    basegfx::BGradient aNullGrad(
+        basegfx::BColorStops(
             aNullCol.getBColor(),
             COL_WHITE.getBColor()));
     aNullGrad.SetStartIntens( 100 );
@@ -392,7 +392,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // Graphic
     OUString aGraphicName;
     XFillGradientItem aFillGradient;
-    XGradient aGradient;
+    basegfx::BGradient aGradient;
 
     {
         aGraphicName = SdResId(STR_POOLSHEET_GRAPHIC);
@@ -419,7 +419,7 @@ void SdDrawDocument::CreateLayoutTemplates()
         aGradient.SetAngle( 0_deg10 );                                 // 0° angle
 
         aGradient.SetColorStops(
-            basegfx::utils::createColorStopsFromStartEndColor(
+            basegfx::BColorStops(
                 Color(0xcccccc).getBColor(),    // light gray 3
                 COL_WHITE.getBColor())); // white
 
@@ -443,7 +443,7 @@ void SdDrawDocument::CreateLayoutTemplates()
         aGradient.SetAngle( 300_deg10 );
 
         aGradient.SetColorStops(
-            basegfx::utils::createColorStopsFromStartEndColor(
+            basegfx::BColorStops(
                 COL_WHITE.getBColor(),  // white
                 Color(0xcccccc).getBColor())); // light gray 3
 
@@ -461,7 +461,7 @@ void SdDrawDocument::CreateLayoutTemplates()
         pISet = &pSheet->GetItemSet();
 
         aGradient.SetColorStops(
-            basegfx::utils::createColorStopsFromStartEndColor(
+            basegfx::BColorStops(
                 Color(0x00729fcf).getBColor(),   // light blue 2
                 Color(0x00355269).getBColor())); // dark blue 2
 
@@ -479,7 +479,7 @@ void SdDrawDocument::CreateLayoutTemplates()
         pISet = &pSheet->GetItemSet();
 
         aGradient.SetColorStops(
-            basegfx::utils::createColorStopsFromStartEndColor(
+            basegfx::BColorStops(
                 Color(0x0077bc65).getBColor(),   // light green 2
                 Color(0x00127622).getBColor())); // dark green 2
 
@@ -498,7 +498,7 @@ void SdDrawDocument::CreateLayoutTemplates()
         pISet = &pSheet->GetItemSet();
 
         aGradient.SetColorStops(
-            basegfx::utils::createColorStopsFromStartEndColor(
+            basegfx::BColorStops(
                 Color(0x00ff6d6d).getBColor(),   // light red 2
                 Color(0x00c9211e).getBColor())); // dark red 2
 
@@ -516,7 +516,7 @@ void SdDrawDocument::CreateLayoutTemplates()
         pISet = &pSheet->GetItemSet();
 
         aGradient.SetColorStops(
-            basegfx::utils::createColorStopsFromStartEndColor(
+            basegfx::BColorStops(
                 Color(0x00ffde59).getBColor(),   // light gold 2
                 Color(0x00b47804).getBColor())); // dark gold 2
 

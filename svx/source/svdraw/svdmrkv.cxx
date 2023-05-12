@@ -29,7 +29,6 @@
 #include <osl/thread.h>
 #include <rtl/strbuf.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/xgrad.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflgrit.hxx>
 #include "gradtrns.hxx"
@@ -1561,7 +1560,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
                 {
                     // add this item, it's not yet there
                     XFillFloatTransparenceItem aNewItem(rSet.Get(XATTR_FILLFLOATTRANSPARENCE));
-                    XGradient aGrad = aNewItem.GetGradientValue();
+                    basegfx::BGradient aGrad = aNewItem.GetGradientValue();
 
                     aNewItem.SetEnabled(true);
                     aGrad.SetStartIntens(100);

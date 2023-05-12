@@ -6069,7 +6069,6 @@ include/svx/xftouit.hxx
 include/svx/xftshit.hxx
 include/svx/xftshxy.hxx
 include/svx/xftstit.hxx
-include/svx/xgrad.hxx
 include/svx/xgrscit.hxx
 include/svx/xhatch.hxx
 include/svx/xit.hxx

@@ -36,7 +36,6 @@ class SvxPageItem;
 class SvxLongLRSpaceItem;
 class SvxLongULSpaceItem;
 class XFillColorItem;
-class XGradient;
 class XFillGradientItem;
 class XFillBitmapItem;
 class XFillHatchItem;
@@ -140,7 +139,7 @@ private:
     MapUnit meUnit;
 
     // MCGR: Preserve in-between ColorStops until we have an UI to edit these
-    basegfx::ColorStops maColorStops;
+    basegfx::BColorStops maColorStops;
 
     DECL_LINK(FillBackgroundHdl, weld::ComboBox&, void);
     DECL_LINK(FillStyleModifyHdl, weld::ComboBox&, void);
@@ -162,7 +161,7 @@ private:
     void SetMarginsFieldUnit();
 
     Color const & GetColorSetOrDefault();
-    XGradient const & GetGradientSetOrDefault();
+    basegfx::BGradient const & GetGradientSetOrDefault();
     OUString const & GetHatchingSetOrDefault();
     OUString const & GetBitmapSetOrDefault();
     OUString const & GetPatternSetOrDefault();
@@ -178,7 +177,7 @@ private:
     static FieldUnit GetCurrentUnit(SfxItemState eState, const SfxPoolItem* pState);
 
     // MCGR: Preserve in-between ColorStops until we have an UI to edit these
-    basegfx::ColorStops createColorStops();
+    basegfx::BColorStops createColorStops();
 };
 
 }
