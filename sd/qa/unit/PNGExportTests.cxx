@@ -476,6 +476,17 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf155048)
 
     // 1. AA disabled
     {
+#ifdef MACOSX
+    // Disable test that always fails with Apple Retina displays
+    // With a HiDPI display on macOS, each logical pixel is backed
+    // by 4 physical pixels. Turning off antialiasing and drawing a
+    // diagonal line causes many logical pixels on the edge of the
+    // diagonal line to have a mixture of white and blue physical
+    // pixels. Then, when such logical pixels are fetched via
+    // BitmapEx::GetPixelColor(), their underlying 4 white and blue
+    // physical pixels are combined into blended shades of white
+    // and blue.
+#else
         css::uno::Sequence<css::beans::PropertyValue> aFilterData{
             comphelper::makePropertyValue("PixelWidth", sal_Int32(200)),
             comphelper::makePropertyValue("PixelHeight", sal_Int32(200)),
@@ -499,6 +510,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf155048)
         // There must be only two colors (white and blue) in the bitmap generated without AA
         CPPUNIT_ASSERT_EQUAL(size_t(2), foundColors.size());
         maTempFile.CloseStream();
+#endif
     }
 
     // 2. AA enabled
