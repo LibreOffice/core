@@ -1216,35 +1216,30 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
         {
             bool           draw = false;
             bool           full = false;
-            SwLinePortion *pPos = const_cast<SwLinePortion *>(&rPor);
+            const sal_Int32 nMaxLen = GetText().getLength();
+            const sal_Int32 nCurrPorEnd(GetIdx() + rPor.GetLen());
+            const SwLinePortion* pPos = &rPor;
             TextFrameIndex nIdx = GetIdx();
-            TextFrameIndex nLen;
 
             do
             {
-                nLen = pPos->GetLen();
-                for (TextFrameIndex i = nIdx; i < (nIdx + nLen); ++i)
+                const sal_Int32 nEndPos = std::min(sal_Int32(nIdx + pPos->GetLen()), nMaxLen);
+                for (sal_Int32 i = sal_Int32(nIdx); i < nEndPos; ++i)
                 {
-                    if (i < TextFrameIndex(GetText().getLength())
-                        && GetText()[sal_Int32(i)] == CH_TXTATR_NEWLINE)
-                    {
-                        if ( i >= (GetIdx() + rPor.GetLen()) )
-                        {
-                            goto drawcontinue;
-                        }
-                    }
-                    if (i >= TextFrameIndex(GetText().getLength())
-                        || GetText()[sal_Int32(i)] != CH_BLANK)
+                    if (i < nMaxLen && i >= nCurrPorEnd && GetText()[i] == CH_TXTATR_NEWLINE)
+                        goto drawcontinue;
+
+                    if (i == nMaxLen || GetText()[i] != CH_BLANK)
                     {
                         draw = true;
-                        if ( i >= (GetIdx() + rPor.GetLen()) )
+                        if (i >= nCurrPorEnd)
                         {
                             full = true;
                             goto drawcontinue;
                         }
                     }
                 }
-                nIdx += nLen;
+                nIdx += pPos->GetLen();
                 pPos = pPos->GetNextPortion();
             } while ( pPos );
 
@@ -1255,36 +1250,25 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
 
             if ( !full )
             {
-                pPos = const_cast<SwLinePortion *>(&rPor);
-                nIdx = GetIdx();
-
-                nLen = pPos->GetLen();
-                for (TextFrameIndex i = nIdx + nLen - TextFrameIndex(1);
-                        i >= nIdx; --i)
+                const sal_Int32 nLastPos = std::min(nCurrPorEnd, nMaxLen) - 1;
+                for (sal_Int32 i = nLastPos; TextFrameIndex(i) >= GetIdx(); --i)
                 {
-                    if (i < TextFrameIndex(GetText().getLength())
-                        && GetText()[sal_Int32(i)] == CH_TXTATR_NEWLINE)
-                    {
+                    if (GetText()[i] == CH_TXTATR_NEWLINE)
                         continue;
-                    }
-                    if ((i + TextFrameIndex(1) ).get() > GetText().getLength())
-                        // prevent crash by not passing bad data down to GetTextSize->SwDrawTextInfo
-                        SAL_WARN("sw", "something dodgy, clamping text index to prevent crash");
-                    else if (i >= TextFrameIndex(GetText().getLength())
-                        || GetText()[sal_Int32(i)] != CH_BLANK)
+
+                    if (GetText()[i] != CH_BLANK)
                     {
-                        sal_uInt16 nOldWidth = rPor.Width();
-                        sal_uInt16 nNewWidth = GetTextSize(m_pOut, nullptr,
-                            GetText(), nIdx, (i + TextFrameIndex(1) - nIdx)).Width();
+                        const sal_uInt16 nOldWidth = rPor.Width();
+                        const sal_uInt16 nNewWidth
+                            = GetTextSize(m_pOut, nullptr, GetText(), GetIdx(),
+                                          TextFrameIndex(i + 1) - GetIdx()).Width();
 
                         const_cast<SwLinePortion&>(rPor).Width( nNewWidth );
                         CalcRect( rPor, nullptr, &aIntersect, true );
                         const_cast<SwLinePortion&>(rPor).Width( nOldWidth );
 
                         if ( !aIntersect.HasArea() )
-                        {
                             return;
-                        }
 
                         break;
                     }
