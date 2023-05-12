@@ -250,6 +250,8 @@ template<> Any toAny(Any const & value) { return value; }
 
 #if defined LIBO_INTERNAL_ONLY
 
+inline Any toAny(Any&& value) { return std::move(value); }
+
 template<typename T1, typename T2>
 Any toAny(rtl::OUStringConcat<T1, T2> && value)
 { return Any(std::move(value)); }
