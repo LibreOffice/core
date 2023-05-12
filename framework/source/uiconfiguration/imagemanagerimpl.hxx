@@ -137,17 +137,12 @@ namespace framework
 
             void clear();
 
-            typedef std::unordered_map< OUString,
-                                        sal_Bool > ImageNameMap;
-
             enum NotifyOp
             {
                 NotifyOp_Remove,
                 NotifyOp_Insert,
                 NotifyOp_Replace
             };
-
-            typedef ::std::vector< css::ui::ConfigurationEvent > ConfigEventNotifyContainer;
 
             void                                      implts_initialize();
             void                                      implts_notifyContainerListener( const css::ui::ConfigurationEvent& aEvent, NotifyOp eOp );
