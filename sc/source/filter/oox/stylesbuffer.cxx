@@ -274,8 +274,12 @@ void Color::importColor( const AttributeList& rAttribs )
 {
     // tdf#113271 The order of import color is very important in case of more than one color attributes was provided.
     // This order (theme -> rgb -> indexed -> auto) is not documented and was gathered experimentally based on MS Excel 2013.
-    if( rAttribs.hasAttribute( XML_theme ) )
-        setTheme( rAttribs.getInteger( XML_theme, -1 ), rAttribs.getDouble( XML_tint, 0.0 ) );
+    if (rAttribs.hasAttribute(XML_theme))
+    {
+        sal_Int32 nTheme = rAttribs.getInteger(XML_theme, -1);
+        double fTint = rAttribs.getDouble(XML_tint, 0.0);
+        setTheme(nTheme , fTint);
+    }
     else if( rAttribs.hasAttribute( XML_rgb ) )
         setRgb( ::Color(ColorTransparency, rAttribs.getIntegerHex( XML_rgb, sal_Int32(API_RGB_TRANSPARENT) ) ), rAttribs.getDouble( XML_tint, 0.0 ) );
     else if( rAttribs.hasAttribute( XML_indexed ) )
@@ -745,6 +749,7 @@ void Font::finalizeImport()
             rtl_getTextEncodingFromWindowsCharset( static_cast< sal_uInt8 >( maModel.mnCharSet ) ) );
 
     // color, height, weight, slant, strikeout, outline, shadow
+    maApiData.maComplexColor   = maModel.maColor.createComplexColor(getBaseFilter().getGraphicHelper(), -1);
     maApiData.mnColor          = maModel.maColor.getColor( getBaseFilter().getGraphicHelper() );
     maApiData.maDesc.Height    = static_cast< sal_Int16 >( maModel.mfHeight * 20.0 );
     maApiData.maDesc.Weight    = maModel.mbBold ? css::awt::FontWeight::BOLD : css::awt::FontWeight::NORMAL;
@@ -928,7 +933,7 @@ void Font::fillToItemSet( SfxItemSet& rItemSet, bool bEditEngineText, bool bSkip
     // character color
     if( maUsedFlags.mbColorUsed )
     {
-        ScfTools::PutItem( rItemSet,SvxColorItem( maApiData.mnColor, bEditEngineText ? static_cast<sal_uInt16>(EE_CHAR_COLOR) : ATTR_FONT_COLOR), bSkipPoolDefs );
+        ScfTools::PutItem( rItemSet,SvxColorItem( maApiData.mnColor, maApiData.maComplexColor, bEditEngineText ? static_cast<sal_uInt16>(EE_CHAR_COLOR) : ATTR_FONT_COLOR), bSkipPoolDefs );
     }
     // underline style
     if( maUsedFlags.mbUnderlineUsed )
@@ -1718,7 +1723,7 @@ void Fill::importFgColor( const AttributeList& rAttribs )
     OSL_ENSURE( mxPatternModel, "Fill::importFgColor - missing pattern data" );
     if( mxPatternModel )
     {
-        mxPatternModel->maPatternColor.importColor( rAttribs );
+        mxPatternModel->maPatternColor.importColor(rAttribs);
         mxPatternModel->mbPattColorUsed = true;
     }
 }
@@ -1728,7 +1733,7 @@ void Fill::importBgColor( const AttributeList& rAttribs )
     OSL_ENSURE( mxPatternModel, "Fill::importBgColor - missing pattern data" );
     if( mxPatternModel )
     {
-        mxPatternModel->maFillColor.importColor( rAttribs );
+        mxPatternModel->maFillColor.importColor(rAttribs);
         mxPatternModel->mbFillColorUsed = true;
     }
 }
@@ -1891,6 +1896,7 @@ void Fill::finalizeImport()
             ::Color nFillColor = rModel.maFillColor.getColor( rGraphicHelper, nWinColor );
 
             maApiData.mnColor = lclGetMixedColor( nPattColor, nFillColor, nAlpha );
+            maApiData.maComplexColor = rModel.maPatternColor.createComplexColor(rGraphicHelper, -1);
             maApiData.mnFilterColor = lclGetMixedColor( nFiltPattColor, nFillColor, nAlpha );
             maApiData.mbTransparent = false;
         }
@@ -1926,6 +1932,7 @@ void Fill::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
     else
     {
         aBrushItem.SetColor( maApiData.mnColor  );
+        aBrushItem.setComplexColor(maApiData.maComplexColor);
         aBrushItem.SetFiltColor( maApiData.mnFilterColor  );
     }
     ScfTools::PutItem( rItemSet, aBrushItem, bSkipPoolDefs );
