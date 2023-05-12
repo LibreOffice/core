@@ -1283,29 +1283,23 @@ void SvxShadowItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 // class SvxBoxItem ------------------------------------------------------
 
-SvxBoxItem::SvxBoxItem( const SvxBoxItem& rCpy ) :
-
-    SfxPoolItem ( rCpy ),
-    pTop        ( rCpy.pTop     ? new SvxBorderLine( *rCpy.pTop )    : nullptr ),
-    pBottom     ( rCpy.pBottom  ? new SvxBorderLine( *rCpy.pBottom ) : nullptr ),
-    pLeft       ( rCpy.pLeft    ? new SvxBorderLine( *rCpy.pLeft )   : nullptr ),
-    pRight      ( rCpy.pRight   ? new SvxBorderLine( *rCpy.pRight )  : nullptr ),
-    nTopDist    ( rCpy.nTopDist ),
-    nBottomDist ( rCpy.nBottomDist ),
-    nLeftDist   ( rCpy.nLeftDist ),
-    nRightDist  ( rCpy.nRightDist ),
-    bRemoveAdjCellBorder ( rCpy.bRemoveAdjCellBorder )
+SvxBoxItem::SvxBoxItem(const SvxBoxItem& rCopy)
+    : SfxPoolItem (rCopy)
+    , mpTopBorderLine(rCopy.mpTopBorderLine ? new SvxBorderLine(*rCopy.mpTopBorderLine) : nullptr)
+    , mpBottomBorderLine(rCopy.mpBottomBorderLine ? new SvxBorderLine(*rCopy.mpBottomBorderLine) : nullptr)
+    , mpLeftBorderLine(rCopy.mpLeftBorderLine ? new SvxBorderLine(*rCopy.mpLeftBorderLine) : nullptr)
+    , mpRightBorderLine(rCopy.mpRightBorderLine ? new SvxBorderLine(*rCopy.mpRightBorderLine) : nullptr)
+    , mnTopDistance(rCopy.mnTopDistance)
+    , mnBottomDistance(rCopy.mnBottomDistance)
+    , mnLeftDistance(rCopy.mnLeftDistance)
+    , mnRightDistance(rCopy.mnRightDistance)
+    , mbRemoveAdjCellBorder(rCopy.mbRemoveAdjCellBorder)
 {
 }
 
 
-SvxBoxItem::SvxBoxItem( const sal_uInt16 nId ) :
-    SfxPoolItem( nId ),
-    nTopDist    ( 0 ),
-    nBottomDist ( 0 ),
-    nLeftDist   ( 0 ),
-    nRightDist  ( 0 ),
-    bRemoveAdjCellBorder ( false )
+SvxBoxItem::SvxBoxItem(const sal_uInt16 nId)
+    : SfxPoolItem(nId)
 {
 }
 
@@ -1318,13 +1312,13 @@ void SvxBoxItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxBoxItem"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("top-dist"),
-                                      BAD_CAST(OString::number(nTopDist).getStr()));
+                                      BAD_CAST(OString::number(mnTopDistance).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("bottom-dist"),
-                                      BAD_CAST(OString::number(nBottomDist).getStr()));
+                                      BAD_CAST(OString::number(mnBottomDistance).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("left-dist"),
-                                      BAD_CAST(OString::number(nLeftDist).getStr()));
+                                      BAD_CAST(OString::number(mnLeftDistance).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("right-dist"),
-                                      BAD_CAST(OString::number(nRightDist).getStr()));
+                                      BAD_CAST(OString::number(mnRightDistance).getStr()));
     SfxPoolItem::dumpAsXml(pWriter);
     (void)xmlTextWriterEndElement(pWriter);
 }
@@ -1346,7 +1340,7 @@ boost::property_tree::ptree SvxBoxItem::dumpAsJSON() const
 }
 
 
-static bool CmpBrdLn( const std::unique_ptr<SvxBorderLine> & pBrd1, const SvxBorderLine* pBrd2 )
+static bool CompareBorderLine(const std::unique_ptr<SvxBorderLine> & pBrd1, const SvxBorderLine* pBrd2)
 {
     if( pBrd1.get() == pBrd2 )
         return true;
@@ -1362,15 +1356,15 @@ bool SvxBoxItem::operator==( const SfxPoolItem& rAttr ) const
 
     const SvxBoxItem& rBoxItem = static_cast<const SvxBoxItem&>(rAttr);
     return (
-        ( nTopDist == rBoxItem.nTopDist ) &&
-        ( nBottomDist == rBoxItem.nBottomDist )   &&
-        ( nLeftDist == rBoxItem.nLeftDist )   &&
-        ( nRightDist == rBoxItem.nRightDist ) &&
-        ( bRemoveAdjCellBorder == rBoxItem.bRemoveAdjCellBorder ) &&
-        CmpBrdLn( pTop, rBoxItem.GetTop() )           &&
-        CmpBrdLn( pBottom, rBoxItem.GetBottom() )     &&
-        CmpBrdLn( pLeft, rBoxItem.GetLeft() )         &&
-        CmpBrdLn( pRight, rBoxItem.GetRight() ) );
+        (mnTopDistance == rBoxItem.mnTopDistance) &&
+        (mnBottomDistance == rBoxItem.mnBottomDistance) &&
+        (mnLeftDistance == rBoxItem.mnLeftDistance) &&
+        (mnRightDistance == rBoxItem.mnRightDistance) &&
+        (mbRemoveAdjCellBorder == rBoxItem.mbRemoveAdjCellBorder ) &&
+        CompareBorderLine(mpTopBorderLine, rBoxItem.GetTop()) &&
+        CompareBorderLine(mpBottomBorderLine, rBoxItem.GetBottom()) &&
+        CompareBorderLine(mpLeftBorderLine, rBoxItem.GetLeft()) &&
+        CompareBorderLine(mpRightBorderLine, rBoxItem.GetRight()));
 }
 
 
@@ -1411,11 +1405,11 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 uno::Any(SvxBoxItem::SvxLineToLine(GetRight(), bConvert)),
                 uno::Any(SvxBoxItem::SvxLineToLine(GetBottom(), bConvert)),
                 uno::Any(SvxBoxItem::SvxLineToLine(GetTop(), bConvert)),
-                uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100( GetSmallestDistance()) : GetSmallestDistance())),
-                uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100( nTopDist ) : nTopDist )),
-                uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100( nBottomDist ) : nBottomDist )),
-                uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100( nLeftDist ) : nLeftDist )),
-                uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100( nRightDist ) : nRightDist ))
+                uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100(GetSmallestDistance()) : GetSmallestDistance())),
+                uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100(mnTopDistance) : mnTopDistance)),
+                uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100(mnBottomDistance) : mnBottomDistance)),
+                uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100(mnLeftDistance) : mnLeftDistance)),
+                uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100(mnRightDistance) : mnRightDistance))
             };
             rVal <<= aSeq;
             return true;
@@ -1441,19 +1435,19 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             bDistMember = true;
             break;
         case TOP_BORDER_DISTANCE:
-            nDist = nTopDist;
+            nDist = mnTopDistance;
             bDistMember = true;
             break;
         case BOTTOM_BORDER_DISTANCE:
-            nDist = nBottomDist;
+            nDist = mnBottomDistance;
             bDistMember = true;
             break;
         case LEFT_BORDER_DISTANCE:
-            nDist = nLeftDist;
+            nDist = mnLeftDistance;
             bDistMember = true;
             break;
         case RIGHT_BORDER_DISTANCE:
-            nDist = nRightDist;
+            nDist = mnRightDistance;
             bDistMember = true;
             break;
         case LINE_STYLE:
@@ -1778,112 +1772,111 @@ bool SvxBoxItem::GetPresentation
         {
             rText.clear();
 
-            if ( pTop )
+            if (mpTopBorderLine)
             {
-                rText = pTop->GetValueString( eCoreUnit, ePresUnit, &rIntl ) + cpDelimTmp;
+                rText = mpTopBorderLine->GetValueString( eCoreUnit, ePresUnit, &rIntl ) + cpDelimTmp;
             }
-            if( !(pTop && pBottom && pLeft && pRight &&
-                  *pTop == *pBottom && *pTop == *pLeft && *pTop == *pRight) )
+            if ( !(mpTopBorderLine && mpBottomBorderLine && mpLeftBorderLine && mpRightBorderLine &&
+                  *mpTopBorderLine == *mpBottomBorderLine &&
+                  *mpTopBorderLine == *mpLeftBorderLine &&
+                  *mpTopBorderLine == *mpRightBorderLine))
             {
-                if ( pBottom )
+                if (mpBottomBorderLine)
                 {
-                    rText += pBottom->GetValueString( eCoreUnit, ePresUnit, &rIntl ) + cpDelimTmp;
+                    rText += mpBottomBorderLine->GetValueString( eCoreUnit, ePresUnit, &rIntl ) + cpDelimTmp;
                 }
-                if ( pLeft )
+                if (mpLeftBorderLine)
                 {
-                    rText += pLeft->GetValueString( eCoreUnit, ePresUnit, &rIntl ) + cpDelimTmp;
+                    rText += mpLeftBorderLine->GetValueString( eCoreUnit, ePresUnit, &rIntl ) + cpDelimTmp;
                 }
-                if ( pRight )
+                if (mpRightBorderLine)
                 {
-                    rText += pRight->GetValueString( eCoreUnit, ePresUnit, &rIntl ) + cpDelimTmp;
+                    rText += mpRightBorderLine->GetValueString( eCoreUnit, ePresUnit, &rIntl ) + cpDelimTmp;
                 }
             }
-            rText += GetMetricText( static_cast<tools::Long>(nTopDist), eCoreUnit, ePresUnit, &rIntl );
-            if( nTopDist != nBottomDist || nTopDist != nLeftDist ||
-                nTopDist != nRightDist )
+            rText += GetMetricText( static_cast<tools::Long>(mnTopDistance), eCoreUnit, ePresUnit, &rIntl );
+            if (mnTopDistance != mnBottomDistance ||
+                mnTopDistance != mnLeftDistance ||
+                mnTopDistance != mnRightDistance)
             {
                 rText += cpDelimTmp +
-                        GetMetricText( static_cast<tools::Long>(nBottomDist), eCoreUnit,
-                                        ePresUnit, &rIntl ) +
+                        GetMetricText( tools::Long(mnBottomDistance), eCoreUnit, ePresUnit, &rIntl ) +
                         cpDelimTmp +
-                        GetMetricText( static_cast<tools::Long>(nLeftDist), eCoreUnit, ePresUnit, &rIntl ) +
+                        GetMetricText( tools::Long(mnLeftDistance), eCoreUnit, ePresUnit, &rIntl ) +
                         cpDelimTmp +
-                        GetMetricText( static_cast<tools::Long>(nRightDist), eCoreUnit,
-                                        ePresUnit, &rIntl );
+                        GetMetricText( tools::Long(mnRightDistance), eCoreUnit, ePresUnit, &rIntl );
             }
             return true;
         }
         case SfxItemPresentation::Complete:
         {
-            if( !(pTop || pBottom || pLeft || pRight) )
+            if (!(mpTopBorderLine || mpBottomBorderLine || mpLeftBorderLine || mpRightBorderLine))
             {
                 rText = EditResId(RID_SVXITEMS_BORDER_NONE) + cpDelimTmp;
             }
             else
             {
                 rText = EditResId(RID_SVXITEMS_BORDER_COMPLETE);
-                if( pTop && pBottom && pLeft && pRight &&
-                    *pTop == *pBottom && *pTop == *pLeft && *pTop == *pRight )
+                if (mpTopBorderLine && mpBottomBorderLine && mpLeftBorderLine && mpRightBorderLine &&
+                    *mpTopBorderLine == *mpBottomBorderLine &&
+                    *mpTopBorderLine == *mpLeftBorderLine &&
+                    *mpTopBorderLine == *mpRightBorderLine)
                 {
-                    rText += pTop->GetValueString( eCoreUnit, ePresUnit, &rIntl, true ) + cpDelimTmp;
+                    rText += mpTopBorderLine->GetValueString( eCoreUnit, ePresUnit, &rIntl, true ) + cpDelimTmp;
                 }
                 else
                 {
-                    if ( pTop )
+                    if (mpTopBorderLine)
                     {
                         rText += EditResId(RID_SVXITEMS_BORDER_TOP) +
-                                pTop->GetValueString( eCoreUnit, ePresUnit, &rIntl, true ) +
+                                mpTopBorderLine->GetValueString( eCoreUnit, ePresUnit, &rIntl, true ) +
                                 cpDelimTmp;
                     }
-                    if ( pBottom )
+                    if (mpBottomBorderLine)
                     {
                         rText += EditResId(RID_SVXITEMS_BORDER_BOTTOM) +
-                                pBottom->GetValueString( eCoreUnit, ePresUnit, &rIntl, true ) +
+                                mpBottomBorderLine->GetValueString( eCoreUnit, ePresUnit, &rIntl, true ) +
                                 cpDelimTmp;
                     }
-                    if ( pLeft )
+                    if (mpLeftBorderLine)
                     {
                         rText += EditResId(RID_SVXITEMS_BORDER_LEFT) +
-                                pLeft->GetValueString( eCoreUnit, ePresUnit, &rIntl, true ) +
+                                mpLeftBorderLine->GetValueString( eCoreUnit, ePresUnit, &rIntl, true ) +
                                 cpDelimTmp;
                     }
-                    if ( pRight )
+                    if (mpRightBorderLine)
                     {
                         rText += EditResId(RID_SVXITEMS_BORDER_RIGHT) +
-                                pRight->GetValueString( eCoreUnit, ePresUnit, &rIntl, true ) +
+                                mpRightBorderLine->GetValueString( eCoreUnit, ePresUnit, &rIntl, true ) +
                                 cpDelimTmp;
                     }
                 }
             }
 
             rText += EditResId(RID_SVXITEMS_BORDER_DISTANCE);
-            if( nTopDist == nBottomDist && nTopDist == nLeftDist &&
-                nTopDist == nRightDist )
+            if (mnTopDistance == mnBottomDistance &&
+                mnTopDistance == mnLeftDistance &&
+                mnTopDistance == mnRightDistance)
             {
-                rText += GetMetricText( static_cast<tools::Long>(nTopDist), eCoreUnit,
-                                            ePresUnit, &rIntl ) +
+                rText += GetMetricText(tools::Long(mnTopDistance), eCoreUnit, ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit));
             }
             else
             {
                 rText += EditResId(RID_SVXITEMS_BORDER_TOP) +
-                        GetMetricText( static_cast<tools::Long>(nTopDist), eCoreUnit,
-                                        ePresUnit, &rIntl ) +
+                        GetMetricText(tools::Long(mnTopDistance), eCoreUnit, ePresUnit, &rIntl) +
                         " " + EditResId(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         EditResId(RID_SVXITEMS_BORDER_BOTTOM) +
-                        GetMetricText( static_cast<tools::Long>(nBottomDist), eCoreUnit,
-                                        ePresUnit, &rIntl ) +
+                        GetMetricText(tools::Long(mnBottomDistance), eCoreUnit, ePresUnit, &rIntl) +
                         " " + EditResId(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         EditResId(RID_SVXITEMS_BORDER_LEFT) +
-                        GetMetricText( static_cast<tools::Long>(nLeftDist), eCoreUnit,
-                                        ePresUnit, &rIntl ) +
+                        GetMetricText(tools::Long(mnLeftDistance), eCoreUnit, ePresUnit, &rIntl) +
                         " " + EditResId(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         EditResId(RID_SVXITEMS_BORDER_RIGHT) +
-                        GetMetricText( static_cast<tools::Long>(nRightDist), eCoreUnit,
-                                        ePresUnit, &rIntl ) +
+                        GetMetricText(tools::Long(mnRightDistance), eCoreUnit, ePresUnit, &rIntl) +
                         " " + EditResId(GetMetricId(ePresUnit));
             }
             return true;
@@ -1896,14 +1889,19 @@ bool SvxBoxItem::GetPresentation
 
 void SvxBoxItem::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
 {
-    if ( pTop )     pTop->ScaleMetrics( nMult, nDiv );
-    if ( pBottom )  pBottom->ScaleMetrics( nMult, nDiv );
-    if ( pLeft )    pLeft->ScaleMetrics( nMult, nDiv );
-    if ( pRight )   pRight->ScaleMetrics( nMult, nDiv );
-    nTopDist = static_cast<sal_Int16>(BigInt::Scale( nTopDist, nMult, nDiv ));
-    nBottomDist = static_cast<sal_Int16>(BigInt::Scale( nBottomDist, nMult, nDiv ));
-    nLeftDist = static_cast<sal_Int16>(BigInt::Scale( nLeftDist, nMult, nDiv ));
-    nRightDist = static_cast<sal_Int16>(BigInt::Scale( nRightDist, nMult, nDiv ));
+    if (mpTopBorderLine)
+        mpTopBorderLine->ScaleMetrics( nMult, nDiv );
+    if (mpBottomBorderLine)
+        mpBottomBorderLine->ScaleMetrics( nMult, nDiv );
+    if (mpLeftBorderLine)
+        mpLeftBorderLine->ScaleMetrics( nMult, nDiv );
+    if (mpRightBorderLine)
+        mpRightBorderLine->ScaleMetrics( nMult, nDiv );
+
+    mnTopDistance = static_cast<sal_Int16>(BigInt::Scale(mnTopDistance, nMult, nDiv));
+    mnBottomDistance = static_cast<sal_Int16>(BigInt::Scale(mnBottomDistance, nMult, nDiv));
+    mnLeftDistance = static_cast<sal_Int16>(BigInt::Scale(mnLeftDistance, nMult, nDiv));
+    mnRightDistance = static_cast<sal_Int16>(BigInt::Scale(mnRightDistance, nMult, nDiv));
 }
 
 
@@ -1920,16 +1918,16 @@ const SvxBorderLine *SvxBoxItem::GetLine( SvxBoxItemLine nLine ) const
     switch ( nLine )
     {
         case SvxBoxItemLine::TOP:
-            pRet = pTop.get();
+            pRet = mpTopBorderLine.get();
             break;
         case SvxBoxItemLine::BOTTOM:
-            pRet = pBottom.get();
+            pRet = mpBottomBorderLine.get();
             break;
         case SvxBoxItemLine::LEFT:
-            pRet = pLeft.get();
+            pRet = mpLeftBorderLine.get();
             break;
         case SvxBoxItemLine::RIGHT:
-            pRet = pRight.get();
+            pRet = mpRightBorderLine.get();
             break;
         default:
             OSL_FAIL( "wrong line" );
@@ -1947,16 +1945,16 @@ void SvxBoxItem::SetLine( const SvxBorderLine* pNew, SvxBoxItemLine nLine )
     switch ( nLine )
     {
         case SvxBoxItemLine::TOP:
-            pTop = std::move( pTmp );
+            mpTopBorderLine = std::move(pTmp);
             break;
         case SvxBoxItemLine::BOTTOM:
-            pBottom = std::move( pTmp );
+            mpBottomBorderLine = std::move(pTmp);
             break;
         case SvxBoxItemLine::LEFT:
-            pLeft = std::move( pTmp );
+            mpLeftBorderLine = std::move(pTmp);
             break;
         case SvxBoxItemLine::RIGHT:
-            pRight = std::move( pTmp );
+            mpRightBorderLine = std::move(pTmp);
             break;
         default:
             OSL_FAIL( "wrong line" );
@@ -1967,13 +1965,13 @@ void SvxBoxItem::SetLine( const SvxBorderLine* pNew, SvxBoxItemLine nLine )
 sal_uInt16 SvxBoxItem::GetSmallestDistance() const
 {
     // The smallest distance that is not 0 will be returned.
-    sal_uInt16 nDist = nTopDist;
-    if( nBottomDist && (!nDist || nBottomDist < nDist) )
-        nDist = nBottomDist;
-    if( nLeftDist && (!nDist || nLeftDist < nDist) )
-        nDist = nLeftDist;
-    if( nRightDist && (!nDist || nRightDist < nDist) )
-        nDist = nRightDist;
+    sal_uInt16 nDist = mnTopDistance;
+    if (mnBottomDistance && (!nDist || mnBottomDistance < nDist))
+        nDist = mnBottomDistance;
+    if (mnLeftDistance && (!nDist || mnLeftDistance < nDist))
+        nDist = mnLeftDistance;
+    if (mnRightDistance && (!nDist || mnRightDistance < nDist))
+        nDist = mnRightDistance;
 
     return nDist;
 }
@@ -1985,16 +1983,16 @@ sal_Int16 SvxBoxItem::GetDistance( SvxBoxItemLine nLine, bool bAllowNegative ) c
     switch ( nLine )
     {
         case SvxBoxItemLine::TOP:
-            nDist = nTopDist;
+            nDist = mnTopDistance;
             break;
         case SvxBoxItemLine::BOTTOM:
-            nDist = nBottomDist;
+            nDist = mnBottomDistance;
             break;
         case SvxBoxItemLine::LEFT:
-            nDist = nLeftDist;
+            nDist = mnLeftDistance;
             break;
         case SvxBoxItemLine::RIGHT:
-            nDist = nRightDist;
+            nDist = mnRightDistance;
             break;
         default:
             OSL_FAIL( "wrong line" );
@@ -2013,16 +2011,16 @@ void SvxBoxItem::SetDistance( sal_Int16 nNew, SvxBoxItemLine nLine )
     switch ( nLine )
     {
         case SvxBoxItemLine::TOP:
-            nTopDist = nNew;
+            mnTopDistance = nNew;
             break;
         case SvxBoxItemLine::BOTTOM:
-            nBottomDist = nNew;
+            mnBottomDistance = nNew;
             break;
         case SvxBoxItemLine::LEFT:
-            nLeftDist = nNew;
+            mnLeftDistance = nNew;
             break;
         case SvxBoxItemLine::RIGHT:
-            nRightDist = nNew;
+            mnRightDistance = nNew;
             break;
         default:
             OSL_FAIL( "wrong line" );
@@ -2036,16 +2034,16 @@ sal_uInt16 SvxBoxItem::CalcLineWidth( SvxBoxItemLine nLine ) const
     switch ( nLine )
     {
     case SvxBoxItemLine::TOP:
-        pTmp = pTop.get();
+        pTmp = mpTopBorderLine.get();
         break;
     case SvxBoxItemLine::BOTTOM:
-        pTmp = pBottom.get();
+        pTmp = mpBottomBorderLine.get();
         break;
     case SvxBoxItemLine::LEFT:
-        pTmp = pLeft.get();
+        pTmp = mpLeftBorderLine.get();
         break;
     case SvxBoxItemLine::RIGHT:
-        pTmp = pRight.get();
+        pTmp = mpRightBorderLine.get();
         break;
     default:
         OSL_FAIL( "wrong line" );
@@ -2064,20 +2062,20 @@ sal_Int16 SvxBoxItem::CalcLineSpace( SvxBoxItemLine nLine, bool bEvenIfNoLine, b
     switch ( nLine )
     {
     case SvxBoxItemLine::TOP:
-        pTmp = pTop.get();
-        nDist = nTopDist;
+        pTmp = mpTopBorderLine.get();
+        nDist = mnTopDistance;
         break;
     case SvxBoxItemLine::BOTTOM:
-        pTmp = pBottom.get();
-        nDist = nBottomDist;
+        pTmp = mpBottomBorderLine.get();
+        nDist = mnBottomDistance;
         break;
     case SvxBoxItemLine::LEFT:
-        pTmp = pLeft.get();
-        nDist = nLeftDist;
+        pTmp = mpLeftBorderLine.get();
+        nDist = mnLeftDistance;
         break;
     case SvxBoxItemLine::RIGHT:
-        pTmp = pRight.get();
-        nDist = nRightDist;
+        pTmp = mpRightBorderLine.get();
+        nDist = mnRightDistance;
         break;
     default:
         OSL_FAIL( "wrong line" );
@@ -2108,27 +2106,25 @@ bool SvxBoxItem::HasBorder( bool bTreatPaddingAsBorder ) const
 
 // class SvxBoxInfoItem --------------------------------------------------
 
-SvxBoxInfoItem::SvxBoxInfoItem( const sal_uInt16 nId ) :
-    SfxPoolItem( nId ),
-    mbEnableHor( false ),
-    mbEnableVer( false ),
-    nDefDist( 0 )
+SvxBoxInfoItem::SvxBoxInfoItem(const sal_uInt16 nId)
+    : SfxPoolItem(nId)
+    , mbDistance(false)
+    , mbMinimumDistance(false)
 {
-    bDist = bMinDist = false;
     ResetFlags();
 }
 
 
-SvxBoxInfoItem::SvxBoxInfoItem( const SvxBoxInfoItem& rCpy ) :
-    SfxPoolItem( rCpy ),
-    pHori( rCpy.pHori ? new SvxBorderLine( *rCpy.pHori ) : nullptr ),
-    pVert( rCpy.pVert ? new SvxBorderLine( *rCpy.pVert ) : nullptr ),
-    mbEnableHor( rCpy.mbEnableHor ),
-    mbEnableVer( rCpy.mbEnableVer ),
-    bDist( rCpy.bDist ),
-    bMinDist ( rCpy.bMinDist ),
-    nValidFlags( rCpy.nValidFlags ),
-    nDefDist( rCpy.nDefDist )
+SvxBoxInfoItem::SvxBoxInfoItem( const SvxBoxInfoItem& rCopy )
+    : SfxPoolItem(rCopy)
+    , mpHorizontalLine(rCopy.mpHorizontalLine ? new SvxBorderLine(*rCopy.mpHorizontalLine) : nullptr)
+    , mpVerticalLine(rCopy.mpVerticalLine ? new SvxBorderLine(*rCopy.mpVerticalLine) : nullptr)
+    , mbEnableHorizontalLine(rCopy.mbEnableHorizontalLine)
+    , mbEnableVerticalLine(rCopy.mbEnableVerticalLine)
+    , mbDistance(rCopy.mbDistance)
+    , mbMinimumDistance (rCopy.mbMinimumDistance)
+    , mnValidFlags(rCopy.mnValidFlags)
+    , mnDefaultMinimumDistance(rCopy.mnDefaultMinimumDistance)
 {
 }
 
@@ -2158,29 +2154,28 @@ bool SvxBoxInfoItem::operator==( const SfxPoolItem& rAttr ) const
 
     const SvxBoxInfoItem& rBoxInfo = static_cast<const SvxBoxInfoItem&>(rAttr);
 
-    return (   mbEnableHor               == rBoxInfo.mbEnableHor
-            && mbEnableVer               == rBoxInfo.mbEnableVer
-            && bDist                     == rBoxInfo.IsDist()
-            && bMinDist                  == rBoxInfo.IsMinDist()
-            && nValidFlags               == rBoxInfo.nValidFlags
-            && nDefDist                  == rBoxInfo.GetDefDist()
-            && CmpBrdLn( pHori, rBoxInfo.GetHori() )
-            && CmpBrdLn( pVert, rBoxInfo.GetVert() )
-           );
+    return (mbEnableHorizontalLine == rBoxInfo.mbEnableHorizontalLine
+            && mbEnableVerticalLine == rBoxInfo.mbEnableVerticalLine
+            && mbDistance == rBoxInfo.mbDistance
+            && mbMinimumDistance == rBoxInfo.mbMinimumDistance
+            && mnValidFlags == rBoxInfo.mnValidFlags
+            && mnDefaultMinimumDistance == rBoxInfo.mnDefaultMinimumDistance
+            && CompareBorderLine(mpHorizontalLine, rBoxInfo.GetHori())
+            && CompareBorderLine(mpVerticalLine, rBoxInfo.GetVert()));
 }
 
 
 void SvxBoxInfoItem::SetLine( const SvxBorderLine* pNew, SvxBoxInfoItemLine nLine )
 {
-    std::unique_ptr<SvxBorderLine> pTmp( pNew ? new SvxBorderLine( *pNew ) : nullptr );
+    std::unique_ptr<SvxBorderLine> pCopy(pNew ? new SvxBorderLine(*pNew) : nullptr);
 
     if ( SvxBoxInfoItemLine::HORI == nLine )
     {
-        pHori = std::move(pTmp);
+        mpHorizontalLine = std::move(pCopy);
     }
     else if ( SvxBoxInfoItemLine::VERT == nLine )
     {
-        pVert = std::move(pTmp);
+        mpVerticalLine = std::move(pCopy);
     }
     else
     {
@@ -2208,9 +2203,11 @@ bool SvxBoxInfoItem::GetPresentation
 
 void SvxBoxInfoItem::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
 {
-    if ( pHori ) pHori->ScaleMetrics( nMult, nDiv );
-    if ( pVert ) pVert->ScaleMetrics( nMult, nDiv );
-    nDefDist = static_cast<sal_uInt16>(BigInt::Scale( nDefDist, nMult, nDiv ));
+    if (mpHorizontalLine)
+        mpHorizontalLine->ScaleMetrics(nMult, nDiv);
+    if (mpVerticalLine)
+        mpVerticalLine->ScaleMetrics(nMult, nDiv);
+    mnDefaultMinimumDistance = sal_uInt16(BigInt::Scale(mnDefaultMinimumDistance, nMult, nDiv));
 }
 
 
@@ -2222,7 +2219,7 @@ bool SvxBoxInfoItem::HasMetrics() const
 
 void SvxBoxInfoItem::ResetFlags()
 {
-    nValidFlags = static_cast<SvxBoxInfoItemValidFlags>(0x7F); // all valid except Disable
+    mnValidFlags = static_cast<SvxBoxInfoItemValidFlags>(0x7F); // all valid except Disable
 }
 
 bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -2244,10 +2241,10 @@ bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             if ( IsMinDist() )
                 nVal |= 0x04;
             css::uno::Sequence< css::uno::Any > aSeq{
-                uno::Any(SvxBoxItem::SvxLineToLine( pHori.get(), bConvert)),
-                uno::Any(SvxBoxItem::SvxLineToLine( pVert.get(), bConvert)),
+                uno::Any(SvxBoxItem::SvxLineToLine(mpHorizontalLine.get(), bConvert)),
+                uno::Any(SvxBoxItem::SvxLineToLine(mpVerticalLine.get(), bConvert)),
                 uno::Any(nVal),
-                uno::Any(static_cast<sal_Int16>(nValidFlags)),
+                uno::Any(static_cast<sal_Int16>(mnValidFlags)),
                 uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100(GetDefDist()) : GetDefDist()))
             };
             rVal <<= aSeq;
@@ -2255,10 +2252,10 @@ bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
 
         case MID_HORIZONTAL:
-            aRetLine = SvxBoxItem::SvxLineToLine( pHori.get(), bConvert);
+            aRetLine = SvxBoxItem::SvxLineToLine(mpHorizontalLine.get(), bConvert);
             break;
         case MID_VERTICAL:
-            aRetLine = SvxBoxItem::SvxLineToLine( pVert.get(), bConvert);
+            aRetLine = SvxBoxItem::SvxLineToLine(mpVerticalLine.get(), bConvert);
             break;
         case MID_FLAGS:
             bIntMember = true;
@@ -2272,7 +2269,7 @@ bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             break;
         case MID_VALIDFLAGS:
             bIntMember = true;
-            rVal <<= static_cast<sal_Int16>(nValidFlags);
+            rVal <<= static_cast<sal_Int16>(mnValidFlags);
             break;
         case MID_DISTANCE:
             bIntMember = true;
@@ -2317,7 +2314,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 else
                     return false;
                 if ( aSeq[3] >>= nFlags )
-                    nValidFlags = static_cast<SvxBoxInfoItemValidFlags>(nFlags);
+                    mnValidFlags = static_cast<SvxBoxInfoItemValidFlags>(nFlags);
                 else
                     return false;
                 if (( aSeq[4] >>= nVal ) && ( nVal >= 0 ))
@@ -2430,7 +2427,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nFlags = sal_Int16();
             bRet = (rVal >>= nFlags);
             if ( bRet )
-                nValidFlags = static_cast<SvxBoxInfoItemValidFlags>(nFlags);
+                mnValidFlags = static_cast<SvxBoxInfoItemValidFlags>(nFlags);
             break;
         }
         case MID_DISTANCE:
@@ -2722,7 +2719,7 @@ bool SvxLineItem::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
 
-    return CmpBrdLn( pLine, static_cast<const SvxLineItem&>(rAttr).GetLine() );
+    return CompareBorderLine(pLine, static_cast<const SvxLineItem&>(rAttr).GetLine());
 }
 
 SvxLineItem* SvxLineItem::Clone( SfxItemPool* ) const
