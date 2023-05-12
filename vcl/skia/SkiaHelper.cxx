@@ -72,6 +72,18 @@ static void writeToLog(SvStream& stream, const char* key, const char* value)
     stream.WriteChar('\n');
 }
 
+OUString readLog()
+{
+    SvFileStream logFile(getCacheFolder() + "/skia.log", StreamMode::READ);
+
+    OUString sResult;
+    OString sLine;
+    while (logFile.ReadLine(sLine))
+        sResult += OStringToOUString(sLine, RTL_TEXTENCODING_UTF8) + "\n";
+
+    return sResult;
+}
+
 uint32_t vendorId = 0;
 
 #ifdef SK_VULKAN

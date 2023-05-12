@@ -81,11 +81,15 @@
 #include <vcl/window.hxx>
 #include <vcl/IconThemeInfo.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
+#include <bitmaps.hlst>
+
 #include "optgdlg.hxx"
 #include <svtools/apearcfg.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/restartdialog.hxx>
 #include <svtools/imgdef.hxx>
+#include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
+#include <vcl/unohelp2.hxx>
 
 #if defined(_WIN32)
 #include <systools/win32/winstoreutil.hxx>
@@ -537,6 +541,7 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xForceSkiaRaster(m_xBuilder->weld_check_button("forceskiaraster"))
     , m_xSkiaStatusEnabled(m_xBuilder->weld_label("skiaenabled"))
     , m_xSkiaStatusDisabled(m_xBuilder->weld_label("skiadisabled"))
+    , m_xSkiaLog(m_xBuilder->weld_button("btnSkialog"))
     , m_xMouseMiddleLB(m_xBuilder->weld_combo_box("mousemiddle"))
     , m_xMoreIcons(m_xBuilder->weld_button("btnMoreIcons"))
     , m_xRunGPTests(m_xBuilder->weld_button("btn_rungptest"))
@@ -550,6 +555,7 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     m_xFontAntiAliasing->connect_toggled( LINK( this, OfaViewTabPage, OnAntialiasingToggled ) );
 
     m_xUseSkia->connect_toggled(LINK(this, OfaViewTabPage, OnUseSkiaToggled));
+    m_xSkiaLog->connect_clicked(LINK(this, OfaViewTabPage, OnCopySkiaLog));
 
     UpdateIconThemes();
 
@@ -611,12 +617,25 @@ IMPL_LINK_NOARG(OfaViewTabPage, OnUseSkiaToggled, weld::Toggleable&, void)
     UpdateSkiaStatus();
 }
 
+IMPL_LINK_NOARG(OfaViewTabPage, OnCopySkiaLog, weld::Button&, void)
+{
+#if HAVE_FEATURE_SKIA
+    css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
+        css::datatransfer::clipboard::SystemClipboard::create(
+            comphelper::getProcessComponentContext());
+    OUString sInfo = SkiaHelper::readLog();
+    vcl::unohelper::TextDataObject::CopyStringTo(sInfo, xClipboard);
+    m_xSkiaLog->set_from_icon_name(RID_SVXBMP_COPY);
+#endif
+}
+
 void OfaViewTabPage::HideSkiaWidgets()
 {
     m_xUseSkia->hide();
     m_xForceSkiaRaster->hide();
     m_xSkiaStatusEnabled->hide();
     m_xSkiaStatusDisabled->hide();
+    m_xSkiaLog->hide();
 }
 
 void OfaViewTabPage::UpdateSkiaStatus()

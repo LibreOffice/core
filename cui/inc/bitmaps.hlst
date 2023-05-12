@@ -71,6 +71,7 @@ inline constexpr OUStringLiteral RID_SVXBMP_LEGTYP3 = u"svx/res/legtyp3.png";
 
 inline constexpr OUStringLiteral RID_SVXBMP_COMPONENT = u"res/component_16.png";
 inline constexpr OUStringLiteral RID_SVXBMP_MACRO = u"svx/res/id018.png";
+inline constexpr OUStringLiteral RID_SVXBMP_COPY = u"cmd/sc_copy.png";
 
 inline constexpr OUStringLiteral RID_SVXBMP_STARS_FULL = u"cmd/sc_stars-full.png";
 
