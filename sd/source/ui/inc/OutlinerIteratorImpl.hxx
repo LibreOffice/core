@@ -19,12 +19,12 @@
 
 #pragma once
 
+#include <svx/svditer.hxx>
 #include <OutlinerIterator.hxx>
-#include <memory>
+#include <optional>
 
 class SdDrawDocument;
 class SdPage;
-class SdrObjListIter;
 
 namespace sd {
 
@@ -199,7 +199,7 @@ private:
     /// Pointer to the page associated with the current page index. May be NULL.
     SdPage* mpPage;
     /// Iterator of all objects on the current page.
-    std::unique_ptr<SdrObjListIter> mpObjectIterator;
+    std::optional<SdrObjListIter> moObjectIterator;
 
     // Don't use this operator.
     ViewIteratorImpl& operator= (const ViewIteratorImpl&) = delete;

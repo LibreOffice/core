@@ -242,11 +242,11 @@ Sequence< Reference< XInterface > >
     {
         SdrObject* pCurrent = _rMarkList.GetMark(i)->GetMarkedSdrObj();
 
-        std::unique_ptr<SdrObjListIter> pGroupIterator;
+        std::optional<SdrObjListIter> oGroupIterator;
         if (pCurrent->IsGroupObject())
         {
-            pGroupIterator.reset(new SdrObjListIter(pCurrent->GetSubList()));
-            pCurrent = pGroupIterator->IsMore() ? pGroupIterator->Next() : nullptr;
+            oGroupIterator.emplace(pCurrent->GetSubList());
+            pCurrent = oGroupIterator->IsMore() ? oGroupIterator->Next() : nullptr;
         }
 
         while (pCurrent)
@@ -259,7 +259,7 @@ Sequence< Reference< XInterface > >
             }
 
             // next element
-            pCurrent = pGroupIterator && pGroupIterator->IsMore() ? pGroupIterator->Next() : nullptr;
+            pCurrent = oGroupIterator && oGroupIterator->IsMore() ? oGroupIterator->Next() : nullptr;
         }
     }
 

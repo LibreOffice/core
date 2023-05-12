@@ -17,6 +17,7 @@
 #include <svx/svditer.hxx>
 #include <tools/long.hxx>
 #include "types.hxx"
+#include <optional>
 
 class ScDocShell;
 class SdrOle2Obj;
@@ -32,7 +33,7 @@ enum class ChartSourceType
 class ChartIterator
 {
 private:
-    std::unique_ptr<SdrObjListIter> m_pIterator;
+    std::optional<SdrObjListIter> m_oIterator;
     ChartSourceType m_eChartSourceType;
 public:
     ChartIterator(ScDocShell* pDocShell, SCTAB nTab, ChartSourceType eChartSourceType);

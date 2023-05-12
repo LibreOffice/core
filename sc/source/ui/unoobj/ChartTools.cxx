@@ -67,15 +67,15 @@ ChartIterator::ChartIterator(ScDocShell* pDocShell, SCTAB nTab, ChartSourceType 
     SdrPage* pPage = pDrawLayer->GetPage(sal_uInt16(nTab));
     if (!pPage)
         return;
-    m_pIterator.reset(new SdrObjListIter(pPage, SdrIterMode::DeepNoGroups));
+    m_oIterator.emplace(pPage, SdrIterMode::DeepNoGroups);
 }
 
 SdrOle2Obj* ChartIterator::next()
 {
-    if (!m_pIterator)
+    if (!m_oIterator)
         return nullptr;
 
-    SdrObject* pObject = m_pIterator->Next();
+    SdrObject* pObject = m_oIterator->Next();
     while (pObject)
     {
         if (pObject->GetObjIdentifier() == SdrObjKind::OLE2 && ScDocument::IsChart(pObject))
@@ -90,7 +90,7 @@ SdrOle2Obj* ChartIterator::next()
             else if (!xPivotTableDataProvider.is() && m_eChartSourceType == ChartSourceType::CELL_RANGE)
                 return pOleObject;
         }
-        pObject = m_pIterator->Next();
+        pObject = m_oIterator->Next();
     }
     return nullptr;
 }
