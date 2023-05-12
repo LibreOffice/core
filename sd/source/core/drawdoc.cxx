@@ -199,7 +199,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     }
 
     LanguageType eRealLanguage = MsLangId::getRealLanguage( meLanguage );
-    mpCharClass.reset(new CharClass( LanguageTag( eRealLanguage) ));
+    moCharClass.emplace(LanguageTag( eRealLanguage));
 
     // If the current application language is a language that uses right-to-left text...
     LanguageType eRealCTLLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
@@ -367,7 +367,7 @@ SdDrawDocument::~SdDrawDocument()
     mpCustomShowList.reset();
     mpOutliner.reset();
     mpInternalOutliner.reset();
-    mpCharClass.reset();
+    moCharClass.reset();
 }
 
 void SdDrawDocument::adaptSizeAndBorderForAllPages(

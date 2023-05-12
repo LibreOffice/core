@@ -22,11 +22,13 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <svl/style.hxx>
 #include <svx/fmmodel.hxx>
+#include <unotools/charclass.hxx>
 #include <vcl/prntypes.hxx>
 #include <xmloff/autolayout.hxx>
 
 #include <vector>
 #include <memory>
+#include <optional>
 #include <string_view>
 
 #include "sddllapi.h"
@@ -51,7 +53,6 @@ struct SpellCallbackInfo;
 class SdCustomShowList;
 class SdUndoGroup;
 class SdrObject;
-class CharClass;
 class Idle;
 class ImageMap;
 class Outliner;
@@ -162,8 +163,8 @@ private:
     ::sd::DrawDocShellRef   mxAllocedDocShRef;   // => AllocModel()
     bool                mbAllocDocSh;       // => AllocModel()
     DocumentType        meDocType;
-    std::unique_ptr<CharClass>
-                        mpCharClass;
+    std::optional<CharClass>
+                        moCharClass;
 
     ::std::unique_ptr<ImpDrawPageListWatcher> mpDrawPageListWatcher;
     ::std::unique_ptr<ImpMasterPageListWatcher> mpMasterPageListWatcher;
@@ -464,7 +465,7 @@ public:
 
     static     SdAnimationInfo* GetShapeUserData(SdrObject& rObject, bool bCreate = false );
 
-    SAL_DLLPRIVATE CharClass*          GetCharClass() const { return mpCharClass.get(); }
+    SAL_DLLPRIVATE const std::optional<CharClass>& GetCharClass() const { return moCharClass; }
 
     SAL_DLLPRIVATE void                UpdateAllLinks();
 

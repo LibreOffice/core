@@ -20,13 +20,14 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_TXMSRT_HXX
 
 #include <i18nlangtag/lang.h>
+#include <unotools/charclass.hxx>
 #include <nodeoffset.hxx>
 #include <tox.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
+#include <optional>
 #include <utility>
 
-class CharClass;
 class SwContentNode;
 class SwTextNode;
 class SwTextTOXMark;
@@ -73,7 +74,7 @@ struct TextAndReading
 class SwTOXInternational
 {
     std::unique_ptr<IndexEntrySupplierWrapper> m_pIndexWrapper;
-    std::unique_ptr<CharClass>                 m_pCharClass;
+    std::optional<CharClass>   m_oCharClass;
     LanguageType               m_eLang;
     OUString                   m_sSortAlgorithm;
     SwTOIOptions               m_nOptions;

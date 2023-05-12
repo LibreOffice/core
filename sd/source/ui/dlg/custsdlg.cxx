@@ -195,7 +195,7 @@ void SdCustomShowDlg::SelectHdl(void const *p)
                 {
                     // replace number by a number increased by 1
 
-                    const CharClass* pCharClass = rDoc.GetCharClass();
+                    const std::optional<CharClass>& pCharClass = rDoc.GetCharClass();
                     while( pCharClass->isDigit( aStr, nStrPos ) )
                         aStr = aStr.replaceAt( nStrPos, 1, u"" );
                     aStr = aStr.subView( 0, nStrPos) + OUString::number( ++nNum ) + aStr.subView( nStrPos);

@@ -394,9 +394,9 @@ bool SpellCheckerDispatcher::isValid_Impl(
                 bRes = !xTmp->isNegative();
             } else {
                 setCharClass(LanguageTag(nLanguage));
-                CapType ct = capitalType(aChkWord, m_pCharClass.get());
+                CapType ct = capitalType(aChkWord, m_oCharClass ? &*m_oCharClass : nullptr);
                 if (ct == CapType::INITCAP || ct == CapType::ALLCAP) {
-                    Reference< XDictionaryEntry > xTmp2( lcl_GetRulingDictionaryEntry( makeLowerCase(aChkWord, m_pCharClass.get()), nLanguage ) );
+                    Reference< XDictionaryEntry > xTmp2( lcl_GetRulingDictionaryEntry( makeLowerCase(aChkWord, m_oCharClass), nLanguage ) );
                     if (xTmp2.is()) {
                         bRes = !xTmp2->isNegative();
                     }
@@ -635,10 +635,10 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
             else
             {
                 setCharClass(LanguageTag(nLanguage));
-                CapType ct = capitalType(aChkWord, m_pCharClass.get());
+                CapType ct = capitalType(aChkWord, m_oCharClass ? &*m_oCharClass : nullptr);
                 if (ct == CapType::INITCAP || ct == CapType::ALLCAP)
                 {
-                    Reference< XDictionaryEntry > xTmp2( lcl_GetRulingDictionaryEntry( makeLowerCase(aChkWord, m_pCharClass.get()), nLanguage ) );
+                    Reference< XDictionaryEntry > xTmp2( lcl_GetRulingDictionaryEntry( makeLowerCase(aChkWord, m_oCharClass), nLanguage ) );
                     if (xTmp2.is())
                     {
                         if (xTmp2->isNegative())    // negative entry found
@@ -655,10 +655,10 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                                 switch ( ct )
                                 {
                                     case CapType::INITCAP:
-                                        aProposalList.Prepend( m_pCharClass->titlecase(aAddRplcTxt) );
+                                        aProposalList.Prepend( m_oCharClass->titlecase(aAddRplcTxt) );
                                         break;
                                     case CapType::ALLCAP:
-                                        aProposalList.Prepend( m_pCharClass->uppercase(aAddRplcTxt) );
+                                        aProposalList.Prepend( m_oCharClass->uppercase(aAddRplcTxt) );
                                         break;
                                     default:
                                         /* can't happen because of if ct ==  above */
@@ -813,13 +813,13 @@ void SpellCheckerDispatcher::FlushSpellCache()
 
 void SpellCheckerDispatcher::setCharClass(const LanguageTag& rLanguageTag)
 {
-    if (m_pCharClass && m_pCharClass->getLanguageTag() == rLanguageTag)
+    if (m_oCharClass && m_oCharClass->getLanguageTag() == rLanguageTag)
         return;
-    m_pCharClass.reset( new CharClass(rLanguageTag) );
+    m_oCharClass.emplace( rLanguageTag );
 }
 
 
-OUString SpellCheckerDispatcher::makeLowerCase(const OUString& aTerm, CharClass const * pCC)
+OUString SpellCheckerDispatcher::makeLowerCase(const OUString& aTerm, const std::optional<CharClass> & pCC)
 {
     if (pCC)
         return pCC->lowercase(aTerm);

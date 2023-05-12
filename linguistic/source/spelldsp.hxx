@@ -31,6 +31,7 @@
 
 #include <map>
 #include <memory>
+#include <optional>
 #include <unotools/charclass.hxx>
 
 class LngSvcMgr;
@@ -53,7 +54,7 @@ class SpellCheckerDispatcher :
 
     LngSvcMgr                       &m_rMgr;
     mutable std::unique_ptr<linguistic::SpellCache> m_pCache; // Spell Cache (holds known words)
-    std::unique_ptr<CharClass>       m_pCharClass;
+    std::optional<CharClass>       m_oCharClass;
 
     SpellCheckerDispatcher(const SpellCheckerDispatcher &) = delete;
     SpellCheckerDispatcher & operator = (const SpellCheckerDispatcher &) = delete;
@@ -105,7 +106,7 @@ public:
 
 private:
     void setCharClass(const LanguageTag& rLanguageTag);
-    static OUString makeLowerCase(const OUString&, CharClass const *);
+    static OUString makeLowerCase(const OUString&, const std::optional<CharClass> &);
 
 };
 

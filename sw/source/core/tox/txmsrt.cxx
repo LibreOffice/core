@@ -91,24 +91,24 @@ void SwTOXInternational::Init()
     else
         m_pIndexWrapper->LoadAlgorithm( aLcl, m_sSortAlgorithm, SW_COLLATOR_IGNORES );
 
-    m_pCharClass.reset( new CharClass( LanguageTag( aLcl )) );
+    m_oCharClass.emplace( LanguageTag( aLcl ) );
 
 }
 
 SwTOXInternational::~SwTOXInternational()
 {
-    m_pCharClass.reset();
+    m_oCharClass.reset();
     m_pIndexWrapper.reset();
 }
 
 OUString SwTOXInternational::ToUpper( const OUString& rStr, sal_Int32 nPos ) const
 {
-    return m_pCharClass->uppercase( rStr, nPos, 1 );
+    return m_oCharClass->uppercase( rStr, nPos, 1 );
 }
 
 bool SwTOXInternational::IsNumeric( const OUString& rStr ) const
 {
-    return m_pCharClass->isNumeric( rStr );
+    return m_oCharClass->isNumeric( rStr );
 }
 
 sal_Int32 SwTOXInternational::Compare( const TextAndReading& rTaR1,

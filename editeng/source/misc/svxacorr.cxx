@@ -359,7 +359,7 @@ SvxAutoCorrect::~SvxAutoCorrect()
 
 void SvxAutoCorrect::GetCharClass_( LanguageType eLang )
 {
-    pCharClass.reset( new CharClass( LanguageTag( eLang)) );
+    moCharClass.emplace( LanguageTag( eLang) );
     eCharClassLang = eLang;
 }
 

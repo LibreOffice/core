@@ -28,14 +28,15 @@
 #include <tools/date.hxx>
 #include <editeng/swafopt.hxx>
 #include <editeng/editengdllapi.h>
+#include <unotools/charclass.hxx>
 
 #include <optional>
 #include <map>
 #include <memory>
+#include <optional>
 #include <string_view>
 #include <utility>
 
-class CharClass;
 class SfxPoolItem;
 class SotStorage;
 class SvxAutoCorrect;
@@ -255,7 +256,7 @@ class EDITENG_DLLPUBLIC SvxAutoCorrect
     // all languages in a table
     std::map<LanguageTag, SvxAutoCorrectLanguageLists> m_aLangTable;
     std::map<LanguageTag, sal_Int64> aLastFileTable;
-    std::unique_ptr<CharClass> pCharClass;
+    std::optional<CharClass> moCharClass;
 
     LanguageType eCharClassLang;
 
@@ -440,9 +441,9 @@ public:
 
     CharClass& GetCharClass( LanguageType eLang )
     {
-        if( !pCharClass || eLang != eCharClassLang )
+        if( !moCharClass || eLang != eCharClassLang )
             GetCharClass_( eLang );
-        return *pCharClass;
+        return *moCharClass;
     }
 };
 

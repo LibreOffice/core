@@ -98,7 +98,7 @@ class SwAutoFormat
     SwTextFrame* m_pCurTextFrame;     // frame of the current TextNode
     bool m_bIsRightToLeft;      // text direction of the current frame
     SwNodeOffset m_nEndNdIdx;      // for the percentage-display
-    mutable std::unique_ptr<CharClass> m_pCharClass; // Character classification
+    mutable std::optional<CharClass> m_oCharClass; // Character classification
     mutable LanguageType m_eCharClassLang;
 
     sal_uInt16 m_nRedlAutoFormatSeqId;
@@ -121,12 +121,12 @@ class SwAutoFormat
 
     CharClass& GetCharClass( LanguageType eLang ) const
     {
-        if( !m_pCharClass || eLang != m_eCharClassLang )
+        if( !m_oCharClass || eLang != m_eCharClassLang )
         {
-            m_pCharClass.reset( new CharClass( LanguageTag( eLang ) ) );
+            m_oCharClass.emplace( LanguageTag( eLang ) );
             m_eCharClassLang = eLang;
         }
-        return *m_pCharClass;
+        return *m_oCharClass;
     }
 
     static bool IsSpace( const sal_Unicode c )
