@@ -152,6 +152,7 @@ long CalcHeightWithFlys( const SwFrame *pFrame );
 
 namespace sw {
 
+bool HasPageBreakBefore(SwPageFrame const& rPage);
 bool IsRightPageByNumber(SwRootFrame const& rLayout, sal_uInt16 nPageNum);
 
 } // namespace sw
