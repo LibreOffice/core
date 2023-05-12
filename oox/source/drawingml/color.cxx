@@ -209,7 +209,7 @@ void lclOffValue( sal_Int32& ornValue, sal_Int32 nOff, sal_Int32 nMax = MAX_PERC
     ornValue = getLimitedValue< sal_Int32, sal_Int32 >( ornValue + nOff, 0, nMax );
 }
 
-constexpr frozen::unordered_map<std::u16string_view, model::ThemeColorType, 26> aSchemeColorNameToIndex
+constexpr frozen::unordered_map<std::u16string_view, model::ThemeColorType, 26> constSchemeColorNameToIndex
 {
     { u"dk1", model::ThemeColorType::Dark1 },
     { u"lt1", model::ThemeColorType::Light1 },
@@ -239,12 +239,51 @@ constexpr frozen::unordered_map<std::u16string_view, model::ThemeColorType, 26> 
     { u"followedHyperlink", model::ThemeColorType::FollowedHyperlink }
 };
 
+constexpr frozen::unordered_map<sal_Int32, model::ThemeColorType, 26> constThemeColorTokenMap
+{
+    { XML_dk1, model::ThemeColorType::Dark1 },
+    { XML_lt1, model::ThemeColorType::Light1 },
+    { XML_dk2, model::ThemeColorType::Dark2 },
+    { XML_lt2, model::ThemeColorType::Light2 },
+    { XML_accent1, model::ThemeColorType::Accent1 },
+    { XML_accent2, model::ThemeColorType::Accent2 },
+    { XML_accent3, model::ThemeColorType::Accent3 },
+    { XML_accent4, model::ThemeColorType::Accent4 },
+    { XML_accent5, model::ThemeColorType::Accent5 },
+    { XML_accent6, model::ThemeColorType::Accent6 },
+    { XML_hlink, model::ThemeColorType::Hyperlink },
+    { XML_folHlink, model::ThemeColorType::FollowedHyperlink },
+    { XML_tx1, model::ThemeColorType::Dark1 },
+    { XML_bg1, model::ThemeColorType::Light1 },
+    { XML_tx2, model::ThemeColorType::Dark2 },
+    { XML_bg2, model::ThemeColorType::Light2 },
+    { XML_dark1, model::ThemeColorType::Dark1 },
+    { XML_light1, model::ThemeColorType::Light1 },
+    { XML_dark2, model::ThemeColorType::Dark2 },
+    { XML_light2, model::ThemeColorType::Light2 },
+    { XML_text1, model::ThemeColorType::Dark1 },
+    { XML_background1, model::ThemeColorType::Light1 },
+    { XML_text2, model::ThemeColorType::Dark2 },
+    { XML_background2, model::ThemeColorType::Light2 },
+    { XML_hyperlink, model::ThemeColorType::Hyperlink },
+    { XML_followedHyperlink, model::ThemeColorType::FollowedHyperlink },
+};
+
 } // end anonymous namespace
 
 model::ThemeColorType schemeNameToThemeColorType(OUString const& rSchemeName)
 {
-    auto aIterator = aSchemeColorNameToIndex.find(rSchemeName);
-    if (aIterator == aSchemeColorNameToIndex.end())
+    auto aIterator = constSchemeColorNameToIndex.find(rSchemeName);
+    if (aIterator == constSchemeColorNameToIndex.end())
+        return model::ThemeColorType::Unknown;
+    else
+        return aIterator->second;
+}
+
+model::ThemeColorType schemeTokenToThemeColorType(sal_uInt32 nToken)
+{
+    auto aIterator = constThemeColorTokenMap.find(nToken);
+    if (aIterator == constThemeColorTokenMap.end())
         return model::ThemeColorType::Unknown;
     else
         return aIterator->second;
@@ -346,6 +385,8 @@ void Color::setSchemeClr( sal_Int32 nToken )
     OSL_ENSURE( nToken != XML_TOKEN_INVALID, "Color::setSchemeClr - invalid color token" );
     meMode = (nToken == XML_phClr) ? COLOR_PH : COLOR_SCHEME;
     mnC1 = nToken;
+    if (meMode == COLOR_SCHEME)
+        meThemeColorType = schemeTokenToThemeColorType(nToken);
 }
 
 void Color::setPaletteClr( sal_Int32 nPaletteIdx )
@@ -777,6 +818,43 @@ sal_Int16 Color::getSchemeColorIndex() const
 {
     auto eThemeType = schemeNameToThemeColorType(msSchemeName);
     return sal_Int16(eThemeType);
+}
+
+model::ComplexColor Color::createComplexColor(const GraphicHelper& /*rGraphicHelper*/, sal_Int16 nPhClrTheme) const
+{
+    model::ComplexColor aNewComplexColor;
+    if (meMode == COLOR_PH)
+    {
+        auto eTheme = model::convertToThemeColorType(nPhClrTheme);
+        aNewComplexColor.setSchemeColor(eTheme);
+    }
+    else if (meMode == COLOR_SCHEME)
+    {
+        auto eTheme = getThemeColorType();
+        aNewComplexColor.setSchemeColor(eTheme);
+    }
+    else
+    {
+        // TODO
+        return aNewComplexColor;
+    }
+
+    if (getLumMod() != 10000)
+        aNewComplexColor.addTransformation({model::TransformationType::LumMod, getLumMod()});
+
+    if (getLumOff() != 0)
+        aNewComplexColor.addTransformation({model::TransformationType::LumOff, getLumOff()});
+
+    if (getTintOrShade() > 0)
+    {
+        aNewComplexColor.addTransformation({model::TransformationType::Tint, getTintOrShade()});
+    }
+    else if (getTintOrShade() < 0)
+    {
+        sal_Int16 nShade = o3tl::narrowing<sal_Int16>(-getTintOrShade());
+        aNewComplexColor.addTransformation({model::TransformationType::Shade, nShade});
+    }
+    return aNewComplexColor;
 }
 
 // private --------------------------------------------------------------------

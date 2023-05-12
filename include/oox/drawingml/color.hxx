@@ -37,6 +37,7 @@ namespace oox { class GraphicHelper; }
 namespace oox::drawingml
 {
 
+model::ThemeColorType schemeTokenToThemeColorType(sal_uInt32 nToken);
 model::ThemeColorType schemeNameToThemeColorType(OUString const& rSchemeName);
 
 class OOX_DLLPUBLIC Color
@@ -107,6 +108,13 @@ public:
     sal_Int16           getLumMod() const;
     sal_Int16           getLumOff() const;
 
+    model::ThemeColorType getThemeColorType() const
+    {
+        return meThemeColorType;
+    }
+
+    model::ComplexColor createComplexColor(const GraphicHelper& rGraphicHelper, sal_Int16 nPhClrTheme) const;
+
     /** Returns the unaltered list of transformations for interoperability purposes */
     const css::uno::Sequence< css::beans::PropertyValue >& getTransformations() const { return maInteropTransformations;}
 
@@ -160,8 +168,8 @@ private:
     mutable sal_Int32   mnC2;           /// Green, green%, saturation, or system default RGB.
     mutable sal_Int32   mnC3;           /// Blue, blue%, or luminance.
     sal_Int32           mnAlpha;        /// Alpha value (color opacity).
-
     OUString            msSchemeName;   /// Scheme name from the a:schemeClr element for interoperability purposes
+    model::ThemeColorType meThemeColorType;
     css::uno::Sequence< css::beans::PropertyValue >
                         maInteropTransformations;   /// Unaltered list of transformations for interoperability purposes
 };
