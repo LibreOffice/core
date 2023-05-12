@@ -1259,11 +1259,10 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
                     if (GetText()[i] != CH_BLANK)
                     {
                         const sal_uInt16 nOldWidth = rPor.Width();
-                        const sal_uInt16 nNewWidth
-                            = GetTextSize(m_pOut, nullptr, GetText(), GetIdx(),
-                                          TextFrameIndex(i + 1) - GetIdx()).Width();
-
-                        const_cast<SwLinePortion&>(rPor).Width( nNewWidth );
+                        const sal_uInt16 nExcessWidth
+                            = GetTextSize(m_pOut, nullptr, GetText(), TextFrameIndex(i + 1),
+                                          TextFrameIndex(nLastPos - i)).Width();
+                        const_cast<SwLinePortion&>(rPor).Width(nOldWidth - nExcessWidth);
                         CalcRect( rPor, nullptr, &aIntersect, true );
                         const_cast<SwLinePortion&>(rPor).Width( nOldWidth );
 
