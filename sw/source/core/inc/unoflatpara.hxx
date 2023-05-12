@@ -124,9 +124,6 @@ private:
     SwXFlatParagraphIterator( const SwXFlatParagraphIterator & ) = delete;
     SwXFlatParagraphIterator & operator =(const SwXFlatParagraphIterator & ) = delete;
 
-    // container to hold the 'hard' references as long as necessary and valid
-    std::set< css::uno::Reference< css::text::XFlatParagraph > >    m_aFlatParaList;
-
     SwDoc* mpDoc;
     const sal_Int32 mnType;
     const bool mbAutomatic;

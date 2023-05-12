@@ -485,8 +485,6 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
         const OUString& aExpandText = aConversionMap.getViewText();
 
         xRet = new SwXFlatParagraph( *pRet, aExpandText, aConversionMap );
-        // keep hard references...
-        m_aFlatParaList.insert( xRet );
     }
 
     return xRet;
@@ -533,8 +531,6 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaAfter(co
         const OUString& aExpandText = aConversionMap.getViewText();
 
         xRet = new SwXFlatParagraph( *pNextTextNode, aExpandText, aConversionMap );
-        // keep hard references...
-        m_aFlatParaList.insert( xRet );
     }
 
     return xRet;
@@ -576,8 +572,6 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaBefore(c
         const OUString& aExpandText = aConversionMap.getViewText();
 
         xRet = new SwXFlatParagraph( *pPrevTextNode, aExpandText, aConversionMap );
-        // keep hard references...
-        m_aFlatParaList.insert( xRet );
     }
 
     return xRet;
