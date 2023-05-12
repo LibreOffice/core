@@ -758,7 +758,7 @@ bool PDFPage::emit(sal_Int32 nParentObject )
             && PDFWriter::PDFVersion::PDF_1_5 <= m_pWriter->m_aContext.Version)
         {
             // ISO 14289-1:2014, Clause: 7.18.3
-            aLine.append( "/Tabs(S)\n" );
+            aLine.append( "/Tabs/S\n" );
         }
     }
     if( !m_aMCIDParents.empty() )
