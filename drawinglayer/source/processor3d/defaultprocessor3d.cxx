@@ -61,8 +61,9 @@ namespace drawinglayer::processor3d
             const basegfx::B2DRange aOutlineRange(0.0, 0.0, rPrimitive.getTextureSize().getX(), rPrimitive.getTextureSize().getY());
             const css::awt::GradientStyle aGradientStyle(rFillGradient.getStyle());
             std::shared_ptr< texture::GeoTexSvx > pNewTex;
+            basegfx::BColor aSingleColor;
 
-            if(!rFillGradient.hasSingleColor())
+            if (!rFillGradient.getColorStops().isSingleColor(aSingleColor))
             {
                 switch(aGradientStyle)
                 {
@@ -147,8 +148,7 @@ namespace drawinglayer::processor3d
             else
             {
                 // only one color, so no real gradient -> use simple texture
-                const basegfx::BColor aStart(rFillGradient.getColorStops().front().getStopColor());
-                pNewTex = std::make_shared<texture::GeoTexSvxMono>(aStart, 1.0 - aStart.luminance());
+                pNewTex = std::make_shared<texture::GeoTexSvxMono>(aSingleColor, 1.0 - aSingleColor.luminance());
                 mbSimpleTextureActive = true;
             }
 

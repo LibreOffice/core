@@ -1011,8 +1011,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf105739)
         aXBackgroundPropSet->getPropertyValue("FillGradient") >>= aFillGradient;
 
         // MCGR: Use the completely imported gradient to check for correctness
-        basegfx::ColorStops aColorStops;
-        basegfx::utils::fillColorStopsFromGradient2(aColorStops, aFillGradient);
+        const basegfx::BColorStops aColorStops(aFillGradient.ColorStops);
 
         CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
         CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));

@@ -2092,209 +2092,17 @@ bool XSecondaryFillColorItem::GetPresentation
     return true;
 }
 
-std::string XGradient::GradientStyleToString(css::awt::GradientStyle eStyle)
-{
-    switch (eStyle)
-    {
-        case css::awt::GradientStyle::GradientStyle_LINEAR:
-            return "LINEAR";
-
-        case css::awt::GradientStyle::GradientStyle_AXIAL:
-            return "AXIAL";
-
-        case css::awt::GradientStyle::GradientStyle_RADIAL:
-            return "RADIAL";
-
-        case css::awt::GradientStyle::GradientStyle_ELLIPTICAL:
-            return "ELLIPTICAL";
-
-        case css::awt::GradientStyle::GradientStyle_SQUARE:
-            return "SQUARE";
-
-        case css::awt::GradientStyle::GradientStyle_RECT:
-            return "RECT";
-
-        case css::awt::GradientStyle::GradientStyle_MAKE_FIXED_SIZE:
-            return "MAKE_FIXED_SIZE";
-    }
-
-    return "";
-}
-
-namespace
-{
-    css::awt::GradientStyle lcl_getStyleFromString(std::u16string_view rStyle)
-    {
-        if (rStyle == u"LINEAR")
-            return css::awt::GradientStyle_LINEAR;
-        else if (rStyle == u"AXIAL")
-            return css::awt::GradientStyle_AXIAL;
-        else if (rStyle == u"RADIAL")
-            return css::awt::GradientStyle_RADIAL;
-        else if (rStyle == u"ELLIPTICAL")
-            return css::awt::GradientStyle_ELLIPTICAL;
-        else if (rStyle == u"SQUARE")
-            return css::awt::GradientStyle_SQUARE;
-        else if (rStyle == u"RECT")
-            return css::awt::GradientStyle_RECT;
-
-        return css::awt::GradientStyle_LINEAR;
-    }
-
-    StringMap lcl_jsonToStringMap(std::u16string_view rJSON)
-    {
-        StringMap aArgs;
-        if (rJSON.size() && rJSON[0] != '\0')
-        {
-            std::stringstream aStream(std::string(OUStringToOString(rJSON, RTL_TEXTENCODING_ASCII_US)));
-            boost::property_tree::ptree aTree;
-            boost::property_tree::read_json(aStream, aTree);
-
-            for (const auto& rPair : aTree)
-            {
-                aArgs[OUString::fromUtf8(rPair.first)] = OUString::fromUtf8(rPair.second.get_value<std::string>("."));
-            }
-        }
-        return aArgs;
-    }
-
-    XGradient lcl_buildGradientFromStringMap(StringMap& rMap)
-    {
-        XGradient aGradient(
-            basegfx::utils::createColorStopsFromStartEndColor(
-                Color(ColorTransparency, rMap["startcolor"].toInt32(16)).getBColor(),
-                Color(ColorTransparency, rMap["endcolor"].toInt32(16)).getBColor()));
-
-        aGradient.SetGradientStyle(lcl_getStyleFromString(rMap["style"]));
-        aGradient.SetAngle(Degree10(rMap["angle"].toInt32()));
-
-        return aGradient;
-    }
-}
-
-XGradient XGradient::fromJSON(std::u16string_view rJSON)
-{
-    StringMap aMap(lcl_jsonToStringMap(rJSON));
-    return lcl_buildGradientFromStringMap(aMap);
-}
-
-namespace
-{
-    void fillGradient2FromXGradient(css::awt::Gradient2& rGradient2, const XGradient& rXGradient)
-    {
-        // standard values
-        rGradient2.Style = rXGradient.GetGradientStyle();
-        rGradient2.Angle = static_cast<short>(rXGradient.GetAngle());
-        rGradient2.Border = rXGradient.GetBorder();
-        rGradient2.XOffset = rXGradient.GetXOffset();
-        rGradient2.YOffset = rXGradient.GetYOffset();
-        rGradient2.StartIntensity = rXGradient.GetStartIntens();
-        rGradient2.EndIntensity = rXGradient.GetEndIntens();
-        rGradient2.StepCount = rXGradient.GetSteps();
-
-        // for compatibility, still set StartColor/EndColor
-        const basegfx::ColorStops& rColorStops(rXGradient.GetColorStops());
-        rGradient2.StartColor = static_cast<sal_Int32>(Color(rColorStops.front().getStopColor()));
-        rGradient2.EndColor = static_cast<sal_Int32>(Color(rColorStops.back().getStopColor()));
-
-        // fill ColorStops to extended Gradient2
-        basegfx::utils::fillColorStopSequenceFromColorStops(rGradient2.ColorStops, rColorStops);
-    }
-}
-
-css::awt::Gradient2 XGradient::toGradientUNO() const
-{
-    css::awt::Gradient2 aGradient2;
-
-    // fill values
-    fillGradient2FromXGradient(aGradient2, *this);
-
-    return aGradient2;
-}
-
-XGradient::XGradient() :
-    eStyle( css::awt::GradientStyle_LINEAR ),
-    aColorStops(),
-    nAngle( 0 ),
-    nBorder( 0 ),
-    nOfsX( 50 ),
-    nOfsY( 50 ),
-    nIntensStart( 100 ),
-    nIntensEnd( 100 ),
-    nStepCount( 0 )
-{
-    aColorStops.emplace_back(0.0, COL_BLACK.getBColor());
-    aColorStops.emplace_back(1.0, COL_WHITE.getBColor());
-}
-
-XGradient::XGradient(const basegfx::ColorStops& rColorStops,
-                     css::awt::GradientStyle eTheStyle, Degree10 nTheAngle, sal_uInt16 nXOfs,
-                     sal_uInt16 nYOfs, sal_uInt16 nTheBorder,
-                     sal_uInt16 nStartIntens, sal_uInt16 nEndIntens,
-                     sal_uInt16 nSteps) :
-    eStyle(eTheStyle),
-    aColorStops(rColorStops),
-    nAngle(nTheAngle),
-    nBorder(nTheBorder),
-    nOfsX(nXOfs),
-    nOfsY(nYOfs),
-    nIntensStart(nStartIntens),
-    nIntensEnd(nEndIntens),
-    nStepCount(nSteps)
-{
-    SetColorStops(aColorStops);
-}
-
-bool XGradient::operator==(const XGradient& rGradient) const
-{
-    return ( eStyle         == rGradient.eStyle         &&
-             aColorStops    == rGradient.aColorStops    &&
-             nAngle         == rGradient.nAngle         &&
-             nBorder        == rGradient.nBorder        &&
-             nOfsX          == rGradient.nOfsX          &&
-             nOfsY          == rGradient.nOfsY          &&
-             nIntensStart   == rGradient.nIntensStart   &&
-             nIntensEnd     == rGradient.nIntensEnd     &&
-             nStepCount     == rGradient.nStepCount );
-}
-
-void XGradient::SetColorStops(const basegfx::ColorStops& rSteps)
-{
-    aColorStops = rSteps;
-    basegfx::utils::sortAndCorrectColorStops(aColorStops);
-    if (aColorStops.empty())
-        aColorStops.emplace_back(0.0, basegfx::BColor());
-}
-
-boost::property_tree::ptree XGradient::dumpAsJSON() const
-{
-    boost::property_tree::ptree aTree;
-
-    aTree.put("style", XGradient::GradientStyleToString(eStyle));
-    aTree.put("startcolor", Color(GetColorStops().front().getStopColor()).AsRGBHexString());
-    aTree.put("endcolor", Color(GetColorStops().back().getStopColor()).AsRGBHexString());
-    aTree.put("angle", std::to_string(nAngle.get()));
-    aTree.put("border", std::to_string(nBorder));
-    aTree.put("x", std::to_string(nOfsX));
-    aTree.put("y", std::to_string(nOfsY));
-    aTree.put("intensstart", std::to_string(nIntensStart));
-    aTree.put("intensend", std::to_string(nIntensEnd));
-    aTree.put("stepcount", std::to_string(nStepCount));
-
-    return aTree;
-}
-
 SfxPoolItem* XFillGradientItem::CreateDefault() { return new XFillGradientItem; }
 
 XFillGradientItem::XFillGradientItem(sal_Int32 nIndex,
-                                   const XGradient& rTheGradient) :
+                                   const basegfx::BGradient& rTheGradient) :
     NameOrIndex(XATTR_FILLGRADIENT, nIndex),
     aGradient(rTheGradient)
 {
 }
 
 XFillGradientItem::XFillGradientItem(const OUString& rName,
-                                   const XGradient& rTheGradient, TypedWhichId<XFillGradientItem> nWhich)
+                                   const basegfx::BGradient& rTheGradient, TypedWhichId<XFillGradientItem> nWhich)
     : NameOrIndex(nWhich, rName)
     , aGradient(rTheGradient)
 {
@@ -2306,7 +2114,7 @@ XFillGradientItem::XFillGradientItem(const XFillGradientItem& rItem) :
 {
 }
 
-XFillGradientItem::XFillGradientItem( const XGradient& rTheGradient )
+XFillGradientItem::XFillGradientItem( const basegfx::BGradient& rTheGradient )
 :   NameOrIndex( XATTR_FILLGRADIENT, -1 ),
     aGradient(rTheGradient)
 {
@@ -2323,7 +2131,7 @@ bool XFillGradientItem::operator==(const SfxPoolItem& rItem) const
              aGradient == static_cast<const XFillGradientItem&>(rItem).aGradient );
 }
 
-const XGradient& XFillGradientItem::GetGradientValue() const // GetValue -> GetGradientValue
+const basegfx::BGradient& XFillGradientItem::GetGradientValue() const // GetValue -> GetGradientValue
 {
     if (!IsIndex())
         return aGradient;
@@ -2346,32 +2154,32 @@ bool XFillGradientItem::GetPresentation
 
 namespace
 {
-    void fillXGradientFromAny(XGradient& rXGradient, const css::uno::Any& rVal)
+    void fillXGradientFromAny(basegfx::BGradient& rBGradient, const css::uno::Any& rVal)
     {
         css::awt::Gradient aGradient;
         if (!(rVal >>= aGradient))
             return;
 
         // for compatibility, read and set StartColor/EndColor
-        rXGradient.SetColorStops(basegfx::utils::createColorStopsFromStartEndColor(
-            Color(ColorTransparency, aGradient.StartColor).getBColor(),
-            Color(ColorTransparency, aGradient.EndColor).getBColor()));
+        rBGradient.SetColorStops(
+            basegfx::BColorStops(
+                Color(ColorTransparency, aGradient.StartColor).getBColor(),
+                Color(ColorTransparency, aGradient.EndColor).getBColor()));
 
         // set values
-        rXGradient.SetGradientStyle( aGradient.Style );
-        rXGradient.SetAngle( Degree10(aGradient.Angle) );
-        rXGradient.SetBorder( aGradient.Border );
-        rXGradient.SetXOffset( aGradient.XOffset );
-        rXGradient.SetYOffset( aGradient.YOffset );
-        rXGradient.SetStartIntens( aGradient.StartIntensity );
-        rXGradient.SetEndIntens( aGradient.EndIntensity );
-        rXGradient.SetSteps( aGradient.StepCount );
+        rBGradient.SetGradientStyle( aGradient.Style );
+        rBGradient.SetAngle( Degree10(aGradient.Angle) );
+        rBGradient.SetBorder( aGradient.Border );
+        rBGradient.SetXOffset( aGradient.XOffset );
+        rBGradient.SetYOffset( aGradient.YOffset );
+        rBGradient.SetStartIntens( aGradient.StartIntensity );
+        rBGradient.SetEndIntens( aGradient.EndIntensity );
+        rBGradient.SetSteps( aGradient.StepCount );
 
         // check if we have a awt::Gradient2 with a ColorStopSequence
-        basegfx::ColorStops aColorStops;
-        basegfx::utils::fillColorStopsFromAny(aColorStops, rVal);
+        const basegfx::BColorStops aColorStops(rVal);
         if (!aColorStops.empty())
-            rXGradient.SetColorStops(aColorStops);
+            rBGradient.SetColorStops(aColorStops);
     }
 }
 
@@ -2382,10 +2190,8 @@ bool XFillGradientItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) c
     {
         case 0:
         {
-            css::awt::Gradient2 aGradient2;
-
             // fill values
-            fillGradient2FromXGradient(aGradient2, GetGradientValue());
+            const css::awt::Gradient2 aGradient2(GetGradientValue().getAsGradient2());
 
             // create sequence
             uno::Sequence< beans::PropertyValue > aPropSeq{
@@ -2398,10 +2204,8 @@ bool XFillGradientItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) c
 
         case MID_FILLGRADIENT:
         {
-            css::awt::Gradient2 aGradient2;
-
             // fill values
-            fillGradient2FromXGradient(aGradient2, GetGradientValue());
+            const css::awt::Gradient2 aGradient2(GetGradientValue().getAsGradient2());
 
             // create sequence
             rVal <<= aGradient2;
@@ -2416,10 +2220,9 @@ bool XFillGradientItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) c
 
         case MID_GRADIENT_COLORSTOPSEQUENCE:
         {
-            css::awt::ColorStopSequence aColorStopSequence;
-
             // fill values
-            basegfx::utils::fillColorStopSequenceFromColorStops(aColorStopSequence, GetGradientValue().GetColorStops());
+            const css::awt::ColorStopSequence aColorStopSequence(
+                GetGradientValue().GetColorStops().getAsColorStopSequence());
 
             // create sequence
             rVal <<= aColorStopSequence;
@@ -2470,9 +2273,9 @@ bool XFillGradientItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
 
                 if ( aGradientAny.hasValue() )
                 {
-                    XGradient aXGradient;
-                    fillXGradientFromAny(aXGradient, aGradientAny);
-                    SetGradientValue(aXGradient);
+                    basegfx::BGradient aBGradient;
+                    fillXGradientFromAny(aBGradient, aGradientAny);
+                    SetGradientValue(aBGradient);
                 }
 
                 return true;
@@ -2492,22 +2295,22 @@ bool XFillGradientItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
 
         case MID_FILLGRADIENT:
         {
-            XGradient aXGradient;
-            fillXGradientFromAny(aXGradient, rVal);
-            SetGradientValue(aXGradient);
+            basegfx::BGradient aBGradient;
+            fillXGradientFromAny(aBGradient, rVal);
+            SetGradientValue(aBGradient);
             break;
         }
 
         case MID_GRADIENT_COLORSTOPSEQUENCE:
         {
             // check if we have a awt::Gradient2 with a ColorStopSequence
-            basegfx::ColorStops aColorStops;
-            basegfx::utils::fillColorStopsFromAny(aColorStops, rVal);
+            const basegfx::BColorStops aColorStops(rVal);
+
             if (!aColorStops.empty())
             {
-                XGradient aXGradient(GetGradientValue());
-                aXGradient.SetColorStops(aColorStops);
-                SetGradientValue(aXGradient);
+                basegfx::BGradient aBGradient(GetGradientValue());
+                aBGradient.SetColorStops(aColorStops);
+                SetGradientValue(aBGradient);
             }
             break;
         }
@@ -2519,20 +2322,20 @@ bool XFillGradientItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
             if(!(rVal >>= nVal ))
                 return false;
 
-            XGradient aXGradient(GetGradientValue());
-            basegfx::ColorStops aNewColorStops(aXGradient.GetColorStops());
+            basegfx::BGradient aBGradient(GetGradientValue());
+            basegfx::BColorStops aNewColorStops(aBGradient.GetColorStops());
 
             if ( nMemberId == MID_GRADIENT_STARTCOLOR )
             {
-                basegfx::utils::replaceStartColor(aNewColorStops, nVal.getBColor());
+                aNewColorStops.replaceStartColor(nVal.getBColor());
             }
             else
             {
-                basegfx::utils::replaceEndColor(aNewColorStops, nVal.getBColor());
+                aNewColorStops.replaceEndColor(nVal.getBColor());
             }
 
-            aXGradient.SetColorStops(aNewColorStops);
-            SetGradientValue( aXGradient );
+            aBGradient.SetColorStops(aNewColorStops);
+            SetGradientValue( aBGradient );
             break;
         }
 
@@ -2549,29 +2352,29 @@ bool XFillGradientItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
             if(!(rVal >>= nVal ))
                 return false;
 
-            XGradient aXGradient = GetGradientValue();
+            basegfx::BGradient aBGradient = GetGradientValue();
 
             switch ( nMemberId )
             {
                 case MID_GRADIENT_STYLE:
-                    aXGradient.SetGradientStyle( static_cast<css::awt::GradientStyle>(nVal) ); break;
+                    aBGradient.SetGradientStyle( static_cast<css::awt::GradientStyle>(nVal) ); break;
                 case MID_GRADIENT_ANGLE:
-                    aXGradient.SetAngle( Degree10(nVal) ); break;
+                    aBGradient.SetAngle( Degree10(nVal) ); break;
                 case MID_GRADIENT_BORDER:
-                    aXGradient.SetBorder( nVal ); break;
+                    aBGradient.SetBorder( nVal ); break;
                 case MID_GRADIENT_STARTINTENSITY:
-                    aXGradient.SetStartIntens( nVal ); break;
+                    aBGradient.SetStartIntens( nVal ); break;
                 case MID_GRADIENT_ENDINTENSITY:
-                    aXGradient.SetEndIntens( nVal ); break;
+                    aBGradient.SetEndIntens( nVal ); break;
                 case MID_GRADIENT_STEPCOUNT:
-                    aXGradient.SetSteps( nVal ); break;
+                    aBGradient.SetSteps( nVal ); break;
                 case MID_GRADIENT_XOFFSET:
-                    aXGradient.SetXOffset( nVal ); break;
+                    aBGradient.SetXOffset( nVal ); break;
                 case MID_GRADIENT_YOFFSET:
-                    aXGradient.SetYOffset( nVal ); break;
+                    aBGradient.SetYOffset( nVal ); break;
             }
 
-            SetGradientValue( aXGradient );
+            SetGradientValue( aBGradient );
             break;
         }
     }
@@ -2622,7 +2425,7 @@ XFillFloatTransparenceItem::XFillFloatTransparenceItem() :
     SetWhich( XATTR_FILLFLOATTRANSPARENCE );
 }
 
-XFillFloatTransparenceItem::XFillFloatTransparenceItem(const OUString& rName, const XGradient& rGradient, bool bEnable ) :
+XFillFloatTransparenceItem::XFillFloatTransparenceItem(const OUString& rName, const basegfx::BGradient& rGradient, bool bEnable ) :
     XFillGradientItem   ( rName, rGradient ),
     bEnabled            ( bEnable )
 {
@@ -2636,7 +2439,7 @@ XFillFloatTransparenceItem::XFillFloatTransparenceItem( const XFillFloatTranspar
     SetWhich( XATTR_FILLFLOATTRANSPARENCE );
 }
 
-XFillFloatTransparenceItem::XFillFloatTransparenceItem(const XGradient& rTheGradient, bool bEnable )
+XFillFloatTransparenceItem::XFillFloatTransparenceItem(const basegfx::BGradient& rTheGradient, bool bEnable )
 :   XFillGradientItem   ( -1, rTheGradient ),
     bEnabled            ( bEnable )
 {

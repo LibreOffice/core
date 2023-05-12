@@ -415,9 +415,9 @@ namespace drawinglayer::primitive2d
                     if((pGradientItem = rSet.GetItemIfSet(XATTR_FILLFLOATTRANSPARENCE, true))
                         && pGradientItem->IsEnabled())
                     {
-                        const XGradient& rGradient = pGradientItem->GetGradientValue();
+                        const basegfx::BGradient& rGradient = pGradientItem->GetGradientValue();
                         basegfx::BColor aSingleColor;
-                        const bool bSingleColor(basegfx::utils::isSingleColor(rGradient.GetColorStops(), aSingleColor));
+                        const bool bSingleColor(rGradient.GetColorStops().isSingleColor(aSingleColor));
                         const bool bCompletelyTransparent(bSingleColor && basegfx::fTools::equal(aSingleColor.luminance(), 1.0));
 
                         if(bCompletelyTransparent)
@@ -443,309 +443,27 @@ namespace drawinglayer::primitive2d
                         }
                         case drawing::FillStyle_GRADIENT :
                         {
-                            XGradient aXGradient(rSet.Get(XATTR_FILLGRADIENT).GetGradientValue());
-                            basegfx::ColorStops aColorStops(aXGradient.GetColorStops());
+                            basegfx::BGradient aBGradient(rSet.Get(XATTR_FILLGRADIENT).GetGradientValue());
+                            basegfx::BColorStops aColorStops(aBGradient.GetColorStops());
 
-                            // test code here, can/will be removed later
-                            static const char* pUseGradientSteps(std::getenv("MCGR_TEST"));
-                            static int nUseGradientSteps(pUseGradientSteps ? std::atoi(pUseGradientSteps) : 0);
 
-                            switch(nUseGradientSteps)
-                            {
-                                case 1:
-                                {
-                                    // just test a nice valid gradient
-                                    aColorStops.clear();
-                                    aColorStops.emplace_back(0.0, COL_LIGHTRED.getBColor()); // red
-                                    aColorStops.emplace_back(0.25, COL_LIGHTGREEN.getBColor()); // green@25%
-                                    aColorStops.emplace_back(0.50, COL_YELLOW.getBColor()); // yellow@50%
-                                    aColorStops.emplace_back(0.75, COL_LIGHTMAGENTA.getBColor()); // pink@75%
-                                    aColorStops.emplace_back(1.0, COL_LIGHTBLUE.getBColor()); // blue
-                                    break;
-                                }
-
-                                case 2:
-                                {
-                                    // single added in-between, no change of start/end
-                                    aColorStops.clear();
-                                    aColorStops.emplace_back(0.0, COL_LIGHTRED.getBColor()); // red
-                                    aColorStops.emplace_back(0.5, COL_YELLOW.getBColor()); // yellow@50%
-                                    aColorStops.emplace_back(1.0, COL_LIGHTBLUE.getBColor()); // blue
-                                    break;
-                                }
-
-                                case 3:
-                                {
-                                    // check additional StartColor, the second one has to win
-                                    aColorStops.clear();
-                                    aColorStops.emplace_back(0.0, COL_LIGHTRED.getBColor()); // red
-                                    aColorStops.emplace_back(0.0, COL_YELLOW.getBColor()); // yellow@50%
-                                    aColorStops.emplace_back(1.0, COL_LIGHTBLUE.getBColor()); // blue
-                                    break;
-                                }
-
-                                case 4:
-                                {
-                                    // check additional EndColor, the first one has to win
-                                    aColorStops.clear();
-                                    aColorStops.emplace_back(0.0, COL_LIGHTRED.getBColor()); // red
-                                    aColorStops.emplace_back(1.0, COL_YELLOW.getBColor()); // yellow@50%
-                                    aColorStops.emplace_back(1.0, COL_LIGHTBLUE.getBColor()); // blue
-                                    break;
-                                }
-
-                                case 5:
-                                {
-                                    // check invalid color (too low index), has to be ignored
-                                    aColorStops.clear();
-                                    aColorStops.emplace_back(0.0, COL_LIGHTRED.getBColor()); // red
-                                    aColorStops.emplace_back(1.0, COL_LIGHTBLUE.getBColor()); // blue
-                                    aColorStops.emplace_back(-1.0, COL_YELLOW.getBColor()); // yellow@50%
-                                    break;
-                                }
-
-                                case 6:
-                                {
-                                    // check invalid color (too high index), has to be ignored
-                                    aColorStops.clear();
-                                    aColorStops.emplace_back(0.0, COL_LIGHTRED.getBColor()); // red
-                                    aColorStops.emplace_back(1.0, COL_LIGHTBLUE.getBColor()); // blue
-                                    aColorStops.emplace_back(2.0, COL_YELLOW.getBColor()); // yellow@50%
-                                    break;
-                                }
-
-                                case 7:
-                                {
-                                    // check in-between single-color section
-                                    aColorStops.clear();
-                                    aColorStops.emplace_back(0.0, COL_LIGHTRED.getBColor()); // red
-                                    aColorStops.emplace_back(0.3, COL_YELLOW.getBColor()); // yellow@50%
-                                    aColorStops.emplace_back(0.7, COL_YELLOW.getBColor()); // yellow@50%
-                                    aColorStops.emplace_back(1.0, COL_LIGHTBLUE.getBColor()); // blue
-                                    break;
-                                }
-
-                                case 8:
-                                {
-                                    // check in-between single-color sections
-                                    aColorStops.clear();
-                                    aColorStops.emplace_back(0.0, COL_LIGHTRED.getBColor()); // red
-                                    aColorStops.emplace_back(0.2, COL_YELLOW.getBColor()); // yellow@50%
-                                    aColorStops.emplace_back(0.4, COL_YELLOW.getBColor()); // yellow@50%
-                                    aColorStops.emplace_back(0.5, COL_LIGHTRED.getBColor()); // red
-                                    aColorStops.emplace_back(0.6, COL_YELLOW.getBColor()); // yellow@50%
-                                    aColorStops.emplace_back(0.8, COL_YELLOW.getBColor()); // yellow@50%
-                                    aColorStops.emplace_back(1.0, COL_LIGHTBLUE.getBColor()); // blue
-                                    break;
-                                }
-
-                                case 9:
-                                {
-                                    // check single-color start area
-                                    aColorStops.clear();
-                                    aColorStops.emplace_back(0.0, COL_LIGHTRED.getBColor()); // red
-                                    aColorStops.emplace_back(0.6, COL_LIGHTRED.getBColor()); // red
-                                    aColorStops.emplace_back(1.0, COL_LIGHTBLUE.getBColor()); // blue
-                                    break;
-                                }
-
-                                case 10:
-                                {
-                                    // check single-color end area
-                                    aColorStops.clear();
-                                    aColorStops.emplace_back(0.0, COL_LIGHTRED.getBColor()); // red
-                                    aColorStops.emplace_back(0.4, COL_LIGHTBLUE.getBColor()); // blue
-                                    aColorStops.emplace_back(1.0, COL_LIGHTBLUE.getBColor()); // blue
-                                    break;
-                                }
-
-                                case 11:
-                                {
-                                    // check case without direct Start/EndColor
-                                    aColorStops.clear();
-                                    aColorStops.emplace_back(0.4, COL_LIGHTRED.getBColor()); // red
-                                    aColorStops.emplace_back(0.6, COL_LIGHTBLUE.getBColor()); // blue
-                                    break;
-                                }
-
-                                case 12:
-                                {
-                                    // check case without colors at all
-                                    aColorStops.clear();
-                                    break;
-                                }
-
-                                case 13:
-                                {
-                                    // check case with single stop
-                                    aColorStops.clear();
-                                    aColorStops.emplace_back(0.5, COL_LIGHTRED.getBColor()); // red
-                                    break;
-                                }
-
-                                case 14:
-                                {
-                                    // check case with single-double stop
-                                    aColorStops.clear();
-                                    aColorStops.emplace_back(0.5, COL_LIGHTRED.getBColor()); // red
-                                    aColorStops.emplace_back(0.5, COL_LIGHTRED.getBColor()); // red
-                                    break;
-                                }
-
-                                case 15:
-                                {
-                                    // check case with single stop diff colors
-                                    aColorStops.clear();
-                                    aColorStops.emplace_back(0.5, COL_LIGHTRED.getBColor()); // red
-                                    aColorStops.emplace_back(0.5, COL_LIGHTBLUE.getBColor()); // blue
-                                    break;
-                                }
-
-                                case 16:
-                                {
-                                    // check case with gradient, hard change, gradient
-                                    aColorStops.clear();
-                                    aColorStops.emplace_back(0.0, COL_LIGHTGREEN.getBColor()); // green
-                                    aColorStops.emplace_back(0.2, COL_LIGHTGREEN.getBColor()); // green
-                                    aColorStops.emplace_back(0.2, COL_LIGHTBLUE.getBColor()); // blue
-                                    aColorStops.emplace_back(0.5, COL_LIGHTRED.getBColor()); // red
-                                    aColorStops.emplace_back(0.5, COL_LIGHTBLUE.getBColor()); // blue
-                                    aColorStops.emplace_back(0.8, COL_LIGHTRED.getBColor()); // red
-                                    aColorStops.emplace_back(0.8, COL_LIGHTGREEN.getBColor()); // green
-                                    aColorStops.emplace_back(1.0, COL_LIGHTGREEN.getBColor()); // green
-                                    break;
-                                }
-
-                                case 17:
-                                {
-                                    // check case with single stop < 0.0
-                                    aColorStops.clear();
-                                    aColorStops.emplace_back(-0.5, COL_LIGHTRED.getBColor()); // red
-                                    break;
-                                }
-
-                                case 18:
-                                {
-                                    // check case with single stop > 1.0
-                                    aColorStops.clear();
-                                    aColorStops.emplace_back(1.5, COL_LIGHTRED.getBColor()); // red
-                                    break;
-                                }
-
-                                case 19:
-                                {
-                                    // check case with stops overlapping 0.0
-                                    aColorStops.clear();
-                                    aColorStops.emplace_back(-0.5, COL_LIGHTRED.getBColor()); // red
-                                    aColorStops.emplace_back(0.5, COL_LIGHTBLUE.getBColor()); // blue
-                                    break;
-                                }
-
-                                case 20:
-                                {
-                                    // check case with stops overlapping 1.0
-                                    aColorStops.clear();
-                                    aColorStops.emplace_back(0.5, COL_LIGHTRED.getBColor()); // red
-                                    aColorStops.emplace_back(1.5, COL_LIGHTBLUE.getBColor()); // blue
-                                    break;
-                                }
-
-                                case 21:
-                                {
-                                    // check case with multiple stops < 0.0
-                                    aColorStops.clear();
-                                    aColorStops.emplace_back(-0.5, COL_LIGHTRED.getBColor()); // red
-                                    aColorStops.emplace_back(-0.4, COL_LIGHTBLUE.getBColor()); // blue
-                                    aColorStops.emplace_back(-0.3, COL_LIGHTGREEN.getBColor()); // green
-                                    break;
-                                }
-
-                                case 22:
-                                {
-                                    // check case with multiple stops > 1.0
-                                    aColorStops.clear();
-                                    aColorStops.emplace_back(1.3, COL_LIGHTRED.getBColor()); // red
-                                    aColorStops.emplace_back(1.4, COL_LIGHTBLUE.getBColor()); // blue
-                                    aColorStops.emplace_back(1.5, COL_LIGHTGREEN.getBColor()); // green
-                                    break;
-                                }
-
-                                case 23:
-                                {
-                                    // check case with stops overlapping 0.0 and 1.0
-                                    aColorStops.clear();
-                                    aColorStops.emplace_back(-0.5, COL_LIGHTRED.getBColor()); // red
-                                    aColorStops.emplace_back(0.5, COL_LIGHTBLUE.getBColor()); // blue
-                                    aColorStops.emplace_back(0.5, COL_LIGHTGREEN.getBColor()); // green
-                                    aColorStops.emplace_back(1.5, COL_LIGHTRED.getBColor()); // red
-                                    break;
-                                }
-
-                                case 24:
-                                {
-                                    // check case with stops overlapping 0.0 and 1.0 and multiple entries
-                                    aColorStops.clear();
-                                    aColorStops.emplace_back(-0.5, COL_LIGHTGREEN.getBColor()); // green
-                                    aColorStops.emplace_back(-0.5, COL_LIGHTRED.getBColor()); // red
-                                    aColorStops.emplace_back(0.4, COL_LIGHTBLUE.getBColor()); // blue
-                                    aColorStops.emplace_back(0.5, COL_YELLOW.getBColor()); // yellow
-                                    aColorStops.emplace_back(0.6, COL_LIGHTGREEN.getBColor()); // green
-                                    aColorStops.emplace_back(1.5, COL_LIGHTRED.getBColor()); // red
-                                    aColorStops.emplace_back(1.5, COL_LIGHTGREEN.getBColor()); // green
-                                    break;
-                                }
-
-                                case 25:
-                                {
-                                    // check case with just two stops overlapping 0.0 and 1.0
-                                    aColorStops.clear();
-                                    aColorStops.emplace_back(-0.5, COL_LIGHTRED.getBColor()); // red
-                                    aColorStops.emplace_back(1.5, COL_LIGHTGREEN.getBColor()); // green
-                                    break;
-                                }
-
-                                case 26:
-                                {
-                                    // check case with just two stops overlapping 0.0 and 1.0 faaaar out
-                                    aColorStops.clear();
-                                    aColorStops.emplace_back(-5.5, COL_LIGHTRED.getBColor()); // red
-                                    aColorStops.emplace_back(5.5, COL_LIGHTGREEN.getBColor()); // green
-                                    break;
-                                }
-
-                                case 27:
-                                {
-                                    // check case with just two stops overlapping 0.0 and 1.0 faaaar out but closer to one
-                                    aColorStops.clear();
-                                    aColorStops.emplace_back(-1.5, COL_LIGHTRED.getBColor()); // red
-                                    aColorStops.emplace_back(5.5, COL_LIGHTGREEN.getBColor()); // green
-                                    break;
-                                }
-
-                                default:
-                                {
-                                    break;
-                                }
-                            }
-
-                            if (aXGradient.GetStartIntens() != 100 || aXGradient.GetEndIntens() != 100)
+                            if (aBGradient.GetStartIntens() != 100 || aBGradient.GetEndIntens() != 100)
                             {
                                 // Need to do the (old, crazy) blend against black for a
                                 // used intensity, but now for all ColorStops relative to their
                                 // offsets, where 0 means black and 100 means original color
-                                basegfx::utils::blendColorStopsToIntensity(
-                                    aColorStops,
-                                    aXGradient.GetStartIntens() * 0.01,
-                                    aXGradient.GetEndIntens() * 0.01,
+                                aColorStops.blendToIntensity(
+                                    aBGradient.GetStartIntens() * 0.01,
+                                    aBGradient.GetEndIntens() * 0.01,
                                     basegfx::BColor()); // COL_BLACK
                             }
 
                             aGradient = attribute::FillGradientAttribute(
-                                aXGradient.GetGradientStyle(),
-                                static_cast<double>(aXGradient.GetBorder()) * 0.01,
-                                static_cast<double>(aXGradient.GetXOffset()) * 0.01,
-                                static_cast<double>(aXGradient.GetYOffset()) * 0.01,
-                                toRadians(aXGradient.GetAngle()),
+                                aBGradient.GetGradientStyle(),
+                                static_cast<double>(aBGradient.GetBorder()) * 0.01,
+                                static_cast<double>(aBGradient.GetXOffset()) * 0.01,
+                                static_cast<double>(aBGradient.GetYOffset()) * 0.01,
+                                toRadians(aBGradient.GetAngle()),
                                 aColorStops,
                                 rSet.Get(XATTR_GRADIENTSTEPCOUNT).GetValue());
 
@@ -885,9 +603,9 @@ namespace drawinglayer::primitive2d
                 && pGradientItem->IsEnabled())
             {
                 // test if float transparency is completely transparent
-                const XGradient& rGradient(pGradientItem->GetGradientValue());
+                const basegfx::BGradient& rGradient(pGradientItem->GetGradientValue());
                 basegfx::BColor aSingleColor;
-                const bool bSingleColor(basegfx::utils::isSingleColor(rGradient.GetColorStops(), aSingleColor));
+                const bool bSingleColor(rGradient.GetColorStops().isSingleColor(aSingleColor));
                 const bool bCompletelyTransparent(bSingleColor && basegfx::fTools::equal(aSingleColor.luminance(), 1.0));
                 const bool bNotTransparent(bSingleColor && basegfx::fTools::equalZero(aSingleColor.luminance()));
 
@@ -897,13 +615,12 @@ namespace drawinglayer::primitive2d
                 // Both cases are optimizations, always creating FillGradientAttribute will work, too
                 if (!bNotTransparent && !bCompletelyTransparent)
                 {
-                    basegfx::ColorStops aColorStops(rGradient.GetColorStops());
+                    basegfx::BColorStops aColorStops(rGradient.GetColorStops());
 
                     if (rGradient.GetStartIntens() != 100 || rGradient.GetEndIntens() != 100)
                     {
                         // this may also be set for transparence, so need to take care of it
-                        basegfx::utils::blendColorStopsToIntensity(
-                            aColorStops,
+                        aColorStops.blendToIntensity(
                             rGradient.GetStartIntens() * 0.01,
                             rGradient.GetEndIntens() * 0.01,
                             basegfx::BColor()); // COL_BLACK

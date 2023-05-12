@@ -471,8 +471,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork3)
         xShapeProps->getPropertyValue(u"FillGradient") >>= aGradient;
 
         // MCGR: Use the completely imported transparency gradient to check for correctness
-        basegfx::ColorStops aColorStops;
-        basegfx::utils::fillColorStopsFromGradient2(aColorStops, aGradient);
+        const basegfx::BColorStops aColorStops(aGradient.ColorStops);
 
         CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
         CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
@@ -497,8 +496,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork3)
         xShapeProps->getPropertyValue(u"FillGradient") >>= aGradient;
 
         // MCGR: Use the completely imported transparency gradient to check for correctness
-        basegfx::ColorStops aColorStops;
-        basegfx::utils::fillColorStopsFromGradient2(aColorStops, aGradient);
+        const basegfx::BColorStops aColorStops(aGradient.ColorStops);
 
         CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
         CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.40000000000000002));
@@ -523,8 +521,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork3)
         xShapeProps->getPropertyValue(u"FillGradient") >>= aGradient;
 
         // MCGR: Use the completely imported transparency gradient to check for correctness
-        basegfx::ColorStops aColorStops;
-        basegfx::utils::fillColorStopsFromGradient2(aColorStops, aGradient);
+        const basegfx::BColorStops aColorStops(aGradient.ColorStops);
 
         CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
         CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
@@ -641,8 +638,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testImportWordArtGradient)
         xShapeProps->getPropertyValue(u"FillGradient") >>= aGradient;
 
         // MCGR: Use the completely imported transparency gradient to check for correctness
-        basegfx::ColorStops aColorStops;
-        basegfx::utils::fillColorStopsFromGradient2(aColorStops, aGradient);
+        const basegfx::BColorStops aColorStops(aGradient.ColorStops);
 
         CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
         CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
@@ -675,8 +671,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testImportWordArtGradient)
         xShapeProps->getPropertyValue(u"FillGradient") >>= aGradient;
 
         // MCGR: Use the completely imported transparency gradient to check for correctness
-        basegfx::ColorStops aColorStops;
-        basegfx::utils::fillColorStopsFromGradient2(aColorStops, aGradient);
+        basegfx::BColorStops aColorStops(aGradient.ColorStops);
 
         CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
         CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
@@ -692,7 +687,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testImportWordArtGradient)
 
         xShapeProps->getPropertyValue(u"FillTransparenceGradient") >>= aGradient;
         // MCGR: Use the completely imported transparency gradient to check for correctness
-        basegfx::utils::fillColorStopsFromGradient2(aColorStops, aGradient);
+        aColorStops = basegfx::BColorStops(aGradient.ColorStops);
 
         // Transparency is encoded in gray color.
         CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
@@ -733,8 +728,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testImportWordArtGradient)
         xShapeProps->getPropertyValue(u"FillGradient") >>= aGradient;
 
         // MCGR: Use the completely imported transparency gradient to check for correctness
-        basegfx::ColorStops aColorStops;
-        basegfx::utils::fillColorStopsFromGradient2(aColorStops, aGradient);
+        basegfx::BColorStops aColorStops(aGradient.ColorStops);
 
         CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
         CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
@@ -752,7 +746,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testImportWordArtGradient)
 
         xShapeProps->getPropertyValue(u"FillTransparenceGradient") >>= aGradient;
         // MCGR: Use the completely imported transparency gradient to check for correctness
-        basegfx::utils::fillColorStopsFromGradient2(aColorStops, aGradient);
+        aColorStops = basegfx::BColorStops(aGradient.ColorStops);
 
         // Transparency is encoded in gray color.
         CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());

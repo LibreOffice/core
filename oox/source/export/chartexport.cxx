@@ -1916,10 +1916,9 @@ void ChartExport::exportSolidFill(const Reference< XPropertySet >& xPropSet)
 
         if (basegfx::utils::fillGradient2FromAny(aTransparenceGradient, rTransparenceValue))
         {
-            basegfx::ColorStops aColorStops;
-            basegfx::utils::fillColorStopsFromAny(aColorStops, rTransparenceValue);
+            const basegfx::BColorStops aColorStops(rTransparenceValue);
             basegfx::BColor aSingleColor;
-            bNeedGradientFill = !basegfx::utils::isSingleColor(aColorStops, aSingleColor);
+            bNeedGradientFill = !aColorStops.isSingleColor(aSingleColor);
         }
 
         if (!bNeedGradientFill && 0 != aTransparenceGradient.StartColor)

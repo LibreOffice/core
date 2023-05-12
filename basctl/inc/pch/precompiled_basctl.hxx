@@ -499,7 +499,6 @@
 #include <svx/svxdllapi.h>
 #include <svx/xdash.hxx>
 #include <svx/xdef.hxx>
-#include <svx/xgrad.hxx>
 #include <svx/xhatch.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/xtable.hxx>

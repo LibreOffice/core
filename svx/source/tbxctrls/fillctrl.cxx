@@ -765,7 +765,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, weld::ComboBox&, void)
 
                     if(mnLastPosGradient < pItem->GetGradientList()->Count())
                     {
-                        const XGradient aGradient = pItem->GetGradientList()->GetGradient(mnLastPosGradient)->GetGradient();
+                        const basegfx::BGradient aGradient = pItem->GetGradientList()->GetGradient(mnLastPosGradient)->GetGradient();
                         const XFillGradientItem aXFillGradientItem(mpLbFillAttr->get_text(mnLastPosGradient), aGradient);
 
                         // #i122676# change FillStyle and Gradient in one call
@@ -941,7 +941,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, weld::ComboBox&, void)
 
                 if(nPos < pItem->GetGradientList()->Count())
                 {
-                    const XGradient aGradient = pItem->GetGradientList()->GetGradient(nPos)->GetGradient();
+                    const basegfx::BGradient aGradient = pItem->GetGradientList()->GetGradient(nPos)->GetGradient();
                     const XFillGradientItem aXFillGradientItem(mpLbFillAttr->get_active_text(), aGradient);
 
                     // #i122676# Change FillStyle and Gradient in one call

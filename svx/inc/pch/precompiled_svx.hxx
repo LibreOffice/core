@@ -426,7 +426,6 @@
 #include <svx/xflclit.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/xfltrit.hxx>
-#include <svx/xgrad.hxx>
 #include <svx/xit.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>

@@ -7395,19 +7395,19 @@ static void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell > const
             case drawing::FillStyle_GRADIENT :
                 {
                     eFS = css::drawing::FillStyle_GRADIENT;
-                    XGradient aXGradient(pObj->GetMergedItem(XATTR_FILLGRADIENT).GetGradientValue());
+                    basegfx::BGradient aBGradient(pObj->GetMergedItem(XATTR_FILLGRADIENT).GetGradientValue());
 
                     css::awt::Gradient aGradient;
-                    aGradient.Style = aXGradient.GetGradientStyle();
-                    aGradient.StartColor = static_cast<sal_Int32>(Color(aXGradient.GetColorStops().front().getStopColor()));
-                    aGradient.EndColor = static_cast<sal_Int32>(Color(aXGradient.GetColorStops().back().getStopColor()));
-                    aGradient.Angle = static_cast<short>(aXGradient.GetAngle());
-                    aGradient.Border = aXGradient.GetBorder();
-                    aGradient.XOffset = aXGradient.GetXOffset();
-                    aGradient.YOffset = aXGradient.GetYOffset();
-                    aGradient.StartIntensity = aXGradient.GetStartIntens();
-                    aGradient.EndIntensity = aXGradient.GetEndIntens();
-                    aGradient.StepCount = aXGradient.GetSteps();
+                    aGradient.Style = aBGradient.GetGradientStyle();
+                    aGradient.StartColor = static_cast<sal_Int32>(Color(aBGradient.GetColorStops().front().getStopColor()));
+                    aGradient.EndColor = static_cast<sal_Int32>(Color(aBGradient.GetColorStops().back().getStopColor()));
+                    aGradient.Angle = static_cast<short>(aBGradient.GetAngle());
+                    aGradient.Border = aBGradient.GetBorder();
+                    aGradient.XOffset = aBGradient.GetXOffset();
+                    aGradient.YOffset = aBGradient.GetYOffset();
+                    aGradient.StartIntensity = aBGradient.GetStartIntens();
+                    aGradient.EndIntensity = aBGradient.GetEndIntens();
+                    aGradient.StepCount = aBGradient.GetSteps();
 
                     xPropSet->setPropertyValue( "FillGradient", Any( aGradient ) );
                 }

@@ -628,9 +628,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testBnc889755)
     uno::Reference<beans::XPropertySet> xShapeProps(xPage->getByIndex(4), uno::UNO_QUERY_THROW);
     awt::Gradient2 aTransparence;
     xShapeProps->getPropertyValue("FillTransparenceGradient") >>= aTransparence;
-
-    basegfx::ColorStops aColorStops;
-    basegfx::utils::fillColorStopsFromGradient2(aColorStops, aTransparence);
+    const basegfx::BColorStops aColorStops(aTransparence.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(3), aColorStops.size());
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
@@ -673,9 +671,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTransparencyGradientValue)
     uno::Reference< container::XNameAccess > xTransparenceGradient(xFact->createInstance("com.sun.star.drawing.TransparencyGradientTable"), uno::UNO_QUERY);
     uno::Any rTransparenceValue = xTransparenceGradient->getByName(sTranspGradientName);
     CPPUNIT_ASSERT(rTransparenceValue >>= aTransparenceGradient);
-
-    basegfx::ColorStops aColorStops;
-    basegfx::utils::fillColorStopsFromGradient2(aColorStops, aTransparenceGradient);
+    const basegfx::BColorStops aColorStops(aTransparenceGradient.ColorStops);
 
     // MCGR: Use the whole completely imported transparency gradient to check for correctness
     CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());

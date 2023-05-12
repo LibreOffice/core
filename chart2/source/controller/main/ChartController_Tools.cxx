@@ -74,7 +74,6 @@
 #include <svx/unoapi.hxx>
 #include <svx/unopage.hxx>
 #include <svx/unoshape.hxx>
-#include <svx/xgrad.hxx>
 #include <PropertyHelper.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -957,8 +956,8 @@ void ChartController::executeDispatch_FillColor(sal_uInt32 nColor)
 
 void ChartController::executeDispatch_FillGradient(std::u16string_view sJSONGradient)
 {
-    XGradient aXGradient = XGradient::fromJSON(sJSONGradient);
-    css::awt::Gradient aGradient = aXGradient.toGradientUNO();
+    basegfx::BGradient aBGradient = basegfx::BGradient::fromJSON(sJSONGradient);
+    css::awt::Gradient aGradient = aBGradient.getAsGradient2();
 
     try
     {
@@ -973,9 +972,9 @@ void ChartController::executeDispatch_FillGradient(std::u16string_view sJSONGrad
             if( xPropSet.is() )
             {
                 OUString aPrefferedName =
-                    OUString::number(static_cast<sal_Int32>(Color(aXGradient.GetColorStops().front().getStopColor())))
-                    + OUString::number(static_cast<sal_Int32>(Color(aXGradient.GetColorStops().back().getStopColor())))
-                    + OUString::number(static_cast<sal_Int32>(aXGradient.GetAngle().get()));
+                    OUString::number(static_cast<sal_Int32>(Color(aBGradient.GetColorStops().front().getStopColor())))
+                    + OUString::number(static_cast<sal_Int32>(Color(aBGradient.GetColorStops().back().getStopColor())))
+                    + OUString::number(static_cast<sal_Int32>(aBGradient.GetAngle().get()));
 
                 OUString aNewName = PropertyHelper::addGradientUniqueNameToTable(css::uno::Any(aGradient),
                                         xChartModel,

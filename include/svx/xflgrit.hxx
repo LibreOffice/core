@@ -22,7 +22,6 @@
 
 #include <svx/xdef.hxx>
 #include <svx/xit.hxx>
-#include <svx/xgrad.hxx>
 #include <svx/svxdllapi.h>
 
 class SdrModel;
@@ -31,14 +30,14 @@ class SdrModel;
 
 class SVXCORE_DLLPUBLIC XFillGradientItem : public NameOrIndex
 {
-    XGradient   aGradient;
+    basegfx::BGradient   aGradient;
 
 public:
             static SfxPoolItem* CreateDefault();
             XFillGradientItem() : NameOrIndex(XATTR_FILLGRADIENT, -1) {}
-            XFillGradientItem(sal_Int32 nIndex, const XGradient& rTheGradient);
-            XFillGradientItem(const OUString& rName, const XGradient& rTheGradient, TypedWhichId<XFillGradientItem> nWhich = XATTR_FILLGRADIENT);
-            XFillGradientItem(const XGradient& rTheGradient);
+            XFillGradientItem(sal_Int32 nIndex, const basegfx::BGradient& rTheGradient);
+            XFillGradientItem(const OUString& rName, const basegfx::BGradient& rTheGradient, TypedWhichId<XFillGradientItem> nWhich = XATTR_FILLGRADIENT);
+            XFillGradientItem(const basegfx::BGradient& rTheGradient);
             XFillGradientItem(const XFillGradientItem& rItem);
 
     virtual bool            operator==(const SfxPoolItem& rItem) const override;
@@ -50,8 +49,8 @@ public:
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
-    const XGradient&        GetGradientValue() const; // GetValue -> GetGradientValue
-    void                    SetGradientValue(const XGradient& rNew) { aGradient = rNew; Detach(); } // SetValue -> SetGradientValue
+    const basegfx::BGradient&        GetGradientValue() const; // GetValue -> GetGradientValue
+    void                    SetGradientValue(const basegfx::BGradient& rNew) { aGradient = rNew; Detach(); } // SetValue -> SetGradientValue
 
     static bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
     std::unique_ptr<XFillGradientItem> checkForUniqueItem( SdrModel* pModel ) const;

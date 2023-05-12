@@ -20,8 +20,9 @@
 #ifndef INCLUDED_SVX_SOURCE_SVDRAW_GRADTRNS_HXX
 #define INCLUDED_SVX_SOURCE_SVDRAW_GRADTRNS_HXX
 
-#include <svx/xgrad.hxx>
+#include <tools/color.hxx>
 #include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/utils/bgradient.hxx>
 
 class SdrObject;
 
@@ -37,7 +38,7 @@ public:
 class GradTransGradient
 {
 public:
-    XGradient                   aGradient;
+    basegfx::BGradient          aGradient;
 };
 
 struct GradTransformer

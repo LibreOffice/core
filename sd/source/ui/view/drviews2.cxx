@@ -562,7 +562,7 @@ public:
             const SfxStringItem* pJSON = static_cast<const SfxStringItem*>(pItem);
             if (pJSON)
             {
-                XGradient aGradient = XGradient::fromJSON(pJSON->GetValue());
+                basegfx::BGradient aGradient = basegfx::BGradient::fromJSON(pJSON->GetValue());
                 XFillGradientItem aItem(aGradient);
                 pArgs->Put(aItem);
             }

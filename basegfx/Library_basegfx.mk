@@ -67,6 +67,7 @@ $(eval $(call gb_Library_add_exception_objects,basegfx,\
     basegfx/source/range/b3drange \
     basegfx/source/raster/rasterconvert3d \
     basegfx/source/tools/b2dclipstate \
+    basegfx/source/tools/bgradient \
     basegfx/source/tools/canvastools \
     basegfx/source/tools/gradienttools \
     basegfx/source/tools/keystoplerp \

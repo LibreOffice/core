@@ -2924,8 +2924,8 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet, sal_uInt32 eMSO_F
     }
 
     //Construct gradient item
-    XGradient aGrad(
-        basegfx::utils::createColorStopsFromStartEndColor(aCol2.getBColor(), aCol1.getBColor()),
+    basegfx::BGradient aGrad(
+        basegfx::BColorStops(aCol2.getBColor(), aCol1.getBColor()),
         eGrad, nAngle, nFocusX, nFocusY );
     //Intensity has been merged into color. So here just set is as 100
     aGrad.SetStartIntens( 100 );
@@ -2939,8 +2939,8 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet, sal_uInt32 eMSO_F
         aCol1 = Color(nStartCol, nStartCol, nStartCol);
         aCol2 = Color(nEndCol, nEndCol, nEndCol);
 
-        XGradient aGrad2(
-            basegfx::utils::createColorStopsFromStartEndColor(aCol2.getBColor(), aCol1.getBColor()),
+        basegfx::BGradient aGrad2(
+            basegfx::BColorStops(aCol2.getBColor(), aCol1.getBColor()),
             eGrad, nAngle, nFocusX, nFocusY );
         aSet.Put( XFillFloatTransparenceItem( OUString(), aGrad2 ) );
     }

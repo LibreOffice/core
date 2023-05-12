@@ -681,7 +681,7 @@ namespace wmfemfhelper
             static_cast<double>(rGradient.GetOfsX()) * 0.01,
             static_cast<double>(rGradient.GetOfsY()) * 0.01,
             toRadians(rGradient.GetAngle()),
-            basegfx::utils::createColorStopsFromStartEndColor(aStart, aEnd),
+            basegfx::BColorStops(aStart, aEnd),
             rGradient.GetSteps());
     }
 
@@ -882,11 +882,12 @@ namespace wmfemfhelper
         PropertyHolder const & rPropertyHolder)
     {
         drawinglayer::attribute::FillGradientAttribute aAttribute(createFillGradientAttribute(rGradient));
+        basegfx::BColor aSingleColor;
 
-        if(aAttribute.hasSingleColor())
+        if (aAttribute.getColorStops().isSingleColor(aSingleColor))
         {
             // not really a gradient. Create filled rectangle
-            return CreateColorWallpaper(rRange, aAttribute.getColorStops().front().getStopColor(), rPropertyHolder);
+            return CreateColorWallpaper(rRange, aSingleColor, rPropertyHolder);
         }
         else
         {
@@ -2052,8 +2053,9 @@ namespace wmfemfhelper
                             const Gradient& rGradient = pA->GetGradient();
                             drawinglayer::attribute::FillGradientAttribute aAttribute(createFillGradientAttribute(rGradient));
                             basegfx::B2DPolyPolygon aOutline(basegfx::utils::createPolygonFromRect(aRange));
+                            basegfx::BColor aSingleColor;
 
-                            if(aAttribute.hasSingleColor())
+                            if (aAttribute.getColorStops().isSingleColor(aSingleColor))
                             {
                                 // not really a gradient. Create filled rectangle
                                 createFillPrimitive(
@@ -2762,14 +2764,15 @@ namespace wmfemfhelper
                                 // check if gradient is a real gradient
                                 const Gradient& rGradient = pA->GetGradient();
                                 drawinglayer::attribute::FillGradientAttribute aAttribute(createFillGradientAttribute(rGradient));
+                                basegfx::BColor aSingleColor;
 
-                                if(aAttribute.hasSingleColor())
+                                if (aAttribute.getColorStops().isSingleColor(aSingleColor))
                                 {
                                     // not really a gradient; create UnifiedTransparencePrimitive2D
                                     rTargetHolders.Current().append(
                                         new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                                             std::move(xSubContent),
-                                            aAttribute.getColorStops().front().getStopColor().luminance()));
+                                            aSingleColor.luminance()));
                                 }
                                 else
                                 {
@@ -2882,14 +2885,15 @@ namespace wmfemfhelper
                                 // get and check if gradient is a real gradient
                                 const Gradient& rGradient = pMetaGradientExAction->GetGradient();
                                 drawinglayer::attribute::FillGradientAttribute aAttribute(createFillGradientAttribute(rGradient));
+                                basegfx::BColor aSingleColor;
 
-                                if(aAttribute.hasSingleColor())
+                                if (aAttribute.getColorStops().isSingleColor(aSingleColor))
                                 {
                                     // not really a gradient
                                     rTargetHolders.Current().append(
                                         new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                                             std::move(aPolyPolygon),
-                                            aAttribute.getColorStops().front().getStopColor()));
+                                            aSingleColor));
                                 }
                                 else
                                 {

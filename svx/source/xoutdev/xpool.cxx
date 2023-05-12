@@ -109,8 +109,8 @@ XOutdevItemPool::XOutdevItemPool(SfxItemPool* _pMaster)
     rPoolDefaults[XATTR_FILLSTYLE                -XATTR_START] = new XFillStyleItem;
     rPoolDefaults[XATTR_FILLCOLOR                -XATTR_START] = new XFillColorItem   (aNullStr,aNullFillCol);
 
-    // XGradient() default already creates [COL_BLACK, COL_WHITE] as defaults
-    rPoolDefaults[XATTR_FILLGRADIENT         -XATTR_START] = new XFillGradientItem(XGradient());
+    // basegfx::BGradient() default already creates [COL_BLACK, COL_WHITE] as defaults
+    rPoolDefaults[XATTR_FILLGRADIENT         -XATTR_START] = new XFillGradientItem(basegfx::BGradient());
 
     rPoolDefaults[XATTR_FILLHATCH                -XATTR_START] = new XFillHatchItem   (aNullHatch);
     rPoolDefaults[XATTR_FILLBITMAP               -XATTR_START] = new XFillBitmapItem  (Graphic());
@@ -128,8 +128,8 @@ XOutdevItemPool::XOutdevItemPool(SfxItemPool* _pMaster)
     rPoolDefaults[XATTR_FILLBMP_POSOFFSETY       -XATTR_START] = new XFillBmpPosOffsetYItem;
 
     rPoolDefaults[XATTR_FILLFLOATTRANSPARENCE    -XATTR_START] = new XFillFloatTransparenceItem(
-        XGradient(
-            basegfx::utils::createColorStopsFromStartEndColor(
+        basegfx::BGradient(
+            basegfx::BColorStops(
                 COL_BLACK.getBColor(),
                 COL_BLACK.getBColor())),
                 false);

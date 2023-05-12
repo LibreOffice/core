@@ -302,7 +302,7 @@ static rtl::Reference<SdrObject> ImpCreateShadowObjectClone(const SdrObject& rOr
         // gradient and transparency like shadow
         if(bGradientFillUsed)
         {
-            XGradient aGradient(rOriginalSet.Get(XATTR_FILLGRADIENT).GetGradientValue());
+            basegfx::BGradient aGradient(rOriginalSet.Get(XATTR_FILLGRADIENT).GetGradientValue());
             sal_uInt8 nStartLuminance(Color(aGradient.GetColorStops().front().getStopColor()).GetLuminance());
             sal_uInt8 nEndLuminance(Color(aGradient.GetColorStops().back().getStopColor()).GetLuminance());
 
@@ -327,7 +327,7 @@ static rtl::Reference<SdrObject> ImpCreateShadowObjectClone(const SdrObject& rOr
                 static_cast<sal_uInt8>((nEndLuminance * aShadowColor.GetBlue()) / 256));
 
             aGradient.SetColorStops(
-                basegfx::utils::createColorStopsFromStartEndColor(
+                basegfx::BColorStops(
                     aStartColor.getBColor(),
                     aEndColor.getBColor()));
             aTempSet.Put(XFillGradientItem(aGradient));

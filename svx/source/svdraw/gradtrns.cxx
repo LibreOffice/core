@@ -188,15 +188,15 @@ void GradTransformer::VecToGrad(GradTransVector const & rV, GradTransGradient& r
     // handle color changes
     if(rV.aCol1 != Color(rGOld.aGradient.GetColorStops().front().getStopColor()))
     {
-        basegfx::ColorStops aNewColorStops(rG.aGradient.GetColorStops());
-        basegfx::utils::replaceStartColor(aNewColorStops, rV.aCol1.getBColor());
+        basegfx::BColorStops aNewColorStops(rG.aGradient.GetColorStops());
+        aNewColorStops.replaceStartColor(rV.aCol1.getBColor());
         rG.aGradient.SetColorStops(aNewColorStops);
         rG.aGradient.SetStartIntens(100);
     }
     if(rV.aCol2 != Color(rGOld.aGradient.GetColorStops().back().getStopColor()))
     {
-        basegfx::ColorStops aNewColorStops(rG.aGradient.GetColorStops());
-        basegfx::utils::replaceEndColor(aNewColorStops, rV.aCol2.getBColor());
+        basegfx::BColorStops aNewColorStops(rG.aGradient.GetColorStops());
+        aNewColorStops.replaceEndColor(rV.aCol2.getBColor());
         rG.aGradient.SetColorStops(aNewColorStops);
         rG.aGradient.SetEndIntens(100);
     }

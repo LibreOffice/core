@@ -26,9 +26,9 @@
 
 namespace basegfx
 {
-class ColorStop;
+class BColorStop;
 class BColor;
-typedef std::vector<ColorStop> ColorStops;
+class BColorStops;
 }
 
 namespace drawinglayer::attribute
@@ -49,12 +49,12 @@ public:
        Direct Start/EndCOlor is no longer required, instead the
        full color gradient is handed over as ColorStops vector.
        To add the former Start/EndColor in a compatible way, just
-       prepare an instance of basegfx::ColorStops with the
+       prepare an instance of basegfx::BColorStops with the
        StartColor at 0.0 and the EndColor at 1.0.
 
        A rigid correction/input data will be done by the constructor,
        including to sort the ColorStops by offset and removing invalid
-       entries (see sortAndCorrectColorStops)
+       entries (see sortAndCorrect)
 
        To access e.g. the StartColor, use getColorStops().front(), and
        getColorStops().back(), accordingly, for EndColor. The existence
@@ -65,7 +65,7 @@ public:
     */
     /// constructors/assignmentoperator/destructor
     FillGradientAttribute(css::awt::GradientStyle eStyle, double fBorder, double fOffsetX,
-                          double fOffsetY, double fAngle, const basegfx::ColorStops& rColorStops,
+                          double fOffsetY, double fAngle, const basegfx::BColorStops& rColorStops,
                           sal_uInt16 nSteps = 0);
     FillGradientAttribute();
     FillGradientAttribute(const FillGradientAttribute&);
@@ -76,9 +76,6 @@ public:
 
     // checks if the incarnation is default constructed
     bool isDefault() const;
-
-    // check if it is defined by a single color, then it is no gradient at all
-    bool hasSingleColor() const;
 
     // MCGR: Check if rendering cannot be handled by old vcl stuff
     // due to various restrictions, based on local parameters. There
@@ -96,7 +93,7 @@ public:
     double getOffsetX() const;
     double getOffsetY() const;
     double getAngle() const;
-    const basegfx::ColorStops& getColorStops() const;
+    const basegfx::BColorStops& getColorStops() const;
     sal_uInt16 getSteps() const;
 };
 

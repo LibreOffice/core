@@ -93,7 +93,7 @@ private:
     void Initialize();
     void Update();
     Color const & GetColorSetOrDefault();
-    XGradient const & GetGradientSetOrDefault();
+    basegfx::BGradient const & GetGradientSetOrDefault();
     OUString const & GetHatchingSetOrDefault();
     OUString const & GetBitmapSetOrDefault();
     OUString const & GetPatternSetOrDefault();
