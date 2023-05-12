@@ -32,6 +32,7 @@
 #include "numberformatsbuffer.hxx"
 #include <editeng/svxenum.hxx>
 #include <editeng/frmdir.hxx>
+#include <docmodel/color/ComplexColor.hxx>
 #include <attarray.hxx>
 #include <vector>
 
@@ -196,6 +197,7 @@ struct ApiFontData
     ApiScriptFontName        maCmplxFont;        /// Font name for complex scripts.
     css::awt::FontDescriptor maDesc;             /// Font descriptor (height in twips, weight in %).
     ::Color                  mnColor;            /// Font color.
+    model::ComplexColor      maComplexColor;     /// Font complex color.
     sal_Int16                mnEscapement;       /// Escapement style.
     sal_Int8                 mnEscapeHeight;     /// Escapement font height.
     bool                     mbOutline;          /// True = outlined characters.
@@ -506,6 +508,7 @@ struct GradientFillModel
 struct ApiSolidFillData
 {
     ::Color             mnColor;            /// Fill color.
+    model::ComplexColor maComplexColor;
     ::Color             mnFilterColor;        /// Fill color filtering.
     bool                mbTransparent;      /// True = transparent area.
     bool                mbUsed;             /// True = fill data is valid.

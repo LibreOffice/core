@@ -51,6 +51,7 @@
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/style/GraphicLocation.hpp>
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>
+#include <com/sun/star/util/XComplexColor.hpp>
 #include <com/sun/star/util/CellProtection.hpp>
 #include <com/sun/star/util/XComplexColor.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
