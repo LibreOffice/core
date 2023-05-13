@@ -1565,6 +1565,21 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testBorderDirectionsXLSXML)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testNamedTableRef)
+{
+    createScDoc("xlsx/tablerefsnamed.xlsx");
+    ScDocument* pDoc = getScDoc();
+    for (sal_Int32 nRow = 1; nRow < 7; ++nRow)
+    {
+        ScFormulaCell* pFC = pDoc->GetFormulaCell(ScAddress(5, nRow, 0));
+        CPPUNIT_ASSERT(pFC);
+        // Without the fix there will be #REF in F2:F7.
+        CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, pFC->GetErrCode());
+        // Without the fix value will be 0 (FALSE).
+        CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(6, nRow, 0)));
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
