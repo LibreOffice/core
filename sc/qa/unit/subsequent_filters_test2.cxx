@@ -192,6 +192,7 @@ public:
     void testTdf151818_SmartArtFontColor();
     void testTdf82984_zip64XLSXImport();
     void testSingleLine();
+    void testNamedTableRef();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest2);
 
@@ -314,6 +315,7 @@ public:
     CPPUNIT_TEST(testTdf151818_SmartArtFontColor);
     CPPUNIT_TEST(testTdf82984_zip64XLSXImport);
     CPPUNIT_TEST(testSingleLine);
+    CPPUNIT_TEST(testNamedTableRef);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -3076,6 +3078,21 @@ void ScFiltersTest2::testSingleLine()
     pDoc = getScDoc();
     CPPUNIT_ASSERT(pDoc);
     testCells(pDoc);
+}
+
+void ScFiltersTest2::testNamedTableRef()
+{
+    createScDoc("xlsx/tablerefsnamed.xlsx");
+    ScDocument* pDoc = getScDoc();
+    for (sal_Int32 nRow = 1; nRow < 7; ++nRow)
+    {
+        ScFormulaCell* pFC = pDoc->GetFormulaCell(ScAddress(5, nRow, 0));
+        CPPUNIT_ASSERT(pFC);
+        // Without the fix there will be #REF in F2:F7.
+        CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, pFC->GetErrCode());
+        // Without the fix value will be 0 (FALSE).
+        CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(6, nRow, 0)));
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScFiltersTest2);

@@ -8181,6 +8181,12 @@ void ScInterpreter::ScDBVarP()
     PushDouble(fVal/fCount);
 }
 
+bool lcl_IsTableStructuredRef(const OUString& sRefStr, sal_Int32& nIndex)
+{
+    nIndex = ScGlobal::FindUnquoted(sRefStr, '[');
+    return (nIndex > 0 && ScGlobal::FindUnquoted(sRefStr, ']', nIndex + 1) > nIndex);
+}
+
 void ScInterpreter::ScIndirect()
 {
     sal_uInt8 nParamCount = GetByte();
@@ -8217,6 +8223,10 @@ void ScInterpreter::ScIndirect()
     const ScAddress::Details aDetailsXlA1( FormulaGrammar::CONV_XL_A1, aPos );
     SCTAB nTab = aPos.Tab();
 
+    bool bTableRefNamed = false;
+    sal_Int32 nTableRefNamedIndex = -1;
+    OUString sTabRefStr;
+
     // Named expressions and DB range names need to be tried first, as older 1K
     // columns allowed names that would now match a 16k columns cell address.
     do
@@ -8232,8 +8242,14 @@ void ScInterpreter::ScIndirect()
 
         // This is the usual way to treat named ranges containing
         // relative references.
-        if (!pData->IsReference( aRange, aPos))
+        if (!pData->IsReference(aRange, aPos))
+        {
+            sTabRefStr = pData->GetSymbol();
+            bTableRefNamed = lcl_IsTableStructuredRef(sTabRefStr, nTableRefNamedIndex);
+            // if bTableRefNamed is true, we have a name that maps to a table structured reference.
+            // Such a case is handled below.
             break;
+        }
 
         if (aRange.aStart == aRange.aEnd)
             PushSingleRef( aRange.aStart.Col(), aRange.aStart.Row(),
@@ -8250,6 +8266,9 @@ void ScInterpreter::ScIndirect()
 
     do
     {
+        if (bTableRefNamed)
+            break;
+
         const OUString & aName( sSharedRefStr.getIgnoreCaseString() );
         ScDBCollection::NamedDBs& rDBs = mrDoc.GetDBCollection()->getNamedDBs();
         const ScDBData* pData = rDBs.findByUpperName( aName);
@@ -8285,9 +8304,10 @@ void ScInterpreter::ScIndirect()
 
     ScRefAddress aRefAd, aRefAd2;
     ScAddress::ExternalInfo aExtInfo;
-    if ( ConvertDoubleRef(mrDoc, sRefStr, nTab, aRefAd, aRefAd2, aDetails, &aExtInfo) ||
-         ( bTryXlA1 && ConvertDoubleRef(mrDoc, sRefStr, nTab, aRefAd,
-                                        aRefAd2, aDetailsXlA1, &aExtInfo) ) )
+    if ( !bTableRefNamed &&
+         (ConvertDoubleRef(mrDoc, sRefStr, nTab, aRefAd, aRefAd2, aDetails, &aExtInfo) ||
+            ( bTryXlA1 && ConvertDoubleRef(mrDoc, sRefStr, nTab, aRefAd,
+                                           aRefAd2, aDetailsXlA1, &aExtInfo) ) ) )
     {
         if (aExtInfo.mbExternal)
         {
@@ -8299,9 +8319,10 @@ void ScInterpreter::ScIndirect()
         else
             PushDoubleRef( aRefAd, aRefAd2);
     }
-    else if ( ConvertSingleRef(mrDoc, sRefStr, nTab, aRefAd, aDetails, &aExtInfo) ||
-              ( bTryXlA1 && ConvertSingleRef (mrDoc, sRefStr, nTab, aRefAd,
-                                              aDetailsXlA1, &aExtInfo) ) )
+    else if ( !bTableRefNamed &&
+              (ConvertSingleRef(mrDoc, sRefStr, nTab, aRefAd, aDetails, &aExtInfo) ||
+                ( bTryXlA1 && ConvertSingleRef (mrDoc, sRefStr, nTab, aRefAd,
+                                                aDetailsXlA1, &aExtInfo) ) ) )
     {
         if (aExtInfo.mbExternal)
         {
@@ -8317,8 +8338,10 @@ void ScInterpreter::ScIndirect()
         // Anything else that resolves to one reference could be added
         // here, but we don't want to compile every arbitrary string. This
         // is already nasty enough...
-        sal_Int32 nIndex = ScGlobal::FindUnquoted( sRefStr, '[');
-        const bool bTableRef = (nIndex > 0 && ScGlobal::FindUnquoted( sRefStr, ']', nIndex+1) > nIndex);
+        sal_Int32 nIndex = bTableRefNamed ? nTableRefNamedIndex : -1;
+        bool bTableRef = bTableRefNamed;
+        if (!bTableRefNamed)
+            bTableRef = lcl_IsTableStructuredRef(sRefStr, nIndex);
         bool bExternalName = false;     // External references would had been consumed above already.
         if (!bTableRef)
         {
@@ -8355,7 +8378,7 @@ void ScInterpreter::ScIndirect()
             {
                 ScCompiler aComp( mrDoc, aPos, mrDoc.GetGrammar());
                 aComp.SetRefConvention( eConv);     // must be after grammar
-                std::unique_ptr<ScTokenArray> pTokArr( aComp.CompileString( sRefStr));
+                std::unique_ptr<ScTokenArray> pTokArr( aComp.CompileString(bTableRefNamed ? sTabRefStr : sRefStr));
 
                 if (pTokArr->GetCodeError() != FormulaError::NONE || !pTokArr->GetLen())
                     break;
