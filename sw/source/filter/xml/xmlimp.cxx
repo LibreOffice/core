@@ -1779,7 +1779,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
     OString const str(read_uInt8s_ToOString(rStream, 4000));
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
     OUString resultString(str.getStr(), str.getLength(), RTL_TEXTENCODING_ASCII_US,
-                          RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT|OSTRING_TO_OUSTRING_CVTFLAGS);
+                          RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT|RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT|RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT);
     if (resultString.indexOf("office:mimetype=\"application/vnd.oasis.opendocument.text\"") == -1)
         return false;
 
