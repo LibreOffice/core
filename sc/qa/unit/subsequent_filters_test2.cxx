@@ -190,6 +190,7 @@ public:
     void testTdf83671_SmartArt_import();
     void testTdf83671_SmartArt_import2();
     void testTdf151818_SmartArtFontColor();
+    void testNamedTableRef();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest2);
 
@@ -310,6 +311,7 @@ public:
     CPPUNIT_TEST(testTdf83671_SmartArt_import);
     CPPUNIT_TEST(testTdf83671_SmartArt_import2);
     CPPUNIT_TEST(testTdf151818_SmartArtFontColor);
+    CPPUNIT_TEST(testNamedTableRef);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -3032,6 +3034,21 @@ void ScFiltersTest2::testTdf151818_SmartArtFontColor()
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(false, pChange);
         pChange->commit();
+    }
+}
+
+void ScFiltersTest2::testNamedTableRef()
+{
+    createScDoc("xlsx/tablerefsnamed.xlsx");
+    ScDocument* pDoc = getScDoc();
+    for (sal_Int32 nRow = 1; nRow < 7; ++nRow)
+    {
+        ScFormulaCell* pFC = pDoc->GetFormulaCell(ScAddress(5, nRow, 0));
+        CPPUNIT_ASSERT(pFC);
+        // Without the fix there will be #REF in F2:F7.
+        CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, pFC->GetErrCode());
+        // Without the fix value will be 0 (FALSE).
+        CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(6, nRow, 0)));
     }
 }
 
