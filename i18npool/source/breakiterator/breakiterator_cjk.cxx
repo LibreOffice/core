@@ -42,8 +42,8 @@ Boundary SAL_CALL
 BreakIterator_CJK::previousWord(const OUString& text, sal_Int32 anyPos,
         const css::lang::Locale& nLocale, sal_Int16 wordType)
 {
-    if (m_xDict) {
-        result = m_xDict->previousWord(text, anyPos, wordType);
+    if (m_oDict) {
+        result = m_oDict->previousWord(text, anyPos, wordType);
         // #109813# for non-CJK, single character word, fallback to ICU breakiterator.
         if (result.endPos - result.startPos != 1 ||
                 getScriptType(text, result.startPos) == ScriptType::ASIAN)
@@ -59,8 +59,8 @@ Boundary SAL_CALL
 BreakIterator_CJK::nextWord(const OUString& text, sal_Int32 anyPos,
         const css::lang::Locale& nLocale, sal_Int16 wordType)
 {
-    if (m_xDict) {
-        result = m_xDict->nextWord(text, anyPos, wordType);
+    if (m_oDict) {
+        result = m_oDict->nextWord(text, anyPos, wordType);
         // #109813# for non-CJK, single character word, fallback to ICU breakiterator.
         if (result.endPos - result.startPos != 1 ||
                 getScriptType(text, result.startPos) == ScriptType::ASIAN)
@@ -76,8 +76,8 @@ Boundary SAL_CALL
 BreakIterator_CJK::getWordBoundary( const OUString& text, sal_Int32 anyPos,
         const css::lang::Locale& nLocale, sal_Int16 wordType, sal_Bool bDirection )
 {
-    if (m_xDict) {
-        result = m_xDict->getWordBoundary(text, anyPos, wordType, bDirection);
+    if (m_oDict) {
+        result = m_oDict->getWordBoundary(text, anyPos, wordType, bDirection);
         // #109813# for non-CJK, single character word, fallback to ICU breakiterator.
         if (result.endPos - result.startPos != 1 ||
                 getScriptType(text, result.startPos) == ScriptType::ASIAN)
@@ -144,7 +144,7 @@ LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
 //      ----------------------------------------------------;
 BreakIterator_zh::BreakIterator_zh()
 {
-    m_xDict = std::make_unique<xdictionary>("zh");
+    m_oDict.emplace("zh");
     assert(hangingCharacters.pData);
     hangingCharacters = LocaleDataImpl::get()->getHangingCharacters(LOCALE("zh", "CN"));
     cBreakIterator = "com.sun.star.i18n.BreakIterator_zh";
@@ -155,7 +155,7 @@ BreakIterator_zh::BreakIterator_zh()
 //      ----------------------------------------------------;
 BreakIterator_zh_TW::BreakIterator_zh_TW()
 {
-    m_xDict = std::make_unique<xdictionary>("zh");
+    m_oDict.emplace("zh");
     assert(hangingCharacters.pData);
     hangingCharacters = LocaleDataImpl::get()->getHangingCharacters(LOCALE("zh", "TW"));
     cBreakIterator = "com.sun.star.i18n.BreakIterator_zh_TW";
@@ -166,8 +166,8 @@ BreakIterator_zh_TW::BreakIterator_zh_TW()
 //      ----------------------------------------------------;
 BreakIterator_ja::BreakIterator_ja()
 {
-    m_xDict = std::make_unique<xdictionary>("ja");
-    m_xDict->setJapaneseWordBreak();
+    m_oDict.emplace("ja");
+    m_oDict->setJapaneseWordBreak();
     assert(hangingCharacters.pData);
     hangingCharacters = LocaleDataImpl::get()->getHangingCharacters(LOCALE("ja", "JP"));
     cBreakIterator = "com.sun.star.i18n.BreakIterator_ja";

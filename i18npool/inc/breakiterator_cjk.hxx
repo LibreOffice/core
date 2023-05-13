@@ -20,7 +20,7 @@
 
 #include "breakiterator_unicode.hxx"
 #include "xdictionary.hxx"
-
+#include <optional>
 #include <memory>
 
 namespace i18npool {
@@ -43,7 +43,7 @@ public:
         const css::i18n::LineBreakUserOptions& bOptions ) override;
 
 protected:
-    std::unique_ptr<xdictionary> m_xDict;
+    std::optional<xdictionary> m_oDict;
     OUString hangingCharacters;
 };
 
