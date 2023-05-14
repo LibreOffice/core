@@ -1117,10 +1117,10 @@ sal_uInt16 MSWordSections::CurrentNumberOfColumns( const SwDoc &rDoc ) const
     if ( m_aSects.empty() )
         return 1;
 
-    return NumberOfColumns( rDoc, m_aSects.back() );
+    return GetFormatCol(rDoc, m_aSects.back()).GetNumCols();
 }
 
-sal_uInt16 MSWordSections::NumberOfColumns( const SwDoc &rDoc, const WW8_SepInfo& rInfo )
+const SwFormatCol& MSWordSections::GetFormatCol(const SwDoc &rDoc, const WW8_SepInfo& rInfo)
 {
     const SwPageDesc* pPd = rInfo.pPageDesc;
     if ( !pPd )
@@ -1134,9 +1134,7 @@ sal_uInt16 MSWordSections::NumberOfColumns( const SwDoc &rDoc, const WW8_SepInfo
     if ( rInfo.pSectionFormat && reinterpret_cast<SwSectionFormat*>(sal_IntPtr(-1)) != rInfo.pSectionFormat )
         aSet.Put( rInfo.pSectionFormat->GetFormatAttr( RES_COL ) );
 
-    const SwFormatCol& rCol = aSet.Get( RES_COL );
-    const SwColumns& rColumns = rCol.GetColumns();
-    return rColumns.size();
+    return aSet.Get(RES_COL);
 }
 
 const WW8_SepInfo* MSWordSections::CurrentSectionInfo()
