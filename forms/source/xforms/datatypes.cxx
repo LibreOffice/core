@@ -514,7 +514,7 @@ namespace xforms
             {
                 sal_Int32 nValue( 0 );
                 OSL_VERIFY( _rNewValue >>= nValue );
-                if ( nValue <= 0 )
+                if ( nValue < 0 )
                     _rErrorMessage = "Length limits must denote positive integer values.";
                         // TODO/eforms: localize the error message
             }
@@ -635,7 +635,7 @@ namespace xforms
             {
                 sal_Int32 nValue( 0 );
                 OSL_VERIFY( _rNewValue >>= nValue );
-                if ( nValue <= 0 )
+                if ( nValue < 0 )
                     _rErrorMessage = "Length limits must denote positive integer values.";
                         // TODO/eforms: localize the error message
             }

@@ -499,7 +499,8 @@ namespace pcr
         if ( !getTypedControlWindow()->get_text().isEmpty() )
         {
             double nValue = impl_fieldValueToApiValue_nothrow( getTypedControlWindow()->get_value( m_eValueUnit ) );
-            aPropValue <<= nValue;
+            if (nValue)
+                aPropValue <<= nValue;
         }
         return aPropValue;
     }
