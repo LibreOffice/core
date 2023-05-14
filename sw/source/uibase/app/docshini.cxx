@@ -649,7 +649,8 @@ void SwDocShell::SubInitNew()
     //! get lingu options without loading lingu DLL
     SvtLinguOptions aLinguOpt;
 
-    if (!utl::ConfigManager::IsFuzzing())
+    const bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    if (!bFuzzing)
         SvtLinguConfig().GetOptions(aLinguOpt);
 
     LanguageType nVal = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, css::i18n::ScriptType::LATIN),
@@ -684,7 +685,7 @@ void SwDocShell::SubInitNew()
         m_xDoc->SetDefaultPageMode( bSquaredPageMode );
 
         // only set Widow/Orphan defaults on a new, non-web document - not an opened one
-        if( GetMedium() && GetMedium()->GetOrigURL().isEmpty() )
+        if (GetMedium() && GetMedium()->GetOrigURL().isEmpty() && !bFuzzing)
         {
             m_xDoc->SetDefault( SvxWidowsItem(  sal_uInt8(2), RES_PARATR_WIDOWS)  );
             m_xDoc->SetDefault( SvxOrphansItem( sal_uInt8(2), RES_PARATR_ORPHANS) );

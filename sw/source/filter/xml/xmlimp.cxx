@@ -1793,10 +1793,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
     Reference<css::frame::XLoadable> xModelLoad(xModel, UNO_QUERY_THROW);
     xModelLoad->initNew();
 
-    css::uno::Reference<css::frame::XController2> xController(xModel->createDefaultViewController(xTargetFrame), UNO_SET_THROW);
-
-    utl::ConnectFrameControllerModel(xTargetFrame, xController, xModel);
-
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
     uno::Reference<io::XInputStream> xStream(new utl::OSeekableInputStreamWrapper(rStream));
     uno::Reference<uno::XInterface> xInterface(xMultiServiceFactory->createInstance("com.sun.star.comp.Writer.XmlFilterAdaptor"), uno::UNO_SET_THROW);
@@ -1830,6 +1826,10 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
 
     uno::Reference<document::XFilter> xFODTFilter(xInterface, uno::UNO_QUERY_THROW);
     bool ret = xFODTFilter->filter(aArgs);
+
+    css::uno::Reference<css::frame::XController2> xController(xModel->createDefaultViewController(xTargetFrame), UNO_SET_THROW);
+
+    utl::ConnectFrameControllerModel(xTargetFrame, xController, xModel);
 
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");

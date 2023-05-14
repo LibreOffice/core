@@ -57,6 +57,10 @@ SwMasterUsrPref::SwMasterUsrPref(bool bWeb) :
     if (utl::ConfigManager::IsFuzzing())
     {
         m_eHScrollMetric = m_eVScrollMetric = m_eUserMetric = FieldUnit::CM;
+        // match defaults
+        SetCore2Option(true, ViewOptCoreFlags2::CursorInProt);
+        SetCore2Option(false, ViewOptCoreFlags2::HiddenPara);
+        m_nDefTabInMm100 = 1250;
         return;
     }
     MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
