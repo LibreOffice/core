@@ -208,7 +208,14 @@ bool Binding::isValid() const
 {
     // TODO: determine whether node is suitable, not just whether it exists
     return maBindingExpression.getNode().is() &&
-        isValid_DataType() &&
+        (
+            // tdf#155121, validity rules should be apply when field is required or
+            // when the field is not required but not empty
+            // so if the field is not required and empty, do not check validity
+            (! maMIP.isRequired() && maBindingExpression.hasValue()
+               && maBindingExpression.getString().isEmpty() ) ||
+            isValid_DataType()
+        ) &&
         maMIP.isConstraint() &&
         ( ! maMIP.isRequired() ||
              ( maBindingExpression.hasValue() &&
