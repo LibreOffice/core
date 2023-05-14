@@ -1893,6 +1893,11 @@ AC_ARG_ENABLE(silent-msi,
         [Enable MSI with LIMITUI=1 (silent install).]),
 ,)
 
+AC_ARG_ENABLE(wix,
+    AS_HELP_STRING([--enable-wix],
+        [Build Windows installer using WiX.]),
+,)
+
 AC_ARG_ENABLE(macosx-code-signing,
     AS_HELP_STRING([--enable-macosx-code-signing=<identity>],
         [Sign executables, dylibs, frameworks and the app bundle. If you
@@ -13424,6 +13429,21 @@ else
     AC_MSG_RESULT([yes])
     ENABLE_SILENT_MSI=TRUE
     SCPDEFS="$SCPDEFS -DENABLE_SILENT_MSI"
+fi
+AC_SUBST(ENABLE_SILENT_MSI)
+
+dnl ===================================================================
+dnl Check for WiX tools.
+dnl ===================================================================
+if test "$enable_wix" = "" -o "enable_wix" = "no"; then
+    AC_MSG_RESULT([no])
+    ENABLE_WIX=
+else
+    AC_MSG_RESULT([yes])
+    if ! which candle  >/dev/null 2>&1; then
+      AC_MSG_ERROR([WiX requested but WiX toolset not found.])
+    fi
+    ENABLE_WIX=TRUE
 fi
 AC_SUBST(ENABLE_SILENT_MSI)
 
