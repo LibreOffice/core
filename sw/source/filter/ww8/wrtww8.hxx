@@ -223,7 +223,7 @@ public:
     sal_uInt16 CurrentNumberOfColumns( const SwDoc &rDoc ) const;
 
     /// Number of columns of the provided WW8_SepInfo.
-    static sal_uInt16 NumberOfColumns( const SwDoc &rDoc, const WW8_SepInfo& rInfo );
+    static const SwFormatCol& GetFormatCol(const SwDoc &rDoc, const WW8_SepInfo& rInfo);
 
     bool DocumentIsProtected() const { return mbDocumentIsProtected; }
 

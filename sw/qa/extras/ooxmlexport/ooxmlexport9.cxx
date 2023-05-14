@@ -529,6 +529,32 @@ DECLARE_OOXMLEXPORT_TEST(testTdf97648_relativeWidth, "tdf97648_relativeWidth.doc
         CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::RIGHT, getProperty<sal_Int16>(getShape(3), "HoriOrient"));
         CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::LEFT, getProperty<sal_Int16>(getShape(4), "HoriOrient"));
     }
+
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(),
+                                                      uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xSections->getCount());
+
+    uno::Reference<beans::XPropertySet> xTextSection(xSections->getByIndex(2), uno::UNO_QUERY);
+    uno::Reference<text::XTextColumns> xTextColumns
+        = getProperty<uno::Reference<text::XTextColumns>>(xTextSection, "TextColumns");
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xTextColumns->getColumnCount());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf144362, "tdf144362.odt")
+{
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(),
+                                                      uno::UNO_QUERY);
+
+    // This is difference OK: tdf#107837 extra section added on export to preserve balanced columns.
+    CPPUNIT_ASSERT_GREATEREQUAL(sal_Int32(2), xSections->getCount());
+
+    uno::Reference<beans::XPropertySet> xTextSection(xSections->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextColumns> xTextColumns
+        = getProperty<uno::Reference<text::XTextColumns>>(xTextSection, "TextColumns");
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xTextColumns->getColumnCount());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf104061_tableSectionColumns,"tdf104061_tableSectionColumns.docx")

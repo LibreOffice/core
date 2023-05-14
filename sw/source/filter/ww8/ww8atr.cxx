@@ -602,6 +602,31 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
                         bNewPageDesc |= SetCurrentPageDescFromNode( rNd );
                     }
                 }
+
+                // If the columns are different in LO's adjacent sections, create a new MS section
+                if (!bNewPageDesc && pBreak->GetBreak() == SvxBreak::PageBefore
+                    && Sections().CurrentSectionInfo())
+                {
+                    const SwSectionFormat* pSectionFormat = MSWordExportBase::GetSectionFormat(rNd);
+                    if (pSectionFormat)
+                    {
+                        const SwFormatCol& rNewSect = pSectionFormat->GetFormatAttr(RES_COL);
+                        const SwFormatCol& rPrevSect
+                            = MSWordSections::GetFormatCol(m_rDoc,
+                                                           *Sections().CurrentSectionInfo());
+                        if (rNewSect.GetNumCols() != rPrevSect.GetNumCols()
+                            || !rNewSect.IsOrtho() || !rPrevSect.IsOrtho()
+                            || rNewSect.GetLineStyle() != rPrevSect.GetLineStyle()
+                            || rNewSect.GetLineWidth() != rPrevSect.GetLineWidth()
+                            || rNewSect.GetLineColor() != rPrevSect.GetLineColor()
+                            || rNewSect.GetLineHeight() != rPrevSect.GetLineHeight()
+                            || rNewSect.GetLineAdj() != rPrevSect.GetLineAdj())
+                        {
+                            bNewPageDesc = true;
+                        }
+                    }
+                }
+
                 if ( !bNewPageDesc )
                     AttrOutput().OutputItem( *pBreak );
             }
