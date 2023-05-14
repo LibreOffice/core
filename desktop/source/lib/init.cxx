@@ -7206,6 +7206,25 @@ static void activateNotebookbar(std::u16string_view rApp)
     }
 }
 
+void setHelpRootURL()
+{
+    const char* pHelpRootURL = ::getenv("LOK_HELP_URL");
+    if (pHelpRootURL)
+    {
+        OUString aHelpRootURL = OStringToOUString(pHelpRootURL, RTL_TEXTENCODING_UTF8);
+        try
+        {
+            std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+            officecfg::Office::Common::Help::HelpRootURL::set(aHelpRootURL, batch);
+            batch->commit();
+        }
+        catch (uno::Exception const& rException)
+        {
+            SAL_WARN("lok", "Failed to set the help root URL: " << rException.Message);
+        }
+    }
+}
+
 void setCertificateDir()
 {
     const char* pEnvVarString = ::getenv("LO_CERTIFICATE_DATABASE_PATH");
@@ -7633,6 +7652,8 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     }
 #endif
 
+
+    setHelpRootURL();
     setCertificateDir();
     setDeeplConfig();
 
