@@ -738,7 +738,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
             }
 
             const std::shared_ptr<SfxItemSet>& pSet = pHt->GetAutoFormat().GetStyleHandle();
-            if (!pSet || pSet->Count() != 1 || !pSet->GetItem(RES_CHRATR_ESCAPEMENT))
+            if (!pSet || pSet->Count() != 1 || !pSet->HasItem(RES_CHRATR_ESCAPEMENT))
             {
                 continue;
             }
