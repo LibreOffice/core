@@ -80,7 +80,7 @@ public:
         // that parameter was originally added. Other hints are: It is *not* named
         // 'ClipRange'. Using a B2DRange to define a ClipRange topology would be bad due
         // to not being transformable, a PolyPolygon would be used in that case. Using as
-        // clipping mechanism would offer a 2nd pinciple to add clipping for primitives
+        // clipping mechanism would offer a 2nd principle to add clipping for primitives
         // besides MaskPrimitive2D - always bad style in a sub-system. A quick look
         // on it's usages gives hints, too.
         // This means that when defining an outputRange that resides completely *inside*
