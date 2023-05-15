@@ -723,7 +723,7 @@ void LOKDocumentFocusListener::notifyEvent( const accessibility::AccessibleEvent
                 break;
         }
     }
-    catch( const lang::IndexOutOfBoundsException& e )
+    catch( const lang::IndexOutOfBoundsException& )
     {
         SAL_WARN("lok.a11y", "Focused object has invalid index in parent");
     }
