@@ -239,7 +239,7 @@ public:
 
     // check if we need last-ColorStop-correction. This returns true if the last
     // two ColorStops have the same offset but different Colors. In that case the
-    // tesselation for gradients does have to create an extra ending/closing entry
+    // tessellation for gradients does have to create an extra ending/closing entry
     bool checkPenultimate() const;
 
     /* Tooling method to fill a awt::ColorStopSequence with
