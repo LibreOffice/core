@@ -101,7 +101,7 @@ BColorStops::BColorStops(const css::uno::Any& rVal)
     }
 }
 
-// constuctor with two colors to explicitly create a
+// constructor with two colors to explicitly create a
 // BColorStops for a single StartColor @0.0 & EndColor @1.0
 BColorStops::BColorStops(const BColor& rStart, const BColor& rEnd)
 {
