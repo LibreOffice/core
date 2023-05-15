@@ -28,8 +28,7 @@
 class ImageMap;
 class IntlWrapper;
 
-// URL, ServerMap and ClientMap
-
+/// SfxPoolItem subclass that wraps a URL.
 class SW_DLLPUBLIC SwFormatURL final : public SfxPoolItem
 {
     OUString  m_sTargetFrameName; ///< Target frame for URL.
