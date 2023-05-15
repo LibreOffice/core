@@ -2905,8 +2905,9 @@ void ScDocument::CopyFromClip(
     InsertDeleteFlags nDelFlag = InsertDeleteFlags::NONE;
     if ( (nInsFlag & (InsertDeleteFlags::CONTENTS | InsertDeleteFlags::ADDNOTES)) == (InsertDeleteFlags::NOTE | InsertDeleteFlags::ADDNOTES) )
         nDelFlag |= InsertDeleteFlags::NOTE;
-    else if ( nInsFlag & InsertDeleteFlags::CONTENTS )
-        nDelFlag |= InsertDeleteFlags::CONTENTS;
+    // tdf#141440 - do not delete notes when pasting contents (see InsertDeleteFlags::CONTENTS)
+    else if ( nInsFlag & (InsertDeleteFlags::CONTENTS & ~InsertDeleteFlags::NOTE) )
+        nDelFlag |= InsertDeleteFlags::CONTENTS & ~InsertDeleteFlags::NOTE;
 
     if (nInsFlag & InsertDeleteFlags::ATTRIB)
         nDelFlag |= InsertDeleteFlags::ATTRIB;
