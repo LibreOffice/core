@@ -93,7 +93,7 @@ public:
         // PolyPolygon) in a MaskPrimitive2D defined by the outline PolyPolygon of the
         // shape. Nothing speaks against renderers detecting that combination and do
         // something optimized if they want to, especially SDPRs, but this is not
-        // required. The standard embedded clipping of the mplementations of the
+        // required. The standard embedded clipping of the implementations of the
         // MaskPrimitive2D do the right thing.
         // This test intends to paint the lower part of a gradient, so define the
         // gradient for the full target range and embed it to a MaskPrimitive2D
