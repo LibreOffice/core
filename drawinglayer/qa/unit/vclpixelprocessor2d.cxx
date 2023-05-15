@@ -72,7 +72,7 @@ public:
         // the gradient fill. Since you can freely move those sub-TFs even outside the
         // parent TF there has to be a way to not only paint gradients in ther definition
         // range (classical, all DrawObjects do that), but extended from that. This is
-        // needed e.g. for linerar gradients, but - dependent of e.g. the center settings -
+        // needed e.g. for linear gradients, but - dependent of e.g. the center settings -
         // also for all other ones, all can have geometry 'outside' the DefinitionRange.
         // This is now also used in various other locations which is proof that this is
         // useful and needed. It is possible to see that basic history/reason for this
