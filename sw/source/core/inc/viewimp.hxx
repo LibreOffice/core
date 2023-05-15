@@ -152,7 +152,7 @@ public:
 
     bool AddPaintRect( const SwRect &rRect );
     bool HasPaintRegion()      { return m_oPaintRegion.has_value(); }
-    std::optional<SwRegionRects> TakePaintRegion() { return std::move(m_oPaintRegion); }
+    std::optional<SwRegionRects> TakePaintRegion() { auto ret = std::move(m_oPaintRegion); m_oPaintRegion.reset(); return ret; }
     const std::optional<SwRegionRects>& GetPaintRegion() { return m_oPaintRegion; }
     void DeletePaintRegion() { m_oPaintRegion.reset(); }
 
