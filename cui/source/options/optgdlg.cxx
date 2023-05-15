@@ -667,6 +667,7 @@ void OfaViewTabPage::UpdateSkiaStatus()
     // FIXME: should really add code to show a 'lock' icon here.
     m_xUseSkia->set_sensitive(!officecfg::Office::Common::VCL::UseSkia::isReadOnly());
     m_xForceSkiaRaster->set_sensitive(m_xUseSkia->get_active() && !officecfg::Office::Common::VCL::ForceSkiaRaster::isReadOnly());
+    m_xSkiaLog->set_sensitive(bEnabled);
 
     // Technically the 'use hardware acceleration' option could be used to mean !forceSkiaRaster, but the implementation
     // of the option is so tied to the implementation of the canvas module that it's simpler to ignore it.
