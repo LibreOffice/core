@@ -55,6 +55,8 @@ private:
     DECL_LINK(ChangeAttrEditHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(ChangeAttrListBoxHdl_Impl, weld::ComboBox&, void);
 
+    template<class T>
+    void lcl_SetMetricValueAndSave_new(const SfxItemSet *rAttrs, weld::MetricSpinButton &rField, TypedWhichId<T> nWhich);
 public:
 
     SvxConnectionPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);

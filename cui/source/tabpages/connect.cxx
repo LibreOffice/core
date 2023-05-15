@@ -118,6 +118,17 @@ SvxConnectionPage::~SvxConnectionPage()
     m_xCtlPreview.reset();
 }
 
+template<class T>
+void SvxConnectionPage::lcl_SetMetricValueAndSave_new(const SfxItemSet* rAttrs, weld::MetricSpinButton& rField, TypedWhichId<T> nWhich)
+{
+    const SfxPoolItem* pItem = GetItem( *rAttrs,  nWhich);
+    const SfxItemPool* pPool = rAttrs->GetPool();
+    if( !pItem )
+        pItem = &pPool->GetDefaultItem( nWhich );
+    SetMetricValue(rField, pItem->StaticWhichCast(nWhich).GetValue(), eUnit);
+    rField.save_value();
+}
+
 /*************************************************************************
 |*
 |* reads passed Item-Set
@@ -126,60 +137,29 @@ SvxConnectionPage::~SvxConnectionPage()
 
 void SvxConnectionPage::Reset( const SfxItemSet* rAttrs )
 {
-    const SfxPoolItem* pItem = GetItem( *rAttrs, SDRATTR_EDGENODE1HORZDIST );
+    const SfxPoolItem* pItem;
     const SfxItemPool* pPool = rAttrs->GetPool();
 
     // SdrEdgeNode1HorzDistItem
-    if( !pItem )
-        pItem = &pPool->GetDefaultItem( SDRATTR_EDGENODE1HORZDIST );
-    SetMetricValue(*m_xMtrFldHorz1, pItem->StaticWhichCast(SDRATTR_EDGENODE1HORZDIST).GetValue(),
-                   eUnit);
-    m_xMtrFldHorz1->save_value();
+    lcl_SetMetricValueAndSave_new(rAttrs, *m_xMtrFldHorz1, SDRATTR_EDGENODE1HORZDIST);
 
     // SdrEdgeNode2HorzDistItem
-    pItem = GetItem( *rAttrs, SDRATTR_EDGENODE2HORZDIST );
-    if( !pItem )
-        pItem = &pPool->GetDefaultItem( SDRATTR_EDGENODE2HORZDIST );
-    SetMetricValue(*m_xMtrFldHorz2, pItem->StaticWhichCast(SDRATTR_EDGENODE2HORZDIST).GetValue(),
-                   eUnit);
-    m_xMtrFldHorz2->save_value();
+    lcl_SetMetricValueAndSave_new(rAttrs, *m_xMtrFldHorz2, SDRATTR_EDGENODE2HORZDIST);
 
     // SdrEdgeNode1VertDistItem
-    pItem = GetItem( *rAttrs, SDRATTR_EDGENODE1VERTDIST );
-    if( !pItem )
-        pItem = &pPool->GetDefaultItem( SDRATTR_EDGENODE1VERTDIST );
-    SetMetricValue(*m_xMtrFldVert1, pItem->StaticWhichCast(SDRATTR_EDGENODE1VERTDIST).GetValue(),
-                   eUnit);
-    m_xMtrFldVert1->save_value();
+    lcl_SetMetricValueAndSave_new(rAttrs, *m_xMtrFldVert1, SDRATTR_EDGENODE1VERTDIST);
 
     // SdrEdgeNode2VertDistItem
-    pItem = GetItem( *rAttrs, SDRATTR_EDGENODE2VERTDIST );
-    if( !pItem )
-        pItem = &pPool->GetDefaultItem( SDRATTR_EDGENODE2VERTDIST );
-    SetMetricValue(*m_xMtrFldVert2, pItem->StaticWhichCast(SDRATTR_EDGENODE2VERTDIST).GetValue(),
-                   eUnit);
-    m_xMtrFldVert2->save_value();
+    lcl_SetMetricValueAndSave_new(rAttrs, *m_xMtrFldVert2, SDRATTR_EDGENODE2VERTDIST);
 
     // SdrEdgeLine1DeltaItem
-    pItem = GetItem( *rAttrs, SDRATTR_EDGELINE1DELTA );
-    if( !pItem )
-        pItem = &pPool->GetDefaultItem( SDRATTR_EDGELINE1DELTA );
-    SetMetricValue(*m_xMtrFldLine1, pItem->StaticWhichCast(SDRATTR_EDGELINE1DELTA).GetValue(), eUnit);
-    m_xMtrFldLine1->save_value();
+    lcl_SetMetricValueAndSave_new(rAttrs, *m_xMtrFldLine1, SDRATTR_EDGELINE1DELTA);
 
     // SdrEdgeLine2DeltaItem
-    pItem = GetItem( *rAttrs, SDRATTR_EDGELINE2DELTA );
-    if( !pItem )
-        pItem = &pPool->GetDefaultItem( SDRATTR_EDGELINE2DELTA );
-    SetMetricValue(*m_xMtrFldLine2, pItem->StaticWhichCast(SDRATTR_EDGELINE2DELTA).GetValue(), eUnit);
-    m_xMtrFldLine2->save_value();
+    lcl_SetMetricValueAndSave_new(rAttrs, *m_xMtrFldLine2, SDRATTR_EDGELINE2DELTA);
 
     // SdrEdgeLine3DeltaItem
-    pItem = GetItem( *rAttrs, SDRATTR_EDGELINE3DELTA );
-    if( !pItem )
-        pItem = &pPool->GetDefaultItem( SDRATTR_EDGELINE3DELTA );
-    SetMetricValue(*m_xMtrFldLine3, pItem->StaticWhichCast(SDRATTR_EDGELINE3DELTA).GetValue(), eUnit);
-    m_xMtrFldLine3->save_value();
+    lcl_SetMetricValueAndSave_new(rAttrs, *m_xMtrFldLine3, SDRATTR_EDGELINE3DELTA);
 
     // SdrEdgeLineDeltaAnzItem
     pItem = GetItem( *rAttrs, SDRATTR_EDGELINEDELTACOUNT );
