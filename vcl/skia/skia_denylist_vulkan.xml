@@ -51,6 +51,15 @@
         <entry os="windows" vendor="nvidia"> <!-- tdf#154378: GeForce RTX 3080 (531.164.0) -->
             <device id="0x2206"/>
         </entry>
+        <entry os="windows" vendor="nvidia"> <!-- tdf#155143: GeForce GTX 1660 SUPER (516.376.0) -->
+            <device id="0x21c4"/>
+        </entry>
+        <entry os="windows" vendor="nvidia"> <!-- tdf#155143: GeForce GTX 970 (531.272.0) -->
+            <device id="0x13c2"/>
+        </entry>
+        <entry os="windows" vendor="nvidia"> <!-- tdf#155143: Quadro P400 (516.376.0) -->
+            <device id="0x1cb3"/>
+        </entry>
         <entry os="7" vendor="all">
             <device id="all"/>
         </entry>
