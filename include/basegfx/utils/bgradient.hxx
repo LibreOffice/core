@@ -137,7 +137,7 @@ public:
     BColorStops(const css::awt::ColorStopSequence& rColorStops);
     BColorStops(const css::uno::Any& rVal);
 
-    // constuctor with two colors to explicitly create a
+    // constructor with two colors to explicitly create a
     // BColorStops for StartColor @0.0 & EndColor @1.0
     BColorStops(const BColor& rStart, const BColor& rEnd);
 
