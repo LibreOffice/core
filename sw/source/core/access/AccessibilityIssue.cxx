@@ -10,9 +10,11 @@
 
 #include <AccessibilityIssue.hxx>
 #include <AccessibilityCheckStrings.hrc>
+#include <edtwin.hxx>
 #include <swtypes.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
+#include <view.hxx>
 #include <comphelper/lok.hxx>
 #include <cui/dlgname.hxx>
 
@@ -85,6 +87,7 @@ void AccessibilityIssue::gotoIssue() const
         default:
             break;
     }
+    m_pDoc->GetDocShell()->GetView()->GetEditWin().GrabFocus();
 }
 
 bool AccessibilityIssue::canQuickFixIssue() const
