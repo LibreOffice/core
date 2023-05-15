@@ -24,27 +24,24 @@
 #include <ostream>
 
 #include <sal/types.h>
-#include <o3tl/cow_wrapper.hxx>
 #include <basegfx/basegfxdllapi.h>
+#include <basegfx/matrix/hommatrixtemplate.hxx>
 
 namespace basegfx
 {
     class B2DTuple;
-    class Impl2DHomMatrix;
+
+    using Impl2DHomMatrix = ::basegfx::internal::ImplHomMatrixTemplate< 3 >;
 
     class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC B2DHomMatrix
     {
-    public:
-        typedef o3tl::cow_wrapper< Impl2DHomMatrix > ImplType;
-
     private:
-        ImplType                                     mpImpl;
+        Impl2DHomMatrix maImpl;
 
     public:
-        B2DHomMatrix();
-        B2DHomMatrix(const B2DHomMatrix& rMat);
-        B2DHomMatrix(B2DHomMatrix&& rMat);
-        ~B2DHomMatrix();
+        B2DHomMatrix() {}
+        B2DHomMatrix(const B2DHomMatrix& rMat) = default;
+        B2DHomMatrix(B2DHomMatrix&& rMat) = default;
 
         /** Convenience creator for declaration of the matrix that is commonly
             used by web standards (SVG, CSS, HTML).
@@ -78,7 +75,11 @@ namespace basegfx
          */
         B2DHomMatrix(double f_0x0, double f_0x1, double f_0x2, double f_1x0, double f_1x1, double f_1x2);
 
-        double get(sal_uInt16 nRow, sal_uInt16 nColumn) const;
+        double get(sal_uInt16 nRow, sal_uInt16 nColumn) const
+        {
+            return maImpl.get(nRow, nColumn);
+        }
+
         void set(sal_uInt16 nRow, sal_uInt16 nColumn, double fValue);
 
         /** allow setting all needed values for a 3x2 matrix in one call. The
@@ -122,8 +123,8 @@ namespace basegfx
         B2DHomMatrix& operator*=(const B2DHomMatrix& rMat);
 
         // assignment operator
-        B2DHomMatrix& operator=(const B2DHomMatrix& rMat);
-        B2DHomMatrix& operator=(B2DHomMatrix&& rMat);
+        B2DHomMatrix& operator=(const B2DHomMatrix& rMat) = default;
+        B2DHomMatrix& operator=(B2DHomMatrix&& rMat) = default;
 
         /**
          * Help routine to decompose given homogen 3x3 matrix to components. A correction of the

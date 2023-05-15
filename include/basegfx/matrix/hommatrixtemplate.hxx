@@ -29,7 +29,7 @@
 namespace basegfx::internal
     {
 
-        inline double implGetDefaultValue(sal_uInt16 nRow, sal_uInt16 nColumn)
+        inline constexpr double implGetDefaultValue(sal_uInt16 nRow, sal_uInt16 nColumn)
         {
             if(nRow == nColumn)
                 return 1.0;
@@ -125,6 +125,7 @@ namespace basegfx::internal
                     {
                         memcpy(&maLine[a], &rToBeCopied.maLine[a], sizeof(ImplMatLine< RowSize >));
                     }
+                    mpLine.reset();
                     if(rToBeCopied.mpLine)
                     {
                         mpLine.reset( new ImplMatLine< RowSize >((RowSize - 1), rToBeCopied.mpLine.get()) );

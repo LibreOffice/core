@@ -243,7 +243,6 @@ basegfx/source/color/bcolormodifier.cxx
 basegfx/source/color/bcolortools.cxx
 basegfx/source/curve/b2dbeziertools.cxx
 basegfx/source/curve/b2dcubicbezier.cxx
-basegfx/source/inc/hommatrixtemplate.hxx
 basegfx/source/inc/stringconversiontools.hxx
 basegfx/source/matrix/b2dhommatrix.cxx
 basegfx/source/matrix/b2dhommatrixtools.cxx
@@ -4753,6 +4752,7 @@ include/basegfx/curve/b2dcubicbezier.hxx
 include/basegfx/matrix/b2dhommatrix.hxx
 include/basegfx/matrix/b2dhommatrixtools.hxx
 include/basegfx/matrix/b3dhommatrix.hxx
+include/basegfx/matrix/hommatrixtemplate.hxx
 include/basegfx/numeric/ftools.hxx
 include/basegfx/pixel/bpixel.hxx
 include/basegfx/point/b2dpoint.hxx

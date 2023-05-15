@@ -18,7 +18,7 @@
  */
 
 #include <basegfx/matrix/b3dhommatrix.hxx>
-#include <hommatrixtemplate.hxx>
+#include <basegfx/matrix/hommatrixtemplate.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 #include <memory>
 
