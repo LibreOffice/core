@@ -1009,7 +1009,7 @@ namespace emfio
                             }
                             else if (aPointTypes[i] & PT_BEZIERTO)
                             {
-                                if (aPoints.size() - i < 3)
+                                if (nPointsCount - i < 3)
                                 {
                                     SAL_WARN("emfio", "EMF file error: Not enough Bezier points.");
                                     break;
