@@ -140,6 +140,34 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testPasteFlyInTextBox)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pDoc->GetSpzFrameFormats()->GetFormatCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testTextBoxSelectCursorPos)
+{
+    // Given a document with a fly+draw format pair (textbox):
+    createSwDoc("paste-fly-in-textbox.docx");
+
+    // When selecting the fly format:
+    SwDoc* pDoc = getSwDoc();
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pFlyObject = pPage->GetObj(1);
+    SwDrawContact* pFlyContact = static_cast<SwDrawContact*>(pFlyObject->GetUserCall());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(RES_FLYFRMFMT), pFlyContact->GetFormat()->Which());
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SelectObj(Point(), 0, pFlyObject);
+
+    // Then make sure the cursor is the anchor of the draw format:
+    SdrObject* pDrawObject = pPage->GetObj(0);
+    SwDrawContact* pDrawContact = static_cast<SwDrawContact*>(pDrawObject->GetUserCall());
+    SwFrameFormat* pDrawFormat = pDrawContact->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(RES_DRAWFRMFMT), pDrawFormat->Which());
+    SwNodeOffset nAnchor = pDrawFormat->GetAnchor().GetContentAnchor()->GetNode().GetIndex();
+    SwNodeOffset nCursor = pWrtShell->GetCurrentShellCursor().GetPointNode().GetIndex();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 15 (anchor of draw format)
+    // - Actual  : 6 (in-fly-format position)
+    // i.e. the cursor had a broken position after trying to select the fly format.
+    CPPUNIT_ASSERT_EQUAL(nAnchor, nCursor);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

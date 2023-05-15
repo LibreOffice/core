@@ -151,7 +151,7 @@ SwFlyFrame *GetFlyFromMarked( const SdrMarkList *pLst, SwViewShell *pSh )
     return nullptr;
 }
 
-static void lcl_GrabCursor( SwFEShell* pSh, SwFlyFrame* pOldSelFly)
+static void lcl_GrabCursor( SwFEShell* pSh, SwFlyFrame* pOldSelFly, SwFrameFormat* pNewDrawFormat = nullptr)
 {
     const SwFrameFormat *pFlyFormat = pSh->SelFlyGrabCursor();
     if( pFlyFormat && !pSh->ActionPend() &&
@@ -171,7 +171,21 @@ static void lcl_GrabCursor( SwFEShell* pSh, SwFlyFrame* pOldSelFly)
         // --> assure consistent cursor
         pSh->KillPams();
         pSh->ClearMark();
-        pSh->SetCursor( pSh->Imp()->GetDrawView()->GetAllMarkedRect().TopLeft(), true);
+        if (pNewDrawFormat)
+        {
+            // If we selected a draw shape format, move the cursor to its anchor position.
+            // SetCursor() may pick something inside, which is not wanted: code later assumes that
+            // the cursor is at the anchor point if a shape is selected.
+            const SwPosition* pContentAnchor = pNewDrawFormat->GetAnchor().GetContentAnchor();
+            if (pContentAnchor)
+            {
+                pSh->SetSelection(SwPaM(*pContentAnchor));
+            }
+        }
+        else
+        {
+            pSh->SetCursor( pSh->Imp()->GetDrawView()->GetAllMarkedRect().TopLeft(), true);
+        }
     }
 }
 
@@ -306,6 +320,7 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
             pSelFly->SelectionHasChanged(this);
     }
 
+    SwFrameFormat* pNewDrawFormat = nullptr;
     if (!(nFlag & SW_ALLOW_TEXTBOX))
     {
         // If the fly frame is a textbox of a shape, then select the shape instead.
@@ -324,6 +339,8 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
                 SdrObject* pShape = pShapeFormat->FindSdrObject();
                 pDView->UnmarkAll();
                 pDView->MarkObj(pShape, Imp()->GetPageView(), bAddSelect, bEnterGroup);
+                // Remember that this frame format was marked for selection.
+                pNewDrawFormat = pShapeFormat;
                 break;
             }
         }
@@ -331,7 +348,7 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
 
     if ( bRet )
     {
-        ::lcl_GrabCursor(this, pOldSelFly);
+        ::lcl_GrabCursor(this, pOldSelFly, pNewDrawFormat);
         if ( GetCntType() & CNT_GRF )
         {
             const SwFlyFrame *pTmp = GetFlyFromMarked( &rMrkList, this );
