@@ -149,7 +149,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testTextBoxSelectCursorPos)
     SwDoc* pDoc = getSwDoc();
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pFlyObject = pPage->GetObj(1);
-    SwDrawContact* pFlyContact = static_cast<SwDrawContact*>(pFlyObject->GetUserCall());
+    SwContact* pFlyContact = static_cast<SwContact*>(pFlyObject->GetUserCall());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(RES_FLYFRMFMT), pFlyContact->GetFormat()->Which());
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->SelectObj(Point(), 0, pFlyObject);
