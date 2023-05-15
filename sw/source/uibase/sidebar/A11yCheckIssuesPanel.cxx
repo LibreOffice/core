@@ -116,7 +116,7 @@ void A11yCheckIssuesPanel::populateIssues()
 void A11yCheckIssuesPanel::NotifyItemUpdate(const sal_uInt16 nSid, const SfxItemState /* eState */,
                                             const SfxPoolItem* pState)
 {
-    if (!m_xAccessibilityCheckBox) //disposed
+    if (!m_xAccessibilityCheckBox || !pState) //disposed
         return;
 
     switch (nSid)
