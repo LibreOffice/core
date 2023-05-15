@@ -83,7 +83,7 @@ public:
         // clipping mechanism would offer a 2nd pinciple to add clipping for primitives
         // besides MaskPrimitive2D - always bad style in a sub-system. A quick look
         // on it's usages gives hints, too.
-        // This means that when defining a outputRange tat resides completely *inside*
+        // This means that when defining an outputRange that resides completely *inside*
         // the definitionRange *no change* at all is done by definition since this does
         // not *extend* the target area of the gradient paint region at all. If an
         // implementation does clip and limit output to 'outputRange' that should do no
