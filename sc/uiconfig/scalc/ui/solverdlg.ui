@@ -594,9 +594,9 @@
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
                                     <items>
-                                      <item translatable="yes" context="solverdlg|op1list">&lt;=</item>
-                                      <item translatable="yes" context="solverdlg|op1list">=</item>
-                                      <item translatable="yes" context="solverdlg|op1list">&gt;=</item>
+                                      <item translatable="no" context="solverdlg|op1list">≤</item>
+                                      <item translatable="no" context="solverdlg|op1list">=</item>
+                                      <item translatable="no" context="solverdlg|op1list">≥</item>
                                       <item translatable="yes" context="solverdlg|op1list">Integer</item>
                                       <item translatable="yes" context="solverdlg|op1list">Binary</item>
                                     </items>
@@ -616,9 +616,9 @@
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
                                     <items>
-                                      <item translatable="yes" context="solverdlg|op2list">&lt;=</item>
-                                      <item translatable="yes" context="solverdlg|op2list">=</item>
-                                      <item translatable="yes" context="solverdlg|op2list">&gt;=</item>
+                                      <item translatable="no" context="solverdlg|op2list">≤</item>
+                                      <item translatable="no" context="solverdlg|op2list">=</item>
+                                      <item translatable="no" context="solverdlg|op2list">≥</item>
                                       <item translatable="yes" context="solverdlg|op2list">Integer</item>
                                       <item translatable="yes" context="solverdlg|op2list">Binary</item>
                                     </items>
@@ -638,9 +638,9 @@
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
                                     <items>
-                                      <item translatable="yes" context="solverdlg|op3list">&lt;=</item>
-                                      <item translatable="yes" context="solverdlg|op3list">=</item>
-                                      <item translatable="yes" context="solverdlg|op3list">&gt;=</item>
+                                      <item translatable="no" context="solverdlg|op3list">≤</item>
+                                      <item translatable="no" context="solverdlg|op3list">=</item>
+                                      <item translatable="no" context="solverdlg|op3list">≥</item>
                                       <item translatable="yes" context="solverdlg|op3list">Integer</item>
                                       <item translatable="yes" context="solverdlg|op3list">Binary</item>
                                     </items>
@@ -660,9 +660,9 @@
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
                                     <items>
-                                      <item translatable="yes" context="solverdlg|op4list">&lt;=</item>
-                                      <item translatable="yes" context="solverdlg|op4list">=</item>
-                                      <item translatable="yes" context="solverdlg|op4list">&gt;=</item>
+                                      <item translatable="no" context="solverdlg|op4list">≤</item>
+                                      <item translatable="no" context="solverdlg|op4list">=</item>
+                                      <item translatable="no" context="solverdlg|op4list">≥</item>
                                       <item translatable="yes" context="solverdlg|op4list">Integer</item>
                                       <item translatable="yes" context="solverdlg|op4list">Binary</item>
                                     </items>

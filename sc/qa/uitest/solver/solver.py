@@ -37,10 +37,10 @@ class solver(UITestCase):
                 self.assertEqual("true", get_state_as_dict(xmax)["Checked"])
 
                 xvalue.executeAction("CLICK", tuple())
-                select_by_text(xop2list, ">=")
+                select_by_text(xop2list, "≥")
 
-                self.assertEqual("<=", get_state_as_dict(xop1list)["SelectEntryText"])
-                self.assertEqual(">=", get_state_as_dict(xop2list)["SelectEntryText"])
+                self.assertEqual("≤", get_state_as_dict(xop1list)["SelectEntryText"])
+                self.assertEqual("≥", get_state_as_dict(xop2list)["SelectEntryText"])
 
                 xvalueedit.executeAction("TYPE", mkPropertyValues({"TEXT":"1000"}))
                 xchangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"C2"}))
