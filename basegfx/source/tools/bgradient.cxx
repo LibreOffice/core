@@ -683,7 +683,7 @@ BGradient::BGradient(const css::uno::Any& rVal)
         SetEndIntens(aGradient.EndIntensity);
         SetSteps(aGradient.StepCount);
 
-        // complete data by creating ColorStops from fixe Start/EndColor
+        // complete data by creating ColorStops from fixed Start/EndColor
         aColorStops = BColorStops{
             BColorStop(0.0, ColorToBColorConverter(aGradient.StartColor).getBColor()),
             BColorStop(1.0, ColorToBColorConverter(aGradient.EndColor).getBColor())
