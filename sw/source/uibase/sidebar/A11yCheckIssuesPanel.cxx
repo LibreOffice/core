@@ -70,7 +70,6 @@ std::unique_ptr<PanelLayout> A11yCheckIssuesPanel::Create(weld::Widget* pParent,
 A11yCheckIssuesPanel::A11yCheckIssuesPanel(weld::Widget* pParent, SfxBindings* pBindings)
     : PanelLayout(pParent, "A11yCheckIssuesPanel", "modules/swriter/ui/a11ycheckissuespanel.ui")
     , m_xAccessibilityCheckBox(m_xBuilder->weld_box("accessibilityCheckBox"))
-    , m_xScrolledWindow(m_xBuilder->weld_scrolled_window("scrolledwindow"))
     , mpBindings(pBindings)
     , mpDoc(nullptr)
     , maA11yCheckController(FN_STAT_ACCESSIBILITY_CHECK, *pBindings, *this)
@@ -130,14 +129,6 @@ void A11yCheckIssuesPanel::populateIssues()
             = std::make_unique<AccessibilityCheckEntry>(m_xAccessibilityCheckBox.get(), pIssue);
         m_xAccessibilityCheckBox->reorder_child(xEntry->get_widget(), i++);
         m_aAccessibilityCheckEntries.push_back(std::move(xEntry));
-    }
-
-    if (!m_aAccessibilityCheckEntries.empty())
-    {
-        auto nRowHeight
-            = m_aAccessibilityCheckEntries.back()->get_widget()->get_preferred_size().Height();
-        // 6 is the spacing set in the .ui
-        m_xScrolledWindow->vadjustment_set_step_increment(nRowHeight + 6);
     }
 }
 

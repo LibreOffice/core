@@ -61,7 +61,6 @@ public:
 private:
     std::vector<std::unique_ptr<AccessibilityCheckEntry>> m_aAccessibilityCheckEntries;
     std::unique_ptr<weld::Box> m_xAccessibilityCheckBox;
-    std::unique_ptr<weld::ScrolledWindow> m_xScrolledWindow;
     sfx::AccessibilityIssueCollection m_aIssueCollection;
     std::function<sfx::AccessibilityIssueCollection()> m_getIssueCollection;
     void populateIssues();
