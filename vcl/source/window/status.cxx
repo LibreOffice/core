@@ -41,6 +41,8 @@
 #define STATUSBAR_PRGS_COUNT    100
 #define STATUSBAR_PRGS_MIN      5
 
+#define STATUSBAR_MIN_HEIGHT    16 // icons height, tdf#153344
+
 class StatusBar::ImplData
 {
 public:
@@ -1428,7 +1430,7 @@ Size StatusBar::CalcWindowSizePixel() const
         i++;
     }
 
-    tools::Long nMinHeight = GetTextHeight();
+    tools::Long nMinHeight = std::max( static_cast<int>(GetTextHeight()), STATUSBAR_MIN_HEIGHT);
     const tools::Long nBarTextOffset = STATUSBAR_OFFSET_TEXTY*2;
     tools::Long nProgressHeight = nMinHeight + nBarTextOffset;
 
