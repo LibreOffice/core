@@ -66,9 +66,11 @@ private:
     std::function<sfx::AccessibilityIssueCollection()> m_getIssueCollection;
     void populateIssues();
 
+    SfxBindings* mpBindings;
     SwDoc* mpDoc;
     ::sfx2::sidebar::ControllerItem maA11yCheckController;
     sal_Int32 mnIssueCount;
+    bool mbAutomaticCheckEnabled;
 };
 
 } //end of namespace sw::sidebar

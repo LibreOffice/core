@@ -16,7 +16,10 @@
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>
 
+#include <officecfg/Office/Common.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/AccessibilityIssue.hxx>
+#include <unotools/configmgr.hxx>
 #include <vcl/svapp.hxx>
 
 #include "A11yCheckIssuesPanel.hxx"
@@ -68,6 +71,7 @@ A11yCheckIssuesPanel::A11yCheckIssuesPanel(weld::Widget* pParent, SfxBindings* p
     : PanelLayout(pParent, "A11yCheckIssuesPanel", "modules/swriter/ui/a11ycheckissuespanel.ui")
     , m_xAccessibilityCheckBox(m_xBuilder->weld_box("accessibilityCheckBox"))
     , m_xScrolledWindow(m_xBuilder->weld_scrolled_window("scrolledwindow"))
+    , mpBindings(pBindings)
     , mpDoc(nullptr)
     , maA11yCheckController(FN_STAT_ACCESSIBILITY_CHECK, *pBindings, *this)
     , mnIssueCount(0)
@@ -76,12 +80,36 @@ A11yCheckIssuesPanel::A11yCheckIssuesPanel(weld::Widget* pParent, SfxBindings* p
     if (!pDocSh)
         return;
 
+    // Automatic a11y checking must be enabled for this panel to work properly
+    mbAutomaticCheckEnabled
+        = officecfg::Office::Common::Accessibility::OnlineAccessibilityCheck::get();
+    if (!mbAutomaticCheckEnabled)
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Accessibility::OnlineAccessibilityCheck::set(true, batch);
+        batch->commit();
+        pBindings->Invalidate(SID_ACCESSIBILITY_CHECK_ONLINE);
+    }
+
     mpDoc = pDocSh->GetDoc();
 
     populateIssues();
 }
 
-A11yCheckIssuesPanel::~A11yCheckIssuesPanel() { m_xAccessibilityCheckBox.reset(); }
+A11yCheckIssuesPanel::~A11yCheckIssuesPanel()
+{
+    // Restore state when this panel is no longer used
+    if (!mbAutomaticCheckEnabled)
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Accessibility::OnlineAccessibilityCheck::set(false, batch);
+        batch->commit();
+        mpBindings->Invalidate(SID_ACCESSIBILITY_CHECK_ONLINE);
+    }
+    m_xAccessibilityCheckBox.reset();
+}
 
 void A11yCheckIssuesPanel::populateIssues()
 {
