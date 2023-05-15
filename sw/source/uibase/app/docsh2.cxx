@@ -1329,7 +1329,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         SwTableNode* pTableNd =
                             pRedline->GetPoint()->GetNode().FindTableNode();
                         if ( pTableNd && pTableNd !=
-                                pOldTableNd && pTableNd->GetTable().HasDeletedRow() )
+                                pOldTableNd && pTableNd->GetTable().HasDeletedRowOrCell() )
                         {
                             SfxBoolItem aShow(FN_REDLINE_SHOW, true);
                             SfxViewShell* pViewShell = GetView()

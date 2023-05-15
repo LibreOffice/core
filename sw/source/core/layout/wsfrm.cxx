@@ -4505,7 +4505,7 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                 }
                 pTableNd->DelFrames(&rLayout);
             }
-            else if ( pTableNd->GetTable().HasDeletedRow() )
+            else if ( pTableNd->GetTable().HasDeletedRowOrCell() )
             {
                 pTableNd->DelFrames(&rLayout);
                 if ( !pTableNd->GetTable().IsDeleted() )
@@ -4515,7 +4515,7 @@ static void UnHideRedlines(SwRootFrame & rLayout,
             }
         }
         else if (rNode.IsTableNode() && !rLayout.IsHideRedlines() &&
-            rNode.GetTableNode()->GetTable().HasDeletedRow() )
+            rNode.GetTableNode()->GetTable().HasDeletedRowOrCell() )
         {
             SwTableNode * pTableNd = rNode.GetTableNode();
             pTableNd->DelFrames(&rLayout);

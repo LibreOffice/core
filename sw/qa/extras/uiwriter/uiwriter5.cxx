@@ -1907,7 +1907,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf150976)
     SwTabFrame* pTabFrame = static_cast<SwTabFrame*>(pTable);
 
     // This was false (not deleted row)
-    CPPUNIT_ASSERT(pTabFrame->GetTable()->HasDeletedRow());
+    CPPUNIT_ASSERT(pTabFrame->GetTable()->HasDeletedRowOrCell());
 
     // accept all tracked changes
     dispatchCommand(mxComponent, ".uno:AcceptAllTrackedChanges", {});
@@ -1960,7 +1960,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf151657)
     SwTabFrame* pTabFrame = static_cast<SwTabFrame*>(pTable);
 
     // This was false (not deleted row)
-    CPPUNIT_ASSERT(pTabFrame->GetTable()->HasDeletedRow());
+    CPPUNIT_ASSERT(pTabFrame->GetTable()->HasDeletedRowOrCell());
 
     // accept all tracked changes
     dispatchCommand(mxComponent, ".uno:AcceptAllTrackedChanges", {});

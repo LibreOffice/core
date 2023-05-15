@@ -4001,8 +4001,15 @@ SwRowFrame::SwRowFrame(const SwTableLine &rLine, SwFrame* pSib, bool bInsertCont
     //Create the boxes and insert them.
     const SwTableBoxes &rBoxes = rLine.GetTabBoxes();
     SwFrame *pTmpPrev = nullptr;
+
+    bool bHiddenRedlines = getRootFrame()->IsHideRedlines() &&
+        !GetFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable().empty();
     for ( size_t i = 0; i < rBoxes.size(); ++i )
     {
+        // skip cells deleted with track changes
+        if ( bHiddenRedlines && RedlineType::Delete == rBoxes[i]->GetRedlineType() )
+            continue;
+
         SwCellFrame *pNew = new SwCellFrame( *rBoxes[i], this, bInsertContent );
         pNew->InsertBehind( this, pTmpPrev );
         pTmpPrev = pNew;

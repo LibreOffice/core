@@ -354,8 +354,8 @@ public:
 
     // is it a table deleted completely with change tracking
     bool IsDeleted() const;
-    // is it a table with deleted row(s)
-    bool HasDeletedRow() const;
+    // is it a table with a deleted row or cell
+    bool HasDeletedRowOrCell() const;
     // it doesn't contain box content (except single empty nested tables of the boxes
     // which could remain after deletion of text content of the selected table)
     bool IsEmpty() const;

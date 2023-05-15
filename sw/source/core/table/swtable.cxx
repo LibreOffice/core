@@ -1584,7 +1584,7 @@ bool SwTable::IsEmpty() const
     return true;
 }
 
-bool SwTable::HasDeletedRow() const
+bool SwTable::HasDeletedRowOrCell() const
 {
     const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
     if ( aRedlineTable.empty() )
@@ -1593,8 +1593,17 @@ bool SwTable::HasDeletedRow() const
     SwRedlineTable::size_type nRedlinePos = 0;
     for (size_t i = 0; i < m_aLines.size(); ++i)
     {
+        // has a deleted row
         if ( m_aLines[i]->IsDeleted(nRedlinePos) )
             return true;
+
+        // has a deleted cell in the not deleted row
+        SwTableBoxes& rBoxes = m_aLines[i]->GetTabBoxes();
+        for( size_t j = 0; j < rBoxes.size(); ++j )
+        {
+            if ( RedlineType::Delete == rBoxes[j]->GetRedlineType() )
+                return true;
+        }
     }
     return false;
 }
@@ -1929,7 +1938,19 @@ bool SwTableLine::IsTracked(SwRedlineTable::size_type& rRedlinePos, bool bOnlyDe
 
 bool SwTableLine::IsDeleted(SwRedlineTable::size_type& rRedlinePos) const
 {
-   return IsTracked(rRedlinePos, true);
+   // if not a deleted row, check the deleted columns
+   if ( !IsTracked(rRedlinePos, /*bOnlyDeleted=*/true) )
+   {
+       const SwTableBoxes& rBoxes = GetTabBoxes();
+       for( size_t i = 0; i < rBoxes.size(); ++i )
+       {
+           // there is a not deleted column
+           if ( rBoxes[i]->GetRedlineType() != RedlineType::Delete )
+               return false;
+       }
+   }
+
+   return true;
 }
 
 RedlineType SwTableLine::GetRedlineType() const

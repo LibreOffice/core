@@ -3302,6 +3302,50 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf144347)
     assertXPath(pXmlDoc, "/root/page[1]/body/tab", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf155345)
+{
+    createSwDoc("tdf144057.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
+    SwRootFrame* pLayout(pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
+    CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
+
+    // reject all deletions
+    dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
+
+    // enable redlining
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+
+    // delete table column with track changes
+    dispatchCommand(mxComponent, ".uno:DeleteColumns", {});
+
+    discardDumpedLayout();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // show tracked column deletions
+    assertXPath(pXmlDoc, "/root/page", 4);
+
+    // hide tracked table column deletions
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    CPPUNIT_ASSERT(pLayout->IsHideRedlines());
+    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+
+    // This was 4 (unhidden tracked table column deletions)
+    assertXPath(pXmlDoc, "/root/page", 2);
+
+    // show tracked table column deletions again
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
+    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page", 4);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf109137)
 {
     createSwDoc("tdf109137.docx");
