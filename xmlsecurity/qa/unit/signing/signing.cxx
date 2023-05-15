@@ -706,6 +706,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFNo)
                          static_cast<int>(pObjectShell->GetDocumentSignatureState()));
 }
 
+#endif
+
 CPPUNIT_TEST_FIXTURE(SigningTest, testPDFAddVisibleSignature)
 {
     std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
@@ -769,8 +771,6 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFAddVisibleSignature)
     // i.e. the signature was there, but it was empty / not visible.
     CPPUNIT_ASSERT_EQUAL(4, pAnnot->getObjectCount());
 }
-
-#endif
 
 CPPUNIT_TEST_FIXTURE(SigningTest, test96097Calc)
 {
