@@ -30,7 +30,7 @@ class SvXMLAttrCollection;
 class XMLOFF_DLLPUBLIC SvXMLAttrContainerData
 {
 private:
-    std::unique_ptr<SvXMLAttrCollection> pimpl;
+    std::unique_ptr<SvXMLAttrCollection> m_pImpl;
 
 public:
     SvXMLAttrContainerData();

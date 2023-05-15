@@ -34,7 +34,7 @@ namespace com::sun::star {
 
 class XMLOFF_DLLPUBLIC XMLDashStyleImport
 {
-    SvXMLImport& rImport;
+    SvXMLImport& m_rImport;
 
 public:
     XMLDashStyleImport( SvXMLImport& rImport );
@@ -48,7 +48,7 @@ public:
 
 class XMLOFF_DLLPUBLIC XMLDashStyleExport
 {
-    SvXMLExport& rExport;
+    SvXMLExport& m_rExport;
 
 public:
     XMLDashStyleExport( SvXMLExport& rExport );

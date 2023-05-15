@@ -43,22 +43,22 @@ using ::xmloff::token::XML_EVENT_LISTENERS;
 constexpr OUStringLiteral gsEventType(u"EventType");
 
 XMLEventExport::XMLEventExport(SvXMLExport& rExp) :
-    rExport(rExp),
-    bExtNamespace(false)
+    m_rExport(rExp),
+    m_bExtNamespace(false)
 {
 }
 
 XMLEventExport::~XMLEventExport()
 {
     // delete all handlers
-    aHandlerMap.clear();
+    m_aHandlerMap.clear();
 }
 
 void XMLEventExport::AddHandler( const OUString& rName,
                                  std::unique_ptr<XMLEventExportHandler> pHandler )
 {
     assert(pHandler);
-    aHandlerMap[rName] = std::move(pHandler);
+    m_aHandlerMap[rName] = std::move(pHandler);
 }
 
 void XMLEventExport::AddTranslationTable(
@@ -71,7 +71,7 @@ void XMLEventExport::AddTranslationTable(
             pTrans->sAPIName != nullptr;
             pTrans++)
         {
-            aNameTranslationMap[OUString::createFromAscii(pTrans->sAPIName)] =
+            m_aNameTranslationMap[OUString::createFromAscii(pTrans->sAPIName)] =
                 XMLEventName(pTrans->nPrefix, pTrans->sXMLName);
         }
     }
@@ -112,8 +112,8 @@ void XMLEventExport::Export( Reference<XNameAccess> const & rAccess,
     for(const auto& rName : aNames)
     {
         // translate name
-        NameMap::iterator aIter = aNameTranslationMap.find(rName);
-        if (aIter != aNameTranslationMap.end())
+        NameMap::iterator aIter = m_aNameTranslationMap.find(rName);
+        if (aIter != m_aNameTranslationMap.end())
         {
             const XMLEventName& rXmlName = aIter->second;
 
@@ -143,9 +143,9 @@ void XMLEventExport::ExportExt( Reference<XNameAccess> const & rAccess )
 {
     // set bExtNamespace flag to use XML_NAMESPACE_OFFICE_EXT namespace
     // for events element (not for child elements)
-    bExtNamespace = true;
+    m_bExtNamespace = true;
     Export(rAccess);
-    bExtNamespace = false;          // reset for future Export calls
+    m_bExtNamespace = false;          // reset for future Export calls
 }
 
 /// export a singular event and write <office:events> container
@@ -155,8 +155,8 @@ void XMLEventExport::ExportSingleEvent(
     bool bUseWhitespace )
 {
     // translate the name
-    NameMap::iterator aIter = aNameTranslationMap.find(rApiEventName);
-    if (aIter != aNameTranslationMap.end())
+    NameMap::iterator aIter = m_aNameTranslationMap.find(rApiEventName);
+    if (aIter != m_aNameTranslationMap.end())
     {
         const XMLEventName& rXmlName = aIter->second;
 
@@ -196,7 +196,7 @@ void XMLEventExport::ExportEvent(
     OUString sType;
     pValue->Value >>= sType;
 
-    if (aHandlerMap.count(sType))
+    if (m_aHandlerMap.count(sType))
     {
         if (! rExported)
         {
@@ -207,11 +207,11 @@ void XMLEventExport::ExportEvent(
         }
 
         OUString aEventQName(
-            rExport.GetNamespaceMap().GetQNameByKey(
+            m_rExport.GetNamespaceMap().GetQNameByKey(
                     rXmlEventName.m_nPrefix, rXmlEventName.m_aName ) );
 
         // delegate to proper ExportEventHandler
-        aHandlerMap[sType]->Export(rExport, aEventQName,
+        m_aHandlerMap[sType]->Export(m_rExport, aEventQName,
                                    rEventValues, bUseWhitespace);
     }
     else
@@ -230,22 +230,22 @@ void XMLEventExport::StartElement(bool bWhitespace)
 {
     if (bWhitespace)
     {
-        rExport.IgnorableWhitespace();
+        m_rExport.IgnorableWhitespace();
     }
-    sal_uInt16 nNamespace = bExtNamespace ? XML_NAMESPACE_OFFICE_EXT
+    sal_uInt16 nNamespace = m_bExtNamespace ? XML_NAMESPACE_OFFICE_EXT
                                           : XML_NAMESPACE_OFFICE;
-    rExport.StartElement( nNamespace, XML_EVENT_LISTENERS,
+    m_rExport.StartElement( nNamespace, XML_EVENT_LISTENERS,
                           bWhitespace);
 }
 
 void XMLEventExport::EndElement(bool bWhitespace)
 {
-    sal_uInt16 nNamespace = bExtNamespace ? XML_NAMESPACE_OFFICE_EXT
+    sal_uInt16 nNamespace = m_bExtNamespace ? XML_NAMESPACE_OFFICE_EXT
                                           : XML_NAMESPACE_OFFICE;
-    rExport.EndElement(nNamespace, XML_EVENT_LISTENERS, bWhitespace);
+    m_rExport.EndElement(nNamespace, XML_EVENT_LISTENERS, bWhitespace);
     if (bWhitespace)
     {
-        rExport.IgnorableWhitespace();
+        m_rExport.IgnorableWhitespace();
     }
 }
 

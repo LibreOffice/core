@@ -60,12 +60,12 @@ typedef ::std::map< OUString, XMLEventName > NameMap;
  */
 class XMLOFF_DLLPUBLIC XMLEventExport
 {
-    SvXMLExport& rExport;
+    SvXMLExport& m_rExport;
 
-    HandlerMap aHandlerMap;
-    NameMap aNameTranslationMap;
+    HandlerMap m_aHandlerMap;
+    NameMap m_aNameTranslationMap;
 
-    bool bExtNamespace;
+    bool m_bExtNamespace;
 
 public:
     XMLEventExport(SvXMLExport& rExport);

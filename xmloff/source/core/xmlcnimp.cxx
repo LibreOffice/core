@@ -21,24 +21,24 @@
 #include <xmloff/xmlcnimp.hxx>
 #include <rtl/ustring.hxx>
 
-SvXMLAttrContainerData::SvXMLAttrContainerData() : pimpl( new SvXMLAttrCollection )
+SvXMLAttrContainerData::SvXMLAttrContainerData() : m_pImpl( new SvXMLAttrCollection )
 {
 }
 
 SvXMLAttrContainerData::SvXMLAttrContainerData(const SvXMLAttrContainerData &rCopy) :
-        pimpl( new SvXMLAttrCollection( *(rCopy.pimpl) ) )
+        m_pImpl( new SvXMLAttrCollection( *(rCopy.m_pImpl) ) )
 {
 }
 
 SvXMLAttrContainerData& SvXMLAttrContainerData::operator=(const SvXMLAttrContainerData &rCopy)
 {
-    pimpl.reset( new SvXMLAttrCollection( *rCopy.pimpl ) );
+    m_pImpl.reset( new SvXMLAttrCollection( *rCopy.m_pImpl ) );
     return *this;
 }
 
 SvXMLAttrContainerData& SvXMLAttrContainerData::operator=(SvXMLAttrContainerData&& rCopy) noexcept
 {
-    pimpl = std::move( rCopy.pimpl );
+    m_pImpl = std::move( rCopy.m_pImpl );
     return *this;
 }
 
@@ -50,7 +50,7 @@ SvXMLAttrContainerData::~SvXMLAttrContainerData()
 
 bool SvXMLAttrContainerData::operator ==( const SvXMLAttrContainerData& rCmp ) const
 {
-    return ( *(rCmp.pimpl) == *pimpl );
+    return ( *(rCmp.m_pImpl) == *m_pImpl );
 }
 
 bool SvXMLAttrContainerData::AddAttr( const OUString& rLName,
@@ -58,7 +58,7 @@ bool SvXMLAttrContainerData::AddAttr( const OUString& rLName,
 {
     assert( !rLName.isEmpty() && "empty attribute name is invalid");
     assert( rLName.indexOf(':') == -1 && "colon in name?");
-    return pimpl->AddAttr(rLName, rValue);
+    return m_pImpl->AddAttr(rLName, rValue);
 }
 
 bool SvXMLAttrContainerData::AddAttr( const OUString& rPrefix,
@@ -69,7 +69,7 @@ bool SvXMLAttrContainerData::AddAttr( const OUString& rPrefix,
     assert( !rLName.isEmpty() && "empty attribute name is invalid");
     assert( rPrefix.indexOf(':') == -1 && "colon in prefix?");
     assert( rLName.indexOf(':') == -1 && "colon in name?");
-    return pimpl->AddAttr(rPrefix, rNamespace, rLName, rValue);
+    return m_pImpl->AddAttr(rPrefix, rNamespace, rLName, rValue);
 }
 
 bool SvXMLAttrContainerData::AddAttr( const OUString& rPrefix,
@@ -79,7 +79,7 @@ bool SvXMLAttrContainerData::AddAttr( const OUString& rPrefix,
     assert( !rLName.isEmpty() && "empty attribute name is invalid");
     assert( rPrefix.indexOf(':') == -1 && "colon in prefix?");
     assert( rLName.indexOf(':') == -1 && "colon in name?");
-    return pimpl->AddAttr(rPrefix, rLName, rValue);
+    return m_pImpl->AddAttr(rPrefix, rLName, rValue);
 }
 
 bool SvXMLAttrContainerData::SetAt( size_t i,
@@ -88,7 +88,7 @@ bool SvXMLAttrContainerData::SetAt( size_t i,
 {
     assert( !rLName.isEmpty() && "empty attribute name is invalid");
     assert( rLName.indexOf(':') == -1 && "colon in name?");
-    return pimpl->SetAt(i, rLName, rValue);
+    return m_pImpl->SetAt(i, rLName, rValue);
 }
 
 bool SvXMLAttrContainerData::SetAt( size_t i,
@@ -100,7 +100,7 @@ bool SvXMLAttrContainerData::SetAt( size_t i,
     assert( !rLName.isEmpty() && "empty attribute name is invalid");
     assert( rPrefix.indexOf(':') == -1 && "colon in prefix?");
     assert( rLName.indexOf(':') == -1 && "colon in name?");
-    return pimpl->SetAt(i, rPrefix, rNamespace, rLName, rValue);
+    return m_pImpl->SetAt(i, rPrefix, rNamespace, rLName, rValue);
 }
 
 bool SvXMLAttrContainerData::SetAt( size_t i,
@@ -111,57 +111,57 @@ bool SvXMLAttrContainerData::SetAt( size_t i,
     assert( !rLName.isEmpty() && "empty attribute name is invalid");
     assert( rPrefix.indexOf(':') == -1 && "colon in prefix?");
     assert( rLName.indexOf(':') == -1 && "colon in name?");
-    return pimpl->SetAt(i, rPrefix, rLName, rValue);
+    return m_pImpl->SetAt(i, rPrefix, rLName, rValue);
 }
 
 void SvXMLAttrContainerData::Remove( size_t i )
 {
-    pimpl->Remove(i);
+    m_pImpl->Remove(i);
 }
 
 size_t SvXMLAttrContainerData::GetAttrCount() const
 {
-    return pimpl->GetAttrCount();
+    return m_pImpl->GetAttrCount();
 }
 
 const OUString& SvXMLAttrContainerData::GetAttrLName(size_t i) const
 {
-    return pimpl->GetAttrLName(i);
+    return m_pImpl->GetAttrLName(i);
 }
 
 const OUString& SvXMLAttrContainerData::GetAttrValue(size_t i) const
 {
-    return pimpl->GetAttrValue(i);
+    return m_pImpl->GetAttrValue(i);
 }
 
 OUString SvXMLAttrContainerData::GetAttrNamespace( size_t i ) const
 {
-    return pimpl->GetAttrNamespace(i);
+    return m_pImpl->GetAttrNamespace(i);
 }
 
 OUString SvXMLAttrContainerData::GetAttrPrefix( size_t i ) const
 {
-    return pimpl->GetAttrPrefix(i);
+    return m_pImpl->GetAttrPrefix(i);
 }
 
 const OUString& SvXMLAttrContainerData::GetNamespace( sal_uInt16 i ) const
 {
-    return pimpl->GetNamespace(i);
+    return m_pImpl->GetNamespace(i);
 }
 
 const OUString& SvXMLAttrContainerData::GetPrefix( sal_uInt16 i ) const
 {
-    return pimpl->GetPrefix(i);
+    return m_pImpl->GetPrefix(i);
 }
 
 sal_uInt16 SvXMLAttrContainerData::GetFirstNamespaceIndex() const
 {
-    return pimpl->GetFirstNamespaceIndex();
+    return m_pImpl->GetFirstNamespaceIndex();
 }
 
 sal_uInt16 SvXMLAttrContainerData::GetNextNamespaceIndex( sal_uInt16 nIdx ) const
 {
-    return pimpl->GetNextNamespaceIndex( nIdx );
+    return m_pImpl->GetNextNamespaceIndex( nIdx );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

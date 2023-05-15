@@ -50,7 +50,7 @@ SvXMLEnumMapEntry<drawing::DashStyle> const pXML_DashStyle_Enum[] =
 // Import
 
 XMLDashStyleImport::XMLDashStyleImport( SvXMLImport& rImp )
-    : rImport(rImp)
+    : m_rImport(rImp)
 {
 }
 
@@ -70,7 +70,7 @@ void XMLDashStyleImport::importXML(
 
     bool bIsRel = false;
 
-    SvXMLUnitConverter& rUnitConverter = rImport.GetMM100UnitConverter();
+    SvXMLUnitConverter& rUnitConverter = m_rImport.GetMM100UnitConverter();
 
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
@@ -163,7 +163,7 @@ void XMLDashStyleImport::importXML(
 
     if( !aDisplayName.isEmpty() )
     {
-        rImport.AddStyleDisplayName( XmlStyleFamily::SD_STROKE_DASH_ID,
+        m_rImport.AddStyleDisplayName( XmlStyleFamily::SD_STROKE_DASH_ID,
                                      rStrName, aDisplayName );
         rStrName = aDisplayName;
     }
@@ -172,7 +172,7 @@ void XMLDashStyleImport::importXML(
 // Export
 
 XMLDashStyleExport::XMLDashStyleExport( SvXMLExport& rExp )
-    : rExport(rExp)
+    : m_rExport(rExp)
 {
 }
 
@@ -180,7 +180,7 @@ void XMLDashStyleExport::exportXML(
     const OUString& rStrName,
     const uno::Any& rValue )
 {
-    SvXMLUnitConverter & rUnitConverter = rExport.GetMM100UnitConverter();
+    SvXMLUnitConverter & rUnitConverter = m_rExport.GetMM100UnitConverter();
 
     drawing::LineDash aLineDash;
 
@@ -197,22 +197,22 @@ void XMLDashStyleExport::exportXML(
 
     // Name
     bool bEncoded = false;
-    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME,
-                          rExport.EncodeStyleName( rStrName,
+    m_rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME,
+                          m_rExport.EncodeStyleName( rStrName,
                                                    &bEncoded ) );
     if( bEncoded )
-        rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY_NAME,
+        m_rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY_NAME,
                               rStrName );
 
     // Style
     SvXMLUnitConverter::convertEnum( aOut, aLineDash.Style, pXML_DashStyle_Enum );
     aStrValue = aOut.makeStringAndClear();
-    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );
+    m_rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );
 
     // dots
     if( aLineDash.Dots )
     {
-        rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DOTS1, OUString::number( aLineDash.Dots ) );
+        m_rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DOTS1, OUString::number( aLineDash.Dots ) );
 
         if( aLineDash.DotLen )
         {
@@ -227,14 +227,14 @@ void XMLDashStyleExport::exportXML(
                         aLineDash.DotLen );
             }
             aStrValue = aOut.makeStringAndClear();
-            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DOTS1_LENGTH, aStrValue );
+            m_rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DOTS1_LENGTH, aStrValue );
         }
     }
 
     // dashes
     if( aLineDash.Dashes )
     {
-        rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DOTS2, OUString::number( aLineDash.Dashes ) );
+        m_rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DOTS2, OUString::number( aLineDash.Dashes ) );
 
         if( aLineDash.DashLen )
         {
@@ -249,7 +249,7 @@ void XMLDashStyleExport::exportXML(
                         aLineDash.DashLen );
             }
             aStrValue = aOut.makeStringAndClear();
-            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DOTS2_LENGTH, aStrValue );
+            m_rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DOTS2_LENGTH, aStrValue );
         }
     }
 
@@ -264,10 +264,10 @@ void XMLDashStyleExport::exportXML(
                 aLineDash.Distance );
     }
     aStrValue = aOut.makeStringAndClear();
-    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISTANCE, aStrValue );
+    m_rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISTANCE, aStrValue );
 
     // do Write
-    SvXMLElementExport rElem( rExport,
+    SvXMLElementExport rElem( m_rExport,
                               XML_NAMESPACE_DRAW, XML_STROKE_DASH,
                               true, false );
 }
