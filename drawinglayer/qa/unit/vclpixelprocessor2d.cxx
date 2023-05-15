@@ -68,7 +68,7 @@ public:
         // the case --- it is in fact the *contrary*, it is there to *extend* the
         // usual definition/paintRange of a gradient:
         // It was originally needed to correctly display TextFrames (TF) in Writer: If you
-        // have a TF in SW filled with a gradient and that TF has sub-frames, it inhertits
+        // have a TF in SW filled with a gradient and that TF has sub-frames, it inherits
         // the gradient fill. Since you can freely move those sub-TFs even outside the
         // parent TF there has to be a way to not only paint gradients in ther definition
         // range (classical, all DrawObjects do that), but extended from that. This is
