@@ -571,7 +571,7 @@ Window::~Window()
 
 ::OutputDevice* Window::GetOutDev()
 {
-    return mpWindowImpl->mxOutDev.get();
+    return mpWindowImpl ? mpWindowImpl->mxOutDev.get() : nullptr;
 }
 
 Color WindowOutputDevice::GetBackgroundColor() const
