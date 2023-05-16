@@ -299,16 +299,16 @@ struct XclFontData
     /** Constructs an empty font data structure. */
     explicit            XclFontData();
     /** Constructs a font data structure and fills it with the passed font attributes (except color). */
-    explicit            XclFontData( const vcl::Font& rFont );
+    explicit            XclFontData(const vcl::Font& rFont, Color const& aColor);
     /** As directly above but also fills in the escapement member. */
-    explicit            XclFontData( const SvxFont& rFont );
+    explicit            XclFontData(const SvxFont& rFont, Color const& aColor);
 
     /** Resets all members to default (empty) values. */
     void                Clear();
     /** Fills all members (except color and escapement) from the passed font. */
-    void                FillFromVclFont( const vcl::Font& rFont );
+    void                FillFromVclFont(const vcl::Font& rFont, Color const& rColor);
     /** Fills all members (except color) from the passed SVX font. */
-    void                FillFromSvxFont( const SvxFont& rFont );
+    void                FillFromSvxFont(const SvxFont& rFont, Color const& rColor);
 
 // *** conversion of VCL/SVX constants *** ------------------------------------
 

@@ -1218,16 +1218,16 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testUnallocatedColumnsAttributes)
     // That shouldn't need allocating more columns, just changing the default attribute.
     CPPUNIT_ASSERT_EQUAL(INITIALCOLCOUNT, pDoc->GetAllocatedColumnsCount(0));
     vcl::Font aFont;
-    pDoc->GetPattern(pDoc->MaxCol(), 0, 0)->GetFont(aFont, SC_AUTOCOL_RAW);
+    pDoc->GetPattern(pDoc->MaxCol(), 0, 0)->fillFontOnly(aFont);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
 
     goToCell("A2:CV2"); // first 100 cells in row 2
     dispatchCommand(mxComponent, ".uno:Bold", {});
     // These need to be explicitly allocated.
     CPPUNIT_ASSERT_EQUAL(SCCOL(100), pDoc->GetAllocatedColumnsCount(0));
-    pDoc->GetPattern(99, 1, 0)->GetFont(aFont, SC_AUTOCOL_RAW);
+    pDoc->GetPattern(99, 1, 0)->fillFontOnly(aFont);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
-    pDoc->GetPattern(100, 1, 0)->GetFont(aFont, SC_AUTOCOL_RAW);
+    pDoc->GetPattern(100, 1, 0)->fillFontOnly(aFont);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should not be bold", WEIGHT_NORMAL, aFont.GetWeight());
 
     goToCell("CW3:" + pDoc->MaxColAsString() + "3"); // All but first 100 cells in row 3.
@@ -1235,9 +1235,9 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testUnallocatedColumnsAttributes)
     // First 100 columns need to be allocated to not be bold, the rest should be handled
     // by the default attribute.
     CPPUNIT_ASSERT_EQUAL(SCCOL(100), pDoc->GetAllocatedColumnsCount(0));
-    pDoc->GetPattern(99, 2, 0)->GetFont(aFont, SC_AUTOCOL_RAW);
+    pDoc->GetPattern(99, 2, 0)->fillFontOnly(aFont);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should not be bold", WEIGHT_NORMAL, aFont.GetWeight());
-    pDoc->GetPattern(100, 2, 0)->GetFont(aFont, SC_AUTOCOL_RAW);
+    pDoc->GetPattern(100, 2, 0)->fillFontOnly(aFont);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
 }
 

@@ -892,7 +892,7 @@ vcl::Font XclExpFontHelper::GetFontFromItemSet( const XclExpRoot& rRoot, const S
 
     // fill the font object
     vcl::Font aFont;
-    ScPatternAttr::GetFont( aFont, rItemSet, SC_AUTOCOL_RAW, nullptr, nullptr, nullptr, nScScript );
+    ScPatternAttr::fillFontOnly(aFont, rItemSet, nullptr, nullptr, nullptr, nScScript);
     return aFont;
 }
 
@@ -1222,18 +1222,18 @@ sal_uInt16 XclExpFontBuffer::Insert(
     return static_cast< sal_uInt16 >( nPos );
 }
 
-sal_uInt16 XclExpFontBuffer::Insert(
-        const SvxFont& rFont, XclExpColorType eColorType )
+sal_uInt16 XclExpFontBuffer::Insert(const SvxFont& rFont, Color const& rColor, XclExpColorType eColorType )
 {
-    return Insert( XclFontData( rFont ), eColorType );
+    return Insert(XclFontData(rFont, rColor), eColorType);
 }
 
-sal_uInt16 XclExpFontBuffer::Insert( const SfxItemSet& rItemSet,
-        sal_Int16 nScript, XclExpColorType eColorType, bool bAppFont )
+sal_uInt16 XclExpFontBuffer::Insert(const SfxItemSet& rItemSet, sal_Int16 nScript, XclExpColorType eColorType, bool bAppFont )
 {
     // #i17050# script type now provided by caller
-    vcl::Font aFont = XclExpFontHelper::GetFontFromItemSet( GetRoot(), rItemSet, nScript );
-    return Insert( XclFontData( aFont ), eColorType, bAppFont );
+    vcl::Font aFont = XclExpFontHelper::GetFontFromItemSet(GetRoot(), rItemSet, nScript);
+    Color aColor;
+    ScPatternAttr::fillColor(aColor, rItemSet, SC_AUTOCOL_RAW);
+    return Insert(XclFontData(aFont, aColor), eColorType, bAppFont );
 }
 
 void XclExpFontBuffer::Save( XclExpStream& rStrm )

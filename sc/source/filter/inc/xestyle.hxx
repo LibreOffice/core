@@ -217,18 +217,15 @@ public:
     /** Inserts a new font with the passed font data into the buffer if not present.
         @param bAppFont  true = Sets the application font; false = Inserts a new font.
         @return  The resulting Excel font index. */
-    sal_uInt16          Insert( const XclFontData& rFontData,
-                            XclExpColorType eColorType, bool bAppFont = false );
+    sal_uInt16          Insert(const XclFontData& rFontData, XclExpColorType eColorType, bool bAppFont = false );
     /** Inserts the SvxFont into the buffer if not present, e.g. where escapements are used.
         @return  The resulting Excel font index. */
-    sal_uInt16          Insert( const SvxFont& rFont,
-                            XclExpColorType eColorType );
+    sal_uInt16          Insert(const SvxFont& rFont, Color const& rColor, XclExpColorType eColorType);
     /** Inserts the font contained in the passed item set into the buffer, if not present.
         @param nScript  The script type of the font properties to be used.
         @param bAppFont  true = Sets the application font; false = Inserts a new font.
         @return  The resulting Excel font index. */
-    sal_uInt16          Insert( const SfxItemSet& rItemSet, sal_Int16 nScript,
-                            XclExpColorType eColorType, bool bAppFont );
+    sal_uInt16          Insert(const SfxItemSet& rItemSet, sal_Int16 nScript, XclExpColorType eColorType, bool bAppFont);
 
     /** Writes all FONT records contained in this buffer. */
     virtual void        Save( XclExpStream& rStrm ) override;
@@ -372,13 +369,14 @@ struct XclExpCellBorder : public XclCellBorder
     @descr  Provides functions to fill from item sets and to fill to Excel record data. */
 struct XclExpCellArea : public XclCellArea
 {
-    sal_uInt32          mnForeColorId;  /// Foreground color ID.
-    sal_uInt32          mnBackColorId;  /// Background color ID.
+    sal_uInt32 mnForeColorId;  /// Foreground color ID.
+    sal_uInt32 mnBackColorId;  /// Background color ID.
+
     Color maForeColor; // Actual foreground color
     Color maBackColor; // Actual background color
 
-    explicit            XclExpCellArea();
-    explicit            XclExpCellArea(Color aForeColor, Color aBackColor);
+    explicit XclExpCellArea();
+    explicit XclExpCellArea(Color aForeColor, Color aBackColor);
 
     /** Fills the area attributes from the passed item set.
         @return  true = At least one area item is set. */

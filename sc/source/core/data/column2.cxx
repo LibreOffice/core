@@ -284,7 +284,7 @@ tools::Long ScColumn::GetNeededSize(
         Fraction aFontZoom = ( eOrient == SvxCellOrientation::Standard ) ? rZoomX : rZoomY;
         vcl::Font aFont;
         // font color doesn't matter here
-        pPattern->GetFont( aFont, SC_AUTOCOL_BLACK, pDev, &aFontZoom, pCondSet, nScript );
+        pPattern->fillFontOnly(aFont, pDev, &aFontZoom, pCondSet, nScript);
         pDev->SetFont(aFont);
     }
 
@@ -755,8 +755,8 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
         const ScPatternAttr* pPattern = GetPattern( nRow );
         vcl::Font aFont;
         // font color doesn't matter here
-        pPattern->GetFont( aFont, SC_AUTOCOL_BLACK, pDev, &rZoomX );
-        pDev->SetFont( aFont );
+        pPattern->fillFontOnly(aFont, pDev, &rZoomX);
+        pDev->SetFont(aFont);
         const SvxMarginItem* pMargin = &pPattern->GetItem(ATTR_MARGIN);
         tools::Long nMargin = static_cast<tools::Long>( pMargin->GetLeftMargin() * nPPTX ) +
                         static_cast<tools::Long>( pMargin->GetRightMargin() * nPPTX );
