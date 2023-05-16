@@ -168,32 +168,36 @@ void ScModelTestBase::testFormats(ScDocument* pDoc,std::u16string_view sFormat)
     //test Sheet2
     const ScPatternAttr* pPattern = pDoc->GetPattern(0, 0, 1);
     vcl::Font aFont;
-    pPattern->GetFont(aFont,SC_AUTOCOL_RAW);
+    Color aColor;
+
+    pPattern->fillFontOnly(aFont);
+    pPattern->fillColor(aColor, SC_AUTOCOL_RAW);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font size should be 10", tools::Long(200), aFont.GetFontSize().getHeight());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("font color should be black", COL_AUTO, aFont.GetColor());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font color should be black", COL_AUTO, aColor);
     pPattern = pDoc->GetPattern(0,1,1);
-    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    pPattern->fillFontOnly(aFont);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font size should be 12", tools::Long(240), aFont.GetFontSize().getHeight());
     pPattern = pDoc->GetPattern(0,2,1);
-    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    pPattern->fillFontOnly(aFont);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be italic", ITALIC_NORMAL, aFont.GetItalic());
     pPattern = pDoc->GetPattern(0,4,1);
-    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    pPattern->fillFontOnly(aFont);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
     pPattern = pDoc->GetPattern(1,0,1);
-    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be blue", COL_BLUE, aFont.GetColor());
+    pPattern->fillFontOnly(aFont);
+    pPattern->fillColor(aColor, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be blue", COL_BLUE, aColor);
     pPattern = pDoc->GetPattern(1,1,1);
-    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    pPattern->fillFontOnly(aFont);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be striked out with a single line", STRIKEOUT_SINGLE, aFont.GetStrikeout());
     //some tests on sheet2 only for ods
     if (sFormat == u"calc8")
     {
         pPattern = pDoc->GetPattern(1,2,1);
-        pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+        pPattern->fillFontOnly(aFont);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be striked out with a double line", STRIKEOUT_DOUBLE, aFont.GetStrikeout());
         pPattern = pDoc->GetPattern(1,3,1);
-        pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+        pPattern->fillFontOnly(aFont);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be underlined with a dotted line", LINESTYLE_DOTTED, aFont.GetUnderline());
         //check row height import
         //disable for now until we figure out cause of win tinderboxes test failures
@@ -214,7 +218,7 @@ void ScModelTestBase::testFormats(ScDocument* pDoc,std::u16string_view sFormat)
         CPPUNIT_ASSERT_EQUAL( aKnownGoodStr, aTestStr );
     }
     pPattern = pDoc->GetPattern(1,4,1);
-    Color aColor = pPattern->GetItem(ATTR_BACKGROUND).GetColor();
+    aColor = pPattern->GetItem(ATTR_BACKGROUND).GetColor();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("background color should be green", COL_LIGHTGREEN, aColor);
     pPattern = pDoc->GetPattern(2,0,1);
     SvxCellHorJustify eHorJustify = pPattern->GetItem(ATTR_HOR_JUSTIFY).GetValue();

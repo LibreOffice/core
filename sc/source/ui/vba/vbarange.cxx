@@ -3831,8 +3831,8 @@ static double getDefaultCharWidth( ScDocShell* pDocShell )
     OutputDevice* pRefDevice = rDoc.GetRefDevice();
     ScPatternAttr* pAttr = rDoc.GetDefPattern();
     vcl::Font aDefFont;
-    pAttr->GetFont( aDefFont, SC_AUTOCOL_BLACK, pRefDevice );
-    pRefDevice->SetFont( aDefFont );
+    pAttr->fillFontOnly(aDefFont, pRefDevice);
+    pRefDevice->SetFont(aDefFont);
     tools::Long nCharWidth = pRefDevice->GetTextWidth( OUString( '0' ) );        // 1/100th mm
     return o3tl::convert<double>(nCharWidth, o3tl::Length::mm100, o3tl::Length::pt);
 }

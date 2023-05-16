@@ -93,23 +93,55 @@ public:
     SvxCellOrientation      GetCellOrientation( const SfxItemSet* pCondSet = nullptr ) const;
 
     /** Static helper function to fill a font object from the passed item set. */
-    static void             GetFont( vcl::Font& rFont, const SfxItemSet& rItemSet,
+    static void fillFontOnly(vcl::Font& rFont, const SfxItemSet& rItemSet,
+                                        const OutputDevice* pOutDev = nullptr,
+                                        const Fraction* pScale = nullptr,
+                                        const SfxItemSet* pCondSet = nullptr,
+                                        SvtScriptType nScript = SvtScriptType::NONE);
+
+    static void fillFont( vcl::Font& rFont, const SfxItemSet& rItemSet,
                                         ScAutoFontColorMode eAutoMode,
                                         const OutputDevice* pOutDev = nullptr,
                                         const Fraction* pScale = nullptr,
                                         const SfxItemSet* pCondSet = nullptr,
                                         SvtScriptType nScript = SvtScriptType::NONE, const Color* pBackConfigColor = nullptr,
-                                        const Color* pTextConfigColor = nullptr );
+                                        const Color* pTextConfigColor = nullptr);
+
+    static void fillColor(Color& rColor, const SfxItemSet& rItemSet, ScAutoFontColorMode eAutoMode, const SfxItemSet* pCondSet = nullptr,
+                            const Color* pBackConfigColor = nullptr, const Color* pTextConfigColor = nullptr);
+
 
     static ScDxfFont        GetDxfFont(const SfxItemSet& rSet, SvtScriptType nScript);
+
+    void fillColor(Color& rColor,
+                    ScAutoFontColorMode eAutoMode,
+                    const SfxItemSet* pCondSet = nullptr,
+                    const Color* pBackConfigColor = nullptr,
+                    const Color* pTextConfigColor = nullptr) const
+    {
+        fillColor(rColor, GetItemSet(), eAutoMode, pCondSet, pBackConfigColor, pTextConfigColor);
+    }
+
+    void fillFontOnly(vcl::Font& rFont,
+                    const OutputDevice* pOutDev = nullptr,
+                    const Fraction* pScale = nullptr,
+                    const SfxItemSet* pCondSet = nullptr,
+                    SvtScriptType nScript = SvtScriptType::NONE) const
+    {
+        fillFontOnly(rFont, GetItemSet(), pOutDev, pScale, pCondSet, nScript);
+    }
+
     /** Fills a font object from the own item set. */
-    void                    GetFont( vcl::Font& rFont, ScAutoFontColorMode eAutoMode,
-                                     const OutputDevice* pOutDev = nullptr,
-                                     const Fraction* pScale = nullptr,
-                                     const SfxItemSet* pCondSet = nullptr,
-                                     SvtScriptType nScript = SvtScriptType::NONE,
-                                     const Color* pBackConfigColor = nullptr,
-                                     const Color* pTextConfigColor = nullptr ) const;
+    void fillFont(vcl::Font& rFont, ScAutoFontColorMode eAutoMode,
+                    const OutputDevice* pOutDev = nullptr,
+                    const Fraction* pScale = nullptr,
+                    const SfxItemSet* pCondSet = nullptr,
+                    SvtScriptType nScript = SvtScriptType::NONE,
+                    const Color* pBackConfigColor = nullptr,
+                    const Color* pTextConfigColor = nullptr) const
+    {
+        fillFont(rFont, GetItemSet(), eAutoMode, pOutDev, pScale, pCondSet, nScript, pBackConfigColor, pTextConfigColor);
+    }
 
     /** Converts all Calc items contained in rSrcSet to edit engine items and puts them into rEditSet. */
     static void             FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& rSrcSet, const SfxItemSet* pCondSet = nullptr );

@@ -2804,13 +2804,13 @@ void ScExportTest2::testWholeRowBold()
     ScDocument* pDoc = getScDoc();
     CPPUNIT_ASSERT_EQUAL(SCCOL(INITIALCOLCOUNT), pDoc->GetAllocatedColumnsCount(0));
     vcl::Font aFont;
-    pDoc->GetPattern(pDoc->MaxCol(), 1, 0)->GetFont(aFont, SC_AUTOCOL_RAW);
+    pDoc->GetPattern(pDoc->MaxCol(), 1, 0)->fillFontOnly(aFont);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
 
     saveAndReload("Calc Office Open XML");
     pDoc = getScDoc();
     CPPUNIT_ASSERT_EQUAL(SCCOL(INITIALCOLCOUNT), pDoc->GetAllocatedColumnsCount(0));
-    pDoc->GetPattern(pDoc->MaxCol(), 1, 0)->GetFont(aFont, SC_AUTOCOL_RAW);
+    pDoc->GetPattern(pDoc->MaxCol(), 1, 0)->fillFontOnly(aFont);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
 }
 

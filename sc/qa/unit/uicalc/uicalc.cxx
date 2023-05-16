@@ -739,7 +739,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124820)
 
     vcl::Font aFont;
     const ScPatternAttr* pPattern = pDoc->GetPattern(1, 1, 0);
-    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    pPattern->fillFontOnly(aFont);
 
     // Without the fix in place, this test would have failed here
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be striked out", STRIKEOUT_SINGLE,
@@ -1503,7 +1503,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteTransposed)
     CPPUNIT_ASSERT_MESSAGE("There should be a note on A1", pDoc->HasNote(ScAddress(0, 0, 0)));
     const ScPatternAttr* pPattern = pDoc->GetPattern(0, 1, 0);
     vcl::Font aFont;
-    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    pPattern->fillFontOnly(aFont);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
 
     goToCell("A1:A3");
@@ -1529,7 +1529,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteTransposed)
     CPPUNIT_ASSERT_EQUAL(OUString("Note in A1"), pDoc->GetNote(ScAddress(0, 0, 0))->GetText());
 
     pPattern = pDoc->GetPattern(1, 0, 0);
-    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    pPattern->fillFontOnly(aFont);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
 }
 
@@ -1558,7 +1558,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteAsLink)
     CPPUNIT_ASSERT_MESSAGE("There should be a note on A1", pDoc->HasNote(ScAddress(0, 0, 0)));
     const ScPatternAttr* pPattern = pDoc->GetPattern(0, 1, 0);
     vcl::Font aFont;
-    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    pPattern->fillFontOnly(aFont);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
 
     goToCell("A1:A3");
@@ -1581,7 +1581,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteAsLink)
     CPPUNIT_ASSERT_MESSAGE("There should be no note on C1", !pDoc->HasNote(ScAddress(2, 0, 0)));
 
     pPattern = pDoc->GetPattern(2, 1, 0);
-    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    pPattern->fillFontOnly(aFont);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be normal (cell attributes should not be copied)",
                                  WEIGHT_NORMAL, aFont.GetWeight());
 }
@@ -2990,16 +2990,16 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testUnallocatedColumnsAttributes)
     // That shouldn't need allocating more columns, just changing the default attribute.
     CPPUNIT_ASSERT_EQUAL(INITIALCOLCOUNT, pDoc->GetAllocatedColumnsCount(0));
     vcl::Font aFont;
-    pDoc->GetPattern(pDoc->MaxCol(), 0, 0)->GetFont(aFont, SC_AUTOCOL_RAW);
+    pDoc->GetPattern(pDoc->MaxCol(), 0, 0)->fillFontOnly(aFont);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
 
     goToCell("A2:CV2"); // first 100 cells in row 2
     dispatchCommand(mxComponent, ".uno:Bold", {});
     // These need to be explicitly allocated.
     CPPUNIT_ASSERT_EQUAL(SCCOL(100), pDoc->GetAllocatedColumnsCount(0));
-    pDoc->GetPattern(99, 1, 0)->GetFont(aFont, SC_AUTOCOL_RAW);
+    pDoc->GetPattern(99, 1, 0)->fillFontOnly(aFont);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
-    pDoc->GetPattern(100, 1, 0)->GetFont(aFont, SC_AUTOCOL_RAW);
+    pDoc->GetPattern(100, 1, 0)->fillFontOnly(aFont);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should not be bold", WEIGHT_NORMAL, aFont.GetWeight());
 
     goToCell("CW3:" + pDoc->MaxColAsString() + "3"); // All but first 100 cells in row 3.
@@ -3007,9 +3007,9 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testUnallocatedColumnsAttributes)
     // First 100 columns need to be allocated to not be bold, the rest should be handled
     // by the default attribute.
     CPPUNIT_ASSERT_EQUAL(SCCOL(100), pDoc->GetAllocatedColumnsCount(0));
-    pDoc->GetPattern(99, 2, 0)->GetFont(aFont, SC_AUTOCOL_RAW);
+    pDoc->GetPattern(99, 2, 0)->fillFontOnly(aFont);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should not be bold", WEIGHT_NORMAL, aFont.GetWeight());
-    pDoc->GetPattern(100, 2, 0)->GetFont(aFont, SC_AUTOCOL_RAW);
+    pDoc->GetPattern(100, 2, 0)->fillFontOnly(aFont);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
 }
 
@@ -3123,9 +3123,11 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testMouseMergeRef)
     Point aA6 = pViewShell->GetViewData().GetPrintTwipsPos(0, 5);
     Point aA7 = pViewShell->GetViewData().GetPrintTwipsPos(0, 6);
 
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aA1.X() + 5, aA1.Y() + 5, 1, MOUSE_LEFT, 0);
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aA1.X() + 5, aA1.Y() + 5, 1,
+                              MOUSE_LEFT, 0);
     pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEMOVE, aA6.X() + 5, aA6.Y() + 5, 1, MOUSE_LEFT, 0);
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aA7.X() + 5, aA7.Y() + 5, 1, MOUSE_LEFT, 0);
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aA7.X() + 5, aA7.Y() + 5, 1, MOUSE_LEFT,
+                              0);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT(pViewShell->IsRefInputMode());

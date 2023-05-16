@@ -2397,8 +2397,8 @@ void ScInterpreter::ScCell()
 
             pPrinter->SetMapMode(MapMode(MapUnit::MapTwip));
             // font color doesn't matter here
-            mrDoc.GetDefPattern()->GetFont( aDefFont, SC_AUTOCOL_BLACK, pPrinter );
-            pPrinter->SetFont( aDefFont );
+            mrDoc.GetDefPattern()->fillFontOnly(aDefFont, pPrinter);
+            pPrinter->SetFont(aDefFont);
             tools::Long nZeroWidth = pPrinter->GetTextWidth( OUString( '0' ) );
             assert(nZeroWidth != 0);
             pPrinter->SetFont( aOldFont );

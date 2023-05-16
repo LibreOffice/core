@@ -120,7 +120,7 @@ static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const tools::Rectangle& 
     //  use ScPatternAttr::GetFont only for font size
     vcl::Font aAttrFont;
     rDoc.GetPool()->GetDefaultItem(ATTR_PATTERN).
-                                    GetFont(aAttrFont,SC_AUTOCOL_BLACK,pDev,&rZoomY);
+                                    fillFontOnly(aAttrFont, pDev, &rZoomY);
 
     //  everything else from application font
     vcl::Font aAppFont = pDev->GetSettings().GetStyleSettings().GetAppFont();
@@ -1911,8 +1911,8 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
     if ( nPageScript == SvtScriptType::LATIN )
     {
         //  use single font and call DrawText directly
-        rDefPattern.GetFont( aFont, SC_AUTOCOL_BLACK );
-        aFont.SetColor( COL_LIGHTGRAY );
+        rDefPattern.fillFontOnly(aFont);
+        aFont.SetColor(COL_LIGHTGRAY);
         //  font size is set as needed
     }
     else

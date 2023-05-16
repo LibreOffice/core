@@ -422,7 +422,7 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
         {                                   // empty cell
             vcl::Font aFont;
             // font color doesn't matter here
-            pPattern->GetFont( aFont, SC_AUTOCOL_BLACK, pDev, &aZoomY );
+            pPattern->fillFontOnly(aFont, pDev, &aZoomY );
             pDev->SetFont(aFont);
             nTextHeight = pDev->GetTextHeight() + nTopMargin + nBottomMargin;
         }

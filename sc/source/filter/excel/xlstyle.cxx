@@ -174,15 +174,15 @@ XclFontData::XclFontData()
     Clear();
 }
 
-XclFontData::XclFontData( const vcl::Font& rFont )
+XclFontData::XclFontData(const vcl::Font& rFont, Color const& rColor)
 {
     Clear();
-    FillFromVclFont( rFont );
+    FillFromVclFont(rFont, rColor);
 }
 
-XclFontData::XclFontData( const SvxFont& rFont )
+XclFontData::XclFontData(const SvxFont& rFont, Color const& rColor)
 {
-    FillFromSvxFont( rFont );
+    FillFromSvxFont(rFont, rColor);
 }
 
 void XclFontData::Clear()
@@ -199,11 +199,11 @@ void XclFontData::Clear()
     mbItalic = mbStrikeout = mbOutline = mbShadow = false;
 }
 
-void XclFontData::FillFromVclFont( const vcl::Font& rFont )
+void XclFontData::FillFromVclFont(const vcl::Font& rFont, Color const& rColor)
 {
     maName = XclTools::GetXclFontName( rFont.GetFamilyName() );   // substitute with MS fonts
     maStyle.clear();
-    maColor = rFont.GetColor();
+    maColor = rColor;
     SetScUnderline( rFont.GetUnderline() );
     mnEscapem = EXC_FONTESC_NONE;
     SetScHeight( rFont.GetFontSize().Height() );
@@ -216,10 +216,10 @@ void XclFontData::FillFromVclFont( const vcl::Font& rFont )
     mbShadow = rFont.IsShadow();
 }
 
-void XclFontData::FillFromSvxFont( const SvxFont& rFont )
+void XclFontData::FillFromSvxFont(const SvxFont& rFont, Color const& rColor)
 {
-    FillFromVclFont( rFont );
-    SetScEscapement( rFont.GetEscapement() );
+    FillFromVclFont(rFont, rColor);
+    SetScEscapement(rFont.GetEscapement());
 }
 
 // *** conversion of VCL/SVX constants *** ------------------------------------

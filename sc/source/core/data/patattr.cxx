@@ -250,11 +250,26 @@ void getFontIDsByScriptType(SvtScriptType nScript,
 
 }
 
-void ScPatternAttr::GetFont(
+void ScPatternAttr::fillFont(
         vcl::Font& rFont, const SfxItemSet& rItemSet, ScAutoFontColorMode eAutoMode,
         const OutputDevice* pOutDev, const Fraction* pScale,
         const SfxItemSet* pCondSet, SvtScriptType nScript,
-        const Color* pBackConfigColor, const Color* pTextConfigColor )
+        const Color* pBackConfigColor, const Color* pTextConfigColor)
+{
+    Color aColor;
+
+    //  determine effective font color
+    ScPatternAttr::fillFontOnly(rFont, rItemSet, pOutDev, pScale, pCondSet, nScript);
+    ScPatternAttr::fillColor(aColor, rItemSet, eAutoMode, pCondSet, pBackConfigColor, pTextConfigColor);
+
+    //  set font effects
+    rFont.SetColor(aColor);
+}
+
+void ScPatternAttr::fillFontOnly(
+        vcl::Font& rFont, const SfxItemSet& rItemSet,
+        const OutputDevice* pOutDev, const Fraction* pScale,
+        const SfxItemSet* pCondSet, SvtScriptType nScript)
 {
     // Read items
 
@@ -270,7 +285,6 @@ void ScPatternAttr::GetFont(
     bool bShadow;
     FontEmphasisMark eEmphasis;
     FontRelief eRelief;
-    Color aColor;
     LanguageType eLang;
 
     TypedWhichId<SvxFontItem> nFontId(0);
@@ -280,7 +294,7 @@ void ScPatternAttr::GetFont(
     TypedWhichId<SvxLanguageItem> nLangId(0);
     getFontIDsByScriptType(nScript, nFontId, nHeightId, nWeightId, nPostureId, nLangId);
 
-    if ( pCondSet )
+    if (pCondSet)
     {
         pFontAttr = pCondSet->GetItemIfSet( nFontId );
         if ( !pFontAttr )
@@ -341,11 +355,6 @@ void ScPatternAttr::GetFont(
             pCharReliefItem = &rItemSet.Get( ATTR_FONT_RELIEF );
         eRelief = pCharReliefItem->GetValue();
 
-        const SvxColorItem* pColorItem = pCondSet->GetItemIfSet( ATTR_FONT_COLOR );
-        if ( !pColorItem )
-            pColorItem = &rItemSet.Get( ATTR_FONT_COLOR );
-        aColor = pColorItem->GetValue();
-
         const SvxLanguageItem* pLanguageItem = pCondSet->GetItemIfSet( nLangId );
         if ( !pLanguageItem )
             pLanguageItem = &rItemSet.Get( nLangId );
@@ -365,7 +374,6 @@ void ScPatternAttr::GetFont(
         bShadow = rItemSet.Get( ATTR_FONT_SHADOWED ).GetValue();
         eEmphasis = rItemSet.Get( ATTR_FONT_EMPHASISMARK ).GetEmphasisMark();
         eRelief = rItemSet.Get( ATTR_FONT_RELIEF ).GetValue();
-        aColor = rItemSet.Get( ATTR_FONT_COLOR ).GetValue();
         // for graphite language features
         eLang = rItemSet.Get( nLangId ).GetLanguage();
     }
@@ -413,10 +421,39 @@ void ScPatternAttr::GetFont(
         rFont.SetFontSize( Size( 0, static_cast<tools::Long>(nFontHeight) ) );
     }
 
-    //  determine effective font color
+    //  set font effects
+    rFont.SetWeight( eWeight );
+    rFont.SetItalic( eItalic );
+    rFont.SetUnderline( eUnder );
+    rFont.SetOverline( eOver );
+    rFont.SetWordLineMode( bWordLine );
+    rFont.SetStrikeout( eStrike );
+    rFont.SetOutline( bOutline );
+    rFont.SetShadow( bShadow );
+    rFont.SetEmphasisMark( eEmphasis );
+    rFont.SetRelief( eRelief );
+    rFont.SetTransparent( true );
+}
 
-    if ( ( aColor == COL_AUTO && eAutoMode != SC_AUTOCOL_RAW ) ||
-            eAutoMode == SC_AUTOCOL_IGNOREFONT || eAutoMode == SC_AUTOCOL_IGNOREALL )
+void ScPatternAttr::fillColor(Color& rColor, const SfxItemSet& rItemSet, ScAutoFontColorMode eAutoMode, const SfxItemSet* pCondSet, const Color* pBackConfigColor, const Color* pTextConfigColor)
+{
+    Color aColor = COL_TRANSPARENT;
+
+    SvxColorItem const* pColorItem = nullptr;
+
+    if (pCondSet)
+        pColorItem = pCondSet->GetItemIfSet(ATTR_FONT_COLOR);
+
+    if (!pColorItem)
+        pColorItem = &rItemSet.Get(ATTR_FONT_COLOR);
+
+    if (pColorItem)
+        aColor = pColorItem->GetValue();
+
+
+    if ((aColor == COL_AUTO && eAutoMode != SC_AUTOCOL_RAW)
+        || eAutoMode == SC_AUTOCOL_IGNOREFONT
+        || eAutoMode == SC_AUTOCOL_IGNOREALL)
     {
         if ( eAutoMode == SC_AUTOCOL_BLACK )
             aColor = COL_BLACK;
@@ -426,17 +463,20 @@ void ScPatternAttr::GetFont(
             Color aBackColor;
             if ( pCondSet )
             {
-                const SvxBrushItem* pItem = pCondSet->GetItemIfSet( ATTR_BACKGROUND );
-                if ( !pItem )
-                    pItem = &rItemSet.Get( ATTR_BACKGROUND );
+                const SvxBrushItem* pItem = pCondSet->GetItemIfSet(ATTR_BACKGROUND);
+                if (!pItem)
+                    pItem = &rItemSet.Get(ATTR_BACKGROUND);
                 aBackColor = pItem->GetColor();
             }
             else
-                aBackColor = rItemSet.Get( ATTR_BACKGROUND ).GetColor();
+            {
+                aBackColor = rItemSet.Get(ATTR_BACKGROUND).GetColor();
+            }
 
             //  if background color attribute is transparent, use window color for brightness comparisons
-            if ( aBackColor == COL_TRANSPARENT ||
-                    eAutoMode == SC_AUTOCOL_IGNOREBACK || eAutoMode == SC_AUTOCOL_IGNOREALL )
+            if (aBackColor == COL_TRANSPARENT
+                || eAutoMode == SC_AUTOCOL_IGNOREBACK
+                || eAutoMode == SC_AUTOCOL_IGNOREALL)
             {
                 if (!comphelper::LibreOfficeKit::isActive())
                 {
@@ -474,7 +514,9 @@ void ScPatternAttr::GetFont(
                 aSysTextColor = *pTextConfigColor;
             }
             else
+            {
                 aSysTextColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
+            }
 
             //  select the resulting color
             if ( aBackColor.IsDark() && aSysTextColor.IsDark() )
@@ -495,28 +537,7 @@ void ScPatternAttr::GetFont(
         }
     }
 
-    //  set font effects
-    rFont.SetWeight( eWeight );
-    rFont.SetItalic( eItalic );
-    rFont.SetUnderline( eUnder );
-    rFont.SetOverline( eOver );
-    rFont.SetWordLineMode( bWordLine );
-    rFont.SetStrikeout( eStrike );
-    rFont.SetOutline( bOutline );
-    rFont.SetShadow( bShadow );
-    rFont.SetEmphasisMark( eEmphasis );
-    rFont.SetRelief( eRelief );
-    rFont.SetColor( aColor );
-    rFont.SetTransparent( true );
-}
-
-void ScPatternAttr::GetFont(
-        vcl::Font& rFont, ScAutoFontColorMode eAutoMode,
-        const OutputDevice* pOutDev, const Fraction* pScale,
-        const SfxItemSet* pCondSet, SvtScriptType nScript,
-        const Color* pBackConfigColor, const Color* pTextConfigColor ) const
-{
-    GetFont( rFont, GetItemSet(), eAutoMode, pOutDev, pScale, pCondSet, nScript, pBackConfigColor, pTextConfigColor );
+    rColor = aColor;
 }
 
 ScDxfFont ScPatternAttr::GetDxfFont(const SfxItemSet& rItemSet, SvtScriptType nScript)

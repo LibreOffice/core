@@ -1908,8 +1908,8 @@ tools::Long ScPrintFunc::DoNotes( tools::Long nNoteStart, bool bDoPrint, ScPrevi
 
     vcl::Font aMarkFont;
     ScAutoFontColorMode eColorMode = bUseStyleColor ? SC_AUTOCOL_DISPLAY : SC_AUTOCOL_PRINT;
-    rDoc.GetPool()->GetDefaultItem(ATTR_PATTERN).GetFont( aMarkFont, eColorMode );
-    pDev->SetFont( aMarkFont );
+    rDoc.GetPool()->GetDefaultItem(ATTR_PATTERN).fillFont(aMarkFont, eColorMode);
+    pDev->SetFont(aMarkFont);
     tools::Long nMarkLen = pDev->GetTextWidth("GW99999:");
     // without Space-Char, because it rarely arrives there
 
@@ -2323,8 +2323,8 @@ void ScPrintFunc::PrintPage( tools::Long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX
         ScPatternAttr aPattern( rDoc.GetPool() );
         vcl::Font aFont;
         ScAutoFontColorMode eColorMode = bUseStyleColor ? SC_AUTOCOL_DISPLAY : SC_AUTOCOL_PRINT;
-        aPattern.GetFont( aFont, eColorMode, pDev );
-        pDev->SetFont( aFont );
+        aPattern.fillFont(aFont, eColorMode, pDev);
+        pDev->SetFont(aFont);
 
         if (bDoRepCol)
         {
