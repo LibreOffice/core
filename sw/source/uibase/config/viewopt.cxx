@@ -602,6 +602,8 @@ rtl::Reference<comphelper::ConfigurationListener> const & getWCOptionListener()
 
 bool SwViewOption::IsIgnoreProtectedArea()
 {
+    if (utl::ConfigManager::IsFuzzing())
+        return false;
     static comphelper::ConfigurationListenerProperty<bool> gIgnoreProtectedArea(getWCOptionListener(), "IgnoreProtectedArea");
     return gIgnoreProtectedArea.get();
 }
