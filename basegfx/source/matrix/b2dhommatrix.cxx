@@ -75,21 +75,55 @@ namespace basegfx
     bool B2DHomMatrix::invert()
     {
         if(isIdentity())
-        {
             return true;
-        }
 
-        Impl2DHomMatrix aWork(maImpl);
-        sal_uInt16* pIndex = static_cast<sal_uInt16*>(alloca( sizeof(sal_uInt16) * Impl2DHomMatrix::getEdgeLength() ));
-        sal_Int16 nParity;
 
-        if(aWork.ludcmp(pIndex, nParity))
-        {
-            maImpl.doInvert(aWork, pIndex);
-            return true;
-        }
+        double dst[9];
 
-        return false;
+        /* Compute adjoint: */
+
+        dst[0] = + get(1, 1) * get(2, 2) - get(1, 2) * get(2, 1);
+        dst[1] = - get(0, 1) * get(2, 2) + get(0, 2) * get(2, 1);
+        dst[2] = + get(0, 1) * get(1, 2) - get(0, 2) * get(1, 1);
+        dst[3] = - get(1, 0) * get(2, 2) + get(1, 2) * get(2, 0);
+        dst[4] = + get(0, 0) * get(2, 2) - get(0, 2) * get(2, 0);
+        dst[5] = - get(0, 0) * get(1, 2) + get(0, 2) * get(1, 0);
+        dst[6] = + get(1, 0) * get(2, 1) - get(1, 1) * get(2, 0);
+        dst[7] = - get(0, 0) * get(2, 1) + get(0, 1) * get(2, 0);
+        dst[8] = + get(0, 0) * get(1, 1) - get(0, 1) * get(1, 0);
+
+        /* Compute determinant: */
+
+        double det = get(0, 0) * dst[0] + get(0, 1) * dst[3] + get(0, 2) * dst[6];
+        if (fTools::equalZero(det))
+            return false;
+
+        /* Multiply adjoint with reciprocal of determinant: */
+
+        det = 1.0 / det;
+
+        maImpl.set(0, 0, dst[0] * det);
+        maImpl.set(0, 1, dst[1] * det);
+        maImpl.set(0, 2, dst[2] * det);
+        maImpl.set(1, 0, dst[3] * det);
+        maImpl.set(1, 1, dst[4] * det);
+        maImpl.set(1, 2, dst[5] * det);
+        maImpl.set(2, 0, dst[6] * det);
+        maImpl.set(2, 1, dst[7] * det);
+        maImpl.set(2, 2, dst[8] * det);
+
+        // The above algorithm is very slightly less accurate then the old one, so
+        // we need to round the last row to make sure that functions like decompose
+        // still do the same thing with existing data, otherwise testTdf109143
+        // in CppunitTest_vcl_pdfexport will fail.
+        if (fTools::equalZero(maImpl.get(2, 0)))
+            maImpl.set(2, 0, 0);
+        if (fTools::equalZero(maImpl.get(2, 1)))
+            maImpl.set(2, 1, 0);
+        if (fTools::equal(1.0, maImpl.get(2, 2)))
+            maImpl.set(2, 2, 1);
+
+        return true;
     }
 
     B2DHomMatrix& B2DHomMatrix::operator+=(const B2DHomMatrix& rMat)
