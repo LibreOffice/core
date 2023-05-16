@@ -49,6 +49,7 @@
 #include <tools/color.hxx>
 #include <vcl/mapmod.hxx>
 #include <svx/EnhancedCustomShape2d.hxx>
+#include <basegfx/utils/bgradient.hxx>
 
 class Graphic;
 class SdrObjCustomShape;
@@ -368,16 +369,16 @@ public:
     void WriteGradientFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
 
     /* New API for WriteGradientFill:
-       If a awt::Gradient2 is given, it will be used. Else, the 'Fix' entry will be used for
+       If a BGradient is given, it will be used. Else, the 'Fix' entry will be used for
        Color or Transparency. That way, less Pseudo(Color|Transparency)Gradients have to be
        created at caller side.
        NOTE: Giving no Gradient at all (both nullptr) is an error.
     */
     void WriteGradientFill(
-        const css::awt::Gradient2* pColorGradient, sal_Int32 nFixColor,
-        const css::awt::Gradient2* pTransparenceGradient, double fFixTransparence = 0.0);
+        const basegfx::BGradient* pColorGradient, sal_Int32 nFixColor,
+        const basegfx::BGradient* pTransparenceGradient, double fFixTransparence = 0.0);
 
-    void WriteGrabBagGradientFill( const css::uno::Sequence< css::beans::PropertyValue >& aGradientStops, const css::awt::Gradient2& rGradient);
+    void WriteGrabBagGradientFill( const css::uno::Sequence< css::beans::PropertyValue >& aGradientStops, const basegfx::BGradient& rGradient);
 
     void WriteBlipOrNormalFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
             const OUString& rURLPropName );

@@ -135,6 +135,8 @@ public:
     {
     }
     BColorStops(const css::awt::ColorStopSequence& rColorStops);
+
+    // needs true == rVal.has<css::awt::ColorStopSequence>()
     BColorStops(const css::uno::Any& rVal);
 
     // constuctor with two colors to explicitly create a
@@ -265,6 +267,7 @@ public:
 
 class BASEGFX_DLLPUBLIC BGradient final
 {
+private:
     css::awt::GradientStyle eStyle;
 
     // MCGS: ColorStops in the range [0.0 .. 1.0], including StartColor/EndColor
@@ -279,6 +282,7 @@ class BASEGFX_DLLPUBLIC BGradient final
     sal_uInt16 nStepCount;
 
     static std::string GradientStyleToString(css::awt::GradientStyle eStyle);
+    void setGradient2(const css::awt::Gradient2& rGradient2);
 
 public:
     BGradient();
@@ -288,6 +292,8 @@ public:
               sal_uInt16 nBorder = 0, sal_uInt16 nStartIntens = 100, sal_uInt16 nEndIntens = 100,
               sal_uInt16 nSteps = 0);
     BGradient(const css::awt::Gradient2& rGradient2);
+
+    // needs true == (rVal.has<css::awt::Gradient>() || rVal.has<css::awt::Gradient2>())
     BGradient(const css::uno::Any& rVal);
 
     bool operator==(const BGradient& rGradient) const;

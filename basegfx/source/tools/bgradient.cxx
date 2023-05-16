@@ -94,10 +94,12 @@ BColorStops::BColorStops(const css::awt::ColorStopSequence& rColorStops)
 
 BColorStops::BColorStops(const css::uno::Any& rVal)
 {
-    css::awt::Gradient2 aGradient2;
-    if (rVal >>= aGradient2)
+    if (rVal.has<css::awt::ColorStopSequence>())
     {
-        setColorStopSequence(aGradient2.ColorStops);
+        // we can use awt::ColorStopSequence
+        css::awt::ColorStopSequence aColorStopSequence;
+        rVal >>= aColorStopSequence;
+        setColorStopSequence(aColorStopSequence);
     }
 }
 
@@ -627,7 +629,7 @@ BGradient::BGradient(const basegfx::BColorStops& rColorStops, css::awt::Gradient
     SetColorStops(aColorStops);
 }
 
-BGradient::BGradient(const css::awt::Gradient2& rGradient2)
+void BGradient::setGradient2(const css::awt::Gradient2& rGradient2)
 {
     // set values
     SetGradientStyle(rGradient2.Style);
@@ -640,9 +642,23 @@ BGradient::BGradient(const css::awt::Gradient2& rGradient2)
     SetSteps(rGradient2.StepCount);
 
     // set ColorStops
-    aColorStops = BColorStops(rGradient2.ColorStops);
-    aColorStops.sortAndCorrect();
+    if (rGradient2.ColorStops.hasElements())
+    {
+        // if we have a awt::ColorStopSequence, use it
+        aColorStops = BColorStops(rGradient2.ColorStops);
+        aColorStops.sortAndCorrect();
+    }
+    else
+    {
+        // if not, for compatibility, use StartColor/EndColor
+        aColorStops = BColorStops{
+            BColorStop(0.0, ColorToBColorConverter(rGradient2.StartColor).getBColor()),
+            BColorStop(1.0, ColorToBColorConverter(rGradient2.EndColor).getBColor())
+        };
+    }
 }
+
+BGradient::BGradient(const css::awt::Gradient2& rGradient2) { setGradient2(rGradient2); }
 
 BGradient::BGradient(const css::uno::Any& rVal)
     : BGradient()
@@ -653,19 +669,7 @@ BGradient::BGradient(const css::uno::Any& rVal)
         css::awt::Gradient2 aGradient2;
         rVal >>= aGradient2;
 
-        // set values
-        SetGradientStyle(aGradient2.Style);
-        SetAngle(Degree10(aGradient2.Angle));
-        SetBorder(aGradient2.Border);
-        SetXOffset(aGradient2.XOffset);
-        SetYOffset(aGradient2.YOffset);
-        SetStartIntens(aGradient2.StartIntensity);
-        SetEndIntens(aGradient2.EndIntensity);
-        SetSteps(aGradient2.StepCount);
-
-        // set ColorStops
-        aColorStops = BColorStops(aGradient2.ColorStops);
-        aColorStops.sortAndCorrect();
+        setGradient2(aGradient2);
     }
     else if (rVal.has<css::awt::Gradient>())
     {

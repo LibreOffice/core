@@ -558,29 +558,10 @@ uno::Any SvxUnoXGradientTable::getAny( const XPropertyEntry* pEntry ) const noex
 
 std::unique_ptr<XPropertyEntry> SvxUnoXGradientTable::createEntry(const OUString& rName, const uno::Any& rAny) const
 {
-    awt::Gradient aGradient;
-    if(!(rAny >>= aGradient))
+    if (!rAny.has<css::awt::Gradient>() || !rAny.has<css::awt::Gradient2>())
         return std::unique_ptr<XPropertyEntry>();
 
-    basegfx::BGradient aBGradient(
-        basegfx::BColorStops(
-            Color(ColorTransparency, aGradient.StartColor).getBColor(),
-            Color(ColorTransparency, aGradient.EndColor).getBColor()));
-
-    aBGradient.SetGradientStyle( aGradient.Style );
-    aBGradient.SetAngle( Degree10(aGradient.Angle) );
-    aBGradient.SetBorder( aGradient.Border );
-    aBGradient.SetXOffset( aGradient.XOffset );
-    aBGradient.SetYOffset( aGradient.YOffset );
-    aBGradient.SetStartIntens( aGradient.StartIntensity );
-    aBGradient.SetEndIntens( aGradient.EndIntensity );
-    aBGradient.SetSteps( aGradient.StepCount );
-
-    // check if we have a awt::Gradient2 with a ColorStopSequence
-    const basegfx::BColorStops aColorStops(rAny);
-    if (!aColorStops.empty())
-        aBGradient.SetColorStops(aColorStops);
-
+    const basegfx::BGradient aBGradient(rAny);
     return std::make_unique<XGradientEntry>(aBGradient, rName);
 }
 
