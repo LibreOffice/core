@@ -1462,11 +1462,13 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                 case NF_SYMBOLTYPE_PERCENT:
                     if (pElemStr)
                     {
-                        if ( ( nPrevType == NF_KEY_S || nPrevType == NF_KEY_SS ) &&
-                             ( nElemType == NF_SYMBOLTYPE_TIME100SECSEP ) &&
+                        if ( ( nElemType == NF_SYMBOLTYPE_TIME100SECSEP ) &&
+                             ( nPrevType == NF_KEY_S || nPrevType == NF_KEY_SS ||
+                               ( nPos > 0 && (*rFormat.GetNumForString( nPart, nPos-1 ))[0] == ']' &&
+                               ( nFmtType == SvNumFormatType::TIME || nFmtType == SvNumFormatType::DATETIME ) ) ) &&
                              nPrecision > 0 )
                         {
-                            //  decimal separator after seconds is implied by
+                            //  decimal separator after seconds or [SS] is implied by
                             //  "decimal-places" attribute and must not be written
                             //  as text element
                             //! difference between '.' and ',' is lost here

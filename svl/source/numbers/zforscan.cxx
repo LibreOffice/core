@@ -1467,6 +1467,11 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                     }
                     else if (pLoc->getTime100SecSep() == sStrArray[i])
                         bDecSep = true;
+                    else if ( sStrArray[i][0] == ']' && i < nStringsCnt - 1 && pLoc->getTime100SecSep() == sStrArray[i+1] )
+                    {
+                        bDecSep = true;
+                        i++;
+                    }
                 }
                 eNewType = SvNumFormatType::UNDEFINED;
                 break;
@@ -2592,6 +2597,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                         bDecSep = true;
                         nTypeArray[i] = NF_SYMBOLTYPE_DIGIT;
                         OUString& rStr = sStrArray[i];
+
                         nCounter++;
                         i++;
                         while (i < nStringsCnt &&

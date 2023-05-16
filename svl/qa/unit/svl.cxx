@@ -1728,6 +1728,23 @@ void Test::testUserDefinedNumberFormats()
         sExpected = "1900-01-02 23:53.605";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
+    {   // tdf#150028 decimals of seconds fraction withtout truncate on overflow
+        sCode =     "[SS]";
+        sExpected = "271434";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        // One decimal.
+        sCode =     "[SS].0";
+        sExpected = "271433.6";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        // Two decimals.
+        sCode =     "[SS].00";
+        sExpected = "271433.61";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        // Three decimals.
+        sCode =     "[SS].000";
+        sExpected = "271433.605";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+    }
     {   // tdf#33689 use English NfKeywords in non-English language
         eLang = LANGUAGE_DUTCH;
         sExpected = "Dutch: 1900/01/02 03:23:53";

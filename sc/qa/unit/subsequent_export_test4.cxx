@@ -1460,24 +1460,34 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf148820)
 
 namespace
 {
-void lcl_TestEmbeddedTextInDecimal(ScDocument& rDoc)
+void lcl_TestNumberFormat(ScDocument& rDoc, const OUString& rFormatStrOK)
 {
     sal_uInt32 nNumberFormat = rDoc.GetNumberFormat(0, 0, 0);
     const SvNumberformat* pNumberFormat = rDoc.GetFormatTable()->GetEntry(nNumberFormat);
     const OUString& rFormatStr = pNumberFormat->GetFormatstring();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("#,##0.000\" \"###\" \"###"), rFormatStr);
+    CPPUNIT_ASSERT_EQUAL(rFormatStrOK, rFormatStr);
 }
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testSecondsWithoutTruncateAndDecimals)
+{
+    createScDoc("xlsx/seconds-without-truncate-and-decimals.xlsx");
+    lcl_TestNumberFormat(*getScDoc(), "[SS].00");
+
+    // save to ODS and reload
+    saveAndReload("calc8");
+    lcl_TestNumberFormat(*getScDoc(), "[SS].00");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testEmbeddedTextInDecimal)
 {
     createScDoc("xlsx/embedded-text-in-decimal.xlsx");
-    lcl_TestEmbeddedTextInDecimal(*getScDoc());
+    lcl_TestNumberFormat(*getScDoc(), "#,##0.000\" \"###\" \"###");
 
     // save to ODS and reload
     saveAndReload("calc8");
-    lcl_TestEmbeddedTextInDecimal(*getScDoc());
+    lcl_TestNumberFormat(*getScDoc(), "#,##0.000\" \"###\" \"###");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testTotalsRowFunction)
