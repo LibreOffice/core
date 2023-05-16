@@ -1137,7 +1137,6 @@ void ScColumn::DeleteArea(
 
     if ( nDelFlag & InsertDeleteFlags::EDITATTR )
     {
-        OSL_ENSURE( nContFlag == InsertDeleteFlags::NONE, "DeleteArea: Wrong Flags" );
         RemoveEditAttribs(aBlockPos, nStartRow, nEndRow);
     }
 
