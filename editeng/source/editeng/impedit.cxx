@@ -524,8 +524,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
 
     bool bStartHandleVisible = false;
     bool bEndHandleVisible = false;
-    bool bLOKCalcRTL = mpLOKSpecialPositioning &&
-        (mpLOKSpecialPositioning->IsLayoutRTL() || pEditEngine->IsRightToLeft(nStartPara));
+    bool bLOKCalcRTL = mpLOKSpecialPositioning && pEditEngine->IsRightToLeft(nStartPara);
 
     auto DrawHighlight = [&, nStartLine = sal_Int32(0), nEndLine = sal_Int32(0)](
                              const ImpEditEngine::LineAreaInfo& rInfo) mutable {
@@ -1356,7 +1355,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                 Point aRefPointLogical = GetOutputArea().TopLeft();
                 // Get the relative coordinates w.r.t refpoint in display hmm.
                 aCursorRectPureLogical.Move(-aRefPointLogical.X(), -aRefPointLogical.Y());
-                if (pEditEngine->IsRightToLeft(nPara) || mpLOKSpecialPositioning->IsLayoutRTL())
+                if (pEditEngine->IsRightToLeft(nPara))
                 {
                     tools::Long nMirrorW = GetOutputArea().GetWidth();
                     tools::Long nLeft = aCursorRectPureLogical.Left(), nRight = aCursorRectPureLogical.Right();
