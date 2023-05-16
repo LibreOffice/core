@@ -6211,22 +6211,16 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  std::optional< sal_Int16 >& rS
     GetAttrib(PPT_ParaAttr_BulletOn, nIsBullet2, nDestinationInstance);
     GetAttrib(PPT_ParaAttr_TextOfs, _nTextOfs, nDestinationInstance);
     GetAttrib(PPT_ParaAttr_BulletOfs, _nBulletOfs, nDestinationInstance);
+    SvxLRSpaceItem aLRSpaceItem( EE_PARA_LRSPACE );
     if ( !nIsBullet2 )
     {
-        SvxLRSpaceItem aLRSpaceItem( EE_PARA_LRSPACE );
         auto const nAbsLSpace = convertMasterUnitToMm100(_nTextOfs);
         auto const nFirstLineOffset = nAbsLSpace - convertMasterUnitToMm100(_nBulletOfs);
-        aLRSpaceItem.SetLeft( nAbsLSpace );
         aLRSpaceItem.SetTextFirstLineOffsetValue( -nFirstLineOffset );
-        rSet.Put( aLRSpaceItem );
+        aLRSpaceItem.SetTextLeft( nAbsLSpace );
     }
-    else
-    {
-        SvxLRSpaceItem aLRSpaceItem( EE_PARA_LRSPACE );
-        aLRSpaceItem.SetLeft( 0 );
-        aLRSpaceItem.SetTextFirstLineOffsetValue( 0 );
-        rSet.Put( aLRSpaceItem );
-    }
+    rSet.Put( aLRSpaceItem );
+
     if ( GetAttrib( PPT_ParaAttr_Adjust, nVal, nDestinationInstance ) )
     {
         if ( nVal <= 3 )
