@@ -1929,15 +1929,13 @@ void SwRootFrame::StartAllAction()
         }
 }
 
-void SwRootFrame::EndAllAction( bool bVirDev )
+void SwRootFrame::EndAllAction()
 {
     if ( !GetCurrShell() )
         return;
 
     for(SwViewShell& rSh : GetCurrShell()->GetRingContainer())
     {
-        const bool bOldEndActionByVirDev = rSh.IsEndActionByVirDev();
-        rSh.SetEndActionByVirDev( bVirDev );
         if ( auto pCursorShell = dynamic_cast<SwCursorShell*>( &rSh) )
         {
             pCursorShell->EndAction();
@@ -1947,7 +1945,6 @@ void SwRootFrame::EndAllAction( bool bVirDev )
         }
         else
             rSh.EndAction();
-        rSh.SetEndActionByVirDev( bOldEndActionByVirDev );
     }
 }
 

@@ -2683,10 +2683,7 @@ SwViewShell *SwHTMLParser::CallEndAction( bool bChkAction, bool bChkPtr )
         // Already scrolled?, then make sure that the view doesn't move!
         const bool bOldLock = m_pActionViewShell->IsViewLocked();
         m_pActionViewShell->LockView( true );
-        const bool bOldEndActionByVirDev = m_pActionViewShell->IsEndActionByVirDev();
-        m_pActionViewShell->SetEndActionByVirDev( true );
         pEditShell->EndAction();
-        m_pActionViewShell->SetEndActionByVirDev( bOldEndActionByVirDev );
         m_pActionViewShell->LockView( bOldLock );
 
         // bChkJumpMark is only set when the object was also found

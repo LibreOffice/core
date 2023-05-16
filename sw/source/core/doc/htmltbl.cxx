@@ -1684,8 +1684,8 @@ void SwHTMLTableLayout::Resize_( sal_uInt16 nAbsAvail, bool bRecalc )
     // Else we can set the widths, in which we have to run Pass 2 in each case.
     SetWidths( true, nAbsAvail );
 
-    if ( pRoot && pRoot->IsCallbackActionEnabled() )
-        pRoot->EndAllAction( true );    //True per VirDev (browsing is calmer)
+    if (pRoot && pRoot->IsCallbackActionEnabled())
+        pRoot->EndAllAction();
 }
 
 IMPL_LINK_NOARG( SwHTMLTableLayout, DelayedResize_Impl, Timer*, void )

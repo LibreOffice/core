@@ -168,8 +168,7 @@ SwViewShell::SwViewShell( SwDoc& rDocument, vcl::Window *pWindow,
     // <SwDrawContact::Changed> during construction of <SwViewShell> instance
     mbInConstructor = true;
 
-    mbPaintInProgress = mbViewLocked = mbInEndAction = mbFrameView =
-    mbEndActionByVirDev = false;
+    mbPaintInProgress = mbViewLocked = mbInEndAction = mbFrameView = false;
     mbPaintWorks = mbEnableSmooth = true;
     mbPreview = 0 !=( VSHELLFLAG_ISPREVIEW & nFlags );
 
@@ -238,8 +237,7 @@ SwViewShell::SwViewShell( SwViewShell& rShell, vcl::Window *pWindow,
     mbInConstructor = true;
 
     mbPaintWorks = mbEnableSmooth = true;
-    mbPaintInProgress = mbViewLocked = mbInEndAction = mbFrameView =
-    mbEndActionByVirDev = false;
+    mbPaintInProgress = mbViewLocked = mbInEndAction = mbFrameView = false;
     mbPreview = 0 !=( VSHELLFLAG_ISPREVIEW & nFlags );
 
     if( nFlags & VSHELLFLAG_SHARELAYOUT )

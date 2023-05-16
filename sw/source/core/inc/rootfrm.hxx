@@ -223,7 +223,7 @@ public:
      * automatically in the EndAllAction.
      */
     void StartAllAction();
-    void EndAllAction( bool bVirDev = false );
+    void EndAllAction();
 
     /**
      * Certain UNO Actions (e.g. table cursor) require that all Actions are reset temporarily

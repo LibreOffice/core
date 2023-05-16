@@ -337,71 +337,12 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                 oRegion->LimitToOrigin();
                 oRegion->Compress( SwRegionRects::CompressFuzzy );
 
-                ScopedVclPtr<VirtualDevice> pVout;
                 while ( !oRegion->empty() )
                 {
                     SwRect aRect( oRegion->back() );
                     oRegion->pop_back();
 
-                    bool bPaint = true;
-                    if ( IsEndActionByVirDev() )
-                    {
-                        //create virtual device and set.
-                        if ( !pVout )
-                            pVout = VclPtr<VirtualDevice>::Create( *GetOut() );
-                        MapMode aMapMode( GetOut()->GetMapMode() );
-                        pVout->SetMapMode( aMapMode );
-
-                        bool bSizeOK = true;
-
-                        tools::Rectangle aTmp1( aRect.SVRect() );
-                        aTmp1 = GetOut()->LogicToPixel( aTmp1 );
-                        tools::Rectangle aTmp2( GetOut()->PixelToLogic( aTmp1 ) );
-                        if ( aTmp2.Left() > aRect.Left() )
-                            aTmp1.SetLeft( std::max( tools::Long(0), aTmp1.Left() - 1 ) );
-                        if ( aTmp2.Top() > aRect.Top() )
-                            aTmp1.SetTop( std::max<tools::Long>( 0, aTmp1.Top() - 1 ) );
-                        aTmp1.AdjustRight(1 );
-                        aTmp1.AdjustBottom(1 );
-                        aTmp1 = GetOut()->PixelToLogic( aTmp1 );
-                        aRect = SwRect( aTmp1 );
-
-                        const Size aTmp( pVout->GetOutputSize() );
-                        if ( aTmp.Height() < aRect.Height() ||
-                             aTmp.Width()  < aRect.Width() )
-                        {
-                            bSizeOK = pVout->SetOutputSize( aRect.SSize() );
-                        }
-                        if ( bSizeOK )
-                        {
-                            bPaint = false;
-
-                            // --> OD 2007-07-26 #i79947#
-                            // #i72754# start Pre/PostPaint encapsulation before mpOut is changed to the buffering VDev
-                            const vcl::Region aRepaintRegion(aRect.SVRect());
-                            DLPrePaint2(aRepaintRegion);
-                            // <--
-
-                            OutputDevice  *pOld = GetOut();
-                            pVout->SetLineColor( pOld->GetLineColor() );
-                            pVout->SetFillColor( pOld->GetFillColor() );
-                            Point aOrigin( aRect.Pos() );
-                            aOrigin.setX( -aOrigin.X() ); aOrigin.setY( -aOrigin.Y() );
-                            aMapMode.SetOrigin( aOrigin );
-                            pVout->SetMapMode( aMapMode );
-
-                            mpOut = pVout.get();
-                            if ( bPaintsFromSystem )
-                                PaintDesktop(*mpOut, aRect);
-                            pCurrentLayout->PaintSwFrame( *mpOut, aRect );
-                            pOld->DrawOutDev( aRect.Pos(), aRect.SSize(),
-                                              aRect.Pos(), aRect.SSize(), *pVout );
-                            mpOut = pOld;
-
-                            // #i72754# end Pre/PostPaint encapsulation when mpOut is back and content is painted
-                            DLPostPaint2(true);
-                        }
-                    }
+                    const bool bPaint = true;
                     if ( bPaint )
                     {
                         if (GetWin()->SupportsDoubleBuffering())
