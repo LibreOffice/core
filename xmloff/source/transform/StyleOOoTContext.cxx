@@ -49,42 +49,38 @@ using namespace ::com::sun::star::xml::sax;
 
 const sal_uInt16 MAX_PROP_TYPES = 4;
 #define ENTRY4(a,b,c,d) \
-    { XML_PROP_TYPE_##a, XML_PROP_TYPE_##b, \
-        XML_PROP_TYPE_##c, XML_PROP_TYPE_##d  }
+    { a, b, c, d  }
 #define ENTRY3(a,b,c) \
-    { XML_PROP_TYPE_##a, XML_PROP_TYPE_##b,  \
-        XML_PROP_TYPE_##c, XML_PROP_TYPE_END }
+    { a, b, c, XML_PROP_TYPE_END }
 #define ENTRY2(a,b) \
-    { XML_PROP_TYPE_##a, XML_PROP_TYPE_##b, \
-        XML_PROP_TYPE_END, XML_PROP_TYPE_END }
+    { a, b, XML_PROP_TYPE_END, XML_PROP_TYPE_END }
 #define ENTRY1(a) \
-    { XML_PROP_TYPE_##a, XML_PROP_TYPE_##END, \
-        XML_PROP_TYPE_END, XML_PROP_TYPE_END }
+    { a, XML_PROP_TYPE_END, XML_PROP_TYPE_END, XML_PROP_TYPE_END }
 
 const std::array<XMLPropType,MAX_PROP_TYPES> aPropTypes[XML_FAMILY_TYPE_END] =
 {
-    ENTRY3( GRAPHIC, PARAGRAPH, TEXT ),         // XML_FAMILY_TYPE_GRAPHIC,
-    ENTRY3( GRAPHIC, PARAGRAPH, TEXT ),         // XML_FAMILY_TYPE_PRESENTATION,
-    ENTRY1( DRAWING_PAGE ),                     // XML_FAMILY_TYPE_DRAWING_PAGE,
-    ENTRY1( END ),                              // XML_FAMILY_TYPE_MASTER_PAGE
-    ENTRY1( PAGE_LAYOUT ),                      // XML_FAMILY_TYPE_PAGE_LAYOUT,
-    ENTRY1( HEADER_FOOTER ),                    // XML_FAMILY_TYPE_HEADER_FOOTER
-    ENTRY1( TEXT ),                             // XML_FAMILY_TYPE_TEXT,
-    ENTRY2( PARAGRAPH, TEXT ),                  // XML_FAMILY_TYPE_PARAGRAPH,
-    ENTRY1( RUBY ),                             //XML_FAMILY_TYPE_RUBY,
-    ENTRY1( SECTION ),                          // XML_FAMILY_TYPE_SECTION,
-    ENTRY1( TABLE ),                            // XML_FAMILY_TYPE_TABLE,
-    ENTRY1( TABLE_COLUMN ),                     // XML_FAMILY_TYPE_TABLE_COLUMN,
-    ENTRY1( TABLE_ROW ),                        // XML_FAMILY_TYPE_TABLE_ROW,
-    ENTRY3( TABLE_CELL, PARAGRAPH, TEXT ),      // XML_FAMILY_TYPE_TABLE_CELL,
-    ENTRY1( LIST_LEVEL ),                       // XML_FAMILY_TYPE_LIST,
-    ENTRY4( CHART, GRAPHIC, PARAGRAPH, TEXT ),  // XML_FAMILY_TYPE_CHART,
-    ENTRY1( TEXT ),                             // XML_FAMILY_TYPE_DATA,
-    ENTRY1( END ),                              // XML_FAMILY_TYPE_GRADIENT,
-    ENTRY1( END ),                              // XML_FAMILY_TYPE_HATCH,
-    ENTRY1( END ),                              // XML_FAMILY_TYPE_FILL_IMAGE,
-    ENTRY1( END ),                              // XML_FAMILY_TYPE_STROKE_DASH,
-    ENTRY1( END ),                              // XML_FAMILY_TYPE_MARKER,
+    ENTRY3( XML_PROP_TYPE_GRAPHIC, XML_PROP_TYPE_PARAGRAPH, XML_PROP_TYPE_TEXT ), // XML_FAMILY_TYPE_GRAPHIC,
+    ENTRY3( XML_PROP_TYPE_GRAPHIC, XML_PROP_TYPE_PARAGRAPH, XML_PROP_TYPE_TEXT ), // XML_FAMILY_TYPE_PRESENTATION,
+    ENTRY1( XML_PROP_TYPE_DRAWING_PAGE ),                     // XML_FAMILY_TYPE_DRAWING_PAGE,
+    ENTRY1( XML_PROP_TYPE_END ),                              // XML_FAMILY_TYPE_MASTER_PAGE
+    ENTRY1( XML_PROP_TYPE_PAGE_LAYOUT ),                      // XML_FAMILY_TYPE_PAGE_LAYOUT,
+    ENTRY1( XML_PROP_TYPE_HEADER_FOOTER ),                    // XML_FAMILY_TYPE_HEADER_FOOTER
+    ENTRY1( XML_PROP_TYPE_TEXT ),                             // XML_FAMILY_TYPE_TEXT,
+    ENTRY2( XML_PROP_TYPE_PARAGRAPH, XML_PROP_TYPE_TEXT ),    // XML_FAMILY_TYPE_PARAGRAPH,
+    ENTRY1( XML_PROP_TYPE_RUBY ),                             // XML_FAMILY_TYPE_RUBY,
+    ENTRY1( XML_PROP_TYPE_SECTION ),                          // XML_FAMILY_TYPE_SECTION,
+    ENTRY1( XML_PROP_TYPE_TABLE ),                            // XML_FAMILY_TYPE_TABLE,
+    ENTRY1( XML_PROP_TYPE_TABLE_COLUMN ),                     // XML_FAMILY_TYPE_TABLE_COLUMN,
+    ENTRY1( XML_PROP_TYPE_TABLE_ROW ),                        // XML_FAMILY_TYPE_TABLE_ROW,
+    ENTRY3( XML_PROP_TYPE_TABLE_CELL, XML_PROP_TYPE_PARAGRAPH, XML_PROP_TYPE_TEXT ), // XML_FAMILY_TYPE_TABLE_CELL,
+    ENTRY1( XML_PROP_TYPE_LIST_LEVEL ),                       // XML_FAMILY_TYPE_LIST,
+    ENTRY4( XML_PROP_TYPE_CHART, XML_PROP_TYPE_GRAPHIC, XML_PROP_TYPE_PARAGRAPH, XML_PROP_TYPE_TEXT ), // XML_FAMILY_TYPE_CHART,
+    ENTRY1( XML_PROP_TYPE_TEXT ),                             // XML_FAMILY_TYPE_DATA,
+    ENTRY1( XML_PROP_TYPE_END ),                              // XML_FAMILY_TYPE_GRADIENT,
+    ENTRY1( XML_PROP_TYPE_END ),                              // XML_FAMILY_TYPE_HATCH,
+    ENTRY1( XML_PROP_TYPE_END ),                              // XML_FAMILY_TYPE_FILL_IMAGE,
+    ENTRY1( XML_PROP_TYPE_END ),                              // XML_FAMILY_TYPE_STROKE_DASH,
+    ENTRY1( XML_PROP_TYPE_END ),                              // XML_FAMILY_TYPE_MARKER,
 };
 
 const XMLTokenEnum aPropTokens[XML_PROP_TYPE_END] =
