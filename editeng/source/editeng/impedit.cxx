@@ -2746,10 +2746,4 @@ bool ImpEditView::HasLOKSpecialPositioning() const
     return bool(mpLOKSpecialPositioning);
 }
 
-void ImpEditView::SetLOKSpecialFlags(LOKSpecialFlags eFlags)
-{
-    assert(mpLOKSpecialPositioning);
-    mpLOKSpecialPositioning->SetFlags(eFlags);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

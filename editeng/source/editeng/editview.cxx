@@ -1730,11 +1730,6 @@ bool EditView::HasLOKSpecialPositioning() const
     return pImpEditView->HasLOKSpecialPositioning();
 }
 
-void EditView::SetLOKSpecialFlags(LOKSpecialFlags eFlags)
-{
-    pImpEditView->SetLOKSpecialFlags(eFlags);
-}
-
 void EditView::SuppressLOKMessages(bool bSet)
 {
     pImpEditView->SuppressLOKMessages(bSet);
