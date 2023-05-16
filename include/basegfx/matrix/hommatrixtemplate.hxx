@@ -45,18 +45,16 @@ namespace basegfx::internal
             {
             }
 
-            explicit ImplMatLine(sal_uInt16 nRow, ImplMatLine< RowSize >* pToBeCopied)
+            explicit ImplMatLine(const ImplMatLine< RowSize >& rToBeCopied)
             {
-                if(pToBeCopied)
+                memcpy(&mfValue, &rToBeCopied, sizeof(double) * RowSize);
+            }
+
+            explicit ImplMatLine(sal_uInt16 nRow)
+            {
+                for(sal_uInt16 a(0); a < RowSize; a++)
                 {
-                    memcpy(&mfValue, pToBeCopied, sizeof(double) * RowSize);
-                }
-                else
-                {
-                    for(sal_uInt16 a(0); a < RowSize; a++)
-                    {
-                        mfValue[a] = implGetDefaultValue(nRow, a);
-                    }
+                    mfValue[a] = implGetDefaultValue(nRow, a);
                 }
             }
 
@@ -128,7 +126,7 @@ namespace basegfx::internal
                     mpLine.reset();
                     if(rToBeCopied.mpLine)
                     {
-                        mpLine.reset( new ImplMatLine< RowSize >((RowSize - 1), rToBeCopied.mpLine.get()) );
+                        mpLine.reset( new ImplMatLine< RowSize >( *rToBeCopied.mpLine ) );
                     }
                 }
                 return *this;
@@ -167,7 +165,7 @@ namespace basegfx::internal
 
                     if(!::basegfx::fTools::equal(fDefault, rValue))
                     {
-                        mpLine.reset(new ImplMatLine< RowSize >((RowSize - 1), nullptr));
+                        mpLine.reset(new ImplMatLine< RowSize >((RowSize - 1)));
                         mpLine->set(nColumn, rValue);
                     }
                 }
