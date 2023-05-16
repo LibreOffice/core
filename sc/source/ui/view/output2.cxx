@@ -249,7 +249,8 @@ void ScDrawStringsVars::SetShrinkScale( tools::Long nScale, SvtScriptType nScrip
     if ( !bPixelToLogic )
         aFraction *= pOutput->aZoomY;
     vcl::Font aTmpFont;
-    pPattern->GetFont( aTmpFont, SC_AUTOCOL_RAW, pFmtDevice, &aFraction, pCondSet, nScript );
+    pPattern->fillFontOnly(aTmpFont, pFmtDevice, &aFraction, pCondSet, nScript);
+    // only need font height
     tools::Long nNewHeight = aTmpFont.GetFontHeight();
     if ( nNewHeight > 0 )
         aFont.SetFontHeight( nNewHeight );
@@ -331,12 +332,11 @@ void ScDrawStringsVars::SetPattern(
     else
         eColorMode = SC_AUTOCOL_PRINT;
 
-    if ( bPixelToLogic )
-        pPattern->GetFont( aFont, eColorMode, pFmtDevice, nullptr, pCondSet, nScript,
-                            &aBackConfigColor, &aTextConfigColor );
+    if (bPixelToLogic)
+        pPattern->fillFont(aFont, eColorMode, pFmtDevice, nullptr, pCondSet, nScript, &aBackConfigColor, &aTextConfigColor);
     else
-        pPattern->GetFont( aFont, eColorMode, pFmtDevice, &pOutput->aZoomY, pCondSet, nScript,
-                            &aBackConfigColor, &aTextConfigColor );
+        pPattern->fillFont(aFont, eColorMode, pFmtDevice, &pOutput->aZoomY, pCondSet, nScript, &aBackConfigColor, &aTextConfigColor );
+
     aFont.SetAlignment(ALIGN_BASELINE);
 
     // orientation

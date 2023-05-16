@@ -708,7 +708,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124820)
 
     vcl::Font aFont;
     const ScPatternAttr* pPattern = pDoc->GetPattern(1, 1, 0);
-    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    pPattern->fillFontOnly(aFont);
 
     // Without the fix in place, this test would have failed here
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be striked out", STRIKEOUT_SINGLE,
@@ -1674,7 +1674,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteTransposed)
     CPPUNIT_ASSERT_MESSAGE("There should be a note on A1", pDoc->HasNote(ScAddress(0, 0, 0)));
     const ScPatternAttr* pPattern = pDoc->GetPattern(0, 1, 0);
     vcl::Font aFont;
-    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    pPattern->fillFontOnly(aFont);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
 
     goToCell("A1:A3");
@@ -1700,7 +1700,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteTransposed)
     CPPUNIT_ASSERT_EQUAL(OUString("Note in A1"), pDoc->GetNote(ScAddress(0, 0, 0))->GetText());
 
     pPattern = pDoc->GetPattern(1, 0, 0);
-    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    pPattern->fillFontOnly(aFont);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
 }
 
@@ -1729,7 +1729,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteAsLink)
     CPPUNIT_ASSERT_MESSAGE("There should be a note on A1", pDoc->HasNote(ScAddress(0, 0, 0)));
     const ScPatternAttr* pPattern = pDoc->GetPattern(0, 1, 0);
     vcl::Font aFont;
-    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    pPattern->fillFontOnly(aFont);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
 
     goToCell("A1:A3");
@@ -1752,7 +1752,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteAsLink)
     CPPUNIT_ASSERT_MESSAGE("There should be no note on C1", !pDoc->HasNote(ScAddress(2, 0, 0)));
 
     pPattern = pDoc->GetPattern(2, 1, 0);
-    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    pPattern->fillFontOnly(aFont);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be normal (cell attributes should not be copied)",
                                  WEIGHT_NORMAL, aFont.GetWeight());
 }

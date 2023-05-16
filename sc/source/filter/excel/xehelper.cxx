@@ -388,7 +388,9 @@ XclExpStringRef lclCreateFormattedString(
             nScript = nLastScript;
 
         // construct font from current text portion
-        SvxFont aFont( XclExpFontHelper::GetFontFromItemSet( rRoot, rItemSet, nScript ) );
+        SvxFont aFont(XclExpFontHelper::GetFontFromItemSet(rRoot, rItemSet, nScript));
+        Color aColor;
+        ScPatternAttr::fillColor(aColor, rItemSet, SC_AUTOCOL_RAW);
 
         // Excel start position of this portion
         sal_Int32 nXclPortionStart = xString->Len();
@@ -397,7 +399,7 @@ XclExpStringRef lclCreateFormattedString(
         if( nXclPortionStart < xString->Len() )
         {
             // insert font into buffer
-            sal_uInt16 nFontIdx = rFontBuffer.Insert( aFont, EXC_COLOR_CELLTEXT );
+            sal_uInt16 nFontIdx = rFontBuffer.Insert(aFont, aColor, EXC_COLOR_CELLTEXT);
             // insert font index into format run vector
             xString->AppendFormat( nXclPortionStart, nFontIdx );
         }
@@ -500,17 +502,20 @@ XclExpStringRef lclCreateFormattedString(
                 sal_Int16 nScript = xBreakIt->getScriptType( aXclPortionText, 0 );
                 if( nScript == ApiScriptType::WEAK )
                     nScript = nLastScript;
-                SvxFont aFont( XclExpFontHelper::GetFontFromItemSet( rRoot, aItemSet, nScript ) );
+                SvxFont aFont( XclExpFontHelper::GetFontFromItemSet(rRoot, aItemSet, nScript));
+                Color aColor;
+                ScPatternAttr::fillColor(aColor, aItemSet, SC_AUTOCOL_RAW);
+
                 nLastScript = nScript;
 
                 // add escapement
                 aFont.SetEscapement( nEsc );
                 // modify automatic font color for hyperlinks
-                if( bIsHyperlink && aItemSet.Get( ATTR_FONT_COLOR ).GetValue() == COL_AUTO)
-                    aFont.SetColor( COL_LIGHTBLUE );
+                if (bIsHyperlink && aItemSet.Get(ATTR_FONT_COLOR).GetValue() == COL_AUTO)
+                    aColor = COL_LIGHTBLUE;
 
                 // insert font into buffer
-                sal_uInt16 nFontIdx = rFontBuffer.Insert( aFont, EXC_COLOR_CELLTEXT );
+                sal_uInt16 nFontIdx = rFontBuffer.Insert(aFont, aColor, EXC_COLOR_CELLTEXT);
                 // insert font index into format run vector
                 xString->AppendFormat( nXclPortionStart, nFontIdx );
             }
@@ -726,10 +731,12 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
 // --- font attributes ---
 
                 vcl::Font aFont;
+                Color aColor;
                 aItemSet.ClearItem();
                 SfxItemSet aEditSet( mrEE.GetAttribs( aSel ) );
                 ScPatternAttr::GetFromEditItemSet( aItemSet, aEditSet );
-                ScPatternAttr::GetFont( aFont, aItemSet, SC_AUTOCOL_RAW );
+                ScPatternAttr::fillFontOnly(aFont, aItemSet);
+                ScPatternAttr::fillColor(aColor, aItemSet, SC_AUTOCOL_RAW);
 
                 // font name and style
                 aNewData.maName = XclTools::GetXclFontName( aFont.GetFamilyName() );
@@ -782,7 +789,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                 }
 
                 // font color
-                aNewData.maColor = aFont.GetColor();
+                aNewData.maColor = aColor;
                 if ( !aFontData.maColor.IsRGBEqual( aNewData.maColor ) )
                 {
                     aParaText.append("&K" + aNewData.maColor.AsRGBHexString());

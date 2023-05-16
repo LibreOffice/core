@@ -1244,7 +1244,7 @@ CPPUNIT_TEST_FIXTURE(Test, testIteratorsUnallocatedColumnsAttributes)
     CPPUNIT_ASSERT_EQUAL(allocatedColsCount, m_pDoc->GetAllocatedColumnsCount(0));
     vcl::Font aFont;
     const ScPatternAttr* pattern = m_pDoc->GetPattern(m_pDoc->MaxCol(), 1, 0);
-    pattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    pattern->fillFontOnly(aFont);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
 
     // Test iterators.

@@ -2643,7 +2643,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 if ( !aChars.isEmpty() )
                 {
                     vcl::Font aFont;
-                    pTabViewShell->GetSelectionPattern()->GetFont( aFont, SC_AUTOCOL_BLACK, nullptr, nullptr, nullptr,
+                    pTabViewShell->GetSelectionPattern()->fillFontOnly(aFont, nullptr, nullptr, nullptr,
                                                                 pTabViewShell->GetSelectionScriptType() );
                     if ( !aFontName.isEmpty() )
                         aFont = vcl::Font( aFontName, Size(1,1) );
@@ -2657,9 +2657,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
 
                 // font color doesn't matter here
-                vcl::Font         aCurFont;
-                pTabViewShell->GetSelectionPattern()->GetFont( aCurFont, SC_AUTOCOL_BLACK, nullptr, nullptr, nullptr,
-                                                                pTabViewShell->GetSelectionScriptType() );
+                vcl::Font aCurFont;
+                pTabViewShell->GetSelectionPattern()->fillFontOnly(aCurFont, nullptr, nullptr, nullptr,
+                                                                pTabViewShell->GetSelectionScriptType());
 
                 SfxAllItemSet aSet( GetPool() );
                 aSet.Put( SfxBoolItem( FN_PARAM_1, false ) );
