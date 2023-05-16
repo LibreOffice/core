@@ -1731,14 +1731,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf95374)
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:ind", "start", "1136");
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testTdf108493)
+DECLARE_OOXMLEXPORT_TEST(testTdf108493, "tdf108493.docx")
 {
-    loadAndSave("tdf108493.docx");
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    // set in the paragraph
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:ind", "start", "709");
+    uno::Reference<beans::XPropertySet> xPara7(getParagraph(7), uno::UNO_QUERY);
+    // set in the paragraph (709 twips)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1251), getProperty<sal_Int32>(xPara7, "ParaLeftMargin"));
     // set in the numbering style (this was 0)
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:ind", "hanging", "709");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1251), getProperty<sal_Int32>(xPara7, "ParaFirstLineIndent"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf118691, "tdf118691.docx")
