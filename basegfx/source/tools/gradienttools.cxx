@@ -265,47 +265,6 @@ namespace basegfx
 
     namespace utils
     {
-        /// Tooling method to fill awt::Gradient2 from data contained in the given Any
-        bool fillGradient2FromAny(css::awt::Gradient2& rGradient, const css::uno::Any& rVal)
-        {
-            bool bRetval(false);
-
-            if (rVal.has< css::awt::Gradient2 >())
-            {
-                // we can use awt::Gradient2 directly
-                bRetval = (rVal >>= rGradient);
-            }
-            else if (rVal.has< css::awt::Gradient >())
-            {
-                // 1st get awt::Gradient
-                css::awt::Gradient aTmp;
-
-                if (rVal >>= aTmp)
-                {
-                    // copy all awt::Gradient data to awt::Gradient2
-                    rGradient.Style = aTmp.Style;
-                    rGradient.StartColor = aTmp.StartColor;
-                    rGradient.EndColor = aTmp.EndColor;
-                    rGradient.Angle = aTmp.Angle;
-                    rGradient.Border = aTmp.Border;
-                    rGradient.XOffset = aTmp.XOffset;
-                    rGradient.YOffset = aTmp.YOffset;
-                    rGradient.StartIntensity = aTmp.StartIntensity;
-                    rGradient.EndIntensity = aTmp.EndIntensity;
-                    rGradient.StepCount = aTmp.StepCount;
-
-                    // complete data by creating ColorStops for awt::Gradient2
-                    const BColorStops aTempColorStops {
-                        BColorStop(0.0, ColorToBColorConverter(aTmp.StartColor).getBColor()),
-                        BColorStop(1.0, ColorToBColorConverter(aTmp.EndColor).getBColor()) };
-                    rGradient.ColorStops = aTempColorStops.getAsColorStopSequence();
-                    bRetval = true;
-                }
-            }
-
-            return bRetval;
-        }
-
         /* Tooling method to extract data from given awt::Gradient2
            to ColorStops, doing some corrections, partially based
            on given SingleColor.
@@ -321,11 +280,11 @@ namespace basegfx
              directly
         */
         void prepareColorStops(
-            const com::sun::star::awt::Gradient2& rGradient,
+            const basegfx::BGradient& rGradient,
             BColorStops& rColorStops,
             BColor& rSingleColor)
         {
-            rColorStops = BColorStops(rGradient.ColorStops);
+            rColorStops = rGradient.GetColorStops();
 
             if (rColorStops.isSingleColor(rSingleColor))
             {
@@ -335,12 +294,12 @@ namespace basegfx
                 return;
             }
 
-            if (rGradient.StartIntensity != 100 || rGradient.EndIntensity != 100)
+            if (100 != rGradient.GetStartIntens() || 100 != rGradient.GetEndIntens())
             {
                 // apply 'old' blend stuff, blend against black
                 rColorStops.blendToIntensity(
-                    rGradient.StartIntensity * 0.01,
-                    rGradient.EndIntensity * 0.01,
+                    rGradient.GetStartIntens() * 0.01,
+                    rGradient.GetEndIntens() * 0.01,
                     basegfx::BColor()); // COL_BLACK
 
                 // can lead to single color (e.g. both zero, so all black),
@@ -352,18 +311,18 @@ namespace basegfx
                 }
             }
 
-            if (rGradient.Border != 0)
+            if (0 != rGradient.GetBorder())
             {
                 // apply Border if set
                 // NOTE: no new start node is added. The new ColorStop
                 //       mechanism does not need entries at 0.0 and 1.0.
                 //       In case this is needed, do that in the caller
-                const double fFactor(rGradient.Border * 0.01);
+                const double fFactor(rGradient.GetBorder() * 0.01);
                 BColorStops aNewStops;
 
                 for (const auto& candidate : rColorStops)
                 {
-                    if (css::awt::GradientStyle_AXIAL == rGradient.Style)
+                    if (css::awt::GradientStyle_AXIAL == rGradient.GetGradientStyle())
                     {
                         // for axial add the 'gap' at the start due to reverse used gradient
                         aNewStops.emplace_back((1.0 - fFactor) * candidate.getStopOffset(), candidate.getStopColor());

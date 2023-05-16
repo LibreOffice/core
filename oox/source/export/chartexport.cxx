@@ -1903,37 +1903,26 @@ void ChartExport::exportSolidFill(const Reference< XPropertySet >& xPropSet)
     }
     // OOXML has no separate transparence gradient but uses transparency in the gradient stops.
     // So we merge transparency and color and use gradient fill in such case.
-    awt::Gradient2 aTransparenceGradient;
+    basegfx::BGradient aTransparenceGradient;
     bool bNeedGradientFill(false);
     OUString sFillTransparenceGradientName;
+
     if (GetProperty(xPropSet, "FillTransparenceGradientName")
         && (mAny >>= sFillTransparenceGradientName)
         && !sFillTransparenceGradientName.isEmpty())
     {
         uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
         uno::Reference< container::XNameAccess > xTransparenceGradient(xFact->createInstance("com.sun.star.drawing.TransparencyGradientTable"), uno::UNO_QUERY);
-        uno::Any rTransparenceValue = xTransparenceGradient->getByName(sFillTransparenceGradientName);
+        const uno::Any rTransparenceValue = xTransparenceGradient->getByName(sFillTransparenceGradientName);
 
-        if (basegfx::utils::fillGradient2FromAny(aTransparenceGradient, rTransparenceValue))
+        aTransparenceGradient = basegfx::BGradient(rTransparenceValue);
+        basegfx::BColor aSingleColor;
+        bNeedGradientFill = !aTransparenceGradient.GetColorStops().isSingleColor(aSingleColor);
+
+        if (!bNeedGradientFill)
         {
-            const basegfx::BColorStops aColorStops(rTransparenceValue);
-            basegfx::BColor aSingleColor;
-            bNeedGradientFill = !aColorStops.isSingleColor(aSingleColor);
-        }
-
-        if (!bNeedGradientFill && 0 != aTransparenceGradient.StartColor)
-        {
-            // Our alpha is a gray color value.
-            sal_uInt8 nRed(0);
-
-            if (aTransparenceGradient.ColorStops.getLength() > 0)
-            {
-                nRed = static_cast<sal_uInt8>(aTransparenceGradient.ColorStops[0].StopColor.Red * 255.0);
-            }
-            else
-            {
-                nRed = ::Color(ColorTransparency, aTransparenceGradient.StartColor).GetRed();
-            }
+            // Our alpha is a single gray color value.
+            const sal_uInt8 nRed(aSingleColor.getRed() * 255.0);
 
             // drawingML alpha is a percentage on a 0..100000 scale.
             nAlpha = (255 - nRed) * oox::drawingml::MAX_PERCENT / 255;
@@ -2012,19 +2001,23 @@ void ChartExport::exportGradientFill( const Reference< XPropertySet >& xPropSet 
     try
     {
         uno::Reference< container::XNameAccess > xGradient( xFact->createInstance("com.sun.star.drawing.GradientTable"), uno::UNO_QUERY );
-        uno::Any rGradientValue = xGradient->getByName( sFillGradientName );
-        awt::Gradient2 aGradient;
+        const uno::Any rGradientValue(xGradient->getByName( sFillGradientName ));
+        const basegfx::BGradient aGradient(rGradientValue);
+        basegfx::BColor aSingleColor;
 
-        if (basegfx::utils::fillGradient2FromAny(aGradient, rGradientValue))
+        if (!aGradient.GetColorStops().isSingleColor(aSingleColor))
         {
-            awt::Gradient2 aTransparenceGradient;
+            basegfx::BGradient aTransparenceGradient;
             mpFS->startElementNS(XML_a, XML_gradFill);
             OUString sFillTransparenceGradientName;
+
             if( (xPropSet->getPropertyValue("FillTransparenceGradientName") >>= sFillTransparenceGradientName) && !sFillTransparenceGradientName.isEmpty())
             {
                 uno::Reference< container::XNameAccess > xTransparenceGradient(xFact->createInstance("com.sun.star.drawing.TransparencyGradientTable"), uno::UNO_QUERY);
-                uno::Any rTransparenceValue = xTransparenceGradient->getByName(sFillTransparenceGradientName);
-                basegfx::utils::fillGradient2FromAny(aTransparenceGradient, rTransparenceValue);
+                const uno::Any rTransparenceValue(xTransparenceGradient->getByName(sFillTransparenceGradientName));
+
+                aTransparenceGradient = basegfx::BGradient(rTransparenceValue);
+
                 WriteGradientFill(&aGradient, 0, &aTransparenceGradient);
             }
             else if (GetProperty(xPropSet, "FillTransparence") )
@@ -2038,7 +2031,7 @@ void ChartExport::exportGradientFill( const Reference< XPropertySet >& xPropSet 
             }
             else
             {
-                WriteGradientFill(&aGradient, 0, &aTransparenceGradient);
+                WriteGradientFill(&aGradient, 0, nullptr);
             }
 
             mpFS->endElementNS(XML_a, XML_gradFill);

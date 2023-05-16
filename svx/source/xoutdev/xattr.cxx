@@ -2152,37 +2152,6 @@ bool XFillGradientItem::GetPresentation
     return true;
 }
 
-namespace
-{
-    void fillXGradientFromAny(basegfx::BGradient& rBGradient, const css::uno::Any& rVal)
-    {
-        css::awt::Gradient aGradient;
-        if (!(rVal >>= aGradient))
-            return;
-
-        // for compatibility, read and set StartColor/EndColor
-        rBGradient.SetColorStops(
-            basegfx::BColorStops(
-                Color(ColorTransparency, aGradient.StartColor).getBColor(),
-                Color(ColorTransparency, aGradient.EndColor).getBColor()));
-
-        // set values
-        rBGradient.SetGradientStyle( aGradient.Style );
-        rBGradient.SetAngle( Degree10(aGradient.Angle) );
-        rBGradient.SetBorder( aGradient.Border );
-        rBGradient.SetXOffset( aGradient.XOffset );
-        rBGradient.SetYOffset( aGradient.YOffset );
-        rBGradient.SetStartIntens( aGradient.StartIntensity );
-        rBGradient.SetEndIntens( aGradient.EndIntensity );
-        rBGradient.SetSteps( aGradient.StepCount );
-
-        // check if we have a awt::Gradient2 with a ColorStopSequence
-        const basegfx::BColorStops aColorStops(rVal);
-        if (!aColorStops.empty())
-            rBGradient.SetColorStops(aColorStops);
-    }
-}
-
 bool XFillGradientItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
@@ -2271,10 +2240,9 @@ bool XFillGradientItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
 
                 SetName( aName );
 
-                if ( aGradientAny.hasValue() )
+                if (aGradientAny.hasValue() && (aGradientAny.has<css::awt::Gradient>() || aGradientAny.has<css::awt::Gradient2>()))
                 {
-                    basegfx::BGradient aBGradient;
-                    fillXGradientFromAny(aBGradient, aGradientAny);
+                    const basegfx::BGradient aBGradient(aGradientAny);
                     SetGradientValue(aBGradient);
                 }
 
@@ -2295,22 +2263,28 @@ bool XFillGradientItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
 
         case MID_FILLGRADIENT:
         {
-            basegfx::BGradient aBGradient;
-            fillXGradientFromAny(aBGradient, rVal);
-            SetGradientValue(aBGradient);
+            if (rVal.hasValue() && (rVal.has<css::awt::Gradient>() || rVal.has<css::awt::Gradient2>()))
+            {
+                const basegfx::BGradient aBGradient(rVal);
+                SetGradientValue(aBGradient);
+            }
+
             break;
         }
 
         case MID_GRADIENT_COLORSTOPSEQUENCE:
         {
-            // check if we have a awt::Gradient2 with a ColorStopSequence
-            const basegfx::BColorStops aColorStops(rVal);
-
-            if (!aColorStops.empty())
+            // check if we have a awt::ColorStopSequence
+            if (rVal.hasValue() && rVal.has<css::awt::ColorStopSequence>())
             {
-                basegfx::BGradient aBGradient(GetGradientValue());
-                aBGradient.SetColorStops(aColorStops);
-                SetGradientValue(aBGradient);
+                const basegfx::BColorStops aColorStops(rVal);
+
+                if (!aColorStops.empty())
+                {
+                    basegfx::BGradient aBGradient(GetGradientValue());
+                    aBGradient.SetColorStops(aColorStops);
+                    SetGradientValue(aBGradient);
+                }
             }
             break;
         }
