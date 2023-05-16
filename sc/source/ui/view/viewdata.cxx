@@ -1626,8 +1626,8 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
             pEditView[eWhich]->SetLOKSpecialOutputArea(aPTwipsRect);
     }
 
-    if (bLOKLayoutRTL)
-        pEditView[eWhich]->SetLOKSpecialFlags(LOKSpecialFlags::LayoutRTL);
+    if (bLOKActive && pEditView[eWhich]->HasLOKSpecialPositioning())
+        pEditView[eWhich]->SetLOKSpecialFlags(bLOKLayoutRTL ? LOKSpecialFlags::LayoutRTL : LOKSpecialFlags::NONE);
 
     tools::Rectangle aOutputArea = pWin->PixelToLogic( aPixRect, GetLogicMode() );
     pEditView[eWhich]->SetOutputArea( aOutputArea );
