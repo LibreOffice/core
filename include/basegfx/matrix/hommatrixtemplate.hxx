@@ -41,14 +41,7 @@ namespace basegfx::internal
             double                                          mfValue[RowSize];
 
         public:
-            ImplMatLine()
-            {
-            }
-
-            explicit ImplMatLine(const ImplMatLine< RowSize >& rToBeCopied)
-            {
-                memcpy(&mfValue, &rToBeCopied, sizeof(double) * RowSize);
-            }
+            ImplMatLine() = default;
 
             explicit ImplMatLine(sal_uInt16 nRow)
             {
@@ -71,30 +64,22 @@ namespace basegfx::internal
 
         template < sal_uInt16 RowSize > class ImplHomMatrixTemplate
         {
-            ImplMatLine< RowSize >                          maLine[RowSize - 1];
-            std::unique_ptr<ImplMatLine< RowSize >> mutable mpLine;
+            ImplMatLine< RowSize >                          maLine[RowSize];
 
         public:
             // Is last line used?
             bool isLastLineDefault() const
             {
-                if(!mpLine)
-                    return true;
-
                 for(sal_uInt16 a(0); a < RowSize; a++)
                 {
                     const double fDefault(implGetDefaultValue((RowSize - 1), a));
-                    const double fLineValue(mpLine->get(a));
+                    const double fLineValue(maLine[RowSize-1].get(a));
 
-                    if(!::basegfx::fTools::equal(fDefault, fLineValue))
+                    if(fDefault != fLineValue)
                     {
                         return false;
                     }
                 }
-
-                // reset last line, it equals default
-                mpLine.reset();
-
                 return true;
             }
 
@@ -102,7 +87,7 @@ namespace basegfx::internal
             {
                 // complete initialization with identity matrix, all lines
                 // were initialized with a trailing 1 followed by 0's.
-                for(sal_uInt16 a(0); a < RowSize-1; a++)
+                for(sal_uInt16 a(0); a < RowSize; a++)
                 {
                     for(sal_uInt16 b(0); b < RowSize; b++)
                         maLine[a].set(b, implGetDefaultValue(a, b) );
@@ -119,14 +104,9 @@ namespace basegfx::internal
                 if (this != &rToBeCopied)
                 {
                     // complete initialization using copy
-                    for(sal_uInt16 a(0); a < (RowSize - 1); a++)
+                    for(sal_uInt16 a(0); a < RowSize; a++)
                     {
-                        memcpy(&maLine[a], &rToBeCopied.maLine[a], sizeof(ImplMatLine< RowSize >));
-                    }
-                    mpLine.reset();
-                    if(rToBeCopied.mpLine)
-                    {
-                        mpLine.reset( new ImplMatLine< RowSize >( *rToBeCopied.mpLine ) );
+                        maLine[a] = rToBeCopied.maLine[a];
                     }
                 }
                 return *this;
@@ -136,63 +116,12 @@ namespace basegfx::internal
 
             double get(sal_uInt16 nRow, sal_uInt16 nColumn) const
             {
-                if(nRow < (RowSize - 1))
-                {
-                    return maLine[nRow].get(nColumn);
-                }
-
-                if(mpLine)
-                {
-                    return mpLine->get(nColumn);
-                }
-
-                return implGetDefaultValue((RowSize - 1), nColumn);
+                return maLine[nRow].get(nColumn);
             }
 
             void set(sal_uInt16 nRow, sal_uInt16 nColumn, const double& rValue)
             {
-                if(nRow < (RowSize - 1))
-                {
-                    maLine[nRow].set(nColumn, rValue);
-                }
-                else if(mpLine)
-                {
-                    mpLine->set(nColumn, rValue);
-                }
-                else
-                {
-                    const double fDefault(implGetDefaultValue((RowSize - 1), nColumn));
-
-                    if(!::basegfx::fTools::equal(fDefault, rValue))
-                    {
-                        mpLine.reset(new ImplMatLine< RowSize >((RowSize - 1)));
-                        mpLine->set(nColumn, rValue);
-                    }
-                }
-            }
-
-            void testLastLine()
-            {
-                if(!mpLine)
-                    return;
-
-                bool bNecessary(false);
-
-                for(sal_uInt16 a(0);!bNecessary && a < RowSize; a++)
-                {
-                    const double fDefault(implGetDefaultValue((RowSize - 1), a));
-                    const double fLineValue(mpLine->get(a));
-
-                    if(!::basegfx::fTools::equal(fDefault, fLineValue))
-                    {
-                        bNecessary = true;
-                    }
-                }
-
-                if(!bNecessary)
-                {
-                    mpLine.reset();
-                }
+                maLine[nRow].set(nColumn, rValue);
             }
 
             // Left-upper decomposition
@@ -351,11 +280,7 @@ namespace basegfx::internal
 
             bool isIdentity() const
             {
-                // last line needs no testing if not existing
-                const sal_uInt16 nMaxLine(
-                    sal::static_int_cast<sal_uInt16>(mpLine ? RowSize : (RowSize - 1)) );
-
-                for(sal_uInt16 a(0); a < nMaxLine; a++)
+                for(sal_uInt16 a(0); a < RowSize; a++)
                 {
                     for(sal_uInt16 b(0); b < RowSize; b++)
                     {
@@ -403,9 +328,6 @@ namespace basegfx::internal
                         set(b, a, fArray[b]);
                     }
                 }
-
-                // evtl. get rid of last matrix line
-                testLastLine();
             }
 
             double doDeterminant() const
@@ -418,12 +340,7 @@ namespace basegfx::internal
                 if(aWork.ludcmp(nIndex, nParity))
                 {
                     fRetval = static_cast<double>(nParity);
-
-                    // last line needs no multiply if not existing; default value would be 1.
-                    const sal_uInt16 nMaxLine(
-                        sal::static_int_cast<sal_uInt16>(aWork.mpLine ? RowSize : (RowSize - 1)) );
-
-                    for(sal_uInt16 a(0); a < nMaxLine; a++)
+                    for(sal_uInt16 a(0); a < RowSize; a++)
                     {
                         fRetval *= aWork.get(a, a);
                     }
@@ -441,8 +358,6 @@ namespace basegfx::internal
                         set(a, b, get(a, b) + rMat.get(a, b));
                     }
                 }
-
-                testLastLine();
             }
 
             void doSubMatrix(const ImplHomMatrixTemplate& rMat)
@@ -454,8 +369,6 @@ namespace basegfx::internal
                         set(a, b, get(a, b) - rMat.get(a, b));
                     }
                 }
-
-                testLastLine();
             }
 
             void doMulMatrix(const double& rfValue)
@@ -467,8 +380,6 @@ namespace basegfx::internal
                         set(a, b, get(a, b) * rfValue);
                     }
                 }
-
-                testLastLine();
             }
 
             void doMulMatrix(const ImplHomMatrixTemplate& rMat)
@@ -492,16 +403,11 @@ namespace basegfx::internal
                         set(a, b, fValue);
                     }
                 }
-
-                testLastLine();
             }
 
             bool isEqual(const ImplHomMatrixTemplate& rMat) const
             {
-                const sal_uInt16 nMaxLine(
-                    sal::static_int_cast<sal_uInt16>((mpLine || rMat.mpLine) ? RowSize : (RowSize - 1)) );
-
-                for(sal_uInt16 a(0); a < nMaxLine; a++)
+                for(sal_uInt16 a(0); a < RowSize; a++)
                 {
                     for(sal_uInt16 b(0); b < RowSize; b++)
                     {
