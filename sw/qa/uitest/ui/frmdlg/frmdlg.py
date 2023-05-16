@@ -13,6 +13,7 @@ import time
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
+from uitest.uihelper.common import get_url_for_data_file
 
 
 class Test(UITestCase):
@@ -44,5 +45,21 @@ class Test(UITestCase):
             # Then make sure the doc model is updated correctly:
             self.assertEqual(xComponent.TextFrames.Frame1.IsSplitAllowed, True)
 
+    def test_chained_fly_split(self):
+        # Given a document with 2 chained fly frames:
+        with self.ui_test.load_file(get_url_for_data_file("chained-frames.odt")):
+            # When selecting the first and opening the fly frame properties dialog:
+            self.xUITest.executeCommand(".uno:JumpToNextFrame")
+            # Wait until SwTextShell is replaced with SwDrawShell after 120 ms, as set in the SwView
+            # ctor.
+            time.sleep(0.2)
+            with self.ui_test.execute_dialog_through_command(".uno:FrameDialog") as xDialog:
+                # Then make sure that the 'split' checkbox is hidden:
+                xFlysplit = xDialog.getChild("flysplit")
+                # Without the accompanying fix in place, this test would have failed with:
+                # AssertionError: 'true' != 'false'
+                # i.e. the UI didn't hide this option, leading to some weird mix of chained shapes
+                # and floating tables.
+                self.assertEqual(get_state_as_dict(xFlysplit)['Visible'], "false")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
