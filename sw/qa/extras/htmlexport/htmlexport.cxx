@@ -859,8 +859,12 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfTable)
         "bgcolor");
 }
 
-DECLARE_HTMLEXPORT_TEST(testReqIfTable2, "reqif-table2.odt")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfTable2)
 {
+    createSwDoc("reqif-table2.odt");
+    setFilterOptions("xhtmlns=reqif-xhtml");
+    save(OUString::createFromAscii(mpFilter));
+
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
     sal_uInt64 nLength = pStream->TellEnd();
