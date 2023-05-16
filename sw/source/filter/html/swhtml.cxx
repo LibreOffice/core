@@ -2678,14 +2678,14 @@ SwViewShell *SwHTMLParser::CallEndAction( bool bChkAction, bool bChkPtr )
     if( !m_pActionViewShell || (bChkAction && !m_pActionViewShell->ActionPend()) )
         return m_pActionViewShell;
 
-    if( dynamic_cast< const SwEditShell *>( m_pActionViewShell ) !=  nullptr )
+    if (SwEditShell* pEditShell = dynamic_cast<SwEditShell*>(m_pActionViewShell))
     {
         // Already scrolled?, then make sure that the view doesn't move!
         const bool bOldLock = m_pActionViewShell->IsViewLocked();
         m_pActionViewShell->LockView( true );
         const bool bOldEndActionByVirDev = m_pActionViewShell->IsEndActionByVirDev();
         m_pActionViewShell->SetEndActionByVirDev( true );
-        static_cast<SwEditShell*>(m_pActionViewShell)->EndAction();
+        pEditShell->EndAction();
         m_pActionViewShell->SetEndActionByVirDev( bOldEndActionByVirDev );
         m_pActionViewShell->LockView( bOldLock );
 
