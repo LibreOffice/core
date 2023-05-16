@@ -3416,7 +3416,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                         }
 
                         rRef.SetAddress(*mxSheetLimits, aAbs, rNewPos);
-                        rRef.SetFlag3D(aAbs.Tab() != rNewPos.Tab() || !rRef.IsTabRel());
+                        rRef.SetFlag3D(rRef.IsFlag3D() || !rRef.IsTabRel() || aAbs.Tab() != rNewPos.Tab());
                     }
                     break;
                 case svDoubleRef:
@@ -3446,12 +3446,33 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                         }
 
                         rRef.SetRange(*mxSheetLimits, aAbs, rNewPos);
-                        // Absolute sheet reference => set 3D flag.
-                        // More than one sheet referenced => has to have both 3D flags.
-                        // If end part has 3D flag => start part must have it too.
-                        rRef.Ref2.SetFlag3D(aAbs.aStart.Tab() != aAbs.aEnd.Tab() || !rRef.Ref2.IsTabRel());
-                        rRef.Ref1.SetFlag3D(aAbs.aStart.Tab() != rNewPos.Tab() || !rRef.Ref1.IsTabRel() ||
-                                rRef.Ref2.IsFlag3D());
+                        bool b1, b2;
+                        if (aAbs.aStart.Tab() != aAbs.aEnd.Tab())
+                        {
+                            // More than one sheet referenced => has to have
+                            // both 3D flags.
+                            b1 = b2 = true;
+                        }
+                        else
+                        {
+                            // Keep given 3D flag even for relative sheet
+                            // reference to same sheet.
+                            // Absolute sheet reference => set 3D flag.
+                            // Reference to another sheet => set 3D flag.
+                            b1 = rRef.Ref1.IsFlag3D() || !rRef.Ref1.IsTabRel() || rNewPos.Tab() != aAbs.aStart.Tab();
+                            b2 = rRef.Ref2.IsFlag3D() || !rRef.Ref2.IsTabRel() || rNewPos.Tab() != aAbs.aEnd.Tab();
+                            // End part has 3D flag => start part must have it too.
+                            if (b2)
+                                b1 = true;
+                            // End part sheet reference is identical to start
+                            // part sheet reference and end part sheet
+                            // reference was not explicitly given => clear end
+                            // part 3D flag.
+                            if (b1 && b2 && rRef.Ref1.IsTabRel() == rRef.Ref2.IsTabRel() && !rRef.Ref2.IsFlag3D())
+                                b2 = false;
+                        }
+                        rRef.Ref1.SetFlag3D(b1);
+                        rRef.Ref2.SetFlag3D(b2);
                     }
                     break;
                 case svExternalSingleRef:
