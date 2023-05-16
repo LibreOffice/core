@@ -310,7 +310,8 @@ Dim sSql As String				&apos;	SQL statement
 Dim bDirect						&apos;	Alias of DirectSQL
 Dim lCols As Long				&apos;	Number of columns
 Dim lRows As Long				&apos;	Number of rows
-Dim oColumns As Object
+Dim oColumns As Object			&apos;	Collection of com.sun.star.sdb.ODataColumn
+Dim bRead As Boolean			&apos;	When True, next record has been read successfully
 Dim i As Long
 Const cstThisSub = &quot;SFDatabases.Database.GetRows&quot;
 Const cstSubArgs = &quot;SQLCommand, [DirectSQL=False], [Header=False], [MaxRows=0]&quot;
@@ -365,8 +366,8 @@ Try:
 		End If
 
 	&apos;	Load data
-		.first()
-		Do While Not .isAfterLast() And (MaxRows = 0 Or lRows &lt; MaxRows - 1)
+		bRead = .first()
+		Do While bRead And (MaxRows = 0 Or lRows &lt; MaxRows - 1)
 			lRows = lRows + 1
 			If lRows = 0 Then
 				ReDim vResult(0 To lRows, 0 To lCols)
@@ -376,7 +377,7 @@ Try:
 			For i = 0 To lCols
 				vResult(lRows, i) = _GetColumnValue(oResult, i + 1)
 			Next i
-			.next()
+			bRead = .next()
 		Loop
 	End With
 	
