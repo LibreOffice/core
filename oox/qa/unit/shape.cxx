@@ -795,6 +795,23 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWordArtBitmapFill)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1592), aSize100thMM.Width);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1592), aSize100thMM.Height);
 }
+
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWordArtDefaultColor)
+{
+    // The document has a WordArt shape for which the text color is not explicitly set. In such cases
+    // MS Office uses the scheme color 'tx1'. Without fix it was imported as 'fill none'. The shape
+    // existed but was not visible on screen.
+    loadFromURL(u"tdf155327_WordArtDefaultColor.pptx");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::FillStyle_SOLID),
+                         xShapeProps->getPropertyValue(u"FillStyle"));
+
+    CPPUNIT_ASSERT_EQUAL(uno::Any(Color(3, 74, 144)), xShapeProps->getPropertyValue(u"FillColor"));
+}
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

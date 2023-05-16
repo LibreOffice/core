@@ -728,7 +728,12 @@ static void lcl_copyCharPropsToShape(const uno::Reference<drawing::XShape>& xSha
 
             // Fill
             // ToDo: Replace flip and rotate constants in parameters with actual values.
+            // tdf#155327 If color is not explicitly set, MS Office uses scheme color 'tx1'.
             oox::drawingml::ShapePropertyMap aFillShapeProps(rFilter.getModelObjectHelper());
+            if (!rCharProps.maFillProperties.moFillType.has_value())
+                rCharProps.maFillProperties.moFillType = XML_solidFill;
+            if (!rCharProps.maFillProperties.maFillColor.isUsed())
+                rCharProps.maFillProperties.maFillColor.setSchemeClr(XML_tx1);
             rCharProps.maFillProperties.pushToPropMap(aFillShapeProps, rFilter.getGraphicHelper(),
                                                       /*nShapeRotation*/ 0,
                                                       /*nPhClr*/ API_RGB_TRANSPARENT,
