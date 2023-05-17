@@ -432,6 +432,7 @@ bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurrentC
             aEvent.EventId = AccessibleEventId::CHILD;
             aEvent.Source = uno::Reference< XAccessibleContext >(mpAccessibleDocument);
             aEvent.OldValue <<= uno::Reference<XAccessible>(pCurrentChild);
+            aEvent.IndexHint = -1;
 
             mpAccessibleDocument->CommitChange(aEvent); // child is gone - event
 
@@ -449,6 +450,7 @@ bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurrentC
             aEvent.EventId = AccessibleEventId::CHILD;
             aEvent.Source = uno::Reference< XAccessibleContext >(mpAccessibleDocument);
             aEvent.NewValue <<= uno::Reference<XAccessible>(pReplacement);
+            aEvent.IndexHint = -1;
 
             mpAccessibleDocument->CommitChange(aEvent); // child is new - event
             bResult = true;
@@ -1223,6 +1225,7 @@ void ScChildrenShapes::AddShape(const uno::Reference<drawing::XShape>& xShape, b
         aEvent.EventId = AccessibleEventId::CHILD;
         aEvent.Source = uno::Reference< XAccessibleContext >(mpAccessibleDocument);
         aEvent.NewValue <<= Get(pShape);
+        aEvent.IndexHint = -1;
 
         mpAccessibleDocument->CommitChange(aEvent); // new child - event
     }
@@ -1250,6 +1253,7 @@ void ScChildrenShapes::RemoveShape(const uno::Reference<drawing::XShape>& xShape
             aEvent.EventId = AccessibleEventId::CHILD;
             aEvent.Source = uno::Reference< XAccessibleContext >(mpAccessibleDocument);
             aEvent.OldValue <<= xOldAccessible;
+            aEvent.IndexHint = -1;
 
             mpAccessibleDocument->CommitChange(aEvent); // child is gone - event
         }

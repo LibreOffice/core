@@ -307,6 +307,7 @@ void SwAccessibleContext::ScrolledIn()
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::CHILD;
     aEvent.NewValue <<= xThis;
+    aEvent.IndexHint = -1;
 
     xParentImpl->FireAccessibleEvent( aEvent );
 
@@ -1028,6 +1029,7 @@ void SwAccessibleContext::DisposeShape( const SdrObject *pObj,
     aEvent.EventId = AccessibleEventId::CHILD;
     uno::Reference< XAccessible > xAcc( xAccImpl );
     aEvent.OldValue <<= xAcc;
+    aEvent.IndexHint = -1;
     FireAccessibleEvent( aEvent );
 
     GetMap()->RemoveContext( pObj );
@@ -1044,6 +1046,7 @@ void SwAccessibleContext::ScrolledInShape( ::accessibility::AccessibleShape *pAc
     aEvent.EventId = AccessibleEventId::CHILD;
     uno::Reference< XAccessible > xAcc( pAccImpl );
     aEvent.NewValue <<= xAcc;
+    aEvent.IndexHint = -1;
     FireAccessibleEvent( aEvent );
 
     if( !pAccImpl->GetState( AccessibleStateType::FOCUSED ) )
@@ -1087,6 +1090,7 @@ void SwAccessibleContext::Dispose(bool bRecursive, bool bCanSkipInvisible)
         AccessibleEventObject aEvent;
         aEvent.EventId = AccessibleEventId::CHILD;
         aEvent.OldValue <<= xThis;
+        aEvent.IndexHint = -1;
         pAcc->FireAccessibleEvent( aEvent );
     }
 
@@ -1148,6 +1152,7 @@ void SwAccessibleContext::DisposeChild( const SwAccessibleChild& rChildFrameOrOb
             uno::Reference< XAccessible > xAcc =
                                     rChildFrameOrObj.GetWindow()->GetAccessible();
             aEvent.OldValue <<= xAcc;
+            aEvent.IndexHint = -1;
             FireAccessibleEvent( aEvent );
         }
     }

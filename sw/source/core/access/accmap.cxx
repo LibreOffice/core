@@ -2619,6 +2619,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
                                             AccessibleEventObject aEvent;
                                             aEvent.EventId = AccessibleEventId::CHILD;
                                             aEvent.NewValue <<= xAccParentTab;
+                                            aEvent.IndexHint = -1;
                                             xParentAccImplRoot->FireAccessibleEvent( aEvent );
                                         }
                                     }
@@ -2639,6 +2640,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
                                         AccessibleEventObject aEvent;
                                         aEvent.EventId = AccessibleEventId::CHILD;
                                         aEvent.NewValue <<= uno::Reference< XAccessible>(xParentAccImpl);
+                                        aEvent.IndexHint = -1;
                                         xParentAccImplRoot->FireAccessibleEvent( aEvent );
                                     }
                                 }
@@ -2651,6 +2653,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
                                 AccessibleEventObject aEvent;
                                 aEvent.EventId = AccessibleEventId::CHILD;
                                 aEvent.NewValue <<= xAccShape;
+                                aEvent.IndexHint = -1;
                                 xParentAccImpl->FireAccessibleEvent( aEvent );
                             }
                         }

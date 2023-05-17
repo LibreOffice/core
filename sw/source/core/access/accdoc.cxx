@@ -105,6 +105,7 @@ void SwAccessibleDocumentBase::AddChild( vcl::Window *pWin, bool bFireEvent )
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::CHILD;
             aEvent.NewValue <<= mpChildWin->GetAccessible();
+            aEvent.IndexHint = -1;
             FireAccessibleEvent( aEvent );
         }
     }
@@ -120,6 +121,7 @@ void SwAccessibleDocumentBase::RemoveChild( vcl::Window *pWin )
         AccessibleEventObject aEvent;
         aEvent.EventId = AccessibleEventId::CHILD;
         aEvent.OldValue <<= mpChildWin->GetAccessible();
+        aEvent.IndexHint = -1;
         FireAccessibleEvent( aEvent );
 
         mpChildWin = nullptr;
