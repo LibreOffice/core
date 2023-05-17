@@ -170,21 +170,20 @@ void xforms_setValueAny( Reference<XPropertySet> const & xPropertySet,
     xPropertySet->setPropertyValue( rName, rAny );
 }
 
-#define TOKEN_MAP_ENTRY(NAMESPACE,TOKEN) { XML_NAMESPACE_##NAMESPACE, xmloff::token::XML_##TOKEN, xmloff::token::XML_##TOKEN }
 const SvXMLTokenMapEntry aTypes[] =
 {
-    TOKEN_MAP_ENTRY( XSD, STRING  ),
-    TOKEN_MAP_ENTRY( XSD, DECIMAL ),
-    TOKEN_MAP_ENTRY( XSD, DOUBLE ),
-    TOKEN_MAP_ENTRY( XSD, FLOAT ),
-    TOKEN_MAP_ENTRY( XSD, BOOLEAN ),
-    TOKEN_MAP_ENTRY( XSD, ANYURI ),
-    TOKEN_MAP_ENTRY( XSD, DATETIME_XSD ),
-    TOKEN_MAP_ENTRY( XSD, DATE ),
-    TOKEN_MAP_ENTRY( XSD, TIME ),
-    TOKEN_MAP_ENTRY( XSD, YEAR ),
-    TOKEN_MAP_ENTRY( XSD, MONTH ),
-    TOKEN_MAP_ENTRY( XSD, DAY ),
+    { XML_NAMESPACE_XSD, xmloff::token::XML_STRING, xmloff::token::XML_STRING },
+    { XML_NAMESPACE_XSD, xmloff::token::XML_DECIMAL, xmloff::token::XML_DECIMAL },
+    { XML_NAMESPACE_XSD, xmloff::token::XML_DOUBLE, xmloff::token::XML_DOUBLE },
+    { XML_NAMESPACE_XSD, xmloff::token::XML_FLOAT, xmloff::token::XML_FLOAT },
+    { XML_NAMESPACE_XSD, xmloff::token::XML_BOOLEAN, xmloff::token::XML_BOOLEAN },
+    { XML_NAMESPACE_XSD, xmloff::token::XML_ANYURI, xmloff::token::XML_ANYURI },
+    { XML_NAMESPACE_XSD, xmloff::token::XML_DATETIME_XSD, xmloff::token::XML_DATETIME_XSD },
+    { XML_NAMESPACE_XSD, xmloff::token::XML_DATE, xmloff::token::XML_DATE },
+    { XML_NAMESPACE_XSD, xmloff::token::XML_TIME, xmloff::token::XML_TIME },
+    { XML_NAMESPACE_XSD, xmloff::token::XML_YEAR, xmloff::token::XML_YEAR },
+    { XML_NAMESPACE_XSD, xmloff::token::XML_MONTH, xmloff::token::XML_MONTH },
+    { XML_NAMESPACE_XSD, xmloff::token::XML_DAY, xmloff::token::XML_DAY },
     XML_TOKEN_MAP_END
 };
 

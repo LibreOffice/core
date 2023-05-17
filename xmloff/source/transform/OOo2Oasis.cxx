@@ -1767,9 +1767,9 @@ xmloff_OOo2OasisTransformer_get_implementation(
     return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.OOo2OasisTransformer", OUString()));
 }
 
-#define OOO_IMPORTER( className, implName, subServiceName )             \
+#define OOO_IMPORTER( xml_className_get_impl, implName, subServiceName )             \
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* \
-xmloff_##className##_get_implementation( \
+xml_className_get_impl( \
     css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&) \
 { \
     return cppu::acquire(new OOo2OasisTransformer( \
@@ -1777,92 +1777,92 @@ xmloff_##className##_get_implementation( \
               subServiceName )); \
 }
 
-OOO_IMPORTER( XMLWriterImportOOO,
+OOO_IMPORTER( xmloff_XMLWriterImportOOO_get_implementation,
               "com.sun.star.comp.Writer.XMLImporter",
               "com.sun.star.comp.Writer.XMLOasisImporter" )
-OOO_IMPORTER( XMLWriterStylesImportOOO,
+OOO_IMPORTER( xmloff_XMLWriterStylesImportOOO_get_implementation,
               "com.sun.star.comp.Writer.XMLStylesImporter",
               "com.sun.star.comp.Writer.XMLOasisStylesImporter" )
-OOO_IMPORTER( XMLWriterContentImportOOO,
+OOO_IMPORTER( xmloff_XMLWriterContentImportOOO_get_implementation,
               "com.sun.star.comp.Writer.XMLContentImporter",
               "com.sun.star.comp.Writer.XMLOasisContentImporter" )
-OOO_IMPORTER( XMLWriterMetaImportOOO,
+OOO_IMPORTER( xmloff_XMLWriterMetaImportOOO_get_implementation,
               "com.sun.star.comp.Writer.XMLMetaImporter",
               "com.sun.star.comp.Writer.XMLOasisMetaImporter" )
-OOO_IMPORTER( XMLWriterSettingsImportOOO,
+OOO_IMPORTER( xmloff_XMLWriterSettingsImportOOO_get_implementation,
               "com.sun.star.comp.Writer.XMLSettingsImporter",
               "com.sun.star.comp.Writer.XMLOasisSettingsImporter" )
 
-OOO_IMPORTER( XMLImpressImportOOO,
+OOO_IMPORTER( xmloff_XMLImpressImportOOO_get_implementation,
               "com.sun.star.comp.Impress.XMLImporter",
               "com.sun.star.comp.Impress.XMLOasisImporter" )
-OOO_IMPORTER( XMLImpressStylesImportOOO,
+OOO_IMPORTER( xmloff_XMLImpressStylesImportOOO_get_implementation,
               "com.sun.star.comp.Impress.XMLStylesImporter",
               "com.sun.star.comp.Impress.XMLOasisStylesImporter" )
-OOO_IMPORTER( XMLImpressContentImportOOO,
+OOO_IMPORTER( xmloff_XMLImpressContentImportOOO_get_implementation,
               "com.sun.star.comp.Impress.XMLContentImporter",
               "com.sun.star.comp.Impress.XMLOasisContentImporter" )
-OOO_IMPORTER( XMLImpressMetaImportOOO,
+OOO_IMPORTER( xmloff_XMLImpressMetaImportOOO_get_implementation,
               "com.sun.star.comp.Impress.XMLMetaImporter",
               "com.sun.star.comp.Impress.XMLOasisMetaImporter" )
-OOO_IMPORTER( XMLImpressSettingsImportOOO,
+OOO_IMPORTER( xmloff_XMLImpressSettingsImportOOO_get_implementation,
               "com.sun.star.comp.Impress.XMLSettingsImporter",
               "com.sun.star.comp.Impress.XMLOasisSettingsImporter" )
 
-OOO_IMPORTER( XMLDrawImportOOO,
+OOO_IMPORTER( xmloff_XMLDrawImportOOO_get_implementation,
               "com.sun.star.comp.Draw.XMLImporter",
               "com.sun.star.comp.Draw.XMLOasisImporter" )
-OOO_IMPORTER( XMLDrawStylesImportOOO,
+OOO_IMPORTER( xmloff_XMLDrawStylesImportOOO_get_implementation,
               "com.sun.star.comp.Draw.XMLStylesImporter",
               "com.sun.star.comp.Draw.XMLOasisStylesImporter" )
-OOO_IMPORTER( XMLDrawContentImportOOO,
+OOO_IMPORTER( xmloff_XMLDrawContentImportOOO_get_implementation,
               "com.sun.star.comp.Draw.XMLContentImporter",
               "com.sun.star.comp.Draw.XMLOasisContentImporter" )
-OOO_IMPORTER( XMLDrawMetaImportOOO,
+OOO_IMPORTER( xmloff_XMLDrawMetaImportOOO_get_implementation,
               "com.sun.star.comp.Draw.XMLMetaImporter",
               "com.sun.star.comp.Draw.XMLOasisMetaImporter" )
-OOO_IMPORTER( XMLDrawSettingsImportOOO,
+OOO_IMPORTER( xmloff_XMLDrawSettingsImportOOO_get_implementation,
               "com.sun.star.comp.Draw.XMLSettingsImporter",
               "com.sun.star.comp.Draw.XMLOasisSettingsImporter" )
 
-OOO_IMPORTER( XMLCalcImportOOO,
+OOO_IMPORTER( xmloff_XMLCalcImportOOO_get_implementation,
               "com.sun.star.comp.Calc.XMLImporter",
               "com.sun.star.comp.Calc.XMLOasisImporter" )
-OOO_IMPORTER( XMLCalcStylesImportOOO,
+OOO_IMPORTER( xmloff_XMLCalcStylesImportOOO_get_implementation,
               "com.sun.star.comp.Calc.XMLStylesImporter",
               "com.sun.star.comp.Calc.XMLOasisStylesImporter" )
-OOO_IMPORTER( XMLCalcContentImportOOO,
+OOO_IMPORTER( xmloff_XMLCalcContentImportOOO_get_implementation,
               "com.sun.star.comp.Calc.XMLContentImporter",
               "com.sun.star.comp.Calc.XMLOasisContentImporter" )
-OOO_IMPORTER( XMLCalcMetaImportOOO,
+OOO_IMPORTER( xmloff_XMLCalcMetaImportOOO_get_implementation,
               "com.sun.star.comp.Calc.XMLMetaImporter",
               "com.sun.star.comp.Calc.XMLOasisMetaImporter" )
-OOO_IMPORTER( XMLCalcSettingsImportOOO,
+OOO_IMPORTER( xmloff_XMLCalcSettingsImportOOO_get_implementation,
               "com.sun.star.comp.Calc.XMLSettingsImporter",
               "com.sun.star.comp.Calc.XMLOasisSettingsImporter" )
 
-OOO_IMPORTER( XMLChartImportOOO,
+OOO_IMPORTER( xmloff_XMLChartImportOOO_get_implementation,
               "com.sun.star.comp.Chart.XMLImporter",
               "com.sun.star.comp.Chart.XMLOasisImporter" )
-OOO_IMPORTER( XMLChartStylesImportOOO,
+OOO_IMPORTER( xmloff_XMLChartStylesImportOOO_get_implementation,
               "com.sun.star.comp.Chart.XMLStylesImporter",
               "com.sun.star.comp.Chart.XMLOasisStylesImporter" )
-OOO_IMPORTER( XMLChartContentImportOOO,
+OOO_IMPORTER( xmloff_XMLChartContentImportOOO_get_implementation,
               "com.sun.star.comp.Chart.XMLContentImporter",
               "com.sun.star.comp.Chart.XMLOasisContentImporter" )
 
-OOO_IMPORTER( XMLMathMetaImportOOO,
+OOO_IMPORTER( xmloff_XMLMathMetaImportOOO_get_implementation,
               "com.sun.star.comp.Math.XMLMetaImporter",
               "com.sun.star.comp.Math.XMLOasisMetaImporter" )
-OOO_IMPORTER( XMLMathSettingsImportOOO,
+OOO_IMPORTER( xmloff_XMLMathSettingsImportOOO_get_implementation,
               "com.sun.star.comp.Math.XMLSettingsImporter",
               "com.sun.star.comp.Math.XMLOasisSettingsImporter" )
 
-OOO_IMPORTER( XMLMetaImportOOO,
+OOO_IMPORTER( xmloff_XMLMetaImportOOO_get_implementation,
               "com.sun.star.document.XMLMetaImporter",
               "com.sun.star.document.XMLOasisMetaImporter" )
 
-OOO_IMPORTER( XMLAutoTextEventImportOOO,
+OOO_IMPORTER( xmloff_XMLAutoTextEventImportOOO_get_implementation,
               "com.sun.star.comp.Writer.XMLAutotextEventsImporter",
               "com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter" )
 

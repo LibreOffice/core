@@ -122,7 +122,6 @@ static void lcl_export( const Reference<XPropertySet>& rPropertySet,
                  SvXMLExport& rExport,
                  const ExportTable* pTable );
 
-#define TABLE_ENTRY(NAME,NAMESPACE,TOKEN,CONVERTER) { NAME,XML_NAMESPACE_##NAMESPACE,xmloff::token::XML_##TOKEN, CONVERTER }
 #define TABLE_END { nullptr, 0, 0, nullptr }
 
 // any conversion functions
@@ -156,8 +155,8 @@ static OUString lcl_getXSDType( SvXMLExport const & rExport,
 
 const ExportTable aXFormsModelTable[] =
 {
-    TABLE_ENTRY( "ID", NONE, ID, xforms_string ),
-    TABLE_ENTRY( "SchemaRef", NONE, SCHEMA, xforms_string ),
+    { "ID", XML_NAMESPACE_NONE, xmloff::token::XML_ID, xforms_string },
+    { "SchemaRef", XML_NAMESPACE_NONE, xmloff::token::XML_SCHEMA, xforms_string },
     TABLE_END
 };
 
@@ -255,15 +254,15 @@ void exportXFormsInstance( SvXMLExport& rExport,
 
 const ExportTable aXFormsBindingTable[] =
 {
-    TABLE_ENTRY( "BindingID",            NONE, ID,         xforms_string ),
-    TABLE_ENTRY( "BindingExpression",    NONE, NODESET,    xforms_string ),
-    TABLE_ENTRY( "ReadonlyExpression",   NONE, READONLY,   xforms_string ),
-    TABLE_ENTRY( "RelevantExpression",   NONE, RELEVANT,   xforms_string ),
-    TABLE_ENTRY( "RequiredExpression",   NONE, REQUIRED,   xforms_string ),
-    TABLE_ENTRY( "ConstraintExpression", NONE, CONSTRAINT, xforms_string ),
-    TABLE_ENTRY( "CalculateExpression",  NONE, CALCULATE,  xforms_string ),
+    { "BindingID", XML_NAMESPACE_NONE, xmloff::token::XML_ID, xforms_string },
+    { "BindingExpression", XML_NAMESPACE_NONE, xmloff::token::XML_NODESET, xforms_string },
+    { "ReadonlyExpression", XML_NAMESPACE_NONE, xmloff::token::XML_READONLY, xforms_string },
+    { "RelevantExpression", XML_NAMESPACE_NONE, xmloff::token::XML_RELEVANT, xforms_string },
+    { "RequiredExpression", XML_NAMESPACE_NONE, xmloff::token::XML_REQUIRED, xforms_string },
+    { "ConstraintExpression", XML_NAMESPACE_NONE, xmloff::token::XML_CONSTRAINT, xforms_string },
+    { "CalculateExpression", XML_NAMESPACE_NONE, xmloff::token::XML_CALCULATE, xforms_string },
     // type handled separately, for type name <-> XSD type conversion
-    // TABLE_ENTRY( "Type",                 NONE, TYPE,       xforms_string ),
+    // { "Type", XML_NAMESPACE_NONE, xmloff::token::XML_TYPE, xforms_string },
     TABLE_END
 };
 
@@ -369,21 +368,21 @@ void exportXFormsBinding( SvXMLExport& rExport,
 
 const ExportTable aXFormsSubmissionTable[] =
 {
-    TABLE_ENTRY( "ID",         NONE, ID,        xforms_string ),
-    TABLE_ENTRY( "Bind",       NONE, BIND,      xforms_string ),
-    TABLE_ENTRY( "Ref",        NONE, REF,       xforms_string ),
-    TABLE_ENTRY( "Action",     NONE, ACTION,    xforms_string ),
-    TABLE_ENTRY( "Method",     NONE, METHOD,    xforms_string ),
-    TABLE_ENTRY( "Version",    NONE, VERSION,   xforms_string ),
-    TABLE_ENTRY( "Indent",     NONE, INDENT,    xforms_bool ),
-    TABLE_ENTRY( "MediaType",  NONE, MEDIATYPE, xforms_string ),
-    TABLE_ENTRY( "Encoding",   NONE, ENCODING, xforms_string ),
-    TABLE_ENTRY( "OmitXmlDeclaration",  NONE, OMIT_XML_DECLARATION, xforms_bool ),
-    TABLE_ENTRY( "Standalone", NONE, STANDALONE, xforms_bool ),
-    TABLE_ENTRY( "CDataSectionElement", NONE, CDATA_SECTION_ELEMENTS, xforms_string ),
-    TABLE_ENTRY( "Replace",    NONE, REPLACE, xforms_string ),
-    TABLE_ENTRY( "Separator",  NONE, SEPARATOR, xforms_string ),
-    TABLE_ENTRY( "IncludeNamespacePrefixes", NONE, INCLUDENAMESPACEPREFIXES, xforms_string ),
+    { "ID", XML_NAMESPACE_NONE, xmloff::token::XML_ID, xforms_string },
+    { "Bind", XML_NAMESPACE_NONE, xmloff::token::XML_BIND, xforms_string },
+    { "Ref", XML_NAMESPACE_NONE, xmloff::token::XML_REF, xforms_string },
+    { "Action", XML_NAMESPACE_NONE, xmloff::token::XML_ACTION, xforms_string },
+    { "Method", XML_NAMESPACE_NONE, xmloff::token::XML_METHOD, xforms_string },
+    { "Version", XML_NAMESPACE_NONE, xmloff::token::XML_VERSION, xforms_string },
+    { "Indent", XML_NAMESPACE_NONE, xmloff::token::XML_INDENT, xforms_bool },
+    { "MediaType", XML_NAMESPACE_NONE, xmloff::token::XML_MEDIATYPE, xforms_string },
+    { "Encoding", XML_NAMESPACE_NONE, xmloff::token::XML_ENCODING, xforms_string },
+    { "OmitXmlDeclaration", XML_NAMESPACE_NONE, xmloff::token::XML_OMIT_XML_DECLARATION, xforms_bool },
+    { "Standalone", XML_NAMESPACE_NONE, xmloff::token::XML_STANDALONE, xforms_bool },
+    { "CDataSectionElement", XML_NAMESPACE_NONE, xmloff::token::XML_CDATA_SECTION_ELEMENTS, xforms_string },
+    { "Replace", XML_NAMESPACE_NONE, xmloff::token::XML_REPLACE, xforms_string },
+    { "Separator", XML_NAMESPACE_NONE, xmloff::token::XML_SEPARATOR, xforms_string },
+    { "IncludeNamespacePrefixes", XML_NAMESPACE_NONE, xmloff::token::XML_INCLUDENAMESPACEPREFIXES, xforms_string },
     TABLE_END
 };
 
@@ -401,34 +400,34 @@ void exportXFormsSubmission( SvXMLExport& rExport,
 
 const ExportTable aDataTypeFacetTable[] =
 {
-    TABLE_ENTRY( "Length",               XSD, LENGTH,         xforms_int32 ),
-    TABLE_ENTRY( "MinLength",            XSD, MINLENGTH,      xforms_int32 ),
-    TABLE_ENTRY( "MaxLength",            XSD, MAXLENGTH,      xforms_int32 ),
-    TABLE_ENTRY( "MinInclusiveInt",      XSD, MININCLUSIVE,   xforms_int32 ),
-    TABLE_ENTRY( "MinExclusiveInt",      XSD, MINEXCLUSIVE,   xforms_int32 ),
-    TABLE_ENTRY( "MaxInclusiveInt",      XSD, MAXINCLUSIVE,   xforms_int32 ),
-    TABLE_ENTRY( "MaxExclusiveInt",      XSD, MAXEXCLUSIVE,   xforms_int32 ),
-    TABLE_ENTRY( "MinInclusiveDouble",   XSD, MININCLUSIVE,   xforms_double ),
-    TABLE_ENTRY( "MinExclusiveDouble",   XSD, MINEXCLUSIVE,   xforms_double ),
-    TABLE_ENTRY( "MaxInclusiveDouble",   XSD, MAXINCLUSIVE,   xforms_double ),
-    TABLE_ENTRY( "MaxExclusiveDouble",   XSD, MAXEXCLUSIVE,   xforms_double ),
-    TABLE_ENTRY( "MinInclusiveDate",     XSD, MININCLUSIVE,   xforms_date ),
-    TABLE_ENTRY( "MinExclusiveDate",     XSD, MINEXCLUSIVE,   xforms_date ),
-    TABLE_ENTRY( "MaxInclusiveDate",     XSD, MAXINCLUSIVE,   xforms_date ),
-    TABLE_ENTRY( "MaxExclusiveDate",     XSD, MAXEXCLUSIVE,   xforms_date ),
-    TABLE_ENTRY( "MinInclusiveTime",     XSD, MININCLUSIVE,   xforms_time ),
-    TABLE_ENTRY( "MinExclusiveTime",     XSD, MINEXCLUSIVE,   xforms_time ),
-    TABLE_ENTRY( "MaxInclusiveTime",     XSD, MAXINCLUSIVE,   xforms_time ),
-    TABLE_ENTRY( "MaxExclusiveTime",     XSD, MAXEXCLUSIVE,   xforms_time ),
-    TABLE_ENTRY( "MinInclusiveDateTime", XSD, MININCLUSIVE,   xforms_dateTime ),
-    TABLE_ENTRY( "MinExclusiveDateTime", XSD, MINEXCLUSIVE,   xforms_dateTime ),
-    TABLE_ENTRY( "MaxInclusiveDateTime", XSD, MAXINCLUSIVE,   xforms_dateTime ),
-    TABLE_ENTRY( "MaxExclusiveDateTime", XSD, MAXEXCLUSIVE,   xforms_dateTime ),
-    TABLE_ENTRY( "Pattern",              XSD, PATTERN,        xforms_string ),
+    { "Length", XML_NAMESPACE_XSD, xmloff::token::XML_LENGTH, xforms_int32 },
+    { "MinLength", XML_NAMESPACE_XSD, xmloff::token::XML_MINLENGTH, xforms_int32 },
+    { "MaxLength", XML_NAMESPACE_XSD, xmloff::token::XML_MAXLENGTH, xforms_int32 },
+    { "MinInclusiveInt", XML_NAMESPACE_XSD, xmloff::token::XML_MININCLUSIVE, xforms_int32 },
+    { "MinExclusiveInt", XML_NAMESPACE_XSD, xmloff::token::XML_MINEXCLUSIVE, xforms_int32 },
+    { "MaxInclusiveInt", XML_NAMESPACE_XSD, xmloff::token::XML_MAXINCLUSIVE, xforms_int32 },
+    { "MaxExclusiveInt", XML_NAMESPACE_XSD, xmloff::token::XML_MAXEXCLUSIVE, xforms_int32 },
+    { "MinInclusiveDouble", XML_NAMESPACE_XSD, xmloff::token::XML_MININCLUSIVE, xforms_double },
+    { "MinExclusiveDouble", XML_NAMESPACE_XSD, xmloff::token::XML_MINEXCLUSIVE, xforms_double },
+    { "MaxInclusiveDouble", XML_NAMESPACE_XSD, xmloff::token::XML_MAXINCLUSIVE, xforms_double },
+    { "MaxExclusiveDouble", XML_NAMESPACE_XSD, xmloff::token::XML_MAXEXCLUSIVE, xforms_double },
+    { "MinInclusiveDate", XML_NAMESPACE_XSD, xmloff::token::XML_MININCLUSIVE, xforms_date },
+    { "MinExclusiveDate", XML_NAMESPACE_XSD, xmloff::token::XML_MINEXCLUSIVE, xforms_date },
+    { "MaxInclusiveDate", XML_NAMESPACE_XSD, xmloff::token::XML_MAXINCLUSIVE, xforms_date },
+    { "MaxExclusiveDate", XML_NAMESPACE_XSD, xmloff::token::XML_MAXEXCLUSIVE, xforms_date },
+    { "MinInclusiveTime", XML_NAMESPACE_XSD, xmloff::token::XML_MININCLUSIVE, xforms_time },
+    { "MinExclusiveTime", XML_NAMESPACE_XSD, xmloff::token::XML_MINEXCLUSIVE, xforms_time },
+    { "MaxInclusiveTime", XML_NAMESPACE_XSD, xmloff::token::XML_MAXINCLUSIVE, xforms_time },
+    { "MaxExclusiveTime", XML_NAMESPACE_XSD, xmloff::token::XML_MAXEXCLUSIVE, xforms_time },
+    { "MinInclusiveDateTime", XML_NAMESPACE_XSD, xmloff::token::XML_MININCLUSIVE, xforms_dateTime },
+    { "MinExclusiveDateTime", XML_NAMESPACE_XSD, xmloff::token::XML_MINEXCLUSIVE, xforms_dateTime },
+    { "MaxInclusiveDateTime", XML_NAMESPACE_XSD, xmloff::token::XML_MAXINCLUSIVE, xforms_dateTime },
+    { "MaxExclusiveDateTime", XML_NAMESPACE_XSD, xmloff::token::XML_MAXEXCLUSIVE, xforms_dateTime },
+    { "Pattern", XML_NAMESPACE_XSD, xmloff::token::XML_PATTERN, xforms_string },
     // ??? XML_ENUMERATION,
-    TABLE_ENTRY( "WhiteSpace",           XSD, WHITESPACE,     xforms_whitespace ),
-    TABLE_ENTRY( "TotalDigits",          XSD, TOTALDIGITS,    xforms_int32 ),
-    TABLE_ENTRY( "FractionDigits",       XSD, FRACTIONDIGITS, xforms_int32 ),
+    { "WhiteSpace", XML_NAMESPACE_XSD, xmloff::token::XML_WHITESPACE, xforms_whitespace },
+    { "TotalDigits", XML_NAMESPACE_XSD, xmloff::token::XML_TOTALDIGITS, xforms_int32 },
+    { "FractionDigits", XML_NAMESPACE_XSD, xmloff::token::XML_FRACTIONDIGITS, xforms_int32 },
     TABLE_END
 };
 

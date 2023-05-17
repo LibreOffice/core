@@ -37,9 +37,6 @@ namespace xmloff::metadata
 
     using namespace ::xmloff::token;
 
-#define FORM_SINGLE_PROPERTY( id, att ) \
-    PropertyDescription( PROPERTY_##id, XML_NAMESPACE_FORM, att, &FormHandlerFactory::getFormPropertyHandler, PID_##id )
-
     //= property meta data
     namespace
     {
@@ -47,14 +44,14 @@ namespace xmloff::metadata
         {
             static const PropertyDescription s_propertyMetaData[] =
             {
-                FORM_SINGLE_PROPERTY( DATE_MIN,        XML_MIN_VALUE        ),
-                FORM_SINGLE_PROPERTY( DATE_MAX,        XML_MAX_VALUE        ),
-                FORM_SINGLE_PROPERTY( DEFAULT_DATE,    XML_VALUE            ),
-                FORM_SINGLE_PROPERTY( DATE,            XML_CURRENT_VALUE    ),
-                FORM_SINGLE_PROPERTY( TIME_MIN,        XML_MIN_VALUE        ),
-                FORM_SINGLE_PROPERTY( TIME_MAX,        XML_MAX_VALUE        ),
-                FORM_SINGLE_PROPERTY( DEFAULT_TIME,    XML_VALUE            ),
-                FORM_SINGLE_PROPERTY( TIME,            XML_CURRENT_VALUE    ),
+                PropertyDescription( PROPERTY_DATE_MIN, XML_NAMESPACE_FORM, XML_MIN_VALUE, &FormHandlerFactory::getFormPropertyHandler, PID_DATE_MIN ),
+                PropertyDescription( PROPERTY_DATE_MAX, XML_NAMESPACE_FORM, XML_MAX_VALUE, &FormHandlerFactory::getFormPropertyHandler, PID_DATE_MAX ),
+                PropertyDescription( PROPERTY_DEFAULT_DATE, XML_NAMESPACE_FORM, XML_VALUE, &FormHandlerFactory::getFormPropertyHandler, PID_DEFAULT_DATE ),
+                PropertyDescription( PROPERTY_DATE, XML_NAMESPACE_FORM, XML_CURRENT_VALUE, &FormHandlerFactory::getFormPropertyHandler, PID_DATE ),
+                PropertyDescription( PROPERTY_TIME_MIN, XML_NAMESPACE_FORM, XML_MIN_VALUE, &FormHandlerFactory::getFormPropertyHandler, PID_TIME_MIN ),
+                PropertyDescription( PROPERTY_TIME_MAX, XML_NAMESPACE_FORM, XML_MAX_VALUE, &FormHandlerFactory::getFormPropertyHandler, PID_TIME_MAX ),
+                PropertyDescription( PROPERTY_DEFAULT_TIME, XML_NAMESPACE_FORM, XML_VALUE, &FormHandlerFactory::getFormPropertyHandler, PID_DEFAULT_TIME ),
+                PropertyDescription( PROPERTY_TIME, XML_NAMESPACE_FORM, XML_CURRENT_VALUE, &FormHandlerFactory::getFormPropertyHandler, PID_TIME ),
 
                 PropertyDescription()
             };
