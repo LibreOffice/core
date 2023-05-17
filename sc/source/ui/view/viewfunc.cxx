@@ -1217,7 +1217,8 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
     ScDocShell* pDocSh      = rViewData.GetDocShell();
     ScDocument& rDoc        = pDocSh->GetDocument();
     ScMarkData aFuncMark( rViewData.GetMarkData() );       // local copy for UnmarkFiltered
-    ShrinkToDataArea( aFuncMark, rDoc );
+    if (aFuncMark.IsMarked()) // do not make it marked if it is not already marked
+        ShrinkToDataArea( aFuncMark, rDoc );
     ScViewUtil::UnmarkFiltered( aFuncMark, rDoc );
 
     bool bRecord = true;
