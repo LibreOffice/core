@@ -342,36 +342,32 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                     SwRect aRect( oRegion->back() );
                     oRegion->pop_back();
 
-                    const bool bPaint = true;
-                    if ( bPaint )
+                    if (GetWin()->SupportsDoubleBuffering())
+                        InvalidateWindows(aRect);
+                    else
                     {
-                        if (GetWin()->SupportsDoubleBuffering())
-                            InvalidateWindows(aRect);
-                        else
+                        // #i75172# begin DrawingLayer paint
+                        // need to do begin/end DrawingLayer preparation for each single rectangle of the
+                        // repaint region. I already tried to prepare only once for the whole Region. This
+                        // seems to work (and does technically) but fails with transparent objects. Since the
+                        // region given to BeginDrawLayers() defines the clip region for DrawingLayer paint,
+                        // transparent objects in the single rectangles will indeed be painted multiple times.
+                        if (!comphelper::LibreOfficeKit::isActive())
                         {
-                            // #i75172# begin DrawingLayer paint
-                            // need to do begin/end DrawingLayer preparation for each single rectangle of the
-                            // repaint region. I already tried to prepare only once for the whole Region. This
-                            // seems to work (and does technically) but fails with transparent objects. Since the
-                            // region given to BeginDrawLayers() defines the clip region for DrawingLayer paint,
-                            // transparent objects in the single rectangles will indeed be painted multiple times.
-                            if (!comphelper::LibreOfficeKit::isActive())
-                            {
-                                DLPrePaint2(vcl::Region(aRect.SVRect()));
-                            }
+                            DLPrePaint2(vcl::Region(aRect.SVRect()));
+                        }
 
-                            if ( bPaintsFromSystem )
-                                PaintDesktop(*GetOut(), aRect);
-                            if (!comphelper::LibreOfficeKit::isActive())
-                                pCurrentLayout->PaintSwFrame( *mpOut, aRect );
-                            else
-                                pCurrentLayout->GetCurrShell()->InvalidateWindows(aRect);
+                        if ( bPaintsFromSystem )
+                            PaintDesktop(*GetOut(), aRect);
+                        if (!comphelper::LibreOfficeKit::isActive())
+                            pCurrentLayout->PaintSwFrame( *mpOut, aRect );
+                        else
+                            pCurrentLayout->GetCurrShell()->InvalidateWindows(aRect);
 
-                            // #i75172# end DrawingLayer paint
-                            if (!comphelper::LibreOfficeKit::isActive())
-                            {
-                                DLPostPaint2(true);
-                            }
+                        // #i75172# end DrawingLayer paint
+                        if (!comphelper::LibreOfficeKit::isActive())
+                        {
+                            DLPostPaint2(true);
                         }
                     }
 
