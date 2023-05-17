@@ -716,6 +716,31 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testBarChartSecondaryAxisXLSX)
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx[2]/c:axId", "val", YValueIdOf2Barchart);
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testTdf148142)
+{
+    // The document contains a line chart with "Between tick marks" X axis position.
+    loadFromURL(u"ods/tdf148142.ods");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    Reference<chart2::XAxis> xAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
+    CPPUNIT_ASSERT(xAxis.is());
+    chart2::ScaleData aScaleData = xAxis->getScaleData();
+    CPPUNIT_ASSERT(aScaleData.ShiftedCategoryPosition);
+
+    // Set the X axis position to "On tick marks".
+    aScaleData.ShiftedCategoryPosition = false;
+    xAxis->setScaleData(aScaleData);
+
+    // Check the X axis position after export.
+    saveAndReload("calc8");
+    Reference<chart2::XChartDocument> xChartDoc2 = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT(xChartDoc2.is());
+    Reference<chart2::XAxis> xAxis2 = getAxisFromDoc(xChartDoc2, 0, 0, 0);
+    CPPUNIT_ASSERT(xAxis2.is());
+    chart2::ScaleData aScaleData2 = xAxis2->getScaleData();
+    CPPUNIT_ASSERT(!aScaleData2.ShiftedCategoryPosition);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
