@@ -547,6 +547,7 @@ void SchXMLAxisContext::CreateAxis()
     {
         aScaleData.ShiftedCategoryPosition = rtl::math::approxEqual(fMajorOrigin, 0.5);
         xAxis->setScaleData(aScaleData);
+        m_xAxisProps->setPropertyValue("MajorOrigin", uno::Any());
     }
 }
 

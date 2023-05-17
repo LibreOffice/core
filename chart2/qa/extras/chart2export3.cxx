@@ -74,6 +74,7 @@ public:
     void testMultipleAxisXLSX();
     void testSecondaryAxisXLSX();
     void testBarChartSecondaryAxisXLSX();
+    void testTdf148142();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest3);
     CPPUNIT_TEST(testTdf108107);
@@ -120,6 +121,7 @@ public:
     CPPUNIT_TEST(testMultipleAxisXLSX);
     CPPUNIT_TEST(testSecondaryAxisXLSX);
     CPPUNIT_TEST(testBarChartSecondaryAxisXLSX);
+    CPPUNIT_TEST(testTdf148142);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -771,6 +773,31 @@ void Chart2ExportTest3::testBarChartSecondaryAxisXLSX()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx[1]/c:axId", "val", YValueIdOf1Barchart);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx[2]/c:axId", "val", XValueIdOf2Barchart);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx[2]/c:axId", "val", YValueIdOf2Barchart);
+}
+
+void Chart2ExportTest3::testTdf148142()
+{
+    // The document contains a line chart with "Between tick marks" X axis position.
+    loadFromURL(u"ods/tdf148142.ods");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    Reference<chart2::XAxis> xAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
+    CPPUNIT_ASSERT(xAxis.is());
+    chart2::ScaleData aScaleData = xAxis->getScaleData();
+    CPPUNIT_ASSERT(aScaleData.ShiftedCategoryPosition);
+
+    // Set the X axis position to "On tick marks".
+    aScaleData.ShiftedCategoryPosition = false;
+    xAxis->setScaleData(aScaleData);
+
+    // Check the X axis position after export.
+    saveAndReload("calc8");
+    Reference<chart2::XChartDocument> xChartDoc2 = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT(xChartDoc2.is());
+    Reference<chart2::XAxis> xAxis2 = getAxisFromDoc(xChartDoc2, 0, 0, 0);
+    CPPUNIT_ASSERT(xAxis2.is());
+    chart2::ScaleData aScaleData2 = xAxis2->getScaleData();
+    CPPUNIT_ASSERT(!aScaleData2.ShiftedCategoryPosition);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest3);
