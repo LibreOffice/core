@@ -2548,8 +2548,6 @@ void SdTiledRenderingTest::testGetViewRenderState()
     CPPUNIT_ASSERT_EQUAL(OString(";Default"), pXImpressDocument->getViewRenderState());
     // Create a second view
     SfxLokHelper::createView();
-    int nSecondViewId = SfxLokHelper::getView();
-    ViewCallback aView2;
     CPPUNIT_ASSERT_EQUAL(OString(";Default"), pXImpressDocument->getViewRenderState());
     // Set to dark scheme
     {
