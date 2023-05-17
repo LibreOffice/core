@@ -153,7 +153,7 @@ class EDITENG_DLLPUBLIC SvxBorderLine final
     Color (*m_pColorInFn)(Color);
     Color (*m_pColorGapFn)(Color);
     BorderWidthImpl m_aWidthImpl;
-    Color aColor;
+    Color m_aColor;
     SvxBorderLineStyle   m_nStyle;
     bool m_bMirrorWidths;
     bool m_bUseLeftTop;
@@ -165,7 +165,7 @@ public:
             Color (*pColorOutFn)( Color ) = &darkColor,
             Color (*pColorInFn)( Color ) = &darkColor );
 
-    const Color&    GetColor() const { return aColor; }
+    const Color&    GetColor() const { return m_aColor; }
     Color           GetColorOut( bool bLeftOrTop = true ) const;
     Color           GetColorIn( bool bLeftOrTop = true ) const;
     bool            HasGapColor() const { return m_pColorGapFn != nullptr; }
@@ -208,7 +208,7 @@ public:
 
     SvxBorderLineStyle  GetBorderLineStyle() const { return m_nStyle; }
 
-    void            SetColor( const Color &rColor ) { aColor = rColor; }
+    void            SetColor( const Color &rColor ) { m_aColor = rColor; }
     void            SetBorderLineStyle( SvxBorderLineStyle nNew );
     void            ScaleMetrics( tools::Long nMult, tools::Long nDiv );
 

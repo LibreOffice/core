@@ -109,8 +109,8 @@ SvxBorderLine::SvxBorderLine( const Color *pCol, tools::Long nWidth,
     , m_bMirrorWidths(false)
     , m_bUseLeftTop(false)
 {
-    if ( pCol )
-        aColor = *pCol;
+    if (pCol)
+        m_aColor = *pCol;
 }
 
 SvxBorderLineStyle
@@ -518,15 +518,15 @@ sal_uInt16 SvxBorderLine::GetDistance() const
 
 bool SvxBorderLine::operator==( const SvxBorderLine& rCmp ) const
 {
-    return ( ( aColor    == rCmp.aColor )            &&
-             ( m_nWidth == rCmp.m_nWidth )           &&
-             ( m_bMirrorWidths  == rCmp.m_bMirrorWidths )  &&
-             ( m_aWidthImpl  == rCmp.m_aWidthImpl )  &&
-             ( m_nStyle == rCmp.GetBorderLineStyle()) &&
-             ( m_bUseLeftTop == rCmp.m_bUseLeftTop ) &&
-             ( m_pColorOutFn == rCmp.m_pColorOutFn ) &&
-             ( m_pColorInFn == rCmp.m_pColorInFn )   &&
-             ( m_pColorGapFn == rCmp.m_pColorGapFn ) );
+    return (m_aColor == rCmp.m_aColor &&
+            m_nWidth == rCmp.m_nWidth &&
+            m_bMirrorWidths == rCmp.m_bMirrorWidths &&
+            m_aWidthImpl == rCmp.m_aWidthImpl &&
+            m_nStyle == rCmp.GetBorderLineStyle() &&
+            m_bUseLeftTop == rCmp.m_bUseLeftTop &&
+            m_pColorOutFn == rCmp.m_pColorOutFn &&
+            m_pColorInFn == rCmp.m_pColorInFn &&
+            m_pColorGapFn == rCmp.m_pColorGapFn);
 }
 
 void SvxBorderLine::SetBorderLineStyle( SvxBorderLineStyle nNew )
@@ -571,14 +571,14 @@ void SvxBorderLine::SetBorderLineStyle( SvxBorderLineStyle nNew )
 
 Color SvxBorderLine::GetColorOut( bool bLeftOrTop ) const
 {
-    Color aResult = aColor;
+    Color aResult = m_aColor;
 
     if ( m_aWidthImpl.IsDouble() && m_pColorOutFn != nullptr )
     {
         if ( !bLeftOrTop && m_bUseLeftTop )
-            aResult = (*m_pColorInFn)( aColor );
+            aResult = (*m_pColorInFn)(m_aColor);
         else
-            aResult = (*m_pColorOutFn)( aColor );
+            aResult = (*m_pColorOutFn)(m_aColor);
     }
 
     return aResult;
@@ -586,14 +586,14 @@ Color SvxBorderLine::GetColorOut( bool bLeftOrTop ) const
 
 Color SvxBorderLine::GetColorIn( bool bLeftOrTop ) const
 {
-    Color aResult = aColor;
+    Color aResult = m_aColor;
 
     if ( m_aWidthImpl.IsDouble() && m_pColorInFn != nullptr )
     {
         if ( !bLeftOrTop && m_bUseLeftTop )
-            aResult = (*m_pColorOutFn)( aColor );
+            aResult = (*m_pColorOutFn)(m_aColor);
         else
-            aResult = (*m_pColorInFn)( aColor );
+            aResult = (*m_pColorInFn)(m_aColor);
     }
 
     return aResult;
@@ -601,11 +601,11 @@ Color SvxBorderLine::GetColorIn( bool bLeftOrTop ) const
 
 Color SvxBorderLine::GetColorGap( ) const
 {
-    Color aResult = aColor;
+    Color aResult = m_aColor;
 
     if ( m_aWidthImpl.IsDouble() && m_pColorGapFn != nullptr )
     {
-        aResult = (*m_pColorGapFn)( aColor );
+        aResult = (*m_pColorGapFn)(m_aColor);
     }
 
     return aResult;
@@ -642,7 +642,7 @@ OUString SvxBorderLine::GetValueString(MapUnit eSrcUnit,
         RID_DASH_DOT,
         RID_DASH_DOT_DOT
     };
-    OUString aStr = "(" + ::GetColorString( aColor ) + cpDelim;
+    OUString aStr = "(" + ::GetColorString(m_aColor) + cpDelim;
 
     if ( static_cast<int>(m_nStyle) < int(SAL_N_ELEMENTS(aStyleIds)) )
     {
