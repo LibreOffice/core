@@ -481,7 +481,9 @@ static bool extractLinks(const uno::Reference< container::XNameAccess >& xLinks,
 
                     if (bIsTarget)
                     {
-                        jsonText.append("true");
+                        jsonText.append("\"");
+                        jsonText.append(aLink);
+                        jsonText.append("\"");
                         continue;
                     }
                     jsonText.append("{");
