@@ -406,7 +406,7 @@ bool ScValidationData::DoError(weld::Window* pParent, const OUString& rInput,
     }
 
     std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent, eType,
-                                              eStyle, aMessage));
+                                              eStyle, aMessage, SfxViewShell::Current()));
     xBox->set_title(aTitle);
     xBox->SetInstallLOKNotifierHdl(LINK(nullptr, ScValidationData, InstallLOKNotifierHdl));
 
