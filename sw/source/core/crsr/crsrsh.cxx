@@ -2631,6 +2631,8 @@ void SwCursorShell::ShowCursor()
 {
     if( !m_bBasicHideCursor )
     {
+        comphelper::FlagRestorationGuard g(mbSelectAll, StartsWith_() != StartsWith::None && ExtendedSelectedAll());
+
         m_bSVCursorVis = true;
         m_pCurrentCursor->SetShowTextInputFieldOverlay( true );
 
