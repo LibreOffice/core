@@ -233,20 +233,6 @@ static void lo_accessible_set_property(GObject* object, guint property_id, const
     }
 }
 
-static void lo_accessible_class_init(LoAccessibleClass* klass)
-{
-    GObjectClass* object_class = G_OBJECT_CLASS(klass);
-
-    //    object_class->finalize = lo_accessible_finalize;
-    //    object_class->dispose = lo_accessible_dispose;
-    object_class->get_property = lo_accessible_get_property;
-    object_class->set_property = lo_accessible_set_property;
-    //    object_class->constructed = lo_accessible_constructed;
-
-    //    g_object_class_install_properties(object_class, LAST_CHILD_PROP, lo_accessible_props);
-    g_object_class_override_property(object_class, PROP_ACCESSIBLE_ROLE, "accessible-role");
-}
-
 static GtkAccessible* lo_accessible_get_accessible_parent(GtkAccessible* accessible)
 {
     LoAccessible* lo_accessible = LO_ACCESSIBLE(accessible);
@@ -294,6 +280,20 @@ static void lo_accessible_accessible_init(GtkAccessibleInterface* iface)
 
 G_DEFINE_TYPE_WITH_CODE(LoAccessible, lo_accessible, G_TYPE_OBJECT,
                         G_IMPLEMENT_INTERFACE(GTK_TYPE_ACCESSIBLE, lo_accessible_accessible_init))
+
+static void lo_accessible_class_init(LoAccessibleClass* klass)
+{
+    GObjectClass* object_class = G_OBJECT_CLASS(klass);
+
+    //    object_class->finalize = lo_accessible_finalize;
+    //    object_class->dispose = lo_accessible_dispose;
+    object_class->get_property = lo_accessible_get_property;
+    object_class->set_property = lo_accessible_set_property;
+    //    object_class->constructed = lo_accessible_constructed;
+
+    //    g_object_class_install_properties(object_class, LAST_CHILD_PROP, lo_accessible_props);
+    g_object_class_override_property(object_class, PROP_ACCESSIBLE_ROLE, "accessible-role");
+}
 
 static LoAccessible*
 lo_accessible_new(GdkDisplay* pDisplay, GtkAccessible* pParent,
