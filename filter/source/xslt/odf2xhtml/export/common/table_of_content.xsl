@@ -93,7 +93,10 @@
                     </xsl:attribute>
                 </xsl:if>
                 <xsl:attribute name="class">
-                    <xsl:value-of select="translate(parent::*/@text:style-name, '.,;: %()[]/\+', '_____________')"/>
+                    <xsl:call-template name="create-unique-style-id">
+                        <xsl:with-param name="styleName" select="parent::*/@text:style-name"/>
+                        <xsl:with-param name="styleFamily" select="'table'"/>
+                    </xsl:call-template>
                 </xsl:attribute>
             </xsl:if>
 
@@ -317,7 +320,10 @@ Scenarios unmatched:
                     <xsl:element namespace="{$namespace}" name="p">
                         <xsl:if test="$position = 1">
                             <xsl:attribute name="class">
-                                <xsl:value-of select="translate(@text:style-name, '.,;: %()[]/\+', '_____________')"/>
+                                <xsl:call-template name="create-unique-style-id">
+                                    <xsl:with-param name="styleName" select="@text:style-name"/>
+                                    <xsl:with-param name="styleFamily" select="'paragraph'"/>
+                                </xsl:call-template>
                             </xsl:attribute>
                         </xsl:if>
                         <xsl:apply-templates mode="content-table">
@@ -341,7 +347,10 @@ Scenarios unmatched:
                                     <xsl:element namespace="{$namespace}" name="p">
                                         <xsl:if test="$position = 1">
                                             <xsl:attribute name="class">
-                                                <xsl:value-of select="translate(@text:style-name, '.,;: %()[]/\+', '_____________')"/>
+                                                <xsl:call-template name="create-unique-style-id">
+                                                    <xsl:with-param name="styleName" select="@text:style-name"/>
+                                                    <xsl:with-param name="styleFamily" select="'paragraph'"/>
+                                                </xsl:call-template>
                                             </xsl:attribute>
                                         </xsl:if>
                                         <xsl:call-template name="grab-cell-content-before-tab-stop">
@@ -358,7 +367,10 @@ Scenarios unmatched:
                                     <xsl:element namespace="{$namespace}" name="p">
                                         <xsl:if test="$position = 1">
                                             <xsl:attribute name="class">
-                                                <xsl:value-of select="translate(@text:style-name, '.,;: %()[]/\+', '_____________')"/>
+                                                <xsl:call-template name="create-unique-style-id">
+                                                    <xsl:with-param name="styleName" select="@text:style-name"/>
+                                                    <xsl:with-param name="styleFamily" select="'paragraph'"/>
+                                                </xsl:call-template>
                                             </xsl:attribute>
                                         </xsl:if>
                                         <xsl:call-template name="grab-cell-content-before-tab-stop">
@@ -382,7 +394,10 @@ Scenarios unmatched:
                                 <xsl:element namespace="{$namespace}" name="p">
                                     <xsl:if test="$position = 1">
                                         <xsl:attribute name="class">
-                                            <xsl:value-of select="translate(@text:style-name, '.,;: %()[]/\+', '_____________')"/>
+                                            <xsl:call-template name="create-unique-style-id">
+                                                <xsl:with-param name="styleName" select="@text:style-name"/>
+                                                <xsl:with-param name="styleFamily" select="'paragraph'"/>
+                                            </xsl:call-template>
                                         </xsl:attribute>
                                     </xsl:if>
                                     <xsl:element namespace="{$namespace}" name="td">

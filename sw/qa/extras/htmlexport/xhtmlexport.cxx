@@ -49,7 +49,7 @@ DECLARE_HTMLEXPORT_TEST(testTdf131812, "tdf131812.odt")
     sal_uInt64 nLength = pStream->TellEnd();
     OString aStream(read_uInt8s_ToOString(*pStream, nLength));
     CPPUNIT_ASSERT(
-        aStream.indexOf(".P1 { font-size:12pt; font-family:\'Liberation Serif\'; "
+        aStream.indexOf(".paragraph-P1{ font-size:12pt; font-family:\'Liberation Serif\'; "
                         "writing-mode:horizontal-tb; direction:rtl; text-align:right ! important;}")
         != -1);
 }
@@ -138,18 +138,20 @@ DECLARE_HTMLEXPORT_TEST(testTdf107696, "tdf107696.odt")
     CPPUNIT_ASSERT(aStream.indexOf("span.heading_numbering { margin-right: 0.8rem; }* { margin:0;}")
                    != -1);
     CPPUNIT_ASSERT(
-        aStream.indexOf("<h2 class=\"Heading_20_2\"><a "
+        aStream.indexOf("<h2 class=\"paragraph-Heading_20_2\"><a "
                         "id=\"a__Level_2_without_number\"><span/></a>Level 2 without number</h2>")
         != -1);
     CPPUNIT_ASSERT(
-        aStream.indexOf("<h2 class=\"Heading_20_2\"><a id=\"a_3_1_Level_2__number_3_1\"><span "
-                        "class=\"heading_numbering\">3.1</span></a>Level <span "
-                        "class=\"T2\">2</span>, <span class=\"T1\">number 3.1</span></h2>")
+        aStream.indexOf(
+            "<h2 class=\"paragraph-Heading_20_2\"><a id=\"a_3_1_Level_2__number_3_1\"><span "
+            "class=\"heading_numbering\">3.1</span></a>Level <span "
+            "class=\"text-T2\">2</span>, <span class=\"text-T1\">number 3.1</span></h2>")
         != -1);
     CPPUNIT_ASSERT(
-        aStream.indexOf("<h2 class=\"Heading_20_2\"><a id=\"a_3_2_Level_2__number_3_2\"><span "
-                        "class=\"heading_numbering\">3.2</span></a>Level 2, <span "
-                        "class=\"T1\">number 3.2</span></h2>")
+        aStream.indexOf(
+            "<h2 class=\"paragraph-Heading_20_2\"><a id=\"a_3_2_Level_2__number_3_2\"><span "
+            "class=\"heading_numbering\">3.2</span></a>Level 2, <span "
+            "class=\"text-T1\">number 3.2</span></h2>")
         != -1);
 }
 
@@ -160,8 +162,9 @@ DECLARE_HTMLEXPORT_TEST(testTdf66305, "tdf66305.odt")
     sal_uInt64 nLength = pStream->TellEnd();
     OString aStream(read_uInt8s_ToOString(*pStream, nLength));
     CPPUNIT_ASSERT(
-        aStream.indexOf("<p class=\"P6\"><a href=\"#__RefHeading__82004_486970805\" "
-                        "class=\"Internet_20_link\">Introduction</a></p><p class=\"P7\"> </p>")
+        aStream.indexOf("<p class=\"paragraph-P6\"><a href=\"#__RefHeading__82004_486970805\" "
+                        "class=\"text-Internet_20_link\">Introduction</a></p><p "
+                        "class=\"paragraph-P7\"> </p>")
         != -1);
 }
 

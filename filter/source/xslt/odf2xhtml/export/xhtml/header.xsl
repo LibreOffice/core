@@ -129,7 +129,12 @@
             <xsl:for-each select="$globalData/all-styles/style">
                     <xsl:if test="final-properties != ''">
                         <!-- NOTE: easy process, as only the style family in conjunction with the style name, makes the style unambiguous -->
-                        <xsl:text>.</xsl:text><!--<xsl:value-of select="@style:family" /><xsl:text>:</xsl:text>--><xsl:value-of select="translate(@style:name, '.,;: %()[]/\+', '_____________')"/><xsl:text> { </xsl:text> <xsl:value-of select="final-properties" /><xsl:text>}
+                        <xsl:text>.</xsl:text>
+                        <xsl:call-template name="create-unique-style-id">
+                            <xsl:with-param name="styleName" select="@style:name"/>
+                            <xsl:with-param name="styleFamily" select="@style:family"/>
+                        </xsl:call-template>
+                        <xsl:text>{ </xsl:text> <xsl:value-of select="final-properties" /><xsl:text>}
     </xsl:text>
                     </xsl:if>
 
