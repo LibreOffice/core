@@ -213,7 +213,7 @@ SwHTMLWriter& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
 
         rWrt.m_aBulletGrfs[i].clear();
         OString sOut = "<" + rWrt.GetNamespace();
-        if (rWrt.mbXHTML && (nPrevDepth != 0 || i != 0))
+        if (rWrt.mbXHTML && i != 0)
         {
             sOut += OOO_STRING_SVTOOLS_HTML_li "><" + rWrt.GetNamespace();
         }
