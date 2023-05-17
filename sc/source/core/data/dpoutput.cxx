@@ -608,7 +608,11 @@ ScDPOutput::ScDPOutput( ScDocument* pD, uno::Reference<sheet::XDimensionsSupplie
                                     {
                                         uno::Sequence<sheet::MemberResult> aResult = xLevRes->getResults();
                                         ++nRowDims;
-                                        if (!lcl_MemberEmpty(aResult))
+                                        // We want only to remove the DATA column if it is empty
+                                        // and not any other empty columns (to still show the
+                                        // header columns)
+                                        bool bSkip = lcl_MemberEmpty(aResult) && bIsDataLayout;
+                                        if (!bSkip)
                                         {
                                             bool bFieldCompact = false;
                                             try

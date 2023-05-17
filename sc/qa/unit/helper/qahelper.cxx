@@ -32,6 +32,7 @@
 #include <scitems.hxx>
 #include <stringutil.hxx>
 #include <tokenarray.hxx>
+#include <o3tl/safeint.hxx>
 
 #include <orcus/csv_parser.hpp>
 
@@ -404,6 +405,43 @@ bool checkOutput(
     svl::GridPrinter printer(e.Row() - s.Row() + 1, e.Col() - s.Col() + 1, CALC_DEBUG_OUTPUT != 0);
     SCROW nOutRowSize = e.Row() - s.Row() + 1;
     SCCOL nOutColSize = e.Col() - s.Col() + 1;
+
+    // Check if expected size iz smaller than actual size (and prevent a crash)
+    if (aCheck.size() < o3tl::make_unsigned(nOutRowSize) || aCheck[0].size() < o3tl::make_unsigned(nOutColSize))
+    {
+        // Dump the arrays to console, so we can compare
+        std::cout << "Expected data:" << std::endl;
+        for (size_t nRow = 0; nRow < aCheck.size(); ++nRow)
+        {
+            for (size_t nCol = 0; nCol < aCheck[nRow].size(); ++nCol)
+            {
+                const char* p = aCheck[nRow][nCol];
+                if (p)
+                {
+                    OUString aCheckVal = OUString::createFromAscii(p);
+                    std::cout << "'" << aCheckVal << "', ";
+                }
+                else
+                    std::cout << "null, ";
+            }
+            std::cout << std::endl;
+        }
+
+        std::cout << "Actual data:" << std::endl;
+        for (SCROW nRow = 0; nRow < nOutRowSize; ++nRow)
+        {
+            for (SCCOL nCol = 0; nCol < nOutColSize; ++nCol)
+            {
+                OUString aVal = pDoc->GetString(nCol + s.Col(), nRow + s.Row(), s.Tab());
+                std::cout << "'" << aVal << "', ";
+            }
+            std::cout << std::endl;
+        }
+        std::cout << std::endl;
+
+        return false;
+    }
+
     for (SCROW nRow = 0; nRow < nOutRowSize; ++nRow)
     {
         for (SCCOL nCol = 0; nCol < nOutColSize; ++nCol)
