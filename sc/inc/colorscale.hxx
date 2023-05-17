@@ -310,6 +310,8 @@ public:
     const ScDataBarFormatData* GetDataBarData() const;
     ScDataBarFormatData* GetDataBarData();
 
+    bool IsEqual(const ScFormatEntry& r, bool bIgnoreSrcPos) const override;
+
     virtual void UpdateReference( sc::RefUpdateContext& rCxt ) override;
     virtual void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt ) override;
     virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt ) override;
