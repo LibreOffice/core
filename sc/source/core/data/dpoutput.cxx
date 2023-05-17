@@ -599,7 +599,11 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                     case sheet::DataPilotFieldOrientation_ROW:
                                     {
                                         uno::Sequence<sheet::MemberResult> aResult = xLevRes->getResults();
-                                        if (!lcl_MemberEmpty(aResult))
+                                        // We want only to remove the DATA column if it is empty
+                                        // and not any other empty columns (to still show the
+                                        // header columns)
+                                        bool bSkip = lcl_MemberEmpty(aResult) && bIsDataLayout;
+                                        if (!bSkip)
                                         {
                                             ScDPOutLevelData tmp(nDim, nHierarchy, nLev, nDimPos, nNumFmt, aResult, aName,
                                                                    aCaption, bHasHiddenMember, bIsDataLayout, false);
