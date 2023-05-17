@@ -230,6 +230,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_tablesheetsobj \
 	CppunitTest_sc_tablevalidationobj \
 	CppunitTest_sc_tabviewobj \
+	CppunitTest_sc_theme_import_export_test \
 	CppunitTest_sc_uniquecellformatsenumeration \
 	CppunitTest_sc_uniquecellformatsobj \
 	CppunitTest_sc_viewpaneobj \

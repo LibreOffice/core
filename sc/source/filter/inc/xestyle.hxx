@@ -30,6 +30,7 @@
 #include <memory>
 #include <utility>
 #include <vector>
+#include <docmodel/color/ComplexColor.hxx>
 
 /* ============================================================================
 - Buffers for style records (PALETTE, FONT, FORMAT, XF, STYLE).
@@ -375,6 +376,9 @@ struct XclExpCellArea : public XclCellArea
     Color maForeColor; // Actual foreground color
     Color maBackColor; // Actual background color
 
+    model::ComplexColor maForegroundComplexColor;
+    model::ComplexColor maBackgroundComplexColor;
+
     explicit XclExpCellArea();
     explicit XclExpCellArea(Color aForeColor, Color aBackColor);
 
@@ -400,6 +404,7 @@ struct XclExpCellArea : public XclCellArea
 struct XclExpColor
 {
     Color maColor;
+    model::ComplexColor maComplexColor;
 
     bool FillFromItemSet( const SfxItemSet& rItemSet );
 

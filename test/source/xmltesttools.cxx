@@ -76,8 +76,14 @@ xmlXPathObjectPtr XmlTestTools::getXPathNode(const xmlDocUniquePtr& pXmlDoc, con
     return pXmlXpathObj;
 }
 
-void XmlTestTools::registerNamespaces(xmlXPathContextPtr& /*pXmlXpathCtx*/)
+void XmlTestTools::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
 {
+    // ooxml
+    XmlTestTools::registerOOXMLNamespaces(pXmlXpathCtx);
+    // odf
+    XmlTestTools::registerODFNamespaces(pXmlXpathCtx);
+    // reqif-xhtml
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("reqif-xhtml"), BAD_CAST("http://www.w3.org/1999/xhtml"));
 }
 
 OUString XmlTestTools::getXPath(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, const OString& rAttribute)
