@@ -31,7 +31,7 @@ struct OOoFixedClass
     GtkFixedClass parent_class;
 };
 
-GtkAccessibleRole
+static GtkAccessibleRole
 map_accessible_role(const css::uno::Reference<css::accessibility::XAccessible>& rAccessible)
 {
     GtkAccessibleRole eRole(GTK_ACCESSIBLE_ROLE_WIDGET);
@@ -130,7 +130,7 @@ map_accessible_role(const css::uno::Reference<css::accessibility::XAccessible>& 
     return eRole;
 }
 
-css::uno::Reference<css::accessibility::XAccessible> get_uno_accessible(GtkWidget* pWidget)
+static css::uno::Reference<css::accessibility::XAccessible> get_uno_accessible(GtkWidget* pWidget)
 {
     GtkWidget* pTopLevel = widget_get_toplevel(pWidget);
     if (!pTopLevel)
@@ -255,7 +255,7 @@ static GtkAccessible* lo_accessible_get_accessible_parent(GtkAccessible* accessi
     return GTK_ACCESSIBLE(g_object_ref(lo_accessible->parent));
 }
 
-GtkATContext* lo_accessible_get_at_context(GtkAccessible* self)
+static GtkATContext* lo_accessible_get_at_context(GtkAccessible* self)
 {
     LoAccessible* pAccessible = LO_ACCESSIBLE(self);
 
@@ -295,7 +295,7 @@ static void lo_accessible_accessible_init(GtkAccessibleInterface* iface)
 G_DEFINE_TYPE_WITH_CODE(LoAccessible, lo_accessible, G_TYPE_OBJECT,
                         G_IMPLEMENT_INTERFACE(GTK_TYPE_ACCESSIBLE, lo_accessible_accessible_init))
 
-LoAccessible*
+static LoAccessible*
 lo_accessible_new(GdkDisplay* pDisplay, GtkAccessible* pParent,
                   const css::uno::Reference<css::accessibility::XAccessible>& rAccessible)
 {
@@ -404,7 +404,7 @@ static gboolean lo_accessible_get_platform_state(GtkAccessible* self,
 
 static void lo_accessible_init(LoAccessible* /*iface*/) {}
 
-GtkATContext* get_at_context(GtkAccessible* self)
+static GtkATContext* get_at_context(GtkAccessible* self)
 {
     OOoFixed* pFixed = OOO_FIXED(self);
 
@@ -433,7 +433,7 @@ gboolean get_platform_state(GtkAccessible* self, GtkAccessiblePlatformState stat
 }
 #endif
 
-gboolean get_bounds(GtkAccessible* accessible, int* x, int* y, int* width, int* height)
+static gboolean get_bounds(GtkAccessible* accessible, int* x, int* y, int* width, int* height)
 {
     OOoFixed* pFixed = OOO_FIXED(accessible);
     css::uno::Reference<css::accessibility::XAccessible> xAccessible(
@@ -451,7 +451,7 @@ gboolean get_bounds(GtkAccessible* accessible, int* x, int* y, int* width, int* 
     return true;
 }
 
-GtkAccessible* get_first_accessible_child(GtkAccessible* accessible)
+static GtkAccessible* get_first_accessible_child(GtkAccessible* accessible)
 {
     OOoFixed* pFixed = OOO_FIXED(accessible);
     css::uno::Reference<css::accessibility::XAccessible> xAccessible(
