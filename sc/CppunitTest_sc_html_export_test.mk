@@ -67,6 +67,11 @@ $(eval $(call gb_CppunitTest_use_api,sc_html_export_test,\
 	oovbaapi \
 ))
 
+$(eval $(call gb_CppunitTest_use_packages,sc_html_export_test, \
+    filter_xhtml \
+    filter_xslt \
+))
+
 $(eval $(call gb_CppunitTest_use_ure,sc_html_export_test))
 $(eval $(call gb_CppunitTest_use_vcl,sc_html_export_test))
 
