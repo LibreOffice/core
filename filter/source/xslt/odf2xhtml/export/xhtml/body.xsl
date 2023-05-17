@@ -19,7 +19,7 @@
 <!--
     For further documentation and updates visit http://xml.openoffice.org/odf2xhtml
 -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xt="http://www.jclark.com/xt" xmlns:common="http://exslt.org/common" xmlns:xalan="http://xml.apache.org/xalan" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" exclude-result-prefixes="chart config dc dom dr3d draw fo form loext math meta number office ooo oooc ooow script style svg table text xforms xlink xsd xsi xt common xalan" xmlns="http://www.w3.org/1999/xhtml">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xt="http://www.jclark.com/xt" xmlns:common="http://exslt.org/common" xmlns:xalan="http://xml.apache.org/xalan" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" exclude-result-prefixes="chart config dc dom dr3d draw fo form loext math meta number office ooo oooc ooow presentation script style svg table text xforms xlink xsd xsi xt common xalan" xmlns="http://www.w3.org/1999/xhtml">
 
 
     <!--+++++ INCLUDED XSL MODULES +++++-->
@@ -1220,7 +1220,10 @@
             NOTE: Should be handled as CSS style in style header -->
             <xsl:variable name="min-label" select="$globalData/office:styles/text:outline-style/text:outline-level-style[@text:level = current()/@text:outline-level]/*/@text:min-label-width"/>
             <xsl:attribute name="class">
-                <xsl:value-of select="translate(@text:style-name, '.,;: %()[]/\+', '_____________')"/>
+                <xsl:call-template name="create-unique-style-id">
+                    <xsl:with-param name="styleName" select="@text:style-name"/>
+                    <xsl:with-param name="styleFamily" select="'paragraph'"/>
+                </xsl:call-template>
             </xsl:attribute>
 
             <xsl:call-template name="create-heading-anchor">
@@ -2859,29 +2862,329 @@
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="@text:style-name | @draw:style-name | @draw:text-style-name | @table:style-name"><!-- | @presentation:style-name-->
+    <xsl:template match="@text:style-name | @draw:style-name | @draw:text-style-name | @table:style-name | @presentation:style-name">
         <xsl:param name="globalData"/>
 
-        <xsl:attribute name="class">
-        	<xsl:choose>
-        		<xsl:when test="name() = 'draw:text-style-name' or name() = 'draw:style-name'">
-                    <xsl:choose>
-                        <xsl:when test="parent::*/@draw:text-style-name and parent::*/@draw:style-name">
-                            <xsl:value-of select="translate(parent::*/@draw:style-name, '.,;: %()[]/\+', '_____________')" /><xsl:text> </xsl:text>
-                            <xsl:value-of select="translate(parent::*/@draw:text-style-name, '.,;: %()[]/\+', '_____________')" />
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="translate(., '.,;: %()[]/\+', '_____________')" />
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="translate(., '.,;: %()[]/\+', '_____________')"/>
-                </xsl:otherwise>	            
-	        </xsl:choose>    
-        </xsl:attribute>
+        <!-- the probem there can be more than one style-name attribute! We need to write class once with all style-name attribute values -->
+        <xsl:variable name="classAttributeValue">
+            <xsl:if test="parent::*/@text:style-name != ''"> 
+                <xsl:call-template name="create-unique-style-id">
+                    <xsl:with-param name="styleName" select="parent::*/@text:style-name"/>
+                    <xsl:with-param name="styleFamily">
+                        <xsl:call-template name="get-style-family-name">
+                            <xsl:with-param name="parentName" select="name(..)"/>
+                        </xsl:call-template>
+                    </xsl:with-param>
+                </xsl:call-template><xsl:text> </xsl:text>
+            </xsl:if>        
+            <xsl:if test="parent::*/@draw:style-name != ''"> 
+                <xsl:call-template name="create-unique-style-id">
+                    <xsl:with-param name="styleName" select="parent::*/@draw:style-name"/>
+                    <xsl:with-param name="styleFamily">
+                        <xsl:call-template name="get-style-family-name">
+                            <xsl:with-param name="parentName" select="name(..)"/>
+                        </xsl:call-template>
+                    </xsl:with-param>
+                </xsl:call-template><xsl:text> </xsl:text>
+            </xsl:if>
+            <xsl:if test="parent::*/@draw:text-style-name != ''"> 
+                <xsl:call-template name="create-unique-style-id">
+                    <xsl:with-param name="styleName" select="parent::*/@draw:text-style-name"/>
+                    <xsl:with-param name="styleFamily">
+                        <xsl:call-template name="get-style-family-name">
+                            <xsl:with-param name="parentName" select="name(..)"/>
+                        </xsl:call-template>
+                    </xsl:with-param>
+                </xsl:call-template><xsl:text> </xsl:text>
+            </xsl:if>
+            <xsl:if test="parent::*/@table:style-name != ''"> 
+                <xsl:call-template name="create-unique-style-id">
+                    <xsl:with-param name="styleName" select="parent::*/@table:style-name"/>
+                    <xsl:with-param name="styleFamily">
+                        <xsl:call-template name="get-style-family-name">
+                            <xsl:with-param name="parentName" select="name(..)"/>
+                        </xsl:call-template>
+                    </xsl:with-param>
+                </xsl:call-template><xsl:text> </xsl:text>
+            </xsl:if>
+            <xsl:if test="parent::*/@presentation:style-name != ''"> 
+                <xsl:call-template name="create-unique-style-id">
+                    <xsl:with-param name="styleName" select="parent::*/@presentation:style-name"/>
+                    <xsl:with-param name="styleFamily">
+                        <xsl:call-template name="get-style-family-name">
+                            <xsl:with-param name="parentName" select="name(..)"/>
+                        </xsl:call-template>
+                    </xsl:with-param>
+                </xsl:call-template><xsl:text> </xsl:text>
+            </xsl:if>
+        </xsl:variable>
+
+        <xsl:attribute name="class"><xsl:value-of select="normalize-space($classAttributeValue)"/></xsl:attribute>
     </xsl:template>
 
+    
+    <xsl:template name="create-unique-style-id">
+        <xsl:param name="styleName" />
+        <xsl:param name="styleFamily" />
+
+        <xsl:call-template name="abbreviate-style-family-name">
+            <xsl:with-param name="styleFamily" select="$styleFamily"/>
+        </xsl:call-template>
+        <xsl:text>-</xsl:text>
+        <xsl:value-of select="translate($styleName, '.,;: %()[]/\+', '_____________')"/>
+    </xsl:template>
+
+
+    <xsl:template name="abbreviate-style-family-name">
+            <xsl:param name="styleFamily" />
+        <!--<xsl:message>abbreviate-style-family-name: The style family is '<xsl:value-of select="$styleFamily"/>'</xsl:message>-->
+
+        <!-- 
+        	The complete set of family types (aka @style:family) is defined in the ODF specification:
+            	https://docs.oasis-open.org/office/OpenDocument/v1.3/os/part3-schema/OpenDocument-v1.3-os-part3-schema.html#attribute-style_family            
+            (realized style family 'section' is missing, see https://docs.oasis-open.org/office/OpenDocument/v1.3/os/schemas/OpenDocument-v1.3-schema-rng.html#12668 
+                and wrote an issue to ODF TC: https://github.com/oasis-tcs/odf-tc/issues/49
+        -->
+        <xsl:choose>
+            <!-- chart: family name of styles for charts. -->
+            <xsl:when test="$styleFamily='chart'">
+                <xsl:text>chart</xsl:text>
+            </xsl:when>
+            <!-- drawing-page: family name of styles for drawing pages. -->
+            <xsl:when test="$styleFamily='drawing-page'">
+                <xsl:text>page</xsl:text>
+            </xsl:when>
+            <!-- graphic: family name of styles for graphic elements. -->
+            <xsl:when test="$styleFamily='graphic'">
+                <xsl:text>graphic</xsl:text>
+            </xsl:when>
+            <!-- paragraph: family name of styles for paragraphs. -->
+            <xsl:when test="$styleFamily='paragraph'">
+                <xsl:text>paragraph</xsl:text>
+            </xsl:when>
+            <!-- presentation: family name of styles for presentations. -->
+            <xsl:when test="$styleFamily='presentation'">
+                <xsl:text>presentation</xsl:text>
+            </xsl:when>
+            <!-- ruby: family name of styles for ruby text. -->
+            <xsl:when test="$styleFamily='ruby'">
+                <xsl:text>ruby</xsl:text>
+            </xsl:when>
+            <!-- section: family name of styles for sections. -->
+            <xsl:when test="$styleFamily='section'">
+                <xsl:text>section</xsl:text>
+            </xsl:when>            
+            <!-- table: family name of styles for tables. -->
+            <xsl:when test="$styleFamily='table'">
+                <xsl:text>table</xsl:text>
+            </xsl:when>
+            <!-- table-cell: family name of styles for table cells. -->
+            <xsl:when test="$styleFamily='table-cell'">
+                <xsl:text>cell</xsl:text>
+            </xsl:when>
+            <!-- table-column: family name of styles for table columns. -->
+            <xsl:when test="$styleFamily='table-column'">
+                <xsl:text>col</xsl:text>
+            </xsl:when>
+            <!-- table-row: family name of styles for table rows. -->
+            <xsl:when test="$styleFamily='table-row'">
+                <xsl:text>row</xsl:text>
+            </xsl:when>
+            <!-- text: family name of styles for text. -->
+            <xsl:when test="$styleFamily='text'">
+                <xsl:text>text</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:message>WARNING: No style family found for <xsl:value-of select="$styleFamily"/></xsl:message>
+                <xsl:text>unknown-family</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template name="get-style-family-name">
+        <xsl:param name="parentName" />
+
+
+        <!--<xsl:message>get-style-family-name: The style parent is '<xsl:value-of select="name(..)"/>'</xsl:message>-->
+        <!--
+        	The complete set of family types (aka @style:family) is defined in the ODF specification:
+            	https://docs.oasis-open.org/office/OpenDocument/v1.3/os/part3-schema/OpenDocument-v1.3-os-part3-schema.html#attribute-style_family
+            (realized style family 'section' is missing, see https://docs.oasis-open.org/office/OpenDocument/v1.3/os/schemas/OpenDocument-v1.3-schema-rng.html#12668
+                and wrote an issue to ODF TC: https://github.com/oasis-tcs/odf-tc/issues/49
+
+            in addition the mapping of styleable ODF elements to their @style:family attribute is availabe in structured form (XML) in the ODF Toolkit generator project:
+            	https://github.com/tdf/odftoolkit/blob/master/generator/schema2template/src/test/resources/test-input/odf/generation/odfdom-java/dom/grammar-additions.xml#LL43C52-L43C52r-additions.xml#LL43C52-L43C52
+        -->
+        <xsl:choose>
+            <!-- chart: family name of styles for charts. -->
+            <xsl:when test="
+            		$parentName='chart:axis' or
+					$parentName='chart:chart' or
+					$parentName='chart:data-point' or
+					$parentName='chart:error-indicator' or
+					$parentName='chart:floor' or
+					$parentName='chart:footer' or
+					$parentName='chart:grid' or
+					$parentName='chart:legend' or
+					$parentName='chart:mean-value' or
+					$parentName='chart:plot-area' or
+					$parentName='chart:regression-curve' or
+					$parentName='chart:series' or
+					$parentName='chart:stock-gain-marker' or
+					$parentName='chart:stock-loss-marker' or
+					$parentName='chart:stock-range-line' or
+					$parentName='chart:subtitle' or
+					$parentName='chart:title' or
+					$parentName='chart:wall'">
+                <xsl:text>chart</xsl:text>
+            </xsl:when>
+            <!-- drawing-page: family name of styles for drawing pages. -->
+            <xsl:when test="
+            		$parentName='draw:page' or
+            		$parentName='style:handout-master' or
+            		$parentName='style:master-page' or
+        			$parentName='presentation:notes'">
+                <xsl:text>drawing-page</xsl:text>
+            </xsl:when>
+            <!-- graphic: family name of styles for graphic elements. -->
+            <xsl:when test="
+            		$parentName='dr3d:cube' or
+					$parentName='dr3d:extrude' or
+					$parentName='dr3d:rotate' or
+					$parentName='dr3d:scene' or
+					$parentName='dr3d:sphere' or
+					$parentName='draw:caption' or
+					$parentName='draw:circle' or
+					$parentName='draw:connector' or
+					$parentName='draw:control' or
+					$parentName='draw:custom-shape' or
+					$parentName='draw:ellipse' or
+					$parentName='draw:frame' or
+					$parentName='draw:g' or
+					$parentName='draw:line' or
+					$parentName='draw:measure' or
+					$parentName='draw:page-thumbnail' or
+					$parentName='draw:path' or
+					$parentName='draw:polygon' or
+					$parentName='draw:polyline' or
+					$parentName='draw:rect' or
+					$parentName='draw:regular-polygon' or
+					$parentName='office:annotation'">
+                <xsl:text>graphic</xsl:text>
+            </xsl:when>
+            <!-- paragraph: family name of styles for paragraphs. -->
+            <xsl:when test="
+					$parentName='text:alphabetical-index-entry-template' or
+					$parentName='text:bibliography-entry-template' or
+					$parentName='text:h' or
+					$parentName='text:illustration-index-entry-template' or
+					$parentName='text:index-source-style' or
+					$parentName='text:index-title-template' or
+					$parentName='text:object-index-entry-template' or
+					$parentName='text:p' or
+					$parentName='text:table-index-entry-template' or
+					$parentName='text:table-of-content-entry-template' or
+					$parentName='text:user-index-entry-template'">
+                <xsl:text>paragraph</xsl:text>
+            </xsl:when>
+            <!-- presentation: family name of styles for presentations. -->
+            <xsl:when test="
+            		$parentName='dr3d:cube' or
+					$parentName='dr3d:extrude' or
+					$parentName='dr3d:rotate' or
+					$parentName='dr3d:scene' or
+					$parentName='dr3d:sphere' or
+					$parentName='draw:caption' or
+					$parentName='draw:circle' or
+					$parentName='draw:connector' or
+					$parentName='draw:control' or
+					$parentName='draw:custom-shape' or
+					$parentName='draw:ellipse' or
+					$parentName='draw:frame' or
+					$parentName='draw:g' or
+					$parentName='draw:line' or
+					$parentName='draw:measure' or
+					$parentName='draw:page-thumbnail' or
+					$parentName='draw:path' or
+					$parentName='draw:polygon' or
+					$parentName='draw:polyline' or
+					$parentName='draw:rect' or
+					$parentName='draw:regular-polygon' or
+					$parentName='office:annotation'">
+                <xsl:text>presentation</xsl:text>
+            </xsl:when>
+            <!-- ruby: family name of styles for ruby text. -->
+            <xsl:when test="$parentName='text:ruby' or
+            				$parentName='text:ruby-text'">
+                <xsl:text>ruby</xsl:text>
+            </xsl:when>
+            <!-- section: family name of styles for sections. -->
+            <xsl:when test="
+					$parentName='text:alphabetical-index' or
+					$parentName='text:bibliography' or
+					$parentName='text:illustration-index' or
+					$parentName='text:index-title' or
+					$parentName='text:object-index' or
+					$parentName='text:page' or
+					$parentName='text:section' or
+					$parentName='text:s' or
+					$parentName='text:table-index' or
+					$parentName='text:table-of-content' or
+					$parentName='text:user-index'">
+                <xsl:text>section</xsl:text>
+            </xsl:when>
+            <!-- table: family name of styles for tables. -->
+            <xsl:when test="$parentName='table:table'">
+                <xsl:text>table</xsl:text>
+            </xsl:when>
+            <!-- table-cell: family name of styles for table cells. -->
+            <xsl:when test="
+            	$parentName='table:table-cell' or
+				$parentName='table:body' or
+				$parentName='table:even-columns' or
+				$parentName='table:even-rows' or
+				$parentName='table:first-column' or
+				$parentName='table:first-row' or
+				$parentName='table:last-column' or
+				$parentName='table:last-row' or
+				$parentName='table:odd-columns' or
+				$parentName='table:odd-rows' or
+				$parentName='table:covered-table-cell'">
+                <xsl:text>table-cell</xsl:text>
+            </xsl:when>
+            <!-- table-column: family name of styles for table columns. -->
+            <xsl:when test="$parentName='table:table-column'">
+                <xsl:text>table-column</xsl:text>
+            </xsl:when>
+            <!-- table-row: family name of styles for table rows. -->
+            <xsl:when test="$parentName='table:table-row'">
+                <xsl:text>table-row</xsl:text>
+            </xsl:when>
+            <!-- text: family name of styles for text. -->
+            <xsl:when test="
+            	$parentName='text:index-entry-bibliography' or
+				$parentName='text:index-entry-chapter' or
+				$parentName='text:index-entry-link-end' or
+				$parentName='text:index-entry-link-start' or
+				$parentName='text:index-entry-page-number' or
+				$parentName='text:index-entry-span' or
+				$parentName='text:index-entry-tab-stop' or
+				$parentName='text:index-entry-text' or
+				$parentName='text:a' or
+				$parentName='text:span' or
+				$parentName='style:drop-cap' or
+				$parentName='text:line-break' or
+				$parentName='text:tab' or
+				$parentName='text:linenumbering-configuration'">
+                <xsl:text>text</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:message>WARNING: No style family found for parent element <xsl:value-of select="$parentName"/></xsl:message>
+                <xsl:text>unknown-family-parent</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    
 
     <!-- ***************** -->
     <!-- *** Footnotes *** -->
