@@ -81,6 +81,7 @@ public:
 
 class X11SalGraphics final : public SalGraphicsAutoDelegateToImpl
 {
+    friend class X11CairoSalGraphicsImpl;
     friend class X11CairoTextRender;
 
 public:
