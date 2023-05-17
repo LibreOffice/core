@@ -162,9 +162,7 @@ GType lo_accessible_get_type();
 #define LO_ACCESSIBLE(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), LO_TYPE_ACCESSIBLE, LoAccessible))
 // #define LO_IS_ACCESSIBLE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), LO_TYPE_ACCESSIBLE))
 
-typedef struct _LoAccessible LoAccessible;
-
-struct _LoAccessible
+struct LoAccessible
 {
     GObject parent_instance;
     GdkDisplay* display;
@@ -173,8 +171,7 @@ struct _LoAccessible
     css::uno::Reference<css::accessibility::XAccessible> uno_accessible;
 };
 
-typedef struct _LoAccessibleClass LoAccessibleClass;
-struct _LoAccessibleClass
+struct LoAccessibleClass
 {
     GObjectClass parent_class;
 };
