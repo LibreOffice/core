@@ -62,6 +62,7 @@
 #include <svx/xlnstit.hxx>
 #include <svx/xlnedit.hxx>
 #include <svx/xflhtit.hxx>
+#include <formatflysplit.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1007,6 +1008,18 @@ SwChainRet SwDoc::Chainable( const SwFrameFormat &rSource, const SwFrameFormat &
     const SwFormatChain &rChain = rDest.GetChain();
     if( rChain.GetPrev() )
         return SwChainRet::IS_IN_CHAIN;
+
+    // Split flys are incompatible with chaining.
+    const SwFormatFlySplit& rOldSplit = rSource.GetFlySplit();
+    if (rOldSplit.GetValue())
+    {
+        return SwChainRet::SOURCE_CHAINED;
+    }
+    const SwFormatFlySplit& rNewSplit = rDest.GetFlySplit();
+    if (rNewSplit.GetValue())
+    {
+        return SwChainRet::IS_IN_CHAIN;
+    }
 
     // Target must be empty.
     const SwNodeIndex* pCntIdx = rDest.GetContent().GetContentIdx();

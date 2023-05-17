@@ -35,6 +35,8 @@
 #include <unotxdoc.hxx>
 #include <UndoManager.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <frmmgr.hxx>
+#include <formatflysplit.hxx>
 
 /// Covers sw/source/core/doc/ fixes.
 class SwCoreDocTest : public SwModelTestBase
@@ -444,6 +446,44 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testHeaderFooterDelete)
     // Without the accompanying fix in place, this test would have crashed, an invalidated iterator
     // was used in sw::mark::MarkManager::deleteMarks().
     createSwDoc("header-footer-delete.docx");
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testSplitFlyChain)
+{
+    // Given a document with 2 fly frames, first is allowed to split, second is not:
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwFlyFrameAttrMgr aMgr(true, pWrtShell, Frmmgr_Type::TEXT, nullptr);
+    RndStdIds eAnchor = RndStdIds::FLY_AT_PARA;
+    aMgr.InsertFlyFrame(eAnchor, aMgr.GetPos(), aMgr.GetSize());
+    SwDoc* pDoc = getSwDoc();
+    auto& rFlys = *pDoc->GetSpzFrameFormats();
+    {
+        pWrtShell->StartAllAction();
+        auto pFly = rFlys[0];
+        SwAttrSet aSet(pFly->GetAttrSet());
+        aSet.Put(SwFormatFlySplit(true));
+        pDoc->SetAttr(aSet, *pFly);
+        pWrtShell->EndAllAction();
+    }
+    pWrtShell->UnSelectFrame();
+    pWrtShell->SttEndDoc(/*bStart=*/false);
+    aMgr.InsertFlyFrame(eAnchor, aMgr.GetPos(), aMgr.GetSize());
+    auto pFly = rFlys[0];
+    auto pFly2 = rFlys[1];
+
+    // When checking if chaining is allowed:
+    SwChainRet eActual = pDoc->Chainable(*pFly, *pFly2);
+    // Then make sure the source is rejected if it is a split fly:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 5 (SwChainRet::SOURCE_CHAINED)
+    // - Actual  : 0 (SwChainRet::OK)
+    // i.e. the UI allowed chaining for floating tables, which doesn't make sense.
+    CPPUNIT_ASSERT_EQUAL(SwChainRet::SOURCE_CHAINED, eActual);
+
+    // Also test the other way around, that should not be OK, either.
+    eActual = pDoc->Chainable(*pFly2, *pFly);
+    CPPUNIT_ASSERT_EQUAL(SwChainRet::IS_IN_CHAIN, eActual);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
