@@ -20,245 +20,9 @@ class ScOpenCLTest1
 {
 public:
     ScOpenCLTest1();
-
-    void testSystematic();
-    void testSharedFormulaXLS();
-    void testFinacialFormula();
-    void testStatisticalFormulaFisher();
-    void testStatisticalFormulaFisherInv();
-    void testStatisticalFormulaGamma();
-    void testFinacialFvscheduleFormula();
-// this test has intermittent failures on OSX
-#if !defined MACOSX
-    void testFinacialIRRFormula();
-#endif
-    void testFinacialMIRRFormula();
-    void testFinacialRateFormula();
-    void testFinancialAccrintmFormula();
-    void testFinancialAccrintFormula();
-    void testCompilerHorizontal();
-    void testCompilerNested();
-    void testFinacialSLNFormula();
-    void testStatisticalFormulaGammaLn();
-    void testStatisticalFormulaGauss();
-    void testStatisticalFormulaGeoMean();
-    void testStatisticalFormulaHarMean();
-    void testFinancialCoupdaybsFormula();
-    void testFinacialDollardeFormula();
-    void testCompilerString();
-    void testCompilerInEq();
-    void testCompilerPrecision();
-    void testFinacialDollarfrFormula();
-    void testFinacialSYDFormula();
-    void testStatisticalFormulaCorrel();
-    void testFinancialCoupdaysFormula();
-    void testFinancialCoupdaysncFormula();
-    void testFinacialDISCFormula();
-    void testFinacialINTRATEFormula();
-    void testMathFormulaCos();
-    void testMathFormulaCsc();
-    void testStatisticalFormulaRsq();
-    void testStatisticalFormulaPearson();
-    void testStatisticalFormulaNegbinomdist();
-    void testFinacialXNPVFormula();
-    void testFinacialPriceMatFormula();
-    void testFinacialFormulaReceived();
-    void testFinancialFormulaCumipmt();
-    void testFinancialFormulaCumprinc();
-    void testFinacialRRIFormula();
-    void testFinacialEFFECT_ADDFormula();
-    void testFinacialNominalFormula();
-    void testFinacialTBILLEQFormula();
-    void testFinacialTBILLPRICEFormula();
-    void testFinacialTBILLYIELDFormula();
-    void testFinacialYIELDFormula();
-    void testFinacialYIELDDISCFormula();
-    void testFinacialYIELDMATFormula();
-    void testFinacialPMTFormula();
-    void testFinacialPPMTFormula();
-    void testFinancialISPMTFormula();
-    void testFinacialPriceFormula();
-    void testFinancialDurationFormula();
-    void testFinancialCoupnumFormula();
-    void testMathFormulaSinh();
-    void testMathFormulaAbs();
-    void testFinacialPVFormula();
-    void testMathFormulaSin();
-    void testMathFormulaTan();
-    void testMathFormulaTanH();
-    void testStatisticalFormulaStandard();
-    void testStatisticalFormulaWeibull();
-    void testStatisticalFormulaMedian();
-    void testFinancialDuration_ADDFormula();
-    void testFinancialAmordegrcFormula();
-    void testFinancialAmorlincFormula();
-    void testFinancialDDBFormula();
-    void testFinancialFVFormula();
-    void testFinancialMDurationFormula();
-    void testMathSumIfsFormula();
-    void testFinancialVDBFormula();
-    void testStatisticalFormulaKurt();
-    void testFinacialNPERFormula();
-    void testStatisticalFormulaNormdist();
-    void testMathFormulaArcCos();
-    void testMathFormulaSqrt();
-    void testMathFormulaArcCosHyp();
-    void testFinacialNPVFormula();
-    void testStatisticalFormulaNormsdist();
-    void testStatisticalFormulaNorminv();
-    void testStatisticalFormulaNormsinv();
-    void testStatisticalFormulaPermut();
-    void testStatisticalFormulaPermutation();
-    void testStatisticalFormulaPhi();
-    void testFinancialIPMTFormula();
-    void testStatisticalFormulaConfidence();
-    void testStatisticalFormulaIntercept();
-    void testFinacialODDLPRICEFormula();
-    void testFinacialOddlyieldFormula();
-    void testFinacialPriceDiscFormula();
-    void testFinancialDBFormula();
-    void testFinancialCouppcdFormula();
-    void testFinancialCoupncdFormula();
-    void testStatisticalFormulaLogInv();
-    void testMathFormulaArcCot();
-    void testMathFormulaCosh();
-    void testStatisticalFormulaCritBinom();
-    void testMathFormulaArcCotHyp();
-    void testMathFormulaArcSin();
-    void testMathFormulaArcSinHyp();
-    void testMathFormulaArcTan();
-    void testMathFormulaArcTanHyp();
-    void testMathFormulaBitAnd();
-    void testStatisticalFormulaForecast();
-    void testStatisticalFormulaLogNormDist();
-    void testStatisticalFormulaGammaDist();
-    void testMathFormulaLN();
-    void testMathFormulaRound();
-    void testMathFormulaCot();
-    void testMathFormulaCoth();
-    void testFinacialNPER1Formula();
-
-    CPPUNIT_TEST_SUITE(ScOpenCLTest1);
-    CPPUNIT_TEST(testSystematic);
-    CPPUNIT_TEST(testSharedFormulaXLS);
-    CPPUNIT_TEST(testFinacialFormula);
-    CPPUNIT_TEST(testStatisticalFormulaFisher);
-    CPPUNIT_TEST(testStatisticalFormulaFisherInv);
-    CPPUNIT_TEST(testStatisticalFormulaGamma);
-    CPPUNIT_TEST(testFinacialFvscheduleFormula);
-// this test has intermittent failures on OSX
-#if !defined MACOSX
-    CPPUNIT_TEST(testFinacialIRRFormula);
-#endif
-    CPPUNIT_TEST(testFinacialMIRRFormula);
-    CPPUNIT_TEST(testFinacialRateFormula);
-    CPPUNIT_TEST(testCompilerHorizontal);
-    CPPUNIT_TEST(testCompilerNested);
-    CPPUNIT_TEST(testFinacialSLNFormula);
-    CPPUNIT_TEST(testFinancialAccrintmFormula);
-    CPPUNIT_TEST(testStatisticalFormulaGammaLn);
-    CPPUNIT_TEST(testStatisticalFormulaGauss);
-    CPPUNIT_TEST(testStatisticalFormulaGeoMean);
-    CPPUNIT_TEST(testStatisticalFormulaHarMean);
-    CPPUNIT_TEST(testFinancialCoupdaybsFormula);
-    CPPUNIT_TEST(testFinacialDollardeFormula);
-    CPPUNIT_TEST(testCompilerString);
-    CPPUNIT_TEST(testCompilerInEq);
-    CPPUNIT_TEST(testCompilerPrecision);
-    CPPUNIT_TEST(testFinacialDollarfrFormula);
-    CPPUNIT_TEST(testFinacialSYDFormula);
-    CPPUNIT_TEST(testStatisticalFormulaCorrel);
-    CPPUNIT_TEST(testFinancialCoupdaysFormula);
-    CPPUNIT_TEST(testFinancialCoupdaysncFormula);
-    CPPUNIT_TEST(testFinacialDISCFormula);
-    CPPUNIT_TEST(testFinacialINTRATEFormula);
-    CPPUNIT_TEST(testMathFormulaCos);
-    CPPUNIT_TEST(testStatisticalFormulaNegbinomdist);
-    CPPUNIT_TEST(testStatisticalFormulaRsq);
-    CPPUNIT_TEST(testStatisticalFormulaPearson);
-    CPPUNIT_TEST(testMathFormulaCsc);
-    CPPUNIT_TEST(testFinacialPriceMatFormula);
-    CPPUNIT_TEST(testFinacialXNPVFormula);
-    CPPUNIT_TEST(testFinacialFormulaReceived);
-    CPPUNIT_TEST(testFinancialFormulaCumipmt);
-    CPPUNIT_TEST(testFinancialFormulaCumprinc);
-    CPPUNIT_TEST(testFinacialRRIFormula);
-    CPPUNIT_TEST(testFinacialEFFECT_ADDFormula);
-    CPPUNIT_TEST(testFinacialNominalFormula);
-    CPPUNIT_TEST(testFinacialTBILLEQFormula);
-    CPPUNIT_TEST(testFinacialTBILLPRICEFormula);
-    CPPUNIT_TEST(testFinacialTBILLYIELDFormula);
-    CPPUNIT_TEST(testFinacialYIELDFormula);
-    CPPUNIT_TEST(testFinacialYIELDDISCFormula);
-    CPPUNIT_TEST(testFinacialYIELDMATFormula);
-    CPPUNIT_TEST(testFinacialPPMTFormula);
-    CPPUNIT_TEST(testFinacialPMTFormula);
-    CPPUNIT_TEST(testFinancialISPMTFormula);
-    CPPUNIT_TEST(testFinacialPriceFormula);
-    CPPUNIT_TEST(testFinancialDurationFormula);
-    CPPUNIT_TEST(testFinancialCoupnumFormula);
-    CPPUNIT_TEST(testMathFormulaSinh);
-    CPPUNIT_TEST(testMathFormulaAbs);
-    CPPUNIT_TEST(testFinacialPVFormula);
-    CPPUNIT_TEST(testMathFormulaSin);
-    CPPUNIT_TEST(testMathFormulaTan);
-    CPPUNIT_TEST(testMathFormulaTanH);
-    CPPUNIT_TEST(testStatisticalFormulaStandard);
-    CPPUNIT_TEST(testStatisticalFormulaWeibull);
-    CPPUNIT_TEST(testStatisticalFormulaMedian);
-    CPPUNIT_TEST(testFinancialDuration_ADDFormula);
-    CPPUNIT_TEST(testFinancialAmordegrcFormula);
-    CPPUNIT_TEST(testFinancialAmorlincFormula);
-    CPPUNIT_TEST(testFinancialDDBFormula);
-    CPPUNIT_TEST(testFinancialFVFormula);
-    CPPUNIT_TEST(testFinancialMDurationFormula);
-    CPPUNIT_TEST(testMathSumIfsFormula);
-    CPPUNIT_TEST(testFinancialVDBFormula);
-    CPPUNIT_TEST(testStatisticalFormulaKurt);
-    CPPUNIT_TEST(testFinacialNPERFormula);
-    CPPUNIT_TEST(testStatisticalFormulaNormdist);
-    CPPUNIT_TEST(testMathFormulaArcCos);
-    CPPUNIT_TEST(testMathFormulaSqrt);
-    CPPUNIT_TEST(testMathFormulaArcCosHyp);
-    CPPUNIT_TEST(testFinacialNPVFormula);
-    CPPUNIT_TEST(testStatisticalFormulaNormsdist);
-    CPPUNIT_TEST(testStatisticalFormulaNorminv);
-    CPPUNIT_TEST(testStatisticalFormulaNormsinv);
-    CPPUNIT_TEST(testStatisticalFormulaPermut);
-    CPPUNIT_TEST(testStatisticalFormulaPermutation);
-    CPPUNIT_TEST(testStatisticalFormulaPhi);
-    CPPUNIT_TEST(testFinancialIPMTFormula);
-    CPPUNIT_TEST(testStatisticalFormulaConfidence);
-    CPPUNIT_TEST(testStatisticalFormulaIntercept);
-    CPPUNIT_TEST(testFinacialODDLPRICEFormula);
-    CPPUNIT_TEST(testFinacialOddlyieldFormula);
-    CPPUNIT_TEST(testFinacialPriceDiscFormula);
-    CPPUNIT_TEST(testFinancialDBFormula);
-    CPPUNIT_TEST(testFinancialCouppcdFormula);
-    CPPUNIT_TEST(testFinancialCoupncdFormula);
-    CPPUNIT_TEST(testFinancialAccrintFormula);
-    CPPUNIT_TEST(testStatisticalFormulaLogInv);
-    CPPUNIT_TEST(testMathFormulaArcCot);
-    CPPUNIT_TEST(testMathFormulaCosh);
-    CPPUNIT_TEST(testStatisticalFormulaCritBinom);
-    CPPUNIT_TEST(testMathFormulaArcCotHyp);
-    CPPUNIT_TEST(testMathFormulaArcSin);
-    CPPUNIT_TEST(testMathFormulaArcSinHyp);
-    CPPUNIT_TEST(testMathFormulaArcTan);
-    CPPUNIT_TEST(testMathFormulaArcTanHyp);
-    CPPUNIT_TEST(testMathFormulaBitAnd);
-    CPPUNIT_TEST(testStatisticalFormulaForecast);
-    CPPUNIT_TEST(testStatisticalFormulaLogNormDist);
-    CPPUNIT_TEST(testStatisticalFormulaGammaDist);
-    CPPUNIT_TEST(testMathFormulaLN);
-    CPPUNIT_TEST(testMathFormulaRound);
-    CPPUNIT_TEST(testMathFormulaCot);
-    CPPUNIT_TEST(testMathFormulaCoth);
-    CPPUNIT_TEST(testFinacialNPER1Formula);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void ScOpenCLTest1::testCompilerHorizontal()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testCompilerHorizontal)
 {
     initTestEnv(u"ods/opencl/compiler/horizontal.ods");
     ScDocument* pDoc = getScDoc();
@@ -280,7 +44,7 @@ void ScOpenCLTest1::testCompilerHorizontal()
     }
 }
 
-void ScOpenCLTest1::testCompilerNested()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testCompilerNested)
 {
     initTestEnv(u"ods/opencl/compiler/nested.ods");
     ScDocument* pDoc = getScDoc();
@@ -296,7 +60,7 @@ void ScOpenCLTest1::testCompilerNested()
     }
 }
 
-void ScOpenCLTest1::testCompilerString()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testCompilerString)
 {
     initTestEnv(u"ods/opencl/compiler/string.ods");
     ScDocument* pDoc = getScDoc();
@@ -316,7 +80,7 @@ void ScOpenCLTest1::testCompilerString()
     }
 }
 
-void ScOpenCLTest1::testCompilerInEq()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testCompilerInEq)
 {
     initTestEnv(u"ods/opencl/compiler/ineq.ods");
     ScDocument* pDoc = getScDoc();
@@ -332,7 +96,7 @@ void ScOpenCLTest1::testCompilerInEq()
     }
 }
 
-void ScOpenCLTest1::testCompilerPrecision()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testCompilerPrecision)
 {
     initTestEnv(u"ods/opencl/compiler/precision.ods");
     ScDocument* pDoc = getScDoc();
@@ -352,7 +116,7 @@ void ScOpenCLTest1::testCompilerPrecision()
     }
 }
 
-void ScOpenCLTest1::testSystematic()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testSystematic)
 {
     initTestEnv(u"xls/systematic.xls");
 
@@ -443,7 +207,7 @@ void ScOpenCLTest1::testSystematic()
 }
 
 
-void ScOpenCLTest1::testSharedFormulaXLS()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testSharedFormulaXLS)
 {
     initTestEnv(u"xls/sum_ex.xls");
     ScDocument* pDoc = getScDoc();
@@ -531,7 +295,7 @@ void ScOpenCLTest1::testSharedFormulaXLS()
     }
 }
 
-void ScOpenCLTest1::testMathFormulaCos()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testMathFormulaCos)
 {
     initTestEnv(u"xls/opencl/math/cos.xls");
     ScDocument* pDoc = getScDoc();
@@ -546,7 +310,7 @@ void ScOpenCLTest1::testMathFormulaCos()
     }
 }
 
-void ScOpenCLTest1::testMathFormulaSinh()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testMathFormulaSinh)
 {
     initTestEnv(u"xls/opencl/math/sinh.xls");
     ScDocument* pDoc = getScDoc();
@@ -562,7 +326,7 @@ void ScOpenCLTest1::testMathFormulaSinh()
     }
 }
 
-void ScOpenCLTest1::testFinacialFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialFormula)
 {
     initTestEnv(u"xls/opencl/financial/general.xls");
     ScDocument* pDoc = getScDoc();
@@ -711,7 +475,7 @@ void ScOpenCLTest1::testFinacialFormula()
     }
 }
 
-void ScOpenCLTest1::testStatisticalFormulaCorrel()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaCorrel)
 {
     initTestEnv(u"ods/opencl/statistical/Correl.ods");
     ScDocument* pDoc = getScDoc();
@@ -726,7 +490,7 @@ void ScOpenCLTest1::testStatisticalFormulaCorrel()
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
-void ScOpenCLTest1::testStatisticalFormulaFisher()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaFisher)
 {
     initTestEnv(u"xls/opencl/statistical/Fisher.xls");
     ScDocument* pDoc = getScDoc();
@@ -742,7 +506,7 @@ void ScOpenCLTest1::testStatisticalFormulaFisher()
     }
 }
 
-void ScOpenCLTest1::testStatisticalFormulaFisherInv()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaFisherInv)
 {
     initTestEnv(u"xls/opencl/statistical/FisherInv.xls");
     ScDocument* pDoc = getScDoc();
@@ -758,7 +522,7 @@ void ScOpenCLTest1::testStatisticalFormulaFisherInv()
     }
 }
 
-void ScOpenCLTest1::testStatisticalFormulaGamma()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaGamma)
 {
     initTestEnv(u"xls/opencl/statistical/Gamma.xls");
     ScDocument* pDoc = getScDoc();
@@ -774,7 +538,7 @@ void ScOpenCLTest1::testStatisticalFormulaGamma()
     }
 }
 
-void ScOpenCLTest1::testFinacialFvscheduleFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialFvscheduleFormula)
 {
     initTestEnv(u"xls/opencl/financial/Fvschedule.xls");
     ScDocument* pDoc = getScDoc();
@@ -789,7 +553,7 @@ void ScOpenCLTest1::testFinacialFvscheduleFormula()
     }
 }
 
-void ScOpenCLTest1::testMathFormulaAbs()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testMathFormulaAbs)
 {
     initTestEnv(u"ods/opencl/math/Abs.ods");
     ScDocument* pDoc = getScDoc();
@@ -805,7 +569,7 @@ void ScOpenCLTest1::testMathFormulaAbs()
     }
 }
 
-void ScOpenCLTest1::testFinacialSYDFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialSYDFormula)
 {
     initTestEnv(u"xls/opencl/financial/SYD.xls");
     ScDocument* pDoc = getScDoc();
@@ -822,7 +586,7 @@ void ScOpenCLTest1::testFinacialSYDFormula()
 
 // this test has intermittent failures on OSX
 #if !defined MACOSX
-void ScOpenCLTest1::testFinacialIRRFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialIRRFormula)
 {
     initTestEnv(u"xls/opencl/financial/IRR.xls");
     ScDocument* pDoc = getScDoc();
@@ -838,7 +602,7 @@ void ScOpenCLTest1::testFinacialIRRFormula()
 }
 #endif
 
-void ScOpenCLTest1::testStatisticalFormulaGammaLn()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaGammaLn)
 {
     initTestEnv(u"xls/opencl/statistical/GammaLn.xls");
     ScDocument* pDoc = getScDoc();
@@ -854,7 +618,7 @@ void ScOpenCLTest1::testStatisticalFormulaGammaLn()
     }
 }
 
-void ScOpenCLTest1::testStatisticalFormulaGauss()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaGauss)
 {
     initTestEnv(u"xls/opencl/statistical/Gauss.xls");
     ScDocument* pDoc = getScDoc();
@@ -870,7 +634,7 @@ void ScOpenCLTest1::testStatisticalFormulaGauss()
     }
 }
 
-void ScOpenCLTest1::testStatisticalFormulaGeoMean()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaGeoMean)
 {
     initTestEnv(u"xls/opencl/statistical/GeoMean.xls");
     ScDocument* pDoc = getScDoc();
@@ -886,7 +650,7 @@ void ScOpenCLTest1::testStatisticalFormulaGeoMean()
     }
 }
 
-void ScOpenCLTest1::testStatisticalFormulaHarMean()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaHarMean)
 {
     initTestEnv(u"xls/opencl/statistical/HarMean.xls");
     ScDocument* pDoc = getScDoc();
@@ -902,7 +666,7 @@ void ScOpenCLTest1::testStatisticalFormulaHarMean()
     }
 }
 
-void ScOpenCLTest1::testFinacialSLNFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialSLNFormula)
 {
     initTestEnv(u"xls/opencl/financial/SLN.xls");
     ScDocument* pDoc = getScDoc();
@@ -917,7 +681,7 @@ void ScOpenCLTest1::testFinacialSLNFormula()
     }
 }
 
-void ScOpenCLTest1::testFinacialMIRRFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialMIRRFormula)
 {
     initTestEnv(u"xls/opencl/financial/MIRR.xls");
     ScDocument* pDoc = getScDoc();
@@ -932,7 +696,7 @@ void ScOpenCLTest1::testFinacialMIRRFormula()
     }
 }
 
-void ScOpenCLTest1::testFinancialCoupdaybsFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinancialCoupdaybsFormula)
 {
     initTestEnv(u"xls/opencl/financial/Coupdaybs.xls");
     ScDocument* pDoc = getScDoc();
@@ -947,7 +711,7 @@ void ScOpenCLTest1::testFinancialCoupdaybsFormula()
     }
 }
 
-void ScOpenCLTest1::testFinacialDollardeFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialDollardeFormula)
 {
     initTestEnv(u"xls/opencl/financial/Dollarde.xls");
     ScDocument* pDoc = getScDoc();
@@ -962,7 +726,7 @@ void ScOpenCLTest1::testFinacialDollardeFormula()
     }
 }
 
-void ScOpenCLTest1::testFinancialCoupdaysFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinancialCoupdaysFormula)
 {
     initTestEnv(u"xls/opencl/financial/Coupdays.xls");
     ScDocument* pDoc = getScDoc();
@@ -978,7 +742,7 @@ void ScOpenCLTest1::testFinancialCoupdaysFormula()
 
 }
 
-void ScOpenCLTest1::testFinancialCoupdaysncFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinancialCoupdaysncFormula)
 {
     initTestEnv(u"xls/opencl/financial/Coupdaysnc.xls");
     ScDocument* pDoc = getScDoc();
@@ -992,7 +756,7 @@ void ScOpenCLTest1::testFinancialCoupdaysncFormula()
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
-void ScOpenCLTest1::testFinacialRateFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialRateFormula)
 {
     initTestEnv(u"xls/opencl/financial/RATE.xls");
     ScDocument* pDoc = getScDoc();
@@ -1007,7 +771,7 @@ void ScOpenCLTest1::testFinacialRateFormula()
     }
 }
 
-void ScOpenCLTest1::testFinancialAccrintmFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinancialAccrintmFormula)
 {
     initTestEnv(u"xls/opencl/financial/Accrintm.xls");
     ScDocument* pDoc = getScDoc();
@@ -1022,7 +786,7 @@ void ScOpenCLTest1::testFinancialAccrintmFormula()
     }
 }
 
-void ScOpenCLTest1::testFinancialCoupnumFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinancialCoupnumFormula)
 {
     initTestEnv(u"xls/opencl/financial/Coupnum.xls");
     ScDocument* pDoc = getScDoc();
@@ -1037,7 +801,7 @@ void ScOpenCLTest1::testFinancialCoupnumFormula()
     }
 }
 
-void ScOpenCLTest1::testStatisticalFormulaNegbinomdist()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaNegbinomdist)
 {
     initTestEnv(u"xls/opencl/statistical/Negbinomdist.xls");
     ScDocument* pDoc = getScDoc();
@@ -1053,7 +817,7 @@ void ScOpenCLTest1::testStatisticalFormulaNegbinomdist()
     }
 }
 
-void ScOpenCLTest1::testMathFormulaSin()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testMathFormulaSin)
 {
     initTestEnv(u"xls/opencl/math/sin.xls");
     ScDocument* pDoc = getScDoc();
@@ -1068,7 +832,7 @@ void ScOpenCLTest1::testMathFormulaSin()
     }
 }
 
-void ScOpenCLTest1::testMathFormulaTan()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testMathFormulaTan)
 {
     initTestEnv(u"xls/opencl/math/tan.xls");
     ScDocument* pDoc = getScDoc();
@@ -1083,7 +847,7 @@ void ScOpenCLTest1::testMathFormulaTan()
     }
 }
 
-void ScOpenCLTest1::testMathFormulaTanH()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testMathFormulaTanH)
 {
     initTestEnv(u"xls/opencl/math/tanh.xls");
     ScDocument* pDoc = getScDoc();
@@ -1098,7 +862,7 @@ void ScOpenCLTest1::testMathFormulaTanH()
     }
 }
 
-void ScOpenCLTest1::testMathFormulaSqrt()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testMathFormulaSqrt)
 {
     initTestEnv(u"xls/opencl/math/sqrt.xls");
     ScDocument* pDoc = getScDoc();
@@ -1113,7 +877,7 @@ void ScOpenCLTest1::testMathFormulaSqrt()
     }
 }
 
-void ScOpenCLTest1::testFinacialPriceFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialPriceFormula)
 {
     initTestEnv(u"xls/opencl/financial/Price.xls");
     ScDocument* pDoc = getScDoc();
@@ -1128,7 +892,7 @@ void ScOpenCLTest1::testFinacialPriceFormula()
     }
 }
 
-void ScOpenCLTest1::testFinacialDollarfrFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialDollarfrFormula)
 {
     initTestEnv(u"xls/opencl/financial/Dollarfr.xls");
     ScDocument* pDoc = getScDoc();
@@ -1143,7 +907,7 @@ void ScOpenCLTest1::testFinacialDollarfrFormula()
     }
 }
 
-void ScOpenCLTest1::testFinacialPriceDiscFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialPriceDiscFormula)
 {
     initTestEnv(u"xls/opencl/financial/PriceDisc.xls");
     ScDocument* pDoc = getScDoc();
@@ -1158,7 +922,7 @@ void ScOpenCLTest1::testFinacialPriceDiscFormula()
     }
 }
 
-void ScOpenCLTest1::testFinacialODDLPRICEFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialODDLPRICEFormula)
 {
     initTestEnv(u"xls/opencl/financial/Oddlprice.xls");
     ScDocument* pDoc = getScDoc();
@@ -1173,7 +937,7 @@ void ScOpenCLTest1::testFinacialODDLPRICEFormula()
     }
 }
 
-void ScOpenCLTest1:: testFinacialOddlyieldFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialOddlyieldFormula)
 {
     initTestEnv(u"xls/opencl/financial/Oddlyield.xls");
     ScDocument* pDoc = getScDoc();
@@ -1188,7 +952,7 @@ void ScOpenCLTest1:: testFinacialOddlyieldFormula()
     }
 }
 
-void ScOpenCLTest1::testFinacialDISCFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialDISCFormula)
 {
     initTestEnv(u"xls/opencl/financial/DISC.xls");
     ScDocument* pDoc = getScDoc();
@@ -1203,7 +967,7 @@ void ScOpenCLTest1::testFinacialDISCFormula()
     }
 }
 
-void ScOpenCLTest1:: testFinacialPVFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialPVFormula)
 {
     initTestEnv(u"xls/opencl/financial/PV.xls");
     ScDocument* pDoc = getScDoc();
@@ -1218,7 +982,7 @@ void ScOpenCLTest1:: testFinacialPVFormula()
     }
 }
 
-void ScOpenCLTest1::testFinacialINTRATEFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialINTRATEFormula)
 {
     initTestEnv(u"xls/opencl/financial/INTRATE.xls");
     ScDocument* pDoc = getScDoc();
@@ -1233,7 +997,7 @@ void ScOpenCLTest1::testFinacialINTRATEFormula()
     }
 }
 
-void ScOpenCLTest1::testStatisticalFormulaStandard()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaStandard)
 {
     initTestEnv(u"xls/opencl/statistical/Standard.xls");
     ScDocument* pDoc = getScDoc();
@@ -1249,7 +1013,7 @@ void ScOpenCLTest1::testStatisticalFormulaStandard()
     }
 }
 
-void ScOpenCLTest1::testStatisticalFormulaWeibull()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaWeibull)
 {
     initTestEnv(u"xls/opencl/statistical/Weibull.xls");
     ScDocument* pDoc = getScDoc();
@@ -1266,7 +1030,7 @@ void ScOpenCLTest1::testStatisticalFormulaWeibull()
     }
 }
 
-void ScOpenCLTest1::testStatisticalFormulaPearson()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaPearson)
 {
     initTestEnv(u"xls/opencl/statistical/Pearson.xls");
     ScDocument* pDoc = getScDoc();
@@ -1282,7 +1046,7 @@ void ScOpenCLTest1::testStatisticalFormulaPearson()
     }
 }
 
-void ScOpenCLTest1::testStatisticalFormulaRsq()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaRsq)
 {
     initTestEnv(u"xls/opencl/statistical/Rsq.xls");
     ScDocument* pDoc = getScDoc();
@@ -1298,7 +1062,7 @@ void ScOpenCLTest1::testStatisticalFormulaRsq()
     }
 }
 
-void ScOpenCLTest1::testMathFormulaCosh()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testMathFormulaCosh)
 {
     initTestEnv(u"xls/opencl/math/cosh.xls");
     ScDocument* pDoc = getScDoc();
@@ -1313,7 +1077,7 @@ void ScOpenCLTest1::testMathFormulaCosh()
     }
 }
 
-void ScOpenCLTest1::testStatisticalFormulaKurt()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaKurt)
 {
     initTestEnv(u"xls/opencl/statistical/Kurt.xls");
     ScDocument* pDoc = getScDoc();
@@ -1329,7 +1093,7 @@ void ScOpenCLTest1::testStatisticalFormulaKurt()
     }
 }
 
-void ScOpenCLTest1::testMathFormulaCot()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testMathFormulaCot)
 {
     initTestEnv(u"ods/opencl/math/cot.ods");
     ScDocument* pDoc = getScDoc();
@@ -1344,7 +1108,7 @@ void ScOpenCLTest1::testMathFormulaCot()
     }
 }
 
-void ScOpenCLTest1::testMathFormulaCsc()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testMathFormulaCsc)
 {
     initTestEnv(u"ods/opencl/math/csc.ods");
     ScDocument* pDoc = getScDoc();
@@ -1359,7 +1123,7 @@ void ScOpenCLTest1::testMathFormulaCsc()
     }
 }
 
-void ScOpenCLTest1::testMathFormulaCoth()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testMathFormulaCoth)
 {
     initTestEnv(u"ods/opencl/math/coth.ods");
     ScDocument* pDoc = getScDoc();
@@ -1374,7 +1138,7 @@ void ScOpenCLTest1::testMathFormulaCoth()
     }
 }
 
-void ScOpenCLTest1::testFinacialXNPVFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialXNPVFormula)
 {
     initTestEnv(u"xls/opencl/financial/XNPV.xls");
     ScDocument* pDoc = getScDoc();
@@ -1396,7 +1160,7 @@ void ScOpenCLTest1::testFinacialXNPVFormula()
     }
 }
 
-void ScOpenCLTest1::testStatisticalFormulaIntercept()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaIntercept)
 {
     initTestEnv(u"xls/opencl/statistical/Intercept.xls");
     ScDocument* pDoc = getScDoc();
@@ -1411,7 +1175,7 @@ void ScOpenCLTest1::testStatisticalFormulaIntercept()
     }
 }
 
-void ScOpenCLTest1::testFinancialAmordegrcFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinancialAmordegrcFormula)
 {
     initTestEnv(u"xls/opencl/financial/Amordegrc.xls");
     ScDocument* pDoc = getScDoc();
@@ -1426,7 +1190,7 @@ void ScOpenCLTest1::testFinancialAmordegrcFormula()
     }
 }
 
-void ScOpenCLTest1:: testFinancialISPMTFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinancialISPMTFormula)
 {
     initTestEnv(u"xls/opencl/financial/ISPMT.xls");
     ScDocument* pDoc = getScDoc();
@@ -1441,7 +1205,7 @@ void ScOpenCLTest1:: testFinancialISPMTFormula()
     }
 }
 
-void ScOpenCLTest1::testStatisticalFormulaMedian()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaMedian)
 {
     initTestEnv(u"xls/opencl/statistical/Median.xls");
     ScDocument* pDoc = getScDoc();
@@ -1457,7 +1221,7 @@ void ScOpenCLTest1::testStatisticalFormulaMedian()
     }
 }
 
-void ScOpenCLTest1::testStatisticalFormulaNormdist()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaNormdist)
 {
     initTestEnv(u"xls/opencl/statistical/Normdist.xls");
     ScDocument* pDoc = getScDoc();
@@ -1473,7 +1237,7 @@ void ScOpenCLTest1::testStatisticalFormulaNormdist()
     }
 }
 
-void ScOpenCLTest1::testStatisticalFormulaNormsdist()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaNormsdist)
 {
     initTestEnv(u"xls/opencl/statistical/Normsdist.xls");
     ScDocument* pDoc = getScDoc();
@@ -1489,7 +1253,7 @@ void ScOpenCLTest1::testStatisticalFormulaNormsdist()
     }
 }
 
-void ScOpenCLTest1::testStatisticalFormulaPermut()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaPermut)
 {
     initTestEnv(u"xls/opencl/statistical/Permut.xls");
     ScDocument* pDoc = getScDoc();
@@ -1505,7 +1269,7 @@ void ScOpenCLTest1::testStatisticalFormulaPermut()
     }
 }
 
-void ScOpenCLTest1::testStatisticalFormulaPermutation()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaPermutation)
 {
     initTestEnv(u"xls/opencl/statistical/Permutation.xls");
     ScDocument* pDoc = getScDoc();
@@ -1521,7 +1285,7 @@ void ScOpenCLTest1::testStatisticalFormulaPermutation()
     }
 }
 
-void ScOpenCLTest1::testStatisticalFormulaPhi()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaPhi)
 {
     initTestEnv(u"xls/opencl/statistical/Phi.xls");
     ScDocument* pDoc = getScDoc();
@@ -1537,7 +1301,7 @@ void ScOpenCLTest1::testStatisticalFormulaPhi()
     }
 }
 
-void ScOpenCLTest1::testStatisticalFormulaLogInv()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaLogInv)
 {
     initTestEnv(u"xls/opencl/statistical/LogInv.xls");
     ScDocument* pDoc = getScDoc();
@@ -1553,7 +1317,7 @@ void ScOpenCLTest1::testStatisticalFormulaLogInv()
     }
 }
 
-void ScOpenCLTest1::testFinacialNPERFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialNPERFormula)
 {
     initTestEnv(u"xls/opencl/financial/NPER.xls");
     ScDocument* pDoc = getScDoc();
@@ -1568,7 +1332,7 @@ void ScOpenCLTest1::testFinacialNPERFormula()
     }
 }
 
-void ScOpenCLTest1::testStatisticalFormulaForecast()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaForecast)
 {
     initTestEnv(u"xls/opencl/statistical/Forecast.xls");
     ScDocument* pDoc = getScDoc();
@@ -1584,7 +1348,7 @@ void ScOpenCLTest1::testStatisticalFormulaForecast()
     }
 }
 
-void ScOpenCLTest1::testFinancialAmorlincFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinancialAmorlincFormula)
 {
     initTestEnv(u"xls/opencl/financial/Amorlinc.xls");
     ScDocument* pDoc = getScDoc();
@@ -1599,7 +1363,7 @@ void ScOpenCLTest1::testFinancialAmorlincFormula()
     }
 }
 
-void ScOpenCLTest1::testFinancialDDBFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinancialDDBFormula)
 {
     initTestEnv(u"xls/opencl/financial/ddb.xls");
     ScDocument* pDoc = getScDoc();
@@ -1613,7 +1377,7 @@ void ScOpenCLTest1::testFinancialDDBFormula()
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
-void ScOpenCLTest1::testFinacialPriceMatFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialPriceMatFormula)
 {
     initTestEnv(u"xls/opencl/financial/PriceMat.xls");
     ScDocument* pDoc = getScDoc();
@@ -1627,7 +1391,7 @@ void ScOpenCLTest1::testFinacialPriceMatFormula()
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
-void ScOpenCLTest1::testFinacialFormulaReceived()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialFormulaReceived)
 {
     initTestEnv(u"xls/opencl/financial/Received.xls");
     ScDocument* pDoc = getScDoc();
@@ -1642,7 +1406,7 @@ void ScOpenCLTest1::testFinacialFormulaReceived()
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
-void ScOpenCLTest1::testFinancialFormulaCumipmt()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinancialFormulaCumipmt)
 {
     initTestEnv(u"xls/opencl/financial/Cumipmt.xls");
     ScDocument* pDoc = getScDoc();
@@ -1657,7 +1421,7 @@ void ScOpenCLTest1::testFinancialFormulaCumipmt()
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
-void ScOpenCLTest1::testFinancialFormulaCumprinc()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinancialFormulaCumprinc)
 {
     initTestEnv(u"xls/opencl/financial/Cumprinc.xls");
     ScDocument* pDoc = getScDoc();
@@ -1672,7 +1436,7 @@ void ScOpenCLTest1::testFinancialFormulaCumprinc()
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
-void ScOpenCLTest1::testFinacialRRIFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialRRIFormula)
 {
     initTestEnv(u"xls/opencl/financial/RRI.xls");
     ScDocument* pDoc = getScDoc();
@@ -1686,7 +1450,7 @@ void ScOpenCLTest1::testFinacialRRIFormula()
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
-void ScOpenCLTest1::testFinacialEFFECT_ADDFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialEFFECT_ADDFormula)
 {
     initTestEnv(u"xls/opencl/financial/EFFECT_ADD.xls");
     ScDocument* pDoc = getScDoc();
@@ -1700,7 +1464,7 @@ void ScOpenCLTest1::testFinacialEFFECT_ADDFormula()
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
-void ScOpenCLTest1::testFinacialNominalFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialNominalFormula)
 {
     initTestEnv(u"xls/opencl/financial/Nominal.xls");
     ScDocument* pDoc = getScDoc();
@@ -1716,7 +1480,7 @@ void ScOpenCLTest1::testFinacialNominalFormula()
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
-void ScOpenCLTest1::testFinacialTBILLEQFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialTBILLEQFormula)
 {
     initTestEnv(u"xls/opencl/financial/TBILLEQ.xls");
     ScDocument* pDoc = getScDoc();
@@ -1730,7 +1494,7 @@ void ScOpenCLTest1::testFinacialTBILLEQFormula()
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
-void ScOpenCLTest1::testFinacialTBILLPRICEFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialTBILLPRICEFormula)
 {
     initTestEnv(u"xls/opencl/financial/TBILLPRICE.xls");
     ScDocument* pDoc = getScDoc();
@@ -1744,7 +1508,7 @@ void ScOpenCLTest1::testFinacialTBILLPRICEFormula()
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
-void ScOpenCLTest1::testFinacialTBILLYIELDFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialTBILLYIELDFormula)
 {
     initTestEnv(u"xls/opencl/financial/TBILLYIELD.xls");
     ScDocument* pDoc = getScDoc();
@@ -1758,7 +1522,7 @@ void ScOpenCLTest1::testFinacialTBILLYIELDFormula()
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
-void ScOpenCLTest1::testFinacialYIELDFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialYIELDFormula)
 {
     initTestEnv(u"xls/opencl/financial/YIELD.xls");
     ScDocument* pDoc = getScDoc();
@@ -1773,7 +1537,7 @@ void ScOpenCLTest1::testFinacialYIELDFormula()
     }
 }
 
-void ScOpenCLTest1::testFinacialYIELDDISCFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialYIELDDISCFormula)
 {
     initTestEnv(u"xls/opencl/financial/YIELDDISC.xls");
     ScDocument* pDoc = getScDoc();
@@ -1788,7 +1552,7 @@ void ScOpenCLTest1::testFinacialYIELDDISCFormula()
     }
 }
 
-void ScOpenCLTest1::testFinacialYIELDMATFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialYIELDMATFormula)
 {
     initTestEnv(u"xls/opencl/financial/YIELDMAT.xls");
     ScDocument* pDoc = getScDoc();
@@ -1802,7 +1566,7 @@ void ScOpenCLTest1::testFinacialYIELDMATFormula()
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
-void ScOpenCLTest1:: testFinacialPMTFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialPMTFormula)
 {
     initTestEnv(u"xls/opencl/financial/PMT.xls");
     ScDocument* pDoc = getScDoc();
@@ -1817,7 +1581,7 @@ void ScOpenCLTest1:: testFinacialPMTFormula()
     }
 }
 
-void ScOpenCLTest1:: testFinancialDurationFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinancialDurationFormula)
 {
     initTestEnv(u"ods/opencl/financial/Duration.ods");
     ScDocument* pDoc = getScDoc();
@@ -1832,7 +1596,7 @@ void ScOpenCLTest1:: testFinancialDurationFormula()
     }
 }
 
-void ScOpenCLTest1::testStatisticalFormulaLogNormDist()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaLogNormDist)
 {
     initTestEnv(u"ods/opencl/statistical/LogNormDist.ods");
     ScDocument* pDoc = getScDoc();
@@ -1848,7 +1612,7 @@ void ScOpenCLTest1::testStatisticalFormulaLogNormDist()
     }
 }
 
-void ScOpenCLTest1::testMathFormulaArcCos()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testMathFormulaArcCos)
 {
     initTestEnv(u"ods/opencl/math/ArcCos.ods");
     ScDocument* pDoc = getScDoc();
@@ -1864,7 +1628,7 @@ void ScOpenCLTest1::testMathFormulaArcCos()
     }
 }
 
-void ScOpenCLTest1:: testFinacialPPMTFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialPPMTFormula)
 {
     initTestEnv(u"xls/opencl/financial/PPMT.xls");
     ScDocument* pDoc = getScDoc();
@@ -1879,7 +1643,7 @@ void ScOpenCLTest1:: testFinacialPPMTFormula()
     }
 }
 
-void ScOpenCLTest1:: testFinacialNPVFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialNPVFormula)
 {
     initTestEnv(u"xls/opencl/financial/NPV.xls");
     ScDocument* pDoc = getScDoc();
@@ -1894,7 +1658,7 @@ void ScOpenCLTest1:: testFinacialNPVFormula()
     }
 }
 
-void ScOpenCLTest1:: testFinancialDuration_ADDFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinancialDuration_ADDFormula)
 {
     initTestEnv(u"xls/opencl/financial/Duration_ADD.xls");
     ScDocument* pDoc = getScDoc();
@@ -1909,7 +1673,7 @@ void ScOpenCLTest1:: testFinancialDuration_ADDFormula()
     }
 }
 
-void ScOpenCLTest1::testStatisticalFormulaNorminv()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaNorminv)
 {
     initTestEnv(u"xls/opencl/statistical/Norminv.xls");
     ScDocument* pDoc = getScDoc();
@@ -1925,7 +1689,7 @@ void ScOpenCLTest1::testStatisticalFormulaNorminv()
     }
 }
 
-void ScOpenCLTest1::testStatisticalFormulaNormsinv()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaNormsinv)
 {
     initTestEnv(u"xls/opencl/statistical/Normsinv.xls");
     ScDocument* pDoc = getScDoc();
@@ -1941,7 +1705,7 @@ void ScOpenCLTest1::testStatisticalFormulaNormsinv()
     }
 }
 
-void ScOpenCLTest1::testMathFormulaArcCosHyp()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testMathFormulaArcCosHyp)
 {
     initTestEnv(u"ods/opencl/math/ArcCosHyp.ods");
     ScDocument* pDoc = getScDoc();
@@ -1957,7 +1721,7 @@ void ScOpenCLTest1::testMathFormulaArcCosHyp()
     }
 }
 
-void ScOpenCLTest1:: testFinancialMDurationFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinancialMDurationFormula)
 {
     initTestEnv(u"xls/opencl/financial/MDuration.xls");
     ScDocument* pDoc = getScDoc();
@@ -1972,7 +1736,7 @@ void ScOpenCLTest1:: testFinancialMDurationFormula()
     }
 }
 
-void ScOpenCLTest1::testMathFormulaArcCot()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testMathFormulaArcCot)
 {
     initTestEnv(u"ods/opencl/math/ArcCot.ods");
     ScDocument* pDoc = getScDoc();
@@ -1988,7 +1752,7 @@ void ScOpenCLTest1::testMathFormulaArcCot()
     }
 }
 
-void ScOpenCLTest1:: testFinancialFVFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinancialFVFormula)
 {
     initTestEnv(u"xls/opencl/financial/FV.xls");
     ScDocument* pDoc = getScDoc();
@@ -2003,7 +1767,7 @@ void ScOpenCLTest1:: testFinancialFVFormula()
     }
 }
 
-void ScOpenCLTest1::testFinancialDBFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinancialDBFormula)
 {
     initTestEnv(u"xls/opencl/financial/db.xls");
     ScDocument* pDoc = getScDoc();
@@ -2018,7 +1782,7 @@ void ScOpenCLTest1::testFinancialDBFormula()
     }
 }
 
-void ScOpenCLTest1::testFinancialCouppcdFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinancialCouppcdFormula)
 {
     initTestEnv(u"xls/opencl/financial/Couppcd.xls");
     ScDocument* pDoc = getScDoc();
@@ -2033,7 +1797,7 @@ void ScOpenCLTest1::testFinancialCouppcdFormula()
     }
 }
 
-void ScOpenCLTest1::testMathSumIfsFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testMathSumIfsFormula)
 {
     initTestEnv(u"xls/opencl/math/sumifs.xls");
     ScDocument* pDoc = getScDoc();
@@ -2067,7 +1831,7 @@ void ScOpenCLTest1::testMathSumIfsFormula()
     }
 }
 
-void ScOpenCLTest1::testMathFormulaArcCotHyp()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testMathFormulaArcCotHyp)
 {
     initTestEnv(u"ods/opencl/math/ArcCotHyp.ods");
     ScDocument* pDoc = getScDoc();
@@ -2083,7 +1847,7 @@ void ScOpenCLTest1::testMathFormulaArcCotHyp()
     }
 }
 
-void ScOpenCLTest1::testMathFormulaArcSin()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testMathFormulaArcSin)
 {
     initTestEnv(u"ods/opencl/math/ArcSin.ods");
     ScDocument* pDoc = getScDoc();
@@ -2099,7 +1863,7 @@ void ScOpenCLTest1::testMathFormulaArcSin()
     }
 }
 
-void ScOpenCLTest1:: testFinancialVDBFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinancialVDBFormula)
 {
     initTestEnv(u"xls/opencl/financial/VDB.xls");
     ScDocument* pDoc = getScDoc();
@@ -2126,7 +1890,7 @@ void ScOpenCLTest1:: testFinancialVDBFormula()
     }
 }
 
-void ScOpenCLTest1:: testFinancialIPMTFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinancialIPMTFormula)
 {
     initTestEnv(u"xls/opencl/financial/IPMT.xls");
     ScDocument* pDoc = getScDoc();
@@ -2141,7 +1905,7 @@ void ScOpenCLTest1:: testFinancialIPMTFormula()
     }
 }
 
-void ScOpenCLTest1::testStatisticalFormulaConfidence()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaConfidence)
 {
     initTestEnv(u"xls/opencl/statistical/Confidence.xls");
     ScDocument* pDoc = getScDoc();
@@ -2157,7 +1921,7 @@ void ScOpenCLTest1::testStatisticalFormulaConfidence()
     }
 }
 
-void ScOpenCLTest1::testFinancialCoupncdFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinancialCoupncdFormula)
 {
     initTestEnv(u"xls/opencl/financial/Coupncd.xls");
     ScDocument* pDoc = getScDoc();
@@ -2172,7 +1936,7 @@ void ScOpenCLTest1::testFinancialCoupncdFormula()
     }
 }
 
-void ScOpenCLTest1::testFinancialAccrintFormula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinancialAccrintFormula)
 {
     initTestEnv(u"xls/opencl/financial/Accrint.xls");
     ScDocument* pDoc = getScDoc();
@@ -2187,7 +1951,7 @@ void ScOpenCLTest1::testFinancialAccrintFormula()
     }
 }
 
-void ScOpenCLTest1::testStatisticalFormulaCritBinom()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaCritBinom)
 {
     initTestEnv(u"xls/opencl/statistical/CritBinom.xls");
     ScDocument* pDoc = getScDoc();
@@ -2203,7 +1967,7 @@ void ScOpenCLTest1::testStatisticalFormulaCritBinom()
     }
 }
 
-void ScOpenCLTest1::testMathFormulaArcSinHyp()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testMathFormulaArcSinHyp)
 {
     initTestEnv(u"ods/opencl/math/ArcSinHyp.ods");
     ScDocument* pDoc = getScDoc();
@@ -2219,7 +1983,7 @@ void ScOpenCLTest1::testMathFormulaArcSinHyp()
     }
 }
 
-void ScOpenCLTest1::testMathFormulaArcTan()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testMathFormulaArcTan)
 {
     initTestEnv(u"ods/opencl/math/ArcTan.ods");
     ScDocument* pDoc = getScDoc();
@@ -2235,7 +1999,7 @@ void ScOpenCLTest1::testMathFormulaArcTan()
     }
 }
 
-void ScOpenCLTest1::testMathFormulaArcTanHyp()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testMathFormulaArcTanHyp)
 {
     initTestEnv(u"ods/opencl/math/ArcTanHyp.ods");
     ScDocument* pDoc = getScDoc();
@@ -2251,7 +2015,7 @@ void ScOpenCLTest1::testMathFormulaArcTanHyp()
     }
 }
 
-void ScOpenCLTest1:: testFinacialNPER1Formula()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialNPER1Formula)
 {
     initTestEnv(u"xls/opencl/financial/NPER1.xls");
     ScDocument* pDoc = getScDoc();
@@ -2266,7 +2030,7 @@ void ScOpenCLTest1:: testFinacialNPER1Formula()
     }
 }
 
-void ScOpenCLTest1::testMathFormulaBitAnd()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testMathFormulaBitAnd)
 {
     initTestEnv(u"ods/opencl/math/BitAnd.ods");
     ScDocument* pDoc = getScDoc();
@@ -2282,7 +2046,7 @@ void ScOpenCLTest1::testMathFormulaBitAnd()
     }
 }
 
-void ScOpenCLTest1::testMathFormulaLN()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testMathFormulaLN)
 {
     initTestEnv(u"xls/opencl/math/LN.xls");
     ScDocument* pDoc = getScDoc();
@@ -2298,7 +2062,7 @@ void ScOpenCLTest1::testMathFormulaLN()
     }
 }
 
-void ScOpenCLTest1::testMathFormulaRound()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testMathFormulaRound)
 {
     initTestEnv(u"xls/opencl/math/ROUND.xls");
     ScDocument* pDoc = getScDoc();
@@ -2320,7 +2084,7 @@ void ScOpenCLTest1::testMathFormulaRound()
     }
 }
 
-void ScOpenCLTest1::testStatisticalFormulaGammaDist()
+CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaGammaDist)
 {
     initTestEnv(u"xls/opencl/statistical/GammaDist.xls");
     ScDocument* pDoc = getScDoc();
@@ -2340,8 +2104,6 @@ ScOpenCLTest1::ScOpenCLTest1()
       : ScModelTestBase( "sc/qa/unit/data" )
 {
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(ScOpenCLTest1);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
