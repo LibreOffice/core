@@ -944,20 +944,6 @@ namespace drawinglayer::texture
                 rMat.get(1, 1) * fY +
                 rMat.get(1, 2));
 
-            if(!rMat.isLastLineDefault())
-            {
-                const double fOne(1.0);
-                const double fTempM(
-                    rMat.get(2, 0) * fX +
-                    rMat.get(2, 1) * fY +
-                    rMat.get(2, 2));
-
-                if(!basegfx::fTools::equalZero(fTempM) && !basegfx::fTools::equal(fOne, fTempM))
-                {
-                    fTempY /= fTempM;
-                }
-            }
-
             return fmod(fTempY, mfDistance);
         }
 

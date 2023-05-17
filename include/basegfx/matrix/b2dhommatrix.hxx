@@ -26,22 +26,35 @@
 #include <sal/types.h>
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/matrix/hommatrixtemplate.hxx>
+#include <array>
 
 namespace basegfx
 {
     class B2DTuple;
 
-    using Impl2DHomMatrix = ::basegfx::internal::ImplHomMatrixTemplate< 3 >;
-
     class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC B2DHomMatrix
     {
     private:
-        Impl2DHomMatrix maImpl;
+        // Since this is a graphics matrix, the last row is always 0 0 1, so we don't bother to store it.
+        std::array<std::array<double, 3>, 2> mfValues {
+            std::array<double, 3>{ 1.0, 0.0, 0.0 },
+            std::array<double, 3>{ 0.0, 1.0, 0.0 } };
 
     public:
-        B2DHomMatrix() {}
-        B2DHomMatrix(const B2DHomMatrix& rMat) = default;
-        B2DHomMatrix(B2DHomMatrix&& rMat) = default;
+        constexpr B2DHomMatrix() = default;
+
+        /** constructor to allow setting all needed values for a 3x2 matrix at once. The
+            parameter f_0x1 e.g. is the same as using set(0, 1, f)
+         */
+        constexpr B2DHomMatrix(double f_0x0, double f_0x1, double f_0x2, double f_1x0, double f_1x1, double f_1x2)
+        {
+            mfValues[0][0] = f_0x0;
+            mfValues[0][1] = f_0x1;
+            mfValues[0][2] = f_0x2;
+            mfValues[1][0] = f_1x0;
+            mfValues[1][1] = f_1x1;
+            mfValues[1][2] = f_1x2;
+        }
 
         /** Convenience creator for declaration of the matrix that is commonly
             used by web standards (SVG, CSS, HTML).
@@ -70,26 +83,20 @@ namespace basegfx
         // Convenience accessor for value at 1,2 position in the matrix
         double f() const { return get(1,2); }
 
-        /** constructor to allow setting all needed values for a 3x2 matrix at once. The
-            parameter f_0x1 e.g. is the same as using set(0, 1, f)
-         */
-        B2DHomMatrix(double f_0x0, double f_0x1, double f_0x2, double f_1x0, double f_1x1, double f_1x2);
-
         double get(sal_uInt16 nRow, sal_uInt16 nColumn) const
         {
-            return maImpl.get(nRow, nColumn);
+            return mfValues[nRow][nColumn];
         }
 
-        void set(sal_uInt16 nRow, sal_uInt16 nColumn, double fValue);
+        void set(sal_uInt16 nRow, sal_uInt16 nColumn, double fValue)
+        {
+            mfValues[nRow][nColumn] = fValue;
+        }
 
         /** allow setting all needed values for a 3x2 matrix in one call. The
             parameter f_0x1 e.g. is the same as using set(0, 1, f)
          */
         void set3x2(double f_0x0, double f_0x1, double f_0x2, double f_1x0, double f_1x1, double f_1x2);
-
-        // test if last line is default to see if last line needs to be
-        // involved in calculations
-        bool isLastLineDefault() const;
 
         // reset to a standard matrix
         bool isIdentity() const;
@@ -110,21 +117,11 @@ namespace basegfx
         void shearX(double fSx);
         void shearY(double fSy);
 
-        B2DHomMatrix& operator+=(const B2DHomMatrix& rMat);
-        B2DHomMatrix& operator-=(const B2DHomMatrix& rMat);
-
         bool operator==(const B2DHomMatrix& rMat) const;
         bool operator!=(const B2DHomMatrix& rMat) const;
 
-        B2DHomMatrix& operator*=(double fValue);
-        B2DHomMatrix& operator/=(double fValue);
-
         // matrix multiplication from the left to the local
         B2DHomMatrix& operator*=(const B2DHomMatrix& rMat);
-
-        // assignment operator
-        B2DHomMatrix& operator=(const B2DHomMatrix& rMat) = default;
-        B2DHomMatrix& operator=(B2DHomMatrix&& rMat) = default;
 
         /**
          * Help routine to decompose given homogen 3x3 matrix to components. A correction of the
@@ -134,6 +131,11 @@ namespace basegfx
          * compose a homogen 3x3 matrix from components.
          */
         bool decompose(B2DTuple& rScale, B2DTuple& rTranslate, double& rRotate, double& rShearX) const;
+
+    private:
+        void computeAdjoint(double (&dst)[6]) const;
+        double computeDeterminant(double (&dst)[6]) const;
+        void doMulMatrix(const B2DHomMatrix& rMat);
     };
 
     inline B2DHomMatrix operator*(const B2DHomMatrix& rMatA, const B2DHomMatrix& rMatB)
@@ -150,9 +152,7 @@ namespace basegfx
         return stream
             << '[' << matrix.get(0, 0) << ' ' << matrix.get(0, 1) << ' '
             << matrix.get(0, 2) << "; " << matrix.get(1, 0) << ' '
-            << matrix.get(1, 1) << ' ' << matrix.get(1, 2) << "; "
-            << matrix.get(2, 0) << ' ' << matrix.get(2, 1) << ' '
-            << matrix.get(2, 2) << ']';
+            << matrix.get(1, 1) << ' ' << matrix.get(1, 2) << ']';
     }
 } // end of namespace basegfx
 

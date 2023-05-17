@@ -590,9 +590,9 @@ void SdXMLShapeContext::SetTransformation()
     aUnoMatrix.Line2.Column2 = aB2DHomMatrix.get(1, 1);
     aUnoMatrix.Line2.Column3 = aB2DHomMatrix.get(1, 2);
 
-    aUnoMatrix.Line3.Column1 = aB2DHomMatrix.get(2, 0);
-    aUnoMatrix.Line3.Column2 = aB2DHomMatrix.get(2, 1);
-    aUnoMatrix.Line3.Column3 = aB2DHomMatrix.get(2, 2);
+    aUnoMatrix.Line3.Column1 = 0;
+    aUnoMatrix.Line3.Column2 = 0;
+    aUnoMatrix.Line3.Column3 = 1;
 
     xPropSet->setPropertyValue("Transformation", Any(aUnoMatrix));
 }

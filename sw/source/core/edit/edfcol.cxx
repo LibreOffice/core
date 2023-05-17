@@ -1379,9 +1379,10 @@ static sal_Int16 lcl_GetAngle(const drawing::HomogenMatrix3& rMatrix)
     aTransformation.set(1, 0, rMatrix.Line2.Column1);
     aTransformation.set(1, 1, rMatrix.Line2.Column2);
     aTransformation.set(1, 2, rMatrix.Line2.Column3);
-    aTransformation.set(2, 0, rMatrix.Line3.Column1);
-    aTransformation.set(2, 1, rMatrix.Line3.Column2);
-    aTransformation.set(2, 2, rMatrix.Line3.Column3);
+    // For this to be a valid 2D transform matrix, the last row must be [0,0,1]
+    assert( rMatrix.Line3.Column1 == 0 );
+    assert( rMatrix.Line3.Column2 == 0 );
+    assert( rMatrix.Line3.Column3 == 1 );
 
     aTransformation.decompose(aScale, aTranslate, fRotate, fShear);
     sal_Int16 nDeg = round(basegfx::rad2deg(fRotate));
@@ -1553,9 +1554,9 @@ static void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
     aMatrix.Line2.Column1 = aTransformation.get(1, 0);
     aMatrix.Line2.Column2 = aTransformation.get(1, 1);
     aMatrix.Line2.Column3 = aTransformation.get(1, 2);
-    aMatrix.Line3.Column1 = aTransformation.get(2, 0);
-    aMatrix.Line3.Column2 = aTransformation.get(2, 1);
-    aMatrix.Line3.Column3 = aTransformation.get(2, 2);
+    aMatrix.Line3.Column1 = 0;
+    aMatrix.Line3.Column2 = 0;
+    aMatrix.Line3.Column3 = 1;
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
     xPropertySet->setPropertyValue(UNO_NAME_ANCHOR_TYPE, uno::Any(text::TextContentAnchorType_AT_CHARACTER));
     uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY);

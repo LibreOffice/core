@@ -34,21 +34,6 @@ namespace basegfx
             rMat.get(1, 1) * mfY +
             rMat.get(1, 2));
 
-        if(!rMat.isLastLineDefault())
-        {
-            const double fOne(1.0);
-            const double fTempM(
-                rMat.get(2, 0) * mfX +
-                rMat.get(2, 1) * mfY +
-                rMat.get(2, 2));
-
-            if(!fTools::equalZero(fTempM) && !fTools::equal(fOne, fTempM))
-            {
-                fTempX /= fTempM;
-                fTempY /= fTempM;
-            }
-        }
-
         mfX = fTempX;
         mfY = fTempY;
 

@@ -92,9 +92,10 @@ drawing::HomogenMatrix B3DHomMatrixToHomogenMatrix( const ::basegfx::B3DHomMatri
     aM.set(1, 0, rM.get(1, 0));
     aM.set(1, 1, rM.get(1, 1));
     aM.set(1, 2, rM.get(1, 3));
-    aM.set(2, 0, rM.get(3, 0));
-    aM.set(2, 1, rM.get(3, 1));
-    aM.set(2, 2, rM.get(3, 3));
+    // For this to be a valid 2D transform matrix, the last row must be [0,0,1]
+    assert( rM.get(3, 0) == 0 );
+    assert( rM.get(3, 1) == 0 );
+    assert( rM.get(3, 3) == 1 );
     return aM;
 }
 
@@ -107,9 +108,9 @@ drawing::HomogenMatrix3 B2DHomMatrixToHomogenMatrix3( const ::basegfx::B2DHomMat
     aHM.Line2.Column1 = rM.get(1, 0);
     aHM.Line2.Column2 = rM.get(1, 1);
     aHM.Line2.Column3 = rM.get(1, 2);
-    aHM.Line3.Column1 = rM.get(2, 0);
-    aHM.Line3.Column2 = rM.get(2, 1);
-    aHM.Line3.Column3 = rM.get(2, 2);
+    aHM.Line3.Column1 = 0;
+    aHM.Line3.Column2 = 0;
+    aHM.Line3.Column3 = 1;
     return aHM;
 }
 

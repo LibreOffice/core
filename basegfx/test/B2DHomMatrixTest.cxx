@@ -79,9 +79,6 @@ public:
         maPerspective.set(1, 0, 4.0);
         maPerspective.set(1, 1, 5.0);
         maPerspective.set(1, 2, 6.0);
-        maPerspective.set(2, 0, 7.0);
-        maPerspective.set(2, 1, 8.0);
-        maPerspective.set(2, 2, 9.0);
     }
 
     void equal()
@@ -129,9 +126,6 @@ public:
         aPerspective.set(1, 0, 4.0);
         aPerspective.set(1, 1, 5.0);
         aPerspective.set(1, 2, 6.0);
-        aPerspective.set(2, 0, 7.0);
-        aPerspective.set(2, 1, 8.0);
-        aPerspective.set(2, 2, 9.0);
 
         CPPUNIT_ASSERT_MESSAGE("operator==: identity matrix", aIdentity.operator==(maIdentity));
         CPPUNIT_ASSERT_MESSAGE("operator==: scale matrix", aScale.operator==(maScale));
@@ -239,59 +233,11 @@ public:
         affineAffineProd.set(1, 1, 33);
         affineAffineProd.set(1, 2, 48);
 
-        B2DHomMatrix affinePerspectiveProd;
-
-        affinePerspectiveProd.set(0, 0, 30);
-        affinePerspectiveProd.set(0, 1, 36);
-        affinePerspectiveProd.set(0, 2, 42);
-        affinePerspectiveProd.set(1, 0, 66);
-        affinePerspectiveProd.set(1, 1, 81);
-        affinePerspectiveProd.set(1, 2, 96);
-        affinePerspectiveProd.set(2, 0, 7);
-        affinePerspectiveProd.set(2, 1, 8);
-        affinePerspectiveProd.set(2, 2, 9);
-
-        B2DHomMatrix perspectiveAffineProd;
-
-        perspectiveAffineProd.set(0, 0, 9);
-        perspectiveAffineProd.set(0, 1, 12);
-        perspectiveAffineProd.set(0, 2, 18);
-        perspectiveAffineProd.set(1, 0, 24);
-        perspectiveAffineProd.set(1, 1, 33);
-        perspectiveAffineProd.set(1, 2, 48);
-        perspectiveAffineProd.set(2, 0, 39);
-        perspectiveAffineProd.set(2, 1, 54);
-        perspectiveAffineProd.set(2, 2, 78);
-
-        B2DHomMatrix perspectivePerspectiveProd;
-
-        perspectivePerspectiveProd.set(0, 0, 30);
-        perspectivePerspectiveProd.set(0, 1, 36);
-        perspectivePerspectiveProd.set(0, 2, 42);
-        perspectivePerspectiveProd.set(1, 0, 66);
-        perspectivePerspectiveProd.set(1, 1, 81);
-        perspectivePerspectiveProd.set(1, 2, 96);
-        perspectivePerspectiveProd.set(2, 0, 102);
-        perspectivePerspectiveProd.set(2, 1, 126);
-        perspectivePerspectiveProd.set(2, 2, 150);
-
         B2DHomMatrix temp;
 
         temp = maAffine;
         temp *= maAffine;
         CPPUNIT_ASSERT_EQUAL_MESSAGE("multiply: both compact", affineAffineProd, temp);
-
-        temp = maPerspective;
-        temp *= maAffine;
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("multiply: first compact", affinePerspectiveProd, temp);
-
-        temp = maAffine;
-        temp *= maPerspective;
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("multiply: second compact", perspectiveAffineProd, temp);
-
-        temp = maPerspective;
-        temp *= maPerspective;
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("multiply: none compact", perspectivePerspectiveProd, temp);
     }
 
     void impFillMatrix(B2DHomMatrix& rSource, double fScaleX, double fScaleY, double fShearX,

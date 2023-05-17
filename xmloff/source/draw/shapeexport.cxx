@@ -1513,9 +1513,10 @@ void XMLShapeExport::ImpExportNewTrans_GetB2DHomMatrix(::basegfx::B2DHomMatrix& 
     rMatrix.set(1, 0, aMatrix.Line2.Column1);
     rMatrix.set(1, 1, aMatrix.Line2.Column2);
     rMatrix.set(1, 2, aMatrix.Line2.Column3);
-    rMatrix.set(2, 0, aMatrix.Line3.Column1);
-    rMatrix.set(2, 1, aMatrix.Line3.Column2);
-    rMatrix.set(2, 2, aMatrix.Line3.Column3);
+    // For this to be a valid 2D transform matrix, the last row must be [0,0,1]
+    assert( aMatrix.Line3.Column1 == 0 );
+    assert( aMatrix.Line3.Column2 == 0 );
+    assert( aMatrix.Line3.Column3 == 1 );
 }
 
 void XMLShapeExport::ImpExportNewTrans_DecomposeAndRefPoint(const ::basegfx::B2DHomMatrix& rMatrix, ::basegfx::B2DTuple& rTRScale,

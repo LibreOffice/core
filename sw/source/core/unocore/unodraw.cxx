@@ -2553,9 +2553,10 @@ drawing::HomogenMatrix3 SwXShape::ConvertTransformationToLayoutDir(
                 aTempMatrix.set(1, 0, aMatrix.Line2.Column1 );
                 aTempMatrix.set(1, 1, aMatrix.Line2.Column2 );
                 aTempMatrix.set(1, 2, aMatrix.Line2.Column3 );
-                aTempMatrix.set(2, 0, aMatrix.Line3.Column1 );
-                aTempMatrix.set(2, 1, aMatrix.Line3.Column2 );
-                aTempMatrix.set(2, 2, aMatrix.Line3.Column3 );
+                // For this to be a valid 2D transform matrix, the last row must be [0,0,1]
+                assert( aMatrix.Line3.Column1 == 0 );
+                assert( aMatrix.Line3.Column2 == 0 );
+                assert( aMatrix.Line3.Column3 == 1 );
                 // #i73079#
                 aTempMatrix.translate( aTranslateDiff.X, aTranslateDiff.Y );
                 aMatrix.Line1.Column1 = aTempMatrix.get(0, 0);
@@ -2564,9 +2565,9 @@ drawing::HomogenMatrix3 SwXShape::ConvertTransformationToLayoutDir(
                 aMatrix.Line2.Column1 = aTempMatrix.get(1, 0);
                 aMatrix.Line2.Column2 = aTempMatrix.get(1, 1);
                 aMatrix.Line2.Column3 = aTempMatrix.get(1, 2);
-                aMatrix.Line3.Column1 = aTempMatrix.get(2, 0);
-                aMatrix.Line3.Column2 = aTempMatrix.get(2, 1);
-                aMatrix.Line3.Column3 = aTempMatrix.get(2, 2);
+                aMatrix.Line3.Column1 = 0;
+                aMatrix.Line3.Column2 = 0;
+                aMatrix.Line3.Column3 = 1;
             }
         }
     }

@@ -1090,9 +1090,10 @@ static basegfx::B2DRange getUnrotatedGroupBoundRange(const Reference< XShape >& 
                             aHomogenMatrix.set(1, 0, aMatrix.Line2.Column1);
                             aHomogenMatrix.set(1, 1, aMatrix.Line2.Column2);
                             aHomogenMatrix.set(1, 2, aMatrix.Line2.Column3);
-                            aHomogenMatrix.set(2, 0, aMatrix.Line3.Column1);
-                            aHomogenMatrix.set(2, 1, aMatrix.Line3.Column2);
-                            aHomogenMatrix.set(2, 2, aMatrix.Line3.Column3);
+                            // For this to be a valid 2D transform matrix, the last row must be [0,0,1]
+                            assert( aMatrix.Line3.Column1 == 0 );
+                            assert( aMatrix.Line3.Column2 == 0 );
+                            assert( aMatrix.Line3.Column3 == 1 );
 
                             basegfx::B2DVector aScale, aTranslate;
                             double fRotate, fShearX;

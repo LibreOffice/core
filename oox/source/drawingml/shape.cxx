@@ -1118,9 +1118,9 @@ Reference< XShape > const & Shape::createAndInsert(
         aMatrix.Line2.Column2 = aTransformation.get(1,1);
         aMatrix.Line2.Column3 = aTransformation.get(1,2);
 
-        aMatrix.Line3.Column1 = aTransformation.get(2,0);
-        aMatrix.Line3.Column2 = aTransformation.get(2,1);
-        aMatrix.Line3.Column3 = aTransformation.get(2,2);
+        aMatrix.Line3.Column1 = 0;
+        aMatrix.Line3.Column2 = 0;
+        aMatrix.Line3.Column3 = 1;
 
         maShapeProperties.setProperty(PROP_Transformation, aMatrix);
     }

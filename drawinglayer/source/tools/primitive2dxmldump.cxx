@@ -81,9 +81,9 @@ void writeMatrix(::tools::XmlWriter& rWriter, const basegfx::B2DHomMatrix& rMatr
     rWriter.attribute("xy21", rMatrix.get(1, 0));
     rWriter.attribute("xy22", rMatrix.get(1, 1));
     rWriter.attribute("xy23", rMatrix.get(1, 2));
-    rWriter.attribute("xy31", rMatrix.get(2, 0));
-    rWriter.attribute("xy32", rMatrix.get(2, 1));
-    rWriter.attribute("xy33", rMatrix.get(2, 2));
+    rWriter.attribute("xy31", 0);
+    rWriter.attribute("xy32", 0);
+    rWriter.attribute("xy33", 1);
 }
 
 void writeMatrix3D(::tools::XmlWriter& rWriter, const basegfx::B3DHomMatrix& rMatrix)

@@ -26,50 +26,56 @@
 
 namespace basegfx
 {
-
-    B2DHomMatrix::B2DHomMatrix(double f_0x0, double f_0x1, double f_0x2, double f_1x0, double f_1x1, double f_1x2)
-    {
-        maImpl.set(0, 0, f_0x0);
-        maImpl.set(0, 1, f_0x1);
-        maImpl.set(0, 2, f_0x2);
-        maImpl.set(1, 0, f_1x0);
-        maImpl.set(1, 1, f_1x1);
-        maImpl.set(1, 2, f_1x2);
-    }
-
-    void B2DHomMatrix::set(sal_uInt16 nRow, sal_uInt16 nColumn, double fValue)
-    {
-        maImpl.set(nRow, nColumn, fValue);
-    }
+    constexpr int RowSize = 3;
 
     void B2DHomMatrix::set3x2(double f_0x0, double f_0x1, double f_0x2, double f_1x0, double f_1x1, double f_1x2)
     {
-        maImpl.set(0, 0, f_0x0);
-        maImpl.set(0, 1, f_0x1);
-        maImpl.set(0, 2, f_0x2);
-        maImpl.set(1, 0, f_1x0);
-        maImpl.set(1, 1, f_1x1);
-        maImpl.set(1, 2, f_1x2);
-    }
-
-    bool B2DHomMatrix::isLastLineDefault() const
-    {
-        return maImpl.isLastLineDefault();
+        mfValues[0][0] = f_0x0;
+        mfValues[0][1] = f_0x1;
+        mfValues[0][2] = f_0x2;
+        mfValues[1][0] = f_1x0;
+        mfValues[1][1] = f_1x1;
+        mfValues[1][2] = f_1x2;
     }
 
     bool B2DHomMatrix::isIdentity() const
     {
-        return maImpl.isIdentity();
+        for(sal_uInt16 a(0); a < RowSize - 1; a++)
+        {
+            for(sal_uInt16 b(0); b < RowSize; b++)
+            {
+                const double fDefault(internal::implGetDefaultValue(a, b));
+                const double fValueAB(get(a, b));
+
+                if(!::basegfx::fTools::equal(fDefault, fValueAB))
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     void B2DHomMatrix::identity()
     {
-        maImpl = Impl2DHomMatrix();
+        for(sal_uInt16 a(0); a < RowSize - 1; a++)
+        {
+            for(sal_uInt16 b(0); b < RowSize; b++)
+                mfValues[a][b] = internal::implGetDefaultValue(a, b);
+        }
     }
 
     bool B2DHomMatrix::isInvertible() const
     {
-        return maImpl.isInvertible();
+        double dst[6];
+        /* Compute adjoint: */
+        computeAdjoint(dst);
+        /* Compute determinant: */
+        double det = computeDeterminant(dst);
+        if (fTools::equalZero(det))
+            return false;
+        return true;
     }
 
     bool B2DHomMatrix::invert()
@@ -77,85 +83,43 @@ namespace basegfx
         if(isIdentity())
             return true;
 
-
-        double dst[9];
+        double dst[6];
 
         /* Compute adjoint: */
-
-        dst[0] = + get(1, 1) * get(2, 2) - get(1, 2) * get(2, 1);
-        dst[1] = - get(0, 1) * get(2, 2) + get(0, 2) * get(2, 1);
-        dst[2] = + get(0, 1) * get(1, 2) - get(0, 2) * get(1, 1);
-        dst[3] = - get(1, 0) * get(2, 2) + get(1, 2) * get(2, 0);
-        dst[4] = + get(0, 0) * get(2, 2) - get(0, 2) * get(2, 0);
-        dst[5] = - get(0, 0) * get(1, 2) + get(0, 2) * get(1, 0);
-        dst[6] = + get(1, 0) * get(2, 1) - get(1, 1) * get(2, 0);
-        dst[7] = - get(0, 0) * get(2, 1) + get(0, 1) * get(2, 0);
-        dst[8] = + get(0, 0) * get(1, 1) - get(0, 1) * get(1, 0);
+        computeAdjoint(dst);
 
         /* Compute determinant: */
-
-        double det = get(0, 0) * dst[0] + get(0, 1) * dst[3] + get(0, 2) * dst[6];
+        double det = computeDeterminant(dst);
         if (fTools::equalZero(det))
             return false;
 
         /* Multiply adjoint with reciprocal of determinant: */
-
         det = 1.0 / det;
-
-        maImpl.set(0, 0, dst[0] * det);
-        maImpl.set(0, 1, dst[1] * det);
-        maImpl.set(0, 2, dst[2] * det);
-        maImpl.set(1, 0, dst[3] * det);
-        maImpl.set(1, 1, dst[4] * det);
-        maImpl.set(1, 2, dst[5] * det);
-        maImpl.set(2, 0, dst[6] * det);
-        maImpl.set(2, 1, dst[7] * det);
-        maImpl.set(2, 2, dst[8] * det);
-
-        // The above algorithm is very slightly less accurate then the old one, so
-        // we need to round the last row to make sure that functions like decompose
-        // still do the same thing with existing data, otherwise testTdf109143
-        // in CppunitTest_vcl_pdfexport will fail.
-        if (fTools::equalZero(maImpl.get(2, 0)))
-            maImpl.set(2, 0, 0);
-        if (fTools::equalZero(maImpl.get(2, 1)))
-            maImpl.set(2, 1, 0);
-        if (fTools::equal(1.0, maImpl.get(2, 2)))
-            maImpl.set(2, 2, 1);
+        mfValues[0][0] = dst[0] * det;
+        mfValues[0][1] = dst[1] * det;
+        mfValues[0][2] = dst[2] * det;
+        mfValues[1][0] = dst[3] * det;
+        mfValues[1][1] = dst[4] * det;
+        mfValues[1][2] = dst[5] * det;
 
         return true;
     }
 
-    B2DHomMatrix& B2DHomMatrix::operator+=(const B2DHomMatrix& rMat)
+    /* Compute adjoint, optimised for the case where the last (not stored) row is { 0, 0, 1 } */
+    void B2DHomMatrix::computeAdjoint(double (&dst)[6]) const
     {
-        maImpl.doAddMatrix(rMat.maImpl);
-        return *this;
+        dst[0] = + get(1, 1);
+        dst[1] = - get(0, 1);
+        dst[2] = + get(0, 1) * get(1, 2) - get(0, 2) * get(1, 1);
+        dst[3] = - get(1, 0);
+        dst[4] = + get(0, 0);
+        dst[5] = - get(0, 0) * get(1, 2) + get(0, 2) * get(1, 0);
     }
 
-    B2DHomMatrix& B2DHomMatrix::operator-=(const B2DHomMatrix& rMat)
+    /* Compute the determinant, given the adjoint matrix */
+    double B2DHomMatrix::computeDeterminant(double (&dst)[6]) const
     {
-        maImpl.doSubMatrix(rMat.maImpl);
-        return *this;
-    }
-
-    B2DHomMatrix& B2DHomMatrix::operator*=(double fValue)
-    {
-        const double fOne(1.0);
-
-        if(!fTools::equal(fOne, fValue))
-            maImpl.doMulMatrix(fValue);
-
-        return *this;
-    }
-
-    B2DHomMatrix& B2DHomMatrix::operator/=(double fValue)
-    {
-        const double fOne(1.0);
-
-        if(!fTools::equal(fOne, fValue))
-            maImpl.doMulMatrix(1.0 / fValue);
-
-        return *this;
+        return mfValues[0][0] * dst[0] + mfValues[0][1] * dst[3];
     }
 
     B2DHomMatrix& B2DHomMatrix::operator*=(const B2DHomMatrix& rMat)
@@ -172,15 +136,50 @@ namespace basegfx
         else
         {
             // multiply
-            maImpl.doMulMatrix(rMat.maImpl);
+            doMulMatrix(rMat);
         }
 
         return *this;
     }
 
+    void B2DHomMatrix::doMulMatrix(const B2DHomMatrix& rMat)
+    {
+        // create a copy as source for the original values
+        const B2DHomMatrix aCopy(*this);
+
+        for(sal_uInt16 a(0); a < 2; ++a)
+        {
+            for(sal_uInt16 b(0); b < 3; ++b)
+            {
+                double fValue = 0.0;
+
+                for(sal_uInt16 c(0); c < 2; ++c)
+                    fValue += aCopy.mfValues[c][b] * rMat.mfValues[a][c];
+
+                mfValues[a][b] = fValue;
+            }
+            mfValues[a][2] += rMat.mfValues[a][2];
+        }
+    }
+
     bool B2DHomMatrix::operator==(const B2DHomMatrix& rMat) const
     {
-        return &rMat == this || maImpl.isEqual(rMat.maImpl);
+        if (&rMat == this)
+            return true;
+        for(sal_uInt16 a(0); a < 2; a++)
+        {
+            for(sal_uInt16 b(0); b < 3; b++)
+            {
+                const double fValueA(mfValues[a][b]);
+                const double fValueB(rMat.mfValues[a][b]);
+
+                if(!::basegfx::fTools::equal(fValueA, fValueB))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     bool B2DHomMatrix::operator!=(const B2DHomMatrix& rMat) const
@@ -197,26 +196,26 @@ namespace basegfx
         double fCos(1.0);
 
         utils::createSinCosOrthogonal(fSin, fCos, fRadiant);
-        Impl2DHomMatrix aRotMat;
+        B2DHomMatrix aRotMat;
 
         aRotMat.set(0, 0, fCos);
         aRotMat.set(1, 1, fCos);
         aRotMat.set(1, 0, fSin);
         aRotMat.set(0, 1, -fSin);
 
-        maImpl.doMulMatrix(aRotMat);
+        doMulMatrix(aRotMat);
     }
 
     void B2DHomMatrix::translate(double fX, double fY)
     {
         if(!fTools::equalZero(fX) || !fTools::equalZero(fY))
         {
-            Impl2DHomMatrix aTransMat;
+            B2DHomMatrix aTransMat;
 
             aTransMat.set(0, 2, fX);
             aTransMat.set(1, 2, fY);
 
-            maImpl.doMulMatrix(aTransMat);
+            doMulMatrix(aTransMat);
         }
     }
 
@@ -231,12 +230,12 @@ namespace basegfx
 
         if(!fTools::equal(fOne, fX) || !fTools::equal(fOne, fY))
         {
-            Impl2DHomMatrix aScaleMat;
+            B2DHomMatrix aScaleMat;
 
             aScaleMat.set(0, 0, fX);
             aScaleMat.set(1, 1, fY);
 
-            maImpl.doMulMatrix(aScaleMat);
+            doMulMatrix(aScaleMat);
         }
     }
 
@@ -250,11 +249,11 @@ namespace basegfx
         // #i76239# do not test against 1.0, but against 0.0. We are talking about a value not on the diagonal (!)
         if(!fTools::equalZero(fSx))
         {
-            Impl2DHomMatrix aShearXMat;
+            B2DHomMatrix aShearXMat;
 
             aShearXMat.set(0, 1, fSx);
 
-            maImpl.doMulMatrix(aShearXMat);
+            doMulMatrix(aShearXMat);
         }
     }
 
@@ -263,11 +262,11 @@ namespace basegfx
         // #i76239# do not test against 1.0, but against 0.0. We are talking about a value not on the diagonal (!)
         if(!fTools::equalZero(fSy))
         {
-            Impl2DHomMatrix aShearYMat;
+            B2DHomMatrix aShearYMat;
 
             aShearYMat.set(1, 0, fSy);
 
-            maImpl.doMulMatrix(aShearYMat);
+            doMulMatrix(aShearYMat);
         }
     }
 
@@ -280,12 +279,6 @@ namespace basegfx
     */
     bool B2DHomMatrix::decompose(B2DTuple& rScale, B2DTuple& rTranslate, double& rRotate, double& rShearX) const
     {
-        // when perspective is used, decompose is not made here
-        if(!maImpl.isLastLineDefault())
-        {
-            return false;
-        }
-
         // reset rotate and shear and copy translation values in every case
         rRotate = rShearX = 0.0;
         rTranslate.setX(get(0, 2));

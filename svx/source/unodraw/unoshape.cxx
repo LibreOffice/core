@@ -2076,9 +2076,10 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
             aNewHomogenMatrix.set(1, 0, aMatrix.Line2.Column1);
             aNewHomogenMatrix.set(1, 1, aMatrix.Line2.Column2);
             aNewHomogenMatrix.set(1, 2, aMatrix.Line2.Column3);
-            aNewHomogenMatrix.set(2, 0, aMatrix.Line3.Column1);
-            aNewHomogenMatrix.set(2, 1, aMatrix.Line3.Column2);
-            aNewHomogenMatrix.set(2, 2, aMatrix.Line3.Column3);
+            // For this to be a valid 2D transform matrix, the last row must be [0,0,1]
+            assert( aMatrix.Line3.Column1 == 0 );
+            assert( aMatrix.Line3.Column2 == 0 );
+            assert( aMatrix.Line3.Column3 == 1 );
 
             // tdf#117145 metric of SdrModel is app-specific, metric of UNO API is 100thmm
             // Need to adapt aNewHomogenMatrix from 100thmm to app-specific
@@ -2578,9 +2579,9 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
         aMatrix.Line2.Column1 = aNewHomogenMatrix.get(1, 0);
         aMatrix.Line2.Column2 = aNewHomogenMatrix.get(1, 1);
         aMatrix.Line2.Column3 = aNewHomogenMatrix.get(1, 2);
-        aMatrix.Line3.Column1 = aNewHomogenMatrix.get(2, 0);
-        aMatrix.Line3.Column2 = aNewHomogenMatrix.get(2, 1);
-        aMatrix.Line3.Column3 = aNewHomogenMatrix.get(2, 2);
+        aMatrix.Line3.Column1 = 0;
+        aMatrix.Line3.Column2 = 0;
+        aMatrix.Line3.Column3 = 1;
 
         rValue <<= aMatrix;
 
