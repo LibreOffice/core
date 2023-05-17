@@ -91,10 +91,17 @@ VCL_DLLPUBLIC size_t AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rP
                                       const basegfx::B2DHomMatrix& rObjectToDevice, bool bPixelSnap,
                                       bool bPixelSnapHairline);
 
-VCL_DLLPUBLIC basegfx::B2DPoint impPixelSnap(const basegfx::B2DPolygon& rPolygon,
-                                             const basegfx::B2DHomMatrix& rObjectToDevice,
-                                             basegfx::B2DHomMatrix& rObjectToDeviceInv,
-                                             sal_uInt32 nIndex);
+class VCL_DLLPUBLIC PixelSnapper
+{
+public:
+    basegfx::B2DPoint snap(const basegfx::B2DPolygon& rPolygon,
+                           const basegfx::B2DHomMatrix& rObjectToDevice,
+                           basegfx::B2DHomMatrix& rObjectToDeviceInv, sal_uInt32 nIndex);
+
+private:
+    basegfx::B2DPoint maPrevPoint, maCurrPoint, maNextPoint;
+    basegfx::B2ITuple maPrevTuple, maCurrTuple, maNextTuple;
+};
 
 VCL_DLLPUBLIC void add_polygon_path(cairo_t* cr, const basegfx::B2DPolyPolygon& rPolyPolygon,
                                     const basegfx::B2DHomMatrix& rObjectToDevice, bool bPixelSnap);

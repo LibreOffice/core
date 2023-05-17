@@ -160,6 +160,7 @@ size_t AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon,
     const bool bObjectToDeviceUsed(!rObjectToDevice.isIdentity());
     basegfx::B2DHomMatrix aObjectToDeviceInv;
     basegfx::B2DPoint aLast;
+    PixelSnapper aSnapper;
 
     for (sal_uInt32 nPointIdx = 0, nPrevIdx = 0;; nPrevIdx = nPointIdx++)
     {
@@ -209,7 +210,7 @@ size_t AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon,
         {
             // snap horizontal and vertical lines (mainly used in Chart for
             // 'nicer' AAing)
-            aPoint = impPixelSnap(rPolygon, rObjectToDevice, aObjectToDeviceInv, nClosedIdx);
+            aPoint = aSnapper.snap(rPolygon, rObjectToDevice, aObjectToDeviceInv, nClosedIdx);
         }
 
         if (!nPointIdx)
@@ -271,32 +272,44 @@ size_t AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon,
     return nSizeMeasure;
 }
 
-basegfx::B2DPoint impPixelSnap(const basegfx::B2DPolygon& rPolygon,
-                               const basegfx::B2DHomMatrix& rObjectToDevice,
-                               basegfx::B2DHomMatrix& rObjectToDeviceInv, sal_uInt32 nIndex)
+basegfx::B2DPoint PixelSnapper::snap(const basegfx::B2DPolygon& rPolygon,
+                                     const basegfx::B2DHomMatrix& rObjectToDevice,
+                                     basegfx::B2DHomMatrix& rObjectToDeviceInv, sal_uInt32 nIndex)
 {
     const sal_uInt32 nCount(rPolygon.count());
 
     // get the data
-    const basegfx::B2ITuple aPrevTuple(
-        basegfx::fround(rObjectToDevice * rPolygon.getB2DPoint((nIndex + nCount - 1) % nCount)));
-    const basegfx::B2DPoint aCurrPoint(rObjectToDevice * rPolygon.getB2DPoint(nIndex));
-    const basegfx::B2ITuple aCurrTuple(basegfx::fround(aCurrPoint));
-    const basegfx::B2ITuple aNextTuple(
-        basegfx::fround(rObjectToDevice * rPolygon.getB2DPoint((nIndex + 1) % nCount)));
+    if (nIndex == 0)
+    {
+        // if it's the first time, we need to calculate everything
+        maPrevPoint = rObjectToDevice * rPolygon.getB2DPoint((nIndex + nCount - 1) % nCount);
+        maCurrPoint = rObjectToDevice * rPolygon.getB2DPoint(nIndex);
+        maPrevTuple = basegfx::fround(maPrevPoint);
+        maCurrTuple = basegfx::fround(maCurrPoint);
+    }
+    else
+    {
+        // but for all other times, we can re-use the previous iteration computations
+        maPrevPoint = maCurrPoint;
+        maPrevTuple = maCurrTuple;
+        maCurrPoint = maNextPoint;
+        maCurrTuple = maNextTuple;
+    }
+    maNextPoint = rObjectToDevice * rPolygon.getB2DPoint((nIndex + 1) % nCount);
+    maNextTuple = basegfx::fround(maNextPoint);
 
     // get the states
-    const bool bPrevVertical(aPrevTuple.getX() == aCurrTuple.getX());
-    const bool bNextVertical(aNextTuple.getX() == aCurrTuple.getX());
-    const bool bPrevHorizontal(aPrevTuple.getY() == aCurrTuple.getY());
-    const bool bNextHorizontal(aNextTuple.getY() == aCurrTuple.getY());
+    const bool bPrevVertical(maPrevTuple.getX() == maCurrTuple.getX());
+    const bool bNextVertical(maNextTuple.getX() == maCurrTuple.getX());
+    const bool bPrevHorizontal(maPrevTuple.getY() == maCurrTuple.getY());
+    const bool bNextHorizontal(maNextTuple.getY() == maCurrTuple.getY());
     const bool bSnapX(bPrevVertical || bNextVertical);
     const bool bSnapY(bPrevHorizontal || bNextHorizontal);
 
     if (bSnapX || bSnapY)
     {
-        basegfx::B2DPoint aSnappedPoint(bSnapX ? aCurrTuple.getX() : aCurrPoint.getX(),
-                                        bSnapY ? aCurrTuple.getY() : aCurrPoint.getY());
+        basegfx::B2DPoint aSnappedPoint(bSnapX ? maCurrTuple.getX() : maCurrPoint.getX(),
+                                        bSnapY ? maCurrTuple.getY() : maCurrPoint.getY());
 
         if (rObjectToDeviceInv.isIdentity())
         {
