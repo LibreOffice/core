@@ -668,7 +668,7 @@ class SFScriptForge:
                 :param unodate: com.sun.star.util.DateTime, com.sun.star.util.Date or com.sun.star.util.Time
                 :return: the equivalent datetime.datetime
                 """
-            date = datetime.datetime(1899, 12, 30, 0, 0, 0, 0)  # Idem as Basic builtin TimeSeria() function
+            date = datetime.datetime(1899, 12, 30, 0, 0, 0, 0)  # Idem as Basic builtin TimeSerial() function
             datetype = repr(type(unodate))
             if 'com.sun.star.util.DateTime' in datetype:
                 if 1900 <= unodate.Year <= datetime.MAXYEAR:
@@ -1869,6 +1869,99 @@ class SFDialogs:
         def Controls(self, controlname = ''):
             return self.ExecMethod(self.vbMethod + self.flgArrayRet + self.flgHardCode, 'Controls', controlname)
 
+        def CreateButton(self, controlname, place, toggle = False, push = ''):
+            return self.ExecMethod(self.vbMethod, 'CreateButton', controlname, place, toggle, push)
+
+        def CreateCheckBox(self, controlname, place, multiline = False):
+            return self.ExecMethod(self.vbMethod, 'CreateCheckBox', controlname, place, multiline)
+
+        def CreateComboBox(self, controlname, place, border = '3D', dropdown = True, linecount = 5):
+            return self.ExecMethod(self.vbMethod, 'CreateComboBox', controlname, place, border, dropdown, linecount)
+
+        def CreateCurrencyField(self, controlname, place, border = '3D', spinbutton = False, minvalue = -1000000,
+                                maxvalue = +1000000, increment = 1, accuracy = 2):
+            return self.ExecMethod(self.vbMethod, 'CreateCurrencyField', controlname, place, border, spinbutton,
+                                   minvalue, maxvalue, increment, accuracy)
+
+        def CreateDateField(self, controlname, place, border = '3D', dropdown = True,
+                            mindate = datetime.datetime(1900, 1, 1, 0, 0, 0, 0),
+                            maxdate = datetime.datetime(2200, 12, 31, 0, 0, 0, 0)):
+            if isinstance(mindate, datetime.datetime):
+                mindate = SFScriptForge.SF_Basic.CDateToUnoDateTime(mindate)
+            if isinstance(maxdate, datetime.datetime):
+                maxdate = SFScriptForge.SF_Basic.CDateToUnoDateTime(maxdate)
+            return self.ExecMethod(self.vbMethod + self.flgDateArg, 'CreateDateField', controlname, place, border,
+                                   dropdown, mindate, maxdate)
+
+        def CreateFileControl(self, controlname, place, border = '3D'):
+            return self.ExecMethod(self.vbMethod, 'CreateFileControl', controlname, place, border)
+
+        def CreateFixedLine(self, controlname, place, orientation):
+            return self.ExecMethod(self.vbMethod, 'CreateFixedLine', controlname, place, orientation)
+
+        def CreateFixedText(self, controlname, place, border = 'NONE', multiline = False, align = 'LEFT',
+                            verticalalign = 'TOP'):
+            return self.ExecMethod(self.vbMethod, 'CreateFixedText', controlname, place, border, multiline, align,
+                                   verticalalign)
+
+        def CreateFormattedField(self, controlname, place, border = '3D', spinbutton = False,
+                                 minvalue = -1000000, maxvalue = +1000000):
+            return self.ExecMethod(self.vbMethod, 'CreateFormattedField', controlname, place, border, spinbutton,
+                                   minvalue, maxvalue)
+
+        def CreateGroupBox(self, controlname, place):
+            return self.ExecMethod(self.vbMethod, 'CreateGroupBox', controlname, place)
+
+        def CreateImageControl(self, controlname, place, border = '3D', scale = 'FITTOSIZE'):
+            return self.ExecMethod(self.vbMethod, 'CreateImageControl', controlname, place, border, scale)
+
+        def CreateListBox(self, controlname, place, border = '3D', dropdown = True, linecount = 5,
+                          multiselect = False):
+            return self.ExecMethod(self.vbMethod, 'CreateListBox', controlname, place, border, dropdown,
+                                   linecount, multiselect)
+
+        def CreateNumericField(self, controlname, place, border = '3D', spinbutton = False,
+                               minvalue = -1000000, maxvalue = +1000000, increment = 1, accuracy = 2):
+            return self.ExecMethod(self.vbMethod, 'CreateNumericField', controlname, place, border, spinbutton,
+                                   minvalue, maxvalue, increment, accuracy)
+
+        def CreatePatternField(self, controlname, place, border = '3D', editmask = '', literalmask = ''):
+            return self.ExecMethod(self.vbMethod, 'CreatePatternField', controlname, place, border,
+                                   editmask, literalmask)
+
+        def CreateProgressBar(self, controlname, place, border = '3D', minvalue = 0, maxvalue = 100):
+            return self.ExecMethod(self.vbMethod, 'CreateProgressBar', controlname, place, border, minvalue, maxvalue)
+
+        def CreateRadioButton(self, controlname, place, multiline = False):
+            return self.ExecMethod(self.vbMethod, 'CreateRadioButton', controlname, place, multiline)
+
+        def CreateScrollBar(self, controlname, place, orientation, border = '3D', minvalue = 0, maxvalue = 100):
+            return self.ExecMethod(self.vbMethod, 'CreateScrollBar', controlname, place, orientation, border,
+                                   minvalue, maxvalue)
+
+        def CreateTableControl(self, controlname, place, border = '3D', rowheaders = True, columnheaders = True,
+                               scrollbars = 'None', gridlines = False):
+            return self.ExecMethod(self.vbMethod, 'CreateTableControl', controlname, place, border,
+                                   rowheaders, columnheaders, scrollbars, gridlines)
+
+        def CreateTextField(self, controlname, place, border = '3D', multiline = False,
+                            maximumlength = 0, passwordcharacter = ''):
+            return self.ExecMethod(self.vbMethod, 'CreateTextField', controlname, place, border,
+                                   multiline, maximumlength, passwordcharacter)
+
+        def CreateTimeField(self, controlname, place, border = '3D',
+                            mintime = datetime.datetime(1899, 12, 30, 0, 0, 0, 0),
+                            maxtime = datetime.datetime(1899, 12, 30, 23, 59, 59, 0)):
+            if isinstance(mintime, datetime.datetime):
+                mintime = SFScriptForge.SF_Basic.CDateToUnoDateTime(mintime)
+            if isinstance(maxtime, datetime.datetime):
+                maxtime = SFScriptForge.SF_Basic.CDateToUnoDateTime(maxtime)
+            return self.ExecMethod(self.vbMethod + self.flgDateArg, 'CreateTimeField', controlname, place, border,
+                                   mintime, maxtime)
+
+        def CreateTreeControl(self, controlname, place, border = '3D'):
+            return self.ExecMethod(self.vbMethod, 'CreateTreeControl', controlname, place, border)
+
         def EndExecute(self, returnvalue):
             return self.ExecMethod(self.vbMethod + self.flgHardCode, 'EndExecute', returnvalue)
 
@@ -1903,7 +1996,7 @@ class SFDialogs:
         serviceimplementation = 'basic'
         servicename = 'SFDialogs.DialogControl'
         servicesynonyms = ()
-        serviceproperties = dict(Cancel = True, Caption = True, ControlType = False, CurrentNode = True,
+        serviceproperties = dict(Border = True, Cancel = True, Caption = True, ControlType = False, CurrentNode = True,
                                  Default = True, Enabled = True, Format = True, Height = True, ListCount = False,
                                  ListIndex = True, Locked = True, MultiSelect = True, Name = False,
                                  OnActionPerformed = True, OnAdjustmentValueChanged = True, OnFocusGained = True,
@@ -1912,7 +2005,7 @@ class SFDialogs:
                                  OnMouseExited = True, OnMouseMoved = True, OnMousePressed = True,
                                  OnMouseReleased = True, OnNodeExpanded = True, OnNodeSelected = True,
                                  OnTextChanged = True, Page = True, Parent = False, Picture = True,
-                                 RootNode = False, RowSource = True, Text = False, TipText = True,
+                                 RootNode = False, RowSource = True, TabIndex = True, Text = False, TipText = True,
                                  TripleState = True, URL = True, Value = True, Visible = True, Width = True,
                                  X = True, Y = True, XControlModel = False, XControlView = False,
                                  XGridColumnModel = False, XGridDataModel = False, XTreeDataModel = False)
@@ -1944,8 +2037,9 @@ class SFDialogs:
         def SetFocus(self):
             return self.ExecMethod(self.vbMethod, 'SetFocus')
 
-        def SetTableData(self, dataarray, widths = (1,), alignments = ''):
-            return self.ExecMethod(self.vbMethod + self.flgArrayArg, 'SetTableData', dataarray, widths, alignments)
+        def SetTableData(self, dataarray, widths = (1,), alignments = '', rowheaderwidth = 10):
+            return self.ExecMethod(self.vbMethod + self.flgArrayArg, 'SetTableData', dataarray, widths, alignments,
+                                   rowheaderwidth)
 
         def WriteLine(self, line = ''):
             return self.ExecMethod(self.vbMethod, 'WriteLine', line)

@@ -1008,6 +1008,15 @@ Try:
 									&amp;	&quot;%5: An identifier\n&quot; _
 									&amp;	&quot;%6: A list of names separated by commas&quot; _
 					)
+	&apos;	SF_Dialog.CreateControl
+			.AddText(	Context := &quot;DUPLICATECONTROL&quot; _
+						, MsgId := &quot;A control with the same name exists already in the dialog &apos;%3&apos;.\n\n&quot; _
+									&amp; &quot;« %1 » = %2\n&quot; _
+						, Comment :=	&quot;SF_Dialog CreateControl\n&quot; _
+									&amp;	&quot;%1: An identifier\n&quot; _
+									&amp;	&quot;%2: A string\n&quot; _
+									&amp;	&quot;%3: A dialog name&quot; _
+					)
 	&apos;	SF_Database.RunSql
 			.AddText(	Context := &quot;DBREADONLY&quot; _
 						, MsgId := &quot;The database has been opened in read-only mode.\n&quot; _

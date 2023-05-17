@@ -51,6 +51,7 @@ REM ================================================================== EXCEPTION
 
 Private Const DIALOGDEADERROR		=	&quot;DIALOGDEADERROR&quot;
 Private Const PAGEMANAGERERROR		=	&quot;PAGEMANAGERERROR&quot;
+Private Const DUPLICATECONTROLERROR	=	&quot;DUPLICATECONTROLERROR&quot;
 
 REM ============================================================= PRIVATE MEMBERS
 
@@ -596,6 +597,7 @@ Try:
 				._DialogName = _Name
 				Set ._ControlModel = _DialogModel.getByName(ControlName)
 				Set ._ControlView = _DialogControl.getControl(ControlName)
+				._ControlView.setModel(._ControlModel)
 				._Initialize()
 			End With
 		Else
@@ -613,6 +615,1138 @@ CatchNotFound:
 	ScriptForge.SF_Utils._Validate(ControlName, &quot;ControlName&quot;, V_STRING, _DialogModel.getElementNames())
 	GoTo Finally
 End Function	&apos;	SFDialogs.SF_Dialog.Controls
+
+&apos;&apos;&apos;	CreateXXX functions:
+&apos;&apos;&apos;	-------------------
+&apos;&apos;&apos;		Common arguments:
+&apos;&apos;&apos;			ControlName: the name of the new control. It must not exist yet.
+&apos;&apos;&apos;			Place: either
+&apos;&apos;&apos;				- an array with 4 elements: (X, Y, Width, Height)
+&apos;&apos;&apos;				- a com.sun.star.awt.Rectangle [X, Y, Width, Height]
+&apos;&apos;&apos;				All elements are expressed in &quot;Map AppFont&quot; units.
+
+REM -----------------------------------------------------------------------------
+Public Function CreateButton(Optional ByVal ControlName As Variant _
+								, Optional ByRef Place As Variant _
+								, Optional ByVal Toggle As Variant _
+								, Optional ByVal Push As Variant _
+								) As Object
+&apos;&apos;&apos;	Create a new control of type Button in the actual dialog.
+&apos;&apos;&apos;	Specific args:
+&apos;&apos;&apos;		Toggle: when True a Toggle button is created. Default = False
+&apos;&apos;&apos;		Push: &quot;OK&quot;, &quot;CANCE&quot; or &quot;&quot; (default)
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Set myButton = dialog.CreateButton(&quot;Button1&quot;, Array(20, 20, 60, 15))
+
+Dim oControl As Object			&apos;	Return value
+Dim iPush As Integer			&apos;	Alias of Push
+Dim vPropNames As Variant		&apos;	Array of names of specific arguments
+Dim vPropValues As Variant		&apos;	Array of values of specific arguments
+Const cstThisSub = &quot;SFDialogs.Dialog.CreateButton&quot;
+Const cstSubArgs = &quot;ControlName, Place, [Toggle=False], [Push=&quot;&quot;&quot;&quot;|&quot;&quot;OK&quot;&quot;|&quot;&quot;CANCEL&quot;&quot;]&quot;
+
+Check:
+	Set oControl = Nothing
+	If Not _CheckNewControl(cstThisSub, cstSubArgs, ControlName, Place) Then GoTo Finally
+
+	If IsMissing(Toggle) Or IsEmpty(Toggle) Then Toggle = False
+	If IsMissing(Push) Or IsEmpty(Push) Then Push = &quot;&quot;
+	If Not ScriptForge.SF_Utils._Validate(Toggle, &quot;Toggle&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(Push, &quot;Push&quot;, V_STRING, Array(&quot;&quot;, &quot;OK&quot;, &quot;CANCEL&quot;)) Then GoTo Finally
+
+Try:
+	&apos;	Handle specific arguments
+	Select Case UCase(Push)
+		Case &quot;&quot;			:	iPush = com.sun.star.awt.PushButtonType.STANDARD
+		Case &quot;OK&quot;		:	iPush = com.sun.star.awt.PushButtonType.OK
+		Case &quot;CANCEL&quot;	:	iPush = com.sun.star.awt.PushButtonType.CANCEL
+	End Select
+	vPropNames = Array(&quot;Toggle&quot;, &quot;PushButtonType&quot;)
+	vPropValues = Array(CBool(Toggle), iPush)
+
+	&apos;	Create the control
+	Set oControl = _CreateNewControl(&quot;UnoControlButtonModel&quot;, ControlName, Place, vPropNames, vPropValues)
+
+Finally:
+	Set CreateButton = oControl
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+End Function	&apos;	SFDialogs.SF_Dialog.CreateButton
+
+REM -----------------------------------------------------------------------------
+Public Function CreateCheckBox(Optional ByVal ControlName As Variant _
+								, Optional ByRef Place As Variant _
+								, Optional ByVal MultiLine As Variant _
+								) As Object
+&apos;&apos;&apos;	Create a new control of type CheckBox in the actual dialog.
+&apos;&apos;&apos;	Specific args:
+&apos;&apos;&apos;		MultiLine: When True (default = False), the caption may be displayed on more than one line
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Set myCheckBox = dialog.CreateCheckBox(&quot;CheckBox1&quot;, Array(20, 20, 60, 15), MultiLine := True)
+
+Dim oControl As Object			&apos;	Return value
+Dim vPropNames As Variant		&apos;	Array of names of specific arguments
+Dim vPropValues As Variant		&apos;	Array of values of specific arguments
+Const cstThisSub = &quot;SFDialogs.Dialog.CreateCheckBox&quot;
+Const cstSubArgs = &quot;ControlName, Place, [MultiLine=False]&quot;
+
+Check:
+	Set oControl = Nothing
+	If Not _CheckNewControl(cstThisSub, cstSubArgs, ControlName, Place) Then GoTo Finally
+
+	If IsMissing(MultiLine) Or IsEmpty(MultiLine) Then MultiLine = False
+	If Not ScriptForge.SF_Utils._Validate(MultiLine, &quot;MultiLine&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+
+Try:
+	&apos;	Manage specific properties
+	vPropNames = Array(&quot;VisualEffect&quot;, &quot;MultiLine&quot;)
+	vPropValues = Array(1, CBool(MultiLine))
+
+	&apos;	Create the control
+	Set oControl = _CreateNewControl(&quot;UnoControlCheckBoxModel&quot;, ControlName, Place, vPropNames, vPropValues)
+
+Finally:
+	Set CreateCheckBox = oControl
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+End Function	&apos;	SFDialogs.SF_Dialog.CreateCheckBox
+
+REM -----------------------------------------------------------------------------
+Public Function CreateComboBox(Optional ByVal ControlName As Variant _
+								, Optional ByRef Place As Variant _
+								, Optional ByVal Border As Variant _
+								, Optional ByVal Dropdown As Variant _
+								, Optional ByVal LineCount As Variant _
+								) As Object
+&apos;&apos;&apos;	Create a new control of type ComboBox in the actual dialog.
+&apos;&apos;&apos;	Specific args:
+&apos;&apos;&apos;		Border: &quot;3D&quot; (default) or &quot;FLAT&quot; or &quot;NONE&quot;
+&apos;&apos;&apos;		Dropdown: When True (default), a drop down button is displayed
+&apos;&apos;&apos;		LineCount: Specifies the maximum line count displayed in the drop down (default = 5)
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Set myComboBox = dialog.CreateComboBox(&quot;ComboBox1&quot;, Array(20, 20, 60, 15), Dropdown := True)
+
+Dim oControl As Object			&apos;	Return value
+Dim iBorder As Integer			&apos;	Alias of border
+Dim vPropNames As Variant		&apos;	Array of names of specific arguments
+Dim vPropValues As Variant		&apos;	Array of values of specific arguments
+Const cstThisSub = &quot;SFDialogs.Dialog.CreateComboBox&quot;
+Const cstSubArgs = &quot;ControlName, Place, [Border=&quot;&quot;3D&quot;&quot;|&quot;&quot;FLAT&quot;&quot;|&quot;&quot;NONE&quot;&quot;], [Dropdown=True], [LineCount=5]&quot;
+
+Check:
+	Set oControl = Nothing
+	If Not _CheckNewControl(cstThisSub, cstSubArgs, ControlName, Place) Then GoTo Finally
+
+	If IsMissing(Border) Or IsEmpty(Border) Then Border = &quot;3D&quot;
+	If IsMissing(Dropdown) Or IsEmpty(Dropdown) Then Dropdown = True
+	If IsMissing(LineCount) Or IsEmpty(LineCount) Then LineCount = 5
+
+	If Not ScriptForge.SF_Utils._Validate(Border, &quot;Border&quot;, V_STRING, Array(&quot;3D&quot;, &quot;FLAT&quot;, &quot;NONE&quot;)) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(Dropdown, &quot;Dropdown&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(LineCount, &quot;LineCount&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+
+Try:
+	&apos;	Manage specific properties
+	iBorder = ScriptForge.SF_Array.IndexOf(Array(&quot;NONE&quot;, &quot;3D&quot;, &quot;FLAT&quot;), Border)
+	vPropNames = Array(&quot;Border&quot;, &quot;Dropdown&quot;, &quot;LineCount&quot;)
+	vPropValues = Array(iBorder, CBool(Dropdown), CInt(LineCount))
+
+	&apos;	Create the control
+	Set oControl = _CreateNewControl(&quot;UnoControlComboBoxModel&quot;, ControlName, Place, vPropNames, vPropValues)
+
+Finally:
+	Set CreateComboBox = oControl
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+End Function	&apos;	SFDialogs.SF_Dialog.CreateComboBox
+
+REM -----------------------------------------------------------------------------
+Public Function CreateCurrencyField(Optional ByVal ControlName As Variant _
+								, Optional ByRef Place As Variant _
+								, Optional ByVal Border As Variant _
+								, Optional ByVal SpinButton As Variant _
+								, Optional ByVal MinValue As Variant _
+								, Optional ByVal MaxValue As Variant _
+								, Optional ByVal Increment As Variant _
+								, Optional ByVal Accuracy As Variant _
+								) As Object
+&apos;&apos;&apos;	Create a new control of type CurrencyField in the actual dialog.
+&apos;&apos;&apos;	Specific args:
+&apos;&apos;&apos;		Border: &quot;3D&quot; (default) or &quot;FLAT&quot; or &quot;NONE&quot;
+&apos;&apos;&apos;		SpinButton:: when True (default = False), a spin button is present
+&apos;&apos;&apos;		MinValue: the smallest value that can be entered in the control. Dafault = -1000000
+&apos;&apos;&apos;		MaxValue: the largest value that can be entered in the control. Dafault = +1000000
+&apos;&apos;&apos;		Increment: the step when the spin button is pressed. Default = 1
+&apos;&apos;&apos;		Accuracy: specifies the decimal accuracy. Default = 2 decimal digits
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Set myCurrencyField = dialog.CreateCurrencyField(&quot;CurrencyField1&quot;, Array(20, 20, 60, 15), SpinButton := True)
+
+Dim oControl As Object			&apos;	Return value
+Dim iBorder As Integer			&apos;	Alias of border
+Dim vPropNames As Variant		&apos;	Array of names of specific arguments
+Dim vPropValues As Variant		&apos;	Array of values of specific arguments
+Const cstThisSub = &quot;SFDialogs.Dialog.CreateCurrencyField&quot;
+Const cstSubArgs = &quot;ControlName, Place, [Border=&quot;&quot;3D&quot;&quot;|&quot;&quot;FLAT&quot;&quot;|&quot;&quot;NONE&quot;&quot;], [Dropdown=False], [SpinButton=False]&quot; _
+						&amp; &quot;, [MinValue=-1000000], MaxValue=+1000000], [Increment=1], [Accuracy=2]&quot;
+
+Check:
+	Set oControl = Nothing
+	If Not _CheckNewControl(cstThisSub, cstSubArgs, ControlName, Place) Then GoTo Finally
+
+	If IsMissing(Border) Or IsEmpty(Border) Then Border = &quot;3D&quot;
+	If IsMissing(SpinButton) Or IsEmpty(SpinButton) Then SpinButton = False
+	If IsMissing(MinValue) Or IsEmpty(MinValue) Then MinValue = -1000000.00
+	If IsMissing(MaxValue) Or IsEmpty(MaxValue) Then MaxValue = +1000000.00
+	If IsMissing(Increment) Or IsEmpty(Increment) Then Increment = 1.00
+	If IsMissing(Accuracy) Or IsEmpty(Accuracy) Then Accuracy = 2
+	
+	If Not ScriptForge.SF_Utils._Validate(Border, &quot;Border&quot;, V_STRING, Array(&quot;3D&quot;, &quot;FLAT&quot;, &quot;NONE&quot;)) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(SpinButton, &quot;SpinButton&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(MinValue, &quot;MinValue&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(MaxValue, &quot;MaxValue&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(Increment, &quot;Increment&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(Accuracy, &quot;Accuracy&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+
+Try:
+	&apos;	Manage specific properties
+	iBorder = ScriptForge.SF_Array.IndexOf(Array(&quot;NONE&quot;, &quot;3D&quot;, &quot;FLAT&quot;), Border)
+	vPropNames = Array(&quot;Border&quot;, &quot;Spin&quot;, &quot;ValueMin&quot;, &quot;ValueMax&quot;, &quot;ValueStep&quot;, &quot;DecimalAccuracy&quot;)
+	vPropValues = Array(iBorder, CBool(SpinButton), CDbl(MinValue), CDbl(MaxValue), CDbl(Increment), CInt(Accuracy))
+
+	&apos;	Create the control
+	Set oControl = _CreateNewControl(&quot;UnoControlCurrencyFieldModel&quot;, ControlName, Place, vPropNames, vPropValues)
+
+Finally:
+	Set CreateCurrencyField = oControl
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+End Function	&apos;	SFDialogs.SF_Dialog.CreateCurrencyField
+
+REM -----------------------------------------------------------------------------
+Public Function CreateDateField(Optional ByVal ControlName As Variant _
+								, Optional ByRef Place As Variant _
+								, Optional ByVal Border As Variant _
+								, Optional ByVal Dropdown As Variant _
+								, Optional ByVal MinDate As Variant _
+								, Optional ByVal MaxDate As Variant _
+								) As Object
+&apos;&apos;&apos;	Create a new control of type DateField in the actual dialog.
+&apos;&apos;&apos;	Specific args:
+&apos;&apos;&apos;		Border: &quot;3D&quot; (default) or &quot;FLAT&quot; or &quot;NONE&quot;
+&apos;&apos;&apos;		Dropdown:: when True (default = False), a dropdown button is shown
+&apos;&apos;&apos;		MinDate: the smallest date that can be entered in the control. Dafault = 1900-01-01
+&apos;&apos;&apos;		MaxDate: the largest Date that can be entered in the control. Dafault = 2200-12-31
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Set myDateField = dialog.CreateDateField(&quot;DateField1&quot;, Array(20, 20, 60, 15), Dropdown := True)
+
+Dim oControl As Object			&apos;	Return Date
+Dim iBorder As Integer			&apos;	Alias of border
+Dim oMinDate As New com.sun.star.util.Date
+Dim oMaxDate As New com.sun.star.util.Date
+Dim vFormats As Variant			&apos;	List of available date formats
+Dim vPropNames As Variant		&apos;	Array of names of specific arguments
+Dim vPropValues As Variant		&apos;	Array of values of specific arguments
+Const cstThisSub = &quot;SFDialogs.Dialog.CreateDateField&quot;
+Const cstSubArgs = &quot;ControlName, Place, [Border=&quot;&quot;3D&quot;&quot;|&quot;&quot;FLAT&quot;&quot;|&quot;&quot;NONE&quot;&quot;], [Dropdown=False]&quot; _
+						&amp; &quot;, [MinDate=DateSerial(1900, 1, 1)], [MaxDate=DateSerial(2200, 12, 31)]&quot;
+
+Check:
+	Set oControl = Nothing
+	If Not _CheckNewControl(cstThisSub, cstSubArgs, ControlName, Place) Then GoTo Finally
+
+	If IsMissing(Border) Or IsEmpty(Border) Then Border = &quot;3D&quot;
+	If IsMissing(Dropdown) Or IsEmpty(Dropdown) Then Dropdown = False
+	If IsMissing(MinDate) Or IsEmpty(MinDate) Then MinDate = DateSerial(1900, 1, 1)
+	If IsMissing(MaxDate) Or IsEmpty(MaxDate) Then MaxDate = DateSerial(2200, 12, 31)
+	
+	If Not ScriptForge.SF_Utils._Validate(Border, &quot;Border&quot;, V_STRING, Array(&quot;3D&quot;, &quot;FLAT&quot;, &quot;NONE&quot;)) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(Dropdown, &quot;Dropdown&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(MinDate, &quot;MinDate&quot;, ScriptForge.V_DATE) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(MaxDate, &quot;MaxDate&quot;, ScriptForge.V_DATE) Then GoTo Finally
+	vFormats = SF_DialogUtils._FormatsList(&quot;DateField&quot;)
+
+Try:
+	&apos;	Manage specific properties
+	iBorder = ScriptForge.SF_Array.IndexOf(Array(&quot;NONE&quot;, &quot;3D&quot;, &quot;FLAT&quot;), Border)
+	With oMinDate
+		.Year = Year(MinDate)	:	.Month = Month(MinDate)	:	.Day = Day(MinDate)
+	End With
+	With oMaxDate
+		.Year = Year(MaxDate)	:	.Month = Month(MaxDate)	:	.Day = Day(MaxDate)
+	End With
+	vPropNames = Array(&quot;Border&quot;, &quot;Dropdown&quot;, &quot;DateMin&quot;, &quot;DateMax&quot;, &quot;DateFormat&quot;)
+	vPropValues = Array(iBorder, CBool(Dropdown), oMinDate, oMaxDate, CInt(ScriptForge.SF_Array.IndexOf(vFormats(), &quot;Standard (short)&quot;)))
+
+	&apos;	Create the control
+	Set oControl = _CreateNewControl(&quot;UnoControlDateFieldModel&quot;, ControlName, Place, vPropNames, vPropValues)
+
+Finally:
+	Set CreateDateField = oControl
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+End Function	&apos;	SFDialogs.SF_Dialog.CreateDateField
+
+REM -----------------------------------------------------------------------------
+Public Function CreateFileControl(Optional ByVal ControlName As Variant _
+								, Optional ByRef Place As Variant _
+								, Optional ByVal Border As Variant _
+								) As Object
+&apos;&apos;&apos;	Create a new control of type FileControl in the actual dialog.
+&apos;&apos;&apos;	Specific args:
+&apos;&apos;&apos;		Border: &quot;3D&quot; (default) or &quot;FLAT&quot; or &quot;NONE&quot;
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Set myFileControl = dialog.CreateFileControl(&quot;FileControl1&quot;, Array(20, 20, 60, 15))
+
+Dim oControl As Object			&apos;	Return value
+Dim iBorder As Integer			&apos;	Alias of border
+Dim vPropNames As Variant		&apos;	Array of names of specific arguments
+Dim vPropValues As Variant		&apos;	Array of values of specific arguments
+Const cstThisSub = &quot;SFDialogs.Dialog.CreateFileControl&quot;
+Const cstSubArgs = &quot;ControlName, Place, [Border=&quot;&quot;3D&quot;&quot;|&quot;&quot;FLAT&quot;&quot;|&quot;&quot;NONE&quot;&quot;]&quot;
+
+Check:
+	Set oControl = Nothing
+	If Not _CheckNewControl(cstThisSub, cstSubArgs, ControlName, Place) Then GoTo Finally
+
+	If IsMissing(Border) Or IsEmpty(Border) Then Border = &quot;3D&quot;
+	If Not ScriptForge.SF_Utils._Validate(Border, &quot;Border&quot;, V_STRING, Array(&quot;3D&quot;, &quot;FLAT&quot;, &quot;NONE&quot;)) Then GoTo Finally
+
+Try:
+	&apos;	Manage specific properties
+	iBorder = ScriptForge.SF_Array.IndexOf(Array(&quot;NONE&quot;, &quot;3D&quot;, &quot;FLAT&quot;), Border)
+	vPropNames = Array(&quot;Border&quot;)
+	vPropValues = Array(iBorder)
+
+	&apos;	Create the control
+	Set oControl = _CreateNewControl(&quot;UnoControlFileControlModel&quot;, ControlName, Place, vPropNames, vPropValues)
+
+Finally:
+	Set CreateFileControl = oControl
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDialogs.SF_Dialog.CreateFileControl
+
+REM -----------------------------------------------------------------------------
+Public Function CreateFixedLine(Optional ByVal ControlName As Variant _
+								, Optional ByRef Place As Variant _
+								, Optional ByVal Orientation As Variant _
+								) As Object
+&apos;&apos;&apos;	Create a new control of type FixedLine in the actual dialog.
+&apos;&apos;&apos;	Specific args:
+&apos;&apos;&apos;		Orientation: &quot;H[orizontal]&quot; or &quot;V[ertical]&quot;.
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Set myFixedLine = dialog.CreateFixedLine(&quot;FixedLine1&quot;, Array(20, 20, 60, 15), Orientation := &quot;vertical&quot;)
+
+Dim oControl As Object			&apos;	Return value
+Dim vPropNames As Variant		&apos;	Array of names of specific arguments
+Dim vPropValues As Variant		&apos;	Array of values of specific arguments
+Const cstThisSub = &quot;SFDialogs.Dialog.CreateFixedLine&quot;
+Const cstSubArgs = &quot;ControlName, Place, Orientation=&quot;&quot;H&quot;&quot;|&quot;&quot;Horizontal&quot;&quot;|&quot;&quot;V&quot;&quot;|&quot;&quot;Vertical&quot;&quot;&quot;
+
+Check:
+	Set oControl = Nothing
+	If Not _CheckNewControl(cstThisSub, cstSubArgs, ControlName, Place) Then GoTo Finally
+
+	If Not ScriptForge.SF_Utils._Validate(Orientation, &quot;Orientation&quot;, V_STRING, Array(&quot;H&quot;, &quot;Horizontal&quot;, &quot;V&quot;, &quot;Vertical&quot;)) Then GoTo Finally
+
+Try:
+	&apos;	Manage specific properties
+	vPropNames = Array(&quot;Orientation&quot;)
+	vPropValues = Array(CLng(Iif(Left(UCase(Orientation), 1) = &quot;V&quot;, 1, 0)))
+
+	&apos;	Create the control
+	Set oControl = _CreateNewControl(&quot;UnoControlFixedLineModel&quot;, ControlName, Place, vPropNames, vPropValues)
+
+Finally:
+	Set CreateFixedLine = oControl
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+End Function	&apos;	SFDialogs.SF_Dialog.CreateFixedLine
+
+REM -----------------------------------------------------------------------------
+Public Function CreateFixedText(Optional ByVal ControlName As Variant _
+								, Optional ByRef Place As Variant _
+								, Optional ByVal Border As Variant _
+								, Optional ByVal MultiLine As Variant _
+								, Optional ByVal Align As Variant _
+								, Optional ByVal VerticalAlign As Variant _
+								) As Object
+&apos;&apos;&apos;	Create a new control of type FixedText in the actual dialog.
+&apos;&apos;&apos;	Specific args:
+&apos;&apos;&apos;		Border: &quot;NONE&quot; (default) or &quot;FLAT&quot; or &quot;3D&quot;
+&apos;&apos;&apos;		MultiLine: When True (default = False), the caption may be displayed on more than one line
+&apos;&apos;&apos;		Align: horizontal alignment, &quot;LEFT&quot; (default) or &quot;CENTER&quot; or &quot;RIGHT&quot;
+&apos;&apos;&apos;		VerticalAlign: vertical alignment, &quot;TOP&quot; (default) or &quot;MIDDLE&quot; or &quot;BOTTOM&quot;
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Set myFixedText = dialog.CreateFixedText(&quot;FixedText1&quot;, Array(20, 20, 60, 15), MultiLine := True)
+
+Dim oControl As Object			&apos;	Return value
+Dim iBorder As Integer			&apos;	Alias of border
+Dim iAlign As Integer			&apos;	Alias of Align
+Dim iVerticalAlign As Integer	&apos;	Alias of VerticalAlign
+Dim vPropNames As Variant		&apos;	Array of names of specific arguments
+Dim vPropValues As Variant		&apos;	Array of values of specific arguments
+Const cstThisSub = &quot;SFDialogs.Dialog.CreateFixedText&quot;
+Const cstSubArgs = &quot;ControlName, Place, [MultiLine=False], [Border=&quot;&quot;NONE&quot;&quot;|&quot;&quot;FLAT&quot;&quot;|&quot;&quot;3D&quot;&quot;]&quot; _
+						&amp; &quot;, [Align=&quot;&quot;LEFT&quot;&quot;|&quot;&quot;CENTER&quot;&quot;|&quot;&quot;RIGHT&quot;&quot;], [VerticalAlign=&quot;&quot;TOP&quot;&quot;|&quot;&quot;MIDDLE&quot;&quot;|&quot;&quot;BOTTOM&quot;&quot;]&quot;
+
+Check:
+	Set oControl = Nothing
+	If Not _CheckNewControl(cstThisSub, cstSubArgs, ControlName, Place) Then GoTo Finally
+
+	If IsMissing(Border) Or IsEmpty(Border) Then Border = &quot;NONE&quot;
+	If IsMissing(MultiLine) Or IsEmpty(MultiLine) Then MultiLine = False
+	If IsMissing(Align) Or IsEmpty(Align) Then Align = &quot;LEFT&quot;
+	If IsMissing(VerticalAlign) Or IsEmpty(VerticalAlign) Then VerticalAlign = &quot;TOP&quot;
+
+	If Not ScriptForge.SF_Utils._Validate(Border, &quot;Border&quot;, V_STRING, Array(&quot;3D&quot;, &quot;FLAT&quot;, &quot;NONE&quot;)) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(MultiLine, &quot;MultiLine&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(Align, &quot;Align&quot;, V_STRING, Array(&quot;LEFT&quot;, &quot;CENTER&quot;, &quot;RIGHT&quot;)) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(VerticalAlign, &quot;VerticalAlign&quot;, V_STRING, Array(&quot;TOP&quot;, &quot;MIDDLE&quot;, &quot;BOTTOM&quot;)) Then GoTo Finally
+
+Try:
+	&apos;	Manage specific properties
+	iBorder = ScriptForge.SF_Array.IndexOf(Array(&quot;NONE&quot;, &quot;3D&quot;, &quot;FLAT&quot;), Border)
+	iAlign = ScriptForge.SF_Array.IndexOf(Array(&quot;LEFT&quot;, &quot;CENTER&quot;, &quot;BOTTOM&quot;), Align)
+	Select Case UCase(VerticalAlign)
+		Case &quot;TOP&quot;		:	iVerticalAlign = com.sun.star.style.VerticalAlignment.TOP
+		Case &quot;MIDDLE&quot;	:	iVerticalAlign = com.sun.star.style.VerticalAlignment.MIDDLE
+		Case &quot;BOTTOM&quot;	:	iVerticalAlign = com.sun.star.style.VerticalAlignment.BOTTOM
+	End Select
+	vPropNames = Array(&quot;Border&quot;, &quot;MultiLine&quot;, &quot;Align&quot;, &quot;VerticalAlign&quot;)
+	vPropValues = Array(iBorder, CBool(MultiLine), iAlign, iVerticalAlign)
+
+	&apos;	Create the control
+	Set oControl = _CreateNewControl(&quot;UnoControlFixedTextModel&quot;, ControlName, Place, vPropNames, vPropValues)
+
+Finally:
+	Set CreateFixedText = oControl
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+End Function	&apos;	SFDialogs.SF_Dialog.CreateFixedText
+
+REM -----------------------------------------------------------------------------
+Public Function CreateFormattedField(Optional ByVal ControlName As Variant _
+								, Optional ByRef Place As Variant _
+								, Optional ByVal Border As Variant _
+								, Optional ByVal SpinButton As Variant _
+								, Optional ByVal MinValue As Variant _
+								, Optional ByVal MaxValue As Variant _
+								) As Object
+&apos;&apos;&apos;	Create a new control of type FormattedField in the actual dialog.
+&apos;&apos;&apos;	Specific args:
+&apos;&apos;&apos;		Border: &quot;3D&quot; (default) or &quot;FLAT&quot; or &quot;NONE&quot;
+&apos;&apos;&apos;		SpinButton:: when True (default = False), a spin button is present
+&apos;&apos;&apos;		MinValue: the smallest value that can be entered in the control. Dafault = -1000000
+&apos;&apos;&apos;		MaxValue: the largest value that can be entered in the control. Dafault = +1000000
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Set myFormattedField = dialog.CreateFormattedField(&quot;FormattedField1&quot;, Array(20, 20, 60, 15), SpinButton := True)
+&apos;&apos;&apos;		myFormattedField.Format = &quot;##0,00E+00&quot;
+
+Dim oControl As Object			&apos;	Return value
+Dim iBorder As Integer			&apos;	Alias of border
+Dim vPropNames As Variant		&apos;	Array of names of specific arguments
+Dim vPropValues As Variant		&apos;	Array of values of specific arguments
+Const cstThisSub = &quot;SFDialogs.Dialog.CreateFormattedField&quot;
+Const cstSubArgs = &quot;ControlName, Place, [Border=&quot;&quot;3D&quot;&quot;|&quot;&quot;FLAT&quot;&quot;|&quot;&quot;NONE&quot;&quot;], [SpinButton=False]&quot; _
+						&amp; &quot;, [MinValue=-1000000], MaxValue=+1000000]&quot;
+
+Check:
+	Set oControl = Nothing
+	If Not _CheckNewControl(cstThisSub, cstSubArgs, ControlName, Place) Then GoTo Finally
+
+	If IsMissing(Border) Or IsEmpty(Border) Then Border = &quot;3D&quot;
+	If IsMissing(SpinButton) Or IsEmpty(SpinButton) Then SpinButton = False
+	If IsMissing(MinValue) Or IsEmpty(MinValue) Then MinValue = -1000000.00
+	If IsMissing(MaxValue) Or IsEmpty(MaxValue) Then MaxValue = +1000000.00
+	
+	If Not ScriptForge.SF_Utils._Validate(Border, &quot;Border&quot;, V_STRING, Array(&quot;3D&quot;, &quot;FLAT&quot;, &quot;NONE&quot;)) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(SpinButton, &quot;SpinButton&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(MinValue, &quot;MinValue&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(MaxValue, &quot;MaxValue&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+
+Try:
+	&apos;	Manage specific properties
+	iBorder = ScriptForge.SF_Array.IndexOf(Array(&quot;NONE&quot;, &quot;3D&quot;, &quot;FLAT&quot;), Border)
+	vPropNames = Array(&quot;FormatsSupplier&quot;, &quot;Border&quot;, &quot;Spin&quot;, &quot;EffectiveMin&quot;, &quot;EffectiveMax&quot;)
+	vPropValues = Array(CreateUnoService(&quot;com.sun.star.util.NumberFormatsSupplier&quot;) _
+						, iBorder, CBool(SpinButton), CDbl(MinValue), CDbl(MaxValue))
+
+	&apos;	Create the control
+	Set oControl = _CreateNewControl(&quot;UnoControlFormattedFieldModel&quot;, ControlName, Place, vPropNames, vPropValues)
+
+Finally:
+	Set CreateFormattedField = oControl
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDialogs.SF_Dialog.CreateFormattedField
+
+REM -----------------------------------------------------------------------------
+Public Function CreateGroupBox(Optional ByVal ControlName As Variant _
+								, Optional ByRef Place As Variant _
+								) As Object
+&apos;&apos;&apos;	Create a new control of type GroupBox in the actual dialog.
+&apos;&apos;&apos;	Specific args:
+&apos;&apos;&apos;		Orientation: &quot;H[orizontal]&quot; or &quot;V[ertical]&quot;
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Set myGroupBox = dialog.CreateGroupBox(&quot;GroupBox1&quot;, Array(20, 20, 60, 15))
+
+Dim oControl As Object			&apos;	Return value
+Dim vPropNames As Variant		&apos;	Array of names of specific arguments
+Dim vPropValues As Variant		&apos;	Array of values of specific arguments
+Const cstThisSub = &quot;SFDialogs.Dialog.CreateGroupBox&quot;
+Const cstSubArgs = &quot;ControlName, Place&quot;
+
+Check:
+	Set oControl = Nothing
+	If Not _CheckNewControl(cstThisSub, cstSubArgs, ControlName, Place) Then GoTo Finally
+
+Try:
+	&apos;	Manage specific properties
+	vPropNames = Array()
+	vPropValues = Array()
+
+	&apos;	Create the control
+	Set oControl = _CreateNewControl(&quot;UnoControlGroupBoxModel&quot;, ControlName, Place, vPropNames, vPropValues)
+
+Finally:
+	Set CreateGroupBox = oControl
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDialogs.SF_Dialog.CreateGroupBox
+
+REM -----------------------------------------------------------------------------
+Public Function CreateImageControl(Optional ByVal ControlName As Variant _
+								, Optional ByRef Place As Variant _
+								, Optional ByVal Border As Variant _
+								, Optional ByVal Scale As Variant _
+								) As Object
+&apos;&apos;&apos;	Create a new control of type ImageControl in the actual dialog.
+&apos;&apos;&apos;	Specific args:
+&apos;&apos;&apos;		Border: &quot;3D&quot; (default) or &quot;FLAT&quot; or &quot;NONE&quot;
+&apos;&apos;&apos;		Scale: One of next values: &quot;FITTOSIZE&quot; (default), &quot;KEEPRATIO&quot; or &quot;NO&quot;
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Set myImageControl = dialog.CreateImageControl(&quot;ImageControl1&quot;, Array(20, 20, 60, 15))
+
+Dim oControl As Object			&apos;	Return value
+Dim iBorder As Integer			&apos;	Alias of border
+Dim iScale As Integer			&apos;	Alias of Scale
+Dim bScale As Boolean			&apos;	When False, no scaling
+Dim vPropNames As Variant		&apos;	Array of names of specific arguments
+Dim vPropValues As Variant		&apos;	Array of values of specific arguments
+Const cstThisSub = &quot;SFDialogs.Dialog.CreateImageControl&quot;
+Const cstSubArgs = &quot;ControlName, Place, [Border=&quot;&quot;3D&quot;&quot;|&quot;&quot;FLAT&quot;&quot;|&quot;&quot;NONE&quot;&quot;], [Scale=&quot;&quot;FITTOSIZE&quot;&quot;|&quot;&quot;KEEPRATIO&quot;&quot;|&quot;&quot;NO&quot;&quot;]&quot;
+
+Check:
+	Set oControl = Nothing
+	If Not _CheckNewControl(cstThisSub, cstSubArgs, ControlName, Place) Then GoTo Finally
+
+	If IsMissing(Border) Or IsEmpty(Border) Then Border = &quot;3D&quot;
+	If IsMissing(Scale) Or IsEmpty(Scale) Then Scale = &quot;FITTOSIZE&quot;
+	If Not ScriptForge.SF_Utils._Validate(Border, &quot;Border&quot;, V_STRING, Array(&quot;3D&quot;, &quot;FLAT&quot;, &quot;NONE&quot;)) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(Scale, &quot;Scale&quot;, V_STRING, Array(&quot;FITTOSIZE&quot;, &quot;KEEPRATIO&quot;, &quot;NO&quot;)) Then GoTo Finally
+
+Try:
+	&apos;	Manage specific properties
+	iBorder = ScriptForge.SF_Array.IndexOf(Array(&quot;NONE&quot;, &quot;3D&quot;, &quot;FLAT&quot;), Border)
+	Select Case UCase(Scale)
+		Case &quot;NO&quot;			:	iScale = com.sun.star.awt.ImageScaleMode.NONE			:	bScale = False
+		Case &quot;FITTOSIZE&quot;	:	iScale = com.sun.star.awt.ImageScaleMode.ANISOTROPIC	:	bScale = True
+		Case &quot;KEEPRATIO&quot;	:	iScale = com.sun.star.awt.ImageScaleMode.ISOTROPIC		:	bScale = True
+	End Select
+	vPropNames = Array(&quot;Border&quot;, &quot;ScaleImage&quot;, &quot;ScaleMode&quot;)
+	vPropValues = Array(iBorder, bScale, iScale)
+
+	&apos;	Create the control
+	Set oControl = _CreateNewControl(&quot;UnoControlImageControlModel&quot;, ControlName, Place, vPropNames, vPropValues)
+
+Finally:
+	Set CreateImageControl = oControl
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDialogs.SF_Dialog.CreateImageControl
+
+REM -----------------------------------------------------------------------------
+Public Function CreateListBox(Optional ByVal ControlName As Variant _
+								, Optional ByRef Place As Variant _
+								, Optional ByVal Border As Variant _
+								, Optional ByVal Dropdown As Variant _
+								, Optional ByVal LineCount As Variant _
+								, Optional ByVal MultiSelect As Variant _
+								) As Object
+&apos;&apos;&apos;	Create a new control of type ListBox in the actual dialog.
+&apos;&apos;&apos;	Specific args:
+&apos;&apos;&apos;		Border: &quot;3D&quot; (default) or &quot;FLAT&quot; or &quot;NONE&quot;
+&apos;&apos;&apos;		Dropdown: When True (default), a drop down button is displayed
+&apos;&apos;&apos;		LineCount: Specifies the maximum line count displayed in the drop down (default = 5)
+&apos;&apos;&apos;		MultiSelect: When True, more than 1 entry may be selected. Default = False
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Set myListBox = dialog.CreateListBox(&quot;ListBox1&quot;, Array(20, 20, 60, 15), Dropdown := True, MultiSelect := True)
+
+Dim oControl As Object			&apos;	Return value
+Dim iBorder As Integer			&apos;	Alias of border
+Dim vPropNames As Variant		&apos;	Array of names of specific arguments
+Dim vPropValues As Variant		&apos;	Array of values of specific arguments
+Const cstThisSub = &quot;SFDialogs.Dialog.CreateListBox&quot;
+Const cstSubArgs = &quot;ControlName, Place, [Border=&quot;&quot;3D&quot;&quot;|&quot;&quot;FLAT&quot;&quot;|&quot;&quot;NONE&quot;&quot;], [Dropdown=True], [LineCount=5], [MultiSelect=False]&quot;
+
+Check:
+	Set oControl = Nothing
+	If Not _CheckNewControl(cstThisSub, cstSubArgs, ControlName, Place) Then GoTo Finally
+
+	If IsMissing(Border) Or IsEmpty(Border) Then Border = &quot;3D&quot;
+	If IsMissing(Dropdown) Or IsEmpty(Dropdown) Then Dropdown = True
+	If IsMissing(LineCount) Or IsEmpty(LineCount) Then LineCount = 5
+	If IsMissing(MultiSelect) Or IsEmpty(MultiSelect) Then MultiSelect = True
+
+	If Not ScriptForge.SF_Utils._Validate(Border, &quot;Border&quot;, V_STRING, Array(&quot;3D&quot;, &quot;FLAT&quot;, &quot;NONE&quot;)) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(Dropdown, &quot;Dropdown&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(LineCount, &quot;LineCount&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(MultiSelect, &quot;MultiSelect&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+
+Try:
+	&apos;	Manage specific properties
+	iBorder = ScriptForge.SF_Array.IndexOf(Array(&quot;NONE&quot;, &quot;3D&quot;, &quot;FLAT&quot;), Border)
+	vPropNames = Array(&quot;Border&quot;, &quot;Dropdown&quot;, &quot;LineCount&quot;, &quot;MultiSelection&quot;)
+	vPropValues = Array(iBorder, CBool(Dropdown), CInt(LineCount), CBool(MultiSelect))
+
+	&apos;	Create the control
+	Set oControl = _CreateNewControl(&quot;UnoControlListBoxModel&quot;, ControlName, Place, vPropNames, vPropValues)
+
+Finally:
+	Set CreateListBox = oControl
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+End Function	&apos;	SFDialogs.SF_Dialog.CreateListBox
+
+REM -----------------------------------------------------------------------------
+Public Function CreateNumericField(Optional ByVal ControlName As Variant _
+								, Optional ByRef Place As Variant _
+								, Optional ByVal Border As Variant _
+								, Optional ByVal SpinButton As Variant _
+								, Optional ByVal MinValue As Variant _
+								, Optional ByVal MaxValue As Variant _
+								, Optional ByVal Increment As Variant _
+								, Optional ByVal Accuracy As Variant _
+								) As Object
+&apos;&apos;&apos;	Create a new control of type NumericField in the actual dialog.
+&apos;&apos;&apos;	Specific args:
+&apos;&apos;&apos;		Border: &quot;3D&quot; (default) or &quot;FLAT&quot; or &quot;NONE&quot;
+&apos;&apos;&apos;		SpinButton:: when True (default = False), a spin button is present
+&apos;&apos;&apos;		MinValue: the smallest value that can be entered in the control. Dafault = -1000000
+&apos;&apos;&apos;		MaxValue: the largest value that can be entered in the control. Dafault = +1000000
+&apos;&apos;&apos;		Increment: the step when the spin button is pressed. Default = 1
+&apos;&apos;&apos;		Accuracy: specifies the decimal accuracy. Default = 2 decimal digits
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Set myNumericField = dialog.CreateNumericField(&quot;NumericField1&quot;, Array(20, 20, 60, 15), SpinButton := True)
+
+Dim oControl As Object			&apos;	Return value
+Dim iBorder As Integer			&apos;	Alias of border
+Dim vPropNames As Variant		&apos;	Array of names of specific arguments
+Dim vPropValues As Variant		&apos;	Array of values of specific arguments
+Const cstThisSub = &quot;SFDialogs.Dialog.CreateNumericField&quot;
+Const cstSubArgs = &quot;ControlName, Place, [Border=&quot;&quot;3D&quot;&quot;|&quot;&quot;FLAT&quot;&quot;|&quot;&quot;NONE&quot;&quot;], [SpinButton=False]&quot; _
+						&amp; &quot;, [MinValue=-1000000], MaxValue=+1000000], [Increment=1], [Accuracy=2]&quot;
+
+Check:
+	Set oControl = Nothing
+	If Not _CheckNewControl(cstThisSub, cstSubArgs, ControlName, Place) Then GoTo Finally
+
+	If IsMissing(Border) Or IsEmpty(Border) Then Border = &quot;3D&quot;
+	If IsMissing(SpinButton) Or IsEmpty(SpinButton) Then SpinButton = False
+	If IsMissing(MinValue) Or IsEmpty(MinValue) Then MinValue = -1000000.00
+	If IsMissing(MaxValue) Or IsEmpty(MaxValue) Then MaxValue = +1000000.00
+	If IsMissing(Increment) Or IsEmpty(Increment) Then Increment = 1.00
+	If IsMissing(Accuracy) Or IsEmpty(Accuracy) Then Accuracy = 2
+	
+	If Not ScriptForge.SF_Utils._Validate(Border, &quot;Border&quot;, V_STRING, Array(&quot;3D&quot;, &quot;FLAT&quot;, &quot;NONE&quot;)) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(SpinButton, &quot;SpinButton&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(MinValue, &quot;MinValue&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(MaxValue, &quot;MaxValue&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(Increment, &quot;Increment&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(Accuracy, &quot;Accuracy&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+
+Try:
+	&apos;	Manage specific properties
+	iBorder = ScriptForge.SF_Array.IndexOf(Array(&quot;NONE&quot;, &quot;3D&quot;, &quot;FLAT&quot;), Border)
+	vPropNames = Array(&quot;Border&quot;, &quot;Spin&quot;, &quot;ValueMin&quot;, &quot;ValueMax&quot;, &quot;ValueStep&quot;, &quot;DecimalAccuracy&quot;)
+	vPropValues = Array(iBorder, CBool(SpinButton), CDbl(MinValue), CDbl(MaxValue), CDbl(Increment), CInt(Accuracy))
+
+	&apos;	Create the control
+	Set oControl = _CreateNewControl(&quot;UnoControlNumericFieldModel&quot;, ControlName, Place, vPropNames, vPropValues)
+
+Finally:
+	Set CreateNumericField = oControl
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+End Function	&apos;	SFDialogs.SF_Dialog.CreateNumericField
+
+REM -----------------------------------------------------------------------------
+Public Function CreatePatternField(Optional ByVal ControlName As Variant _
+								, Optional ByRef Place As Variant _
+								, Optional ByVal Border As Variant _
+								, Optional ByVal EditMask As Variant _
+								, Optional ByVal LiteralMask As Variant _
+								) As Object
+&apos;&apos;&apos;	Create a new control of type PatternField in the actual dialog.
+&apos;&apos;&apos;	Specific args:
+&apos;&apos;&apos;		Border: &quot;3D&quot; (default) or &quot;FLAT&quot; or &quot;NONE&quot;
+&apos;&apos;&apos;		Editmask: a character code that determines what the user may enter
+&apos;&apos;&apos;		LiteralMask: contains the initial values that are displayed in the pattern field
+&apos;&apos;&apos;			More details on https://wiki.documentfoundation.org/Documentation/DevGuide/Graphical_User_Interfaces#Pattern_Field
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Set myPatternField = dialog.CreatePatternField(&quot;PatternField1&quot;, Array(20, 20, 60, 15), EditMask := &quot;NNLNNLLLLL&quot;, LiteralMask := &quot;__.__.2002&quot;)
+
+Dim oControl As Object			&apos;	Return value
+Dim iBorder As Integer			&apos;	Alias of border
+Dim vPropNames As Variant		&apos;	Array of names of specific arguments
+Dim vPropValues As Variant		&apos;	Array of values of specific arguments
+Const cstThisSub = &quot;SFDialogs.Dialog.CreatePatternField&quot;
+Const cstSubArgs = &quot;ControlName, Place, [Border=&quot;&quot;3D&quot;&quot;|&quot;&quot;FLAT&quot;&quot;|&quot;&quot;NONE&quot;&quot;], [EditMask=&quot;&quot;&quot;&quot;], [LiteralMask=&quot;&quot;&quot;&quot;]&quot;
+
+Check:
+	Set oControl = Nothing
+	If Not _CheckNewControl(cstThisSub, cstSubArgs, ControlName, Place) Then GoTo Finally
+
+	If IsMissing(Border) Or IsEmpty(Border) Then Border = &quot;3D&quot;
+	If IsMissing(EditMask) Or IsEmpty(EditMask) Then EditMask = &quot;&quot;
+	If IsMissing(LiteralMask) Or IsEmpty(LiteralMask) Then LiteralMask = &quot;&quot;
+
+	If Not ScriptForge.SF_Utils._Validate(Border, &quot;Border&quot;, V_STRING, Array(&quot;3D&quot;, &quot;FLAT&quot;, &quot;NONE&quot;)) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(EditMask, &quot;EditMask&quot;, V_STRING) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(LiteralMask, &quot;LiteralMask&quot;, V_STRING) Then GoTo Finally
+
+Try:
+	&apos;	Manage specific properties
+	iBorder = ScriptForge.SF_Array.IndexOf(Array(&quot;NONE&quot;, &quot;3D&quot;, &quot;FLAT&quot;), Border)
+	vPropNames = Array(&quot;Border&quot;, &quot;EditMask&quot;, &quot;LiteralMask&quot;)
+	vPropValues = Array(iBorder, EditMask, LiteralMask)
+
+	&apos;	Create the control
+	Set oControl = _CreateNewControl(&quot;UnoControlPatternFieldModel&quot;, ControlName, Place, vPropNames, vPropValues)
+
+Finally:
+	Set CreatePatternField = oControl
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDialogs.SF_Dialog.CreatePatternField
+
+REM -----------------------------------------------------------------------------
+Public Function CreateProgressBar(Optional ByVal ControlName As Variant _
+								, Optional ByRef Place As Variant _
+								, Optional ByVal Border As Variant _
+								, Optional ByVal MinValue As Variant _
+								, Optional ByVal MaxValue As Variant _
+								) As Object
+&apos;&apos;&apos;	Create a new control of type ProgressBar in the actual dialog.
+&apos;&apos;&apos;	Specific args:
+&apos;&apos;&apos;		Border: &quot;3D&quot; (default) or &quot;FLAT&quot; or &quot;NONE&quot;
+&apos;&apos;&apos;		MinValue: the smallest value that can be entered in the control. Default = 0
+&apos;&apos;&apos;		MaxValue: the largest value that can be entered in the control. Default = 100
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Set myProgressBar = dialog.CreateProgressBar(&quot;ProgressBar1&quot;, Array(20, 20, 60, 15), MaxValue := 1000)
+
+Dim oControl As Object			&apos;	Return value
+Dim iBorder As Integer			&apos;	Alias of border
+Dim vPropNames As Variant		&apos;	Array of names of specific arguments
+Dim vPropValues As Variant		&apos;	Array of values of specific arguments
+Const cstThisSub = &quot;SFDialogs.Dialog.CreateProgressBar&quot;
+Const cstSubArgs = &quot;ControlName, Place, [Border=&quot;&quot;3D&quot;&quot;|&quot;&quot;FLAT&quot;&quot;|&quot;&quot;NONE&quot;&quot;], [MinValue=0], MaxValue=100]&quot;
+
+Check:
+	Set oControl = Nothing
+	If Not _CheckNewControl(cstThisSub, cstSubArgs, ControlName, Place) Then GoTo Finally
+
+	If IsMissing(Border) Or IsEmpty(Border) Then Border = &quot;3D&quot;
+	If IsMissing(MinValue) Or IsEmpty(MinValue) Then MinValue = 0
+	If IsMissing(MaxValue) Or IsEmpty(MaxValue) Then MaxValue = 100
+	
+	If Not ScriptForge.SF_Utils._Validate(Border, &quot;Border&quot;, V_STRING, Array(&quot;3D&quot;, &quot;FLAT&quot;, &quot;NONE&quot;)) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(MinValue, &quot;MinValue&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(MaxValue, &quot;MaxValue&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+
+Try:
+	&apos;	Manage specific properties
+	iBorder = ScriptForge.SF_Array.IndexOf(Array(&quot;NONE&quot;, &quot;3D&quot;, &quot;FLAT&quot;), Border)
+	vPropNames = Array(&quot;Border&quot;, &quot;ProgressValueMin&quot;, &quot;ProgressValueMax&quot;)
+	vPropValues = Array(iBorder, CLng(MinValue), CLng(MaxValue))
+
+	&apos;	Create the control
+	Set oControl = _CreateNewControl(&quot;UnoControlProgressBarModel&quot;, ControlName, Place, vPropNames, vPropValues)
+
+Finally:
+	Set CreateProgressBar = oControl
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+End Function	&apos;	SFDialogs.SF_Dialog.CreateProgressBar
+
+REM -----------------------------------------------------------------------------
+Public Function CreateRadioButton(Optional ByVal ControlName As Variant _
+								, Optional ByRef Place As Variant _
+								, Optional ByVal MultiLine As Variant _
+								) As Object
+&apos;&apos;&apos;	Create a new control of type RadioButton in the actual dialog.
+&apos;&apos;&apos;	Specific args:
+&apos;&apos;&apos;		MultiLine: When True (default = False), the caption may be displayed on more than one line
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Set myRadioButton = dialog.CreateRadioButton(&quot;RadioButton1&quot;, Array(20, 20, 60, 15), MultiLine := True)
+
+Dim oControl As Object			&apos;	Return value
+Dim vPropNames As Variant		&apos;	Array of names of specific arguments
+Dim vPropValues As Variant		&apos;	Array of values of specific arguments
+Const cstThisSub = &quot;SFDialogs.Dialog.CreateRadioButton&quot;
+Const cstSubArgs = &quot;ControlName, Place, [MultiLine=False]&quot;
+
+Check:
+	Set oControl = Nothing
+	If Not _CheckNewControl(cstThisSub, cstSubArgs, ControlName, Place) Then GoTo Finally
+
+	If IsMissing(MultiLine) Or IsEmpty(MultiLine) Then MultiLine = False
+	If Not ScriptForge.SF_Utils._Validate(MultiLine, &quot;MultiLine&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+
+Try:
+	&apos;	Manage specific properties
+	vPropNames = Array(&quot;VisualEffect&quot;, &quot;MultiLine&quot;)
+	vPropValues = Array(1, CBool(MultiLine))
+
+	&apos;	Create the control
+	Set oControl = _CreateNewControl(&quot;UnoControlRadioButtonModel&quot;, ControlName, Place, vPropNames, vPropValues)
+
+Finally:
+	Set CreateRadioButton = oControl
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+End Function	&apos;	SFDialogs.SF_Dialog.CreateRadioButton
+
+REM -----------------------------------------------------------------------------
+Public Function CreateScrollBar(Optional ByVal ControlName As Variant _
+								, Optional ByRef Place As Variant _
+								, Optional ByVal Orientation As Variant _
+								, Optional ByVal Border As Variant _
+								, Optional ByVal MinValue As Variant _
+								, Optional ByVal MaxValue As Variant _
+								) As Object
+&apos;&apos;&apos;	Create a new control of type ScrollBar in the actual dialog.
+&apos;&apos;&apos;	Specific args:
+&apos;&apos;&apos;		Orientation: H[orizontal] or V[ertical]
+&apos;&apos;&apos;		Border: &quot;3D&quot; (default) or &quot;FLAT&quot; or &quot;NONE&quot;
+&apos;&apos;&apos;		MinValue: the smallest value that can be entered in the control. Dafault = 0
+&apos;&apos;&apos;		MaxValue: the largest value that can be entered in the control. Dafault = 100
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Set myScrollBar = dialog.CreateScrollBar(&quot;ScrollBar1&quot;, Array(20, 20, 60, 15), MaxValue := 1000)
+
+Dim oControl As Object			&apos;	Return value
+Dim iBorder As Integer			&apos;	Alias of border
+Dim vPropNames As Variant		&apos;	Array of names of specific arguments
+Dim vPropValues As Variant		&apos;	Array of values of specific arguments
+Const cstThisSub = &quot;SFDialogs.Dialog.CreateScrollBar&quot;
+Const cstSubArgs = &quot;ControlName, Place, Orientation=&quot;&quot;H&quot;&quot;|&quot;&quot;Horizontal&quot;&quot;|&quot;&quot;V&quot;&quot;|&quot;&quot;Vertical&quot;&quot;&quot; _
+					&amp; &quot;, [Border=&quot;&quot;3D&quot;&quot;|&quot;&quot;FLAT&quot;&quot;|&quot;&quot;NONE&quot;&quot;], [MinValue=0], MaxValue=100]&quot;
+
+Check:
+	Set oControl = Nothing
+	If Not _CheckNewControl(cstThisSub, cstSubArgs, ControlName, Place) Then GoTo Finally
+
+	If IsMissing(Border) Or IsEmpty(Border) Then Border = &quot;3D&quot;
+	If IsMissing(MinValue) Or IsEmpty(MinValue) Then MinValue = 0
+	If IsMissing(MaxValue) Or IsEmpty(MaxValue) Then MaxValue = 100
+	
+	If Not ScriptForge.SF_Utils._Validate(Orientation, &quot;Orientation&quot;, V_STRING, Array(&quot;H&quot;, &quot;Horizontal&quot;, &quot;V&quot;, &quot;Vertical&quot;)) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(Border, &quot;Border&quot;, V_STRING, Array(&quot;3D&quot;, &quot;FLAT&quot;, &quot;NONE&quot;)) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(MinValue, &quot;MinValue&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(MaxValue, &quot;MaxValue&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+
+Try:
+	&apos;	Manage specific properties
+	iBorder = ScriptForge.SF_Array.IndexOf(Array(&quot;NONE&quot;, &quot;3D&quot;, &quot;FLAT&quot;), Border)
+	vPropNames = Array(&quot;Border&quot;, &quot;Orientation&quot;, &quot;ScrollValueMin&quot;, &quot;ScrollValueMax&quot;)
+	vPropValues = Array(iBorder, CLng(Iif(Left(UCase(Orientation), 1) = &quot;V&quot;, 1, 0)), CLng(MinValue), CLng(MaxValue))
+
+	&apos;	Create the control
+	Set oControl = _CreateNewControl(&quot;UnoControlScrollBarModel&quot;, ControlName, Place, vPropNames, vPropValues)
+
+Finally:
+	Set CreateScrollBar = oControl
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+End Function	&apos;	SFDialogs.SF_Dialog.CreateScrollBar
+
+REM -----------------------------------------------------------------------------
+Public Function CreateTableControl(Optional ByVal ControlName As Variant _
+								, Optional ByRef Place As Variant _
+								, Optional ByVal Border As Variant _
+								, Optional ByVal RowHeaders As Variant _
+								, Optional ByVal ColumnHeaders As Variant _
+								, Optional ByVal ScrollBars As Variant _
+								, Optional ByVal GridLines As Variant _
+								) As Object
+&apos;&apos;&apos;	Create a new control of type TableControl in the actual dialog.
+&apos;&apos;&apos;	To fill the table with data, use the SetTableData() method
+&apos;&apos;&apos;	Specific args:
+&apos;&apos;&apos;		Border: &quot;3D&quot; (default) or &quot;FLAT&quot; or &quot;NONE&quot;
+&apos;&apos;&apos;		RowHeaders: when True (default), the row Headerss are shown
+&apos;&apos;&apos;		ColumnHeaders: when True (default), the column Headerss are shown
+&apos;&apos;&apos;		ScrollBars: H[orizontal] or V[ertical] or B[oth] or N[one] (default)
+&apos;&apos;&apos;			Note that scrollbars always appear dynamically when they are needed
+&apos;&apos;&apos;		GridLines: when True (default = False) horizontal and vertical lines are painted between the grid cells
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Set myTableControl = dialog.CreateTableControl(&quot;TableControl1&quot;, Array(20, 20, 60, 15), ScrollBars := &quot;B&quot;)
+
+Dim oControl As Object			&apos;	Return value
+Dim iBorder As Integer			&apos;	Alias of border
+Dim vPropNames As Variant		&apos;	Array of names of specific arguments
+Dim vPropValues As Variant		&apos;	Array of values of specific arguments
+Const cstThisSub = &quot;SFDialogs.Dialog.CreateTableControl&quot;
+Const cstSubArgs = &quot;ControlName, Place, [Border=&quot;&quot;3D&quot;&quot;|&quot;&quot;FLAT&quot;&quot;|&quot;&quot;NONE&quot;&quot;], [RowHeaders=True], [ColumnHeaders=True]&quot; _
+					&amp; &quot;, [ScrollBars=&quot;&quot;N&quot;&quot;|&quot;&quot;None&quot;&quot;|&quot;&quot;B&quot;&quot;|&quot;&quot;Both&quot;&quot;|&quot;&quot;H&quot;&quot;|&quot;&quot;Horizontal&quot;&quot;|&quot;&quot;V&quot;&quot;|&quot;&quot;Vertical&quot;&quot;&quot;
+
+Check:
+	Set oControl = Nothing
+	If Not _CheckNewControl(cstThisSub, cstSubArgs, ControlName, Place) Then GoTo Finally
+
+	If IsMissing(Border) Or IsEmpty(Border) Then Border = &quot;3D&quot;
+	If IsMissing(RowHeaders) Or IsEmpty(RowHeaders) Then RowHeaders = True
+	If IsMissing(ColumnHeaders) Or IsEmpty(ColumnHeaders) Then ColumnHeaders = True
+	If IsMissing(ScrollBars) Or IsEmpty(ScrollBars) Then ScrollBars = &quot;None&quot;
+	If IsMissing(GridLines) Or IsEmpty(GridLines) Then GridLines = False
+	
+	If Not ScriptForge.SF_Utils._Validate(Border, &quot;Border&quot;, V_STRING, Array(&quot;3D&quot;, &quot;FLAT&quot;, &quot;NONE&quot;)) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(RowHeaders, &quot;RowHeaders&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(ColumnHeaders, &quot;ColumnHeaders&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(ScrollBars, &quot;ScrollBars&quot;, V_STRING, Array(&quot;N&quot;, &quot;None&quot;, &quot;B&quot;, &quot;Both&quot;, &quot;H&quot;, &quot;Horizontal&quot;, &quot;V&quot;, &quot;Vertical&quot;)) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(GridLines, &quot;GridLines&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+
+Try:
+	&apos;	Manage specific properties
+	iBorder = ScriptForge.SF_Array.IndexOf(Array(&quot;NONE&quot;, &quot;3D&quot;, &quot;FLAT&quot;), Border)
+	vPropNames = Array(&quot;Border&quot;, &quot;ShowRowHeader&quot;, &quot;ShowColumnHeader&quot;, &quot;VScroll&quot;, &quot;HScroll&quot;, &quot;UseGridLines&quot;)
+	vPropValues = Array(iBorder, CBool(RowHeaders), CBool(ColumnHeaders) _
+							, Left(ScrollBars, 1) = &quot;B&quot; Or Left(ScrollBars, 1) = &quot;V&quot; _
+							, Left(ScrollBars, 1) = &quot;B&quot; Or Left(ScrollBars, 1) = &quot;H&quot; _
+							, CBool(GridLines) _
+							)
+
+	&apos;	Create the control
+	Set oControl = _CreateNewControl(&quot;grid.UnoControlGridModel&quot;, ControlName, Place, vPropNames, vPropValues)
+
+Finally:
+	Set CreateTableControl = oControl
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+End Function	&apos;	SFDialogs.SF_Dialog.CreateTableControl
+
+REM -----------------------------------------------------------------------------
+Public Function CreateTextField(Optional ByVal ControlName As Variant _
+								, Optional ByRef Place As Variant _
+								, Optional ByVal Border As Variant _
+								, Optional ByVal MultiLine As Variant _
+								, Optional ByVal MaximumLength As Variant _
+								, Optional ByVal PasswordCharacter As Variant _
+								) As Object
+&apos;&apos;&apos;	Create a new control of type TextField in the actual dialog.
+&apos;&apos;&apos;	Specific args:
+&apos;&apos;&apos;		Border: &quot;3D&quot; (default) or &quot;FLAT&quot; or &quot;NONE&quot;
+&apos;&apos;&apos;		MultiLine: When True (default = False), the caption may be displayed on more than one line
+&apos;&apos;&apos;		MaximumLength: the maximum character count (default = 0 meaning unlimited)
+&apos;&apos;&apos;		PasswordCharacter: a single character specifying the echo for a password text field (default = &quot;&quot;)
+&apos;&apos;&apos;			MultiLine must be False to have PasswordCharacter being applied
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Set myTextField = dialog.CreateTextField(&quot;TextField1&quot;, Array(20, 20, 120, 50), MultiLine := True)
+
+Dim oControl As Object			&apos;	Return value
+Dim iBorder As Integer			&apos;	Alias of border
+Dim iPassword As Integer		&apos;	Integer alias of PasswordCharacter
+Dim vPropNames As Variant		&apos;	Array of names of specific arguments
+Dim vPropValues As Variant		&apos;	Array of values of specific arguments
+Const cstThisSub = &quot;SFDialogs.Dialog.CreateTextField&quot;
+Const cstSubArgs = &quot;ControlName, Place, [Border=&quot;&quot;3D&quot;&quot;|&quot;&quot;FLAT&quot;&quot;|&quot;&quot;NONE&quot;&quot;], [MultiLine=False], [MaximumLength=0, [PasswordCharacter=&quot;&quot;&quot;&quot;]&quot;
+
+Check:
+	Set oControl = Nothing
+	If Not _CheckNewControl(cstThisSub, cstSubArgs, ControlName, Place) Then GoTo Finally
+
+	If IsMissing(Border) Or IsEmpty(Border) Then Border = &quot;3D&quot;
+	If IsMissing(MultiLine) Or IsEmpty(MultiLine) Then MultiLine = False
+	If IsMissing(MaximumLength) Or IsEmpty(MaximumLength) Then MaximumLength = 0
+		If IsMissing(PasswordCharacter) Or IsEmpty(PasswordCharacter) Then PasswordCharacter = &quot;&quot;
+
+	If Not ScriptForge.SF_Utils._Validate(Border, &quot;Border&quot;, V_STRING, Array(&quot;3D&quot;, &quot;FLAT&quot;, &quot;NONE&quot;)) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(MultiLine, &quot;MultiLine&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(MaximumLength, &quot;MaximumLength&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(PasswordCharacter, &quot;PasswordCharacter&quot;, V_STRING) Then GoTo Finally
+
+	&apos;	MultiLine has precedence over Password
+	If MultiLine Then PasswordCharacter = &quot;&quot;
+
+Try:
+	&apos;	Manage specific properties
+	iBorder = ScriptForge.SF_Array.IndexOf(Array(&quot;NONE&quot;, &quot;3D&quot;, &quot;FLAT&quot;), Border)
+	If Len(PasswordCharacter) &gt; 0 Then iPassword = Asc(Left(PasswordCharacter, 1)) Else iPassword = 0
+	vPropNames = Array(&quot;Border&quot;, &quot;MultiLine&quot;, &quot;MaxTextLen&quot;, &quot;EchoChar&quot;, &quot;AutoVScroll&quot;)	&apos;	AutoHScroll not implemented ??
+	vPropValues = Array(iBorder, CBool(MultiLine), CInt(MaximumLength), iPassword, True)
+
+	&apos;	Create the control
+	Set oControl = _CreateNewControl(&quot;UnoControlEditModel&quot;, ControlName, Place, vPropNames, vPropValues)
+
+Finally:
+	Set CreateTextField = oControl
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+End Function	&apos;	SFDialogs.SF_Dialog.CreateTextField
+
+REM -----------------------------------------------------------------------------
+Public Function CreateTimeField(Optional ByVal ControlName As Variant _
+								, Optional ByRef Place As Variant _
+								, Optional ByVal Border As Variant _
+								, Optional ByVal MinTime As Variant _
+								, Optional ByVal MaxTime As Variant _
+								) As Object
+&apos;&apos;&apos;	Create a new control of type TimeField in the actual dialog.
+&apos;&apos;&apos;	Specific args:
+&apos;&apos;&apos;		Border: &quot;3D&quot; (default) or &quot;FLAT&quot; or &quot;NONE&quot;
+&apos;&apos;&apos;		MinTime: the smallest time that can be entered in the control. Dafault = 0
+&apos;&apos;&apos;		MaxTime: the largest time that can be entered in the control. Dafault = 24h
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Set myTimeField = dialog.CreateTimeField(&quot;TimeField1&quot;, Array(20, 20, 60, 15))
+
+Dim oControl As Object			&apos;	Return Time
+Dim iBorder As Integer			&apos;	Alias of border
+Dim oMinTime As New com.sun.star.util.Time
+Dim oMaxTime As New com.sun.star.util.Time
+Dim vFormats As Variant			&apos;	List of available time formats
+Dim vPropNames As Variant		&apos;	Array of names of specific arguments
+Dim vPropValues As Variant		&apos;	Array of values of specific arguments
+Const cstThisSub = &quot;SFDialogs.Dialog.CreateTimeField&quot;
+Const cstSubArgs = &quot;ControlName, Place, [Border=&quot;&quot;3D&quot;&quot;|&quot;&quot;FLAT&quot;&quot;|&quot;&quot;NONE&quot;&quot;]&quot; _
+						&amp; &quot;, [MinTime=TimeSerial(0, 0, 0)], [MaxTime=TimeSerial(23, 59, 59)]&quot;
+
+Check:
+	Set oControl = Nothing
+	If Not _CheckNewControl(cstThisSub, cstSubArgs, ControlName, Place) Then GoTo Finally
+
+	If IsMissing(Border) Or IsEmpty(Border) Then Border = &quot;3D&quot;
+	If IsMissing(MinTime) Or IsEmpty(MinTime) Then MinTime = TimeSerial(0, 0, 0)
+	If IsMissing(MaxTime) Or IsEmpty(MaxTime) Then MaxTime = TimeSerial(23, 59, 59)
+	
+	If Not ScriptForge.SF_Utils._Validate(Border, &quot;Border&quot;, V_STRING, Array(&quot;3D&quot;, &quot;FLAT&quot;, &quot;NONE&quot;)) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._ValiDate(MinTime, &quot;MinTime&quot;, ScriptForge.V_DATE) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._ValiDate(MaxTime, &quot;MaxTime&quot;, ScriptForge.V_DATE) Then GoTo Finally
+	vFormats = SF_DialogUtils._FormatsList(&quot;TimeField&quot;)
+
+Try:
+	&apos;	Manage specific properties
+	iBorder = ScriptForge.SF_Array.IndexOf(Array(&quot;NONE&quot;, &quot;3D&quot;, &quot;FLAT&quot;), Border)
+	With oMinTime
+		.Hours = Hour(MinTime)	:	.Minutes = Minute(MinTime)	:	.Seconds = Second(MinTime)
+	End With
+	With oMaxTime
+		.Hours = Hour(MaxTime)	:	.Minutes = Minute(MaxTime)	:	.Seconds = Second(MaxTime)
+	End With
+	vPropNames = Array(&quot;Border&quot;, &quot;TimeMin&quot;, &quot;TimeMax&quot;, &quot;TimeFormat&quot;)
+	vPropValues = Array(iBorder, oMinTime, oMaxTime, CInt(ScriptForge.SF_Array.IndexOf(vFormats(), &quot;24h short&quot;)))
+
+	&apos;	Create the control
+	Set oControl = _CreateNewControl(&quot;UnoControlTimeFieldModel&quot;, ControlName, Place, vPropNames, vPropValues)
+
+Finally:
+	Set CreateTimeField = oControl
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+End Function	&apos;	SFDialogs.SF_Dialog.CreateTimeField
+
+REM -----------------------------------------------------------------------------
+Public Function CreateTreeControl(Optional ByVal ControlName As Variant _
+								, Optional ByRef Place As Variant _
+								, Optional ByVal Border As Variant _
+								) As Object
+&apos;&apos;&apos;	Create a new control of type TreeControl in the actual dialog.
+&apos;&apos;&apos;	Specific args:
+&apos;&apos;&apos;		Border: &quot;3D&quot; (default) or &quot;FLAT&quot; or &quot;NONE&quot;
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Set myTreeControl = dialog.CreateTreeControl(&quot;TreeControl1&quot;, Array(20, 20, 60, 15))
+
+Dim oControl As Object			&apos;	Return value
+Dim iBorder As Integer			&apos;	Alias of border
+Dim vPropNames As Variant		&apos;	Array of names of specific arguments
+Dim vPropValues As Variant		&apos;	Array of values of specific arguments
+Const cstThisSub = &quot;SFDialogs.Dialog.CreateTreeControl&quot;
+Const cstSubArgs = &quot;ControlName, Place, [Border=&quot;&quot;3D&quot;&quot;|&quot;&quot;FLAT&quot;&quot;|&quot;&quot;NONE&quot;&quot;]&quot;
+
+Check:
+	Set oControl = Nothing
+	If Not _CheckNewControl(cstThisSub, cstSubArgs, ControlName, Place) Then GoTo Finally
+
+	If IsMissing(Border) Or IsEmpty(Border) Then Border = &quot;3D&quot;
+	If Not ScriptForge.SF_Utils._Validate(Border, &quot;Border&quot;, V_STRING, Array(&quot;3D&quot;, &quot;FLAT&quot;, &quot;NONE&quot;)) Then GoTo Finally
+
+Try:
+	&apos;	Manage specific properties
+	iBorder = ScriptForge.SF_Array.IndexOf(Array(&quot;NONE&quot;, &quot;3D&quot;, &quot;FLAT&quot;), Border)
+	vPropNames = Array(&quot;Border&quot;, &quot;SelectionType&quot;, &quot;Editable&quot;, &quot;ShowsHandles&quot;, &quot;ShowsRootHandles&quot;)
+	vPropValues = Array(iBorder, com.sun.star.view.SelectionType.SINGLE, False, True, True)
+
+	&apos;	Create the control
+	Set oControl = _CreateNewControl(&quot;tree.TreeControlModel&quot;, ControlName, Place, vPropNames, vPropValues)
+
+Finally:
+	Set CreateTreeControl = oControl
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDialogs.SF_Dialog.CreateTreeControl
 
 REM -----------------------------------------------------------------------------
 Public Sub EndExecute(Optional ByVal ReturnValue As Variant)
@@ -845,6 +1979,27 @@ Public Function Methods() As Variant
 					&quot;Activate&quot; _
 					, &quot;Center&quot; _
 					, &quot;Controls&quot; _
+					, &quot;CreateButton&quot; _
+					, &quot;CreateCheckBox&quot; _
+					, &quot;CreateComboBox&quot; _
+					, &quot;CreateCurrencyField&quot; _
+					, &quot;CreateDateField&quot; _
+					, &quot;CreateFileControl&quot; _
+					, &quot;CreateFixedLine&quot; _
+					, &quot;CreateFixedText&quot; _
+					, &quot;CreateFormattedField&quot; _
+					, &quot;CreateGroupBox&quot; _
+					, &quot;CreateImageControl&quot; _
+					, &quot;CreateListBox&quot; _
+					, &quot;CreateNumericField&quot; _
+					, &quot;CreatePatternField&quot; _
+					, &quot;CreateProgressBar&quot; _
+					, &quot;CreateRadioButton&quot; _
+					, &quot;CfeateScrollBar&quot; _
+					, &quot;CreateTableControl&quot; _
+					, &quot;CreateTextField&quot; _
+					, &quot;CreateTimeField&quot; _
+					, &quot;CreateTreeControl&quot; _
 					, &quot;EndExecute&quot; _
 					, &quot;Execute&quot; _
 					, &quot;GetTextsFromL10N&quot; _
@@ -1104,6 +2259,133 @@ End Function	&apos;	SFDialogs.SF_Dialog.Terminate
 REM =========================================================== PRIVATE FUNCTIONS
 
 REM -----------------------------------------------------------------------------
+Private Function _CheckNewControl(cstThisSub As String, cstSubArgs As String _
+									, Optional ByVal ControlName As Variant _
+									, ByRef Place As Variant _
+									) As Boolean
+&apos;&apos;&apos;	Check the generic arguments of a CreateXXX() method for control creation.
+&apos;&apos;&apos;	Called by the CreateButton, CreateCheckBox, ... specific methods
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		cstThisSub, cstSubArgs: caller routine and its arguments
+&apos;&apos;&apos;		Name: the name of the new control. It must not exist yet
+&apos;&apos;&apos;		Place: the size and position expressed in APPFONT units, either
+&apos;&apos;&apos;			- an array (X, Y, Width, Height)
+&apos;&apos;&apos;			- a com.sun.star.awt.Rectangle structure
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		DUPLICATECONTROLERROR		A control with the same name exists already
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when arguments passed the check
+
+Dim bCheck As Boolean				&apos;	Return value
+
+	bCheck = False
+
+Check:
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(ControlName, &quot;ControlName&quot;, V_STRING) Then GoTo Finally
+		If IsArray(Place) Then
+			If Not ScriptForge.SF_Utils._ValidateArray(Place, &quot;Place&quot;, 1, ScriptForge.V_NUMERIC, True) Then GoTo Finally
+		Else
+			If Not ScriptForge.SF_Utils._Validate(Place, &quot;Place&quot;, ScriptForge.V_OBJECT) Then GoTo Finally
+		End If
+	End If
+	If _DialogModel.hasByName(ControlName) Then GoTo CatchDuplicate
+
+	bCheck = True
+
+Finally:
+	_CheckNewControl = bCheck
+	&apos;	Call to _ExitFunction is done in the caller to allow handling of specific arguments
+	Exit Function
+CatchDuplicate:
+	ScriptForge.SF_Exception.RaiseFatal(DUPLICATECONTROLERROR, &quot;ControlName&quot;, ControlName, _Name)
+	GoTo Finally
+End Function	&apos;	SFDialogs.SF_Dialog._CheckNewControl
+
+REM -----------------------------------------------------------------------------
+Private Function _CreateNewControl(ByVal psType As String _
+									, ByVal ControlName As Variant _
+									, ByRef Place As Variant _
+									, ByRef ArgNames As Variant _
+									, ByRef ArgValues As Variant _
+									) As Object
+&apos;&apos;&apos;	Generic creation of a new control.
+&apos;&apos;&apos;	Called by the CreateButton, CreateCheckBox, ... specific methods
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		cstThisSub, cstSubArgs: caller routine and its arguments
+&apos;&apos;&apos;		psType: one of the UnoControlxxx control models
+&apos;&apos;&apos;		Name: the name of the new control. It must not exist yet
+&apos;&apos;&apos;		Place: the size and position expressed in APPFONT units, either
+&apos;&apos;&apos;			- an array (X, Y, Width, Height)
+&apos;&apos;&apos;			- a com.sun.star.awt.Rectangle structure
+&apos;&apos;&apos;		ArgNames: the list of the specific arguments linked to the given psType
+&apos;&apos;&apos;		ArgValues: their values
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A new SF_DialogControl class instance or Nothing if creation failed
+
+Dim oControl As Object				&apos;	Return value
+Dim oControlModel As Object			&apos;	com.sun.star.awt.XControlModel
+Dim vPlace As Variant				&apos;	Alias of Place when object to avoid &quot;Object variable not set&quot; error
+Dim lCache As Long					&apos;	Number of elements in the controls cache
+Static oSession As Object
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	Set oControl = Nothing
+
+	If IsNull(oSession) Then Set oSession = ScriptForge.SF_Services.CreateScriptService(&quot;Session&quot;)
+
+Try:
+	&apos;	Create a new (empty) model instance
+	Set oControlModel = _DialogModel.createInstance(&quot;com.sun.star.awt.&quot; &amp; psType)
+
+	oControlModel.Name = ControlName
+
+	&apos;	Set dimension and position
+	With oControlModel
+		If IsArray(Place) Then
+			If UBound(Place) = 3 Then
+				.PositionX = Place(0)
+				.PositionY = Place(1)
+				.Width = Place(2)
+				.Height = Place(3)
+			End If
+		ElseIf oSession.UnoObjectType(Place) = &quot;com.sun.star.awt.Rectangle&quot; Then
+			Set vPlace = Place
+			.PositionX = vPlace.X
+			.PositionY = vPlace.Y
+			.Width = vPlace.Width
+			.Height = vPlace.Height
+		Else
+			&apos;Leave eveything to zero
+		End If
+	End With
+
+	&apos;	Store the specific propertes in the model
+	If UBound(ArgNames) &gt;= 0 Then oControlModel.setPropertyValues(ArgNames, ArgValues)
+
+	&apos;	Insert the new completed control model in the dialog
+	_DialogModel.insertByName(ControlName, oControlModel)
+
+	&apos;	Update controls cache - existing cache is presumed unchanged: new control is added at the end of Model.ElementNames
+	lCache = UBound(_ControlCache)
+	If lCache &lt; 0 Then
+		ReDim _ControlCache(0 To 0)
+	Else
+		ReDim Preserve _ControlCache(0 To lCache + 1)
+	End If
+
+	&apos;	Now the UNO control exists, build the SF_DialogControl instance as usual
+	Set oControl = Controls(ControlName)
+
+Finally:
+	Set _CreateNewControl = oControl
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDialogs.SF_Dialog._CreateNewControl
+
+REM -----------------------------------------------------------------------------
 Private Function _FindRadioSiblings(ByVal psRadioButton As String) As String
 &apos;&apos;&apos;	Given the name of the first radio button of a group, return all the names of the group
 &apos;&apos;&apos;	For dialogs, radio buttons are considered of the same group
@@ -1213,6 +2495,7 @@ Public Sub _Initialize()
 &apos;&apos;&apos;		- Addition of the new object in the Dialogs buffer
 &apos;&apos;&apos;		- Initialisation of persistent storage for controls
 
+Dim lControls As Long		&apos;	Number of controls at dialog creation
 Try:
 	&apos;	Keep reference to model
 	Set _DialogModel = _DialogControl.Model
@@ -1230,7 +2513,8 @@ Try:
 
 	&apos;	Size the persistent storage
 	_ControlCache = Array()
-	ReDim _ControlCache(0 To UBound(_DialogModel.getElementNames()))
+	lControls = UBound(_DialogModel.getElementNames())
+	If lControls &gt;= 0 Then ReDim _ControlCache(0 To lControls)
 
 Finally:
 	Exit Sub

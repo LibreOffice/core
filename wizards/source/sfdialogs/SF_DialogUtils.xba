@@ -158,6 +158,49 @@ Try:
 End Function	&apos;	SFDialogs.SF_DialogUtils._ConvertToAppFont
 
 REM -----------------------------------------------------------------------------
+Private Function _FormatsList(psControlType) As Variant
+&apos;&apos;&apos;	Return the list of the allowed formats for Date and Time control types
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		DateField or TimeField control
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		The allowed format entries as a zero-based array
+
+Dim vFormats() As Variant		&apos;	Return value
+Const CTLDATEFIELD		= &quot;DateField&quot;
+Const CTLTIMEFIELD		= &quot;TimeField&quot;
+
+	Select Case psControlType
+		Case CTLDATEFIELD
+			vFormats = Array( _
+				&quot;Standard (short)&quot; _
+				, &quot;Standard (short YY)&quot; _
+				, &quot;Standard (short YYYY)&quot; _
+				, &quot;Standard (long)&quot; _
+				, &quot;DD/MM/YY&quot; _
+				, &quot;MM/DD/YY&quot; _
+				, &quot;YY/MM/DD&quot; _
+				, &quot;DD/MM/YYYY&quot; _
+				, &quot;MM/DD/YYYY&quot; _
+				, &quot;YYYY/MM/DD&quot; _
+				, &quot;YY-MM-DD&quot; _
+				, &quot;YYYY-MM-DD&quot; _
+				)
+		Case CTLTIMEFIELD
+			vFormats = Array( _
+				&quot;24h short&quot; _
+				, &quot;24h long&quot; _
+				, &quot;12h short&quot; _
+				, &quot;12h long&quot; _
+				)
+		Case Else
+			vFormats = Array()
+	End Select
+	
+	_FormatsList = vFormats
+
+End Function	&apos;	SFDialogs.SF_DialogUtils._FormatsList
+
+REM -----------------------------------------------------------------------------
 Public Function _Resize(ByRef Control As Object _
 								, Optional ByVal Left As Variant _
 								, Optional ByVal Top As Variant _
@@ -165,7 +208,9 @@ Public Function _Resize(ByRef Control As Object _
 								, Optional ByVal Height As Variant _
 								) As Boolean
 &apos;&apos;&apos;	Move the top-left corner of a dialog or a dialog control to new coordinates and/or modify its dimensions
-&apos;&apos;&apos;	Without arguments, the method resets the initial dimensions
+&apos;&apos;&apos;	Without arguments, the method either:
+&apos;&apos;&apos;				leaves the position unchanged and computes best fit dimensions
+&apos;&apos;&apos;				resets the initial position and dimensions (Scrollbar, ProgressBar, FixedLine, GroupBox, TreeControl&quot;, TableControl)
 &apos;&apos;&apos;	Attributes denoting the position and size of a dialog are expressed in &quot;Map AppFont&quot; units.
 &apos;&apos;&apos;	Map AppFont units are device and resolution independent.
 &apos;&apos;&apos;	One Map AppFont unit is equal to one eighth of the average character (Systemfont) height and one quarter of the average character width.
@@ -186,7 +231,9 @@ Dim oView As Object					&apos;	View of Control object
 Dim Displayed As Boolean			&apos;	When Trs, the dialog is currently active
 Dim oSize As Object					&apos;	com.sun.star.awt.Size
 Dim oPoint As Object				&apos;	com.sun.star.awt.Point
+Dim oPreferredSize As Object		&apos;	com.sun.star.awt.Size
 Dim iFlags As Integer				&apos;	com.sun.star.awt.PosSize constants
+Static oSession As Object			&apos;	SF_Session alias
 Dim cstThisSub As String
 Const cstSubArgs = &quot;[Left], [Top], [Width], [Height]&quot;
 
@@ -222,12 +269,22 @@ Try:
 				Displayed = .[Parent]._Displayed
 			Case Else
 		End Select
-		&apos;	Reset factory settings when relevant
+		&apos;	Manage absence of arguments: best fit or reset
 		If Left = MINPOSITION And Top = MINPOSITION And Width = -1 And Height = -1 Then
-			Left = ._Left
-			Top = ._Top
-			Width = ._Width
-			Height = ._Height
+			If IsNull(oSession) Then Set oSession = ScriptForge.SF_Services.CreateScriptService(&quot;ScriptForge.Session&quot;)
+			If oSession.HasUnoMethod(oView, &quot;getPreferredSize&quot;) Then
+				&apos;	Compute a best fit size when relevant
+				Set oPreferredSize = oView.getPreferredSize()
+				Set oSize = SF_DialogUtils._ConvertSizeToAppFont(oView, oPreferredSize.Width, oPreferredSize.Height)
+				Width = oSize.Width
+				Height = oSize.Height
+			Else
+				&apos;	Reset factory settings otherwise
+				Left = ._Left
+				Top = ._Top
+				Width = ._Width
+				Height = ._Height
+			End If
 		End If
 	End With
 

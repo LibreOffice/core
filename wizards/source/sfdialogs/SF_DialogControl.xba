@@ -232,6 +232,18 @@ End Function	&apos;	SFDialogs.SF_DialogControl Explicit Destructor
 REM ================================================================== PROPERTIES
 
 REM -----------------------------------------------------------------------------
+Property Get Border() As Variant
+&apos;&apos;&apos;	The Border property refers to the surrounding of the control: 3D, FLAT or NONE
+	Border = _PropertyGet(&quot;Border&quot;, &quot;&quot;)
+End Property	&apos;	SFDialogs.SF_DialogControl.Border (get)
+
+REM -----------------------------------------------------------------------------
+Property Let Border(Optional ByVal pvBorder As Variant)
+&apos;&apos;&apos;	Set the updatable property Border
+	_PropertySet(&quot;Border&quot;, pvBorder)
+End Property	&apos;	SFDialogs.SF_DialogControl.Border (let)
+
+REM -----------------------------------------------------------------------------
 Property Get Cancel() As Variant
 &apos;&apos;&apos;	The Cancel property specifies if a command button has or not the behaviour of a Cancel button.
 	Cancel = _PropertyGet(&quot;Cancel&quot;, False)
@@ -308,7 +320,6 @@ End Property	&apos;	SFDialogs.SF_DialogControl.Format (get)
 REM -----------------------------------------------------------------------------
 Property Let Format(Optional ByVal pvFormat As Variant)
 &apos;&apos;&apos;	Set the updatable property Format
-&apos;&apos;&apos;	NB: Format is read-only for formatted field controls
 	_PropertySet(&quot;Format&quot;, pvFormat)
 End Property	&apos;	SFDialogs.SF_DialogControl.Format (let)
 
@@ -616,6 +627,19 @@ Property Let RowSource(Optional ByVal pvRowSource As Variant)
 &apos;&apos;&apos;	Set the updatable property RowSource
 	_PropertySet(&quot;RowSource&quot;, pvRowSource)
 End Property	&apos;	SFDialogs.SF_DialogControl.RowSource (let)
+
+REM -----------------------------------------------------------------------------
+Property Get TabIndex() As Variant
+&apos;&apos;&apos;	The TabIndex property specifies a control&apos;s place in the tab order in the dialog
+&apos;&apos;&apos;	Zero or negative means no tab set in the control
+	TabIndex = _PropertyGet(&quot;TabIndex&quot;, -1)
+End Property	&apos;	SFDialogs.SF_DialogControl.TabIndex (get)
+
+REM -----------------------------------------------------------------------------
+Property Let TabIndex(Optional ByVal pvTabIndex As Variant)
+&apos;&apos;&apos;	Set the updatable property TabIndex
+	_PropertySet(&quot;TabIndex&quot;, pvTabIndex)
+End Property	&apos;	SFDialogs.SF_DialogControl.TabIndex (let)
 
 REM -----------------------------------------------------------------------------
 Property Get Text() As Variant
@@ -1108,7 +1132,8 @@ Public Function Properties() As Variant
 &apos;&apos;&apos;	Return the list or properties of the Timer class as an array
 
 	Properties = Array( _
-					&quot;Cancel&quot; _
+					&quot;Border&quot; _
+					, &quot;Cancel&quot; _
 					, &quot;Caption&quot; _
 					, &quot;ControlType&quot; _
 					, &quot;CurrentNode&quot; _
@@ -1142,6 +1167,7 @@ Public Function Properties() As Variant
 					, &quot;Picture&quot; _
 					, &quot;RootNode&quot; _
 					, &quot;RowSource&quot; _
+					, &quot;TabIndex&quot; _
 					, &quot;Text&quot; _
 					, &quot;TipText&quot; _
 					, &quot;TripleState&quot; _
@@ -1263,6 +1289,7 @@ REM ----------------------------------------------------------------------------
 Public Function SetTableData(Optional ByRef DataArray As Variant _
 								, Optional ByRef Widths As Variant _
 								, Optional ByRef Alignments As Variant _
+								, Optional ByVal RowHeaderWidth As Variant _
 								) As Boolean
 &apos;&apos;&apos;	Fill a table control with the given data. Preexisting data is erased
 &apos;&apos;&apos;	The Basic IDE allows to define if the control has a row and/or a column header
@@ -1274,15 +1301,17 @@ Public Function SetTableData(Optional ByRef DataArray As Variant _
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		DataArray: the set of data to display in the table control, including optional column/row headers
 &apos;&apos;&apos;			Is a 2D array in Basic, is a tuple of tuples when called from Python
-&apos;&apos;&apos;		Widths: the column&apos;s relative widths as a 1D array, each element corresponding with a column
+&apos;&apos;&apos;		Widths: the column&apos;s relative widths as a 1D array, each element corresponding with one data column
 &apos;&apos;&apos;				If the array is shorter than the number of columns, the last value is kept for the next columns.
 &apos;&apos;&apos;				Example:
 &apos;&apos;&apos;					Widths := Array(1, 2)
 &apos;&apos;&apos;				means that the first column is half as wide as all the other columns
-&apos;&apos;&apos;				When the argument is absent, the columns are evenly spread over the control
+&apos;&apos;&apos;				When the argument is absent, the columns are evenly spread over the available space in the control
 &apos;&apos;&apos;		Alignments: the column&apos;s horizontal alignment as a string with length = number of columns.
 &apos;&apos;&apos;				Possible characters are:
 &apos;&apos;&apos;					L(EFT), C(ENTER), R(IGHT) or space (default behaviour)
+&apos;&apos;&apos;		RowGeaderWidth: width of the row header column expressed in AppFont units. Default = 10.
+&apos;&apos;&apos;				The argument is ignored when the TableControl has no row header.
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		True when successful
 &apos;&apos;&apos;	Examples:
@@ -1312,28 +1341,30 @@ Dim oColumn As Object			&apos;	com.sun.star.awt.grid.XGridColumn
 Dim dWidth As Double			&apos;	A single item of Widths
 Dim dRelativeWidth As Double	&apos;	Sum of Widths up to the number of columns
 Dim dWidthFactor As Double		&apos;	Factor to apply to relative widths to get absolute column widths
+Dim lHeaderWidth As Long		&apos;	Row header width when row header present, otherwise = 0
+Dim lAverageWidth As Long		&apos;	Width to apply when columns spead evenly across table
 Dim vDataRow As Variant			&apos;	A single row content in the tablecontrol
 Dim vDataItem As Variant		&apos;	A single DataArray item
 Dim sAlign As String			&apos;	Column&apos;s horizontal alignments (single chars: L, C, R, space)
 Dim lAlign As Long				&apos;	com.sun.star.style.HorizontalAlignment.XXX
 Dim i As Long, j As Long, k As Long
 
-Const cstRowHdrWidth = 12	&apos;	Estimated width of the row header
-
 Const cstThisSub = &quot;SFDialogs.DialogControl.SetTableData&quot;
-Const cstSubArgs = &quot;DataArray, [Widths=Array(1)], [Alignments=&quot;&quot;&quot;&quot;]&quot;
+Const cstSubArgs = &quot;DataArray, [Widths=Array(1)], [Alignments=&quot;&quot;&quot;&quot;], [RowHeaderWidth=10]&quot;
 
 	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
 	bData = False
 
 Check:
-	If IsMissing(Widths) Or IsEmpty(Widths) Then Widths = Array(1)
+	If IsMissing(Widths) Or IsEmpty(Widths) Then Widths = Array()
 	If IsMissing(Alignments) Or IsEmpty(Alignments) Then Alignments = &quot;&quot;
+	If IsMissing(RowHeaderWidth) Or IsEmpty(RowHeaderWidth) Then RowHeaderWidth = 10
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If _ControlType &lt;&gt; CTLTABLECONTROL Then GoTo CatchType
 		If Not ScriptForge.SF_Utils._ValidateArray(DataArray, &quot;DataArray&quot;) Then GoTo Catch		&apos;	Dimensions are checked below
 		If Not ScriptForge.SF_Utils._ValidateArray(Widths, &quot;Widths&quot;, 1, ScriptForge.V_NUMERIC, True) Then GoTo Catch
 		If Not ScriptForge.SF_Utils._Validate(Alignments, &quot;Alignments&quot;, V_STRING) Then GoTo Catch
+		If Not ScriptForge.SF_Utils._Validate(RowHeaderWidth, &quot;RowHeaderWidth&quot;, ScriptForge.V_NUMERIC) Then GoTo Catch
 	End If
 
 Try:
@@ -1395,6 +1426,15 @@ Try:
 		If _ControlModel.ShowColumnHeader Then oColumn.Title = vColHeaders(j)
 		_GridColumnModel.addColumn(oColumn)
 	Next j
+
+	&apos;	Manage row headers width
+	If _ControlModel.ShowRowHeader Then
+		lHeaderWidth = RowHeaderWidth
+		_ControlModel.RowHeaderWidth = lHeaderWidth
+	Else
+		lHeaderWidth = 0
+	End If
+
 	&apos;	Size the columns. Column sizing cannot be done before all the columns are added
 	If lMaxW &gt;= lMinW Then		&apos;	There must be at least 1 width given as argument
 		&apos;	Size the columns proportionally with their relative widths
@@ -1405,8 +1445,9 @@ Try:
 			i = i + 1
 			If i &gt;= lMinW And i &lt;= lMaxW Then dRelativeWidth = dRelativeWidth + Widths(i) Else dRelativeWidth = dRelativeWidth + Widths(lMaxW)
 		Next j
-		&apos;	Set absolute widths
-		If dRelativeWidth &gt; 0.0 Then dWidthFactor = CDbl((_ControlModel.Width - cstRowHdrWidth) / dRelativeWidth) Else dWidthFactor = 1.0
+
+		&apos;	Set absolute column widths
+		If dRelativeWidth &gt; 0.0 Then dWidthFactor = CDbl(_ControlModel.Width - lHeaderWidth) / dRelativeWidth Else dWidthFactor = 1.0
 		i = lMinW - 1
 		For j = 0 To lMax2 - lMinCol
 			i = i + 1
@@ -1414,9 +1455,10 @@ Try:
 			_GridColumnModel.Columns(j).ColumnWidth = CLng(dWidthFactor * dWidth)
 		Next j
 	Else
-		&apos;	Size all columns evenly
+		&apos;	Size header and columns evenly
+		lAverageWidth = (_ControlModel.Width - lHeaderWidth) / (lMax2 - lMin2 + 1)
 		For j = 0 To lMax2 - lMinCol
-			_GridColumnModel.Columns(j).ColumnWidth = (_ControlModel.Width - cstRowHdrWidth) / (lMax2 - lMonCol + 1)
+			_GridColumnModel.Columns(j).ColumnWidth = lAverageWidth
 		Next j
 	End If
 
@@ -1598,43 +1640,6 @@ Finally:
 End Function	&apos;	SFDialogs.SF_DialogControl._FindNode
 
 REM -----------------------------------------------------------------------------
-Private Function _FormatsList() As Variant
-&apos;&apos;&apos;	Return the allowed format entries as a zero-based array for Date and Time control types
-
-Dim vFormats() As Variant		&apos;	Return value
-
-	Select Case _ControlType
-		Case CTLDATEFIELD
-			vFormats = Array( _
-				&quot;Standard (short)&quot; _
-				, &quot;Standard (short YY)&quot; _
-				, &quot;Standard (short YYYY)&quot; _
-				, &quot;Standard (long)&quot; _
-				, &quot;DD/MM/YY&quot; _
-				, &quot;MM/DD/YY&quot; _
-				, &quot;YY/MM/DD&quot; _
-				, &quot;DD/MM/YYYY&quot; _
-				, &quot;MM/DD/YYYY&quot; _
-				, &quot;YYYY/MM/DD&quot; _
-				, &quot;YY-MM-DD&quot; _
-				, &quot;YYYY-MM-DD&quot; _
-				)
-		Case CTLTIMEFIELD
-			vFormats = Array( _
-				&quot;24h short&quot; _
-				, &quot;24h long&quot; _
-				, &quot;12h short&quot; _
-				, &quot;12h long&quot; _
-				)
-		Case Else
-			vFormats = Array()
-	End Select
-	
-	_FormatsList = vFormats
-
-End Function	&apos;	SFDialogs.SF_DialogControl._FormatsList
-
-REM -----------------------------------------------------------------------------
 Public Function _GetEventName(ByVal psProperty As String) As String
 &apos;&apos;&apos;	Return the LO internal event name derived from the SF property name
 &apos;&apos;&apos;	The SF property name is not case sensitive, while the LO name is case-sensitive
@@ -1764,6 +1769,16 @@ Const cstSubArgs = &quot;&quot;
 
 	If IsNull(oSession) Then Set oSession = ScriptForge.SF_Services.CreateScriptService(&quot;Session&quot;)
 	Select Case UCase(psProperty)
+		Case UCase(&quot;Border&quot;)
+			Select Case _ControlType
+				Case CTLCOMBOBOX, CTLCURRENCYFIELD, CTLDATEFIELD, CTLFILECONTROL, CTLFIXEDTEXT, CTLFORMATTEDFIELD _
+						, CTLHYPERLINK, CTLIMAGECONTROL, CTLLISTBOX, CTLNUMERICFIELD, CTLPATTERNFIELD, CTLPROGRESSBAR _
+						, CTLSCROLLBAR , CTLTABLECONTROL, CTLTEXTFIELD, CTLTIMEFIELD, CTLTREECONTROL
+					If oSession.HasUNOProperty(_ControlModel, &quot;Border&quot;) Then _PropertyGet = Array(&quot;NONE&quot;, &quot;3D&quot;, &quot;FLAT&quot;)(_ControlModel.Border)
+				Case CTLCHECKBOX, CTLRADIOBUTTON
+					If oSession.HasUNOProperty(_ControlModel, &quot;VisualEffect&quot;) Then _PropertyGet = Array(&quot;NONE&quot;, &quot;3D&quot;, &quot;FLAT&quot;)(_ControlModel.VisualEffect)
+				Case Else	:	GoTo CatchType
+			End Select
 		Case UCase(&quot;Cancel&quot;)
 			Select Case _ControlType
 				Case CTLBUTTON
@@ -1805,9 +1820,9 @@ Const cstSubArgs = &quot;&quot;
 		Case UCase(&quot;Format&quot;)
 			Select Case _ControlType
 				Case CTLDATEFIELD
-					If oSession.HasUNOProperty(_ControlModel, &quot;DateFormat&quot;) Then _PropertyGet = _FormatsList()(_ControlModel.DateFormat)
+					If oSession.HasUNOProperty(_ControlModel, &quot;DateFormat&quot;) Then _PropertyGet = SF_DialogUtils._FormatsList(_ControlType)(_ControlModel.DateFormat)
 				Case CTLTIMEFIELD
-					If oSession.HasUNOProperty(_ControlModel, &quot;TimeFormat&quot;) Then _PropertyGet = _FormatsList()(_ControlModel.TimeFormat)
+					If oSession.HasUNOProperty(_ControlModel, &quot;TimeFormat&quot;) Then _PropertyGet = SF_DialogUtils._FormatsList(_ControlType)(_ControlModel.TimeFormat)
 				Case CTLFORMATTEDFIELD
 					If oSession.HasUNOProperty(_ControlModel, &quot;FormatsSupplier&quot;) And oSession.HasUNOProperty(_ControlModel, &quot;FormatKey&quot;) Then
 						_PropertyGet = _ControlModel.FormatsSupplier.getNumberFormats.getByKey(_ControlModel.FormatKey).FormatString
@@ -1939,6 +1954,16 @@ Const cstSubArgs = &quot;&quot;
 					End If
 				Case Else	:	GoTo CatchType
 			End Select
+		Case UCase(&quot;TabIndex&quot;)
+			Select Case _ControlType
+				Case CTLBUTTON, CTLCHECKBOX, CTLCOMBOBOX, CTLCURRENCYFIELD, CTLDATEFIELD, CTLFILECONTROL, CTLFIXEDTEXT _
+						, CTLFORMATTEDFIELD, CTLHYPERLINK, CTLIMAGECONTROL, CTLLISTBOX, CTLNUMERICFIELD, CTLPATTERNFIELD _
+						, CTLRADIOBUTTON, CTLSCROLLBAR, CTLTABLECONTROL, CTLTEXTFIELD, CTLTIMEFIELD, CTLTREECONTROL
+					If oSession.HasUnoProperty(_ControlModel, &quot;TabIndex&quot;) Then
+						If CBool(_ControlModel.TabStop) Or IsEmpty(_ControlModel.TabStop) Then _PropertyGet = _ControlModel.TabIndex Else _PropertyGet = 0
+					End If
+				Case Else	:	GoTo CatchType
+			End Select
 		Case UCase(&quot;Text&quot;)
 			Select Case _ControlType
 				Case CTLCOMBOBOX, CTLFILECONTROL, CTLFORMATTEDFIELD, CTLPATTERNFIELD, CTLTEXTFIELD
@@ -1965,7 +1990,7 @@ Const cstSubArgs = &quot;&quot;
 				Case CTLBUTTON		&apos;Boolean, toggle buttons only
 					vGet = False
 					If oSession.HasUnoProperty(_ControlModel, &quot;Toggle&quot;) Then
-						If oSession.HasUnoProperty(_ControlModel, &quot;State&quot;) Then vGet = ( _ControlModel.State = 1 )
+						If oSession.HasUnoProperty(_ControlModel, &quot;State&quot;) And _ControlMOdel.Toggle Then vGet = ( _ControlModel.State = 1 )
 					End If
 				Case CTLCHECKBOX	&apos;0 = Not checked, 1 = Checked, 2 = Don&apos;t know
 					If oSession.HasUnoProperty(_ControlModel, &quot;State&quot;) Then vGet = _ControlModel.State Else vGet = 2
@@ -2092,8 +2117,12 @@ Private Function _PropertySet(Optional ByVal psProperty As String _
 Dim bSet As Boolean							&apos;	Return value
 Static oSession As Object					&apos;	Alias of SF_Session
 Dim vSet As Variant							&apos;	Value to set in UNO model or view property
+Dim vBorders As Variant						&apos;	Array of allowed Border vaues
 Dim vFormats As Variant						&apos;	Format property: output of _FormatsList()
 Dim iFormat As Integer						&apos;	Format property: index in vFormats
+Dim oNumberFormats As Object				&apos;	com.sun.star.util.XNumberFormats
+Dim lFormatKey As Long						&apos;	Format index for formatted fields
+Dim oLocale As Object						&apos;	com.sun.star.lang.Locale
 Dim vSelection As Variant					&apos;	Alias of Model.SelectedItems
 Dim vList As Variant						&apos;	Alias of Model.StringItemList
 Dim lIndex As Long							&apos;	Index in StringItemList
@@ -2113,6 +2142,21 @@ Const cstSubArgs = &quot;Value&quot;
 	If IsNull(oSession) Then Set oSession = ScriptForge.SF_Services.CreateScriptService(&quot;Session&quot;)
 	bSet = True
 	Select Case UCase(psProperty)
+		Case UCase(&quot;Border&quot;)
+			Select Case _ControlType
+				Case CTLCHECKBOX, CTLCOMBOBOX, CTLCURRENCYFIELD, CTLDATEFIELD, CTLFILECONTROL, CTLFIXEDTEXT, CTLFORMATTEDFIELD _
+						, CTLHYPERLINK, CTLIMAGECONTROL, CTLLISTBOX, CTLNUMERICFIELD, CTLPATTERNFIELD, CTLPROGRESSBAR _
+						, CTLRADIOBUTTON, CTLSCROLLBAR , CTLTABLECONTROL, CTLTEXTFIELD, CTLTIMEFIELD, CTLTREECONTROL
+					vBorders = Array(&quot;NONE&quot;, &quot;3D&quot;, &quot;FLAT&quot;)
+					If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Border&quot;, V_STRING, vBorders) Then GoTo Finally
+					vSet = ScriptForge.SF_Array.IndexOf(vBorders, pvValue)
+					If oSession.HasUNOProperty(_ControlModel, &quot;Border&quot;) Then
+						_ControlModel.Border = vSet
+					ElseIf oSession.HasUNOProperty(_ControlModel, &quot;VisualEffect&quot;) Then	&apos;	Checkbox case
+						_ControlModel.VisualEffect = vSet
+					End If
+				Case Else	:	GoTo CatchType
+			End Select
 		Case UCase(&quot;Cancel&quot;)
 			Select Case _ControlType
 				Case CTLBUTTON
@@ -2160,13 +2204,27 @@ Const cstSubArgs = &quot;Value&quot;
 		Case UCase(&quot;Format&quot;)
 			Select Case _ControlType
 				Case CTLDATEFIELD, CTLTIMEFIELD
-					vFormats = _FormatsList()
+					vFormats = SF_DialogUtils._FormatsList(_ControlType)
 					If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Format&quot;, V_STRING, vFormats) Then GoTo Finally
 					iFormat = ScriptForge.SF_Array.IndexOf(vFormats, pvValue, CaseSensitive := False)
 					If oSession.HasUNOProperty(_ControlModel, &quot;DateFormat&quot;) Then
 						_ControlModel.DateFormat = iFormat
 					ElseIf oSession.HasUNOProperty(_ControlModel, &quot;TimeFormat&quot;) Then
 						_ControlModel.TimeFormat = iFormat
+					End If
+				Case CTLFORMATTEDFIELD		&apos;	The format may exist already or not yet
+					If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Format&quot;, V_STRING) Then GoTo Finally
+					If oSession.HasUNOProperty(_ControlModel, &quot;FormatsSupplier&quot;) Then
+						If Not IsNull(_ControlModel.FormatsSupplier) Then
+							Set oLocale = ScriptForge.SF_Utils._GetUnoService(&quot;FormatLocale&quot;)
+							Set oNumberFormats = _ControlModel.FormatsSupplier.getNumberFormats()
+							lFormatKey = oNumberFormats.queryKey(pvValue, oLocale, True)
+							If lFormatKey &lt; 0 Then		&apos;	Format not found
+								_ControlModel.FormatKey = oNumberFormats.addNew(pvValue, oLocale)
+							Else
+								_ControlModel.FormatKey = lFormatKey
+							End If
+						End If
 					End If
 				Case Else	:	GoTo CatchType
 			End Select
@@ -2296,6 +2354,18 @@ Const cstSubArgs = &quot;Value&quot;
 					If oSession.HasUnoProperty(_ControlModel, &quot;StringItemList&quot;) Then _ControlModel.StringItemList = pvValue
 				Case Else	:	GoTo CatchType
 			End Select
+		Case UCase(&quot;TabIndex&quot;)
+			Select Case _ControlType
+				Case CTLBUTTON, CTLCHECKBOX, CTLCOMBOBOX, CTLCURRENCYFIELD, CTLDATEFIELD, CTLFILECONTROL, CTLFIXEDTEXT _
+						, CTLFORMATTEDFIELD, CTLHYPERLINK, CTLIMAGECONTROL, CTLLISTBOX, CTLNUMERICFIELD, CTLPATTERNFIELD _
+						, CTLRADIOBUTTON, CTLSCROLLBAR, CTLTABLECONTROL, CTLTEXTFIELD, CTLTIMEFIELD, CTLTREECONTROL
+					If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;TabIndex&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+					If oSession.HasUnoProperty(_ControlModel, &quot;TabIndex&quot;) Then
+						_ControlModel.TabStop = ( pvValue  &gt; 0 )
+						_ControlModel.TabIndex = Iif(pvValue &gt; 0, pvValue, -1)
+					End If
+				Case Else	:	GoTo CatchType
+			End Select
 		Case UCase(&quot;TipText&quot;)
 			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;TipText&quot;, V_STRING) Then GoTo Finally
 			If oSession.HasUnoProperty(_ControlModel, &quot;HelpText&quot;) Then _ControlModel.HelpText = pvValue
@@ -2318,7 +2388,7 @@ Const cstSubArgs = &quot;Value&quot;
 				Case CTLBUTTON		&apos;Boolean, toggle buttons only
 					If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Value&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
 					If oSession.HasUnoProperty(_ControlModel, &quot;Toggle&quot;) And oSession.HasUnoProperty(_ControlModel, &quot;State&quot;) Then
-						_ControlModel.State = Iif(pvValue, 1, 0)
+						If _ControlModel.Toggle Then _ControlModel.State = Iif(pvValue, 1, 0) Else _ControlModel.State = 2
 					End If
 				Case CTLCHECKBOX	&apos;0 = Not checked, 1 = Checked, 2 = Don&apos;t know
 					If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Value&quot;, Array(ScriptForge.V_BOOLEAN, ScriptForge.V_NUMERIC), Array(0, 1, 2, True, False)) Then GoTo Finally

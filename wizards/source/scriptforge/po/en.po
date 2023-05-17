@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.libreoffice.org/enter_bug.cgi?product=LibreOffice&bug_status=UNCONFIRMED&component=UI\n"
-"POT-Creation-Date: 2023-01-22 15:34:36\n"
+"POT-Creation-Date: 2023-05-15 16:22:55\n"
 "PO-Revision-Date: YYYY-MM-DD HH:MM:SS\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -941,6 +941,19 @@ msgid  ""
 " %1 : « %2 »\n"
 " %3 : « %4 »\n"
 " %5 : « %6 »"
+msgstr ""
+
+#. SF_Dialog CreateControl
+#. %1: An identifier
+#. %2: A string
+#. %3: A dialog name
+#, kde-format
+msgctxt "DUPLICATECONTROL"
+msgid  ""
+"A control with the same name exists already in the dialog '%3'.\n"
+"\n"
+"« %1 » = %2\n"
+""
 msgstr ""
 
 #. SF_Database when running update SQL statement
