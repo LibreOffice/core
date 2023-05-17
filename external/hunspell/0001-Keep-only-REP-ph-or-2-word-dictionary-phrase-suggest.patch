@@ -1,0 +1,149 @@
+From b88f9ea57bdb9b219f3c1d2c67f4f882f1f23194 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?L=C3=A1szl=C3=B3=20N=C3=A9meth?= <nemeth@numbertext.org>
+Date: Sun, 14 May 2023 22:15:15 +0200
+Subject: [PATCH] Keep only REP, ph: or 2-word dictionary phrase suggestions
+
+These are the best suggestions, no need to search other
+ones to avoid annoying redundant and long list.
+
+For example to suggest only "a lot" to the bad form "alot",
+add the 2-word phrase "a lot" to the dic file.
+
+Or for a very typical spelling mistake, enough to specify the
+bad form with a ph: in the dictionary file to remove the other
+suggestions.
+
+Note: partial revert of commit de9fe28008eb0761c33bd83847f282602c599fda
+"fix up some warnings seen with -Wall -Wextra".
+---
+ src/hunspell/atypes.hxx     |  1 +
+ src/hunspell/suggestmgr.cxx | 31 ++++++++++++++++++++++++++-----
+ src/hunspell/suggestmgr.hxx |  2 +-
+ tests/ph.sug                |  4 ++--
+ tests/rep.sug               |  2 +-
+ 5 files changed, 31 insertions(+), 9 deletions(-)
+
+diff --git a/src/hunspell/atypes.hxx b/src/hunspell/atypes.hxx
+index 7e5a5c0..6e3ed1b 100644
+--- a/src/hunspell/atypes.hxx
++++ b/src/hunspell/atypes.hxx
+@@ -82,6 +82,7 @@ static inline void HUNSPELL_WARNING(FILE*, const char*, ...) {}
+ #define SPELL_ORIGCAP (1 << 5)
+ #define SPELL_WARN (1 << 6)
+ #define SPELL_COMPOUND_2 (1 << 7)  // permit only 2 dictionary words in the compound
++#define SPELL_BEST_SUG (1 << 8)    // limit suggestions for the best ones, i.e. ph:
+ 
+ #define MINCPDLEN 3
+ #define MAXCOMPOUND 10
+diff --git a/src/hunspell/suggestmgr.cxx b/src/hunspell/suggestmgr.cxx
+index 19a24f8..ba688aa 100644
+--- a/src/hunspell/suggestmgr.cxx
++++ b/src/hunspell/suggestmgr.cxx
+@@ -242,8 +242,11 @@ bool SuggestMgr::suggest(std::vector<std::string>& slst,
+     if ((slst.size() < maxSug) && (!cpdsuggest || (slst.size() < oldSug + maxcpdsugs))) {
+       size_t i = slst.size();
+       replchars(slst, word, cpdsuggest, info);
+-      if (slst.size() > i)
++      if (slst.size() > i) {
+         good_suggestion = true;
++        if (info & SPELL_BEST_SUG)
++          return true;
++      }
+     }
+     if (clock() > timelimit + TIMELIMIT_SUGGESTION)
+       return good_suggestion;
+@@ -365,7 +368,10 @@ bool SuggestMgr::suggest(std::vector<std::string>& slst,
+     // we always suggest them, in despite of nosplitsugs, and
+     // drop compound word and other suggestions)
+     if (!cpdsuggest || (!nosplitsugs && slst.size() < oldSug + maxcpdsugs)) {
+-      good_suggestion = twowords(slst, word, cpdsuggest, good_suggestion, info);
++      good_suggestion = twowords(slst, word, cpdsuggest, good_suggestion, info);
++
++      if (info & SPELL_BEST_SUG)
++        return true;
+     }
+     if (clock() > timelimit + TIMELIMIT_SUGGESTION)
+       return good_suggestion;
+@@ -506,15 +512,23 @@ int SuggestMgr::replchars(std::vector<std::string>& wlst,
+       candidate.assign(word, 0, r);
+       candidate.append(entry.outstrings[type]);
+       candidate.append(word, r + entry.pattern.size(), std::string::npos);
++      size_t sp = candidate.find(' ');
++      size_t oldns = wlst.size();
+       testsug(wlst, candidate, cpdsuggest, NULL, NULL, info);
++      if (oldns < wlst.size()) {
++        int patlen = entry.pattern.size();
++        int replen = entry.outstrings[type].size();
++        // REP suggestions are the best, don't search other type of suggestions
++        info |= SPELL_BEST_SUG;
++      }
++
+       // check REP suggestions with space
+-      size_t sp = candidate.find(' ');
+       if (sp != std::string::npos) {
+         size_t prev = 0;
+         while (sp != std::string::npos) {
+           std::string prev_chunk = candidate.substr(prev, sp - prev);
+           if (checkword(prev_chunk, 0, NULL, NULL)) {
+-            size_t oldns = wlst.size();
++            oldns = wlst.size();
+             std::string post_chunk = candidate.substr(sp + 1);
+             testsug(wlst, post_chunk, cpdsuggest, NULL, NULL, info);
+             if (oldns < wlst.size()) {
+@@ -854,11 +868,15 @@ bool SuggestMgr::twowords(std::vector<std::string>& wlst,
+     // alot -> a lot, alto, slot...
+     *p = ' ';
+     if (!cpdsuggest && checkword(candidate, cpdsuggest, NULL, NULL)) {
++      // best solution
++      info |= SPELL_BEST_SUG;
++
+       // remove not word pair suggestions
+       if (!good) {
+         good = true;
+         wlst.clear();
+       }
++
+       wlst.insert(wlst.begin(), candidate);
+     }
+ 
+@@ -867,6 +885,9 @@ bool SuggestMgr::twowords(std::vector<std::string>& wlst,
+       *p = '-';
+ 
+       if (!cpdsuggest && checkword(candidate, cpdsuggest, NULL, NULL)) {
++        // best solution
++        info |= SPELL_BEST_SUG;
++
+         // remove not word pair suggestions
+         if (!good) {
+           good = true;
+diff --git a/tests/ph.sug b/tests/ph.sug
+index 8daee56..ccd936e 100644
+--- a/tests/ph.sug
++++ b/tests/ph.sug
+@@ -1,11 +1,11 @@
+ a lot
+-in spite, inspire
++in spite
+ what
+ what
+ Wednesday
+ Wednesday
+ Wednesday
+ Wednesday
+-which, witch, winch, wish
++which, witch
+ Oh, my gosh!
+ OH, MY GOSH!
+diff --git a/tests/rep.sug b/tests/rep.sug
+index b48a5b8..424731c 100644
+--- a/tests/rep.sug
++++ b/tests/rep.sug
+@@ -5,4 +5,4 @@ a lot, lot
+ un alunno
+ bar
+ vinte e un
+-auto's, auto
++auto's
+-- 
+2.25.1
+
