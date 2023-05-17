@@ -35,6 +35,9 @@
  <toolbar:toolbaritem xlink:href=".uno:Redo"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ObjectCatalog"/>
+ <toolbar:toolbaritem xlink:href=".uno:WatchWindow"/>
+ <toolbar:toolbaritem xlink:href=".uno:StackWindow"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ChooseMacro"/>
  <toolbar:toolbaritem xlink:href=".uno:ModuleDialog"/>
  <toolbar:toolbarseparator/>
