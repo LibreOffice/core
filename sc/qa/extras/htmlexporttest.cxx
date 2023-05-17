@@ -50,8 +50,26 @@ public:
         assertXPath(pDoc, "/html/body/table/tr/td/img", 0);
     }
 
+    void testTdf155244()
+    {
+        loadFromURL(u"default-styles.ods");
+        save("XHTML Calc File");
+
+        xmlDocUniquePtr pXmlDoc = parseXml(maTempFile);
+        CPPUNIT_ASSERT(pXmlDoc);
+
+        assertXPath(pXmlDoc, "/xhtml:html", 1);
+        // the problem was that there were 2 CSS styles named "Default"
+        assertXPath(pXmlDoc, "/xhtml:html/xhtml:body/xhtml:table/xhtml:tr/xhtml:td", "class", "cell-Default");
+        OUString const styles = getXPathContent(pXmlDoc, "/xhtml:html/xhtml:head/xhtml:style");
+        CPPUNIT_ASSERT(styles.indexOf(".graphic-Default{ background-color:#729fcf;") != -1);
+        CPPUNIT_ASSERT(styles.indexOf(".cell-Default{ font-size:10pt; font-family:'Liberation Sans'; }") != -1);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), styles.indexOf(".Default"));
+    }
+
     CPPUNIT_TEST_SUITE(ScHTMLExportTest);
     CPPUNIT_TEST(testHtmlSkipImage);
+    CPPUNIT_TEST(testTdf155244);
     CPPUNIT_TEST_SUITE_END();
 
 };
