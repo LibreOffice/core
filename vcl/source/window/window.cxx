@@ -2416,7 +2416,11 @@ Size Window::GetSizePixel() const
     {
         VclPtr<vcl::Window> xWindow( const_cast<Window*>(this) );
         mpWindowImpl->mpFrameData->maResizeIdle.Stop();
-        mpWindowImpl->mpFrameData->maResizeIdle.Invoke( nullptr );
+        // This is a copy of the code inside the resize Idle callback
+        // __except__ that we are not calling the paint idle callback
+        // which we don't want to do here, to avoid double work.
+        if( mpWindowImpl->mbReallyVisible )
+            xWindow->ImplCallResize();
         if( xWindow->isDisposed() )
             return Size(0,0);
     }
