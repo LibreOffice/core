@@ -781,6 +781,41 @@ ScFormatEntry::Type ScDataBarFormat::GetType() const
     return Type::Databar;
 }
 
+bool ScDataBarFormat::IsEqual(const ScFormatEntry& rOther, bool /*bIgnoreSrcPos*/) const
+{
+    if (GetType() != rOther.GetType())
+        return false;
+
+    const ScDataBarFormat& r = static_cast<const ScDataBarFormat&>(rOther);
+
+    bool bEq = (mpFormatData->maAxisColor.IsRGBEqual(r.mpFormatData->maAxisColor)
+                && mpFormatData->maPositiveColor.IsRGBEqual(r.mpFormatData->maPositiveColor)
+                && mpFormatData->mxNegativeColor == r.mpFormatData->mxNegativeColor
+                && mpFormatData->meAxisPosition == r.mpFormatData->meAxisPosition
+                && mpFormatData->mbGradient == r.mpFormatData->mbGradient
+                && mpFormatData->mbOnlyBar == r.mpFormatData->mbOnlyBar);
+
+    if (mpFormatData->mpUpperLimit->GetType() == r.mpFormatData->mpUpperLimit->GetType()
+        && bEq)
+    {
+        bEq = (mpFormatData->mpUpperLimit->GetColor().IsRGBEqual(
+                   r.mpFormatData->mpUpperLimit->GetColor())
+               && mpFormatData->mpUpperLimit->GetValue()
+                      == r.mpFormatData->mpUpperLimit->GetValue());
+    }
+
+    if (mpFormatData->mpLowerLimit->GetType() == r.mpFormatData->mpLowerLimit->GetType()
+        && bEq)
+    {
+        bEq = (mpFormatData->mpLowerLimit->GetColor().IsRGBEqual(
+                   r.mpFormatData->mpLowerLimit->GetColor())
+               && mpFormatData->mpLowerLimit->GetValue()
+                      == r.mpFormatData->mpLowerLimit->GetValue());
+    }
+
+    return bEq;
+}
+
 void ScDataBarFormat::UpdateReference( sc::RefUpdateContext& rCxt )
 {
     mpFormatData->mpUpperLimit->UpdateReference(rCxt);
