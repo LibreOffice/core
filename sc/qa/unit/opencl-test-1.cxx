@@ -23,10 +23,6 @@ public:
 
     void testSystematic();
     void testSharedFormulaXLS();
-#if 0
-    void testSharedFormulaXLSGroundWater();
-    void testSharedFormulaXLSStockHistory();
-#endif
     void testFinacialFormula();
     void testStatisticalFormulaFisher();
     void testStatisticalFormulaFisherInv();
@@ -355,51 +351,6 @@ void ScOpenCLTest1::testCompilerPrecision()
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fNormal, fOpenCL, fabs(1e-14*fOpenCL));
     }
 }
-
-#if 0
-void ScOpenCLTest1::testSharedFormulaXLSStockHistory()
-{
-    initTestEnv(u"xls/stock-history.xls");
-    ScDocument* pDoc = getScDoc();
-    ScDocument* pDocRes = getScDoc2();
-    ScDocShell* pDocSh = getScDocShell();
-    pDocSh->DoHardRecalc();
-
-    // Check the results of formula cells in the shared formula range.
-    for (SCROW i = 33; i < 44; ++i)
-    {   // Cell H34:H44 in S&P 500 (tab 1)
-        double fLibre = pDoc->GetValue(ScAddress(7, i, 1));
-        double fExcel = pDocRes->GetValue(ScAddress(7, i, 1));
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, 0.0001*fExcel);
-    }
-
-    for (SCROW i = 33; i < 44; ++i)
-    {   // Cell J34:J44 in S&P 500 (tab 1)
-        double fLibre = pDoc->GetValue(ScAddress(9, i, 1));
-        double fExcel = pDocRes->GetValue(ScAddress(9, i, 1));
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, 0.0001*fExcel);
-    }
-}
-
-void ScOpenCLTest1::testSharedFormulaXLSGroundWater()
-{
-    initTestEnv(u"xls/ground-water-daily.xls");
-    ScDocument* pDoc = getScDoc();
-    ScDocument* pDocRes = getScDoc2();
-    ScDocShell* pDocSh = getScDocShell();
-    pDocSh->DoHardRecalc();
-
-    // Check the results of formula cells in the shared formula range.
-    for (SCROW i = 5; i <= 77; ++i)
-    {
-        double fLibre = pDoc->GetValue(ScAddress(11,i,1));
-        double fExcel = pDocRes->GetValue(ScAddress(11,i,1));
-        ASSERT_DOUBLES_EQUAL(fExcel, fLibre);
-    }
-
-
-}
-#endif
 
 void ScOpenCLTest1::testSystematic()
 {
