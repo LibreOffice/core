@@ -5,7 +5,7 @@
  	return CAIRO_STATUS_SUCCESS;
  
 +#if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
-+    if (unlikely (polygon->num_edges > 200000))
++    if (unlikely (polygon->num_edges > 100000))
 +	return CAIRO_STATUS_SUCCESS;
 +#endif
 +
