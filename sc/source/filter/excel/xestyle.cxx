@@ -1869,10 +1869,10 @@ void XclExpCellBorder::SaveXml( XclExpXmlStream& rStrm ) const
 }
 
 XclExpCellArea::XclExpCellArea() :
-    mnForeColorId( XclExpPalette::GetColorIdFromIndex( mnForeColor ) ),
-    mnBackColorId( XclExpPalette::GetColorIdFromIndex( mnBackColor ) ),
-    maForeColor(0),
-    maBackColor(0)
+    mnForeColorId(XclExpPalette::GetColorIdFromIndex(mnForeColor)),
+    mnBackColorId(XclExpPalette::GetColorIdFromIndex(mnBackColor)),
+    maForeColor(COL_TRANSPARENT),
+    maBackColor(COL_TRANSPARENT)
 {
 }
 
@@ -1888,6 +1888,10 @@ XclExpCellArea::XclExpCellArea(Color aForeColor, Color aBackColor)
 bool XclExpCellArea::FillFromItemSet( const SfxItemSet& rItemSet, XclExpPalette& rPalette, bool bStyle )
 {
     const SvxBrushItem& rBrushItem = rItemSet.Get( ATTR_BACKGROUND );
+
+    if (rBrushItem.getComplexColor().getType() != model::ColorType::Unused)
+        maForegroundComplexColor = rBrushItem.getComplexColor();
+
     if( rBrushItem.GetColor().IsTransparent() )
     {
         mnPattern = EXC_PATT_NONE;
@@ -1958,39 +1962,53 @@ void XclExpCellArea::SaveXml( XclExpXmlStream& rStrm ) const
 
     XclExpPalette& rPalette = rStrm.GetRoot().GetPalette();
 
-    if (mnPattern == EXC_PATT_NONE
-        || (mnForeColor == 0 && mnBackColor == 0 && maForeColor == 0 && maBackColor == 0))
+    if (mnPattern == EXC_PATT_NONE ||
+        (mnForeColor == 0 && mnBackColor == 0 && maForeColor == COL_TRANSPARENT && maBackColor == COL_TRANSPARENT))
     {
         rStyleSheet->singleElement(XML_patternFill, XML_patternType, ToPatternType(mnPattern));
     }
     else
     {
         rStyleSheet->startElement(XML_patternFill, XML_patternType, ToPatternType(mnPattern));
-        if (maForeColor != 0 || maBackColor != 0)
+
+        if (maForeColor != COL_TRANSPARENT || maBackColor != COL_TRANSPARENT)
         {
-            if (maForeColor != 0)
+            if (maForegroundComplexColor.getType() == model::ColorType::Scheme)
             {
-                rStyleSheet->singleElement(XML_fgColor, XML_rgb,
-                                           XclXmlUtils::ToOString(maForeColor));
+                rStyleSheet->singleElement(XML_fgColor, XML_theme, OString::number(sal_Int32(maForegroundComplexColor.getSchemeType())));
+            }
+            else if (maForeColor != COL_TRANSPARENT)
+            {
+                rStyleSheet->singleElement(XML_fgColor, XML_rgb, XclXmlUtils::ToOString(maForeColor));
             }
 
-            if (maBackColor != 0)
+            if (maBackgroundComplexColor.getType() == model::ColorType::Scheme)
             {
-                rStyleSheet->singleElement(XML_bgColor, XML_rgb,
-                                           XclXmlUtils::ToOString(maBackColor));
+                rStyleSheet->singleElement(XML_fgColor, XML_theme, OString::number(sal_Int32(maBackgroundComplexColor.getSchemeType())));
+            }
+            else if (maBackColor != COL_TRANSPARENT)
+            {
+                rStyleSheet->singleElement(XML_bgColor, XML_rgb, XclXmlUtils::ToOString(maBackColor));
             }
         }
         else
         {
-            if (mnForeColor != 0)
+            if (maForegroundComplexColor.getType() == model::ColorType::Scheme)
             {
-                rStyleSheet->singleElement(XML_fgColor, XML_rgb,
-                                           XclXmlUtils::ToOString(rPalette.GetColor(mnForeColor)));
+                rStyleSheet->singleElement(XML_fgColor, XML_theme, OString::number(sal_Int32(maForegroundComplexColor.getSchemeType())));
             }
-            if (mnBackColor != 0)
+            else if (mnForeColor != 0)
             {
-                rStyleSheet->singleElement(XML_bgColor, XML_rgb,
-                                           XclXmlUtils::ToOString(rPalette.GetColor(mnBackColor)));
+                rStyleSheet->singleElement(XML_fgColor, XML_rgb, XclXmlUtils::ToOString(rPalette.GetColor(mnForeColor)));
+            }
+
+            if (maBackgroundComplexColor.getType() == model::ColorType::Scheme)
+            {
+                rStyleSheet->singleElement(XML_fgColor, XML_theme, OString::number(sal_Int32(maBackgroundComplexColor.getSchemeType())));
+            }
+            else if (mnBackColor != 0)
+            {
+                rStyleSheet->singleElement(XML_bgColor, XML_rgb, XclXmlUtils::ToOString(rPalette.GetColor(mnBackColor)));
             }
         }
 
@@ -2007,6 +2025,7 @@ bool XclExpColor::FillFromItemSet( const SfxItemSet& rItemSet )
 
     const SvxBrushItem& rBrushItem = rItemSet.Get( ATTR_BACKGROUND );
     maColor = rBrushItem.GetColor();
+    maComplexColor = rBrushItem.getComplexColor();
 
     return true;
 }
@@ -2016,7 +2035,10 @@ void XclExpColor::SaveXml( XclExpXmlStream& rStrm ) const
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
     rStyleSheet->startElement(XML_fill);
     rStyleSheet->startElement(XML_patternFill);
-    rStyleSheet->singleElement(XML_bgColor, XML_rgb, XclXmlUtils::ToOString(maColor));
+    if (maComplexColor.getType() == model::ColorType::Scheme)
+        rStyleSheet->singleElement(XML_bgColor, XML_theme, OString::number(sal_Int32(maComplexColor.getSchemeType())));
+    else
+        rStyleSheet->singleElement(XML_bgColor, XML_rgb, XclXmlUtils::ToOString(maColor));
 
     rStyleSheet->endElement( XML_patternFill );
     rStyleSheet->endElement( XML_fill );
