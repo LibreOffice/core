@@ -3617,6 +3617,28 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testBIRT)
     load(DATA_DIRECTORY, "birt_min.odt");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf155324)
+{
+    createDoc("tox-update-wrong-pages.odt");
+
+    lcl_dispatchCommand(mxComponent, ".uno:UpdateAllIndexes", {});
+
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+
+    // the problem was that the first entry was on page 7, 2nd on page 9 etc.
+    assertXPath(pXmlDoc, "/root/page[1]/body/section[2]/txt[1]/Text[1]", "Portion", "Foo");
+    assertXPath(pXmlDoc, "/root/page[1]/body/section[2]/txt[1]/Text[3]", "Portion", "5");
+    assertXPath(pXmlDoc, "/root/page[1]/body/section[2]/txt[2]/Text[1]", "Portion", "bar");
+    assertXPath(pXmlDoc, "/root/page[1]/body/section[2]/txt[2]/Text[3]", "Portion", "7");
+    assertXPath(pXmlDoc, "/root/page[1]/body/section[2]/txt[3]/Text[1]", "Portion", "Three");
+    assertXPath(pXmlDoc, "/root/page[1]/body/section[2]/txt[3]/Text[3]", "Portion", "7");
+
+    // check first content page has the footnotes
+    assertXPath(pXmlDoc, "/root/page[5]/body/txt[1]/Text", "Portion", "Foo");
+    assertXPath(pXmlDoc, "/root/page[4]/ftncont", 0);
+    assertXPath(pXmlDoc, "/root/page[5]/ftncont/ftn", 5);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
