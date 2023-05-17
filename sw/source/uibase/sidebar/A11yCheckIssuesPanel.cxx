@@ -97,7 +97,7 @@ A11yCheckIssuesPanel::A11yCheckIssuesPanel(weld::Widget* pParent, SfxBindings* p
     populateIssues();
 }
 
-A11yCheckIssuesPanel::~A11yCheckIssuesPanel()
+void A11yCheckIssuesPanel::ImplDestroy()
 {
     // Restore state when this panel is no longer used
     if (!mbAutomaticCheckEnabled)
@@ -110,6 +110,8 @@ A11yCheckIssuesPanel::~A11yCheckIssuesPanel()
     }
     m_xAccessibilityCheckBox.reset();
 }
+
+A11yCheckIssuesPanel::~A11yCheckIssuesPanel() { suppress_fun_call_w_exception(ImplDestroy()); }
 
 void A11yCheckIssuesPanel::populateIssues()
 {

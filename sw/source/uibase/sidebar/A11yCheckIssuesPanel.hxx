@@ -56,6 +56,7 @@ public:
                                  boost::property_tree::ptree& /*rState*/) override{};
 
     A11yCheckIssuesPanel(weld::Widget* pParent, SfxBindings* pBindings);
+    void ImplDestroy();
     virtual ~A11yCheckIssuesPanel() override;
 
 private:
