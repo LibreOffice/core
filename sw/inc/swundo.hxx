@@ -178,6 +178,7 @@ enum class SwUndoId
     DELETE_FIELDS,                     // 146
     UPDATE_SECTIONS,                   // 147
     CHANGE_THEME = 148,
+    DELETE_SECTIONS = 149,
 };
 
 OUString GetUndoComment(SwUndoId eId);

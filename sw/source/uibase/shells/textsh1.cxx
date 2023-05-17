@@ -480,13 +480,13 @@ void DeleteSections(SfxRequest& rReq, SwWrtShell& rWrtSh)
         aSectionNamePrefix = pSectionNamePrefix->GetValue();
     }
 
-    rWrtSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::DELSECTION, nullptr);
+    rWrtSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::DELETE_SECTIONS, nullptr);
     rWrtSh.StartAction();
     comphelper::ScopeGuard g(
         [&rWrtSh]
         {
             rWrtSh.EndAction();
-            rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::DELSECTION, nullptr);
+            rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::DELETE_SECTIONS, nullptr);
         });
 
     SwDoc* pDoc = rWrtSh.GetDoc();
