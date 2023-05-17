@@ -395,11 +395,11 @@ static gboolean lo_accessible_get_platform_state(GtkAccessible* self,
     switch (state)
     {
         case GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE:
-            return nStateSet & css::accessibility::AccessibleStateType::FOCUSABLE;
+            return (nStateSet & css::accessibility::AccessibleStateType::FOCUSABLE) != 0;
         case GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED:
-            return nStateSet & css::accessibility::AccessibleStateType::FOCUSED;
+            return (nStateSet & css::accessibility::AccessibleStateType::FOCUSED) != 0;
         case GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE:
-            return nStateSet & css::accessibility::AccessibleStateType::ACTIVE;
+            return (nStateSet & css::accessibility::AccessibleStateType::ACTIVE) != 0;
     }
 
     return false;
