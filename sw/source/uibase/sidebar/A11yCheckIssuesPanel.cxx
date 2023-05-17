@@ -74,6 +74,7 @@ A11yCheckIssuesPanel::A11yCheckIssuesPanel(weld::Widget* pParent, SfxBindings* p
     , mpDoc(nullptr)
     , maA11yCheckController(FN_STAT_ACCESSIBILITY_CHECK, *pBindings, *this)
     , mnIssueCount(0)
+    , mbAutomaticCheckEnabled(false)
 {
     SwDocShell* pDocSh = dynamic_cast<SwDocShell*>(SfxObjectShell::Current());
     if (!pDocSh)
