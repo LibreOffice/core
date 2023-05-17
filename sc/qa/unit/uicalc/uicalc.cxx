@@ -1893,6 +1893,33 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf150219)
     CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 0, 1)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf153790)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    insertStringToCell("A1", u"=SUM($Sheet1.B1:C1)");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("0"), pDoc->GetString(ScAddress(0, 0, 0)));
+
+    goToCell("A1");
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    goToCell("A2");
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($Sheet1.B2:C2)"), pDoc->GetFormula(0, 1, 0));
+
+    goToCell("A1");
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    goToCell("A3");
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    // Without the fix in place, this test would have failed wiht
+    // - Expected: =SUM($Sheet1.B1:C1)
+    // - Actual  : =SUM($Sheet1.B1:$Sheet1.C1)
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($Sheet1.B1:C1)"), pDoc->GetFormula(0, 2, 0));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf141440)
 {
     createScDoc();
