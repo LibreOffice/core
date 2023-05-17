@@ -2829,6 +2829,10 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetFieldTextColor( aStyleSettings.GetWindowTextColor() );
     aStyleSettings.SetFieldRolloverTextColor( aStyleSettings.GetFieldTextColor() );
     aStyleSettings.SetListBoxWindowTextColor( aStyleSettings.GetFieldTextColor() );
+
+    aStyleSettings.SetAccentColor( ImplWinColorToSal( GetSysColor( COLOR_HIGHLIGHT ) ) );
+    // https://devblogs.microsoft.com/oldnewthing/20170405-00/?p=95905
+
     aStyleSettings.SetHighlightColor( ImplWinColorToSal( GetSysColor( COLOR_HIGHLIGHT ) ) );
     aStyleSettings.SetHighlightTextColor(aHighlightTextColor);
     aStyleSettings.SetListBoxWindowHighlightColor( aStyleSettings.GetHighlightColor() );

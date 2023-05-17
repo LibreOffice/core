@@ -336,6 +336,9 @@ public:
     void                            SetDeactiveBorderColor( const Color& rColor );
     const Color&                    GetDeactiveBorderColor() const;
 
+    void                            SetAccentColor( const Color& rColor );
+    const Color&                    GetAccentColor() const;
+
     void                            SetHighlightColor( const Color& rColor );
     const Color&                    GetHighlightColor() const;
 

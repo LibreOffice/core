@@ -1143,6 +1143,8 @@ void QtFrame::UpdateSettings(AllSettings& rSettings)
     style.SetWorkspaceColor(aMid);
 
     // Selection
+    // https://invent.kde.org/plasma/plasma-workspace/-/merge_requests/305
+    style.SetAccentColor(aHigh);
     style.SetHighlightColor(aHigh);
     style.SetHighlightTextColor(aHighText);
     style.SetListBoxWindowHighlightColor(aHigh);

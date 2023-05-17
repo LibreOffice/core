@@ -6454,7 +6454,7 @@ void ScGridWindow::UpdateCursorOverlay()
 
             if (xOverlayManager.is())
             {
-                Color aCursorColor = GetSettings().GetStyleSettings().GetHighlightColor();
+                Color aCursorColor = GetSettings().GetStyleSettings().GetAccentColor();
                 if (mrViewData.GetActivePart() != eWhich)
                     // non-active pane uses a different color.
                     aCursorColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCPAGEBREAKAUTOMATIC).nColor;

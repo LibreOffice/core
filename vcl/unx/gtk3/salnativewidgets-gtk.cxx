@@ -2420,6 +2420,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
         ::Color aHighlightColor = style_context_get_background_color(pCStyle);
         style_context_get_color(pCStyle, &text_color);
         ::Color aHighlightTextColor = getColor( text_color );
+        aStyleSet.SetAccentColor( aHighlightColor ); // https://debugpointnews.com/gnome-native-accent-colour-announcement/
         aStyleSet.SetHighlightColor( aHighlightColor );
         aStyleSet.SetHighlightTextColor( aHighlightTextColor );
         aStyleSet.SetListBoxWindowHighlightColor( aHighlightColor );

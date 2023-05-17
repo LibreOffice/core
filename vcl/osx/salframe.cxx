@@ -1384,6 +1384,10 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     vcl::Font aTooltipFont(getFont([NSFont toolTipsFontOfSize: 0], nDPIY, aAppFont));
     aStyleSettings.SetHelpFont(aTooltipFont);
 
+    Color aAccentColor( getColor( [NSColor controlAccentColor],
+                                   aStyleSettings.GetAccentColor(), mpNSWindow ) );
+    aStyleSettings.SetAccentColor( aAccentColor );
+
     Color aHighlightColor( getColor( [NSColor selectedTextBackgroundColor],
                                       aStyleSettings.GetHighlightColor(), mpNSWindow ) );
     aStyleSettings.SetHighlightColor( aHighlightColor );

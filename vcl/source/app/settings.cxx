@@ -112,6 +112,7 @@ struct ImplStyleData
     Color                           maGroupTextColor;
     Color                           maHelpColor;
     Color                           maHelpTextColor;
+    Color                           maAccentColor;
     Color                           maHighlightColor;
     Color                           maHighlightTextColor;
     Color                           maLabelTextColor;
@@ -536,6 +537,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maGroupTextColor( rData.maGroupTextColor ),
     maHelpColor( rData.maHelpColor ),
     maHelpTextColor( rData.maHelpTextColor ),
+    maAccentColor( rData.maAccentColor ),
     maHighlightColor( rData.maHighlightColor ),
     maHighlightTextColor( rData.maHighlightTextColor ),
     maLabelTextColor( rData.maLabelTextColor ),
@@ -708,6 +710,7 @@ void ImplStyleData::SetStandardStyles()
     maMenuBarHighlightTextColor = COL_WHITE;
     maMenuHighlightColor        = COL_BLUE;
     maMenuHighlightTextColor    = COL_WHITE;
+    maAccentColor               = COL_RED;
     maHighlightColor            = COL_BLUE;
     maHighlightTextColor        = COL_WHITE;
     // make active like highlight, except with a small contrast
@@ -1251,6 +1254,19 @@ const Color&
 StyleSettings::GetDeactiveBorderColor() const
 {
     return mxData->maDeactiveBorderColor;
+}
+
+void
+StyleSettings::SetAccentColor( const Color& rColor )
+{
+    CopyData();
+    mxData->maAccentColor = rColor;
+}
+
+const Color&
+StyleSettings::GetAccentColor() const
+{
+    return mxData->maAccentColor;
 }
 
 void
@@ -2539,6 +2555,7 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mxData->maMenuBarRolloverTextColor == rSet.mxData->maMenuBarRolloverTextColor) &&
          (mxData->maMenuHighlightColor      == rSet.mxData->maMenuHighlightColor)       &&
          (mxData->maMenuHighlightTextColor  == rSet.mxData->maMenuHighlightTextColor)   &&
+         (mxData->maAccentColor             == rSet.mxData->maAccentColor)              &&
          (mxData->maHighlightColor          == rSet.mxData->maHighlightColor)           &&
          (mxData->maHighlightTextColor      == rSet.mxData->maHighlightTextColor)       &&
          (mxData->maTabTextColor            == rSet.mxData->maTabTextColor)             &&

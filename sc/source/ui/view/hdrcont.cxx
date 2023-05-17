@@ -361,7 +361,7 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
             {
                 // background for selection
                 GetOutDev()->SetLineColor();
-                GetOutDev()->SetFillColor( rStyleSettings.GetHighlightColor() );
+                GetOutDev()->SetFillColor( rStyleSettings.GetAccentColor() );
                 GetOutDev()->DrawRect( aFillRect );
             }
         }
