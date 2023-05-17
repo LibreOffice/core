@@ -248,11 +248,6 @@ SwHTMLWriter& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
         {
             // Unordered list: <UL>
             sOut += OOO_STRING_SVTOOLS_HTML_unorderlist;
-            rWrt.Strm().WriteOString( sOut );
-            OutHTML_BulletImage( rWrt,
-                                    nullptr,
-                                    rNumFormat.GetBrush(),
-                                    rWrt.m_aBulletGrfs[i]);
         }
         else
         {
@@ -302,8 +297,10 @@ SwHTMLWriter& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
             }
         }
 
-        if (!sOut.isEmpty() && SVX_NUM_BITMAP != eType)  // second condition to avoid adding extra ul, already done before.
-            rWrt.Strm().WriteOString( sOut );
+        rWrt.Strm().WriteOString(sOut);
+
+        if (eType == SVX_NUM_BITMAP)
+            OutHTML_BulletImage(rWrt, nullptr, rNumFormat.GetBrush(), rWrt.m_aBulletGrfs[i]);
 
         if( rWrt.m_bCfgOutStyles )
             OutCSS1_NumberBulletListStyleOpt( rWrt, *rInfo.GetNumRule(), static_cast<sal_uInt8>(i) );
