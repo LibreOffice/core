@@ -14,6 +14,8 @@
 #include <unx/gtk/gtkframe.hxx>
 #include <gtk/gtk.h>
 
+#include "a11y.hxx"
+
 #if GTK_CHECK_VERSION(4, 9, 0)
 
 #define OOO_TYPE_FIXED (ooo_fixed_get_type())
@@ -155,8 +157,6 @@ static css::uno::Reference<css::accessibility::XAccessible> get_uno_accessible(G
 
     return pWindow->GetAccessible();
 }
-
-GType lo_accessible_get_type();
 
 #define LO_TYPE_ACCESSIBLE (lo_accessible_get_type())
 #define LO_ACCESSIBLE(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), LO_TYPE_ACCESSIBLE, LoAccessible))
