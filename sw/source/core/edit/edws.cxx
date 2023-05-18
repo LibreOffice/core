@@ -272,6 +272,10 @@ void SwEditShell::AutoCorrect( SvxAutoCorrect& rACorr, bool bInsert,
     // something - so first normalize cursor point to end of redline so that
     // point will then be moved forward when something is inserted.
     *pCursor->GetPoint() = pFrame->MapViewToModelPos(nPos);
+    // The hope is that the AutoCorrect never deletes nodes, hence never
+    // deletes SwTextFrames, hence we can pass in the SwTextFrame::GetText()
+    // result and it will be updated via the SwTextFrame::SwClientNotify()
+    // on editing operations.
     OUString const& rMergedText(pFrame->GetText());
     rACorr.DoAutoCorrect( aSwAutoCorrDoc,
                     rMergedText, sal_Int32(nPos),

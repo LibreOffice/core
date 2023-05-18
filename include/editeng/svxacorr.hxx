@@ -407,7 +407,7 @@ public:
     bool FnChgOrdinalNumber( SvxAutoCorrDoc&, const OUString&,
                                 sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang );
-    bool FnChgToEnEmDash( SvxAutoCorrDoc&, std::u16string_view,
+    bool FnChgToEnEmDash( SvxAutoCorrDoc&, const OUString&,
                                 sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang );
     bool FnAddNonBrkSpace( SvxAutoCorrDoc&, std::u16string_view,
