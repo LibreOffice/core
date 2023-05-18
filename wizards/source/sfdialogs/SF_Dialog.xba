@@ -2361,7 +2361,7 @@ Try:
 		End If
 	End With
 
-	&apos;	Store the specific propertes in the model
+	&apos;	Store the specific properties in the model
 	If UBound(ArgNames) &gt;= 0 Then oControlModel.setPropertyValues(ArgNames, ArgValues)
 
 	&apos;	Insert the new completed control model in the dialog
