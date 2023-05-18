@@ -33,21 +33,18 @@
 namespace comphelper
 {
 
-
-// SequenceInputStream
-// stream for reading data from a sequence of bytes
-
-
-class COMPHELPER_DLLPUBLIC SequenceInputStream final
+/** Base class for wrappers around memory data that want to be exposed as an XInputStream */
+class COMPHELPER_DLLPUBLIC MemoryInputStream
     : public ::cppu::WeakImplHelper< css::io::XInputStream, css::io::XSeekable >,
       public comphelper::ByteReader
 {
     std::mutex    m_aMutex;
-    css::uno::Sequence<sal_Int8> const m_aData;
+    const sal_Int8* m_pMemoryData;
+    sal_Int32       m_nMemoryDataLength;
     sal_Int32       m_nPos;
 
 public:
-    SequenceInputStream(css::uno::Sequence<sal_Int8> const & rData);
+    MemoryInputStream(const sal_Int8* pData, sal_Int32 nDataLength);
 
 // css::io::XInputStream
     virtual sal_Int32 SAL_CALL readBytes( css::uno::Sequence<sal_Int8>& aData, sal_Int32 nBytesToRead ) override;
@@ -69,6 +66,17 @@ public:
 
 private:
     sal_Int32 avail();
+};
+
+
+// Stream for reading data from a sequence of bytes
+class COMPHELPER_DLLPUBLIC SequenceInputStream final
+    : public MemoryInputStream
+{
+    css::uno::Sequence<sal_Int8> const m_aData;
+
+public:
+    SequenceInputStream(css::uno::Sequence<sal_Int8> const & rData);
 };
 
 // don't export to avoid duplicate WeakImplHelper definitions with MSVC

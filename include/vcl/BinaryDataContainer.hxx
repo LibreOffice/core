@@ -13,6 +13,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/io/XInputStream.hpp>
 #include <unotools/tempfile.hxx>
 #include <tools/stream.hxx>
 #include <vcl/dllapi.h>
@@ -52,6 +53,9 @@ public:
 
     // Returns the data as a readonly stream open for reading
     std::shared_ptr<SvStream> getAsStream();
+
+    // Returns the data as a readonly stream open for reading
+    css::uno::Reference<css::io::XInputStream> getAsXInputStream();
 
     /// writes the contents to the given stream
     std::size_t writeToStream(SvStream& rStream) const;
