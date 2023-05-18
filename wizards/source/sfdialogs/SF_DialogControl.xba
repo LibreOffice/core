@@ -2117,7 +2117,7 @@ Private Function _PropertySet(Optional ByVal psProperty As String _
 Dim bSet As Boolean							&apos;	Return value
 Static oSession As Object					&apos;	Alias of SF_Session
 Dim vSet As Variant							&apos;	Value to set in UNO model or view property
-Dim vBorders As Variant						&apos;	Array of allowed Border vaues
+Dim vBorders As Variant						&apos;	Array of allowed Border values
 Dim vFormats As Variant						&apos;	Format property: output of _FormatsList()
 Dim iFormat As Integer						&apos;	Format property: index in vFormats
 Dim oNumberFormats As Object				&apos;	com.sun.star.util.XNumberFormats
