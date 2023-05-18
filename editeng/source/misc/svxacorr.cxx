@@ -544,7 +544,7 @@ bool SvxAutoCorrect::FnChgOrdinalNumber(
 
 // Replace dashes
 bool SvxAutoCorrect::FnChgToEnEmDash(
-                                SvxAutoCorrDoc& rDoc, std::u16string_view rTxt,
+                                SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                 sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang )
 {
@@ -553,6 +553,10 @@ bool SvxAutoCorrect::FnChgToEnEmDash(
     if (eLang == LANGUAGE_SYSTEM)
         eLang = GetAppLang().getLanguageType();
     bool bAlwaysUseEmDash = (eLang == LANGUAGE_RUSSIAN || eLang == LANGUAGE_UKRAINIAN);
+
+    // rTxt may refer to the frame text that will change in the calls to rDoc.Delete / rDoc.Insert;
+    // keep a local copy for later use
+    OUString aOrigTxt = rTxt;
 
     // replace " - " or " --" with "enDash"
     if( 1 < nSttPos && 1 <= nEndPos - nSttPos )
@@ -630,14 +634,14 @@ bool SvxAutoCorrect::FnChgToEnEmDash(
     bool bEnDash = (eLang == LANGUAGE_HUNGARIAN || eLang == LANGUAGE_FINNISH);
     if( 4 <= nEndPos - nSttPos )
     {
-        OUString sTmp( rTxt.substr( nSttPos, nEndPos - nSttPos ) );
+        OUString sTmp( aOrigTxt.subView( nSttPos, nEndPos - nSttPos ) );
         sal_Int32 nFndPos = sTmp.indexOf("--");
         if( nFndPos != -1 && nFndPos &&
             nFndPos + 2 < sTmp.getLength() &&
             ( rCC.isLetterNumeric( sTmp, nFndPos - 1 ) ||
-              lcl_IsInAsciiArr( sImplEndSkipChars, rTxt[ nFndPos - 1 ] )) &&
+              lcl_IsInAsciiArr( sImplEndSkipChars, aOrigTxt[ nFndPos - 1 ] )) &&
             ( rCC.isLetterNumeric( sTmp, nFndPos + 2 ) ||
-            lcl_IsInAsciiArr( sImplSttSkipChars, rTxt[ nFndPos + 2 ] )))
+            lcl_IsInAsciiArr( sImplSttSkipChars, aOrigTxt[ nFndPos + 2 ] )))
         {
             nSttPos = nSttPos + nFndPos;
             rDoc.Delete( nSttPos, nSttPos + 2 );
