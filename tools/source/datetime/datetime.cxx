@@ -101,19 +101,20 @@ DateTime& DateTime::operator +=( const tools::Time& rTime )
     sal_uInt16 nHours = aTime.GetHour();
     if ( aTime.GetTime() > 0 )
     {
-        while ( nHours >= 24 )
+        if (nHours >= 24)
         {
-            Date::operator++();
-            nHours -= 24;
+            AddDays( nHours / 24 );
+            nHours %= 24;
+            aTime.SetHour( nHours );
         }
-        aTime.SetHour( nHours );
     }
     else if ( aTime.GetTime() != 0 )
     {
-        while ( nHours >= 24 )
+        if (nHours >= 24)
         {
-            Date::operator--();
-            nHours -= 24;
+            AddDays( -static_cast<sal_Int32>(nHours) / 24 );
+            nHours %= 24;
+            aTime.SetHour( nHours );
         }
         Date::operator--();
         aTime = Time( 24, 0, 0 )+aTime;
@@ -130,19 +131,20 @@ DateTime& DateTime::operator -=( const tools::Time& rTime )
     sal_uInt16 nHours = aTime.GetHour();
     if ( aTime.GetTime() > 0 )
     {
-        while ( nHours >= 24 )
+        if (nHours >= 24)
         {
-            Date::operator++();
-            nHours -= 24;
+            AddDays( nHours / 24 );
+            nHours %= 24;
+            aTime.SetHour( nHours );
         }
-        aTime.SetHour( nHours );
     }
     else if ( aTime.GetTime() != 0 )
     {
-        while ( nHours >= 24 )
+        if (nHours >= 24)
         {
-            Date::operator--();
-            nHours -= 24;
+            AddDays( -static_cast<sal_Int32>(nHours) / 24 );
+            nHours %= 24;
+            aTime.SetHour( nHours );
         }
         Date::operator--();
         aTime = Time( 24, 0, 0 )+aTime;
