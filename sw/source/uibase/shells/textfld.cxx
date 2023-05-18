@@ -1252,7 +1252,7 @@ FIELD_INSERT:
                 aMgr.InsertField(aData);
                 if (pDlg->GetIncludePageTotal())
                 {
-                    rDoc->getIDocumentContentOperations().InsertString(*rSh.GetCursor(), " - ");
+                    rDoc->getIDocumentContentOperations().InsertString(*rSh.GetCursor(), " / ");
                     SwInsertField_Data aPageTotalData(SwFieldTypesEnum::DocumentStatistics, DS_PAGE,
                                                       OUString(), OUString(), SVX_NUM_PAGEDESC);
                     aMgr.InsertField(aPageTotalData);
@@ -1306,7 +1306,7 @@ FIELD_INSERT:
                     aEvenMgr.InsertField(aData);
                     if (pDlg->GetIncludePageTotal())
                     {
-                        rDoc->getIDocumentContentOperations().InsertString(*rSh.GetCursor(), " - ");
+                        rDoc->getIDocumentContentOperations().InsertString(*rSh.GetCursor(), " / ");
                         SwInsertField_Data aPageTotalData(SwFieldTypesEnum::DocumentStatistics,
                                                           DS_PAGE, OUString(), OUString(),
                                                           SVX_NUM_PAGEDESC);
