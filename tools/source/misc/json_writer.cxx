@@ -225,6 +225,26 @@ void JsonWriter::writeEscapedOUString(const OUString& rPropVal)
     validate();
 }
 
+void JsonWriter::put(std::u16string_view pPropName, const OUString& rPropVal)
+{
+    auto nPropNameLength = pPropName.length();
+    // But values can be any UTF-8,
+    // if the string only contains of 0x2028, it will be expanded 6 times (see writeEscapedSequence)
+    auto nWorstCasePropValLength = rPropVal.getLength() * 6;
+    ensureSpace(nPropNameLength + nWorstCasePropValLength + 8);
+
+    addCommaBeforeField();
+
+    writeEscapedOUString(OUString(pPropName));
+
+    memcpy(mPos, ": ", 2);
+    mPos += 2;
+
+    writeEscapedOUString(rPropVal);
+
+    validate();
+}
+
 void JsonWriter::put(std::string_view pPropName, const OUString& rPropVal)
 {
     // Values can be any UTF-8,

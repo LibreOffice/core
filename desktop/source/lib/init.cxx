@@ -410,7 +410,7 @@ std::vector<beans::PropertyValue> desktop::jsonToPropertyValuesVector(const char
     return aArguments;
 }
 
-static bool extractLinks(const uno::Reference< container::XNameAccess >& xLinks, bool subcontent, OUStringBuffer& jsonText)
+static void extractLinks(const uno::Reference< container::XNameAccess >& xLinks, bool subcontent, tools::JsonWriter& aJson)
 {
     const uno::Sequence< OUString > aNames( xLinks->getElementNames() );
 
@@ -451,47 +451,27 @@ static bool extractLinks(const uno::Reference< container::XNameAccess >& xLinks,
 
                 if (subcontent)
                 {
-                    jsonText.append("\"");
-                    jsonText.append(aStrDisplayname);
-                    jsonText.append("\": \"");
-                    jsonText.append(aLink);
-                    jsonText.append("\"");
-                    if (i < nLinks-1)
-                    {
-                        jsonText.append(", ");
-                    }
+                    aJson.put(aStrDisplayname, aLink);
                 }
                 else
                 {
                     uno::Reference< lang::XServiceInfo > xSI( xTarget, uno::UNO_QUERY );
                     bIsTarget = xSI->supportsService( aProp_LinkTarget );
-                    if (i != 0)
-                    {
-                        if (!bIsTarget)
-                            jsonText.append("}");
-                        if (i < nLinks)
-                        {
-                            jsonText.append(", ");
-                        }
-                    }
-                    jsonText.append("\"");
-                    jsonText.append(aStrDisplayname);
-                    jsonText.append("\": ");
 
                     if (bIsTarget)
                     {
-                        jsonText.append("\"");
-                        jsonText.append(aLink);
-                        jsonText.append("\"");
+                        aJson.put(aStrDisplayname, aLink);
                         continue;
                     }
-                    jsonText.append("{");
-                }
+                    else
+                    {
+                        std::unique_ptr<char[], o3tl::free_delete> pName(convertOUString(aStrDisplayname));
+                        auto aNode = aJson.startNode(pName.get());
 
-                uno::Reference< document::XLinkTargetSupplier > xLTS( xTarget, uno::UNO_QUERY );
-                if( xLTS.is() )
-                {
-                    extractLinks(xLTS->getLinks(), true, jsonText);
+                        uno::Reference< document::XLinkTargetSupplier > xLTS( xTarget, uno::UNO_QUERY );
+                        if( xLTS.is() )
+                            extractLinks(xLTS->getLinks(), true, aJson);
+                    }
                 }
             }
             catch(...)
@@ -500,7 +480,6 @@ static bool extractLinks(const uno::Reference< container::XNameAccess >& xLinks,
             }
         }
     }
-    return bIsTarget;
 }
 
 static void unoAnyToJson(tools::JsonWriter& rJson, std::string_view pNodeName, const uno::Any& anyItem)
@@ -3145,14 +3124,12 @@ static char* lo_extractRequest(LibreOfficeKit* /*pThis*/, const char* pFilePath)
 
                 if( xLTS.is() )
                 {
-                    OUStringBuffer jsonText("{ \"Targets\": { ");
-                    bool lastParentheses = extractLinks(xLTS->getLinks(), false, jsonText);
-                    jsonText.append("} }");
-                    if (!lastParentheses)
-                        jsonText.append(" }");
-
-                    OUString res(jsonText.makeStringAndClear());
-                    return convertOUString(res);
+                    tools::JsonWriter aJson;
+                    {
+                        auto aNode = aJson.startNode("Targets");
+                        extractLinks(xLTS->getLinks(), false, aJson);
+                    }
+                    return strdup(aJson.finishAndGetAsOString().getStr());
                 }
                 xComp->dispose();
             }

@@ -52,6 +52,8 @@ public:
     [[nodiscard]] ScopedJsonWriterArray startArray(std::string_view);
     [[nodiscard]] ScopedJsonWriterStruct startStruct();
 
+    void put(std::u16string_view pPropName, const OUString& rPropValue);
+
     void put(std::string_view pPropName, const OUString& rPropValue);
     // Assumes utf-8 property value encoding
     void put(std::string_view pPropName, std::string_view rPropValue);
