@@ -535,7 +535,7 @@ void impBufferDevice::paint(double fTrans)
             // use Former for now.
             //
             // To easily allow to change this (maybe system-dependent) I add a static switch here,
-            // also for evetually experimenting (hint: can be changed in the debugger).
+            // also for eventually experimenting (hint: can be changed in the debugger).
             static bool bUseNew(false);
 
             if (bUseNew)
