@@ -1203,7 +1203,8 @@ uno::Reference< excel::XRange > lclCreateVbaRange(
         const ListOfScRange& rList )
 {
     ScDocShell* pDocShell = excel::getDocShell( rxModel );
-    if( !pDocShell ) throw uno::RuntimeException();
+    if( !pDocShell )
+        throw uno::RuntimeException();
 
     ScRangeList aCellRanges;
     for( const auto& rItem : rList )
@@ -1345,8 +1346,11 @@ ScVbaApplication::Volatile( const uno::Any& aVolatile )
     if ( pMeth )
     {
         uno::Reference< frame::XModel > xModel( getCurrentDocument() );
-        ScDocument& rDoc = excel::getDocShell( xModel )->GetDocument();
-        rDoc.GetMacroManager()->SetUserFuncVolatile( pMeth->GetName(), bVolatile);
+        if ( ScDocShell* pShell = excel::getDocShell( xModel ))
+        {
+            ScDocument& rDoc = pShell->GetDocument();
+            rDoc.GetMacroManager()->SetUserFuncVolatile( pMeth->GetName(), bVolatile);
+        }
     }
 
 // this is bound to break when loading the document
@@ -1446,7 +1450,10 @@ void SAL_CALL ScVbaApplication::setScreenUpdating(sal_Bool bUpdate)
     VbaApplicationBase::setScreenUpdating( bUpdate );
 
     uno::Reference< frame::XModel > xModel( getCurrentExcelDoc( mxContext ), uno::UNO_SET_THROW );
+
     ScDocShell* pDocShell = excel::getDocShell( xModel );
+    if (!pDocShell)
+        return;
     ScDocument& rDoc = pDocShell->GetDocument();
 
     if( bUpdate )
