@@ -1011,6 +1011,9 @@ void SvxStyleBox_Base::Select(bool bNonTravelSelect)
 
     //Do we need to create a new style?
     SfxObjectShell *pShell = SfxObjectShell::Current();
+    if (!pShell)
+        return;
+
     SfxStyleSheetBasePool* pPool = pShell->GetStyleSheetPool();
     SfxStyleSheetBase* pStyle = nullptr;
 
@@ -1321,11 +1324,13 @@ static bool SetFontSize(vcl::RenderContext& rRenderContext, const SfxItemSet& rS
     if (GetWhich(rSet, nSlot, nWhich))
     {
         const auto& rFontHeightItem = static_cast<const SvxFontHeightItem&>(rSet.Get(nWhich));
-        SfxObjectShell *pShell = SfxObjectShell::Current();
-        Size aFontSize(0, rFontHeightItem.GetHeight());
-        Size aPixelSize(rRenderContext.LogicToPixel(aFontSize, MapMode(pShell->GetMapUnit())));
-        rFont.SetFontSize(aPixelSize);
-        return true;
+        if (SfxObjectShell *pShell = SfxObjectShell::Current())
+        {
+            Size aFontSize(0, rFontHeightItem.GetHeight());
+            Size aPixelSize(rRenderContext.LogicToPixel(aFontSize, MapMode(pShell->GetMapUnit())));
+            rFont.SetFontSize(aPixelSize);
+            return true;
+        }
     }
     return false;
 }
