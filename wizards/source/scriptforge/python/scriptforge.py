@@ -1912,6 +1912,11 @@ class SFDialogs:
         def CreateGroupBox(self, controlname, place):
             return self.ExecMethod(self.vbMethod, 'CreateGroupBox', controlname, place)
 
+        def CreateHyperlink(self, controlname, place, border = 'NONE', multiline = False, align = 'LEFT',
+                            verticalalign = 'TOP'):
+            return self.ExecMethod(self.vbMethod, 'CreateHyperlink', controlname, place, border, multiline, align,
+                                   verticalalign)
+
         def CreateImageControl(self, controlname, place, border = '3D', scale = 'FITTOSIZE'):
             return self.ExecMethod(self.vbMethod, 'CreateImageControl', controlname, place, border, scale)
 

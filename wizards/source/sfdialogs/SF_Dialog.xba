@@ -1142,6 +1142,70 @@ Catch:
 End Function	&apos;	SFDialogs.SF_Dialog.CreateGroupBox
 
 REM -----------------------------------------------------------------------------
+Public Function CreateHyperlink(Optional ByVal ControlName As Variant _
+								, Optional ByRef Place As Variant _
+								, Optional ByVal Border As Variant _
+								, Optional ByVal MultiLine As Variant _
+								, Optional ByVal Align As Variant _
+								, Optional ByVal VerticalAlign As Variant _
+								) As Object
+&apos;&apos;&apos;	Create a new control of type Hyperlink in the actual dialog.
+&apos;&apos;&apos;	Specific args:
+&apos;&apos;&apos;		Border: &quot;NONE&quot; (default) or &quot;FLAT&quot; or &quot;3D&quot;
+&apos;&apos;&apos;		MultiLine: When True (default = False), the caption may be displayed on more than one line
+&apos;&apos;&apos;		Align: horizontal alignment, &quot;LEFT&quot; (default) or &quot;CENTER&quot; or &quot;RIGHT&quot;
+&apos;&apos;&apos;		VerticalAlign: vertical alignment, &quot;TOP&quot; (default) or &quot;MIDDLE&quot; or &quot;BOTTOM&quot;
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Set myHyperlink = dialog.CreateHyperlink(&quot;Hyperlink1&quot;, Array(20, 20, 60, 15), MultiLine := True)
+
+Dim oControl As Object			&apos;	Return value
+Dim iBorder As Integer			&apos;	Alias of border
+Dim iAlign As Integer			&apos;	Alias of Align
+Dim iVerticalAlign As Integer	&apos;	Alias of VerticalAlign
+Dim vPropNames As Variant		&apos;	Array of names of specific arguments
+Dim vPropValues As Variant		&apos;	Array of values of specific arguments
+Const cstThisSub = &quot;SFDialogs.Dialog.CreateHyperlink&quot;
+Const cstSubArgs = &quot;ControlName, Place, [MultiLine=False], [Border=&quot;&quot;NONE&quot;&quot;|&quot;&quot;FLAT&quot;&quot;|&quot;&quot;3D&quot;&quot;]&quot; _
+						&amp; &quot;, [Align=&quot;&quot;LEFT&quot;&quot;|&quot;&quot;CENTER&quot;&quot;|&quot;&quot;RIGHT&quot;&quot;], [VerticalAlign=&quot;&quot;TOP&quot;&quot;|&quot;&quot;MIDDLE&quot;&quot;|&quot;&quot;BOTTOM&quot;&quot;]&quot;
+
+Check:
+	Set oControl = Nothing
+	If Not _CheckNewControl(cstThisSub, cstSubArgs, ControlName, Place) Then GoTo Finally
+
+	If IsMissing(Border) Or IsEmpty(Border) Then Border = &quot;NONE&quot;
+	If IsMissing(MultiLine) Or IsEmpty(MultiLine) Then MultiLine = False
+	If IsMissing(Align) Or IsEmpty(Align) Then Align = &quot;LEFT&quot;
+	If IsMissing(VerticalAlign) Or IsEmpty(VerticalAlign) Then VerticalAlign = &quot;TOP&quot;
+
+	If Not ScriptForge.SF_Utils._Validate(Border, &quot;Border&quot;, V_STRING, Array(&quot;3D&quot;, &quot;FLAT&quot;, &quot;NONE&quot;)) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(MultiLine, &quot;MultiLine&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(Align, &quot;Align&quot;, V_STRING, Array(&quot;LEFT&quot;, &quot;CENTER&quot;, &quot;RIGHT&quot;)) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(VerticalAlign, &quot;VerticalAlign&quot;, V_STRING, Array(&quot;TOP&quot;, &quot;MIDDLE&quot;, &quot;BOTTOM&quot;)) Then GoTo Finally
+
+Try:
+	&apos;	Manage specific properties
+	iBorder = ScriptForge.SF_Array.IndexOf(Array(&quot;NONE&quot;, &quot;3D&quot;, &quot;FLAT&quot;), Border)
+	iAlign = ScriptForge.SF_Array.IndexOf(Array(&quot;LEFT&quot;, &quot;CENTER&quot;, &quot;BOTTOM&quot;), Align)
+	Select Case UCase(VerticalAlign)
+		Case &quot;TOP&quot;		:	iVerticalAlign = com.sun.star.style.VerticalAlignment.TOP
+		Case &quot;MIDDLE&quot;	:	iVerticalAlign = com.sun.star.style.VerticalAlignment.MIDDLE
+		Case &quot;BOTTOM&quot;	:	iVerticalAlign = com.sun.star.style.VerticalAlignment.BOTTOM
+	End Select
+	vPropNames = Array(&quot;Border&quot;, &quot;MultiLine&quot;, &quot;Align&quot;, &quot;VerticalAlign&quot;)
+	vPropValues = Array(iBorder, CBool(MultiLine), iAlign, iVerticalAlign)
+
+	&apos;	Create the control
+	Set oControl = _CreateNewControl(&quot;UnoControlFixedHyperlinkModel&quot;, ControlName, Place, vPropNames, vPropValues)
+
+Finally:
+	Set CreateHyperlink = oControl
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+End Function	&apos;	SFDialogs.SF_Dialog.CreateHyperlink
+
+REM -----------------------------------------------------------------------------
 Public Function CreateImageControl(Optional ByVal ControlName As Variant _
 								, Optional ByRef Place As Variant _
 								, Optional ByVal Border As Variant _
@@ -1528,8 +1592,8 @@ Public Function CreateTableControl(Optional ByVal ControlName As Variant _
 &apos;&apos;&apos;	To fill the table with data, use the SetTableData() method
 &apos;&apos;&apos;	Specific args:
 &apos;&apos;&apos;		Border: &quot;3D&quot; (default) or &quot;FLAT&quot; or &quot;NONE&quot;
-&apos;&apos;&apos;		RowHeaders: when True (default), the row Headers are shown
-&apos;&apos;&apos;		ColumnHeaders: when True (default), the column Headers are shown
+&apos;&apos;&apos;		RowHeaders: when True (default), the row headers are shown
+&apos;&apos;&apos;		ColumnHeaders: when True (default), the column headers are shown
 &apos;&apos;&apos;		ScrollBars: H[orizontal] or V[ertical] or B[oth] or N[one] (default)
 &apos;&apos;&apos;			Note that scrollbars always appear dynamically when they are needed
 &apos;&apos;&apos;		GridLines: when True (default = False) horizontal and vertical lines are painted between the grid cells
@@ -1989,6 +2053,7 @@ Public Function Methods() As Variant
 					, &quot;CreateFixedText&quot; _
 					, &quot;CreateFormattedField&quot; _
 					, &quot;CreateGroupBox&quot; _
+					, &quot;CreateHyperlink&quot; _
 					, &quot;CreateImageControl&quot; _
 					, &quot;CreateListBox&quot; _
 					, &quot;CreateNumericField&quot; _
