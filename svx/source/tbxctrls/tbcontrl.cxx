@@ -3879,6 +3879,7 @@ SvxCurrencyToolBoxControl::~SvxCurrencyToolBoxControl() {}
 
 namespace
 {
+    /** Implementation of the currency combo widget **/
     class SvxCurrencyList_Impl : public WeldToolbarPopup
     {
     private:
