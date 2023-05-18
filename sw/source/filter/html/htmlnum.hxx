@@ -38,8 +38,8 @@ class SwHTMLNumRuleInfo
     sal_uInt16      m_aNumStarts[MAXLEVEL];
     SwNumRule   *   m_pNumRule;       // current numbering
     sal_uInt16      m_nDeep;          // current numbering depth (1, 2, 3, ...)
-    bool        m_bRestart : 1;   // Export: restart numbering
-    bool        m_bNumbered : 1;  // Export: paragraph is numbered
+    bool        m_bRestart;   // Export: restart numbering
+    bool        m_bNumbered;  // Export: paragraph is numbered
 
 public:
 
@@ -75,7 +75,7 @@ public:
     void DecDepth() { if (m_nDeep!=0) --m_nDeep; }
     inline sal_uInt8 GetLevel() const;
 
-    bool IsRestart() const { return m_bRestart; }
+    bool IsRestart(const SwHTMLNumRuleInfo& rPrev) const;
 
     bool IsNumbered() const { return m_bNumbered; }
 

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <text:list>
+    <text:list-item>
+     <text:p>l1</text:p>
+     <text:p>l1_ctd1</text:p>
+     <text:list>
+      <text:list-item>
+       <text:p>l2</text:p>
+      </text:list-item>
+      <text:list-item>
+       <text:p>l2</text:p>
+      </text:list-item>
+     </text:list>
+     <text:p>l1_ctd2</text:p>
+     <text:list>
+      <text:list-item>
+       <text:list>
+        <text:list-item>
+         <text:p>l3</text:p>
+        </text:list-item>
+       </text:list>
+      </text:list-item>
+     </text:list>
+     <text:p>l1_ctd3</text:p>
+    </text:list-item>
+   </text:list>
+  </office:text>
+ </office:body>
+</office:document>
