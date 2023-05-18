@@ -1036,9 +1036,8 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
         if( aLRItem.GetLeft() > 0 && rHTMLWrt.m_nDefListMargin > 0 &&
             ( !rHTMLWrt.GetNumInfo().GetNumRule() ||
               ( rHTMLWrt.GetNextNumInfo() &&
-                (rHTMLWrt.GetNextNumInfo()->IsRestart() ||
-                 rHTMLWrt.GetNumInfo().GetNumRule() !=
-                    rHTMLWrt.GetNextNumInfo()->GetNumRule()) ) ) )
+                (rHTMLWrt.GetNumInfo().GetNumRule() != rHTMLWrt.GetNextNumInfo()->GetNumRule() ||
+                 rHTMLWrt.GetNextNumInfo()->IsRestart(rHTMLWrt.GetNumInfo())) ) ) )
         {
             // If the paragraph before the table is not numbered or the
             // paragraph after the table starts with a new numbering or with
@@ -1186,9 +1185,8 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
     rHTMLWrt.m_bOutTable = false;
 
     if( rHTMLWrt.GetNextNumInfo() &&
-        !rHTMLWrt.GetNextNumInfo()->IsRestart() &&
-        rHTMLWrt.GetNextNumInfo()->GetNumRule() ==
-            rHTMLWrt.GetNumInfo().GetNumRule() )
+        rHTMLWrt.GetNextNumInfo()->GetNumRule() == rHTMLWrt.GetNumInfo().GetNumRule() &&
+        !rHTMLWrt.GetNextNumInfo()->IsRestart(rHTMLWrt.GetNumInfo()) )
     {
         // If the paragraph after the table is numbered with the same rule as the
         // one before, then the NumInfo of the next paragraph holds the level of

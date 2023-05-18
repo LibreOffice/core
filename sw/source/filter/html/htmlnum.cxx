@@ -44,4 +44,50 @@ void SwHTMLNumRuleInfo::Set(const SwTextNode& rTextNd)
     }
 }
 
+// Restart flag is only effective when this level is not below the previous
+bool SwHTMLNumRuleInfo::IsRestart(const SwHTMLNumRuleInfo& rPrev) const
+{
+    // calling this, when the rules are different, makes no sense
+    assert(rPrev.GetNumRule() == GetNumRule());
+
+    // An example ODF when the restart flag is set, but has no effect:
+    //   <text:list text:style-name="L1">
+    //    <text:list-item>
+    //     <text:p>l1</text:p>
+    //     <text:list>
+    //      <text:list-item>
+    //       <text:p>l2</text:p>
+    //      </text:list-item>
+    //      <text:list-item>
+    //       <text:p>l2</text:p>
+    //      </text:list-item>
+    //     </text:list>
+    //     <text:list>
+    //      <text:list-item>
+    //       <text:list>
+    //        <text:list-item>
+    //         <text:p>l3</text:p>
+    //        </text:list-item>
+    //       </text:list>
+    //      </text:list-item>
+    //     </text:list>
+    //    </text:list-item>
+    //   </text:list>
+    // In this case, "l3" is in a separate sublist than "l2", and so the "l3" node gets the
+    // "list restart" property. But the document rendering would be
+    //   1. l1
+    //        1.1. l2
+    //        1.2. l2
+    //             1.2.1. l3
+    // and the second-level numbering will not actually restart at the "l3" node.
+    //
+    // TODO/LATER: note that restarting may happen at different levels. In the code using this
+    // function, the level is reset to 0 whenever a restart is detected. And also, there is no
+    // code to actually descend to that new level (close corresponding li/ul/ol elements).
+
+    if (rPrev.GetDepth() < GetDepth())
+        return false; // No matter if the restart flag is set, it is not effective for subitems
+    return m_bRestart;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
