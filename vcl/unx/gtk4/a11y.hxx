@@ -11,7 +11,7 @@
 
 #include <gtk/gtk.h>
 
-//TODO: Silence various loplugin:external and lopluign:unreffun in (WIP?) a11y.cxx for now:
+//TODO: Silence various loplugin:external and loplugin:unreffun in (WIP?) a11y.cxx for now:
 struct LoAccessible;
 struct LoAccessibleClass;
 struct OOoFixed;
