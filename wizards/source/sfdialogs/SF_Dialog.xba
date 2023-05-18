@@ -1528,8 +1528,8 @@ Public Function CreateTableControl(Optional ByVal ControlName As Variant _
 &apos;&apos;&apos;	To fill the table with data, use the SetTableData() method
 &apos;&apos;&apos;	Specific args:
 &apos;&apos;&apos;		Border: &quot;3D&quot; (default) or &quot;FLAT&quot; or &quot;NONE&quot;
-&apos;&apos;&apos;		RowHeaders: when True (default), the row Headerss are shown
-&apos;&apos;&apos;		ColumnHeaders: when True (default), the column Headerss are shown
+&apos;&apos;&apos;		RowHeaders: when True (default), the row Headers are shown
+&apos;&apos;&apos;		ColumnHeaders: when True (default), the column Headers are shown
 &apos;&apos;&apos;		ScrollBars: H[orizontal] or V[ertical] or B[oth] or N[one] (default)
 &apos;&apos;&apos;			Note that scrollbars always appear dynamically when they are needed
 &apos;&apos;&apos;		GridLines: when True (default = False) horizontal and vertical lines are painted between the grid cells
