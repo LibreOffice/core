@@ -2357,7 +2357,7 @@ Try:
 			.Width = vPlace.Width
 			.Height = vPlace.Height
 		Else
-			&apos;Leave eveything to zero
+			&apos;Leave everything to zero
 		End If
 	End With
 
