@@ -1914,7 +1914,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf153790)
     goToCell("A3");
     dispatchCommand(mxComponent, ".uno:Paste", {});
 
-    // Without the fix in place, this test would have failed wiht
+    // Without the fix in place, this test would have failed with
     // - Expected: =SUM($Sheet1.B1:C1)
     // - Actual  : =SUM($Sheet1.B1:$Sheet1.C1)
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM($Sheet1.B1:C1)"), pDoc->GetFormula(0, 2, 0));
