@@ -634,7 +634,7 @@ Public Function CreateButton(Optional ByVal ControlName As Variant _
 &apos;&apos;&apos;	Create a new control of type Button in the actual dialog.
 &apos;&apos;&apos;	Specific args:
 &apos;&apos;&apos;		Toggle: when True a Toggle button is created. Default = False
-&apos;&apos;&apos;		Push: &quot;OK&quot;, &quot;CANCE&quot; or &quot;&quot; (default)
+&apos;&apos;&apos;		Push: &quot;OK&quot;, &quot;CANCEL&quot; or &quot;&quot; (default)
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
 &apos;&apos;&apos;	Example:
