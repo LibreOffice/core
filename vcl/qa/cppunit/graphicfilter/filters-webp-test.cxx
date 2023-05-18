@@ -57,7 +57,7 @@ public:
 
 private:
     void testRoundtrip(bool lossy);
-    void testRead(bool lossy, bool alpha);
+    void testRead(std::u16string_view rName, bool lossy, bool alpha);
 };
 
 bool WebpFilterTest::load(const OUString&, const OUString& rURL, const OUString&, SfxFilterFlags,
@@ -156,20 +156,19 @@ void WebpFilterTest::testRoundtrip(bool lossy)
                          vcl::getImportFormatShortName(aDetector.getMetadata().mnFormat));
 }
 
-void WebpFilterTest::testReadAlphaLossless() { testRead(false, true); }
+void WebpFilterTest::testReadAlphaLossless() { testRead(u"alpha_lossless.webp", false, true); }
 
-void WebpFilterTest::testReadAlphaLossy() { testRead(true, true); }
+void WebpFilterTest::testReadAlphaLossy() { testRead(u"alpha_lossy.webp", true, true); }
 
-void WebpFilterTest::testReadNoAlphaLossless() { testRead(false, false); }
+void WebpFilterTest::testReadNoAlphaLossless() { testRead(u"noalpha_lossless.webp", false, false); }
 
-void WebpFilterTest::testReadNoAlphaLossy() { testRead(true, false); }
+void WebpFilterTest::testReadNoAlphaLossy() { testRead(u"noalpha_lossy.webp", true, false); }
 
-void WebpFilterTest::testRead(bool lossy, bool alpha)
+void WebpFilterTest::testRead(std::u16string_view rName, bool lossy, bool alpha)
 {
     // Read a file created in GIMP and check it's read correctly.
-    OUString file = m_directories.getURLFromSrc(u"/vcl/qa/cppunit/graphicfilter/data/webp/")
-                    + (alpha ? u"alpha" : u"noalpha") + "_" + (lossy ? u"lossy" : u"lossless")
-                    + ".webp";
+    OUString file
+        = m_directories.getURLFromSrc(u"/vcl/qa/cppunit/graphicfilter/data/webp/") + rName;
     SvFileStream aFileStream(file, StreamMode::READ);
     Graphic aGraphic;
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
