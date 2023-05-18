@@ -5965,6 +5965,19 @@ bool SwTabFrame::IsCollapsingBorders() const
     return GetFormat()->GetAttrSet().Get( RES_COLLAPSING_BORDERS ).GetValue();
 }
 
+void SwTabFrame::dumpAsXml(xmlTextWriterPtr writer) const
+{
+    (void)xmlTextWriterStartElement(writer, reinterpret_cast<const xmlChar*>("tab"));
+    dumpAsXmlAttributes(writer);
+
+    (void)xmlTextWriterStartElement(writer, BAD_CAST("infos"));
+    dumpInfosAsXml(writer);
+    (void)xmlTextWriterEndElement(writer);
+    dumpChildrenAsXml(writer);
+
+    (void)xmlTextWriterEndElement(writer);
+}
+
 /// Local helper function to calculate height of first text row
 static SwTwips lcl_CalcHeightOfFirstContentLine( const SwRowFrame& rSourceLine )
 {
