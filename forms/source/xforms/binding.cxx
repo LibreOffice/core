@@ -469,8 +469,6 @@ static void lcl_addListenerToNode( const Reference<XNode>& xNode,
                                xListener, false );
     xTarget->addEventListener( "DOMAttrModified",
                                xListener, true );
-    xTarget->addEventListener( "DOMAttrModified",
-                               xListener, true );
     xTarget->addEventListener( "xforms-generic",
                                xListener, true );
 }
