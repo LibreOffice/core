@@ -14,6 +14,7 @@
 #include <tools/color.hxx>
 #include <docmodel/theme/ThemeColor.hxx>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <o3tl/hash_combine.hxx>
 
 namespace model
 {
@@ -88,6 +89,8 @@ public:
 
     ThemeColorType meSchemeType = ThemeColorType::Unknown;
     std::vector<Transformation> maTransformations;
+
+    ::Color maFinalColor;
 
 public:
     ColorType getType() const { return meType; }
@@ -212,8 +215,35 @@ public:
         }
         return aColor;
     }
+
+    void setFinalColor(Color const& rColor) { maFinalColor = rColor; }
+
+    Color const& getFinalColor() const { return maFinalColor; }
+
+    std::size_t getHash() const
+    {
+        std::size_t seed = 0;
+        o3tl::hash_combine(seed, meType);
+        o3tl::hash_combine(seed, mnComponent1);
+        o3tl::hash_combine(seed, mnComponent2);
+        o3tl::hash_combine(seed, mnComponent3);
+        o3tl::hash_combine(seed, meSystemColorType);
+        o3tl::hash_combine(seed, sal_uInt32(maLastColor));
+        for (auto const& rTransform : maTransformations)
+            o3tl::hash_combine(seed, rTransform);
+        o3tl::hash_combine(seed, sal_uInt32(maFinalColor));
+        return seed;
+    }
 };
 
 } // end of namespace svx
+
+namespace std
+{
+template <> struct hash<model::ComplexColor>
+{
+    std::size_t operator()(model::ComplexColor const& rColor) const { return rColor.getHash(); }
+};
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

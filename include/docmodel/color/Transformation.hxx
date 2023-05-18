@@ -12,6 +12,7 @@
 
 #include <docmodel/dllapi.h>
 #include <vector>
+#include <o3tl/hash_combine.hxx>
 
 namespace model
 {
@@ -65,8 +66,27 @@ struct DOCMODEL_DLLPUBLIC Transformation
     {
         return meType == rTransformation.meType && mnValue == rTransformation.mnValue;
     }
+
+    std::size_t getHash() const
+    {
+        std::size_t seed = 0;
+        o3tl::hash_combine(seed, meType);
+        o3tl::hash_combine(seed, mnValue);
+        return seed;
+    }
 };
 
 } // end of namespace model
+
+namespace std
+{
+template <> struct hash<model::Transformation>
+{
+    std::size_t operator()(model::Transformation const& rTransformation) const
+    {
+        return rTransformation.getHash();
+    }
+};
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
