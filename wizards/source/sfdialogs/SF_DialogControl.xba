@@ -1342,7 +1342,7 @@ Dim dWidth As Double			&apos;	A single item of Widths
 Dim dRelativeWidth As Double	&apos;	Sum of Widths up to the number of columns
 Dim dWidthFactor As Double		&apos;	Factor to apply to relative widths to get absolute column widths
 Dim lHeaderWidth As Long		&apos;	Row header width when row header present, otherwise = 0
-Dim lAverageWidth As Long		&apos;	Width to apply when columns spead evenly across table
+Dim lAverageWidth As Long		&apos;	Width to apply when columns spread evenly across table
 Dim vDataRow As Variant			&apos;	A single row content in the tablecontrol
 Dim vDataItem As Variant		&apos;	A single DataArray item
 Dim sAlign As String			&apos;	Column&apos;s horizontal alignments (single chars: L, C, R, space)
