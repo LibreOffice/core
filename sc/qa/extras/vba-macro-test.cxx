@@ -326,33 +326,33 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testMacroKeyBinding)
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVba)
 {
     TestMacroInfo testInfo[] = {
-        { OUString("TestAddress."),
+        { OUString("TestAddress.xls"),
           OUString(
               "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
         {
-            OUString("vba."),
+            OUString("vba.xls"),
             OUString(
                 "vnd.sun.Star.script:VBAProject.Modul1.Modul1?language=Basic&location=document"),
         },
-        { OUString("MiscRangeTests."),
+        { OUString("MiscRangeTests.xls"),
           OUString(
               "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("bytearraystring."),
+        { OUString("bytearraystring.xls"),
           OUString(
               "vnd.sun.Star.script:VBAProject.testMacro.test?language=Basic&location=document") },
-        { OUString("AutoFilter."),
+        { OUString("AutoFilter.xls"),
           OUString(
               "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("CalcFont."),
+        { OUString("CalcFont.xls"),
           OUString(
               "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("TestIntersection."),
+        { OUString("TestIntersection.xls"),
           OUString(
               "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("TestUnion."),
+        { OUString("TestUnion.xls"),
           OUString(
               "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("range-4."),
+        { OUString("range-4.xls"),
           OUString(
               "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
 // FIXME: sometimes it fails on Windows with
@@ -363,62 +363,62 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVba)
 // Tests passed: 4
 // Tests failed: 4
 #if !defined(_WIN32)
-        { OUString("Ranges-3."),
+        { OUString("Ranges-3.xls"),
           OUString(
               "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
 #endif
-        { OUString("TestCalc_Rangetest."),
+        { OUString("TestCalc_Rangetest.xls"),
           OUString(
               "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("TestCalc_Rangetest2."),
+        { OUString("TestCalc_Rangetest2.xls"),
           OUString(
               "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("Ranges-2."),
+        { OUString("Ranges-2.xls"),
           OUString(
               "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("pagesetup."),
+        { OUString("pagesetup.xls"),
           OUString(
               "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("Window."),
+        { OUString("Window.xls"),
           OUString(
               "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("window2."),
+        { OUString("window2.xls"),
           OUString(
               "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("PageBreaks."),
+        { OUString("PageBreaks.xls"),
           OUString(
               "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("Shapes."),
+        { OUString("Shapes.xls"),
           OUString(
               "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("Ranges."),
+        { OUString("Ranges.xls"),
           OUString(
               "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("CheckOptionToggleValue."),
+        { OUString("CheckOptionToggleValue.xls"),
           OUString(
               "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("GeneratedEventTest."),
+        { OUString("GeneratedEventTest.xls"),
           OUString(
               "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("MiscControlTests."),
+        { OUString("MiscControlTests.xls"),
           OUString(
               "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("Workbooks."),
+        { OUString("Workbooks.xls"),
           OUString(
               "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("Names."),
+        { OUString("Names.xls"),
           OUString(
               "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("NamesSheetLocal."),
+        { OUString("NamesSheetLocal.xls"),
           OUString(
               "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("vba_endFunction."),
+        { OUString("vba_endFunction.xls"),
           OUString(
               "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("vba_findFunction."),
+        { OUString("vba_findFunction.xls"),
           OUString(
               "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("BGR-RGBTest."),
+        { OUString("BGR-RGBTest.xls"),
           OUString("vnd.sun.Star.script:VBAProject.Module1.test?language=Basic&location=document") }
     };
     OUString sTempDir;
@@ -430,14 +430,14 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVba)
     uno::Sequence<uno::Any> aParams;
     for (const auto& rTestInfo : testInfo)
     {
-        OUString aFileName = loadFromURL(Concat2View(rTestInfo.sFileBaseName + "xls"));
+        OUString aFileName = loadFromURL(rTestInfo.sFileBaseName);
 
         // process all events such as OnLoad events etc.  otherwise they tend
         // to arrive later at a random time - while processing other StarBasic
         // methods.
         Scheduler::ProcessEventsToIdle();
 
-        bool bWorkbooksHandling = rTestInfo.sFileBaseName == "Workbooks." && !sTempDir.isEmpty();
+        bool bWorkbooksHandling = rTestInfo.sFileBaseName == "Workbooks.xls" && !sTempDir.isEmpty();
 
         if (bWorkbooksHandling)
         {
@@ -452,7 +452,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVba)
         aRet >>= aStringRes;
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            OUString("script reported failure in file " + rTestInfo.sFileBaseName + "xls")
+            OUString("script reported failure in file " + rTestInfo.sFileBaseName)
                 .toUtf8()
                 .getStr(),
             OUString("OK"), aStringRes);
