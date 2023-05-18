@@ -3569,7 +3569,7 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
             }
         }
 
-        // The existance of an end address is equivalent to anchor mode "To Cell (resize with cell)".
+        // The existence of an end address is equivalent to anchor mode "To Cell (resize with cell)".
         // XML needs end address in regard of untransformed shape. Those are contained in rShape but
         // could be received from NonRotatedObjData as well.
         // tdf#154005: We treat the combination of "To Cell (resize with cell)" anchor with 'size
