@@ -692,6 +692,12 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
         m_xGlobalBox->hide();
         m_xGlobalToolBox->hide();
         m_xGlobalTree->HideTree();
+
+        //Open Headings by default
+        auto& pTreeView = m_xContentTree->get_widget();
+        std::unique_ptr<weld::TreeIter> itEntry(pTreeView.make_iterator());
+        pTreeView.get_iter_first(*itEntry);
+        pTreeView.expand_row(*itEntry);
     }
 }
 
