@@ -1995,7 +1995,7 @@ Public Function Methods() As Variant
 					, &quot;CreatePatternField&quot; _
 					, &quot;CreateProgressBar&quot; _
 					, &quot;CreateRadioButton&quot; _
-					, &quot;CfeateScrollBar&quot; _
+					, &quot;CreateScrollBar&quot; _
 					, &quot;CreateTableControl&quot; _
 					, &quot;CreateTextField&quot; _
 					, &quot;CreateTimeField&quot; _
