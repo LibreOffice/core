@@ -184,9 +184,8 @@ ScVbaWorkbook::init()
 {
     if ( !ColorData.hasElements() )
         ResetColors();
-    uno::Reference< frame::XModel > xModel = getModel();
-    if ( xModel.is() )
-        excel::getDocShell( xModel )->RegisterAutomationWorkbookObject( this );
+    if ( ScDocShell* pShell = excel::getDocShell( getModel() ))
+        pShell->RegisterAutomationWorkbookObject( this );
 }
 
 ScVbaWorkbook::ScVbaWorkbook(   const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::frame::XModel > const & xModel ) : ScVbaWorkbook_BASE( xParent, xContext, xModel )
@@ -264,18 +263,23 @@ ScVbaWorkbook::getProtectStructure()
 
 sal_Bool SAL_CALL ScVbaWorkbook::getPrecisionAsDisplayed()
 {
-    uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_SET_THROW );
-    ScDocument& rDoc = excel::getDocShell( xModel )->GetDocument();
-    return rDoc.GetDocOptions().IsCalcAsShown();
+    if ( ScDocShell* pShell = excel::getDocShell( getModel() ))
+    {
+        ScDocument& rDoc = pShell->GetDocument();
+        return rDoc.GetDocOptions().IsCalcAsShown();
+    }
+    return false;
 }
 
 void SAL_CALL ScVbaWorkbook::setPrecisionAsDisplayed( sal_Bool _precisionAsDisplayed )
 {
-    uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_SET_THROW );
-    ScDocument& rDoc = excel::getDocShell( xModel )->GetDocument();
-    ScDocOptions aOpt = rDoc.GetDocOptions();
-    aOpt.SetCalcAsShown( _precisionAsDisplayed );
-    rDoc.SetDocOptions( aOpt );
+    if ( ScDocShell* pShell = excel::getDocShell( getModel() ))
+    {
+        ScDocument& rDoc = pShell->GetDocument();
+        ScDocOptions aOpt = rDoc.GetDocOptions();
+        aOpt.SetCalcAsShown( _precisionAsDisplayed );
+        rDoc.SetDocOptions( aOpt );
+    }
 }
 
 OUString SAL_CALL ScVbaWorkbook::getAuthor()
