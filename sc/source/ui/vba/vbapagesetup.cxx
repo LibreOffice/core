@@ -77,8 +77,11 @@ OUString SAL_CALL ScVbaPageSetup::getPrintArea()
             ScUnoConversion::FillScRange( aRange, rRange );
             aRangeList.push_back( aRange );
         }
-        ScDocument& rDoc = excel::getDocShell( mxModel )->GetDocument();
-        aRangeList.Format( aPrintArea, ScRefFlags::RANGE_ABS, rDoc, formula::FormulaGrammar::CONV_XL_A1, ','  );
+        if ( ScDocShell* pShell = excel::getDocShell( mxModel ))
+        {
+            ScDocument& rDoc = pShell->GetDocument();
+            aRangeList.Format( aPrintArea, ScRefFlags::RANGE_ABS, rDoc, formula::FormulaGrammar::CONV_XL_A1, ','  );
+        }
     }
 
     return aPrintArea;
