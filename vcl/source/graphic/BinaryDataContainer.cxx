@@ -12,6 +12,7 @@
 #include <o3tl/hash_combine.hxx>
 #include <unotools/tempfile.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/seqstream.hxx>
 #include <sal/log.hxx>
 
 struct BinaryDataContainer::Impl
@@ -114,10 +115,29 @@ public:
     }
 };
 
+class ReferencedXInputStream : public comphelper::MemoryInputStream
+{
+    std::shared_ptr<std::vector<sal_uInt8>> mpData;
+
+public:
+    ReferencedXInputStream(const std::shared_ptr<std::vector<sal_uInt8>>& pData)
+        : comphelper::MemoryInputStream(reinterpret_cast<const sal_Int8*>(pData->data()),
+                                        pData->size())
+        , mpData(pData)
+    {
+    }
+};
+
 std::shared_ptr<SvStream> BinaryDataContainer::getAsStream()
 {
     ensureSwappedIn(); // TODO: transfer in streamed chunks
     return std::make_shared<ReferencedMemoryStream>(mpImpl->mpData);
+}
+
+css::uno::Reference<css::io::XInputStream> BinaryDataContainer::getAsXInputStream()
+{
+    ensureSwappedIn(); // TODO: transfer in streamed chunks
+    return new ReferencedXInputStream(mpImpl->mpData);
 }
 
 std::size_t BinaryDataContainer::writeToStream(SvStream& rStream) const

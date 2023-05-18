@@ -36,26 +36,27 @@ using namespace ::osl;
 
 
 
-SequenceInputStream::SequenceInputStream(
-    css::uno::Sequence<sal_Int8> const & rData)
-:   m_aData(rData)
+MemoryInputStream::MemoryInputStream(
+    const sal_Int8* pData, sal_Int32 nDataLength)
+:   m_pMemoryData(pData)
+,   m_nMemoryDataLength(nDataLength)
 ,   m_nPos(0)
 {
 }
 
 // checks if closed, returns available size, not mutex-protected
 
-inline sal_Int32 SequenceInputStream::avail()
+inline sal_Int32 MemoryInputStream::avail()
 {
     if (m_nPos == -1)
         throw NotConnectedException(OUString(), *this);
 
-    return m_aData.getLength() - m_nPos;
+    return m_nMemoryDataLength - m_nPos;
 }
 
 // css::io::XInputStream
 
-sal_Int32 SAL_CALL SequenceInputStream::readBytes( Sequence<sal_Int8>& aData, sal_Int32 nBytesToRead )
+sal_Int32 SAL_CALL MemoryInputStream::readBytes( Sequence<sal_Int8>& aData, sal_Int32 nBytesToRead )
 {
     if (nBytesToRead < 0)
         throw BufferSizeExceededException(OUString(),*this);
@@ -68,13 +69,13 @@ sal_Int32 SAL_CALL SequenceInputStream::readBytes( Sequence<sal_Int8>& aData, sa
         nBytesToRead = nAvail;
 
     aData.realloc(nBytesToRead);
-    memcpy(aData.getArray(), m_aData.getConstArray() + m_nPos, nBytesToRead);
+    memcpy(aData.getArray(), m_pMemoryData + m_nPos, nBytesToRead);
     m_nPos += nBytesToRead;
 
     return nBytesToRead;
 }
 
-sal_Int32 SequenceInputStream::readSomeBytes( sal_Int8* pData, sal_Int32 nBytesToRead )
+sal_Int32 MemoryInputStream::readSomeBytes( sal_Int8* pData, sal_Int32 nBytesToRead )
 {
     if (nBytesToRead < 0)
         throw BufferSizeExceededException(OUString(),*this);
@@ -86,27 +87,20 @@ sal_Int32 SequenceInputStream::readSomeBytes( sal_Int8* pData, sal_Int32 nBytesT
     if (nAvail < nBytesToRead)
         nBytesToRead = nAvail;
 
-    memcpy(pData, m_aData.getConstArray() + m_nPos, nBytesToRead);
+    memcpy(pData, m_pMemoryData + m_nPos, nBytesToRead);
     m_nPos += nBytesToRead;
 
     return nBytesToRead;
 }
 
-sal_Int64 SAL_CALL SequenceInputStream::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )
-{
-    if (rIdentifier == comphelper::ByteReader::getUnoTunnelId())
-        return reinterpret_cast<sal_Int64>(static_cast<comphelper::ByteReader*>(this));
-    return 0;
-}
-
-sal_Int32 SAL_CALL SequenceInputStream::readSomeBytes( Sequence<sal_Int8>& aData, sal_Int32 nMaxBytesToRead )
+sal_Int32 SAL_CALL MemoryInputStream::readSomeBytes( Sequence<sal_Int8>& aData, sal_Int32 nMaxBytesToRead )
 {
     // all data is available at once
     return readBytes(aData, nMaxBytesToRead);
 }
 
 
-void SAL_CALL SequenceInputStream::skipBytes( sal_Int32 nBytesToSkip )
+void SAL_CALL MemoryInputStream::skipBytes( sal_Int32 nBytesToSkip )
 {
     if (nBytesToSkip < 0)
         throw BufferSizeExceededException(OUString(),*this);
@@ -122,7 +116,7 @@ void SAL_CALL SequenceInputStream::skipBytes( sal_Int32 nBytesToSkip )
 }
 
 
-sal_Int32 SAL_CALL SequenceInputStream::available(  )
+sal_Int32 SAL_CALL MemoryInputStream::available(  )
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -130,7 +124,7 @@ sal_Int32 SAL_CALL SequenceInputStream::available(  )
 }
 
 
-void SAL_CALL SequenceInputStream::closeInput(  )
+void SAL_CALL MemoryInputStream::closeInput(  )
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -140,24 +134,32 @@ void SAL_CALL SequenceInputStream::closeInput(  )
     m_nPos = -1;
 }
 
-void SAL_CALL SequenceInputStream::seek( sal_Int64 location )
+void SAL_CALL MemoryInputStream::seek( sal_Int64 location )
 {
-    if ( location > m_aData.getLength() || location < 0 || location > SAL_MAX_INT32 )
+    if ( location > m_nMemoryDataLength || location < 0 || location > SAL_MAX_INT32 )
         throw IllegalArgumentException("bad location", static_cast<cppu::OWeakObject*>(this), 1);
     std::scoped_lock aGuard( m_aMutex );
     m_nPos = static_cast<sal_Int32>(location);
 }
 
-sal_Int64 SAL_CALL SequenceInputStream::getPosition()
+sal_Int64 SAL_CALL MemoryInputStream::getPosition()
 {
     std::scoped_lock aGuard( m_aMutex );
     return m_nPos;
 }
 
-sal_Int64 SAL_CALL SequenceInputStream::getLength(  )
+sal_Int64 SAL_CALL MemoryInputStream::getLength(  )
 {
     std::scoped_lock aGuard( m_aMutex );
-    return m_aData.getLength();
+    return m_nMemoryDataLength;
+}
+
+
+SequenceInputStream::SequenceInputStream(
+    css::uno::Sequence<sal_Int8> const & rData)
+:   MemoryInputStream(rData.getConstArray(), rData.getLength())
+,   m_aData(rData)
+{
 }
 
 
