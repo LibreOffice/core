@@ -2,9 +2,9 @@
 
 SCRIPT=$(realpath "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
-PATHES="$(find $SCRIPTPATH/.. \( -wholename '*/qa/*/testdocuments' -o -wholename '*/qa/*/testdocuments/*' -o -wholename '*/qa/*/data' -o -wholename '*/qa/*/data/*' \) -type d )"
+PATHS="$(find $SCRIPTPATH/.. \( -wholename '*/qa/*/testdocuments' -o -wholename '*/qa/*/testdocuments/*' -o -wholename '*/qa/*/data' -o -wholename '*/qa/*/data/*' \) -type d )"
 
-for path in $PATHES
+for path in $PATHS
 do
     # Ignore pass/fail/indeterminate folders, functions test in sc, workdir folder and xml in sd
     if [[ "$path" != */pass* ]] && [[ "$path" != */fail* ]] && [[ "$path" != */indeterminate* ]] \
