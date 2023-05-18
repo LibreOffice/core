@@ -3500,7 +3500,7 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
             continue;
 
         // The current object geometry is based on bHiddenAsZero=true, but ODF file format
-        // needs it as if there were no hidden rows or columns. We termine a fictive snap
+        // needs it as if there were no hidden rows or columns. We determine a fictive snap
         // rectangle from the anchor as if all column/rows are shown. Then we move and resize
         // (in case of "resize with cell") the object to meet this snap rectangle. We need to
         // manipulate the object itself, because the used methods in xmloff do not evaluate the
