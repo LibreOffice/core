@@ -6,7 +6,7 @@ PATHES="$(find $SCRIPTPATH/.. \( -wholename '*/qa/*/testdocuments' -o -wholename
 
 for path in $PATHES
 do
-    # Ignore pass/fail/inderterminate folders, functions test in sc, workdir folder and xml in sd
+    # Ignore pass/fail/indeterminate folders, functions test in sc, workdir folder and xml in sd
     if [[ "$path" != */pass* ]] && [[ "$path" != */fail* ]] && [[ "$path" != */indeterminate* ]] \
             && [[ "$path" != */functions* ]] && [[ "$path" != */workdir* ]] && [[ "$path" != */xml* ]]; then
         for i in $path/*
