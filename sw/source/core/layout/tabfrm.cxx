@@ -2261,6 +2261,30 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
             }
         }
 
+        if (GetFollow() && GetUpper()->IsFlyFrame())
+        {
+            auto pUpper = static_cast<SwFlyFrame*>(GetUpper());
+            if (pUpper->IsFlySplitAllowed())
+            {
+                // We have a follow tab frame that may be joined, and we're directly in a split fly.
+                // See if the fly could grow.
+                SwTwips nTest = GetUpper()->Grow(LONG_MAX, /*bTst=*/true);
+                if (nTest >= aRectFnSet.GetHeight(GetFollow()->getFrameArea()))
+                {
+                    // We have space to to join at least one follow tab frame.
+                    SwTwips nRequest = 0;
+                    for (SwTabFrame* pFollow = GetFollow(); pFollow; pFollow = pFollow->GetFollow())
+                    {
+                        nRequest += aRectFnSet.GetHeight(pFollow->getFrameArea());
+                    }
+                    // Try to grow the split fly to join all follows.
+                    pUpper->Grow(nRequest);
+                    // Determine what is space we actually got from the requested space.
+                    nDistanceToUpperPrtBottom = aRectFnSet.BottomDist(getFrameArea(), aRectFnSet.GetPrtBottom(*pUpper));
+                }
+            }
+        }
+
         // If there is still some space left in the upper, we check if we
         // can join some rows of the follow.
         // Setting bLastRowHasToMoveToFollow to true means we want to force
