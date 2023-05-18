@@ -687,12 +687,12 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testFunctionsODS)
     aCSVPath = createFilePath(u"contentCSV/date-time-functions.csv");
     testFile(aCSVPath, *pDoc, 0, StringType::PureString);
 
-    // crashes at exit while unloading StarBasic code
-    // xDocSh = loadDoc("user-defined-function.", FORMAT_ODS);
-    // xDocSh->DoHardRecalc();
-    // ScDocument& rDocUserDef = xDocSh->GetDocument();
-    // createCSVPath("user-defined-function.", aCSVFileName);
-    // testFile(aCSVFileName, rDocUserDef, 0);
+    createScDoc("ods/user-defined-function.ods");
+    pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
+    pDoc = getScDoc();
+    aCSVPath = createFilePath(u"contentCSV/user-defined-function.csv");
+    testFile(aCSVPath, *pDoc, 0);
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest, testFunctionsExcel2010)
