@@ -986,7 +986,7 @@ static void OutHTML_SwFormatOff( SwHTMLWriter& rWrt, const SwHTMLTextCollOutputI
             const SwHTMLNumRuleInfo& rNRInfo = rWrt.GetNumInfo();
             if( rNextInfo.GetNumRule() != rNRInfo.GetNumRule() ||
                 rNextInfo.GetDepth() != rNRInfo.GetDepth() ||
-                rNextInfo.IsNumbered() || rNextInfo.IsRestart() )
+                rNextInfo.IsNumbered() || rNextInfo.IsRestart(rNRInfo) )
                 rWrt.ChangeParaToken( HtmlTokenId::NONE );
             OutHTML_NumberBulletListEnd( rWrt, rNextInfo );
         }

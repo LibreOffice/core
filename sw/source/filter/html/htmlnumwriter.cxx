@@ -53,7 +53,7 @@ void SwHTMLWriter::FillNextNumInfo()
             // numbering level during import.
             if( bTable &&
                 m_pNextNumRuleInfo->GetNumRule()==GetNumInfo().GetNumRule() &&
-                !m_pNextNumRuleInfo->IsRestart() )
+                !m_pNextNumRuleInfo->IsRestart(GetNumInfo()) )
             {
                 m_pNextNumRuleInfo->SetDepth( GetNumInfo().GetDepth() );
             }
@@ -90,7 +90,7 @@ SwHTMLWriter& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
     SwHTMLNumRuleInfo& rPrevInfo = rWrt.GetNumInfo();
     bool bSameRule = rPrevInfo.GetNumRule() == rInfo.GetNumRule();
     if( bSameRule && rPrevInfo.GetDepth() >= rInfo.GetDepth() &&
-        !rInfo.IsRestart() )
+        !rInfo.IsRestart(rPrevInfo) )
     {
         return rWrt;
     }
@@ -205,7 +205,7 @@ SwHTMLWriter& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
     OSL_ENSURE( rWrt.m_nLastParaToken == HtmlTokenId::NONE,
                 "<PRE> was not closed before <OL>." );
     sal_uInt16 nPrevDepth =
-        (bSameRule && !rInfo.IsRestart()) ? rPrevInfo.GetDepth() : 0;
+        (bSameRule && !rInfo.IsRestart(rPrevInfo)) ? rPrevInfo.GetDepth() : 0;
 
     for( sal_uInt16 i=nPrevDepth; i<rInfo.GetDepth(); i++ )
     {
@@ -213,8 +213,9 @@ SwHTMLWriter& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
 
         rWrt.m_aBulletGrfs[i].clear();
         OString sOut = "<" + rWrt.GetNamespace();
-        if (rWrt.mbXHTML && i != 0)
+        if (rWrt.mbXHTML && i != nPrevDepth)
         {
+            // for all skipped sublevels, add a li
             sOut += OOO_STRING_SVTOOLS_HTML_li "><" + rWrt.GetNamespace();
         }
         const SwNumFormat& rNumFormat = rInfo.GetNumRule()->Get( i );
@@ -318,7 +319,8 @@ SwHTMLWriter& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
 {
     SwHTMLNumRuleInfo& rInfo = rWrt.GetNumInfo();
     bool bSameRule = rNextInfo.GetNumRule() == rInfo.GetNumRule();
-    bool bListEnd = !bSameRule || rNextInfo.GetDepth() < rInfo.GetDepth() || rNextInfo.IsRestart();
+    bool bListEnd = !bSameRule || rNextInfo.GetDepth() < rInfo.GetDepth() || rNextInfo.IsRestart(rInfo);
+    bool bNextIsSubitem = !bListEnd && rNextInfo.GetDepth() > rInfo.GetDepth();
 
     std::optional<bool> oAtLeastOneNumbered;
     if (!rInfo.IsNumbered())
@@ -355,7 +357,7 @@ SwHTMLWriter& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
     // node is numbered.
     bool bPrevIsNumbered = rInfo.IsNumbered() || *oAtLeastOneNumbered;
     // XHTML </li> for the list item content, if there is an open <li>.
-    if ((bListEnd && bPrevIsNumbered) || (!bListEnd && rNextInfo.IsNumbered()))
+    if ((bListEnd && bPrevIsNumbered) || (!bListEnd && !bNextIsSubitem && rNextInfo.IsNumbered()))
     {
         HTMLOutFuncs::Out_AsciiTag(
             rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_li),
@@ -379,7 +381,7 @@ SwHTMLWriter& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
     OSL_ENSURE( rWrt.m_nLastParaToken == HtmlTokenId::NONE,
                 "<PRE> was not closed before </OL>." );
     sal_uInt16 nNextDepth =
-        (bSameRule && !rNextInfo.IsRestart()) ? rNextInfo.GetDepth() : 0;
+        (bSameRule && !rNextInfo.IsRestart(rInfo)) ? rNextInfo.GetDepth() : 0;
 
     // MIB 23.7.97: We must loop backwards, to get the right order of </OL>/</UL>
     for( sal_uInt16 i=rInfo.GetDepth(); i>nNextDepth; i-- )
@@ -396,8 +398,9 @@ SwHTMLWriter& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
         else
             aTag = OOO_STRING_SVTOOLS_HTML_orderlist;
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + aTag), false );
-        if (rWrt.mbXHTML && (nNextDepth != 0 || i != 1))
+        if (rWrt.mbXHTML && i != nNextDepth + 1)
         {
+            // for all skipped sublevels, close a li
             HTMLOutFuncs::Out_AsciiTag(
                 rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_li),
                 /*bOn=*/false);
