@@ -1202,7 +1202,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf154821_shape_in_group)
     pViewShell->GetViewData().SetCurX(0);
     pViewShell->GetViewData().SetCurY(5);
     pViewShell->GetViewData().GetDispatcher().Execute(SID_OUTLINE_SHOW);
-    // Expande the upper group
+    // Expand the upper group
     pViewShell = getViewShell();
     pViewShell->GetViewData().SetCurX(0);
     pViewShell->GetViewData().SetCurY(1);
