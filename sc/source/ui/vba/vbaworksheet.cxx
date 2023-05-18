@@ -199,7 +199,8 @@ ScVbaWorksheet::createSheetCopyInNewDoc(const OUString& aCurrSheetName)
 
     ScDocShell* pShell = excel::getDocShell( xModel );
     OUString aCodeName;
-    pShell->GetDocument().GetCodeName( 0, aCodeName );
+    if (pShell)
+        pShell->GetDocument().GetCodeName( 0, aCodeName );
     return uno::Reference< excel::XWorksheet >( getUnoDocModule( aCodeName, pShell ), uno::UNO_QUERY_THROW );
 }
 
@@ -309,20 +310,22 @@ ScVbaWorksheet::getEnableSelection()
     if ( !ScVbaWorksheets::nameExists(xSpreadDoc, getName(), nTab) )
         throw uno::RuntimeException("Sheet Name does not exist." );
 
-    uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_SET_THROW );
-    ScDocument& rDoc = excel::getDocShell( xModel )->GetDocument();
-    const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
-    bool bLockedCells = false;
-    bool bUnlockedCells = false;
-    if( pProtect )
+    if ( ScDocShell* pShell = excel::getDocShell( getModel() ))
     {
-        bLockedCells   = pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
-        bUnlockedCells = pProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
+        ScDocument& rDoc = pShell->GetDocument();
+        const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
+        bool bLockedCells = false;
+        bool bUnlockedCells = false;
+        if( pProtect )
+        {
+            bLockedCells   = pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
+            bUnlockedCells = pProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
+        }
+        if( bLockedCells )
+            return excel::XlEnableSelection::xlNoRestrictions;
+        if( bUnlockedCells )
+            return excel::XlEnableSelection::xlUnlockedCells;
     }
-    if( bLockedCells )
-        return excel::XlEnableSelection::xlNoRestrictions;
-    if( bUnlockedCells )
-        return excel::XlEnableSelection::xlUnlockedCells;
     return excel::XlEnableSelection::xlNoSelection;
 
 }
@@ -342,46 +345,49 @@ ScVbaWorksheet::setEnableSelection( sal_Int32 nSelection )
     if ( !ScVbaWorksheets::nameExists(xSpreadDoc, getName(), nTab) )
         throw uno::RuntimeException("Sheet Name does not exist." );
 
-    uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_SET_THROW );
-    ScDocument& rDoc = excel::getDocShell( xModel )->GetDocument();
-    const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
-    // default is xlNoSelection
-    bool bLockedCells = false;
-    bool bUnlockedCells = false;
-    if( nSelection == excel::XlEnableSelection::xlNoRestrictions )
+    if ( ScDocShell* pShell = excel::getDocShell( getModel() ))
     {
-        bLockedCells = true;
-        bUnlockedCells = true;
+        ScDocument& rDoc = pShell->GetDocument();
+        const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
+        // default is xlNoSelection
+        bool bLockedCells = false;
+        bool bUnlockedCells = false;
+        if( nSelection == excel::XlEnableSelection::xlNoRestrictions )
+        {
+            bLockedCells = true;
+            bUnlockedCells = true;
+        }
+        else if( nSelection == excel::XlEnableSelection::xlUnlockedCells )
+        {
+            bUnlockedCells = true;
+        }
+        if( pProtect )
+        {
+            ScTableProtection aNewProtect(*pProtect);
+            aNewProtect.setOption(ScTableProtection::SELECT_LOCKED_CELLS, bLockedCells);
+            aNewProtect.setOption(ScTableProtection::SELECT_UNLOCKED_CELLS, bUnlockedCells);
+            rDoc.SetTabProtection(nTab, &aNewProtect);
+        }
     }
-    else if( nSelection == excel::XlEnableSelection::xlUnlockedCells )
-    {
-        bUnlockedCells = true;
-    }
-    if( pProtect )
-    {
-        ScTableProtection aNewProtect(*pProtect);
-        aNewProtect.setOption(ScTableProtection::SELECT_LOCKED_CELLS, bLockedCells);
-        aNewProtect.setOption(ScTableProtection::SELECT_UNLOCKED_CELLS, bUnlockedCells);
-        rDoc.SetTabProtection(nTab, &aNewProtect);
-    }
-
-
 }
 
 sal_Bool SAL_CALL ScVbaWorksheet::getAutoFilterMode()
 {
-    uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_SET_THROW );
-    ScDocument& rDoc = excel::getDocShell( xModel )->GetDocument();
-    ScDBData* pDBData = rDoc.GetAnonymousDBData(getSheetID());
-    if (pDBData)
-        return pDBData->HasAutoFilter();
+    if ( ScDocShell* pShell = excel::getDocShell( getModel() ))
+    {
+        ScDocument& rDoc = pShell->GetDocument();
+        ScDBData* pDBData = rDoc.GetAnonymousDBData(getSheetID());
+        if (pDBData)
+            return pDBData->HasAutoFilter();
+    }
     return false;
 }
 
 void SAL_CALL ScVbaWorksheet::setAutoFilterMode( sal_Bool bAutoFilterMode )
 {
-    uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_SET_THROW );
-    ScDocShell* pDocShell = excel::getDocShell( xModel );
+    ScDocShell* pDocShell = excel::getDocShell( getModel() );
+    if (!pDocShell)
+        return;
     ScDocument& rDoc = pDocShell->GetDocument();
     ScDBData* pDBData = rDoc.GetAnonymousDBData(getSheetID());
     if (!pDBData)
@@ -481,11 +487,13 @@ ScVbaWorksheet::getProtectDrawingObjects()
     bool bSheetExists = ScVbaWorksheets::nameExists (xSpreadDoc, aSheetName, nTab);
     if ( bSheetExists )
     {
-        uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_SET_THROW );
-        ScDocument& rDoc = excel::getDocShell( xModel )->GetDocument();
-        const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
-        if ( pProtect )
-            return pProtect->isOptionEnabled( ScTableProtection::OBJECTS );
+        if ( ScDocShell* pShell = excel::getDocShell( getModel() ))
+        {
+            ScDocument& rDoc = pShell->GetDocument();
+            const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
+            if ( pProtect )
+                return pProtect->isOptionEnabled( ScTableProtection::OBJECTS );
+        }
     }
     return false;
 }
