@@ -162,8 +162,8 @@ public:
     virtual bool clear() override;
 #else
     // no override, but used in QAccessibleTableInterface methods
-    virtual int selectedItemCount() const;
-    virtual QList<QAccessibleInterface*> selectedItems() const;
+    int selectedItemCount() const;
+    QList<QAccessibleInterface*> selectedItems() const;
 #endif
 
     // Factory

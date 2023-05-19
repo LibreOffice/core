@@ -52,7 +52,7 @@ public:
     virtual bool canQuickFixIssue() const = 0;
     virtual void quickFixIssue() const = 0;
 
-    virtual void setParent(weld::Window* pParent) { m_pParent = pParent; }
+    void setParent(weld::Window* pParent) { m_pParent = pParent; }
 
     AccessibilityIssueID m_eIssueID;
     OUString m_aIssueText;

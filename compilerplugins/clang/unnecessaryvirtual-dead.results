@@ -8,10 +8,14 @@ canvas/inc/base/graphicdevicebase.hxx:318
     void canvas::GraphicDeviceBase::removeVetoableChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
 include/basegfx/utils/unopolypolygon.hxx:93
     void basegfx::unotools::UnoPolyPolygon::modifying()const
+include/comphelper/propmultiplex2.hxx:54
+    void comphelper::OPropertyChangeListener2::_disposing(const struct com::sun::star::lang::EventObject &,)
 sc/source/core/opencl/opbase.hxx:447
     void sc::opencl::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class sc::opencl::outputstream &,)
 slideshow/source/engine/animationfactory.cxx:617
     void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch()
+vcl/inc/font/LogicalFontInstance.hxx:126
+    void LogicalFontInstance::ImplInitHbFont(struct hb_font_t *,)
 vcl/inc/salframe.hxx:145
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
 vcl/inc/salinst.hxx:204
