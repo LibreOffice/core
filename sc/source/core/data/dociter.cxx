@@ -1039,7 +1039,11 @@ ScHorizontalCellIterator::ScHorizontalCellIterator(ScDocument& rDocument, SCTAB 
 {
     assert(mnTab < rDoc.GetTableCount() && "index out of bounds, FIX IT");
 
-    nEndCol = rDoc.maTabs[mnTab]->ClampToAllocatedColumns(nEndCol);
+    const ScTable* pTab = rDoc.FetchTable(mnTab);
+    if (!pTab)
+        return;
+
+    nEndCol = pTab->ClampToAllocatedColumns(nEndCol);
     if (nEndCol < nStartCol) // E.g., somewhere completely outside allocated area
         nEndCol = nStartCol - 1; // Empty
 
