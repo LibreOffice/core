@@ -107,11 +107,19 @@ SwTwips GetFlyAnchorBottom(SwFlyFrame* pFly, const SwFrame& rAnchor)
         // See if the fly height would fit at least the page height, ignoring the vertical offset.
         SwTwips nFlyHeight = aRectFnSet.GetHeight(pFly->getFrameArea());
         SwTwips nPageHeight = aRectFnSet.GetHeight(pPage->getFramePrintArea());
+        SwTwips nFlyTop = aRectFnSet.GetTop(pFly->getFrameArea());
+        SwTwips nBodyTop = aRectFnSet.GetTop(pBody->getFrameArea());
+        if (nFlyTop < nBodyTop)
+        {
+            // Fly frame overlaps with the top margin area, ignore that part of the fly frame for
+            // top/height purposes.
+            nFlyHeight -= nBodyTop - nFlyTop;
+            nFlyTop = nBodyTop;
+        }
         if (nFlyHeight <= nPageHeight)
         {
             // Yes, it would fit: allow overlap if there is no problematic vertical offset.
             SwTwips nDeadline = aRectFnSet.GetBottom(pPage->getFrameArea());
-            SwTwips nFlyTop = aRectFnSet.GetTop(pFly->getFrameArea());
             SwTwips nBodyHeight = aRectFnSet.GetHeight(pBody->getFramePrintArea());
             if (nDeadline - nFlyTop > nBodyHeight)
             {
