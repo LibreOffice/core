@@ -2525,6 +2525,30 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf146178)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pCursor->GetPoint()->GetContentIndex());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf155407)
+{
+    createSwDoc();
+    SwXTextDocument& rTextDoc = dynamic_cast<SwXTextDocument&>(*mxComponent);
+
+    {
+        emulateTyping(rTextDoc, u"Foo - 11’--’22 ");
+        // Without the fix in place, this would fail with
+        // - Expected: Foo – 11’—’22
+        // - Actual  : Foo – 11’--’22
+        CPPUNIT_ASSERT_EQUAL(OUString(u"Foo – 11’—’22 "), getParagraph(1)->getString());
+    }
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {}); // start again
+
+    {
+        emulateTyping(rTextDoc, u"Bar -- 111--222 ");
+        // Without the fix in place, this would fail with
+        // - Expected: Bar – 111–222
+        // - Actual  : Bar – 111-–22
+        CPPUNIT_ASSERT_EQUAL(OUString(u"Bar – 111–222 "), getParagraph(1)->getString());
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
