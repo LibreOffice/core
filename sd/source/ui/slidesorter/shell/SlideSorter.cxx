@@ -88,8 +88,7 @@ SlideSorter::SlideSorter (
     sd::Window* pContentWindow,
     ScrollAdaptor* pHorizontalScrollBar,
     ScrollAdaptor* pVerticalScrollBar)
-    : mbIsValid(false),
-      mpViewShell(&rViewShell),
+    : mpViewShell(&rViewShell),
       mpViewShellBase(&rViewShell.GetViewShellBase()),
       mpContentWindow(pContentWindow),
       mpHorizontalScrollBar(pHorizontalScrollBar),
@@ -102,8 +101,7 @@ SlideSorter::SlideSorter (
 SlideSorter::SlideSorter (
     ViewShellBase& rBase,
     vcl::Window& rParentWindow)
-    : mbIsValid(false),
-      mpViewShell(nullptr),
+    : mpViewShell(nullptr),
       mpViewShellBase(&rBase),
       mpContentWindow(VclPtr<ContentWindow>::Create(rParentWindow,*this )),
       mpHorizontalScrollBar(VclPtr<ScrollAdaptor>::Create(&rParentWindow, true)),
@@ -123,11 +121,7 @@ void SlideSorter::Init()
     {
         mpProperties->SetBackgroundColor(
             mpContentWindow->GetSettings().GetStyleSettings().GetWindowColor());
-        mpProperties->SetTextColor(
-            mpContentWindow->GetSettings().GetStyleSettings().GetWindowTextColor());
         mpProperties->SetSelectionColor(
-            mpContentWindow->GetSettings().GetStyleSettings().GetMenuHighlightColor());
-        mpProperties->SetHighlightColor(
             mpContentWindow->GetSettings().GetStyleSettings().GetMenuHighlightColor());
     }
 
@@ -153,14 +147,10 @@ void SlideSorter::Init()
 
     // Set view pointer of base class.
     SetupControls();
-
-    mbIsValid = true;
 }
 
 SlideSorter::~SlideSorter()
 {
-    mbIsValid = false;
-
     ReleaseListeners();
 
     // Dispose model, view and controller to avoid calls between them when

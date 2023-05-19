@@ -404,26 +404,10 @@ struct LineNumberSettings
 /// Contains information about a table that will be potentially converted to a floating one at the section end.
 struct FloatingTableInfo
 {
-    css::uno::Reference<css::text::XTextRange> m_xStart;
-    css::uno::Reference<css::text::XTextRange> m_xEnd;
     css::uno::Sequence<css::beans::PropertyValue> m_aFrameProperties;
-    sal_Int32 m_nTableWidth;
-    sal_Int32 m_nTableWidthType;
-    /// Break type of the section that contains this table.
-    sal_Int32 m_nBreakType = -1;
-    /// Tables in footnotes and endnotes are always floating
-    bool m_bConvertToFloatingInFootnote = false;
 
-    FloatingTableInfo(css::uno::Reference<css::text::XTextRange> xStart,
-            css::uno::Reference<css::text::XTextRange> xEnd,
-            const css::uno::Sequence<css::beans::PropertyValue>& aFrameProperties,
-            sal_Int32 nTableWidth, sal_Int32 nTableWidthType, bool bConvertToFloatingInFootnote)
-        : m_xStart(std::move(xStart)),
-        m_xEnd(std::move(xEnd)),
-        m_aFrameProperties(aFrameProperties),
-        m_nTableWidth(nTableWidth),
-        m_nTableWidthType(nTableWidthType),
-        m_bConvertToFloatingInFootnote(bConvertToFloatingInFootnote)
+    FloatingTableInfo(const css::uno::Sequence<css::beans::PropertyValue>& aFrameProperties)
+        : m_aFrameProperties(aFrameProperties)
     {
     }
     css::uno::Any getPropertyValue(std::u16string_view propertyName);

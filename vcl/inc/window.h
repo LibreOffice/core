@@ -395,7 +395,6 @@ public:
 
     const vcl::ILibreOfficeKitNotifier* mpLOKNotifier; ///< To emit the LOK callbacks eg. for dialog tunneling.
     vcl::LOKWindowId mnLOKWindowId; ///< ID of this specific window.
-    bool mbLOKParentNotifier;
     bool mbUseFrameData;
 };
 

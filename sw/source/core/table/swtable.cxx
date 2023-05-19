@@ -1644,7 +1644,6 @@ void SwTable::Split(OUString sNewTableName, sal_uInt16 nSplitLine, SwHistory* pH
     aHint.m_eFlags = TBL_SPLITTBL;
     aHint.m_aData.pNewTableNm = &sNewTableName;
     aHint.m_nSplitLine = nSplitLine;
-    aHint.m_pHistory = pHistory;
 
     std::vector<SwTableBoxFormula*> vFormulas;
     GatherFormulas(vFormulas);
@@ -1670,7 +1669,6 @@ void SwTable::Merge(SwTable& rTable, SwHistory* pHistory)
     SwTableFormulaUpdate aHint(this);
     aHint.m_eFlags = TBL_MERGETBL;
     aHint.m_aData.pDelTable = &rTable;
-    aHint.m_pHistory = pHistory;
     std::vector<SwTableBoxFormula*> vFormulas;
     GatherFormulas(vFormulas);
     for(auto pBoxFormula: vFormulas)

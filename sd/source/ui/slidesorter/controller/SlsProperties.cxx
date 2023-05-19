@@ -25,9 +25,7 @@ namespace sd::slidesorter::controller {
 
 Properties::Properties()
     : maBackgroundColor(Application::GetSettings().GetStyleSettings().GetWindowColor()),
-      maTextColor(Application::GetSettings().GetStyleSettings().GetActiveTextColor()),
       maSelectionColor(Application::GetSettings().GetStyleSettings().GetHighlightColor()),
-      maHighlightColor(Application::GetSettings().GetStyleSettings().GetMenuHighlightColor()),
       mbIsUIReadOnly(false)
 {
 }
@@ -35,9 +33,7 @@ Properties::Properties()
 void Properties::HandleDataChangeEvent()
 {
     maBackgroundColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
-    maTextColor = Application::GetSettings().GetStyleSettings().GetActiveTextColor();
     maSelectionColor = Application::GetSettings().GetStyleSettings().GetHighlightColor();
-    maHighlightColor = Application::GetSettings().GetStyleSettings().GetMenuHighlightColor();
 }
 
 void Properties::SetBackgroundColor (const Color& rColor)
@@ -45,19 +41,9 @@ void Properties::SetBackgroundColor (const Color& rColor)
     maBackgroundColor = rColor;
 }
 
-void Properties::SetTextColor (const Color& rColor)
-{
-    maTextColor = rColor;
-}
-
 void Properties::SetSelectionColor (const Color& rColor)
 {
     maSelectionColor = rColor;
-}
-
-void Properties::SetHighlightColor (const Color& rColor)
-{
-    maHighlightColor = rColor;
 }
 
 } // end of namespace ::sd::slidesorter::controller

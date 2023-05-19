@@ -40,18 +40,10 @@ public:
     const Color& GetBackgroundColor() const { return maBackgroundColor; }
     void SetBackgroundColor(const Color& rColor);
 
-    /** Return the text color.
-    */
-    void SetTextColor(const Color& rColor);
-
     /** Return the color in which selections are to be painted.
     */
     const Color& GetSelectionColor() const { return maSelectionColor; }
     void SetSelectionColor(const Color& rColor);
-
-    /** Return the color used for highlighting e.g. the current slide.
-    */
-    void SetHighlightColor(const Color& rColor);
 
     /** The UI can be set to be read only independently from the model status.
         Used for instance in the presenter view.
@@ -60,9 +52,7 @@ public:
 
 private:
     Color maBackgroundColor;
-    Color maTextColor;
     Color maSelectionColor;
-    Color maHighlightColor;
     bool mbIsUIReadOnly;
 };
 

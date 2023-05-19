@@ -83,7 +83,6 @@ SwUpdateAttr::SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW, std::vect
 
 SwTableFormulaUpdate::SwTableFormulaUpdate(const SwTable* pNewTable)
     : m_pTable(pNewTable)
-    , m_pHistory(nullptr)
     , m_nSplitLine(USHRT_MAX)
     , m_eFlags(TBL_CALC)
 {

@@ -554,7 +554,6 @@ void ScXMLExport::CollectSharedData(SCTAB& nTableCount, sal_Int32& nShapesCount)
                 aMyShape.nEndX = pAnchor->maEndOffset.X();
                 aMyShape.nEndY = pAnchor->maEndOffset.Y();
                 aMyShape.xShape = xShape;
-                aMyShape.bResizeWithCell = ScDrawLayer::IsResizeWithCell(*pSdrObj);
                 pSharedData->AddNewShape(aMyShape);
                 pSharedData->SetLastColumn(nTable, pAnchor->maStart.Col());
                 pSharedData->SetLastRow(nTable, pAnchor->maStart.Row());

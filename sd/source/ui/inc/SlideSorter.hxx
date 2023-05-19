@@ -164,8 +164,6 @@ private:
     */
     model::SlideSorterModel* CreateModel();
 
-    bool mbIsValid;
-
     std::unique_ptr<controller::SlideSorterController> mpSlideSorterController;
     std::unique_ptr<model::SlideSorterModel> mpSlideSorterModel;
     std::unique_ptr<view::SlideSorterView> mpSlideSorterView;

@@ -312,7 +312,6 @@ public:
         const SwTable* pDelTable;  ///< Merge: Pointer to the table to be removed
         const OUString* pNewTableNm; ///< Split: the name of the new table
     } m_aData;
-    SwHistory* m_pHistory;
     sal_uInt16 m_nSplitLine;       ///< Split: from this BaseLine on will be split
     TableFormulaUpdateFlags m_eFlags;
     bool m_bModified : 1;
