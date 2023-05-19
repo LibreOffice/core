@@ -89,7 +89,6 @@
 #include <vcl/TypeSerializer.hxx>
 
 #include "FilterConfigCache.hxx"
-#include "graphicfilter_internal.hxx"
 
 #include <graphic/GraphicFormatDetector.hxx>
 #include <graphic/GraphicReader.hxx>
@@ -140,23 +139,6 @@ public:
 }
 
 // Helper functions
-
-sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8 const * pDest, sal_uLong nComp, sal_uLong nSize )
-{
-    while ( nComp-- >= nSize )
-    {
-        sal_uLong i;
-        for ( i = 0; i < nSize; i++ )
-        {
-            if ( ( pSource[i]&~0x20 ) != ( pDest[i]&~0x20 ) )
-                break;
-        }
-        if ( i == nSize )
-            return pSource;
-        pSource++;
-    }
-    return nullptr;
-}
 
 static OUString ImpGetExtension( std::u16string_view rPath )
 {

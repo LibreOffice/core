@@ -1314,14 +1314,6 @@ public:
     static css::uno::Reference< css::ui::dialogs::XFolderPicker2 >
         createFolderPicker( const css::uno::Reference< css::uno::XComponentContext >& rServiceManager );
 
-    /** Cancel all open dialogs
-    */
-    static void                 EndAllDialogs();
-
-    /** Cancel all open popups
-    */
-    static void                 EndAllPopups();
-
     /** Returns true, if the VCL plugin runs on the system event loop.
      *
      *  AKA the VCL plugin can't handle nested event loops, like WASM or mobile.

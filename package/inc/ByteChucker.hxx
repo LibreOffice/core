@@ -71,19 +71,6 @@ public:
         WriteBytes( a4Sequence );
     }
 
-    void WriteInt64(sal_Int64 nInt64)
-    {
-        p8Sequence[0] = static_cast<sal_Int8>((nInt64 >>  0) & 0xFF);
-        p8Sequence[1] = static_cast<sal_Int8>((nInt64 >>  8) & 0xFF);
-        p8Sequence[2] = static_cast<sal_Int8>((nInt64 >> 16) & 0xFF);
-        p8Sequence[3] = static_cast<sal_Int8>((nInt64 >> 24) & 0xFF);
-        p8Sequence[4] = static_cast<sal_Int8>((nInt64 >> 32) & 0xFF);
-        p8Sequence[5] = static_cast<sal_Int8>((nInt64 >> 40) & 0xFF);
-        p8Sequence[6] = static_cast<sal_Int8>((nInt64 >> 48) & 0xFF);
-        p8Sequence[7] = static_cast<sal_Int8>((nInt64 >> 56) & 0xFF);
-        WriteBytes( a8Sequence );
-    }
-
     void WriteUInt64(sal_uInt64 nuInt64)
     {
         p8Sequence[0] = static_cast<sal_Int8>((nuInt64 >>  0) & 0xFF);

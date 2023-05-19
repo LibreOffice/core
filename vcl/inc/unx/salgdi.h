@@ -75,7 +75,6 @@ public:
     const SalDisplay* GetDisplay() const { return GetColormap().GetDisplay(); }
     const SalVisual& GetVisual() const { return GetColormap().GetVisual(); }
     Display* GetXDisplay() const { return GetColormap().GetXDisplay(); }
-    Pixel GetPixel(Color nColor) const { return GetColormap().GetPixel(nColor); }
     Drawable GetDrawable() const { return m_hDrawable; }
 };
 

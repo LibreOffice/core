@@ -401,18 +401,6 @@ struct LineNumberSettings
 
 };
 
-/// Contains information about a table that will be potentially converted to a floating one at the section end.
-struct FloatingTableInfo
-{
-    css::uno::Sequence<css::beans::PropertyValue> m_aFrameProperties;
-
-    FloatingTableInfo(const css::uno::Sequence<css::beans::PropertyValue>& aFrameProperties)
-        : m_aFrameProperties(aFrameProperties)
-    {
-    }
-    css::uno::Any getPropertyValue(std::u16string_view propertyName);
-};
-
 /// Stores original/in-file-format info about a single anchored object.
 struct AnchoredObjectInfo
 {

@@ -54,7 +54,6 @@ private:
 
     const INetURLObject& GetSdgURL() const { return maGalleryStorageLocations.GetSdgURL(); }
     const INetURLObject& GetSdvURL() const { return maGalleryStorageLocations.GetSdvURL(); }
-    const INetURLObject& GetStrURL() const { return maGalleryStorageLocations.GetStrURL(); }
     const INetURLObject& GetThmURL() const { return maGalleryStorageLocations.GetThmURL(); }
 
 public:

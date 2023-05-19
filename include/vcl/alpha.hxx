@@ -69,7 +69,6 @@ private:
     friend bool VCL_DLLPUBLIC ReadDIBBitmapEx(BitmapEx& rTarget, SvStream& rIStm, bool bFileHeader, bool bMSOFormat);
 
     SAL_DLLPRIVATE const Bitmap&    ImplGetBitmap() const;
-    SAL_DLLPRIVATE void             ImplSetBitmap( const Bitmap& rBitmap );
 
 };
 

@@ -651,23 +651,12 @@ using namespace ::com::sun::star;
         impl_setURL( _rURL, true);
     }
 
-    OUString OPostgresConnectionPageSetup::getURLNoPrefix( ) const
-    {
-        return impl_getURL();
-    }
-
     OUString OPostgresConnectionPageSetup::impl_getURL() const
     {
         // get the pure text
         OUString sURL = m_xConnectionURL->GetTextNoPrefix();
         OSL_ENSURE( m_pCollection, "OConnectionHelper::impl_getURL: have no interpreter for the URLs!" );
         return sURL;
-    }
-
-    IMPL_LINK_NOARG(OPostgresConnectionPageSetup, OnEditModified, weld::Entry&, void)
-    {
-        SetRoadmapStateValue(true);
-        callModifiedHdl();
     }
 
     // OMySQLJDBCConnectionPageSetup

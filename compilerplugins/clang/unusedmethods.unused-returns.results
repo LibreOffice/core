@@ -4,6 +4,10 @@ connectivity/source/inc/odbc/OConnection.hxx:74
     short connectivity::odbc::OConnection::Construct(const rtl::OUString &,const com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &)
 connectivity/source/inc/odbc/OStatement.hxx:113
     _Bool connectivity::odbc::OStatement_Base::lockIfNecessary(const rtl::OUString &)
+cppuhelper/inc/interfacecontainer4.hxx:170
+    int cppuhelper::OInterfaceContainerHelper4::addInterface(std::unique_lock<std::mutex> &,const Reference<type-parameter-?-?> &)
+cppuhelper/inc/interfacecontainer4.hxx:181
+    int cppuhelper::OInterfaceContainerHelper4::removeInterface(std::unique_lock<std::mutex> &,const Reference<type-parameter-?-?> &)
 cui/source/inc/iconcdlg.hxx:56
     _Bool IconChoicePage::FillItemSet(SfxItemSet *)
 dbaccess/source/ui/app/AppSwapWindow.hxx:84
@@ -20,11 +24,11 @@ extensions/source/scanner/sanedlg.hxx:87
     _Bool SaneDlg::LoadState()
 extensions/source/scanner/sanedlg.hxx:101
     _Bool SaneDlg::SetAdjustedNumericalValue(const char *,double,int)
-framework/source/fwe/classes/addonsoptions.cxx:282
+framework/source/fwe/classes/addonsoptions.cxx:281
     _Bool framework::AddonsOptions_Impl::ReadToolBarItemSet(const rtl::OUString &,com::sun::star::uno::Sequence<com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> > &)
-framework/source/fwe/classes/addonsoptions.cxx:284
+framework/source/fwe/classes/addonsoptions.cxx:283
     _Bool framework::AddonsOptions_Impl::ReadNotebookBarItemSet(const rtl::OUString &,com::sun::star::uno::Sequence<com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> > &)
-i18nlangtag/source/languagetag/languagetag.cxx:298
+i18nlangtag/source/languagetag/languagetag.cxx:302
     const rtl::OUString & LanguageTagImpl::getBcp47() const
 include/basegfx/range/b2dconnectedranges.hxx:215
     type-parameter-?-? basegfx::B2DConnectedRanges::forEachAggregate(type-parameter-?-?) const
@@ -36,9 +40,9 @@ include/basic/sbstar.hxx:62
     _Bool StarBASIC::RTError(ErrCode,const rtl::OUString &,int,int,int)
 include/comphelper/backupfilehelper.hxx:205
     _Bool comphelper::BackupFileHelper::tryPush_extensionInfo(std::basic_string_view<char16_t>)
-include/editeng/editview.hxx:263
+include/editeng/editview.hxx:267
     ErrCode EditView::Read(SvStream &,enum EETextFormat,SvKeyValueIterator *)
-include/editeng/outliner.hxx:279
+include/editeng/outliner.hxx:280
     _Bool OutlinerView::Command(const CommandEvent &)
 include/oox/crypto/AgileEngine.hxx:120
     _Bool oox::crypto::AgileEngine::decryptHmacKey()
@@ -102,6 +106,12 @@ include/oox/export/shapes.hxx:137
     oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteNonVisualDrawingProperties(const com::sun::star::uno::Reference<com::sun::star::drawing::XShape> &,const char *)
 include/oox/export/shapes.hxx:185
     oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteTextBox(const com::sun::star::uno::Reference<com::sun::star::uno::XInterface> &,int,_Bool)
+include/oox/export/ThemeExport.hxx:48
+    _Bool oox::ThemeExport::writeColorSet(const model::Theme &)
+include/oox/export/ThemeExport.hxx:49
+    _Bool oox::ThemeExport::writeFontScheme(const model::FontScheme &)
+include/oox/export/ThemeExport.hxx:50
+    _Bool oox::ThemeExport::writeFormatScheme(const model::FormatScheme &)
 include/oox/helper/binaryoutputstream.hxx:78
     oox::BinaryOutputStream & oox::BinaryOutputStream::WriteInt16(short)
 include/oox/helper/binaryoutputstream.hxx:79
@@ -114,13 +124,13 @@ include/oox/ole/olehelper.hxx:176
     _Bool oox::ole::MSConvertOCXControls::importControlFromStream(oox::BinaryInputStream &,com::sun::star::uno::Reference<com::sun::star::form::XFormComponent> &,std::basic_string_view<char16_t>)
 include/oox/ole/olehelper.hxx:187
     _Bool oox::ole::MSConvertOCXControls::ReadOCXCtlsStream(const tools::SvRef<SotStorageStream> &,com::sun::star::uno::Reference<com::sun::star::form::XFormComponent> &,int,int)
-include/sax/fshelper.hxx:139
+include/sax/fshelper.hxx:135
     sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(int)
-include/sax/fshelper.hxx:140
+include/sax/fshelper.hxx:136
     sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(long)
-include/sax/fshelper.hxx:141
+include/sax/fshelper.hxx:137
     sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(double)
-include/sax/fshelper.hxx:143
+include/sax/fshelper.hxx:139
     sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::writeEscaped(const char *)
 include/sfx2/linkmgr.hxx:65
     _Bool sfx2::LinkManager::InsertLink(sfx2::SvBaseLink *,enum sfx2::SvBaseLinkObjectType,enum SfxLinkUpdateMode,const rtl::OUString *)
@@ -128,7 +138,7 @@ include/sfx2/lnkbase.hxx:111
     sfx2::SvLinkSource * sfx2::SvBaseLink::GetRealObject()
 include/svl/macitem.hxx:89
     SvStream & SvxMacroTableDtor::Write(SvStream &) const
-include/svtools/ctrlbox.hxx:367
+include/svtools/ctrlbox.hxx:368
     _Bool FontNameBox::get_entry_selection_bounds(int &,int &)
 include/svx/autoformathelper.hxx:212
     _Bool AutoFormatBase::LoadBlockA(SvStream &,const struct AutoFormatVersions &,unsigned short)
@@ -142,12 +152,16 @@ include/svx/dlgctrl.hxx:99
     Point SvxRectCtl::SetActualRPWithoutInvalidate(enum RectPoint)
 include/svx/framelink.hxx:159
     svx::frame::Style & svx::frame::Style::MirrorSelf()
-include/svx/gallerybinaryengine.hxx:105
-    SvStream & GalleryBinaryEngine::writeGalleryTheme(SvStream &,const GalleryTheme &,const GalleryThemeEntry *)
-include/svx/gallerybinaryengineentry.hxx:57
-    std::unique_ptr<GalleryTheme> & GalleryBinaryEngineEntry::getCachedTheme(std::unique_ptr<GalleryTheme> &)
-include/test/a11y/AccessibilityTools.hxx:62
-    rtl::OUString AccessibilityTools::getStateName(const short)
+include/test/a11y/AccessibilityTools.hxx:118
+    com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessibleContext> AccessibilityTools::getAccessibleObjectForName(const com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessibleContext> &,const short,std::basic_string_view<char16_t>,type-parameter-?-?...)
+include/test/a11y/AccessibilityTools.hxx:148
+    com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessibleContext> AccessibilityTools::getAccessibleObjectForName(const com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> &,const short,std::basic_string_view<char16_t>,type-parameter-?-?...)
+include/test/a11y/AccessibilityTools.hxx:172
+    _Bool AccessibilityTools::nameEquals(const com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> &,const std::basic_string_view<char16_t>)
+include/test/a11y/AccessibilityTools.hxx:260
+    rtl::OUString AccessibilityTools::debugName(com::sun::star::accessibility::XAccessibleAction *)
+include/test/a11y/eventposter.hxx:91
+    _Bool test::EventPosterHelper::operator!() const
 include/test/helper/shape.hxx:41
     com::sun::star::uno::Reference<com::sun::star::drawing::XShape> apitest::helper::shape::createEllipse(const com::sun::star::uno::Reference<com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
 include/test/sheet/xnamedrange.hxx:22
@@ -160,15 +174,19 @@ include/tools/urlobj.hxx:738
     _Bool INetURLObject::SetParam(std::basic_string_view<char16_t>,enum INetURLObject::EncodeMechanism,unsigned short)
 include/unotools/localedatawrapper.hxx:159
     const com::sun::star::uno::Sequence<struct com::sun::star::lang::Locale> & LocaleDataWrapper::getAllInstalledLocaleNames() const
+include/vcl/BinaryDataContainer.hxx:61
+    unsigned long BinaryDataContainer::writeToStream(SvStream &) const
+include/vcl/bitmap.hxx:263
+    _Bool Bitmap::Blend(const AlphaMask &,const Color &)
 include/vcl/bitmapex.hxx:226
     _Bool BitmapEx::Rotate(struct o3tl::strong_int<short, struct FractionTag<10> >,const Color &)
 include/vcl/filter/SvmReader.hxx:36
     SvStream & SvmReader::Read(GDIMetaFile &,struct ImplMetaReadData *)
 include/vcl/filter/SvmWriter.hxx:37
     SvStream & SvmWriter::Write(const GDIMetaFile &)
-include/vcl/formatter.hxx:218
+include/vcl/formatter.hxx:219
     _Bool Formatter::SetFormat(const rtl::OUString &,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>)
-include/vcl/graphicfilter.hxx:257
+include/vcl/graphicfilter.hxx:258
     ErrCode GraphicFilter::ExportGraphic(const Graphic &,const INetURLObject &,unsigned short,const com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> *)
 include/vcl/GraphicNativeMetadata.hxx:34
     _Bool GraphicNativeMetadata::read(SvStream &)
@@ -176,19 +194,17 @@ include/vcl/GraphicNativeTransform.hxx:33
     _Bool GraphicNativeTransform::rotateBitmapOnly(struct o3tl::strong_int<short, struct FractionTag<10> >)
 include/vcl/GraphicNativeTransform.hxx:35
     _Bool GraphicNativeTransform::rotateGeneric(struct o3tl::strong_int<short, struct FractionTag<10> >,std::basic_string_view<char16_t>)
-include/vcl/menu.hxx:387
+include/vcl/menu.hxx:385
     _Bool Menu::HandleMenuActivateEvent(Menu *) const
-include/vcl/menu.hxx:388
+include/vcl/menu.hxx:386
     _Bool Menu::HandleMenuDeActivateEvent(Menu *) const
 include/vcl/texteng.hxx:271
     _Bool TextEngine::Read(SvStream &,const TextSelection *)
-include/vcl/window.hxx:1394
-    _Bool vcl::Window::set_font_attribute(const rtl::OString &,std::basic_string_view<char16_t>)
 include/xmloff/unointerfacetouniqueidentifiermapper.hxx:65
     _Bool comphelper::UnoInterfaceToUniqueIdentifierMapper::registerReservedReference(const rtl::OUString &,const com::sun::star::uno::Reference<com::sun::star::uno::XInterface> &)
 include/xmloff/xmluconv.hxx:279
     _Bool SvXMLUnitConverter::convertNumFormat(short &,const rtl::OUString &,std::basic_string_view<char16_t>,_Bool) const
-linguistic/source/lngsvcmgr.hxx:117
+linguistic/source/lngsvcmgr.hxx:116
     _Bool LngSvcMgr::SaveCfgSvcs(std::basic_string_view<char16_t>)
 lotuswordpro/inc/lwpsvstream.hxx:80
     LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
@@ -200,13 +216,13 @@ sc/inc/column.hxx:677
     _Bool ScColumn::DeleteSparkline(int)
 sc/inc/orcusfilters.hxx:44
     _Bool ScOrcusFilters::importODS_Styles(ScDocument &,rtl::OUString &) const
-sc/inc/scabstdlg.hxx:55
+sc/inc/scabstdlg.hxx:56
     _Bool ScAsyncTabController::StartExecuteAsync(struct VclAbstractDialog::AsyncContext &)
 sc/source/core/opencl/opbase.hxx:451
     unsigned long sc::opencl::DynamicKernelSlidingArgument::GenReductionLoopHeader(sc::opencl::outputstream &,_Bool &)
 sc/source/core/opencl/opbase.hxx:483
     unsigned long sc::opencl::ParallelReductionVectorRef::GenReductionLoopHeader(sc::opencl::outputstream &,int,_Bool &)
-sc/source/filter/inc/workbookhelper.hxx:262
+sc/source/filter/inc/workbookhelper.hxx:260
     _Bool oox::xls::WorkbookHelper::importOoxFragment(const rtl::Reference<oox::core::FragmentHandler> &,oox::core::FastParser &)
 sc/source/filter/xml/XMLStylesExportHelper.hxx:174
     _Bool ScFormatRangeStyles::AddStyleName(const rtl::OUString &,int &,const _Bool)
@@ -256,14 +272,16 @@ sc/source/ui/vba/vbaformat.hxx:145
     com::sun::star::uno::Any ScVbaFormat::getMergeCells()
 sc/source/ui/vba/vbaformat.hxx:151
     com::sun::star::uno::Any ScVbaFormat::getReadingOrder()
-sd/source/filter/eppt/pptx-epptooxml.cxx:133
+sd/source/filter/eppt/pptx-epptooxml.cxx:135
     oox::drawingml::ShapeExport & oox::core::PowerPointShapeExport::WritePageShape(const com::sun::star::uno::Reference<com::sun::star::drawing::XShape> &,enum PageType,_Bool)
-sd/source/ui/inc/DrawViewShell.hxx:252
+sd/source/ui/inc/DrawViewShell.hxx:253
     _Bool sd::DrawViewShell::SelectPage(unsigned short,unsigned short)
 sd/source/ui/inc/navigatr.hxx:120
     _Bool SdNavigatorWin::InsertFile(const rtl::OUString &)
 sd/source/ui/inc/OutlineViewShell.hxx:114
     ErrCode sd::OutlineViewShell::ReadRtf(SvStream &)
+sd/source/ui/inc/View.hxx:175
+    SdrMediaObj * sd::View::InsertMediaObj(const rtl::OUString &,signed char &,const Point &,const Size &)
 sd/source/ui/remotecontrol/IBluetoothSocket.hxx:36
     int sd::IBluetoothSocket::write(const void *,unsigned int)
 sdext/source/pdfimport/tree/style.hxx:155
@@ -272,27 +290,37 @@ sfx2/inc/autoredactdialog.hxx:139
     _Bool SfxAutoRedactDialog::getTargets(std::vector<struct std::pair<struct RedactionTarget, rtl::OUString> > &)
 slideshow/source/engine/animationnodes/animationbasenode.hxx:62
     _Bool slideshow::internal::AnimationBaseNode::enqueueActivity() const
-sw/inc/calc.hxx:124
+svl/source/fsstor/fsstorage.hxx:56
+    ucbhelper::Content & FSStorage::GetContent()
+svx/inc/galleryfilestorage.hxx:103
+    SvStream & GalleryFileStorage::writeGalleryTheme(SvStream &,const GalleryTheme &,const GalleryThemeEntry *)
+svx/inc/galleryfilestorageentry.hxx:56
+    std::unique_ptr<GalleryTheme> & GalleryFileStorageEntry::getCachedTheme(std::unique_ptr<GalleryTheme> &)
+sw/inc/calc.hxx:125
     SwSbxValue & SwSbxValue::MakeDouble()
-sw/inc/docary.hxx:299
-    _Bool SwExtraRedlineTable::DeleteAllTableRedlines(SwDoc &,const SwTable &,_Bool,enum RedlineType)
+sw/inc/crsrsh.hxx:599
+    _Bool SwCursorShell::TrySelectOuterTable()
 sw/inc/docary.hxx:300
-    _Bool SwExtraRedlineTable::DeleteTableRowRedline(SwDoc *,const SwTableLine &,_Bool,enum RedlineType)
+    _Bool SwExtraRedlineTable::DeleteAllTableRedlines(SwDoc &,const SwTable &,_Bool,enum RedlineType)
 sw/inc/docary.hxx:301
+    _Bool SwExtraRedlineTable::DeleteTableRowRedline(SwDoc *,const SwTableLine &,_Bool,enum RedlineType)
+sw/inc/docary.hxx:302
     _Bool SwExtraRedlineTable::DeleteTableCellRedline(SwDoc *,const SwTableBox &,_Bool,enum RedlineType)
-sw/inc/editsh.hxx:635
+sw/inc/editsh.hxx:493
+    _Bool SwEditShell::OutlineUpDown(short)
+sw/inc/editsh.hxx:649
     const GraphicAttr * SwEditShell::GetGraphicAttr(GraphicAttr &) const
-sw/inc/editsh.hxx:648
+sw/inc/editsh.hxx:662
     _Bool SwEditShell::GetGrfSize(Size &) const
-sw/inc/editsh.hxx:813
+sw/inc/editsh.hxx:827
     unsigned short SwEditShell::GetRefMarks(std::vector<rtl::OUString> *) const
-sw/inc/IDocumentUndoRedo.hxx:100
+sw/inc/IDocumentUndoRedo.hxx:99
     _Bool IDocumentUndoRedo::Undo()
-sw/inc/IDocumentUndoRedo.hxx:181
+sw/inc/IDocumentUndoRedo.hxx:180
     _Bool IDocumentUndoRedo::Repeat(sw::RepeatContext &,const unsigned short)
 sw/inc/node.hxx:438
     _Bool SwContentNode::GoNext(struct SwPosition *,enum SwCursorSkipMode) const
-sw/inc/tblafmt.hxx:267
+sw/inc/tblafmt.hxx:271
     _Bool SwTableAutoFormatTable::Load(SvStream &)
 sw/source/core/inc/laycache.hxx:64
     _Bool SwLayoutCache::CompareLayout(const SwDoc &) const
@@ -304,21 +332,25 @@ sw/source/uibase/inc/drawbase.hxx:54
     _Bool SwDrawBase::MouseMove(const MouseEvent &)
 sw/source/uibase/inc/fldmgr.hxx:118
     const com::sun::star::uno::Reference<com::sun::star::text::XNumberingTypeInfo> & SwFieldMgr::GetNumberingInfo() const
-sw/source/uibase/inc/mailmergewizard.hxx:79
+sw/source/uibase/inc/mailmergewizard.hxx:78
     _Bool SwMailMergeWizard::skipUntil(unsigned short)
+sw/source/uibase/inc/wrtsh.hxx:427
+    _Bool SwWrtShell::GotoFieldmark(const sw::mark::IFieldmark *const)
 sw/source/uibase/inc/wrtsh.hxx:435
     _Bool SwWrtShell::GotoContentControl(const SwFormatContentControl &,_Bool)
 ucb/source/ucp/webdav-curl/ContentProperties.hxx:160
     _Bool http_dav_ucp::CachableContentProperties::containsAllNames(const com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,std::vector<rtl::OUString> &) const
+unotools/source/ucbhelper/ucblockbytes.hxx:108
+    _Bool utl::UcbLockBytes::setInputStream(const com::sun::star::uno::Reference<com::sun::star::io::XInputStream> &,_Bool)
 vcl/inc/font/FeatureCollector.hxx:45
     _Bool vcl::font::FeatureCollector::collect()
-vcl/inc/impgraph.hxx:186
+vcl/inc/impgraph.hxx:187
     _Bool ImpGraphic::swapOutGraphic(SvStream &)
-vcl/inc/pdf/pdfwriter_impl.hxx:1307
+vcl/inc/pdf/pdfwriter_impl.hxx:1334
     _Bool vcl::PDFWriterImpl::setCurrentStructureElement(int)
-vcl/inc/pdf/pdfwriter_impl.hxx:1308
+vcl/inc/pdf/pdfwriter_impl.hxx:1335
     _Bool vcl::PDFWriterImpl::setStructureAttribute(enum vcl::PDFWriter::StructAttribute,enum vcl::PDFWriter::StructAttributeValue)
-vcl/inc/pdf/pdfwriter_impl.hxx:1309
+vcl/inc/pdf/pdfwriter_impl.hxx:1336
     _Bool vcl::PDFWriterImpl::setStructureAttributeNumerical(enum vcl::PDFWriter::StructAttribute,int)
 vcl/inc/qt5/QtClipboard.hxx:36
     QString QtClipboard::tr(const char *,const char *,int)
@@ -362,11 +394,11 @@ vcl/inc/salinst.hxx:177
     _Bool SalInstance::CallEventCallback(const void *,int)
 vcl/inc/salprn.hxx:113
     _Bool SalPrinter::EndJob()
-vcl/inc/salvtables.hxx:1624
+vcl/inc/salvtables.hxx:1771
     _Bool SalInstanceTreeView::get_iter_abs_pos(weld::TreeIter &,int) const
-vcl/inc/unx/gtk/gtkdata.hxx:335
+vcl/inc/unx/gtk/gtkdata.hxx:336
     int GtkSalDisplay::CaptureMouse(SalFrame *)
-vcl/inc/unx/salframe.h:168
+vcl/inc/unx/salframe.h:169
     _Bool X11SalFrame::Dispatch(union _XEvent *)
 vcl/source/fontsubset/sft.cxx:122
     _Bool vcl::(anonymous namespace)::HexFmt::Flush()
@@ -384,3 +416,5 @@ workdir/../vcl/unx/kf5/KF5FilePicker.hxx:29
     QString KF5FilePicker::tr(const char *,const char *,int)
 workdir/../vcl/unx/kf5/KF5FilePicker.hxx:29
     QString KF5FilePicker::trUtf8(const char *,const char *,int)
+writerfilter/source/dmapper/TagLogger.hxx:59
+    typename enable_if<std::is_integral_v<T>, void>::type writerfilter::TagLogger::attribute(const std::basic_string<char> &,type-parameter-?-?)

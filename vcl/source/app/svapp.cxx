@@ -307,16 +307,6 @@ IMPL_STATIC_LINK_NOARG( ImplSVAppData, ImplEndAllDialogsMsg, void*, void )
     }
 }
 
-void Application::EndAllDialogs()
-{
-    Application::PostUserEvent( LINK( nullptr, ImplSVAppData, ImplEndAllDialogsMsg ) );
-}
-
-void Application::EndAllPopups()
-{
-    Application::PostUserEvent( LINK( nullptr, ImplSVAppData, ImplEndAllPopupsMsg ) );
-}
-
 void Application::notifyWindow(vcl::LOKWindowId /*nLOKWindowId*/,
                                const OUString& /*rAction*/,
                                const std::vector<vcl::LOKPayloadItem>& /*rPayload = std::vector<LOKPayloadItem>()*/) const

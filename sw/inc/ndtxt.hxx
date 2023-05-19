@@ -540,10 +540,6 @@ public:
 
     SwTwips GetAdditionalIndentForStartingNewList() const;
 
-    void ClearLRSpaceItemDueToListLevelIndents(
-        std::unique_ptr<SvxFirstLineIndentItem>& o_rFirstLineItem,
-        std::unique_ptr<SvxTextLeftMarginItem>& o_rTextLeftMarginItem) const;
-
     /** return left margin for tab stop position calculation
 
         Needed for text formatting

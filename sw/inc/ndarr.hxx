@@ -223,10 +223,6 @@ public:
                             SwGrfFormatColl *pColl,
                             SwAttrSet const * pAutoAttr = nullptr );    ///< in ndgrf.cxx
 
-    static SwGrfNode *MakeGrfNode( SwNode & rWhere,
-                            const GraphicObject& rGrfObj,
-                            SwGrfFormatColl *pColl ); ///< in ndgrf.cxx
-
     SwOLENode *MakeOLENode( SwNode& rWhere,
                             const svt::EmbeddedObjectRef&,
                             SwGrfFormatColl *pColl ); ///< in ndole.cxx

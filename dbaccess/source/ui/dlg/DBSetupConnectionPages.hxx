@@ -232,7 +232,6 @@ namespace dbaui
     ::dbaccess::ODsnTypeCollection* m_pCollection;
 
     private:
-        DECL_LINK(OnEditModified, weld::Entry&, void);
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
         virtual void fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
@@ -261,7 +260,6 @@ namespace dbaui
         void        impl_setURL( std::u16string_view _rURL, bool _bPrefix );
         void        setURLNoPrefix( std::u16string_view _rURL );
         void        setURL( std::u16string_view _rURL );
-        OUString    getURLNoPrefix( ) const;
         OUString    impl_getURL() const;
         bool        commitURL();
 

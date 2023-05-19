@@ -55,8 +55,6 @@ public:
                                                sal_uInt32 nId, bool bThemeNameFromResource );
     ~GalleryThemeEntry();
     
-    const std::unique_ptr<GalleryFileStorageEntry>& getGalleryStorageEngineEntry() const { return mpGalleryStorageEngineEntry; }
-
     GalleryStorageLocations& getGalleryStorageLocations() const;
 
     GalleryTheme* createGalleryTheme(Gallery* pGallery);

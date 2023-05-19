@@ -31,19 +31,10 @@
 #include <comphelper/random.hxx>
 #include <rtl/math.hxx>
 
-#include "boxclipper.hxx"
-
 using namespace ::basegfx;
 
 namespace basegfx2d
 {
-/// Gets a random ordinal [0,n)
-double getRandomOrdinal( const std::size_t n )
-{
-    // use this one when displaying polygons in OOo, which still sucks
-    // great rocks when trying to import non-integer svg:d attributes
-    return comphelper::rng::uniform_size_distribution(0, n-1);
-}
 
 static bool compare(const B2DPoint& left, const B2DPoint& right)
 {

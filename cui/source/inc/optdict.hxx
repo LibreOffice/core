@@ -89,7 +89,6 @@ private:
     DECL_LINK(NewDelActionHdl, weld::Entry&, bool);
     DECL_LINK(ModifyHdl, weld::Entry&, void);
     DECL_LINK(EntrySizeAllocHdl, const Size&, void);
-    DECL_STATIC_LINK(SvxEditDictionaryDialog, InsertTextHdl, OUString&, bool);
     bool NewDelHdl(const weld::Widget*);
 
     void            ShowWords_Impl( sal_uInt16 nId );

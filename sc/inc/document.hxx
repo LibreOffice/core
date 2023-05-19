@@ -2036,8 +2036,6 @@ public:
     SC_DLLPUBLIC SCROW          FirstVisibleRow(SCROW nStartRow, SCROW nEndRow, SCTAB nTab) const;
     SC_DLLPUBLIC SCROW          LastVisibleRow(SCROW nStartRow, SCROW nEndRow, SCTAB nTab) const;
     SCROW                       CountVisibleRows(SCROW nStartRow, SCROW nEndRow, SCTAB nTab) const;
-    SCROW                       CountHiddenRows(SCROW nStartRow, SCROW nEndRow, SCTAB nTab) const;
-    SCCOL                       CountHiddenCols(SCROW nStartCol, SCROW nEndCol, SCTAB nTab) const;
 
     SC_DLLPUBLIC bool           RowFiltered(SCROW nRow, SCTAB nTab, SCROW* pFirstRow = nullptr, SCROW* pLastRow = nullptr) const;
     bool                        HasFilteredRows(SCROW nStartRow, SCROW nEndRow, SCTAB nTab) const;

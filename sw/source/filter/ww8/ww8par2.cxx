@@ -388,45 +388,6 @@ bool SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp,
     return false;
 }
 
-bool SwWW8ImplReader::SearchTableEnd(WW8PLCFx_Cp_FKP* pPap) const
-{
-    if (m_bVer67)
-        // The below SPRM is for WW8 only.
-        return false;
-
-    WW8PLCFxDesc aRes;
-    aRes.pMemPos = nullptr;
-    aRes.nEndPos = pPap->Where();
-    std::set<std::pair<WW8_CP, WW8_CP>> aPrevRes;
-
-    while (pPap->HasFkp() && pPap->Where() != WW8_CP_MAX)
-    {
-        // See if the current pap is outside the table.
-        SprmResult aSprmRes = pPap->HasSprm(NS_sprm::PFInTable::val);
-        const sal_uInt8* pB = aSprmRes.pSprm;
-        if (!pB || aSprmRes.nRemainingData < 1 || *pB != 1)
-            // Yes, this is the position after the end of the table.
-            return true;
-
-        // It is, so seek to the next pap.
-        aRes.nStartPos = aRes.nEndPos;
-        aRes.pMemPos = nullptr;
-        if (!pPap->SeekPos(aRes.nStartPos))
-            return false;
-
-        // Read the sprms and make sure we moved forward to avoid infinite loops.
-        pPap->GetSprms(&aRes);
-        auto aBounds(std::make_pair(aRes.nStartPos, aRes.nEndPos));
-        if (!aPrevRes.insert(aBounds).second) //already seen these bounds, infinite loop
-        {
-            SAL_WARN("sw.ww8", "SearchTableEnd, loop in paragraph property chain");
-            break;
-        }
-    }
-
-    return false;
-}
-
 ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     const WW8_TablePos *pTabPos)
 {
