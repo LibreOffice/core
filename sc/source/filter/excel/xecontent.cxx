@@ -668,11 +668,11 @@ XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rF
         if( mbFontUsed )
         {
             vcl::Font aFont;
-            ::Color aColor;
+            model::ComplexColor aComplexColor;
             ScPatternAttr::fillFontOnly(aFont, rItemSet);
-            ScPatternAttr::fillColor(aColor, rItemSet, ScAutoFontColorMode::Raw);
-            maFontData.FillFromVclFont(aFont, aColor);
-            mnFontColorId = GetPalette().InsertColor(maFontData.maColor, EXC_COLOR_CELLTEXT);
+            ScPatternAttr::fillColor(aComplexColor, rItemSet, ScAutoFontColorMode::Raw);
+            maFontData.FillFromVclFont(aFont, aComplexColor);
+            mnFontColorId = GetPalette().InsertColor(maFontData.maComplexColor.getFinalColor(), EXC_COLOR_CELLTEXT);
         }
 
         // border

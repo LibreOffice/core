@@ -883,14 +883,17 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
     if (bHaveVertAlign)
         pStream->singleElement(XML_vertAlign, XML_val, pVertAlign);
     pStream->singleElement(XML_sz, XML_val, OString::number( rFontData.mnHeight / 20.0 )); // Twips->Pt
-    if( rFontData.maColor != Color( ColorAlpha, 0, 0xFF, 0xFF, 0xFF ) )
-        pStream->singleElement( XML_color,
+
+    if (rFontData.maComplexColor.getFinalColor() != Color( ColorAlpha, 0, 0xFF, 0xFF, 0xFF))
+    {
+        pStream->singleElement(XML_color,
                 // OOXTODO: XML_auto,       bool
                 // OOXTODO: XML_indexed,    uint
-                XML_rgb, XclXmlUtils::ToOString(rFontData.maColor)
+                XML_rgb, XclXmlUtils::ToOString(rFontData.maComplexColor.getFinalColor())
                 // OOXTODO: XML_theme,      index into <clrScheme/>
                 // OOXTODO: XML_tint,       double
         );
+    }
     pStream->singleElement(nFontId, XML_val, rFontData.maName);
     pStream->singleElement(XML_family, XML_val, OString::number(  rFontData.mnFamily ));
     if (rFontData.mnCharSet != 0)

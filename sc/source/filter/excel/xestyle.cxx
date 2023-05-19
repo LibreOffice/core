@@ -938,21 +938,22 @@ bool XclExpFontHelper::CheckItems( const XclExpRoot& rRoot, const SfxItemSet& rI
 
 namespace {
 
-sal_uInt32 lclCalcHash( const XclFontData& rFontData )
+std::size_t lclCalcHash( const XclFontData& rFontData )
 {
-    sal_uInt32 nHash = rFontData.maName.getLength();
-    nHash += sal_uInt32(rFontData.maColor) * 2;
-    nHash += rFontData.mnWeight * 3;
-    nHash += rFontData.mnCharSet * 5;
-    nHash += rFontData.mnFamily * 7;
-    nHash += rFontData.mnHeight * 11;
-    nHash += rFontData.mnUnderline * 13;
-    nHash += rFontData.mnEscapem * 17;
-    if( rFontData.mbItalic ) nHash += 19;
-    if( rFontData.mbStrikeout ) nHash += 23;
-    if( rFontData.mbOutline ) nHash += 29;
-    if( rFontData.mbShadow ) nHash += 31;
-    return nHash;
+    std::size_t seed = 0;
+    o3tl::hash_combine(seed, rFontData.maName);
+    o3tl::hash_combine(seed, rFontData.maComplexColor);
+    o3tl::hash_combine(seed, rFontData.mnWeight);
+    o3tl::hash_combine(seed, rFontData.mnCharSet);
+    o3tl::hash_combine(seed, rFontData.mnFamily);
+    o3tl::hash_combine(seed, rFontData.mnHeight);
+    o3tl::hash_combine(seed, rFontData.mnUnderline);
+    o3tl::hash_combine(seed, rFontData.mnEscapem);
+    o3tl::hash_combine(seed, rFontData.mbItalic);
+    o3tl::hash_combine(seed, rFontData.mbStrikeout);
+    o3tl::hash_combine(seed, rFontData.mbOutline);
+    o3tl::hash_combine(seed, rFontData.mbShadow);
+    return seed;
 }
 
 } // namespace
@@ -964,7 +965,7 @@ XclExpFont::XclExpFont( const XclExpRoot& rRoot,
     maData( rFontData )
 {
     // insert font color into palette
-    mnColorId = rRoot.GetPalette().InsertColor( rFontData.maColor, eColorType, EXC_COLOR_FONTAUTO );
+    mnColorId = rRoot.GetPalette().InsertColor(rFontData.maComplexColor.getFinalColor(), eColorType, EXC_COLOR_FONTAUTO);
     // hash value for faster comparison
     mnHash = lclCalcHash( maData );
     // record size
@@ -1222,18 +1223,18 @@ sal_uInt16 XclExpFontBuffer::Insert(
     return static_cast< sal_uInt16 >( nPos );
 }
 
-sal_uInt16 XclExpFontBuffer::Insert(const SvxFont& rFont, Color const& rColor, XclExpColorType eColorType )
+sal_uInt16 XclExpFontBuffer::Insert(const SvxFont& rFont, model::ComplexColor const& rComplexColor, XclExpColorType eColorType )
 {
-    return Insert(XclFontData(rFont, rColor), eColorType);
+    return Insert(XclFontData(rFont, rComplexColor), eColorType);
 }
 
 sal_uInt16 XclExpFontBuffer::Insert(const SfxItemSet& rItemSet, sal_Int16 nScript, XclExpColorType eColorType, bool bAppFont )
 {
     // #i17050# script type now provided by caller
     vcl::Font aFont = XclExpFontHelper::GetFontFromItemSet(GetRoot(), rItemSet, nScript);
-    Color aColor;
-    ScPatternAttr::fillColor(aColor, rItemSet, ScAutoFontColorMode::Raw);
-    return Insert(XclFontData(aFont, aColor), eColorType, bAppFont );
+    model::ComplexColor aComplexColor;
+    ScPatternAttr::fillColor(aComplexColor, rItemSet, ScAutoFontColorMode::Raw);
+    return Insert(XclFontData(aFont, aComplexColor), eColorType, bAppFont );
 }
 
 void XclExpFontBuffer::Save( XclExpStream& rStrm )
@@ -3208,7 +3209,7 @@ sal_Int32 XclExpDxfs::GetDxfByColor(Color aColor) const
     return -1;
 }
 
-void XclExpDxfs::AddColor(Color aColor)
+void XclExpDxfs::addColor(Color aColor)
 {
     maColorToDxfId.emplace(aColor, maDxf.size());
 

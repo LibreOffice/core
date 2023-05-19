@@ -221,7 +221,7 @@ public:
     sal_uInt16          Insert(const XclFontData& rFontData, XclExpColorType eColorType, bool bAppFont = false );
     /** Inserts the SvxFont into the buffer if not present, e.g. where escapements are used.
         @return  The resulting Excel font index. */
-    sal_uInt16          Insert(const SvxFont& rFont, Color const& rColor, XclExpColorType eColorType);
+    sal_uInt16 Insert(const SvxFont& rFont, model::ComplexColor const& rComplexColor, XclExpColorType eColorType);
     /** Inserts the font contained in the passed item set into the buffer, if not present.
         @param nScript  The script type of the font properties to be used.
         @param bAppFont  true = Sets the application font; false = Inserts a new font.
@@ -756,7 +756,7 @@ public:
 
     sal_Int32 GetDxfId(const OUString& rName) const;
     sal_Int32 GetDxfByColor(Color aColor) const;
-    void AddColor(Color aColor);
+    void addColor(Color aColor);
 
     virtual void SaveXml( XclExpXmlStream& rStrm) override;
     void Finalize();
