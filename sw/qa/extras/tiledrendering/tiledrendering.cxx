@@ -107,6 +107,7 @@ protected:
     int m_nRedlineTableSizeChanged;
     int m_nRedlineTableEntryModified;
     int m_nTrackedChangeIndex;
+    bool m_bFullInvalidateSeen;
     OString m_sHyperlinkText;
     OString m_sHyperlinkLink;
     OString m_aFormFieldButton;
@@ -124,6 +125,7 @@ SwTiledRenderingTest::SwTiledRenderingTest()
     m_nRedlineTableSizeChanged(0),
     m_nRedlineTableEntryModified(0),
     m_nTrackedChangeIndex(-1),
+    m_bFullInvalidateSeen(false),
     m_callbackWrapper(&callback, this)
 {
 }
@@ -194,7 +196,11 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
                 tools::Rectangle aInvalidation;
                 uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
                 if (std::string_view("EMPTY") == pPayload)
+                {
+                    m_bFullInvalidateSeen = true;
                     return;
+                }
+
                 CPPUNIT_ASSERT(aSeq.getLength() == 4 || aSeq.getLength() == 5);
                 aInvalidation.SetLeft(aSeq[0].toInt32());
                 aInvalidation.SetTop(aSeq[1].toInt32());
@@ -3529,6 +3535,21 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testBulletDeleteInvalidation)
     SwFrame* pFirstText = pBody->GetLower();
     tools::Rectangle aFirstTextRect = pFirstText->getFrameArea().SVRect();
     CPPUNIT_ASSERT(!aFirstTextRect.Overlaps(m_aInvalidations));
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTdf155349)
+{
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    Scheduler::ProcessEventsToIdle();
+    setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
+    pWrtShell->Insert2("a");
+    Scheduler::ProcessEventsToIdle();
+    pWrtShell->Insert2("b");
+    m_bFullInvalidateSeen = false;
+    Scheduler::ProcessEventsToIdle();
+    // before fix for tdf#155349 the total area got invalidated when changing one line
+    CPPUNIT_ASSERT(!m_bFullInvalidateSeen);
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testBulletNoNumInvalidation)
