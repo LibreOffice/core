@@ -1130,8 +1130,8 @@ void XclExpChFontBase::ConvertFontBase( const XclExpChRoot& rRoot, sal_uInt16 nF
 {
     if( const XclExpFont* pFont = rRoot.GetFontBuffer().GetFont( nFontIdx ) )
     {
-        XclExpChFontRef xFont = new XclExpChFont( nFontIdx );
-        SetFont( xFont, pFont->GetFontData().maColor, pFont->GetFontColorId() );
+        XclExpChFontRef xFont = new XclExpChFont(nFontIdx);
+        SetFont(xFont, pFont->GetFontData().maComplexColor, pFont->GetFontColorId());
     }
 }
 
@@ -1152,11 +1152,11 @@ XclExpChText::XclExpChText( const XclExpChRoot& rRoot ) :
 {
 }
 
-void XclExpChText::SetFont( XclExpChFontRef xFont, const Color& rColor, sal_uInt32 nColorId )
+void XclExpChText::SetFont( XclExpChFontRef xFont, model::ComplexColor const& rComplexColor, sal_uInt32 nColorId )
 {
     mxFont = xFont;
-    maData.maTextColor = rColor;
-    ::set_flag( maData.mnFlags, EXC_CHTEXT_AUTOCOLOR, rColor == COL_AUTO );
+    maData.maTextComplexColor = rComplexColor;
+    ::set_flag(maData.mnFlags, EXC_CHTEXT_AUTOCOLOR, rComplexColor.getFinalColor() == COL_AUTO);
     mnTextColorId = nColorId;
 }
 
@@ -1386,7 +1386,7 @@ void XclExpChText::WriteBody( XclExpStream& rStrm )
     rStrm   << maData.mnHAlign
             << maData.mnVAlign
             << maData.mnBackMode
-            << maData.maTextColor
+            << maData.maTextComplexColor.getFinalColor()
             << maData.maRect
             << maData.mnFlags;
 
@@ -2845,10 +2845,10 @@ void XclExpChTick::Convert( const ScfPropertySet& rPropSet, const XclChExtTypeIn
     }
 }
 
-void XclExpChTick::SetFontColor( const Color& rColor, sal_uInt32 nColorId )
+void XclExpChTick::SetFontColor(model::ComplexColor const& rComplexColor, sal_uInt32 nColorId )
 {
-    maData.maTextColor = rColor;
-    ::set_flag( maData.mnFlags, EXC_CHTICK_AUTOCOLOR, rColor == COL_AUTO );
+    maData.maTextComplexColor = rComplexColor;
+    ::set_flag(maData.mnFlags, EXC_CHTICK_AUTOCOLOR, rComplexColor.getFinalColor() == COL_AUTO);
     mnTextColorId = nColorId;
 }
 
@@ -2866,7 +2866,7 @@ void XclExpChTick::WriteBody( XclExpStream& rStrm )
             << maData.mnLabelPos
             << maData.mnBackMode;
     rStrm.WriteZeroBytes( 16 );
-    rStrm   << maData.maTextColor
+    rStrm   << maData.maTextComplexColor.getFinalColor()
             << maData.mnFlags;
     if( GetBiff() == EXC_BIFF8 )
         rStrm << GetPalette().GetColorIndex( mnTextColorId ) << maData.mnRotation;
@@ -2922,11 +2922,11 @@ XclExpChAxis::XclExpChAxis( const XclExpChRoot& rRoot, sal_uInt16 nAxisType ) :
     maData.mnType = nAxisType;
 }
 
-void XclExpChAxis::SetFont( XclExpChFontRef xFont, const Color& rColor, sal_uInt32 nColorId )
+void XclExpChAxis::SetFont( XclExpChFontRef xFont, model::ComplexColor const& rComplexColor, sal_uInt32 nColorId )
 {
     mxFont = xFont;
     if( mxTick )
-        mxTick->SetFontColor( rColor, nColorId );
+        mxTick->SetFontColor(rComplexColor, nColorId);
 }
 
 void XclExpChAxis::SetRotation( sal_uInt16 nRotation )

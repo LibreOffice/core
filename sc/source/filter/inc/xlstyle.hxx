@@ -21,6 +21,7 @@
 
 #include <map>
 #include <com/sun/star/awt/FontSlant.hpp>
+#include <docmodel/color/ComplexColor.hxx>
 #include <tools/color.hxx>
 #include <tools/fontenum.hxx>
 #include <editeng/svxenum.hxx>
@@ -284,7 +285,6 @@ struct XclFontData
 {
     OUString            maName;         /// Font name.
     OUString            maStyle;        /// String with styles (bold, italic).
-    Color               maColor;        /// Font color.
     sal_uInt16          mnHeight;       /// Font height in twips (1/20 of a point).
     sal_uInt16          mnWeight;       /// Boldness: 400=normal, 700=bold.
     sal_uInt16          mnEscapem;      /// Escapement type.
@@ -296,19 +296,21 @@ struct XclFontData
     bool                mbOutline;      /// true = Outlined.
     bool                mbShadow;       /// true = Shadowed.
 
+    model::ComplexColor maComplexColor; /// Font color.
+
     /** Constructs an empty font data structure. */
-    explicit            XclFontData();
+    explicit XclFontData();
     /** Constructs a font data structure and fills it with the passed font attributes (except color). */
-    explicit            XclFontData(const vcl::Font& rFont, Color const& aColor);
+    explicit XclFontData(const vcl::Font& rFont, model::ComplexColor const& rComplexColor);
     /** As directly above but also fills in the escapement member. */
-    explicit            XclFontData(const SvxFont& rFont, Color const& aColor);
+    explicit XclFontData(const SvxFont& rFont, model::ComplexColor const& rComplexColor);
 
     /** Resets all members to default (empty) values. */
     void                Clear();
     /** Fills all members (except color and escapement) from the passed font. */
-    void                FillFromVclFont(const vcl::Font& rFont, Color const& rColor);
+    void FillFromVclFont(const vcl::Font& rFont, model::ComplexColor const& rComplexColor);
     /** Fills all members (except color) from the passed SVX font. */
-    void                FillFromSvxFont(const SvxFont& rFont, Color const& rColor);
+    void FillFromSvxFont(const SvxFont& rFont, model::ComplexColor const& rComplexColor);
 
 // *** conversion of VCL/SVX constants *** ------------------------------------
 

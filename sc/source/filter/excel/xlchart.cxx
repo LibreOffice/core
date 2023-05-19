@@ -153,7 +153,6 @@ XclChFrLabelProps::XclChFrLabelProps() :
 }
 
 XclChText::XclChText() :
-    maTextColor( COL_BLACK ),
     mnHAlign( EXC_CHTEXT_ALIGN_CENTER ),
     mnVAlign( EXC_CHTEXT_ALIGN_CENTER ),
     mnBackMode( EXC_CHTEXT_TRANSPARENT ),
@@ -161,6 +160,7 @@ XclChText::XclChText() :
     mnFlags2( EXC_CHTEXT_POS_DEFAULT ),
     mnRotation( EXC_ROT_NONE )
 {
+    maTextComplexColor.setColor(COL_BLACK);
 }
 
 // Data series ================================================================
@@ -303,7 +303,6 @@ XclChValueRange::XclChValueRange() :
 }
 
 XclChTick::XclChTick() :
-    maTextColor( COL_BLACK ),
     mnMajor( EXC_CHTICK_INSIDE | EXC_CHTICK_OUTSIDE ),
     mnMinor( 0 ),
     mnLabelPos( EXC_CHTICK_NEXT ),
@@ -311,6 +310,7 @@ XclChTick::XclChTick() :
     mnFlags( EXC_CHTICK_AUTOCOLOR | EXC_CHTICK_AUTOROT ),
     mnRotation( EXC_ROT_NONE )
 {
+    maTextComplexColor.setColor(COL_BLACK);
 }
 
 XclChAxis::XclChAxis() :

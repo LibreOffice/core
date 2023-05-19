@@ -20,6 +20,7 @@
 #pragma once
 
 #include <tools/gen.hxx>
+#include <docmodel/color/ComplexColor.hxx>
 #include "fapihelper.hxx"
 #include <map>
 #include <memory>
@@ -870,7 +871,8 @@ struct XclChFrLabelProps
 struct XclChText
 {
     XclChRectangle      maRect;             /// Position of the text object.
-    Color               maTextColor;        /// Text color.
+    //Color               maTextColor;        /// Text color.
+    model::ComplexColor maTextComplexColor;
     sal_uInt8           mnHAlign;           /// Horizontal alignment.
     sal_uInt8           mnVAlign;           /// Vertical alignment.
     sal_uInt16          mnBackMode;         /// Background mode: transparent, opaque.
@@ -1042,7 +1044,7 @@ struct XclChValueRange
 
 struct XclChTick
 {
-    Color               maTextColor;        /// Tick labels color.
+    model::ComplexColor maTextComplexColor; /// Tick labels color.
     sal_uInt8           mnMajor;            /// Type of tick marks of major grid.
     sal_uInt8           mnMinor;            /// Type of tick marks of minor grid.
     sal_uInt8           mnLabelPos;         /// Position of labels relative to axis.

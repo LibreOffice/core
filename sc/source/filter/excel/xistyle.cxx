@@ -309,7 +309,7 @@ void XclImpFont::ReadCFFontBlock( XclImpStream& rStrm )
     if( (mbUnderlUsed = !::get_flag( nFontFlags3, EXC_CF_FONT_UNDERL ) && (nUnderl <= 0x7F)) )
         maData.mnUnderline = nUnderl;
     if( (mbColorUsed = (nColor <= 0x7FFF)) )
-        maData.maColor = GetPalette().GetColor( static_cast< sal_uInt16 >( nColor ) );
+        maData.maComplexColor.setColor(GetPalette().GetColor(sal_uInt16(nColor)));
     if( (mbStrikeUsed = !::get_flag( nFontFlags1, EXC_CF_FONT_STRIKEOUT )) )
         maData.mbStrikeout = ::get_flag( nStyle, EXC_CF_FONT_STRIKEOUT );
 }
@@ -368,7 +368,7 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType, boo
 
 // Font color - pass AUTO_COL to item
     if( mbColorUsed )
-        PUTITEM( SvxColorItem( maData.maColor, ATTR_FONT_COLOR  ), ATTR_FONT_COLOR, EE_CHAR_COLOR );
+        PUTITEM(SvxColorItem(maData.maComplexColor.getFinalColor(), maData.maComplexColor, ATTR_FONT_COLOR ), ATTR_FONT_COLOR, EE_CHAR_COLOR);
 
 // Font weight (for all script types)
     if( mbWeightUsed )
@@ -455,7 +455,7 @@ void XclImpFont::ReadFontData5( XclImpStream& rStrm )
 
 void XclImpFont::ReadFontColor( XclImpStream& rStrm )
 {
-    maData.maColor = GetPalette().GetColor( rStrm.ReaduInt16() );
+    maData.maComplexColor.setColor(GetPalette().GetColor(rStrm.ReaduInt16()));
 }
 
 void XclImpFont::ReadFontName2( XclImpStream& rStrm )
