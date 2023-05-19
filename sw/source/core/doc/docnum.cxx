@@ -1439,11 +1439,16 @@ GotoPrevLayoutTextFrame(SwNodeIndex & rIndex, SwRootFrame const*const pLayout)
     {
         if (rIndex.GetNode().IsTextNode())
         {
-            if (rIndex.GetNode().GetRedlineMergeFlag() != SwNode::Merge::None &&
-                // not a tracked row deletion in Hide Changes mode
-                rIndex.GetNode().GetTextNode()->getLayoutFrame(pLayout) )
+            if (rIndex.GetNode().GetRedlineMergeFlag() != SwNode::Merge::None)
             {
-                rIndex = *static_cast<SwTextFrame*>(rIndex.GetNode().GetTextNode()->getLayoutFrame(pLayout))->GetMergedPara()->pFirstNode;
+                // not a tracked row deletion in Hide Changes mode
+                if (SwContentFrame* pFrame = rIndex.GetNode().GetTextNode()->getLayoutFrame(pLayout))
+                {
+                    if (sw::MergedPara* pMerged = static_cast<SwTextFrame*>(pFrame)->GetMergedPara())
+                    {
+                        rIndex = pMerged->pFirstNode->GetIndex();
+                    }
+                }
             }
         }
         else if (rIndex.GetNode().IsEndNode())
@@ -1471,7 +1476,13 @@ GotoNextLayoutTextFrame(SwNodeIndex & rIndex, SwRootFrame const*const pLayout)
         {
             if (rIndex.GetNode().GetRedlineMergeFlag() != SwNode::Merge::None)
             {
-                rIndex = *static_cast<SwTextFrame*>(rIndex.GetNode().GetTextNode()->getLayoutFrame(pLayout))->GetMergedPara()->pLastNode;
+                if (SwContentFrame* pFrame = rIndex.GetNode().GetTextNode()->getLayoutFrame(pLayout))
+                {
+                    if (sw::MergedPara* pMerged = static_cast<SwTextFrame*>(pFrame)->GetMergedPara())
+                    {
+                        rIndex = pMerged->pLastNode->GetIndex();
+                    }
+                }
             }
         }
         else if (rIndex.GetNode().IsTableNode())
