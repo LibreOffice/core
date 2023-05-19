@@ -611,7 +611,7 @@ void DrawingML::WriteGradientFill( const Reference< XPropertySet >& rXPropSet )
             if( rProp.Name == "GradFillDefinition" )
                 rProp.Value >>= aGradientStops;
             else if( rProp.Name == "OriginalGradFill" )
-                // use BGradient constructor direcly, it will take care of Gradient/Gradient2
+                // use BGradient constructor directly, it will take care of Gradient/Gradient2
                 aOriginalGradient = basegfx::BGradient(rProp.Value);
     }
 
