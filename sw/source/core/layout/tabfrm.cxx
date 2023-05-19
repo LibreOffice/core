@@ -2269,7 +2269,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 SwTwips nTest = GetUpper()->Grow(LONG_MAX, /*bTst=*/true);
                 if (nTest >= aRectFnSet.GetHeight(GetFollow()->getFrameArea()))
                 {
-                    // We have space to to join at least one follow tab frame.
+                    // We have space to join at least one follow tab frame.
                     SwTwips nRequest = 0;
                     for (SwTabFrame* pFollow = GetFollow(); pFollow; pFollow = pFollow->GetFollow())
                     {
