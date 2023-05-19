@@ -436,6 +436,8 @@ private:
         }
 
         const SwPageDesc* pPageDescription = pTextNode->FindPageDesc();
+        if (!pPageDescription)
+            return;
         const SwFrameFormat& rPageFormat = pPageDescription->GetMaster();
         const SwAttrSet& rPageSet = rPageFormat.GetAttrSet();
 
