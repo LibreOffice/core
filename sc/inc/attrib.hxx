@@ -269,7 +269,7 @@ private:
 
 typedef o3tl::sorted_vector<sal_uInt32> ScCondFormatIndexes;
 
-class ScCondFormatItem final : public SfxPoolItem
+class SAL_DLLPUBLIC_RTTI ScCondFormatItem final : public SfxPoolItem
 {
 public:
     explicit ScCondFormatItem();
