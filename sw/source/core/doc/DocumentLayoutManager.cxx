@@ -454,8 +454,9 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
     {
         SwNode* pAnchorNode = rNewAnchor.GetAnchorNode();
         SwFormatFlyCnt aFormat( pDest );
-        pAnchorNode->GetTextNode()->InsertItem(
-            aFormat, rNewAnchor.GetAnchorContentOffset(), 0 );
+        assert(pAnchorNode->GetTextNode() && "sw.core: text node expected");
+        if (SwTextNode *pTextNd = pAnchorNode->GetTextNode())
+            pTextNd->InsertItem( aFormat, rNewAnchor.GetAnchorContentOffset(), 0 );
     }
 
     if( bMakeFrames )
