@@ -253,19 +253,24 @@ bool PSCSDFPropsQuickHelp(const HelpEvent &rEvt, SwWrtShell& rSh)
 }
 }
 
-static OUString lcl_GetRedlineHelp( const SwRangeRedline& rRedl, bool bBalloon, bool bTableChange )
+static OUString lcl_GetRedlineHelp( const SwRangeRedline& rRedl, bool bBalloon,
+                                    bool bTableChange, bool bTableColChange )
 {
     TranslateId pResId;
     switch( rRedl.GetType() )
     {
     case RedlineType::Insert:   pResId = bTableChange
-        ? STR_REDLINE_TABLE_ROW_INSERT
+        ? !bTableColChange
+            ? STR_REDLINE_TABLE_ROW_INSERT
+            : STR_REDLINE_TABLE_COLUMN_INSERT
         :  rRedl.IsMoved()
             ? STR_REDLINE_INSERT_MOVED
             : STR_REDLINE_INSERT;
         break;
     case RedlineType::Delete:   pResId = bTableChange
-        ? STR_REDLINE_TABLE_ROW_DELETE
+        ? !bTableColChange
+            ? STR_REDLINE_TABLE_ROW_DELETE
+            : STR_REDLINE_TABLE_COLUMN_DELETE
         : rRedl.IsMoved()
             ? STR_REDLINE_DELETE_MOVED
             : STR_REDLINE_DELETE;
@@ -344,7 +349,8 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                     ( bBalloon ? IsAttrAtPos::CurrAttrs : IsAttrAtPos::NONE) |
 #endif
                                     IsAttrAtPos::TableBoxFml |
-                                    IsAttrAtPos::TableRedline );
+                                    IsAttrAtPos::TableRedline |
+                                    IsAttrAtPos::TableColRedline );
 
         if( rSh.GetContentAtPos( aPos, aContentAtPos, false, &aFieldRect ) )
         {
@@ -454,13 +460,17 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 break;
 
             case IsAttrAtPos::TableRedline:
+            case IsAttrAtPos::TableColRedline:
             case IsAttrAtPos::Redline:
             {
                 const bool bShowTrackChanges = IDocumentRedlineAccess::IsShowChanges( m_rView.GetDocShell()->GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags() );
                 const bool bShowInlineTooltips = rSh.GetViewOptions()->IsShowInlineTooltips();
                 if ( bShowTrackChanges && bShowInlineTooltips )
                 {
-                     sText = lcl_GetRedlineHelp(*aContentAtPos.aFnd.pRedl, bBalloon, IsAttrAtPos::TableRedline == aContentAtPos.eContentAtPos );
+                     sText = lcl_GetRedlineHelp(*aContentAtPos.aFnd.pRedl, bBalloon,
+                         IsAttrAtPos::TableRedline == aContentAtPos.eContentAtPos ||
+                         IsAttrAtPos::TableColRedline == aContentAtPos.eContentAtPos,
+                         IsAttrAtPos::TableColRedline == aContentAtPos.eContentAtPos);
                 }
                 break;
             }
@@ -598,7 +608,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         {
                             aContentAtPos.eContentAtPos = IsAttrAtPos::Redline;
                             if( rSh.GetContentAtPos( aPos, aContentAtPos, false, &aFieldRect ) )
-                                sText = lcl_GetRedlineHelp(*aContentAtPos.aFnd.pRedl, bBalloon, /*bTableChange=*/false);
+                                sText = lcl_GetRedlineHelp(*aContentAtPos.aFnd.pRedl, bBalloon, /*bTableChange=*/false, /*bTableColChange=*/false);
                         }
                     }
                 }

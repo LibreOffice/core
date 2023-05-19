@@ -1879,7 +1879,8 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
             }
         }
 
-        if( !bRet && ( IsAttrAtPos::TableRedline & rContentAtPos.eContentAtPos ) )
+        if( !bRet && ( ( IsAttrAtPos::TableRedline & rContentAtPos.eContentAtPos ) ||
+                     ( IsAttrAtPos::TableColRedline & rContentAtPos.eContentAtPos ) ) )
         {
             const SwTableNode* pTableNd;
             const SwTableBox* pBox;
@@ -1889,17 +1890,34 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                 nullptr != ( pBox = pTableNd->GetTable().GetTableBox(
                 pSttNd->GetIndex() )) &&
                 nullptr != ( pTableLine = pBox->GetUpper() ) &&
-                RedlineType::None != pTableLine->GetRedlineType() )
+                ( RedlineType::None != pBox->GetRedlineType() ||
+                RedlineType::None != pTableLine->GetRedlineType() ) )
             {
-                SwRedlineTable::size_type nPos = 0;
-                nPos = pTableLine->UpdateTextChangesOnly(nPos);
-                if ( nPos != SwRedlineTable::npos )
+                const SwRedlineTable& aRedlineTable = GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+                if ( RedlineType::None != pTableLine->GetRedlineType() )
                 {
-                    rContentAtPos.aFnd.pRedl = GetDoc()->getIDocumentRedlineAccess().GetRedlineTable()[nPos];
-                    rContentAtPos.eContentAtPos = IsAttrAtPos::TableRedline;
-                    bRet = true;
+                    SwRedlineTable::size_type nPos = 0;
+                    nPos = pTableLine->UpdateTextChangesOnly(nPos);
+                    if ( nPos != SwRedlineTable::npos )
+                    {
+                        rContentAtPos.aFnd.pRedl = aRedlineTable[nPos];
+                        rContentAtPos.eContentAtPos = IsAttrAtPos::TableRedline;
+                        bRet = true;
+                    }
                 }
-
+                else
+                {
+                    SwRedlineTable::size_type n = 0;
+                    SwNodeIndex aIdx( *pSttNd, 1 );
+                    const SwPosition aBoxStart(aIdx);
+                    const SwRangeRedline* pFnd = aRedlineTable.FindAtPosition( aBoxStart, n, /*next=*/true );
+                    if( pFnd && RedlineType::Delete == pFnd->GetType() )
+                    {
+                        rContentAtPos.aFnd.pRedl = aRedlineTable[n];
+                        rContentAtPos.eContentAtPos = IsAttrAtPos::TableColRedline;
+                        bRet = true;
+                    }
+                }
             }
         }
 
