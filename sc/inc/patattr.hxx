@@ -30,6 +30,7 @@
 #include "fonthelper.hxx"
 
 namespace vcl { class Font; }
+namespace model { class ComplexColor; }
 class OutputDevice;
 class Fraction;
 class ScStyleSheet;
@@ -107,19 +108,23 @@ public:
                                         SvtScriptType nScript = SvtScriptType::NONE, const Color* pBackConfigColor = nullptr,
                                         const Color* pTextConfigColor = nullptr);
 
-    static void fillColor(Color& rColor, const SfxItemSet& rItemSet, ScAutoFontColorMode eAutoMode, const SfxItemSet* pCondSet = nullptr,
-                            const Color* pBackConfigColor = nullptr, const Color* pTextConfigColor = nullptr);
+    static void fillColor(model::ComplexColor& rComplexColor,
+                            const SfxItemSet& rItemSet,
+                            ScAutoFontColorMode eAutoMode,
+                            const SfxItemSet* pCondSet = nullptr,
+                            const Color* pBackConfigColor = nullptr,
+                            const Color* pTextConfigColor = nullptr);
 
 
     static ScDxfFont        GetDxfFont(const SfxItemSet& rSet, SvtScriptType nScript);
 
-    void fillColor(Color& rColor,
+    void fillColor(model::ComplexColor& rComplexColor,
                     ScAutoFontColorMode eAutoMode,
                     const SfxItemSet* pCondSet = nullptr,
                     const Color* pBackConfigColor = nullptr,
                     const Color* pTextConfigColor = nullptr) const
     {
-        fillColor(rColor, GetItemSet(), eAutoMode, pCondSet, pBackConfigColor, pTextConfigColor);
+        fillColor(rComplexColor, GetItemSet(), eAutoMode, pCondSet, pBackConfigColor, pTextConfigColor);
     }
 
     void fillFontOnly(vcl::Font& rFont,

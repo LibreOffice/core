@@ -44,6 +44,7 @@ $(eval $(call gb_Library_use_libraries,scqahelper,\
 	comphelper \
 	cppu \
 	cppuhelper \
+	docmodel \
 	editeng \
 	for \
 	sal \

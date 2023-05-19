@@ -949,14 +949,19 @@ void XclImpChText::ReadHeaderRecord( XclImpStream& rStrm )
     maData.mnHAlign = rStrm.ReaduInt8();
     maData.mnVAlign = rStrm.ReaduInt8();
     maData.mnBackMode = rStrm.ReaduInt16();
-    rStrm   >> maData.maTextColor
-            >> maData.maRect;
+
+    Color aColor;
+    rStrm >> aColor;
+    maData.maTextComplexColor.setColor(aColor);
+
+    rStrm  >> maData.maRect;
     maData.mnFlags = rStrm.ReaduInt16();
 
     if( GetBiff() == EXC_BIFF8 )
     {
         // BIFF8: index into palette used instead of RGB data
-        maData.maTextColor = GetPalette().GetColor( rStrm.ReaduInt16() );
+        aColor = GetPalette().GetColor(rStrm.ReaduInt16());
+        maData.maTextComplexColor.setColor(aColor);
         // placement and rotation
         maData.mnFlags2 = rStrm.ReaduInt16();
         maData.mnRotation = rStrm.ReaduInt16();
@@ -1015,7 +1020,7 @@ sal_uInt16 XclImpChText::GetFontIndex() const
 
 Color XclImpChText::GetFontColor() const
 {
-    return ::get_flag( maData.mnFlags, EXC_CHTEXT_AUTOCOLOR ) ? GetFontAutoColor() : maData.maTextColor;
+    return ::get_flag(maData.mnFlags, EXC_CHTEXT_AUTOCOLOR) ? GetFontAutoColor() : maData.maTextComplexColor.getFinalColor();
 }
 
 sal_uInt16 XclImpChText::GetRotation() const
@@ -1042,8 +1047,8 @@ void XclImpChText::UpdateText( const XclImpChText* pParentText )
     {
         mxFont = pParentText->mxFont;
         // text color is taken from CHTEXT record, not from font in CHFONT
-        ::set_flag( maData.mnFlags, EXC_CHTEXT_AUTOCOLOR, ::get_flag( pParentText->maData.mnFlags, EXC_CHTEXT_AUTOCOLOR ) );
-        maData.maTextColor = pParentText->maData.maTextColor;
+        ::set_flag(maData.mnFlags, EXC_CHTEXT_AUTOCOLOR, ::get_flag(pParentText->maData.mnFlags, EXC_CHTEXT_AUTOCOLOR));
+        maData.maTextComplexColor = pParentText->maData.maTextComplexColor;
     }
 }
 
@@ -3193,13 +3198,15 @@ void XclImpChTick::ReadChTick( XclImpStream& rStrm )
     maData.mnLabelPos = rStrm.ReaduInt8();
     maData.mnBackMode = rStrm.ReaduInt8();
     rStrm.Ignore( 16 );
-    rStrm >> maData.maTextColor;
+    Color aColor;
+    rStrm >> aColor;
+    maData.maTextComplexColor.setColor(aColor);
     maData.mnFlags = rStrm.ReaduInt16();
 
     if( GetBiff() == EXC_BIFF8 )
     {
         // BIFF8: index into palette used instead of RGB data
-        maData.maTextColor = GetPalette().GetColor( rStrm.ReaduInt16() );
+        maData.maTextComplexColor.setColor(GetPalette().GetColor(rStrm.ReaduInt16()));
         // rotation
         maData.mnRotation = rStrm.ReaduInt16();
     }
@@ -3213,7 +3220,7 @@ void XclImpChTick::ReadChTick( XclImpStream& rStrm )
 
 Color XclImpChTick::GetFontColor() const
 {
-    return ::get_flag( maData.mnFlags, EXC_CHTICK_AUTOCOLOR ) ? GetFontAutoColor() : maData.maTextColor;
+    return ::get_flag(maData.mnFlags, EXC_CHTICK_AUTOCOLOR) ? GetFontAutoColor() : maData.maTextComplexColor.getFinalColor();
 }
 
 sal_uInt16 XclImpChTick::GetRotation() const

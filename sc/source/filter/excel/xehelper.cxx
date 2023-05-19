@@ -389,8 +389,8 @@ XclExpStringRef lclCreateFormattedString(
 
         // construct font from current text portion
         SvxFont aFont(XclExpFontHelper::GetFontFromItemSet(rRoot, rItemSet, nScript));
-        Color aColor;
-        ScPatternAttr::fillColor(aColor, rItemSet, SC_AUTOCOL_RAW);
+        model::ComplexColor aComplexColor;
+        ScPatternAttr::fillColor(aComplexColor, rItemSet, SC_AUTOCOL_RAW);
 
         // Excel start position of this portion
         sal_Int32 nXclPortionStart = xString->Len();
@@ -399,7 +399,7 @@ XclExpStringRef lclCreateFormattedString(
         if( nXclPortionStart < xString->Len() )
         {
             // insert font into buffer
-            sal_uInt16 nFontIdx = rFontBuffer.Insert(aFont, aColor, EXC_COLOR_CELLTEXT);
+            sal_uInt16 nFontIdx = rFontBuffer.Insert(aFont, aComplexColor, EXC_COLOR_CELLTEXT);
             // insert font index into format run vector
             xString->AppendFormat( nXclPortionStart, nFontIdx );
         }
@@ -503,8 +503,8 @@ XclExpStringRef lclCreateFormattedString(
                 if( nScript == ApiScriptType::WEAK )
                     nScript = nLastScript;
                 SvxFont aFont( XclExpFontHelper::GetFontFromItemSet(rRoot, aItemSet, nScript));
-                Color aColor;
-                ScPatternAttr::fillColor(aColor, aItemSet, SC_AUTOCOL_RAW);
+                model::ComplexColor aComplexColor;
+                ScPatternAttr::fillColor(aComplexColor, aItemSet, SC_AUTOCOL_RAW);
 
                 nLastScript = nScript;
 
@@ -512,10 +512,10 @@ XclExpStringRef lclCreateFormattedString(
                 aFont.SetEscapement( nEsc );
                 // modify automatic font color for hyperlinks
                 if (bIsHyperlink && aItemSet.Get(ATTR_FONT_COLOR).GetValue() == COL_AUTO)
-                    aColor = COL_LIGHTBLUE;
+                    aComplexColor.setFinalColor(COL_LIGHTBLUE);
 
                 // insert font into buffer
-                sal_uInt16 nFontIdx = rFontBuffer.Insert(aFont, aColor, EXC_COLOR_CELLTEXT);
+                sal_uInt16 nFontIdx = rFontBuffer.Insert(aFont, aComplexColor, EXC_COLOR_CELLTEXT);
                 // insert font index into format run vector
                 xString->AppendFormat( nXclPortionStart, nFontIdx );
             }
@@ -731,12 +731,12 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
 // --- font attributes ---
 
                 vcl::Font aFont;
-                Color aColor;
+                model::ComplexColor aComplexColor;
                 aItemSet.ClearItem();
                 SfxItemSet aEditSet( mrEE.GetAttribs( aSel ) );
                 ScPatternAttr::GetFromEditItemSet( aItemSet, aEditSet );
                 ScPatternAttr::fillFontOnly(aFont, aItemSet);
-                ScPatternAttr::fillColor(aColor, aItemSet, SC_AUTOCOL_RAW);
+                ScPatternAttr::fillColor(aComplexColor, aItemSet, SC_AUTOCOL_RAW);
 
                 // font name and style
                 aNewData.maName = XclTools::GetXclFontName( aFont.GetFamilyName() );
@@ -789,10 +789,12 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                 }
 
                 // font color
-                aNewData.maColor = aColor;
-                if ( !aFontData.maColor.IsRGBEqual( aNewData.maColor ) )
+                aNewData.maComplexColor = aComplexColor;
+                Color aNewColor = aNewData.maComplexColor.getFinalColor();
+
+                if (!aFontData.maComplexColor.getFinalColor().IsRGBEqual(aNewColor))
                 {
-                    aParaText.append("&K" + aNewData.maColor.AsRGBHexString());
+                    aParaText.append("&K" + aNewColor.AsRGBHexString());
                 }
 
                 // strikeout

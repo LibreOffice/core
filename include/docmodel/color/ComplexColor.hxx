@@ -133,13 +133,19 @@ public:
         meType = ColorType::CRGB;
     }
 
+    void setColor(Color const& rColor)
+    {
+        mnComponent1 = rColor.GetRed();
+        mnComponent2 = rColor.GetGreen();
+        mnComponent3 = rColor.GetBlue();
+        maFinalColor = rColor;
+        meType = ColorType::RGB;
+    }
+
     void setRGB(sal_Int32 nRGB)
     {
         ::Color aColor(ColorTransparency, nRGB);
-        mnComponent1 = aColor.GetRed();
-        mnComponent2 = aColor.GetGreen();
-        mnComponent3 = aColor.GetBlue();
-        meType = ColorType::RGB;
+        setColor(aColor);
     }
 
     void setHSL(sal_Int32 nH, sal_Int32 nS, sal_Int32 nL)

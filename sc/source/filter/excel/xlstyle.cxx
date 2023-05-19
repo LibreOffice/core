@@ -174,22 +174,22 @@ XclFontData::XclFontData()
     Clear();
 }
 
-XclFontData::XclFontData(const vcl::Font& rFont, Color const& rColor)
+XclFontData::XclFontData(const vcl::Font& rFont, model::ComplexColor const& rComplexColor)
 {
     Clear();
-    FillFromVclFont(rFont, rColor);
+    FillFromVclFont(rFont, rComplexColor);
 }
 
-XclFontData::XclFontData(const SvxFont& rFont, Color const& rColor)
+XclFontData::XclFontData(const SvxFont& rFont, model::ComplexColor const& rComplexColor)
 {
-    FillFromSvxFont(rFont, rColor);
+    FillFromSvxFont(rFont, rComplexColor);
 }
 
 void XclFontData::Clear()
 {
     maName.clear();
     maStyle.clear();
-    maColor = COL_AUTO;
+    maComplexColor.setColor(COL_AUTO);
     mnHeight = 0;
     mnWeight = EXC_FONTWGHT_DONTKNOW;
     mnEscapem = EXC_FONTESC_NONE;
@@ -199,11 +199,10 @@ void XclFontData::Clear()
     mbItalic = mbStrikeout = mbOutline = mbShadow = false;
 }
 
-void XclFontData::FillFromVclFont(const vcl::Font& rFont, Color const& rColor)
+void XclFontData::FillFromVclFont(const vcl::Font& rFont, model::ComplexColor const& rComplexColor)
 {
     maName = XclTools::GetXclFontName( rFont.GetFamilyName() );   // substitute with MS fonts
     maStyle.clear();
-    maColor = rColor;
     SetScUnderline( rFont.GetUnderline() );
     mnEscapem = EXC_FONTESC_NONE;
     SetScHeight( rFont.GetFontSize().Height() );
@@ -214,11 +213,13 @@ void XclFontData::FillFromVclFont(const vcl::Font& rFont, Color const& rColor)
     SetScStrikeout( rFont.GetStrikeout() );
     mbOutline = rFont.IsOutline();
     mbShadow = rFont.IsShadow();
+
+    maComplexColor = rComplexColor;
 }
 
-void XclFontData::FillFromSvxFont(const SvxFont& rFont, Color const& rColor)
+void XclFontData::FillFromSvxFont(const SvxFont& rFont, model::ComplexColor const& rComplexColor)
 {
-    FillFromVclFont(rFont, rColor);
+    FillFromVclFont(rFont, rComplexColor);
     SetScEscapement(rFont.GetEscapement());
 }
 
@@ -520,7 +521,7 @@ bool operator==( const XclFontData& rLeft, const XclFontData& rRight )
         (rLeft.mnHeight    == rRight.mnHeight)    &&
         (rLeft.mnWeight    == rRight.mnWeight)    &&
         (rLeft.mnUnderline == rRight.mnUnderline) &&
-        (rLeft.maColor     == rRight.maColor)     &&
+        (rLeft.maComplexColor == rRight.maComplexColor) &&
         (rLeft.mnEscapem   == rRight.mnEscapem)   &&
         (rLeft.mnFamily    == rRight.mnFamily)    &&
         (rLeft.mnCharSet   == rRight.mnCharSet)   &&
@@ -638,11 +639,13 @@ void XclFontPropSetHelper::ReadFontProperties( XclFontData& rFontData,
             rPropSetHlp >> aApiFontName >> fApiHeight >> eApiPosture >> fApiWeight;
             // read common properties
             maHlpChCommon.ReadFromPropertySet( rPropSet );
-            maHlpChCommon   >> nApiUnderl
-                            >> nApiStrikeout
-                            >> rFontData.maColor
-                            >> rFontData.mbOutline
-                            >> rFontData.mbShadow;
+            maHlpChCommon >> nApiUnderl;
+            maHlpChCommon >> nApiStrikeout;
+            Color aColor;
+            maHlpChCommon >> aColor;
+            rFontData.maComplexColor.setColor(aColor);
+            maHlpChCommon >> rFontData.mbOutline;
+            maHlpChCommon >> rFontData.mbShadow;
 
             // convert API property values to Excel settings
             lclSetApiFontSettings( rFontData, aApiFontName,
@@ -667,15 +670,17 @@ void XclFontPropSetHelper::ReadFontProperties( XclFontData& rFontData,
 
             // read font properties
             maHlpControl.ReadFromPropertySet( rPropSet );
-            maHlpControl    >> aApiFontName
-                            >> nApiFamily
-                            >> nApiCharSet
-                            >> fApiHeight
-                            >> nApiPosture
-                            >> fApiWeight
-                            >> nApiUnderl
-                            >> nApiStrikeout
-                            >> rFontData.maColor;
+            maHlpControl >> aApiFontName;
+            maHlpControl >> nApiFamily;
+            maHlpControl >> nApiCharSet;
+            maHlpControl >> fApiHeight;
+            maHlpControl >> nApiPosture;
+            maHlpControl >> fApiWeight;
+            maHlpControl >> nApiUnderl;
+            maHlpControl >> nApiStrikeout;
+            Color aColor;
+            maHlpControl >> aColor;
+            rFontData.maComplexColor.setColor(aColor);
 
             // convert API property values to Excel settings
             Awt::FontSlant eApiPosture = static_cast< Awt::FontSlant >( nApiPosture );
@@ -699,10 +704,10 @@ void XclFontPropSetHelper::WriteFontProperties(
         {
             // write common properties
             maHlpChCommon.InitializeWrite();
-            const Color& rColor = pFontColor ? *pFontColor : rFontData.maColor;
+            Color aColor = pFontColor ? *pFontColor : rFontData.maComplexColor.getFinalColor();
             maHlpChCommon   << rFontData.GetApiUnderline()
                             << rFontData.GetApiStrikeout()
-                            << rColor
+                            << aColor
                             << rFontData.mbOutline
                             << rFontData.mbShadow;
             maHlpChCommon.WriteToPropertySet( rPropSet );
@@ -733,7 +738,7 @@ void XclFontPropSetHelper::WriteFontProperties(
                             << rFontData.GetApiWeight()
                             << rFontData.GetApiUnderline()
                             << rFontData.GetApiStrikeout()
-                            << rFontData.maColor;
+                            << rFontData.maComplexColor.getFinalColor();
             maHlpControl.WriteToPropertySet( rPropSet );
         }
         break;

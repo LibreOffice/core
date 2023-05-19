@@ -473,7 +473,7 @@ public:
     virtual             ~XclExpChFontBase();
 
     /** Derived classes set font color and color identifier to internal data structures. */
-    virtual void        SetFont( XclExpChFontRef xFont, const Color& rColor, sal_uInt32 nColorId ) = 0;
+    virtual void SetFont( XclExpChFontRef xFont, const model::ComplexColor& rComplexColor, sal_uInt32 nColorId ) = 0;
     /** Derived classes set text rotation to internal data structures. */
     virtual void        SetRotation( sal_uInt16 nRotation ) = 0;
 
@@ -496,7 +496,7 @@ public:
     explicit            XclExpChText( const XclExpChRoot& rRoot );
 
     /** Sets font color and color identifier to internal data structures. */
-    virtual void        SetFont( XclExpChFontRef xFont, const Color& rColor, sal_uInt32 nColorId ) override;
+    virtual void SetFont( XclExpChFontRef xFont, model::ComplexColor const& rComplexColor, sal_uInt32 nColorId ) override;
     /** Sets text rotation to internal data structures. */
     virtual void        SetRotation( sal_uInt16 nRotation ) override;
 
@@ -993,7 +993,8 @@ public:
     /** Converts axis tick mark settings. */
     void                Convert( const ScfPropertySet& rPropSet, const XclChExtTypeInfo& rTypeInfo, sal_uInt16 nAxisType );
     /** Sets font color and color identifier to internal data structures. */
-    void                SetFontColor( const Color& rColor, sal_uInt32 nColorId );
+    void SetFontColor(model::ComplexColor const& rComplexColor, sal_uInt32 nColorId);
+
     /** Sets text rotation to internal data structures. */
     void                SetRotation( sal_uInt16 nRotation );
 
@@ -1019,7 +1020,7 @@ public:
     explicit            XclExpChAxis( const XclExpChRoot& rRoot, sal_uInt16 nAxisType );
 
     /** Sets font color and color identifier to internal data structures. */
-    virtual void        SetFont( XclExpChFontRef xFont, const Color& rColor, sal_uInt32 nColorId ) override;
+    virtual void SetFont( XclExpChFontRef xFont, model::ComplexColor const& rComplexColor, sal_uInt32 nColorId ) override;
     /** Sets text rotation to internal data structures. */
     virtual void        SetRotation( sal_uInt16 nRotation ) override;
 

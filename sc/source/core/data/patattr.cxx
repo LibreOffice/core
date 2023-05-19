@@ -256,14 +256,14 @@ void ScPatternAttr::fillFont(
         const SfxItemSet* pCondSet, SvtScriptType nScript,
         const Color* pBackConfigColor, const Color* pTextConfigColor)
 {
-    Color aColor;
+    model::ComplexColor aComplexColor;
 
     //  determine effective font color
     ScPatternAttr::fillFontOnly(rFont, rItemSet, pOutDev, pScale, pCondSet, nScript);
-    ScPatternAttr::fillColor(aColor, rItemSet, eAutoMode, pCondSet, pBackConfigColor, pTextConfigColor);
+    ScPatternAttr::fillColor(aComplexColor, rItemSet, eAutoMode, pCondSet, pBackConfigColor, pTextConfigColor);
 
     //  set font effects
-    rFont.SetColor(aColor);
+    rFont.SetColor(aComplexColor.getFinalColor());
 }
 
 void ScPatternAttr::fillFontOnly(
@@ -435,9 +435,11 @@ void ScPatternAttr::fillFontOnly(
     rFont.SetTransparent( true );
 }
 
-void ScPatternAttr::fillColor(Color& rColor, const SfxItemSet& rItemSet, ScAutoFontColorMode eAutoMode, const SfxItemSet* pCondSet, const Color* pBackConfigColor, const Color* pTextConfigColor)
+void ScPatternAttr::fillColor(model::ComplexColor& rComplexColor, const SfxItemSet& rItemSet, ScAutoFontColorMode eAutoMode, const SfxItemSet* pCondSet, const Color* pBackConfigColor, const Color* pTextConfigColor)
 {
-    Color aColor = COL_TRANSPARENT;
+    model::ComplexColor aComplexColor;
+
+    Color aColor;
 
     SvxColorItem const* pColorItem = nullptr;
 
@@ -448,15 +450,24 @@ void ScPatternAttr::fillColor(Color& rColor, const SfxItemSet& rItemSet, ScAutoF
         pColorItem = &rItemSet.Get(ATTR_FONT_COLOR);
 
     if (pColorItem)
+    {
+        aComplexColor = pColorItem->getComplexColor();
         aColor = pColorItem->GetValue();
+    }
 
+    if (aComplexColor.getType() == model::ColorType::Unused)
+    {
+        aComplexColor.setColor(aColor);
+    }
 
     if ((aColor == COL_AUTO && eAutoMode != SC_AUTOCOL_RAW)
         || eAutoMode == SC_AUTOCOL_IGNOREFONT
         || eAutoMode == SC_AUTOCOL_IGNOREALL)
     {
-        if ( eAutoMode == SC_AUTOCOL_BLACK )
+        if (eAutoMode == SC_AUTOCOL_BLACK)
+        {
             aColor = COL_BLACK;
+        }
         else
         {
             //  get background color from conditional or own set
@@ -506,9 +517,11 @@ void ScPatternAttr::fillColor(Color& rColor, const SfxItemSet& rItemSet, ScAutoF
 
             //  get system text color for comparison
             Color aSysTextColor;
-            if ( eAutoMode == SC_AUTOCOL_PRINT )
+            if (eAutoMode == SC_AUTOCOL_PRINT)
+            {
                 aSysTextColor = COL_BLACK;
-            else if ( pTextConfigColor )
+            }
+            else if (pTextConfigColor)
             {
                 // pTextConfigColor can be used to avoid repeated lookup of the configured color
                 aSysTextColor = *pTextConfigColor;
@@ -536,8 +549,8 @@ void ScPatternAttr::fillColor(Color& rColor, const SfxItemSet& rItemSet, ScAutoF
             }
         }
     }
-
-    rColor = aColor;
+    aComplexColor.setFinalColor(aColor);
+    rComplexColor = aComplexColor;
 }
 
 ScDxfFont ScPatternAttr::GetDxfFont(const SfxItemSet& rItemSet, SvtScriptType nScript)

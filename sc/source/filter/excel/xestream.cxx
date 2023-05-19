@@ -878,22 +878,30 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
     lcl_WriteValue( pStream, XML_strike,     rFontData.mbStrikeout    ? ToPsz( true ) : nullptr );
     // OOXTODO: lcl_WriteValue( rStream, XML_condense, );    // mac compatibility setting
     // OOXTODO: lcl_WriteValue( rStream, XML_extend, );      // compatibility setting
-    lcl_WriteValue( pStream, XML_outline,    rFontData.mbOutline      ? ToPsz( true ) : nullptr );
-    lcl_WriteValue( pStream, XML_shadow,     rFontData.mbShadow       ? ToPsz( true ) : nullptr );
-    lcl_WriteValue( pStream, XML_u,          bHaveUnderline           ? pUnderline    : nullptr );
-    lcl_WriteValue( pStream, XML_vertAlign,  bHaveVertAlign           ? pVertAlign    : nullptr );
-    lcl_WriteValue( pStream, XML_sz,         OString::number( rFontData.mnHeight / 20.0 ).getStr() );  // Twips->Pt
-    if( rFontData.maColor != Color( ColorAlpha, 0, 0xFF, 0xFF, 0xFF ) )
-        pStream->singleElement( XML_color,
+    if (rFontData.mbOutline)
+        pStream->singleElement(XML_outline, XML_val, ToPsz( true ));
+    if (rFontData.mbShadow)
+        pStream->singleElement(XML_shadow, XML_val, ToPsz( true ));
+    if (bHaveUnderline)
+        pStream->singleElement(XML_u, XML_val, pUnderline);
+    if (bHaveVertAlign)
+        pStream->singleElement(XML_vertAlign, XML_val, pVertAlign);
+    pStream->singleElement(XML_sz, XML_val, OString::number( rFontData.mnHeight / 20.0 )); // Twips->Pt
+
+    if (rFontData.maComplexColor.getFinalColor() != Color( ColorAlpha, 0, 0xFF, 0xFF, 0xFF))
+    {
+        pStream->singleElement(XML_color,
                 // OOXTODO: XML_auto,       bool
                 // OOXTODO: XML_indexed,    uint
-                XML_rgb, XclXmlUtils::ToOString(rFontData.maColor)
+                XML_rgb, XclXmlUtils::ToOString(rFontData.maComplexColor.getFinalColor())
                 // OOXTODO: XML_theme,      index into <clrScheme/>
                 // OOXTODO: XML_tint,       double
         );
-    lcl_WriteValue( pStream, nFontId,        rFontData.maName.toUtf8().getStr() );
-    lcl_WriteValue( pStream, XML_family,     OString::number(  rFontData.mnFamily ).getStr() );
-    lcl_WriteValue( pStream, XML_charset,    rFontData.mnCharSet != 0 ? OString::number(  rFontData.mnCharSet ).getStr() : nullptr );
+    }
+    pStream->singleElement(nFontId, XML_val, rFontData.maName);
+    pStream->singleElement(XML_family, XML_val, OString::number(  rFontData.mnFamily ));
+    if (rFontData.mnCharSet != 0)
+        pStream->singleElement(XML_charset, XML_val, OString::number(rFontData.mnCharSet));
 
     return pStream;
 }

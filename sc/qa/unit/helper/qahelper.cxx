@@ -168,12 +168,12 @@ void ScModelTestBase::testFormats(ScDocument* pDoc,std::u16string_view sFormat)
     //test Sheet2
     const ScPatternAttr* pPattern = pDoc->GetPattern(0, 0, 1);
     vcl::Font aFont;
-    Color aColor;
+    model::ComplexColor aComplexColor;
 
     pPattern->fillFontOnly(aFont);
-    pPattern->fillColor(aColor, SC_AUTOCOL_RAW);
+    pPattern->fillColor(aComplexColor, SC_AUTOCOL_RAW);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font size should be 10", tools::Long(200), aFont.GetFontSize().getHeight());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("font color should be black", COL_AUTO, aColor);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font color should be black", COL_AUTO, aComplexColor.getFinalColor());
     pPattern = pDoc->GetPattern(0,1,1);
     pPattern->fillFontOnly(aFont);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font size should be 12", tools::Long(240), aFont.GetFontSize().getHeight());
@@ -185,8 +185,8 @@ void ScModelTestBase::testFormats(ScDocument* pDoc,std::u16string_view sFormat)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
     pPattern = pDoc->GetPattern(1,0,1);
     pPattern->fillFontOnly(aFont);
-    pPattern->fillColor(aColor, SC_AUTOCOL_RAW);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be blue", COL_BLUE, aColor);
+    pPattern->fillColor(aComplexColor, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be blue", COL_BLUE, aComplexColor.getFinalColor());
     pPattern = pDoc->GetPattern(1,1,1);
     pPattern->fillFontOnly(aFont);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be striked out with a single line", STRIKEOUT_SINGLE, aFont.GetStrikeout());
@@ -218,7 +218,7 @@ void ScModelTestBase::testFormats(ScDocument* pDoc,std::u16string_view sFormat)
         CPPUNIT_ASSERT_EQUAL( aKnownGoodStr, aTestStr );
     }
     pPattern = pDoc->GetPattern(1,4,1);
-    aColor = pPattern->GetItem(ATTR_BACKGROUND).GetColor();
+    Color aColor = pPattern->GetItem(ATTR_BACKGROUND).GetColor();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("background color should be green", COL_LIGHTGREEN, aColor);
     pPattern = pDoc->GetPattern(2,0,1);
     SvxCellHorJustify eHorJustify = pPattern->GetItem(ATTR_HOR_JUSTIFY).GetValue();
