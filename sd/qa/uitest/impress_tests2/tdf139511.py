@@ -23,7 +23,7 @@ class tdf139511(UITestCase):
 
                 self.xUITest.executeCommand(".uno:InsertTable?Columns:short=4&Rows:short=4")
 
-                self.assertEqual(8036, document.DrawPages[0].getByIndex(2).BoundRect.Height)
+                self.assertEqual(3885, document.DrawPages[0].getByIndex(2).BoundRect.Height)
                 self.assertEqual(14136, document.DrawPages[0].getByIndex(2).BoundRect.Width)
 
                 with self.ui_test.execute_dialog_through_command(".uno:TransformDialog") as xDialog:

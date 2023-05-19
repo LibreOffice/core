@@ -102,7 +102,7 @@ static void InsertTableImpl(const DrawViewShell* pShell,
     }
     else
     {
-        Size aSize( 14100, 2000 );
+        Size aSize(14100, 200);
 
         Point aPos;
         ::tools::Rectangle aWinRect(aPos, pShell->GetActiveWindow()->GetOutputSizePixel());
