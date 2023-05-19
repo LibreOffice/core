@@ -677,8 +677,7 @@ JSInstanceBuilder::~JSInstanceBuilder()
     // tab page closed -> refresh parent window
     if (m_bIsNestedBuilder && m_sTypeOfJSON == "dialog")
     {
-        sendFullUpdate(true);
-        flush();
+        jsdialog::SendFullUpdate(OUString::number(m_nWindowId), "__DIALOG__");
     }
 
     if (m_sTypeOfJSON == "popup")
