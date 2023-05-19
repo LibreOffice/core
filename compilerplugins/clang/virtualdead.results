@@ -28,6 +28,9 @@ canvas/inc/base/graphicdevicebase.hxx:318
 include/basegfx/utils/unopolypolygon.hxx:93
     void basegfx::unotools::UnoPolyPolygon::modifying()const
     empty
+include/comphelper/propmultiplex2.hxx:54
+    void comphelper::OPropertyChangeListener2::_disposing(const struct com::sun::star::lang::EventObject &,)
+    empty
 include/connectivity/sdbcx/IRefreshable.hxx:29
     void connectivity::sdbcx::IRefreshableGroups::refreshGroups()
     empty
@@ -51,7 +54,7 @@ include/svl/svdde.hxx:243
     0
 include/svtools/unoevent.hxx:198
     unsigned short SvEventDescriptor::getMacroItemWhich()const
-    108
+    114
 include/svx/GenericCheckDialog.hxx:32
     _Bool svx::CheckData::canMarkObject()
     1
@@ -112,7 +115,7 @@ vcl/inc/salinst.hxx:204
 vcl/inc/salinst.hxx:213
     void SalInstance::BeforeAbort(const class rtl::OUString &,_Bool,)
     empty
-vcl/inc/salmenu.hxx:85
+vcl/inc/salmenu.hxx:76
     void SalMenu::GetSystemMenuData(struct SystemMenuData *,)
     empty
 vcl/inc/salobj.hxx:49

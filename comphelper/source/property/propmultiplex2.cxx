@@ -33,11 +33,6 @@ OPropertyChangeListener2::~OPropertyChangeListener2()
         m_xAdapter->onListenerDestruction();
 }
 
-void OPropertyChangeListener2::_disposing(const EventObject&)
-{
-    // nothing to do here
-}
-
 void OPropertyChangeListener2::disposeAdapter(std::unique_lock<std::mutex>& rGuard)
 {
     if (m_xAdapter.is())
@@ -106,14 +101,11 @@ void OPropertyChangeMultiplexer2::onListenerDestruction()
 
 // XEventListener
 
-void SAL_CALL OPropertyChangeMultiplexer2::disposing(const EventObject& _rSource)
+void SAL_CALL OPropertyChangeMultiplexer2::disposing(const EventObject& /*_rSource*/)
 {
     std::unique_lock g(m_rMutex);
     if (m_pListener)
     {
-        // tell the listener
-        if (!locked())
-            m_pListener->_disposing(_rSource);
         // disconnect the listener
         if (m_pListener) // may have been reset whilst calling into _disposing
             m_pListener->setAdapter(g, nullptr);

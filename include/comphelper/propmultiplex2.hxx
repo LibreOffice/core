@@ -50,8 +50,6 @@ public:
 
     /// @throws css::uno::RuntimeException
     virtual void _propertyChanged(const css::beans::PropertyChangeEvent& _rEvent) = 0;
-    /// @throws css::uno::RuntimeException
-    virtual void _disposing(const css::lang::EventObject& _rSource);
 
 protected:
     /** If the derivee also owns the mutex which we know as reference, then call this within your

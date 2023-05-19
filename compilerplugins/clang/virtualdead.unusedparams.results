@@ -61,13 +61,19 @@ extensions/source/bibliography/loadlisteneradapter.hxx:109
 extensions/source/bibliography/loadlisteneradapter.hxx:110
     void bib::OLoadListener::_reloading(const struct com::sun::star::lang::EventObject &,)
     0
+include/comphelper/propmultiplex2.hxx:54
+    void comphelper::OPropertyChangeListener2::_disposing(const struct com::sun::star::lang::EventObject &,)
+    0
+include/comphelper/propshlp.hxx:255
+    void comphelper::OPropertySetHelper::getFastPropertyValue(class std::unique_lock<class std::mutex> &,class com::sun::star::uno::Any &,int,)const
+    011
 include/cppuhelper/propshlp.hxx:330
     void cppu::IEventNotificationHook::fireEvents(int *,int,unsigned char,_Bool,)
     0111
 include/drawinglayer/primitive2d/textbreakuphelper.hxx:58
     _Bool drawinglayer::primitive2d::TextBreakupHelper::allowChange(unsigned int,class basegfx::B2DHomMatrix &,unsigned int,unsigned int,)
     0111
-include/editeng/editeng.hxx:494
+include/editeng/editeng.hxx:502
     void EditEngine::ParagraphConnected(int,int,)
     01
 include/filter/msfilter/msdffimp.hxx:547
@@ -88,6 +94,9 @@ include/oox/export/shapes.hxx:139
 include/sfx2/stbitem.hxx:101
     _Bool SfxStatusBarControl::MouseButtonUp(const class MouseEvent &,)
     0
+include/svl/documentlockfile.hxx:50
+    void svt::GenDocumentLockFile::WriteEntryToStream(class std::unique_lock<class std::mutex> &,const class o3tl::enumarray<enum LockFileComponent, class rtl::OUString> &,const class com::sun::star::uno::Reference<class com::sun::star::io::XOutputStream> &,)
+    011
 include/svl/svdde.hxx:227
     _Bool DdeGetPutItem::Put(const class DdeData *,)
     0
@@ -111,9 +120,6 @@ include/svx/IAccessibleParent.hxx:81
     1101
 include/svx/selectioncontroller.hxx:48
     _Bool sdr::SelectionController::onMouseButtonUp(const class MouseEvent &,class vcl::Window *,)
-    10
-include/svx/svdobj.hxx:133
-    int SdrObjUserCall::GetPDFAnchorStructureElementId(const class SdrObject &,const class OutputDevice &,)
     10
 include/vcl/accessibletable.hxx:90
     class tools::Rectangle vcl::table::IAccessibleTable::GetFieldCharacterBounds(int,int,int,)
@@ -161,22 +167,22 @@ sdext/source/pdfimport/inc/contentsink.hxx:165
     void pdfi::ContentSink::drawMaskedImage(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,_Bool,)
     110
 sdext/source/pdfimport/inc/treevisiting.hxx:46
-    void pdfi::ElementTreeVisitor::visit(struct pdfi::HyperlinkElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element> >, class std::list<class std::unique_ptr<struct pdfi::Element> >, struct std::bidirectional_iterator_tag> &,)
+    void pdfi::ElementTreeVisitor::visit(struct pdfi::HyperlinkElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element> >, class std::list<class std::unique_ptr<struct pdfi::Element> > > &,)
     10
 sdext/source/pdfimport/inc/treevisiting.hxx:47
-    void pdfi::ElementTreeVisitor::visit(struct pdfi::TextElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element> >, class std::list<class std::unique_ptr<struct pdfi::Element> >, struct std::bidirectional_iterator_tag> &,)
+    void pdfi::ElementTreeVisitor::visit(struct pdfi::TextElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element> >, class std::list<class std::unique_ptr<struct pdfi::Element> > > &,)
     10
 sdext/source/pdfimport/inc/treevisiting.hxx:49
-    void pdfi::ElementTreeVisitor::visit(struct pdfi::FrameElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element> >, class std::list<class std::unique_ptr<struct pdfi::Element> >, struct std::bidirectional_iterator_tag> &,)
+    void pdfi::ElementTreeVisitor::visit(struct pdfi::FrameElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element> >, class std::list<class std::unique_ptr<struct pdfi::Element> > > &,)
     10
 sdext/source/pdfimport/inc/treevisiting.hxx:51
-    void pdfi::ElementTreeVisitor::visit(struct pdfi::ImageElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element> >, class std::list<class std::unique_ptr<struct pdfi::Element> >, struct std::bidirectional_iterator_tag> &,)
+    void pdfi::ElementTreeVisitor::visit(struct pdfi::ImageElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element> >, class std::list<class std::unique_ptr<struct pdfi::Element> > > &,)
     10
 sdext/source/pdfimport/inc/treevisiting.hxx:52
-    void pdfi::ElementTreeVisitor::visit(struct pdfi::PageElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element> >, class std::list<class std::unique_ptr<struct pdfi::Element> >, struct std::bidirectional_iterator_tag> &,)
+    void pdfi::ElementTreeVisitor::visit(struct pdfi::PageElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element> >, class std::list<class std::unique_ptr<struct pdfi::Element> > > &,)
     10
 sdext/source/pdfimport/inc/treevisiting.hxx:53
-    void pdfi::ElementTreeVisitor::visit(struct pdfi::DocumentElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element> >, class std::list<class std::unique_ptr<struct pdfi::Element> >, struct std::bidirectional_iterator_tag> &,)
+    void pdfi::ElementTreeVisitor::visit(struct pdfi::DocumentElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element> >, class std::list<class std::unique_ptr<struct pdfi::Element> > > &,)
     10
 starmath/source/wordexportbase.hxx:28
     void SmWordExportBase::HandleText(const class SmNode *,int,)
@@ -190,13 +196,13 @@ sw/qa/inc/swmodeltestbase.hxx:158
 sw/source/core/access/acccontext.hxx:349
     _Bool SwAccessibleContext::SetSelectedState(_Bool,)
     0
-sw/source/core/inc/txmsrt.hxx:147
+sw/source/core/inc/txmsrt.hxx:148
     void SwTOXSortTabBase::FillText(class SwTextNode &,const class SwContentIndex &,unsigned short,const class SwRootFrame *const,)const
     1100
 sw/source/filter/ww8/wrtww8.hxx:799
     void MSWordExportBase::WriteHyperlinkData(const class sw::mark::IFieldmark &,)
     0
-sw/source/filter/ww8/wrtww8.hxx:869
+sw/source/filter/ww8/wrtww8.hxx:871
     void MSWordExportBase::OutputGrfNode(const class SwGrfNode &,)
     0
 unoxml/inc/node.hxx:137
@@ -247,16 +253,16 @@ vcl/inc/salinst.hxx:187
 vcl/inc/salinst.hxx:213
     void SalInstance::BeforeAbort(const class rtl::OUString &,_Bool,)
     00
-vcl/inc/salmenu.hxx:79
+vcl/inc/salmenu.hxx:70
     void SalMenu::SetItemBits(unsigned int,enum MenuItemBits,)
     10
-vcl/inc/salmenu.hxx:83
+vcl/inc/salmenu.hxx:74
     void SalMenu::SetItemImage(unsigned int,class SalMenuItem *,const class Image &,)
     011
-vcl/inc/salmenu.hxx:84
+vcl/inc/salmenu.hxx:75
     void SalMenu::SetAccelerator(unsigned int,class SalMenuItem *,const class vcl::KeyCode &,const class rtl::OUString &,)
     0101
-vcl/inc/salmenu.hxx:85
+vcl/inc/salmenu.hxx:76
     void SalMenu::GetSystemMenuData(struct SystemMenuData *,)
     0
 vcl/inc/salobj.hxx:49
