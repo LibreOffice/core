@@ -100,11 +100,13 @@ constexpr OUStringLiteral pXMLImplWordStart_ExcptLstStr = u"WordExceptList.xml";
 constexpr OUStringLiteral pXMLImplCplStt_ExcptLstStr = u"SentenceExceptList.xml";
 constexpr OUStringLiteral pXMLImplAutocorr_ListStr = u"DocumentList.xml";
 
-const char
+// tdf#54409 check also typographical quotation marks in the case of skipped ASCII quotation marks
+// Curious, why these \u0083\u0084\u0089\u0091\u0092\u0093\u0094 are handled as "begin characters"?
+constexpr std::u16string_view
     /* also at these beginnings - Brackets and all kinds of begin characters */
-    sImplSttSkipChars[] = "\"\'([{\x83\x84\x89\x91\x92\x93\x94",
+    sImplSttSkipChars = u"\"'([{\u2018\u2019\u201a\u201b\u201c\u201d\u201e\u201f\u0083\u0084\u0089\u0091\u0092\u0093\u0094",
     /* also at these ends - Brackets and all kinds of begin characters */
-    sImplEndSkipChars[] = "\"\')]}\x83\x84\x89\x91\x92\x93\x94";
+    sImplEndSkipChars = u"\"')]}\u2018\u2019\u201a\u201b\u201c\u201d\u201e\u201f\u0083\u0084\u0089\u0091\u0092\u0093\u0094";
 
 static OUString EncryptBlockName_Imp(std::u16string_view rName);
 
@@ -171,20 +173,12 @@ static bool lcl_IsSymbolChar( CharClass const & rCC, const OUString& rTxt,
     return false;
 }
 
-static bool lcl_IsInAsciiArr( const char* pArr, const sal_Unicode c )
+static bool lcl_IsInArr(std::u16string_view arr, const sal_uInt32 c)
 {
-    // tdf#54409 check also typographical quotation marks in the case of skipped ASCII quotation marks
-    if ( 0x2018 <= c && c <= 0x201F && (pArr == sImplSttSkipChars || pArr == sImplEndSkipChars) )
-        return true;
-
-    bool bRet = false;
-    for( ; *pArr; ++pArr )
-        if( *pArr == c )
-        {
-            bRet = true;
-            break;
-        }
-    return bRet;
+    for (const auto c1 : arr)
+        if (c1 == c)
+            return true;
+    return false;
 }
 
 SvxAutoCorrDoc::~SvxAutoCorrDoc()
@@ -311,6 +305,8 @@ ACFlags SvxAutoCorrect::GetDefaultFlags()
 
 constexpr sal_Unicode cEmDash = 0x2014;
 constexpr sal_Unicode cEnDash = 0x2013;
+constexpr OUStringLiteral sEmDash(u"\u2014");
+constexpr OUStringLiteral sEnDash(u"\u2013");
 constexpr sal_Unicode cApostrophe = 0x2019;
 constexpr sal_Unicode cLeftDoubleAngleQuote = 0xAB;
 constexpr sal_Unicode cRightDoubleAngleQuote = 0xBB;
@@ -484,10 +480,10 @@ bool SvxAutoCorrect::FnChgOrdinalNumber(
         CharClass& rCC = GetCharClass(eLang);
 
         for (; nSttPos < nEndPos; ++nSttPos)
-            if (!lcl_IsInAsciiArr(sImplSttSkipChars, rTxt[nSttPos]))
+            if (!lcl_IsInArr(sImplSttSkipChars, rTxt[nSttPos]))
                 break;
         for (; nSttPos < nEndPos; --nEndPos)
-            if (!lcl_IsInAsciiArr(sImplEndSkipChars, rTxt[nEndPos - 1]))
+            if (!lcl_IsInArr(sImplEndSkipChars, rTxt[nEndPos - 1]))
                 break;
 
 
@@ -557,6 +553,7 @@ bool SvxAutoCorrect::FnChgToEnEmDash(
     // rTxt may refer to the frame text that will change in the calls to rDoc.Delete / rDoc.Insert;
     // keep a local copy for later use
     OUString aOrigTxt = rTxt;
+    sal_Int32 nFirstReplacementTextLengthChange = 0;
 
     // replace " - " or " --" with "enDash"
     if( 1 < nSttPos && 1 <= nEndPos - nSttPos )
@@ -569,7 +566,7 @@ bool SvxAutoCorrect::FnChgToEnEmDash(
                 '-' == rTxt[ nSttPos+1 ])
             {
                 sal_Int32 n;
-                for( n = nSttPos+2; n < nEndPos && lcl_IsInAsciiArr(
+                for( n = nSttPos+2; n < nEndPos && lcl_IsInArr(
                             sImplSttSkipChars,(cCh = rTxt[ n ]));
                         ++n )
                     ;
@@ -577,7 +574,7 @@ bool SvxAutoCorrect::FnChgToEnEmDash(
                 // found: " --[<AnySttChars>][A-z0-9]
                 if( rCC.isLetterNumeric( OUString(cCh) ) )
                 {
-                    for( n = nSttPos-1; n && lcl_IsInAsciiArr(
+                    for( n = nSttPos-1; n && lcl_IsInArr(
                             sImplEndSkipChars,(cCh = rTxt[ --n ])); )
                         ;
 
@@ -585,7 +582,8 @@ bool SvxAutoCorrect::FnChgToEnEmDash(
                     if( rCC.isLetterNumeric( OUString(cCh) ))
                     {
                         rDoc.Delete( nSttPos, nSttPos + 2 );
-                        rDoc.Insert( nSttPos, bAlwaysUseEmDash ? OUString(cEmDash) : OUString(cEnDash) );
+                        rDoc.Insert( nSttPos, bAlwaysUseEmDash ? sEmDash : sEnDash );
+                        nFirstReplacementTextLengthChange = -1; // 2 ch -> 1 ch
                         bRet = true;
                     }
                 }
@@ -604,7 +602,7 @@ bool SvxAutoCorrect::FnChgToEnEmDash(
             }
             if( ' ' == cCh )
             {
-                for( n = nSttPos; n < nEndPos && lcl_IsInAsciiArr(
+                for( n = nSttPos; n < nEndPos && lcl_IsInArr(
                             sImplSttSkipChars,(cCh = rTxt[ n ]));
                         ++n )
                     ;
@@ -613,14 +611,15 @@ bool SvxAutoCorrect::FnChgToEnEmDash(
                 if( rCC.isLetterNumeric( OUString(cCh) ) )
                 {
                     cCh = ' ';
-                    for( n = nTmpPos-1; n && lcl_IsInAsciiArr(
+                    for( n = nTmpPos-1; n && lcl_IsInArr(
                             sImplEndSkipChars,(cCh = rTxt[ --n ])); )
                             ;
                     // found: "[A-z0-9][<AnyEndChars>] - [<AnySttChars>][A-z0-9]
                     if( rCC.isLetterNumeric( OUString(cCh) ))
                     {
                         rDoc.Delete( nTmpPos, nTmpPos + nLen );
-                        rDoc.Insert( nTmpPos, bAlwaysUseEmDash ? OUString(cEmDash) : OUString(cEnDash) );
+                        rDoc.Insert( nTmpPos, bAlwaysUseEmDash ? sEmDash : sEnDash );
+                        nFirstReplacementTextLengthChange = 1 - nLen; // nLen ch -> 1 ch
                         bRet = true;
                     }
                 }
@@ -634,20 +633,35 @@ bool SvxAutoCorrect::FnChgToEnEmDash(
     bool bEnDash = (eLang == LANGUAGE_HUNGARIAN || eLang == LANGUAGE_FINNISH);
     if( 4 <= nEndPos - nSttPos )
     {
-        OUString sTmp( aOrigTxt.subView( nSttPos, nEndPos - nSttPos ) );
-        sal_Int32 nFndPos = sTmp.indexOf("--");
-        if( nFndPos != -1 && nFndPos &&
-            nFndPos + 2 < sTmp.getLength() &&
-            ( rCC.isLetterNumeric( sTmp, nFndPos - 1 ) ||
-              lcl_IsInAsciiArr( sImplEndSkipChars, aOrigTxt[ nFndPos - 1 ] )) &&
-            ( rCC.isLetterNumeric( sTmp, nFndPos + 2 ) ||
-            lcl_IsInAsciiArr( sImplSttSkipChars, aOrigTxt[ nFndPos + 2 ] )))
+        std::u16string_view sTmpView( aOrigTxt.subView( nSttPos, nEndPos - nSttPos ) );
+        size_t nFndPos = sTmpView.find(u"--");
+        if (nFndPos > 0 && nFndPos < sTmpView.size() - 2)
         {
-            nSttPos = nSttPos + nFndPos;
-            rDoc.Delete( nSttPos, nSttPos + 2 );
-            rDoc.Insert( nSttPos, (bEnDash || (rCC.isDigit( sTmp, nFndPos - 1 ) &&
-                rCC.isDigit( sTmp, nFndPos + 2 )) ? OUString(cEnDash) : OUString(cEmDash)) );
-            bRet = true;
+            // Use proper codepoints. Currently, CharClass::isLetterNumeric is broken, it
+            // uses the index *both* as code unit index (when checking it as ASCII), *and*
+            // as code point index (when passes to css::i18n::XCharacterClassification).
+            // Oh well... Anyway, single-codepoint strings will workaround it.
+            sal_Int32 nStart = nSttPos + nFndPos;
+            sal_uInt32 chStart = aOrigTxt.iterateCodePoints(&nStart, -1);
+            OUString sStart(&chStart, 1);
+            // No idea why sImplEndSkipChars is checked at start
+            if (rCC.isLetterNumeric(sStart, 0) || lcl_IsInArr(sImplEndSkipChars, chStart))
+            {
+                sal_Int32 nEnd = nSttPos + nFndPos + 2;
+                sal_uInt32 chEnd = aOrigTxt.iterateCodePoints(&nEnd, 1);
+                OUString sEnd(&chEnd, 1);
+                // No idea why sImplSttSkipChars is checked at end
+                if (rCC.isLetterNumeric(sEnd, 0) || lcl_IsInArr(sImplSttSkipChars, chEnd))
+                {
+                    nSttPos = nSttPos + nFndPos + nFirstReplacementTextLengthChange;
+                    rDoc.Delete(nSttPos, nSttPos + 2);
+                    rDoc.Insert(nSttPos,
+                                (bEnDash || (rCC.isDigit(sStart, 0) && rCC.isDigit(sEnd, 0))
+                                     ? sEnDash
+                                     : sEmDash));
+                    bRet = true;
+                }
+            }
         }
     }
     return bRet;
@@ -872,7 +886,7 @@ void SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
         }
         else if (pWordStt && !rCC.isDigit(aText, pStr - pStart))
         {
-            if( (lcl_IsInAsciiArr( "-'", *pStr ) || *pStr == cApostrophe) && // These characters are allowed in words
+            if( (lcl_IsInArr( u"-'", *pStr ) || *pStr == cApostrophe) && // These characters are allowed in words
                 pWordStt - 1 == pStr &&
                 // Installation at beginning of paragraph. Replaced < by <= (#i38971#)
                 (pStart + 1) <= pStr &&
@@ -909,7 +923,7 @@ void SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
 
     // Only capitalize, if string before specified characters is long enough
     if( *pDelim && 2 >= pDelim - pWordStt &&
-        lcl_IsInAsciiArr( ".-)>", *pDelim ) )
+        lcl_IsInArr( u".-)>", *pDelim ) )
         return;
 
     // tdf#59666 don't capitalize single Greek letters (except in Greek texts)
@@ -1337,7 +1351,7 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                 {
                     sal_Unicode cPrev = rTxt[ nInsPos-1 ];
                     bSttQuote = NonFieldWordDelim(cPrev) ||
-                        lcl_IsInAsciiArr( "([{", cPrev ) ||
+                        lcl_IsInArr( u"([{", cPrev ) ||
                         ( cEmDash == cPrev ) ||
                         ( cEnDash == cPrev );
                     // tdf#38394 use opening quotation mark << in French l'<<word>>
@@ -1557,11 +1571,11 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
             {
                 sal_Int32 nCapLttrPos1 = nCapLttrPos, nInsPos1 = nInsPos;
                 while( nCapLttrPos1 < nInsPos &&
-                        lcl_IsInAsciiArr( sImplSttSkipChars, rTxt[ nCapLttrPos1 ] )
+                        lcl_IsInArr( sImplSttSkipChars, rTxt[ nCapLttrPos1 ] )
                         )
                         ++nCapLttrPos1;
                 while( nCapLttrPos1 < nInsPos1 && nInsPos1 &&
-                        lcl_IsInAsciiArr( sImplEndSkipChars, rTxt[ nInsPos1-1 ] )
+                        lcl_IsInArr( sImplEndSkipChars, rTxt[ nInsPos1-1 ] )
                         )
                         --nInsPos1;
 
@@ -1751,7 +1765,7 @@ OUString SvxAutoCorrect::GetPrevAutoCorrWord(SvxAutoCorrDoc const& rDoc, const O
     if( !nPos && !IsWordDelim( rTxt[ 0 ]))
         --nCapLttrPos;          // Beginning of paragraph and no Blank!
 
-    while( lcl_IsInAsciiArr( sImplSttSkipChars, rTxt[ nCapLttrPos ]) )
+    while( lcl_IsInArr( sImplSttSkipChars, rTxt[ nCapLttrPos ]) )
         if( ++nCapLttrPos >= nEnd )
             return sRet;
 
@@ -1907,7 +1921,7 @@ OUString EncryptBlockName_Imp(std::u16string_view rName)
     aName.append('#').append(rName);
     for (size_t nLen = rName.size(), nPos = 1; nPos < nLen; ++nPos)
     {
-        if (lcl_IsInAsciiArr( "!/:.\\", aName[nPos]))
+        if (lcl_IsInArr( u"!/:.\\", aName[nPos]))
             aName[nPos] &= 0x0f;
     }
     return aName.makeStringAndClear();
