@@ -855,6 +855,36 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyTabJoin)
     CPPUNIT_ASSERT(pPage3);
     CPPUNIT_ASSERT(!pPage3->GetSortedObjs());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyTabJoinLegacy)
+{
+    // Given a document with 3 pages and 2 tables: table on first and second page, 3rd page has no
+    // table (Word 2010 mode):
+    createSwDoc("floattable-tab-join-legacy.docx");
+
+    // When laying out that document:
+    calcLayout();
+
+    // Then make sure that all pages have the expected amount of fly frames:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    const SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
+    auto pPage2 = dynamic_cast<SwPageFrame*>(pPage1->GetNext());
+    CPPUNIT_ASSERT(pPage2);
+    const SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. the 2nd page had 2 fly frames, hosting a split table, instead of joining that table and
+    // having 1 fly frame (even after the non-legacy case was fixed already).
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage2Objs.size());
+    auto pPage3 = dynamic_cast<SwPageFrame*>(pPage2->GetNext());
+    CPPUNIT_ASSERT(pPage3);
+    CPPUNIT_ASSERT(!pPage3->GetSortedObjs());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
