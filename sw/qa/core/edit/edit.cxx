@@ -12,6 +12,7 @@
 #include <docsh.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
+#include <unotxdoc.hxx>
 
 namespace
 {
@@ -40,6 +41,19 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineHidden)
     aSet.Put(aItem);
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->SetAttrSet(aSet, SetAttrMode::DEFAULT, nullptr, true);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testAutocorrect)
+{
+    // Given an empty document:
+    createSwDoc();
+
+    // When typing a string, which contains a "-", then make sure no memory corruption happens when
+    // it gets auto-corrected to "–":
+    auto pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    // Without the accompanying fix in place, this test would have failed with a
+    // heap-use-after-free:
+    emulateTyping(*pTextDoc, u"But not now - with ");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
