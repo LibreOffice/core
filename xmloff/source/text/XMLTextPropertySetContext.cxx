@@ -20,7 +20,7 @@
 #include <tools/debug.hxx>
 #include "XMLTextPropertySetContext.hxx"
 #include <XMLTextColumnsContext.hxx>
-#include <XMLThemeColorContext.hxx>
+#include <XMLComplexColorContext.hxx>
 #include <XMLBackgroundImageContext.hxx>
 #include "XMLSectionFootnoteConfigImport.hxx"
 
@@ -70,7 +70,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextPropertySetCont
         break;
 
     case CTF_COMPLEX_COLOR:
-        return new XMLThemeColorContext(GetImport(), nElement, xAttrList, rProp, rProperties);
+        return new XMLComplexColorContext(GetImport(), nElement, xAttrList, rProp, rProperties);
         break;
 
     case CTF_DROPCAPFORMAT:
