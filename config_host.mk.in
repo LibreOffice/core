@@ -760,6 +760,7 @@ export ZLIB_CFLAGS=$(gb_SPACE)@ZLIB_CFLAGS@
 export ZLIB_LIBS=$(gb_SPACE)@ZLIB_LIBS@
 export ZMF_CFLAGS=$(gb_SPACE)@ZMF_CFLAGS@
 export ZMF_LIBS=$(gb_SPACE)@ZMF_LIBS@
+export GET_TASK_ALLOW_ENTITLEMENT=@GET_TASK_ALLOW_ENTITLEMENT@
 
 # lang-related stuff
 include $(BUILDDIR)/config_$(gb_Side)_lang.mk

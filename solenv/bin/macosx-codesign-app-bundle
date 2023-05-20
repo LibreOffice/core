@@ -15,8 +15,7 @@ test $# = 1 || { echo Usage: $0 app-bundle; exit 1; }
 
 for V in \
     BUILDDIR \
-    MACOSX_BUNDLE_IDENTIFIER \
-    MACOSX_CODESIGNING_IDENTITY; do
+    MACOSX_BUNDLE_IDENTIFIER; do
     if test -z "$(eval echo '$'$V)"; then
        echo No '$'$V "environment variable! This should be run in a build only"
        exit 1
@@ -44,6 +43,19 @@ else
  -or -name '*.fodt' -or -name 'schema.strings' -or -name 'schema.xml' \
  -or -name '*.jar' -or -name 'LICENSE' -or -name 'LICENSE.html' \
  -or -name '*.applescript' -or -name '*.odt'"
+fi
+
+if test -z "$MACOSX_CODESIGNING_IDENTITY"; then
+    if test -n "$ENABLE_RELEASE_BUILD"; then
+        echo "This is a release build! This should be run in a non-release build only"
+        exit 1
+    fi
+
+    # Skip codesigning for non-release builds if there is no identity set but
+    # set entitlements to allow Xcode's Instruments application to connect to
+    # the application
+    codesign --force --identifier="${MACOSX_BUNDLE_IDENTIFIER}" --sign - $entitlements "$APP_BUNDLE" || exit 1
+    exit 0
 fi
 
 # Sign jnilibs first as workaround for signing issue on old baseline

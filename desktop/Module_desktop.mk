@@ -46,7 +46,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
         Pagein_impress \
         Pagein_writer \
     ) \
-    $(if $(filter-out MACOSX WNT,$(OS)),CustomTarget_soffice) \
+    $(if $(filter-out WNT,$(OS)),CustomTarget_soffice) \
 ))
 
 ifeq ($(USING_X11),TRUE)

@@ -409,7 +409,10 @@ sub create_package
         {
             my $subdir = "$tempdir/$packagename/$volume_name_classic_app.app/Contents/Resources";
             if ( ! -d $subdir ) { installer::systemactions::create_directory($subdir); }
-            if ( $ENV{'MACOSX_CODESIGNING_IDENTITY'} )
+            # For non-release builds where no identity is, set entitlements
+            # to allow Xcode's Instruments application to connect to the
+            # application
+            if ( $ENV{'MACOSX_CODESIGNING_IDENTITY'} || !$ENV{'ENABLE_RELEASE_BUILD'} )
             {
                 $systemcall = "$ENV{'SRCDIR'}/solenv/bin/macosx-codesign-app-bundle $localtempdir/$folder/$volume_name_classic_app.app";
                 print "... $systemcall ...\n";
