@@ -24,7 +24,7 @@
 #include <xmltabe.hxx>
 #include <XMLTextColumnsExport.hxx>
 #include <XMLBackgroundImageExport.hxx>
-#include <XMLThemeColorExport.hxx>
+#include <XMLComplexColorExport.hxx>
 
 class SvXMLExport;
 class XMLTextExportPropertySetMapper: public SvXMLExportPropertyMapper
@@ -53,7 +53,7 @@ private:
     XMLTextDropCapExport maDropCapExport;
     SvxXMLTabStopExport maTabStopExport;
     XMLTextColumnsExport maTextColumnsExport;
-    XMLThemeColorExport maThemeColorExport;
+    XMLComplexColorExport maComplexColorExport;
     XMLBackgroundImageExport maBackgroundImageExport;
 
     /** Application-specific filter. By default do nothing. */
