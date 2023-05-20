@@ -26,7 +26,6 @@ module com { module sun { module star { module ui { module dialogs {
 published struct FilePickerEvent: com::sun::star::lang::EventObject
 {
     /**
-        @param ElementId
         Identifies the affected element
 
         @see com::sun::star::ui::dialogs::CommonFilePickerElementIds

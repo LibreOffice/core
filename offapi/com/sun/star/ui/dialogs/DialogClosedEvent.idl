@@ -30,7 +30,6 @@ module com { module sun { module star { module ui { module dialogs {
 struct DialogClosedEvent: com::sun::star::lang::EventObject
 {
     /**
-        @param DialogResult
         Identifies the result of a dialog.
 
         @see ExecutableDialogResults
