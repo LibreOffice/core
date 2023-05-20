@@ -2360,8 +2360,6 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, OUString& rStr)
     bool bBracket  = false;
     WW8ReadFieldParams aReadParam( rStr );
 
-    sal_Int32 nOffset = 0;
-
     for (;;)
     {
         const sal_Int32 nRet = aReadParam.SkipToNextToken();
@@ -2374,8 +2372,6 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, OUString& rStr)
                 aName = aReadParam.GetResult();
             else if( aVText.isEmpty() || bBracket )
             {
-                nOffset = aReadParam.GetTokenSttPtr() + 1;
-
                 if( bBracket )
                     aVText += " ";
                 aVText += aReadParam.GetResult();
@@ -2403,19 +2399,7 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, OUString& rStr)
                     m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Macro )), aName, aVText );
 
     if( !bApplyWingdings )
-    {
-
         m_rDoc.getIDocumentContentOperations().InsertPoolItem( *m_pPaM, SwFormatField( aField ) );
-        WW8_CP nOldCp = m_xPlcxMan->Where();
-        WW8_CP nCp = nOldCp + nOffset;
-
-        SwPaM aPaM(*m_pPaM, m_pPaM);
-        aPaM.SetMark();
-        aPaM.Move(fnMoveBackward);
-        aPaM.Exchange();
-
-        m_pPostProcessAttrsInfo.reset(new WW8PostProcessAttrsInfo(nCp, nCp, aPaM));
-    }
     else
     {
         //set Wingdings font
@@ -2444,16 +2428,6 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, OUString& rStr)
     }
 
     return eF_ResT::OK;
-}
-
-WW8PostProcessAttrsInfo::WW8PostProcessAttrsInfo(WW8_CP nCpStart, WW8_CP nCpEnd,
-                                                 SwPaM & rPaM)
-    : mbCopy(false)
-    , mnCpStart(nCpStart)
-    , mnCpEnd(nCpEnd)
-    , mPaM(*rPaM.GetMark(), *rPaM.GetPoint())
-    , mItemSet(rPaM.GetDoc().GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_PARATR_END - 1>)
-{
 }
 
 bool CanUseRemoteLink(const OUString &rGrfName)
