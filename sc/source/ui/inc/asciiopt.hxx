@@ -33,6 +33,7 @@ private:
     bool        bRemoveSpace;
     bool        bQuotedFieldAsText;
     bool        bDetectSpecialNumber;
+    bool        bDetectScientificNumber;
     bool        bEvaluateFormulas;
     bool        bSkipEmptyCells;
     bool        bSaveAsShown;
@@ -60,6 +61,7 @@ public:
     bool                IsRemoveSpace() const   { return bRemoveSpace; }
     bool                IsQuotedAsText() const  { return bQuotedFieldAsText; }
     bool                IsDetectSpecialNumber() const { return bDetectSpecialNumber; }
+    bool                IsDetectScientificNumber() const { return bDetectScientificNumber; }
     bool                IsEvaluateFormulas() const    { return bEvaluateFormulas; }
     bool                IsSkipEmptyCells() const      { return bSkipEmptyCells; }
     bool                GetIncludeBOM() const   { return bIncludeBOM; }
@@ -79,6 +81,7 @@ public:
     void    SetRemoveSpace( bool bSet )         { bRemoveSpace = bSet; }
     void    SetQuotedAsText(bool bSet)          { bQuotedFieldAsText = bSet; }
     void    SetDetectSpecialNumber(bool bSet)   { bDetectSpecialNumber = bSet; }
+    void    SetDetectScientificNumber(bool bSet){ bDetectScientificNumber = bSet; }
     void    SetEvaluateFormulas(bool bSet)      { bEvaluateFormulas = bSet; }
     void    SetSkipEmptyCells(bool bSet)        { bSkipEmptyCells = bSet; }
     void    SetIncludeBOM(bool bVal)            { bIncludeBOM = bVal; }

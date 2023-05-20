@@ -579,7 +579,7 @@
                     <property name="spacing">6</property>
                     <property name="homogeneous">True</property>
                     <child>
-                      <!-- n-columns=2 n-rows=2 -->
+                      <!-- n-columns=3 n-rows=2 -->
                       <object class="GtkGrid" id="grid5">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
@@ -655,6 +655,25 @@
                             <child internal-child="accessible">
                               <object class="AtkObject" id="skipemptycells-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|skipemptycells">When this option is enabled, Calc preserves previous content of cells when pasting empty ones. Otherwise, Calc deletes content of previous cells.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left-attach">2</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="detectscientificnumbers">
+                            <property name="label" translatable="yes" context="textimportcsv|detectspecialnumbers">Detect scientific num_bers</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
+                            <property name="use-underline">True</property>
+                            <property name="draw-indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="detectscientificnumbers-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|detectscientificnumbers">When this option is enabled, Calc will automatically detect numbers in scientific notation in addition to basic decimal numbers.</property>
                               </object>
                             </child>
                           </object>

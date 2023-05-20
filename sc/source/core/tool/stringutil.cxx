@@ -28,6 +28,7 @@
 ScSetStringParam::ScSetStringParam() :
     mpNumFormatter(nullptr),
     mbDetectNumberFormat(true),
+    mbDetectScientificNumberFormat(true),
     meSetTextNumFormat(Never),
     mbHandleApostrophe(true),
     meStartListening(sc::SingleCellListening),
@@ -38,6 +39,7 @@ ScSetStringParam::ScSetStringParam() :
 void ScSetStringParam::setTextInput()
 {
     mbDetectNumberFormat = false;
+    mbDetectScientificNumberFormat = false;
     mbHandleApostrophe = false;
     meSetTextNumFormat = Always;
 }
@@ -45,12 +47,13 @@ void ScSetStringParam::setTextInput()
 void ScSetStringParam::setNumericInput()
 {
     mbDetectNumberFormat = true;
+    mbDetectScientificNumberFormat = true;
     mbHandleApostrophe = true;
     meSetTextNumFormat = Never;
 }
 
 bool ScStringUtil::parseSimpleNumber(
-    const OUString& rStr, sal_Unicode dsep, sal_Unicode gsep, sal_Unicode dsepa, double& rVal)
+    const OUString& rStr, sal_Unicode dsep, sal_Unicode gsep, sal_Unicode dsepa, double& rVal, bool bDetectScientificNumber)
 {
     // Actually almost the entire pre-check is unnecessary and we could call
     // rtl::math::stringToDouble() just after having exchanged ascii space with
@@ -165,7 +168,7 @@ bool ScStringUtil::parseSimpleNumber(
         {
             // this is an exponent designator.
 
-            if (nPosExponent >= 0)
+            if (nPosExponent >= 0 || !bDetectScientificNumber)
                 // Only one exponent allowed.
                 return false;
 

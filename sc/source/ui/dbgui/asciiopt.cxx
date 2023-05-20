@@ -33,6 +33,7 @@ ScAsciiOptions::ScAsciiOptions() :
     bRemoveSpace    ( false ),
     bQuotedFieldAsText(false),
     bDetectSpecialNumber(false),
+    bDetectScientificNumber(true),
     bEvaluateFormulas(true),
     bSkipEmptyCells(false),
     bSaveAsShown(true),
@@ -196,6 +197,15 @@ void ScAsciiOptions::ReadFromString( std::u16string_view rString )
 
     // Token 13: include BOM.
     bIncludeBOM = nPos >= 0 && o3tl::getToken(rString, 0, ',', nPos) == u"true";
+
+    // Token 14: Detect scientific numbers.
+    if (nPos >= 0)
+    {
+        bDetectScientificNumber = o3tl::getToken(rString, 0, ',', nPos) == u"true";
+    }
+    else
+        bDetectScientificNumber = true;    // default of versions that didn't add the parameter
+
 }
 
 OUString ScAsciiOptions::WriteToString() const
@@ -266,7 +276,9 @@ OUString ScAsciiOptions::WriteToString() const
                // Token 12: evaluate formulas in import
                OUString::boolean( bEvaluateFormulas ) + "," +
                // Token 13: include BOM
-               OUString::boolean(bIncludeBOM)
+               OUString::boolean(bIncludeBOM) + "," +
+               // Token 14: Detect scientific numbers.
+               OUString::boolean( bDetectScientificNumber )
             );
     return aOutStr.makeStringAndClear();
 }

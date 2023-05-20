@@ -74,6 +74,7 @@ enum CSVImportOptionsIndex
     CSVIO_CharSet,
     CSVIO_QuotedAsText,
     CSVIO_DetectSpecialNum,
+    CSVIO_DetectScientificNum,
     CSVIO_Language,
     // Plus one not for SC_IMPORTFILE.
     CSVIO_PasteSkipEmptyCells
@@ -96,6 +97,7 @@ const ::std::vector<OUString> CSVImportOptionNames =
     "CharSet",
     "QuotedFieldAsText",
     "DetectSpecialNumbers",
+    "DetectScientificNumbers",
     "Language",
     "SkipEmptyCells"
 };
@@ -174,11 +176,11 @@ static void lcl_CreatePropertiesNames ( OUString& rSepPath, Sequence<OUString>& 
     {
         case SC_IMPORTFILE:
             rSepPath = aSep_Path;
-            nProperties = 11;
+            nProperties = 12;
             break;
         case SC_PASTETEXT:
             rSepPath = aSep_Path_Clpbrd;
-            nProperties = 12;
+            nProperties = 13;
             break;
         case SC_TEXTTOCOLUMNS:
         default:
@@ -200,6 +202,7 @@ static void lcl_CreatePropertiesNames ( OUString& rSepPath, Sequence<OUString>& 
         pNames[ CSVIO_CharSet ] =       CSVImportOptionNames[ CSVIO_CharSet ];
         pNames[ CSVIO_QuotedAsText ] =  CSVImportOptionNames[ CSVIO_QuotedAsText ];
         pNames[ CSVIO_DetectSpecialNum ] = CSVImportOptionNames[ CSVIO_DetectSpecialNum ];
+        pNames[ CSVIO_DetectScientificNum ] = CSVImportOptionNames[ CSVIO_DetectScientificNum ];
         pNames[ CSVIO_Language ] =      CSVImportOptionNames[ CSVIO_Language ];
     }
     if (eCall != SC_IMPORTFILE)
@@ -211,7 +214,7 @@ static void lcl_CreatePropertiesNames ( OUString& rSepPath, Sequence<OUString>& 
 }
 
 static void lcl_LoadSeparators( OUString& rFieldSeparators, OUString& rTextSeparators,
-                             bool& rMergeDelimiters, bool& rQuotedAsText, bool& rDetectSpecialNum,
+                             bool& rMergeDelimiters, bool& rQuotedAsText, bool& rDetectSpecialNum, bool& rDetectScientificNum,
                              bool& rFixedWidth, sal_Int32& rFromRow, sal_Int32& rCharSet,
                              sal_Int32& rLanguage, bool& rSkipEmptyCells, bool& rRemoveSpace,
                              bool& rEvaluateFormulas, ScImportAsciiCall eCall )
@@ -257,6 +260,9 @@ static void lcl_LoadSeparators( OUString& rFieldSeparators, OUString& rTextSepar
         if ( pProperties[ CSVIO_DetectSpecialNum ].hasValue() )
             pProperties[ CSVIO_DetectSpecialNum ] >>= rDetectSpecialNum;
 
+        if ( pProperties[ CSVIO_DetectScientificNum ].hasValue() )
+            pProperties[ CSVIO_DetectScientificNum ] >>= rDetectScientificNum;
+
         if ( pProperties[ CSVIO_Language ].hasValue() )
             pProperties[ CSVIO_Language ] >>= rLanguage;
     }
@@ -271,7 +277,7 @@ static void lcl_LoadSeparators( OUString& rFieldSeparators, OUString& rTextSepar
 
 static void lcl_SaveSeparators(
     const OUString& sFieldSeparators, const OUString& sTextSeparators, bool bMergeDelimiters, bool bQuotedAsText,
-    bool bDetectSpecialNum, bool bFixedWidth, sal_Int32 nFromRow,
+    bool bDetectSpecialNum, bool bDetectScientificNum, bool bFixedWidth, sal_Int32 nFromRow,
     sal_Int32 nCharSet, sal_Int32 nLanguage, bool bSkipEmptyCells, bool bRemoveSpace, bool bEvaluateFormulas,
     ScImportAsciiCall eCall )
 {
@@ -296,6 +302,7 @@ static void lcl_SaveSeparators(
         pProperties[ CSVIO_CharSet ] <<= nCharSet;
         pProperties[ CSVIO_QuotedAsText ] <<= bQuotedAsText;
         pProperties[ CSVIO_DetectSpecialNum ] <<= bDetectSpecialNum;
+        pProperties[ CSVIO_DetectScientificNum ] <<= bDetectScientificNum;
         pProperties[ CSVIO_Language ] <<= nLanguage;
     }
     if (eCall != SC_IMPORTFILE)
@@ -337,6 +344,7 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
     , mxCbTextSep(m_xBuilder->weld_combo_box("textdelimiter"))
     , mxCkbQuotedAsText(m_xBuilder->weld_check_button("quotedfieldastext"))
     , mxCkbDetectNumber(m_xBuilder->weld_check_button("detectspecialnumbers"))
+    , mxCkbDetectScientificNumber(m_xBuilder->weld_check_button("detectscientificnumbers"))
     , mxCkbEvaluateFormulas(m_xBuilder->weld_check_button("evaluateformulas"))
     , mxCkbSkipEmptyCells(m_xBuilder->weld_check_button("skipemptycells"))
     , mxLbType(m_xBuilder->weld_combo_box("columntype"))
@@ -370,6 +378,7 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
     bool bFixedWidth = false;
     bool bQuotedFieldAsText = false;
     bool bDetectSpecialNum = true;
+    bool bDetectScientificNum = true;
     bool bEvaluateFormulas = (meCall != SC_IMPORTFILE);
     bool bSkipEmptyCells = true;
     bool bRemoveSpace = false;
@@ -377,7 +386,7 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
     sal_Int32 nCharSet = -1;
     sal_Int32 nLanguage = 0;
     lcl_LoadSeparators (sFieldSeparators, sTextSeparators, bMergeDelimiters,
-                         bQuotedFieldAsText, bDetectSpecialNum, bFixedWidth, nFromRow,
+                         bQuotedFieldAsText, bDetectSpecialNum, bDetectScientificNum, bFixedWidth, nFromRow,
                          nCharSet, nLanguage, bSkipEmptyCells, bRemoveSpace, bEvaluateFormulas, meCall);
     // load from saved settings
     maFieldSeparators = sFieldSeparators;
@@ -389,7 +398,13 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
     if (bRemoveSpace)
         mxCkbRemoveSpace->set_active(true);
     if (bDetectSpecialNum)
+    {
         mxCkbDetectNumber->set_active(true);
+        bDetectScientificNum = true;
+        mxCkbDetectScientificNumber->set_sensitive(false);
+    }
+    if (bDetectScientificNum)
+        mxCkbDetectScientificNumber->set_active(true);
     if (bEvaluateFormulas)
         mxCkbEvaluateFormulas->set_active(true);
     if (bSkipEmptyCells)
@@ -498,6 +513,7 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
     mxCkbAsOnce->connect_toggled( aSeparatorClickHdl );
     mxCkbQuotedAsText->connect_toggled( aSeparatorClickHdl );
     mxCkbDetectNumber->connect_toggled( aSeparatorClickHdl );
+    mxCkbDetectScientificNumber->connect_toggled( aSeparatorClickHdl );
     mxCkbEvaluateFormulas->connect_toggled( aSeparatorClickHdl );
     mxCkbSkipEmptyCells->connect_toggled( aSeparatorClickHdl );
     mxCkbSpace->connect_toggled( aSeparatorClickHdl );
@@ -579,6 +595,8 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
         // Always detect special numbers for text-to-columns mode.
         mxCkbDetectNumber->set_active(true);
         mxCkbDetectNumber->set_sensitive(false);
+        mxCkbDetectScientificNumber->set_active(true);
+        mxCkbDetectScientificNumber->set_sensitive(false);
     }
     if (meCall == SC_IMPORTFILE)
     {
@@ -680,6 +698,7 @@ void ScImportAsciiDlg::GetOptions( ScAsciiOptions& rOpt )
 
     rOpt.SetQuotedAsText(mxCkbQuotedAsText->get_active());
     rOpt.SetDetectSpecialNumber(mxCkbDetectNumber->get_active());
+    rOpt.SetDetectScientificNumber(mxCkbDetectScientificNumber->get_active());
     rOpt.SetEvaluateFormulas(mxCkbEvaluateFormulas->get_active());
     rOpt.SetSkipEmptyCells(mxCkbSkipEmptyCells->get_active());
 }
@@ -687,7 +706,7 @@ void ScImportAsciiDlg::GetOptions( ScAsciiOptions& rOpt )
 void ScImportAsciiDlg::SaveParameters()
 {
     lcl_SaveSeparators( maFieldSeparators, mxCbTextSep->get_active_text(), mxCkbAsOnce->get_active(),
-                     mxCkbQuotedAsText->get_active(), mxCkbDetectNumber->get_active(),
+                     mxCkbQuotedAsText->get_active(), mxCkbDetectNumber->get_active(), mxCkbDetectScientificNumber->get_active(),
                      mxRbFixed->get_active(),
                      mxNfRow->get_value(),
                      mxLbCharSet->get_active(),
@@ -823,6 +842,17 @@ void ScImportAsciiDlg::SeparatorHdl(const weld::Widget* pCtrl)
     OSL_ENSURE( pCtrl, "ScImportAsciiDlg::SeparatorHdl - missing sender" );
     OSL_ENSURE( !mxRbFixed->get_active(), "ScImportAsciiDlg::SeparatorHdl - not allowed in fixed width" );
 
+    if (pCtrl == mxCkbDetectNumber.get())
+    {
+        if (mxCkbDetectNumber->get_active())
+        {
+            mxCkbDetectScientificNumber->set_active(true);
+            mxCkbDetectScientificNumber->set_sensitive(false);
+        }
+        else
+            mxCkbDetectScientificNumber->set_sensitive(true);
+        return;
+    }
     /*  #i41550# First update state of the controls. The GetSeparators()
         function needs final state of the check boxes. */
     if (pCtrl == mxCkbOther.get() && mxCkbOther->get_active())

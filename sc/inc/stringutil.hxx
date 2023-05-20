@@ -70,11 +70,14 @@ struct SAL_WARN_UNUSED SC_DLLPUBLIC ScSetStringParam
     SvNumberFormatter* mpNumFormatter;
 
     /**
-     * When true, we try to detect special number format (dates etc) from the
-     * input string, when false, we only try to detect a basic decimal number
-     * format.
+     * Specify which number formats are detected:
+     * mbDetectNumberFormat=true && mbDetectScientificNumberFormat=true : detect all special number formats : basic decimal number, date, scientific notation, etc
+     * mbDetectNumberFormat=false && mbDetectScientificNumberFormat=true : detect scientific notation and basic decimal number, but not other special number formats (date etc)
+     * mbDetectNumberFormat=false && mbDetectScientificNumberFormat=false : detect only basic decimal number, but not scientific notation or other special number formats (date etc)
+     * Note: mbDetectNumberFormat=true && mbDetectScientificNumberFormat=false not allowed
      */
     bool mbDetectNumberFormat;
+    bool mbDetectScientificNumberFormat;
 
     /**
      * Determine when to set the 'Text' number format to the cell where the
@@ -145,7 +148,7 @@ public:
      * @return true if the string is a valid number, false otherwise.
      */
     static bool parseSimpleNumber(
-        const OUString& rStr, sal_Unicode dsep, sal_Unicode gsep, sal_Unicode dsepa, double& rVal);
+        const OUString& rStr, sal_Unicode dsep, sal_Unicode gsep, sal_Unicode dsepa, double& rVal, bool bDetectScientificNumber = true);
 
     static bool parseSimpleNumber(
         const char* p, size_t n, char dsep, char gsep, double& rVal);

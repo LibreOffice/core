@@ -1032,6 +1032,13 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="DetectScientificNumbers" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, Calc tries to detect numbers in scientific notation.</desc>
+            <label>DetectScientificNumbers</label>
+          </info>
+          <value>true</value>
+        </prop>
         <prop oor:name="Language" oor:type="xs:int" oor:nillable="false">
           <info>
             <desc>Language to use for CSV import.  This determines how the numbers are parsed.</desc>
@@ -1118,6 +1125,13 @@
           <info>
             <desc>If true, Calc tries to detect special number format, such as date and scientific notation.</desc>
             <label>DetectSpecialNumbers</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="DetectScientificNumbers" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, Calc tries to detect numbers in scientific notation.</desc>
+            <label>DetectScientificNumbers</label>
           </info>
           <value>true</value>
         </prop>

@@ -2303,7 +2303,7 @@ bool ScColumn::ParseString(
                 sal_Unicode gsep = rGroupSep[0];
                 sal_Unicode dsepa = rDecSepAlt.toChar();
 
-                if (!ScStringUtil::parseSimpleNumber(rString, dsep, gsep, dsepa, nVal))
+                if (!ScStringUtil::parseSimpleNumber(rString, dsep, gsep, dsepa, nVal, aParam.mbDetectScientificNumberFormat))
                     break;
 
                 rCell.set(nVal);

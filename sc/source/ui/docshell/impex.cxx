@@ -1067,7 +1067,7 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
 static bool lcl_PutString(
     ScDocumentImport& rDocImport, bool bUseDocImport,
     SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rStr, sal_uInt8 nColFormat,
-    SvNumberFormatter* pFormatter, bool bDetectNumFormat, bool bEvaluateFormulas, bool bSkipEmptyCells,
+    SvNumberFormatter* pFormatter, bool bDetectNumFormat, bool bDetectSciNumFormat, bool bEvaluateFormulas, bool bSkipEmptyCells,
     const ::utl::TransliterationWrapper& rTransliteration, CalendarWrapper& rCalendar,
     const ::utl::TransliterationWrapper* pSecondTransliteration, CalendarWrapper* pSecondCalendar )
 {
@@ -1504,6 +1504,7 @@ static bool lcl_PutString(
         ScSetStringParam aParam;
         aParam.mpNumFormatter = pFormatter;
         aParam.mbDetectNumberFormat = bDetectNumFormat;
+        aParam.mbDetectScientificNumberFormat = bDetectSciNumFormat;
         aParam.meSetTextNumFormat = ScSetStringParam::SpecialNumberOnly;
         aParam.mbHandleApostrophe = false;
         aParam.mbCheckLinkFormula = true;
@@ -1599,6 +1600,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     LanguageType eDocLang = pExtOptions->GetLanguage();
     SvNumberFormatter aNumFormatter( comphelper::getProcessComponentContext(), eDocLang);
     bool bDetectNumFormat = pExtOptions->IsDetectSpecialNumber();
+    bool bDetectSciNumFormat = pExtOptions->IsDetectScientificNumber();
     bool bEvaluateFormulas = pExtOptions->IsEvaluateFormulas();
     bool bSkipEmptyCells = pExtOptions->IsSkipEmptyCells();
 
@@ -1722,7 +1724,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 
                                 bMultiLine |= lcl_PutString(
                                         aDocImport, !mbOverwriting, nCol, nRow, nTab, aCell, nFmt,
-                                        &aNumFormatter, bDetectNumFormat, bEvaluateFormulas, bSkipEmptyCells,
+                                        &aNumFormatter, bDetectNumFormat, bDetectSciNumFormat, bEvaluateFormulas, bSkipEmptyCells,
                                         aTransliteration, aCalendar,
                                         pEnglishTransliteration.get(), pEnglishCalendar.get());
                             }
@@ -1768,7 +1770,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 
                             bMultiLine |= lcl_PutString(
                                 aDocImport, !mbOverwriting, nCol, nRow, nTab, aCell, nFmt,
-                                &aNumFormatter, bDetectNumFormat, bEvaluateFormulas, bSkipEmptyCells,
+                                &aNumFormatter, bDetectNumFormat, bDetectSciNumFormat, bEvaluateFormulas, bSkipEmptyCells,
                                 aTransliteration, aCalendar,
                                 pEnglishTransliteration.get(), pEnglishCalendar.get());
                         }

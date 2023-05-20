@@ -42,6 +42,21 @@ def load_csv_file(UITestCase, fileName, bUseDefaultOptions):
                 if get_state_as_dict(xChild)['Selected'] == 'true':
                     xChild.executeAction("CLICK", tuple())
                 UITestCase.assertEqual('false', get_state_as_dict(xChild)['Selected'])
+                # tdf#154131
+                if childName == 'detectspecialnumbers':
+                    # if 'Detect special numbers' is false, 'Detect scientific numbers' can be modified
+                    xDetectScientific = xDialog.getChild('detectscientificnumbers')
+                    if get_state_as_dict(xDetectScientific)['Selected'] == 'false':
+                        xDetectScientific.executeAction("CLICK", tuple())
+                    UITestCase.assertEqual('true', get_state_as_dict(xDetectScientific)['Selected'])
+                    xDetectScientific.executeAction("CLICK", tuple())
+                    UITestCase.assertEqual('false', get_state_as_dict(xDetectScientific)['Selected'])
+                    # if 'Detect special numbers' is true, 'Detect scientific numbers' is true and disabled
+                    xChild.executeAction("CLICK", tuple())
+                    UITestCase.assertEqual('true', get_state_as_dict(xChild)['Selected'])
+                    UITestCase.assertEqual('true', get_state_as_dict(xDetectScientific)['Selected'])
+                    UITestCase.assertEqual('false', get_state_as_dict(xDetectScientific)['Enabled'])
+                    xChild.executeAction("CLICK", tuple())
 
             UITestCase.assertEqual('1', get_state_as_dict(xDialog.getChild("fromrow"))['Text'])
 
