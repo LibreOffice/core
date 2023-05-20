@@ -18,7 +18,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmlprhdl.hxx>
-#include <XMLThemeColorContext.hxx>
+#include <XMLComplexColorContext.hxx>
 
 using namespace css;
 using namespace xmloff::token;
@@ -29,7 +29,7 @@ SvXMLEnumMapEntry<sal_Int16> const pXML_ThemeColor_Enum[]
         { XML_ACCENT4, 7 },   { XML_ACCENT5, 8 },      { XML_ACCENT6, 9 }, { XML_HLINK, 10 },
         { XML_FOLHLINK, 11 }, { XML_TOKEN_INVALID, 0 } };
 
-XMLThemeColorContext::XMLThemeColorContext(
+XMLComplexColorContext::XMLComplexColorContext(
     SvXMLImport& rImport, sal_Int32 nElement,
     const uno::Reference<xml::sax::XFastAttributeList>& xAttrList, const XMLPropertyState& rProp,
     std::vector<XMLPropertyState>& rProps)
@@ -57,7 +57,7 @@ XMLThemeColorContext::XMLThemeColorContext(
 }
 
 css::uno::Reference<css::xml::sax::XFastContextHandler>
-XMLThemeColorContext::createFastChildContext(
+XMLComplexColorContext::createFastChildContext(
     sal_Int32 nElement, const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
 {
     if (nElement == XML_ELEMENT(LO_EXT, XML_TRANSFORMATION))
@@ -100,7 +100,7 @@ XMLThemeColorContext::createFastChildContext(
     return nullptr;
 }
 
-void XMLThemeColorContext::endFastElement(sal_Int32 nElement)
+void XMLComplexColorContext::endFastElement(sal_Int32 nElement)
 {
     if (nElement == mnRootElement)
     {

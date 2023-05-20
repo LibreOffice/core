@@ -13,15 +13,15 @@
 #include "XMLElementPropertyContext.hxx"
 #include <docmodel/uno/UnoComplexColor.hxx>
 
-class XMLThemeColorContext final : public XMLElementPropertyContext
+class XMLComplexColorContext final : public XMLElementPropertyContext
 {
     model::ComplexColor maComplexColor;
     sal_Int32 mnRootElement;
 
 public:
-    XMLThemeColorContext(SvXMLImport& rImport, sal_Int32 nElement,
-                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
-                         const XMLPropertyState& rProp, std::vector<XMLPropertyState>& rProps);
+    XMLComplexColorContext(SvXMLImport& rImport, sal_Int32 nElement,
+                           const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                           const XMLPropertyState& rProp, std::vector<XMLPropertyState>& rProps);
 
     css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
         sal_Int32 nElement,
