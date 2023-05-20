@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <XMLThemeColorExport.hxx>
+#include <XMLComplexColorExport.hxx>
 
 #include <sal/config.h>
 
@@ -21,7 +21,7 @@
 using namespace css;
 using namespace ::xmloff::token;
 
-XMLThemeColorExport::XMLThemeColorExport(SvXMLExport& rExport)
+XMLComplexColorExport::XMLComplexColorExport(SvXMLExport& rExport)
     : mrExport(rExport)
 {
 }
@@ -34,8 +34,8 @@ constexpr const std::array<XMLTokenEnum, 12> constThemeColorTypeToToken{
 };
 }
 
-void XMLThemeColorExport::exportXML(const uno::Any& rAny, sal_uInt16 nPrefix,
-                                    const OUString& rLocalName)
+void XMLComplexColorExport::exportXML(const uno::Any& rAny, sal_uInt16 nPrefix,
+                                      const OUString& rLocalName)
 {
     uno::Reference<util::XComplexColor> xComplexColor;
     rAny >>= xComplexColor;

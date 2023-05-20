@@ -17,12 +17,12 @@ class Any;
 }
 class SvXMLExport;
 
-class XMLThemeColorExport
+class XMLComplexColorExport
 {
     SvXMLExport& mrExport;
 
 public:
-    XMLThemeColorExport(SvXMLExport& rExport);
+    XMLComplexColorExport(SvXMLExport& rExport);
 
     void exportXML(const css::uno::Any& rAny, sal_uInt16 nPrefix, const OUString& rLocalName);
 };

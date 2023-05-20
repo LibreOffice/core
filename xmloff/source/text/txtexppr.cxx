@@ -73,7 +73,7 @@ void XMLTextExportPropertySetMapper::handleElementItem(
         break;
 
     case CTF_COMPLEX_COLOR:
-        pThis->maThemeColorExport.exportXML(rProperty.maValue,
+        pThis->maComplexColorExport.exportXML(rProperty.maValue,
                     getPropertySetMapper()->GetEntryNameSpace(rProperty.mnIndex),
                     getPropertySetMapper()->GetEntryXMLName(rProperty.mnIndex));
         break;
@@ -216,7 +216,7 @@ XMLTextExportPropertySetMapper::XMLTextExportPropertySetMapper(
     maDropCapExport( rExp ),
     maTabStopExport( rExp ),
     maTextColumnsExport( rExp ),
-    maThemeColorExport(rExp),
+    maComplexColorExport(rExp),
     maBackgroundImageExport( rExp )
 {
 }
