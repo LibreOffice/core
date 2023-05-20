@@ -1316,6 +1316,22 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeColorTransparency)
     assertXPath(pXmlDoc, sElement + "a:solidFill/a:schemeClr/a:lumMod", "val", "75000");
     assertXPath(pXmlDoc, sElement + "a:solidFill/a:schemeClr/a:alpha", "val", "20000");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testThemeFontTypeface)
+{
+    // Saving the document had produced a file which PowerPoint wants to repair. The mandatory
+    // attribute 'typeface' was missing in the <a:ea> elements.
+
+    loadFromURL(u"tdf155412_typeface.pptx");
+
+    save("Impress Office Open XML");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/theme/theme1.xml");
+
+    // Make sure typeface is written.
+    OString sElement = "/a:theme/a:themeElements/a:fontScheme/";
+    assertXPath(pXmlDoc, sElement + "a:majorFont/a:ea", "typeface", "");
+    assertXPath(pXmlDoc, sElement + "a:minorFont/a:ea", "typeface", "");
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
