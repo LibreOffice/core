@@ -81,7 +81,10 @@ void fillAttrList(rtl::Reference<sax_fastparser::FastAttributeList> const& pAttr
                   model::ThemeFont const& rThemeFont)
 {
     if (rThemeFont.maTypeface.isEmpty())
+    {
+        pAttrList->add(XML_typeface, ""); // 'typeface' attribute is mandatory
         return;
+    }
 
     pAttrList->add(XML_typeface, rThemeFont.maTypeface);
 
