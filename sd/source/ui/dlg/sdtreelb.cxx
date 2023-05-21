@@ -54,8 +54,20 @@
 #include <comphelper/processfactory.hxx>
 
 #include <vcl/commandevent.hxx>
+#include <DrawViewShell.hxx>
 
 using namespace com::sun::star;
+
+namespace {
+
+sd::DrawViewShell* lcl_getDrawViewShell(const SdDrawDocument* pDoc)
+{
+    if (!pDoc || !pDoc->GetDocSh())
+        return nullptr;
+    return static_cast<sd::DrawViewShell*>(pDoc->GetDocSh()->GetViewShell());
+}
+
+}
 
 bool SdPageObjsTLV::bIsInDrag = false;
 
@@ -263,6 +275,13 @@ bool SdPageObjsTLV::IsEqualToDoc( const SdDrawDocument* pInDoc )
     if( !m_pDoc )
         return false;
 
+    sd::DrawViewShell* pDrawViewShell = lcl_getDrawViewShell(m_pDoc);
+    if (!pDrawViewShell)
+        return false;
+    PageKind eDrawViewShellPageKind = pDrawViewShell->GetPageKind();
+    if (eDrawViewShellPageKind != PageKind::Standard && eDrawViewShellPageKind != PageKind::Notes)
+        return false;
+
     std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
     if (!m_xTreeView->get_iter_first(*xEntry))
         xEntry.reset();
@@ -274,7 +293,7 @@ bool SdPageObjsTLV::IsEqualToDoc( const SdDrawDocument* pInDoc )
     while( nPage < nMaxPages )
     {
         const SdPage* pPage = static_cast<const SdPage*>( m_pDoc->GetPage( nPage ) );
-        if( pPage->GetPageKind() == PageKind::Standard )
+        if (pPage->GetPageKind() == eDrawViewShellPageKind)
         {
             bool bRet = IsEqualToShapeList(xEntry, *pPage, pPage->GetName());
             if (!bRet)
@@ -1254,11 +1273,21 @@ void SdPageObjsTLV::Fill(const SdDrawDocument* pInDoc, bool bAllPages, const OUS
     sal_uInt16 nPage = 0;
     const sal_uInt16 nMaxPages = m_pDoc->GetPageCount();
 
+    sd::DrawViewShell* pDrawViewShell = lcl_getDrawViewShell(m_pDoc);
+    if (!pDrawViewShell)
+        return;
+    PageKind eDrawViewShellPageKind = pDrawViewShell->GetPageKind();
+
     while( nPage < nMaxPages )
     {
         const SdPage* pPage = static_cast<const SdPage*>( m_pDoc->GetPage( nPage ) );
-        if(  (m_bShowAllPages || pPage->GetPageKind() == PageKind::Standard)
-             && (pPage->GetPageKind() != PageKind::Handout)   ) //#94954# never list the normal handout page ( handout-masterpage is used instead )
+        PageKind ePagePageKind = pPage->GetPageKind();
+        if ((m_bShowAllPages ||
+             (ePagePageKind == PageKind::Standard &&
+              eDrawViewShellPageKind == PageKind::Standard) ||
+             (ePagePageKind == PageKind::Notes &&
+              eDrawViewShellPageKind == PageKind::Notes)) &&
+                ePagePageKind != PageKind::Handout) //#94954# never list the normal handout page ( handout-masterpage is used instead )
         {
             bool bPageExcluded = pPage->IsExcluded();
 
