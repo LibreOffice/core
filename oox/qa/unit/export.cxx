@@ -356,7 +356,7 @@ CPPUNIT_TEST_FIXTURE(Test, testReferToTheme)
 CPPUNIT_TEST_FIXTURE(Test, testThemeColor_ShapeFill)
 {
     // Given an ODP file that contains references to a theme for shape fill:
-    loadFromURL(u"ReferenceShapeFill.odp");
+    loadFromURL(u"ReferenceShapeFill.fodp");
 
     // When saving that document:
     save("Impress Office Open XML");
