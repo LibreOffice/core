@@ -349,7 +349,7 @@ CPPUNIT_TEST_FIXTURE(Test, testReferToTheme)
 CPPUNIT_TEST_FIXTURE(Test, testThemeColor_ShapeFill)
 {
     // Given an ODP file that contains references to a theme for shape fill:
-    loadFromURL(u"ReferenceShapeFill.odp");
+    loadFromURL(u"ReferenceShapeFill.fodp");
 
     // When saving that document:
     save("Impress Office Open XML");
@@ -944,7 +944,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkThemeColor)
     // The document has a Fontwork shape with fill theme color 'lt2' and 50% darker, and a Fontwork
     // shape with theme color 'dk2' and 40% lighter. When exporting to docx, fill color was not
     // exported as theme color at all, and it was replaced with character color.
-    loadFromURL(u"tdf51195_Fontwork_ThemeColor.odt");
+    loadFromURL(u"tdf51195_Fontwork_ThemeColor.fodt");
 
     // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
     // Attribute 'ID' is not allowed to appear in element 'v:shape'.
@@ -1015,7 +1015,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkLinGradientRGBColor)
     // start color #ffff00 (Yellow) with 'Brightness' 80%, end color #4682B4 (Steel Blue), Transition
     // Start 25% and solid transparency 30%.
     // Without fix the gradient was not exported at all.
-    loadFromURL(u"tdf51195_Fontwork_linearGradient.odt");
+    loadFromURL(u"tdf51195_Fontwork_linearGradient.fodt");
 
     // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
     // Attribute 'ID' is not allowed to appear in element 'v:shape'.
@@ -1062,7 +1062,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkAxialGradientTransparency)
     // Transparency gradient Type Axial with Angle 160deg, Transition start 40%,
     // Start value 5%, End value 90%
     // Without fix the gradient was not exported at all.
-    loadFromURL(u"tdf51195_Fontwork_axialGradient.odt");
+    loadFromURL(u"tdf51195_Fontwork_axialGradient.fodt");
 
     // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
     // Attribute 'ID' is not allowed to appear in element 'v:shape'.
@@ -1122,7 +1122,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkRadialGradient)
     // From Color #40E0D0, To Color #FF0000, Center x|y 75%|20%, no transparency
     // Transition start 10%
     // Without fix the gradient was not exported at all.
-    loadFromURL(u"tdf51195_Fontwork_radialGradient.odt");
+    loadFromURL(u"tdf51195_Fontwork_radialGradient.fodt");
 
     // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
     // Attribute 'ID' is not allowed to appear in element 'v:shape'.
@@ -1162,7 +1162,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkEllipticalGradient)
     // transparency gradient type Ellipsoid, Center x|y 50%|50%, Transition Start 50%,
     // Start 70%, End 0%.
     // Without fix the gradient was not exported at all.
-    loadFromURL(u"tdf51195_Fontwork_ellipticalGradient.odt");
+    loadFromURL(u"tdf51195_Fontwork_ellipticalGradient.fodt");
 
     // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
     // Attribute 'ID' is not allowed to appear in element 'v:shape'.
@@ -1205,7 +1205,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkSquareGradient)
     // From Color #4963ef 40%, To Color #ffff6e 90%, Center x|y 100%|50%,
     // no transparency
     // Without fix the gradient was not exported at all.
-    loadFromURL(u"tdf51195_Fontwork_squareGradient.odt");
+    loadFromURL(u"tdf51195_Fontwork_squareGradient.fodt");
 
     // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
     // Attribute 'ID' is not allowed to appear in element 'v:shape'.
@@ -1248,7 +1248,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkRectGradient)
     // transparency gradient Type "Rectangular", Center x|y 50%|50%, Transition start 10%,
     // Start value 70%, End value 5%.
     // Without fix the gradient was not exported at all.
-    loadFromURL(u"tdf51195_Fontwork_rectGradient.odt");
+    loadFromURL(u"tdf51195_Fontwork_rectGradient.fodt");
 
     // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
     // Attribute 'ID' is not allowed to appear in element 'v:shape'.
