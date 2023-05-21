@@ -51,6 +51,7 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <algorithm>
+#include <clonelist.hxx>
 #include <svl/hint.hxx>
 #include <rtl/strbuf.hxx>
 #include <libxml/xmlwriter.h>
@@ -131,6 +132,8 @@ SdrObject* SdrObjList::getSdrObjectFromSdrObjList() const
 
 void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
 {
+    CloneList aCloneList;
+
     // clear SdrObjects with broadcasting
     ClearSdrObjList();
 
@@ -157,6 +160,7 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
         if(pDO)
         {
             NbcInsertObject(pDO.get(), SAL_MAX_SIZE);
+            aCloneList.AddPair(pSO, pDO.get());
         }
         else
         {
@@ -164,53 +168,11 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
         }
     }
 
-    // and now for the Connectors
-    // The new objects would be shown in the rSrcList
-    // and then the object connections are made.
-    // Similar implementation are setup as the following:
-    //    void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
-    //    SdrModel* SdrExchangeView::CreateMarkedObjModel() const
-    //    BOOL SdrExchangeView::Paste(const SdrModel& rMod,...)
-    //    void SdrEditView::CopyMarked()
-    if (nCloneErrCnt==0) {
-        for (size_t no=0; no<nCount; ++no) {
-            const SdrObject* pSrcOb=rSrcList.GetObj(no);
-            const SdrEdgeObj* pSrcEdge=dynamic_cast<const SdrEdgeObj*>( pSrcOb );
-            if (pSrcEdge!=nullptr) {
-                SdrObject* pSrcNode1=pSrcEdge->GetConnectedNode(true);
-                SdrObject* pSrcNode2=pSrcEdge->GetConnectedNode(false);
-                if (pSrcNode1!=nullptr && pSrcNode1->getParentSdrObjListFromSdrObject()!=pSrcEdge->getParentSdrObjListFromSdrObject()) pSrcNode1=nullptr; // can't do this
-                if (pSrcNode2!=nullptr && pSrcNode2->getParentSdrObjListFromSdrObject()!=pSrcEdge->getParentSdrObjListFromSdrObject()) pSrcNode2=nullptr; // across all lists (yet)
-                if (pSrcNode1!=nullptr || pSrcNode2!=nullptr) {
-                    SdrObject* pEdgeObjTmp=GetObj(no);
-                    SdrEdgeObj* pDstEdge=dynamic_cast<SdrEdgeObj*>( pEdgeObjTmp );
-                    if (pDstEdge!=nullptr) {
-                        if (pSrcNode1!=nullptr) {
-                            sal_uInt32 nDstNode1=pSrcNode1->GetOrdNum();
-                            SdrObject* pDstNode1=GetObj(nDstNode1);
-                            if (pDstNode1!=nullptr) { // else we get an error!
-                                pDstEdge->ConnectToNode(true,pDstNode1);
-                            } else {
-                                OSL_FAIL("SdrObjList::operator=(): pDstNode1==NULL!");
-                            }
-                        }
-                        if (pSrcNode2!=nullptr) {
-                            sal_uInt32 nDstNode2=pSrcNode2->GetOrdNum();
-                            SdrObject* pDstNode2=GetObj(nDstNode2);
-                            if (pDstNode2!=nullptr) { // else the node was probably not selected
-                                pDstEdge->ConnectToNode(false,pDstNode2);
-                            } else {
-                                OSL_FAIL("SdrObjList::operator=(): pDstNode2==NULL!");
-                            }
-                        }
-                    } else {
-                        OSL_FAIL("SdrObjList::operator=(): pDstEdge==NULL!");
-                    }
-                }
-            }
-        }
-    } else {
+    // Wires up the connections
+    aCloneList.CopyConnections();
 #ifdef DBG_UTIL
+    if (nCloneErrCnt != 0)
+    {
         OStringBuffer aStr("SdrObjList::operator=(): Error when cloning ");
 
         if(nCloneErrCnt == 1)
@@ -223,11 +185,9 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
                 + " drawing objects.");
         }
 
-        aStr.append(" Not copying connectors.");
-
         OSL_FAIL(aStr.getStr());
-#endif
     }
+#endif
 }
 
 void SdrObjList::RecalcObjOrdNums()
