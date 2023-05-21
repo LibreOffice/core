@@ -14,18 +14,22 @@ Option Explicit
 &apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
 &apos;&apos;&apos;	SF_Dialog
 &apos;&apos;&apos;	=========
-&apos;&apos;&apos;		Management of dialogs defined with the Basic IDE
+&apos;&apos;&apos;		Management of dialogs. They may bedefined with the Basic IDE or built from scratch
 &apos;&apos;&apos;		Each instance of the current class represents a single dialog box displayed to the user
 &apos;&apos;&apos;
 &apos;&apos;&apos;		A dialog box can be displayed in modal or in non-modal modes
-&apos;&apos;&apos;		In modal mode, the box is displayed and the execution of the macro process is suspended
-&apos;&apos;&apos;		until one of the OK or Cancel buttons is pressed. In the meantime, other user actions
-&apos;&apos;&apos;		executed on the box can trigger specific actions.
-&apos;&apos;&apos;		In non-modal mode, the dialog box is &quot;floating&quot; on the user desktop and the execution
-&apos;&apos;&apos;		of the macro process continues normally
-&apos;&apos;&apos;		A dialog box disappears from memory after its explicit termination.
+&apos;&apos;&apos;
+&apos;&apos;&apos;			In modal mode, the box is displayed and the execution of the macro process is suspended
+&apos;&apos;&apos;			until one of the OK or Cancel buttons is pressed. In the meantime, other user actions
+&apos;&apos;&apos;			executed on the box can trigger specific actions.
+&apos;&apos;&apos;
+&apos;&apos;&apos;			In non-modal mode, the dialog box is &quot;floating&quot; on the user desktop and the execution
+&apos;&apos;&apos;			of the macro process continues normally
+&apos;&apos;&apos;			A dialog box disappears from memory after its explicit termination.
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Service invocation and usage:
+&apos;&apos;&apos;
+&apos;&apos;&apos;		1) when the dialog exists in some dialog libraries (= pre-defined with the Basic IDE):
 &apos;&apos;&apos;			Dim myDialog As Object, lButton As Long
 &apos;&apos;&apos;				Set myDialog = CreateScriptService(&quot;SFDialogs.Dialog&quot;, Container, Library, DialogName)
 &apos;&apos;&apos;					&apos;	Args:
@@ -41,6 +45,24 @@ Option Explicit
 &apos;&apos;&apos;					&apos;	... Process controls and do what is needed
 &apos;&apos;&apos;				End If
 &apos;&apos;&apos;				myDialog.Terminate()
+&apos;&apos;&apos;
+&apos;&apos;&apos;		2) when the dialog is fully defined by code:
+&apos;&apos;&apos;			Dim myDialog As Object, oButton As Object lExec As Long
+&apos;&apos;&apos;				Set myDialog = CreateScriptService(&quot;SFDialogs.NewDialog&quot;, DialogName, Place)
+&apos;&apos;&apos;					&apos;	Args:
+&apos;&apos;&apos;					&apos;		DialogName:	a case-sensitive string designating the dialog
+&apos;&apos;&apos;							Place: either
+&apos;&apos;&apos;							- an array with 4 elements: (X, Y, Width, Height)
+&apos;&apos;&apos;							- a com.sun.star.awt.Rectangle [X, Y, Width, Height]
+&apos;&apos;&apos;	 							(All elements are expressed in &quot;Map AppFont&quot; units).
+&apos;&apos;&apos;				&apos;	... Create controls with the CreateXXX(...) methods ..., e.g.
+&apos;&apos;&apos;				Set oButton = myDialog.CreateButton(&quot;OKButton&quot;, Place := Array(100, 100, 20, 10), Push := &quot;OK&quot;)
+&apos;&apos;&apos;				lExec = myDialog.Execute()	&apos;	Default mode = Modal
+&apos;&apos;&apos;				If lExec = myDialog.OKBUTTON Then
+&apos;&apos;&apos;					&apos;	... Process controls and do what is needed
+&apos;&apos;&apos;				End If
+&apos;&apos;&apos;				myDialog.Terminate()
+&apos;&apos;&apos;
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Detailed user documentation:
 &apos;&apos;&apos;			https://help.libreoffice.org/latest/en-US/text/sbasic/shared/03/sf_dialog.html?DbPAR=BASIC
@@ -63,6 +85,8 @@ Private ServiceName			As String
 &apos;	Dialog location
 Private _Container			As String
 Private _Library			As String
+Private _BuiltFromScratch	As Boolean		&apos; When True, dialog is not stored in a library
+Private _BuiltInPython		As Boolean		&apos; Used only when _BuiltFromScratch = True
 Private _Name				As String
 Private _CacheIndex			As Long			&apos; Index in cache storage
 
@@ -145,6 +169,8 @@ Private Sub Class_Initialize()
 	ServiceName = &quot;SFDialogs.Dialog&quot;
 	_Container = &quot;&quot;
 	_Library = &quot;&quot;
+	_BuiltFromScratch = False
+	_BuiltInPython = False
 	_Name = &quot;&quot;
 	_CacheIndex = -1
 	Set _DialogProvider = Nothing
@@ -1895,7 +1921,8 @@ Try:
 	Else
 		_Modal = False
 		_Displayed = True
-		_DialogModel.DesktopAsParent = True
+		&apos;	To make visible an on-the-fly designed dialog when macro triggered from Python
+		_DialogModel.DesktopAsParent = Not ( _BuiltFromScratch And _BuiltInPython )
 		_DialogControl.setVisible(True)
 		lExecute = 0
 	End If
@@ -2600,7 +2627,8 @@ Check:
 	If IsMissing(pbError) Then pbError = True
 
 Try:
-	bAlive = ( Not IsNull(_DialogProvider) And Not IsNull(_DialogControl) )
+	bAlive = ( Not IsNull(_DialogProvider) Or _BuiltFromScratch )
+	If bAlive Then bAlive = Not IsNull(_DialogControl)
 	If Not bAlive Then GoTo Catch
 
 Finally:

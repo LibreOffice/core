@@ -1988,6 +1988,32 @@ class SFDialogs:
             return self.ExecMethod(self.vbMethod, 'Terminate')
 
     # #########################################################################
+    # SF_NewDialog CLASS
+    # #########################################################################
+    class SF_NewDialog(SFServices):
+        """
+            Pseudo service never returned from the Basic world. A SF_Dialog instance is returned instead.
+            Main purpose: manage the arguments of CreateScritService() for the creation of a dialog from scratch
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'SFDialogs.NewDialog'
+        servicesynonyms = ('newdialog', 'sfdialogs.newdialog')
+        serviceproperties = dict()
+
+        @classmethod
+        def ReviewServiceArgs(cls, dialogname = '', place = (0, 0, 0, 0)):
+            """
+                Transform positional and keyword arguments into positional only
+                Add the XComponentContext as last argument
+                """
+            outsideprocess = len(ScriptForge.hostname) > 0 and ScriptForge.port > 0
+            if outsideprocess:
+                return dialogname, place, ScriptForge.componentcontext
+            else:
+                return dialogname, place
+
+    # #########################################################################
     # SF_DialogControl CLASS
     # #########################################################################
     class SF_DialogControl(SFServices):

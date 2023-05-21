@@ -56,9 +56,9 @@ Public Sub RegisterScriptServices() As Variant
 &apos;&apos;&apos;				&quot;libraryname.modulename.function&quot;
 
 	With GlobalScope.ScriptForge.SF_Services
-		.RegisterService(&quot;Dialog&quot;,				&quot;SFDialogs.SF_Register._NewDialog&quot;)			&apos;	Reference to the function initializing the service
-		.RegisterEventManager(&quot;DialogEvent&quot;,	&quot;SFDialogs.SF_Register._EventManager&quot;)		&apos;	Reference to the events manager
-		&apos;TODO
+		.RegisterService(&quot;Dialog&quot;,				&quot;SFDialogs.SF_Register._NewDialog&quot;)				&apos;	Reference to the function initializing the service
+		.RegisterEventManager(&quot;DialogEvent&quot;,	&quot;SFDialogs.SF_Register._EventManager&quot;)			&apos;	Reference to the events manager
+		.RegisterEventManager(&quot;NewDialog&quot;,		&quot;SFDialogs.SF_Register._NewDialogFromScratch&quot;)	&apos;	Reference to the function initializing the service
 	End With
 
 End Sub			&apos;	SFDialogs.SF_Register.RegisterScriptServices
@@ -251,16 +251,18 @@ Const cstGlobal = &quot;GlobalScope&quot;
 
 Check:
 	If IsMissing(pvArgs) Or IsEmpty(pvArgs) Then pvArgs = Array()
-	If Not IsArray(pvArgs) Then pvArgs = Array(pvArgs)		&apos;	Needed when _NewDialog called from _EventManager
+	If Not IsArray(pvArgs) Then pvArgs = Array(pvArgs)
 	If UBound(pvArgs) &gt;= 0 Then vContainer = pvArgs(0) Else vContainer = &quot;&quot;
 	If UBound(pvArgs) &gt;= 1 Then vLibrary = pvArgs(1)
 	If IsEmpty(vLibrary) Then vLibrary = &quot;Standard&quot;
 	If UBound(pvArgs) &gt;= 2 Then vDialogName = pvArgs(2) Else vDialogName = Empty	&apos;	Use Empty to force mandatory status
+
 	If Not ScriptForge.SF_Utils._Validate(vContainer, &quot;Container&quot;, Array(V_STRING, ScriptForge.V_OBJECT)) Then GoTo Finally
 	If Not ScriptForge.SF_Utils._Validate(vLibrary, &quot;Library&quot;, V_STRING) Then GoTo Finally
 	If Not ScriptForge.SF_Utils._Validate(vDialogName, &quot;DialogName&quot;, V_STRING) Then GoTo Finally
-	If UBound(pvArgs) &gt;= 3 Then vContext = pvArgs(3) Else vContext = Nothing
-	If Not ScriptForge.SF_Utils._Validate(vContext, &quot;DialogName&quot;, V_OBJECT) Then GoTo Finally
+	If UBound(pvArgs) &gt;= 3 Then vContext = pvArgs(3) Else Set vContext = Nothing
+	If Not ScriptForge.SF_Utils._Validate(vContext, &quot;Context&quot;, ScriptForge.V_OBJECT) Then GoTo Finally
+
 	Set oDialog = Nothing
 
 Try:
@@ -343,6 +345,110 @@ CatchNotFound:
 		, &quot;Container&quot;, vContainer, &quot;Library&quot;, vLibrary, &quot;DialogName&quot;, vDialogName)
 	GoTo Finally
 End Function	&apos;	SFDialogs.SF_Register._NewDialog
+
+REM -----------------------------------------------------------------------------
+Private Function _NewDialogFromScratch(Optional ByVal pvArgs As Variant) As Object
+&apos;&apos;&apos;	Create a new instance of the SF_Dialog class describing a dynamically defined dialog box
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		DialogName: a symbolic name of the dialog to create, for information only. Not checked for unicity.
+&apos;&apos;&apos;		Place: either
+&apos;&apos;&apos;			- an array with 4 elements: (X, Y, Width, Height)
+&apos;&apos;&apos;			- a com.sun.star.awt.Rectangle [X, Y, Width, Height]
+&apos;&apos;&apos;				All elements are expressed in &quot;Map AppFont&quot; units.
+&apos;&apos;&apos;		Context: When called from Python, the context must be provided : XSCRIPTCONTEXT
+&apos;&apos;&apos;	Returns: the instance or Nothing
+
+Dim oDialog As Object				&apos;	Return value
+Dim vDialogName As Variant			&apos;	The name is for information only
+Dim vPlace As variant				&apos;	com.sun.star.awt.rectangle or array(X, Y, Width, Height)
+Dim oPlace As Object				&apos;	com.sun.star.awt.rectangle
+Dim oProcessManager As Object		&apos;	com.sun.star.lang.XMultiServiceFactory
+Dim bBuiltInPython As Boolean		&apos;	True when context is present
+Dim oModel As Object				&apos;	com.sun.star.awt.UnoControlDialogModel
+Dim oView As Object					&apos;	com.sun.star.awt.UnoControlDialog
+Dim vContext As Variant				&apos;	com.sun.star.uno.XComponentContext
+
+Const cstDialogModel = &quot;com.sun.star.awt.UnoControlDialogModel&quot;
+Const cstDialogView = &quot;com.sun.star.awt.UnoControlDialog&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+
+Check:
+	If IsMissing(pvArgs) Or IsEmpty(pvArgs) Then pvArgs = Array()
+	If Not IsArray(pvArgs) Then pvArgs = Array(pvArgs)
+	If UBound(pvArgs) &gt;= 0 Then vDialogName = pvArgs(0) Else vDialogName = Empty
+	If UBound(pvArgs) &gt;= 1 Then vPlace = pvArgs(1) Else vPlace = Empty	&apos;	Use Empty to force the mandatory status
+	If IsMissing(vDialogName) Or IsEmpty(vDialogName) Then vDialogName = &quot;DYNDIALOG&quot;
+	If UBound(pvArgs) &gt;= 2 Then vContext = pvArgs(2) Else Set vContext = Nothing
+
+	If Not ScriptForge.SF_Utils._Validate(vDialogName, &quot;DialogName&quot;, V_STRING) Then GoTo Finally
+	If IsArray(vPlace) Then
+		If Not ScriptForge.SF_Utils._ValidateArray(vPlace, &quot;Place&quot;, 1, ScriptForge.V_NUMERIC, True) Then GoTo Finally
+	Else
+		If Not ScriptForge.SF_Utils._Validate(vPlace, &quot;Place&quot;, ScriptForge.V_OBJECT) Then GoTo Finally
+	End If
+	If Not ScriptForge.SF_Utils._Validate(vContext, &quot;Context&quot;, ScriptForge.V_OBJECT) Then GoTo Finally
+
+	Set oDialog = Nothing
+
+Try:
+	&apos;	Determine the process service manager and create the dialog model
+	If IsNull(vContext)	Then						&apos;	Basic
+		Set oprocessManager = GetProcessServiceManager()
+		Set oModel = oProcessManager.createInstance(cstDialogModel)
+		bBuiltInPython = False
+	Else											&apos;	Python
+		Set oprocessManager = vContext.getServiceManager()
+		Set oModel = oProcessManager.createInstanceWithContext(cstDialogModel, vContext)
+		bBuiltInPython = True
+	End If
+
+	oModel.Name = vDialogName
+
+	&apos;	Set dimension and position
+	With oModel
+		If IsArray(vPlace) Then
+			If UBound(vPlace) = 3 Then
+				.PositionX = vPlace(0)
+				.PositionY = vPlace(1)
+				.Width = vPlace(2)
+				.Height = vPlace(3)
+			End If
+		ElseIf ScriptForge.SF_Session.UnoObjectType(vPlace) = &quot;com.sun.star.awt.Rectangle&quot; Then
+			Set oPlace = vPlace
+			.PositionX = oPlace.X
+			.PositionY = oPlace.Y
+			.Width = oPlace.Width
+			.Height = oPlace.Height
+		Else
+			&apos;Leave everything to zero
+		End If
+	End With
+
+	&apos;	Create the view and associate model and view
+	Set oView = oprocessManager.createInstance(cstDialogView)
+	oView.setModel(oModel)
+
+	&apos;	Initialize the basic SF_Dialog instance to return to the user script
+	Set oDialog = New SF_Dialog
+	With oDialog
+		Set .[Me] = oDialog
+		._Container = &quot;&quot;
+		._Library = &quot;&quot;
+		._BuiltFromScratch = True
+		._BuiltInPython = bBuiltInPython
+		._Name = vDialogName
+		Set ._DialogProvider = Nothing
+		Set ._DialogControl = oView
+		._Initialize()
+	End With
+
+Finally:
+	Set _NewDialogFromScratch = oDialog
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDialogs.SF_Register._NewDialogFromScratch
 
 REM ============================================== END OF SFDIALOGS.SF_REGISTER
 </script:module>
