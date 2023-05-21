@@ -769,6 +769,7 @@ void SdNavigatorControllerItem::StateChangedAtToolBoxControl( sal_uInt16 nSId,
                 static_cast<::sd::DrawViewShell *>(pDrawDocShell->GetViewShell());
         if (pDrawViewShell)
         {
+            pNavigatorWin->FreshTree(pDrawDocShell->GetDoc());
             bool bEditModePage(pDrawViewShell->GetEditMode() == EditMode::Page);
             pNavigatorWin->mxToolbox->set_sensitive(bEditModePage);
             pNavigatorWin->mxLbDocs->set_sensitive(bEditModePage);
