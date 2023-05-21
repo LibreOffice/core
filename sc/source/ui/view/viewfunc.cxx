@@ -904,17 +904,25 @@ SvtScriptType ScViewFunc::GetSelectionScriptType()
     return nScript;
 }
 
+static void ShrinkToDataArea(ScMarkData& rFuncMark, ScDocument& rDoc);
+
 const ScPatternAttr* ScViewFunc::GetSelectionPattern()
 {
     // Don't use UnmarkFiltered in slot state functions, for performance reasons.
     // The displayed state is always that of the whole selection including filtered rows.
 
-    const ScMarkData& rMark = GetViewData().GetMarkData();
+    ScMarkData aMark = GetViewData().GetMarkData();
     ScDocument& rDoc = GetViewData().GetDocument();
-    if ( rMark.IsMarked() || rMark.IsMultiMarked() )
+
+    // tdf#155368 if the selection is the whole sheet, we need to shrink the mark area, otherwise
+    // we will not return a consistent result
+    // (consistent compared to what happens in ScViewFunc::ApplySelectionPattern)
+    ShrinkToDataArea( aMark, rDoc );
+
+    if ( aMark.IsMarked() || aMark.IsMultiMarked() )
     {
         //  MarkToMulti is no longer necessary for rDoc.GetSelectionPattern
-        const ScPatternAttr* pAttr = rDoc.GetSelectionPattern( rMark );
+        const ScPatternAttr* pAttr = rDoc.GetSelectionPattern( aMark );
         return pAttr;
     }
     else
@@ -923,9 +931,9 @@ const ScPatternAttr* ScViewFunc::GetSelectionPattern()
         SCROW  nRow = GetViewData().GetCurY();
         SCTAB  nTab = GetViewData().GetTabNo();
 
-        ScMarkData aTempMark( rMark );      // copy sheet selection
-        aTempMark.SetMarkArea( ScRange( nCol, nRow, nTab ) );
-        const ScPatternAttr* pAttr = rDoc.GetSelectionPattern( aTempMark );
+        // copy sheet selection
+        aMark.SetMarkArea( ScRange( nCol, nRow, nTab ) );
+        const ScPatternAttr* pAttr = rDoc.GetSelectionPattern( aMark );
         return pAttr;
     }
 }
@@ -1181,11 +1189,14 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
     StartFormatArea();
 }
 
+// tdf#147842 if the marked area is the entire sheet, then shrink it to the data area.
+// Otherwise ctrl-A, perform-action, will take a very long time as it tries to modify
+// cells that we are not using.
 static void ShrinkToDataArea(ScMarkData& rFuncMark, ScDocument& rDoc)
 {
-    // tdf#147842 if the marked area is the entire sheet, then shrink it to the data area.
-    // Otherwise ctrl-A, perform-action, will take a very long time as it tries to modify
-    // cells then we are not using.
+    // do not make it marked if it is not already marked
+    if (!rFuncMark.IsMarked())
+        return;
     if (rFuncMark.IsMultiMarked())
         return;
     ScRange aMarkArea = rFuncMark.GetMarkArea();
