@@ -3489,8 +3489,9 @@ namespace xmloff::token {
         TOKEN("linked-style-name",   XML_LINKED_STYLE_NAME ),
 
         TOKEN("theme",               XML_THEME ),
-        TOKEN("char-color-theme-reference", XML_CHAR_COMPLEX_COLOR),
-        TOKEN("fill-color-theme-reference", XML_FILL_COMPLEX_COLOR),
+        TOKEN("theme-type",          XML_THEME_TYPE ),
+        TOKEN("char-complex-color", XML_CHAR_COMPLEX_COLOR),
+        TOKEN("fill-complex-color", XML_FILL_COMPLEX_COLOR),
         TOKEN("dk1",                 XML_DK1 ),
         TOKEN("lt1",                 XML_LT1 ),
         TOKEN("dk2",                 XML_DK2 ),

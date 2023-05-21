@@ -3233,8 +3233,9 @@ rtl
 symmetric
 linked-style-name
 theme
-char-color-theme-reference
-fill-color-theme-reference
+theme-type
+char-complex-color
+fill-complex-color
 dk1
 lt1
 dk2

@@ -3415,28 +3415,28 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:element>
   </rng:define>
 
-  <rng:define name="loext-theme-color-reference-attlist">
+  <rng:define name="loext-complex-color-attlist">
     <rng:interleave>
       <rng:optional>
-        <rng:attribute name="loext:type">
+        <rng:attribute name="loext:theme-type">
           <rng:ref name="theme-color"/>
         </rng:attribute>
       </rng:optional>
     </rng:interleave>
   </rng:define>
 
-  <rng:define name="loext-char-color-theme-reference">
-    <rng:element name="loext:char-color-theme-reference">
-      <rng:ref name="loext-theme-color-reference-attlist"/>
+  <rng:define name="loext-char-complex-color">
+    <rng:element name="loext:char-complex-color">
+      <rng:ref name="loext-complex-color-attlist"/>
       <rng:zeroOrMore>
         <rng:ref name="loext-transformation"/>
       </rng:zeroOrMore>
     </rng:element>
   </rng:define>
 
-  <rng:define name="loext-fill-color-theme-reference">
-    <rng:element name="loext:fill-color-theme-reference">
-      <rng:ref name="loext-theme-color-reference-attlist"/>
+  <rng:define name="loext-fill-complex-color">
+    <rng:element name="loext:fill-complex-color">
+      <rng:ref name="loext-complex-color-attlist"/>
       <rng:zeroOrMore>
         <rng:ref name="loext-transformation"/>
       </rng:zeroOrMore>
@@ -3446,14 +3446,14 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
   <!-- TODO no proposal -->
   <rng:define name="style-text-properties-elements" combine="interleave">
     <rng:optional>
-        <rng:ref name="loext-char-color-theme-reference"/>
+        <rng:ref name="loext-char-complex-color"/>
     </rng:optional>
   </rng:define>
 
   <!-- TODO no proposal -->
   <rng:define name="style-graphic-properties-elements" combine="interleave">
     <rng:optional>
-        <rng:ref name="loext-fill-color-theme-reference"/>
+        <rng:ref name="loext-fill-complex-color"/>
     </rng:optional>
   </rng:define>
 
