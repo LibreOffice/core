@@ -40,7 +40,7 @@ XMLComplexColorContext::XMLComplexColorContext(
     {
         switch (aIter.getToken())
         {
-            case XML_ELEMENT(LO_EXT, XML_TYPE):
+            case XML_ELEMENT(LO_EXT, XML_THEME_TYPE):
             {
                 sal_Int16 nValue = -1;
                 if (SvXMLUnitConverter::convertEnum(nValue, aIter.toView(), pXML_ThemeColor_Enum))

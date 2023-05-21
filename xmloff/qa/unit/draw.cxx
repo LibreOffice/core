@@ -240,47 +240,47 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeColorExportImport)
 
     // Text color
     OString aStyle1(
-        "//style:style[@style:name='T2']/style:text-properties/loext:char-color-theme-reference");
-    assertXPath(pXmlDoc, aStyle1, "type", "accent3");
+        "//style:style[@style:name='T2']/style:text-properties/loext:char-complex-color");
+    assertXPath(pXmlDoc, aStyle1, "theme-type", "accent3");
     assertXPath(pXmlDoc, aStyle1 + "/loext:transformation[1]", "type", "lummod");
     assertXPath(pXmlDoc, aStyle1 + "/loext:transformation[1]", "value", "2000");
     assertXPath(pXmlDoc, aStyle1 + "/loext:transformation[2]", "type", "lumoff");
     assertXPath(pXmlDoc, aStyle1 + "/loext:transformation[2]", "value", "8000");
 
     OString aStyle2(
-        "//style:style[@style:name='T3']/style:text-properties/loext:char-color-theme-reference");
-    assertXPath(pXmlDoc, aStyle2, "type", "accent3");
+        "//style:style[@style:name='T3']/style:text-properties/loext:char-complex-color");
+    assertXPath(pXmlDoc, aStyle2, "theme-type", "accent3");
     assertXPath(pXmlDoc, aStyle2 + "/loext:transformation[1]", "type", "lummod");
     assertXPath(pXmlDoc, aStyle2 + "/loext:transformation[1]", "value", "6000");
     assertXPath(pXmlDoc, aStyle2 + "/loext:transformation[2]", "type", "lumoff");
     assertXPath(pXmlDoc, aStyle2 + "/loext:transformation[2]", "value", "4000");
 
     OString aStyle3(
-        "//style:style[@style:name='T4']/style:text-properties/loext:char-color-theme-reference");
-    assertXPath(pXmlDoc, aStyle3, "type", "accent3");
+        "//style:style[@style:name='T4']/style:text-properties/loext:char-complex-color");
+    assertXPath(pXmlDoc, aStyle3, "theme-type", "accent3");
     assertXPath(pXmlDoc, aStyle3 + "/loext:transformation[1]", "type", "lummod");
     assertXPath(pXmlDoc, aStyle3 + "/loext:transformation[1]", "value", "5000");
 
     // Shapes fill color
     OString aShape1("//style:style[@style:name='gr1']/style:graphic-properties/"
-                    "loext:fill-color-theme-reference");
-    assertXPath(pXmlDoc, aShape1, "type", "accent2");
+                    "loext:fill-complex-color");
+    assertXPath(pXmlDoc, aShape1, "theme-type", "accent2");
     assertXPath(pXmlDoc, aShape1 + "/loext:transformation[1]", "type", "lummod");
     assertXPath(pXmlDoc, aShape1 + "/loext:transformation[1]", "value", "2000");
     assertXPath(pXmlDoc, aShape1 + "/loext:transformation[2]", "type", "lumoff");
     assertXPath(pXmlDoc, aShape1 + "/loext:transformation[2]", "value", "8000");
 
     OString aShape2("//style:style[@style:name='gr2']/style:graphic-properties/"
-                    "loext:fill-color-theme-reference");
-    assertXPath(pXmlDoc, aShape2, "type", "accent2");
+                    "loext:fill-complex-color");
+    assertXPath(pXmlDoc, aShape2, "theme-type", "accent2");
     assertXPath(pXmlDoc, aShape2 + "/loext:transformation[1]", "type", "lummod");
     assertXPath(pXmlDoc, aShape2 + "/loext:transformation[1]", "value", "6000");
     assertXPath(pXmlDoc, aShape2 + "/loext:transformation[2]", "type", "lumoff");
     assertXPath(pXmlDoc, aShape2 + "/loext:transformation[2]", "value", "4000");
 
     OString aShape3("//style:style[@style:name='gr3']/style:graphic-properties/"
-                    "loext:fill-color-theme-reference");
-    assertXPath(pXmlDoc, aShape3, "type", "accent2");
+                    "loext:fill-complex-color");
+    assertXPath(pXmlDoc, aShape3, "theme-type", "accent2");
     assertXPath(pXmlDoc, aShape3 + "/loext:transformation[1]", "type", "lummod");
     assertXPath(pXmlDoc, aShape3 + "/loext:transformation[1]", "value", "5000");
 
