@@ -78,46 +78,26 @@ void CloneList::CopyConnections() const
 
         if(pOriginalEdge && pCloneEdge)
         {
-            SdrObject* pOriginalNode1 = pOriginalEdge->GetConnectedNode(true);
-            SdrObject* pOriginalNode2 = pOriginalEdge->GetConnectedNode(false);
-
-            if(pOriginalNode1)
+            for (bool bTail1 : { true, false })
             {
-                std::vector<const SdrObject*>::const_iterator it = std::find(maOriginalList.begin(),
-                                                                 maOriginalList.end(),
-                                                                 pOriginalNode1);
-
-                sal_uInt32 nPos = it - maOriginalList.begin();
-
-                if(it != maOriginalList.end())
+                SdrObject* pOriginalNode = pOriginalEdge->GetConnectedNode(bTail1);
+                if (pOriginalNode)
                 {
-                    SdrObject *cObj = nullptr;
+                    std::vector<const SdrObject*>::const_iterator it = std::find(maOriginalList.begin(),
+                                                                     maOriginalList.end(),
+                                                                     pOriginalNode);
 
-                    if (nPos < cloneCount)
-                        cObj = GetClone(nPos);
+                    if(it != maOriginalList.end())
+                    {
+                        sal_uInt32 nPos = it - maOriginalList.begin();
+                        SdrObject *cObj = nullptr;
 
-                    if(pOriginalEdge->GetConnectedNode(true) != cObj)
-                        pCloneEdge->ConnectToNode(true, cObj);
-                }
-            }
+                        if (nPos < cloneCount)
+                            cObj = GetClone(nPos);
 
-            if(pOriginalNode2)
-            {
-                std::vector<const SdrObject*>::const_iterator it = std::find(maOriginalList.begin(),
-                                                                 maOriginalList.end(),
-                                                                 pOriginalNode2);
-
-                sal_uInt32 nPos = it - maOriginalList.begin();
-
-                if(it != maOriginalList.end())
-                {
-                    SdrObject *cObj = nullptr;
-
-                    if (nPos < cloneCount)
-                        cObj = GetClone(nPos);
-
-                    if(pOriginalEdge->GetConnectedNode(false) != cObj)
-                        pCloneEdge->ConnectToNode(false, cObj);
+                        if(pOriginalNode != cObj)
+                            pCloneEdge->ConnectToNode(bTail1, cObj);
+                    }
                 }
             }
         }
