@@ -263,6 +263,5 @@ namespace sal::systools
 
 /* Typedefs for some popular COM interfaces */
 typedef sal::systools::COMReference<IDataObject> IDataObjectPtr;
-typedef sal::systools::COMReference<IStream> IStreamPtr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

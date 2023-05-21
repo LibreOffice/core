@@ -57,8 +57,6 @@ public:
     STDMETHODIMP DUnadvise( DWORD dwConnection ) override;
     STDMETHODIMP EnumDAdvise( IEnumSTATDATA** ppenumAdvise ) override;
 
-    operator IDataObject*( );
-
 private:
     HRESULT MarshalIDataObjectIntoCurrentApartment( IDataObject** ppIDataObj );
 
@@ -69,8 +67,8 @@ private:
 
 // prevent copy and assignment
 private:
-    CAPNDataObject( const CAPNDataObject& theOther );
-    CAPNDataObject& operator=( const CAPNDataObject& theOther );
+    CAPNDataObject( const CAPNDataObject& theOther ) = delete;
+    CAPNDataObject& operator=( const CAPNDataObject& theOther ) = delete;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -38,7 +38,7 @@ CAPNDataObject::CAPNDataObject( IDataObjectPtr rIDataObject ) :
     // we marshal the IDataObject interface pointer here so
     // that it can be unmarshalled multiple times when this
     // class will be used from another apartment
-    IStreamPtr pStm;
+    sal::systools::COMReference<IStream> pStm;
     HRESULT hr = CreateStreamOnHGlobal( nullptr, KEEP_HGLOB_ON_RELEASE, &pStm );
 
     OSL_ENSURE( E_INVALIDARG != hr, "invalid args passed to CreateStreamOnHGlobal" );
@@ -46,9 +46,9 @@ CAPNDataObject::CAPNDataObject( IDataObjectPtr rIDataObject ) :
     if ( SUCCEEDED( hr ) )
     {
         HRESULT hr_marshal = CoMarshalInterface(
-            pStm.get(),
+            pStm,
             __uuidof(IDataObject),
-            static_cast<LPUNKNOWN>(m_rIDataObjectOrg.get()),
+            m_rIDataObjectOrg,
             MSHCTX_LOCAL,
             nullptr,
             MSHLFLAGS_TABLEWEAK );
@@ -60,7 +60,7 @@ CAPNDataObject::CAPNDataObject( IDataObjectPtr rIDataObject ) :
         // error or because of stream errors which are runtime
         // errors for instance E_OUTOFMEMORY etc.
 
-        hr = GetHGlobalFromStream(pStm.get(), &m_hGlobal );
+        hr = GetHGlobalFromStream(pStm, &m_hGlobal );
 
         OSL_ENSURE( E_INVALIDARG != hr, "invalid stream passed to GetHGlobalFromStream" );
 
@@ -83,14 +83,14 @@ CAPNDataObject::~CAPNDataObject( )
 {
     if (m_hGlobal)
     {
-        IStreamPtr pStm;
+        sal::systools::COMReference<IStream> pStm;
         HRESULT  hr = CreateStreamOnHGlobal(m_hGlobal, FREE_HGLOB_ON_RELEASE, &pStm);
 
         OSL_ENSURE( E_INVALIDARG != hr, "invalid args passed to CreateStreamOnHGlobal" );
 
         if (SUCCEEDED(hr))
         {
-            hr = CoReleaseMarshalData(pStm.get());
+            hr = CoReleaseMarshalData(pStm);
             OSL_ENSURE(SUCCEEDED(hr), "CoReleaseMarshalData failed");
         }
     }
@@ -111,7 +111,7 @@ STDMETHODIMP CAPNDataObject::QueryInterface( REFIID iid, void** ppvObject )
     if ( ( __uuidof( IUnknown ) == iid ) || ( __uuidof( IDataObject ) == iid ) )
     {
         *ppvObject = static_cast< IUnknown* >( this );
-        static_cast<LPUNKNOWN>(*ppvObject)->AddRef( );
+        AddRef( );
         hr = S_OK;
     }
 
@@ -292,13 +292,6 @@ STDMETHODIMP CAPNDataObject::EnumDAdvise( IEnumSTATDATA ** ppenumAdvise )
     return hr;
 }
 
-// for our convenience
-
-CAPNDataObject::operator IDataObject*( )
-{
-    return static_cast< IDataObject* >( this );
-}
-
 // helper function
 
 HRESULT CAPNDataObject::MarshalIDataObjectIntoCurrentApartment( IDataObject** ppIDataObj )
@@ -310,14 +303,14 @@ HRESULT CAPNDataObject::MarshalIDataObjectIntoCurrentApartment( IDataObject** pp
 
     if (m_hGlobal)
     {
-        IStreamPtr pStm;
+        sal::systools::COMReference<IStream> pStm;
         hr = CreateStreamOnHGlobal(m_hGlobal, KEEP_HGLOB_ON_RELEASE, &pStm);
 
         OSL_ENSURE(E_INVALIDARG != hr, "CreateStreamOnHGlobal with invalid args called");
 
         if (SUCCEEDED(hr))
         {
-            hr = CoUnmarshalInterface(pStm.get(), __uuidof(IDataObject), reinterpret_cast<void**>(ppIDataObj));
+            hr = CoUnmarshalInterface(pStm, IID_PPV_ARGS(ppIDataObj));
             OSL_ENSURE(CO_E_NOTINITIALIZED != hr, "COM is not initialized");
         }
     }
