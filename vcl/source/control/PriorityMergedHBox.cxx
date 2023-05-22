@@ -144,31 +144,23 @@ Size PriorityMergedHBox::calculateRequisition() const
     sal_uInt16 nVisibleChildren = 0;
 
     Size aSize;
+    // find max height and total width
     for (vcl::Window* pChild = GetWindow(GetWindowType::FirstChild); pChild;
          pChild = pChild->GetWindow(GetWindowType::Next))
     {
+        Size aChildSize = getLayoutRequisition(*pChild);
         if (!pChild->IsVisible())
-            continue;
-        ++nVisibleChildren;
-        Size aChildSize = getLayoutRequisition(*pChild);
-
-        tools::Long nPrimaryDimension = getPrimaryDimension(aChildSize);
-        nPrimaryDimension += pChild->get_padding() * 2;
-        setPrimaryDimension(aChildSize, nPrimaryDimension);
-
+            setPrimaryDimension(aChildSize, 0);
+        else
+        {
+            ++nVisibleChildren;
+            tools::Long nPrimaryDimension = getPrimaryDimension(aChildSize);
+            nPrimaryDimension += pChild->get_padding() * 2;
+            setPrimaryDimension(aChildSize, nPrimaryDimension);
+        }
         accumulateMaxes(aChildSize, aSize);
     }
 
-    // find max height
-    for (vcl::Window* pChild = GetWindow(GetWindowType::FirstChild); pChild;
-         pChild = pChild->GetWindow(GetWindowType::Next))
-    {
-        Size aChildSize = getLayoutRequisition(*pChild);
-        setPrimaryDimension(aChildSize, getPrimaryDimension(aSize));
-        accumulateMaxes(aChildSize, aSize);
-    }
-
-    setPrimaryDimension(aSize, 200);
     return finalizeMaxes(aSize, nVisibleChildren);
 }
 
