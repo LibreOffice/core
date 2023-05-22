@@ -2217,6 +2217,27 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testCellBordersXLSX)
     testExcelCellBorders("Calc Office Open XML");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf155368)
+{
+    createScDoc("ods/tdf155368.ods");
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    dispatchCommand(mxComponent, ".uno:WrapText", {});
+
+    save("Calc Office Open XML");
+
+    xmlDocUniquePtr pStyles = parseExport("xl/styles.xml");
+    CPPUNIT_ASSERT(pStyles);
+
+    assertXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[1]/x:alignment", "wrapText", "false");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: false
+    // - Actual  : true
+    assertXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment", "wrapText", "false");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
