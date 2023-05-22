@@ -1697,6 +1697,22 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf152980)
     CPPUNIT_ASSERT_EQUAL(OUString("a\n\nb"), pDoc->GetString(0, 7, 0));
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf100034)
+{
+    createScDoc("xlsx/tdf100034.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    // Clear print ranges
+    pDoc->ClearPrintRanges(0);
+
+    // Save and load back
+    saveAndReload("Calc Office Open XML");
+
+    // Check if the same print ranges are present
+    pDoc = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(0), pDoc->GetPrintRangeCount(0));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
