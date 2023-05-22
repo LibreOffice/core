@@ -7023,7 +7023,6 @@ static void doc_setViewTimezone(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*p
 static void doc_setAccessibilityState(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis, int nId, bool nEnabled)
 {
     SolarMutexGuard aGuard;
-    SetLastExceptionMsg();
 
     int nDocType = getDocumentType(pThis);
     if (nDocType != LOK_DOCTYPE_TEXT)
