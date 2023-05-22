@@ -78,6 +78,7 @@ public:
     ScFiltersTest();
 
     //ods, xls, xlsx filter tests
+    void testTdf155321_CondFormatColor_XLSX();
     void testTdf138601_CondFormatXLSX();
     void testContentODS();
     void testContentXLS();
@@ -210,6 +211,7 @@ public:
     void testForcepoint107();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
+    CPPUNIT_TEST(testTdf155321_CondFormatColor_XLSX);
     CPPUNIT_TEST(testTdf138601_CondFormatXLSX);
     CPPUNIT_TEST(testContentODS);
     CPPUNIT_TEST(testContentXLS);
@@ -419,6 +421,17 @@ void testContentImpl(ScDocument& rDoc, bool bCheckMergedCells)
 
     //add additional checks here
 }
+}
+
+void ScFiltersTest::testTdf155321_CondFormatColor_XLSX()
+{
+    createScDoc("xlsx/tdf155321.xlsx");
+
+    ScDocument* pDoc = getScDoc();
+    ScConditionalFormat* pCondFormat = pDoc->GetCondFormat(0, 0, 0);
+    ScRefCellValue aCellB1(*pDoc, ScAddress(1, 0, 0));
+    Color aColor = pCondFormat->GetData(aCellB1, ScAddress(1, 0, 0)).mxColorScale.value();
+    CPPUNIT_ASSERT_EQUAL(Color(99, 190, 123), aColor);
 }
 
 void ScFiltersTest::testTdf138601_CondFormatXLSX()

@@ -208,7 +208,7 @@ class ScConditionalFormat;
 struct ScDataBarInfo;
 struct ScIconSetInfo;
 
-struct ScCondFormatData
+struct SC_DLLPUBLIC ScCondFormatData
 {
     ScCondFormatData();
     ScCondFormatData(ScCondFormatData&&);
