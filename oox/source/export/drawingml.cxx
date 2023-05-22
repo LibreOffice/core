@@ -473,15 +473,22 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
     // OOXML has no separate transparence gradient but uses transparency in the gradient stops.
     // So we merge transparency and color and use gradient fill in such case.
     basegfx::BGradient aTransparenceGradient;
+    OUString sFillTransparenceGradientName;
     bool bNeedGradientFill(false);
 
-    if (GetProperty(rXPropSet, "FillTransparenceGradient"))
+    if (GetProperty(rXPropSet, "FillTransparenceGradientName")
+        && (mAny >>= sFillTransparenceGradientName)
+        && !sFillTransparenceGradientName.isEmpty()
+        && GetProperty(rXPropSet, "FillTransparenceGradient"))
     {
         aTransparenceGradient = basegfx::BGradient(mAny);
         basegfx::BColor aSingleColor;
         bNeedGradientFill = !aTransparenceGradient.GetColorStops().isSingleColor(aSingleColor);
 
-        if (!bNeedGradientFill && aSingleColor != basegfx::BColor())
+        // we no longer need to 'guess' if FillTransparenceGradient is used by
+        // comparing it's 1st color to COL_BLACK after having tested that the
+        // FillTransparenceGradientName is set
+        if (!bNeedGradientFill)
         {
             // Our alpha is a gray color value.
             const sal_uInt8 nRed(aSingleColor.getRed() * 255.0);
@@ -639,13 +646,11 @@ void DrawingML::WriteGradientFill( const Reference< XPropertySet >& rXPropSet )
 
         if (GetProperty(rXPropSet, "FillTransparenceGradientName")
             && (mAny >>= sFillTransparenceGradientName)
-            && !sFillTransparenceGradientName.isEmpty())
+            && !sFillTransparenceGradientName.isEmpty()
+            && GetProperty(rXPropSet, "FillTransparenceGradient"))
         {
-            if (GetProperty(rXPropSet, "FillTransparenceGradient"))
-            {
-                aTransparenceGradient = basegfx::BGradient(mAny);
-            }
-
+            // TransparenceGradient is only used when name is not empty
+            aTransparenceGradient = basegfx::BGradient(mAny);
             pTransparenceGradient = &aTransparenceGradient;
         }
         else if (GetProperty(rXPropSet, "FillTransparence"))
@@ -5314,19 +5319,35 @@ void DrawingML::WriteFill(const Reference<XPropertySet>& xPropSet, const awt::Si
     xPropSet->getPropertyValue( "FillStyle" ) >>= aFillStyle;
 
     // map full transparent background to no fill
-    if ( aFillStyle == FillStyle_SOLID && GetProperty( xPropSet, "FillTransparence" ) )
+    if (aFillStyle == FillStyle_SOLID)
     {
-        sal_Int16 nVal = 0;
-        xPropSet->getPropertyValue( "FillTransparence" ) >>= nVal;
-        if ( nVal == 100 )
-            aFillStyle = FillStyle_NONE;
-    }
-    if (aFillStyle == FillStyle_SOLID && GetProperty( xPropSet, "FillTransparenceGradient"))
-    {
-        awt::Gradient aTransparenceGradient;
-        mAny >>= aTransparenceGradient;
-        if (aTransparenceGradient.StartColor == 0xffffff && aTransparenceGradient.EndColor == 0xffffff)
-            aFillStyle = FillStyle_NONE;
+        OUString sFillTransparenceGradientName;
+
+        if (GetProperty(xPropSet, "FillTransparenceGradientName")
+            && (mAny >>= sFillTransparenceGradientName)
+            && !sFillTransparenceGradientName.isEmpty()
+            && GetProperty(xPropSet, "FillTransparenceGradient"))
+        {
+            // check if a fully transparent TransparenceGradient is used
+            // use BGradient constructor & tooling here now
+            const basegfx::BGradient aTransparenceGradient(mAny);
+            basegfx::BColor aSingleColor;
+            const bool bSingleColor(aTransparenceGradient.GetColorStops().isSingleColor(aSingleColor));
+            const bool bCompletelyTransparent(bSingleColor && basegfx::fTools::equal(aSingleColor.luminance(), 1.0));
+
+            if (bCompletelyTransparent)
+            {
+                aFillStyle = FillStyle_NONE;
+            }
+        }
+        else if ( GetProperty( xPropSet, "FillTransparence" ) )
+        {
+            // check if a fully transparent FillTransparence is used
+            sal_Int16 nVal = 0;
+            xPropSet->getPropertyValue( "FillTransparence" ) >>= nVal;
+            if ( nVal == 100 )
+                aFillStyle = FillStyle_NONE;
+        }
     }
 
     bool bUseBackground(false);

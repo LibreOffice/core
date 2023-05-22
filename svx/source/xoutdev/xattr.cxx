@@ -2434,6 +2434,13 @@ XFillFloatTransparenceItem* XFillFloatTransparenceItem::Clone( SfxItemPool* /*pP
 
 bool XFillFloatTransparenceItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
+    if (!IsEnabled() && nMemberId == MID_NAME)
+    {
+        // make sure that we return empty string in case of query for
+        // "FillTransparenceGradientName" if the item is disabled
+        rVal <<= OUString();
+    }
+
     return XFillGradientItem::QueryValue( rVal, nMemberId );
 }
 
