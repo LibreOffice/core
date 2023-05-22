@@ -54,6 +54,7 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
@@ -235,6 +236,247 @@ void SAL_CALL SfxClipboardChangeListener::changedContents( const datatransfer::c
         delete pInfo;
 }
 
+namespace
+{
+
+bool hasState(const accessibility::AccessibleEventObject& aEvent, ::sal_Int64 nState)
+{
+    bool res = false;
+    uno::Reference< accessibility::XAccessibleContext > xContext(aEvent.Source, uno::UNO_QUERY);
+    if (xContext.is())
+    {
+        ::sal_Int64 nStateSet = xContext->getAccessibleStateSet();
+        res = (nStateSet & nState) != 0;
+    }
+    return res;
+}
+
+bool isFocused(const accessibility::AccessibleEventObject& aEvent)
+{
+    return hasState(aEvent, accessibility::AccessibleStateType::FOCUSED);
+}
+
+std::string stateSetToString(::sal_Int64 stateSet)
+{
+    static const std::string states[34] = {
+            "ACTIVE", "ARMED", "BUSY", "CHECKED", "DEFUNC",
+            "EDITABLE", "ENABLED", "EXPANDABLE", "EXPANDED", "FOCUSABLE",
+            "FOCUSED", "HORIZONTAL", "ICONIFIED", "INDETERMINATE", "MANAGES_DESCENDANTS",
+            "MODAL", "MULTI_LINE", "MULTI_SELECTABLE", "OPAQUE", "PRESSED",
+            "RESIZABLE", "SELECTABLE", "SELECTED", "SENSITIVE", "SHOWING",
+            "SINGLE_LINE", "STALE", "TRANSIENT", "VERTICAL", "VISIBLE",
+            "MOVEABLE", "DEFAULT", "OFFSCREEN", "COLLAPSE"
+    };
+
+    if (stateSet == 0)
+        return "INVALID";
+    ::sal_Int64 state = 1;
+    std::string s;
+    for (int i = 0; i < 34; ++i)
+    {
+        if (stateSet & state)
+        {
+            s += states[i];
+            s += "|";
+        }
+        state <<= 1;
+    }
+    return s;
+}
+
+void aboutView(std::string msg,  const void* pInstance, const SfxViewShell* pViewShell)
+{
+    if (!pViewShell)
+        return;
+
+    SAL_INFO("lok.a11y", ">>> " << msg << ": instance: " << pInstance
+            << ", VIED ID: " <<  pViewShell->GetViewShellId().get() << " <<<");
+}
+
+void aboutEvent(std::string msg, const accessibility::AccessibleEventObject& aEvent)
+{
+    try
+    {
+        uno::Reference< accessibility::XAccessible > xSource(aEvent.Source, uno::UNO_QUERY);
+        if (xSource.is())
+        {
+            uno::Reference< accessibility::XAccessibleContext > xContext =
+                    xSource->getAccessibleContext();
+
+            if (xContext.is())
+            {
+                SAL_INFO("lok.a11y", msg << ": event id: " << aEvent.EventId
+                        << "\n  xSource: " << xSource.get()
+                        << "\n  role: " << xContext->getAccessibleRole()
+                        << "\n  name: " << xContext->getAccessibleName()
+                        << "\n  index in parent: " << xContext->getAccessibleIndexInParent()
+                        << "\n  state set: " << stateSetToString(xContext->getAccessibleStateSet())
+                        << "\n  parent: " << xContext->getAccessibleParent().get()
+                        << "\n  child count: " << xContext->getAccessibleChildCount());
+            }
+        }
+        uno::Reference< accessibility::XAccessible > xOldValue;
+        aEvent.OldValue >>= xOldValue;
+        if (xOldValue.is())
+        {
+            uno::Reference< accessibility::XAccessibleContext > xContext =
+                    xOldValue->getAccessibleContext();
+
+            if (xContext.is())
+            {
+                SAL_INFO("lok.a11y", msg << ": "
+                        << "\n  xOldValue: " << xOldValue.get()
+                        << "\n  role: " << xContext->getAccessibleRole()
+                        << "\n  name: " << xContext->getAccessibleName()
+                        << "\n  index in parent: " << xContext->getAccessibleIndexInParent()
+                        << "\n  state set: " << stateSetToString(xContext->getAccessibleStateSet())
+                        << "\n  parent: " << xContext->getAccessibleParent().get()
+                        << "\n  child count: " << xContext->getAccessibleChildCount());
+            }
+        }
+        uno::Reference< accessibility::XAccessible > xNewValue;
+        aEvent.NewValue >>= xNewValue;
+        if (xNewValue.is())
+        {
+            uno::Reference< accessibility::XAccessibleContext > xContext =
+                    xNewValue->getAccessibleContext();
+
+            if (xContext.is())
+            {
+                SAL_INFO("lok.a11y", msg << ": "
+                        << "\n  xNewValue: " << xNewValue.get()
+                        << "\n  role: " << xContext->getAccessibleRole()
+                        << "\n  name: " << xContext->getAccessibleName()
+                        << "\n  index in parent: " << xContext->getAccessibleIndexInParent()
+                        << "\n  state set: " << stateSetToString(xContext->getAccessibleStateSet())
+                        << "\n  parent: " << xContext->getAccessibleParent().get()
+                        << "\n  child count: " << xContext->getAccessibleChildCount());
+            }
+        }
+    }
+    catch( const lang::IndexOutOfBoundsException& e )
+    {
+        SAL_WARN("lok.a11y", "Focused object has invalid index in parent");
+    }
+}
+
+void aboutTextFormatting(std::string msg, const uno::Reference<css::accessibility::XAccessibleText>& xAccText)
+{
+    if (!xAccText.is())
+        return;
+
+    OUString sText = xAccText->getText();
+    sal_Int32 nLength = sText.getLength();
+    if (nLength <= 0)
+        return;
+
+    css::uno::Reference<css::accessibility::XAccessibleTextAttributes>
+        xAccTextAttr(xAccText, uno::UNO_QUERY);
+    css::uno::Sequence< OUString > aRequestedAttributes;
+
+    sal_Int32 nPos = 0;
+    while (nPos < nLength)
+    {
+        css::accessibility::TextSegment aTextSegment =
+                xAccText->getTextAtIndex(nPos, css::accessibility::AccessibleTextType::ATTRIBUTE_RUN);
+        SAL_INFO("lok.a11y", msg << ": "
+                << "text segment: '" << aTextSegment.SegmentText
+                << "', start: " << aTextSegment.SegmentStart
+                << ", end: " << aTextSegment.SegmentEnd);
+
+        css::uno::Sequence< css::beans::PropertyValue > aRunAttributeList;
+        if (xAccTextAttr.is())
+        {
+            aRunAttributeList = xAccTextAttr->getRunAttributes(nPos, aRequestedAttributes);
+        }
+        else
+        {
+            aRunAttributeList = xAccText->getCharacterAttributes(nPos, aRequestedAttributes);
+        }
+
+        sal_Int32 nSize = aRunAttributeList.getLength();
+        SAL_INFO("lok.a11y",
+                 msg << ": attribute list size: " << nSize);
+        if (nSize)
+        {
+            OUString sValue;
+            OUString sAttributes = "{ ";
+            for (const auto& attribute: aRunAttributeList)
+            {
+                if (attribute.Name.isEmpty())
+                    continue;
+
+                if (attribute.Name == "CharHeight" || attribute.Name == "CharWeight")
+                {
+                    float fValue;
+                    attribute.Value >>= fValue;
+                    sValue = OUString::number(fValue);
+                }
+                else if (attribute.Name == "CharPosture")
+                {
+                    awt::FontSlant nValue;
+                    attribute.Value >>= nValue;
+                    sValue = OUString::number((unsigned int)(nValue));
+                }
+                else if (attribute.Name == "CharUnderline")
+                {
+                    sal_Int16 nValue;
+                    attribute.Value >>= nValue;
+                    sValue = OUString::number(nValue);
+                }
+                else if (attribute.Name == "CharFontName")
+                {
+                    attribute.Value >>= sValue;
+                }
+                else if (attribute.Name == "Rsid")
+                {
+                    sal_uInt32 nValue;
+                    attribute.Value >>= nValue;
+                    sValue = OUString::number(nValue);
+                }
+
+                if (!sValue.isEmpty())
+                {
+                    if (sAttributes != "{ ")
+                        sAttributes += ", ";
+                    sAttributes += attribute.Name + ": ";
+                    sAttributes += sValue;
+                    sValue = "";
+                }
+            }
+            sAttributes += " }";
+            SAL_INFO("lok.a11y",
+                     msg << ": " << sAttributes);
+            }
+        nPos = aTextSegment.SegmentEnd + 1;
+    }
+}
+
+void aboutParagraph(std::string msg, const OUString& rsParagraphContent, sal_Int32 nCaretPosition,
+                    sal_Int32 nSelectionStart, sal_Int32 nSelectionEnd, bool force = false)
+{
+    SAL_INFO("lok.a11y", msg << ": "
+            << "\n text content: \"" << rsParagraphContent << "\""
+            << "\n caret pos: " << nCaretPosition
+            << "\n selection: start: " << nSelectionStart << ", end: " << nSelectionEnd
+            << "\n force: " << force
+            );
+}
+
+void aboutParagraph(std::string msg, const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
+                    bool force = false)
+{
+    if (!xAccText.is())
+        return;
+
+    OUString sText = xAccText->getText();
+    sal_Int32 nCaretPosition = xAccText->getCaretPosition();
+    sal_Int32 nSelectionStart = xAccText->getSelectionStart();
+    sal_Int32 nSelectionEnd = xAccText->getSelectionEnd();
+    aboutParagraph(msg, sText, nCaretPosition, nSelectionStart, nSelectionEnd, force);
+}
+} // anonymous namespace
+
 class LOKDocumentFocusListener :
     public ::cppu::WeakImplHelper< accessibility::XAccessibleEventListener >
 {
@@ -243,7 +485,6 @@ class LOKDocumentFocusListener :
     const SfxViewShell* m_pViewShell;
     std::set< uno::Reference< uno::XInterface > > m_aRefList;
     OUString m_sFocusedParagraph;
-    bool m_bFocusedParagraphNotified;
     sal_Int32 m_nCaretPosition;
     sal_Int32 m_nSelectionStart;
     sal_Int32 m_nSelectionEnd;
@@ -304,17 +545,20 @@ public:
     // XAccessibleEventListener
     virtual void SAL_CALL notifyEvent( const accessibility::AccessibleEventObject& aEvent ) override;
 
-    void notifyFocusedParagraphChanged();
+    void notifyFocusedParagraphChanged(bool force = false);
     void notifyCaretChanged();
     void notifyTextSelectionChanged();
 
     OUString getFocusedParagraph() const;
     int getCaretPosition() const;
+
+private:
+    void updateParagraphInfo(const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
+                             bool force, std::string msg = "");
 };
 
 LOKDocumentFocusListener::LOKDocumentFocusListener(const SfxViewShell* pViewShell)
     : m_pViewShell(pViewShell)
-    , m_bFocusedParagraphNotified(false)
     , m_nCaretPosition(0)
     , m_nSelectionStart(0)
     , m_nSelectionEnd(0)
@@ -324,18 +568,16 @@ LOKDocumentFocusListener::LOKDocumentFocusListener(const SfxViewShell* pViewShel
 
 OUString LOKDocumentFocusListener::getFocusedParagraph() const
 {
-    SAL_INFO("lok.a11y", "LOKDocumentFocusListener::getFocusedParagraph: " << m_sFocusedParagraph);
-    const_cast<LOKDocumentFocusListener*>(this)->m_bFocusedParagraphNotified = true;
+    aboutView("LOKDocumentFocusListener::getFocusedParagraph", this, m_pViewShell);
+    aboutParagraph("LOKDocumentFocusListener::getFocusedParagraph",
+            m_sFocusedParagraph, m_nCaretPosition, m_nSelectionStart, m_nSelectionEnd);
 
-    sal_Int32 nSelectionStart = m_nSelectionStart;
-    sal_Int32 nSelectionEnd = m_nSelectionEnd;
-    if (nSelectionStart < 0 || nSelectionEnd < 0)
-        nSelectionStart = nSelectionEnd = m_nCaretPosition;
-
+    bool bLeftToRight = m_nCaretPosition == m_nSelectionEnd;
     boost::property_tree::ptree aPayloadTree;
     aPayloadTree.put("content", m_sFocusedParagraph.toUtf8().getStr());
-    aPayloadTree.put("start", nSelectionStart);
-    aPayloadTree.put("end", nSelectionEnd);
+    aPayloadTree.put("position", m_nCaretPosition);
+    aPayloadTree.put("start", bLeftToRight ? m_nSelectionStart : m_nSelectionEnd);
+    aPayloadTree.put("end", bLeftToRight ? m_nSelectionEnd : m_nSelectionStart);
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aPayloadTree);
     std::string aPayload = aStream.str();
@@ -345,28 +587,55 @@ OUString LOKDocumentFocusListener::getFocusedParagraph() const
 
 int LOKDocumentFocusListener::getCaretPosition() const
 {
+    aboutView("LOKDocumentFocusListener::getCaretPosition", this, m_pViewShell);
     SAL_INFO("lok.a11y", "LOKDocumentFocusListener::getCaretPosition: " << m_nCaretPosition);
     return m_nCaretPosition;
 }
 
-void LOKDocumentFocusListener::notifyFocusedParagraphChanged()
+/// notifyFocusedParagraphChanged
+//
+//  Notify content, caret position and text selection start/end for the focused paragraph
+//  in current view.
+//  For focused we don't mean to be necessarily the currently focused accessibility node.
+//  It's enough that the caret is present in the paragraph (position != -1).
+//  In fact each view has its own accessibility node per each text paragraph.
+//  Anyway there can be only one focused accessibility node at time.
+//  So when text changes are performed in one view, both accessibility nodes emit
+//  a text changed event, anyway only the accessibility node belonging to the view
+//  where the text change has occurred is the focused one.
+//
+//  force: when true update the clipboard content even if client is composing.
+//
+//  Usually when editing on the client involves composing the clipboard area updating
+//  is skipped until the composition is over.
+//  On the contrary the composition would be aborted, making dictation not possible.
+//  Anyway when the text change has been performed by another view we are in due
+//  to upadate the clipboard content even if the user is in the middle of a composition.
+void LOKDocumentFocusListener::notifyFocusedParagraphChanged(bool force)
 {
+    aboutView("LOKDocumentFocusListener::notifyFocusedParagraphChanged", this, m_pViewShell);
+    bool bLeftToRight = m_nCaretPosition == m_nSelectionEnd;
     boost::property_tree::ptree aPayloadTree;
     aPayloadTree.put("content", m_sFocusedParagraph.toUtf8().getStr());
     aPayloadTree.put("position", m_nCaretPosition);
+    aPayloadTree.put("start", bLeftToRight ? m_nSelectionStart : m_nSelectionEnd);
+    aPayloadTree.put("end", bLeftToRight ? m_nSelectionEnd : m_nSelectionStart);
+    aPayloadTree.put("force", force ? 1 : 0);
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aPayloadTree);
     std::string aPayload = aStream.str();
     if (m_pViewShell)
     {
-        SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyFocusedParagraphChanged: " << m_sFocusedParagraph);
-        m_bFocusedParagraphNotified = true;
+        aboutParagraph("LOKDocumentFocusListener::notifyFocusedParagraphChanged",
+                m_sFocusedParagraph, m_nCaretPosition, m_nSelectionStart, m_nSelectionEnd, force);
+
         m_pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_A11Y_FOCUS_CHANGED, aPayload.c_str());
     }
 }
 
 void LOKDocumentFocusListener::notifyCaretChanged()
 {
+    aboutView("LOKDocumentFocusListener::notifyCaretChanged", this, m_pViewShell);
     boost::property_tree::ptree aPayloadTree;
     aPayloadTree.put("position", m_nCaretPosition);
     std::stringstream aStream;
@@ -381,15 +650,17 @@ void LOKDocumentFocusListener::notifyCaretChanged()
 
 void LOKDocumentFocusListener::notifyTextSelectionChanged()
 {
+    aboutView("LOKDocumentFocusListener::notifyTextSelectionChanged", this, m_pViewShell);
+    bool bLeftToRight = m_nCaretPosition == m_nSelectionEnd;
     boost::property_tree::ptree aPayloadTree;
-    aPayloadTree.put("start", m_nSelectionStart);
-    aPayloadTree.put("end", m_nSelectionEnd);
+    aPayloadTree.put("start", bLeftToRight ? m_nSelectionStart : m_nSelectionEnd);
+    aPayloadTree.put("end", bLeftToRight ? m_nSelectionEnd : m_nSelectionStart);
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aPayloadTree);
     std::string aPayload = aStream.str();
     if (m_pViewShell)
     {
-        SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyTextSelectionChanged: "
+        SAL_INFO("lok.a11y",  "LOKDocumentFocusListener::notifyTextSelectionChanged: "
                 << "start: " << m_nSelectionStart << ", end: " << m_nSelectionEnd);
         m_pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED, aPayload.c_str());
     }
@@ -404,44 +675,62 @@ void LOKDocumentFocusListener::disposing( const lang::EventObject& aEvent )
 
 }
 
-namespace
+void LOKDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
+                                                   bool force, std::string msg)
 {
-bool hasState(const accessibility::AccessibleEventObject& aEvent, ::sal_Int64 nState)
-{
-    bool res = false;
-    uno::Reference< accessibility::XAccessibleContext > xContext(aEvent.Source, uno::UNO_QUERY);
-    if (xContext.is())
+    if (!xAccText.is())
+        return;
+
+    // If caret is present inside the paragraph (pos != -1), it means that paragraph has focus in the current view.
+    sal_Int32 nCaretPosition = xAccText->getCaretPosition();
+    if (nCaretPosition >= 0)
     {
-        ::sal_Int64 nStateSet = xContext->getAccessibleStateSet();
-        res = (nStateSet & nState) != 0;
+        OUString sText = xAccText->getText();
+        m_nCaretPosition = nCaretPosition;
+        m_nSelectionStart = xAccText->getSelectionStart();
+        m_nSelectionEnd = xAccText->getSelectionEnd();
+
+        // In case only caret position or text selection are different we can rely on specific events.
+        if (m_sFocusedParagraph != sText)
+        {
+            m_sFocusedParagraph = sText;
+            notifyFocusedParagraphChanged(force);
+        }
     }
-    return res;
+    else
+    {
+        SAL_WARN("lok.a11y",
+                 "LOKDocumentFocusListener::updateParagraphInfo: skipped since no caret is present");
+    }
+
+    std::string header = "LOKDocumentFocusListener::updateParagraphInfo";
+    if (msg.size())
+        header += ": " + msg;
+    aboutParagraph(header, xAccText, force);
+
 }
 
-bool isFocused(const accessibility::AccessibleEventObject& aEvent)
+void LOKDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventObject& aEvent )
 {
-    return hasState(aEvent, accessibility::AccessibleStateType::FOCUSED);
-}
-} // anonymous namespace
+    aboutView("LOKDocumentFocusListener::notifyEvent", this, m_pViewShell);
 
-void LOKDocumentFocusListener::notifyEvent( const accessibility::AccessibleEventObject& aEvent )
-{
     try
     {
+        aboutEvent("LOKDocumentFocusListener::notifyEvent", aEvent);
+
         switch( aEvent.EventId )
         {
             case accessibility::AccessibleEventId::STATE_CHANGED:
             {
-                uno::Reference< accessibility::XAccessible > xAccStateChanged = getAccessible(aEvent);
+                uno::Reference< accessibility::XAccessible > xAccessibleObject = getAccessible(aEvent);
                 sal_Int64 nState = accessibility::AccessibleStateType::INVALID;
                 aEvent.NewValue >>= nState;
                 SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: "
-                        << "STATE_CHANGED: XAccessible: " << xAccStateChanged.get() << ", nState: " << nState);
+                        << "STATE_CHANGED: nState: " << stateSetToString(nState));
 
                 if( accessibility::AccessibleStateType::FOCUSED == nState )
                 {
                     SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: FOCUSED");
-
                     if (m_bIsEditingCell)
                     {
                         if (!hasState(aEvent, accessibility::AccessibleStateType::ACTIVE))
@@ -451,119 +740,14 @@ void LOKDocumentFocusListener::notifyEvent( const accessibility::AccessibleEvent
                             return;
                         }
                     }
-                    uno::Reference<css::accessibility::XAccessibleText> xAccText(xAccStateChanged, uno::UNO_QUERY);
-                    if( xAccText.is() )
-                    {
-                        OUString sText = xAccText->getText();
-                        sal_Int32 nLength = sText.getLength();
-                        sal_Int32 nCaretPosition = xAccText->getCaretPosition();
-                        SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: xAccText: " << xAccText.get()
-                                << ", text: >" << sText << "<, caret pos: " << nCaretPosition);
-
-                        if (nLength)
-                        {
-                            css::uno::Reference<css::accessibility::XAccessibleTextAttributes>
-                                xAccTextAttr(xAccText, uno::UNO_QUERY);
-                            css::uno::Sequence< OUString > aRequestedAttributes;
-
-                            sal_Int32 nPos = 0;
-                            while (nPos < nLength)
-                            {
-                                css::accessibility::TextSegment aTextSegment =
-                                        xAccText->getTextAtIndex(nPos, css::accessibility::AccessibleTextType::ATTRIBUTE_RUN);
-                                SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: "
-                                        << "text segment: '" << aTextSegment.SegmentText
-                                        << "', start: " << aTextSegment.SegmentStart
-                                        << ", end: " << aTextSegment.SegmentEnd);
-
-                                css::uno::Sequence< css::beans::PropertyValue > aRunAttributeList;
-                                if (xAccTextAttr.is())
-                                {
-                                    aRunAttributeList = xAccTextAttr->getRunAttributes(nPos, aRequestedAttributes);
-                                }
-                                else
-                                {
-                                    aRunAttributeList = xAccText->getCharacterAttributes(nPos, aRequestedAttributes);
-                                }
-
-                                sal_Int32 nSize = aRunAttributeList.getLength();
-                                SAL_INFO("lok.a11y",
-                                         "LOKDocumentFocusListener::notifyEvent: attribute list size: " << nSize);
-                                if (nSize)
-                                {
-                                    OUString sValue;
-                                    OUString sAttributes = "{ ";
-                                    for (const auto& attribute: aRunAttributeList)
-                                    {
-                                        if (attribute.Name.isEmpty())
-                                            continue;
-
-                                        if (attribute.Name == "CharHeight" || attribute.Name == "CharWeight")
-                                        {
-                                            float fValue;
-                                            attribute.Value >>= fValue;
-                                            sValue = OUString::number(fValue);
-                                        }
-                                        else if (attribute.Name == "CharPosture")
-                                        {
-                                            awt::FontSlant nValue;
-                                            attribute.Value >>= nValue;
-                                            sValue = OUString::number((unsigned int)(nValue));
-                                        }
-                                        else if (attribute.Name == "CharUnderline")
-                                        {
-                                            sal_Int16 nValue;
-                                            attribute.Value >>= nValue;
-                                            sValue = OUString::number(nValue);
-                                        }
-                                        else if (attribute.Name == "CharFontName")
-                                        {
-                                            attribute.Value >>= sValue;
-                                        }
-                                        else if (attribute.Name == "Rsid")
-                                        {
-                                            sal_uInt32 nValue;
-                                            attribute.Value >>= nValue;
-                                            sValue = OUString::number(nValue);
-                                        }
-
-                                        if (!sValue.isEmpty())
-                                        {
-                                            if (sAttributes != "{ ")
-                                                sAttributes += ", ";
-                                            sAttributes += attribute.Name + ": ";
-                                            sAttributes += sValue;
-                                            sValue = "";
-                                        }
-                                    }
-                                    sAttributes += " }";
-                                    SAL_INFO("lok.a11y",
-                                             "LOKDocumentFocusListener::notifyEvent: attributes: " << sAttributes);
-                                    }
-                                nPos = aTextSegment.SegmentEnd + 1;
-                            }
-                        }
-                        if (!m_bFocusedParagraphNotified || m_sFocusedParagraph != sText)
-                        {
-                            m_sFocusedParagraph = sText;
-                            m_nCaretPosition = nCaretPosition;
-                            notifyFocusedParagraphChanged();
-                        }
-                    }
+                    uno::Reference<css::accessibility::XAccessibleText> xAccText(xAccessibleObject, uno::UNO_QUERY);
+                    updateParagraphInfo(xAccText, false, "STATE_CHANGED: FOCUSED");
+                    aboutTextFormatting("LOKDocumentFocusListener::notifyEvent: STATE_CHANGED: FOCUSED", xAccText);
                 }
-
                 break;
             }
-
             case accessibility::AccessibleEventId::CARET_CHANGED:
             {
-                if (!isFocused(aEvent))
-                {
-                    SAL_WARN("lok.a11y",
-                             "LOKDocumentFocusListener::notifyEvent: CARET_CHANGED: skip non focused paragraph");
-                    return;
-                }
-
                 sal_Int32 nNewPos = -1;
                 aEvent.NewValue >>= nNewPos;
                 sal_Int32 nOldPos = -1;
@@ -573,32 +757,41 @@ void LOKDocumentFocusListener::notifyEvent( const accessibility::AccessibleEvent
                 {
                     SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: CARET_CHANGED: " <<
                             "new pos: " << nNewPos << ", nOldPos: " << nOldPos);
+
                     uno::Reference<css::accessibility::XAccessibleText>
                         xAccText(getAccessible(aEvent), uno::UNO_QUERY);
-                    if( xAccText.is() )
+                    if (xAccText.is())
                     {
-                        OUString sText = xAccText->getText();
-                        SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: CARET_CHANGED: "
-                                << "xAccText: " << xAccText.get() << ", text: >" << sText << "<");
-
                         m_nCaretPosition = nNewPos;
-                        m_nSelectionStart = m_nSelectionEnd = m_nCaretPosition;
-                        notifyCaretChanged();
+                        // Let's say we are in the following case: 'Hello wor|ld',
+                        // where '|' is the cursor position for the current view.
+                        // Suppose that in another view it's typed <enter> soon before 'world'.
+                        // Now the new paragraph content and caret position is: 'wor|ld'.
+                        // Anyway no new paragraph focused event is emitted for current view.
+                        // Only a new caret position event is emitted.
+                        // So we could need to notify a new focused paragraph changed message.
+                        if (!isFocused(aEvent))
+                        {
+                            OUString sText = xAccText->getText();
+                            if (m_sFocusedParagraph != sText)
+                            {
+                                m_sFocusedParagraph = sText;
+                                m_nSelectionStart = xAccText->getSelectionStart();
+                                m_nSelectionEnd = xAccText->getSelectionEnd();
+                                notifyFocusedParagraphChanged(true);
+                            }
+                        }
+                        else
+                        {
+                            notifyCaretChanged();
+                        }
+                        aboutParagraph("LOKDocumentFocusListener::notifyEvent: CARET_CHANGED", xAccText);
                     }
                 }
-
                 break;
             }
-
             case accessibility::AccessibleEventId::TEXT_CHANGED:
             {
-                if (!isFocused(aEvent))
-                {
-                    SAL_WARN("lok.a11y",
-                             "LOKDocumentFocusListener::notifyEvent: TEXT_CHANGED: skip non focused paragraph");
-                    return;
-                }
-
                 accessibility::TextSegment aDeletedText;
                 accessibility::TextSegment aInsertedText;
 
@@ -613,14 +806,12 @@ void LOKDocumentFocusListener::notifyEvent( const accessibility::AccessibleEvent
                             << "inserted text: >" << aInsertedText.SegmentText << "<");
                 }
                 uno::Reference<css::accessibility::XAccessibleText> xAccText(getAccessible(aEvent), uno::UNO_QUERY);
-                if (xAccText.is())
-                {
-                    OUString sText = xAccText->getText();
-                    SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: TEXT_CHANGED: "
-                            << "xAccText: " << xAccText.get() << ", text: >" << sText << "<");
-                    m_sFocusedParagraph = sText;
-                    m_bFocusedParagraphNotified = false;
-                }
+
+                // When the change has been performed in another view we need to force
+                // paragraph content updating on the client, even if current editing involves composing.
+                // We make a guess that if the paragraph accessibility node is not focused,
+                // it means that the text change has been performed in another view.
+                updateParagraphInfo(xAccText, !isFocused(aEvent), "TEXT_CHANGED");
 
                 break;
             }
@@ -637,25 +828,15 @@ void LOKDocumentFocusListener::notifyEvent( const accessibility::AccessibleEvent
                 if (xAccText.is())
                 {
                     OUString sText = xAccText->getText();
-                    sal_Int32 nSelectionStart = xAccText->getSelectionStart();
-                    sal_Int32 nSelectionEnd = xAccText->getSelectionEnd();
                     m_sSelectedText = xAccText->getSelectedText();
-
-                    SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: TEXT_SELECTION_CHANGED: "
-                            << "\n  xAccText: " << xAccText.get() << ", text: >" << sText << "<"
-                            << "\n  start: " << nSelectionStart << ", end: " << nSelectionEnd
-                            << "\n  selected text: >" << m_sSelectedText << "<");
-
-                    // This should not be risky since selection start/end are set also on CARET_CHANGED event
-                    if (nSelectionStart == m_nSelectionStart && nSelectionEnd == m_nSelectionEnd)
-                        return;
 
                     // We send a message to client also when start/end are -1, in this way the client knows
                     // if a text selection object exists or not. That's needed because of the odd behavior
                     // occurring when <backspace>/<delete> are hit and a text selection is empty but it still exists.
                     // Such keys delete the empty selection instead of the previous/next char.
-                    m_nSelectionStart = nSelectionStart;
-                    m_nSelectionEnd = nSelectionEnd;
+                    m_nSelectionStart = xAccText->getSelectionStart();
+                    m_nSelectionEnd = xAccText->getSelectionEnd();
+                    m_nCaretPosition = xAccText->getCaretPosition();
 
                     // Calc: when editing a formula send the update content
                     if (m_bIsEditingCell && !m_sSelectedCellAddress.isEmpty()
@@ -664,8 +845,11 @@ void LOKDocumentFocusListener::notifyEvent( const accessibility::AccessibleEvent
                         notifyFocusedParagraphChanged();
                     }
                     notifyTextSelectionChanged();
-                }
 
+                    aboutParagraph("LOKDocumentFocusListener::notifyEvent: TEXT_SELECTION_CHANGED", xAccText);
+                    SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: TEXT_SELECTION_CHANGED: selected text: >"
+                            << m_sSelectedText << "<");
+                }
                 break;
             }
             case accessibility::AccessibleEventId::SELECTION_CHANGED:
@@ -714,7 +898,6 @@ void LOKDocumentFocusListener::notifyEvent( const accessibility::AccessibleEvent
 
                 break;
             }
-
             case accessibility::AccessibleEventId::INVALIDATE_ALL_CHILDREN:
                 SAL_INFO("lok.a11y", "Invalidate all children called");
                 break;
@@ -795,10 +978,13 @@ void LOKDocumentFocusListener::attachRecursive(
     const sal_Int64 nStateSet
 )
 {
+    aboutView("LOKDocumentFocusListener::attachRecursive (3)", this, m_pViewShell);
     SAL_INFO("lok.a11y", "LOKDocumentFocusListener::attachRecursive(3) #1: this: " << this
             << ", xAccessible: " << xAccessible.get()
             << ", role: " << xContext->getAccessibleRole()
             << ", name: " << xContext->getAccessibleName()
+            << ", index in parent: " << xContext->getAccessibleIndexInParent()
+            << ", state: " << stateSetToString(nStateSet)
             << ", parent: " << xContext->getAccessibleParent().get()
             << ", child count: " << xContext->getAccessibleChildCount());
 
@@ -814,7 +1000,6 @@ void LOKDocumentFocusListener::attachRecursive(
     {
         SAL_INFO("lok.a11y", "LOKDocumentFocusListener::attachRecursive(3) #3: m_aRefList.insert(xInterface).second");
         xBroadcaster->addAccessibleEventListener(static_cast< accessibility::XAccessibleEventListener *>(this));
-
 
         if( !(nStateSet & accessibility::AccessibleStateType::MANAGES_DESCENDANTS) )
         {
@@ -848,6 +1033,7 @@ void LOKDocumentFocusListener::detachRecursive(
     const uno::Reference< accessibility::XAccessibleContext >& xContext
 )
 {
+    aboutView("LOKDocumentFocusListener::detachRecursive (2)", this, m_pViewShell);
     sal_Int64 nStateSet = xContext->getAccessibleStateSet();
 
     SAL_INFO("lok.a11y", "LOKDocumentFocusListener::detachRecursive(2): this: " << this
