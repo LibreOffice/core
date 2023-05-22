@@ -1679,7 +1679,27 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
                         // anchored objects.
                         //pAnchoredObj->InvalidateObjPos();
                         SwRect aRect( pAnchoredObj->GetObjRect() );
-                        if ( !SwObjectFormatter::FormatObj( *pAnchoredObj, pFrame, pPageFrame ) )
+
+                        SwFrame* pAnchorFrame = pFrame;
+                        SwPageFrame* pAnchorPageFrame = pPageFrame;
+                        if (SwFlyFrame* pFlyFrame = pAnchoredObj->DynCastFlyFrame())
+                        {
+                            if (pFlyFrame->IsFlySplitAllowed())
+                            {
+                                // Split flys are at-para anchored, but the follow fly's anchor char
+                                // frame is not the master frame but can be also a follow of pFrame.
+                                SwTextFrame* pAnchorCharFrame = pFlyFrame->FindAnchorCharFrame();
+                                if (pAnchorCharFrame)
+                                {
+                                    // Found an anchor char frame, update the anchor frame and the
+                                    // anchor page frame accordingly.
+                                    pAnchorFrame = pAnchorCharFrame;
+                                    pAnchorPageFrame = pAnchorCharFrame->FindPageFrame();
+                                }
+                            }
+                        }
+
+                        if ( !SwObjectFormatter::FormatObj( *pAnchoredObj, pAnchorFrame, pAnchorPageFrame ) )
                         {
                             bRestartLayoutProcess = true;
                             break;
