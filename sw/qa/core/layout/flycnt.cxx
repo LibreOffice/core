@@ -885,6 +885,31 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyTabJoinLegacy)
     CPPUNIT_ASSERT(pPage3);
     CPPUNIT_ASSERT(!pPage3->GetSortedObjs());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyObjectFormatter)
+{
+    // Given a document with 3 pages and 2 tables: table on first and second page, 3rd page has no
+    // table:
+    createSwDoc("floattable-object-formatter.docx");
+
+    // When calculating the layout:
+    calcLayout();
+
+    // Then make sure we don't crash and also that all pages have the expected amount of fly frames:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    const SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
+    auto pPage2 = dynamic_cast<SwPageFrame*>(pPage1->GetNext());
+    CPPUNIT_ASSERT(pPage2);
+    const SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage2Objs.size());
+    auto pPage3 = dynamic_cast<SwPageFrame*>(pPage2->GetNext());
+    CPPUNIT_ASSERT(pPage3);
+    CPPUNIT_ASSERT(!pPage3->GetSortedObjs());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
