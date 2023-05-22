@@ -890,10 +890,6 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf115655_HideDetail)
     pViewShell->GetViewData().GetDispatcher().Execute(SID_OUTLINE_HIDE);
     CPPUNIT_ASSERT_MESSAGE("Collapse: Image should not be visible", !pObj->IsVisible());
 
-    // FIXME: validation fails with
-    // Error: unexpected attribute "drawooo:display"
-    skipValidation();
-
     // Save and reload
     saveAndReload("calc8");
 
@@ -1191,10 +1187,6 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf154821_shape_in_group)
     pViewShell->GetViewData().SetCurY(1);
     pViewShell->GetViewData().GetDispatcher().Execute(SID_OUTLINE_HIDE);
 
-    // Save and reload
-    // FIXME: validation fails with
-    // Error: unexpected attribute "drawooo:display"
-    skipValidation();
     saveAndReload("calc8");
 
     // Expand the lower group
