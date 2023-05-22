@@ -457,7 +457,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
     if (m_xLbColor->IsValueChangedFromSaved())
     {
         NamedColor aColor = m_xLbColor->GetSelectedEntry();
-        XLineColorItem aItem(aColor.second, aColor.first);
+        XLineColorItem aItem(aColor.m_aName, aColor.m_aColor);
         pOld = GetOldItem( *rAttrs, XATTR_LINECOLOR );
         if ( !pOld || !( *static_cast<const XLineColorItem*>(pOld) == aItem ) )
         {
@@ -759,7 +759,7 @@ void SvxLineTabPage::FillXLSet_Impl()
 
     m_rXLSet.Put( XLineWidthItem( GetCoreValue( *m_xMtrLineWidth, m_ePoolUnit ) ) );
     NamedColor aColor = m_xLbColor->GetSelectedEntry();
-    m_rXLSet.Put(XLineColorItem(aColor.second, aColor.first));
+    m_rXLSet.Put(XLineColorItem(aColor.m_aName, aColor.m_aColor));
 
     // Centered line end
     if( m_xTsbCenterStart->get_state() == TRISTATE_TRUE )

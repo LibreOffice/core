@@ -2736,7 +2736,7 @@ namespace
 void Svx3DWin::LBSelectColor( ColorListBox* pLb, const Color& rColor )
 {
     pLb->SetNoSelection();
-    pLb->SelectEntry(std::make_pair(rColor, lcl_makeColorName(rColor)));
+    pLb->SelectEntry({rColor, lcl_makeColorName(rColor)});
 }
 
 void Svx3DWin::UpdatePreview()

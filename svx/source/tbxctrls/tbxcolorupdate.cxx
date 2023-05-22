@@ -137,11 +137,11 @@ namespace svx
 
     void ToolboxButtonColorUpdaterBase::Update(const NamedColor &rNamedColor)
     {
-        Update(rNamedColor.first);
+        Update(rNamedColor.m_aColor);
         if (!mbWideButton)
         {
             // Also show the current color as QuickHelpText
-            OUString colorSuffix = OUString(" (%1)").replaceFirst("%1", rNamedColor.second);
+            OUString colorSuffix = OUString(" (%1)").replaceFirst("%1", rNamedColor.m_aName);
             OUString colorHelpText = maCommandLabel + colorSuffix;
 
             SetQuickHelpText(colorHelpText);
