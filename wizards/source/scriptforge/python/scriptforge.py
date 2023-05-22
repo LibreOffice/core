@@ -1993,7 +1993,7 @@ class SFDialogs:
     class SF_NewDialog(SFServices):
         """
             Pseudo service never returned from the Basic world. A SF_Dialog instance is returned instead.
-            Main purpose: manage the arguments of CreateScritService() for the creation of a dialog from scratch
+            Main purpose: manage the arguments of CreateScriptService() for the creation of a dialog from scratch
             """
         # Mandatory class properties for service registration
         serviceimplementation = 'basic'
