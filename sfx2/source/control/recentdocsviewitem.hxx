@@ -20,8 +20,9 @@ namespace sfx2
 class RecentDocsViewItem final : public ThumbnailViewItem
 {
 public:
-    RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUString &rURL,
-        const OUString &rTitle, std::u16string_view sThumbnailBase64, sal_uInt16 nId, tools::Long nThumbnailSize, bool isReadOnly);
+    RecentDocsViewItem(sfx2::RecentDocsView& rView, const OUString& rURL, const OUString& rTitle,
+                       std::u16string_view sThumbnailBase64, sal_uInt16 nId,
+                       tools::Long nThumbnailSize, bool isReadOnly, bool isPinned);
 
     /** Updates own highlight status based on the aPoint position.
 
@@ -51,6 +52,7 @@ private:
     OUString maURL;
 
     bool m_isReadOnly = false;
+    bool m_isPinned = false;
 
     OUString m_sHelpText;
 

@@ -144,9 +144,12 @@ bool RecentDocsView::isAcceptedFile(const INetURLObject& rURL) const
            (mnFileTypes & ApplicationType::TYPE_OTHER    && typeMatchesExtension(ApplicationType::TYPE_OTHER,   aExt));
 }
 
-void RecentDocsView::insertItem(const OUString &rURL, const OUString &rTitle, const OUString& rThumbnail, bool isReadOnly, sal_uInt16 nId)
+void RecentDocsView::insertItem(const OUString& rURL, const OUString& rTitle,
+                                const OUString& rThumbnail, bool isReadOnly, bool isPinned,
+                                sal_uInt16 nId)
 {
-    AppendItem( std::make_unique<RecentDocsViewItem>(*this, rURL, rTitle, rThumbnail, nId, mnItemMaxSize, isReadOnly) );
+    AppendItem(std::make_unique<RecentDocsViewItem>(*this, rURL, rTitle, rThumbnail, nId,
+                                                    mnItemMaxSize, isReadOnly, isPinned));
 }
 
 void RecentDocsView::Reload()
@@ -168,7 +171,8 @@ void RecentDocsView::Reload()
         //Remove extension from url's last segment and use it as title
         const OUString aTitle = aURLObj.GetBase(); //DecodeMechanism::WithCharset
 
-        insertItem(aURL, aTitle, rRecentEntry.sThumbnail, rRecentEntry.isReadOnly, i+1);
+        insertItem(aURL, aTitle, rRecentEntry.sThumbnail, rRecentEntry.isReadOnly,
+                   rRecentEntry.isPinned, i + 1);
     }
 
     CalculateItemPositions();

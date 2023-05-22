@@ -43,6 +43,7 @@ namespace {
     constexpr OUStringLiteral s_sPassword = u"Password";
     constexpr OUStringLiteral s_sThumbnail = u"Thumbnail";
     constexpr OUStringLiteral s_sReadOnly = u"ReadOnly";
+    constexpr OUStringLiteral s_sPinned = u"Pinned";
 }
 
 static uno::Reference<container::XNameAccess> GetConfig();
@@ -54,6 +55,14 @@ static void TruncateList(
         const uno::Reference<container::XNameAccess>& xCfg,
         const uno::Reference<container::XNameAccess>& xList,
         sal_uInt32 nSize);
+
+static void PrependItem(const uno::Reference<container::XNameAccess>& xCfg,
+                        uno::Reference<container::XNameContainer>& xList, std::u16string_view sURL);
+static void MoveItemToUnpinned(const uno::Reference<container::XNameAccess>& xCfg,
+                               uno::Reference<container::XNameContainer>& xOrderList,
+                               uno::Reference<container::XNameContainer>& xItemList,
+                               std::u16string_view sURL);
+
 static sal_uInt32 GetCapacity(const uno::Reference<container::XNameAccess>& xCommonXCU, EHistoryType eHistory);
 
 namespace SvtHistoryOptions
@@ -125,6 +134,8 @@ std::vector< HistoryItem > GetList( EHistoryType eHistory )
                 xSet->getPropertyValue(s_sPassword) >>= aItem.sPassword;
                 xSet->getPropertyValue(s_sThumbnail) >>= aItem.sThumbnail;
                 xSet->getPropertyValue(s_sReadOnly) >>= aItem.isReadOnly;
+                xSet->getPropertyValue(s_sPinned) >>= aItem.isPinned;
+
                 aRet.push_back(aItem);
             }
             catch(const uno::Exception&)
@@ -147,10 +158,9 @@ std::vector< HistoryItem > GetList( EHistoryType eHistory )
     return aRet;
 }
 
-void AppendItem(EHistoryType eHistory,
-        const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
-        const std::optional<OUString>& sThumbnail,
-        ::std::optional<bool> const oIsReadOnly)
+void AppendItem(EHistoryType eHistory, const OUString& sURL, const OUString& sFilter,
+                const OUString& sTitle, const std::optional<OUString>& sThumbnail,
+                ::std::optional<bool> const oIsReadOnly, ::std::optional<bool> const oIsPinned)
 {
     try
     {
@@ -184,33 +194,17 @@ void AppendItem(EHistoryType eHistory,
             {
                 xSet->setPropertyValue(s_sReadOnly, uno::Any(*oIsReadOnly));
             }
-
-            for (sal_Int32 i=0; i<nLength; ++i)
+            if (oIsPinned)
             {
-                OUString aItem;
-                xOrderList->getByName(OUString::number(i)) >>= xSet;
-                xSet->getPropertyValue(s_sHistoryItemRef) >>= aItem;
-
-                if (aItem == sURL)
-                {
-                    for (sal_Int32 j = i - 1; j >= 0; --j)
-                    {
-                        uno::Reference<beans::XPropertySet> xPrevSet;
-                        uno::Reference<beans::XPropertySet> xNextSet;
-                        xOrderList->getByName(OUString::number(j+1)) >>= xPrevSet;
-                        xOrderList->getByName(OUString::number(j))   >>= xNextSet;
-
-                        OUString sTemp;
-                        xNextSet->getPropertyValue(s_sHistoryItemRef) >>= sTemp;
-                        xPrevSet->setPropertyValue(s_sHistoryItemRef, uno::Any(sTemp));
-                    }
-                    xOrderList->getByName(OUString::number(0)) >>= xSet;
-                    xSet->setPropertyValue(s_sHistoryItemRef, uno::Any(aItem));
-                    break;
-                }
+                xSet->setPropertyValue(s_sPinned, uno::Any(*oIsPinned));
+                if (*oIsPinned)
+                    PrependItem(xCfg, xOrderList, sURL);
+                else
+                    MoveItemToUnpinned(xCfg, xOrderList, xItemList, sURL);
             }
+            else
+                MoveItemToUnpinned(xCfg, xOrderList, xItemList, sURL);
 
-            ::comphelper::ConfigurationHelper::flush(xCfg);
         }
         else // The item to be appended does not exist yet
         {
@@ -275,6 +269,10 @@ void AppendItem(EHistoryType eHistory,
             if (oIsReadOnly)
             {
                 xSet->setPropertyValue(s_sReadOnly, uno::Any(*oIsReadOnly));
+            }
+            if (oIsPinned)
+            {
+                xSet->setPropertyValue(s_sPinned, uno::Any(*oIsPinned));
             }
 
             ::comphelper::ConfigurationHelper::flush(xCfg);
@@ -341,6 +339,43 @@ void DeleteItem(EHistoryType eHistory, const OUString& sURL)
         xItemList->removeByName(sURL);
 
         ::comphelper::ConfigurationHelper::flush(xCfg);
+    }
+    catch (const uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("unotools.config");
+    }
+}
+
+void TogglePinItem(EHistoryType eHistory, const OUString& sURL)
+{
+    try
+    {
+        uno::Reference<container::XNameAccess> xCfg = GetConfig();
+        uno::Reference<container::XNameAccess> xListAccess(GetListAccess(xCfg, eHistory));
+
+        uno::Reference<container::XNameContainer> xItemList;
+        xListAccess->getByName(s_sItemList)  >>= xItemList;
+
+        // Check if item exists
+        if (xItemList->hasByName(sURL))
+        {
+            // Toggle pinned option
+            uno::Reference<beans::XPropertySet> xSet;
+            xItemList->getByName(sURL) >>= xSet;
+            bool bIsItemPinned = false;
+            if (xSet->getPropertySetInfo()->hasPropertyByName(s_sPinned))
+                xSet->getPropertyValue(s_sPinned) >>= bIsItemPinned;
+            xSet->setPropertyValue(s_sPinned, uno::Any(!bIsItemPinned));
+
+            uno::Reference<container::XNameContainer> xOrderList;
+            xListAccess->getByName(s_sOrderList) >>= xOrderList;
+
+            // Shift item to the beginning of the document list if is not pinned now
+            if (bIsItemPinned)
+                MoveItemToUnpinned(xCfg, xOrderList, xItemList, sURL);
+            else
+                PrependItem(xCfg, xOrderList, sURL);
+        }
     }
     catch (const uno::Exception&)
     {
@@ -417,7 +452,81 @@ static void TruncateList(
     ::comphelper::ConfigurationHelper::flush(xCfg);
 }
 
+static void PrependItem(const uno::Reference<container::XNameAccess>& xCfg,
+                        uno::Reference<container::XNameContainer>& xList, std::u16string_view sURL)
+{
+    uno::Reference<beans::XPropertySet> xSet;
+    const sal_Int32 nLength = xList->getElementNames().getLength();
+    for (sal_Int32 i = 0; i < nLength; i++)
+    {
+        OUString aItem;
+        xList->getByName(OUString::number(i)) >>= xSet;
+        xSet->getPropertyValue(s_sHistoryItemRef) >>= aItem;
 
+        if (aItem == sURL)
+        {
+            for (sal_Int32 j = i - 1; j >= 0; --j)
+            {
+                uno::Reference<beans::XPropertySet> xPrevSet;
+                uno::Reference<beans::XPropertySet> xNextSet;
+                xList->getByName(OUString::number(j + 1)) >>= xPrevSet;
+                xList->getByName(OUString::number(j)) >>= xNextSet;
+
+                OUString sTemp;
+                xNextSet->getPropertyValue(s_sHistoryItemRef) >>= sTemp;
+                xPrevSet->setPropertyValue(s_sHistoryItemRef, uno::Any(sTemp));
+            }
+            xList->getByName(OUString::number(0)) >>= xSet;
+            xSet->setPropertyValue(s_sHistoryItemRef, uno::Any(aItem));
+            ::comphelper::ConfigurationHelper::flush(xCfg);
+            return;
+        }
+    }
+}
+
+static void MoveItemToUnpinned(const uno::Reference<container::XNameAccess>& xCfg,
+                               uno::Reference<container::XNameContainer>& xOrderList,
+                               uno::Reference<container::XNameContainer>& xItemList,
+                               std::u16string_view sURL)
+{
+    uno::Reference<beans::XPropertySet> xSet;
+    const sal_Int32 nLength = xOrderList->getElementNames().getLength();
+    // Search for item in the ordered list list
+    for (sal_Int32 i = 0; i < nLength; i++)
+    {
+        OUString aItem;
+        xOrderList->getByName(OUString::number(i)) >>= xSet;
+        xSet->getPropertyValue(s_sHistoryItemRef) >>= aItem;
+
+        if (aItem == sURL)
+        {
+            // Move item to the unpinned document section
+            for (sal_Int32 j = i + 1; j < nLength - 1; j++)
+            {
+                uno::Reference<beans::XPropertySet> xNextSet;
+                xOrderList->getByName(OUString::number(j)) >>= xNextSet;
+
+                OUString aNextItem;
+                xNextSet->getPropertyValue(s_sHistoryItemRef) >>= aNextItem;
+
+                uno::Reference<beans::XPropertySet> xNextItemSet;
+                xItemList->getByName(aNextItem) >>= xNextItemSet;
+                bool bIsItemPinned = false;
+                if (xNextItemSet->getPropertySetInfo()->hasPropertyByName(s_sPinned))
+                    xNextItemSet->getPropertyValue(s_sPinned) >>= bIsItemPinned;
+                if (bIsItemPinned)
+                {
+                    xSet->setPropertyValue(s_sHistoryItemRef, uno::Any(aNextItem));
+                    xNextSet->setPropertyValue(s_sHistoryItemRef, uno::Any(aItem));
+                }
+                else
+                    break;
+            }
+            ::comphelper::ConfigurationHelper::flush(xCfg);
+            return;
+        }
+    }
+}
 
 static sal_uInt32 GetCapacity(const uno::Reference<container::XNameAccess>& xCommonXCU, EHistoryType eHistory)
 {

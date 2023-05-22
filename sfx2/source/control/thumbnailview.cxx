@@ -411,10 +411,24 @@ void ThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
     // If want also draw parts of items in the last line,
     // then we add one more line if parts of this line are visible
 
+    bool bPinnedItems = true;
     size_t nCurCount = 0;
     for ( size_t i = 0; i < nItemCount; i++ )
     {
         ThumbnailViewItem *const pItem = mFilteredItemList[i];
+
+        // tdf#38742 - show pinned items in a separate line
+        if (bPinnedItems && !pItem->isPinned())
+        {
+            bPinnedItems = false;
+            // Start a new line only if the entire line is not filled
+            if ((nCurCount + 1) % mnCols && nCurCount > nFirstItem)
+            {
+                x = nStartX;
+                y += mnItemHeight + nVItemSpace;
+            }
+            nCurCount = 0;
+        }
 
         if ((nCurCount >= nFirstItem) && (nCurCount < nLastItem))
         {

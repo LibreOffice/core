@@ -123,11 +123,12 @@ BitmapEx getModuleOverlay(std::u16string_view rURL)
 RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUString &rURL,
     const OUString &rTitle, std::u16string_view const sThumbnailBase64,
         sal_uInt16 const nId, tools::Long const nThumbnailSize,
-        bool const isReadOnly)
+        bool const isReadOnly, bool const isPinned)
     : ThumbnailViewItem(rView, nId),
       mrParentView(rView),
       maURL(rURL),
       m_isReadOnly(isReadOnly),
+      m_isPinned(isPinned),
       m_bRemoveIconHighlighted(false),
       m_aRemoveRecentBitmap(BMP_RECENTDOC_REMOVE),
       m_aRemoveRecentBitmapHighlighted(BMP_RECENTDOC_REMOVE_HIGHLIGHTED)
@@ -230,6 +231,7 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
 
     maTitle = aTitle;
     maPreview1 = aThumbnail;
+    mbPinned = m_isPinned;
 }
 
 ::tools::Rectangle RecentDocsViewItem::updateHighlight(bool bVisible, const Point& rPoint)
@@ -273,7 +275,7 @@ void RecentDocsViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProc
 {
     ThumbnailViewItem::Paint(pProcessor, pAttrs);
 
-    // paint the remove icon when highlighted
+    // paint the remove icon when hovered
     if (isHighlighted())
     {
         drawinglayer::primitive2d::Primitive2DContainer aSeq(1);
@@ -295,6 +297,14 @@ void RecentDocsViewItem::MouseButtonUp(const MouseEvent& rMEvt)
         if (getRemoveIconArea().Contains(rMEvt.GetPosPixel()))
         {
             SvtHistoryOptions::DeleteItem(EHistoryType::PickList, maURL);
+            mrParent.Reload();
+            return;
+        }
+
+        const ::tools::Rectangle aPinPosRectangle(maPinPos, maPinnedDocumentBitmap.GetSizePixel());
+        if (aPinPosRectangle.Contains(rMEvt.GetPosPixel()))
+        {
+            SvtHistoryOptions::TogglePinItem(EHistoryType::PickList, maURL);
             mrParent.Reload();
             return;
         }

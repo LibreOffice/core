@@ -52,6 +52,11 @@
           <desc>Stores whether the document was opened editable or read-only.</desc>
         </info>
       </prop>
+      <prop oor:name="Pinned" oor:type="xs:boolean">
+        <info>
+          <desc>Stores whether the document is pinned in the user-interface.</desc>
+        </info>
+      </prop>
     </group>
     <group oor:name="HistoryOrder">
       <info>

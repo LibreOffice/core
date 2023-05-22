@@ -44,7 +44,7 @@ namespace SvtHistoryOptions
 
         @param      eHistory select right history.
     */
-    UNOTOOLS_DLLPUBLIC void Clear(EHistoryType eHistory);
+    UNOTOOLS_DLLPUBLIC void Clear(EHistoryType eHistory, bool bClearPinned = false);
 
     /** Return the complete specified history list.
 
@@ -59,6 +59,7 @@ namespace SvtHistoryOptions
         OUString sPassword;
         OUString sThumbnail;
         bool isReadOnly = false;
+        bool isPinned = false;
     };
     UNOTOOLS_DLLPUBLIC std::vector< HistoryItem > GetList(EHistoryType eHistory);
 
@@ -66,18 +67,26 @@ namespace SvtHistoryOptions
 
         The oldest entry is deleted automatically when the size reaches the maximum.
 
-        @param eHistory  select right history.
-        @param sURL      URL to save in history
-        @param sFilter   filter name to save in history
-        @param sTitle    document title to save in history
+        @param eHistory    select right history.
+        @param sURL        URL to save in history
+        @param sFilter     filter name to save in history
+        @param sTitle      document title to save in history
+        @param sThumbnail  base64 encoded thumbnail of the item
+        @param oIsReadOnly item was opened editable or read-only
+        @param oIsPinned   item is pinned in the user-interface
     */
-    UNOTOOLS_DLLPUBLIC void AppendItem(EHistoryType eHistory,
-            const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
-            const std::optional<OUString>& sThumbnail, std::optional<bool> oIsReadOnly);
+    UNOTOOLS_DLLPUBLIC void AppendItem(EHistoryType eHistory, const OUString& sURL,
+                                       const OUString& sFilter, const OUString& sTitle,
+                                       const std::optional<OUString>& sThumbnail,
+                                       std::optional<bool> oIsReadOnly,
+                                       std::optional<bool> oIsPinned);
 
     /** Delete item from the specified list.
     */
     UNOTOOLS_DLLPUBLIC void DeleteItem(EHistoryType eHistory, const OUString& sURL);
+
+    // tdf#38742 - toggle pinned state of an item
+    UNOTOOLS_DLLPUBLIC void TogglePinItem(EHistoryType eHistory, const OUString& sURL);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

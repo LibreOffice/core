@@ -72,10 +72,15 @@ public:
     bool mbBorder;
     bool mbSelected;
     bool mbHover;
+    bool mbPinned;
     BitmapEx maPreview1;
     OUString maTitle;
     OUString maHelpText;
     css::uno::Reference< css::accessibility::XAccessible > mxAcc;
+
+    bool mbPinnedDocumentHighlighted;
+    BitmapEx maPinnedDocumentBitmap;
+    BitmapEx maPinnedDocumentBitmapHiglighted;
 
     ThumbnailViewItem(ThumbnailView& rView, sal_uInt16 nId);
 
@@ -92,6 +97,10 @@ public:
     bool isHighlighted () const { return mbHover; }
 
     void setHighlight (bool state);
+
+    bool isPinned () const { return mbPinned; }
+
+    void setPinned (bool state);
 
     /** Updates own highlight status based on the aPoint position.
 
@@ -132,6 +141,7 @@ protected:
 
     Point maTextPos;
     Point maPrev1Pos;
+    Point maPinPos;
     tools::Rectangle maDrawArea;
 };
 

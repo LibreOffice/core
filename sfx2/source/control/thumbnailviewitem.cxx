@@ -33,10 +33,15 @@
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <vcl/event.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/texteng.hxx>
+#include <bitmaps.hlst>
+#include <drawinglayer/primitive2d/discretebitmapprimitive2d.hxx>
+#include <unotools/historyoptions.hxx>
+
 
 using namespace basegfx;
 using namespace basegfx::utils;
@@ -51,6 +56,10 @@ ThumbnailViewItem::ThumbnailViewItem(ThumbnailView& rView, sal_uInt16 nId)
     , mbBorder(true)
     , mbSelected(false)
     , mbHover(false)
+    , mbPinned(false)
+    , mbPinnedDocumentHighlighted(false)
+    , maPinnedDocumentBitmap(BMP_PIN_DOC)
+    , maPinnedDocumentBitmapHiglighted(BMP_PIN_DOC_HIGHLIGHTED)
 {
 }
 
@@ -77,6 +86,11 @@ void ThumbnailViewItem::setHighlight (bool state)
     mbHover = state;
 }
 
+void ThumbnailViewItem::setPinned (bool state)
+{
+    mbPinned = state;
+}
+
 ::tools::Rectangle ThumbnailViewItem::updateHighlight(bool bVisible, const Point& rPoint)
 {
     bool bNeedsPaint = false;
@@ -92,6 +106,20 @@ void ThumbnailViewItem::setHighlight (bool state)
         if (isHighlighted())
             bNeedsPaint = true;
         setHighlight(false);
+    }
+
+    const ::tools::Rectangle aPinPosRectangle(maPinPos, maPinnedDocumentBitmap.GetSizePixel());
+    if (bVisible && aPinPosRectangle.Contains(rPoint))
+    {
+        if (!mbPinnedDocumentHighlighted)
+            bNeedsPaint = true;
+        mbPinnedDocumentHighlighted = true;
+    }
+    else
+    {
+        if (mbPinnedDocumentHighlighted)
+            bNeedsPaint = true;
+        mbPinnedDocumentHighlighted = false;
     }
 
     if (bNeedsPaint)
@@ -134,6 +162,9 @@ void ThumbnailViewItem::calculateItemsPosition (const tools::Long nThumbnailHeig
     const Point aPos = maDrawArea.TopCenter();
     maPrev1Pos = aPos + Point(-aImageSize.Width() / 2, nPadding + (nThumbnailHeight - aImageSize.Height()) / 2);
 
+    // Calculate pin position
+    maPinPos = maDrawArea.TopLeft() + Point(nPadding, nPadding);
+
     // Calculate text position
     maTextPos = aPos + Point(-aTextDev.getTextWidth(maTitle, 0, nMaxTextLength) / 2, nThumbnailHeight + nPadding * 2);
 }
@@ -142,7 +173,7 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
                                const ThumbnailItemAttributes *pAttrs)
 {
     BColor aFillColor = pAttrs->aFillColor;
-    drawinglayer::primitive2d::Primitive2DContainer aSeq(4);
+    drawinglayer::primitive2d::Primitive2DContainer aSeq(5);
     double fTransparence = 0.0;
 
     // Draw background
@@ -175,6 +206,20 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
                                                                 B2DPoint(aImageSize.Width(),aImageSize.Height())),
                                                             false)
                                         ));
+
+    // tdf#38742 - draw pinned icon
+    if (mbPinned)
+    {
+        const BitmapEx& aBitmapEx
+            = mbHover ? maPinnedDocumentBitmapHiglighted : maPinnedDocumentBitmap;
+        aSeq[nPrimitive++] = drawinglayer::primitive2d::Primitive2DReference(
+            new DiscreteBitmapPrimitive2D(aBitmapEx, B2DPoint(maPinPos.X(), maPinPos.Y())));
+    }
+    else if (mbHover)
+        aSeq[nPrimitive++]
+            = drawinglayer::primitive2d::Primitive2DReference(new DiscreteBitmapPrimitive2D(
+                maPinnedDocumentBitmap, B2DPoint(maPinPos.X(), maPinPos.Y())));
+
 
     if (mbBorder)
     {
