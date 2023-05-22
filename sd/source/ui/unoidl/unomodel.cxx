@@ -2612,6 +2612,11 @@ void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount, i
     SdrPageView* pPageView = pDrawView->GetSdrPageView();
     SdrPage* pPage = pPageView->GetPage();
     ::sd::Window* pActiveWin = pViewShell->GetActiveWindow();
+    if (!pActiveWin)
+    {
+        return;
+    }
+
     if (LokControlHandler::postMouseEvent(pPage, pDrawView, *pActiveWin, nType, aPointHMM, nCount, nButtons, nModifier))
             return;
 
