@@ -21,7 +21,7 @@ class ListBoxColorWrapper
 public:
     ListBoxColorWrapper(ColorListBox* pControl);
     void operator()(const OUString& rCommand,
-                    const svx::NamedThemedColor& rColor); // ColorSelectFunction signature
+                    const NamedColor& rColor); // ColorSelectFunction signature
 private:
     ColorListBox* mpControl;
 };
@@ -36,14 +36,14 @@ private:
     ListBoxColorWrapper m_aColorWrapper;
     Color m_aAutoDisplayColor;
     Color m_aSaveColor;
-    svx::NamedThemedColor m_aSelectedColor;
+    NamedColor m_aSelectedColor;
     sal_uInt16 m_nSlotId;
     bool m_bShowNoneButton;
     std::shared_ptr<PaletteManager> m_xPaletteManager;
     TopLevelParentFunction m_aTopLevelParentFunction;
     ColorStatus m_aColorStatus;
 
-    void Selected(const svx::NamedThemedColor& rNamedColor);
+    void Selected(const NamedColor& rNamedColor);
     void createColorWindow();
     void LockWidthRequest(int nWidthRequest);
     int CalcBestWidthRequest();
@@ -63,8 +63,8 @@ public:
     void SetSlotId(sal_uInt16 nSlotId, bool bShowNoneButton = false);
 
     Color const& GetSelectEntryColor() const { return m_aSelectedColor.m_aColor; }
-    NamedColor GetSelectedEntry() const { return m_aSelectedColor.ToNamedColor(); }
-    const svx::NamedThemedColor& GetSelectedEntryThemedColor() const { return m_aSelectedColor; }
+    NamedColor GetSelectedEntry() const { return m_aSelectedColor; }
+    const NamedColor& GetSelectedEntryThemedColor() const { return m_aSelectedColor; }
 
     void SelectEntry(const NamedColor& rColor);
     void SelectEntry(const Color& rColor);

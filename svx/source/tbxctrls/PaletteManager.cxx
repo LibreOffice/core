@@ -417,12 +417,12 @@ void PaletteManager::PopupColorPicker(weld::Window* pParent, const OUString& aCo
             if (mpBtnUpdater)
                 mpBtnUpdater->Update(aNamedColor);
             AddRecentColor(aLastColor, sColorName);
-            maColorSelectFunction(aCommandCopy, svx::NamedThemedColor::FromNamedColor(aNamedColor));
+            maColorSelectFunction(aCommandCopy, aNamedColor);
         }
     });
 }
 
-void PaletteManager::DispatchColorCommand(const OUString& aCommand, const svx::NamedThemedColor& rColor)
+void PaletteManager::DispatchColorCommand(const OUString& aCommand, const NamedColor& rColor)
 {
     using namespace css;
     using namespace css::uno;

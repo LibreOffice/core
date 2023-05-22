@@ -82,7 +82,7 @@ public:
     static void GetThemeIndexLumModOff(sal_uInt16 nItemId, sal_Int16& rThemeIndex,
                                        sal_Int16& rLumMod, sal_Int16& rLumOff);
 
-    static void DispatchColorCommand(const OUString& aCommand, const svx::NamedThemedColor& rColor);
+    static void DispatchColorCommand(const OUString& aCommand, const NamedColor& rColor);
 };
 
 #endif // INCLUDED_SVX_PALETTEMANAGER_HXX

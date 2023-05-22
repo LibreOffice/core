@@ -1572,7 +1572,7 @@ bool SvxCharEffectsPage::FillItemSetColor_Impl( SfxItemSet& rSet )
     sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_COLOR );
     const SfxItemSet& rOldSet = GetItemSet();
 
-    svx::NamedThemedColor aSelectedColor;
+    NamedColor aSelectedColor;
     bool bChanged = m_bNewFontColor;
 
     if (bChanged)
