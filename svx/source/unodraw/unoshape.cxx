@@ -950,19 +950,20 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) noexcept
     // do cheap checks first, this method is hot
     if (rHint.GetId() != SfxHintId::ThisIsAnSdrHint)
         return;
-    rtl::Reference<SdrObject> pSdrObject(mxSdrObject);
-    if( !pSdrObject )
+    if( !mxSdrObject )
         return;
     const SdrHint* pSdrHint = static_cast<const SdrHint*>(&rHint);
     // #i55919# SdrHintKind::ObjectChange is only interesting if it's for this object
     if ((pSdrHint->GetKind() != SdrHintKind::ModelCleared) &&
-         (pSdrHint->GetKind() != SdrHintKind::ObjectChange || pSdrHint->GetObject() != pSdrObject.get() ))
+         (pSdrHint->GetKind() != SdrHintKind::ObjectChange || pSdrHint->GetObject() != mxSdrObject.get() ))
         return;
 
-    uno::Reference< uno::XInterface > xSelf( pSdrObject->getWeakUnoShape() );
+    // prevent object being deleted from under us
+    rtl::Reference<SdrObject> xSdrSelf(mxSdrObject);
+    uno::Reference< uno::XInterface > xSelf( mxSdrObject->getWeakUnoShape() );
     if( !xSelf.is() )
     {
-        EndListening(pSdrObject->getSdrModelFromSdrObject());
+        EndListening(mxSdrObject->getSdrModelFromSdrObject());
         mxSdrObject.clear();
         return;
     }
@@ -973,9 +974,8 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) noexcept
     }
     else // (pSdrHint->GetKind() == SdrHintKind::ModelCleared)
     {
-        EndListening(pSdrObject->getSdrModelFromSdrObject());
-        pSdrObject->setUnoShape(nullptr);
-        pSdrObject.clear();
+        EndListening(mxSdrObject->getSdrModelFromSdrObject());
+        mxSdrObject->setUnoShape(nullptr);
         mxSdrObject.clear();
 
         if(!mpImpl->mbDisposing)
