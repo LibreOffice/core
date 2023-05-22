@@ -14,7 +14,7 @@ Option Explicit
 &apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
 &apos;&apos;&apos;	SF_Dialog
 &apos;&apos;&apos;	=========
-&apos;&apos;&apos;		Management of dialogs. They may bedefined with the Basic IDE or built from scratch
+&apos;&apos;&apos;		Management of dialogs. They may be defined with the Basic IDE or built from scratch
 &apos;&apos;&apos;		Each instance of the current class represents a single dialog box displayed to the user
 &apos;&apos;&apos;
 &apos;&apos;&apos;		A dialog box can be displayed in modal or in non-modal modes
