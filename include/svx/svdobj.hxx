@@ -364,8 +364,7 @@ public:
     virtual SdrLayerID GetLayer() const;
     virtual void NbcSetLayer(SdrLayerID nLayer);
     virtual void SetLayer(SdrLayerID nLayer);
-    // renaming GetSdrLayerIDSet -> getMergedHierarchySdrLayerIDSet to make clear what happens here. rSet needs to be empty.
-    void getMergedHierarchySdrLayerIDSet(SdrLayerIDSet& rSet) const;
+    bool isVisibleOnAnyOfTheseLayers(const SdrLayerIDSet& rSet) const;
 
     void SendUserCall(SdrUserCallType eUserCall, const tools::Rectangle& rBoundRect) const;
 

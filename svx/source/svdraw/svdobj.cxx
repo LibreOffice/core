@@ -647,16 +647,18 @@ SdrLayerID SdrObject::GetLayer() const
     return mnLayerID;
 }
 
-void SdrObject::getMergedHierarchySdrLayerIDSet(SdrLayerIDSet& rSet) const
+bool SdrObject::isVisibleOnAnyOfTheseLayers(const SdrLayerIDSet& rSet) const
 {
-    rSet.Set(GetLayer());
+    if (rSet.IsSet(GetLayer()))
+        return true;
     SdrObjList* pOL=GetSubList();
-    if (pOL!=nullptr) {
-        const size_t nObjCount = pOL->GetObjCount();
-        for (size_t nObjNum = 0; nObjNum<nObjCount; ++nObjNum) {
-            pOL->GetObj(nObjNum)->getMergedHierarchySdrLayerIDSet(rSet);
-        }
-    }
+    if (!pOL)
+        return false;
+    const size_t nObjCount = pOL->GetObjCount();
+    for (size_t nObjNum = 0; nObjNum<nObjCount; ++nObjNum)
+        if (pOL->GetObj(nObjNum)->isVisibleOnAnyOfTheseLayers(rSet))
+            return true;
+    return false;
 }
 
 void SdrObject::NbcSetLayer(SdrLayerID nLayer)

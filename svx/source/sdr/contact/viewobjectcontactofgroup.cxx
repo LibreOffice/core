@@ -76,10 +76,7 @@ namespace sdr::contact
 
         bool ViewObjectContactOfGroup::isPrimitiveVisibleOnAnyLayer(const SdrLayerIDSet& aLayers) const
         {
-            SdrLayerIDSet aObjectLayers;
-            getSdrObject().getMergedHierarchySdrLayerIDSet(aObjectLayers);
-            aObjectLayers &= aLayers;
-            return !aObjectLayers.IsEmpty();
+            return getSdrObject().isVisibleOnAnyOfTheseLayers(aLayers);
         }
 
 } // end of namespace
