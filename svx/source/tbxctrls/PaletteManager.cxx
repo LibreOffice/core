@@ -53,11 +53,11 @@ namespace
 {
 // Luminance modulation for the 6 effect presets.
 // 10000 is the default.
-sal_Int16 g_aLumMods[] = { 10000, 2000, 4000, 6000, 7500, 5000 };
+constexpr const std::array<sal_Int16, 6> g_aLumMods = { 10000, 2000, 4000, 6000, 7500, 5000 };
 
 // Luminance offset for the 6 effect presets.
 // 0 is the default.
-sal_Int16 g_aLumOffs[] = { 0, 8000, 6000, 4000, 0, 0 };
+constexpr const std::array<sal_Int16, 6> g_aLumOffs = { 0, 8000, 6000, 4000, 0, 0 };
 }
 
 PaletteManager::PaletteManager() :
@@ -366,7 +366,7 @@ void PaletteManager::AddRecentColor(const Color& rRecentColor, const OUString& r
 {
     auto itColor = std::find_if(maRecentColors.begin(),
                                 maRecentColors.end(),
-                                [rRecentColor] (const NamedColor &a) { return a.first == rRecentColor; });
+                                [rRecentColor] (const NamedColor &aColor) { return aColor.m_aColor == rRecentColor; });
     // if recent color to be added is already in list, remove it
     if( itColor != maRecentColors.end() )
         maRecentColors.erase( itColor );
@@ -374,7 +374,7 @@ void PaletteManager::AddRecentColor(const Color& rRecentColor, const OUString& r
     if (maRecentColors.size() == mnMaxRecentColors)
         maRecentColors.pop_back();
     if (bFront)
-        maRecentColors.push_front(std::make_pair(rRecentColor, rName));
+        maRecentColors.emplace_front(rRecentColor, rName);
     else
         maRecentColors.emplace_back(rRecentColor, rName);
     css::uno::Sequence< sal_Int32 > aColorList(maRecentColors.size());
@@ -383,8 +383,8 @@ void PaletteManager::AddRecentColor(const Color& rRecentColor, const OUString& r
     auto aColorNameListRange = asNonConstRange(aColorNameList);
     for (size_t i = 0; i < maRecentColors.size(); ++i)
     {
-        aColorListRange[i] = static_cast<sal_Int32>(maRecentColors[i].first);
-        aColorNameListRange[i] = maRecentColors[i].second;
+        aColorListRange[i] = static_cast<sal_Int32>(maRecentColors[i].m_aColor);
+        aColorNameListRange[i] = maRecentColors[i].m_aName;
     }
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::UserColors::RecentColor::set(aColorList, batch);
@@ -414,7 +414,7 @@ void PaletteManager::PopupColorPicker(weld::Window* pParent, const OUString& aCo
         {
             Color aLastColor = m_pColorDlg->GetColor();
             OUString sColorName = "#" + aLastColor.AsRGBHexString().toAsciiUpperCase();
-            NamedColor aNamedColor = std::make_pair(aLastColor, sColorName);
+            NamedColor aNamedColor(aLastColor, sColorName);
             if (mpBtnUpdater)
                 mpBtnUpdater->Update(aNamedColor);
             AddRecentColor(aLastColor, sColorName);

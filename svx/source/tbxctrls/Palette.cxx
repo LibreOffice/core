@@ -45,7 +45,7 @@ void PaletteASE::LoadColorSet(SvxColorValueSet& rColorSet)
     int nIx = 1;
     for (const auto& rColor : maColors)
     {
-        rColorSet.InsertItem(nIx, rColor.first, rColor.second);
+        rColorSet.InsertItem(nIx, rColor.m_aColor, rColor.m_aName);
         ++nIx;
     }
 }
@@ -211,7 +211,7 @@ void PaletteGPL::LoadColorSet(SvxColorValueSet& rColorSet)
     int nIx = 1;
     for (const auto& rColor : maColors)
     {
-        rColorSet.InsertItem(nIx, rColor.first, rColor.second);
+        rColorSet.InsertItem(nIx, rColor.m_aColor, rColor.m_aName);
         ++nIx;
     }
 }
@@ -384,8 +384,8 @@ NamedColor NamedThemedColor::ToNamedColor() const { return { m_aColor, m_aName }
 NamedThemedColor NamedThemedColor::FromNamedColor(const NamedColor& rNamedColor)
 {
     NamedThemedColor aColor;
-    aColor.m_aColor = rNamedColor.first;
-    aColor.m_aName = rNamedColor.second;
+    aColor.m_aColor = rNamedColor.m_aColor;
+    aColor.m_aName = rNamedColor.m_aName;
     return aColor;
 }
 }

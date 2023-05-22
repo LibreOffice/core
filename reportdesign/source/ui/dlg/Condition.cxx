@@ -200,7 +200,7 @@ IMPL_LINK(Condition, OnConditionAction, weld::Button&, rClickedButton, void)
 
 void Condition::ApplyCommand( sal_uInt16 _nCommandId, const NamedColor& rNamedColor )
 {
-    m_rAction.applyCommand( m_nCondIndex, _nCommandId, rNamedColor.first );
+    m_rAction.applyCommand(m_nCondIndex, _nCommandId, rNamedColor.m_aColor);
 }
 
 IMPL_LINK_NOARG( Condition, OnTypeSelected, weld::ComboBox&, void )

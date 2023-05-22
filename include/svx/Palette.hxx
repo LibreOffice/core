@@ -29,10 +29,22 @@
 
 class SvxColorValueSet;
 
-typedef std::pair<Color, OUString> NamedColor;
+struct SVXCORE_DLLPUBLIC NamedColor
+{
+    Color m_aColor;
+    OUString m_aName;
+
+    NamedColor() = default;
+
+    NamedColor(Color const& rColor, OUString const& rName)
+        : m_aColor(rColor)
+        , m_aName(rName)
+    {}
+};
 
 namespace svx
 {
+
 /// A color with an optional name and other theming-related properties.
 struct SVXCORE_DLLPUBLIC NamedThemedColor
 {

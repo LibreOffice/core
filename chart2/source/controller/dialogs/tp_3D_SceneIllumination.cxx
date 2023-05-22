@@ -101,7 +101,7 @@ namespace
     void lcl_selectColor(ColorListBox& rListBox, const Color& rColor)
     {
         rListBox.SetNoSelection();
-        rListBox.SelectEntry(std::make_pair(rColor, lcl_makeColorName(rColor)));
+        rListBox.SelectEntry({rColor, lcl_makeColorName(rColor)});
     }
 
     ::chart::LightSource lcl_getLightSourceFromProperties(

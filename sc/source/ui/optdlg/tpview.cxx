@@ -127,12 +127,12 @@ bool    ScTpContentOptions::FillItemSet( SfxItemSet* rCoreSet )
         m_xGuideLineCB->get_state_changed_from_saved())
     {
         NamedColor aNamedColor = m_xColorLB->GetSelectedEntry();
-        if (aNamedColor.first == COL_AUTO)
+        if (aNamedColor.m_aColor == COL_AUTO)
         {
-            aNamedColor.first = SC_STD_GRIDCOLOR;
-            aNamedColor.second.clear();
+            aNamedColor.m_aColor = SC_STD_GRIDCOLOR;
+            aNamedColor.m_aName.clear();
         }
-        m_xLocalOptions->SetGridColor(aNamedColor.first, aNamedColor.second);
+        m_xLocalOptions->SetGridColor(aNamedColor.m_aColor, aNamedColor.m_aName);
         rCoreSet->Put(ScTpViewItem(*m_xLocalOptions));
         bRet = true;
     }
@@ -289,13 +289,13 @@ void ScTpContentOptions::InitGridOpt()
     m_xGridLB->set_active (nSelPos);
 
     //  select grid color entry
-    OUString  aName;
-    Color     aCol    = m_xLocalOptions->GetGridColor( &aName );
+    OUString aName;
+    Color aColor = m_xLocalOptions->GetGridColor( &aName );
 
-    if (aName.trim().isEmpty() && aCol == SC_STD_GRIDCOLOR)
-        aCol = COL_AUTO;
+    if (aName.trim().isEmpty() && aColor == SC_STD_GRIDCOLOR)
+        aColor = COL_AUTO;
 
-    m_xColorLB->SelectEntry(std::make_pair(aCol, aName));
+    m_xColorLB->SelectEntry({aColor, aName});
 }
 
 IMPL_LINK( ScTpContentOptions, GridHdl, weld::ComboBox&, rLb, void )
