@@ -1145,7 +1145,14 @@ SwView::~SwView()
     m_pViewImpl->Invalidate();
     EndListening(*GetViewFrame());
     EndListening(*GetDocShell());
+
+    // tdf#155410 speedup shutdown, prevent unnecessary broadcasting during teardown of draw model
+    auto pDrawModel = GetWrtShell().getIDocumentDrawModelAccess().GetDrawModel();
+    const bool bWasLocked = pDrawModel->isLocked();
+    pDrawModel->setLock(true);
     m_pWrtShell.reset(); // reset here so that it is not accessible by the following dtors.
+    pDrawModel->setLock(bWasLocked);
+
     m_pHScrollbar.disposeAndClear();
     m_pVScrollbar.disposeAndClear();
     m_pHRuler.disposeAndClear();
