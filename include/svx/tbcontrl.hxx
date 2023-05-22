@@ -200,7 +200,7 @@ friend class SfxStyleControllerItem_Impl;
     SfxStyleFamily GetActFamily() const;
 };
 
-typedef std::function<void(const OUString&, const svx::NamedThemedColor&)> ColorSelectFunction;
+typedef std::function<void(const OUString&, const NamedColor&)> ColorSelectFunction;
 
 class SVXCORE_DLLPUBLIC SvxColorToolBoxControl final : public cppu::ImplInheritanceHelper< svt::PopupWindowController,
                                                                                  css::frame::XSubToolbarController >

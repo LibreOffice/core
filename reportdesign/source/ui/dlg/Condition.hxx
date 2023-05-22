@@ -58,7 +58,7 @@ namespace rptui
     {
     public:
         ConditionColorWrapper(Condition* pControl, sal_uInt16 nSlotId);
-        void operator()(const OUString& rCommand, const svx::NamedThemedColor& rColor);
+        void operator()(const OUString& rCommand, const NamedColor& rColor);
             // ColorSelectFunction signature
     private:
         Condition* mpControl;

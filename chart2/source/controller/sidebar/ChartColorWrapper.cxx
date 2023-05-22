@@ -87,7 +87,7 @@ ChartColorWrapper::ChartColorWrapper(
 {
 }
 
-void ChartColorWrapper::operator()([[maybe_unused]] const OUString& , const svx::NamedThemedColor& rColor)
+void ChartColorWrapper::operator()([[maybe_unused]] const OUString& , const NamedColor& rColor)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
 

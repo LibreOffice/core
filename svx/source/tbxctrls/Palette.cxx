@@ -377,17 +377,4 @@ Palette* PaletteSOC::Clone() const
     return new PaletteSOC(*this);
 }
 
-namespace svx
-{
-NamedColor NamedThemedColor::ToNamedColor() const { return { m_aColor, m_aName }; }
-
-NamedThemedColor NamedThemedColor::FromNamedColor(const NamedColor& rNamedColor)
-{
-    NamedThemedColor aColor;
-    aColor.m_aColor = rNamedColor.m_aColor;
-    aColor.m_aName = rNamedColor.m_aName;
-    return aColor;
-}
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

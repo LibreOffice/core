@@ -74,9 +74,9 @@ ConditionColorWrapper::ConditionColorWrapper(Condition* pControl, sal_uInt16 nSl
 }
 
 void ConditionColorWrapper::operator()(
-    [[maybe_unused]] const OUString& /*rCommand*/, const svx::NamedThemedColor& rNamedColor)
+    [[maybe_unused]] const OUString& /*rCommand*/, const NamedColor& rNamedColor)
 {
-    mpControl->ApplyCommand(mnSlotId, rNamedColor.ToNamedColor());
+    mpControl->ApplyCommand(mnSlotId, rNamedColor);
 }
 
 // = Condition

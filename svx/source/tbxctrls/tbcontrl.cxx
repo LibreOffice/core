@@ -2233,14 +2233,13 @@ IMPL_LINK(ColorWindow, SelectHdl, ValueSet*, pColorSet, void)
 
     maMenuButton.set_inactive();
 
-    auto aNamedThemedColor = svx::NamedThemedColor::FromNamedColor(aNamedColor);
     if (bThemePaletteSelected)
     {
-        PaletteManager::GetThemeIndexLumModOff(nSelectedItemId, aNamedThemedColor.m_nThemeIndex,
-                                               aNamedThemedColor.m_nLumMod,
-                                               aNamedThemedColor.m_nLumOff);
+        PaletteManager::GetThemeIndexLumModOff(nSelectedItemId, aNamedColor.m_nThemeIndex,
+                                               aNamedColor.m_nLumMod,
+                                               aNamedColor.m_nLumOff);
     }
-    aColorSelectFunction(sCommand, aNamedThemedColor);
+    aColorSelectFunction(sCommand, aNamedColor);
 }
 
 IMPL_LINK_NOARG(ColorWindow, SelectPaletteHdl, weld::ComboBox&, void)
@@ -2273,7 +2272,7 @@ IMPL_LINK(ColorWindow, AutoColorClickHdl, weld::Button&, rButton, void)
 
     maMenuButton.set_inactive();
 
-    aColorSelectFunction(sCommand, svx::NamedThemedColor::FromNamedColor(aNamedColor));
+    aColorSelectFunction(sCommand, aNamedColor);
 }
 
 IMPL_LINK_NOARG(ColorWindow, OpenPickerClickHdl, weld::Button&, void)
@@ -4205,7 +4204,7 @@ ListBoxColorWrapper::ListBoxColorWrapper(ColorListBox* pControl)
 }
 
 void ListBoxColorWrapper::operator()(
-    [[maybe_unused]] const OUString& /*rCommand*/, const svx::NamedThemedColor& rColor)
+    [[maybe_unused]] const OUString& /*rCommand*/, const NamedColor& rColor)
 {
     mpControl->Selected(rColor);
 }
@@ -4225,8 +4224,8 @@ void ColorListBox::SetSlotId(sal_uInt16 nSlotId, bool bShowNoneButton)
     m_bShowNoneButton = bShowNoneButton;
     m_xButton->set_popover(nullptr);
     m_xColorWindow.reset();
-    m_aSelectedColor = svx::NamedThemedColor::FromNamedColor(bShowNoneButton ? GetNoneColor() : GetAutoColor(m_nSlotId));
-    ShowPreview(m_aSelectedColor.ToNamedColor());
+    m_aSelectedColor = bShowNoneButton ? GetNoneColor() : GetAutoColor(m_nSlotId);
+    ShowPreview(m_aSelectedColor);
     createColorWindow();
 }
 
@@ -4241,7 +4240,7 @@ ColorListBox::ColorListBox(std::unique_ptr<weld::MenuButton> pControl,
     , m_aTopLevelParentFunction(std::move(aTopLevelParentFunction))
 {
     m_xButton->connect_toggled(LINK(this, ColorListBox, ToggleHdl));
-    m_aSelectedColor = svx::NamedThemedColor::FromNamedColor(GetAutoColor(m_nSlotId));
+    m_aSelectedColor = GetAutoColor(m_nSlotId);
     if (!pCache)
         LockWidthRequest(CalcBestWidthRequest());
     else
@@ -4250,7 +4249,7 @@ ColorListBox::ColorListBox(std::unique_ptr<weld::MenuButton> pControl,
         m_xPaletteManager.reset(pCache->m_xPaletteManager->Clone());
         m_xPaletteManager->SetColorSelectFunction(std::ref(m_aColorWrapper));
     }
-    ShowPreview(m_aSelectedColor.ToNamedColor());
+    ShowPreview(m_aSelectedColor);
 }
 
 IMPL_LINK(ColorListBox, ToggleHdl, weld::Toggleable&, rButton, void)
@@ -4296,7 +4295,7 @@ void ColorListBox::createColorWindow()
     m_xButton->set_popover(m_xColorWindow->getTopLevel());
     if (m_bShowNoneButton)
         m_xColorWindow->ShowNoneButton();
-    m_xColorWindow->SelectEntry(m_aSelectedColor.ToNamedColor());
+    m_xColorWindow->SelectEntry(m_aSelectedColor);
 }
 
 void ColorListBox::SelectEntry(const NamedColor& rColor)
@@ -4308,21 +4307,21 @@ void ColorListBox::SelectEntry(const NamedColor& rColor)
     }
     ColorWindow* pColorWindow = getColorWindow();
     pColorWindow->SelectEntry(rColor);
-    m_aSelectedColor = svx::NamedThemedColor::FromNamedColor(pColorWindow->GetSelectEntryColor());
-    ShowPreview(m_aSelectedColor.ToNamedColor());
+    m_aSelectedColor = pColorWindow->GetSelectEntryColor();
+    ShowPreview(m_aSelectedColor);
 }
 
 void ColorListBox::SelectEntry(const Color& rColor)
 {
     ColorWindow* pColorWindow = getColorWindow();
     pColorWindow->SelectEntry(rColor);
-    m_aSelectedColor = svx::NamedThemedColor::FromNamedColor(pColorWindow->GetSelectEntryColor());
-    ShowPreview(m_aSelectedColor.ToNamedColor());
+    m_aSelectedColor = pColorWindow->GetSelectEntryColor();
+    ShowPreview(m_aSelectedColor);
 }
 
-void ColorListBox::Selected(const svx::NamedThemedColor& rColor)
+void ColorListBox::Selected(const NamedColor& rColor)
 {
-    ShowPreview(rColor.ToNamedColor());
+    ShowPreview(rColor);
     m_aSelectedColor = rColor;
     if (m_aSelectedLink.IsSet())
         m_aSelectedLink.Call(*this);

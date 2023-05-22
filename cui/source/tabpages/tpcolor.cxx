@@ -210,9 +210,9 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
         ChangeColorModel();
 
         const Color aColor = pFillColorItem->GetColorValue();
-        svx::NamedThemedColor aThemedColor;
-        aThemedColor.m_aColor = aColor;
-        ChangeColor( aThemedColor );
+        NamedColor aNamedColor;
+        aNamedColor.m_aColor = aColor;
+        ChangeColor(aNamedColor);
         sal_Int32 nPos = FindInPalette( aColor );
 
         if ( nPos != -1 )
@@ -289,9 +289,9 @@ void SvxColorTabPage::Reset( const SfxItemSet* rSet )
     SetColorModel( eCM );
     ChangeColorModel();
 
-    svx::NamedThemedColor aThemedColor;
-    aThemedColor.m_aColor = aNewColor;
-    ChangeColor(aThemedColor);
+    NamedColor aColor;
+    aColor.m_aColor = aNewColor;
+    ChangeColor(aColor);
 
     UpdateModified();
 }
@@ -519,14 +519,14 @@ IMPL_LINK(SvxColorTabPage, SelectValSetHdl_Impl, ValueSet*, pValSet, void)
     {
         bThemePaletteSelected = maPaletteManager.IsThemePaletteSelected();
     }
-    svx::NamedThemedColor aThemedColor;
-    aThemedColor.m_aColor = aColor;
+    NamedColor aNamedColor;
+    aNamedColor.m_aColor = aColor;
     if (bThemePaletteSelected)
     {
-        PaletteManager::GetThemeIndexLumModOff(nPos, aThemedColor.m_nThemeIndex, aThemedColor.m_nLumMod, aThemedColor.m_nLumOff);
+        PaletteManager::GetThemeIndexLumModOff(nPos, aNamedColor.m_nThemeIndex, aNamedColor.m_nLumMod, aNamedColor.m_nLumOff);
     }
 
-    ChangeColor(aThemedColor, false);
+    ChangeColor(aNamedColor, false);
 
     if (pValSet == m_xValSetColorList.get())
     {
@@ -589,7 +589,7 @@ IMPL_STATIC_LINK_NOARG(SvxColorTabPage, OnMoreColorsClick, weld::Button&, void)
     comphelper::dispatchCommand(".uno:AdditionsDialog", aArgs);
 }
 
-void SvxColorTabPage::ChangeColor(const svx::NamedThemedColor &rNewColor, bool bUpdatePreset )
+void SvxColorTabPage::ChangeColor(const NamedColor &rNewColor, bool bUpdatePreset )
 {
     aPreviousColor = rNewColor.m_aColor;
     aCurrentColor = rNewColor;

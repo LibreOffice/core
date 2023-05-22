@@ -28,7 +28,7 @@ public:
             SvxColorToolBoxControl* pControl,
             OUString  rPropertyName);
 
-    void operator()(const OUString& rCommand, const svx::NamedThemedColor& rColor);
+    void operator()(const OUString& rCommand, const NamedColor& rColor);
         // ColorSelectFunction signature
 
     void updateModel(const rtl::Reference<::chart::ChartModel>& xModel);
