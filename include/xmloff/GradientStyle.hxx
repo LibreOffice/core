@@ -37,7 +37,7 @@ namespace com::sun::star {
 
 class XMLOFF_DLLPUBLIC XMLGradientStyleImport
 {
-    SvXMLImport& rImport;
+    SvXMLImport& m_rImport;
 
 public:
     XMLGradientStyleImport( SvXMLImport& rImport );
@@ -60,7 +60,7 @@ public:
 
 class XMLOFF_DLLPUBLIC XMLGradientStyleExport
 {
-    SvXMLExport& rExport;
+    SvXMLExport& m_rExport;
 
 public:
     XMLGradientStyleExport( SvXMLExport& rExport );

@@ -35,7 +35,7 @@ namespace com::sun::star {
 
 class XMLOFF_DLLPUBLIC XMLHatchStyleImport
 {
-    SvXMLImport& rImport;
+    SvXMLImport& m_rImport;
 
 public:
     XMLHatchStyleImport( SvXMLImport& rImport );
@@ -48,7 +48,7 @@ public:
 
 class XMLOFF_DLLPUBLIC XMLHatchStyleExport
 {
-    SvXMLExport& rExport;
+    SvXMLExport& m_rExport;
 
 public:
     XMLHatchStyleExport( SvXMLExport& rExport );
