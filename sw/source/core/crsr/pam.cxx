@@ -22,6 +22,7 @@
 #include <tools/gen.hxx>
 #include <editeng/protitem.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <unotools/configmgr.hxx>
 
 #include <cntfrm.hxx>
 #include <pagefrm.hxx>
@@ -874,7 +875,7 @@ bool SwPaM::HasReadonlySel(bool bFormView, bool const isReplace) const
     const bool bAtStartA = (pA != nullptr) && (pA->GetMarkStart() == *GetPoint());
     const bool bAtStartB = (pB != nullptr) && (pB->GetMarkStart() == *GetMark());
 
-    if (officecfg::Office::Common::Filter::Microsoft::Import::ForceImportWWFieldsAsGenericFields::get())
+    if (!utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Filter::Microsoft::Import::ForceImportWWFieldsAsGenericFields::get())
     {
         ; // allow editing all fields in generic mode
     }
