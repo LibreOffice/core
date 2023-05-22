@@ -24,6 +24,7 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
+#include <ftnfrm.hxx>
 
 namespace
 {
@@ -277,6 +278,32 @@ CPPUNIT_TEST_FIXTURE(Test, testWrapThroughLayoutInCell)
     // - attribute 'layoutInCell' of '//wp:anchor' incorrect value.
     // i.e. layoutInCell was disabled, leading to bad layout in Word.
     assertXPath(pXmlDoc, "//wp:anchor", "layoutInCell", "1");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, test3Endnotes)
+{
+    // Given a DOC file with 3 endnotes:
+    createSwDoc("3endnotes.doc");
+
+    // When laying out that document:
+    calcLayout();
+
+    // Then make sure that all 3 endnotes are on the last page, like in Word:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwPageFrame* pPage = pLayout->GetLastPage();
+    SwFootnoteContFrame* pFootnoteCont = pPage->FindFootnoteCont();
+    int nEndnotes = 0;
+    for (SwFrame* pLower = pFootnoteCont->GetLower(); pLower; pLower = pLower->GetNext())
+    {
+        ++nEndnotes;
+    }
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 3
+    // - Actual  : 1
+    // i.e. only 1 endnote was on the last page, the other 2 was not moved to the end of the
+    // document, which is incorrect.
+    CPPUNIT_ASSERT_EQUAL(3, nEndnotes);
 }
 }
 

@@ -1081,6 +1081,7 @@ public:
     ~WW8ScannerBase();
     bool AreThereFootnotes() const { return m_pFootnotePLCF->Count() > 0; };
     bool AreThereEndnotes()  const { return m_pEdnPLCF->Count() > 0; };
+    tools::Long GetEndnoteCount()  const { return m_pEdnPLCF->Count(); };
 
     //If you use WW8Fc2Cp you are almost certainly doing the wrong thing
     //when it comes to fastsaved files, avoid like the plague. For export
