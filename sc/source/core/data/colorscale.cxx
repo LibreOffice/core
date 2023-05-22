@@ -636,11 +636,15 @@ std::optional<Color> ScColorScaleFormat::GetColor( const ScAddress& rAddr ) cons
     double nValMax = CalcValue(nMin, nMax, itr);
     Color rColMax = (*itr)->GetColor();
 
+    // tdf#155321 for the last percentile value, use always the end of the color scale,
+    // i.e. not the first possible color in the case of repeating values
+    bool bEqual = COLORSCALE_PERCENTILE == (*itr)->GetType() && nVal == nMax && nVal == nValMax;
+
     ++itr;
-    while(itr != end() && nVal > nValMax)
+    while(itr != end() && (nVal > nValMax || bEqual))
     {
         rColMin = rColMax;
-        nValMin = nValMax;
+        nValMin = !bEqual ? nValMax : nValMax - 1;
         rColMax = (*itr)->GetColor();
         nValMax = CalcValue(nMin, nMax, itr);
         ++itr;
