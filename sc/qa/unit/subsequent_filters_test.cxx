@@ -123,6 +123,17 @@ void testContentImpl(ScDocument& rDoc, bool bCheckMergedCells)
 }
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf155321_CondFormatColor_XLSX)
+{
+    createScDoc("xlsx/tdf155321.xlsx");
+
+    ScDocument* pDoc = getScDoc();
+    ScConditionalFormat* pCondFormat = pDoc->GetCondFormat(0, 0, 0);
+    ScRefCellValue aCellB1(*pDoc, ScAddress(1, 0, 0));
+    Color aColor = pCondFormat->GetData(aCellB1, ScAddress(1, 0, 0)).mxColorScale.value();
+    CPPUNIT_ASSERT_EQUAL(Color(99, 190, 123), aColor);
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf138601_CondFormatXLSX)
 {
     createScDoc("xlsx/tdf138601.xlsx");
