@@ -1208,7 +1208,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
                     return;
                 maVisArea.Pos() = rRect.Pos();
             }
-            else
+            else if (!comphelper::LibreOfficeKit::isActive())
                 GetWin()->Invalidate( aRect );
         }
         else if ( !mnLockPaint ) //will be released in Unlock
