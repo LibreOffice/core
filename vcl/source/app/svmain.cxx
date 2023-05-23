@@ -27,6 +27,7 @@
 
 #include <desktop/exithelper.h>
 
+#include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/asyncnotification.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -595,6 +596,8 @@ void DeInitVCL()
 
     pSVData->maGDIData.maThemeDrawCommandsCache.clear();
     pSVData->maGDIData.maThemeImageCache.clear();
+
+    comphelper::AccessibleEventNotifier::shutdown();
 
     // Deinit Sal
     if (pSVData->mpDefInst)

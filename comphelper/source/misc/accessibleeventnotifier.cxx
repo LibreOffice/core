@@ -263,6 +263,11 @@ void AccessibleEventNotifier::addEvent( const TClientId _nClient, const Accessib
     }
 }
 
+void AccessibleEventNotifier::shutdown()
+{
+    gaClients.clear();
+}
+
 } // namespace comphelper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

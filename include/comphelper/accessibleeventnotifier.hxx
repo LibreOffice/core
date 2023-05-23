@@ -107,6 +107,9 @@ public:
         const TClientId _nClient,
         const css::accessibility::AccessibleEventObject& _rEvent );
 
+    // to be called at application shutdown to clear the static map, so we don't get crashes on shutdown
+    static void shutdown();
+
 };
 
 }   // namespace comphelper
