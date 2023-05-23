@@ -65,6 +65,8 @@
 #include <scmod.hxx>
 #include <fillinfo.hxx>
 #include <boost/functional/hash.hpp>
+#include <comphelper/lok.hxx>
+#include <tabvwsh.hxx>
 
 ScPatternAttr::ScPatternAttr( SfxItemSet&& pItemSet, const OUString& rStyleName )
     :   SfxSetItem  ( ATTR_PATTERN, std::move(pItemSet) ),
@@ -436,15 +438,30 @@ void ScPatternAttr::GetFont(
             if ( aBackColor == COL_TRANSPARENT ||
                     eAutoMode == SC_AUTOCOL_IGNOREBACK || eAutoMode == SC_AUTOCOL_IGNOREALL )
             {
-                if ( eAutoMode == SC_AUTOCOL_PRINT )
-                    aBackColor = COL_WHITE;
-                else if ( pBackConfigColor )
+                if (!comphelper::LibreOfficeKit::isActive())
                 {
-                    // pBackConfigColor can be used to avoid repeated lookup of the configured color
-                    aBackColor = *pBackConfigColor;
+                    if ( eAutoMode == SC_AUTOCOL_PRINT )
+                        aBackColor = COL_WHITE;
+                    else if ( pBackConfigColor )
+                    {
+                        // pBackConfigColor can be used to avoid repeated lookup of the configured color
+                        aBackColor = *pBackConfigColor;
+                    }
+                    else
+                        aBackColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
                 }
                 else
-                    aBackColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+                {
+                    // Get document color from current view instead
+                    SfxViewShell* pSfxViewShell = SfxViewShell::Current();
+                    ScTabViewShell* pViewShell = dynamic_cast<ScTabViewShell*>(pSfxViewShell);
+                    if (pViewShell)
+                    {
+                        const ScViewData& pViewData = pViewShell->GetViewData();
+                        const ScViewOptions& aViewOptions = pViewData.GetOptions();
+                        aBackColor = aViewOptions.GetDocColor();
+                    }
+                }
             }
 
             //  get system text color for comparison

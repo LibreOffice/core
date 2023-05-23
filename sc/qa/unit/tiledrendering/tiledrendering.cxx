@@ -128,6 +128,7 @@ public:
     void testUndoReordering();
     void testUndoReorderingRedo();
     void testUndoReorderingMulti();
+    void testGetViewRenderState();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnHeaders);
@@ -188,6 +189,7 @@ public:
     CPPUNIT_TEST(testUndoReordering);
     CPPUNIT_TEST(testUndoReorderingRedo);
     CPPUNIT_TEST(testUndoReorderingMulti);
+    CPPUNIT_TEST(testGetViewRenderState);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3225,6 +3227,37 @@ void ScTiledRenderingTest::testUndoReorderingMulti()
     CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 0, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString("CC"), pDoc->GetString(ScAddress(0, 2, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString("DD"), pDoc->GetString(ScAddress(0, 3, 0)));
+}
+
+void ScTiledRenderingTest::testGetViewRenderState()
+{
+    // Add an empty dark scheme to avoid a warning
+    svtools::EditableColorConfig aColorConfig;
+    aColorConfig.AddScheme(u"Dark");
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    int nFirstViewId = SfxLokHelper::getView();
+    ViewCallback aView1;
+
+    CPPUNIT_ASSERT_EQUAL(OString(";Default"), pModelObj->getViewRenderState());
+    // Create a second view
+    SfxLokHelper::createView();
+    ViewCallback aView2;
+    CPPUNIT_ASSERT_EQUAL(OString(";Default"), pModelObj->getViewRenderState());
+    // Set second view to dark scheme
+    {
+        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+            {
+                { "NewTheme", uno::Any(OUString("Dark")) },
+            }
+        );
+        dispatchCommand(mxComponent, ".uno:ChangeTheme", aPropertyValues);
+    }
+    CPPUNIT_ASSERT_EQUAL(OString(";Dark"), pModelObj->getViewRenderState());
+
+    // Switch back to first view and make sure it's the same
+    SfxLokHelper::setView(nFirstViewId);
+    CPPUNIT_ASSERT_EQUAL(OString(";Default"), pModelObj->getViewRenderState());
 }
 
 }

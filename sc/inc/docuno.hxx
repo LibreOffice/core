@@ -394,6 +394,9 @@ public:
 
     /// @see vcl::ITiledRenderable::completeFunction().
     virtual void completeFunction(const OUString& rFunctionName) override;
+
+    /// @see vcl::ITiledRenderable::getViewRenderState().
+    OString getViewRenderState() override;
 };
 
 class ScDrawPagesObj final : public cppu::WeakImplHelper<

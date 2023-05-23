@@ -1239,6 +1239,23 @@ void ScModelObj::completeFunction(const OUString& rFunctionName)
     }
 }
 
+OString ScModelObj::getViewRenderState()
+{
+    OStringBuffer aState;
+    ScViewData* pViewData = ScDocShell::GetViewData();
+
+    if (pViewData)
+    {
+        aState.append(';');
+
+        const ScViewOptions& aViewOptions = pViewData->GetOptions();
+        OString aThemeName = OUStringToOString(aViewOptions.GetColorSchemeName(), RTL_TEXTENCODING_UTF8);
+        aState.append(aThemeName);
+    }
+
+    return aState.makeStringAndClear();
+}
+
 void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
 {
     SolarMutexGuard aGuard;
