@@ -125,8 +125,7 @@ void XDatabaseRange::testGetFilterDescriptor()
 void XDatabaseRange::testGetImportDescriptor()
 {
     uno::Reference<sheet::XDatabaseRange> xDBRange(init("ImportDescriptor"), UNO_QUERY_THROW);
-    uno::Sequence<beans::PropertyValue> xImportDescr = xDBRange->getImportDescriptor();
-    (void)xImportDescr;
+    (void)xDBRange->getImportDescriptor();
 }
 
 void XDatabaseRange::testRefresh()

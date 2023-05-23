@@ -96,8 +96,7 @@ uno::Reference<uno::XInterface> ScDataPilotFieldObj::init()
 
     uno::Reference<sheet::XDataPilotTablesSupplier> xDPTS(xSheet, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XDataPilotTables> xDPT(xDPTS->getDataPilotTables(), uno::UNO_SET_THROW);
-    uno::Sequence<OUString> aElementNames = xDPT->getElementNames();
-    (void)aElementNames;
+    (void)xDPT->getElementNames();
 
     uno::Reference<sheet::XDataPilotDescriptor> xDPDsc(xDPT->getByName("DataPilot1"),
                                                        uno::UNO_QUERY_THROW);
