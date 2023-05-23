@@ -89,7 +89,7 @@ void SwView::SetZoom_( const Size &rEditSize, SvxZoomType eZoomType,
 {
     bool bUnLockView = !m_pWrtShell->IsViewLocked();
     m_pWrtShell->LockView( true );
-    m_pWrtShell->LockPaint();
+    m_pWrtShell->LockPaint(LockPaintReason::SetZoom);
 
     { // start of SwActContext scope
     SwActContext aActContext(m_pWrtShell.get());
@@ -225,7 +225,7 @@ void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, bool bViewOnly 
 {
     const bool bUnLockView = !m_pWrtShell->IsViewLocked();
     m_pWrtShell->LockView( true );
-    m_pWrtShell->LockPaint();
+    m_pWrtShell->LockPaint(LockPaintReason::ViewLayout);
 
     {
 

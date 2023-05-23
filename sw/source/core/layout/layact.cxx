@@ -2356,7 +2356,7 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
                     pViewImp->DeletePaintRegion();
 
                     // Cause a repaint with virtual device.
-                    rSh.LockPaint();
+                    rSh.LockPaint(LockPaintReason::SwLayIdle);
                     bUnlock = true;
                 }
 

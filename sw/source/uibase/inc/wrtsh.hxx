@@ -694,7 +694,7 @@ public:
                     m_pWrtSh->GetViewOptions()->IsShowOutlineContentVisibilityButton())
             {
                 m_pWrtSh->LockView(true);
-                m_pWrtSh->LockPaint();
+                m_pWrtSh->LockPaint(LockPaintReason::OutlineFolding);
                 m_pWrtSh->MakeAllFoldedOutlineContentVisible();
                 m_bScrollToCursor = bScrollToCursor;
                 m_bDone = true;

@@ -533,7 +533,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
 #endif
 
         SwWrtShell& rSh = GetWrtShell();
-        rSh.LockPaint();
+        rSh.LockPaint(LockPaintReason::InsertGraphic);
         rSh.StartAction();
 
         SwRewriter aRewriter;
@@ -681,7 +681,7 @@ void SwView::Execute(SfxRequest &rReq)
                     nPage++;
                 if (nPage != nOldPage)
                 {
-                    m_pWrtShell->LockPaint();
+                    m_pWrtShell->LockPaint(LockPaintReason::GotoPage);
                     if (IsDrawMode())
                         LeaveDrawCreate();
                     m_pWrtShell->EnterStdMode();

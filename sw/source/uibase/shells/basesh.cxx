@@ -630,7 +630,7 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
             if (rUndoRedo.GetLastUndoInfo(nullptr, &nUndoId, &rWrtShell.GetView()))
             {
                 for (SwViewShell& rShell : rWrtShell.GetRingContainer())
-                    rShell.LockPaint();
+                    rShell.LockPaint(LockPaintReason::Undo);
 
                 sal_uInt16 nUndoOffset = 0;
                 if (comphelper::LibreOfficeKit::isActive() && !bRepair && nCnt == 1)
@@ -666,7 +666,7 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
             if (rUndoRedo.GetFirstRedoInfo(nullptr, &nUndoId, &rWrtShell.GetView()))
             {
                 for (SwViewShell& rShell : rWrtShell.GetRingContainer())
-                    rShell.LockPaint();
+                    rShell.LockPaint(LockPaintReason::Redo);
                 rWrtShell.Do( SwWrtShell::REDO, nCnt );
                 for (SwViewShell& rShell : rWrtShell.GetRingContainer())
                     rShell.UnlockPaint();

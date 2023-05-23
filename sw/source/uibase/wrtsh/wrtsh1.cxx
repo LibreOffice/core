@@ -1113,7 +1113,7 @@ void SwWrtShell::InsertContentControl(SwContentControlType eType)
             SwRewriter aRewriter;
             aRewriter.AddRule(UndoArg1, SwResId(STR_GRAPHIC_DEFNAME));
             StartUndo(SwUndoId::INSERT, &aRewriter);
-            LockPaint();
+            LockPaint(LockPaintReason::InsertGraphic);
             StartAction();
             InsertGraphic(OUString(), OUString(), aBitmap, nullptr, RndStdIds::FLY_AS_CHAR);
 

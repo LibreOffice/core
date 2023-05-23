@@ -105,7 +105,7 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
     else if( !g_bFrameDrag && m_rView.GetDocShell()->IsReadOnly() &&
             OBJCNT_NONE != rSh.GetObjCntType( aDocPos, pObj ))
     {
-        rSh.LockPaint();
+        rSh.LockPaint(LockPaintReason::StartDrag);
         if( rSh.SelectObj( aDocPos, 0, pObj ))
             bStart = bDelSelect = true;
         else

@@ -144,7 +144,7 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
         // from the settings.
         if( rDCEvt.GetFlags() & AllSettingsFlags::STYLE )
         {
-            pSh->LockPaint();
+            pSh->LockPaint(LockPaintReason::DataChanged);
             bUnlockPaint = true;
             pSh->DeleteReplacementBitmaps();
             GetView().InvalidateBorder();               //Scrollbar work
@@ -155,7 +155,7 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
     case DataChangedEventType::DISPLAY:
     case DataChangedEventType::FONTS:
     case DataChangedEventType::FONTSUBSTITUTION:
-        pSh->LockPaint();
+        pSh->LockPaint(LockPaintReason::DataChanged);
         bUnlockPaint = true;
         GetView().GetDocShell()->UpdateFontList();  //e.g. printer change
         pSh->InvalidateLayout(true);

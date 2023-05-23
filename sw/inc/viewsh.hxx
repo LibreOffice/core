@@ -66,6 +66,25 @@ class SdrPaintWindow;
 class SwAccessibleMap;
 enum class Orientation;
 
+enum class LockPaintReason
+{
+    ViewLayout = 1,
+    OuterResize,
+    Undo,
+    Redo,
+    OutlineFolding,
+    EndSdrCreate,
+    SwLayIdle,
+    InvalidateLayout,
+    StartDrag,
+    DataChanged,
+    InsertFrame,
+    GotoPage,
+    InsertGraphic,
+    SetZoom,
+    ExampleFrame
+};
+
 namespace vcl
 {
     typedef OutputDevice RenderContext;
@@ -170,6 +189,8 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
 
     SAL_DLLPRIVATE void ImplApplyViewOptions( const SwViewOption &rOpt );
 
+    SAL_DLLPRIVATE void InvalidateAll(const std::vector<LockPaintReason>& rReasons);
+
 protected:
     static ShellResource*      spShellRes;      ///< Resources for the Shell.
     static vcl::DeleteOnDeinit< std::shared_ptr<weld::Window> > spCareDialog;    ///< Avoid this window.
@@ -180,6 +201,7 @@ protected:
 
     sal_uInt16 mnStartAction; ///< != 0 if at least one Action is active.
     sal_uInt16 mnLockPaint;   ///< != 0 if Paint is locked.
+    std::vector<LockPaintReason> maLockPaintReasons;
     bool      mbSelectAll; ///< Special select all mode: whole document selected, even if doc starts with table.
 
     /// The virtual device we paint to will end up on the screen.
@@ -471,10 +493,10 @@ public:
     bool IsViewLocked() const { return mbViewLocked; }
     void LockView( bool b )   { mbViewLocked = b;    }
 
-    inline void LockPaint();
+    inline void LockPaint(LockPaintReason eReason);
            void ImplLockPaint();
-    inline void UnlockPaint( bool bVirDev = false );
-           void ImplUnlockPaint( bool bVirDev );
+    inline void UnlockPaint(bool bVirDev = false );
+           void ImplUnlockPaint( const std::vector<LockPaintReason>& rReasons, bool bVirDev );
            bool IsPaintLocked() const { return mnLockPaint != 0; }
 
     // Get/set DrawView and PageView.
@@ -604,6 +626,7 @@ inline void SwViewShell::StartAction()
     if ( !mnStartAction++ )
         ImplStartAction();
 }
+
 inline void SwViewShell::EndAction( const bool bIdleEnd )
 {
     if( 0 == (mnStartAction - 1) )
@@ -611,16 +634,22 @@ inline void SwViewShell::EndAction( const bool bIdleEnd )
     --mnStartAction;
 }
 
-inline void SwViewShell::LockPaint()
+inline void SwViewShell::LockPaint(LockPaintReason eReason)
 {
+    maLockPaintReasons.push_back(eReason);
     if ( !mnLockPaint++ )
         ImplLockPaint();
 }
-inline void SwViewShell::UnlockPaint( bool bVirDev )
+
+inline void SwViewShell::UnlockPaint(bool bVirDev )
 {
     if ( 0 == --mnLockPaint )
-        ImplUnlockPaint( bVirDev );
+    {
+        ImplUnlockPaint(maLockPaintReasons, bVirDev);
+        maLockPaintReasons.clear();
+    }
 }
+
 inline const SfxItemPool& SwViewShell::GetAttrPool() const
 {
     return const_cast<SwViewShell*>(this)->GetAttrPool();
