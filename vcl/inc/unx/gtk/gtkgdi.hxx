@@ -201,6 +201,7 @@ private:
     static GtkStyleContext *mpRadioMenuItemRadioStyle;
     static GtkStyleContext *mpSeparatorMenuItemStyle;
     static GtkStyleContext *mpSeparatorMenuItemSeparatorStyle;
+    static gint mnVerticalSeparatorMinWidth;
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
     static tools::Rectangle NWGetScrollButtonRect( ControlPart nPart, tools::Rectangle aAreaRect );

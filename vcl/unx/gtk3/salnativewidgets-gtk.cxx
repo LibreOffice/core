@@ -91,6 +91,7 @@ GtkStyleContext* GtkSalGraphics::mpRadioMenuItemStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpRadioMenuItemRadioStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpSeparatorMenuItemStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpSeparatorMenuItemSeparatorStyle = nullptr;
+gint GtkSalGraphics::mnVerticalSeparatorMinWidth = 0;
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
 static void style_context_get_margin(GtkStyleContext *pContext, GtkBorder *pMargin)
@@ -1531,16 +1532,10 @@ static gfloat getArrowSize(GtkStyleContext* context)
 
 namespace
 {
-    void draw_vertical_separator(GtkStyleContext *context, cairo_t *cr, const tools::Rectangle& rControlRegion)
+    void draw_vertical_separator(GtkStyleContext *context, cairo_t *cr, const tools::Rectangle& rControlRegion, gint nSeparatorWidth)
     {
         tools::Long nX = 0;
         tools::Long nY = 0;
-
-        gint nSeparatorWidth = 1;
-
-        gtk_style_context_get(context,
-            gtk_style_context_get_state(context),
-            "min-width", &nSeparatorWidth, nullptr);
 
         gint nHalfSeparatorWidth = nSeparatorWidth / 2;
         gint nHalfRegionWidth = rControlRegion.GetWidth() / 2;
@@ -1854,14 +1849,14 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         break;
     case RenderType::ToolbarSeparator:
     {
-        draw_vertical_separator(context, cr, rControlRegion);
+        draw_vertical_separator(context, cr, rControlRegion, mnVerticalSeparatorMinWidth);
         break;
     }
     case RenderType::Separator:
         if (nPart == ControlPart::SeparatorHorz)
             draw_horizontal_separator(context, cr, rControlRegion);
         else
-            draw_vertical_separator(context, cr, rControlRegion);
+            draw_vertical_separator(context, cr, rControlRegion, mnVerticalSeparatorMinWidth);
         break;
     case RenderType::Arrow:
         gtk_render_arrow(context, cr,
@@ -2920,6 +2915,9 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     GtkToolItem *item = gtk_separator_tool_item_new();
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), item, -1);
     mpToolbarSeparatorStyle = gtk_widget_get_style_context(GTK_WIDGET(item));
+    gtk_style_context_get(mpToolbarSeparatorStyle,
+        gtk_style_context_get_state(mpToolbarSeparatorStyle),
+        "min-width", &mnVerticalSeparatorMinWidth, nullptr);
 
     GtkWidget *pButton = gtk_button_new();
     item = gtk_tool_button_new(pButton, nullptr);
