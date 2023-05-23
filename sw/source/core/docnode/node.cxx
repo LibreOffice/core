@@ -745,7 +745,7 @@ SwFrameFormat* SwNode::GetFlyFormat() const
         if( IsContentNode() )
         {
             SwContentFrame* pFrame = SwIterator<SwContentFrame, SwContentNode, sw::IteratorMode::UnwrapMulti>(*static_cast<const SwContentNode*>(this)).First();
-            if( pFrame )
+            if( pFrame && pFrame->FindFlyFrame())
                 pRet = pFrame->FindFlyFrame()->GetFormat();
         }
         if( !pRet )
