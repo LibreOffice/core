@@ -21,7 +21,7 @@ $(eval $(call gb_ExternalProject_use_nmake,libxml2,build))
 $(call gb_ExternalProject_get_state_target,libxml2,build):
 	$(call gb_ExternalProject_run,build,\
 		cscript /e:javascript configure.js \
-			iconv=no icu=yes sax1=yes $(if $(MSVC_USE_DEBUG_RUNTIME),run_debug=yes cruntime=/MDd) \
+			iconv=no icu=yes sax1=yes $(if $(MSVC_USE_DEBUG_RUNTIME),cruntime=/MDd) \
 			$(if $(filter TRUE,$(ENABLE_DBGUTIL)),debug=yes) \
 		&& nmake \
 	,win32)
@@ -36,7 +36,7 @@ $(call gb_ExternalProject_get_state_target,libxml2,build):
 			LDFLAGS="$(if $(SYSBASE),-L$(SYSBASE)/usr/lib)" \
 			CFLAGS="$(if $(SYSBASE),-I$(SYSBASE)/usr/include) $(if $(debug),-g)" \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
-		&& $(MAKE) \
+		&& $(MAKE) libxml2.la \
 	)
 endif
 
