@@ -131,34 +131,56 @@ extern "C"
 }
 #endif
 
+namespace {
+    struct CairoFontOptions
+    {
+        // https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/235
+        // I don't want to have CAIRO_ROUND_GLYPH_POS_ON set in the cairo
+        // surfaces font_options, but that's private, so tricky to achieve
+        cairo_font_options_t* mpRoundGlyphPosOffOptions;
+
+        CairoFontOptions()
+        {
+            // https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/235
+            // I don't want to have CAIRO_ROUND_GLYPH_POS_ON set in the cairo surfaces
+            // font_options when trying subpixel rendering, but that's a private
+            // feature of cairo_font_options_t, so tricky to achieve. Hack this by
+            // getting the font options of a backend known to set this private feature
+            // to CAIRO_ROUND_GLYPH_POS_OFF and then set to defaults the public
+            // features and the result can be merged with new font options to set
+            // CAIRO_ROUND_GLYPH_POS_OFF in those
+            mpRoundGlyphPosOffOptions = cairo_font_options_create();
+#if defined(CAIRO_HAS_SVG_SURFACE)
+            // svg, pdf and ps backends have CAIRO_ROUND_GLYPH_POS_OFF by default
+            cairo_surface_t* hack = cairo_svg_surface_create(nullptr, 1, 1);
+#elif defined(CAIRO_HAS_PDF_SURFACE)
+            cairo_surface_t* hack = cairo_pdf_surface_create(nullptr, 1, 1);
+#endif
+            cairo_surface_get_font_options(hack, mpRoundGlyphPosOffOptions);
+            cairo_surface_destroy(hack);
+            cairo_font_options_set_antialias(mpRoundGlyphPosOffOptions, CAIRO_ANTIALIAS_DEFAULT);
+            cairo_font_options_set_subpixel_order(mpRoundGlyphPosOffOptions, CAIRO_SUBPIXEL_ORDER_DEFAULT);
+            cairo_font_options_set_hint_style(mpRoundGlyphPosOffOptions, CAIRO_HINT_STYLE_DEFAULT);
+            cairo_font_options_set_hint_metrics(mpRoundGlyphPosOffOptions, CAIRO_HINT_METRICS_DEFAULT);
+        }
+        ~CairoFontOptions()
+        {
+            cairo_font_options_destroy(mpRoundGlyphPosOffOptions);
+        }
+        static const cairo_font_options_t *get()
+        {
+            static CairoFontOptions opts;
+            return opts.mpRoundGlyphPosOffOptions;
+        }
+    };
+}
+
 CairoTextRender::CairoTextRender()
 {
-    // https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/235
-    // I don't want to have CAIRO_ROUND_GLYPH_POS_ON set in the cairo surfaces
-    // font_options when trying subpixel rendering, but that's a private
-    // feature of cairo_font_options_t, so tricky to achieve. Hack this by
-    // getting the font options of a backend known to set this private feature
-    // to CAIRO_ROUND_GLYPH_POS_OFF and then set to defaults the public
-    // features and the result can be merged with new font options to set
-    // CAIRO_ROUND_GLYPH_POS_OFF in those
-    mpRoundGlyphPosOffOptions = cairo_font_options_create();
-#if defined(CAIRO_HAS_SVG_SURFACE)
-    // svg, pdf and ps backends have CAIRO_ROUND_GLYPH_POS_OFF by default
-    cairo_surface_t* hack = cairo_svg_surface_create(nullptr, 1, 1);
-#elif defined(CAIRO_HAS_PDF_SURFACE)
-    cairo_surface_t* hack = cairo_pdf_surface_create(nullptr, 1, 1);
-#endif
-    cairo_surface_get_font_options(hack, mpRoundGlyphPosOffOptions);
-    cairo_surface_destroy(hack);
-    cairo_font_options_set_antialias(mpRoundGlyphPosOffOptions, CAIRO_ANTIALIAS_DEFAULT);
-    cairo_font_options_set_subpixel_order(mpRoundGlyphPosOffOptions, CAIRO_SUBPIXEL_ORDER_DEFAULT);
-    cairo_font_options_set_hint_style(mpRoundGlyphPosOffOptions, CAIRO_HINT_STYLE_DEFAULT);
-    cairo_font_options_set_hint_metrics(mpRoundGlyphPosOffOptions, CAIRO_HINT_METRICS_DEFAULT);
 }
 
 CairoTextRender::~CairoTextRender()
 {
-    cairo_font_options_destroy(mpRoundGlyphPosOffOptions);
 }
 
 void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGraphics& rGraphics)
@@ -293,7 +315,7 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
             // CAIRO_ROUND_GLYPH_POS_OFF
             if (bResolutionIndependentLayoutEnabled)
             {
-                cairo_font_options_merge(pOptions, mpRoundGlyphPosOffOptions);
+                cairo_font_options_merge(pOptions, CairoFontOptions::get());
                 // tdf#153699 skip this with cairo 1.17.8 as it has a problem
                 // See: https://gitlab.freedesktop.org/cairo/cairo/-/issues/643
                 if (cairo_version() != CAIRO_VERSION_ENCODE(1,17,8))
