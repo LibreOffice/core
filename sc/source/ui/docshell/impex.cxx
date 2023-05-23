@@ -1033,11 +1033,14 @@ static bool lcl_PutString(
         return false;
     }
 
-    if ( nColFormat == SC_COL_TEXT )
+    // Resolves: tdf#114878 Add 'Evaluate formulas' option to CSV import and paste
+    // Only the optimization is backported from the tdf#114878 fix
+    const bool bForceFormulaText = (rStr[0] == '=');
+    if ( nColFormat == SC_COL_TEXT || bForceFormulaText )
     {
         double fDummy;
         sal_uInt32 nIndex = 0;
-        if (pFormatter->IsNumberFormat(rStr, nIndex, fDummy))
+        if (bForceFormulaText || pFormatter->IsNumberFormat(rStr, nIndex, fDummy))
         {
             // Set the format of this cell to Text.
             sal_uInt32 nFormat = pFormatter->GetStandardFormat(SvNumFormatType::TEXT);
