@@ -58,7 +58,7 @@ CollaboraOffice
             ADDSYSTEMINTEGRATION 1
             PACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@
             PACKAGEREVISION @LIBO_VERSION_PATCH@
-            LICENSENAME LGPL
+            LICENSENAME @LICENSE@
             ROOTMODULEGID gid_Module_Root
             GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
             SPELLCHECKERFILE spellchecker_selection.txt
@@ -101,7 +101,7 @@ LibreOfficeDev
             ADDSYSTEMINTEGRATION 1
             PACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
             PACKAGEREVISION {buildid}
-            LICENSENAME LGPL
+            LICENSENAME @LICENSE@
             ROOTMODULEGID gid_Module_Root
             GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
             SPELLCHECKERFILE spellchecker_selection.txt
@@ -139,7 +139,7 @@ LibreOffice_SDK
             DMG_VOLUMEEXTENSION SDK
             DATABASENAME libreoffice40sdk
             NO_README_IN_ROOTDIR 1
-            LICENSENAME LGPL
+            LICENSENAME @LICENSE@
             IGNOREDIRECTORYLAYER 1
             NOVERSIONINDIRNAME 0
             NOSPACEINDIRECTORYNAME 1
@@ -180,7 +180,7 @@ LibreOfficeDev_SDK
             DMG_VOLUMEEXTENSION SDK
             DATABASENAME libreoffice40devsdk
             NO_README_IN_ROOTDIR 1
-            LICENSENAME LGPL
+            LICENSENAME @LICENSE@
             IGNOREDIRECTORYLAYER 1
             NOVERSIONINDIRNAME 0
             NOSPACEINDIRECTORYNAME 1
