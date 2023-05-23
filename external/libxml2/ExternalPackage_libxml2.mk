@@ -21,7 +21,7 @@ else # COM=MSC
 $(eval $(call gb_ExternalPackage_add_file,libxml2,$(LIBO_URE_LIB_FOLDER)/libxml2.dll,win32/bin.msvc/libxml2.dll))
 endif
 else # OS!=WNT
-$(eval $(call gb_ExternalPackage_add_file,libxml2,$(LIBO_URE_LIB_FOLDER)/libxml2.so.2,.libs/libxml2.so.2.10.$(LIBXML_VERSION_MICRO)))
+$(eval $(call gb_ExternalPackage_add_file,libxml2,$(LIBO_URE_LIB_FOLDER)/libxml2.so.2,.libs/libxml2.so.2.11.$(LIBXML_VERSION_MICRO)))
 endif
 endif # DISABLE_DYNLOADING
 
