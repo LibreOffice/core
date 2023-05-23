@@ -14732,6 +14732,7 @@ dnl ===================================================================
 
 AC_MSG_CHECKING([MPL subset])
 MPL_SUBSET=
+LICENSE="LGPL"
 
 if test "$enable_mpl_subset" = "yes"; then
     mpl_error_string=
@@ -14783,12 +14784,14 @@ if test "$enable_mpl_subset" = "yes"; then
     fi
 
     MPL_SUBSET="TRUE"
+    LICENSE="MPL-2.0"
     AC_DEFINE(MPL_HAVE_SUBSET)
     AC_MSG_RESULT([only])
 else
     AC_MSG_RESULT([no restrictions])
 fi
 AC_SUBST(MPL_SUBSET)
+AC_SUBST(LICENSE)
 
 dnl ===================================================================
 
