@@ -23,7 +23,7 @@ diff -up win32/Makefile.msvc.dt win32/Makefile.msvc
  !if "$(STATIC)" == "1"
  LIBS = $(LIBS) advapi32.lib sicuuc.lib sicuin.lib sicudt.lib
  !else
-+!if "$(WITH_RUN_DEBUG)" == "1"
++!if "$(DEBUG)" == "1"
 +LIBS = $(LIBS) icuind.lib icuucd.lib icudtd.lib
 +!else
  LIBS = $(LIBS) icuuc.lib icuin.lib icudt.lib
