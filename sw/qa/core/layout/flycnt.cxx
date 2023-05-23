@@ -910,6 +910,17 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyObjectFormatter)
     CPPUNIT_ASSERT(pPage3);
     CPPUNIT_ASSERT(!pPage3->GetSortedObjs());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyNextLeafInSection)
+{
+    // Given a document with 4 pages: page 1 had a floating table, page 2 & 3 had a second floating
+    // table and finally page 4 is empty:
+    createSwDoc("floattable-next-leaf-in-section.docx");
+
+    // When calculating the layout:
+    // Then this never returned, the loop in SwFrame::GetNextFlyLeaf() never finished.
+    calcLayout();
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
