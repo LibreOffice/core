@@ -14,9 +14,9 @@
 #include <unx/gtk/gtkframe.hxx>
 #include <gtk/gtk.h>
 
-#include "a11y.hxx"
-
 #if GTK_CHECK_VERSION(4, 9, 0)
+
+#include "a11y.hxx"
 
 #define OOO_TYPE_FIXED (ooo_fixed_get_type())
 #define OOO_FIXED(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), OOO_TYPE_FIXED, OOoFixed))
