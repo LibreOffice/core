@@ -374,8 +374,9 @@ bool ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                 // #102812# convert quotes in IME text
                 // works on the last input character, this is especially in Korean text often done
                 // quotes that are inside of the string are not replaced!
+                // See also tdf#155350
                 const sal_Unicode nCharCode = aSel.Min().GetNode()->GetChar( aSel.Min().GetIndex() );
-                if ( ( GetStatus().DoAutoCorrect() ) && ( ( nCharCode == '\"' ) || ( nCharCode == '\'' ) ) )
+                if ( ( GetStatus().DoAutoCorrect() ) && SvxAutoCorrect::IsAutoCorrectChar(nCharCode) )
                 {
                     aSel = DeleteSelected( aSel );
                     aSel = AutoCorrect( aSel, nCharCode, mpIMEInfos->bWasCursorOverwrite );
