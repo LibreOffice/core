@@ -25,6 +25,7 @@
 #include <editeng/colritem.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/fhgtitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/printer.hxx>
 #include <vcl/cursor.hxx>
@@ -1122,7 +1123,21 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                             tools::Long nScreenY = aOutputData.nScrY;
 
                             rDevice.SetLineColor();
-                            rDevice.SetFillColor(pOtherEditView->GetBackgroundColor());
+                            SfxViewShell* pSfxViewShell = SfxViewShell::Current();
+                            ScTabViewShell* pCurrentViewShell = dynamic_cast<ScTabViewShell*>(pSfxViewShell);
+                            if (pCurrentViewShell)
+                            {
+                                const ScViewData& pViewData = pCurrentViewShell->GetViewData();
+                                const ScViewOptions& aViewOptions = pViewData.GetOptions();
+                                const ScPatternAttr* pPattern = rDoc.GetPattern( nCol1, nRow1, nTab );
+                                Color aCellColor = pPattern->GetItem(ATTR_BACKGROUND).GetColor();
+                                if (aCellColor.IsTransparent())
+                                {
+                                    aCellColor = aViewOptions.GetDocColor();
+                                }
+                                rDevice.SetFillColor(aCellColor);
+                                pOtherEditView->SetBackgroundColor(aCellColor);
+                            }
                             Point aStart = mrViewData.GetScrPos( nCol1, nRow1, eOtherWhich );
                             Point aEnd = mrViewData.GetScrPos( nCol2+1, nRow2+1, eOtherWhich );
 

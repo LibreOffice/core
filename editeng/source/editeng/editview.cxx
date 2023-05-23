@@ -719,6 +719,7 @@ void EditView::MoveParagraphs( tools::Long nDiff )
 void EditView::SetBackgroundColor( const Color& rColor )
 {
     pImpEditView->SetBackgroundColor( rColor );
+    pImpEditView->pEditEngine->SetBackgroundColor( rColor );
 }
 
 Color const & EditView::GetBackgroundColor() const
