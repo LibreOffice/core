@@ -1555,6 +1555,20 @@ SwLayoutFrame *SwFrame::GetNextFlyLeaf( MakePageType eMakePage )
     assert(pFly->IsFlySplitAllowed() && "GetNextFlyLeaf: fly split not allowed");
 
     SwTextFrame* pFlyAnchor = pFly->FindAnchorCharFrame();
+
+    if (!pFlyAnchor)
+    {
+        // In case our fly frame is split already, but not yet moved, then FindAnchorCharFrame()
+        // won't find the anchor, since it wants a follow anchor, but there is no follow anchor yet.
+        // In this case work with a plain anchor, so FindSctFrame() works to find out we're in a
+        // section.
+        auto pAnchorFrame = const_cast<SwFrame*>(pFly->GetAnchorFrame());
+        if (pAnchorFrame && pAnchorFrame->IsTextFrame())
+        {
+            pFlyAnchor = static_cast<SwTextFrame*>(pAnchorFrame);
+        }
+    }
+
     bool bBody = pFlyAnchor && pFlyAnchor->IsInDocBody();
     SwLayoutFrame *pLayLeaf = nullptr;
     // Look up the first candidate.
