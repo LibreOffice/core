@@ -917,8 +917,14 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testXHTMLUseCSS)
     CPPUNIT_ASSERT(aStream.indexOf("<span style=\"font-size:") != -1);
 }
 
-DECLARE_HTMLEXPORT_TEST(testReqIfList, "reqif-list.xhtml")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfList)
 {
+    setImportFilterOptions("xhtmlns=reqif-xhtml");
+    setImportFilterName("HTML (StarWriter)");
+    createSwDoc("reqif-list.xhtml");
+    setFilterOptions("xhtmlns=reqif-xhtml");
+    save(OUString::createFromAscii(mpFilter));
+
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
     sal_uInt64 nLength = pStream->TellEnd();
