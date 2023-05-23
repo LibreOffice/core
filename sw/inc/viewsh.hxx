@@ -187,7 +187,7 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
 
     SAL_DLLPRIVATE void ImplApplyViewOptions( const SwViewOption &rOpt );
 
-    SAL_DLLPRIVATE void InvalidateAll(const std::vector<LockPaintReason>& rReasons);
+    SAL_DLLPRIVATE void InvalidateAll(std::vector<LockPaintReason>& rReasons);
 
 protected:
     static ShellResource*      spShellRes;      ///< Resources for the Shell.
@@ -492,7 +492,7 @@ public:
     inline void LockPaint(LockPaintReason eReason);
            void ImplLockPaint();
     inline void UnlockPaint(bool bVirDev = false );
-           void ImplUnlockPaint( const std::vector<LockPaintReason>& rReasons, bool bVirDev );
+           void ImplUnlockPaint( std::vector<LockPaintReason>& rReasons, bool bVirDev );
            bool IsPaintLocked() const { return mnLockPaint != 0; }
 
     // Get/set DrawView and PageView.
