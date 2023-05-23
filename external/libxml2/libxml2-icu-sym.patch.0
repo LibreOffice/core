@@ -3,7 +3,7 @@ Find bundled ICU in workdir and use debug .libs when needed
 diff -up win32/Makefile.msvc.dt win32/Makefile.msvc
 --- win32/Makefile.msvc.dt	2014-07-18 19:00:23.372103963 +0200
 +++ win32/Makefile.msvc	2014-07-18 19:01:39.347982929 +0200
-@@ -45,6 +45,7 @@ CPPFLAGS = $(CPPFLAGS) /D "_REENTRANT"
+@@ -46,6 +46,7 @@ CPPFLAGS = $(CPPFLAGS) /D "_REENTRANT"
  CC = cl.exe
  CFLAGS = /nologo /D "_WINDOWS" /D "_MBCS" /D "NOLIBTOOL" /W3 /wd4244 /wd4267 $(CRUNTIME)
  CFLAGS = $(CFLAGS) /I$(XML_SRCDIR) /I$(XML_SRCDIR)\include /I$(INCPREFIX)
@@ -11,15 +11,17 @@ diff -up win32/Makefile.msvc.dt win32/Makefile.msvc
  !if "$(WITH_THREADS)" != "no"
  CFLAGS = $(CFLAGS) /D "_REENTRANT"
  !endif
-@@ -67,6 +68,7 @@ CFLAGS = $(CFLAGS) $(SOLARINC)
+@@ -62,7 +63,9 @@
  # The linker and its options.
  LD = link.exe
  LDFLAGS = /nologo /VERSION:$(LIBXML_MAJOR_VERSION).$(LIBXML_MINOR_VERSION)
 +LDFLAGS = $(LDFLAGS) /LIBPATH:$(WORKDIR)/UnpackedTarball/icu/source/lib
  LDFLAGS = $(LDFLAGS) /LIBPATH:$(BINDIR) /LIBPATH:$(LIBPREFIX)
++LDFLAGS = $(LDFLAGS) /DEBUG /OPT:REF
  LIBS =
  !if "$(WITH_FTP)" == "1" || "$(WITH_HTTP)" == "1"
-@@ -78,7 +78,11 @@ LIBS = $(LIBS) wsock32.lib ws2_32.lib
+ LIBS = $(LIBS) wsock32.lib ws2_32.lib
+@@ -74,9 +77,13 @@
  !if "$(STATIC)" == "1"
  LIBS = $(LIBS) advapi32.lib sicuuc.lib sicuin.lib sicudt.lib
  !else
@@ -27,7 +29,9 @@ diff -up win32/Makefile.msvc.dt win32/Makefile.msvc
 +LIBS = $(LIBS) icuind.lib icuucd.lib icudtd.lib
 +!else
  LIBS = $(LIBS) icuuc.lib icuin.lib icudt.lib
+ !endif
+ !endif
 +!endif
- !endif
- !endif
  !if "$(WITH_ZLIB)" == "1"
+ # could be named differently zdll or zlib
+ # LIBS = $(LIBS) zdll.lib
