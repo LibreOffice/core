@@ -62,7 +62,7 @@ SalGraphics::SalGraphics()
 
 bool SalGraphics::initWidgetDrawBackends(bool bForce)
 {
-    bool bFileDefinitionsWidgetDraw = !!getenv("VCL_DRAW_WIDGETS_FROM_FILE");
+    static bool bFileDefinitionsWidgetDraw = !!getenv("VCL_DRAW_WIDGETS_FROM_FILE");
 
     if (bFileDefinitionsWidgetDraw || bForce)
     {
