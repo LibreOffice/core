@@ -1065,7 +1065,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
 
     bool bUnLockView = !m_pWrtShell->IsViewLocked();
     m_pWrtShell->LockView( true );
-    m_pWrtShell->LockPaint();
+    m_pWrtShell->LockPaint(LockPaintReason::OuterResize);
 
     do {
         ++nCnt;

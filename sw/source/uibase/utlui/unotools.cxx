@@ -442,7 +442,7 @@ void SwOneExampleFrame::ClearDocument()
     {
         SwDoc* pDoc = pCursor->GetDoc();
         SwEditShell* pSh = pDoc->GetEditShell();
-        pSh->LockPaint();
+        pSh->LockPaint(LockPaintReason::ExampleFrame);
         pSh->StartAllAction();
         pSh->KillPams();
         pSh->ClearMark();

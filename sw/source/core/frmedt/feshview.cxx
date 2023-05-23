@@ -1928,7 +1928,7 @@ bool SwFEShell::ImpEndCreate()
         return true;
     }
 
-    LockPaint();
+    LockPaint(LockPaintReason::EndSdrCreate);
     StartAllAction();
 
     Imp()->GetDrawView()->UnmarkAll();

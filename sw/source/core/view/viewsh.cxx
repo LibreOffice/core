@@ -417,7 +417,7 @@ void SwViewShell::ImplLockPaint()
     Imp()->LockPaint();
 }
 
-void SwViewShell::ImplUnlockPaint( bool bVirDev )
+void SwViewShell::ImplUnlockPaint(const std::vector<LockPaintReason>& rReasons, bool bVirDev)
 {
     CurrShell aCurr( this );
     if ( GetWin() && GetWin()->IsVisible() )
@@ -459,7 +459,7 @@ void SwViewShell::ImplUnlockPaint( bool bVirDev )
             {
                 Imp()->UnlockPaint();
                 GetWin()->EnablePaint( true );
-                GetWin()->Invalidate( InvalidateFlags::Children );
+                InvalidateAll(rReasons);
             }
             pVout.disposeAndClear();
         }
@@ -467,11 +467,59 @@ void SwViewShell::ImplUnlockPaint( bool bVirDev )
         {
             Imp()->UnlockPaint();
             GetWin()->EnablePaint( true );
-            GetWin()->Invalidate( InvalidateFlags::Children );
+            InvalidateAll(rReasons);
         }
     }
     else
         Imp()->UnlockPaint();
+}
+
+namespace
+{
+    std::string_view to_string(LockPaintReason eReason)
+    {
+        switch(eReason)
+        {
+            case LockPaintReason::ViewLayout:
+                return "ViewLayout";
+            case LockPaintReason::OuterResize:
+                return "OuterResize";
+            case LockPaintReason::Undo:
+                return "Undo";
+            case LockPaintReason::Redo:
+                return "Redo";
+            case LockPaintReason::OutlineFolding:
+                return "OutlineFolding";
+            case LockPaintReason::EndSdrCreate:
+                return "EndSdrCreate";
+            case LockPaintReason::SwLayIdle:
+                return "SwLayIdle";
+            case LockPaintReason::InvalidateLayout:
+                return "InvalidateLayout";
+            case LockPaintReason::StartDrag:
+                return "StartDrag";
+            case LockPaintReason::DataChanged:
+                return "DataChanged";
+            case LockPaintReason::InsertFrame:
+                return "InsertFrame";
+            case LockPaintReason::GotoPage:
+                return "GotoPage";
+            case LockPaintReason::InsertGraphic:
+                return "InsertGraphic";
+            case LockPaintReason::SetZoom:
+                return "SetZoom";
+            case LockPaintReason::ExampleFrame:
+                return "ExampleFram";
+        }
+        return "";
+    };
+}
+
+void SwViewShell::InvalidateAll(const std::vector<LockPaintReason>& rReasons)
+{
+    for (const auto& reason : rReasons)
+        SAL_INFO("sw.core", "InvalidateAll because of: " << to_string(reason));
+    GetWin()->Invalidate(InvalidateFlags::Children);
 }
 
 bool SwViewShell::AddPaintRect( const SwRect & rRect )
@@ -2053,7 +2101,7 @@ void SwViewShell::InvalidateLayout( bool bSizeChanged )
         return;
     }
 
-    LockPaint();
+    LockPaint(LockPaintReason::InvalidateLayout);
     StartAction();
 
     SwPageFrame *pPg = static_cast<SwPageFrame*>(GetLayout()->Lower());
