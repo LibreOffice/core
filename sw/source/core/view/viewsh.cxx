@@ -480,7 +480,7 @@ void SwViewShell::ImplLockPaint()
     Imp()->LockPaint();
 }
 
-void SwViewShell::ImplUnlockPaint(const std::vector<LockPaintReason>& rReasons, bool bVirDev)
+void SwViewShell::ImplUnlockPaint(std::vector<LockPaintReason>& rReasons, bool bVirDev)
 {
     CurrShell aCurr( this );
     if ( GetWin() && GetWin()->IsVisible() )
@@ -578,11 +578,23 @@ namespace
     };
 }
 
-void SwViewShell::InvalidateAll(const std::vector<LockPaintReason>& rReasons)
+void SwViewShell::InvalidateAll(std::vector<LockPaintReason>& rReasons)
 {
+    assert(!rReasons.empty() && "there must be a reason to InvalidateAll");
+
     for (const auto& reason : rReasons)
         SAL_INFO("sw.core", "InvalidateAll because of: " << to_string(reason));
-    GetWin()->Invalidate(InvalidateFlags::Children);
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // https://github.com/CollaboraOnline/online/issues/6379
+        // ditch OuterResize as a reason to invalidate all in the online case
+        rReasons.erase(std::remove(rReasons.begin(), rReasons.end(), LockPaintReason::OuterResize), rReasons.end());
+    }
+
+    if (!rReasons.empty())
+        GetWin()->Invalidate(InvalidateFlags::Children);
+    rReasons.clear();
 }
 
 bool SwViewShell::AddPaintRect( const SwRect & rRect )
