@@ -2095,12 +2095,97 @@ Public Function Methods() As Variant
 					, &quot;EndExecute&quot; _
 					, &quot;Execute&quot; _
 					, &quot;GetTextsFromL10N&quot; _
+					, &quot;OrderTabs&quot; _
 					, &quot;Resize&quot; _
 					, &quot;SetPageManager&quot; _
 					, &quot;Terminate&quot; _
 					)
 
 End Function	&apos;	SFDialogs.SF_Dialog.Methods
+
+REM -----------------------------------------------------------------------------
+Public Function OrderTabs(ByRef Optional TabsList As Variant _
+							, ByVal Optional Start As Variant _
+							, ByVal Optional Increment As Variant _
+							) As Boolean
+&apos;&apos;&apos;	Set the tabulation index f a series of controls.
+&apos;&apos;&apos;	The sequence of controls are given as an array of control names from the first to the last.
+&apos;&apos;&apos;	Next controls will not be accessible (anymore ?) via the TAB key if &gt;=1 of next conditions is met:
+&apos;&apos;&apos;		- if they are not in the given list
+&apos;&apos;&apos;		- if their type is FixedLine, GroupBox or ProgressBar
+&apos;&apos;&apos;		- if the control is disabled
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		TabsList: an array of valid control names in the order of tabulation
+&apos;&apos;&apos;		Start: the tab index to be assigned to the 1st control in the list. Default = 1
+&apos;&apos;&apos;		Increment: the difference between 2 successive tab indexes. Default = 1
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		dialog.OredrTabs(Array(&quot;myListBox&quot;, &quot;myTextField&quot;, &quot;myNumericField&quot;), Start := 10)
+
+Dim bOrder As Boolean			&apos;	Return value
+Dim vControlNames As Variant	&apos;	List of control names in the dialog
+Dim oControl As Object			&apos;	A SF_DialogControl instance
+Dim bValid As Boolean			&apos;	When True, the considered control deserves a tab stop
+Dim iTabIndex As Integer		&apos;	The tab index to be set
+Dim vWrongTypes As Variant		&apos;	List of rejected control types
+Dim i As Long
+
+Const cstThisSub = &quot;SFDialogs.Dialog.OrderTabs&quot;
+Const cstSubArgs = &quot;TabsList, [Start=1], Încrement=1]&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bOrder = False
+
+Check:
+	If IsMissing(Start) Or IsEmpty(Start) Then Start = 1
+	If IsMissing(Increment) Or IsEmpty(Increment) Then Increment = 1
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not ScriptForge.SF_Utils._ValidateArray(TabsList, &quot;TabsList&quot;, 1, V_STRING, True) Then GoTo Finally
+		If Not SF_Utils._Validate(Start, &quot;Start&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+		If Not SF_Utils._Validate(Increment, &quot;Increment&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	End If
+
+Try:
+	vWrongTypes = Array(&quot;FixedLine&quot;, &quot;GroupBox&quot;, &quot;ProgressBar&quot;)
+
+	&apos;	Remove all existing tabulations
+	vControlNames = _DialogModel.getElementNames()
+	For i = 0 To UBound(vControlNames)
+		Set oControl = Controls(vControlNames(i))
+		With oControl._ControlModel
+			If Not ScriptForge.SF_Array.Contains(vWrongTypes, oControl._ControlType) Then
+				.TabStop = False
+				.TabIndex = -1
+			End If
+		End With
+	Next i
+
+	iTabIndex = Start
+
+	&apos;	Go through the candidate controls for being tabulated and set tabs
+	For i = LBound(TabsList) To UBound(TabsList)
+		Set oControl = Controls(TabsList(i))	&apos;	Error checking on input names happens here
+		With oControl._ControlModel
+			bValid = Not ScriptForge.SF_Array.Contains(vWrongTypes, oControl._ControlType)
+			If bValid Then bValid = .Enabled
+			If bValid Then
+				.TabStop = True
+				.TabIndex = iTabIndex
+				iTabIndex = iTabIndex + Increment
+			End If
+		End With
+	Next i
+
+	bOrder = True
+							
+Finally:
+	OrderTabs = bOrder
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDialogs.SF_Dialog.OrderTabls
 
 REM -----------------------------------------------------------------------------
 Public Function Properties() As Variant

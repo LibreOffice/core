@@ -426,7 +426,7 @@ Try:
 	End With
 
 	&apos;	Create the view and associate model and view
-	Set oView = oprocessManager.createInstance(cstDialogView)
+	Set oView = oProcessManager.createInstance(cstDialogView)
 	oView.setModel(oModel)
 
 	&apos;	Initialize the basic SF_Dialog instance to return to the user script

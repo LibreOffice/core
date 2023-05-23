@@ -1960,7 +1960,7 @@ Const cstSubArgs = &quot;&quot;
 						, CTLFORMATTEDFIELD, CTLHYPERLINK, CTLIMAGECONTROL, CTLLISTBOX, CTLNUMERICFIELD, CTLPATTERNFIELD _
 						, CTLRADIOBUTTON, CTLSCROLLBAR, CTLTABLECONTROL, CTLTEXTFIELD, CTLTIMEFIELD, CTLTREECONTROL
 					If oSession.HasUnoProperty(_ControlModel, &quot;TabIndex&quot;) Then
-						If CBool(_ControlModel.TabStop) Or IsEmpty(_ControlModel.TabStop) Then _PropertyGet = _ControlModel.TabIndex Else _PropertyGet = 0
+						If CBool(_ControlModel.TabStop) Or IsEmpty(_ControlModel.TabStop) Then _PropertyGet = _ControlModel.TabIndex Else _PropertyGet = -1
 					End If
 				Case Else	:	GoTo CatchType
 			End Select
@@ -2489,7 +2489,6 @@ Const cstSubArgs = &quot;Value&quot;
 		Case Else
 			bSet = False
 	End Select
-
 Finally:
 	_PropertySet = bSet
 	ScriptForge.SF_Utils._ExitFunction(cstThisSub)

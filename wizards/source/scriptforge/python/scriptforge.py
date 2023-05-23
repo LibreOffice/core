@@ -1977,6 +1977,9 @@ class SFDialogs:
             l10nobj = l10n.objectreference if isinstance(l10n, SFScriptForge.SF_L10N) else l10n
             return self.ExecMethod(self.vbMethod + self.flgObject, 'GetTextsFromL10N', l10nobj)
 
+        def OrderTabs(self, tabslist, start = 1, increment = 1):
+            return self.ExecMethod(self.vbMethod, 'OrderTabs', tabslist, start, increment)
+
         def Resize(self, left = -99999, top = -99999, width = -1, height = -1):
             return self.ExecMethod(self.vbMethod + self.flgHardCode, 'Resize', left, top, width, height)
 
