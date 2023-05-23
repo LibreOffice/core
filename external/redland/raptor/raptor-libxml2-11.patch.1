@@ -1,0 +1,15 @@
+--- raptor/src/raptor_libxml.c	2023-05-24 09:55:21.589275008 +0100
++++ raptor/src/raptor_libxml.c	2023-05-24 09:56:41.100324810 +0100
+@@ -246,9 +246,11 @@
+     
+     ret->owner = 1;
+ 
+-#if LIBXML_VERSION >= 20627
++#if LIBXML_VERSION >= 20627 && LIBXML_VERSION < 21100
+     /* Checked field was released in 2.6.27 on 2006-10-25
+      * http://git.gnome.org/browse/libxml2/commit/?id=a37a6ad91a61d168ecc4b29263def3363fff4da6
++     * and removed with
++     * https://gitlab.gnome.org/GNOME/libxml2/-/commit/ce76ebfd1312459951d555ad9d87fb9a89eede55
+      *
+      */
+ 
