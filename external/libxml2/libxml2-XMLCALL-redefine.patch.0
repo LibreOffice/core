@@ -1,0 +1,11 @@
+--- include/libxml/xmlexports.h	2023-05-24 12:48:46.179570708 +0100
++++ include/libxml/xmlexports.h	2023-05-24 12:48:56.563577488 +0100
+@@ -38,8 +38,6 @@
+ 
+ /** DOC_DISABLE */
+ /* Compatibility */
+-#define XMLCALL
+-#define XMLCDECL
+ #if !defined(LIBXML_DLL_IMPORT)
+ #define LIBXML_DLL_IMPORT XMLPUBVAR
+ #endif

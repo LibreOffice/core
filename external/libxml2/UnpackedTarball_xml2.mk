@@ -16,6 +16,7 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,xml2))
 $(eval $(call gb_UnpackedTarball_add_patches,xml2,\
 	external/libxml2/libxml2-global-symbols.patch \
 	external/libxml2/libxml2-vc10.patch \
+	external/libxml2/libxml2-XMLCALL-redefine.patch.0 \
 	$(if $(filter ANDROID,$(OS)),external/libxml2/libxml2-android.patch) \
 	external/libxml2/libxml2-icu.patch.0 \
 ))
