@@ -252,6 +252,8 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::AUTO_FIRST_LINE_INDENT_DISREGARD_LINE_SPACE:
             return mbAutoFirstLineIndentDisregardLineSpace;
         case DocumentSettingId::HYPHENATE_URLS: return mbHyphenateURLs;
+        case DocumentSettingId::DO_NOT_BREAK_WRAPPED_TABLES:
+            return mbDoNotBreakWrappedTables;
         case DocumentSettingId::WRAP_AS_CHAR_FLYS_LIKE_IN_OOXML: return mbWrapAsCharFlysLikeInOOXML;
         case DocumentSettingId::NO_NUMBERING_SHOW_FOLLOWBY: return mbNoNumberingShowFollowBy;
         case DocumentSettingId::DROP_CAP_PUNCTUATION: return mbDropCapPunctuation;
@@ -436,6 +438,10 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
 
         case DocumentSettingId::HYPHENATE_URLS:
             mbHyphenateURLs = value;
+            break;
+
+        case DocumentSettingId::DO_NOT_BREAK_WRAPPED_TABLES:
+            mbDoNotBreakWrappedTables = value;
             break;
 
         case DocumentSettingId::WRAP_AS_CHAR_FLYS_LIKE_IN_OOXML:
@@ -1054,10 +1060,17 @@ void sw::DocumentSettingManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbFootnoteInColumnToPageEnd"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::boolean(mbFootnoteInColumnToPageEnd).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbHyphenateURLs"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::boolean(mbHyphenateURLs).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbDoNotBreakWrappedTables"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::boolean(mbDoNotBreakWrappedTables).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mnImagePreferredDPI"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),

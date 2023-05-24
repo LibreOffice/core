@@ -394,7 +394,10 @@ void SwXMLExport::GetConfigurationSettings( Sequence < PropertyValue >& rProps)
     if (!xProps.is())
         return;
 
-    SvXMLUnitConverter::convertPropertySet( rProps, xProps );
+    static const std::initializer_list<std::u16string_view> vOmitFalseValues = {
+        u"DoNotBreakWrappedTables",
+    };
+    SvXMLUnitConverter::convertPropertySet( rProps, xProps, &vOmitFalseValues );
 
     // tdf#144532 if NoEmbDataSet was set, to indicate not to write an embedded
     // database for the case of a temporary mail merge preview document, then

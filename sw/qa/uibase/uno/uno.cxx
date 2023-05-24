@@ -510,6 +510,30 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetField)
                          aBookmark.get<std::string>("name"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testDoNotBreakWrappedTables)
+{
+    // Given an empty document:
+    createSwDoc();
+
+    // When checking the state of the DoNotBreakWrappedTables compat flag:
+    uno::Reference<lang::XMultiServiceFactory> xDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xSettings(
+        xDocument->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+    bool bDoNotBreakWrappedTables{};
+    // Without the accompanying fix in place, this test would have failed with:
+    // An uncaught exception of type com.sun.star.beans.UnknownPropertyException
+    // i.e. the compat flag was not recognized.
+    xSettings->getPropertyValue("DoNotBreakWrappedTables") >>= bDoNotBreakWrappedTables;
+    // Then make sure it's false by default:
+    CPPUNIT_ASSERT(!bDoNotBreakWrappedTables);
+
+    // And when setting DoNotBreakWrappedTables=true:
+    xSettings->setPropertyValue("DoNotBreakWrappedTables", uno::Any(true));
+    // Then make sure it gets enabled:
+    xSettings->getPropertyValue("DoNotBreakWrappedTables") >>= bDoNotBreakWrappedTables;
+    CPPUNIT_ASSERT(bDoNotBreakWrappedTables);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
