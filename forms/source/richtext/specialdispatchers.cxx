@@ -155,7 +155,7 @@ namespace frm
         {
             bool bEnable = true;
             OSL_VERIFY( pLookup->Value >>= bEnable );
-            if ( m_nAttributeId == SID_ATTR_PARA_SCRIPTSPACE )
+            if ( m_nAttributeId == sal_uInt16(SID_ATTR_PARA_SCRIPTSPACE) )
                 return new SvxScriptSpaceItem( bEnable, static_cast<WhichId>(m_nAttributeId) );
             return new SfxBoolItem( static_cast<WhichId>(m_nAttributeId), bEnable );
         }

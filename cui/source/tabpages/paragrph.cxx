@@ -45,6 +45,9 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/keepitem.hxx>
+#include <editeng/scriptspaceitem.hxx>
+#include <editeng/hngpnctitem.hxx>
+#include <editeng/forbiddenruleitem.hxx>
 #include <svx/dlgutil.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <editeng/paravertalignitem.hxx>

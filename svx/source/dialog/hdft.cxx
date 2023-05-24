@@ -350,10 +350,8 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
                 pSharedFirst = static_cast<const SfxBoolItem*>(&rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_SHARED_FIRST ) ));
             const SvxSizeItem& rSize =
                 rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_SIZE ) );
-            const SvxULSpaceItem& rUL =
-                static_cast<const SvxULSpaceItem&>(rHeaderSet.Get( GetWhich( SID_ATTR_ULSPACE ) ));
-            const SvxLRSpaceItem& rLR =
-                static_cast<const SvxLRSpaceItem&>(rHeaderSet.Get( GetWhich( SID_ATTR_LRSPACE ) ));
+            const SvxULSpaceItem& rUL = rHeaderSet.Get( GetWhich( SID_ATTR_ULSPACE ) );
+            const SvxLRSpaceItem& rLR = rHeaderSet.Get( GetWhich( SID_ATTR_LRSPACE ) );
             if (m_xDynSpacingCB->get_visible())
             {
                 const SfxBoolItem& rDynSpacing =
@@ -861,10 +859,8 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
         {
             const SvxSizeItem& rSize =
                 rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_SIZE ) );
-            const SvxULSpaceItem& rUL = static_cast<const SvxULSpaceItem&>(
-                rHeaderSet.Get( GetWhich(SID_ATTR_ULSPACE ) ));
-            const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>(
-                rHeaderSet.Get( GetWhich( SID_ATTR_LRSPACE ) ));
+            const SvxULSpaceItem& rUL = rHeaderSet.Get( GetWhich(SID_ATTR_ULSPACE ) );
+            const SvxLRSpaceItem& rLR = rHeaderSet.Get( GetWhich( SID_ATTR_LRSPACE ) );
             tools::Long nDist = rUL.GetLower();
 
             m_aBspWin.SetHdHeight( rSize.GetSize().Height() - nDist );
@@ -901,10 +897,8 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
         {
             const SvxSizeItem& rSize =
                 rFooterSet.Get( GetWhich( SID_ATTR_PAGE_SIZE ) );
-            const SvxULSpaceItem& rUL = static_cast<const SvxULSpaceItem&>(
-                rFooterSet.Get( GetWhich( SID_ATTR_ULSPACE ) ));
-            const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>(
-                rFooterSet.Get( GetWhich( SID_ATTR_LRSPACE ) ));
+            const SvxULSpaceItem& rUL = rFooterSet.Get( GetWhich( SID_ATTR_ULSPACE ) );
+            const SvxLRSpaceItem& rLR = rFooterSet.Get( GetWhich( SID_ATTR_LRSPACE ) );
             tools::Long nDist = rUL.GetUpper();
 
             m_aBspWin.SetFtHeight( rSize.GetSize().Height() - nDist );

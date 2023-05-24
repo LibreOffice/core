@@ -106,10 +106,8 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
             const SvxSizeItem& rSize =
                 rHeaderSet.Get(pPool->GetWhich(SID_ATTR_PAGE_SIZE));
 
-            const SvxULSpaceItem& rUL = static_cast<const SvxULSpaceItem&>(rHeaderSet.Get(
-                                        pPool->GetWhich(SID_ATTR_ULSPACE)));
-            const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>(rHeaderSet.Get(
-                                        pPool->GetWhich(SID_ATTR_LRSPACE)));
+            const SvxULSpaceItem& rUL = rHeaderSet.Get(pPool->GetWhich(SID_ATTR_ULSPACE));
+            const SvxLRSpaceItem& rLR = rHeaderSet.Get(pPool->GetWhich(SID_ATTR_LRSPACE));
 
             SetHdHeight( rSize.GetSize().Height() - rUL.GetLower());
             SetHdDist( rUL.GetLower() );
@@ -144,10 +142,8 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
             const SvxSizeItem& rSize =
                 rFooterSet.Get( pPool->GetWhich( SID_ATTR_PAGE_SIZE ) );
 
-            const SvxULSpaceItem& rUL = static_cast<const SvxULSpaceItem&>(rFooterSet.Get(
-                                        pPool->GetWhich( SID_ATTR_ULSPACE ) ));
-            const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>(rFooterSet.Get(
-                                        pPool->GetWhich( SID_ATTR_LRSPACE ) ));
+            const SvxULSpaceItem& rUL = rFooterSet.Get(pPool->GetWhich( SID_ATTR_ULSPACE ) );
+            const SvxLRSpaceItem& rLR = rFooterSet.Get(pPool->GetWhich( SID_ATTR_LRSPACE ) );
 
             SetFtHeight( rSize.GetSize().Height() - rUL.GetUpper());
             SetFtDist( rUL.GetUpper() );

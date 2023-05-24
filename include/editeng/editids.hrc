@@ -22,18 +22,47 @@
 #include <svl/solar.hrc>
 
 class SfxGrabBagItem;
+class SfxInt16Item;
 class SfxUInt16Item;
+class SvxAdjustItem;
+class SvxAutoKernItem;
+class SvxBoxItem;
 class SvxBrushItem;
+class SvxCaseMapItem;
+class SvxCharHiddenItem;
+class SvxCharReliefItem;
+class SvxCharRotateItem;
+class SvxCharScaleWidthItem;
 class SvxColorItem;
+class SvxContourItem;
+class SvxCrossedOutItem;
+class SvxEmphasisMarkItem;
+class SvxEscapementItem;
+class SvxFontHeightItem;
 class SvxFontItem;
+class SvxForbiddenRuleItem;
+class SvxFormatKeepItem;
+class SvxFormatSplitItem;
+class SvxFrameDirectionItem;
+class SvxHangingPunctuationItem;
+class SvxHyphenZoneItem;
 class SvxKerningItem;
 class SvxLanguageItem;
 class SvxLineSpacingItem;
+class SvxLRSpaceItem;
+class SvxOverlineItem;
 class SvxPageModelItem;
+class SvxParaVertAlignItem;
 class SvxPostureItem;
+class SvxScriptSpaceItem;
+class SvxShadowItem;
+class SvxShadowedItem;
 class SvxTabStopItem;
+class SvxTwoLinesItem;
 class SvxUnderlineItem;
+class SvxULSpaceItem;
 class SvxWeightItem;
+class SvxWordLineModeItem;
 
 /*
   These SID_SVX_START entries came from include/svx/svxids.hrc, avoid
@@ -50,22 +79,22 @@ class SvxWeightItem;
 #define SID_ATTR_CHAR_FONT                              TypedWhichId<SvxFontItem>( SID_SVX_START + 7 )
 #define SID_ATTR_CHAR_POSTURE                           TypedWhichId<SvxPostureItem>( SID_SVX_START + 8 )
 #define SID_ATTR_CHAR_WEIGHT                            TypedWhichId<SvxWeightItem>( SID_SVX_START + 9 )
-#define SID_ATTR_CHAR_SHADOWED                          ( SID_SVX_START + 10 )
-#define SID_ATTR_CHAR_WORDLINEMODE                      ( SID_SVX_START + 11 )
-#define SID_ATTR_CHAR_CONTOUR                           ( SID_SVX_START + 12 )
-#define SID_ATTR_CHAR_STRIKEOUT                         ( SID_SVX_START + 13 )
+#define SID_ATTR_CHAR_SHADOWED                          TypedWhichId<SvxShadowedItem>( SID_SVX_START + 10 )
+#define SID_ATTR_CHAR_WORDLINEMODE                      TypedWhichId<SvxWordLineModeItem>( SID_SVX_START + 11 )
+#define SID_ATTR_CHAR_CONTOUR                           TypedWhichId<SvxContourItem>( SID_SVX_START + 12 )
+#define SID_ATTR_CHAR_STRIKEOUT                         TypedWhichId<SvxCrossedOutItem>( SID_SVX_START + 13 )
 #define SID_ATTR_CHAR_UNDERLINE                         TypedWhichId<SvxUnderlineItem>( SID_SVX_START + 14 )
-#define SID_ATTR_CHAR_FONTHEIGHT                        ( SID_SVX_START + 15 )
+#define SID_ATTR_CHAR_FONTHEIGHT                        TypedWhichId<SvxFontHeightItem>( SID_SVX_START + 15 )
   // free
 #define SID_ATTR_CHAR_COLOR                             TypedWhichId<SvxColorItem>( SID_SVX_START + 17 )
 #define SID_ATTR_CHAR_KERNING                           TypedWhichId<SvxKerningItem>( SID_SVX_START + 18 )
-#define SID_ATTR_CHAR_CASEMAP                           ( SID_SVX_START + 19 )
-#define SID_ATTR_CHAR_LANGUAGE                          ( SID_SVX_START + 20 )
-#define SID_ATTR_CHAR_ESCAPEMENT                        ( SID_SVX_START + 21 )
+#define SID_ATTR_CHAR_CASEMAP                           TypedWhichId<SvxCaseMapItem>( SID_SVX_START + 19 )
+#define SID_ATTR_CHAR_LANGUAGE                          TypedWhichId<SvxLanguageItem>( SID_SVX_START + 20 )
+#define SID_ATTR_CHAR_ESCAPEMENT                        TypedWhichId<SvxEscapementItem>( SID_SVX_START + 21 )
 #define SID_ATTR_CHAR_FONTLIST                          ( SID_SVX_START + 22 )
-#define SID_ATTR_BORDER_OUTER                           ( SID_SVX_START + 24 )
-#define SID_ATTR_BORDER_SHADOW                          ( SID_SVX_START + 25 )
-#define SID_ATTR_PARA_ADJUST                            ( SID_SVX_START + 27 )
+#define SID_ATTR_BORDER_OUTER                           TypedWhichId<SvxBoxItem>( SID_SVX_START + 24 )
+#define SID_ATTR_BORDER_SHADOW                          TypedWhichId<SvxShadowItem>( SID_SVX_START + 25 )
+#define SID_ATTR_PARA_ADJUST                            TypedWhichId<SvxAdjustItem>( SID_SVX_START + 27 )
 #define SID_ATTR_PARA_ADJUST_LEFT                       ( SID_SVX_START + 28 )
 #define SID_ATTR_PARA_ADJUST_RIGHT                      ( SID_SVX_START + 29 )
 #define SID_ATTR_PARA_ADJUST_CENTER                     ( SID_SVX_START + 30 )
@@ -76,8 +105,8 @@ class SvxWeightItem;
 #define SID_ATTR_PARA_LINESPACE_115                     ( SID_SVX_START + 26 )
 #define SID_ATTR_PARA_LINESPACE_20                      ( SID_SVX_START + 36 )
 #define SID_ATTR_PARA_PAGEBREAK                         ( SID_SVX_START + 37 )
-#define SID_ATTR_PARA_HYPHENZONE                        ( SID_SVX_START + 38 )
-#define SID_ATTR_PARA_SPLIT                             ( SID_SVX_START + 39 )
+#define SID_ATTR_PARA_HYPHENZONE                        TypedWhichId<SvxHyphenZoneItem>( SID_SVX_START + 38 )
+#define SID_ATTR_PARA_SPLIT                             TypedWhichId<SvxFormatSplitItem>( SID_SVX_START + 39 )
 #define SID_ATTR_PARA_ORPHANS                           ( SID_SVX_START + 40 )
 #define SID_ATTR_PARA_WIDOWS                            ( SID_SVX_START + 41 )
 #define SID_ATTR_PARA_ULSPACE                           ( SID_SVX_START + 42 )
@@ -86,60 +115,60 @@ class SvxWeightItem;
 #define SID_ATTR_PARA_RIGHTSPACE                        ( SID_SVX_START + 45 )
 #define SID_ATTR_PARA_FIRSTLINESPACE                    ( SID_SVX_START + 46 )
 #define SID_ATTR_PARA_BELOWSPACE                        ( SID_SVX_START + 47 )
-#define SID_ATTR_LRSPACE                                ( SID_SVX_START + 48 )
-#define SID_ATTR_ULSPACE                                ( SID_SVX_START + 49 )
+#define SID_ATTR_LRSPACE                                TypedWhichId<SvxLRSpaceItem>( SID_SVX_START + 48 )
+#define SID_ATTR_ULSPACE                                TypedWhichId<SvxULSpaceItem>( SID_SVX_START + 49 )
 #define SID_ATTR_PARA_ABOVESPACE                        ( SID_SVX_START + 64 )
 #define SID_ATTR_PARA_MODEL                             TypedWhichId<SvxPageModelItem>( SID_SVX_START + 65 )
-#define SID_ATTR_PARA_KEEP                              ( SID_SVX_START + 66 )
-#define SID_ATTR_CHAR_AUTOKERN                          ( SID_SVX_START + 67 )
+#define SID_ATTR_PARA_KEEP                              TypedWhichId<SvxFormatKeepItem>( SID_SVX_START + 66 )
+#define SID_ATTR_CHAR_AUTOKERN                          TypedWhichId<SvxAutoKernItem>( SID_SVX_START + 67 )
 #define SID_HANGING_INDENT                              ( SID_SVX_START + 68 )
 #define SID_ATTR_PARA_BULLET                            ( SID_SVX_START + 250 )
-#define SID_ATTR_PARA_OUTLLEVEL                         ( SID_SVX_START + 300 )
+#define SID_ATTR_PARA_OUTLLEVEL                         TypedWhichId<SfxInt16Item>( SID_SVX_START + 300 )
 #define SID_FIELD                                       ( SID_SVX_START + 363 ) // related to EE_FEATURE_FIELD
 #define SID_ATTR_PARA_REGISTER                          ( SID_SVX_START + 413 )
 #define SID_ATTR_PARA_PAGENUM                           ( SID_SVX_START + 457 )
 #define SID_ATTR_PARA_NUMRULE                           ( SID_SVX_START + 587 )
-#define SID_ATTR_BRUSH_CHAR                             ( SID_SVX_START + 591 )
+#define SID_ATTR_BRUSH_CHAR                             TypedWhichId<SvxBrushItem>( SID_SVX_START + 591 )
 #define SID_ATTR_NUMBERING_RULE                         TypedWhichId<SvxNumBulletItem>( SID_SVX_START + 855 )
 #define SID_ATTR_CHAR_CHARSETCOLOR                      ( SID_SVX_START + 877 )
-#define SID_ATTR_CHAR_CJK_FONT                          ( SID_SVX_START + 887 )
-#define SID_ATTR_CHAR_CJK_FONTHEIGHT                    ( SID_SVX_START + 888 )
+#define SID_ATTR_CHAR_CJK_FONT                          TypedWhichId<SvxFontItem>( SID_SVX_START + 887 )
+#define SID_ATTR_CHAR_CJK_FONTHEIGHT                    TypedWhichId<SvxFontHeightItem>( SID_SVX_START + 888 )
 #define SID_ATTR_CHAR_CJK_LANGUAGE                      TypedWhichId<SvxLanguageItem>( SID_SVX_START + 889 )
-#define SID_ATTR_CHAR_CJK_POSTURE                       ( SID_SVX_START + 890 )
-#define SID_ATTR_CHAR_CJK_WEIGHT                        ( SID_SVX_START + 891 )
-#define SID_ATTR_CHAR_CTL_FONT                          ( SID_SVX_START + 892 )
-#define SID_ATTR_CHAR_CTL_FONTHEIGHT                    ( SID_SVX_START + 893 )
+#define SID_ATTR_CHAR_CJK_POSTURE                       TypedWhichId<SvxPostureItem>( SID_SVX_START + 890 )
+#define SID_ATTR_CHAR_CJK_WEIGHT                        TypedWhichId<SvxWeightItem>( SID_SVX_START + 891 )
+#define SID_ATTR_CHAR_CTL_FONT                          TypedWhichId<SvxFontItem>( SID_SVX_START + 892 )
+#define SID_ATTR_CHAR_CTL_FONTHEIGHT                    TypedWhichId<SvxFontHeightItem>( SID_SVX_START + 893 )
 #define SID_ATTR_CHAR_CTL_LANGUAGE                      TypedWhichId<SvxLanguageItem>( SID_SVX_START + 894 )
-#define SID_ATTR_CHAR_CTL_POSTURE                       ( SID_SVX_START + 895 )
-#define SID_ATTR_CHAR_CTL_WEIGHT                        ( SID_SVX_START + 896 )
-#define SID_ATTR_CHAR_TWO_LINES                         ( SID_SVX_START + 897 )
+#define SID_ATTR_CHAR_CTL_POSTURE                       TypedWhichId<SvxPostureItem>( SID_SVX_START + 895 )
+#define SID_ATTR_CHAR_CTL_WEIGHT                        TypedWhichId<SvxWeightItem>( SID_SVX_START + 896 )
+#define SID_ATTR_CHAR_TWO_LINES                         TypedWhichId<SvxTwoLinesItem>( SID_SVX_START + 897 )
 #define SID_ATTR_CHAR_CJK_RUBY                          ( SID_SVX_START + 898 )
-#define SID_ATTR_CHAR_EMPHASISMARK                      ( SID_SVX_START + 899 )
-#define SID_ATTR_PARA_SCRIPTSPACE                       ( SID_SVX_START + 901 )
-#define SID_ATTR_PARA_HANGPUNCTUATION                   ( SID_SVX_START + 902 )
-#define SID_ATTR_PARA_FORBIDDEN_RULES                   ( SID_SVX_START + 903 )
+#define SID_ATTR_CHAR_EMPHASISMARK                      TypedWhichId<SvxEmphasisMarkItem>( SID_SVX_START + 899 )
+#define SID_ATTR_PARA_SCRIPTSPACE                       TypedWhichId<SvxScriptSpaceItem>( SID_SVX_START + 901 )
+#define SID_ATTR_PARA_HANGPUNCTUATION                   TypedWhichId<SvxHangingPunctuationItem>( SID_SVX_START + 902 )
+#define SID_ATTR_PARA_FORBIDDEN_RULES                   TypedWhichId<SvxForbiddenRuleItem>( SID_SVX_START + 903 )
 #define SID_ATTR_CHAR_VERTICAL                          ( SID_SVX_START + 905 )
-#define SID_ATTR_CHAR_ROTATED                           ( SID_SVX_START + 910 )
-#define SID_ATTR_CHAR_SCALEWIDTH                        ( SID_SVX_START + 911 )
+#define SID_ATTR_CHAR_ROTATED                           TypedWhichId<SvxCharRotateItem>( SID_SVX_START + 910 )
+#define SID_ATTR_CHAR_SCALEWIDTH                        TypedWhichId<SvxCharScaleWidthItem>( SID_SVX_START + 911 )
 #define SID_ATTR_CHAR_WIDTH_FIT_TO_LINE                 ( SID_SVX_START + 919 )
-#define SID_ATTR_CHAR_RELIEF                            ( SID_SVX_START + 920 )
-#define SID_PARA_VERTALIGN                              ( SID_SVX_START + 925 )
-#define SID_ATTR_FRAMEDIRECTION                         ( SID_SVX_START + 944 )
+#define SID_ATTR_CHAR_RELIEF                            TypedWhichId<SvxCharReliefItem>( SID_SVX_START + 920 )
+#define SID_PARA_VERTALIGN                              TypedWhichId<SvxParaVertAlignItem>( SID_SVX_START + 925 )
+#define SID_ATTR_FRAMEDIRECTION                         TypedWhichId<SvxFrameDirectionItem>( SID_SVX_START + 944 )
 #define SID_ATTR_PARA_SNAPTOGRID                        ( SID_SVX_START + 945 )
 #define SID_ATTR_PARA_LRSPACE_VERTICAL                  ( SID_SVX_START + 947 )
 #define SID_ATTR_PARA_LEFT_TO_RIGHT                     ( SID_SVX_START + 950 )
 #define SID_ATTR_PARA_RIGHT_TO_LEFT                     ( SID_SVX_START + 951 )
-#define SID_ATTR_CHAR_HIDDEN                            ( SID_SVX_START + 989 )
+#define SID_ATTR_CHAR_HIDDEN                            TypedWhichId<SvxCharHiddenItem>( SID_SVX_START + 989 )
 #define SID_ATTR_CHAR_LATIN_FONT                        ( SID_SVX_START + 994 )
-#define SID_ATTR_CHAR_LATIN_FONTHEIGHT                  ( SID_SVX_START + 995 )
+#define SID_ATTR_CHAR_LATIN_FONTHEIGHT                  TypedWhichId<SvxFontHeightItem>( SID_SVX_START + 995 )
 #define SID_ATTR_CHAR_LATIN_LANGUAGE                    ( SID_SVX_START + 996 )
-#define SID_ATTR_CHAR_LATIN_POSTURE                     ( SID_SVX_START + 997 )
+#define SID_ATTR_CHAR_LATIN_POSTURE                     TypedWhichId<SvxPostureItem>( SID_SVX_START + 997 )
 #define SID_ATTR_CHAR_LATIN_WEIGHT                      ( SID_SVX_START + 998 )
 #define SID_ATTR_CHAR_GRABBAG                           TypedWhichId<SfxGrabBagItem>( SID_SVX_START + 1142 )
 #define SID_ATTR_CHAR_BACK_COLOR                        ( SID_SVX_START + 1153 )
 
 // these ID didn't exist prior to the svx split, add new ids here
-#define SID_ATTR_CHAR_OVERLINE                          ( SID_EDIT_START + 68 )
+#define SID_ATTR_CHAR_OVERLINE                          TypedWhichId<SvxOverlineItem>( SID_EDIT_START + 68 )
 #define SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD               ( SID_EDIT_START + 69 )
 #define SID_ATTR_ALIGN_VER_JUSTIFY_METHOD               ( SID_EDIT_START + 70 )
 #define SID_ATTR_ALIGN_HOR_JUSTIFY                      ( SID_EDIT_START + 71 )

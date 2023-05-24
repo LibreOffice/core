@@ -94,8 +94,16 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     std::deque< std::unique_ptr<SvxRTFItemStackType> >  aAttrStack;
     SvxRTFItemStackList   m_AttrSetList;
 
-    std::map<sal_uInt16, sal_uInt16> aPlainMap;
-    std::map<sal_uInt16, sal_uInt16> aPardMap;
+    struct PlainOrPardMap
+    {
+        std::map<sal_uInt16, sal_uInt16> data;
+        template<class T>
+        TypedWhichId<T> operator[](TypedWhichId<T> in) const { return TypedWhichId<T>(data.at(in)); }
+        template<class T>
+        void set(TypedWhichId<T> in, TypedWhichId<T> out) { data[in] = out; }
+    };
+    PlainOrPardMap aPlainMap;
+    PlainOrPardMap aPardMap;
     WhichRangesContainer aWhichMap;
 
     std::optional<EditPosition> mxInsertPosition;
@@ -203,7 +211,8 @@ public:
     // The maps are not generated anew!
     void SetAttrPool( SfxItemPool* pNewPool )   { pAttrPool = pNewPool; }
     // to set different WhichIds for a different pool.
-    void SetPardMap(sal_uInt16 wid, sal_uInt16 widTrue) { aPardMap[wid] = widTrue; }
+    template<class T>
+    void SetPardMap(TypedWhichId<T> wid, TypedWhichId<T> widTrue) { aPardMap[wid] = widTrue; }
     // to be able to assign them from the outside as for example table cells
     void ReadBorderAttr( int nToken, SfxItemSet& rSet, bool bTableDef=false );
     void ReadBackgroundAttr( int nToken, SfxItemSet& rSet, bool bTableDef=false  );

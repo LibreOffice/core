@@ -597,8 +597,8 @@ const vcl::Font& SvxRTFParser::GetFont( sal_uInt16 nId )
     {
         return it->second;
     }
-    const SvxFontItem& rDfltFont = static_cast<const SvxFontItem&>(
-        pAttrPool->GetDefaultItem(aPlainMap[SID_ATTR_CHAR_FONT]));
+    const SvxFontItem& rDfltFont =
+        pAttrPool->GetDefaultItem(aPlainMap[SID_ATTR_CHAR_FONT]);
     pDfltFont->SetFamilyName( rDfltFont.GetStyleName() );
     pDfltFont->SetFamily( rDfltFont.GetFamily() );
     return *pDfltFont;
@@ -749,7 +749,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                     xNew->aAttrSet.SetParent( pOld->aAttrSet.GetParent() );
 
                     // Delete all paragraph attributes from xNew
-                    for (const auto& pair : aPardMap)
+                    for (const auto& pair : aPardMap.data)
                         if (sal_uInt16 wid = pair.second)
                             xNew->aAttrSet.ClearItem(wid);
                     xNew->SetRTFDefaults( GetRTFDefaults() );
@@ -918,7 +918,7 @@ void SvxRTFParser::BuildWhichTable()
     for (sal_uInt16 nWid : WIDS1)
     {
         sal_uInt16 nTrueWid = pAttrPool->GetTrueWhich(nWid, false);
-        aPardMap[nWid] = nTrueWid;
+        aPardMap.data[nWid] = nTrueWid;
         if (nTrueWid == 0)
             continue;
         aWhichMap = aWhichMap.MergeRange(nTrueWid, nTrueWid);
@@ -943,7 +943,7 @@ void SvxRTFParser::BuildWhichTable()
     for (sal_uInt16 nWid : WIDS)
     {
         sal_uInt16 nTrueWid = pAttrPool->GetTrueWhich(nWid, false);
-        aPlainMap[nWid] = nTrueWid;
+        aPlainMap.data[nWid] = nTrueWid;
         if (nTrueWid == 0)
             continue;
         aWhichMap = aWhichMap.MergeRange(nTrueWid, nTrueWid);

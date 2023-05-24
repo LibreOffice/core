@@ -2441,10 +2441,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             rSet.Put( SfxBoolItem(SID_ATTR_PAGE_HEADER, bHeaderOn ) );
             if(bHeaderOn)
             {
-                const SvxLRSpaceItem* pLR = static_cast<const SvxLRSpaceItem*>(
-                                            rHeader.GetHeaderFormat()->GetAttrSet().GetItem(SID_ATTR_LRSPACE));
-                const SvxULSpaceItem* pUL = static_cast<const SvxULSpaceItem*>(
-                                            rHeader.GetHeaderFormat()->GetAttrSet().GetItem(SID_ATTR_ULSPACE));
+                const SvxLRSpaceItem* pLR = rHeader.GetHeaderFormat()->GetAttrSet().GetItem(SID_ATTR_LRSPACE);
+                const SvxULSpaceItem* pUL = rHeader.GetHeaderFormat()->GetAttrSet().GetItem(SID_ATTR_ULSPACE);
                 if (pLR && pUL)
                 {
                     SvxLongLRSpaceItem aLR(pLR->GetLeft(), pLR->GetRight(), SID_ATTR_PAGE_HEADER_LRMARGIN);

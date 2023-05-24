@@ -632,8 +632,7 @@ sal_Int32 RtfSdrExport::StartShape()
                                                               m_rExport.GetCurrentEncoding()));
                 }
 
-                auto pFontHeight = static_cast<const SvxFontHeightItem*>(
-                    rItemSet.GetItem(SID_ATTR_CHAR_FONTHEIGHT));
+                auto pFontHeight = rItemSet.GetItem(SID_ATTR_CHAR_FONTHEIGHT);
                 if (pFontHeight)
                 {
                     tools::Long nFontHeight = TransformMetric(pFontHeight->GetHeight(),
