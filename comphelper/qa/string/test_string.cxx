@@ -50,7 +50,6 @@ public:
     void testReverseCodePoints();
     void testSplit();
     void testRemoveAny();
-    void testAdjustIndexToStartOfSurrogate();
 
     CPPUNIT_TEST_SUITE(TestString);
     CPPUNIT_TEST(testStripStart);
@@ -64,7 +63,6 @@ public:
     CPPUNIT_TEST(testReverseCodePoints);
     CPPUNIT_TEST(testSplit);
     CPPUNIT_TEST(testRemoveAny);
-    CPPUNIT_TEST(testAdjustIndexToStartOfSurrogate);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -237,24 +235,6 @@ void TestString::testRemoveAny()
     CPPUNIT_ASSERT_EQUAL(in, removeAny(in, test6));
     sal_Unicode const test7 [] = { 'A', 'B', 'C', 'a', 'b', 'c', 0 };
     CPPUNIT_ASSERT_EQUAL(OUString(), removeAny(in, test7));
-}
-
-void TestString::testAdjustIndexToStartOfSurrogate() {
-    CPPUNIT_ASSERT_EQUAL(
-        sal_Int32(0),
-        comphelper::string::adjustIndexToStartOfSurrogate("", 0));
-    CPPUNIT_ASSERT_EQUAL(
-        sal_Int32(0),
-        comphelper::string::adjustIndexToStartOfSurrogate(u"\U00010000", 0));
-    CPPUNIT_ASSERT_EQUAL(
-        sal_Int32(0),
-        comphelper::string::adjustIndexToStartOfSurrogate(u"\U00010000", 1));
-    CPPUNIT_ASSERT_EQUAL(
-        sal_Int32(2),
-        comphelper::string::adjustIndexToStartOfSurrogate(u"\U00010000", 2));
-    CPPUNIT_ASSERT_EQUAL(
-        sal_Int32(1),
-        comphelper::string::adjustIndexToStartOfSurrogate(u"\xD800", 1));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestString);

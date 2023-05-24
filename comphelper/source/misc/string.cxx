@@ -673,14 +673,6 @@ OUString sanitizeStringSurrogates(const OUString& rString)
     return rString;
 }
 
-sal_Int32 adjustIndexToStartOfSurrogate(OUString const & string, sal_Int32 index) {
-    assert(index >= 0 && index <= string.getLength());
-    return
-        (index > 0 && rtl::isHighSurrogate(string[index - 1])
-         && index < string.getLength() && rtl::isLowSurrogate(string[index]))
-        ? index - 1 : index;
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

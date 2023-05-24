@@ -384,19 +384,6 @@ COMPHELPER_DLLPUBLIC bool isdigitAsciiString(std::u16string_view rString);
  */
 COMPHELPER_DLLPUBLIC OUString sanitizeStringSurrogates(const OUString& rString);
 
-/** Adjust an index in case it points into the middle of a surrogate pair.
-
-    @param string  An OUString
-
-    @param index  A valid index into the string or to its end (i.e., must be in the range from zero
-    to the length of string, inclusive)
-
-    @return index - 1 if the original index pointed into the middle of a surrogate pair; otherwise
-    the unchanged index
- */
-COMPHELPER_DLLPUBLIC sal_Int32 adjustIndexToStartOfSurrogate(
-    OUString const & string, sal_Int32 index);
-
 } // namespace comphelper::string
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
