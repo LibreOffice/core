@@ -201,7 +201,7 @@ public:
     void                Connect() { GetRealObject(); }
 };
 
-class SVXCORE_DLLPUBLIC SdrIFrameLink final : public sfx2::SvBaseLink
+class SVX_DLLPUBLIC SdrIFrameLink final : public sfx2::SvBaseLink
 {
     SdrOle2Obj* m_pObject;
 
