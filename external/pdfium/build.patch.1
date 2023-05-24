@@ -1,9 +1,66 @@
 -*- Mode: diff -*-
+diff --git a/core/fpdfapi/font/cpdf_cidfont.cpp b/core/fpdfapi/font/cpdf_cidfont.cpp
+index f5a51b24e..8b308d0a6 100644
+--- a/core/fpdfapi/font/cpdf_cidfont.cpp
++++ b/core/fpdfapi/font/cpdf_cidfont.cpp
+@@ -755,7 +755,7 @@ int CPDF_CIDFont::GlyphFromCharCode(uint32_t charcode, bool* pVertGlyph) {
+         uint32_t maccode = CharCodeFromUnicodeForFreetypeEncoding(
+             FT_ENCODING_APPLE_ROMAN, name_unicode);
+         index = maccode ? FT_Get_Char_Index(face, maccode)
+-                        : FT_Get_Name_Index(face, name);
++                        : FT_Get_Name_Index(face, const_cast<char*>(name));
+       }
+       if (index == 0 || index == 0xffff)
+         return charcode ? static_cast<int>(charcode) : -1;
+diff --git a/core/fpdfapi/font/cpdf_truetypefont.cpp b/core/fpdfapi/font/cpdf_truetypefont.cpp
+index 0a59b54eb..a96e11759 100644
+--- a/core/fpdfapi/font/cpdf_truetypefont.cpp
++++ b/core/fpdfapi/font/cpdf_truetypefont.cpp
+@@ -91,7 +91,7 @@ void CPDF_TrueTypeFont::LoadGlyphMap() {
+               FT_ENCODING_APPLE_ROMAN,
+               m_Encoding.UnicodeFromCharCode(charcode));
+           if (!maccode) {
+-            m_GlyphIndex[charcode] = FT_Get_Name_Index(face, name);
++            m_GlyphIndex[charcode] = FT_Get_Name_Index(face, const_cast<char*>(name));
+           } else {
+             m_GlyphIndex[charcode] = FT_Get_Char_Index(face, maccode);
+           }
+@@ -105,7 +105,7 @@ void CPDF_TrueTypeFont::LoadGlyphMap() {
+         m_GlyphIndex[charcode] = FT_Get_Char_Index(face, 32);
+         continue;
+       }
+-      m_GlyphIndex[charcode] = FT_Get_Name_Index(face, name);
++      m_GlyphIndex[charcode] = FT_Get_Name_Index(face, const_cast<char*>(name));
+       if (m_GlyphIndex[charcode] != 0 || !bToUnicode)
+         continue;
+ 
+diff --git a/core/fpdfapi/font/cpdf_type1font.cpp b/core/fpdfapi/font/cpdf_type1font.cpp
+index 55510e7d7..2f13f00b8 100644
+--- a/core/fpdfapi/font/cpdf_type1font.cpp
++++ b/core/fpdfapi/font/cpdf_type1font.cpp
+@@ -263,7 +263,7 @@ void CPDF_Type1Font::LoadGlyphMap() {
+                                           static_cast<uint32_t>(charcode));
+       if (name) {
+         m_Encoding.SetUnicode(charcode, UnicodeFromAdobeName(name));
+-        m_GlyphIndex[charcode] = FT_Get_Name_Index(m_Font.GetFaceRec(), name);
++        m_GlyphIndex[charcode] = FT_Get_Name_Index(m_Font.GetFaceRec(), const_cast<char*>(name));
+       } else {
+         m_GlyphIndex[charcode] = FT_Get_Char_Index(
+             m_Font.GetFaceRec(), static_cast<uint32_t>(charcode));
+@@ -294,7 +294,7 @@ void CPDF_Type1Font::LoadGlyphMap() {
+       continue;
+ 
+     m_Encoding.SetUnicode(charcode, UnicodeFromAdobeName(name));
+-    m_GlyphIndex[charcode] = FT_Get_Name_Index(m_Font.GetFaceRec(), name);
++    m_GlyphIndex[charcode] = FT_Get_Name_Index(m_Font.GetFaceRec(), const_cast<char*>(name));
+     if (m_GlyphIndex[charcode] != 0)
+       continue;
+ 
 diff --git a/core/fpdfdoc/cpdf_metadata.cpp b/core/fpdfdoc/cpdf_metadata.cpp
-index 323de4ffc..f11a0b0ad 100644
+index 228a0c137..bf512beb3 100644
 --- a/core/fpdfdoc/cpdf_metadata.cpp
 +++ b/core/fpdfdoc/cpdf_metadata.cpp
-@@ -74,7 +74,7 @@ std::vector<UnsupportedFeature> CPDF_Metadata::CheckForSharedForm() const {
+@@ -77,7 +77,7 @@ std::vector<UnsupportedFeature> CPDF_Metadata::CheckForSharedForm() const {
    CFX_XMLParser parser(stream);
    std::unique_ptr<CFX_XMLDocument> doc = parser.Parse();
    if (!doc)
@@ -12,37 +69,11 @@ index 323de4ffc..f11a0b0ad 100644
  
    std::vector<UnsupportedFeature> unsupported;
    CheckForSharedFormInternal(doc->GetRoot(), &unsupported);
-diff --git a/third_party/base/span.h b/third_party/base/span.h
-index ec9f9903f..1c17ad091 100644
---- a/third_party/base/span.h
-+++ b/third_party/base/span.h
-@@ -208,7 +208,7 @@ class span {
-   // Conversions from spans of compatible types: this allows a span<T> to be
-   // seamlessly used as a span<const T>, but not the other way around.
-   template <typename U, typename = internal::EnableIfLegalSpanConversion<U, T>>
--  constexpr span(const span<U>& other) : span(other.data(), other.size()) {}
-+  span(const span<U>& other) : span(other.data(), other.size()) {}
-   span& operator=(const span& other) noexcept {
-     if (this != &other) {
-       ReleaseEmptySpan();
-diff --git a/third_party/base/span.h b/third_party/base/span.h
-index 0fb627ba8..dda1fc8bc 100644
---- a/third_party/base/span.h
-+++ b/third_party/base/span.h
-@@ -204,7 +204,7 @@ class span {
-   // size()|.
-   template <typename Container,
-             typename = internal::EnableIfSpanCompatibleContainer<Container, T>>
--  constexpr span(Container& container)
-+  span(Container& container)
-       : span(container.data(), container.size()) {}
-   template <
-       typename Container,
 diff --git a/core/fxcodec/jpx/cjpx_decoder.cpp b/core/fxcodec/jpx/cjpx_decoder.cpp
-index d8875786c..bc019ebe1 100644
+index 9391d61ab..490ce2230 100644
 --- a/core/fxcodec/jpx/cjpx_decoder.cpp
 +++ b/core/fxcodec/jpx/cjpx_decoder.cpp
-@@ -73,7 +73,7 @@ absl::optional<OpjImageRgbData> alloc_rgb(size_t size) {
+@@ -75,7 +75,7 @@ absl::optional<OpjImageRgbData> alloc_rgb(size_t size) {
    if (!data.b)
      return absl::nullopt;
  
@@ -52,10 +83,10 @@ index d8875786c..bc019ebe1 100644
  
  void sycc_to_rgb(int offset,
 diff --git a/core/fxge/cfx_font.cpp b/core/fxge/cfx_font.cpp
-index 8b3a72700..ea1db23f4 100644
+index a2a44df39..d6cedee46 100644
 --- a/core/fxge/cfx_font.cpp
 +++ b/core/fxge/cfx_font.cpp
-@@ -47,25 +47,9 @@ struct OUTLINE_PARAMS {
+@@ -48,25 +48,9 @@ struct OUTLINE_PARAMS {
  // TODO(crbug.com/pdfium/1400): When FT_Done_MM_Var() is more likely to be
  // available to all users in the future, remove FreeMMVar() and use
  // FT_Done_MM_Var() directly.
@@ -82,10 +113,10 @@ index 8b3a72700..ea1db23f4 100644
  
  FX_RECT FXRectFromFTPos(FT_Pos left, FT_Pos top, FT_Pos right, FT_Pos bottom) {
 diff --git a/third_party/base/numerics/safe_conversions_impl.h b/third_party/base/numerics/safe_conversions_impl.h
-index 4d8a7b7d9..d14c6dc06 100644
+index 44c921a14..0152a89b7 100644
 --- a/third_party/base/numerics/safe_conversions_impl.h
 +++ b/third_party/base/numerics/safe_conversions_impl.h
-@@ -88,7 +88,7 @@ constexpr typename std::make_unsigned<T>::type SafeUnsignedAbs(T value) {
+@@ -89,7 +89,7 @@ constexpr typename std::make_unsigned<T>::type SafeUnsignedAbs(T value) {
  
  // TODO(jschuh): Switch to std::is_constant_evaluated() once C++20 is supported.
  // Alternately, the usage could be restructured for "consteval if" in C++23.
@@ -94,57 +125,28 @@ index 4d8a7b7d9..d14c6dc06 100644
  
  // TODO(jschuh): Debug builds don't reliably propagate constants, so we restrict
  // some accelerated runtime paths to release builds until this can be forced
---- pdfium/core/fpdfapi/font/cpdf_cidfont.cpp.orig	2022-05-20 09:25:52.066728467 +0000
-+++ pdfium/core/fpdfapi/font/cpdf_cidfont.cpp	2022-05-20 09:25:56.146736531 +0000
-@@ -738,7 +738,7 @@
-         uint32_t maccode = CharCodeFromUnicodeForFreetypeEncoding(
-             FT_ENCODING_APPLE_ROMAN, name_unicode);
-         index = maccode ? FT_Get_Char_Index(face, maccode)
--                        : FT_Get_Name_Index(face, name);
-+                        : FT_Get_Name_Index(face, const_cast<char*>(name));
-       }
-       if (index == 0 || index == 0xffff)
-         return charcode ? static_cast<int>(charcode) : -1;
---- pdfium/core/fpdfapi/font/cpdf_type1font.cpp.orig	2022-05-20 09:26:59.090862058 +0000
-+++ pdfium/core/fpdfapi/font/cpdf_type1font.cpp	2022-05-20 09:27:33.810932435 +0000
-@@ -260,7 +260,7 @@
-                                           static_cast<uint32_t>(charcode));
-       if (name) {
-         m_Encoding.SetUnicode(charcode, UnicodeFromAdobeName(name));
--        m_GlyphIndex[charcode] = FT_Get_Name_Index(m_Font.GetFaceRec(), name);
-+        m_GlyphIndex[charcode] = FT_Get_Name_Index(m_Font.GetFaceRec(), const_cast<char*>(name));
-       } else {
-         m_GlyphIndex[charcode] = FT_Get_Char_Index(
-             m_Font.GetFaceRec(), static_cast<uint32_t>(charcode));
-@@ -291,7 +291,7 @@
-       continue;
+diff --git a/third_party/base/span.h b/third_party/base/span.h
+index ed2a3c8de..87493861c 100644
+--- a/third_party/base/span.h
++++ b/third_party/base/span.h
+@@ -211,7 +211,7 @@ class TRIVIAL_ABI GSL_POINTER span {
+ #else
+   template <typename Container,
+             typename = internal::EnableIfSpanCompatibleContainer<Container, T>>
+-  constexpr span(Container& container)
++  span(Container& container)
+       : span(container.data(), container.size()) {}
+ #endif
  
-     m_Encoding.SetUnicode(charcode, UnicodeFromAdobeName(name));
--    m_GlyphIndex[charcode] = FT_Get_Name_Index(m_Font.GetFaceRec(), name);
-+    m_GlyphIndex[charcode] = FT_Get_Name_Index(m_Font.GetFaceRec(), const_cast<char*>(name));
-     if (m_GlyphIndex[charcode] != 0)
-       continue;
- 
---- pdfium/core/fpdfapi/font/cpdf_truetypefont.cpp.orig	2022-05-20 09:26:12.066767996 +0000
-+++ pdfium/core/fpdfapi/font/cpdf_truetypefont.cpp	2022-05-20 09:26:46.690836923 +0000
-@@ -90,7 +90,7 @@
-               FT_ENCODING_APPLE_ROMAN,
-               m_Encoding.UnicodeFromCharCode(charcode));
-           if (!maccode) {
--            m_GlyphIndex[charcode] = FT_Get_Name_Index(face, name);
-+            m_GlyphIndex[charcode] = FT_Get_Name_Index(face, const_cast<char*>(name));
-           } else {
-             m_GlyphIndex[charcode] = FT_Get_Char_Index(face, maccode);
-           }
-@@ -104,7 +104,7 @@
-         m_GlyphIndex[charcode] = FT_Get_Char_Index(face, 32);
-         continue;
-       }
--      m_GlyphIndex[charcode] = FT_Get_Name_Index(face, name);
-+      m_GlyphIndex[charcode] = FT_Get_Name_Index(face, const_cast<char*>(name));
-       if (m_GlyphIndex[charcode] != 0 || !bToUnicode)
-         continue;
- 
+@@ -225,7 +225,7 @@ class TRIVIAL_ABI GSL_POINTER span {
+   // Conversions from spans of compatible types: this allows a span<T> to be
+   // seamlessly used as a span<const T>, but not the other way around.
+   template <typename U, typename = internal::EnableIfLegalSpanConversion<U, T>>
+-  constexpr span(const span<U>& other) : span(other.data(), other.size()) {}
++  span(const span<U>& other) : span(other.data(), other.size()) {}
+   span& operator=(const span& other) noexcept {
+     if (this != &other) {
+       ReleaseEmptySpan();
 diff --git a/third_party/libopenjpeg/openjpeg.c b/third_party/libopenjpeg/openjpeg.c
 index 29d3ee528..d5c7a1bc9 100644
 --- a/third_party/libopenjpeg/openjpeg.c

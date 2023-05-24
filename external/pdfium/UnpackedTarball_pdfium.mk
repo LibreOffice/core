@@ -14,14 +14,6 @@ pdfium_patches += build.patch.1
 # Avoids Windows 8 build dependency.
 pdfium_patches += windows7.patch.1
 pdfium_patches += c++20-comparison.patch
-# Use CoreGraphics.h instead of Carbon.h -- https://pdfium-review.googlesource.com/c/pdfium/+/99753
-# pdfium_patches += cg-instead-of-carbon.patch.1
-# Android NDK 19 - that is known to work well - does not have 2 defines -- https://pdfium-review.googlesource.com/c/pdfium/+/96530
-# pdfium_patches += AndroidNDK19.patch.1
-
-pdfium_patches += include.patch
-
-pdfium_patches += abseil-trivial.patch
 
 pdfium_patches += constexpr-template.patch
 
