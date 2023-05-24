@@ -13,6 +13,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
@@ -99,6 +100,24 @@ DECLARE_WW8EXPORT_TEST(testTdf90408B, "tdf90408B.doc")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("checkbox is 28pt", 28.f, getProperty<float>(xRun, "CharHeight"));
     xRun.set(getRun(xPara, 2, u" Κατάψυξη,  "), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("text is 10pt", 10.f, getProperty<float>(xRun, "CharHeight"));
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf155465_paraAdjustDistribute, "tdf155465_paraAdjustDistribute.doc")
+{
+    // Without the accompanying fix in place, this test would have failed with
+    // 'Expected: 2; Actual  : 0', i.e. the first paragraph's ParaAdjust was left, not block.
+    const style::ParagraphAdjust eBlock = style::ParagraphAdjust_BLOCK;
+    auto nAdjust = getProperty<sal_Int16>(getParagraph(1), "ParaAdjust");
+    CPPUNIT_ASSERT_EQUAL(eBlock, static_cast<style::ParagraphAdjust>(nAdjust));
+
+    nAdjust = getProperty<sal_Int16>(getParagraph(1), "ParaLastLineAdjust");
+    CPPUNIT_ASSERT_EQUAL(eBlock, static_cast<style::ParagraphAdjust>(nAdjust));
+
+    nAdjust = getProperty<sal_Int16>(getParagraph(2), "ParaAdjust");
+    CPPUNIT_ASSERT_EQUAL(eBlock, static_cast<style::ParagraphAdjust>(nAdjust));
+
+    nAdjust = getProperty<sal_Int16>(getParagraph(2), "ParaLastLineAdjust");
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_LEFT, static_cast<style::ParagraphAdjust>(nAdjust));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
