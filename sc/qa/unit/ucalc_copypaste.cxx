@@ -27,6 +27,7 @@
 #include <refundo.hxx>
 #include <scitems.hxx>
 #include <scopetools.hxx>
+#include <undomanager.hxx>
 
 #include <sfx2/docfile.hxx>
 
@@ -135,6 +136,7 @@ public:
 
     // tdf#80137
     void testCopyPasteMatrixFormula();
+    void testUndoBackgroundColor();
 
     CPPUNIT_TEST_SUITE(TestCopyPaste);
 
@@ -239,6 +241,7 @@ public:
     CPPUNIT_TEST(testMixDataWithFormulaTdf116413);
 
     CPPUNIT_TEST(testCopyPasteMatrixFormula);
+    CPPUNIT_TEST(testUndoBackgroundColor);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -10901,6 +10904,48 @@ void TestCopyPaste::testCopyPasteMatrixFormula()
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0, 2, 0)));
     // A4 Cell value should contain 3.0
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0, 3, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+void TestCopyPaste::testUndoBackgroundColor()
+{
+    m_pDoc->InsertTab(0, "Table1");
+
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+
+    // Set Values to B1, C2, D5
+    m_pDoc->SetValue(ScAddress(1, 0, 0), 1.0); // B1
+    m_pDoc->SetValue(ScAddress(2, 1, 0), 2.0); // C2
+    m_pDoc->SetValue(ScAddress(3, 4, 0), 3.0); // D5
+
+    // Add patterns
+    ScPatternAttr aCellBlueColor(m_pDoc->GetPool());
+    aCellBlueColor.GetItemSet().Put(SvxBrushItem(COL_BLUE, ATTR_BACKGROUND));
+    m_pDoc->ApplyPatternAreaTab(0, 3, m_pDoc->MaxCol(), 3, 0, aCellBlueColor);
+
+    // Insert a new row at row 3
+    ScRange aRowOne(0, 2, 0, m_pDoc->MaxCol(), 2, 0);
+    aMark.SetMarkArea(aRowOne);
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
+    rFunc.InsertCells(aRowOne, &aMark, INS_INSROWS_BEFORE, true, true);
+
+    // Check patterns
+    const SfxPoolItem* pItem = nullptr;
+    m_pDoc->GetPattern(ScAddress(1000, 4, 0))->GetItemSet().HasItem(ATTR_BACKGROUND, &pItem);
+    CPPUNIT_ASSERT(pItem);
+    CPPUNIT_ASSERT_EQUAL(COL_BLUE, static_cast<const SvxBrushItem*>(pItem)->GetColor());
+
+    // Undo the new row
+    m_pDoc->GetUndoManager()->Undo();
+
+    // Check patterns
+    // Failed if row 3 is not blue all the way through
+    pItem = nullptr;
+    m_pDoc->GetPattern(ScAddress(1000, 3, 0))->GetItemSet().HasItem(ATTR_BACKGROUND, &pItem);
+    CPPUNIT_ASSERT(pItem);
+    CPPUNIT_ASSERT_EQUAL(COL_BLUE, static_cast<const SvxBrushItem*>(pItem)->GetColor());
 
     m_pDoc->DeleteTab(0);
 }
