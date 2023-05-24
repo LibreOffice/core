@@ -47,7 +47,6 @@
 #include <rangecache.hxx>
 #include <refdata.hxx>
 
-#include <o3tl/safeint.hxx>
 #include <tools/fract.hxx>
 #include <editeng/editobj.hxx>
 #include <svl/sharedstring.hxx>
