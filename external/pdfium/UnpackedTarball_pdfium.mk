@@ -11,7 +11,6 @@ pdfium_patches :=
 pdfium_patches += ubsan.patch
 # Fixes build on our baseline.
 pdfium_patches += build.patch.1
-pdfium_patches += include.patch.1
 pdfium_patches += msvc2017.patch.1
 # Avoids Windows 8 build dependency.
 pdfium_patches += windows7.patch.1
