@@ -2192,11 +2192,11 @@ void ScModule::RegisterRefController(sal_uInt16 nSlotId, std::shared_ptr<SfxDial
 {
     std::vector<std::pair<std::shared_ptr<SfxDialogController>, weld::Window*>> & rlRefWindow = m_mapRefController[nSlotId];
 
-    if (std::find_if(rlRefWindow.begin(), rlRefWindow.end(),
+    if (std::none_of(rlRefWindow.begin(), rlRefWindow.end(),
                          [rWnd](const std::pair<std::shared_ptr<SfxDialogController>, weld::Window*>& rCandidate)
                          {
                              return rCandidate.first.get() == rWnd.get();
-                         }) == rlRefWindow.end())
+                         }))
     {
         rlRefWindow.emplace_back(rWnd, pWndAncestor);
     }

@@ -691,7 +691,7 @@ void GraphicFilter::MakeGraphicsAvailableThreaded(std::vector<Graphic*>& graphic
         {
             // Graphic objects share internal ImpGraphic, do not process any of those twice.
             const auto predicate = [graphic](Graphic* item) { return item->ImplGetImpGraphic() == graphic->ImplGetImpGraphic(); };
-            if( std::find_if(toLoad.begin(), toLoad.end(), predicate ) == toLoad.end())
+            if( std::none_of(toLoad.begin(), toLoad.end(), predicate ))
                 toLoad.push_back( graphic );
         }
     }
