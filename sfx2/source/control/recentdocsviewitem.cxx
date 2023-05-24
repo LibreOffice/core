@@ -213,6 +213,7 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
         aThumbnail = TemplateLocalView::scaleImg(aThumbnail, nThumbnailSize, nThumbnailSize);
 
         BitmapEx aModule = getModuleOverlay(rURL);
+        aModule.Scale(Size(48,48)); //tdf#155200: Thumbnails don't change their size so overlay must not too
         if (!aModule.IsEmpty())
         {
             const Size aSize(aThumbnail.GetSizePixel());
