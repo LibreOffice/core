@@ -691,6 +691,11 @@ void SwFlyNotify::ImplDestroy()
         }
         pFly->ResetNotifyBack();
     }
+    if (pFly->IsForceNotifyNewBackground())
+    {
+        pFly->NotifyBackground(pFly->FindPageFrame(), pFly->GetObjRectWithSpaces(), PrepareHint::FlyFrameArrive);
+        pFly->SetForceNotifyNewBackground(false);
+    }
 
     //Have the size or the position changed,
     //so should the view know this.

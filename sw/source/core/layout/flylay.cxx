@@ -220,7 +220,7 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
             else
                 // #i26791# - use new method <MakeObjPos()>
                 MakeObjPos();
-            if( aOldPos == aRectFnSet.GetPos(getFrameArea()) )
+            if (!IsForceNotifyNewBackground() && aOldPos == aRectFnSet.GetPos(getFrameArea()))
             {
                 if( !isFrameAreaPositionValid() && GetAnchorFrame()->IsInSct() &&
                     !GetAnchorFrame()->FindSctFrame()->isFrameAreaDefinitionValid() )

@@ -1682,6 +1682,12 @@ bool SwLayAction::FormatContent(SwPageFrame *const pPage)
                 pObj->InvalidateObjPos();
                 ::Notify_Background(pObj->GetDrawObj(), pPage,
                     pObj->GetObjRect(), PrepareHint::FlyFrameLeave, false);
+                // tdf#148897 in case the fly moves back to this page before
+                // being positioned again, the SwFlyNotify / ::Notify() could
+                // conclude that it didn't move at all and not call
+                // NotifyBackground(); note: pObj->SetObjTop(FAR_AWAY) results
+                // in wrong positions, use different approach!
+                pObj->SetForceNotifyNewBackground(true);
             }
             if (!moved.empty())
             {

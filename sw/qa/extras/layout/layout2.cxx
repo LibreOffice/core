@@ -12,6 +12,7 @@
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
@@ -142,6 +143,87 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf100680_as_char_wrap)
     auto pDump = parseLayoutDump();
     assertXPath(pDump, "/root/page/header/txt/SwParaPortion/SwLineLayout[3]");
     // If the third line missing that assert will fire, as was before the fix.
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf148897)
+{
+    createSwDoc("tdf148897.odt");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "/root/page[1]/sorted_objs/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/sorted_objs/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[3]/anchored/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[3]/sorted_objs/fly", 0);
+    assertXPath(pXmlDoc, "/root/page[3]/body/txt/anchored/fly", 0);
+    assertXPath(pXmlDoc, "/root/page[4]/sorted_objs/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[4]/body/txt[1]/anchored/fly", 1);
+    // fly portion exists, no overlapping text
+    assertXPath(pXmlDoc, "/root/page[4]/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwFixPortion",
+                "height", "5797");
+    assertXPath(pXmlDoc, "/root/page[5]/sorted_objs/fly", 0);
+    assertXPath(pXmlDoc, "/root/page", 5);
+
+    auto xModel = mxComponent.queryThrow<frame::XModel>();
+    uno::Reference<drawing::XShape> xShape(getShapeByName(u"Image3"));
+    uno::Reference<view::XSelectionSupplier> xCtrl(xModel->getCurrentController(), uno::UNO_QUERY);
+    xCtrl->select(uno::Any(xShape));
+
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "/root/page[1]/sorted_objs/fly", 0);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/anchored/fly", 0);
+    assertXPath(pXmlDoc, "/root/page[2]/sorted_objs/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/anchored/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[3]/sorted_objs/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[3]/body/txt[2]/anchored/fly", 1);
+    // fly portion exists, no overlapping text
+    assertXPath(pXmlDoc, "/root/page[3]/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwFixPortion",
+                "height", "5797");
+    assertXPath(pXmlDoc, "/root/page[4]/sorted_objs/fly", 0);
+    assertXPath(pXmlDoc, "/root/page[4]/body/txt/anchored/fly", 0);
+    assertXPath(pXmlDoc, "/root/page", 4);
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "/root/page[1]/sorted_objs/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/sorted_objs/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[3]/anchored/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[3]/sorted_objs/fly", 0);
+    assertXPath(pXmlDoc, "/root/page[3]/body/txt/anchored/fly", 0);
+    assertXPath(pXmlDoc, "/root/page[4]/sorted_objs/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[4]/body/txt[1]/anchored/fly", 1);
+    // fly portion exists, no overlapping text
+    assertXPath(pXmlDoc, "/root/page[4]/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwFixPortion",
+                "height", "5797");
+    assertXPath(pXmlDoc, "/root/page[5]/sorted_objs/fly", 0);
+    assertXPath(pXmlDoc, "/root/page", 5);
+
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "/root/page[1]/sorted_objs/fly", 0);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/anchored/fly", 0);
+    assertXPath(pXmlDoc, "/root/page[2]/sorted_objs/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/anchored/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[3]/sorted_objs/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[3]/body/txt[2]/anchored/fly", 1);
+    // fly portion exists, no overlapping text
+    assertXPath(pXmlDoc, "/root/page[3]/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwFixPortion",
+                "height", "5797");
+    assertXPath(pXmlDoc, "/root/page[4]/sorted_objs/fly", 0);
+    assertXPath(pXmlDoc, "/root/page[4]/body/txt/anchored/fly", 0);
+    assertXPath(pXmlDoc, "/root/page", 4);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineCharAttributes)
