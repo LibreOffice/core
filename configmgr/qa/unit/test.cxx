@@ -39,6 +39,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
+#include <cppu/unotype.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <osl/time.h>
 #include <rtl/ref.hxx>
@@ -214,13 +215,8 @@ void Test::testKeyFetch()
             s);
     }
     {
-        auto const v = getKey(
-            "/org.openoffice.Office.Embedding",
-            "MimeTypeClassIDRelations/['application/vnd.sun.xml.report.chart']");
-        OUString s;
-        CPPUNIT_ASSERT(v >>= s);
-        CPPUNIT_ASSERT_EQUAL(OUString("80243D39-6741-46C5-926E-069164FF87BB"), s);
-            // cf. officecfg/registry/data/org/openoffice/Office/Embedding.xcu
+        auto const v = getKey("/org.openoffice.System", "L10N/['Locale']");
+        CPPUNIT_ASSERT_EQUAL(cppu::UnoType<OUString>::get(), v.getValueType());
     }
 }
 
