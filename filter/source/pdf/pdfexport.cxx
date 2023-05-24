@@ -883,7 +883,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 aContext.BaseURL = xModel->getURL();
                 // relative link option is private to PDF Export filter and limited to local filesystem only
                 aContext.RelFsys = mbExportRelativeFsysLinks;
-                // determine the default acton for PDF links
+                // determine the default action for PDF links
                 switch( mnDefaultLinkAction )
                 {
                 default:
