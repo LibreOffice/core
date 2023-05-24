@@ -58,6 +58,10 @@ public:
 
     virtual void SAL_CALL alterColumnByIndex(
         sal_Int32 index, const css::uno::Reference<css::beans::XPropertySet>& descriptor) override;
+
+    /** returns the ALTER TABLE XXX statement
+    */
+    OUString getAlterTableColumnPart() const;
 };
 
 } // namespace connectivity::mysqlc

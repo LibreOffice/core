@@ -135,7 +135,7 @@ void SAL_CALL connectivity::mysqlc::Table::alterColumnByName(
     {
         OUString sNewColName;
         rDescriptor->getPropertyValue("Name") >>= sNewColName;
-        OUString sSql("ALTER TABLE `" + getName() + "` RENAME COLUMN `" + rColName + "` TO `"
+        OUString sSql(getAlterTableColumnPart() + " RENAME COLUMN `" + rColName + "` TO `"
                       + sNewColName + "`");
 
         getConnection()->createStatement()->execute(sSql);
@@ -153,6 +153,13 @@ void SAL_CALL connectivity::mysqlc::Table::alterColumnByIndex(
     alterColumnByName(comphelper::getString(xColumn->getPropertyValue(
                           OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),
                       descriptor);
+}
+
+OUString connectivity::mysqlc::Table::getAlterTableColumnPart() const
+{
+    return "ALTER TABLE "
+           + ::dbtools::composeTableName(getMetaData(), m_CatalogName, m_SchemaName, m_Name, true,
+                                         ::dbtools::EComposeRule::InTableDefinitions);
 }
 
 OUString connectivity::mysqlc::Table::getRenameStart() const { return "RENAME TABLE "; }
