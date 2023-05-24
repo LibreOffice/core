@@ -416,7 +416,7 @@ bool UndoManager::IsViewUndoActionIndependent(const SwView* pView, sal_uInt16& r
     for (size_t i = 0; i < GetRedoActionCount(); ++i)
     {
         auto pRedoAction = dynamic_cast<const SwUndo*>(GetRedoAction(i));
-        if (!pRedoAction || pViewSwAction->GetId() != SwUndoId::TYPING)
+        if (!pRedoAction || pRedoAction->GetId() != SwUndoId::TYPING)
         {
             return false;
         }
