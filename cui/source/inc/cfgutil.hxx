@@ -204,7 +204,7 @@ class CuiConfigGroupListBox
         css::uno::Reference< css::uno::XComponentContext > const & xCtx,
         std::u16string_view docName);
 
-    void InitModule();
+    sal_Int32 InitModule();
     void FillScriptList(const css::uno::Reference< css::script::browse::XBrowseNode >& xRootNode,
                         const weld::TreeIter* pParentEntry);
     void FillFunctionsList(const css::uno::Sequence< css::frame::DispatchInformation >& xCommands);
