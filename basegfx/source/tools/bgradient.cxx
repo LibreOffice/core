@@ -563,6 +563,100 @@ void BColorStops::reverseColorStops()
         candidate = BColorStop(1.0 - candidate.getStopOffset(), candidate.getStopColor());
 }
 
+// createSpaceAtStart creates fOffset space at start by
+// translating/scaling all entries to the right
+void BColorStops::createSpaceAtStart(double fOffset)
+{
+    // nothing to do if empty
+    if (empty())
+        return;
+
+    // correct offset to [0.0 .. 1.0]
+    fOffset = std::max(std::min(1.0, fOffset), 0.0);
+
+    // nothing to do if 0.0 == offset
+    if (basegfx::fTools::equalZero(fOffset))
+        return;
+
+    BColorStops aNewStops;
+
+    for (const auto& candidate : *this)
+    {
+        aNewStops.emplace_back(fOffset + (candidate.getStopOffset() * (1.0 - fOffset)),
+                               candidate.getStopColor());
+    }
+
+    *this = aNewStops;
+}
+
+// removeSpaceAtStart removes fOffset space from start by
+// translating/scaling entries more or equal to fOffset
+// to the left. Entries less than fOffset will be removed
+void BColorStops::removeSpaceAtStart(double fOffset)
+{
+    // nothing to do if empty
+    if (empty())
+        return;
+
+    // correct factor to [0.0 .. 1.0]
+    fOffset = std::max(std::min(1.0, fOffset), 0.0);
+
+    // nothing to do if fOffset == 0.0
+    if (basegfx::fTools::equalZero(fOffset))
+        return;
+
+    BColorStops aNewStops;
+    const double fMul(basegfx::fTools::equal(fOffset, 1.0) ? 1.0 : 1.0 / (1.0 - fOffset));
+
+    for (const auto& candidate : *this)
+    {
+        if (basegfx::fTools::moreOrEqual(candidate.getStopOffset(), fOffset))
+        {
+            aNewStops.emplace_back((candidate.getStopOffset() - fOffset) * fMul,
+                                   candidate.getStopColor());
+        }
+    }
+
+    *this = aNewStops;
+}
+
+// try to detect if an empty/no-color-change area exists
+// at the start and return offset to it. Returns 0.0 if not.
+double BColorStops::detectPossibleOffsetAtStart() const
+{
+    BColor aSingleColor;
+    const bool bSingleColor(isSingleColor(aSingleColor));
+
+    // no useful offset for single color
+    if (bSingleColor)
+        return 0.0;
+
+    // here we know that we have at least two colors, so we have a
+    // color change. Find colors left and right of that first color change
+    BColorStops::const_iterator aColorR(begin());
+    BColorStops::const_iterator aColorL(aColorR++);
+
+    // aColorR would 1st get equal to end(), so no need to also check aColorL
+    // for end(). Loop as long as same color. Since we *have* a color change
+    // not even aColorR can get equal to end() before color inequality, but
+    // keep for safety
+    while (aColorR != end() && aColorL->getStopColor() == aColorR->getStopColor())
+    {
+        aColorL++;
+        aColorR++;
+    }
+
+    // also for safety: access values at aColorL below *only*
+    // if not equal to end(), but can theoretically not happen
+    if (aColorL == end())
+    {
+        return 0.0;
+    }
+
+    // return offset (maybe 0.0 what is OK)
+    return aColorL->getStopOffset();
+}
+
 std::string BGradient::GradientStyleToString(css::awt::GradientStyle eStyle)
 {
     switch (eStyle)
@@ -757,7 +851,24 @@ css::awt::Gradient2 BGradient::getAsGradient2() const
     aRetval.StepCount = GetSteps();
 
     // for compatibility, still set StartColor/EndColor
-    // const basegfx::BColorStops& rColorStops(GetColorStops());
+    // NOTE: All code after adapting to multi color gradients works
+    //       using the ColorSteps, so in principle Start/EndColor might
+    //       be either
+    //        (a) ignored consequently everywhere or
+    //        (b) be set/added consequently everywhere
+    //       since this is - in principle - redundant data.
+    //       Be aware that e.g. cases like DrawingML::EqualGradients
+    //       and others would have to be identified and adapted (!)
+    //       Since awt::Gradient2 is UNO API data there might
+    //       be cases where just awt::Gradient is transferred, so (b)
+    //       is far better backwards compatible and thus more safe, so
+    //       all changes will make use of additionally using/setting
+    //       these additionally, but will only make use of the given
+    //       ColorSteps if these are not empty, assuming that these
+    //       already contain Start/EndColor.
+    //       In principle that redundancy and that it is conflict-free
+    //       could even be checked and asserted, but consequently using
+    //       (b) methodically should be safe.
     aRetval.StartColor
         = static_cast<sal_Int32>(ColorToBColorConverter(aColorStops.front().getStopColor()));
     aRetval.EndColor
@@ -765,9 +876,100 @@ css::awt::Gradient2 BGradient::getAsGradient2() const
 
     // fill ColorStops to extended Gradient2
     aRetval.ColorStops = aColorStops.getAsColorStopSequence();
-    // fillColorStopSequenceFromColorStops(rGradient2.ColorStops, rColorStops);
 
     return aRetval;
+}
+
+void BGradient::tryToRecreateBorder(basegfx::BColorStops* pAssociatedTransparencyStops)
+{
+    // border already set, do not try to recreate
+    if (0 != GetBorder())
+        return;
+
+    BColor aSingleColor;
+    const bool bSingleColor(GetColorStops().isSingleColor(aSingleColor));
+
+    // no need to recreate with single color
+    if (bSingleColor)
+        return;
+
+    const bool bIsAxial(css::awt::GradientStyle_AXIAL == GetGradientStyle());
+
+    if (bIsAxial)
+    {
+        // for axial due to reverse used gradient work reversed
+        aColorStops.reverseColorStops();
+        if (nullptr != pAssociatedTransparencyStops)
+            pAssociatedTransparencyStops->reverseColorStops();
+    }
+
+    // check if we have space at start of range [0.0 .. 1.0] that
+    // may be interpreted as 'border' -> same color. That may involve
+    // different scenarios, e.g. 1st index > 0.0, but also a non-zero
+    // number of same color entries, or a combination of both
+    const double fOffset(aColorStops.detectPossibleOffsetAtStart());
+
+    if (!basegfx::fTools::equalZero(fOffset))
+    {
+        // we have a border area, indeed re-create
+        aColorStops.removeSpaceAtStart(fOffset);
+        if (nullptr != pAssociatedTransparencyStops)
+            pAssociatedTransparencyStops->removeSpaceAtStart(fOffset);
+
+        // ...and create border value
+        SetBorder(static_cast<sal_uInt16>(fOffset * 100.0));
+    }
+
+    if (bIsAxial)
+    {
+        // take back reverse
+        aColorStops.reverseColorStops();
+        if (nullptr != pAssociatedTransparencyStops)
+            pAssociatedTransparencyStops->reverseColorStops();
+    }
+}
+
+void BGradient::tryToApplyBorder()
+{
+    // no border to apply, done
+    if (0 == GetBorder())
+        return;
+
+    // NOTE: no new start node is added. The new ColorStop
+    //       mechanism does not need entries at 0.0 and 1.0.
+    //       In case this is needed, do that in the caller
+    const double fOffset(GetBorder() * 0.01);
+
+    if (css::awt::GradientStyle_AXIAL == GetGradientStyle())
+    {
+        // for axial due to reverse used gradient work reversed
+        aColorStops.reverseColorStops();
+        aColorStops.createSpaceAtStart(fOffset);
+        aColorStops.reverseColorStops();
+    }
+    else
+    {
+        // apply border to GradientSteps
+        aColorStops.createSpaceAtStart(fOffset);
+    }
+
+    // set changed values
+    SetBorder(0);
+}
+
+void BGradient::tryToApplyStartEndIntensity()
+{
+    // already on default, nothing to apply
+    if (100 == GetStartIntens() && 100 == GetEndIntens())
+        return;
+
+    // apply 'old' blend stuff, blend against black
+    aColorStops.blendToIntensity(GetStartIntens() * 0.01, GetEndIntens() * 0.01,
+                                 BColor()); // COL_BLACK
+
+    // set values to default
+    SetStartIntens(100);
+    SetEndIntens(100);
 }
 }
 

@@ -186,18 +186,23 @@ namespace basegfx
 
     namespace utils
     {
-        /* Tooling method to extract data from given awt::Gradient2
+        /* Tooling method to extract data from given BGradient
            to ColorStops, doing some corrections, partially based
            on given SingleColor.
+           This is used for export preparations in case these exports
+           do neither support Start/EndIntensity nor Border settings,
+           both will be elliminated if possible (see below).
+           The BGradient rGradient and BColorStops& rColorStops
+           are both return parameters and may be changed.
            This will do quite some preparations for the gradient
            as follows:
            - It will check for single color (resetting rSingleColor when
              this is the case) and return with empty ColorStops
            - It will blend ColorStops to Intensity if StartIntensity/
-             EndIntensity != 100 is set in awt::Gradient2, so applying
+             EndIntensity != 100 is set in BGradient, so applying
              that value(s) to the gradient directly
            - It will adapt to Border if Border != 0 is set at the
-             given awt::Gradient2, so applying that value to the gradient
+             given BGradient, so applying that value to the gradient
              directly
         */
         BASEGFX_DLLPUBLIC void prepareColorStops(
