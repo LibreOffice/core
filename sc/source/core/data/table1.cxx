@@ -1851,8 +1851,13 @@ void ScTable::UpdateReference(
     }
     else
     {
-        for( SCCOL col : GetAllocatedColumnsRange( 0, rDocument.MaxCol()))
-            bUpdated |= aCol[col].UpdateReference(rCxt, pUndoDoc);
+        // When deleting row(s) or column(s), allocate the last column
+        // before updating the references
+        if (nDx < 0 || nDy < 0)
+            CreateColumnIfNotExists(rDocument.MaxCol());
+
+        for (SCCOL col : GetColumnsRange(0, rDocument.MaxCol()))
+            bUpdated |= CreateColumnIfNotExists(col).UpdateReference(rCxt, pUndoDoc);
     }
 
     if ( bIncludeDraw )
