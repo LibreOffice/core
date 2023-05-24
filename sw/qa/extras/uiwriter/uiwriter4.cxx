@@ -2345,6 +2345,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf113877_blank_bold_on)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf107975)
 {
+// Disable on Windows: fails quite a lot on multiple Jenkins slaves, but entirely reliably,
+// with:
+// sw/qa/extras/uiwriter/uiwriter4.cxx(2407) : error : Assertion
+// - Expected: 2
+// - Actual  : 1
+// i.e. the xIndexAccess->getCount() line.
+#if !defined(_WIN32)
     // This test also covers tdf#117185 tdf#110442
 
     createSwDoc("tdf107975.odt");
@@ -2416,6 +2423,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf107975)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
     dispatchCommand(mxComponent, ".uno:Undo", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+#endif
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf113877_blank_bold_off)
