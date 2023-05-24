@@ -13,6 +13,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 
@@ -52,6 +53,24 @@ DECLARE_WW8EXPORT_TEST(testTdf117994_CRnumformatting, "tdf117994_CRnumformatting
     CPPUNIT_ASSERT_EQUAL(OUString("1."), parseDump("//body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']", "expand"));
     //Without this fix in place, it would become 200 (and non-bold).
     CPPUNIT_ASSERT_EQUAL(OUString("160"), parseDump("//body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']", "font-height"));
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf155465_paraAdjustDistribute, "tdf155465_paraAdjustDistribute.doc")
+{
+    // Without the accompanying fix in place, this test would have failed with
+    // 'Expected: 2; Actual  : 0', i.e. the first paragraph's ParaAdjust was left, not block.
+    const style::ParagraphAdjust eBlock = style::ParagraphAdjust_BLOCK;
+    auto nAdjust = getProperty<sal_Int16>(getParagraph(1), "ParaAdjust");
+    CPPUNIT_ASSERT_EQUAL(eBlock, static_cast<style::ParagraphAdjust>(nAdjust));
+
+    nAdjust = getProperty<sal_Int16>(getParagraph(1), "ParaLastLineAdjust");
+    CPPUNIT_ASSERT_EQUAL(eBlock, static_cast<style::ParagraphAdjust>(nAdjust));
+
+    nAdjust = getProperty<sal_Int16>(getParagraph(2), "ParaAdjust");
+    CPPUNIT_ASSERT_EQUAL(eBlock, static_cast<style::ParagraphAdjust>(nAdjust));
+
+    nAdjust = getProperty<sal_Int16>(getParagraph(2), "ParaLastLineAdjust");
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_LEFT, static_cast<style::ParagraphAdjust>(nAdjust));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
