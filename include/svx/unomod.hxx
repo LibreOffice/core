@@ -42,7 +42,7 @@ protected:
     // not too hard to asl a UnoModel to hand back a DrawingLayer Model in the
     // form of an SdrModel. Thus, returning a reference and make usages
     // safer and easier is justified.
-    virtual SdrModel& getSdrModelFromUnoModel() const = 0; //TTTT make reference return
+    virtual SdrModel& getSdrModelFromUnoModel() const = 0;
 
 public:
     SvxUnoDrawMSFactory() noexcept {};
