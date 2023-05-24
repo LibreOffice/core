@@ -1308,6 +1308,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bCollapseEmptyCellPara = false;
     bool bAutoFirstLineIndentDisregardLineSpace = false;
     bool bHyphenateURLs = false;
+    bool bDoNotBreakWrappedTables = false;
     bool bDropCapPunctuation = false;
 
     const PropertyValue* currentDatabaseDataSource = nullptr;
@@ -1405,6 +1406,10 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                 else if (rValue.Name == "HyphenateURLs")
                 {
                     bHyphenateURLs = true;
+                }
+                else if (rValue.Name == "DoNotBreakWrappedTables")
+                {
+                    rValue.Value >>= bDoNotBreakWrappedTables;
                 }
                 else if ( rValue.Name == "DropCapPunctuation" )
                     bDropCapPunctuation = true;
@@ -1573,6 +1578,11 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if (!bHyphenateURLs)
     {
         xProps->setPropertyValue("HyphenateURLs", Any(true));
+    }
+
+    if (bDoNotBreakWrappedTables)
+    {
+        xProps->setPropertyValue("DoNotBreakWrappedTables", Any(true));
     }
 
     // LO 7.4 and previous versions had different drop cap punctuation: very long dashes.

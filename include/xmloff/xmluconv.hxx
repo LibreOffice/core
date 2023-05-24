@@ -288,7 +288,8 @@ public:
                                   sal_Int16 nType );
 
     static void convertPropertySet(css::uno::Sequence<css::beans::PropertyValue>& rProps,
-                        const css::uno::Reference<css::beans::XPropertySet>& aProperties);
+                        const css::uno::Reference<css::beans::XPropertySet>& aProperties,
+                        const std::initializer_list<std::u16string_view>* pOmitFalseValues = nullptr);
     static void convertPropertySet(css::uno::Reference<css::beans::XPropertySet> const & rProperties,
                         const css::uno::Sequence<css::beans::PropertyValue>& aProps);
 

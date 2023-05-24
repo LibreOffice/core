@@ -153,6 +153,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_IMAGE_PREFERRED_DPI,
     HANDLE_AUTO_FIRST_LINE_INDENT_DISREGARD_LINE_SPACE,
     HANDLE_HYPHENATE_URLS,
+    HANDLE_DO_NOT_BREAK_WRAPPED_TABLES,
     HANDLE_WORD_LIKE_WRAP_FOR_AS_CHAR_FLYS,
     HANDLE_NO_NUMBERING_SHOW_FOLLOWBY,
     HANDLE_DROP_CAP_PUNCTUATION
@@ -255,6 +256,7 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
         { OUString("ImagePreferredDPI"), HANDLE_IMAGE_PREFERRED_DPI, cppu::UnoType<sal_Int32>::get(), 0 },
         { OUString("AutoFirstLineIndentDisregardLineSpace"), HANDLE_AUTO_FIRST_LINE_INDENT_DISREGARD_LINE_SPACE, cppu::UnoType<bool>::get(), 0 },
         { OUString("HyphenateURLs"), HANDLE_HYPHENATE_URLS, cppu::UnoType<bool>::get(), 0 },
+        { OUString("DoNotBreakWrappedTables"), HANDLE_DO_NOT_BREAK_WRAPPED_TABLES, cppu::UnoType<bool>::get(), 0 },
         { OUString("WordLikeWrapForAsCharFlys"), HANDLE_WORD_LIKE_WRAP_FOR_AS_CHAR_FLYS, cppu::UnoType<bool>::get(), 0 },
         { OUString("NoNumberingShowFollowBy"), HANDLE_NO_NUMBERING_SHOW_FOLLOWBY, cppu::UnoType<bool>::get(), 0 },
         { OUString("DropCapPunctuation"), HANDLE_DROP_CAP_PUNCTUATION, cppu::UnoType<bool>::get(), 0 },
@@ -1068,6 +1070,16 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             }
         }
         break;
+        case HANDLE_DO_NOT_BREAK_WRAPPED_TABLES:
+        {
+            bool bTmp;
+            if (rValue >>= bTmp)
+            {
+                mpDoc->getIDocumentSettingAccess().set(
+                    DocumentSettingId::DO_NOT_BREAK_WRAPPED_TABLES, bTmp);
+            }
+        }
+        break;
         case HANDLE_WORD_LIKE_WRAP_FOR_AS_CHAR_FLYS:
         {
             bool bTmp;
@@ -1618,6 +1630,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(
                 DocumentSettingId::HYPHENATE_URLS);
+        }
+        break;
+        case HANDLE_DO_NOT_BREAK_WRAPPED_TABLES:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(
+                DocumentSettingId::DO_NOT_BREAK_WRAPPED_TABLES);
         }
         break;
         case HANDLE_WORD_LIKE_WRAP_FOR_AS_CHAR_FLYS:

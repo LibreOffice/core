@@ -49,6 +49,7 @@
 #include <basegfx/vector/b3dvector.hxx>
 
 #include <sax/tools/converter.hxx>
+#include <comphelper/sequence.hxx>
 
 
 using namespace com::sun::star;
@@ -778,7 +779,8 @@ void SvXMLUnitConverter::convertNumLetterSync( OUStringBuffer& rBuffer,
 }
 
 void SvXMLUnitConverter::convertPropertySet(uno::Sequence<beans::PropertyValue>& rProps,
-                    const uno::Reference<beans::XPropertySet>& aProperties)
+                    const uno::Reference<beans::XPropertySet>& aProperties,
+                    const std::initializer_list<std::u16string_view>* pOmitFalseValues)
 {
     uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = aProperties->getPropertySetInfo();
     if (!xPropertySetInfo.is())
@@ -787,14 +789,25 @@ void SvXMLUnitConverter::convertPropertySet(uno::Sequence<beans::PropertyValue>&
     const uno::Sequence< beans::Property > aProps = xPropertySetInfo->getProperties();
     if (aProps.hasElements())
     {
-        rProps.realloc(aProps.getLength());
-        beans::PropertyValue* pProps = rProps.getArray();
+        std::vector<beans::PropertyValue> aPropsVec;
         for (const auto& rProp : aProps)
         {
-            pProps->Name = rProp.Name;
-            pProps->Value = aProperties->getPropertyValue(rProp.Name);
-            ++pProps;
+            uno::Any aPropertyValue = aProperties->getPropertyValue(rProp.Name);
+            if (pOmitFalseValues && aPropertyValue.has<bool>() && !aPropertyValue.get<bool>())
+            {
+                const std::initializer_list<std::u16string_view>& rOmitFalseValues = *pOmitFalseValues;
+                if (std::find(rOmitFalseValues.begin(), rOmitFalseValues.end(), rProp.Name) != rOmitFalseValues.end())
+                {
+                    continue;
+                }
+            }
+
+            beans::PropertyValue aValue;
+            aValue.Name = rProp.Name;
+            aValue.Value = aPropertyValue;
+            aPropsVec.push_back(aValue);
         }
+        rProps = comphelper::containerToSequence(aPropsVec);
     }
 }
 

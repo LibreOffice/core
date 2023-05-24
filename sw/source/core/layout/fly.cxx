@@ -661,6 +661,12 @@ bool SwFlyFrame::IsFlySplitAllowed() const
         return false;
     }
 
+    const IDocumentSettingAccess& rIDSA = GetFormat()->getIDocumentSettingAccess();
+    if (rIDSA.get(DocumentSettingId::DO_NOT_BREAK_WRAPPED_TABLES))
+    {
+        return false;
+    }
+
     if (FindFooterOrHeader())
     {
         // Adding a new page would not increase the header/footer area.
