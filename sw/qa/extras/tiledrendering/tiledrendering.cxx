@@ -1321,6 +1321,48 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoReorderingRedo)
     SfxViewShell::Current()->setLibreOfficeKitViewCallback(nullptr);
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoReorderingRedo2)
+{
+    // Create two views.
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell1 = pXTextDocument->GetDocShell()->GetWrtShell();
+    int nView1 = SfxLokHelper::getView();
+    int nView2 = SfxLokHelper::createView();
+    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
+
+    // Type in the first view.
+    SfxLokHelper::setView(nView1);
+    pWrtShell1->SttEndDoc(/*bStt=*/true);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'f', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'f', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Type to the same paragraph in the second view.
+    SfxLokHelper::setView(nView2);
+    pWrtShell2->SttEndDoc(/*bStt=*/true);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 's', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 's', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Delete in the first view and undo.
+    SfxLokHelper::setView(nView1);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::BACKSPACE);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::BACKSPACE);
+    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Query the undo state, now that a "delete" is on the redo stack and an "insert" belongs to the
+    // view on the undo stack, so the types are different.
+    SwUndoId nUndoId(SwUndoId::EMPTY);
+    // Without the accompanying fix in place, this test would have failed with:
+    // runtime error: downcast which does not point to an object of type 'const SwUndoInsert'
+    // note: object is of type 'SwUndoDelete'
+    // in an UBSan build.
+    pWrtShell1->GetLastUndoInfo(nullptr, &nUndoId, &pWrtShell1->GetView());
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoReorderingMulti)
 {
     // Create two views and a document of 2 paragraphs.
