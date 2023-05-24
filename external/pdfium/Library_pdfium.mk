@@ -293,6 +293,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_transferfunc \
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_basedcs \
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_indexedcs \
+    UnpackedTarball/pdfium/core/fpdfapi/parser/object_tree_traversal_util \
 ))
 
 # fpdfdoc
