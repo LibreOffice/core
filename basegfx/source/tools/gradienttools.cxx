@@ -265,28 +265,15 @@ namespace basegfx
 
     namespace utils
     {
-        /* Tooling method to extract data from given awt::Gradient2
-           to ColorStops, doing some corrections, partitally based
-           on given SingleColor.
-           This will do quite some preparations for the gradient
-           as follows:
-           - It will check for single color (resetting rSingleColor when
-             this is the case) and return with empty ColorStops
-           - It will blend ColorStops to Intensity if StartIntensity/
-             EndIntensity != 100 is set in awt::Gradient2, so applying
-             that value(s) to the gadient directly
-           - It will adapt to Border if Border != 0 is set at the
-             given awt::Gradient2, so applying that value to the gadient
-             directly
-        */
+        /* Tooling method to extract data from given BGradient
+           to ColorStops, doing some corrections, partially based
+           on given SingleColor */
         void prepareColorStops(
             const basegfx::BGradient& rGradient,
             BColorStops& rColorStops,
             BColor& rSingleColor)
         {
-            rColorStops = rGradient.GetColorStops();
-
-            if (rColorStops.isSingleColor(rSingleColor))
+            if (rGradient.GetColorStops().isSingleColor(rSingleColor))
             {
                 // when single color, preserve value in rSingleColor
                 // and clear the ColorStops, done.
@@ -294,73 +281,45 @@ namespace basegfx
                 return;
             }
 
-            if (100 != rGradient.GetStartIntens() || 100 != rGradient.GetEndIntens())
-            {
-                // apply 'old' blend stuff, blend against black
-                rColorStops.blendToIntensity(
-                    rGradient.GetStartIntens() * 0.01,
-                    rGradient.GetEndIntens() * 0.01,
-                    basegfx::BColor()); // COL_BLACK
+            const bool bAdaptStartEndIntensity(100 != rGradient.GetStartIntens() || 100 != rGradient.GetEndIntens());
+            const bool bAdaptBorder(0 != rGradient.GetBorder());
 
-                // can lead to single color (e.g. both zero, so all black),
-                // so check again
-                if (rColorStops.isSingleColor(rSingleColor))
+            if (!bAdaptStartEndIntensity && !bAdaptBorder)
+            {
+                // copy unchanged ColorStops & done
+                rColorStops = rGradient.GetColorStops();
+                return;
+            }
+
+            // prepare a copy to work on
+            basegfx::BGradient aWorkCopy(rGradient);
+
+            if (bAdaptStartEndIntensity)
+            {
+                aWorkCopy.tryToApplyStartEndIntensity();
+
+                // this can again lead to single color (e.g. both zero, so
+                // all black), so check again for it
+                if (aWorkCopy.GetColorStops().isSingleColor(rSingleColor))
                 {
                     rColorStops.clear();
                     return;
                 }
             }
 
-            if (0 != rGradient.GetBorder())
+            if (bAdaptBorder)
             {
-                // apply Border if set
-                // NOTE: no new start node is added. The new ColorStop
-                //       mechanism does not need entries at 0.0 and 1.0.
-                //       In case this is needed, do that in the caller
-                const double fFactor(rGradient.GetBorder() * 0.01);
-                BColorStops aNewStops;
-
-                for (const auto& candidate : rColorStops)
-                {
-                    if (css::awt::GradientStyle_AXIAL == rGradient.GetGradientStyle())
-                    {
-                        // for axial add the 'gap' at the start due to reverse used gradient
-                        aNewStops.emplace_back((1.0 - fFactor) * candidate.getStopOffset(), candidate.getStopColor());
-                    }
-                    else
-                    {
-                        // css::awt::GradientStyle_LINEAR
-                        // case awt::GradientStyle_RADIAL
-                        // case awt::GradientStyle_ELLIPTICAL
-                        // case awt::GradientStyle_RECT
-                        // case awt::GradientStyle_SQUARE
-
-                        // for all others add the 'gap' at the end
-                        aNewStops.emplace_back(fFactor + (candidate.getStopOffset() * (1.0 - fFactor)), candidate.getStopColor());
-                    }
-                }
-
-                rColorStops = aNewStops;
+                aWorkCopy.tryToApplyBorder();
             }
+
+            // extract ColorStops, that's all we need here
+            rColorStops = aWorkCopy.GetColorStops();
         }
 
         /* Tooling method to synchronize the given ColorStops.
            The intention is that a color GradientStops and an
            alpha/transparence GradientStops gets synchronized
-           for export.
-           Fo the corrections the single values for color and
-           alpha may be used, e.g. when ColorStops is given
-           and not empty, but AlphaStops is empty, it will get
-           sycronized so that it will have the same number and
-           offsets in AlphaStops as in ColorStops, but with
-           the given SingleAlpha as value.
-           At return it guarantees that both have the same
-           number of entries with the same StopOffsets, so
-           that synchonized pair of ColorStops can e.g. be used
-           to export a Gradient with defined/adapted alpha
-           being 'coupled' indirectly using the
-           'FillTransparenceGradient' method (at import time).
-        */
+           for export. */
         void synchronizeColorStops(
             BColorStops& rColorStops,
             BColorStops& rAlphaStops,

@@ -40,13 +40,10 @@ namespace basegfx
 
         Offset is defined as:
         - being in the range of [0.0 .. 1.0] (unit range)
-          - 0.0 being reserved for StartColor
-          - 1.0 being reserved for EndColor
-        - in-between offsets thus being in the range of ]0.0 .. 1.0[
-        - no two equal offsets are allowed
-            - this is an error
-        - missing 1.0 entry (EndColor) is allowed
-          - it means that EndColor == StartColor
+          - offsets outside are an error
+        - lowest/1st value equivalent to StartColor
+        - highest/last value equivalent to EndColor
+        - missing 0.0/1.0 entries are allowed
         - at least one value (usually 0.0, StartColor) is required
             - this allows to avoid massive testing in all places where
               this data has to be accessed
@@ -263,6 +260,19 @@ public:
            When also mirroring offsets a valid sort keeps valid.
         */
     void reverseColorStops();
+
+    // createSpaceAtStart creates fOffset space at start by
+    // translating/scaling all entries to the right
+    void createSpaceAtStart(double fOffset);
+
+    // removeSpaceAtStart removes fOffset space from start by
+    // translating/scaling entries more or equal to fOffset
+    // to the left. Entries less than fOffset will be removed
+    void removeSpaceAtStart(double fOffset);
+
+    // try to detect if an empty/no-color-change area exists
+    // at the start and return offset to it. Returns 0.0 if not.
+    double detectPossibleOffsetAtStart() const;
 };
 
 class BASEGFX_DLLPUBLIC BGradient final
@@ -323,6 +333,11 @@ public:
 
     /// Tooling method to fill awt::Gradient2 from data contained in the given basegfx::BGradient
     css::awt::Gradient2 getAsGradient2() const;
+
+    /// Tooling to handle border correction/integration and StartStopIntensity
+    void tryToRecreateBorder(basegfx::BColorStops* pAssociatedTransparencyStops);
+    void tryToApplyBorder();
+    void tryToApplyStartEndIntensity();
 };
 }
 

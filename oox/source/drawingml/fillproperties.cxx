@@ -457,17 +457,10 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
             // do not create gradient struct if property is not supported...
             if( rPropMap.supportsProperty( ShapeProperty::FillGradient ) )
             {
-                // use awt::Gradient2, prepare ColorStops
-                awt::Gradient2 aGradient;
+                // prepare ColorStops
                 basegfx::BColorStops aColorStops;
                 basegfx::BColorStops aTransparencyStops;
                 bool bContainsTransparency(false);
-
-                // set defaults
-                aGradient.Angle = 900;
-                aGradient.StartIntensity = 100;
-                aGradient.EndIntensity = 100;
-                aGradient.Style = awt::GradientStyle_LINEAR;
 
                 // convert to BColorStops, check for contained transparency
                 for (const auto& rCandidate : maGradientProps.maGradientStops)
@@ -487,6 +480,20 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     }
                 }
 
+                // prepare BGradient with some defaults
+                // CAUTION: This used awt::Gradient2 before who's empty constructor
+                //          (see workdir/UnoApiHeadersTarget/offapi/normal/com/sun/
+                //          star/awt/Gradient.hpp) initializes all to zeros, so reflect
+                //          this here. OTOH set all that were set, e.g. Start/EndIntens
+                //          were set to 100, so just use default of BGradient constructor
+                basegfx::BGradient aGradient(
+                    aColorStops,
+                    awt::GradientStyle_LINEAR,
+                    Degree10(900),
+                    0,  // border
+                    0,  // OfsX -> 0, not 50 (!)
+                    0); // OfsY -> 0, not 50 (!)
+
                 // "rotate with shape" set to false -> do not rotate
                 if (!maGradientProps.moRotateWithShape.value_or(true))
                 {
@@ -497,77 +504,61 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 {
                     IntegerRectangle2D aFillToRect = maGradientProps.moFillToRect.value_or( IntegerRectangle2D( 0, 0, MAX_PERCENT, MAX_PERCENT ) );
                     sal_Int32 nCenterX = (MAX_PERCENT + aFillToRect.X1 - aFillToRect.X2) / 2;
-                    aGradient.XOffset = getLimitedValue<sal_Int16, sal_Int32>(
-                        nCenterX / PER_PERCENT, 0, 100);
+                    aGradient.SetXOffset(getLimitedValue<sal_Int16, sal_Int32>(
+                        nCenterX / PER_PERCENT, 0, 100));
                     sal_Int32 nCenterY = (MAX_PERCENT + aFillToRect.Y1 - aFillToRect.Y2) / 2;
-                    aGradient.YOffset = getLimitedValue<sal_Int16, sal_Int32>(
-                        nCenterY / PER_PERCENT, 0, 100);
+                    aGradient.SetYOffset(getLimitedValue<sal_Int16, sal_Int32>(
+                        nCenterY / PER_PERCENT, 0, 100));
 
                     if( maGradientProps.moGradientPath.value() == XML_circle )
                     {
                         // Style should be radial at least when the horizontal center is at 50%.
                         // Otherwise import as a linear gradient, because it is the most similar to the MSO radial style.
-                        // aGradient.Style = awt::GradientStyle_LINEAR;
-                        if( aGradient.XOffset == 100 && aGradient.YOffset == 100 )
-                            aGradient.Angle = 450;
-                        else if( aGradient.XOffset == 0 && aGradient.YOffset == 100 )
-                            aGradient.Angle = 3150;
-                        else if( aGradient.XOffset == 100 && aGradient.YOffset == 0 )
-                            aGradient.Angle = 1350;
-                        else if( aGradient.XOffset == 0 && aGradient.YOffset == 0 )
-                            aGradient.Angle = 2250;
+                        // aGradient.SetGradientStyle(awt::GradientStyle_LINEAR);
+                        if( 100 == aGradient.GetXOffset() && 100 == aGradient.GetYOffset() )
+                            aGradient.SetAngle( Degree10(450) );
+                        else if( 0 == aGradient.GetXOffset() && 100 == aGradient.GetYOffset() )
+                            aGradient.SetAngle( Degree10(3150) );
+                        else if( 100 == aGradient.GetXOffset() && 0 == aGradient.GetYOffset() )
+                            aGradient.SetAngle( Degree10(1350) );
+                        else if( 0 == aGradient.GetXOffset() && 0 == aGradient.GetYOffset() )
+                            aGradient.SetAngle( Degree10(2250) );
                         else
-                            aGradient.Style = awt::GradientStyle_RADIAL;
+                            aGradient.SetGradientStyle(awt::GradientStyle_RADIAL);
                     }
                     else
                     {
-                        aGradient.Style = awt::GradientStyle_RECT;
+                        aGradient.SetGradientStyle(awt::GradientStyle_RECT);
                     }
 
                     aColorStops.reverseColorStops();
+                    aGradient.SetColorStops(aColorStops);
                     aTransparencyStops.reverseColorStops();
                 }
                 else if (!maGradientProps.maGradientStops.empty())
                 {
-                    // aGradient.Style = awt::GradientStyle_LINEAR;
-                    sal_Int32 nShadeAngle = maGradientProps.moShadeAngle.value_or( 0 );
+                    // aGradient.SetGradientStyle(awt::GradientStyle_LINEAR);
+                    sal_Int32 nShadeAngle(maGradientProps.moShadeAngle.value_or( 0 ));
                     // Adjust for flips
                     if ( bFlipH )
                         nShadeAngle = 180*60000 - nShadeAngle;
                     if ( bFlipV )
                         nShadeAngle = -nShadeAngle;
                     const sal_Int32 nDmlAngle = nShadeAngle + nShapeRotation;
+
                     // convert DrawingML angle (in 1/60000 degrees) to API angle (in 1/10 degrees)
-                    aGradient.Angle = static_cast< sal_Int16 >( (8100 - (nDmlAngle / (PER_DEGREE / 10))) % 3600 );
+                    aGradient.SetAngle(Degree10(static_cast< sal_Int16 >( (8100 - (nDmlAngle / (PER_DEGREE / 10))) % 3600 )));
                 }
 
-                // set BColorStops using UNO API
-                aGradient.ColorStops = aColorStops.getAsColorStopSequence();
-
-                // for compatibility, still set StartColor/EndColor
-                // NOTE: All code after adapting to multi color gradients works
-                //       using the ColorSteps, so in principle Start/EndColor might
-                //       be either
-                //        (a) ignored consequently everywhere or
-                //        (b) be set/added consequently everywhere
-                //       since this is - in principle - redundant data.
-                //       Be aware that e.g. cases like DrawingML::EqualGradients
-                //       and others would have to be identified and adapted (!)
-                //       Since awt::Gradient2 is UNO API data there might
-                //       be cases where just awt::Gradient is transferred, so (b)
-                //       is far better backwards compatible and thus more safe, so
-                //       all changes will make use of additionally using/setting
-                //       these additionally, but will only make use of the given
-                //       ColorSteps if these are not empty, assuming that these
-                //       already contain Start/EndColor.
-                //       In principle that redundancy and that it is conflict-free
-                //       could even be checked and asserted, but consequently using
-                //       (b) methodically should be safe.
-                aGradient.StartColor = static_cast<sal_Int32>(::Color(aColorStops.front().getStopColor()));
-                aGradient.EndColor = static_cast<sal_Int32>(::Color(aColorStops.back().getStopColor()));
+                if (awt::GradientStyle_RECT == aGradient.GetGradientStyle())
+                {
+                    // MCGR: tdf#155362: better support border
+                    // CAUTION: Need to handle TransparencyStops if used
+                    aGradient.tryToRecreateBorder(aTransparencyStops.empty() ? nullptr : &aTransparencyStops);
+                }
 
                 // push gradient or named gradient to property map
-                if (rPropMap.setProperty(ShapeProperty::FillGradient, aGradient))
+                if (rPropMap.setProperty(ShapeProperty::FillGradient, aGradient.getAsGradient2()))
                 {
                     eFillStyle = FillStyle_GRADIENT;
                 }
@@ -575,8 +566,8 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 // push gradient transparency to property map if it exists
                 if (!aTransparencyStops.empty())
                 {
-                    aGradient.ColorStops = aTransparencyStops.getAsColorStopSequence();
-                    rPropMap.setProperty(ShapeProperty::GradientTransparency, aGradient);
+                    aGradient.SetColorStops(aTransparencyStops);
+                    rPropMap.setProperty(ShapeProperty::GradientTransparency, aGradient.getAsGradient2());
                 }
             }
         break;
