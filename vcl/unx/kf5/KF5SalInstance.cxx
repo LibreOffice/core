@@ -77,6 +77,9 @@ VCLPLUG_KF5_PUBLIC SalInstance* create_SalInstance()
     std::vector<FreeableCStr> aFakeArgvFreeable;
     QtInstance::AllocFakeCmdlineArgs(pFakeArgv, pFakeArgc, aFakeArgvFreeable);
 
+    // disable global menubar, which is affected by QTBUG-58723
+    QCoreApplication::setAttribute(Qt::AA_DontUseNativeMenuBar);
+
     std::unique_ptr<QApplication> pQApp
         = QtInstance::CreateQApplication(*pFakeArgc, pFakeArgv.get());
 
