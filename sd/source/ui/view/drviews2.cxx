@@ -3283,8 +3283,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             if ( rReq.GetArgs() )
                 GetViewFrame()->SetChildWindow(SvxColorChildWindow::GetChildWindowId(),
-                                        static_cast<const SfxBoolItem&>(rReq.GetArgs()->
-                                        Get(SID_COLOR_CONTROL)).GetValue());
+                                        rReq.GetArgs()->Get(SID_COLOR_CONTROL).GetValue());
             else
                 GetViewFrame()->ToggleChildWindow(SvxColorChildWindow::GetChildWindowId() );
 

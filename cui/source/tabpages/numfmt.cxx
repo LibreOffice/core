@@ -412,8 +412,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 
     if(eState==SfxItemState::SET)
     {
-        const SfxBoolItem* pBoolItem = static_cast<const SfxBoolItem*>(
-                      GetItem( *rSet, SID_ATTR_NUMBERFORMAT_ONE_AREA));
+        const SfxBoolItem* pBoolItem = GetItem( *rSet, SID_ATTR_NUMBERFORMAT_ONE_AREA);
 
         if(pBoolItem!=nullptr)
         {

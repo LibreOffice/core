@@ -573,7 +573,7 @@ SET_FONTALIGNMENT:
                 break;
 
             case RTF_KERNING:
-                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_CHAR_AUTOKERN])
+                if (const TypedWhichId<SvxAutoKernItem> wid = aPlainMap[SID_ATTR_CHAR_AUTOKERN])
                 {
                     if( -1 == nTokenValue )
                         nTokenValue = 0;

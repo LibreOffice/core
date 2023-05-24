@@ -66,36 +66,36 @@ namespace pcr
 
     //= OFontPropertyExtractor
 
-    namespace {
-
-    enum FontItemIds: sal_uInt16
+    namespace FontItemIds
     {
-        CFID_FONT =             1,
-        CFID_HEIGHT =           2,
-        CFID_WEIGHT =           3,
-        CFID_POSTURE =          4,
-        CFID_LANGUAGE =         5,
-        CFID_UNDERLINE =        6,
-        CFID_STRIKEOUT =        7,
-        CFID_WORDLINEMODE =     8,
-        CFID_CHARCOLOR =        9,
-        CFID_RELIEF =           10,
-        CFID_EMPHASIS =         11,
+        constexpr sal_uInt16 CFID_FONT =             1;
+        constexpr sal_uInt16 CFID_HEIGHT =           2;
+        constexpr sal_uInt16 CFID_WEIGHT =           3;
+        constexpr sal_uInt16 CFID_POSTURE =          4;
+        constexpr sal_uInt16 CFID_LANGUAGE =         5;
+        constexpr sal_uInt16 CFID_UNDERLINE =        6;
+        constexpr sal_uInt16 CFID_STRIKEOUT =        7;
+        constexpr TypedWhichId<SvxWordLineModeItem> CFID_WORDLINEMODE(8);
+        constexpr sal_uInt16 CFID_CHARCOLOR =        9;
+        constexpr sal_uInt16 CFID_RELIEF =           10;
+        constexpr sal_uInt16 CFID_EMPHASIS =         11;
 
-        CFID_CJK_FONT =         12,
-        CFID_CJK_HEIGHT =       13,
-        CFID_CJK_WEIGHT =       14,
-        CFID_CJK_POSTURE =      15,
-        CFID_CJK_LANGUAGE =     16,
-        CFID_CASEMAP =          17,
-        CFID_CONTOUR =          18,
-        CFID_SHADOWED =         19,
+        constexpr sal_uInt16 CFID_CJK_FONT =         12;
+        constexpr sal_uInt16 CFID_CJK_HEIGHT =       13;
+        constexpr sal_uInt16 CFID_CJK_WEIGHT =       14;
+        constexpr sal_uInt16 CFID_CJK_POSTURE =      15;
+        constexpr sal_uInt16 CFID_CJK_LANGUAGE =     16;
+        constexpr sal_uInt16 CFID_CASEMAP =          17;
+        constexpr TypedWhichId<SvxContourItem> CFID_CONTOUR(18);
+        constexpr TypedWhichId<SvxShadowedItem> CFID_SHADOWED(19);
 
-        CFID_FONTLIST =         20,
+        constexpr sal_uInt16 CFID_FONTLIST =         20;
 
-        CFID_FIRST_ITEM_ID =    CFID_FONT,
-        CFID_LAST_ITEM_ID =     CFID_FONTLIST
-    };
+        constexpr sal_uInt16 CFID_FIRST_ITEM_ID =    CFID_FONT;
+        constexpr sal_uInt16 CFID_LAST_ITEM_ID =     CFID_FONTLIST;
+    }
+
+    namespace {
 
     class OFontPropertyExtractor
     {
@@ -421,7 +421,7 @@ namespace pcr
             if ( eState == SfxItemState::SET )
             {
                 const SvxWordLineModeItem& rWordLineModeItem =
-                    static_cast<const SvxWordLineModeItem&>(_rSet.Get(FontItemIds::CFID_WORDLINEMODE));
+                    _rSet.Get(FontItemIds::CFID_WORDLINEMODE);
 
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_WORDLINEMODE, css::uno::Any(rWordLineModeItem.GetValue()));
             }

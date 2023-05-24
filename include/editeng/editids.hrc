@@ -154,7 +154,7 @@ class SvxWordLineModeItem;
 #define SID_ATTR_CHAR_RELIEF                            TypedWhichId<SvxCharReliefItem>( SID_SVX_START + 920 )
 #define SID_PARA_VERTALIGN                              TypedWhichId<SvxParaVertAlignItem>( SID_SVX_START + 925 )
 #define SID_ATTR_FRAMEDIRECTION                         TypedWhichId<SvxFrameDirectionItem>( SID_SVX_START + 944 )
-#define SID_ATTR_PARA_SNAPTOGRID                        ( SID_SVX_START + 945 )
+#define SID_ATTR_PARA_SNAPTOGRID                        TypedWhichId<SvxParaGridItem>( SID_SVX_START + 945 )
 #define SID_ATTR_PARA_LRSPACE_VERTICAL                  ( SID_SVX_START + 947 )
 #define SID_ATTR_PARA_LEFT_TO_RIGHT                     ( SID_SVX_START + 950 )
 #define SID_ATTR_PARA_RIGHT_TO_LEFT                     ( SID_SVX_START + 951 )

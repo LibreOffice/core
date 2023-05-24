@@ -165,7 +165,7 @@ class XFillGradientItem;
 #define ID_VAL_INDEX                        (SID_SD_START+246)
 #define SID_BEZIERTO                        (SID_SD_START+252)
 #define SID_DASH                            (SID_SD_START+267)
-#define SID_TEXT_FITTOSIZE_VERTICAL         (SID_SD_START+286)
+#define SID_TEXT_FITTOSIZE_VERTICAL         TypedWhichId<SfxBoolItem>(SID_SD_START+286)
 #define SID_GRID_VISIBLE                    (SID_SD_START+322)
 #define ID_VAL_USEFIRSTROWSTYLE             TypedWhichId<SfxBoolItem>(SID_SD_START+323)
 #define ID_VAL_USELASTROWSTYLE              TypedWhichId<SfxBoolItem>(SID_SD_START+324)
@@ -341,7 +341,7 @@ class XFillGradientItem;
 #define SID_INSERT_HSCROLLBAR                           ( SID_SVX_START + 195 )
 #define SID_INSERT_VSCROLLBAR                           ( SID_SVX_START + 196 )
 #define SID_INSERT_SELECT                               ( SID_SVX_START + 199 )
-#define SID_DIALOG_TESTMODE                             ( SID_SVX_START + 200 )
+#define SID_DIALOG_TESTMODE                             TypedWhichId<SfxBoolItem>( SID_SVX_START + 200 )
 #define SID_FRAME_LINESTYLE                             TypedWhichId<SvxLineItem>( SID_SVX_START + 201 )
 #define SID_FRAME_LINECOLOR                             TypedWhichId<SvxColorItem>( SID_SVX_START + 202 )
 #define SID_ATTR_LINE_WIDTH_ARG                         TypedWhichId<SvxDoubleItem>( SID_SVX_START + 203 )
@@ -442,7 +442,7 @@ class XFillGradientItem;
 #define SID_TWAIN_SELECT                                ( SID_SVX_START + 331 )
 #define SID_TWAIN_TRANSFER                              ( SID_SVX_START + 332 )
 #define SID_CONTOUR_DLG                                 ( SID_SVX_START + 334 )
-#define SID_CONTOUR_EXEC                                ( SID_SVX_START + 335 )
+#define SID_CONTOUR_EXEC                                TypedWhichId<SfxBoolItem>( SID_SVX_START + 335 )
 
 //#define SID_SIDEBAR                                   ( SID_SVX_START + 336 )   -> sfxsids.hrc
 
@@ -457,8 +457,8 @@ class XFillGradientItem;
 #define SID_SB_CONNECTIONPOOLING                        ( SID_SVX_START + 348 )
 #define SID_SB_DBREGISTEROPTIONS                        ( SID_SVX_START + 349 )
 #define SID_BMPMASK                                     ( SID_SVX_START + 350 )
-#define SID_BMPMASK_PIPETTE                             ( SID_SVX_START + 351 )
-#define SID_BMPMASK_EXEC                                ( SID_SVX_START + 353 )
+#define SID_BMPMASK_PIPETTE                             TypedWhichId<SfxBoolItem>( SID_SVX_START + 351 )
+#define SID_BMPMASK_EXEC                                TypedWhichId<SfxBoolItem>( SID_SVX_START + 353 )
 
 // CAUTION! Range <363 .. 363> used by EditEngine (!)
 
@@ -466,7 +466,7 @@ class XFillGradientItem;
 #define SID_ATTR_BRUSH_ROW                              TypedWhichId<SvxBrushItem>( SID_SVX_START + 368 )
 #define SID_OPTFILTER_MSOFFICE                          ( SID_SVX_START + 369 )
 #define SID_IMAP                                        ( SID_SVX_START + 371 )
-#define SID_IMAP_EXEC                                   ( SID_SVX_START + 374 )
+#define SID_IMAP_EXEC                                   TypedWhichId<SfxBoolItem>( SID_SVX_START + 374 )
 #define SID_DRAW_RECT_NOFILL                            ( SID_SVX_START + 378 )
 #define SID_DRAW_RECT_ROUND_NOFILL                      ( SID_SVX_START + 379 )
 #define SID_DRAW_SQUARE                                 ( SID_SVX_START + 380 )
@@ -500,7 +500,7 @@ class XFillGradientItem;
 
 #define SID_ATTR_3D_START                               ( SID_SVX_START + 415 )
 #define SID_RULER_PROTECT                               SID_ATTR_3D_START
-#define SID_COLOR_CONTROL                               ( SID_SVX_START + 417 )
+#define SID_COLOR_CONTROL                               TypedWhichId<SfxBoolItem>( SID_SVX_START + 417 )
 
 #define SID_TABLE_INSERT_COL_BEFORE                     ( SID_SVX_START + 418 )
 #define SID_TABLE_INSERT_COL_AFTER                      ( SID_SVX_START + 419 )
@@ -561,7 +561,7 @@ class XFillGradientItem;
 #define SID_FIELD_GRABFOCUS                             ( SID_SVX_START + 567 )
 #define SID_ATTR_ALIGN_DEGREES                          ( SID_SVX_START + 577 )
 #define SID_ATTR_ALIGN_LOCKPOS                          ( SID_SVX_START + 578 )
-#define SID_ATTR_NUMBERFORMAT_ONE_AREA                  ( SID_SVX_START + 580 )
+#define SID_ATTR_NUMBERFORMAT_ONE_AREA                  TypedWhichId<SfxBoolItem>( SID_SVX_START + 580 )
 #define SID_TABSTOP_ADD_OR_CHANGE                       ( SID_SVX_START + 581 )
 #define SID_TABSTOP_ATTR_INDEX                          ( SID_SVX_START + 582 )
 #define SID_TABSTOP_ATTR_POSITION                       ( SID_SVX_START + 583 )
@@ -596,7 +596,7 @@ class XFillGradientItem;
 //FREE
 //FREE
 #define SID_FM_CTL_PROPERTIES                           TypedWhichId<SfxBoolItem>( SID_SVX_START + 613 )
-#define SID_FM_PROPERTIES                               ( SID_SVX_START + 614 )
+#define SID_FM_PROPERTIES                               TypedWhichId<SfxBoolItem>( SID_SVX_START + 614 )
 #define SID_FM_TAB_DIALOG                               ( SID_SVX_START + 615 )
 #define SID_FM_RECORD_FIRST                             ( SID_SVX_START + 616 )
 #define SID_FM_RECORD_NEXT                              ( SID_SVX_START + 617 )
@@ -611,35 +611,35 @@ class XFillGradientItem;
 #define SID_FM_RECORD_TOTAL                             ( SID_SVX_START + 626 )
 #define SID_FM_RECORD_SAVE                              ( SID_SVX_START + 627 )
 #define SID_FM_CREATE_CONTROL                           ( SID_SVX_START + 628 )
-#define SID_FM_DESIGN_MODE                              ( SID_SVX_START + 629 )
+#define SID_FM_DESIGN_MODE                              TypedWhichId<SfxBoolItem>( SID_SVX_START + 629 )
 #define SID_FM_RECORD_UNDO                              ( SID_SVX_START + 630 )
 #define SID_FM_CONTROL_IDENTIFIER                       ( SID_SVX_START + 631 )
 #define SID_FM_CONTROL_INVENTOR                         ( SID_SVX_START + 632 )
 #define SID_FM_SHOW_FMEXPLORER                          ( SID_SVX_START + 633 )
 #define SID_FM_FIELDS_CONTROL                           ( SID_SVX_START + 634 )
-#define SID_FM_SHOW_PROPERTIES                          ( SID_SVX_START + 635 )
+#define SID_FM_SHOW_PROPERTIES                          TypedWhichId<SfxBoolItem>( SID_SVX_START + 635 )
 #define SID_FM_PROPERTY_CONTROL                         ( SID_SVX_START + 636 )
 #define SID_FM_FMEXPLORER_CONTROL                       ( SID_SVX_START + 637 )
 //FREE
 //FREE
 //FREE
 #define SID_3D_WIN                                      ( SID_SVX_START + 644 )
-#define SID_3D_STATE                                    ( SID_SVX_START + 645 )
-#define SID_3D_INIT                                     ( SID_SVX_START + 646 )
-#define SID_3D_ASSIGN                                   ( SID_SVX_START + 647 )
+#define SID_3D_STATE                                    TypedWhichId<SfxBoolItem>( SID_SVX_START + 645 )
+#define SID_3D_INIT                                     TypedWhichId<SfxBoolItem>( SID_SVX_START + 646 )
+#define SID_3D_ASSIGN                                   TypedWhichId<SfxBoolItem>( SID_SVX_START + 647 )
 #define SID_CONVERT_TO_3D                               ( SID_SVX_START + 648 )
 #define SID_CONVERT_TO_3D_LATHE_FAST                    ( SID_SVX_START + 649 )
 #define SID_ATTR_3D_END                                   SID_CONVERT_TO_3D_LATHE_FAST
 #define SID_ATTR_NUMBERFORMAT_NOLANGUAGE                TypedWhichId<SfxBoolItem>( SID_SVX_START + 700 )
 
 #define SID_MORE_FMSLOTS_START                          ( SID_SVX_START + 702 )
-#define SID_FM_SHOW_PROPERTY_BROWSER                    ( SID_SVX_START + 703 )
+#define SID_FM_SHOW_PROPERTY_BROWSER                    TypedWhichId<SfxBoolItem>( SID_SVX_START + 703 )
 #define SID_FM_DATEFIELD                                ( SID_SVX_START + 704 )
 #define SID_FM_TIMEFIELD                                ( SID_SVX_START + 705 )
 #define SID_FM_NUMERICFIELD                             ( SID_SVX_START + 706 )
 #define SID_FM_CURRENCYFIELD                            ( SID_SVX_START + 707 )
 #define SID_FM_PATTERNFIELD                             ( SID_SVX_START + 708 )
-#define SID_FM_OPEN_READONLY                            ( SID_SVX_START + 709 )
+#define SID_FM_OPEN_READONLY                            TypedWhichId<SfxBoolItem>( SID_SVX_START + 709 )
 #define SID_FM_IMAGECONTROL                             ( SID_SVX_START + 710 )
 #define SID_FM_REMOVE_FILTER_SORT                       ( SID_SVX_START + 711 )
 #define SID_FM_SORTUP                                   ( SID_SVX_START + 712 )
@@ -651,16 +651,16 @@ class XFillGradientItem;
 #define SID_FM_EXECUTE                                  ( SID_SVX_START + 721 )
 #define SID_SBA_QRY_EXECUTE                                 SID_FM_EXECUTE
 #define SID_FM_ADDTABLE                                 ( SID_SVX_START + 722 )
-#define SID_FM_FORM_FILTERED                            ( SID_SVX_START + 723 )
+#define SID_FM_FORM_FILTERED                            TypedWhichId<SfxBoolItem>( SID_SVX_START + 723 )
 #define SID_FM_REFRESH                                  ( SID_SVX_START + 724 )
 #define SID_FM_SEARCH                                   ( SID_SVX_START + 725 )
 #define SID_FM_LEAVE_CREATE                             ( SID_SVX_START + 726 ) // pop Formcontroller Button
-#define SID_FM_USE_WIZARDS                              ( SID_SVX_START + 727 )
+#define SID_FM_USE_WIZARDS                              TypedWhichId<SfxBoolItem>( SID_SVX_START + 727 )
 #define SID_FM_FORMATTEDFIELD                           ( SID_SVX_START + 728 )
 #define SID_FM_FILTER_START                             ( SID_SVX_START + 729 )
 #define SID_FM_FILTER_EXIT                              ( SID_SVX_START + 730 )
 #define SID_FM_FILTER_EXECUTE                           ( SID_SVX_START + 731 )
-#define SID_FM_FILTER_NAVIGATOR                         ( SID_SVX_START + 732 )
+#define SID_FM_FILTER_NAVIGATOR                         TypedWhichId<SfxBoolItem>( SID_SVX_START + 732 )
 #define SID_FM_CHANGECONTROLTYPE                        ( SID_SVX_START + 733 )
 #define SID_FM_CONVERTTO_EDIT                           ( SID_SVX_START + 734 )
 #define SID_FM_CONVERTTO_BUTTON                         ( SID_SVX_START + 735 )
@@ -689,12 +689,12 @@ class XFillGradientItem;
 //FREE
 //FREE
 //FREE
-#define SID_FM_VIEW_AS_GRID                             ( SID_SVX_START + 761 )
-#define SID_FM_AUTOCONTROLFOCUS                         ( SID_SVX_START + 763 )
+#define SID_FM_VIEW_AS_GRID                             TypedWhichId<SfxBoolItem>( SID_SVX_START + 761 )
+#define SID_FM_AUTOCONTROLFOCUS                         TypedWhichId<SfxBoolItem>( SID_SVX_START + 763 )
 #define SID_DSBROWSER_EXPLORER                          ( SID_SVX_START + 764 )
 #define SID_FM_CREATE_FIELDCONTROL                      ( SID_SVX_START + 765 )
 #define SID_FM_DATACCESS_DESCRIPTOR                     ( SID_SVX_START + 766 )
-#define SID_FM_TOGGLECONTROLFOCUS                       ( SID_SVX_START + 767 )
+#define SID_FM_TOGGLECONTROLFOCUS                       TypedWhichId<SfxBoolItem>( SID_SVX_START + 767 )
 #define SID_FM_SCROLLBAR                                ( SID_SVX_START + 768 )
 #define SID_FM_SPINBUTTON                               ( SID_SVX_START + 769 )
 #define SID_FM_CONVERTTO_SCROLLBAR                      ( SID_SVX_START + 770 )
@@ -770,7 +770,7 @@ class XFillGradientItem;
 #define SID_INSERT_FORMATTEDFIELD                       ( SID_SVX_START + 940 )
 #define SID_INSERT_PATTERNFIELD                         ( SID_SVX_START + 941 )
 #define SID_INSERT_FILECONTROL                          ( SID_SVX_START + 942 )
-#define SID_SHOW_PROPERTYBROWSER                        ( SID_SVX_START + 943 )
+#define SID_SHOW_PROPERTYBROWSER                        TypedWhichId<SfxBoolItem>( SID_SVX_START + 943 )
 
 // CAUTION! Range <944 .. 945> used by EditEngine (!)
 
@@ -787,8 +787,8 @@ class XFillGradientItem;
 #define SID_ATTR_HDFT_DYNAMIC_SPACING                   ( SID_SVX_START + 953 )
 #define SID_ATTR_NUMBERFORMAT_ADD_AUTO                  TypedWhichId<SfxBoolItem>( SID_SVX_START + 954 )
 #define SID_OPEN_HYPERLINK                              ( SID_SVX_START + 955 )
-#define SID_CTLFONT_STATE                               ( SID_SVX_START + 956 )
-#define SID_VERTICALTEXT_STATE                          ( SID_SVX_START + 957 )
+#define SID_CTLFONT_STATE                               TypedWhichId<SfxBoolItem>( SID_SVX_START + 956 )
+#define SID_VERTICALTEXT_STATE                          TypedWhichId<SfxBoolItem>( SID_SVX_START + 957 )
 #define SID_OPEN_XML_FILTERSETTINGS                     ( SID_SVX_START + 958 )
 #define SID_HANGUL_HANJA_CONVERSION                     ( SID_SVX_START + 959 )
 #define SID_EXTRUSION_TOGGLE                            ( SID_SVX_START + 960 )
@@ -817,7 +817,7 @@ class XFillGradientItem;
 #define SID_FONTWORK_SHAPE                              ( SID_SVX_START + 983 )
 #define SID_FONTWORK_ALIGNMENT                          ( SID_SVX_START + 984 )
 #define SID_FONTWORK_CHARACTER_SPACING                  ( SID_SVX_START + 985 )
-#define SID_FONTWORK_KERN_CHARACTER_PAIRS               ( SID_SVX_START + 986 )
+#define SID_FONTWORK_KERN_CHARACTER_PAIRS               TypedWhichId<SfxBoolItem>( SID_SVX_START + 986 )
 #define SID_DRAW_FONTWORK                               ( SID_SVX_START + 987 )
 #define SID_DRAW_FONTWORK_VERTICAL                      ( SID_SVX_START + 988 )
 
@@ -876,9 +876,9 @@ class XFillGradientItem;
 #define SID_GROW_FONT_SIZE                              ( SID_SVX_START + 1042 )
 #define SID_SHRINK_FONT_SIZE                            ( SID_SVX_START + 1043 )
 // color subtoolbar on graphictoolbar
-#define SID_COLOR_SETTINGS                              ( SID_SVX_START + 1044 )
+#define SID_COLOR_SETTINGS                              TypedWhichId<SfxBoolItem>( SID_SVX_START + 1044 )
 
-#define SID_FM_FORM_DESIGN_TOOLS                        ( SID_SVX_START + 1046 )
+#define SID_FM_FORM_DESIGN_TOOLS                        TypedWhichId<SfxBoolItem>( SID_SVX_START + 1046 )
 #define SID_DRAWTBX_CS_BASIC                            ( SID_SVX_START + 1047 )
 #define SID_DRAWTBX_CS_SYMBOL                           ( SID_SVX_START + 1048 )
 #define SID_DRAWTBX_CS_ARROW                            ( SID_SVX_START + 1049 )
@@ -900,9 +900,9 @@ class XFillGradientItem;
 #define SID_TABLE_MERGE_CELLS                           ( SID_SVX_START + 1070 )
 #define SID_TABLE_SPLIT_CELLS                           ( SID_SVX_START + 1071 )
 #define SID_OPTIMIZE_TABLE                              ( SID_SVX_START + 1072 )
-#define SID_TABLE_VERT_BOTTOM                           ( SID_SVX_START + 1073 )
-#define SID_TABLE_VERT_CENTER                           ( SID_SVX_START + 1074 )
-#define SID_TABLE_VERT_NONE                             ( SID_SVX_START + 1075 )
+#define SID_TABLE_VERT_BOTTOM                           TypedWhichId<SfxBoolItem>( SID_SVX_START + 1073 )
+#define SID_TABLE_VERT_CENTER                           TypedWhichId<SfxBoolItem>( SID_SVX_START + 1074 )
+#define SID_TABLE_VERT_NONE                             TypedWhichId<SfxBoolItem>( SID_SVX_START + 1075 )
 #define SID_TABLE_INSERT_ROW                            ( SID_SVX_START + 1076 )
 #define SID_TABLE_INSERT_COL                            ( SID_SVX_START + 1077 )
 #define SID_TABLE_DELETE_ROW                            ( SID_SVX_START + 1078 )
@@ -977,7 +977,7 @@ class XFillGradientItem;
 #define SID_ATTR_BORDER_DEFAULT_WIDTH                   TypedWhichId<SfxInt64Item>( SID_SVX_START + 1141 )
 // 1142 is used by editeng (SID_ATTR_CHAR_GRABBAG)
 
-#define SID_OFFER_IMPORT                                ( SID_SVX_START + 1143 )
+#define SID_OFFER_IMPORT                                TypedWhichId<SfxBoolItem>( SID_SVX_START + 1143 )
 #define SID_DRAWINGLAYER_FILLSTYLES                     ( SID_SVX_START + 1144)
 #define SID_PARASPACE_INCREASE                          ( SID_SVX_START + 1145 )
 #define SID_PARASPACE_DECREASE                          ( SID_SVX_START + 1146 )
