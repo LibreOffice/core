@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
 #include <svx/PaletteManager.hxx>
 
+#include <basegfx/color/bcolortools.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
@@ -33,8 +33,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <comphelper/sequence.hxx>
-#include <stack>
-#include <set>
 #include <officecfg/Office/Common.hxx>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -49,15 +47,32 @@
 
 #include <palettes.hxx>
 
+#include <memory>
+#include <array>
+#include <stack>
+#include <set>
+
 namespace
 {
-// Luminance modulation for the 6 effect presets.
-// 10000 is the default.
-constexpr const std::array<sal_Int16, 6> g_aLumMods = { 10000, 2000, 4000, 6000, 7500, 5000 };
+constexpr const std::array<sal_Int16, 6> g_aPercentBlack = {      0,    50,    35,    25,    15,     5 };
+constexpr const std::array<sal_Int16, 6> g_aLumModsBlack = { 10'000, 5'000, 6'500, 7'500, 8'500, 9'500 };
+constexpr const std::array<sal_Int16, 6> g_aLumOffsBlack = {      0, 5'000, 3'500, 2'500, 1'500, 0'500 };
 
-// Luminance offset for the 6 effect presets.
-// 0 is the default.
-constexpr const std::array<sal_Int16, 6> g_aLumOffs = { 0, 8000, 6000, 4000, 0, 0 };
+constexpr const std::array<sal_Int16, 6> g_aPercentLow = {      0,    90,    75,    50,    25,    10 };
+constexpr const std::array<sal_Int16, 6> g_aLumModsLow = { 10'000, 1'000, 2'500, 5'000, 7'500, 9'000 };
+constexpr const std::array<sal_Int16, 6> g_aLumOffsLow = {      0, 9'000, 7'500, 5'000, 2'500, 1'000 };
+
+constexpr const std::array<sal_Int16, 6> g_aPercent = {      0,    80,    60,    40,   -25,   -50 };
+constexpr const std::array<sal_Int16, 6> g_aLumMods = { 10'000, 2'000, 4'000, 6'000, 7'500, 5'000 };
+constexpr const std::array<sal_Int16, 6> g_aLumOffs = {      0, 8'000, 6'000, 4'000,     0,     0 };
+
+constexpr const std::array<sal_Int16, 6> g_aPercentHigh = {      0,   -10,   -25,   -50,   -75,   -90 };
+constexpr const std::array<sal_Int16, 6> g_aLumModsHigh = { 10'000, 9'000, 7'500, 5'000, 2'500, 1'000 };
+constexpr const std::array<sal_Int16, 6> g_aLumOffsHigh = {      0,     0,     0,     0,     0,     0 };
+
+constexpr const std::array<sal_Int16, 6> g_aPercentWhite = {      0,    -5,   -15,   -25,   -35,   -50 };
+constexpr const std::array<sal_Int16, 6> g_aLumModsWhite = { 10'000, 9'500, 8'500, 7'500, 6'500, 5'000 };
+constexpr const std::array<sal_Int16, 6> g_aLumOffsWhite = {      0,     0,     0,     0,     0,     0 };
 }
 
 PaletteManager::PaletteManager() :
@@ -67,6 +82,7 @@ PaletteManager::PaletteManager() :
     mnColorCount(0),
     mpBtnUpdater(nullptr),
     maColorSelectFunction(PaletteManager::DispatchColorCommand)
+
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     if(pDocSh)
@@ -166,19 +182,53 @@ bool PaletteManager::IsThemePaletteSelected() const
     return mnCurrentPalette == mnNumOfPalettes - 2;
 }
 
-void PaletteManager::GetThemeIndexLumModOff(sal_uInt16 nItemId, sal_Int16& rThemeIndex,
-                                            sal_Int16& rLumMod, sal_Int16& rLumOff)
+bool PaletteManager::GetThemeAndEffectIndex(sal_uInt16 nItemId, sal_uInt16& rThemeIndex, sal_uInt16& rEffectIndex)
 {
-    // Each column is the same color with different effects.
+     // Each column is the same color with different effects.
     rThemeIndex = nItemId % 12;
 
-    // Each row is the same effect with different colors.
-    rLumMod = g_aLumMods[nItemId / 12];
-    rLumOff = g_aLumOffs[nItemId / 12];
+    rEffectIndex = nItemId / 12;
+    if (rEffectIndex > 5)
+        return false;
+    return true;
+}
+
+bool PaletteManager::GetLumModOff(sal_uInt16 nThemeIndex, sal_uInt16 nEffect, sal_Int16& rLumMod, sal_Int16& rLumOff)
+{
+    if (!moThemePaletteCollection)
+        return false;
+
+    auto const& aThemeColorData = moThemePaletteCollection->maData[nThemeIndex];
+
+    switch (aThemeColorData.meType)
+    {
+        case ThemePaletteColorType::Black:
+            rLumMod = g_aLumModsBlack[nEffect];
+            rLumOff = g_aLumOffsBlack[nEffect];
+            break;
+        case ThemePaletteColorType::White:
+            rLumMod = g_aLumModsWhite[nEffect];
+            rLumOff = g_aLumOffsWhite[nEffect];
+            break;
+        case ThemePaletteColorType::Low:
+            rLumMod = g_aLumModsLow[nEffect];
+            rLumOff = g_aLumOffsLow[nEffect];
+            break;
+        case ThemePaletteColorType::High:
+            rLumMod = g_aLumModsHigh[nEffect];
+            rLumOff = g_aLumOffsHigh[nEffect];
+            break;
+        case ThemePaletteColorType::Normal:
+            rLumMod = g_aLumMods[nEffect];
+            rLumOff = g_aLumOffs[nEffect];
+            break;
+    }
+    return true;
 }
 
 void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
 {
+    moThemePaletteCollection.reset();
     if( mnCurrentPalette == 0)
     {
         rColorSet.Clear();
@@ -202,13 +252,7 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
             rColorSet.Clear();
             if (aColors.size() >= 12)
             {
-                std::vector<OUString> aEffectNames = {
-                    SvxResId(RID_SVXSTR_THEME_EFFECT1),  SvxResId(RID_SVXSTR_THEME_EFFECT2),
-                    SvxResId(RID_SVXSTR_THEME_EFFECT3),  SvxResId(RID_SVXSTR_THEME_EFFECT4),
-                    SvxResId(RID_SVXSTR_THEME_EFFECT5),
-                };
-
-                std::vector<OUString> aColorNames = {
+                const std::array<OUString, 12> aColorNames = {
                     SvxResId(RID_SVXSTR_THEME_COLOR1),  SvxResId(RID_SVXSTR_THEME_COLOR2),
                     SvxResId(RID_SVXSTR_THEME_COLOR3),  SvxResId(RID_SVXSTR_THEME_COLOR4),
                     SvxResId(RID_SVXSTR_THEME_COLOR5),  SvxResId(RID_SVXSTR_THEME_COLOR6),
@@ -218,22 +262,77 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
                 };
 
                 sal_uInt16 nItemId = 0;
+
+                moThemePaletteCollection = ThemePaletteCollection();
+                for (size_t nColor = 0; nColor < aColorNames.size(); ++nColor)
+                {
+                    Color aColor = aColors[nColor];
+                    basegfx::BColor aBColor = basegfx::utils::rgb2hsl(aColor.getBColor());
+                    double aLuminanceValue = aBColor.getBlue() * 255.0;
+                    moThemePaletteCollection->maData[nColor].maColor = aColor;
+
+                    if (aLuminanceValue < 0.5)
+                        moThemePaletteCollection->maData[nColor].meType = ThemePaletteColorType::Black;
+                    else if (aLuminanceValue > 254.5)
+                        moThemePaletteCollection->maData[nColor].meType = ThemePaletteColorType::White;
+                    else if (aLuminanceValue < 50.5)
+                        moThemePaletteCollection->maData[nColor].meType = ThemePaletteColorType::Low;
+                    else if (aLuminanceValue > 203.5)
+                        moThemePaletteCollection->maData[nColor].meType = ThemePaletteColorType::High;
+                    else
+                        moThemePaletteCollection->maData[nColor].meType = ThemePaletteColorType::Normal;
+                }
+
                 // Each row is one effect type (no effect + each type).
-                for (size_t nEffect = 0; nEffect < aEffectNames.size() + 1; ++nEffect)
+                for (size_t nEffect : {0, 1, 2, 3, 4, 5})
                 {
                     // Each column is one color type.
                     for (size_t nColor = 0; nColor < aColorNames.size(); ++nColor)
                     {
-                        Color aColor = aColors[nColor];
-                        aColor.ApplyLumModOff(g_aLumMods[nEffect], g_aLumOffs[nEffect]);
-                        OUString aColorName;
-                        if (nEffect == 0)
+                        auto const& aThemeColorData = moThemePaletteCollection->maData[nColor];
+                        Color aColor = aThemeColorData.maColor;
+                        sal_Int16 nColorTemplateValue = 0;
+                        switch (aThemeColorData.meType)
                         {
-                            aColorName = aColorNames[nColor];
+                            case ThemePaletteColorType::Black:
+                                nColorTemplateValue = g_aPercentBlack[nEffect];
+                                break;
+                            case ThemePaletteColorType::White:
+                                nColorTemplateValue = g_aPercentWhite[nEffect];
+                                break;
+                            case ThemePaletteColorType::Low:
+                                nColorTemplateValue = g_aPercentLow[nEffect];
+                                break;
+                            case ThemePaletteColorType::High:
+                                nColorTemplateValue = g_aPercentHigh[nEffect];
+                                break;
+                            case ThemePaletteColorType::Normal:
+                                nColorTemplateValue = g_aPercent[nEffect];
+                                break;
+                        }
+
+                        sal_Int16 nLumMod = 10'000;
+                        sal_Int16 nLumOff = 0;
+                        GetLumModOff(nColor, nEffect, nLumMod, nLumOff);
+                        aColor.ApplyLumModOff(nLumMod, nLumOff);
+
+                        OUString aColorName;
+                        if (nColorTemplateValue > 0)
+                        {
+                            OUString aTemplate = SvxResId(RID_SVXSTR_THEME_EFFECT_LIGHTER);
+                            aColorName = aTemplate.replaceAll("$THEME_NAME", aColorNames[nColor]);
+                            aColorName = aColorName.replaceAll("$PERCENTAGE", OUString::number(std::abs(nColorTemplateValue)));
+
+                        }
+                        else if (nColorTemplateValue < 0)
+                        {
+                            OUString aTemplate = SvxResId(RID_SVXSTR_THEME_EFFECT_DARKER);
+                            aColorName = aTemplate.replaceAll("$THEME_NAME", aColorNames[nColor]);
+                            aColorName = aColorName.replaceAll("$PERCENTAGE", OUString::number(std::abs(nColorTemplateValue)));
                         }
                         else
                         {
-                            aColorName = aEffectNames[nEffect - 1].replaceAll("%1", aColorNames[nColor]);
+                            aColorName = aColorNames[nColor];
                         }
                         rColorSet.InsertItem(nItemId++, aColor, aColorName);
                     }

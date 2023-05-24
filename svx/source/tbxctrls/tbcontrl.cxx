@@ -2231,14 +2231,18 @@ IMPL_LINK(ColorWindow, SelectHdl, ValueSet*, pColorSet, void)
     bool bThemePaletteSelected = mxPaletteManager->IsThemePaletteSelected();
     sal_uInt16 nSelectedItemId = pColorSet->GetSelectedItemId();
 
-    maMenuButton.set_inactive();
-
     if (bThemePaletteSelected)
     {
-        PaletteManager::GetThemeIndexLumModOff(nSelectedItemId, aNamedColor.m_nThemeIndex,
-                                               aNamedColor.m_nLumMod,
-                                               aNamedColor.m_nLumOff);
+        sal_uInt16 nThemeIndex;
+        sal_uInt16 nEffectIndex;
+        if (PaletteManager::GetThemeAndEffectIndex(nSelectedItemId, nThemeIndex, nEffectIndex))
+        {
+            aNamedColor.m_nThemeIndex = nThemeIndex;
+            mxPaletteManager->GetLumModOff(nThemeIndex, nEffectIndex, aNamedColor.m_nLumMod, aNamedColor.m_nLumOff);
+        }
     }
+
+    maMenuButton.set_inactive();
     aColorSelectFunction(sCommand, aNamedColor);
 }
 

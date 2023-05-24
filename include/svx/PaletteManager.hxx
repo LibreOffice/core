@@ -32,6 +32,26 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace svx { class ToolboxButtonColorUpdaterBase; }
 namespace weld { class Window; }
 
+enum class ThemePaletteColorType
+{
+    Black,
+    White,
+    Low,
+    High,
+    Normal
+};
+
+struct ThemePaletteData
+{
+    ThemePaletteColorType meType = ThemePaletteColorType::Normal;
+    Color maColor;
+};
+
+struct ThemePaletteCollection
+{
+    std::array<ThemePaletteData, 12> maData;
+};
+
 class SVXCORE_DLLPUBLIC PaletteManager
 {
     const sal_uInt16        mnMaxRecentColors;
@@ -49,6 +69,7 @@ class SVXCORE_DLLPUBLIC PaletteManager
     ColorSelectFunction maColorSelectFunction;
 
     std::unique_ptr<SvColorDialog> m_pColorDlg;
+    std::optional<ThemePaletteCollection> moThemePaletteCollection;
 
     PaletteManager(const PaletteManager* pClone);
 public:
@@ -79,8 +100,8 @@ public:
 
     PaletteManager* Clone() const;
 
-    static void GetThemeIndexLumModOff(sal_uInt16 nItemId, sal_Int16& rThemeIndex,
-                                       sal_Int16& rLumMod, sal_Int16& rLumOff);
+    static bool GetThemeAndEffectIndex(sal_uInt16 nItemId, sal_uInt16& rThemeIndex, sal_uInt16& rEffectIndex);
+    bool GetLumModOff(sal_uInt16 nThemeIndex, sal_uInt16 nEffect, sal_Int16& rLumMod, sal_Int16& rLumOff);
 
     static void DispatchColorCommand(const OUString& aCommand, const NamedColor& rColor);
 };
