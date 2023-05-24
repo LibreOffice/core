@@ -705,14 +705,20 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="sv">.uno:Shrink</value>
-            <value xml:lang="de">.uno:Shrink</value>
+            <value xml:lang="de">.uno:HideColumn</value>
           </prop>
         </node>
         <node oor:name="9_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="sv">.uno:Grow</value>
-            <value xml:lang="de">.uno:Grow</value>
+            <value xml:lang="de">.uno:HideRow</value>
+          </prop>
+        </node>
+        <node oor:name="O_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10 SHORTCUTS - No TRANSLATE</value>
+            <value xml:lang="de">.uno:Zoom100Percent</value>
           </prop>
         </node>
         <node oor:name="ADD_MOD1" oor:op="replace">
@@ -881,6 +887,24 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="en-US">.uno:Ungroup</value>
           </prop>
         </node>
+        <node oor:name="LEFT_SHIFT_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:Ungroup</value>
+          </prop>
+        </node>
+        <node oor:name="RIGHT_SHIFT_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:Group</value>
+          </prop>
+        </node>
+        <node oor:name="M_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:InsertAnnotation</value>
+          </prop>
+        </node>
         <node oor:name="F2" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -945,6 +969,7 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:InsertCurrentTime</value>
+            <value xml:lang="de">.uno:Shrink</value>
           </prop>
         </node>
         <node oor:name="F7_MOD1" oor:op="replace">
@@ -1009,6 +1034,7 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="en-US">.uno:RepeatSearch</value>
             <value xml:lang="es">.uno:Save</value>
             <value xml:lang="fr">.uno:Bold</value>
+            <value xml:lang="de">.uno:FocusCellAddress</value>
           </prop>
         </node>
         <node oor:name="HOME" oor:op="replace">
@@ -1453,6 +1479,7 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <!-- tdf#142257 Replace Ctrl-[ with Shift-Alt-U for Hungarian -->
             <value xml:lang="hu">.uno:MarkPrecedents</value>
+            <value xml:lang="de">.uno:Zoom100Percent</value>
           </prop>
         </node>
         <node oor:name="V_SHIFT_MOD1" oor:op="replace">
