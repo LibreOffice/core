@@ -823,6 +823,22 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
     return false;
 }
 
+SwRect SwTextFly::GetFrameArea() const
+{
+    // i#28701 - consider complete frame area for new text wrapping
+    SwRect aRect;
+    if (m_pCurrFrame->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING))
+    {
+        aRect = m_pCurrFrame->getFramePrintArea();
+        aRect += m_pCurrFrame->getFrameArea().Pos();
+    }
+    else
+    {
+        aRect = m_pCurrFrame->getFrameArea();
+    }
+    return aRect;
+}
+
 // #i68520#
 SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
 {
@@ -853,18 +869,7 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
         // #i68520#
         mpAnchoredObjList.reset(new SwAnchoredObjList );
 
-        // #i28701# - consider complete frame area for new
-        // text wrapping
-        SwRect aRect;
-        if ( pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) )
-        {
-            aRect = m_pCurrFrame->getFramePrintArea();
-            aRect += m_pCurrFrame->getFrameArea().Pos();
-        }
-        else
-        {
-            aRect = m_pCurrFrame->getFrameArea();
-        }
+        SwRect const aRect(GetFrameArea());
         // Make ourselves a little smaller than we are,
         // so that 1-Twip-overlappings are ignored (#49532)
         SwRectFnSet aRectFnSet(m_pCurrFrame);

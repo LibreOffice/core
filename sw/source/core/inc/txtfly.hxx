@@ -152,7 +152,9 @@ class SwTextFly
 
     SwAnchoredObjList* InitAnchoredObjList();
 
+public:
     SwAnchoredObjList* GetAnchoredObjList() const;
+private:
 
     /**
         Look for the first object which overlaps with the rectangle.
@@ -302,6 +304,8 @@ public:
     void SetIgnoreContour( bool bNew );
 
     void SetIgnoreObjsInHeaderFooter( const bool bNew );
+
+    SwRect GetFrameArea() const;
 };
 
 inline SwAnchoredObjList* SwTextFly::GetAnchoredObjList() const

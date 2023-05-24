@@ -268,7 +268,8 @@ class SW_DLLPUBLIC SwTextFrame final : public SwContentFrame
 
     // In order to safe stack space, we split this method:
     // Format_ calls Format_ with parameters
-    void Format_( vcl::RenderContext* pRenderContext, SwParaPortion *pPara );
+    void FormatImpl( vcl::RenderContext* pRenderContext, SwParaPortion *pPara,
+            ::std::vector<SwAnchoredObject *> & rIntersectingObjs);
     void Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
                   const bool bAdjust = false );
     void FormatOnceMore( SwTextFormatter &rLine, SwTextFormatInfo &rInf );

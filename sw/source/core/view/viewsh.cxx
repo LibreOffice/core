@@ -66,6 +66,7 @@
 #include <anchoredobject.hxx>
 #include <DocumentSettingManager.hxx>
 #include <DocumentRedlineManager.hxx>
+#include <DocumentLayoutManager.hxx>
 
 #include <unotxdoc.hxx>
 #include <view.hxx>
@@ -2425,6 +2426,8 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
                 }
             }
         }
+        // the layout changes but SetModified() wasn't called so do it here:
+        mxDoc->GetDocumentLayoutManager().ClearSwLayouterEntries();
     }
 
     if( !bOnlineSpellChgd )

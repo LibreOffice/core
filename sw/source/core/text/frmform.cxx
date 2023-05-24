@@ -50,6 +50,8 @@
 #include <redline.hxx>
 #include <comphelper/lok.hxx>
 #include <flyfrms.hxx>
+#include <frmtool.hxx>
+#include <layouter.hxx>
 
 // Tolerance in formatting and text output
 #define SLOPPY_TWIPS    5
@@ -1775,7 +1777,8 @@ void SwTextFrame::FormatOnceMore( SwTextFormatter &rLine, SwTextFormatInfo &rInf
     }
 }
 
-void SwTextFrame::Format_( vcl::RenderContext* pRenderContext, SwParaPortion *pPara )
+void SwTextFrame::FormatImpl(vcl::RenderContext* pRenderContext, SwParaPortion *pPara,
+        std::vector<SwAnchoredObject *> & rIntersectingObjs)
 {
     const bool bIsEmpty = GetText().isEmpty();
 
@@ -1809,6 +1812,18 @@ void SwTextFrame::Format_( vcl::RenderContext* pRenderContext, SwParaPortion *pP
 
     if( aLine.IsOnceMore() )
         FormatOnceMore( aLine, aInf );
+
+    if (aInf.GetTextFly().IsOn())
+    {
+        SwRect const aRect(aInf.GetTextFly().GetFrameArea());
+        for (SwAnchoredObject *const pObj : *aInf.GetTextFly().GetAnchoredObjList())
+        {
+            if (!aInf.GetTextFly().AnchoredObjToRect(pObj, aRect).IsEmpty())
+            {
+                rIntersectingObjs.push_back(pObj);
+            }
+        }
+    }
 
     if ( IsVertical() )
         SwapWidthAndHeight();
@@ -1991,7 +2006,13 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
             }
             do
             {
-                Format_( pRenderContext, aAccess.GetPara() );
+                ::std::vector<SwAnchoredObject *> intersectingObjs;
+                ::std::vector<SwFrame const*> nexts;
+                for (SwFrame const* pNext = GetNext(); pNext; pNext = pNext->GetNext())
+                {
+                    nexts.push_back(pNext);
+                }
+                FormatImpl(pRenderContext, aAccess.GetPara(), intersectingObjs);
                 if( pFootnoteBoss && nFootnoteHeight )
                 {
                     const SwFootnoteContFrame* pCont = pFootnoteBoss->FindFootnoteCont();
@@ -1999,12 +2020,79 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
                     // If we lost some footnotes, we may have more space
                     // for our main text, so we have to format again ...
                     if( nNewHeight < nFootnoteHeight )
+                    {
                         nFootnoteHeight = nNewHeight;
-                    else
-                        break;
+                        continue;
+                    }
                 }
-                else
-                    break;
+                if (!intersectingObjs.empty())
+                {
+                    // assumption is that FormatImpl() only moves frames
+                    // in the next-chain to next page
+                    SwPageFrame *const pPage(FindPageFrame());
+                    SwTextFrame * pLastMovedAnchor(nullptr);
+                    auto lastIter(nexts.end());
+                    for (SwAnchoredObject *const pObj : intersectingObjs)
+                    {
+                        SwFrame *const pAnchor(pObj->AnchorFrame());
+                        SwPageFrame *const pAnchorPage(pAnchor->FindPageFrame());
+                        if (pAnchorPage != pPage)
+                        {
+                            auto const iter(::std::find(nexts.begin(), nexts.end(), pAnchor));
+                            if (iter != nexts.end())
+                            {
+                                assert(pAnchor->IsTextFrame());
+                                // (can't check SwOszControl::IsInProgress()?)
+                                // called in loop in FormatAnchorFrameAndItsPrevs()
+                                if (static_cast<SwTextFrame const*>(pAnchor)->IsJoinLocked()
+                                    // called in loop in SwFrame::PrepareMake()
+                                    || pAnchor->IsDeleteForbidden())
+                                {
+                                    // when called via FormatAnchorFrameAndItsPrevs():
+                                    // don't do anything, caller will handle it
+                                    pLastMovedAnchor = nullptr;
+                                    break;
+                                }
+                                assert(pPage->GetPhyPageNum() < pAnchorPage->GetPhyPageNum()); // how could it move backward?
+
+                                if (!pLastMovedAnchor || iter < lastIter)
+                                {
+                                    pLastMovedAnchor = static_cast<SwTextFrame *>(pAnchor);
+                                    lastIter = iter;
+                                }
+                            }
+                        }
+                    }
+                    SwPageFrame const*const pPrevPage(static_cast<SwPageFrame const*>(pPage->GetPrev()));
+                    if (pLastMovedAnchor)
+                    {
+                        for (SwAnchoredObject *const pObj : intersectingObjs)
+                        {
+                            if (pObj->AnchorFrame() == pLastMovedAnchor)
+                            {
+                                SwPageFrame *const pAnchorPage(pLastMovedAnchor->FindPageFrame());
+                                SAL_INFO("sw.layout", "SwTextFrame::Format: move anchored " << pObj << " from " << pPage->GetPhyPageNum() << " to " << pAnchorPage->GetPhyPageNum());
+                                pObj->RegisterAtPage(*pAnchorPage);
+                                // tdf#143239 if the position remains valid, it may not be
+                                // positioned again so would remain on the wrong page!
+                                pObj->InvalidateObjPos();
+                                ::Notify_Background(pObj->GetDrawObj(), pPage,
+                                    pObj->GetObjRect(), PrepareHint::FlyFrameLeave, false);
+                                pObj->SetForceNotifyNewBackground(true);
+                            }
+                        }
+                        if (GetFollow() // this frame was split
+                            && (!pPrevPage // prev page is still valid
+                                || (!pPrevPage->IsInvalid()
+                                    && (!pPrevPage->GetSortedObjs() || !pPrevPage->IsInvalidFly()))))
+                        {   // this seems a bit risky...
+                            SwLayouter::InsertMovedFwdFrame(GetTextNodeFirst()->GetDoc(),
+                                *pLastMovedAnchor, FindPageFrame()->GetPhyPageNum() + 1);
+                        }
+                        continue; // try again without the fly
+                    }
+                }
+                break;
             } while ( pFootnoteBoss );
             if( bOrphan )
             {
