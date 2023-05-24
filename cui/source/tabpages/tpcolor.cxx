@@ -522,7 +522,13 @@ IMPL_LINK(SvxColorTabPage, SelectValSetHdl_Impl, ValueSet*, pValSet, void)
     aNamedColor.m_aColor = aColor;
     if (bThemePaletteSelected)
     {
-        PaletteManager::GetThemeIndexLumModOff(nPos, aNamedColor.m_nThemeIndex, aNamedColor.m_nLumMod, aNamedColor.m_nLumOff);
+        sal_uInt16 nThemeIndex;
+        sal_uInt16 nEffectIndex;
+        if (PaletteManager::GetThemeAndEffectIndex(nPos, nThemeIndex, nEffectIndex))
+        {
+            aNamedColor.m_nThemeIndex = nThemeIndex;
+            maPaletteManager.GetLumModOff(nThemeIndex, nEffectIndex, aNamedColor.m_nLumMod, aNamedColor.m_nLumOff);
+        }
     }
 
     ChangeColor(aNamedColor, false);

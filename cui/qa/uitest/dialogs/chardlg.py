@@ -115,8 +115,8 @@ class Test(UITestCase):
             # AssertionError: 10000 != 2000
             # i.e. the effects where not applied, luminance modulation was the default instead of a
             # custom value.
-            self.assertEqual(portion.CharColorLumMod, 2000)
-            self.assertEqual(portion.CharColorLumOff, 8000)
+            self.assertEqual(portion.CharColorLumMod, 5000)
+            self.assertEqual(portion.CharColorLumOff, 5000)
 
     def testSvxCharEffectsPageWriter(self):
         # Start Writer.
