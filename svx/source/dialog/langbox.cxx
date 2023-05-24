@@ -183,8 +183,8 @@ void SvxLanguageBox::AddLanguages(const std::vector< LanguageType >& rLanguageTy
                 weld::ComboBoxEntry aNewEntry(BuildEntry(nLang));
                 if (aNewEntry.sString.isEmpty())
                     continue;
-                if (std::find_if(rEntries.begin(), rEntries.end(),
-                                 [=](const weld::ComboBoxEntry& rEntry){ return rEntry.sId == aNewEntry.sId; }) != rEntries.end())
+                if (std::any_of(rEntries.begin(), rEntries.end(),
+                                 [&](const weld::ComboBoxEntry& rEntry){ return rEntry.sId == aNewEntry.sId; }))
                     continue;
                 rEntries.push_back(aNewEntry);
             }
