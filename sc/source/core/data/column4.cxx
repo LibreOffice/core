@@ -268,12 +268,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
             const ScPatternAttr* pAttr = (bSameDocPool ? rCxt.getSingleCellPattern(nColOffset) :
                     rCxt.getSingleCellPattern(nColOffset)->PutInPool( &rDocument, rCxt.getClipDoc()));
 
-            auto pNewPattern = std::make_unique<ScPatternAttr>(*pAttr);
-            sal_uInt16 pItems[2];
-            pItems[0] = ATTR_CONDITIONAL;
-            pItems[1] = 0;
-            pNewPattern->ClearItems(pItems);
-            pAttrArray->SetPatternArea(nRow1, nRow2, std::move(pNewPattern), true);
+            pAttrArray->SetPatternArea(nRow1, nRow2, pAttr, true);
         }
     }
 
