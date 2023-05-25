@@ -135,6 +135,15 @@ static char getEscapementChar(char ch)
 
 static bool writeEscapedSequence(sal_uInt32 ch, char*& pos)
 {
+    // control characters
+    if (ch <= 0x1f)
+    {
+        int written = snprintf(pos, 7, "\\u%.4x", static_cast<unsigned int>(ch));
+        if (written > 0)
+            pos += written;
+        return true;
+    }
+
     switch (ch)
     {
         case '\b':
