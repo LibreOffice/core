@@ -28,6 +28,7 @@
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/table/TableBorder2.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/XFormField.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
@@ -577,6 +578,13 @@ DECLARE_WW8EXPORT_TEST(testBnc787942, "bnc787942.doc")
 
     // this is on page 1 in Word
     parseDump("/root/page[1]/body/txt[4]/anchored");
+
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_PARALLEL, getProperty<text::WrapTextMode>(getShape(1), "Surround"));
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf133504_wrapNotBeside, "tdf133504_wrapNotBeside.doc")
+{
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_NONE, getProperty<text::WrapTextMode>(getShape(1), "Surround"));
 }
 
 DECLARE_WW8EXPORT_TEST(testLayoutHanging, "fdo68967.doc")
