@@ -23,8 +23,8 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 
-#include <mutex>
 #include <vector>
 
 namespace dbaccess
@@ -33,9 +33,9 @@ namespace dbaccess
     // OPropertyForward
     typedef ::cppu::WeakImplHelper<   css::beans::XPropertyChangeListener
                                   >   OPropertyForward_Base;
-    class OPropertyForward : public OPropertyForward_Base
+    class OPropertyForward  :public ::cppu::BaseMutex
+                            ,public OPropertyForward_Base
     {
-        std::mutex m_aMutex;
         css::uno::Reference< css::beans::XPropertySet >       m_xSource;
         css::uno::Reference< css::beans::XPropertySet >       m_xDest;
         css::uno::Reference< css::beans::XPropertySetInfo >   m_xDestInfo;
