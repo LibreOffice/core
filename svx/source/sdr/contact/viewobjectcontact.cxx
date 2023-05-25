@@ -31,6 +31,7 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/svdomedia.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdotext.hxx>
@@ -438,7 +439,8 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
                     }
 
                     ::std::vector<sal_Int32> annotIds;
-                    if (eElement == vcl::PDFWriter::Annot)
+                    if (eElement == vcl::PDFWriter::Annot
+                        && !static_cast<SdrMediaObj*>(pSdrObj)->getURL().isEmpty())
                     {
                         auto const pPDFExtOutDevData(GetObjectContact().GetPDFExtOutDevData());
                         assert(pPDFExtOutDevData);
