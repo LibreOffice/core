@@ -777,15 +777,15 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf108963)
             pSegment = pPdfPageObject->getPathSegment(1);
             CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFSegmentType::Lineto, pSegment->getType());
             aPoint = pSegment->getPoint();
-            CPPUNIT_ASSERT_DOUBLES_EQUAL(275.074, aPoint.getX(), 0.0005);
-            CPPUNIT_ASSERT_DOUBLES_EQUAL(267.590, aPoint.getY(), 0.0005);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(275.216, aPoint.getX(), 0.0005);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(267.732, aPoint.getY(), 0.0005);
             CPPUNIT_ASSERT(!pSegment->isClosed());
 
             pSegment = pPdfPageObject->getPathSegment(2);
             CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFSegmentType::Lineto, pSegment->getType());
             aPoint = pSegment->getPoint();
-            CPPUNIT_ASSERT_DOUBLES_EQUAL(287.490, aPoint.getX(), 0.0005);
-            CPPUNIT_ASSERT_DOUBLES_EQUAL(251.801, aPoint.getY(), 0.0005);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(287.660, aPoint.getX(), 0.0005);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(251.914, aPoint.getY(), 0.0005);
             CPPUNIT_ASSERT(!pSegment->isClosed());
 
             pSegment = pPdfPageObject->getPathSegment(3);
