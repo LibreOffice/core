@@ -1222,7 +1222,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
     {
         if ( pReqArgs && rDesc.GetMaster().GetHeader().IsActive())
         {
-            const SfxInt16Item& aLayoutItem = static_cast<const SfxInt16Item&>(pReqArgs->Get(SID_ATTR_PAGE_HEADER_LAYOUT));
+            const SfxInt16Item& aLayoutItem = pReqArgs->Get(SID_ATTR_PAGE_HEADER_LAYOUT);
             sal_uInt16 nLayout = aLayoutItem.GetValue();
             SwPageDesc aDesc(rDesc);
             aDesc.ChgHeaderShare((nLayout>>1) == 0);
@@ -1275,7 +1275,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
     {
         if ( pReqArgs && rDesc.GetMaster().GetFooter().IsActive())
         {
-            const SfxInt16Item& aLayoutItem = static_cast<const SfxInt16Item&>(pReqArgs->Get(SID_ATTR_PAGE_FOOTER_LAYOUT));
+            const SfxInt16Item& aLayoutItem = pReqArgs->Get(SID_ATTR_PAGE_FOOTER_LAYOUT);
             sal_uInt16 nLayout = aLayoutItem.GetValue();
             SwPageDesc aDesc(rDesc);
             aDesc.ChgFooterShare((nLayout>>1) == 0);

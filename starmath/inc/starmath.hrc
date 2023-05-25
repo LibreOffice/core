@@ -22,6 +22,7 @@
 #include <svl/solar.hrc>
 
 class SfxBoolItem;
+class SfxInt16Item;
 class SfxUInt16Item;
 
 #define SID_NEXTERR                 (SID_SMA_START + 1)
@@ -43,7 +44,7 @@ class SfxUInt16Item;
 #define SID_IMPORT_FORMULA          (SID_SMA_START + 58)
 #define SID_IMPORT_MATHML_CLIPBOARD (SID_SMA_START + 59)
 #define SID_TEXT                    TypedWhichId<SfxStringItem>(SID_SMA_START + 100)
-#define SID_GRAPHIC_SM              (SID_SMA_START + 101)
+#define SID_GRAPHIC_SM              TypedWhichId<SfxInt16Item>(SID_SMA_START + 101)
 /** Command for inserting a symbol specified by a string (Inserts an SmSpecialNode) */
 #define SID_INSERTSPECIAL           TypedWhichId<SfxStringItem>(SID_SMA_START + 104)
 /** Command for inserting a math construction */

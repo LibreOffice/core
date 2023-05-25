@@ -560,7 +560,7 @@ SET_FONTALIGNMENT:
                 break;
 
             case RTF_EXPND:
-                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_CHAR_KERNING])
+                if (TypedWhichId<SvxKerningItem> wid = aPlainMap[SID_ATTR_CHAR_KERNING])
                 {
                     if( -1 == nTokenValue )
                         nTokenValue = 0;
@@ -586,7 +586,7 @@ SET_FONTALIGNMENT:
                 break;
 
             case RTF_EXPNDTW:
-                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_CHAR_KERNING])
+                if (TypedWhichId<SvxKerningItem> wid = aPlainMap[SID_ATTR_CHAR_KERNING])
                 {
                     if( -1 == nTokenValue )
                         nTokenValue = 0;

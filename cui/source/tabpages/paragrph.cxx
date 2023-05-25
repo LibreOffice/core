@@ -1779,14 +1779,14 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
     }
 
     // widows and orphans
-    _nWhich = GetWhich( SID_ATTR_PARA_WIDOWS );
+    TypedWhichId<SvxWidowsItem> nWidowsWhich = GetWhich( SID_ATTR_PARA_WIDOWS );
     eState = m_xWidowBox->get_state();
 
     if ( m_xWidowBox->get_state_changed_from_saved() ||
          m_xWidowRowNo->get_value_changed_from_saved() )
     {
         SvxWidowsItem rItem( eState == TRISTATE_TRUE ?
-                             static_cast<sal_uInt8>(m_xWidowRowNo->get_value()) : 0, _nWhich );
+                             static_cast<sal_uInt8>(m_xWidowRowNo->get_value()) : 0, nWidowsWhich );
         pOld = GetOldItem( *rOutSet, SID_ATTR_PARA_WIDOWS );
 
         if ( m_xWidowBox->get_state_changed_from_saved() || !pOld || !( *static_cast<const SvxWidowsItem*>(pOld) == rItem ) )
@@ -1796,14 +1796,14 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
         }
     }
 
-    _nWhich = GetWhich( SID_ATTR_PARA_ORPHANS );
+    TypedWhichId<SvxOrphansItem> nOrphansWhich = GetWhich( SID_ATTR_PARA_ORPHANS );
     eState = m_xOrphanBox->get_state();
 
     if ( m_xOrphanBox->get_state_changed_from_saved() ||
          m_xOrphanRowNo->get_value_changed_from_saved() )
     {
         SvxOrphansItem rItem( eState == TRISTATE_TRUE ?
-                             static_cast<sal_uInt8>(m_xOrphanRowNo->get_value()) : 0, _nWhich );
+                             static_cast<sal_uInt8>(m_xOrphanRowNo->get_value()) : 0, nOrphansWhich );
         pOld = GetOldItem( *rOutSet, SID_ATTR_PARA_ORPHANS );
 
         if ( m_xOrphanBox->get_state_changed_from_saved() ||

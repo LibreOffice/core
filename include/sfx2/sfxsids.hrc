@@ -28,9 +28,10 @@ class SfxBoolItem;
 class SfxDocumentInfoItem;
 class SfxEventNamesItem;
 class SfxFlagItem;
+class SfxHyphenRegionItem;
+class SfxImageItem;
 class SfxInt16Item;
 class SfxInt32Item;
-class SfxHyphenRegionItem;
 class SfxMacroInfoItem;
 class SfxScriptOrganizerItem;
 class SfxStringItem;
@@ -142,7 +143,7 @@ class SvxZoomItem;
 #define SID_CLOSEDOC_SAVE                   (SID_SFX_START +   1)
 #define SID_CLOSEDOC_FILENAME               (SID_SFX_START +   2)
 #define SID_PRINTDOC                        (SID_SFX_START + 504)
-#define SID_PRINT_COPIES                    (SID_SFX_START +   3)
+#define SID_PRINT_COPIES                    TypedWhichId<SfxInt16Item>(SID_SFX_START +   3)
 #define SID_PRINT_PAGES                     TypedWhichId<SfxStringItem>(SID_SFX_START +1589)
 #define SID_PRINT_COLLATE                   (SID_SFX_START +1590)
 #define SID_PRINT_SORT                      (SID_SFX_START +1591)
@@ -228,7 +229,7 @@ class SvxZoomItem;
 #define SID_ATTR_TARGETLANG_STR             (SID_SFX_START + 1664)
     // FREE
 #define SID_OUTPUTSTREAM                    TypedWhichId<SfxUnoAnyItem>(SID_SFX_START + 1666)
-#define SID_IMAGE_ORIENTATION               (SID_SFX_START + 1667)
+#define SID_IMAGE_ORIENTATION               TypedWhichId<SfxImageItem>(SID_SFX_START + 1667)
 
 #define SID_STOP_RECORDING                  (SID_SFX_START + 1671)
 #define SID_INTERACTIONHANDLER              TypedWhichId<SfxUnoAnyItem>(SID_SFX_START + 1675)
@@ -400,7 +401,7 @@ class SvxZoomItem;
 #define SID_HYPERLINK_DIALOG                TypedWhichId<SfxBoolItem>(SID_SFX_START + 678)
 
 #define SID_DEFAULTFILEPATH                 (SID_SFX_START + 571)
-#define SID_OBJECT                          (SID_SFX_START + 575)
+#define SID_OBJECT                          TypedWhichId<SfxInt16Item>(SID_SFX_START + 575)
 
 // Doc-Properties
 #define SID_DOCFULLNAME                     TypedWhichId<SfxStringItem>(SID_SFX_START + 581)

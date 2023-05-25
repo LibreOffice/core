@@ -28,6 +28,7 @@ class OfaPtrItem;
 class OfaXColorListItem;
 class SdrAngleItem;
 class SfxBoolItem;
+class SfxInt16Item;
 class SfxInt32Item;
 class SfxInt64Item;
 class SfxIntegerListItem;
@@ -710,11 +711,11 @@ class XFillGradientItem;
 #define SID_PARAM_NUM_PRESET                            TypedWhichId<SfxBoolItem>( SID_SVX_START + 856 )
 #define SID_PARAM_CUR_NUM_LEVEL                         TypedWhichId<SfxUInt16Item>( SID_SVX_START + 859 )
 #define SID_CREATE_SW_DRAWVIEW                          ( SID_SVX_START + 860 )
-#define SID_ATTR_GRAF_LUMINANCE                         ( SID_SVX_START + 863 )
-#define SID_ATTR_GRAF_CONTRAST                          ( SID_SVX_START + 864 )
-#define SID_ATTR_GRAF_RED                               ( SID_SVX_START + 865 )
-#define SID_ATTR_GRAF_GREEN                             ( SID_SVX_START + 866 )
-#define SID_ATTR_GRAF_BLUE                              ( SID_SVX_START + 867 )
+#define SID_ATTR_GRAF_LUMINANCE                         TypedWhichId<SfxInt16Item>( SID_SVX_START + 863 )
+#define SID_ATTR_GRAF_CONTRAST                          TypedWhichId<SfxInt16Item>( SID_SVX_START + 864 )
+#define SID_ATTR_GRAF_RED                               TypedWhichId<SfxInt16Item>( SID_SVX_START + 865 )
+#define SID_ATTR_GRAF_GREEN                             TypedWhichId<SfxInt16Item>( SID_SVX_START + 866 )
+#define SID_ATTR_GRAF_BLUE                              TypedWhichId<SfxInt16Item>( SID_SVX_START + 867 )
 #define SID_ATTR_GRAF_GAMMA                             ( SID_SVX_START + 868 )
 #define SID_ATTR_GRAF_TRANSPARENCE                      TypedWhichId<SfxUInt16Item>( SID_SVX_START + 869 )
 #define SID_ATTR_GRAF_INVERT                            ( SID_SVX_START + 870 )

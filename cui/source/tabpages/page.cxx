@@ -723,14 +723,14 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
     }
 
     // paper tray
-    nWhich = GetWhich( SID_ATTR_PAGE_PAPERBIN );
+    TypedWhichId<SvxPaperBinItem> nPaperWhich = GetWhich( SID_ATTR_PAGE_PAPERBIN );
     sal_Int32 nPos = m_xPaperTrayBox->get_active();
     sal_uInt16 nBin = m_xPaperTrayBox->get_id(nPos).toInt32();
     pOld = GetOldItem( *rSet, SID_ATTR_PAGE_PAPERBIN );
 
     if ( !pOld || static_cast<const SvxPaperBinItem*>(pOld)->GetValue() != nBin )
     {
-        rSet->Put( SvxPaperBinItem( nWhich, static_cast<sal_uInt8>(nBin) ) );
+        rSet->Put( SvxPaperBinItem( nPaperWhich, static_cast<sal_uInt8>(nBin) ) );
         bModified = true;
     }
 

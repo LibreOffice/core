@@ -522,7 +522,7 @@ static_assert(SID_PREVIEW_END < SID_KEYFUNC_START, "calc slots ids trampling inf
 
 #define SID_RANGE_ROW           TypedWhichId<SfxInt32Item>(SID_NEW_SLOTS+20)
 #define SID_RANGE_COL           TypedWhichId<SfxInt16Item>(SID_NEW_SLOTS+21)
-#define SID_RANGE_TABLE         (SID_NEW_SLOTS+22)
+#define SID_RANGE_TABLE         TypedWhichId<SfxInt16Item>(SID_NEW_SLOTS+22)
 // empty, was SID_RANGE_VALUE
 #define SID_RANGE_FORMULA       TypedWhichId<SfxStringItem>(SID_NEW_SLOTS+24)
 #define SID_RANGE_TEXTVALUE     TypedWhichId<SfxStringItem>(SID_NEW_SLOTS+26)
@@ -636,7 +636,7 @@ static_assert(SID_PREVIEW_END < SID_KEYFUNC_START, "calc slots ids trampling inf
 // Sidebar -------------------------------------------------------------
 
 #define SID_PROPERTY_PANEL_CELLTEXT_DLG (SC_SIDEBAR_PROPERTY_BEGIN+0)
-#define SID_NUMBER_TYPE_FORMAT          (SC_SIDEBAR_PROPERTY_BEGIN+1)
+#define SID_NUMBER_TYPE_FORMAT          TypedWhichId<SfxInt16Item>(SC_SIDEBAR_PROPERTY_BEGIN+1)
 
 // resources
 

@@ -50,6 +50,7 @@ class SvxKerningItem;
 class SvxLanguageItem;
 class SvxLineSpacingItem;
 class SvxLRSpaceItem;
+class SvxOrphansItem;
 class SvxOverlineItem;
 class SvxPageModelItem;
 class SvxParaVertAlignItem;
@@ -62,6 +63,7 @@ class SvxTwoLinesItem;
 class SvxUnderlineItem;
 class SvxULSpaceItem;
 class SvxWeightItem;
+class SvxWidowsItem;
 class SvxWordLineModeItem;
 
 /*
@@ -107,8 +109,8 @@ class SvxWordLineModeItem;
 #define SID_ATTR_PARA_PAGEBREAK                         ( SID_SVX_START + 37 )
 #define SID_ATTR_PARA_HYPHENZONE                        TypedWhichId<SvxHyphenZoneItem>( SID_SVX_START + 38 )
 #define SID_ATTR_PARA_SPLIT                             TypedWhichId<SvxFormatSplitItem>( SID_SVX_START + 39 )
-#define SID_ATTR_PARA_ORPHANS                           ( SID_SVX_START + 40 )
-#define SID_ATTR_PARA_WIDOWS                            ( SID_SVX_START + 41 )
+#define SID_ATTR_PARA_ORPHANS                           TypedWhichId<SvxOrphansItem>( SID_SVX_START + 40 )
+#define SID_ATTR_PARA_WIDOWS                            TypedWhichId<SvxWidowsItem>( SID_SVX_START + 41 )
 #define SID_ATTR_PARA_ULSPACE                           ( SID_SVX_START + 42 )
 #define SID_ATTR_PARA_LRSPACE                           ( SID_SVX_START + 43 )
 #define SID_ATTR_PARA_LEFTSPACE                         ( SID_SVX_START + 44 )

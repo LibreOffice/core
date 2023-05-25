@@ -896,15 +896,15 @@ class SwUINumRuleItem;
 #define FN_UNO_DESCRIPTION              TypedWhichId<SfxStringItem>(FN_FRAME + 20)
 #define FN_UNO_TOOLTIP                  (FN_FRAME + 21)
 
-#define SID_ATTR_PAGE_COLUMN            (FN_SIDEBAR + 0)
+#define SID_ATTR_PAGE_COLUMN            TypedWhichId<SfxInt16Item>(FN_SIDEBAR + 0)
 #define SID_ATTR_PAGE_HEADER            (FN_SIDEBAR + 3)
 #define SID_ATTR_PAGE_HEADER_LRMARGIN   TypedWhichId<SvxLongLRSpaceItem>(FN_SIDEBAR + 4)
 #define SID_ATTR_PAGE_HEADER_SPACING    TypedWhichId<SvxLongULSpaceItem>(FN_SIDEBAR + 5)
-#define SID_ATTR_PAGE_HEADER_LAYOUT     (FN_SIDEBAR + 6)
+#define SID_ATTR_PAGE_HEADER_LAYOUT     TypedWhichId<SfxInt16Item>(FN_SIDEBAR + 6)
 #define SID_ATTR_PAGE_FOOTER            (FN_SIDEBAR + 7)
 #define SID_ATTR_PAGE_FOOTER_LRMARGIN   TypedWhichId<SvxLongLRSpaceItem>(FN_SIDEBAR + 8)
 #define SID_ATTR_PAGE_FOOTER_SPACING    TypedWhichId<SvxLongULSpaceItem>(FN_SIDEBAR + 9)
-#define SID_ATTR_PAGE_FOOTER_LAYOUT     (FN_SIDEBAR + 10)
+#define SID_ATTR_PAGE_FOOTER_LAYOUT     TypedWhichId<SfxInt16Item>(FN_SIDEBAR + 10)
 #define SID_ATTR_PAGE_MARGIN            (FN_SIDEBAR + 11)
 
 //Member IDs for Fill / SetVariable of items
