@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <text:p/>
+   <text:list>
+    <text:list-item>
+     <text:p>list 1 item 1</text:p>
+     <text:list>
+      <text:list-header>
+       <text:p>list 1 item 1 sub-header</text:p>
+      </text:list-header>
+     </text:list>
+    </text:list-item>
+   </text:list>
+   <text:p/>
+   <text:p>text</text:p>
+   <text:list text:continue-numbering="true">
+    <text:list-item>
+     <text:list>
+      <text:list-header>
+       <text:p>list 2 sub-header</text:p>
+      </text:list-header>
+     </text:list>
+    </text:list-item>
+   </text:list>
+   <text:p/>
+  </office:text>
+ </office:body>
+</office:document>
