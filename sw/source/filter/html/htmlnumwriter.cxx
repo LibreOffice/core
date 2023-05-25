@@ -84,8 +84,7 @@ void SwHTMLWriter::SetNextNumInfo( std::unique_ptr<SwHTMLNumRuleInfo> pNxt )
 }
 
 Writer& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
-                                 const SwHTMLNumRuleInfo& rInfo,
-                                 bool& rAtLeastOneNumbered )
+                                 const SwHTMLNumRuleInfo& rInfo )
 {
     SwHTMLNumRuleInfo& rPrevInfo = rWrt.GetNumInfo();
     bool bSameRule = rPrevInfo.GetNumRule() == rInfo.GetNumRule();
@@ -93,43 +92,6 @@ Writer& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
         !rInfo.IsRestart(rPrevInfo) )
     {
         return rWrt;
-    }
-
-    if (rWrt.mbXHTML && !rInfo.IsNumbered())
-    {
-        // If the list only consists of non-numbered text nodes, then don't start the list.
-        bool bAtLeastOneNumbered = false;
-        SwNodeOffset nPos = rWrt.m_pCurrentPam->GetPoint()->GetNodeIndex() + 1;
-        SwNumRule* pNumRule = nullptr;
-        while (true)
-        {
-            const SwNode* pNode = rWrt.m_pDoc->GetNodes()[nPos];
-            if (!pNode->IsTextNode())
-            {
-                break;
-            }
-
-            const SwTextNode* pTextNode = pNode->GetTextNode();
-            if (!pTextNode->GetNumRule() || (pNumRule && pTextNode->GetNumRule() != pNumRule))
-            {
-                // Node is not in the same numbering as the previous one.
-                break;
-            }
-
-            pNumRule = pTextNode->GetNumRule();
-            if (pTextNode->IsNumbered())
-            {
-                bAtLeastOneNumbered = true;
-                break;
-            }
-            ++nPos;
-        }
-
-        rAtLeastOneNumbered = bAtLeastOneNumbered;
-        if (!bAtLeastOneNumbered)
-        {
-            return rWrt;
-        }
     }
 
     bool bStartValue = false;
@@ -325,44 +287,10 @@ Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
     bool bListEnd = !bSameRule || rNextInfo.GetDepth() < rInfo.GetDepth() || rNextInfo.IsRestart(rInfo);
     bool bNextIsSubitem = !bListEnd && rNextInfo.GetDepth() > rInfo.GetDepth();
 
-    std::optional<bool> oAtLeastOneNumbered;
-    if (!rInfo.IsNumbered())
-    {
-        oAtLeastOneNumbered = false;
-        SwNodeOffset nPos = rWrt.m_pCurrentPam->GetPoint()->GetNodeIndex() - 1;
-        SwNumRule* pNumRule = nullptr;
-        while (true)
-        {
-            const SwNode* pNode = rWrt.m_pDoc->GetNodes()[nPos];
-            if (!pNode->IsTextNode())
-            {
-                break;
-            }
-
-            const SwTextNode* pTextNode = pNode->GetTextNode();
-            if (!pTextNode->GetNumRule() || (pNumRule && pTextNode->GetNumRule() != pNumRule))
-            {
-                // Node is not in the same numbering as the next one.
-                break;
-            }
-
-            pNumRule = pTextNode->GetNumRule();
-            if (pTextNode->IsNumbered())
-            {
-                oAtLeastOneNumbered = true;
-                break;
-            }
-            --nPos;
-        }
-    }
-
     if (rWrt.mbXHTML)
     {
-        // The list is numbered if the previous text node is numbered or any other previous text
-        // node is numbered.
-        bool bPrevIsNumbered = rInfo.IsNumbered() || *oAtLeastOneNumbered;
         // XHTML </li> for the list item content, if there is an open <li>.
-        if ((bListEnd && bPrevIsNumbered) || (!bListEnd && !bNextIsSubitem && rNextInfo.IsNumbered()))
+        if (bListEnd || (!bNextIsSubitem && rNextInfo.IsNumbered()))
         {
             HTMLOutFuncs::Out_AsciiTag(
                 rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_li),
@@ -373,15 +301,6 @@ Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
     if (!bListEnd)
     {
         return rWrt;
-    }
-
-    if (rWrt.mbXHTML && !rInfo.IsNumbered())
-    {
-        // If the list only consisted of non-numbered text nodes, then don't end the list.
-        if (!*oAtLeastOneNumbered)
-        {
-            return rWrt;
-        }
     }
 
     OSL_ENSURE( rWrt.m_nLastParaToken == HtmlTokenId::NONE,

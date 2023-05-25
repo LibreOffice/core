@@ -1487,10 +1487,13 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testListHeading)
     CPPUNIT_ASSERT(pDoc);
 
     // Without the accompanying fix in place, this test would have failed:
-    // - expected: <div><p>...</p></div>
+    // - expected: <div><ol><li style="display: block"><p>...</p></li></ol></div>
     // - actual  : <div><ol><p>...</p></li></ol></div>
     // because a </li> but no <li> is not well-formed and <ol> with a non-li children is invalid.
-    assertXPathContent(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p", "list header");
+    OUString aContent
+        = getXPathContent(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:ol/"
+                                   "reqif-xhtml:li[@style='display: block']/reqif-xhtml:p");
+    CPPUNIT_ASSERT_EQUAL(OUString("list header"), aContent.trim());
 }
 
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testPartiallyNumberedList)
@@ -2086,11 +2089,10 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testListsHeading)
     xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
     CPPUNIT_ASSERT(pDoc);
 
-    // Without the accompanying fix in place, this test would have failed with:
-    // - In <>, XPath '/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p' not found
-    // Because the headers of list 1 were inside <div><ol>, not directly under <div>.
-    assertXPathContent(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p",
-                       "list 1, header 1");
+    OUString aContent
+        = getXPathContent(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:ol/"
+                                   "reqif-xhtml:li[@style='display: block']/reqif-xhtml:p");
+    CPPUNIT_ASSERT_EQUAL(OUString("list 1, header 1"), aContent.trim());
 }
 
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testOleEmfPreviewToHtml)
@@ -2544,6 +2546,38 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTdf155387)
         "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:ul/reqif-xhtml:li/reqif-xhtml:ul[2]/"
         "reqif-xhtml:li/reqif-xhtml:ul/reqif-xhtml:li/reqif-xhtml:p",
         "l3");
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTdf155496)
+{
+    createSwDoc("listItemSubheader.fodt");
+    ExportToReqif();
+
+    SvMemoryStream aStream;
+    WrapReqifFromTempFile(aStream);
+    xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
+    // Without the fix in place, this would fail
+    CPPUNIT_ASSERT(pDoc);
+
+    // Two top-level lists
+    assertXPath(pDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:ul", 2);
+    // Single top-level item
+    assertXPath(pDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:ul[1]/reqif-xhtml:li");
+    // One top-level paragraph in the item
+    assertXPath(pDoc,
+                "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:ul[1]/reqif-xhtml:li/reqif-xhtml:p");
+    // One sublist in the item
+    assertXPath(
+        pDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:ul[1]/reqif-xhtml:li/reqif-xhtml:ul");
+    // One item in the sublist
+    assertXPath(pDoc,
+                "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:ul[1]/reqif-xhtml:li/reqif-xhtml:ul/"
+                "reqif-xhtml:li");
+    // Check its text
+    OUString aContent = getXPathContent(
+        pDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:ul[1]/reqif-xhtml:li/reqif-xhtml:ul/"
+              "reqif-xhtml:li/reqif-xhtml:p");
+    CPPUNIT_ASSERT_EQUAL(OUString("list 1 item 1\n\t\tsub-header"), aContent.trim());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
