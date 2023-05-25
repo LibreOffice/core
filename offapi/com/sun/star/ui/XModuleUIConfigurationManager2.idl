@@ -45,6 +45,14 @@ interface XModuleUIConfigurationManager2
         interface configuration manager.
     */
     interface com::sun::star::ui::XUIConfiguration;
+
+    /**
+        Creates a new configuration manager in case there are different views with different languages.
+        This function enables those views to have short cut keys specific to the languages.
+
+        @since LibreOffice 7.6
+    */
+    com::sun::star::ui::XAcceleratorConfiguration createShortCutManager();
 };
 
 
