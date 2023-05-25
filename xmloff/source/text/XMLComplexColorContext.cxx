@@ -58,6 +58,14 @@ XMLComplexColorContext::XMLComplexColorContext(
                 }
                 break;
             }
+            case XML_ELEMENT(LO_EXT, XML_COLOR_TYPE):
+            {
+                const OUString aValue = aIter.toString();
+                if (aValue == u"theme")
+                    maComplexColor.setType(model::ColorType::Scheme);
+                // TODO - handle other color types
+                break;
+            }
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", aIter);
                 break;
