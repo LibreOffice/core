@@ -158,7 +158,8 @@ void TheExtensionManager::SetText( const OUString &rTitle )
 {
     const SolarMutexGuard guard;
 
-    getDialog()->set_title( rTitle );
+    if (weld::Window* pDialog = getDialog())
+        pDialog->set_title( rTitle );
 }
 
 
@@ -166,7 +167,8 @@ void TheExtensionManager::ToTop()
 {
     const SolarMutexGuard guard;
 
-    getDialog()->present();
+    if (weld::Window* pDialog = getDialog())
+        pDialog->present();
 }
 
 void TheExtensionManager::Close()
