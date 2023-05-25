@@ -90,7 +90,7 @@ constants VBAEventId
 
     /** Worksheet has been activated (made visible). Arguments: short nSheet. */
     const long WORKSHEET_ACTIVATE                   = 2101;
-    /** Worksheet has been activated (made visible). Arguments: short nSheet. */
+    /** Worksheet has been deactivated (made not visible). Arguments: short nSheet. */
     const long WORKSHEET_DEACTIVATE                 = 2102;
     /** Double click in the sheet. Arguments: XRange/XSheetCellRangeContainer aRange, [out] boolean bCancel. */
     const long WORKSHEET_BEFOREDOUBLECLICK          = 2103;
