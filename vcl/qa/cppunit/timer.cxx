@@ -160,7 +160,7 @@ class TimerBool : public Timer
 {
     bool &mrBool;
 public:
-    TimerBool( sal_uLong nMS, bool &rBool ) :
+    TimerBool( sal_uInt64 nMS, bool &rBool ) :
         Timer( "TimerBool" ), mrBool( rBool )
     {
         SetTimeout( nMS );
@@ -178,11 +178,10 @@ public:
 
 void TimerTest::testDurations()
 {
-    static const sal_uLong aDurations[] = { 0, 1, 500, 1000 };
-    for (size_t i = 0; i < SAL_N_ELEMENTS( aDurations ); i++)
+    for (auto const nDuration : { 0, 1, 500, 1000 })
     {
         bool bDone = false;
-        TimerBool aTimer( aDurations[i], bDone );
+        TimerBool aTimer( nDuration, bDone );
         // coverity[loop_top] - Application::Yield allows the timer to fire and toggle bDone
         while( !bDone )
         {
@@ -199,7 +198,7 @@ class AutoTimerCount : public AutoTimer
     const sal_Int32 mnMaxCount;
 
 public:
-    AutoTimerCount( sal_uLong nMS, sal_Int32 &rCount,
+    AutoTimerCount( sal_uInt64 nMS, sal_Int32 &rCount,
                     const sal_Int32 nMaxCount = -1 )
         : AutoTimer( "AutoTimerCount" )
         , mrCount( rCount )
@@ -340,7 +339,7 @@ namespace {
 class YieldTimer : public Timer
 {
 public:
-    explicit YieldTimer( sal_uLong nMS ) : Timer( "YieldTimer" )
+    explicit YieldTimer( sal_uInt64 nMS ) : Timer( "YieldTimer" )
     {
         SetTimeout( nMS );
         Start();
@@ -370,7 +369,7 @@ class SlowCallbackTimer : public Timer
 {
     bool &mbSlow;
 public:
-    SlowCallbackTimer( sal_uLong nMS, bool &bBeenSlow ) :
+    SlowCallbackTimer( sal_uInt64 nMS, bool &bBeenSlow ) :
         Timer( "SlowCallbackTimer" ), mbSlow( bBeenSlow )
     {
         SetTimeout( nMS );
