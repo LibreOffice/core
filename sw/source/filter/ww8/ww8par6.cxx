@@ -1912,7 +1912,6 @@ eHRel(text::RelOrientation::PAGE_FRAME),
 eVRel(text::RelOrientation::FRAME),
 eVAlign(text::VertOrientation::NONE),
 eHAlign(text::HoriOrientation::NONE),
-eSurround(( rWW.nPWr > 1 ) ? css::text::WrapTextMode_DYNAMIC : css::text::WrapTextMode_NONE),
 nXBind(( rWW.nTPc & 0xc0 ) >> 6),
 nYBind(( rWW.nTPc & 0x30 ) >> 4),
 nNewNetWidth(MINFLY),
@@ -1920,10 +1919,25 @@ nLineSpace(0),
 bAutoWidth(false),
 bTogglePos(false)
 {
-    //#i119466 mapping "Around" wrap setting to "Parallel" for table
-    const bool bIsTable = rIo.m_xPlcxMan->HasParaSprm(NS_sprm::PFInTable::val).pSprm;
-    if (bIsTable && rWW.nPWr == 2)
-        eSurround = css::text::WrapTextMode_PARALLEL;
+    switch(rWW.nPWr)
+    {
+        case 0: // ST_Wrap: auto
+            eSurround = css::text::WrapTextMode_DYNAMIC;
+            break;
+        case 1: // ST_Wrap: notBeside
+        case 3: // ST_Wrap: none
+            eSurround = css::text::WrapTextMode_NONE;
+            break;
+        case 2: // ST_Wrap: around
+        case 4: // ST_Wrap: tight
+            eSurround = css::text::WrapTextMode_PARALLEL;
+            break;
+        case 5: // St_Wrap: through
+            eSurround = css::text::WrapTextMode_THROUGH;
+            break;
+        default:
+            eSurround = css::text::WrapTextMode_DYNAMIC;
+    }
 
     /*
      #95905#, #83307# seems to have gone away now, so re-enable parallel
