@@ -318,8 +318,21 @@ namespace dbaui
                 int i = 1;
                 for (;;)
                 {
-                    // be dumb, treat everything as a string
-                    out.append(xRow->getString(i) + ",");
+                    // be dumb, treat everything as a string unless below
+                    // tdf#153317, at least "Bit" type in Mysql/MariaDB gives: "\000" or "\001"
+                    // so retrieve Sequence from getBytes, test if it has a length of 1 (so we avoid BLOB/CLOB or other complex types)
+                    // and test if the value of first byte is one of those.
+                    // In this case, there's a good chance it's a "Bit" field
+                    // remark: for unknown reason, getByte(i) gives "\000" even if the bit is at 1.
+                    auto seq = xRow->getBytes(i);
+                    if ((seq.getLength() == 1) && (seq[0] <= 1))
+                    {
+                        out.append(OUString::number(static_cast<int>(seq[0])) + ",");
+                    }
+                    else
+                    {
+                        out.append(xRow->getString(i) + ",");
+                    }
                     i++;
                 }
             }
