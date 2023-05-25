@@ -36,7 +36,7 @@ $(call gb_ExternalProject_get_state_target,libxml2,build):
 			LDFLAGS="$(if $(SYSBASE),-L$(SYSBASE)/usr/lib)" \
 			CFLAGS="$(if $(SYSBASE),-I$(SYSBASE)/usr/include) $(if $(debug),-g)" \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
-		&& $(MAKE) libxml2.la \
+		&& $(MAKE) libxml2.la xmllint \
 	)
 endif
 
