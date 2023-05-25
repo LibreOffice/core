@@ -95,6 +95,8 @@ public:
 public:
     ColorType getType() const { return meType; }
 
+    void setType(ColorType eType) { meType = eType; }
+
     ThemeColorType getSchemeType() const { return meSchemeType; }
 
     Color getRGBColor() const { return Color(mnComponent1, mnComponent2, mnComponent3); }

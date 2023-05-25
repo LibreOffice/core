@@ -358,7 +358,7 @@
   </style:style>
   <style:style style:name="gr1" style:family="graphic">
    <style:graphic-properties draw:stroke="none" svg:stroke-width="0.199cm" svg:stroke-color="#b3a2c7" draw:marker-start="" draw:marker-start-width="0.559cm" draw:marker-start-center="false" draw:marker-end="" draw:marker-end-width="0.559cm" draw:marker-end-center="false" svg:stroke-opacity="100%" draw:stroke-linejoin="bevel" draw:fill="solid" draw:fill-color="#558ed5" draw:secondary-fill-color="#d4ea6b" draw:opacity="100%" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="false" fo:min-height="2.993cm" fo:min-width="5.004cm" fo:padding-top="0.215cm" fo:padding-bottom="0.215cm" fo:padding-left="0.335cm" fo:padding-right="0.335cm" fo:wrap-option="wrap" draw:shadow="hidden" draw:shadow-offset-x="0.071cm" draw:shadow-offset-y="0.071cm" draw:shadow-color="#808080" draw:shadow-opacity="100%" style:writing-mode="lr-tb" style:run-through="foreground" style:wrap="run-through" style:number-wrapped-paragraphs="no-limit" style:vertical-pos="from-top" style:vertical-rel="paragraph-content" style:horizontal-pos="from-left" style:horizontal-rel="paragraph-content" draw:wrap-influence-on-position="once-concurrent" loext:allow-overlap="true" style:flow-with-text="false">
-    <loext:fill-complex-color loext:theme-type="dark2">
+    <loext:fill-complex-color loext:color-type="theme" loext:theme-type="dark2">
      <loext:transformation loext:type="lummod" loext:value="6000"/>
      <loext:transformation loext:type="lumoff" loext:value="4000"/>
     </loext:fill-complex-color>
@@ -367,7 +367,7 @@
   </style:style>
   <style:style style:name="gr2" style:family="graphic">
    <style:graphic-properties draw:stroke="none" svg:stroke-width="0.199cm" svg:stroke-color="#b3a2c7" draw:marker-start="" draw:marker-start-width="0.559cm" draw:marker-start-center="false" draw:marker-end="" draw:marker-end-width="0.559cm" draw:marker-end-center="false" svg:stroke-opacity="100%" draw:stroke-linejoin="bevel" draw:fill="solid" draw:fill-color="#948a54" draw:secondary-fill-color="#d4ea6b" draw:opacity="100%" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="false" fo:min-height="2.993cm" fo:min-width="5.004cm" fo:padding-top="0.215cm" fo:padding-bottom="0.215cm" fo:padding-left="0.335cm" fo:padding-right="0.335cm" fo:wrap-option="wrap" draw:shadow="hidden" draw:shadow-offset-x="0.071cm" draw:shadow-offset-y="0.071cm" draw:shadow-color="#808080" draw:shadow-opacity="100%" style:writing-mode="lr-tb" style:run-through="foreground" style:wrap="run-through" style:number-wrapped-paragraphs="no-limit" style:vertical-pos="from-top" style:vertical-rel="paragraph-content" style:horizontal-pos="from-left" style:horizontal-rel="paragraph-content" draw:wrap-influence-on-position="once-concurrent" loext:allow-overlap="true" style:flow-with-text="false">
-    <loext:fill-complex-color loext:theme-type="light2">
+    <loext:fill-complex-color loext:color-type="theme" loext:theme-type="light2">
      <loext:transformation loext:type="lummod" loext:value="5000"/>
     </loext:fill-complex-color>
    </style:graphic-properties>

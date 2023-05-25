@@ -340,7 +340,7 @@
     <style:tab-stops/>
    </style:paragraph-properties>
    <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#c0504d" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:text-position="0% 100%" style:font-name="Calibri" fo:font-size="12pt" fo:letter-spacing="normal" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:letter-kerning="false" fo:background-color="transparent" style:font-name-asian="ＭＳ 明朝" style:font-size-asian="12pt" style:language-asian="ja" style:country-asian="JP" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Arial" style:font-size-complex="12pt" style:language-complex="ar" style:country-complex="SA" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:text-scale="100%" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" fo:hyphenate="false" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false">
-    <loext:char-complex-color loext:theme-type="accent2"/>
+    <loext:char-complex-color loext:color-type="theme" loext:theme-type="accent2"/>
    </style:text-properties>
   </style:style>
   <style:style style:name="P3" style:family="paragraph">
@@ -349,17 +349,17 @@
     <style:tab-stops/>
    </style:paragraph-properties>
    <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#c0504d" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:text-position="0% 100%" style:font-name="Calibri" fo:font-size="12pt" fo:letter-spacing="normal" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:letter-kerning="false" fo:background-color="transparent" style:font-name-asian="ＭＳ 明朝" style:font-size-asian="12pt" style:language-asian="ja" style:country-asian="JP" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Arial" style:font-size-complex="12pt" style:language-complex="ar" style:country-complex="SA" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:text-scale="100%" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" fo:hyphenate="false" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false">
-    <loext:char-complex-color loext:theme-type="accent2"/>
+    <loext:char-complex-color loext:color-type="theme" loext:theme-type="accent2"/>
    </style:text-properties>
   </style:style>
   <style:style style:name="T1" style:family="text">
    <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#c0504d" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:text-position="0% 100%" style:font-name="Calibri" fo:font-size="12pt" fo:letter-spacing="normal" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:letter-kerning="false" fo:background-color="transparent" style:font-name-asian="ＭＳ 明朝" style:font-size-asian="12pt" style:language-asian="ja" style:country-asian="JP" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Arial" style:font-size-complex="12pt" style:language-complex="ar" style:country-complex="SA" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:text-scale="100%" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color">
-    <loext:char-complex-color loext:theme-type="accent2"/>
+    <loext:char-complex-color loext:color-type="theme" loext:theme-type="accent2"/>
    </style:text-properties>
   </style:style>
   <style:style style:name="gr1" style:family="graphic">
    <style:graphic-properties draw:stroke="none" svg:stroke-width="0.032cm" draw:stroke-linejoin="round" svg:stroke-linecap="butt" draw:fill="solid" draw:fill-color="#77933c" loext:fill-use-slide-background="false" draw:opacity-name="Transparency_20_1" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="top" draw:auto-grow-height="false" draw:auto-grow-width="false" fo:min-height="3.034cm" fo:min-width="8.715cm" fo:padding-top="0.127cm" fo:padding-bottom="0.127cm" fo:padding-left="0.254cm" fo:padding-right="0.254cm" fo:wrap-option="wrap" style:writing-mode="lr-tb" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" style:run-through="foreground" style:wrap="run-through" style:number-wrapped-paragraphs="no-limit" style:vertical-pos="from-top" style:vertical-rel="paragraph" style:horizontal-pos="from-left" style:horizontal-rel="paragraph" draw:wrap-influence-on-position="once-concurrent" loext:allow-overlap="true" style:flow-with-text="false">
-    <loext:fill-complex-color loext:theme-type="accent3">
+    <loext:fill-complex-color loext:color-type="theme" loext:theme-type="accent3">
      <loext:transformation loext:type="lummod" loext:value="7500"/>
     </loext:fill-complex-color>
    </style:graphic-properties>
