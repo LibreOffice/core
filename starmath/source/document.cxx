@@ -959,7 +959,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
         case SID_TEXT:
         {
-            const SfxStringItem& rItem = static_cast<const SfxStringItem&>(rReq.GetArgs()->Get(SID_TEXT));
+            const SfxStringItem& rItem = rReq.GetArgs()->Get(SID_TEXT);
             if (GetText() != rItem.GetValue())
                 SetText(rItem.GetValue());
         }

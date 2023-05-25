@@ -833,10 +833,10 @@ void SmEditTextWindow::Flush()
         pEditEngine->ClearModifyFlag();
         if (SmViewShell *pViewSh = mrEditWindow.GetView())
         {
-            std::unique_ptr<SfxStringItem> pTextToFlush = std::make_unique<SfxStringItem>(SID_TEXT, GetText());
+            SfxStringItem aTextToFlush(SID_TEXT, GetText());
             pViewSh->GetViewFrame().GetDispatcher()->ExecuteList(
                     SID_TEXT, SfxCallMode::RECORD,
-                    { pTextToFlush.get() });
+                    { &aTextToFlush });
         }
     }
     if (aCursorMoveIdle.IsActive())

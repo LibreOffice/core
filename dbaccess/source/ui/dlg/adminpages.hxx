@@ -23,6 +23,8 @@
 #include <vcl/wizardmachine.hxx>
 #include <curledit.hxx>
 
+class SfxStringItem;
+
 namespace dbaui
 {
     /// helper class to wrap the savevalue and disable call
@@ -215,8 +217,8 @@ namespace dbaui
             @param  _bChangedSomething
                 <TRUE/> if something changed otherwise <FALSE/>
         */
-        static void fillString(SfxItemSet& _rSet,const weld::Entry* pEdit,sal_uInt16 _nID, bool& _bChangedSomething);
-        static void fillString(SfxItemSet& _rSet,const dbaui::OConnectionURLEdit* pEdit,sal_uInt16 _nID, bool& _bChangedSomething);
+        static void fillString(SfxItemSet& _rSet,const weld::Entry* pEdit, TypedWhichId<SfxStringItem> _nID, bool& _bChangedSomething);
+        static void fillString(SfxItemSet& _rSet,const dbaui::OConnectionURLEdit* pEdit, TypedWhichId<SfxStringItem> _nID, bool& _bChangedSomething);
 
     protected:
         /** This link be used for controls where the tabpage does not need to take any special action when the control

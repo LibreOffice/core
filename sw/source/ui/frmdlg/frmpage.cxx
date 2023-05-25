@@ -2493,8 +2493,7 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
             m_xConnectED->set_text(m_aNewGrfName);
         }
         OUString referer;
-        SfxStringItem const * it = static_cast<SfxStringItem const *>(
-            rSet.GetItem(SID_REFERER));
+        SfxStringItem const * it = rSet.GetItem(SID_REFERER);
         if (it != nullptr) {
             referer = it->GetValue();
         }

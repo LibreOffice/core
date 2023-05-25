@@ -106,7 +106,7 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
     else
         m_xRbtAtDia->set_active(true);
 
-    m_xLbDias->set_active_text( static_cast<const SfxStringItem&>( rOutAttrs.Get( ATTR_PRESENT_DIANAME ) ).GetValue() );
+    m_xLbDias->set_active_text( rOutAttrs.Get( ATTR_PRESENT_DIANAME ).GetValue() );
     m_xCbxManuel->set_active( static_cast<const SfxBoolItem&>( rOutAttrs.Get( ATTR_PRESENT_MANUEL ) ).GetValue() );
     m_xCbxMousepointer->set_active( static_cast<const SfxBoolItem&>( rOutAttrs.Get( ATTR_PRESENT_MOUSE ) ).GetValue() );
     m_xCbxPen->set_active( static_cast<const SfxBoolItem&>( rOutAttrs.Get( ATTR_PRESENT_PEN ) ).GetValue() );

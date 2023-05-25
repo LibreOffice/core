@@ -60,7 +60,7 @@ SfxPoolItem* SvxOrphansItem::CreateDefault() { return new  SvxOrphansItem(0, 0);
 SfxPoolItem* SvxHyphenZoneItem::CreateDefault() { return new  SvxHyphenZoneItem(false, 0);}
 SfxPoolItem* SvxTabStopItem::CreateDefault() { return new  SvxTabStopItem(0);}
 SfxPoolItem* SvxFormatSplitItem::CreateDefault() { return new  SvxFormatSplitItem(false, 0);}
-SfxPoolItem* SvxPageModelItem::CreateDefault() { return new  SvxPageModelItem(0);}
+SfxPoolItem* SvxPageModelItem::CreateDefault() { return new  SvxPageModelItem(TypedWhichId<SvxPageModelItem>(0));}
 SfxPoolItem* SvxParaVertAlignItem::CreateDefault() { return new  SvxParaVertAlignItem(Align::Automatic, 0);}
 
 namespace {

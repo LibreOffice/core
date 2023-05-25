@@ -40,6 +40,14 @@ private:
     sal_uInt16 mnWhich;
 };
 
+template <class T> constexpr bool operator==(TypedWhichId<T> const& lhs, TypedWhichId<T> rhs)
+{
+    return lhs == rhs;
+}
+template <class T> constexpr bool operator!=(TypedWhichId<T> const& lhs, TypedWhichId<T> rhs)
+{
+    return lhs != rhs;
+}
 template <class T> constexpr bool operator==(sal_uInt16 lhs, TypedWhichId<T> const& rhs)
 {
     return lhs == sal_uInt16(rhs);

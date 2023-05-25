@@ -73,7 +73,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
        if not, it is not allowed to edit the templates */
     SfxItemSetFixed<SID_STATUS_LAYOUT, SID_STATUS_LAYOUT> aSet(mpDoc->GetItemPool() );
     pOutlineViewShell->GetStatusBarState( aSet );
-    OUString aLayoutName = static_cast<const SfxStringItem&>(aSet.Get(SID_STATUS_LAYOUT)).GetValue();
+    OUString aLayoutName = aSet.Get(SID_STATUS_LAYOUT).GetValue();
     DBG_ASSERT(!aLayoutName.isEmpty(), "Layout not defined");
 
     bool    bUnique = false;

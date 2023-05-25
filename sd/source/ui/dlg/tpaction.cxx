@@ -299,7 +299,7 @@ void SdTPAction::Reset( const SfxItemSet* rAttrs )
     // m_xEdtSound
     if( rAttrs->GetItemState( ATTR_ACTION_FILENAME ) != SfxItemState::DONTCARE )
     {
-            aFileName = static_cast<const SfxStringItem&>( rAttrs->Get( ATTR_ACTION_FILENAME ) ).GetValue();
+            aFileName = rAttrs->Get( ATTR_ACTION_FILENAME ).GetValue();
             SetEditText( aFileName );
     }
 

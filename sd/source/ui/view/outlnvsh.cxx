@@ -409,7 +409,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
         GetDocSh()->SetStyleFamily(static_cast<SfxStyleFamily>(rReq.GetArgs()->Get( SID_STYLE_FAMILY ).GetValue()));
 
     bool bPreviewState = false;
-    sal_uLong nSlot = rReq.GetSlot();
+    sal_uInt16 nSlot = rReq.GetSlot();
 
     std::unique_ptr<OutlineViewModelChangeGuard, o3tl::default_delete<OutlineViewModelChangeGuard>> aGuard;
     if( pOlView && (
@@ -820,7 +820,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     // if not, the templates must not be edited
     SfxItemSetFixed<SID_STATUS_LAYOUT, SID_STATUS_LAYOUT> aSet(*rSet.GetPool());
     GetStatusBarState(aSet);
-    OUString aTest = static_cast<const SfxStringItem&>(aSet.Get(SID_STATUS_LAYOUT)).GetValue();
+    OUString aTest = aSet.Get(SID_STATUS_LAYOUT).GetValue();
     if (aTest.isEmpty())
     {
         bUnique = false;
@@ -1468,7 +1468,7 @@ void OutlineViewShell::GetAttrState( SfxItemSet& rSet )
                 {
                     SfxItemSetFixed<SID_STATUS_LAYOUT, SID_STATUS_LAYOUT> aSet(*rSet.GetPool());
                     GetStatusBarState(aSet);
-                    OUString aRealStyle = static_cast<const SfxStringItem&>(aSet.Get(SID_STATUS_LAYOUT)).GetValue();
+                    OUString aRealStyle = aSet.Get(SID_STATUS_LAYOUT).GetValue();
                     if (aRealStyle.isEmpty())
                     {
                         // no unique layout name found

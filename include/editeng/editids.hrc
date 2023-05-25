@@ -75,7 +75,7 @@ class SvxWordLineModeItem;
 #define SID_ATTR_TABSTOP_DEFAULTS                       TypedWhichId<SfxUInt16Item>( SID_SVX_START + 3 )
 #define SID_ATTR_TABSTOP_POS                            TypedWhichId<SfxUInt16Item>( SID_SVX_START + 4 )
 #define SID_ATTR_TABSTOP_OFFSET                         TypedWhichId<SfxInt32Item>( SID_SVX_START + 5 )
-#define SID_ATTR_CHAR                                   ( SID_SVX_START + 6 )
+#define SID_ATTR_CHAR                                   TypedWhichId<SfxStringItem>( SID_SVX_START + 6 )
 #define SID_ATTR_CHAR_FONT                              TypedWhichId<SvxFontItem>( SID_SVX_START + 7 )
 #define SID_ATTR_CHAR_POSTURE                           TypedWhichId<SvxPostureItem>( SID_SVX_START + 8 )
 #define SID_ATTR_CHAR_WEIGHT                            TypedWhichId<SvxWeightItem>( SID_SVX_START + 9 )

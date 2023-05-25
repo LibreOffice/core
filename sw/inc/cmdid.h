@@ -82,7 +82,7 @@ class SwUINumRuleItem;
 #define FN_EDIT_IDX_ENTRY_DLG   (FN_EDIT + 23)    /* Edit Index-Entry */
 #define FN_UPDATE_FIELDS        (FN_EDIT + 26)    /* Update fields */
 #define FN_EXECUTE_MACROFIELD   (FN_EDIT + 27)    /* Execute macrofield */
-#define FN_EDIT_FORMULA         (FN_EDIT + 28)    /* Edit formula in RibbonBar */
+#define FN_EDIT_FORMULA         TypedWhichId<SfxStringItem>(FN_EDIT + 28)    /* Edit formula in RibbonBar */
 #define FN_CALC_TABLE           (FN_EDIT + 29)
 
 // Region: Bullets
@@ -211,11 +211,11 @@ class SwUINumRuleItem;
 
 #define FN_INSERT_BREAK_DLG     (FN_INSERT + 4 )  /* Break */
 #define FN_INSERT_COLUMN_BREAK  (FN_INSERT + 5 )  /* Column break */
-#define FN_INSERT_FIELD         (FN_INSERT + 8 )  /* Textcommand */
+#define FN_INSERT_FIELD         TypedWhichId<SfxStringItem>(FN_INSERT + 8 )  /* Textcommand */
 #define FN_CHANGE_DBFIELD       (FN_INSERT + 9 )  /* Change the database field */
 
 #define FN_INSERT_CAPTION       (FN_INSERT + 10)  /* Caption */
-#define FN_INSERT_DBFIELD       (FN_INSERT + 11)  /* Insert database field - for recording */
+#define FN_INSERT_DBFIELD       TypedWhichId<SfxStringItem>(FN_INSERT + 11)  /* Insert database field - for recording */
 #define FN_INSERT_FOOTNOTE_DLG  (FN_INSERT + 12)  /* Footnote Dialog */
 
 #define FN_INSERT_REF_FIELD     (FN_INSERT + 13)  /* Insert Reference Field */
@@ -234,8 +234,8 @@ class SwUINumRuleItem;
 #define FN_INSERT_DATE_CONTENT_CONTROL (FN_INSERT + 27) /* Date content control */
 #define FN_INSERT_PLAIN_TEXT_CONTENT_CONTROL (FN_INSERT + 28) /* Plain text content control */
 #define FN_POSTIT               (FN_INSERT + 29)    /* Insert/edit PostIt */
-#define FN_INSERT_TABLE         (FN_INSERT + 30)    /* Insert Table */
-#define FN_INSERT_STRING        (FN_INSERT+31)
+#define FN_INSERT_TABLE         TypedWhichId<SfxStringItem>(FN_INSERT + 30)    /* Insert Table */
+#define FN_INSERT_STRING        TypedWhichId<SfxStringItem>(FN_INSERT+31)
 #define FN_INSERT_COMBO_BOX_CONTENT_CONTROL (FN_INSERT + 32) /* Combo box content control */
 #define FN_INSERT_FRAME_INTERACT (FN_INSERT + 33)   /* Insert interactive frame */
 #define FN_INSERT_FRAME         (FN_INSERT + 34)    /* Insert Frame */
@@ -294,7 +294,7 @@ class SwUINumRuleItem;
 #define FN_SBA_BRW_UPDATE       (FN_INSERT2 + 7)    /* insert records into fields */
 #define FN_SBA_BRW_INSERT       (FN_INSERT2 + 8)    /* insert records into text */
 #define FN_SBA_BRW_MERGE        (FN_INSERT2 + 9)    /* serial letter print */
-#define FN_JAVAEDIT             (FN_INSERT2 + 10)   /* edit script field */
+#define FN_JAVAEDIT             TypedWhichId<SfxStringItem>(FN_INSERT2 + 10)   /* edit script field */
 #define FN_TOOL_ANCHOR_AT_CHAR  (FN_INSERT2 + 12)   /* anchor object to character*/
 
 #define FN_INSERT_PAGEHEADER    TypedWhichId<SfxStringListItem>(FN_INSERT2 + 13)   /* insert default header */
@@ -325,7 +325,7 @@ class SwUINumRuleItem;
 #define FN_TABLE_PASTE_ROW_BEFORE   (FN_INSERT2 + 31)  /* paste table as new table rows */
 #define FN_TABLE_PASTE_COL_BEFORE   (FN_INSERT2 + 32)  /* paste table as new table columns */
 
-#define FN_EDIT_BOOKMARK        (FN_INSERT2 + 33 )  /* Bookmark */
+#define FN_EDIT_BOOKMARK    TypedWhichId<SfxStringItem>(FN_INSERT2 + 33 )  /* Bookmark */
 #define FN_UPDATE_BOOKMARKS (FN_INSERT2 + 34)
 #define FN_UPDATE_SECTIONS (FN_INSERT2 + 35)
 #define FN_DELETE_TEXT_FORMFIELDS (FN_INSERT2 + 36)
@@ -350,12 +350,12 @@ class SwUINumRuleItem;
 #define FN_FORMAT_BORDER_DLG        (FN_FORMAT + 48)  /* */
 #define FN_FORMAT_PAGE_COLUMN_DLG   (FN_FORMAT + 49)  /* columns per page */
 #define FN_FORMAT_BACKGROUND_DLG    (FN_FORMAT + 50)  /* background */
-#define FN_FORMAT_PAGE_DLG          (FN_FORMAT + 52)  /* page */
+#define FN_FORMAT_PAGE_DLG          TypedWhichId<SfxStringItem>(FN_FORMAT + 52)  /* page */
 #define FN_FORMAT_COLUMN            (FN_FORMAT + 53)  /* columns */
 #define FN_FORMAT_DROPCAPS          (FN_FORMAT + 54)  /* initials */
 #define FN_FORMAT_FRAME_DLG         TypedWhichId<SfxStringItem>(FN_FORMAT + 56)  /* frame */
 #define FN_FORMAT_GRAFIC_DLG        (FN_FORMAT + 58)  /* graphic */
-#define FN_FORMAT_TABLE_DLG         (FN_FORMAT + 60)  /* table */
+#define FN_FORMAT_TABLE_DLG         TypedWhichId<SfxStringItem>(FN_FORMAT + 60)  /* table */
 
 #define FN_UPDATE_STYLE_BY_EXAMPLE            (FN_FORMAT + 63)  /* update style */
 #define FN_FORMAT_FOOTNOTE_DLG                (FN_FORMAT + 68)  /* footnote dialog */
@@ -374,7 +374,7 @@ class SwUINumRuleItem;
 
 #define FN_SET_FRM_POSITION         (FN_FORMAT + 82)/* frame position -- " -- */
 
-#define FN_SET_PAGE_STYLE           (FN_FORMAT + 93)  /* apply page style */
+#define FN_SET_PAGE_STYLE           TypedWhichId<SfxStringItem>(FN_FORMAT + 93)  /* apply page style */
 
 #define FN_FORMAT_TITLEPAGE_DLG     (FN_FORMAT + 98)  /* Title Page */
 
@@ -477,7 +477,7 @@ class SwUINumRuleItem;
 
 #define FN_TITLE_DESCRIPTION_SHAPE   (FN_FORMAT2 + 15)  /* shape title and description */
 
-#define FN_NUMBER_FORMAT                    (FN_FORMAT2 + 120) /* set Boxes/NumberFormatter */
+#define FN_NUMBER_FORMAT                    TypedWhichId<SfxStringItem>(FN_FORMAT2 + 120) /* set Boxes/NumberFormatter */
 #define FN_NUMBER_STANDARD                  (FN_FORMAT2 + 121)
 #define FN_NUMBER_TWODEC                    (FN_FORMAT2 + 123)
 #define FN_NUMBER_SCIENTIFIC                (FN_FORMAT2 + 124)
@@ -618,9 +618,9 @@ class SwUINumRuleItem;
 #define FN_UNO_GRAPHIC_URL                  (FN_EXTRA2 + 86)
 #define FN_UNO_GRAPHIC_FILTER               (FN_EXTRA2 + 87)
 #define FN_UNO_CELL_NAME                    (FN_EXTRA2 + 88)
-#define FN_INSERT_GLOSSARY                  (FN_EXTRA2 + 89)
-#define FN_NEW_GLOSSARY                     (FN_EXTRA2 + 90)
-#define FN_SET_ACT_GLOSSARY                 (FN_EXTRA2 + 91)
+#define FN_INSERT_GLOSSARY                  TypedWhichId<SfxStringItem>(FN_EXTRA2 + 89)
+#define FN_NEW_GLOSSARY                     TypedWhichId<SfxStringItem>(FN_EXTRA2 + 90)
+#define FN_SET_ACT_GLOSSARY                 TypedWhichId<SfxStringItem>(FN_EXTRA2 + 91)
 #define FN_UNO_LINK_STYLE (FN_EXTRA2 + 92)
 
 #define FN_UNO_CHARFMT_SEQUENCE             (FN_EXTRA2 + 94)
@@ -786,10 +786,10 @@ class SwUINumRuleItem;
 // Region: Envelope
 #define FN_ENVELOP                  (FN_ENVELP    )
 
-#define FN_DELETE_NOTE_AUTHOR       (FN_NOTES+1)
+#define FN_DELETE_NOTE_AUTHOR       TypedWhichId<SfxStringItem>(FN_NOTES+1)
 #define FN_DELETE_ALL_NOTES         (FN_NOTES+2)
 #define FN_HIDE_NOTE                (FN_NOTES+3)
-#define FN_HIDE_NOTE_AUTHOR         (FN_NOTES+4)
+#define FN_HIDE_NOTE_AUTHOR         TypedWhichId<SfxStringItem>(FN_NOTES+4)
 #define FN_HIDE_ALL_NOTES           (FN_NOTES+5)
 
 #define FN_DELETE_COMMENT           (FN_NOTES+6)
@@ -865,11 +865,11 @@ class SwUINumRuleItem;
 
 // Status: not more than 19!
 #define FN_STAT_PAGE                (FN_STAT + 1)
-#define FN_STAT_TEMPLATE            (FN_STAT + 2)
+#define FN_STAT_TEMPLATE            TypedWhichId<SfxStringItem>(FN_STAT + 2)
 #define FN_STAT_ZOOM                (FN_STAT + 3)
 #define FN_STAT_SELMODE             (FN_STAT + 5)
 #define FN_STAT_BOOKMARK            (FN_STAT + 8)  /* For Popup Bookmarks*/
-#define FN_STAT_WORDCOUNT           (FN_STAT + 9)
+#define FN_STAT_WORDCOUNT           TypedWhichId<SfxStringItem>(FN_STAT + 9)
 #define FN_STAT_ACCESSIBILITY_CHECK (FN_STAT + 10)
 
 // Region: Page preview

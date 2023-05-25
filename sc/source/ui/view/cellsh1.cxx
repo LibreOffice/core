@@ -2391,7 +2391,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_RANGE_NOTETEXT:
             if (pReqArgs)
             {
-                const SfxStringItem& rTextItem = static_cast<const SfxStringItem&>(pReqArgs->Get( SID_RANGE_NOTETEXT ));
+                const SfxStringItem& rTextItem = pReqArgs->Get( SID_RANGE_NOTETEXT );
 
                 //  always cursor position
                 ScAddress aPos( GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().GetTabNo() );
@@ -2677,8 +2677,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 if ( pReqArgs )
                 {
-                    const SfxStringItem& rItem
-                        = static_cast<const SfxStringItem&>(pReqArgs->Get(SID_SELECT_SCENARIO));
+                    const SfxStringItem& rItem = pReqArgs->Get(SID_SELECT_SCENARIO);
                     pTabViewShell->UseScenario(rItem.GetValue());
                     //! why should the return value be valid?!?!
                     rReq.SetReturnValue(SfxStringItem(SID_SELECT_SCENARIO, rItem.GetValue()));

@@ -22,24 +22,25 @@
 #include <svl/solar.hrc>
 
 class SdOptionsPrintItem;
+class SfxStringItem;
 class XColorItem;
 
 // Layer attributes
 #define ATTR_LAYER_START        SID_SD_START + 1234
-#define ATTR_LAYER_NAME         ATTR_LAYER_START
+#define ATTR_LAYER_NAME         TypedWhichId<SfxStringItem>(ATTR_LAYER_START)
 #define ATTR_LAYER_VISIBLE      ATTR_LAYER_START + 1
 #define ATTR_LAYER_PRINTABLE    ATTR_LAYER_START + 2
 #define ATTR_LAYER_LOCKED       ATTR_LAYER_START + 3
 #define ATTR_LAYER_THISPAGE     ATTR_LAYER_START + 4
-#define ATTR_LAYER_TITLE        ATTR_LAYER_START + 5
-#define ATTR_LAYER_DESC         ATTR_LAYER_START + 6
+#define ATTR_LAYER_TITLE        TypedWhichId<SfxStringItem>(ATTR_LAYER_START + 5)
+#define ATTR_LAYER_DESC         TypedWhichId<SfxStringItem>(ATTR_LAYER_START + 6)
 #define ATTR_LAYER_END          ATTR_LAYER_DESC
 
 // presentation attributes
 #define ATTR_PRESENT_START                   ATTR_LAYER_END + 1
 #define ATTR_PRESENT_ALL                     ATTR_PRESENT_START
 #define ATTR_PRESENT_CUSTOMSHOW              ATTR_PRESENT_START + 1
-#define ATTR_PRESENT_DIANAME                 ATTR_PRESENT_START + 2
+#define ATTR_PRESENT_DIANAME                 TypedWhichId<SfxStringItem>(ATTR_PRESENT_START + 2)
 #define ATTR_PRESENT_ENDLESS                 ATTR_PRESENT_START + 3
 #define ATTR_PRESENT_MANUEL                  ATTR_PRESENT_START + 4
 #define ATTR_PRESENT_MOUSE                   ATTR_PRESENT_START + 5
@@ -65,7 +66,7 @@ class XColorItem;
 #define ATTR_ANIMATION_FADEOUT          ATTR_ANIMATION_START + 4
 #define ATTR_ANIMATION_COLOR            ATTR_ANIMATION_START + 5
 #define ATTR_ANIMATION_SOUNDON          ATTR_ANIMATION_START + 6
-#define ATTR_ANIMATION_SOUNDFILE        ATTR_ANIMATION_START + 7
+#define ATTR_ANIMATION_SOUNDFILE        TypedWhichId<SfxStringItem>(ATTR_ANIMATION_START + 7)
 #define ATTR_ANIMATION_PLAYFULL         ATTR_ANIMATION_START + 8
 #define ATTR_ANIMATION_TEXTEFFECT       ATTR_ANIMATION_START + 10
 #define ATTR_ANIMATION_END              ATTR_ANIMATION_TEXTEFFECT
@@ -74,7 +75,7 @@ class XColorItem;
 #define ATTR_ACTION                     ATTR_ACTION_START
 #define ATTR_ACTION_EFFECT              ATTR_ACTION_START + 1
 #define ATTR_ACTION_EFFECTSPEED         ATTR_ACTION_START + 2
-#define ATTR_ACTION_FILENAME            ATTR_ACTION_START + 3
+#define ATTR_ACTION_FILENAME            TypedWhichId<SfxStringItem>(ATTR_ACTION_START + 3)
 #define ATTR_ACTION_SOUNDON             ATTR_ACTION_START + 4
 #define ATTR_ACTION_PLAYFULL            ATTR_ACTION_START + 5
 #define ATTR_ACTION_END                 ATTR_ACTION_PLAYFULL

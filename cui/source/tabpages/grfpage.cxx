@@ -187,8 +187,7 @@ void SvxGrfCropPage::Reset( const SfxItemSet *rSet )
     if( const SvxBrushItem* pGraphicItem = rSet->GetItemIfSet( SID_ATTR_GRAF_GRAPHIC, false ) )
     {
         OUString referer;
-        SfxStringItem const * it = static_cast<SfxStringItem const *>(
-            rSet->GetItem(SID_REFERER));
+        SfxStringItem const * it = rSet->GetItem(SID_REFERER);
         if (it != nullptr) {
             referer = it->GetValue();
         }
@@ -322,8 +321,7 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
             m_aGraphicName = pBrushItem->GetGraphicLink();
 
         OUString referer;
-        SfxStringItem const * it = static_cast<SfxStringItem const *>(
-            rSet.GetItem(SID_REFERER));
+        SfxStringItem const * it = rSet.GetItem(SID_REFERER);
         if (it != nullptr) {
             referer = it->GetValue();
         }

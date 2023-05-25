@@ -704,7 +704,7 @@ void SwView::KillVRuler()
 IMPL_LINK( SwView, ExecRulerClick, Ruler *, pRuler, void )
 {
     OUString sDefPage;
-    sal_uInt16 nDefDlg = SID_PARA_DLG;
+    TypedWhichId<SfxStringItem> nDefDlg = SID_PARA_DLG;
     switch( pRuler->GetClickType() )
     {
         case RulerType::DontKnow:

@@ -1965,7 +1965,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 while( bLoop && pDlg->Execute() == RET_OK )
                 {
                     pDlg->GetAttr( aNewAttr );
-                    aLayerName   = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
+                    aLayerName   = aNewAttr.Get(ATTR_LAYER_NAME).GetValue ();
 
                     if( rLayerAdmin.GetLayer( aLayerName )
                         || aLayerName.isEmpty()
@@ -1989,8 +1989,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 }
                 else
                 {
-                    aLayerTitle  = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_TITLE)).GetValue ();
-                    aLayerDesc   = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_DESC)).GetValue ();
+                    aLayerTitle  = aNewAttr.Get(ATTR_LAYER_TITLE).GetValue();
+                    aLayerDesc   = aNewAttr.Get(ATTR_LAYER_DESC).GetValue ();
                     bIsVisible   = static_cast<const SfxBoolItem &>( aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
                     bIsLocked    = static_cast<const SfxBoolItem &>( aNewAttr.Get (ATTR_LAYER_LOCKED)).GetValue () ;
                     bIsPrintable = static_cast<const SfxBoolItem &>( aNewAttr.Get (ATTR_LAYER_PRINTABLE)).GetValue () ;
@@ -2122,7 +2122,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     if (nRet != RET_OK)
                         break;
                     pDlg->GetAttr( aNewAttr );
-                    aLayerName   = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
+                    aLayerName   = aNewAttr.Get(ATTR_LAYER_NAME).GetValue ();
                     if (bDelete)
                     {
                         if( (rLayerAdmin.GetLayer( aLayerName ) && aLayerName != aOldLayerName)
@@ -2145,8 +2145,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 switch (nRet)
                 {
                     case RET_OK :
-                        aLayerTitle  = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_TITLE)).GetValue ();
-                        aLayerDesc   = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_DESC)).GetValue ();
+                        aLayerTitle  = aNewAttr.Get(ATTR_LAYER_TITLE).GetValue ();
+                        aLayerDesc   = aNewAttr.Get(ATTR_LAYER_DESC).GetValue ();
                         bIsVisible   = static_cast<const SfxBoolItem &>( aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
                         bIsLocked    = static_cast<const SfxBoolItem &>( aNewAttr.Get (ATTR_LAYER_LOCKED)).GetValue ();
                         bIsPrintable = static_cast<const SfxBoolItem &>( aNewAttr.Get (ATTR_LAYER_PRINTABLE)).GetValue ();

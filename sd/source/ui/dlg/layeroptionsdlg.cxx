@@ -35,9 +35,9 @@ SdInsertLayerDlg::SdInsertLayerDlg(weld::Window* pWindow, const SfxItemSet& rInA
 {
     m_xDialog->set_title(rStr);
 
-    m_xEdtName->set_text( static_cast<const SfxStringItem&>( rInAttrs.Get( ATTR_LAYER_NAME ) ).GetValue() );
-    m_xEdtTitle->set_text( static_cast<const SfxStringItem&>( rInAttrs.Get( ATTR_LAYER_TITLE ) ).GetValue() );
-    m_xEdtDesc->set_text( static_cast<const SfxStringItem&>( rInAttrs.Get( ATTR_LAYER_DESC ) ).GetValue() );
+    m_xEdtName->set_text( rInAttrs.Get( ATTR_LAYER_NAME ).GetValue() );
+    m_xEdtTitle->set_text( rInAttrs.Get( ATTR_LAYER_TITLE ).GetValue() );
+    m_xEdtDesc->set_text( rInAttrs.Get( ATTR_LAYER_DESC ).GetValue() );
     m_xEdtDesc->set_size_request(-1, m_xEdtDesc->get_height_rows(4));
     m_xCbxVisible->set_active( static_cast<const SfxBoolItem&>( rInAttrs.Get( ATTR_LAYER_VISIBLE ) ).GetValue() );
     m_xCbxPrintable->set_active( static_cast<const SfxBoolItem&>( rInAttrs.Get( ATTR_LAYER_PRINTABLE ) ).GetValue() );

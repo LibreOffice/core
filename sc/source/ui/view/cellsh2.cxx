@@ -735,8 +735,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             {
                 if ( pReqArgs )
                 {
-                    const SfxStringItem& rItem
-                        = static_cast<const SfxStringItem&>(pReqArgs->Get(SID_SELECT_DB));
+                    const SfxStringItem& rItem = pReqArgs->Get(SID_SELECT_DB);
                     pTabViewShell->GotoDBArea(rItem.GetValue());
                     rReq.Done();
                 }

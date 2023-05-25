@@ -1814,7 +1814,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
         case SID_INSERTCOMMANDTEXT:
         {
-            const SfxStringItem& rItem = static_cast<const SfxStringItem&>(rReq.GetArgs()->Get(SID_INSERTCOMMANDTEXT));
+            const SfxStringItem& rItem = rReq.GetArgs()->Get(SID_INSERTCOMMANDTEXT);
 
             if (pWin && (mbInsertIntoEditWindow || !IsInlineEditEnabled()))
             {
@@ -1831,8 +1831,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
         case SID_INSERTSPECIAL:
         {
-            const SfxStringItem& rItem =
-                static_cast<const SfxStringItem&>(rReq.GetArgs()->Get(SID_INSERTSPECIAL));
+            const SfxStringItem& rItem = rReq.GetArgs()->Get(SID_INSERTSPECIAL);
 
             if (pWin && (mbInsertIntoEditWindow || !IsInlineEditEnabled()))
                 pWin->InsertText(rItem.GetValue());
@@ -1936,8 +1935,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
         {
             if (rReq.GetArgs() != nullptr)
             {
-                const SfxStringItem& rItem =
-                    static_cast<const SfxStringItem&>(rReq.GetArgs()->Get(SID_TEXTSTATUS));
+                const SfxStringItem& rItem = rReq.GetArgs()->Get(SID_TEXTSTATUS);
 
                 SetStatusText(rItem.GetValue());
             }

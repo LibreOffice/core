@@ -185,7 +185,7 @@ class XFillGradientItem;
 #define FN_OUTLINE_RULE_INDEX   (FN_EDIT + 122)
 
 #define FN_INSERT               (SID_SW_START +  300) // 20300
-#define FN_DELETE_BOOKMARK      (FN_INSERT + 1)
+#define FN_DELETE_BOOKMARK      TypedWhichId<SfxStringItem>(FN_INSERT + 1)
 #define FN_INSERT_BREAK         (FN_INSERT + 3)
 #define FN_INSERT_SOFT_HYPHEN   (FN_INSERT + 43)    /* optional hyphen */
 #define FN_INSERT_HARD_SPACE    (FN_INSERT + 44)    /* hard space */
@@ -411,7 +411,7 @@ class XFillGradientItem;
 #define SID_SET_SUPER_SCRIPT                            ( SID_SVX_START + 294 )
 #define SID_SET_SUB_SCRIPT                              ( SID_SVX_START + 295 )
 #define SID_CHAR_DLG                                    ( SID_SVX_START + 296 )
-#define SID_PARA_DLG                                    ( SID_SVX_START + 297 )
+#define SID_PARA_DLG                                    TypedWhichId<SfxStringItem>( SID_SVX_START + 297 )
 #define SID_ATTR_GRID_OPTIONS                           TypedWhichId<SvxGridItem>( SID_SVX_START + 298 )
 #define SID_ATTR_FILL_SHADOW                            ( SID_SVX_START + 299 )
 
@@ -608,7 +608,7 @@ class XFillGradientItem;
 #define SID_FM_ADD_FIELD                                ( SID_SVX_START + 623 )
 #define SID_FM_RECORD_TEXT                              ( SID_SVX_START + 624 )
 #define SID_FM_RECORD_FROM_TEXT                         ( SID_SVX_START + 625 )
-#define SID_FM_RECORD_TOTAL                             ( SID_SVX_START + 626 )
+#define SID_FM_RECORD_TOTAL                             TypedWhichId<SfxStringItem>( SID_SVX_START + 626 )
 #define SID_FM_RECORD_SAVE                              ( SID_SVX_START + 627 )
 #define SID_FM_CREATE_CONTROL                           ( SID_SVX_START + 628 )
 #define SID_FM_DESIGN_MODE                              TypedWhichId<SfxBoolItem>( SID_SVX_START + 629 )
@@ -810,7 +810,7 @@ class XFillGradientItem;
 #define SID_EXTRUSION_DEPTH_DIALOG                      ( SID_SVX_START + 976 )
 #define SID_FONTWORK_GALLERY_FLOATER                    ( SID_SVX_START + 977 )
 #define SID_EDIT_HYPERLINK                              ( SID_SVX_START + 978 )
-#define SID_FONTWORK_SHAPE_TYPE                         ( SID_SVX_START + 979 )
+#define SID_FONTWORK_SHAPE_TYPE                         TypedWhichId<SfxStringItem>( SID_SVX_START + 979 )
 #define SID_FONTWORK_SAME_LETTER_HEIGHTS                ( SID_SVX_START + 980 )
 #define SID_FONTWORK_ALIGNMENT_FLOATER                  ( SID_SVX_START + 981 )
 #define SID_FONTWORK_CHARACTER_SPACING_FLOATER          ( SID_SVX_START + 982 )
@@ -856,8 +856,8 @@ class XFillGradientItem;
 #define SID_ATTR_SET                                    ( SID_SVX_START + 1022 )
 #define SID_CHAR_FMT_LIST_BOX                           ( SID_SVX_START + 1023 )
 #define SID_METRIC_ITEM                                 TypedWhichId<SfxUInt16Item>( SID_SVX_START + 1024 )
-#define SID_NUM_CHAR_FMT                                ( SID_SVX_START + 1025 )
-#define SID_BULLET_CHAR_FMT                             ( SID_SVX_START + 1026 )
+#define SID_NUM_CHAR_FMT                                TypedWhichId<SfxStringItem>( SID_SVX_START + 1025 )
+#define SID_BULLET_CHAR_FMT                             TypedWhichId<SfxStringItem>( SID_SVX_START + 1026 )
 #define SID_DISABLE_SVXEXTPARAGRAPHTABPAGE_PAGEBREAK    ( SID_SVX_START + 1027 )
 #define SID_SVXPARAALIGNTABPAGE_ENABLEJUSTIFYEXT        ( SID_SVX_START + 1028 )
 #define SID_SVXSTDPARAGRAPHTABPAGE_PAGEWIDTH            ( SID_SVX_START + 1029 )
@@ -915,7 +915,7 @@ class XFillGradientItem;
 #define SID_TABLE_AUTOSUM                               ( SID_SVX_START + 1085 )
 #define SID_TABLE_DISTRIBUTE_COLUMNS                    ( SID_SVX_START + 1086 )
 #define SID_TABLE_DISTRIBUTE_ROWS                       ( SID_SVX_START + 1087 )
-#define SID_TABLE_STYLE                                 ( SID_SVX_START + 1088 )
+#define SID_TABLE_STYLE                                 TypedWhichId<SfxStringItem>( SID_SVX_START + 1088 )
 #define SID_TABLE_STYLE_SETTINGS                        ( SID_SVX_START + 1089 )
 #define SID_CHAR_DLG_PREVIEW_STRING                     ( SID_SVX_START + 1090 )
 #define SID_RECHECK_DOCUMENT                            ( SID_SVX_START + 1091 )
@@ -928,7 +928,7 @@ class XFillGradientItem;
 #define SID_DELETEALL_POSTIT                            ( SID_SVX_START + 1097 )
 #define SID_TOGGLE_NOTES                                ( SID_SVX_START + 1098 )
 #define SID_REPLYTO_POSTIT                              ( SID_SVX_START + 1099 )
-#define SID_DELETEALLBYAUTHOR_POSTIT                    ( SID_SVX_START + 1100 )
+#define SID_DELETEALLBYAUTHOR_POSTIT                    TypedWhichId<SfxStringItem>( SID_SVX_START + 1100 )
 #define SID_INSERT_POSTIT                               ( SID_SVX_START + 1101 )
 
 #define SID_TRANSLITERATE_SENTENCE_CASE                 ( SID_SVX_START + 1102 )

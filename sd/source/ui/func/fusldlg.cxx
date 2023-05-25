@@ -129,7 +129,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
 
     if (!rPresentationSettings.mbAll)
     {
-        OUString aPage = ITEMVALUE( aDlgSet, ATTR_PRESENT_DIANAME, SfxStringItem );
+        OUString aPage = aDlgSet.Get(ATTR_PRESENT_DIANAME).GetValue();
         if( aPage != rPresentationSettings.maPresPage )
         {
             bValuesChanged = true;

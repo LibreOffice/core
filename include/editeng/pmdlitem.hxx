@@ -37,9 +37,9 @@ private:
 public:
     static SfxPoolItem* CreateDefault();
 
-    explicit inline SvxPageModelItem( sal_uInt16 nWh  );
+    explicit inline SvxPageModelItem( TypedWhichId<SvxPageModelItem> nWh  );
     inline SvxPageModelItem( const OUString& rModel, bool bA /*= false*/,
-                             sal_uInt16 nWh  );
+                             TypedWhichId<SvxPageModelItem> nWh  );
 
     virtual SvxPageModelItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
@@ -53,14 +53,14 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const override;
 };
 
-inline SvxPageModelItem::SvxPageModelItem( sal_uInt16 nWh )
+inline SvxPageModelItem::SvxPageModelItem( TypedWhichId<SvxPageModelItem> nWh )
     : bAuto( false )
 {
     SetWhich( nWh );
 }
 
 inline SvxPageModelItem::SvxPageModelItem( const OUString& rModel, bool bA,
-                                           sal_uInt16 nWh ) :
+                                           TypedWhichId<SvxPageModelItem> nWh ) :
     SfxStringItem( nWh, rModel ),
     bAuto( bA )
 {}

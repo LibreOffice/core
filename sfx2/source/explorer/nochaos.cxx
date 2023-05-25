@@ -26,7 +26,7 @@
 #include <memory>
 
 
-#define WID_CHAOS_START 500
+#define WID_CHAOS_START TypedWhichId<SfxStringItem>(500)
 
 
 namespace {

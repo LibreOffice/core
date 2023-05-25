@@ -276,8 +276,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         rBindings.Invalidate(SID_DOC_MODIFIED);
                     }
 
-                    OUString aStr( static_cast<const SfxStringItem&>(pReqArgs->
-                                    Get( SID_ENTER_STRING )).GetValue() );
+                    OUString aStr( pReqArgs->Get( SID_ENTER_STRING ).GetValue() );
                     const SfxPoolItem* pDontCommitItem;
                     bool bCommit = true;
                     if (pReqArgs->HasItem(FN_PARAM_1, &pDontCommitItem))

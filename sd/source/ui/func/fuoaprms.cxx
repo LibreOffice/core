@@ -517,7 +517,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
     if (pArgs->GetItemState(ATTR_ANIMATION_SOUNDFILE) == SfxItemState::SET)
     {
-        aSound = static_cast<const SfxStringItem&>(pArgs->Get(ATTR_ANIMATION_SOUNDFILE)).GetValue();
+        aSound = pArgs->Get(ATTR_ANIMATION_SOUNDFILE).GetValue();
         nSoundFileSet = ATTR_SET;
     }
     else
@@ -550,8 +550,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
     if (pArgs->GetItemState(ATTR_ACTION_FILENAME) == SfxItemState::SET)
     {
-        aBookmark = static_cast<const SfxStringItem&>(pArgs->
-                        Get(ATTR_ACTION_FILENAME)).GetValue();
+        aBookmark = pArgs->Get(ATTR_ACTION_FILENAME).GetValue();
         nBookmarkSet = ATTR_SET;
     }
     else
