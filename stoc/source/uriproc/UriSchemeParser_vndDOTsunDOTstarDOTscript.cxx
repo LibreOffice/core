@@ -293,8 +293,7 @@ void UrlReference::setParameter(OUString const & key, OUString const & value)
     newPath.append(m_base.m_path.subView(0, i));
     if (!bExistent) {
         newPath.append( m_base.m_path.indexOf('?') < 0 ? '?' : '&' );
-        newPath.append(encodeNameOrParamFragment(key));
-        newPath.append('=');
+        newPath.append(encodeNameOrParamFragment(key) + "=");
     }
     newPath.append(encodeNameOrParamFragment(value));
     if (bExistent) {

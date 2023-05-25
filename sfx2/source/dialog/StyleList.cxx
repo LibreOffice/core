@@ -1341,8 +1341,7 @@ void StyleList::DeleteHdl()
     weld::TreeView* pTreeView = m_xTreeBox->get_visible() ? m_xTreeBox.get() : m_xFmtLb.get();
     const SfxStyleFamilyItem* pItem = GetFamilyItem();
 
-    OUStringBuffer aMsg;
-    aMsg.append(SfxResId(STR_DELETE_STYLE_USED) + SfxResId(STR_DELETE_STYLE));
+    OUStringBuffer aMsg(SfxResId(STR_DELETE_STYLE_USED) + SfxResId(STR_DELETE_STYLE));
 
     pTreeView->selected_foreach(
         [this, pTreeView, pItem, &aList, &bUsedStyle, &aMsg](weld::TreeIter& rEntry) {

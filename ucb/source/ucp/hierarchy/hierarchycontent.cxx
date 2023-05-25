@@ -699,8 +699,8 @@ HierarchyContent::makeNewIdentifier( const OUString& rTitle )
 
     // Assemble new content identifier...
     HierarchyUri aUri( m_xIdentifier->getContentIdentifier() );
-    OUString aNewURL = aUri.getParentUri() + "/";
-    aNewURL += ::ucb_impl::urihelper::encodeSegment( rTitle );
+    OUString aNewURL = aUri.getParentUri() + "/" +
+        ::ucb_impl::urihelper::encodeSegment( rTitle );
 
     return uno::Reference< ucb::XContentIdentifier >(
         new ::ucbhelper::ContentIdentifier( aNewURL ) );
@@ -1348,8 +1348,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
 
                 do
                 {
-                    OUString aNewId = xId->getContentIdentifier() + "_";
-                    aNewId += OUString::number( ++nTry );
+                    OUString aNewId = xId->getContentIdentifier() + "_" + OUString::number( ++nTry );
                     xId = new ::ucbhelper::ContentIdentifier( aNewId );
                 }
                 while ( hasData( xId ) && ( nTry < 1000 ) );

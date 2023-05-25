@@ -1033,8 +1033,8 @@ void SaneDlg::EstablishQuantumRange()
             mxQuantumRangeBox->set_active_text( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
         }
         mxQuantumRangeBox->show();
-        OUString aText( mrSane.GetOptionName( mnCurrentOption ) + " " );
-        aText += mrSane.GetOptionUnitName( mnCurrentOption );
+        OUString aText = mrSane.GetOptionName( mnCurrentOption ) + " "
+            + mrSane.GetOptionUnitName( mnCurrentOption );
         mxOptionDescTxt->set_label(aText);
         mxOptionDescTxt->show();
     }
@@ -1050,8 +1050,8 @@ void SaneDlg::EstablishNumericOption()
         return;
 
     char pBuf[256];
-    OUString aText( mrSane.GetOptionName( mnCurrentOption ) + " " );
-    aText += mrSane.GetOptionUnitName( mnCurrentOption );
+    OUString aText = mrSane.GetOptionName( mnCurrentOption ) + " "
+        + mrSane.GetOptionUnitName( mnCurrentOption );
     if( mfMin != mfMax )
     {
         o3tl::sprintf( pBuf, " < %g ; %g >", mfMin, mfMax );

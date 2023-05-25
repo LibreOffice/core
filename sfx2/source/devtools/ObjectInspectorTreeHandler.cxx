@@ -654,8 +654,8 @@ public:
     {
         int nLength = mxIdlArray->getLen(maAny);
 
-        OUString aType = getAnyType(maAny).replaceAll(u"[]", u"");
-        aType += u"[" + OUString::number(nLength) + u"]";
+        OUString aType
+            = getAnyType(maAny).replaceAll(u"[]", u"") + u"[" + OUString::number(nLength) + u"]";
 
         OUString aValue
             = SfxResId(STR_PROPERTY_VALUE_SEQUENCE).replaceFirst("%1", OUString::number(nLength));

@@ -965,7 +965,6 @@ void SvXMLExportPropertyMapper::_exportXML(
 
             const uno::Sequence< OUString > aAttribNames( xAttrContainer->getElementNames() );
 
-            OUStringBuffer sNameBuffer;
             xml::AttributeData aData;
             for( const auto& rAttribName : aAttribNames )
             {
@@ -1008,9 +1007,7 @@ void SvXMLExportPropertyMapper::_exportXML(
                                 OUString sOrigPrefix( sPrefix );
                                 do
                                 {
-                                    sNameBuffer.append( sOrigPrefix );
-                                    sNameBuffer.append( ++n );
-                                    sPrefix = sNameBuffer.makeStringAndClear();
+                                    sPrefix = sOrigPrefix + OUString::number( ++n );
                                     nKey = pNamespaceMap->GetKeyByPrefix( sPrefix );
                                 }
                                 while( nKey != USHRT_MAX );
@@ -1024,8 +1021,7 @@ void SvXMLExportPropertyMapper::_exportXML(
                                 sPrefix = pNamespaceMap->GetPrefixByKey( nKey );
                             }
                             // In any case, the attribute name has to be adapted.
-                            sNameBuffer.append(sPrefix + ":" + rAttribName.subView(nColonPos+1));
-                            sAttribName = sNameBuffer.makeStringAndClear();
+                            sAttribName = sPrefix + ":" + rAttribName.subView(nColonPos+1);
                         }
 
                         if( bAddNamespace )

@@ -1201,10 +1201,9 @@ void XMLTextParagraphExport::exportListChange(
                 {
                     if ( rNextInfo.HasStartValue() )
                     {
-                        OUStringBuffer aBuffer;
-                        aBuffer.append( static_cast<sal_Int32>(rNextInfo.GetStartValue()) );
+                        OUString aTmp = OUString::number( static_cast<sal_Int32>(rNextInfo.GetStartValue()) );
                         GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_START_VALUE,
-                                      aBuffer.makeStringAndClear() );
+                                      aTmp );
                     }
                     else if (bRestartNumberingAtContinuedList)
                     {
@@ -1276,19 +1275,15 @@ void XMLTextParagraphExport::exportListChange(
     GetExport().CheckAttrList();
     if( rNextInfo.HasStartValue() )
     {
-        OUStringBuffer aBuffer;
-        aBuffer.append( static_cast<sal_Int32>(rNextInfo.GetStartValue()) );
-        GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_START_VALUE,
-                                  aBuffer.makeStringAndClear() );
+        OUString aTmp = OUString::number( static_cast<sal_Int32>(rNextInfo.GetStartValue()) );
+        GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_START_VALUE, aTmp );
     }
     // Handle restart without start value on list level 1 (#i103745#)
     else if ( rNextInfo.IsRestart() && /*!rNextInfo.HasStartValue() &&*/
               rNextInfo.GetLevel() == 1 )
     {
-        OUStringBuffer aBuffer;
-        aBuffer.append( static_cast<sal_Int32>(rNextInfo.GetListLevelStartValue()) );
-        GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_START_VALUE,
-                                  aBuffer.makeStringAndClear() );
+        OUString aTmp = OUString::number( static_cast<sal_Int32>(rNextInfo.GetListLevelStartValue()) );
+        GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_START_VALUE, aTmp );
     }
     if ( ( GetExport().getExportFlags() & SvXMLExportFlags::OASIS ) &&
         GetExport().getSaneDefaultVersion() >= SvtSaveOptions::ODFSVER_012)

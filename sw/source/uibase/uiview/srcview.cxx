@@ -421,12 +421,13 @@ void SwSrcView::GetState(SfxItemSet& rSet)
             break;
             case SID_TABLE_CELL:
             {
-                OUString aPos( SwResId(STR_SRCVIEW_ROW) );
                 TextSelection aSel = pTextView->GetSelection();
-                aPos += OUString::number( aSel.GetEnd().GetPara()+1 );
-                aPos += " : " +
-                    SwResId(STR_SRCVIEW_COL);
-                aPos += OUString::number( aSel.GetEnd().GetIndex()+1 );
+                OUString aPos =
+                    SwResId(STR_SRCVIEW_ROW)
+                    + OUString::number( aSel.GetEnd().GetPara()+1 )
+                    + " : "
+                    + SwResId(STR_SRCVIEW_COL)
+                    + OUString::number( aSel.GetEnd().GetIndex()+1 );
                 SvxStatusItem aItem( SID_TABLE_CELL, aPos, StatusCategory::RowColumn );
                 rSet.Put( aItem );
             }
@@ -475,8 +476,7 @@ void SwSrcView::GetState(SfxItemSet& rSet)
                     nCount = rMgr.GetUndoActionCount();
                     if(nCount)
                     {
-                        OUString aStr(SvtResId( STR_UNDO));
-                        aStr += rMgr.GetUndoActionComment(--nCount);
+                        OUString aStr = SvtResId( STR_UNDO) + rMgr.GetUndoActionComment(--nCount);
                         rSet.Put(SfxStringItem(nWhich, aStr));
                     }
                     else
@@ -487,8 +487,7 @@ void SwSrcView::GetState(SfxItemSet& rSet)
                     nCount = rMgr.GetRedoActionCount();
                     if(nCount)
                     {
-                        OUString aStr(SvtResId( STR_REDO));
-                        aStr += rMgr.GetRedoActionComment(--nCount);
+                        OUString aStr = SvtResId( STR_REDO) + rMgr.GetRedoActionComment(--nCount);
                         rSet.Put(SfxStringItem(nWhich,aStr));
                     }
                     else

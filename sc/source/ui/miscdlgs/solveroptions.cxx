@@ -208,10 +208,10 @@ void ScSolverOptionsDialog::FillListBox()
                 if (aValue >>= fDoubleValue)
                     m_aOptions.back()->SetDoubleValue(fDoubleValue);
 
-                OUString sTxt = aVisName + ": ";
-                sTxt += rtl::math::doubleToUString(fDoubleValue,
-                    rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-                    ScGlobal::getLocaleData().getNumDecimalSep()[0], true );
+                OUString sTxt = aVisName + ": " +
+                    rtl::math::doubleToUString(fDoubleValue,
+                        rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
+                        ScGlobal::getLocaleData().getNumDecimalSep()[0], true );
 
                 m_xLbSettings->set_text(nPos, sTxt, 0);
             }
@@ -264,10 +264,10 @@ void ScSolverOptionsDialog::EditOption()
             {
                 pStringItem->SetDoubleValue(m_xValDialog->GetValue());
 
-                OUString sTxt(pStringItem->GetText() + ": ");
-                sTxt += rtl::math::doubleToUString(pStringItem->GetDoubleValue(),
-                    rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-                    ScGlobal::getLocaleData().getNumDecimalSep()[0], true );
+                OUString sTxt(pStringItem->GetText() + ": " +
+                    rtl::math::doubleToUString(pStringItem->GetDoubleValue(),
+                        rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
+                        ScGlobal::getLocaleData().getNumDecimalSep()[0], true ));
 
                 m_xLbSettings->set_text(nEntry, sTxt, 0);
             }

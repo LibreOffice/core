@@ -701,8 +701,7 @@ namespace accessibility
             // paragraphs inbetween are fully included
             for( ; i<aEndIndex.nPara; ++i )
             {
-                aRes.append(cNewLine);
-                aRes.append(mpImpl->GetParagraph(i).getText());
+                aRes.append(OUStringChar(cNewLine) + mpImpl->GetParagraph(i).getText());
             }
 
             if( i<=aEndIndex.nPara )

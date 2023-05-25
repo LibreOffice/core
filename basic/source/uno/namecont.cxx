@@ -1788,10 +1788,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                 sal_Int32 index = 0;
                 do
                 {
-                    OUStringBuffer aTempTargetName( aTempTargetNameBase );
-                    aTempTargetName.append( index++ );
-
-                    sTargetLibrariesStoreName = aTempTargetName.makeStringAndClear();
+                    sTargetLibrariesStoreName = aTempTargetNameBase + OUString::number( index++ );
                     if ( !i_rStorage->hasByName( sTargetLibrariesStoreName ) )
                     {
                         break;

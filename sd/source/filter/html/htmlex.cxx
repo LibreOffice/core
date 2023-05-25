@@ -1412,10 +1412,8 @@ OUString HtmlExport::ParagraphToHTMLString( SdrOutliner const * pOutliner, sal_I
 
         SfxItemSet aSet( rEditEngine.GetAttribs( aSelection ) );
 
-        OUString aPortion(StringToHTMLString(rEditEngine.GetText( aSelection )));
-
-        aStr.append(TextAttribToHTMLString( &aSet, &aState, rBackgroundColor ));
-        aStr.append(aPortion);
+        aStr.append(TextAttribToHTMLString( &aSet, &aState, rBackgroundColor ) +
+            StringToHTMLString(rEditEngine.GetText( aSelection )));
 
         nPos1 = nPos2;
     }
@@ -1569,9 +1567,9 @@ bool HtmlExport::CreateHtmlForPresPages()
         }
 
         // HTML Head
-        OUStringBuffer aStr(gaHTMLHeader);
-        aStr.append(CreateMetaCharset());
-        aStr.append("  <title>" + StringToHTMLString(maPageNames[nSdPage]) + "</title>\r\n");
+        OUStringBuffer aStr(gaHTMLHeader +
+            CreateMetaCharset() +
+            "  <title>" + StringToHTMLString(maPageNames[nSdPage]) + "</title>\r\n");
 
         // insert timing information
         pPage = maPages[ nSdPage ];
@@ -2612,8 +2610,7 @@ OUString HtmlExport::CreateNavBar( sal_uInt16 nSdPage, bool bIsText ) const
     // to Index page
     if (mbContentsPage)
     {
-        aStr.append(CreateLink(maIndex, aStrNavContent));
-        aStr.append(' ');
+        aStr.append(CreateLink(maIndex, aStrNavContent) + " ");
     }
 
     // Text/Graphics

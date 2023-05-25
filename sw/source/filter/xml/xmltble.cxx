@@ -556,9 +556,9 @@ void SwXMLExport::ExportTableColumnStyle( const SwXMLTableColumn_Impl& rCol )
     {
         SvXMLElementExport aElem( *this, XML_NAMESPACE_STYLE, XML_STYLE, true,
                                   true );
-        OUStringBuffer sValue;
         if( rCol.GetWidthOpt() )
         {
+            OUStringBuffer sValue;
             GetTwipUnitConverter().convertMeasureToXML( sValue,
                     rCol.GetWidthOpt() );
             AddAttribute( XML_NAMESPACE_STYLE, XML_COLUMN_WIDTH,
@@ -566,10 +566,9 @@ void SwXMLExport::ExportTableColumnStyle( const SwXMLTableColumn_Impl& rCol )
         }
         if( rCol.GetRelWidth() )
         {
-            sValue.append( static_cast<sal_Int32>(rCol.GetRelWidth()) );
-            sValue.append( '*' );
+            OUString sValue = OUString::number(static_cast<sal_Int32>(rCol.GetRelWidth()) ) + "*";
             AddAttribute( XML_NAMESPACE_STYLE, XML_REL_COLUMN_WIDTH,
-                          sValue.makeStringAndClear() );
+                          sValue );
         }
 
         {

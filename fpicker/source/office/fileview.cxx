@@ -409,10 +409,11 @@ namespace
             nDec = 3;
         }
 
-        OUString aSizeStr( ::rtl::math::doubleToUString( fSize,
+        OUString aSizeStr =
+            ::rtl::math::doubleToUString( fSize,
                     rtl_math_StringFormat_F, nDec,
-                    SvtSysLocale().GetLocaleData().getNumDecimalSep()[0]) );
-        aSizeStr += aUnitStr;
+                    SvtSysLocale().GetLocaleData().getNumDecimalSep()[0]) +
+            aUnitStr;
 
         return aSizeStr;
     }

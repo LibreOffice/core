@@ -510,11 +510,11 @@ OUString SfxHelp::CreateHelpURL_Impl( const OUString& aCommandURL, const OUStrin
         aHelpURL.append("/start");
     else
     {
-        aHelpURL.append('/');
-        aHelpURL.append(rtl::Uri::encode(aCommandURL,
-                                              rtl_UriCharClassRelSegment,
-                                              rtl_UriEncodeKeepEscapes,
-                                              RTL_TEXTENCODING_UTF8));
+        aHelpURL.append("/" +
+            rtl::Uri::encode(aCommandURL,
+                              rtl_UriCharClassRelSegment,
+                              rtl_UriEncodeKeepEscapes,
+                              RTL_TEXTENCODING_UTF8));
 
         OUStringBuffer aTempURL = aHelpURL;
         AppendConfigToken( aTempURL, true );

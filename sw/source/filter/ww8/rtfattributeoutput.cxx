@@ -198,8 +198,7 @@ static OString OutBorderLine(RtfExport const& rExport, const editeng::SvxBorderL
                              const char* pStr, sal_uInt16 nDist,
                              SvxShadowLocation eShadowLocation = SvxShadowLocation::NONE)
 {
-    OStringBuffer aRet;
-    aRet.append(OutTBLBorderLine(rExport, pLine, pStr));
+    OStringBuffer aRet(OutTBLBorderLine(rExport, pLine, pStr));
     if (pLine)
     {
         aRet.append(OOO_STRING_SVTOOLS_RTF_BRSP + OString::number(static_cast<sal_Int32>(nDist)));
@@ -528,10 +527,9 @@ void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 /*nPos*/,
                                    const SwFormatRuby& rRuby)
 {
     WW8Ruby aWW8Ruby(rNode, rRuby, GetExport());
-    OUString aStr(FieldString(ww::eEQ) + "\\* jc");
-    aStr += OUString::number(aWW8Ruby.GetJC()) + " \\* \"Font:" + aWW8Ruby.GetFontFamily()
-            + "\" \\* hps";
-    aStr += OUString::number((aWW8Ruby.GetRubyHeight() + 5) / 10) + " \\o";
+    OUString aStr = FieldString(ww::eEQ) + "\\* jc" + OUString::number(aWW8Ruby.GetJC())
+                    + " \\* \"Font:" + aWW8Ruby.GetFontFamily() + "\" \\* hps"
+                    + OUString::number((aWW8Ruby.GetRubyHeight() + 5) / 10) + " \\o";
     if (aWW8Ruby.GetDirective())
     {
         aStr += "\\a" + OUStringChar(aWW8Ruby.GetDirective());

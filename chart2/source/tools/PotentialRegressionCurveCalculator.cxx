@@ -174,8 +174,8 @@ OUString PotentialRegressionCurveCalculator::ImplGetRepresentation(
         }
         if( m_fSlope != 0.0 )  // add slope value
         {
-            aTmpBuf.append( mXName + "^" );
-            aTmpBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fSlope, pValueLength ));
+            aTmpBuf.append( mXName + "^" +
+                 getFormattedString( xNumFormatter, nNumberFormatKey, m_fSlope, pValueLength ));
         }
         addStringToEquation( aBuf, nLineLength, aTmpBuf, pFormulaMaxWidth );
     }

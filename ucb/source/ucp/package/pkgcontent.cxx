@@ -1259,8 +1259,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         uno::Reference< ucb::XContentIdentifier > xOldId = m_xIdentifier;
 
         // Assemble new content identifier...
-        OUString aNewURL = m_aUri.getParentUri() + "/";
-        aNewURL += ::ucb_impl::urihelper::encodeSegment( aNewTitle );
+        OUString aNewURL = m_aUri.getParentUri() + "/" +
+            ::ucb_impl::urihelper::encodeSegment( aNewTitle );
         uno::Reference< ucb::XContentIdentifier > xNewId
             = new ::ucbhelper::ContentIdentifier( aNewURL );
 
@@ -1538,8 +1538,7 @@ void Content::insert(
 
                 do
                 {
-                    OUString aNew = aNewUri.getUri() + "_";
-                    aNew += OUString::number( ++nTry );
+                    OUString aNew = aNewUri.getUri() + "_" + OUString::number( ++nTry );
                     aNewUri.setUri( aNew );
                 }
                 while ( hasData( aNewUri ) && ( nTry < 1000 ) );

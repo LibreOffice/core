@@ -260,14 +260,9 @@ ScDBData::~ScDBData()
 
 OUString ScDBData::GetSourceString() const
 {
-    OUStringBuffer aBuf;
     if (mpImportParam->bImport)
-    {
-        aBuf.append(mpImportParam->aDBName);
-        aBuf.append('/');
-        aBuf.append(mpImportParam->aStatement);
-    }
-    return aBuf.makeStringAndClear();
+        return mpImportParam->aDBName + "/" + mpImportParam->aStatement;
+    return OUString();
 }
 
 OUString ScDBData::GetOperations() const

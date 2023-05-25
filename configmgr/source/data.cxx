@@ -220,8 +220,7 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
             return p;
         }
         if (canonicRepresentation != nullptr) {
-            canonic.append('/');
-            canonic.append(createSegment(templateName, seg));
+            canonic.append("/" + createSegment(templateName, seg));
         }
         if (path != nullptr) {
             path->push_back(seg);

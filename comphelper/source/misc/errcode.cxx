@@ -144,9 +144,7 @@ COMPHELPER_DLLPUBLIC OUString ErrCode::toString() const
                 pClass = u"Compiler";
                 break;
         }
-        buf.append(OUString::Concat(" Class:") + pClass);
-
-        buf.append(" Code:" + OUString::number(GetCode()));
+        buf.append(OUString::Concat(" Class:") + pClass + " Code:" + OUString::number(GetCode()));
     }
     buf.append(")");
     return buf.makeStringAndClear();

@@ -253,11 +253,8 @@ std::unique_ptr<ScMemChart> ScChartArray::CreateMemChartSingle()
         }
         if (aString.isEmpty())
         {
-            OUStringBuffer aBuf;
-            aBuf.append(ScResId(STR_ROW));
-            aBuf.append(' ');
-            aBuf.append(static_cast<sal_Int32>(aRows[nRow]+1));
-            aString = aBuf.makeStringAndClear();
+            aString = ScResId(STR_ROW) + " " +
+                OUString::number(static_cast<sal_Int32>(aRows[nRow]+1));
         }
         pMemChart->SetRowText( nRow, aString);
     }

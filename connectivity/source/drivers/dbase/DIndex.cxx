@@ -387,8 +387,7 @@ void ODbaseIndex::createINFEntry()
     bool bCase = isCaseSensitive();
     while (aNewEntry.isEmpty())
     {
-        aNewEntry = OString("NDX");
-        aNewEntry += OString::number(++nSuffix);
+        aNewEntry = "NDX" + OString::number(++nSuffix);
         for (sal_uInt16 i = 0; i < aInfFile.GetKeyCount(); i++)
         {
             aKeyName = aInfFile.GetKeyName(i);

@@ -112,16 +112,16 @@ void ScHTMLExport::FillGraphList( const SdrPage* pPage, SCTAB nTab,
 void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
 {
     SdrObject* pObject = pE->pObject;
-    OStringBuffer aBuf;
-    aBuf.append(" " OOO_STRING_SVTOOLS_HTML_O_width "="
-        + OString::number(static_cast<sal_Int32>(pE->aSize.Width())));
-    aBuf.append(" " OOO_STRING_SVTOOLS_HTML_O_height "="
-        + OString::number(static_cast<sal_Int32>(pE->aSize.Height())));
+    OStringBuffer aBuf =
+        " " OOO_STRING_SVTOOLS_HTML_O_width "="
+        + OString::number(static_cast<sal_Int32>(pE->aSize.Width()))
+        + " " OOO_STRING_SVTOOLS_HTML_O_height "="
+        + OString::number(static_cast<sal_Int32>(pE->aSize.Height()));
     if ( pE->bInCell )
     {
         aBuf.append(" " OOO_STRING_SVTOOLS_HTML_O_hspace "="
-            + OString::number(static_cast<sal_Int32>(pE->aSpace.Width())));
-        aBuf.append(" " OOO_STRING_SVTOOLS_HTML_O_vspace "="
+            + OString::number(static_cast<sal_Int32>(pE->aSpace.Width()))
+            + " " OOO_STRING_SVTOOLS_HTML_O_vspace "="
             + OString::number(static_cast<sal_Int32>(pE->aSpace.Height())));
     }
     OString aOpt = aBuf.makeStringAndClear();

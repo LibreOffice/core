@@ -517,9 +517,9 @@ void prepareUserKeys(const Reference < XSimpleRegistry >& xDest,
         hasSubKeys = true;
 
         OUString linkTarget = xKey->getLinkTarget(relativKey);
-        OUString linkName(xKey->getKeyName().copy(xUnoKey->getKeyName().getLength()));
-
-        linkName += "/" + relativKey;
+        OUString linkName(
+            OUString::Concat(xKey->getKeyName().subView(xUnoKey->getKeyName().getLength()))
+            + "/" + relativKey);
 
         if (bRegister)
         {

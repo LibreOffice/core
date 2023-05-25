@@ -605,12 +605,12 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
     if( rOutName.isEmpty() )
         return rStream;
 
-    OStringBuffer sOut;
-    sOut.append(OString::Concat("<") +
-            OOO_STRING_SVTOOLS_HTML_map
-            " "
-            OOO_STRING_SVTOOLS_HTML_O_name
-            "=\"");
+    OStringBuffer sOut =
+        OString::Concat("<") +
+        OOO_STRING_SVTOOLS_HTML_map
+        " "
+        OOO_STRING_SVTOOLS_HTML_O_name
+        "=\"";
     rStream.WriteOString( sOut );
     sOut.setLength(0);
     Out_String( rStream, rOutName );

@@ -923,12 +923,7 @@ void AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
 OUString AddonsOptions_Impl::GeneratePrefixURL()
 {
     // Create a unique prefixed Add-On popup menu URL so it can be identified later as a runtime popup menu.
-    OUString aPopupMenuURL;
-    OUStringBuffer aBuf( m_aRootAddonPopupMenuURLPrexfix.getLength() + 3 );
-    aBuf.append( m_aRootAddonPopupMenuURLPrexfix );
-    aBuf.append( ++m_nRootAddonPopupMenuId );
-    aPopupMenuURL = aBuf.makeStringAndClear();
-    return aPopupMenuURL;
+    return m_aRootAddonPopupMenuURLPrexfix + OUString::number( ++m_nRootAddonPopupMenuId );
 }
 
 void AddonsOptions_Impl::ReadMenuMergeInstructions( MergeMenuInstructionContainer& aContainer )

@@ -876,12 +876,9 @@ SvXMLExport::EnsureNamespace(OUString const & i_rNamespace)
         sPrefix = aPreferredPrefix;
         nKey = GetNamespaceMap_().GetKeyByPrefix( sPrefix );
         sal_Int32 n( 0 );
-        OUStringBuffer buf;
         while( nKey != USHRT_MAX )
         {
-            buf.append( aPreferredPrefix );
-            buf.append( ++n );
-            sPrefix = buf.makeStringAndClear();
+            sPrefix = aPreferredPrefix + OUString::number(++n);
             nKey = GetNamespaceMap_().GetKeyByPrefix( sPrefix );
         }
 

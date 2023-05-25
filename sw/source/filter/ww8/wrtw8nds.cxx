@@ -894,10 +894,15 @@ const SfxPoolItem& SwWW8AttrIter::GetItem(sal_uInt16 nWhich) const
 void WW8AttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 /*nPos*/, const SwFormatRuby& rRuby )
 {
     WW8Ruby aWW8Ruby(rNode, rRuby, GetExport());
-    OUString aStr( FieldString( ww::eEQ ) + "\\* jc" );
-    aStr += OUString::number(aWW8Ruby.GetJC()) + " \\* \"Font:" + aWW8Ruby.GetFontFamily()
-        + "\" \\* hps";
-    aStr += OUString::number((aWW8Ruby.GetRubyHeight() + 5) / 10) + " \\o";
+    OUString aStr =
+        FieldString( ww::eEQ )
+        + "\\* jc"
+        + OUString::number(aWW8Ruby.GetJC())
+        + " \\* \"Font:"
+        + aWW8Ruby.GetFontFamily()
+        + "\" \\* hps"
+        + OUString::number((aWW8Ruby.GetRubyHeight() + 5) / 10)
+        + " \\o";
     if (aWW8Ruby.GetDirective())
     {
         aStr += OUString::Concat(u"\\a") + OUStringChar(aWW8Ruby.GetDirective());

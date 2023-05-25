@@ -448,8 +448,8 @@ OUString ObjectIdentifier::createClassifiedIdentifierForParticles(
     if( eObjectType == OBJECTTYPE_UNKNOWN )
         eObjectType = ObjectIdentifier::getObjectType( rParentParticle );
 
-    OUStringBuffer aRet( m_aProtocol );
-    aRet.append( lcl_createClassificationStringForType( eObjectType, rDragMethodServiceName, rDragParameterString ));
+    OUStringBuffer aRet( m_aProtocol +
+        lcl_createClassificationStringForType( eObjectType, rDragMethodServiceName, rDragParameterString ));
     if(aRet.getLength() > m_aProtocol.getLength())
         aRet.append("/");
 
@@ -577,8 +577,8 @@ OUString ObjectIdentifier::createClassifiedIdentifierWithParent(
 {
     //e.g. "MultiClick/Series=2:Point=34"
 
-    OUStringBuffer aRet( m_aProtocol );
-    aRet.append( lcl_createClassificationStringForType( eObjectType, rDragMethodServiceName, rDragParameterString ));
+    OUStringBuffer aRet( m_aProtocol +
+        lcl_createClassificationStringForType( eObjectType, rDragMethodServiceName, rDragParameterString ));
     if(aRet.getLength() > m_aProtocol.getLength())
         aRet.append("/");
     aRet.append(rParentPartical);

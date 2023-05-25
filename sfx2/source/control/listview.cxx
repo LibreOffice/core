@@ -393,10 +393,10 @@ static OUString getDisplayFileSize(const OUString& rURL)
         nDec = 3;
     }
 
-    OUString aSizeStr(
-        ::rtl::math::doubleToUString(fSize, rtl_math_StringFormat_F, nDec,
-                                     SvtSysLocale().GetLocaleData().getNumDecimalSep()[0]));
-    aSizeStr += aUnitStr;
+    OUString aSizeStr
+        = ::rtl::math::doubleToUString(fSize, rtl_math_StringFormat_F, nDec,
+                                       SvtSysLocale().GetLocaleData().getNumDecimalSep()[0])
+          + aUnitStr;
 
     return aSizeStr;
 }

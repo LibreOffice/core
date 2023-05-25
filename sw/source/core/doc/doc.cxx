@@ -567,21 +567,21 @@ static void lcl_FormatPostIt(
         pIDCO->SplitNode( *aPam.GetPoint(), false );
     }
 
-    OUString aStr( SwViewShell::GetShellRes()->aPostItPage );
-    aStr += sTmp +
+    OUString aStr = SwViewShell::GetShellRes()->aPostItPage +
+        sTmp +
         OUString::number( nPageNo ) +
         " ";
     if( nLineNo )
     {
-        aStr += SwViewShell::GetShellRes()->aPostItLine;
-        aStr += sTmp +
+        aStr += SwViewShell::GetShellRes()->aPostItLine +
+            sTmp +
             OUString::number( nLineNo ) +
             " ";
     }
-    aStr += SwViewShell::GetShellRes()->aPostItAuthor;
-    aStr += sTmp + pField->GetPar1() + " ";
     SvtSysLocale aSysLocale;
-    aStr += /*(LocaleDataWrapper&)*/aSysLocale.GetLocaleData().getDate( pField->GetDate() );
+    aStr += SwViewShell::GetShellRes()->aPostItAuthor +
+        sTmp + pField->GetPar1() + " " +
+        /*(LocaleDataWrapper&)*/aSysLocale.GetLocaleData().getDate( pField->GetDate() );
     if(pField->GetResolved())
         aStr += " " + SwResId(STR_RESOLVED);
     pIDCO->InsertString( aPam, aStr );
