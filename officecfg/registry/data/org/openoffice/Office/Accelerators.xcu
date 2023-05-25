@@ -6173,6 +6173,13 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:InsertZWSP</value>
+            <value xml:lang="de">.uno:DefaultNumbering</value>
+          </prop>
+        </node>
+        <node oor:name="POINT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="de">.uno:DefaultBullet</value>
           </prop>
         </node>
         <node oor:name="DOWN" oor:op="replace">
