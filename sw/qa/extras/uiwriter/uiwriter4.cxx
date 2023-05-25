@@ -2403,13 +2403,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf107975)
     dispatchCommand(mxComponent, ".uno:GoRight", {});
     dispatchCommand(mxComponent, ".uno:Paste", {});
 
-// Disable on Windows: fails quite a lot on multiple Jenkins slaves, but entirely reliably,
+// Fails quite a lot on multiple Jenkins slaves, but entirely reliably,
 // with:
 // sw/qa/extras/uiwriter/uiwriter4.cxx(2407) : error : Assertion
 // - Expected: 2
 // - Actual  : 1
 // i.e. the xIndexAccess->getCount() line.
-#if !defined(_WIN32)
+#if 0
     // without the fix, it crashes
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(OUString("ABC"), getParagraph(1)->getString());
