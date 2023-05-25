@@ -260,20 +260,20 @@
    <style:page-layout-properties style:writing-mode="lr-tb" style:layout-grid-standard-mode="true"/>
   </style:default-page-layout>
   <loext:theme loext:name="Office">
-   <loext:color-table loext:name="LibreOffice">
-    <loext:color loext:name="dk1" loext:color="#000000"/>
-    <loext:color loext:name="lt1" loext:color="#ffffff"/>
-    <loext:color loext:name="dk2" loext:color="#000000"/>
-    <loext:color loext:name="lt2" loext:color="#ffffff"/>
+   <loext:theme-colors loext:name="LibreOffice">
+    <loext:color loext:name="dark1" loext:color="#000000"/>
+    <loext:color loext:name="light1" loext:color="#ffffff"/>
+    <loext:color loext:name="dark2" loext:color="#000000"/>
+    <loext:color loext:name="light2" loext:color="#ffffff"/>
     <loext:color loext:name="accent1" loext:color="#18a303"/>
     <loext:color loext:name="accent2" loext:color="#0369a3"/>
     <loext:color loext:name="accent3" loext:color="#a33e03"/>
     <loext:color loext:name="accent4" loext:color="#8e03a3"/>
     <loext:color loext:name="accent5" loext:color="#c99c00"/>
     <loext:color loext:name="accent6" loext:color="#c9211e"/>
-    <loext:color loext:name="hlink" loext:color="#0000ee"/>
-    <loext:color loext:name="folHlink" loext:color="#551a8b"/>
-   </loext:color-table>
+    <loext:color loext:name="hyperlink" loext:color="#0000ee"/>
+    <loext:color loext:name="followed-hyperlink" loext:color="#551a8b"/>
+   </loext:theme-colors>
   </loext:theme>
  </office:styles>
  <office:automatic-styles>

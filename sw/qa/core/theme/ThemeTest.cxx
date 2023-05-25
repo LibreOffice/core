@@ -368,7 +368,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsDOCX)
 
 CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsODT)
 {
-    createSwDoc("ThemeColorInHeading.odt");
+    createSwDoc("ThemeColorInHeading.fodt");
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
 
