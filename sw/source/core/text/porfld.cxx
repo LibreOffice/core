@@ -395,7 +395,6 @@ bool SwFieldPortion::Format( SwTextFormatInfo &rInf )
                 switch (cNew)
                 {
                     case CH_BREAK:
-                    case ' ': // ??? why is this one not in ScanPortionEnd?
                     case CH_TAB:
                     case CHAR_HARDHYPHEN: // non-breaking hyphen
                     case CHAR_SOFTHYPHEN:
