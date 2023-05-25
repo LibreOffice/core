@@ -1419,7 +1419,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testMultiParaListItem)
     SvMemoryStream aStream;
     WrapReqifFromTempFile(aStream);
     xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
-    CPPUNIT_ASSERT(pDoc);
+    CPPUNIT_ASSERT(pXmlDoc);
     assertXPathContent(pXmlDoc, "//reqif-xhtml:ol/reqif-xhtml:li[1]/reqif-xhtml:p", "A");
     assertXPathContent(pXmlDoc, "//reqif-xhtml:ol/reqif-xhtml:li[2]/reqif-xhtml:p[1]", "B");
     // Without the accompanying fix in place, this test would have failed with:
@@ -1549,7 +1549,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testListHeading)
     SvMemoryStream aStream;
     WrapReqifFromTempFile(aStream);
     xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
-    CPPUNIT_ASSERT(pDoc);
+    CPPUNIT_ASSERT(pXmlDoc);
 
     // Without the accompanying fix in place, this test would have failed:
     // - expected: <div><p>...</p></div>
@@ -2149,7 +2149,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testListsHeading)
     SvMemoryStream aStream;
     WrapReqifFromTempFile(aStream);
     xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
-    CPPUNIT_ASSERT(pDoc);
+    CPPUNIT_ASSERT(pXmlDoc);
 
     // Without the accompanying fix in place, this test would have failed with:
     // - In <>, XPath '/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p' not found
@@ -2209,7 +2209,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testNestedBullets)
     SvMemoryStream aStream;
     WrapReqifFromTempFile(aStream);
     xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
-    CPPUNIT_ASSERT(pDoc);
+    CPPUNIT_ASSERT(pXmlDoc);
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//reqif-xhtml:ol/reqif-xhtml:li/reqif-xhtml:ol/reqif-xhtml:li/reqif-xhtml:p' not found
     // i.e. the <li> inside the outer <ol> was missing.
@@ -2233,7 +2233,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTrailingLineBreak)
     SvMemoryStream aStream;
     WrapReqifFromTempFile(aStream);
     xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
-    CPPUNIT_ASSERT(pDoc);
+    CPPUNIT_ASSERT(pXmlDoc);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 2
@@ -2284,7 +2284,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testLeadingTab)
     SvMemoryStream aStream;
     WrapReqifFromTempFile(aStream);
     xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
-    CPPUNIT_ASSERT(pDoc);
+    CPPUNIT_ASSERT(pXmlDoc);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: <nbsp><nbsp><space>first
     // - Actual  : <tab><space>first
