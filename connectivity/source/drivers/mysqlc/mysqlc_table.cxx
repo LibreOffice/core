@@ -116,7 +116,7 @@ void SAL_CALL connectivity::mysqlc::Table::alterColumnByName(
         // precision, otherwise an exception is thrown -- however the base
         // gui then offers to delete and recreate the column.
         OUStringBuffer sSql(300);
-        sSql.append("ALTER TABLE `" + getTableName() + "` MODIFY COLUMN `" + rColName + "` "
+        sSql.append(getAlterTableColumnPart() + " MODIFY COLUMN `" + rColName + "` "
                     + ::dbtools::createStandardTypePart(rDescriptor, getConnection()));
 
         if (comphelper::getBOOL(rDescriptor->getPropertyValue("IsAutoIncrement")))
