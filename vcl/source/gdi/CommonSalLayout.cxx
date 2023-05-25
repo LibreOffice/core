@@ -845,7 +845,7 @@ void GenericSalLayout::ApplyDXArray(const double* pDXArray, const sal_Bool* pKas
         aPos.adjustX(-nClusterWidth + pGlyphIter->origWidth());
         while (nCopies--)
         {
-            GlyphItem aKashida(nCharPos, 0, nKashidaIndex, aPos, nFlags, nKashidaWidth, 0, 0);
+            GlyphItem aKashida(nCharPos, 0, nKashidaIndex, aPos, nFlags, 0, 0, 0);
             pGlyphIter = m_GlyphItems.insert(pGlyphIter, aKashida);
             aPos.adjustX(nKashidaWidth - nOverlap);
             ++pGlyphIter;
