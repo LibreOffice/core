@@ -683,12 +683,11 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     if( nNewDefListLvl != rHWrt.m_nDefListLvl )
         rHWrt.OutAndSetDefList( nNewDefListLvl );
 
-    bool bAtLeastOneNumbered = false;
     // if necessary, start a bulleted or numbered list
     if( rInfo.bInNumberBulletList )
     {
         OSL_ENSURE( !rHWrt.m_nDefListLvl, "DL cannot be inside OL!" );
-        OutHTML_NumberBulletListStart( rHWrt, aNumInfo, bAtLeastOneNumbered );
+        OutHTML_NumberBulletListStart( rHWrt, aNumInfo );
 
         if( bNumbered )
         {
@@ -758,17 +757,25 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
 
     // if necessary, start a new list item
     bool bNumberedForListItem = bNumbered;
-    if (!bNumberedForListItem && rHWrt.mbXHTML && bAtLeastOneNumbered)
+    if (!bNumberedForListItem)
     {
-        // OutHTML_NumberBulletListEnd() will end a list item if at least one text node is numbered
-        // in the list, so open the list item with the same condition here.
-        bNumberedForListItem = true;
+        // Open a list also for the leading unnumbered nodes (= list headers in ODF terminology);
+        // to do that, detect if this unnumbered node is the first in this list
+        const auto& rPrevListInfo = rHWrt.GetNumInfo();
+        if (rPrevListInfo.GetNumRule() != aNumInfo.GetNumRule() || aNumInfo.IsRestart(rPrevListInfo)
+            || rPrevListInfo.GetDepth() < aNumInfo.GetDepth())
+            bNumberedForListItem = true;
     }
     if( rInfo.bInNumberBulletList && bNumberedForListItem )
     {
         HtmlWriter html(rWrt.Strm(), rHWrt.maNamespace);
         html.start(OOO_STRING_SVTOOLS_HTML_li);
-        if( USHRT_MAX != nNumStart )
+        if (!bNumbered)
+        {
+            // Handles list headers (<text:list-header> ODF element)
+            html.attribute(OOO_STRING_SVTOOLS_HTML_O_style, "display: block");
+        }
+        else if (USHRT_MAX != nNumStart)
             html.attribute(OOO_STRING_SVTOOLS_HTML_O_value, OString::number(nNumStart));
         // Finish the opening element, but don't close it.
         html.characters("");
