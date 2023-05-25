@@ -4159,6 +4159,19 @@ void SwRowFrame::MakeAll(vcl::RenderContext* pRenderContext)
     SwLayoutFrame::MakeAll(pRenderContext);
 }
 
+void SwRowFrame::dumpAsXml(xmlTextWriterPtr writer) const
+{
+    (void)xmlTextWriterStartElement(writer, reinterpret_cast<const xmlChar*>("row"));
+    dumpAsXmlAttributes(writer);
+
+    (void)xmlTextWriterStartElement(writer, BAD_CAST("infos"));
+    dumpInfosAsXml(writer);
+    (void)xmlTextWriterEndElement(writer);
+    dumpChildrenAsXml(writer);
+
+    (void)xmlTextWriterEndElement(writer);
+}
+
 tools::Long CalcHeightWithFlys( const SwFrame *pFrame )
 {
     SwRectFnSet aRectFnSet(pFrame);

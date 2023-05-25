@@ -122,6 +122,8 @@ public:
     bool IsInSplit() const { return m_bIsInSplit; }
     void SetInSplit(bool bNew = true) { m_bIsInSplit = bNew; }
     void OnFrameSize(const SfxPoolItem&);
+
+    void dumpAsXml(xmlTextWriterPtr writer = nullptr) const override;
 };
 
 #endif
