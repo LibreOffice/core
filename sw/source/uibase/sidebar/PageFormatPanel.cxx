@@ -62,19 +62,19 @@ void PageFormatPanel::SetMarginFieldUnit()
     if (IsInch(meFUnit))
     {
         OUString sSuffix = weld::MetricSpinButton::MetricToString(FieldUnit::INCH);
-        for (size_t i = 0; i < SAL_N_ELEMENTS(RID_PAGEFORMATPANEL_MARGINS_INCH); ++i)
+        for (auto const& [aName, nSize] : RID_PAGEFORMATPANEL_MARGINS_INCH)
         {
-            OUString sStr = rLocaleData.getNum(RID_PAGEFORMATPANEL_MARGINS_INCH[i].second, 2, true, false) + sSuffix;
-            mxMarginSelectBox->append_text(SwResId(RID_PAGEFORMATPANEL_MARGINS_INCH[i].first).replaceFirst("%1", sStr));
+            OUString sStr = rLocaleData.getNum(nSize, 2, true, false) + sSuffix;
+            mxMarginSelectBox->append_text(SwResId(aName).replaceFirst("%1", sStr));
         }
     }
     else
     {
         OUString sSuffix = weld::MetricSpinButton::MetricToString(FieldUnit::CM);
-        for (size_t i = 0; i < SAL_N_ELEMENTS(RID_PAGEFORMATPANEL_MARGINS_CM); ++i)
+        for (auto const& [aName, nSize] : RID_PAGEFORMATPANEL_MARGINS_CM)
         {
-            OUString sStr = rLocaleData.getNum(RID_PAGEFORMATPANEL_MARGINS_CM[i].second, 2, true, false) + " " + sSuffix;
-            mxMarginSelectBox->append_text(SwResId(RID_PAGEFORMATPANEL_MARGINS_CM[i].first).replaceFirst("%1", sStr));
+            OUString sStr = rLocaleData.getNum(nSize, 2, true, false) + " " + sSuffix;
+            mxMarginSelectBox->append_text(SwResId(aName).replaceFirst("%1", sStr));
         }
     }
     mxMarginSelectBox->set_active(nSelected);

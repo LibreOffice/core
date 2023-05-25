@@ -87,15 +87,6 @@ static void disableScrollBars(uno::Reference< beans::XPropertySet > const & xVie
     }
 }
 
-const sal_Int16 nZoomValues[] =
-{
-    20,
-    40,
-    50,
-    75,
-    100
-};
-
 SwOneExampleFrame::SwOneExampleFrame(sal_uInt32 nFlags,
                                  const Link<SwOneExampleFrame&,void>* pInitializedLink,
                                  const OUString* pURL)
@@ -479,13 +470,13 @@ bool SwOneExampleFrame::CreatePopup(const Point& rPt)
     sal_Int16 nZoom = 0;
     aZoom >>= nZoom;
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(nZoomValues); ++i)
+    for (auto const nZoomPreset : { 20, 40, 50, 75, 100 })
     {
-        OUString sTemp = unicode::formatPercent(nZoomValues[i],
+        OUString sTemp = unicode::formatPercent(nZoomPreset,
             Application::GetSettings().GetUILanguageTag());
-        OUString sIdent = "zoom" + OUString::number(nZoomValues[i]);
+        OUString sIdent = "zoom" + OUString::number(nZoomPreset);
         xPop->set_label(sIdent, sTemp);
-        if (nZoom == nZoomValues[i])
+        if (nZoom == nZoomPreset)
             xPop->set_active(sIdent, true);
     }
 

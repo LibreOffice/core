@@ -135,8 +135,8 @@ ShellResource::ShellResource()
     sPageDescFollowName(    SwResId(STR_PAGEDESC_FOLLOWNAME)),
     sPageDescName(          SwResId(STR_PAGEDESC_NAME))
 {
-    for (size_t i = 0; i < SAL_N_ELEMENTS(FLD_DOCINFO_ARY); ++i)
-        aDocInfoLst.push_back(SwResId(FLD_DOCINFO_ARY[i]));
+    for (auto const& aID : FLD_DOCINFO_ARY)
+        aDocInfoLst.push_back(SwResId(aID));
 }
 
 OUString ShellResource::GetPageDescName(sal_uInt16 nNo, PageNameMode eMode)

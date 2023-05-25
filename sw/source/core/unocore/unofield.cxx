@@ -183,9 +183,9 @@ const ServiceIdResId aServiceToRes[] =
 
 static SwFieldIds lcl_ServiceIdToResId(SwServiceType nServiceId)
 {
-    for (size_t i=0; i<SAL_N_ELEMENTS(aServiceToRes); ++i)
-        if (aServiceToRes[i].nServiceId == nServiceId)
-            return aServiceToRes[i].nResId;
+    for (auto const& aEntry : aServiceToRes)
+        if (aEntry.nServiceId == nServiceId)
+            return aEntry.nResId;
 #if OSL_DEBUG_LEVEL > 0
     OSL_FAIL("service id not found");
 #endif

@@ -46,8 +46,8 @@ using namespace com::sun::star;
 
 void FillFieldSelect(weld::TreeView& rListBox)
 {
-    for (size_t i = 0; i < SAL_N_ELEMENTS(FLD_SELECT); ++i)
-        rListBox.append_text(SwResId(FLD_SELECT[i]));
+    for (auto const& aID : FLD_SELECT)
+        rListBox.append_text(SwResId(aID));
 }
 
 SwFieldDokInfPage::SwFieldDokInfPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *const pCoreSet)

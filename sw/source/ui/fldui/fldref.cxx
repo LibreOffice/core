@@ -70,10 +70,10 @@ SwFieldRefPage::SwFieldRefPage(weld::Container* pPage, weld::DialogController* p
 {
     m_xSelectionLB->make_sorted();
     // #i83479#
-    for (size_t i = 0; i < SAL_N_ELEMENTS(FLD_REF_PAGE_TYPES); ++i)
+    for (auto const& aID : FLD_REF_PAGE_TYPES)
     {
-        m_xTypeLB->append_text(SwResId(FLD_REF_PAGE_TYPES[i]));
-        m_xFormatLB->append_text(SwResId(FLD_REF_PAGE_TYPES[i]));
+        m_xTypeLB->append_text(SwResId(aID));
+        m_xFormatLB->append_text(SwResId(aID));
     }
 
     m_sBookmarkText = m_xTypeLB->get_text(0);

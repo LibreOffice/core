@@ -118,8 +118,8 @@ SwNumNamesDlg::SwNumNamesDlg(weld::Window *pParent)
     , m_xFormBox(m_xBuilder->weld_tree_view("form"))
     , m_xOKBtn(m_xBuilder->weld_button("ok"))
 {
-    for (size_t i = 0; i < SAL_N_ELEMENTS(OUTLINE_STYLE); ++i)
-        m_xFormBox->append_text(SwResId(OUTLINE_STYLE[i]));
+    for (auto const& aID : OUTLINE_STYLE)
+        m_xFormBox->append_text(SwResId(aID));
 
     m_xFormEdit->connect_changed(LINK(this, SwNumNamesDlg, ModifyHdl));
     m_xFormBox->connect_changed(LINK(this, SwNumNamesDlg, SelectHdl));
