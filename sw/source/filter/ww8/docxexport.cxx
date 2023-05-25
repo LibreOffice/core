@@ -1001,7 +1001,8 @@ static auto
 WriteCompat(SwDoc const& rDoc, ::sax_fastparser::FSHelperPtr const& rpFS,
         sal_Int32 & rTargetCompatibilityMode) -> void
 {
-    if (!rDoc.getIDocumentSettingAccess().get(DocumentSettingId::ADD_EXT_LEADING))
+    const IDocumentSettingAccess& rIDSA = rDoc.getIDocumentSettingAccess();
+    if (!rIDSA.get(DocumentSettingId::ADD_EXT_LEADING))
     {
         rpFS->singleElementNS(XML_w, XML_noLeading);
         if (rTargetCompatibilityMode > 14)
@@ -1010,13 +1011,19 @@ WriteCompat(SwDoc const& rDoc, ::sax_fastparser::FSHelperPtr const& rpFS,
         }
     }
     // Do not justify lines with manual break
-    if (rDoc.getIDocumentSettingAccess().get(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK))
+    if (rIDSA.get(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK))
     {
         rpFS->singleElementNS(XML_w, XML_doNotExpandShiftReturn);
     }
     // tdf#146515 export "Use printer metrics for document formatting"
-    if (!rDoc.getIDocumentSettingAccess().get(DocumentSettingId::USE_VIRTUAL_DEVICE))
+    if (!rIDSA.get(DocumentSettingId::USE_VIRTUAL_DEVICE))
         rpFS->singleElementNS(XML_w, XML_usePrinterMetrics);
+
+    if (rIDSA.get(DocumentSettingId::DO_NOT_BREAK_WRAPPED_TABLES))
+    {
+        // Map the DoNotBreakWrappedTables compat flag to <w:doNotBreakWrappedTables>.
+        rpFS->singleElementNS(XML_w, XML_doNotBreakWrappedTables);
+    }
 }
 
 void DocxExport::WriteSettings()

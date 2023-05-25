@@ -25,6 +25,7 @@
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <ftnfrm.hxx>
+#include <IDocumentSettingAccess.hxx>
 
 namespace
 {
@@ -304,6 +305,27 @@ CPPUNIT_TEST_FIXTURE(Test, test3Endnotes)
     // i.e. only 1 endnote was on the last page, the other 2 was not moved to the end of the
     // document, which is incorrect.
     CPPUNIT_ASSERT_EQUAL(3, nEndnotes);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testDoNotBreakWrappedTables)
+{
+    // Given a document with the DO_NOT_BREAK_WRAPPED_TABLES compat mode enabled:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    IDocumentSettingAccess& rIDSA = pDoc->getIDocumentSettingAccess();
+    rIDSA.set(DocumentSettingId::DO_NOT_BREAK_WRAPPED_TABLES, true);
+
+    // When saving to docx:
+    save("Office Open XML Text");
+
+    // Then make sure the compat flag is serialized:
+    xmlDocUniquePtr pXmlDoc = parseExport("word/settings.xml");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - XPath '/w:settings/w:compat/w:doNotBreakWrappedTables' number of nodes is incorrect
+    // i.e. <w:doNotBreakWrappedTables> was not written.
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:doNotBreakWrappedTables", 1);
 }
 }
 
