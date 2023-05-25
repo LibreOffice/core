@@ -162,7 +162,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeExport)
     // - Actual  : 0
     // - XPath '//style:master-page/loext:theme/loext:color-table/loext:color' number of nodes is incorrect
     // i.e. the theme was lost on exporting to ODF.
-    assertXPath(pXmlDoc, "//style:master-page/loext:theme/loext:color-table/loext:color", 12);
+    assertXPath(pXmlDoc, "//style:master-page/loext:theme/loext:theme-colors/loext:color", 12);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testVideoSnapshot)
@@ -211,7 +211,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testVideoSnapshot)
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeImport)
 {
     // Given a document that has a master page with a theme associated:
-    loadFromURL(u"theme.odp");
+    loadFromURL(u"theme.fodp");
 
     // Then make sure the doc model has a master page with a theme:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
@@ -230,10 +230,12 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeImport)
     CPPUNIT_ASSERT(pTheme);
 
     CPPUNIT_ASSERT_EQUAL(OUString("Office Theme"), pTheme->GetName());
-    CPPUNIT_ASSERT_EQUAL(OUString("Office"), pTheme->getColorSet()->getName());
+    auto pColorSet = pTheme->getColorSet();
+    CPPUNIT_ASSERT(pColorSet);
+    CPPUNIT_ASSERT_EQUAL(OUString("Office"), pColorSet->getName());
 
     CPPUNIT_ASSERT_EQUAL(Color(0x954F72),
-                         pTheme->getColorSet()->getColor(model::ThemeColorType::FollowedHyperlink));
+                         pColorSet->getColor(model::ThemeColorType::FollowedHyperlink));
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeColorExportImport)

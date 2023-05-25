@@ -3239,7 +3239,7 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
       <rng:empty/>
     </rng:element>
   </rng:define>
-  <rng:define name="loext-color-table-attlist">
+  <rng:define name="loext-theme-colors-attlist">
     <rng:interleave>
       <rng:optional>
         <rng:attribute name="loext:name">
@@ -3248,9 +3248,9 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
       </rng:optional>
     </rng:interleave>
   </rng:define>
-  <rng:define name="loext-color-table">
-    <rng:element name="loext:color-table">
-      <rng:ref name="loext-color-table-attlist"/>
+  <rng:define name="loext-theme-colors">
+    <rng:element name="loext:theme-colors">
+      <rng:ref name="loext-theme-colors-attlist"/>
       <rng:zeroOrMore>
         <rng:ref name="loext-color"/>
       </rng:zeroOrMore>
@@ -3269,7 +3269,7 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     <rng:element name="loext:theme">
       <rng:ref name="loext-theme-attlist"/>
       <rng:optional>
-        <rng:ref name="loext-color-table"/>
+        <rng:ref name="loext-theme-colors"/>
       </rng:optional>
     </rng:element>
   </rng:define>
@@ -3382,24 +3382,18 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
   <!-- Theme Elements -->
   <rng:define name="theme-color">
     <rng:choice>
-      <!-- Background 1 -->
-      <rng:value>dk1</rng:value>
-      <!-- Text 1 -->
-      <rng:value>lt1</rng:value>
-      <!-- Background 2 -->
-      <rng:value>dk2</rng:value>
-      <!-- Text 2 -->
-      <rng:value>lt2</rng:value>
+      <rng:value>dark1</rng:value>
+      <rng:value>light1</rng:value>
+      <rng:value>dark2</rng:value>
+      <rng:value>light2</rng:value>
       <rng:value>accent1</rng:value>
       <rng:value>accent2</rng:value>
       <rng:value>accent3</rng:value>
       <rng:value>accent4</rng:value>
       <rng:value>accent5</rng:value>
       <rng:value>accent6</rng:value>
-      <!-- Hyperlink -->
-      <rng:value>hlink</rng:value>
-      <!-- Followed hyperlink -->
-      <rng:value>folHlink</rng:value>
+      <rng:value>hyperlink</rng:value>
+      <rng:value>followed-hyperlink</rng:value>
     </rng:choice>
   </rng:define>
 

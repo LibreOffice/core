@@ -944,19 +944,14 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testThemeExport)
 
     // Check if the 12 colors are written in the XML:
     xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
-    assertXPath(pXmlDoc, "//office:styles/loext:theme/loext:color-table/loext:color", 12);
-    assertXPath(pXmlDoc, "//office:styles/loext:theme/loext:color-table/loext:color[1]", "name",
-                "dk1");
-    assertXPath(pXmlDoc, "//office:styles/loext:theme/loext:color-table/loext:color[1]", "color",
-                "#101010");
-    assertXPath(pXmlDoc, "//office:styles/loext:theme/loext:color-table/loext:color[2]", "name",
-                "lt1");
-    assertXPath(pXmlDoc, "//office:styles/loext:theme/loext:color-table/loext:color[2]", "color",
-                "#202020");
-    assertXPath(pXmlDoc, "//office:styles/loext:theme/loext:color-table/loext:color[12]", "name",
-                "folHlink");
-    assertXPath(pXmlDoc, "//office:styles/loext:theme/loext:color-table/loext:color[12]", "color",
-                "#c0c0c0");
+    OString aThemePath = "//office:styles/loext:theme/loext:theme-colors/loext:color";
+    assertXPath(pXmlDoc, aThemePath, 12);
+    assertXPath(pXmlDoc, aThemePath + "[1]", "name", "dark1");
+    assertXPath(pXmlDoc, aThemePath + "[1]", "color", "#101010");
+    assertXPath(pXmlDoc, aThemePath + "[2]", "name", "light1");
+    assertXPath(pXmlDoc, aThemePath + "[2]", "color", "#202020");
+    assertXPath(pXmlDoc, aThemePath + "[12]", "name", "followed-hyperlink");
+    assertXPath(pXmlDoc, aThemePath + "[12]", "color", "#c0c0c0");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFloatingTableExport)

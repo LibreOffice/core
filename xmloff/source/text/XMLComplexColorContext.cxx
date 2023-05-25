@@ -23,11 +23,20 @@
 using namespace css;
 using namespace xmloff::token;
 
-SvXMLEnumMapEntry<sal_Int16> const pXML_ThemeColor_Enum[]
-    = { { XML_NONE, -1 },     { XML_DK1, 0 },          { XML_LT1, 1 },     { XML_DK2, 2 },
-        { XML_LT2, 3 },       { XML_ACCENT1, 4 },      { XML_ACCENT2, 5 }, { XML_ACCENT3, 6 },
-        { XML_ACCENT4, 7 },   { XML_ACCENT5, 8 },      { XML_ACCENT6, 9 }, { XML_HLINK, 10 },
-        { XML_FOLHLINK, 11 }, { XML_TOKEN_INVALID, 0 } };
+SvXMLEnumMapEntry<sal_Int16> const pXML_ThemeColor_Enum[] = { { XML_NONE, -1 },
+                                                              { XML_DARK1, 0 },
+                                                              { XML_LIGHT1, 1 },
+                                                              { XML_DARK2, 2 },
+                                                              { XML_LIGHT2, 3 },
+                                                              { XML_ACCENT1, 4 },
+                                                              { XML_ACCENT2, 5 },
+                                                              { XML_ACCENT3, 6 },
+                                                              { XML_ACCENT4, 7 },
+                                                              { XML_ACCENT5, 8 },
+                                                              { XML_ACCENT6, 9 },
+                                                              { XML_HYPERLINK, 10 },
+                                                              { XML_FOLLOWED_HYPERLINK, 11 },
+                                                              { XML_TOKEN_INVALID, 0 } };
 
 XMLComplexColorContext::XMLComplexColorContext(
     SvXMLImport& rImport, sal_Int32 nElement,
