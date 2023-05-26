@@ -35,7 +35,7 @@
 class EDITENG_DLLPUBLIC SvxTextRotateItem : public SfxUInt16Item
 {
 public:
-    SvxTextRotateItem(Degree10 nValue, const sal_uInt16 nId);
+    SvxTextRotateItem(Degree10 nValue, TypedWhichId<SvxTextRotateItem> nId);
 
     virtual SvxTextRotateItem* Clone(SfxItemPool *pPool = nullptr) const override;
 
@@ -81,7 +81,7 @@ public:
 
     SvxCharRotateItem( Degree10 nValue /*= 0*/,
                        bool bFitIntoLine /*= false*/,
-                       const sal_uInt16 nId );
+                       TypedWhichId<SvxCharRotateItem> nId );
 
     virtual SvxCharRotateItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 

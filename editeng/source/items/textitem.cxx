@@ -101,9 +101,9 @@ SfxPoolItem* SvxKerningItem::CreateDefault() {return new SvxKerningItem(0, 0);}
 SfxPoolItem* SvxCaseMapItem::CreateDefault() {return new SvxCaseMapItem(SvxCaseMap::NotMapped, 0);}
 SfxPoolItem* SvxEscapementItem::CreateDefault() {return new SvxEscapementItem(0);}
 SfxPoolItem* SvxLanguageItem::CreateDefault() {return new SvxLanguageItem(LANGUAGE_GERMAN, 0);}
-SfxPoolItem* SvxEmphasisMarkItem::CreateDefault() {return new SvxEmphasisMarkItem(FontEmphasisMark::NONE, 0);}
-SfxPoolItem* SvxCharRotateItem::CreateDefault() {return new SvxCharRotateItem(0_deg10, false, 0);}
-SfxPoolItem* SvxCharScaleWidthItem::CreateDefault() {return new SvxCharScaleWidthItem(100, 0);}
+SfxPoolItem* SvxEmphasisMarkItem::CreateDefault() {return new SvxEmphasisMarkItem(FontEmphasisMark::NONE, TypedWhichId<SvxEmphasisMarkItem>(0));}
+SfxPoolItem* SvxCharRotateItem::CreateDefault() {return new SvxCharRotateItem(0_deg10, false, TypedWhichId<SvxCharRotateItem>(0));}
+SfxPoolItem* SvxCharScaleWidthItem::CreateDefault() {return new SvxCharScaleWidthItem(100, TypedWhichId<SvxCharScaleWidthItem>(0));}
 SfxPoolItem* SvxCharReliefItem::CreateDefault() {return new SvxCharReliefItem(FontRelief::NONE, 0);}
 
 
@@ -2076,7 +2076,7 @@ bool SvxBlinkItem::GetPresentation
 // class SvxEmphaisMarkItem ---------------------------------------------------
 
 SvxEmphasisMarkItem::SvxEmphasisMarkItem( const FontEmphasisMark nValue,
-                                        const sal_uInt16 nId )
+                                        TypedWhichId<SvxEmphasisMarkItem> nId )
     : SfxUInt16Item( nId, static_cast<sal_uInt16>(nValue) )
 {
 }
@@ -2287,7 +2287,7 @@ bool SvxTwoLinesItem::GetPresentation( SfxItemPresentation /*ePres*/,
 |*    class SvxTextRotateItem
 *************************************************************************/
 
-SvxTextRotateItem::SvxTextRotateItem(Degree10 nValue, const sal_uInt16 nW)
+SvxTextRotateItem::SvxTextRotateItem(Degree10 nValue, TypedWhichId<SvxTextRotateItem> nW)
     : SfxUInt16Item(nW, nValue.get())
 {
 }
@@ -2366,7 +2366,7 @@ void SvxTextRotateItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 SvxCharRotateItem::SvxCharRotateItem( Degree10 nValue,
                                        bool bFitIntoLine,
-                                       const sal_uInt16 nW )
+                                       TypedWhichId<SvxCharRotateItem> nW )
     : SvxTextRotateItem(nValue, nW), bFitToLine( bFitIntoLine )
 {
 }
@@ -2455,7 +2455,7 @@ void SvxCharRotateItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 *************************************************************************/
 
 SvxCharScaleWidthItem::SvxCharScaleWidthItem( sal_uInt16 nValue,
-                                               const sal_uInt16 nW )
+                                               TypedWhichId<SvxCharScaleWidthItem> nW )
     : SfxUInt16Item( nW, nValue )
 {
 }

@@ -365,7 +365,7 @@ void SvxGeneralTabPage::Reset( const SfxItemSet* rSet )
 
     if (rSet->GetItemState(SID_FIELD_GRABFOCUS) == SfxItemState::SET)
     {
-        EditPosition nField = static_cast<EditPosition>(static_cast<const SfxUInt16Item&>(rSet->Get(SID_FIELD_GRABFOCUS)).GetValue());
+        EditPosition nField = static_cast<EditPosition>(rSet->Get(SID_FIELD_GRABFOCUS).GetValue());
         if (nField != EditPosition::UNKNOWN)
         {
             for (auto const & i: vFields)

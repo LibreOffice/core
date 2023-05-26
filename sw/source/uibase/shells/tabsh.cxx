@@ -995,7 +995,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                                                                                         nSlot == FN_TABLE_INSERT_COL_DLG, pSlot->GetCommand()));
                 if( pDlg->Execute() == 1 )
                 {
-                    const sal_uInt16 nDispatchSlot = (nSlot == FN_TABLE_INSERT_COL_DLG)
+                    const TypedWhichId<SfxUInt16Item> nDispatchSlot = (nSlot == FN_TABLE_INSERT_COL_DLG)
                         ? FN_TABLE_INSERT_COL_AFTER : FN_TABLE_INSERT_ROW_AFTER;
                     SfxUInt16Item aCountItem( nDispatchSlot, pDlg->getInsertCount() );
                     SfxBoolItem  aAfter( FN_PARAM_INSERT_AFTER, !pDlg->isInsertBefore() );

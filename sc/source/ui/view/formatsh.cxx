@@ -517,7 +517,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                 const SfxPoolItem* pItem;
                 if ( pReqArgs->GetItemState( nSlot, true, &pItem ) == SfxItemState::SET )
                 {
-                    sal_uInt16 nFormat = static_cast<const SfxInt16Item *>(pItem)->GetValue();
+                    sal_uInt16 nFormat = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
                     switch(nFormat)
                     {
                     case 0:

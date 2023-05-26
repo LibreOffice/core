@@ -72,8 +72,7 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
                     mpDrawView->SdrEndTextEdit();
 
                 const SfxItemSet* pArgs = rReq.GetArgs();
-                PageJump eJump = static_cast<PageJump>(static_cast<const SfxUInt16Item&>( pArgs->
-                                  Get(SID_NAVIGATOR_PAGE)).GetValue());
+                PageJump eJump = static_cast<PageJump>( pArgs->Get(SID_NAVIGATOR_PAGE).GetValue() );
 
                 switch (eJump)
                 {

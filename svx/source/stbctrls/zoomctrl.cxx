@@ -172,7 +172,7 @@ void SvxZoomStatusBarControl::Command( const CommandEvent& rCEvt )
         {
             nZoom = aPop.GetZoom(sIdent);
             ImplUpdateItemText();
-            SvxZoomItem aZoom(SvxZoomType::PERCENT, nZoom, GetId());
+            SvxZoomItem aZoom(SvxZoomType::PERCENT, nZoom, TypedWhichId<SvxZoomItem>(GetId()));
 
             if (sIdent == "optimal")
                 aZoom.SetType(SvxZoomType::OPTIMAL);
@@ -234,7 +234,7 @@ void SvxZoomPageStatusBarControl::Paint(const UserDrawEvent& rUsrEvt)
 
 bool SvxZoomPageStatusBarControl::MouseButtonDown(const MouseEvent&)
 {
-    SvxZoomItem aZoom( SvxZoomType::WHOLEPAGE, 0, GetId() );
+    SvxZoomItem aZoom( SvxZoomType::WHOLEPAGE, 0, TypedWhichId<SvxZoomItem>(GetId()) );
 
     css::uno::Any a;
     aZoom.QueryValue( a );

@@ -167,8 +167,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
 
         pPV = mpView->GetSdrPageView();
 
-        switch ( static_cast<SnapKind>(static_cast<const SfxUInt16Item&>(
-                 pArgs->Get(ATTR_SNAPLINE_KIND)).GetValue()) )
+        switch ( static_cast<SnapKind>(pArgs->Get(ATTR_SNAPLINE_KIND).GetValue()) )
         {
             case SnapKind::Horizontal  : eKind = SdrHelpLineKind::Horizontal;   break;
             case SnapKind::Vertical    : eKind = SdrHelpLineKind::Vertical;     break;

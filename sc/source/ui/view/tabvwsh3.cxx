@@ -879,7 +879,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     PaintTop();
                     PaintLeft();
                     rBindings.Invalidate( SID_ATTR_ZOOM );
-                    rReq.AppendItem( SvxZoomItem( GetZoomType(), nZoom, nSlot ) );
+                    rReq.AppendItem( SvxZoomItem( GetZoomType(), nZoom, TypedWhichId<SvxZoomItem>(nSlot) ) );
                     rReq.Done();
                 }
             }

@@ -60,8 +60,8 @@ class XColorItem;
 // animation attributes
 #define ATTR_ANIMATION_START            ATTR_PRESENT_END + 1
 #define ATTR_ANIMATION_ACTIVE           ATTR_ANIMATION_START
-#define ATTR_ANIMATION_EFFECT           ATTR_ANIMATION_START + 1
-#define ATTR_ANIMATION_SPEED            ATTR_ANIMATION_START + 2
+#define ATTR_ANIMATION_EFFECT           TypedWhichId<SfxUInt16Item>(ATTR_ANIMATION_START + 1)
+#define ATTR_ANIMATION_SPEED            TypedWhichId<SfxUInt16Item>(ATTR_ANIMATION_START + 2)
 #define ATTR_ANIMATION_INVISIBLE        ATTR_ANIMATION_START + 3
 #define ATTR_ANIMATION_FADEOUT          ATTR_ANIMATION_START + 4
 #define ATTR_ANIMATION_COLOR            ATTR_ANIMATION_START + 5
@@ -72,9 +72,9 @@ class XColorItem;
 #define ATTR_ANIMATION_END              ATTR_ANIMATION_TEXTEFFECT
 
 #define ATTR_ACTION_START               ATTR_ANIMATION_END + 1
-#define ATTR_ACTION                     ATTR_ACTION_START
-#define ATTR_ACTION_EFFECT              ATTR_ACTION_START + 1
-#define ATTR_ACTION_EFFECTSPEED         ATTR_ACTION_START + 2
+#define ATTR_ACTION                     TypedWhichId<SfxUInt16Item>(ATTR_ACTION_START)
+#define ATTR_ACTION_EFFECT              TypedWhichId<SfxUInt16Item>(ATTR_ACTION_START + 1)
+#define ATTR_ACTION_EFFECTSPEED         TypedWhichId<SfxUInt16Item>(ATTR_ACTION_START + 2)
 #define ATTR_ACTION_FILENAME            TypedWhichId<SfxStringItem>(ATTR_ACTION_START + 3)
 #define ATTR_ACTION_SOUNDON             ATTR_ACTION_START + 4
 #define ATTR_ACTION_PLAYFULL            ATTR_ACTION_START + 5
@@ -92,7 +92,7 @@ class XColorItem;
 #define ATTR_COPY_END                   ATTR_COPY_END_COLOR
 
 #define ATTR_SNAPLINE_START             ATTR_COPY_END + 1
-#define ATTR_SNAPLINE_KIND              ATTR_SNAPLINE_START
+#define ATTR_SNAPLINE_KIND              TypedWhichId<SfxUInt16Item>(ATTR_SNAPLINE_START)
 #define ATTR_SNAPLINE_X                 ATTR_SNAPLINE_START + 1
 #define ATTR_SNAPLINE_Y                 ATTR_SNAPLINE_START + 2
 #define ATTR_SNAPLINE_END               ATTR_SNAPLINE_Y

@@ -61,7 +61,7 @@ SfxPoolItem* SvxHyphenZoneItem::CreateDefault() { return new  SvxHyphenZoneItem(
 SfxPoolItem* SvxTabStopItem::CreateDefault() { return new  SvxTabStopItem(0);}
 SfxPoolItem* SvxFormatSplitItem::CreateDefault() { return new  SvxFormatSplitItem(false, 0);}
 SfxPoolItem* SvxPageModelItem::CreateDefault() { return new  SvxPageModelItem(TypedWhichId<SvxPageModelItem>(0));}
-SfxPoolItem* SvxParaVertAlignItem::CreateDefault() { return new  SvxParaVertAlignItem(Align::Automatic, 0);}
+SfxPoolItem* SvxParaVertAlignItem::CreateDefault() { return new  SvxParaVertAlignItem(Align::Automatic, TypedWhichId<SvxParaVertAlignItem>(0));}
 
 namespace {
 
@@ -1243,7 +1243,7 @@ bool SvxForbiddenRuleItem::GetPresentation(
 *************************************************************************/
 
 SvxParaVertAlignItem::SvxParaVertAlignItem( Align nValue,
-    const sal_uInt16 nW )
+    TypedWhichId<SvxParaVertAlignItem> nW )
     : SfxUInt16Item( nW, static_cast<sal_uInt16>(nValue) )
 {
 }

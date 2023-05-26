@@ -281,7 +281,7 @@ void SwParagraphNumTabPage::Reset(const SfxItemSet* rSet)
     eItemState = rSet->GetItemState( FN_NUMBER_NEWSTART_AT);
     if( eItemState > SfxItemState::DEFAULT )
     {
-        const sal_uInt16 nNewStart = static_cast<const SfxUInt16Item&>(rSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
+        const sal_uInt16 nNewStart = rSet->Get(FN_NUMBER_NEWSTART_AT).GetValue();
         const bool bNotMax = USHRT_MAX != nNewStart;
         m_xNewStartNumberCB->set_active(bNotMax);
         m_xNewStartNF->set_value(bNotMax ? nNewStart : 1);

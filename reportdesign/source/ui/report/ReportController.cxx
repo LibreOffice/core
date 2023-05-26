@@ -146,13 +146,13 @@
 #define RPTUI_ID_ULSPACE    TypedWhichId<SvxULSpaceItem>(XATTR_FILL_FIRST - 7)
 #define RPTUI_ID_PAGE       TypedWhichId<SvxPageItem>(XATTR_FILL_FIRST - 6)
 #define RPTUI_ID_SIZE       TypedWhichId<SvxSizeItem>(XATTR_FILL_FIRST - 5)
-#define RPTUI_ID_PAGE_MODE  XATTR_FILL_FIRST - 4
-#define RPTUI_ID_START      XATTR_FILL_FIRST - 3
-#define RPTUI_ID_END        XATTR_FILL_FIRST - 2
+#define RPTUI_ID_PAGE_MODE  TypedWhichId<SfxUInt16Item>(XATTR_FILL_FIRST - 4)
+#define RPTUI_ID_START      TypedWhichId<SfxUInt16Item>(XATTR_FILL_FIRST - 3)
+#define RPTUI_ID_END        TypedWhichId<SfxUInt16Item>(XATTR_FILL_FIRST - 2)
 #define RPTUI_ID_BRUSH      TypedWhichId<SvxBrushItem>(XATTR_FILL_FIRST - 1)
 /// Note that we deliberately overlap an existing item id, so that we can have contiguous item ids for
 /// the static defaults.
-#define RPTUI_ID_METRIC     XATTR_FILL_LAST
+#define RPTUI_ID_METRIC     TypedWhichId<SfxUInt16Item>(XATTR_FILL_LAST)
 
 static_assert((RPTUI_ID_METRIC - RPTUI_ID_LRSPACE) == 28, "Item ids are not contiguous");
 

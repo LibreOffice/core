@@ -38,7 +38,7 @@ public:
     static SfxPoolItem* CreateDefault();
 
     SvxCharScaleWidthItem( sal_uInt16 nValue /*= 100*/,
-                            const sal_uInt16 nId );
+                        TypedWhichId<SvxCharScaleWidthItem> nId );
 
     virtual SvxCharScaleWidthItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 

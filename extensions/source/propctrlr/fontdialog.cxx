@@ -78,7 +78,7 @@ namespace pcr
         constexpr TypedWhichId<SvxWordLineModeItem> CFID_WORDLINEMODE(8);
         constexpr sal_uInt16 CFID_CHARCOLOR =        9;
         constexpr sal_uInt16 CFID_RELIEF =           10;
-        constexpr sal_uInt16 CFID_EMPHASIS =         11;
+        constexpr TypedWhichId<SvxEmphasisMarkItem> CFID_EMPHASIS(11);
 
         constexpr sal_uInt16 CFID_CJK_FONT =         12;
         constexpr sal_uInt16 CFID_CJK_HEIGHT =       13;
@@ -462,8 +462,7 @@ namespace pcr
 
             if ( eState == SfxItemState::SET )
             {
-                const SvxEmphasisMarkItem& rEmphMarkItem =
-                    static_cast<const SvxEmphasisMarkItem&>(_rSet.Get(FontItemIds::CFID_EMPHASIS));
+                const SvxEmphasisMarkItem& rEmphMarkItem = _rSet.Get(FontItemIds::CFID_EMPHASIS);
 
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_EMPHASIS_MARK, Any(static_cast<sal_Int16>(rEmphMarkItem.GetEmphasisMark())) );
             }

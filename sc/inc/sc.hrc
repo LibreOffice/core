@@ -88,7 +88,7 @@ class SvxZoomSliderItem;
 
 // cursor movements as properties:
 #define SID_CURRENTCELL         TypedWhichId<SfxStringItem>(SC_VIEW_START + 41)
-#define SID_CURRENTTAB          (SC_VIEW_START + 42)
+#define SID_CURRENTTAB          TypedWhichId<SfxUInt16Item>(SC_VIEW_START + 42)
 #define SID_CURRENTDOC          TypedWhichId<SfxStringItem>(SC_VIEW_START + 43)
 #define SID_CURRENTOBJECT       TypedWhichId<SfxStringItem>(SC_VIEW_START + 44)
 
@@ -180,7 +180,7 @@ class SvxZoomSliderItem;
 #define SID_DLG_RETOK           (SC_MESSAGE_START + 12)
 #define SID_STATUS_DOCPOS       TypedWhichId<SfxStringItem>(SC_MESSAGE_START + 14)
 #define SID_STATUS_PAGESTYLE    TypedWhichId<SfxStringItem>(SC_MESSAGE_START + 15)
-#define SID_STATUS_SELMODE      (SC_MESSAGE_START + 16)
+#define SID_STATUS_SELMODE      TypedWhichId<SfxUInt16Item>(SC_MESSAGE_START + 16)
 #define SID_DLG_MATRIX          (SC_MESSAGE_START + 18)
 
 #define SID_STATUS_SELMODE_ERG  (SC_MESSAGE_START + 22)
@@ -274,7 +274,7 @@ class SvxZoomSliderItem;
 
 #define FID_TOGGLEINPUTLINE     TypedWhichId<SfxBoolItem>(VIEW_MENU_START + 1)
 #define FID_TOGGLEHEADERS       (VIEW_MENU_START + 2)
-#define FID_SCALE               (VIEW_MENU_START + 4)
+#define FID_SCALE               TypedWhichId<SvxZoomItem>(VIEW_MENU_START + 4)
 #define FID_TOGGLESYNTAX        (VIEW_MENU_START + 5)
 #define FID_PAGEBREAKMODE       (VIEW_MENU_START + 7)
 #define FID_FUNCTION_BOX        (VIEW_MENU_START + 8)
@@ -314,11 +314,11 @@ class SvxZoomSliderItem;
 #define FORMAT_MENU_START       (INSERT_MENU_END)
 #define FID_CELL_FORMAT         (FORMAT_MENU_START)
 #define FID_ROW_HEIGHT          TypedWhichId<SfxUInt16Item>(FORMAT_MENU_START + 1)
-#define FID_ROW_OPT_HEIGHT      (FORMAT_MENU_START + 2)
+#define FID_ROW_OPT_HEIGHT      TypedWhichId<SfxUInt16Item>(FORMAT_MENU_START + 2)
 #define FID_ROW_HIDE            (FORMAT_MENU_START + 3)
 #define FID_ROW_SHOW            (FORMAT_MENU_START + 4)
 #define FID_COL_WIDTH           TypedWhichId<SfxUInt16Item>(FORMAT_MENU_START + 5)
-#define FID_COL_OPT_WIDTH       (FORMAT_MENU_START + 6)
+#define FID_COL_OPT_WIDTH       TypedWhichId<SfxUInt16Item>(FORMAT_MENU_START + 6)
 #define FID_COL_HIDE            (FORMAT_MENU_START + 7)
 #define FID_COL_SHOW            (FORMAT_MENU_START + 8)
 #define FID_TABLE_HIDE          (FORMAT_MENU_START + 9)
@@ -636,7 +636,7 @@ static_assert(SID_PREVIEW_END < SID_KEYFUNC_START, "calc slots ids trampling inf
 // Sidebar -------------------------------------------------------------
 
 #define SID_PROPERTY_PANEL_CELLTEXT_DLG (SC_SIDEBAR_PROPERTY_BEGIN+0)
-#define SID_NUMBER_TYPE_FORMAT          TypedWhichId<SfxInt16Item>(SC_SIDEBAR_PROPERTY_BEGIN+1)
+#define SID_NUMBER_TYPE_FORMAT          TypedWhichId<SfxUInt16Item>(SC_SIDEBAR_PROPERTY_BEGIN+1)
 
 // resources
 

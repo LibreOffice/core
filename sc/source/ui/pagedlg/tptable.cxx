@@ -243,7 +243,7 @@ void ScTablePage::Reset( const SfxItemSet* rCoreSet )
 bool ScTablePage::FillItemSet( SfxItemSet* rCoreSet )
 {
     const SfxItemSet&   rOldSet      = GetItemSet();
-    constexpr sal_uInt16 nWhichPageNo = SID_SCATTR_PAGE_FIRSTPAGENO;
+    constexpr TypedWhichId<SfxUInt16Item> nWhichPageNo = SID_SCATTR_PAGE_FIRSTPAGENO;
     bool                bDataChanged = false;
 
     // sal_Bool flags

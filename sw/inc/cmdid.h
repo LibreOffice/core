@@ -238,7 +238,7 @@ class SwUINumRuleItem;
 #define FN_INSERT_STRING        TypedWhichId<SfxStringItem>(FN_INSERT+31)
 #define FN_INSERT_COMBO_BOX_CONTENT_CONTROL (FN_INSERT + 32) /* Combo box content control */
 #define FN_INSERT_FRAME_INTERACT (FN_INSERT + 33)   /* Insert interactive frame */
-#define FN_INSERT_FRAME         (FN_INSERT + 34)    /* Insert Frame */
+#define FN_INSERT_FRAME         TypedWhichId<SfxUInt16Item>(FN_INSERT + 34)    /* Insert Frame */
 
 #define FN_INSERT_IDX_ENTRY_DLG (FN_INSERT + 35)    /* insert index entry */
 #define FN_INSERT_FRAME_INTERACT_NOCOL (FN_INSERT + 36) /*insert interactive non column frame*/
@@ -388,14 +388,14 @@ class SwUINumRuleItem;
 #define FN_TABLE_MERGE_CELLS        (FN_FORMAT + 106)  /* */
 #define FN_TABLE_SET_ROW_HEIGHT     (FN_FORMAT + 107)  /* */
 #define FN_TABLE_SET_COL_WIDTH      (FN_FORMAT + 108)  /* */
-#define FN_TABLE_INSERT_ROW_AFTER   (FN_FORMAT + 109)  /* */
+#define FN_TABLE_INSERT_ROW_AFTER   TypedWhichId<SfxUInt16Item>(FN_FORMAT + 109)  /* */
 #define FN_OPTIMIZE_TABLE           (FN_FORMAT + 110)  /* ToolBoxItem for optimizing tables */
 #define FN_TABLE_INSERT_ROW_BEFORE  (FN_FORMAT + 111)  /* */
 #define FN_TABLE_INSERT_COL_BEFORE  (FN_FORMAT + 112)  /* */
 #define FN_TABLE_SELECT_ROW         (FN_FORMAT + 113)  /* */
 #define FN_TABLE_SELECT_COL         (FN_FORMAT + 114)  /* */
 #define FN_TABLE_SELECT_ALL         (FN_FORMAT + 115)  /* */
-#define FN_TABLE_INSERT_COL_AFTER   (FN_FORMAT + 116)  /* */
+#define FN_TABLE_INSERT_COL_AFTER   TypedWhichId<SfxUInt16Item>(FN_FORMAT + 116)  /* */
 #define FN_TABLE_SET_READ_ONLY_CELLS (FN_FORMAT + 117)  /* protect table cells */
 #define FN_TABLE_UNSET_READ_ONLY_CELLS  (FN_FORMAT + 119)  /* undo table cell protection */
 #define FN_TABLE_HEADLINE_REPEAT    (FN_FORMAT + 120)   /* also used in SwXTextTable*/
@@ -490,7 +490,7 @@ class SwUINumRuleItem;
 #define FN_FRAME_UNCHAIN                    (FN_FORMAT2 + 137)
 
 #define FN_NUMBER_NEWSTART                  (FN_FORMAT2 + 138)
-#define FN_NUMBER_NEWSTART_AT               (FN_FORMAT2 + 139)
+#define FN_NUMBER_NEWSTART_AT               TypedWhichId<SfxUInt16Item>(FN_FORMAT2 + 139)
 
 #define FN_FRAME_MIRROR_ON_EVEN_PAGES       (FN_FORMAT2 + 140)
 #define FN_GRAPHIC_MIRROR_ON_EVEN_PAGES     (FN_FORMAT2 + 141)
@@ -528,7 +528,7 @@ class SwUINumRuleItem;
 #define FN_GLOSSARY_DLG             (FN_EXTRA + 20)   /* text building blocks */
 
 #define FN_EXPAND_GLOSSARY          (FN_EXTRA + 28)   /* expand text building blocks */
-#define FN_CHANGE_PAGENUM           (FN_EXTRA + 34)   /* change page numbers*/
+#define FN_CHANGE_PAGENUM           TypedWhichId<SfxUInt16Item>(FN_EXTRA + 34)   /* change page numbers*/
 #define FN_ADD_TEXT_BOX             (FN_EXTRA + 35)   /* add text box to draw shape */
 #define FN_REMOVE_TEXT_BOX          (FN_EXTRA + 36)   /* remove text box of draw shape */
 #define FN_OPEN_LOCAL_URL           (FN_EXTRA + 37)   /* open local copy for bibliography */
@@ -867,8 +867,8 @@ class SwUINumRuleItem;
 #define FN_STAT_PAGE                (FN_STAT + 1)
 #define FN_STAT_TEMPLATE            TypedWhichId<SfxStringItem>(FN_STAT + 2)
 #define FN_STAT_ZOOM                (FN_STAT + 3)
-#define FN_STAT_SELMODE             (FN_STAT + 5)
-#define FN_STAT_BOOKMARK            (FN_STAT + 8)  /* For Popup Bookmarks*/
+#define FN_STAT_SELMODE             TypedWhichId<SfxUInt16Item>(FN_STAT + 5)
+#define FN_STAT_BOOKMARK            TypedWhichId<SfxUInt16Item>(FN_STAT + 8)  /* For Popup Bookmarks*/
 #define FN_STAT_WORDCOUNT           TypedWhichId<SfxStringItem>(FN_STAT + 9)
 #define FN_STAT_ACCESSIBILITY_CHECK (FN_STAT + 10)
 

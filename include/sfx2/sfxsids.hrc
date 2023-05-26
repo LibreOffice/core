@@ -253,7 +253,7 @@ class SvxZoomItem;
 #define SID_DOC_HIERARCHICALNAME            TypedWhichId<SfxStringItem>(SID_SFX_START + 1701)
 #define SID_TERMINATE_INPLACEACTIVATION     (SID_SFX_START + 1702)
 #define SID_APPLY_STYLE                     (SID_SFX_START + 1703)
-#define SID_MACRO_SIGNATURE                 (SID_SFX_START + 1704)
+#define SID_MACRO_SIGNATURE                 TypedWhichId<SfxUInt16Item>(SID_SFX_START + 1704)
 #define SID_ATTR_WARNALIENFORMAT            TypedWhichId<SfxBoolItem>(SID_SFX_START + 1705)
 #define SID_COPY_STREAM_IF_POSSIBLE         TypedWhichId<SfxBoolItem>(SID_SFX_START + 1706)
 #define SID_MAIL_SENDDOCASFORMAT            (SID_SFX_START + 1707)
@@ -377,7 +377,7 @@ class SvxZoomItem;
 #define SID_STYLE_NEW_BY_EXAMPLE            TypedWhichId<SfxStringItem>(SID_SFX_START + 555)
 #define SID_STYLE_UPDATE_BY_EXAMPLE         TypedWhichId<SfxStringItem>(SID_SFX_START + 556)
 #define SID_STYLE_DRAGHIERARCHIE            (SID_SFX_START + 565)
-#define SID_STYLE_MASK                      (SID_SFX_START + 562)
+#define SID_STYLE_MASK                      TypedWhichId<SfxUInt16Item>(SID_SFX_START + 562)
 #define SID_STYLE_PREVIEW                   (SID_SFX_START + 567)
 #define SID_STYLE_END_PREVIEW               (SID_SFX_START + 568)
 #define SID_STYLE_HIDE                      TypedWhichId<SfxStringItem>(SID_SFX_START + 1603)
@@ -519,7 +519,7 @@ class SvxZoomItem;
 #define SID_VERB_START                      (SID_SFX_START + 1100)
 #define SID_VERB_END                        (SID_SFX_START + 1121)
 
-#define SID_SIGNATURE                       (SID_SFX_START + 1643)
+#define SID_SIGNATURE                       TypedWhichId<SfxUInt16Item>(SID_SFX_START + 1643)
 
 // SaveTabPage
 #define SID_ATTR_DOCINFO                TypedWhichId<SfxBoolItem>(SID_OPTIONS_START +  0)
@@ -589,7 +589,7 @@ class SvxZoomItem;
 #define SID_SIZE_REAL                       (SID_SVX_START +  99)
 #define SID_SIZE_PAGE                       (SID_SVX_START + 100)
 #define SID_GALLERY_BG_BRUSH                (SID_SVX_START + 279)
-#define SID_SEARCH_OPTIONS                  (SID_SVX_START + 281)
+#define SID_SEARCH_OPTIONS                  TypedWhichId<SfxUInt16Item>(SID_SVX_START + 281)
 #define SID_SEARCH_ITEM                     TypedWhichId<SvxSearchItem>(SID_SVX_START + 291)
 #define SID_SIDEBAR                         TypedWhichId<SfxBoolItem>(SID_SVX_START + 336)
 #define SID_NOTEBOOKBAR                     TypedWhichId<SfxStringItem>(SID_SVX_START + 338)

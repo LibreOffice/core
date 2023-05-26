@@ -712,7 +712,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             {
                 if ( pReqArgs )
                 {
-                    const SfxUInt16Item&  rUInt16Item = static_cast<const SfxUInt16Item&>(pReqArgs->Get( FID_ROW_OPT_HEIGHT ));
+                    const SfxUInt16Item&  rUInt16Item = pReqArgs->Get( FID_ROW_OPT_HEIGHT );
 
                     // #101390#; the value of the macro is in HMM so use convertMm100ToTwip to convert
                     pTabViewShell->SetMarkedWidthOrHeight( false, SC_SIZE_OPTIMAL,
@@ -817,7 +817,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             {
                 if ( pReqArgs )
                 {
-                    const SfxUInt16Item&  rUInt16Item = static_cast<const SfxUInt16Item&>(pReqArgs->Get( FID_COL_OPT_WIDTH ));
+                    const SfxUInt16Item&  rUInt16Item = pReqArgs->Get( FID_COL_OPT_WIDTH );
 
                     // #101390#; the value of the macro is in HMM so use convertMm100ToTwip to convert
                     pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_OPTIMAL,

@@ -54,7 +54,7 @@
 //maximum: RC_GLOBALS_BEGIN +  120
 
 #define SID_PREVIEWFLAG_TYPE        (RC_GLOBALS_BEGIN +  114)
-#define SID_FONTMODE_TYPE           (RC_GLOBALS_BEGIN +  115)
+#define SID_FONTMODE_TYPE           TypedWhichId<SfxUInt16Item>(RC_GLOBALS_BEGIN +  115)
 #define SID_FAX_LIST                (RC_GLOBALS_BEGIN +  116)
 #define SID_WRT_SHELL               (RC_GLOBALS_BEGIN +  117)
 

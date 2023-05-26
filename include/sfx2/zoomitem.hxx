@@ -61,7 +61,7 @@ public:
     static SfxPoolItem* CreateDefault();
 
     SvxZoomItem( SvxZoomType eZoomType = SvxZoomType::PERCENT,
-                 sal_uInt16 nVal = 0, sal_uInt16 nWhich = SID_ATTR_ZOOM );
+                 sal_uInt16 nVal = 0, TypedWhichId<SvxZoomItem> nWhich = SID_ATTR_ZOOM );
 
     void                    SetValueSet( SvxZoomEnableFlags nValues ) { nValueSet = nValues; }
     SvxZoomEnableFlags      GetValueSet() const { return nValueSet; }

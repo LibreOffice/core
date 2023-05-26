@@ -128,7 +128,7 @@ class SvxWordLineModeItem;
 #define SID_ATTR_PARA_OUTLLEVEL                         TypedWhichId<SfxInt16Item>( SID_SVX_START + 300 )
 #define SID_FIELD                                       ( SID_SVX_START + 363 ) // related to EE_FEATURE_FIELD
 #define SID_ATTR_PARA_REGISTER                          ( SID_SVX_START + 413 )
-#define SID_ATTR_PARA_PAGENUM                           ( SID_SVX_START + 457 )
+#define SID_ATTR_PARA_PAGENUM                           TypedWhichId<SfxUInt16Item>( SID_SVX_START + 457 )
 #define SID_ATTR_PARA_NUMRULE                           ( SID_SVX_START + 587 )
 #define SID_ATTR_BRUSH_CHAR                             TypedWhichId<SvxBrushItem>( SID_SVX_START + 591 )
 #define SID_ATTR_NUMBERING_RULE                         TypedWhichId<SvxNumBulletItem>( SID_SVX_START + 855 )
@@ -152,7 +152,7 @@ class SvxWordLineModeItem;
 #define SID_ATTR_CHAR_VERTICAL                          ( SID_SVX_START + 905 )
 #define SID_ATTR_CHAR_ROTATED                           TypedWhichId<SvxCharRotateItem>( SID_SVX_START + 910 )
 #define SID_ATTR_CHAR_SCALEWIDTH                        TypedWhichId<SvxCharScaleWidthItem>( SID_SVX_START + 911 )
-#define SID_ATTR_CHAR_WIDTH_FIT_TO_LINE                 ( SID_SVX_START + 919 )
+#define SID_ATTR_CHAR_WIDTH_FIT_TO_LINE                 TypedWhichId<SfxUInt16Item>( SID_SVX_START + 919 )
 #define SID_ATTR_CHAR_RELIEF                            TypedWhichId<SvxCharReliefItem>( SID_SVX_START + 920 )
 #define SID_PARA_VERTALIGN                              TypedWhichId<SvxParaVertAlignItem>( SID_SVX_START + 925 )
 #define SID_ATTR_FRAMEDIRECTION                         TypedWhichId<SvxFrameDirectionItem>( SID_SVX_START + 944 )

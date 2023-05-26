@@ -29,7 +29,7 @@ class EDITENG_DLLPUBLIC SvxWritingModeItem final : public SfxUInt16Item
 {
 public:
     SvxWritingModeItem( css::text::WritingMode eValue /*= css::text::WritingMode_LR_TB*/,
-                sal_uInt16 nWhich /*= SDRATTR_TEXTDIRECTION*/ );
+                TypedWhichId<SvxWritingModeItem> nWhich /*= SDRATTR_TEXTDIRECTION*/ );
     virtual ~SvxWritingModeItem() override;
 
     SvxWritingModeItem(SvxWritingModeItem const &) = default;

@@ -182,7 +182,7 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
         {
             if( eState >= SfxItemState::DEFAULT)
             {
-                const SfxInt16Item* pItem = static_cast<const SfxInt16Item*>(pState);
+                const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pState);
                 sal_uInt16 nVal = pItem->GetValue();
                 mnCategorySelected = nVal;
                 mxLbCategory->set_active(nVal);

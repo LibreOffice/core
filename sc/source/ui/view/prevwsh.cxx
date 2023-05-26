@@ -809,7 +809,7 @@ void ScPreviewShell::GetState( SfxItemSet& rSet )
                 break;
             case SID_ATTR_ZOOM:
                 {
-                    SvxZoomItem aZoom( eZoom, nZoom, nWhich );
+                    SvxZoomItem aZoom( eZoom, nZoom, TypedWhichId<SvxZoomItem>(nWhich) );
                     aZoom.SetValueSet( SvxZoomEnableFlags::ALL & ~SvxZoomEnableFlags::OPTIMAL );
                     rSet.Put( aZoom );
                 }

@@ -36,7 +36,7 @@ public:
     static SfxPoolItem* CreateDefault();
 
     SvxEmphasisMarkItem(  const FontEmphasisMark eVal /*= FontEmphasisMark::NONE*/,
-                          const sal_uInt16 nId  );
+                          TypedWhichId<SvxEmphasisMarkItem> nId  );
 
     // "pure virtual Methods" from SfxPoolItem + SfxEnumItem
     virtual bool GetPresentation( SfxItemPresentation ePres,

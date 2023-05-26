@@ -337,14 +337,14 @@ static void sw_ParagraphDialogResult(SfxItemSet* pSet, SwWrtShell &rWrtSh, SfxRe
         sal_uInt16 nNumStart = USHRT_MAX;
         if( SfxItemState::SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
         {
-            nNumStart = static_cast<const SfxUInt16Item&>(pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
+            nNumStart = pSet->Get(FN_NUMBER_NEWSTART_AT).GetValue();
         }
         rWrtSh.SetNumRuleStart(bStart, pPaM);
         rWrtSh.SetNodeNumStart(nNumStart);
     }
     else if( SfxItemState::SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
     {
-        rWrtSh.SetNodeNumStart(static_cast<const SfxUInt16Item&>(pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue());
+        rWrtSh.SetNodeNumStart(pSet->Get(FN_NUMBER_NEWSTART_AT).GetValue());
         rWrtSh.SetNumRuleStart(false, pPaM);
     }
     // #i56253#
