@@ -2965,9 +2965,9 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
             if ( !bActive )
             {
-                // When in Hide-Whitespace mode, we don't want header
-                // and footer controls.
-                if (!rSh.GetViewOptions()->IsHideWhitespaceMode())
+                // HeaderFooter menu implies header/footer controls, so only do this with IsUseHeaderFooterMenu enabled.
+                // But, additionally, when in Hide-Whitespace mode, we don't want those controls.
+                if (rSh.GetViewOptions()->IsUseHeaderFooterMenu() && !rSh.GetViewOptions()->IsHideWhitespaceMode())
                 {
                     SwPaM aPam(*rSh.GetCurrentShellCursor().GetPoint());
                     const bool bWasInHeader = aPam.GetPoint()->GetNode().FindHeaderStartNode() != nullptr;
@@ -2992,7 +2992,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         // if the cursor cannot be positioned on-screen, then the user would need to scroll back again to use the control.
                         // This should only be done for the footer. The cursor can always be re-positioned near the header. tdf#134023.
                         if ( eControl == FrameControlType::Footer && !bSeparatorWasVisible
-                             && rSh.GetViewOptions()->IsUseHeaderFooterMenu() && !Application::IsHeadlessModeEnabled() )
+                             && !Application::IsHeadlessModeEnabled() )
                             return;
                     }
                 }
