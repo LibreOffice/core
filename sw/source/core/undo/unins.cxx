@@ -124,7 +124,7 @@ SwUndoInsert::SwUndoInsert( const SwNode& rNd )
 }
 
 // Check if the next Insert can be combined with the current one. If so
-// change the length and InsPos. As a result, SwDoc::Inser will not add a
+// change the length and InsPos. As a result, SwDoc::Insert will not add a
 // new object into the Undo list.
 
 bool SwUndoInsert::CanGrouping( sal_Unicode cIns )
