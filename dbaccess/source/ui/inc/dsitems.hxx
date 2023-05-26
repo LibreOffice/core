@@ -24,6 +24,7 @@
 
 class OptionalBoolItem;
 class SfxBoolItem;
+class SfxInt32Item;
 class SfxStringItem;
 
 typedef sal_Int32   ItemID;
@@ -52,27 +53,27 @@ typedef sal_Int32   ItemID;
 #define DSID_TEXTFILEEXTENSION      TypedWhichId<SfxStringItem>(20) // extension for text files, SfxStringItem
 #define DSID_TEXTFILEHEADER         TypedWhichId<SfxBoolItem>(21) // the text file contains a header?, SfxBoolItem
 #define DSID_PARAMETERNAMESUBST     TypedWhichId<SfxBoolItem>(22)
-#define DSID_CONN_PORTNUMBER        23
+#define DSID_CONN_PORTNUMBER        TypedWhichId<SfxInt32Item>(23)
 #define DSID_SUPPRESSVERSIONCL      TypedWhichId<SfxBoolItem>(24) // meta data: sal_True if the data source described by the set is to-be-deleted
 #define DSID_CONN_SHUTSERVICE       TypedWhichId<SfxBoolItem>(25)
-#define DSID_CONN_DATAINC           26
-#define DSID_CONN_CACHESIZE         27
+#define DSID_CONN_DATAINC           TypedWhichId<SfxInt32Item>(26)
+#define DSID_CONN_CACHESIZE         TypedWhichId<SfxInt32Item>(27)
 #define DSID_CONN_CTRLUSER          TypedWhichId<SfxStringItem>(28)
 #define DSID_CONN_CTRLPWD           TypedWhichId<SfxStringItem>(29)
 #define DSID_USECATALOG             TypedWhichId<SfxBoolItem>(30) // should the driver use the catalog name when the database is filebased
 #define DSID_CONN_HOSTNAME          TypedWhichId<SfxStringItem>(31)
 #define DSID_CONN_LDAP_BASEDN       TypedWhichId<SfxStringItem>(32)
-#define DSID_CONN_LDAP_PORTNUMBER   33
-#define DSID_CONN_LDAP_ROWCOUNT     34
+#define DSID_CONN_LDAP_PORTNUMBER   TypedWhichId<SfxInt32Item>(33)
+#define DSID_CONN_LDAP_ROWCOUNT     TypedWhichId<SfxInt32Item>(34)
 #define DSID_SQL92CHECK             TypedWhichId<SfxBoolItem>(35)
 #define DSID_AUTOINCREMENTVALUE     TypedWhichId<SfxStringItem>(36)
 #define DSID_AUTORETRIEVEVALUE      TypedWhichId<SfxStringItem>(37)
 #define DSID_AUTORETRIEVEENABLED    TypedWhichId<SfxBoolItem>(38)
 #define DSID_APPEND_TABLE_ALIAS     TypedWhichId<SfxBoolItem>(39)
-#define DSID_MYSQL_PORTNUMBER       40
+#define DSID_MYSQL_PORTNUMBER       TypedWhichId<SfxInt32Item>(40)
 #define DSID_IGNOREDRIVER_PRIV      TypedWhichId<SfxBoolItem>(41)
-#define DSID_BOOLEANCOMPARISON      42
-#define DSID_ORACLE_PORTNUMBER      43
+#define DSID_BOOLEANCOMPARISON      TypedWhichId<SfxInt32Item>(42)
+#define DSID_ORACLE_PORTNUMBER      TypedWhichId<SfxInt32Item>(43)
 #define DSID_ENABLEOUTERJOIN        TypedWhichId<SfxBoolItem>(44)
 #define DSID_CATALOG                TypedWhichId<SfxBoolItem>(45)
 #define DSID_SCHEMA                 TypedWhichId<SfxBoolItem>(46)
@@ -88,9 +89,9 @@ typedef sal_Int32   ItemID;
 #define DSID_ESCAPE_DATETIME        TypedWhichId<SfxBoolItem>(56)
 #define DSID_NAMED_PIPE             TypedWhichId<SfxStringItem>(57)
 #define DSID_PRIMARY_KEY_SUPPORT    TypedWhichId<OptionalBoolItem>(58)
-#define DSID_MAX_ROW_SCAN           59
+#define DSID_MAX_ROW_SCAN           TypedWhichId<SfxInt32Item>(59)
 #define DSID_RESPECTRESULTSETTYPE   TypedWhichId<SfxBoolItem>(60)
-#define DSID_POSTGRES_PORTNUMBER    61
+#define DSID_POSTGRES_PORTNUMBER    TypedWhichId<SfxInt32Item>(61)
     // don't forget to adjust DSID_LAST_ITEM_ID below!
 
 // item range. Adjust this if you introduce new items above

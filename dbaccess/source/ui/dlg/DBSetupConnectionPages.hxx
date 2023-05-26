@@ -143,7 +143,7 @@ namespace dbaui
         DECL_LINK(OnTestJavaClickHdl, weld::Button&, void);
 
         OUString              m_sDefaultJdbcDriverName;
-        sal_uInt16              m_nPortId;
+        TypedWhichId<SfxInt32Item> m_nPortId;
 
         std::unique_ptr<weld::Label> m_xHeaderText;
         std::unique_ptr<weld::Label> m_xFTHelpText;
@@ -238,7 +238,7 @@ namespace dbaui
         virtual void fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
         virtual bool commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
 
-        sal_uInt16              m_nPortId;
+        TypedWhichId<SfxInt32Item> m_nPortId;
 
         std::unique_ptr<weld::Label> m_xHeaderText;
         std::unique_ptr<weld::Label> m_xFTHelpText;

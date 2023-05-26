@@ -474,7 +474,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 {
                     bool bIsCol = (nWhich == SID_WINDOW_FIX_COL);
                     sal_Int32 nFreezeIndex = rViewData.GetLOKSheetFreezeIndex(bIsCol);
-                    rSet.Put(SfxInt32Item(nWhich, nFreezeIndex));
+                    rSet.Put(SfxInt32Item(TypedWhichId<SfxInt32Item>(nWhich), nFreezeIndex));
                 }
                 break;
 

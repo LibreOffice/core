@@ -88,8 +88,8 @@ SdSnapLineDlg::SdSnapLineDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, 
                           FieldUnit::NONE);
 
     // set values
-    nXValue = static_cast<const SfxInt32Item&>( rInAttrs.Get(ATTR_SNAPLINE_X)).GetValue();
-    nYValue = static_cast<const SfxInt32Item&>( rInAttrs.Get(ATTR_SNAPLINE_Y)).GetValue();
+    nXValue = rInAttrs.Get(ATTR_SNAPLINE_X).GetValue();
+    nYValue = rInAttrs.Get(ATTR_SNAPLINE_Y).GetValue();
     nXValue = sal_Int32(nXValue / aUIScale);
     nYValue = sal_Int32(nYValue / aUIScale);
     SetMetricValue(*m_xMtrFldX, nXValue, MapUnit::Map100thMM);

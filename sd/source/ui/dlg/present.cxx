@@ -197,7 +197,7 @@ void SdStartPresentationDlg::InitMonitorSettings()
             sal_Int32 nSelectedIndex (-1);
             sal_Int32 nDefaultExternalIndex (-1);
             const sal_Int32 nDefaultSelectedDisplay (
-                static_cast<const SfxInt32Item&>( rOutAttrs.Get( ATTR_PRESENT_DISPLAY ) ).GetValue());
+                rOutAttrs.Get( ATTR_PRESENT_DISPLAY ).GetValue());
 
             // Un-conditionally add a version for '0' the default external display
             sal_Int32 nInsertedEntry;

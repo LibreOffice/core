@@ -22,6 +22,7 @@
 #include <svl/solar.hrc>
 
 class SdOptionsPrintItem;
+class SfxInt32Item;
 class SfxStringItem;
 class XColorItem;
 
@@ -52,7 +53,7 @@ class XColorItem;
 #define ATTR_PRESENT_ANIMATION_ALLOWED       ATTR_PRESENT_START + 12
 #define ATTR_PRESENT_PAUSE_TIMEOUT           ATTR_PRESENT_START + 13
 #define ATTR_PRESENT_SHOW_PAUSELOGO          ATTR_PRESENT_START + 14
-#define ATTR_PRESENT_DISPLAY                 ATTR_PRESENT_START + 15
+#define ATTR_PRESENT_DISPLAY                 TypedWhichId<SfxInt32Item>(ATTR_PRESENT_START + 15)
 #define ATTR_PRESENT_SHOW_NAVIGATION_BUTTONS ATTR_PRESENT_START + 16
 
 #define ATTR_PRESENT_END                ATTR_PRESENT_SHOW_NAVIGATION_BUTTONS
@@ -93,8 +94,8 @@ class XColorItem;
 
 #define ATTR_SNAPLINE_START             ATTR_COPY_END + 1
 #define ATTR_SNAPLINE_KIND              TypedWhichId<SfxUInt16Item>(ATTR_SNAPLINE_START)
-#define ATTR_SNAPLINE_X                 ATTR_SNAPLINE_START + 1
-#define ATTR_SNAPLINE_Y                 ATTR_SNAPLINE_START + 2
+#define ATTR_SNAPLINE_X                 TypedWhichId<SfxInt32Item>(ATTR_SNAPLINE_START + 1)
+#define ATTR_SNAPLINE_Y                 TypedWhichId<SfxInt32Item>(ATTR_SNAPLINE_START + 2)
 #define ATTR_SNAPLINE_END               ATTR_SNAPLINE_Y
 
 #define ATTR_OPTIONS_START              ATTR_SNAPLINE_END + 1

@@ -222,7 +222,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
         rPresentationSettings.mbShowPauseLogo = bValue;
     }
 
-    pOptions->SetDisplay( ITEMVALUE( aDlgSet, ATTR_PRESENT_DISPLAY, SfxInt32Item ) );
+    pOptions->SetDisplay( aDlgSet.Get(ATTR_PRESENT_DISPLAY).GetValue() );
 
     // is something has changed, we set the modified flag
     if ( bValuesChanged )

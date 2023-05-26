@@ -403,7 +403,7 @@ void ODbAdminDialog::createItemSet(std::unique_ptr<SfxItemSet>& _rpSet, rtl::Ref
         {0,false},
     };
 
-    OSL_ENSURE(std::size(aItemInfos) == DSID_LAST_ITEM_ID,"Invalid Ids!");
+    OSL_ENSURE(std::size(aItemInfos) == sal_uInt16(DSID_LAST_ITEM_ID),"Invalid Ids!");
     _rpPool = new SfxItemPool("DSAItemPool", DSID_FIRST_ITEM_ID, DSID_LAST_ITEM_ID,
         aItemInfos, _rpDefaults);
     _rpPool->FreezeIdRanges();

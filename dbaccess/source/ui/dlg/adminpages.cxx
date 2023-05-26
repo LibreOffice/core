@@ -208,7 +208,7 @@ namespace dbaui
 
         _bChangedSomething = true;
     }
-    void OGenericAdministrationPage::fillInt32(SfxItemSet& _rSet, const weld::SpinButton* pEdit, sal_uInt16 _nID, bool& _bChangedSomething)
+    void OGenericAdministrationPage::fillInt32(SfxItemSet& _rSet, const weld::SpinButton* pEdit, TypedWhichId<SfxInt32Item> _nID, bool& _bChangedSomething)
     {
         if (pEdit && pEdit->get_value_changed_from_saved())
         {

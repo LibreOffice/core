@@ -869,7 +869,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         }
                     }
 
-                    rReq.SetReturnValue( SfxInt32Item( nSlot, 0 ) );        //! ???????
+                    rReq.SetReturnValue( SfxInt32Item( TypedWhichId<SfxInt32Item>(nSlot), 0 ) );        //! ???????
                     rReq.Done();
 
                     if (!bHadTrack)         //  newly turned on -> show as well

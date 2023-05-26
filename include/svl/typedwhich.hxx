@@ -42,11 +42,11 @@ private:
 
 template <class T> constexpr bool operator==(TypedWhichId<T> const& lhs, TypedWhichId<T> rhs)
 {
-    return lhs == rhs;
+    return sal_uInt16(lhs) == sal_uInt16(rhs);
 }
 template <class T> constexpr bool operator!=(TypedWhichId<T> const& lhs, TypedWhichId<T> rhs)
 {
-    return lhs != rhs;
+    return sal_uInt16(lhs) != sal_uInt16(rhs);
 }
 template <class T> constexpr bool operator==(sal_uInt16 lhs, TypedWhichId<T> const& rhs)
 {

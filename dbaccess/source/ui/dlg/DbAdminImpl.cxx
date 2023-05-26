@@ -946,7 +946,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
             {
                 sal_Int32 nValue = 0;
                 _rValue >>= nValue;
-                _rSet.Put( SfxInt32Item( _nId, nValue ) );
+                _rSet.Put( SfxInt32Item( TypedWhichId<SfxInt32Item>(_nId), nValue ) );
             }
             else {
                 SAL_WARN( "dbaccess", "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value ("
@@ -1013,7 +1013,7 @@ void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
     ::dbaccess::ODsnTypeCollection* pCollection = pTypeCollection->getCollection();
     OSL_ENSURE(pCollection, "ODbAdminDialog::getDatasourceType: invalid type collection!");
 
-    sal_uInt16 nPortNumberId    = 0;
+    TypedWhichId<SfxInt32Item> nPortNumberId(0);
     sal_Int32 nPortNumber   = -1;
     OUString sNewHostName;
     OUString sUrlPart;
@@ -1056,7 +1056,7 @@ void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
     if ( !sNewHostName.isEmpty() )
         _rDest.Put(SfxStringItem(DSID_CONN_HOSTNAME, sNewHostName));
 
-    if ( nPortNumber != -1 && nPortNumberId != 0 )
+    if ( nPortNumber != -1 && nPortNumberId != TypedWhichId<SfxInt32Item>(0) )
         _rDest.Put(SfxInt32Item(nPortNumberId, nPortNumber));
 
 }

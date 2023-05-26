@@ -165,7 +165,7 @@ namespace dbaui
         DECL_LINK(OnTestJavaClickHdl, weld::Button&, void);
 
         OUString                   m_sDefaultJdbcDriverName;
-        sal_uInt16                 m_nPortId;
+        TypedWhichId<SfxInt32Item> m_nPortId;
         bool                       m_bUseClass;
 
         std::unique_ptr<weld::Entry> m_xEDHostname;

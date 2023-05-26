@@ -733,15 +733,15 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                 break;
 
             case SID_RANGE_ROW:
-                rSet.Put( SfxInt32Item( nWhich, nPosY+1 ) );
+                rSet.Put( SfxInt32Item( SID_RANGE_ROW, nPosY+1 ) );
                 break;
 
             case SID_RANGE_COL:
-                rSet.Put( SfxInt16Item( nWhich, nPosX+1 ) );
+                rSet.Put( SfxInt16Item( SID_RANGE_COL, nPosX+1 ) );
                 break;
 
             case SID_RANGE_TABLE:
-                rSet.Put( SfxInt16Item( nWhich, nTab+1 ) );
+                rSet.Put( SfxInt16Item( SID_RANGE_TABLE, nTab+1 ) );
                 break;
 
             case SID_RANGE_FORMULA:

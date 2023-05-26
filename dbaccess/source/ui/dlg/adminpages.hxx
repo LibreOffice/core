@@ -23,6 +23,7 @@
 #include <vcl/wizardmachine.hxx>
 #include <curledit.hxx>
 
+class SfxInt32Item;
 class SfxStringItem;
 
 namespace dbaui
@@ -205,7 +206,7 @@ namespace dbaui
             @param  _bChangedSomething
                 <TRUE/> if something changed otherwise <FALSE/>
         */
-        static void fillInt32(SfxItemSet& _rSet,const weld::SpinButton* pEdit,sal_uInt16 _nID, bool& _bChangedSomething);
+        static void fillInt32(SfxItemSet& _rSet,const weld::SpinButton* pEdit,TypedWhichId<SfxInt32Item> _nID, bool& _bChangedSomething);
 
         /** fills the String value into the item set when the value changed.
             @param  _rSet

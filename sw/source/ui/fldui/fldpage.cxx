@@ -152,7 +152,7 @@ void SwFieldPage::InsertField(SwFieldTypesEnum nTypeId, sal_uInt16 nSubType, con
                 aReq.AppendItem(SfxStringItem
                         (FN_PARAM_1,rPar1.getToken(0, DB_DELIM, nIdx)));
                 aReq.AppendItem(SfxInt32Item
-                        (FN_PARAM_3, o3tl::toInt32(o3tl::getToken(rPar1, 0, DB_DELIM, nIdx))));
+                        (TypedWhichId<SfxInt32Item>(FN_PARAM_3), o3tl::toInt32(o3tl::getToken(rPar1, 0, DB_DELIM, nIdx))));
                 aReq.AppendItem(SfxStringItem
                         (FN_PARAM_2,rPar1.getToken(0, DB_DELIM, nIdx)));
             }

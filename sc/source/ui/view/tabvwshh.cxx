@@ -197,7 +197,7 @@ void ScTabViewShell::GetObjectState( SfxItemSet& rSet )
 
                             //! convert from 1/100mm to something else ??????
 
-                            rSet.Put( SfxInt32Item( nWhich, nVal ) );
+                            rSet.Put( SfxInt32Item( TypedWhichId<SfxInt32Item>(nWhich), nVal ) );
                         }
                     }
                 }

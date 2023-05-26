@@ -710,7 +710,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 if ( dlg->Execute() == RET_OK )
                     nRecord = dlg->GetValue();
 
-                rReq.AppendItem( SfxInt32Item( FN_PARAM_1, nRecord ) );
+                rReq.AppendItem( SfxInt32Item( TypedWhichId<SfxInt32Item>(FN_PARAM_1), nRecord ) );
             }
 
             if ( nRecord != -1 )
@@ -1072,7 +1072,7 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
                 {
                     sal_Int32 nPosition = 0;
                     aState.State >>= nPosition;
-                    rSet.Put( SfxInt32Item( nWhich, nPosition ) );
+                    rSet.Put( SfxInt32Item( SID_FM_RECORD_ABSOLUTE, nPosition ) );
                 }
                 else if ( SID_FM_RECORD_TOTAL == nWhich )
                 {

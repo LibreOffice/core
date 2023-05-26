@@ -45,7 +45,7 @@ SvxFmAbsRecWin::SvxFmAbsRecWin(vcl::Window* pParent, SfxToolBoxControl* pControl
 
 void SvxFmAbsRecWin::PositionFired(sal_Int64 nRecord)
 {
-    SfxInt32Item aPositionParam( FN_PARAM_1, static_cast<sal_Int32>(nRecord) );
+    SfxInt32Item aPositionParam( TypedWhichId<SfxInt32Item>(FN_PARAM_1), static_cast<sal_Int32>(nRecord) );
 
     Any a;
     aPositionParam.QueryValue( a );

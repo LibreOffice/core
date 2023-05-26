@@ -551,21 +551,21 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                         aRequest.AppendItem( SfxUInt16Item( SID_SORT_USERDEF, nUser ) );
                                         if ( rOutParam.maKeyState[0].bDoSort )
                                         {
-                                            aRequest.AppendItem( SfxInt32Item( FN_PARAM_1,
+                                            aRequest.AppendItem( SfxInt32Item( TypedWhichId<SfxInt32Item>(FN_PARAM_1),
                                                 rOutParam.maKeyState[0].nField + 1 ) );
                                             aRequest.AppendItem( SfxBoolItem( FN_PARAM_2,
                                                 rOutParam.maKeyState[0].bAscending ) );
                                         }
                                         if ( rOutParam.maKeyState[1].bDoSort )
                                         {
-                                            aRequest.AppendItem( SfxInt32Item( FN_PARAM_3,
+                                            aRequest.AppendItem( SfxInt32Item( TypedWhichId<SfxInt32Item>(FN_PARAM_3),
                                                 rOutParam.maKeyState[1].nField + 1 ) );
                                             aRequest.AppendItem( SfxBoolItem( FN_PARAM_4,
                                                 rOutParam.maKeyState[1].bAscending ) );
                                         }
                                         if ( rOutParam.maKeyState[2].bDoSort )
                                         {
-                                            aRequest.AppendItem( SfxInt32Item( FN_PARAM_5,
+                                            aRequest.AppendItem( SfxInt32Item( TypedWhichId<SfxInt32Item>(FN_PARAM_5),
                                                 rOutParam.maKeyState[2].nField + 1 ) );
                                             aRequest.AppendItem( SfxBoolItem( FN_PARAM_6,
                                                 rOutParam.maKeyState[2].bAscending ) );
