@@ -478,6 +478,7 @@ void ScConditionEntry::SetFormula1( const ScTokenArray& rArray )
     if( rArray.GetLen() > 0 )
     {
         pFormula1.reset( new ScTokenArray( rArray ) );
+        SimplifyCompiledFormula(pFormula1, nVal1, bIsStr1, aStrVal1);
         bRelRef1 = lcl_HasRelRef( mpDoc, pFormula1.get() );
     }
 
@@ -490,6 +491,7 @@ void ScConditionEntry::SetFormula2( const ScTokenArray& rArray )
     if( rArray.GetLen() > 0 )
     {
         pFormula2.reset( new ScTokenArray( rArray ) );
+        SimplifyCompiledFormula(pFormula2, nVal2, bIsStr2, aStrVal2);
         bRelRef2 = lcl_HasRelRef( mpDoc, pFormula2.get() );
     }
 
