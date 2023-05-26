@@ -3605,6 +3605,10 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
 
     // Disable field shadings: the result would depend on the cursor position.
     aViewOption.SetAppearanceFlag(ViewOptFlags::FieldShadings, false);
+    // The fancy header/footer controls don't work in tiled mode anyway, so
+    // explicitly disable them to enable skipping invalidating the view for
+    // the case of clicking in the header area of a document with no headers
+    aViewOption.SetUseHeaderFooterMenu(false);
 
     OUString sOrigAuthor = SW_MOD()->GetRedlineAuthor(SW_MOD()->GetRedlineAuthor());
     OUString sAuthor;
