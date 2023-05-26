@@ -139,7 +139,9 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
 
     mbObjOrdNumsDirty = false;
     mbRectsDirty = false;
+#ifdef DBG_UTIL
     size_t nCloneErrCnt(0);
+#endif
     const size_t nCount(rSrcList.GetObjCount());
 
     if(nullptr == getSdrObjectFromSdrObjList() && nullptr == getSdrPageFromSdrObjList())
@@ -162,10 +164,12 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
             NbcInsertObject(pDO.get(), SAL_MAX_SIZE);
             aCloneList.AddPair(pSO, pDO.get());
         }
+#ifdef DBG_UTIL
         else
         {
             nCloneErrCnt++;
         }
+#endif
     }
 
     // Wires up the connections
