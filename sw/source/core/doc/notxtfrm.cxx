@@ -1002,6 +1002,9 @@ protected:
         const sdr::contact::DisplayInfo& rDisplayInfo,
         drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const override;
 
+    // tdf#155190 disable this so superclass doesn't wrongly produce NonStruct
+    virtual bool isExportPDFTags() const override { return false; }
+
 public:
     ViewObjectContactOfSwNoTextFrame(
         sdr::contact::ObjectContact& rObjectContact,

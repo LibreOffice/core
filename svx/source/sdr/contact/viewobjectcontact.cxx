@@ -341,6 +341,11 @@ void ViewObjectContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInf
     rVisitor.visit(xRetval);
 }
 
+bool ViewObjectContact::isExportPDFTags() const
+{
+    return GetObjectContact().isExportTaggedPDF();
+}
+
 drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
 {
     // only some of the top-level apps are any good at reliably invalidating us (e.g. writer is not)
@@ -387,7 +392,7 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
 
     // Check if we need to embed to a StructureTagPrimitive2D, too. This
     // was done at ImplRenderPaintProc::createRedirectedPrimitive2DSequence before
-    if (!xNewPrimitiveSequence.empty() && GetObjectContact().isExportTaggedPDF())
+    if (!xNewPrimitiveSequence.empty() && isExportPDFTags())
     {
         if (nullptr != pSdrObj)
         {
