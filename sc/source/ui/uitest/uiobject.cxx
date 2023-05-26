@@ -89,6 +89,16 @@ StringMap ScGridWinUIObject::get_state()
         aMap["CurrentCellCommentText"] = pNote->GetText();
     }
 
+    SCCOL nCol;
+    SCROW nRow;
+    aMap["CurrentTableHasData"] = OUString::boolean( rDoc.GetDataStart( mxGridWindow->getViewData().GetTabNo(), nCol, nRow ) );
+    nCol = mxGridWindow->getViewData().GetCurX();
+    nRow = 0;
+    aMap["CurrentColumnHasData"] = OUString::boolean( rDoc.GetPrintAreaVer( mxGridWindow->getViewData().GetTabNo(), nCol, nCol, nRow, true ) );
+    nRow = mxGridWindow->getViewData().GetCurY();
+    nCol = 0;
+    aMap["CurrentRowHasData"] = OUString::boolean( rDoc.GetPrintAreaHor( mxGridWindow->getViewData().GetTabNo(), nRow, nRow, nCol ) );
+
     ScAppOptions aOpt = SC_MOD()->GetAppOptions();
     aMap["Zoom"] = OUString::number( aOpt.GetZoom() );
     return aMap;
