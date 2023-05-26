@@ -3005,12 +3005,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                 rSh.SetShowHeaderFooterSeparator( FrameControlType::Footer, eControl == FrameControlType::Footer );
 
                 if ( !rSh.IsHeaderFooterEdit() )
-                {
                     rSh.ToggleHeaderFooterEdit();
-
-                    // Repaint everything
-                    rSh.GetWin()->Invalidate();
-                }
             }
         }
     }
