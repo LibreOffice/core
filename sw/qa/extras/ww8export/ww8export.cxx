@@ -575,11 +575,11 @@ DECLARE_WW8EXPORT_TEST(testFdo81102, "fdo81102.doc")
 DECLARE_WW8EXPORT_TEST(testBnc787942, "bnc787942.doc")
 {
     // The frame ended up on the second page instead of first.
-
     // this is on page 1 in Word
     parseDump("/root/page[1]/body/txt[4]/anchored");
 
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_PARALLEL, getProperty<text::WrapTextMode>(getShape(1), "Surround"));
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(getShape(1), "HoriOrientRelation"));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf133504_wrapNotBeside, "tdf133504_wrapNotBeside.doc")
