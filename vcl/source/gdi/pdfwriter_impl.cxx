@@ -10616,9 +10616,8 @@ void PDFWriterImpl::addRoleMap(OString aAlias, PDFWriter::StructElement eType)
 {
     OString aTag = getStructureTag(eType);
     // For PDF/UA it's not allowed to map an alias with the same name.
-    // Not sure if this allowed, necessary or recommended otherwise, so
-    // only enable filtering when PDF/UA is enabled.
-    if (!m_bIsPDF_UA || aAlias != aTag)
+    // Not aware of a reason for doing it in any case, so just don't do it.
+    if (aAlias != aTag)
         m_aRoleMap[aAlias] = aTag;
 }
 
