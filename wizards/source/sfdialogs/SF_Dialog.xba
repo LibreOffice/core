@@ -572,6 +572,58 @@ Catch:
 End Function	&apos;	SF_Documents.SF_Dialog.Center
 
 REM -----------------------------------------------------------------------------
+Public Function CloneControl(Optional ByVal SourceName As Variant _
+								, Optional ByVal ControlName As Variant _
+								, Optional ByVal Left As Variant _
+								, Optional ByVal Top As Variant _
+								) As Object
+&apos;&apos;&apos;	Duplicate an existing control of any type in the actual dialog.
+&apos;&apos;&apos;	The duplicated control is left unchanged. The new control can be relocated.
+&apos;&apos;&apos;	Specific args:
+&apos;&apos;&apos;		SourceName: the name of the control to duplicate
+&apos;&apos;&apos;		ControlName: the name of the new control. It must not exist yet
+&apos;&apos;&apos;		Left, Top: the coordinates of the new control expressed in &quot;Map AppFont&quot; units
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Set myButton2 = dialog.CloneControl(&quot;Button1&quot;, &quot;Button2&quot;, 30, 30)
+
+Dim oControl As Object			&apos;	Return value
+Dim oSourceModel As Object		&apos;	com.sun.star.awt.XControlModel of the source
+Dim oControlModel As Object		&apos;	com.sun.star.awt.XControlModel of the new control
+Const cstThisSub = &quot;SFDialogs.Dialog.CloneControl&quot;
+Const cstSubArgs = &quot;SourceName, ControlName, [Left=1], [Top=1]&quot;
+
+Check:
+	Set oControl = Nothing
+
+	If IsMissing(Left) Or IsEmpty(Left) Then Left = 1
+	If IsMissing(Top) Or IsEmpty(Top) Then Top = 1
+
+	If Not _CheckNewControl(cstThisSub, cstSubArgs, ControlName, Place := Null) Then GoTo Finally
+
+	If Not ScriptForge.SF_Utils._Validate(SourceName, &quot;SourceName&quot;, V_String, _DialogModel.getElementNames()) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(Left, &quot;Left&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(Top, &quot;Top&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+
+Try:
+	&apos;	All control types are presumes cloneable
+	Set oSourceModel = _DialogModel.getByName(SourceName)
+	Set oControlModel = oSourceModel.createClone()
+	oControlModel.Name = ControlName
+
+	&apos;	Create the control
+	Set oControl = _CreateNewControl(oControlModel, ControlName, Array(Left, Top))
+
+Finally:
+	Set CloneControl = oControl
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDialogs.SF_Dialog.CloneControl
+
+REM -----------------------------------------------------------------------------
 Public Function Controls(Optional ByVal ControlName As Variant) As Variant
 &apos;&apos;&apos;	Return either
 &apos;&apos;&apos;		- the list of the controls contained in the dialog
@@ -2069,6 +2121,7 @@ Public Function Methods() As Variant
 	Methods = Array( _
 					&quot;Activate&quot; _
 					, &quot;Center&quot; _
+					, &quot;CloneControl&quot; _
 					, &quot;Controls&quot; _
 					, &quot;CreateButton&quot; _
 					, &quot;CreateCheckBox&quot; _
@@ -2178,7 +2231,7 @@ Try:
 	Next i
 
 	bOrder = True
-							
+
 Finally:
 	OrderTabs = bOrder
 	SF_Utils._ExitFunction(cstThisSub)
@@ -2443,10 +2496,10 @@ Private Function _CheckNewControl(cstThisSub As String, cstSubArgs As String _
 &apos;&apos;&apos;	Check the generic arguments of a CreateXXX() method for control creation.
 &apos;&apos;&apos;	Called by the CreateButton, CreateCheckBox, ... specific methods
 &apos;&apos;&apos;	Args:
-&apos;&apos;&apos;		cstThisSub, cstSubArgs: caller routine and its arguments
-&apos;&apos;&apos;		Name: the name of the new control. It must not exist yet
+&apos;&apos;&apos;		cstThisSub, cstSubArgs: caller routine and its arguments. Used to formulate an error message, if any.
+&apos;&apos;&apos;		ControlName: the name of the new control. It must not exist yet
 &apos;&apos;&apos;		Place: the size and position expressed in APPFONT units, either
-&apos;&apos;&apos;			- an array (X, Y, Width, Height)
+&apos;&apos;&apos;			- an array (X, Y, Width, Height) or Array(x, Y)
 &apos;&apos;&apos;			- a com.sun.star.awt.Rectangle structure
 &apos;&apos;&apos;	Exceptions:
 &apos;&apos;&apos;		DUPLICATECONTROLERROR		A control with the same name exists already
@@ -2463,7 +2516,7 @@ Check:
 		If Not ScriptForge.SF_Utils._Validate(ControlName, &quot;ControlName&quot;, V_STRING) Then GoTo Finally
 		If IsArray(Place) Then
 			If Not ScriptForge.SF_Utils._ValidateArray(Place, &quot;Place&quot;, 1, ScriptForge.V_NUMERIC, True) Then GoTo Finally
-		Else
+		ElseIf Not IsNull(Place) Then
 			If Not ScriptForge.SF_Utils._Validate(Place, &quot;Place&quot;, ScriptForge.V_OBJECT) Then GoTo Finally
 		End If
 	End If
@@ -2481,22 +2534,22 @@ CatchDuplicate:
 End Function	&apos;	SFDialogs.SF_Dialog._CheckNewControl
 
 REM -----------------------------------------------------------------------------
-Private Function _CreateNewControl(ByVal psType As String _
+Private Function _CreateNewControl(ByVal pvModel As Variant _
 									, ByVal ControlName As Variant _
 									, ByRef Place As Variant _
-									, ByRef ArgNames As Variant _
-									, ByRef ArgValues As Variant _
+									, Optional ByRef ArgNames As Variant _
+									, Optional ByRef ArgValues As Variant _
 									) As Object
 &apos;&apos;&apos;	Generic creation of a new control.
 &apos;&apos;&apos;	Called by the CreateButton, CreateCheckBox, ... specific methods
 &apos;&apos;&apos;	Args:
-&apos;&apos;&apos;		cstThisSub, cstSubArgs: caller routine and its arguments
-&apos;&apos;&apos;		psType: one of the UnoControlxxx control models
-&apos;&apos;&apos;		Name: the name of the new control. It must not exist yet
+&apos;&apos;&apos;		pvModel: one of the UnoControlxxx control models (as a string)
+&apos;&apos;&apos;			or such a model as a UNO class instance (cloned from an existing control)
+&apos;&apos;&apos;		ControlName: the name of the new control. It must not exist yet
 &apos;&apos;&apos;		Place: the size and position expressed in APPFONT units, either
 &apos;&apos;&apos;			- an array (X, Y, Width, Height)
 &apos;&apos;&apos;			- a com.sun.star.awt.Rectangle structure
-&apos;&apos;&apos;		ArgNames: the list of the specific arguments linked to the given psType
+&apos;&apos;&apos;		ArgNames: the list of the specific arguments linked to the given pvModel
 &apos;&apos;&apos;		ArgValues: their values
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		A new SF_DialogControl class instance or Nothing if creation failed
@@ -2507,23 +2560,33 @@ Dim vPlace As Variant				&apos;	Alias of Place when object to avoid &quot;Object
 Dim lCache As Long					&apos;	Number of elements in the controls cache
 Static oSession As Object
 
+Check:
 	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
 	Set oControl = Nothing
 
 	If IsNull(oSession) Then Set oSession = ScriptForge.SF_Services.CreateScriptService(&quot;Session&quot;)
 
+	If IsMissing(ArgNames) Or IsEmpty(ArgNames) Then ArgNames = Array()
+	If IsMissing(ArgValues) Or IsEmpty(ArgValues) Then ArgValues = Array()
+
 Try:
-	&apos;	Create a new (empty) model instance
-	Set oControlModel = _DialogModel.createInstance(&quot;com.sun.star.awt.&quot; &amp; psType)
+	&apos;	When rhe model is a string, create a new (empty) model instance
+	Select Case VarType(pvModel)
+		Case V_STRING				:	Set oControlModel = _DialogModel.createInstance(&quot;com.sun.star.awt.&quot; &amp; pvModel)
+		Case ScriptForge.V_OBJECT	:	Set oControlModel = pvModel
+	End Select
 
 	oControlModel.Name = ControlName
 
 	&apos;	Set dimension and position
 	With oControlModel
 		If IsArray(Place) Then
-			If UBound(Place) = 3 Then
+			&apos;	Ignore width and height when new control is cloed from an existing one
+			If UBound(Place) &gt;= 1 Then
 				.PositionX = Place(0)
 				.PositionY = Place(1)
+			End If
+			If UBound(Place) &gt;= 3 Then
 				.Width = Place(2)
 				.Height = Place(3)
 			End If

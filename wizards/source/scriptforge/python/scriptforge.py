@@ -1866,6 +1866,9 @@ class SFDialogs:
             parentobj = parent.objectreference if isinstance(parent, parentclasses) else parent
             return self.ExecMethod(self.vbMethod + self.flgObject + self.flgHardCode, 'Center', parentobj)
 
+        def CloneControl(self, sourcename, controlname, left = 1, top = 1):
+            return self.ExecMethod(self.vbMethod, 'CloneControl', sourcename, controlname, left, top)
+
         def Controls(self, controlname = ''):
             return self.ExecMethod(self.vbMethod + self.flgArrayRet + self.flgHardCode, 'Controls', controlname)
 
