@@ -1841,26 +1841,29 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
 
     utl::ConnectFrameControllerModel(xTargetFrame, xController, xModel);
 
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    if (ret)
+    {
+        utl::MediaDescriptor aMediaDescriptor;
+        aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
 
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
+        utl::TempFileNamed aTempFile;
+        aTempFile.EnableKillingFile();
 
-    uno::Reference<document::XFilter> xPDFFilter(
-        xMultiServiceFactory->createInstance("com.sun.star.document.PDFFilter"), uno::UNO_QUERY);
-    uno::Reference<document::XExporter> xExporter(xPDFFilter, uno::UNO_QUERY);
-    xExporter->setSourceDocument(xModel);
+        uno::Reference<document::XFilter> xPDFFilter(
+            xMultiServiceFactory->createInstance("com.sun.star.document.PDFFilter"), uno::UNO_QUERY);
+        uno::Reference<document::XExporter> xExporter(xPDFFilter, uno::UNO_QUERY);
+        xExporter->setSourceDocument(xModel);
 
-    SvFileStream aOutputStream(aTempFile.GetURL(), StreamMode::WRITE);
-    uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aOutputStream));
+        SvFileStream aOutputStream(aTempFile.GetURL(), StreamMode::WRITE);
+        uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aOutputStream));
 
-    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence({
-        { "FilterName", uno::Any(OUString("writer_pdf_Export")) },
-        { "OutputStream", uno::Any(xOutputStream) }
-    }));
-    xPDFFilter->filter(aDescriptor);
-    aOutputStream.Close();
+        uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence({
+            { "FilterName", uno::Any(OUString("writer_pdf_Export")) },
+            { "OutputStream", uno::Any(xOutputStream) }
+        }));
+        xPDFFilter->filter(aDescriptor);
+        aOutputStream.Close();
+    }
 
     css::uno::Reference<css::util::XCloseable> xClose(xModel, css::uno::UNO_QUERY);
     xClose->close(false);
