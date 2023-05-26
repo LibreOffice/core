@@ -2300,11 +2300,14 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
     // Draw Form controls
     SdrView* pDrawView = pViewSh->GetDrawView();
     SdrPageView* pPageView = pDrawView->GetSdrPageView();
-    SdrPage* pPage = pPageView->GetPage();
-    ::sd::Window* pActiveWin = pViewSh->GetActiveWindow();
-    ::tools::Rectangle aTileRect(Point(nTilePosX, nTilePosY), Size(nTileWidth, nTileHeight));
-    Size aOutputSize(nOutputWidth, nOutputHeight);
-    LokControlHandler::paintControlTile(pPage, pDrawView, *pActiveWin, rDevice, aOutputSize, aTileRect);
+    if (pPageView != nullptr)
+    {
+        SdrPage* pPage = pPageView->GetPage();
+        ::sd::Window* pActiveWin = pViewSh->GetActiveWindow();
+        ::tools::Rectangle aTileRect(Point(nTilePosX, nTilePosY), Size(nTileWidth, nTileHeight));
+        Size aOutputSize(nOutputWidth, nOutputHeight);
+        LokControlHandler::paintControlTile(pPage, pDrawView, *pActiveWin, rDevice, aOutputSize, aTileRect);
+    }
 
     comphelper::LibreOfficeKit::setTiledPainting(false);
 }
