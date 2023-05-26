@@ -77,7 +77,7 @@ private:
 void SdModule::Execute(SfxRequest& rReq)
 {
     const SfxItemSet* pSet = rReq.GetArgs();
-    sal_uLong nSlotId = rReq.GetSlot();
+    sal_uInt16 nSlotId = rReq.GetSlot();
 
     switch ( nSlotId )
     {
@@ -160,9 +160,9 @@ void SdModule::Execute(SfxRequest& rReq)
                     LanguageType eLanguage = static_cast<const SvxLanguageItem*>(pItem)->GetValue();
                     SdDrawDocument* pDoc = pDocSh->GetDoc();
 
-                    if( nSlotId == sal_uInt16(SID_ATTR_CHAR_CJK_LANGUAGE) )
+                    if( nSlotId == SID_ATTR_CHAR_CJK_LANGUAGE )
                         pDoc->SetLanguage( eLanguage, EE_CHAR_LANGUAGE_CJK );
-                    else if( nSlotId == sal_uInt16(SID_ATTR_CHAR_CTL_LANGUAGE) )
+                    else if( nSlotId == SID_ATTR_CHAR_CTL_LANGUAGE )
                         pDoc->SetLanguage( eLanguage, EE_CHAR_LANGUAGE_CTL );
                     else
                         pDoc->SetLanguage( eLanguage, EE_CHAR_LANGUAGE );

@@ -116,7 +116,7 @@ void TableObjectBar::Execute( SfxRequest& rReq )
     SfxBindings* pBindings = &mpViewSh->GetViewFrame()->GetBindings();
 
     rtl::Reference< sdr::SelectionController > xController( mpView->getSelectionController() );
-    sal_uLong nSlotId = rReq.GetSlot();
+    sal_uInt16 nSlotId = rReq.GetSlot();
     if( xController.is() )
     {
         switch( nSlotId )
@@ -160,10 +160,10 @@ void TableObjectBar::Execute( SfxRequest& rReq )
             else
                 nSlotId = SID_TABLE_INSERT_COL;
 
-            rReq.AppendItem(SfxInt16Item(static_cast<sal_uInt16>(nSlotId), nCount));
+            rReq.AppendItem(SfxInt16Item(nSlotId, nCount));
             rReq.AppendItem(SfxBoolItem(SID_TABLE_PARAM_INSERT_AFTER, bInsertAfter));
 
-            rReq.SetSlot( static_cast<sal_uInt16>(nSlotId) );
+            rReq.SetSlot( nSlotId );
         }
         }
 
