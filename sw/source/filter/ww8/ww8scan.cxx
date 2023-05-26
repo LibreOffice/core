@@ -7635,7 +7635,7 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize):
     fCompatibilityOptions_Unknown2_5(false), fCompatibilityOptions_Unknown2_6(false),
     fCompatibilityOptions_Unknown2_7(false), fCompatibilityOptions_Unknown2_8(false),
     fCompatibilityOptions_Unknown2_9(false), fCompatibilityOptions_Unknown2_10(false),
-    fCompatibilityOptions_Unknown2_11(false), fCompatibilityOptions_Unknown2_12(false),
+    fDontBreakWrappedTables(false), fCompatibilityOptions_Unknown2_12(false),
     fCompatibilityOptions_Unknown2_13(false), fCompatibilityOptions_Unknown2_14(false),
     fCompatibilityOptions_Unknown2_15(false), fCompatibilityOptions_Unknown2_16(false),
     fCompatibilityOptions_Unknown2_17(false), fCompatibilityOptions_Unknown2_18(false),
@@ -7906,7 +7906,7 @@ WW8Dop::WW8Dop():
     fCompatibilityOptions_Unknown2_5(false), fCompatibilityOptions_Unknown2_6(false),
     fCompatibilityOptions_Unknown2_7(false), fCompatibilityOptions_Unknown2_8(false),
     fCompatibilityOptions_Unknown2_9(false), fCompatibilityOptions_Unknown2_10(false),
-    fCompatibilityOptions_Unknown2_11(false), fCompatibilityOptions_Unknown2_12(false),
+    fDontBreakWrappedTables(false), fCompatibilityOptions_Unknown2_12(false),
     fCompatibilityOptions_Unknown2_13(false), fCompatibilityOptions_Unknown2_14(false),
     fCompatibilityOptions_Unknown2_15(false), fCompatibilityOptions_Unknown2_16(false),
     fCompatibilityOptions_Unknown2_17(false), fCompatibilityOptions_Unknown2_18(false),
@@ -8023,7 +8023,7 @@ void WW8Dop::SetCompatibilityOptions2(sal_uInt32 a32Bit)
     fCompatibilityOptions_Unknown2_8                 = ( a32Bit &  0x00000080 ) >>  7 ;
     fCompatibilityOptions_Unknown2_9                 = ( a32Bit &  0x00000100 ) >>  8 ;
     fCompatibilityOptions_Unknown2_10                    = ( a32Bit &  0x00000200 ) >>  9 ;
-    fCompatibilityOptions_Unknown2_11                    = ( a32Bit &  0x00000400 ) >> 10 ;
+    fDontBreakWrappedTables                              = ( a32Bit &  0x00000400 ) >> 10 ;
     fCompatibilityOptions_Unknown2_12                    = ( a32Bit &  0x00000800 ) >> 11 ;
     fCompatibilityOptions_Unknown2_13                   = ( a32Bit &  0x00001000 ) >> 12 ;
     fCompatibilityOptions_Unknown2_14                   = ( a32Bit &  0x00002000 ) >> 13 ;
@@ -8060,7 +8060,7 @@ sal_uInt32 WW8Dop::GetCompatibilityOptions2() const
     if (fCompatibilityOptions_Unknown2_8)           a32Bit |= 0x00000080;
     if (fCompatibilityOptions_Unknown2_9)           a32Bit |= 0x00000100;
     if (fCompatibilityOptions_Unknown2_10)          a32Bit |= 0x00000200;
-    if (fCompatibilityOptions_Unknown2_11)          a32Bit |= 0x00000400;
+    if (fDontBreakWrappedTables)                    a32Bit |= 0x00000400;
     if (fCompatibilityOptions_Unknown2_12)          a32Bit |= 0x00000800;
     if (fCompatibilityOptions_Unknown2_13)          a32Bit |= 0x00001000;
     //#i42909# set thai "line breaking rules" compatibility option

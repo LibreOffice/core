@@ -1780,6 +1780,7 @@ public:
     sal_Int16 hpsZoomFontPag = 0;
     sal_Int16 dywDispPag = 0;
 
+     // [MS-DOC] 2.7.11 Copts A..H
      bool       fCompatibilityOptions_Unknown2_1 : 1 /*= false*/;  // #i78591#
      bool       fCompatibilityOptions_Unknown2_2 : 1 /*= false*/;  // #i78591#
      bool       fDontUseHTMLAutoSpacing : 1 /*= false*/;
@@ -1788,13 +1789,17 @@ public:
      bool       fCompatibilityOptions_Unknown2_6 : 1 /*= false*/;  // #i78591#
      bool       fCompatibilityOptions_Unknown2_7 : 1 /*= false*/;  // #i78591#
      bool       fCompatibilityOptions_Unknown2_8 : 1 /*= false*/;  // #i78591#
+
+     // [MS-DOC] 2.7.11 Copts I..P
      bool       fCompatibilityOptions_Unknown2_9 : 1 /*= false*/;  // #i78591#
      bool       fCompatibilityOptions_Unknown2_10 : 1 /*= false*/; // #i78591#
-     bool       fCompatibilityOptions_Unknown2_11 : 1 /*= false*/; // #i78591#
+     bool       fDontBreakWrappedTables : 1 /*= false*/; // #i78591#
      bool       fCompatibilityOptions_Unknown2_12 : 1 /*= false*/; // #i78591#
      bool       fCompatibilityOptions_Unknown2_13 : 1 /*= false*/; // #i78591#
      bool       fCompatibilityOptions_Unknown2_14 : 1 /*= false*/; // #i78591#
      bool       fCompatibilityOptions_Unknown2_15 : 1 /*= false*/; // #i78591#
+
+     // [MS-DOC] 2.7.11 Copts Q..X
      bool       fCompatibilityOptions_Unknown2_16 : 1 /*= false*/; // #i78591#
      bool       fCompatibilityOptions_Unknown2_17 : 1 /*= false*/; // #i78591#
      bool       fCompatibilityOptions_Unknown2_18 : 1 /*= false*/; // #i78591#
@@ -1803,6 +1808,8 @@ public:
      bool       fCompatibilityOptions_Unknown2_21 : 1 /*= false*/; // #i78591#
      bool       fCompatibilityOptions_Unknown2_22 : 1 /*= false*/; // #i78591#
      bool       fCompatibilityOptions_Unknown2_23 : 1 /*= false*/; // #i78591#
+
+     // [MS-DOC] 2.7.11 Copts Y..f
      bool       fCompatibilityOptions_Unknown2_24 : 1 /*= false*/; // #i78591#
      bool       fCompatibilityOptions_Unknown2_25 : 1 /*= false*/; // #i78591#
      bool       fCompatibilityOptions_Unknown2_26 : 1 /*= false*/; // #i78591#
@@ -1811,6 +1818,8 @@ public:
      bool       fCompatibilityOptions_Unknown2_29 : 1 /*= false*/; // #i78591#
      bool       fCompatibilityOptions_Unknown2_30 : 1 /*= false*/; // #i78591#
      bool       fCompatibilityOptions_Unknown2_31 : 1 /*= false*/; // #i78591#
+
+     // [MS-DOC] 2.7.11 Copts g
      bool       fCompatibilityOptions_Unknown2_32 : 1 /*= false*/; // #i78591#
 
      sal_uInt16 fUnknown3 : 15 /*= 0*/;

@@ -302,6 +302,21 @@ CPPUNIT_TEST_FIXTURE(Test, testDoNotBreakWrappedTables)
     // i.e. <w:doNotBreakWrappedTables> was not written.
     assertXPath(pXmlDoc, "/w:settings/w:compat/w:doNotBreakWrappedTables", 1);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testDOCfDontBreakWrappedTables)
+{
+    // Given a document with fDontBreakWrappedTables:
+    // When importing that document:
+    createSwDoc("dont-break-wrapped-tables.doc");
+
+    // Then make sure that the matching compat flag is set:
+    SwDoc* pDoc = getSwDoc();
+    IDocumentSettingAccess& rIDSA = pDoc->getIDocumentSettingAccess();
+    bool bDontBreakWrappedTables = rIDSA.get(DocumentSettingId::DO_NOT_BREAK_WRAPPED_TABLES);
+    // Without the accompanying fix in place, this test would have failed, the compat flag was not
+    // set.
+    CPPUNIT_ASSERT(bDontBreakWrappedTables);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

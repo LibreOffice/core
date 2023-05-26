@@ -557,6 +557,9 @@ static void WriteDop( WW8Export& rWrt )
 
     rDop.fExpShRtn = !rWrt.m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK); // #i56856#
 
+    IDocumentSettingAccess& rIDSA = rWrt.m_rDoc.getIDocumentSettingAccess();
+    rDop.fDontBreakWrappedTables = rIDSA.get(DocumentSettingId::DO_NOT_BREAK_WRAPPED_TABLES);
+
     rDop.Write( *rWrt.m_pTableStrm, *rWrt.m_pFib );
 }
 

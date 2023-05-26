@@ -1892,6 +1892,12 @@ void SwWW8ImplReader::ImportDop()
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::CONTINUOUS_ENDNOTES, true);
     // rely on default for HYPHENATE_URLS=false
 
+    IDocumentSettingAccess& rIDSA = m_rDoc.getIDocumentSettingAccess();
+    if (m_xWDop->fDontBreakWrappedTables)
+    {
+        rIDSA.set(DocumentSettingId::DO_NOT_BREAK_WRAPPED_TABLES, true);
+    }
+
     // COMPATIBILITY FLAGS END
 
     // Import magic doptypography information, if it's there
