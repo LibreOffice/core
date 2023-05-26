@@ -120,6 +120,28 @@ DECLARE_WW8EXPORT_TEST(testTdf155465_paraAdjustDistribute, "tdf155465_paraAdjust
     CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_LEFT, static_cast<style::ParagraphAdjust>(nAdjust));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testDontBreakWrappedTables)
+{
+    // Given a document with the DO_NOT_BREAK_WRAPPED_TABLES compat mode enabled:
+    createSwDoc();
+    {
+        SwDoc* pDoc = getSwDoc();
+        IDocumentSettingAccess& rIDSA = pDoc->getIDocumentSettingAccess();
+        rIDSA.set(DocumentSettingId::DO_NOT_BREAK_WRAPPED_TABLES, true);
+    }
+
+    // When saving to doc:
+    reload(mpFilter, "dont-break-wrapped-tables.doc");
+
+    // Then make sure the compat flag is serialized:
+    SwDoc* pDoc = getSwDoc();
+    IDocumentSettingAccess& rIDSA = pDoc->getIDocumentSettingAccess();
+    bool bDontBreakWrappedTables = rIDSA.get(DocumentSettingId::DO_NOT_BREAK_WRAPPED_TABLES);
+    // Without the accompanying fix in place, this test would have failed, the compat flag was not
+    // set.
+    CPPUNIT_ASSERT(bDontBreakWrappedTables);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
