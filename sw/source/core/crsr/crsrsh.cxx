@@ -391,12 +391,18 @@ void SwCursorShell::MarkListLevel( const OUString& sListId,
     if (sListId == m_sMarkedListId && nListLevel == m_nMarkedListLevel)
         return;
 
-    if ( !m_sMarkedListId.isEmpty() )
-        mxDoc->MarkListLevel( m_sMarkedListId, m_nMarkedListLevel, false );
-
-    if ( !sListId.isEmpty() )
+    // Writer redraws the "marked" list with the field shading, if there
+    // is no field shading then the marked list would be redrawn for no
+    // visually identifiable reason, so skip the mark if field shadings
+    // are disabled.
+    const bool bVisuallyMarked(GetViewOptions()->IsFieldShadings());
+    if (bVisuallyMarked)
     {
-        mxDoc->MarkListLevel( sListId, nListLevel, true );
+        if ( !m_sMarkedListId.isEmpty() )
+            mxDoc->MarkListLevel( m_sMarkedListId, m_nMarkedListLevel, false );
+
+        if ( !sListId.isEmpty() )
+            mxDoc->MarkListLevel( sListId, nListLevel, true );
     }
 
     m_sMarkedListId = sListId;
