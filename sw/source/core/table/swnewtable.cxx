@@ -18,6 +18,7 @@
  */
 
 #include <swtable.hxx>
+#include <swcrsr.hxx>
 #include <tblsel.hxx>
 #include <tblrwcl.hxx>
 #include <ndtxt.hxx>
@@ -34,6 +35,7 @@
 #include <IDocumentContentOperations.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <cstdlib>
 #include <vector>
 #include <set>
@@ -745,6 +747,20 @@ bool SwTable::NewInsertCol( SwDoc& rDoc, const SwSelBoxes& rBoxes,
         for( sal_uInt16 j = 0; j < nCnt; ++j )
         {
             SwTableBox *pCurrBox = pLine->GetTabBoxes()[nInsPos+j];
+
+            // set tracked insertion by inserting a dummy redline
+            if ( rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
+            {
+                SwPosition aPos(*pCurrBox->GetSttNd());
+                SwCursor aCursor( aPos, nullptr );
+                SwNodeIndex aInsDummyPos(*pCurrBox->GetSttNd(), 1 );
+                SwPaM aPaM(aInsDummyPos);
+                rDoc.getIDocumentContentOperations().InsertString( aPaM,
+                        OUStringChar(CH_TXT_TRACKED_DUMMY_CHAR) );
+                SvxPrintItem aHasTextChangesOnly(RES_PRINT, false);
+                rDoc.SetBoxAttr( aCursor, aHasTextChangesOnly );
+            }
+
             if( bNewSpan )
             {
                 pCurrBox->setRowSpan( nLastRowSpan );

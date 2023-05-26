@@ -2981,15 +2981,22 @@ void SwTableBox::ActualiseValueBox()
 
 SwRedlineTable::size_type SwTableBox::GetRedline() const
 {
+    const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
     const SwStartNode *pSttNd = GetSttNd();
 
-    if ( !pSttNd || GetRedlineType() == RedlineType::None )
+    if ( aRedlineTable.empty() || !pSttNd )
+        return SwRedlineTable::npos;
+
+    // check table row property "HasTextChangesOnly", if it's defined and its value is
+    // false, return with the first redline of the cell
+    const SvxPrintItem *pHasTextChangesOnlyProp =
+            GetFrameFormat()->GetAttrSet().GetItem<SvxPrintItem>(RES_PRINT);
+    if ( !pHasTextChangesOnlyProp || pHasTextChangesOnlyProp->GetValue() )
         return SwRedlineTable::npos;
 
     SwPosition aCellStart( *GetSttNd(), SwNodeOffset(0) );
     SwPosition aCellEnd( *GetSttNd()->EndOfSectionNode(), SwNodeOffset(-1) );
     SwNodeIndex pEndNodeIndex(aCellEnd.GetNode());
-    const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
     SwRedlineTable::size_type nRedlinePos = 0;
     for( ; nRedlinePos < aRedlineTable.size(); ++nRedlinePos )
     {
@@ -3012,18 +3019,17 @@ SwRedlineTable::size_type SwTableBox::GetRedline() const
 
 RedlineType SwTableBox::GetRedlineType() const
 {
-    const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
-    if ( aRedlineTable.empty() )
-        return RedlineType::None;
-
-    // check table row property "HasTextChangesOnly", if it's defined and its value is
-    // false, return with RedlineType::Delete
-    // TODO add support for RedlineType::Insert
-    const SvxPrintItem *pHasTextChangesOnlyProp =
-            GetFrameFormat()->GetAttrSet().GetItem<SvxPrintItem>(RES_PRINT);
-    if ( pHasTextChangesOnlyProp && !pHasTextChangesOnlyProp->GetValue() )
-        return RedlineType::Delete;
-
+    SwRedlineTable::size_type nPos = GetRedline();
+    if ( nPos != SwRedlineTable::npos )
+    {
+        const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+        const SwRangeRedline* pRedline = aRedlineTable[ nPos ];
+        if ( RedlineType::Delete == pRedline->GetType() ||
+             RedlineType::Insert == pRedline->GetType() )
+        {
+            return pRedline->GetType();
+        }
+    }
     return RedlineType::None;
 }
 
