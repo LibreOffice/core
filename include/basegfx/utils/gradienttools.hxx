@@ -191,7 +191,7 @@ namespace basegfx
            on given SingleColor.
            This is used for export preparations in case these exports
            do neither support Start/EndIntensity nor Border settings,
-           both will be elliminated if possible (see below).
+           both will be eliminated if possible (see below).
            The BGradient rGradient and BColorStops& rColorStops
            are both return parameters and may be changed.
            This will do quite some preparations for the gradient
