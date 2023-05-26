@@ -325,7 +325,7 @@ namespace dbaui
                     // In this case, there's a good chance it's a "Bit" field
                     // remark: for unknown reason, getByte(i) gives "\000" even if the bit is at 1.
                     auto seq = xRow->getBytes(i);
-                    if ((seq.getLength() == 1) && (seq[0] <= 1))
+                    if ((seq.getLength() == 1) && (seq[0] >= 0) && (seq[0] <= 1))
                     {
                         out.append(OUString::number(static_cast<int>(seq[0])) + ",");
                     }
