@@ -116,6 +116,9 @@ public:
     // This method will not handle included hierarchies and not check visibility.
     drawinglayer::primitive2d::Primitive2DContainer const & getPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const;
 
+    /// check if getPrimitive2DSequence() should create tag
+    virtual bool isExportPDFTags() const;
+
     // test this VOC for visibility concerning model-view stuff like e.g. Layer
     virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const;
 
