@@ -361,7 +361,14 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
             {
                 // background for selection
                 GetOutDev()->SetLineColor();
-                GetOutDev()->SetFillColor( rStyleSettings.GetAccentColor() );
+                Color aColor( rStyleSettings.GetAccentColor() );
+// merging the highlightcolor (which is used if accent does not exist) with the background
+// fails in many cases such as Breeze Dark (highlight is too close to background) and
+// Breeze Light (font color is white and not readable anymore)
+#ifdef MACOSX
+                aColor.Merge( rStyleSettings.GetFaceColor(), 80 );
+#endif
+                GetOutDev()->SetFillColor( aColor );
                 GetOutDev()->DrawRect( aFillRect );
             }
         }
