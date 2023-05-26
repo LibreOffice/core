@@ -239,7 +239,7 @@
 // In svxids.hrc: ID_VAL_ANGLEEND               (SID_SD_START+209)
 // In svxids.hrc: ID_VAL_CENTER_X               (SID_SD_START+210)
 // In svxids.hrc: ID_VAL_CENTER_Y               (SID_SD_START+211)
-#define ID_VAL_WHATPAGE                     (SID_SD_START+212)
+#define ID_VAL_WHATPAGE                     TypedWhichId<SfxUInt32Item>(SID_SD_START+212)
 #define ID_VAL_WHATLAYER                    (SID_SD_START+213)
 #define ID_VAL_ANGLE                        (SID_SD_START+214)
 #define ID_VAL_MIRRORVERT                   (SID_SD_START+215)
@@ -253,7 +253,7 @@
 #define ID_VAL_PAGERIGHT                    (SID_SD_START+223)
 #define ID_VAL_SCALEOBJECTS                 (SID_SD_START+224)
 #define ID_VAL_PAGENAME                     TypedWhichId<SfxStringItem>(SID_SD_START+225)
-#define ID_VAL_WHATLAYOUT                   (SID_SD_START+226)
+#define ID_VAL_WHATLAYOUT                   TypedWhichId<SfxUInt32Item>(SID_SD_START+226)
 #define ID_VAL_ISPAGEBACK                   (SID_SD_START+227)
 #define ID_VAL_ISPAGEOBJ                    (SID_SD_START+228)
 #define ID_VAL_LAYERNAME                    (SID_SD_START+229)
@@ -297,9 +297,9 @@
 #define SID_RENAMEPAGE                      (SID_SD_START+268)
 #define SID_RENAMELAYER                     (SID_SD_START+269)
 #define SID_HATCH                           (SID_SD_START+270)
-#define SID_GETFILLSTYLE                    (SID_SD_START+271)
-#define SID_GETLINESTYLE                    (SID_SD_START+272)
-#define SID_GETLINEWIDTH                    (SID_SD_START+273)
+#define SID_GETFILLSTYLE                    TypedWhichId<SfxUInt32Item>(SID_SD_START+271)
+#define SID_GETLINESTYLE                    TypedWhichId<SfxUInt32Item>(SID_SD_START+272)
+#define SID_GETLINEWIDTH                    TypedWhichId<SfxUInt32Item>(SID_SD_START+273)
 #define SID_SETLINECOLOR                    (SID_SD_START+274)
 #define SID_SETHATCHCOLOR                   (SID_SD_START+275)
 #define SID_SETGRADSTARTCOLOR               (SID_SD_START+276)
@@ -313,7 +313,7 @@
 #define SID_TEXT_FITTOSIZE                  (SID_SD_START+285)
 // In svxids.hrc: SID_TEXT_FITTOSIZE_VERTICAL   (SID_SD_START+286)
 #define SID_NAVIGATOR_PAGENAME              TypedWhichId<SfxStringItem>(SID_SD_START+287)
-#define SID_NAVIGATOR_STATE                 (SID_SD_START+288)
+#define SID_NAVIGATOR_STATE                 TypedWhichId<SfxUInt32Item>(SID_SD_START+288)
 #define SID_NAVIGATOR_INIT                  (SID_SD_START+289)
     // FREE
 #define SID_NAVIGATOR_PAGE                  TypedWhichId<SfxUInt16Item>(SID_SD_START+292)
@@ -414,7 +414,7 @@
     // FREE
 #define SID_INSERT_PAGE_NUMBER              (SID_SD_START+411)
 #define SID_INSERT_DATE_TIME                (SID_SD_START+412)
-#define SID_SDMODE_FLAG                     (SID_SD_START+413)
+#define SID_SDMODE_FLAG                     TypedWhichId<SfxUInt32Item>(SID_SD_START+413)
 // Enum in the middle of IDs...
 #define SD_DRAW_MODE        1
 #define SD_IMPRESS_MODE     2
@@ -436,7 +436,7 @@
 #define SID_DELETE_MASTER_PAGE              (SID_SD_START+432)
 #define SID_RENAME_MASTER_PAGE              (SID_SD_START+433)
 #define SID_CLOSE_MASTER_VIEW               (SID_SD_START+434)
-#define SID_ASSIGN_LAYOUT                   (SID_SD_START+435)
+#define SID_ASSIGN_LAYOUT                   TypedWhichId<SfxUInt32Item>(SID_SD_START+435)
 #define SID_DISPLAY_MASTER_BACKGROUND       (SID_SD_START+436)
 #define SID_DISPLAY_MASTER_OBJECTS          (SID_SD_START+437)
 #define SID_INSERTPAGE_LAYOUT_MENU          (SID_SD_START+438)

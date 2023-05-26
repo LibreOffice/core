@@ -672,7 +672,7 @@ bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
     if ( bDataChanged )
     {
         const SfxItemSet& rMyItemSet = GetItemSet();
-        sal_uInt16          nWhich       = GetWhich( SID_ATTR_NUMBERFORMAT_VALUE );
+        TypedWhichId<SfxUInt32Item> nWhich = GetWhich( SID_ATTR_NUMBERFORMAT_VALUE );
         SfxItemState    eItemState   = rMyItemSet.GetItemState( nWhich, false );
 
         // OK chosen - Is format code input entered already taken over?

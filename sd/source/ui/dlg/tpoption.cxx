@@ -450,10 +450,8 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     //Scale
     sal_Int32 nX = rAttrs->Get( ATTR_OPTIONS_SCALE_X ).GetValue();
     sal_Int32 nY = rAttrs->Get( ATTR_OPTIONS_SCALE_Y ).GetValue();
-    nWidth = static_cast<const SfxUInt32Item&>( rAttrs->
-                    Get( ATTR_OPTIONS_SCALE_WIDTH ) ).GetValue();
-    nHeight = static_cast<const SfxUInt32Item&>( rAttrs->
-                    Get( ATTR_OPTIONS_SCALE_HEIGHT ) ).GetValue();
+    nWidth = rAttrs->Get( ATTR_OPTIONS_SCALE_WIDTH ).GetValue();
+    nHeight = rAttrs->Get( ATTR_OPTIONS_SCALE_HEIGHT ).GetValue();
 
     m_xCbScale->set_entry_text( GetScale( nX, nY ) );
 

@@ -208,7 +208,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
         rPresentationSettings.mbFullScreen = bValue;
     }
 
-    nValue32 = ITEMVALUE( aDlgSet, ATTR_PRESENT_PAUSE_TIMEOUT, SfxUInt32Item );
+    nValue32 = aDlgSet.Get(ATTR_PRESENT_PAUSE_TIMEOUT).GetValue();
     if( nValue32 != rPresentationSettings.mnPauseTimeout )
     {
         bValuesChanged = true;

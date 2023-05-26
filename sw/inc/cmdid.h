@@ -188,7 +188,7 @@ class SwUINumRuleItem;
 #define FN_HSCROLL_METRIC       TypedWhichId<SfxUInt16Item>(FN_VIEW + 53) /* Metric horizontal scrollbar */
 #define FN_VSCROLL_METRIC       TypedWhichId<SfxUInt16Item>(FN_VIEW + 54) /* Metric vertical scrollbar */
 
-#define FN_NAV_ELEMENT          (FN_VIEW + 55)  /* Navigate By drop down controller */
+#define FN_NAV_ELEMENT          TypedWhichId<SfxUInt32Item>(FN_VIEW + 55)  /* Navigate By drop down controller */
 #define FN_SCROLL_PREV          (FN_VIEW + 57)  /* uno:ScrollToPrevious */
 #define FN_SCROLL_NEXT          (FN_VIEW + 58)  /* uno:ScrollToNext */
 #define FN_VIEW_HIDE_WHITESPACE (FN_VIEW + 59)  /* Hide header, footer, and pagebreak */
@@ -462,8 +462,8 @@ class SwUINumRuleItem;
 #define FN_TABLE_MODE_FIX_PROP      (FN_FORMAT + 190)  /*  -"-  */
 #define FN_TABLE_MODE_VARIABLE      (FN_FORMAT + 191)  /*  -"-  */
 #define FN_TABLE_BOX_TEXTORIENTATION TypedWhichId<SvxFrameDirectionItem>(FN_FORMAT + 192)  /* text orientation of table cells */
-#define SID_ATTR_TABLE_ROW_HEIGHT    (FN_FORMAT + 193)
-#define SID_ATTR_TABLE_COLUMN_WIDTH  (FN_FORMAT2 + 194)
+#define SID_ATTR_TABLE_ROW_HEIGHT    TypedWhichId<SfxUInt32Item>(FN_FORMAT + 193)
+#define SID_ATTR_TABLE_COLUMN_WIDTH  TypedWhichId<SfxUInt32Item>(FN_FORMAT2 + 194)
 
 #define FN_TABLE_AUTOSUM            (FN_FORMAT + 195)  /* */
 
