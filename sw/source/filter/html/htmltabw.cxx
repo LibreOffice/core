@@ -1113,10 +1113,20 @@ SwHTMLWriter& OutHTML_SwTableNode( SwHTMLWriter& rWrt, SwTableNode & rNode,
         }
         else
         {
-            OStringLiteral sOut = OOO_STRING_SVTOOLS_HTML_division
-                " " OOO_STRING_SVTOOLS_HTML_O_align "=\""
-                OOO_STRING_SVTOOLS_HTML_AL_right "\"";
-            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + sOut) );
+            if (rWrt.mbReqIF)
+            {
+                // In ReqIF, div cannot have an 'align' attribute. For now, use 'style' only
+                // for ReqIF; maybe it makes sense to use it in both cases?
+                static constexpr char sOut[] = OOO_STRING_SVTOOLS_HTML_division
+                    " style=\"display: flex; flex-direction: column; align-items: flex-end\"";
+                HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rWrt.GetNamespace() + sOut));
+            }
+            else
+            {
+                static constexpr char sOut[] = OOO_STRING_SVTOOLS_HTML_division
+                    " " OOO_STRING_SVTOOLS_HTML_O_align "=\"" OOO_STRING_SVTOOLS_HTML_AL_right "\"";
+                HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rWrt.GetNamespace() + sOut));
+            }
         }
         rWrt.IncIndentLevel();  // indent content of <CENTER>
         rWrt.m_bLFPossible = true;
