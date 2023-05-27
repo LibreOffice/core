@@ -312,14 +312,9 @@ private:
     std::unique_ptr<C[]> buffer_;
 };
 
-template <typename T1, typename T2> auto Concat2View(OStringConcat<T1, T2> const& c)
+template <typename C, typename T1, typename T2> auto Concat2View(StringConcat<C, T1, T2> const& c)
 {
-    return StringConcatenation<char>(c);
-}
-
-template <typename T1, typename T2> auto Concat2View(OUStringConcat<T1, T2> const& c)
-{
-    return StringConcatenation<char16_t>(c);
+    return StringConcatenation<C>(c);
 }
 
 /**
