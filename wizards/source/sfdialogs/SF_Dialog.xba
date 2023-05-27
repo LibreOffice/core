@@ -2581,7 +2581,7 @@ Try:
 	&apos;	Set dimension and position
 	With oControlModel
 		If IsArray(Place) Then
-			&apos;	Ignore width and height when new control is cloed from an existing one
+			&apos;	Ignore width and height when new control is cloned from an existing one
 			If UBound(Place) &gt;= 1 Then
 				.PositionX = Place(0)
 				.PositionY = Place(1)
