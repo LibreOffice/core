@@ -2570,7 +2570,7 @@ Check:
 	If IsMissing(ArgValues) Or IsEmpty(ArgValues) Then ArgValues = Array()
 
 Try:
-	&apos;	When rhe model is a string, create a new (empty) model instance
+	&apos;	When the model is a string, create a new (empty) model instance
 	Select Case VarType(pvModel)
 		Case V_STRING				:	Set oControlModel = _DialogModel.createInstance(&quot;com.sun.star.awt.&quot; &amp; pvModel)
 		Case ScriptForge.V_OBJECT	:	Set oControlModel = pvModel
