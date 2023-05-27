@@ -212,7 +212,7 @@ public:
     void SetAttrPool( SfxItemPool* pNewPool )   { pAttrPool = pNewPool; }
     // to set different WhichIds for a different pool.
     template<class T>
-    void SetPardMap(TypedWhichId<T> wid, TypedWhichId<T> widTrue) { aPardMap[wid] = widTrue; }
+    void SetPardMap(TypedWhichId<T> wid, TypedWhichId<T> widTrue) { aPardMap.set(wid, widTrue); }
     // to be able to assign them from the outside as for example table cells
     void ReadBorderAttr( int nToken, SfxItemSet& rSet, bool bTableDef=false );
     void ReadBackgroundAttr( int nToken, SfxItemSet& rSet, bool bTableDef=false  );
