@@ -94,33 +94,37 @@ sal_Int64 DateTime::GetSecFromDateTime( const Date& rDate ) const
     }
 }
 
-DateTime& DateTime::operator +=( const tools::Time& rTime )
+void DateTime::NormalizeTimeRemainderAndApply( tools::Time& rTime )
 {
-    tools::Time aTime = *this;
-    aTime += rTime;
-    sal_uInt16 nHours = aTime.GetHour();
-    if ( aTime.GetTime() > 0 )
+    sal_uInt16 nHours = rTime.GetHour();
+    if ( rTime.GetTime() > 0 )
     {
         if (nHours >= 24)
         {
             AddDays( nHours / 24 );
             nHours %= 24;
-            aTime.SetHour( nHours );
+            rTime.SetHour( nHours );
         }
     }
-    else if ( aTime.GetTime() != 0 )
+    else if ( rTime.GetTime() != 0 )
     {
         if (nHours >= 24)
         {
             AddDays( -static_cast<sal_Int32>(nHours) / 24 );
             nHours %= 24;
-            aTime.SetHour( nHours );
+            rTime.SetHour( nHours );
         }
         Date::operator--();
-        aTime = Time( 24, 0, 0 )+aTime;
+        rTime = Time( 24, 0, 0 ) + rTime;
     }
-    tools::Time::operator=( aTime );
+    tools::Time::operator=( rTime );
+}
 
+DateTime& DateTime::operator +=( const tools::Time& rTime )
+{
+    tools::Time aTime = *this;
+    aTime += rTime;
+    NormalizeTimeRemainderAndApply(aTime);
     return *this;
 }
 
@@ -128,29 +132,7 @@ DateTime& DateTime::operator -=( const tools::Time& rTime )
 {
     tools::Time aTime = *this;
     aTime -= rTime;
-    sal_uInt16 nHours = aTime.GetHour();
-    if ( aTime.GetTime() > 0 )
-    {
-        if (nHours >= 24)
-        {
-            AddDays( nHours / 24 );
-            nHours %= 24;
-            aTime.SetHour( nHours );
-        }
-    }
-    else if ( aTime.GetTime() != 0 )
-    {
-        if (nHours >= 24)
-        {
-            AddDays( -static_cast<sal_Int32>(nHours) / 24 );
-            nHours %= 24;
-            aTime.SetHour( nHours );
-        }
-        Date::operator--();
-        aTime = Time( 24, 0, 0 )+aTime;
-    }
-    tools::Time::operator=( aTime );
-
+    NormalizeTimeRemainderAndApply(aTime);
     return *this;
 }
 

@@ -83,6 +83,9 @@ public:
     void            AddTime( double fTimeInDays );
     DateTime&       operator +=( const tools::Time& rTime );
     DateTime&       operator -=( const tools::Time& rTime );
+private:
+    void            NormalizeTimeRemainderAndApply( tools::Time& rTime );
+public:
 
     TOOLS_DLLPUBLIC friend DateTime operator +( const DateTime& rDateTime, sal_Int32 nDays );
     TOOLS_DLLPUBLIC friend DateTime operator -( const DateTime& rDateTime, sal_Int32 nDays );
