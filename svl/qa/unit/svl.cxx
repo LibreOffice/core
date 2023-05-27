@@ -1728,7 +1728,7 @@ void Test::testUserDefinedNumberFormats()
         sExpected = "1900-01-02 23:53.605";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
-    {   // tdf#150028 decimals of seconds fraction withtout truncate on overflow
+    {   // tdf#150028 decimals of seconds fraction without truncate on overflow
         sCode =     "[SS]";
         sExpected = "271434";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
