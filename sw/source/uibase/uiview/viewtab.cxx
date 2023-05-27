@@ -2467,15 +2467,18 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             const SwFormatFooter& rFooter = rDesc.GetMaster().GetFooter();
             bool bFooterOn = rFooter.IsActive();
             rSet.Put( SfxBoolItem(SID_ATTR_PAGE_FOOTER, bFooterOn ) );
-            if(bFooterOn)
+            if (bFooterOn)
             {
-                const SvxLRSpaceItem* rLR = rFooter.GetFooterFormat()->GetAttrSet().GetItem<SvxLRSpaceItem>(SID_ATTR_LRSPACE);
-                const SvxULSpaceItem* rUL = rFooter.GetFooterFormat()->GetAttrSet().GetItem<SvxULSpaceItem>(SID_ATTR_ULSPACE);
-                SvxLongLRSpaceItem aLR(rLR->GetLeft(), rLR->GetRight(), SID_ATTR_PAGE_FOOTER_LRMARGIN);
-                rSet.Put(aLR);
-                SvxLongULSpaceItem aUL( rUL->GetUpper(), rUL->GetLower(), SID_ATTR_PAGE_FOOTER_SPACING);
-                rSet.Put(aUL);
-
+                if (const SvxLRSpaceItem* rLR = rFooter.GetFooterFormat()->GetAttrSet().GetItem<SvxLRSpaceItem>(SID_ATTR_LRSPACE))
+                {
+                    SvxLongLRSpaceItem aLR(rLR->GetLeft(), rLR->GetRight(), SID_ATTR_PAGE_FOOTER_LRMARGIN);
+                    rSet.Put(aLR);
+                }
+                if (const SvxULSpaceItem* rUL = rFooter.GetFooterFormat()->GetAttrSet().GetItem<SvxULSpaceItem>(SID_ATTR_ULSPACE))
+                {
+                    SvxLongULSpaceItem aUL( rUL->GetUpper(), rUL->GetLower(), SID_ATTR_PAGE_FOOTER_SPACING);
+                    rSet.Put(aUL);
+                }
                 bool bShared = !rDesc.IsFooterShared();
                 bool bFirst = !rDesc.IsFirstShared(); // FIXME control changes for both header footer - tdf#100287
                 sal_uInt16 nLayout = (static_cast<int>(bShared)<<1) + static_cast<int>(bFirst);
