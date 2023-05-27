@@ -1519,7 +1519,7 @@ IMPL_LINK(SvxLinguTabPage, ClickHdl_Impl, weld::Button&, rBtn, void)
     }
     else
     {
-        OSL_FAIL( "rBtn unexpected value" );
+        SAL_WARN("cui.options", "rBtn unexpected value");
     }
 }
 
@@ -1551,7 +1551,7 @@ IMPL_LINK(SvxLinguTabPage, SelectHdl_Impl, weld::TreeView&, rBox, void)
     }
     else
     {
-        OSL_FAIL( "rBox unexpected value" );
+        SAL_WARN("cui.options", "rBtn unexpected value");
     }
 }
 

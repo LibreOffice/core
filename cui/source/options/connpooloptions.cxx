@@ -145,7 +145,7 @@ namespace offapp
             UpdateDriverList(pDriverSettings->getSettings());
         else
         {
-            OSL_FAIL("ConnectionPoolOptionsPage::implInitControls: missing the DriverTimeouts item!");
+            SAL_WARN("cui.options", "ConnectionPoolOptionsPage::implInitControls: missing the DriverTimeouts item!");
             UpdateDriverList(DriverPoolingSettings());
         }
         saveDriverList();

@@ -702,7 +702,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
             case 2: eSet = SFX_SYMBOLS_SIZE_LARGE; break;
             case 3: eSet = SFX_SYMBOLS_SIZE_32; break;
             default:
-                OSL_FAIL( "OfaViewTabPage::FillItemSet(): This state of m_xIconSizeLB should not be possible!" );
+                SAL_WARN("cui.options", "OfaViewTabPage::FillItemSet(): This state of m_xIconSizeLB should not be possible!");
         }
         aMiscOptions.SetSymbolsSize( eSet );
     }
@@ -718,7 +718,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
             case 1: eSet = ToolBoxButtonSize::Small; break;
             case 2: eSet = ToolBoxButtonSize::Large; break;
             default:
-                OSL_FAIL( "OfaViewTabPage::FillItemSet(): This state of m_xSidebarIconSizeLB should not be possible!" );
+                SAL_WARN("cui.options", "OfaViewTabPage::FillItemSet(): This state of m_xSidebarIconSizeLB should not be possible!");
         }
         officecfg::Office::Common::Misc::SidebarIconSize::set(static_cast<sal_Int16>(eSet), xChanges);
     }
@@ -734,7 +734,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
             case 1: eSet = ToolBoxButtonSize::Small; break;
             case 2: eSet = ToolBoxButtonSize::Large; break;
             default:
-                OSL_FAIL( "OfaViewTabPage::FillItemSet(): This state of m_xNotebookbarIconSizeLB should not be possible!" );
+                SAL_WARN("cui.options", "OfaViewTabPage::FillItemSet(): This state of m_xNotebookbarIconSizeLB should not be possible!");
         }
         officecfg::Office::Common::Misc::NotebookbarIconSize::set(static_cast<sal_Int16>(eSet), xChanges);
     }

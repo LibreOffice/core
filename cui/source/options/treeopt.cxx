@@ -1207,7 +1207,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
 
         default:
         {
-            OSL_FAIL( "Unhandled option in ApplyItemSet" );
+            SAL_WARN("cui.options", "Unhandled option in ApplyItemSet");
         }
         break;
     }

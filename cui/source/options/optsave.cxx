@@ -422,7 +422,7 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
                         case  APP_IMPRESS       : sReplace = "com.sun.star.presentation.PresentationDocument";break;
                         case  APP_DRAW          : sReplace = "com.sun.star.drawing.DrawingDocument";break;
                         case  APP_MATH          : sReplace = "com.sun.star.formula.FormulaProperties";break;
-                        default: OSL_FAIL("illegal user data");
+                        default: SAL_WARN("cui.options", "illegal user data");
                     }
                     sCommand = sCommand.replaceFirst("%1", sReplace);
                     Reference< XEnumeration > xList = xQuery->createSubSetEnumerationByQuery(sCommand);
