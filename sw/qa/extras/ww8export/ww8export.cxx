@@ -587,6 +587,11 @@ DECLARE_WW8EXPORT_TEST(testTdf133504_wrapNotBeside, "tdf133504_wrapNotBeside.doc
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_NONE, getProperty<text::WrapTextMode>(getShape(1), "Surround"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf36711_inlineFrames, "tdf36711_inlineFrames.doc")
+{
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(getShape(1), "VertOrientRelation"));
+}
+
 DECLARE_WW8EXPORT_TEST(testLayoutHanging, "fdo68967.doc")
 {
     // This must not hang in layout

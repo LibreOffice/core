@@ -1996,6 +1996,11 @@ bTogglePos(false)
 // #i18732#
     switch( rWW.nTDyaAbs )             // particular Y-positions ?
     {
+        case 0: // inline
+            // Specifies that the parent object shall be vertically aligned in line
+            // with the surrounding text (i.e. shall not allow any text wrapping around it)
+            eVRel = text::RelOrientation::FRAME;
+            break;
         case -4:
             eVAlign = text::VertOrientation::TOP;
             if (nYBind < 2)
