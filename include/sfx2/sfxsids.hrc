@@ -28,6 +28,7 @@ class SfxBoolItem;
 class SfxDocumentInfoItem;
 class SfxEventNamesItem;
 class SfxFlagItem;
+class SfxGlobalNameItem;
 class SfxHyphenRegionItem;
 class SfxImageItem;
 class SfxInt16Item;
@@ -40,6 +41,7 @@ class SfxUInt16Item;
 class SfxUnoAnyItem;
 class SfxUnoFrameItem;
 class SfxWatermarkItem;
+class SfxVisibilityItem;
 class SvxClipboardFormatItem;
 class SvxHyperlinkItem;
 class SvxLanguageItem;
@@ -164,9 +166,9 @@ class SvxZoomItem;
 #define SID_REDACTDOC                       (SID_SFX_START + 1732)
 #define SID_AUTOREDACTDOC                   (SID_SFX_START + 1736)
 #define SID_UPDATEDOCMODE                   TypedWhichId<SfxUInt16Item>(SID_SFX_START + 1668)
-#define SID_CHECKOUT                        (SID_SFX_START + 512)
-#define SID_CANCELCHECKOUT                  (SID_SFX_START + 513)
-#define SID_CHECKIN                         (SID_SFX_START + 514)
+#define SID_CHECKOUT                        TypedWhichId<SfxVisibilityItem>(SID_SFX_START + 512)
+#define SID_CANCELCHECKOUT                  TypedWhichId<SfxVisibilityItem>(SID_SFX_START + 513)
+#define SID_CHECKIN                         TypedWhichId<SfxVisibilityItem>(SID_SFX_START + 514)
 #define SID_FILTER_PROVIDER                 TypedWhichId<SfxStringItem>(SID_SFX_START + 515)
 
 #define SID_FORCERELOAD                     TypedWhichId<SfxBoolItem>(SID_SFX_START + 1502)
@@ -276,7 +278,7 @@ class SvxZoomItem;
 #define SID_GOTOLINE                        (SID_SFX_START + 1724)
 #define SID_SHOWLINES                       TypedWhichId<SfxBoolItem>(SID_SFX_START + 1725)
 #define SID_BLUETOOTH_SENDDOC               (SID_SFX_START + 1726)
-#define SID_TEMPLATE_MANAGER                (SID_SFX_START + 1727)
+#define SID_TEMPLATE_MANAGER                TypedWhichId<SfxVisibilityItem>(SID_SFX_START + 1727)
 #define SID_TOOLBAR_MODE                    (SID_SFX_START + 1728)
 #define SID_NO_FILE_SYNC                    (SID_SFX_START + 1729)
 #define SID_NO_THUMBNAIL                    (SID_SFX_START + 1730)
@@ -389,7 +391,7 @@ class SvxZoomItem;
 #define SID_TEMPLATE_REGIONNAME             TypedWhichId<SfxStringItem>(SID_SFX_START + 662)
 #define SID_TEMPLATE_LOAD                   TypedWhichId<SfxInt32Item>(SID_SFX_START + 663)
 
-#define SID_INSERT_OBJECT                   (SID_SFX_START + 561)
+#define SID_INSERT_OBJECT                   TypedWhichId<SfxGlobalNameItem>(SID_SFX_START + 561)
 #define SID_INSERT_FLOATINGFRAME            (SID_SFX_START + 563)
 #define SID_CLASSIFICATION_APPLY            (SID_SFX_START + 672)
 #define SID_WATERMARK                       TypedWhichId<SfxWatermarkItem>(SID_SFX_START + 676)

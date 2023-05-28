@@ -864,7 +864,7 @@ class SwUINumRuleItem;
 #define FN_BOOKMARK_CONDITION           (FN_PARAM2+30) /* Condition Property of bookmarks*/
 
 // Status: not more than 19!
-#define FN_STAT_PAGE                (FN_STAT + 1)
+#define FN_STAT_PAGE                TypedWhichId<SfxStringListItem>(FN_STAT + 1)
 #define FN_STAT_TEMPLATE            TypedWhichId<SfxStringItem>(FN_STAT + 2)
 #define FN_STAT_ZOOM                (FN_STAT + 3)
 #define FN_STAT_SELMODE             TypedWhichId<SfxUInt16Item>(FN_STAT + 5)

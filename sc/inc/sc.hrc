@@ -145,7 +145,7 @@ class SvxZoomSliderItem;
 
 #define SID_RENAME_OBJECT               (SC_VIEW_START + 88)
 #define SID_FOCUS_INPUTLINE             (SC_VIEW_START + 89)
-#define SID_SELECT_TABLES               (SC_VIEW_START + 90)
+#define SID_SELECT_TABLES               TypedWhichId<SfxIntegerListItem>(SC_VIEW_START + 90)
 
 // new entry "Filter..." in DP popup menu
 #define SID_DP_FILTER                   (SC_VIEW_START + 91)

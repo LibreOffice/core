@@ -26,8 +26,8 @@
 
 // Columns
 // Formatting
-#define SBA_DEF_RANGEFORMAT     (SBA_WHICHID_START+143) // RangeItem
-#define SBA_DEF_FMTVALUE        (SBA_WHICHID_START+144) // SfxULONG, Format
+#define SBA_DEF_RANGEFORMAT     TypedWhichId<SfxRangeItem>(SBA_WHICHID_START+143) // RangeItem
+#define SBA_DEF_FMTVALUE        TypedWhichId<SfxUInt32Item>(SBA_WHICHID_START+144) // SfxULONG, Format
 
 // Justification
 #define SBA_ATTR_ALIGN_HOR_JUSTIFY  (SBA_WHICHID_START + 145) //  SvxHorJustifyItem

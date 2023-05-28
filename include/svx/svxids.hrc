@@ -348,8 +348,8 @@ class XFillGradientItem;
 #define SID_FRAME_LINECOLOR                             TypedWhichId<SvxColorItem>( SID_SVX_START + 202 )
 #define SID_ATTR_LINE_WIDTH_ARG                         TypedWhichId<SvxDoubleItem>( SID_SVX_START + 203 )
 #define SID_FILL_GRADIENT_JSON                          TypedWhichId<SfxStringItem>( SID_SVX_START + 204 )
-#define SID_SEARCHDLG_SEARCHSTRINGS                     ( SID_SVX_START + 215 )
-#define SID_SEARCHDLG_REPLACESTRINGS                    ( SID_SVX_START + 216 )
+#define SID_SEARCHDLG_SEARCHSTRINGS                     TypedWhichId<SfxStringListItem>( SID_SVX_START + 215 )
+#define SID_SEARCHDLG_REPLACESTRINGS                    TypedWhichId<SfxStringListItem>( SID_SVX_START + 216 )
 #define SID_ATTR_TABLE                                  ( SID_SVX_START + 217 )
 #define SID_ATTR_TABLE_COLUMN                           TypedWhichId<SfxUInt16Item>( SID_SVX_START + 218 )
 #define SID_ATTR_TABLE_ROW                              TypedWhichId<SfxUInt16Item>( SID_SVX_START + 219 )
@@ -751,8 +751,8 @@ class XFillGradientItem;
 // CAUTION! Range <919 .. 920> used by EditEngine (!)
 
 #define SID_LANGUAGE_OPTIONS                            ( SID_SVX_START + 921 )
-#define SID_GETUNDOSTRINGS                              ( SID_SVX_START + 923 )
-#define SID_GETREDOSTRINGS                              ( SID_SVX_START + 924 )
+#define SID_GETUNDOSTRINGS                              TypedWhichId<SfxStringListItem>( SID_SVX_START + 923 )
+#define SID_GETREDOSTRINGS                              TypedWhichId<SfxStringListItem>( SID_SVX_START + 924 )
 
 // CAUTION! Range <925 .. 925> used by EditEngine (!)
 
@@ -855,8 +855,8 @@ class XFillGradientItem;
 #define SID_TABPAGE_POS                                 TypedWhichId<SfxUInt16Item>( SID_SVX_START + 1019 )
 #define SID_GRAPHIC                                     ( SID_SVX_START + 1020 )
 #define SID_OBJECT_LIST                                 TypedWhichId<OfaPtrItem>( SID_SVX_START + 1021 )
-#define SID_ATTR_SET                                    ( SID_SVX_START + 1022 )
-#define SID_CHAR_FMT_LIST_BOX                           ( SID_SVX_START + 1023 )
+#define SID_ATTR_SET                                    TypedWhichId<SfxTabDialogItem>( SID_SVX_START + 1022 )
+#define SID_CHAR_FMT_LIST_BOX                           TypedWhichId<SfxStringListItem>( SID_SVX_START + 1023 )
 #define SID_METRIC_ITEM                                 TypedWhichId<SfxUInt16Item>( SID_SVX_START + 1024 )
 #define SID_NUM_CHAR_FMT                                TypedWhichId<SfxStringItem>( SID_SVX_START + 1025 )
 #define SID_BULLET_CHAR_FMT                             TypedWhichId<SfxStringItem>( SID_SVX_START + 1026 )
@@ -874,7 +874,7 @@ class XFillGradientItem;
 #define SID_ENUM_PAGE_MODE                              TypedWhichId<SfxUInt16Item>( SID_SVX_START + 1038 )
 #define SID_PAPER_START                                 TypedWhichId<SfxUInt16Item>( SID_SVX_START + 1039 )
 #define SID_PAPER_END                                   TypedWhichId<SfxUInt16Item>( SID_SVX_START + 1040 )
-#define SID_COLLECT_LIST                                ( SID_SVX_START + 1041 )
+#define SID_COLLECT_LIST                                TypedWhichId<SfxStringListItem>( SID_SVX_START + 1041 )
 #define SID_GROW_FONT_SIZE                              ( SID_SVX_START + 1042 )
 #define SID_SHRINK_FONT_SIZE                            ( SID_SVX_START + 1043 )
 // color subtoolbar on graphictoolbar

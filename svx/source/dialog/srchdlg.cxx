@@ -168,7 +168,7 @@ static void ListToStrArr_Impl(sal_uInt16 nId, std::vector<OUString>& rStrLst, we
     }
 }
 
-static void StrArrToList_Impl( sal_uInt16 nId, const std::vector<OUString>& rStrLst )
+static void StrArrToList_Impl( TypedWhichId<SfxStringListItem> nId, const std::vector<OUString>& rStrLst )
 {
     DBG_ASSERT( !rStrLst.empty(), "check in advance");
     SfxGetpApp()->PutItem( SfxStringListItem( nId, &rStrLst ) );
