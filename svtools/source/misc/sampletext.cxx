@@ -232,9 +232,8 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         case USCRIPT_HEBREW:
         {
             static constexpr OUStringLiteral aHebr =
-                u"\u05D0\u05B8\u05DC\u05B6\u05E3\u05BE\u05D1\u05B5"
-                "\u05BC\u05D9\u05EA \u05E2\u05B4\u05D1\u05B0"
-                "\u05E8\u05B4\u05D9";
+                u"\u05D0\u05DC\u05E3\u05BE\u05D1\u05D9\u05EA "
+                "\u05E2\u05D1\u05E8\u05D9";
             sSampleText = aHebr;
             break;
         }
