@@ -855,7 +855,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
     SolarMutexGuard aGuard;
 
     SAL_INFO("vcl.a11y", "[" << self << " accessibilityParameterizedAttributeNames]");
-    NSMutableArray * attributeNames = [ [ NSMutableArray alloc ] init ];
+    NSMutableArray * attributeNames = [ NSMutableArray array ];
     // Special Attributes depending on interface
     if ( [ self accessibleText ] ) {
         [ AquaA11yTextWrapper addParameterizedAttributeNamesTo: attributeNames ];
