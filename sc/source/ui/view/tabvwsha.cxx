@@ -640,13 +640,19 @@ bool ScTabViewShell::IsRefInputMode() const
             ScInputHandler* pHdl = pScMod->GetInputHdl();
             if ( pHdl )
             {
+                const ScViewData& rViewData = GetViewData();
+                ScDocument& rDoc = rViewData.GetDocument();
+                const ScAddress aPos( rViewData.GetCurPos() );
+                const sal_uInt32 nIndex = rDoc.GetAttr(aPos, ATTR_VALUE_FORMAT )->GetValue();
+                const SvNumFormatType nType = rDoc.GetFormatTable()->GetType(nIndex);
+                if (nType == SvNumFormatType::TEXT)
+                {
+                    return false;
+                }
                 OUString aString = pHdl->GetEditString();
                 if ( !pHdl->GetSelIsRef() && aString.getLength() > 1 &&
                      ( aString[0] == '+' || aString[0] == '-' ) )
                 {
-                    const ScViewData& rViewData = GetViewData();
-                    ScDocument& rDoc = rViewData.GetDocument();
-                    const ScAddress aPos( rViewData.GetCurPos() );
                     ScCompiler aComp( rDoc, aPos, rDoc.GetGrammar() );
                     aComp.SetCloseBrackets( false );
                     std::unique_ptr<ScTokenArray> pArr(aComp.CompileString(aString));
