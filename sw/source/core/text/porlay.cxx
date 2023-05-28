@@ -33,7 +33,6 @@
 #include <unicode/uchar.h>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
-#include <com/sun/star/i18n/CTLScriptType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <paratr.hxx>
@@ -1446,29 +1445,6 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
 
         if (nChg > TextFrameIndex(rText.getLength()) || nChg < TextFrameIndex(0))
             nChg = TextFrameIndex(rText.getLength());
-
-        // #i28203#
-        // for 'complex' portions, we make sure that a portion does not contain more
-        // than one script:
-        if( i18n::ScriptType::COMPLEX == nScript )
-        {
-            const short nScriptType = ScriptTypeDetector::getCTLScriptType(
-                    rText, sal_Int32(nSearchStt) );
-            TextFrameIndex nNextCTLScriptStart = nSearchStt;
-            short nCurrentScriptType = nScriptType;
-            while( css::i18n::CTLScriptType::CTL_UNKNOWN == nCurrentScriptType || nScriptType == nCurrentScriptType )
-            {
-                nNextCTLScriptStart = TextFrameIndex(
-                        ScriptTypeDetector::endOfCTLScriptType(
-                            rText, sal_Int32(nNextCTLScriptStart)));
-                if (nNextCTLScriptStart >= TextFrameIndex(rText.getLength())
-                    || nNextCTLScriptStart >= nChg)
-                    break;
-                nCurrentScriptType = ScriptTypeDetector::getCTLScriptType(
-                                        rText, sal_Int32(nNextCTLScriptStart));
-            }
-            nChg = std::min( nChg, nNextCTLScriptStart );
-        }
 
         // special case for dotted circle since it can be used with complex
         // before a mark, so we want it associated with the mark's script
