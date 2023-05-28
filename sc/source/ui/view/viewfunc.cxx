@@ -408,8 +408,11 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
     bool bFormula = false;
 
+    // do not check formula if it is a text cell
+    sal_uInt32 format = rDoc.GetNumberFormat( nCol, nRow, nTab );
+    SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
     // a single '=' character is handled as string (needed for special filters)
-    if ( rString.getLength() > 1 )
+    if ( pFormatter->GetType(format) != SvNumFormatType::TEXT && rString.getLength() > 1 )
     {
         if ( rString[0] == '=' )
         {
@@ -431,10 +434,8 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             // is non-empty and not a number, handle as formula
             if ( aString.getLength() > 1 )
             {
-                sal_uInt32 nFormat = rDoc.GetNumberFormat( nCol, nRow, nTab );
-                SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                 double fNumber = 0;
-                if ( !pFormatter->IsNumberFormat( aString, nFormat, fNumber ) )
+                if ( !pFormatter->IsNumberFormat( aString, format, fNumber ) )
                 {
                     bFormula = true;
                 }
@@ -568,7 +569,6 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
         ScFormulaCell aCell(rDoc, aPos, std::move( pArr ), formula::FormulaGrammar::GRAM_DEFAULT, ScMatrixMode::NONE);
 
-        SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
         for (const auto& rTab : rMark)
         {
             i = rTab;
