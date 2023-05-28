@@ -208,13 +208,14 @@ bool SwBlankPortion::Format( SwTextFormatInfo &rInf )
 
 void SwBlankPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
+    // Draw field shade (can be disabled individually)
+    if (!m_bMulti) // No gray background for multiportion brackets
+        rInf.DrawViewOpt(*this, PortionType::Blank);
+
     if (m_cChar == CHAR_HARDBLANK)
     {
         if (rInf.GetOpt().IsBlank())
         {
-            // Draw background
-            rInf.DrawViewOpt(*this, PortionType::Blank);
-
             // Draw tilde or degree sign
             OUString aMarker = (rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess()
                                     .get(DocumentSettingId::USE_VARIABLE_WIDTH_NBSP)
@@ -243,9 +244,6 @@ void SwBlankPortion::Paint( const SwTextPaintInfo &rInf ) const
     }
     else
     {
-        if (!m_bMulti) // No gray background for multiportion brackets
-            rInf.DrawViewOpt(*this, PortionType::Blank);
-
         SwExpandPortion::Paint(rInf);
     }
 }
