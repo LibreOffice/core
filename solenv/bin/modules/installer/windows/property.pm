@@ -375,6 +375,7 @@ sub set_ms_file_types_properties
     push(@{$propertyfile}, "REGISTER_DOTM" . "\t" . "0" . "\n");
     push(@{$propertyfile}, "REGISTER_RTF"  . "\t" . "0" . "\n");
 
+    push(@{$propertyfile}, "REGISTER_XLR"  . "\t" . "0" . "\n");
     push(@{$propertyfile}, "REGISTER_XLS"  . "\t" . "0" . "\n");
     push(@{$propertyfile}, "REGISTER_XLSX" . "\t" . "0" . "\n");
     push(@{$propertyfile}, "REGISTER_XLSM" . "\t" . "0" . "\n");

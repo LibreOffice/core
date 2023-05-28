@@ -1252,6 +1252,7 @@ REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( stc )
 
 // registering the mso file types
 
+CONDITIONAL_REGISTER_DOC_EXTENSION( Xlr, gid_Module_Prg_Calc_MSO_Reg, xlr, XLR, MS_WORKS, 3, scalc.exe, open, Calc )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Xls,  gid_Module_Prg_Calc_MSO_Reg, xls,  XLS,  MS_EXCEL_WORKSHEET_OLD, 3, scalc.exe, open, Calc )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsx, gid_Module_Prg_Calc_MSO_Reg, xlsx, XLSX, MS_EXCEL_WORKSHEET, 3, scalc.exe, open, Calc )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsm, gid_Module_Prg_Calc_MSO_Reg, xlsm, XLSM, MS_EXCEL_WORKSHEET, 3, scalc.exe, open, Calc )

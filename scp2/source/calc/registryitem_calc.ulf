@@ -54,3 +54,6 @@ en-US = "Lotus Quattro Pro Spreadsheet"
 
 [STR_REG_VAL_NUMBERS_SPREADSHEET]
 en-US = "Apple Numbers"
+
+[STR_REG_VAL_MS_WORKS]
+en-US = "Microsoft Works Spreadsheet with Excel format"
