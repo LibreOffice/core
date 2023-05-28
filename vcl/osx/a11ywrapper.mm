@@ -870,7 +870,15 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
     SAL_INFO("vcl.a11y", "[" << self << " accessibilityAttributeValue:" << attribute << " forParameter:" << (static_cast<NSObject*>(parameter)) << "]");
     SEL methodSelector = [ self selectorForAttribute: attribute asGetter: YES withGetterParameter: YES ];
     if ( [ self respondsToSelector: methodSelector ] ) {
-        return [ self performSelector: methodSelector withObject: parameter ];
+        try {
+            return [ self performSelector: methodSelector withObject: parameter ];
+        } catch ( const DisposedException & ) {
+            mIsTableCell = NO; // just to be sure
+            [ AquaA11yFactory removeFromWrapperRepositoryFor: [ self accessibleContext ] ];
+            return nil;
+        } catch ( const Exception & ) {
+            // empty
+        }
     }
     return nil; // TODO: to be completed
 }
