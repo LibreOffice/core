@@ -815,13 +815,13 @@ static OUString impl_doComposeTableName( const Reference< XDatabaseMetaData >& _
     OUStringBuffer aComposedName;
 
     OUString sCatalogSep;
-    bool bCatlogAtStart = true;
+    bool bCatalogAtStart = true;
     if ( !_rCatalog.isEmpty() && aNameComps.bCatalogs )
     {
         sCatalogSep     = _rxMetaData->getCatalogSeparator();
-        bCatlogAtStart  = _rxMetaData->isCatalogAtStart();
+        bCatalogAtStart  = _rxMetaData->isCatalogAtStart();
 
-        if ( bCatlogAtStart && !sCatalogSep.isEmpty())
+        if ( bCatalogAtStart && !sCatalogSep.isEmpty())
         {
             aComposedName.append( _bQuote ? quoteName( sQuoteString, _rCatalog ) : _rCatalog );
             aComposedName.append( sCatalogSep );
@@ -838,7 +838,7 @@ static OUString impl_doComposeTableName( const Reference< XDatabaseMetaData >& _
     aComposedName.append( _bQuote ? quoteName( sQuoteString, _rName ) : _rName );
 
     if  (   !_rCatalog.isEmpty()
-        &&  !bCatlogAtStart
+        &&  !bCatalogAtStart
         &&  !sCatalogSep.isEmpty()
         &&  aNameComps.bCatalogs
         )

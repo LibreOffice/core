@@ -511,9 +511,9 @@ OUString OSingleSelectQueryComposer::impl_getColumnRealName_throw(const Referenc
             {
                 if(sTableName.indexOf('.') != -1)
                 {
-                    OUString aCatlog,aSchema,aTable;
-                    ::dbtools::qualifiedNameComponents(m_xMetaData,sTableName,aCatlog,aSchema,aTable,::dbtools::EComposeRule::InDataManipulation);
-                    sTableName = ::dbtools::composeTableName( m_xMetaData, aCatlog, aSchema, aTable, true, ::dbtools::EComposeRule::InDataManipulation );
+                    OUString aCatalog,aSchema,aTable;
+                    ::dbtools::qualifiedNameComponents(m_xMetaData,sTableName,aCatalog,aSchema,aTable,::dbtools::EComposeRule::InDataManipulation);
+                    sTableName = ::dbtools::composeTableName( m_xMetaData, aCatalog, aSchema, aTable, true, ::dbtools::EComposeRule::InDataManipulation );
                 }
                 else if (!sTableName.isEmpty())
                     sTableName = ::dbtools::quoteName(aQuote,sTableName);
@@ -1660,9 +1660,9 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
             xColumn->getPropertyValue(PROPERTY_TABLENAME)   >>= sTableName;
             if(sTableName.indexOf('.') != -1)
             {
-                OUString aCatlog,aSchema,aTable;
-                ::dbtools::qualifiedNameComponents(m_xMetaData,sTableName,aCatlog,aSchema,aTable,::dbtools::EComposeRule::InDataManipulation);
-                sTableName = ::dbtools::composeTableName( m_xMetaData, aCatlog, aSchema, aTable, true, ::dbtools::EComposeRule::InDataManipulation );
+                OUString aCatalog,aSchema,aTable;
+                ::dbtools::qualifiedNameComponents(m_xMetaData,sTableName,aCatalog,aSchema,aTable,::dbtools::EComposeRule::InDataManipulation);
+                sTableName = ::dbtools::composeTableName( m_xMetaData, aCatalog, aSchema, aTable, true, ::dbtools::EComposeRule::InDataManipulation );
             }
             else
                 sTableName = ::dbtools::quoteName(aQuote,sTableName);
