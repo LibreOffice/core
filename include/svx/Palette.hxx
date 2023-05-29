@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_PALETTE_HXX
-#define INCLUDED_SVX_PALETTE_HXX
+
+#pragma once
 
 #include <sal/config.h>
 
@@ -26,6 +26,9 @@
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 #include <svx/svxdllapi.h>
+
+#include <docmodel/color/ComplexColor.hxx>
+#include <docmodel/theme/ThemeColorType.hxx>
 
 class SvxColorValueSet;
 
@@ -43,6 +46,28 @@ struct SVXCORE_DLLPUBLIC NamedColor
         : m_aColor(rColor)
         , m_aName(rName)
     {}
+
+    model::ComplexColor getComplexColor()
+    {
+        model::ComplexColor aComplexColor;
+
+        auto eThemeColorType = model::convertToThemeColorType(m_nThemeIndex);
+
+        if (eThemeColorType != model::ThemeColorType::Unknown)
+        {
+            aComplexColor.setSchemeColor(eThemeColorType);
+
+            if (m_nLumMod != 10000)
+                aComplexColor.addTransformation({model::TransformationType::LumMod, m_nLumMod});
+
+            if (m_nLumMod != 0)
+                aComplexColor.addTransformation({model::TransformationType::LumOff, m_nLumOff});
+        }
+
+        aComplexColor.setFinalColor(m_aColor);
+
+        return aComplexColor;
+    }
 };
 
 typedef std::function<void(const OUString&, const NamedColor&)> ColorSelectFunction;
@@ -63,7 +88,5 @@ public:
 
     virtual Palette*            Clone() const = 0;
 };
-
-#endif // INCLUDED_SVX_PALETTE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -657,8 +657,8 @@ private:
 
     ColorModel          eCM;
 
-    Color               aPreviousColor;
-    NamedColor aCurrentColor;
+    Color m_aPreviousColor;
+    NamedColor m_aCurrentColor;
 
     PaletteManager maPaletteManager;
     SvxXRectPreview m_aCtlPreviewOld;
