@@ -534,6 +534,8 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                 nLstHeight /= 5;
                 // does the kerning portion still fit into the line?
                 if( bAllowBefore && ( nLstActual != nNxtActual ) &&
+                    // tdf#89288 we want to insert space between CJK and non-CJK text only.
+                    ( nLstActual == SwFontScript::CJK || nNxtActual == SwFontScript::CJK ) &&
                     nLstHeight && rInf.X() + nLstHeight <= rInf.Width() &&
                     ! pPor->InTabGrp() )
                 {
