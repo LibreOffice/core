@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:automatic-styles>
+  <text:list-style style:name="A_upper">
+   <text:list-level-style-number text:level="1" style:num-suffix="." style:num-format="A"/>
+  </text:list-style>
+  <text:list-style style:name="a_lower">
+   <text:list-level-style-number text:level="1" style:num-suffix="." style:num-format="a"/>
+  </text:list-style>
+  <text:list-style style:name="I_upper">
+   <text:list-level-style-number text:level="1" style:num-suffix="." style:num-format="I"/>
+  </text:list-style>
+  <text:list-style style:name="i_lower">
+   <text:list-level-style-number text:level="1" style:num-suffix="." style:num-format="i"/>
+  </text:list-style>
+ </office:automatic-styles>
+ <office:body>
+  <office:text>
+   <text:p>List A</text:p>
+   <text:list text:style-name="A_upper">
+    <text:list-item>
+     <text:p>First</text:p>
+    </text:list-item>
+    <text:list-item>
+     <text:p>Second</text:p>
+    </text:list-item>
+    <text:list-item>
+     <text:p>Third</text:p>
+    </text:list-item>
+   </text:list>
+   <text:p/>
+   <text:p>List a</text:p>
+   <text:list text:style-name="a_lower">
+    <text:list-item>
+     <text:p>First</text:p>
+    </text:list-item>
+    <text:list-item>
+     <text:p>Second</text:p>
+    </text:list-item>
+    <text:list-item>
+     <text:p>Third</text:p>
+    </text:list-item>
+   </text:list>
+   <text:p/>
+   <text:p>List I</text:p>
+   <text:list text:style-name="I_upper">
+    <text:list-item>
+     <text:p>First</text:p>
+    </text:list-item>
+    <text:list-item>
+     <text:p>Second</text:p>
+    </text:list-item>
+    <text:list-item>
+     <text:p>Third</text:p>
+    </text:list-item>
+   </text:list>
+   <text:p/>
+   <text:p>List i</text:p>
+   <text:list text:style-name="i_lower">
+    <text:list-item>
+     <text:p>First</text:p>
+    </text:list-item>
+    <text:list-item>
+     <text:p>Second</text:p>
+    </text:list-item>
+    <text:list-item>
+     <text:p>Third</text:p>
+    </text:list-item>
+   </text:list>
+   <text:p/>
+  </office:text>
+ </office:body>
+</office:document>
