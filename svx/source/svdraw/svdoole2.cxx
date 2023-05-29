@@ -1932,12 +1932,20 @@ bool SdrOle2Obj::CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScaleHei
     aObjAreaSize = mpImpl->mxObjRef.GetSize( &aMapMode );
 
     Size aSize = getRectangle().GetSize();
-    aScaleWidth = Fraction(aSize.Width(),  aObjAreaSize.Width() );
-    aScaleHeight = Fraction(aSize.Height(), aObjAreaSize.Height() );
-
-    // reduce to 10 binary digits
-    aScaleHeight.ReduceInaccurate(10);
-    aScaleWidth.ReduceInaccurate(10);
+    if (!aObjAreaSize.Width() || !aObjAreaSize.Height())
+    {
+        // avoid invalid fractions
+        aScaleWidth = Fraction(1,1);
+        aScaleHeight = Fraction(1,1);
+    }
+    else
+    {
+        aScaleWidth = Fraction(aSize.Width(),  aObjAreaSize.Width() );
+        aScaleHeight = Fraction(aSize.Height(), aObjAreaSize.Height() );
+        // reduce to 10 binary digits
+        aScaleHeight.ReduceInaccurate(10);
+        aScaleWidth.ReduceInaccurate(10);
+    }
 
     return true;
 }
