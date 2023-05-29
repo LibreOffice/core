@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/xml/sax/InputSource.hpp>
 #include <oox/core/fastparser.hxx>
 
 #include <oox/core/fasttokenhandler.hxx>

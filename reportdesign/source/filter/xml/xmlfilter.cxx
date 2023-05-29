@@ -226,15 +226,15 @@ static ErrCode ReadThroughComponent(
         aFilterCompArgsRange[ nArgs++ ] <<= _xProp;
 
     // the underlying SvXMLImport implements XFastParser, XImporter, XFastDocumentHandler
-    Reference< XFastParser > xFastParser(
-        rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(_sFilterName, aFilterCompArgs, rxContext),
-        uno::UNO_QUERY_THROW );
+    Reference< XInterface > xInstance =
+        rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(_sFilterName, aFilterCompArgs, rxContext);
+    XFastParser* pFastParser = dynamic_cast<XFastParser*>(xInstance.get());
     uno::Reference< XInputStream > xInputStream = xDocStream->getInputStream();
     // read from the stream
     return ReadThroughComponent( xInputStream
                                 ,xModelComponent
                                 ,rxContext
-                                ,xFastParser );
+                                ,pFastParser );
 }
 
 

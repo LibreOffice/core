@@ -321,7 +321,6 @@ core_constructor_list = [
     "package_ManifestReader_get_implementation",
     "package_ManifestWriter_get_implementation",
 # sax/source/expatwrap/expwrap.component
-    "com_sun_star_comp_extensions_xml_sax_FastParser_get_implementation",
     "com_sun_star_comp_extensions_xml_sax_ParserExpat_get_implementation",
     "com_sun_star_extensions_xml_sax_Writer_get_implementation",
 # scripting/util/scriptframe.component

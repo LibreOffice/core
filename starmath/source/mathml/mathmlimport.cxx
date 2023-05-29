@@ -22,7 +22,6 @@ into one string, xml parser hands them to us line by line rather than all in
 one go*/
 
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -40,6 +39,7 @@ one go*/
 #include <comphelper/propertysetinfo.hxx>
 #include <rtl/character.hxx>
 #include <sal/log.hxx>
+#include <sax/fastparser.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -266,18 +266,18 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(const Reference<io::XInputStrea
     // finally, parser the stream
     try
     {
-        Reference<css::xml::sax::XFastParser> xFastParser(xFilter, UNO_QUERY);
+        XFastParser* pFastParser = dynamic_cast<XFastParser*>(xFilter.get());
         Reference<css::xml::sax::XFastDocumentHandler> xFastDocHandler(xFilter, UNO_QUERY);
-        if (xFastParser)
+        if (pFastParser)
         {
             if (bUseHTMLMLEntities)
-                xFastParser->setCustomEntityNames(starmathdatabase::icustomMathmlHtmlEntities);
-            xFastParser->parseStream(aParserInput);
+                pFastParser->setCustomEntityNames(starmathdatabase::icustomMathmlHtmlEntities);
+            pFastParser->parseStream(aParserInput);
         }
         else if (xFastDocHandler)
         {
-            Reference<css::xml::sax::XFastParser> xParser
-                = css::xml::sax::FastParser::create(rxContext);
+            rtl::Reference<sax_fastparser::FastSaxParser> xParser
+                = new sax_fastparser::FastSaxParser;
             if (bUseHTMLMLEntities)
                 xParser->setCustomEntityNames(starmathdatabase::icustomMathmlHtmlEntities);
             xParser->setFastDocumentHandler(xFastDocHandler);

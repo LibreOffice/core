@@ -35,6 +35,7 @@ $(eval $(call gb_Library_use_libraries,xmlfa,\
 	cppuhelper \
 	cppu \
 	sal \
+	sax \
 	tl \
 	utl \
 	xo \

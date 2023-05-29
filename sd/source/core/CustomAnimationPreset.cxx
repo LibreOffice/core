@@ -24,7 +24,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <unotools/streamwrap.hxx>
@@ -34,6 +33,7 @@
 #include <comphelper/random.hxx>
 #include <comphelper/lok.hxx>
 #include <unotools/syslocaleoptions.hxx>
+#include <sax/xfastparser.hxx>
 #include <tools/stream.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <o3tl/string_view.hxx>
@@ -225,11 +225,12 @@ Reference< XAnimationNode > implImportEffects( const Reference< XMultiServiceFac
         aParserInput.aInputStream = xInputStream;
 
         // get filter
-        Reference< xml::sax::XFastParser > xFilter( xServiceFactory->createInstance("com.sun.star.comp.Xmloff.AnimationsImport" ), UNO_QUERY_THROW );
+        Reference< XInterface > xInterface( xServiceFactory->createInstance("com.sun.star.comp.Xmloff.AnimationsImport" ) );
+        XFastParser* pFilter = dynamic_cast<XFastParser*>(xInterface.get());
 
-        xFilter->parseStream( aParserInput );
+        pFilter->parseStream( aParserInput );
 
-        Reference< XAnimationNodeSupplier > xAnimationNodeSupplier( xFilter, UNO_QUERY_THROW );
+        Reference< XAnimationNodeSupplier > xAnimationNodeSupplier( xInterface, UNO_QUERY_THROW );
         xRootNode = xAnimationNodeSupplier->getAnimationNode();
     }
     catch (const Exception&)

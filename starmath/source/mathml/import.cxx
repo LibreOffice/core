@@ -17,7 +17,6 @@
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
@@ -29,6 +28,8 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <rtl/character.hxx>
+#include <sax/xfastparser.hxx>
+#include <sax/fastparser.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -393,17 +394,17 @@ ErrCode SmMLImportWrapper::ReadThroughComponentIS(
     // Finally, parser the stream
     try
     {
-        Reference<css::xml::sax::XFastParser> xFastParser(xFilter, UNO_QUERY);
+        XFastParser* pFastParser = dynamic_cast<XFastParser*>(xFilter.get());
         Reference<css::xml::sax::XFastDocumentHandler> xFastDocHandler(xFilter, UNO_QUERY);
-        if (xFastParser)
+        if (pFastParser)
         {
-            xFastParser->setCustomEntityNames(starmathdatabase::icustomMathmlHtmlEntities);
-            xFastParser->parseStream(aParserInput);
+            pFastParser->setCustomEntityNames(starmathdatabase::icustomMathmlHtmlEntities);
+            pFastParser->parseStream(aParserInput);
         }
         else if (xFastDocHandler)
         {
-            Reference<css::xml::sax::XFastParser> xParser
-                = css::xml::sax::FastParser::create(rxContext);
+            rtl::Reference<sax_fastparser::FastSaxParser> xParser
+                = new sax_fastparser::FastSaxParser;
             xParser->setCustomEntityNames(starmathdatabase::icustomMathmlHtmlEntities);
             xParser->setFastDocumentHandler(xFastDocHandler);
             xParser->parseStream(aParserInput);

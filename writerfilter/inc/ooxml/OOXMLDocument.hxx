@@ -25,7 +25,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <dmapper/resourcemodel.hxx>
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -67,6 +66,8 @@
    core API to insert the according elements to the core.
  */
 
+namespace sax_fastparser { class FastSaxParser; }
+
 namespace writerfilter::ooxml
 {
 
@@ -80,7 +81,7 @@ public:
     /**
        Returns fast parser for this stream.
      */
-    virtual css::uno::Reference<css::xml::sax::XFastParser> getFastParser() = 0;
+    virtual rtl::Reference<sax_fastparser::FastSaxParser> getFastParser() = 0;
 
     virtual css::uno::Reference<css::io::XInputStream> getDocumentStream() = 0;
 

@@ -22,12 +22,12 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <comphelper/processfactory.hxx>
+#include <sax/xfastparser.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/xmleohlp.hxx>
 #include <svx/xmlgrhlp.hxx>
@@ -193,18 +193,18 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
         // get filter
         Reference< XInterface > xFilter = xContext->getServiceManager()->createInstanceWithArgumentsAndContext( OUString::createFromAscii( pImportService ), aFilterArgs, xContext);
         SAL_WARN_IF( !xFilter, "svx", "Can't instantiate filter component " << pImportService);
-        uno::Reference< xml::sax::XFastParser > xFastParser( xFilter,  UNO_QUERY );
-        assert(xFastParser);
+        XFastParser* pFastParser = dynamic_cast<XFastParser*>( xFilter.get() );
+        assert(pFastParser);
 
         bRet = false;
-        if( xFastParser.is() )
+        if( pFastParser )
         {
             // connect model and filter
             uno::Reference < document::XImporter > xImporter( xFilter, UNO_QUERY );
             xImporter->setTargetDocument( xTargetDocument );
 
             // finally, parser the stream
-            xFastParser->parseStream( aParserInput );
+            pFastParser->parseStream( aParserInput );
 
             bRet = true;
         }

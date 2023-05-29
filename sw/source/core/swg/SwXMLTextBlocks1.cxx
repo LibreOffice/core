@@ -20,6 +20,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <osl/diagnose.h>
+#include <sax/fastparser.hxx>
 #include <svl/macitem.hxx>
 #include <svtools/unoevent.hxx>
 #include <sfx2/docfile.hxx>
@@ -29,7 +30,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
@@ -114,7 +114,7 @@ ErrCode SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
             uno::Reference< xml::sax::XFastTokenHandler > xTokenHandler = new SwXMLTextBlockTokenHandler();
 
             // connect parser and filter
-            uno::Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create(xContext);
+            rtl::Reference< sax_fastparser::FastSaxParser > xParser = new sax_fastparser::FastSaxParser;
             xParser->setFastDocumentHandler( xFilter );
             xParser->setTokenHandler( xTokenHandler );
 
@@ -214,16 +214,16 @@ ErrCode SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
         // parse the stream
         try
         {
-            Reference<css::xml::sax::XFastParser> xFastParser(xFilterInt, UNO_QUERY);
+            XFastParser* pFastParser = dynamic_cast<XFastParser*>(xFilterInt.get());
             Reference<css::xml::sax::XFastDocumentHandler> xFastDocHandler(xFilterInt, UNO_QUERY);
-            if (xFastParser)
+            if (pFastParser)
             {
-                xFastParser->parseStream(aParserInput);
+                pFastParser->parseStream(aParserInput);
             }
             else if (xFastDocHandler)
             {
-                Reference<css::xml::sax::XFastParser> xParser
-                    = css::xml::sax::FastParser::create(xContext);
+                rtl::Reference<sax_fastparser::FastSaxParser> xParser
+                    = new sax_fastparser::FastSaxParser;
                 xParser->setFastDocumentHandler(xFastDocHandler);
                 xParser->parseStream(aParserInput);
             }
@@ -297,7 +297,7 @@ ErrCode SwXMLTextBlocks::GetBlockText( std::u16string_view rShort, OUString& rTe
         uno::Reference< xml::sax::XFastTokenHandler > xTokenHandler = new SwXMLTextBlockTokenHandler();
 
         // connect parser and filter
-        uno::Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create(xContext);
+        rtl::Reference< sax_fastparser::FastSaxParser > xParser = new sax_fastparser::FastSaxParser;
         xParser->setFastDocumentHandler( xFilter );
         xParser->setTokenHandler( xTokenHandler );
 
@@ -421,7 +421,7 @@ void SwXMLTextBlocks::ReadInfo()
         uno::Reference< xml::sax::XFastTokenHandler > xTokenHandler = new SwXMLBlockListTokenHandler();
 
         // connect parser and filter
-        uno::Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create(xContext);
+        rtl::Reference< sax_fastparser::FastSaxParser > xParser = new sax_fastparser::FastSaxParser;
         xParser->setFastDocumentHandler( xFilter );
         xParser->registerNamespace( "http://openoffice.org/2001/block-list", FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST );
         xParser->setTokenHandler( xTokenHandler );

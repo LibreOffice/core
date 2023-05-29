@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/xml/sax/InputSource.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <svl/itemprop.hxx>

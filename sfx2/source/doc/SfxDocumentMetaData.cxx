@@ -48,7 +48,6 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
-#include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/dom/DOMException.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/XElement.hpp>
@@ -74,6 +73,7 @@
 #include <sot/storage.hxx>
 #include <sfx2/docfile.hxx>
 #include <sax/tools/converter.hxx>
+#include <sax/xfastparser.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <optional>
 
@@ -1826,12 +1826,12 @@ SfxDocumentMetaData::loadFromStorage(
         xMsf->createInstanceWithArgumentsAndContext(
             OUString::createFromAscii(pServiceName), args, m_xContext);
     assert(xFilter);
-    css::uno::Reference<css::xml::sax::XFastParser> xFastParser(xFilter, css::uno::UNO_QUERY);
+    XFastParser* pFastParser = dynamic_cast<XFastParser*>(xFilter.get());
     css::uno::Reference<css::document::XImporter> xImp(xFilter, css::uno::UNO_QUERY_THROW);
     xImp->setTargetDocument(css::uno::Reference<css::lang::XComponent>(this));
     try {
-        if (xFastParser)
-            xFastParser->parseStream(input);
+        if (pFastParser)
+            pFastParser->parseStream(input);
         else
         {
             css::uno::Reference<css::xml::sax::XDocumentHandler> xDocHandler(xFilter, css::uno::UNO_QUERY_THROW);

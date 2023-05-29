@@ -46,10 +46,8 @@
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/XImportFilter.hpp>
-#include <com/sun/star/xml/XImportFilter2.hpp>
 #include <com/sun/star/xml/XExportFilter.hpp>
 
 #include <com/sun/star/util/theMacroExpander.hpp>
@@ -66,6 +64,8 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/xml/xslt/XSLTTransformer.hpp>
+#include <sax/ximportfilter2.hxx>
+#include <sax/xfastparser.hxx>
 #include <utility>
 
 #define TRANSFORMATION_TIMEOUT_SEC 60
@@ -118,8 +118,8 @@ namespace XSLT
      * supporting service from an extension for a specific filter; the
      * service must support com.sun.star.xml.xslt.XSLT2Transformer.
      */
-    class XSLTFilter : public WeakImplHelper<XImportFilter, XImportFilter2, XExportFilter,
-            ExtendedDocumentHandlerAdapter, XServiceInfo>
+    class XSLTFilter : public WeakImplHelper<XImportFilter, XExportFilter,
+            ExtendedDocumentHandlerAdapter, XServiceInfo>, public XImportFilter2
     {
         friend class XSLTFilterStreamListener;
     private:
@@ -162,9 +162,9 @@ namespace XSLT
                 const Sequence<OUString>& msUserData) override;
 
         // XImportFilter2
-        virtual sal_Bool SAL_CALL
-        importer(const Sequence<PropertyValue>& aSourceData, const css::uno::Reference<
-                XFastParser>& xFastParser,
+        virtual bool
+        importer(const Sequence<PropertyValue>& aSourceData,
+                XFastParser& xFastParser,
                 const Sequence<OUString>& msUserData) override;
 
         // XExportFilter
@@ -362,8 +362,8 @@ namespace XSLT
                         aInput.sPublicId = aURL;
                         aInput.aInputStream = pipein;
 
-                        css::uno::Reference< css::xml::sax::XFastParser > xFastParser(
-                            xHandler, css::uno::UNO_QUERY );
+                        XFastParser* pFastParser = dynamic_cast<XFastParser*>(
+                            xHandler.get() );
 
                         // transform
                         m_tcontrol->start();
@@ -394,8 +394,8 @@ namespace XSLT
                                 result = m_cTransformed.wait(&timeout);
                         };
                         if (!m_bError) {
-                                if( xFastParser.is() )
-                                    xFastParser->parseStream( aInput );
+                                if( pFastParser )
+                                    pFastParser->parseStream( aInput );
                                 else
                                 {
                                     // create SAX parser that will read the document file
@@ -422,9 +422,9 @@ namespace XSLT
         }
     }
 
-    sal_Bool
+    bool
     XSLTFilter::importer(const Sequence<PropertyValue>& aSourceData,
-            const css::uno::Reference<XFastParser>& xFastParser, const Sequence<
+            XFastParser& rFastParser, const Sequence<
                     OUString>& msUserData)
     {
         if (msUserData.getLength() < 5)
@@ -461,10 +461,9 @@ namespace XSLT
                             Any(NamedValue("SourceBaseURL", Any(INetURLObject(aURL).getBase()))) };
         m_tcontrol = impl_createTransformer(msUserData[1], args);
 
-        assert(xFastParser.is());
         OSL_ASSERT(xInputStream.is());
         OSL_ASSERT(m_tcontrol.is());
-        if (xFastParser.is() && xInputStream.is() && m_tcontrol.is())
+        if (xInputStream.is() && m_tcontrol.is())
         {
                 try
                     {
@@ -521,7 +520,7 @@ namespace XSLT
                                 result = m_cTransformed.wait(&timeout);
                         };
                         if (!m_bError)
-                            xFastParser->parseStream( aInput );
+                            rFastParser.parseStream( aInput );
                         m_tcontrol->terminate();
                         return !m_bError;
                     }

@@ -30,7 +30,7 @@
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XFastParser.hpp>
+#include <com/sun/star/xml/sax/XFastNamespaceHandler.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XImporter.hpp>
@@ -42,6 +42,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <xmloff/formlayerimport.hxx>
 #include <sax/fastattribs.hxx>
+#include <sax/xfastparser.hxx>
 #include <rtl/ustring.hxx>
 #include <unordered_map>
 
@@ -56,6 +57,7 @@ namespace com::sun::star::document { class XEmbeddedObjectResolver; }
 namespace com::sun::star::document { class XGraphicStorageHandler; }
 namespace com::sun::star::embed { class XStorage; }
 namespace com::sun::star::graphic { class XGraphic; }
+namespace com::sun::star::io { class XInputStream; }
 namespace com::sun::star::task { class XStatusIndicator; }
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::util { class XNumberFormatsSupplier; }
@@ -70,6 +72,8 @@ namespace com::sun::star {
 
 namespace comphelper { class UnoInterfaceToUniqueIdentifierMapper; }
 namespace comphelper { class AttributeList; }
+
+namespace sax_fastparser { class FastSaxParser; }
 
 namespace xmloff {
     class RDFaImportHelper;
@@ -180,8 +184,7 @@ class XMLOFF_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") SvXMLImport : public c
              css::lang::XServiceInfo,
              css::lang::XInitialization,
              css::document::XImporter,
-             css::document::XFilter,
-             css::xml::sax::XFastParser>
+             css::document::XFilter>, public XFastParser
 {
     friend class SvXMLImportContext;
     friend class SvXMLLegacyToFastDocHandler;
@@ -228,7 +231,7 @@ class XMLOFF_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") SvXMLImport : public c
 
     SvXMLImportFlags  mnImportFlags;
     std::set< OUString > m_embeddedFontUrlsKnown;
-    css::uno::Reference< css::xml::sax::XFastParser > mxParser;
+    rtl::Reference< sax_fastparser::FastSaxParser > mxParser;
     rtl::Reference< SvXMLImportFastNamespaceHandler > maNamespaceHandler;
     rtl::Reference < comphelper::AttributeList > maNamespaceAttrList;
     css::uno::Reference< css::xml::sax::XFastDocumentHandler > mxFastDocumentHandler;
@@ -331,16 +334,16 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
     // XFastParser
-    virtual void SAL_CALL parseStream( const css::xml::sax::InputSource& aInputSource ) override;
-    virtual void SAL_CALL setFastDocumentHandler( const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& Handler ) override;
-    virtual void SAL_CALL setTokenHandler( const css::uno::Reference< css::xml::sax::XFastTokenHandler >& Handler ) override;
-    virtual void SAL_CALL registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken ) override;
-    virtual OUString SAL_CALL getNamespaceURL( const OUString& rPrefix ) override;
-    virtual void SAL_CALL setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler ) override;
-    virtual void SAL_CALL setEntityResolver( const css::uno::Reference< css::xml::sax::XEntityResolver >& Resolver ) override;
-    virtual void SAL_CALL setLocale( const css::lang::Locale& rLocale ) override;
-    virtual void SAL_CALL setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler) override;
-    virtual void SAL_CALL setCustomEntityNames( const ::css::uno::Sequence< ::css::beans::Pair<::rtl::OUString, ::rtl::OUString> >& replacements )  override;
+    virtual void parseStream( const css::xml::sax::InputSource& aInputSource ) override;
+    virtual void setFastDocumentHandler( const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& Handler ) override;
+    virtual void setTokenHandler( const css::uno::Reference< css::xml::sax::XFastTokenHandler >& Handler ) override;
+    virtual void registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken ) override;
+    virtual OUString getNamespaceURL( std::u16string_view aPrefix ) override;
+    virtual void setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler ) override;
+    virtual void setEntityResolver( const css::uno::Reference< css::xml::sax::XEntityResolver >& Resolver ) override;
+    virtual void setLocale( const css::lang::Locale& rLocale ) override;
+    virtual void setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler) override;
+    virtual void setCustomEntityNames( const ::css::uno::Sequence< ::css::beans::Pair<::rtl::OUString, ::rtl::OUString> >& replacements )  override;
 
     // XImporter
     virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;

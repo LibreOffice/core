@@ -159,11 +159,11 @@ ErrCode ReadThroughComponent(
     if( !xFilter.is() )
         return ERR_SWG_READ_ERROR;
     // the underlying SvXMLImport implements XFastParser, XImporter, XFastDocumentHandler
-    uno::Reference< xml::sax::XFastParser > xFastParser(xFilter, UNO_QUERY);
+    XFastParser* pFastParser = dynamic_cast<XFastParser*>(xFilter.get());
     uno::Reference< xml::sax::XDocumentHandler > xDocumentHandler;
-    if (!xFastParser)
+    if (!pFastParser)
         xDocumentHandler.set(xFilter, UNO_QUERY);
-    if (!xDocumentHandler && !xFastParser)
+    if (!xDocumentHandler && !pFastParser)
     {
         SAL_WARN("sd", "service does not implement XFastParser or XDocumentHandler");
         assert(false);
@@ -177,8 +177,8 @@ ErrCode ReadThroughComponent(
     // finally, parse the stream
     try
     {
-        if (xFastParser)
-            xFastParser->parseStream( aParserInput );
+        if (pFastParser)
+            pFastParser->parseStream( aParserInput );
         else
         {
             uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(rxContext);

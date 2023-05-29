@@ -19,13 +19,16 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
-#include <com/sun/star/xml/sax/FastParser.hpp>
+#include <com/sun/star/xml/sax/XFastNamespaceHandler.hpp>
+#include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/beans/Pair.hpp>
 #include <comphelper/attributelist.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ref.hxx>
+#include <sax/fastparser.hxx>
 #include <memory>
 #include <utility>
 #include <vector>
@@ -115,7 +118,7 @@ public:
     sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
 
 private:
-    Reference< XFastParser > m_xParser;
+    rtl::Reference< sax_fastparser::FastSaxParser > m_xParser;
     Reference< XDocumentHandler > m_xDocumentHandler;
     Reference< XFastTokenHandler > m_xTokenHandler;
 
@@ -281,7 +284,7 @@ void SAL_CALL CallbackDocumentHandler::characters( const OUString& aChars )
 }
 
 SaxLegacyFastParser::SaxLegacyFastParser( ) : m_aNamespaceHandler( new NamespaceHandler ),
-  m_xParser(FastParser::create(::comphelper::getProcessComponentContext() ))
+  m_xParser(new sax_fastparser::FastSaxParser)
 {
     m_xParser->setNamespaceHandler( m_aNamespaceHandler );
 }
@@ -308,9 +311,7 @@ void SAL_CALL SaxLegacyFastParser::initialize(Sequence< Any > const& rArguments 
     }
     else
     {
-        uno::Reference<lang::XInitialization> const xInit(m_xParser,
-                        uno::UNO_QUERY_THROW);
-        xInit->initialize( rArguments );
+        m_xParser->initialize( rArguments );
     }
 }
 

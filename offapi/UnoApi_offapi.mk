@@ -473,7 +473,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/xml/dom,\
 	SAXDocumentBuilder \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/xml/sax,\
-	FastParser \
 	FastTokenHandler \
 	Parser \
     Writer \
@@ -4268,7 +4267,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/xml,\
 	FastAttribute \
 	XExportFilter \
 	XImportFilter \
-	XImportFilter2 \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/xml/crypto,\
 	CipherID \
@@ -4386,7 +4384,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/xml/sax,\
 	XFastAttributeList \
 	XFastContextHandler \
 	XFastDocumentHandler \
-	XFastParser \
 	XFastSAXSerializable \
 	XFastTokenHandler \
 	XLocator \

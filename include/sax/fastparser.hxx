@@ -20,11 +20,10 @@
 #ifndef INCLUDED_SAX_FASTPARSER_HXX
 #define INCLUDED_SAX_FASTPARSER_HXX
 
-#include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/lang/XInitialization.hpp>
 
+#include <sax/xfastparser.hxx>
 #include <sax/saxdllapi.h>
 #include <memory>
 
@@ -40,10 +39,8 @@ class FastSaxParserImpl;
 
 // This class implements the external Parser interface
 class SAX_DLLPUBLIC FastSaxParser final
-    : public ::cppu::WeakImplHelper<
-                css::lang::XInitialization,
-                css::xml::sax::XFastParser,
-                css::lang::XServiceInfo >
+    : public ::cppu::WeakImplHelper<css::lang::XInitialization, css::lang::XServiceInfo>,
+      public XFastParser
 {
     std::unique_ptr<FastSaxParserImpl> mpImpl;
 
@@ -55,16 +52,16 @@ public:
     virtual void SAL_CALL initialize(css::uno::Sequence<css::uno::Any> const& rArguments) override;
 
     // XFastParser
-    virtual void SAL_CALL parseStream( const css::xml::sax::InputSource& aInputSource ) override;
-    virtual void SAL_CALL setFastDocumentHandler( const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& Handler ) override;
-    virtual void SAL_CALL setTokenHandler( const css::uno::Reference< css::xml::sax::XFastTokenHandler >& Handler ) override;
-    virtual void SAL_CALL registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken ) override;
-    virtual OUString SAL_CALL getNamespaceURL( const OUString& rPrefix ) override;
-    virtual void SAL_CALL setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler ) override;
-    virtual void SAL_CALL setEntityResolver( const css::uno::Reference< css::xml::sax::XEntityResolver >& Resolver ) override;
-    virtual void SAL_CALL setLocale( const css::lang::Locale& rLocale ) override;
-    virtual void SAL_CALL setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler) override;
-    virtual void SAL_CALL setCustomEntityNames( const ::css::uno::Sequence< ::css::beans::Pair<::rtl::OUString, ::rtl::OUString> >& replacements )  override;
+    virtual void parseStream( const css::xml::sax::InputSource& aInputSource ) override;
+    virtual void setFastDocumentHandler( const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& Handler ) override;
+    virtual void setTokenHandler( const css::uno::Reference< css::xml::sax::XFastTokenHandler >& Handler ) override;
+    virtual void registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken ) override;
+    virtual OUString getNamespaceURL( std::u16string_view aPrefix ) override;
+    virtual void setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler ) override;
+    virtual void setEntityResolver( const css::uno::Reference< css::xml::sax::XEntityResolver >& Resolver ) override;
+    virtual void setLocale( const css::lang::Locale& rLocale ) override;
+    virtual void setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler) override;
+    virtual void setCustomEntityNames( const ::css::uno::Sequence< ::css::beans::Pair<::rtl::OUString, ::rtl::OUString> >& replacements )  override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;

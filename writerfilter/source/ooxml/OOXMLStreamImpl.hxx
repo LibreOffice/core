@@ -22,6 +22,7 @@
 
 #include <ooxml/OOXMLDocument.hxx>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
+#include <sax/fastparser.hxx>
 
 extern OUString customTarget;
 extern OUString embeddingsTarget;
@@ -38,7 +39,7 @@ class OOXMLStreamImpl : public OOXMLStream
     css::uno::Reference<css::embed::XStorage> mxStorage;
     css::uno::Reference<css::embed::XRelationshipAccess> mxRelationshipAccess;
     css::uno::Reference<css::io::XStream> mxDocumentStream;
-    css::uno::Reference<css::xml::sax::XFastParser> mxFastParser;
+    rtl::Reference<sax_fastparser::FastSaxParser> mxFastParser;
     css::uno::Reference<css::xml::sax::XFastTokenHandler> mxFastTokenHandler;
 
     StreamType_t mnStreamType;
@@ -67,7 +68,7 @@ public:
 
     virtual ~OOXMLStreamImpl() override;
 
-    virtual css::uno::Reference<css::xml::sax::XFastParser> getFastParser() override;
+    virtual rtl::Reference<sax_fastparser::FastSaxParser> getFastParser() override;
     virtual css::uno::Reference<css::io::XInputStream> getDocumentStream() override;
     virtual css::uno::Reference<css::uno::XComponentContext> getContext() override;
     virtual OUString getTargetForId(const OUString & rId) override;
