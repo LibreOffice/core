@@ -219,8 +219,10 @@ SwHTMLWriter& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
 
             // determine the type by the format
             char cType = 0;
-            switch( eType )
+            if (!rWrt.mbReqIF) // No 'type' attribute in ReqIF
             {
+                switch (eType)
+                {
                 case SVX_NUM_CHARS_UPPER_LETTER:
                 case SVX_NUM_CHARS_UPPER_LETTER_N:
                     cType = 'A';
@@ -235,6 +237,7 @@ SwHTMLWriter& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
                 case SVX_NUM_ROMAN_LOWER:
                     cType = 'i';
                     break;
+                }
             }
             if( cType )
             {
