@@ -43,23 +43,21 @@ UnoScriptTypeDetector::endOfScriptDirection( const OUString& Text, sal_Int32 nPo
 }
 
 sal_Int16 SAL_CALL
-UnoScriptTypeDetector::getCTLScriptType( const OUString& Text, sal_Int32 nPos )
+UnoScriptTypeDetector::getCTLScriptType( const OUString&, sal_Int32 )
 {
-    return ScriptTypeDetector::getCTLScriptType(Text, nPos);
+    throw css::uno::RuntimeException("not implemented");
 }
 
-// Begin of Script Type is inclusive.
 sal_Int32 SAL_CALL
-UnoScriptTypeDetector::beginOfCTLScriptType( const OUString& Text, sal_Int32 nPos )
+UnoScriptTypeDetector::beginOfCTLScriptType( const OUString&, sal_Int32 )
 {
-    return ScriptTypeDetector::beginOfCTLScriptType(Text, nPos);
+    throw css::uno::RuntimeException("not implemented");
 }
 
-// End of the Script Type is exclusive, the return value pointing to the begin of next script type
 sal_Int32 SAL_CALL
-UnoScriptTypeDetector::endOfCTLScriptType( const OUString& Text, sal_Int32 nPos )
+UnoScriptTypeDetector::endOfCTLScriptType( const OUString&, sal_Int32 )
 {
-    return ScriptTypeDetector::endOfCTLScriptType(Text, nPos);
+    throw css::uno::RuntimeException("not implemented");
 }
 
 OUString SAL_CALL

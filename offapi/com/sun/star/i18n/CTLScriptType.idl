@@ -26,6 +26,7 @@ module com {  module sun {  module star {  module i18n {
     XScriptTypeDetector::getCTLScriptType()
 
      @since OOo 1.1.2
+     @deprecated since LibreOffice 7.6
 */
 
 published constants CTLScriptType

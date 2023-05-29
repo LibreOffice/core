@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/i18n/CTLScriptType.hpp>
 #include <com/sun/star/i18n/ScriptDirection.hpp>
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <i18nutil/scripttypedetector.hxx>
@@ -80,54 +79,6 @@ sal_Int32 ScriptTypeDetector::endOfScriptDirection( std::u16string_view Text, sa
             }
         }
         return cPos == nPos ? -1 : cPos;
-}
-
-sal_Int16 ScriptTypeDetector::getCTLScriptType( std::u16string_view Text, sal_Int32 nPos )
-{
-    static const ScriptTypeList typeList[] = {
-        { UnicodeScript_kHebrew,      UnicodeScript_kHebrew,      CTLScriptType::CTL_HEBREW },    // 10
-        { UnicodeScript_kArabic,      UnicodeScript_kArabic,      CTLScriptType::CTL_ARABIC },    // 11
-        { UnicodeScript_kDevanagari,  UnicodeScript_kDevanagari,  CTLScriptType::CTL_INDIC },     // 14
-        { UnicodeScript_kThai,        UnicodeScript_kThai,        CTLScriptType::CTL_THAI },      // 24
-        { UnicodeScript_kScriptCount, UnicodeScript_kScriptCount, CTLScriptType::CTL_UNKNOWN }    // 88
-    };
-
-    return unicode::getUnicodeScriptType(Text[nPos], typeList);
-}
-
-// Begin of Script Type is inclusive.
-sal_Int32 ScriptTypeDetector::beginOfCTLScriptType( std::u16string_view Text, sal_Int32 nPos )
-{
-    if (nPos < 0)
-        return 0;
-    else if (o3tl::make_unsigned(nPos) >= Text.size())
-        return Text.size();
-    else {
-        sal_Int16 cType = getCTLScriptType(Text, nPos);
-        for (nPos--; nPos >= 0; nPos--) {
-            if (cType != getCTLScriptType(Text, nPos))
-                break;
-        }
-        return nPos + 1;
-    }
-}
-
-// End of the Script Type is exclusive, the return value pointing to the begin of next script type
-sal_Int32 ScriptTypeDetector::endOfCTLScriptType( std::u16string_view Text, sal_Int32 nPos )
-{
-    if (nPos < 0)
-        return 0;
-    else if (o3tl::make_unsigned(nPos) >= Text.size())
-        return Text.size();
-    else {
-        sal_Int16 cType = getCTLScriptType(Text, nPos);
-        sal_Int32 len = Text.size();
-        for (nPos++; nPos < len; nPos++) {
-            if (cType != getCTLScriptType(Text, nPos))
-                break;
-        }
-        return nPos;
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
