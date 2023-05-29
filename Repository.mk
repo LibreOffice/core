@@ -408,7 +408,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	editeng \
 	$(if $(filter WNT,$(OS)),emser) \
 	evtatt \
-	expwrap \
 	$(call gb_Helper_optional,DBCONNECTIVITY, \
 		flat \
 		file) \

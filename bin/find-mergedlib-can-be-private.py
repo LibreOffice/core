@@ -34,7 +34,6 @@ merged_libs = { \
     ,"desktop_detector)" \
     ,"drawinglayer" \
     ,"editeng" \
-    ,"expwrap" \
     ,"filterconfig" \
     ,"fsstorage" \
     ,"fwk" \

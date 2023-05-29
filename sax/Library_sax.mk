@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Library_Library,sax))
 
+$(eval $(call gb_Library_set_componentfile,sax,sax/source/expatwrap/expwrap,services))
+
 $(eval $(call gb_Library_set_include,sax,\
 	-I$(SRCDIR)/sax/inc \
 	$$(INCLUDE) \
@@ -20,11 +22,19 @@ $(eval $(call gb_Library_use_common_precompiled_header,sax))
 
 $(eval $(call gb_Library_use_sdk_api,sax))
 
+$(eval $(call gb_Library_use_externals,sax,\
+	boost_headers \
+	libxml2 \
+	expat \
+	zlib \
+))
+
 $(eval $(call gb_Library_use_libraries,sax,\
 	comphelper \
 	cppu \
 	cppuhelper \
 	sal \
+	salhelper \
 	tl \
 ))
 
@@ -33,6 +43,11 @@ $(eval $(call gb_Library_add_defs,sax,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sax,\
+	sax/source/expatwrap/sax_expat \
+	sax/source/expatwrap/saxwriter \
+	sax/source/expatwrap/xml2utf \
+	sax/source/fastparser/fastparser \
+	sax/source/fastparser/legacyfastparser \
 	sax/source/tools/converter \
 	sax/source/tools/fastattribs \
 	sax/source/tools/fastserializer \

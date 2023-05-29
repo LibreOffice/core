@@ -10,7 +10,6 @@
 $(eval $(call gb_Module_Module,sax))
 
 $(eval $(call gb_Module_add_targets,sax,\
-	Library_expwrap \
 	Library_sax \
 ))
 

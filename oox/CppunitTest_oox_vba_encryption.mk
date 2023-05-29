@@ -22,7 +22,6 @@ $(eval $(call gb_CppunitTest_use_libraries,oox_vba_encryption,\
     cppu \
     cppuhelper \
     editeng \
-    expwrap \
     drawinglayer \
     msfilter \
     sal \

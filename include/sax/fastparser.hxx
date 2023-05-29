@@ -25,7 +25,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 
-#include <sax/fastsaxdllapi.h>
+#include <sax/saxdllapi.h>
 #include <memory>
 
 namespace com::sun::star::xml::sax {
@@ -39,7 +39,7 @@ namespace sax_fastparser {
 class FastSaxParserImpl;
 
 // This class implements the external Parser interface
-class FASTSAX_DLLPUBLIC FastSaxParser final
+class SAX_DLLPUBLIC FastSaxParser final
     : public ::cppu::WeakImplHelper<
                 css::lang::XInitialization,
                 css::xml::sax::XFastParser,

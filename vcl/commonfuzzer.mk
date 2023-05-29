@@ -148,7 +148,6 @@ fuzzer_core_libraries = \
     unoidl \
     reg \
     store \
-    expwrap \
     gcc3_uno \
     salhelper \
     sal \

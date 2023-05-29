@@ -42,7 +42,6 @@ $(eval $(call gb_CppunitTest_use_libraries,oox_tokenmap,\
     cppuhelper \
     docmodel \
     editeng \
-    expwrap \
     drawinglayer \
     msfilter \
     sal \

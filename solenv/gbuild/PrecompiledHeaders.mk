@@ -139,7 +139,6 @@ endef
 # So while this is officially tricky, in practice it seems to work to allow PCH reuse if the linktarget
 # has more defines than the PCH was built with, as long as the defines do not affect the PCH.
 gb_PrecompiledHeader_ignore_flags_system := \
--DFASTSAX_DLLIMPLEMENTATION \
 -DSAX_DLLIMPLEMENTATION \
 -DSCQAHELPER_DLLIMPLEMENTATION \
 -DVCLPLUG_WIN_IMPLEMENTATION \
