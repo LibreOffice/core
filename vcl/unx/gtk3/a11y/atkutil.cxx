@@ -162,8 +162,11 @@ void DocumentFocusListener::notifyEvent( const accessibility::AccessibleEventObj
             }
 
             case accessibility::AccessibleEventId::INVALIDATE_ALL_CHILDREN:
-                SAL_INFO("vcl.a11y", "Invalidate all children called");
+            {
+                if (uno::Reference< accessibility::XAccessible > xAcc = getAccessible(aEvent))
+                    detachRecursive(xAcc);
                 break;
+            }
 
             default:
                 break;
@@ -433,13 +436,15 @@ WindowList g_aWindowList;
 
 }
 
-DocumentFocusListener & GtkSalData::GetDocumentFocusListener()
+rtl::Reference<DocumentFocusListener> GtkSalData::GetDocumentFocusListener()
 {
-    if (!m_xDocumentFocusListener)
+    rtl::Reference<DocumentFocusListener> xDFL = m_xDocumentFocusListener.get();
+    if (!xDFL)
     {
-        m_xDocumentFocusListener = new DocumentFocusListener;
+        xDFL = new DocumentFocusListener;
+        m_xDocumentFocusListener = xDFL.get();
     }
-    return *m_xDocumentFocusListener;
+    return xDFL;
 }
 
 static void handle_get_focus(::VclWindowEvent const * pEvent)
@@ -447,7 +452,7 @@ static void handle_get_focus(::VclWindowEvent const * pEvent)
     GtkSalData *const pSalData(GetGtkSalData());
     assert(pSalData);
 
-    DocumentFocusListener & rDocumentFocusListener(pSalData->GetDocumentFocusListener());
+    rtl::Reference<DocumentFocusListener> xDocumentFocusListener(pSalData->GetDocumentFocusListener());
 
     vcl::Window *pWindow = pEvent->GetWindow();
 
@@ -493,7 +498,7 @@ static void handle_get_focus(::VclWindowEvent const * pEvent)
         {
             try
             {
-                rDocumentFocusListener.attachRecursive(xAccessible, xContext, nStateSet);
+                xDocumentFocusListener->attachRecursive(xAccessible, xContext, nStateSet);
             }
             catch (const uno::Exception&)
             {

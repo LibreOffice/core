@@ -38,6 +38,7 @@
 #include <osl/conditn.hxx>
 #include <saltimer.hxx>
 #include <o3tl/enumarray.hxx>
+#include <unotools/weakref.hxx>
 
 #include <exception>
 #include <string_view>
@@ -283,13 +284,13 @@ class GtkSalData final : public GenericUnixSalData
     osl::Condition  m_aDispatchCondition;
     std::exception_ptr m_aException;
 
-    rtl::Reference<DocumentFocusListener> m_xDocumentFocusListener;
+    unotools::WeakReference<DocumentFocusListener> m_xDocumentFocusListener;
 
 public:
     GtkSalData();
     virtual ~GtkSalData() override;
 
-    DocumentFocusListener & GetDocumentFocusListener();
+    rtl::Reference<DocumentFocusListener> GetDocumentFocusListener();
 
     void Init();
     virtual void Dispose() override;

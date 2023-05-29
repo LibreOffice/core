@@ -629,11 +629,14 @@ void SAL_CALL AccessibleControlShape::disposing()
     if ( m_bWaitingForControl )
     {
         OSL_FAIL( "AccessibleControlShape::disposing: this should never happen!" );
-        Reference< XContainer > xContainer = lcl_getControlContainer( maShapeTreeInfo.GetWindow()->GetOutDev(), maShapeTreeInfo.GetSdrView() );
-        if ( xContainer.is() )
+        if (auto pWindow = maShapeTreeInfo.GetWindow())
         {
-            m_bWaitingForControl = false;
-            xContainer->removeContainerListener( this );
+            Reference< XContainer > xContainer = lcl_getControlContainer( pWindow->GetOutDev(), maShapeTreeInfo.GetSdrView() );
+            if ( xContainer.is() )
+            {
+                m_bWaitingForControl = false;
+                xContainer->removeContainerListener( this );
+            }
         }
     }
 
