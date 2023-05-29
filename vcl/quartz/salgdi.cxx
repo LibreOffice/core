@@ -346,16 +346,10 @@ void AquaGraphicsBackend::drawTextLayout(const GenericSalLayout& rLayout, bool b
         if (rFont.mfFontRotation)
         {
             if (pGlyph->IsVertical())
-            {
                 bUprightGlyph = true;
-                // Adjust the position of upright (vertical) glyphs.
-                aGCPos.y -= CTFontGetAscent(pCTFont) - CTFontGetDescent(pCTFont);
-            }
             else
-            {
                 // Transform the position of rotated glyphs.
                 aGCPos = CGPointApplyAffineTransform(aGCPos, aRotMatrix);
-            }
         }
 
         aGlyphIds.push_back(pGlyph->glyphId());
