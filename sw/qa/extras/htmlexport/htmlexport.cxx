@@ -940,52 +940,61 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfList)
     CPPUNIT_ASSERT(aStream.indexOf("</reqif-xhtml:li>") != -1);
 }
 
-DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOle2, "reqif-ole2.xhtml")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfOle2)
 {
-    uno::Reference<text::XTextEmbeddedObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xObjects(xSupplier->getEmbeddedObjects(),
-                                                     uno::UNO_QUERY);
-    uno::Reference<document::XEmbeddedObjectSupplier2> xObject(xObjects->getByIndex(0),
-                                                               uno::UNO_QUERY);
-    uno::Reference<io::XActiveDataStreamer> xEmbeddedObject(
-        xObject->getExtendedControlOverEmbeddedObject(), uno::UNO_QUERY);
-    // This failed, the "RTF fragment" native data was loaded as-is, we had no
-    // filter to handle it, so nothing happened on double-click.
-    CPPUNIT_ASSERT(xEmbeddedObject.is());
-    uno::Reference<io::XSeekable> xStream(xEmbeddedObject->getStream(), uno::UNO_QUERY);
-    // This was 38375, msfilter::rtfutil::ExtractOLE2FromObjdata() wrote
-    // everything after the OLE1 header into the OLE2 stream, while the
-    // Presentation field after the OLE2 data doesn't belong there.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(37888), xStream->getLength());
-    // Finally the export also failed as it tried to open the stream from the
-    // document storage, but the embedded object already opened it, so an
-    // exception of type com.sun.star.io.IOException was thrown.
+    auto verify = [this]() {
+        uno::Reference<text::XTextEmbeddedObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xObjects(xSupplier->getEmbeddedObjects(),
+                                                         uno::UNO_QUERY);
+        uno::Reference<document::XEmbeddedObjectSupplier2> xObject(xObjects->getByIndex(0),
+                                                                   uno::UNO_QUERY);
+        uno::Reference<io::XActiveDataStreamer> xEmbeddedObject(
+            xObject->getExtendedControlOverEmbeddedObject(), uno::UNO_QUERY);
+        // This failed, the "RTF fragment" native data was loaded as-is, we had no
+        // filter to handle it, so nothing happened on double-click.
+        CPPUNIT_ASSERT(xEmbeddedObject.is());
+        uno::Reference<io::XSeekable> xStream(xEmbeddedObject->getStream(), uno::UNO_QUERY);
+        // This was 38375, msfilter::rtfutil::ExtractOLE2FromObjdata() wrote
+        // everything after the OLE1 header into the OLE2 stream, while the
+        // Presentation field after the OLE2 data doesn't belong there.
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(37888), xStream->getLength());
+        // Finally the export also failed as it tried to open the stream from the
+        // document storage, but the embedded object already opened it, so an
+        // exception of type com.sun.star.io.IOException was thrown.
 
-    if (isExported())
-    {
-        // Check that the replacement graphic is exported at RTF level.
-        SvMemoryStream aStream;
-        WrapReqifFromTempFile(aStream);
-        xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
-        CPPUNIT_ASSERT(pDoc);
-        // Get the path of the RTF data.
-        OUString aOlePath = getXPath(
-            pDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p/reqif-xhtml:object", "data");
-        OUString aOleSuffix(".ole");
-        CPPUNIT_ASSERT(aOlePath.endsWith(aOleSuffix));
-        INetURLObject aUrl(maTempFile.GetURL());
-        aUrl.setBase(aOlePath.subView(0, aOlePath.getLength() - aOleSuffix.getLength()));
-        aUrl.setExtension(u"ole");
-        OUString aOleUrl = aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+        if (isExported())
+        {
+            // Check that the replacement graphic is exported at RTF level.
+            SvMemoryStream aStream;
+            WrapReqifFromTempFile(aStream);
+            xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
+            CPPUNIT_ASSERT(pDoc);
+            // Get the path of the RTF data.
+            OUString aOlePath = getXPath(
+                pDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p/reqif-xhtml:object", "data");
+            OUString aOleSuffix(".ole");
+            CPPUNIT_ASSERT(aOlePath.endsWith(aOleSuffix));
+            INetURLObject aUrl(maTempFile.GetURL());
+            aUrl.setBase(aOlePath.subView(0, aOlePath.getLength() - aOleSuffix.getLength()));
+            aUrl.setExtension(u"ole");
+            OUString aOleUrl = aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 
-        // Search for \result in the RTF data.
-        SvFileStream aOleStream(aOleUrl, StreamMode::READ);
-        CPPUNIT_ASSERT(aOleStream.IsOpen());
-        OString aOleString(read_uInt8s_ToOString(aOleStream, aOleStream.TellEnd()));
-        // Without the accompanying fix in place, this test would have failed,
-        // replacement graphic was missing at RTF level.
-        CPPUNIT_ASSERT(aOleString.indexOf(OOO_STRING_SVTOOLS_RTF_RESULT) != -1);
-    }
+            // Search for \result in the RTF data.
+            SvFileStream aOleStream(aOleUrl, StreamMode::READ);
+            CPPUNIT_ASSERT(aOleStream.IsOpen());
+            OString aOleString(read_uInt8s_ToOString(aOleStream, aOleStream.TellEnd()));
+            // Without the accompanying fix in place, this test would have failed,
+            // replacement graphic was missing at RTF level.
+            CPPUNIT_ASSERT(aOleString.indexOf(OOO_STRING_SVTOOLS_RTF_RESULT) != -1);
+        }
+    };
+    setImportFilterOptions("xhtmlns=reqif-xhtml");
+    setImportFilterName("HTML (StarWriter)");
+    createSwDoc("reqif-ole2.xhtml");
+    verify();
+    setFilterOptions("xhtmlns=reqif-xhtml");
+    reload(mpFilter, "reqif-ole2.xhtml");
+    verify();
 }
 
 DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOle2Odg, "reqif-ole-odg.xhtml")
