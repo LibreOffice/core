@@ -691,7 +691,6 @@ void XMLTextParagraphExport::Add( XmlStyleFamily nFamily,
 
     Reference< XPropertySetInfo > xPropSetInfo(rPropSet->getPropertySetInfo());
     OUString sParent, sCondParent;
-    sal_uInt16 nIgnoreProps = 0;
     switch( nFamily )
     {
     case XmlStyleFamily::TEXT_PARAGRAPH:
@@ -744,6 +743,7 @@ void XMLTextParagraphExport::Add( XmlStyleFamily nFamily,
         {
             // Get parent and remove hyperlinks (they aren't of interest)
             rtl::Reference< XMLPropertySetMapper > xPM(xPropMapper->getPropertySetMapper());
+            sal_uInt16 nIgnoreProps = 0;
             for( ::std::vector< XMLPropertyState >::iterator i(aPropStates.begin());
                   nIgnoreProps < 2 && i != aPropStates.end(); )
             {
@@ -780,7 +780,7 @@ void XMLTextParagraphExport::Add( XmlStyleFamily nFamily,
         break;
     default: break;
     }
-    if (aPropStates.size() - nIgnoreProps)
+    if (aPropStates.size()) // could change after the previous check
     {
         GetAutoStylePool().Add( nFamily, sParent, std::vector(aPropStates), bDontSeek );
         if( !sCondParent.isEmpty() && sParent != sCondParent )
