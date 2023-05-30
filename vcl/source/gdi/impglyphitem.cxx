@@ -136,9 +136,10 @@ SalLayoutGlyphsImpl* SalLayoutGlyphsImpl::cloneCharRange(sal_Int32 index, sal_In
     // Require a start at the exact position given, otherwise bail out.
     if (pos->charPos() != beginPos)
         return nullptr;
-    // For RTL make sure we're not cutting in the middle of a multi-character glyph
+    // For RTL make sure we're not cutting in the middle of a multi-character glyph,
+    // or in the middle of a cluster
     // (for non-RTL charPos is always the start of a multi-character glyph).
-    if (rtl && pos->charPos() + pos->charCount() > beginPos + 1)
+    if (rtl && (pos->charPos() + pos->charCount() > beginPos + 1 || pos->IsInCluster()))
         return nullptr;
     if (!isSafeToBreak(pos, rtl))
         return nullptr;
