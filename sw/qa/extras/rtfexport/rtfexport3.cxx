@@ -28,6 +28,7 @@
 #include <wrtsh.hxx>
 #include <fmtpdsc.hxx>
 #include <IDocumentContentOperations.hxx>
+#include <IDocumentSettingAccess.hxx>
 
 using namespace css;
 
@@ -428,6 +429,28 @@ DECLARE_RTFEXPORT_TEST(testTdf128428_dntblnsbdb, "tdf128428_dntblnsbdb.rtf")
 {
     // still 1 here
     CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testDontBreakWrappedTables)
+{
+    // Given a document with no DO_NOT_BREAK_WRAPPED_TABLES compat mode enabled:
+    createSwDoc();
+    {
+        SwDoc* pDoc = getSwDoc();
+        IDocumentSettingAccess& rIDSA = pDoc->getIDocumentSettingAccess();
+        rIDSA.set(DocumentSettingId::DO_NOT_BREAK_WRAPPED_TABLES, true);
+    }
+
+    // When saving to rtf:
+    reload(mpFilter, "dont-break-wrapped-tables.rtf");
+
+    // Then make sure \nobrkwrptbl is not written:
+    SwDoc* pDoc = getSwDoc();
+    IDocumentSettingAccess& rIDSA = pDoc->getIDocumentSettingAccess();
+    bool bDontBreakWrappedTables = rIDSA.get(DocumentSettingId::DO_NOT_BREAK_WRAPPED_TABLES);
+    // Without the accompanying fix in place, this test would have failed, the compat flag was not
+    // set.
+    CPPUNIT_ASSERT(bDontBreakWrappedTables);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testRtlGutter)

@@ -153,6 +153,7 @@ SettingsTable::SettingsTable(const DomainMapper& rDomainMapper)
         m_pImpl->m_bDoNotUseHTMLParagraphAutoSpacing = true;
         // Longer space sequence is opt-in for RTF, and not in OOXML.
         m_pImpl->m_bLongerSpaceSequence = true;
+        m_pImpl->m_bDoNotBreakWrappedTables = true;
     }
     m_pImpl->m_pDocumentProtection = std::make_shared<DocumentProtection>();
     m_pImpl->m_pWriteProtection = std::make_shared<WriteProtection>();
@@ -398,7 +399,7 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
         m_pImpl->m_bGutterAtTop = nIntValue != 0;
         break;
     case NS_ooxml::LN_CT_Compat_doNotBreakWrappedTables:
-        m_pImpl->m_bDoNotBreakWrappedTables = true;
+        m_pImpl->m_bDoNotBreakWrappedTables = nIntValue != 0;
         break;
     default:
     {
