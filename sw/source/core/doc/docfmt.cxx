@@ -116,7 +116,8 @@ static bool lcl_RstAttr( SwNode* pNd, void* pArgs )
         SfxItemSetFixed<
                 RES_PARATR_NUMRULE, RES_PARATR_NUMRULE,
                 RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1,
-                RES_PAGEDESC, RES_BREAK>  aSavedAttrsSet(rDoc.GetAttrPool());
+                RES_PAGEDESC, RES_BREAK,
+                RES_FRMATR_STYLE_NAME, RES_FRMATR_CONDITIONAL_STYLE_NAME> aSavedAttrsSet(rDoc.GetAttrPool());
         const SfxItemSet* pAttrSetOfNode = pNode->GetpSwAttrSet();
 
         std::vector<sal_uInt16> aClearWhichIds;
@@ -137,32 +138,35 @@ static bool lcl_RstAttr( SwNode* pNd, void* pArgs )
             }
         }
 
-        const SfxPoolItem* pItem;
-
-        sal_uInt16 const aSavIds[3] = { RES_PAGEDESC, RES_BREAK, RES_PARATR_NUMRULE };
-        for (sal_uInt16 aSavId : aSavIds)
+        if (auto pItem = pAttrSetOfNode->GetItemIfSet(RES_PARATR_NUMRULE, false);
+            pItem && !pItem->GetValue().isEmpty())
         {
-            if (SfxItemState::SET == pAttrSetOfNode->GetItemState(aSavId, false, &pItem))
-            {
-                bool bSave = false;
-                switch( aSavId )
-                {
-                    case RES_PAGEDESC:
-                        bSave = nullptr != pItem->StaticWhichCast(RES_PAGEDESC).GetPageDesc();
-                    break;
-                    case RES_BREAK:
-                        bSave = SvxBreak::NONE != pItem->StaticWhichCast(RES_BREAK).GetBreak();
-                    break;
-                    case RES_PARATR_NUMRULE:
-                        bSave = !pItem->StaticWhichCast(RES_PARATR_NUMRULE).GetValue().isEmpty();
-                    break;
-                }
-                if( bSave )
-                {
-                    aSavedAttrsSet.Put(*pItem);
-                    aClearWhichIds.push_back(aSavId);
-                }
-            }
+            aSavedAttrsSet.Put(*pItem);
+            aClearWhichIds.push_back(RES_PARATR_NUMRULE);
+        }
+        if (auto pItem = pAttrSetOfNode->GetItemIfSet(RES_PAGEDESC, false);
+            pItem && pItem->GetPageDesc())
+        {
+            aSavedAttrsSet.Put(*pItem);
+            aClearWhichIds.push_back(RES_PAGEDESC);
+        }
+        if (auto pItem = pAttrSetOfNode->GetItemIfSet(RES_BREAK, false);
+            pItem && pItem->GetBreak() != SvxBreak::NONE)
+        {
+            aSavedAttrsSet.Put(*pItem);
+            aClearWhichIds.push_back(RES_BREAK);
+        }
+        if (auto pItem = pAttrSetOfNode->GetItemIfSet(RES_FRMATR_STYLE_NAME, false);
+            pItem && !pItem->GetValue().isEmpty())
+        {
+            aSavedAttrsSet.Put(*pItem);
+            aClearWhichIds.push_back(RES_FRMATR_STYLE_NAME);
+        }
+        if (auto pItem = pAttrSetOfNode->GetItemIfSet(RES_FRMATR_CONDITIONAL_STYLE_NAME, false);
+            pItem && !pItem->GetValue().isEmpty())
+        {
+            aSavedAttrsSet.Put(*pItem);
+            aClearWhichIds.push_back(RES_FRMATR_CONDITIONAL_STYLE_NAME);
         }
 
         // do not clear items directly from item set and only clear to be kept
@@ -186,10 +190,12 @@ static bool lcl_RstAttr( SwNode* pNd, void* pArgs )
                 OSL_ENSURE( !bKeepAttributes,
                         "<lcl_RstAttr(..)> - certain attributes are kept, but not needed." );
                 SfxItemIter aIter( *pPara->pDelSet );
-                for (pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+                for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
                 {
                     if ( ( pItem->Which() != RES_PAGEDESC &&
                            pItem->Which() != RES_BREAK &&
+                           pItem->Which() != RES_FRMATR_STYLE_NAME &&
+                           pItem->Which() != RES_FRMATR_CONDITIONAL_STYLE_NAME &&
                            pItem->Which() != RES_PARATR_NUMRULE ) ||
                          ( aSavedAttrsSet.GetItemState( pItem->Which(), false ) != SfxItemState::SET ) )
                     {
