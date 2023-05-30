@@ -67,8 +67,9 @@
 #include <charfmt.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <strings.hrc>
-// 50 cm 28350
+#include <docmodel/color/ComplexColor.hxx>
 
+// 50 cm 28350
 #define MAXHEIGHT 28350
 #define MAXWIDTH  28350
 
@@ -193,7 +194,7 @@ void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet, bool bIs
     assert(SfxItemState::SET != rSet.GetItemState(RES_PARATR_GRABBAG, false));
 }
 
-void ApplyCharBackground(const Color& rBackgroundColor, SwWrtShell& rShell)
+void ApplyCharBackground(Color const& rBackgroundColor, model::ComplexColor const& rComplexColor, SwWrtShell& rShell)
 {
     rShell.StartUndo(SwUndoId::INSATTR);
 
@@ -202,7 +203,7 @@ void ApplyCharBackground(const Color& rBackgroundColor, SwWrtShell& rShell)
     rShell.GetCurAttr(aCoreSet);
 
     // Set char background
-    rShell.SetAttrItem(SvxBrushItem(rBackgroundColor, RES_CHRATR_BACKGROUND));
+    rShell.SetAttrItem(SvxBrushItem(rBackgroundColor, rComplexColor, RES_CHRATR_BACKGROUND));
 
     // Highlight is an MS specific thing, so remove it at the first time when LO modifies
     // this part of the imported document.

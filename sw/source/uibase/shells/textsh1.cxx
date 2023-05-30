@@ -1704,27 +1704,32 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case SID_ATTR_CHAR_COLOR_BACKGROUND_EXT:
         case SID_ATTR_CHAR_COLOR_EXT:
         {
-            Color aSet;
+            Color aColor;
+            model::ComplexColor aComplexColor;
             const SfxStringItem* pColorStringItem = nullptr;
 
             if (pArgs && (pColorStringItem = pArgs->GetItemIfSet(SID_ATTR_COLOR_STR, false)))
             {
                 OUString sColor = pColorStringItem->GetValue();
                 if (sColor == "transparent")
-                    aSet = COL_TRANSPARENT;
+                    aColor = COL_TRANSPARENT;
                 else
-                    aSet = Color(ColorTransparency, sColor.toInt32(16));
+                    aColor = Color(ColorTransparency, sColor.toInt32(16));
             }
             else if (pItem)
-                aSet = static_cast<const SvxColorItem*>(pItem)->GetValue();
+            {
+                auto* pColorItem = static_cast<const SvxColorItem*>(pItem);
+                aColor = pColorItem->GetValue();
+                aComplexColor = pColorItem->getComplexColor();
+            }
             else
-                aSet = COL_TRANSPARENT;
+                aColor = COL_TRANSPARENT;
 
             SwEditWin& rEdtWin = GetView().GetEditWin();
             if (nSlot != SID_ATTR_CHAR_COLOR_EXT)
-                rEdtWin.SetWaterCanTextBackColor(aSet);
+                rEdtWin.SetWaterCanTextBackColor(aColor);
             else if (pItem)
-                rEdtWin.SetWaterCanTextColor(aSet);
+                rEdtWin.SetWaterCanTextColor(aColor);
 
             SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
             SwApplyTemplate aTempl;
@@ -1734,18 +1739,19 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 {
                     SfxItemSetFixed<RES_CHRATR_BACKGROUND, RES_CHRATR_BACKGROUND> aCoreSet( rWrtSh.GetView().GetPool() );
 
-                    rWrtSh.GetCurAttr( aCoreSet );
+                    rWrtSh.GetCurAttr(aCoreSet);
 
                     // Remove highlight if already set of the same color
                     const SvxBrushItem& rBrushItem = aCoreSet.Get(RES_CHRATR_BACKGROUND);
-                    if ( aSet == rBrushItem.GetColor() )
-                        aSet = COL_TRANSPARENT;
-
-                    ApplyCharBackground(aSet, rWrtSh);
+                    if (aColor == rBrushItem.GetColor())
+                    {
+                        aComplexColor = model::ComplexColor();
+                        aColor = COL_TRANSPARENT;
+                    }
+                    ApplyCharBackground(aColor, aComplexColor, rWrtSh);
                 }
                 else
-                    rWrtSh.SetAttrItem(
-                        SvxColorItem(aSet, RES_CHRATR_COLOR) );
+                    rWrtSh.SetAttrItem(SvxColorItem(aColor, aComplexColor, RES_CHRATR_COLOR));
             }
             else if (nSlot == SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
             {
@@ -2357,12 +2363,12 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 const SvxBrushItem& aBrushItem = aSet.Get(RES_CHRATR_HIGHLIGHT);
                 if( aBrushItem.GetColor() != COL_TRANSPARENT )
                 {
-                    rSet.Put( SvxColorItem(aBrushItem.GetColor(), nWhich) );
+                    rSet.Put(SvxColorItem(aBrushItem.GetColor(), aBrushItem.getComplexColor(), nWhich));
                 }
                 else
                 {
                     const SvxBrushItem& aBrushItem2 = aSet.Get(RES_CHRATR_BACKGROUND);
-                    rSet.Put( SvxColorItem(aBrushItem2.GetColor(), nWhich) );
+                    rSet.Put(SvxColorItem(aBrushItem2.GetColor(), aBrushItem2.getComplexColor(), nWhich));
                 }
             }
             break;

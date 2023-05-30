@@ -30,7 +30,11 @@
 #include <editeng/eerdll.hxx>
 #include <tools/bigint.hxx>
 
+#include <docmodel/uno/UnoComplexColor.hxx>
+#include <com/sun/star/util/XComplexColor.hpp>
+
 using namespace ::com::sun::star::table::BorderLineStyle;
+using namespace css;
 
 // class SvxBorderLine  --------------------------------------------------
 
@@ -57,7 +61,22 @@ namespace {
     }
 } // Anonymous namespace
 
-namespace editeng {
+namespace editeng
+{
+
+bool SvxBorderLine::setComplexColorFromAny(css::uno::Any const& rValue)
+{
+    css::uno::Reference<css::util::XComplexColor> xComplexColor;
+    if (!(rValue >>= xComplexColor))
+        return false;
+
+    if (xComplexColor.is())
+    {
+        auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+        setComplexColor(aComplexColor);
+    }
+    return true;
+}
 
 Color SvxBorderLine::darkColor( Color aMain )
 {
@@ -519,6 +538,7 @@ sal_uInt16 SvxBorderLine::GetDistance() const
 bool SvxBorderLine::operator==( const SvxBorderLine& rCmp ) const
 {
     return (m_aColor == rCmp.m_aColor &&
+            m_aComplexColor == rCmp.m_aComplexColor &&
             m_nWidth == rCmp.m_nWidth &&
             m_bMirrorWidths == rCmp.m_bMirrorWidths &&
             m_aWidthImpl == rCmp.m_aWidthImpl &&

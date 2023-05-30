@@ -16,13 +16,13 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_EDITENG_UDLNITEM_HXX
-#define INCLUDED_EDITENG_UDLNITEM_HXX
+#pragma once
 
+#include <editeng/editengdllapi.h>
 #include <svl/eitem.hxx>
 #include <tools/color.hxx>
 #include <tools/fontenum.hxx>
-#include <editeng/editengdllapi.h>
+#include <docmodel/color/ComplexColor.hxx>
 
 // class SvxTextLineItem ------------------------------------------------
 
@@ -30,7 +30,9 @@
 
 class EDITENG_DLLPUBLIC SvxTextLineItem : public SfxEnumItem<FontLineStyle>
 {
-    Color mColor;
+    Color maColor;
+    model::ComplexColor maComplexColor;
+
 public:
     SvxTextLineItem( const FontLineStyle eSt,
                      const sal_uInt16 nId );
@@ -61,8 +63,18 @@ public:
     void                    SetLineStyle( FontLineStyle eNew )
                                 { SetValue(eNew); }
 
-    const Color&            GetColor() const                { return mColor; }
-    void                    SetColor( const Color& rCol )   { mColor = rCol; }
+    const Color& GetColor() const { return maColor; }
+    void SetColor(const Color& rColor) { maColor = rColor; }
+
+    const model::ComplexColor& getComplexColor() const
+    {
+        return maComplexColor;
+    }
+
+    void setComplexColor(model::ComplexColor const& rComplexColor)
+    {
+        maComplexColor = rComplexColor;
+    }
 };
 
 // class SvxUnderlineItem ------------------------------------------------
@@ -96,7 +108,5 @@ public:
     virtual SvxOverlineItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual OUString   GetValueTextByPos( sal_uInt16 nPos ) const override;
 };
-
-#endif // INCLUDED_EDITENG_UDLNITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

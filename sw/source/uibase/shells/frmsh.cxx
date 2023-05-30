@@ -1222,14 +1222,14 @@ void SwFrameShell::ExecFrameStyle(SfxRequest const & rReq)
                     }
                     else
                     {
-                        if ( aBoxItem->GetTop() )
-                            const_cast<SvxBorderLine*>(aBoxItem->GetTop())->SetColor( rNewColor );
-                        if ( aBoxItem->GetBottom() )
-                            const_cast<SvxBorderLine*>(aBoxItem->GetBottom())->SetColor( rNewColor );
-                        if ( aBoxItem->GetLeft() )
-                            const_cast<SvxBorderLine*>(aBoxItem->GetLeft())->SetColor( rNewColor );
-                        if ( aBoxItem->GetRight() )
-                            const_cast<SvxBorderLine*>(aBoxItem->GetRight())->SetColor( rNewColor );
+                        if (aBoxItem->GetTop())
+                            aBoxItem->GetTop()->SetColor(rNewColor);
+                        if (aBoxItem->GetBottom())
+                            aBoxItem->GetBottom()->SetColor(rNewColor);
+                        if (aBoxItem->GetLeft())
+                            aBoxItem->GetLeft()->SetColor(rNewColor);
+                        if (aBoxItem->GetRight())
+                            aBoxItem->GetRight()->SetColor(rNewColor);
                     }
                 }
             }

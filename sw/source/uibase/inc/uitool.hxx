@@ -29,6 +29,7 @@ class SvxTabStopItem;
 class SwWrtShell;
 namespace com::sun::star::awt { class XPopupMenu; }
 namespace weld { class ComboBox; }
+namespace model { class ComplexColor; }
 class SwDocShell;
 class SwFrameFormat;
 class SwTabCols;
@@ -66,7 +67,7 @@ SW_DLLPUBLIC void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrig
 * @param[in]       rBackgroundColor    the color to apply on the shell
 * @param[in,out]   rShell              the shell on which we apply the new attribute
 **/
-void ApplyCharBackground(const Color& rBackgroundColor, SwWrtShell& rShell);
+void ApplyCharBackground(Color const& rBackgroundColor, model::ComplexColor const& rComplexColor, SwWrtShell& rShell);
 
 // SfxItemSets <-> PageDesc
 void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc );

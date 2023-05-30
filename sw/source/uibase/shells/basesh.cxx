@@ -2682,7 +2682,7 @@ void SwBaseShell::GetBckColState(SfxItemSet &rSet)
             case SID_BACKGROUND_COLOR:
             case SID_TABLE_CELL_BACKGROUND_COLOR:
             {
-                SvxColorItem aColorItem(aBrushItem->GetColor(), nWhich);
+                SvxColorItem aColorItem(aBrushItem->GetColor(), aBrushItem->getComplexColor(), nWhich);
                 rSet.Put(aColorItem);
                 break;
             }
@@ -2774,6 +2774,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
                 const SvxColorItem& rNewColorItem = static_cast<const SvxColorItem&>(pArgs->Get(nSlotId));
                 const Color& rNewColor = rNewColorItem.GetValue();
                 aBrushItem->SetColor(rNewColor);
+                aBrushItem->setComplexColor(rNewColorItem.getComplexColor());
                 GetView().GetViewFrame()->GetBindings().SetState(rNewColorItem);
             }
             else

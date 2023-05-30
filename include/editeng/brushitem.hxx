@@ -16,15 +16,13 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_EDITENG_BRUSHITEM_HXX
-#define INCLUDED_EDITENG_BRUSHITEM_HXX
+#pragma once
 
 #include <tools/color.hxx>
 #include <svl/poolitem.hxx>
 #include <editeng/editengdllapi.h>
 #include <memory>
-
-// class SvxBrushItem ----------------------------------------------------
+#include <docmodel/color/ComplexColor.hxx>
 
 class Graphic;
 class GraphicObject;
@@ -43,6 +41,7 @@ enum SvxGraphicPosition
 class EDITENG_DLLPUBLIC SvxBrushItem final : public SfxPoolItem
 {
     Color               aColor;
+    model::ComplexColor maComplexColor;
     Color               aFilterColor;
     sal_Int32           nShadingValue;
     mutable std::unique_ptr<GraphicObject> xGraphicObject;
@@ -59,7 +58,8 @@ public:
     static SfxPoolItem* CreateDefault();
 
     explicit SvxBrushItem( sal_uInt16 nWhich );
-    SvxBrushItem( const Color& rColor, sal_uInt16 nWhich  );
+    SvxBrushItem(Color const& rColor, sal_uInt16 nWhich);
+    SvxBrushItem(Color const& rColor, model::ComplexColor const& rComplexColor, sal_uInt16 nWhich);
 
     SvxBrushItem( const Graphic& rGraphic,
                   SvxGraphicPosition ePos, sal_uInt16 nWhich );
@@ -91,6 +91,16 @@ public:
     Color&          GetColor()                      { return aColor; }
     void            SetColor( const Color& rCol)    { aColor = rCol; }
 
+    model::ComplexColor getComplexColor() const
+    {
+        return maComplexColor;
+    }
+
+    void setComplexColor(model::ComplexColor const& rComplexColor)
+    {
+        maComplexColor = rComplexColor;
+    }
+
     const Color&    GetFiltColor() const             { return aFilterColor; }
     void            SetFiltColor( const Color& rCol) { aFilterColor = rCol; }
 
@@ -116,7 +126,5 @@ public:
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
-
-#endif // INCLUDED_EDITENG_BRUSHITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

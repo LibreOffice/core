@@ -939,7 +939,8 @@ void SvxFontHeightItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 // class SvxTextLineItem ------------------------------------------------
 
 SvxTextLineItem::SvxTextLineItem( const FontLineStyle eSt, const sal_uInt16 nId )
-    : SfxEnumItem( nId, eSt ), mColor( COL_TRANSPARENT )
+    : SfxEnumItem(nId, eSt)
+    , maColor(COL_TRANSPARENT)
 {
 }
 
@@ -981,8 +982,8 @@ bool SvxTextLineItem::GetPresentation
 )   const
 {
     rText = GetValueTextByPos( GetValue() );
-    if( !mColor.IsTransparent() )
-        rText += cpDelim + ::GetColorString( mColor );
+    if( !maColor.IsTransparent() )
+        rText += cpDelim + ::GetColorString(maColor);
     return true;
 }
 
@@ -1005,14 +1006,19 @@ bool SvxTextLineItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         rVal <<= static_cast<sal_Int16>(GetValue());
         break;
     case MID_TL_COLOR:
-        rVal <<= mColor;
+        rVal <<= maColor;
         break;
+    case MID_TL_COMPLEX_COLOR:
+    {
+        auto xComplexColor = model::color::createXComplexColor(maComplexColor);
+        rVal <<= xComplexColor;
+        break;
+    }
     case MID_TL_HASCOLOR:
-        rVal <<= mColor.GetAlpha() == 255;
+        rVal <<= maColor.GetAlpha() == 255;
         break;
     }
     return true;
-
 }
 
 bool SvxTextLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
@@ -1042,14 +1048,24 @@ bool SvxTextLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             // Keep transparence, because it contains the information
             // whether the font color or the stored color should be used
-            sal_uInt8 nAlpha = mColor.GetAlpha();
-            mColor = nCol;
-            mColor.SetAlpha( nAlpha );
+            sal_uInt8 nAlpha = maColor.GetAlpha();
+            maColor = nCol;
+            maColor.SetAlpha( nAlpha );
         }
     }
     break;
+    case MID_TL_COMPLEX_COLOR:
+    {
+        css::uno::Reference<css::util::XComplexColor> xComplexColor;
+        if (!(rVal >>= xComplexColor))
+            return false;
+
+        if (xComplexColor.is())
+            maComplexColor = model::color::getFromXComplexColor(xComplexColor);
+    }
+    break;
     case MID_TL_HASCOLOR:
-        mColor.SetAlpha( Any2Bool( rVal ) ? 255 : 0 );
+        maColor.SetAlpha( Any2Bool( rVal ) ? 255 : 0 );
     break;
     }
     return bRet;
@@ -1058,7 +1074,8 @@ bool SvxTextLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 bool SvxTextLineItem::operator==( const SfxPoolItem& rItem ) const
 {
     return SfxEnumItem::operator==( rItem ) &&
-           GetColor() == static_cast<const SvxTextLineItem&>(rItem).GetColor();
+           maColor == static_cast<const SvxTextLineItem&>(rItem).maColor &&
+           maComplexColor == static_cast<const SvxTextLineItem&>(rItem).maComplexColor;
 }
 
 // class SvxUnderlineItem ------------------------------------------------
@@ -1614,11 +1631,6 @@ void SvxColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterEndElement(pWriter);
-}
-
-void SvxColorItem::SetValue( const Color& rNewCol )
-{
-    mColor = rNewCol;
 }
 
 // class SvxKerningItem --------------------------------------------------

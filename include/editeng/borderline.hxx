@@ -27,6 +27,7 @@
 #include <tools/mapunit.hxx>
 #include <editeng/editengdllapi.h>
 #include <svtools/borderline.hxx>
+#include <docmodel/color/ComplexColor.hxx>
 
 class IntlWrapper;
 
@@ -154,6 +155,7 @@ class EDITENG_DLLPUBLIC SvxBorderLine final
     Color (*m_pColorGapFn)(Color);
     BorderWidthImpl m_aWidthImpl;
     Color m_aColor;
+    model::ComplexColor m_aComplexColor;
     SvxBorderLineStyle   m_nStyle;
     bool m_bMirrorWidths;
     bool m_bUseLeftTop;
@@ -165,7 +167,21 @@ public:
             Color (*pColorOutFn)( Color ) = &darkColor,
             Color (*pColorInFn)( Color ) = &darkColor );
 
-    const Color&    GetColor() const { return m_aColor; }
+    const Color & GetColor() const { return m_aColor; }
+    void SetColor(const Color & rColor ) { m_aColor = rColor; }
+
+    model::ComplexColor const& getComplexColor() const
+    {
+        return m_aComplexColor;
+    }
+    void setComplexColor(model::ComplexColor const& rComplexColor)
+    {
+        m_aComplexColor = rComplexColor;
+    }
+
+    bool setComplexColorFromAny(css::uno::Any const& rValue);
+
+
     Color           GetColorOut( bool bLeftOrTop = true ) const;
     Color           GetColorIn( bool bLeftOrTop = true ) const;
     bool            HasGapColor() const { return m_pColorGapFn != nullptr; }
@@ -208,7 +224,6 @@ public:
 
     SvxBorderLineStyle  GetBorderLineStyle() const { return m_nStyle; }
 
-    void            SetColor( const Color &rColor ) { m_aColor = rColor; }
     void            SetBorderLineStyle( SvxBorderLineStyle nNew );
     void            ScaleMetrics( tools::Long nMult, tools::Long nDiv );
 

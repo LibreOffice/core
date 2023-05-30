@@ -121,6 +121,8 @@ inline constexpr OUStringLiteral UNO_NAME_CHAR_HEIGHT_COMPLEX = u"CharHeightComp
 inline constexpr OUStringLiteral UNO_NAME_CHAR_LOCALE_COMPLEX = u"CharLocaleComplex";
 inline constexpr OUStringLiteral UNO_NAME_CHAR_AUTO_KERNING = u"CharAutoKerning";
 inline constexpr OUStringLiteral UNO_NAME_CHAR_UNDERLINE_COLOR = u"CharUnderlineColor";
+inline constexpr OUStringLiteral UNO_NAME_CHAR_UNDERLINE_COMPLEX_COLOR
+    = u"CharUnderlineComplexColor";
 inline constexpr OUStringLiteral UNO_NAME_CHAR_UNDERLINE_HAS_COLOR = u"CharUnderlineHasColor";
 inline constexpr OUStringLiteral UNO_NAME_CHAR_ESCAPEMENT = u"CharEscapement";
 inline constexpr OUStringLiteral UNO_NAME_CHAR_CASE_MAP = u"CharCaseMap";
@@ -146,6 +148,8 @@ inline constexpr OUStringLiteral UNO_NAME_TOC_PARAGRAPH_OUTLINE_LEVEL = u"TOCPar
 inline constexpr OUStringLiteral UNO_NAME_CHAR_FLASH = u"CharFlash";
 inline constexpr OUStringLiteral UNO_NAME_CHAR_KERNING = u"CharKerning";
 inline constexpr OUStringLiteral UNO_NAME_CHAR_BACK_COLOR = u"CharBackColor";
+inline constexpr OUStringLiteral UNO_NAME_CHAR_BACKGROUND_COMPLEX_COLOR
+    = u"CharBackgroundComplexColor";
 inline constexpr OUStringLiteral UNO_NAME_CHAR_BACK_TRANSPARENT = u"CharBackTransparent";
 inline constexpr OUStringLiteral UNO_NAME_CHAR_COMBINE_IS_ON = u"CharCombineIsOn";
 inline constexpr OUStringLiteral UNO_NAME_CHAR_COMBINE_PREFIX = u"CharCombinePrefix";
@@ -192,7 +196,10 @@ inline constexpr OUStringLiteral UNO_NAME_PARA_LINE_NUMBER_COUNT = u"ParaLineNum
 inline constexpr OUStringLiteral UNO_NAME_PARA_LINE_NUMBER_START_VALUE
     = u"ParaLineNumberStartValue";
 inline constexpr OUStringLiteral UNO_NAME_BACK_COLOR = u"BackColor";
+inline constexpr OUStringLiteral UNO_NAME_BACKGROUND_COMPLEX_COLOR = u"BackgroundComplexColor";
 inline constexpr OUStringLiteral UNO_NAME_PARA_BACK_COLOR = u"ParaBackColor";
+inline constexpr OUStringLiteral UNO_NAME_PARA_BACKGROUND_COMPLEX_COLOR
+    = u"ParaBackgroundComplexColor";
 inline constexpr OUStringLiteral UNO_NAME_PARA_WIDOWS = u"ParaWidows";
 inline constexpr OUStringLiteral UNO_NAME_PARA_ORPHANS = u"ParaOrphans";
 inline constexpr OUStringLiteral UNO_NAME_PARA_BACK_TRANSPARENT = u"ParaBackTransparent";
@@ -377,6 +384,10 @@ inline constexpr OUStringLiteral UNO_NAME_LEFT_BORDER_DISTANCE = u"LeftBorderDis
 inline constexpr OUStringLiteral UNO_NAME_RIGHT_BORDER_DISTANCE = u"RightBorderDistance";
 inline constexpr OUStringLiteral UNO_NAME_TOP_BORDER_DISTANCE = u"TopBorderDistance";
 inline constexpr OUStringLiteral UNO_NAME_BOTTOM_BORDER_DISTANCE = u"BottomBorderDistance";
+inline constexpr OUStringLiteral UNO_NAME_BORDER_BOTTOM_COMPLEX_COLOR = u"BottomBorderComplexColor";
+inline constexpr OUStringLiteral UNO_NAME_BORDER_LEFT_COMPLEX_COLOR = u"LeftBorderComplexColor";
+inline constexpr OUStringLiteral UNO_NAME_BORDER_RIGHT_COMPLEX_COLOR = u"RightBorderComplexColor";
+inline constexpr OUStringLiteral UNO_NAME_BORDER_TOP_COMPLEX_COLOR = u"TopBorderComplexColor";
 inline constexpr OUStringLiteral UNO_NAME_TABLE_BORDER = u"TableBorder";
 inline constexpr OUStringLiteral UNO_NAME_TABLE_COLUMN_SEPARATORS = u"TableColumnSeparators";
 inline constexpr OUStringLiteral UNO_NAME_TABLE_COLUMN_RELATIVE_SUM = u"TableColumnRelativeSum";
@@ -834,6 +845,7 @@ inline constexpr OUStringLiteral UNO_NAME_PARA_LIST_LABEL_STRING = u"ListLabelSt
 inline constexpr OUStringLiteral UNO_NAME_PARA_LIST_AUTO_FORMAT = u"ListAutoFormat";
 inline constexpr OUStringLiteral UNO_NAME_CHAR_OVERLINE = u"CharOverline";
 inline constexpr OUStringLiteral UNO_NAME_CHAR_OVERLINE_COLOR = u"CharOverlineColor";
+inline constexpr OUStringLiteral UNO_NAME_CHAR_OVERLINE_COMPLEX_COLOR = u"CharOverlineComplexColor";
 inline constexpr OUStringLiteral UNO_NAME_CHAR_OVERLINE_HAS_COLOR = u"CharOverlineHasColor";
 inline constexpr OUStringLiteral UNO_NAME_OUTLINE_CONTENT_VISIBLE = u"OutlineContentVisible";
 inline constexpr OUStringLiteral UNO_NAME_OUTLINE_LEVEL = u"OutlineLevel";
@@ -875,6 +887,14 @@ inline constexpr OUStringLiteral UNO_NAME_CHAR_LEFT_BORDER_DISTANCE = u"CharLeft
 inline constexpr OUStringLiteral UNO_NAME_CHAR_RIGHT_BORDER_DISTANCE = u"CharRightBorderDistance";
 inline constexpr OUStringLiteral UNO_NAME_CHAR_TOP_BORDER_DISTANCE = u"CharTopBorderDistance";
 inline constexpr OUStringLiteral UNO_NAME_CHAR_BOTTOM_BORDER_DISTANCE = u"CharBottomBorderDistance";
+inline constexpr OUStringLiteral UNO_NAME_CHAR_BORDER_LEFT_COMPLEX_COLOR
+    = u"CharLeftBorderComplexColor";
+inline constexpr OUStringLiteral UNO_NAME_CHAR_BORDER_RIGHT_COMPLEX_COLOR
+    = u"CharRightBorderComplexColor";
+inline constexpr OUStringLiteral UNO_NAME_CHAR_BORDER_TOP_COMPLEX_COLOR
+    = u"CharTopBorderComplexColor";
+inline constexpr OUStringLiteral UNO_NAME_CHAR_BORDER_BOTTOM_COMPLEX_COLOR
+    = u"CharBottomBorderComplexColor";
 inline constexpr OUStringLiteral UNO_NAME_CHAR_SHADOW_FORMAT = u"CharShadowFormat";
 inline constexpr OUStringLiteral UNO_NAME_SHADOW_TRANSPARENCE = u"ShadowTransparence";
 inline constexpr OUStringLiteral UNO_NAME_DOC_INTEROP_GRAB_BAG = u"InteropGrabBag";
