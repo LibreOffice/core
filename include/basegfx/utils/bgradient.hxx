@@ -335,7 +335,7 @@ public:
     css::awt::Gradient2 getAsGradient2() const;
 
     /// Tooling to handle border correction/integration and StartStopIntensity
-    void tryToRecreateBorder(basegfx::BColorStops* pAssociatedTransparencyStops);
+    void tryToRecreateBorder(basegfx::BColorStops* pAssociatedTransparencyStops = nullptr);
     void tryToApplyBorder();
     void tryToApplyStartEndIntensity();
 };
