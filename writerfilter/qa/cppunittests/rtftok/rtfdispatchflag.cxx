@@ -65,6 +65,23 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTable)
     nExpected = o3tl::convert(40, o3tl::Length::twip, o3tl::Length::mm100);
     CPPUNIT_ASSERT_EQUAL(nExpected, nRightMargin);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testDoNotBreakWrappedTables)
+{
+    // Given a document without \nobrkwrptbl:
+    // When importing that document:
+    loadFromURL(u"do-not-break-wrapped-tables.rtf");
+
+    // Then make sure that the matching compat flag is set:
+    uno::Reference<lang::XMultiServiceFactory> xDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xSettings(
+        xDocument->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+    bool bDoNotBreakWrappedTables{};
+    xSettings->getPropertyValue("DoNotBreakWrappedTables") >>= bDoNotBreakWrappedTables;
+    // Without the accompanying fix in place, this test would have failed, the compat flag was not
+    // set.
+    CPPUNIT_ASSERT(bDoNotBreakWrappedTables);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -991,9 +991,6 @@ private:
 
     /// Are we after a \cell, but before a \row?
     bool m_bAfterCellBeforeRow;
-
-    /// Floating tables are single-page by default.
-    bool m_bBreakWrappedTables = false;
 };
 } // namespace writerfilter::rtftok
 

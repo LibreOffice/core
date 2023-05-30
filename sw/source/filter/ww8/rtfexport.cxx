@@ -831,7 +831,8 @@ ErrCode RtfExport::ExportDocument_Impl()
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_MARGMIRROR);
 
     // Gutter at top?
-    if (m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::GUTTER_AT_TOP))
+    IDocumentSettingAccess& rIDSA = m_rDoc.getIDocumentSettingAccess();
+    if (rIDSA.get(DocumentSettingId::GUTTER_AT_TOP))
     {
         Strm().WriteCharPtr(LO_STRING_SVTOOLS_RTF_GUTTERPRL);
     }
@@ -860,7 +861,10 @@ ErrCode RtfExport::ExportDocument_Impl()
 
     // Enable breaking wrapped tables across pages: the "no" in the control word's name is
     // confusing.
-    Strm().WriteOString(LO_STRING_SVTOOLS_RTF_NOBRKWRPTBL);
+    if (!rIDSA.get(DocumentSettingId::DO_NOT_BREAK_WRAPPED_TABLES))
+    {
+        Strm().WriteOString(LO_STRING_SVTOOLS_RTF_NOBRKWRPTBL);
+    }
 
     // size and empty margins of the page
     if (m_rDoc.GetPageDescCnt())

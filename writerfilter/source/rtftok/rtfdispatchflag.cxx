@@ -34,11 +34,6 @@ namespace writerfilter::rtftok
 {
 bool RTFDocumentImpl::dispatchFloatingTableFlag(RTFKeyword nKeyword)
 {
-    if (!m_bBreakWrappedTables)
-    {
-        return false;
-    }
-
     // Positioned Wrapped Tables
     OUString aParam;
     switch (nKeyword)
@@ -1337,7 +1332,8 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         break;
         case RTFKeyword::NOBRKWRPTBL:
         {
-            m_bBreakWrappedTables = true;
+            m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Compat_doNotBreakWrappedTables,
+                                      new RTFValue(0));
         }
         break;
         default:

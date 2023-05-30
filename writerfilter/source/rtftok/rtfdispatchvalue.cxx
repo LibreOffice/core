@@ -1825,66 +1825,36 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         break;
         case RTFKeyword::TPOSY:
         {
-            if (!m_bBreakWrappedTables)
-            {
-                break;
-            }
-
             putNestedAttribute(m_aStates.top().getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblpPr,
                                NS_ooxml::LN_CT_TblPPr_tblpY, new RTFValue(nParam));
         }
         break;
         case RTFKeyword::TPOSX:
         {
-            if (!m_bBreakWrappedTables)
-            {
-                break;
-            }
-
             putNestedAttribute(m_aStates.top().getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblpPr,
                                NS_ooxml::LN_CT_TblPPr_tblpX, new RTFValue(nParam));
         }
         break;
         case RTFKeyword::TDFRMTXTLEFT:
         {
-            if (!m_bBreakWrappedTables)
-            {
-                break;
-            }
-
             putNestedAttribute(m_aStates.top().getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblpPr,
                                NS_ooxml::LN_CT_TblPPr_leftFromText, new RTFValue(nParam));
         }
         break;
         case RTFKeyword::TDFRMTXTRIGHT:
         {
-            if (!m_bBreakWrappedTables)
-            {
-                break;
-            }
-
             putNestedAttribute(m_aStates.top().getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblpPr,
                                NS_ooxml::LN_CT_TblPPr_rightFromText, new RTFValue(nParam));
         }
         break;
         case RTFKeyword::TDFRMTXTTOP:
         {
-            if (!m_bBreakWrappedTables)
-            {
-                break;
-            }
-
             putNestedAttribute(m_aStates.top().getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblpPr,
                                NS_ooxml::LN_CT_TblPPr_topFromText, new RTFValue(nParam));
         }
         break;
         case RTFKeyword::TDFRMTXTBOTTOM:
         {
-            if (!m_bBreakWrappedTables)
-            {
-                break;
-            }
-
             putNestedAttribute(m_aStates.top().getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblpPr,
                                NS_ooxml::LN_CT_TblPPr_bottomFromText, new RTFValue(nParam));
         }
