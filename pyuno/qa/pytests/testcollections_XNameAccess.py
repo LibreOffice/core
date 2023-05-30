@@ -30,10 +30,14 @@ class TestXNameAccess(CollectionsTestBase):
         drw = self.createBlankDrawing()
 
         # When
-        length = len(drw.Links)
+        length_categories = len(drw.Links)
+        length_slides = len(drw.Links['Slide'].Links)
+        length_master = len(drw.Links['Master Page'].Links)
 
         # Then
-        self.assertEqual(2, length)
+        self.assertEqual(4, length_categories)
+        self.assertEqual(1, length_slides)
+        self.assertEqual(1, length_master)
 
         drw.close(True)
 
@@ -47,7 +51,7 @@ class TestXNameAccess(CollectionsTestBase):
         drw.DrawPages[0].Name = 'foo'
 
         # When
-        link = drw.Links['foo']
+        link = drw.Links['Slide'].Links['foo']
 
         # Then
         self.assertEqual('foo', link.getName())
@@ -64,7 +68,7 @@ class TestXNameAccess(CollectionsTestBase):
 
         # When / Then
         with self.assertRaises(KeyError):
-            link = drw.Links['foo']
+            link = drw.Links['Slide'].Links['foo']
 
         drw.close(True)
 
@@ -148,7 +152,7 @@ class TestXNameAccess(CollectionsTestBase):
         drw.DrawPages[0].Name = 'foo'
 
         # When
-        present = 'foo' in drw.Links
+        present = 'foo' in drw.Links['Slide'].Links
 
         # Then
         self.assertTrue(present)
@@ -163,17 +167,17 @@ class TestXNameAccess(CollectionsTestBase):
         # Given
         drw = self.createBlankDrawing()
         i = 0
-        for name in drw.Links.getElementNames():
-            drw.Links.getByName(name).Name = 'foo' + str(i)
+        for name in drw.Links['Slide'].Links.getElementNames():
+            drw.Links['Slide'].Links.getByName(name).Name = 'foo' + str(i)
             i += 1
 
         # When
         read_links = []
-        for link in drw.Links:
+        for link in drw.Links['Slide'].Links:
             read_links.append(link)
 
         # Then
-        self.assertEqual(['foo0', 'foo1'], read_links)
+        self.assertEqual(['foo0'], read_links)
 
         drw.close(True)
 
@@ -186,10 +190,9 @@ class TestXNameAccess(CollectionsTestBase):
         drw = self.createBlankDrawing()
 
         # When
-        itr = iter(drw.Links)
+        itr = iter(drw.Links['Slide'].Links)
 
         # Then
-        self.assertIsNotNone(next(itr))
         self.assertIsNotNone(next(itr))
         with self.assertRaises(StopIteration):
             next(itr)

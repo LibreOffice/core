@@ -380,11 +380,21 @@ public:
 *                                                                      *
 ***********************************************************************/
 
+enum SdLinkTargetType
+{
+    Page = 0,
+    Notes,
+    Handout,
+    MasterPage,
+    Count
+};
+
 class SdDocLinkTargets final : public ::cppu::WeakImplHelper< css::container::XNameAccess,
                                                          css::lang::XServiceInfo , css::lang::XComponent >
 {
 private:
     SdXImpressDocument* mpModel;
+    OUString aNames[SdLinkTargetType::Count];
 
 public:
     SdDocLinkTargets( SdXImpressDocument&   rMyModel ) noexcept;
@@ -408,6 +418,65 @@ public:
     virtual void SAL_CALL dispose(  ) override;
     virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+};
+
+class SdDocLinkTargetType final : public ::cppu::WeakImplHelper< css::document::XLinkTargetSupplier,
+                                                             css::beans::XPropertySet,
+                                                             css::lang::XServiceInfo >
+{
+    SdXImpressDocument* mpModel;
+    sal_uInt16 mnType;
+    OUString maName;
+
+public:
+    SdDocLinkTargetType(SdXImpressDocument* pModel, sal_uInt16 nT) noexcept;
+
+    // css::document::XLinkTargetSupplier
+    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getLinks() override;
+
+    // css::lang::XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() override;
+
+    // css::beans::XPropertySet
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
+    virtual void SAL_CALL setPropertyValue(const OUString& aPropertyName,
+                                           const css::uno::Any& aValue) override;
+    virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& PropertyName) override;
+    virtual void SAL_CALL addPropertyChangeListener(const OUString& aPropertyName,
+                          const css::uno::Reference< css::beans::XPropertyChangeListener > & xListener) override;
+    virtual void SAL_CALL removePropertyChangeListener(const OUString& aPropertyName,
+                          const css::uno::Reference< css::beans::XPropertyChangeListener > & aListener) override;
+    virtual void SAL_CALL addVetoableChangeListener(const OUString& PropertyName,
+                          const css::uno::Reference< css::beans::XVetoableChangeListener > & aListener) override;
+    virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName,
+                          const css::uno::Reference< css::beans::XVetoableChangeListener > & aListener) override;
+};
+
+class SdDocLinkTarget final : public ::cppu::WeakImplHelper< css::container::XNameAccess,
+                                                             css::lang::XServiceInfo >
+{
+private:
+    SdXImpressDocument* mpModel;
+    sal_uInt16 mnType;
+
+public:
+    SdDocLinkTarget( SdXImpressDocument* pModel, sal_uInt16 nT );
+
+    // css::container::XNameAccess
+    virtual css::uno::Any SAL_CALL getByName(const OUString& aName) override;
+    virtual css::uno::Sequence< OUString> SAL_CALL getElementNames() override;
+    virtual sal_Bool SAL_CALL hasByName(const OUString& aName) override;
+
+    // css::container::XElementAccess
+    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual sal_Bool SAL_CALL hasElements() override;
+
+    // css::lang::XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() override;
 
     // intern
     /// @throws std::exception
