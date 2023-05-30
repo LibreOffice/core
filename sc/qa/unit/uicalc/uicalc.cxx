@@ -683,6 +683,20 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124820)
                                  aFont.GetStrikeout());
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf152037)
+{
+    createScDoc("tdf152037.xlsx");
+
+    insertStringToCell("C2", u"abcdefghi");
+
+    ScDocument* pDoc = getScDoc();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: abcdefghi
+    // - Actual  :
+    CPPUNIT_ASSERT_EQUAL(OUString("abcdefghi"), pDoc->GetString(ScAddress(2, 1, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119155)
 {
     createScDoc("tdf119155.xlsx");
