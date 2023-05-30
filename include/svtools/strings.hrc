@@ -187,7 +187,7 @@
 #define STR_TABBAR_HINT_MOVELEFT_SHEETS         NC_("STR_TABBAR_HINT_MOVELEFT_SHEETS", "Scroll to previous sheet")
 #define STR_TABBAR_HINT_MOVERIGHT_SHEETS        NC_("STR_TABBAR_HINT_MOVERIGHT_SHEETS", "Scroll to next sheet")
 #define STR_TABBAR_HINT_MOVETOEND_SHEETS        NC_("STR_TABBAR_HINT_MOVETOEND_SHEETS", "Scroll to last sheet")
-#define STR_TABBAR_HINT_ADDTAB_SHEETS           NC_("STR_TABBAR_HINT_ADDTAB_SHEETS", "Add sheet")
+#define STR_TABBAR_HINT_ADDTAB_SHEETS           NC_("STR_TABBAR_HINT_ADDTAB_SHEETS", "Add new sheet (right click to see all non-hidden sheets)")
 
 #define STR_SVT_ACC_RULER_HORZ_NAME             NC_("STR_SVT_ACC_RULER_HORZ_NAME", "Horizontal Ruler")
 #define STR_SVT_ACC_RULER_VERT_NAME             NC_("STR_SVT_ACC_RULER_VERT_NAME", "Vertical Ruler")
