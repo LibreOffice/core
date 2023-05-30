@@ -1066,6 +1066,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf79186_noLayoutInCell)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), "IsFollowingTextFlow"));
+    CPPUNIT_ASSERT(getProperty<bool>(getShape(1), "SurroundContour")); // tdf#140508
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testClearingBreak)

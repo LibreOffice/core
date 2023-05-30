@@ -2104,11 +2104,22 @@ void SwWW8ImplReader::MapWrapIntoFlyFormat(const SvxMSDffImportRec& rRecord,
     }
     else if (rFlyFormat.GetSurround().IsContour())
     {
-        // Contour is enabled, but no polygon is set: disable contour, because Word does not
-        // Writer-style auto-contour in that case.
-        SwFormatSurround aSurround(rFlyFormat.GetSurround());
-        aSurround.SetContour(false);
-        rFlyFormat.SetFormatAttr(aSurround);
+        const SdrObject* pSdrObj = rFlyFormat.FindSdrObject();
+        SdrObjKind eKind = pSdrObj ? pSdrObj->GetObjIdentifier() : SdrObjKind::Graphic;
+        switch (eKind)
+        {
+            case SdrObjKind::Text:
+                break;
+            case SdrObjKind::SwFlyDrawObjIdentifier:
+            default:
+            {
+                // Contour is enabled, but no polygon is set: disable contour, because Word does not
+                // Writer-style auto-contour in that case.
+                SwFormatSurround aSurround(rFlyFormat.GetSurround());
+                aSurround.SetContour(false);
+                rFlyFormat.SetFormatAttr(aSurround);
+            }
+        }
     }
 }
 
