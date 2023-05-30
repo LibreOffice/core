@@ -5269,6 +5269,10 @@ CPPUNIT_TEST_FIXTURE(Test, testAreasWithNotes)
     CPPUNIT_ASSERT_MESSAGE("No PrintAreaVer found", dataFound);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("PrintAreaVer wrong row for notes", static_cast<SCROW>(2), row);
 
+    dataFound = m_pDoc->GetPrintAreaVer(0,20,21,row, bNotes); // cols 20 & 21
+    CPPUNIT_ASSERT_MESSAGE("PrintAreaVer found", !dataFound);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("PrintAreaVer wrong row for notes", static_cast<SCROW>(0), row);
+
     bNotes = false;
     dataFound = m_pDoc->GetPrintAreaVer(0,0,1,row, bNotes); // col 0 & 1
     CPPUNIT_ASSERT_MESSAGE("No PrintAreaVer should be found", !dataFound);
