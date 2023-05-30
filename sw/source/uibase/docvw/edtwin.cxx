@@ -6647,6 +6647,9 @@ OUString SwEditWin::GetSurroundingText() const
     {
         bool bUnLockView = !rSh.IsViewLocked();
         rSh.LockView(true);
+
+        // store shell state *before* Push
+        ::std::optional<SwCallLink> aLink(std::in_place, rSh);
         rSh.Push();
 
         // disable accessible events for internal-only helper cursor
@@ -6660,7 +6663,7 @@ OUString SwEditWin::GetSurroundingText() const
         rSh.GoEndSentence();
         rSh.GetSelectedText( sReturn, ParaBreakType::ToOnlyCR  );
 
-        rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
+        rSh.Pop(SwCursorShell::PopMode::DeleteCurrent, aLink);
         rSh.SetSendAccessibleCursorEvents(bSendAccessibleEventOld);
         rSh.HideCursor();
 
