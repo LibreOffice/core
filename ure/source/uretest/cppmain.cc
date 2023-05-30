@@ -131,12 +131,12 @@ private:
         } catch (css::uno::Exception &) {
             throw css::uno::RuntimeException(
                 ::rtl::OUString("error creating instance"),
-                getXWeak());
+                static_cast< ::cppu::OWeakObject * >(this));
         }
         if (!instance.is()) {
             throw css::uno::RuntimeException(
                 "no instance: " + name,
-                getXWeak());
+                static_cast< ::cppu::OWeakObject * >(this));
         }
     }
     css::beans::Introspection::create(context_);
@@ -195,7 +195,7 @@ void Service::test(
         throw css::uno::RuntimeException(
             (name
              + ::rtl::OUString(".throwException failed")),
-            getXWeak());
+            static_cast< ::cppu::OWeakObject * >(this));
     }
 }
 
@@ -204,7 +204,7 @@ namespace CppMain {
 css::uno::Reference< css::uno::XInterface > create(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
-    return getXWeak(new Service(context));
+    return static_cast< ::cppu::OWeakObject * >(new Service(context));
 }
 
 rtl::OUString getImplementationName() {
