@@ -587,7 +587,7 @@
                         <property name="column-spacing">12</property>
                         <child>
                           <object class="GtkCheckButton" id="quotedfieldastext">
-                            <property name="label" translatable="yes" context="textimportcsv|quotedfieldastext">F_ormat quoted field as text</property>
+                            <property name="label" translatable="yes" context="textimportcsv|quotedfieldastext">Format _quoted field as text</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
@@ -665,7 +665,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="detectscientificnumbers">
-                            <property name="label" translatable="yes" context="textimportcsv|detectspecialnumbers">Detect scientific num_bers</property>
+                            <property name="label" translatable="yes" context="textimportcsv|detectspecialnumbers">Detect scientific n_otation</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
