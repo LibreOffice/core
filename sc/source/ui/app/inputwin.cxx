@@ -1709,19 +1709,7 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
 
         // Prevent that the EditView is lost when switching between Views
         pScMod->SetInEditCommand( true );
-
-        // tdf#155453 send InputMethod events received by the InputBar through
-        // ScInputHandler so formatting in other views can be retained
-        bool bExtInput = nCommand == CommandEventId::StartExtTextInput ||
-                         nCommand == CommandEventId::ExtTextInput ||
-                         nCommand == CommandEventId::EndExtTextInput;
-
-        ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
-        if (bExtInput && pInputHdl)
-            pInputHdl->InputCommand(rCEvt);
-        else
-            m_xEditView->Command( rCEvt );
-
+        m_xEditView->Command( rCEvt );
         pScMod->SetInEditCommand( false );
 
         //  CommandEventId::StartDrag does not mean by far that the content was actually changed,
@@ -1741,6 +1729,15 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
                     pHdl->CancelHandler();
                     rViewData.GetView()->ShowCursor(); // Missing for KillEditView, due to being inactive
                 }
+            }
+        }
+        else if ( nCommand == CommandEventId::EndExtTextInput )
+        {
+            if (bFormulaMode)
+            {
+                ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+                if (pHdl)
+                    pHdl->InputCommand(rCEvt);
             }
         }
         else if ( nCommand == CommandEventId::CursorPos )
