@@ -1025,9 +1025,11 @@ void FrameSelector::SetStyleToSelection( tools::Long nWidth, SvxBorderLineStyle 
         mxImpl->SetBorderState( **aIt, FrameBorderState::Show );
 }
 
-void FrameSelector::SetColorToSelection( const Color& rColor )
+void FrameSelector::SetColorToSelection(const Color& rColor, model::ComplexColor const& rComplexColor)
 {
-    mxImpl->maCurrStyle.SetColor( rColor );
+    mxImpl->maCurrStyle.SetColor(rColor);
+    mxImpl->maCurrStyle.setComplexColor(rComplexColor);
+
     for( SelFrameBorderIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt )
         mxImpl->SetBorderState( **aIt, FrameBorderState::Show );
 }

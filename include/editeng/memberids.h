@@ -92,6 +92,7 @@
 #define MID_TL_STYLE        1
 #define MID_TL_COLOR        2
 #define MID_TL_HASCOLOR     3
+#define MID_TL_COMPLEX_COLOR 4
 
 //SvxCrossedOutItem
 #define MID_CROSSED_OUT     0
@@ -150,12 +151,16 @@
 #define RIGHT_BORDER_DISTANCE   7
 #define TOP_BORDER_DISTANCE     8
 #define BOTTOM_BORDER_DISTANCE  9
-#define MID_LEFT_BORDER             10
-#define MID_RIGHT_BORDER            11
-#define MID_TOP_BORDER              12
-#define MID_BOTTOM_BORDER           13
-#define LINE_STYLE                  14
-#define LINE_WIDTH                  15
+#define MID_LEFT_BORDER          10
+#define MID_RIGHT_BORDER         11
+#define MID_TOP_BORDER           12
+#define MID_BOTTOM_BORDER        13
+#define LINE_STYLE               14
+#define LINE_WIDTH               15
+#define MID_BORDER_BOTTOM_COLOR  16
+#define MID_BORDER_LEFT_COLOR    17
+#define MID_BORDER_RIGHT_COLOR   18
+#define MID_BORDER_TOP_COLOR     19
 
 //BrushItem
 #define MID_BACK_COLOR          0

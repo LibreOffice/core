@@ -1012,10 +1012,10 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
             SwFrameFormat *pFormat = pCell->GetFormat();
             std::unique_ptr<SvxBoxItem> aBox(pFormat->GetBox().Clone());
 
-            SvxBorderLine* pTop = const_cast<SvxBorderLine*>(aBox->GetTop());
-            SvxBorderLine* pBot = const_cast<SvxBorderLine*>(aBox->GetBottom());
-            SvxBorderLine* pLeft = const_cast<SvxBorderLine*>(aBox->GetLeft());
-            SvxBorderLine* pRight = const_cast<SvxBorderLine*>(aBox->GetRight());
+            SvxBorderLine* pTop = aBox->GetTop();
+            SvxBorderLine* pBot = aBox->GetBottom();
+            SvxBorderLine* pLeft = aBox->GetLeft();
+            SvxBorderLine* pRight = aBox->GetRight();
 
             if ( !pBorderLine && bSetLine )
             {

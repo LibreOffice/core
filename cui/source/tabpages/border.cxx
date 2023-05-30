@@ -1234,8 +1234,8 @@ IMPL_LINK_NOARG(SvxBorderTabPage, SelSdwHdl_Impl, ValueSet*, void)
 
 IMPL_LINK(SvxBorderTabPage, SelColHdl_Impl, ColorListBox&, rColorBox, void)
 {
-    Color aColor = rColorBox.GetSelectEntryColor();
-    m_aFrameSel.SetColorToSelection(aColor);
+    NamedColor aNamedColor = rColorBox.GetSelectedEntry();
+    m_aFrameSel.SetColorToSelection(aNamedColor.m_aColor, aNamedColor.getComplexColor());
 }
 
 IMPL_LINK_NOARG(SvxBorderTabPage, ModifyWidthLBHdl_Impl, weld::ComboBox&, void)

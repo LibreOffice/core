@@ -242,24 +242,12 @@ bool SvxColorTabPage::FillItemSet( SfxItemSet* rSet )
        sColorName = m_xValSetColorList->GetItemText( m_xValSetColorList->GetSelectedItemId() );
     else
        sColorName = "#" + m_aCurrentColor.m_aColor.AsRGBHexString().toAsciiUpperCase();
-    maPaletteManager.AddRecentColor( m_aCurrentColor.m_aColor, sColorName );
-    XFillColorItem aColorItem( sColorName, m_aCurrentColor.m_aColor );
-    model::ThemeColorType eType = model::convertToThemeColorType(m_aCurrentColor.m_nThemeIndex);
-    if (eType != model::ThemeColorType::Unknown)
-    {
-        aColorItem.getComplexColor().setSchemeColor(eType);
-    }
-    aColorItem.getComplexColor().clearTransformations();
-    if (m_aCurrentColor.m_nLumMod != 10000)
-    {
-        aColorItem.getComplexColor().addTransformation({model::TransformationType::LumMod, m_aCurrentColor.m_nLumMod});
-    }
-    if (m_aCurrentColor.m_nLumOff != 0)
-    {
-        aColorItem.getComplexColor().addTransformation({model::TransformationType::LumOff, m_aCurrentColor.m_nLumOff});
-    }
-    rSet->Put( aColorItem );
-    rSet->Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
+
+    maPaletteManager.AddRecentColor(m_aCurrentColor.m_aColor, sColorName);
+    XFillColorItem aColorItem(sColorName, m_aCurrentColor.m_aColor);
+    aColorItem.setComplexColor(m_aCurrentColor.getComplexColor());
+    rSet->Put(aColorItem);
+    rSet->Put(XFillStyleItem(drawing::FillStyle_SOLID));
     return true;
 }
 
@@ -513,14 +501,10 @@ IMPL_LINK(SvxColorTabPage, SelectValSetHdl_Impl, ValueSet*, pValSet, void)
     m_aCtlPreviewNew.SetAttributes( aXFillAttr.GetItemSet() );
     m_aCtlPreviewNew.Invalidate();
 
-    bool bThemePaletteSelected = false;
-    if (pValSet == m_xValSetColorList.get())
-    {
-        bThemePaletteSelected = maPaletteManager.IsThemePaletteSelected();
-    }
     NamedColor aNamedColor;
     aNamedColor.m_aColor = aColor;
-    if (bThemePaletteSelected)
+
+    if (pValSet == m_xValSetColorList.get() && maPaletteManager.IsThemePaletteSelected())
     {
         sal_uInt16 nThemeIndex;
         sal_uInt16 nEffectIndex;

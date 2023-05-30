@@ -105,6 +105,23 @@ public:
         return mpRightBorderLine.get();
     }
 
+    editeng::SvxBorderLine* GetTop()
+    {
+        return mpTopBorderLine.get();
+    }
+    editeng::SvxBorderLine* GetBottom()
+    {
+        return mpBottomBorderLine.get();
+    }
+    editeng::SvxBorderLine* GetLeft()
+    {
+        return mpLeftBorderLine.get();
+    }
+    editeng::SvxBorderLine* GetRight()
+    {
+        return mpRightBorderLine.get();
+    }
+
     const   editeng::SvxBorderLine* GetLine( SvxBoxItemLine nLine ) const;
 
     //The Pointers are being copied!

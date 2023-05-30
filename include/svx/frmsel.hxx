@@ -151,7 +151,7 @@ public:
     /** Sets the passed line widths to all selected frame borders (in twips). */
     void                SetStyleToSelection( tools::Long nWidth, SvxBorderLineStyle nStyle );
     /** Sets the passed color to all selected frame borders. */
-    void                SetColorToSelection( const Color& rColor );
+    void SetColorToSelection(const Color& rColor, model::ComplexColor const& rComplexColor);
 
     SvxBorderLineStyle getCurrentStyleLineStyle() const;
 

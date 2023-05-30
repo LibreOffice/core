@@ -2458,6 +2458,42 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             nDist = mnRightDistance;
             bDistMember = true;
             break;
+        case MID_BORDER_BOTTOM_COLOR:
+        {
+            if (mpBottomBorderLine)
+            {
+                auto xComplexColor = model::color::createXComplexColor(mpBottomBorderLine->getComplexColor());
+                rVal <<= xComplexColor;
+            }
+            return true;
+        }
+        case MID_BORDER_LEFT_COLOR:
+        {
+            if (mpLeftBorderLine)
+            {
+                auto xComplexColor = model::color::createXComplexColor(mpLeftBorderLine->getComplexColor());
+                rVal <<= xComplexColor;
+            }
+            return true;
+        }
+        case MID_BORDER_RIGHT_COLOR:
+        {
+            if (mpRightBorderLine)
+            {
+                auto xComplexColor = model::color::createXComplexColor(mpRightBorderLine->getComplexColor());
+                rVal <<= xComplexColor;
+            }
+            return true;
+        }
+        case MID_BORDER_TOP_COLOR:
+        {
+            if (mpTopBorderLine)
+            {
+                auto xComplexColor = model::color::createXComplexColor(mpTopBorderLine->getComplexColor());
+                rVal <<= xComplexColor;
+            }
+            return true;
+        }
         case LINE_STYLE:
         case LINE_WIDTH:
             // it doesn't make sense to return a value for these since it's
@@ -2682,6 +2718,30 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 }
             }
             return true;
+        case MID_BORDER_BOTTOM_COLOR:
+        {
+            if (mpBottomBorderLine)
+                return mpBottomBorderLine->setComplexColorFromAny(rVal);
+            return true;
+        }
+        case MID_BORDER_LEFT_COLOR:
+        {
+            if (mpLeftBorderLine)
+                return mpLeftBorderLine->setComplexColorFromAny(rVal);
+            return true;
+        }
+        case MID_BORDER_RIGHT_COLOR:
+        {
+            if (mpRightBorderLine)
+                return mpRightBorderLine->setComplexColorFromAny(rVal);
+            return true;
+        }
+        case MID_BORDER_TOP_COLOR:
+        {
+            if (mpTopBorderLine)
+                return mpTopBorderLine->setComplexColorFromAny(rVal);
+            return true;
+        }
     }
 
     if( bDistMember || nMemberId == BORDER_DISTANCE )
@@ -4206,8 +4266,12 @@ bool SvxBrushItem::operator==( const SfxPoolItem& rAttr ) const
     assert(SfxPoolItem::operator==(rAttr));
 
     const SvxBrushItem& rCmp = static_cast<const SvxBrushItem&>(rAttr);
-    bool bEqual = ( aColor == rCmp.aColor && aFilterColor == rCmp.aFilterColor &&
-        eGraphicPos == rCmp.eGraphicPos && nGraphicTransparency == rCmp.nGraphicTransparency);
+    bool bEqual =
+        aColor == rCmp.aColor &&
+        maComplexColor == rCmp.maComplexColor &&
+        aFilterColor == rCmp.aFilterColor &&
+        eGraphicPos == rCmp.eGraphicPos &&
+        nGraphicTransparency == rCmp.nGraphicTransparency;
 
     if ( bEqual )
     {

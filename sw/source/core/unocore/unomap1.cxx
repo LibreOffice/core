@@ -177,6 +177,7 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetCharStyle
         { UNO_NAME_CHAR_AUTO_KERNING, RES_CHRATR_AUTOKERN  ,  cppu::UnoType<bool>::get()  ,       PROPERTY_NONE,     0},
         { UNO_NAME_CHAR_BACK_TRANSPARENT, RES_CHRATR_BACKGROUND,  cppu::UnoType<bool>::get(),         PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
         { UNO_NAME_CHAR_BACK_COLOR, RES_CHRATR_BACKGROUND,    cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_BACK_COLOR        },
+        { UNO_NAME_CHAR_BACKGROUND_COMPLEX_COLOR, RES_CHRATR_BACKGROUND, cppu::UnoType<css::util::XComplexColor>::get(), PROPERTY_NONE ,MID_BACKGROUND_COMPLEX_COLOR },
         { UNO_NAME_CHAR_HIGHLIGHT, RES_CHRATR_HIGHLIGHT, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_BACK_COLOR },
         { UNO_NAME_CHAR_CASE_MAP, RES_CHRATR_CASEMAP,     cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE, 0},
         { UNO_NAME_CHAR_COLOR, RES_CHRATR_COLOR, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, 0 },
@@ -195,9 +196,11 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetCharStyle
         CTL_FONT_PROPERTIES
         { UNO_NAME_CHAR_UNDERLINE, RES_CHRATR_UNDERLINE ,  cppu::UnoType<sal_Int16>::get(),      PROPERTY_NONE, MID_TL_STYLE},
         { UNO_NAME_CHAR_UNDERLINE_COLOR, RES_CHRATR_UNDERLINE ,  cppu::UnoType<sal_Int32>::get(),            PROPERTY_NONE, MID_TL_COLOR},
+        { UNO_NAME_CHAR_UNDERLINE_COMPLEX_COLOR, RES_CHRATR_UNDERLINE ,  cppu::UnoType<css::util::XComplexColor>::get(), PROPERTY_NONE, MID_TL_COMPLEX_COLOR },
         { UNO_NAME_CHAR_UNDERLINE_HAS_COLOR, RES_CHRATR_UNDERLINE ,  cppu::UnoType<bool>::get(),              PROPERTY_NONE, MID_TL_HASCOLOR},
         { UNO_NAME_CHAR_OVERLINE, RES_CHRATR_OVERLINE ,  cppu::UnoType<sal_Int16>::get(),    PROPERTY_NONE, MID_TL_STYLE},
         { UNO_NAME_CHAR_OVERLINE_COLOR, RES_CHRATR_OVERLINE ,  cppu::UnoType<sal_Int32>::get(),              PROPERTY_NONE, MID_TL_COLOR},
+        { UNO_NAME_CHAR_OVERLINE_COMPLEX_COLOR, RES_CHRATR_OVERLINE, cppu::UnoType<css::util::XComplexColor>::get(), PROPERTY_NONE, MID_TL_COMPLEX_COLOR },
         { UNO_NAME_CHAR_OVERLINE_HAS_COLOR, RES_CHRATR_OVERLINE ,  cppu::UnoType<bool>::get(),            PROPERTY_NONE, MID_TL_HASCOLOR},
         { UNO_NAME_CHAR_KERNING, RES_CHRATR_KERNING    ,  cppu::UnoType<sal_Int16>::get()  ,         PROPERTY_NONE,  CONVERT_TWIPS},
         { UNO_NAME_CHAR_NO_HYPHENATION, RES_CHRATR_NOHYPHEN   ,   cppu::UnoType<bool>::get()  ,       PROPERTY_NONE,     0},
@@ -227,6 +230,10 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetCharStyle
         { UNO_NAME_CHAR_RIGHT_BORDER_DISTANCE, RES_CHRATR_BOX, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },
         { UNO_NAME_CHAR_TOP_BORDER_DISTANCE, RES_CHRATR_BOX, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, TOP_BORDER_DISTANCE |CONVERT_TWIPS },
         { UNO_NAME_CHAR_BOTTOM_BORDER_DISTANCE, RES_CHRATR_BOX, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
+        { UNO_NAME_CHAR_BORDER_LEFT_COMPLEX_COLOR, RES_CHRATR_BOX,   cppu::UnoType<css::util::XComplexColor>::get(),  PROPERTY_NONE, MID_BORDER_LEFT_COLOR },
+        { UNO_NAME_CHAR_BORDER_RIGHT_COMPLEX_COLOR, RES_CHRATR_BOX,  cppu::UnoType<css::util::XComplexColor>::get(),  PROPERTY_NONE, MID_BORDER_RIGHT_COLOR },
+        { UNO_NAME_CHAR_BORDER_TOP_COMPLEX_COLOR, RES_CHRATR_BOX,    cppu::UnoType<css::util::XComplexColor>::get(),  PROPERTY_NONE, MID_BORDER_TOP_COLOR },
+        { UNO_NAME_CHAR_BORDER_BOTTOM_COMPLEX_COLOR, RES_CHRATR_BOX, cppu::UnoType<css::util::XComplexColor>::get(),  PROPERTY_NONE, MID_BORDER_BOTTOM_COLOR },
         { UNO_NAME_CHAR_SHADOW_FORMAT, RES_CHRATR_SHADOW, cppu::UnoType<css::table::ShadowFormat>::get(), PROPERTY_NONE, CONVERT_TWIPS},
         { UNO_NAME_LINK_STYLE, FN_UNO_LINK_STYLE, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0},
     };
@@ -242,6 +249,7 @@ o3tl::span<const SfxItemPropertyMapEntry>  SwUnoPropertyMapProvider::GetAutoChar
         { UNO_NAME_CHAR_AUTO_KERNING, RES_CHRATR_AUTOKERN  ,  cppu::UnoType<bool>::get()  ,       PROPERTY_NONE,     0},
         { UNO_NAME_CHAR_BACK_TRANSPARENT, RES_CHRATR_BACKGROUND,  cppu::UnoType<bool>::get(),         PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
         { UNO_NAME_CHAR_BACK_COLOR, RES_CHRATR_BACKGROUND,    cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_BACK_COLOR        },
+        { UNO_NAME_CHAR_BACKGROUND_COMPLEX_COLOR, RES_CHRATR_BACKGROUND, cppu::UnoType<css::util::XComplexColor>::get(), PROPERTY_NONE, MID_BACKGROUND_COMPLEX_COLOR },
         { UNO_NAME_CHAR_HIGHLIGHT, RES_CHRATR_HIGHLIGHT, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_BACK_COLOR },
         { UNO_NAME_CHAR_CASE_MAP, RES_CHRATR_CASEMAP,     cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE, 0},
         { UNO_NAME_CHAR_COLOR, RES_CHRATR_COLOR,      cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE, 0},
@@ -260,9 +268,11 @@ o3tl::span<const SfxItemPropertyMapEntry>  SwUnoPropertyMapProvider::GetAutoChar
         CTL_FONT_PROPERTIES
         { UNO_NAME_CHAR_UNDERLINE, RES_CHRATR_UNDERLINE ,  cppu::UnoType<sal_Int16>::get(),      PROPERTY_NONE, MID_TL_STYLE},
         { UNO_NAME_CHAR_UNDERLINE_COLOR, RES_CHRATR_UNDERLINE ,  cppu::UnoType<sal_Int32>::get(),            PROPERTY_NONE, MID_TL_COLOR},
+        { UNO_NAME_CHAR_UNDERLINE_COMPLEX_COLOR, RES_CHRATR_UNDERLINE, cppu::UnoType<css::util::XComplexColor>::get(), PROPERTY_NONE, MID_TL_COMPLEX_COLOR },
         { UNO_NAME_CHAR_UNDERLINE_HAS_COLOR, RES_CHRATR_UNDERLINE ,  cppu::UnoType<bool>::get(),              PROPERTY_NONE, MID_TL_HASCOLOR},
         { UNO_NAME_CHAR_OVERLINE, RES_CHRATR_OVERLINE ,  cppu::UnoType<sal_Int16>::get(),      PROPERTY_NONE, MID_TL_STYLE},
         { UNO_NAME_CHAR_OVERLINE_COLOR, RES_CHRATR_OVERLINE ,  cppu::UnoType<sal_Int32>::get(),            PROPERTY_NONE, MID_TL_COLOR},
+        { UNO_NAME_CHAR_OVERLINE_COMPLEX_COLOR, RES_CHRATR_OVERLINE, cppu::UnoType<css::util::XComplexColor>::get(), PROPERTY_NONE, MID_TL_COMPLEX_COLOR },
         { UNO_NAME_CHAR_OVERLINE_HAS_COLOR, RES_CHRATR_OVERLINE ,  cppu::UnoType<bool>::get(),              PROPERTY_NONE, MID_TL_HASCOLOR},
         { UNO_NAME_CHAR_KERNING, RES_CHRATR_KERNING    ,  cppu::UnoType<sal_Int16>::get()  ,         PROPERTY_NONE,  CONVERT_TWIPS},
         { UNO_NAME_CHAR_NO_HYPHENATION, RES_CHRATR_NOHYPHEN   ,   cppu::UnoType<bool>::get()  ,       PROPERTY_NONE,     0},
@@ -339,6 +349,7 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetFrameStyl
         { UNO_NAME_ANCHOR_PAGE_NO, RES_ANCHOR,            cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE, MID_ANCHOR_PAGENUM       },
         { UNO_NAME_ANCHOR_TYPE, RES_ANCHOR,           cppu::UnoType<css::text::TextContentAnchorType>::get(),            PROPERTY_NONE, MID_ANCHOR_ANCHORTYPE},
         { UNO_NAME_BACK_COLOR, RES_BACKGROUND,            cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_BACK_COLOR        },
+        { UNO_NAME_BACKGROUND_COMPLEX_COLOR, RES_BACKGROUND, cppu::UnoType<css::util::XComplexColor>::get(), PROPERTY_NONE ,MID_BACKGROUND_COMPLEX_COLOR },
         { UNO_NAME_BACK_COLOR_R_G_B, RES_BACKGROUND,      cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE ,MID_BACK_COLOR_R_G_B},
         { UNO_NAME_BACK_COLOR_TRANSPARENCY, RES_BACKGROUND,      cppu::UnoType<sal_Int8>::get(), PROPERTY_NONE ,MID_BACK_COLOR_TRANSPARENCY},
         { UNO_NAME_FRAME_INTEROP_GRAB_BAG, RES_FRMATR_GRABBAG, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE, 0},
@@ -403,6 +414,10 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetFrameStyl
         { UNO_NAME_RIGHT_BORDER_DISTANCE, RES_BOX,                cppu::UnoType<sal_Int32>::get(),   0, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },
         { UNO_NAME_TOP_BORDER_DISTANCE, RES_BOX,              cppu::UnoType<sal_Int32>::get(),   0, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },
         { UNO_NAME_BOTTOM_BORDER_DISTANCE, RES_BOX,               cppu::UnoType<sal_Int32>::get(),   0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
+        { UNO_NAME_BORDER_LEFT_COMPLEX_COLOR, RES_BOX,   cppu::UnoType<css::util::XComplexColor>::get(),  0, MID_BORDER_LEFT_COLOR },
+        { UNO_NAME_BORDER_RIGHT_COMPLEX_COLOR, RES_BOX,  cppu::UnoType<css::util::XComplexColor>::get(),  0, MID_BORDER_RIGHT_COLOR },
+        { UNO_NAME_BORDER_TOP_COMPLEX_COLOR, RES_BOX,    cppu::UnoType<css::util::XComplexColor>::get(),  0, MID_BORDER_TOP_COLOR },
+        { UNO_NAME_BORDER_BOTTOM_COMPLEX_COLOR, RES_BOX, cppu::UnoType<css::util::XComplexColor>::get(),  0, MID_BORDER_BOTTOM_COLOR },
         { UNO_NAME_USER_DEFINED_ATTRIBUTES, RES_UNKNOWNATR_CONTAINER, cppu::UnoType<css::container::XNameContainer>::get(), PropertyAttribute::MAYBEVOID, 0 },
         { UNO_NAME_IS_PHYSICAL, FN_UNO_IS_PHYSICAL,     cppu::UnoType<bool>::get(), PropertyAttribute::READONLY, 0},
         { UNO_NAME_IS_AUTO_UPDATE, FN_UNO_IS_AUTO_UPDATE, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},
@@ -431,7 +446,8 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPageStyle
 {
     static SfxItemPropertyMapEntry const aPageStyleMap   [] =
     {
-        { UNO_NAME_BACK_COLOR, RES_BACKGROUND,            cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_BACK_COLOR        },
+        { UNO_NAME_BACK_COLOR, RES_BACKGROUND,            cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_BACK_COLOR },
+        { UNO_NAME_BACKGROUND_COMPLEX_COLOR, RES_BACKGROUND, cppu::UnoType<css::util::XComplexColor>::get(), PROPERTY_NONE, MID_BACKGROUND_COMPLEX_COLOR },
         { UNO_NAME_BACK_GRAPHIC_URL, RES_BACKGROUND,      cppu::UnoType<OUString>::get(), PROPERTY_NONE ,MID_GRAPHIC_URL    },
         { UNO_NAME_BACK_GRAPHIC, RES_BACKGROUND, cppu::UnoType<graphic::XGraphic>::get(), PROPERTY_NONE, MID_GRAPHIC },
         { UNO_NAME_BACK_GRAPHIC_FILTER, RES_BACKGROUND,       cppu::UnoType<OUString>::get(), PROPERTY_NONE ,MID_GRAPHIC_FILTER    },
@@ -449,6 +465,10 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPageStyle
         { UNO_NAME_RIGHT_BORDER_DISTANCE, RES_BOX,                cppu::UnoType<sal_Int32>::get(),   0, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },
         { UNO_NAME_TOP_BORDER_DISTANCE, RES_BOX,              cppu::UnoType<sal_Int32>::get(),   0, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },
         { UNO_NAME_BOTTOM_BORDER_DISTANCE, RES_BOX,               cppu::UnoType<sal_Int32>::get(),   0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
+        { UNO_NAME_BORDER_LEFT_COMPLEX_COLOR, RES_BOX,   cppu::UnoType<css::util::XComplexColor>::get(),  0, MID_BORDER_LEFT_COLOR },
+        { UNO_NAME_BORDER_RIGHT_COMPLEX_COLOR, RES_BOX,  cppu::UnoType<css::util::XComplexColor>::get(),  0, MID_BORDER_RIGHT_COLOR },
+        { UNO_NAME_BORDER_TOP_COMPLEX_COLOR, RES_BOX,    cppu::UnoType<css::util::XComplexColor>::get(),  0, MID_BORDER_TOP_COLOR },
+        { UNO_NAME_BORDER_BOTTOM_COMPLEX_COLOR, RES_BOX, cppu::UnoType<css::util::XComplexColor>::get(),  0, MID_BORDER_BOTTOM_COLOR },
         { UNO_NAME_SHADOW_FORMAT, RES_SHADOW,             cppu::UnoType<css::table::ShadowFormat>::get(),   PROPERTY_NONE, CONVERT_TWIPS},
         { UNO_NAME_SHADOW_TRANSPARENCE, RES_SHADOW,       cppu::UnoType<sal_Int16>::get(),       PROPERTY_NONE, MID_SHADOW_TRANSPARENCE},
 
@@ -631,7 +651,8 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetTableProp
 {
     static SfxItemPropertyMapEntry const aTablePropertyMap_Impl[] =
     {
-        { UNO_NAME_BACK_COLOR, RES_BACKGROUND,        cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE,MID_BACK_COLOR         },
+        { UNO_NAME_BACK_COLOR, RES_BACKGROUND,        cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE,MID_BACK_COLOR },
+        { UNO_NAME_BACKGROUND_COMPLEX_COLOR, RES_BACKGROUND, cppu::UnoType<css::util::XComplexColor>::get(), PROPERTY_NONE, MID_BACKGROUND_COMPLEX_COLOR},
         { UNO_NAME_BREAK_TYPE, RES_BREAK,                 cppu::UnoType<css::style::BreakType>::get(),       PROPERTY_NONE, 0},
         { UNO_NAME_BACK_GRAPHIC_URL, RES_BACKGROUND,      cppu::UnoType<OUString>::get(), PROPERTY_NONE ,MID_GRAPHIC_URL    },
         { UNO_NAME_BACK_GRAPHIC, RES_BACKGROUND, cppu::UnoType<graphic::XGraphic>::get(), PROPERTY_NONE, MID_GRAPHIC },
@@ -684,7 +705,8 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetRangeProp
     {
         COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN_01
         TABSTOPS_MAP_ENTRY
-        { UNO_NAME_BACK_COLOR, FN_UNO_TABLE_CELL_BACKGROUND,  cppu::UnoType<sal_Int32>::get(),   PropertyAttribute::MAYBEVOID, MID_BACK_COLOR  },
+        { UNO_NAME_BACK_COLOR, FN_UNO_TABLE_CELL_BACKGROUND, cppu::UnoType<sal_Int32>::get(), PropertyAttribute::MAYBEVOID, MID_BACK_COLOR  },
+        { UNO_NAME_BACKGROUND_COMPLEX_COLOR, FN_UNO_TABLE_CELL_BACKGROUND, cppu::UnoType<sal_Int32>::get(), PropertyAttribute::MAYBEVOID, MID_BACKGROUND_COMPLEX_COLOR  },
         { UNO_NAME_BACK_GRAPHIC_URL, RES_BACKGROUND,      cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID ,MID_GRAPHIC_URL    },
         { UNO_NAME_BACK_GRAPHIC, RES_BACKGROUND, cppu::UnoType<graphic::XGraphic>::get(), PROPERTY_NONE, MID_GRAPHIC },
         { UNO_NAME_BACK_GRAPHIC_FILTER, RES_BACKGROUND,       cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID ,MID_GRAPHIC_FILTER    },
@@ -719,6 +741,7 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetSectionPr
         { UNO_NAME_BACK_GRAPHIC_FILTER, RES_BACKGROUND,       cppu::UnoType<OUString>::get(), PROPERTY_NONE ,MID_GRAPHIC_FILTER    },
         { UNO_NAME_BACK_GRAPHIC_LOCATION, RES_BACKGROUND,         cppu::UnoType<css::style::GraphicLocation>::get(),          PROPERTY_NONE ,MID_GRAPHIC_POSITION},
         { UNO_NAME_BACK_COLOR, RES_BACKGROUND,            cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_BACK_COLOR        },
+        { UNO_NAME_BACKGROUND_COMPLEX_COLOR, RES_BACKGROUND, cppu::UnoType<css::util::XComplexColor>::get(), PROPERTY_NONE, MID_BACKGROUND_COMPLEX_COLOR },
         { UNO_NAME_BACK_TRANSPARENT, RES_BACKGROUND,      cppu::UnoType<bool>::get(),         PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
         { UNO_LINK_DISPLAY_NAME, FN_PARAM_LINK_DISPLAY_NAME,  cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0xbf},
         { UNO_NAME_USER_DEFINED_ATTRIBUTES, RES_UNKNOWNATR_CONTAINER, cppu::UnoType<css::container::XNameContainer>::get(), PropertyAttribute::MAYBEVOID, 0 },
@@ -916,6 +939,7 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetTextTable
 
         // attributes from PROPERTY_MAP_TABLE_CELL:
         { UNO_NAME_BACK_COLOR, FN_UNO_TABLE_CELL_BACKGROUND,    cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE , MID_BACK_COLOR       },
+        { UNO_NAME_BACKGROUND_COMPLEX_COLOR, FN_UNO_TABLE_CELL_BACKGROUND, cppu::UnoType<css::util::XComplexColor>::get(), PROPERTY_NONE , MID_BACKGROUND_COMPLEX_COLOR },
         { UNO_NAME_BACK_GRAPHIC_URL, RES_BACKGROUND,      cppu::UnoType<OUString>::get(), PROPERTY_NONE ,MID_GRAPHIC_URL    },
         { UNO_NAME_BACK_GRAPHIC, RES_BACKGROUND, cppu::UnoType<graphic::XGraphic>::get(), PROPERTY_NONE, MID_GRAPHIC },
         { UNO_NAME_BACK_GRAPHIC_FILTER, RES_BACKGROUND,       cppu::UnoType<OUString>::get(), PROPERTY_NONE ,MID_GRAPHIC_FILTER    },
