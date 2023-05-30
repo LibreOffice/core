@@ -95,6 +95,7 @@
 #define STR_VOC_FILE                                    NC_("STR_VOC_FILE", "Creative Labs Audio")
 #define STR_AIFF_FILE                                   NC_("STR_AIFF_FILE", "Apple/SGI Audio")
 #define STR_SVX_FILE                                    NC_("STR_SVX_FILE", "Amiga SVX Audio")
+#define STR_SD_PAGE                                     NC_("STR_SD_PAGE", "Slide")
 #define STR_SD_PAGE_COUNT                               NC_("STR_SD_PAGE_COUNT", "Slide %1 of %2")
 #define STR_SD_PAGE_COUNT_CUSTOM                        NC_("STR_SD_PAGE_COUNT_CUSTOM", "Slide %1 of %2 (%3)")
 #define STR_SD_PAGE_COUNT_DRAW                          NC_("STR_SD_PAGE_COUNT_DRAW", "Page %1 of %2")
