@@ -48,7 +48,7 @@ XMLEventsImportContext::XMLEventsImportContext(
     SvXMLImport& rImport,
     const Reference<XEventsSupplier> & xEventsSupplier) :
         SvXMLImportContext(rImport),
-        xEvents(xEventsSupplier->getEvents())
+        m_xEvents(xEventsSupplier->getEvents())
 {
 }
 
@@ -57,7 +57,7 @@ XMLEventsImportContext::XMLEventsImportContext(
     SvXMLImport& rImport,
     const Reference<XNameReplace> & xNameReplace) :
         SvXMLImportContext(rImport),
-        xEvents(xNameReplace)
+        m_xEvents(xNameReplace)
 {
 }
 
@@ -116,14 +116,14 @@ void XMLEventsImportContext::SetEvents(
 {
     if (xNameRepl.is())
     {
-        xEvents = xNameRepl;
+        m_xEvents = xNameRepl;
 
         // now iterate over vector and a) insert b) delete all elements
-        for(const auto& rEvent : aCollectEvents)
+        for(const auto& rEvent : m_aCollectEvents)
         {
             AddEventValues(rEvent.first, rEvent.second);
         }
-        aCollectEvents.clear();
+        m_aCollectEvents.clear();
     }
 }
 
@@ -135,11 +135,11 @@ void XMLEventsImportContext::GetEventSequence(
     // (This shouldn't take a lot of time, since this method should only get
     //  called if only one (or few) events are being expected)
 
-    auto aIter = std::find_if(aCollectEvents.begin(), aCollectEvents.end(),
+    auto aIter = std::find_if(m_aCollectEvents.begin(), m_aCollectEvents.end(),
         [&rName](EventNameValuesPair& rEvent) { return rEvent.first == rName; });
 
     // if we're not at the end, set the sequence
-    if (aIter != aCollectEvents.end())
+    if (aIter != m_aCollectEvents.end())
     {
         rSequence = aIter->second;
     }
@@ -150,14 +150,14 @@ void XMLEventsImportContext::AddEventValues(
     const Sequence<PropertyValue> & rValues )
 {
     // if we already have the events, set them; else just collect
-    if (xEvents.is())
+    if (m_xEvents.is())
     {
         // set event (if name is known)
-        if (xEvents->hasByName(rEventName))
+        if (m_xEvents->hasByName(rEventName))
         {
             try
             {
-                xEvents->replaceByName(rEventName, Any(rValues));
+                m_xEvents->replaceByName(rEventName, Any(rValues));
             } catch ( const IllegalArgumentException & rException )
             {
                 Sequence<OUString> aMsgParams { rEventName };
@@ -171,7 +171,7 @@ void XMLEventsImportContext::AddEventValues(
     else
     {
         EventNameValuesPair aPair(rEventName, rValues);
-        aCollectEvents.push_back(aPair);
+        m_aCollectEvents.push_back(aPair);
     }
 }
 

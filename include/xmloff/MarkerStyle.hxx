@@ -35,7 +35,7 @@ namespace com::sun::star {
 
 class XMLOFF_DLLPUBLIC XMLMarkerStyleImport
 {
-    SvXMLImport& rImport;
+    SvXMLImport& m_rImport;
 
 public:
     XMLMarkerStyleImport( SvXMLImport& rImport );
@@ -48,7 +48,7 @@ public:
 
 class XMLOFF_DLLPUBLIC XMLMarkerStyleExport
 {
-    SvXMLExport& rExport;
+    SvXMLExport& m_rExport;
 
 public:
     XMLMarkerStyleExport( SvXMLExport& rExport );

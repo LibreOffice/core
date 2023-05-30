@@ -40,7 +40,7 @@ using namespace ::xmloff::token;
 // Import
 
 XMLMarkerStyleImport::XMLMarkerStyleImport( SvXMLImport& rImp )
-    : rImport( rImp )
+    : m_rImport( rImp )
 {
 }
 
@@ -55,7 +55,7 @@ void XMLMarkerStyleImport::importXML(
 
     std::unique_ptr<SdXMLImExViewBox> xViewBox;
 
-    SvXMLUnitConverter& rUnitConverter = rImport.GetMM100UnitConverter();
+    SvXMLUnitConverter& rUnitConverter = m_rImport.GetMM100UnitConverter();
 
     OUString strPathData;
 
@@ -88,7 +88,7 @@ void XMLMarkerStyleImport::importXML(
     {
         basegfx::B2DPolyPolygon aPolyPolygon;
 
-        if(basegfx::utils::importFromSvgD(aPolyPolygon, strPathData, rImport.needFixPositionAfterZ(), nullptr))
+        if(basegfx::utils::importFromSvgD(aPolyPolygon, strPathData, m_rImport.needFixPositionAfterZ(), nullptr))
         {
             if(aPolyPolygon.count())
             {
@@ -122,7 +122,7 @@ void XMLMarkerStyleImport::importXML(
 
         if( !aDisplayName.isEmpty() )
         {
-            rImport.AddStyleDisplayName( XmlStyleFamily::SD_MARKER_ID, rStrName,
+            m_rImport.AddStyleDisplayName( XmlStyleFamily::SD_MARKER_ID, rStrName,
                                         aDisplayName );
             rStrName = aDisplayName;
         }
@@ -134,7 +134,7 @@ void XMLMarkerStyleImport::importXML(
 // Export
 
 XMLMarkerStyleExport::XMLMarkerStyleExport( SvXMLExport& rExp )
-    : rExport( rExp )
+    : m_rExport( rExp )
 {
 }
 
@@ -153,11 +153,11 @@ void XMLMarkerStyleExport::exportXML(
     // Name
     bool bEncoded(false);
 
-    rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_NAME, rExport.EncodeStyleName( rStrName, &bEncoded ) );
+    m_rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_NAME, m_rExport.EncodeStyleName( rStrName, &bEncoded ) );
 
     if( bEncoded )
     {
-        rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, rStrName );
+        m_rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, rStrName );
     }
 
     const basegfx::B2DPolyPolygon aPolyPolygon(
@@ -173,7 +173,7 @@ void XMLMarkerStyleExport::exportXML(
         aPolyPolygonRange.getMinY(),
         aPolyPolygonRange.getWidth(),
         aPolyPolygonRange.getHeight());
-    rExport.AddAttribute( XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString() );
+    m_rExport.AddAttribute( XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString() );
 
     // Pathdata
     const OUString aPolygonString(
@@ -184,10 +184,10 @@ void XMLMarkerStyleExport::exportXML(
             true));         // bHandleRelativeNextPointCompatible
 
     // write point array
-    rExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aPolygonString);
+    m_rExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aPolygonString);
 
     // Do Write
-    SvXMLElementExport rElem( rExport, XML_NAMESPACE_DRAW, XML_MARKER, true, false );
+    SvXMLElementExport rElem( m_rExport, XML_NAMESPACE_DRAW, XML_MARKER, true, false );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

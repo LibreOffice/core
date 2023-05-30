@@ -51,11 +51,11 @@ typedef ::std::pair<
 class XMLOFF_DLLPUBLIC XMLEventsImportContext : public SvXMLImportContext
 {
     // the event XNameReplace; may be empty
-    css::uno::Reference<css::container::XNameReplace> xEvents;
+    css::uno::Reference<css::container::XNameReplace> m_xEvents;
 
 protected:
     // if no XNameReplace is given, use this vector to collect events
-    std::vector< EventNameValuesPair > aCollectEvents;
+    std::vector< EventNameValuesPair > m_aCollectEvents;
 
 public:
 

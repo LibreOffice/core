@@ -35,12 +35,12 @@ class XMLFontEncodingPropHdl;
 
 class XMLOFF_DLLPUBLIC XMLFontStylesContext final : public SvXMLStylesContext
 {
-    std::unique_ptr<XMLFontFamilyNamePropHdl>    pFamilyNameHdl;
-    std::unique_ptr<XMLFontFamilyPropHdl>        pFamilyHdl;
-    std::unique_ptr<XMLFontPitchPropHdl>         pPitchHdl;
-    std::unique_ptr<XMLFontEncodingPropHdl>      pEncHdl;
+    std::unique_ptr<XMLFontFamilyNamePropHdl>    m_pFamilyNameHdl;
+    std::unique_ptr<XMLFontFamilyPropHdl>        m_pFamilyHdl;
+    std::unique_ptr<XMLFontPitchPropHdl>         m_pPitchHdl;
+    std::unique_ptr<XMLFontEncodingPropHdl>      m_pEncHdl;
 
-    rtl_TextEncoding        eDfltEncoding;
+    rtl_TextEncoding        m_eDefaultEncoding;
 
     using SvXMLStylesContext::CreateStyleChildContext;
     virtual SvXMLStyleContext *CreateStyleChildContext( sal_Int32 nElement,
@@ -60,12 +60,12 @@ public:
                          sal_Int32 nPitchIdx,
                          sal_Int32 nCharsetIdx ) const;
 
-    rtl_TextEncoding GetDfltCharset() const { return eDfltEncoding; }
+    rtl_TextEncoding GetDfltCharset() const { return m_eDefaultEncoding; }
 
-    XMLFontFamilyNamePropHdl& GetFamilyNameHdl() const { return *pFamilyNameHdl; }
-    XMLFontFamilyPropHdl& GetFamilyHdl() const { return *pFamilyHdl; }
-    XMLFontPitchPropHdl& GetPitchHdl() const { return *pPitchHdl; }
-    XMLFontEncodingPropHdl& GetEncodingHdl() const { return *pEncHdl; }
+    XMLFontFamilyNamePropHdl& GetFamilyNameHdl() const { return *m_pFamilyNameHdl; }
+    XMLFontFamilyPropHdl& GetFamilyHdl() const { return *m_pFamilyHdl; }
+    XMLFontPitchPropHdl& GetPitchHdl() const { return *m_pPitchHdl; }
+    XMLFontEncodingPropHdl& GetEncodingHdl() const { return *m_pEncHdl; }
 
 };
 

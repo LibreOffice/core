@@ -40,12 +40,12 @@ namespace xmloff
 
     void OFormEventsImportContext::endFastElement(sal_Int32 )
     {
-        Sequence< ScriptEventDescriptor > aTranslated(aCollectEvents.size());
+        Sequence< ScriptEventDescriptor > aTranslated(m_aCollectEvents.size());
         ScriptEventDescriptor* pTranslated = aTranslated.getArray();
 
         // loop through the collected events and translate them
         sal_Int32 nSeparatorPos = -1;
-        for ( const auto& rEvent : aCollectEvents )
+        for ( const auto& rEvent : m_aCollectEvents )
         {
             // the name of the event is built from ListenerType::EventMethod
             nSeparatorPos = rEvent.first.indexOf(EVENT_NAME_SEPARATOR);

@@ -323,11 +323,11 @@ SvXMLStyleContext *XMLFontStylesContext::CreateStyleChildContext(
 XMLFontStylesContext::XMLFontStylesContext( SvXMLImport& rImport,
         rtl_TextEncoding eDfltEnc ) :
     SvXMLStylesContext( rImport ),
-    pFamilyNameHdl( new XMLFontFamilyNamePropHdl ),
-    pFamilyHdl( new XMLFontFamilyPropHdl ),
-    pPitchHdl( new XMLFontPitchPropHdl ),
-    pEncHdl( new XMLFontEncodingPropHdl ),
-    eDfltEncoding( eDfltEnc )
+    m_pFamilyNameHdl( new XMLFontFamilyNamePropHdl ),
+    m_pFamilyHdl( new XMLFontFamilyPropHdl ),
+    m_pPitchHdl( new XMLFontPitchPropHdl ),
+    m_pEncHdl( new XMLFontEncodingPropHdl ),
+    m_eDefaultEncoding( eDfltEnc )
 {
 }
 
