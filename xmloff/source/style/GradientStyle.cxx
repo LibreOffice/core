@@ -34,6 +34,7 @@
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <basegfx/utils/bgradient.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -219,19 +220,30 @@ void XMLGradientStyleExport::exportXML(
     const OUString& rStrName,
     const uno::Any& rValue )
 {
-    awt::Gradient2 aGradient;
-
     if( rStrName.isEmpty() )
         return;
 
-    if( !(rValue >>= aGradient) )
+    if (!rValue.has<css::awt::Gradient2>() && !rValue.has<css::awt::Gradient>())
         return;
+
+    basegfx::BGradient aGradient(rValue);
+
+    // MCGR: For better compatibility with LO versions before MCGR, try
+    // to re-create a 'border' value based on the existing gradient stops.
+    // With MCGR we do not need 'border' anymore in quite some cases since
+    // no Start/EndColor at 0.0 resp. 1.0 is explicitely needed. Since we
+    // (unfortunately need to) internally continue to support border
+    // anyways it does no harm to fallback to use the border value - if
+    // there is an equivalent representation as this helper checks for.
+    // For exports that do not support 'border' this will be adapted as
+    // needed (see tryToApplyBorder()).
+    aGradient.tryToRecreateBorder(nullptr);
 
     OUString aStrValue;
     OUStringBuffer aOut;
 
     // Style
-    if( !SvXMLUnitConverter::convertEnum( aOut, aGradient.Style, pXML_GradientStyle_Enum ) )
+    if( !SvXMLUnitConverter::convertEnum( aOut, aGradient.GetGradientStyle(), pXML_GradientStyle_Enum ) )
         return;
 
     // Name
@@ -247,47 +259,57 @@ void XMLGradientStyleExport::exportXML(
     m_rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );
 
     // Center x/y
-    if( aGradient.Style != awt::GradientStyle_LINEAR &&
-        aGradient.Style != awt::GradientStyle_AXIAL   )
+    if( aGradient.GetGradientStyle() != awt::GradientStyle_LINEAR &&
+        aGradient.GetGradientStyle() != awt::GradientStyle_AXIAL   )
     {
-        ::sax::Converter::convertPercent(aOut, aGradient.XOffset);
+        ::sax::Converter::convertPercent(aOut, aGradient.GetXOffset());
         aStrValue = aOut.makeStringAndClear();
         m_rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CX, aStrValue );
-        ::sax::Converter::convertPercent(aOut, aGradient.YOffset);
+        ::sax::Converter::convertPercent(aOut, aGradient.GetYOffset());
         aStrValue = aOut.makeStringAndClear();
         m_rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CY, aStrValue );
     }
 
+    // prep Start/EndColor, default black
+    basegfx::BColor aStartColor;
+    basegfx::BColor aEndColor;
+
+    if (!aGradient.GetColorStops().empty())
+    {
+        aStartColor = aGradient.GetColorStops().front().getStopColor();
+        aEndColor = aGradient.GetColorStops().back().getStopColor();
+    }
+
     // Color start
-    ::sax::Converter::convertColor(aOut, aGradient.StartColor);
+    ::sax::Converter::convertColor(aOut, Color(aStartColor));
     aStrValue = aOut.makeStringAndClear();
     m_rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_START_COLOR, aStrValue );
 
     // Color end
-    ::sax::Converter::convertColor(aOut, aGradient.EndColor);
+    ::sax::Converter::convertColor(aOut, Color(aEndColor));
     aStrValue = aOut.makeStringAndClear();
     m_rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_END_COLOR, aStrValue );
 
     // Intensity start
-    ::sax::Converter::convertPercent(aOut, aGradient.StartIntensity);
+    ::sax::Converter::convertPercent(aOut, aGradient.GetStartIntens());
     aStrValue = aOut.makeStringAndClear();
     m_rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_START_INTENSITY, aStrValue );
 
     // Intensity end
-    ::sax::Converter::convertPercent(aOut, aGradient.EndIntensity);
+    ::sax::Converter::convertPercent(aOut, aGradient.GetEndIntens());
     aStrValue = aOut.makeStringAndClear();
     m_rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_END_INTENSITY, aStrValue );
 
     // Angle
-    if( aGradient.Style != awt::GradientStyle_RADIAL )
+    if( aGradient.GetGradientStyle() != awt::GradientStyle_RADIAL )
     {
-        ::sax::Converter::convertAngle(aOut, aGradient.Angle, m_rExport.getSaneDefaultVersion());
+        ::sax::Converter::convertAngle(aOut, static_cast<sal_Int16>(aGradient.GetAngle()), m_rExport.getSaneDefaultVersion());
         aStrValue = aOut.makeStringAndClear();
         m_rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_GRADIENT_ANGLE, aStrValue );
     }
 
     // Border
-    ::sax::Converter::convertPercent( aOut, aGradient.Border );
+    ::sax::Converter::convertPercent( aOut, aGradient.GetBorder() );
     aStrValue = aOut.makeStringAndClear();
     m_rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_BORDER, aStrValue );
 
@@ -299,15 +321,15 @@ void XMLGradientStyleExport::exportXML(
     // Do not export in standard ODF 1.3 or older.
     if ((m_rExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED) == 0)
         return;
-    sal_Int32 nCount = aGradient.ColorStops.getLength();
-    if (nCount == 0)
+
+    if (aGradient.GetColorStops().empty())
         return;
 
     double fPreviousOffset = 0.0;
-    for (auto& aCandidate : aGradient.ColorStops)
+    for (const auto& aCandidate : aGradient.GetColorStops())
     {
         // Attribute svg:offset. Make sure offsets are increasing.
-        double fOffset = std::clamp<double>(aCandidate.StopOffset, 0.0, 1.0);
+        double fOffset = std::clamp<double>(aCandidate.getStopOffset(), 0.0, 1.0);
         if (fOffset < fPreviousOffset)
             fOffset = fPreviousOffset;
         m_rExport.AddAttribute(XML_NAMESPACE_SVG, XML_OFFSET, OUString::number(fOffset));
@@ -317,10 +339,10 @@ void XMLGradientStyleExport::exportXML(
         m_rExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_COLOR_TYPE, u"rgb");
 
         // Attribute loext:color-value, data type color, that is #rrggbb.
-        rendering::RGBColor aDecimalColor = aCandidate.StopColor;
-        ::Color aToolsColor(std::clamp<sal_uInt8>(std::round(aDecimalColor.Red * 255.0), 0, 255),
-                            std::clamp<sal_uInt8>(std::round(aDecimalColor.Green * 255.0), 0, 255),
-                            std::clamp<sal_uInt8>(std::round(aDecimalColor.Blue * 255.0), 0, 255));
+        const basegfx::BColor aDecimalColor(aCandidate.getStopColor());
+        ::Color aToolsColor(std::clamp<sal_uInt8>(std::round(aDecimalColor.getRed() * 255.0), 0, 255),
+                            std::clamp<sal_uInt8>(std::round(aDecimalColor.getGreen() * 255.0), 0, 255),
+                            std::clamp<sal_uInt8>(std::round(aDecimalColor.getBlue() * 255.0), 0, 255));
         m_rExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_COLOR_VALUE,
                              rtl::OUStringChar('#') + aToolsColor.AsRGBHexString());
 
