@@ -121,6 +121,7 @@ cmd/32/insertobjectfloatingframe.png cmd/32/insertframe.png
 cmd/32/insertobjectstarmath.png cmd/32/insertmath.png
 cmd/32/insertpagefooter.png cmd/32/insertfooter.png
 cmd/32/insertpageheader.png cmd/32/insertheader.png
+cmd/32/insertpagenumberwizard.png cmd/32/insertpagenumberfield.png
 cmd/32/insertpagesfield.png cmd/32/insertpagecountfield.png
 cmd/32/insertpatternfield.png cmd/32/patternfield.png
 cmd/32/insertpushbutton.png cmd/32/pushbutton.png
@@ -130,13 +131,6 @@ cmd/32/inserttextframe.png cmd/32/insertframe.png
 cmd/32/inserttimefield.png cmd/32/timefield.png
 cmd/32/inserttimefieldfix.png cmd/32/timefield.png
 cmd/32/insobjctrl.png cmd/32/adddirect.png
-cmd/32/linenumberdialog.png cmd/32/linenumberingdialog.png
-cmd/32/numberingmenu.png cmd/32/outlinebullet.png
-cmd/32/objectmenu.png cmd/32/insertobject.png
-cmd/32/paragraphmenu.png cmd/32/paragraphdialog.png
-cmd/32/shapesmenu.png cmd/32/basicshapes.pentagon.png
-cmd/32/tracechangemode.png cmd/32/trackchanges.png
-cmd/32/viewtrackchanges.png cmd/32/showtrackedchanges.png
 
 cmd/lc_authoritiesentrydialog.png cmd/lc_insertauthorfield.png
 cmd/lc_changesmenu.png cmd/lc_trackchangesbar.png
@@ -180,6 +174,7 @@ cmd/lc_insertobjectfloatingframe.png cmd/lc_insertframe.png
 cmd/lc_insertobjectstarmath.png cmd/lc_insertmath.png
 cmd/lc_insertpagefooter.png cmd/lc_insertfooter.png
 cmd/lc_insertpageheader.png cmd/lc_insertheader.png
+cmd/lc_insertpagenumberwizard.png cmd/lc_insertpagenumberfield.png
 cmd/lc_insertpagesfield.png cmd/lc_insertpagecountfield.png
 cmd/lc_insertpatternfield.png cmd/lc_patternfield.png
 cmd/lc_insertpushbutton.png cmd/lc_pushbutton.png
@@ -189,13 +184,6 @@ cmd/lc_inserttextframe.png cmd/lc_insertframe.png
 cmd/lc_inserttimefield.png cmd/lc_timefield.png
 cmd/lc_inserttimefieldfix.png cmd/lc_timefield.png
 cmd/lc_insobjctrl.png cmd/lc_adddirect.png
-cmd/lc_linenumberdialog.png cmd/lc_linenumberingdialog.png
-cmd/lc_numberingmenu.png cmd/lc_outlinebullet.png
-cmd/lc_objectmenu.png cmd/lc_insertobject.png
-cmd/lc_paragraphmenu.png cmd/lc_paragraphdialog.png
-cmd/lc_shapesmenu.png cmd/lc_basicshapes.pentagon.png
-cmd/lc_tracechangemode.png cmd/lc_trackchanges.png
-cmd/lc_viewtrackchanges.png cmd/lc_showtrackedchanges.png
 
 cmd/sc_authoritiesentrydialog.png cmd/sc_insertauthorfield.png
 cmd/sc_changesmenu.png cmd/sc_trackchangesbar.png
@@ -239,6 +227,7 @@ cmd/sc_insertobjectfloatingframe.png cmd/sc_insertframe.png
 cmd/sc_insertobjectstarmath.png cmd/sc_insertmath.png
 cmd/sc_insertpagefooter.png cmd/sc_insertfooter.png
 cmd/sc_insertpageheader.png cmd/sc_insertheader.png
+cmd/sc_insertpagenumberwizard.png cmd/sc_insertpagenumberfield.png
 cmd/sc_insertpagesfield.png cmd/sc_insertpagecountfield.png
 cmd/sc_insertpatternfield.png cmd/sc_patternfield.png
 cmd/sc_insertpushbutton.png cmd/sc_pushbutton.png
@@ -248,13 +237,6 @@ cmd/sc_inserttextframe.png cmd/sc_insertframe.png
 cmd/sc_inserttimefield.png cmd/sc_timefield.png
 cmd/sc_inserttimefieldfix.png cmd/sc_timefield.png
 cmd/sc_insobjctrl.png cmd/sc_adddirect.png
-cmd/sc_linenumberdialog.png cmd/sc_linenumberingdialog.png
-cmd/sc_numberingmenu.png cmd/sc_outlinebullet.png
-cmd/sc_objectmenu.png cmd/sc_insertobject.png
-cmd/sc_paragraphmenu.png cmd/sc_paragraphdialog.png
-cmd/sc_shapesmenu.png cmd/sc_basicshapes.pentagon.png
-cmd/sc_tracechangemode.png cmd/sc_trackchanges.png
-cmd/sc_viewtrackchanges.png cmd/sc_showtrackedchanges.png
 
 #View Menu
 cmd/32/changesmenu.png cmd/32/trackchanges.png
@@ -2769,6 +2751,13 @@ cmd/sc_openhyperlinkoncursor.png cmd/sc_inserthyperlink.png
 cmd/sc_rotateflipmenu.png cmd/sc_rotateleft.png
 
 # writer
+cmd/32/linenumberdialog.png cmd/32/linenumberingdialog.png
+cmd/32/numberingmenu.png cmd/32/outlinebullet.png
+cmd/32/objectmenu.png cmd/32/insertobject.png
+cmd/32/paragraphmenu.png cmd/32/paragraphdialog.png
+cmd/32/shapesmenu.png cmd/32/basicshapes.pentagon.png
+cmd/32/tracechangemode.png cmd/32/trackchanges.png
+cmd/32/viewtrackchanges.png cmd/32/showtrackedchanges.png
 cmd/32/addtextbox.png cmd/32/insertfixedtext.png
 cmd/32/editcommentsmenu.png cmd/32/editannotation.png
 cmd/32/scrollbarmenu.png cmd/32/scrollbar.png
@@ -2783,15 +2772,31 @@ cmd/sc_scrollbarmenu.png cmd/sc_scrollbar.png
 cmd/sc_wrapmenu.png cmd/sc_wrapon.png
 
 # menubar icons
+cmd/32/com.sun.star.deployment.ui.packagemanagerdialog.png cmd/32/insertplugin.png
 cmd/32/focustofindbar.png cmd/32/recsearch.png
 cmd/32/macroorganizer%3ftabid%3ashort=1.png cmd/32/open.png
-cmd/32/com.sun.star.deployment.ui.packagemanagerdialog.png cmd/32/insertplugin.png
-cmd/lc_focustofindbar.png cmd/lc_recsearch.png
-cmd/lc_macroorganizer%3ftabid%3ashort=1.png cmd/lc_open.png
+
 cmd/lc_com.sun.star.deployment.ui.packagemanagerdialog.png cmd/lc_insertplugin.png
-cmd/sc_focustofindbar.png cmd/sc_recsearch.png
-cmd/sc_macroorganizer%3ftabid%3ashort=1.png cmd/sc_open.png
+cmd/lc_focustofindbar.png cmd/lc_recsearch.png
+cmd/lc_linenumberdialog.png cmd/lc_linenumberingdialog.png
+cmd/lc_macroorganizer%3ftabid%3ashort=1.png cmd/lc_open.png
+cmd/lc_numberingmenu.png cmd/lc_outlinebullet.png
+cmd/lc_objectmenu.png cmd/lc_insertobject.png
+cmd/lc_paragraphmenu.png cmd/lc_paragraphdialog.png
+cmd/lc_shapesmenu.png cmd/lc_basicshapes.pentagon.png
+cmd/lc_tracechangemode.png cmd/lc_trackchanges.png
+cmd/lc_viewtrackchanges.png cmd/lc_showtrackedchanges.png
+
 cmd/sc_com.sun.star.deployment.ui.packagemanagerdialog.png cmd/sc_insertplugin.png
+cmd/sc_focustofindbar.png cmd/sc_recsearch.png
+cmd/sc_linenumberdialog.png cmd/sc_linenumberingdialog.png
+cmd/sc_macroorganizer%3ftabid%3ashort=1.png cmd/sc_open.png
+cmd/sc_numberingmenu.png cmd/sc_outlinebullet.png
+cmd/sc_objectmenu.png cmd/sc_insertobject.png
+cmd/sc_paragraphmenu.png cmd/sc_paragraphdialog.png
+cmd/sc_shapesmenu.png cmd/sc_basicshapes.pentagon.png
+cmd/sc_tracechangemode.png cmd/sc_trackchanges.png
+cmd/sc_viewtrackchanges.png cmd/sc_showtrackedchanges.png
 
 # LibreLogo
 cmd/32/librelogo-gobackward.png cmd/32/upsearch.png

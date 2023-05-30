@@ -97,6 +97,7 @@ cmd/32/insertobjectfloatingframe.png cmd/32/insertframe.png
 cmd/32/insertobjectstarmath.png cmd/32/insertmath.png
 cmd/32/insertpagefooter.png cmd/32/insertfooter.png
 cmd/32/insertpageheader.png cmd/32/insertheader.png
+cmd/32/insertpagenumberwizard.png cmd/32/insertpagenumberfield.png
 cmd/32/insertpatternfield.png cmd/32/patternfield.png
 cmd/32/insertpivottable.png cmd/32/datadatapilotrun.png
 cmd/32/insertpushbutton.png cmd/32/pushbutton.png
@@ -158,6 +159,7 @@ cmd/lc_insertobjectfloatingframe.png cmd/lc_insertframe.png
 cmd/lc_insertobjectstarmath.png cmd/lc_insertmath.png
 cmd/lc_insertpagefooter.png cmd/lc_insertfooter.png
 cmd/lc_insertpageheader.png cmd/lc_insertheader.png
+cmd/lc_insertpagenumberwizard.png cmd/lc_insertpagenumberfield.png
 cmd/lc_insertpatternfield.png cmd/lc_patternfield.png
 cmd/lc_insertpivottable.png cmd/lc_datadatapilotrun.png
 cmd/lc_insertpushbutton.png cmd/lc_pushbutton.png
@@ -219,6 +221,7 @@ cmd/sc_insertobjectfloatingframe.png cmd/sc_insertframe.png
 cmd/sc_insertobjectstarmath.png cmd/sc_insertmath.png
 cmd/sc_insertpagefooter.png cmd/sc_insertfooter.png
 cmd/sc_insertpageheader.png cmd/sc_insertheader.png
+cmd/sc_insertpagenumberwizard.png cmd/sc_insertpagenumberfield.png
 cmd/sc_insertpatternfield.png cmd/sc_patternfield.png
 cmd/sc_insertpivottable.png cmd/sc_datadatapilotrun.png
 cmd/sc_insertpushbutton.png cmd/sc_pushbutton.png
@@ -2129,7 +2132,6 @@ cmd/32/moveslideup.png cmd/32/upsearch.png
 cmd/32/previousslide.png cmd/32/prevrecord.png
 cmd/32/slidesetup.png cmd/32/pagesetup.png
 cmd/32/nextslide.png cmd/32/nextrecord.png
-
 
 cmd/lc_deleteslide.png cmd/lc_deletepage.png
 cmd/lc_duplicateslide.png cmd/lc_duplicatepage.png
