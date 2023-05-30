@@ -64,6 +64,8 @@
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx> // for Title/Description metadata
+#include <drawinglayer/converters.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>
@@ -2276,28 +2278,59 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
     // FillGradientPrimitive2D and reconstruct the gradient.
     // If that detection goes wrong, I have to create a transparence-blended bitmap. Eventually
     // do that in stripes, else RenderTransparencePrimitive2D may just be used
-    const primitive2d::Primitive2DContainer& rContent = rTransparenceCandidate.getChildren();
-    const primitive2d::Primitive2DContainer& rTransparence
-        = rTransparenceCandidate.getTransparence();
+    const primitive2d::Primitive2DContainer& rContent(rTransparenceCandidate.getChildren());
+    const primitive2d::Primitive2DContainer& rTransparence(
+        rTransparenceCandidate.getTransparence());
 
     if (rContent.empty() || rTransparence.empty())
         return;
 
     // try to identify a single FillGradientPrimitive2D in the
-    // transparence part of the primitive
-    const primitive2d::FillGradientPrimitive2D* pFiGradient = nullptr;
+    // transparence part of the primitive. The hope is to handle
+    // the more specific case in a better way than the general
+    // TransparencePrimitive2D which has strongly seperated
+    // definitions for transparency and content, both completely
+    // free definable by primitives
+    const primitive2d::FillGradientPrimitive2D* pFiGradient(nullptr);
     static bool bForceToBigTransparentVDev(false); // loplugin:constvars:ignore
 
+    // check for single FillGradientPrimitive2D
     if (!bForceToBigTransparentVDev && 1 == rTransparence.size())
     {
-        const primitive2d::Primitive2DReference xReference(rTransparence[0]);
-        pFiGradient = dynamic_cast<const primitive2d::FillGradientPrimitive2D*>(xReference.get());
+        pFiGradient
+            = dynamic_cast<const primitive2d::FillGradientPrimitive2D*>(rTransparence[0].get());
+
+        // check also for correct ID to exclude derived implementations
+        if (pFiGradient
+            && PRIMITIVE2D_ID_FILLGRADIENTPRIMITIVE2D != pFiGradient->getPrimitive2DID())
+            pFiGradient = nullptr;
     }
 
-    // Check also for correct ID to exclude derived implementations
-    if (pFiGradient && PRIMITIVE2D_ID_FILLGRADIENTPRIMITIVE2D == pFiGradient->getPrimitive2DID())
+    // MCGR: tdf#155437 If we have identified a transparency gradient,
+    // check if VCL is able to handle it at all
+    if (nullptr != pFiGradient && pFiGradient->getFillGradient().cannotBeHandledByVCL())
     {
-        // various content, create content-metafile
+        // If not, reset the pointer and do not make use of this special case.
+        // Adding a gradient in incomplete state that canot be handled by vcl
+        // makes no sense and will knowingly lead to errors, especially with
+        // MCGR extended possibilities. I checked what happens with the
+        // MetaFloatTransparentAction added by OutputDevice::DrawTransparent, but
+        // in most cases it gets converted to bitmap or even ignored, see e.g.
+        // - vcl/source/gdi/pdfwriter_impl2.cxx for PDF export
+        // - vcl/source/filter/wmf/wmfwr.cxx -> does ignore TransparenceGradient completely
+        //   - vcl/source/filter/wmf/emfwr.cxx -> same
+        //   - vcl/source/filter/eps/eps.cxx -> same
+        // NOTE: Theoretically it would be possible to make the new extended Gradient data
+        // available in metafiles, with the known limitiations (not backward comp, all
+        // places using it would need adaption, ...), but combined with knowing that nearly
+        // all usages ignore or render it locally anyways makes that a non-option.
+        pFiGradient = nullptr;
+    }
+
+    if (nullptr != pFiGradient)
+    {
+        // this combination of Gradient can be expressed/handled by
+        // vcl/metafile, so add it directly. various content, create content-metafile
         GDIMetaFile aContentMetafile;
         const tools::Rectangle aPrimitiveRectangle(impDumpToMetaFile(rContent, aContentMetafile));
 
@@ -2306,101 +2339,71 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
         impConvertFillGradientAttributeToVCLGradient(aVCLGradient, pFiGradient->getFillGradient(),
                                                      true);
 
-        // render it to VCL
+        // render it to VCL (creates MetaFloatTransparentAction)
         mpOutputDevice->DrawTransparent(aContentMetafile, aPrimitiveRectangle.TopLeft(),
                                         aPrimitiveRectangle.GetSize(), aVCLGradient);
+        return;
     }
-    else
-    {
-        // sub-transparence group. Draw to VDev first.
-        // this may get refined to tiling when resolution is too big here
 
-        // need to avoid switching off MapMode stuff here; maybe need another
-        // tooling class, cannot just do the same as with the pixel renderer.
-        // Need to experiment...
+    // Here we need to create a correct replacement visualization for the
+    // TransparencePrimitive2D for the target metafile.
+    // I replaced the n'th iteration to convert-to-bitmap which was
+    // used here by using the existing tooling. The orig here was also producing
+    // transparency errors with test-file from tdf#155437 on the right part of the
+    // image.
+    // Just rely on existing tooling doing the right thing in one place, so also
+    // corrections/optimizations can be in one single place
 
-        // Okay, basic implementation finished and tested. The DPI stuff was hard
-        // and not easy to find out that it's needed.
-        // Since this will not yet happen normally (as long as no one constructs
-        // transparence primitives with non-trivial transparence content) i will for now not
-        // refine to tiling here.
+    // Start by getting logic range of content, transform object-to-world, then world-to-view
+    // to get to discrete values ('pixels'). Matrix multiplication is right-to-left (and not
+    // commutative)
+    basegfx::B2DRange aLogicRange(rTransparenceCandidate.getB2DRange(getViewInformation2D()));
+    aLogicRange.transform(mpOutputDevice->GetViewTransformation() * maCurrentTransformation);
 
-        basegfx::B2DRange aViewRange(rContent.getB2DRange(getViewInformation2D()));
-        aViewRange.transform(maCurrentTransformation);
-        const tools::Rectangle aRectLogic(static_cast<sal_Int32>(floor(aViewRange.getMinX())),
-                                          static_cast<sal_Int32>(floor(aViewRange.getMinY())),
-                                          static_cast<sal_Int32>(ceil(aViewRange.getMaxX())),
-                                          static_cast<sal_Int32>(ceil(aViewRange.getMaxY())));
-        const tools::Rectangle aRectPixel(mpOutputDevice->LogicToPixel(aRectLogic));
-        Size aSizePixel(aRectPixel.GetSize());
-        ScopedVclPtrInstance<VirtualDevice> aBufferDevice;
-        const sal_uInt32 nMaxSquarePixels(500000);
-        const sal_uInt32 nViewVisibleArea(aSizePixel.getWidth() * aSizePixel.getHeight());
-        double fReduceFactor(1.0);
+    // expand in discrete coordinates to next-bigger 'pixel' boundaries and remember
+    // created discrete range
+    aLogicRange.expand(
+        basegfx::B2DPoint(floor(aLogicRange.getMinX()), floor(aLogicRange.getMinY())));
+    aLogicRange.expand(basegfx::B2DPoint(ceil(aLogicRange.getMaxX()), ceil(aLogicRange.getMaxY())));
+    const basegfx::B2DRange aDiscreteRange(aLogicRange);
 
-        if (nViewVisibleArea > nMaxSquarePixels)
-        {
-            // reduce render size
-            fReduceFactor = sqrt(double(nMaxSquarePixels) / static_cast<double>(nViewVisibleArea));
-            aSizePixel = Size(
-                basegfx::fround(static_cast<double>(aSizePixel.getWidth()) * fReduceFactor),
-                basegfx::fround(static_cast<double>(aSizePixel.getHeight()) * fReduceFactor));
-        }
+    // transform back from discrete to world coordinates: this creates the
+    // pixel-boundaries extended logic range we need to cover all content
+    // reliably
+    aLogicRange.transform(mpOutputDevice->GetInverseViewTransformation());
 
-        if (aBufferDevice->SetOutputSizePixel(aSizePixel))
-        {
-            // create and set MapModes for target devices
-            MapMode aNewMapMode(mpOutputDevice->GetMapMode());
-            aNewMapMode.SetOrigin(Point(-aRectLogic.Left(), -aRectLogic.Top()));
-            aBufferDevice->SetMapMode(aNewMapMode);
+    // create transform embedding for renderer. Goal is to translate what we
+    // want to paint to top/left 0/0 and the calculated discrete size
+    basegfx::B2DHomMatrix aEmbedding(basegfx::utils::createTranslateB2DHomMatrix(
+        -aLogicRange.getMinX(), -aLogicRange.getMinY()));
+    const double fLogicWidth(
+        basegfx::fTools::equalZero(aLogicRange.getWidth()) ? 1.0 : aLogicRange.getWidth());
+    const double fLogicHeight(
+        basegfx::fTools::equalZero(aLogicRange.getHeight()) ? 1.0 : aLogicRange.getHeight());
+    aEmbedding.scale(aDiscreteRange.getWidth() / fLogicWidth,
+                     aDiscreteRange.getHeight() / fLogicHeight);
 
-            // prepare view transformation for target renderers
-            // ATTENTION! Need to apply another scaling because of the potential DPI differences
-            // between Printer and VDev (mpOutputDevice and aBufferDevice here).
-            // To get the DPI, LogicToPixel from (1,1) from MapUnit::MapInch needs to be used.
-            basegfx::B2DHomMatrix aViewTransform(aBufferDevice->GetViewTransformation());
-            const Size aDPIOld(mpOutputDevice->LogicToPixel(Size(1, 1), MapMode(MapUnit::MapInch)));
-            const Size aDPINew(aBufferDevice->LogicToPixel(Size(1, 1), MapMode(MapUnit::MapInch)));
-            const double fDPIXChange(static_cast<double>(aDPIOld.getWidth())
-                                     / static_cast<double>(aDPINew.getWidth()));
-            const double fDPIYChange(static_cast<double>(aDPIOld.getHeight())
-                                     / static_cast<double>(aDPINew.getHeight()));
+    // use the whole TransparencePrimitive2D as input (no need to create a new
+    // one with the sub-contents, these are ref-counted) and add to embedding
+    // primitive2d::TransparencePrimitive2D& rTrCand();
+    primitive2d::Primitive2DContainer xEmbedSeq{ &const_cast<primitive2d::TransparencePrimitive2D&>(
+        rTransparenceCandidate) };
+    xEmbedSeq = primitive2d::Primitive2DContainer{ new primitive2d::TransformPrimitive2D(
+        aEmbedding, std::move(xEmbedSeq)) };
 
-            if (!basegfx::fTools::equal(fDPIXChange, 1.0)
-                || !basegfx::fTools::equal(fDPIYChange, 1.0))
-            {
-                aViewTransform.scale(fDPIXChange, fDPIYChange);
-            }
+    // use empty ViewInformation & a useful MaximumQuadraticPixels
+    // limitation to paint the content
+    const auto aViewInformation2D(geometry::createViewInformation2D({}));
+    const sal_uInt32 nMaximumQuadraticPixels(500000);
+    const BitmapEx aBitmapEx(convertToBitmapEx(
+        std::move(xEmbedSeq), aViewInformation2D, basegfx::fround(aDiscreteRange.getWidth()),
+        basegfx::fround(aDiscreteRange.getHeight()), nMaximumQuadraticPixels));
 
-            // also take scaling from Size reduction into account
-            if (!basegfx::fTools::equal(fReduceFactor, 1.0))
-            {
-                aViewTransform.scale(fReduceFactor, fReduceFactor);
-            }
-
-            // create view information and pixel renderer. Reuse known ViewInformation
-            // except new transformation and range
-            geometry::ViewInformation2D aViewInfo(getViewInformation2D());
-            aViewInfo.setViewTransformation(aViewTransform);
-            aViewInfo.setViewport(aViewRange);
-
-            VclPixelProcessor2D aBufferProcessor(aViewInfo, *aBufferDevice);
-
-            // draw content using pixel renderer
-            const Point aEmptyPoint;
-            aBufferProcessor.process(rContent);
-            const Bitmap aBmContent(aBufferDevice->GetBitmap(aEmptyPoint, aSizePixel));
-
-            // draw transparence using pixel renderer
-            aBufferDevice->Erase();
-            aBufferProcessor.process(rTransparence);
-            const AlphaMask aBmAlpha(aBufferDevice->GetBitmap(aEmptyPoint, aSizePixel));
-
-            // paint
-            mpOutputDevice->DrawBitmapEx(aRectLogic.TopLeft(), aRectLogic.GetSize(),
-                                         BitmapEx(aBmContent, aBmAlpha));
-        }
-    }
+    // add to target metafile (will create MetaFloatTransparentAction)
+    mpOutputDevice->DrawBitmapEx(
+        Point(basegfx::fround(aLogicRange.getMinX()), basegfx::fround(aLogicRange.getMinY())),
+        Size(basegfx::fround(aLogicRange.getWidth()), basegfx::fround(aLogicRange.getHeight())),
+        aBitmapEx);
 }
 
 void VclMetafileProcessor2D::processStructureTagPrimitive2D(
