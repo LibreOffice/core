@@ -287,15 +287,12 @@ Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
     bool bListEnd = !bSameRule || rNextInfo.GetDepth() < rInfo.GetDepth() || rNextInfo.IsRestart(rInfo);
     bool bNextIsSubitem = !bListEnd && rNextInfo.GetDepth() > rInfo.GetDepth();
 
-    if (rWrt.mbXHTML)
+    // XHTML </li> for the list item content, if there is an open <li>.
+    if (bListEnd || (!bNextIsSubitem && rNextInfo.IsNumbered()))
     {
-        // XHTML </li> for the list item content, if there is an open <li>.
-        if (bListEnd || (!bNextIsSubitem && rNextInfo.IsNumbered()))
-        {
-            HTMLOutFuncs::Out_AsciiTag(
-                rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_li),
-                false);
-        }
+        HTMLOutFuncs::Out_AsciiTag(
+            rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_li),
+            false);
     }
 
     if (!bListEnd)
