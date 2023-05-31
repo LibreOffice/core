@@ -167,10 +167,14 @@ ViewObjectContact::ViewObjectContact(ObjectContact& rObjectContact, ViewContact&
 
 ViewObjectContact::~ViewObjectContact()
 {
-    // invalidate in view
-    if(!getObjectRange().isEmpty())
+    // if the object range is empty, then we have never had the primitive range change, so nothing to invalidate
+    if (!maObjectRange.isEmpty())
     {
-        GetObjectContact().InvalidatePartOfView(maObjectRange);
+        // invalidate in view
+        if(!getObjectRange().isEmpty())
+        {
+            GetObjectContact().InvalidatePartOfView(maObjectRange);
+        }
     }
 
     // delete PrimitiveAnimation
