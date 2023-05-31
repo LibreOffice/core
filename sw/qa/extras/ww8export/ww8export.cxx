@@ -749,7 +749,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf112346)
     };
     createSwDoc("tdf112346.doc");
     verify();
-    reload(mpFilter, "tdf112346.doc");
+    saveAndReload("MS Word 97");
     verify();
 }
 
@@ -1515,7 +1515,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf94386)
         SfxRequest aRequest(FN_ENVELOP, SfxCallMode::SYNCHRON, aSet);
         SW_MOD()->ExecOther(aRequest);
     }
-    reload(mpFilter, "tdf94386.odt");
+    saveAndReload("MS Word 97");
 
     // check that the first and next page use different page styles
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);

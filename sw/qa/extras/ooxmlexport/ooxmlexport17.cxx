@@ -1042,7 +1042,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148455_2, "tdf148455_2.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf147978enhancedPathABVW)
 {
     createSwDoc("tdf147978_enhancedPath_commandABVW.odt");
-    reload("Office Open XML Text", nullptr);
+    saveAndReload("Office Open XML Text");
     // Make sure the new implemented export for commands A,B,V and W use the correct arc between
     // the given two points, here the short one.
     for (sal_Int16 i = 1 ; i <= 4; ++i)

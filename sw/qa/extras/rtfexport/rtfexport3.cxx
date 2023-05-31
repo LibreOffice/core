@@ -316,7 +316,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNestedHyperlink)
     // assertion failed
     // - Expression: xComponent.is()
     // i.e. the RTF output was not well-formed, loading failed.
-    reload(mpFilter, "nested-hyperlink.rtf");
+    saveAndReload("Rich Text Format");
 
     // Then make sure both hyperlinks are have the correct URLs.
     uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
@@ -442,7 +442,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDontBreakWrappedTables)
     }
 
     // When saving to rtf:
-    reload(mpFilter, "dont-break-wrapped-tables.rtf");
+    saveAndReload("Rich Text Format");
 
     // Then make sure \nobrkwrptbl is not written:
     SwDoc* pDoc = getSwDoc();
@@ -466,7 +466,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRtlGutter)
     // Then make sure the section's gutter is still RTL:
     // Without the accompanying fix in place, this test would have failed as \rtlgutter was missing.
     verify();
-    reload(mpFilter, "rtl-gutter.rtf");
+    saveAndReload("Rich Text Format");
     verify();
 }
 
@@ -498,7 +498,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
     }
 
     // When saving that document to RTF:
-    reload(mpFilter, "negative-page-border.rtf");
+    saveAndReload("Rich Text Format");
 
     // Then make sure that the border distance is negative, so the first line of body text appears
     // on top of the page border:
@@ -533,7 +533,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127806)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(600), aSize.Height);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(635), aSize.Width);
 
-    reload(mpFilter, "tdf127806.rtf");
+    saveAndReload("Rich Text Format");
     CPPUNIT_ASSERT_EQUAL(1, getShapes()); // FIXME: We lost one shape on export, that's sucks
 
     xImage = getShape(1);
@@ -611,7 +611,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableExport)
     xFrame->setPropertyValue("RightMargin", uno::Any(static_cast<sal_Int32>(71)));
 
     // When saving to RTF:
-    reload(mpFilter, "floating-table.rtf");
+    saveAndReload("Rich Text Format");
 
     // Then make sure the floating table is there & has the expected properties:
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);

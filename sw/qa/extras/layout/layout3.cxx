@@ -63,7 +63,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf134463)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf117188)
 {
     createSwDoc("tdf117188.docx");
-    reload("writer8", "tdf117188.odt");
+    saveAndReload("writer8");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     OUString sWidth = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/bounds", "width");
     OUString sHeight = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/bounds", "height");

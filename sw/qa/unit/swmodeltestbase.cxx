@@ -67,7 +67,7 @@ void SwModelTestBase::executeImportTest(const char* filename, const char* pPassw
     maTempFile.EnableKillingFile(false);
     header();
     std::unique_ptr<Resetter> const pChanges(preTest(filename));
-    load(filename, pPassword);
+    loadURL(createFileURL(OUString::createFromAscii(filename)), pPassword);
     verify();
     finish();
     maTempFile.EnableKillingFile();
@@ -78,10 +78,10 @@ void SwModelTestBase::executeLoadVerifyReloadVerify(const char* filename, const 
     maTempFile.EnableKillingFile(false);
     header();
     std::unique_ptr<Resetter> const pChanges(preTest(filename));
-    load(filename, pPassword);
+    loadURL(createFileURL(OUString::createFromAscii(filename)), pPassword);
     verify();
     postLoad(filename);
-    reload(mpFilter, filename, pPassword);
+    saveAndReload(mpFilter, pPassword);
     verify();
     finish();
     maTempFile.EnableKillingFile();
@@ -92,9 +92,9 @@ void SwModelTestBase::executeLoadReloadVerify(const char* filename, const char* 
     maTempFile.EnableKillingFile(false);
     header();
     std::unique_ptr<Resetter> const pChanges(preTest(filename));
-    load(filename, pPassword);
+    loadURL(createFileURL(OUString::createFromAscii(filename)), pPassword);
     postLoad(filename);
-    reload(mpFilter, filename, pPassword);
+    saveAndReload(mpFilter, pPassword);
     verify();
     finish();
     maTempFile.EnableKillingFile();
@@ -456,13 +456,12 @@ uno::Reference<drawing::XShape> SwModelTestBase::getTextFrameByName(const OUStri
 
 void SwModelTestBase::header() {}
 
-void SwModelTestBase::loadURL(OUString const& rURL, const char* pName, const char* pPassword)
+void SwModelTestBase::loadURL(OUString const& rURL, const char* pPassword)
 {
     // Output name at load time, so in the case of a hang, the name of the hanging input file is visible.
     if (!isExported())
     {
-        if (pName)
-            std::cout << pName << ":\n";
+        std::cout << rURL << ":\n";
         mnStartTime = osl_getGlobalTimer();
     }
 
@@ -474,25 +473,25 @@ void SwModelTestBase::loadURL(OUString const& rURL, const char* pName, const cha
     calcLayout();
 }
 
-void SwModelTestBase::reload(const OUString& pFilter, const char* pName, const char* pPassword)
+void SwModelTestBase::saveAndReload(const OUString& pFilter, const char* pPassword)
 {
     save(pFilter, pPassword);
     mbExported = true;
 
-    loadURL(maTempFile.GetURL(), pName, pPassword);
+    loadURL(maTempFile.GetURL(), pPassword);
 }
 
 void SwModelTestBase::loadAndSave(const char* pName, const char* pPassword)
 {
-    load(pName, pPassword);
+    loadURL(createFileURL(OUString::createFromAscii(pName)), pPassword);
     save(mpFilter);
     mbExported = true;
 }
 
 void SwModelTestBase::loadAndReload(const char* pName)
 {
-    load(pName);
-    reload(mpFilter, pName);
+    loadURL(createFileURL(OUString::createFromAscii(pName)));
+    saveAndReload(mpFilter);
 }
 
 void SwModelTestBase::finish()
@@ -529,9 +528,9 @@ xmlDocUniquePtr SwModelTestBase::parseExportedFile()
 void SwModelTestBase::createSwDoc(const char* pName, const char* pPassword)
 {
     if (!pName)
-        loadURL("private:factory/swriter", pName, nullptr);
+        loadURL("private:factory/swriter");
     else
-        load(pName, pPassword);
+        loadURL(createFileURL(OUString::createFromAscii(pName)), pPassword);
 
     uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextDocument"));
@@ -540,9 +539,9 @@ void SwModelTestBase::createSwDoc(const char* pName, const char* pPassword)
 void SwModelTestBase::createSwWebDoc(const char* pName)
 {
     if (!pName)
-        loadURL("private:factory/swriter/web", pName, nullptr);
+        loadURL("private:factory/swriter/web");
     else
-        load(pName);
+        loadURL(createFileURL(OUString::createFromAscii(pName)));
 
     uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.WebDocument"));
@@ -551,9 +550,9 @@ void SwModelTestBase::createSwWebDoc(const char* pName)
 void SwModelTestBase::createSwGlobalDoc(const char* pName)
 {
     if (!pName)
-        loadURL("private:factory/swriter/GlobalDocument", pName, nullptr);
+        loadURL("private:factory/swriter/GlobalDocument");
     else
-        load(pName);
+        loadURL(createFileURL(OUString::createFromAscii(pName)));
 
     uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.GlobalDocument"));

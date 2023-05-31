@@ -75,7 +75,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf47471_paraStyleBackground)
                          getProperty<OUString>(getParagraph(3), "ParaStyleName"));
 
     // Save it and load it back.
-    reload("writer8", "tdf47471_paraStyleBackgroundRT.odt");
+    saveAndReload("writer8");
 
     CPPUNIT_ASSERT_EQUAL(Color(0xdedce6), getProperty<Color>(getParagraph(2), "FillColor"));
     // on round-trip, the paragraph style name was lost
@@ -124,7 +124,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdfChangeNumberingListAutoFormat)
         "height", "260");
 
     // save it to DOCX
-    reload("Office Open XML Text", "tdf117923.docx");
+    saveAndReload("Office Open XML Text");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     pViewShell
         = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
@@ -2275,7 +2275,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817_round_trip)
     createSwDoc("tdf76817.fodt");
 
     // save it to DOCX
-    reload("Office Open XML Text", "tdf76817.docx");
+    saveAndReload("Office Open XML Text");
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwViewShell* pViewShell
@@ -2582,7 +2582,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRTLparaStyle_LocaleArabic)
     createSwDoc(); // new, empty doc - everything defaults to RTL with Arabic locale
 
     // Save it and load it back.
-    reload("Office Open XML Text", "tdf116404_paraStyleFrameDir.docx");
+    saveAndReload("Office Open XML Text");
 
     uno::Reference<beans::XPropertySet> xPageStyle(
         getStyles("ParagraphStyles")->getByName("Default Paragraph Style"), uno::UNO_QUERY_THROW);
@@ -2695,7 +2695,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122942)
     const auto& rFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rFormats.size());
 
-    reload("writer8", "tdf122942.odt");
+    saveAndReload("writer8");
     pDoc = getSwDoc();
     const auto& rFormats2 = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rFormats2.size());

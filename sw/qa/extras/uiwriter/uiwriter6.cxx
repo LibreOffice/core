@@ -658,7 +658,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf113790)
     pWrtShell->Paste(aClipboard);
 
     // Save it as DOCX & load it again
-    reload("Office Open XML Text", "tdf113790.docx");
+    saveAndReload("Office Open XML Text");
     CPPUNIT_ASSERT(dynamic_cast<SwXTextDocument*>(mxComponent.get()));
 }
 
@@ -750,7 +750,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf115013)
         pWrtShell->InsertField2(aField);
     }
     // Save it as DOCX & load it again
-    reload("Office Open XML Text", "mm-field.docx");
+    saveAndReload("Office Open XML Text");
     pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -2285,7 +2285,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testInsertPdf)
     dispatchCommand(mxComponent, ".uno:InsertGraphic", aArgs);
 
     // Save and load cycle
-    reload("writer8", "testInsertPdf.odt");
+    saveAndReload("writer8");
 
     uno::Reference<drawing::XShape> xShape = getShape(1);
     // Assert that we have a replacement graphics
@@ -2321,7 +2321,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf143760WrapContourToOff)
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getShape(1), "SurroundContour"));
 
     // Without fix this had failed, because the shape was written to file with contour.
-    reload("Office Open XML Text", "tdf143760_ContourToWrapOff.docx");
+    saveAndReload("Office Open XML Text");
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getShape(1), "SurroundContour"));
 }
 
@@ -2345,7 +2345,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testHatchFill)
     xDrawPage->add(xShape);
 
     // Save it as DOCX and load it again.
-    reload("Office Open XML Text", "hatchFill.docx");
+    saveAndReload("Office Open XML Text");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
     // tdf#127989 Without fix this had failed, because the background of the hatch was not set as 'no background'.
@@ -2400,7 +2400,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testCrashOnExit)
     CPPUNIT_ASSERT_EQUAL(true, xProperties->getPropertyValue("TextBox").get<bool>());
 
     // save and reload
-    reload("writer8", "tdf142715_.odt");
+    saveAndReload("writer8");
 
     // Before the fix this crashed here and could not reopen.
     CPPUNIT_ASSERT_MESSAGE("Crash on exit, isn't it?", mxComponent);
@@ -2421,7 +2421,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testCaptionShape)
     xDrawPage->add(xShape);
 
     // Save it as DOCX and load it again.
-    reload("Office Open XML Text", "captionshape.docx");
+    saveAndReload("Office Open XML Text");
 
     // Without fix in place, the shape was lost on export.
     CPPUNIT_ASSERT_EQUAL(1, getShapes());

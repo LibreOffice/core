@@ -80,7 +80,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo72031)
 
     createSwDoc("fdo72031.rtf");
     verify();
-    reload(mpFilter, "fdo72031.rtf");
+    saveAndReload("Rich Text Format");
     verify();
 }
 
@@ -461,7 +461,7 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testChicagoNumberingFootnote)
                                                                 uno::UNO_QUERY);
     xTextContentAppend->appendTextContent(xFootnote, {});
 
-    reload("Rich Text Format", "");
+    saveAndReload("Rich Text Format");
     xFootnotesSupplier.set(mxComponent, uno::UNO_QUERY);
     sal_uInt16 nExpected = style::NumberingType::SYMBOL_CHICAGO;
     auto nActual

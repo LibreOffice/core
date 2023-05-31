@@ -99,7 +99,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128700_relativeTableWidth)
     // This also resulted in a layout loop when flys were allowed to split in footers.
     createSwDoc("tdf128700_relativeTableWidth.doc");
     verify();
-    reload(mpFilter, "tdf128700_relativeTableWidth.doc");
+    saveAndReload("MS Word 97");
     verify();
 }
 
@@ -299,7 +299,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf80635_pageRightRTL)
     };
     createSwDoc("tdf80635_pageRightRTL.doc");
     verify();
-    reload(mpFilter, "tdf80635_pageRightRTL.doc");
+    saveAndReload("MS Word 97");
     verify();
 }
 
@@ -312,7 +312,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf80635_marginRTL)
     };
     createSwDoc("tdf80635_marginRightRTL.doc");
     verify();
-    reload(mpFilter, "tdf80635_marginRightRTL.doc");
+    saveAndReload("MS Word 97");
     verify();
 }
 
@@ -329,7 +329,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf80635_marginLeft)
     };
     createSwDoc("tdf80635_marginLeft.doc");
     verify();
-    reload(mpFilter, "tdf80635_marginLeft.doc");
+    saveAndReload("MS Word 97");
     verify();
 }
 
@@ -344,7 +344,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf80635_pageLeft)
     };
     createSwDoc("tdf80635_pageLeft.doc");
     verify();
-    reload(mpFilter, "tdf80635_pageLeft.doc");
+    saveAndReload("MS Word 97");
     verify();
 }
 
@@ -383,7 +383,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf107773)
     };
     createSwDoc("tdf107773.doc");
     verify();
-    reload(mpFilter, "tdf107773.doc");
+    saveAndReload("MS Word 97");
     verify();
 }
 
@@ -1146,7 +1146,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When saving that document to DOC and loading it back:
-    reload("MS Word 97", "");
+    saveAndReload("MS Word 97");
 
     // Then make sure the dummy character at the end is filtered out:
     OUString aBodyText = getBodyText();

@@ -572,7 +572,7 @@ DECLARE_RTFEXPORT_TEST(testTdf116358, "tdf116358.rtf")
 CPPUNIT_TEST_FIXTURE(Test, testGutterLeft)
 {
     createSwDoc("gutter-left.rtf");
-    reload(mpFilter, "gutter-left.rtf");
+    saveAndReload("Rich Text Format");
     uno::Reference<beans::XPropertySet> xPageStyle;
     getStyles("PageStyles")->getByName("Standard") >>= xPageStyle;
     sal_Int32 nGutterMargin{};
@@ -587,7 +587,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGutterLeft)
 CPPUNIT_TEST_FIXTURE(Test, testGutterTop)
 {
     createSwDoc("gutter-top.rtf");
-    reload(mpFilter, "gutter-left.rtf");
+    saveAndReload("Rich Text Format");
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xSettings(
         xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
@@ -625,7 +625,7 @@ CPPUNIT_TEST_FIXTURE(Test, testClearingBreak)
     createSwDoc("clearing-break.rtf");
     // Then make sure that the clear property of the break is not ignored:
     verify();
-    reload(mpFilter, "clearing-break.rtf");
+    saveAndReload("Rich Text Format");
     // Make sure that the clear property of the break is not ignored during export:
     verify();
 }

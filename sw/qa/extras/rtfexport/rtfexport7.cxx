@@ -253,7 +253,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHyperlinkWithoutURL)
     // Change the hyperlink, so its URL is empty.
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 2), uno::UNO_QUERY);
     xRun->setPropertyValue("HyperLinkURL", uno::Any(OUString()));
-    reload(mpFilter, "gutter-left.rtf");
+    saveAndReload("Rich Text Format");
     SvMemoryStream aMemoryStream;
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
     aStream.ReadStream(aMemoryStream);

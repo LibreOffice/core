@@ -871,7 +871,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testParagraphMarkerODFExport)
     createSwDoc("paragraph-marker.docx");
 
     // When saving that as ODT + reload:
-    reload("writer8", nullptr);
+    saveAndReload("writer8");
 
     // Then make sure that it still has the correct color:
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -890,7 +890,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testParagraphMarkerFormattedRun)
     createSwDoc("paragraph-marker-formatted-run.docx");
 
     // When saving that as ODT + reload:
-    reload("writer8", nullptr);
+    saveAndReload("writer8");
 
     // Then make sure that the numbering portion is still non-bold, matching Word:
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();

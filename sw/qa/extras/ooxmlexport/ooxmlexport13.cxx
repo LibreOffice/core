@@ -107,7 +107,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121659_loseColumnBrNextToShape)
     // (messing also the shape position), and eliminated during the second import,
     // losing the 2-column text layout. As a workaround, split the paragraph
     // moving the column break into the fourth paragraph instead of losing it.
-    reload("Office Open XML Text", "tdf121659_loseColumnBrNextToShape.docx");
+    saveAndReload("Office Open XML Text");
     bool bBreakOnPara3 = getProperty<style::BreakType>(getParagraph(3), "BreakType") == style::BreakType_COLUMN_BEFORE;
     bool bBreakOnPara4 = getProperty<style::BreakType>(getParagraph(4), "BreakType") == style::BreakType_COLUMN_BEFORE;
     CPPUNIT_ASSERT(bBreakOnPara3 || bBreakOnPara4);

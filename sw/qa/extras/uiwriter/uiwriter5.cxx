@@ -223,7 +223,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf140982)
     CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum dolor sit amet..."), getParagraph(1)->getString());
 
     // Save it and load it back.
-    reload("writer8", "tdf115815.odt");
+    saveAndReload("writer8");
 
     // Test comment range feature on tracked deletion.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -966,7 +966,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDocxAttributeTableExport)
         xShape->setPropertyValue("HoriOrientRelation", uno::Any(static_cast<sal_Int16>(0)));
     }
     // save it to docx
-    reload("Office Open XML Text", "floating-table-position.docx");
+    saveAndReload("Office Open XML Text");
 
     uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
 
@@ -2099,7 +2099,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletionWithExport)
     assertXPath(pXmlDoc, "//page[1]//body/tab");
 
     // Save it and load it back.
-    reload("writer8", "tdf60382_tracked_table_deletion.odt");
+    saveAndReload("writer8");
     pDoc = getSwDoc();
 
     // accept the deletion of the content of the first cell
@@ -2155,7 +2155,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletionWithDOCXExport)
     // Save it to a DOCX and load it back.
     // Exporting change tracking of the row wasn't supported.
     // Also Manage Changes for the import.
-    reload("Office Open XML Text", "tdf79069_tracked_table_deletion.docx");
+    saveAndReload("Office Open XML Text");
     pDoc = getSwDoc();
 
     // accept the deletion of the content of the first cell
@@ -2589,7 +2589,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf150673_RedlineTableColumnDeletionWi
     assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 2);
 
     // Save it and load it back.
-    reload("writer8", "tdf150673_tracked_column_deletion.odt");
+    saveAndReload("writer8");
     pDoc = getSwDoc();
 
     // accept the deletion of the content of the first cell
@@ -2675,7 +2675,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableColumnDeletionWithDOCXExpo
     // Save it to a DOCX and load it back.
     // Exporting change tracking of the cell wasn't supported.
     // Also Manage Changes for the import.
-    reload("Office Open XML Text", "tdf79069_tracked_table_deletion.docx");
+    saveAndReload("Office Open XML Text");
     pDoc = getSwDoc();
 
     // accept the deletion of the content of the first cell
@@ -2685,6 +2685,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableColumnDeletionWithDOCXExpo
 
     // table column was deleted
     // (working export/import of HasTextChangesOnly of table cells)
+    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab");
     assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 1);
@@ -2752,7 +2753,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletionWithReject)
     assertXPath(pXmlDoc, "//page[1]//body/tab");
 
     // Save it and load it back.
-    reload("writer8", "tdf60382_tracked_table_deletion.odt");
+    saveAndReload("writer8");
     pDoc = getSwDoc();
 
     // reject the deletion of the content of the first cell
@@ -2869,7 +2870,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145089_RedlineTableRowInsertionDOCX
     dispatchCommand(mxComponent, ".uno:InsertRowsAfter", {});
 
     // save it to DOCX
-    reload("Office Open XML Text", "tdf145089.docx");
+    saveAndReload("Office Open XML Text");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwViewShell* pViewShell
         = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
@@ -3057,7 +3058,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145091)
     CPPUNIT_ASSERT(pEditShell->GetRedlineCount() > 0);
 
     // save it to DOCX
-    reload("Office Open XML Text", "tdf145091.docx");
+    saveAndReload("Office Open XML Text");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwViewShell* pViewShell
         = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();

@@ -131,7 +131,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDontBreakWrappedTables)
     }
 
     // When saving to doc:
-    reload(mpFilter, "dont-break-wrapped-tables.doc");
+    saveAndReload("MS Word 97");
 
     // Then make sure the compat flag is serialized:
     SwDoc* pDoc = getSwDoc();

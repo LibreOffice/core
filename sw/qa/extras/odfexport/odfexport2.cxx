@@ -660,7 +660,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf57317_autoListName)
 
     // This was failing with a duplicate auto numbering style name of L1 instead of a unique name,
     // thus it was showing the same info as before the bullet modification.
-    reload(mpFilter, "");
+    saveAndReload("writer8");
     xPara.set(getParagraph(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
 

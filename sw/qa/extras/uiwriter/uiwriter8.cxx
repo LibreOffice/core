@@ -589,7 +589,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf135014)
     dispatchCommand(mxComponent, ".uno:StyleNewByExample", aArgs2);
 
     // Without the fix in place, this test would have failed here
-    reload("Office Open XML Text", "tdf135014.docx");
+    saveAndReload("Office Open XML Text");
 
     xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='NewNumberingStyle']/w:qFormat", 1);
@@ -2452,7 +2452,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf97899)
     getParagraph(3, "c");
 
     // Save it as DOCX & load it again
-    reload("Office Open XML Text", "tdf97899-tmp.docx");
+    saveAndReload("Office Open XML Text");
     uno::Reference<container::XIndexAccess> xNumberingRules
         = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), "NumberingRules");
     CPPUNIT_ASSERT(xNumberingRules->getCount());
@@ -2607,7 +2607,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf73483)
     CPPUNIT_ASSERT_EQUAL(OUString("Right Page"), pWrtShell->GetCurPageStyle());
 
     // Make sure that the page break with page style survives ODF save-and-reload
-    reload("writer8", "pageBreakWithPageStyle.odt");
+    saveAndReload("writer8");
 
     xmlDocUniquePtr pXml = parseExport("content.xml");
     CPPUNIT_ASSERT(pXml);

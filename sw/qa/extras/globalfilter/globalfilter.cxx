@@ -110,7 +110,7 @@ void Test::testEmbeddedGraphicRoundtrip()
         createSwDoc("document_with_two_images.odt");
 
         // Export the document and import again for a check
-        reload(rFilterName, nullptr);
+        saveAndReload(rFilterName);
 
         // Check whether graphic exported well after it was swapped out
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
@@ -166,7 +166,7 @@ void Test::testLinkedGraphicRT()
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
         // Export the document and import again for a check
-        reload(rFilterName, nullptr);
+        saveAndReload(rFilterName);
 
         SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pTextDoc);
@@ -220,7 +220,7 @@ void Test::testImageWithSpecialID()
         createSwDoc("images_with_special_IDs.odt");
 
         // Export the document and import again for a check
-        reload(rFilterName, nullptr);
+        saveAndReload(rFilterName);
 
         // Check whether graphic exported well
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
@@ -303,7 +303,7 @@ void Test::testGraphicShape()
         createSwDoc("graphic_shape.odt");
 
         // Export the document and import again for a check
-        reload(rFilterName, nullptr);
+        saveAndReload(rFilterName);
 
         // Check whether graphic exported well
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
@@ -397,7 +397,7 @@ void Test::testMultipleIdenticalGraphics()
         createSwDoc("multiple_identical_graphics.odt");
 
         // Export the document and import again for a check
-        reload(rFilterName, nullptr);
+        saveAndReload(rFilterName);
 
         // Check whether graphic exported well
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
@@ -441,7 +441,7 @@ void Test::testCharHighlightBody()
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
         // Export the document and import again for a check
-        reload(rFilterName, nullptr);
+        saveAndReload(rFilterName);
 
         const uno::Reference< text::XTextRange > xPara = getParagraph(1);
         // Both highlight and background
@@ -524,7 +524,7 @@ void Test::testCharStyleHighlight()
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
         // Export the document and import again for a check
-        reload(rFilterName, nullptr);
+        saveAndReload(rFilterName);
 
         uno::Reference<beans::XPropertySet> xCharStyle;
         getStyles("CharacterStyles")->getByName("charBackground") >>= xCharStyle;
@@ -588,7 +588,7 @@ void Test::testCharHighlightODF()
         }
     }
 
-    reload("writer8", nullptr);
+    saveAndReload("writer8");
 
     xPara.set(getParagraph(1));
     for (int i = 1; i <= 4; ++i)
@@ -688,7 +688,7 @@ void Test::testMSCharBackgroundEditing()
         rOpt.SetCharBackground2Highlighting();
 
         // Export the document and import again for a check
-        reload(rFilterName, nullptr);
+        saveAndReload(rFilterName);
 
         // Check whether background was exported as highlighting
         xPara.set(getParagraph(1));
@@ -739,7 +739,7 @@ void Test::testCharBackgroundToHighlighting()
         rOpt.SetCharBackground2Highlighting();
 
         // Export the document and import again for a check
-        reload(rFilterName, nullptr);
+        saveAndReload(rFilterName);
 
         // Check highlight color
         const uno::Reference< text::XTextRange > xPara = getParagraph(1);
@@ -920,7 +920,7 @@ void Test::testNestedFieldmark()
         verifyNestedFieldmark(rFilterName.first + ", load", mxComponent);
 
         // Export the document and import again
-        reload(rFilterName.first, nullptr);
+        saveAndReload(rFilterName.first);
 
         verifyNestedFieldmark(rFilterName.first + " exported-reload", mxComponent);
     }
@@ -979,7 +979,7 @@ void Test::testODF13()
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
         pBatch->commit();
 
-        reload("writer8", nullptr);
+        saveAndReload("writer8");
 
         // check XML
         xmlDocUniquePtr pContentXml = parseExport("content.xml");
@@ -1168,7 +1168,7 @@ void Test::testBulletAsImage()
         }
 
         // Export the document and import again for a check
-        reload(rFilterName, nullptr);
+        saveAndReload(rFilterName);
 
         {
             uno::Reference<text::XTextRange> xPara(getParagraph(1));
@@ -1773,7 +1773,7 @@ void Test::testTextFormField()
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
         // Export the document and import again for a check
-        reload(rFilterName, nullptr);
+        saveAndReload(rFilterName);
 
         // Check the document after round trip
         SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
@@ -1826,7 +1826,7 @@ void Test::testCheckBoxFormField()
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
         // Export the document and import again for a check
-        reload(rFilterName, nullptr);
+        saveAndReload(rFilterName);
 
         // Check the document after round trip
         SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
@@ -1879,7 +1879,7 @@ void Test::testDropDownFormField()
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
         // Export the document and import again for a check
-        reload(rFilterName, nullptr);
+        saveAndReload(rFilterName);
 
         // Check the document after round trip
         SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
@@ -1954,7 +1954,7 @@ void Test::testDateFormField()
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
         // Export the document and import again for a check
-        reload(rFilterName, nullptr);
+        saveAndReload(rFilterName);
 
         // Check the document after round trip
         if (rFilterName == "writer8")
@@ -2138,7 +2138,7 @@ void Test::testDateFormFieldCharacterFormatting()
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
 
         // Export the document and import again for a check
-        reload(rFilterName, nullptr);
+        saveAndReload(rFilterName);
 
         // Check the document after round trip
         if (rFilterName == "writer8")

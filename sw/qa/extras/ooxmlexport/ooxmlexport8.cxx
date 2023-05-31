@@ -752,7 +752,7 @@ CPPUNIT_TEST_FIXTURE(Test, testN779642)
     };
     createSwDoc("n779642.docx");
     verify();
-    reload(mpFilter, "n779642.docx");
+    saveAndReload("Office Open XML Text");
     verify();
 }
 

@@ -431,7 +431,7 @@ CPPUNIT_TEST_FIXTURE(Test, testArabicZeroNumberingFootnote)
                                                                 uno::UNO_QUERY);
     xTextContentAppend->appendTextContent(xFootnote, {});
 
-    reload("Office Open XML Text", "");
+    saveAndReload("Office Open XML Text");
 
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // Without the accompanying fix in place, this test would have failed with:
@@ -459,7 +459,7 @@ CPPUNIT_TEST_FIXTURE(Test, testChicagoNumberingFootnote)
                                                                 uno::UNO_QUERY);
     xTextContentAppend->appendTextContent(xFootnote, {});
 
-    reload("Office Open XML Text", "");
+    saveAndReload("Office Open XML Text");
 
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // Without the accompanying fix in place, this test would have failed with:

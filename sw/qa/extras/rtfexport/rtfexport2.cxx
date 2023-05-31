@@ -307,7 +307,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo48023)
 
     createSwDoc("fdo48023.rtf");
     verify();
-    reload(mpFilter, "fdo48023.rtf");
+    saveAndReload("Rich Text Format");
     verify();
 }
 
@@ -341,7 +341,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo44211)
 
     createSwDoc("fdo44211.rtf");
     verify();
-    reload(mpFilter, "fdo44211.rtf");
+    saveAndReload("Rich Text Format");
     verify();
 }
 

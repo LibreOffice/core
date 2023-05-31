@@ -261,12 +261,12 @@ protected:
 
     void header();
 
-    void reload(const OUString& pFilter, const char* pName, const char* pPassword = nullptr);
+    void saveAndReload(const OUString& pFilter, const char* pPassword = nullptr);
 
     /// Combines load() and save().
     void loadAndSave(const char* pName, const char* pPassword = nullptr);
 
-    /// Combines load() and reload().
+    /// Combines load() and saveAndReload().
     void loadAndReload(const char* pName);
 
     void finish();
@@ -327,13 +327,7 @@ protected:
     void emulateTyping(SwXTextDocument& rTextDoc, const std::u16string_view& rStr);
 
 private:
-    void loadURL(OUString const& rURL, const char* pName, const char* pPassword);
-
-    void load(const char* pName, const char* pPassword = nullptr)
-    {
-        return loadURL(createFileURL(OUString::createFromAscii(pName)), pName, pPassword);
-
-    }
+    void loadURL(OUString const& rURL, const char* pPassword = nullptr);
 };
 
 /**

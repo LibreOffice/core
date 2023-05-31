@@ -2129,7 +2129,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testEmbeddedDataSource)
     xConnection->close();
 
     // Reload: should still have a component and a data source, too.
-    reload("writer8", "embedded-data-source.odt");
+    saveAndReload("writer8");
     CPPUNIT_ASSERT(mxComponent.is());
     CPPUNIT_ASSERT(xDatabaseContext->hasByName("calc-data-source"));
 

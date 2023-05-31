@@ -275,7 +275,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf8255)
     };
     createSwDoc("tdf8255.docx");
     verify();
-    reload(mpFilter, "tdf8255.docx");
+    saveAndReload("Office Open XML Text");
     verify();
 }
 
@@ -633,7 +633,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf99140)
     };
     createSwDoc("tdf99140.docx");
     verify();
-    reload(mpFilter, "tdf99140.docx");
+    saveAndReload("Office Open XML Text");
     verify();
 }
 

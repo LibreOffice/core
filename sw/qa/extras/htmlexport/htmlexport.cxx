@@ -699,7 +699,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfOleData)
     createSwDoc("reqif-ole-data.xhtml");
     verify();
     setFilterOptions("xhtmlns=reqif-xhtml");
-    reload(mpFilter, "reqif-ole-data.xhtml");
+    saveAndReload("HTML (StarWriter)");
     verify();
 }
 
@@ -755,7 +755,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfOleImg)
     createSwDoc("reqif-ole-img.xhtml");
     verify();
     setFilterOptions("xhtmlns=reqif-xhtml");
-    reload(mpFilter, "reqif-ole-img.xhtml");
+    saveAndReload("HTML (StarWriter)");
     verify();
 }
 
@@ -982,7 +982,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfOle2)
     createSwDoc("reqif-ole2.xhtml");
     verify();
     setFilterOptions("xhtmlns=reqif-xhtml");
-    reload(mpFilter, "reqif-ole2.xhtml");
+    saveAndReload(mpFilter);
     verify();
 }
 
@@ -1945,7 +1945,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testShapeAsImageHtml)
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
     // When exporting to plain HTML:
-    reload("HTML (StarWriter)", "");
+    saveAndReload("HTML (StarWriter)");
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected:
@@ -2359,7 +2359,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testClearingBreak)
     createSwWebDoc("clearing-break.html");
     // Then make sure that the clear property of the break is not ignored:
     verify();
-    reload(mpFilter, "clearing-break.html");
+    saveAndReload("HTML (StarWriter)");
     // Make sure that the clear property of the break is not ignored during export:
     verify();
 }

@@ -158,7 +158,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134219ContourWrap_glow_rotate)
     // Test fails on reload without fix with left: expected 1461 actual 2455; right: expected 1302
     // actual 4177; top: expected 1522 actual 2457; bottom: expected 1296, actual 4179
     verify();
-    reload(mpFilter, "tdf143219ContourWrap_glow_rotate.docx");
+    saveAndReload("Office Open XML Text");
     verify();
 }
 
@@ -182,7 +182,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134219ContourWrap_stroke_shadow)
     // Test after reload would fail without fix with
     // left, top: expected 318 actual 635; right, bottom: expected 1164 actual 2434
     verify();
-    reload(mpFilter, "tdf143219ContourWrap_stroke_shadow.docx");
+    saveAndReload("Office Open XML Text");
     verify();
 }
 
@@ -655,7 +655,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTextframeHyperlink)
 
     // FIXME: After save&reload, the text frame should still be a text frame, and the above test should still work.
     // (Currently the Writer text frame becomes a text box (shape based)). See tdf#140961
-    reload(mpFilter, "docxopenhyperlinkbox.docx");
+    saveAndReload("Office Open XML Text");
 
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // DML
@@ -672,7 +672,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146171_invalid_change_date)
     // disable and check only the conversion of the invalid (zeroed) change date
     // 0000-00-00T00:00:00Z, resulting loss of change tracking during ODF roundtrip
     // reload("writer8", "tdf146171.odt");
-    reload("Office Open XML Text", "tdf146171.docx");
+    saveAndReload("Office Open XML Text");
 
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // This was 0
@@ -728,7 +728,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEffectExtentLineWidth)
     // - Actual  : 561
     // i.e. the upper spacing was too large, the last line of the text moved below the shape.
     verify();
-    reload(mpFilter, "effect-extent-line-width.docx");
+    saveAndReload("Office Open XML Text");
     verify();
 }
 
@@ -741,7 +741,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRtlGutter)
     CPPUNIT_ASSERT(getProperty<bool>(xStandard, "RtlGutter"));
 
     // When saving back to DOCX:
-    reload(mpFilter, "rtl-gutter.docx");
+    saveAndReload("Office Open XML Text");
 
     // Then make sure the section's gutter is still RTL:
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");

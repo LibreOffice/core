@@ -212,8 +212,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf70423)
     OUString aResStr = s.makeStringAndClear();
     pWrtShell->Insert(aResStr);
 
-    save("Text", "maTempFile"); //Saving the resulting file
-    reload(mpFilter, "Text"); //Reloading the file again
+    saveAndReload("Text"); //Reloading the file again
 
     // Without the fix, this test would have failed with:
     // - Expected: 1

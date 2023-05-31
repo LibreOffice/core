@@ -611,7 +611,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96479)
         // Actually not needed, but the bug symptom of a missing bookmark
         // occurred because a broken bookmark was saved and loading silently
         // dropped the broken bookmark!
-        reload("writer8", "testTdf96479.odt");
+        saveAndReload("writer8");
         pDoc = getSwDoc();
 
         // Lookup "replacement" bookmark
@@ -1364,7 +1364,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf91292)
     xPropertySet->setPropertyValue("FillStyle", uno::Any(drawing::FillStyle_NONE));
 
     // Save it and load it back.
-    reload("Office Open XML Text", "tdf91292_paraBackground.docx");
+    saveAndReload("Office Open XML Text");
 
     xPropertySet.set(getParagraph(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("No background color", drawing::FillStyle_NONE,
@@ -2149,7 +2149,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testCreateDocxAnnotation)
     dispatchCommand(mxComponent, ".uno:InsertAnnotation", aPropertyValues);
 
     // Save it as DOCX & load it again
-    reload("Office Open XML Text", "create-docx-annotation.docx");
+    saveAndReload("Office Open XML Text");
 
     // get the annotation
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
