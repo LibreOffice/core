@@ -231,7 +231,7 @@ void XMLGradientStyleExport::exportXML(
     // MCGR: For better compatibility with LO versions before MCGR, try
     // to re-create a 'border' value based on the existing gradient stops.
     // With MCGR we do not need 'border' anymore in quite some cases since
-    // no Start/EndColor at 0.0 resp. 1.0 is explicitely needed. Since we
+    // no Start/EndColor at 0.0 resp. 1.0 is explicitly needed. Since we
     // (unfortunately need to) internally continue to support border
     // anyways it does no harm to fallback to use the border value - if
     // there is an equivalent representation as this helper checks for.
