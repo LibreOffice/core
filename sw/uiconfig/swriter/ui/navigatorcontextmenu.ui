@@ -57,7 +57,7 @@
       <object class="GtkMenuItem" id="deletechapter">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_CHAPTER">Delete Chapter</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_CHAPTER">Delete Heading</property>
         <property name="use-underline">True</property>
         <accelerator key="Delete" signal="activate"/>
       </object>
@@ -66,7 +66,7 @@
       <object class="GtkMenuItem" id="801">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_PROMOTE_CHAPTER">Move Chapter Up</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_PROMOTE_CHAPTER">Move Heading Up</property>
         <property name="use-underline">True</property>
         <accelerator key="Up" signal="activate" modifiers="GDK_CONTROL_MASK"/>
       </object>
@@ -75,7 +75,7 @@
       <object class="GtkMenuItem" id="802">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DEMOTE_CHAPTER">Move Chapter Down</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DEMOTE_CHAPTER">Move Heading Down</property>
         <property name="use-underline">True</property>
         <accelerator key="Down" signal="activate" modifiers="GDK_CONTROL_MASK"/>
       </object>
