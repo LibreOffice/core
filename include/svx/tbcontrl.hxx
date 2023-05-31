@@ -300,7 +300,7 @@ private:
     /** Most recently used currencies **/
     SvxCurrencyVect_t  m_mru_currencies;
 
-    /** Adds a currency to the the most recently used list **/
+    /** Adds a currency to the most recently used list **/
     void addMruCurrency(sal_Int16 currencyPosition);
 
     /**
