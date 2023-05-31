@@ -22,6 +22,7 @@
 
 #include <officecfg/Office/Common.hxx>
 #include <rtl/character.hxx>
+#include <unotools/saveopt.hxx>
 
 using namespace ::com::sun::star;
 
@@ -512,6 +513,44 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_threeStops)
     CPPUNIT_ASSERT_EQUAL(1.0, aColorStop.StopColor.Red);
     CPPUNIT_ASSERT_EQUAL(1.0, aColorStop.StopColor.Green);
     CPPUNIT_ASSERT_EQUAL(0.0, aColorStop.StopColor.Blue);
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBorderRestoration)
+{
+    // Load document. It has a shape with color gradient build from color stop yellow at offset 0.5
+    // and color stop red at offset 1.0. For better backward compatibility such gradient has to be
+    // exported to ODF with a border of 50%.
+    // When gradient-stops are integrated in ODF strict, the test needs to be adapted.
+
+    loadFromURL(u"MCGR_Border_restoration.pptx");
+
+    // Backup original ODF default version
+    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
+
+    // Save to ODF_LATEST which is currently ODF 1.3 extended. Make sure gradient-stop elements have
+    // offsets 0 and 1, and border is written as 50%.
+    SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_LATEST);
+    save("impress8");
+    xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
+    OString sPath
+        = "/office:document-styles/office:styles/draw:gradient[@draw:name='Gradient_20_1']";
+    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[2]", "color-value", "#ff0000");
+    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[2]", "offset", "1");
+    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[1]", "color-value", "#ffff00");
+    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[1]", "offset", "0");
+    assertXPath(pXmlDoc, sPath, "border", "50%");
+
+    // Save to ODF 1.3 strict and make sure border, start-color and end-color are suitable set.
+    SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
+    save("impress8");
+    pXmlDoc = parseExport("styles.xml");
+    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop", 0);
+    assertXPath(pXmlDoc, sPath, "start-color", "#ffff00");
+    assertXPath(pXmlDoc, sPath, "end-color", "#ff0000");
+    assertXPath(pXmlDoc, sPath, "border", "50%");
+
+    // Set back to original ODF default version.
+    SetODFDefaultVersion(nCurrentODFVersion);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
