@@ -566,7 +566,7 @@ Window::~Window()
 
 ::OutputDevice const* Window::GetOutDev() const
 {
-    return mpWindowImpl->mxOutDev.get();
+    return mpWindowImpl ? mpWindowImpl->mxOutDev.get() : nullptr;
 }
 
 ::OutputDevice* Window::GetOutDev()
