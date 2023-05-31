@@ -38,29 +38,12 @@ class Test : public SwModelTestBase
 {
 public:
     Test() : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text") {}
-
-protected:
-    /**
-     * Validation handling
-     */
-    bool mustValidate(const char* filename) const override
-    {
-        const char* aAllowlist[] = {
-            "page-graphic-background.odt",
-            "zoom.docx",
-            "empty.odt",
-            "fdo38244.docx",
-            "comments-nested.odt"
-        };
-        std::vector<const char*> vAllowlist(aAllowlist, aAllowlist + SAL_N_ELEMENTS(aAllowlist));
-
-        return std::find(vAllowlist.begin(), vAllowlist.end(), filename) != vAllowlist.end();
-    }
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testPageGraphicBackground)
 {
     loadAndReload("page-graphic-background.odt");
+    validate(maTempFile.GetFileName(), test::OOXML);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // No idea how the graphic background should be exported (seems there is no
     // way to do a non-tiling export to OOXML), but at least the background
@@ -176,6 +159,7 @@ DECLARE_OOXMLEXPORT_TEST(testZoom, "zoom.docx")
     // Validation test: order of elements were wrong.
     if (!isExported())
         return;
+    validate(maTempFile.GetFileName(), test::OOXML);
     xmlDocUniquePtr pXmlDoc = parseExport("word/styles.xml");
     // Order was: rsid, next.
     int nNext = getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "next");
@@ -191,6 +175,7 @@ DECLARE_OOXMLEXPORT_TEST(testZoom, "zoom.docx")
 CPPUNIT_TEST_FIXTURE(Test, defaultTabStopNotInStyles)
 {
     loadAndReload("empty.odt");
+    validate(maTempFile.GetFileName(), test::OOXML);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 // The default tab stop was mistakenly exported to a style.
 // xray ThisComponent.StyleFamilies(1)(0).ParaTabStop
@@ -255,11 +240,15 @@ DECLARE_OOXMLEXPORT_TEST(testFdo38244, "fdo38244.docx")
     xParaEnum = xParaEnumAccess->createEnumeration();
     xParaEnum->nextElement();
     CPPUNIT_ASSERT(!xParaEnum->hasMoreElements());
+
+    if (isExported())
+        validate(maTempFile.GetFileName(), test::OOXML);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCommentsNested)
 {
     loadAndReload("comments-nested.odt");
+    validate(maTempFile.GetFileName(), test::OOXML);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xOuter = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 2), "TextField");
     CPPUNIT_ASSERT_EQUAL(OUString("Outer"), getProperty<OUString>(xOuter, "Content"));

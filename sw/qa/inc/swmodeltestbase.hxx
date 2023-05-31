@@ -167,14 +167,6 @@ protected:
         return true;
     }
 
-    /**
-     * Override this function if validation is wanted
-     */
-    virtual bool mustValidate(const char* /*filename*/) const
-    {
-        return false;
-    }
-
     void dumpLayout(const css::uno::Reference< css::lang::XComponent > & rComponent);
 
     void discardDumpedLayout();
@@ -279,11 +271,8 @@ protected:
 
     void reload(const char* pFilter, const char* pName, const char* pPassword = nullptr);
 
-    /// Save the loaded document to a tempfile. Can be used to check the resulting docx/odt directly as a ZIP file.
-    void save(const OUString& aFilterName, const char* pName = nullptr, const char* pPassword = nullptr);
-
     /// Combines load() and save().
-    void loadAndSave(const char* pName);
+    void loadAndSave(const char* pName, const char* pPassword = nullptr);
 
     /// Combines load() and reload().
     void loadAndReload(const char* pName);

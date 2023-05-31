@@ -67,39 +67,6 @@ class Test : public SwModelTestBase
 {
 public:
     Test() : SwModelTestBase("/sw/qa/extras/ww8export/data/", "MS Word 97") {}
-
-    /**
-     * Validation handling
-     */
-    bool mustValidate(const char* filename) const override
-    {
-        const std::vector<const char*> aDenylist =
-        {
-            // the following doc exports currently don't pass binary validation
-            "tdf56321_flipImage_both.doc",
-            "cjklist30.doc",
-            "cjklist31.doc",
-            "cjklist34.doc",
-            "cjklist35.doc",
-            "fdo77454.doc",
-            "new-page-styles.doc",
-            "tdf36117_verticalAdjustment.doc",
-            "bnc636128.doc",
-            "tdf92281.doc",
-            "fdo59530.doc",
-            "fdo56513.doc",
-            "tscp.doc",
-            "zoom.doc",
-            "comments-nested.doc",
-            "commented-table.doc",
-            "zoomtype.doc",
-            "n325936.doc",
-            "first-header-footer.doc"
-        };
-
-        // Don't bother with non-.doc files; weed out denylisted .doc files
-        return (o3tl::ends_with(filename, ".doc") && std::find(aDenylist.begin(), aDenylist.end(), filename) == aDenylist.end());
-    }
 };
 
 DECLARE_WW8EXPORT_TEST(testN757910, "n757910.doc")

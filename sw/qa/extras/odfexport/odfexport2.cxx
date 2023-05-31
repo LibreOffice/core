@@ -38,12 +38,6 @@ class Test : public SwModelTestBase
 {
 public:
     Test() : SwModelTestBase("/sw/qa/extras/odfexport/data/", "writer8") {}
-
-    bool mustValidate(const char* /*filename*/) const override
-    {
-        return true;
-    }
-
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testEmbeddedFontProps)

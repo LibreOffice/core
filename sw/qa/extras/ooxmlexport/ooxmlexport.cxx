@@ -37,20 +37,6 @@ class Test : public SwModelTestBase
 {
 public:
     Test() : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text") {}
-
-protected:
-    /**
-     * Validation handling
-     */
-    bool mustValidate(const char* filename) const override
-    {
-        const char* aAllowlist[] = {
-            "paragraph-mark-nonempty.odt"
-        };
-        std::vector<const char*> vAllowlist(aAllowlist, aAllowlist + SAL_N_ELEMENTS(aAllowlist));
-
-        return std::find(vAllowlist.begin(), vAllowlist.end(), filename) != vAllowlist.end();
-    }
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo81381)
@@ -693,6 +679,7 @@ DECLARE_OOXMLEXPORT_TEST(testParagraphMark2, "paragraph-mark2.docx")
 CPPUNIT_TEST_FIXTURE(Test, testParagraphMarkNonempty)
 {
     loadAndSave("paragraph-mark-nonempty.odt");
+    validate(maTempFile.GetFileName(), test::OOXML);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // There were two <w:sz> elements, make sure the 40 one is dropped and the 20 one is kept.

@@ -105,8 +105,7 @@ void SwModelTestBase::executeImportExport(const char* filename, const char* pPas
     maTempFile.EnableKillingFile(false);
     header();
     std::unique_ptr<Resetter> const pChanges(preTest(filename));
-    load(filename, pPassword);
-    save(OUString::createFromAscii(mpFilter));
+    loadAndSave(filename, pPassword);
     maTempFile.EnableKillingFile(false);
     verify();
     finish();
@@ -478,50 +477,17 @@ void SwModelTestBase::loadURL(OUString const& rURL, const char* pName, const cha
 
 void SwModelTestBase::reload(const char* pFilter, const char* pName, const char* pPassword)
 {
-    save(OUString::createFromAscii(pFilter), pName, pPassword);
+    save(OUString::createFromAscii(pFilter), pPassword);
+    mbExported = true;
 
     loadURL(maTempFile.GetURL(), pName, pPassword);
 }
 
-void SwModelTestBase::save(const OUString& aFilterName, const char* pName, const char* pPassword)
+void SwModelTestBase::loadAndSave(const char* pName, const char* pPassword)
 {
-    // FIXME: Merge skipValidation and mustValidate
-    skipValidation();
-
-    UnoApiXmlTest::save(aFilterName, pPassword);
-
-    // TODO: for now, validate only ODF here
-    if (mustValidate(pName) || aFilterName == "writer8"
-        || aFilterName == "OpenDocument Text Flat XML")
-    {
-        if (aFilterName == "Office Open XML Text")
-        {
-            // too many validation errors right now
-            validate(maTempFile.GetFileName(), test::OOXML);
-        }
-        else if (aFilterName == "writer8" || aFilterName == "OpenDocument Text Flat XML")
-        {
-            validate(maTempFile.GetFileName(), test::ODF);
-        }
-        else if (aFilterName == "MS Word 97")
-        {
-            validate(maTempFile.GetFileName(), test::MSBINARY);
-        }
-        else
-        {
-            OString aMessage
-                = OString::Concat("validation requested, but don't know how to validate ") + pName
-                  + " (" + OUStringToOString(aFilterName, RTL_TEXTENCODING_UTF8) + ")";
-            CPPUNIT_FAIL(aMessage.getStr());
-        }
-    }
-    mbExported = true;
-}
-
-void SwModelTestBase::loadAndSave(const char* pName)
-{
-    load(pName);
+    load(pName, pPassword);
     save(OUString::createFromAscii(mpFilter));
+    mbExported = true;
 }
 
 void SwModelTestBase::loadAndReload(const char* pName)
