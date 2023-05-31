@@ -2311,7 +2311,7 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
         //   - vcl/source/filter/wmf/emfwr.cxx -> same
         //   - vcl/source/filter/eps/eps.cxx -> same
         // NOTE: Theoretically it would be possible to make the new extended Gradient data
-        // available in metafiles, with the known limitiations (not backward comp, all
+        // available in metafiles, with the known limitations (not backward comp, all
         // places using it would need adaption, ...), but combined with knowing that nearly
         // all usages ignore or render it locally anyways makes that a non-option.
         pFiGradient = nullptr;
