@@ -2278,7 +2278,7 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
     // try to identify a single FillGradientPrimitive2D in the
     // transparence part of the primitive. The hope is to handle
     // the more specific case in a better way than the general
-    // TransparencePrimitive2D which has strongly seperated
+    // TransparencePrimitive2D which has strongly separated
     // definitions for transparency and content, both completely
     // free definable by primitives
     const primitive2d::FillGradientPrimitive2D* pFiGradient(nullptr);
