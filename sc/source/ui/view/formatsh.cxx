@@ -1870,7 +1870,7 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                         if( nFormatCategory == -1 )
                             rSet.InvalidateItem( nWhich );
                         else
-                            rSet.Put( SfxInt16Item( nWhich, nFormatCategory ) );
+                            rSet.Put( SfxUInt16Item( nWhich, nFormatCategory ) );
                     }
                     else
                     {
