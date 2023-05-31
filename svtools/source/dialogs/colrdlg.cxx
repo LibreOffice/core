@@ -25,6 +25,7 @@
 #include <com/sun/star/cui/AsynchronousColorPicker.hpp>
 #include <com/sun/star/cui/ColorPicker.hpp>
 
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 
@@ -130,7 +131,7 @@ void SvColorDialog::ExecuteAsync(weld::Window* pParent, const std::function<void
     }
     catch(Exception&)
     {
-        OSL_ASSERT(false);
+        TOOLS_WARN_EXCEPTION("svtools.dialogs", "SvColorDialog::ExecuteAsync");
     }
 }
 
