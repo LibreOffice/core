@@ -7219,27 +7219,18 @@ void preLoadShortCutAccelerators()
     {
         OUString language = LanguageTag(installedLocales[i]).getLocale().Language;
 
-        if (!comphelper::LibreOfficeKit::isAllowlistedLanguage(language))
-        {
-            // Language is listed by COOL and also installed in core. We can create the short cut accelerator.
+        // Set the UI language to current one, before creating the accelerator.
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+        officecfg::Setup::L10N::ooLocale::set(installedLocales[i], batch);
+        batch->commit();
 
-            // Set the UI language to current one, before creating the accelerator.
-            std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-            officecfg::Setup::L10N::ooLocale::set(installedLocales[i], batch);
-            batch->commit();
-
-            // Supported module names: Writer, Calc, Draw, Impress
-            std::vector<OUString> supportedModuleNames = { "com.sun.star.text.TextDocument", "com.sun.star.sheet.SpreadsheetDocument", "com.sun.star.drawing.DrawingDocument", "com.sun.star.presentation.PresentationDocument" };
-            // Create the accelerators.
-            for (std::size_t j = 0; j < supportedModuleNames.size(); j++)
-            {
-                OUString key = supportedModuleNames[j] + installedLocales[i];
-                acceleratorConfs[key] = svt::AcceleratorExecute::lok_createNewAcceleratorConfiguration(::comphelper::getProcessComponentContext(), supportedModuleNames[j]);
-            }
-        }
-        else
+        // Supported module names: Writer, Calc, Draw, Impress
+        std::vector<OUString> supportedModuleNames = { "com.sun.star.text.TextDocument", "com.sun.star.sheet.SpreadsheetDocument", "com.sun.star.drawing.DrawingDocument", "com.sun.star.presentation.PresentationDocument" };
+        // Create the accelerators.
+        for (std::size_t j = 0; j < supportedModuleNames.size(); j++)
         {
-            std::cerr << "Language is installed in core but not in the list of COOL languages: " << language << "\n";
+            OUString key = supportedModuleNames[j] + installedLocales[i];
+            acceleratorConfs[key] = svt::AcceleratorExecute::lok_createNewAcceleratorConfiguration(::comphelper::getProcessComponentContext(), supportedModuleNames[j]);
         }
     }
 
