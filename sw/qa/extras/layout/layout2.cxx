@@ -2815,6 +2815,37 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138124)
     assertXPath(pXml, "/root/page/ftncont/ftn/txt//SwLinePortion[@type='PortionType::FlyCnt']", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf155611)
+{
+    createSwDoc("tdf155611_table_and_nested_section.fodt");
+    Scheduler::ProcessEventsToIdle();
+
+    xmlDocUniquePtr pXml = parseLayoutDump();
+    CPPUNIT_ASSERT(pXml);
+
+    // Check the layout: single page, two section frames (no section frames after the one for Inner
+    // section), correct table structure and content in the first section frame, including nested
+    // table in the last cell, and the last section text.
+    assertXPath(pXml, "/root/page");
+    // Without the fix in place, this would fail with
+    // - Expected: 2
+    // - Actual  : 3
+    assertXPath(pXml, "/root/page/body/section", 2);
+    assertXPath(pXml, "/root/page/body/section[1]/tab");
+    assertXPath(pXml, "/root/page/body/section[1]/tab/row");
+    assertXPath(pXml, "/root/page/body/section[1]/tab/row/cell", 2);
+    assertXPath(pXml, "/root/page/body/section[1]/tab/row/cell[1]/txt/SwParaPortion/SwLineLayout/"
+                      "SwParaPortion[@portion='foo']");
+    assertXPath(pXml, "/root/page/body/section[1]/tab/row/cell[2]/txt/SwParaPortion/SwLineLayout/"
+                      "SwParaPortion[@portion='bar']");
+    assertXPath(pXml, "/root/page/body/section[1]/tab/row/cell[2]/tab/row/cell/txt/SwParaPortion/"
+                      "SwLineLayout/SwParaPortion[@portion='baz']");
+    assertXPath(pXml, "/root/page/body/section[2]/txt[1]/SwParaPortion/SwLineLayout/"
+                      "SwParaPortion[@portion='abc']");
+
+    // Also must not crash on close because of a frame that accidentally fell off of the layout
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
