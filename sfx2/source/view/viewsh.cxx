@@ -706,7 +706,23 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                     if ( pPrinter != nullptr )
                         aPrinterName = pPrinter->GetName();
                     else
-                        aPrinterName = Printer::GetDefaultPrinterName();
+                    {
+                        // tdf#109149 don't poll the Default Printer Name on every query.
+                        // We are queried on every change, so on every
+                        // keystroke, and we are only using this to fill in the
+                        // printername inside the label of "Print Directly (printer-name)"
+                        // On Printer::GetDefaultPrinterName() is implemented with
+                        // GetDefaultPrinter so don't call this excessively. 5 mins
+                        // seems a reasonable refresh time.
+                        std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+                        std::chrono::minutes five_mins(5);
+                        if (now > pImpl->m_nDefaultPrinterNameFetchTime + five_mins)
+                        {
+                            pImpl->m_sDefaultPrinterName = Printer::GetDefaultPrinterName();
+                            pImpl->m_nDefaultPrinterNameFetchTime = now;
+                        }
+                        aPrinterName = pImpl->m_sDefaultPrinterName;
+                    }
                     if ( !aPrinterName.isEmpty() )
                     {
                         uno::Reference < frame::XFrame > xFrame( rFrame.GetFrame().GetFrameInterface() );

@@ -28,6 +28,7 @@
 #include <svtools/acceleratorexecute.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/print.hxx>
+#include <chrono>
 #include <vector>
 
 class SfxBaseController;
@@ -41,6 +42,8 @@ struct SfxViewShell_Impl
         aInterceptorContainer;
     SfxShellArr_Impl aArr;
     Size aMargin;
+    OUString m_sDefaultPrinterName;
+    std::chrono::steady_clock::time_point m_nDefaultPrinterNameFetchTime;
     bool m_bHasPrintOptions;
     sal_uInt16 m_nFamily;
     ::rtl::Reference<SfxBaseController> m_pController;
