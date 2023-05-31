@@ -124,7 +124,9 @@ SwViewColors::SwViewColors(const svtools::ColorConfig& rConfig)
 
     aValue = rConfig.GetColorValue(svtools::WRITERFIELDSHADINGS);
     m_aFieldShadingsColor = aValue.nColor;
-    if(aValue.bIsVisible)
+    // as in initializeForTiledRendering we don't want to enable
+    // field shadings for the online case
+    if (aValue.bIsVisible && !comphelper::LibreOfficeKit::isActive())
         m_nAppearanceFlags |= ViewOptFlags::FieldShadings;
 
     aValue = rConfig.GetColorValue(svtools::WRITERSECTIONBOUNDARIES);
