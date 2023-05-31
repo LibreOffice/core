@@ -142,6 +142,11 @@ CPPUNIT_TEST_FIXTURE(Test, testDontBreakWrappedTables)
     CPPUNIT_ASSERT(bDontBreakWrappedTables);
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf104704_mangledFooter, "tdf104704_mangledFooter.odt")
+{
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
