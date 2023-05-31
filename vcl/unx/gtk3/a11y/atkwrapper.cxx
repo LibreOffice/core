@@ -404,6 +404,8 @@ wrapper_get_description( AtkObject *atk_obj )
 
             g_free(atk_obj->description);
             atk_obj->description = g_strdup(aDescription.getStr());
+
+            return atk_obj->description;
         }
         catch(const uno::Exception&) {
             g_warning( "Exception in getAccessibleDescription()" );
