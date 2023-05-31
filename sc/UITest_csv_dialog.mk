@@ -17,4 +17,6 @@ $(eval $(call gb_UITest_set_defs,csv_dialog, \
     TDOC="$(SRCDIR)/sc/qa/uitest/data" \
 ))
 
+$(eval $(call gb_UITest_use_oneprocess,csv_dialog))
+
 # vim: set noet sw=4 ts=4:
