@@ -525,8 +525,9 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
             // sections during import, so minimize unnecessary duplication
             // by substituting a simple page break when the resulting section is identical,
             // unless this is needed to re-number the page.
-            if (!bNewPageDesc && !pItem->GetNumOffset() && m_pCurrentPageDesc
-                && m_pCurrentPageDesc->GetFollow() == pItem->GetPageDesc())
+            // DOCX only.
+            if (!bNewPageDesc && !pItem->GetNumOffset() && !PreferPageBreakBefore()
+                && m_pCurrentPageDesc && m_pCurrentPageDesc->GetFollow() == pItem->GetPageDesc())
             {
                 // A section break on the very first paragraph is ignored by LO/Word
                 // and should NOT be turned into a page break.
