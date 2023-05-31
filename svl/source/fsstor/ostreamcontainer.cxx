@@ -208,7 +208,7 @@ void SAL_CALL OFSStreamContainer::dispose()
     std::unique_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
-        throw lang::DisposedException();
+        return;
 
     if ( !m_xStream.is() )
         throw uno::RuntimeException();

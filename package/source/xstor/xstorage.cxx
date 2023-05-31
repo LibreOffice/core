@@ -1792,10 +1792,7 @@ OStorage::~OStorage()
 void OStorage::InternalDispose( bool bNotifyImpl )
 {
     if ( !m_pImpl )
-    {
-        SAL_INFO("package.xstor", THROW_WHERE "Disposed!");
-        throw lang::DisposedException( THROW_WHERE );
-    }
+        return;
 
     // the source object is also a kind of locker for the current object
     // since the listeners could dispose the object while being notified
@@ -1803,10 +1800,7 @@ void OStorage::InternalDispose( bool bNotifyImpl )
     m_aListenersContainer.disposeAndClear( aSource );
 
     if ( !m_pImpl )
-    {
-        SAL_INFO("package.xstor", THROW_WHERE "Disposed!");
-        throw lang::DisposedException( THROW_WHERE );
-    }
+        return;
 
     m_pImpl->m_nModifiedListenerCount = 0;
 

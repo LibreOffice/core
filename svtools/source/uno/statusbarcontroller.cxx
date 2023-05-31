@@ -179,7 +179,7 @@ void SAL_CALL StatusbarController::dispose()
     {
         SolarMutexGuard aSolarMutexGuard;
         if ( m_bDisposed )
-            throw DisposedException();
+            return;
     }
 
     css::lang::EventObject aEvent( xThis );

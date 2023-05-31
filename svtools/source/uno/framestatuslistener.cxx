@@ -83,7 +83,7 @@ void SAL_CALL FrameStatusListener::dispose()
 
     SolarMutexGuard aSolarMutexGuard;
     if ( m_bDisposed )
-        throw DisposedException();
+        return;
 
     for (auto const& listener : m_aListenerMap)
     {

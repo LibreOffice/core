@@ -546,7 +546,7 @@ void SAL_CALL OLESimpleStorage::dispose()
     std::unique_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
-        throw lang::DisposedException();
+        return;
 
     if ( m_aListenersContainer.getLength(aGuard) )
     {

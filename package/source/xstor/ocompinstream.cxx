@@ -185,10 +185,7 @@ void OInputCompStream::InternalDispose()
     // can be called only by OWriteStream_Impl
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
     if ( m_bDisposed )
-    {
-        SAL_INFO("package.xstor", "Disposed!");
-        throw lang::DisposedException();
-    }
+        return;
 
     // the source object is also a kind of locker for the current object
     // since the listeners could dispose the object while being notified
@@ -212,10 +209,7 @@ void SAL_CALL OInputCompStream::dispose(  )
 {
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
     if ( m_bDisposed )
-    {
-        SAL_INFO("package.xstor", "Disposed!");
-        throw lang::DisposedException();
-    }
+        return;
 
     if ( m_pInterfaceContainer )
     {

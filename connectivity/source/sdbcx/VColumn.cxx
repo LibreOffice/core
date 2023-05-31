@@ -170,10 +170,6 @@ void OColumn::construct()
 void OColumn::disposing()
 {
     OPropertySetHelper::disposing();
-
-    ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(OColumnDescriptor_BASE::rBHelper.bDisposed);
-
 }
 
 Reference< XPropertySet > SAL_CALL OColumn::createDataDescriptor(  )

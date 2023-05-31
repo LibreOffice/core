@@ -223,7 +223,7 @@ void SAL_CALL OFSInputStreamContainer::dispose(  )
     std::unique_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
-        throw lang::DisposedException();
+        return;
 
     if ( !m_xInputStream.is() )
         throw uno::RuntimeException();

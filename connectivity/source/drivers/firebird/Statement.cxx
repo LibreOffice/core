@@ -70,7 +70,8 @@ void SAL_CALL OStatement::release() noexcept
 void OStatement::disposeResultSet()
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
+    if (OStatementCommonBase_Base::rBHelper.bDisposed)
+        return;
 
     OStatementCommonBase::disposeResultSet();
 

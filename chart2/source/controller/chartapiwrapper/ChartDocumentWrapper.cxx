@@ -855,8 +855,7 @@ Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::getCurrentSelection(
 void SAL_CALL ChartDocumentWrapper::dispose()
 {
     if( m_bIsDisposed )
-        throw lang::DisposedException("ChartDocumentWrapper is disposed",
-            static_cast< ::cppu::OWeakObject* >( this ));
+        return;
 
     m_bIsDisposed = true;
 

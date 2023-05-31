@@ -61,7 +61,7 @@ void SAL_CALL StatusBarWrapper::dispose()
 
     SolarMutexGuard g;
     if ( m_bDisposed )
-        throw DisposedException();
+        return;
 
     if ( m_xStatusBarManager.is() )
         m_xStatusBarManager->dispose();

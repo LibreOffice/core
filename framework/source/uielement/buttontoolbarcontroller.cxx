@@ -126,7 +126,7 @@ void SAL_CALL ButtonToolbarController::dispose()
     {
         SolarMutexGuard aSolarMutexGuard;
         if ( m_bDisposed )
-            throw DisposedException();
+            return;
 
         m_xContext.clear();
         m_xURLTransformer.clear();
