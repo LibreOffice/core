@@ -580,6 +580,79 @@ void DomainMapper_Impl::SetDocumentSettingsProperty( const OUString& rPropName, 
         }
     }
 }
+
+namespace
+{
+void CopyPageDescNameToNextParagraph(const uno::Reference<lang::XComponent>& xParagraph,
+                                     const uno::Reference<text::XTextCursor>& xCursor)
+{
+    // First check if xParagraph has a non-empty page style name to copy from.
+    uno::Reference<beans::XPropertySet> xParagraphProps(xParagraph, uno::UNO_QUERY);
+    if (!xParagraphProps.is())
+    {
+        return;
+    }
+
+    uno::Any aPageDescName = xParagraphProps->getPropertyValue("PageDescName");
+    OUString sPageDescName;
+    aPageDescName >>= sPageDescName;
+    if (sPageDescName.isEmpty())
+    {
+        return;
+    }
+
+    // If so, search for the next paragraph.
+    uno::Reference<text::XParagraphCursor> xParaCursor(xCursor, uno::UNO_QUERY);
+    if (!xParaCursor.is())
+    {
+        return;
+    }
+
+    // Create a range till the next paragraph and then enumerate on the range.
+    if (!xParaCursor->gotoNextParagraph(/*bExpand=*/true))
+    {
+        return;
+    }
+
+    uno::Reference<container::XEnumerationAccess> xEnumerationAccess(xParaCursor, uno::UNO_QUERY);
+    if (!xEnumerationAccess.is())
+    {
+        return;
+    }
+
+    uno::Reference<container::XEnumeration> xEnumeration = xEnumerationAccess->createEnumeration();
+    if (!xEnumeration.is())
+    {
+        return;
+    }
+
+    xEnumeration->nextElement();
+    if (!xEnumeration->hasMoreElements())
+    {
+        return;
+    }
+
+    // We found a next item in the enumeration: it's usually a paragraph, but may be a table as
+    // well.
+    uno::Reference<beans::XPropertySet> xNextParagraph(xEnumeration->nextElement(), uno::UNO_QUERY);
+    if (!xNextParagraph.is())
+    {
+        return;
+    }
+
+    // See if there is page style set already: if so, don't touch it.
+    OUString sNextPageDescName;
+    xNextParagraph->getPropertyValue("PageDescName") >>= sNextPageDescName;
+    if (!sNextPageDescName.isEmpty())
+    {
+        return;
+    }
+
+    // Finally copy it over, so it's not lost.
+    xNextParagraph->setPropertyValue("PageDescName", aPageDescName);
+}
+}
+
 void DomainMapper_Impl::RemoveDummyParaForTableInSection()
 {
     SetIsDummyParaAddedForTableInSection(false);
@@ -607,6 +680,8 @@ void DomainMapper_Impl::RemoveDummyParaForTableInSection()
     {
         uno::Reference<container::XEnumeration> xEnumeration = xEnumerationAccess->createEnumeration();
         uno::Reference<lang::XComponent> xParagraph(xEnumeration->nextElement(), uno::UNO_QUERY);
+        // Make sure no page breaks are lost.
+        CopyPageDescNameToNextParagraph(xParagraph, xCursor);
         xParagraph->dispose();
     }
 }

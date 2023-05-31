@@ -19,6 +19,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/document/XDocumentInsertable.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/text/XPageCursor.hpp>
 
 #include <vcl/scheduler.hxx>
 
@@ -323,6 +325,28 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlDataBindingColor)
     // - Actual  : rgba[ff0000ff]
     // i.e. the char color was red, not the default / automatic.
     CPPUNIT_ASSERT_EQUAL(COL_AUTO, nColor);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFloatingTableSectionBreak)
+{
+    // Given a document with 2 floating tables and 2 pages, section break (next page) between the
+    // two:
+    loadFromURL(u"floating-table-section-break.docx");
+
+    // When going to the last page:
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
+        xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(),
+                                              uno::UNO_QUERY);
+    xCursor->jumpToLastPage();
+
+    // Then make sure that we're on page 2:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 1
+    // i.e. the document was of 1 page, the section break was lost.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2), xCursor->getPage());
 }
 }
 
