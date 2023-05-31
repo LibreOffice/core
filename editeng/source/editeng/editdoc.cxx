@@ -1976,7 +1976,6 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, S
 {
     vcl::Font aPrevFont( rFont );
     rFont.SetAlignment( ALIGN_BASELINE );
-    rFont.SetTransparent( true );
 
     sal_uInt16 nWhich_FontInfo = GetScriptItemId( EE_CHAR_FONTINFO, nScriptType );
     sal_uInt16 nWhich_Language = GetScriptItemId( EE_CHAR_LANGUAGE, nScriptType );
@@ -1997,7 +1996,11 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, S
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_COLOR ) == SfxItemState::SET ) )
         rFont.SetColor( rSet.Get( EE_CHAR_COLOR ).GetValue() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_BKGCOLOR ) == SfxItemState::SET ) )
-        rFont.SetFillColor( rSet.Get( EE_CHAR_BKGCOLOR ).GetValue() );
+    {
+        auto& aColor = rSet.Get( EE_CHAR_BKGCOLOR ).GetValue();
+        rFont.SetTransparent(aColor == COL_TRANSPARENT);
+        rFont.SetFillColor(aColor);
+    }
     if ( bSearchInParent || ( rSet.GetItemState( nWhich_FontHeight ) == SfxItemState::SET ) )
         rFont.SetFontSize( Size( rFont.GetFontSize().Width(), static_cast<const SvxFontHeightItem&>(rSet.Get( nWhich_FontHeight ) ).GetHeight() ) );
     if ( bSearchInParent || ( rSet.GetItemState( nWhich_Weight ) == SfxItemState::SET ) )
