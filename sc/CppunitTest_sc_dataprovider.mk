@@ -141,4 +141,10 @@ $(eval $(call gb_CppunitTest_use_externals,sc_dataprovider,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_dataprovider))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,sc_dataprovider, \
+    modules/scalc \
+    sfx \
+    svt \
+))
+
 # vim: set noet sw=4 ts=4:
