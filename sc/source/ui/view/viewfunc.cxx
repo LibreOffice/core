@@ -832,6 +832,8 @@ void ScViewFunc::EnterDataAtCursor( const OUString& rString )
     SCTAB nTab = GetViewData().GetTabNo();
 
     EnterData( nPosX, nPosY, nTab, rString );
+    // tdf#154174: update repeated data in the cell
+    GetViewData().GetViewShell()->UpdateInputHandler();
 }
 
 void ScViewFunc::EnterMatrix( const OUString& rString, ::formula::FormulaGrammar::Grammar eGram )
