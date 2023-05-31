@@ -186,13 +186,9 @@ OLE1Reader::OLE1Reader(SvStream& rStream)
 /// Covers sw/source/filter/html/wrthtml.cxx and related fixes.
 class HtmlExportTest : public SwModelTestBase, public HtmlTestTools
 {
-private:
-    FieldUnit m_eUnit;
-
 public:
     HtmlExportTest()
         : SwModelTestBase("/sw/qa/extras/htmlexport/data/", "HTML (StarWriter)")
-        , m_eUnit(FieldUnit::NONE)
     {
     }
 
@@ -227,12 +223,9 @@ private:
         {
             // FIXME if padding-top gets exported as inches, not cms, we get rounding errors.
             SwGlobals::ensure(); // make sure that SW_MOD() is not 0
-            std::unique_ptr<Resetter> pResetter(new Resetter([this]() {
-                SwMasterUsrPref* pPref = const_cast<SwMasterUsrPref*>(SW_MOD()->GetUsrPref(false));
-                pPref->SetMetric(this->m_eUnit);
-            }));
             SwMasterUsrPref* pPref = const_cast<SwMasterUsrPref*>(SW_MOD()->GetUsrPref(false));
-            m_eUnit = pPref->GetMetric();
+            std::unique_ptr<Resetter> pResetter(
+                new Resetter([ pPref, eUnit = pPref->GetMetric() ]() { pPref->SetMetric(eUnit); }));
             pPref->SetMetric(FieldUnit::CM);
             return pResetter;
         }
