@@ -523,7 +523,21 @@ void SwSectionFrame::MergeNext( SwSectionFrame* pNxt )
 SwSectionFrame* SwSectionFrame::SplitSect( SwFrame* pFrameStartAfter, SwFrame* pFramePutAfter )
 {
     assert(!pFrameStartAfter || IsAnLower(pFrameStartAfter));
-    SwFrame* pSav = pFrameStartAfter ? pFrameStartAfter->FindNext() : ContainsAny();
+    SwFrame* pSav;
+    if (pFrameStartAfter)
+    {
+        pSav = pFrameStartAfter->FindNext();
+        // If pFrameStartAfter is a complex object like table, and it has no next,
+        // its FindNext may return its own last subframe. In this case, assume that
+        // we are at the end.
+        if (pSav && pFrameStartAfter->IsLayoutFrame())
+            if (static_cast<SwLayoutFrame*>(pFrameStartAfter)->IsAnLower(pSav))
+                pSav = nullptr;
+    }
+    else
+    {
+        pSav = ContainsAny();
+    }
     if (pSav && !IsAnLower(pSav))
         pSav = nullptr; // we are at the very end
 
