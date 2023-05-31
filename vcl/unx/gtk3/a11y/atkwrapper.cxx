@@ -377,6 +377,8 @@ wrapper_get_name( AtkObject *atk_obj )
                 if( atk_obj->name )
                     g_free(atk_obj->name);
                 atk_obj->name = g_strdup(aName.getStr());
+
+                return atk_obj->name;
             }
         }
         catch(const uno::Exception&) {
