@@ -159,14 +159,6 @@ protected:
     {
     }
 
-    /**
-     * Override this function if calc layout is not needed
-     */
-    virtual bool mustCalcLayoutOf(const char* /*filename*/)
-    {
-        return true;
-    }
-
     void dumpLayout(const css::uno::Reference< css::lang::XComponent > & rComponent);
 
     void discardDumpedLayout();

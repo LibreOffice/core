@@ -254,10 +254,8 @@ public:
         std::cout << filename << ",";
         mnStartTime = osl_getGlobalTimer();
         mxComponent = loadFromDesktop(msMailMergeOutputURL + "/" + filename, "com.sun.star.text.TextDocument");
-        OString name2 = OUStringToOString( filename, RTL_TEXTENCODING_UTF8 );
         discardDumpedLayout();
-        if (mustCalcLayoutOf(name2.getStr()))
-            calcLayout();
+        calcLayout();
     }
 
     /**

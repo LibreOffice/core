@@ -207,11 +207,6 @@ public:
     }
 
 private:
-    bool mustCalcLayoutOf(const char* filename) override
-    {
-        return filename != std::string_view("fdo62336.docx");
-    }
-
     virtual std::unique_ptr<Resetter> preTest(const char* filename) override
     {
         if (getTestName().indexOf("ReqIf") != -1)

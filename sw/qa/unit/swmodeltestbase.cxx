@@ -471,8 +471,7 @@ void SwModelTestBase::loadURL(OUString const& rURL, const char* pName, const cha
     CPPUNIT_ASSERT(!getSwDocShell()->GetMedium()->GetWarningError());
 
     discardDumpedLayout();
-    if (pName && mustCalcLayoutOf(pName))
-        calcLayout();
+    calcLayout();
 }
 
 void SwModelTestBase::reload(const char* pFilter, const char* pName, const char* pPassword)
