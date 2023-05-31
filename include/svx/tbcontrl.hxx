@@ -247,7 +247,7 @@ public:
     void EnsurePaletteManager();
 };
 
-/** Poup controller for currency combo widget **/
+/** Popup controller for currency combo widget **/
 class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxCurrencyToolBoxControl final : public svt::PopupWindowController
 {
 public:
