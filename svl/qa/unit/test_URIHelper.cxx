@@ -247,35 +247,36 @@ void Test::testNormalizedMakeRelative() {
           "nonex3/nonex4" }
 #endif
     };
-    for (std::size_t i = 0; i < SAL_N_ELEMENTS(tests); ++i) {
-        css::uno::Reference< css::uri::XUriReference > ref(
-            URIHelper::normalizedMakeRelative(
-                m_context, OUString::createFromAscii(tests[i].base),
-                OUString::createFromAscii(tests[i].absolute)));
-        bool ok = tests[i].relative == nullptr
-            ? !ref.is()
-            : ref.is() && ref->getUriReference().equalsAscii(tests[i].relative);
+    for (auto const[base, absolute, relative] : tests)
+    {
+        css::uno::Reference< css::uri::XUriReference > ref(URIHelper::normalizedMakeRelative(
+                m_context, OUString::createFromAscii(base), OUString::createFromAscii(absolute)));
+        bool ok = relative == nullptr ? !ref.is()
+                                      : ref.is() && ref->getUriReference().equalsAscii(relative);
         OString msg;
-        if (!ok) {
-            OStringBuffer buf(OString::Concat("<")
-                + tests[i].base
-                + ">, <"
-                + tests[i].absolute
-                + ">: ");
-            if (ref.is()) {
+        if (!ok)
+        {
+            OStringBuffer buf(OString::Concat("<") + base + ">, <" + absolute + ">: ");
+            if (ref.is())
+            {
                 buf.append('<');
                 buf.append(
                     OUStringToOString(
                         ref->getUriReference(), RTL_TEXTENCODING_UTF8));
                 buf.append('>');
-            } else {
+            }
+            else
+            {
                 buf.append("none");
             }
             buf.append(" instead of ");
-            if (tests[i].relative == nullptr) {
+            if (relative == nullptr)
+            {
                 buf.append("none");
-            } else {
-                buf.append(OString::Concat("<") + tests[i].relative + ">");
+            }
+            else
+            {
+                buf.append(OString::Concat("<") + relative + ">");
             }
             msg = buf.makeStringAndClear();
         }
@@ -369,32 +370,27 @@ void Test::testFindFirstURLInText() {
         { "wfs:", nullptr, 0, 0 }
     };
     CharClass charClass( m_context, LanguageTag( css::lang::Locale("en", "US", "")));
-    for (std::size_t i = 0; i < SAL_N_ELEMENTS(tests); ++i) {
-        OUString input(OUString::createFromAscii(tests[i].input));
+    for (auto const[pInput, pResult, nBegin, nEnd] : tests)
+    {
+        OUString input(OUString::createFromAscii(pInput));
         sal_Int32 begin = 0;
         sal_Int32 end = input.getLength();
-        OUString result(
-            URIHelper::FindFirstURLInText(input, begin, end, charClass));
-        bool ok = tests[i].result == nullptr
-            ? (result.getLength() == 0 && begin == input.getLength()
-               && end == input.getLength())
-            : (result.equalsAscii(tests[i].result) && begin == tests[i].begin
-               && end == tests[i].end);
+        OUString result(URIHelper::FindFirstURLInText(input, begin, end, charClass));
+        bool ok = pResult == nullptr
+                  ? (result.getLength() == 0 && begin == input.getLength()
+                  && end == input.getLength())
+                  : (result.equalsAscii(pResult) && begin == nBegin && end == nEnd);
         OString msg;
-        if (!ok) {
+        if (!ok)
+        {
             OStringBuffer buf;
-            buf.append(OString::Concat("\"")
-                + tests[i].input
-                + "\" -> ");
-            buf.append(tests[i].result == nullptr ? "none" : tests[i].result);
-            buf.append(" ("
-                + OString::number(tests[i].begin)
-                + ", "
-                + OString::number(tests[i].end)
+            buf.append(OString::Concat("\"") + pInput + "\" -> ");
+            buf.append(pResult == nullptr ? "none" : pResult);
+            buf.append(" (" + OString::number(nBegin) + ", " + OString::number(nEnd)
                 + ")"
                 " != "
-                + OUStringToOString(result, RTL_TEXTENCODING_UTF8)
-                + " (" + OString::number(begin) + ", " + OString::number(end) +")");
+                + OUStringToOString(result, RTL_TEXTENCODING_UTF8) + " ("
+                + OString::number(begin) + ", " + OString::number(end) +")");
             msg = buf.makeStringAndClear();
         }
         CPPUNIT_ASSERT_MESSAGE(msg.getStr(), ok);
@@ -425,32 +421,27 @@ void Test::testFindFirstDOIInText() {
         { "doi:11.1093/ajae/aaq063", nullptr, 0, 0 }, // doesn't begin with doi:10.
     };
     CharClass charClass( m_context, LanguageTag( css::lang::Locale("en", "US", "")));
-    for (std::size_t i = 0; i < SAL_N_ELEMENTS(tests); ++i) {
-        OUString input(OUString::createFromAscii(tests[i].input));
+    for (auto const[pInput, pResult, nBegin, nEnd] : tests)
+    {
+        OUString input(OUString::createFromAscii(pInput));
         sal_Int32 begin = 0;
         sal_Int32 end = input.getLength();
         OUString result(
             URIHelper::FindFirstDOIInText(input, begin, end, charClass));
-        bool ok = tests[i].result == nullptr
-            ? (result.getLength() == 0 && begin == input.getLength()
-               && end == input.getLength())
-            : (result.equalsAscii(tests[i].result) && begin == tests[i].begin
-               && end == tests[i].end);
+        bool ok = pResult == nullptr
+                  ? (result.getLength() == 0 && begin == input.getLength() && end == input.getLength())
+                  : (result.equalsAscii(pResult) && begin == nBegin && end == nEnd);
         OString msg;
-        if (!ok) {
+        if (!ok)
+        {
             OStringBuffer buf;
-            buf.append(OString::Concat("\"")
-                + tests[i].input
-                + "\" -> ");
-            buf.append(tests[i].result == nullptr ? "none" : tests[i].result);
-            buf.append(" ("
-                + OString::number(tests[i].begin)
-                + ", "
-                + OString::number(tests[i].end)
+            buf.append(OString::Concat("\"") + pInput + "\" -> ");
+            buf.append(pResult == nullptr ? "none" : pResult);
+            buf.append(" (" + OString::number(nBegin) + ", " + OString::number(nEnd)
                 + ")"
                 " != "
-                + OUStringToOString(result, RTL_TEXTENCODING_UTF8)
-                + " (" + OString::number(begin) + ", " + OString::number(end) +")");
+                + OUStringToOString(result, RTL_TEXTENCODING_UTF8) + " ("
+                + OString::number(begin) + ", " + OString::number(end) +")");
             msg = buf.makeStringAndClear();
         }
         CPPUNIT_ASSERT_MESSAGE(msg.getStr(), ok);

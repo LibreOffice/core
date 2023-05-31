@@ -276,13 +276,12 @@ void Test::testNumberFormat()
 
     SvNumberFormatter aFormatter(m_xContext, eLang);
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
+    for (auto const[eStart, eEnd, nSize, pCodes] : aTests)
     {
-        size_t nStart = aTests[i].eStart;
-        size_t nEnd = aTests[i].eEnd;
-
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected number of formats for this category.",
-                               aTests[i].nSize, (nEnd - nStart + 1));
+        size_t nStart = eStart;
+        size_t nEnd = eEnd;
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected number of formats for this category.", nSize,
+                                     (nEnd - nStart + 1));
 
         for (size_t j = nStart; j <= nEnd; ++j)
         {
@@ -292,7 +291,7 @@ void Test::testNumberFormat()
 
             CPPUNIT_ASSERT_MESSAGE("Number format entry is expected, but doesn't exist.", p);
             OUString aCode = p->GetFormatstring();
-            CPPUNIT_ASSERT_EQUAL( OString( aTests[i].pCodes[j-nStart] ), aCode.toUtf8());
+            CPPUNIT_ASSERT_EQUAL(OString( pCodes[j-nStart]), aCode.toUtf8());
         }
     }
 
@@ -1117,9 +1116,9 @@ void Test::testDateInput()
     LanguageType eLang = LANGUAGE_ENGLISH_US;
     SvNumberFormatter aFormatter(m_xContext, eLang);
 
-    for (size_t i=0; i < SAL_N_ELEMENTS(aData); ++i)
+    for (auto const& aEntry : aData)
     {
-        checkDateInput( aFormatter, aData[i][0], aData[i][1]);
+        checkDateInput(aFormatter, aEntry[0], aEntry[1]);
     }
 }
 
@@ -1177,14 +1176,13 @@ void Test::testIsNumberFormat()
         { "−1000", true } // unicode minus
     };
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
+    for (auto const[pFormat, bTestIsNumber] : aTests)
     {
         sal_uInt32 nIndex = 0;
         double nNumber = 0;
-        OUString aString = OUString::fromUtf8(aTests[i].pFormat);
+        OUString aString = OUString::fromUtf8(pFormat);
         bool bIsNumber = aFormatter.IsNumberFormat(aString, nIndex, nNumber);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(aTests[i].pFormat, aTests[i].bIsNumber, bIsNumber);
-
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(pFormat, bTestIsNumber, bIsNumber);
     }
 }
 

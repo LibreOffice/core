@@ -2179,29 +2179,27 @@ void ScExportTest::testExcelCellBorders(const OUString& sFormatType)
     {
         ScDocument* pDoc = getScDoc();
 
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        for (auto const[nRow, eStyle, nWidth] : aChecks)
         {
             const editeng::SvxBorderLine* pLine = nullptr;
-            pDoc->GetBorderLines(2, aChecks[i].mnRow, 0, nullptr, &pLine, nullptr, nullptr);
+            pDoc->GetBorderLines(2, nRow, 0, nullptr, &pLine, nullptr, nullptr);
             CPPUNIT_ASSERT(pLine);
-            CPPUNIT_ASSERT_EQUAL(toBorderName(aChecks[i].mnStyle),
-                                 toBorderName(pLine->GetBorderLineStyle()));
-            if (aChecks[i].mnWidth >= 0)
-                CPPUNIT_ASSERT_EQUAL(aChecks[i].mnWidth, pLine->GetWidth());
+            CPPUNIT_ASSERT_EQUAL(toBorderName(eStyle), toBorderName(pLine->GetBorderLineStyle()));
+            if (nWidth >= 0)
+                CPPUNIT_ASSERT_EQUAL(nWidth, pLine->GetWidth());
         }
     }
 
     saveAndReload(sFormatType);
     ScDocument* pDoc = getScDoc();
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+    for (auto const[nRow, eStyle, nWidth] : aChecks)
     {
         const editeng::SvxBorderLine* pLine = nullptr;
-        pDoc->GetBorderLines(2, aChecks[i].mnRow, 0, nullptr, &pLine, nullptr, nullptr);
+        pDoc->GetBorderLines(2, nRow, 0, nullptr, &pLine, nullptr, nullptr);
         CPPUNIT_ASSERT(pLine);
-        CPPUNIT_ASSERT_EQUAL(toBorderName(aChecks[i].mnStyle),
-                             toBorderName(pLine->GetBorderLineStyle()));
-        if (aChecks[i].mnWidth >= 0)
-            CPPUNIT_ASSERT_EQUAL(aChecks[i].mnWidth, pLine->GetWidth());
+        CPPUNIT_ASSERT_EQUAL(toBorderName(eStyle), toBorderName(pLine->GetBorderLineStyle()));
+        if (nWidth >= 0)
+            CPPUNIT_ASSERT_EQUAL(nWidth, pLine->GetWidth());
     }
 }
 

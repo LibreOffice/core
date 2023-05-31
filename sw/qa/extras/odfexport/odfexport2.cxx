@@ -121,7 +121,7 @@ DECLARE_ODFEXPORT_TEST(testReferenceLanguage, "referencelanguage.odt")
 
     uno::Any aHu(OUString("Hu"));
     uno::Any ahu(OUString("hu"));
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aFieldTexts); i++)
+    for (auto const& sFieldText : aFieldTexts)
     {
         uno::Any aField = xFields->nextElement();
         uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
@@ -131,7 +131,7 @@ DECLARE_ODFEXPORT_TEST(testReferenceLanguage, "referencelanguage.odt")
             uno::Any aLang = xPropertySet->getPropertyValue("ReferenceFieldLanguage");
             CPPUNIT_ASSERT_EQUAL(true, aLang == aHu || aLang == ahu);
             uno::Reference<text::XTextContent> xField(aField, uno::UNO_QUERY);
-            CPPUNIT_ASSERT_EQUAL(aFieldTexts[i], xField->getAnchor()->getString());
+            CPPUNIT_ASSERT_EQUAL(sFieldText, xField->getAnchor()->getString());
         }
     }
 }

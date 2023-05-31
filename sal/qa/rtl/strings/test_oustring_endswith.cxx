@@ -93,20 +93,17 @@ void test::oustring::EndsWith::endsWith()
           RTL_CONSTASCII_STRINGPARAM("b\0c"), true },
         { RTL_CONSTASCII_STRINGPARAM("a\0b\0c"),
           RTL_CONSTASCII_STRINGPARAM("b"), false } };
-    for (size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
+    for (auto const[pStr1, nStr1Len, pStr2, nStr2Len, bEndsWith] : data)
+    {
         OStringBuffer msg;
-        appendString(msg, OString(data[i].str1, data[i].str1Len));
+        appendString(msg, OString(pStr1, nStr1Len));
         msg.append(".endsWithIgnoreAsciiCaseAsciiL(");
-        appendString(msg, OString(data[i].str2, data[i].str2Len));
+        appendString(msg, OString(pStr2, nStr2Len));
         msg.append(") == ");
-        msg.append(data[i].endsWith);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            msg.getStr(),
-            data[i].endsWith,
-            OUString(
-                data[i].str1, data[i].str1Len,
-                RTL_TEXTENCODING_ASCII_US).endsWithIgnoreAsciiCaseAsciiL(
-                    data[i].str2, data[i].str2Len));
+        msg.append(bEndsWith);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg.getStr(), bEndsWith,
+                                     OUString(pStr1, nStr1Len, RTL_TEXTENCODING_ASCII_US)
+                                         .endsWithIgnoreAsciiCaseAsciiL(pStr2, nStr2Len));
     }
 }
 

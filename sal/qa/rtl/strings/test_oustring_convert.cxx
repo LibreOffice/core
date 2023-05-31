@@ -170,8 +170,8 @@ void test::oustring::Convert::convertToString()
               OUSTRING_TO_OSTRING_CVTFLAGS,
               "A?B",
               "A?B" } };
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
-        testConvertToString(aTests[i]);
+    for (auto const& aTest : aTests)
+        testConvertToString(aTest);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

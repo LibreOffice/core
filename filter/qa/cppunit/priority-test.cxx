@@ -50,20 +50,17 @@ void PriorityFilterTest::testPriority()
         // TODO: expand this to check more of these priorities
     };
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aToCheck); i++)
+    for (auto const[pURL, pFormat] : aToCheck)
     {
-        OUString aURL = OUString::createFromAscii(aToCheck[i].pURL);
+        OUString aURL = OUString::createFromAscii(pURL);
         try
         {
             OUString aTypeName = xDetection->queryTypeByURL(aURL);
 
-            OUString aFormatCorrect = OUString::createFromAscii(aToCheck[i].pFormat);
+            OUString aFormatCorrect = OUString::createFromAscii(pFormat);
             OUString aMsg = "Mis-matching formats "
-                "'" +
-                aTypeName +
-                "' should be '" +
-                aFormatCorrect +
-                "'";
+                            "'" +
+                            aTypeName + "' should be '" + aFormatCorrect + "'";
             CPPUNIT_ASSERT_EQUAL_MESSAGE(OUStringToOString(aMsg,
                                                           RTL_TEXTENCODING_UTF8).getStr(),
                                    aFormatCorrect, aTypeName);

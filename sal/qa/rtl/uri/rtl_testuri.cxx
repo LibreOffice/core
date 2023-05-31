@@ -326,31 +326,25 @@ void Test::test_Uri() {
             { "http://a/b/c/", "d", "http://a/b/c/d" },
             { "http://a/b/c//", "d", "http://a/b/c//d" } };
 
-    for (std::size_t i = 0; i < SAL_N_ELEMENTS(aRelToAbsTest); ++i)
+    for (auto const[pBase, pRel, pAbs] : aRelToAbsTest)
     {
-        OUString aAbs;
+        OUString aAbsResult;
         bool bMalformed = false;
-        try {
-            aAbs = rtl::Uri::convertRelToAbs(
-                OUString::createFromAscii(aRelToAbsTest[i].pBase),
-                OUString::createFromAscii(aRelToAbsTest[i].pRel));
-        } catch (const rtl::MalformedUriException &) {
+        try
+        {
+            aAbsResult = rtl::Uri::convertRelToAbs(OUString::createFromAscii(pBase),
+                                                   OUString::createFromAscii(pRel));
+        }
+        catch (const rtl::MalformedUriException &)
+        {
             bMalformed = true;
         }
-        if (bMalformed
-            ? aRelToAbsTest[i].pAbs != nullptr
-            : (aRelToAbsTest[i].pAbs == nullptr
-               || !aAbs.equalsAscii(aRelToAbsTest[i].pAbs)))
+        if (bMalformed ? pAbs != nullptr : (pAbs == nullptr || !aAbsResult.equalsAscii(pAbs)))
         {
-            printf(
-                "FAILED convertRelToAbs(%s, %s) -> %s != %s\n",
-                aRelToAbsTest[i].pBase, aRelToAbsTest[i].pRel,
-                (bMalformed
-                 ? "<MALFORMED>"
-                 : OUStringToOString(
-                     aAbs, RTL_TEXTENCODING_UTF8).getStr()),
-                (aRelToAbsTest[i].pAbs == nullptr
-                 ? "<MALFORMED>" : aRelToAbsTest[i].pAbs));
+            printf("FAILED convertRelToAbs(%s, %s) -> %s != %s\n", pBase, pRel,
+                (bMalformed ? "<MALFORMED>"
+                            : OUStringToOString(aAbsResult, RTL_TEXTENCODING_UTF8).getStr()),
+                (pAbs == nullptr ? "<MALFORMED>" : pAbs));
             CPPUNIT_ASSERT(false);
         }
     }

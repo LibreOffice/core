@@ -135,12 +135,12 @@ void SwMacrosTest::testVba()
         }
 
     };
-    for ( size_t  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )
+    for (auto const & [ sFileBaseName, sMacroUrl ] : testInfo)
     {
-        OUString sFileName("docm/" + testInfo[i].sFileBaseName);
+        OUString sFileName("docm/" + sFileBaseName);
         loadFromURL(sFileName);
 
-        uno::Any aRet = executeMacro(testInfo[i].sMacroUrl);
+        uno::Any aRet = executeMacro(sMacroUrl);
         OUString aStringRes;
         CPPUNIT_ASSERT_MESSAGE(sFileName.toUtf8().getStr(), aRet >>= aStringRes);
         CPPUNIT_ASSERT_EQUAL(OUString("OK"), aStringRes);
