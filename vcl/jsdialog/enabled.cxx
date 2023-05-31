@@ -130,6 +130,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/scalc/ui/sortdialog.ui"
         || rUIFile == u"modules/scalc/ui/sortkey.ui"
         || rUIFile == u"modules/scalc/ui/sortoptionspage.ui"
+        || rUIFile == u"modules/scalc/ui/sparklinedialog.ui"
         || rUIFile == u"modules/scalc/ui/standardfilterdialog.ui"
         || rUIFile == u"modules/scalc/ui/textimportcsv.ui"
         || rUIFile == u"modules/scalc/ui/ttestdialog.ui"
