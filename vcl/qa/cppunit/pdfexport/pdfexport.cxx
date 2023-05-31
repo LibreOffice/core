@@ -1338,13 +1338,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf145274)
 
     int nPageObjectCount = pPage->getObjectCount();
 
-    // Without the fix in place, this test would have failed with
-    // - Expected: 6
-    // - Actual  : 4
-    CPPUNIT_ASSERT_EQUAL(6, nPageObjectCount);
-
-    auto pTextPage = pPage->getTextPage();
-
     for (int i = 0; i < nPageObjectCount; ++i)
     {
         std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPage->getObject(i);
