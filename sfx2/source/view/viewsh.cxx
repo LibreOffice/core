@@ -502,7 +502,7 @@ void LOKDocumentFocusListener::notifyEvent( const accessibility::AccessibleEvent
 
                                         if (attribute.Name == "CharHeight" || attribute.Name == "CharWeight")
                                         {
-                                            float fValue;
+                                            float fValue(0.0);
                                             attribute.Value >>= fValue;
                                             sValue = OUString::number(fValue);
                                         }
@@ -514,7 +514,7 @@ void LOKDocumentFocusListener::notifyEvent( const accessibility::AccessibleEvent
                                         }
                                         else if (attribute.Name == "CharUnderline")
                                         {
-                                            sal_Int16 nValue;
+                                            sal_Int16 nValue(0);
                                             attribute.Value >>= nValue;
                                             sValue = OUString::number(nValue);
                                         }
@@ -524,7 +524,7 @@ void LOKDocumentFocusListener::notifyEvent( const accessibility::AccessibleEvent
                                         }
                                         else if (attribute.Name == "Rsid")
                                         {
-                                            sal_uInt32 nValue;
+                                            sal_uInt32 nValue(0);
                                             attribute.Value >>= nValue;
                                             sValue = OUString::number(nValue);
                                         }
