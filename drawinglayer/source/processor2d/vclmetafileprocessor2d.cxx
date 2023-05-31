@@ -2301,7 +2301,7 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
     if (nullptr != pFiGradient && pFiGradient->getFillGradient().cannotBeHandledByVCL())
     {
         // If not, reset the pointer and do not make use of this special case.
-        // Adding a gradient in incomplete state that canot be handled by vcl
+        // Adding a gradient in incomplete state that can not be handled by vcl
         // makes no sense and will knowingly lead to errors, especially with
         // MCGR extended possibilities. I checked what happens with the
         // MetaFloatTransparentAction added by OutputDevice::DrawTransparent, but
