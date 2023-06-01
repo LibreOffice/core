@@ -27,7 +27,7 @@ namespace emfplushelper
     {
         ::basegfx::B2DPolyPolygon    aPolygon;
         sal_uInt32                   nPoints;
-        std::unique_ptr<float[]>     pPoints;
+        std::deque<float>            xPoints, yPoints;
         std::unique_ptr<sal_uInt8[]> pPointTypes;
 
     public:
@@ -38,6 +38,9 @@ namespace emfplushelper
         void Read(SvStream& s, sal_uInt32 pathFlags);
 
         ::basegfx::B2DPolyPolygon& GetPolygon(EmfPlusHelperData const & rR, bool bMapIt = true, bool bAddLineToCloseShape = false);
+        ::basegfx::B2DPolyPolygon& GetCardinalSpline(EmfPlusHelperData const& rR, float fTension,
+                                                     sal_uInt32 aOffset, sal_uInt32 aNumSegments);
+        ::basegfx::B2DPolyPolygon& GetClosedCardinalSpline(EmfPlusHelperData const& rR, float fTension);
     };
 }
 
