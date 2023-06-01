@@ -348,6 +348,23 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableSectionBreak)
     // i.e. the document was of 1 page, the section break was lost.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2), xCursor->getPage());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testFloattableSectend)
+{
+    // Given a document with 2 tables, table 1 on page 1, table 2 on page 2:
+    loadFromURL(u"floattable-sectend.docx");
+
+    // When importing that document and listing the tables:
+    uno::Reference<text::XTextTablesSupplier> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextDocument->getTextTables(), uno::UNO_QUERY);
+
+    // Then make sure that we have two tables:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 1
+    // i.e. the first table was lost.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xTables->getCount());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
