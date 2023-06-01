@@ -90,6 +90,8 @@ OUString OrcusFormatDetect::detect(css::uno::Sequence<css::beans::PropertyValue>
             return "Gnumeric XML";
         case orcus::format_t::xls_xml:
             return "calc_MS_Excel_2003_XML";
+        case orcus::format_t::parquet:
+            return "Apache Parquet";
         default:
             ;
     }

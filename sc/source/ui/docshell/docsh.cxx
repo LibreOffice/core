@@ -1261,22 +1261,6 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             else
                 bRet = true;
         }
-        else if (aFltName == "Gnumeric Spreadsheet")
-        {
-            ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
-            if (!pOrcus)
-                return false;
-
-            bRet = pOrcus->importGnumeric(*m_pDocument, rMedium);
-        }
-        else if (aFltName == "MS Excel 2003 XML Orcus")
-        {
-            ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
-            if (!pOrcus)
-                return false;
-
-            bRet = pOrcus->importExcel2003XML(*m_pDocument, rMedium);
-        }
         else if (aFltName == SC_TEXT_CSV_FILTER_NAME)
         {
             ScAsciiOptions aOptions;
@@ -1604,10 +1588,27 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
         }
         else
         {
-            if (!GetErrorIgnoreWarning())
+            ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
+            if (!pOrcus)
+                return false;
+
+            switch (pOrcus->importByName(*m_pDocument, rMedium, aFltName))
             {
-                SAL_WARN("sc.filter", "No match for filter '" << aFltName << "' in ConvertFrom");
-                SetError(SCERR_IMPORT_NI);
+                case ScOrcusFilters::ImportResult::Success:
+                    bRet = true;
+                    break;
+                case ScOrcusFilters::ImportResult::Failure:
+                    bRet = false;
+                    break;
+                case ScOrcusFilters::ImportResult::NotSupported:
+                {
+                    if (!GetErrorIgnoreWarning())
+                    {
+                        SAL_WARN("sc.filter", "No match for filter '" << aFltName << "' in ConvertFrom");
+                        SetError(SCERR_IMPORT_NI);
+                    }
+                    break;
+                }
             }
         }
 
@@ -1695,27 +1696,9 @@ bool ScDocShell::LoadExternal( SfxMedium& rMed )
         if (!pOrcus)
             return false;
 
-        const OUString& rFilterName = pFilter->GetName();
-        if (rFilterName == "gnumeric")
-        {
-            if (!pOrcus->importGnumeric(*m_pDocument, rMed))
-                return false;
-        }
-        else if (rFilterName == "csv")
-        {
-            if (!pOrcus->importCSV(*m_pDocument, rMed))
-                return false;
-        }
-        else if (rFilterName == "xlsx")
-        {
-            if (!pOrcus->importXLSX(*m_pDocument, rMed))
-                return false;
-        }
-        else if (rFilterName == "ods")
-        {
-            if (!pOrcus->importODS(*m_pDocument, rMed))
-                return false;
-        }
+        auto res = pOrcus->importByName(*m_pDocument, rMed, pFilter->GetName());
+        if (res != ScOrcusFilters::ImportResult::Success)
+            return false;
 
         FinishedLoading();
         return true;

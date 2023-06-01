@@ -477,6 +477,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,f
 	generic_Text \
 	calc_Gnumeric \
 	calc_Lotus \
+	calc_Parquet \
 	calc_QPro \
 	calc_MS_Excel_40 \
 	calc_MS_Excel_40_VorlageTemplate \
@@ -535,6 +536,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.x
 	calc_HTML_WebQuery \
 	calc_StarOffice_XML_Calc_Template \
 	calc_pdf_Export \
+	calc_Parquet \
 	dBase \
 	calc8 \
 	calc8_template \

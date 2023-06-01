@@ -211,6 +211,7 @@ int getFlatTypeRank(std::u16string_view rType)
         "calc_SYLK",
         "calc_DIF",
         "calc_dBase",
+        "Apache Parquet",
 
         // Binary (raster and vector image files)
         "emf_MS_Windows_Metafile",

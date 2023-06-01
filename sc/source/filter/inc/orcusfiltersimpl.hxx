@@ -16,11 +16,8 @@
 class ScOrcusFiltersImpl : public ScOrcusFilters
 {
 public:
-    virtual bool importCSV(ScDocument& rDoc, SfxMedium& rMedium) const override;
-    virtual bool importGnumeric(ScDocument& rDoc, SfxMedium& rMedium) const override;
-    virtual bool importExcel2003XML(ScDocument& rDoc, SfxMedium& rMedium) const override;
-    virtual bool importXLSX(ScDocument& rDoc, SfxMedium& rMedium) const override;
-    virtual bool importODS(ScDocument& rDoc, SfxMedium& rMedium) const override;
+    virtual ImportResult importByName(ScDocument& rDoc, SfxMedium& rMedium,
+                                      const OUString& rFilterName) const override;
 
     virtual bool importODS_Styles(ScDocument& rDoc, OUString& aFileName) const override;
 

@@ -25,17 +25,17 @@ namespace weld { class TreeView; }
 class ScOrcusFilters
 {
 public:
+    enum class ImportResult
+    {
+        NotSupported,
+        Success,
+        Failure
+    };
+
     virtual ~ScOrcusFilters() {}
 
-    virtual bool importCSV(ScDocument& rDoc, SfxMedium& rMedium) const = 0;
-
-    virtual bool importGnumeric(ScDocument& rDoc, SfxMedium& rMedium) const = 0;
-
-    virtual bool importExcel2003XML(ScDocument& rDoc, SfxMedium& rMedium) const = 0;
-
-    virtual bool importXLSX(ScDocument& rDoc, SfxMedium& rMedium) const = 0;
-
-    virtual bool importODS(ScDocument& rDoc, SfxMedium& rMedium) const = 0;
+    virtual ImportResult importByName(
+        ScDocument& rDoc, SfxMedium& rMedium, const OUString& rFilterName) const = 0;
 
     /**
      * Used to import just the styles from an xml file.
