@@ -53,11 +53,11 @@
 // iterates over all views and unmarks this SdrObject if it is marked
 static void ImplUnmarkObject( SdrObject* pObj )
 {
-    SdrViewIter aIter( pObj );
-    for ( SdrView* pView = aIter.FirstView(); pView; pView = aIter.NextView() )
-    {
-        pView->MarkObj( pObj, pView->GetSdrPageView(), true );
-    }
+    SdrViewIter::ForAllViews( pObj,
+        [&pObj] (SdrView* pView)
+        {
+            pView->MarkObj( pObj, pView->GetSdrPageView(), true );
+        });
 }
 
 SdrUndoAction::SdrUndoAction(SdrModel& rNewMod)

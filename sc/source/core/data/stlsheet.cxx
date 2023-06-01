@@ -297,18 +297,18 @@ bool ScStyleSheet::IsUsed() const
         }
         case SfxStyleFamily::Frame:
         {
-            const size_t nListenerCount = GetSizeOfVector();
-            for (size_t n = 0; n < nListenerCount; ++n)
-            {
-                auto pUser(dynamic_cast<svl::StyleSheetUser*>(GetListener(n)));
-                if (pUser && pUser->isUsedByModel())
+            ForAllListeners([this] (SfxListener* pListener)
                 {
-                    eUsage = Usage::USED;
-                    break;
-                }
-                else
-                    eUsage = Usage::NOTUSED;
-            }
+                    auto pUser(dynamic_cast<svl::StyleSheetUser*>(pListener));
+                    if (pUser && pUser->isUsedByModel())
+                    {
+                        eUsage = Usage::USED;
+                        return true; // break loop
+                    }
+                    else
+                        eUsage = Usage::NOTUSED;
+                    return false;
+                });
             return eUsage == Usage::USED;
         }
         default:

@@ -25,72 +25,43 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdsob.hxx>
 
-void SdrViewIter::ImpInitVars()
+static bool ImpCheckPageView(const SdrPage* pPage, const SdrObject* pObject, SdrPageView const* pPV)
 {
-    mnListenerNum = 0;
-    mpCurrentView = nullptr;
-}
-
-SdrViewIter::SdrViewIter(const SdrPage* pPage)
-{
-    mpPage = pPage;
-    mpModel = pPage ? &pPage->getSdrModelFromSdrPage() : nullptr;
-    mpObject = nullptr;
-    ImpInitVars();
-}
-
-SdrViewIter::SdrViewIter(const SdrObject* pObject)
-{
-    mpObject = pObject;
-    mpModel = pObject ? &pObject->getSdrModelFromSdrObject() : nullptr;
-    mpPage = pObject ? pObject->getSdrPageFromSdrObject() : nullptr;
-
-    if (!mpModel || !mpPage)
-    {
-        mpModel = nullptr;
-        mpPage = nullptr;
-    }
-
-    ImpInitVars();
-}
-
-bool SdrViewIter::ImpCheckPageView(SdrPageView const* pPV) const
-{
-    if (!mpPage)
+    if (!pPage)
         return true;
 
-    bool bMaster(mpPage->IsMasterPage());
+    bool bMaster(pPage->IsMasterPage());
     SdrPage* pPg = pPV->GetPage();
 
-    if (pPg == mpPage)
+    if (pPg == pPage)
     {
-        if (mpObject)
+        if (pObject)
         {
             // Looking for an object? First, determine if it visible in
             // this PageView.
-            return mpObject->isVisibleOnAnyOfTheseLayers(pPV->GetVisibleLayers());
+            return pObject->isVisibleOnAnyOfTheseLayers(pPV->GetVisibleLayers());
         }
         else
         {
             return true;
         }
     }
-    else if (bMaster && (!mpObject || !mpObject->IsNotVisibleAsMaster()))
+    else if (bMaster && (!pObject || !pObject->IsNotVisibleAsMaster()))
     {
         if (pPg->TRG_HasMasterPage())
         {
             SdrPage& rMasterPage = pPg->TRG_GetMasterPage();
 
-            if (&rMasterPage == mpPage)
+            if (&rMasterPage == pPage)
             {
                 // the page we're looking for is a master page in this PageView
-                if (mpObject)
+                if (pObject)
                 {
                     // Looking for an object? First, determine if it visible in
                     // this PageView.
                     SdrLayerIDSet aObjLay = pPV->GetVisibleLayers();
                     aObjLay &= pPg->TRG_GetMasterPageVisibleLayers();
-                    if (mpObject->isVisibleOnAnyOfTheseLayers(aObjLay))
+                    if (pObject->isVisibleOnAnyOfTheseLayers(aObjLay))
                     {
                         return true;
                     } // else, look at the next master page of this page...
@@ -107,53 +78,49 @@ bool SdrViewIter::ImpCheckPageView(SdrPageView const* pPV) const
     return false;
 }
 
-SdrView* SdrViewIter::ImpFindView()
+namespace SdrViewIter
 {
-    if (mpModel)
-    {
-        const size_t nLsCnt(mpModel->GetSizeOfVector());
+void ForAllViews(const SdrPage* pPage, std::function<void(SdrView*)> f)
+{
+    if (!pPage)
+        return;
+    const SdrModel* pModel = &pPage->getSdrModelFromSdrPage();
 
-        while (mnListenerNum < nLsCnt)
+    pModel->ForAllListeners([&pPage, &f](SfxListener* pLs) {
+        if (!pLs->IsSdrView())
+            return false;
+        SdrView* pCurrentView = static_cast<SdrView*>(pLs);
+        SdrPageView* pPV = pCurrentView->GetSdrPageView();
+
+        if (pPV && ImpCheckPageView(pPage, nullptr, pPV))
         {
-            SfxListener* pLs = mpModel->GetListener(mnListenerNum);
-            mpCurrentView
-                = pLs ? (pLs->IsSdrView() ? static_cast<SdrView*>(pLs) : nullptr) : nullptr;
-
-            if (mpCurrentView)
-            {
-                if (mpPage)
-                {
-                    SdrPageView* pPV = mpCurrentView->GetSdrPageView();
-
-                    if (pPV && ImpCheckPageView(pPV))
-                    {
-                        return mpCurrentView;
-                    }
-                }
-                else
-                {
-                    return mpCurrentView;
-                }
-            }
-
-            mnListenerNum++;
+            f(pCurrentView);
         }
-    }
-
-    mpCurrentView = nullptr;
-    return mpCurrentView;
+        return false;
+    });
 }
 
-SdrView* SdrViewIter::FirstView()
+void ForAllViews(const SdrObject* pObject, std::function<void(SdrView*)> f)
 {
-    ImpInitVars();
-    return ImpFindView();
-}
+    if (!pObject)
+        return;
+    const SdrModel* pModel = &pObject->getSdrModelFromSdrObject();
+    const SdrPage* pPage = pObject->getSdrPageFromSdrObject();
+    if (!pPage)
+        return;
 
-SdrView* SdrViewIter::NextView()
-{
-    mnListenerNum++;
-    return ImpFindView();
-}
+    pModel->ForAllListeners([&pPage, &pObject, &f](SfxListener* pLs) {
+        if (!pLs->IsSdrView())
+            return false;
+        SdrView* pCurrentView = static_cast<SdrView*>(pLs);
+        SdrPageView* pPV = pCurrentView->GetSdrPageView();
 
+        if (pPV && ImpCheckPageView(pPage, pObject, pPV))
+        {
+            f(pCurrentView);
+        }
+        return false;
+    });
+}
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

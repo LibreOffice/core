@@ -21,6 +21,7 @@
 
 #include <svl/svldllapi.h>
 #include <vector>
+#include <functional>
 
 class SfxListener;
 class SfxHint;
@@ -52,15 +53,13 @@ public:
     /** Get the number of listeners which are registered at this broadcaster */
     size_t                  GetListenerCount() const;
 
-    /** Get the size of the internally stored vector.
-     * Use it to iterate over all listeners.
-     */
-    size_t GetSizeOfVector() const;
+    /** Iterate over all the listeners and call the passed function.
+        return true to break the loop.  */
+    void  ForAllListeners(std::function<bool(SfxListener*)> f) const;
 
-    /** Get a listener by its position in the internally stored vector.
-     * Note that this method may return NULL
+    /** Get a vector of the current listeners - used by unit test code.
      */
-    SfxListener* GetListener( size_t nNo ) const;
+    std::vector<SfxListener*> GetListenersForUnitTest() const;
 
     friend class SfxListener;
     friend class ::SfxBroadcasterTest;

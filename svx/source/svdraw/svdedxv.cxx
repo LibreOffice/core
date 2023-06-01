@@ -136,15 +136,13 @@ SdrPageView* SdrObjEditView::ShowSdrPage(SdrPage* pPage)
     {
         // Check if other views have an active text edit on the same page as
         // this one.
-        SdrViewIter aIter(pPageView->GetPage());
-        for (SdrView* pView = aIter.FirstView(); pView; pView = aIter.NextView())
-        {
+        SdrViewIter::ForAllViews(pPageView->GetPage(), [this](SdrView* pView) {
             if (pView == this || !pView->IsTextEdit())
-                continue;
+                return;
 
             OutputDevice* pOutDev = GetFirstOutputDevice();
             if (!pOutDev || pOutDev->GetOutDevType() != OUTDEV_WINDOW)
-                continue;
+                return;
 
             // Found one, so create an outliner view, to get invalidations when
             // the text edit changes.
@@ -155,7 +153,7 @@ SdrPageView* SdrObjEditView::ShowSdrPage(SdrPage* pPage)
                 = pView->ImpMakeOutlinerView(pOutDev->GetOwnerWindow(), nullptr, GetSfxViewShell());
             pOutlinerView->HideCursor();
             pView->GetTextEditOutliner()->InsertView(pOutlinerView);
-        }
+        });
     }
 
     return pPageView;
@@ -176,11 +174,9 @@ void lcl_RemoveTextEditOutlinerViews(SdrObjEditView const* pThis, SdrPageView co
     if (!pOutputDevice || pOutputDevice->GetOutDevType() != OUTDEV_WINDOW)
         return;
 
-    SdrViewIter aIter(pPageView->GetPage());
-    for (SdrView* pView = aIter.FirstView(); pView; pView = aIter.NextView())
-    {
+    SdrViewIter::ForAllViews(pPageView->GetPage(), [&pThis, &pOutputDevice](SdrView* pView) {
         if (pView == pThis || !pView->IsTextEdit())
-            continue;
+            return;
 
         SdrOutliner* pOutliner = pView->GetTextEditOutliner();
         for (size_t nView = 0; nView < pOutliner->GetViewCount(); ++nView)
@@ -192,7 +188,7 @@ void lcl_RemoveTextEditOutlinerViews(SdrObjEditView const* pThis, SdrPageView co
             pOutliner->RemoveView(pOutlinerView);
             delete pOutlinerView;
         }
-    }
+    });
 }
 }
 
@@ -1457,11 +1453,10 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
                     // Register an outliner view for all other sdr views that
                     // show the same page, so that when the text edit changes,
                     // all interested windows get an invalidation.
-                    SdrViewIter aIter(pObj->getSdrPageFromSdrObject());
-                    for (SdrView* pView = aIter.FirstView(); pView; pView = aIter.NextView())
-                    {
+                    SdrViewIter::ForAllViews(pObj->getSdrPageFromSdrObject(), [this, &pWin](
+                                                                                  SdrView* pView) {
                         if (pView == this)
-                            continue;
+                            return;
 
                         for (sal_uInt32 nViewPaintWindow = 0;
                              nViewPaintWindow < pView->PaintWindowCount(); ++nViewPaintWindow)
@@ -1479,7 +1474,7 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
                                 mpTextEditOutliner->InsertView(pOutlView);
                             }
                         }
-                    }
+                    });
                 }
             }
 

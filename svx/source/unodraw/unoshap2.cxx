@@ -260,15 +260,14 @@ void SAL_CALL SvxShapeGroup::remove( const uno::Reference< drawing::XShape >& xS
         // #i29181#
         // If the SdrObject which is about to be deleted is in any selection,
         // deselect it first.
-        SdrViewIter aIter( pSdrShape );
-
-        for ( SdrView* pView = aIter.FirstView(); pView; pView = aIter.NextView() )
-        {
-            if(SAL_MAX_SIZE != pView->TryToFindMarkedObject(pSdrShape))
+        SdrViewIter::ForAllViews( pSdrShape,
+            [&pSdrShape] (SdrView* pView)
             {
-                pView->MarkObj(pSdrShape, pView->GetSdrPageView(), true);
-            }
-        }
+                if(SAL_MAX_SIZE != pView->TryToFindMarkedObject(pSdrShape))
+                {
+                    pView->MarkObj(pSdrShape, pView->GetSdrPageView(), true);
+                }
+            });
 
         rList.NbcRemoveObject( nObjNum );
     }

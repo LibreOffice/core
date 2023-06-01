@@ -1226,15 +1226,19 @@ uno::Any SAL_CALL XStyleFamily::getPropertyValue( const OUString& sPropertyName 
 
 SwXStyle* XStyleFamily::FindStyle(std::u16string_view rStyleName) const
 {
-    const size_t nLCount = m_pBasePool->GetSizeOfVector();
-    for(size_t i = 0; i < nLCount; ++i)
-    {
-        SfxListener* pListener = m_pBasePool->GetListener(i);
-        SwXStyle* pTempStyle = dynamic_cast<SwXStyle*>(pListener);
-        if(pTempStyle && pTempStyle->GetFamily() == m_rEntry.family() && pTempStyle->GetStyleName() == rStyleName)
-            return pTempStyle;
-    }
-    return nullptr;
+    SwXStyle* pFoundStyle = nullptr;
+    m_pBasePool->ForAllListeners(
+        [this, &pFoundStyle, &rStyleName] (SfxListener* pListener)
+        {
+            SwXStyle* pTempStyle = dynamic_cast<SwXStyle*>(pListener);
+            if(pTempStyle && pTempStyle->GetFamily() == m_rEntry.family() && pTempStyle->GetStyleName() == rStyleName)
+            {
+                pFoundStyle = pTempStyle;
+                return true; // break
+            }
+            return false;
+        });
+    return pFoundStyle;
 }
 
 static SwGetPoolIdFromName lcl_GetSwEnumFromSfxEnum(SfxStyleFamily eFamily)

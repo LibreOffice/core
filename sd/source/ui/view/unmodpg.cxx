@@ -83,15 +83,12 @@ void ModifyPageUndoAction::Undo()
 {
     // invalidate Selection, there could be objects deleted in this UNDO
     // which are no longer allowed to be selected then.
-    SdrViewIter aIter(mpPage);
-    SdrView* pView = aIter.FirstView();
-
-    while(pView)
-    {
-        if(pView->AreObjectsMarked())
-            pView->UnmarkAll();
-        pView = aIter.NextView();
-    }
+    SdrViewIter::ForAllViews(mpPage,
+        [] (SdrView* pView)
+        {
+            if(pView->AreObjectsMarked())
+                pView->UnmarkAll();
+        });
 
     mpPage->SetAutoLayout( meOldAutoLayout );
 
@@ -130,15 +127,12 @@ void ModifyPageUndoAction::Redo()
 {
     // invalidate Selection, there could be objects deleted in this UNDO
     // which are no longer allowed to be selected then.
-    SdrViewIter aIter(mpPage);
-    SdrView* pView = aIter.FirstView();
-
-    while(pView)
-    {
-        if(pView->AreObjectsMarked())
-            pView->UnmarkAll();
-        pView = aIter.NextView();
-    }
+    SdrViewIter::ForAllViews(mpPage,
+        [] (SdrView* pView)
+        {
+            if(pView->AreObjectsMarked())
+                pView->UnmarkAll();
+        });
 
     mpPage->meAutoLayout = meNewAutoLayout;
 

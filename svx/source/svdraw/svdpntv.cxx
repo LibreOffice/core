@@ -649,22 +649,23 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFo
         {
             // Look for active text edits in other views showing the same page,
             // and show them as well. Show only if Page/MasterPage mode is matching.
-            SdrViewIter aIter(pPageView->GetPage());
             bool bRequireMasterPage = pPageView->GetPage() ? pPageView->GetPage()->IsMasterPage() : false;
-            for (SdrView* pView = aIter.FirstView(); pView; pView = aIter.NextView())
-            {
-                SdrPageView* pCurrentPageView = pView->GetSdrPageView();
-                bool bIsCurrentMasterPage = (pCurrentPageView && pCurrentPageView->GetPage()) ?
-                    pCurrentPageView->GetPage()->IsMasterPage() : false;
-
-                if (pView == this || bRequireMasterPage != bIsCurrentMasterPage)
-                    continue;
-
-                if (pView->IsTextEdit() && pView->GetSdrPageView())
+            SdrViewIter::ForAllViews(pPageView->GetPage(),
+                [this, &bRequireMasterPage, &rPaintWindow] (SdrView* pView)
                 {
-                    pView->TextEditDrawing(rPaintWindow);
-                }
-            }
+                    SdrPageView* pCurrentPageView = pView->GetSdrPageView();
+                    bool bIsCurrentMasterPage = (pCurrentPageView && pCurrentPageView->GetPage()) ?
+                        pCurrentPageView->GetPage()->IsMasterPage() : false;
+
+                    if (pView == this || bRequireMasterPage != bIsCurrentMasterPage)
+                        return false;
+
+                    if (pView->IsTextEdit() && pView->GetSdrPageView())
+                    {
+                        pView->TextEditDrawing(rPaintWindow);
+                    }
+                    return false;
+                });
         }
 
         // draw Overlay, also to PreRender device if exists

@@ -334,9 +334,12 @@ void SdrUnoObj::NbcSetLayer( SdrLayerID _nLayer )
     o3tl::sorted_vector< SdrView* > aPreviouslyVisible;
 
     {
-        SdrViewIter aIter( this );
-        for ( SdrView* pView = aIter.FirstView(); pView; pView = aIter.NextView() )
-            aPreviouslyVisible.insert( pView );
+        SdrViewIter::ForAllViews(this,
+            [&aPreviouslyVisible] (SdrView* pView)
+            {
+                aPreviouslyVisible.insert( pView );
+                return false;
+            });
     }
 
     SdrRectObj::NbcSetLayer( _nLayer );
@@ -344,9 +347,8 @@ void SdrUnoObj::NbcSetLayer( SdrLayerID _nLayer )
     // collect all views in which our new layer is visible
     o3tl::sorted_vector< SdrView* > aNewlyVisible;
 
-    {
-        SdrViewIter aIter( this );
-        for ( SdrView* pView = aIter.FirstView(); pView; pView = aIter.NextView() )
+    SdrViewIter::ForAllViews( this,
+        [&aPreviouslyVisible, &aNewlyVisible] (SdrView* pView)
         {
             if ( aPreviouslyVisible.erase(pView) == 0 )
             {
@@ -355,8 +357,7 @@ void SdrUnoObj::NbcSetLayer( SdrLayerID _nLayer )
                 // => remember this view, as our visibility there changed
                 aNewlyVisible.insert( pView );
             }
-        }
-    }
+        });
 
     // now aPreviouslyVisible contains all views where we became invisible
     for (const auto& rpView : aPreviouslyVisible)

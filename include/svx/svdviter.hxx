@@ -20,6 +20,7 @@
 #pragma once
 
 #include <svx/svxdllapi.h>
+#include <functional>
 
 /*
 
@@ -50,34 +51,15 @@ Not considered are:
 
 */
 
-class OutputDevice;
 class SdrView;
-class SdrPageView;
 class SdrModel;
 class SdrPage;
 class SdrObject;
-class SdrLayerIDSet;
 
-class SVXCORE_DLLPUBLIC SdrViewIter
+namespace SdrViewIter
 {
-    const SdrModel* mpModel;
-    const SdrPage* mpPage;
-    const SdrObject* mpObject;
-    SdrView* mpCurrentView;
-
-    size_t mnListenerNum;
-
-private:
-    SVX_DLLPRIVATE void          ImpInitVars();
-    SVX_DLLPRIVATE SdrView*      ImpFindView();
-    SVX_DLLPRIVATE bool          ImpCheckPageView(SdrPageView const * pPV) const;
-
-public:
-    SdrViewIter(const SdrPage* pPage);
-    SdrViewIter(const SdrObject* pObject);
-
-    SdrView* FirstView();
-    SdrView* NextView();
+    SVXCORE_DLLPUBLIC void ForAllViews(const SdrPage* pPage, std::function<void(SdrView*)> f);
+    SVXCORE_DLLPUBLIC void ForAllViews(const SdrObject* pObject, std::function<void(SdrView*)> f);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1060,16 +1060,14 @@ bool SdrEditView::IsUndoEnabled() const
 
 void SdrEditView::EndTextEditAllViews() const
 {
-    size_t nViews = GetModel().GetListenerCount();
-    for (size_t nView = 0; nView < nViews; ++nView)
-    {
-        SdrObjEditView* pView = dynamic_cast<SdrObjEditView*>(GetModel().GetListener(nView));
-        if (!pView)
-            continue;
-
-        if (pView->IsTextEdit())
-            pView->SdrEndTextEdit();
-    }
+    GetModel().ForAllListeners(
+        [](SfxListener* pListener)
+        {
+            SdrObjEditView* pView = dynamic_cast<SdrObjEditView*>(pListener);
+            if (pView && pView->IsTextEdit())
+                pView->SdrEndTextEdit();
+            return false;
+        });
 }
 
 void SdrEditView::EndTextEditCurrentView(bool bDontDeleteReally)

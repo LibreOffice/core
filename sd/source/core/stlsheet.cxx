@@ -282,19 +282,19 @@ bool SdStyleSheet::IsUsed() const
 {
     bool bResult = false;
 
-    const size_t nListenerCount = GetSizeOfVector();
-    for (size_t n = 0; n < nListenerCount; ++n)
-    {
-        SfxListener* pListener = GetListener(n);
-        if( pListener == this )
-            continue;
+    ForAllListeners(
+        [this, &bResult] (SfxListener* pListener)
+        {
+            if( pListener == this )
+                return false; // continue
 
-        const svl::StyleSheetUser* const pUser(dynamic_cast<svl::StyleSheetUser*>(pListener));
-        if (pUser)
-            bResult = pUser->isUsedByModel();
-        if (bResult)
-            break;
-    }
+            const svl::StyleSheetUser* const pUser(dynamic_cast<svl::StyleSheetUser*>(pListener));
+            if (pUser)
+                bResult = pUser->isUsedByModel();
+            if (bResult)
+                return true; // break loop
+            return false;
+        });
 
     if( !bResult )
     {
@@ -335,15 +335,19 @@ bool SdStyleSheet::IsEditable()
     if (!IsUserDefined())
         return false;
 
-    const size_t nListenerCount = GetSizeOfVector();
-    for (size_t n = 0; n < nListenerCount; ++n)
-    {
-        SfxListener* pListener = GetListener(n);
-        if (pListener == this)
-            continue;
-        if (dynamic_cast<SdStyleSheet*>(pListener))
+    bool bFoundOne = false;
+    ForAllListeners(
+        [this, &bFoundOne] (SfxListener* pListener)
+        {
+            if (pListener != this && dynamic_cast<SdStyleSheet*>(pListener))
+            {
+                bFoundOne = true;
+                return true; // break loop
+            }
             return false;
-    }
+        });
+    if (bFoundOne)
+        return false;
 
     std::unique_lock aGuard(m_aMutex);
     return maModifyListeners.getLength(aGuard) <= 1;
