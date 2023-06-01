@@ -31,11 +31,17 @@
 #include <editeng/flstitem.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/lok.hxx>
+#include <unotools/viewoptions.hxx>
 
 ScAttrDlg::ScAttrDlg(weld::Window* pParent, const SfxItemSet* pCellAttrs)
     : SfxTabDialogController(pParent, "modules/scalc/ui/formatcellsdialog.ui",
                              "FormatCellsDialog", pCellAttrs)
 {
+    // tdf#149598 - restore window state of the dialog
+    SvtViewOptions aDlgOpt(EViewType::Dialog, "FormatCellDialog");
+    if (aDlgOpt.Exists())
+        m_xDialog->set_window_state(aDlgOpt.GetWindowState());
+
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
     OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT ), "GetTabPageCreatorFunc fail!");
@@ -67,6 +73,9 @@ ScAttrDlg::ScAttrDlg(weld::Window* pParent, const SfxItemSet* pCellAttrs)
 
 ScAttrDlg::~ScAttrDlg()
 {
+    // tdf#149598 - remember window state of the dialog
+    SvtViewOptions aDlgOpt(EViewType::Dialog, "FormatCellDialog");
+    aDlgOpt.SetWindowState(m_xDialog->get_window_state(vcl::WindowDataMask::PosSize));
 }
 
 void ScAttrDlg::PageCreated(const OUString& rPageId, SfxTabPage& rTabPage)
