@@ -108,6 +108,7 @@
             <property name="hscrollbar-policy">never</property>
             <property name="vscrollbar-policy">never</property>
             <property name="shadow-type">in</property>
+            <property name="overlay-scrolling">False</property>
             <child>
               <object class="GtkViewport">
                 <property name="visible">True</property>
