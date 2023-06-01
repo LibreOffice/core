@@ -1117,7 +1117,7 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
         OUString sSymbol = getCurrencySymbol();
         sSymbol = comphelper::string::strip(sSymbol, ' ');
 
-        sNewFormat =
+        OUString sTemp =
             "[$" + sSymbol + "] "
             + sNewFormat
         // for negative values : $ -0.00, not -$ 0.00...
@@ -1128,6 +1128,8 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
             + sSymbol
             + "] -"
             + sNewFormat;
+
+        sNewFormat = sTemp;
     }
     else
     {
