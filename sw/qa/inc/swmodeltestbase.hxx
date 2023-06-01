@@ -97,7 +97,7 @@ private:
 
 protected:
     xmlBufferPtr mpXmlBuffer;
-    const char* mpFilter;
+    OUString mpFilter;
 
     sal_uInt32 mnStartTime;
 
@@ -107,7 +107,7 @@ protected:
     void paste(std::u16string_view aFilename, OUString aInstance, css::uno::Reference<css::text::XTextRange> const& xTextRange);
 
 public:
-    SwModelTestBase(const OUString& pTestDocumentPath = OUString(), const char* pFilter = "");
+    SwModelTestBase(const OUString& pTestDocumentPath = OUString(), const OUString& pFilter = {});
 
 protected:
     /**
@@ -261,7 +261,7 @@ protected:
 
     void header();
 
-    void reload(const char* pFilter, const char* pName, const char* pPassword = nullptr);
+    void reload(const OUString& pFilter, const char* pName, const char* pPassword = nullptr);
 
     /// Combines load() and save().
     void loadAndSave(const char* pName, const char* pPassword = nullptr);

@@ -53,7 +53,7 @@ void SwModelTestBase::paste(std::u16string_view aFilename, OUString aInstance,
     CPPUNIT_ASSERT(xFilter->filter(aDescriptor));
 }
 
-SwModelTestBase::SwModelTestBase(const OUString& pTestDocumentPath, const char* pFilter)
+SwModelTestBase::SwModelTestBase(const OUString& pTestDocumentPath, const OUString& pFilter)
     : UnoApiXmlTest(pTestDocumentPath)
     , mbExported(false)
     , mpXmlBuffer(nullptr)
@@ -474,9 +474,9 @@ void SwModelTestBase::loadURL(OUString const& rURL, const char* pName, const cha
     calcLayout();
 }
 
-void SwModelTestBase::reload(const char* pFilter, const char* pName, const char* pPassword)
+void SwModelTestBase::reload(const OUString& pFilter, const char* pName, const char* pPassword)
 {
-    save(OUString::createFromAscii(pFilter), pPassword);
+    save(pFilter, pPassword);
     mbExported = true;
 
     loadURL(maTempFile.GetURL(), pName, pPassword);
@@ -485,7 +485,7 @@ void SwModelTestBase::reload(const char* pFilter, const char* pName, const char*
 void SwModelTestBase::loadAndSave(const char* pName, const char* pPassword)
 {
     load(pName, pPassword);
-    save(OUString::createFromAscii(mpFilter));
+    save(mpFilter);
     mbExported = true;
 }
 

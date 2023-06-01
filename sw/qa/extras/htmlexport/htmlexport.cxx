@@ -407,7 +407,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testExportOfImagesWithSkipImagesEnabled)
 {
     createSwDoc("textAndImage.docx");
     setFilterOptions("SkipImages");
-    save(OUString::createFromAscii(mpFilter));
+    save(mpFilter);
 
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
@@ -420,7 +420,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testSkipImagesEmbedded)
 {
     createSwDoc("skipimage-embedded.doc");
     setFilterOptions("SkipImages");
-    save(OUString::createFromAscii(mpFilter));
+    save(mpFilter);
 
     // Embedded spreadsheet was exported as image, so content was lost. Make
     // sure it's exported as HTML instead.
@@ -439,7 +439,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testSkipImagesEmbeddedDocument)
 {
     createSwDoc("skipimage-embedded-document.docx");
     setFilterOptions("SkipImages");
-    save(OUString::createFromAscii(mpFilter));
+    save(mpFilter);
 
     // Similar to testSkipImagesEmbedded, but with an embedded Writer object,
     // not a Calc one, and this time OOXML, not WW8.
@@ -606,7 +606,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testEmbedImagesEnabled)
 {
     createSwDoc("textAndImage.docx");
     setFilterOptions("EmbedImages");
-    save(OUString::createFromAscii(mpFilter));
+    save(mpFilter);
 
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
@@ -625,7 +625,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testXHTML)
 {
     createSwWebDoc("hello.html");
     setFilterOptions("XHTML");
-    save(OUString::createFromAscii(mpFilter));
+    save(mpFilter);
 
     OString aExpected("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML");
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
@@ -646,7 +646,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfParagraph)
     setImportFilterName("HTML (StarWriter)");
     createSwDoc("reqif-p.xhtml");
     setFilterOptions("xhtmlns=reqif-xhtml");
-    save(OUString::createFromAscii(mpFilter));
+    save(mpFilter);
 
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
@@ -809,7 +809,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfJpgImg)
     setImportFilterName("HTML (StarWriter)");
     createSwDoc("reqif-jpg-img.xhtml");
     setFilterOptions("xhtmlns=reqif-xhtml");
-    save(OUString::createFromAscii(mpFilter));
+    save(mpFilter);
 
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
@@ -825,7 +825,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfTable)
     setImportFilterName("HTML (StarWriter)");
     createSwDoc("reqif-table.xhtml");
     setFilterOptions("xhtmlns=reqif-xhtml");
-    save(OUString::createFromAscii(mpFilter));
+    save(mpFilter);
 
     SvMemoryStream aStream;
     WrapReqifFromTempFile(aStream);
@@ -851,7 +851,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfTable2)
 {
     createSwDoc("reqif-table2.odt");
     setFilterOptions("xhtmlns=reqif-xhtml");
-    save(OUString::createFromAscii(mpFilter));
+    save(mpFilter);
 
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
@@ -893,7 +893,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testXHTMLUseCSS)
 {
     createSwDoc("xhtml-css.odt");
     setFilterOptions("XHTML");
-    save(OUString::createFromAscii(mpFilter));
+    save(mpFilter);
 
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
@@ -911,7 +911,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfList)
     setImportFilterName("HTML (StarWriter)");
     createSwDoc("reqif-list.xhtml");
     setFilterOptions("xhtmlns=reqif-xhtml");
-    save(OUString::createFromAscii(mpFilter));
+    save(mpFilter);
 
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);

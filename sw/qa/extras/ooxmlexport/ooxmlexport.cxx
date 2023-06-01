@@ -1098,7 +1098,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf115094v3)
         // i.e. some unwanted ~-2mm left margin appeared.
         CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(1991), pFormat->GetHoriOrient().GetPos());
     }
-    save(OUString::createFromAscii(mpFilter));
+    save(mpFilter);
     // floating table is now exported directly without surrounding frame
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
