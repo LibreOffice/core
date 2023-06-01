@@ -52,7 +52,7 @@ struct ReferenceWrapper
 
 @interface AquaA11yWrapper : NSView
 {
-    ReferenceWrapper * mpReferenceWrapper;
+    ReferenceWrapper maReferenceWrapper;
     BOOL mActsAsRadioGroup;
     BOOL mIsTableCell;
 }
@@ -88,7 +88,6 @@ struct ReferenceWrapper
 -(NSWindow*)windowForParent;
 -(id)initWithAccessibleContext: (css::uno::Reference < css::accessibility::XAccessibleContext >) anAccessibleContext;
 -(void) setDefaults: (css::uno::Reference < css::accessibility::XAccessibleContext >) rxAccessibleContext;
--(void) dealloc;
 +(void)setPopupMenuOpen:(BOOL)popupMenuOpen;
 -(css::accessibility::XAccessibleAction *)accessibleAction;
 -(css::accessibility::XAccessibleContext *)accessibleContext;
