@@ -69,6 +69,8 @@ public:
     std::vector<const SwCellFrame*> GetCoveredCells() const;
 
     void dumpAsXmlAttributes(xmlTextWriterPtr writer) const override;
+
+    void dumpAsXml(xmlTextWriterPtr writer = nullptr) const override;
 };
 
 #endif

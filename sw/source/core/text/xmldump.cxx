@@ -174,9 +174,6 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
 
     switch ( GetType(  ) )
     {
-    case SwFrameType::Cell:
-        name = "cell";
-        break;
     case SwFrameType::Txt:
         name = "txt";
         break;
@@ -210,12 +207,6 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
                 }
                 (void)xmlTextWriterEndElement( writer );
             }
-        }
-
-        if (IsCellFrame())
-        {
-            SwCellFrame const* pCellFrame(static_cast<SwCellFrame const*>(this));
-            (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "rowspan" ), "%ld", pCellFrame->GetLayoutRowSpan() );
         }
 
         (void)xmlTextWriterStartElement( writer, BAD_CAST( "infos" ) );

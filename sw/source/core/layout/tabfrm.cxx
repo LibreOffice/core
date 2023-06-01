@@ -5900,6 +5900,20 @@ void SwCellFrame::dumpAsXmlAttributes(xmlTextWriterPtr pWriter) const
         (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("precede"), "%" SAL_PRIuUINT32, pPrevious->GetFrameId());
 }
 
+void SwCellFrame::dumpAsXml(xmlTextWriterPtr writer) const
+{
+    (void)xmlTextWriterStartElement(writer, reinterpret_cast<const xmlChar*>("cell"));
+    dumpAsXmlAttributes(writer);
+    (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "rowspan" ), "%ld", GetLayoutRowSpan() );
+
+    (void)xmlTextWriterStartElement(writer, BAD_CAST("infos"));
+    dumpInfosAsXml(writer);
+    (void)xmlTextWriterEndElement(writer);
+    dumpChildrenAsXml(writer);
+
+    (void)xmlTextWriterEndElement(writer);
+}
+
 // #i103961#
 void SwCellFrame::Cut()
 {
