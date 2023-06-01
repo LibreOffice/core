@@ -79,34 +79,33 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
 }
 
 -(void) setDefaults: (Reference < XAccessibleContext >) rxAccessibleContext {
-    mpReferenceWrapper = new ReferenceWrapper;
     mActsAsRadioGroup = NO;
-    mpReferenceWrapper -> rAccessibleContext = rxAccessibleContext;
+    maReferenceWrapper.rAccessibleContext = rxAccessibleContext;
     mIsTableCell = NO;
     // Querying all supported interfaces
     try {
         // XAccessibleComponent
-        mpReferenceWrapper->rAccessibleComponent.set( rxAccessibleContext, UNO_QUERY );
+        maReferenceWrapper.rAccessibleComponent.set( rxAccessibleContext, UNO_QUERY );
         // XAccessibleExtendedComponent
-        mpReferenceWrapper->rAccessibleExtendedComponent.set( rxAccessibleContext, UNO_QUERY );
+        maReferenceWrapper.rAccessibleExtendedComponent.set( rxAccessibleContext, UNO_QUERY );
         // XAccessibleSelection
-        mpReferenceWrapper->rAccessibleSelection.set( rxAccessibleContext, UNO_QUERY );
+        maReferenceWrapper.rAccessibleSelection.set( rxAccessibleContext, UNO_QUERY );
         // XAccessibleTable
-        mpReferenceWrapper->rAccessibleTable.set( rxAccessibleContext, UNO_QUERY );
+        maReferenceWrapper.rAccessibleTable.set( rxAccessibleContext, UNO_QUERY );
         // XAccessibleText
-        mpReferenceWrapper->rAccessibleText.set( rxAccessibleContext, UNO_QUERY );
+        maReferenceWrapper.rAccessibleText.set( rxAccessibleContext, UNO_QUERY );
         // XAccessibleEditableText
-        mpReferenceWrapper->rAccessibleEditableText.set( rxAccessibleContext, UNO_QUERY );
+        maReferenceWrapper.rAccessibleEditableText.set( rxAccessibleContext, UNO_QUERY );
         // XAccessibleValue
-        mpReferenceWrapper->rAccessibleValue.set( rxAccessibleContext, UNO_QUERY );
+        maReferenceWrapper.rAccessibleValue.set( rxAccessibleContext, UNO_QUERY );
         // XAccessibleAction
-        mpReferenceWrapper->rAccessibleAction.set( rxAccessibleContext, UNO_QUERY );
+        maReferenceWrapper.rAccessibleAction.set( rxAccessibleContext, UNO_QUERY );
         // XAccessibleTextAttributes
-        mpReferenceWrapper->rAccessibleTextAttributes.set( rxAccessibleContext, UNO_QUERY );
+        maReferenceWrapper.rAccessibleTextAttributes.set( rxAccessibleContext, UNO_QUERY );
         // XAccessibleMultiLineText
-        mpReferenceWrapper->rAccessibleMultiLineText.set( rxAccessibleContext, UNO_QUERY );
+        maReferenceWrapper.rAccessibleMultiLineText.set( rxAccessibleContext, UNO_QUERY );
         // XAccessibleTextMarkup
-        mpReferenceWrapper->rAccessibleTextMarkup.set( rxAccessibleContext, UNO_QUERY );
+        maReferenceWrapper.rAccessibleTextMarkup.set( rxAccessibleContext, UNO_QUERY );
         // XAccessibleEventBroadcaster
         #if 0
         /* #i102033# NSAccessibility does not seemt to know an equivalent for transient children.
@@ -135,13 +134,6 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
         }
     } catch ( const Exception ) {
     }
-}
-
--(void)dealloc {
-    if ( mpReferenceWrapper ) {
-        delete mpReferenceWrapper;
-    }
-    [ super dealloc ];
 }
 
 #pragma mark -
@@ -1112,10 +1104,10 @@ static Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
     }
     // nothing hit yet, so check ourself
     if ( ! hitChild.is() ) {
-        if ( !mpReferenceWrapper ) {
+        if ( !maReferenceWrapper.rAccessibleContext ) {
             [ self setDefaults: [ self accessibleContext ] ];
         }
-        hitChild = hitTestRunner ( hitPoint, mpReferenceWrapper -> rAccessibleContext );
+        hitChild = hitTestRunner ( hitPoint, maReferenceWrapper.rAccessibleContext );
     }
     if ( hitChild.is() ) {
         wrapper = [ AquaA11yFactory wrapperForAccessibleContext: hitChild ];
@@ -1130,51 +1122,51 @@ static Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
 #pragma mark Access Methods
 
 -(XAccessibleAction *)accessibleAction {
-    return mpReferenceWrapper -> rAccessibleAction.get();
+    return maReferenceWrapper.rAccessibleAction.get();
 }
 
 -(XAccessibleContext *)accessibleContext {
-    return mpReferenceWrapper -> rAccessibleContext.get();
+    return maReferenceWrapper.rAccessibleContext.get();
 }
 
 -(XAccessibleComponent *)accessibleComponent {
-    return mpReferenceWrapper -> rAccessibleComponent.get();
+    return maReferenceWrapper.rAccessibleComponent.get();
 }
 
 -(XAccessibleExtendedComponent *)accessibleExtendedComponent {
-    return mpReferenceWrapper -> rAccessibleExtendedComponent.get();
+    return maReferenceWrapper.rAccessibleExtendedComponent.get();
 }
 
 -(XAccessibleSelection *)accessibleSelection {
-    return mpReferenceWrapper -> rAccessibleSelection.get();
+    return maReferenceWrapper.rAccessibleSelection.get();
 }
 
 -(XAccessibleTable *)accessibleTable {
-    return mpReferenceWrapper -> rAccessibleTable.get();
+    return maReferenceWrapper.rAccessibleTable.get();
 }
 
 -(XAccessibleText *)accessibleText {
-    return mpReferenceWrapper -> rAccessibleText.get();
+    return maReferenceWrapper.rAccessibleText.get();
 }
 
 -(XAccessibleEditableText *)accessibleEditableText {
-    return mpReferenceWrapper -> rAccessibleEditableText.get();
+    return maReferenceWrapper.rAccessibleEditableText.get();
 }
 
 -(XAccessibleValue *)accessibleValue {
-    return mpReferenceWrapper -> rAccessibleValue.get();
+    return maReferenceWrapper.rAccessibleValue.get();
 }
 
 -(XAccessibleTextAttributes *)accessibleTextAttributes {
-    return mpReferenceWrapper -> rAccessibleTextAttributes.get();
+    return maReferenceWrapper.rAccessibleTextAttributes.get();
 }
 
 -(XAccessibleMultiLineText *)accessibleMultiLineText {
-    return mpReferenceWrapper -> rAccessibleMultiLineText.get();
+    return maReferenceWrapper.rAccessibleMultiLineText.get();
 }
 
 -(XAccessibleTextMarkup *)accessibleTextMarkup {
-    return mpReferenceWrapper -> rAccessibleTextMarkup.get();
+    return maReferenceWrapper.rAccessibleTextMarkup.get();
 }
 
 -(NSWindow*)windowForParent {
