@@ -35,12 +35,12 @@ class SAL_WARN_UNUSED SW_DLLPUBLIC SwNodeIndex final : public sw::Ring<SwNodeInd
     {
         if(!rNodes.m_vIndices)
         {
-#if defined(__GNUC__) && __GNUC__ == 12
+#if defined(__GNUC__) && (__GNUC__ == 12 || __GNUC__ == 13)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdangling-pointer"
 #endif
             rNodes.m_vIndices = this;
-#if defined(__GNUC__) && __GNUC__ == 12
+#if defined(__GNUC__) && (__GNUC__ == 12 || __GNUC__ == 13)
 #pragma GCC diagnostic pop
 #endif
         }
