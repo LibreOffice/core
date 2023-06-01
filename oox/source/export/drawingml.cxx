@@ -2058,7 +2058,7 @@ void DrawingML::WriteXGraphicTile(uno::Reference<beans::XPropertySet> const& rXP
         css::uno::Reference<css::beans::XPropertySet> xPagePropSet(xDrawPage, UNO_QUERY);
         if (xPagePropSet)
         {
-            double nPageWidth, nPageHeight;
+            double nPageWidth(0.0), nPageHeight(0.0);
             xPagePropSet->getPropertyValue("Width") >>= nPageWidth;
             xPagePropSet->getPropertyValue("Height") >>= nPageHeight;
             nSizeX = nPageWidth / aOriginalSize.Width() * std::abs(nSizeX);
