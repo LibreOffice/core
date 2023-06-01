@@ -594,6 +594,38 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf56036)
     CPPUNIT_ASSERT_EQUAL(OUString("6"), pDoc->GetString(ScAddress(0, 0, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf154174_repeat_empty)
+{
+    createScDoc();
+
+    insertStringToCell("A1", u"aaaa");
+
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | KEY_SHIFT | awt::Key::Y);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_MOD1 | KEY_SHIFT | awt::Key::Y);
+    Scheduler::ProcessEventsToIdle();
+
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(OUString("aaaa"), pDoc->GetString(ScAddress(0, 1, 0)));
+
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::F2);
+    Scheduler::ProcessEventsToIdle();
+
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DELETE);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DELETE);
+    Scheduler::ProcessEventsToIdle();
+
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: aaaa
+    // - Actual  :
+    CPPUNIT_ASSERT_EQUAL(OUString("aaaa"), pDoc->GetString(ScAddress(0, 1, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119162)
 {
     createScDoc();
