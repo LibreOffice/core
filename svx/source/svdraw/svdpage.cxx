@@ -789,6 +789,17 @@ SdrObject* SdrObjList::GetObj(size_t nNum) const
     return nullptr;
 }
 
+SdrObject* SdrObjList::GetObjByName(std::u16string_view sName) const
+{
+    for (size_t i = 0; i < GetObjCount(); ++i)
+    {
+        SdrObject* pObj = GetObj(i);
+        if (pObj->GetName() == sName)
+            return pObj;
+    }
+    return nullptr;
+}
+
 
 bool SdrObjList::IsReadOnly() const
 {

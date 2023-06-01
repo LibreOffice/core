@@ -10,13 +10,16 @@
 
 #include <AccessibilityIssue.hxx>
 #include <AccessibilityCheckStrings.hrc>
+#include <drawdoc.hxx>
 #include <edtwin.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <swtypes.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
 #include <view.hxx>
 #include <comphelper/lok.hxx>
 #include <cui/dlgname.hxx>
+#include <svx/svdpage.hxx>
 
 namespace sw
 {
@@ -100,7 +103,8 @@ void AccessibilityIssue::gotoIssue() const
 
 bool AccessibilityIssue::canQuickFixIssue() const
 {
-    return m_eIssueObject == IssueObject::GRAPHIC || m_eIssueObject == IssueObject::OLE;
+    return m_eIssueObject == IssueObject::GRAPHIC || m_eIssueObject == IssueObject::OLE
+           || m_eIssueObject == IssueObject::SHAPE;
 }
 
 void AccessibilityIssue::quickFixIssue() const
@@ -121,6 +125,20 @@ void AccessibilityIssue::quickFixIssue() const
                     = const_cast<SwFlyFrameFormat*>(m_pDoc->FindFlyByName(m_sObjectID));
                 if (pFlyFormat)
                     m_pDoc->SetFlyFrameTitle(*pFlyFormat, aNameDialog.GetName());
+            }
+        }
+        break;
+        case IssueObject::SHAPE:
+        {
+            OUString aDesc = SwResId(STR_ENTER_ALT);
+            SvxNameDialog aNameDialog(m_pParent, "", aDesc);
+            if (aNameDialog.run() == RET_OK)
+            {
+                SwWrtShell* pWrtShell = m_pDoc->GetDocShell()->GetWrtShell();
+                auto pPage = pWrtShell->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+                SdrObject* pObj = pPage->GetObjByName(m_sObjectID);
+                if (pObj)
+                    pObj->SetTitle(aNameDialog.GetName());
             }
         }
         break;
