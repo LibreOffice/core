@@ -619,7 +619,6 @@ static AquaSalFrame* getMouseContainerFrame()
         mpLastEvent = nil;
         mMarkedRange = NSMakeRange(NSNotFound, 0);
         mSelectedRange = NSMakeRange(NSNotFound, 0);
-        mpReferenceWrapper = nil;
         mpMouseEventListener = nil;
         mpLastSuperEvent = nil;
         mfLastMagnifyTime = 0.0;
@@ -2055,15 +2054,14 @@ static AquaSalFrame* getMouseContainerFrame()
 
 -(css::accessibility::XAccessibleContext *)accessibleContext
 {
-    if ( !mpReferenceWrapper ) {
+    if ( !maReferenceWrapper.rAccessibleContext ) {
         // some frames never become visible ..
         vcl::Window *pWindow = mpFrame -> GetWindow();
         if ( ! pWindow )
             return nil;
 
-        mpReferenceWrapper = new ReferenceWrapper;
-        mpReferenceWrapper -> rAccessibleContext =  pWindow -> /*GetAccessibleChildWindow( 0 ) ->*/ GetAccessible() -> getAccessibleContext();
-        [ AquaA11yFactory insertIntoWrapperRepository: self forAccessibleContext: mpReferenceWrapper -> rAccessibleContext ];
+        maReferenceWrapper.rAccessibleContext =  pWindow -> /*GetAccessibleChildWindow( 0 ) ->*/ GetAccessible() -> getAccessibleContext();
+        [ AquaA11yFactory insertIntoWrapperRepository: self forAccessibleContext: maReferenceWrapper.rAccessibleContext ];
     }
     return [ super accessibleContext ];
 }
