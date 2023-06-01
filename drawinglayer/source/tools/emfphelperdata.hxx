@@ -56,7 +56,7 @@ namespace emfplushelper
     #define EmfPlusRecordTypeDrawPath 0x4015
     #define EmfPlusRecordTypeFillClosedCurve 0x4016
     #define EmfPlusRecordTypeDrawClosedCurve 0x4017
-    //TODO EmfPlusRecordTypeDrawCurve 0x4018
+    #define EmfPlusRecordTypeDrawCurve 0x4018
     #define EmfPlusRecordTypeDrawBeziers 0x4019
     #define EmfPlusRecordTypeDrawImage 0x401A
     #define EmfPlusRecordTypeDrawImagePoints 0x401B
