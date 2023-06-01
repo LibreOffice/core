@@ -959,8 +959,14 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
         aEvent.FeatureURL.Path == "SpacePara2")
     {
         bool bTemp = false;
-        aEvent.State >>= bTemp;
-        aBuffer.append(bTemp);
+
+        if (aEvent.IsEnabled)
+        {
+            aEvent.State >>= bTemp;
+            aBuffer.append(bTemp);
+        }
+        else
+            aBuffer.append("disabled");
     }
     else if (aEvent.FeatureURL.Path == "CharFontName")
     {
