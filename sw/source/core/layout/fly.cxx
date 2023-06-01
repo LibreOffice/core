@@ -1659,8 +1659,12 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
             }
             if ( pFrame->IsTabFrame() )
             {
-                if ( static_cast<SwTabFrame*>(pFrame)->IsFollow() )
+                if (static_cast<SwTabFrame*>(pFrame)->m_bLockBackMove)
+                {
+                    assert(static_cast<SwTabFrame*>(pFrame)->IsFollow());
                     static_cast<SwTabFrame*>(pFrame)->m_bLockBackMove = false;
+                    pFrame->InvalidatePos();
+                }
             }
 
             pFrame = bPrevInvalid ? pTmpPrev : pFrame->FindNext();

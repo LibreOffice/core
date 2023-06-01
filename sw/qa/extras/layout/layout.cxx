@@ -761,6 +761,74 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
     }
 }
 
+#if !defined(MACOSX)
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf150606)
+{
+    createDoc("tdf150606-1-min.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/column[1]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/column[2]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/column", 2);
+    assertXPath(pXmlDoc, "/root/page[2]/body/section/column[1]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/section/column[2]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/section/column", 2);
+    assertXPath(pXmlDoc, "/root/page[3]/body/section/column[1]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[3]/body/section/column[2]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[3]/body/section/column", 2);
+    assertXPath(pXmlDoc, "/root/page[4]/body/section/column[1]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[4]/body/section/column[2]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[4]/body/section/column", 2);
+    // on page 5 the table is split across balanced columns
+    assertXPath(pXmlDoc, "/root/page[5]/body/section/column[1]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[5]/body/section/column[2]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[5]/body/section/column", 2);
+    CPPUNIT_ASSERT_GREATEREQUAL(5, getPages());
+    CPPUNIT_ASSERT_LESSEQUAL(6, getPages());
+
+    pWrtShell->Down(false, 1);
+    lcl_dispatchCommand(mxComponent, ".uno:DeleteTable", {});
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/column/body/tab", 0);
+    assertXPath(pXmlDoc, "/root/page", 1);
+
+    pWrtShell->Undo();
+    Scheduler::ProcessEventsToIdle();
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/column[1]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/column[2]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/column", 2);
+    assertXPath(pXmlDoc, "/root/page[2]/body/section/column[1]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/section/column[2]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/section/column", 2);
+    assertXPath(pXmlDoc, "/root/page[3]/body/section/column[1]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[3]/body/section/column[2]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[3]/body/section/column", 2);
+    assertXPath(pXmlDoc, "/root/page[4]/body/section/column[1]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[4]/body/section/column[2]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[4]/body/section/column", 2);
+    // on page 5 the table is split across balanced columns
+    // (problem was that there were empty pages and table was on page 10)
+    assertXPath(pXmlDoc, "/root/page[5]/body/section/column[1]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[5]/body/section/column[2]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[5]/body/section/column", 2);
+    // somehow may be 6 pages on WNT on this branch - still better than 10
+    CPPUNIT_ASSERT_GREATEREQUAL(5, getPages());
+    CPPUNIT_ASSERT_LESSEQUAL(6, getPages());
+}
+#endif
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
 {
     loadURL("private:factory/swriter", nullptr);
