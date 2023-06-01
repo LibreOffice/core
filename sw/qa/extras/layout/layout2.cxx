@@ -875,7 +875,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMoving2)
     // text and numbering colors show moving of the list item
     // These were 0 (other color, not COL_GREEN, color of the tracked text movement)
     assertXPath(pXmlDoc, "/metafile/push/push/push/textcolor[@color='#008000']", 5);
-    assertXPath(pXmlDoc, "/metafile/push/push/push/font[@color='#008000']", 9);
+    assertXPath(pXmlDoc, "/metafile/push/push/push/font[@color='#008000']", 11);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMovingDOCX)

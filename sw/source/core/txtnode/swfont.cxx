@@ -1099,6 +1099,16 @@ void SwSubFont::DrawText_( SwDrawTextInfo &rInf, const bool bGrey )
     if (TextFrameIndex(COMPLETE_STRING) == rInf.GetLen())
         rInf.SetLen( nLn );
 
+    FontLineStyle nOldUnder = LINESTYLE_NONE;
+    SwUnderlineFont* pUnderFnt = nullptr;
+
+    if( rInf.GetUnderFnt() )
+    {
+        nOldUnder = GetUnderline();
+        SetUnderline( LINESTYLE_NONE );
+        pUnderFnt = rInf.GetUnderFnt();
+    }
+
     if( !pLastFont || pLastFont->GetOwner() != m_nFontCacheId )
         ChgFnt( rInf.GetShell(), rInf.GetOut() );
 
@@ -1153,6 +1163,57 @@ void SwSubFont::DrawText_( SwDrawTextInfo &rInf, const bool bGrey )
 
             rInf.SetText(oldStr);
         }
+    }
+
+    if( pUnderFnt && nOldUnder != LINESTYLE_NONE )
+    {
+        Size aFontSize = GetTextSize_( rInf );
+        const OUString oldStr = rInf.GetText();
+
+        TextFrameIndex const nOldIdx = rInf.GetIdx();
+        TextFrameIndex const nOldLen = rInf.GetLen();
+        tools::Long nSpace = 0;
+        if( rInf.GetSpace() )
+        {
+            TextFrameIndex nTmpEnd = nOldIdx + nOldLen;
+            if (nTmpEnd > TextFrameIndex(oldStr.getLength()))
+                nTmpEnd = TextFrameIndex(oldStr.getLength());
+
+            const SwScriptInfo* pSI = rInf.GetScriptInfo();
+
+            const bool bAsianFont =
+                ( rInf.GetFont() && SwFontScript::CJK == rInf.GetFont()->GetActual() );
+            for (TextFrameIndex nTmp = nOldIdx; nTmp < nTmpEnd; ++nTmp)
+            {
+                if (CH_BLANK == oldStr[sal_Int32(nTmp)] || bAsianFont ||
+                    (nTmp + TextFrameIndex(1) < TextFrameIndex(oldStr.getLength())
+                     && pSI
+                     && i18n::ScriptType::ASIAN == pSI->ScriptType(nTmp + TextFrameIndex(1))))
+                {
+                    ++nSpace;
+                }
+            }
+
+            // if next portion if a hole portion we do not consider any
+            // extra space added because the last character was ASIAN
+            if ( nSpace && rInf.IsSpaceStop() && bAsianFont )
+                 --nSpace;
+
+            nSpace *= rInf.GetSpace() / SPACING_PRECISION_FACTOR;
+        }
+
+        rInf.SetWidth( sal_uInt16(aFontSize.Width() + nSpace) );
+        rInf.SetTextIdxLen( "  ", TextFrameIndex(0), TextFrameIndex(2) );
+        SetUnderline( nOldUnder );
+        rInf.SetUnderFnt( nullptr );
+
+        // set position for underline font
+        rInf.SetPos( pUnderFnt->GetPos() );
+
+        pUnderFnt->GetFont().DrawStretchText_( rInf );
+
+        rInf.SetUnderFnt( pUnderFnt );
+        rInf.SetTextIdxLen(oldStr, nOldIdx, nOldLen);
     }
 
     rInf.SetPos(aOldPos);
