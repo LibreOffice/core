@@ -38,7 +38,7 @@ void AccessibilityIssue::setObjectID(OUString const& rID) { m_sObjectID = rID; }
 
 bool AccessibilityIssue::canGotoIssue() const
 {
-    if (m_eIssueObject != IssueObject::UNKNOWN)
+    if (m_pDoc && m_eIssueObject != IssueObject::UNKNOWN)
         return true;
     return false;
 }
@@ -55,6 +55,14 @@ void AccessibilityIssue::gotoIssue() const
         {
             SwWrtShell* pWrtShell = m_pDoc->GetDocShell()->GetWrtShell();
             pWrtShell->GotoFly(m_sObjectID, FLYCNTTYPE_ALL, true);
+            if (comphelper::LibreOfficeKit::isActive())
+                pWrtShell->ShowCursor();
+        }
+        break;
+        case IssueObject::SHAPE:
+        {
+            SwWrtShell* pWrtShell = m_pDoc->GetDocShell()->GetWrtShell();
+            pWrtShell->GotoDrawingObject(m_sObjectID);
             if (comphelper::LibreOfficeKit::isActive())
                 pWrtShell->ShowCursor();
         }

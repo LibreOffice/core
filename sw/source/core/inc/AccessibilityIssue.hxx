@@ -21,6 +21,7 @@ enum class IssueObject
     UNKNOWN,
     GRAPHIC,
     OLE,
+    SHAPE,
     TABLE,
     TEXT,
 };
