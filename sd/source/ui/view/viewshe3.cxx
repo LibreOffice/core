@@ -189,7 +189,9 @@ SdPage* ViewShell::CreateOrDuplicatePage (
 
     // 1. Process the arguments.
     const SfxItemSet* pArgs = rRequest.GetArgs();
-    if (! pArgs)
+    const SfxUInt16Item* pInsertPos = rRequest.GetArg<SfxUInt16Item>(ID_INSERT_POS);
+
+    if (! pArgs || (pArgs->Count() == 1 && pInsertPos))
     {
         // AutoLayouts must be ready
         pDocument->StopWorkStartupDelay();
@@ -206,7 +208,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
                 eNotesLayout = pNotesTemplatePage->GetAutoLayout();
         }
     }
-    else if (pArgs->Count() == 1)
+    else if (pArgs->Count() == 1 || pArgs->Count() == 2)
     {
         pDocument->StopWorkStartupDelay();
         const SfxUInt32Item* pLayout = rRequest.GetArg<SfxUInt32Item>(ID_VAL_WHATLAYOUT);
@@ -222,7 +224,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
             }
         }
     }
-    else if (pArgs->Count() == 4)
+    else if (pArgs->Count() == 4 || pArgs->Count() == 5)
     {
         // AutoLayouts must be ready
         pDocument->StopWorkStartupDelay();
@@ -354,7 +356,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
                     aNotesPageName,
                     bIsPageBack,
                     bIsPageObj,
-                    nInsertPosition);
+                    pInsertPos ? (pInsertPos->GetValue()*2)+1 : nInsertPosition);
             break;
 
         default:
