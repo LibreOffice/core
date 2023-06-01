@@ -250,16 +250,16 @@ void SwAccessibleParagraph::InvalidateContent_( bool bVisibleDataFired )
 
     ClearPortionData();
 
-    const OUString& rText = GetString();
+    const OUString sText = GetString();
 
-    if( rText != sOldText )
+    if( sText != sOldText )
     {
         // The text is changed
         AccessibleEventObject aEvent;
         aEvent.EventId = AccessibleEventId::TEXT_CHANGED;
 
-        // determine exact changes between sOldText and rText
-        (void)comphelper::OCommonAccessibleText::implInitTextChangedEvent(sOldText, rText,
+        // determine exact changes between sOldText and sText
+        (void)comphelper::OCommonAccessibleText::implInitTextChangedEvent(sOldText, sText,
                                                                           aEvent.OldValue,
                                                                           aEvent.NewValue);
 
@@ -302,7 +302,7 @@ void SwAccessibleParagraph::InvalidateContent_( bool bVisibleDataFired )
         FireAccessibleEvent( aEvent );
     }
 
-    if( rText == sOldText )
+    if( sText == sOldText )
         return;
 
     OUString sNewDesc( GetDescription() );
