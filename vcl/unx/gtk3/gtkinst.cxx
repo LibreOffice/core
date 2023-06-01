@@ -8420,7 +8420,9 @@ public:
     {
         if (gtk_scrolled_window_get_overlay_scrolling(m_pScrolledWindow))
             return 0;
-        return gtk_widget_get_allocated_width(gtk_scrolled_window_get_vscrollbar(m_pScrolledWindow));
+        GtkRequisition size;
+        gtk_widget_get_preferred_size(gtk_scrolled_window_get_vscrollbar(m_pScrolledWindow), nullptr, &size);
+        return size.width;
     }
 
     virtual void set_scroll_thickness(int nThickness) override
