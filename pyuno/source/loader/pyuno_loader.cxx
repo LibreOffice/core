@@ -130,7 +130,9 @@ static void setPythonHome ( const OUString & pythonHome )
         PyErr_SetString(PyExc_SystemError, "python home path is too long");
         return;
     }
-    Py_SetPythonHome(wide);
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    Py_SetPythonHome(wide); // deprecated since python 3.11
+SAL_WNODEPRECATED_DECLARATIONS_POP
 }
 
 static void prependPythonPath( std::u16string_view pythonPathBootstrap )
