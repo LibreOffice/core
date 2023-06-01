@@ -52,6 +52,7 @@
 #include <tools/fract.hxx>
 #include <tools/UnitConversion.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <attrib.hxx>
 #include <patattr.hxx>
@@ -64,7 +65,6 @@
 #include <validat.hxx>
 #include <scmod.hxx>
 #include <fillinfo.hxx>
-#include <boost/functional/hash.hpp>
 #include <comphelper/lok.hxx>
 #include <tabvwsh.hxx>
 
@@ -1432,8 +1432,25 @@ void ScPatternAttr::CalcHashCode() const
         mxHashCode = 0; // invalid
         return;
     }
-    mxHashCode = 1; // Set up seed so that an empty pattern does not have an (invalid) hash of 0.
-    boost::hash_range(*mxHashCode, rSet.GetItems_Impl(), rSet.GetItems_Impl() + compareSize);
+    // This is an unrolled hash function so the compiler/CPU can execute it in parallel,
+    // because we hit this hard when loading documents with lots of styles.
+    // Set up seed so that an empty pattern does not have an (invalid) hash of 0.
+    sal_Int32 h1 = 1;
+    sal_Int32 h2 = 1;
+    sal_Int32 h3 = 1;
+    sal_Int32 h4 = 1;
+    for (auto it = rSet.GetItems_Impl(), end = rSet.GetItems_Impl() + (compareSize / 4 * 4); it != end; )
+    {
+        h1 = 31 * h1 + reinterpret_cast<size_t>(*it);
+        ++it;
+        h2 = 31 * h2 + reinterpret_cast<size_t>(*it);
+        ++it;
+        h3 = 31 * h3 + reinterpret_cast<size_t>(*it);
+        ++it;
+        h4 = 31 * h4 + reinterpret_cast<size_t>(*it);
+        ++it;
+    }
+    mxHashCode = h1 + h2 + h3 + h4;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
