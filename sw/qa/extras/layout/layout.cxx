@@ -829,6 +829,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf150606)
 }
 #endif
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf152983)
+{
+    //just care it doesn't crash/assert
+    createDoc("tdf152983-1-min.docx");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
 {
     loadURL("private:factory/swriter", nullptr);
