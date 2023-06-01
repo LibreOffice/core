@@ -245,7 +245,7 @@
 #define ID_VAL_ISACTIVE                     (SID_SD_START+216)
 #define ID_VAL_WHATKIND                     (SID_SD_START+217)
 #define ID_VAL_PAGEWIDTH                    (SID_SD_START+218)
-    // FREE
+#define ID_INSERT_POS                       (SID_SD_START+219)
 #define ID_VAL_PAGETOP                      (SID_SD_START+220)
 #define ID_VAL_PAGEBOTTOM                   (SID_SD_START+221)
 #define ID_VAL_PAGELEFT                     (SID_SD_START+222)

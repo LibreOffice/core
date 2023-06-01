@@ -1337,7 +1337,7 @@ SfxBoolItem DrawingMode SID_DRAWINGMODE
 ]
 
 SfxVoidItem DuplicatePage SID_DUPLICATE_PAGE
-(SfxStringItem PageName ID_VAL_PAGENAME,SfxUInt32Item WhatLayout ID_VAL_WHATLAYOUT,SfxBoolItem IsPageBack ID_VAL_ISPAGEBACK,SfxBoolItem IsPageObj ID_VAL_ISPAGEOBJ)
+(SfxStringItem PageName ID_VAL_PAGENAME,SfxUInt32Item WhatLayout ID_VAL_WHATLAYOUT,SfxBoolItem IsPageBack ID_VAL_ISPAGEBACK,SfxBoolItem IsPageObj ID_VAL_ISPAGEOBJ,SfxUInt16Item InsertPos ID_INSERT_POS)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
