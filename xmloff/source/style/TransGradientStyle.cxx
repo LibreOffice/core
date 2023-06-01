@@ -21,6 +21,7 @@
 
 #include <com/sun/star/awt/Gradient2.hpp>
 
+#include <basegfx/utils/bgradient.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -169,19 +170,26 @@ void XMLTransGradientStyleExport::exportXML(
     const OUString& rStrName,
     const uno::Any& rValue )
 {
-    awt::Gradient2 aGradient;
-
+    // MCGR: We try to write the gradient so, that applications without multi-color gradient support
+    // can render it as best as possible.
+    // This is similar to XMLGradientStyleExport::exportXML(). For details see there.
     if( rStrName.isEmpty() )
         return;
-
-    if( !(rValue >>= aGradient) )
+    if (!rValue.has<css::awt::Gradient2>() && !rValue.has<css::awt::Gradient>())
         return;
+
+    basegfx::BGradient aGradient(rValue);
+
+    // ToDo: aGradient.tryToConvertToAxial();
+
+    aGradient.tryToRecreateBorder(nullptr);
 
     OUString aStrValue;
     OUStringBuffer aOut;
 
     // Style
-    if( !SvXMLUnitConverter::convertEnum( aOut, aGradient.Style, pXML_GradientStyle_Enum ) )
+    if (!SvXMLUnitConverter::convertEnum(aOut, aGradient.GetGradientStyle(),
+                                         pXML_GradientStyle_Enum))
         return;
 
     // Name
@@ -197,71 +205,75 @@ void XMLTransGradientStyleExport::exportXML(
     rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );
 
     // Center x/y
-    if( aGradient.Style != awt::GradientStyle_LINEAR &&
-        aGradient.Style != awt::GradientStyle_AXIAL   )
+    if (awt::GradientStyle_LINEAR != aGradient.GetGradientStyle()
+        && awt::GradientStyle_AXIAL != aGradient.GetGradientStyle())
     {
-        ::sax::Converter::convertPercent(aOut, aGradient.XOffset);
+        ::sax::Converter::convertPercent(aOut, aGradient.GetXOffset());
         aStrValue = aOut.makeStringAndClear();
         rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CX, aStrValue );
 
-        ::sax::Converter::convertPercent(aOut, aGradient.YOffset);
+        ::sax::Converter::convertPercent(aOut, aGradient.GetYOffset());
         aStrValue = aOut.makeStringAndClear();
         rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CY, aStrValue );
     }
 
-    // Transparency start
-    Color aColor(ColorTransparency, aGradient.StartColor);
-    sal_Int32 aStartValue = 100 - static_cast<sal_Int32>(((aColor.GetRed() + 1) * 100) / 255);
-    ::sax::Converter::convertPercent( aOut, aStartValue );
+    // LO uses a gray color as transparency. ODF uses opacity in range [0%,100%].
+    // Default 100% opacity.
+    double fOpacityStartPerc = 100.0;
+    double fOpacityEndPerc = 100.0;
+    if (!aGradient.GetColorStops().empty())
+    {
+        fOpacityStartPerc
+            = (1.0 - aGradient.GetColorStops().front().getStopColor().getRed()) * 100.0;
+        fOpacityEndPerc = (1.0 - aGradient.GetColorStops().back().getStopColor().getRed()) * 100.0;
+    }
+
+    // Opacity start
+    ::sax::Converter::convertPercent(aOut, static_cast<sal_Int32>(std::lround(fOpacityStartPerc)));
     aStrValue = aOut.makeStringAndClear();
     rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_START, aStrValue );
 
-    // Transparency end
-    aColor = Color(ColorTransparency, aGradient.EndColor);
-    sal_Int32 aEndValue = 100 - static_cast<sal_Int32>(((aColor.GetRed() + 1) * 100) / 255);
-    ::sax::Converter::convertPercent( aOut, aEndValue );
+    // Opacity end
+    ::sax::Converter::convertPercent( aOut, static_cast<sal_Int32>(std::lround(fOpacityEndPerc)));
     aStrValue = aOut.makeStringAndClear();
     rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_END, aStrValue );
 
     // Angle
-    if( aGradient.Style != awt::GradientStyle_RADIAL )
+    if (awt::GradientStyle_RADIAL != aGradient.GetGradientStyle())
     {
-        ::sax::Converter::convertAngle(aOut, aGradient.Angle, rExport.getSaneDefaultVersion());
+        ::sax::Converter::convertAngle(aOut, aGradient.GetAngle().get(),
+                                       rExport.getSaneDefaultVersion());
         aStrValue = aOut.makeStringAndClear();
         rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_GRADIENT_ANGLE, aStrValue );
     }
 
     // Border
-    ::sax::Converter::convertPercent( aOut, aGradient.Border );
+    ::sax::Converter::convertPercent(aOut, aGradient.GetBorder());
     aStrValue = aOut.makeStringAndClear();
     rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_BORDER, aStrValue );
 
     // ctor writes start tag. End-tag is written by destructor at block end.
-    SvXMLElementExport rElem( rExport,
-                              XML_NAMESPACE_DRAW, XML_OPACITY,
-                              true, false );
+    SvXMLElementExport rElem(rExport, XML_NAMESPACE_DRAW, XML_OPACITY, true, false);
 
     // Write child elements <loext:opacity-stop>
     // Do not export in standard ODF 1.3 or older.
     if ((rExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED) == 0)
         return;
-    sal_Int32 nCount = aGradient.ColorStops.getLength();
-    if (nCount == 0)
+    if (aGradient.GetColorStops().empty())
         return;
+
     double fPreviousOffset = 0.0;
-    for (auto& aCandidate : aGradient.ColorStops)
+    for (auto& aCandidate : aGradient.GetColorStops())
     {
         // Attribute svg:offset. Make sure offsets are increasing.
-        double fOffset = std::clamp<double>(aCandidate.StopOffset, 0.0, 1.0);
+        double fOffset = std::clamp<double>(aCandidate.getStopOffset(), 0.0, 1.0);
         if (fOffset < fPreviousOffset)
             fOffset = fPreviousOffset;
         rExport.AddAttribute(XML_NAMESPACE_SVG, XML_OFFSET, OUString::number(fOffset));
         fPreviousOffset = fOffset;
 
         // Attribute svg:stop-opacity, data type zeroToOneDecimal
-        rendering::RGBColor aDecimalColor = aCandidate.StopColor;
-        // transparency is encoded as gray, 1.0 corresponds to full transparent
-        double fOpacity = std::clamp<double>(1.0 - aDecimalColor.Red, 0.0, 1.0);
+        double fOpacity = std::clamp<double>(1.0 - aCandidate.getStopColor().getRed(), 0.0, 1.0);
         rExport.AddAttribute(XML_NAMESPACE_SVG, XML_STOP_OPACITY, OUString::number(fOpacity));
 
         // write opacity stop element

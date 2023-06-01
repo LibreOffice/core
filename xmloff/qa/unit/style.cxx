@@ -559,6 +559,43 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBorderRestoration)
     SetODFDefaultVersion(nCurrentODFVersion);
 }
 
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testTransparencyBorderRestoration)
+{
+    // Load document. It has a shape with transparency gradient build from transparency 100% at
+    // offset 0, transparency 100% at offset 0.4 and transparency 10% at offset 1.0. For better
+    // backward compatibility such gradient is exported with a border of 40% in the transparency
+    // gradient. The color itself is the same for all gradient stops.
+    // When transparency gradient-stops are integrated in ODF strict, the test needs to be adapted.
+    loadFromURL(u"MCGR_TransparencyBorder_restoration.pptx");
+
+    // Backup original ODF default version
+    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
+
+    // Save to ODF_LATEST which is currently ODF 1.3 extended. Make sure transparency gradient-stop
+    //elements are written with offset 0 and 1, and border is written as 40%.
+    SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_LATEST);
+    save("impress8");
+    xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
+    OString sPath = "/office:document-styles/office:styles/draw:opacity[1]";
+    assertXPath(pXmlDoc, sPath + "/loext:opacity-stop[2]", "stop-opacity", "0.9");
+    assertXPath(pXmlDoc, sPath + "/loext:opacity-stop[2]", "offset", "1");
+    assertXPath(pXmlDoc, sPath + "/loext:opacity-stop[1]", "stop-opacity", "0");
+    assertXPath(pXmlDoc, sPath + "/loext:opacity-stop[1]", "offset", "0");
+    assertXPath(pXmlDoc, sPath, "border", "40%");
+
+    // Save to ODF 1.3 strict and make sure border, start and end opacity are suitable set.
+    SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
+    save("impress8");
+    pXmlDoc = parseExport("styles.xml");
+    assertXPath(pXmlDoc, sPath + "/loext:opacity-stop", 0);
+    assertXPath(pXmlDoc, sPath, "start", "0%");
+    assertXPath(pXmlDoc, sPath, "end", "90%");
+    assertXPath(pXmlDoc, sPath, "border", "40%");
+
+    // Set back to original ODF default version.
+    SetODFDefaultVersion(nCurrentODFVersion);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
