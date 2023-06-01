@@ -1040,11 +1040,11 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
     rLayoutArgs.mnFlags |= SalLayoutFlags::ForFallback;
 
     // get list of code units that need glyph fallback
-    int nCharPos = -1;
-    bool bRTL = false;
+    bool bRTL;
+    int nMinRunPos, nEndRunPos;
     OUStringBuffer aMissingCodeBuf(512);
-    while (rLayoutArgs.GetNextPos( &nCharPos, &bRTL))
-        aMissingCodeBuf.append(rLayoutArgs.mrStr[nCharPos]);
+    while (rLayoutArgs.GetNextRun(&nMinRunPos, &nEndRunPos, &bRTL))
+        aMissingCodeBuf.append(rLayoutArgs.mrStr.subView(nMinRunPos, nEndRunPos - nMinRunPos));
     rLayoutArgs.ResetPos();
     OUString aMissingCodes = aMissingCodeBuf.makeStringAndClear();
 
