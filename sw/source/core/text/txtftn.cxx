@@ -664,7 +664,7 @@ void SwTextFrame::ConnectFootnote( SwTextFootnote *pFootnote, const SwTwips nDea
             mbInFootnoteConnect = false;
             return;
         }
-        else if( pSrcFrame )
+        else if (pSrcFrame && pFootnoteFrame)
         {
             SwFootnoteBossFrame *pFootnoteBoss = pFootnoteFrame->FindFootnoteBossFrame();
             if( !pFootnoteBoss->IsInSct() ||
