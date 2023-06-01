@@ -1200,6 +1200,71 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
     }
 }
 
+#if !defined(MACOSX)
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf150606)
+{
+    createSwDoc("tdf150606-1-min.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/column[1]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/column[2]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/column", 2);
+    assertXPath(pXmlDoc, "/root/page[2]/body/section/column[1]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/section/column[2]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/section/column", 2);
+    assertXPath(pXmlDoc, "/root/page[3]/body/section/column[1]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[3]/body/section/column[2]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[3]/body/section/column", 2);
+    assertXPath(pXmlDoc, "/root/page[4]/body/section/column[1]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[4]/body/section/column[2]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[4]/body/section/column", 2);
+    // on page 5 the table is split across balanced columns
+    assertXPath(pXmlDoc, "/root/page[5]/body/section/column[1]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[5]/body/section/column[2]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[5]/body/section/column", 2);
+    assertXPath(pXmlDoc, "/root/page", 5);
+
+    pWrtShell->Down(false, 1);
+    dispatchCommand(mxComponent, ".uno:DeleteTable", {});
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/column/body/tab", 0);
+    assertXPath(pXmlDoc, "/root/page", 1);
+
+    pWrtShell->Undo();
+    Scheduler::ProcessEventsToIdle();
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/column[1]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/column[2]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/column", 2);
+    assertXPath(pXmlDoc, "/root/page[2]/body/section/column[1]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/section/column[2]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/section/column", 2);
+    assertXPath(pXmlDoc, "/root/page[3]/body/section/column[1]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[3]/body/section/column[2]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[3]/body/section/column", 2);
+    assertXPath(pXmlDoc, "/root/page[4]/body/section/column[1]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[4]/body/section/column[2]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[4]/body/section/column", 2);
+    // on page 5 the table is split across balanced columns
+    // (problem was that there were empty pages and table was on page 10)
+    assertXPath(pXmlDoc, "/root/page[5]/body/section/column[1]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[5]/body/section/column[2]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[5]/body/section/column", 2);
+    assertXPath(pXmlDoc, "/root/page", 5);
+}
+#endif
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf137025)
 {
     // Check the padding of the textbox
