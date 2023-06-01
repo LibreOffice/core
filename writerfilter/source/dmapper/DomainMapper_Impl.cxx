@@ -754,6 +754,14 @@ void DomainMapper_Impl::RemoveLastParagraph( )
     uno::Reference< text::XTextAppend > xTextAppend = m_aTextAppendStack.top().xTextAppend;
     if (!xTextAppend.is())
         return;
+
+    if (hasTableManager() && getTableManager().getCurrentTablePosition().getLength() != 0)
+    {
+        // If we have an open floating table, then don't remove this paragraph, since that'll be the
+        // anchor of the floating table. Otherwise we would lose the table.
+        return;
+    }
+
     try
     {
         uno::Reference< text::XTextCursor > xCursor;
