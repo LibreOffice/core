@@ -26,12 +26,11 @@
 #include <tools/stream.hxx>
 #include <tools/XmlWriter.hxx>
 #include <sax/fastattribs.hxx>
-#include <sax/fastparser.hxx>
 
+#include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
-#include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
-#include <com/sun/star/xml/sax/InputSource.hpp>
 
 using namespace css;
 using namespace css::beans;
@@ -522,7 +521,7 @@ bool AgileEngine::readEncryptionInfo(uno::Reference<io::XInputStream> & rxInputS
     Reference<XFastDocumentHandler> xFastDocumentHandler(new AgileDocumentHandler(mInfo));
     Reference<XFastTokenHandler> xFastTokenHandler(new AgileTokenHandler);
 
-    rtl::Reference<sax_fastparser::FastSaxParser> xParser = new sax_fastparser::FastSaxParser;
+    Reference<XFastParser> xParser(css::xml::sax::FastParser::create(comphelper::getProcessComponentContext()));
 
     xParser->setFastDocumentHandler(xFastDocumentHandler);
     xParser->setTokenHandler(xFastTokenHandler);

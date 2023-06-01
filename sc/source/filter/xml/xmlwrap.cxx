@@ -40,6 +40,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -179,9 +180,9 @@ ErrCode ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCompo
         // xImportInterface is either ScXMLImport or an XMLTransformer subclass.
         // ScXMLImport implements XFastParser, but XMLTransformer only implements XExtendedDocumentHandler
 
-        XFastParser* pFastParser = dynamic_cast<XFastParser*>(xImportInterface.get());
-        if (pFastParser)
-            pFastParser->parseStream( aParserInput );
+        uno::Reference< xml::sax::XFastParser > xFastParser(xImportInterface, uno::UNO_QUERY);
+        if (xFastParser)
+            xFastParser->parseStream( aParserInput );
         else
         {
             uno::Reference<xml::sax::XParser> xParser = xml::sax::Parser::create(xContext);

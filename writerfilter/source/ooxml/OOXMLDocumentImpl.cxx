@@ -91,7 +91,7 @@ void OOXMLDocumentImpl::resolveFastSubStream(Stream & rStreamHandler,
     OOXMLStream::Pointer_t savedStream = mpStream;
     mpStream = pStream;
 
-    rtl::Reference<sax_fastparser::FastSaxParser> xParser(mpStream->getFastParser());
+    uno::Reference<xml::sax::XFastParser> xParser(mpStream->getFastParser());
 
     if (xParser.is())
     {
@@ -445,7 +445,7 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
         return;
     }
 
-    rtl::Reference<sax_fastparser::FastSaxParser> xParser(mpStream->getFastParser());
+    uno::Reference<xml::sax::XFastParser> xParser(mpStream->getFastParser());
 
     if (mxModel.is())
     {

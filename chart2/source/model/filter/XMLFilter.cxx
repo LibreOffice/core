@@ -44,11 +44,11 @@
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/document/GraphicStorageHandler.hpp>
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
-#include <sax/xfastparser.hxx>
 
 using namespace ::com::sun::star;
 
@@ -463,9 +463,9 @@ ErrCode XMLFilter::impl_ImportStream(
                 aParserInput.aInputStream.set(xInputStream, uno::UNO_QUERY_THROW);
 
                 // the underlying SvXMLImport implements XFastParser, XImporter, XFastDocumentHandler
-                XFastParser* pFastParser = dynamic_cast<XFastParser*>(xFilter.get());
-                if (pFastParser)
-                    pFastParser->parseStream(aParserInput);
+                Reference< xml::sax::XFastParser > xFastParser(xFilter, uno::UNO_QUERY);
+                if (xFastParser.is())
+                    xFastParser->parseStream(aParserInput);
                 else
                 {
                     Reference<xml::sax::XParser> xParser = xml::sax::Parser::create(m_xContext);

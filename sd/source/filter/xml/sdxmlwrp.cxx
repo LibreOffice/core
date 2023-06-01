@@ -28,7 +28,6 @@
 #include <comphelper/propertysequence.hxx>
 #include <o3tl/string_view.hxx>
 #include <editeng/outlobj.hxx>
-#include <sax/xfastparser.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -46,6 +45,7 @@
 #include <svx/xmleohlp.hxx>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
@@ -198,11 +198,11 @@ ErrCode ReadThroughComponent(
     SAL_WARN_IF(!xFilter.is(), "sd.filter", "Can't instantiate filter component: " << aFilterName);
     if( !xFilter.is() )
         return SD_XML_READERROR;
-    XFastParser* pFastParser = dynamic_cast<XFastParser*>(xFilter.get());
+    Reference< xml::sax::XFastParser > xFastParser(xFilter, UNO_QUERY);
     Reference< xml::sax::XDocumentHandler > xDocumentHandler;
-    if (!pFastParser)
+    if (!xFastParser)
         xDocumentHandler.set(xFilter, UNO_QUERY);
-    if (!pFastParser && !xDocumentHandler)
+    if (!xFastParser && !xDocumentHandler)
     {
         SAL_WARN("sd", "service does not implement XFastParser or XDocumentHandler");
         assert(false);
@@ -218,8 +218,8 @@ ErrCode ReadThroughComponent(
     SAL_INFO( "sd.filter", "parsing stream" );
     try
     {
-        if (pFastParser)
-            pFastParser->parseStream( aParserInput );
+        if (xFastParser)
+            xFastParser->parseStream( aParserInput );
         else
         {
             Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(rxContext);

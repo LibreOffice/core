@@ -56,6 +56,7 @@
 #include <editeng/unolingu.hxx>
 #include <vcl/window.hxx>
 #include <com/sun/star/xml/sax/InputSource.hpp>
+#include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <unotools/streamwrap.hxx>
@@ -71,7 +72,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <unordered_map>
 #include <rtl/character.hxx>
-#include <sax/fastparser.hxx>
 
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
@@ -2278,7 +2278,7 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
                 uno::Reference< xml::sax::XFastDocumentHandler > xFilter = new SvXMLExceptionListImport ( xContext, *rpLst );
 
                 // connect parser and filter
-                rtl::Reference< sax_fastparser::FastSaxParser > xParser = new sax_fastparser::FastSaxParser;
+                uno::Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create( xContext );
                 uno::Reference<xml::sax::XFastTokenHandler> xTokenHandler = new SvXMLAutoCorrectTokenHandler;
                 xParser->setFastDocumentHandler( xFilter );
                 xParser->registerNamespace( "http://openoffice.org/2001/block-list", SvXMLAutoCorrectToken::NAMESPACE );
@@ -2385,7 +2385,7 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
         aParserInput.aInputStream = xStrm->getInputStream();
 
         // get parser
-        rtl::Reference< sax_fastparser::FastSaxParser > xParser = new sax_fastparser::FastSaxParser;
+        uno::Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create(xContext);
         SAL_INFO("editeng", "AutoCorrect Import" );
         uno::Reference< xml::sax::XFastDocumentHandler > xFilter = new SvXMLAutoCorrectImport( xContext, pAutocorr_List.get(), rAutoCorrect, xStg );
         uno::Reference<xml::sax::XFastTokenHandler> xTokenHandler = new SvXMLAutoCorrectTokenHandler;

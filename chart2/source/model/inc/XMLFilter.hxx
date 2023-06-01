@@ -36,6 +36,9 @@ namespace com::sun::star {
     namespace embed {
         class XStorage;
     }
+    namespace xml::sax {
+        class XFastParser;
+    }
     namespace document {
         class XGraphicStorageHandler;
     }

@@ -25,6 +25,7 @@
 #include "XmlFilterAdaptor.hxx"
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/XImportFilter.hpp>
+#include <com/sun/star/xml/XImportFilter2.hpp>
 #include <com/sun/star/xml/XExportFilter.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -41,7 +42,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/pathoptions.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <sax/ximportfilter2.hxx>
+
 #include <strings.hrc>
 
 using namespace comphelper;
@@ -131,7 +132,7 @@ bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& 
         xStatusIndicator->setValue(nSteps++);
 
     Reference< XImportFilter > xConverter1( xConvBridge, UNO_QUERY );
-    XImportFilter2* pConverter2 = dynamic_cast<XImportFilter2*>(xConvBridge.get());
+    Reference< XImportFilter2 > xConverter2( xConvBridge, UNO_QUERY );
 
     // prevent unnecessary broadcasting when loading
     Reference< XModel > xModel( mxDoc, UNO_QUERY );
@@ -169,12 +170,12 @@ bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& 
     // Calling Filtering Component
 
     try {
-        XFastParser* pFastParser = dynamic_cast<XFastParser*>( xFilter.get() ); // SvXMLImport subclasses
+        Reference < XFastParser > xFastParser( xFilter, UNO_QUERY ); // SvXMLImport subclasses
         Reference < XDocumentHandler > xDocHandler( xFilter, UNO_QUERY ); // XMLTransformer subclasses
-        assert(pFastParser || xDocHandler);
-        if (pConverter2 && pFastParser)
+        assert(xFastParser || xDocHandler);
+        if (xConverter2 && xFastParser)
         {
-            if (!pConverter2->importer(aDescriptor,*pFastParser,msUserData)) {
+            if (!xConverter2->importer(aDescriptor,xFastParser,msUserData)) {
                 if (xStatusIndicator.is())
                     xStatusIndicator->end();
                 return false;
@@ -188,9 +189,9 @@ bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& 
                 return false;
             }
         }
-        else if (xConverter1 && pFastParser)
+        else if (xConverter1 && xFastParser)
         {
-            auto pImport = static_cast<SvXMLImport*>(pFastParser);
+            auto pImport = static_cast<SvXMLImport*>(xFastParser.get());
             Reference<XDocumentHandler> xLegacyDocHandler = new SvXMLLegacyToFastDocHandler(pImport);
             if (!xConverter1->importer(aDescriptor,xLegacyDocHandler,msUserData)) {
                 if (xStatusIndicator.is())

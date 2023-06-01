@@ -5522,7 +5522,6 @@ include/sax/fastparser.hxx
 include/sax/fshelper.hxx
 include/sax/tools/converter.hxx
 include/sax/tools/documenthandleradapter.hxx
-include/sax/ximportfilter2.hxx
 include/sfx2/DocumentMetadataAccess.hxx
 include/sfx2/Metadatable.hxx
 include/sfx2/StyleManager.hxx

@@ -21,7 +21,6 @@
 #include <com/sun/star/document/XGraphicStorageHandler.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>

@@ -25,7 +25,7 @@
 #include <com/sun/star/form/XReset.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/xml/sax/InputSource.hpp>
+#include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <sfx2/dispatch.hxx>
@@ -40,7 +40,6 @@
 #include <rtl/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/streamwrap.hxx>
-#include <sax/xfastparser.hxx>
 #include <tools/stream.hxx>
 #include <tools/UnitConversion.hxx>
 
@@ -647,9 +646,9 @@ void SdDrawDocument::CreateDefaultCellStyles()
     css::xml::sax::InputSource aParserInput;
     aParserInput.sPublicId = aURL;
     aParserInput.aInputStream = xInputStream;
-    XFastParser* pFastParser = dynamic_cast<XFastParser*>(xImporter.get());
-    if (pFastParser)
-        pFastParser->parseStream(aParserInput);
+    Reference<css::xml::sax::XFastParser> xFastParser(xImporter, UNO_QUERY);
+    if (xFastParser)
+        xFastParser->parseStream(aParserInput);
 
     // Set default fonts, if they were not defined in the xml.
     vcl::Font aLatinFont, aCJKFont, aCTLFont;

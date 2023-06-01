@@ -23,19 +23,19 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <com/sun/star/xml/XImportFilter.hpp>
+#include <com/sun/star/xml/XImportFilter2.hpp>
 #include <com/sun/star/xml/XExportFilter.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
+#include <com/sun/star/xml/sax/XFastParser.hpp>
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <comphelper/diagnose_ex.hxx>
-#include <sax/ximportfilter2.hxx>
-#include <sax/xfastparser.hxx>
 
 using namespace ::cppu;
 using namespace ::osl;
@@ -55,9 +55,8 @@ namespace filter::odfflatxml {
          * OdfFlatXml export and imports ODF flat XML documents by plugging a pass-through
          * filter implementation into XmlFilterAdaptor.
          */
-        class OdfFlatXml : public WeakImplHelper<XImportFilter,
-                                                  XExportFilter, DocumentHandlerAdapter, css::lang::XServiceInfo>,
-                           public XImportFilter2
+        class OdfFlatXml : public WeakImplHelper<XImportFilter, XImportFilter2,
+                                                  XExportFilter, DocumentHandlerAdapter, css::lang::XServiceInfo>
         {
         private:
             Reference< XComponentContext > m_xContext;
@@ -76,9 +75,9 @@ namespace filter::odfflatxml {
                      const Sequence< OUString >& userData) override;
 
             // XImportFilter2
-            virtual bool
+            virtual sal_Bool SAL_CALL
             importer(const Sequence< PropertyValue >& sourceData,
-                     XFastParser& fastParser,
+                     const Reference< XFastParser >& fastParser,
                      const Sequence< OUString >& userData) override;
 
             // XExportFilter
@@ -143,9 +142,9 @@ OdfFlatXml::importer(
         if ( xSeekable.is() )
             xSeekable->seek( 0 );
 
-        XFastParser* pFastParser = dynamic_cast<XFastParser*>(docHandler.get());
-        if( pFastParser )
-            pFastParser->parseStream( inputSource );
+        css::uno::Reference< css::xml::sax::XFastParser > xFastParser (docHandler, UNO_QUERY );
+        if( xFastParser.is() )
+            xFastParser->parseStream( inputSource );
         else
         {
             Reference<XParser> saxParser = Parser::create(m_xContext);
@@ -166,10 +165,10 @@ OdfFlatXml::importer(
     return true;
 }
 
-bool
+sal_Bool
 OdfFlatXml::importer(
                      const Sequence< PropertyValue >& sourceData,
-                     XFastParser& rFastParser,
+                     const Reference< XFastParser >& xFastParser,
                      const Sequence< OUString >& /* userData */)
 {
     // Read InputStream to read from and a URL used for the system id
@@ -202,7 +201,7 @@ OdfFlatXml::importer(
         if ( xSeekable.is() )
             xSeekable->seek( 0 );
 
-        rFastParser.parseStream( inputSource );
+        xFastParser->parseStream( inputSource );
     }
     catch (const Exception &)
     {

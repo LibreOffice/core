@@ -48,7 +48,6 @@ $(eval $(call gb_Library_use_libraries,chartcore,\
     i18nlangtag \
     sal \
 	salhelper \
-	sax \
 	sfx \
     svl \
     svt \

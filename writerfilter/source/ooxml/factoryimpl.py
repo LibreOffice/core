@@ -147,14 +147,15 @@ std::string fastTokenToId(sal_uInt32 nToken)
 
 
 def getFastParser():
-    print("""rtl::Reference<sax_fastparser::FastSaxParser> OOXMLStreamImpl::getFastParser()
+    print("""uno::Reference <xml::sax::XFastParser> OOXMLStreamImpl::getFastParser()
 {
     if (!mxFastParser.is())
     {
-        mxFastParser = new sax_fastparser::FastSaxParser;
+        mxFastParser = css::xml::sax::FastParser::create(mxContext);
         // the threaded parser is about 20% slower loading writer documents
+        css::uno::Reference< css::lang::XInitialization > xInit( mxFastParser, css::uno::UNO_QUERY_THROW );
         css::uno::Sequence< css::uno::Any > args{ css::uno::Any(OUString("DisableThreadedParser")) };
-        mxFastParser->initialize(args);
+        xInit->initialize(args);
 """)
     for url in sorted(ooxUrlAliases.keys()):
         print("""        mxFastParser->registerNamespace("%s", oox::NMSP_%s);""" % (url, ooxUrlAliases[url]))
@@ -169,7 +170,7 @@ def getFastParser():
 
 def createImpl(model):
     print("""
-#include <sax/fastparser.hxx>
+#include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include "ooxml/OOXMLFactory.hxx"
 #include "ooxml/OOXMLFastHelper.hxx"

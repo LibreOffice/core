@@ -57,6 +57,7 @@
 #include <com/sun/star/document/XGraphicStorageHandler.hpp>
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
+#include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -75,7 +76,6 @@
 #include <fasttokenhandler.hxx>
 #include <vcl/GraphicExternalLink.hxx>
 #include <o3tl/string_view.hxx>
-#include <sax/fastparser.hxx>
 
 #include <com/sun/star/rdf/XMetadatable.hpp>
 #include <com/sun/star/rdf/XRepositorySupplier.hpp>
@@ -430,7 +430,7 @@ SvXMLImport::SvXMLImport(
 {
     SAL_WARN_IF( !xContext.is(), "xmloff.core", "got no service manager" );
     InitCtor_();
-    mxParser = new sax_fastparser::FastSaxParser;
+    mxParser = xml::sax::FastParser::create( xContext );
     setNamespaceHandler( maNamespaceHandler );
     setTokenHandler( xTokenHandler  );
     if ( !bIsNSMapsInitialized )
@@ -479,9 +479,9 @@ namespace
     class setFastDocumentHandlerGuard
     {
     private:
-        rtl::Reference<sax_fastparser::FastSaxParser> mxParser;
+        css::uno::Reference<css::xml::sax::XFastParser> mxParser;
     public:
-        setFastDocumentHandlerGuard(rtl::Reference<sax_fastparser::FastSaxParser> Parser,
+        setFastDocumentHandlerGuard(css::uno::Reference<css::xml::sax::XFastParser> Parser,
                                     const css::uno::Reference<css::xml::sax::XFastDocumentHandler>& Handler)
             : mxParser(std::move(Parser))
         {
@@ -496,53 +496,53 @@ namespace
 }
 
 // XFastParser
-void SvXMLImport::parseStream( const xml::sax::InputSource& aInputSource )
+void SAL_CALL SvXMLImport::parseStream( const xml::sax::InputSource& aInputSource )
 {
     setFastDocumentHandlerGuard aDocumentHandlerGuard(mxParser, mxFastDocumentHandler.is() ? mxFastDocumentHandler : this);
     mxParser->parseStream(aInputSource);
 }
 
-void SvXMLImport::setFastDocumentHandler( const uno::Reference< xml::sax::XFastDocumentHandler >& Handler )
+void SAL_CALL SvXMLImport::setFastDocumentHandler( const uno::Reference< xml::sax::XFastDocumentHandler >& Handler )
 {
     mxFastDocumentHandler = Handler;
 }
 
-void SvXMLImport::setTokenHandler( const uno::Reference< xml::sax::XFastTokenHandler >& Handler )
+void SAL_CALL SvXMLImport::setTokenHandler( const uno::Reference< xml::sax::XFastTokenHandler >& Handler )
 {
     mxParser->setTokenHandler( Handler );
 }
 
-void SvXMLImport::registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken )
+void SAL_CALL SvXMLImport::registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken )
 {
     mxParser->registerNamespace( NamespaceURL, NamespaceToken );
 }
 
-OUString SvXMLImport::getNamespaceURL( std::u16string_view aPrefix )
+OUString SAL_CALL SvXMLImport::getNamespaceURL( const OUString& rPrefix )
 {
-    return mxParser->getNamespaceURL( aPrefix );
+    return mxParser->getNamespaceURL( rPrefix );
 }
 
-void SvXMLImport::setErrorHandler( const uno::Reference< xml::sax::XErrorHandler >& Handler )
+void SAL_CALL SvXMLImport::setErrorHandler( const uno::Reference< xml::sax::XErrorHandler >& Handler )
 {
     mxParser->setErrorHandler( Handler );
 }
 
-void SvXMLImport::setEntityResolver( const uno::Reference< xml::sax::XEntityResolver >& Resolver )
+void SAL_CALL SvXMLImport::setEntityResolver( const uno::Reference< xml::sax::XEntityResolver >& Resolver )
 {
     mxParser->setEntityResolver( Resolver );
 }
 
-void SvXMLImport::setLocale( const lang::Locale& rLocale )
+void SAL_CALL SvXMLImport::setLocale( const lang::Locale& rLocale )
 {
     mxParser->setLocale( rLocale );
 }
 
-void SvXMLImport::setNamespaceHandler( const uno::Reference< xml::sax::XFastNamespaceHandler >& Handler)
+void SAL_CALL SvXMLImport::setNamespaceHandler( const uno::Reference< xml::sax::XFastNamespaceHandler >& Handler)
 {
     mxParser->setNamespaceHandler( Handler );
 }
 
-void SvXMLImport::setCustomEntityNames( const ::css::uno::Sequence< ::css::beans::Pair<::rtl::OUString, ::rtl::OUString> >& replacements )
+void SAL_CALL SvXMLImport::setCustomEntityNames( const ::css::uno::Sequence< ::css::beans::Pair<::rtl::OUString, ::rtl::OUString> >& replacements )
 {
     mxParser->setCustomEntityNames( replacements );
 }
@@ -1039,7 +1039,8 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
         }
     }
 
-    mxParser->initialize( { Any(OUString("IgnoreMissingNSDecl")) });
+    uno::Reference<lang::XInitialization> const xInit(mxParser, uno::UNO_QUERY_THROW);
+    xInit->initialize( { Any(OUString("IgnoreMissingNSDecl")) });
 }
 
 // XServiceInfo

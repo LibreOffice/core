@@ -1,0 +1,148 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com {  module sun {  module star {  module xml {  module sax {
+
+
+/** specifies a SAX parser that uses integer values for known XML names
+    (elements, attributes and attribute values). The parser also handles
+    namespaces and allows to have individual contexts for each XML element.
+
+    <p>Before parsing is possible you have to set your
+    XFastDocumentHandler using setFastDocumentHandler().
+
+    <p>Parsing starts with calling parseStream(). If the parser
+    finds a valid XML file with the given InputSource, it calls
+    XFastDocumentHandler::startDocument() first.
+
+    <p>This parser generates either "fast" events that use integer token
+    values for namespaces, elements and attributes or "unknown" events for
+    elements that are unknown.
+
+    <p>A namespace is unknown if the namespace URL was not registered with
+    registerNamespace().
+
+    <p>An element is unknown if no XFastTokenHandler is set
+    or if the XFastTokenHandler does not return a valid
+    identifier for the elements local name. An element is also unknown if
+    the elements local name is known but it uses a namespace that is unknown.
+
+    <p>Setting a XFastTokenHandler with setTokenHandler()
+    is optional, but without a XFastTokenHandler you will only
+    get unknown sax events. This can be useful if you are only interested
+    in the namespace handling and/or the context feature.
+
+    <p>For each element the parser sends a create child element event to the
+    elements parent context by calling
+    XFastContextHandler::createFastChildContext() for known
+    elements or XFastContextHandler::createUnknownChildContext()
+    for unknown elements.
+    <br>The parent context for the root element is the XFastDocumentHandler
+    itself.
+
+    <p>If the parent context returns an empty reference, no further events for
+    the element and all of its children are created.
+
+    <p>If a valid context is returned this context gets a start event by a call to
+    XFastContextHandler::startFastElement() for known elements or
+    XFastContextHandler::startUnknownElement() for unknown elements.
+
+    <p>After processing all its child elements the context gets an end event by a call to
+    XFastContextHandler::endFastElement() for known elements or
+    XFastContextHandler::endUnknownElement() for unknown elements.
+
+    <p>It is valid to return one instance of XFastContextHandler more
+    than once. It is even possible to only use the XFastDocumentHandler
+    by always returning a reference to itself for each create child context event.
+
+    <p>After the last element is processed the parser generates an end document
+    event at the XFastDocumentHandler by calling
+    XFastDocumentHandler::endDocument().
+
+    @see http://wiki.openoffice.org/wiki/FastParser
+*/
+interface XFastParser: com::sun::star::uno::XInterface
+{
+    /** parses an XML document from a stream.
+
+        <p>Set the desired handlers before calling this method.</p>
+     */
+    void parseStream( [in] InputSource aInputSource )
+            raises( SAXException, com::sun::star::io::IOException );
+
+
+    /** Application must register a document event handler to get
+        sax events for the parsed stream.
+     */
+    void setFastDocumentHandler( [in] XFastDocumentHandler Handler );
+
+
+    /** must be registered to translate known XML names to integer tokens.
+     */
+    void setTokenHandler( [in] XFastTokenHandler Handler );
+
+
+    /** registers a known namespace url with the given integer token.<br>
+        @param NamespaceURL the namespace URL.
+        @param NamespaceToken
+            an integer token that must be greater than FastToken::NAMESPACE.
+     */
+    void registerNamespace( [in] string NamespaceURL, [in] long NamespaceToken )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    /** allows an application to register an error event handler.
+
+        <p>Note that the error handler can throw an exception when an error or
+        warning occurs.  Note that an exception is thrown by the parser when
+        an unrecoverable (fatal) error occurs.</p>
+     */
+    void setErrorHandler( [in] XErrorHandler Handler );
+
+    /** allows an application to register a DTD-Handler.
+     */
+    void setEntityResolver( [in] XEntityResolver Resolver );
+
+    /** sets a locale specified for localization of warnings and error messages.
+
+        <p>Set the language of the error messages. Useful when the parsing
+        errors will be presented to the user.</p>
+     */
+    void setLocale( [in] com::sun::star::lang::Locale locale );
+
+    /** Gets the namespace url string.
+      */
+    string getNamespaceURL( [in] string prefix )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    /** @since LibreOffice 5.3 */
+    void setNamespaceHandler( [in] XFastNamespaceHandler Handler);
+
+    /**
+      * Simulate a DTD file.
+      * Will allow to use customized entity references like &infin; .
+      * @since LibreOffice 7.1
+      */
+    void setCustomEntityNames( [in] sequence< beans::Pair<string,string> > replacements);
+};
+
+
+}; }; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

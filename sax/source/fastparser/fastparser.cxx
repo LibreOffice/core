@@ -19,7 +19,6 @@
 
 #include <sax/fastparser.hxx>
 #include <sax/fastattribs.hxx>
-#include <sax/ximportfilter2.hxx>
 #include <utility>
 #include <xml2utf.hxx>
 
@@ -28,13 +27,8 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
-#include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
-#include <com/sun/star/xml/sax/XErrorHandler.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
-#include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XFastNamespaceHandler.hpp>
-#include <com/sun/star/xml/sax/XLocator.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -1490,9 +1484,9 @@ void FastSaxParser::registerNamespace( const OUString& NamespaceURL, sal_Int32 N
     mpImpl->registerNamespace(NamespaceURL, NamespaceToken);
 }
 
-OUString FastSaxParser::getNamespaceURL( std::u16string_view aPrefix )
+OUString FastSaxParser::getNamespaceURL( const OUString& rPrefix )
 {
-    return mpImpl->getNamespaceURL(aPrefix);
+    return mpImpl->getNamespaceURL(rPrefix);
 }
 
 void FastSaxParser::setErrorHandler( const uno::Reference< xml::sax::XErrorHandler >& Handler )
@@ -1680,10 +1674,6 @@ static bool NormalizeOasisURN( OUString& rName )
 
     return true;
 }
-
-XFastParser::~XFastParser() {}
-
-XImportFilter2::~XImportFilter2() {}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
