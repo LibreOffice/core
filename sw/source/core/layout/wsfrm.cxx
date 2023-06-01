@@ -1227,10 +1227,11 @@ void SwContentFrame::Cut()
                 // RemoveSuperfluous can only remove empty pages at the end;
                 // find if there are pages without content following pPage
                 // and if so request a call to CheckPageDescs()
-                SwPageFrame const* pNext(pPage);
                 SwViewShell *pSh = pRoot->GetCurrShell();
-                if (pSh && pSh->Imp()->IsAction())
+                // tdf#152983 pPage is null when called from SwHeadFootFrame ctor
+                if (pPage && pSh && pSh->Imp()->IsAction())
                 {
+                    SwPageFrame const* pNext(pPage);
                     while ((pNext = static_cast<SwPageFrame const*>(pNext->GetNext())))
                     {
                         if (!sw::IsPageFrameEmpty(*pNext) && !pNext->IsFootnotePage())
