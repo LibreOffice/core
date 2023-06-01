@@ -1889,9 +1889,9 @@ void ChartExport::exportSolidFill(const Reference< XPropertySet >& xPropSet)
     // Similar to DrawingML::WriteSolidFill, but gradient access via name
     // and currently no InteropGrabBag
     // get fill color
-    if (!GetProperty( xPropSet, "FillColor" ))
+    sal_uInt32 nFillColor = 0;
+    if (!GetProperty(xPropSet, "FillColor") || !(mAny >>= nFillColor))
         return;
-    sal_uInt32 nFillColor = mAny.get<sal_uInt32>();
 
     sal_Int32 nAlpha = MAX_PERCENT;
     if (GetProperty( xPropSet, "FillTransparence" ))
