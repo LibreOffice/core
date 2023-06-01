@@ -13,6 +13,7 @@
 #include <drawdoc.hxx>
 #include <edtwin.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <OnlineAccessibilityCheck.hxx>
 #include <swtypes.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
@@ -145,6 +146,8 @@ void AccessibilityIssue::quickFixIssue() const
         default:
             break;
     }
+    if (m_pNode)
+        m_pDoc->getOnlineAccessibilityCheck()->resetAndQueue(m_pNode);
 }
 
 } // end sw namespace

@@ -119,6 +119,7 @@ class NoTextNodeAltTextCheck : public NodeCheck
             pIssue->setDoc(pNoTextNode->GetDoc());
             pIssue->setIssueObject(IssueObject::GRAPHIC);
             pIssue->setObjectID(pNoTextNode->GetFlyFormat()->GetName());
+            pIssue->setNode(pNoTextNode);
         }
     }
 
