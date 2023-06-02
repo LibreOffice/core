@@ -477,12 +477,9 @@ void GrammarCheckingIterator::ProcessResult(
     if (bContinueWithNextPara)
     {
         // we need to continue with the next paragraph
-        uno::Reference< text::XFlatParagraph > xFlatParaNext;
         if (rxFlatParagraphIterator.is())
-            xFlatParaNext = rxFlatParagraphIterator->getNextPara();
-        {
-            AddEntry( rxFlatParagraphIterator, xFlatParaNext, rRes.aDocumentIdentifier, 0, bIsAutomaticChecking );
-        }
+            AddEntry(rxFlatParagraphIterator, rxFlatParagraphIterator->getNextPara(),
+                     rRes.aDocumentIdentifier, 0, bIsAutomaticChecking);
     }
 }
 
