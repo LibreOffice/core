@@ -30,7 +30,6 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/weakref.hxx>
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 #include <osl/thread.h>
@@ -53,7 +52,7 @@ struct FPEntry
     css::uno::Reference< css::text::XFlatParagraphIterator > m_xParaIterator;
 
     // flat paragraph
-    css::uno::WeakReference< css::text::XFlatParagraph > m_xPara;
+    css::uno::Reference< css::text::XFlatParagraph > m_xPara;
 
     // document ID to identify different documents
     OUString        m_aDocId;
@@ -127,8 +126,8 @@ class GrammarCheckingIterator:
     OUString GetOrCreateDocId( const css::uno::Reference< css::lang::XComponent > &xComp );
 
     void AddEntry(
-            const css::uno::WeakReference< css::text::XFlatParagraphIterator >& xFlatParaIterator,
-            const css::uno::WeakReference< css::text::XFlatParagraph >& xFlatPara,
+            const css::uno::Reference< css::text::XFlatParagraphIterator >& xFlatParaIterator,
+            const css::uno::Reference< css::text::XFlatParagraph >& xFlatPara,
             const OUString &rDocId, sal_Int32 nStartIndex, bool bAutomatic );
 
     void ProcessResult( const css::linguistic2::ProofreadingResult &rRes,
