@@ -248,6 +248,17 @@ bool SwFlowFrame::IsKeep(SvxFormatKeepItem const& rKeep,
                     ( !m_rThis.IsInTab() || m_rThis.IsTabFrame() ) &&
                     rKeep.GetValue() && !IsNextContentFullPage(m_rThis));
 
+    if (bKeep && m_rThis.IsTextFrame())
+    {
+        auto& rTextFrame = static_cast<SwTextFrame&>(m_rThis);
+        if (rTextFrame.HasNonLastSplitFlyDrawObj())
+        {
+            // Allow split for the non-last anchors of a split fly, even if rKeep.GetValue() is
+            // true.
+            bKeep = false;
+        }
+    }
+
     OSL_ENSURE( !bCheckIfLastRowShouldKeep || m_rThis.IsTabFrame(),
             "IsKeep with bCheckIfLastRowShouldKeep should only be used for tabfrms" );
 
