@@ -121,11 +121,14 @@ public:
 
     void Select(const OUString& rStyleName);
     void RequestStylesListUpdate();
+    static VclPtr<VirtualDevice> GetCachedPreview(const std::pair<OUString, OUString>& rStyle);
 
 private:
     void UpdateStylesList();
     void UpdateSelection();
     bool Command(const CommandEvent& rEvent);
+
+    static std::map<OUString, VclPtr<VirtualDevice>> aPreviewCache;
 };
 
 class StylesPreviewWindow_Impl final : public InterimItemWindow, public StylesPreviewWindow_Base

@@ -60,6 +60,8 @@
 
 #include <vcl/commandevent.hxx>
 
+std::map<OUString, VclPtr<VirtualDevice>> StylesPreviewWindow_Base::aPreviewCache;
+
 StyleStatusListener::StyleStatusListener(
     StylesPreviewWindow_Base* pPreviewControl,
     const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider)
@@ -460,6 +462,25 @@ void StylesListUpdateTask::Invoke()
     m_rStylesList.UpdateSelection();
 }
 
+VclPtr<VirtualDevice>
+StylesPreviewWindow_Base::GetCachedPreview(const std::pair<OUString, OUString>& rStyle)
+{
+    if (aPreviewCache.find(rStyle.second) != aPreviewCache.end())
+        return aPreviewCache[rStyle.second];
+    else
+    {
+        VclPtr<VirtualDevice> pImg = VclPtr<VirtualDevice>::Create();
+        const Size aSize(100, 30);
+        pImg->SetOutputSizePixel(aSize);
+
+        StyleItemController aStyleController(rStyle);
+        aStyleController.Paint(*pImg);
+        aPreviewCache[rStyle.second] = pImg;
+
+        return pImg;
+    }
+}
+
 void StylesPreviewWindow_Base::UpdateStylesList()
 {
     m_aAllStyles = m_aDefaultStyles;
@@ -487,12 +508,7 @@ void StylesPreviewWindow_Base::UpdateStylesList()
     m_xStylesView->clear();
     for (const auto& rStyle : m_aAllStyles)
     {
-        ScopedVclPtr<VirtualDevice> pImg = VclPtr<VirtualDevice>::Create();
-        const Size aSize(100, 30);
-        pImg->SetOutputSizePixel(aSize);
-
-        StyleItemController aStyleController(rStyle);
-        aStyleController.Paint(*pImg);
+        VclPtr<VirtualDevice> pImg = GetCachedPreview(rStyle);
 
         m_xStylesView->append(rStyle.first, rStyle.second, pImg);
     }
