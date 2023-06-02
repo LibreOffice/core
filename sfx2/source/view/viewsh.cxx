@@ -363,8 +363,7 @@ void LOKDocumentFocusListener::notifyFocusedParagraphChanged()
     {
         SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyFocusedParagraphChanged: " << m_sFocusedParagraph);
         m_bFocusedParagraphNotified = true;
-        const char* pPayload = aPayload.c_str();
-        m_pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_A11Y_FOCUS_CHANGED, pPayload);
+        m_pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_A11Y_FOCUS_CHANGED, aPayload.c_str());
     }
 }
 
@@ -378,8 +377,7 @@ void LOKDocumentFocusListener::notifyCaretChanged()
     if (m_pViewShell)
     {
         SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyCaretChanged: " << m_nCaretPosition);
-        const char* pPayload = aPayload.c_str();
-        m_pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_A11Y_CARET_CHANGED, pPayload);
+        m_pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_A11Y_CARET_CHANGED, aPayload.c_str());
     }
 }
 
@@ -394,8 +392,7 @@ void LOKDocumentFocusListener::notifyTextSelectionChanged()
     if (m_pViewShell)
     {
         SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyTextSelectionChanged: start: " << m_nSelectionStart << ", end: " << m_nSelectionEnd);
-        const char* pPayload = aPayload.c_str();
-        m_pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED, pPayload);
+        m_pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED, aPayload.c_str());
     }
 }
 

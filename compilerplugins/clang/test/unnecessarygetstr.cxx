@@ -11,6 +11,7 @@
 
 #include <ostream>
 #include <string_view>
+#include <string>
 
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
@@ -118,6 +119,13 @@ void test(std::string v, OString o)
     // expected-error@+1 {{unnecessary call to 'getStr' when passing to string constructor [loplugin:unnecessarygetstr]}}
     std::string s2(o.getStr());
 }
+}
+
+// no warning expected
+namespace test6
+{
+void foo(const OString&);
+void test(std::string v) { foo(v.c_str()); }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -49,7 +49,8 @@ public:
                 .Namespace("rtl")
                 .GlobalNamespace())
         {
-            checkForGetStr(callExpr->getArg(0), "OUString::createFromAscii");
+            checkForGetStr(callExpr->getArg(0), "OUString::createFromAscii",
+                           /*isOStringConstructor*/ false);
         }
         return true;
     }
@@ -62,22 +63,26 @@ public:
         if (tc.ClassOrStruct("basic_string").StdNamespace())
         {
             if (constructExpr->getNumArgs() == 1 || constructExpr->getNumArgs() == 2)
-                checkForGetStr(constructExpr->getArg(0), "string constructor");
+                checkForGetStr(constructExpr->getArg(0), "string constructor",
+                               /*isOStringConstructor*/ false);
         }
         else if (tc.ClassOrStruct("basic_string_view").StdNamespace())
         {
             if (constructExpr->getNumArgs() == 1)
-                checkForGetStr(constructExpr->getArg(0), "string_view constructor");
+                checkForGetStr(constructExpr->getArg(0), "string_view constructor",
+                               /*isOStringConstructor*/ false);
         }
         else if (tc.Class("OString").Namespace("rtl").GlobalNamespace())
         {
             if (constructExpr->getNumArgs() == 1 || constructExpr->getNumArgs() == 2)
-                checkForGetStr(constructExpr->getArg(0), "OString constructor");
+                checkForGetStr(constructExpr->getArg(0), "OString constructor",
+                               /*isOStringConstructor*/ true);
         }
         else if (tc.Class("OUString").Namespace("rtl").GlobalNamespace())
         {
             if (constructExpr->getNumArgs() == 2)
-                checkForGetStr(constructExpr->getArg(0), "OUString constructor");
+                checkForGetStr(constructExpr->getArg(0), "OUString constructor",
+                               /*isOStringConstructor*/ false);
         }
         return true;
     }
@@ -94,7 +99,7 @@ public:
     }
 
 private:
-    void checkForGetStr(const Expr* arg, const char* msg)
+    void checkForGetStr(const Expr* arg, const char* msg, bool isOStringConstructor)
     {
         auto e = dyn_cast<CXXMemberCallExpr>(arg->IgnoreImplicit());
         if (!e)
@@ -117,7 +122,8 @@ private:
                         << msg << e->getSourceRange();
             }
         }
-        else if (tc2.Class("basic_string").StdNamespace())
+        // we do need to use c_str() when passing to an OString
+        else if (!isOStringConstructor && tc2.Class("basic_string").StdNamespace())
         {
             if (loplugin::DeclCheck(e->getMethodDecl()).Function("c_str"))
                 report(DiagnosticsEngine::Warning, "unnecessary call to 'c_str' when passing to %0",
