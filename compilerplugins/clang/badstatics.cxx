@@ -202,6 +202,7 @@ public:
                 || (loplugin::DeclCheck(pVarDecl).Var("aPreviewCache")
                     .Class("StylesPreviewWindow_Base").GlobalNamespace()) // TODO: temp disable
                     //svtools/source/control/ctrlbox.cxx, empty at exit
+                || name == "gStylePreviewCache" // svx/source/tbxctrls/StylesPreviewWindow.cxx
                 || name == "aLogger" // FormulaLogger& FormulaLogger::get() in sc/source/core/tool/formulalogger.cxx
                 || name == "s_aUncommittedRegistrations" // sw/source/uibase/dbui/dbmgr.cxx
                 || (loplugin::DeclCheck(pVarDecl).Var("aAllListeners")
