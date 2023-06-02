@@ -892,6 +892,11 @@ CPPUNIT_TEST_FIXTURE(Test, test_ClosingBrace)
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // Checking for ClosingBrace tag
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/m:oMath[1]/m:d[2]/m:dPr[1]/m:endChr[1]","val","");
+
+    // tdf#154371 paragraph style Подзаголовок ур3 inherits from Heading 3 (includes list level and list id)
+    uno::Reference<beans::XPropertySet> xParaStyle(getStyles("ParagraphStyles")->getByName(u"Подзаголовок ур3"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2), getProperty<sal_Int16>(xParaStyle, "NumberingLevel"));
+    CPPUNIT_ASSERT(!getProperty<OUString>(xParaStyle, "NumberingStyleName").isEmpty());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testlvlPicBulletId)
