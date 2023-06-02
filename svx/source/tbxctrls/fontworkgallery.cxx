@@ -22,6 +22,9 @@
 
 #include <comphelper/lok.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/servicehelper.hxx>
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/frame/ModuleManager.hpp>
 
 #include <vcl/toolbox.hxx>
 #include <vcl/virdev.hxx>
@@ -46,6 +49,9 @@
 #include <algorithm>
 #include <memory>
 
+#include <svx/strings.hrc>
+#include <svx/dialmgr.hxx>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
@@ -53,7 +59,8 @@ using namespace ::com::sun::star::beans;
 namespace svx
 {
 
-FontWorkGalleryDialog::FontWorkGalleryDialog(weld::Window* pParent, SdrView& rSdrView)
+FontWorkGalleryDialog::FontWorkGalleryDialog(weld::Window* pParent, SdrView& rSdrView,
+                                             Reference<css::frame::XFrame> xFrame)
     : GenericDialogController(pParent, "svx/ui/fontworkgallerydialog.ui", "FontworkGalleryDialog")
     , mnThemeId(0xffff)
     , mrSdrView(rSdrView)
@@ -61,6 +68,7 @@ FontWorkGalleryDialog::FontWorkGalleryDialog(weld::Window* pParent, SdrView& rSd
     , mpDestModel(nullptr)
     , maCtlFavorites(m_xBuilder->weld_icon_view("ctlFavoriteswin"))
     , mxOKButton(m_xBuilder->weld_button("ok"))
+    , mxFrame(std::move(xFrame))
 {
     Size aSize(530, 400);
     maCtlFavorites->set_size_request(aSize.Width(), aSize.Height());
@@ -188,7 +196,19 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
         pPage->GetObj(0)->CloneSdrObject(
             bUseSpecialCalcMode ? *mpDestModel : mrSdrView.getSdrModelFromSdrView()));
 
-    pNewObject->MakeNameUnique();
+    Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+    css::uno::Reference<css::frame::XModuleManager> xModuleManager =
+            css::frame::ModuleManager::create(xContext);
+    OUString aModuleIdentifier = xModuleManager->identify(mxFrame);
+
+    if (aModuleIdentifier != "com.sun.star.drawing.DrawingDocument"  &&
+        aModuleIdentifier != "com.sun.star.presentation.PresentationDocument" )
+    {
+        pNewObject->SetName(SvxResId(STR_ObjNameSingulFONTWORK) + u" 1");
+        pNewObject->MakeNameUnique();
+    }
+    else
+        pNewObject->SetName(OUString());
 
     // tdf#117629
     // Since the 'old' ::CloneSdrObject also copies the SdrPage* the

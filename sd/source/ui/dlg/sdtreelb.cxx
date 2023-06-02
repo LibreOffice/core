@@ -58,6 +58,11 @@
 #include <svx/svdview.hxx>
 #include <DrawViewShell.hxx>
 
+#include <svx/svdoashp.hxx>
+#include <svx/sdasitm.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/stritem.hxx>
+
 using namespace com::sun::star;
 
 namespace {
@@ -918,7 +923,25 @@ OUString SdPageObjsTLV::GetObjectName(
         && aRet.isEmpty()
         && pObject!=nullptr)
     {
-        aRet = SdResId(STR_NAVIGATOR_SHAPE_BASE_NAME) + " (" + pObject->TakeObjNameSingul() +")";
+        OUString sObjName;
+        if (pObject->GetObjIdentifier() == SdrObjKind::CustomShape)
+        {
+            // taken from SdrObjCustomShape::GetCustomShapeName
+            OUString aEngine(pObject->GetMergedItem(SDRATTR_CUSTOMSHAPE_ENGINE).GetValue());
+            if (aEngine.isEmpty() || aEngine == "com.sun.star.drawing.EnhancedCustomShapeEngine")
+            {
+                OUString sShapeType;
+                const SdrCustomShapeGeometryItem& rGeometryItem
+                    = pObject->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
+                const uno::Any* pAny = rGeometryItem.GetPropertyValueByName("Type");
+                if (pAny && (*pAny >>= sShapeType))
+                    sObjName = SdResId(STR_NAVIGATOR_CUSTOMSHAPE) + u": " + sShapeType;
+            }
+        }
+        else
+            sObjName = pObject->TakeObjNameSingul();
+
+        aRet = SdResId(STR_NAVIGATOR_SHAPE_BASE_NAME) + " (" + sObjName +")";
         aRet = aRet.replaceFirst("%1", OUString::number(pObject->GetOrdNum() + 1));
     }
 
@@ -1223,7 +1246,7 @@ void SdPageObjsTLV::AddShapeList (
             }
             else
             {
-                InsertEntry(xEntry.get(), sId, aStr, BMP_OBJECTS);
+                InsertEntry(xEntry.get(), sId, aStr, BMP_OBJECTS); // BMP_OBJECTS
             }
         }
     }

@@ -245,6 +245,7 @@
 #define STR_GRAPHICS_STYLE_FAMILY                       NC_("STR_GRAPHICS_STYLE_FAMILY", "Drawing Styles")
 #define STR_PRESENTATIONS_STYLE_FAMILY                  NC_("STR_PRESENTATIONS_STYLE_FAMILY", "Presentation Styles")
 #define STR_CELL_STYLE_FAMILY                           NC_("STR_CELL_STYLE_FAMILY", "Cell Styles")
+#define STR_NAVIGATOR_CUSTOMSHAPE                       NC_("STR_NAVIGATOR_CUSTOMSHAPE", "Custom Shape")
 #define STR_NAVIGATOR_SHAPE_BASE_NAME                   NC_("STR_NAVIGATOR_SHAPE_BASE_NAME", "Shape %1")
 #define STR_SET_BACKGROUND_PICTURE                      NC_("STR_SET_BACKGROUND_PICTURE", "Set Background Image" )
 #define STR_RESET_LAYOUT                                NC_("STR_RESET_LAYOUT", "Reset Slide Layout")

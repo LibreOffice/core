@@ -171,7 +171,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestFontworkDialog)
     CPPUNIT_ASSERT(dialogWaiter->waitEndDialog());
 
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString("<PARAGRAPH/><SHAPE name=\"Simple\" description=\" \"><PARAGRAPH "
+        rtl::OUString("<PARAGRAPH/><SHAPE name=\"Fontwork 1\" description=\" \"><PARAGRAPH "
                       "description=\"Paragraph: 0 Simple\">Simple</PARAGRAPH></SHAPE>"),
         collectText());
 }
