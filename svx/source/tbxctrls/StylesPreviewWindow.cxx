@@ -60,7 +60,36 @@
 
 #include <vcl/commandevent.hxx>
 
-std::map<OUString, VclPtr<VirtualDevice>> StylesPreviewWindow_Base::aPreviewCache;
+namespace
+{
+class StylePreviewCache
+{
+    static std::map<OUString, VclPtr<VirtualDevice>> gStylePreviewCache;
+    static int gStylePreviewCacheClients;
+
+public:
+    static std::map<OUString, VclPtr<VirtualDevice>>& Get() { return gStylePreviewCache; }
+
+    static void ClearCache()
+    {
+        for (auto& aPreview : gStylePreviewCache)
+            aPreview.second.disposeAndClear();
+
+        gStylePreviewCache.clear();
+    }
+
+    static void RegisterClient() { gStylePreviewCacheClients++; }
+    static void UnregisterClient()
+    {
+        gStylePreviewCacheClients--;
+        if (!gStylePreviewCacheClients)
+            ClearCache();
+    }
+};
+
+std::map<OUString, VclPtr<VirtualDevice>> StylePreviewCache::gStylePreviewCache;
+int StylePreviewCache::gStylePreviewCacheClients;
+}
 
 StyleStatusListener::StyleStatusListener(
     StylesPreviewWindow_Base* pPreviewControl,
@@ -103,8 +132,10 @@ StylePoolChangeListener::~StylePoolChangeListener()
         EndListening(*m_pStyleSheetPool);
 }
 
-void StylePoolChangeListener::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& /*rHint*/)
+void StylePoolChangeListener::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
+    if (rHint.GetId() == SfxHintId::StyleSheetModified)
+        StylePreviewCache::ClearCache();
     m_pPreviewControl->RequestStylesListUpdate();
 }
 
@@ -378,6 +409,8 @@ StylesPreviewWindow_Base::StylesPreviewWindow_Base(
     , m_aUpdateTask(*this)
     , m_aDefaultStyles(std::move(aDefaultStyles))
 {
+    StylePreviewCache::RegisterClient();
+
     m_xStylesView->connect_selection_changed(LINK(this, StylesPreviewWindow_Base, Selected));
     m_xStylesView->connect_item_activated(LINK(this, StylesPreviewWindow_Base, DoubleClick));
     m_xStylesView->connect_command(LINK(this, StylesPreviewWindow_Base, DoCommand));
@@ -424,6 +457,8 @@ StylesPreviewWindow_Base::~StylesPreviewWindow_Base()
 
     m_aUpdateTask.Stop();
 
+    StylePreviewCache::UnregisterClient();
+
     try
     {
         m_xStatusListener->dispose();
@@ -465,8 +500,9 @@ void StylesListUpdateTask::Invoke()
 VclPtr<VirtualDevice>
 StylesPreviewWindow_Base::GetCachedPreview(const std::pair<OUString, OUString>& rStyle)
 {
-    if (aPreviewCache.find(rStyle.second) != aPreviewCache.end())
-        return aPreviewCache[rStyle.second];
+    auto aFound = StylePreviewCache::Get().find(rStyle.second);
+    if (aFound != StylePreviewCache::Get().end())
+        return StylePreviewCache::Get()[rStyle.second];
     else
     {
         VclPtr<VirtualDevice> pImg = VclPtr<VirtualDevice>::Create();
@@ -475,7 +511,7 @@ StylesPreviewWindow_Base::GetCachedPreview(const std::pair<OUString, OUString>& 
 
         StyleItemController aStyleController(rStyle);
         aStyleController.Paint(*pImg);
-        aPreviewCache[rStyle.second] = pImg;
+        StylePreviewCache::Get()[rStyle.second] = pImg;
 
         return pImg;
     }
