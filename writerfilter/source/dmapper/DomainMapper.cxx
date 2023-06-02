@@ -1921,12 +1921,20 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                     }
                     break;
                     case NS_ooxml::LN_EG_RPrBase_strike:
-                        rContext->Insert(ePropertyId,
-                                         uno::Any( nIntValue ? awt::FontStrikeout::SINGLE : awt::FontStrikeout::NONE ) );
+                    {
+                        const auto eStrike
+                            = nIntValue ? awt::FontStrikeout::SINGLE : awt::FontStrikeout::NONE;
+                        const bool bOverwrite(nIntValue);
+                        rContext->Insert(ePropertyId, uno::Any(eStrike), bOverwrite);
+                    }
                     break;
                     case NS_ooxml::LN_EG_RPrBase_dstrike:
-                        rContext->Insert(ePropertyId,
-                                         uno::Any( nIntValue ? awt::FontStrikeout::DOUBLE : awt::FontStrikeout::NONE ) );
+                    {
+                        const auto eStrike
+                            = nIntValue ? awt::FontStrikeout::DOUBLE : awt::FontStrikeout::NONE;
+                        const bool bOverwrite(nIntValue);
+                        rContext->Insert(ePropertyId, uno::Any(eStrike), bOverwrite);
+                    }
                     break;
                     case NS_ooxml::LN_EG_RPrBase_outline:
                     case NS_ooxml::LN_EG_RPrBase_shadow:

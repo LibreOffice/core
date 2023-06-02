@@ -11,6 +11,7 @@
 
 #include <queue>
 
+#include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
@@ -149,6 +150,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153042_noTab, "tdf153042_noTab.docx")
     const auto& pLayout = parseLayoutDump();
     // Ensure a miniscule tab is used in the pseudo-numbering (numbering::NONE followed by tabstop)
     assertXPath(pLayout, "//SwFixPortion", "width", "10");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf154751_dualStrikethrough, "tdf154751_dualStrikethrough.docx")
+{
+    auto nStrike = getProperty<sal_Int16>(getRun(getParagraph(1), 1), "CharStrikeout");
+    CPPUNIT_ASSERT_EQUAL(awt::FontStrikeout::SINGLE, nStrike);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf154478)
