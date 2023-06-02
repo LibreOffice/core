@@ -1493,6 +1493,8 @@ void SAL_CALL
     {
         if (!mxGrammarDsp.is())
             GetGrammarCheckerDsp_Impl();
+        if (!mxGrammarDsp) // e.g., when !SvtLinguConfig().HasGrammarChecker()
+            return;
         bool bChanged = !IsEqSvcList( rServiceImplNames,
                                       mxGrammarDsp->GetServiceList( rLocale ) );
         if (bChanged)
