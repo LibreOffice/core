@@ -62,6 +62,8 @@ public:
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
     virtual ~SvxOnlineUpdateTabPage() override;
 
+    virtual OUString GetAllStrings() override;
+
     virtual bool            FillItemSet( SfxItemSet* rSet ) override;
     virtual void            Reset( const SfxItemSet* rSet ) override;
     virtual void            FillUserData() override;

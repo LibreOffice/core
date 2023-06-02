@@ -141,6 +141,26 @@ std::unique_ptr<SfxTabPage> SvxAsianLayoutPage::Create(weld::Container* pPage, w
     return std::make_unique<SvxAsianLayoutPage>(pPage, pController, *rAttrSet);
 }
 
+OUString SvxAsianLayoutPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[]
+        = { "label1", "label2", "label3", "languageft", "startft", "endft", "hintft" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString radioButton[] = { "charkerning", "charpunctkerning", "nocompression",
+                               "punctcompression", "punctkanacompression" };
+
+    for (const auto& radio : radioButton)
+        sAllStrings += m_xBuilder->weld_radio_button(radio)->get_label() + " ";
+
+    sAllStrings += m_xStandardCB->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool SvxAsianLayoutPage::FillItemSet( SfxItemSet* )
 {
     if(m_xCharKerningRB->get_state_changed_from_saved())

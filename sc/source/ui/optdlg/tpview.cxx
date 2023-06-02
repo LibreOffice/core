@@ -94,6 +94,26 @@ std::unique_ptr<SfxTabPage> ScTpContentOptions::Create( weld::Container* pPage, 
     return std::make_unique<ScTpContentOptions>(pPage, pController, *rCoreSet);
 }
 
+OUString ScTpContentOptions::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label4",   "label5", "label3",       "label1",        "grid_label",
+                          "lbCursor", "label2", "objgrf_label", "diagram_label", "draw_label" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[]
+        = { "formula",   "nil",          "annot",   "formulamark", "value",  "anchor",
+            "rangefind", "rowcolheader", "hscroll", "vscroll",     "tblreg", "outline",
+            "cbSummary", "synczoom",     "break",   "guideline" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool    ScTpContentOptions::FillItemSet( SfxItemSet* rCoreSet )
 {
     bool bRet = false;
@@ -338,6 +358,29 @@ std::unique_ptr<SfxTabPage> ScTpLayoutOptions::Create( weld::Container* pPage, w
     if (pDocSh!=nullptr)
         xNew->pDoc = &pDocSh->GetDocument();
     return xNew;
+}
+
+OUString ScTpLayoutOptions::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label1", "label4", "label5", "label6", "label3" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[] = { "aligncb",   "editmodecb", "enter_paste_mode_cb",
+                               "formatcb",  "exprefcb",   "sortrefupdatecb",
+                               "markhdrcb", "replwarncb", "legacy_cell_selection_cb" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    OUString radioButton[] = { "alwaysrb", "requestrb", "neverrb" };
+
+    for (const auto& radio : radioButton)
+        sAllStrings += m_xBuilder->weld_radio_button(radio)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
 }
 
 bool    ScTpLayoutOptions::FillItemSet( SfxItemSet* rCoreSet )

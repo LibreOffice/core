@@ -467,6 +467,27 @@ std::unique_ptr<SfxTabPage> SvxJavaOptionsPage::Create(weld::Container* pPage, w
     return std::make_unique<SvxJavaOptionsPage>(pPage, pController, *rAttrSet);
 }
 
+OUString SvxJavaOptionsPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label1", "label2", "javapath", "selectruntime", "label12" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[] = { "javaenabled", "experimental", "macrorecording" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    OUString buttons[] = { "add", "parameters", "classpath", "expertconfig" };
+
+    for (const auto& btn : buttons)
+        sAllStrings += m_xBuilder->weld_button(btn)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
 {
     bool bModified = false;

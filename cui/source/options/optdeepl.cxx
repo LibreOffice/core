@@ -43,6 +43,19 @@ void OptDeeplTabPage::Reset(const SfxItemSet*)
         m_xAuthKey->set_text(*officecfg::Office::Linguistic::Translation::Deepl::AuthKey::get());
 }
 
+OUString OptDeeplTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label1", "label2", "label3" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    sAllStrings += m_xBuilder->weld_link_button("privacy")->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool OptDeeplTabPage::FillItemSet(SfxItemSet*)
 {
     std::shared_ptr<comphelper::ConfigurationChanges> batch(

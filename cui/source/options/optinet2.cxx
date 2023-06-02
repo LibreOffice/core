@@ -336,6 +336,18 @@ void SvxProxyTabPage::Reset(const SfxItemSet*)
     EnableControls_Impl();
 }
 
+OUString SvxProxyTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label1",    "label2",     "httpft",      "httpsft",   "ftpft",
+                          "noproxyft", "httpportft", "httpsportft", "ftpportft", "noproxydesc" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool SvxProxyTabPage::FillItemSet(SfxItemSet* )
 {
     bool bModified = false;
@@ -836,6 +848,33 @@ namespace
     }
 }
 
+OUString SvxSecurityTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label1",         "label4",  "label2", "masterpasswordtext",
+                          "nopasswordsave", "label3",  "label5", "label8",
+                          "label7",         "label10", "label9", "label12",
+                          "label11" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[] = { "savepassword", "usemasterpassword" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    // TODO: Should we exclude button strings from the search?
+    // button id: "browse" is excluded
+    OUString buttons[]
+        = { "options", "connections", "masterpassword", "macro", "cert", "tsas" };
+
+    for (const auto& btn : buttons)
+        sAllStrings += m_xBuilder->weld_button(btn)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool SvxSecurityTabPage::FillItemSet( SfxItemSet* )
 {
     bool bModified = false;
@@ -915,6 +954,19 @@ SvxEMailTabPage::~SvxEMailTabPage()
 std::unique_ptr<SfxTabPage> SvxEMailTabPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet )
 {
     return std::make_unique<SvxEMailTabPage>(pPage, pController, *rAttrSet);
+}
+
+/* -------------------------------------------------------------------------*/
+
+OUString SvxEMailTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label1", "label2", "browsetitle", "suppress" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
 }
 
 /* -------------------------------------------------------------------------*/

@@ -130,6 +130,28 @@ std::unique_ptr<SfxTabPage> SwMailConfigPage::Create(weld::Container* pPage, wel
     return std::make_unique<SwMailConfigPage>(pPage, pController, *rAttrSet);
 }
 
+OUString SwMailConfigPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label1", "displayname_label", "address_label", "replyto_label",
+                          "label2", "server_label",      "port_label" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[] = { "replytocb", "secure" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    OUString buttons[] = { "serverauthentication", "test" };
+
+    for (const auto& btn : buttons)
+        sAllStrings += m_xBuilder->weld_button(btn)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool SwMailConfigPage::FillItemSet( SfxItemSet* /*rSet*/ )
 {
     if (m_xDisplayNameED->get_value_changed_from_saved())

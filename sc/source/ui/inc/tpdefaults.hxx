@@ -18,6 +18,8 @@ public:
     static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rCoreSet);
     virtual ~ScTpDefaultsOptions() override;
 
+    virtual OUString GetAllStrings() override;
+
     virtual bool FillItemSet(SfxItemSet* rCoreSet) override;
     virtual void Reset(const SfxItemSet* rCoreSet) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;

@@ -221,6 +221,12 @@ std::unique_ptr<SfxTabPage> SvxPathTabPage::Create( weld::Container* pPage, weld
     return std::make_unique<SvxPathTabPage>( pPage, pController, *rAttrSet );
 }
 
+OUString SvxPathTabPage::GetAllStrings()
+{
+    OUString sAllStrings = m_xBuilder->weld_label("label1")->get_label();
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool SvxPathTabPage::FillItemSet( SfxItemSet* )
 {
     for (int i = 0, nEntryCount = m_xPathBox->n_children(); i < nEntryCount; ++i)

@@ -159,6 +159,22 @@ namespace offapp
         commitTimeoutField();
     }
 
+    OUString ConnectionPoolOptionsPage::GetAllStrings()
+    {
+        OUString sAllStrings;
+        OUString labels[] = { "label1", "driverslabel", "driverlabel", "timeoutlabel", "driver" };
+
+        for (const auto& label : labels)
+            sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+        OUString checkButton[] = { "connectionpooling", "enablepooling" };
+
+        for (const auto& check : checkButton)
+            sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+        return sAllStrings.replaceAll("_", "");
+    }
+
     bool ConnectionPoolOptionsPage::FillItemSet(SfxItemSet* _rSet)
     {
         commitTimeoutField();

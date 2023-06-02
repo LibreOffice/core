@@ -147,6 +147,29 @@ IMPL_LINK_NOARG(SwLoadOptPage, StandardizedPageCountCheckHdl, weld::Toggleable&,
     m_xStandardizedPageSizeNF->set_sensitive(m_xShowStandardizedPageCount->get_active());
 }
 
+OUString SwLoadOptPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label2",   "label1", "label3", "label5",
+                          "tablabel", "label4", "label7", "labelstandardpages" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[]
+        = { "updatefields", "updatecharts", "usecharunit", "squaremode", "standardizedpageshow" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    OUString radioButton[] = { "always", "onrequest", "never" };
+
+    for (const auto& radio : radioButton)
+        sAllStrings += m_xBuilder->weld_radio_button(radio)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool SwLoadOptPage::FillItemSet( SfxItemSet* rSet )
 {
     bool bRet = false;
@@ -539,6 +562,21 @@ std::unique_ptr<SfxTabPage> SwCaptionOptPage::Create(weld::Container* pPage, wel
                                             const SfxItemSet* rAttrSet)
 {
     return std::make_unique<SwCaptionOptPage>(pPage, pController, *rAttrSet);
+}
+
+OUString SwCaptionOptPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label1",         "label13",     "label2",  "label7",  "numberingft",
+                          "numseparatorft", "separatorft", "label18", "label11", "label4",
+                          "label6",         "label10",     "label3" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    sAllStrings += m_xBuilder->weld_check_button("applyborder")->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
 }
 
 bool SwCaptionOptPage::FillItemSet( SfxItemSet* )

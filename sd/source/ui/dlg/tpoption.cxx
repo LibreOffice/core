@@ -119,6 +119,22 @@ SdTpOptionsContents::~SdTpOptionsContents()
 {
 }
 
+OUString SdTpOptionsContents::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label1" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[] = { "ruler", "dragstripes", "handlesbezier", "moveoutline" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool SdTpOptionsContents::FillItemSet( SfxItemSet* rAttrs )
 {
     bool bModified = false;
@@ -324,6 +340,27 @@ DeactivateRC SdTpOptionsMisc::DeactivatePage( SfxItemSet* pActiveSet )
         FillItemSet( pActiveSet );
 
     return DeactivateRC::LeavePage;
+}
+
+OUString SdTpOptionsMisc::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[]
+        = { "newdoclbl", "label4", "label6",   "tabstoplabel", "label1",    "label7", "label2",
+            "label5",    "label8", "widthlbl", "info1",        "heightlbl", "info2" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[] = { "startwithwizard", "copywhenmove", "backgroundback",
+                               "objalwymov",      "distortcb",    "cbCompatibility",
+                               "enremotcont",     "enprsntcons",  "enprsntconsfullscreen",
+                               "qickedit",        "textselected" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
 }
 
 bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )

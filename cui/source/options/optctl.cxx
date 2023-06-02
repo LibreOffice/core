@@ -58,6 +58,27 @@ std::unique_ptr<SfxTabPage> SvxCTLOptionsPage::Create( weld::Container* pPage, w
     return std::make_unique<SvxCTLOptionsPage>( pPage, pController, *rAttrSet );
 }
 
+OUString SvxCTLOptionsPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label1", "label2", "label3", "label4", "label5" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[] = { "sequencechecking", "restricted", "typeandreplace" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    OUString radioButton[] = { "movementlogical", "movementvisual" };
+
+    for (const auto& radio : radioButton)
+        sAllStrings += m_xBuilder->weld_radio_button(radio)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool SvxCTLOptionsPage::FillItemSet( SfxItemSet* )
 {
     bool bModified = false;

@@ -71,6 +71,23 @@ std::unique_ptr<SfxTabPage> OfaMSFilterTabPage::Create( weld::Container* pPage, 
     return std::make_unique<OfaMSFilterTabPage>(pPage, pController, *rAttrSet);
 }
 
+OUString OfaMSFilterTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label1", "label2", "label3" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[] = { "wo_basic", "wo_exec",     "wo_saveorig", "ex_basic",
+                               "ex_exec",  "ex_saveorig", "pp_basic",    "pp_saveorig" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool OfaMSFilterTabPage::FillItemSet( SfxItemSet* )
 {
     SvtFilterOptions& rOpt = SvtFilterOptions::Get();
@@ -153,6 +170,24 @@ std::unique_ptr<SfxTabPage> OfaMSFilterTabPage2::Create( weld::Container* pPage,
                                                 const SfxItemSet* rAttrSet )
 {
     return std::make_unique<OfaMSFilterTabPage2>( pPage, pController, *rAttrSet );
+}
+
+OUString OfaMSFilterTabPage2::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label1", "label2", "label3", "label4", "label5", "label6" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString radioButton[] = { "highlighting", "shading" };
+
+    for (const auto& radio : radioButton)
+        sAllStrings += m_xBuilder->weld_radio_button(radio)->get_label() + " ";
+
+    sAllStrings += m_xMSOLockFileCB->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
 }
 
 bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet* )

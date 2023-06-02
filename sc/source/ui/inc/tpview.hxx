@@ -64,6 +64,9 @@ public:
     ScTpContentOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet);
     static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rCoreSet);
     virtual ~ScTpContentOptions() override;
+
+    virtual OUString GetAllStrings() override;
+
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) override;
     virtual void        Reset           ( const SfxItemSet* rCoreSet ) override;
     virtual void        ActivatePage( const SfxItemSet& ) override;
@@ -103,6 +106,9 @@ public:
     static  std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController,
                                           const SfxItemSet* rCoreSet);
     virtual ~ScTpLayoutOptions() override;
+
+    virtual OUString GetAllStrings() override;
+
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) override;
     virtual void        Reset           ( const SfxItemSet* rCoreSet ) override;
     virtual void        ActivatePage( const SfxItemSet& ) override;

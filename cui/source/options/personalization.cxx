@@ -55,6 +55,19 @@ std::unique_ptr<SfxTabPage> SvxPersonalizationTabPage::Create(weld::Container* p
     return std::make_unique<SvxPersonalizationTabPage>(pPage, pController, *rSet);
 }
 
+OUString SvxPersonalizationTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString radioButton[] = { "no_persona", "default_persona" };
+
+    for (const auto& radio : radioButton)
+        sAllStrings += m_xBuilder->weld_radio_button(radio)->get_label() + " ";
+
+    sAllStrings += m_xBuilder->weld_label("personas_label")->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool SvxPersonalizationTabPage::FillItemSet(SfxItemSet*)
 {
     // persona

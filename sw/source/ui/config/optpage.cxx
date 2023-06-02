@@ -212,6 +212,38 @@ void SwContentOptPage::Reset(const SfxItemSet* rSet)
     lcl_SelectMetricLB(*m_xVMetric, FN_VSCROLL_METRIC, *rSet);
 }
 
+OUString SwContentOptPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[]
+        = { "guideslabel", "displaylabel",  "displayfl1",       "changeslabel", "label3",
+            "hruler",      "settingslabel", "measureunitlabel", "outlinelabel" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[] = { "helplines",
+                               "graphics",
+                               "tables",
+                               "drawings",
+                               "comments",
+                               "resolvedcomments",
+                               "hiddentextfield",
+                               "hiddenparafield",
+                               "changesinmargin",
+                               "changestooltip",
+                               "vruler",
+                               "vrulerright",
+                               "smoothscroll",
+                               "outlinecontentvisibilitybutton",
+                               "suboutlinelevelsascontent" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
 {
     const SwElemItem* pOldAttr = GetOldItem(GetItemSet(), FN_PARAM_ELEM);
@@ -350,6 +382,29 @@ std::unique_ptr<SfxTabPage> SwAddPrinterTabPage::Create( weld::Container* pPage,
                                                 const SfxItemSet* rAttrSet )
 {
     return std::make_unique<SwAddPrinterTabPage>(pPage, pController, *rAttrSet);
+}
+
+OUString SwAddPrinterTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label2", "label10", "label1", "label5", "4" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[]
+        = { "graphics",  "formcontrols", "background", "inblack", "hiddentext", "textplaceholder",
+            "leftpages", "rightpages",   "brochure",   "rtl",     "blankpages", "papertray" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    OUString radioButton[] = { "none", "only", "end", "endpage", "inmargins" };
+
+    for (const auto& radio : radioButton)
+        sAllStrings += m_xBuilder->weld_radio_button(radio)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
 }
 
 bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet* rCoreSet )
@@ -572,6 +627,20 @@ static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
     nHeight = CalcToUnit( fSize, MapUnit::MapTwip );
     SwTextFormatColl *pColl = pWrtShell->GetTextCollFromPool(nType);
     pColl->SetFormatAttr(SvxFontHeightItem(nHeight, 100, nFontHeightWhich));
+}
+
+OUString SwStdFontTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label1",        "font_label", "size_label",    "default_label",
+                          "heading_label", "list_label", "caption_label", "index_label" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    sAllStrings += m_xStandardPB->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
 }
 
 bool SwStdFontTabPage::FillItemSet( SfxItemSet* )
@@ -1011,6 +1080,30 @@ std::unique_ptr<SfxTabPage> SwTableOptionsTabPage::Create( weld::Container* pPag
     return std::make_unique<SwTableOptionsTabPage>(pPage, pController, *rAttrSet);
 }
 
+OUString SwTableOptionsTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[]
+        = { "label1",  "label3",  "label4",  "label5",  "label6",  "label10", "label2",
+            "label14", "label15", "label16", "label11", "label12", "label13" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[] = { "header",        "repeatheader",     "dontsplit",   "border",
+                               "numformatting", "numfmtformatting", "numalignment" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    OUString radioButton[] = { "fix", "fixprop", "var" };
+
+    for (const auto& radio : radioButton)
+        sAllStrings += m_xBuilder->weld_radio_button(radio)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
 {
     bool bRet = false;
@@ -1240,6 +1333,25 @@ void SwShdwCursorOptionsTabPage::PageCreated( const SfxAllItemSet& aSet )
     const SwWrtShellItem* pWrtSh = aSet.GetItem<SwWrtShellItem>(SID_WRT_SHELL, false);
     if (pWrtSh)
         m_pWrtShell = pWrtSh->GetValue();
+}
+
+OUString SwShdwCursorOptionsTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "layoutopt", "displayfl", "cursoropt",      "cursorlabel",
+                          "fillmode",  "lbImage",   "lbDefaultAnchor" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[]
+        = { "mathbaseline", "paragraph",  "hyphens",   "spaces",       "nonbreak",   "tabs",
+            "break",        "hiddentext", "bookmarks", "cursorinprot", "cursoronoff" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
 }
 
 bool SwShdwCursorOptionsTabPage::FillItemSet( SfxItemSet* rSet )
@@ -1604,6 +1716,20 @@ SwRedlineOptionsTabPage::~SwRedlineOptionsTabPage()
 std::unique_ptr<SfxTabPage> SwRedlineOptionsTabPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet)
 {
     return std::make_unique<SwRedlineOptionsTabPage>(pPage, pController, *rSet);
+}
+
+OUString SwRedlineOptionsTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label2", "insert_label",  "insertcolor_label",
+                          "label3", "deleted_label", "deletedcolor_label",
+                          "label4", "changed_label", "changedcolor_label",
+                          "label5", "markpos_label", "markcolor_label" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
 }
 
 bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
@@ -1992,6 +2118,27 @@ std::unique_ptr<SfxTabPage> SwCompareOptionsTabPage::Create( weld::Container* pP
     return std::make_unique<SwCompareOptionsTabPage>(pPage, pController, *rAttrSet);
 }
 
+OUString SwCompareOptionsTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label1", "setting" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[] = { "useRSID", "ignore", "storeRSID" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    OUString radioButton[] = { "auto", "byword", "bycharacter" };
+
+    for (const auto& radio : radioButton)
+        sAllStrings += m_xBuilder->weld_radio_button(radio)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet* )
 {
     bool bRet = false;
@@ -2126,6 +2273,22 @@ std::unique_ptr<SfxTabPage> SwTestTabPage::Create( weld::Container* pPage, weld:
                                           const SfxItemSet* rAttrSet )
 {
     return std::make_unique<SwTestTabPage>(pPage, pController, *rAttrSet);
+}
+
+OUString SwTestTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString checkButton[] = { "unused",           "dynamic",  "nocalm",
+                               "wysiwygdbg",       "noidle",   "noscreenadj",
+                               "winformat",        "noscroll", "DrawingLayerNotLoading",
+                               "AutoFormatByInput" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    sAllStrings += m_xBuilder->weld_label("label1")->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
 }
 
 bool    SwTestTabPage::FillItemSet( SfxItemSet* rCoreSet )

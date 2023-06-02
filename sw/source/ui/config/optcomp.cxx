@@ -356,6 +356,19 @@ std::unique_ptr<SfxTabPage> SwCompatibilityOptPage::Create(weld::Container* pPag
     return std::make_unique<SwCompatibilityOptPage>(pPage, pController, *rAttrSet);
 }
 
+OUString SwCompatibilityOptPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label2", "label11" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    sAllStrings += m_xDefaultPB->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
 {
     bool bModified = false;

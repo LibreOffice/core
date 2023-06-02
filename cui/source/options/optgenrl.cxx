@@ -341,6 +341,23 @@ std::unique_ptr<SfxTabPage> SvxGeneralTabPage::Create( weld::Container* pPage, w
     return std::make_unique<SvxGeneralTabPage>( pPage, pController, *rAttrSet );
 }
 
+OUString SvxGeneralTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[]
+        = { "label1",     "companyft",         "nameft",          "rusnameft",
+            "eastnameft", "streetft",          "russtreetft",     "icityft",
+            "cityft",     "countryft",         "titleft",         "phoneft",
+            "faxft",      "cryptographylabel", "signingkeylabel", "encryptionkeylabel" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    sAllStrings += m_xUseDataCB->get_label() + " " + m_xEncryptToSelfCB->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool SvxGeneralTabPage::FillItemSet( SfxItemSet* )
 {
     // remove leading and trailing whitespaces

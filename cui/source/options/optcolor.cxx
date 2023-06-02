@@ -800,6 +800,18 @@ std::unique_ptr<SfxTabPage> SvxColorOptionsTabPage::Create(weld::Container* pPag
     return std::make_unique<SvxColorOptionsTabPage>(pPage, pController, *rAttrSet);
 }
 
+OUString SvxColorOptionsTabPage::GetAllStrings()
+{
+    // buttons are excluded
+    OUString sAllStrings;
+    OUString labels[] = { "label2", "label3", "autocolor", "uielements", "colorsetting" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool SvxColorOptionsTabPage::FillItemSet( SfxItemSet*  )
 {
     bFillItemSetCalled = true;

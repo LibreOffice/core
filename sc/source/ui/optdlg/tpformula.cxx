@@ -258,6 +258,34 @@ std::unique_ptr<SfxTabPage> ScTpFormulaOptions::Create(weld::Container* pPage, w
     return std::make_unique<ScTpFormulaOptions>(pPage, pController, *rCoreSet);
 }
 
+OUString ScTpFormulaOptions::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label1", "formulasyntaxlabel",
+                          "label3", "label6",
+                          "label7", "label8",
+                          "label2", "label4",
+                          "label9", "label10" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString radioButton[] = { "calcdefault", "calccustom" };
+
+    for (const auto& radio : radioButton)
+        sAllStrings += m_xBuilder->weld_radio_button(radio)->get_label() + " ";
+
+    OUString buttons[] = { "reset", "details" };
+
+    for (const auto& btn : buttons)
+        sAllStrings += m_xBuilder->weld_button(btn)->get_label() + " ";
+
+    // check button
+    sAllStrings += mxCbEnglishFuncName->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool ScTpFormulaOptions::FillItemSet(SfxItemSet* rCoreSet)
 {
     bool bRet = false;

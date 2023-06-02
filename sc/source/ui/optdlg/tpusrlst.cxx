@@ -185,6 +185,22 @@ void ScTpUserLists::Reset( const SfxItemSet* rCoreAttrs )
     }
 }
 
+OUString ScTpUserLists::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "listslabel", "entrieslabel", "copyfromlabel" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString buttons[] = { "new", "discard", "add", "modify", "delete", "copy" };
+
+    for (const auto& btn : buttons)
+        sAllStrings += m_xBuilder->weld_button(btn)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool ScTpUserLists::FillItemSet( SfxItemSet* rCoreAttrs )
 {
     // Changes aren't saved?

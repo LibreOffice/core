@@ -69,6 +69,30 @@ SdPrintOptions::~SdPrintOptions()
 {
 }
 
+OUString SdPrintOptions::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label3", "label2", "printlbl", "contentlbl" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[] = { "frontcb", "backcb",    "papertryfrmprntrcb", "pagenmcb",
+                               "datecb",  "timecb",    "hiddenpgcb",         "drawingcb",
+                               "notecb",  "handoutcb", "outlinecb" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    OUString radioButton[] = { "pagedefaultrb", "fittopgrb",   "tilepgrb",    "brouchrb",
+                               "defaultrb",     "grayscalerb", "blackwhiterb" };
+
+    for (const auto& radio : radioButton)
+        sAllStrings += m_xBuilder->weld_radio_button(radio)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool SdPrintOptions::FillItemSet( SfxItemSet* rAttrs )
 {
     if( m_xCbxDraw->get_state_changed_from_saved() ||

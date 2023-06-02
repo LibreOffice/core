@@ -58,6 +58,17 @@ std::unique_ptr<SfxTabPage> ScRedlineOptionsTabPage::Create( weld::Container* pP
     return std::make_unique<ScRedlineOptionsTabPage>( pPage, pController, *rSet );
 }
 
+OUString ScRedlineOptionsTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label1", "label2", "label3", "label4", "label5" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool ScRedlineOptionsTabPage::FillItemSet( SfxItemSet* /* rSet */ )
 {
     ScAppOptions aAppOptions=SC_MOD()->GetAppOptions();

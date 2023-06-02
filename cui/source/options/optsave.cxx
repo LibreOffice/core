@@ -238,6 +238,26 @@ void SvxSaveTabPage::DetectHiddenControls()
 
 }
 
+OUString SvxSaveTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label1", "label2", "autosave_mins", "label3",
+                          "label5", "label6", "saveas_label",  "odfwarning_label" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[]
+        = { "load_settings", "load_docprinter", "load_anyuser",   "autosave",
+            "userautosave",  "docinfo",         "backup",         "backupintodocumentfolder",
+            "relative_fsys", "relative_inet",   "warnalienformat" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool SvxSaveTabPage::FillItemSet( SfxItemSet* rSet )
 {
     auto xChanges = comphelper::ConfigurationChanges::create();

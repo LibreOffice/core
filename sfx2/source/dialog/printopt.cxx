@@ -79,6 +79,36 @@ std::unique_ptr<SfxTabPage> SfxCommonPrintOptionsTabPage::Create(weld::Container
     return std::make_unique<SfxCommonPrintOptionsTabPage>(pPage, pController, *rAttrSet);
 }
 
+OUString SfxCommonPrintOptionsTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label4", "label6", "label2", "label3", "label1", "label5" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[] = { "converttogray", "reducebitmaptrans", "reducebitmap", "reducetrans",
+                               "papersize",     "paperorient",       "trans",        "reducegrad" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    OUString radioButton[] = { "printer",
+                               "file",
+                               "reducebitmapresol",
+                               "reducebitmapnormal",
+                               "reducebitmapoptimal",
+                               "reducetransauto",
+                               "reducetransnone",
+                               "reducegradstripes",
+                               "reducegradcolor" };
+
+    for (const auto& radio : radioButton)
+        sAllStrings += m_xBuilder->weld_radio_button(radio)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet* /*rSet*/ )
 {
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());

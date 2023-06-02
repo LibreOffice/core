@@ -921,6 +921,19 @@ std::unique_ptr<SfxTabPage> SvxLinguTabPage::Create( weld::Container* pPage, wel
     return std::make_unique<SvxLinguTabPage>( pPage, pController, *rAttrSet );
 }
 
+OUString SvxLinguTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "lingumodulesft", "lingudictsft", "label4" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    sAllStrings += m_xMoreDictsLink->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
 {
     bool bModified = true; // !!!!

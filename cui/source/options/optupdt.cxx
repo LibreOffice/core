@@ -190,6 +190,31 @@ std::unique_ptr<SfxTabPage> SvxOnlineUpdateTabPage::Create( weld::Container* pPa
     return std::make_unique<SvxOnlineUpdateTabPage>( pPage, pController, *rAttrSet );
 }
 
+OUString SvxOnlineUpdateTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label1",        "lastchecked", "neverchecked",    "labeldest",
+                          "destpathlabel", "labelagent",  "useragent_label", "useragent_changed" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[] = { "autocheck", "autodownload", "extrabits" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    OUString radioButton[] = { "everyday", "everyweek", "everymonth" };
+
+    for (const auto& radio : radioButton)
+        sAllStrings += m_xBuilder->weld_radio_button(radio)->get_label() + " ";
+
+    // some buttons are not included
+    sAllStrings += m_xPrivacyPolicyButton->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet* )
 {
     bool bModified = false;

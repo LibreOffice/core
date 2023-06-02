@@ -68,6 +68,24 @@ std::unique_ptr<SfxTabPage> OfaHtmlTabPage::Create( weld::Container* pPage, weld
     return std::make_unique<OfaHtmlTabPage>(pPage, pController, *rAttrSet);
 }
 
+OUString OfaHtmlTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label1",  "label2",  "label3",  "size1FT", "size2FT",
+                          "size3FT", "size4FT", "size5FT", "size6FT", "size7FT" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[] = { "numbersenglishus", "unknowntag",     "ignorefontnames", "starbasic",
+                               "starbasicwarning", "printextension", "savegrflocal" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool OfaHtmlTabPage::FillItemSet( SfxItemSet* )
 {
     std::shared_ptr<comphelper::ConfigurationChanges> xChanges = comphelper::ConfigurationChanges::create();

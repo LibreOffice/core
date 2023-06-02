@@ -50,6 +50,19 @@ std::unique_ptr<SfxTabPage> SvxOpenCLTabPage::Create(weld::Container* pPage, wel
     return std::make_unique<SvxOpenCLTabPage>(pPage, pController, *rAttrSet);
 }
 
+OUString SvxOpenCLTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label1", "openclnotused", "openclused" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    sAllStrings += mxUseOpenCL->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool SvxOpenCLTabPage::FillItemSet( SfxItemSet* )
 {
     bool bModified = false;

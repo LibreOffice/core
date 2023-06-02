@@ -53,6 +53,23 @@ void SvxBasicIDEOptionsPage::LoadConfig()
     m_xUseExtendedTypesChk->set_sensitive( !officecfg::Office::BasicIDE::Autocomplete::UseExtended::isReadOnly() );
 }
 
+OUString SvxBasicIDEOptionsPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label1", "label2", "label3" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[] = { "codecomplete_enable", "autocorrect",    "autoclose_quotes",
+                               "autoclose_paren",     "autoclose_proc", "extendedtypes_enable" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool SvxBasicIDEOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
 {
     bool bModified = false;

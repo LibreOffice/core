@@ -149,6 +149,26 @@ std::unique_ptr<SfxTabPage> SvxGridTabPage::Create(weld::Container* pPage, weld:
     return std::make_unique<SvxGridTabPage>(pPage, pController, rAttrSet);
 }
 
+OUString SvxGridTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[]
+        = { "label1",    "label2", "flddrawx",  "flddrawy", "label6", "label7", "label3",
+            "divisionx", "label4", "divisiony", "label5",   "label8", "label9" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[]
+        = { "usegridsnap", "gridvisible", "synchronize", "snaphelplines", "snapborder",
+            "snapframe",   "snappoints",  "ortho",       "bigortho",      "rotate" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool SvxGridTabPage::FillItemSet( SfxItemSet* rCoreSet )
 {
     if ( bAttrModified )

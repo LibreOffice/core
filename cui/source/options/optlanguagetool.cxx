@@ -83,6 +83,26 @@ void OptLanguageToolTabPage::Reset(const SfxItemSet*)
     m_xSSLDisableVerificationBox->set_active(!LanguageToolCfg::SSLCertVerify::get());
 }
 
+OUString OptLanguageToolTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "langtoolsettings", "disclaimer",  "apisettingsheader", "base",
+                          "urldesc",          "usernamelbl", "usernamedesc",      "apikeylbl",
+                          "apikeydesc",       "restlbl",     "restdesc" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[] = { "activate", "verifyssl" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    sAllStrings += m_xBuilder->weld_link_button("policy")->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool OptLanguageToolTabPage::FillItemSet(SfxItemSet*)
 {
     auto batch(comphelper::ConfigurationChanges::create());

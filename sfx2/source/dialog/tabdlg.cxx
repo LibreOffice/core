@@ -166,6 +166,19 @@ bool SfxTabPage::FillItemSet( SfxItemSet* )
     return false;
 }
 
+/*
+Returns the visible strings of a dialog.
+
+Supported items:
+- label
+- check button
+- radio button
+- toggle button
+- link button
+- button
+*/
+OUString SfxTabPage::GetAllStrings() { return OUString(); }
+
 void SfxTabPage::Reset( const SfxItemSet* )
 {
 }

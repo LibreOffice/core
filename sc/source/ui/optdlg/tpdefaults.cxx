@@ -40,6 +40,19 @@ std::unique_ptr<SfxTabPage> ScTpDefaultsOptions::Create(weld::Container* pPage, 
     return std::make_unique<ScTpDefaultsOptions>(pPage, pController, *rCoreAttrs);
 }
 
+OUString ScTpDefaultsOptions::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label1", "textsheetsnumber", "textsheetprefix" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    sAllStrings += m_xEdJumboSheets->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool ScTpDefaultsOptions::FillItemSet(SfxItemSet *rCoreSet)
 {
     bool bRet = false;

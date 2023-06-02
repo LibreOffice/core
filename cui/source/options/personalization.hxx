@@ -33,6 +33,8 @@ public:
     static std::unique_ptr<SfxTabPage>
     Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
 
+    virtual OUString GetAllStrings() override;
+
     /// Apply the settings ([OK] button).
     virtual bool FillItemSet(SfxItemSet* rSet) override;
 

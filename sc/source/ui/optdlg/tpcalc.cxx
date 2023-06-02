@@ -159,6 +159,30 @@ void ScTpCalcOptions::Reset(const SfxItemSet* rCoreAttrs)
     CheckClickHdl(*m_xBtnIterate);
 }
 
+OUString ScTpCalcOptions::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[]
+        = { "label5", "label1", "precft", "label2", "stepsft", "minchangeft", "label4", "label3" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[]
+        = { "case", "calc", "match", "lookup", "generalprec", "iterate", "threadingenabled" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    OUString radioButton[] = { "formulawildcards", "formularegex", "formulaliteral",
+                               "datestd",          "datesc10",     "date1904" };
+
+    for (const auto& radio : radioButton)
+        sAllStrings += m_xBuilder->weld_radio_button(radio)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool ScTpCalcOptions::FillItemSet( SfxItemSet* rCoreAttrs )
 {
     // every other options are updated in handlers

@@ -186,6 +186,28 @@ SmPrintOptionsTabPage::~SmPrintOptionsTabPage()
             pEdit->UpdateStatus();
 }
 
+OUString SmPrintOptionsTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label4", "label5", "label1", "label6" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[]
+        = { "title", "text", "frame", "norightspaces", "saveonlyusedsymbols", "autoclosebrackets" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    OUString radioButton[] = { "sizenormal", "sizescaled", "sizezoomed" };
+
+    for (const auto& radio : radioButton)
+        sAllStrings += m_xBuilder->weld_radio_button(radio)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool SmPrintOptionsTabPage::FillItemSet(SfxItemSet* rSet)
 {
     sal_uInt16  nPrintSize;

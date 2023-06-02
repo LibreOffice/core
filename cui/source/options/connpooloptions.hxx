@@ -45,6 +45,7 @@ namespace offapp
         ConnectionPoolOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet);
         virtual ~ConnectionPoolOptionsPage() override;
         static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet);
+        virtual OUString GetAllStrings() override;
 
     private:
         virtual bool        FillItemSet(SfxItemSet* _rSet) override;

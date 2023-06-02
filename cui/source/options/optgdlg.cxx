@@ -218,6 +218,27 @@ std::unique_ptr<SfxTabPage> OfaMiscTabPage::Create( weld::Container* pPage, weld
     return std::make_unique<OfaMiscTabPage>( pPage, pController, *rAttrSet );
 }
 
+OUString OfaMiscTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label1", "label2", "label4", "label5", "label6",
+                          "toyear", "label7", "label8", "label9" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[]
+        = { "exthelp",   "popupnohelp", "cbShowTipOfTheDay", "filedlg",
+            "docstatus", "crashreport", "quicklaunch",       "cbPerformFileExtCheck" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    sAllStrings += m_xBuilder->weld_button("assocfiles")->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
 {
     bool bModified = false;
@@ -681,6 +702,27 @@ void OfaViewTabPage::UpdateSkiaStatus()
 std::unique_ptr<SfxTabPage> OfaViewTabPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet )
 {
     return std::make_unique<OfaViewTabPage>(pPage, pController, *rAttrSet);
+}
+
+OUString OfaViewTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label16", "label7",      "label1",       "label6", "label15",
+                          "label14", "label8",      "label9",       "label4", "label12",
+                          "label2",  "skiaenabled", "skiadisabled", "label5", "aafrom" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[]
+        = { "useaccel", "useaa", "useskia", "forceskiaraster", "showfontpreview", "aafont" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    sAllStrings += m_xSkiaLog->get_label() + " " + m_xRunGPTests->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
 }
 
 bool OfaViewTabPage::FillItemSet( SfxItemSet* )
@@ -1205,6 +1247,25 @@ static void lcl_Update(std::unique_ptr<SfxVoidItem> pInvalidItems[], std::unique
         }
         pViewFrm = SfxViewFrame::GetNext(*pViewFrm);
     }
+}
+
+OUString OfaLanguagesTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[]
+        = { "label1", "label4",          "label7", "localesettingFT", "defaultcurrency",
+            "label6", "dataaccpatterns", "label2", "western",         "label3" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[] = { "decimalseparator", "asiansupport", "ctlsupport", "currentdoc",
+                               "ignorelanguagechange" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
 }
 
 bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )

@@ -48,6 +48,23 @@ std::unique_ptr<SfxTabPage> SvxAccessibilityOptionsTabPage::Create(weld::Contain
     return std::make_unique<SvxAccessibilityOptionsTabPage>(pPage, pController, *rAttrSet);
 }
 
+OUString SvxAccessibilityOptionsTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString labels[] = { "label1", "label2", "label13" };
+
+    for (const auto& label : labels)
+        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+
+    OUString checkButton[] = { "acctool",      "textselinreadonly", "animatedgraphics",
+                               "animatedtext", "autofontcolor",     "systempagepreviewcolor" };
+
+    for (const auto& check : checkButton)
+        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet* )
 {
     std::shared_ptr<comphelper::ConfigurationChanges> batch( comphelper::ConfigurationChanges::create() );

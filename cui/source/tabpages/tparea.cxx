@@ -281,6 +281,18 @@ bool SvxAreaTabPage::FillItemSet_Impl( SfxItemSet* rAttrs)
     return static_cast<TTabPage&>( *m_xFillTabPage ).FillItemSet( rAttrs );
 }
 
+OUString SvxAreaTabPage::GetAllStrings()
+{
+    OUString sAllStrings;
+    OUString toggleButton[] = { "btnnone",    "btncolor", "btngradient",     "btnbitmap",
+                                "btnpattern", "btnhatch", "btnusebackground" };
+
+    for (const auto& toggle : toggleButton)
+        sAllStrings += m_xBuilder->weld_toggle_button(toggle)->get_label() + " ";
+
+    return sAllStrings.replaceAll("_", "");
+}
+
 bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
 {
     FillType eFillType = static_cast<FillType>(maBox.GetCurrentButtonPos());

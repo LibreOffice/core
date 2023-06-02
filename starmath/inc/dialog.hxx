@@ -61,6 +61,8 @@ public:
 
     SmPrintOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rOptions);
     virtual ~SmPrintOptionsTabPage() override;
+
+    virtual OUString GetAllStrings() override;
 };
 
 /**************************************************************************/
