@@ -559,7 +559,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
     uno::Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     xLinguSrvcMgr = LinguServiceManager::create(xContext);
 
-    const Locale& rCurrentLocale = Application::GetSettings().GetLanguageTag().getLocale();
+    const Locale& rCurrentLocale = Application::GetSettings().GetUILanguageTag().getLocale();
     Sequence<Any> aArgs
     {
         Any(LinguMgr::GetLinguPropertySet()),
