@@ -7217,8 +7217,6 @@ void preLoadShortCutAccelerators()
 
     for (sal_Int32 i = 0; i < installedLocales.getLength(); i++)
     {
-        OUString language = LanguageTag(installedLocales[i]).getLocale().Language;
-
         // Set the UI language to current one, before creating the accelerator.
         std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
         officecfg::Setup::L10N::ooLocale::set(installedLocales[i], batch);
