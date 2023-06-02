@@ -2721,7 +2721,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf155341_RedlineTableColumnInsertionW
     assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 3);
 
     // Save it and load it back.
-    reload("writer8", "tdf150673_tracked_column_insertion.odt");
+    saveAndReload("writer8");
     pDoc = getSwDoc();
 
     // reject the insertion of the hidden content of the cell
