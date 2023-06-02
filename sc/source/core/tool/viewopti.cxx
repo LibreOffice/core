@@ -21,10 +21,12 @@
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <svtools/colorcfg.hxx>
 
 #include <global.hxx>
 #include <viewopti.hxx>
 #include <sc.hrc>
+#include <scmod.hxx>
 #include <miscuno.hxx>
 
 using namespace utl;
@@ -111,6 +113,8 @@ void ScViewOptions::SetDefaults()
     aModeArr[VOBJ_TYPE_DRAW ] = VOBJ_MODE_SHOW;
 
     aGridCol     = SC_STD_GRIDCOLOR;
+
+    aDocCol      = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
 
     aGridOpt.SetDefaults();
 }
