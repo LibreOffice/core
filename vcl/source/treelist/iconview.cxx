@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/toolkit/treelistentry.hxx>
 #include <vcl/toolkit/viewdataentry.hxx>
 #include <iconview.hxx>
@@ -28,6 +29,7 @@
 #include <tools/stream.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <comphelper/base64.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 namespace
 {
@@ -262,7 +264,13 @@ static OString extractPngString(const SvLBoxContextBmp* pBmpItem)
 {
     BitmapEx aImage = pBmpItem->GetBitmap1().GetBitmapEx();
     SvMemoryStream aOStm(65535, 65535);
-    if (GraphicConverter::Export(aOStm, aImage, ConvertDataFormat::PNG) == ERRCODE_NONE)
+    // Use fastest compression "1"
+    css::uno::Sequence<css::beans::PropertyValue> aFilterData{
+        comphelper::makePropertyValue("Compression", sal_Int32(1)),
+    };
+    vcl::PngImageWriter aPNGWriter(aOStm);
+    aPNGWriter.setParameters(aFilterData);
+    if (aPNGWriter.write(aImage))
     {
         css::uno::Sequence<sal_Int8> aSeq(static_cast<sal_Int8 const*>(aOStm.GetData()),
                                           aOStm.Tell());
