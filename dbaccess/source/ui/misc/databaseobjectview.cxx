@@ -253,22 +253,22 @@ namespace dbaui
     {
         DatabaseObjectView::fillDispatchArgs( i_rDispatchArgs, _aDataSource, _rQualifiedName );
         OSL_ENSURE( !_rQualifiedName.isEmpty(),"A Table name must be set");
-        OUString sCatalog;
-        OUString sSchema;
-        OUString sTable;
-        if ( m_bTable )
-            ::dbtools::qualifiedNameComponents( getConnection()->getMetaData(), _rQualifiedName, sCatalog, sSchema, sTable, ::dbtools::EComposeRule::InDataManipulation );
-
-        i_rDispatchArgs.put( PROPERTY_COMMAND_TYPE, (m_bTable ? CommandType::TABLE : CommandType::QUERY) );
         i_rDispatchArgs.put( PROPERTY_COMMAND, _rQualifiedName );
         i_rDispatchArgs.put( PROPERTY_ENABLE_BROWSER, false );
 
         if ( m_bTable )
         {
+            OUString sCatalog;
+            OUString sSchema;
+            OUString sTable;
+            ::dbtools::qualifiedNameComponents( getConnection()->getMetaData(), _rQualifiedName, sCatalog, sSchema, sTable, ::dbtools::EComposeRule::InDataManipulation );
             i_rDispatchArgs.put( PROPERTY_UPDATE_CATALOGNAME, sCatalog );
             i_rDispatchArgs.put( PROPERTY_UPDATE_SCHEMANAME, sSchema );
             i_rDispatchArgs.put( PROPERTY_UPDATE_TABLENAME, sTable );
+            i_rDispatchArgs.put( PROPERTY_COMMAND_TYPE, CommandType::TABLE );
         }
+        else
+            i_rDispatchArgs.put( PROPERTY_COMMAND_TYPE, CommandType::QUERY );
     }
 
     // RelationDesigner
