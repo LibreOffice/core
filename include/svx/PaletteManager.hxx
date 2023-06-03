@@ -16,13 +16,13 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_PALETTEMANAGER_HXX
-#define INCLUDED_SVX_PALETTEMANAGER_HXX
+#pragma once
 
 #include <svx/Palette.hxx>
 #include <rtl/ustring.hxx>
 #include <svx/xtable.hxx>
 #include <svtools/colrdlg.hxx>
+#include <svx/theme/ThemeColorPaletteManager.hxx>
 
 #include <deque>
 #include <vector>
@@ -31,26 +31,7 @@
 namespace com::sun::star::uno { class XComponentContext; }
 namespace svx { class ToolboxButtonColorUpdaterBase; }
 namespace weld { class Window; }
-
-enum class ThemePaletteColorType
-{
-    Black,
-    White,
-    Low,
-    High,
-    Normal
-};
-
-struct ThemePaletteData
-{
-    ThemePaletteColorType meType = ThemePaletteColorType::Normal;
-    Color maColor;
-};
-
-struct ThemePaletteCollection
-{
-    std::array<ThemePaletteData, 12> maData;
-};
+namespace model { class ColorSet; }
 
 class SVXCORE_DLLPUBLIC PaletteManager
 {
@@ -69,7 +50,7 @@ class SVXCORE_DLLPUBLIC PaletteManager
     ColorSelectFunction maColorSelectFunction;
 
     std::unique_ptr<SvColorDialog> m_pColorDlg;
-    std::optional<ThemePaletteCollection> moThemePaletteCollection;
+    std::optional<svx::ThemePaletteCollection> moThemePaletteCollection;
 
     PaletteManager(const PaletteManager* pClone);
 public:
@@ -105,7 +86,5 @@ public:
 
     static void DispatchColorCommand(const OUString& aCommand, const NamedColor& rColor);
 };
-
-#endif // INCLUDED_SVX_PALETTEMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

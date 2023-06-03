@@ -1580,7 +1580,7 @@ std::set<Color> SwDocShell::GetDocColors()
     return m_xDoc->GetDocColors();
 }
 
-std::vector<Color> SwDocShell::GetThemeColors()
+std::shared_ptr<model::ColorSet> SwDocShell::GetThemeColors()
 {
     SdrPage* pPage = m_xDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     if (!pPage)
@@ -1588,7 +1588,7 @@ std::vector<Color> SwDocShell::GetThemeColors()
     auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
     if (!pTheme)
         return {};
-    return pTheme->GetColors();
+    return pTheme->getColorSet();
 }
 
 void  SwDocShell::LoadStyles( SfxObjectShell& rSource )

@@ -488,27 +488,21 @@ void DrawDocShell::ClearUndoBuffer()
         pUndoManager->Clear();
 }
 
-std::vector<Color> DrawDocShell::GetThemeColors()
+std::shared_ptr<model::ColorSet> DrawDocShell::GetThemeColors()
 {
     auto pViewShell = dynamic_cast<sd::DrawViewShell*>(GetViewShell());
     if (!pViewShell)
-    {
         return {};
-    }
 
     SdPage* pPage = pViewShell->getCurrentPage();
-    model::Theme* pTheme = pPage->getSdrPageProperties().GetTheme().get();
+    auto pTheme = pPage->getSdrPageProperties().GetTheme();
     if (!pPage->IsMasterPage())
-    {
-        pTheme = pPage->TRG_GetMasterPage().getSdrPageProperties().GetTheme().get();
-    }
+        pTheme = pPage->TRG_GetMasterPage().getSdrPageProperties().GetTheme();
 
     if (!pTheme)
-    {
         return {};
-    }
 
-    return pTheme->GetColors();
+    return pTheme->getColorSet();
 }
 
 } // end of namespace sd

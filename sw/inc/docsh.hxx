@@ -254,7 +254,7 @@ public:
 
     virtual std::set<Color> GetDocColors() override;
 
-    virtual std::vector<Color> GetThemeColors() override;
+    virtual std::shared_ptr<model::ColorSet> GetThemeColors() override;
 
     sfx::AccessibilityIssueCollection runAccessibilityCheck() override;
 

@@ -201,7 +201,7 @@ public:
 
     void                    ClearUndoBuffer();
 
-    std::vector<Color> GetThemeColors() override;
+    std::shared_ptr<model::ColorSet> GetThemeColors() override;
 
 private:
     static void setEditMode(DrawViewShell* pDrawViewShell, bool isMasterPage);
