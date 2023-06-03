@@ -1854,6 +1854,9 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
                     xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_FOLLOW_TEXT_FLOW ),
                         uno::Any(m_pImpl->m_bLayoutInCell));
 
+                xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_ALLOW_OVERLAP),
+                                                           uno::Any(m_pImpl->m_bAllowOverlap));
+
                 xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_SURROUND_CONTOUR ),
                     uno::Any(m_pImpl->m_bContour));
                 xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_CONTOUR_OUTSIDE ),

@@ -161,6 +161,7 @@ const OUString & getPropertyName( PropertyIds eId )
         { PROP_PAGE_TOGGLE, u"PageToggle"},
         { PROP_BACK_COLOR, u"BackColor"},
         { PROP_BACK_COLOR_TRANSPARENCY, u"BackColorTransparency"},
+        { PROP_ALLOW_OVERLAP, u"AllowOverlap"},
         { PROP_ALTERNATIVE_TEXT, u"AlternativeText"},
         { PROP_HEADER_TEXT_LEFT, u"HeaderTextLeft"},
         { PROP_HEADER_TEXT, u"HeaderText"},

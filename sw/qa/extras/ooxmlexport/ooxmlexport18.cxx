@@ -529,6 +529,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf76022_textboxWrap)
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf134114_allowOverlap, "tdf134114_allowOverlap.docx")
+{
+    // CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), "AllowOverlap"));
+    CPPUNIT_ASSERT(getProperty<bool>(getShape(2), "AllowOverlap"));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf149551_mongolianVert)
 {
     // Given a docx document with a shape with vert="mongolianVert".
