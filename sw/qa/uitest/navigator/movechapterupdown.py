@@ -318,7 +318,7 @@ class movechapterupdown(UITestCase):
             xHeadingsChild2Child1 = xHeadingsChild2.getChild('1')
             self.assertEqual(get_state_as_dict(xHeadingsChild2Child1)["Text"], "3.2. Three_B (H2)")
 
-            # Move "A heading of level 3" to its orignal position
+            # Move "A heading of level 3" to its original position
 
             # Double click on the "A heading of level 3" entry to select and set focus
             xHeadingsChild1 = xNavigatorPanelContentTreeHeadings.getChild('1')
@@ -375,7 +375,7 @@ class movechapterupdown(UITestCase):
             xHeadingsChild2Child1 = xHeadingsChild2.getChild('1')
             self.assertEqual(get_state_as_dict(xHeadingsChild2Child1)["Text"], "3.2. Three_B (H2)")
 
-            # Move "2.1. Two_B (H2)" to its orignal position
+            # Move "2.1. Two_B (H2)" to its original position
 
             # Double click on the "2.1. Two_B (H2)" entry to select and set focus
             xHeadingsChild1 = xNavigatorPanelContentTreeHeadings.getChild('1')
