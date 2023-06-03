@@ -506,20 +506,21 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
     mcTextSep = lcl_CharFromCombo(*mxCbTextSep, SCSTR_TEXTSEP);
 
     Link<weld::Toggleable&,void> aSeparatorClickHdl =LINK( this, ScImportAsciiDlg, SeparatorClickHdl );
+    Link<weld::Toggleable&,void> aOtherOptionsClickHdl =LINK( this, ScImportAsciiDlg, OtherOptionsClickHdl );
     mxCbTextSep->connect_changed( LINK( this, ScImportAsciiDlg, SeparatorComboBoxHdl ) );
     mxCkbTab->connect_toggled( aSeparatorClickHdl );
     mxCkbSemicolon->connect_toggled( aSeparatorClickHdl );
     mxCkbComma->connect_toggled( aSeparatorClickHdl );
     mxCkbAsOnce->connect_toggled( aSeparatorClickHdl );
-    mxCkbQuotedAsText->connect_toggled( aSeparatorClickHdl );
-    mxCkbDetectNumber->connect_toggled( aSeparatorClickHdl );
-    mxCkbDetectScientificNumber->connect_toggled( aSeparatorClickHdl );
-    mxCkbEvaluateFormulas->connect_toggled( aSeparatorClickHdl );
-    mxCkbSkipEmptyCells->connect_toggled( aSeparatorClickHdl );
     mxCkbSpace->connect_toggled( aSeparatorClickHdl );
     mxCkbRemoveSpace->connect_toggled( aSeparatorClickHdl );
     mxCkbOther->connect_toggled( aSeparatorClickHdl );
     mxEdOther->connect_changed(LINK(this, ScImportAsciiDlg, SeparatorEditHdl));
+    mxCkbQuotedAsText->connect_toggled( aOtherOptionsClickHdl );
+    mxCkbDetectNumber->connect_toggled( aOtherOptionsClickHdl );
+    mxCkbDetectScientificNumber->connect_toggled( aOtherOptionsClickHdl );
+    mxCkbEvaluateFormulas->connect_toggled( aOtherOptionsClickHdl );
+    mxCkbSkipEmptyCells->connect_toggled( aOtherOptionsClickHdl );
 
     // *** text encoding ListBox ***
     // all encodings allowed, including Unicode, but subsets are excluded
@@ -837,12 +838,9 @@ IMPL_LINK( ScImportAsciiDlg, SeparatorEditHdl, weld::Entry&, rEdit, void )
     SeparatorHdl(&rEdit);
 }
 
-void ScImportAsciiDlg::SeparatorHdl(const weld::Widget* pCtrl)
+IMPL_LINK(ScImportAsciiDlg, OtherOptionsClickHdl, weld::Toggleable&, rCtrl, void)
 {
-    OSL_ENSURE( pCtrl, "ScImportAsciiDlg::SeparatorHdl - missing sender" );
-    OSL_ENSURE( !mxRbFixed->get_active(), "ScImportAsciiDlg::SeparatorHdl - not allowed in fixed width" );
-
-    if (pCtrl == mxCkbDetectNumber.get())
+    if (&rCtrl == mxCkbDetectNumber.get())
     {
         if (mxCkbDetectNumber->get_active())
         {
@@ -853,6 +851,13 @@ void ScImportAsciiDlg::SeparatorHdl(const weld::Widget* pCtrl)
             mxCkbDetectScientificNumber->set_sensitive(true);
         return;
     }
+}
+
+void ScImportAsciiDlg::SeparatorHdl(const weld::Widget* pCtrl)
+{
+    OSL_ENSURE( pCtrl, "ScImportAsciiDlg::SeparatorHdl - missing sender" );
+    OSL_ENSURE( !mxRbFixed->get_active(), "ScImportAsciiDlg::SeparatorHdl - not allowed in fixed width" );
+
     /*  #i41550# First update state of the controls. The GetSeparators()
         function needs final state of the check boxes. */
     if (pCtrl == mxCkbOther.get() && mxCkbOther->get_active())
