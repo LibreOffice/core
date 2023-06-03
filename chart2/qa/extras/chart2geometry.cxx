@@ -336,9 +336,8 @@ void Chart2GeometryTest::testTdf128345Legend_CS_TG_axial_import()
     const OString sAttribute("@draw:name='" + OU2O(sOUOpacityName) + "'");
     const OString sStart("//office:document-styles/office:styles/draw:opacity[" + sAttribute);
     assertXPath(pXmlDoc2, sStart + "]", 1);
-    // MCGR: Needs odf im/export for MCGR, then adapt.
-    assertXPath(pXmlDoc2, sStart + " and @draw:style='linear']"); // MCGR: axial -> linear
-    assertXPath(pXmlDoc2, sStart + " and @draw:start='100%']"); // MCGR: 0% -> 100%
+    assertXPath(pXmlDoc2, sStart + " and @draw:style='axial']");
+    assertXPath(pXmlDoc2, sStart + " and @draw:start='0%']");
     assertXPath(pXmlDoc2, sStart + " and @draw:end='100%']");
 }
 

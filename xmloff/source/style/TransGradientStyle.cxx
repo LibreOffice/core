@@ -180,7 +180,7 @@ void XMLTransGradientStyleExport::exportXML(
 
     basegfx::BGradient aGradient(rValue);
 
-    // ToDo: aGradient.tryToConvertToAxial();
+    aGradient.tryToConvertToAxial();
 
     aGradient.tryToRecreateBorder(nullptr);
 

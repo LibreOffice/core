@@ -657,6 +657,28 @@ double BColorStops::detectPossibleOffsetAtStart() const
     return aColorL->getStopOffset();
 }
 
+//  checks whether the color stops are symmetrical in color and offset.
+bool BColorStops::isSymmetrical() const
+{
+    if (empty())
+        return false;
+    if (1 == size())
+        return basegfx::fTools::equal(0.5, front().getStopOffset());
+
+    BColorStops::const_iterator aIter(begin()); // for going forward
+    BColorStops::const_iterator aRIter(end()); // for going backward
+    --aRIter;
+    // We have at least two elements, so aIter <= aRIter fails before iterators no longer point to
+    // an element.
+    while (aIter <= aRIter && aIter->getStopColor().equal(aRIter->getStopColor())
+           && basegfx::fTools::equal(aIter->getStopOffset(), 1.0 - aRIter->getStopOffset()))
+    {
+        ++aIter;
+        --aRIter;
+    }
+    return aIter > aRIter;
+}
+
 std::string BGradient::GradientStyleToString(css::awt::GradientStyle eStyle)
 {
     switch (eStyle)
@@ -917,7 +939,7 @@ void BGradient::tryToRecreateBorder(basegfx::BColorStops* pAssociatedTransparenc
             pAssociatedTransparencyStops->removeSpaceAtStart(fOffset);
 
         // ...and create border value
-        SetBorder(static_cast<sal_uInt16>(fOffset * 100.0));
+        SetBorder(static_cast<sal_uInt16>(std::lround(fOffset * 100.0)));
     }
 
     if (bIsAxial)
@@ -970,6 +992,35 @@ void BGradient::tryToApplyStartEndIntensity()
     // set values to default
     SetStartIntens(100);
     SetEndIntens(100);
+}
+
+void BGradient::tryToConvertToAxial()
+{
+    if (css::awt::GradientStyle_LINEAR != GetGradientStyle() || 0 != GetBorder()
+        || GetColorStops().empty())
+        return;
+
+    if (!GetColorStops().isSymmetrical())
+        return;
+
+    SetGradientStyle(css::awt::GradientStyle_AXIAL);
+
+    // Stretch the first half of the color stops to double width
+    // and collect them in a new color stops vector.
+    BColorStops aAxialColorStops;
+    aAxialColorStops.reserve(std::ceil(GetColorStops().size() / 2.0));
+    BColorStops::const_iterator aIter(GetColorStops().begin());
+    while (basegfx::fTools::lessOrEqual(aIter->getStopOffset(), 0.5))
+    {
+        BColorStop aNextStop(std::clamp((*aIter).getStopOffset() * 2.0, 0.0, 1.0),
+                             (*aIter).getStopColor());
+        aAxialColorStops.push_back(aNextStop);
+        ++aIter;
+    }
+    // Axial gradients have outmost color as last color stop.
+    aAxialColorStops.reverseColorStops();
+
+    SetColorStops(aAxialColorStops);
 }
 }
 
