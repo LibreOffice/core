@@ -871,71 +871,20 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmSubSupNode* pNode )
     bodyRight->SetRight( right );
     right->SetLeft( bodyRight );
 
-    //If there's an LSUP
-    SmNode* pChild = pNode->GetSubSup( LSUP );
-    if( pChild ){
-        SmCaretPosGraphEntry *cLeft; //Child left
-        cLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
+    SmNode* pChild;
+    for (SmSubSup const nodeType : { LSUP, LSUB, CSUP, CSUB, RSUP, RSUB })
+    {
+        pChild = pNode->GetSubSup(nodeType);
+        if( pChild )
+        {
+            SmCaretPosGraphEntry *cLeft; //Child left
+            cLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), ((nodeType == RSUP) || (nodeType == RSUB))?bodyRight:left );
 
-        mpRightMost = cLeft;
-        pChild->Accept( this );
+            mpRightMost = cLeft;
+            pChild->Accept( this );
 
-        mpRightMost->SetRight( bodyLeft );
-    }
-    //If there's an LSUB
-    pChild = pNode->GetSubSup( LSUB );
-    if( pChild ){
-        SmCaretPosGraphEntry *cLeft; //Child left
-        cLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
-
-        mpRightMost = cLeft;
-        pChild->Accept( this );
-
-        mpRightMost->SetRight( bodyLeft );
-    }
-    //If there's a CSUP
-    pChild = pNode->GetSubSup( CSUP );
-    if( pChild ){
-        SmCaretPosGraphEntry *cLeft; //Child left
-        cLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
-
-        mpRightMost = cLeft;
-        pChild->Accept( this );
-
-        mpRightMost->SetRight( right );
-    }
-    //If there's a CSUB
-    pChild = pNode->GetSubSup( CSUB );
-    if( pChild ){
-        SmCaretPosGraphEntry *cLeft; //Child left
-        cLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
-
-        mpRightMost = cLeft;
-        pChild->Accept( this );
-
-        mpRightMost->SetRight( right );
-    }
-    //If there's an RSUP
-    pChild = pNode->GetSubSup( RSUP );
-    if( pChild ){
-        SmCaretPosGraphEntry *cLeft; //Child left
-        cLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), bodyRight );
-
-        mpRightMost = cLeft;
-        pChild->Accept( this );
-
-        mpRightMost->SetRight( right );
-    }
-    //If there's an RSUB
-    pChild = pNode->GetSubSup( RSUB );
-    if( pChild ){
-        SmCaretPosGraphEntry *cLeft; //Child left
-        cLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), bodyRight );
-
-        mpRightMost = cLeft;
-        pChild->Accept( this );
-
-        mpRightMost->SetRight( right );
+            mpRightMost->SetRight( ((nodeType == LSUP) || (nodeType == LSUB))?bodyLeft:right );
+        }
     }
 
     //Set return parameters
