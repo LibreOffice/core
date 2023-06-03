@@ -541,6 +541,7 @@ void StylesPreviewWindow_Base::UpdateStylesList()
         }
     }
 
+    m_xStylesView->freeze();
     m_xStylesView->clear();
     for (const auto& rStyle : m_aAllStyles)
     {
@@ -548,6 +549,7 @@ void StylesPreviewWindow_Base::UpdateStylesList()
 
         m_xStylesView->append(rStyle.first, rStyle.second, pImg);
     }
+    m_xStylesView->thaw();
 }
 
 StylesPreviewWindow_Impl::StylesPreviewWindow_Impl(
