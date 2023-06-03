@@ -3034,8 +3034,6 @@ starmath/inc/node.hxx:508
     SmNode * SmStructureNode::GetSubNodeBinMo(unsigned long) const
 starmath/inc/node.hxx:533
     void SmStructureNode::SetSubNodes(SmNode *,SmNode *,SmNode *)
-starmath/inc/node.hxx:554
-    void SmStructureNode::SetSubNodesBinMo(SmNode *,SmNode *,SmNode *)
 starmath/inc/nodetype.hxx:59
     _Bool starmathdatabase::isStructuralNode(enum SmNodeType)
 starmath/inc/nodetype.hxx:71
