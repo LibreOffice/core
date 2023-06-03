@@ -590,6 +590,69 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testTransparencyBorderRestoration)
     SetODFDefaultVersion(nCurrentODFVersion);
 }
 
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAxialGradientCompatible)
+{
+    // tdf#155549. An axial gradient with Border, StartColor A and EndColor B is exported to OOXML as
+    // symmetrical linear gradient with three stops, colors B A B. After the changes for multi-color
+    // gradients (MCGR) this is imported as linear gradient with colors B A B. So a consumer not able
+    // of MCGR would get a linear gradient with start and end color B. For better compatibility
+    // ODF export writes an axial gradient. with colors A and B.
+    // This test needs to be adapted when color stops are available in ODF strict and widely
+    // supported in even older LibreOffice versions.
+    loadFromURL(u"tdf155549_MCGR_AxialGradientCompatible.odt");
+
+    //Round-trip through OOXML.
+    // FixMe tdf#153183. Here "Attribute 'ID' is not allowed to appear in element 'v:rect'".
+    skipValidation();
+    saveAndReload("Office Open XML Text");
+    saveAndReload("writer8");
+
+    // Examine reloaded file
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    CPPUNIT_ASSERT_MESSAGE("No shape", xShape.is());
+    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
+
+    // Without fix these would have failed with Style=0 (=LINEAR), StartColor=0xFFFF00 and Border=0.
+    awt::Gradient2 aGradient;
+    xShapeProperties->getPropertyValue("FillGradient") >>= aGradient;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("gradient style", awt::GradientStyle_AXIAL, aGradient.Style);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("EndColor", sal_Int32(0xFFFF00), aGradient.EndColor);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("StartColor", sal_Int32(0x1E90FF), aGradient.StartColor);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Border", sal_Int16(20), aGradient.Border);
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAxialTransparencyCompatible)
+{
+    // tdf#155549. The shape in the document has a solid color and an axial transparency gradient
+    // with 'Transition start 60%', 'Start value 10%' and 'End value 80%'. The gradient is exported
+    // to OOXML as linear symmetrical gradient with three gradient stops. After the changes for
+    // multi-color gradients (MCGR) this is imported as linear transparency gradient. For better
+    // compatibility with consumers not able to use MCGR, the ODF export writes the transparency as
+    // axial transparency gradient that is same as in the original document.
+    // This test needs to be adapted when color stops are available in ODF strict and widely
+    // supported in even older LibreOffice versions.
+    loadFromURL(u"tdf155549_MCGR_AxialTransparencyCompatible.odt");
+
+    //Round-trip through OOXML.
+    // FixMe tdf#153183, and error in charSpace and in CharacterSet
+    //skipValidation();
+    saveAndReload("Office Open XML Text");
+    saveAndReload("writer8");
+
+    // Examine reloaded file
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    CPPUNIT_ASSERT(xShape.is());
+    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
+
+    // Without fix these would have failed with Style=LINEAR, StartColor=0xCCCCCC and wrong Border.
+    awt::Gradient2 aTransGradient;
+    xShapeProperties->getPropertyValue("FillTransparenceGradient") >>= aTransGradient;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("gradient style", awt::GradientStyle_AXIAL, aTransGradient.Style);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("EndColor", sal_Int32(0xCCCCCC), aTransGradient.EndColor);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("StartColor", sal_Int32(0x191919), aTransGradient.StartColor);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Border", sal_Int16(60), aTransGradient.Border);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

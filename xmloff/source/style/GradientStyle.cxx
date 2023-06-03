@@ -228,6 +228,11 @@ void XMLGradientStyleExport::exportXML(
 
     basegfx::BGradient aGradient(rValue);
 
+    // Export of axial gradient to OOXML produces a symmetrical linear multi-color gradient. Import
+    // does not regenerate it as 'axial' because that is not needed for MCGR. For export to ODF we
+    // try to regenerate 'axial' for to get a better compatibility with LO versions before MCGR.
+    aGradient.tryToConvertToAxial();
+
     // MCGR: For better compatibility with LO versions before MCGR, try
     // to re-create a 'border' value based on the existing gradient stops.
     // With MCGR we do not need 'border' anymore in quite some cases since
