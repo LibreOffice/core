@@ -46,6 +46,7 @@
 #include <sfx2/AccessibilityIssue.hxx>
 
 namespace weld {class Button; }
+namespace model {class ColorSet; }
 class SbxValue;
 class SbxArray;
 class BasicManager;
@@ -558,7 +559,7 @@ public:
     StarBASIC*                  GetBasic() const;
 
     virtual std::set<Color>     GetDocColors();
-    virtual std::vector<Color> GetThemeColors();
+    virtual std::shared_ptr<model::ColorSet> GetThemeColors();
 
     // Accessibility Check
     virtual sfx::AccessibilityIssueCollection runAccessibilityCheck();

@@ -218,24 +218,29 @@ std::set<Color> ScDocShell::GetDocColors()
     return m_pDocument->GetDocColors();
 }
 
-std::vector<Color> ScDocShell::GetThemeColors()
+std::shared_ptr<model::ColorSet> ScDocShell::GetThemeColors()
 {
-    ScTabViewShell* pSh = GetBestViewShell();
-    if (!pSh)
+    ScTabViewShell* pShell = GetBestViewShell();
+    if (!pShell)
         return {};
-    ScTabView* pTabView = pSh->GetViewData().GetView();
+
+    ScTabView* pTabView = pShell->GetViewData().GetView();
     if (!pTabView)
         return {};
+
     ScDrawView* pView = pTabView->GetScDrawView();
     if (!pView)
         return {};
+
     SdrPage* pPage = pView->GetSdrPageView()->GetPage();
     if (!pPage)
         return {};
+
     auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
     if (!pTheme)
         return {};
-    return pTheme->GetColors();
+
+    return pTheme->getColorSet();
 }
 
 void ScDocShell::DoEnterHandler()
