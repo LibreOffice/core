@@ -976,6 +976,13 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
         return true;
     }
 
+    const SwPaM aPam(*pTextNode, nEnd, *pTextNode, nStart);
+    static sal_Unicode const aForbidden[] = {
+        CH_TXTATR_BREAKWORD,
+        0
+    };
+    const OUString aText = comphelper::string::removeAny(aPam.GetText(), aForbidden);
+
     std::unique_ptr<vcl::PDFWriter::AnyWidget> pDescriptor;
     switch (pContentControl->GetType())
     {
@@ -999,9 +1006,13 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
             pDescriptor = std::make_unique<vcl::PDFWriter::ListBoxWidget>();
             auto pListWidget = static_cast<vcl::PDFWriter::ListBoxWidget*>(pDescriptor.get());
             pListWidget->DropDown = true;
+            sal_Int32 nIndex = 0;
             for (const auto& rItem : pContentControl->GetListItems())
             {
                 pListWidget->Entries.push_back(rItem.m_aDisplayText);
+                if (rItem.m_aDisplayText == aText)
+                    pListWidget->SelectedEntries.push_back(nIndex);
+                ++nIndex;
             }
             break;
         }
@@ -1048,15 +1059,7 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
     }
 
     // Map the text of the content control to the descriptor's text.
-    SwPosition aPoint(*pTextNode, nStart);
-    SwPosition aMark(*pTextNode, nEnd);
-    SwPaM aPam(aMark, aPoint);
-    OUString aText = aPam.GetText();
-    static sal_Unicode const aForbidden[] = {
-        CH_TXTATR_BREAKWORD,
-        0
-    };
-    pDescriptor->Text = comphelper::string::removeAny(aText, aForbidden);
+    pDescriptor->Text = aText;
 
     // Calculate the bounding rectangle of this content control, which can be one or more layout
     // portions in one or more lines.
