@@ -954,70 +954,20 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmOperNode* pNode )
     SmSubSupNode* pSubSup = pOper->GetType( ) == SmNodeType::SubSup ? static_cast<SmSubSupNode*>(pOper) : nullptr;
 
     if( pSubSup ) {
-        SmNode* pChild = pSubSup->GetSubSup( LSUP );
-        if( pChild ) {
+        SmNode* pChild;
+        for (SmSubSup const nodeType : { LSUP, LSUB, CSUP, CSUB, RSUP, RSUB })
+        {
+            pChild = pSubSup->GetSubSup(nodeType);
+            if( pChild )
+            {
             //Create position in front of pChild
-            SmCaretPosGraphEntry *childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
-            //Visit pChild
-            mpRightMost = childLeft;
-            pChild->Accept( this );
-            //Set right on mpRightMost from pChild
-            mpRightMost->SetRight( bodyLeft );
-        }
-
-        pChild = pSubSup->GetSubSup( LSUB );
-        if( pChild ) {
-            //Create position in front of pChild
-            SmCaretPosGraphEntry *childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
-            //Visit pChild
-            mpRightMost = childLeft;
-            pChild->Accept( this );
-            //Set right on mpRightMost from pChild
-            mpRightMost->SetRight( bodyLeft );
-        }
-
-        pChild = pSubSup->GetSubSup( CSUP );
-        if ( pChild ) {//TO
-            //Create position in front of pChild
-            SmCaretPosGraphEntry *childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
-            //Visit pChild
-            mpRightMost = childLeft;
-            pChild->Accept( this );
-            //Set right on mpRightMost from pChild
-            mpRightMost->SetRight( bodyLeft );
-        }
-
-        pChild = pSubSup->GetSubSup( CSUB );
-        if( pChild ) { //FROM
-            //Create position in front of pChild
-            SmCaretPosGraphEntry *childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
-            //Visit pChild
-            mpRightMost = childLeft;
-            pChild->Accept( this );
-            //Set right on mpRightMost from pChild
-            mpRightMost->SetRight( bodyLeft );
-        }
-
-        pChild = pSubSup->GetSubSup( RSUP );
-        if ( pChild ) {
-            //Create position in front of pChild
-            SmCaretPosGraphEntry *childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
-            //Visit pChild
-            mpRightMost = childLeft;
-            pChild->Accept( this );
-            //Set right on mpRightMost from pChild
-            mpRightMost->SetRight( bodyLeft );
-        }
-
-        pChild = pSubSup->GetSubSup( RSUB );
-        if ( pChild ) {
-            //Create position in front of pChild
-            SmCaretPosGraphEntry *childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
-            //Visit pChild
-            mpRightMost = childLeft;
-            pChild->Accept( this );
-            //Set right on mpRightMost from pChild
-            mpRightMost->SetRight( bodyLeft );
+                SmCaretPosGraphEntry *childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
+                //Visit pChild
+                mpRightMost = childLeft;
+                pChild->Accept( this );
+                //Set right on mpRightMost from pChild
+                mpRightMost->SetRight( bodyLeft );
+            }
         }
     }
 
