@@ -34,12 +34,11 @@ ScUserListData::SubStr::SubStr(OUString aReal, OUString aUpper) :
 
 void ScUserListData::InitTokens()
 {
-    sal_Unicode cSep = ScGlobal::cListDelimiter;
     maSubStrings.clear();
     sal_Int32 nIndex = 0;
     do
     {
-        OUString aSub = aStr.getToken(0, cSep, nIndex);
+        OUString aSub = aStr.getToken(0, ScGlobal::cListDelimiter, nIndex);
         if (!aSub.isEmpty())
         {
             OUString aUpStr = ScGlobal::getCharClass().uppercase(aSub);
@@ -52,18 +51,6 @@ ScUserListData::ScUserListData(OUString _aStr) :
     aStr(std::move(_aStr))
 {
     InitTokens();
-}
-
-ScUserListData::ScUserListData(const ScUserListData& rData) :
-    aStr(rData.aStr)
-{
-    InitTokens();
-}
-
-ScUserListData& ScUserListData::operator=(const ScUserListData& rData)
-{
-    SetString(rData.aStr);
-    return *this;
 }
 
 void ScUserListData::SetString( const OUString& rStr )
@@ -249,7 +236,7 @@ bool ScUserList::operator==( const ScUserList& r ) const
 {
     return std::equal(maData.begin(), maData.end(), r.maData.begin(), r.maData.end(),
         [](const ScUserListData& lhs, const ScUserListData& rhs) {
-            return (lhs.GetString() == rhs.GetString()) && (lhs.GetSubCount() == rhs.GetSubCount());
+            return lhs.GetString() == rhs.GetString();
         });
 }
 

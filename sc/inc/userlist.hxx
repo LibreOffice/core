@@ -46,9 +46,6 @@ private:
 
 public:
     ScUserListData(OUString aStr);
-    // Copy ctor and assignment operator re-initialize tokens. Is this intended on copy?
-    ScUserListData(const ScUserListData& rData);
-    ScUserListData& operator=(const ScUserListData& rData);
 
     const OUString& GetString() const { return aStr; }
     void SetString(const OUString& rStr);
