@@ -30,6 +30,7 @@
 #include <drawingfragment.hxx>
 #include <svx/sdtaitm.hxx>
 #include <svx/svdocapt.hxx>
+#include <svx/unoshape.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <document.hxx>
 #include <drwlayer.hxx>
@@ -162,12 +163,11 @@ void Comment::finalizeImport()
         ScPostIt* pPostIt = pDocShell->GetDocFunc().ImportNote( maModel.maRange.aStart, OUString( ' ' ) );
         SdrCaptionObj* pCaption = pPostIt->GetOrCreateCaption( maModel.maRange.aStart );
 
-        Reference< XShape > xAnnoShape( pCaption->getUnoShape() ); // SvxShapeText
+        rtl::Reference< SvxShapeText > xAnnoShape( dynamic_cast<SvxShapeText*>(pCaption->getUnoShape().get() ) ); // SvxShapeText
         // setting a property triggers expensive process, so set them all at once
-        Reference< css::beans::XMultiPropertySet > xAnnoShapeMultiPropSet(xAnnoShape, UNO_QUERY_THROW);
 
         // Add shape formatting properties (autoFill, colHidden and rowHidden are dropped)
-        xAnnoShapeMultiPropSet->setPropertyValues(
+        static_cast<SvxShape*>(xAnnoShape.get())->setPropertyValues(
             Sequence<OUString> { "TextFitToSize", "MoveProtect", "TextHorizontalAdjust", "TextVerticalAdjust" },
             Sequence<Any> { Any(maModel.mbAutoScale), Any(maModel.mbLocked),
                 Any(lcl_ToHorizAlign( maModel.mnTHA )), Any(lcl_ToVertAlign( maModel.mnTVA )) });
@@ -188,7 +188,7 @@ void Comment::finalizeImport()
 
             // Setting comment text alignment
             const ::oox::vml::ClientData* xClientData = pVmlNoteShape->getClientData();
-            xAnnoShapeMultiPropSet->setPropertyValues(
+            static_cast<SvxShape*>(xAnnoShape.get())->setPropertyValues(
                 Sequence<OUString> { "TextVerticalAdjust", "ParaAdjust" },
                 Sequence<Any> { Any(lcl_ToVertAlign( xClientData->mnTextVAlign )), Any(lcl_ToParaAlign( xClientData->mnTextHAlign )) });
         }
@@ -197,11 +197,10 @@ void Comment::finalizeImport()
 
         // insert text and convert text formatting
         maModel.mxText->finalizeImport(*this);
-        Reference< XText > xAnnoText( xAnnoShape, UNO_QUERY_THROW );
-        Reference< css::document::XActionLockable > xAnnoLock( xAnnoShape, UNO_QUERY_THROW );
-        xAnnoLock->addActionLock();
+        Reference< XText > xAnnoText( xAnnoShape );
+        xAnnoShape->addActionLock();
         maModel.mxText->convert( xAnnoText );
-        xAnnoLock->removeActionLock();
+        xAnnoShape->removeActionLock();
     }
     catch( Exception& )
     {
