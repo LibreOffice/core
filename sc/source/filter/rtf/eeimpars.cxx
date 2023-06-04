@@ -112,7 +112,8 @@ namespace
     }
 }
 
-void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNumberFormatter* pFormatter, bool bConvertDate )
+void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNumberFormatter* pFormatter, bool bConvertDate,
+    bool bConvertScientific )
 {
     std::unique_ptr<ScProgress> pProgress( new ScProgress( mpDoc->GetDocumentShell(),
         ScResId( STR_LOAD_DOC ), mpParser->ListSize(), true ) );
@@ -395,10 +396,14 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                     if (bTextFormat)
                     {
                         aParam.mbDetectNumberFormat = false;
+                        aParam.mbDetectScientificNumberFormat = bConvertScientific;
                         aParam.meSetTextNumFormat = ScSetStringParam::Always;
                     }
                     else
+                    {
                         aParam.mbDetectNumberFormat = bConvertDate;
+                        aParam.mbDetectScientificNumberFormat = bConvertScientific;
+                    }
 
                     mpDoc->SetString(nCol, nRow, nTab, aStr, &aParam);
                 }

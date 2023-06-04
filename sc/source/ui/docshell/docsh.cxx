@@ -1137,7 +1137,7 @@ bool ScDocShell::LoadFrom( SfxMedium& rMedium )
     return bRet;
 }
 
-static void lcl_parseHtmlFilterOption(const OUString& rOption, LanguageType& rLang, bool& rDateConvert)
+static void lcl_parseHtmlFilterOption(const OUString& rOption, LanguageType& rLang, bool& rDateConvert, bool& rScientificConvert)
 {
     OUStringBuffer aBuf;
     std::vector< OUString > aTokens;
@@ -1165,6 +1165,8 @@ static void lcl_parseHtmlFilterOption(const OUString& rOption, LanguageType& rLa
         rLang = static_cast<LanguageType>(aTokens[0].toInt32());
     if (aTokens.size() > 1)
         rDateConvert = static_cast<bool>(aTokens[1].toInt32());
+    if (aTokens.size() > 2)
+        rScientificConvert = static_cast<bool>(aTokens[2].toInt32());
 }
 
 bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
@@ -1581,13 +1583,14 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 {
                     LanguageType eLang = LANGUAGE_SYSTEM;
                     bool bDateConvert = false;
+                    bool bScientificConvert = true;
                     SfxItemSet*  pSet = rMedium.GetItemSet();
                     const SfxStringItem* pOptionsItem;
                     if ( pSet &&
                         (pOptionsItem = pSet->GetItemIfSet( SID_FILE_FILTEROPTIONS )) )
                     {
                         OUString aFilterOption = pOptionsItem->GetValue();
-                        lcl_parseHtmlFilterOption(aFilterOption, eLang, bDateConvert);
+                        lcl_parseHtmlFilterOption(aFilterOption, eLang, bDateConvert, bScientificConvert);
                     }
 
                     pInStream->Seek( 0 );
@@ -1596,7 +1599,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     CalcOutputFactor();
                     SvNumberFormatter aNumFormatter( comphelper::getProcessComponentContext(), eLang);
                     eError = ScFormatFilter::Get().ScImportHTML( *pInStream, rMedium.GetBaseURL(), m_pDocument.get(), aRange,
-                                            GetOutputFactor(), !bWebQuery, &aNumFormatter, bDateConvert );
+                                            GetOutputFactor(), !bWebQuery, &aNumFormatter, bDateConvert, bScientificConvert );
                     if (eError != ERRCODE_NONE)
                     {
                         if (!GetError())

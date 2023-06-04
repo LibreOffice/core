@@ -394,6 +394,7 @@ protected:
 public:
     virtual LanguageType GetLanguageType() const = 0;
     virtual bool IsDateConversionSet() const = 0;
+    virtual bool IsScientificConversionSet() const = 0;
     virtual bool IsKeepAskingSet() const = 0;
 };
 

@@ -32,6 +32,7 @@ public:
 
     LanguageType getLanguageType() const;
     bool isDateConversionSet() const;
+    bool isScientificConversionSet() const;
     bool isKeepAskingSet() const;
 
 private:
@@ -41,12 +42,13 @@ private:
     std::unique_ptr<weld::Button> m_xBtnOk;
     std::unique_ptr<weld::RadioButton> m_xRbAutomatic;
     std::unique_ptr<weld::RadioButton> m_xRbCustom;
-    std::unique_ptr<weld::CheckButton> m_xBtnConvertDate;
-    std::unique_ptr<weld::CheckButton> m_xBtnKeepAsking;
+    std::unique_ptr<weld::CheckButton> m_xCkbConvertDate;
+    std::unique_ptr<weld::CheckButton> m_xCkbConvertScientific;
+    std::unique_ptr<weld::CheckButton> m_xCkbKeepAsking;
     std::unique_ptr<SvxLanguageBox> m_xLbCustomLang;
 
     DECL_LINK(OKHdl, weld::Button&, void);
-    DECL_LINK(RadioHdl, weld::Toggleable&, void);
+    DECL_LINK(RadioCheckHdl, weld::Toggleable&, void);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

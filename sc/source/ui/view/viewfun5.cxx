@@ -337,6 +337,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                 static bool bHaveSavedPreferences = false;
                 static LanguageType eSavedLanguage;
                 static bool bSavedDateConversion;
+                static bool bSavedScientificConversion;
 
                 if (nFormatId == SotClipboardFormatId::HTML &&
                     !comphelper::LibreOfficeKit::isActive())
@@ -346,6 +347,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                         ScAsciiOptions aOptions;
                         aOptions.SetLanguage(eSavedLanguage);
                         aOptions.SetDetectSpecialNumber(bSavedDateConversion);
+                        aOptions.SetDetectScientificNumber(bSavedScientificConversion);
                         pObj->SetExtOptions(aOptions);
                     }
                     else
@@ -363,11 +365,13 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                             ScAsciiOptions aOptions;
                             aOptions.SetLanguage(pDlg->GetLanguageType());
                             aOptions.SetDetectSpecialNumber(pDlg->IsDateConversionSet());
+                            aOptions.SetDetectScientificNumber(pDlg->IsScientificConversionSet());
                             if (!pDlg->IsKeepAskingSet())
                             {
                                 bHaveSavedPreferences = true;
                                 eSavedLanguage = pDlg->GetLanguageType();
                                 bSavedDateConversion = pDlg->IsDateConversionSet();
+                                bSavedScientificConversion = pDlg->IsScientificConversionSet();
                             }
                             pObj->SetExtOptions(aOptions);
                         }

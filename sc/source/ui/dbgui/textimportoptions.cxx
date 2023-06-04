@@ -30,8 +30,9 @@ ScTextImportOptionsDlg::ScTextImportOptionsDlg(weld::Window* pParent)
     , m_xBtnOk(m_xBuilder->weld_button("ok"))
     , m_xRbAutomatic(m_xBuilder->weld_radio_button("automatic"))
     , m_xRbCustom(m_xBuilder->weld_radio_button("custom"))
-    , m_xBtnConvertDate(m_xBuilder->weld_check_button("convertdata"))
-    , m_xBtnKeepAsking(m_xBuilder->weld_check_button("keepasking"))
+    , m_xCkbConvertDate(m_xBuilder->weld_check_button("convertdata"))
+    , m_xCkbConvertScientific(m_xBuilder->weld_check_button("convertscientificnotation"))
+    , m_xCkbKeepAsking(m_xBuilder->weld_check_button("keepasking"))
     , m_xLbCustomLang(new SvxLanguageBox(m_xBuilder->weld_combo_box("lang")))
 {
     init();
@@ -51,20 +52,27 @@ LanguageType ScTextImportOptionsDlg::getLanguageType() const
 
 bool ScTextImportOptionsDlg::isDateConversionSet() const
 {
-    return m_xBtnConvertDate->get_active();
+    return m_xCkbConvertDate->get_active();
+}
+
+bool ScTextImportOptionsDlg::isScientificConversionSet() const
+{
+    return m_xCkbConvertScientific->get_active();
 }
 
 bool ScTextImportOptionsDlg::isKeepAskingSet() const
 {
-    return m_xBtnKeepAsking->get_active();
+    return m_xCkbKeepAsking->get_active();
 }
 
 void ScTextImportOptionsDlg::init()
 {
     m_xBtnOk->connect_clicked(LINK(this, ScTextImportOptionsDlg, OKHdl));
-    Link<weld::Toggleable&,void> aLink = LINK(this, ScTextImportOptionsDlg, RadioHdl);
+    Link<weld::Toggleable&,void> aLink = LINK(this, ScTextImportOptionsDlg, RadioCheckHdl);
     m_xRbAutomatic->connect_toggled(aLink);
     m_xRbCustom->connect_toggled(aLink);
+    m_xCkbConvertDate->connect_toggled(aLink);
+    m_xCkbConvertScientific->connect_toggled(aLink);
 
     m_xRbAutomatic->set_active(true);
 
@@ -81,7 +89,7 @@ IMPL_LINK_NOARG(ScTextImportOptionsDlg, OKHdl, weld::Button&, void)
     m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK(ScTextImportOptionsDlg, RadioHdl, weld::Toggleable&, rBtn, void)
+IMPL_LINK(ScTextImportOptionsDlg, RadioCheckHdl, weld::Toggleable&, rBtn, void)
 {
     if (&rBtn == m_xRbAutomatic.get())
     {
@@ -90,6 +98,22 @@ IMPL_LINK(ScTextImportOptionsDlg, RadioHdl, weld::Toggleable&, rBtn, void)
     else if (&rBtn == m_xRbCustom.get())
     {
         m_xLbCustomLang->set_sensitive(true);
+    }
+    else if (&rBtn == m_xCkbConvertDate.get())
+    {
+        if (m_xCkbConvertDate->get_active())
+        {
+            m_xCkbConvertScientific->set_active(true);
+            m_xCkbConvertScientific->set_sensitive(false);
+        }
+        else
+        {
+            m_xCkbConvertScientific->set_sensitive(true);
+        }
+    }
+    else if (&rBtn == m_xCkbConvertScientific.get())
+    {
+        assert( !m_xCkbConvertDate->get_active() && "ScTextImportOptionsDlg::RadioCheckHdl - scientific option disabled if Detect numbers active" );
     }
 }
 

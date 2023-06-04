@@ -275,7 +275,7 @@ public:
     virtual ErrCode ScImportRTF( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange ) override;
     virtual ErrCode ScImportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange,
                                    double nOutputFactor, bool bCalcWidthHeight,
-                                   SvNumberFormatter* pFormatter, bool bConvertDate ) override;
+                                   SvNumberFormatter* pFormatter, bool bConvertDate, bool bConvertScientific ) override;
 
     virtual std::unique_ptr<ScEEAbsImport> CreateRTFImport( ScDocument* pDoc, const ScRange& rRange ) override;
     virtual std::unique_ptr<ScEEAbsImport> CreateHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const ScRange& rRange ) override;

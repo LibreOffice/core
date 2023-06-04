@@ -50,7 +50,8 @@ class ScEEAbsImport {
     virtual ScRange GetRange() = 0;
     virtual void    WriteToDocument(
         bool bSizeColsRows = false, double nOutputFactor = 1.0,
-        SvNumberFormatter* pFormatter = nullptr, bool bConvertDate = true ) = 0;
+        SvNumberFormatter* pFormatter = nullptr, bool bConvertDate = true,
+        bool bConvertScientific = true ) = 0;
 };
 
 class SAL_DLLPUBLIC_RTTI ScFormatFilterPlugin {
@@ -67,7 +68,8 @@ class SAL_DLLPUBLIC_RTTI ScFormatFilterPlugin {
                  const rtl_TextEncoding eSrc ) = 0;
     virtual ErrCode ScImportRTF( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange ) = 0;
     virtual ErrCode ScImportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange, double nOutputFactor,
-                                   bool bCalcWidthHeight, SvNumberFormatter* pFormatter, bool bConvertDate ) = 0;
+                                   bool bCalcWidthHeight, SvNumberFormatter* pFormatter, bool bConvertDate,
+                                   bool bConvertScientific ) = 0;
 
     // various import helpers
     virtual std::unique_ptr<ScEEAbsImport> CreateRTFImport( ScDocument* pDoc, const ScRange& rRange ) = 0;

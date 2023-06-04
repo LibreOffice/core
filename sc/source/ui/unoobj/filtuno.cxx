@@ -215,6 +215,8 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
                 aBuf.append(static_cast<sal_Int32>(static_cast<sal_uInt16>(eLang)));
                 aBuf.append(' ');
                 aBuf.append(pDlg->IsDateConversionSet() ? u'1' : u'0');
+                aBuf.append(' ');
+                aBuf.append(pDlg->IsScientificConversionSet() ? u'1' : u'0');
                 aFilterOptions = aBuf.makeStringAndClear();
                 nRet = ui::dialogs::ExecutableDialogResults::OK;
             }

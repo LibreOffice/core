@@ -938,6 +938,11 @@ bool AbstractScTextImportOptionsDlg_Impl::IsDateConversionSet() const
     return m_xDlg->isDateConversionSet();
 }
 
+bool AbstractScTextImportOptionsDlg_Impl::IsScientificConversionSet() const
+{
+    return m_xDlg->isScientificConversionSet();
+}
+
 bool AbstractScTextImportOptionsDlg_Impl::IsKeepAskingSet() const
 {
     return m_xDlg->isKeepAskingSet();

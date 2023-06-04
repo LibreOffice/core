@@ -56,7 +56,8 @@ public:
     virtual void     WriteToDocument( bool bSizeColsRows = false,
                                       double nOutputFactor = 1.0,
                                       SvNumberFormatter* pFormatter = nullptr,
-                                      bool bConvertDate = true ) override;
+                                      bool bConvertDate = true,
+                                      bool bConvertScientific = true ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -45,13 +45,13 @@
 
 ErrCode ScFormatFilterPluginImpl::ScImportHTML( SvStream &rStream, const OUString& rBaseURL, ScDocument *pDoc,
         ScRange& rRange, double nOutputFactor, bool bCalcWidthHeight, SvNumberFormatter* pFormatter,
-        bool bConvertDate )
+        bool bConvertDate, bool bConvertScientific )
 {
     ScHTMLImport aImp( pDoc, rBaseURL, rRange, bCalcWidthHeight );
     ErrCode nErr = aImp.Read( rStream, rBaseURL );
     ScRange aR = aImp.GetRange();
     rRange.aEnd = aR.aEnd;
-    aImp.WriteToDocument( true, nOutputFactor, pFormatter, bConvertDate );
+    aImp.WriteToDocument( true, nOutputFactor, pFormatter, bConvertDate, bConvertScientific );
     return nErr;
 }
 
@@ -112,9 +112,10 @@ void ScHTMLImport::InsertRangeName( ScDocument& rDoc, const OUString& rName, con
 }
 
 void ScHTMLImport::WriteToDocument(
-    bool bSizeColsRows, double nOutputFactor, SvNumberFormatter* pFormatter, bool bConvertDate )
+    bool bSizeColsRows, double nOutputFactor, SvNumberFormatter* pFormatter, bool bConvertDate,
+    bool bConvertScientific )
 {
-    ScEEImport::WriteToDocument( bSizeColsRows, nOutputFactor, pFormatter, bConvertDate );
+    ScEEImport::WriteToDocument( bSizeColsRows, nOutputFactor, pFormatter, bConvertDate, bConvertScientific );
 
     const ScHTMLParser* pParser = static_cast<ScHTMLParser*>(mpParser.get());
     const ScHTMLTable* pGlobTable = pParser->GetGlobalTable();

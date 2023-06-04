@@ -30,7 +30,8 @@ public:
     ScHTMLImport( ScDocument* pDoc, const OUString& rBaseURL, const ScRange& rRange, bool bCalcWidthHeight );
 
     virtual void        WriteToDocument( bool bSizeColsRows = false, double nOutputFactor = 1.0,
-                                         SvNumberFormatter* pFormatter = nullptr, bool bConvertDate = true ) override;
+                                         SvNumberFormatter* pFormatter = nullptr, bool bConvertDate = true,
+                                         bool bConvertScientific = true ) override;
 
     static OUString     GetHTMLRangeNameList( const ScDocument& rDoc, std::u16string_view rOrigName );
 };

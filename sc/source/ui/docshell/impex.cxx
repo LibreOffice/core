@@ -2656,7 +2656,8 @@ bool ScImportExport::HTML2Doc( SvStream& rStrm, const OUString& rBaseURL )
             LanguageType eLang = pExtOptions->GetLanguage();
             SvNumberFormatter aNumFormatter( comphelper::getProcessComponentContext(), eLang);
             bool bSpecialNumber = pExtOptions->IsDetectSpecialNumber();
-            pImp->WriteToDocument(false, 1.0, &aNumFormatter, bSpecialNumber);
+            bool bScientificNumber = pExtOptions->IsDetectScientificNumber();
+            pImp->WriteToDocument(false, 1.0, &aNumFormatter, bSpecialNumber, bScientificNumber);
         }
         else
             // Regular import, with no options.
