@@ -200,20 +200,18 @@ sal_Int32 ScUserListData::ICompare(const OUString& rSubStr1, const OUString& rSu
         return ScGlobal::GetTransliteration().compareString( rSubStr1, rSubStr2 );
 }
 
-ScUserList::ScUserList()
+ScUserList::ScUserList(bool initDefault)
 {
-    using namespace ::com::sun::star;
+    if (initDefault)
+        AddDefaults();
+}
 
+void ScUserList::AddDefaults()
+{
     sal_Unicode cDelimiter = ScGlobal::cListDelimiter;
-    uno::Sequence< i18n::CalendarItem2 > xCal;
-
-    const uno::Sequence< i18n::Calendar2 > xCalendars(
-            ScGlobal::getLocaleData().getAllCalendars() );
-
-    for ( const auto& rCalendar : xCalendars )
+    for (const auto& rCalendar : ScGlobal::getLocaleData().getAllCalendars())
     {
-        xCal = rCalendar.Days;
-        if ( xCal.hasElements() )
+        if (const auto& xCal = rCalendar.Days; xCal.hasElements())
         {
             OUStringBuffer aDayShortBuf(32), aDayLongBuf(64);
             sal_Int32 i;
@@ -244,8 +242,7 @@ ScUserList::ScUserList()
                 emplace_back(aDayLong);
         }
 
-        xCal = rCalendar.Months;
-        if ( xCal.hasElements() )
+        if (const auto& xCal = rCalendar.Months; xCal.hasElements())
         {
             OUStringBuffer aMonthShortBuf(128), aMonthLongBuf(128);
             sal_Int32 i;

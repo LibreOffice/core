@@ -69,9 +69,10 @@ class SC_DLLPUBLIC ScUserList
     DataType maData;
 
 public:
-    ScUserList();
+    explicit ScUserList(bool initDefault = true);
     ScUserList(const ScUserList& r) = default;
 
+    void AddDefaults();
     void EraseData(size_t nIndex) { maData.erase(maData.cbegin() + nIndex); }
 
     const ScUserListData* GetData(const OUString& rSubStr) const;

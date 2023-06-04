@@ -407,16 +407,18 @@ void ScAppCfg::ReadSortListCfg()
 
     if (Sequence<OUString> aSeq; aValues[SCSORTLISTOPT_LIST] >>= aSeq)
     {
-        ScUserList aList;
+        ScUserList aList(false); // Do not init defaults
 
-        //  if setting is "default", keep default values from ScUserList ctor
+        //  if setting is "default", keep default values
         //TODO: mark "default" in a safe way
         const bool bDefault = (aSeq.getLength() == 1 && aSeq[0] == "NULL");
 
-        if (!bDefault)
+        if (bDefault)
         {
-            aList.clear();
-
+            aList.AddDefaults();
+        }
+        else
+        {
             for (const OUString& rStr : std::as_const(aSeq))
             {
                 aList.emplace_back(rStr);
