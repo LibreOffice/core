@@ -3316,15 +3316,31 @@ AC_SUBST(CCACHE_DEPEND_MODE)
 
 # sccache defaults are good enough
 if test "$CCACHE" != "" -a -z "$SCCACHE"; then
-    ccache_size=$($CCACHE --print-stats | $AWK /cache_size_kibibyte/'{ print $2 }')
-    if test $ccache_size -lt 976563; then
-        CCACHE=""
-        AC_MSG_WARN([ccache's cache size is less than 1GB using it is counter-productive: Disabling auto-ccache detection])
-        add_warning "ccache's cache size is less than 1GB using it is counter-productive: auto-ccache detection disabled"
-    elif test $ccache_size -lt 4883000; then
-        # warn that ccache may be too small for debug build
-        AC_MSG_WARN([ccache's cache size is less than 5GB using it may be counter-productive for debug or symbol-enabled build])
-        add_warning "ccache's cache size is less than 5GB using it may be counter-productive for debug or symbol-enabled build"
+    # e.g. (/home/rene/.config/ccache/ccache.conf) max_size = 20.0G
+    # -p works with both 4.2 and 4.4
+    ccache_size_msg=$([$CCACHE -p | $AWK /max_size/'{ print $4 }' | sed -e 's/\.[0-9]*//'])
+    ccache_size=$(echo "$ccache_size_msg" | grep "G" | sed -e 's/G.*$//')
+    if test "$ccache_size" = ""; then
+        ccache_size=$(echo "$ccache_size_msg" | grep "M" | sed -e 's/\ M.*$//')
+        if test "$ccache_size" = ""; then
+            ccache_size=0
+        fi
+        # we could not determine the size or it was less than 1GB -> disable auto-ccache
+        if test $ccache_size -lt 1024; then
+            CCACHE=""
+            AC_MSG_WARN([ccache's cache size is less than 1GB using it is counter-productive: Disabling auto-ccache detection])
+            add_warning "ccache's cache size is less than 1GB using it is counter-productive: auto-ccache detection disabled"
+        else
+            # warn that ccache may be too small for debug build
+            AC_MSG_WARN([ccache's cache size is less than 5GB using it may be counter-productive for debug or symbol-enabled build])
+            add_warning "ccache's cache size is less than 5GB using it may be counter-productive for debug or symbol-enabled build"
+        fi
+    else
+        if test $ccache_size -lt 5; then
+            #warn that ccache may be too small for debug build
+            AC_MSG_WARN([ccache's cache size is less than 5GB using it may be counter-productive for debug or symbol-enabled build])
+            add_warning "ccache's cache size is less than 5GB using it may be counter-productive for debug or symbol-enabled build"
+        fi
     fi
 fi
 
