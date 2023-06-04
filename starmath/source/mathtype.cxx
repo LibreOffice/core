@@ -1976,16 +1976,6 @@ void MathType::HandleNodes(SmNode *pNode,int nLevel)
         case SmNodeType::SubSup:
             HandleSubSupScript(pNode,nLevel);
             break;
-        case SmNodeType::Expression:
-        {
-            size_t nSize = pNode->GetNumSubNodes();
-            for (size_t i = 0; i < nSize; ++i)
-            {
-                if (SmNode *pTemp = pNode->GetSubNode(i))
-                    HandleNodes(pTemp,nLevel+1);
-            }
-            break;
-        }
         case SmNodeType::Table:
             //Root Node, PILE equivalent, i.e. vertical stack
             HandleTable(pNode,nLevel);
@@ -2017,6 +2007,7 @@ void MathType::HandleNodes(SmNode *pNode,int nLevel)
             else
                 pS->WriteUInt16( 0xEB05 );
             break;
+        case SmNodeType::Expression: // same treatment as the default one
         default:
         {
             size_t nSize = pNode->GetNumSubNodes();
