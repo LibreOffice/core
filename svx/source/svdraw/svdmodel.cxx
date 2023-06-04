@@ -1834,23 +1834,15 @@ void SdrModel::ReadUserDataSequenceValue(const beans::PropertyValue* pValue)
     }
 }
 
-template <typename T>
-static void addPair(std::vector< std::pair< OUString, uno::Any > >& aUserData, const OUString& name, const T val)
-{
-    aUserData.push_back(std::pair< OUString, uno::Any >(name, uno::Any(val)));
-}
-
 void SdrModel::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rValues)
 {
-    std::vector< std::pair< OUString, uno::Any > > aUserData;
-    addPair(aUserData, "AnchoredTextOverflowLegacy",
-            GetCompatibilityFlag(SdrCompatibilityFlag::AnchoredTextOverflowLegacy));
-    addPair(aUserData, "LegacySingleLineFontwork",
-            GetCompatibilityFlag(SdrCompatibilityFlag::LegacySingleLineFontwork));
-    addPair(aUserData, "ConnectorUseSnapRect",
-            GetCompatibilityFlag(SdrCompatibilityFlag::ConnectorUseSnapRect));
-    addPair(aUserData, "IgnoreBreakAfterMultilineField",
-            GetCompatibilityFlag(SdrCompatibilityFlag::IgnoreBreakAfterMultilineField));
+    std::vector< std::pair< OUString, uno::Any > > aUserData
+    {
+        { "AnchoredTextOverflowLegacy", uno::Any(GetCompatibilityFlag(SdrCompatibilityFlag::AnchoredTextOverflowLegacy)) },
+        { "LegacySingleLineFontwork", uno::Any(GetCompatibilityFlag(SdrCompatibilityFlag::LegacySingleLineFontwork)) },
+        { "ConnectorUseSnapRect", uno::Any(GetCompatibilityFlag(SdrCompatibilityFlag::ConnectorUseSnapRect)) },
+        { "IgnoreBreakAfterMultilineField", uno::Any(GetCompatibilityFlag(SdrCompatibilityFlag::IgnoreBreakAfterMultilineField)) }
+    };
 
     const sal_Int32 nOldLength = rValues.getLength();
     rValues.realloc(nOldLength + aUserData.size());
