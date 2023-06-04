@@ -97,8 +97,10 @@ ScUserListData::ScUserListData(const ScUserListData& rData) :
     InitTokens();
 }
 
-ScUserListData::~ScUserListData()
+ScUserListData& ScUserListData::operator=(const ScUserListData& rData)
 {
+    SetString(rData.aStr);
+    return *this;
 }
 
 void ScUserListData::SetString( const OUString& rStr )
@@ -237,9 +239,9 @@ ScUserList::ScUserList()
             OUString aDayLong = aDayLongBuf.makeStringAndClear();
 
             if ( !HasEntry( aDayShort ) )
-                maData.push_back( std::make_unique<ScUserListData>( aDayShort ));
+                emplace_back(aDayShort);
             if ( !HasEntry( aDayLong ) )
-                maData.push_back( std::make_unique<ScUserListData>( aDayLong ));
+                emplace_back(aDayLong);
         }
 
         xCal = rCalendar.Months;
@@ -262,17 +264,11 @@ ScUserList::ScUserList()
             OUString aMonthLong = aMonthLongBuf.makeStringAndClear();
 
             if ( !HasEntry( aMonthShort ) )
-                maData.push_back( std::make_unique<ScUserListData>( aMonthShort ));
+                emplace_back(aMonthShort);
             if ( !HasEntry( aMonthLong ) )
-                maData.push_back( std::make_unique<ScUserListData>( aMonthLong ));
+                emplace_back(aMonthLong);
         }
     }
-}
-
-ScUserList::ScUserList(const ScUserList& rOther)
-{
-    for (const std::unique_ptr<ScUserListData>& rData : rOther.maData)
-        maData.push_back(std::make_unique<ScUserListData>(*rData));
 }
 
 const ScUserListData* ScUserList::GetData(const OUString& rSubStr) const
@@ -283,79 +279,31 @@ const ScUserListData* ScUserList::GetData(const OUString& rSubStr) const
 
     for (const auto& rxItem : maData)
     {
-        if (rxItem->GetSubIndex(rSubStr, nIndex, bMatchCase))
+        if (rxItem.GetSubIndex(rSubStr, nIndex, bMatchCase))
         {
             if (bMatchCase)
-                return rxItem.get();
+                return &rxItem;
             if (!pFirstCaseInsensitive)
-                pFirstCaseInsensitive = rxItem.get();
+                pFirstCaseInsensitive = &rxItem;
         }
     }
 
     return pFirstCaseInsensitive;
 }
 
-const ScUserListData& ScUserList::operator[](size_t nIndex) const
-{
-    return *maData[nIndex];
-}
-
-ScUserListData& ScUserList::operator[](size_t nIndex)
-{
-    return *maData[nIndex];
-}
-
-ScUserList& ScUserList::operator=( const ScUserList& rOther )
-{
-    maData.clear();
-    for (const std::unique_ptr<ScUserListData>& rData : rOther.maData)
-        maData.push_back(std::make_unique<ScUserListData>(*rData));
-    return *this;
-}
-
 bool ScUserList::operator==( const ScUserList& r ) const
 {
     return std::equal(maData.begin(), maData.end(), r.maData.begin(), r.maData.end(),
-        [](const std::unique_ptr<ScUserListData>& lhs, const std::unique_ptr<ScUserListData>& rhs) {
-            return (lhs->GetString() == rhs->GetString()) && (lhs->GetSubCount() == rhs->GetSubCount());
+        [](const ScUserListData& lhs, const ScUserListData& rhs) {
+            return (lhs.GetString() == rhs.GetString()) && (lhs.GetSubCount() == rhs.GetSubCount());
         });
-}
-
-bool ScUserList::operator!=( const ScUserList& r ) const
-{
-    return !operator==( r );
 }
 
 bool ScUserList::HasEntry( std::u16string_view rStr ) const
 {
     return ::std::any_of(maData.begin(), maData.end(),
-        [&] (std::unique_ptr<ScUserListData> const& pData)
-            { return pData->GetString() == rStr; } );
-}
-
-ScUserList::iterator ScUserList::begin()
-{
-    return maData.begin();
-}
-
-void ScUserList::clear()
-{
-    maData.clear();
-}
-
-size_t ScUserList::size() const
-{
-    return maData.size();
-}
-
-void ScUserList::push_back(ScUserListData* p)
-{
-    maData.push_back(std::unique_ptr<ScUserListData>(p));
-}
-
-void ScUserList::erase(const iterator& itr)
-{
-    maData.erase(itr);
+        [&] (ScUserListData const& pData)
+            { return pData.GetString() == rStr; } );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

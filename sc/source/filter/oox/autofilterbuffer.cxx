@@ -837,7 +837,7 @@ void AutoFilter::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRa
 
     if (!aParam.bUserDef)
     {
-        pUserList->push_back(new ScUserListData(rSorConditionLoaded.maSortCustomList));
+        pUserList->emplace_back(rSorConditionLoaded.maSortCustomList);
         aParam.bUserDef = true;
         aParam.nUserIndex = pUserList->size()-1;
     }

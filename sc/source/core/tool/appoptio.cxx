@@ -419,8 +419,7 @@ void ScAppCfg::ReadSortListCfg()
 
             for (const OUString& rStr : std::as_const(aSeq))
             {
-                ScUserListData* pNew = new ScUserListData(rStr);
-                aList.push_back(pNew);
+                aList.emplace_back(rStr);
             }
         }
 

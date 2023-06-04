@@ -258,8 +258,7 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
             pUserList->clear();
             for (const OUString& aEntry : std::as_const(aSeq))
             {
-                ScUserListData* pData = new ScUserListData(aEntry);
-                pUserList->push_back(pData);
+                pUserList->emplace_back(aEntry);
             }
             bSaveApp = true;    // List with App-Options are saved
         }

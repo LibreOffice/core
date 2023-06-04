@@ -321,7 +321,7 @@ void ScTpUserLists::AddNewList( const OUString& rEntriesStr )
 
     MakeListStr( theEntriesStr );
 
-    pUserLists->push_back(new ScUserListData(theEntriesStr));
+    pUserLists->emplace_back(theEntriesStr);
 }
 
 void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
@@ -425,11 +425,7 @@ void ScTpUserLists::ModifyList( size_t            nSelList,
 void ScTpUserLists::RemoveList( size_t nList )
 {
     if (pUserLists && nList < pUserLists->size())
-    {
-        ScUserList::iterator itr = pUserLists->begin();
-        ::std::advance(itr, nList);
-        pUserLists->erase(itr);
-    }
+        pUserLists->EraseData(nList);
 }
 
 // Handler:

@@ -613,8 +613,7 @@ void ScCopyPasteTest::tdf137205_autofillDatesInMergedCells()
 
 void ScCopyPasteTest::addToUserList(const OUString& rStr)
 {
-    ScUserListData* aListData = new ScUserListData(rStr);
-    ScGlobal::GetUserList()->push_back(aListData);
+    ScGlobal::GetUserList()->emplace_back(rStr);
 }
 
 void ScCopyPasteTest::tdf137653_137654_autofillUserlist()

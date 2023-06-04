@@ -23,13 +23,12 @@
 
 #include <rtl/ustring.hxx>
 
-#include <memory>
 #include <vector>
 
 /**
  * Stores individual user-defined sort list.
  */
-class SC_DLLPUBLIC ScUserListData
+class SC_DLLPUBLIC ScUserListData final
 {
 public:
     struct SAL_DLLPRIVATE SubStr
@@ -48,8 +47,9 @@ private:
 
 public:
     ScUserListData(OUString aStr);
+    // Copy ctor and assignment operator re-initialize tokens. Is this intended on copy?
     ScUserListData(const ScUserListData& rData);
-    ~ScUserListData();
+    ScUserListData& operator=(const ScUserListData& rData);
 
     const OUString& GetString() const { return aStr; }
     void SetString(const OUString& rStr);
@@ -65,32 +65,31 @@ public:
  */
 class SC_DLLPUBLIC ScUserList
 {
-    typedef std::vector<std::unique_ptr<ScUserListData>> DataType;
+    typedef std::vector<ScUserListData> DataType;
     DataType maData;
 
 public:
-    typedef DataType::iterator iterator;
-    typedef DataType::const_iterator const_iterator;
-
     ScUserList();
-    ScUserList(const ScUserList& r);
+    ScUserList(const ScUserList& r) = default;
+
+    void EraseData(size_t nIndex) { maData.erase(maData.cbegin() + nIndex); }
 
     const ScUserListData* GetData(const OUString& rSubStr) const;
     /// If the list in rStr is already inserted
     bool HasEntry(std::u16string_view rStr) const;
 
-    const ScUserListData& operator[](size_t nIndex) const;
-    ScUserListData& operator[](size_t nIndex);
-    ScUserList& operator=(const ScUserList& r);
+    const ScUserListData& operator[](size_t nIndex) const { return maData[nIndex]; }
+    ScUserListData& operator[](size_t nIndex) { return maData[nIndex]; }
+    ScUserList& operator=(const ScUserList& r) = default;
     bool operator==(const ScUserList& r) const;
-    bool operator!=(const ScUserList& r) const;
+    bool operator!=(const ScUserList& r) const { return !operator==(r); }
 
-    iterator begin();
-    const_iterator begin() const;
-    void clear();
-    size_t size() const;
-    void push_back(ScUserListData* p);
-    void erase(const iterator& itr);
+    void clear() { maData.clear(); }
+    size_t size() const { return maData.size(); }
+    template <class... Args> void emplace_back(Args&&... args)
+    {
+        maData.emplace_back(std::forward<Args>(args)...);
+    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
