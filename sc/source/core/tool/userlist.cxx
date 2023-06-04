@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
+#include <sal/config.h>
+
 #include <unotools/charclass.hxx>
 
 #include <global.hxx>
@@ -29,8 +30,8 @@
 #include <algorithm>
 #include <utility>
 
-ScUserListData::SubStr::SubStr(OUString aReal, OUString aUpper) :
-    maReal(std::move(aReal)), maUpper(std::move(aUpper)) {}
+ScUserListData::SubStr::SubStr(OUString&& aReal) :
+    maReal(std::move(aReal)), maUpper(ScGlobal::getCharClass().uppercase(maReal)) {}
 
 void ScUserListData::InitTokens()
 {
@@ -40,10 +41,7 @@ void ScUserListData::InitTokens()
     {
         OUString aSub = aStr.getToken(0, ScGlobal::cListDelimiter, nIndex);
         if (!aSub.isEmpty())
-        {
-            OUString aUpStr = ScGlobal::getCharClass().uppercase(aSub);
-            maSubStrings.emplace_back(aSub, aUpStr);
-        }
+            maSubStrings.emplace_back(std::move(aSub));
     } while (nIndex >= 0);
 }
 

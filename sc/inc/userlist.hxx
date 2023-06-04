@@ -30,15 +30,14 @@
  */
 class SC_DLLPUBLIC ScUserListData final
 {
-public:
+private:
     struct SAL_DLLPRIVATE SubStr
     {
         OUString maReal;
         OUString maUpper;
-        SubStr(OUString aReal, OUString aUpper);
+        SubStr(OUString&& aReal);
     };
 
-private:
     std::vector<SubStr> maSubStrings;
     OUString aStr;
 
