@@ -119,7 +119,7 @@ SvxConnectionPage::~SvxConnectionPage()
 }
 
 template<class T>
-void SvxConnectionPage::lcl_SetMetricValueAndSave_new(const SfxItemSet* rAttrs, weld::MetricSpinButton& rField, TypedWhichId<T> nWhich)
+void SvxConnectionPage::SetMetricValueAndSave(const SfxItemSet* rAttrs, weld::MetricSpinButton& rField, TypedWhichId<T> nWhich)
 {
     const SfxPoolItem* pItem = GetItem( *rAttrs,  nWhich);
     const SfxItemPool* pPool = rAttrs->GetPool();
@@ -141,25 +141,25 @@ void SvxConnectionPage::Reset( const SfxItemSet* rAttrs )
     const SfxItemPool* pPool = rAttrs->GetPool();
 
     // SdrEdgeNode1HorzDistItem
-    lcl_SetMetricValueAndSave_new(rAttrs, *m_xMtrFldHorz1, SDRATTR_EDGENODE1HORZDIST);
+    SetMetricValueAndSave(rAttrs, *m_xMtrFldHorz1, SDRATTR_EDGENODE1HORZDIST);
 
     // SdrEdgeNode2HorzDistItem
-    lcl_SetMetricValueAndSave_new(rAttrs, *m_xMtrFldHorz2, SDRATTR_EDGENODE2HORZDIST);
+    SetMetricValueAndSave(rAttrs, *m_xMtrFldHorz2, SDRATTR_EDGENODE2HORZDIST);
 
     // SdrEdgeNode1VertDistItem
-    lcl_SetMetricValueAndSave_new(rAttrs, *m_xMtrFldVert1, SDRATTR_EDGENODE1VERTDIST);
+    SetMetricValueAndSave(rAttrs, *m_xMtrFldVert1, SDRATTR_EDGENODE1VERTDIST);
 
     // SdrEdgeNode2VertDistItem
-    lcl_SetMetricValueAndSave_new(rAttrs, *m_xMtrFldVert2, SDRATTR_EDGENODE2VERTDIST);
+    SetMetricValueAndSave(rAttrs, *m_xMtrFldVert2, SDRATTR_EDGENODE2VERTDIST);
 
     // SdrEdgeLine1DeltaItem
-    lcl_SetMetricValueAndSave_new(rAttrs, *m_xMtrFldLine1, SDRATTR_EDGELINE1DELTA);
+    SetMetricValueAndSave(rAttrs, *m_xMtrFldLine1, SDRATTR_EDGELINE1DELTA);
 
     // SdrEdgeLine2DeltaItem
-    lcl_SetMetricValueAndSave_new(rAttrs, *m_xMtrFldLine2, SDRATTR_EDGELINE2DELTA);
+    SetMetricValueAndSave(rAttrs, *m_xMtrFldLine2, SDRATTR_EDGELINE2DELTA);
 
     // SdrEdgeLine3DeltaItem
-    lcl_SetMetricValueAndSave_new(rAttrs, *m_xMtrFldLine3, SDRATTR_EDGELINE3DELTA);
+    SetMetricValueAndSave(rAttrs, *m_xMtrFldLine3, SDRATTR_EDGELINE3DELTA);
 
     // SdrEdgeLineDeltaAnzItem
     pItem = GetItem( *rAttrs, SDRATTR_EDGELINEDELTACOUNT );
