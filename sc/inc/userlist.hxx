@@ -39,8 +39,7 @@ public:
     };
 
 private:
-    typedef std::vector<SubStr> SubStringsType;
-    SubStringsType maSubStrings;
+    std::vector<SubStr> maSubStrings;
     OUString aStr;
 
     SAL_DLLPRIVATE void InitTokens();
@@ -53,7 +52,7 @@ public:
 
     const OUString& GetString() const { return aStr; }
     void SetString(const OUString& rStr);
-    size_t GetSubCount() const;
+    size_t GetSubCount() const { return maSubStrings.size(); }
     bool GetSubIndex(const OUString& rSubStr, sal_uInt16& rIndex, bool& bMatchCase) const;
     OUString GetSubStr(sal_uInt16 nIndex) const;
     sal_Int32 Compare(const OUString& rSubStr1, const OUString& rSubStr2) const;

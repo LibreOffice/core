@@ -29,22 +29,6 @@
 #include <algorithm>
 #include <utility>
 
-namespace {
-
-class FindByName
-{
-    const OUString& mrName;
-    bool mbUpper;
-public:
-    FindByName(const OUString& rName, bool bUpper) : mrName(rName), mbUpper(bUpper) {}
-    bool operator() (const ScUserListData::SubStr& r) const
-    {
-        return mbUpper ? r.maUpper == mrName : r.maReal == mrName;
-    }
-};
-
-}
-
 ScUserListData::SubStr::SubStr(OUString aReal, OUString aUpper) :
     maReal(std::move(aReal)), maUpper(std::move(aUpper)) {}
 
@@ -52,37 +36,16 @@ void ScUserListData::InitTokens()
 {
     sal_Unicode cSep = ScGlobal::cListDelimiter;
     maSubStrings.clear();
-    const sal_Unicode* p = aStr.getStr();
-    const sal_Unicode* p0 = p;
-    sal_Int32 nLen = 0;
-    bool bFirst = true;
-    for (sal_Int32 i = 0, n = aStr.getLength(); i < n; ++i, ++p, ++nLen)
+    sal_Int32 nIndex = 0;
+    do
     {
-        if (bFirst)
+        OUString aSub = aStr.getToken(0, cSep, nIndex);
+        if (!aSub.isEmpty())
         {
-            // very first character, or the first character after a separator.
-            p0 = p;
-            nLen = 0;
-            bFirst = false;
+            OUString aUpStr = ScGlobal::getCharClass().uppercase(aSub);
+            maSubStrings.emplace_back(aSub, aUpStr);
         }
-        if (*p == cSep)
-        {
-            if (nLen)
-            {
-                OUString aSub(p0, nLen);
-                OUString aUpStr = ScGlobal::getCharClass().uppercase(aSub);
-                maSubStrings.emplace_back(aSub, aUpStr);
-            }
-            bFirst = true;
-        }
-    }
-
-    if (nLen)
-    {
-        OUString aSub(p0, nLen);
-        OUString aUpStr = ScGlobal::getCharClass().uppercase(aSub);
-        maSubStrings.emplace_back(aSub, aUpStr);
-    }
+    } while (nIndex >= 0);
 }
 
 ScUserListData::ScUserListData(OUString _aStr) :
@@ -109,16 +72,11 @@ void ScUserListData::SetString( const OUString& rStr )
     InitTokens();
 }
 
-size_t ScUserListData::GetSubCount() const
-{
-    return maSubStrings.size();
-}
-
 bool ScUserListData::GetSubIndex(const OUString& rSubStr, sal_uInt16& rIndex, bool& bMatchCase) const
 {
     // First, case sensitive search.
-    SubStringsType::const_iterator itr = ::std::find_if(
-        maSubStrings.begin(), maSubStrings.end(), FindByName(rSubStr, false));
+    auto itr = ::std::find_if(maSubStrings.begin(), maSubStrings.end(),
+                              [&rSubStr](const SubStr& item) { return item.maReal == rSubStr; });
     if (itr != maSubStrings.end())
     {
         rIndex = ::std::distance(maSubStrings.begin(), itr);
@@ -127,16 +85,15 @@ bool ScUserListData::GetSubIndex(const OUString& rSubStr, sal_uInt16& rIndex, bo
     }
 
     // When that fails, do a case insensitive search.
+    bMatchCase = false;
     OUString aUpStr = ScGlobal::getCharClass().uppercase(rSubStr);
-    itr = ::std::find_if(
-        maSubStrings.begin(), maSubStrings.end(), FindByName(aUpStr, true));
+    itr = ::std::find_if(maSubStrings.begin(), maSubStrings.end(),
+                         [&aUpStr](const SubStr& item) { return item.maUpper == aUpStr; });
     if (itr != maSubStrings.end())
     {
         rIndex = ::std::distance(maSubStrings.begin(), itr);
-        bMatchCase = false;
         return true;
     }
-    bMatchCase = false;
     return false;
 }
 
