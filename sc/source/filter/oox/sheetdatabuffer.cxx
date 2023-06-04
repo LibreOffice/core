@@ -390,10 +390,17 @@ void SheetDataBuffer::addColXfStyleProcessRowRanges()
     for ( sal_Int32 nCol = 0; nCol <= nMaxCol; ++nCol )
     {
         RowStyles& rRowStyles = maStylesPerColumn[ nCol ];
-        for ( const auto& [nXfId, rRowRangeList] : maXfIdRowRangeList )
+        for ( auto& [nXfId, rRowRangeList] : maXfIdRowRangeList )
         {
             if ( nXfId == -1 ) // it's a dud skip it
                 continue;
+            // sort the row ranges, so we spend less time moving data around
+            // when we insert into aStyleRows
+            std::sort(rRowRangeList.begin(), rRowRangeList.end(),
+                [](const ValueRange& lhs, const ValueRange& rhs)
+                {
+                    return lhs.mnFirst < rhs.mnFirst;
+                });
             // get all row ranges for id
             for ( const auto& rRange : rRowRangeList )
             {
