@@ -143,7 +143,7 @@ public:
         }
     }
 
-    void updateParagraphAttibutes(SwTextNode* pTextNode)
+    void updateParagraphAttributes(SwTextNode* pTextNode)
     {
         if (!pTextNode->HasSwAttrSet())
             return;
@@ -238,7 +238,7 @@ public:
             return;
 
         updateHints(pNode->GetTextNode());
-        updateParagraphAttibutes(pNode->GetTextNode());
+        updateParagraphAttributes(pNode->GetTextNode());
     }
 
     void handleSdrObject(SdrObject* pObject) override
