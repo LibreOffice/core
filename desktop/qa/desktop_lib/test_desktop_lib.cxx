@@ -217,6 +217,7 @@ public:
     void testRenderSearchResult_CommonNode();
     void testNoDuplicateTableSelection();
     void testMultiViewTableSelection();
+    void testColorPaletteCallback();
     void testABI();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
@@ -287,6 +288,7 @@ public:
     CPPUNIT_TEST(testRenderSearchResult_CommonNode);
     CPPUNIT_TEST(testNoDuplicateTableSelection);
     CPPUNIT_TEST(testMultiViewTableSelection);
+    CPPUNIT_TEST(testColorPaletteCallback);
     CPPUNIT_TEST(testABI);
     CPPUNIT_TEST_SUITE_END();
 
@@ -2159,12 +2161,14 @@ class ViewCallback
 public:
     OString m_aCellFormula;
     int m_nTableSelectionCount;
+    int m_nColorPaletteCallbackCount = 0;
     bool m_bEmptyTableSelection;
     bool m_bTilesInvalidated;
     bool m_bZeroCursor;
     tools::Rectangle m_aOwnCursor;
     boost::property_tree::ptree m_aCommentCallbackResult;
     boost::property_tree::ptree m_aCallbackWindowResult;
+    boost::property_tree::ptree m_aColorPaletteCallbackResult;
     bool m_bWindowHidden;
 
     ViewCallback(LibLODocument_Impl* pDocument)
@@ -2242,6 +2246,14 @@ public:
         {
             m_bEmptyTableSelection = (std::string(pPayload).compare("{ }") == 0);
             ++m_nTableSelectionCount;
+        }
+        break;
+        case LOK_CALLBACK_COLOR_PALETTES:
+        {
+            m_aColorPaletteCallbackResult.clear();
+            std::stringstream aStream(pPayload);
+            boost::property_tree::read_json(aStream, m_aColorPaletteCallbackResult);
+            ++m_nColorPaletteCallbackCount;
         }
         break;
         }
@@ -3522,6 +3534,34 @@ void DesktopLOKTest::testMultiViewTableSelection()
     // View2 should not get any table selection.
     CPPUNIT_ASSERT_EQUAL(0, aView2.m_nTableSelectionCount);
     CPPUNIT_ASSERT(!aView1.m_bEmptyTableSelection);
+}
+
+void DesktopLOKTest::testColorPaletteCallback()
+{
+    LibLODocument_Impl* pDocument = loadDoc("ThemeDocument.docx");
+
+    // Create view 1.
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    ViewCallback aView1(pDocument);
+    Scheduler::ProcessEventsToIdle();
+    {
+        CPPUNIT_ASSERT_EQUAL(1, aView1.m_nColorPaletteCallbackCount);
+        boost::property_tree::ptree aValues = aView1.m_aColorPaletteCallbackResult.get_child("ThemeColors");
+        CPPUNIT_ASSERT(!aValues.empty());
+        CPPUNIT_ASSERT_EQUAL(size_t(6), aValues.size());
+    }
+
+    // Create view 2.
+    pDocument->m_pDocumentClass->createView(pDocument);
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    ViewCallback aView2(pDocument);
+    Scheduler::ProcessEventsToIdle();
+    {
+        CPPUNIT_ASSERT_EQUAL(1, aView2.m_nColorPaletteCallbackCount);
+        boost::property_tree::ptree aValues = aView1.m_aColorPaletteCallbackResult.get_child("ThemeColors");
+        CPPUNIT_ASSERT(!aValues.empty());
+        CPPUNIT_ASSERT_EQUAL(size_t(6), aValues.size());
+    }
 }
 
 namespace {

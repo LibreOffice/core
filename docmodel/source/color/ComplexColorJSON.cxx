@@ -12,7 +12,6 @@
 #include <sstream>
 #include <utility>
 #include <sal/log.hxx>
-#include <boost/property_tree/json_parser.hpp>
 
 namespace model::color
 {
@@ -57,10 +56,9 @@ bool convertFromJSON(OString const& rJsonString, model::ComplexColor& rComplexCo
     return true;
 }
 
-OString convertToJSON(model::ComplexColor const& rComplexColor)
+void convertToJSONTree(boost::property_tree::ptree& rTree, model::ComplexColor const& rComplexColor)
 {
-    boost::property_tree::ptree aTree;
-    aTree.put("ThemeIndex", sal_Int16(rComplexColor.getSchemeType()));
+    rTree.put("ThemeIndex", sal_Int16(rComplexColor.getSchemeType()));
 
     boost::property_tree::ptree aTransformationsList;
     for (auto const& rTransformation : rComplexColor.getTransformations())
@@ -91,11 +89,17 @@ OString convertToJSON(model::ComplexColor const& rComplexColor)
             aTransformationsList.push_back(std::make_pair("", aChild));
         }
     }
-    aTree.add_child("Transformations", aTransformationsList);
+    rTree.add_child("Transformations", aTransformationsList);
+}
+
+OString convertToJSON(model::ComplexColor const& rComplexColor)
+{
+    boost::property_tree::ptree aTree;
+    convertToJSONTree(aTree, rComplexColor);
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
 
-    return OString(aStream.str().c_str());
+    return OString(aStream.str());
 }
 
 } // end model::theme

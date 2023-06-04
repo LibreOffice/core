@@ -1491,6 +1491,7 @@ callback (gpointer pData)
     case LOK_CALLBACK_A11Y_FOCUS_CHANGED:
     case LOK_CALLBACK_A11Y_CARET_CHANGED:
     case LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED:
+    case LOK_CALLBACK_COLOR_PALETTES:
     {
         // TODO: Implement me
         break;

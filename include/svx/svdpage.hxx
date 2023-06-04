@@ -326,6 +326,7 @@ private:
 
     SdrPageProperties& operator=(const SdrPageProperties& rCandidate) = delete;
 
+    void sendLOKitThemeChangedCallback();
 public:
     // construct/destruct
     SdrPageProperties(SdrPage& rSdrPage);

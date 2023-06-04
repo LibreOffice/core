@@ -1013,6 +1013,11 @@ void ViewShellBase::setEditMode(int nMode)
     }
 }
 
+void ViewShellBase::afterCallbackRegistered()
+{
+    // TODO: Add theme color palette changed callback
+}
+
 void ViewShellBase::NotifyCursor(SfxViewShell* pOtherShell) const
 {
     ViewShell* pThisShell = framework::FrameworkHelper::Instance(*const_cast<ViewShellBase*>(this))->GetViewShell(FrameworkHelper::msCenterPaneURL).get();

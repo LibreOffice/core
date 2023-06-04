@@ -217,6 +217,8 @@ public:
     int getEditMode() const override;
     /// See SfxViewShell::setEditMode().
     void setEditMode(int nMode);
+    /// See SfxViewShell::afterCallbackRegistered().
+    void afterCallbackRegistered() override;
     /// See SfxViewShell::NotifyCursor().
     void NotifyCursor(SfxViewShell* pViewShell) const override;
 
