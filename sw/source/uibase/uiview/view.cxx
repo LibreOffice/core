@@ -27,6 +27,7 @@
 #include <stdlib.h>
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/lok.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/string_view.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -100,7 +101,7 @@
 #include <PostItMgr.hxx>
 #include <annotsh.hxx>
 #include <swruler.hxx>
-
+#include <svx/theme/ThemeColorPaletteManager.hxx>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
@@ -1175,6 +1176,18 @@ SwView::~SwView()
     m_pEditWin.disposeAndClear();
 
     m_pFormatClipboard.reset();
+}
+
+void SwView::afterCallbackRegistered()
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+    auto* pDocShell = GetDocShell();
+    if (pDocShell)
+    {
+        svx::ThemeColorPaletteManager aManager(pDocShell->GetThemeColors());
+        libreOfficeKitViewCallback(LOK_CALLBACK_COLOR_PALETTES, aManager.generateJSON());
+    }
 }
 
 SwDocShell* SwView::GetDocShell()

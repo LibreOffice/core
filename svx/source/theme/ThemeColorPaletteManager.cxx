@@ -15,6 +15,8 @@
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <docmodel/theme/ColorSet.hxx>
+#include <docmodel/color/ComplexColorJSON.hxx>
+#include <boost/property_tree/json_parser.hpp>
 
 #include <array>
 
@@ -123,6 +125,47 @@ svx::ThemePaletteCollection ThemeColorPaletteManager::generate()
         }
     }
     return aThemePaletteCollection;
+}
+
+OString ThemeColorPaletteManager::generateJSON()
+{
+    svx::ThemePaletteCollection aThemePaletteCollection = generate();
+
+    boost::property_tree::ptree aTree;
+    boost::property_tree::ptree aColorListTree;
+
+    for (size_t nEffect = 0; nEffect < 6; ++nEffect)
+    {
+        boost::property_tree::ptree aColorRowTree;
+        for (size_t nIndex = 0; nIndex < 12; ++nIndex)
+        {
+            auto const& rColorData = aThemePaletteCollection.maColors[nIndex];
+            auto const& rEffectData = rColorData.maEffects[nEffect];
+
+            boost::property_tree::ptree aColorTree;
+            aColorTree.put("Value", rEffectData.maColor.AsRGBHexString().toUtf8());
+            aColorTree.put("Name", rEffectData.maColorName.toUtf8());
+
+            model::ComplexColor aComplexColor;
+            aComplexColor.setSchemeColor(rColorData.meThemeColorType);
+            aComplexColor.addTransformation(
+                { model::TransformationType::LumMod, rEffectData.mnLumMod });
+            aComplexColor.addTransformation(
+                { model::TransformationType::LumMod, rEffectData.mnLumOff });
+            boost::property_tree::ptree aDataTree;
+            model::color::convertToJSONTree(aDataTree, aComplexColor);
+            aColorTree.add_child("Data", aDataTree);
+            aColorRowTree.push_back(std::make_pair("", aColorTree));
+        }
+        aColorListTree.push_back(std::make_pair("", aColorRowTree));
+    }
+
+    aTree.add_child("ThemeColors", aColorListTree);
+
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+
+    return OString(aStream.str());
 }
 
 } // end svx namespace

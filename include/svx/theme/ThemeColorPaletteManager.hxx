@@ -60,6 +60,7 @@ class SVXCORE_DLLPUBLIC ThemeColorPaletteManager final
 public:
     ThemeColorPaletteManager(std::shared_ptr<model::ColorSet> const& pColorSet);
     ThemePaletteCollection generate();
+    OString generateJSON();
 };
 
 } // end svx namespace

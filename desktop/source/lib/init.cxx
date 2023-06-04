@@ -1816,6 +1816,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
         case LOK_CALLBACK_A11Y_FOCUS_CHANGED:
         case LOK_CALLBACK_A11Y_CARET_CHANGED:
         case LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED:
+        case LOK_CALLBACK_COLOR_PALETTES:
         {
             const auto& pos = std::find(m_queue1.rbegin(), m_queue1.rend(), type);
             auto pos2 = toQueue2(pos);
@@ -1877,6 +1878,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
             case LOK_CALLBACK_A11Y_FOCUS_CHANGED:
             case LOK_CALLBACK_A11Y_CARET_CHANGED:
             case LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED:
+            case LOK_CALLBACK_COLOR_PALETTES:
             {
                 if (removeAll(type))
                     SAL_INFO("lok", "Removed dups of [" << type << "]: [" << aCallbackData.getPayload() << "].");

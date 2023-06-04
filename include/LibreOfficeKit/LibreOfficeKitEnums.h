@@ -955,7 +955,12 @@ typedef enum
      *  }
      *  where [N1,N2] is the range of the text selection inside the focused paragraph.
      */
-    LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED = 64
+    LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED = 64,
+
+    /**
+     * Informs the LibreOfficeKit client that the color palettes have changed.
+    */
+    LOK_CALLBACK_COLOR_PALETTES = 65
 }
 LibreOfficeKitCallbackType;
 
@@ -1114,6 +1119,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_A11Y_CARET_CHANGED";
     case LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED:
         return "LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED";
+    case LOK_CALLBACK_COLOR_PALETTES:
+        return "LOK_CALLBACK_COLOR_PALETTES";
     }
 
     assert(!"Unknown LibreOfficeKitCallbackType type.");
