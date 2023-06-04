@@ -710,17 +710,6 @@ SmColorTokenTableEntry starmathdatabase::Identify_Color_Parser(sal_uInt32 cColor
         return SmColorTokenTableEntry("", TRGBA, cColor);
 }
 
-SmColorTokenTableEntry starmathdatabase::Identify_Color_HTML(sal_uInt32 cColor)
-{
-    for (auto i = std::begin(aColorTokenTableHTML); i < std::end(aColorTokenTableHTML); ++i)
-        if (i->equals(cColor))
-            return i;
-    if ((cColor & 0x00FFFFFF) == cColor)
-        return SmColorTokenTableEntry("", TRGB, cColor);
-    else
-        return SmColorTokenTableEntry("", TRGBA, cColor);
-}
-
 SmColorTokenTableEntry starmathdatabase::Identify_Color_MATHML(sal_uInt32 cColor)
 {
     for (auto i = std::begin(aColorTokenTableMATHML); i < std::end(aColorTokenTableMATHML); ++i)

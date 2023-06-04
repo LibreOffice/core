@@ -267,14 +267,6 @@ SmColorTokenTableEntry Identify_Color_Parser(sal_uInt32 cColor);
 
 /**
   * Identifies color from color code cColor.
-  * It will be returned with the HTML syntax.
-  * @param cColor
-  * @param parser color
-  */
-SmColorTokenTableEntry Identify_Color_HTML(sal_uInt32 cColor);
-
-/**
-  * Identifies color from color code cColor.
   * It will be returned with the MATHML syntax.
   *
   * This is used to export mathml.
