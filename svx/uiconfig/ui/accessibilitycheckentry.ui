@@ -5,13 +5,15 @@
   <object class="GtkBox" id="accessibilityCheckEntryBox">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
-    <property name="margin-start">3</property>
-    <property name="margin-end">3</property>
+    <property name="margin-top">1</property>
+    <property name="margin-bottom">1</property>
+    <property name="hexpand">True</property>
     <property name="spacing">6</property>
     <child>
       <object class="GtkLabel" id="accessibilityCheckEntryLabel">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="margin-start">6</property>
         <property name="hexpand">True</property>
         <property name="wrap">True</property>
         <property name="selectable">True</property>
@@ -23,21 +25,23 @@
         </child>
       </object>
       <packing>
-        <property name="expand">False</property>
+        <property name="expand">True</property>
         <property name="fill">True</property>
         <property name="position">0</property>
       </packing>
     </child>
     <child>
-      <object class="GtkButton" id="accessibilityCheckEntryGotoButton">
-        <property name="label" translatable="yes" context="accessibilitycheckentry|accessibilityCheckEntryGotoButton">Go to</property>
+      <object class="GtkLinkButton" id="accessibilityCheckEntryLinkButton">
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="receives-default">True</property>
+        <property name="halign">start</property>
+        <property name="hexpand">True</property>
+        <property name="relief">none</property>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="fill">False</property>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
     </child>
@@ -47,6 +51,8 @@
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="receives-default">True</property>
+        <property name="halign">end</property>
+        <property name="valign">center</property>
       </object>
       <packing>
         <property name="expand">False</property>

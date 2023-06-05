@@ -33,24 +33,36 @@ AccessibilityCheckEntry::AccessibilityCheckEntry(
     : m_xBuilder(Application::CreateBuilder(pParent, "svx/ui/accessibilitycheckentry.ui"))
     , m_xContainer(m_xBuilder->weld_container("accessibilityCheckEntryBox"))
     , m_xLabel(m_xBuilder->weld_label("accessibilityCheckEntryLabel"))
-    , m_xGotoButton(m_xBuilder->weld_button("accessibilityCheckEntryGotoButton"))
+    , m_xGotoButton(m_xBuilder->weld_link_button("accessibilityCheckEntryLinkButton"))
     , m_xFixButton(m_xBuilder->weld_button("accessibilityCheckEntryFixButton"))
     , m_pAccessibilityIssue(rAccessibilityIssue)
 {
-    m_xLabel->set_label(m_pAccessibilityIssue->m_aIssueText);
     // lock in the height as including the button so all rows are the same height
     m_xContainer->set_size_request(-1, m_xContainer->get_preferred_size().Height());
-    m_xGotoButton->set_visible(m_pAccessibilityIssue->canGotoIssue());
-    m_xGotoButton->connect_clicked(LINK(this, AccessibilityCheckEntry, GotoButtonClicked));
+
+    if (m_pAccessibilityIssue->canGotoIssue())
+    {
+        m_xGotoButton->set_label(m_pAccessibilityIssue->m_aIssueText);
+        m_xGotoButton->connect_activate_link(
+            LINK(this, AccessibilityCheckEntry, GotoButtonClicked));
+        m_xLabel->set_visible(false);
+    }
+    else
+    {
+        m_xLabel->set_label(m_pAccessibilityIssue->m_aIssueText);
+        m_xGotoButton->set_visible(false);
+    }
+
     m_xFixButton->set_visible(m_pAccessibilityIssue->canQuickFixIssue());
     m_xFixButton->connect_clicked(LINK(this, AccessibilityCheckEntry, FixButtonClicked));
 
     m_pAccessibilityIssue->setParent(dynamic_cast<weld::Window*>(get_widget()));
 }
 
-IMPL_LINK_NOARG(AccessibilityCheckEntry, GotoButtonClicked, weld::Button&, void)
+IMPL_LINK_NOARG(AccessibilityCheckEntry, GotoButtonClicked, weld::LinkButton&, bool)
 {
     m_pAccessibilityIssue->gotoIssue();
+    return true;
 }
 
 IMPL_LINK_NOARG(AccessibilityCheckEntry, FixButtonClicked, weld::Button&, void)
