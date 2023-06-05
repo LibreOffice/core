@@ -66,6 +66,10 @@ struct PDFNote
     OUString          Title;          // optional title for the popup containing the note
     OUString          Contents;       // contents of the note
     css::util::DateTime maModificationDate;
+    bool isFreeText;
+    std::vector<basegfx::B2DPolygon> maPolygons;
+    Color annotColor;
+    Color interiorColor;
 };
 
 class VCL_DLLPUBLIC PDFOutputStream

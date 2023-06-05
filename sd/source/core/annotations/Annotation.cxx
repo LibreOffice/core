@@ -117,11 +117,13 @@ void createAnnotation(uno::Reference<office::XAnnotation>& xAnnotation, SdPage* 
 
 sal_uInt32 Annotation::m_nLastId = 1;
 
-Annotation::Annotation( const uno::Reference<uno::XComponentContext>& context, SdPage* pPage )
-: ::cppu::WeakComponentImplHelper<office::XAnnotation>(m_aMutex)
-, ::cppu::PropertySetMixin<office::XAnnotation>(context, IMPLEMENTS_PROPERTY_SET, uno::Sequence<OUString>())
-, m_nId( m_nLastId++ )
-, mpPage( pPage )
+Annotation::Annotation(const uno::Reference<uno::XComponentContext>& context, SdPage* pPage)
+    : ::cppu::WeakComponentImplHelper<office::XAnnotation>(m_aMutex)
+    , ::cppu::PropertySetMixin<office::XAnnotation>(context, IMPLEMENTS_PROPERTY_SET,
+                                                    uno::Sequence<OUString>())
+    , m_nId(m_nLastId++)
+    , mpPage(pPage)
+    , m_bIsFreeText(false)
 {
 }
 

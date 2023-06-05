@@ -176,6 +176,7 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
             auto eSubtype = pAnnotation->getSubType();
 
             if (eSubtype == vcl::pdf::PDFAnnotationSubType::Text
+                || eSubtype == vcl::pdf::PDFAnnotationSubType::FreeText
                 || eSubtype == vcl::pdf::PDFAnnotationSubType::Polygon
                 || eSubtype == vcl::pdf::PDFAnnotationSubType::Circle
                 || eSubtype == vcl::pdf::PDFAnnotationSubType::Square
