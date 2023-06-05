@@ -748,10 +748,16 @@ public:
         = 0;
     virtual void insert_vector(const std::vector<weld::ComboBoxEntry>& rItems, bool bKeepExisting)
         = 0;
+    void insert(int pos, const weld::ComboBoxEntry& rItem)
+    {
+        insert(pos, rItem.sString, rItem.sId.isEmpty() ? nullptr : &rItem.sId,
+               rItem.sImage.isEmpty() ? nullptr : &rItem.sImage, nullptr);
+    }
     void insert_text(int pos, const OUString& rStr)
     {
         insert(pos, rStr, nullptr, nullptr, nullptr);
     }
+    void append(const weld::ComboBoxEntry& rItem) { insert(-1, rItem); }
     void append_text(const OUString& rStr) { insert(-1, rStr, nullptr, nullptr, nullptr); }
     void append(const OUString& rId, const OUString& rStr)
     {
@@ -1919,10 +1925,7 @@ public:
         if (!bKeepExisting)
             m_xTreeView->clear();
         for (const auto& rItem : rItems)
-        {
-            m_xTreeView->insert(-1, rItem.sString, rItem.sId.isEmpty() ? nullptr : &rItem.sId,
-                                rItem.sImage.isEmpty() ? nullptr : &rItem.sImage, nullptr);
-        }
+            append(rItem);
         m_xTreeView->thaw();
     }
 
