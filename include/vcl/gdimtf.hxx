@@ -67,6 +67,9 @@ private:
     bool            m_bRecord;
     bool            m_bUseCanvas;
 
+    // tdf#155479 need to know if it's SVG export
+    bool            m_bSVG;
+
 
     SAL_DLLPRIVATE static Color         ImplColAdjustFnc( const Color& rColor, const void* pColParam );
     SAL_DLLPRIVATE static BitmapEx      ImplBmpAdjustFnc( const BitmapEx& rBmpEx, const void* pBmpParam );
@@ -185,6 +188,10 @@ public:
 
     void            UseCanvas( bool _bUseCanvas );
     bool            GetUseCanvas() const { return m_bUseCanvas; }
+
+    // tdf#155479
+    bool getSVG() const { return m_bSVG; }
+    void setSVG(bool bNew) { m_bSVG = bNew; }
 
     /// Dumps the meta actions as XML in metafile.xml.
     void dumpAsXml(const char* pFileName = nullptr) const;

@@ -2381,7 +2381,8 @@ bool SVGFilter::implCreateObjectsFromShape( const Reference< css::drawing::XDraw
 
         if( pObj )
         {
-            Graphic aGraphic(SdrExchangeView::GetObjGraphic(*pObj));
+            // tdf#155479 need to signal SVG export
+            Graphic aGraphic(SdrExchangeView::GetObjGraphic(*pObj, true));
 
             // Writer graphic shapes are handled differently
             if( mbWriterFilter && aGraphic.GetType() == GraphicType::NONE )

@@ -43,6 +43,7 @@
 #include <vcl/region.hxx>
 #include <vcl/rendercontext/RasterOp.hxx>
 #include <vcl/wall.hxx>
+#include <basegfx/utils/bgradient.hxx>
 
 #include <memory>
 
@@ -1569,7 +1570,7 @@ public:
     bool                IsTransparent() const override { return true; }
 };
 
-class SAL_DLLPUBLIC_RTTI MetaFloatTransparentAction final : public MetaAction
+class VCL_DLLPUBLIC MetaFloatTransparentAction final : public MetaAction
 {
 private:
 
@@ -1577,6 +1578,9 @@ private:
     Point               maPoint;
     Size                maSize;
     Gradient            maGradient;
+
+    // tdf#155479 allow holding MCGR infos
+    std::optional<basegfx::BColorStops> maSVGTransparencyColorStops;
 
 public:
                         MetaFloatTransparentAction();
@@ -1605,6 +1609,11 @@ public:
     void                SetSize(const Size& rSize) { maSize = rSize; }
     void                SetGradient(const Gradient& rGradient) { maGradient = rGradient; }
     bool                IsTransparent() const override { return true; }
+
+    // tdf#155479 allow holding MCGR infos
+    const basegfx::BColorStops* getSVGTransparencyColorStops() const
+    { return !maSVGTransparencyColorStops ? nullptr : &(*maSVGTransparencyColorStops); }
+    void addSVGTransparencyColorStops(const basegfx::BColorStops& rSVGTransparencyColorStops);
 };
 
 class VCL_DLLPUBLIC MetaEPSAction final : public MetaAction
