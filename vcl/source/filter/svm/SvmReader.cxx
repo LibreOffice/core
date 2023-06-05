@@ -1352,6 +1352,27 @@ rtl::Reference<MetaAction> SvmReader::FloatTransparentHandler(ImplMetaReadData* 
     pAction->SetSize(aSize);
     pAction->SetGradient(aGradient);
 
+    // tdf#155479 add support for MCGR and SVG export
+    if (aCompat.GetVersion() > 1)
+    {
+        basegfx::BColorStops aColorStops;
+        sal_uInt16 nTmp;
+        double fOff, fR, fG, fB;
+        mrStream.ReadUInt16(nTmp);
+
+        for (sal_uInt16 a(0); a < nTmp; a++)
+        {
+            mrStream.ReadDouble(fOff);
+            mrStream.ReadDouble(fR);
+            mrStream.ReadDouble(fG);
+            mrStream.ReadDouble(fB);
+
+            aColorStops.emplace_back(fOff, basegfx::BColor(fR, fG, fB));
+        }
+
+        pAction->addSVGTransparencyColorStops(aColorStops);
+    }
+
     return pAction;
 }
 

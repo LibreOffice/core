@@ -679,6 +679,117 @@ bool BColorStops::isSymmetrical() const
     return aIter > aRIter;
 }
 
+void BColorStops::doApplyAxial()
+{
+    // preapare new ColorStops
+    basegfx::BColorStops aNewColorStops;
+
+    // add gradient stops in reverse order, scaled to [0.0 .. 0.5]
+    basegfx::BColorStops::const_reverse_iterator aRevCurrColor(rbegin());
+
+    while (aRevCurrColor != rend())
+    {
+        aNewColorStops.emplace_back((1.0 - aRevCurrColor->getStopOffset()) * 0.5,
+                                    aRevCurrColor->getStopColor());
+        aRevCurrColor++;
+    }
+
+    // prepare non-reverse run
+    basegfx::BColorStops::const_iterator aCurrColor(begin());
+
+    if (basegfx::fTools::equalZero(aCurrColor->getStopOffset()))
+    {
+        // Caution: do not add 1st entry again, that would be double since it was
+        // already added as last element of the inverse run above. But only if
+        // the gradient has a start entry for 0.0 aka StartColor, else it is correct.
+        aCurrColor++;
+    }
+
+    // add gradient stops in non-reverse order, translated and scaled to [0.5 .. 1.0]
+    while (aCurrColor != end())
+    {
+        aNewColorStops.emplace_back((aCurrColor->getStopOffset() * 0.5) + 0.5,
+                                    aCurrColor->getStopColor());
+        aCurrColor++;
+    }
+
+    // apply color stops
+    *this = aNewColorStops;
+}
+
+void BColorStops::doApplySteps(sal_uInt16 nStepCount)
+{
+    // check for zero or invalid steps setting -> done
+    if (0 == nStepCount || nStepCount > 100)
+        return;
+
+    // no change needed if single color
+    BColor aSingleColor;
+    if (isSingleColor(aSingleColor))
+        return;
+
+    // prepare new color stops, get L/R iterators for segments
+    basegfx::BColorStops aNewColorStops;
+    basegfx::BColorStops::const_iterator aColorR(begin());
+    basegfx::BColorStops::const_iterator aColorL(aColorR++);
+
+    while (aColorR != end())
+    {
+        // get start/end color for segment
+        const double fStart(aColorL->getStopOffset());
+        const double fDelta(aColorR->getStopOffset() - fStart);
+
+        if (aNewColorStops.empty() || aNewColorStops.back() != *aColorL)
+        {
+            // add start color, but check if it is already there - which is the
+            // case from the 2nd segment on due to a new segment starting with
+            // the same color as the previous one ended
+            aNewColorStops.push_back(*aColorL);
+        }
+
+        if (!basegfx::fTools::equalZero(fDelta))
+        {
+            // create in-between steps, always two at the same positon to
+            // define a 'hard' color stop. Get start/end color for the segment
+            const basegfx::BColor& rStartColor(aColorL->getStopColor());
+            const basegfx::BColor& rEndColor(aColorR->getStopColor());
+
+            if (rStartColor != rEndColor)
+            {
+                // get relative single-step width
+                const double fSingleStep(1.0 / static_cast<double>(nStepCount));
+
+                for (sal_uInt16 a(1); a < nStepCount; a++)
+                {
+                    // calculate position since being used twice
+                    const double fPosition(fStart
+                                           + (fDelta * (static_cast<double>(a) * fSingleStep)));
+
+                    // add start color of sub-segment
+                    aNewColorStops.emplace_back(
+                        fPosition, basegfx::interpolate(rStartColor, rEndColor,
+                                                        static_cast<double>(a - 1) * fSingleStep));
+
+                    // add end color of sub-segment
+                    aNewColorStops.emplace_back(
+                        fPosition, basegfx::interpolate(rStartColor, rEndColor,
+                                                        static_cast<double>(a) * fSingleStep));
+                }
+            }
+        }
+
+        // always add end color of segment
+        aNewColorStops.push_back(*aColorR);
+
+        // next segment
+        aColorL++;
+        aColorR++;
+    }
+
+    // apply the change to color stops
+    *this = aNewColorStops;
+}
+
 std::string BGradient::GradientStyleToString(css::awt::GradientStyle eStyle)
 {
     switch (eStyle)
@@ -1021,6 +1132,32 @@ void BGradient::tryToConvertToAxial()
     aAxialColorStops.reverseColorStops();
 
     SetColorStops(aAxialColorStops);
+}
+
+void BGradient::tryToApplyAxial()
+{
+    // only need to do something if css::awt::GradientStyle_AXIAL, else done
+    if (GetGradientStyle() != css::awt::GradientStyle_AXIAL)
+        return;
+
+    // apply the change to color stops
+    aColorStops.doApplyAxial();
+
+    // set style to GradientStyle_LINEAR
+    SetGradientStyle(css::awt::GradientStyle_LINEAR);
+}
+
+void BGradient::tryToApplySteps()
+{
+    // check for zero or invalid steps setting -> done
+    if (0 == GetSteps() || GetSteps() > 100)
+        return;
+
+    // do the action
+    aColorStops.doApplySteps(GetSteps());
+
+    // set value to default
+    SetSteps(0);
 }
 }
 

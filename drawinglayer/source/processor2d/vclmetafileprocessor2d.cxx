@@ -66,6 +66,7 @@
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx> // for Title/Description metadata
 #include <drawinglayer/converters.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <tools/vcompat.hxx>
 
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>
@@ -1972,58 +1973,126 @@ void VclMetafileProcessor2D::processPolyPolygonHatchPrimitive2D(
 void VclMetafileProcessor2D::processPolyPolygonGradientPrimitive2D(
     const primitive2d::PolyPolygonGradientPrimitive2D& rGradientCandidate)
 {
-    basegfx::B2DVector aScale, aTranslate;
-    double fRotate, fShearX;
+    bool useDecompose(false);
 
-    maCurrentTransformation.decompose(aScale, aTranslate, fRotate, fShearX);
-
-    if (!basegfx::fTools::equalZero(fRotate) || !basegfx::fTools::equalZero(fShearX))
+    if (!useDecompose)
     {
-        // #i121185# When rotation or shear is used, a VCL Gradient cannot be used directly.
-        // This is because VCL Gradient mechanism does *not* support to rotate the gradient
-        // with objects and this case is not expressible in a Metafile (and cannot be added
-        // since the FileFormats used, e.g. *.wmf, do not support it either).
-        // Such cases happen when a graphic object uses a Metafile as graphic information or
-        // a fill style definition uses a Metafile. In this cases the graphic content is
-        // rotated with the graphic or filled object; this is not supported by the target
-        // format of this conversion renderer - Metafiles.
-        // To solve this, not a Gradient is written, but the decomposition of this object
-        // is written to the Metafile. This is the PolyPolygons building the gradient fill.
-        // These will need more space and time, but the result will be as if the Gradient
-        // was rotated with the object.
-        // This mechanism is used by all exporters still not using Primitives (e.g. Print,
-        // Slideshow, Export rto PDF, export to Picture, ...) but relying on Metafile
-        // transfers. One more reason to *change* these to primitives.
-        // BTW: One more example how useful the principles of primitives are; the decomposition
-        // is by definition a simpler, maybe more expensive representation of the same content.
-        process(rGradientCandidate);
-        return;
+        basegfx::B2DVector aScale, aTranslate;
+        double fRotate, fShearX;
+
+        maCurrentTransformation.decompose(aScale, aTranslate, fRotate, fShearX);
+
+        // detect if transformation is rotated, sheared or mirrored in X and/or Y
+        if (!basegfx::fTools::equalZero(fRotate) || !basegfx::fTools::equalZero(fShearX)
+            || aScale.getX() < 0.0 || aScale.getY() < 0.0)
+        {
+            // #i121185# When rotation or shear is used, a VCL Gradient cannot be used directly.
+            // This is because VCL Gradient mechanism does *not* support to rotate the gradient
+            // with objects and this case is not expressible in a Metafile (and cannot be added
+            // since the FileFormats used, e.g. *.wmf, do not support it either).
+            // Such cases happen when a graphic object uses a Metafile as graphic information or
+            // a fill style definition uses a Metafile. In this cases the graphic content is
+            // rotated with the graphic or filled object; this is not supported by the target
+            // format of this conversion renderer - Metafiles.
+            // To solve this, not a Gradient is written, but the decomposition of this object
+            // is written to the Metafile. This is the PolyPolygons building the gradient fill.
+            // These will need more space and time, but the result will be as if the Gradient
+            // was rotated with the object.
+            // This mechanism is used by all exporters still not using Primitives (e.g. Print,
+            // Slideshow, Export rto PDF, export to Picture, ...) but relying on Metafile
+            // transfers. One more reason to *change* these to primitives.
+            // BTW: One more example how useful the principles of primitives are; the decomposition
+            // is by definition a simpler, maybe more expensive representation of the same content.
+            useDecompose = true;
+        }
     }
 
     // tdf#150551 for PDF export, use the decomposition for better gradient visualization
-    if (nullptr != mpPDFExtOutDevData)
+    if (!useDecompose && nullptr != mpPDFExtOutDevData)
     {
-        process(rGradientCandidate);
-        return;
+        useDecompose = true;
     }
 
     basegfx::B2DPolyPolygon aLocalPolyPolygon(rGradientCandidate.getB2DPolyPolygon());
 
-    if (aLocalPolyPolygon.getB2DRange() != rGradientCandidate.getDefinitionRange())
+    if (!useDecompose && aLocalPolyPolygon.getB2DRange() != rGradientCandidate.getDefinitionRange())
     {
         // the range which defines the gradient is different from the range of the
         // geometry (used for writer frames). This cannot be done calling vcl, thus use
         // decomposition here
-        process(rGradientCandidate);
-        return;
+        useDecompose = true;
     }
 
-    if (!rGradientCandidate.getFillGradient().getColorStops().empty())
+    const attribute::FillGradientAttribute& rFillGradient(rGradientCandidate.getFillGradient());
+
+    if (!useDecompose && rFillGradient.cannotBeHandledByVCL())
     {
         // MCGR: if we have ColorStops, do not try to fallback to old VCL-Gradient,
         // that will *not* be capable of representing this properly. Use the
         // correct decomposition instead
+        useDecompose = true;
+    }
+
+    if (useDecompose)
+    {
+        GDIMetaFile* pMetaFile(mpOutputDevice->GetConnectMetaFile());
+
+        // tdf#155479 only add 'BGRAD_SEQ_BEGIN' if SVG export
+        if (nullptr != pMetaFile && pMetaFile->getSVG())
+        {
+            // write the color stops to a memory stream
+            SvMemoryStream aMemStm;
+            VersionCompatWrite aCompat(aMemStm, 1);
+
+            const basegfx::BColorStops& rColorStops(rFillGradient.getColorStops());
+            sal_uInt16 nTmp(sal::static_int_cast<sal_uInt16>(rColorStops.size()));
+            aMemStm.WriteUInt16(nTmp);
+
+            for (auto const& rCand : rColorStops)
+            {
+                aMemStm.WriteDouble(rCand.getStopOffset());
+                const basegfx::BColor& rColor(rCand.getStopColor());
+                aMemStm.WriteDouble(rColor.getRed());
+                aMemStm.WriteDouble(rColor.getGreen());
+                aMemStm.WriteDouble(rColor.getBlue());
+            }
+
+            // Add a new MetaCommentAction section of type 'BGRAD_SEQ_BEGIN/BGRAD_SEQ_END'
+            // that is capable of holding the new color step information, plus the
+            // already used MetaActionType::GRADIENTEX.
+            // With that combination only places that know about that new BGRAD_SEQ_* will
+            // use it while all others will work on the created decomposition of the
+            // gradient for compatibility - which are single-color filled polygons
+            pMetaFile->AddAction(new MetaCommentAction(
+                "BGRAD_SEQ_BEGIN", 0, static_cast<const sal_uInt8*>(aMemStm.GetData()),
+                aMemStm.TellEnd()));
+
+            // create MetaActionType::GRADIENTEX
+            // NOTE: with the new BGRAD_SEQ_* we could use basegfx::B2DPolygon and
+            // basegfx::BGradient here directly, but may have to add streaming OPs
+            // for these, so for now just go with what we use all the time. The real
+            // work for improvement should not go to this 'compromize' but to a real
+            // re-work of the SVG export (or/and others) to no longer work on metafiles
+            // but on UNO API or primitives (whatever fits best to the specific export)
+            fillPolyPolygonNeededToBeSplit(aLocalPolyPolygon);
+            Gradient aVCLGradient;
+            impConvertFillGradientAttributeToVCLGradient(aVCLGradient, rFillGradient, false);
+            aLocalPolyPolygon.transform(maCurrentTransformation);
+            const tools::PolyPolygon aToolsPolyPolygon(
+                getFillPolyPolygon(basegfx::utils::adaptiveSubdivideByAngle(aLocalPolyPolygon)));
+            mpOutputDevice->DrawGradient(aToolsPolyPolygon, aVCLGradient);
+        }
+
+        // use decompose to draw, will create PolyPolygon ColorFill actions
         process(rGradientCandidate);
+
+        // tdf#155479 only add 'BGRAD_SEQ_END' if SVG export
+        if (nullptr != pMetaFile && pMetaFile->getSVG())
+        {
+            // close the BGRAD_SEQ_* actions range
+            pMetaFile->AddAction(new MetaCommentAction("BGRAD_SEQ_END"));
+        }
+
         return;
     }
 
@@ -2035,8 +2104,7 @@ void VclMetafileProcessor2D::processPolyPolygonGradientPrimitive2D(
     // it is safest to use the VCL OutputDevice::DrawGradient method which creates those.
     // re-create a VCL-gradient from FillGradientPrimitive2D and the needed tools PolyPolygon
     Gradient aVCLGradient;
-    impConvertFillGradientAttributeToVCLGradient(aVCLGradient, rGradientCandidate.getFillGradient(),
-                                                 false);
+    impConvertFillGradientAttributeToVCLGradient(aVCLGradient, rFillGradient, false);
     aLocalPolyPolygon.transform(maCurrentTransformation);
 
     // #i82145# ATM VCL printing of gradients using curved shapes does not work,
@@ -2306,6 +2374,10 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
             pFiGradient = nullptr;
     }
 
+    // tdf#155479 preps for holding extra-MCGR infos
+    bool bSVGTransparencyColorStops(false);
+    basegfx::BColorStops aSVGTransparencyColorStops;
+
     // MCGR: tdf#155437 If we have identified a transparency gradient,
     // check if VCL is able to handle it at all
     if (nullptr != pFiGradient && pFiGradient->getFillGradient().cannotBeHandledByVCL())
@@ -2324,7 +2396,21 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
         // available in metafiles, with the known limitiations (not backward comp, all
         // places using it would need adaption, ...), but combined with knowing that nearly
         // all usages ignore or render it locally anyways makes that a non-option.
-        pFiGradient = nullptr;
+
+        // tdf#155479 Yepp, as already mentionmed above we need to add
+        // some MCGR infos in case of SVG export, prepare that here
+        if (nullptr != mpOutputDevice->GetConnectMetaFile()
+            && mpOutputDevice->GetConnectMetaFile()->getSVG())
+        {
+            // for SVG, do not use decompose & prep extra data
+            bSVGTransparencyColorStops = true;
+            aSVGTransparencyColorStops = pFiGradient->getFillGradient().getColorStops();
+        }
+        else
+        {
+            // use decomposition
+            pFiGradient = nullptr;
+        }
     }
 
     if (nullptr != pFiGradient)
@@ -2332,6 +2418,13 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
         // this combination of Gradient can be expressed/handled by
         // vcl/metafile, so add it directly. various content, create content-metafile
         GDIMetaFile aContentMetafile;
+
+        // tdf#155479 do not forget to forward SVG flag for sub-content
+        if (bSVGTransparencyColorStops)
+        {
+            aContentMetafile.setSVG(true);
+        }
+
         const tools::Rectangle aPrimitiveRectangle(impDumpToMetaFile(rContent, aContentMetafile));
 
         // re-create a VCL-gradient from FillGradientPrimitive2D
@@ -2339,9 +2432,30 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
         impConvertFillGradientAttributeToVCLGradient(aVCLGradient, pFiGradient->getFillGradient(),
                                                      true);
 
-        // render it to VCL (creates MetaFloatTransparentAction)
-        mpOutputDevice->DrawTransparent(aContentMetafile, aPrimitiveRectangle.TopLeft(),
-                                        aPrimitiveRectangle.GetSize(), aVCLGradient);
+        if (bSVGTransparencyColorStops)
+        {
+            // tdf#155479 create action directly & add extra
+            // MCGR infos to the metafile, do that by adding - ONLY in
+            // case of SVG export - to the MetaFileAction. For that
+            // reason, do what OutputDevice::DrawTransparent will do,
+            // but locally.
+            // NOTE: That would be good for this whole
+            // VclMetafileProcessor2D anyways to allow to get it
+            // completely independent from OutputDevice in the long run
+            GDIMetaFile* pMetaFile(mpOutputDevice->GetConnectMetaFile());
+            rtl::Reference<::MetaFloatTransparentAction> pAction(
+                new MetaFloatTransparentAction(aContentMetafile, aPrimitiveRectangle.TopLeft(),
+                                               aPrimitiveRectangle.GetSize(), aVCLGradient));
+
+            pAction->addSVGTransparencyColorStops(aSVGTransparencyColorStops);
+            pMetaFile->AddAction(pAction);
+        }
+        else
+        {
+            // render it to VCL (creates MetaFloatTransparentAction)
+            mpOutputDevice->DrawTransparent(aContentMetafile, aPrimitiveRectangle.TopLeft(),
+                                            aPrimitiveRectangle.GetSize(), aVCLGradient);
+        }
         return;
     }
 

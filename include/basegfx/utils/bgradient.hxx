@@ -96,6 +96,8 @@ public:
         return getStopOffset() == rCandidate.getStopOffset()
                && getStopColor() == rCandidate.getStopColor();
     }
+
+    bool operator!=(const BColorStop& rCandidate) const { return !(*this == rCandidate); }
 };
 
 /* MCGR: Provide ColorStops definition to the FillGradientAttribute
@@ -276,6 +278,13 @@ public:
 
     // returns true if the color stops are symmetrical in color and offset, otherwise false.
     bool isSymmetrical() const;
+    // assume that the color stops represent an Axial gradient
+    // and replace with gradient stops to represent the same
+    // gradient as linear gradient
+    void doApplyAxial();
+
+    // apply Steps as 'hard' color stops
+    void doApplySteps(sal_uInt16 nStepCount);
 };
 
 class BASEGFX_DLLPUBLIC BGradient final
@@ -337,7 +346,11 @@ public:
     /// Tooling method to fill awt::Gradient2 from data contained in the given basegfx::BGradient
     css::awt::Gradient2 getAsGradient2() const;
 
-    /// Tooling to handle border correction/integration and StartStopIntensity
+    // Tooling to handle
+    // - border correction/integration
+    // - apply StartStopIntensity to color stops
+    // - convert type from 'axial' to linear
+    // - apply Steps as 'hard' color stops
     void tryToRecreateBorder(basegfx::BColorStops* pAssociatedTransparencyStops = nullptr);
     void tryToApplyBorder();
     void tryToApplyStartEndIntensity();
@@ -345,6 +358,8 @@ public:
     // If a linear gradient is symmetrical it is converted to an axial gradient.
     // Does nothing in other cases and for other gradient types.
     void tryToConvertToAxial();
+    void tryToApplyAxial();
+    void tryToApplySteps();
 };
 }
 

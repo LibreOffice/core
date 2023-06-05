@@ -747,7 +747,16 @@ void DrawingML::WriteGradientFill(
         basegfx::utils::prepareColorStops(*pTransparenceGradient, aAlphaStops, aSingleAlpha);
     }
 
-    // synchronize ColorStops and AlphaStops as peparation to export
+    // apply steps if used. Need to do that before synchronizeColorStops
+    // since that may add e.g. for AlphaStops all-the-same no-data entries,
+    // so the number of entries might change
+    if (pGradient->GetSteps())
+    {
+        aColorStops.doApplySteps(pGradient->GetSteps());
+        aAlphaStops.doApplySteps(pGradient->GetSteps());
+    }
+
+    // synchronize ColorStops and AlphaStops as preparation to export
     // so also gradients 'coupled' indirectly using the 'FillTransparenceGradient'
     // method (at import time) will be exported again
     basegfx::utils::synchronizeColorStops(aColorStops, aAlphaStops, aSingleColor, aSingleAlpha);
@@ -776,48 +785,11 @@ void DrawingML::WriteGradientFill(
         }
         case awt::GradientStyle_AXIAL:
         {
-            // we need to 'double' the gradient to make it appear as what we call
-            // 'axial', but also scale and mirror in doing so
-            basegfx::BColorStops aNewColorStops;
-            basegfx::BColorStops aNewAlphaStops;
-
-            // add mirrored gradients, scaled to [0.0 .. 0.5]
-            basegfx::BColorStops::const_reverse_iterator aRevCurrColor(aColorStops.rbegin());
-            basegfx::BColorStops::const_reverse_iterator aRevCurrAlpha(aAlphaStops.rbegin());
-
-            while (aRevCurrColor != aColorStops.rend() && aRevCurrAlpha != aAlphaStops.rend())
-            {
-                aNewColorStops.emplace_back((1.0 - aRevCurrColor->getStopOffset()) * 0.5, aRevCurrColor->getStopColor());
-                aNewAlphaStops.emplace_back((1.0 - aRevCurrAlpha->getStopOffset()) * 0.5, aRevCurrAlpha->getStopColor());
-                aRevCurrColor++;
-                aRevCurrAlpha++;
-            }
-
-            basegfx::BColorStops::const_iterator aCurrColor(aColorStops.begin());
-            basegfx::BColorStops::const_iterator aCurrAlpha(aAlphaStops.begin());
-
-            if (basegfx::fTools::equalZero(aCurrColor->getStopOffset()))
-            {
-                // Caution: do not add 1st entry again, that would be double since it was
-                // already added as last element of the inverse run above. But only if
-                // the gradient has a start entry for 0.0 aka StartColor, else it is correct.
-                // Since aColorStops and aAlphaStops are already syched (see
-                // synchronizeColorStops above), testing one of them is sufficient here.
-                aCurrColor++;
-                aCurrAlpha++;
-            }
-
-            // add non-mirrored gradients, translated and scaled to [0.5 .. 1.0]
-            while (aCurrColor != aColorStops.end() && aCurrAlpha != aAlphaStops.end())
-            {
-                aNewColorStops.emplace_back((aCurrColor->getStopOffset() * 0.5) + 0.5, aCurrColor->getStopColor());
-                aNewAlphaStops.emplace_back((aCurrAlpha->getStopOffset() * 0.5) + 0.5, aCurrAlpha->getStopColor());
-                aCurrColor++;
-                aCurrAlpha++;
-            }
-
-            aColorStops = aNewColorStops;
-            aAlphaStops = aNewAlphaStops;
+            // use tooling to convert from GradientStyle_AXIAL to GradientStyle_LINEAR
+            // NOTE: Since aColorStops and aAlphaStops are already synched (see
+            // synchronizeColorStops above) this can be done directly here
+            aColorStops.doApplyAxial();
+            aAlphaStops.doApplyAxial();
 
             // remember being axial
             bAxial = true;

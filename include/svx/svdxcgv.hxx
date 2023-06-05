@@ -79,10 +79,14 @@ public:
         The object (can also be a group object) to retrieve a Graphic
         for.
 
+        @param bSVG
+        tdf#155479 need to know it's SVG export, default is false
+
+
         @return a graphical representation of the given object, as it
         appears on screen (e.g. with rotation, if any, applied).
      */
-    static Graphic GetObjGraphic(const SdrObject& rSdrObject);
+    static Graphic GetObjGraphic(const SdrObject& rSdrObject, bool bSVG = false);
 
     // The new Draw objects are marked for all paste methods.
     // If bAddMark is true, the new Draw objects are added to an existing

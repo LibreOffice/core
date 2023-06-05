@@ -39,6 +39,8 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/string_view.hxx>
 #include <svx/svdomedia.hxx>
+#include <basegfx/utils/bgradient.hxx>
+#include <tools/vcompat.hxx>
 
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
@@ -640,7 +642,7 @@ sal_Int32 SVGTextWriter::setTextPosition(const GDIMetaFile& rMtf, size_t& nCurAc
                     bEmpty = false;
 
                     mrActionWriter.StartMask(pA->GetPoint(), pA->GetSize(), pA->GetGradient(),
-                                             nWriteFlags, &maTextOpacity);
+                                             nWriteFlags, pA->getSVGTransparencyColorStops(), &maTextOpacity);
                 }
             }
             break;
@@ -2312,12 +2314,12 @@ void SVGActionWriter::ImplWritePattern( const tools::PolyPolygon& rPolyPoly,
 
 
 void SVGActionWriter::ImplWriteGradientEx( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient,
-                                           sal_uInt32 nWriteFlags)
+                                           sal_uInt32 nWriteFlags, const basegfx::BColorStops* pColorStops)
 {
     if ( rGradient.GetStyle() == css::awt::GradientStyle_LINEAR ||
          rGradient.GetStyle() == css::awt::GradientStyle_AXIAL )
     {
-        ImplWriteGradientLinear( rPolyPoly, rGradient );
+        ImplWriteGradientLinear( rPolyPoly, rGradient, pColorStops );
     }
     else
     {
@@ -2327,7 +2329,7 @@ void SVGActionWriter::ImplWriteGradientEx( const tools::PolyPolygon& rPolyPoly, 
 
 
 void SVGActionWriter::ImplWriteGradientLinear( const tools::PolyPolygon& rPolyPoly,
-                                               const Gradient& rGradient )
+                                               const Gradient& rGradient, const basegfx::BColorStops* pColorStops )
 {
     if( !rPolyPoly.Count() )
         return;
@@ -2370,60 +2372,53 @@ void SVGActionWriter::ImplWriteGradientLinear( const tools::PolyPolygon& rPolyPo
 
         {
             SvXMLElementExport aElemLinearGradient( mrExport, XML_NAMESPACE_NONE, aXMLElemLinearGradient, true, true );
+            basegfx::BColorStops aColorStops;
 
-            const Color aStartColor = ImplGetColorWithIntensity( rGradient.GetStartColor(), rGradient.GetStartIntensity() );
-            const Color aEndColor = ImplGetColorWithIntensity( rGradient.GetEndColor(), rGradient.GetEndIntensity() );
-            double fBorderOffset = rGradient.GetBorder() / 100.0;
-            const sal_uInt16 nSteps = rGradient.GetSteps();
-            if( rGradient.GetStyle() == css::awt::GradientStyle_LINEAR )
+            if (nullptr != pColorStops && pColorStops->size() > 1)
             {
-                // Emulate non-smooth gradient
-                if( 0 < nSteps && nSteps < 100 )
-                {
-                    double fOffsetStep = ( 1.0 - fBorderOffset ) / static_cast<double>(nSteps);
-                    for( sal_uInt16 i = 0; i < nSteps; i++ ) {
-                        Color aColor = ImplGetGradientColor( aStartColor, aEndColor, i / static_cast<double>(nSteps) );
-                        ImplWriteGradientStop( aColor, fBorderOffset + ( i + 1 ) * fOffsetStep );
-                        aColor = ImplGetGradientColor( aStartColor, aEndColor, ( i + 1 ) / static_cast<double>(nSteps) );
-                        ImplWriteGradientStop( aColor, fBorderOffset + ( i + 1 ) * fOffsetStep );
-                    }
-                }
-                else
-                {
-                    ImplWriteGradientStop( aStartColor, fBorderOffset );
-                    ImplWriteGradientStop( aEndColor, 1.0 );
-                }
+                // if we got the real colr stops, use them. That way we are
+                // now capable in the SVG export to export real multi color gradients
+                aColorStops = *pColorStops;
             }
             else
             {
-                fBorderOffset /= 2;
-                // Emulate non-smooth gradient
-                if( 0 < nSteps && nSteps < 100 )
-                {
-                    double fOffsetStep = ( 0.5 - fBorderOffset ) / static_cast<double>(nSteps);
-                    // Upper half
-                    for( sal_uInt16 i = 0; i < nSteps; i++ )
-                    {
-                        Color aColor = ImplGetGradientColor( aEndColor, aStartColor, i / static_cast<double>(nSteps) );
-                        ImplWriteGradientStop( aColor, fBorderOffset + i * fOffsetStep );
-                        aColor = ImplGetGradientColor( aEndColor, aStartColor, (i + 1 ) / static_cast<double>(nSteps) );
-                        ImplWriteGradientStop( aColor, fBorderOffset + i * fOffsetStep );
-                    }
-                    // Lower half
-                    for( sal_uInt16 i = 0; i < nSteps; i++ )
-                    {
-                        Color aColor = ImplGetGradientColor( aStartColor, aEndColor, i / static_cast<double>(nSteps) );
-                        ImplWriteGradientStop( aColor, 0.5 + (i + 1) * fOffsetStep );
-                        aColor = ImplGetGradientColor( aStartColor, aEndColor, (i + 1 ) / static_cast<double>(nSteps) );
-                        ImplWriteGradientStop( aColor, 0.5 + (i + 1) * fOffsetStep );
-                    }
-                }
-                else
-                {
-                    ImplWriteGradientStop( aEndColor, fBorderOffset );
-                    ImplWriteGradientStop( aStartColor, 0.5 );
-                    ImplWriteGradientStop( aEndColor, 1.0 - fBorderOffset );
-                }
+                // else create color stops with 'old' start/endColor
+                aColorStops.emplace_back(0.0, rGradient.GetStartColor().getBColor());
+                aColorStops.emplace_back(1.0, rGradient.GetEndColor().getBColor());
+            }
+
+            // create a basegfx::BGradient with the info to be able to directly
+            // use the tooling it offers
+            basegfx::BGradient aGradient(
+                aColorStops,
+                rGradient.GetStyle(),
+                rGradient.GetAngle(),
+                rGradient.GetOfsX(),
+                rGradient.GetOfsY(),
+                rGradient.GetBorder(),
+                rGradient.GetStartIntensity(),
+                rGradient.GetEndIntensity(),
+                rGradient.GetSteps());
+
+            // apply Start/EndIntensity to the whole color stops - if used
+            aGradient.tryToApplyStartEndIntensity();
+
+            // apply border to color stops - if used
+            aGradient.tryToApplyBorder();
+
+            // convert from 'axial' to linear - if needed and used
+            aGradient.tryToApplyAxial();
+
+            // apply 'Steps' as hard gradient stops - if used
+            aGradient.tryToApplySteps();
+
+            // write prepared gradient stops
+            for (const auto& rCand : aGradient.GetColorStops())
+            {
+                ImplWriteGradientStop(
+                    Color(rCand.getStopColor()),
+                    rCand.getStopOffset());
+                    //  aStartColor, fBorderOffset );
             }
         }
     }
@@ -2461,28 +2456,9 @@ Color SVGActionWriter::ImplGetColorWithIntensity( const Color& rColor,
 }
 
 
-Color SVGActionWriter::ImplGetGradientColor( const Color& rStartColor,
-                                             const Color& rEndColor,
-                                             double fOffset )
-{
-    tools::Long nRedStep = rEndColor.GetRed() - rStartColor.GetRed();
-    tools::Long nNewRed = rStartColor.GetRed() + static_cast<tools::Long>( nRedStep * fOffset );
-    nNewRed = ( nNewRed < 0 ) ? 0 : ( nNewRed > 0xFF) ? 0xFF : nNewRed;
-
-    tools::Long nGreenStep = rEndColor.GetGreen() - rStartColor.GetGreen();
-    tools::Long nNewGreen = rStartColor.GetGreen() + static_cast<tools::Long>( nGreenStep * fOffset );
-    nNewGreen = ( nNewGreen < 0 ) ? 0 : ( nNewGreen > 0xFF) ? 0xFF : nNewGreen;
-
-    tools::Long nBlueStep = rEndColor.GetBlue() - rStartColor.GetBlue();
-    tools::Long nNewBlue = rStartColor.GetBlue() + static_cast<tools::Long>( nBlueStep * fOffset );
-    nNewBlue = ( nNewBlue < 0 ) ? 0 : ( nNewBlue > 0xFF) ? 0xFF : nNewBlue;
-
-    return Color( static_cast<sal_uInt8>(nNewRed), static_cast<sal_uInt8>(nNewGreen), static_cast<sal_uInt8>(nNewBlue) );
-}
-
 void SVGActionWriter::StartMask(const Point& rDestPt, const Size& rDestSize,
                                 const Gradient& rGradient, sal_uInt32 nWriteFlags,
-                                OUString* pTextFillOpacity)
+                                const basegfx::BColorStops* pColorStops, OUString* pTextFillOpacity)
 {
     OUString aStyle;
     if (rGradient.GetStartColor() == rGradient.GetEndColor())
@@ -2523,7 +2499,19 @@ void SVGActionWriter::StartMask(const Point& rDestPt, const Size& rDestSize,
                 aGradient.SetEndColor(aTmpColor);
                 aGradient.SetEndIntensity(nTmpIntensity);
 
-                ImplWriteGradientEx(aPolyPolygon, aGradient, nWriteFlags);
+                // tdf#155479 prep local ColorStops. The code above
+                // implies that the ColorStops need to be reversed,
+                // so do so & use change of local ptr to represent this
+                basegfx::BColorStops aLocalColorStops;
+
+                if (nullptr != pColorStops)
+                {
+                    aLocalColorStops = *pColorStops;
+                    aLocalColorStops.reverseColorStops();
+                    pColorStops = &aLocalColorStops;
+                }
+
+                ImplWriteGradientEx(aPolyPolygon, aGradient, nWriteFlags, pColorStops);
             }
         }
 
@@ -2533,7 +2521,7 @@ void SVGActionWriter::StartMask(const Point& rDestPt, const Size& rDestSize,
 }
 
 void SVGActionWriter::ImplWriteMask(GDIMetaFile& rMtf, const Point& rDestPt, const Size& rDestSize,
-                                    const Gradient& rGradient, sal_uInt32 nWriteFlags)
+                                    const Gradient& rGradient, sal_uInt32 nWriteFlags, const basegfx::BColorStops* pColorStops)
 {
     Point aSrcPt(rMtf.GetPrefMapMode().GetOrigin());
     const Size aSrcSize(rMtf.GetPrefSize());
@@ -2560,7 +2548,7 @@ void SVGActionWriter::ImplWriteMask(GDIMetaFile& rMtf, const Point& rDestPt, con
         std::unique_ptr<SvXMLElementExport> pElemG;
         if (!maTextWriter.hasTextOpacity())
         {
-            StartMask(rDestPt, rDestSize, rGradient, nWriteFlags);
+            StartMask(rDestPt, rDestSize, rGradient, nWriteFlags, pColorStops);
             pElemG.reset(
                 new SvXMLElementExport(mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true));
         }
@@ -3283,7 +3271,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     const tools::Polygon aRectPoly( pA->GetRect() );
                     const tools::PolyPolygon aRectPolyPoly( aRectPoly );
 
-                    ImplWriteGradientEx( aRectPolyPoly, pA->GetGradient(), nWriteFlags );
+                    ImplWriteGradientEx( aRectPolyPoly, pA->GetGradient(), nWriteFlags, nullptr );
                 }
             }
             break;
@@ -3293,7 +3281,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
                     const MetaGradientExAction* pA = static_cast<const MetaGradientExAction*>(pAction);
-                    ImplWriteGradientEx( pA->GetPolyPolygon(), pA->GetGradient(), nWriteFlags );
+                    ImplWriteGradientEx( pA->GetPolyPolygon(), pA->GetGradient(), nWriteFlags, nullptr );
                 }
             }
             break;
@@ -3340,7 +3328,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     const MetaFloatTransparentAction*   pA = static_cast<const MetaFloatTransparentAction*>(pAction);
                     GDIMetaFile                         aTmpMtf( pA->GetGDIMetaFile() );
                     ImplWriteMask( aTmpMtf, pA->GetPoint(), pA->GetSize(),
-                                   pA->GetGradient(), nWriteFlags  );
+                                   pA->GetGradient(), nWriteFlags, pA->getSVGTransparencyColorStops()  );
                 }
             }
             break;
@@ -3374,7 +3362,55 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 const MetaCommentAction*    pA = static_cast<const MetaCommentAction*>(pAction);
 
-                if( ( pA->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_BEGIN") ) &&
+                if (pA->GetComment().equalsIgnoreAsciiCase("BGRAD_SEQ_BEGIN"))
+                {
+                    // detect and use the new BGRAD_SEQ_* metafile comment actions
+                    const MetaGradientExAction* pGradAction(nullptr);
+                    bool bDone(false);
+
+                    while (!bDone && (++nCurAction < nCount))
+                    {
+                        pAction = rMtf.GetAction(nCurAction);
+
+                        if (MetaActionType::GRADIENTEX == pAction->GetType())
+                        {
+                            // remember the 'paint' data action
+                            pGradAction = static_cast<const MetaGradientExAction*>(pAction);
+                        }
+                        else if (MetaActionType::COMMENT == pAction->GetType()
+                            && static_cast<const MetaCommentAction*>(pAction)->GetComment().equalsIgnoreAsciiCase("BGRAD_SEQ_END"))
+                        {
+                            // end action found
+                            bDone = true;
+                        }
+                    }
+
+                    if (nullptr != pGradAction)
+                    {
+                        // we have a complete actions sequence of BGRAD_SEQ_*, so we can now
+                        // read the correct color stops here
+                        basegfx::BColorStops aColorStops;
+                        SvMemoryStream aMemStm(const_cast<sal_uInt8 *>(pA->GetData()), pA->GetDataSize(), StreamMode::READ);
+                        VersionCompatRead aCompat(aMemStm);
+                        sal_uInt16 nTmp;
+                        double fOff, fR, fG, fB;
+                        aMemStm.ReadUInt16( nTmp );
+
+                        for (sal_uInt16 a(0); a < nTmp; a++)
+                        {
+                            aMemStm.ReadDouble(fOff);
+                            aMemStm.ReadDouble(fR);
+                            aMemStm.ReadDouble(fG);
+                            aMemStm.ReadDouble(fB);
+
+                            aColorStops.emplace_back(fOff, basegfx::BColor(fR, fG, fB));
+                        }
+
+                        // export with real Color Stops
+                        ImplWriteGradientEx(pGradAction->GetPolyPolygon(), pGradAction->GetGradient(), nWriteFlags, &aColorStops);
+                    }
+                }
+                else if( ( pA->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_BEGIN") ) &&
                     ( nWriteFlags & SVGWRITER_WRITE_FILL ) )
                 {
                     const MetaGradientExAction* pGradAction = nullptr;
@@ -3395,7 +3431,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     }
 
                     if( pGradAction )
-                        ImplWriteGradientEx( pGradAction->GetPolyPolygon(), pGradAction->GetGradient(), nWriteFlags );
+                        ImplWriteGradientEx( pGradAction->GetPolyPolygon(), pGradAction->GetGradient(), nWriteFlags, nullptr );
                 }
                 else if( ( pA->GetComment().equalsIgnoreAsciiCase("XPATHFILL_SEQ_BEGIN") ) &&
                          ( nWriteFlags & SVGWRITER_WRITE_FILL ) && !( nWriteFlags & SVGWRITER_NO_SHAPE_COMMENTS ) &&

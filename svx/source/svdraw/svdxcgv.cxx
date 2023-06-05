@@ -599,7 +599,8 @@ Graphic SdrExchangeView::GetAllMarkedGraphic() const
 }
 
 
-Graphic SdrExchangeView::GetObjGraphic(const SdrObject& rSdrObject)
+// tdf#155479 bSVG: need to know it's SVG export, default is false
+Graphic SdrExchangeView::GetObjGraphic(const SdrObject& rSdrObject, bool bSVG)
 {
     Graphic aRet;
 
@@ -656,6 +657,7 @@ Graphic SdrExchangeView::GetObjGraphic(const SdrObject& rSdrObject)
         pOut->EnableOutput(false);
         pOut->SetMapMode(aMap);
         aMtf.Record(pOut);
+        aMtf.setSVG(bSVG);
         rSdrObject.SingleObjectPainter(*pOut);
         aMtf.Stop();
         aMtf.WindStart();
