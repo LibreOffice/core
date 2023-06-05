@@ -69,7 +69,7 @@ private:
 
     SVX_DLLPRIVATE weld::ComboBoxEntry BuildEntry(const LanguageType nLangType, sal_Int16 nType = css::i18n::ScriptType::WEAK);
     SVX_DLLPRIVATE void AddLanguages(const std::vector< LanguageType >& rLanguageTypes, SvxLanguageListFlags nLangList,
-                                     std::vector<weld::ComboBoxEntry>& rEntries);
+                                     std::vector<weld::ComboBoxEntry>& rEntries, bool requireSublang);
 
     DECL_DLLPRIVATE_LINK(ChangeHdl, weld::ComboBox&, void);
 public:
@@ -80,6 +80,7 @@ public:
                             LanguageType eDefaultLangType = LANGUAGE_NONE,
                             sal_Int16 nDefaultType = 0 );
     void            InsertLanguage(const LanguageType nLangType);
+    void InsertLanguages(const std::vector<LanguageType>& rLanguageTypes);
 
     EditedAndValid      GetEditedAndValid() const { return m_eEditedAndValid;}
     SvxLanguageBox*     SaveEditedAsEntry( SvxLanguageBox* ppBoxes[3] /* convention: Western, Asian, Complex */ );

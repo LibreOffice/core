@@ -88,7 +88,7 @@ static bool lcl_SeqHasLang( const Sequence< sal_Int16 > & rLangSeq, sal_Int16 nL
 
 namespace {
 
-bool lcl_isPrerequisite( LanguageType nLangType )
+bool lcl_isPrerequisite(LanguageType nLangType, bool requireSublang)
 {
     return
         nLangType != LANGUAGE_DONTKNOW &&
@@ -96,7 +96,7 @@ bool lcl_isPrerequisite( LanguageType nLangType )
         nLangType != LANGUAGE_NONE &&
         nLangType != LANGUAGE_USER_KEYID &&
         !MsLangId::isLegacy( nLangType) &&
-        MsLangId::getSubLanguage( nLangType);
+        (!requireSublang || MsLangId::getSubLanguage( nLangType));
 }
 
 bool lcl_isScriptTypeRequested( LanguageType nLangType, SvxLanguageListFlags nLangList )
@@ -167,11 +167,11 @@ void SvxLanguageBox::set_active_id(const LanguageType eLangType)
 }
 
 void SvxLanguageBox::AddLanguages(const std::vector< LanguageType >& rLanguageTypes,
-        SvxLanguageListFlags nLangList, std::vector<weld::ComboBoxEntry>& rEntries)
+        SvxLanguageListFlags nLangList, std::vector<weld::ComboBoxEntry>& rEntries, bool requireSublang)
 {
     for ( auto const & nLangType : rLanguageTypes )
     {
-        if (lcl_isPrerequisite( nLangType ))
+        if (lcl_isPrerequisite(nLangType, requireSublang))
         {
             LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( nLangType );
             if (lcl_isScriptTypeRequested( nLang, nLangList))
@@ -280,7 +280,7 @@ void SvxLanguageBox::SetLanguageList(SvxLanguageListFlags nLangList, bool bHasLa
             nLangType = aKnown[i];
         else
             nLangType = SvtLanguageTable::GetLanguageTypeAtIndex( i );
-        if ( lcl_isPrerequisite( nLangType ) &&
+        if ( lcl_isPrerequisite( nLangType, true ) &&
              (lcl_isScriptTypeRequested( nLangType, nLangList) ||
               (bool(nLangList & SvxLanguageListFlags::FBD_CHARS) &&
                MsLangId::hasForbiddenCharacters(nLangType)) ||
@@ -298,7 +298,7 @@ void SvxLanguageBox::SetLanguageList(SvxLanguageListFlags nLangList, bool bHasLa
     {
         // Spell checkers, hyphenators and thesauri may add language tags
         // unknown so far.
-        AddLanguages(aAvailLang, nLangList, aEntries);
+        AddLanguages(aAvailLang, nLangList, aEntries, true);
     }
 
     SortLanguages(aEntries);
@@ -313,6 +313,14 @@ void SvxLanguageBox::InsertLanguage(const LanguageType nLangType)
     if (aEntry.sString.isEmpty())
         return;
     m_xControl->append(aEntry);
+}
+
+void SvxLanguageBox::InsertLanguages(const std::vector<LanguageType>& rLanguageTypes)
+{
+    std::vector<weld::ComboBoxEntry> entries;
+    AddLanguages(rLanguageTypes, SvxLanguageListFlags::ALL, entries, false);
+    SortLanguages(entries);
+    m_xControl->insert_vector(entries, true);
 }
 
 weld::ComboBoxEntry SvxLanguageBox::BuildEntry(const LanguageType nLangType, sal_Int16 nType)

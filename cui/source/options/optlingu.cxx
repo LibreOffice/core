@@ -1603,11 +1603,11 @@ SvxEditModulesDlg::SvxEditModulesDlg(weld::Window* pParent, SvxLinguData_Impl& r
 
     //fill language box
     const auto& rLoc = rLinguData.GetAllSupportedLocales();
-    for (Locale const & locale : rLoc)
-    {
-        LanguageType nLang = LanguageTag::convertToLanguageType( locale );
-        m_xLanguageLB->InsertLanguage(nLang);
-    }
+    std::vector<LanguageType> aLanguages;
+    aLanguages.reserve(rLoc.size());
+    std::transform(rLoc.begin(), rLoc.end(), std::back_inserter(aLanguages),
+                   [](Locale const& locale) { return LanguageTag::convertToLanguageType(locale); });
+    m_xLanguageLB->InsertLanguages(aLanguages);
     LanguageType eSysLang = MsLangId::getConfiguredSystemLanguage();
     m_xLanguageLB->set_active_id( eSysLang );
     if (m_xLanguageLB->get_active_id() != eSysLang)
