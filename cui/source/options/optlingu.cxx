@@ -60,6 +60,7 @@
 
 #include <ucbhelper/content.hxx>
 
+#include <set>
 #include <vector>
 #include <map>
 
@@ -329,6 +330,22 @@ struct ServiceInfo_Impl
     ServiceInfo_Impl() : bConfigured(false) {}
 };
 
+struct Locale_less
+{
+    bool operator()(const css::lang::Locale& lhs, const css::lang::Locale& rhs) const
+    {
+        if (lhs.Language < rhs.Language)
+            return true;
+        if (lhs.Language > rhs.Language)
+            return false;
+        if (lhs.Country < rhs.Country)
+            return true;
+        if (lhs.Country > rhs.Country)
+            return false;
+        return lhs.Variant < rhs.Variant;
+    }
+};
+
 }
 
 typedef std::vector< ServiceInfo_Impl >                   ServiceInfoArr;
@@ -343,7 +360,7 @@ class SvxLinguData_Impl
     ServiceInfoArr                      aDisplayServiceArr;
     sal_uInt32                          nDisplayServices;
 
-    Sequence< Locale >                  aAllServiceLocales;
+    std::set<Locale, Locale_less>       aAllServiceLocales;
     LangImplNameTable                   aCfgSpellTable;
     LangImplNameTable                   aCfgHyphTable;
     LangImplNameTable                   aCfgThesTable;
@@ -362,7 +379,7 @@ public:
     void SetChecked( const Sequence< OUString > &rConfiguredServices );
     void Reconfigure( std::u16string_view rDisplayName, bool bEnable );
 
-    const Sequence<Locale> &    GetAllSupportedLocales() const { return aAllServiceLocales; }
+    const auto&                 GetAllSupportedLocales() const { return aAllServiceLocales; }
 
     LangImplNameTable &         GetSpellTable()         { return aCfgSpellTable; }
     LangImplNameTable &         GetHyphTable()          { return aCfgHyphTable; }
@@ -468,37 +485,6 @@ ServiceInfo_Impl * SvxLinguData_Impl::GetInfoByImplName( std::u16string_view rSv
     return nullptr;
 }
 
-
-static void lcl_MergeLocales(Sequence< Locale >& aAllLocales, const Sequence< Locale >& rAdd)
-{
-    Sequence<Locale> aLocToAdd(rAdd.getLength());
-    Locale* pLocToAdd = aLocToAdd.getArray();
-    sal_Int32 nFound = 0;
-    for(const Locale& i : rAdd)
-    {
-        bool bFound = false;
-        for(const Locale& j : std::as_const(aAllLocales))
-        {
-            if (i.Language == j.Language &&
-                i.Country == j.Country &&
-                i.Variant == j.Variant)
-            {
-                bFound = true;
-                break;
-            }
-        }
-        if(!bFound)
-        {
-            pLocToAdd[nFound++] = i;
-        }
-    }
-    sal_Int32 nLength = aAllLocales.getLength();
-    aAllLocales.realloc( nLength + nFound);
-    Locale* pAllLocales2 = aAllLocales.getArray();
-    for(sal_Int32 i = 0; i < nFound; i++)
-        pAllLocales2[nLength++] = pLocToAdd[i];
-}
-
 static void lcl_MergeDisplayArray(
         SvxLinguData_Impl &rData,
         const ServiceInfo_Impl &rToAdd )
@@ -585,7 +571,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
         //! suppress display of entries with no supported languages (see feature 110994)
         if (aLocales.hasElements())
         {
-            lcl_MergeLocales( aAllServiceLocales, aLocales );
+            aAllServiceLocales.insert(aLocales.begin(), aLocales.end());
             lcl_MergeDisplayArray( *this, aInfo );
         }
     }
@@ -608,7 +594,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
         //! suppress display of entries with no supported languages (see feature 110994)
         if (aLocales.hasElements())
         {
-            lcl_MergeLocales( aAllServiceLocales, aLocales );
+            aAllServiceLocales.insert(aLocales.begin(), aLocales.end());
             lcl_MergeDisplayArray( *this, aInfo );
         }
     }
@@ -630,7 +616,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
         //! suppress display of entries with no supported languages (see feature 110994)
         if (aLocales.hasElements())
         {
-            lcl_MergeLocales( aAllServiceLocales, aLocales );
+            aAllServiceLocales.insert(aLocales.begin(), aLocales.end());
             lcl_MergeDisplayArray( *this, aInfo );
         }
     }
@@ -652,7 +638,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
         //! suppress display of entries with no supported languages (see feature 110994)
         if (aLocales.hasElements())
         {
-            lcl_MergeLocales( aAllServiceLocales, aLocales );
+            aAllServiceLocales.insert(aLocales.begin(), aLocales.end());
             lcl_MergeDisplayArray( *this, aInfo );
         }
     }
@@ -1372,11 +1358,9 @@ IMPL_LINK(SvxLinguTabPage, ClickHdl_Impl, weld::Button&, rBtn, void)
         sal_uInt32 nLen = pLinguData->GetDisplayServiceCount();
         for (sal_uInt32 i = 0;  i < nLen;  ++i)
             pLinguData->GetDisplayServiceArray()[i].bConfigured = false;
-        const Locale* pAllLocales = pLinguData->GetAllSupportedLocales().getConstArray();
-        sal_Int32 nLocales = pLinguData->GetAllSupportedLocales().getLength();
-        for (sal_Int32 k = 0;  k < nLocales;  ++k)
+        for (const auto& locale : pLinguData->GetAllSupportedLocales())
         {
-            LanguageType nLang = LanguageTag::convertToLanguageType( pAllLocales[k] );
+            LanguageType nLang = LanguageTag::convertToLanguageType(locale);
             if (pLinguData->GetSpellTable().count( nLang ))
                 pLinguData->SetChecked( pLinguData->GetSpellTable()[ nLang ] );
             if (pLinguData->GetGrammarTable().count( nLang ))
@@ -1618,7 +1602,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(weld::Window* pParent, SvxLinguData_Impl& r
     m_xLanguageLB->SetLanguageList(SvxLanguageListFlags::EMPTY, false, false, true);
 
     //fill language box
-    const Sequence< Locale >& rLoc = rLinguData.GetAllSupportedLocales();
+    const auto& rLoc = rLinguData.GetAllSupportedLocales();
     for (Locale const & locale : rLoc)
     {
         LanguageType nLang = LanguageTag::convertToLanguageType( locale );
