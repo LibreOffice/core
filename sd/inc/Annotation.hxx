@@ -133,6 +133,10 @@ public:
         return bool(m_pCustomAnnotationMarker);
     }
 
+    void setIsFreeText(bool value) { m_bIsFreeText = value; }
+
+    bool isFreeText() const { return m_bIsFreeText; }
+
 private:
     // destructor is private and will be called indirectly by the release call    virtual ~Annotation() {}
 
@@ -152,6 +156,7 @@ private:
     rtl::Reference<TextApiObject> m_TextRange;
 
     std::unique_ptr<CustomAnnotationMarker> m_pCustomAnnotationMarker;
+    bool m_bIsFreeText;
 };
 
 }

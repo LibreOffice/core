@@ -1126,24 +1126,36 @@ basegfx::B2DRectangle PDFiumAnnotationImpl::getRectangle()
 
 Color PDFiumAnnotationImpl::getColor()
 {
-    Color aColor = COL_TRANSPARENT;
     unsigned int nR, nG, nB, nA;
     if (FPDFAnnot_GetColor(mpAnnotation, FPDFANNOT_COLORTYPE_Color, &nR, &nG, &nB, &nA))
     {
-        aColor = Color(ColorAlpha, nA, nR, nG, nB);
+        return Color(ColorAlpha, nA, nR, nG, nB);
     }
-    return aColor;
+    // FPDFAnnot_GetColor can return false if there is an appearance stream
+    // So we search for a color with getStrokeColor
+    for (int i = 0; i < getObjectCount(); ++i)
+    {
+        if (getObject(i)->getType() == PDFPageObjectType::Path)
+            return getObject(i)->getStrokeColor();
+    }
+    return COL_TRANSPARENT;
 }
 
 Color PDFiumAnnotationImpl::getInteriorColor()
 {
-    Color aColor = COL_TRANSPARENT;
     unsigned int nR, nG, nB, nA;
     if (FPDFAnnot_GetColor(mpAnnotation, FPDFANNOT_COLORTYPE_InteriorColor, &nR, &nG, &nB, &nA))
     {
-        aColor = Color(ColorAlpha, nA, nR, nG, nB);
+        return Color(ColorAlpha, nA, nR, nG, nB);
     }
-    return aColor;
+    // FPDFAnnot_GetColor can return false if there is an appearance stream
+    // So we search for a color with getFillColor
+    for (int i = 0; i < getObjectCount(); ++i)
+    {
+        if (getObject(i)->getType() == PDFPageObjectType::Path)
+            return getObject(i)->getFillColor();
+    }
+    return COL_TRANSPARENT;
 }
 
 size_t PDFiumAnnotationImpl::getAttachmentPointsCount()

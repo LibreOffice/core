@@ -524,18 +524,29 @@ BitmapEx AnnotationTag::CreateAnnotationBitmap( bool bSelected )
 {
     ScopedVclPtrInstance< VirtualDevice > pVDev;
 
-    OUString sInitials(mxAnnotation->getInitials());
-    if (sInitials.isEmpty())
-        sInitials = getInitials(mxAnnotation->getAuthor());
+    OUString sText;
+    auto* pAnnotation = dynamic_cast<sd::Annotation*>(mxAnnotation.get());
+    if (pAnnotation && pAnnotation->isFreeText())
+    {
+        sText = mxAnnotation->getTextRange()->getString();
+    }
+    else
+    {
+        OUString sInitials(mxAnnotation->getInitials());
+        if (sInitials.isEmpty())
+        {
+            sInitials = getInitials(mxAnnotation->getAuthor());
+        }
 
-    OUString sAuthor(sInitials + " " + OUString::number(mnIndex));
+        sText = sInitials + " " + OUString::number(mnIndex);
+    }
 
     pVDev->SetFont( mrFont );
 
     const int BORDER_X = 4; // pixels
     const int BORDER_Y = 4; // pixels
 
-    maSize = Size( pVDev->GetTextWidth( sAuthor ) + 2*BORDER_X, pVDev->GetTextHeight() + 2*BORDER_Y );
+    maSize = Size(pVDev->GetTextWidth(sText) + 2 * BORDER_X, pVDev->GetTextHeight() + 2 * BORDER_Y);
     pVDev->SetOutputSizePixel( maSize, false );
 
     Color aBorderColor( maColor );
@@ -563,7 +574,7 @@ BitmapEx AnnotationTag::CreateAnnotationBitmap( bool bSelected )
     pVDev->DrawRect( aBorderRect );
 
     pVDev->SetTextColor( maColor.IsDark() ? COL_WHITE : COL_BLACK );
-    pVDev->DrawText( Point( BORDER_X, BORDER_Y ), sAuthor );
+    pVDev->DrawText(Point(BORDER_X, BORDER_Y), sText);
 
     return pVDev->GetBitmapEx( aPos, maSize );
 }
