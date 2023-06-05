@@ -203,9 +203,9 @@ bool SwEditShell::CopySelToDoc( SwDoc* pInsDoc )
         bool bColSel = GetCursor_()->IsColumnSelection();
         if( bColSel && pInsDoc->IsClipBoard() )
             pInsDoc->SetColumnSelection( true );
-        SwNode const*const pSelectAllStart(StartsWith_() != SwCursorShell::StartsWith::None
+        auto const oSelectAll(StartsWith_() != SwCursorShell::StartsWith::None
             ? ExtendedSelectedAll()
-            : nullptr);
+            : ::std::optional<::std::pair<SwNode const*, ::std::vector<SwTableNode*>>>{});
         {
             for(SwPaM& rPaM : GetCursor()->GetRingContainer())
             {
@@ -229,12 +229,12 @@ bool SwEditShell::CopySelToDoc( SwDoc* pInsDoc )
                     // for the purpose of copying, our shell cursor is not touched.
                     // (Otherwise we would have to restore it.)
                     SwPaM aPaM(*rPaM.GetMark(), *rPaM.GetPoint());
-                    if (pSelectAllStart)
+                    if (oSelectAll)
                     {
                         // Selection starts at the first para of the first cell,
                         // but we want to copy the table and the start node before
                         // the first cell as well.
-                        *aPaM.Start() = SwPosition(*pSelectAllStart);
+                        *aPaM.Start() = SwPosition(*oSelectAll->first);
                     }
                     bRet = GetDoc()->getIDocumentContentOperations().CopyRange( aPaM, aPos, /*bCopyAll=*/false, /*bCheckPos=*/true, /*bCopyText=*/false ) || bRet;
                 }
