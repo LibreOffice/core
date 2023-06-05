@@ -70,7 +70,6 @@ private:
     SVX_DLLPRIVATE weld::ComboBoxEntry BuildEntry(const LanguageType nLangType, sal_Int16 nType = css::i18n::ScriptType::WEAK);
     SVX_DLLPRIVATE void AddLanguages(const std::vector< LanguageType >& rLanguageTypes, SvxLanguageListFlags nLangList,
                                      std::vector<weld::ComboBoxEntry>& rEntries);
-    SVX_DLLPRIVATE void InsertLanguage(const LanguageType nLangType, sal_Int16 nType);
 
     DECL_DLLPRIVATE_LINK(ChangeHdl, weld::ComboBox&, void);
 public:

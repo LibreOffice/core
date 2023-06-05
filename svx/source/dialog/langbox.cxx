@@ -305,20 +305,14 @@ void SvxLanguageBox::SetLanguageList(SvxLanguageListFlags nLangList, bool bHasLa
     m_xControl->insert_vector(aEntries, true);
 }
 
-void SvxLanguageBox::InsertLanguage(const LanguageType nLangType, sal_Int16 nType)
-{
-    weld::ComboBoxEntry aEntry = BuildEntry(nLangType, nType);
-    if (aEntry.sString.isEmpty())
-        return;
-    if (aEntry.sImage.isEmpty())
-        m_xControl->append(aEntry.sId, aEntry.sString);
-    else
-        m_xControl->append(aEntry.sId, aEntry.sString, aEntry.sImage);
-}
-
 void SvxLanguageBox::InsertLanguage(const LanguageType nLangType)
 {
-    InsertLanguage(nLangType, css::i18n::ScriptType::WEAK);
+    if (find_id(nLangType) != -1)
+        return;
+    weld::ComboBoxEntry aEntry = BuildEntry(nLangType);
+    if (aEntry.sString.isEmpty())
+        return;
+    m_xControl->append(aEntry);
 }
 
 weld::ComboBoxEntry SvxLanguageBox::BuildEntry(const LanguageType nLangType, sal_Int16 nType)
