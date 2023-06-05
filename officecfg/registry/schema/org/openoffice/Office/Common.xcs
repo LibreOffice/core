@@ -5126,12 +5126,12 @@
         </info>
         <value>
           <!-- tdf#148122 Celtic MD font appears wrong -->
-          <it>Celticmd:1571:-567:1571:-547:2126:559</it>
+          <it>Celticmd,1571,-567,1571,-547,2126,559</it>
           <!-- DIN Light (ttf version) has odd metrics. The otf version works fine. -->
-          <it>DIN Light:1509:-503:1509:-483:1997:483</it>
+          <it>DIN Light,1509,-503,1509,-483,1997,483</it>
           <!-- tdf#155297 -->
-	  <it>B Nazanin:1343:-705:1990:-1045:1990:1045</it> <!-- Regular -->
-	  <it>B Nazanin:1341:-707:2126:-1120:2126:1120</it> <!-- Bold -->
+	  <it>B Nazanin,1343,-705,1990,-1045,1990,1045</it> <!-- Regular -->
+	  <it>B Nazanin,1341,-707,2126,-1120,2126,1120</it> <!-- Bold -->
         </value>
       </prop>
       <prop oor:name="FontsDontUseUnderlineMetrics" oor:type="oor:string-list" oor:nillable="false">
