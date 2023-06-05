@@ -1206,6 +1206,7 @@ public:
 
     // Delete Columns/Rows in table.
     enum class RowColMode { DeleteRow = 0, DeleteColumn = 1, DeleteProtected = 2 };
+    void DelTable(SwTableNode * pTable);
     bool DeleteRowCol(const SwSelBoxes& rBoxes, RowColMode eMode = RowColMode::DeleteRow);
     void DeleteRow( const SwCursor& rCursor );
     void DeleteCol( const SwCursor& rCursor );
