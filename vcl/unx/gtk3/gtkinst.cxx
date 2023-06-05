@@ -16978,6 +16978,11 @@ public:
         gtk_widget_set_has_tooltip(GTK_WIDGET(m_pIconView), true);
     }
 
+    virtual void connect_get_property_tree_elem(const Link<const tools::json_prop_query&, bool>& /*rLink*/) override
+    {
+        //not implemented for the gtk variant
+    }
+
     virtual OUString get_selected_id() const override
     {
         assert(gtk_icon_view_get_model(m_pIconView) && "don't request selection when frozen");

@@ -1933,6 +1933,9 @@ public:
 
     virtual void connect_query_tooltip(const Link<const weld::TreeIter&, OUString>& rLink) override;
 
+    virtual void
+    connect_get_property_tree_elem(const Link<const tools::json_prop_query&, bool>& rLink) override;
+
     virtual OUString get_selected_id() const override;
 
     virtual OUString get_selected_text() const override;
