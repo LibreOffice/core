@@ -1576,15 +1576,28 @@ static void ImplPDFExportComments( const uno::Reference< drawing::XDrawPage >& x
             uno::Reference< office::XAnnotation > xAnnotation( xAnnotationEnumeration->nextElement() );
 
             geometry::RealPoint2D aRealPoint2D( xAnnotation->getPosition() );
+            geometry::RealSize2D aRealSize2D(xAnnotation->getSize());
             uno::Reference< text::XText > xText( xAnnotation->getTextRange() );
 
             vcl::PDFNote aNote;
             aNote.Title = xAnnotation->getAuthor();
             aNote.Contents = xText->getString();
             aNote.maModificationDate = xAnnotation->getDateTime();
+            auto* pAnnotation = dynamic_cast<sd::Annotation*>(xAnnotation.get());
+            aNote.isFreeText = pAnnotation && pAnnotation->isFreeText();
+            if (pAnnotation && pAnnotation->hasCustomAnnotationMarker())
+            {
+                aNote.maPolygons = pAnnotation->getCustomAnnotationMarker().maPolygons;
+                aNote.annotColor = pAnnotation->getCustomAnnotationMarker().maLineColor;
+                aNote.interiorColor = pAnnotation->getCustomAnnotationMarker().maFillColor;
+            }
 
-            rPDFExtOutDevData.CreateNote( ::tools::Rectangle( Point( static_cast< ::tools::Long >( aRealPoint2D.X * 100 ),
-                static_cast< ::tools::Long >( aRealPoint2D.Y * 100 ) ), Size( 1000, 1000 ) ), aNote );
+            rPDFExtOutDevData.CreateNote(
+                ::tools::Rectangle(Point(static_cast<::tools::Long>(aRealPoint2D.X * 100),
+                                         static_cast<::tools::Long>(aRealPoint2D.Y * 100)),
+                                   Size(static_cast<::tools::Long>(aRealSize2D.Width * 100),
+                                        static_cast<::tools::Long>(aRealSize2D.Height * 100))),
+                aNote);
         }
     }
     catch (const uno::Exception&)

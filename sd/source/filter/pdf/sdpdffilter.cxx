@@ -189,6 +189,11 @@ bool SdPdfFilter::Import()
                     rCustomAnnotationMarker.maFillColor = COL_TRANSPARENT;
                 }
             }
+            else if (rPDFAnnotation.meSubType == vcl::pdf::PDFAnnotationSubType::FreeText)
+            {
+                auto* pAnnotation = static_cast<sd::Annotation*>(xAnnotation.get());
+                pAnnotation->setIsFreeText(true);
+            }
         }
     }
     mrDocument.setLock(bWasLocked);
