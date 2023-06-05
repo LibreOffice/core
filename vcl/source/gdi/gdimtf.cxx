@@ -117,7 +117,8 @@ GDIMetaFile::GDIMetaFile() :
     m_pOutDev     ( nullptr ),
     m_bPause      ( false ),
     m_bRecord     ( false ),
-    m_bUseCanvas  ( false )
+    m_bUseCanvas  ( false ),
+    m_bSVG        ( false )
 {
 }
 
@@ -130,7 +131,8 @@ GDIMetaFile::GDIMetaFile( const GDIMetaFile& rMtf ) :
     m_pOutDev         ( nullptr ),
     m_bPause          ( false ),
     m_bRecord         ( false ),
-    m_bUseCanvas      ( rMtf.m_bUseCanvas )
+    m_bUseCanvas      ( rMtf.m_bUseCanvas ),
+    m_bSVG            ( rMtf.m_bSVG )
 {
     for( size_t i = 0, n = rMtf.GetActionSize(); i < n; ++i )
     {
@@ -228,6 +230,7 @@ GDIMetaFile& GDIMetaFile::operator=( const GDIMetaFile& rMtf )
         m_bPause = false;
         m_bRecord = false;
         m_bUseCanvas = rMtf.m_bUseCanvas;
+        m_bSVG = rMtf.m_bSVG;
 
         if( rMtf.m_bRecord )
         {
@@ -328,6 +331,7 @@ void GDIMetaFile::Play( GDIMetaFile& rMtf )
     const size_t nObjCount = m_aList.size();
 
     rMtf.UseCanvas( rMtf.GetUseCanvas() || m_bUseCanvas );
+    rMtf.setSVG( rMtf.getSVG() || m_bSVG );
 
     for( size_t nCurPos = m_nCurrentActionElement; nCurPos < nObjCount; nCurPos++ )
     {
@@ -1809,6 +1813,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
     aMtf.m_aPrefSize = m_aPrefSize;
     aMtf.m_aPrefMapMode = m_aPrefMapMode;
     aMtf.m_bUseCanvas = m_bUseCanvas;
+    aMtf.m_bSVG = m_bSVG;
 
     for( MetaAction* pAction = FirstAction(); pAction; pAction = NextAction() )
     {

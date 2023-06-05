@@ -1364,7 +1364,12 @@ void SvmWriter::TransparentHandler(const MetaTransparentAction* pAction)
 void SvmWriter::FloatTransparentHandler(const MetaFloatTransparentAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
-    VersionCompatWrite aCompat(mrStream, 1);
+
+    // tdf#155479 prep vars for MCGR
+    const basegfx::BColorStops* pSVGTransparencyColorStops(pAction->getSVGTransparencyColorStops());
+    const bool bSVG(nullptr != pSVGTransparencyColorStops);
+
+    VersionCompatWrite aCompat(mrStream, bSVG ? 2 : 1);
 
     SvmWriter aWriter(mrStream);
     GDIMetaFile aMtf = pAction->GetGDIMetaFile();
@@ -1373,6 +1378,22 @@ void SvmWriter::FloatTransparentHandler(const MetaFloatTransparentAction* pActio
     aSerializer.writePoint(pAction->GetPoint());
     aSerializer.writeSize(pAction->GetSize());
     aSerializer.writeGradient(pAction->GetGradient());
+
+    // tdf#155479 add support for MCGR and SVG export
+    if (bSVG)
+    {
+        sal_uInt16 nTmp(sal::static_int_cast<sal_uInt16>(pSVGTransparencyColorStops->size()));
+        mrStream.WriteUInt16(nTmp);
+
+        for (auto const& rCand : *pSVGTransparencyColorStops)
+        {
+            mrStream.WriteDouble(rCand.getStopOffset());
+            const basegfx::BColor& rColor(rCand.getStopColor());
+            mrStream.WriteDouble(rColor.getRed());
+            mrStream.WriteDouble(rColor.getGreen());
+            mrStream.WriteDouble(rColor.getBlue());
+        }
+    }
 }
 
 void SvmWriter::EPSHandler(const MetaEPSAction* pAction)

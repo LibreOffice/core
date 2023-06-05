@@ -1908,6 +1908,11 @@ void MetaFloatTransparentAction::Scale( double fScaleX, double fScaleY )
     maSize = aRectangle.GetSize();
 }
 
+void MetaFloatTransparentAction::addSVGTransparencyColorStops(const basegfx::BColorStops& rSVGTransparencyColorStops)
+{
+    maSVGTransparencyColorStops = rSVGTransparencyColorStops;
+}
+
 MetaEPSAction::MetaEPSAction() :
     MetaAction(MetaActionType::EPS)
 {}

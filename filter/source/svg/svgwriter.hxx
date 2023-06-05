@@ -41,6 +41,7 @@
 #include <stack>
 #include <unordered_map>
 
+namespace basegfx { class BColorStops; }
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
@@ -340,12 +341,11 @@ private:
     void                    ImplStartClipRegion(sal_Int32 nClipPathId);
     void                    ImplEndClipRegion();
     void                    ImplWriteClipPath( const tools::PolyPolygon& rPolyPoly );
-    void                    ImplWriteGradientEx( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient, sal_uInt32 nWriteFlags);
-    void                    ImplWriteGradientLinear( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient );
+    void                    ImplWriteGradientEx( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient, sal_uInt32 nWriteFlags, const basegfx::BColorStops* pColorStops);
+    void                    ImplWriteGradientLinear( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient, const basegfx::BColorStops* pColorStops );
     void                    ImplWriteGradientStop( const Color& rColor, double fOffset );
     static Color            ImplGetColorWithIntensity( const Color& rColor, sal_uInt16 nIntensity );
-    static Color            ImplGetGradientColor( const Color& rStartColor, const Color& rEndColor, double fOffset );
-    void                    ImplWriteMask( GDIMetaFile& rMtf, const Point& rDestPt, const Size& rDestSize, const Gradient& rGradient, sal_uInt32 nWriteFlags );
+    void                    ImplWriteMask( GDIMetaFile& rMtf, const Point& rDestPt, const Size& rDestSize, const Gradient& rGradient, sal_uInt32 nWriteFlags, const basegfx::BColorStops* pColorStops);
     void                    ImplWriteText( const Point& rPos, const OUString& rText, KernArraySpan pDXArray, tools::Long nWidth );
     void                    ImplWriteText( const Point& rPos, const OUString& rText, KernArraySpan pDXArray, tools::Long nWidth, Color aTextColor );
     void                    ImplWriteBmp( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz, const css::uno::Reference<css::drawing::XShape>* pShape);
@@ -377,7 +377,7 @@ public:
 
     void                    SetEmbeddedBitmapRefs( const MetaBitmapActionMap* pEmbeddedBitmapsMap );
     void StartMask(const Point& rDestPt, const Size& rDestSize, const Gradient& rGradient,
-                   sal_uInt32 nWriteFlags, OUString* pTextStyle = nullptr);
+                   sal_uInt32 nWriteFlags, const basegfx::BColorStops* pColorStops, OUString* pTextStyle = nullptr);
     void                    SetPreviewMode(bool bState = true) { mbIsPreview = bState; }
 };
 
