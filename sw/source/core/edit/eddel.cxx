@@ -35,9 +35,9 @@
 
 void SwEditShell::DeleteSel(SwPaM& rPam, bool const isArtificialSelection, bool *const pUndo)
 {
-    SwNode const*const pSelectAllStart(StartsWith_() != SwCursorShell::StartsWith::None
+    auto const oSelectAll(StartsWith_() != SwCursorShell::StartsWith::None
         ? ExtendedSelectedAll()
-        : nullptr);
+        : ::std::optional<::std::pair<SwNode const*, ::std::vector<SwTableNode *>>>{});
     // only for selections
     if (!rPam.HasMark()
         || (*rPam.GetPoint() == *rPam.GetMark()
@@ -53,7 +53,7 @@ void SwEditShell::DeleteSel(SwPaM& rPam, bool const isArtificialSelection, bool 
     // 3. Point and Mark are at the document start and end, Point is in a table: delete selection as usual
     if( rPam.GetPointNode().FindTableNode() &&
         rPam.GetPointNode().StartOfSectionNode() !=
-        rPam.GetMarkNode().StartOfSectionNode() && pSelectAllStart == nullptr)
+        rPam.GetMarkNode().StartOfSectionNode() && !oSelectAll)
     {
         // group the Undo in the table
         if( pUndo && !*pUndo )
@@ -97,13 +97,18 @@ void SwEditShell::DeleteSel(SwPaM& rPam, bool const isArtificialSelection, bool 
     {
         std::optional<SwPaM> pNewPam;
         SwPaM * pPam = &rPam;
-        if (pSelectAllStart)
+        if (oSelectAll)
         {
+            // tdf#155685 tables at the end must be deleted separately
+            for (SwTableNode *const pTable : oSelectAll->second)
+            {
+                GetDoc()->DelTable(pTable);
+            }
             assert(dynamic_cast<SwShellCursor*>(&rPam)); // must be corrected pam
             pNewPam.emplace(*rPam.GetMark(), *rPam.GetPoint());
             // Selection starts at the first para of the first cell, but we
             // want to delete the table node before the first cell as well.
-            pNewPam->Start()->Assign(*pSelectAllStart);
+            pNewPam->Start()->Assign(*oSelectAll->first);
             pPam = &*pNewPam;
         }
         // delete everything

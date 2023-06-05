@@ -819,11 +819,12 @@ static typename SwCursorShell::StartsWith EndsWith(SwStartNode const& rStart)
 
 // return the node that is the start of the extended selection (to include table
 // or section start nodes; looks like extending for end nodes is not required)
-SwNode const* SwCursorShell::ExtendedSelectedAll() const
+::std::optional<::std::pair<SwNode const*, ::std::vector<SwTableNode*>>>
+SwCursorShell::ExtendedSelectedAll() const
 {
     if (m_pTableCursor)
     {
-        return nullptr;
+        return {};
     }
 
     SwNodes& rNodes = GetDoc()->GetNodes();
@@ -834,27 +835,48 @@ SwNode const* SwCursorShell::ExtendedSelectedAll() const
     SwContentNode* pStart = rNodes.GoNext(&nNode);
     if (!pStart)
     {
-        return nullptr;
+        return {};
     }
 
     nNode = *pStartNode->EndOfSectionNode();
     SwContentNode* pEnd = SwNodes::GoPrevious(&nNode);
     if (!pEnd)
     {
-        return nullptr;
+        return {};
     }
 
     SwPosition aStart(*pStart, 0);
     SwPosition aEnd(*pEnd, pEnd->Len());
     if (!(aStart == *pShellCursor->Start() && aEnd == *pShellCursor->End()))
     {
-        return nullptr;
+        return {};
     }
 
+    auto const ends(::EndsWith(*pStartNode));
     if (::StartsWith(*pStartNode) == StartsWith::None
-        && ::EndsWith(*pStartNode) == StartsWith::None)
+        && ends == StartsWith::None)
     {
-        return nullptr; // "ordinary" selection will work
+        return {}; // "ordinary" selection will work
+    }
+
+    ::std::vector<SwTableNode*> tablesAtEnd;
+    if (ends == StartsWith::Table)
+    {
+        SwNode * pLastNode(rNodes[pStartNode->EndOfSectionIndex() - 1]);
+        while (pLastNode->IsEndNode())
+        {
+            SwNode *const pNode(pLastNode->StartOfSectionNode());
+            if (pNode->IsTableNode())
+            {
+                tablesAtEnd.push_back(pNode->GetTableNode());
+                pLastNode = rNodes[pNode->GetIndex() - 1];
+            }
+            else if (pNode->IsSectionNode())
+            {
+                pLastNode = rNodes[pLastNode->GetIndex() - 1];
+            }
+        }
+        assert(!tablesAtEnd.empty());
     }
 
     // tdf#133990 ensure directly containing section is included in SwUndoDelete
@@ -867,7 +889,7 @@ SwNode const* SwCursorShell::ExtendedSelectedAll() const
 
     // pStartNode is the node that fully contains the selection - the first
     // node of the selection is the first node inside pStartNode
-    return pStartNode->GetNodes()[pStartNode->GetIndex() + 1];
+    return ::std::make_pair(rNodes[pStartNode->GetIndex() + 1], tablesAtEnd);
 }
 
 typename SwCursorShell::StartsWith SwCursorShell::StartsWith_()
