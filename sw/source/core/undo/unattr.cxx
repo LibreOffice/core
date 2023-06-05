@@ -505,7 +505,16 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         // The Draw model also prepared an Undo object for its right positioning
         // which unfortunately is relative. Therefore block here a position
         // change of the Contact object by setting the anchor.
-        pFrameFormat->CallSwClientNotify(sw::RestoreFlyAnchorHint(aDrawSavePt));
+        const SwFormatVertOrient& rVertOrient = pFrameFormat->GetVertOrient();
+        const SwFormatHoriOrient& rHoriOrient = pFrameFormat->GetHoriOrient();
+        Point aFormatPos(rHoriOrient.GetPos(), rVertOrient.GetPos());
+        if (aDrawSavePt != aFormatPos)
+        {
+            // If the position would be the same, then skip the call: either it would do nothing or
+            // it would just go wrong.
+            pFrameFormat->CallSwClientNotify(sw::RestoreFlyAnchorHint(aDrawSavePt));
+        }
+
         // cache the old value again
         m_oOldSet->Put(SwFormatFrameSize(SwFrameSize::Variable, aDrawOldPt.X(), aDrawOldPt.Y()));
     }
