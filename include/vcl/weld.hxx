@@ -70,6 +70,7 @@ typedef OutputDevice RenderContext;
 namespace tools
 {
 class JsonWriter;
+typedef std::tuple<tools::JsonWriter&, const OUString&, std::string_view> json_prop_query;
 }
 
 class LOKTrigger;
@@ -1447,6 +1448,11 @@ public:
     {
         m_aQueryTooltipHdl = rLink;
     }
+
+    // 0: json writer, 1: id, 2: property. returns true if supported
+    virtual void
+    connect_get_property_tree_elem(const Link<const tools::json_prop_query&, bool>& rLink)
+        = 0;
 
     virtual OUString get_selected_id() const = 0;
 

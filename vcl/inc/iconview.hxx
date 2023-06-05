@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_ICONVIEW_HXX
 #define INCLUDED_SVTOOLS_ICONVIEW_HXX
 
+#include <tools/json_writer.hxx>
 #include <vcl/toolkit/treelistbox.hxx>
 
 class IconView final : public SvTreeListBox
@@ -47,11 +48,18 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
     virtual void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 
+    void SetDumpElemToPropertyTreeHdl(const Link<const tools::json_prop_query&, bool>& rLink)
+    {
+        maDumpElemToPropertyTreeHdl = rLink;
+    }
+
 protected:
     virtual void CalcEntryHeight(SvTreeListEntry const* pEntry) override;
 
 private:
     Link<SvTreeListEntry*, OUString> maEntryAccessibleDescriptionHdl;
+    Link<const tools::json_prop_query&, bool> maDumpElemToPropertyTreeHdl;
+    void DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter, SvTreeListEntry* pEntry);
 };
 
 #endif

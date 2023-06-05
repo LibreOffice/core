@@ -5532,6 +5532,12 @@ void SalInstanceIconView::connect_query_tooltip(const Link<const weld::TreeIter&
     m_xIconView->SetTooltipHdl(LINK(this, SalInstanceIconView, TooltipHdl));
 }
 
+void SalInstanceIconView::connect_get_property_tree_elem(
+    const Link<const tools::json_prop_query&, bool>& rLink)
+{
+    m_xIconView->SetDumpElemToPropertyTreeHdl(rLink);
+}
+
 OUString SalInstanceIconView::get_selected_id() const
 {
     assert(m_xIconView->IsUpdateMode() && "don't request selection when frozen");

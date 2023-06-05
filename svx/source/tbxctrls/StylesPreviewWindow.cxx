@@ -19,6 +19,7 @@
 
 #include <StylesPreviewWindow.hxx>
 
+#include <comphelper/base64.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
@@ -28,6 +29,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/viewsh.hxx>
+#include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/glyphitemcache.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
@@ -59,16 +61,19 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <vcl/commandevent.hxx>
+#include <tools/json_writer.hxx>
 
 namespace
 {
 class StylePreviewCache
 {
     static std::map<OUString, VclPtr<VirtualDevice>> gStylePreviewCache;
+    static std::map<OUString, OString> gJsonStylePreviewCache;
     static int gStylePreviewCacheClients;
 
 public:
     static std::map<OUString, VclPtr<VirtualDevice>>& Get() { return gStylePreviewCache; }
+    static std::map<OUString, OString>& GetJson() { return gJsonStylePreviewCache; }
 
     static void ClearCache()
     {
@@ -76,6 +81,7 @@ public:
             aPreview.second.disposeAndClear();
 
         gStylePreviewCache.clear();
+        gJsonStylePreviewCache.clear();
     }
 
     static void RegisterClient() { gStylePreviewCacheClients++; }
@@ -88,6 +94,7 @@ public:
 };
 
 std::map<OUString, VclPtr<VirtualDevice>> StylePreviewCache::gStylePreviewCache;
+std::map<OUString, OString> StylePreviewCache::gJsonStylePreviewCache;
 int StylePreviewCache::gStylePreviewCacheClients;
 }
 
@@ -414,6 +421,8 @@ StylesPreviewWindow_Base::StylesPreviewWindow_Base(
     m_xStylesView->connect_selection_changed(LINK(this, StylesPreviewWindow_Base, Selected));
     m_xStylesView->connect_item_activated(LINK(this, StylesPreviewWindow_Base, DoubleClick));
     m_xStylesView->connect_command(LINK(this, StylesPreviewWindow_Base, DoCommand));
+    m_xStylesView->connect_get_property_tree_elem(
+        LINK(this, StylesPreviewWindow_Base, DoJsonProperty));
 
     m_xStatusListener = new StyleStatusListener(this, xDispatchProvider);
 
@@ -497,6 +506,44 @@ void StylesListUpdateTask::Invoke()
     m_rStylesList.UpdateSelection();
 }
 
+static OString extractPngString(const BitmapEx& rBitmap)
+{
+    SvMemoryStream aOStm(65535, 65535);
+    // Use fastest compression "1"
+    css::uno::Sequence<css::beans::PropertyValue> aFilterData{
+        comphelper::makePropertyValue("Compression", sal_Int32(1)),
+    };
+    vcl::PngImageWriter aPNGWriter(aOStm);
+    aPNGWriter.setParameters(aFilterData);
+    if (aPNGWriter.write(rBitmap))
+    {
+        css::uno::Sequence<sal_Int8> aSeq(static_cast<sal_Int8 const*>(aOStm.GetData()),
+                                          aOStm.Tell());
+        OStringBuffer aBuffer("data:image/png;base64,");
+        ::comphelper::Base64::encode(aBuffer, aSeq);
+        return aBuffer.makeStringAndClear();
+    }
+
+    return "";
+}
+
+// 0: json writer, 1: id, 2: property. returns true if supported
+IMPL_STATIC_LINK(StylesPreviewWindow_Base, DoJsonProperty, const tools::json_prop_query&, rQuery,
+                 bool)
+{
+    if (std::get<2>(rQuery) != "image")
+        return false;
+
+    OString sBase64Png(GetCachedPreviewJson(std::get<1>(rQuery)));
+    if (sBase64Png.isEmpty())
+        return false;
+
+    tools::JsonWriter& rJsonWriter = std::get<0>(rQuery);
+    rJsonWriter.put("image", sBase64Png);
+
+    return true;
+}
+
 VclPtr<VirtualDevice>
 StylesPreviewWindow_Base::GetCachedPreview(const std::pair<OUString, OUString>& rStyle)
 {
@@ -515,6 +562,23 @@ StylesPreviewWindow_Base::GetCachedPreview(const std::pair<OUString, OUString>& 
 
         return pImg;
     }
+}
+
+OString StylesPreviewWindow_Base::GetCachedPreviewJson(const OUString& rStyle)
+{
+    auto aJsonFound = StylePreviewCache::GetJson().find(rStyle);
+    if (aJsonFound != StylePreviewCache::GetJson().end())
+        return StylePreviewCache::GetJson()[rStyle];
+
+    auto aFound = StylePreviewCache::Get().find(rStyle);
+    if (aFound == StylePreviewCache::Get().end())
+        return "";
+
+    VclPtr<VirtualDevice> xDev = aFound->second;
+    BitmapEx aBitmap(xDev->GetBitmapEx(Point(0, 0), xDev->GetOutputSize()));
+    OString sResult = extractPngString(aBitmap);
+    StylePreviewCache::GetJson()[rStyle] = sResult;
+    return sResult;
 }
 
 void StylesPreviewWindow_Base::UpdateStylesList()
@@ -536,7 +600,8 @@ void StylesPreviewWindow_Base::UpdateStylesList()
 
         while (pStyle)
         {
-            m_aAllStyles.push_back(std::pair<OUString, OUString>("", pStyle->GetName()));
+            OUString sName(pStyle->GetName());
+            m_aAllStyles.push_back(std::pair<OUString, OUString>(sName, sName));
             pStyle = xIter->Next();
         }
     }
