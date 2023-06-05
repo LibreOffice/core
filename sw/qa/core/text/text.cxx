@@ -1016,6 +1016,30 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDropdownContentControlPDF)
                          pAnnotation->getFormFieldType(pPdfDocument.get()));
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDropdownContentControlPDF2)
+{
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
+    createSwDoc("tdf153040.docx");
+
+    save("writer_pdf_Export");
+
+    // Make sure that a dropdown form widget is emitted:
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
+
+    CPPUNIT_ASSERT_EQUAL(4, pPage->getAnnotationCount());
+    std::unique_ptr<vcl::pdf::PDFiumAnnotation> pAnnotation = pPage->getAnnotation(0);
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Widget, pAnnotation->getSubType());
+    // Also check the form widget type (our dropdown is called combo in PDF terms):
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFFormFieldType::ComboBox,
+                         pAnnotation->getFormFieldType(pPdfDocument.get()));
+    // Without tdf#153040's fix, this would have been the empty OUString()
+    CPPUNIT_ASSERT_EQUAL(OUString("Apfel"), pAnnotation->getFormFieldValue(pPdfDocument.get()));
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDateContentControlPDF)
 {
     std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
