@@ -165,7 +165,7 @@ private:
     bool checkForWriteWhenUsingCollectionType(const CXXMethodDecl* calleeMethodDecl);
     bool IsPassedByNonConst(const VarDecl* fieldDecl, const Stmt* child, CallerWrapper callExpr,
                             CalleeWrapper calleeFunctionDecl);
-    llvm::Optional<CalleeWrapper> getCallee(CallExpr const*);
+    compat::optional<CalleeWrapper> getCallee(CallExpr const*);
 
     // For reasons I do not understand, parentFunctionDecl() is not reliable, so
     // we store the parent function on the way down the AST.
@@ -932,7 +932,7 @@ bool UnusedVarsGlobal::IsPassedByNonConst(const VarDecl* varDecl, const Stmt* ch
     return false;
 }
 
-llvm::Optional<CalleeWrapper> UnusedVarsGlobal::getCallee(CallExpr const* callExpr)
+compat::optional<CalleeWrapper> UnusedVarsGlobal::getCallee(CallExpr const* callExpr)
 {
     FunctionDecl const* functionDecl = callExpr->getDirectCallee();
     if (functionDecl)
@@ -950,7 +950,7 @@ llvm::Optional<CalleeWrapper> UnusedVarsGlobal::getCallee(CallExpr const* callEx
         }
     }
 
-    return llvm::Optional<CalleeWrapper>();
+    return compat::optional<CalleeWrapper>();
 }
 
 loplugin::Plugin::Registration<UnusedVarsGlobal> X("unusedvarsglobal", false);

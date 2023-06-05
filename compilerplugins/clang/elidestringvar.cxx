@@ -13,9 +13,8 @@
 #include <cassert>
 #include <map>
 
-#include "llvm/ADT/Optional.h"
-
 #include "check.hxx"
+#include "compat.hxx"
 #include "plugin.hxx"
 
 // Find cases where a variable of a OString/OUString type is initialized
@@ -447,7 +446,7 @@ private:
         {
         }
         Stmt const* innermostLoop;
-        llvm::Optional<Expr const*> singleUse;
+        compat::optional<Expr const*> singleUse;
     };
 
     std::stack<Stmt const*> innermostLoop_;

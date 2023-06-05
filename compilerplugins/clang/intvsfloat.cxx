@@ -10,7 +10,7 @@
 
 #include "plugin.hxx"
 #include "check.hxx"
-#include "llvm/ADT/Optional.h"
+#include "compat.hxx"
 #include <iostream>
 
 /**
@@ -35,7 +35,7 @@ public:
     bool VisitBinaryOperator(BinaryOperator const*);
 
 private:
-    llvm::Optional<double> getExprValue(Expr const* expr);
+    compat::optional<double> getExprValue(Expr const* expr);
 };
 
 bool IntVsFloat::VisitVarDecl(VarDecl const* varDecl)
@@ -49,7 +49,7 @@ bool IntVsFloat::VisitVarDecl(VarDecl const* varDecl)
     if (varDecl->getType()->isFloatingType())
         return true;
     //    init->dump();
-    llvm::Optional<double> d = getExprValue(init);
+    compat::optional<double> d = getExprValue(init);
     if (!d)
         return true;
     if (static_cast<long>(*d) == *d)
@@ -77,7 +77,7 @@ bool IntVsFloat::VisitBinaryOperator(BinaryOperator const* op)
         return true;
     if (rhs->getType()->isFloatingType())
         return true;
-    llvm::Optional<double> d = getExprValue(lhs);
+    compat::optional<double> d = getExprValue(lhs);
     if (!d)
         return true;
     if (static_cast<long>(*d) == *d)
@@ -88,18 +88,18 @@ bool IntVsFloat::VisitBinaryOperator(BinaryOperator const* op)
     return true;
 }
 
-llvm::Optional<double> IntVsFloat::getExprValue(Expr const* expr)
+compat::optional<double> IntVsFloat::getExprValue(Expr const* expr)
 {
     // Of the available clang Evaluate* APIs, this is the __only__ one that produces useful output
     // (as of 17 Aug 2018 checkout of clang, ie. towards clang 7)
 
     if (expr->isValueDependent())
-        return llvm::Optional<double>();
+        return compat::optional<double>();
     Expr::EvalResult evalResult;
     if (!expr->EvaluateAsRValue(evalResult, compiler.getASTContext()))
-        return llvm::Optional<double>();
+        return compat::optional<double>();
     if (!evalResult.Val.isFloat())
-        return llvm::Optional<double>();
+        return compat::optional<double>();
     llvm::APFloat floatResult = evalResult.Val.getFloat();
     bool losesInfo;
     floatResult.convert(APFloat::IEEEdouble(), APFloat::rmNearestTiesToEven, &losesInfo);

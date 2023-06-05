@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include "compat.hxx"
 #include "plugin.hxx"
-#include "llvm/ADT/Optional.h"
 #include <cassert>
 #include <string>
 #include <iostream>
@@ -49,7 +49,8 @@ private:
     SourceRange ignoreMacroExpansions(SourceRange range);
     SourceRange extendOverComments(SourceRange range);
     std::string getSourceAsString(SourceRange range);
-    llvm::Optional<std::string> invertCondition(Expr const * condExpr, SourceRange conditionRange);
+    compat::optional<std::string> invertCondition(
+        Expr const * condExpr, SourceRange conditionRange);
     bool isLargeCompoundStmt(Stmt const *);
 
     Stmt const * lastStmtInCompoundStmt = nullptr;
@@ -302,7 +303,7 @@ bool Flatten::rewrite1(IfStmt const * ifStmt)
 
     // in adjusting the formatting I assume that "{" starts on a new line
 
-    llvm::Optional<std::string> conditionString = invertCondition(ifStmt->getCond(), conditionRange);
+    compat::optional<std::string> conditionString = invertCondition(ifStmt->getCond(), conditionRange);
     if (!conditionString)
         return false;
 
@@ -392,7 +393,7 @@ bool Flatten::rewriteLargeIf(IfStmt const * ifStmt)
 
     // in adjusting the formatting I assume that "{" starts on a new line
 
-    llvm::Optional<std::string> conditionString = invertCondition(ifStmt->getCond(), conditionRange);
+    compat::optional<std::string> conditionString = invertCondition(ifStmt->getCond(), conditionRange);
     if (!conditionString)
         return false;
 
@@ -416,7 +417,7 @@ bool Flatten::rewriteLargeIf(IfStmt const * ifStmt)
     return true;
 }
 
-llvm::Optional<std::string> Flatten::invertCondition(Expr const * condExpr, SourceRange conditionRange)
+compat::optional<std::string> Flatten::invertCondition(Expr const * condExpr, SourceRange conditionRange)
 {
     std::string s = getSourceAsString(conditionRange);
 
@@ -455,7 +456,7 @@ llvm::Optional<std::string> Flatten::invertCondition(Expr const * condExpr, Sour
                 s = "!(" + s + ")";
         }
         if (!ok)
-           return llvm::Optional<std::string>();
+           return compat::optional<std::string>();
     }
     else if (auto opCallExpr = dyn_cast<CXXOperatorCallExpr>(condExpr))
     {
@@ -472,7 +473,7 @@ llvm::Optional<std::string> Flatten::invertCondition(Expr const * condExpr, Sour
                 s = "!(" + s + ")";
         }
         if (!ok)
-            return llvm::Optional<std::string>();
+            return compat::optional<std::string>();
     }
     else if (isa<DeclRefExpr>(condExpr) || isa<CallExpr>(condExpr) || isa<MemberExpr>(condExpr))
         s = "!" + s;

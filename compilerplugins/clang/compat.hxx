@@ -16,17 +16,29 @@
 #include "clang/AST/ExprCXX.h"
 #include "clang/Basic/SourceManager.h"
 #include "clang/Basic/Specifiers.h"
-#include "llvm/ADT/Optional.h"
 #include "llvm/ADT/StringExtras.h"
 #include "llvm/Support/FileSystem.h"
 
 #include "config_clang.h"
 
+#if CLANG_VERSION >= 170000
+#include <optional>
+#else
+#include "llvm/ADT/Optional.h"
+#endif
+
 // Compatibility wrapper to abstract over (trivial) changes in the Clang API:
 namespace compat {
 
 template<typename T>
-constexpr bool has_value(llvm::Optional<T> const & o) {
+#if CLANG_VERSION >= 170000
+using optional = std::optional<T>;
+#else
+using optional = llvm::Optional<T>;
+#endif
+
+template<typename T>
+constexpr bool has_value(optional<T> const & o) {
 #if CLANG_VERSION >= 150000
     return o.has_value();
 #else
@@ -35,7 +47,7 @@ constexpr bool has_value(llvm::Optional<T> const & o) {
 }
 
 template<typename T>
-constexpr T const & value(llvm::Optional<T> const & o) {
+constexpr T const & value(optional<T> const & o) {
 #if CLANG_VERSION >= 150000
     return *o;
 #else

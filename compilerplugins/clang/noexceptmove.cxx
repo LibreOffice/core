@@ -9,11 +9,10 @@
 // versions before 9.0 didn't have getExceptionSpecType
 
 #include "check.hxx"
+#include "compat.hxx"
 #include "plugin.hxx"
 
 #include "config_clang.h"
-
-#include "llvm/ADT/Optional.h"
 
 #include <string>
 #include <set>
@@ -55,7 +54,7 @@ public:
     bool VisitVarDecl(const VarDecl*);
 
 private:
-    llvm::Optional<bool> IsCallThrows(const CallExpr* callExpr);
+    compat::optional<bool> IsCallThrows(const CallExpr* callExpr);
     std::vector<bool> m_ConstructorThrows;
     std::vector<std::vector<const Decl*>> m_Exclusions;
     std::vector<bool> m_CannotFix;
@@ -173,7 +172,7 @@ bool NoExceptMove::VisitCallExpr(const CallExpr* callExpr)
         return true;
     if (m_ConstructorThrows.empty())
         return true;
-    llvm::Optional<bool> bCallThrows = IsCallThrows(callExpr);
+    compat::optional<bool> bCallThrows = IsCallThrows(callExpr);
     if (!bCallThrows)
     {
         callExpr->dump();
@@ -252,7 +251,7 @@ bool NoExceptMove::VisitVarDecl(const VarDecl* varDecl)
     return true;
 }
 
-llvm::Optional<bool> NoExceptMove::IsCallThrows(const CallExpr* callExpr)
+compat::optional<bool> NoExceptMove::IsCallThrows(const CallExpr* callExpr)
 {
     const FunctionDecl* calleeFunctionDecl = callExpr->getDirectCallee();
     if (calleeFunctionDecl)
@@ -302,7 +301,7 @@ llvm::Optional<bool> NoExceptMove::IsCallThrows(const CallExpr* callExpr)
     else
     {
         m_CannotFix.back() = true;
-        return llvm::Optional<bool>();
+        return compat::optional<bool>();
     }
 
     // allowlist of functions that could be noexcept, but we can't change them because of backwards-compatibility reasons
@@ -316,7 +315,7 @@ llvm::Optional<bool> NoExceptMove::IsCallThrows(const CallExpr* callExpr)
     if (!funcProto)
     {
         m_CannotFix.back() = true;
-        return llvm::Optional<bool>();
+        return compat::optional<bool>();
     }
 
     auto est = funcProto->getExceptionSpecType();

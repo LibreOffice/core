@@ -170,7 +170,7 @@ private:
     bool checkForWriteWhenUsingCollectionType(const CXXMethodDecl * calleeMethodDecl);
     bool IsPassedByNonConst(const FieldDecl* fieldDecl, const Stmt * child, CallerWrapper callExpr,
                                         CalleeWrapper calleeFunctionDecl);
-    llvm::Optional<CalleeWrapper> getCallee(CallExpr const *);
+    compat::optional<CalleeWrapper> getCallee(CallExpr const *);
 
     RecordDecl *   insideMoveOrCopyOrCloneDeclParent = nullptr;
     RecordDecl *   insideStreamOutputOperator = nullptr;
@@ -1173,7 +1173,7 @@ void UnusedFields::checkTouchedFromOutside(const FieldDecl* fieldDecl, const Exp
     }
 }
 
-llvm::Optional<CalleeWrapper> UnusedFields::getCallee(CallExpr const * callExpr)
+compat::optional<CalleeWrapper> UnusedFields::getCallee(CallExpr const * callExpr)
 {
     FunctionDecl const * functionDecl = callExpr->getDirectCallee();
     if (functionDecl)
@@ -1187,7 +1187,7 @@ llvm::Optional<CalleeWrapper> UnusedFields::getCallee(CallExpr const * callExpr)
         }
     }
 
-    return llvm::Optional<CalleeWrapper>();
+    return compat::optional<CalleeWrapper>();
 }
 
 loplugin::Plugin::Registration< UnusedFields > X("unusedfields", false);

@@ -47,7 +47,7 @@ public:
     bool VisitCallExpr(CallExpr const*);
 
 private:
-    llvm::Optional<APSInt> getCallValue(const Expr* arg);
+    compat::optional<APSInt> getCallValue(const Expr* arg);
     std::vector<FunctionDecl*> functions_;
 };
 
@@ -140,7 +140,7 @@ bool PointerBool::VisitCallExpr(CallExpr const* callExpr)
     return true;
 }
 
-llvm::Optional<APSInt> PointerBool::getCallValue(const Expr* arg)
+compat::optional<APSInt> PointerBool::getCallValue(const Expr* arg)
 {
     arg = arg->IgnoreParenCasts();
     if (auto defArg = dyn_cast<CXXDefaultArgExpr>(arg))
@@ -150,14 +150,14 @@ llvm::Optional<APSInt> PointerBool::getCallValue(const Expr* arg)
     // ignore this, it seems to trigger an infinite recursion
     if (isa<UnaryExprOrTypeTraitExpr>(arg))
     {
-        return llvm::Optional<APSInt>();
+        return compat::optional<APSInt>();
     }
     APSInt x1;
     if (compat::EvaluateAsInt(arg, x1, compiler.getASTContext()))
     {
         return x1;
     }
-    return llvm::Optional<APSInt>();
+    return compat::optional<APSInt>();
 }
 
 loplugin::Plugin::Registration<PointerBool> pointerbool("pointerbool");
