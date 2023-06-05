@@ -154,4 +154,100 @@ class tdf146145(UITestCase):
             # disabled Accept Track Change
             self.assertFalse(self.is_enabled_Accept_Track_Change())
 
+   def test_tdf155344(self):
+        with self.ui_test.load_file(get_url_for_data_file("TC-table-del-add.docx")) as self.document:
+
+            # accept all tracked changes
+            self.xUITest.executeCommand(".uno:AcceptAllTrackedChanges")
+            # delete first table column
+            self.xUITest.executeCommand(".uno:DeleteColumns")
+
+            # Check enabling Accept/Reject Track Change icons
+            # and Accept Change/Reject Change context menu items
+            # on table columns with tracked deletion or insertion
+
+            # enable Track Changes toolbar
+            self.xUITest.executeCommand(".uno:AvailableToolbars?Toolbar:string=changes")
+
+            xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+            xToolkit.processEventsToIdle()
+
+            # cursor at changed text: Accept Track Change is enabled
+            self.assertTrue(self.is_enabled_Accept_Track_Change())
+
+            # cursor in a changed column, but not at changed text: Accept Track Change is enabled now
+            self.xUITest.executeCommand(".uno:GoRight")
+            xToolkit.processEventsToIdle()
+            # This was false
+            self.assertTrue(self.is_enabled_Accept_Track_Change())
+
+            # cursor in a not changed column: Accept Track Change is disabled
+            self.xUITest.executeCommand(".uno:GoRight")
+            xToolkit.processEventsToIdle()
+            while self.is_enabled_Accept_Track_Change():
+                time.sleep(0.1)
+            self.assertFalse(self.is_enabled_Accept_Track_Change())
+
+            # check the fix again to avoid of the asynchron state changes
+            self.xUITest.executeCommand(".uno:GoLeft")
+            xToolkit.processEventsToIdle()
+            while not self.is_enabled_Accept_Track_Change():
+                time.sleep(0.1)
+            self.assertTrue(self.is_enabled_Accept_Track_Change())
+
+            # check 1-click accept of table column deletion (3 redlines in the column)
+
+            # not at changed text, but Accept Track Change removes the whole column now
+
+            tables = self.document.getTextTables()
+            self.assertEqual(len(tables[0].getColumns()), 3)
+
+            self.xUITest.executeCommand(".uno:AcceptTrackedChange")
+            xToolkit.processEventsToIdle()
+            self.assertEqual(len(tables[0].getColumns()), 2)
+
+            self.xUITest.executeCommand(".uno:Undo")
+            xToolkit.processEventsToIdle()
+            self.assertEqual(len(tables[0].getColumns()), 3)
+
+            self.xUITest.executeCommand(".uno:Redo")
+            xToolkit.processEventsToIdle()
+            self.assertEqual(len(tables[0].getColumns()), 2)
+
+            # check 1-click reject of table column insertion (9 redlines in the 3 columns)
+
+            self.xUITest.executeCommand(".uno:InsertColumnsBefore")
+            self.xUITest.executeCommand(".uno:InsertColumnsBefore")
+            self.xUITest.executeCommand(".uno:InsertColumnsBefore")
+            xToolkit.processEventsToIdle()
+            while self.is_enabled_Accept_Track_Change():
+                time.sleep(0.1)
+            self.assertFalse(self.is_enabled_Accept_Track_Change())
+
+            self.assertEqual(len(tables[0].getColumns()), 5)
+
+            # check the fix again to avoid of the asynchron state changes
+            self.xUITest.executeCommand(".uno:GoLeft")
+            xToolkit.processEventsToIdle()
+            while not self.is_enabled_Accept_Track_Change():
+                time.sleep(0.1)
+            # This was false
+            self.assertTrue(self.is_enabled_Accept_Track_Change())
+
+            self.xUITest.executeCommand(".uno:RejectTrackedChange")
+
+            self.assertEqual(len(tables[0].getColumns()), 2)
+
+            self.xUITest.executeCommand(".uno:Undo")
+            xToolkit.processEventsToIdle()
+            self.assertEqual(len(tables[0].getColumns()), 5)
+
+            self.xUITest.executeCommand(".uno:Redo")
+            xToolkit.processEventsToIdle()
+            self.assertEqual(len(tables[0].getColumns()), 2)
+
+            self.xUITest.executeCommand(".uno:Undo")
+            xToolkit.processEventsToIdle()
+            self.assertEqual(len(tables[0].getColumns()), 5)
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

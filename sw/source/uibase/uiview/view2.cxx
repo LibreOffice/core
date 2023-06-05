@@ -927,7 +927,9 @@ void SwView::Execute(SfxRequest &rReq)
                 if ( !pRedline && m_pWrtShell->IsCursorInTable() )
                 {
                     nRedline = 0;
-                    auto pTabLine = pCursor->Start()->GetNode().GetTableBox()->GetUpper();
+                    auto pTabBox = pCursor->Start()->GetNode().GetTableBox();
+                    auto pTabLine = pTabBox->GetUpper();
+                    const SwTableNode* pTableNd = pCursor->Start()->GetNode().FindTableNode();
 
                     if ( RedlineType::None != pTabLine->GetRedlineType() )
                     {
@@ -959,6 +961,75 @@ void SwView::Execute(SfxRequest &rReq)
                                 SwTableBox* pTableBox = pRedline->Start()->GetNode().GetTableBox();
                                 if ( !pTableBox || pTableBox->GetUpper() != pTabLine )
                                     break;
+
+                                if (FN_REDLINE_ACCEPT_DIRECT == nSlot || FN_REDLINE_ACCEPT_TONEXT == nSlot)
+                                    m_pWrtShell->AcceptRedline(nRedline);
+                                else
+                                    m_pWrtShell->RejectRedline(nRedline);
+                            }
+                            rSh.EndUndo( eUndoId, &aRewriter);
+                        }
+                    }
+                    else if ( RedlineType::None != pTabBox->GetRedlineType() )
+                    {
+                        nRedline = pTabBox->GetRedline();
+
+                        if ( nRedline != SwRedlineTable::npos )
+                        {
+                            bTableChange = true;
+
+                            SwWrtShell& rSh = GetWrtShell();
+                            SwRewriter aRewriter;
+
+                            aRewriter.AddRule(UndoArg1, SwResId(
+                                rRedlineTable[nRedline]->GetType() == RedlineType::Delete
+                                    ? STR_REDLINE_TABLE_COLUMN_DELETE
+                                    : STR_REDLINE_TABLE_COLUMN_INSERT ));
+
+                            SwUndoId eUndoId =
+                                (FN_REDLINE_ACCEPT_DIRECT == nSlot || FN_REDLINE_ACCEPT_TONEXT == nSlot)
+                                    ? SwUndoId::ACCEPT_REDLINE
+                                    : SwUndoId::REJECT_REDLINE;
+
+                            // change only the cells with the same data
+                            SwRedlineData aData(rRedlineTable[nRedline]->GetRedlineData(0));
+
+                            // start from the first redline of the table to handle all the
+                            // cells of the changed column(s)
+                            while ( nRedline )
+                            {
+                                pRedline = rRedlineTable[nRedline-1];
+                                SwTableBox* pTableBox = pRedline->Start()->GetNode().GetTableBox();
+                                SwTableNode* pTableNode = pRedline->Start()->GetNode().FindTableNode();
+
+                                // previous redline is not in the same table
+                                if ( !pTableBox || pTableNode != pTableNd )
+                                    break;
+
+                                --nRedline;
+                            }
+
+                            rSh.StartUndo( eUndoId, &aRewriter);
+                            while ( nRedline != SwRedlineTable::npos && nRedline < rRedlineTable.size() )
+                            {
+                                pRedline = rRedlineTable[nRedline];
+
+                                // until next redline is not in the same table
+                                SwTableBox* pTableBox = pRedline->Start()->GetNode().GetTableBox();
+                                SwTableNode* pTableNode = pRedline->Start()->GetNode().FindTableNode();
+                                if ( !pTableBox || pTableNode != pTableNd )
+                                    break;
+
+                                // skip cells which are not from the same author, same type change
+                                // or timestamp, i.e. keep only the cells of the same tracked
+                                // column insertion or deletion
+                                if ( !pRedline->GetRedlineData(0).CanCombine(aData) ||
+                                     // not a tracked cell change
+                                     RedlineType::None == pTableBox->GetRedlineType() )
+                                {
+                                    ++nRedline;
+                                    continue;
+                                }
 
                                 if (FN_REDLINE_ACCEPT_DIRECT == nSlot || FN_REDLINE_ACCEPT_TONEXT == nSlot)
                                     m_pWrtShell->AcceptRedline(nRedline);
