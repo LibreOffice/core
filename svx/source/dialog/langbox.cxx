@@ -154,12 +154,12 @@ void SvxLanguageBox::set_active_id(const LanguageType eLangType)
     // a language that is replaced, we need to select the replacement instead.
     LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( eLangType);
 
-    sal_Int32 nAt = ImplTypeToPos( nLang );
+    sal_Int32 nAt = find_id( nLang );
 
     if (nAt == -1)
     {
         InsertLanguage( nLang );      // on-the-fly-ID
-        nAt = ImplTypeToPos( nLang );
+        nAt = find_id( nLang );
     }
 
     if (nAt != -1)
@@ -176,7 +176,7 @@ void SvxLanguageBox::AddLanguages(const std::vector< LanguageType >& rLanguageTy
             LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( nLangType );
             if (lcl_isScriptTypeRequested( nLang, nLangList))
             {
-                int nAt = ImplTypeToPos(nLang);
+                int nAt = find_id(nLang);
                 if (nAt != -1)
                     continue;
                 weld::ComboBoxEntry aNewEntry(BuildEntry(nLang));
@@ -305,11 +305,6 @@ void SvxLanguageBox::SetLanguageList(SvxLanguageListFlags nLangList, bool bHasLa
     m_xControl->insert_vector(aEntries, true);
 }
 
-int SvxLanguageBox::ImplTypeToPos(LanguageType eType) const
-{
-    return m_xControl->find_id(OUString::number(static_cast<sal_uInt16>(eType)));
-}
-
 void SvxLanguageBox::InsertLanguage(const LanguageType nLangType, sal_Int16 nType)
 {
     weld::ComboBoxEntry aEntry = BuildEntry(nLangType, nType);
@@ -334,7 +329,7 @@ weld::ComboBoxEntry SvxLanguageBox::BuildEntry(const LanguageType nLangType, sal
     // string as would be returned by SvtLanguageTable::GetString().
     if (nLang != nLangType)
     {
-        int nAt = ImplTypeToPos( nLang );
+        int nAt = find_id( nLang );
         if (nAt != -1)
             return weld::ComboBoxEntry("");
     }
@@ -478,7 +473,7 @@ SvxLanguageBox* SvxLanguageBox::SaveEditedAsEntry(SvxLanguageBox* ppBoxes[3])
         if (!pBox)
             continue;
 
-        const int nPos = pBox->ImplTypeToPos( nLang);
+        const int nPos = pBox->find_id( nLang);
         if (nPos != -1)
         {
             // Already present but with a different string or in another list.
@@ -521,7 +516,7 @@ SvxLanguageBox* SvxLanguageBox::SaveEditedAsEntry(SvxLanguageBox* ppBoxes[3])
     pBox->InsertLanguage(nLang);
 
     // Select it.
-    const int nPos = pBox->ImplTypeToPos(nLang);
+    const int nPos = pBox->find_id(nLang);
     if (nPos != -1)
         pBox->m_xControl->set_active(nPos);
 
