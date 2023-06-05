@@ -400,10 +400,10 @@ bool ImplFontMetricData::ShouldUseWinMetrics(int nAscent, int nDescent, int nTyp
         return false;
 
     OUString aFontIdentifier(
-        GetFamilyName() + ","
-        + OUString::number(nAscent) + "," + OUString::number(nDescent) + ","
-        + OUString::number(nTypoAscent) + "," + OUString::number(nTypoDescent) + ","
-        + OUString::number(nWinAscent) + "," + OUString::number(nWinDescent));
+        GetFamilyName() + ":"
+        + OUString::number(nAscent) + ":" + OUString::number(nDescent) + ":"
+        + OUString::number(nTypoAscent) + ":" + OUString::number(nTypoDescent) + ":"
+        + OUString::number(nWinAscent) + ":" + OUString::number(nWinDescent));
 
     css::uno::Sequence<OUString> rWinMetricFontList(
         officecfg::Office::Common::Misc::FontsUseWinMetrics::get());
