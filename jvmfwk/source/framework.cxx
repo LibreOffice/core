@@ -185,10 +185,7 @@ javaFrameworkError jfw_startVM(
                     return JFW_E_NEED_RESTART;
 
                 vmParams = settings.getVmParametersUtf8();
-                // Expand user classpath (might contain bootstrap vars)
-                OUString sUserPath(settings.getUserClassPath());
-                rtl::Bootstrap::expandMacros(sUserPath);
-                sUserClassPath = jfw::makeClassPathOption(sUserPath);
+                sUserClassPath = jfw::makeClassPathOption(settings.getUserClassPath());
             } // end mode FWK_MODE_OFFICE
             else if (mode == jfw::JFW_MODE_DIRECT)
             {
