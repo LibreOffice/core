@@ -207,6 +207,16 @@ void OOXMLParserState::setTableProperties(const OOXMLPropertySet::Pointer_t& pPr
     }
 }
 
+OOXMLPropertySet::Pointer_t OOXMLParserState::GetTableProperties() const
+{
+    if (mTableProps.empty())
+    {
+        return nullptr;
+    }
+
+    return mTableProps.top();
+}
+
 // tdf#108714
 void OOXMLParserState::resolvePostponedBreak(Stream & rStream)
 {

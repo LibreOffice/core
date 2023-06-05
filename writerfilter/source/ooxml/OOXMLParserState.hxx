@@ -58,6 +58,8 @@ class OOXMLParserState final : public virtual SvRefBase
     std::vector<SavedAlternateState> maSavedAlternateStates;
     std::vector<OOXMLPropertySet::Pointer_t> mvPostponedBreaks;
     bool mbStartFootnote;
+    /// We just ended a floating table. Starting a paragraph or table resets this.
+    bool m_bFloatingTableEnded = false;
 
 public:
     typedef tools::SvRef<OOXMLParserState> Pointer_t;
@@ -101,6 +103,7 @@ public:
     void setRowProperties(const OOXMLPropertySet::Pointer_t& pProps);
     void resolveTableProperties(Stream& rStream);
     void setTableProperties(const OOXMLPropertySet::Pointer_t& pProps);
+    OOXMLPropertySet::Pointer_t GetTableProperties() const;
     // tdf#108714
     void resolvePostponedBreak(Stream& rStream);
     void setPostponedBreak(const OOXMLPropertySet::Pointer_t& pProps);
@@ -115,6 +118,12 @@ public:
 
     void setStartFootnote(bool bStartFootnote);
     bool isStartFootnote() const { return mbStartFootnote; }
+
+    void SetFloatingTableEnded(bool bFloatingTableEnded)
+    {
+        m_bFloatingTableEnded = bFloatingTableEnded;
+    }
+    bool GetFloatingTableEnded() const { return m_bFloatingTableEnded; }
 };
 }
 

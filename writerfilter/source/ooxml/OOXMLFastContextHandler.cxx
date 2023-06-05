@@ -413,6 +413,11 @@ void OOXMLFastContextHandler::startParagraphGroup()
     if (!isForwardEvents())
         return;
 
+    if (mpParserState->GetFloatingTableEnded())
+    {
+        mpParserState->SetFloatingTableEnded(false);
+    }
+
     if (mpParserState->isInParagraphGroup())
         endParagraphGroup();
 
@@ -1613,6 +1618,14 @@ void OOXMLFastContextHandlerTextTable::lcl_startFastElement
 (Token_t /*Element*/,
  const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
 {
+    if (mpParserState->GetFloatingTableEnded())
+    {
+        // We're starting a new table, but the previous table was floating. Insert a dummy paragraph
+        // to ensure that the floating table has a suitable anchor.
+        startParagraphGroup();
+        endOfParagraph();
+    }
+
     mpParserState->startTable();
     mnTableDepth++;
 
@@ -1639,6 +1652,20 @@ void OOXMLFastContextHandlerTextTable::lcl_endFastElement
     mpParserState->setCharacterProperties(pProps);
 
     mnTableDepth--;
+
+    OOXMLPropertySet::Pointer_t pTableProps = mpParserState->GetTableProperties();
+    if (pTableProps)
+    {
+        for (const auto& rTableProp : *pTableProps)
+        {
+            if (rTableProp->getId() == NS_ooxml::LN_CT_TblPrBase_tblpPr)
+            {
+                mpParserState->SetFloatingTableEnded(true);
+                break;
+            }
+        }
+    }
+
     mpParserState->endTable();
 }
 
