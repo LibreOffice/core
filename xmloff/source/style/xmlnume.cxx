@@ -622,7 +622,7 @@ constexpr OUStringLiteral gsIsPhysical( u"IsPhysical" );
 constexpr OUStringLiteral gsIsContinuousNumbering( u"IsContinuousNumbering" );
 
 SvxXMLNumRuleExport::SvxXMLNumRuleExport( SvXMLExport& rExp ) :
-    rExport( rExp ),
+    m_rExport( rExp ),
     // Let list style creation depend on Load/Save option "ODF format version" (#i89178#)
     mbExportPositionAndSpaceModeLabelAlignment( true )
 {

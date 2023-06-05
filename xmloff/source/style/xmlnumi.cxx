@@ -832,7 +832,7 @@ void SvxXMLListStyleContext::SetAttribute( sal_Int32 nElement,
 {
     if( nElement == XML_ELEMENT(TEXT, XML_CONSECUTIVE_NUMBERING) )
     {
-        bConsecutive = IsXMLToken( rValue, XML_TRUE );
+        m_bConsecutive = IsXMLToken( rValue, XML_TRUE );
     }
     else
     {
@@ -847,8 +847,8 @@ constexpr OUStringLiteral sIsContinuousNumbering( u"IsContinuousNumbering"  );
 SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
         bool bOutl )
 :   SvXMLStyleContext( rImport, bOutl ? XmlStyleFamily::TEXT_OUTLINE : XmlStyleFamily::TEXT_LIST )
-,   bConsecutive( false )
-,   bOutline( bOutl )
+,   m_bConsecutive( false )
+,   m_bOutline( bOutl )
 {
 }
 
@@ -858,7 +858,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SvxXMLListStyleContext
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    if( bOutline
+    if( m_bOutline
         ? nElement == XML_ELEMENT(TEXT, XML_OUTLINE_LEVEL_STYLE)
         : ( nElement == XML_ELEMENT(TEXT, XML_LIST_LEVEL_STYLE_NUMBER) ||
             nElement == XML_ELEMENT(TEXT, XML_LIST_LEVEL_STYLE_BULLET) ||
@@ -866,9 +866,9 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SvxXMLListStyleContext
     {
         rtl::Reference<SvxXMLListLevelStyleContext_Impl> xLevelStyle{
             new SvxXMLListLevelStyleContext_Impl( GetImport(), nElement, xAttrList )};
-        if( !pLevelStyles )
-            pLevelStyles = std::make_unique<SvxXMLListStyle_Impl>();
-        pLevelStyles->push_back( xLevelStyle );
+        if( !m_pLevelStyles )
+            m_pLevelStyles = std::make_unique<SvxXMLListStyle_Impl>();
+        m_pLevelStyles->push_back( xLevelStyle );
 
         return xLevelStyle;
     }
@@ -881,10 +881,10 @@ void SvxXMLListStyleContext::FillUnoNumRule(
 {
     try
     {
-        if( pLevelStyles && rNumRule.is() )
+        if( m_pLevelStyles && rNumRule.is() )
         {
             sal_Int32 l_nLevels = rNumRule->getCount();
-            for (const auto& pLevelStyle : *pLevelStyles)
+            for (const auto& pLevelStyle : *m_pLevelStyles)
             {
                 sal_Int32 nLevel = pLevelStyle->GetLevel();
                 if( nLevel >= 0 && nLevel < l_nLevels )
@@ -903,7 +903,7 @@ void SvxXMLListStyleContext::FillUnoNumRule(
         if( xPropSetInfo.is() &&
             xPropSetInfo->hasPropertyByName( sIsContinuousNumbering ) )
         {
-            xPropSet->setPropertyValue( sIsContinuousNumbering, Any(bConsecutive) );
+            xPropSet->setPropertyValue( sIsContinuousNumbering, Any(m_bConsecutive) );
         }
     }
     catch (const Exception&)
@@ -914,7 +914,7 @@ void SvxXMLListStyleContext::FillUnoNumRule(
 
 void SvxXMLListStyleContext::CreateAndInsertLate( bool bOverwrite )
 {
-    if( bOutline )
+    if( m_bOutline )
     {
         if( bOverwrite )
         {
@@ -987,11 +987,11 @@ void SvxXMLListStyleContext::CreateAndInsertLate( bool bOverwrite )
                                              GetName(), rName );
 
         Any aAny = xPropSet->getPropertyValue( sNumberingRules );
-        aAny >>= xNumRules;
+        aAny >>= m_xNumRules;
         if( bOverwrite || bNew )
         {
-            FillUnoNumRule(xNumRules);
-            xPropSet->setPropertyValue( sNumberingRules, Any(xNumRules) );
+            FillUnoNumRule(m_xNumRules);
+            xPropSet->setPropertyValue( sNumberingRules, Any(m_xNumRules) );
         }
         else
         {
@@ -1004,20 +1004,20 @@ void SvxXMLListStyleContext::CreateAndInsertLate( bool bOverwrite )
 
 void SvxXMLListStyleContext::CreateAndInsertAuto() const
 {
-    SAL_WARN_IF( bOutline, "xmloff", "Outlines cannot be inserted here" );
-    SAL_WARN_IF( xNumRules.is(), "xmloff", "Numbering Rule is existing already" );
+    SAL_WARN_IF( m_bOutline, "xmloff", "Outlines cannot be inserted here" );
+    SAL_WARN_IF( m_xNumRules.is(), "xmloff", "Numbering Rule is existing already" );
 
     const OUString& rName = GetName();
-    if( bOutline || xNumRules.is() || rName.isEmpty() )
+    if( m_bOutline || m_xNumRules.is() || rName.isEmpty() )
     {
         const_cast<SvxXMLListStyleContext *>(this)->SetValid( false );
         return;
     }
 
-    const_cast<SvxXMLListStyleContext *>(this)->xNumRules = CreateNumRule(
+    const_cast<SvxXMLListStyleContext *>(this)->m_xNumRules = CreateNumRule(
         GetImport().GetModel() );
 
-    FillUnoNumRule(xNumRules);
+    FillUnoNumRule(m_xNumRules);
 }
 
 Reference < XIndexReplace > SvxXMLListStyleContext::CreateNumRule(

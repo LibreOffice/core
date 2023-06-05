@@ -31,24 +31,24 @@ namespace com::sun::star {
 
 class XMLOFF_DLLPUBLIC XMLTextMasterPageContext : public SvXMLStyleContext
 {
-    OUString       sFollow;
-    OUString       sPageMasterName;
+    OUString       m_sFollow;
+    OUString       m_sPageMasterName;
     OUString m_sDrawingPageStyle;
 
-    css::uno::Reference < css::style::XStyle > xStyle;
+    css::uno::Reference < css::style::XStyle > m_xStyle;
 
-    bool bInsertHeader;
-    bool bInsertFooter;
-    bool bInsertHeaderLeft;
-    bool bInsertFooterLeft;
-    bool bInsertHeaderFirst;
-    bool bInsertFooterFirst;
-    bool bHeaderInserted;
-    bool bFooterInserted;
+    bool m_bInsertHeader;
+    bool m_bInsertFooter;
+    bool m_bInsertHeaderLeft;
+    bool m_bInsertFooterLeft;
+    bool m_bInsertHeaderFirst;
+    bool m_bInsertFooterFirst;
+    bool m_bHeaderInserted;
+    bool m_bFooterInserted;
 
     SAL_DLLPRIVATE css::uno::Reference< css::style::XStyle > Create();
 protected:
-    const css::uno::Reference< css::style::XStyle >& GetStyle() const { return xStyle; }
+    const css::uno::Reference< css::style::XStyle >& GetStyle() const { return m_xStyle; }
 public:
 
 

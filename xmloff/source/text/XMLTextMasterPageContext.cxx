@@ -72,14 +72,14 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
         const Reference< XFastAttributeList > & xAttrList,
         bool bOverwrite )
 :   SvXMLStyleContext( rImport, XmlStyleFamily::MASTER_PAGE )
-,   bInsertHeader( false )
-,   bInsertFooter( false )
-,   bInsertHeaderLeft( false )
-,   bInsertFooterLeft( false )
-,   bInsertHeaderFirst( false )
-,   bInsertFooterFirst( false )
-,   bHeaderInserted( false )
-,   bFooterInserted( false )
+,   m_bInsertHeader( false )
+,   m_bInsertFooter( false )
+,   m_bInsertHeaderLeft( false )
+,   m_bInsertFooterLeft( false )
+,   m_bInsertHeaderFirst( false )
+,   m_bInsertFooterFirst( false )
+,   m_bHeaderInserted( false )
+,   m_bFooterInserted( false )
 {
     OUString sName, sDisplayName;
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
@@ -94,10 +94,10 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
                 sDisplayName = aValue;
                 break;
             case XML_ELEMENT(STYLE, XML_NEXT_STYLE_NAME):
-                sFollow = aValue;
+                m_sFollow = aValue;
                 break;
             case XML_ELEMENT(STYLE, XML_PAGE_LAYOUT_NAME):
-                sPageMasterName = aValue;
+                m_sPageMasterName = aValue;
                 break;
             case XML_ELEMENT(DRAW, XML_STYLE_NAME):
                 m_sDrawingPageStyle = aValue;
@@ -130,19 +130,19 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
     if( xPageStyles->hasByName( sDisplayName ) )
     {
         aAny = xPageStyles->getByName( sDisplayName );
-        aAny >>= xStyle;
+        aAny >>= m_xStyle;
     }
     else
     {
-        xStyle = Create();
-        if( !xStyle.is() )
+        m_xStyle = Create();
+        if( !m_xStyle.is() )
             return;
 
-        xPageStyles->insertByName( sDisplayName, Any(xStyle) );
+        xPageStyles->insertByName( sDisplayName, Any(m_xStyle) );
         bNew = true;
     }
 
-    Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
+    Reference < XPropertySet > xPropSet( m_xStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo =
                 xPropSet->getPropertySetInfo();
     OUString sIsPhysical( "IsPhysical" );
@@ -169,9 +169,9 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
     if ( xPropSetInfo->hasPropertyByName( "GridPrint" ) )
         xPropSet->setPropertyValue( "GridPrint", Any(false) );
 
-    bInsertHeader = bInsertFooter = true;
-    bInsertHeaderLeft = bInsertFooterLeft = true;
-    bInsertHeaderFirst = bInsertFooterFirst = true;
+    m_bInsertHeader = m_bInsertFooter = true;
+    m_bInsertHeaderLeft = m_bInsertFooterLeft = true;
+    m_bInsertHeaderFirst = m_bInsertFooterFirst = true;
 }
 
 XMLTextMasterPageContext::~XMLTextMasterPageContext()
@@ -188,40 +188,40 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextMasterPageConte
     switch( nElement )
     {
     case XML_ELEMENT(STYLE, XML_HEADER):
-        if( bInsertHeader && !bHeaderInserted )
+        if( m_bInsertHeader && !m_bHeaderInserted )
         {
             bInsert = true;
-            bHeaderInserted = true;
+            m_bHeaderInserted = true;
         }
         break;
     case XML_ELEMENT(STYLE, XML_FOOTER):
-        if( bInsertFooter && !bFooterInserted )
+        if( m_bInsertFooter && !m_bFooterInserted )
         {
             bInsert = bFooter = true;
-            bFooterInserted = true;
+            m_bFooterInserted = true;
         }
         break;
     case XML_ELEMENT(STYLE, XML_HEADER_LEFT):
-        if( bInsertHeaderLeft && bHeaderInserted )
+        if( m_bInsertHeaderLeft && m_bHeaderInserted )
             bInsert = bLeft = true;
         break;
     case XML_ELEMENT(STYLE, XML_FOOTER_LEFT):
-        if( bInsertFooterLeft && bFooterInserted )
+        if( m_bInsertFooterLeft && m_bFooterInserted )
             bInsert = bFooter = bLeft = true;
         break;
     case XML_ELEMENT(LO_EXT, XML_HEADER_FIRST):
     case XML_ELEMENT(STYLE, XML_HEADER_FIRST):
-        if( bInsertHeaderFirst && bHeaderInserted )
+        if( m_bInsertHeaderFirst && m_bHeaderInserted )
             bInsert = bFirst = true;
         break;
     case XML_ELEMENT(LO_EXT, XML_FOOTER_FIRST):
     case XML_ELEMENT(STYLE, XML_FOOTER_FIRST):
-        if( bInsertFooterFirst && bFooterInserted )
+        if( m_bInsertFooterFirst && m_bFooterInserted )
             bInsert = bFooter = bFirst = true;
         break;
     }
 
-    if( bInsert && xStyle.is() )
+    if( bInsert && m_xStyle.is() )
     {
         xContext = CreateHeaderFooterContext( nElement, xAttrList,
                                               bFooter, bLeft, bFirst );
@@ -237,25 +237,25 @@ SvXMLImportContext *XMLTextMasterPageContext::CreateHeaderFooterContext(
             const bool bLeft,
             const bool bFirst )
 {
-    Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
+    Reference < XPropertySet > xPropSet( m_xStyle, UNO_QUERY );
     return new XMLTextHeaderFooterContext( GetImport(), xPropSet, bFooter, bLeft, bFirst );
 }
 
 void XMLTextMasterPageContext::Finish( bool bOverwrite )
 {
-    if( !(xStyle.is() && (IsNew() || bOverwrite)) )
+    if( !(m_xStyle.is() && (IsNew() || bOverwrite)) )
         return;
 
-    Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
+    Reference < XPropertySet > xPropSet( m_xStyle, UNO_QUERY );
     XMLPropStyleContext * pDrawingPageStyle(nullptr);
     if (!m_sDrawingPageStyle.isEmpty())
     {
         pDrawingPageStyle = GetImport().GetTextImport()->FindDrawingPage(m_sDrawingPageStyle);
     }
     PageStyleContext * pPageLayout(nullptr);
-    if( !sPageMasterName.isEmpty() )
+    if( !m_sPageMasterName.isEmpty() )
     {
-        pPageLayout = static_cast<PageStyleContext *>(GetImport().GetTextImport()->FindPageMaster(sPageMasterName));
+        pPageLayout = static_cast<PageStyleContext *>(GetImport().GetTextImport()->FindPageMaster(m_sPageMasterName));
     }
     if (pPageLayout)
     {
@@ -278,10 +278,10 @@ void XMLTextMasterPageContext::Finish( bool bOverwrite )
     {
         OUString sDisplayFollow(
             GetImport().GetStyleDisplayName(
-                    XmlStyleFamily::MASTER_PAGE, sFollow ) );
+                    XmlStyleFamily::MASTER_PAGE, m_sFollow ) );
         if( sDisplayFollow.isEmpty() ||
             !xPageStyles->hasByName( sDisplayFollow ) )
-            sDisplayFollow = xStyle->getName();
+            sDisplayFollow = m_xStyle->getName();
 
         Any aAny = xPropSet->getPropertyValue( gsFollowStyle );
         OUString sCurrFollow;

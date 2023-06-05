@@ -36,12 +36,12 @@ typedef std::vector<rtl::Reference<SvxXMLListLevelStyleContext_Impl>> SvxXMLList
 class XMLOFF_DLLPUBLIC SvxXMLListStyleContext final
     : public SvXMLStyleContext
 {
-    css::uno::Reference< css::container::XIndexReplace > xNumRules;
+    css::uno::Reference< css::container::XIndexReplace > m_xNumRules;
 
-    std::unique_ptr<SvxXMLListStyle_Impl> pLevelStyles;
+    std::unique_ptr<SvxXMLListStyle_Impl> m_pLevelStyles;
 
-    bool                        bConsecutive : 1;
-    bool                        bOutline : 1;
+    bool                        m_bConsecutive : 1;
+    bool                        m_bOutline : 1;
 
     SAL_DLLPRIVATE virtual void SetAttribute( sal_Int32 nElement,
                                const OUString& rValue ) override;
@@ -61,7 +61,7 @@ public:
             const css::uno::Reference< css::container::XIndexReplace> & rNumRule) const;
 
     const css::uno::Reference< css::container::XIndexReplace >& GetNumRules() const
-        { return xNumRules; }
+        { return m_xNumRules; }
 
     static css::uno::Reference< css::container::XIndexReplace >
     CreateNumRule(

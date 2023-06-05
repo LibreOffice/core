@@ -34,14 +34,14 @@ struct SvXMLEnumMapEntry;
 */
 class XMLOFF_DLLPUBLIC XMLConstantsPropertyHandler: public XMLPropertyHandler
 {
-    const SvXMLEnumMapEntry<sal_uInt16> *pMap;
-    const enum ::xmloff::token::XMLTokenEnum eDefault;
+    const SvXMLEnumMapEntry<sal_uInt16> *m_pMap;
+    const enum ::xmloff::token::XMLTokenEnum m_eDefault;
 
 public:
     template<typename EnumT>
     XMLConstantsPropertyHandler( const SvXMLEnumMapEntry<EnumT> *pM,
                                  enum ::xmloff::token::XMLTokenEnum eDflt)
-     : pMap(reinterpret_cast<const SvXMLEnumMapEntry<sal_uInt16>*>(pM)), eDefault(eDflt) {}
+     : m_pMap(reinterpret_cast<const SvXMLEnumMapEntry<sal_uInt16>*>(pM)), m_eDefault(eDflt) {}
 
     // Just needed for virtual destruction
     virtual ~XMLConstantsPropertyHandler() override;

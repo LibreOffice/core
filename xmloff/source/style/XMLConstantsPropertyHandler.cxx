@@ -36,7 +36,7 @@ bool XMLConstantsPropertyHandler::importXML(
 {
     sal_uInt16 nEnum;
     bool bRet = SvXMLUnitConverter::convertEnum(
-        nEnum, rStrImpValue, pMap );
+        nEnum, rStrImpValue, m_pMap );
 
     if( bRet )
         rValue <<= static_cast<sal_Int16>(nEnum);
@@ -71,7 +71,7 @@ bool XMLConstantsPropertyHandler::exportXML(
             OUStringBuffer aOut;
 
             bRet = SvXMLUnitConverter::convertEnum(
-                aOut, nConst, pMap, eDefault );
+                aOut, nConst, m_pMap, m_eDefault );
 
             rStrExpValue = aOut.makeStringAndClear();
         }

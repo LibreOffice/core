@@ -37,7 +37,7 @@ class XMLTextListAutoStylePool;
 
 class XMLOFF_DLLPUBLIC SvxXMLNumRuleExport final
 {
-    SvXMLExport& rExport;
+    SvXMLExport& m_rExport;
     // Boolean indicating, if properties for position-and-space-mode LABEL_ALIGNMENT
     // are exported or not. (#i89178#)
     // These properties have been introduced in ODF 1.2. Thus, its export have
@@ -52,7 +52,7 @@ class XMLOFF_DLLPUBLIC SvxXMLNumRuleExport final
     SAL_DLLPRIVATE void exportStyle( const css::uno::Reference< css::style::XStyle >& rStyle );
     SAL_DLLPRIVATE void exportOutline();
 
-    SvXMLExport& GetExport() { return rExport; }
+    SvXMLExport& GetExport() { return m_rExport; }
 
 public:
 
