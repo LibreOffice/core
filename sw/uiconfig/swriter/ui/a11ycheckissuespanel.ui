@@ -18,7 +18,7 @@
         <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
-        <property name="homogeneous">True</property>
+        <property name="baseline-position">top</property>
         <child>
           <object class="GtkExpander" id="expand_document">
             <property name="can-focus">True</property>
@@ -27,6 +27,7 @@
               <object class="GtkBox" id="box_document">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="margin-start">6</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <placeholder/>
@@ -55,6 +56,7 @@
               <object class="GtkBox" id="box_styles">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="margin-start">6</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <placeholder/>
@@ -83,6 +85,8 @@
               <object class="GtkBox" id="box_no_alt">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="margin-start">6</property>
+                <property name="hexpand">True</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <placeholder/>
@@ -111,6 +115,7 @@
               <object class="GtkBox" id="box_table">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="margin-start">6</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <placeholder/>
@@ -139,6 +144,7 @@
               <object class="GtkBox" id="box_formatting">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="margin-start">6</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <placeholder/>
@@ -167,6 +173,7 @@
               <object class="GtkBox" id="box_hyperlink">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="margin-start">6</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <placeholder/>
@@ -195,6 +202,7 @@
               <object class="GtkBox" id="box_fakes">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="margin-start">6</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <placeholder/>
@@ -223,6 +231,7 @@
               <object class="GtkBox" id="box_numbering">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="margin-start">6</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <placeholder/>
@@ -251,6 +260,7 @@
               <object class="GtkBox" id="box_other">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="margin-start">6</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <placeholder/>

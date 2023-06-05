@@ -28,7 +28,7 @@ private:
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Container> m_xContainer;
     std::unique_ptr<weld::Label> m_xLabel;
-    std::unique_ptr<weld::Button> m_xGotoButton;
+    std::unique_ptr<weld::LinkButton> m_xGotoButton;
     std::unique_ptr<weld::Button> m_xFixButton;
 
     std::shared_ptr<sfx::AccessibilityIssue> const& m_pAccessibilityIssue;
@@ -39,7 +39,7 @@ public:
 
     weld::Widget* get_widget() const { return m_xContainer.get(); }
 
-    DECL_LINK(GotoButtonClicked, weld::Button&, void);
+    DECL_LINK(GotoButtonClicked, weld::LinkButton&, bool);
     DECL_LINK(FixButtonClicked, weld::Button&, void);
 };
 
