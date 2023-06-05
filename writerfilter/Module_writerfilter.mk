@@ -18,6 +18,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,writerfilter,\
     CppunitTest_writerfilter_filters_test \
     CppunitTest_writerfilter_misc \
     CppunitTest_writerfilter_dmapper \
+    CppunitTest_writerfilter_ooxml \
     CppunitTest_writerfilter_rtftok \
 ))
 
