@@ -944,30 +944,13 @@ void SvxJavaClassPathDlg::SetClassPath( const OUString& _rPath )
         sal_Int32 nIdx = 0;
         do
         {
-            sal_Int32 nextColon = _rPath.indexOf(CLASSPATH_DELIMITER, nIdx);
-            OUString sToken(
-                _rPath.subView(nIdx, nextColon > 0 ? nextColon - nIdx : _rPath.getLength() - nIdx));
-
-            // Detect open bootstrap variables - they might contain colons - we need to skip those.
-            sal_Int32 nBootstrapVarStart = sToken.indexOf("${");
-            if (nBootstrapVarStart >= 0)
-            {
-                sal_Int32 nBootstrapVarEnd = sToken.indexOf("}");
-                if (nBootstrapVarEnd == -1)
-                {
-                    // Current colon is part of bootstrap variable - skip it!
-                    nextColon = _rPath.indexOf(CLASSPATH_DELIMITER, nextColon + 1);
-                    sToken = _rPath.subView(nIdx, nextColon > 0 ? nextColon - nIdx
-                                                                : _rPath.getLength() - nIdx);
-                }
-            }
+            OUString sToken = _rPath.getToken( 0, CLASSPATH_DELIMITER, nIdx );
             OUString sURL;
             osl::FileBase::getFileURLFromSystemPath(sToken, sURL); // best effort
             INetURLObject aURL( sURL );
             m_xPathList->append("", sToken, SvFileInformationManager::GetImageId(aURL));
-            nIdx = nextColon + 1;
         }
-        while (nIdx > 0);
+        while (nIdx>=0);
         // select first entry
         m_xPathList->select(0);
     }
