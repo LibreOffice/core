@@ -1067,7 +1067,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(weld::Container* pPage, weld::DialogCon
         std::sort(aUILanguages.begin(), aUILanguages.end(), [](const auto& l1, const auto& l2) {
             static const auto aSorter = comphelper::string::NaturalStringSorter(
                 comphelper::getProcessComponentContext(),
-                Application::GetSettings().GetLanguageTag().getLocale());
+                Application::GetSettings().GetUILanguageTag().getLocale());
             return aSorter.compare(l1.second, l2.second) < 0;
         });
 
