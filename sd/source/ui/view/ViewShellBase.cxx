@@ -1015,6 +1015,9 @@ void ViewShellBase::setEditMode(int nMode)
 
 void ViewShellBase::afterCallbackRegistered()
 {
+    // common tasks
+    SfxViewShell::afterCallbackRegistered();
+
     // TODO: Add theme color palette changed callback
 }
 

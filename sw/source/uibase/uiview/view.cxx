@@ -1174,6 +1174,10 @@ void SwView::afterCallbackRegistered()
 {
     if (!comphelper::LibreOfficeKit::isActive())
         return;
+
+    // common tasks
+    SfxViewShell::afterCallbackRegistered();
+
     auto* pDocShell = GetDocShell();
     if (pDocShell)
     {

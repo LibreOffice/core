@@ -321,6 +321,7 @@ certain functionality.
 @li @c lok.fontsubst
 @li @c lok.tiledrendering
 @li @c lok.dialog
+@li @c lok.a11y - LOK accessibility
 
 @section l10ntools
 

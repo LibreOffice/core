@@ -553,8 +553,10 @@ public:
     int getCaretPosition() const;
 
 private:
-    void updateParagraphInfo(const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
+    bool updateParagraphInfo(const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
                              bool force, std::string msg = "");
+    void updateAndNotifyParagraph(const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
+                                  bool force, std::string msg = "");
 };
 
 LOKDocumentFocusListener::LOKDocumentFocusListener(const SfxViewShell* pViewShell)
@@ -675,12 +677,13 @@ void LOKDocumentFocusListener::disposing( const lang::EventObject& aEvent )
 
 }
 
-void LOKDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
+bool LOKDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
                                                    bool force, std::string msg)
 {
     if (!xAccText.is())
-        return;
+        return false;
 
+    bool bNotify = false;
     // If caret is present inside the paragraph (pos != -1), it means that paragraph has focus in the current view.
     sal_Int32 nCaretPosition = xAccText->getCaretPosition();
     if (nCaretPosition >= 0)
@@ -694,7 +697,7 @@ void LOKDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::acc
         if (m_sFocusedParagraph != sText)
         {
             m_sFocusedParagraph = sText;
-            notifyFocusedParagraphChanged(force);
+            bNotify = true;
         }
     }
     else
@@ -707,8 +710,18 @@ void LOKDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::acc
     if (msg.size())
         header += ": " + msg;
     aboutParagraph(header, xAccText, force);
+    return bNotify;
 
 }
+
+void LOKDocumentFocusListener::updateAndNotifyParagraph(
+        const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
+        bool force, std::string msg)
+{
+    if (updateParagraphInfo(xAccText, force, msg))
+        notifyFocusedParagraphChanged(force);
+}
+
 
 void LOKDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventObject& aEvent )
 {
@@ -741,7 +754,7 @@ void LOKDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
                         }
                     }
                     uno::Reference<css::accessibility::XAccessibleText> xAccText(xAccessibleObject, uno::UNO_QUERY);
-                    updateParagraphInfo(xAccText, false, "STATE_CHANGED: FOCUSED");
+                    updateAndNotifyParagraph(xAccText, false, "STATE_CHANGED: FOCUSED");
                     aboutTextFormatting("LOKDocumentFocusListener::notifyEvent: STATE_CHANGED: FOCUSED", xAccText);
                 }
                 break;
@@ -811,7 +824,7 @@ void LOKDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
                 // paragraph content updating on the client, even if current editing involves composing.
                 // We make a guess that if the paragraph accessibility node is not focused,
                 // it means that the text change has been performed in another view.
-                updateParagraphInfo(xAccText, !isFocused(aEvent), "TEXT_CHANGED");
+                updateAndNotifyParagraph(xAccText, !isFocused(aEvent), "TEXT_CHANGED");
 
                 break;
             }
@@ -1013,6 +1026,34 @@ void LOKDocumentFocusListener::attachRecursive(
 
                 if( xChild.is() )
                     attachRecursive(xChild);
+            }
+        }
+        else
+        {
+            // Usually, when the document is loaded, a CARET_CHANGED accessibility event is automatically emitted
+            // for the first paragraph. That allows to notify the paragraph content to the client, even if no input
+            // event occurred yet. However, in Cypress tests no accessibility event is automatically emitted until
+            // some input event occurs. So we use the following workaround to notify the content of the focused
+            // paragraph, without waiting for an input event.
+            // Here we update the paragraph info related to the focused paragraph,
+            // later when afterCallbackRegistered is executed we notify the paragraph content.
+            sal_Int64 nChildCount = xContext->getAccessibleChildCount();
+            if (nChildCount > 0)
+            {
+                uno::Reference< accessibility::XAccessible > xChild( xContext->getAccessibleChild( 0 ) );
+                if( xChild.is() )
+                {
+                    uno::Reference<css::accessibility::XAccessibleText> xAccText(xChild, uno::UNO_QUERY);
+                    if (xAccText.is())
+                    {
+                        sal_Int32 nPos = xAccText->getCaretPosition();
+                        if (nPos >= 0)
+                        {
+                            attachRecursive(xChild);
+                            updateParagraphInfo(xAccText, false, "LOKDocumentFocusListener::attachRecursive(3)");
+                        }
+                    }
+                }
             }
         }
     }
@@ -2482,6 +2523,11 @@ void SfxViewShell::libreOfficeKitViewAddPendingInvalidateTiles()
 
 void SfxViewShell::afterCallbackRegistered()
 {
+    if (GetLOKAccessibilityState())
+    {
+        LOKDocumentFocusListener& rDocFocusListener = GetLOKDocumentFocusListener();
+        rDocFocusListener.notifyFocusedParagraphChanged();
+    }
 }
 
 void SfxViewShell::flushPendingLOKInvalidateTiles()

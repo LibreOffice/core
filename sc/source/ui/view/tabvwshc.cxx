@@ -451,6 +451,9 @@ int ScTabViewShell::getPart() const
 
 void ScTabViewShell::afterCallbackRegistered()
 {
+    // common tasks
+    SfxViewShell::afterCallbackRegistered();
+
     UpdateInputHandler(true, false);
 
     ScInputHandler* pHdl = mpInputHandler ? mpInputHandler.get() : SC_MOD()->GetInputHdl();

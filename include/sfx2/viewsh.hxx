@@ -413,6 +413,8 @@ public:
     const LanguageTag& GetLOKLanguageTag() const { return maLOKLanguageTag; }
     /// Enable/Disable LibreOfficeKit AT support for this view.
     void SetLOKAccessibilityState(bool bEnabled);
+    /// Get LibreOfficeKit AT support state for this view.
+    bool GetLOKAccessibilityState() const { return mbLOKAccessibilityEnabled; }
 
     /// Get the LibreOfficeKit timezone of this view. See @SetLOKTimezone.
     std::pair<bool, OUString> GetLOKTimezone() const
