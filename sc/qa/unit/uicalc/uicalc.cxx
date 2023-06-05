@@ -715,6 +715,54 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124820)
                                  aFont.GetStrikeout());
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf132026)
+{
+    createScDoc("tdf132026.ods");
+    ScDocument* pDoc = getScDoc();
+    std::vector<std::u16string_view> aChars{ u"=", u"+", u"-" };
+    std::vector<sal_uInt16> aDirections{ KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT };
+
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    for (auto aChar = aChars.begin(); aChar != aChars.end(); ++aChar)
+    {
+        for (size_t i = 0; i < aDirections.size(); ++i)
+        {
+            goToCell("B2");
+            typeString(*aChar);
+
+            sal_uInt16 nDir = aDirections[i];
+            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, nDir);
+            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, nDir);
+            Scheduler::ProcessEventsToIdle();
+
+            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+            Scheduler::ProcessEventsToIdle();
+
+            sal_Int16 nSign = (*aChar == u"-") ? -1 : 1;
+            sal_Int16 nExpected = nSign * (i + 1);
+            OUString sExpectedResult = OUString::number(nExpected);
+            CPPUNIT_ASSERT_EQUAL(sExpectedResult, pDoc->GetString(ScAddress(1, 1, 0)));
+
+            goToCell("E2");
+            typeString(*aChar);
+
+            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, nDir);
+            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, nDir);
+            Scheduler::ProcessEventsToIdle();
+
+            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+            Scheduler::ProcessEventsToIdle();
+
+            // Without the fix in place, this test would have failed with
+            // - Expected: =
+            // - Actual  : =E1
+            CPPUNIT_ASSERT_EQUAL(OUString(*aChar), pDoc->GetString(ScAddress(4, 1, 0)));
+        }
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf152037)
 {
     createScDoc("tdf152037.xlsx");
