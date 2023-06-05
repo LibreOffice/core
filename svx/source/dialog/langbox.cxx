@@ -328,9 +328,9 @@ weld::ComboBoxEntry SvxLanguageBox::BuildEntry(const LanguageType nLangType, sal
             return weld::ComboBoxEntry("");
     }
 
-    OUString aStrEntry = SvtLanguageTable::GetLanguageString( nLang );
-    if (LANGUAGE_NONE == nLang && m_bHasLangNone && m_bLangNoneIsLangAll)
-        aStrEntry = m_aAllString;
+    OUString aStrEntry = (LANGUAGE_NONE == nLang && m_bHasLangNone && m_bLangNoneIsLangAll)
+                             ? m_aAllString
+                             : SvtLanguageTable::GetLanguageString(nLang);
 
     LanguageType nRealLang = nLang;
     if (nRealLang == LANGUAGE_SYSTEM)
@@ -357,10 +357,10 @@ weld::ComboBoxEntry SvxLanguageBox::BuildEntry(const LanguageType nLangType, sal
 
         bool bFound = m_xSpellUsedLang && lcl_SeqHasLang(*m_xSpellUsedLang, static_cast<sal_uInt16>(nRealLang));
 
-        return weld::ComboBoxEntry(aStrEntry, OUString::number(static_cast<sal_uInt16>(nLangType)), bFound ? OUString(RID_SVXBMP_CHECKED) : OUString(RID_SVXBMP_NOTCHECKED));
+        return weld::ComboBoxEntry(aStrEntry, OUString::number(static_cast<sal_uInt16>(nLang)), bFound ? OUString(RID_SVXBMP_CHECKED) : OUString(RID_SVXBMP_NOTCHECKED));
     }
     else
-        return weld::ComboBoxEntry(aStrEntry, OUString::number(static_cast<sal_uInt16>(nLangType)));
+        return weld::ComboBoxEntry(aStrEntry, OUString::number(static_cast<sal_uInt16>(nLang)));
 }
 
 IMPL_LINK(SvxLanguageBox, ChangeHdl, weld::ComboBox&, rControl, void)
