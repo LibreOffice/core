@@ -332,7 +332,7 @@ SwAddPrinterTabPage::SwAddPrinterTabPage(weld::Container* pPage, weld::DialogCon
     }
     m_xProspectCB_RTL->set_sensitive(false);
     SvtCTLOptions aCTLOptions;
-    m_xProspectCB_RTL->set_visible(aCTLOptions.IsCTLFontEnabled());
+    m_xProspectCB_RTL->set_visible(SvtCTLOptions::IsCTLFontEnabled());
 }
 
 SwAddPrinterTabPage::~SwAddPrinterTabPage()

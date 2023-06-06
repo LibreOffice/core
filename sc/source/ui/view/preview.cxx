@@ -127,7 +127,7 @@ ScPreview::ScPreview( vcl::Window* pParent, ScDocShell* pDocSh, ScPreviewShell* 
 
     SetHelpId( HID_SC_WIN_PREVIEW );
 
-    GetOutDev()->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
+    GetOutDev()->SetDigitLanguage( ScModule::GetOptDigitLanguage() );
 }
 
 ScPreview::~ScPreview()

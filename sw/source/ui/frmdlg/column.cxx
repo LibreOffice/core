@@ -1298,7 +1298,7 @@ void SwColumnPage::SetFrameMode(bool bMod)
 
 void SwColumnPage::SetInSection(bool bSet)
 {
-    if(!SW_MOD()->GetCTLOptions().IsCTLFontEnabled())
+    if(!SvtCTLOptions::IsCTLFontEnabled())
         return;
 
     m_xTextDirectionFT->set_visible(bSet);

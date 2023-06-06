@@ -4578,18 +4578,16 @@ const SvxLRSpaceItem& ImpEditEngine::GetLRSpaceItem( ContentNode* pNode )
 
 // select a representative text language for the digit type according to the
 // text numeral setting:
-LanguageType ImpEditEngine::ImplCalcDigitLang(LanguageType eCurLang) const
+LanguageType ImpEditEngine::ImplCalcDigitLang(LanguageType eCurLang)
 {
     if (utl::ConfigManager::IsFuzzing())
         return LANGUAGE_ENGLISH_US;
 
     // #114278# Also setting up digit language from Svt options
     // (cannot reliably inherit the outdev's setting)
-    if( !pCTLOptions )
-        pCTLOptions.reset( new SvtCTLOptions );
 
     LanguageType eLang = eCurLang;
-    const SvtCTLOptions::TextNumerals nCTLTextNumerals = pCTLOptions->GetCTLTextNumerals();
+    const SvtCTLOptions::TextNumerals nCTLTextNumerals = SvtCTLOptions::GetCTLTextNumerals();
 
     if ( SvtCTLOptions::NUMERALS_HINDI == nCTLTextNumerals )
         eLang = LANGUAGE_ARABIC_SAUDI_ARABIA;

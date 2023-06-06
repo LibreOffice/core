@@ -107,7 +107,7 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(weld::Window* pParent, const SfxItemSet* _pSet )
     //! will be set to LANGUAGE_UNDETERMINED
     SvxLanguageListFlags nLangList = SvxLanguageListFlags::WESTERN;
 
-    if( SvtCTLOptions().IsCTLFontEnabled() )
+    if( SvtCTLOptions::IsCTLFontEnabled() )
         nLangList |= SvxLanguageListFlags::CTL;
     if( SvtCJKOptions::IsCJKFontEnabled() )
         nLangList |= SvxLanguageListFlags::CJK;

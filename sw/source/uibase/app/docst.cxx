@@ -616,7 +616,7 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl, LinkParamNone*, void)
 
         m_xTmp->SetItemSet( aTmpSet );
 
-        if( SfxStyleFamily::Page == m_nFamily && SvtCTLOptions().IsCTLFontEnabled() )
+        if( SfxStyleFamily::Page == m_nFamily && SvtCTLOptions::IsCTLFontEnabled() )
         {
             const SfxPoolItem *pItem = nullptr;
             if( aTmpSet.GetItemState( m_rDocSh.GetPool().GetTrueWhich( SID_ATTR_FRAMEDIRECTION, false ) , true, &pItem ) == SfxItemState::SET )

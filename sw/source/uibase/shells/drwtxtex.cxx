@@ -878,7 +878,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
             case SID_ATTR_PARA_LEFT_TO_RIGHT:
             case SID_ATTR_PARA_RIGHT_TO_LEFT:
             {
-                if (!SvtCTLOptions().IsCTLFontEnabled())
+                if (!SvtCTLOptions::IsCTLFontEnabled())
                 {
                     rSet.DisableItem(nWhich);
                     nSlotId = 0;
@@ -926,8 +926,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
             case SID_INSERT_RLM:
             case SID_INSERT_LRM:
             {
-                SvtCTLOptions aCTLOptions;
-                bool bEnabled = aCTLOptions.IsCTLFontEnabled();
+                bool bEnabled = SvtCTLOptions::IsCTLFontEnabled();
                 GetView().GetViewFrame().GetBindings().SetVisibleState(nWhich, bEnabled);
                 if (!bEnabled)
                     rSet.DisableItem(nWhich);

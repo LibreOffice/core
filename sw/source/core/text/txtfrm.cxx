@@ -729,7 +729,7 @@ SwDigitModeModifier::SwDigitModeModifier( const OutputDevice& rOutp, LanguageTyp
         eLang = LANGUAGE_ENGLISH_US;
     else
     {
-        const SvtCTLOptions::TextNumerals nTextNumerals = SW_MOD()->GetCTLOptions().GetCTLTextNumerals();
+        const SvtCTLOptions::TextNumerals nTextNumerals = SvtCTLOptions::GetCTLTextNumerals();
 
         if ( SvtCTLOptions::NUMERALS_HINDI == nTextNumerals )
             eLang = LANGUAGE_ARABIC_SAUDI_ARABIA;

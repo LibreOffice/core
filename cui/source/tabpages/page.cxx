@@ -191,9 +191,8 @@ SvxPageDescPage::SvxPageDescPage(weld::Container* pPage, weld::DialogController*
     // this page needs ExchangeSupport
     SetExchangeSupport();
 
-    SvtCTLOptions aCTLLanguageOptions;
     bool bCJK = SvtCJKOptions::IsAsianTypographyEnabled();
-    bool bCTL = aCTLLanguageOptions.IsCTLFontEnabled();
+    bool bCTL = SvtCTLOptions::IsCTLFontEnabled();
     bool bWeb = false;
 
     const SfxUInt16Item* pHtmlModeItem = rAttr.GetItemIfSet(SID_HTML_MODE, false);

@@ -70,7 +70,6 @@ class SvxLRSpaceItem;
 class TextRanger;
 class SvKeyValueIterator;
 class SvxForbiddenCharactersTable;
-class SvtCTLOptions;
 namespace vcl { class Window; }
 class SvxNumberFormat;
 namespace com::sun::star::datatransfer::clipboard {
@@ -513,7 +512,6 @@ private:
     VclPtr<VirtualDevice> mpOwnDev;
 
     svtools::ColorConfig maColorConfig;
-    mutable std::unique_ptr<SvtCTLOptions> pCTLOptions;
 
     mutable std::unique_ptr<SfxItemSet> pEmptyItemSet;
     EditUndoManager*    pUndoManager;
@@ -718,8 +716,8 @@ private:
     void                ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* pParaPortion, tools::Long nRemainingWidth );
 
     void                ImplInitLayoutMode(OutputDevice& rOutDev, sal_Int32 nPara, sal_Int32 nIndex);
-    LanguageType        ImplCalcDigitLang(LanguageType eCurLang) const;
-    void                ImplInitDigitMode(OutputDevice& rOutDev, LanguageType eLang);
+    static LanguageType ImplCalcDigitLang(LanguageType eCurLang);
+    static void         ImplInitDigitMode(OutputDevice& rOutDev, LanguageType eLang);
     static OUString     convertDigits(std::u16string_view rString, sal_Int32 nStt, sal_Int32 nLen, LanguageType eDigitLang);
 
     EditPaM             ReadText( SvStream& rInput, EditSelection aSel );
@@ -996,8 +994,8 @@ public:
     void            FormatAndLayout( EditView* pCurView = nullptr, bool bCalledFromUndo = false );
 
     const svtools::ColorConfig& GetColorConfig() const { return maColorConfig; }
-    bool            IsVisualCursorTravelingEnabled();
-    bool            DoVisualCursorTraveling();
+    static bool     IsVisualCursorTravelingEnabled();
+    static bool     DoVisualCursorTraveling();
 
     EditSelection         ConvertSelection( sal_Int32 nStartPara, sal_Int32 nStartPos, sal_Int32 nEndPara, sal_Int32 nEndPos );
     inline EPaM           CreateEPaM( const EditPaM& rPaM ) const;

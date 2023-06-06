@@ -39,16 +39,16 @@ public:
     virtual ~SvtCTLOptions() override;
 
     void        SetCTLFontEnabled( bool _bEnabled );
-    bool        IsCTLFontEnabled() const;
+    static bool IsCTLFontEnabled();
 
     void        SetCTLSequenceChecking( bool _bEnabled );
-    bool        IsCTLSequenceChecking() const;
+    static bool IsCTLSequenceChecking();
 
     void        SetCTLSequenceCheckingRestricted( bool _bEnable );
-    bool        IsCTLSequenceCheckingRestricted() const;
+    static bool IsCTLSequenceCheckingRestricted();
 
     void        SetCTLSequenceCheckingTypeAndReplace( bool _bEnable );
-    bool        IsCTLSequenceCheckingTypeAndReplace() const;
+    static bool IsCTLSequenceCheckingTypeAndReplace();
 
     enum CursorMovement
     {
@@ -56,7 +56,7 @@ public:
         MOVEMENT_VISUAL
     };
     void            SetCTLCursorMovement( CursorMovement _eMovement );
-    CursorMovement  GetCTLCursorMovement() const;
+    static CursorMovement GetCTLCursorMovement();
 
     enum TextNumerals
     {
@@ -66,7 +66,7 @@ public:
         NUMERALS_CONTEXT
     };
     void            SetCTLTextNumerals( TextNumerals _eNumerals );
-    TextNumerals    GetCTLTextNumerals() const;
+    static TextNumerals GetCTLTextNumerals();
 
     enum EOption
     {

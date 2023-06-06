@@ -612,14 +612,12 @@ uno::Reference < i18n::XExtendedInputSequenceChecker > const & TextEngine::GetIn
 
 bool TextEngine::IsInputSequenceCheckingRequired( sal_Unicode c, const TextSelection& rCurSel ) const
 {
-    SvtCTLOptions aCTLOptions;
-
     // get the index that really is first
     const sal_Int32 nFirstPos = std::min(rCurSel.GetStart().GetIndex(), rCurSel.GetEnd().GetIndex());
 
     bool bIsSequenceChecking =
-        aCTLOptions.IsCTLFontEnabled() &&
-        aCTLOptions.IsCTLSequenceChecking() &&
+        SvtCTLOptions::IsCTLFontEnabled() &&
+        SvtCTLOptions::IsCTLSequenceChecking() &&
         nFirstPos != 0; /* first char needs not to be checked */
 
     if (bIsSequenceChecking)
@@ -666,18 +664,17 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
     if (bIsUserInput && IsInputSequenceCheckingRequired( c, rCurSel ))
     {
         uno::Reference < i18n::XExtendedInputSequenceChecker > xISC = GetInputSequenceChecker();
-        SvtCTLOptions aCTLOptions;
 
         if (xISC.is())
         {
             sal_Int32 nTmpPos = aPaM.GetIndex();
-            sal_Int16 nCheckMode = aCTLOptions.IsCTLSequenceCheckingRestricted() ?
+            sal_Int16 nCheckMode = SvtCTLOptions::IsCTLSequenceCheckingRestricted() ?
                     i18n::InputSequenceCheckMode::STRICT : i18n::InputSequenceCheckMode::BASIC;
 
             // the text that needs to be checked is only the one
             // before the current cursor position
             OUString aOldText( mpDoc->GetText( aPaM.GetPara() ).copy(0, nTmpPos) );
-            if (aCTLOptions.IsCTLSequenceCheckingTypeAndReplace())
+            if (SvtCTLOptions::IsCTLSequenceCheckingTypeAndReplace())
             {
                 OUString aNewText( aOldText );
                 xISC->correctInputSequence( aNewText, nTmpPos - 1, c, nCheckMode );

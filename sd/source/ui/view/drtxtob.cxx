@@ -145,7 +145,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
     SfxWhichIter        aIter( rSet );
     sal_uInt16              nWhich = aIter.FirstWhich();
     SfxItemSet          aAttrSet( mpView->GetDoc().GetPool() );
-    bool            bDisableParagraphTextDirection = !SvtCTLOptions().IsCTLFontEnabled();
+    bool            bDisableParagraphTextDirection = !SvtCTLOptions::IsCTLFontEnabled();
     bool            bDisableVerticalText = !SvtCJKOptions::IsVerticalTextEnabled();
 
     mpView->GetAttributes( aAttrSet );

@@ -1122,7 +1122,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
             {
                 if ( !rKeyEvent.GetKeyCode().IsMod2() || ( nCode == KEY_LEFT ) || ( nCode == KEY_RIGHT ) )
                 {
-                    if ( pImpEditEngine->DoVisualCursorTraveling() && ( ( nCode == KEY_LEFT ) || ( nCode == KEY_RIGHT ) /* || ( nCode == KEY_HOME ) || ( nCode == KEY_END ) */ ) )
+                    if ( ImpEditEngine::DoVisualCursorTraveling() && ( ( nCode == KEY_LEFT ) || ( nCode == KEY_RIGHT ) /* || ( nCode == KEY_HOME ) || ( nCode == KEY_END ) */ ) )
                         bSetCursorFlags = false;    // Will be manipulated within visual cursor move
 
                     aCurSel = pImpEditEngine->MoveCursor( rKeyEvent, pEditView );

@@ -188,7 +188,6 @@ ImpEditEngine::~ImpEditEngine()
     delete pUndoManager;
     pTextRanger.reset();
     mpIMEInfos.reset();
-    pCTLOptions.reset();
     pSpellInfo.reset();
 }
 
@@ -1632,15 +1631,13 @@ EditSelection ImpEditEngine::SelectSentence( const EditSelection& rCurSel )
 bool ImpEditEngine::IsInputSequenceCheckingRequired( sal_Unicode nChar, const EditSelection& rCurSel ) const
 {
     uno::Reference < i18n::XBreakIterator > _xBI( ImplGetBreakIterator() );
-    if (!pCTLOptions)
-        pCTLOptions.reset( new SvtCTLOptions );
 
     // get the index that really is first
     const sal_Int32 nFirstPos = std::min(rCurSel.Min().GetIndex(), rCurSel.Max().GetIndex());
 
     bool bIsSequenceChecking =
-        pCTLOptions->IsCTLFontEnabled() &&
-        pCTLOptions->IsCTLSequenceChecking() &&
+        SvtCTLOptions::IsCTLFontEnabled() &&
+        SvtCTLOptions::IsCTLSequenceChecking() &&
         nFirstPos != 0 && /* first char needs not to be checked */
         _xBI.is() && i18n::ScriptType::COMPLEX == _xBI->getScriptType( OUString( nChar ), 0 );
 
@@ -2643,20 +2640,18 @@ EditPaM ImpEditEngine::InsertTextUserInput( const EditSelection& rCurSel,
         if (IsInputSequenceCheckingRequired( c, rCurSel ))
         {
             uno::Reference < i18n::XExtendedInputSequenceChecker > _xISC( ImplGetInputSequenceChecker() );
-            if (!pCTLOptions)
-                pCTLOptions.reset( new SvtCTLOptions );
 
             if (_xISC)
             {
                 const sal_Int32 nTmpPos = aPaM.GetIndex();
-                sal_Int16 nCheckMode = pCTLOptions->IsCTLSequenceCheckingRestricted() ?
+                sal_Int16 nCheckMode = SvtCTLOptions::IsCTLSequenceCheckingRestricted() ?
                         i18n::InputSequenceCheckMode::STRICT : i18n::InputSequenceCheckMode::BASIC;
 
                 // the text that needs to be checked is only the one
                 // before the current cursor position
                 const OUString aOldText( aPaM.GetNode()->Copy(0, nTmpPos) );
                 OUString aNewText( aOldText );
-                if (pCTLOptions->IsCTLSequenceCheckingTypeAndReplace())
+                if (SvtCTLOptions::IsCTLSequenceCheckingTypeAndReplace())
                 {
                     _xISC->correctInputSequence(aNewText, nTmpPos - 1, c, nCheckMode);
 
@@ -4462,10 +4457,7 @@ bool ImpEditEngine::IsVisualCursorTravelingEnabled()
 {
     bool bVisualCursorTravaling = false;
 
-    if( !pCTLOptions )
-        pCTLOptions.reset( new SvtCTLOptions );
-
-    if ( pCTLOptions->IsCTLFontEnabled() && ( pCTLOptions->GetCTLCursorMovement() == SvtCTLOptions::MOVEMENT_VISUAL ) )
+    if ( SvtCTLOptions::IsCTLFontEnabled() && ( SvtCTLOptions::GetCTLCursorMovement() == SvtCTLOptions::MOVEMENT_VISUAL ) )
     {
         bVisualCursorTravaling = true;
     }

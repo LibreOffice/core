@@ -1632,7 +1632,7 @@ void SwTextFormatInfo::CtorInitTextFormatInfo( OutputDevice* pRenderContext, SwT
     SetLineStart(TextFrameIndex(0));
 
     SvtCTLOptions::TextNumerals const nTextNumerals(
-            SW_MOD()->GetCTLOptions().GetCTLTextNumerals());
+            SvtCTLOptions::GetCTLTextNumerals());
     // cannot cache for NUMERALS_CONTEXT because we need to know the string
     // for the whole paragraph now
     if (nTextNumerals != SvtCTLOptions::NUMERALS_CONTEXT)

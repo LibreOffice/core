@@ -1482,7 +1482,7 @@ static OutputDevice* lcl_GetRenderDevice( const uno::Sequence<beans::PropertyVal
                 if ( pDevice )
                 {
                     pRet = pDevice->GetOutputDevice().get();
-                    pRet->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
+                    pRet->SetDigitLanguage( ScModule::GetOptDigitLanguage() );
                 }
             }
         }

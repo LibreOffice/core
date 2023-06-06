@@ -18,7 +18,7 @@
 #include "getdigitlanguage.hxx"
 
 LanguageType drawinglayer::detail::getDigitLanguage() {
-    switch (SvtCTLOptions().GetCTLTextNumerals()) {
+    switch (SvtCTLOptions::GetCTLTextNumerals()) {
     case SvtCTLOptions::NUMERALS_ARABIC:
         return LANGUAGE_ENGLISH;
     case SvtCTLOptions::NUMERALS_HINDI:

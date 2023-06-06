@@ -1972,7 +1972,7 @@ void ScFormatShell::GetTextDirectionState( SfxItemSet& rSet )
             eBidiDir = EEHorizontalTextDirection::L2R;
     }
 
-    bool bDisableCTLFont = !SvtCTLOptions().IsCTLFontEnabled();
+    bool bDisableCTLFont = !SvtCTLOptions::IsCTLFontEnabled();
     bool bDisableVerticalText = !SvtCJKOptions::IsVerticalTextEnabled();
 
     SfxWhichIter aIter( rSet );

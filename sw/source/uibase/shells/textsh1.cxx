@@ -2751,8 +2751,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             case SID_INSERT_RLM :
             case SID_INSERT_LRM :
             {
-                SvtCTLOptions aCTLOptions;
-                bool bEnabled = aCTLOptions.IsCTLFontEnabled();
+                bool bEnabled = SvtCTLOptions::IsCTLFontEnabled();
                 GetView().GetViewFrame().GetBindings().SetVisibleState( nWhich, bEnabled );
                 if(!bEnabled)
                     rSet.DisableItem(nWhich);

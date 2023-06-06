@@ -928,7 +928,7 @@ SvtUserOptions&  ScModule::GetUserOptions()
 
 LanguageType ScModule::GetOptDigitLanguage()
 {
-    SvtCTLOptions::TextNumerals eNumerals = GetCTLOptions().GetCTLTextNumerals();
+    SvtCTLOptions::TextNumerals eNumerals = SvtCTLOptions::GetCTLTextNumerals();
     return ( eNumerals == SvtCTLOptions::NUMERALS_ARABIC ) ? LANGUAGE_ENGLISH_US :
            ( eNumerals == SvtCTLOptions::NUMERALS_HINDI)   ? LANGUAGE_ARABIC_SAUDI_ARABIA :
                                                              LANGUAGE_SYSTEM;

@@ -764,9 +764,8 @@ void SwEditWin::StopInsFrame()
 
 bool SwEditWin::IsInputSequenceCheckingRequired( const OUString &rText, const SwPaM& rCursor )
 {
-    const SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
-    if ( !rCTLOptions.IsCTLFontEnabled() ||
-         !rCTLOptions.IsCTLSequenceChecking() )
+    if ( !SvtCTLOptions::IsCTLFontEnabled() ||
+         !SvtCTLOptions::IsCTLSequenceChecking() )
          return false;
 
     if ( 0 == rCursor.Start()->GetContentIndex() ) /* first char needs not to be checked */
@@ -912,17 +911,15 @@ void SwEditWin::FlushInBuffer()
         const OUString aOldText( rSh.GetCursor()->GetText() );
         const sal_Int32 nOldLen = aOldText.getLength();
 
-        SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
-
         sal_Int32 nExpandSelection = 0;
         if (nOldLen > 0)
         {
             sal_Int32 nTmpPos = nOldLen;
-            sal_Int16 nCheckMode = rCTLOptions.IsCTLSequenceCheckingRestricted() ?
+            sal_Int16 nCheckMode = SvtCTLOptions::IsCTLSequenceCheckingRestricted() ?
                     i18n::InputSequenceCheckMode::STRICT : i18n::InputSequenceCheckMode::BASIC;
 
             OUString aNewText( aOldText );
-            if (rCTLOptions.IsCTLSequenceCheckingTypeAndReplace())
+            if (SvtCTLOptions::IsCTLSequenceCheckingTypeAndReplace())
             {
                 for( sal_Int32 k = 0;  k < m_aInBuffer.getLength();  ++k)
                 {
@@ -5830,7 +5827,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                     nSlot = SID_ATTR_PARA_LEFT_TO_RIGHT;
                 else if(!pCommandData->IsLeftShift() && pCommandData->IsRightShift())
                     nSlot = SID_ATTR_PARA_RIGHT_TO_LEFT;
-                if(nSlot && SW_MOD()->GetCTLOptions().IsCTLFontEnabled())
+                if(nSlot && SvtCTLOptions::IsCTLFontEnabled())
                     GetView().GetViewFrame().GetDispatcher()->Execute(nSlot);
             }
         }

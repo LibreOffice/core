@@ -967,7 +967,7 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
                                 case RES_CHRATR_CTL_LANGUAGE:
                                 case RES_CHRATR_CTL_POSTURE:
                                 case RES_CHRATR_CTL_WEIGHT:
-                                if(aCTLOptions.IsCTLFontEnabled())
+                                if(SvtCTLOptions::IsCTLFontEnabled())
                                     bIsDefault = true;
                                 if(!bHasCTLFontPrefix)
                                 {

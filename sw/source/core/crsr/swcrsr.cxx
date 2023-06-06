@@ -1686,10 +1686,8 @@ SwCursor::DoSetBidiLevelLeftRight(
         const SwTextNode& rTNd = *rNode.GetTextNode();
         sal_Int32 nPos = GetPoint()->GetContentIndex();
 
-        const SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
-        if ( bVisualAllowed && rCTLOptions.IsCTLFontEnabled() &&
-             SvtCTLOptions::MOVEMENT_VISUAL ==
-             rCTLOptions.GetCTLCursorMovement() )
+        if ( bVisualAllowed && SvtCTLOptions::IsCTLFontEnabled() &&
+             SvtCTLOptions::MOVEMENT_VISUAL == SvtCTLOptions::GetCTLCursorMovement() )
         {
             // for visual cursor travelling (used in bidi layout)
             // we first have to convert the logic to a visual position

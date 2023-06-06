@@ -807,7 +807,7 @@ bool lcl_shouldSymbolsBePlacedOnTheLeftSide( const Reference< beans::XPropertySe
     bool bSymbolsLeftSide = true;
     try
     {
-        if( SvtCTLOptions().IsCTLFontEnabled() )
+        if( SvtCTLOptions::IsCTLFontEnabled() )
         {
             if(xLegendProp.is())
             {

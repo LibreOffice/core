@@ -159,11 +159,10 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
         }
     }
 
-    SvtCTLOptions aCTLOptions;
     TransliterationFlags nFlags = TransliterationFlags::NONE;
     if (!aMatchCase)
         nFlags |= TransliterationFlags::IGNORE_CASE;
-    if (aCTLOptions.IsCTLFontEnabled())
+    if (SvtCTLOptions::IsCTLFontEnabled())
         nFlags |= TransliterationFlags::IGNORE_DIACRITICS_CTL
                   | TransliterationFlags::IGNORE_KASHIDA_CTL;
 

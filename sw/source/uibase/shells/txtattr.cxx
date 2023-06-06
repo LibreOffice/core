@@ -770,7 +770,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             case SID_ATTR_PARA_LEFT_TO_RIGHT :
             case SID_ATTR_PARA_RIGHT_TO_LEFT :
             {
-                if ( !SW_MOD()->GetCTLOptions().IsCTLFontEnabled() )
+                if ( !SvtCTLOptions::IsCTLFontEnabled() )
                 {
                     rSet.DisableItem( nSlot );
                     nSlot = 0;

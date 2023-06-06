@@ -188,7 +188,7 @@ public:
         mbTextInited(false)
     {
         m_bCJKEnabled = SvtCJKOptions::IsAnyEnabled();
-        m_bCTLEnabled = SvtCTLOptions().IsCTLFontEnabled();
+        m_bCTLEnabled = SvtCTLOptions::IsCTLFontEnabled();
         mxBackColor = svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
         Invalidate100PercentFontWidth();
     }

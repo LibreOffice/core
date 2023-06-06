@@ -975,7 +975,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
         // issue 21255 - Notes now support rich text formatting.
     }
 
-    bool bDisableCTLFont = !SvtCTLOptions().IsCTLFontEnabled();
+    bool bDisableCTLFont = !::SvtCTLOptions::IsCTLFontEnabled();
     bool bDisableVerticalText = !SvtCJKOptions::IsVerticalTextEnabled();
 
     SdrView* pView = mrViewData.GetScDrawView();

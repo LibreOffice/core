@@ -181,7 +181,7 @@ public:
     static void         SetAutoSpellProperty( bool bSet );
     static bool         HasThesaurusLanguage( LanguageType nLang );
 
-    LanguageType        GetOptDigitLanguage();      // from CTL options
+    static LanguageType GetOptDigitLanguage();      // from CTL options
 
     ScNavipiCfg&        GetNavipiCfg();
     ScAddInCfg&         GetAddInCfg();

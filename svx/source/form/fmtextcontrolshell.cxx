@@ -894,7 +894,7 @@ namespace svx
                 ||  ( nSlot == SID_ATTR_PARA_RIGHT_TO_LEFT )
                 )
             {
-                if ( !SvtCTLOptions().IsCTLFontEnabled() )
+                if ( !SvtCTLOptions::IsCTLFontEnabled() )
                 {
                     _rSet.DisableItem( nSlot );
                     nSlot = aIter.NextWhich();

@@ -245,9 +245,8 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
     m_xEastFontNameLB = std::move(xCJKFontName);
     m_xCTLFontNameLB = std::move(xCTLFontName);
 
-    SvtCTLOptions aCTLLanguageOptions;
     bool bShowCJK = SvtCJKOptions::IsCJKFontEnabled();
-    bool bShowCTL = aCTLLanguageOptions.IsCTLFontEnabled();
+    bool bShowCTL = SvtCTLOptions::IsCTLFontEnabled();
     bool bShowNonWestern = bShowCJK || bShowCTL;
     if (!bShowNonWestern)
     {

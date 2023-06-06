@@ -292,8 +292,7 @@ void FuBullet::GetSlotState( SfxItemSet& rSet, ViewShell const * pViewShell, Sfx
 
     const bool bTextEdit = pOLV;
 
-    SvtCTLOptions aCTLOptions;
-    const bool bCtlEnabled = aCTLOptions.IsCTLFontEnabled();
+    const bool bCtlEnabled = SvtCTLOptions::IsCTLFontEnabled();
 
     if(!bTextEdit )
     {

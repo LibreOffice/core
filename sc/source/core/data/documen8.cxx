@@ -133,7 +133,7 @@ SfxPrinter* ScDocument::GetPrinter(bool bCreateIfNotExist)
         mpPrinter = VclPtr<SfxPrinter>::Create( std::move(pSet) );
         mpPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
         UpdateDrawPrinter();
-        mpPrinter->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
+        mpPrinter->SetDigitLanguage( ScModule::GetOptDigitLanguage() );
     }
 
     return mpPrinter;
@@ -153,7 +153,7 @@ void ScDocument::SetPrinter( VclPtr<SfxPrinter> const & pNewPrinter )
         ScopedVclPtr<SfxPrinter> xKeepAlive( mpPrinter );
         mpPrinter = pNewPrinter;
         UpdateDrawPrinter();
-        mpPrinter->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
+        mpPrinter->SetDigitLanguage( ScModule::GetOptDigitLanguage() );
     }
     InvalidateTextWidth(nullptr, nullptr, false);     // in both cases
 }
@@ -225,7 +225,7 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
                 if ( (nOldScale != nNewScale) || (nOldScaleToPages != nNewScaleToPages) )
                     InvalidateTextWidth( rStyleSheet.GetName() );
 
-                if( SvtCTLOptions().IsCTLFontEnabled() )
+                if( SvtCTLOptions::IsCTLFontEnabled() )
                 {
                     if( rChanges.GetItemState(ATTR_WRITINGDIR ) == SfxItemState::SET )
                         ScChartHelper::DoUpdateAllCharts( *this );

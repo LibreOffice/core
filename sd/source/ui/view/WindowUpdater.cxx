@@ -71,8 +71,7 @@ void WindowUpdater::SetDocument (SdDrawDocument* pDocument)
     mpDocument = pDocument;
 }
 
-void WindowUpdater::Update (
-    OutputDevice* pDevice) const
+/*static*/ void WindowUpdater::Update (OutputDevice* pDevice)
 {
     if (pDevice != nullptr)
     {
@@ -80,12 +79,12 @@ void WindowUpdater::Update (
     }
 }
 
-void WindowUpdater::UpdateWindow (OutputDevice* pDevice) const
+/*static*/ void WindowUpdater::UpdateWindow (OutputDevice* pDevice)
 {
     if (pDevice == nullptr)
         return;
 
-    SvtCTLOptions::TextNumerals aNumeralMode (maCTLOptions.GetCTLTextNumerals());
+    SvtCTLOptions::TextNumerals aNumeralMode (SvtCTLOptions::GetCTLTextNumerals());
 
     LanguageType aLanguage;
     // Now this is a bit confusing.  The numerals in arabic languages

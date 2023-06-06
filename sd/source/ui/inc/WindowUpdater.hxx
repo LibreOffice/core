@@ -84,7 +84,7 @@ public:
             The device to update.  When the given pointer is NULL then
             nothing is done.
     */
-    void Update(OutputDevice* pDevice) const;
+    static void Update(OutputDevice* pDevice);
 
     /** Callback that waits for notifications of a
         <type>SvtCTLOptions</type> object.
@@ -116,7 +116,7 @@ private:
             The output device to update.  When it is <null/> then the call
             is ignored.
     */
-    void UpdateWindow(OutputDevice* pDevice) const;
+    static void UpdateWindow(OutputDevice* pDevice);
 };
 
 } // end of namespace sd

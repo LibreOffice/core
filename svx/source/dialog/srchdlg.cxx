@@ -444,13 +444,12 @@ void SvxSearchDialog::Construct_Impl()
     {
         m_xJapMatchFullHalfWidthCB->hide();
     }
-    SvtCTLOptions aCTLOptions;
     // Do not disable and hide the m_xIncludeDiacritics button.
     // Include Diacritics == Not Ignore Diacritics => A does not match A-Umlaut (Diaeresis).
     // Confusingly these have negated names (following the UI) but the actual
     // transliteration is to *ignore* diacritics if "included" (sensitive) is
     // _not_ checked.
-    if(!aCTLOptions.IsCTLFontEnabled())
+    if(!SvtCTLOptions::IsCTLFontEnabled())
     {
         m_xIncludeDiacritics->set_active( true );
         m_xIncludeKashida->set_active( true );
@@ -706,7 +705,6 @@ void SvxSearchDialog::ShowOptionalControls_Impl()
 {
     DBG_ASSERT( pSearchItem, "no search item" );
 
-    SvtCTLOptions aCTLOptions;
     SvtModuleOptions::EFactory eFactory = getModule(rBindings);
     bool bDrawApp = eFactory == SvtModuleOptions::EFactory::DRAW;
     bool bWriterApp =
@@ -724,7 +722,7 @@ void SvxSearchDialog::ShowOptionalControls_Impl()
     m_xSimilarityBtn->show();
     m_xSelectionBtn->show();
     m_xIncludeDiacritics->show();
-    m_xIncludeKashida->set_visible(aCTLOptions.IsCTLFontEnabled());
+    m_xIncludeKashida->set_visible(SvtCTLOptions::IsCTLFontEnabled());
     m_xJapMatchFullHalfWidthCB->set_visible(SvtCJKOptions::IsCJKFontEnabled());
     m_xJapOptionsCB->set_visible(SvtCJKOptions::IsJapaneseFindEnabled());
     m_xJapOptionsBtn->set_visible(SvtCJKOptions::IsJapaneseFindEnabled());

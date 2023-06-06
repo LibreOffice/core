@@ -425,7 +425,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
 
             SfxItemSet aSet(m_pWrtShell->GetAttrPool(), aNormalAttr);
 
-            if( SW_MOD()->GetCTLOptions().IsCTLFontEnabled() )
+            if( SvtCTLOptions::IsCTLFontEnabled() )
             {
                 aSet.MergeRange(RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_WEIGHT);
             }

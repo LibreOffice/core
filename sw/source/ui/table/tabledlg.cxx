@@ -111,7 +111,7 @@ SwFormatTablePage::SwFormatTablePage(weld::Container* pPage, weld::DialogControl
     if(const SfxUInt16Item* pModeItem = rSet.GetItemIfSet(SID_HTML_MODE, false))
         m_bHtmlMode = 0 != (pModeItem->GetValue() & HTMLMODE_ON);
 
-    bool bCTL = SW_MOD()->GetCTLOptions().IsCTLFontEnabled();
+    bool bCTL = SvtCTLOptions::IsCTLFontEnabled();
     m_xProperties->set_visible(!m_bHtmlMode && bCTL);
 
     Init();

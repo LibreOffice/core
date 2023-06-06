@@ -421,7 +421,7 @@ ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData& rData, ScSplitPos 
 
     SetHelpId( HID_SC_WIN_GRIDWIN );
 
-    GetOutDev()->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
+    GetOutDev()->SetDigitLanguage( ScModule::GetOptDigitLanguage() );
     EnableRTL( false );
 
     bInitialPageBreaks = true;

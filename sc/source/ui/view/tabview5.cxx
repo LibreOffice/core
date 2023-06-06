@@ -537,7 +537,7 @@ void ScTabView::UpdateDrawTextOutliner()
 
 void ScTabView::DigitLanguageChanged()
 {
-    LanguageType eNewLang = SC_MOD()->GetOptDigitLanguage();
+    LanguageType eNewLang = ScModule::GetOptDigitLanguage();
     for (VclPtr<ScGridWindow> & pWin : pGridWin)
         if ( pWin )
             pWin->GetOutDev()->SetDigitLanguage( eNewLang );

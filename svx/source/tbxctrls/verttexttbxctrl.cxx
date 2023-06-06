@@ -103,8 +103,7 @@ void SAL_CALL SvxVertCTLTextTbxCtrl::statusChanged(const css::frame::FeatureStat
     }
     else if (rEvent.FeatureURL.Complete == ".uno:CTLFontState")
     {
-        SvtCTLOptions aLangOptions;
-        bEnabled = m_bVisible && aLangOptions.IsCTLFontEnabled();
+        bEnabled = m_bVisible && SvtCTLOptions::IsCTLFontEnabled();
     }
     else
     {

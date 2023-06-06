@@ -350,7 +350,7 @@ bool lcl_IsPieOrDonut( const rtl::Reference< Diagram >& xDiagram )
 void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDrawModelWrapper, ChartModel& rModel)
 {
     //get writing mode from parent document:
-    if( !SvtCTLOptions().IsCTLFontEnabled() )
+    if( !SvtCTLOptions::IsCTLFontEnabled() )
         return;
 
     try

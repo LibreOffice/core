@@ -106,13 +106,11 @@ bool SvxCTLOptionsPage::FillItemSet( SfxItemSet* )
 
 void SvxCTLOptionsPage::Reset( const SfxItemSet* )
 {
-    SvtCTLOptions aCTLOptions;
+    m_xSequenceCheckingCB->set_active( SvtCTLOptions::IsCTLSequenceChecking() );
+    m_xRestrictedCB->set_active( SvtCTLOptions::IsCTLSequenceCheckingRestricted() );
+    m_xTypeReplaceCB->set_active( SvtCTLOptions::IsCTLSequenceCheckingTypeAndReplace() );
 
-    m_xSequenceCheckingCB->set_active( aCTLOptions.IsCTLSequenceChecking() );
-    m_xRestrictedCB->set_active( aCTLOptions.IsCTLSequenceCheckingRestricted() );
-    m_xTypeReplaceCB->set_active( aCTLOptions.IsCTLSequenceCheckingTypeAndReplace() );
-
-    SvtCTLOptions::CursorMovement eMovement = aCTLOptions.GetCTLCursorMovement();
+    SvtCTLOptions::CursorMovement eMovement = SvtCTLOptions::GetCTLCursorMovement();
     switch ( eMovement )
     {
         case SvtCTLOptions::MOVEMENT_LOGICAL :
@@ -127,7 +125,7 @@ void SvxCTLOptionsPage::Reset( const SfxItemSet* )
             SAL_WARN( "cui.options", "SvxCTLOptionsPage::Reset(): invalid movement enum" );
     }
 
-    sal_uInt16 nPos = static_cast<sal_uInt16>(aCTLOptions.GetCTLTextNumerals());
+    sal_uInt16 nPos = static_cast<sal_uInt16>(SvtCTLOptions::GetCTLTextNumerals());
     DBG_ASSERT( nPos < m_xNumeralsLB->get_count(), "SvxCTLOptionsPage::Reset(): invalid numerals enum" );
     m_xNumeralsLB->set_active(nPos);
 

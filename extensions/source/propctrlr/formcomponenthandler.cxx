@@ -2270,7 +2270,7 @@ namespace pcr
             break;
 
         case PROPERTY_ID_WRITING_MODE:
-            if ( !SvtCTLOptions().IsCTLFontEnabled() )
+            if ( !SvtCTLOptions::IsCTLFontEnabled() )
                 return true;
             break;
         }

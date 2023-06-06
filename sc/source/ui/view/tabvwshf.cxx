@@ -1060,7 +1060,7 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
 
             case FID_TAB_RTL:
                 {
-                    if ( !SvtCTLOptions().IsCTLFontEnabled() )
+                    if ( !SvtCTLOptions::IsCTLFontEnabled() )
                         rSet.DisableItem( nWhich );
                     else
                         rSet.Put( SfxBoolItem( nWhich, rDoc.IsLayoutRTL( nTab ) ) );

@@ -1169,7 +1169,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(weld::Container* pPage, weld::DialogCon
     m_xAsianSupportCB->set_sensitive(!bReadonly);
     SupportHdl(*m_xAsianSupportCB);
 
-    m_bOldCtl = pLangConfig->aCTLLanguageOptions.IsCTLFontEnabled();
+    m_bOldCtl = SvtCTLOptions::IsCTLFontEnabled();
     m_xCTLSupportCB->set_active(m_bOldCtl);
     m_xCTLSupportCB->save_state();
     bReadonly = pLangConfig->aCTLLanguageOptions.IsReadOnly(SvtCTLOptions::E_CTLFONT);

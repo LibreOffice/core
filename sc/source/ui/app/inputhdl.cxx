@@ -919,7 +919,7 @@ void ScInputHandler::UpdateRefDevice()
     //  so the DigitLanguage can be safely modified (might use an own VDev instead of NULL).
     if ( !( bTextWysiwyg && pActiveViewSh ) )
     {
-        mpEditEngine->GetRefDevice()->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
+        mpEditEngine->GetRefDevice()->SetDigitLanguage( ScModule::GetOptDigitLanguage() );
     }
 }
 
