@@ -989,7 +989,7 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, Con
                    dynamic_cast< const SwSrcView *>( pViewShell ) !=  nullptr)
                 {
                     SwViewOption aNewOptions = *pSwView->GetWrtShell().GetViewOptions();
-                    aNewOptions.SetThemeName(m_pColorConfig->GetCurrentSchemeName());
+                    aNewOptions.SetThemeName(svtools::ColorConfig::GetCurrentSchemeName());
                     SwViewColors aViewColors(*m_pColorConfig);
                     aNewOptions.SetColorConfig(aViewColors);
                     pSwView->GetWrtShell().ApplyViewOptions(aNewOptions);

@@ -40,7 +40,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
-
+#include <officecfg/Office/UI.hxx>
 
 using namespace utl;
 using namespace com::sun::star;
@@ -488,8 +488,9 @@ ColorConfigValue ColorConfig::GetColorValue(ColorConfigEntry eEntry, bool bSmart
     return aRet;
 }
 
-const OUString& ColorConfig::GetCurrentSchemeName() const
+const OUString& ColorConfig::GetCurrentSchemeName()
 {
+    officecfg::Office::UI::ColorScheme::CurrentColorScheme::get();
     return m_pImpl->GetLoadedScheme();
 }
 

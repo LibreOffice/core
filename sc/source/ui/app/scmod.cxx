@@ -219,7 +219,7 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, Configura
                 ScViewOptions aViewOptions = pViewData.GetOptions();
                 Color aFillColor(m_pColorConfig->GetColorValue(svtools::DOCCOLOR).nColor);
                 aViewOptions.SetDocColor(aFillColor);
-                aViewOptions.SetColorSchemeName(m_pColorConfig->GetCurrentSchemeName());
+                aViewOptions.SetColorSchemeName(svtools::ColorConfig::GetCurrentSchemeName());
                 pViewData.SetOptions(aViewOptions);
                 ScModelObj* pScModelObj = comphelper::getFromUnoTunnel<ScModelObj>(SfxObjectShell::Current()->GetModel());
                 SfxLokHelper::notifyViewRenderState(SfxViewShell::Current(), pScModelObj);
