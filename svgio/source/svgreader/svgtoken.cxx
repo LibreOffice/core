@@ -34,6 +34,7 @@ namespace svgio::svgreader
         const char aSVGStrXmlns[] = "xmlns";
         const char aSVGStrVersion[] = "version";
         const char aSVGStrId[] = "id";
+        const char aSVGStrIn[] = "in";
         const char aSVGStrRx[] = "rx";
         const char aSVGStrRy[] = "ry";
         const char aSVGStrPoints[] = "points";
@@ -61,6 +62,7 @@ namespace svgio::svgreader
         const char aSVGStrStartOffset[] = "startOffset";
         const char aSVGStrMethod[] = "method";
         const char aSVGStrSpacing[] = "spacing";
+        const char aSVGStrStdDeviation[] = "stdDeviation";
         const char aSVGStrTextAlign[] = "text-align";
         const char aSVGStrPathLength[] = "pathLength";
         const char aSVGStrType[] = "type";
@@ -70,6 +72,7 @@ namespace svgio::svgreader
         const char aSVGStrColor[] = "color";
         const char aSVGStrClipPathNode[] = "clipPath";
         const char aSVGStrClipPathProperty[] = "clip-path";
+        const char aSVGStrFeGaussianBlur[] = "feGaussianBlur";
         const char aSVGStrFilter[] = "filter";
         const char aSVGStrMask[] = "mask";
         const char aSVGStrClipPathUnits[] = "clipPathUnits";
@@ -182,6 +185,7 @@ namespace svgio::svgreader
                 { aSVGStrXmlns, SVGToken::Xmlns },
                 { aSVGStrVersion, SVGToken::Version },
                 { aSVGStrId, SVGToken::Id },
+                { aSVGStrIn, SVGToken::In },
                 { aSVGStrRx, SVGToken::Rx },
                 { aSVGStrRy, SVGToken::Ry },
                 { aSVGStrPoints, SVGToken::Points },
@@ -209,6 +213,7 @@ namespace svgio::svgreader
                 { aSVGStrStartOffset, SVGToken::StartOffset },
                 { aSVGStrMethod, SVGToken::Method },
                 { aSVGStrSpacing, SVGToken::Spacing },
+                { aSVGStrStdDeviation, SVGToken::StdDeviation },
                 { aSVGStrTextAlign, SVGToken::TextAlign },
                 { aSVGStrPathLength, SVGToken::PathLength },
                 { aSVGStrType, SVGToken::Type },
@@ -218,6 +223,7 @@ namespace svgio::svgreader
                 { aSVGStrColor, SVGToken::Color },
                 { aSVGStrClipPathNode, SVGToken::ClipPathNode },
                 { aSVGStrClipPathProperty, SVGToken::ClipPathProperty },
+                { aSVGStrFeGaussianBlur, SVGToken::FeGaussianBlur },
                 { aSVGStrFilter, SVGToken::Filter },
                 { aSVGStrMask, SVGToken::Mask },
                 { aSVGStrClipPathUnits, SVGToken::ClipPathUnits },

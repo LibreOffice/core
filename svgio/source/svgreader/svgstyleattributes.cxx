@@ -1208,6 +1208,12 @@ namespace svgio::svgreader
 
             if(!aSource.empty()) // test again, applied clipPath may have lead to empty geometry
             {
+                const SvgFilterNode* pFilter = accessFilterXLink();
+                if(pFilter)
+                {
+                    pFilter->apply(aSource);
+                }
+
                 const SvgMaskNode* pMask = accessMaskXLink();
                 if(pMask)
                 {

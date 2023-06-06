@@ -25,11 +25,31 @@
 
 namespace svgio::svgreader
 {
-class SvgFilterNode final : public SvgNode
+/*
+FIXME: If no value is provided and this is the first filter primitive,
+then this filter primitive will use SourceGraphic as its input.
+If no value is provided and this is a subsequent filter primitive,
+then this filter primitive will use the result from the previous
+filter primitive as its input.
+*/
+enum class In
 {
+    None,
+    SourceGraphic
+};
+
+class SvgFeGaussianBlurNode final : public SvgNode
+{
+private:
+    SvgNumber maStdDeviation;
+    In maIn;
+
 public:
-    SvgFilterNode(SvgDocument& rDocument, SvgNode* pParent);
-    virtual ~SvgFilterNode() override;
+    SvgFeGaussianBlurNode(SvgDocument& rDocument, SvgNode* pParent);
+    virtual ~SvgFeGaussianBlurNode() override;
+
+    virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken,
+                                const OUString& aContent) override;
 
     void apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget) const;
 };

@@ -41,6 +41,7 @@
 #include <svgstylenode.hxx>
 #include <svgimagenode.hxx>
 #include <svgclippathnode.hxx>
+#include <svgfegaussianblurnode.hxx>
 #include <svgfilternode.hxx>
 #include <svgmasknode.hxx>
 #include <svgmarkernode.hxx>
@@ -341,6 +342,13 @@ namespace
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }
+                case SVGToken::FeGaussianBlur:
+                {
+                    /// new node for feGaussianBlur
+                    mpTarget = new SvgFeGaussianBlurNode(maDocument, mpTarget);
+                    mpTarget->parseAttributes(xAttribs);
+                    break;
+                }
                 case SVGToken::Filter:
                 {
                     /// new node for Filter
@@ -442,8 +450,9 @@ namespace
                 /// styles (as stylesheets)
                 case SVGToken::Style:
 
-                /// structural elements clip-path, filter and mask
+                /// structural elements clip-path, feGaussianBlur, filter and mask
                 case SVGToken::ClipPathNode:
+                case SVGToken::FeGaussianBlur:
                 case SVGToken::Filter:
                 case SVGToken::Mask:
 

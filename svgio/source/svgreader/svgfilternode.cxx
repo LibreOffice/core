@@ -18,6 +18,7 @@
  */
 
 #include <svgfilternode.hxx>
+#include <svgfegaussianblurnode.hxx>
 
 namespace svgio::svgreader
 {
@@ -27,6 +28,27 @@ SvgFilterNode::SvgFilterNode(SvgDocument& rDocument, SvgNode* pParent)
 }
 
 SvgFilterNode::~SvgFilterNode() {}
+
+void SvgFilterNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget) const
+{
+    if (rTarget.empty())
+        return;
+
+    const auto& rChildren = getChildren();
+    const sal_uInt32 nCount(rChildren.size());
+
+    // apply children's filters
+    for (sal_uInt32 a(0); a < nCount; a++)
+    {
+        SvgNode* pCandidate = rChildren[a].get();
+        if (pCandidate->getType() == SVGToken::FeGaussianBlur)
+        {
+            const SvgFeGaussianBlurNode* pFeGaussianBlurNode
+                = dynamic_cast<const SvgFeGaussianBlurNode*>(pCandidate);
+            pFeGaussianBlurNode->apply(rTarget);
+        }
+    }
+}
 
 } // end of namespace svgio::svgreader
 

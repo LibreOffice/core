@@ -28,6 +28,7 @@
 #include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
+#include <drawinglayer/primitive2d/softedgeprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <primitive2d/textlineprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
@@ -1131,6 +1132,18 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 pBasePrimitive->get2DDecomposition(aPrimitiveContainer,
                                                    drawinglayer::geometry::ViewInformation2D());
                 decomposeAndWrite(aPrimitiveContainer, rWriter);
+                rWriter.endElement();
+                break;
+            }
+            case PRIMITIVE2D_ID_SOFTEDGEPRIMITIVE2D:
+            {
+                // SoftEdgePrimitive2D.
+                const SoftEdgePrimitive2D& rSoftEdgePrimitive2D
+                    = dynamic_cast<const SoftEdgePrimitive2D&>(*pBasePrimitive);
+                rWriter.startElement("softedge");
+                rWriter.attribute("radius", OUString::number(rSoftEdgePrimitive2D.getRadius()));
+
+                decomposeAndWrite(rSoftEdgePrimitive2D.getChildren(), rWriter);
                 rWriter.endElement();
                 break;
             }

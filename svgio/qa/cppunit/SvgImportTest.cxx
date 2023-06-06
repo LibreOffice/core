@@ -24,9 +24,6 @@
 #include <memory>
 #include <string_view>
 
-namespace
-{
-
 using namespace css;
 using namespace css::uno;
 using namespace css::io;
@@ -82,6 +79,8 @@ void Test::checkRectPrimitive(Primitive2DSequence const & rPrimitive)
 
 }
 
+namespace
+{
 bool arePrimitive2DSequencesEqual(const Primitive2DSequence& rA, const Primitive2DSequence& rB)
 {
     return std::equal(rA.begin(), rA.end(), rB.begin(), rB.end(),
@@ -90,6 +89,7 @@ bool arePrimitive2DSequencesEqual(const Primitive2DSequence& rA, const Primitive
         {
             return drawinglayer::primitive2d::arePrimitive2DReferencesEqual(a, b);
         });
+}
 }
 
 // Attributes for an object (like rect as in this case) can be defined
@@ -133,6 +133,19 @@ CPPUNIT_TEST_FIXTURE(Test, testSymbol)
     // - Actual  : 2
     // number of nodes is incorrect
     assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", "color", "#00d000");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFilterFeGaussianBlur)
+{
+    Primitive2DSequence aSequenceTdf132246 = parseSvg(u"/svgio/qa/cppunit/data/filterFeGaussianBlur.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf132246.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequenceTdf132246);
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/softedge", "radius", "5");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf87309)
@@ -1053,8 +1066,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTspanFillOpacity)
     // i.e. the relevant <textsimpleportion> had no <unifiedtransparence> parent, the text was not
     // semi-transparent.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(70), nTransparence);
-}
-
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
