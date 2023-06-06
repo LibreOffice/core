@@ -112,7 +112,7 @@ protected:
     DECL_LINK(Selected, weld::IconView&, void);
     DECL_LINK(DoubleClick, weld::IconView&, bool);
     DECL_LINK(DoCommand, const CommandEvent&, bool);
-    DECL_STATIC_LINK(StylesPreviewWindow_Base, DoJsonProperty, const tools::json_prop_query&, bool);
+    DECL_LINK(DoJsonProperty, const weld::json_prop_query&, bool);
 
 public:
     StylesPreviewWindow_Base(
@@ -123,7 +123,7 @@ public:
     void Select(const OUString& rStyleName);
     void RequestStylesListUpdate();
     static VclPtr<VirtualDevice> GetCachedPreview(const std::pair<OUString, OUString>& rStyle);
-    static OString GetCachedPreviewJson(const OUString& rStyle);
+    static OString GetCachedPreviewJson(const std::pair<OUString, OUString>& rStyle);
 
 private:
     void UpdateStylesList();
