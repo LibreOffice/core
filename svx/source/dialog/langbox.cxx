@@ -337,7 +337,7 @@ weld::ComboBoxEntry SvxLanguageBox::BuildEntry(const LanguageType nLangType, sal
     }
 
     OUString aStrEntry = (LANGUAGE_NONE == nLang && m_bHasLangNone && m_bLangNoneIsLangAll)
-                             ? m_aAllString
+                             ? SvxResId(RID_SVXSTR_LANGUAGE_ALL)
                              : SvtLanguageTable::GetLanguageString(nLang);
 
     LanguageType nRealLang = nLang;
@@ -446,7 +446,6 @@ IMPL_LINK(SvxLanguageBox, ChangeHdl, weld::ComboBox&, rControl, void)
 
 SvxLanguageBox::SvxLanguageBox(std::unique_ptr<weld::ComboBox> pControl)
     : m_xControl(std::move(pControl))
-    , m_aAllString(SvxResId(RID_SVXSTR_LANGUAGE_ALL))
     , m_eSavedLanguage(LANGUAGE_DONTKNOW)
     , m_eEditedAndValid(EditedAndValid::No)
     , m_bHasLangNone(false)
