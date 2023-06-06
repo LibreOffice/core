@@ -31,6 +31,8 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <officecfg/Office/Common.hxx>
+
 #include <mutex>
 
 #include "itemholder2.hxx"
@@ -50,18 +52,6 @@ private:
 
 public:
     SvtAccessibilityOptions_Impl();
-
-    void        SetVCLSettings();
-    bool        GetIsHelpTipsDisappear() const;
-    bool        GetIsAllowAnimatedGraphics() const;
-    bool        GetIsAllowAnimatedText() const;
-    bool        GetIsAutomaticFontColor() const;
-    sal_Int16   GetHelpTipSeconds() const;
-    bool        IsSelectionInReadonly() const;
-    sal_Int16   GetEdgeBlending() const;
-    sal_Int16   GetListBoxMaximumLineCount() const;
-    sal_Int16   GetColorValueSetColumnCount() const;
-    bool        GetPreviewUsesCheckeredBackground() const;
 };
 
 // initialization of static members --------------------------------------
@@ -100,222 +90,63 @@ SvtAccessibilityOptions_Impl::SvtAccessibilityOptions_Impl()
     }
 }
 
-bool SvtAccessibilityOptions_Impl::GetIsHelpTipsDisappear() const
-{
-    bool                                            bRet = true;
-
-    try
-    {
-        if(m_xNode.is())
-            m_xNode->getPropertyValue("IsHelpTipsDisappear") >>= bRet;
-    }
-    catch(const css::uno::Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION("svtools.config");
-    }
-
-    return bRet;
-}
-
-bool SvtAccessibilityOptions_Impl::GetIsAllowAnimatedGraphics() const
-{
-    bool                                            bRet = true;
-
-    try
-    {
-        if(m_xNode.is())
-            m_xNode->getPropertyValue("IsAllowAnimatedGraphics") >>= bRet;
-    }
-    catch(const css::uno::Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION("svtools.config");
-    }
-
-    return bRet;
-}
-
-bool SvtAccessibilityOptions_Impl::GetIsAllowAnimatedText() const
-{
-    bool                                            bRet = true;
-
-    try
-    {
-        static constexpr OUStringLiteral PROPNAME = u"IsAllowAnimatedText";
-        if(m_xNode.is())
-            m_xNode->getPropertyValue(PROPNAME) >>= bRet;
-    }
-    catch(const css::uno::Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION("svtools.config");
-    }
-
-    return bRet;
-}
-
-bool SvtAccessibilityOptions_Impl::GetIsAutomaticFontColor() const
-{
-    bool                                            bRet = false;
-
-    try
-    {
-        if(m_xNode.is())
-            m_xNode->getPropertyValue("IsAutomaticFontColor") >>= bRet;
-    }
-    catch(const css::uno::Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION("svtools.config");
-    }
-
-    return bRet;
-}
-
-sal_Int16 SvtAccessibilityOptions_Impl::GetHelpTipSeconds() const
-{
-    sal_Int16                                       nRet = 4;
-
-    try
-    {
-        if(m_xNode.is())
-            m_xNode->getPropertyValue("HelpTipSeconds") >>= nRet;
-    }
-    catch(const css::uno::Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION("svtools.config");
-    }
-
-    return nRet;
-}
-
-bool SvtAccessibilityOptions_Impl::IsSelectionInReadonly() const
-{
-    bool                                            bRet = false;
-
-    try
-    {
-        if(m_xNode.is())
-            m_xNode->getPropertyValue("IsSelectionInReadonly") >>= bRet;
-    }
-    catch(const css::uno::Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION("svtools.config");
-    }
-
-    return bRet;
-}
-
-sal_Int16 SvtAccessibilityOptions_Impl::GetEdgeBlending() const
-{
-    sal_Int16 nRet = 35;
-
-    try
-    {
-        if(m_xNode.is())
-            m_xNode->getPropertyValue("EdgeBlending") >>= nRet;
-    }
-    catch(const css::uno::Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION("svtools.config");
-    }
-
-    return nRet;
-}
-
-sal_Int16 SvtAccessibilityOptions_Impl::GetListBoxMaximumLineCount() const
-{
-    sal_Int16 nRet = 25;
-
-    try
-    {
-        if(m_xNode.is())
-            m_xNode->getPropertyValue("ListBoxMaximumLineCount") >>= nRet;
-    }
-    catch(const css::uno::Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION("svtools.config");
-    }
-
-    return nRet;
-}
-
-sal_Int16 SvtAccessibilityOptions_Impl::GetColorValueSetColumnCount() const
-{
-#ifdef IOS
-    return 4;
-#else
-    sal_Int16 nRet = 12;
-
-    try
-    {
-        if(m_xNode.is())
-            m_xNode->getPropertyValue("ColorValueSetColumnCount") >>= nRet;
-    }
-    catch(const css::uno::Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION("svtools.config");
-    }
-
-    return nRet;
-#endif
-}
-
-bool SvtAccessibilityOptions_Impl::GetPreviewUsesCheckeredBackground() const
-{
-    bool bRet = false;
-
-    try
-    {
-        if(m_xNode.is())
-            m_xNode->getPropertyValue("PreviewUsesCheckeredBackground") >>= bRet;
-    }
-    catch(const css::uno::Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION("svtools.config");
-    }
-
-    return bRet;
-}
-
-void SvtAccessibilityOptions_Impl::SetVCLSettings()
+void SvtAccessibilityOptions::SetVCLSettings()
 {
     AllSettings aAllSettings(Application::GetSettings());
     StyleSettings aStyleSettings(aAllSettings.GetStyleSettings());
     HelpSettings aHelpSettings(aAllSettings.GetHelpSettings());
     bool StyleSettingsChanged(false);
 
-    aHelpSettings.SetTipTimeout( GetIsHelpTipsDisappear() ? GetHelpTipSeconds() * 1000 : HELP_TIP_TIMEOUT);
+    bool bHelpTipsDisappear = officecfg::Office::Common::Accessibility::IsHelpTipsDisappear::get();
+    sal_Int16 nHelpTipSeconds = officecfg::Office::Common::Accessibility::HelpTipSeconds::get();
+    aHelpSettings.SetTipTimeout( bHelpTipsDisappear ? nHelpTipSeconds * 1000 : HELP_TIP_TIMEOUT);
     aAllSettings.SetHelpSettings(aHelpSettings);
 
-    const sal_Int16 nEdgeBlendingCountA(GetEdgeBlending());
-    OSL_ENSURE(nEdgeBlendingCountA >= 0, "OOps, negative values for EdgeBlending are not allowed (!)");
-    const sal_uInt16 nEdgeBlendingCountB(static_cast< sal_uInt16 >(nEdgeBlendingCountA >= 0 ? nEdgeBlendingCountA : 0));
+    std::optional<sal_Int16> nEdgeBlendingCount(officecfg::Office::Common::Accessibility::EdgeBlending::get());
+    if (!nEdgeBlendingCount)
+        nEdgeBlendingCount = 35;
+    OSL_ENSURE(*nEdgeBlendingCount >= 0, "OOps, negative values for EdgeBlending are not allowed (!)");
+    if (*nEdgeBlendingCount < 0)
+        nEdgeBlendingCount = 0;
 
-    if(aStyleSettings.GetEdgeBlending() != nEdgeBlendingCountB)
+    if(aStyleSettings.GetEdgeBlending() != *nEdgeBlendingCount)
     {
-        aStyleSettings.SetEdgeBlending(nEdgeBlendingCountB);
+        aStyleSettings.SetEdgeBlending(*nEdgeBlendingCount);
         StyleSettingsChanged = true;
     }
 
-    const sal_Int16 nMaxLineCountA(GetListBoxMaximumLineCount());
-    OSL_ENSURE(nMaxLineCountA >= 0, "OOps, negative values for ListBoxMaximumLineCount are not allowed (!)");
-    const sal_uInt16 nMaxLineCountB(static_cast< sal_uInt16 >(nMaxLineCountA >= 0 ? nMaxLineCountA : 0));
+    std::optional<sal_Int16> nMaxLineCount(officecfg::Office::Common::Accessibility::ListBoxMaximumLineCount::get());
+    if (!nMaxLineCount)
+        nMaxLineCount = 25;
+    OSL_ENSURE(*nMaxLineCount >= 0, "OOps, negative values for ListBoxMaximumLineCount are not allowed (!)");
+    if (*nMaxLineCount < 0)
+        nMaxLineCount = 0;
 
-    if(aStyleSettings.GetListBoxMaximumLineCount() != nMaxLineCountB)
+    if(aStyleSettings.GetListBoxMaximumLineCount() != *nMaxLineCount)
     {
-        aStyleSettings.SetListBoxMaximumLineCount(nMaxLineCountB);
+        aStyleSettings.SetListBoxMaximumLineCount(*nMaxLineCount);
         StyleSettingsChanged = true;
     }
 
-    const sal_Int16 nMaxColumnCountA(GetColorValueSetColumnCount());
-    OSL_ENSURE(nMaxColumnCountA >= 0, "OOps, negative values for ColorValueSetColumnCount are not allowed (!)");
-    const sal_uInt16 nMaxColumnCountB(static_cast< sal_uInt16 >(nMaxColumnCountA >= 0 ? nMaxColumnCountA : 0));
+#ifdef IOS
+    std::optional<sal_Int16> nMaxColumnCount = 4;
+#else
+    std::optional<sal_Int16> nMaxColumnCount(officecfg::Office::Common::Accessibility::ColorValueSetColumnCount::get());
+    if (!nMaxColumnCount)
+        nMaxColumnCount = 12;
+#endif
 
-    if(aStyleSettings.GetColorValueSetColumnCount() != nMaxColumnCountB)
+    OSL_ENSURE(*nMaxColumnCount >= 0, "OOps, negative values for ColorValueSetColumnCount are not allowed (!)");
+    if (*nMaxColumnCount < 0)
+        nMaxColumnCount = 0;
+
+    if(aStyleSettings.GetColorValueSetColumnCount() != *nMaxColumnCount)
     {
-        aStyleSettings.SetColorValueSetColumnCount(nMaxColumnCountB);
+        aStyleSettings.SetColorValueSetColumnCount(*nMaxColumnCount);
         StyleSettingsChanged = true;
     }
 
-    const bool bPreviewUsesCheckeredBackground(GetPreviewUsesCheckeredBackground());
+    const bool bPreviewUsesCheckeredBackground(officecfg::Office::Common::Accessibility::PreviewUsesCheckeredBackground::get());
 
     if(aStyleSettings.GetPreviewUsesCheckeredBackground() != bPreviewUsesCheckeredBackground)
     {
@@ -362,28 +193,21 @@ SvtAccessibilityOptions::~SvtAccessibilityOptions()
         sm_pSingleImplConfig = nullptr;
     }
 }
-
-bool SvtAccessibilityOptions::GetIsAllowAnimatedGraphics() const
+bool SvtAccessibilityOptions::GetIsAllowAnimatedGraphics()
 {
-    return sm_pSingleImplConfig->GetIsAllowAnimatedGraphics();
+    return officecfg::Office::Common::Accessibility::IsAllowAnimatedGraphics::get();
 }
-bool SvtAccessibilityOptions::GetIsAllowAnimatedText() const
+bool SvtAccessibilityOptions::GetIsAllowAnimatedText()
 {
-    return sm_pSingleImplConfig->GetIsAllowAnimatedText();
+    return officecfg::Office::Common::Accessibility::IsAllowAnimatedText::get();
 }
-bool SvtAccessibilityOptions::GetIsAutomaticFontColor() const
+bool SvtAccessibilityOptions::GetIsAutomaticFontColor()
 {
-    return sm_pSingleImplConfig->GetIsAutomaticFontColor();
+    return officecfg::Office::Common::Accessibility::IsAutomaticFontColor::get();
 }
-bool SvtAccessibilityOptions::IsSelectionInReadonly() const
+bool SvtAccessibilityOptions::IsSelectionInReadonly()
 {
-    return sm_pSingleImplConfig->IsSelectionInReadonly();
-}
-
-
-void SvtAccessibilityOptions::SetVCLSettings()
-{
-    sm_pSingleImplConfig->SetVCLSettings();
+    return officecfg::Office::Common::Accessibility::IsSelectionInReadonly::get();
 }
 
 

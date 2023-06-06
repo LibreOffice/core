@@ -534,7 +534,7 @@ public:
     void InvalidateAccessibleFocus();
 
     // Apply Accessibility options.
-    void ApplyAccessibilityOptions(SvtAccessibilityOptions const & rAccessibilityOptions);
+    void ApplyAccessibilityOptions();
 
     /** invalidate CONTENT_FLOWS_FROM/_TO relation for paragraphs
 

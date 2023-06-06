@@ -1011,7 +1011,7 @@ SwView::SwView(SfxViewFrame& _rFrame, SfxViewShell* pOldSh)
     m_pWrtShell->SetUIOptions( aUsrPref );
     m_pWrtShell->SetReadOnlyAvailable( aUsrPref.IsCursorInProtectedArea() );
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
-    m_pWrtShell->ApplyAccessibilityOptions(SW_MOD()->GetAccessibilityOptions());
+    m_pWrtShell->ApplyAccessibilityOptions();
 #endif
 
     if( m_pWrtShell->GetDoc()->getIDocumentState().IsUpdateExpField() )

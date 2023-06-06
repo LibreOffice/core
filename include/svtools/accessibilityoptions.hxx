@@ -23,7 +23,7 @@
 
 class SvtAccessibilityOptions_Impl;
 
-class SVT_DLLPUBLIC SvtAccessibilityOptions final :
+class SAL_WARN_UNUSED SVT_DLLPUBLIC SvtAccessibilityOptions final :
     public utl::detail::Options
 {
 private:
@@ -35,12 +35,12 @@ public:
     virtual ~SvtAccessibilityOptions() override;
 
     // get & set config entries
-    bool        GetIsAllowAnimatedGraphics() const;
-    bool        GetIsAllowAnimatedText() const;
-    bool        GetIsAutomaticFontColor() const;
-    bool        IsSelectionInReadonly() const;
+    static bool GetIsAllowAnimatedGraphics();
+    static bool GetIsAllowAnimatedText();
+    static bool GetIsAutomaticFontColor();
+    static bool IsSelectionInReadonly();
 
-    void        SetVCLSettings();
+    static void SetVCLSettings();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

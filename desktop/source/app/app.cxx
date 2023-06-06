@@ -1528,8 +1528,7 @@ int Desktop::Main()
 
     SvtTabAppearanceCfg::SetInitialized();
     SvtTabAppearanceCfg::SetApplicationDefaults( this );
-    SvtAccessibilityOptions aOptions;
-    aOptions.SetVCLSettings();
+    SvtAccessibilityOptions::SetVCLSettings();
     SetSplashScreenProgress(60);
 
     if ( !pExecGlobals->bRestartRequested )

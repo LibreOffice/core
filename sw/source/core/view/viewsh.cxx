@@ -2624,7 +2624,7 @@ SwAccessibleMap* SwViewShell::GetAccessibleMap()
     return nullptr;
 }
 
-void SwViewShell::ApplyAccessibilityOptions(SvtAccessibilityOptions const & rAccessibilityOptions)
+void SwViewShell::ApplyAccessibilityOptions()
 {
     if (utl::ConfigManager::IsFuzzing())
         return;
@@ -2635,12 +2635,12 @@ void SwViewShell::ApplyAccessibilityOptions(SvtAccessibilityOptions const & rAcc
     }
     else
     {
-        mpAccOptions->SetAlwaysAutoColor(rAccessibilityOptions.GetIsAutomaticFontColor());
-        mpAccOptions->SetStopAnimatedGraphics(! rAccessibilityOptions.GetIsAllowAnimatedGraphics());
+        mpAccOptions->SetAlwaysAutoColor(SvtAccessibilityOptions::GetIsAutomaticFontColor());
+        mpAccOptions->SetStopAnimatedGraphics(! SvtAccessibilityOptions::GetIsAllowAnimatedGraphics());
 
         // Form view
         // Always set this option, not only if document is read-only:
-        mpOpt->SetSelectionInReadonly(rAccessibilityOptions.IsSelectionInReadonly());
+        mpOpt->SetSelectionInReadonly(SvtAccessibilityOptions::IsSelectionInReadonly());
     }
 }
 #endif // ENABLE_WASM_STRIP_ACCESSIBILITY

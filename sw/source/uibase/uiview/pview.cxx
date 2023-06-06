@@ -1127,7 +1127,7 @@ void SwPagePreview::Init()
 
     GetViewShell()->ApplyViewOptions( aOpt );
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
-    GetViewShell()->ApplyAccessibilityOptions(SW_MOD()->GetAccessibilityOptions());
+    GetViewShell()->ApplyAccessibilityOptions();
 #endif
 
     // adjust view shell option to the same as for print
@@ -1840,9 +1840,9 @@ uno::Reference< css::accessibility::XAccessible >
     return GetAccessible( false );
 }
 
-void SwPagePreview::ApplyAccessibilityOptions(SvtAccessibilityOptions const & rAccessibilityOptions)
+void SwPagePreview::ApplyAccessibilityOptions()
 {
-    GetViewShell()->ApplyAccessibilityOptions(rAccessibilityOptions);
+    GetViewShell()->ApplyAccessibilityOptions();
 }
 
 void SwPagePreview::ShowHScrollbar(bool bShow)

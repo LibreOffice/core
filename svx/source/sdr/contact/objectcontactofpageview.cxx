@@ -343,9 +343,7 @@ namespace sdr::contact
         {
             if (utl::ConfigManager::IsFuzzing())
                 return true;
-            SdrView& rView = GetPageWindow().GetPageView().GetView();
-            const SvtAccessibilityOptions& rOpt = rView.getAccessibilityOptions();
-            return rOpt.GetIsAllowAnimatedText();
+            return SvtAccessibilityOptions::GetIsAllowAnimatedText();
         }
 
         // check if graphic animation is allowed.
@@ -353,9 +351,7 @@ namespace sdr::contact
         {
             if (utl::ConfigManager::IsFuzzing())
                 return true;
-            SdrView& rView = GetPageWindow().GetPageView().GetView();
-            const SvtAccessibilityOptions& rOpt = rView.getAccessibilityOptions();
-            return rOpt.GetIsAllowAnimatedGraphics();
+            return SvtAccessibilityOptions::GetIsAllowAnimatedGraphics();
         }
 
         // print?

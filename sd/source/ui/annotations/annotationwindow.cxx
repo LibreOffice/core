@@ -550,10 +550,7 @@ void AnnotationWindow::SetColor()
         maColorLight = AnnotationManagerImpl::GetColorLight( nAuthorIdx );
     }
 
-    {
-        SvtAccessibilityOptions aOptions;
-        mpOutliner->ForceAutoColor( bHighContrast || aOptions.GetIsAutomaticFontColor() );
-    }
+    mpOutliner->ForceAutoColor( bHighContrast || SvtAccessibilityOptions::GetIsAutomaticFontColor() );
 
     mxPopover->set_background(maColor);
     mxMenuButton->set_background(maColor);

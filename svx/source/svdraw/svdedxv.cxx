@@ -1311,8 +1311,7 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
                 = SdrMakeOutliner(OutlinerMode::TextObject, pObj->getSdrModelFromSdrObject());
 
         {
-            SvtAccessibilityOptions aOptions;
-            mpTextEditOutliner->ForceAutoColor(aOptions.GetIsAutomaticFontColor());
+            mpTextEditOutliner->ForceAutoColor(SvtAccessibilityOptions::GetIsAutomaticFontColor());
         }
 
         aOldCalcFieldValueLink = mpTextEditOutliner->GetCalcFieldValueHdl();

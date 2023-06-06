@@ -1019,9 +1019,9 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, Con
                 auto pPagePreview = dynamic_cast<SwPagePreview *>( pViewShell );
 
                 if(pSwView)
-                    pSwView->ApplyAccessibilityOptions(*m_pAccessibilityOptions);
+                    pSwView->ApplyAccessibilityOptions();
                 else if(pPagePreview)
-                    pPagePreview->ApplyAccessibilityOptions(*m_pAccessibilityOptions);
+                    pPagePreview->ApplyAccessibilityOptions();
 
                 if(pSwView || pPagePreview || dynamic_cast< const SwSrcView *>( pViewShell ) !=  nullptr)
                 {

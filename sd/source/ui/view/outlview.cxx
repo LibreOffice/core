@@ -154,8 +154,7 @@ OutlineView::~OutlineView()
         EEControlBits nCntrl = mrOutliner.GetControlWord();
         mrOutliner.SetUpdateLayout(false); // otherwise there will be drawn on SetControlWord
         mrOutliner.SetControlWord(nCntrl & ~EEControlBits::NOCOLORS);
-        SvtAccessibilityOptions aOptions;
-        mrOutliner.ForceAutoColor( aOptions.GetIsAutomaticFontColor() );
+        mrOutliner.ForceAutoColor( SvtAccessibilityOptions::GetIsAutomaticFontColor() );
         mrOutliner.Clear();
     }
 }
