@@ -2427,11 +2427,18 @@ void SfxMedium::Transfer_Impl()
         // LongName wasn't defined anywhere, only used here... get the Title instead
         // as it's less probably empty
         OUString aFileName;
-        Any aAny = aDestContent.getPropertyValue("Title");
-        aAny >>= aFileName;
-        aAny = aDestContent.getPropertyValue( "ObjectId" );
         OUString sObjectId;
-        aAny >>= sObjectId;
+        try
+        {
+            Any aAny = aDestContent.getPropertyValue("Title");
+            aAny >>= aFileName;
+            aAny = aDestContent.getPropertyValue("ObjectId");
+            aAny >>= sObjectId;
+        }
+        catch (uno::Exception const&)
+        {
+            SAL_INFO("sfx.doc", "exception while getting Title or ObjectId");
+        }
         if ( aFileName.isEmpty() )
             aFileName = GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
 
