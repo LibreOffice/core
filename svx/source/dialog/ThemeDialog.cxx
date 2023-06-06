@@ -40,7 +40,7 @@ ThemeDialog::ThemeDialog(weld::Window* pParent, model::Theme* pTheme)
     if (!maColorSets.empty())
     {
         mxValueSetThemeColors->SelectItem(1); // ItemId 1, position 0
-        moCurrentColorSet = std::ref(maColorSets[0]);
+        mpCurrentColorSet = std::make_shared<model::ColorSet>(maColorSets[0]);
     }
 }
 
@@ -80,12 +80,12 @@ IMPL_LINK_NOARG(ThemeDialog, SelectItem, ValueSet*, void)
     if (nIndex >= maColorSets.size())
         return;
 
-    moCurrentColorSet = std::ref(maColorSets[nIndex]);
+    mpCurrentColorSet = std::make_shared<model::ColorSet>(maColorSets[nIndex]);
 }
 
 void ThemeDialog::runThemeColorEditDialog()
 {
-    auto pDialog = std::make_shared<svx::ThemeColorEditDialog>(mpWindow, *moCurrentColorSet);
+    auto pDialog = std::make_shared<svx::ThemeColorEditDialog>(mpWindow, *mpCurrentColorSet);
     weld::DialogController::runAsync(pDialog, [this, pDialog](sal_uInt32 nResult) {
         if (nResult != RET_OK)
             return;
@@ -99,14 +99,15 @@ void ThemeDialog::runThemeColorEditDialog()
             initColorSets();
 
             mxValueSetThemeColors->SelectItem(maColorSets.size() - 1);
-            moCurrentColorSet = std::ref(maColorSets[maColorSets.size() - 1]);
+            mpCurrentColorSet
+                = std::make_shared<model::ColorSet>(maColorSets[maColorSets.size() - 1]);
         }
     });
 }
 
 IMPL_LINK(ThemeDialog, ButtonClicked, weld::Button&, rButton, void)
 {
-    if (moCurrentColorSet && mxAdd.get() == &rButton)
+    if (mpCurrentColorSet && mxAdd.get() == &rButton)
     {
         runThemeColorEditDialog();
     }
