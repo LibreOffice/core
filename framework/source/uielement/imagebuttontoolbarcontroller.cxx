@@ -61,7 +61,7 @@ ImageButtonToolbarController::ImageButtonToolbarController(
     const OUString&                          aCommand ) :
     ComplexToolbarController( rxContext, rFrame, pToolbar, nID, aCommand )
 {
-    bool bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
+    bool bBigImages( SvtMiscOptions::AreCurrentSymbolsLarge() );
 
     Image aImage(AddonsOptions().GetImageFromURL(aCommand, bBigImages, true));
 
@@ -97,7 +97,7 @@ void ImageButtonToolbarController::executeControlCommand( const css::frame::Cont
             SubstituteVariables( aURL );
 
             Image aImage;
-            if ( ReadImageFromURL( SvtMiscOptions().AreCurrentSymbolsLarge(),
+            if ( ReadImageFromURL( SvtMiscOptions::AreCurrentSymbolsLarge(),
                                    aURL,
                                    aImage ))
             {

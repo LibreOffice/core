@@ -855,13 +855,13 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
 {
     SvtMiscOptions aMiscOptions;
 
-    if (aMiscOptions.GetSymbolsSize() != SFX_SYMBOLS_SIZE_AUTO)
+    if (SvtMiscOptions::GetSymbolsSize() != SFX_SYMBOLS_SIZE_AUTO)
     {
         nSizeLB_InitialSelection = 1;
 
-        if (aMiscOptions.GetSymbolsSize() == SFX_SYMBOLS_SIZE_LARGE)
+        if (SvtMiscOptions::GetSymbolsSize() == SFX_SYMBOLS_SIZE_LARGE)
             nSizeLB_InitialSelection = 2;
-        else if (aMiscOptions.GetSymbolsSize() == SFX_SYMBOLS_SIZE_32)
+        else if (SvtMiscOptions::GetSymbolsSize() == SFX_SYMBOLS_SIZE_32)
             nSizeLB_InitialSelection = 3;
     }
     m_xIconSizeLB->set_active( nSizeLB_InitialSelection );
@@ -893,7 +893,7 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
         nStyleLB_InitialSelection = 0;
     }
     else {
-        const OUString& selected = aMiscOptions.GetIconTheme();
+        const OUString& selected = SvtMiscOptions::GetIconTheme();
         const vcl::IconThemeInfo& selectedInfo =
                 vcl::IconThemeInfo::FindIconThemeById(mInstalledIconThemes, selected);
         nStyleLB_InitialSelection = m_xIconStyleLB->find_text(selectedInfo.GetDisplayName());

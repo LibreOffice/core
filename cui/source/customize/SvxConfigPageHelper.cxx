@@ -66,11 +66,11 @@ void SvxConfigPageHelper::InitImageType()
 {
     theImageType = css::ui::ImageType::COLOR_NORMAL | css::ui::ImageType::SIZE_DEFAULT;
 
-    if (SvtMiscOptions().GetCurrentSymbolsSize() == SFX_SYMBOLS_SIZE_LARGE)
+    if (SvtMiscOptions::GetCurrentSymbolsSize() == SFX_SYMBOLS_SIZE_LARGE)
     {
         theImageType |= css::ui::ImageType::SIZE_LARGE;
     }
-    else if (SvtMiscOptions().GetCurrentSymbolsSize() == SFX_SYMBOLS_SIZE_32)
+    else if (SvtMiscOptions::GetCurrentSymbolsSize() == SFX_SYMBOLS_SIZE_32)
     {
         theImageType |= css::ui::ImageType::SIZE_32;
     }

@@ -112,7 +112,6 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
     bool bRet = false;
 
     const WhichRangesContainer& pRanges = rSet.GetRanges();
-    SvtMiscOptions aMiscOptions;
 
     for (auto const & pRange : pRanges)
     {
@@ -122,7 +121,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
             {
                 case SID_ATTR_BUTTON_BIGSIZE :
                 {
-                    if( rSet.Put( SfxBoolItem( SID_ATTR_BUTTON_BIGSIZE, aMiscOptions.AreCurrentSymbolsLarge() ) ) )
+                    if( rSet.Put( SfxBoolItem( SID_ATTR_BUTTON_BIGSIZE, SvtMiscOptions::AreCurrentSymbolsLarge() ) ) )
                         bRet = true;
                     break;
                 }

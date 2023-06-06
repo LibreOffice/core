@@ -124,11 +124,11 @@ namespace
 
 sal_Int16 getCurrentImageType()
 {
-    SvtMiscOptions aMiscOptions;
     sal_Int16 nImageType = css::ui::ImageType::SIZE_DEFAULT;
-    if (aMiscOptions.GetCurrentSymbolsSize() == SFX_SYMBOLS_SIZE_LARGE)
+    sal_Int16 nCurrentSymbolSize = SvtMiscOptions::GetCurrentSymbolsSize();
+    if (nCurrentSymbolSize == SFX_SYMBOLS_SIZE_LARGE)
         nImageType |= css::ui::ImageType::SIZE_LARGE;
-    else if (aMiscOptions.GetCurrentSymbolsSize() == SFX_SYMBOLS_SIZE_32)
+    else if (nCurrentSymbolSize == SFX_SYMBOLS_SIZE_32)
         nImageType |= css::ui::ImageType::SIZE_32;
     return nImageType;
 }
@@ -538,7 +538,7 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     m_bDisposed( false ),
     m_bFrameActionRegistered( false ),
     m_bUpdateControllers( false ),
-    m_eSymbolSize(SvtMiscOptions().GetCurrentSymbolsSize()),
+    m_eSymbolSize(SvtMiscOptions::GetCurrentSymbolsSize()),
     m_nContextMinPos(0),
     m_pImpl( new VclToolBarManager( pToolBar ) ),
     m_pToolBar( pToolBar ),
@@ -547,7 +547,7 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     m_xFrame( rFrame ),
     m_xContext( rxContext ),
     m_aAsyncUpdateControllersTimer( "framework::ToolBarManager m_aAsyncUpdateControllersTimer" ),
-    m_sIconTheme( SvtMiscOptions().GetIconTheme() )
+    m_sIconTheme( SvtMiscOptions::GetIconTheme() )
 {
     Init();
 }
@@ -560,7 +560,7 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     m_bDisposed( false ),
     m_bFrameActionRegistered( false ),
     m_bUpdateControllers( false ),
-    m_eSymbolSize( SvtMiscOptions().GetCurrentSymbolsSize() ),
+    m_eSymbolSize( SvtMiscOptions::GetCurrentSymbolsSize() ),
     m_nContextMinPos(0),
     m_pImpl( new WeldToolBarManager( pToolBar, pBuilder ) ),
     m_pWeldedToolBar( pToolBar ),
@@ -568,7 +568,7 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     m_xFrame( rFrame ),
     m_xContext( rxContext ),
     m_aAsyncUpdateControllersTimer( "framework::ToolBarManager m_aAsyncUpdateControllersTimer" ),
-    m_sIconTheme( SvtMiscOptions().GetIconTheme() )
+    m_sIconTheme( SvtMiscOptions::GetIconTheme() )
 {
     Init();
 }
@@ -636,8 +636,7 @@ void ToolBarManager::CheckAndUpdateImages()
     SolarMutexGuard g;
     bool bRefreshImages = false;
 
-    SvtMiscOptions aMiscOptions;
-    sal_Int16 eNewSymbolSize = aMiscOptions.GetCurrentSymbolsSize();
+    sal_Int16 eNewSymbolSize = SvtMiscOptions::GetCurrentSymbolsSize();
 
     if (m_eSymbolSize != eNewSymbolSize )
     {
@@ -645,7 +644,7 @@ void ToolBarManager::CheckAndUpdateImages()
         m_eSymbolSize = eNewSymbolSize;
     }
 
-    const OUString& sCurrentIconTheme = aMiscOptions.GetIconTheme();
+    const OUString& sCurrentIconTheme = SvtMiscOptions::GetIconTheme();
     if ( m_sIconTheme != sCurrentIconTheme )
     {
         bRefreshImages = true;
@@ -1630,8 +1629,6 @@ void ToolBarManager::RequestImages()
     Sequence< Reference< XGraphic > > aDocGraphicSeq;
     Sequence< Reference< XGraphic > > aModGraphicSeq;
 
-    SvtMiscOptions aMiscOptions;
-
     sal_Int16 nImageType = getCurrentImageType();
 
     if ( m_xDocImageManager.is() )
@@ -1652,7 +1649,7 @@ void ToolBarManager::RequestImages()
             // Try also to query for add-on images before giving up and use an
             // empty image.
             if ( !aImage )
-                aImage = Image(framework::AddonsOptions().GetImageFromURL(aCmdURLSeq[i], aMiscOptions.AreCurrentSymbolsLarge()));
+                aImage = Image(framework::AddonsOptions().GetImageFromURL(aCmdURLSeq[i], SvtMiscOptions::AreCurrentSymbolsLarge()));
 
             pIter->second.nImageInfo = 1; // mark image as module based
         }

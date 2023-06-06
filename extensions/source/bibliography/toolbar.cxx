@@ -235,8 +235,7 @@ BibToolBar::BibToolBar(vcl::Window* pParent, Link<void*,void> aLink)
     , aLayoutManager(aLink)
     , nSymbolsSize(SFX_SYMBOLS_SIZE_SMALL)
 {
-    SvtMiscOptions aSvtMiscOptions;
-    nSymbolsSize = aSvtMiscOptions.GetCurrentSymbolsSize();
+    nSymbolsSize = SvtMiscOptions::GetCurrentSymbolsSize();
 
     xSource->Show();
     pLbSource->connect_changed(LINK( this, BibToolBar, SelHdl));
@@ -561,7 +560,7 @@ void BibToolBar::DataChanged( const DataChangedEvent& rDCEvt )
 IMPL_LINK_NOARG( BibToolBar, OptionsChanged_Impl, LinkParamNone*, void )
 {
     bool bRebuildToolBar = false;
-    sal_Int16 eSymbolsSize = SvtMiscOptions().GetCurrentSymbolsSize();
+    sal_Int16 eSymbolsSize = SvtMiscOptions::GetCurrentSymbolsSize();
     if ( nSymbolsSize != eSymbolsSize )
     {
         nSymbolsSize = eSymbolsSize;
@@ -575,7 +574,7 @@ IMPL_LINK_NOARG( BibToolBar, OptionsChanged_Impl, LinkParamNone*, void )
 IMPL_LINK_NOARG( BibToolBar, SettingsChanged_Impl, VclSimpleEvent&, void )
 {
     // Check if toolbar button size have changed and we have to use system settings
-    sal_Int16 eSymbolsSize = SvtMiscOptions().GetCurrentSymbolsSize();
+    sal_Int16 eSymbolsSize = SvtMiscOptions::GetCurrentSymbolsSize();
     if ( eSymbolsSize != nSymbolsSize )
     {
         nSymbolsSize = eSymbolsSize;

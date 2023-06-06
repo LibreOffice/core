@@ -93,7 +93,7 @@ MenuBarManager::MenuBarManager(
     , m_bHasMenuBar( bHasMenuBar )
     , m_xContext(rxContext)
     , m_xURLTransformer(_xURLTransformer)
-    , m_sIconTheme( SvtMiscOptions().GetIconTheme() )
+    , m_sIconTheme( SvtMiscOptions::GetIconTheme() )
     , m_aAsyncSettingsTimer( "framework::MenuBarManager::Deactivate m_aAsyncSettingsTimer" )
 {
     m_xPopupMenuControllerFactory = frame::thePopupMenuControllerFactory::get(m_xContext);
@@ -580,7 +580,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
     m_bActive = true;
 
     // Check if some modes have changed so we have to update our menu images
-    OUString sIconTheme = SvtMiscOptions().GetIconTheme();
+    OUString sIconTheme = SvtMiscOptions::GetIconTheme();
 
     if ( m_bRetrieveImages ||
          bShowMenuImages != m_bShowMenuImages ||

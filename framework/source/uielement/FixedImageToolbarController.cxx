@@ -57,7 +57,7 @@ FixedImageControl::FixedImageControl(vcl::Window* pParent, const OUString& rComm
 
     m_xWidget->connect_key_press(LINK(this, FixedImageControl, KeyInputHdl));
 
-    bool bBigImages(SvtMiscOptions().AreCurrentSymbolsLarge());
+    bool bBigImages(SvtMiscOptions::AreCurrentSymbolsLarge());
     auto xImage
         = Graphic(AddonsOptions().GetImageFromURL(rCommand, bBigImages, true)).GetXGraphic();
     m_xWidget->set_image(xImage);
@@ -82,7 +82,7 @@ FixedImageToolbarController::FixedImageToolbarController(
     const Reference<XComponentContext>& rxContext, const Reference<XFrame>& rFrame,
     ToolBox* pToolbar, ToolBoxItemId nID, const OUString& rCommand)
     : ComplexToolbarController(rxContext, rFrame, pToolbar, nID, rCommand)
-    , m_eSymbolSize(SvtMiscOptions().GetCurrentSymbolsSize())
+    , m_eSymbolSize(SvtMiscOptions::GetCurrentSymbolsSize())
 {
     m_pFixedImageControl = VclPtr<FixedImageControl>::Create(m_xToolbar, rCommand);
     m_xToolbar->SetItemWindow(m_nID, m_pFixedImageControl);
@@ -106,8 +106,7 @@ void FixedImageToolbarController::CheckAndUpdateImages()
 {
     SolarMutexGuard aSolarMutexGuard;
 
-    SvtMiscOptions aMiscOptions;
-    const sal_Int16 eNewSymbolSize = aMiscOptions.GetCurrentSymbolsSize();
+    const sal_Int16 eNewSymbolSize = SvtMiscOptions::GetCurrentSymbolsSize();
 
     if (m_eSymbolSize == eNewSymbolSize)
         return;

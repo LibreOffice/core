@@ -44,7 +44,7 @@ enum class ToolBoxButtonSize;
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class SVT_DLLPUBLIC SvtMiscOptions final : public utl::detail::Options
+class SAL_WARN_UNUSED SVT_DLLPUBLIC SvtMiscOptions final : public utl::detail::Options
 {
     public:
          SvtMiscOptions();
@@ -53,12 +53,12 @@ class SVT_DLLPUBLIC SvtMiscOptions final : public utl::detail::Options
         void        AddListenerLink( const Link<LinkParamNone*,void>& rLink );
         void        RemoveListenerLink( const Link<LinkParamNone*,void>& rLink );
 
-        sal_Int16   GetSymbolsSize() const;
+        static sal_Int16 GetSymbolsSize();
         void        SetSymbolsSize( sal_Int16 eSet );
-        sal_Int16   GetCurrentSymbolsSize() const;
-        bool        AreCurrentSymbolsLarge() const;
+        static sal_Int16 GetCurrentSymbolsSize();
+        static bool AreCurrentSymbolsLarge();
 
-        OUString    GetIconTheme() const;
+        static OUString GetIconTheme();
         void        SetIconTheme(const OUString&);
         bool        IconThemeWasSetAutomatically() const;
 

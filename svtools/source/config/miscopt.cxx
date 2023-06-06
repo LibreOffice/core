@@ -31,6 +31,7 @@
 #include <svtools/imgdef.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <mutex>
 #include <vector>
@@ -93,9 +94,6 @@ public:
         void Load( const Sequence< OUString >& rPropertyNames );
 
         //  public interface
-
-        sal_Int16 GetSymbolsSize() const
-        { return m_nSymbolsSize; }
 
         void SetSymbolsSize( sal_Int16 nSet );
 
@@ -399,9 +397,9 @@ SvtMiscOptions::~SvtMiscOptions()
 }
 
 
-sal_Int16 SvtMiscOptions::GetSymbolsSize() const
+sal_Int16 SvtMiscOptions::GetSymbolsSize()
 {
-    return m_pImpl->GetSymbolsSize();
+    return officecfg::Office::Common::Misc::SymbolSet::get();
 }
 
 void SvtMiscOptions::SetSymbolsSize( sal_Int16 nSet )
@@ -409,9 +407,9 @@ void SvtMiscOptions::SetSymbolsSize( sal_Int16 nSet )
     m_pImpl->SetSymbolsSize( nSet );
 }
 
-sal_Int16 SvtMiscOptions::GetCurrentSymbolsSize() const
+sal_Int16 SvtMiscOptions::GetCurrentSymbolsSize()
 {
-    sal_Int16 eOptSymbolsSize = m_pImpl->GetSymbolsSize();
+    sal_Int16 eOptSymbolsSize = GetSymbolsSize();
 
     if ( eOptSymbolsSize == SFX_SYMBOLS_SIZE_AUTO )
     {
@@ -429,12 +427,12 @@ sal_Int16 SvtMiscOptions::GetCurrentSymbolsSize() const
     return eOptSymbolsSize;
 }
 
-bool SvtMiscOptions::AreCurrentSymbolsLarge() const
+bool SvtMiscOptions::AreCurrentSymbolsLarge()
 {
     return ( GetCurrentSymbolsSize() == SFX_SYMBOLS_SIZE_LARGE || GetCurrentSymbolsSize() == SFX_SYMBOLS_SIZE_32);
 }
 
-OUString SvtMiscOptions::GetIconTheme() const
+OUString SvtMiscOptions::GetIconTheme()
 {
     return SvtMiscOptions_Impl::GetIconTheme();
 }
