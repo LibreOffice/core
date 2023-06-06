@@ -2629,7 +2629,11 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
             eSurround = css::text::WrapTextMode_NONE;
             break;
         case 3: // 3 wrap as if no object present
-            eSurround = css::text::WrapTextMode_THROUGH;
+            // Special case: on export, inline images are wrapped through as a hack for old formats.
+            // That is irrelevant for Writer, so instead use the default wrap in that case,
+            // so that when the user changes it into an anchor, it wraps nicely, and not through.
+            if (!IsInlineEscherHack())
+                eSurround = css::text::WrapTextMode_THROUGH;
             break;
         case 4: // 4 wrap tightly around object
         case 5: // 5 wrap tightly, but allow holes
