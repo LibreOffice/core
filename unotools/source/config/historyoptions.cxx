@@ -273,7 +273,13 @@ void AppendItem(EHistoryType eHistory, const OUString& sURL, const OUString& sFi
             if (oIsPinned)
             {
                 xSet->setPropertyValue(s_sPinned, uno::Any(*oIsPinned));
+                if (*oIsPinned)
+                    PrependItem(xCfg, xOrderList, sURL);
+                else
+                    MoveItemToUnpinned(xCfg, xOrderList, xItemList, sURL);
             }
+            else
+                MoveItemToUnpinned(xCfg, xOrderList, xItemList, sURL);
 
             ::comphelper::ConfigurationHelper::flush(xCfg);
         }
