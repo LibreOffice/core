@@ -41,6 +41,7 @@
 #include <svgstylenode.hxx>
 #include <svgimagenode.hxx>
 #include <svgclippathnode.hxx>
+#include <svgfilternode.hxx>
 #include <svgmasknode.hxx>
 #include <svgmarkernode.hxx>
 #include <svgpatternnode.hxx>
@@ -340,6 +341,13 @@ namespace
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }
+                case SVGToken::Filter:
+                {
+                    /// new node for Filter
+                    mpTarget = new SvgFilterNode(maDocument, mpTarget);
+                    mpTarget->parseAttributes(xAttribs);
+                    break;
+                }
 
                 /// structural element marker
                 case SVGToken::Marker:
@@ -434,8 +442,9 @@ namespace
                 /// styles (as stylesheets)
                 case SVGToken::Style:
 
-                /// structural elements clip-path and mask
+                /// structural elements clip-path, filter and mask
                 case SVGToken::ClipPathNode:
+                case SVGToken::Filter:
                 case SVGToken::Mask:
 
                 /// structural element marker

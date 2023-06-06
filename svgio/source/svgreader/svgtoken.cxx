@@ -70,6 +70,7 @@ namespace svgio::svgreader
         const char aSVGStrColor[] = "color";
         const char aSVGStrClipPathNode[] = "clipPath";
         const char aSVGStrClipPathProperty[] = "clip-path";
+        const char aSVGStrFilter[] = "filter";
         const char aSVGStrMask[] = "mask";
         const char aSVGStrClipPathUnits[] = "clipPathUnits";
         const char aSVGStrMaskUnits[] = "maskUnits";
@@ -217,6 +218,7 @@ namespace svgio::svgreader
                 { aSVGStrColor, SVGToken::Color },
                 { aSVGStrClipPathNode, SVGToken::ClipPathNode },
                 { aSVGStrClipPathProperty, SVGToken::ClipPathProperty },
+                { aSVGStrFilter, SVGToken::Filter },
                 { aSVGStrMask, SVGToken::Mask },
                 { aSVGStrClipPathUnits, SVGToken::ClipPathUnits },
                 { aSVGStrMaskUnits, SVGToken::MaskUnits },

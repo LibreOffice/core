@@ -78,6 +78,7 @@ namespace svgio::svgreader
             Color,
             ClipPathNode,
             ClipPathProperty,
+            Filter,
             Mask,
             ClipPathUnits,
             MaskUnits,

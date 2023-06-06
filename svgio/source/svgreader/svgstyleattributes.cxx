@@ -35,6 +35,7 @@
 #include <drawinglayer/processor2d/textaspolygonextractor2d.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <svgclippathnode.hxx>
+#include <svgfilternode.hxx>
 #include <svgmasknode.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svgmarkernode.hxx>
@@ -1272,6 +1273,7 @@ namespace svgio::svgreader
             maTextAnchor(TextAnchor::notset),
             maVisibility(Visibility::notset),
             mpClipPathXLink(nullptr),
+            mpFilterXLink(nullptr),
             mpMaskXLink(nullptr),
             mpMarkerStartXLink(nullptr),
             mpMarkerMidXLink(nullptr),
@@ -1280,7 +1282,7 @@ namespace svgio::svgreader
             maClipRule(FillRule::notset),
             maBaselineShift(BaselineShift::Baseline),
             maBaselineShiftNumber(0),
-            maResolvingParent(32, 0),
+            maResolvingParent(33, 0),
             mbIsClipPathContent(SVGToken::ClipPathNode == mrOwner.getType()),
             mbStrokeDasharraySet(false)
         {
@@ -1853,6 +1855,11 @@ namespace svgio::svgreader
                 case SVGToken::ClipPathProperty:
                 {
                     readLocalUrl(aContent, maClipPathXLink);
+                    break;
+                }
+                case SVGToken::Filter:
+                {
+                    readLocalUrl(aContent, maFilterXLink);
                     break;
                 }
                 case SVGToken::Mask:
@@ -2871,6 +2878,41 @@ namespace svgio::svgreader
             }
 
             return mpClipPathXLink;
+        }
+
+        OUString SvgStyleAttributes::getFilterXLink() const
+        {
+            if(!maFilterXLink.isEmpty())
+            {
+                return maFilterXLink;
+            }
+
+            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+
+            if (pSvgStyleAttributes && maResolvingParent[32] < nStyleDepthLimit)
+            {
+                ++maResolvingParent[32];
+                auto ret = pSvgStyleAttributes->getFilterXLink();
+                --maResolvingParent[32];
+                return ret;
+            }
+
+            return OUString();
+        }
+
+        const SvgFilterNode* SvgStyleAttributes::accessFilterXLink() const
+        {
+            if(!mpFilterXLink)
+            {
+                const OUString aFilter(getFilterXLink());
+
+                if(!aFilter.isEmpty())
+                {
+                    const_cast< SvgStyleAttributes* >(this)->mpFilterXLink = dynamic_cast< const SvgFilterNode* >(mrOwner.getDocument().findSvgNodeById(aFilter));
+                }
+            }
+
+            return mpFilterXLink;
         }
 
         OUString SvgStyleAttributes::getMaskXLink() const
