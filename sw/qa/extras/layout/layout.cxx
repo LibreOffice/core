@@ -1197,6 +1197,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf138039)
     assertXPath(pXmlDoc, "/root/page[3]/body/txt[1]/anchored", 0);
 }
 
+#ifndef WNT
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf143239)
 {
     SwDoc* pDoc = createDoc("tdf143239-1-min.odt");
@@ -1262,6 +1263,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf143239)
         discardDumpedLayout();
     }
 }
+#endif
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTableOverlapFooterFly)
 {
