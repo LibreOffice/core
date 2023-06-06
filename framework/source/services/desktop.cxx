@@ -679,7 +679,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL Desktop::queryDispatch( co
         m_xCommandOptions.reset(new SvtCommandOptions);
 
     // Make std::unordered_map lookup if the current URL is in the disabled list
-    if (m_xCommandOptions && m_xCommandOptions->Lookup(SvtCommandOptions::CMDOPTION_DISABLED, aCommand))
+    if (m_xCommandOptions && m_xCommandOptions->LookupDisabled(aCommand))
         return css::uno::Reference< css::frame::XDispatch >();
     else
     {

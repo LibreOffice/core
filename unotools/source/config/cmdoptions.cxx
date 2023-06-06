@@ -119,8 +119,8 @@ class SvtCommandOptions_Impl : public ConfigItem
                         => The code exist only for one time and isn't duplicated for every instance!
         *//*-*****************************************************************************************************/
 
-        bool                HasEntries  (   SvtCommandOptions::CmdOption    eOption     ) const;
-        bool                Lookup      (   SvtCommandOptions::CmdOption    eCmdOption, const OUString& ) const;
+        bool                HasEntriesDisabled() const;
+        bool                LookupDisabled( const OUString& ) const;
         void EstablishFrameCallback(const css::uno::Reference< css::frame::XFrame >& xFrame);
 
     private:
@@ -239,29 +239,16 @@ void SvtCommandOptions_Impl::ImplCommit()
 
 //  public method
 
-bool SvtCommandOptions_Impl::HasEntries( SvtCommandOptions::CmdOption eOption ) const
+bool SvtCommandOptions_Impl::HasEntriesDisabled() const
 {
-    if ( eOption == SvtCommandOptions::CMDOPTION_DISABLED )
-        return m_aDisabledCommands.HasEntries();
-    else
-        return false;
+    return m_aDisabledCommands.HasEntries();
 }
 
 //  public method
 
-bool SvtCommandOptions_Impl::Lookup( SvtCommandOptions::CmdOption eCmdOption, const OUString& aCommand ) const
+bool SvtCommandOptions_Impl::LookupDisabled( const OUString& aCommand ) const
 {
-    switch( eCmdOption )
-    {
-        case SvtCommandOptions::CMDOPTION_DISABLED:
-        {
-            return m_aDisabledCommands.Lookup( aCommand );
-        }
-        default:
-            SAL_WARN( "unotools.config", "SvtCommandOptions_Impl::Lookup() Unknown option type given!" );
-    }
-
-    return false;
+    return m_aDisabledCommands.Lookup( aCommand );
 }
 
 //  public method
@@ -323,18 +310,18 @@ SvtCommandOptions::~SvtCommandOptions()
 
 //  public method
 
-bool SvtCommandOptions::HasEntries( CmdOption eOption ) const
+bool SvtCommandOptions::HasEntriesDisabled() const
 {
     std::unique_lock aGuard( GetOwnStaticMutex() );
-    return m_pImpl->HasEntries( eOption );
+    return m_pImpl->HasEntriesDisabled();
 }
 
 //  public method
 
-bool SvtCommandOptions::Lookup( CmdOption eCmdOption, const OUString& aCommandURL ) const
+bool SvtCommandOptions::LookupDisabled( const OUString& aCommandURL ) const
 {
     std::unique_lock aGuard( GetOwnStaticMutex() );
-    return m_pImpl->Lookup( eCmdOption, aCommandURL );
+    return m_pImpl->LookupDisabled( aCommandURL );
 }
 
 //  public method

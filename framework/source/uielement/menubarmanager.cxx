@@ -563,7 +563,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     bool bShowMenuImages     = rSettings.GetUseImagesInMenus();
     bool bShowShortcuts      = m_bHasMenuBar || rSettings.GetContextMenuShortcuts();
-    bool bHasDisabledEntries = SvtCommandOptions().HasEntries( SvtCommandOptions::CMDOPTION_DISABLED );
+    bool bHasDisabledEntries = SvtCommandOptions().HasEntriesDisabled();
 
     SolarMutexGuard g;
 
@@ -657,7 +657,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
 
                 if ( bHasDisabledEntries )
                 {
-                    if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, aTargetURL.Path ))
+                    if ( aCmdOptions.LookupDisabled( aTargetURL.Path ))
                         pMenu->HideItem( menuItemHandler->nItemId );
                 }
 
@@ -840,7 +840,7 @@ bool MenuBarManager::MustBeHidden( PopupMenu* pPopupMenu, const Reference< XURLT
                 aTargetURL.Complete = pPopupMenu->GetItemCommand( nId );
                 rTransformer->parseStrict( aTargetURL );
 
-                if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, aTargetURL.Path ))
+                if ( aCmdOptions.LookupDisabled( aTargetURL.Path ))
                     ++nHideCount;
             }
         }
@@ -1241,7 +1241,7 @@ void MenuBarManager::FillMenuWithConfiguration(
                                      AddonsOptions().GetMergeMenuInstructions(),
                                      rModuleIdentifier );
 
-    bool bHasDisabledEntries = SvtCommandOptions().HasEntries( SvtCommandOptions::CMDOPTION_DISABLED );
+    bool bHasDisabledEntries = SvtCommandOptions().HasEntriesDisabled();
     if ( !bHasDisabledEntries )
         return;
 

@@ -594,7 +594,7 @@ void ToolBarManager::Init()
     // enables a menu for clipped items and customization
     SvtCommandOptions aCmdOptions;
     ToolBoxMenuType nMenuType = ToolBoxMenuType::ClippedItems;
-    if ( !aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, "CreateDialog"))
+    if ( !aCmdOptions.LookupDisabled( "CreateDialog"))
          nMenuType |= ToolBoxMenuType::Customize;
 
     m_pImpl->SetMenuType( nMenuType );
@@ -1032,7 +1032,7 @@ void ToolBarManager::CreateControllers()
     Reference< XWindow > xToolbarWindow = m_pImpl->GetInterface();
 
     css::util::URL      aURL;
-    bool                bHasDisabledEntries = SvtCommandOptions().HasEntries( SvtCommandOptions::CMDOPTION_DISABLED );
+    bool                bHasDisabledEntries = SvtCommandOptions().HasEntriesDisabled();
     SvtCommandOptions   aCmdOptions;
 
     for ( ToolBox::ImplToolItems::size_type i = 0; i < m_pImpl->GetItemCount(); i++ )
@@ -1056,7 +1056,7 @@ void ToolBarManager::CreateControllers()
         {
             aURL.Complete = aCommandURL;
             m_xURLTransformer->parseStrict( aURL );
-            if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, aURL.Path ))
+            if ( aCmdOptions.LookupDisabled( aURL.Path ))
             {
                 m_aControllerMap[ nId ] = xController;
                 m_pImpl->HideItem( nId, aCommandURL );

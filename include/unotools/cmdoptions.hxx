@@ -64,12 +64,6 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtCommandOptions final : public utl::d
     friend class SvtCommandOptions_Impl;
 
 public:
-    enum CmdOption
-    {
-        CMDOPTION_DISABLED,
-        CMDOPTION_NONE
-    };
-
     SvtCommandOptions();
     virtual ~SvtCommandOptions() override;
 
@@ -83,7 +77,7 @@ public:
         @onerror    We return an empty list.
     **-***************************************************************************************************/
 
-    bool HasEntries(CmdOption eOption) const;
+    bool HasEntriesDisabled() const;
 
     /*-****************************************************************************************************
         @short      Lookup if a command URL is inside a given list
@@ -93,7 +87,7 @@ public:
         @return     "sal_True" if the command is inside the list otherwise "sal_False"
     **-***************************************************************************************************/
 
-    bool Lookup(CmdOption eOption, const OUString& aCommandURL) const;
+    bool LookupDisabled(const OUString& aCommandURL) const;
 
     /*-****************************************************************************************************
         @short      register an office frame, which must update its dispatches if

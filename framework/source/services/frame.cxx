@@ -2313,7 +2313,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL XFrameImpl::queryDispatch(
         aCommand = aURL.Path;
 
     // Make std::unordered_map lookup if the current URL is in the disabled list
-    if ( m_aCommandOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, aCommand ) )
+    if ( m_aCommandOptions.LookupDisabled( aCommand ) )
         return css::uno::Reference< css::frame::XDispatch >();
     else
     {

@@ -410,12 +410,8 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
     bool          bAddCommand( true );
     SvtCommandOptions aCmdOptions;
 
-    if ( aCmdOptions.HasEntries( SvtCommandOptions::CMDOPTION_DISABLED ))
-    {
-        if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED,
-                                 "ConfigureDialog"))
-            bAddCommand = false;
-    }
+    if ( aCmdOptions.HasEntriesDisabled() && aCmdOptions.LookupDisabled("ConfigureDialog"))
+        bAddCommand = false;
 
     if ( bAddCommand )
     {

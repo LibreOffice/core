@@ -543,7 +543,7 @@ bool ToolbarLayoutManager::createToolbar( const OUString& rResourceURL )
             {
                 ToolBox* pToolbar = static_cast<ToolBox *>(pWindow.get());
                 ToolBoxMenuType nMenuType = pToolbar->GetMenuType();
-                if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, "ConfigureDialog" ))
+                if ( aCmdOptions.LookupDisabled( "ConfigureDialog" ))
                     pToolbar->SetMenuType( nMenuType & ~ToolBoxMenuType::Customize );
                 else
                     pToolbar->SetMenuType( nMenuType | ToolBoxMenuType::Customize );

@@ -46,7 +46,7 @@ SwLabPrtPage::SwLabPrtPage(weld::Container* pPage, weld::DialogController* pCont
     m_xPrtSetup->connect_clicked(LINK(this, SwLabPrtPage, PrtSetupHdl));
 
     SvtCommandOptions aCmdOpts;
-    if (aCmdOpts.Lookup(SvtCommandOptions::CMDOPTION_DISABLED, "Print"))
+    if (aCmdOpts.LookupDisabled("Print"))
     {
         m_xPrinterFrame->hide();
     }

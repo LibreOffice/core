@@ -718,7 +718,7 @@ SfxDocumentPage::SfxDocumentPage(weld::Container* pPage, weld::DialogController*
     // [i96288] Check if the document signature command is enabled
     // on the main list enable/disable the pushbutton accordingly
     SvtCommandOptions aCmdOptions;
-    if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, "Signature" ) )
+    if ( aCmdOptions.LookupDisabled( "Signature" ) )
         m_xSignatureBtn->set_sensitive(false);
 }
 
