@@ -18,7 +18,7 @@ class SVXCORE_DLLPUBLIC IThemeColorChanger
 {
 public:
     virtual ~IThemeColorChanger() = default;
-    virtual void apply(model::ColorSet const& rColorSet) = 0;
+    virtual void apply(std::shared_ptr<model::ColorSet> const& pColorSet) = 0;
 };
 
 } // end svx namespace

@@ -135,12 +135,12 @@ ThemeColorChanger::ThemeColorChanger(SdrPage* pPage)
 
 ThemeColorChanger::~ThemeColorChanger() = default;
 
-void ThemeColorChanger::apply(model::ColorSet const& rColorSet)
+void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
 {
     for (size_t nObject = 0; nObject < mpPage->GetObjCount(); ++nObject)
     {
         SdrObject* pObject = mpPage->GetObj(nObject);
-        theme::updateSdrObject(rColorSet, pObject);
+        theme::updateSdrObject(*pColorSet, pObject);
 
         // update child objects
         SdrObjList* pList = pObject->GetSubList();
@@ -149,7 +149,7 @@ void ThemeColorChanger::apply(model::ColorSet const& rColorSet)
             SdrObjListIter aIter(pList, SdrIterMode::DeepWithGroups);
             while (aIter.IsMore())
             {
-                theme::updateSdrObject(rColorSet, aIter.Next());
+                theme::updateSdrObject(*pColorSet, aIter.Next());
             }
         }
     }

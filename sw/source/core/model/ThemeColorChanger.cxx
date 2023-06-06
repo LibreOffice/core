@@ -345,7 +345,7 @@ ThemeColorChanger::ThemeColorChanger(SwDocShell* pDocSh)
 
 ThemeColorChanger::~ThemeColorChanger() = default;
 
-void ThemeColorChanger::apply(model::ColorSet const& rColorSet)
+void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
 {
     SwDoc* pDocument = mpDocSh->GetDoc();
     if (!pDocument)
@@ -362,8 +362,8 @@ void ThemeColorChanger::apply(model::ColorSet const& rColorSet)
         pPage->getSdrPageProperties().SetTheme(pTheme);
     }
 
-    auto pNewColorSet = std::make_shared<model::ColorSet>(rColorSet);
-    auto pOldColorSet = pTheme->getColorSet();
+    std::shared_ptr<model::ColorSet> pNewColorSet = pColorSet;
+    std::shared_ptr<model::ColorSet> pOldColorSet = pTheme->getColorSet();
     pTheme->setColorSet(pNewColorSet);
 
     auto pUndoThemeChange
@@ -379,8 +379,8 @@ void ThemeColorChanger::apply(model::ColorSet const& rColorSet)
         std::unique_ptr<SfxItemSet> pNewSet = rAttrSet.Clone();
 
         bool bChanged = false;
-        bChanged = bChanged || changeBackground(rAttrSet, *pNewSet, rColorSet);
-        bChanged = bChanged || changeBox(rAttrSet, *pNewSet, rColorSet);
+        bChanged = bChanged || changeBackground(rAttrSet, *pNewSet, *pColorSet);
+        bChanged = bChanged || changeBox(rAttrSet, *pNewSet, *pColorSet);
 
         if (bChanged)
         {
@@ -403,8 +403,8 @@ void ThemeColorChanger::apply(model::ColorSet const& rColorSet)
             std::unique_ptr<SfxItemSet> pNewSet = rAttrSet.Clone();
 
             bool bChanged = false;
-            bChanged = changeBackground(rAttrSet, *pNewSet, rColorSet) || bChanged;
-            bChanged = changeBox(rAttrSet, *pNewSet, rColorSet) || bChanged;
+            bChanged = changeBackground(rAttrSet, *pNewSet, *pColorSet) || bChanged;
+            bChanged = changeBox(rAttrSet, *pNewSet, *pColorSet) || bChanged;
 
             if (bChanged)
                 pDocument->ChgFormat(*pFrameFormat, *pNewSet);
@@ -423,11 +423,11 @@ void ThemeColorChanger::apply(model::ColorSet const& rColorSet)
             std::unique_ptr<SfxItemSet> pNewSet = rAttrSet.Clone();
 
             bool bChanged = false;
-            bChanged = changeColor(rAttrSet, *pNewSet, rColorSet) || bChanged;
-            bChanged = changeOverlineColor(rAttrSet, *pNewSet, rColorSet) || bChanged;
-            bChanged = changeUnderlineColor(rAttrSet, *pNewSet, rColorSet) || bChanged;
-            bChanged = changeBox(rAttrSet, *pNewSet, rColorSet) || bChanged;
-            bChanged = changeBackground(rAttrSet, *pNewSet, rColorSet) || bChanged;
+            bChanged = changeColor(rAttrSet, *pNewSet, *pColorSet) || bChanged;
+            bChanged = changeOverlineColor(rAttrSet, *pNewSet, *pColorSet) || bChanged;
+            bChanged = changeUnderlineColor(rAttrSet, *pNewSet, *pColorSet) || bChanged;
+            bChanged = changeBox(rAttrSet, *pNewSet, *pColorSet) || bChanged;
+            bChanged = changeBackground(rAttrSet, *pNewSet, *pColorSet) || bChanged;
 
             if (bChanged)
                 pDocument->ChgFormat(*pTextFormatCollection, *pNewSet);
@@ -446,9 +446,9 @@ void ThemeColorChanger::apply(model::ColorSet const& rColorSet)
             std::unique_ptr<SfxItemSet> pNewSet = rAttrSet.Clone();
 
             bool bChanged = false;
-            bChanged = changeColor(rAttrSet, *pNewSet, rColorSet) || bChanged;
-            bChanged = changeOverlineColor(rAttrSet, *pNewSet, rColorSet) || bChanged;
-            bChanged = changeUnderlineColor(rAttrSet, *pNewSet, rColorSet) || bChanged;
+            bChanged = changeColor(rAttrSet, *pNewSet, *pColorSet) || bChanged;
+            bChanged = changeOverlineColor(rAttrSet, *pNewSet, *pColorSet) || bChanged;
+            bChanged = changeUnderlineColor(rAttrSet, *pNewSet, *pColorSet) || bChanged;
             if (bChanged)
                 pDocument->ChgFormat(*pCharFormat, *pNewSet);
         }
@@ -456,7 +456,7 @@ void ThemeColorChanger::apply(model::ColorSet const& rColorSet)
     }
 
     // Direct format change
-    auto pHandler = std::make_shared<ThemeColorHandler>(*pDocument, rColorSet);
+    auto pHandler = std::make_shared<ThemeColorHandler>(*pDocument, *pColorSet);
     sw::ModelTraverser aModelTraverser(pDocument);
     aModelTraverser.addNodeHandler(pHandler);
     aModelTraverser.traverse();

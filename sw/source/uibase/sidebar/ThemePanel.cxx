@@ -97,7 +97,7 @@ void ThemePanel::DoubleClickHdl()
     model::ColorSet const& rColorSet = rColorSets.getColorSet(nIndex);
 
     ThemeColorChanger aChanger(pDocSh);
-    aChanger.apply(rColorSet);
+    aChanger.apply(std::make_shared<model::ColorSet>(rColorSet));
 }
 
 void ThemePanel::NotifyItemUpdate(const sal_uInt16 /*nSId*/,
