@@ -465,7 +465,7 @@ namespace basegfx
                     // This should always be the cease and should have been
                     // detected as such above, see bNeedToSyncronize
                     rColorStops = aNewColor;
-                    rAlphaStops = aNewColor;
+                    rAlphaStops = aNewAlpha; // MCGR: tdf#155537 used wrong result here
                 }
             }
         }
