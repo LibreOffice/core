@@ -44,7 +44,7 @@ namespace SvtHistoryOptions
 
         @param      eHistory select right history.
     */
-    UNOTOOLS_DLLPUBLIC void Clear(EHistoryType eHistory, bool bClearPinned = false);
+    UNOTOOLS_DLLPUBLIC void Clear(EHistoryType eHistory);
 
     /** Return the complete specified history list.
 
