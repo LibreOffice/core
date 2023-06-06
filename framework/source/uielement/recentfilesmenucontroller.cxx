@@ -165,35 +165,50 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
         = officecfg::Office::Common::History::ShowCurrentModuleOnly::get();
 
     size_t nItemPosModule = 0;
+    size_t nItemPosPinned = 0;
     if (( nPickListMenuItems > 0 ) && !m_bDisabled )
     {
         size_t nItemPos = 0;
+
+        // tdf#155699 - create a lambda to insert a recent document item at a specified position
+        auto insertHistoryItemAtPos =
+            [&](const SvtHistoryOptions::HistoryItem& rPickListEntry, const size_t aInsertPosition)
+        {
+            m_aRecentFilesItems.insert(m_aRecentFilesItems.begin() + aInsertPosition,
+                                       { rPickListEntry.sURL, rPickListEntry.isReadOnly });
+            nItemPos++;
+        };
+
         if (m_aModuleName != "com.sun.star.frame.StartModule")
         {
             ::comphelper::MimeConfigurationHelper aConfigHelper(
                 comphelper::getProcessComponentContext());
+
             // Show the first MAX_MENU_ITEMS_PER_MODULE items of the current module
             // on top of the recent document list.
             for (int i = 0; i < nPickListMenuItems; i++)
             {
                 const SvtHistoryOptions::HistoryItem& rPickListEntry = aHistoryList[i];
-                const std::pair<OUString, bool> aPickListEntry(rPickListEntry.sURL,
-                                                               rPickListEntry.isReadOnly);
-                if ((nItemPosModule < MAX_MENU_ITEMS_PER_MODULE || bShowCurrentModuleOnly)
-                    && aConfigHelper.GetDocServiceNameFromFilter(rPickListEntry.sFilter)
-                           == m_aModuleName)
+
+                // tdf#155699 - insert pinned document at the beginning of the list
+                if (rPickListEntry.isPinned)
                 {
-                    m_aRecentFilesItems.insert(m_aRecentFilesItems.begin() + nItemPosModule,
-                                               aPickListEntry);
-                    nItemPos++;
+                    insertHistoryItemAtPos(rPickListEntry, nItemPosPinned);
+                    nItemPosPinned++;
                     nItemPosModule++;
                 }
-                else if (!bShowCurrentModuleOnly)
+                // tdf#56696 - insert documents of the current module
+                else if ((bShowCurrentModuleOnly
+                          || (nItemPosModule - nItemPosPinned) < MAX_MENU_ITEMS_PER_MODULE)
+                         && aConfigHelper.GetDocServiceNameFromFilter(rPickListEntry.sFilter)
+                                == m_aModuleName)
                 {
-                    m_aRecentFilesItems.insert(m_aRecentFilesItems.begin() + nItemPos,
-                                               aPickListEntry);
-                    nItemPos++;
+                    insertHistoryItemAtPos(rPickListEntry, nItemPosModule);
+                    nItemPosModule++;
                 }
+                // Insert all other documents at the end of the list if the expert option is not set
+                else if (!bShowCurrentModuleOnly)
+                    insertHistoryItemAtPos(rPickListEntry, nItemPos);
             }
         }
         else
@@ -201,7 +216,9 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
             for (int i = 0; i < nPickListMenuItems; i++)
             {
                 const SvtHistoryOptions::HistoryItem& rPickListEntry = aHistoryList[i];
-                m_aRecentFilesItems.emplace_back(rPickListEntry.sURL, rPickListEntry.isReadOnly);
+                // tdf#155699 - insert pinned document at the beginning of the list
+                insertHistoryItemAtPos(rPickListEntry,
+                                       rPickListEntry.isPinned ? nItemPosModule++ : nItemPos);
             }
         }
     }
@@ -262,6 +279,10 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
 
             rPopupMenu->setTipHelpText(sal_uInt16(i + 1), aTipHelpText);
             rPopupMenu->setCommand(sal_uInt16(i + 1), aURLString);
+
+            // tdf#155699 - show a separator after the pinned recent document items
+            if (nItemPosPinned > 0 && i == nItemPosPinned - 1)
+                rPopupMenu->insertSeparator(-1);
 
             // Show a separator after the MAX_MENU_ITEMS_PER_MODULE recent document items
             if (nItemPosModule > 0 && i == nItemPosModule - 1)
