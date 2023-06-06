@@ -334,9 +334,6 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 break;
             case NS_ooxml::LN_CT_TblPrBase_tblpPr:
                 {
-                    // Remember that this will be a floating table.
-                    m_bIsFloating = true;
-
                     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                     // Ignore <w:tblpPr> in shape text, those tables should be always non-floating ones.
                     if (!m_bIsInShape && pProperties)

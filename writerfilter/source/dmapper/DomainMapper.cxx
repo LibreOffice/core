@@ -3166,17 +3166,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     {
         if (m_pImpl->hasTableManager())
         {
-            if (m_pImpl->getTableManager().IsFloating())
-            {
-                // We're starting a new table, but the previous table was floating. Insert a dummy
-                // paragraph to ensure that the floating table is not anchored inside the next
-                // table.
-                finishParagraph();
-            }
-        }
-
-        if (m_pImpl->hasTableManager())
-        {
             bool bTableStartsAtCellStart = m_pImpl->m_nTableDepth > 0 && m_pImpl->m_nTableCellDepth > m_pImpl->m_nLastTableCellParagraphDepth + 1;
             m_pImpl->getTableManager().setTableStartsAtCellStart(bTableStartsAtCellStart);
         }
@@ -4756,15 +4745,6 @@ void DomainMapper::finishParagraph(const bool bRemove, const bool bNoNumbering)
     if (m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::datePicker)
         m_pImpl->m_pSdtHelper->createDateContentControl();
     m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH), bRemove, bNoNumbering);
-    if (m_pImpl->m_nTableDepth == 0)
-    {
-        if (m_pImpl->hasTableManager())
-        {
-            // Non-table content, possibly after a table. Forget that such a previous table was
-            // floating.
-            m_pImpl->getTableManager().SetFloating(false);
-        }
-    }
 }
 
 void DomainMapper::commentProps(const OUString& sId, const CommentProperties& rProps)
