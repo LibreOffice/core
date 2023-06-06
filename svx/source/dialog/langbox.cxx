@@ -190,16 +190,42 @@ void SvxLanguageBox::AddLanguages(const std::vector< LanguageType >& rLanguageTy
 
 static void SortLanguages(std::vector<weld::ComboBoxEntry>& rEntries)
 {
-    std::sort(rEntries.begin(), rEntries.end(),
-              [](const weld::ComboBoxEntry e1, const weld::ComboBoxEntry e2)
-              {
-                  static const auto aSorter = comphelper::string::NaturalStringSorter(
-                      ::comphelper::getProcessComponentContext(),
-                      Application::GetSettings().GetUILanguageTag().getLocale());
-                  return aSorter.compare(e1.sString, e2.sString) < 0;
-              });
+    auto langLess = [](const weld::ComboBoxEntry& e1, const weld::ComboBoxEntry& e2)
+    {
+        if (e1.sId == e2.sId)
+            return false; // shortcut
+        // Make sure that e.g. generic 'Spanish {es}' goes before 'Spanish (Argentina)'.
+        // We can't depend on MsLangId::getPrimaryLanguage/getSubLanguage, because e.g.
+        // for generic Bosnian {bs}, the MS-LCID is 0x781A, and getSubLanguage is not 0.
+        // So we have to do the expensive LanguageTag construction.
+        LanguageTag lt1(LanguageType(e1.sId.toInt32())), lt2(LanguageType(e2.sId.toInt32()));
+        if (lt1.getLanguage() == lt2.getLanguage())
+        {
+            const bool isLangOnly1 = lt1.isIsoLocale() && lt1.getCountry().isEmpty();
+            const bool isLangOnly2 = lt2.isIsoLocale() && lt2.getCountry().isEmpty();
+
+            if (isLangOnly1)
+            {
+                // lt1 is a generic language-only tag
+                if (!isLangOnly2)
+                    return true; // lt2 is not
+            }
+            else if (isLangOnly2)
+            {
+                // lt2 is a generic language-only tag, lt1 is not
+                return false;
+            }
+        }
+        // Do a normal string comparison for other cases
+        static const auto aSorter = comphelper::string::NaturalStringSorter(
+            comphelper::getProcessComponentContext(),
+            Application::GetSettings().GetUILanguageTag().getLocale());
+        return aSorter.compare(e1.sString, e2.sString) < 0;
+    };
+
+    std::sort(rEntries.begin(), rEntries.end(), langLess);
     rEntries.erase(std::unique(rEntries.begin(), rEntries.end(),
-                               [](const weld::ComboBoxEntry e1, const weld::ComboBoxEntry e2)
+                               [](const weld::ComboBoxEntry& e1, const weld::ComboBoxEntry& e2)
                                { return e1.sId == e2.sId; }),
                    rEntries.end());
 }
