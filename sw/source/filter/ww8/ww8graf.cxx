@@ -2373,8 +2373,12 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec& rRecord, WW8_FS
         text::RelOrientation::TEXT_LINE   // 3 is relative to line
     };
 
-    sal_Int16 eHoriOri = aHoriOriTab[ nXAlign ];
-    sal_Int16 eHoriRel = aHoriRelOriTab[ nXRelTo ];
+    // If the image is inline, then the relative orientation means nothing,
+    // so set it up so that if the user changes it into an anchor, it positions usefully.
+    sal_Int16 eHoriOri
+        = IsInlineEscherHack() ? text::HoriOrientation::CENTER : aHoriOriTab[ nXAlign ];
+    sal_Int16 eHoriRel
+        = IsInlineEscherHack() ? text::RelOrientation::FRAME : aHoriRelOriTab[nXRelTo];
 
     // #i36649# - adjustments for certain alignments
     if (eHoriOri == text::HoriOrientation::LEFT && eHoriRel == text::RelOrientation::PAGE_FRAME)
