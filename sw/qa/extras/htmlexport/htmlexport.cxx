@@ -986,19 +986,28 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfOle2)
     verify();
 }
 
-DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOle2Odg, "reqif-ole-odg.xhtml")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfOle2Odg)
 {
-    uno::Reference<text::XTextEmbeddedObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xObjects(xSupplier->getEmbeddedObjects(),
-                                                     uno::UNO_QUERY);
-    uno::Reference<document::XEmbeddedObjectSupplier> xTextEmbeddedObject(xObjects->getByIndex(0),
-                                                                          uno::UNO_QUERY);
-    uno::Reference<lang::XServiceInfo> xObject(xTextEmbeddedObject->getEmbeddedObject(),
-                                               uno::UNO_QUERY);
-    // This failed, both import and export failed to handle OLE2 that contains
-    // just ODF.
-    CPPUNIT_ASSERT(xObject.is());
-    CPPUNIT_ASSERT(xObject->supportsService("com.sun.star.drawing.DrawingDocument"));
+    auto verify = [this]() {
+        uno::Reference<text::XTextEmbeddedObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xObjects(xSupplier->getEmbeddedObjects(),
+                                                         uno::UNO_QUERY);
+        uno::Reference<document::XEmbeddedObjectSupplier> xTextEmbeddedObject(
+            xObjects->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<lang::XServiceInfo> xObject(xTextEmbeddedObject->getEmbeddedObject(),
+                                                   uno::UNO_QUERY);
+        // This failed, both import and export failed to handle OLE2 that contains
+        // just ODF.
+        CPPUNIT_ASSERT(xObject.is());
+        CPPUNIT_ASSERT(xObject->supportsService("com.sun.star.drawing.DrawingDocument"));
+    };
+    setImportFilterOptions("xhtmlns=reqif-xhtml");
+    setImportFilterName("HTML (StarWriter)");
+    createSwDoc("reqif-ole-odg.xhtml");
+    verify();
+    setFilterOptions("xhtmlns=reqif-xhtml");
+    saveAndReload(mpFilter);
+    verify();
 }
 
 DECLARE_HTMLEXPORT_TEST(testList, "list.html")
