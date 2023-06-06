@@ -485,7 +485,7 @@ Point FloatingWindow::ImplConvertToAbsPos(vcl::Window* pReference, const Point& 
     const OutputDevice *pWindowOutDev = pReference->GetOutDev();
 
     // compare coordinates in absolute screen coordinates
-    if( pWindowOutDev->HasMirroredGraphics()  )
+    if ( pWindowOutDev->HasMirroredGraphics() && !comphelper::LibreOfficeKit::isActive() )
     {
         if(!pReference->IsRTLEnabled() )
             pWindowOutDev->ReMirror( aAbsolute );
