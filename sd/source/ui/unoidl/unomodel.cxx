@@ -2355,7 +2355,7 @@ OUString SdXImpressDocument::getPartInfo(int nPart)
     if (!pViewSh)
         return OUString();
 
-    const bool bIsVisible = pViewSh->IsVisible(nPart);
+    const bool bIsVisible = !pViewSh->GetDoc()->GetSdPage(nPart, pViewSh->GetPageKind())->IsExcluded();
     const bool bIsSelected = pViewSh->IsSelected(nPart);
     const sal_Int16 nMasterPageCount= pViewSh->GetDoc()->GetMasterSdPageCount(pViewSh->GetPageKind());
 
