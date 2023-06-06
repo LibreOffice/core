@@ -36,7 +36,7 @@ private:
     std::unique_ptr<weld::CustomWeld> mxValueSetThemeColorsWindow;
     std::unique_ptr<weld::Button> mxAdd;
 
-    std::optional<std::reference_wrapper<model::ColorSet>> moCurrentColorSet;
+    std::shared_ptr<model::ColorSet> mpCurrentColorSet;
 
     void runThemeColorEditDialog();
     void initColorSets();
@@ -49,10 +49,7 @@ public:
     DECL_LINK(SelectItem, ValueSet*, void);
     DECL_LINK(ButtonClicked, weld::Button&, void);
 
-    std::optional<std::reference_wrapper<model::ColorSet>> const& getCurrentColorSet()
-    {
-        return moCurrentColorSet;
-    }
+    std::shared_ptr<model::ColorSet> const& getCurrentColorSet() { return mpCurrentColorSet; }
 };
 
 } // end svx namespace

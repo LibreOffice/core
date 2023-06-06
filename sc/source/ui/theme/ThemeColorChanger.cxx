@@ -77,7 +77,7 @@ void paragraphStyleChange(ScStyleSheet* pStyle, model::ColorSet const& rColorSet
 }
 } // end anonymous ns
 
-void ThemeColorChanger::apply(model::ColorSet const& rColorSet)
+void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
 {
     auto& rDocument = m_rDocShell.GetDocument();
     ScStyleSheetPool* pPool = rDocument.GetStyleSheetPool();
@@ -87,7 +87,7 @@ void ThemeColorChanger::apply(model::ColorSet const& rColorSet)
     pStyle = static_cast<ScStyleSheet*>(pPool->First(SfxStyleFamily::Para));
     while (pStyle)
     {
-        paragraphStyleChange(pStyle, rColorSet);
+        paragraphStyleChange(pStyle, *pColorSet);
         pStyle = static_cast<ScStyleSheet*>(pPool->Next());
     }
 }

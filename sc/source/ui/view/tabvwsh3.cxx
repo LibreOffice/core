@@ -1356,12 +1356,11 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     if (RET_OK != nResult)
                         return;
 
-                    auto oColorSet = pDialog->getCurrentColorSet();
-                    if (oColorSet)
+                    auto pColorSet = pDialog->getCurrentColorSet();
+                    if (pColorSet)
                     {
-                        auto& rColorSet = (*oColorSet).get();
                         sc::ThemeColorChanger aChanger(*GetViewData().GetDocShell());
-                        aChanger.apply(rColorSet);
+                        aChanger.apply(pColorSet);
                     }
                 });
             }

@@ -31,7 +31,7 @@ public:
     ThemeColorChanger(SdrPage* pPage);
     virtual ~ThemeColorChanger() override;
 
-    void apply(model::ColorSet const& rColorSet) override;
+    void apply(std::shared_ptr<model::ColorSet> const& pColorSet) override;
 };
 
 } // end svx namespace
