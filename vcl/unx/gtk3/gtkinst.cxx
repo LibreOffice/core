@@ -16978,7 +16978,7 @@ public:
         gtk_widget_set_has_tooltip(GTK_WIDGET(m_pIconView), true);
     }
 
-    virtual void connect_get_property_tree_elem(const Link<const tools::json_prop_query&, bool>& /*rLink*/) override
+    virtual void connect_get_property_tree_elem(const Link<const weld::json_prop_query&, bool>& /*rLink*/) override
     {
         //not implemented for the gtk variant
     }
@@ -17204,6 +17204,12 @@ public:
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         return get(rGtkIter.iter, m_nIdCol);
+    }
+
+    virtual OUString get_text(const weld::TreeIter& rIter) const override
+    {
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        return get(rGtkIter.iter, m_nTextCol);
     }
 
     virtual void disable_notify_events() override

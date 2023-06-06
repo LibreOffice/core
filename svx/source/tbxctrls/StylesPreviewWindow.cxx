@@ -20,6 +20,7 @@
 #include <StylesPreviewWindow.hxx>
 
 #include <comphelper/base64.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
@@ -527,14 +528,16 @@ static OString extractPngString(const BitmapEx& rBitmap)
     return "";
 }
 
-// 0: json writer, 1: id, 2: property. returns true if supported
-IMPL_STATIC_LINK(StylesPreviewWindow_Base, DoJsonProperty, const tools::json_prop_query&, rQuery,
-                 bool)
+// 0: json writer, 1: TreeIter, 2: property. returns true if supported
+IMPL_LINK(StylesPreviewWindow_Base, DoJsonProperty, const weld::json_prop_query&, rQuery, bool)
 {
     if (std::get<2>(rQuery) != "image")
         return false;
 
-    OString sBase64Png(GetCachedPreviewJson(std::get<1>(rQuery)));
+    const weld::TreeIter& rIter = std::get<1>(rQuery);
+    OUString sStyleId(m_xStylesView->get_id(rIter));
+    OUString sStyleName(m_xStylesView->get_text(rIter));
+    OString sBase64Png(GetCachedPreviewJson(std::pair<OUString, OUString>(sStyleId, sStyleName)));
     if (sBase64Png.isEmpty())
         return false;
 
@@ -564,20 +567,16 @@ StylesPreviewWindow_Base::GetCachedPreview(const std::pair<OUString, OUString>& 
     }
 }
 
-OString StylesPreviewWindow_Base::GetCachedPreviewJson(const OUString& rStyle)
+OString StylesPreviewWindow_Base::GetCachedPreviewJson(const std::pair<OUString, OUString>& rStyle)
 {
-    auto aJsonFound = StylePreviewCache::GetJson().find(rStyle);
+    auto aJsonFound = StylePreviewCache::GetJson().find(rStyle.second);
     if (aJsonFound != StylePreviewCache::GetJson().end())
-        return StylePreviewCache::GetJson()[rStyle];
+        return StylePreviewCache::GetJson()[rStyle.second];
 
-    auto aFound = StylePreviewCache::Get().find(rStyle);
-    if (aFound == StylePreviewCache::Get().end())
-        return "";
-
-    VclPtr<VirtualDevice> xDev = aFound->second;
+    VclPtr<VirtualDevice> xDev = GetCachedPreview(rStyle);
     BitmapEx aBitmap(xDev->GetBitmapEx(Point(0, 0), xDev->GetOutputSize()));
     OString sResult = extractPngString(aBitmap);
-    StylePreviewCache::GetJson()[rStyle] = sResult;
+    StylePreviewCache::GetJson()[rStyle.second] = sResult;
     return sResult;
 }
 
@@ -608,10 +607,12 @@ void StylesPreviewWindow_Base::UpdateStylesList()
 
     m_xStylesView->freeze();
     m_xStylesView->clear();
+    // for online we can skip inserting the preview into the IconView and rely
+    // on DoJsonProperty to provide the image to clients
+    const bool bNeedInsertPreview = !comphelper::LibreOfficeKit::isActive();
     for (const auto& rStyle : m_aAllStyles)
     {
-        VclPtr<VirtualDevice> pImg = GetCachedPreview(rStyle);
-
+        VclPtr<VirtualDevice> pImg = bNeedInsertPreview ? GetCachedPreview(rStyle) : nullptr;
         m_xStylesView->append(rStyle.first, rStyle.second, pImg);
     }
     m_xStylesView->thaw();

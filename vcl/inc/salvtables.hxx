@@ -1912,6 +1912,7 @@ private:
     DECL_LINK(CommandHdl, const CommandEvent&, bool);
     DECL_LINK(TooltipHdl, SvTreeListEntry*, OUString);
     DECL_LINK(EntryAccessibleDescriptionHdl, SvTreeListEntry*, OUString);
+    DECL_LINK(DumpElemToPropertyTreeHdl, const ::IconView::json_prop_query&, bool);
 
 public:
     SalInstanceIconView(::IconView* pIconView, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
@@ -1934,7 +1935,7 @@ public:
     virtual void connect_query_tooltip(const Link<const weld::TreeIter&, OUString>& rLink) override;
 
     virtual void
-    connect_get_property_tree_elem(const Link<const tools::json_prop_query&, bool>& rLink) override;
+    connect_get_property_tree_elem(const Link<const weld::json_prop_query&, bool>& rLink) override;
 
     virtual OUString get_selected_id() const override;
 
@@ -1964,6 +1965,8 @@ public:
     virtual void selected_foreach(const std::function<bool(weld::TreeIter&)>& func) override;
 
     virtual OUString get_id(const weld::TreeIter& rIter) const override;
+
+    virtual OUString get_text(const weld::TreeIter& rIter) const override;
 
     virtual void clear() override;
 

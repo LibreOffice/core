@@ -164,7 +164,5 @@ class ScopedJsonWriterStruct
 public:
     ~ScopedJsonWriterStruct() { mrWriter.endStruct(); }
 };
-
-typedef std::tuple<JsonWriter&, const OUString&, std::string_view> json_prop_query;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

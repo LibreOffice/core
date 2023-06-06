@@ -5518,10 +5518,20 @@ void SalInstanceIconView::connect_query_tooltip(const Link<const weld::TreeIter&
     m_xIconView->SetTooltipHdl(LINK(this, SalInstanceIconView, TooltipHdl));
 }
 
-void SalInstanceIconView::connect_get_property_tree_elem(
-    const Link<const tools::json_prop_query&, bool>& rLink)
+IMPL_LINK(SalInstanceIconView, DumpElemToPropertyTreeHdl, const ::IconView::json_prop_query&,
+          rQuery, bool)
 {
-    m_xIconView->SetDumpElemToPropertyTreeHdl(rLink);
+    SvTreeListEntry* pEntry = std::get<1>(rQuery);
+    return m_aGetPropertyTreeElemHdl.Call(weld::json_prop_query(
+        std::get<0>(rQuery), SalInstanceTreeIter(pEntry), std::get<2>(rQuery)));
+}
+
+void SalInstanceIconView::connect_get_property_tree_elem(
+    const Link<const weld::json_prop_query&, bool>& rLink)
+{
+    weld::IconView::connect_get_property_tree_elem(rLink);
+    m_xIconView->SetDumpElemToPropertyTreeHdl(
+        LINK(this, SalInstanceIconView, DumpElemToPropertyTreeHdl));
 }
 
 OUString SalInstanceIconView::get_selected_id() const
@@ -5652,6 +5662,12 @@ OUString SalInstanceIconView::get_id(const weld::TreeIter& rIter) const
     if (pStr)
         return *pStr;
     return OUString();
+}
+
+OUString SalInstanceIconView::get_text(const weld::TreeIter& rIter) const
+{
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    return SvTabListBox::GetEntryText(rVclIter.iter, 0);
 }
 
 void SalInstanceIconView::clear()

@@ -293,10 +293,9 @@ void IconView::DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter, SvTreeListEn
         if (pIt)
             rJsonWriter.put("text", static_cast<const SvLBoxString*>(pIt)->GetText());
 
-        const OUString* pId = static_cast<const OUString*>(pEntry->GetUserData());
-        const bool bHandled = pId && maDumpElemToPropertyTreeHdl.IsSet()
-                              && maDumpElemToPropertyTreeHdl.Call(
-                                     tools::json_prop_query(rJsonWriter, *pId, "image"));
+        const bool bHandled
+            = maDumpElemToPropertyTreeHdl.IsSet()
+              && maDumpElemToPropertyTreeHdl.Call(json_prop_query(rJsonWriter, pEntry, "image"));
         if (!bHandled)
         {
             pIt = pEntry->GetFirstItem(SvLBoxItemType::ContextBmp);

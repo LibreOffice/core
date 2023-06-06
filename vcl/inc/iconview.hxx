@@ -48,7 +48,9 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
     virtual void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 
-    void SetDumpElemToPropertyTreeHdl(const Link<const tools::json_prop_query&, bool>& rLink)
+    typedef std::tuple<tools::JsonWriter&, SvTreeListEntry*, std::string_view> json_prop_query;
+
+    void SetDumpElemToPropertyTreeHdl(const Link<const json_prop_query&, bool>& rLink)
     {
         maDumpElemToPropertyTreeHdl = rLink;
     }
@@ -58,7 +60,7 @@ protected:
 
 private:
     Link<SvTreeListEntry*, OUString> maEntryAccessibleDescriptionHdl;
-    Link<const tools::json_prop_query&, bool> maDumpElemToPropertyTreeHdl;
+    Link<const json_prop_query&, bool> maDumpElemToPropertyTreeHdl;
     void DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter, SvTreeListEntry* pEntry);
 };
 
