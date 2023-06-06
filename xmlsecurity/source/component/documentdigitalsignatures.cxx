@@ -869,7 +869,13 @@ bool DocumentDigitalSignatures::signWithCertificateImpl(
     aSignatureManager.setSignatureStream(xStream);
     aSignatureManager.setModel(xModel);
 
-    Reference<XXMLSecurityContext> xSecurityContext = aSignatureManager.getSecurityContext();
+    Reference<XXMLSecurityContext> xSecurityContext;
+    Reference<XServiceInfo> xServiceInfo(xCertificate, UNO_QUERY);
+    if (xServiceInfo->getImplementationName()
+        == "com.sun.star.xml.security.gpg.XCertificate_GpgImpl")
+        xSecurityContext = aSignatureManager.getGpgSecurityContext();
+    else
+        xSecurityContext = aSignatureManager.getSecurityContext();
 
     sal_Int32 nSecurityId;
 

@@ -190,6 +190,7 @@ private:
                                                   // sal_False := new object
     bool                        bIsInGenerateThumbnail; //optimize thumbnail generate and store procedure to improve odt saving performance, i120030
     bool                        mbAvoidRecentDocs; ///< Avoid adding to the recent documents list, if not necessary.
+    bool                        bRememberSignature; // Do we want to remember the signature.
 
     enum TriState               {undefined, yes, no};
     TriState                    mbContinueImportOnFilterExceptions = undefined; // try to import as much as possible
@@ -198,6 +199,8 @@ private:
 
     SAL_DLLPRIVATE void UpdateTime_Impl(const css::uno::Reference<
         css::document::XDocumentProperties> & i_xDocProps);
+
+    css::uno::Sequence< css::security::DocumentSignatureInformation > rSignatureInfosRemembered;
 
     SAL_DLLPRIVATE bool SaveTo_Impl(SfxMedium &rMedium, const SfxItemSet* pSet );
 
@@ -350,13 +353,14 @@ public:
     void AfterSigning(bool bSignSuccess, bool bSignScriptingContent);
     bool HasValidSignatures() const;
     SignatureState              GetDocumentSignatureState();
-    void                        SignDocumentContent(weld::Window* pDialogParent);
+    bool                        SignDocumentContent(weld::Window* pDialogParent);
     css::uno::Sequence<css::security::DocumentSignatureInformation> GetDocumentSignatureInformation(
         bool bScriptingContent,
         const css::uno::Reference<css::security::XDocumentDigitalSignatures>& xSigner
         = css::uno::Reference<css::security::XDocumentDigitalSignatures>());
 
     bool SignDocumentContentUsingCertificate(const css::uno::Reference<css::security::XCertificate>& xCertificate);
+    bool ResignDocument(css::uno::Sequence< css::security::DocumentSignatureInformation >& rSignaturesInfo);
 
     void SignSignatureLine(weld::Window* pDialogParent, const OUString& aSignatureLineId,
                            const css::uno::Reference<css::security::XCertificate>& xCert,
@@ -364,7 +368,7 @@ public:
                            const css::uno::Reference<css::graphic::XGraphic>& xInvalidGraphic,
                            const OUString& aComment);
     SignatureState              GetScriptingSignatureState();
-    void                        SignScriptingContent(weld::Window* pDialogParent);
+    bool                        SignScriptingContent(weld::Window* pDialogParent);
     DECL_DLLPRIVATE_LINK(SignDocumentHandler, weld::Button&, void);
 
     virtual std::shared_ptr<SfxDocumentInfoDialog> CreateDocumentInfoDialog(weld::Window* pParent, const SfxItemSet& rItemSet);
@@ -457,6 +461,8 @@ public:
 
     /// Don't add to the recent documents - it's an expensive operation, sometimes it is not wanted.
     bool                        IsAvoidRecentDocs() const { return mbAvoidRecentDocs; }
+
+    bool                        IsRememberingSignature() const { return bRememberSignature; }
 
     /// Don't add to the recent documents - it's an expensive operation, sometimes it is not wanted.
     void                        AvoidRecentDocs(bool bAvoid) { mbAvoidRecentDocs = bAvoid; }
