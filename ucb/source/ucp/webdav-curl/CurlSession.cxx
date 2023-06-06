@@ -1472,6 +1472,10 @@ auto CurlProcessor::ProcessRequest(
                     case SC_UNAUTHORIZED:
                     case SC_PROXY_AUTHENTICATION_REQUIRED:
                     {
+                        (statusCode != SC_PROXY_AUTHENTICATION_REQUIRED
+                             ? rSession.m_isAuthenticated
+                             : rSession.m_isAuthenticatedProxy)
+                            = false; // any auth data in m_pCurl is invalid
                         auto& rnAuthRequests(statusCode != SC_PROXY_AUTHENTICATION_REQUIRED
                                                  ? nAuthRequests
                                                  : nAuthRequestsProxy);
