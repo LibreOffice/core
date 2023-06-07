@@ -1355,7 +1355,8 @@ void AccessibilityCheck::checkObject(SdrObject* pObject)
         lclAddIssue(m_aIssueCollection, SwResId(STR_FLOATING_TEXT));
 
     if (pObject->GetObjIdentifier() == SdrObjKind::CustomShape
-        || pObject->GetObjIdentifier() == SdrObjKind::Text)
+        || pObject->GetObjIdentifier() == SdrObjKind::Text
+        || pObject->GetObjIdentifier() == SdrObjKind::Media)
     {
         OUString sAlternative = pObject->GetTitle();
         if (sAlternative.isEmpty())
