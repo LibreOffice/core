@@ -1805,6 +1805,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
         case LOK_CALLBACK_A11Y_FOCUS_CHANGED:
         case LOK_CALLBACK_A11Y_CARET_CHANGED:
         case LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED:
+        case LOK_CALLBACK_A11Y_FOCUSED_CELL_CHANGED:
         case LOK_CALLBACK_COLOR_PALETTES:
         {
             const auto& pos = std::find(m_queue1.rbegin(), m_queue1.rend(), type);
@@ -1867,6 +1868,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
             case LOK_CALLBACK_A11Y_FOCUS_CHANGED:
             case LOK_CALLBACK_A11Y_CARET_CHANGED:
             case LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED:
+            case LOK_CALLBACK_A11Y_FOCUSED_CELL_CHANGED:
             case LOK_CALLBACK_COLOR_PALETTES:
             {
                 if (removeAll(type))

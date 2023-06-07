@@ -924,14 +924,17 @@ typedef enum
    LOK_CALLBACK_APPLICATION_BACKGROUND_COLOR = 61,
 
     /**
-     * Accessibility event: a paragraph get focus.
+     * Accessibility event: a paragraph got focus.
      * The payload is a json with the following structure.
      *
      *   {
      *       "content": "<paragraph text>"
      *       "position": N
+     *       "start": N1
+     *       "end": N2
      *   }
-     *   where N is the position of the text cursor inside the focused paragraph.
+     *   where N is the position of the text cursor inside the focused paragraph,
+     *   and [N1,N2] is the range of the text selection inside the focused paragraph.
      */
     LOK_CALLBACK_A11Y_FOCUS_CHANGED = 62,
 
@@ -946,7 +949,7 @@ typedef enum
     LOK_CALLBACK_A11Y_CARET_CHANGED = 63,
 
     /**
-     * Accessibility event: text cursor position has changed.
+     * Accessibility event: text selection has changed.
      *
      *  {
      *      "start": N1
@@ -965,7 +968,38 @@ typedef enum
      * Informs that the document password has been succesfully changed.
      * The payload contains the the new password and the type.
     */
-    LOK_CALLBACK_DOCUMENT_PASSWORD_RESET = 66
+    LOK_CALLBACK_DOCUMENT_PASSWORD_RESET = 66,
+
+    /**
+     * Accessibility event: a cell got focus.
+     * The payload is a json with the following structure.
+     *
+     *   {
+     *       "outCount": <number of tables user gets out of>
+     *       "inList": [
+     *           {
+     *               "rowCount": <number of rows for outer table user got in>
+     *               "colCount": <number of columns for outer table user got in>
+     *           },
+     *           ...
+     *           {
+     *               "rowCount": <number of rows for inner table user got in>
+     *               "colCount": <number of columns for inner table user got in>
+     *           }
+     *       ]
+     *       "row": <current row index>
+     *       "col": <current column index>
+     *       "rowSpan": <row span for current cell>
+     *       "colSpan": <column span for current cell>
+     *       "paragraph": {
+     *           <same structure as for LOK_CALLBACK_A11Y_FOCUS_CHANGED>
+     *        }
+     *   }
+     *   where row/column indexes start from 0, inList is the list of tables
+     *   the user got in from the outer to the inner; row/column span default
+     *   value is 1; paragraph is the cell text content.
+     */
+    LOK_CALLBACK_A11Y_FOCUSED_CELL_CHANGED = 67
 }
 LibreOfficeKitCallbackType;
 
@@ -1128,6 +1162,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_COLOR_PALETTES";
     case LOK_CALLBACK_DOCUMENT_PASSWORD_RESET:
         return "LOK_CALLBACK_DOCUMENT_PASSWORD_RESET";
+    case LOK_CALLBACK_A11Y_FOCUSED_CELL_CHANGED:
+        return "LOK_CALLBACK_A11Y_FOCUSED_CELL_CHANGED";
     }
 
     assert(!"Unknown LibreOfficeKitCallbackType type.");

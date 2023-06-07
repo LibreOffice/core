@@ -56,6 +56,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
+#include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 
@@ -105,6 +106,7 @@
 #include <openuriexternally.hxx>
 #include <iostream>
 #include <vector>
+#include <list>
 #include <libxml/xmlwriter.h>
 #include <unordered_map>
 
@@ -236,6 +238,14 @@ void SAL_CALL SfxClipboardChangeListener::changedContents( const datatransfer::c
         delete pInfo;
 }
 
+struct TableSizeType
+{
+    sal_Int32 nRowCount;
+    sal_Int32 nColCount;
+};
+
+typedef std::list<uno::Reference<accessibility::XAccessibleTable>> XAccessibleTableList;
+
 namespace
 {
 
@@ -254,6 +264,41 @@ bool hasState(const accessibility::AccessibleEventObject& aEvent, ::sal_Int64 nS
 bool isFocused(const accessibility::AccessibleEventObject& aEvent)
 {
     return hasState(aEvent, accessibility::AccessibleStateType::FOCUSED);
+}
+
+// Put in rAncestorList all ancestors of xTable up to xAncestorTable or
+// up to the first not-a-table ancestor if xAncestorTable is not an ancestor.
+// xTable is included in the list, xAncestorTable is not included.
+// The list is ordered from the ancient ancestor to xTable.
+// Return true if xAncestorTable is an ancestor of xTable.
+bool getAncestorList(XAccessibleTableList& rAncestorList,
+                     uno::Reference<accessibility::XAccessibleTable> xTable,
+                     uno::Reference<accessibility::XAccessibleTable> xAncestorTable = uno::Reference<accessibility::XAccessibleTable>())
+{
+    uno::Reference<accessibility::XAccessibleTable> xCurrentTable = xTable;
+    while (xCurrentTable.is() && xCurrentTable != xAncestorTable)
+    {
+        rAncestorList.push_front(xCurrentTable);
+
+        uno::Reference<accessibility::XAccessibleContext> xContext(xCurrentTable, uno::UNO_QUERY);
+        xCurrentTable.clear();
+        if (xContext.is())
+        {
+            uno::Reference<accessibility::XAccessible> xParent = xContext->getAccessibleParent();
+            uno::Reference<accessibility::XAccessibleContext> xParentContext(xParent, uno::UNO_QUERY);
+            if (xParentContext.is()
+                    && xParentContext->getAccessibleRole() == accessibility::AccessibleRole::TABLE_CELL)
+            {
+                uno::Reference<accessibility::XAccessible> xCellParent = xParentContext->getAccessibleParent();
+                if (xCellParent.is())
+                {
+                    xCurrentTable = uno::Reference<accessibility::XAccessibleTable>(xCellParent, uno::UNO_QUERY);
+                }
+            }
+        }
+    }
+
+    return xCurrentTable.is() && xCurrentTable == xAncestorTable;
 }
 
 std::string stateSetToString(::sal_Int64 stateSet)
@@ -475,12 +520,33 @@ void aboutParagraph(std::string msg, const uno::Reference<css::accessibility::XA
     sal_Int32 nSelectionEnd = xAccText->getSelectionEnd();
     aboutParagraph(msg, sText, nCaretPosition, nSelectionStart, nSelectionEnd, force);
 }
+
+void aboutFocusedCellChanged(sal_Int32 nOutCount, const std::vector<TableSizeType>& aInList,
+                             sal_Int32 nRow, sal_Int32 nCol, sal_Int32 nRowSpan, sal_Int32 nColSpan)
+{
+    std::stringstream inListStream;
+    inListStream << "[ ";
+    for (const auto& rTableSize: aInList)
+    {
+        inListStream << "{ rowCount: " << rTableSize.nRowCount << " colCount: " << rTableSize.nColCount << " } ";
+    }
+    inListStream << "]";
+
+    SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyFocusedCellChanged: "
+            << "\n outCount: " << nOutCount
+            << "\n inList: " << inListStream.str()
+            << "\n row: " << nRow
+            << "\n column: " << nCol
+            << "\n rowSpan: " << nRowSpan
+            << "\n colSpan: " << nColSpan
+            );
+}
 } // anonymous namespace
 
 class LOKDocumentFocusListener :
     public ::cppu::WeakImplHelper< accessibility::XAccessibleEventListener >
 {
-    static constexpr sal_Int64 MAX_ATTACHABLE_CHILDREN = 30;
+    static constexpr sal_Int64 MAX_ATTACHABLE_CHILDREN = 100;
 
     const SfxViewShell* m_pViewShell;
     std::set< uno::Reference< uno::XInterface > > m_aRefList;
@@ -488,6 +554,7 @@ class LOKDocumentFocusListener :
     sal_Int32 m_nCaretPosition;
     sal_Int32 m_nSelectionStart;
     sal_Int32 m_nSelectionEnd;
+    uno::Reference<accessibility::XAccessibleTable> m_xLastTable;
     OUString m_sSelectedText;
     bool m_bIsEditingCell;
     OUString m_sSelectedCellAddress;
@@ -551,11 +618,15 @@ public:
     void notifyFocusedParagraphChanged(bool force = false);
     void notifyCaretChanged();
     void notifyTextSelectionChanged();
+    void notifyTablePositionChanged();
+    void notifyFocusedCellChanged(sal_Int32 nOutCount, const std::vector<TableSizeType>& aInList, sal_Int32 nRow, sal_Int32 nCol, sal_Int32 nRowSpan, sal_Int32 nColSpan);
 
     OUString getFocusedParagraph() const;
     int getCaretPosition() const;
 
 private:
+    void paragraphPropertiesToTree(boost::property_tree::ptree& aPayloadTree, bool force = false) const;
+    void paragraphPropertiesToJson(std::string& aPayload, bool force = false) const;
     bool updateParagraphInfo(const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
                              bool force, std::string msg = "");
     void updateAndNotifyParagraph(const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
@@ -571,21 +642,34 @@ LOKDocumentFocusListener::LOKDocumentFocusListener(const SfxViewShell* pViewShel
 {
 }
 
+void LOKDocumentFocusListener::paragraphPropertiesToTree(boost::property_tree::ptree& aPayloadTree, bool force) const
+{
+    bool bLeftToRight = m_nCaretPosition == m_nSelectionEnd;
+    aPayloadTree.put("content", m_sFocusedParagraph.toUtf8().getStr());
+    aPayloadTree.put("position", m_nCaretPosition);
+    aPayloadTree.put("start", bLeftToRight ? m_nSelectionStart : m_nSelectionEnd);
+    aPayloadTree.put("end", bLeftToRight ? m_nSelectionEnd : m_nSelectionStart);
+    if (force)
+        aPayloadTree.put("force", 1);
+}
+
+void LOKDocumentFocusListener::paragraphPropertiesToJson(std::string& aPayload, bool force) const
+{
+    boost::property_tree::ptree aPayloadTree;
+    paragraphPropertiesToTree(aPayloadTree, force);
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aPayloadTree);
+    aPayload = aStream.str();
+}
+
 OUString LOKDocumentFocusListener::getFocusedParagraph() const
 {
     aboutView("LOKDocumentFocusListener::getFocusedParagraph", this, m_pViewShell);
     aboutParagraph("LOKDocumentFocusListener::getFocusedParagraph",
             m_sFocusedParagraph, m_nCaretPosition, m_nSelectionStart, m_nSelectionEnd);
 
-    bool bLeftToRight = m_nCaretPosition == m_nSelectionEnd;
-    boost::property_tree::ptree aPayloadTree;
-    aPayloadTree.put("content", m_sFocusedParagraph.toUtf8().getStr());
-    aPayloadTree.put("position", m_nCaretPosition);
-    aPayloadTree.put("start", bLeftToRight ? m_nSelectionStart : m_nSelectionEnd);
-    aPayloadTree.put("end", bLeftToRight ? m_nSelectionEnd : m_nSelectionStart);
-    std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aPayloadTree);
-    std::string aPayload = aStream.str();
+    std::string aPayload;
+    paragraphPropertiesToJson(aPayload);
     OUString sRet = OUString::fromUtf8(aPayload);
     return sRet;
 }
@@ -619,16 +703,8 @@ int LOKDocumentFocusListener::getCaretPosition() const
 void LOKDocumentFocusListener::notifyFocusedParagraphChanged(bool force)
 {
     aboutView("LOKDocumentFocusListener::notifyFocusedParagraphChanged", this, m_pViewShell);
-    bool bLeftToRight = m_nCaretPosition == m_nSelectionEnd;
-    boost::property_tree::ptree aPayloadTree;
-    aPayloadTree.put("content", m_sFocusedParagraph.toUtf8().getStr());
-    aPayloadTree.put("position", m_nCaretPosition);
-    aPayloadTree.put("start", bLeftToRight ? m_nSelectionStart : m_nSelectionEnd);
-    aPayloadTree.put("end", bLeftToRight ? m_nSelectionEnd : m_nSelectionStart);
-    aPayloadTree.put("force", force ? 1 : 0);
-    std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aPayloadTree);
-    std::string aPayload = aStream.str();
+    std::string aPayload;
+    paragraphPropertiesToJson(aPayload, force);
     if (m_pViewShell)
     {
         aboutParagraph("LOKDocumentFocusListener::notifyFocusedParagraphChanged",
@@ -668,6 +744,59 @@ void LOKDocumentFocusListener::notifyTextSelectionChanged()
         SAL_INFO("lok.a11y",  "LOKDocumentFocusListener::notifyTextSelectionChanged: "
                 << "start: " << m_nSelectionStart << ", end: " << m_nSelectionEnd);
         m_pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED, aPayload.c_str());
+    }
+}
+
+void LOKDocumentFocusListener::notifyFocusedCellChanged(
+        sal_Int32 nOutCount, const std::vector<TableSizeType>& aInList,
+        sal_Int32 nRow, sal_Int32 nCol, sal_Int32 nRowSpan, sal_Int32 nColSpan)
+{
+    aboutView("LOKDocumentFocusListener::notifyTablePositionChanged", this, m_pViewShell);
+    boost::property_tree::ptree aPayloadTree;
+    if (nOutCount > 0)
+    {
+        aPayloadTree.put("outCount", nOutCount);
+    }
+    if (aInList.size() > 0)
+    {
+        boost::property_tree::ptree aInListNode;
+        for (const auto& rTableSize: aInList)
+        {
+            boost::property_tree::ptree aTableSizeNode;
+            aTableSizeNode.put("rowCount", rTableSize.nRowCount);
+            aTableSizeNode.put("colCount", rTableSize.nColCount);
+
+            aInListNode.push_back(std::make_pair(std::string(), aTableSizeNode));
+        }
+        aPayloadTree.add_child("inList", aInListNode);
+    }
+
+    aPayloadTree.put("row", nRow);
+    aPayloadTree.put("col", nCol);
+
+    if (nRowSpan > 1)
+    {
+        aPayloadTree.put("rowSpan", nRowSpan);
+    }
+    if (nColSpan > 1)
+    {
+        aPayloadTree.put("colSpan", nColSpan);
+    }
+
+    boost::property_tree::ptree aContentNode;
+    paragraphPropertiesToTree(aContentNode);
+    aPayloadTree.add_child("paragraph", aContentNode);
+
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aPayloadTree);
+    std::string aPayload = aStream.str();
+    if (m_pViewShell)
+    {
+        aboutFocusedCellChanged(nOutCount, aInList, nRow, nCol, nRowSpan, nColSpan);
+        aboutParagraph("LOKDocumentFocusListener::notifyFocusedCellChanged: paragraph: ",
+                       m_sFocusedParagraph, m_nCaretPosition, m_nSelectionStart, m_nSelectionEnd, false);
+
+        m_pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_A11Y_FOCUSED_CELL_CHANGED, aPayload.c_str());
     }
 }
 
@@ -725,7 +854,6 @@ void LOKDocumentFocusListener::updateAndNotifyParagraph(
         notifyFocusedParagraphChanged(force);
 }
 
-
 void LOKDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventObject& aEvent )
 {
     aboutView("LOKDocumentFocusListener::notifyEvent", this, m_pViewShell);
@@ -747,6 +875,8 @@ void LOKDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
                 if( accessibility::AccessibleStateType::FOCUSED == nState )
                 {
                     SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: FOCUSED");
+                    uno::Reference<css::accessibility::XAccessibleText> xAccText(xAccessibleObject, uno::UNO_QUERY);
+
                     if (m_bIsEditingCell)
                     {
                         if (!hasState(aEvent, accessibility::AccessibleStateType::ACTIVE))
@@ -756,8 +886,115 @@ void LOKDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
                             return;
                         }
                     }
-                    uno::Reference<css::accessibility::XAccessibleText> xAccText(xAccessibleObject, uno::UNO_QUERY);
-                    updateAndNotifyParagraph(xAccText, false, "STATE_CHANGED: FOCUSED");
+
+                    // check if we are inside a table: in case notify table and current cell info
+                    bool isInsideTable = false;
+                    uno::Reference<accessibility::XAccessibleContext> xContext(aEvent.Source, uno::UNO_QUERY);
+                    if (xContext.is())
+                    {
+                        uno::Reference<accessibility::XAccessible> xParent = xContext->getAccessibleParent();
+                        if (xParent.is())
+                        {
+                            uno::Reference<accessibility::XAccessibleContext> xParentContext(xParent, uno::UNO_QUERY);
+                            if (xParentContext.is()
+                                    && xParentContext->getAccessibleRole() == accessibility::AccessibleRole::TABLE_CELL)
+                            {
+                                uno::Reference<accessibility::XAccessible> xCellParent = xParentContext->getAccessibleParent();
+                                if (xCellParent.is())
+                                {
+                                    uno::Reference<accessibility::XAccessibleTable> xTable =
+                                            uno::Reference<accessibility::XAccessibleTable>(xCellParent, uno::UNO_QUERY);
+                                    if (xTable.is())
+                                    {
+                                        std::vector<TableSizeType> aInList;
+                                        sal_Int32 nOutCount = 0;
+
+                                        if (m_xLastTable.is())
+                                        {
+                                            if (xTable != m_xLastTable)
+                                            {
+                                                // do we get in one or more nested tables ?
+                                                // check if xTable is a descendant of m_xLastTable
+                                                XAccessibleTableList newTableAncestorList;
+                                                bool isLastAncestorOfNew = getAncestorList(newTableAncestorList, xTable, m_xLastTable);
+                                                bool isNewAncestorOfLast = false;
+                                                if (!isLastAncestorOfNew)
+                                                {
+                                                    // do we get out of one or more nested tables ?
+                                                    // check if m_xLastTable is a descendant of xTable
+                                                    XAccessibleTableList lastTableAncestorList;
+                                                    isNewAncestorOfLast = getAncestorList(lastTableAncestorList, m_xLastTable, xTable);
+                                                    // we have to notify "out of table" for all  m_xLastTable ancestors up to xTable
+                                                    // or the first not-a-table ancestor
+                                                    nOutCount = lastTableAncestorList.size();
+                                                }
+                                                if (isLastAncestorOfNew || !isNewAncestorOfLast)
+                                                {
+                                                    // we have to notify row/col count for all xTable ancestors starting from the ancestor
+                                                    // which is a child of m_xLastTable (isLastAncestorOfNew) or the first not-a-table ancestor
+                                                    for (auto ancestor: newTableAncestorList)
+                                                    {
+                                                        TableSizeType aTableSize{ancestor->getAccessibleRowCount(),
+                                                                                 ancestor->getAccessibleColumnCount()};
+                                                        aInList.push_back(aTableSize);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            // cursor was not inside any table and gets inside one or more tables
+                                            // we have to notify row/col count for all xTable ancestors starting from first not-a-table ancestor
+                                            XAccessibleTableList newTableAncestorList;
+                                            getAncestorList(newTableAncestorList, xTable);
+                                            for (auto ancestor: newTableAncestorList)
+                                            {
+                                                TableSizeType aTableSize{ancestor->getAccessibleRowCount(),
+                                                                         ancestor->getAccessibleColumnCount()};
+                                                aInList.push_back(aTableSize);
+                                            }
+                                        }
+
+                                        // we have to notify current row/col of xTable and related row/col span
+                                        sal_Int64 nChildIndex = xParentContext->getAccessibleIndexInParent();
+                                        sal_Int32 nRow = xTable->getAccessibleRow(nChildIndex);
+                                        sal_Int32 nCol = xTable->getAccessibleColumn(nChildIndex);
+                                        sal_Int32 nRowSpan = xTable->getAccessibleRowExtentAt(nRow, nCol);
+                                        sal_Int32 nColSpan = xTable->getAccessibleColumnExtentAt(nRow, nCol);
+
+                                        m_xLastTable = xTable;
+                                        updateParagraphInfo(xAccText, false, "STATE_CHANGED: FOCUSED");
+                                        notifyFocusedCellChanged(nOutCount, aInList, nRow, nCol, nRowSpan, nColSpan);
+                                        isInsideTable = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // paragraph is not inside any table
+                    if (!isInsideTable)
+                    {
+                        if (m_xLastTable.is())
+                        {
+                            // we get out one or more tables
+                            // we have to notify "out of table" for all m_xLastTable ancestors
+                            // up to the first not-a-table ancestor
+                            XAccessibleTableList lastTableAncestorList;
+                            getAncestorList(lastTableAncestorList, m_xLastTable);
+                            sal_Int32 nOutCount = lastTableAncestorList.size();
+                            // no more inside a table
+                            m_xLastTable.clear();
+                            // notify
+                            std::vector<TableSizeType> aInList;
+                            updateParagraphInfo(xAccText, false, "STATE_CHANGED: FOCUSED");
+                            notifyFocusedCellChanged(nOutCount, aInList, -1, -1, 1, 1);
+                        }
+                        else
+                        {
+                            updateAndNotifyParagraph(xAccText, false, "STATE_CHANGED: FOCUSED");
+                        }
+                    }
                     aboutTextFormatting("LOKDocumentFocusListener::notifyEvent: STATE_CHANGED: FOCUSED", xAccText);
                 }
                 break;
