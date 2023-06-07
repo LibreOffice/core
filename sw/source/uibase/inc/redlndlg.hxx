@@ -97,7 +97,8 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg final
     SAL_DLLPRIVATE void          RemoveParents(SwRedlineTable::size_type nStart, SwRedlineTable::size_type nEnd);
     SAL_DLLPRIVATE void          InitAuthors();
 
-    SAL_DLLPRIVATE static OUString GetActionImage(const SwRangeRedline& rRedln, sal_uInt16 nStack = 0, bool bRowChanges = false);
+    SAL_DLLPRIVATE static OUString GetActionImage(const SwRangeRedline& rRedln, sal_uInt16 nStack = 0,
+                                                  bool bTableChanges = false, bool bRowChanges = false);
     SAL_DLLPRIVATE OUString      GetActionText(const SwRangeRedline& rRedln, sal_uInt16 nStack = 0);
     SAL_DLLPRIVATE SwRedlineTable::size_type GetRedlinePos(const weld::TreeIter& rEntry);
 
