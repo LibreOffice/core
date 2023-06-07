@@ -52,7 +52,6 @@
 #include <tools/fract.hxx>
 #include <tools/UnitConversion.hxx>
 #include <osl/diagnose.h>
-#include <sal/log.hxx>
 
 #include <attrib.hxx>
 #include <patattr.hxx>
