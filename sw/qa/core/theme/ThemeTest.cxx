@@ -46,6 +46,18 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testThemeColorInHeading)
     CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getSchemeType());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testThemeColorInHeadingODT)
+{
+    createSwDoc("ThemeColorInHeading.fodt");
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    auto xComplexColor
+        = getProperty<uno::Reference<util::XComplexColor>>(getParagraph(1), "CharComplexColor");
+    auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getSchemeType());
+}
+
 void checkFillStyles(std::vector<model::FillStyle> const& rStyleList)
 {
     CPPUNIT_ASSERT_EQUAL(size_t(3), rStyleList.size());
