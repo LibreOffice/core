@@ -165,6 +165,39 @@ static AquaSalFrame* getMouseContainerFrame()
     return pDispatchFrame;
 }
 
+static NSArray *getMergedAccessibilityChildren(NSArray *pDefaultChildren, NSArray *pUnignoredChildrenToAdd)
+{
+    NSArray *pRet = pDefaultChildren;
+
+    if (pUnignoredChildrenToAdd && [pUnignoredChildrenToAdd count])
+    {
+        NSMutableArray *pNewChildren = [NSMutableArray arrayWithCapacity:(pRet ? [pRet count] : 0) + 1];
+        if (pNewChildren)
+        {
+            if (pRet)
+                [pNewChildren addObjectsFromArray:pRet];
+
+            for (AquaA11yWrapper *pWrapper : pUnignoredChildrenToAdd)
+            {
+                if (pWrapper && ![pNewChildren containsObject:pWrapper])
+                    [pNewChildren addObject:pWrapper];
+            }
+
+            pRet = pNewChildren;
+        }
+        else
+        {
+            pRet = pUnignoredChildrenToAdd;
+        }
+    }
+
+    return pRet;
+}
+
+@interface NSResponder (SalFrameWindow)
+-(BOOL)accessibilityIsIgnored;
+@end
+
 @implementation SalFrameWindow
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame
 {
@@ -541,6 +574,44 @@ static AquaSalFrame* getMouseContainerFrame()
     return mpFrame -> GetWindow() -> GetAccessible() -> getAccessibleContext();
 }
 
+-(BOOL)isIgnoredWindow
+{
+    SolarMutexGuard aGuard;
+
+    // Treat tooltip windows as ignored
+    if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
+        return (mpFrame->mnStyle & SalFrameStyleFlags::TOOLTIP) != SalFrameStyleFlags::NONE;
+    return YES;
+}
+
+-(id)accessibilityApplicationFocusedUIElement
+{
+    return [self accessibilityFocusedUIElement];
+}
+
+-(id)accessibilityFocusedUIElement
+{
+    // Treat tooltip windows as ignored
+    if ([self isIgnoredWindow])
+        return nil;
+
+    return [super accessibilityFocusedUIElement];
+}
+
+-(BOOL)accessibilityIsIgnored
+{
+    // Treat tooltip windows as ignored
+    if ([self isIgnoredWindow])
+        return YES;
+
+    return [super accessibilityIsIgnored];
+}
+
+-(BOOL)isAccessibilityElement
+{
+    return ![self accessibilityIsIgnored];
+}
+
 -(NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
 {
   return [mDraggingDestinationHandler draggingEntered: sender];
@@ -615,6 +686,8 @@ static AquaSalFrame* getMouseContainerFrame()
     {
         mDraggingDestinationHandler = nil;
         mpFrame = pFrame;
+        mpChildWrapper = nil;
+        mbNeedChildWrapper = NO;
         mpLastEvent = nil;
         mMarkedRange = NSMakeRange(NSNotFound, 0);
         mSelectedRange = NSMakeRange(NSNotFound, 0);
@@ -635,6 +708,7 @@ static AquaSalFrame* getMouseContainerFrame()
 {
     [self clearLastEvent];
     [self clearLastMarkedText];
+    [self revokeWrapper];
 
     [super dealloc];
 }
@@ -2053,16 +2127,13 @@ static AquaSalFrame* getMouseContainerFrame()
 
 -(css::accessibility::XAccessibleContext *)accessibleContext
 {
-    if ( !maReferenceWrapper.rAccessibleContext ) {
-        // some frames never become visible ..
-        vcl::Window *pWindow = mpFrame -> GetWindow();
-        if ( ! pWindow )
-            return nil;
+    SolarMutexGuard aGuard;
 
-        maReferenceWrapper.rAccessibleContext =  pWindow -> /*GetAccessibleChildWindow( 0 ) ->*/ GetAccessible() -> getAccessibleContext();
-        [ AquaA11yFactory insertIntoWrapperRepository: self forAccessibleContext: maReferenceWrapper.rAccessibleContext ];
-    }
-    return [ super accessibleContext ];
+    [self insertRegisteredWrapperIntoWrapperRepository];
+    if (mpChildWrapper)
+        return [mpChildWrapper accessibleContext];
+
+    return nil;
 }
 
 -(NSWindow*)windowForParent
@@ -2211,6 +2282,291 @@ static AquaSalFrame* getMouseContainerFrame()
 
         [self unmarkText];
     }
+}
+
+-(void)insertRegisteredWrapperIntoWrapperRepository
+{
+    SolarMutexGuard aGuard;
+
+    if (!mbNeedChildWrapper)
+        return;
+
+    vcl::Window *pWindow = mpFrame->GetWindow();
+    if (!pWindow)
+        return;
+
+    mbNeedChildWrapper = NO;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > xAccessibleContext( pWindow->GetAccessible()->getAccessibleContext() );
+    assert(!mpChildWrapper);
+    mpChildWrapper = [[SalFrameViewA11yWrapper alloc] initWithParent:self accessibleContext:xAccessibleContext];
+    [AquaA11yFactory insertIntoWrapperRepository:mpChildWrapper forAccessibleContext:xAccessibleContext];
+}
+
+-(void)registerWrapper
+{
+    [self revokeWrapper];
+
+    mbNeedChildWrapper = YES;
+}
+
+-(void)revokeWrapper
+{
+    mbNeedChildWrapper = NO;
+
+    if (mpChildWrapper)
+    {
+        [AquaA11yFactory revokeWrapper:mpChildWrapper];
+        [mpChildWrapper setAccessibilityParent:nil];
+        [mpChildWrapper release];
+        mpChildWrapper = nil;
+    }
+}
+
+-(id)accessibilityAttributeValue:(NSString *)pAttribute
+{
+    SolarMutexGuard aGuard;
+
+    [self insertRegisteredWrapperIntoWrapperRepository];
+    if (mpChildWrapper)
+        return [mpChildWrapper accessibilityAttributeValue:pAttribute];
+    else
+        return nil;
+}
+
+-(BOOL)accessibilityIsIgnored
+{
+    SolarMutexGuard aGuard;
+
+    [self insertRegisteredWrapperIntoWrapperRepository];
+    if (mpChildWrapper)
+        return [mpChildWrapper accessibilityIsIgnored];
+    else
+        return YES;
+}
+
+-(NSArray *)accessibilityAttributeNames
+{
+    SolarMutexGuard aGuard;
+
+    [self insertRegisteredWrapperIntoWrapperRepository];
+    if (mpChildWrapper)
+        return [mpChildWrapper accessibilityAttributeNames];
+    else
+        return [NSArray array];
+}
+
+-(BOOL)accessibilityIsAttributeSettable:(NSString *)pAttribute
+{
+    SolarMutexGuard aGuard;
+
+    [self insertRegisteredWrapperIntoWrapperRepository];
+    if (mpChildWrapper)
+        return [mpChildWrapper accessibilityIsAttributeSettable:pAttribute];
+    else
+        return NO;
+}
+
+-(NSArray *)accessibilityParameterizedAttributeNames
+{
+    SolarMutexGuard aGuard;
+
+    [self insertRegisteredWrapperIntoWrapperRepository];
+    if (mpChildWrapper)
+        return [mpChildWrapper accessibilityParameterizedAttributeNames];
+    else
+        return [NSArray array];
+}
+
+-(BOOL)accessibilitySetOverrideValue:(id)pValue forAttribute:(NSString *)pAttribute
+{
+    SolarMutexGuard aGuard;
+
+    [self insertRegisteredWrapperIntoWrapperRepository];
+    if (mpChildWrapper)
+        return [mpChildWrapper accessibilitySetOverrideValue:pValue forAttribute:pAttribute];
+    else
+        return NO;
+}
+
+-(void)accessibilitySetValue:(id)pValue forAttribute:(NSString *)pAttribute
+{
+    SolarMutexGuard aGuard;
+
+    [self insertRegisteredWrapperIntoWrapperRepository];
+    if (mpChildWrapper)
+        [mpChildWrapper accessibilitySetValue:pValue forAttribute:pAttribute];
+}
+
+-(id)accessibilityAttributeValue:(NSString *)pAttribute forParameter:(id)pParameter
+{
+    SolarMutexGuard aGuard;
+
+    [self insertRegisteredWrapperIntoWrapperRepository];
+    if (mpChildWrapper)
+        return [mpChildWrapper accessibilityAttributeValue:pAttribute forParameter:pParameter];
+    else
+        return nil;
+}
+
+-(id)accessibilityFocusedUIElement
+{
+    SolarMutexGuard aGuard;
+
+    [self insertRegisteredWrapperIntoWrapperRepository];
+    if (mpChildWrapper)
+        return [mpChildWrapper accessibilityFocusedUIElement];
+    else
+        return nil;
+}
+
+-(NSString *)accessibilityActionDescription:(NSString *)pAction
+{
+    SolarMutexGuard aGuard;
+
+    [self insertRegisteredWrapperIntoWrapperRepository];
+    if (mpChildWrapper)
+        return [mpChildWrapper accessibilityActionDescription:pAction];
+    else
+        return nil;
+}
+
+-(void)accessibilityPerformAction:(NSString *)pAction
+{
+    SolarMutexGuard aGuard;
+
+    [self insertRegisteredWrapperIntoWrapperRepository];
+    if (mpChildWrapper)
+        [mpChildWrapper accessibilityPerformAction:pAction];
+}
+
+-(NSArray *)accessibilityActionNames
+{
+    SolarMutexGuard aGuard;
+
+    [self insertRegisteredWrapperIntoWrapperRepository];
+    if (mpChildWrapper)
+        return [mpChildWrapper accessibilityActionNames];
+    else
+        return [NSArray array];
+}
+
+-(id)accessibilityHitTest:(NSPoint)aPoint
+{
+    SolarMutexGuard aGuard;
+
+    [self insertRegisteredWrapperIntoWrapperRepository];
+    if (mpChildWrapper)
+        return [mpChildWrapper accessibilityHitTest:aPoint];
+    else
+        return nil;
+}
+
+-(id)accessibilityParent
+{
+    return [self window];
+}
+
+-(NSArray *)accessibilityVisibleChildren
+{
+    return [self accessibilityChildren];
+}
+
+-(NSArray *)accessibilitySelectedChildren
+{
+    SolarMutexGuard aGuard;
+
+    NSArray *pRet = [super accessibilityChildren];
+
+    [self insertRegisteredWrapperIntoWrapperRepository];
+    if (mpChildWrapper)
+        pRet = getMergedAccessibilityChildren(pRet, [mpChildWrapper accessibilitySelectedChildren]);
+
+    return pRet;
+}
+
+-(NSArray *)accessibilityChildren
+{
+    SolarMutexGuard aGuard;
+
+    NSArray *pRet = [super accessibilityChildren];
+
+    [self insertRegisteredWrapperIntoWrapperRepository];
+    if (mpChildWrapper)
+        pRet = getMergedAccessibilityChildren(pRet, [mpChildWrapper accessibilityChildren]);
+
+    return pRet;
+}
+
+-(NSArray <id<NSAccessibilityElement>> *)accessibilityChildrenInNavigationOrder
+{
+    return [self accessibilityChildren];
+}
+
+@end
+
+@implementation SalFrameViewA11yWrapper
+
+-(id)initWithParent:(SalFrameView *)pParentView accessibleContext:(::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >&)rxAccessibleContext
+{
+    [super init];
+
+    maReferenceWrapper.rAccessibleContext = rxAccessibleContext;
+
+    mpParentView = pParentView;
+    if (mpParentView)
+    {
+        [mpParentView retain];
+        [self setAccessibilityParent:mpParentView];
+    }
+
+    return self;
+}
+
+-(void)dealloc
+{
+    if (mpParentView)
+        [mpParentView release];
+
+    [super dealloc];
+}
+
+-(id)parentAttribute
+{
+    if (mpParentView)
+        return NSAccessibilityUnignoredAncestor(mpParentView);
+    else
+        return nil;
+}
+
+-(void)setAccessibilityParent:(id)pObject
+{
+    if (mpParentView)
+    {
+        [mpParentView release];
+        mpParentView = nil;
+    }
+
+    if (pObject && [pObject isKindOfClass:[SalFrameView class]])
+    {
+        mpParentView = (SalFrameView *)pObject;
+        [mpParentView retain];
+    }
+
+    [super setAccessibilityParent:mpParentView];
+}
+
+-(id)windowAttribute
+{
+    if (mpParentView)
+        return [mpParentView window];
+    else
+        return nil;
+}
+
+-(NSWindow *)windowForParent
+{
+    return [self windowAttribute];
 }
 
 @end

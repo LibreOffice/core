@@ -50,7 +50,19 @@ struct ReferenceWrapper
     css::uno::Reference < css::accessibility::XAccessibleTextMarkup > rAccessibleTextMarkup;
 };
 
-@interface AquaA11yWrapper : NSView
+@interface AquaA11yWrapper : NSAccessibilityElement
+    <NSAccessibilityElement,
+     NSAccessibilityGroup,
+     NSAccessibilityButton,
+     NSAccessibilitySwitch,
+     NSAccessibilityRadioButton,
+     NSAccessibilityCheckBox,
+     NSAccessibilityStaticText,
+     NSAccessibilityNavigableStaticText,
+     NSAccessibilityProgressIndicator,
+     NSAccessibilityStepper,
+     NSAccessibilitySlider,
+     NSAccessibilityImage>
 {
     ReferenceWrapper maReferenceWrapper;
     BOOL mActsAsRadioGroup;
@@ -68,6 +80,7 @@ struct ReferenceWrapper
 -(id)accessibilityFocusedUIElement;
 -(NSString *)accessibilityActionDescription:(NSString *)action;
 -(void)accessibilityPerformAction:(NSString *)action;
+-(BOOL)performAction:(NSString *)action;
 -(NSArray *)accessibilityActionNames;
 -(id)accessibilityHitTest:(NSPoint)point;
 // Attribute values
@@ -86,6 +99,7 @@ struct ReferenceWrapper
 -(void)setActsAsRadioGroup:(BOOL)actsAsRadioGroup;
 -(BOOL)actsAsRadioGroup;
 -(NSWindow*)windowForParent;
+-(id)init;
 -(id)initWithAccessibleContext: (css::uno::Reference < css::accessibility::XAccessibleContext >) anAccessibleContext;
 -(void) setDefaults: (css::uno::Reference < css::accessibility::XAccessibleContext >) rxAccessibleContext;
 +(void)setPopupMenuOpen:(BOOL)popupMenuOpen;

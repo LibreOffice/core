@@ -28,6 +28,7 @@
 }
 + (NSArray*)actionNamesForElement:(AquaA11yWrapper*)wrapper;
 + (void)doAction:(NSString*)action ofElement:(AquaA11yWrapper*)wrapper;
++ (NSAccessibilityActionName)actionNameForSelector:(SEL)aSelector;
 @end
 
 #endif // INCLUDED_VCL_OSX_A11YACTIONWRAPPER_H

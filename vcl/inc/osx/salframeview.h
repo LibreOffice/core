@@ -70,11 +70,22 @@ enum class SalEvent;
 -(void)endExtTextInput:(EndExtTextInputFlags)nFlags;
 
 -(void)windowDidResizeWithTimer:(NSTimer *)pTimer;
+
+-(BOOL)isIgnoredWindow;
+
+// NSAccessibilityElement overrides
+-(id)accessibilityApplicationFocusedUIElement;
+-(id)accessibilityFocusedUIElement;
+-(BOOL)accessibilityIsIgnored;
+-(BOOL)isAccessibilityElement;
+
 @end
 
-@interface SalFrameView : AquaA11yWrapper <NSTextInputClient>
+@interface SalFrameView : NSView <NSTextInputClient>
 {
     AquaSalFrame*       mpFrame;
+    AquaA11yWrapper*    mpChildWrapper;
+    BOOL                mbNeedChildWrapper;
 
     // for NSTextInput/NSTextInputClient
     NSEvent*        mpLastEvent;
@@ -228,6 +239,37 @@ enum class SalEvent;
 -(void)endExtTextInput:(EndExtTextInputFlags)nFlags;
 -(void)deleteTextInputWantsNonRepeatKeyDown;
 
+-(void)insertRegisteredWrapperIntoWrapperRepository;
+-(void)registerWrapper;
+-(void)revokeWrapper;
+
+// NSAccessibilityElement overrides
+-(id)accessibilityAttributeValue:(NSString *)pAttribute;
+-(BOOL)accessibilityIsIgnored;
+-(NSArray *)accessibilityAttributeNames;
+-(BOOL)accessibilityIsAttributeSettable:(NSString *)pAttribute;
+-(NSArray *)accessibilityParameterizedAttributeNames;
+-(BOOL)accessibilitySetOverrideValue:(id)pValue forAttribute:(NSString *)pAttribute;
+-(void)accessibilitySetValue:(id)pValue forAttribute:(NSString *)pAttribute;
+-(id)accessibilityAttributeValue:(NSString *)pAttribute forParameter:(id)pParameter;
+-(id)accessibilityFocusedUIElement;
+-(NSString *)accessibilityActionDescription:(NSString *)pAction;
+-(void)accessibilityPerformAction:(NSString *)pAction;
+-(NSArray *)accessibilityActionNames;
+-(id)accessibilityHitTest:(NSPoint)aPoint;
+-(NSArray *)accessibilityVisibleChildren;
+-(NSArray *)accessibilitySelectedChildren;
+-(NSArray *)accessibilityChildren;
+-(NSArray <id<NSAccessibilityElement>> *)accessibilityChildrenInNavigationOrder;
+
+@end
+
+@interface SalFrameViewA11yWrapper : AquaA11yWrapper
+{
+    SalFrameView*       mpParentView;
+}
+-(id)initWithParent:(SalFrameView*)pParentView accessibleContext:(::com::sun::star::uno::Reference<::com::sun::star::accessibility::XAccessibleContext>&)rxAccessibleContext;
+-(void)dealloc;
 @end
 
 #endif // INCLUDED_VCL_INC_OSX_SALFRAMEVIEW_H

@@ -133,6 +133,8 @@ private:
 
 namespace sal::aqua
 {
+NSRect getTotalScreenBounds();
+void resetTotalScreenBounds();
 float getWindowScaling();
 void resetWindowScaling();
 }
