@@ -68,35 +68,65 @@ namespace
 {
 class StylePreviewCache
 {
+private:
+    class JsonStylePreviewCacheClear final : public Timer
+    {
+    public:
+        JsonStylePreviewCacheClear()
+            : Timer("Json Style Preview Cache clear callback")
+        {
+            // a generous 30 secs
+            SetTimeout(30000);
+        }
+        virtual void Invoke() override { StylePreviewCache::gJsonStylePreviewCache.clear(); }
+    };
+
     static std::map<OUString, VclPtr<VirtualDevice>> gStylePreviewCache;
     static std::map<OUString, OString> gJsonStylePreviewCache;
     static int gStylePreviewCacheClients;
+    static JsonStylePreviewCacheClear gJsonIdleClear;
 
 public:
     static std::map<OUString, VclPtr<VirtualDevice>>& Get() { return gStylePreviewCache; }
     static std::map<OUString, OString>& GetJson() { return gJsonStylePreviewCache; }
 
-    static void ClearCache()
+    static void ClearCache(bool bHard)
     {
         for (auto& aPreview : gStylePreviewCache)
             aPreview.second.disposeAndClear();
 
         gStylePreviewCache.clear();
-        gJsonStylePreviewCache.clear();
+        if (bHard)
+        {
+            StylePreviewCache::gJsonStylePreviewCache.clear();
+            gJsonIdleClear.Stop();
+        }
+        else
+        {
+            // tdf#155720 don't immediately clear the json representation
+            gJsonIdleClear.Start();
+        }
     }
 
-    static void RegisterClient() { gStylePreviewCacheClients++; }
+    static void RegisterClient()
+    {
+        if (!gStylePreviewCacheClients)
+            gJsonIdleClear.Stop();
+        gStylePreviewCacheClients++;
+    }
+
     static void UnregisterClient()
     {
         gStylePreviewCacheClients--;
         if (!gStylePreviewCacheClients)
-            ClearCache();
+            ClearCache(false);
     }
 };
 
 std::map<OUString, VclPtr<VirtualDevice>> StylePreviewCache::gStylePreviewCache;
 std::map<OUString, OString> StylePreviewCache::gJsonStylePreviewCache;
 int StylePreviewCache::gStylePreviewCacheClients;
+StylePreviewCache::JsonStylePreviewCacheClear StylePreviewCache::gJsonIdleClear;
 }
 
 StyleStatusListener::StyleStatusListener(
@@ -143,7 +173,7 @@ StylePoolChangeListener::~StylePoolChangeListener()
 void StylePoolChangeListener::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
     if (rHint.GetId() == SfxHintId::StyleSheetModified)
-        StylePreviewCache::ClearCache();
+        StylePreviewCache::ClearCache(true);
     m_pPreviewControl->RequestStylesListUpdate();
 }
 
