@@ -18,6 +18,7 @@
  */
 
 #include <stylesbuffer.hxx>
+#include <patterncache.hxx>
 
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/FontFamily.hpp>
@@ -2065,13 +2066,16 @@ FontRef Xf::getFont() const
     return getStyles().getFont( maModel.mnFontId );
 }
 
-void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal_Int32 nNumFmtId )
+void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal_Int32 nXfId, sal_Int32 nNumFmtId, ScPatternCache& rCache )
 {
-    createPattern();
-    ScPatternAttr& rPat = *mpPattern;
+    ScPatternAttr* pCachedPattern = rCache.query(nXfId, nNumFmtId);
+    if (!pCachedPattern)
+        createPattern();
+
+    ScPatternAttr& rPat = pCachedPattern ? *pCachedPattern : *mpPattern;
     ScDocumentImport& rDocImport = getDocImport();
     ScDocument& rDoc = getScDocument();
-    if ( isCellXf() )
+    if ( !pCachedPattern && isCellXf() )
     {
         StylesBuffer& rStyles = getStyles();
         rStyles.createCellStyle( maModel.mnStyleXfId );
@@ -2096,18 +2100,19 @@ void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal
             }
         }
     }
-    if ( nNumFmtId >= 0 )
+    if ( !pCachedPattern && nNumFmtId >= 0 )
     {
         ScPatternAttr aNumPat(rDoc.GetPool());
         mnScNumFmt = getStyles().writeNumFmtToItemSet( aNumPat.GetItemSet(), nNumFmtId, false );
         rPat.GetItemSet().Put(aNumPat.GetItemSet());
     }
 
-    if (!rDocImport.isLatinScript(mnScNumFmt))
+    if (!pCachedPattern && !rDocImport.isLatinScript(mnScNumFmt))
         rAttrs.mbLatinNumFmtOnly = false;
 
-    if (!rPat.GetStyleName())
+    if (!pCachedPattern && !rPat.GetStyleName())
         return;
+
 
     // Check for a gap between the last entry and this one.
     bool bHasGap = false;
@@ -2134,6 +2139,10 @@ void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal
     ScAttrEntry aEntry;
     aEntry.nEndRow = nRow2;
     aEntry.pPattern = &rDoc.GetPool()->Put(rPat);
+    // Put the allocated pattern to cache
+    if (!pCachedPattern)
+        rCache.add(nXfId, nNumFmtId, const_cast<ScPatternAttr*>(aEntry.pPattern));
+
     rAttrs.maAttrs.push_back(aEntry);
 
     if (!rDocImport.isLatinScript(*aEntry.pPattern))

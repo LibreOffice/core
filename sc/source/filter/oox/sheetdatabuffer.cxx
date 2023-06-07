@@ -18,6 +18,7 @@
  */
 
 #include <sheetdatabuffer.hxx>
+#include <patterncache.hxx>
 
 #include <algorithm>
 #include <com/sun/star/sheet/XArrayFormulaTokens.hpp>
@@ -476,6 +477,8 @@ void SheetDataBuffer::finalizeImport()
     ScDocumentImport::Attrs aPendingAttrParam;
     SCCOL pendingColStart = -1;
     SCCOL pendingColEnd = -1;
+    ScPatternCache aPatternCache;
+
     for ( const auto& [rCol, rRowStyles] : maStylesPerColumn )
     {
         SCCOL nScCol = static_cast< SCCOL >( rCol );
@@ -505,7 +508,8 @@ void SheetDataBuffer::finalizeImport()
              Xf* pXf = rStyles.getCellXf( rRowStyle.mnNumFmt.first ).get();
 
              if ( pXf )
-                 pXf->applyPatternToAttrList( aAttrs,  rRowStyle.mnStartRow,  rRowStyle.mnEndRow,  rRowStyle.mnNumFmt.second );
+                 pXf->applyPatternToAttrList( aAttrs, rRowStyle.mnStartRow, rRowStyle.mnEndRow,
+                    rRowStyle.mnNumFmt.first, rRowStyle.mnNumFmt.second, aPatternCache );
         }
         if (aAttrs.maAttrs.empty() || aAttrs.maAttrs.back().nEndRow != rDoc.MaxRow())
         {

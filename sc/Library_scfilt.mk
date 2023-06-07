@@ -189,6 +189,7 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/oox/numberformatsbuffer \
 	sc/source/filter/oox/ooxformulaparser \
 	sc/source/filter/oox/pagesettings \
+	sc/source/filter/oox/patterncache \
 	sc/source/filter/oox/pivotcachebuffer \
 	sc/source/filter/oox/pivotcachefragment \
 	sc/source/filter/oox/pivottablebuffer \
