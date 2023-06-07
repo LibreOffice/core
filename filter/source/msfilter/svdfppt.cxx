@@ -482,7 +482,7 @@ void PptOEPlaceholderAtom::Clear()
 SvStream& ReadPptOEPlaceholderAtom( SvStream& rIn, PptOEPlaceholderAtom& rAtom )
 {
     rIn.ReadUInt32( rAtom.nPlacementId );
-    sal_uInt8 nTmp;
+    sal_uInt8 nTmp(0);
     rIn.ReadUChar(nTmp);
     rAtom.nPlaceholderId = static_cast<PptPlaceholder>(nTmp);
     rIn.ReadUChar( rAtom.nPlaceholderSize );
