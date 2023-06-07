@@ -35,6 +35,8 @@
 #include <attarray.hxx>
 #include <vector>
 
+class ScPatternCache;
+
 namespace oox { class SequenceInputStream; }
 
 namespace oox { class PropertySet;
@@ -623,7 +625,8 @@ public:
     const Alignment& getAlignment() const { return maAlignment; }
 
     void applyPatternToAttrList(
-        AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal_Int32 nForceScNumFmt );
+        AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal_Int32 nXfId,
+        sal_Int32 nForceScNumFmt, ScPatternCache& rCache );
 
     void writeToDoc( ScDocumentImport& rDoc, const ScRange& rRange );
 
