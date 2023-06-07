@@ -1435,10 +1435,10 @@ void ScPatternAttr::CalcHashCode() const
     // This is an unrolled hash function so the compiler/CPU can execute it in parallel,
     // because we hit this hard when loading documents with lots of styles.
     // Set up seed so that an empty pattern does not have an (invalid) hash of 0.
-    sal_Int32 h1 = 1;
-    sal_Int32 h2 = 1;
-    sal_Int32 h3 = 1;
-    sal_Int32 h4 = 1;
+    sal_uInt32 h1 = 1;
+    sal_uInt32 h2 = 1;
+    sal_uInt32 h3 = 1;
+    sal_uInt32 h4 = 1;
     for (auto it = rSet.GetItems_Impl(), end = rSet.GetItems_Impl() + (compareSize / 4 * 4); it != end; )
     {
         h1 = 31 * h1 + reinterpret_cast<size_t>(*it);
