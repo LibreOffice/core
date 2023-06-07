@@ -71,6 +71,20 @@ void AccessibilityIssue::gotoIssue() const
                 pWrtShell->ShowCursor();
         }
         break;
+        case IssueObject::FORM:
+        {
+            SwWrtShell* pWrtShell = m_pDoc->GetDocShell()->GetWrtShell();
+            bool bIsDesignMode = pWrtShell->GetView().GetFormShell()->IsDesignMode();
+            if (bIsDesignMode || (!bIsDesignMode && pWrtShell->WarnSwitchToDesignModeDialog()))
+            {
+                if (!bIsDesignMode)
+                    pWrtShell->GetView().GetFormShell()->SetDesignMode(true);
+                pWrtShell->GotoDrawingObject(m_sObjectID);
+                if (comphelper::LibreOfficeKit::isActive())
+                    pWrtShell->ShowCursor();
+            }
+        }
+        break;
         case IssueObject::TABLE:
         {
             SwWrtShell* pWrtShell = m_pDoc->GetDocShell()->GetWrtShell();
@@ -105,7 +119,7 @@ void AccessibilityIssue::gotoIssue() const
 bool AccessibilityIssue::canQuickFixIssue() const
 {
     return m_eIssueObject == IssueObject::GRAPHIC || m_eIssueObject == IssueObject::OLE
-           || m_eIssueObject == IssueObject::SHAPE;
+           || m_eIssueObject == IssueObject::SHAPE || m_eIssueObject == IssueObject::FORM;
 }
 
 void AccessibilityIssue::quickFixIssue() const
@@ -130,6 +144,7 @@ void AccessibilityIssue::quickFixIssue() const
         }
         break;
         case IssueObject::SHAPE:
+        case IssueObject::FORM:
         {
             OUString aDesc = SwResId(STR_ENTER_ALT);
             SvxNameDialog aNameDialog(m_pParent, "", aDesc);

@@ -637,6 +637,13 @@ public:
         return true;
     }
 
+    /// Switch to Design mode for Forms
+    virtual bool WarnSwitchToDesignModeDialog() const
+    {
+        // override in SwWrtShell
+        return false;
+    }
+
     /** Query text within selection. */
     void GetSelectedText( OUString &rBuf,
                         ParaBreakType nHndlParaBreak = ParaBreakType::ToBlank );

@@ -516,6 +516,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     bool HasFoldedOutlineContentSelected() const;
     virtual void InfoReadOnlyDialog(bool bAsync) const override;
     virtual bool WarnHiddenSectionDialog() const override;
+    virtual bool WarnSwitchToDesignModeDialog() const override;
 
     std::optional<OString> getLOKPayload(int nType, int nViewId) const;
 

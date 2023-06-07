@@ -22,6 +22,7 @@ enum class IssueObject
     GRAPHIC,
     OLE,
     SHAPE,
+    FORM,
     TABLE,
     TEXT,
 };
