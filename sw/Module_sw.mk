@@ -95,6 +95,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_ooxmllinks \
     CppunitTest_sw_ooxmlw14export \
     CppunitTest_sw_ooxmlencryption \
+    CppunitTest_sw_ooxml_theme_export \
     CppunitTest_sw_ooxmlimport \
     CppunitTest_sw_ooxmlimport2 \
     CppunitTest_sw_ww8export \

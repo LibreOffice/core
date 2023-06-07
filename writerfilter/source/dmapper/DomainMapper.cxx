@@ -2216,17 +2216,21 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 auto eType = TDefTableHandler::getThemeColorTypeIndex(pThemeColorHandler->mnIndex);
                 if (eType != model::ThemeColorType::Unknown)
                 {
+
                     model::ComplexColor aComplexColor;
                     aComplexColor.setSchemeColor(eType);
 
+                    auto eUsage = TDefTableHandler::getThemeColorUsage(pThemeColorHandler->mnIndex);
+                    aComplexColor.meThemeColorUsage = eUsage;
+
                     if (pThemeColorHandler->mnTint > 0 )
                     {
-                        sal_Int16 nTint = sal_Int16((256 - pThemeColorHandler->mnTint) * 10000 / 256);
+                        sal_Int16 nTint = sal_Int16((255 - pThemeColorHandler->mnTint) * 10000 / 255);
                         aComplexColor.addTransformation({model::TransformationType::Tint, nTint});
                     }
                     if (pThemeColorHandler->mnShade > 0)
                     {
-                        sal_Int16 nShade = sal_Int16((256 - pThemeColorHandler->mnShade) * 10000 / 256);
+                        sal_Int16 nShade = sal_Int16((255 - pThemeColorHandler->mnShade) * 10000 / 255);
                         aComplexColor.addTransformation({model::TransformationType::Shade, nShade});
                     }
 

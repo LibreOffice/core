@@ -7560,10 +7560,27 @@ void DocxAttributeOutput::CharCaseMap( const SvxCaseMapItem& rCaseMap )
     }
 }
 
-void DocxAttributeOutput::CharColor( const SvxColorItem& rColor )
+void DocxAttributeOutput::CharColor(const SvxColorItem& rColorItem)
 {
-    const Color aColor( rColor.GetValue() );
-    OString aColorString = msfilter::util::ConvertColor( aColor );
+    static std::unordered_map<model::ThemeColorType, const char*> constThemeColorTypeTokenMap = {
+        { model::ThemeColorType::Dark1, "dark1" },
+        { model::ThemeColorType::Light1, "light1" },
+        { model::ThemeColorType::Dark2, "dark2" },
+        { model::ThemeColorType::Light2, "light2" },
+        { model::ThemeColorType::Accent1, "accent1" },
+        { model::ThemeColorType::Accent2, "accent2" },
+        { model::ThemeColorType::Accent3, "accent3" },
+        { model::ThemeColorType::Accent4, "accent4" },
+        { model::ThemeColorType::Accent5, "accent5" },
+        { model::ThemeColorType::Accent6, "accent6" },
+        { model::ThemeColorType::Hyperlink, "hyperlink" },
+        { model::ThemeColorType::FollowedHyperlink, "followedHyperlink" }
+    };
+
+    const Color aColor = rColorItem.getColor();
+    const model::ComplexColor aComplexColor = rColorItem.getComplexColor();
+
+    OString aColorString = msfilter::util::ConvertColor(aColor);
 
     std::string_view pExistingValue;
     if (m_pColorAttrList.is() && m_pColorAttrList->getAsView(FSNS(XML_w, XML_val), pExistingValue))
@@ -7572,7 +7589,77 @@ void DocxAttributeOutput::CharColor( const SvxColorItem& rColor )
         return;
     }
 
-    AddToAttrList( m_pColorAttrList, FSNS( XML_w, XML_val ), aColorString.getStr() );
+    if (aComplexColor.getType() == model::ColorType::Scheme &&
+        aComplexColor.getSchemeType() != model::ThemeColorType::Unknown)
+    {
+        OString sSchemeType = constThemeColorTypeTokenMap[aComplexColor.getSchemeType()];
+        if (aComplexColor.meThemeColorUsage == model::ThemeColorUsage::Text)
+        {
+            if (aComplexColor.getSchemeType() == model::ThemeColorType::Dark1)
+                sSchemeType = "text1";
+            else if (aComplexColor.getSchemeType() == model::ThemeColorType::Dark2)
+                sSchemeType = "text2";
+        }
+        else if (aComplexColor.meThemeColorUsage == model::ThemeColorUsage::Background)
+        {
+            if (aComplexColor.getSchemeType() == model::ThemeColorType::Light1)
+                sSchemeType = "background1";
+            else if (aComplexColor.getSchemeType() == model::ThemeColorType::Light2)
+                sSchemeType = "background2";
+        }
+        AddToAttrList(m_pColorAttrList, FSNS(XML_w, XML_themeColor), sSchemeType.getStr());
+
+        sal_Int16 nLumMod = 10'000;
+        sal_Int16 nLumOff = 0;
+        sal_Int16 nTint = 0;
+        sal_Int16 nShade = 0;
+
+        for (auto const& rTransform : aComplexColor.getTransformations())
+        {
+            if (rTransform.meType == model::TransformationType::LumMod)
+                nLumMod = rTransform.mnValue;
+            if (rTransform.meType == model::TransformationType::LumOff)
+                nLumOff = rTransform.mnValue;
+            if (rTransform.meType == model::TransformationType::Tint)
+                nTint = rTransform.mnValue;
+            if (rTransform.meType == model::TransformationType::Shade)
+                nShade = rTransform.mnValue;
+        }
+        if (nLumMod == 10'000 && nLumOff == 0)
+        {
+            if (nTint != 0)
+            {
+                // Convert from 0-100 into 0-255
+                sal_Int16 nTint255 = std::round(255.0 - (double(nTint) / 10000.0) * 255.0);
+                AddToAttrList(m_pColorAttrList, FSNS(XML_w, XML_themeTint), OString::number(nTint255, 16).getStr());
+            }
+            else if (nShade != 0)
+            {
+                // Convert from 0-100 into 0-255
+                sal_Int16 nShade255 = std::round(255.0 - (double(nShade) / 10000.0) * 255.0);
+                AddToAttrList(m_pColorAttrList, FSNS(XML_w, XML_themeShade), OString::number(nShade255, 16).getStr());
+            }
+        }
+        else
+        {
+            double nPercentage = 0.0;
+
+            if (nLumOff > 0)
+                nPercentage = double(nLumOff) / 100.0;
+            else
+                nPercentage = (-10'000 + double(nLumMod)) / 100.0;
+
+            // Convert from 0-100 into 0-255
+            sal_Int16 nTintShade255 = std::round(255.0 - (std::abs(nPercentage) / 100.0) * 255.0);
+
+            if (nPercentage > 0)
+                AddToAttrList(m_pColorAttrList, FSNS(XML_w, XML_themeTint), OString::number(nTintShade255, 16).getStr());
+            else if (nPercentage < 0)
+                AddToAttrList(m_pColorAttrList, FSNS(XML_w, XML_themeShade), OString::number(nTintShade255, 16).getStr());
+        }
+    }
+
+    AddToAttrList(m_pColorAttrList, FSNS(XML_w, XML_val), aColorString.getStr());
     m_nCharTransparence = 255 - aColor.GetAlpha();
 }
 
@@ -9823,7 +9910,6 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
     bool bWriteCSTheme = true;
     bool bWriteAsciiTheme = true;
     bool bWriteEastAsiaTheme = true;
-    bool bWriteThemeFontColor = true;
     OUString sOriginalValue;
     for ( const auto & rGrabBagElement : rMap )
     {
@@ -9844,12 +9930,6 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
             if ( rGrabBagElement.second >>= sOriginalValue )
                 bWriteEastAsiaTheme =
                         ( m_pFontsAttrList->getOptionalValue( FSNS( XML_w, XML_eastAsia ) ) == sOriginalValue );
-        }
-        else if ( m_pColorAttrList.is() && rGrabBagElement.first == "CharThemeOriginalColor" )
-        {
-            if ( rGrabBagElement.second >>= sOriginalValue )
-                bWriteThemeFontColor =
-                        ( m_pColorAttrList->getOptionalValue( FSNS( XML_w, XML_val ) ) == sOriginalValue );
         }
     }
 
@@ -9881,24 +9961,6 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
         {
             rGrabBagElement.second >>= str;
             AddToAttrList( m_pFontsAttrList, FSNS( XML_w, XML_hAnsiTheme ),
-                    OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
-        }
-        else if ( rGrabBagElement.first == "CharThemeColor" && bWriteThemeFontColor )
-        {
-            rGrabBagElement.second >>= str;
-            AddToAttrList( m_pColorAttrList, FSNS( XML_w, XML_themeColor ),
-                    OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
-        }
-        else if ( rGrabBagElement.first == "CharThemeColorShade" )
-        {
-            rGrabBagElement.second >>= str;
-            AddToAttrList( m_pColorAttrList, FSNS( XML_w, XML_themeShade ),
-                    OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
-        }
-        else if ( rGrabBagElement.first == "CharThemeColorTint" )
-        {
-            rGrabBagElement.second >>= str;
-            AddToAttrList( m_pColorAttrList, FSNS( XML_w, XML_themeTint ),
                     OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
         else if( rGrabBagElement.first == "CharThemeFontNameCs"   ||

@@ -69,6 +69,7 @@ public:
     static OUString getBorderTypeString(sal_Int32 nType);
     static OUString getThemeColorTypeString(sal_Int32 nType);
     static model::ThemeColorType getThemeColorTypeIndex(sal_Int32 nType);
+    static model::ThemeColorUsage getThemeColorUsage(sal_Int32 nType);
 };
 }
 
