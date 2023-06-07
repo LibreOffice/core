@@ -40,6 +40,9 @@
 #include <vcl/skia/SkiaHelper.hxx>
 #endif
 
+static bool bTotalScreenBounds = false;
+static NSRect aTotalScreenBounds = NSZeroRect;
+
 // TODO: Scale will be set to 2.0f as default after implementation of full scaled display support . This will allow moving of
 // windows between non retina and retina displays without blurry text and graphics. Static variables have to be removed thereafter.
 
@@ -53,6 +56,39 @@ static float fWindowScale = 1.0f;
 
 namespace sal::aqua
 {
+NSRect getTotalScreenBounds()
+{
+    if (!bTotalScreenBounds)
+    {
+        aTotalScreenBounds = NSZeroRect;
+
+        NSArray *aScreens = [NSScreen screens];
+        if (aScreens != nullptr)
+        {
+            for (NSScreen *aScreen : aScreens)
+            {
+                // Calculate total screen bounds
+                NSRect aScreenFrame = [aScreen frame];
+                if (!NSIsEmptyRect(aScreenFrame))
+                {
+                    if (NSIsEmptyRect(aTotalScreenBounds))
+                        aTotalScreenBounds = aScreenFrame;
+                    else
+                        aTotalScreenBounds = NSUnionRect( aScreenFrame, aTotalScreenBounds );
+                }
+            }
+            bTotalScreenBounds = true;
+        }
+    }
+    return aTotalScreenBounds;
+}
+
+void resetTotalScreenBounds()
+{
+    bTotalScreenBounds = false;
+    getTotalScreenBounds();
+}
+
 float getWindowScaling()
 {
     // Related: tdf#147342 Any changes to this function must be copied to the

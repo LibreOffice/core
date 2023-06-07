@@ -156,7 +156,8 @@ AquaSalFrame::~AquaSalFrame()
         }
     }
     if ( mpNSView ) {
-        [AquaA11yFactory revokeView: mpNSView];
+        if ([mpNSView isKindOfClass:[SalFrameView class]])
+            [static_cast<SalFrameView*>(mpNSView) revokeWrapper];
         [mpNSView release];
     }
     if ( mpNSWindow )
@@ -287,6 +288,7 @@ void AquaSalFrame::screenParametersChanged()
 {
     OSX_SALDATA_RUNINMAIN( screenParametersChanged() )
 
+    sal::aqua::resetTotalScreenBounds();
     sal::aqua::resetWindowScaling();
 
     UpdateFrameGeometry();
@@ -429,7 +431,8 @@ void AquaSalFrame::initShow()
     }
 
     // make sure the view is present in the wrapper list before any children receive focus
-    [AquaA11yFactory registerView: mpNSView];
+    if (mpNSView && [mpNSView isKindOfClass:[SalFrameView class]])
+        [static_cast<SalFrameView*>(mpNSView) registerWrapper];
 }
 
 void AquaSalFrame::SendPaintEvent( const tools::Rectangle* pRect )

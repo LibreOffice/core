@@ -26,6 +26,7 @@
 #include <osx/a11yfactory.h>
 #include <osx/a11yfocustracker.hxx>
 
+#include <quartz/salgdi.h>
 #include <quartz/utils.h>
 
 #include "a11yfocuslistener.hxx"
@@ -65,10 +66,14 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
     return s << [[obj description] UTF8String];
 }
 
-@implementation AquaA11yWrapper : NSView
+@implementation AquaA11yWrapper
 
 #pragma mark -
 #pragma mark Init and dealloc
+
+-(id)init {
+    return [ super init ];
+}
 
 -(id)initWithAccessibleContext: (Reference < XAccessibleContext >) rxAccessibleContext {
     self = [ super init ];
@@ -716,20 +721,27 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
         return NO;
     }
     bool ignored = false;
-    sal_Int16 nRole = [ self accessibleContext ] -> getAccessibleRole();
-    switch ( nRole ) {
-        //case AccessibleRole::PANEL:
-        case AccessibleRole::FRAME:
-        case AccessibleRole::ROOT_PANE:
-        case AccessibleRole::SEPARATOR:
-        case AccessibleRole::FILLER:
-        case AccessibleRole::DIALOG:
-            ignored = true;
-            break;
-        default:
-            ignored = ! ( [ self accessibleContext ] -> getAccessibleStateSet() & AccessibleStateType::VISIBLE );
-            break;
+    try {
+        sal_Int16 nRole = [ self accessibleContext ] -> getAccessibleRole();
+        switch ( nRole ) {
+            //case AccessibleRole::PANEL:
+            case AccessibleRole::FRAME:
+            case AccessibleRole::ROOT_PANE:
+            case AccessibleRole::SEPARATOR:
+            case AccessibleRole::FILLER:
+            case AccessibleRole::DIALOG:
+                ignored = true;
+                break;
+            default:
+                ignored = ! ( [ self accessibleContext ] -> getAccessibleStateSet() & AccessibleStateType::VISIBLE );
+                break;
+        }
+    } catch ( DisposedException& ) {
+        ignored = true;
+    } catch ( RuntimeException& ) {
+        ignored = true;
     }
+
     return ignored; // TODO: to be completed
 }
 
@@ -965,6 +977,10 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
 }
 
 -(void)accessibilityPerformAction:(NSString *)action {
+    [ self performAction: action ];
+}
+
+-(BOOL)performAction:(NSString *)action {
     // Related: tdf#148453 Acquire solar mutex during native accessibility calls
     SolarMutexGuard aGuard;
 
@@ -972,7 +988,9 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
     AquaA11yWrapper * actionResponder = [ self actionResponder ];
     if ( actionResponder ) {
         [ AquaA11yActionWrapper doAction: action ofElement: actionResponder ];
+        return YES;
     }
+    return NO;
 }
 
 -(NSArray *)accessibilityActionNames {
@@ -1170,7 +1188,7 @@ static Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
 }
 
 -(NSWindow*)windowForParent {
-    return [self window];
+    return nil;
 }
 
 -(void)setActsAsRadioGroup:(BOOL)actsAsRadioGroup {
@@ -1183,6 +1201,393 @@ static Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
 
 +(void)setPopupMenuOpen:(BOOL)popupMenuOpen {
     isPopupMenuOpen = popupMenuOpen;
+}
+
+// NSAccessibility selectors
+
+- (BOOL)isAccessibilityElement
+{
+    return ! [ self accessibilityIsIgnored ];
+}
+
+- (BOOL)isAccessibilityFocused
+{
+    NSNumber *pNumber = [ self accessibilityAttributeValue: NSAccessibilityFocusedAttribute ];
+    if ( pNumber )
+        return [ pNumber boolValue ];
+    else
+        return NO;
+}
+
+- (id)accessibilityTopLevelUIElement
+{
+    return [ self accessibilityAttributeValue: NSAccessibilityTopLevelUIElementAttribute ];
+}
+
+- (id)accessibilityValue
+{
+    return [ self accessibilityAttributeValue: NSAccessibilityValueAttribute ];
+}
+
+- (NSArray *)accessibilityVisibleChildren
+{
+    return [ self accessibilityChildren ];
+}
+
+- (NSAccessibilitySubrole)accessibilitySubrole
+{
+    return [ self accessibilityAttributeValue: NSAccessibilitySubroleAttribute ];
+}
+
+- (NSString *)accessibilityTitle
+{
+    return [ self accessibilityAttributeValue: NSAccessibilityTitleAttribute ];
+}
+
+- (id)accessibilityTitleUIElement
+{
+    return [ self accessibilityAttributeValue: NSAccessibilityTitleUIElementAttribute ];
+}
+
+- (NSAccessibilityOrientation)accessibilityOrientation
+{
+    NSNumber *pNumber = [ self accessibilityAttributeValue: NSAccessibilityOrientationAttribute ];
+    if ( pNumber )
+        return (NSAccessibilityOrientation)[ pNumber integerValue ];
+    else
+        return NSAccessibilityOrientationUnknown;
+}
+
+- (id)accessibilityParent
+{
+    return [ self accessibilityAttributeValue: NSAccessibilityParentAttribute ];
+}
+
+- (NSAccessibilityRole)accessibilityRole
+{
+    return [ self accessibilityAttributeValue: NSAccessibilityRoleAttribute ];
+}
+
+- (NSString *)accessibilityRoleDescription
+{
+    return [ self accessibilityAttributeValue: NSAccessibilityRoleDescriptionAttribute ];
+}
+
+- (BOOL)isAccessibilitySelected
+{
+    NSNumber *pNumber = [ self accessibilityAttributeValue: NSAccessibilitySelectedAttribute ];
+    if ( pNumber )
+        return [ pNumber boolValue ];
+    else
+        return NO;
+}
+
+- (NSArray *)accessibilitySelectedChildren
+{
+    return [ self accessibilityAttributeValue: NSAccessibilitySelectedChildrenAttribute ];
+}
+
+- (NSArray *)accessibilityServesAsTitleForUIElements
+{
+    return [ self accessibilityAttributeValue: NSAccessibilityServesAsTitleForUIElementsAttribute ];
+}
+
+- (id)accessibilityMinValue
+{
+    return [ self accessibilityAttributeValue: NSAccessibilityMinValueAttribute ];
+}
+
+- (id)accessibilityMaxValue
+{
+    return [ self accessibilityAttributeValue: NSAccessibilityMaxValueAttribute ];
+}
+
+- (id)accessibilityWindow
+{
+    return [ self accessibilityAttributeValue: NSAccessibilityWindowAttribute ];
+}
+
+- (NSString *)accessibilityHelp
+{
+    return [ self accessibilityAttributeValue: NSAccessibilityHelpAttribute ];
+}
+
+- (BOOL)isAccessibilityExpanded
+{
+    NSNumber *pNumber = [ self accessibilityAttributeValue: NSAccessibilityExpandedAttribute ];
+    if ( pNumber )
+        return [ pNumber boolValue ];
+    else
+        return NO;
+}
+
+- (BOOL)isAccessibilityEnabled
+{
+    NSNumber *pNumber = [ self accessibilityAttributeValue: NSAccessibilityEnabledAttribute ];
+    if ( pNumber )
+        return [ pNumber boolValue ];
+    else
+        return NO;
+}
+
+- (NSArray *)accessibilityChildren
+{
+    return [ self accessibilityAttributeValue: NSAccessibilityChildrenAttribute ];
+}
+
+- (NSArray <id<NSAccessibilityElement>> *)accessibilityChildrenInNavigationOrder
+{
+    return [ self accessibilityChildren ];
+}
+
+- (NSArray *)accessibilityContents
+{
+    return [ self accessibilityAttributeValue: NSAccessibilityContentsAttribute ];
+}
+
+- (NSString *)accessibilityLabel
+{
+    return [ self accessibilityAttributeValue: NSAccessibilityDescriptionAttribute ];
+}
+
+- (id)accessibilityApplicationFocusedUIElement
+{
+    return [ self accessibilityFocusedUIElement ];
+}
+
+- (BOOL)isAccessibilityDisclosed
+{
+    NSNumber *pNumber = [ self accessibilityAttributeValue: NSAccessibilityDisclosingAttribute ];
+    if ( pNumber )
+        return [ pNumber boolValue ];
+    else
+        return NO;
+}
+
+- (id)accessibilityHorizontalScrollBar
+{
+    return [ self accessibilityAttributeValue: NSAccessibilityHorizontalScrollBarAttribute ];
+}
+
+- (id)accessibilityVerticalScrollBar
+{
+    return [ self accessibilityAttributeValue: NSAccessibilityVerticalScrollBarAttribute ];
+}
+
+- (NSArray *)accessibilityTabs
+{
+    return [ self accessibilityAttributeValue: NSAccessibilityTabsAttribute ];
+}
+
+- (NSArray *)accessibilityColumns
+{
+    return [ self accessibilityAttributeValue: NSAccessibilityColumnsAttribute ];
+}
+
+- (NSArray *)accessibilityRows
+{
+    return [ self accessibilityAttributeValue: NSAccessibilityRowsAttribute ];
+}
+
+- (NSRange)accessibilitySharedCharacterRange
+{
+    NSValue *pValue = [ self accessibilityAttributeValue: NSAccessibilitySharedCharacterRangeAttribute ];
+    if ( pValue )
+        return [ pValue rangeValue ];
+    else
+        return NSMakeRange( NSNotFound, 0 );
+}
+
+- (NSArray *)accessibilitySharedTextUIElements
+{
+    return [ self accessibilityAttributeValue: NSAccessibilitySharedTextUIElementsAttribute ];
+}
+
+- (NSRange)accessibilityVisibleCharacterRange
+{
+    NSValue *pValue = [ self accessibilityAttributeValue: NSAccessibilityVisibleCharacterRangeAttribute ];
+    if ( pValue )
+        return [ pValue rangeValue ];
+    else
+        return NSMakeRange( NSNotFound, 0 );
+}
+
+- (NSInteger)accessibilityNumberOfCharacters
+{
+    NSNumber *pNumber = [ self accessibilityAttributeValue: NSAccessibilityNumberOfCharactersAttribute ];
+    if ( pNumber )
+        return [ pNumber integerValue ];
+    else
+        return 0;
+}
+
+- (NSString *)accessibilitySelectedText
+{
+    return [ self accessibilityAttributeValue: NSAccessibilitySelectedTextAttribute ];
+}
+
+- (NSRange)accessibilitySelectedTextRange
+{
+    NSValue *pValue = [ self accessibilityAttributeValue: NSAccessibilitySelectedTextRangeAttribute ];
+    if ( pValue )
+        return [ pValue rangeValue ];
+    else
+        return NSMakeRange( NSNotFound, 0 );
+}
+
+- (NSAttributedString *)accessibilityAttributedStringForRange:(NSRange)aRange
+{
+    return [ self accessibilityAttributeValue: NSAccessibilityAttributedStringForRangeParameterizedAttribute forParameter: [ NSValue valueWithRange: aRange ] ];
+}
+
+- (NSRange)accessibilityRangeForLine:(NSInteger)nLine
+{
+    NSValue *pValue = [ self accessibilityAttributeValue: NSAccessibilityRangeForLineParameterizedAttribute forParameter: [NSNumber numberWithInteger: nLine ] ];
+    if ( pValue )
+        return [ pValue rangeValue ];
+    else
+        return NSMakeRange( NSNotFound, 0 );
+}
+
+- (NSString *)accessibilityStringForRange:(NSRange)aRange
+{
+    return [ self accessibilityAttributeValue: NSAccessibilityStringForRangeParameterizedAttribute forParameter: [ NSValue valueWithRange: aRange ] ];
+}
+
+- (NSRange)accessibilityRangeForPosition:(NSPoint)aPoint
+{
+    NSValue *pValue = [ self accessibilityAttributeValue: NSAccessibilityRangeForPositionParameterizedAttribute forParameter: [ NSValue valueWithPoint: aPoint ] ];
+    if ( pValue )
+        return [ pValue rangeValue ];
+    else
+        return NSMakeRange( NSNotFound, 0 );
+}
+
+- (NSRange)accessibilityRangeForIndex:(NSInteger)nIndex
+{
+    NSValue *pValue = [ self accessibilityAttributeValue: NSAccessibilityRangeForIndexParameterizedAttribute forParameter: [ NSNumber numberWithInteger: nIndex ] ];
+    if ( pValue )
+        return [ pValue rangeValue ];
+    else
+        return NSMakeRange( NSNotFound, 0 );
+}
+
+- (NSRect)accessibilityFrameForRange:(NSRange)aRange
+{
+    NSValue *pValue = [ self accessibilityAttributeValue: NSAccessibilityBoundsForRangeParameterizedAttribute forParameter: [ NSValue valueWithRange: aRange ] ];
+    if ( pValue )
+        return [ pValue rectValue ];
+    else
+        return NSZeroRect;
+}
+
+- (NSData *)accessibilityRTFForRange:(NSRange)aRange
+{
+    return [ self accessibilityAttributeValue: NSAccessibilityRTFForRangeParameterizedAttribute forParameter: [ NSValue valueWithRange: aRange ] ];
+}
+
+- (NSRange)accessibilityStyleRangeForIndex:(NSInteger)nIndex
+{
+    NSValue *pValue = [ self accessibilityAttributeValue: NSAccessibilityStyleRangeForIndexParameterizedAttribute forParameter: [ NSNumber numberWithInteger: nIndex ] ];
+    if ( pValue )
+        return [ pValue rangeValue ];
+    else
+        return NSMakeRange( NSNotFound, 0 );
+}
+
+- (NSInteger)accessibilityLineForIndex:(NSInteger)nIndex
+{
+    NSNumber *pNumber = [ self accessibilityAttributeValue: NSAccessibilityLineForIndexParameterizedAttribute forParameter: [ NSNumber numberWithInteger: nIndex ] ];
+    if ( pNumber )
+        return [ pNumber integerValue ];
+    else
+        return 0;
+}
+
+- (BOOL)accessibilityPerformDecrement
+{
+    return [ self performAction: NSAccessibilityDecrementAction ];
+}
+
+- (BOOL)accessibilityPerformPick
+{
+    return [ self performAction: NSAccessibilityPickAction ];
+}
+
+- (BOOL)accessibilityPerformShowMenu
+{
+    return [ self performAction: NSAccessibilityShowMenuAction ];
+}
+
+- (BOOL)accessibilityPerformPress
+{
+    return [ self performAction: NSAccessibilityPressAction ];
+}
+
+- (BOOL)accessibilityPerformIncrement
+{
+    return [ self performAction: NSAccessibilityIncrementAction ];
+}
+
+// NSAccessibilityElement selectors
+
+- (NSRect)accessibilityFrame
+{
+    // Related: tdf#148453 Acquire solar mutex during native accessibility calls
+    SolarMutexGuard aGuard;
+
+    try {
+        XAccessibleComponent *pAccessibleComponent = [ self accessibleComponent ];
+        if ( pAccessibleComponent ) {
+            com::sun::star::awt::Point location = pAccessibleComponent->getLocationOnScreen();
+            com::sun::star::awt::Size size = pAccessibleComponent->getSize();
+            NSRect screenRect = sal::aqua::getTotalScreenBounds();
+            NSRect frame = NSMakeRect( (float)location.X, (float)( screenRect.size.height - size.Height - location.Y ), (float)size.Width, (float)size.Height );
+            return frame;
+        }
+    } catch ( DisposedException& ) {
+    } catch ( RuntimeException& ) {
+    }
+
+    return NSZeroRect;
+}
+
+- (BOOL)accessibilityNotifiesWhenDestroyed
+{
+    return YES;
+}
+
+- (BOOL)isAccessibilitySelectorAllowed:(SEL)aSelector
+{
+    if ( ! aSelector )
+        return NO;
+
+    if ( [ self respondsToSelector: aSelector ] ) {
+        // Ignore actions if action is not supported
+        NSAccessibilityActionName pActionName = [ AquaA11yActionWrapper actionNameForSelector: aSelector ];
+        if ( pActionName ) {
+            NSArray *pActionNames = [ self accessibilityActionNames ];
+            if ( ! pActionNames || ! [ pActionNames containsObject: pActionName ] )
+                return NO;
+        } else {
+            // Ignore "setAccessibility" selectors if attribute is not settable
+            static NSString *pSetPrefix = @"setAccessibility";
+            NSString *pSelName = NSStringFromSelector( aSelector );
+            if ( pSelName && [ pSelName hasPrefix: pSetPrefix ] && [ pSelName hasSuffix: @":" ] ) {
+                NSAccessibilityAttributeName pAttrName = [ pSelName substringToIndex: [ pSelName length ] - 1 ];
+                if ( pAttrName && [ pAttrName length ] > [ pSetPrefix length ] ) {
+                    pAttrName = [ pAttrName substringFromIndex: [ pSetPrefix length ] ];
+                    if ( pAttrName && [ pAttrName length ] ) {
+                        pAttrName = [ @"AX" stringByAppendingString: pAttrName ];
+                        if ( pAttrName && [ pAttrName length ] && ! [ self accessibilityIsAttributeSettable: pAttrName ] )
+                                return NO;
+                    }
+                }
+            }
+        }
+    }
+
+    return [ super isAccessibilitySelectorAllowed: aSelector ];
 }
 
 @end

@@ -155,75 +155,36 @@ static bool enabled = false;
         #endif
         {
             [ dAllWrapper setObject: aWrapper forKey: nKey ];
-            /* fdo#67410: Accessibility notifications are not delivered on NSView subclasses that do not
-               "reasonably" participate in NSView hierarchy (perhaps the only important point is
-               that the view is a transitive subview of the NSWindow's content view, but I
-               did not try to verify that).
-
-               So let the superview-subviews relationship mirror the AXParent-AXChildren relationship.
-            */
-            id parent = [aWrapper accessibilityAttributeValue:NSAccessibilityParentAttribute];
-            if (parent) {
-                if ([parent isKindOfClass:[NSView class]]) {
-                    NSView *parentView = static_cast<NSView *>(parent);
-
-                    // tdf#146765 Fix infinite recursion in -[NSView visibleRect]
-                    // HACK: Adding a subview to an NSView that is not attached
-                    // to an NSWindow leads to infinite recursion in the native
-                    // NSViewGetVisibleRect() function. This seems to be a new
-                    // behavior starting with macOS 12.6.2.
-                    // In the case of tdf#146765, we end up here because
-                    // -[AquaA11yWrapper childrenAttribute] is called by a
-                    // wrapper that is already attached to an NSWindow. That is
-                    // normal. What isn't normal is that the child wrapper's
-                    // unignored accessible parent is a different wrapper than
-                    // the caller and that different wrapper is not yet
-                    // attached to an NSWindow.
-                    // TODO: switch the AquaA11yWrapper class to inherit the
-                    // lightweight NSAccessibilityElement class instead of the
-                    // NSView class to possibly avoid the need for this hack.
-                    NSWindow *window = [parentView window];
-                    SAL_WARN_IF(!window, "vcl.a11y","Can't add subview. Parent view's window is nil!");
-                    if (window)
-                        [parentView addSubview:aWrapper positioned:NSWindowBelow relativeTo:nil];
-                } else if ([parent isKindOfClass:NSClassFromString(@"SalFrameWindow")]) {
-                    NSWindow *window = static_cast<NSWindow *>(parent);
-                    NSView *salView = [window contentView];
-                    [salView addSubview:aWrapper positioned:NSWindowBelow relativeTo:nil];
-                }
-            }
         }
     }
     return aWrapper;
 }
 
-+(void)insertIntoWrapperRepository: (NSView *) viewElement forAccessibleContext: (Reference < XAccessibleContext >) rxAccessibleContext {
++(void)insertIntoWrapperRepository: (AquaA11yWrapper *) element forAccessibleContext: (Reference < XAccessibleContext >) rxAccessibleContext {
     NSMutableDictionary * dAllWrapper = [ AquaA11yFactory allWrapper ];
-    [ dAllWrapper setObject: viewElement forKey: [ AquaA11yFactory keyForAccessibleContext: rxAccessibleContext ] ];
+    [ dAllWrapper setObject: element forKey: [ AquaA11yFactory keyForAccessibleContext: rxAccessibleContext ] ];
 }
 
 +(void)removeFromWrapperRepositoryFor: (css::uno::Reference < css::accessibility::XAccessibleContext >) rxAccessibleContext {
     // TODO: when RADIO_BUTTON search for associated RadioGroup-wrapper and delete that as well
     AquaA11yWrapper * theWrapper = [ AquaA11yFactory wrapperForAccessibleContext: rxAccessibleContext createIfNotExists: NO ];
     if ( theWrapper != nil ) {
-        if (![theWrapper isKindOfClass:NSClassFromString(@"SalFrameView")]) {
-            [theWrapper removeFromSuperview];
-        }
+        NSAccessibilityPostNotification( theWrapper, NSAccessibilityUIElementDestroyedNotification );
         [ [ AquaA11yFactory allWrapper ] removeObjectForKey: [ AquaA11yFactory keyForAccessibleContext: rxAccessibleContext ] ];
         [ theWrapper release ];
     }
 }
 
-+(void)registerView: (NSView *) theView {
-    if ( enabled && [ theView isKindOfClass: [ AquaA11yWrapper class ] ] ) {
++(void)registerWrapper: (AquaA11yWrapper *) theWrapper {
+    if ( enabled && theWrapper ) {
         // insertIntoWrapperRepository gets called from SalFrameView itself to bootstrap the bridge initially
-        [ static_cast<AquaA11yWrapper *>(theView) accessibleContext ];
+        [ theWrapper accessibleContext ];
     }
 }
 
-+(void)revokeView: (NSView *) theView {
-    if ( enabled && [ theView isKindOfClass: [ AquaA11yWrapper class ] ] ) {
-        [ AquaA11yFactory removeFromWrapperRepositoryFor: [ static_cast<AquaA11yWrapper *>(theView) accessibleContext ] ];
++(void)revokeWrapper: (AquaA11yWrapper *) theWrapper {
+    if ( enabled && theWrapper ) {
+        [ AquaA11yFactory removeFromWrapperRepositoryFor: [ theWrapper accessibleContext ] ];
     }
 }
 
