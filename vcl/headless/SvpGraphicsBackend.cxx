@@ -1000,6 +1000,7 @@ bool SvpGraphicsBackend::supportsOperation(OutDevSupportType eType) const
     {
         case OutDevSupportType::TransparentRect:
         case OutDevSupportType::B2DDraw:
+        case OutDevSupportType::TransparentText:
             return true;
     }
     return false;

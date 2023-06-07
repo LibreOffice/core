@@ -334,10 +334,11 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
 
     clipRegion(cr);
 
-    cairo_set_source_rgb(cr,
+    cairo_set_source_rgba(cr,
         mnTextColor.GetRed()/255.0,
         mnTextColor.GetGreen()/255.0,
-        mnTextColor.GetBlue()/255.0);
+        mnTextColor.GetBlue()/255.0,
+        mnTextColor.GetAlpha()/255.0);
 
     FT_Face aFace = rFont.GetFtFace();
     CairoFontsCache::CacheId aId;

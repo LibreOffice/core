@@ -687,7 +687,9 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
     std::unique_ptr<SwTransparentTextGuard, o3tl::default_delete<SwTransparentTextGuard>> pTransparentText;
     if (m_pFnt->GetColor() != COL_AUTO && m_pFnt->GetColor().IsTransparent())
     {
-        pTransparentText.reset(new SwTransparentTextGuard(rPor, *this, aDrawInf));
+        // if drawing to a backend that supports transparency for text color, then we don't need to use this
+        if (!m_bOnWin || !m_pOut->SupportsOperation(OutDevSupportType::TransparentText) || m_pOut->GetConnectMetaFile())
+            pTransparentText.reset(new SwTransparentTextGuard(rPor, *this, aDrawInf));
     }
 
     if( GetTextFly().IsOn() )
