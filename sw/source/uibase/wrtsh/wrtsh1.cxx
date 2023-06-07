@@ -2710,4 +2710,15 @@ bool SwWrtShell::WarnHiddenSectionDialog() const
     return (RET_YES == xQuery->run());
 }
 
+bool SwWrtShell::WarnSwitchToDesignModeDialog() const
+{
+    std::unique_ptr<weld::MessageDialog> xQuery(Application::CreateMessageDialog(nullptr,
+        VclMessageType::Question, VclButtonsType::YesNo, SwResId(STR_A11Y_DESIGN_MODE_PRIMARY)));
+    xQuery->set_default_response(RET_YES);
+    xQuery->set_title(SwResId(STR_A11Y_DESIGN_MODE_TITLE));
+    xQuery->set_secondary_text(SwResId(STR_A11Y_DESIGN_MODE_SECONDARY));
+
+    return (RET_YES == xQuery->run());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
