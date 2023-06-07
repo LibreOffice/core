@@ -30,6 +30,8 @@ inline constexpr OUStringLiteral BMP_REDLINE_MOVED_INSERTION = u"cmd/sc_paste.pn
 inline constexpr OUStringLiteral BMP_REDLINE_MOVED_DELETION = u"cmd/sc_cut.png";
 inline constexpr OUStringLiteral BMP_REDLINE_ROW_INSERTION = u"cmd/sc_insertrows.png";
 inline constexpr OUStringLiteral BMP_REDLINE_ROW_DELETION = u"cmd/sc_deleterows.png";
+inline constexpr OUStringLiteral BMP_REDLINE_COL_INSERTION = u"cmd/sc_insertcolumns.png";
+inline constexpr OUStringLiteral BMP_REDLINE_COL_DELETION = u"cmd/sc_deletecolumns.png";
 inline constexpr OUStringLiteral BMP_REDLINE_COMMENT_INSERTION = u"cmd/sc_insertannotation.png";
 inline constexpr OUStringLiteral BMP_REDLINE_COMMENT_DELETION = u"cmd/sc_deleteannotation.png";
 

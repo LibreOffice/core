@@ -312,19 +312,24 @@ void SwRedlineAcceptDlg::InitAuthors()
                                 m_bOnlyFormatedRedlines );
 }
 
-OUString SwRedlineAcceptDlg::GetActionImage(const SwRangeRedline& rRedln, sal_uInt16 nStack, bool bRowChanges)
+OUString SwRedlineAcceptDlg::GetActionImage(const SwRangeRedline& rRedln, sal_uInt16 nStack,
+                                            bool bTableChanges, bool bRowChanges)
 {
     switch (rRedln.GetType(nStack))
     {
-        case RedlineType::Insert:  return bRowChanges
-            ? OUString(BMP_REDLINE_ROW_INSERTION)
+        case RedlineType::Insert:  return bTableChanges
+            ? bRowChanges
+                ? OUString(BMP_REDLINE_ROW_INSERTION)
+                : OUString(BMP_REDLINE_COL_INSERTION)
             : rRedln.IsMoved()
                 ? OUString(BMP_REDLINE_MOVED_INSERTION)
                 : rRedln.IsAnnotation()
                     ? OUString(BMP_REDLINE_COMMENT_INSERTION)
                     : OUString(BMP_REDLINE_INSERTED);
-        case RedlineType::Delete:  return bRowChanges
-            ? OUString(BMP_REDLINE_ROW_DELETION)
+        case RedlineType::Delete:  return bTableChanges
+            ? bRowChanges
+                 ? OUString(BMP_REDLINE_ROW_DELETION)
+                 : OUString(BMP_REDLINE_COL_DELETION)
             : rRedln.IsMoved()
                 ? OUString(BMP_REDLINE_MOVED_DELETION)
                 : rRedln.IsAnnotation()
@@ -790,25 +795,23 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
 
     bool bIsShowChangesInMargin = SW_MOD()->GetUsrPref(false)->IsShowChangesInMargin();
 
-    // collect redlines of tracked table or table row insertion/deletions under a single tree list
-    // item to accept/reject table (row) insertion/deletion with a single click on Accept/Reject
+    // collect redlines of tracked table/row/column insertion/deletions under a single tree list
+    // item to accept/reject the table change with a single click on Accept/Reject
     // Note: because update of the tree list depends on parent count, we don't modify
     // m_RedlineParents, only store the 2nd and more redlines as children of the tree list
     // item of the first redline
 
     // count of items stored as children (to adjust parent position)
-    sal_Int32 nSkipRedlines = 0;
-    // count of items of the actual table row (or joined table rows) stored as children =
-    // redlines of the row(s) - 1 (first redline is associated to the parent tree list item)
-    sal_Int32 nSkipRedline = 0;
-    // nSkipRedline of the previous table row (to join multiple table rows, if it's possible)
-    sal_Int32 nPrevSkipRedline = 0;
+    SwRedlineTable::size_type nSkipRedlines = 0;
+    // count of items of the actual table change stored as children =
+    // redlines of the change - 1 (first redline is associated to the parent tree list item)
+    SwRedlineTable::size_type nSkipRedline = 0;
 
-    // last SwRangeRedline in the table row
+    // last SwRangeRedline in the table row/column
     SwRedlineTable::size_type nLastChangeInRow = SwRedlineTable::npos;
-    // descriptor redline of the tracked table row
-    SwRedlineTable::size_type nRowChange = SwRedlineTable::npos;
-    // descriptor redline of the previous table row to join the table rows
+    // descriptor redline of the tracked table row/column
+    SwRedlineTable::size_type nRowChange = 0;
+    // descriptor redline of the previous table change to join with the next one
     SwRedlineTable::size_type nPrevRowChange = SwRedlineTable::npos;
 
     // show all redlines as tree list items,
@@ -825,41 +828,68 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
         // handle tracked table row changes
         const SwTableBox* pTableBox;
         const SwTableLine* pTableLine;
-        // first SwRangeRedline of the tracked table row(s), base of the parent tree list
-        // of the other SwRangeRedlines of the tracked table row(s)
+        bool bChange = false;
+        bool bRowChange = false;
+        // first SwRangeRedline of the tracked table rows/columns, base of the parent tree list
+        // of the other SwRangeRedlines of the tracked table rows or columns
         SwRedlineTable::size_type nNewTableParent = SwRedlineTable::npos;
         if ( // not recognized yet as tracked table row change
-             nLastChangeInRow == SwRedlineTable::npos &&
              nullptr != ( pTableBox = pSh->GetRedline(i).Start()->GetNode().GetTableBox() ) &&
              nullptr != ( pTableLine = pTableBox->GetUpper() ) &&
-             // it's a tracked row change based on the cached row data
-             RedlineType::None != pTableLine->GetRedlineType() )
+             // it's a tracked row (or column change) based on the cached row data
+             ( RedlineType::None != pTableLine->GetRedlineType() ||
+               RedlineType::None != pTableBox->GetRedlineType() ) )
         {
-            SwRedlineTable::size_type nRedline = i;
-            nRowChange = pTableLine->UpdateTextChangesOnly(nRedline);
+            // start redline search from the start from the tracked row/column change
+            SwRedlineTable::size_type nStartPos =
+                                        nRowChange > nSkipRedline ? nRowChange - nSkipRedline : 0;
+            bChange = true;
+            bRowChange = RedlineType::None != pTableLine->GetRedlineType();
+            nRowChange = bRowChange
+                            ? pTableLine->UpdateTextChangesOnly(nStartPos)
+                            : pTableBox->GetRedline();
             if ( SwRedlineTable::npos != nRowChange )
             {
-                nSkipRedline = nRedline - i - 1;
-                nLastChangeInRow = nRedline - 1;
-                // join the consecutive deleted/inserted rows under a single treebox item,
+                // redline is there in a tracked table change
+
+                // join the consecutive deleted/inserted rows/columns under a single treebox item,
                 // if they have the same redline data (equal type, author and time stamp)
-                if ( nPrevRowChange != SwRedlineTable::npos &&
-                    pSh->GetRedline(nRowChange).GetRedlineData() == pSh->GetRedline(nPrevRowChange).GetRedlineData() )
+                if ( nPrevRowChange != SwRedlineTable::npos )
                 {
-                    nSkipRedline += nPrevSkipRedline + 1;
-                    nPrevSkipRedline = 0;
-                    nPrevRowChange = SwRedlineTable::npos;
+                    // note: CanCombine() allows a time frame to join the changes within a short
+                    // time period: this avoid of falling apart of the tracked columns inserted
+                    // by several clicks
+                    if ( pSh->GetRedline(nRowChange).GetRedlineData()
+                             .CanCombine(pSh->GetRedline(nPrevRowChange).GetRedlineData()) &&
+                         // in the same table?
+                         pSh->GetRedline(nRowChange).Start()->GetNode().FindTableNode() ==
+                             pSh->GetRedline(nPrevRowChange).Start()->GetNode().FindTableNode() )
+                    {
+                        nSkipRedline++;
+                    }
+                    else
+                    {
+                        nNewTableParent = i;
+                        nLastChangeInRow = i;
+                        nPrevRowChange = nRowChange;
+                    }
                 }
                 else
+                {
+                    nLastChangeInRow = i;
                     nNewTableParent = i;
+                }
             }
             else
+            {
+                // redline is not in a tracked table change
+                bChange = bRowChange = false;
                 nPrevRowChange = SwRedlineTable::npos;
+            }
         }
         else
+            // redline is not in a tracked table change
             nPrevRowChange = SwRedlineTable::npos;
-
-        bool bRowChange(SwRedlineTable::npos != nLastChangeInRow);
 
         bool bShowDeletedTextAsComment = bIsShowChangesInMargin &&
                 RedlineType::Delete == rRedln.GetType() && rRedln.GetComment().isEmpty();
@@ -876,9 +906,9 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
 
         // use descriptor SwRangeRedline of the changed row, if needed to show
         // the correct redline type, author and time stamp of the tracked row change
-        const SwRangeRedline& rChangeRedln = pSh->GetRedline(bRowChange ? nRowChange : i);
+        const SwRangeRedline& rChangeRedln = pSh->GetRedline(bChange ? nRowChange : i);
 
-        OUString sImage = GetActionImage(rChangeRedln, 0, bRowChange && nNewTableParent != SwRedlineTable::npos );
+        OUString sImage = GetActionImage(rChangeRedln, 0, bChange && nNewTableParent != SwRedlineTable::npos, bRowChange );
         OUString sAuthor = rChangeRedln.GetAuthorString(0);
         pData->aDateTime = rChangeRedln.GetTimeStamp(0);
         pData->eType = rChangeRedln.GetType(0);
@@ -887,12 +917,20 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
         OUString sId = weld::toId(pData.get());
         std::unique_ptr<weld::TreeIter> xParent(rTreeView.make_iterator());
 
-        if ( !bRowChange || nNewTableParent != SwRedlineTable::npos )
+        if ( !bChange || nNewTableParent != SwRedlineTable::npos )
+        {
             rTreeView.insert(nullptr, i - nSkipRedlines, nullptr, &sId, nullptr, nullptr, false, xParent.get());
+            // before this was a tracked table change with more than a single redline
+            if ( nSkipRedline > 0 )
+            {
+                nSkipRedlines += nSkipRedline;
+                nSkipRedline = 0;
+            }
+        }
         else
         {
             // put 2nd or more redlines of deleted/inserted rows as children of their first redline
-            SwRedlineDataParent *const pParent = m_RedlineParents[nLastChangeInRow - nSkipRedline].get();
+            SwRedlineDataParent *const pParent = m_RedlineParents[nLastChangeInRow].get();
             rTreeView.insert(pParent->xTLBParent.get(), -1, nullptr, &sId, nullptr, nullptr, false, xParent.get());
         }
 
@@ -916,16 +954,8 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
 
         InsertChildren(pRedlineParent, rRedln, bHasRedlineAutoFormat);
 
-        // end of a tracked deletion/insertion of a table row
-        if ( nLastChangeInRow != SwRedlineTable::npos && i == nLastChangeInRow )
-        {
-            nSkipRedlines += nSkipRedline;
-            nPrevSkipRedline = nSkipRedline;
-            nSkipRedline = 0;
-            nPrevRowChange = nRowChange;
-            nNewTableParent = SwRedlineTable::npos;
-            nLastChangeInRow = SwRedlineTable::npos;
-        }
+        nPrevRowChange = nRowChange;
+        nNewTableParent = SwRedlineTable::npos;
     }
     rTreeView.thaw();
     if (m_pTable->IsSorted())
