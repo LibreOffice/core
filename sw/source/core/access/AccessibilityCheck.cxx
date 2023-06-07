@@ -1365,7 +1365,7 @@ void AccessibilityCheck::checkObject(SwNode* pCurrent, SdrObject* pObject)
 
     if (nObjId == SdrObjKind::CustomShape || nObjId == SdrObjKind::Text
         || nObjId == SdrObjKind::Media || nObjId == SdrObjKind::Group
-        || nInv == SdrInventor::FmForm)
+        || nObjId == SdrObjKind::Graphic || nInv == SdrInventor::FmForm)
     {
         OUString sAlternative = pObject->GetTitle();
         if (sAlternative.isEmpty())
