@@ -34,6 +34,7 @@ public:
     bool Export() override;
 
     static void HandleGraphicFilterError(ErrCode nFilterError, ErrCode nStreamError);
+    static void InsertSdrGrafObj(Graphic pGraphic, SdPage* pPage);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
