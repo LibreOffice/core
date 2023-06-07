@@ -31,6 +31,13 @@ enum class ThemeColorType : sal_Int32
     LAST = FollowedHyperlink
 };
 
+enum class ThemeColorUsage
+{
+    Unknown = 0,
+    Text,
+    Background
+};
+
 constexpr ThemeColorType convertToThemeColorType(sal_Int32 nIndex)
 {
     if (nIndex < 0 || nIndex > 11)

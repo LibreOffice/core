@@ -45,6 +45,7 @@ $(eval $(call gb_Library_use_libraries,msword,\
     comphelper \
     cppu \
     cppuhelper \
+    docmodel \
     editeng \
     i18nlangtag \
     i18nutil \

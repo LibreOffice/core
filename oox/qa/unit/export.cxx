@@ -963,7 +963,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkThemeColor)
 
     // Make sure the fallback in <w:color> has correct values
     assertXPath(pXmlDoc, sElement + "w:color", "val", "948A54");
-    assertXPath(pXmlDoc, sElement + "w:color", "themeColor", "background2");
+    assertXPath(pXmlDoc, sElement + "w:color", "themeColor", "light2");
     assertXPath(pXmlDoc, sElement + "w:color", "themeShade", "80");
 
     // ... and w14:textFill exists and has correct values.
@@ -977,7 +977,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkThemeColor)
 
     // Make sure the fallback in <w:color> has correct values
     assertXPath(pXmlDoc, sElement + "w:color", "val", "558ED5");
-    assertXPath(pXmlDoc, sElement + "w:color", "themeColor", "text2");
+    assertXPath(pXmlDoc, sElement + "w:color", "themeColor", "dark2");
     assertXPath(pXmlDoc, sElement + "w:color", "themeTint", "99");
 
     // ... and w14:textFill exists and has correct values.

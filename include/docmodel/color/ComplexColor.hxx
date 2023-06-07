@@ -88,6 +88,7 @@ public:
     ::Color maLastColor;
 
     ThemeColorType meSchemeType = ThemeColorType::Unknown;
+    ThemeColorUsage meThemeColorUsage = ThemeColorUsage::Unknown;
     std::vector<Transformation> maTransformations;
 
     ::Color maFinalColor;

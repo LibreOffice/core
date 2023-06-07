@@ -313,6 +313,22 @@ model::ThemeColorType TDefTableHandler::getThemeColorTypeIndex(sal_Int32 nType)
     return model::ThemeColorType::Unknown;
 }
 
+model::ThemeColorUsage TDefTableHandler::getThemeColorUsage(sal_Int32 nType)
+{
+    switch (nType)
+    {
+        case NS_ooxml::LN_Value_St_ThemeColor_background1:
+        case NS_ooxml::LN_Value_St_ThemeColor_background2:
+            return model::ThemeColorUsage::Background;
+        case NS_ooxml::LN_Value_St_ThemeColor_text1:
+        case NS_ooxml::LN_Value_St_ThemeColor_text2:
+            return model::ThemeColorUsage::Text;
+        default:
+                break;
+    }
+    return model::ThemeColorUsage::Unknown;
+}
+
 void TDefTableHandler::lcl_attribute(Id rName, Value & rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
