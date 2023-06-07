@@ -32,6 +32,7 @@
 
 #include <store/types.h>
 
+#include <cstdlib>
 #include <memory>
 #include <utility>
 
