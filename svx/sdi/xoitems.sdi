@@ -24,7 +24,13 @@ struct XFillBitmap
 };
 item XFillBitmap XFillBitmapItem;
 
-item INT32  XFillColorItem;             // XColorItem
+struct XFillColor
+{
+    INT32 Color MID_COLOR_RGB;
+    String ComplexColorJSON MID_COMPLEX_COLOR_JSON;
+};
+
+item XFillColor XFillColorItem; // XColorItem
 
 enum SvxGradientStyle
 {
@@ -84,7 +90,13 @@ item SvxFillStyle XFillStyleItem;
 
 //item String XLineAttrSetItem; SfxSetItem!
 
-item INT32  XLineColorItem;
+struct XLineColor
+{
+    INT32  Color MID_COLOR_RGB;
+    String ComplexColorJSON MID_COMPLEX_COLOR_JSON;
+};
+
+item XLineColor XLineColorItem;
 
 enum SvxDashStyle
 {

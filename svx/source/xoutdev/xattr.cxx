@@ -37,6 +37,7 @@
 #include <svl/itempool.hxx>
 #include <editeng/memberids.h>
 #include <docmodel/uno/UnoComplexColor.hxx>
+#include <docmodel/color/ComplexColorJSON.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/UnitConversion.hxx>
 #include <osl/diagnose.h>
@@ -1002,6 +1003,11 @@ bool XLineColorItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId) const
             rVal <<= xComplexColor;
             break;
         }
+        case MID_COMPLEX_COLOR_JSON:
+        {
+            rVal <<= OStringToOUString(model::color::convertToJSON(getComplexColor()), RTL_TEXTENCODING_UTF8);
+            break;
+        }
         default:
         {
             rVal <<= GetColorValue().GetRGBColor();
@@ -1022,6 +1028,20 @@ bool XLineColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId)
             if (!(rVal >>= xComplexColor))
                 return false;
             setComplexColor(model::color::getFromXComplexColor(xComplexColor));
+        }
+        break;
+        case MID_COMPLEX_COLOR_JSON:
+        {
+            OUString sComplexColorJson;
+            if (!(rVal >>= sComplexColorJson))
+                return false;
+
+            if (sComplexColorJson.isEmpty())
+                return false;
+            model::ComplexColor aComplexColor;
+            OString aJSON = OUStringToOString(sComplexColorJson, RTL_TEXTENCODING_ASCII_US);
+            model::color::convertFromJSON(aJSON, aComplexColor);
+            setComplexColor(aComplexColor);
         }
         break;
         default:
@@ -1985,6 +2005,11 @@ bool XFillColorItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) cons
             rVal <<= xComplexColor;
             break;
         }
+        case MID_COMPLEX_COLOR_JSON:
+        {
+            rVal <<= OStringToOUString(model::color::convertToJSON(getComplexColor()), RTL_TEXTENCODING_UTF8);
+            break;
+        }
         default:
         {
             rVal <<= GetColorValue().GetRGBColor();
@@ -2032,6 +2057,21 @@ bool XFillColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
             if (!(rVal >>= xComplexColor))
                 return false;
             setComplexColor(model::color::getFromXComplexColor(xComplexColor));
+        }
+        break;
+        case MID_COMPLEX_COLOR_JSON:
+        {
+            OUString sComplexColorJson;
+            if (!(rVal >>= sComplexColorJson))
+                return false;
+
+            if (sComplexColorJson.isEmpty())
+                return false;
+
+            OString aJSON = OUStringToOString(sComplexColorJson, RTL_TEXTENCODING_ASCII_US);
+            model::ComplexColor aComplexColor;
+            model::color::convertFromJSON(aJSON, aComplexColor);
+            setComplexColor(aComplexColor);
         }
         break;
         default:
