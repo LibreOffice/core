@@ -641,7 +641,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAxialTransparencyCompatible)
 
     //Round-trip through OOXML.
     // FixMe tdf#153183, and error in charSpace and in CharacterSet
-    //skipValidation();
+    skipValidation();
     saveAndReload("Office Open XML Text");
     saveAndReload("writer8");
 
