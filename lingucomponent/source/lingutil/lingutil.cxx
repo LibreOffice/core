@@ -121,8 +121,18 @@ static void GetOldStyleDicsInDir(
                 // add the dictionary to the resulting vector
                 SvtLinguConfigDictionaryEntry aDicEntry;
                 aDicEntry.aLocations = { sPath };
-                aDicEntry.aLocaleNames = { aLocaleName };
                 aDicEntry.aFormatName = aFormatName;
+                if (aLocaleName == u"ar")
+                    aDicEntry.aLocaleNames = {
+                        aLocaleName,
+                        u"ar-AE", u"ar-BH", u"ar-DJ", u"ar-DZ", u"ar-EG",
+                        u"ar-ER", u"ar-IL", u"ar-IQ", u"ar-JO", u"ar-KM",
+                        u"ar-KW", u"ar-LB", u"ar-LY", u"ar-MA", u"ar-MR",
+                        u"ar-OM", u"ar-PS", u"ar-QA", u"ar-SA", u"ar-SD",
+                        u"ar-SO", u"ar-SY", u"ar-TD", u"ar-TN", u"ar-YE"
+                    };
+                else
+                    aDicEntry.aLocaleNames = { aLocaleName };
                 aRes.push_back( aDicEntry );
             }
         }
