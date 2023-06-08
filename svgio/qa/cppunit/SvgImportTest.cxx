@@ -135,6 +135,19 @@ CPPUNIT_TEST_FIXTURE(Test, testSymbol)
     assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", "color", "#00d000");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testFilterLuminanceToAlpha)
+{
+    Primitive2DSequence aSequenceTdf132246 = parseSvg(u"/svgio/qa/cppunit/data/filterLuminanceToAlpha.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf132246.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequenceTdf132246);
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/modifiedColor");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFilterFeGaussianBlur)
 {
     Primitive2DSequence aSequenceTdf132246 = parseSvg(u"/svgio/qa/cppunit/data/filterFeGaussianBlur.svg");

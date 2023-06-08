@@ -73,6 +73,7 @@ namespace svgio::svgreader
         const char aSVGStrClipPathNode[] = "clipPath";
         const char aSVGStrClipPathProperty[] = "clip-path";
         const char aSVGStrFeGaussianBlur[] = "feGaussianBlur";
+        const char aSVGStrFeColorMatrix[] = "feColorMatrix";
         const char aSVGStrFilter[] = "filter";
         const char aSVGStrMask[] = "mask";
         const char aSVGStrClipPathUnits[] = "clipPathUnits";
@@ -224,6 +225,7 @@ namespace svgio::svgreader
                 { aSVGStrClipPathNode, SVGToken::ClipPathNode },
                 { aSVGStrClipPathProperty, SVGToken::ClipPathProperty },
                 { aSVGStrFeGaussianBlur, SVGToken::FeGaussianBlur },
+                { aSVGStrFeColorMatrix, SVGToken::FeColorMatrix },
                 { aSVGStrFilter, SVGToken::Filter },
                 { aSVGStrMask, SVGToken::Mask },
                 { aSVGStrClipPathUnits, SVGToken::ClipPathUnits },
