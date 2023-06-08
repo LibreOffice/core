@@ -461,21 +461,21 @@ namespace vcl_sal {
 
     const struct KeyboardReplacements aKeyboards[] =
     {
-        { "ca", aImplReplacements_Catalan, SAL_N_ELEMENTS(aImplReplacements_Catalan) },
-        { "de", aImplReplacements_German, SAL_N_ELEMENTS(aImplReplacements_German) },
-        { "sl", aImplReplacements_Slovenian, SAL_N_ELEMENTS(aImplReplacements_Slovenian) },
-        { "es", aImplReplacements_Spanish, SAL_N_ELEMENTS(aImplReplacements_Spanish) },
-        { "et", aImplReplacements_Estonian, SAL_N_ELEMENTS(aImplReplacements_Estonian) },
-        { "fr", aImplReplacements_French, SAL_N_ELEMENTS(aImplReplacements_French) },
-        { "hu", aImplReplacements_Hungarian, SAL_N_ELEMENTS(aImplReplacements_Hungarian) },
-        { "it", aImplReplacements_Italian, SAL_N_ELEMENTS(aImplReplacements_Italian) },
-        { "lt", aImplReplacements_Lithuanian, SAL_N_ELEMENTS(aImplReplacements_Lithuanian) },
-        { "nl", aImplReplacements_Dutch, SAL_N_ELEMENTS(aImplReplacements_Dutch) },
-        { "no", aImplReplacements_Norwegian, SAL_N_ELEMENTS(aImplReplacements_Norwegian) },
-        { "pt", aImplReplacements_Portuguese, SAL_N_ELEMENTS(aImplReplacements_Portuguese) },
-        { "ru", aImplReplacements_Russian, SAL_N_ELEMENTS(aImplReplacements_Russian) },
-        { "sv", aImplReplacements_Swedish, SAL_N_ELEMENTS(aImplReplacements_Swedish) },
-        { "tr", aImplReplacements_Turkish, SAL_N_ELEMENTS(aImplReplacements_Turkish) },
+        { "ca", aImplReplacements_Catalan, std::size(aImplReplacements_Catalan) },
+        { "de", aImplReplacements_German, std::size(aImplReplacements_German) },
+        { "sl", aImplReplacements_Slovenian, std::size(aImplReplacements_Slovenian) },
+        { "es", aImplReplacements_Spanish, std::size(aImplReplacements_Spanish) },
+        { "et", aImplReplacements_Estonian, std::size(aImplReplacements_Estonian) },
+        { "fr", aImplReplacements_French, std::size(aImplReplacements_French) },
+        { "hu", aImplReplacements_Hungarian, std::size(aImplReplacements_Hungarian) },
+        { "it", aImplReplacements_Italian, std::size(aImplReplacements_Italian) },
+        { "lt", aImplReplacements_Lithuanian, std::size(aImplReplacements_Lithuanian) },
+        { "nl", aImplReplacements_Dutch, std::size(aImplReplacements_Dutch) },
+        { "no", aImplReplacements_Norwegian, std::size(aImplReplacements_Norwegian) },
+        { "pt", aImplReplacements_Portuguese, std::size(aImplReplacements_Portuguese) },
+        { "ru", aImplReplacements_Russian, std::size(aImplReplacements_Russian) },
+        { "sv", aImplReplacements_Swedish, std::size(aImplReplacements_Swedish) },
+        { "tr", aImplReplacements_Turkish, std::size(aImplReplacements_Turkish) },
     };
 
     // translate keycodes, used within the displayed menu shortcuts
