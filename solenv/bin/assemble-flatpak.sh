@@ -62,9 +62,7 @@ do
 done
 
 mkdir -p /app/share/appdata
-"${SRCDIR?}"/solenv/bin/assemble-flatpak-appdata-step1.sh /app/share/appdata/ 1
-"${SRCDIR?}"/solenv/bin/assemble-flatpak-appdata-step2.sh "${PREFIXDIR?}"/share/metainfo/ \
- /app/share/appdata/
+"${SRCDIR?}"/solenv/bin/assemble-flatpak-appdata.sh /app/share/appdata/ 1
 
 ## see <https://github.com/flatpak/flatpak/blob/master/app/
 ## flatpak-builtins-build-finish.c> for further places where build-finish would
