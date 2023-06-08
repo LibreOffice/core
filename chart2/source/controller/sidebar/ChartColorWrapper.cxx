@@ -39,6 +39,9 @@ namespace {
 
 OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
 {
+    if (!xModel.is())
+        return OUString();
+
     css::uno::Reference<css::frame::XController> xController(xModel->getCurrentController());
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, css::uno::UNO_QUERY);
     if (!xSelectionSupplier.is())
