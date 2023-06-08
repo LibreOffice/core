@@ -171,6 +171,7 @@ public:
 
     bool        TestInsertRow( SCSIZE nSize ) const;
     void        InsertRow( SCROW nStartRow, SCSIZE nSize );
+    void        DeleteRow( SCROW nStartRow, SCSIZE nSize );
 };
 
 // Use protected inheritance to prevent publishing some internal ScColumnData
@@ -1052,6 +1053,11 @@ inline bool ScColumnData::TestInsertRow( SCSIZE nSize ) const
 inline void ScColumnData::InsertRow( SCROW nStartRow, SCSIZE nSize )
 {
     pAttrArray->InsertRow( nStartRow, nSize );
+}
+
+inline void ScColumnData::DeleteRow(SCROW nStartRow, SCSIZE nSize)
+{
+    pAttrArray->DeleteRow( nStartRow, nSize );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
