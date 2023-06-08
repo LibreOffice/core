@@ -989,6 +989,24 @@ CPPUNIT_TEST_FIXTURE(Test, testBehaviourWhenWidthAndHeightIsOrIsNotSet)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf155733)
+{
+    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/tdf155733.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/transform[1]/softedge", "radius", "5");
+
+    // Without the fix in place, the softedge would have been applied to the second element
+    // - Expected: 1
+    // - Actual  : 0
+    assertXPath(pDocument, "/primitive2D/transform/transform[2]/unifiedtransparence", "transparence", "50");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf97663)
 {
     Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/em_units.svg");
