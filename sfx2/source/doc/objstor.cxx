@@ -2609,10 +2609,15 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
 
     // an interaction handler here can acquire only in case of GUI Saving
     // and should be removed after the saving is done
+    Any aOriginalInteract;
     css::uno::Reference< XInteractionHandler > xInteract;
     const SfxUnoAnyItem* pxInteractionItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pArgs, SID_INTERACTIONHANDLER, false);
     if ( pxInteractionItem && ( pxInteractionItem->GetValue() >>= xInteract ) && xInteract.is() )
+    {
+        if (const SfxUnoAnyItem *pItem = pMediumTmp->GetItemSet()->GetItemIfSet(SID_INTERACTIONHANDLER, false))
+            aOriginalInteract = pItem->GetValue();
         pMediumTmp->GetItemSet()->Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, Any( xInteract ) ) );
+    }
 
     const SfxBoolItem* pNoFileSync = pArgs->GetItem<SfxBoolItem>(SID_NO_FILE_SYNC, false);
     if (pNoFileSync && pNoFileSync->GetValue())
@@ -2625,7 +2630,10 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
 
         if( pMediumTmp->GetItemSet() )
         {
-            pMediumTmp->GetItemSet()->ClearItem( SID_INTERACTIONHANDLER );
+            if (aOriginalInteract.hasValue())
+                pMediumTmp->GetItemSet()->Put(SfxUnoAnyItem(SID_INTERACTIONHANDLER, aOriginalInteract));
+            else
+                pMediumTmp->GetItemSet()->ClearItem(SID_INTERACTIONHANDLER);
             pMediumTmp->GetItemSet()->ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
         }
 
