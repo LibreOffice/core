@@ -159,7 +159,12 @@ static bool writeEscapedSequence(sal_uInt32 ch, char*& pos)
     // control characters
     if (ch <= 0x1f)
     {
+        // clang-format off
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
         int written = sprintf(pos, "\\u%.4x", ch);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
+        // clang-format on
+
         if (written > 0)
             pos += written;
         return true;
