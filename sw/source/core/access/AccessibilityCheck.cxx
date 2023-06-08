@@ -114,12 +114,17 @@ class NoTextNodeAltTextCheck : public NodeCheck
         }
         else if (pNoTextNode->IsGrfNode())
         {
-            auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
-                                      sfx::AccessibilityIssueID::NO_ALT_GRAPHIC);
-            pIssue->setDoc(pNoTextNode->GetDoc());
-            pIssue->setIssueObject(IssueObject::GRAPHIC);
-            pIssue->setObjectID(pNoTextNode->GetFlyFormat()->GetName());
-            pIssue->setNode(pNoTextNode);
+            const SwFrameFormat* pFrameFormat = pNoTextNode->GetFlyFormat();
+            const SfxBoolItem* pIsDecorItem = pFrameFormat->GetItemIfSet(RES_DECORATIVE);
+            if (!(pIsDecorItem && pIsDecorItem->GetValue()))
+            {
+                auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
+                                          sfx::AccessibilityIssueID::NO_ALT_GRAPHIC);
+                pIssue->setDoc(pNoTextNode->GetDoc());
+                pIssue->setIssueObject(IssueObject::GRAPHIC);
+                pIssue->setObjectID(pNoTextNode->GetFlyFormat()->GetName());
+                pIssue->setNode(pNoTextNode);
+            }
         }
     }
 
