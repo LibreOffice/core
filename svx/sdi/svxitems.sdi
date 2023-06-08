@@ -214,7 +214,13 @@ item String                 SvxPatternListItem;
 item String                 SfxLockBytesItem;
 item String                 SvxFontListItem;
 item String                 avmedia_MediaItem;
-item INT32                  XColorItem;
+struct XColor
+{
+    INT32  Color            MID_COLOR_RGB;
+    String ComplexColorJSON MID_COMPLEX_COLOR_JSON;
+};
+item XColor XColorItem;
+
 item INT16                  SdrPercentItem;
 item INT32                  SdrMetricItem;
 
