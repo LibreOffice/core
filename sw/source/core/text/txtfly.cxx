@@ -414,6 +414,12 @@ bool SwTextFly::IsAnyObj( const SwRect &rRect ) const
     {
         aRect = SwRect(m_pCurrFrame->getFrameArea().Pos() + m_pCurrFrame->getFramePrintArea().Pos(),
                         m_pCurrFrame->getFramePrintArea().SSize());
+
+        SwTwips nLower = m_pCurrFrame->GetLowerMarginForFlyIntersect();
+        if (nLower > 0)
+        {
+            aRect.AddBottom(nLower);
+        }
     }
 
     const SwSortedObjs *pSorted = m_pPage->GetSortedObjs();

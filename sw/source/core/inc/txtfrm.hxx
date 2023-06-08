@@ -523,6 +523,9 @@ public:
     // the offset will be returned.
     SwTwips HangingMargin() const;
 
+    /// Get the amount of lower margin of this frame we need to consider for fly portion purposes.
+    SwTwips GetLowerMarginForFlyIntersect() const;
+
     // Locking
     bool IsLocked()      const { return mbLocked;     }
 

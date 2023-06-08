@@ -3342,8 +3342,19 @@ static void lcl_NotifyContent( const SdrObject *pThis, SwContentFrame *pCnt,
     if ( !pCnt->IsTextFrame() )
         return;
 
+    auto pTextFrame = static_cast<SwTextFrame*>(pCnt);
     SwRect aCntPrt( pCnt->getFramePrintArea() );
     aCntPrt.Pos() += pCnt->getFrameArea().Pos();
+
+    if (eHint == PrepareHint::FlyFrameArrive)
+    {
+        SwTwips nLower = pTextFrame->GetLowerMarginForFlyIntersect();
+        if (nLower > 0)
+        {
+            aCntPrt.AddBottom(nLower);
+        }
+    }
+
     if ( eHint == PrepareHint::FlyFrameAttributesChanged )
     {
         // #i35640# - use given rectangle <rRect> instead
