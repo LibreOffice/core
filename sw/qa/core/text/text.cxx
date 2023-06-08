@@ -42,6 +42,7 @@
 #include <ndtxt.hxx>
 #include <txatbase.hxx>
 #include <textcontentcontrol.hxx>
+#include <pagefrm.hxx>
 
 /// Covers sw/source/core/text/ fixes.
 class SwCoreTextTest : public SwModelTestBase
@@ -1279,6 +1280,33 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf41652NBSPWidth)
     // Assert justified NBSP is wider for the enabled file
     CPPUNIT_ASSERT_GREATER(nSectionAfterNBSPX_optionDisabled_justified,
                            nSectionAfterNBSPX_optionEnabled_justified);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testFloattableOverlap)
+{
+    // Given a document with 2 floating tables, not overlapping in Word's "Word 2010" compat mode,
+    // because the first empty paragraph is below the first floating table:
+    createSwDoc("floattable-overlap.docx");
+
+    // When laying out that document:
+    calcLayout();
+
+    // Then make sure they don't overlap in Writer, either:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    CPPUNIT_ASSERT(pPage1->GetSortedObjs());
+    const SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPage1Objs.size());
+    SwAnchoredObject* pPage1Obj1 = rPage1Objs[0];
+    const SwRect& rRect1 = pPage1Obj1->GetObjRectWithSpaces();
+    SwAnchoredObject* pPage1Obj2 = rPage1Objs[1];
+    const SwRect& rRect2 = pPage1Obj2->GetObjRectWithSpaces();
+    // Without the accompanying fix in place, this test would have failed, the empty paragraph,
+    // which is after the floating table in the document model went above the floating table in the
+    // layout, which resulted in an overlap.
+    CPPUNIT_ASSERT(!rRect1.Overlaps(rRect2));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
