@@ -111,6 +111,8 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <node2lay.hxx>
 
+#include <comphelper/lok.hxx>
+
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
 
@@ -2544,6 +2546,13 @@ void SwContentTree::Display( bool bActive )
 
                 OUString aImage(GetImageIdForContentTypeId(nCntType));
                 bool bChOnDemand = 0 != rpContentT->GetMemberCount();
+
+                // In case of LOK, empty content types must be hidden in the contenttree
+                if (comphelper::LibreOfficeKit::isActive() && !bChOnDemand)
+                {
+                    continue;
+                }
+
                 OUString sId(weld::toId(rpContentT.get()));
                 insert(nullptr, rpContentT->GetName(), sId, bChOnDemand, xEntry.get());
                 m_xTreeView->set_image(*xEntry, aImage);
@@ -2947,6 +2956,27 @@ bool SwContentTree::HasContentChanged()
         // is detected only fill member lists for remaining content types. The Display function
         // will clear and recreate the treeview from the content type member arrays if content has
         // changed.
+
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            // In case of LOK, empty contentTypes are hidden, even in all content view
+            // so it is not enough to check only the m_xTreeView.
+            bool bCountChanged = false;
+            for (ContentTypeId i : o3tl::enumrange<ContentTypeId>())
+            {
+                if (m_aActiveContentArr[i])
+                {
+                    auto nLastTMCount = m_aActiveContentArr[i]->GetMemberCount();
+                    m_aActiveContentArr[i]->FillMemberList();
+                    // If the member count of a type is changed, then the content is surely changed
+                    if (m_aActiveContentArr[i]->GetMemberCount() != nLastTMCount)
+                        bCountChanged = true;
+                }
+            }
+            if (bCountChanged)
+                return true;
+        }
+
         std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
 
         // lambda function to find the next content type entry
