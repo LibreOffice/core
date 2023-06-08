@@ -169,19 +169,16 @@ SfxPoolItem::lookup_iterator ScPatternAttr::Lookup(lookup_iterator begin, lookup
 {
     if( !mxHashCode )
         CalcHashCode();
-    if( *mxHashCode != 0 )
+    for( auto it = begin; it != end; ++it)
     {
-        for( auto it = begin; it != end; ++it)
+        const ScPatternAttr* other = static_cast<const ScPatternAttr*>(*it);
+        if( !other->mxHashCode )
+            other->CalcHashCode();
+        if (*mxHashCode == *other->mxHashCode
+            && EqualPatternSets( GetItemSet(), other->GetItemSet())
+            && StrCmp( GetStyleName(), other->GetStyleName()))
         {
-            const ScPatternAttr* other = static_cast<const ScPatternAttr*>(*it);
-            if( !other->mxHashCode )
-                other->CalcHashCode();
-            if (*mxHashCode == *other->mxHashCode
-                && EqualPatternSets( GetItemSet(), other->GetItemSet())
-                && StrCmp( GetStyleName(), other->GetStyleName()))
-            {
-                return it;
-            }
+            return it;
         }
     }
     return end;
@@ -1426,18 +1423,12 @@ sal_uInt64 ScPatternAttr::GetKey() const
 void ScPatternAttr::CalcHashCode() const
 {
     auto const & rSet = GetItemSet();
-    if( rSet.TotalCount() != compareSize ) // see EqualPatternSets()
-    {
-        mxHashCode = 0; // invalid
-        return;
-    }
     // This is an unrolled hash function so the compiler/CPU can execute it in parallel,
     // because we hit this hard when loading documents with lots of styles.
-    // Set up seed so that an empty pattern does not have an (invalid) hash of 0.
-    sal_uInt32 h1 = 1;
-    sal_uInt32 h2 = 1;
-    sal_uInt32 h3 = 1;
-    sal_uInt32 h4 = 1;
+    sal_uInt32 h1 = 0;
+    sal_uInt32 h2 = 0;
+    sal_uInt32 h3 = 0;
+    sal_uInt32 h4 = 0;
     for (auto it = rSet.GetItems_Impl(), end = rSet.GetItems_Impl() + (compareSize / 4 * 4); it != end; )
     {
         h1 = 31 * h1 + reinterpret_cast<size_t>(*it);
