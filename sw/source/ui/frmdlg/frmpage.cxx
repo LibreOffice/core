@@ -407,46 +407,46 @@ static size_t lcl_GetFrameMapCount( const FrameMap* pMap)
     if ( pMap )
     {
         if( pMap == aVParaHtmlMap)
-            return SAL_N_ELEMENTS(aVParaHtmlMap);
+            return std::size(aVParaHtmlMap);
         if( pMap == aVAsCharHtmlMap)
-            return SAL_N_ELEMENTS(aVAsCharHtmlMap);
+            return std::size(aVAsCharHtmlMap);
         if( pMap == aHParaHtmlMap)
-            return SAL_N_ELEMENTS(aHParaHtmlMap);
+            return std::size(aHParaHtmlMap);
         if( pMap == aHParaHtmlAbsMap)
-            return SAL_N_ELEMENTS(aHParaHtmlAbsMap);
+            return std::size(aHParaHtmlAbsMap);
         if ( pMap == aVPageMap )
-            return SAL_N_ELEMENTS(aVPageMap);
+            return std::size(aVPageMap);
         if ( pMap == aVPageHtmlMap )
-            return SAL_N_ELEMENTS(aVPageHtmlMap);
+            return std::size(aVPageHtmlMap);
         if ( pMap == aVAsCharMap )
-            return SAL_N_ELEMENTS(aVAsCharMap);
+            return std::size(aVAsCharMap);
         if ( pMap == aVParaMap )
-            return SAL_N_ELEMENTS(aVParaMap);
+            return std::size(aVParaMap);
         if ( pMap == aHParaMap )
-            return SAL_N_ELEMENTS(aHParaMap);
+            return std::size(aHParaMap);
         if ( pMap == aHFrameMap )
-            return SAL_N_ELEMENTS(aHFrameMap);
+            return std::size(aHFrameMap);
         if ( pMap == aVFrameMap )
-            return SAL_N_ELEMENTS(aVFrameMap);
+            return std::size(aVFrameMap);
         if ( pMap == aHCharMap )
-            return SAL_N_ELEMENTS(aHCharMap);
+            return std::size(aHCharMap);
         if ( pMap == aHCharHtmlMap )
-            return SAL_N_ELEMENTS(aHCharHtmlMap);
+            return std::size(aHCharHtmlMap);
         if ( pMap == aHCharHtmlAbsMap )
-            return SAL_N_ELEMENTS(aHCharHtmlAbsMap);
+            return std::size(aHCharHtmlAbsMap);
         if ( pMap == aVCharMap )
-            return SAL_N_ELEMENTS(aVCharMap);
+            return std::size(aVCharMap);
         if ( pMap == aVCharHtmlMap )
-            return SAL_N_ELEMENTS(aVCharHtmlMap);
+            return std::size(aVCharHtmlMap);
         if ( pMap == aVCharHtmlAbsMap )
-            return SAL_N_ELEMENTS(aVCharHtmlAbsMap);
+            return std::size(aVCharHtmlAbsMap);
         if ( pMap == aHPageHtmlMap )
-            return SAL_N_ELEMENTS(aHPageHtmlMap);
+            return std::size(aHPageHtmlMap);
         if ( pMap == aHFlyHtmlMap )
-            return SAL_N_ELEMENTS(aHFlyHtmlMap);
+            return std::size(aHFlyHtmlMap);
         if ( pMap == aVFlyHtmlMap )
-            return SAL_N_ELEMENTS(aVFlyHtmlMap);
-        return SAL_N_ELEMENTS(aHPageMap);
+            return std::size(aVFlyHtmlMap);
+        return std::size(aHPageMap);
     }
     return 0;
 }
@@ -742,27 +742,27 @@ namespace
 void SwFramePage::setOptimalFrameWidth()
 {
     static FrameMaps const aMaps[] = {
-        { aHPageMap, SAL_N_ELEMENTS(aHPageMap) },
-        { aHPageHtmlMap, SAL_N_ELEMENTS(aHPageHtmlMap) },
-        { aVPageMap, SAL_N_ELEMENTS(aVPageMap) },
-        { aVPageHtmlMap, SAL_N_ELEMENTS(aVPageHtmlMap) },
-        { aHFrameMap, SAL_N_ELEMENTS(aHFrameMap) },
-        { aHFlyHtmlMap, SAL_N_ELEMENTS(aHFlyHtmlMap) },
-        { aVFrameMap, SAL_N_ELEMENTS(aVFrameMap) },
-        { aVFlyHtmlMap, SAL_N_ELEMENTS(aVFlyHtmlMap) },
-        { aHParaMap, SAL_N_ELEMENTS(aHParaMap) },
-        { aHParaHtmlMap, SAL_N_ELEMENTS(aHParaHtmlMap) },
-        { aHParaHtmlAbsMap, SAL_N_ELEMENTS(aHParaHtmlAbsMap) },
-        { aVParaMap, SAL_N_ELEMENTS(aVParaMap) },
-        { aVParaHtmlMap, SAL_N_ELEMENTS(aVParaHtmlMap) },
-        { aHCharMap, SAL_N_ELEMENTS(aHCharMap) },
-        { aHCharHtmlMap, SAL_N_ELEMENTS(aHCharHtmlMap) },
-        { aHCharHtmlAbsMap, SAL_N_ELEMENTS(aHCharHtmlAbsMap) },
-        { aVCharMap, SAL_N_ELEMENTS(aVCharMap) },
-        { aVCharHtmlMap, SAL_N_ELEMENTS(aVCharHtmlMap) },
-        { aVCharHtmlAbsMap, SAL_N_ELEMENTS(aVCharHtmlAbsMap) },
-        { aVAsCharMap, SAL_N_ELEMENTS(aVAsCharMap) },
-        { aVAsCharHtmlMap, SAL_N_ELEMENTS(aVAsCharHtmlMap) }
+        { aHPageMap, std::size(aHPageMap) },
+        { aHPageHtmlMap, std::size(aHPageHtmlMap) },
+        { aVPageMap, std::size(aVPageMap) },
+        { aVPageHtmlMap, std::size(aVPageHtmlMap) },
+        { aHFrameMap, std::size(aHFrameMap) },
+        { aHFlyHtmlMap, std::size(aHFlyHtmlMap) },
+        { aVFrameMap, std::size(aVFrameMap) },
+        { aVFlyHtmlMap, std::size(aVFlyHtmlMap) },
+        { aHParaMap, std::size(aHParaMap) },
+        { aHParaHtmlMap, std::size(aHParaHtmlMap) },
+        { aHParaHtmlAbsMap, std::size(aHParaHtmlAbsMap) },
+        { aVParaMap, std::size(aVParaMap) },
+        { aVParaHtmlMap, std::size(aVParaHtmlMap) },
+        { aHCharMap, std::size(aHCharMap) },
+        { aHCharHtmlMap, std::size(aHCharHtmlMap) },
+        { aHCharHtmlAbsMap, std::size(aHCharHtmlAbsMap) },
+        { aVCharMap, std::size(aVCharMap) },
+        { aVCharHtmlMap, std::size(aVCharHtmlMap) },
+        { aVCharHtmlAbsMap, std::size(aVCharHtmlAbsMap) },
+        { aVAsCharMap, std::size(aVAsCharMap) },
+        { aVAsCharHtmlMap, std::size(aVAsCharHtmlMap) }
     };
 
     std::vector<SvxSwFramePosString::StringId> aFrames;
