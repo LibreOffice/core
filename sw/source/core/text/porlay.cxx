@@ -64,7 +64,9 @@
 #include <docsh.hxx>
 #include <unobookmark.hxx>
 #include <unocrsrhelper.hxx>
+#include <frmatr.hxx>
 #include <vcl/kernarray.hxx>
+#include <editeng/ulspitem.hxx>
 #include <com/sun/star/rdf/Statement.hpp>
 #include <com/sun/star/rdf/URI.hpp>
 #include <com/sun/star/rdf/URIs.hpp>
@@ -2774,6 +2776,32 @@ SwTwips SwTextFrame::HangingMargin() const
     if( !nRet ) // update the margin-flag
         const_cast<SwParaPortion*>(GetPara())->SetMargin( false );
     return nRet;
+}
+
+SwTwips SwTextFrame::GetLowerMarginForFlyIntersect() const
+{
+    const IDocumentSettingAccess& rIDSA = GetDoc().getIDocumentSettingAccess();
+    if (!rIDSA.get(DocumentSettingId::TAB_OVER_MARGIN))
+    {
+        // Word >= 2013 style or Writer style: lower margin is ignored when determining the text
+        // frame height.
+        return 0;
+    }
+
+    const SwAttrSet* pAttrSet = GetTextNodeForParaProps()->GetpSwAttrSet();
+    if (!pAttrSet)
+    {
+        return 0;
+    }
+
+    // If it has multiple lines, then probably it already has the needed fly portion.
+    // Limit this to empty paragraphs for now.
+    if ((GetPara() && GetPara()->GetNext()) || !GetText().isEmpty())
+    {
+        return 0;
+    }
+
+    return pAttrSet->GetULSpace().GetLower();
 }
 
 void SwScriptInfo::selectHiddenTextProperty(const SwTextNode& rNode,

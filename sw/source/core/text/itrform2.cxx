@@ -2725,6 +2725,19 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
         if( nUpper > 0 && nTop >= nUpper  )
             aLine.SubTop( nUpper );
     }
+
+    if (IsFirstTextLine())
+    {
+        // Check if a compatibility mode requires considering also the lower margin of this text
+        // frame, intersections with this additional space should lead to shifting the paragraph
+        // marker down.
+        SwTwips nLower = m_pFrame->GetLowerMarginForFlyIntersect();
+        if (nLower > 0)
+        {
+            aLine.AddBottom(nLower);
+        }
+    }
+
     SwRect aLineVert( aLine );
     if ( m_pFrame->IsRightToLeft() )
         m_pFrame->SwitchLTRtoRTL( aLineVert );
