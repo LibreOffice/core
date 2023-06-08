@@ -427,8 +427,12 @@ namespace
                         // full portion width
                         const double fTextWidth(aDXArray[aDXArray.size() - 1]);
 
-                        fStart = fTextWidth - fStart;
-                        fEnd = fTextWidth - fEnd;
+                        // tdf#151968
+                        // if start < end, OutputDevice::DrawWaveLine() will
+                        // think it is a rotated line, so we swap fStart and
+                        // fEnd to avoid this.
+                        fStart = fTextWidth - fEnd;
+                        fEnd = fTextWidth - fStart;
                     }
 
                     // need to take FontScaling out of values; it's already part of

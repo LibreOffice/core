@@ -241,10 +241,20 @@ static void lcl_calcLinePos( const CalcLinePosData &rData,
         break;
     }
 
+    // tdf#151968
+    // if start < end, OutputDevice::DrawWaveLine() will think it is a rotated
+    // line, so we swap nStart and nEnd to avoid this.
+    if ( rData.bBidiPor )
+        std::swap(rStart, rEnd);
+
     if ( rData.bSwitchL2R )
     {
         rData.rInf.GetFrame()->SwitchLTRtoRTL( rStart );
         rData.rInf.GetFrame()->SwitchLTRtoRTL( rEnd );
+
+        // tdf#151968
+        // We need to do this here as well for LTR text in a RTL paragraph.
+        std::swap(rStart, rEnd);
     }
 
     if ( rData.bSwitchH2V )
