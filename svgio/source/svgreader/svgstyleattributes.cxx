@@ -2879,7 +2879,7 @@ namespace svgio::svgreader
 
                 if(!aClipPath.isEmpty())
                 {
-                    const_cast< SvgStyleAttributes* >(this)->mpClipPathXLink = dynamic_cast< const SvgClipPathNode* >(mrOwner.getDocument().findSvgNodeById(aClipPath));
+                    return dynamic_cast< const SvgClipPathNode* >(mrOwner.getDocument().findSvgNodeById(aClipPath));
                 }
             }
 
@@ -2914,7 +2914,7 @@ namespace svgio::svgreader
 
                 if(!aFilter.isEmpty())
                 {
-                    const_cast< SvgStyleAttributes* >(this)->mpFilterXLink = dynamic_cast< const SvgFilterNode* >(mrOwner.getDocument().findSvgNodeById(aFilter));
+                    return dynamic_cast< const SvgFilterNode* >(mrOwner.getDocument().findSvgNodeById(aFilter));
                 }
             }
 
@@ -2949,7 +2949,7 @@ namespace svgio::svgreader
 
                 if(!aMask.isEmpty())
                 {
-                    const_cast< SvgStyleAttributes* >(this)->mpMaskXLink = dynamic_cast< const SvgMaskNode* >(mrOwner.getDocument().findSvgNodeById(aMask));
+                    return dynamic_cast< const SvgMaskNode* >(mrOwner.getDocument().findSvgNodeById(aMask));
                 }
             }
 
@@ -2984,7 +2984,7 @@ namespace svgio::svgreader
 
                 if(!aMarker.isEmpty())
                 {
-                    const_cast< SvgStyleAttributes* >(this)->mpMarkerStartXLink = dynamic_cast< const SvgMarkerNode* >(mrOwner.getDocument().findSvgNodeById(getMarkerStartXLink()));
+                    return dynamic_cast< const SvgMarkerNode* >(mrOwner.getDocument().findSvgNodeById(getMarkerStartXLink()));
                 }
             }
 
@@ -3019,7 +3019,7 @@ namespace svgio::svgreader
 
                 if(!aMarker.isEmpty())
                 {
-                    const_cast< SvgStyleAttributes* >(this)->mpMarkerMidXLink = dynamic_cast< const SvgMarkerNode* >(mrOwner.getDocument().findSvgNodeById(getMarkerMidXLink()));
+                    return dynamic_cast< const SvgMarkerNode* >(mrOwner.getDocument().findSvgNodeById(getMarkerMidXLink()));
                 }
             }
 
@@ -3054,7 +3054,7 @@ namespace svgio::svgreader
 
                 if(!aMarker.isEmpty())
                 {
-                    const_cast< SvgStyleAttributes* >(this)->mpMarkerEndXLink = dynamic_cast< const SvgMarkerNode* >(mrOwner.getDocument().findSvgNodeById(getMarkerEndXLink()));
+                    return dynamic_cast< const SvgMarkerNode* >(mrOwner.getDocument().findSvgNodeById(getMarkerEndXLink()));
                 }
             }
 
