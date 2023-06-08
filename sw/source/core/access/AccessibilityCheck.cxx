@@ -1354,9 +1354,10 @@ void AccessibilityCheck::checkObject(SdrObject* pObject)
         && FindFrameFormat(pObject)->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
         lclAddIssue(m_aIssueCollection, SwResId(STR_FLOATING_TEXT));
 
-    if (pObject->GetObjIdentifier() == SdrObjKind::CustomShape
-        || pObject->GetObjIdentifier() == SdrObjKind::Text
-        || pObject->GetObjIdentifier() == SdrObjKind::Media)
+    const SdrObjKind nObjId = pObject->GetObjIdentifier();
+
+    if (nObjId == SdrObjKind::CustomShape || nObjId == SdrObjKind::Text
+        || nObjId == SdrObjKind::Media || nObjId == SdrObjKind::Group)
     {
         OUString sAlternative = pObject->GetTitle();
         if (sAlternative.isEmpty())
