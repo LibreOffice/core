@@ -1,0 +1,66 @@
+diff --git a/include/xmlsec/nss/crypto.h b/include/xmlsec/nss/crypto.h
+index bb64c5f2..fe9904be 100644
+--- a/include/xmlsec/nss/crypto.h
++++ b/include/xmlsec/nss/crypto.h
+@@ -105,6 +105,7 @@ XMLSEC_CRYPTO_EXPORT xmlSecTransformId  xmlSecNssTransformAes192CbcGetKlass(void
+ XMLSEC_CRYPTO_EXPORT xmlSecTransformId  xmlSecNssTransformAes256CbcGetKlass(void);
+ 
+ 
++#if 0
+ /**
+  * xmlSecNssTransformAes128GcmId:
+  *
+@@ -131,6 +132,7 @@ XMLSEC_CRYPTO_EXPORT xmlSecTransformId  xmlSecNssTransformAes192GcmGetKlass(void
+ #define xmlSecNssTransformAes256GcmId \
+         xmlSecNssTransformAes256GcmGetKlass()
+ XMLSEC_CRYPTO_EXPORT xmlSecTransformId  xmlSecNssTransformAes256GcmGetKlass(void);
++#endif
+ 
+ 
+ /**
+diff --git a/src/nss/ciphers_gcm.c b/src/nss/ciphers_gcm.c
+index 5763a756..7b50e5fd 100644
+--- a/src/nss/ciphers_gcm.c
++++ b/src/nss/ciphers_gcm.c
+@@ -31,6 +31,7 @@
+ #include "../cast_helpers.h"
+ #include "../kw_aes_des.h"
+ 
++#if 0
+ /* https://www.w3.org/TR/xmlenc-core1/#sec-AES-GCM
+  *
+  * For the purposes of this specification, AES-GCM shall be used with
+@@ -591,3 +592,4 @@ xmlSecNssTransformAes256GcmGetKlass(void) {
+ }
+ 
+ #endif /* XMLSEC_NO_AES */
++#endif
+diff --git a/src/nss/crypto.c b/src/nss/crypto.c
+index 429d209f..e0296bda 100644
+--- a/src/nss/crypto.c
++++ b/src/nss/crypto.c
+@@ -131,9 +131,11 @@ xmlSecCryptoGetFunctions_nss(void) {
+     gXmlSecNssFunctions->transformAes192CbcGetKlass     = xmlSecNssTransformAes192CbcGetKlass;
+     gXmlSecNssFunctions->transformAes256CbcGetKlass     = xmlSecNssTransformAes256CbcGetKlass;
+ 
++#if 0
+     gXmlSecNssFunctions->transformAes128GcmGetKlass     = xmlSecNssTransformAes128GcmGetKlass;
+     gXmlSecNssFunctions->transformAes192GcmGetKlass     = xmlSecNssTransformAes192GcmGetKlass;
+     gXmlSecNssFunctions->transformAes256GcmGetKlass     = xmlSecNssTransformAes256GcmGetKlass;
++#endif
+ 
+     gXmlSecNssFunctions->transformKWAes128GetKlass      = xmlSecNssTransformKWAes128GetKlass;
+     gXmlSecNssFunctions->transformKWAes192GetKlass      = xmlSecNssTransformKWAes192GetKlass;
+diff --git a/include/xmlsec/nss/crypto.h b/include/xmlsec/nss/crypto.h
+index bb64c5f2..4c3dc4d3 100644
+--- a/include/xmlsec/nss/crypto.h
++++ b/include/xmlsec/nss/crypto.h
+@@ -26,7 +26,7 @@
+  * RSA OAEP requires https://bugzilla.mozilla.org/show_bug.cgi?id=1666891
+  * which was fixed in NSS 3.59 (https://firefox-source-docs.mozilla.org/security/nss/legacy/nss_releases/nss_3.59_release_notes/index.html)
+  */
+-#if (NSS_VMAJOR < 3) || ((NSS_VMAJOR == 3) && (NSS_VMINOR < 59))
++#if 1
+ #define XMLSEC_NO_RSA_OAEP 1
+ #else  /* (NSS_VMAJOR < 3) || ((NSS_VMAJOR == 3) && (NSS_VMINOR < 59)) */
+ #define XMLSEC_NO_MD5 1

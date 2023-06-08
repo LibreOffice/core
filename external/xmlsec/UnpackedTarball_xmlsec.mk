@@ -8,6 +8,8 @@
 #
 
 xmlsec_patches :=
+# Remove this when Ubuntu 20.04 is EOL in 2025.
+xmlsec_patches += old-nss.patch.1
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,xmlsec))
 
