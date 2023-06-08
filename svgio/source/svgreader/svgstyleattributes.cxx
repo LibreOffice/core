@@ -1213,6 +1213,10 @@ namespace svgio::svgreader
                 {
                     pFilter->apply(aSource);
                 }
+            }
+
+            if(!aSource.empty()) // test again, applied filter may have lead to empty geometry
+            {
 
                 const SvgMaskNode* pMask = accessMaskXLink();
                 if(pMask)
@@ -1279,6 +1283,7 @@ namespace svgio::svgreader
             maTextAnchor(TextAnchor::notset),
             maVisibility(Visibility::notset),
             mpClipPathXLink(nullptr),
+            maFilterXLink(OUString()),
             mpFilterXLink(nullptr),
             mpMaskXLink(nullptr),
             mpMarkerStartXLink(nullptr),
