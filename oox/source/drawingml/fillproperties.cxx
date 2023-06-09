@@ -431,24 +431,12 @@ void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelp
                 if (aFillColor == nPhClr)
                 {
                     aComplexColor.setSchemeColor(model::convertToThemeColorType(nPhClrTheme));
-                    rPropMap.setProperty(PROP_FillComplexColor, model::color::createXComplexColor(aComplexColor));
                 }
                 else
                 {
-                    aComplexColor.setSchemeColor(model::convertToThemeColorType(maFillColor.getSchemeColorIndex()));
-                    if (maFillColor.getLumMod() != 10000)
-                        aComplexColor.addTransformation({model::TransformationType::LumMod, maFillColor.getLumMod()});
-                    if (maFillColor.getLumOff() != 0)
-                        aComplexColor.addTransformation({model::TransformationType::LumOff, maFillColor.getLumOff()});
-                    if (maFillColor.getTintOrShade() > 0)
-                        aComplexColor.addTransformation({model::TransformationType::Tint, maFillColor.getTintOrShade()});
-                    if (maFillColor.getTintOrShade() < 0)
-                    {
-                        sal_Int16 nShade = o3tl::narrowing<sal_Int16>(-maFillColor.getTintOrShade());
-                        aComplexColor.addTransformation({model::TransformationType::Shade, nShade});
-                    }
-                    rPropMap.setProperty(PROP_FillComplexColor, model::color::createXComplexColor(aComplexColor));
+                    aComplexColor = maFillColor.getComplexColor();
                 }
+                rPropMap.setProperty(PROP_FillComplexColor, model::color::createXComplexColor(aComplexColor));
 
                 eFillStyle = FillStyle_SOLID;
             }

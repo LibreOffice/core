@@ -136,20 +136,7 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         rPropMap.setProperty(PROP_CharColor, aColor.getColor(rFilter.getGraphicHelper()));
 
         // set theme color
-        model::ComplexColor aComplexColor;
-        aComplexColor.setSchemeColor(model::convertToThemeColorType(aColor.getSchemeColorIndex()));
-        if (aColor.getTintOrShade() > 0)
-            aComplexColor.addTransformation({model::TransformationType::Tint, aColor.getTintOrShade()});
-        if (aColor.getTintOrShade() < 0)
-        {
-            sal_Int16 nShade = o3tl::narrowing<sal_Int16>(-aColor.getTintOrShade());
-            aComplexColor.addTransformation({model::TransformationType::Shade, nShade});
-        }
-        if (aColor.getLumMod() != 10000)
-            aComplexColor.addTransformation({model::TransformationType::LumMod, aColor.getLumMod()});
-        if (aColor.getLumOff() != 0)
-            aComplexColor.addTransformation({model::TransformationType::LumOff, aColor.getLumOff()});
-
+        model::ComplexColor aComplexColor = aColor.getComplexColor();
         rPropMap.setProperty(PROP_CharComplexColor, model::color::createXComplexColor(aComplexColor));
         rPropMap.setProperty(PROP_CharContoured, bContoured);
 
