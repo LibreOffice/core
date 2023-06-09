@@ -681,7 +681,7 @@ bool BColorStops::isSymmetrical() const
 
 void BColorStops::doApplyAxial()
 {
-    // preapare new ColorStops
+    // prepare new ColorStops
     basegfx::BColorStops aNewColorStops;
 
     // add gradient stops in reverse order, scaled to [0.0 .. 0.5]
