@@ -503,7 +503,7 @@ class trackedchanges(UITestCase):
                     # of the text "inserts": "Document text inserts document"...
                     self.assertTrue(document.getText().getString().startswith('Document text document text'))
 
-    def test_tdf155342_tracked_table_colums(self):
+    def test_tdf155342_tracked_table_columns(self):
         with self.ui_test.load_file(get_url_for_data_file("TC-table-del-add.docx")) as document:
 
             # accept all changes and insert new columns with change tracking
