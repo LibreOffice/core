@@ -3058,9 +3058,10 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReorderingMulti)
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGetViewRenderState)
 {
-    // Add an empty dark scheme to avoid a warning
+    // Add a pair of schemes, last added is the default
     svtools::EditableColorConfig aColorConfig;
     aColorConfig.AddScheme(u"Dark");
+    aColorConfig.AddScheme(u"Light");
 
     ScModelObj* pModelObj = createDoc("empty.ods");
     int nFirstViewId = SfxLokHelper::getView();
