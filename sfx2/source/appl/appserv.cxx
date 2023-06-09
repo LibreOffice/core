@@ -602,8 +602,10 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 SAL_WARN("sfx.appl", "FN_CHANGE_THEME: no theme name");
                 break;
             }
+            const OUString& rSchemeName = pNewThemeArg->GetValue();
             svtools::EditableColorConfig aEditableConfig;
-            aEditableConfig.LoadScheme(pNewThemeArg->GetValue());
+            if (aEditableConfig.GetCurrentSchemeName() != rSchemeName)
+                aEditableConfig.LoadScheme(rSchemeName);
             break;
         }
 
