@@ -2556,6 +2556,39 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableColumnDeletion)
     assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf155747)
+{
+    // load a table, and delete the first column with enabled change tracking:
+    // now the column is not deleted silently, but keeps the deleted cell content,
+    // and only accepting it will result the deletion of the table column.
+    createSwDoc("tdf118311.fodt");
+    SwDoc* pDoc = getSwDoc();
+
+    // turn on red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // delete table column with enabled change tracking
+    // (HasTextChangesOnly property of the cell will be false)
+    dispatchCommand(mxComponent, ".uno:DeleteColumns", {});
+
+    // select table
+    dispatchCommand(mxComponent, ".uno:SelectTable", {});
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:AcceptTrackedChange", {});
+
+    // check removed column
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf150673_RedlineTableColumnDeletionWithExport)
 {
     // load a table, and delete the first column with enabled change tracking:

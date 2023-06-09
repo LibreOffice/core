@@ -22,6 +22,7 @@
 #include <txtfrm.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
+#include <wrtsh.hxx>
 #include <fmtfld.hxx>
 #include <frmtool.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -467,6 +468,8 @@ namespace
             SwCursor aCursor( *pPos, nullptr );
             if ( pBox->IsEmpty() )
             {
+                // tdf#155747 remove table cursor
+                pPos->GetDoc().GetDocShell()->GetWrtShell()->EnterStdMode();
                 // TODO check the other cells of the column
                 // before removing the column
                 pPos->GetDoc().DeleteCol( aCursor );
