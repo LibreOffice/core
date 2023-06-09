@@ -2387,7 +2387,7 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
         // places using it would need adaption, ...), but combined with knowing that nearly
         // all usages ignore or render it locally anyways makes that a non-option.
 
-        // tdf#155479 Yepp, as already mentionmed above we need to add
+        // tdf#155479 Yepp, as already mentioned above we need to add
         // some MCGR infos in case of SVG export, prepare that here
         if (nullptr != mpOutputDevice->GetConnectMetaFile()
             && mpOutputDevice->GetConnectMetaFile()->getSVG())
