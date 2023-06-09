@@ -895,6 +895,16 @@ SwCursorShell::ExtendedSelectedAll() const
 typename SwCursorShell::StartsWith SwCursorShell::StartsWith_()
 {
     SwShellCursor const*const pShellCursor = getShellCursor(false);
+    // first, check if this is invalid; ExtendedSelectAll(true) may result in
+    // a) an ordinary selection that is valid
+    // b) a selection that is extended
+    // c) a selection that is invalid and will cause FindParentText to loop
+    SwNode const& rEndOfExtras(GetDoc()->GetNodes().GetEndOfExtras());
+    if (pShellCursor->Start()->nNode.GetIndex() <= rEndOfExtras.GetIndex()
+        && rEndOfExtras.GetIndex() < pShellCursor->End()->nNode.GetIndex())
+    {
+        return StartsWith::None; // *very* extended, no ExtendedSelectedAll handling!
+    }
     SwStartNode const*const pStartNode(FindParentText(*pShellCursor));
     if (auto const ret = ::StartsWith(*pStartNode); ret != StartsWith::None)
     {
