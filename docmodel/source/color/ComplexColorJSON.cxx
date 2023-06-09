@@ -18,40 +18,42 @@ namespace model::color
 bool convertFromJSON(OString const& rJsonString, model::ComplexColor& rComplexColor)
 {
     model::ComplexColor aComplexColor;
-    std::stringstream aStream((std::string(rJsonString)));
-    boost::property_tree::ptree aRootTree;
+
     try
     {
+        std::stringstream aStream((std::string(rJsonString)));
+        boost::property_tree::ptree aRootTree;
         boost::property_tree::read_json(aStream, aRootTree);
+
+        sal_Int32 nThemeType = aRootTree.get<sal_Int32>("ThemeIndex", -1);
+        aComplexColor.setSchemeColor(model::convertToThemeColorType(nThemeType));
+        boost::property_tree::ptree aTransformTree = aRootTree.get_child("Transformations");
+        for (const auto& rEachTransformationNode :
+             boost::make_iterator_range(aTransformTree.equal_range("")))
+        {
+            auto const& rTransformationTree = rEachTransformationNode.second;
+            std::string sType = rTransformationTree.get<std::string>("Type", "");
+            sal_Int16 nValue = rTransformationTree.get<sal_Int16>("Value", 0);
+
+            auto eType = model::TransformationType::Undefined;
+            if (sType == "LumOff")
+                eType = model::TransformationType::LumOff;
+            else if (sType == "LumMod")
+                eType = model::TransformationType::LumMod;
+            else if (sType == "Tint")
+                eType = model::TransformationType::Tint;
+            else if (sType == "Shade")
+                eType = model::TransformationType::Shade;
+
+            if (eType != model::TransformationType::Undefined)
+                aComplexColor.addTransformation({ eType, nValue });
+        }
     }
     catch (const boost::property_tree::json_parser_error& /*exception*/)
     {
         return false;
     }
 
-    sal_Int32 nThemeType = aRootTree.get<sal_Int32>("ThemeIndex", -1);
-    aComplexColor.setSchemeColor(model::convertToThemeColorType(nThemeType));
-    boost::property_tree::ptree aTransformTree = aRootTree.get_child("Transformations");
-    for (const auto& rEachTransformationNode :
-         boost::make_iterator_range(aTransformTree.equal_range("")))
-    {
-        auto const& rTransformationTree = rEachTransformationNode.second;
-        std::string sType = rTransformationTree.get<std::string>("Type", "");
-        sal_Int16 nValue = rTransformationTree.get<sal_Int16>("Value", 0);
-
-        auto eType = model::TransformationType::Undefined;
-        if (sType == "LumOff")
-            eType = model::TransformationType::LumOff;
-        else if (sType == "LumMod")
-            eType = model::TransformationType::LumMod;
-        else if (sType == "Tint")
-            eType = model::TransformationType::Tint;
-        else if (sType == "Shade")
-            eType = model::TransformationType::Shade;
-
-        if (eType != model::TransformationType::Undefined)
-            aComplexColor.addTransformation({ eType, nValue });
-    }
     rComplexColor = aComplexColor;
     return true;
 }

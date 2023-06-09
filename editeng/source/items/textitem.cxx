@@ -1555,11 +1555,11 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 return false;
 
             if (sComplexColorJson.isEmpty())
-            {
                 return false;
-            }
+
             OString aJSON = OUStringToOString(sComplexColorJson, RTL_TEXTENCODING_ASCII_US);
-            model::color::convertFromJSON(aJSON, maComplexColor);
+            if (!model::color::convertFromJSON(aJSON, maComplexColor))
+                return false;
         }
         break;
         case MID_COMPLEX_COLOR:
@@ -1575,7 +1575,8 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_COLOR_RGB:
         default:
         {
-            return rVal >>= mColor;
+            if (!(rVal >>= mColor))
+                return false;
         }
         break;
     }
