@@ -331,7 +331,6 @@ void WriterFilter::setTargetDocument(const uno::Reference<lang::XComponent>& xDo
     xSettings->setPropertyValue("PropLineSpacingShrinksFirstLine", uno::Any(true));
     xSettings->setPropertyValue("DoNotCaptureDrawObjsOnPage", uno::Any(true));
     xSettings->setPropertyValue("DisableOffPagePositioning", uno::Any(true));
-    xSettings->setPropertyValue("WordLikeWrapForAsCharFlys", uno::Any(true));
     xSettings->setPropertyValue("DropCapPunctuation", uno::Any(true));
     // rely on default for HyphenateURLs=false
 }

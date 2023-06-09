@@ -137,14 +137,6 @@ void SwLayoutWriter2::CheckRedlineCharAttributesHidden()
                 "portion", "foobaz");
 }
 
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf100680_as_char_wrap)
-{
-    createSwDoc("tdf100680.docx");
-    auto pDump = parseLayoutDump();
-    assertXPath(pDump, "/root/page/header/txt/SwParaPortion/SwLineLayout[3]");
-    // If the third line missing that assert will fire, as was before the fix.
-}
-
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineCharAttributes)
 {
     createSwDoc("redline_charatr.fodt");
