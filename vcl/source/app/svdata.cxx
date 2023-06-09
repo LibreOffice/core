@@ -419,9 +419,13 @@ ImplSVData::ImplSVData()
 
 void ImplSVData::dropCaches()
 {
-    maGDIData.maScaleCache.clear();
-    maGDIData.maThemeImageCache.clear();
+    // we are iterating over a map and doing erase while inside a loop which is doing erase
+    // hence we can't use clear() here
+    maGDIData.maScaleCache.remove_if([](const lru_scale_cache::key_value_pair_t&)
+                                                { return true; });
+
     maGDIData.maThemeDrawCommandsCache.clear();
+    maGDIData.maThemeImageCache.clear();
 }
 
 void ImplSVData::dumpState(rtl::OStringBuffer &rState)
