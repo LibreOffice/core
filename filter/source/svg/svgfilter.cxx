@@ -430,12 +430,29 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
                         {
                             Sequence< Reference< XInterface > > aSelectedPageSequence;
                             aSelection >>= aSelectedPageSequence;
-                            mSelectedPages.resize( aSelectedPageSequence.getLength() );
-                            for( size_t j=0; j<mSelectedPages.size(); ++j )
+                            sal_Int32 nCount = aSelectedPageSequence.getLength();
+                            if (nCount > 0)
                             {
-                                uno::Reference< drawing::XDrawPage > xDrawPage( aSelectedPageSequence[j],
-                                                                                uno::UNO_QUERY );
-                                mSelectedPages[j] = xDrawPage;
+                                size_t nSelectedPageCount = nCount;
+                                for( size_t j=0; j<nSelectedPageCount; ++j )
+                                {
+                                    uno::Reference< drawing::XDrawPage > xDrawPage( aSelectedPageSequence[j],
+                                                                                    uno::UNO_QUERY );
+
+                                    Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
+                                    bool bIsSlideVisible = true;     // default: true
+                                    if (xPropSet.is())
+                                    {
+                                        Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+                                        if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("Visible"))
+                                        {
+                                            xPropSet->getPropertyValue( "Visible" )  >>= bIsSlideVisible;
+                                            if (!bIsSlideVisible)
+                                                continue;
+                                        }
+                                    }
+                                    mSelectedPages.push_back(xDrawPage);
+                                }
                             }
 
                             // and stop looping. It is likely not getting better
@@ -470,19 +487,30 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
                 {
                     sal_Int32 nDPCount = xDrawPages->getCount();
 
-                    mSelectedPages.resize( nPageToExport != -1 ? 1 : nDPCount );
                     sal_Int32 i;
                     for( i = 0; i < nDPCount; ++i )
                     {
                         if( nPageToExport != -1 && nPageToExport == i )
                         {
                             uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPages->getByIndex( i ), uno::UNO_QUERY );
-                            mSelectedPages[0] = xDrawPage;
+                            mSelectedPages.push_back(xDrawPage);
                         }
                         else
                         {
                             uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPages->getByIndex( i ), uno::UNO_QUERY );
-                            mSelectedPages[i] = xDrawPage;
+                            Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
+                            bool bIsSlideVisible = true;     // default: true
+                            if (xPropSet.is())
+                            {
+                                Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+                                if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("Visible"))
+                                {
+                                    xPropSet->getPropertyValue( "Visible" )  >>= bIsSlideVisible;
+                                    if (!bIsSlideVisible)
+                                        continue;
+                                }
+                            }
+                            mSelectedPages.push_back(xDrawPage);
                         }
                     }
                 }
