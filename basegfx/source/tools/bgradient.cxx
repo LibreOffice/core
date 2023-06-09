@@ -749,7 +749,7 @@ void BColorStops::doApplySteps(sal_uInt16 nStepCount)
 
         if (!basegfx::fTools::equalZero(fDelta))
         {
-            // create in-between steps, always two at the same positon to
+            // create in-between steps, always two at the same position to
             // define a 'hard' color stop. Get start/end color for the segment
             const basegfx::BColor& rStartColor(aColorL->getStopColor());
             const basegfx::BColor& rEndColor(aColorR->getStopColor());
