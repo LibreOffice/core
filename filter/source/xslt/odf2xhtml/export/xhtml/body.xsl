@@ -2853,7 +2853,7 @@
     <xsl:template match="@text:style-name | @draw:style-name | @draw:text-style-name | @table:style-name | @presentation:style-name">
         <xsl:param name="globalData"/>
 
-        <!-- the probem there can be more than one style-name attribute! We need to write class once with all style-name attribute values -->
+        <!-- the problem there can be more than one style-name attribute! We need to write class once with all style-name attribute values -->
         <xsl:variable name="classAttributeValue">
             <xsl:if test="parent::*/@text:style-name != ''"> 
                 <xsl:call-template name="create-unique-style-id">
