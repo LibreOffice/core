@@ -422,11 +422,8 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
     else
     {
         bool bFirstPor = rInf.GetLineStart() == rInf.GetIdx();
-        const bool bBreakLineIfHasFly
-            = rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
-                DocumentSettingId::WRAP_AS_CHAR_FLYS_LIKE_IN_OOXML);
         if (aGuess.BreakPos() != TextFrameIndex(COMPLETE_STRING) &&
-            (aGuess.BreakPos() != rInf.GetLineStart() || bBreakLineIfHasFly) &&
+            aGuess.BreakPos() != rInf.GetLineStart() &&
             ( !bFirstPor || rInf.GetFly() || rInf.GetLast()->IsFlyPortion() ||
               rInf.IsFirstMulti() ) &&
             ( !rInf.GetLast()->IsBlankPortion() ||
