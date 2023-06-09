@@ -589,13 +589,7 @@ void DeInitVCL()
 
     pSVData->maGDIData.mxScreenFontList.reset();
     pSVData->maGDIData.mxScreenFontCache.reset();
-    // we are iterating over a map and doing erase while inside a loop which is doing erase
-    // hence we can't use clear() here
-    pSVData->maGDIData.maScaleCache.remove_if([](const lru_scale_cache::key_value_pair_t&)
-                                                { return true; });
-
-    pSVData->maGDIData.maThemeDrawCommandsCache.clear();
-    pSVData->maGDIData.maThemeImageCache.clear();
+    pSVData->dropCaches();
 
     comphelper::AccessibleEventNotifier::shutdown();
 
