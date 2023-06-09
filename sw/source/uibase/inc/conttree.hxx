@@ -244,6 +244,7 @@ public:
         { return State::HIDDEN == m_eState ? m_pHiddenShell : m_pActiveShell; }
 
     bool            IsInDrag() const;
+    bool            HasHeadings() const;
 
     sal_uInt8       GetOutlineLevel()const {return m_nOutlineLevel;}
     void            SetOutlineLevel(sal_uInt8 nSet);
