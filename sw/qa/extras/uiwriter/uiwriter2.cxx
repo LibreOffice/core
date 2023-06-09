@@ -18,6 +18,10 @@
 #include <vcl/scheduler.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <svx/svxids.hrc>
+#include <view.hxx>
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>
 #include <IDocumentRedlineAccess.hxx>
@@ -166,6 +170,21 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf101534)
     CPPUNIT_ASSERT(!aSet.HasItem(RES_MARGIN_FIRSTLINE));
     CPPUNIT_ASSERT(aSet.HasItem(RES_MARGIN_TEXTLEFT));
     CPPUNIT_ASSERT_EQUAL(::tools::Long(0), aSet.GetItem(RES_MARGIN_TEXTLEFT)->GetTextLeft());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testExtendedSelectAllHang)
+{
+    createSwDoc();
+    SwDoc* const pDoc = getSwDoc();
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    pWrtShell->InsertFootnote("");
+    pWrtShell->StartOfSection();
+    SwView* pView = pDoc->GetDocShell()->GetView();
+    SfxStringItem aLangString(SID_LANGUAGE_STATUS, "Default_Spanish (Bolivia)");
+    // this looped
+    pView->GetViewFrame().GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS, SfxCallMode::SYNCHRON,
+                                                       { &aLangString });
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineMoveInsertInDelete)
