@@ -106,7 +106,6 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbFootnoteInColumnToPageEnd(false),
     mnImagePreferredDPI(0),
     mbAutoFirstLineIndentDisregardLineSpace(true),
-    mbWrapAsCharFlysLikeInOOXML(false),
     mbNoNumberingShowFollowBy(false),
     mbDropCapPunctuation(true),
     mbUseVariableWidthNBSP(false)
@@ -254,7 +253,6 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::HYPHENATE_URLS: return mbHyphenateURLs;
         case DocumentSettingId::DO_NOT_BREAK_WRAPPED_TABLES:
             return mbDoNotBreakWrappedTables;
-        case DocumentSettingId::WRAP_AS_CHAR_FLYS_LIKE_IN_OOXML: return mbWrapAsCharFlysLikeInOOXML;
         case DocumentSettingId::NO_NUMBERING_SHOW_FOLLOWBY: return mbNoNumberingShowFollowBy;
         case DocumentSettingId::DROP_CAP_PUNCTUATION: return mbDropCapPunctuation;
         case DocumentSettingId::USE_VARIABLE_WIDTH_NBSP: return mbUseVariableWidthNBSP;
@@ -442,10 +440,6 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
 
         case DocumentSettingId::DO_NOT_BREAK_WRAPPED_TABLES:
             mbDoNotBreakWrappedTables = value;
-            break;
-
-        case DocumentSettingId::WRAP_AS_CHAR_FLYS_LIKE_IN_OOXML:
-            mbWrapAsCharFlysLikeInOOXML = value;
             break;
 
         case DocumentSettingId::NO_NUMBERING_SHOW_FOLLOWBY:
