@@ -7661,8 +7661,8 @@ void DocxAttributeOutput::CharColor(const SvxColorItem& rColorItem)
         { model::ThemeColorType::Accent4, "accent4" },
         { model::ThemeColorType::Accent5, "accent5" },
         { model::ThemeColorType::Accent6, "accent6" },
-        { model::ThemeColorType::Hyperlink, "hlink" },
-        { model::ThemeColorType::FollowedHyperlink, "folHlink" }
+        { model::ThemeColorType::Hyperlink, "hyperlink" },
+        { model::ThemeColorType::FollowedHyperlink, "followedHyperlink" }
     };
 
     const Color aColor = rColorItem.getColor();

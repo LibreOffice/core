@@ -151,7 +151,7 @@ OString ThemeColorPaletteManager::generateJSON()
             aComplexColor.addTransformation(
                 { model::TransformationType::LumMod, rEffectData.mnLumMod });
             aComplexColor.addTransformation(
-                { model::TransformationType::LumMod, rEffectData.mnLumOff });
+                { model::TransformationType::LumOff, rEffectData.mnLumOff });
             boost::property_tree::ptree aDataTree;
             model::color::convertToJSONTree(aDataTree, aComplexColor);
             aColorTree.add_child("Data", aDataTree);
