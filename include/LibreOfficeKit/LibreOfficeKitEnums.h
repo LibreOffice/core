@@ -963,7 +963,7 @@ typedef enum
     LOK_CALLBACK_COLOR_PALETTES = 65,
 
     /**
-     * Informs that the document password has been succesfully changed.
+     * Informs that the document password has been successfully changed.
      * The payload contains the the new password and the type.
     */
     LOK_CALLBACK_DOCUMENT_PASSWORD_RESET = 66
