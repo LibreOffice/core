@@ -79,6 +79,7 @@ void PDFDialog::executedDialog( sal_Int16 nExecutionResult )
 void PDFDialog::runAsync(const css::uno::Reference< css::ui::dialogs::XDialogClosedListener >& xListener)
 {
     SfxTabDialogController::runAsync(m_xAsyncDialog, [this, xListener](sal_Int32 nResponse) {
+        rtl::Reference<PDFDialog> xThis(this); // keep alive for scope, dialogClosed can cause owner to drop this
         executedAsyncDialog( m_xAsyncDialog, nResponse );
         css::ui::dialogs::DialogClosedEvent aEvent;
         aEvent.DialogResult = nResponse;
