@@ -32,11 +32,9 @@
   <block-list:block block-list:abbreviated-name="nët" block-list:name="net"/>
   <block-list:block block-list:abbreviated-name="erem" block-list:name="erëm"/>
   <block-list:block block-list:abbreviated-name="machen" block-list:name="maachen"/>
-  <block-list:block block-list:abbreviated-name="em" block-list:name="ëm"/>
   <block-list:block block-list:abbreviated-name="gett" block-list:name="gëtt"/>
   <block-list:block block-list:abbreviated-name="waat" block-list:name="wat"/>
   <block-list:block block-list:abbreviated-name="nemmen" block-list:name="nëmmen"/>
-  <block-list:block block-list:abbreviated-name="matt" block-list:name="mat"/>
   <block-list:block block-list:abbreviated-name="iwert" block-list:name="iwwert"/>
   <block-list:block block-list:abbreviated-name="die" block-list:name="déi"/>
   <block-list:block block-list:abbreviated-name="schons" block-list:name="schonns"/>
@@ -191,7 +189,6 @@
   <block-list:block block-list:abbreviated-name="ett" block-list:name="et"/>
   <block-list:block block-list:abbreviated-name="fun" block-list:name="vun"/>
   <block-list:block block-list:abbreviated-name="waerten" block-list:name="wäerten"/>
-  <block-list:block block-list:abbreviated-name="dono" block-list:name="duerno"/>
   <block-list:block block-list:abbreviated-name="fiir" block-list:name="fir"/>
   <block-list:block block-list:abbreviated-name="Spass" block-list:name="Spaass"/>
   <block-list:block block-list:abbreviated-name="Velo" block-list:name="Vëlo"/>
@@ -248,7 +245,6 @@
   <block-list:block block-list:abbreviated-name="présentéiert" block-list:name="presentéiert"/>
   <block-list:block block-list:abbreviated-name="Plaaz" block-list:name="Plaz"/>
   <block-list:block block-list:abbreviated-name="next" block-list:name="nächst"/>
-  <block-list:block block-list:abbreviated-name="wenden" block-list:name="wennen"/>
   <block-list:block block-list:abbreviated-name="wee" block-list:name="Wee"/>
   <block-list:block block-list:abbreviated-name="Minuten" block-list:name="Minutten"/>
   <block-list:block block-list:abbreviated-name="gud" block-list:name="gutt"/>
@@ -339,17 +335,15 @@
   <block-list:block block-list:abbreviated-name="verkaaf" block-list:name="verkaf"/>
   <block-list:block block-list:abbreviated-name="frai" block-list:name="fräi"/>
   <block-list:block block-list:abbreviated-name="font" block-list:name="fonnt"/>
-  <block-list:block block-list:abbreviated-name="annexe" block-list:name="Annexe"/>
+  <block-list:block block-list:abbreviated-name="annexe" block-list:name="Annex"/>
   <block-list:block block-list:abbreviated-name="oof" block-list:name="of"/>
-  <block-list:block block-list:abbreviated-name="Diir" block-list:name="Dier"/>
   <block-list:block block-list:abbreviated-name="dess" block-list:name="dës"/>
   <block-list:block block-list:abbreviated-name="Sach" block-list:name="Saach"/>
   <block-list:block block-list:abbreviated-name="geseit" block-list:name="gesäit"/>
   <block-list:block block-list:abbreviated-name="haate" block-list:name="hate"/>
   <block-list:block block-list:abbreviated-name="éng" block-list:name="eng"/>
-  <block-list:block block-list:abbreviated-name="Bedürfnisser" block-list:name="Bedierfnesser"/>
   <block-list:block block-list:abbreviated-name="tescht" block-list:name="tëscht"/>
-  <block-list:block block-list:abbreviated-name="Ideen" block-list:name="Ideeën"/>
+  <block-list:block block-list:abbreviated-name="Ideen" block-list:name="Iddien"/>
   <block-list:block block-list:abbreviated-name="Denschdeg" block-list:name="Dënschdeg"/>
   <block-list:block block-list:abbreviated-name="su" block-list:name="sou"/>
   <block-list:block block-list:abbreviated-name="denn" block-list:name="dënn"/>
@@ -367,7 +361,7 @@
   <block-list:block block-list:abbreviated-name="sec" block-list:name="sech"/>
   <block-list:block block-list:abbreviated-name="invitéiren" block-list:name="invitéieren"/>
   <block-list:block block-list:abbreviated-name="september" block-list:name="September"/>
-  <block-list:block block-list:abbreviated-name="weivill" block-list:name="wéivill"/>
+  <block-list:block block-list:abbreviated-name="weivill" block-list:name="wéi vill"/>
   <block-list:block block-list:abbreviated-name="Frendin" block-list:name="Frëndin"/>
   <block-list:block block-list:abbreviated-name="nexten" block-list:name="nächsten"/>
   <block-list:block block-list:abbreviated-name="Schouljoër" block-list:name="Schouljoer"/>
@@ -379,7 +373,7 @@
   <block-list:block block-list:abbreviated-name="selwescht" block-list:name="selwecht"/>
   <block-list:block block-list:abbreviated-name="numm" block-list:name="Numm"/>
   <block-list:block block-list:abbreviated-name="interesseiert" block-list:name="interesséiert"/>
-  <block-list:block block-list:abbreviated-name="letzebuerger" block-list:name="lëtzebuerger"/>
+  <block-list:block block-list:abbreviated-name="letzebuerger" block-list:name="Lëtzebuerger"/>
   <block-list:block block-list:abbreviated-name="Hochzait" block-list:name="Hochzäit"/>
   <block-list:block block-list:abbreviated-name="ménger" block-list:name="menger"/>
   <block-list:block block-list:abbreviated-name="Breif" block-list:name="Bréif"/>
@@ -439,7 +433,7 @@
   <block-list:block block-list:abbreviated-name="schengt" block-list:name="schéngt"/>
   <block-list:block block-list:abbreviated-name="drecken" block-list:name="drécken"/>
   <block-list:block block-list:abbreviated-name="wess" block-list:name="weess"/>
-  <block-list:block block-list:abbreviated-name="aleng" block-list:name="alleng"/>
+  <block-list:block block-list:abbreviated-name="alleng" block-list:name="aleng"/>
   <block-list:block block-list:abbreviated-name="informatiounen" block-list:name="Informatiounen"/>
   <block-list:block block-list:abbreviated-name="gleich" block-list:name="gläich"/>
   <block-list:block block-list:abbreviated-name="Ennerstëtzung" block-list:name="Ënnerstëtzung"/>
@@ -512,7 +506,7 @@
   <block-list:block block-list:abbreviated-name="gesidd" block-list:name="gesitt"/>
   <block-list:block block-list:abbreviated-name="mëch" block-list:name="mech"/>
   <block-list:block block-list:abbreviated-name="grous" block-list:name="grouss"/>
-  <block-list:block block-list:abbreviated-name="ziemlech" block-list:name="zimlech"/>
+  <block-list:block block-list:abbreviated-name="ziemlech" block-list:name="zimmlech"/>
   <block-list:block block-list:abbreviated-name="méngem" block-list:name="mengem"/>
   <block-list:block block-list:abbreviated-name="Reklam" block-list:name="Reklamm"/>
   <block-list:block block-list:abbreviated-name="heiandsdo" block-list:name="heiansdo"/>
@@ -529,6 +523,63 @@
   <block-list:block block-list:abbreviated-name="geduet" block-list:name="geduecht"/>
   <block-list:block block-list:abbreviated-name="hëllt" block-list:name="hëlt"/>
   <block-list:block block-list:abbreviated-name="Bevölkerung" block-list:name="Bevëlkerung"/>
+  <block-list:block block-list:abbreviated-name="w.e.g." block-list:name="wgl."/>
+  <block-list:block block-list:abbreviated-name="wann ech gelift" block-list:name="wannechgelift"/>
+  <block-list:block block-list:abbreviated-name="wat gelift" block-list:name="watgelift"/>
+  <block-list:block block-list:abbreviated-name="watglift" block-list:name="watgelift"/>
+  <block-list:block block-list:abbreviated-name="'T" block-list:name="'t"/>
+  <block-list:block block-list:abbreviated-name="‘T" block-list:name="‘t"/>
+  <block-list:block block-list:abbreviated-name="op mannst" block-list:name="op d'mannst"/>
+  <block-list:block block-list:abbreviated-name="Päiperléck" block-list:name="Päiperlek"/>
+  <block-list:block block-list:abbreviated-name="Päiperlék" block-list:name="Päiperlek"/>
+  <block-list:block block-list:abbreviated-name="iersen" block-list:name="iessen"/>
+  <block-list:block block-list:abbreviated-name="fällt" block-list:name="fält"/>
+  <block-list:block block-list:abbreviated-name="sitt" block-list:name="sidd"/>
+  <block-list:block block-list:abbreviated-name="a.s.b.l." block-list:name="ASBL"/>
+  <block-list:block block-list:abbreviated-name="achzeg" block-list:name="achtzeg"/>
+  <block-list:block block-list:abbreviated-name="Brit" block-list:name="Britt"/>
+  <block-list:block block-list:abbreviated-name="britesch" block-list:name="brittesch"/>
+  <block-list:block block-list:abbreviated-name="folgend" block-list:name="follgend"/>
+  <block-list:block block-list:abbreviated-name="nofolger" block-list:name="Nofollger"/>
+  <block-list:block block-list:abbreviated-name="städtesch" block-list:name="stättesch"/>
+  <block-list:block block-list:abbreviated-name="extrem" block-list:name="extreem"/>
+  <block-list:block block-list:abbreviated-name="jeweileg" block-list:name="jeeweileg"/>
+  <block-list:block block-list:abbreviated-name="Regel" block-list:name="Reegel"/>
+  <block-list:block block-list:abbreviated-name="eben" block-list:name="eeben"/>
+  <block-list:block block-list:abbreviated-name="bewegen" block-list:name="beweegen"/>
+  <block-list:block block-list:abbreviated-name="Bewegung" block-list:name="Beweegung"/>
+  <block-list:block block-list:abbreviated-name="italienesch" block-list:name="italieenesch"/>
+  <block-list:block block-list:abbreviated-name="Trema" block-list:name="Treema"/>
+  <block-list:block block-list:abbreviated-name="Thema" block-list:name="Theema"/>
+  <block-list:block block-list:abbreviated-name="Privileg" block-list:name="Privileeg"/>
+  <block-list:block block-list:abbreviated-name="Erlaabnis" block-list:name="Erlabnis"/>
+  <block-list:block block-list:abbreviated-name="Erlaabnes" block-list:name="Erlabnes"/>
+  <block-list:block block-list:abbreviated-name="Mäerchen" block-list:name="Märchen"/>
+  <block-list:block block-list:abbreviated-name="wootlech" block-list:name="wotlech"/>
+  <block-list:block block-list:abbreviated-name="Liibling" block-list:name="Libling"/>
+  <block-list:block block-list:abbreviated-name="Bir" block-list:name="Bier"/>
+  <block-list:block block-list:abbreviated-name="Gehir" block-list:name="Gehier"/>
+  <block-list:block block-list:abbreviated-name="Geschir" block-list:name="Geschier"/>
+  <block-list:block block-list:abbreviated-name="hurelen" block-list:name="huerelen"/>
+  <block-list:block block-list:abbreviated-name="Kur" block-list:name="Kuer"/>
+  <block-list:block block-list:abbreviated-name="iren" block-list:name="ieren"/>
+  <block-list:block block-list:abbreviated-name="Spur" block-list:name="Spuer"/>
+  <block-list:block block-list:abbreviated-name="Stir" block-list:name="Stier"/>
+  <block-list:block block-list:abbreviated-name="Uerteel" block-list:name="Urteel"/>
+  <block-list:block block-list:abbreviated-name="beuerteelen" block-list:name="beurteelen"/>
+  <block-list:block block-list:abbreviated-name="veruerteelen" block-list:name="verurteelen"/>
+  <block-list:block block-list:abbreviated-name="Hambier" block-list:name="Hammbier"/>
+  <block-list:block block-list:abbreviated-name="Schubkar" block-list:name="Schubbkar"/>
+  <block-list:block block-list:abbreviated-name="dagsiwwer" block-list:name="daagsiwwer"/>
+  <block-list:block block-list:abbreviated-name="hautdësdags" block-list:name="hautdesdaags"/>
+  <block-list:block block-list:abbreviated-name="hautdesdags" block-list:name="hautdesdaags"/>
+  <block-list:block block-list:abbreviated-name="ähnlech" block-list:name="änlech"/>
+  <block-list:block block-list:abbreviated-name="Ahnung" block-list:name="Anung"/>
+  <block-list:block block-list:abbreviated-name="angenehm" block-list:name="angeneem"/>
+  <block-list:block block-list:abbreviated-name="berühmt" block-list:name="berüümt"/>
+  <block-list:block block-list:abbreviated-name="Bühn" block-list:name="Bün"/>
+  <block-list:block block-list:abbreviated-name="während" block-list:name="wärend"/>
+  <block-list:block block-list:abbreviated-name="Truh" block-list:name="Tru"/>
   <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
   <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
   <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
