@@ -567,6 +567,30 @@ sal_Int16 Color::getLumOff() const
     return 0;
 }
 
+model::ComplexColor Color::getComplexColor() const
+{
+    model::ComplexColor aComplexColor;
+    aComplexColor.setSchemeColor(model::convertToThemeColorType(getSchemeColorIndex()));
+
+    if (getTintOrShade() > 0)
+    {
+        aComplexColor.addTransformation({model::TransformationType::Tint, getTintOrShade()});
+    }
+    else if (getTintOrShade() < 0)
+    {
+        sal_Int16 nShade = o3tl::narrowing<sal_Int16>(-getTintOrShade());
+        aComplexColor.addTransformation({model::TransformationType::Shade, nShade});
+    }
+
+    if (getLumMod() != 10000)
+        aComplexColor.addTransformation({model::TransformationType::LumMod, getLumMod()});
+
+    if (getLumOff() != 0)
+        aComplexColor.addTransformation({model::TransformationType::LumOff, getLumOff()});
+
+    return aComplexColor;
+}
+
 ::Color Color::getColor( const GraphicHelper& rGraphicHelper, ::Color nPhClr ) const
 {
     const sal_Int32 nTempC1 = mnC1;
