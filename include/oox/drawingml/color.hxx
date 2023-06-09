@@ -30,6 +30,7 @@
 #include <sal/types.h>
 #include <tools/color.hxx>
 #include <docmodel/theme/ThemeColorType.hxx>
+#include <docmodel/color/ComplexColor.hxx>
 
 namespace oox { class GraphicHelper; }
 
@@ -116,6 +117,8 @@ public:
 
     /// Compares this color with rOther.
     bool equals(const Color& rOther, const GraphicHelper& rGraphicHelper, ::Color nPhClr) const;
+
+    model::ComplexColor getComplexColor() const;
 
 private:
     /** Internal helper for getColor(). */
