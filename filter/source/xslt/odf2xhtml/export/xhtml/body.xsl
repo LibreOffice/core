@@ -3000,7 +3000,7 @@
             (realized style family 'section' is missing, see https://docs.oasis-open.org/office/OpenDocument/v1.3/os/schemas/OpenDocument-v1.3-schema-rng.html#12668
                 and wrote an issue to ODF TC: https://github.com/oasis-tcs/odf-tc/issues/49
 
-            in addition the mapping of styleable ODF elements to their @style:family attribute is availabe in structured form (XML) in the ODF Toolkit generator project:
+            in addition the mapping of styleable ODF elements to their @style:family attribute is available in structured form (XML) in the ODF Toolkit generator project:
             	https://github.com/tdf/odftoolkit/blob/master/generator/schema2template/src/test/resources/test-input/odf/generation/odfdom-java/dom/grammar-additions.xml#LL43C52-L43C52r-additions.xml#LL43C52-L43C52
         -->
         <xsl:choose>
