@@ -694,10 +694,13 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
         m_xGlobalTree->HideTree();
 
         //Open Headings by default
-        auto& pTreeView = m_xContentTree->get_widget();
-        std::unique_ptr<weld::TreeIter> itEntry(pTreeView.make_iterator());
-        pTreeView.get_iter_first(*itEntry);
-        pTreeView.expand_row(*itEntry);
+        if (m_xContentTree->HasHeadings())
+        {
+            auto& pTreeView = m_xContentTree->get_widget();
+            std::unique_ptr<weld::TreeIter> itEntry(pTreeView.make_iterator());
+            pTreeView.get_iter_first(*itEntry);
+            pTreeView.expand_row(*itEntry);
+        }
     }
 }
 

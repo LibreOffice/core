@@ -1256,6 +1256,14 @@ bool SwContentTree::IsInDrag() const
     return m_xTreeView->get_drag_source() == m_xTreeView.get();
 }
 
+bool SwContentTree::HasHeadings() const
+{
+    const std::unique_ptr<SwContentType>& rpContentT = m_aActiveContentArr[ContentTypeId::OUTLINE];
+    if (rpContentT && rpContentT->GetMemberCount() > 0)
+        return true;
+    return false;
+}
+
 // QueryDrop will be executed in the navigator
 sal_Int8 SwContentTree::AcceptDrop(const AcceptDropEvent& rEvt)
 {
