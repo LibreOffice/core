@@ -964,7 +964,7 @@ typedef enum
 
     /**
      * Informs that the document password has been successfully changed.
-     * The payload contains the the new password and the type.
+     * The payload contains the new password and the type.
     */
     LOK_CALLBACK_DOCUMENT_PASSWORD_RESET = 66
 }
