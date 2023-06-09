@@ -18,6 +18,10 @@
 #include <vcl/scheduler.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <svx/svxids.hrc>
+#include <view.hxx>
 #include <ndtxt.hxx>
 #include <swdtflvr.hxx>
 #include <wrtsh.hxx>
@@ -173,6 +177,21 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf101534)
     pWrtShell->GetCurAttr(aSet);
     // This failed, direct formatting was lost.
     CPPUNIT_ASSERT(aSet.HasItem(RES_LR_SPACE));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testExtendedSelectAllHang)
+{
+    createSwDoc();
+    SwDoc* const pDoc = getSwDoc();
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    pWrtShell->InsertFootnote("");
+    pWrtShell->StartOfSection();
+    SwView* pView = pDoc->GetDocShell()->GetView();
+    SfxStringItem aLangString(SID_LANGUAGE_STATUS, "Default_Spanish (Bolivia)");
+    // this looped
+    pView->GetViewFrame()->GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS, SfxCallMode::SYNCHRON,
+                                                        { &aLangString });
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineMoveInsertInDelete)
