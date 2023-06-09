@@ -77,6 +77,7 @@ private:
         {
             // a generous 30 secs
             SetTimeout(30000);
+            SetStatic();
         }
         virtual void Invoke() override { StylePreviewCache::gJsonStylePreviewCache.clear(); }
     };
