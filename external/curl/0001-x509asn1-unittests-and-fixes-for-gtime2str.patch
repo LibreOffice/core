@@ -161,7 +161,7 @@ index c402f8035..5b23c2559 100644
 - unit1650 unit1651 unit1652 unit1653 unit1654 unit1655 \
 + unit1650 unit1651 unit1652 unit1653 unit1654 unit1655 unit1656 \
   unit1660 unit1661 \
-  unit2600 \
+  unit2600 unit2601 unit2602 unit2603 \
   unit3200
 diff --git a/tests/unit/Makefile.in b/tests/unit/Makefile.in
 index c402f8035..5b23c2559 100644
