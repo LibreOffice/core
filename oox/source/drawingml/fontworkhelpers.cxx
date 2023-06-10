@@ -19,6 +19,8 @@
 
 #include <drawingml/fontworkhelpers.hxx>
 
+#include <basegfx/utils/bgradient.hxx>
+#include <basegfx/utils/gradienttools.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
@@ -33,7 +35,7 @@
 #include <tools/color.hxx>
 #include <tools/helpers.hxx>
 
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -1123,8 +1125,8 @@ void lcl_addColorTransformationToGrabBagStack(const model::ComplexColor& rComple
 
 void lcl_getGradientsFromShape(const uno::Reference<beans::XPropertySet>& rXPropSet,
                                const uno::Reference<beans::XPropertySetInfo>& rXPropSetInfo,
-                               awt::Gradient& rColorGradient, bool& rbHasColorGradient,
-                               awt::Gradient& rTransparenceGradient,
+                               awt::Gradient2& rColorGradient, bool& rbHasColorGradient,
+                               awt::Gradient2& rTransparenceGradient,
                                bool& rbHasTransparenceGradient)
 {
     OUString sColorGradientName;
@@ -1144,249 +1146,94 @@ void lcl_getGradientsFromShape(const uno::Reference<beans::XPropertySet>& rXProp
           && (rXPropSet->getPropertyValue(u"FillTransparenceGradient") >>= rTransparenceGradient);
 }
 
-// Returns color without transparency and without intensity. rnPos is position in gradient
-// definition from 0 (= 0%) to 100 (=100%), without considering the gradient type. The border is at
-// 0% side. The caller takes care to use a suitable position and gradient.
-::Color lcl_getColorFromColorGradient(const awt::Gradient& rColorGradient, const sal_Int32 rnPos)
-{
-    sal_Int16 nBorder = rColorGradient.Border; // Border is in percent
-    ::Color aStartColor(ColorTransparency, rColorGradient.StartColor);
-    if (rnPos <= 0 || rnPos <= nBorder || nBorder >= 100)
-        return aStartColor;
-
-    ::Color aEndColor(ColorTransparency, rColorGradient.EndColor);
-    if (rnPos >= 100)
-        return aEndColor;
-
-    // linear interpolation for nBorder < rnpos < 100 in each color component
-    auto ColorInterpolate = [rnPos, nBorder](sal_uInt8 nStartC, sal_uInt8 nEndC) -> sal_uInt8 {
-        return std::clamp<sal_uInt8>(
-            std::lround((nStartC * (100 - rnPos) + nEndC * (rnPos - nBorder)) / (100.0 - nBorder)),
-            0, 255);
-    };
-    sal_uInt8 nInterpolatedRed = ColorInterpolate(aStartColor.GetRed(), aEndColor.GetRed());
-    sal_uInt8 nInterpolatedGreen = ColorInterpolate(aStartColor.GetGreen(), aEndColor.GetGreen());
-    sal_uInt8 nInterpolatedBlue = ColorInterpolate(aStartColor.GetBlue(), aEndColor.GetBlue());
-    return ::Color(nInterpolatedRed, nInterpolatedGreen, nInterpolatedBlue);
-}
-
-// returns intensity in percent. rnPos is position in gradient definition from
-// 0 (= 0%) to 100 (=100%), without considering the gradient type. The border is at 0% side.
-// The caller takes care to use a suitable position and gradient.
-sal_Int16 lcl_getIntensityFromColorGradient(const awt::Gradient& rColorGradient,
-                                            const sal_Int32 rnPos)
-{
-    sal_Int16 nBorder = rColorGradient.Border; // Border is in percent
-    sal_Int16 nStartIntensity = rColorGradient.StartIntensity;
-    if (rnPos <= 0 || rnPos <= nBorder || nBorder >= 100)
-        return nStartIntensity;
-
-    sal_Int32 nEndIntensity = rColorGradient.EndIntensity;
-    if (rnPos >= 100)
-        return nEndIntensity;
-
-    // linear interpolation for nBorder < npos < 100
-    return std::lround((nStartIntensity * (100 - rnPos) + nEndIntensity * (rnPos - nBorder))
-                       / (100.0 - nBorder));
-}
-
-// returns transparency in percent. rnPos is position in gradient definition from
-// 0 (= 0%) to 100 (=100%), without considering the gradient type. The border is at 0% side.
-// The caller takes care to use a suitable position and gradient.
-sal_Int16 lcl_getAlphaFromTransparenceGradient(const awt::Gradient& rTransparenceGradient,
-                                               const sal_Int32 rnPos)
-{
-    sal_Int16 nBorder = rTransparenceGradient.Border; // Border is in percent
-    // The transparency is not in Start- or EndIntensity, but encoded into the Color as gray.
-    ::Color aStartColor(ColorTransparency, rTransparenceGradient.StartColor);
-    if (rnPos <= 0 || rnPos <= nBorder || nBorder >= 100)
-        return std::lround(aStartColor.GetRed() * 100 / 255.0);
-
-    ::Color aEndColor(ColorTransparency, rTransparenceGradient.EndColor);
-    if (rnPos >= 100)
-        return std::lround(aEndColor.GetRed() * 100 / 255.0);
-
-    // linear interpolation for nBorder < npos < 100
-    return std::lround(
-        (aStartColor.GetRed() * (100 - rnPos) + aEndColor.GetRed() * (rnPos - nBorder))
-        / (100.0 - nBorder) * 100 / 255.0);
-}
-
-GradientStopColor
-lcl_createGradientStopColor(const uno::Reference<beans::XPropertySet>& rXPropSet,
-                            const uno::Reference<beans::XPropertySetInfo>& rXPropSetInfo,
-                            const awt::Gradient& rColorGradient, const bool& rbHasColorGradient,
-                            const awt::Gradient& rTransparenceGradient,
-                            const bool& rbHasTransparenceGradient, const sal_Int32& rnPos)
-{
-    // Component mnValue of Transformation struct is in 1/100th percent (e.g 80% = 8000) in range
-    // -10000 to +10000. Constants are used in converting from API values below.
-    constexpr sal_Int16 nFactorToHthPerc = 100;
-    constexpr sal_Int16 nMaxHthPerc = 10000;
-    GradientStopColor aStopColor;
-    if (rbHasTransparenceGradient)
-    {
-        // Color
-        if (rbHasColorGradient)
-        {
-            // a color gradient is yet not enabled to use theme colors
-            aStopColor.RGBColor = lcl_getColorFromColorGradient(rColorGradient, rnPos);
-            sal_Int16 nIntensity = lcl_getIntensityFromColorGradient(rColorGradient, rnPos);
-            if (nIntensity != 100)
-                aStopColor.TTColor.addTransformation(
-                    { model::TransformationType::LumMod,
-                      std::clamp<sal_Int16>(nIntensity * nFactorToHthPerc, -nMaxHthPerc,
-                                            nMaxHthPerc) });
-        }
-        else // solid color
-        {
-            // fill color might be a theme color
-            if (!(FontworkHelpers::getThemeColorFromShape("FillComplexColor", rXPropSet,
-                                                          aStopColor.TTColor)))
-            {
-                // no theme color, use FillColor
-                sal_Int32 nFillColor(0);
-                if (rXPropSetInfo->hasPropertyByName("FillColor"))
-                    rXPropSet->getPropertyValue(u"FillColor") >>= nFillColor;
-                aStopColor.RGBColor = ::Color(ColorTransparency, nFillColor);
-                aStopColor.TTColor = model::ComplexColor();
-            }
-        }
-
-        // transparency
-        // Mixed gradient types for color and transparency are not possible in oox. For now we act as
-        // if gradient geometries are identical. That is the case if we get the gradient from oox
-        // import.
-        sal_Int16 nAlpha = lcl_getAlphaFromTransparenceGradient(rTransparenceGradient, rnPos);
-        // model::TransformationType::Alpha is designed to be used with a:alpha, which has opacity.
-        // Therefore convert transparency to opacity.
-        if (nAlpha > 0)
-            aStopColor.TTColor.addTransformation(
-                { model::TransformationType::Alpha,
-                  std::clamp<sal_Int16>(nMaxHthPerc - nAlpha * nFactorToHthPerc, -nMaxHthPerc,
-                                        nMaxHthPerc) });
-
-        return aStopColor;
-    }
-
-    // else solid transparency or no transparency
-    // color
-    if (rbHasColorGradient)
-    {
-        // a color gradient is yet not enabled to use theme colors
-        aStopColor.RGBColor = lcl_getColorFromColorGradient(rColorGradient, rnPos);
-        aStopColor.TTColor = model::ComplexColor();
-        sal_Int16 nIntensity = lcl_getIntensityFromColorGradient(rColorGradient, rnPos);
-        if (nIntensity != 100)
-            aStopColor.TTColor.addTransformation(
-                { model::TransformationType::LumMod,
-                  std::clamp<sal_Int16>(nIntensity * nFactorToHthPerc, -nMaxHthPerc,
-                                        nMaxHthPerc) });
-    }
-    else
-    {
-        // solid color and solid transparency
-        SAL_WARN("oox.drawingml", "method should not be called in this case");
-        if (!(FontworkHelpers::getThemeColorFromShape("FillComplexColor", rXPropSet,
-                                                      aStopColor.TTColor)))
-        {
-            // no theme color, use FillColor
-            sal_Int32 nFillColor(0);
-            if (rXPropSetInfo->hasPropertyByName(u"FillColor"))
-                rXPropSet->getPropertyValue(u"FillColor") >>= nFillColor;
-            aStopColor.RGBColor = ::Color(ColorTransparency, nFillColor);
-            aStopColor.TTColor = model::ComplexColor();
-        }
-    }
-
-    // Maybe transparency from FillTransparence
-    // model::TransformationType::Alpha is designed to be used with a:alpha, which has opacity.
-    // Therefore convert transparency to opacity.
-    sal_Int16 nAlpha(0);
-    if (rXPropSetInfo->hasPropertyByName(u"FillTransparence")
-        && (rXPropSet->getPropertyValue(u"FillTransparence") >>= nAlpha) && nAlpha > 0)
-        aStopColor.TTColor.addTransformation(
-            { model::TransformationType::Alpha,
-              std::clamp<sal_Int16>(nMaxHthPerc - nAlpha * nFactorToHthPerc, -nMaxHthPerc,
-                                    nMaxHthPerc) });
-
-    return aStopColor;
-}
-
 ColorMapType lcl_createColorMapFromShapeProps(
     const uno::Reference<beans::XPropertySet>& rXPropSet,
     const uno::Reference<beans::XPropertySetInfo>& rXPropSetInfo,
-    const awt::Gradient& rColorGradient, const bool& rbHasColorGradient,
-    const awt::Gradient& rTransparenceGradient, const bool& rbHasTransparenceGradient)
+    const awt::Gradient2& rColorGradient, const bool& rbHasColorGradient,
+    const awt::Gradient2& rTransparenceGradient, const bool& rbHasTransparenceGradient)
 {
-    ColorMapType aColorMap;
-    awt::Gradient aColorGradient = rColorGradient;
-    awt::Gradient aTransparenceGradient = rTransparenceGradient;
-    // AXIAL has reversed gradient direction. Change it so, that 'border' is at 'start'.
-    if (rbHasColorGradient && aColorGradient.Style == awt::GradientStyle_AXIAL)
-    {
-        std::swap<sal_Int32>(aColorGradient.StartColor, aColorGradient.EndColor);
-        std::swap<sal_Int16>(aColorGradient.StartIntensity, aColorGradient.EndIntensity);
-    }
-    if (rbHasTransparenceGradient && aTransparenceGradient.Style == awt::GradientStyle_AXIAL)
-    {
-        std::swap<sal_Int32>(aTransparenceGradient.StartColor, aTransparenceGradient.EndColor);
-        std::swap<sal_Int16>(aTransparenceGradient.StartIntensity,
-                             aTransparenceGradient.EndIntensity);
-    }
+    // LibreOffice can use color gradients and transparency gradients with different geometries.
+    // That is not possible in OOXML, so a fill might look different in Word. But a round-trip
+    // with gradients imported from Word, should work well.
 
-    // A GradientStopColor includes color and transparency.
-    // The key of aColorMap has same unit as the w14:pos attribute of <w14:gs> element in oox.
-    GradientStopColor aStartStopColor
-        = lcl_createGradientStopColor(rXPropSet, rXPropSetInfo, aColorGradient, rbHasColorGradient,
-                                      aTransparenceGradient, rbHasTransparenceGradient, 0);
-    aColorMap.insert(std::pair{ 0, aStartStopColor });
-    GradientStopColor aEndStopColor
-        = lcl_createGradientStopColor(rXPropSet, rXPropSetInfo, aColorGradient, rbHasColorGradient,
-                                      aTransparenceGradient, rbHasTransparenceGradient, 100);
-    aColorMap.insert(std::pair{ 100000, aEndStopColor });
-
-    // We add additional GradientStopColor in case of borders.
+    // Word has transparency not as separate gradient but as color transformation in a color
+    // gradient. Thus we synchronize the gradients. Then they have same offsets and count.
+    basegfx::BColor aSingleColor;
+    basegfx::BGradient aColorBGradient;
+    basegfx::BColorStops aColorStops;
     if (rbHasColorGradient)
     {
-        // We only use the color border for now. If the transparency gradient has a total different
-        // geometry than the color gradient, a description is not possible in oox.
-        // ToDo: If geometries only differ in border, emulation is possible.
-        sal_Int32 nBorderPos = aColorGradient.Border * 1000;
-        if (nBorderPos > 0)
-            aColorMap.insert(std::pair{ nBorderPos, aStartStopColor });
+        aColorBGradient = basegfx::BGradient(rColorGradient);
+        aColorBGradient.tryToApplyStartEndIntensity();
+        aColorBGradient.tryToApplyBorder();
+        aColorBGradient.tryToApplyAxial();
+        basegfx::utils::prepareColorStops(aColorBGradient, aColorStops, aSingleColor);
+        // All gradient styles but LINEAR and AXIAL (which is already converted to LINEAR) need the
+        // stops sequence reverse.
+        if (awt::GradientStyle_LINEAR != aColorBGradient.GetGradientStyle())
+            aColorStops.reverseColorStops();
     }
-    else if (rbHasTransparenceGradient)
+    else
     {
-        sal_Int32 nBorderPos = aTransparenceGradient.Border * 1000;
-        if (nBorderPos > 0)
-            aColorMap.insert(std::pair{ nBorderPos, aStartStopColor });
+        sal_Int32 nFillColor(0);
+        if (rXPropSetInfo->hasPropertyByName("FillColor"))
+            rXPropSet->getPropertyValue(u"FillColor") >>= nFillColor;
+        aSingleColor = ::Color(ColorTransparency, nFillColor).getBColor().clamp();
     }
 
-    // In case of AXIAL we compress the gradient to half wide and mirror it to the other half.
-    if ((rbHasColorGradient && aColorGradient.Style == awt::GradientStyle_AXIAL)
-        || (!rbHasColorGradient && rbHasTransparenceGradient
-            && aTransparenceGradient.Style == awt::GradientStyle_AXIAL))
+    basegfx::BColor aSingleTrans;
+    basegfx::BGradient aTransBGradient;
+    basegfx::BColorStops aTransStops;
+    if (rbHasTransparenceGradient)
     {
-        ColorMapType aHelpColorMap(aColorMap);
-        aColorMap.clear();
-        for (auto it = aHelpColorMap.begin(); it != aHelpColorMap.end(); ++it)
-        {
-            aColorMap.insert(std::pair{ (*it).first / 2, (*it).second });
-            aColorMap.insert(std::pair{ 100000 - (*it).first / 2, (*it).second });
-        }
+        aTransBGradient = basegfx::BGradient(rTransparenceGradient);
+        aTransBGradient.tryToApplyStartEndIntensity(); // usually 100%, but might be set by macro
+        aTransBGradient.tryToApplyBorder();
+        aTransBGradient.tryToApplyAxial();
+        basegfx::utils::prepareColorStops(aTransBGradient, aTransStops, aSingleTrans);
+        // All gradient styles but LINEAR and AXIAL (which is already converted to LINEAR) need the
+        // stops sequence reverse.
+        if (awt::GradientStyle_LINEAR != aTransBGradient.GetGradientStyle())
+            aTransStops.reverseColorStops();
     }
-    else if ((rbHasColorGradient && aColorGradient.Style != awt::GradientStyle_LINEAR)
-             || (!rbHasColorGradient && rbHasTransparenceGradient
-                 && aTransparenceGradient.Style != awt::GradientStyle_LINEAR))
+    else
     {
-        // only LINEAR has same direction as Word, the others are reverse.
-        ColorMapType aHelpColorMap(aColorMap);
-        aColorMap.clear();
-        for (auto it = aHelpColorMap.begin(); it != aHelpColorMap.end(); ++it)
+        sal_Int16 nAPITrans(0);
+        if (rXPropSetInfo->hasPropertyByName(u"FillTransparence"))
+            rXPropSet->getPropertyValue(u"FillTransparence") >>= nAPITrans;
+        // API transparency is in range 0..100, BColor in range [0.0, 1.0].
+        aSingleTrans = basegfx::BColor(nAPITrans * 0.01).clamp();
+    }
+
+    basegfx::utils::synchronizeColorStops(aColorStops, aTransStops, aSingleColor, aSingleTrans);
+
+    ColorMapType aColorMap;
+
+    // If we have no color gradient, the fix fill color might be a theme color. In that case we use
+    // it instead of the color from the color stop.
+    GradientStopColor aFixColor;
+    bool bUseThemeColor(!rbHasColorGradient
+                        && FontworkHelpers::getThemeColorFromShape("FillComplexColor", rXPropSet,
+                                                                   aFixColor.TTColor));
+
+    for (auto itC = aColorStops.begin(), itT = aTransStops.begin();
+         itC != aColorStops.end() && itT != aTransStops.end(); ++itC, ++itT)
+    {
+        GradientStopColor aNextStopColor = aFixColor;
+        if (!bUseThemeColor)
         {
-            aColorMap.insert(std::pair{ 100000 - (*it).first, (*it).second });
+            aNextStopColor.TTColor = model::ComplexColor();
+            aNextStopColor.RGBColor = ::Color((*itC).getStopColor());
         }
+        // model::TransformationType::Alpha is opacity in range 0..10000,
+        // BColor is transparency in range [0.0, 1.0]
+        sal_Int16 nAlpha = std::clamp<sal_Int16>(
+            10000 - std::lround((*itT).getStopColor().luminance() * 10000.0), 0, 10000);
+        if (nAlpha < 10000)
+            aNextStopColor.TTColor.addTransformation({ model::TransformationType::Alpha, nAlpha });
+        sal_Int32 nPosition
+            = static_cast<sal_Int32>(std::lround((*itC).getStopOffset() * 100000.0));
+        aColorMap.insert(std::pair{ nPosition, aNextStopColor });
     }
 
     // If a gradient has only two stops, MS Office renders it with a non-linear method which looks
@@ -1397,7 +1244,6 @@ ColorMapType lcl_createColorMapFromShapeProps(
         auto it = aColorMap.begin();
         aColorMap.insert(std::pair{ 0, (*it).second });
     }
-
     return aColorMap;
 }
 } // end namespace
@@ -1439,9 +1285,9 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
         }
         case drawing::FillStyle_GRADIENT:
         {
-            awt::Gradient aColorGradient;
+            awt::Gradient2 aColorGradient;
             bool bHasColorGradient(false);
-            awt::Gradient aTransparenceGradient;
+            awt::Gradient2 aTransparenceGradient;
             bool bHasTransparenceGradient(false);
             lcl_getGradientsFromShape(rXPropSet, xPropSetInfo, aColorGradient, bHasColorGradient,
                                       aTransparenceGradient, bHasTransparenceGradient);
@@ -1475,8 +1321,8 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
                 }
 
                 lcl_addColorTransformationToGrabBagStack((*it).second.TTColor, pGrabBagStack);
-                pGrabBagStack
-                    ->pop(); // maCurrentElement:'gs', maPropertyList:'attributes', 'srgbClr' or 'schemeClr'
+                pGrabBagStack->pop();
+                // maCurrentElement:'gs', maPropertyList:'attributes', 'srgbClr' or 'schemeClr'
                 pGrabBagStack->pop(); // maCurrentElement:'gsLst', maPropertyList: at least two 'gs'
             }
             pGrabBagStack->pop(); // maCurrentElement:'gradFill', maPropertyList: gsLst
