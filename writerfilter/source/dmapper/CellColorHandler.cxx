@@ -25,6 +25,7 @@
 #include <filter/msfilter/util.hxx>
 #include <comphelper/sequence.hxx>
 #include <tools/color.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 
 namespace writerfilter::dmapper {
 
@@ -124,21 +125,27 @@ void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
             m_nColor = nIntValue;
         break;
         case NS_ooxml::LN_CT_Shd_themeFill:
+            m_eFillThemeColorType = TDefTableHandler::getThemeColorTypeIndex(nIntValue);
             createGrabBag("themeFill", uno::Any(TDefTableHandler::getThemeColorTypeString(nIntValue)));
         break;
         case NS_ooxml::LN_CT_Shd_themeFillShade:
+            m_nFillThemeColorShade = nIntValue;
             createGrabBag("themeFillShade", uno::Any(OUString::number(nIntValue, 16)));
         break;
         case NS_ooxml::LN_CT_Shd_themeFillTint:
+            m_nFillThemeColorTint = nIntValue;
             createGrabBag("themeFillTint", uno::Any(OUString::number(nIntValue, 16)));
             break;
         case NS_ooxml::LN_CT_Shd_themeColor:
+            m_eThemeColorType = TDefTableHandler::getThemeColorTypeIndex(nIntValue);
             createGrabBag("themeColor", uno::Any(TDefTableHandler::getThemeColorTypeString(nIntValue)));
         break;
         case NS_ooxml::LN_CT_Shd_themeShade:
+            m_nThemeColorShade = nIntValue;
             createGrabBag("themeShade", uno::Any(OUString::number(nIntValue, 16)));
         break;
         case NS_ooxml::LN_CT_Shd_themeTint:
+            m_nThemeColorTint = nIntValue;
             createGrabBag("themeTint", uno::Any(OUString::number(nIntValue, 16)));
             break;
         default:
@@ -281,11 +288,26 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
             pPropertyMap->Insert(PROP_FILL_STYLE, uno::Any(drawing::FillStyle_NONE));
 
         pPropertyMap->Insert(PROP_FILL_COLOR, uno::Any(nApplyColor));
+        auto xComplexColor = model::color::createXComplexColor(getFillComplexColor());
+        pPropertyMap->Insert(PROP_FILL_COMPLEX_COLOR, uno::Any(xComplexColor));
     }
     else if ( nWW8BrushStyle || !m_bAutoFillColor || m_bFillSpecified )
-        pPropertyMap->Insert( m_OutputFormat == Form ? PROP_BACK_COLOR
-                            : PROP_CHAR_BACK_COLOR, uno::Any( nApplyColor ));
-
+    {
+        if (m_OutputFormat == Form)
+        {
+            pPropertyMap->Insert(PROP_BACK_COLOR, uno::Any(nApplyColor));
+        }
+        else
+        {
+            pPropertyMap->Insert(PROP_CHAR_BACK_COLOR, uno::Any(nApplyColor));
+            auto aComplexColor = getFillComplexColor();
+            if (aComplexColor.getType() != model::ColorType::Unused)
+            {
+                auto xComplexColor = model::color::createXComplexColor(aComplexColor);
+                pPropertyMap->Insert(PROP_CHAR_BACKGROUND_COMPLEX_COLOR, uno::Any(xComplexColor));
+            }
+        }
+    }
     createGrabBag("originalColor", uno::Any(msfilter::util::ConvertColorOU(Color(ColorTransparency, nApplyColor))));
 
     return pPropertyMap;
@@ -324,6 +346,48 @@ void CellColorHandler::disableInteropGrabBag()
 bool CellColorHandler::isInteropGrabBagEnabled() const
 {
     return !(m_aInteropGrabBagName.isEmpty());
+}
+
+model::ComplexColor CellColorHandler::getComplexColor() const
+{
+    model::ComplexColor aComplexColor;
+    if (m_eThemeColorType != model::ThemeColorType::Unknown)
+    {
+        aComplexColor.setSchemeColor(m_eThemeColorType);
+
+        if (m_nThemeColorTint > 0 )
+        {
+            sal_Int16 nTint = sal_Int16((255.0 - m_nThemeColorTint) * 10000.0 / 255.0);
+            aComplexColor.addTransformation({model::TransformationType::Tint, nTint});
+        }
+        if (m_nThemeColorShade > 0)
+        {
+            sal_Int16 nShade = sal_Int16((255.0 - m_nThemeColorShade) * 10000 / 255.0);
+            aComplexColor.addTransformation({model::TransformationType::Shade, nShade});
+        }
+    }
+    return aComplexColor;
+}
+
+model::ComplexColor CellColorHandler::getFillComplexColor() const
+{
+    model::ComplexColor aComplexColor;
+    if (m_eFillThemeColorType != model::ThemeColorType::Unknown)
+    {
+        aComplexColor.setSchemeColor(m_eFillThemeColorType);
+
+        if (m_nFillThemeColorTint > 0 )
+        {
+            sal_Int16 nTint = sal_Int16((255.0 - m_nFillThemeColorTint) * 10000.0 / 255.0);
+            aComplexColor.addTransformation({model::TransformationType::Tint, nTint});
+        }
+        if (m_nFillThemeColorShade > 0)
+        {
+            sal_Int16 nShade = sal_Int16((255.0 - m_nFillThemeColorShade) * 10000.0 / 255.0);
+            aComplexColor.addTransformation({model::TransformationType::Shade, nShade});
+        }
+    }
+    return aComplexColor;
 }
 
 } //namespace writerfilter

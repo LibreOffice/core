@@ -285,7 +285,9 @@ OUString NumberToHexBinary(sal_Int32 n)
     return aBuf.makeStringAndClear();
 }
 
-void lclAddThemeColorAttributes(rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList, model::ComplexColor const& rComplexColor)
+void lclAddThemeValuesToCustomAttributes(
+    rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList, model::ComplexColor const& rComplexColor,
+    sal_Int32 nThemeAttrId, sal_Int32 nThemeTintAttrId, sal_Int32 nThemeShadeAttrId)
 {
     static std::unordered_map<model::ThemeColorType, const char*> constThemeColorTypeTokenMap = {
         { model::ThemeColorType::Dark1, "dark1" },
@@ -321,7 +323,7 @@ void lclAddThemeColorAttributes(rtl::Reference<sax_fastparser::FastAttributeList
                 sSchemeType = "background2";
         }
 
-        DocxAttributeOutput::AddToAttrList(pAttrList, FSNS(XML_w, XML_themeColor), sSchemeType.getStr());
+        DocxAttributeOutput::AddToAttrList(pAttrList, FSNS(XML_w, nThemeAttrId), sSchemeType.getStr());
 
         sal_Int16 nLumMod = 10'000;
         sal_Int16 nLumOff = 0;
@@ -345,13 +347,13 @@ void lclAddThemeColorAttributes(rtl::Reference<sax_fastparser::FastAttributeList
             {
                 // Convert from 0-100 into 0-255
                 sal_Int16 nTint255 = std::round(255.0 - (double(nTint) / 10000.0) * 255.0);
-                DocxAttributeOutput::AddToAttrList(pAttrList, FSNS(XML_w, XML_themeTint), OString::number(nTint255, 16).getStr());
+                DocxAttributeOutput::AddToAttrList(pAttrList, FSNS(XML_w, nThemeTintAttrId), OString::number(nTint255, 16).getStr());
             }
             else if (nShade != 0)
             {
                 // Convert from 0-100 into 0-255
                 sal_Int16 nShade255 = std::round(255.0 - (double(nShade) / 10000.0) * 255.0);
-                DocxAttributeOutput::AddToAttrList(pAttrList, FSNS(XML_w, XML_themeShade), OString::number(nShade255, 16).getStr());
+                DocxAttributeOutput::AddToAttrList(pAttrList, FSNS(XML_w, nThemeShadeAttrId), OString::number(nShade255, 16).getStr());
             }
         }
         else
@@ -367,11 +369,21 @@ void lclAddThemeColorAttributes(rtl::Reference<sax_fastparser::FastAttributeList
             sal_Int16 nTintShade255 = std::round(255.0 - (std::abs(nPercentage) / 100.0) * 255.0);
 
             if (nPercentage > 0)
-                DocxAttributeOutput::AddToAttrList(pAttrList, FSNS(XML_w, XML_themeTint), OString::number(nTintShade255, 16).getStr());
+                DocxAttributeOutput::AddToAttrList(pAttrList, FSNS(XML_w, nThemeTintAttrId), OString::number(nTintShade255, 16).getStr());
             else if (nPercentage < 0)
-                DocxAttributeOutput::AddToAttrList(pAttrList, FSNS(XML_w, XML_themeShade), OString::number(nTintShade255, 16).getStr());
+                DocxAttributeOutput::AddToAttrList(pAttrList, FSNS(XML_w, nThemeShadeAttrId), OString::number(nTintShade255, 16).getStr());
         }
     }
+}
+
+void lclAddThemeFillColorAttributes(rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList, model::ComplexColor const& rComplexColor)
+{
+    lclAddThemeValuesToCustomAttributes(pAttrList, rComplexColor, XML_themeFill, XML_themeFillTint, XML_themeFillShade);
+}
+
+void lclAddThemeColorAttributes(rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList, model::ComplexColor const& rComplexColor)
+{
+    lclAddThemeValuesToCustomAttributes(pAttrList, rComplexColor, XML_themeColor, XML_themeTint, XML_themeShade);
 }
 
 } // end anonymous namespace
@@ -9400,6 +9412,7 @@ static std::optional<sal_Int32> lcl_getDmlAlpha(const SvxBrushItem& rBrush)
 void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
 {
     const Color aColor = rBrush.GetColor();
+    model::ComplexColor const& rComplexColor = rBrush.getComplexColor();
     OString sColor = msfilter::util::ConvertColor( aColor.GetRGBColor() );
     std::optional<sal_Int32> oAlpha = lcl_getDmlAlpha(rBrush);
     if (m_rExport.SdrExporter().getTextFrameSyntax())
@@ -9417,6 +9430,7 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
 
         sColor = "#" + sColor;
         AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), XML_fillcolor, sColor.getStr() );
+        lclAddThemeFillColorAttributes(m_rExport.SdrExporter().getFlyAttrList(), rComplexColor);
     }
     else if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {

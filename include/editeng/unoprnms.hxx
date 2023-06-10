@@ -350,6 +350,10 @@ inline constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_SHADOWED = u"CharShadowed";
 inline constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_UNDERLINE = u"CharUnderline";
 inline constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_OVERLINE = u"CharOverline";
 
+inline constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_BACKGROUND_COLOR = u"CharBackColor";
+inline constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_BACKGROUND_COMPLEX_COLOR = u"CharBackgroundComplexColor";
+inline constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_BACKGROUND_TRANSPARENT = u"CharBackTransparent";
+
 inline constexpr OUStringLiteral UNO_NAME_BITMAP = u"Bitmap";
 
 inline constexpr OUStringLiteral UNO_NAME_LINKDISPLAYNAME = u"LinkDisplayName";
