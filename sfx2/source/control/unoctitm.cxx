@@ -932,21 +932,14 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
         aEvent.FeatureURL.Path == "FormatPaintbrush" ||
         aEvent.FeatureURL.Path == "FreezePanes" ||
         aEvent.FeatureURL.Path == "Sidebar" ||
-        aEvent.FeatureURL.Path == "SheetRightToLeft" ||
         aEvent.FeatureURL.Path == "SpacePara1" ||
         aEvent.FeatureURL.Path == "SpacePara15" ||
         aEvent.FeatureURL.Path == "SpacePara2" ||
         aEvent.FeatureURL.Path == "DataFilterAutoFilter")
     {
         bool bTemp = false;
-
-        if (aEvent.IsEnabled)
-        {
-            aEvent.State >>= bTemp;
-            aBuffer.append(bTemp);
-        }
-        else
-            aBuffer.append("disabled");
+        aEvent.State >>= bTemp;
+        aBuffer.append(bTemp);
     }
     else if (aEvent.FeatureURL.Path == "CharFontName")
     {
@@ -1193,7 +1186,8 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
             aBuffer.append(OUString::boolean(aBool));
         }
     }
-    else if (aEvent.FeatureURL.Path == "ToggleMergeCells")
+    else if (aEvent.FeatureURL.Path == "ToggleMergeCells" ||
+             aEvent.FeatureURL.Path == "SheetRightToLeft")
     {
         bool aBool;
 
