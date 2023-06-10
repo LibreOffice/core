@@ -24,6 +24,7 @@ BackGraphicLocation
 BackGraphic
 Background
 BackgroundColor
+BackgroundComplexColor
 BasicLibraries
 BlackDay
 BlockIncrement
@@ -52,6 +53,7 @@ CenterHorizontally
 CenterVertically
 Change
 CharBackColor
+CharBackgroundComplexColor
 CharCaseMap
 CharColor
 CharContoured

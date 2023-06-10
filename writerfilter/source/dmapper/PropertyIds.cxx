@@ -64,6 +64,7 @@ namespace
         { PROP_CHAR_WEIGHT_ASIAN, u"CharWeightAsian"},
         { PROP_CHAR_POSTURE_ASIAN, u"CharPostureAsian"},
         { PROP_CHAR_BACK_COLOR, u"CharBackColor"},
+        { PROP_CHAR_BACKGROUND_COMPLEX_COLOR, u"CharBackgroundComplexColor"},
         { PROP_CHAR_EMPHASIS, u"CharEmphasis"},
         { PROP_CHAR_COMBINE_IS_ON, u"CharCombineIsOn"},
         { PROP_CHAR_COMBINE_PREFIX, u"CharCombinePrefix"},
@@ -172,6 +173,7 @@ namespace
         { PROP_CONTOUR_POLY_POLYGON, u"ContourPolyPolygon"},
         { PROP_PAGE_TOGGLE, u"PageToggle"},
         { PROP_BACK_COLOR, u"BackColor"},
+        { PROP_BACK_COMPLEX_COLOR, u"BackComplexColor"},
         { PROP_BACK_COLOR_TRANSPARENCY, u"BackColorTransparency"},
         { PROP_ALLOW_OVERLAP, u"AllowOverlap"},
         { PROP_ALTERNATIVE_TEXT, u"AlternativeText"},
@@ -357,6 +359,7 @@ namespace
         { PROP_FOLLOW_TEXT_FLOW, u"IsFollowingTextFlow"},
         { PROP_FILL_STYLE, u"FillStyle"},
         { PROP_FILL_COLOR, u"FillColor"},
+        { PROP_FILL_COMPLEX_COLOR, u"FillComplexColor"},
         { PROP_SNAP_TO_GRID, u"SnapToGrid"},
         { PROP_GRID_SNAP_TO_CHARS, u"GridSnapToChars"},
         { PROP_RUBY_STYLE, u"RubyCharStyleName"},
@@ -394,7 +397,9 @@ bool isCharacterProperty( const PropertyIds eId )
 
 bool isParagraphProperty( const PropertyIds eId )
 {
-    return (eId >= PROP_PARA_ADJUST && eId <= PROP_PARA_WIDOWS) || eId == PROP_FILL_COLOR;
+    return (eId >= PROP_PARA_ADJUST && eId <= PROP_PARA_WIDOWS)
+        || eId == PROP_FILL_COLOR
+        || eId == PROP_FILL_COMPLEX_COLOR;
 }
 
 } //namespace writerfilter

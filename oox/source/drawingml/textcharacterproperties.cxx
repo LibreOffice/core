@@ -216,7 +216,11 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     }
 
     if (maHighlightColor.isUsed() && maHighlightColor.getTransparency() != 100)
-        rPropMap.setProperty( PROP_CharBackColor, maHighlightColor.getColor( rFilter.getGraphicHelper() ));
+    {
+        rPropMap.setProperty(PROP_CharBackColor, maHighlightColor.getColor( rFilter.getGraphicHelper() ));
+        model::ComplexColor aComplexColor = maHighlightColor.getComplexColor();
+        rPropMap.setProperty(PROP_CharBackgroundComplexColor, model::color::createXComplexColor(aComplexColor));
+    }
     else
         rPropMap.setProperty( PROP_CharBackColor, sal_Int32(-1));
 }
