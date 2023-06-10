@@ -10997,13 +10997,13 @@
           <ref name="ST_HexColor"/>
         </attribute>
         <attribute name="themeColor">
-          <data type="string"/>
+          <ref name="ST_ThemeColor"/>
         </attribute>
         <attribute name="themeTint">
-          <data type="string"/>
+          <ref name="ST_UcharHexNumber"/>
         </attribute>
         <attribute name="themeShade">
-          <data type="string"/>
+          <ref name="ST_UcharHexNumber"/>
         </attribute>
       </define>
       <define name="ST_TextEffect">
@@ -12591,13 +12591,13 @@
           <ref name="ST_HexColor"/>
         </attribute>
         <attribute name="themeColor">
-          <data type="string"/>
+          <ref name="ST_ThemeColor"/>
         </attribute>
         <attribute name="themeTint">
-          <data type="string"/>
+          <ref name="ST_UcharHexNumber"/>
         </attribute>
         <attribute name="themeShade">
-          <data type="string"/>
+          <ref name="ST_UcharHexNumber"/>
         </attribute>
         <element name="v:background">
           <ref name="BUILT_IN_ANY_TYPE"/>
