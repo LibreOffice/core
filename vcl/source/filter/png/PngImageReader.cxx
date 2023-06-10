@@ -192,7 +192,7 @@ int handle_unknown_chunk(png_structp png, png_unknown_chunkp chunk)
         }
         else
         {
-            // Unknown ancilliary chunk
+            // Unknown ancillary chunk
             return 0;
         }
 
