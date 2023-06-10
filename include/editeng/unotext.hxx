@@ -93,8 +93,9 @@ struct SfxItemPropertyMapEntry;
     { UNO_NAME_EDIT_CHAR_COLOR_LUM_MOD,       EE_CHAR_COLOR, ::cppu::UnoType<sal_Int16>::get(),     0, MID_COLOR_LUM_MOD }, \
     { UNO_NAME_EDIT_CHAR_COLOR_LUM_OFF,       EE_CHAR_COLOR, ::cppu::UnoType<sal_Int16>::get(),     0, MID_COLOR_LUM_OFF }, \
     { UNO_NAME_EDIT_CHAR_COMPLEX_COLOR, EE_CHAR_COLOR,    ::cppu::UnoType<css::util::XComplexColor>::get(), 0, MID_COMPLEX_COLOR }, \
-    { u"CharBackColor",                EE_CHAR_BKGCOLOR,   ::cppu::UnoType<sal_Int32>::get(),        0, 0 }, \
-    { u"CharBackTransparent",          EE_CHAR_BKGCOLOR,   ::cppu::UnoType<bool>::get(),             0, MID_GRAPHIC_TRANSPARENT }, \
+    { UNO_NAME_EDIT_CHAR_BACKGROUND_COLOR, EE_CHAR_BKGCOLOR,   ::cppu::UnoType<sal_Int32>::get(),        0, MID_COLOR_RGB }, \
+    { UNO_NAME_EDIT_CHAR_BACKGROUND_COMPLEX_COLOR, EE_CHAR_BKGCOLOR, ::cppu::UnoType<css::util::XComplexColor>::get(), 0, MID_COMPLEX_COLOR }, \
+    { UNO_NAME_EDIT_CHAR_BACKGROUND_TRANSPARENT, EE_CHAR_BKGCOLOR,   ::cppu::UnoType<bool>::get(), 0, MID_GRAPHIC_TRANSPARENT }, \
     { UNO_NAME_EDIT_CHAR_ESCAPEMENT,  EE_CHAR_ESCAPEMENT, ::cppu::UnoType<sal_Int16>::get(),        0, MID_ESC }, \
     { UNO_NAME_EDIT_CHAR_UNDERLINE,   EE_CHAR_UNDERLINE,  ::cppu::UnoType<sal_Int16>::get(),        0, MID_TL_STYLE }, \
     { u"CharUnderlineColor",           EE_CHAR_UNDERLINE,  ::cppu::UnoType<sal_Int32>::get(),        0, MID_TL_COLOR }, \

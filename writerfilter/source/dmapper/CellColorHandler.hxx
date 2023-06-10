@@ -21,7 +21,8 @@
 #include "LoggedResources.hxx"
 #include "PropertyMap.hxx"
 #include <vector>
-
+#include <docmodel/theme/ThemeColorType.hxx>
+#include <docmodel/color/ComplexColor.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 namespace writerfilter::dmapper
@@ -33,8 +34,17 @@ public:
     enum OutputFormat { Form, Paragraph, Character }; // for what part of the document
 private:
     sal_Int32 m_nShadingPattern;
+
     sal_Int32 m_nColor;
+    model::ThemeColorType m_eThemeColorType = model::ThemeColorType::Unknown;
+    sal_Int32 m_nThemeColorTint = 0;
+    sal_Int32 m_nThemeColorShade = 0;
+
     sal_Int32 m_nFillColor;
+    model::ThemeColorType m_eFillThemeColorType = model::ThemeColorType::Unknown;
+    sal_Int32 m_nFillThemeColorTint = 0;
+    sal_Int32 m_nFillThemeColorShade = 0;
+
     bool      m_bAutoFillColor;
     bool      m_bFillSpecified;
     OutputFormat m_OutputFormat;
@@ -60,6 +70,9 @@ public:
     css::beans::PropertyValue getInteropGrabBag();
     void disableInteropGrabBag();
     bool isInteropGrabBagEnabled() const;
+
+    model::ComplexColor getComplexColor() const;
+    model::ComplexColor getFillComplexColor() const;
 };
 }
 
