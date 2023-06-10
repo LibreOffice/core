@@ -206,6 +206,8 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     {
         rPropMap.setProperty( PROP_CharUnderlineHasColor, true);
         rPropMap.setProperty( PROP_CharUnderlineColor, maUnderlineColor.getColor( rFilter.getGraphicHelper() ));
+        model::ComplexColor aComplexColor = maUnderlineColor.getComplexColor();
+        rPropMap.setProperty( PROP_CharUnderlineComplexColor, model::color::createXComplexColor(aComplexColor));
     }
     else
     {
