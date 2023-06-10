@@ -2094,12 +2094,11 @@ AC_ARG_WITH(package-format,
 AC_ARG_WITH(tls,
     AS_HELP_STRING([--with-tls],
         [Decides which TLS/SSL and cryptographic implementations to use for
-         LibreOffice's code. Notice that this doesn't apply for depending
-         libraries like "neon", for example. Default is to use NSS
-         although OpenSSL is also possible. Notice that selecting NSS restricts
-         the usage of OpenSSL in LO's code but selecting OpenSSL doesn't
-         restrict by now the usage of NSS in LO's code. Possible values:
-         openssl, nss. Example: --with-tls="nss"]),
+         LibreOffice's code. Default is to use NSS although OpenSSL is also
+         possible. Notice that selecting NSS restricts the usage of OpenSSL
+         in LO's code but selecting OpenSSL doesn't restrict by now the
+         usage of NSS in LO's code. Possible values: openssl, nss.
+         Example: --with-tls="nss"]),
 ,)
 
 AC_ARG_WITH(system-libs,

@@ -10,7 +10,7 @@
 $(eval $(call gb_ExternalProject_ExternalProject,curl))
 
 $(eval $(call gb_ExternalProject_use_externals,curl,\
-	$(if $(ENABLE_NSS),nss3) \
+	$(if $(ENABLE_OPENSSL),openssl) \
 	zlib \
 ))
 
@@ -30,32 +30,28 @@ curl_LDFLAGS += -L$(SYSBASE)/usr/lib
 endif
 endif
 
-# there are 2 include paths, the other one is passed to --with-nss below
-ifeq ($(SYSTEM_NSS),)
-curl_CPPFLAGS += -I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss
-endif
-
 # use --with-secure-transport on macOS >10.5 and iOS to get a native UI for SSL certs for CMIS usage
-# use --with-nss only on platforms other than macOS and iOS
+# use --with-openssl only on platforms other than macOS and iOS
 $(call gb_ExternalProject_get_state_target,curl,build):
 	$(call gb_Trace_StartRange,curl,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(gb_RUN_CONFIGURE) ./configure \
-			$(if $(filter iOS MACOSX,$(OS)),\
-				--with-secure-transport,\
-				$(if $(ENABLE_NSS),--with-nss$(if $(SYSTEM_NSS),,="$(call gb_UnpackedTarball_get_dir,nss)/dist/out") --with-nss-deprecated,--without-nss)) \
-			--without-openssl --without-gnutls --without-polarssl --without-cyassl --without-axtls --without-mbedtls \
+			--without-amissl --without-bearssl --without-gnutls \
+			--without-mbedtls --without-rustls --without-wolfssl \
 			--enable-ftp --enable-http --enable-ipv6 \
 			--without-libidn2 --without-libpsl --without-librtmp \
-			--without-libssh2 --without-metalink --without-nghttp2 \
+			--without-libssh2 --without-nghttp2 \
 			--without-libssh --without-brotli \
 			--without-ngtcp2 --without-quiche \
-			--without-zstd --without-hyper --without-gsasl --without-gssapi \
+			--without-zstd --without-hyper --without-libgsasl --without-gssapi \
 			--disable-mqtt --disable-ares \
 			--disable-dict --disable-file --disable-gopher --disable-imap \
 			--disable-ldap --disable-ldaps --disable-manual --disable-pop3 \
 			--disable-rtsp --disable-smb --disable-smtp --disable-telnet  \
 			--disable-tftp  \
+			$(if $(filter iOS MACOSX,$(OS)),\
+				--with-secure-transport,\
+				$(if $(ENABLE_OPENSSL),--with-openssl$(if $(SYSTEM_OPENSSL),,="$(call gb_UnpackedTarball_get_dir,openssl)"))) \
 			$(if $(filter LINUX,$(OS)),--without-ca-bundle --without-ca-path) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
