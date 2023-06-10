@@ -192,6 +192,10 @@
         { UNO_NAME_CHAR_RIGHT_BORDER_DISTANCE,          RES_CHRATR_BOX,                cppu::UnoType<sal_Int32>::get(),         PropertyAttribute::MAYBEVOID, RIGHT_BORDER_DISTANCE  | CONVERT_TWIPS }, \
         { UNO_NAME_CHAR_TOP_BORDER_DISTANCE,            RES_CHRATR_BOX,                cppu::UnoType<sal_Int32>::get(),         PropertyAttribute::MAYBEVOID, TOP_BORDER_DISTANCE    | CONVERT_TWIPS }, \
         { UNO_NAME_CHAR_BOTTOM_BORDER_DISTANCE,         RES_CHRATR_BOX,                cppu::UnoType<sal_Int32>::get(),         PropertyAttribute::MAYBEVOID, BOTTOM_BORDER_DISTANCE | CONVERT_TWIPS }, \
+        { UNO_NAME_CHAR_BORDER_LEFT_COMPLEX_COLOR,      RES_CHRATR_BOX,                cppu::UnoType<css::util::XComplexColor>::get(),  PropertyAttribute::MAYBEVOID, MID_BORDER_LEFT_COLOR }, \
+        { UNO_NAME_CHAR_BORDER_RIGHT_COMPLEX_COLOR,     RES_CHRATR_BOX,                cppu::UnoType<css::util::XComplexColor>::get(),  PropertyAttribute::MAYBEVOID, MID_BORDER_RIGHT_COLOR }, \
+        { UNO_NAME_CHAR_BORDER_TOP_COMPLEX_COLOR,       RES_CHRATR_BOX,                cppu::UnoType<css::util::XComplexColor>::get(),  PropertyAttribute::MAYBEVOID, MID_BORDER_TOP_COLOR }, \
+        { UNO_NAME_CHAR_BORDER_BOTTOM_COMPLEX_COLOR,    RES_CHRATR_BOX,                cppu::UnoType<css::util::XComplexColor>::get(),  PropertyAttribute::MAYBEVOID, MID_BORDER_BOTTOM_COLOR }, \
         { UNO_NAME_CHAR_SHADOW_FORMAT,                  RES_CHRATR_SHADOW,             cppu::UnoType<css::table::ShadowFormat>::get(),     PropertyAttribute::MAYBEVOID, CONVERT_TWIPS                          }, \
         { UNO_NAME_LEFT_BORDER,                         RES_BOX,                       cppu::UnoType<css::table::BorderLine>::get(),    PropertyAttribute::MAYBEVOID, LEFT_BORDER            | CONVERT_TWIPS }, \
         { UNO_NAME_RIGHT_BORDER,                        RES_BOX,                       cppu::UnoType<css::table::BorderLine>::get(),    PropertyAttribute::MAYBEVOID, RIGHT_BORDER           | CONVERT_TWIPS }, \
@@ -450,6 +454,10 @@
                     { UNO_NAME_CHAR_RIGHT_BORDER_DISTANCE, RES_CHRATR_BOX, cppu::UnoType<sal_Int32>::get(),PROPERTY_NONE, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },\
                     { UNO_NAME_CHAR_TOP_BORDER_DISTANCE, RES_CHRATR_BOX, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, TOP_BORDER_DISTANCE |CONVERT_TWIPS },\
                     { UNO_NAME_CHAR_BOTTOM_BORDER_DISTANCE, RES_CHRATR_BOX, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },\
+                    { UNO_NAME_CHAR_BORDER_LEFT_COMPLEX_COLOR, RES_CHRATR_BOX, cppu::UnoType<css::util::XComplexColor>::get(), PropertyAttribute::MAYBEVOID, MID_BORDER_LEFT_COLOR }, \
+                    { UNO_NAME_CHAR_BORDER_RIGHT_COMPLEX_COLOR, RES_CHRATR_BOX, cppu::UnoType<css::util::XComplexColor>::get(), PropertyAttribute::MAYBEVOID, MID_BORDER_RIGHT_COLOR }, \
+                    { UNO_NAME_CHAR_BORDER_TOP_COMPLEX_COLOR, RES_CHRATR_BOX, cppu::UnoType<css::util::XComplexColor>::get(), PropertyAttribute::MAYBEVOID, MID_BORDER_TOP_COLOR }, \
+                    { UNO_NAME_CHAR_BORDER_BOTTOM_COMPLEX_COLOR, RES_CHRATR_BOX, cppu::UnoType<css::util::XComplexColor>::get(), PropertyAttribute::MAYBEVOID, MID_BORDER_BOTTOM_COLOR }, \
                     { UNO_NAME_CHAR_SHADOW_FORMAT, RES_CHRATR_SHADOW, cppu::UnoType<css::table::ShadowFormat>::get(), PROPERTY_NONE, CONVERT_TWIPS},\
                     { UNO_NAME_LEFT_BORDER, RES_BOX,              cppu::UnoType<css::table::BorderLine>::get(),  0, LEFT_BORDER  |CONVERT_TWIPS },\
                     { UNO_NAME_RIGHT_BORDER, RES_BOX,             cppu::UnoType<css::table::BorderLine>::get(),  0, RIGHT_BORDER |CONVERT_TWIPS },\

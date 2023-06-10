@@ -21,6 +21,7 @@
 #include "LoggedResources.hxx"
 #include <vector>
 #include <docmodel/theme/ThemeColorType.hxx>
+#include <docmodel/color/ComplexColor.hxx>
 
 namespace com::sun::star{
     namespace table {
@@ -45,9 +46,13 @@ class TDefTableHandler : public LoggedProperties
     std::vector<css::table::BorderLine2> m_aInsideVBorderLines;
 
     //values of the current border
-    sal_Int32                                           m_nLineWidth;
-    sal_Int32                                           m_nLineType;
-    sal_Int32                                           m_nLineColor;
+    sal_Int32 m_nLineWidth;
+    sal_Int32 m_nLineType;
+    sal_Int32 m_nLineColor;
+
+    model::ThemeColorType m_eThemeColorType = model::ThemeColorType::Unknown;
+    sal_Int32 m_nThemeShade = 0;
+    sal_Int32 m_nThemeTint = 0;
 
     OUString m_aInteropGrabBagName;
     std::vector<css::beans::PropertyValue> m_aInteropGrabBag;
@@ -66,6 +71,7 @@ public:
     void fillCellProperties( const ::tools::SvRef< TablePropertyMap >& pCellProperties) const;
     void enableInteropGrabBag(const OUString& aName);
     css::beans::PropertyValue getInteropGrabBag(const OUString& aName = OUString());
+
     static OUString getBorderTypeString(sal_Int32 nType);
     static OUString getThemeColorTypeString(sal_Int32 nType);
     static model::ThemeColorType getThemeColorTypeIndex(sal_Int32 nType);

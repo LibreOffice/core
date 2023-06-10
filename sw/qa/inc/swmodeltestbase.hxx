@@ -230,6 +230,15 @@ protected:
         return data;
     }
 
+    bool isPropertyVoid(const css::uno::Reference<css::uno::XInterface>& object, const OUString& name) const
+    {
+        if (!hasProperty(object, name))
+            return false;
+
+        css::uno::Reference< css::beans::XPropertySet > properties(object, uno::UNO_QUERY_THROW);
+        return !properties->getPropertyValue(name).hasValue();
+    }
+
     bool hasProperty(const css::uno::Reference<css::uno::XInterface>& obj, const OUString& name) const;
 
     css::xml::AttributeData getUserDefineAttribute(const css::uno::Any& obj, const OUString& name, const OUString& rValue) const;

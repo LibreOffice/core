@@ -24,7 +24,9 @@
 #include <editeng/editengdllapi.h>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <o3tl/typed_flags_set.hxx>
+#include <docmodel/color/ComplexColor.hxx>
 #include <memory>
+#include <array>
 
 
 namespace editeng { class SvxBorderLine; }
@@ -64,7 +66,12 @@ class EDITENG_DLLPUBLIC SvxBoxItem final : public SfxPoolItem
     sal_Int16 mnLeftDistance = 0;
     sal_Int16 mnRightDistance = 0;
 
+    // Store complex colors until lines are created...
+    std::array<model::ComplexColor, 4> maTempComplexColors;
+
     bool mbRemoveAdjCellBorder = false;
+
+    void tryMigrateComplexColor(SvxBoxItemLine eLine);
 
 public:
     static SfxPoolItem* CreateDefault();

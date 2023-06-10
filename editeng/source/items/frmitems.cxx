@@ -1295,6 +1295,7 @@ SvxBoxItem::SvxBoxItem(const SvxBoxItem& rCopy)
     , mnBottomDistance(rCopy.mnBottomDistance)
     , mnLeftDistance(rCopy.mnLeftDistance)
     , mnRightDistance(rCopy.mnRightDistance)
+    , maTempComplexColors(rCopy.maTempComplexColors)
     , mbRemoveAdjCellBorder(rCopy.mbRemoveAdjCellBorder)
 {
 }
@@ -1363,6 +1364,7 @@ bool SvxBoxItem::operator==( const SfxPoolItem& rAttr ) const
         (mnLeftDistance == rBoxItem.mnLeftDistance) &&
         (mnRightDistance == rBoxItem.mnRightDistance) &&
         (mbRemoveAdjCellBorder == rBoxItem.mbRemoveAdjCellBorder ) &&
+        (maTempComplexColors == rBoxItem.maTempComplexColors) &&
         CompareBorderLine(mpTopBorderLine, rBoxItem.GetTop()) &&
         CompareBorderLine(mpBottomBorderLine, rBoxItem.GetBottom()) &&
         CompareBorderLine(mpLeftBorderLine, rBoxItem.GetLeft()) &&
@@ -1456,8 +1458,11 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         {
             if (mpBottomBorderLine)
             {
-                auto xComplexColor = model::color::createXComplexColor(mpBottomBorderLine->getComplexColor());
-                rVal <<= xComplexColor;
+                rVal <<= model::color::createXComplexColor(mpBottomBorderLine->getComplexColor());
+            }
+            else if (maTempComplexColors[size_t(SvxBoxItemLine::BOTTOM)].getType() != model::ColorType::Unused)
+            {
+                rVal <<= model::color::createXComplexColor(maTempComplexColors[size_t(SvxBoxItemLine::BOTTOM)]);
             }
             return true;
         }
@@ -1465,8 +1470,11 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         {
             if (mpLeftBorderLine)
             {
-                auto xComplexColor = model::color::createXComplexColor(mpLeftBorderLine->getComplexColor());
-                rVal <<= xComplexColor;
+                rVal <<= model::color::createXComplexColor(mpLeftBorderLine->getComplexColor());
+            }
+            else if (maTempComplexColors[size_t(SvxBoxItemLine::LEFT)].getType() != model::ColorType::Unused)
+            {
+                rVal <<= model::color::createXComplexColor(maTempComplexColors[size_t(SvxBoxItemLine::LEFT)]);
             }
             return true;
         }
@@ -1474,8 +1482,11 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         {
             if (mpRightBorderLine)
             {
-                auto xComplexColor = model::color::createXComplexColor(mpRightBorderLine->getComplexColor());
-                rVal <<= xComplexColor;
+                rVal <<= model::color::createXComplexColor(mpRightBorderLine->getComplexColor());
+            }
+            else if (maTempComplexColors[size_t(SvxBoxItemLine::RIGHT)].getType() != model::ColorType::Unused)
+            {
+                rVal <<= model::color::createXComplexColor(maTempComplexColors[size_t(SvxBoxItemLine::RIGHT)]);
             }
             return true;
         }
@@ -1483,8 +1494,11 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         {
             if (mpTopBorderLine)
             {
-                auto xComplexColor = model::color::createXComplexColor(mpTopBorderLine->getComplexColor());
-                rVal <<= xComplexColor;
+                rVal <<= model::color::createXComplexColor(mpTopBorderLine->getComplexColor());
+            }
+            else if (maTempComplexColors[size_t(SvxBoxItemLine::TOP)].getType() != model::ColorType::Unused)
+            {
+                rVal <<= model::color::createXComplexColor(maTempComplexColors[size_t(SvxBoxItemLine::TOP)]);
             }
             return true;
         }
@@ -1614,6 +1628,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 {
                     if (!lcl_setLine(aSeq[n], *this, aBorders[n], bConvert))
                         return false;
+                    tryMigrateComplexColor(aBorders[n]);
                 }
 
                 // WTH are the borders and the distances saved in different order?
@@ -1716,24 +1731,60 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             if (mpBottomBorderLine)
                 return mpBottomBorderLine->setComplexColorFromAny(rVal);
+            else
+            {
+                css::uno::Reference<css::util::XComplexColor> xComplexColor;
+                if (!(rVal >>= xComplexColor))
+                    return false;
+
+                if (xComplexColor.is())
+                    maTempComplexColors[size_t(SvxBoxItemLine::BOTTOM)] = model::color::getFromXComplexColor(xComplexColor);
+            }
             return true;
         }
         case MID_BORDER_LEFT_COLOR:
         {
             if (mpLeftBorderLine)
                 return mpLeftBorderLine->setComplexColorFromAny(rVal);
+            else
+            {
+                css::uno::Reference<css::util::XComplexColor> xComplexColor;
+                if (!(rVal >>= xComplexColor))
+                    return false;
+
+                if (xComplexColor.is())
+                    maTempComplexColors[size_t(SvxBoxItemLine::LEFT)] = model::color::getFromXComplexColor(xComplexColor);
+            }
             return true;
         }
         case MID_BORDER_RIGHT_COLOR:
         {
             if (mpRightBorderLine)
                 return mpRightBorderLine->setComplexColorFromAny(rVal);
+            else
+            {
+                css::uno::Reference<css::util::XComplexColor> xComplexColor;
+                if (!(rVal >>= xComplexColor))
+                    return false;
+
+                if (xComplexColor.is())
+                    maTempComplexColors[size_t(SvxBoxItemLine::RIGHT)] = model::color::getFromXComplexColor(xComplexColor);
+            }
             return true;
         }
         case MID_BORDER_TOP_COLOR:
         {
             if (mpTopBorderLine)
                 return mpTopBorderLine->setComplexColorFromAny(rVal);
+            else
+            {
+                css::uno::Reference<css::util::XComplexColor> xComplexColor;
+                if (!(rVal >>= xComplexColor))
+                    return false;
+
+                if (xComplexColor.is())
+                    maTempComplexColors[size_t(SvxBoxItemLine::TOP)] = model::color::getFromXComplexColor(xComplexColor);
+            }
             return true;
         }
     }
@@ -1809,6 +1860,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
         bool bSet = SvxBoxItem::LineToSvxLine(aBorderLine, aLine, bConvert);
         SetLine(bSet ? &aLine : nullptr, nLine);
+        tryMigrateComplexColor(nLine);
     }
 
     return true;
@@ -2156,6 +2208,35 @@ sal_Int16 SvxBoxItem::CalcLineSpace( SvxBoxItemLine nLine, bool bEvenIfNoLine, b
     }
 
     return nDist;
+}
+
+void SvxBoxItem::tryMigrateComplexColor(SvxBoxItemLine eLine)
+{
+    if (!GetLine(eLine))
+        return;
+
+    auto nIndex = size_t(eLine);
+
+    if (maTempComplexColors[nIndex].getType() == model::ColorType::Unused)
+        return;
+
+    switch (eLine)
+    {
+    case SvxBoxItemLine::TOP:
+        mpTopBorderLine->setComplexColor(maTempComplexColors[nIndex]);
+        break;
+    case SvxBoxItemLine::BOTTOM:
+        mpBottomBorderLine->setComplexColor(maTempComplexColors[nIndex]);
+        break;
+    case SvxBoxItemLine::LEFT:
+        mpLeftBorderLine->setComplexColor(maTempComplexColors[nIndex]);
+        break;
+    case SvxBoxItemLine::RIGHT:
+        mpRightBorderLine->setComplexColor(maTempComplexColors[nIndex]);
+        break;
+    }
+
+    maTempComplexColors[nIndex] = model::ComplexColor();
 }
 
 bool SvxBoxItem::HasBorder( bool bTreatPaddingAsBorder ) const
