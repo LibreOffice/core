@@ -24,6 +24,8 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <o3tl/enumarray.hxx>
+#include <docmodel/theme/ThemeColorType.hxx>
+#include <docmodel/color/ComplexColor.hxx>
 
 namespace writerfilter::dmapper
 {
@@ -50,6 +52,9 @@ private:
     sal_Int32       m_nLineDistance;
     bool            m_bShadow;
     bool            m_bOOXML;
+    model::ThemeColorType m_eThemeColorType = model::ThemeColorType::Unknown;
+    sal_Int32 m_nThemeShade = 0;
+    sal_Int32 m_nThemeTint = 0;
 
     o3tl::enumarray<BorderPosition, bool> m_aFilledLines;
     o3tl::enumarray<BorderPosition, css::table::BorderLine2> m_aBorderLines;
@@ -72,6 +77,9 @@ public:
     bool                                        getShadow() const { return m_bShadow;}
     void enableInteropGrabBag(const OUString& aName);
     css::beans::PropertyValue getInteropGrabBag(const OUString& aName = OUString());
+
+    model::ComplexColor getComplexColor() const;
+
 };
 }
 

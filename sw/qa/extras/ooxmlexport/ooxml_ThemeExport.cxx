@@ -51,6 +51,36 @@ DECLARE_SW_ROUNDTRIP_TEST(testThemePortionLevelCharColor_DOCX,
     CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), rTransforms[0].mnValue);
 }
 
+DECLARE_SW_ROUNDTRIP_TEST(testThemePortionBorderColor_DOCX, "Test_ThemeBorderColor.docx", nullptr,
+                          Test)
+{
+    auto xParagraph = getParagraph(1);
+    CPPUNIT_ASSERT(xParagraph.is());
+    {
+        auto xComplexColor
+            = getProperty<uno::Reference<util::XComplexColor>>(xParagraph, "TopBorderComplexColor");
+        auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent2, aComplexColor.getSchemeType());
+        auto const& rTransforms = aComplexColor.getTransformations();
+        CPPUNIT_ASSERT_EQUAL(size_t(1), rTransforms.size());
+        CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTransforms[0].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), rTransforms[0].mnValue);
+    }
+    {
+        auto xComplexColor = getProperty<uno::Reference<util::XComplexColor>>(
+            xParagraph, "BottomBorderComplexColor");
+        auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent4, aComplexColor.getSchemeType());
+        auto const& rTransforms = aComplexColor.getTransformations();
+        CPPUNIT_ASSERT_EQUAL(size_t(1), rTransforms.size());
+        CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTransforms[0].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), rTransforms[0].mnValue);
+    }
+
+    CPPUNIT_ASSERT(isPropertyVoid(xParagraph, "LeftBorderComplexColor"));
+    CPPUNIT_ASSERT(isPropertyVoid(xParagraph, "RightBorderComplexColor"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
