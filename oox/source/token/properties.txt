@@ -34,6 +34,7 @@ BorderStyle
 BorderTransparency
 BorderWidth
 BottomBorder
+BottomBorderComplexColor
 BottomBorderDistance
 BottomMargin
 BuiltInUnit
@@ -309,6 +310,7 @@ LabelFillColor
 CustomLabelFields
 LayoutInfo
 LeftBorder
+LeftBorderComplexColor
 LeftBorderDistance
 LeftMargin
 LeftPageFooterContent
@@ -444,6 +446,7 @@ RepeatDelay
 Representation
 RightAngledAxes
 RightBorder
+RightBorderComplexColor
 RightBorderDistance
 RightMargin
 RightPageFooterContent
@@ -570,6 +573,7 @@ Title
 Toggle
 TokenIndex
 TopBorder
+TopBorderComplexColor
 TopBorderDistance
 TopMargin
 TotalsRow

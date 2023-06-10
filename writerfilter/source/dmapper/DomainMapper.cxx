@@ -1553,25 +1553,30 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         {
             auto pBorderHandler = std::make_shared<BorderHandler>( true );
             pProperties->resolve(*pBorderHandler);
-            PropertyIds eBorderId = PropertyIds( 0 );
-            PropertyIds eBorderDistId = PropertyIds( 0 );
+            PropertyIds eBorderId = PropertyIds::INVALID;
+            PropertyIds eBorderComplexColorId = PropertyIds::INVALID;
+            PropertyIds eBorderDistId = PropertyIds::INVALID;
             switch( nSprmId )
             {
             case NS_ooxml::LN_CT_PBdr_top:
                 eBorderId = PROP_TOP_BORDER;
+                eBorderComplexColorId = PROP_BORDER_TOP_COMPLEX_COLOR;
                 eBorderDistId = PROP_TOP_BORDER_DISTANCE;
                 break;
             case NS_ooxml::LN_CT_PBdr_left:
                 eBorderId = PROP_LEFT_BORDER;
+                eBorderComplexColorId = PROP_BORDER_LEFT_COMPLEX_COLOR;
                 eBorderDistId = PROP_LEFT_BORDER_DISTANCE;
                 break;
             case NS_ooxml::LN_CT_PBdr_bottom:
-                eBorderId = PROP_BOTTOM_BORDER         ;
+                eBorderId = PROP_BOTTOM_BORDER;
+                eBorderComplexColorId = PROP_BORDER_BOTTOM_COMPLEX_COLOR;
                 eBorderDistId = PROP_BOTTOM_BORDER_DISTANCE;
                 break;
             case NS_ooxml::LN_CT_PBdr_right:
                 eBorderId = PROP_RIGHT_BORDER;
-                eBorderDistId = PROP_RIGHT_BORDER_DISTANCE ;
+                eBorderComplexColorId = PROP_BORDER_RIGHT_COMPLEX_COLOR;
+                eBorderDistId = PROP_RIGHT_BORDER_DISTANCE;
                 break;
             case NS_ooxml::LN_CT_PBdr_between:
                 if (m_pImpl->handlePreviousParagraphBorderInBetween())
@@ -1580,6 +1585,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                     // then it is possible to emulate this border as top border
                     // for current paragraph
                     eBorderId = PROP_TOP_BORDER;
+                    eBorderComplexColorId = PROP_BORDER_TOP_COMPLEX_COLOR;
                     eBorderDistId = PROP_TOP_BORDER_DISTANCE;
                 }
                 // Since there are borders in between, each paragraph will have own borders. No more joining
@@ -1587,10 +1593,21 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 break;
             default:;
             }
-            if( eBorderId )
-                rContext->Insert( eBorderId, uno::Any( pBorderHandler->getBorderLine()) );
-            if(eBorderDistId)
-                rContext->Insert(eBorderDistId, uno::Any( pBorderHandler->getLineDistance()));
+
+            if (eBorderId != PropertyIds::INVALID)
+            {
+                rContext->Insert(eBorderId, uno::Any(pBorderHandler->getBorderLine()));
+            }
+            if (eBorderComplexColorId != PropertyIds::INVALID)
+            {
+                auto aComplexColor = pBorderHandler->getComplexColor();
+                auto xComplexColor = model::color::createXComplexColor(aComplexColor);
+                rContext->Insert(eBorderComplexColorId, uno::Any(xComplexColor));
+            }
+            if (eBorderDistId != PropertyIds::INVALID)
+            {
+                rContext->Insert(eBorderDistId, uno::Any(pBorderHandler->getLineDistance()));
+            }
             if ( nSprmId == NS_ooxml::LN_CT_PBdr_right )
             {
                 table::ShadowFormat aFormat;
@@ -2197,6 +2214,13 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 rContext->Insert( PROP_CHAR_BOTTOM_BORDER_DISTANCE, uno::Any( pBorderHandler->getLineDistance()));
                 rContext->Insert( PROP_CHAR_LEFT_BORDER_DISTANCE, uno::Any( pBorderHandler->getLineDistance()));
                 rContext->Insert( PROP_CHAR_RIGHT_BORDER_DISTANCE, uno::Any( pBorderHandler->getLineDistance()));
+
+                auto xComplexColor = model::color::createXComplexColor(pBorderHandler->getComplexColor());
+
+                rContext->Insert( PROP_CHAR_BORDER_TOP_COMPLEX_COLOR, uno::Any(xComplexColor));
+                rContext->Insert( PROP_CHAR_BORDER_BOTTOM_COMPLEX_COLOR, uno::Any(xComplexColor));
+                rContext->Insert( PROP_CHAR_BORDER_LEFT_COMPLEX_COLOR, uno::Any(xComplexColor));
+                rContext->Insert( PROP_CHAR_BORDER_RIGHT_COMPLEX_COLOR, uno::Any(xComplexColor));
 
                 table::ShadowFormat aFormat;
                 // Word only allows shadows on visible borders

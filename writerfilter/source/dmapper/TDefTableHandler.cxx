@@ -357,10 +357,13 @@ void TDefTableHandler::lcl_attribute(Id rName, Value & rVal)
         break;
         case NS_ooxml::LN_CT_Border_themeColor:
             appendGrabBag("themeColor", TDefTableHandler::getThemeColorTypeString(nIntValue));
+            m_eThemeColorType = TDefTableHandler::getThemeColorTypeIndex(nIntValue);
         break;
         case NS_ooxml::LN_CT_Border_themeTint:
+            m_nThemeTint = nIntValue;
+        break;
         case NS_ooxml::LN_CT_Border_themeShade:
-            // ignored
+            m_nThemeShade = nIntValue;
         break;
         default:
             OSL_FAIL("unknown attribute");
@@ -484,6 +487,23 @@ void TDefTableHandler::fillCellProperties( const ::tools::SvRef< TablePropertyMa
         pCellProperties->Insert( META_PROP_HORIZONTAL_BORDER, uno::Any( m_aInsideHBorderLines[0] ) );
     if( !m_aInsideVBorderLines.empty() )
         pCellProperties->Insert( META_PROP_VERTICAL_BORDER, uno::Any( m_aInsideVBorderLines[0] ) );
+
+    if (m_eThemeColorType != model::ThemeColorType::Unknown)
+    {
+        model::ComplexColor aComplexColor;
+        aComplexColor.setSchemeColor(m_eThemeColorType);
+
+        if (m_nThemeTint > 0 )
+        {
+            sal_Int16 nTint = sal_Int16((255.0 - m_nThemeTint) * 10000.0 / 255.0);
+            aComplexColor.addTransformation({model::TransformationType::Tint, nTint});
+        }
+        if (m_nThemeShade > 0)
+        {
+            sal_Int16 nShade = sal_Int16((255.0 - m_nThemeShade) * 10000.0 / 255.0);
+            aComplexColor.addTransformation({model::TransformationType::Shade, nShade});
+        }
+    }
 }
 
 
