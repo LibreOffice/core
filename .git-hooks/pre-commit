@@ -48,7 +48,7 @@ sub check_whitespaces($)
             print STDERR "$filename:$lineno:$line\n";
         }
     }
-    open( FILES, "git-diff-index -p -M --cached $h |" ) ||  die "Cannot run git diff-index.";
+    open( FILES, "git diff-index -p -M --cached $h |" ) ||  die "Cannot run git diff-index.";
     while (<FILES>)
     {
         if (m|^diff --git a/(.*) b/\1$|)
