@@ -19,7 +19,6 @@
 
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 
-#include <unotools/configmgr.hxx>
 #include <unotools/linguprops.hxx>
 #include <unotools/lingucfg.hxx>
 #include <hintids.hxx>
@@ -1634,8 +1633,8 @@ void SwTextFormatInfo::CtorInitTextFormatInfo( OutputDevice* pRenderContext, SwT
     m_nLineNetHeight = 0;
     SetLineStart(TextFrameIndex(0));
 
-    SvtCTLOptions::TextNumerals const nTextNumerals = !utl::ConfigManager::IsFuzzing() ?
-            SvtCTLOptions::GetCTLTextNumerals() : SvtCTLOptions::NUMERALS_ARABIC;
+    SvtCTLOptions::TextNumerals const nTextNumerals(
+            SvtCTLOptions::GetCTLTextNumerals());
     // cannot cache for NUMERALS_CONTEXT because we need to know the string
     // for the whole paragraph now
     if (nTextNumerals != SvtCTLOptions::NUMERALS_CONTEXT)

@@ -21,6 +21,7 @@
 #include <svl/ctloptions.hxx>
 
 #include <unotools/configitem.hxx>
+#include <unotools/configmgr.hxx>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/mutex.hxx>
@@ -430,6 +431,8 @@ void SvtCTLOptions::SetCTLTextNumerals( SvtCTLOptions::TextNumerals _eNumerals )
 
 SvtCTLOptions::TextNumerals SvtCTLOptions::GetCTLTextNumerals()
 {
+    if (utl::ConfigManager::IsFuzzing())
+        return SvtCTLOptions::NUMERALS_ARABIC;
     return static_cast<SvtCTLOptions::TextNumerals>(officecfg::Office::Common::I18N::CTL::CTLTextNumerals::get());
 }
 
