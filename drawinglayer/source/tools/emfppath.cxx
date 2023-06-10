@@ -34,7 +34,12 @@ namespace
 
 namespace emfplushelper
 {
-    typedef float matrix [4][4];
+    typedef double matrix [4][4];
+
+    constexpr sal_uInt32 nDetails = 8;
+    constexpr double alpha[nDetails]
+        = { 1. / nDetails, 2. / nDetails, 3. / nDetails, 4. / nDetails,
+            5. / nDetails, 6. / nDetails, 7. / nDetails, 8. / nDetails };
 
     // see 2.2.2.21 EmfPlusInteger7
     //     2.2.2.22 EmfPlusInteger15
@@ -232,21 +237,20 @@ namespace emfplushelper
         m[0][2] = tension - 2.;
         m[1][0] = 2. * tension;
         m[1][1] = tension - 3.;
-        m[1][2] = 3. - 2 * tension;
+        m[1][2] = 3. - 2. * tension;
         m[3][1] = 1.;
         m[0][3] = m[2][2] = tension;
         m[0][0] = m[1][3] = m[2][0] = -tension;
         m[2][1] = m[2][3] = m[3][0] = m[3][2] = m[3][3] = 0.;
     }
 
-    static float calculateSplineCoefficients(float p0, float p1, float p2, float p3, float alpha, matrix m)
+    static double calculateSplineCoefficients(float p0, float p1, float p2, float p3, sal_uInt32 step, matrix m)
     {
-        float a, b, c, d;
-        a = m[0][0] * p0 + m[0][1] * p1 + m[0][2] * p2 + m[0][3] * p3;
-        b = m[1][0] * p0 + m[1][1] * p1 + m[1][2] * p2 + m[1][3] * p3;
-        c = m[2][0] * p0 + m[2][2] * p2;
-        d = p1;
-        return (d + alpha * (c + alpha * (b + alpha * a)));
+        double a = m[0][0] * p0 + m[0][1] * p1 + m[0][2] * p2 + m[0][3] * p3;
+        double b = m[1][0] * p0 + m[1][1] * p1 + m[1][2] * p2 + m[1][3] * p3;
+        double c = m[2][0] * p0 + m[2][2] * p2;
+        double d = p1;
+        return (d + alpha[step] * (c + alpha[step] * (b + alpha[step] * a)));
     }
 
     ::basegfx::B2DPolyPolygon& EMFPPath::GetCardinalSpline(EmfPlusHelperData const& rR, float fTension,
@@ -254,11 +258,7 @@ namespace emfplushelper
     {
         ::basegfx::B2DPolygon polygon;
         matrix mat;
-        float x, y;
-        constexpr sal_uInt32 nDetails = 8;
-        constexpr float alpha[nDetails]
-            = { 1. / nDetails, 2. / nDetails, 3. / nDetails, 4. / nDetails,
-                5. / nDetails, 6. / nDetails, 7. / nDetails, 8. / nDetails };
+        double x, y;
         if (aNumSegments >= nPoints)
             aNumSegments = nPoints - 1;
         GetCardinalMatrix(fTension, mat);
@@ -274,9 +274,9 @@ namespace emfplushelper
             for (sal_uInt32 s = 0; s < nDetails; s++)
             {
                 x = calculateSplineCoefficients(xPoints[i - 3], xPoints[i - 2], xPoints[i - 1],
-                                                xPoints[i], alpha[s], mat);
+                                                xPoints[i], s, mat);
                 y = calculateSplineCoefficients(yPoints[i - 3], yPoints[i - 2], yPoints[i - 1],
-                                                yPoints[i], alpha[s], mat);
+                                                yPoints[i], s, mat);
                 polygon.append(rR.Map(x, y));
             }
         }
@@ -289,11 +289,7 @@ namespace emfplushelper
     {
         ::basegfx::B2DPolygon polygon;
         matrix mat;
-        float x, y;
-        constexpr sal_uInt32 nDetails = 8;
-        constexpr float alpha[nDetails]
-            = { 1. / nDetails, 2. / nDetails, 3. / nDetails, 4. / nDetails,
-                5. / nDetails, 6. / nDetails, 7. / nDetails, 8. / nDetails };
+        double x, y;
         GetCardinalMatrix(fTension, mat);
         // add three first points at the end
         xPoints.push_back(xPoints[0]);
@@ -308,9 +304,9 @@ namespace emfplushelper
             for (sal_uInt32 s = 0; s < nDetails; s++)
             {
                 x = calculateSplineCoefficients(xPoints[i - 3], xPoints[i - 2], xPoints[i - 1],
-                                                xPoints[i], alpha[s], mat);
+                                                xPoints[i], s, mat);
                 y = calculateSplineCoefficients(yPoints[i - 3], yPoints[i - 2], yPoints[i - 1],
-                                                yPoints[i], alpha[s], mat);
+                                                yPoints[i], s, mat);
                 polygon.append(rR.Map(x, y));
             }
         }
