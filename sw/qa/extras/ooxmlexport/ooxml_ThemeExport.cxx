@@ -81,6 +81,22 @@ DECLARE_SW_ROUNDTRIP_TEST(testThemePortionBorderColor_DOCX, "Test_ThemeBorderCol
     CPPUNIT_ASSERT(isPropertyVoid(xParagraph, "RightBorderComplexColor"));
 }
 
+DECLARE_SW_ROUNDTRIP_TEST(testCharUnderlineTheme_DOCX, "Test_CharUnderlineThemeColor.docx", nullptr,
+                          Test)
+{
+    auto xParagraph = getParagraph(1);
+    CPPUNIT_ASSERT(xParagraph.is());
+    auto xRun = getRun(xParagraph, 1);
+    auto xComplexColor
+        = getProperty<uno::Reference<util::XComplexColor>>(xRun, "CharUnderlineComplexColor");
+    auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getSchemeType());
+    auto const& rTransforms = aComplexColor.getTransformations();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rTransforms.size());
+    CPPUNIT_ASSERT_EQUAL(model::TransformationType::Shade, rTransforms[0].meType);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2509), rTransforms[0].mnValue);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

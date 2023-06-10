@@ -7873,10 +7873,14 @@ void DocxAttributeOutput::CharUnderline( const SvxUnderlineItem& rUnderline )
     bool  bUnderlineHasColor = !aUnderlineColor.IsTransparent();
     if (bUnderlineHasColor)
     {
+        model::ComplexColor const& rComplexColor = rUnderline.getComplexColor();
         // Underline has a color
-        m_pSerializer->singleElementNS( XML_w, XML_u,
-                                        FSNS( XML_w, XML_val ), pUnderlineValue,
-                                        FSNS( XML_w, XML_color ), msfilter::util::ConvertColor(aUnderlineColor) );
+        rtl::Reference<FastAttributeList> pAttrList = FastSerializerHelper::createAttrList();
+        pAttrList->add(FSNS(XML_w, XML_val), pUnderlineValue);
+        pAttrList->add(FSNS(XML_w, XML_color), msfilter::util::ConvertColor(aUnderlineColor));
+        lclAddThemeColorAttributes(pAttrList, rComplexColor);
+        m_pSerializer->singleElementNS(XML_w, XML_u, pAttrList);
+
     }
     else
     {

@@ -91,6 +91,7 @@ CharStyleName
 CharTransparence
 CharUnderline
 CharUnderlineColor
+CharUnderlineComplexColor
 CharUnderlineHasColor
 CharWeight
 CharWeightAsian

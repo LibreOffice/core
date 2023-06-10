@@ -352,6 +352,48 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_UNDERLINE_COLOR, uno::Any( nIntValue ) );
             }
             break;
+        case NS_ooxml::LN_CT_Underline_themeColor:
+        case NS_ooxml::LN_CT_Underline_themeTint:
+        case NS_ooxml::LN_CT_Underline_themeShade:
+            if (m_pImpl->GetTopContext())
+            {
+                uno::Reference<util::XComplexColor> xComplexColor;
+                model::ComplexColor aComplexColor;
+
+                PropertyMapPtr pTopContext = m_pImpl->GetTopContext();
+                std::optional<PropertyMap::Property> aValue;
+                if (pTopContext && (aValue = pTopContext->getProperty(PROP_CHAR_UNDERLINE_COMPLEX_COLOR)))
+                {
+                    aValue->second >>= xComplexColor;
+                    if (xComplexColor.is())
+                        aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+                }
+
+                if (nName == NS_ooxml::LN_CT_Underline_themeColor)
+                {
+                    auto eThemeColorType = TDefTableHandler::getThemeColorTypeIndex(nIntValue);
+                    aComplexColor.setSchemeColor(eThemeColorType);
+                }
+                else if (nName == NS_ooxml::LN_CT_Underline_themeTint)
+                {
+                    if (nIntValue > 0)
+                    {
+                        sal_Int16 nTransformedValue = sal_Int16((255.0 - nIntValue) * 10000.0 / 255.0);
+                        aComplexColor.addTransformation({model::TransformationType::Tint, sal_Int16(nTransformedValue)});
+                    }
+                }
+                else if (nName == NS_ooxml::LN_CT_Underline_themeShade)
+                {
+                    if (nIntValue > 0)
+                    {
+                        sal_Int16 nTransformedValue = sal_Int16((255.0 - nIntValue) * 10000.0 / 255.0);
+                        aComplexColor.addTransformation({model::TransformationType::Shade, sal_Int16(nTransformedValue)});
+                    }
+                }
+                xComplexColor = model::color::createXComplexColor(aComplexColor);
+                m_pImpl->GetTopContext()->Insert(PROP_CHAR_UNDERLINE_COMPLEX_COLOR, uno::Any(xComplexColor));
+            }
+            break;
 
         case NS_ooxml::LN_CT_TabStop_val:
             if (sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_ST_TabJc_clear)

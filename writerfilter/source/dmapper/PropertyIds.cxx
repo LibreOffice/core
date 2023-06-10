@@ -36,6 +36,7 @@ const OUString & getPropertyName( PropertyIds eId )
         { PROP_CHAR_RELIEF, u"CharRelief"},
         { PROP_CHAR_UNDERLINE, u"CharUnderline"},
         { PROP_CHAR_UNDERLINE_COLOR, u"CharUnderlineColor"},
+        { PROP_CHAR_UNDERLINE_COMPLEX_COLOR, u"CharUnderlineComplexColor"},
         { PROP_CHAR_UNDERLINE_HAS_COLOR, u"CharUnderlineHasColor"},
         { PROP_CHAR_WORD_MODE, u"CharWordMode"},
         { PROP_CHAR_ESCAPEMENT, u"CharEscapement"},
