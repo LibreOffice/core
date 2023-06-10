@@ -56,6 +56,7 @@ public:
     bool                IsEmpty() const;
     void                SetEmpty();
     void                Clear();
+    void                ClearAlpha();
 
     void                Draw( OutputDevice* pOutDev,
                               const Point& rDestPt ) const;

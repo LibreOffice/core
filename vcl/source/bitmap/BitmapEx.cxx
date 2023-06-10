@@ -190,6 +190,11 @@ void BitmapEx::Clear()
     SetEmpty();
 }
 
+void BitmapEx::ClearAlpha()
+{
+    maAlphaMask.SetEmpty();
+}
+
 bool BitmapEx::IsAlpha() const
 {
     return !maAlphaMask.IsEmpty();

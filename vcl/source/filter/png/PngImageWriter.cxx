@@ -50,8 +50,6 @@ static bool pngWrite(SvStream& rStream, const BitmapEx& rBitmapEx, int nCompress
                      bool bInterlaced, bool bTranslucent,
                      const std::vector<PngChunk>& aAdditionalChunks)
 {
-    if (rBitmapEx.IsAlpha() && !bTranslucent)
-        return false;
     if (rBitmapEx.IsEmpty())
         return false;
 
@@ -76,6 +74,12 @@ static bool pngWrite(SvStream& rStream, const BitmapEx& rBitmapEx, int nCompress
     else
     {
         aBitmapEx = rBitmapEx;
+    }
+
+    if (!bTranslucent)
+    {
+        // Clear alpha channel
+        aBitmapEx.ClearAlpha();
     }
 
     Bitmap aBitmap;
