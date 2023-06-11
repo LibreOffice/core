@@ -143,7 +143,7 @@ ViewShell::~ViewShell()
     // Keep the content window from accessing in its destructor the
     // WindowUpdater.
     if (mpContentWindow)
-        mpContentWindow->SetViewShell(nullptr);
+        suppress_fun_call_w_exception(mpContentWindow->SetViewShell(nullptr));
 
     mpZoomList.reset();
 
