@@ -984,17 +984,15 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, Con
         {
             if(pViewShell->GetWindow())
             {
-                auto pSwView = dynamic_cast<SwView *>( pViewShell );
-                if(pSwView !=  nullptr ||
-                   dynamic_cast< const SwPagePreview *>( pViewShell ) !=  nullptr ||
-                   dynamic_cast< const SwSrcView *>( pViewShell ) !=  nullptr)
+                auto pSwView = dynamic_cast<SwView *>(pViewShell);
+                if (pSwView)
                 {
                     SwViewOption aNewOptions = *pSwView->GetWrtShell().GetViewOptions();
                     aNewOptions.SetThemeName(m_pColorConfig->GetCurrentSchemeName());
                     SwViewColors aViewColors(*m_pColorConfig);
                     aNewOptions.SetColorConfig(aViewColors);
                     pSwView->GetWrtShell().ApplyViewOptions(aNewOptions);
-                    pViewShell->GetWindow()->Invalidate();
+
                     if (bOnlyInvalidateCurrentView)
                     {
                         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_APPLICATION_BACKGROUND_COLOR,
@@ -1002,6 +1000,12 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, Con
                         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR,
                             aViewColors.m_aDocColor.AsRGBHexString().toUtf8().getStr());
                     }
+                }
+                if(pSwView !=  nullptr ||
+                   dynamic_cast< const SwPagePreview *>( pViewShell ) !=  nullptr ||
+                   dynamic_cast< const SwSrcView *>( pViewShell ) !=  nullptr)
+                {
+                    pViewShell->GetWindow()->Invalidate();
                 }
             }
             if (bOnlyInvalidateCurrentView)
