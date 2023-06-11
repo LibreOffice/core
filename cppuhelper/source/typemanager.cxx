@@ -19,6 +19,7 @@
 #include <string_view>
 #include <utility>
 #include <vector>
+#include <algorithm>
 
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -1723,12 +1724,8 @@ bool Enumeration::matches(css::uno::TypeClass tc) const {
     if (!types_.hasElements()) {
         return true;
     }
-    for (const auto & i : types_) {
-        if (i == tc) {
-            return true;
-        }
-    }
-    return false;
+
+    return std::any_of(types_.begin(), types_.end(), [&tc](const auto& i) { return i == tc; });
 }
 
 void Enumeration::findNextMatch() {

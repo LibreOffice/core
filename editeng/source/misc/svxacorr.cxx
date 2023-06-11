@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <utility>
+#include <algorithm>
 #include <string_view>
 #include <sal/config.h>
 
@@ -175,10 +176,7 @@ static bool lcl_IsSymbolChar( CharClass const & rCC, const OUString& rTxt,
 
 static bool lcl_IsInArr(std::u16string_view arr, const sal_uInt32 c)
 {
-    for (const auto c1 : arr)
-        if (c1 == c)
-            return true;
-    return false;
+    return std::any_of(arr.begin(), arr.end(), [c](const auto c1) { return c1 == c; });
 }
 
 SvxAutoCorrDoc::~SvxAutoCorrDoc()

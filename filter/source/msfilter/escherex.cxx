@@ -3789,12 +3789,8 @@ EscherPersistTable::~EscherPersistTable()
 
 bool EscherPersistTable::PtIsID( sal_uInt32 nID )
 {
-    for(auto const & pPtr : maPersistTable) {
-        if ( pPtr->mnID == nID ) {
-            return true;
-        }
-    }
-    return false;
+    return std::any_of(maPersistTable.begin(), maPersistTable.end(),
+        [&nID](const auto& rxEntry) { return rxEntry->mnID == nID; });
 }
 
 void EscherPersistTable::PtInsert( sal_uInt32 nID, sal_uInt32 nOfs )
