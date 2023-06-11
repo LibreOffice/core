@@ -164,6 +164,7 @@ void Comment::finalizeImport()
         SdrCaptionObj* pCaption = pPostIt->GetOrCreateCaption( maModel.maRange.aStart );
 
         rtl::Reference< SvxShapeText > xAnnoShape( dynamic_cast<SvxShapeText*>(pCaption->getUnoShape().get() ) ); // SvxShapeText
+        assert(xAnnoShape && "will not be null");
         // setting a property triggers expensive process, so set them all at once
 
         // Add shape formatting properties (autoFill, colHidden and rowHidden are dropped)
