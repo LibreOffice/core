@@ -783,27 +783,9 @@ IMPL_LINK(SdPageObjsTLV, EditedEntryHdl, const IterString&, rIterString, bool)
         return true;
 
     // If the new name is empty or not unique, start editing again.
-    bool bUniqueName = true;
-    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-    if (!rIterString.second.isEmpty())
+    if (rIterString.second.isEmpty() || m_pDoc->GetObj(rIterString.second))
     {
-        if (m_xTreeView->get_iter_first(*xEntry))
-        {
-            do
-            {
-                // skip self!
-                if (m_xTreeView->iter_compare(*xEntry, rIterString.first) != 0 &&
-                        m_xTreeView->get_text(*xEntry) == rIterString.second)
-                {
-                    bUniqueName = false;
-                    break;
-                }
-            } while(m_xTreeView->iter_next(*xEntry));
-        }
-    }
-    if (rIterString.second.isEmpty() || !bUniqueName)
-    {
-        m_xTreeView->copy_iterator(rIterString.first, *xEntry);
+        std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator(&rIterString.first));
         Application::PostUserEvent(LINK(this, SdPageObjsTLV, EditEntryAgain), xEntry.release());
         return false;
     }
