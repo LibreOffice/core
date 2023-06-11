@@ -41,7 +41,7 @@ struct SVXCORE_DLLPUBLIC ThemePaletteEffect
 struct SVXCORE_DLLPUBLIC ThemePaletteColorData
 {
     Color maBaseColor;
-    model::ThemeColorType meThemeColorType;
+    model::ThemeColorType meThemeColorType = model::ThemeColorType::Unknown;
     std::array<ThemePaletteEffect, 6> maEffects;
 
     sal_Int16 getLumMod(sal_uInt16 nEffect) const { return maEffects[nEffect].mnLumMod; }
