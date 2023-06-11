@@ -485,10 +485,7 @@ namespace drawinglayer::primitive3d
 
                 Primitive3DContainer aRetval(aResultVector.size());
 
-                for(size_t a(0); a < aResultVector.size(); a++)
-                {
-                    aRetval[a] = Primitive3DReference(aResultVector[a]);
-                }
+                std::transform(aResultVector.cbegin(), aResultVector.cend(), aRetval.begin(), [](auto &rResult){return Primitive3DReference(rResult);});
 
                 return aRetval;
             }
@@ -707,10 +704,7 @@ using namespace com::sun::star;
             // prepare return value
             Primitive3DContainer aRetval(aResultVector.size());
 
-            for(size_t a(0); a < aResultVector.size(); a++)
-            {
-                aRetval[a] = Primitive3DReference(aResultVector[a]);
-            }
+            std::transform(aResultVector.cbegin(), aResultVector.cend(), aRetval.begin(), [](auto &rResult){return Primitive3DReference(rResult);});
 
             return aRetval;
         }

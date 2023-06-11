@@ -282,23 +282,10 @@ namespace drawinglayer::primitive2d
 
             const BorderLinePrimitive2D& rCompare = static_cast<const BorderLinePrimitive2D&>(rPrimitive);
 
-            if (getStart() == rCompare.getStart()
-                && getEnd() == rCompare.getEnd()
-                && getStrokeAttribute() == rCompare.getStrokeAttribute())
-            {
-                if (getBorderLines().size() == rCompare.getBorderLines().size())
-                {
-                    for (size_t a(0); a < getBorderLines().size(); a++)
-                    {
-                        if (!(getBorderLines()[a] == rCompare.getBorderLines()[a]))
-                        {
-                            return false;
-                        }
-                    }
-                }
-            }
-
-            return false;
+            return (getStart() == rCompare.getStart()
+                    && getEnd() == rCompare.getEnd()
+                    && getStrokeAttribute() == rCompare.getStrokeAttribute()
+                    && getBorderLines() == rCompare.getBorderLines());
         }
 
         // provide unique ID
