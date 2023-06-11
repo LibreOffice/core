@@ -44,15 +44,15 @@ void SvgFilterNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTarg
         SvgNode* pCandidate = rChildren[a].get();
         if (pCandidate->getType() == SVGToken::FeGaussianBlur)
         {
-            const SvgFeGaussianBlurNode* pFeGaussianBlurNode
-                = dynamic_cast<const SvgFeGaussianBlurNode*>(pCandidate);
-            pFeGaussianBlurNode->apply(rTarget);
+            const SvgFeGaussianBlurNode& rFeGaussianBlurNode
+                = dynamic_cast<const SvgFeGaussianBlurNode&>(*pCandidate);
+            rFeGaussianBlurNode.apply(rTarget);
         }
         else if (pCandidate->getType() == SVGToken::FeColorMatrix)
         {
-            const SvgFeColorMatrixNode* pFeColorMatrixNode
-                = dynamic_cast<const SvgFeColorMatrixNode*>(pCandidate);
-            pFeColorMatrixNode->apply(rTarget);
+            const SvgFeColorMatrixNode& rFeColorMatrixNode
+                = dynamic_cast<const SvgFeColorMatrixNode&>(*pCandidate);
+            rFeColorMatrixNode.apply(rTarget);
         }
     }
 }
