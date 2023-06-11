@@ -22,6 +22,7 @@
 #include <osx/a11yfactory.h>
 
 #include "a11yselectionwrapper.h"
+#include "a11ytablewrapper.h"
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
@@ -36,6 +37,17 @@ using namespace ::com::sun::star::uno;
         NSMutableArray * children = [ [ NSMutableArray alloc ] init ];
         try {
             sal_Int64 n = xAccessibleSelection -> getSelectedAccessibleChildCount();
+
+            // Fix hanging when selecting a column or row in Calc
+            // When a Calc column is selected, the child count will be
+            // at least a million. Constructing that many C++ Calc objects
+            // takes several minutes even on a fast Silicon Mac so apply
+            // the maximum table cell limit here.
+            if ( n < 0 )
+                n = 0;
+            else if ( n > MAXIMUM_ACCESSIBLE_TABLE_CELLS )
+                n = MAXIMUM_ACCESSIBLE_TABLE_CELLS;
+
             for ( sal_Int64 i=0 ; i < n ; ++i ) {
                 [ children addObject: [ AquaA11yFactory wrapperForAccessible: xAccessibleSelection -> getSelectedAccessibleChild( i ) ] ];
             }
