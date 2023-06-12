@@ -46,26 +46,9 @@ class VclComplexTextTest : public test::BootstrapFixture
 {
 public:
     VclComplexTextTest() : BootstrapFixture(true, false) {}
-
-    /// Play with font measuring etc.
-    void testArabic();
-    void testTdf95650(); // Windows-only issue
-    void testCaching();
-    void testCachingSubstring();
-    void testCaret();
-    void testGdefCaret();
-
-    CPPUNIT_TEST_SUITE(VclComplexTextTest);
-    CPPUNIT_TEST(testArabic);
-    CPPUNIT_TEST(testTdf95650);
-    CPPUNIT_TEST(testCaching);
-    CPPUNIT_TEST(testCachingSubstring);
-    CPPUNIT_TEST(testCaret);
-    CPPUNIT_TEST(testGdefCaret);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void VclComplexTextTest::testArabic()
+CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testArabic)
 {
 #if HAVE_MORE_FONTS
     OUString aOneTwoThree(u"واحِدْ إثٍنين ثلاثةٌ");
@@ -114,7 +97,7 @@ void VclComplexTextTest::testArabic()
 #endif
 }
 
-void VclComplexTextTest::testTdf95650()
+CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf95650)
 {
     static constexpr OUStringLiteral aTxt =
         u"\u0131\u0302\u0504\u4E44\u3031\u3030\u3531\u2D30"
@@ -178,7 +161,7 @@ static void testCachedGlyphs( const OUString& aText, const OUString& aFontName )
 
 // Check that caching using SalLayoutGlyphs gives same results as without caching.
 // This should preferably use fonts that come with LO.
-void VclComplexTextTest::testCaching()
+CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testCaching)
 {
     // Just something basic, no font fallback.
     testCachedGlyphs( "test", "Dejavu Sans" );
@@ -222,7 +205,7 @@ static void testCachedGlyphsSubstring( const OUString& aText, const OUString& aF
 // Check that SalLayoutGlyphsCache works properly when it builds a subset
 // of glyphs using SalLayoutGlyphsImpl::cloneCharRange().
 // This should preferably use fonts that come with LO.
-void VclComplexTextTest::testCachingSubstring()
+CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testCachingSubstring)
 {
     // Just something basic.
     testCachedGlyphsSubstring( "test", "Dejavu Sans", false );
@@ -235,7 +218,7 @@ void VclComplexTextTest::testCachingSubstring()
     testCachedGlyphsSubstring( text, "Dejavu Sans", false );
 }
 
-void VclComplexTextTest::testCaret()
+CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testCaret)
 {
 #if HAVE_MORE_FONTS
     // Test caret placement in fonts *without* ligature carets in GDEF table.
@@ -304,7 +287,7 @@ void VclComplexTextTest::testCaret()
 #endif
 }
 
-void VclComplexTextTest::testGdefCaret()
+CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testGdefCaret)
 {
 #if HAVE_MORE_FONTS
     // Test caret placement in fonts *with* ligature carets in GDEF table.
@@ -378,7 +361,5 @@ void VclComplexTextTest::testGdefCaret()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(nTextWidth), aCharWidths.back());
 #endif
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(VclComplexTextTest);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
