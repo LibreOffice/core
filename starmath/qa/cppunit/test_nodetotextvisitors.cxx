@@ -90,7 +90,6 @@ void Test::setUp()
     SmGlobals::ensure();
 
     xDocShRef = new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT);
-    xDocShRef->DoInitNew();
 }
 
 void Test::tearDown()
