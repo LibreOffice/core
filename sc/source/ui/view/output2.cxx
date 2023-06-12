@@ -815,6 +815,11 @@ bool ScDrawStringsVars::HasEditCharacters() const
         switch(aString[nIdx])
         {
             case CHAR_NBSP:
+                // tdf#122676: Ignore CHAR_NBSP (this is thousand separator in any number)
+                // if repeat character is set
+                if (nRepeatPos < 0)
+                    return true;
+                break;
             case CHAR_SHY:
             case CHAR_ZWSP:
             case CHAR_LRM:
