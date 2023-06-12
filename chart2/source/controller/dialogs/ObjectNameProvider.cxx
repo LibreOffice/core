@@ -601,18 +601,9 @@ OUString ObjectNameProvider::getHelpText( std::u16string_view rObjectCID, const 
                         xCalculator->setXYNames ( aXName, aYName );
                         RegressionCurveHelper::initializeCurveCalculator( xCalculator, xSeries, xChartModel );
 
-                        // change text for Moving Average
-                        OUString aWildcard( "%PERIOD" );
-                        sal_Int32 nIndex = xCalculator->getRepresentation().indexOf( aWildcard );
-                        if( nIndex != -1 )
-                        {  // replace period
-                                aRet = xCalculator->getRepresentation();
-                                aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), OUString::number(aPeriod) );
-                        }
-
                         // replace formula
-                        aWildcard = "%FORMULA";
-                        nIndex = aRet.indexOf( aWildcard );
+                        OUString aWildcard = "%FORMULA";
+                        sal_Int32 nIndex = aRet.indexOf( aWildcard );
                         if( nIndex != -1 )
                         {
                             OUString aFormula ( xCalculator->getRepresentation() );
