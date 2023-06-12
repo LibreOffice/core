@@ -30,6 +30,7 @@ class VclTextTest : public test::BootstrapFixture
     // "xdg-open ./workdir/CppunitTest/vcl_text_test.test.core/"
     static constexpr const bool mbExportBitmap = false;
 
+public:
     void exportDevice(const OUString& filename, const VclPtr<VirtualDevice>& device)
     {
         if (mbExportBitmap)
@@ -46,57 +47,10 @@ class VclTextTest : public test::BootstrapFixture
         }
     }
 
-public:
     VclTextTest()
         : BootstrapFixture(true, false)
     {
     }
-
-    void testSimpleText();
-    void testTextLayoutCache();
-    void testImplLayoutRuns_AddPos();
-    void testImplLayoutRuns_AddRuns();
-    void testImplLayoutRuns_PosIsInRun();
-    void testImplLayoutRuns_PosIsInAnyRun();
-    void testImplLayoutArgsBiDiStrong();
-    void testImplLayoutArgsBiDiRtl();
-    void testImplLayoutArgsRightAlign();
-    void testImplLayoutArgs_PrepareFallback_precalculatedglyphs();
-    void testGetStringWithCenterEllpsis();
-    void testGetStringWithEndEllpsis();
-    void testGetStringWithNewsEllpsis();
-    void testGetTextBreak();
-    void testGetSingleLineTextRect();
-    void testGetSingleLineTextRectWithEndEllipsis();
-    void testGetRightBottomAlignedSingleLineTextRect();
-    void testGetMultiLineTextRect();
-    void testGetMultiLineTextRectWithEndEllipsis();
-    void testGetRightBottomAlignedMultiLineTextRect();
-    void testGetRotatedSingleLineTextRect();
-
-    CPPUNIT_TEST_SUITE(VclTextTest);
-    CPPUNIT_TEST(testSimpleText);
-    CPPUNIT_TEST(testTextLayoutCache);
-    CPPUNIT_TEST(testImplLayoutRuns_AddPos);
-    CPPUNIT_TEST(testImplLayoutRuns_AddRuns);
-    CPPUNIT_TEST(testImplLayoutRuns_PosIsInRun);
-    CPPUNIT_TEST(testImplLayoutRuns_PosIsInAnyRun);
-    CPPUNIT_TEST(testImplLayoutArgsBiDiStrong);
-    CPPUNIT_TEST(testImplLayoutArgsBiDiRtl);
-    CPPUNIT_TEST(testImplLayoutArgsRightAlign);
-    CPPUNIT_TEST(testImplLayoutArgs_PrepareFallback_precalculatedglyphs);
-    CPPUNIT_TEST(testGetStringWithCenterEllpsis);
-    CPPUNIT_TEST(testGetStringWithEndEllpsis);
-    CPPUNIT_TEST(testGetStringWithNewsEllpsis);
-    CPPUNIT_TEST(testGetTextBreak);
-    CPPUNIT_TEST(testGetSingleLineTextRect);
-    CPPUNIT_TEST(testGetSingleLineTextRectWithEndEllipsis);
-    CPPUNIT_TEST(testGetRightBottomAlignedSingleLineTextRect);
-    CPPUNIT_TEST(testGetMultiLineTextRect);
-    CPPUNIT_TEST(testGetMultiLineTextRectWithEndEllipsis);
-    CPPUNIT_TEST(testGetRightBottomAlignedMultiLineTextRect);
-    CPPUNIT_TEST(testGetRotatedSingleLineTextRect);
-    CPPUNIT_TEST_SUITE_END();
 };
 
 // Avoid issues when colorized antialiasing generates slightly tinted rather than truly black
@@ -172,7 +126,7 @@ static tools::Long getCharacterLeftSideHeight(VirtualDevice* device, const Point
 // Test rendering of the 'L' character (chosen because L is a simple shape).
 // Check things like using a double font size doubling the size of the character, correct rotation, etc.
 // IMPORTANT: If you modify this, check also the VclCjkTextTest::testVerticalText().
-void VclTextTest::testSimpleText()
+CPPUNIT_TEST_FIXTURE(VclTextTest, testSimpleText)
 {
     OUString text("L");
     ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
@@ -270,7 +224,7 @@ void VclTextTest::testSimpleText()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(width36 / 2, width36pct50, 2);
 }
 
-void VclTextTest::testTextLayoutCache()
+CPPUNIT_TEST_FIXTURE(VclTextTest, testTextLayoutCache)
 {
     OUString sTestString = u"The quick brown fox\n jumped over the lazy dogالعاشر";
     vcl::text::TextLayoutCache cache(sTestString.getStr(), sTestString.getLength());
@@ -288,7 +242,7 @@ void VclTextTest::testTextLayoutCache()
     CPPUNIT_ASSERT_EQUAL(51, run2.nEnd);
 }
 
-void VclTextTest::testImplLayoutRuns_AddPos()
+CPPUNIT_TEST_FIXTURE(VclTextTest, testImplLayoutRuns_AddPos)
 {
     ImplLayoutRuns aRuns;
     aRuns.AddPos(1, false);
@@ -366,7 +320,7 @@ void VclTextTest::testImplLayoutRuns_AddPos()
     CPPUNIT_ASSERT(aRuns.IsEmpty());
 }
 
-void VclTextTest::testImplLayoutRuns_AddRuns()
+CPPUNIT_TEST_FIXTURE(VclTextTest, testImplLayoutRuns_AddRuns)
 {
     ImplLayoutRuns aRuns;
     aRuns.AddRun(1, 4, false);
@@ -433,7 +387,7 @@ void VclTextTest::testImplLayoutRuns_AddRuns()
     CPPUNIT_ASSERT(bRightToLeft);
 }
 
-void VclTextTest::testImplLayoutRuns_PosIsInRun()
+CPPUNIT_TEST_FIXTURE(VclTextTest, testImplLayoutRuns_PosIsInRun)
 {
     ImplLayoutRuns aRuns;
     aRuns.AddRun(1, 4, false);
@@ -457,7 +411,7 @@ void VclTextTest::testImplLayoutRuns_PosIsInRun()
     CPPUNIT_ASSERT(!aRuns.PosIsInRun(7));
 }
 
-void VclTextTest::testImplLayoutRuns_PosIsInAnyRun()
+CPPUNIT_TEST_FIXTURE(VclTextTest, testImplLayoutRuns_PosIsInAnyRun)
 {
     ImplLayoutRuns aRuns;
     aRuns.AddRun(1, 4, false);
@@ -469,7 +423,7 @@ void VclTextTest::testImplLayoutRuns_PosIsInAnyRun()
     CPPUNIT_ASSERT(!aRuns.PosIsInAnyRun(7));
 }
 
-void VclTextTest::testImplLayoutArgsBiDiStrong()
+CPPUNIT_TEST_FIXTURE(VclTextTest, testImplLayoutArgsBiDiStrong)
 {
     OUString sTestString = u"The quick brown fox\n jumped over the lazy dog"
                            "العاشر";
@@ -496,7 +450,7 @@ void VclTextTest::testImplLayoutArgsBiDiStrong()
     CPPUNIT_ASSERT_EQUAL(51, nEndRunPos);
 }
 
-void VclTextTest::testImplLayoutArgsBiDiRtl()
+CPPUNIT_TEST_FIXTURE(VclTextTest, testImplLayoutArgsBiDiRtl)
 {
     OUString sTestString = u"The quick brown fox\n jumped over the lazy dog"
                            "العاشر";
@@ -528,7 +482,7 @@ void VclTextTest::testImplLayoutArgsBiDiRtl()
     CPPUNIT_ASSERT(!bRTL);
 }
 
-void VclTextTest::testImplLayoutArgsRightAlign()
+CPPUNIT_TEST_FIXTURE(VclTextTest, testImplLayoutArgsRightAlign)
 {
     OUString sTestString = u"The quick brown fox\n jumped over the lazy dog"
                            "العاشر";
@@ -556,7 +510,7 @@ void VclTextTest::testImplLayoutArgsRightAlign()
     CPPUNIT_ASSERT(bRTL);
 }
 
-void VclTextTest::testImplLayoutArgs_PrepareFallback_precalculatedglyphs()
+CPPUNIT_TEST_FIXTURE(VclTextTest, testImplLayoutArgs_PrepareFallback_precalculatedglyphs)
 {
     // this font has no Cyrillic characters and thus needs fallback
     const vcl::Font aFont("Amiri", Size(0, 36));
@@ -603,7 +557,7 @@ void VclTextTest::testImplLayoutArgs_PrepareFallback_precalculatedglyphs()
     CPPUNIT_ASSERT(!bRTL);
 }
 
-void VclTextTest::testGetStringWithCenterEllpsis()
+CPPUNIT_TEST_FIXTURE(VclTextTest, testGetStringWithCenterEllpsis)
 {
     ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(1000, 1000));
@@ -615,7 +569,7 @@ void VclTextTest::testGetStringWithCenterEllpsis()
                                   DrawTextFlags::CenterEllipsis));
 }
 
-void VclTextTest::testGetStringWithEndEllpsis()
+CPPUNIT_TEST_FIXTURE(VclTextTest, testGetStringWithEndEllpsis)
 {
     ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(1000, 1000));
@@ -634,7 +588,7 @@ void VclTextTest::testGetStringWithEndEllpsis()
                                                                        | DrawTextFlags::Clip));
 }
 
-void VclTextTest::testGetStringWithNewsEllpsis()
+CPPUNIT_TEST_FIXTURE(VclTextTest, testGetStringWithNewsEllpsis)
 {
     ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(1000, 1000));
@@ -668,7 +622,7 @@ void VclTextTest::testGetStringWithNewsEllpsis()
         device->GetEllipsisString(u"ab. cde. x y z", 50, DrawTextFlags::NewsEllipsis));
 }
 
-void VclTextTest::testGetTextBreak()
+CPPUNIT_TEST_FIXTURE(VclTextTest, testGetTextBreak)
 {
     ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(1000, 1000));
@@ -692,7 +646,7 @@ void VclTextTest::testGetTextBreak()
                          device->GetTextBreak(sTestStr, nTextWidth, 13, nLen));
 }
 
-void VclTextTest::testGetSingleLineTextRect()
+CPPUNIT_TEST_FIXTURE(VclTextTest, testGetSingleLineTextRect)
 {
     ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(1000, 1000));
@@ -703,7 +657,7 @@ void VclTextTest::testGetSingleLineTextRect()
         device->GetTextRect(tools::Rectangle(Point(), Point(100, 100)), "This is test text"));
 }
 
-void VclTextTest::testGetSingleLineTextRectWithEndEllipsis()
+CPPUNIT_TEST_FIXTURE(VclTextTest, testGetSingleLineTextRectWithEndEllipsis)
 {
     ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(1000, 1000));
@@ -715,7 +669,7 @@ void VclTextTest::testGetSingleLineTextRectWithEndEllipsis()
                             DrawTextFlags::WordBreak | DrawTextFlags::EndEllipsis));
 }
 
-void VclTextTest::testGetRightBottomAlignedSingleLineTextRect()
+CPPUNIT_TEST_FIXTURE(VclTextTest, testGetRightBottomAlignedSingleLineTextRect)
 {
     ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(1000, 1000));
@@ -727,7 +681,7 @@ void VclTextTest::testGetRightBottomAlignedSingleLineTextRect()
                                              DrawTextFlags::Right | DrawTextFlags::Bottom));
 }
 
-void VclTextTest::testGetRotatedSingleLineTextRect()
+CPPUNIT_TEST_FIXTURE(VclTextTest, testGetRotatedSingleLineTextRect)
 {
     ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(1000, 1000));
@@ -742,7 +696,7 @@ void VclTextTest::testGetRotatedSingleLineTextRect()
         device->GetTextRect(tools::Rectangle(Point(), Point(100, 100)), "This is test text"));
 }
 
-void VclTextTest::testGetMultiLineTextRect()
+CPPUNIT_TEST_FIXTURE(VclTextTest, testGetMultiLineTextRect)
 {
     ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(1000, 1000));
@@ -754,7 +708,7 @@ void VclTextTest::testGetMultiLineTextRect()
                                              DrawTextFlags::WordBreak | DrawTextFlags::MultiLine));
 }
 
-void VclTextTest::testGetMultiLineTextRectWithEndEllipsis()
+CPPUNIT_TEST_FIXTURE(VclTextTest, testGetMultiLineTextRectWithEndEllipsis)
 {
     ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(1000, 1000));
@@ -767,7 +721,7 @@ void VclTextTest::testGetMultiLineTextRectWithEndEllipsis()
                                                  | DrawTextFlags::MultiLine));
 }
 
-void VclTextTest::testGetRightBottomAlignedMultiLineTextRect()
+CPPUNIT_TEST_FIXTURE(VclTextTest, testGetRightBottomAlignedMultiLineTextRect)
 {
     ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(1000, 1000));
@@ -779,8 +733,6 @@ void VclTextTest::testGetRightBottomAlignedMultiLineTextRect()
                                              DrawTextFlags::Right | DrawTextFlags::Bottom
                                                  | DrawTextFlags::MultiLine));
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(VclTextTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
