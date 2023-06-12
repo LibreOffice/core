@@ -13,6 +13,7 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/style/BreakType.hpp>
@@ -93,6 +94,25 @@ CPPUNIT_TEST_FIXTURE(Test, test3NestedFloatingTables)
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
                                                          uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xIndexAccess->getCount());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFloatingTablesOuterNonsplitInner)
+{
+    // Given a document with a normal table, 3 outer floating tables and an inner floating table in
+    // the last floating table:
+    loadFromURL(u"floattable-outer-nonsplit-inner.docx");
+
+    // When counting the floating tables in the document:
+    uno::Reference<text::XTextFramesSupplier> xFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFrames(xFramesSupplier->getTextFrames(),
+                                                    uno::UNO_QUERY);
+
+    // Then make sure no floating tables are missing:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4
+    // - Actual  : 3
+    // i.e. the inner floating table was not floating.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), xFrames->getCount());
 }
 }
 

@@ -1330,7 +1330,7 @@ static void lcl_convertFormulaRanges(const uno::Reference<text::XTextTable> & xT
     }
 }
 
-void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool /*bTableStartsAtCellStart*/)
+void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTableStartsAtCellStart)
 {
 #ifdef DBG_UTIL
     TagLogger::getInstance().startElement("tablehandler.endTable");
@@ -1559,27 +1559,24 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool /*bT
                     comphelper::makePropertyValue("IsFollowingTextFlow", true));
             }
 
-            // A text frame created for floating tables is always allowed to split.
-            aFrameProperties.push_back(comphelper::makePropertyValue("IsSplitAllowed", true));
+            if (nestedTableLevel <= 1)
+            {
+                // A text frame created for floating tables is allowed to split if it's a toplevel
+                // table.
+                aFrameProperties.push_back(comphelper::makePropertyValue("IsSplitAllowed", true));
+            }
 
-            // In case the document ends with a table, we're called after
-            // SectionPropertyMap::CloseSectionGroup(), so we'll have no idea
-            // about the text area width, nor can fix this by delaying the text
-            // frame conversion: just do it here.
-            // Also, when the anchor is within a table, then do it here as well,
-            // as xStart/xEnd would not point to the start/end at conversion
-            // time anyway.
-            // Next exception: it's pointless to delay the conversion if the
-            // table is not in the body text.
             sal_Int32 nTableWidth = 0;
             m_aTableProperties->getValue(TablePropertyMap::TABLE_WIDTH, nTableWidth);
             sal_Int32 nTableWidthType = text::SizeType::FIX;
             m_aTableProperties->getValue(TablePropertyMap::TABLE_WIDTH_TYPE, nTableWidthType);
             // m_xText points to the body text, get the current xText from m_rDMapper_Impl, in case e.g. we would be in a header.
             uno::Reference<text::XTextAppendAndConvert> xTextAppendAndConvert(m_rDMapper_Impl.GetTopTextAppend(), uno::UNO_QUERY);
-            // Only execute the conversion for top-level tables.
+            // Don't execute the conversion for nested tables anchored at a cell start: that
+            // currently invalidates the cell start / end references and the outer table conversion
+            // would fail.
             uno::Reference<beans::XPropertySet> xFrameAnchor;
-            if (xTextAppendAndConvert.is() && nestedTableLevel <= 1)
+            if (xTextAppendAndConvert.is() && !(nestedTableLevel >= 2 && bTableStartsAtCellStart))
             {
                 std::deque<css::uno::Any> aFramedRedlines = m_rDMapper_Impl.m_aStoredRedlines[StoredRedlines::FRAME];
                 std::vector<sal_Int32> redPos, redLen;
