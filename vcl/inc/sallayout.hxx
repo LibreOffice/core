@@ -62,6 +62,7 @@ class MultiSalLayout final : public SalLayout
 public:
     void            DrawText(SalGraphics&) const override;
     sal_Int32       GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const override;
+    DeviceCoordinate GetTextWidth() const final override;
     DeviceCoordinate FillDXArray(std::vector<DeviceCoordinate>* pDXArray, const OUString& rStr) const override;
     void            GetCaretPositions(int nArraySize, sal_Int32* pCaretXArray) const override;
     bool            GetNextGlyph(const GlyphItem** pGlyph, DevicePoint& rPos, int& nStart,

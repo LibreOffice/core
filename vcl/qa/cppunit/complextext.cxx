@@ -400,4 +400,25 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf152048)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf152048_2)
+{
+#if HAVE_MORE_FONTS
+    vcl::Font aFont(u"Noto Naskh Arabic", u"Regular", Size(0, 72));
+
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
+    pOutDev->SetFont(aFont);
+
+    // get an compare the default text array
+    KernArray aCharWidths;
+    auto nTextWidth = pOutDev->GetTextArray(u"ع a ع", &aCharWidths);
+
+    // Text width should always be equal to the width of the last glyph in the
+    // kern array.
+    // Without the fix this fails with:
+    // - Expected: 158
+    // - Actual  : 118
+    CPPUNIT_ASSERT_EQUAL(aCharWidths.back(), sal_Int32(nTextWidth));
+#endif
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
