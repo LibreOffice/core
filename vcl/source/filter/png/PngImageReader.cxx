@@ -874,7 +874,7 @@ bool PngImageReader::isAPng(SvStream& rStream)
     sal_uInt32 nChunkSize, nChunkType;
     rStream.ReadUInt32(nChunkSize);
     rStream.ReadUInt32(nChunkType);
-    if (nChunkType != PNG_IHDR_SIGNATURE)
+    if (!rStream.good() || nChunkType != PNG_IHDR_SIGNATURE)
         return false;
     rStream.SeekRel(nChunkSize);
     // Skip IHDR CRC
@@ -895,8 +895,8 @@ bool PngImageReader::isAPng(SvStream& rStream)
             return true;
         else
         {
-            rStream.SeekRel(nChunkSize);
-            rStream.SeekRel(PNG_CRC_SIZE);
+            if (!checkSeek(rStream, rStream.Tell() + nChunkSize + PNG_CRC_SIZE))
+                return false;
         }
     }
 }
