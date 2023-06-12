@@ -137,9 +137,6 @@ int handle_unknown_chunk(png_structp png, png_unknown_chunkp chunk)
     else
     {
         std::unique_ptr<FrameDataChunk> pBaseChunk;
-        sal_uInt32 nSequenceNumber = 0;
-        std::memcpy(&nSequenceNumber, chunk->data, 4);
-        nSequenceNumber = OSL_SWAPDWORD(nSequenceNumber);
 
         if (sName == "fcTL")
         {
@@ -195,6 +192,10 @@ int handle_unknown_chunk(png_structp png, png_unknown_chunkp chunk)
             // Unknown ancillary chunk
             return 0;
         }
+
+        sal_uInt32 nSequenceNumber = 0;
+        std::memcpy(&nSequenceNumber, chunk->data, 4);
+        nSequenceNumber = OSL_SWAPDWORD(nSequenceNumber);
 
         pBaseChunk->sequence_number = nSequenceNumber;
         if (pBaseChunk->sequence_number < aAPNGInfo->maFrameData.size())
