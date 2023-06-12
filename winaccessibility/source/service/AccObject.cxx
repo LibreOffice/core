@@ -162,7 +162,7 @@ AccObject::AccObject(XAccessible* pAcc, AccObjectManagerAgent* pAgent,
         m_resID     (NULL),
         m_pParantID (nullptr),
         m_bShouldDestroy(false),
-        m_pIMAcc    (nullptr),
+        m_pIMAcc    (UAccCOMCreateInstance()),
         m_pParentObj(nullptr),
         m_pListener (pListener),
         m_xAccRef( pAcc )
@@ -186,7 +186,6 @@ AccObject::AccObject(XAccessible* pAcc, AccObjectManagerAgent* pAgent,
    */
 AccObject::~AccObject()
 {
-    m_pIMAcc = nullptr;
     m_xAccRef = nullptr;
     m_xAccActionRef = nullptr;
     m_xAccContextRef = nullptr;
@@ -256,8 +255,6 @@ void AccObject::UpdateValidWindow()
    */
 void AccObject::ImplInitializeCreateObj()
 {
-    m_pIMAcc = UAccCOMCreateInstance();
-
     assert(m_pIMAcc);
 }
 
@@ -1162,9 +1159,11 @@ void AccObject::SetParentHWND(HWND hWnd)
     m_pParantID = hWnd;
 }
 
-void AccObject::SetListener(rtl::Reference<AccEventListener> const& pListener)
+rtl::Reference<AccEventListener> AccObject::SetListener(rtl::Reference<AccEventListener> const& pListener)
 {
+    rtl::Reference<AccEventListener> pRet(m_pListener);
     m_pListener = pListener;
+    return pRet;
 }
 
 AccEventListener* AccObject::getListener()

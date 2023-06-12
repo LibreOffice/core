@@ -22,6 +22,8 @@
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <map>
+#include <mutex>
+
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
 #endif
@@ -63,6 +65,9 @@ private:
     typedef std::map<const HWND, css::accessibility::XAccessible* >
         XHWNDToDocumentHash;
 
+    // guard any access to XIdAccList and HwndXAcc
+    std::recursive_mutex m_Mutex;
+
     //XAccessible to AccObject
     XIdToAccObjHash  XIdAccList;
 
@@ -86,11 +91,11 @@ private:
     long ImpleGenerateResID();
     AccObject* GetAccObjByXAcc( css::accessibility::XAccessible* pXAcc);
 
-    AccObject* GetTopWindowAccObj(HWND hWnd);
+    IMAccessible* GetTopWindowIMAccessible(HWND hWnd);
 
     css::accessibility::XAccessible* GetAccDocByHWND(HWND hWnd);
 
-    static void DeleteAccListener( AccObject* pAccObj );
+    static rtl::Reference<AccEventListener> DeleteAccListener(AccObject* pAccObj);
     static void InsertAccChildNode(AccObject* pCurObj,AccObject* pParentObj,HWND pWnd);
     static void DeleteAccChildNode(AccObject* pChild);
     void       DeleteFromHwndXAcc(css::accessibility::XAccessible const * pXAcc );

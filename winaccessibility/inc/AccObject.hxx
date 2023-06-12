@@ -61,7 +61,7 @@ private:
     long                m_resID;
     HWND                m_pParantID;
     bool                m_bShouldDestroy; //avoid access COM interface when acc object is deleted
-    IMAccessible*       m_pIMAcc;
+    IMAccessible* const m_pIMAcc; // AccObjectManager::GetTopWindowIMAccessible relies on this being const
     AccObject*          m_pParentObj;
     IAccChildList       m_childrenList;
     ::rtl::Reference<AccEventListener>  m_pListener;
@@ -99,7 +99,7 @@ public:
     void SetParentHWND(HWND hWnd);//need to set top window handle when send event to AT
     HWND GetParentHWND();
 
-    void SetListener(::rtl::Reference<AccEventListener> const& pListener);
+    ::rtl::Reference<AccEventListener> SetListener(::rtl::Reference<AccEventListener> const& pListener);
     AccEventListener* getListener();
 
     void SetParentObj(AccObject* pParentAccObj);
