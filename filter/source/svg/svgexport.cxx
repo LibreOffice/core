@@ -670,7 +670,7 @@ bool SVGFilter::implExportImpressOrDraw( const Reference< XOutputStream >& rxOSt
 
     if( rxOStm.is() )
     {
-        if( !mSelectedPages.empty() && !mMasterPageTargets.empty() )
+        if (!mSelectedPages.empty())
         {
             ::rtl::Reference< ::utl::OStreamWrapper > aTempStmWrapper = new ::utl::OStreamWrapper( aTempStm );
             Reference< XDocumentHandler > xDocHandler = implCreateExportDocumentHandler( aTempStmWrapper );
@@ -1024,7 +1024,7 @@ bool SVGFilter::implExportDocument()
                 mpSVGWriter->SetPreviewMode();
 
             // #i124608# export a given object selection, so no MasterPage export at all
-            if (!mbExportShapeSelection)
+            if (!mbExportShapeSelection && !mMasterPageTargets.empty())
                 implExportMasterPages( mMasterPageTargets, 0, mMasterPageTargets.size() - 1 );
             implExportDrawPages( mSelectedPages, 0, nLastPage );
 
