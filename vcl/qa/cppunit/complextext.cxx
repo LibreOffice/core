@@ -362,4 +362,42 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testGdefCaret)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf152048)
+{
+#if HAVE_MORE_FONTS
+    OUString aText(u"می‌شود");
+
+    vcl::Font aFont(u"Noto Naskh Arabic", u"Regular", Size(0, 72));
+
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
+    pOutDev->SetFont(aFont);
+
+    // get an compare the default text array
+    std::vector<sal_Int32> aRefCharWidths{ 33, 82, 82, 129, 163, 193 };
+    tools::Long nRefTextWidth(193);
+
+    KernArray aCharWidths;
+    tools::Long nTextWidth = pOutDev->GetTextArray(aText, &aCharWidths);
+
+    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths.get_subunit_array());
+    CPPUNIT_ASSERT_EQUAL(nRefTextWidth, nTextWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(nTextWidth), aCharWidths.back());
+
+    // Simulate Kashida insertion using Kashida array and extending text array
+    // to have room for Kashida.
+    std::vector<sal_Bool> aKashidaArray{ false, false, false, true, false, false };
+    auto nKashida = 200;
+
+    aCharWidths.set(3, aCharWidths[3] + nKashida);
+    aCharWidths.set(4, aCharWidths[4] + nKashida);
+    aCharWidths.set(5, aCharWidths[5] + nKashida);
+    auto pLayout = pOutDev->ImplLayout(aText, 0, -1, Point(0, 0), 0, aCharWidths, aKashidaArray);
+
+    // Without the fix this fails with:
+    // - Expected: 393
+    // - Actual  : 511
+    CPPUNIT_ASSERT_EQUAL(DeviceCoordinate(nRefTextWidth + nKashida), pLayout->GetTextWidth());
+#endif
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
