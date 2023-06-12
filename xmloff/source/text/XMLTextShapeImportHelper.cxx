@@ -51,7 +51,7 @@ XMLTextShapeImportHelper::XMLTextShapeImportHelper(
         SvXMLImport& rImp ) :
     XMLShapeImportHelper( rImp, rImp.GetModel(),
                           XMLTextImportHelper::CreateShapeExtPropMapper(rImp) ),
-    rImport( rImp )
+    m_rImport( rImp )
 {
     Reference < XDrawPageSupplier > xDPS( rImp.GetModel(), UNO_QUERY );
     if( xDPS.is() )
@@ -84,7 +84,7 @@ void XMLTextShapeImportHelper::addShape(
     sal_Int32   nY = 0;
 
     rtl::Reference < XMLTextImportHelper > xTxtImport =
-        rImport.GetTextImport();
+        m_rImport.GetTextImport();
 
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
@@ -109,7 +109,7 @@ void XMLTextShapeImportHelper::addShape(
             break;
         case XML_ELEMENT(SVG, XML_Y):
         case XML_ELEMENT(SVG_COMPAT, XML_Y):
-            rImport.GetMM100UnitConverter().convertMeasureToCore( nY, aIter.toView() );
+            m_rImport.GetMM100UnitConverter().convertMeasureToCore( nY, aIter.toView() );
             break;
         }
     }

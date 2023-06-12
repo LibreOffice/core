@@ -139,8 +139,8 @@ XMLTextImportPropertyMapper::XMLTextImportPropertyMapper(
             const rtl::Reference< XMLPropertySetMapper >& rMapper,
             SvXMLImport& rImp ) :
     SvXMLImportPropertyMapper( rMapper, rImp ),
-    nSizeTypeIndex( -2 ),
-    nWidthTypeIndex( -2 )
+    m_nSizeTypeIndex( -2 ),
+    m_nWidthTypeIndex( -2 )
 {
 }
 
@@ -784,10 +784,10 @@ void XMLTextImportPropertyMapper::finished(
 
     if( bHasAnyHeight )
     {
-        if( nSizeTypeIndex == -2 )
+        if( m_nSizeTypeIndex == -2 )
         {
             const_cast < XMLTextImportPropertyMapper * > ( this )
-                ->nSizeTypeIndex  = -1;
+                ->m_nSizeTypeIndex  = -1;
             sal_Int32 nPropCount = getPropertySetMapper()->GetEntryCount();
             for( sal_Int32 j=0; j < nPropCount; j++ )
             {
@@ -795,14 +795,14 @@ void XMLTextImportPropertyMapper::finished(
                         ->GetEntryContextId( j ) )
                 {
                     const_cast < XMLTextImportPropertyMapper * > ( this )
-                        ->nSizeTypeIndex = j;
+                        ->m_nSizeTypeIndex = j;
                     break;
                 }
             }
         }
-        if( nSizeTypeIndex != -1 )
+        if( m_nSizeTypeIndex != -1 )
         {
-            XMLPropertyState aSizeTypeState( nSizeTypeIndex );
+            XMLPropertyState aSizeTypeState( m_nSizeTypeIndex );
             aSizeTypeState.maValue <<= static_cast<sal_Int16>( bHasAnyMinHeight
                                                         ? SizeType::MIN
                                                         : SizeType::FIX);
@@ -813,10 +813,10 @@ void XMLTextImportPropertyMapper::finished(
     if( !bHasAnyWidth )
         return;
 
-    if( nWidthTypeIndex == -2 )
+    if( m_nWidthTypeIndex == -2 )
     {
         const_cast < XMLTextImportPropertyMapper * > ( this )
-            ->nWidthTypeIndex  = -1;
+            ->m_nWidthTypeIndex  = -1;
         sal_Int32 nCount = getPropertySetMapper()->GetEntryCount();
         for( sal_Int32 j=0; j < nCount; j++ )
         {
@@ -824,14 +824,14 @@ void XMLTextImportPropertyMapper::finished(
                     ->GetEntryContextId( j ) )
             {
                 const_cast < XMLTextImportPropertyMapper * > ( this )
-                    ->nWidthTypeIndex = j;
+                    ->m_nWidthTypeIndex = j;
                 break;
             }
         }
     }
-    if( nWidthTypeIndex != -1 )
+    if( m_nWidthTypeIndex != -1 )
     {
-        XMLPropertyState aSizeTypeState( nWidthTypeIndex );
+        XMLPropertyState aSizeTypeState( m_nWidthTypeIndex );
         aSizeTypeState.maValue <<= static_cast<sal_Int16>( bHasAnyMinWidth
                                                     ? SizeType::MIN
                                                     : SizeType::FIX);

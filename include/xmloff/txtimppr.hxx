@@ -25,8 +25,8 @@
 
 class XMLOFF_DLLPUBLIC XMLTextImportPropertyMapper final : public SvXMLImportPropertyMapper
 {
-    sal_Int32 nSizeTypeIndex;
-    sal_Int32 nWidthTypeIndex;
+    sal_Int32 m_nSizeTypeIndex;
+    sal_Int32 m_nWidthTypeIndex;
 
     static void FontFinished(
                 XMLPropertyState *pFontFamilyNameState,

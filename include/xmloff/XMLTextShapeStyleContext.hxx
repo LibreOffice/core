@@ -26,9 +26,9 @@
 
 class XMLOFF_DLLPUBLIC XMLTextShapeStyleContext final : public XMLShapeStyleContext
 {
-    bool                  bAutoUpdate : 1;
+    bool                  m_bAutoUpdate : 1;
 
-    rtl::Reference<XMLEventsImportContext> xEventContext;
+    rtl::Reference<XMLEventsImportContext> m_xEventContext;
 
     virtual void SetAttribute( sal_Int32 nElement,
                                const OUString& rValue ) override;

@@ -61,15 +61,15 @@ typedef std::set<XMLNumberFormat, LessNumberFormat> XMLNumberFormatSet;
 
 class XMLOFF_DLLPUBLIC XMLNumberFormatAttributesExportHelper
 {
-    css::uno::Reference< css::util::XNumberFormats > xNumberFormats;
-    SvXMLExport*        pExport;
-    const OUString sAttrValue;
-    const OUString sAttrDateValue;
-    const OUString sAttrTimeValue;
-    const OUString sAttrBooleanValue;
-    const OUString sAttrStringValue;
-    const OUString sAttrCurrency;
-    XMLNumberFormatSet  aNumberFormats;
+    css::uno::Reference< css::util::XNumberFormats > m_xNumberFormats;
+    SvXMLExport*        m_pExport;
+    const OUString m_sAttrValue;
+    const OUString m_sAttrDateValue;
+    const OUString m_sAttrTimeValue;
+    const OUString m_sAttrBooleanValue;
+    const OUString m_sAttrStringValue;
+    const OUString m_sAttrCurrency;
+    XMLNumberFormatSet  m_aNumberFormats;
 public:
     XMLNumberFormatAttributesExportHelper(css::uno::Reference< css::util::XNumberFormatsSupplier > const & xNumberFormatsSupplier);
     XMLNumberFormatAttributesExportHelper(css::uno::Reference< css::util::XNumberFormatsSupplier > const & xNumberFormatsSupplier,

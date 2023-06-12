@@ -125,7 +125,7 @@ void XMLTextShapeStyleContext::SetAttribute( sal_Int32 nElement,
     if( nElement == XML_ELEMENT(STYLE, XML_AUTO_UPDATE) )
     {
           if( IsXMLToken( rValue, XML_TRUE ) )
-            bAutoUpdate = true;
+            m_bAutoUpdate = true;
     }
     else
     {
@@ -139,7 +139,7 @@ constexpr OUStringLiteral gsIsAutoUpdate( u"IsAutoUpdate" );
 XMLTextShapeStyleContext::XMLTextShapeStyleContext( SvXMLImport& rImport,
         SvXMLStylesContext& rStyles, XmlStyleFamily nFamily ) :
     XMLShapeStyleContext( rImport, rStyles, nFamily ),
-    bAutoUpdate( false )
+    m_bAutoUpdate( false )
 {
 }
 
@@ -178,8 +178,8 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextShapeStyleConte
     {
         // create and remember events import context
         // (for delayed processing of events)
-        xEventContext = new XMLEventsImportContext( GetImport() );
-        return xEventContext;
+        m_xEventContext = new XMLEventsImportContext( GetImport() );
+        return m_xEventContext;
     }
 
     return XMLShapeStyleContext::createFastChildContext( nElement, xAttrList );
@@ -197,17 +197,17 @@ void XMLTextShapeStyleContext::CreateAndInsert( bool bOverwrite )
                 xPropSet->getPropertySetInfo();
     if( xPropSetInfo->hasPropertyByName( gsIsAutoUpdate ) )
     {
-        bool bTmp = bAutoUpdate;
+        bool bTmp = m_bAutoUpdate;
         xPropSet->setPropertyValue( gsIsAutoUpdate, Any(bTmp) );
     }
 
     // tell the style about it's events (if applicable)
-    if( xEventContext.is() )
+    if( m_xEventContext.is() )
     {
         // set event supplier and release reference to context
         Reference<XEventsSupplier> xEventsSupplier(xStyle, UNO_QUERY);
-        xEventContext->SetEvents(xEventsSupplier);
-        xEventContext = nullptr;
+        m_xEventContext->SetEvents(xEventsSupplier);
+        m_xEventContext = nullptr;
     }
 }
 

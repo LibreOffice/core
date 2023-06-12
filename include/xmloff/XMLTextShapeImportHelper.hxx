@@ -26,7 +26,7 @@
 
 class XMLOFF_DLLPUBLIC XMLTextShapeImportHelper : public XMLShapeImportHelper
 {
-    SvXMLImport& rImport;
+    SvXMLImport& m_rImport;
 
 public:
 
