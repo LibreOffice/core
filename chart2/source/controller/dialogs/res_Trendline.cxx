@@ -372,10 +372,8 @@ void TrendlineResources::UpdateControlStates()
     m_xFmtFld_InterceptValue->set_sensitive( bInterceptAvailable );
     if( bMovingAverage )
     {
-        m_xCB_ShowEquation->set_state(TRISTATE_FALSE);
         m_xCB_ShowCorrelationCoeff->set_state(TRISTATE_FALSE);
     }
-    m_xCB_ShowEquation->set_sensitive( !bMovingAverage );
     m_xCB_ShowCorrelationCoeff->set_sensitive( !bMovingAverage );
     m_xCB_RegressionMovingType->set_sensitive(bMovingAverage);
     m_xNF_Period->set_sensitive(bMovingAverage);
@@ -428,8 +426,6 @@ void TrendlineResources::SetNbPoints( sal_Int32 nNbPoints )
 
 IMPL_LINK_NOARG(TrendlineResources, ShowEquation, weld::Toggleable&, void)
 {
-    m_xEE_XName->set_sensitive(m_xCB_ShowEquation->get_active());
-    m_xEE_YName->set_sensitive(m_xCB_ShowEquation->get_active());
     UpdateControlStates();
 }
 
