@@ -34,8 +34,6 @@ namespace
 
 namespace emfplushelper
 {
-    typedef float matrix [4][4];
-
     // see 2.2.2.21 EmfPlusInteger7
     //     2.2.2.22 EmfPlusInteger15
     // and 2.2.2.37 EmfPlusPointR Object
@@ -67,6 +65,7 @@ namespace emfplushelper
         }
 
         nPoints = _nPoints;
+        pPoints.reset( new float [nPoints*2] );
 
         if (!bLines)
             pPointTypes.reset( new sal_uInt8 [_nPoints] );
@@ -78,8 +77,7 @@ namespace emfplushelper
 
     void EMFPPath::Read (SvStream& s, sal_uInt32 pathFlags)
     {
-        float fx, fy;
-        for (sal_uInt32 i = 0; i < nPoints; i++)
+        for (sal_uInt32 i = 0; i < nPoints; i ++)
         {
             if (pathFlags & 0x800)
             {
@@ -88,8 +86,8 @@ namespace emfplushelper
                 // If 0x800 bit is set, the 0x4000 bit is undefined and must be ignored
                 sal_Int32 x = GetEmfPlusInteger(s);
                 sal_Int32 y = GetEmfPlusInteger(s);
-                xPoints.push_back(x);
-                yPoints.push_back(y);
+                pPoints [i*2] = x;
+                pPoints [i*2 + 1] = y;
                 SAL_INFO("drawinglayer.emf", "EMF+\t\t\t" << i << ". EmfPlusPointR [x,y]: " << x << ", " << y);
             }
             else if (pathFlags & 0x4000)
@@ -97,18 +95,16 @@ namespace emfplushelper
                 // EMFPlusPoint: stored in signed short 16bit integer format
                 sal_Int16 x, y;
 
-                s.ReadInt16(x).ReadInt16(y);
-                SAL_INFO("drawinglayer.emf", "EMF+\t\t\t" << i << ". EmfPlusPoint [x,y]: " << x << ", " << y);
-                xPoints.push_back(x);
-                yPoints.push_back(y);
+                s.ReadInt16( x ).ReadInt16( y );
+                SAL_INFO ("drawinglayer.emf", "EMF+\t\t\t" << i << ". EmfPlusPoint [x,y]: " << x << ", " << y);
+                pPoints [i*2] = x;
+                pPoints [i*2 + 1] = y;
             }
             else
             {
                 // EMFPlusPointF: stored in Single (float) format
-                s.ReadFloat(fx).ReadFloat(fy);
-                SAL_INFO("drawinglayer.emf", "EMF+\t" << i << ". EMFPlusPointF [x,y]: " << fx << ", " << fy);
-                xPoints.push_back(fx);
-                yPoints.push_back(fy);
+                s.ReadFloat( pPoints [i*2] ).ReadFloat( pPoints [i*2 + 1] );
+                SAL_INFO("drawinglayer.emf", "EMF+\t" << i << ". EMFPlusPointF [x,y]: " << pPoints [i * 2] << ", " << pPoints [i * 2 + 1]);
             }
         }
 
@@ -132,7 +128,7 @@ namespace emfplushelper
         ::basegfx::B2DPoint prev, mapped;
         bool hasPrev = false;
 
-        for (sal_uInt32 i = 0; i < nPoints; i++)
+        for (sal_uInt32 i = 0; i < nPoints; i ++)
         {
             if (p && pPointTypes && (pPointTypes [i] == 0))
             {
@@ -143,9 +139,9 @@ namespace emfplushelper
             }
 
             if (bMapIt)
-                mapped = rR.Map(xPoints[i], yPoints [i]);
+                mapped = rR.Map (pPoints [i*2], pPoints [i*2 + 1]);
             else
-                mapped = ::basegfx::B2DPoint(xPoints[i], yPoints[i]);
+                mapped = ::basegfx::B2DPoint (pPoints [i*2], pPoints [i*2 + 1]);
 
             if (pPointTypes)
             {
@@ -171,7 +167,7 @@ namespace emfplushelper
             }
 
             polygon.append (mapped);
-            SAL_INFO ("drawinglayer.emf", "EMF+\t\tPoint: " << xPoints[i] << "," << yPoints[i] << " mapped: " << mapped.getX () << ":" << mapped.getY ());
+            SAL_INFO ("drawinglayer.emf", "EMF+\t\tPoint: " << pPoints [i*2] << "," << pPoints [i*2 + 1] << " mapped: " << mapped.getX () << ":" << mapped.getY ());
 
             if (hasPrev)
             {
@@ -223,100 +219,6 @@ namespace emfplushelper
 #endif
         }
 
-        return aPolygon;
-    }
-
-    static void GetCardinalMatrix(float tension, matrix& m)
-    {
-        m[0][1] = 2. - tension;
-        m[0][2] = tension - 2.;
-        m[1][0] = 2. * tension;
-        m[1][1] = tension - 3.;
-        m[1][2] = 3. - 2 * tension;
-        m[3][1] = 1.;
-        m[0][3] = m[2][2] = tension;
-        m[0][0] = m[1][3] = m[2][0] = -tension;
-        m[2][1] = m[2][3] = m[3][0] = m[3][2] = m[3][3] = 0.;
-    }
-
-    static float calculateSplineCoefficients(float p0, float p1, float p2, float p3, float alpha, matrix m)
-    {
-        float a, b, c, d;
-        a = m[0][0] * p0 + m[0][1] * p1 + m[0][2] * p2 + m[0][3] * p3;
-        b = m[1][0] * p0 + m[1][1] * p1 + m[1][2] * p2 + m[1][3] * p3;
-        c = m[2][0] * p0 + m[2][2] * p2;
-        d = p1;
-        return (d + alpha * (c + alpha * (b + alpha * a)));
-    }
-
-    ::basegfx::B2DPolyPolygon& EMFPPath::GetCardinalSpline(EmfPlusHelperData const& rR, float fTension,
-                                                           sal_uInt32 aOffset, sal_uInt32 aNumSegments)
-    {
-        ::basegfx::B2DPolygon polygon;
-        matrix mat;
-        float x, y;
-        constexpr sal_uInt32 nDetails = 8;
-        constexpr float alpha[nDetails]
-            = { 1. / nDetails, 2. / nDetails, 3. / nDetails, 4. / nDetails,
-                5. / nDetails, 6. / nDetails, 7. / nDetails, 8. / nDetails };
-        if (aNumSegments >= nPoints)
-            aNumSegments = nPoints - 1;
-        GetCardinalMatrix(fTension, mat);
-        // duplicate first point
-        xPoints.push_front(xPoints.front());
-        yPoints.push_front(yPoints.front());
-        // duplicate last point
-        xPoints.push_back(xPoints.back());
-        yPoints.push_back(yPoints.back());
-
-        for (sal_uInt32 i = 3 + aOffset; i < aNumSegments + 3; i++)
-        {
-            for (sal_uInt32 s = 0; s < nDetails; s++)
-            {
-                x = calculateSplineCoefficients(xPoints[i - 3], xPoints[i - 2], xPoints[i - 1],
-                                                xPoints[i], alpha[s], mat);
-                y = calculateSplineCoefficients(yPoints[i - 3], yPoints[i - 2], yPoints[i - 1],
-                                                yPoints[i], alpha[s], mat);
-                polygon.append(rR.Map(x, y));
-            }
-        }
-        if (polygon.count())
-            aPolygon.append(polygon);
-        return aPolygon;
-    }
-
-    ::basegfx::B2DPolyPolygon& EMFPPath::GetClosedCardinalSpline(EmfPlusHelperData const& rR, float fTension)
-    {
-        ::basegfx::B2DPolygon polygon;
-        matrix mat;
-        float x, y;
-        constexpr sal_uInt32 nDetails = 8;
-        constexpr float alpha[nDetails]
-            = { 1. / nDetails, 2. / nDetails, 3. / nDetails, 4. / nDetails,
-                5. / nDetails, 6. / nDetails, 7. / nDetails, 8. / nDetails };
-        GetCardinalMatrix(fTension, mat);
-        // add three first points at the end
-        xPoints.push_back(xPoints[0]);
-        yPoints.push_back(yPoints[0]);
-        xPoints.push_back(xPoints[1]);
-        yPoints.push_back(yPoints[1]);
-        xPoints.push_back(xPoints[2]);
-        yPoints.push_back(yPoints[2]);
-
-        for (sal_uInt32 i = 3; i < nPoints + 3; i++)
-        {
-            for (sal_uInt32 s = 0; s < nDetails; s++)
-            {
-                x = calculateSplineCoefficients(xPoints[i - 3], xPoints[i - 2], xPoints[i - 1],
-                                                xPoints[i], alpha[s], mat);
-                y = calculateSplineCoefficients(yPoints[i - 3], yPoints[i - 2], yPoints[i - 1],
-                                                yPoints[i], alpha[s], mat);
-                polygon.append(rR.Map(x, y));
-            }
-        }
-        polygon.setClosed(true);
-        if (polygon.count())
-            aPolygon.append(polygon);
         return aPolygon;
     }
 }

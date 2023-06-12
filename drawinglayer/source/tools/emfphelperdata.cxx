@@ -81,8 +81,6 @@ namespace emfplushelper
             case EmfPlusRecordTypeFillPolygon: return "EmfPlusRecordTypeFillPolygon";
             case EmfPlusRecordTypeDrawLines: return "EmfPlusRecordTypeDrawLines";
             case EmfPlusRecordTypeFillClosedCurve: return "EmfPlusRecordTypeFillClosedCurve";
-            case EmfPlusRecordTypeDrawClosedCurve: return "EmfPlusRecordTypeDrawClosedCurve";
-            case EmfPlusRecordTypeDrawCurve: return "EmfPlusRecordTypeDrawCurve";
             case EmfPlusRecordTypeFillEllipse: return "EmfPlusRecordTypeFillEllipse";
             case EmfPlusRecordTypeDrawEllipse: return "EmfPlusRecordTypeDrawEllipse";
             case EmfPlusRecordTypeFillPie: return "EmfPlusRecordTypeFillPie";
@@ -92,6 +90,7 @@ namespace emfplushelper
             case EmfPlusRecordTypeFillPath: return "EmfPlusRecordTypeFillPath";
             case EmfPlusRecordTypeDrawPath: return "EmfPlusRecordTypeDrawPath";
             case EmfPlusRecordTypeDrawBeziers: return "EmfPlusRecordTypeDrawBeziers";
+            case EmfPlusRecordTypeDrawClosedCurve: return "EmfPlusRecordTypeDrawClosedCurve";
             case EmfPlusRecordTypeDrawImage: return "EmfPlusRecordTypeDrawImage";
             case EmfPlusRecordTypeDrawImagePoints: return "EmfPlusRecordTypeDrawImagePoints";
             case EmfPlusRecordTypeDrawString: return "EmfPlusRecordTypeDrawString";
@@ -1384,30 +1383,6 @@ namespace emfplushelper
                         EMFPPlusDrawPolygon(::basegfx::B2DPolyPolygon(aPolygon), flags & 0xff);
                         break;
                     }
-                    case EmfPlusRecordTypeDrawCurve:
-                    {
-                        sal_uInt32 aOffset, aNumSegments, points;
-                        float aTension;
-                        rMS.ReadFloat(aTension);
-                        rMS.ReadUInt32(aOffset);
-                        rMS.ReadUInt32(aNumSegments);
-                        rMS.ReadUInt32(points);
-                        SAL_WARN("drawinglayer.emf",
-                                "EMF+\t Tension: " << aTension << " Offset: " << aOffset
-                                                   << " NumSegments: " << aNumSegments
-                                                   << " Points: " << points);
-
-                        EMFPPath path(points, true);
-                        path.Read(rMS, flags);
-
-                        if (points >= 2)
-                            EMFPPlusDrawPolygon(
-                                path.GetCardinalSpline(*this, aTension, aOffset, aNumSegments),
-                                flags & 0xff);
-                        else
-                            SAL_WARN("drawinglayer.emf", "Not enough number of points");
-                        break;
-                    }
                     case EmfPlusRecordTypeDrawClosedCurve:
                     case EmfPlusRecordTypeFillClosedCurve:
                     {
@@ -1417,29 +1392,28 @@ namespace emfplushelper
                         if (type == EmfPlusRecordTypeFillClosedCurve)
                         {
                             rMS.ReadUInt32(brushIndexOrColor);
-                            SAL_INFO(
-                                "drawinglayer.emf",
+                            SAL_INFO("drawinglayer.emf",
                                 "EMF+\t Fill Mode: " << (flags & 0x2000 ? "Winding" : "Alternate"));
                         }
                         rMS.ReadFloat(aTension);
                         rMS.ReadUInt32(points);
                         SAL_WARN("drawinglayer.emf",
-                                "EMF+\t Tension: " << aTension << " Points: " << points);
+                                 "EMF+\t Tension: " << aTension << " Points: " << points);
+                        SAL_WARN_IF(aTension != 0, "drawinglayer.emf",
+                                    "EMF+\t TODO Add support for tension different than 0");
                         SAL_INFO("drawinglayer.emf",
-                                "EMF+\t " << (flags & 0x8000 ? "Color" : "Brush index") << " : 0x"
-                                        << std::hex << brushIndexOrColor << std::dec);
-                        if (points < 3)
-                        {
-                            SAL_WARN("drawinglayer.emf", "Not enough number of points");
-                            break;
-                        }
+                                 "EMF+\t " << (flags & 0x8000 ? "Color" : "Brush index") << " : 0x"
+                                           << std::hex << brushIndexOrColor << std::dec);
+
                         EMFPPath path(points, true);
                         path.Read(rMS, flags);
                         if (type == EmfPlusRecordTypeFillClosedCurve)
-                            EMFPPlusFillPolygon(path.GetClosedCardinalSpline(*this, aTension),
+                            EMFPPlusFillPolygon(path.GetPolygon(*this, /* bMapIt */ true,
+                                                                /*bAddLineToCloseShape */ true),
                                                 flags & 0x8000, brushIndexOrColor);
                         else
-                            EMFPPlusDrawPolygon(path.GetClosedCardinalSpline(*this, aTension),
+                            EMFPPlusDrawPolygon(path.GetPolygon(*this, /* bMapIt */ true,
+                                                                /*bAddLineToCloseShape */ true),
                                                 flags & 0xff);
                         break;
                     }
@@ -1466,7 +1440,7 @@ namespace emfplushelper
 
                             ::tools::Rectangle aSource(Point(sx, sy), Size(sw + 1, sh + 1));
                             SAL_INFO("drawinglayer.emf",
-                                     "EMF+\t "
+                                    "EMF+\t "
                                         << (type == EmfPlusRecordTypeDrawImage ? "DrawImage"
                                                                                 : "DrawImagePoints")
                                         << " source rectangle: " << sx << "," << sy << " " << sw << "x"
@@ -1544,8 +1518,8 @@ namespace emfplushelper
                                 SAL_INFO(
                                     "drawinglayer.emf",
                                     "EMF+\t TODO: Add support for SrcRect to ImageDataTypeMetafile");
-                            const ::basegfx::B2DPoint aDstPoint(dx, dy);
-                            const ::basegfx::B2DSize aDstSize(dw, dh);
+                            ::basegfx::B2DPoint aDstPoint(dx, dy);
+                            ::basegfx::B2DSize aDstSize(dw, dh);
 
                             const basegfx::B2DHomMatrix aTransformMatrix
                                 = maMapTransform
