@@ -75,8 +75,12 @@ AccObjectWinManager::AccObjectWinManager( AccObjectManagerAgent* Agent ):
    */
 AccObjectWinManager::~AccObjectWinManager()
 {
-    XIdAccList.clear();
-    HwndXAcc.clear();
+    {
+        std::scoped_lock l(m_Mutex);
+
+        XIdAccList.clear();
+        HwndXAcc.clear();
+    }
     XResIdAccList.clear();
     XHWNDDocList.clear();
 #ifdef ACC_DEBUG
@@ -100,13 +104,7 @@ AccObjectWinManager::Get_ToATInterface(HWND hWnd, long lParam, WPARAM wParam)
 
     if(lParam == OBJID_CLIENT )
     {
-        AccObject* topWindowAccObj = GetTopWindowAccObj(hWnd);
-        if(topWindowAccObj)
-        {
-            pRetIMAcc = topWindowAccObj->GetIMAccessible();
-            if(pRetIMAcc)
-                pRetIMAcc->AddRef();//increase COM reference count
-        }
+        pRetIMAcc = GetTopWindowIMAccessible(hWnd);
     }
 
     if ( pRetIMAcc && lParam == OBJID_CLIENT )
@@ -129,6 +127,8 @@ AccObject* AccObjectWinManager::GetAccObjByXAcc( XAccessible* pXAcc)
     if( pXAcc == nullptr)
         return nullptr;
 
+    std::scoped_lock l(m_Mutex);
+
     XIdToAccObjHash::iterator pIndTemp = XIdAccList.find( pXAcc );
     if ( pIndTemp == XIdAccList.end() )
         return nullptr;
@@ -141,13 +141,26 @@ AccObject* AccObjectWinManager::GetAccObjByXAcc( XAccessible* pXAcc)
    * @param hWnd, top window handle
    * @return pointer to AccObject
    */
-AccObject* AccObjectWinManager::GetTopWindowAccObj(HWND hWnd)
+IMAccessible * AccObjectWinManager::GetTopWindowIMAccessible(HWND hWnd)
 {
+    std::scoped_lock l(m_Mutex); // tdf#155794 for HwndXAcc and XIdAccList
+
     XHWNDToXAccHash::iterator iterResult =HwndXAcc.find(hWnd);
     if(iterResult == HwndXAcc.end())
         return nullptr;
     XAccessible* pXAcc = static_cast<XAccessible*>(iterResult->second);
-    return GetAccObjByXAcc(pXAcc);
+    AccObject *const pAccObject(GetAccObjByXAcc(pXAcc));
+    if (!pAccObject)
+    {
+        return nullptr;
+    }
+    IMAccessible *const pRet(pAccObject->GetIMAccessible());
+    if (!pRet)
+    {
+        return nullptr;
+    }
+    pRet->AddRef();
+    return pRet;
 }
 
 /**
@@ -475,6 +488,8 @@ void AccObjectWinManager::DeleteAccChildNode( AccObject* pObj )
    */
 void AccObjectWinManager::DeleteFromHwndXAcc(XAccessible* pXAcc )
 {
+    std::scoped_lock l(m_Mutex);
+
     XHWNDToXAccHash::iterator iter = HwndXAcc.begin();
     while(iter!=HwndXAcc.end())
     {
@@ -523,34 +538,46 @@ void AccObjectWinManager::DeleteAccObj( XAccessible* pXAcc )
 {
     if( pXAcc == nullptr )
         return;
-    XIdToAccObjHash::iterator temp = XIdAccList.find(pXAcc);
-    if( temp != XIdAccList.end() )
-    {
-        ResIdGen.SetSub( temp->second.GetResID() );
-    }
-    else
-    {
-        return;
-    }
 
-    AccObject& accObj = temp->second;
-    DeleteAccChildNode( &accObj );
-    DeleteAccListener( &accObj );
-    if( accObj.GetIMAccessible() )
+    rtl::Reference<AccEventListener> pListener;
+
     {
-        accObj.GetIMAccessible()->Release();
+        std::scoped_lock l(m_Mutex);
+
+        XIdToAccObjHash::iterator temp = XIdAccList.find(pXAcc);
+        if( temp != XIdAccList.end() )
+        {
+            ResIdGen.SetSub( temp->second.GetResID() );
+        }
+        else
+        {
+            return;
+        }
+
+        AccObject& accObj = temp->second;
+        DeleteAccChildNode( &accObj );
+        pListener = DeleteAccListener(&accObj);
+        accObj.NotifyDestroy(true);
+        if( accObj.GetIMAccessible() )
+        {
+            accObj.GetIMAccessible()->Release();
+        }
+        size_t i = XResIdAccList.erase(accObj.GetResID());
+        assert(i != 0);
+        DeleteFromHwndXAcc(pXAcc);
+        if( accObj.GetRole() == DOCUMENT ||
+            accObj.GetRole() == DOCUMENT_PRESENTATION ||
+            accObj.GetRole() == DOCUMENT_SPREADSHEET ||
+            accObj.GetRole() == DOCUMENT_TEXT )
+        {
+            XHWNDDocList.erase(accObj.GetParentHWND());
+        }
+        XIdAccList.erase(pXAcc); // note: this invalidates accObj so do it last!
     }
-    size_t i = XResIdAccList.erase(accObj.GetResID());
-    assert(i != 0);
-    DeleteFromHwndXAcc(pXAcc);
-    if( accObj.GetRole() == DOCUMENT ||
-        accObj.GetRole() == DOCUMENT_PRESENTATION ||
-        accObj.GetRole() == DOCUMENT_SPREADSHEET ||
-        accObj.GetRole() == DOCUMENT_TEXT )
+    if (pListener)
     {
-        XHWNDDocList.erase(accObj.GetParentHWND());
+        pListener->RemoveMeFromBroadcaster(false);
     }
-    XIdAccList.erase(pXAcc); // note: this invalidates accObj so do it last!
 }
 
 /**
@@ -558,13 +585,9 @@ void AccObjectWinManager::DeleteAccObj( XAccessible* pXAcc )
    * @param pAccObj Accobject pointer.
    * @return
    */
-void AccObjectWinManager::DeleteAccListener( AccObject*  pAccObj )
+rtl::Reference<AccEventListener> AccObjectWinManager::DeleteAccListener( AccObject*  pAccObj )
 {
-    AccEventListener* listener = pAccObj->getListener();
-    if( listener==nullptr )
-        return;
-    listener->RemoveMeFromBroadcaster();
-    pAccObj->SetListener(nullptr);
+    return pAccObj->SetListener(nullptr);
 }
 
 /**
@@ -657,29 +680,6 @@ void AccObjectWinManager::InsertAccChildNode( AccObject* pCurObj, AccObject* pPa
    */
 bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pParentXAcc,HWND pWnd )
 {
-    XIdToAccObjHash::iterator itXacc = XIdAccList.find( pXAcc );
-    if (itXacc != XIdAccList.end() )
-    {
-        short nCurRole =GetRole(pXAcc);
-        if (AccessibleRole::SHAPE == nCurRole)
-        {
-            AccObject &objXacc = itXacc->second;
-            AccObject *pObjParent = objXacc.GetParentObj();
-            if (pObjParent &&
-                    pObjParent->GetXAccessible().is() &&
-                    pObjParent->GetXAccessible().get() != pParentXAcc)
-            {
-                XIdToAccObjHash::iterator itXaccParent  = XIdAccList.find( pParentXAcc );
-                if(itXaccParent != XIdAccList.end())
-                {
-                    objXacc.SetParentObj(&(itXaccParent->second));
-                }
-            }
-        }
-        return false;
-    }
-
-
     Reference< XAccessibleContext > pRContext;
 
     if( pXAcc == nullptr)
@@ -688,6 +688,33 @@ bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pParentX
     pRContext = pXAcc->getAccessibleContext();
     if( !pRContext.is() )
         return false;
+
+    {
+        short nCurRole = GetRole(pXAcc);
+
+        std::scoped_lock l(m_Mutex);
+
+        XIdToAccObjHash::iterator itXacc = XIdAccList.find( pXAcc );
+        if (itXacc != XIdAccList.end() )
+        {
+            if (AccessibleRole::SHAPE == nCurRole)
+            {
+                AccObject &objXacc = itXacc->second;
+                AccObject *pObjParent = objXacc.GetParentObj();
+                if (pObjParent &&
+                        pObjParent->GetXAccessible().is() &&
+                        pObjParent->GetXAccessible().get() != pParentXAcc)
+                {
+                    XIdToAccObjHash::iterator itXaccParent  = XIdAccList.find( pParentXAcc );
+                    if(itXaccParent != XIdAccList.end())
+                    {
+                        objXacc.SetParentObj(&(itXaccParent->second));
+                    }
+                }
+            }
+            return false;
+        }
+    }
 
     if( pWnd == nullptr )
     {
@@ -736,9 +763,13 @@ bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pParentX
     else
         return false;
 
-    XIdAccList.insert( XIdToAccObjHash::value_type( pXAcc, pObj ));
-    XIdToAccObjHash::iterator pIndTemp = XIdAccList.find( pXAcc );
-    XResIdAccList.insert(XResIdToAccObjHash::value_type(pObj.GetResID(),&(pIndTemp->second)));
+    {
+        std::scoped_lock l(m_Mutex);
+
+        XIdAccList.insert( XIdToAccObjHash::value_type( pXAcc, pObj ));
+        XIdToAccObjHash::iterator pIndTemp = XIdAccList.find( pXAcc );
+        XResIdAccList.insert(XResIdToAccObjHash::value_type(pObj.GetResID(),&(pIndTemp->second)));
+    }
 
     AccObject* pCurObj = GetAccObjByXAcc(pXAcc);
     if( pCurObj )
@@ -762,6 +793,8 @@ bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pParentX
    */
 void AccObjectWinManager::SaveTopWindowHandle(HWND hWnd, css::accessibility::XAccessible* pXAcc)
 {
+    std::scoped_lock l(m_Mutex);
+
     HwndXAcc.insert( XHWNDToXAccHash::value_type( hWnd,pXAcc ) );
 }
 

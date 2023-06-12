@@ -77,7 +77,7 @@ public:
     //get the accessible parent's role
     virtual short GetParentRole();
 
-    void RemoveMeFromBroadcaster();
+    void RemoveMeFromBroadcaster(bool isNotifyDestroy);
 };
 
 #endif // INCLUDED_WINACCESSIBILITY_INC_ACCEVENTLISTENER_HXX

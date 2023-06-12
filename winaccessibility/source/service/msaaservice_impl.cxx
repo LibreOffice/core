@@ -91,7 +91,7 @@ public:
 sal_Int64 MSAAServiceImpl::getAccObjectPtr(
         sal_Int64 hWnd, sal_Int64 lParam, sal_Int64 wParam)
 {
-    SolarMutexGuard g;
+    // tdf#155794: this must complete without taking SolarMutex
 
     if (!m_pTopWindowListener.is())
     {

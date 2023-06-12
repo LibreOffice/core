@@ -223,7 +223,7 @@ short AccEventListener::GetParentRole()
 /**
  *  remove the listener from accessible object
  */
-void AccEventListener::RemoveMeFromBroadcaster()
+void AccEventListener::RemoveMeFromBroadcaster(bool const isNotifyDestroy)
 {
     try
     {
@@ -244,7 +244,10 @@ void AccEventListener::RemoveMeFromBroadcaster()
         catch (Exception const&)
         {   // may throw if it's already disposed - ignore that
         }
-        pAgent->NotifyDestroy(m_xAccessible.get());
+        if (isNotifyDestroy)
+        {
+            pAgent->NotifyDestroy(m_xAccessible.get());
+        }
         m_xAccessible.clear(); // release cyclic reference
     }
     catch(...)
@@ -261,7 +264,7 @@ void AccEventListener::disposing( const css::lang::EventObject& /*Source*/ )
 {
     SolarMutexGuard g;
 
-    RemoveMeFromBroadcaster();
+    RemoveMeFromBroadcaster(true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
