@@ -913,7 +913,9 @@ rtl::Reference<ScAccessibleCell> ScAccessibleSpreadsheet::GetAccessibleCellAt(sa
             return m_pAccFormulaCell;
         }
         else
+        {
             return ScAccessibleCell::create(this, mpViewShell, aCellAddress, GetAccessibleIndexFormula(nRow, nColumn), meSplitPos, mpAccDoc);
+        }
     }
     else
     {
@@ -924,7 +926,17 @@ rtl::Reference<ScAccessibleCell> ScAccessibleSpreadsheet::GetAccessibleCellAt(sa
             return mpAccCell;
         }
         else
-            return ScAccessibleCell::create(this, mpViewShell, aCellAddress, getAccessibleIndex(nRow, nColumn), meSplitPos, mpAccDoc);
+        {
+            rtl::Reference<ScAccessibleCell> xCell;
+            auto it = m_mapCells.find(aCellAddress);
+            if (it != m_mapCells.end())
+                xCell = it->second.get();
+            if (xCell)
+                return xCell;
+            xCell = ScAccessibleCell::create(this, mpViewShell, aCellAddress, getAccessibleIndex(nRow, nColumn), meSplitPos, mpAccDoc);
+            m_mapCells.insert(std::make_pair(aCellAddress, xCell));
+            return xCell;
+        }
     }
 }
 

@@ -19,7 +19,7 @@
 
 
 #include <osx/a11yfactory.h>
-
+#include <sal/log.hxx>
 #include "a11ytablewrapper.h"
 
 using namespace ::com::sun::star::accessibility;
@@ -79,6 +79,7 @@ using namespace ::com::sun::star::uno;
                     sal_Int32 columnTopLeft = accessibleTable -> getAccessibleColumn ( idxTopLeft );
                     sal_Int32 rowBottomRight = accessibleTable -> getAccessibleRow ( idxBottomRight );
                     sal_Int32 columnBottomRight = accessibleTable -> getAccessibleColumn ( idxBottomRight );
+                    SAL_WARN("vcl", "creating " << ((rowBottomRight - rowTopLeft) * (columnBottomRight - columnTopLeft)) << " cells");
                     // create an array containing the visible cells
                     for ( sal_Int32 rowCount = rowTopLeft; rowCount <= rowBottomRight; rowCount++ )
                     {
