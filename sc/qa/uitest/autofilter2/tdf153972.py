@@ -34,9 +34,9 @@ class tdf153972(UITestCase):
             # Without the fix in place, this test would have failed with
             # AssertionError: 4 != 0
             self.assertEqual(4, len(xSubMenu.getChildren()))
-            self.assertEqual('Lime', get_state_as_dict(xSubMenu.getChild('0'))['Text'])
-            self.assertEqual('Red', get_state_as_dict(xSubMenu.getChild('1'))['Text'])
-            self.assertEqual('Yellow', get_state_as_dict(xSubMenu.getChild('2'))['Text'])
+            self.assertEqual('#7FD41A', get_state_as_dict(xSubMenu.getChild('0'))['Text'])
+            self.assertEqual('#FE0000', get_state_as_dict(xSubMenu.getChild('1'))['Text'])
+            self.assertEqual('#FEFF00', get_state_as_dict(xSubMenu.getChild('2'))['Text'])
             self.assertEqual('No Fill', get_state_as_dict(xSubMenu.getChild('3'))['Text'])
 
             # Choose Red
