@@ -157,7 +157,15 @@ OUString MovingAverageRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& /*xNumFormatter*/,
     sal_Int32 /*nNumberFormatKey*/, sal_Int32* /*pFormulaLength = nullptr */ ) const
 {
-    return SchResId( STR_OBJECT_MOVING_AVERAGE_WITH_PARAMETERS );
+    OUString aRet = SchResId( STR_OBJECT_MOVING_AVERAGE_WITH_PARAMETERS );
+    // change text for Moving Average
+    OUString aWildcard( "%PERIOD" );
+    sal_Int32 nIndex = aRet.indexOf( aWildcard );
+    if( nIndex != -1 )
+    {  // replace period
+        aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), OUString::number(mPeriod) );
+    }
+    return aRet;
 }
 
 } //  namespace chart
