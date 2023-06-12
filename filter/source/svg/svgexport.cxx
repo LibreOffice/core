@@ -44,6 +44,7 @@
 #include <editeng/flditem.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <i18nlangtag/lang.h>
 #include <svl/numformat.hxx>
@@ -860,7 +861,17 @@ bool SVGFilter::implExportWriterTextGraphic( const Reference< view::XSelectionSu
     if(pSvxDrawPage == nullptr || pSvxDrawPage->GetSdrPage() == nullptr)
         return false;
 
-    rtl::Reference<SdrGrafObj> pGraphicObj = new SdrGrafObj(pSvxDrawPage->GetSdrPage()->getSdrModelFromSdrPage(), aGraphic, tools::Rectangle( aPos, aSize ));
+    SdrModel& rModel = pSvxDrawPage->GetSdrPage()->getSdrModelFromSdrPage();
+    const bool bUndoEnable = rModel.IsUndoEnabled();
+    if (bUndoEnable)
+        rModel.EnableUndo(false);
+    comphelper::ScopeGuard guard([bUndoEnable, &rModel]() {
+        // restore when leaving
+        if (bUndoEnable)
+            rModel.EnableUndo(false);
+    });
+
+    rtl::Reference<SdrGrafObj> pGraphicObj = new SdrGrafObj(rModel, aGraphic, tools::Rectangle( aPos, aSize ));
     uno::Reference< drawing::XShape > xShape = GetXShapeForSdrObject(pGraphicObj.get());
     uno::Reference< XPropertySet > xShapePropSet(xShape, uno::UNO_QUERY);
     xShapePropSet->setPropertyValue("Graphic", uno::Any(xGraphic));
