@@ -2329,7 +2329,8 @@ bool SVGFilter::implCreateObjects()
             if( xPropSet.is() )
             {
                 Reference< XPropertySet > xBackground;
-                xPropSet->getPropertyValue( "Background" ) >>= xBackground;
+                if (xPropSet->getPropertySetInfo()->hasPropertyByName("Background"))
+                    xPropSet->getPropertyValue( "Background" ) >>= xBackground;
                 if( xBackground.is() )
                 {
                     drawing::FillStyle aFillStyle;
