@@ -520,7 +520,7 @@ OString ScTable::dumpColumnRowSizes(bool bColumns)
     static const OString aDefaultForCols
         = OString::number(STD_COL_WIDTH) + ":" + OString::number(GetDoc().MaxCol()) + " ";
     static const OString aDefaultForRows
-        = OString::number(ScGlobal::nStdRowHeight) + ":" + OString::number(GetDoc().MaxRow()) + " ";
+        = OString::number(GetOptimalMinRowHeight()) + ":" + OString::number(GetDoc().MaxRow()) + " ";
 
     // ScCompressedArray is a template class and we don't want to impose
     // the restriction that its value type should be string serializable,

@@ -248,6 +248,7 @@ ScTable::ScTable( ScDocument& rDoc, SCTAB nNewTab, const OUString& rNewName,
     mbCellAreaEmpty( true ),
     mnEndCol( -1 ),
     mnEndRow( -1 ),
+    mnOptimalMinRowHeight(0),
     mpRowHeights( static_cast<ScFlatUInt16RowSegments*>(nullptr) ),
     mpHiddenCols(new ScFlatBoolColSegments(rDoc.MaxCol())),
     mpHiddenRows(new ScFlatBoolRowSegments(rDoc.MaxRow())),
@@ -291,7 +292,7 @@ ScTable::ScTable( ScDocument& rDoc, SCTAB nNewTab, const OUString& rNewName,
 
     if (bRowInfo)
     {
-        mpRowHeights.reset(new ScFlatUInt16RowSegments(rDocument.MaxRow(), ScGlobal::nStdRowHeight));
+        mpRowHeights.reset(new ScFlatUInt16RowSegments(rDocument.MaxRow(), GetOptimalMinRowHeight()));
         pRowFlags.reset(new ScBitMaskCompressedArray<SCROW, CRFlags>( rDocument.MaxRow(), CRFlags::NONE));
     }
 
@@ -309,7 +310,8 @@ ScTable::ScTable( ScDocument& rDoc, SCTAB nNewTab, const OUString& rNewName,
         {
             pDrawLayer->ScRenamePage( nTab, aName );
             sal_uLong const nx = o3tl::convert((rDocument.MaxCol()+1) * STD_COL_WIDTH, o3tl::Length::twip, o3tl::Length::mm100);
-            sal_uLong ny = o3tl::convert((rDocument.MaxRow()+1) * ScGlobal::nStdRowHeight, o3tl::Length::twip, o3tl::Length::mm10);
+            sal_uLong ny = o3tl::convert((rDocument.MaxRow() + 1) * GetOptimalMinRowHeight(),
+                                         o3tl::Length::twip, o3tl::Length::mm10);
             pDrawLayer->SetPageSize( static_cast<sal_uInt16>(nTab), Size( nx, ny ), false );
         }
     }

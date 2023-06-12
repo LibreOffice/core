@@ -990,6 +990,7 @@ public:
     bool                        IsStreamValidLocked() const { return mbStreamValidLocked; }
     bool                        IsPendingRowHeights( SCTAB nTab ) const;
     void                        SetPendingRowHeights( SCTAB nTab, bool bSet );
+    sal_uInt16 GetSheetOptimalMinRowHeight(SCTAB nTab) const;
     SC_DLLPUBLIC void           SetLayoutRTL( SCTAB nTab, bool bRTL, ScObjectHandling eObjectHandling = ScObjectHandling::RecalcPosMode);
     SC_DLLPUBLIC bool           IsLayoutRTL( SCTAB nTab ) const;
     SC_DLLPUBLIC bool           IsNegativePage( SCTAB nTab ) const;

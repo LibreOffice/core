@@ -823,7 +823,8 @@ ScViewData::ScViewData(ScDocument* pDoc, ScDocShell* pDocSh, ScTabViewShell* pVi
     maMarkData.SelectOneTable(0); // Sync with nTabNo
 
     aScrSize = Size( o3tl::convert(STD_COL_WIDTH * OLE_STD_CELLS_X, o3tl::Length::twip, o3tl::Length::px),
-                     o3tl::convert(ScGlobal::nStdRowHeight * OLE_STD_CELLS_Y, o3tl::Length::twip, o3tl::Length::px));
+                    o3tl::convert(mrDoc.GetSheetOptimalMinRowHeight(nTabNo) * OLE_STD_CELLS_Y,
+                                  o3tl::Length::twip, o3tl::Length::px));
     maTabData.emplace_back( new ScViewDataTable(nullptr) );
     pThisTab = maTabData[nTabNo].get();
 

@@ -63,6 +63,7 @@
 #include <scitems.hxx>
 #include <editutil.hxx>
 #include <tokenarray.hxx>
+#include <table.hxx>
 #include <tablebuffer.hxx>
 #include <documentimport.hxx>
 #include <stlsheet.hxx>
@@ -956,6 +957,11 @@ void WorksheetGlobals::finalizeWorksheetImport()
     ScDocument& rDoc = getScDocument();
     std::vector<sc::ColRowSpan> aSpans;
     SCTAB nTab = getSheetIndex();
+
+    ScTable* pTable = rDoc.FetchTable(nTab);
+    if (pTable)
+        pTable->SetOptimalMinRowHeight(maDefRowModel.mfHeight * 20); // in TWIPS
+
     ScDBData* pDBData = rDoc.GetAnonymousDBData(nTab);
     if (pDBData && pDBData->HasAutoFilter())
     {

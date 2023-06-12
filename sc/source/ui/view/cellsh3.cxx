@@ -687,8 +687,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                                                               rData.GetTabNo() );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     VclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
-                        pTabViewShell->GetFrameWeld(), "RowHeightDialog",
-                        nCurHeight, ScGlobal::nStdRowHeight,
+                        pTabViewShell->GetFrameWeld(), "RowHeightDialog", nCurHeight,
+                        rData.GetDocument().GetSheetOptimalMinRowHeight(rData.GetTabNo()),
                         eMetric, 2, MAX_ROW_HEIGHT));
 
                     pDlg->StartExecuteAsync([pDlg, pTabViewShell](sal_Int32 nResult){

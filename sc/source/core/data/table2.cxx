@@ -3316,7 +3316,7 @@ void ScTable::SetRowHeight( SCROW nRow, sal_uInt16 nNewHeight )
         if (!nNewHeight)
         {
             OSL_FAIL("SetRowHeight: Row height zero");
-            nNewHeight = ScGlobal::nStdRowHeight;
+            nNewHeight = GetOptimalMinRowHeight();
         }
 
         sal_uInt16 nOldHeight = mpRowHeights->getValue(nRow);
@@ -3379,7 +3379,7 @@ bool ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nNew
         if (!nNewHeight)
         {
             OSL_FAIL("SetRowHeight: Row height zero");
-            nNewHeight = ScGlobal::nStdRowHeight;
+            nNewHeight = GetOptimalMinRowHeight();
         }
 
         bool bSingle = false;   // true = process every row for its own
@@ -3432,7 +3432,7 @@ void ScTable::SetRowHeightOnly( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nNewH
         return;
 
     if (!nNewHeight)
-        nNewHeight = ScGlobal::nStdRowHeight;
+        nNewHeight = GetOptimalMinRowHeight();
 
     mpRowHeights->setValue(nStartRow, nEndRow, nNewHeight);
 }
@@ -3588,7 +3588,7 @@ sal_uInt16 ScTable::GetRowHeight( SCROW nRow, SCROW* pStartRow, SCROW* pEndRow, 
             *pStartRow = nRow;
         if (pEndRow)
             *pEndRow = nRow;
-        return ScGlobal::nStdRowHeight;
+        return GetOptimalMinRowHeight();
     }
 }
 
@@ -3614,7 +3614,7 @@ tools::Long ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow, bool bHiddenA
         return nHeight;
     }
     else
-        return (nEndRow - nStartRow + 1) * static_cast<tools::Long>(ScGlobal::nStdRowHeight);
+        return (nEndRow - nStartRow + 1) * static_cast<tools::Long>(GetOptimalMinRowHeight());
 }
 
 tools::Long ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale ) const
@@ -3655,7 +3655,7 @@ tools::Long ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double 
         return nHeight;
     }
     else
-        return static_cast<tools::Long>((nEndRow - nStartRow + 1) * ScGlobal::nStdRowHeight * fScale);
+        return static_cast<tools::Long>((nEndRow - nStartRow + 1) * GetOptimalMinRowHeight() * fScale);
 }
 
 sal_uInt16 ScTable::GetOriginalHeight( SCROW nRow ) const       // non-0 even if hidden
@@ -3665,7 +3665,7 @@ sal_uInt16 ScTable::GetOriginalHeight( SCROW nRow ) const       // non-0 even if
     if (ValidRow(nRow) && mpRowHeights)
         return mpRowHeights->getValue(nRow);
     else
-        return ScGlobal::nStdRowHeight;
+        return GetOptimalMinRowHeight();
 }
 
 //  Column/Row -Flags
@@ -3941,7 +3941,7 @@ SCROW ScTable::GetLastChangedRowFlagsWidth() const
     // Find the last row position where the height is NOT the standard row
     // height.
     // KOHEI: Test this to make sure it does what it's supposed to.
-    SCROW nLastHeight = mpRowHeights->findLastTrue(ScGlobal::nStdRowHeight);
+    SCROW nLastHeight = mpRowHeights->findLastTrue(GetOptimalMinRowHeight());
     if (!ValidRow(nLastHeight))
         nLastHeight = 0;
 

@@ -44,8 +44,10 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <tools/UnitConversion.hxx>
+#include <vcl/scheduler.hxx>
 #include "helper/qahelper.hxx"
 
 using namespace ::com::sun::star;
@@ -141,6 +143,24 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testOptimalHeightReset)
 
     // check if the new height of A1 ( after delete ) is now the optimal height of an empty cell
     CPPUNIT_ASSERT_EQUAL(nOptimalHeight, nHeight);
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf123026_optimalRowHeight)
+{
+    createScDoc("xlsx/tdf123026_optimalRowHeight.xlsx");
+
+    dispatchCommand(mxComponent, ".uno:SelectColumn", {});
+    dispatchCommand(
+        mxComponent, ".uno:SetOptimalRowHeight",
+        comphelper::InitPropertySequence({ { "aExtraHeight", uno::Any(sal_uInt16(0)) } }));
+    Scheduler::ProcessEventsToIdle();
+
+    SCTAB nTab = 0;
+    SCROW nRow = 4;
+    int nHeight = convertTwipToMm100(getScDoc()->GetRowHeight(nRow, nTab, false));
+
+    // Without the fix, this was 529 (300 twip). It should be 3210.
+    CPPUNIT_ASSERT_GREATER(2000, nHeight);
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testCustomNumFormatHybridCellODS)

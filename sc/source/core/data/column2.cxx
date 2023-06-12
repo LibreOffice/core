@@ -855,7 +855,8 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
         return nOldWidth;
 }
 
-static sal_uInt16 lcl_GetAttribHeight( const ScPatternAttr& rPattern, sal_uInt16 nFontHeightId )
+static sal_uInt16 lcl_GetAttribHeight(const ScPatternAttr& rPattern, sal_uInt16 nFontHeightId,
+                                      sal_uInt16 nMinHeight)
 {
     const SvxFontHeightItem& rFontHeight =
         static_cast<const SvxFontHeightItem&>(rPattern.GetItem(nFontHeightId));
@@ -877,8 +878,8 @@ static sal_uInt16 lcl_GetAttribHeight( const ScPatternAttr& rPattern, sal_uInt16
     if (nHeight > STD_ROWHEIGHT_DIFF)
         nHeight -= STD_ROWHEIGHT_DIFF;
 
-    if (nHeight < ScGlobal::nStdRowHeight)
-        nHeight = ScGlobal::nStdRowHeight;
+    if (nHeight < nMinHeight)
+        nHeight = nMinHeight;
 
     return nHeight;
 }
@@ -902,6 +903,7 @@ void ScColumn::GetOptimalHeight(
     //  with conditional formatting, always consider the individual cells
 
     const ScPatternAttr* pPattern = aIter.Next(nStart,nEnd);
+    const sal_uInt16 nOptimalMinRowHeight = GetDoc().GetSheetOptimalMinRowHeight(nTab);
     while ( pPattern )
     {
         const ScMergeAttr*      pMerge = &pPattern->GetItem(ATTR_MERGE);
@@ -978,11 +980,14 @@ void ScColumn::GetOptimalHeight(
                 sal_uInt16 nDefHeight;
                 SvtScriptType nDefScript = ScGlobal::GetDefaultScriptType();
                 if ( nDefScript == SvtScriptType::ASIAN )
-                    nDefHeight = nCjkHeight = lcl_GetAttribHeight( *pPattern, ATTR_CJK_FONT_HEIGHT );
+                    nDefHeight = nCjkHeight = lcl_GetAttribHeight(*pPattern, ATTR_CJK_FONT_HEIGHT,
+                                                                  nOptimalMinRowHeight);
                 else if ( nDefScript == SvtScriptType::COMPLEX )
-                    nDefHeight = nCtlHeight = lcl_GetAttribHeight( *pPattern, ATTR_CTL_FONT_HEIGHT );
+                    nDefHeight = nCtlHeight = lcl_GetAttribHeight(*pPattern, ATTR_CTL_FONT_HEIGHT,
+                                                                  nOptimalMinRowHeight);
                 else
-                    nDefHeight = nLatHeight = lcl_GetAttribHeight( *pPattern, ATTR_FONT_HEIGHT );
+                    nDefHeight = nLatHeight = lcl_GetAttribHeight(*pPattern, ATTR_FONT_HEIGHT,
+                                                                  nOptimalMinRowHeight);
 
                 //  if everything below is already larger, the loop doesn't have to
                 //  be run again
@@ -1023,21 +1028,26 @@ void ScColumn::GetOptimalHeight(
                             if ( nScript == SvtScriptType::ASIAN )
                             {
                                 if ( nCjkHeight == 0 )
-                                    nCjkHeight = lcl_GetAttribHeight( *pPattern, ATTR_CJK_FONT_HEIGHT );
+                                    nCjkHeight = lcl_GetAttribHeight(*pPattern,
+                                                                     ATTR_CJK_FONT_HEIGHT,
+                                                                     nOptimalMinRowHeight);
                                 if (nCjkHeight > rHeights.GetValue(nRow))
                                     rHeights.SetValue(nRow, nRow, nCjkHeight);
                             }
                             else if ( nScript == SvtScriptType::COMPLEX )
                             {
                                 if ( nCtlHeight == 0 )
-                                    nCtlHeight = lcl_GetAttribHeight( *pPattern, ATTR_CTL_FONT_HEIGHT );
+                                    nCtlHeight = lcl_GetAttribHeight(*pPattern,
+                                                                     ATTR_CTL_FONT_HEIGHT,
+                                                                     nOptimalMinRowHeight);
                                 if (nCtlHeight > rHeights.GetValue(nRow))
                                     rHeights.SetValue(nRow, nRow, nCtlHeight);
                             }
                             else
                             {
                                 if ( nLatHeight == 0 )
-                                    nLatHeight = lcl_GetAttribHeight( *pPattern, ATTR_FONT_HEIGHT );
+                                    nLatHeight = lcl_GetAttribHeight(*pPattern, ATTR_FONT_HEIGHT,
+                                                                     nOptimalMinRowHeight);
                                 if (nLatHeight > rHeights.GetValue(nRow))
                                     rHeights.SetValue(nRow, nRow, nLatHeight);
                             }

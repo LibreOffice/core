@@ -956,6 +956,15 @@ void ScDocument::SetPendingRowHeights( SCTAB nTab, bool bSet )
         maTabs[nTab]->SetPendingRowHeights( bSet );
 }
 
+sal_uInt16 ScDocument::GetSheetOptimalMinRowHeight(SCTAB nTab) const
+{
+    const ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return ScGlobal::nStdRowHeight;
+
+    return pTab->GetOptimalMinRowHeight();
+}
+
 void ScDocument::SetLayoutRTL( SCTAB nTab, bool bRTL, ScObjectHandling eObjectHandling)
 {
     if ( !(ValidTab(nTab) && nTab < static_cast<SCTAB> (maTabs.size()) && maTabs[nTab]) )

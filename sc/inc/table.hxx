@@ -186,6 +186,9 @@ private:
     SCCOL           mnEndCol;
     SCROW           mnEndRow;
 
+    // Standard row height for this sheet - benefits XLSX because default height defined per sheet
+    sal_uInt16 mnOptimalMinRowHeight; // in Twips
+
     std::unique_ptr<ScTableProtection> pTabProtection;
 
     std::unique_ptr<ScCompressedArray<SCCOL, sal_uInt16>> mpColWidth;
@@ -872,6 +875,14 @@ public:
 
                         // nPPT to test for modification
     void        SetManualHeight( SCROW nStartRow, SCROW nEndRow, bool bManual );
+
+    sal_uInt16 GetOptimalMinRowHeight() const
+    {
+        if (!mnOptimalMinRowHeight)
+            return ScGlobal::nStdRowHeight;
+        return mnOptimalMinRowHeight;
+    };
+    void SetOptimalMinRowHeight(sal_uInt16 nSet) { mnOptimalMinRowHeight = nSet; }
 
     sal_uInt16      GetColWidth( SCCOL nCol, bool bHiddenAsZero = true ) const;
     tools::Long     GetColWidth( SCCOL nStartCol, SCCOL nEndCol ) const;

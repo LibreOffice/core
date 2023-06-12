@@ -2506,11 +2506,6 @@ void ScViewFunc::SetMarkedWidthOrHeight( bool bWidth, ScSizeMode eMode, sal_uInt
 
 void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
 {
-    //! step size adjustable
-    //  step size is also minimum
-    constexpr sal_uInt16 nStepX = STD_COL_WIDTH / 5;
-    sal_uInt16 nStepY = ScGlobal::nStdRowHeight;
-
     ScModule* pScMod = SC_MOD();
     bool bAnyEdit = pScMod->IsInputMode();
     SCCOL nCol = GetViewData().GetCurX();
@@ -2531,6 +2526,11 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
     }
 
     HideAllCursors();
+
+    //! step size adjustable
+    //  step size is also minimum
+    constexpr sal_uInt16 nStepX = STD_COL_WIDTH / 5;
+    const sal_uInt16 nStepY = rDoc.GetSheetOptimalMinRowHeight(nTab);
 
     sal_uInt16 nWidth = rDoc.GetColWidth( nCol, nTab );
     sal_uInt16 nHeight = rDoc.GetRowHeight( nRow, nTab );

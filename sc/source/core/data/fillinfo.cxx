@@ -192,7 +192,7 @@ bool isRotateItemUsed(const ScDocumentPool *pPool)
 void initRowInfo(const ScDocument* pDoc, RowInfo* pRowInfo, const SCSIZE nMaxRow,
         double fRowScale, SCROW nRow1, SCTAB nTab, SCROW& rYExtra, SCSIZE& rArrRow, SCROW& rRow2)
 {
-    sal_uInt16 nDocHeight = ScGlobal::nStdRowHeight;
+    sal_uInt16 nDocHeight = pDoc->GetSheetOptimalMinRowHeight(nTab);
     SCROW nDocHeightEndRow = -1;
     for (SCROW nSignedY=nRow1-1; nSignedY<=rYExtra; nSignedY++)
     {
@@ -207,7 +207,7 @@ void initRowInfo(const ScDocument* pDoc, RowInfo* pRowInfo, const SCSIZE nMaxRow
             if (pDoc->ValidRow(nY))
                 nDocHeight = pDoc->GetRowHeight( nY, nTab, nullptr, &nDocHeightEndRow );
             else
-                nDocHeight = ScGlobal::nStdRowHeight;
+                nDocHeight = pDoc->GetSheetOptimalMinRowHeight(nTab);
         }
 
         if ( rArrRow==0 || nDocHeight || nY > pDoc->MaxRow() )
