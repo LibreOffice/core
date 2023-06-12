@@ -1009,45 +1009,53 @@ sal_Int32 MultiSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoordi
     return -1;
 }
 
+DeviceCoordinate MultiSalLayout::GetTextWidth() const
+{
+    // Measure text width. There might be holes in each SalLayout due to
+    // missing chars, so we use GetNextGlyph() to get the glyphs across all
+    // layouts.
+    int nStart = 0;
+    DevicePoint aPos;
+    const GlyphItem* pGlyphItem;
+
+    DeviceCoordinate nWidth = 0;
+    while (GetNextGlyph(&pGlyphItem, aPos, nStart))
+        nWidth += pGlyphItem->newWidth();
+
+    return nWidth;
+}
+
 DeviceCoordinate MultiSalLayout::FillDXArray( std::vector<DeviceCoordinate>* pCharWidths, const OUString& rStr ) const
 {
-    DeviceCoordinate nMaxWidth = 0;
-
-    // prepare merging of fallback levels
-    std::vector<DeviceCoordinate> aTempWidths;
-    const int nCharCount = mnEndCharPos - mnMinCharPos;
-    if( pCharWidths )
+    if (pCharWidths)
     {
+        // prepare merging of fallback levels
+        std::vector<DeviceCoordinate> aTempWidths;
+        const int nCharCount = mnEndCharPos - mnMinCharPos;
         pCharWidths->clear();
         pCharWidths->resize(nCharCount, 0);
-    }
 
-    for( int n = mnLevel; --n >= 0; )
-    {
-        // query every fallback level
-        DeviceCoordinate nTextWidth = mpLayouts[n]->FillDXArray( &aTempWidths, rStr );
-        if( !nTextWidth )
-            continue;
-        // merge results from current level
-        if( nMaxWidth < nTextWidth )
-            nMaxWidth = nTextWidth;
-        if( !pCharWidths )
-            continue;
-        // calculate virtual char widths using most probable fallback layout
-        for( int i = 0; i < nCharCount; ++i )
+        for (int n = mnLevel; --n >= 0;)
         {
-            // #i17359# restriction:
-            // one char cannot be resolved from different fallbacks
-            if( (*pCharWidths)[i] != 0 )
-                continue;
-            DeviceCoordinate nCharWidth = aTempWidths[i];
-            if( !nCharWidth )
-                continue;
-            (*pCharWidths)[i] = nCharWidth;
+            // query every fallback level
+            mpLayouts[n]->FillDXArray(&aTempWidths, rStr);
+
+            // calculate virtual char widths using most probable fallback layout
+            for (int i = 0; i < nCharCount; ++i)
+            {
+                // #i17359# restriction:
+                // one char cannot be resolved from different fallbacks
+                if ((*pCharWidths)[i] != 0)
+                    continue;
+                DeviceCoordinate nCharWidth = aTempWidths[i];
+                if (!nCharWidth)
+                    continue;
+                (*pCharWidths)[i] = nCharWidth;
+            }
         }
     }
 
-    return nMaxWidth;
+    return GetTextWidth();
 }
 
 void MultiSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray ) const
