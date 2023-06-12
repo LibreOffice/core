@@ -128,7 +128,7 @@ tools::Long CalcToUnit( float nIn, MapUnit eUnit )
                 eUnit == MapUnit::MapCM, "this unit is not implemented" );
 
     if (const auto eTo = MapToO3tlLength(eUnit); eTo != o3tl::Length::invalid)
-        return o3tl::convert(nIn, o3tl::Length::pt, eTo);
+        return std::round(o3tl::convert(nIn, o3tl::Length::pt, eTo));
 
     return 0;
 }
