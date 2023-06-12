@@ -44,8 +44,27 @@ static std::ostream& operator<<(std::ostream& rStream, const std::vector<sal_Int
 
 class VclComplexTextTest : public test::BootstrapFixture
 {
+    OUString maDataUrl = u"/vcl/qa/cppunit/data/";
+
 public:
-    VclComplexTextTest() : BootstrapFixture(true, false) {}
+    OUString getFullUrl(std::u16string_view sFileName)
+    {
+        return m_directories.getURLFromSrc(maDataUrl) + sFileName;
+    }
+
+    bool addFont(OutputDevice* pOutDev, std::u16string_view sFileName,
+                 std::u16string_view sFamilyName)
+    {
+        OutputDevice::ImplClearAllFontData(true);
+        bool bAdded = pOutDev->AddTempDevFont(getFullUrl(sFileName), OUString(sFamilyName));
+        OutputDevice::ImplRefreshAllFontData(true);
+        return bAdded;
+    }
+
+    VclComplexTextTest()
+        : BootstrapFixture(true, false)
+    {
+    }
 };
 
 CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testArabic)
@@ -418,6 +437,45 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf152048_2)
     // - Expected: 158
     // - Actual  : 118
     CPPUNIT_ASSERT_EQUAL(aCharWidths.back(), sal_Int32(nTextWidth));
+#endif
+}
+
+CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf153440)
+{
+#if HAVE_MORE_FONTS
+    vcl::Font aFont(u"Noto Naskh Arabic", u"Regular", Size(0, 72));
+
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
+    pOutDev->SetFont(aFont);
+
+#if !defined _WIN32 // TODO: Fails on jenkins but passes locally
+    // Add an emoji font so that we are sure a font will be found for the
+    // emoji. The font is subset and supports only 🌿.
+    bool bAdded = addFont(pOutDev, u"tdf153440.ttf", u"Noto Emoji");
+    CPPUNIT_ASSERT_EQUAL(true, bAdded);
+#endif
+
+    for (auto& aString : { u"ع 🌿 ع", u"a 🌿 a" })
+    {
+        OUString aText(aString);
+        bool bRTL = aText.startsWith(u"ع");
+
+        auto pLayout = pOutDev->ImplLayout(aText, 0, -1, Point(0, 0), 0, {}, {});
+
+        int nStart = 0;
+        DevicePoint aPos;
+        const GlyphItem* pGlyphItem;
+        while (pLayout->GetNextGlyph(&pGlyphItem, aPos, nStart))
+        {
+            // Assert glyph ID is not 0, if it is 0 then font fallback didn’t
+            // happen.
+            CPPUNIT_ASSERT(pGlyphItem->glyphId());
+
+            // Assert that we are indeed doing RTL layout for RTL text since
+            // the bug does not happen for LTR text.
+            CPPUNIT_ASSERT_EQUAL(bRTL, pGlyphItem->IsRTLGlyph());
+        }
+    }
 #endif
 }
 
