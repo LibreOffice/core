@@ -23,6 +23,7 @@
 #include <cassert>
 #include <memory>
 
+#include <rtl/bootstrap.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
@@ -123,6 +124,40 @@ javaFrameworkError jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>> *pparI
     }
 }
 
+std::vector<OUString> jfw_convertUserPathList(OUString const& sUserPath)
+{
+    std::vector<OUString> result;
+    sal_Int32 nIdx = 0;
+    do
+    {
+        sal_Int32 nextColon = sUserPath.indexOf(SAL_PATHSEPARATOR, nIdx);
+        OUString sToken(sUserPath.copy(nIdx, nextColon > 0 ? nextColon - nIdx
+                                                              : sUserPath.getLength() - nIdx));
+
+        // Check if we are in bootstrap variable mode (class path starts with '$').
+        // Then the class path must be in URL format.
+        if (sToken.startsWith("$"))
+        {
+            // Detect open bootstrap variables - they might contain colons - we need to skip those.
+            sal_Int32 nBootstrapVarStart = sToken.indexOf("${");
+            if (nBootstrapVarStart >= 0)
+            {
+                sal_Int32 nBootstrapVarEnd = sToken.indexOf("}", nBootstrapVarStart);
+                if (nBootstrapVarEnd == -1)
+                {
+                    // Current colon is part of bootstrap variable - skip it!
+                    nextColon = sUserPath.indexOf(SAL_PATHSEPARATOR, nextColon + 1);
+                    sToken = sUserPath.copy(nIdx, nextColon > 0 ? nextColon - nIdx
+                                                                   : sUserPath.getLength() - nIdx);
+                }
+            }
+        }
+        result.emplace_back(sToken);
+        nIdx = nextColon + 1;
+    } while (nIdx > 0);
+    return result;
+}
+
 javaFrameworkError jfw_startVM(
     JavaInfo const * pInfo, std::vector<OUString> const & arOptions,
     JavaVM ** ppVM, JNIEnv ** ppEnv)
@@ -202,7 +237,23 @@ javaFrameworkError jfw_startVM(
                     return JFW_E_NEED_RESTART;
 
                 vmParams = settings.getVmParametersUtf8();
-                sUserClassPath = jfw::makeClassPathOption(settings.getUserClassPath());
+                // Expand user classpath (might contain bootstrap vars)
+                OUString sUserPath(settings.getUserClassPath());
+                std::vector paths = jfw_convertUserPathList(sUserPath);
+                OUString sUserPathExpanded;
+                for (auto& path : paths)
+                {
+                    if (!sUserPathExpanded.isEmpty())
+                        sUserPathExpanded += OUStringChar(SAL_PATHSEPARATOR);
+                    if (path.startsWith("$"))
+                    {
+                        OUString sURL = path;
+                        rtl::Bootstrap::expandMacros(sURL);
+                        osl::FileBase::getSystemPathFromFileURL(sURL, path);
+                    }
+                    sUserPathExpanded += path;
+                }
+                sUserClassPath = jfw::makeClassPathOption(sUserPathExpanded);
             } // end mode FWK_MODE_OFFICE
             else if (mode == jfw::JFW_MODE_DIRECT)
             {

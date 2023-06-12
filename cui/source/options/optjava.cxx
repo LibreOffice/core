@@ -34,6 +34,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
 #include <svtools/miscopt.hxx>
+#include <rtl/bootstrap.hxx>
 
 #include <strings.hrc>
 #include <vcl/svapp.hxx>
@@ -935,16 +936,22 @@ void SvxJavaClassPathDlg::SetClassPath( const OUString& _rPath )
     m_xPathList->clear();
     if (!_rPath.isEmpty())
     {
-        sal_Int32 nIdx = 0;
-        do
+        std::vector paths = jfw_convertUserPathList(_rPath);
+        for (auto const& path : paths)
         {
-            OUString sToken = _rPath.getToken( 0, CLASSPATH_DELIMITER, nIdx );
             OUString sURL;
-            osl::FileBase::getFileURLFromSystemPath(sToken, sURL); // best effort
+            if (path.startsWith("$"))
+            {
+                sURL = path;
+                rtl::Bootstrap::expandMacros(sURL);
+            }
+            else
+            {
+                osl::FileBase::getFileURLFromSystemPath(path, sURL);
+            }
             INetURLObject aURL( sURL );
-            m_xPathList->append("", sToken, SvFileInformationManager::GetImageId(aURL));
+            m_xPathList->append("", path, SvFileInformationManager::GetImageId(aURL));
         }
-        while (nIdx>=0);
         // select first entry
         m_xPathList->select(0);
     }
