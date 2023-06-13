@@ -2061,6 +2061,13 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             {
                 // For some undocumented reason, MS Word seems to ignore this in docDefaults
 
+                const StyleSheetEntryPtr pCurrStyle = GetStyleSheetTable()->GetCurrentEntry();
+                if (pCurrStyle && pCurrStyle->m_nStyleTypeCode == STYLE_TYPE_PARA && nIntValue < 0)
+                {
+                    m_pImpl->deferCharacterProperty(nSprmId, uno::Any(nIntValue));
+                    break;
+                }
+
                 // DON'T FIXME: Truly calculating this for Character Styles will be tricky,
                 // because it depends on the final fontsize - regardless of
                 // where it is set. So at the style level,
@@ -3534,9 +3541,19 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     }
 }
 
-void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32, uno::Any >& deferredCharacterProperties )
+void DomainMapper::ProcessDeferredStyleCharacterProperties()
 {
-    assert( m_pImpl->GetTopContextType() == CONTEXT_CHARACTER );
+    assert(m_pImpl->GetTopContextType() == CONTEXT_STYLESHEET);
+    m_pImpl->processDeferredCharacterProperties(false);
+}
+
+void DomainMapper::processDeferredCharacterProperties(
+    const std::map<sal_Int32, uno::Any>& deferredCharacterProperties, bool bCharContext)
+{
+    if (bCharContext)
+    {
+        assert(m_pImpl->GetTopContextType() == CONTEXT_CHARACTER);
+    }
     PropertyMapPtr rContext = m_pImpl->GetTopContext();
     for( const auto& rProp : deferredCharacterProperties )
     {
