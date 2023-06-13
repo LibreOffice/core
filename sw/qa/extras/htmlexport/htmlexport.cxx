@@ -1056,8 +1056,12 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTransparentImageReqIf)
     CPPUNIT_ASSERT_MESSAGE(aMessage.toUtf8().getStr(), aSource.endsWith(".png"));
 }
 
-DECLARE_HTMLEXPORT_TEST(testOleNodataReqIf, "reqif-ole-nodata.odt")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testOleNodataReqIf)
 {
+    createSwDoc("reqif-ole-nodata.odt");
+    setFilterOptions("xhtmlns=reqif-xhtml");
+    save(mpFilter);
+
     // This failed, io::IOException was thrown during the filter() call.
     SvMemoryStream aStream;
     WrapReqifFromTempFile(aStream);
