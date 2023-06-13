@@ -66,9 +66,10 @@ public:
     inline XMLTextNumRuleInfo& operator=( const XMLTextNumRuleInfo& rInfo );
 
     void Set( const css::uno::Reference < css::text::XTextContent > & rTextContent,
-              const bool bOutlineStyleAsNormalListStyle,
+              bool bOutlineStyleAsNormalListStyle,
               const XMLTextListAutoStylePool& rListAutoPool,
-              const bool bExportTextNumberElement );
+              bool bExportTextNumberElement,
+              bool bListIdIsDefault );
     inline void Reset();
 
     const OUString& GetNumRulesName() const

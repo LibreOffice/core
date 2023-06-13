@@ -554,6 +554,14 @@ uno::Sequence< uno::Any > SwXParagraph::Impl::GetPropertyValues_Impl(
             continue;
         }
 
+        if (pPropertyNames[nProp] == "ODFExport_NodeIndex")
+        {
+            // A hack to avoid writing random list ids to ODF when they are not referred later
+            // see XMLTextParagraphExport::DocumentListNodes::ShouldSkipListId
+            pValues[nProp] <<= rTextNode.GetIndex().get();
+            continue;
+        }
+
         SfxItemPropertyMapEntry const*const pEntry =
             rMap.getByName( pPropertyNames[nProp] );
         if (!pEntry)
@@ -940,16 +948,6 @@ static beans::PropertyState lcl_SwXParagraph_getPropertyState(
         {
             // if numbering is set, return it; else do nothing
             SwUnoCursorHelper::getNumberingProperty(aPam,eRet,nullptr);
-            bDone = true;
-            break;
-        }
-        case FN_UNO_LIST_ID:
-        {
-            SwNumRule* pNumRule = rTextNode.GetNumRule();
-            if (pNumRule && pNumRule->HasContinueList())
-            {
-                eRet = beans::PropertyState_DIRECT_VALUE;
-            }
             bDone = true;
             break;
         }
