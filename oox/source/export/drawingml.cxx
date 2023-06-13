@@ -761,6 +761,14 @@ void DrawingML::WriteGradientFill(
         basegfx::utils::prepareColorStops(*pTransparenceGradient, aAlphaStops, aSingleAlpha);
     }
 
+    if (nullptr == pGradient)
+    {
+        // an error - see comment in header - is to give neither pColorGradient
+        // nor pTransparenceGradient
+        assert(false && "pColorGradient or pTransparenceGradient should be set");
+        return;
+    }
+
     // apply steps if used. Need to do that before synchronizeColorStops
     // since that may add e.g. for AlphaStops all-the-same no-data entries,
     // so the number of entries might change
@@ -775,12 +783,10 @@ void DrawingML::WriteGradientFill(
     // method (at import time) will be exported again
     basegfx::utils::synchronizeColorStops(aColorStops, aAlphaStops, aSingleColor, aSingleAlpha);
 
-    if (aColorStops.size() != aAlphaStops.size() || nullptr == pGradient)
+    if (aColorStops.size() != aAlphaStops.size())
     {
         // this is an error - synchronizeColorStops above *has* to create that
         // state, see description there (!)
-        // also an error - see comment in header - is to give neither pColorGradient
-        // nor pTransparenceGradient
         assert(false && "oox::WriteGradientFill: non-synchronized gradients (!)");
         return;
     }
