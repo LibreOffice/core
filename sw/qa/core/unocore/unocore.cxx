@@ -29,6 +29,7 @@
 #include <textlinebreak.hxx>
 #include <textcontentcontrol.hxx>
 #include <frmmgr.hxx>
+#include <fmtcntnt.hxx>
 
 using namespace ::com::sun::star;
 
@@ -928,6 +929,28 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testFlySplit)
     // Then make sure that IsSplitAllowed is true when asking back:
     xFrame->getPropertyValue("IsSplitAllowed") >>= bIsSplitAllowed;
     CPPUNIT_ASSERT(bIsSplitAllowed);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testConvertToTextFrame)
+{
+    // Given a document with 2 non-interesting frames, an inner frame and an outer frame:
+    createSwDoc("floattable-outer-nonsplit-inner.docx");
+
+    // When checking the anchor of the inner frame:
+    SwDoc* pDoc = getSwDoc();
+    const sw::FrameFormats<sw::SpzFrameFormat*>& rFrames = *pDoc->GetSpzFrameFormats();
+    sw::SpzFrameFormat* pFrame3 = rFrames.FindFrameFormatByName("Frame3");
+    SwNodeIndex aFrame3Anchor = pFrame3->GetAnchor().GetContentAnchor()->nNode;
+
+    // Then make sure it's anchored in the outer frame's last content node:
+    sw::SpzFrameFormat* pFrame4 = rFrames.FindFrameFormatByName("Frame4");
+    SwPaM aPaM(*pFrame4->GetContent().GetContentIdx()->GetNode().EndOfSectionNode());
+    aPaM.Move(fnMoveBackward, GoInContent);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: SwNodeIndex (node 27)
+    // - Actual  : SwNodeIndex (node 49)
+    // i.e. Frame3 was anchored much later, in the body text, not in Frame4.
+    CPPUNIT_ASSERT_EQUAL(aPaM.GetPoint()->nNode, aFrame3Anchor);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
