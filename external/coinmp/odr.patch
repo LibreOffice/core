@@ -1,0 +1,30 @@
+--- Cbc/src/CbcSolver.cpp
++++ Cbc/src/CbcSolver.cpp
+@@ -970,8 +970,13 @@
+   this set of calls thread-safe.
+ */
+ 
++#if defined _MSC_VER
+ int CbcOrClpRead_mode = 1;
+ FILE * CbcOrClpReadCommand = stdin;
++#else
++extern int CbcOrClpRead_mode;
++extern FILE * CbcOrClpReadCommand;
++#endif
+ extern int CbcOrClpEnvironmentIndex;
+ 
+ int callCbc1(const char * input2, CbcModel & model,
+--- Clp/src/CbcOrClpParam.cpp
++++ Clp/src/CbcOrClpParam.cpp
+@@ -1233,7 +1233,11 @@
+ static char line[1000];
+ static char * where = NULL;
+ extern int CbcOrClpRead_mode;
++#if defined _MSC_VER || !defined COIN_HAS_CBC
+ int CbcOrClpEnvironmentIndex = -1;
++#else
++extern int CbcOrClpEnvironmentIndex;
++#endif
+ static size_t fillEnv()
+ {
+ #if defined(_MSC_VER) || defined(__MSVCRT__)
