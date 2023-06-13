@@ -135,6 +135,24 @@ CPPUNIT_TEST_FIXTURE(Test, testSymbol)
     assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", "color", "#00d000");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf155819)
+{
+    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/tdf155819.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequence);
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke/line", 1);
+    assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke/polypolygon", 1);
+    // Without the fix in place, this test would have failed with
+    // - Expected: 4
+    // - Actual  : 0
+    assertXPath(pDocument, "/primitive2D/transform/transform", 4);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf87309)
 {
     Primitive2DSequence aSequenceTdf87309 = parseSvg(u"/svgio/qa/cppunit/data/tdf87309.svg");
