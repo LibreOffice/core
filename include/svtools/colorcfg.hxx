@@ -27,7 +27,7 @@
 
 
 namespace svtools{
-enum ColorConfigEntry
+enum ColorConfigEntry : int
 {
     DOCCOLOR            ,
     DOCBOUNDARIES       ,

@@ -2316,6 +2316,12 @@ vcl::Window* SfxViewShell::GetEditWindowForActiveOLEObj() const
     return pEditWin;
 }
 
+::Color SfxViewShell::GetColorConfigColor(svtools::ColorConfigEntry) const
+{
+    SAL_WARN("sfx.view", "SfxViewShell::GetColorConfigColor not overriden!");
+    return {};
+}
+
 void SfxViewShell::SetLOKLanguageTag(const OUString& rBcp47LanguageTag)
 {
     LanguageTag aTag(rBcp47LanguageTag, true);

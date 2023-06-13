@@ -72,7 +72,9 @@
 #include <SparklineDialog.hxx>
 #include <SparklineDataRangeDialog.hxx>
 
+#include <svtools/colorcfg.hxx>
 #include <comphelper/lok.hxx>
+#include <o3tl/unreachable.hxx>
 #include <o3tl/make_shared.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
@@ -489,6 +491,24 @@ void ScTabViewShell::NotifyCursor(SfxViewShell* pOtherShell) const
     const ScGridWindow* pWin = GetViewData().GetActiveWin();
     if (pWin)
         pWin->updateKitCellCursor(pOtherShell);
+}
+
+::Color ScTabViewShell::GetColorConfigColor(svtools::ColorConfigEntry nColorType) const
+{
+    const ScViewOptions& rViewOptions = GetViewData().GetOptions();
+
+    switch (nColorType)
+    {
+        case svtools::ColorConfigEntry::DOCCOLOR:
+        {
+            return rViewOptions.GetDocColor();
+        }
+        // Should never be called for an unimplemented color type
+        default:
+        {
+            O3TL_UNREACHABLE;
+        }
+    }
 }
 
 css::uno::Reference<css::datatransfer::XTransferable2> ScTabViewShell::GetClipData(vcl::Window* pWin)

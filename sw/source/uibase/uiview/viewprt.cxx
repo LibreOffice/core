@@ -36,6 +36,8 @@
 #include <svl/flagitem.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <osl/diagnose.h>
+#include <svtools/colorcfg.hxx>
+#include <o3tl/unreachable.hxx>
 
 #include <modcfg.hxx>
 #include <edtwin.hxx>
@@ -287,6 +289,31 @@ const OUString& SwView::GetRedlineAuthor() const
 void SwView::NotifyCursor(SfxViewShell* pViewShell) const
 {
     m_pWrtShell->NotifyCursor(pViewShell);
+}
+
+::Color SwView::GetColorConfigColor(svtools::ColorConfigEntry nColorType) const
+{
+    if (const SwViewOption* pViewOptions = GetWrtShell().GetViewOptions())
+    {
+        switch (nColorType)
+        {
+            case svtools::ColorConfigEntry::DOCCOLOR:
+            {
+                return pViewOptions->GetDocColor();
+            }
+            // Should never be called for an unimplemented color type
+            default:
+            {
+                O3TL_UNREACHABLE;
+            }
+        }
+    }
+    else
+    {
+        SAL_WARN("sw", "GetViewOptions() returned nullptr");
+    }
+
+    return {};
 }
 
 // Create page printer/additions for SwView and SwPagePreview
