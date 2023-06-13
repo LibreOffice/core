@@ -1975,6 +1975,11 @@ RedlineType SwTableLine::GetRedlineType() const
         // empty the cache
         const_cast<SwTableLine*>(this)->SetRedlineType( RedlineType::None );
 
+    // is the whole table part of a changed text
+    SwRedlineTable::size_type nTableRedline = GetTableRedline();
+    if ( nTableRedline != SwRedlineTable::npos )
+        return aRedlineTable[nTableRedline]->GetType();
+
     return RedlineType::None;
 }
 
