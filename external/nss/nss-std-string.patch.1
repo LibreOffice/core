@@ -1,0 +1,15 @@
+diff -ur nss.org/nss/gtests/nss_bogo_shim/nss_bogo_shim.cc nss/nss/gtests/nss_bogo_shim/nss_bogo_shim.cc
+--- nss.org/nss/gtests/nss_bogo_shim/nss_bogo_shim.cc	2023-06-13 22:06:35.757518272 +0200
++++ nss/nss/gtests/nss_bogo_shim/nss_bogo_shim.cc	2023-06-13 22:06:50.521508892 +0200
+@@ -40,8 +40,8 @@
+ }
+ 
+ static void StringRemoveNewlines(std::string& str) {
+-  str.erase(std::remove(str.begin(), str.end(), '\n'), str.cend());
+-  str.erase(std::remove(str.begin(), str.end(), '\r'), str.cend());
++  str.erase(std::remove(str.begin(), str.end(), '\n'), str.end());
++  str.erase(std::remove(str.begin(), str.end(), '\r'), str.end());
+ }
+ 
+ class TestAgent {
+Only in nss/nss/gtests/nss_bogo_shim: nss_bogo_shim.cc~

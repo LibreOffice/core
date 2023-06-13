@@ -19,6 +19,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
     external/nss/nss-win32-make.patch.1 \
     external/nss/ubsan.patch.0 \
     external/nss/clang-cl.patch.0 \
+    external/nss/nss-std-string.patch.1 \
     external/nss/nss.vs2015.patch \
     external/nss/nss.vs2015.pdb.patch \
     $(if $(filter iOS,$(OS)), \
