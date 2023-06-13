@@ -272,9 +272,6 @@ public:
     void dumpAsXml(xmlTextWriterPtr w) const;
     void GetGrabBagItem(css::uno::Any& rVal) const;
     void SetGrabBagItem(const css::uno::Any& rVal);
-
-    /// Is it possible that this numbering has multiple lists?
-    bool HasContinueList() const;
 };
 
 /// namespace for static functions and methods for numbering and bullets

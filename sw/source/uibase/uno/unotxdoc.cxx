@@ -1971,6 +1971,34 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
     if(!IsValid())
         throw DisposedException("", static_cast< XTextDocument* >(this));
 
+    if (rPropertyName == "ODFExport_ListNodes")
+    {
+        // A hack to avoid writing random list ids to ODF when they are not referred later
+        // see XMLTextParagraphExport::DocumentListNodes ctor
+
+        // Sequence of nodes, each of them represented by four-element sequence:
+        // [ index, styleIntPtr, list_id, isRestart ]
+        std::vector<css::uno::Sequence<css::uno::Any>> nodes;
+
+        const SwDoc& rDoc = *m_pDocShell->GetDoc();
+        for (const SwNumRule* pNumRule : rDoc.GetNumRuleTable())
+        {
+            SwNumRule::tTextNodeList textNodes;
+            pNumRule->GetTextNodeList(textNodes);
+            css::uno::Any styleIntPtr(reinterpret_cast<sal_uInt64>(pNumRule));
+
+            for (const SwTextNode* pTextNode : textNodes)
+            {
+                css::uno::Any index(pTextNode->GetIndex().get());
+                css::uno::Any list_id(pTextNode->GetListId());
+                css::uno::Any isRestart(pTextNode->IsListRestart());
+
+                nodes.push_back({ index, styleIntPtr, list_id, isRestart });
+            }
+        }
+        return css::uno::Any(comphelper::containerToSequence(nodes));
+    }
+
     const SfxItemPropertyMapEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName);
 
     if(!pEntry)

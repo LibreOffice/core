@@ -13,6 +13,7 @@
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/BibliographyDataType.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -201,6 +202,110 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListId)
     // - XPath '//text:list' unexpected 'id' attribute
     // i.e. xml:id="..." was written unconditionally, even when no other list needed it.
     assertXPathNoAttribute(pXmlDoc, "//text:list", "id");
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListId2)
+{
+    // tdf#155823 Given a document with a list consisting of items having different list styles:
+    loadFromURL(u"differentListStylesInOneList.fodt");
+
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
+                                                                  uno::UNO_QUERY_THROW);
+    auto xParaEnum(xParaEnumAccess->createEnumeration());
+
+    uno::Reference<beans::XPropertySet> xPara(xParaEnum->nextElement(), uno::UNO_QUERY_THROW);
+    auto aActual(xPara->getPropertyValue("ListLabelString").get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(OUString("1."), aActual);
+    xParaEnum->nextElement(); // Skip empty intermediate paragraph
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    aActual = xPara->getPropertyValue("ListLabelString").get<OUString>();
+    CPPUNIT_ASSERT_EQUAL(OUString("2."), aActual);
+    xParaEnum->nextElement(); // Skip empty intermediate paragraph
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    aActual = xPara->getPropertyValue("ListLabelString").get<OUString>();
+    CPPUNIT_ASSERT_EQUAL(OUString("3."), aActual);
+    xParaEnum->nextElement(); // Skip empty intermediate paragraph
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    aActual = xPara->getPropertyValue("ListLabelString").get<OUString>();
+    CPPUNIT_ASSERT_EQUAL(OUString("4."), aActual);
+
+    // When storing that document as ODF:
+    // Without the fix in place, automatic validation would fail with:
+    // Error: "list123456789012345" is referenced by an IDREF, but not defined.
+    saveAndReload("writer8");
+
+    xTextDocument.set(mxComponent, uno::UNO_QUERY_THROW);
+    xParaEnumAccess.set(xTextDocument->getText(), uno::UNO_QUERY_THROW);
+    xParaEnum.set(xParaEnumAccess->createEnumeration());
+
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    aActual = xPara->getPropertyValue("ListLabelString").get<OUString>();
+    CPPUNIT_ASSERT_EQUAL(OUString("1."), aActual);
+    xParaEnum->nextElement(); // Skip empty intermediate paragraph
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    aActual = xPara->getPropertyValue("ListLabelString").get<OUString>();
+    CPPUNIT_ASSERT_EQUAL(OUString("2."), aActual);
+    xParaEnum->nextElement(); // Skip empty intermediate paragraph
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    aActual = xPara->getPropertyValue("ListLabelString").get<OUString>();
+    CPPUNIT_ASSERT_EQUAL(OUString("3."), aActual);
+    xParaEnum->nextElement(); // Skip empty intermediate paragraph
+
+    // Check that the last item number is correct
+
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    aActual = xPara->getPropertyValue("ListLabelString").get<OUString>();
+    // Without the fix in place, this would fail with:
+    // - Expected: 4.
+    // - Actual  : 1.
+    // i.e. the numbering was not continued.
+    CPPUNIT_ASSERT_EQUAL(OUString("4."), aActual);
+
+    // Then make sure that required xml:id="..." attributes is written when the style changes:
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Without the fix in place, this would fail,
+    // i.e. xml:id="..." was omitted, even though it was needed for the next item.
+    OUString id
+        = getXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:list[3]", "id");
+    CPPUNIT_ASSERT(!id.isEmpty());
+    assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:list[4]",
+                "continue-list", id);
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListIdState)
+{
+    // tdf#149668: given a document with 3 paragraphs: an outer numbering on para 1 & 3, an inner
+    // numbering on para 2:
+    mxComponent = loadFromDesktop("private:factory/swriter");
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY_THROW);
+    auto xText(xTextDocument->getText());
+    xText->insertControlCharacter(xText->getEnd(), css::text::ControlCharacter::PARAGRAPH_BREAK,
+                                  false);
+    xText->insertControlCharacter(xText->getEnd(), css::text::ControlCharacter::PARAGRAPH_BREAK,
+                                  false);
+
+    uno::Reference<container::XEnumerationAccess> paraEnumAccess(xText, uno::UNO_QUERY_THROW);
+    auto paraEnum(paraEnumAccess->createEnumeration());
+    uno::Reference<beans::XPropertySet> xParaProps(paraEnum->nextElement(), uno::UNO_QUERY_THROW);
+    xParaProps->setPropertyValue("NumberingStyleName", css::uno::Any(OUString("Numbering ABC")));
+    xParaProps.set(paraEnum->nextElement(), uno::UNO_QUERY_THROW);
+    xParaProps->setPropertyValue("NumberingStyleName", css::uno::Any(OUString("Numbering 123")));
+    xParaProps.set(paraEnum->nextElement(), uno::UNO_QUERY_THROW);
+    xParaProps->setPropertyValue("NumberingStyleName", css::uno::Any(OUString("Numbering ABC")));
+
+    // When storing that document as ODF:
+    save("writer8");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+
+    // Make sure that xml:id="..." gets written for para 1, as it'll be continued in para 3.
+    // Without the accompanying fix in place, this test would have failed,
+    // i.e. para 1 didn't write an xml:id="..." but para 3 referred to it using continue-list="...",
+    // which is inconsistent.
+    OUString id
+        = getXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:list[1]", "id");
+    CPPUNIT_ASSERT(!id.isEmpty());
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testClearingBreakExport)

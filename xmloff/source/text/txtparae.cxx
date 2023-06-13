@@ -997,7 +997,7 @@ void XMLTextParagraphExport::exportListChange(
     // end a list
     if ( rPrevInfo.GetLevel() > 0 )
     {
-        sal_Int16 nListLevelsToBeClosed = 0;
+        sal_uInt32 nListLevelsToBeClosed = 0; // unsigned larger type to safely multiply and compare
         if ( !rNextInfo.BelongsToSameList( rPrevInfo ) ||
              rNextInfo.GetLevel() <= 0 )
         {
@@ -1007,13 +1007,11 @@ void XMLTextParagraphExport::exportListChange(
         else if ( rPrevInfo.GetLevel() > rNextInfo.GetLevel() )
         {
             // close corresponding sub lists
-            SAL_WARN_IF( rNextInfo.GetLevel() <= 0, "xmloff",
-                        "<rPrevInfo.GetLevel() > 0> not hold. Serious defect." );
             nListLevelsToBeClosed = rPrevInfo.GetLevel() - rNextInfo.GetLevel();
         }
 
         if ( nListLevelsToBeClosed > 0 &&
-             maListElements.size() >= sal::static_int_cast< sal_uInt32 >( 2 * nListLevelsToBeClosed ) )
+             maListElements.size() >= 2 * nListLevelsToBeClosed )
         {
             do {
                 for(size_t j = 0; j < 2; ++j)
@@ -1031,11 +1029,6 @@ void XMLTextParagraphExport::exportListChange(
         }
     }
 
-    const bool bExportODF =
-                bool( GetExport().getExportFlags() & SvXMLExportFlags::OASIS );
-    const SvtSaveOptions::ODFSaneDefaultVersion eODFDefaultVersion =
-                                    GetExport().getSaneDefaultVersion();
-
     // start a new list
     if ( rNextInfo.GetLevel() > 0 )
     {
@@ -1051,8 +1044,6 @@ void XMLTextParagraphExport::exportListChange(
         else if ( rNextInfo.GetLevel() > rPrevInfo.GetLevel() )
         {
             // open corresponding sub lists
-            SAL_WARN_IF( rPrevInfo.GetLevel() <= 0, "xmloff",
-                        "<rPrevInfo.GetLevel() > 0> not hold. Serious defect." );
             nListLevelsToBeOpened = rNextInfo.GetLevel() - rPrevInfo.GetLevel();
         }
 
@@ -1074,8 +1065,7 @@ void XMLTextParagraphExport::exportListChange(
                 {
                     if ( !mpTextListsHelper->IsListProcessed( sListId ) )
                     {
-                        if ( bExportODF &&
-                            eODFDefaultVersion >= SvtSaveOptions::ODFSVER_012 &&
+                        if ( ExportListId() &&
                              !sListId.isEmpty() && !rNextInfo.IsListIdDefault() )
                         {
                             /* Property text:id at element <text:list> has to be
@@ -1093,8 +1083,7 @@ void XMLTextParagraphExport::exportListChange(
                     {
                         const OUString sNewListId(
                                         mpTextListsHelper->GenerateNewListId() );
-                        if ( bExportODF &&
-                            eODFDefaultVersion >= SvtSaveOptions::ODFSVER_012 &&
+                        if ( ExportListId() &&
                              !sListId.isEmpty() && !rNextInfo.IsListIdDefault() )
                         {
                             /* Property text:id at element <text:list> has to be
@@ -1124,8 +1113,7 @@ void XMLTextParagraphExport::exportListChange(
                         }
                         else
                         {
-                            if ( bExportODF &&
-                                eODFDefaultVersion >= SvtSaveOptions::ODFSVER_012 &&
+                            if ( ExportListId() &&
                                  !sListId.isEmpty() )
                             {
                                 GetExport().AddAttribute( XML_NAMESPACE_TEXT,
@@ -1808,6 +1796,127 @@ void XMLTextParagraphExport::exportText(
         pRedlineExport->ExportStartOrEndRedline( xPropertySet, false );
 }
 
+bool XMLTextParagraphExport::ExportListId() const
+{
+    return (GetExport().getExportFlags() & SvXMLExportFlags::OASIS)
+           && GetExport().getSaneDefaultVersion() >= SvtSaveOptions::ODFSVER_012;
+}
+
+struct XMLTextParagraphExport::DocumentListNodes
+{
+    struct NodeData
+    {
+        sal_Int32 index; // see SwNode::GetIndex and SwNodeOffset
+        sal_uInt64 style_id; // actually a pointer to NumRule
+        OUString list_id;
+        bool isRestart;
+    };
+    std::vector<NodeData> docListNodes;
+    DocumentListNodes(const css::uno::Reference<css::frame::XModel>& xModel)
+    {
+        // Sequence of nodes, each of them represented by four-element sequence,
+        // corresponding to NodeData members
+        css::uno::Sequence<css::uno::Sequence<css::uno::Any>> nodes;
+        if (uno::Reference<beans::XPropertySet> xPropSet{ xModel, uno::UNO_QUERY })
+        {
+            try
+            {
+                // See SwXTextDocument::getPropertyValue
+                xPropSet->getPropertyValue("ODFExport_ListNodes") >>= nodes;
+            }
+            catch (css::beans::UnknownPropertyException&)
+            {
+                // That's absolutely fine!
+            }
+        }
+
+        docListNodes.reserve(nodes.getLength());
+        for (const auto& node : nodes)
+        {
+            assert(node.getLength() == 4);
+            docListNodes.push_back({ node[0].get<sal_Int32>(), node[1].get<sal_uInt64>(),
+                                     node[2].get<OUString>(), node[3].get<bool>() });
+        }
+
+        std::sort(docListNodes.begin(), docListNodes.end(),
+                  [](const NodeData& lhs, const NodeData& rhs) { return lhs.index < rhs.index; });
+    }
+    bool ShouldSkipListId(const Reference<XTextContent>& xTextContent) const
+    {
+        if (docListNodes.empty())
+            return false;
+
+        if (uno::Reference<beans::XPropertySet> xPropSet{ xTextContent, uno::UNO_QUERY })
+        {
+            sal_Int32 index = 0;
+            try
+            {
+                // See SwXParagraph::Impl::GetPropertyValues_Impl
+                xPropSet->getPropertyValue("ODFExport_NodeIndex") >>= index;
+            }
+            catch (css::beans::UnknownPropertyException&)
+            {
+                // That's absolutely fine!
+                return false;
+            }
+
+            auto it = std::lower_bound(docListNodes.begin(), docListNodes.end(), index,
+                                       [](const NodeData& lhs, sal_Int32 rhs)
+                                       { return lhs.index < rhs; });
+            if (it == docListNodes.end() || it->index != index)
+                return false;
+
+            // We need to write the id, when there will be continuation of the list either with
+            // a different list style, or after another list.
+
+            for (auto next = it + 1; next != docListNodes.end(); ++next)
+            {
+                if (it->list_id != next->list_id)
+                {
+                    // List changed. We will have to refer to this id, only if there will
+                    // appear a continuation of this list
+                    return std::find_if(next + 1, docListNodes.end(),
+                                        [list_id = it->list_id](const NodeData& data)
+                                        { return data.list_id == list_id; })
+                           == docListNodes.end();
+                }
+
+                if (it->style_id != next->style_id)
+                {
+                    // Same list, new style -> this "next" will refer to the id, no skipping
+                    return false;
+                }
+                if (it->index + 1 != next->index)
+                {
+                    // we have a gap before the next node with the same list and style,
+                    // with no other lists in between. There will be a continuation;
+                    // in case of restart, there will be a reference to the id;
+                    // otherwise, there will be simple 'text:continue-numbering="true"'.
+                    return !next->isRestart;
+                }
+                it = next; // walk through adjacent nodes of the same list
+            }
+            // all nodes were adjacent and of the same list and style -> no continuation, skip id
+            return true;
+        }
+
+        return false;
+    }
+};
+
+bool XMLTextParagraphExport::ShouldSkipListId(const Reference<XTextContent>& xTextContent)
+{
+    if (!mpDocumentListNodes)
+    {
+        if (ExportListId())
+            mpDocumentListNodes.reset(new DocumentListNodes(GetExport().GetModel()));
+        else
+            mpDocumentListNodes.reset(new DocumentListNodes({}));
+    }
+
+    return mpDocumentListNodes->ShouldSkipListId(xTextContent);
+}
+
 void XMLTextParagraphExport::exportTextContentEnumeration(
         const Reference < XEnumeration > & rContEnum,
         bool bAutoStyles,
@@ -1866,7 +1975,8 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
                 aNextNumInfo.Set( xTxtCntnt,
                                   GetExport().writeOutlineStyleAsNormalListStyle(),
                                   GetListAutoStylePool(),
-                                  GetExport().exportTextNumberElement() );
+                                  GetExport().exportTextNumberElement(),
+                                  ShouldSkipListId(xTxtCntnt) );
 
                 exportListAndSectionChange( xCurrentTextSection, aPropSetHelper,
                                             TEXT_SECTION, xTxtCntnt,
