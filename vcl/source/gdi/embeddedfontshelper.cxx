@@ -258,6 +258,15 @@ OUString EmbeddedFontsHelper::fontFileUrl( std::u16string_view familyName, FontF
     graphics->GetDevFontList( &fonts );
     std::unique_ptr< ImplDeviceFontList > fontInfo( fonts.GetDeviceFontList());
     PhysicalFontFace* selected = nullptr;
+
+    // Maybe we don't find the perfect match for the font. E.G. we have fonts with the same family name
+    // but not same bold or italic etc..
+    // In this case we add all the fonts having the family name of tyhe used font:
+    //  - we store all these fonts in familyNameFonts during loop
+    //  - if we haven't found the perfect match we store all fonts in familyNameFonts
+    typedef std::vector<PhysicalFontFace*> FontList;
+    FontList familyNameFonts;
+
     for( int i = 0;
          i < fontInfo->Count();
          ++i )
@@ -285,12 +294,30 @@ OUString EmbeddedFontsHelper::fontFileUrl( std::u16string_view familyName, FontF
             { // Some fonts specify 'DONTKNOW' for some things, still a good match, if we don't find a better one.
                 selected = f;
             }
+            // adding "not perfact match" to familyNameFonts vector
+            familyNameFonts.push_back(f);
+
         }
     }
-    if( selected != nullptr )
+
+    // if we have found a perfect match we will add only "selected", otherwise all familyNameFonts
+    FontList fontsToAdd = (selected ? FontList(1, selected) : std::move(familyNameFonts));
+
+    for (PhysicalFontFace* f : fontsToAdd)
     {
+        if (!selected) { // recalculate file not for "not perfect match"
+            filename = OUString::Concat(familyName) + "_" + OUString::number(f->GetFamilyType()) + "_" +
+                OUString::number(f->GetItalic()) + "_" + OUString::number(f->GetWeight()) + "_" +
+                OUString::number(f->GetPitch()) + ".ttf"; // TODO is it always ttf?
+            url = path + filename;
+            if (osl::File(url).open(osl_File_OpenFlag_Read) == osl::File::E_None) // = exists()
+            {
+                // File with contents of the font file already exists, assume it's been created by a previous call.
+                continue;
+            }
+        }
         tools::Long size;
-        if (const void* data = graphics->GetEmbedFontData(selected, &size))
+        if (const void* data = graphics->GetEmbedFontData(f, &size))
         {
             if( sufficientTTFRights( data, size, rights ))
             {
