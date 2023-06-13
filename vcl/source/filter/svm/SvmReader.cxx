@@ -1347,7 +1347,7 @@ rtl::Reference<MetaAction> SvmReader::FloatTransparentHandler(ImplMetaReadData* 
         const size_t nMaxPossibleEntries = mrStream.remainingSize() / 4 * sizeof(double);
         if (nTmp > nMaxPossibleEntries)
         {
-            SAL_WARN("vcl.gdi", "gradiant record claims to have: " << nTmp << " entries, but only "
+            SAL_WARN("vcl.gdi", "gradient record claims to have: " << nTmp << " entries, but only "
                                                                    << nMaxPossibleEntries
                                                                    << " possible, clamping");
             nTmp = nMaxPossibleEntries;
