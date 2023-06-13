@@ -159,6 +159,8 @@ std::vector<fontID> PrintFontManager::addFontFile( std::u16string_view rFileUrl 
     std::vector<fontID> aFontIds = findFontFileIDs( nDirID, aName );
     if( aFontIds.empty() )
     {
+        addFontconfigFile(OUStringToOString(aPath.GetFull(), osl_getThreadTextEncoding()));
+
         std::vector<PrintFont> aNewFonts = analyzeFontFile(nDirID, aName);
         for (auto & font : aNewFonts)
         {
