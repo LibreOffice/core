@@ -3393,9 +3393,16 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         basegfx::BColorStops aColorStops;
                         SvMemoryStream aMemStm(const_cast<sal_uInt8 *>(pA->GetData()), pA->GetDataSize(), StreamMode::READ);
                         VersionCompatRead aCompat(aMemStm);
-                        sal_uInt16 nTmp;
+                        sal_uInt16 nTmp(0);
                         double fOff, fR, fG, fB;
                         aMemStm.ReadUInt16( nTmp );
+
+                        const size_t nMaxPossibleEntries = aMemStm.remainingSize() / 4 * sizeof(double);
+                        if (nTmp > nMaxPossibleEntries)
+                        {
+                            SAL_WARN("filter.svg", "gradiant record claims to have: " << nTmp << " entries, but only " << nMaxPossibleEntries << " possible, clamping");
+                            nTmp = nMaxPossibleEntries;
+                        }
 
                         for (sal_uInt16 a(0); a < nTmp; a++)
                         {

@@ -1340,9 +1340,18 @@ rtl::Reference<MetaAction> SvmReader::FloatTransparentHandler(ImplMetaReadData* 
     if (aCompat.GetVersion() > 1)
     {
         basegfx::BColorStops aColorStops;
-        sal_uInt16 nTmp;
+        sal_uInt16 nTmp(0);
         double fOff, fR, fG, fB;
         mrStream.ReadUInt16(nTmp);
+
+        const size_t nMaxPossibleEntries = mrStream.remainingSize() / 4 * sizeof(double);
+        if (nTmp > nMaxPossibleEntries)
+        {
+            SAL_WARN("vcl.gdi", "gradiant record claims to have: " << nTmp << " entries, but only "
+                                                                   << nMaxPossibleEntries
+                                                                   << " possible, clamping");
+            nTmp = nMaxPossibleEntries;
+        }
 
         for (sal_uInt16 a(0); a < nTmp; a++)
         {
