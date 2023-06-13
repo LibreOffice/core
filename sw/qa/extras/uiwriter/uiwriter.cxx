@@ -375,6 +375,53 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testBookmarkCopy)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFormulaNumberWithGroupSeparator)
+{
+    createSwDoc("tdf125154.odt");
+    dispatchCommand(mxComponent, ".uno:UpdateAll", {});
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(true);
+    SwField const* pField;
+
+    pField = pWrtShell->GetCurField();
+    CPPUNIT_ASSERT_EQUAL(OUString("1000"), pField->GetFormula());
+    CPPUNIT_ASSERT_EQUAL(OUString("1.000"), pField->ExpandField(true, nullptr));
+    pWrtShell->GoNextCell();
+    CPPUNIT_ASSERT_EQUAL(OUString("10000"), pWrtShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+    pWrtShell->GoNextCell();
+    pField = pWrtShell->GetCurField();
+    CPPUNIT_ASSERT_EQUAL(OUString("test"), pField->GetFormula());
+    CPPUNIT_ASSERT_EQUAL(OUString("1.000"), pField->ExpandField(true, nullptr));
+    pWrtShell->GoNextCell();
+    // the problem was that this was 0
+    CPPUNIT_ASSERT_EQUAL(OUString("10000"), pWrtShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+    pWrtShell->Down(false);
+    pWrtShell->SttPara(false);
+    pField = pWrtShell->GetCurField();
+    CPPUNIT_ASSERT_EQUAL(OUString("1000*10%"), pField->GetFormula());
+    CPPUNIT_ASSERT_EQUAL(OUString("100"), pField->ExpandField(true, nullptr));
+    pWrtShell->Down(false);
+    pField = pWrtShell->GetCurField();
+    CPPUNIT_ASSERT_EQUAL(OUString("5.000*10%"), pField->GetFormula());
+    // the problem was that this was 0
+    CPPUNIT_ASSERT_EQUAL(OUString("500"), pField->ExpandField(true, nullptr));
+    pWrtShell->Down(false);
+    pField = pWrtShell->GetCurField();
+    CPPUNIT_ASSERT_EQUAL(OUString("5.000*10%"), pField->GetFormula());
+    // the problem was that this was
+    CPPUNIT_ASSERT_EQUAL(OUString("500"), pField->ExpandField(true, nullptr));
+    pWrtShell->Down(false);
+    pField = pWrtShell->GetCurField();
+    CPPUNIT_ASSERT_EQUAL(OUString("5000*10%"), pField->GetFormula());
+    CPPUNIT_ASSERT_EQUAL(OUString("500"), pField->ExpandField(true, nullptr));
+    pWrtShell->Down(false);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"-100,00 €"), pWrtShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+    pWrtShell->GoNextCell();
+    // tdf#42518 the problem was that this was 1.900,00 €
+    CPPUNIT_ASSERT_EQUAL(OUString("** Expression is faulty **"), pWrtShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testInsertFileInInputFieldException)
 {
     createSwDoc();
