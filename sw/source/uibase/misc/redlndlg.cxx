@@ -871,7 +871,6 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
                     {
                         nNewTableParent = i;
                         nLastChangeInRow = i;
-                        nPrevRowChange = nRowChange;
                     }
                 }
                 else
@@ -884,12 +883,8 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
             {
                 // redline is not in a tracked table change
                 bChange = bRowChange = false;
-                nPrevRowChange = SwRedlineTable::npos;
             }
         }
-        else
-            // redline is not in a tracked table change
-            nPrevRowChange = SwRedlineTable::npos;
 
         bool bShowDeletedTextAsComment = bIsShowChangesInMargin &&
                 RedlineType::Delete == rRedln.GetType() && rRedln.GetComment().isEmpty();
