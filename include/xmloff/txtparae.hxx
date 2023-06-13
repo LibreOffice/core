@@ -110,6 +110,9 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
     XMLTextListsHelper* mpTextListsHelper;
     ::std::vector< std::unique_ptr<XMLTextListsHelper> > maTextListsHelperStack;
 
+    struct DocumentListNodes;
+    std::unique_ptr<DocumentListNodes> mpDocumentListNodes;
+
     bool mbCollected;
 
     enum class FrameType { Text, Graphic, Embedded, Shape };
@@ -532,6 +535,9 @@ public:
     void PopTextListsHelper();
 
 private:
+    bool ShouldSkipListId(const css::uno::Reference<css::text::XTextContent>& xTextContent);
+    bool ExportListId() const;
+
         XMLTextParagraphExport(XMLTextParagraphExport const &) = delete;
 };
 

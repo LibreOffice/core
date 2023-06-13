@@ -1153,29 +1153,6 @@ void SwNumRule::SetGrabBagItem(const uno::Any& rVal)
     mpGrabBagItem->PutValue(rVal, 0);
 }
 
-bool SwNumRule::HasContinueList() const
-{
-    // In case all text nodes are after each other, then we won't have a later list that wants to
-    // continue us.
-    SwNodeOffset nIndex(0);
-    for (size_t i = 0; i < maTextNodeList.size(); ++i)
-    {
-        SwTextNode* pNode = maTextNodeList[i];
-        if (i > 0)
-        {
-            if (pNode->GetIndex() != nIndex + 1)
-            {
-                // May have a continue list.
-                return true;
-            }
-        }
-        nIndex = pNode->GetIndex();
-    }
-
-    // Definitely won't have a continue list.
-    return false;
-}
-
 namespace numfunc
 {
     namespace {
