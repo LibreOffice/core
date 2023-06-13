@@ -42,6 +42,7 @@ class SwPageNumberDlg final : public SfxDialogController
     SvxNumType m_nPageNumberType;
 
     DECL_LINK(OkHdl, weld::Button&, void);
+    DECL_LINK(IncludePageTotalChangeHdl, weld::Toggleable&, void);
     DECL_LINK(PositionSelectHdl, weld::ComboBox&, void);
     DECL_LINK(AlignmentSelectHdl, weld::ComboBox&, void);
     DECL_LINK(NumberTypeSelectHdl, weld::ComboBox&, void);
