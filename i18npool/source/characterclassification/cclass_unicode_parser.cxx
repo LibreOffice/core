@@ -827,8 +827,16 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                 {
                     if (current == cGroupSep)
                     {
-                        if (getFlags(nextChar, eState) & ParserFlags::VALUE_DIGIT)
+                        // accept only if it is followed by 3 digits
+                        sal_Int32 tempIndex(index);
+                        sal_uInt32 const nextChar2((tempIndex < rText.getLength()) ? rText.iterateCodePoints(&tempIndex) : 0);
+                        sal_uInt32 const nextChar3((tempIndex < rText.getLength()) ? rText.iterateCodePoints(&tempIndex) : 0);
+                        if (getFlags(nextChar, eState) & ParserFlags::VALUE_DIGIT
+                            && getFlags(nextChar2, eState) & ParserFlags::VALUE_DIGIT
+                            && getFlags(nextChar3, eState) & ParserFlags::VALUE_DIGIT)
+                        {
                             nParseTokensType |= KParseTokens::GROUP_SEPARATOR_IN_NUMBER;
+                        }
                         else
                         {
                             // Trailing group separator character is not a
