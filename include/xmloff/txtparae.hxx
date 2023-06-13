@@ -112,6 +112,9 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
     XMLTextListsHelper* mpTextListsHelper;
     ::std::vector< std::unique_ptr<XMLTextListsHelper> > maTextListsHelperStack;
 
+    struct DocumentListNodes;
+    std::unique_ptr<DocumentListNodes> mpDocumentListNodes;
+
     o3tl::sorted_vector<css::uno::Reference<css::text::XTextFrame>> maFrameRecurseGuard;
     o3tl::sorted_vector<css::uno::Reference<css::drawing::XShape>> maShapeRecurseGuard;
 
@@ -537,6 +540,9 @@ public:
     void PopTextListsHelper();
 
 private:
+    bool ShouldSkipListId(const css::uno::Reference<css::text::XTextContent>& xTextContent);
+    bool ExportListId() const;
+
         XMLTextParagraphExport(XMLTextParagraphExport const &) = delete;
 
 };
