@@ -1283,7 +1283,6 @@ namespace svgio::svgreader
             maTextAnchor(TextAnchor::notset),
             maVisibility(Visibility::notset),
             mpClipPathXLink(nullptr),
-            maFilterXLink(OUString()),
             mpFilterXLink(nullptr),
             mpMaskXLink(nullptr),
             mpMarkerStartXLink(nullptr),
