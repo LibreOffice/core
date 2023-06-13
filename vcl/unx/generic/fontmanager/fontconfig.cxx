@@ -153,14 +153,14 @@ class FontCfgWrapper
 {
     FcFontSet* m_pFontSet;
 
-    void addFontSet( FcSetName );
-
     FontCfgWrapper();
     ~FontCfgWrapper();
 
 public:
     static FontCfgWrapper& get();
     static void release();
+
+    void addFontSet( FcSetName );
 
     FcFontSet* getFontSet();
 
@@ -764,6 +764,22 @@ void PrintFontManager::addFontconfigDir( const OString& rDirName )
     } else {
         SAL_INFO("vcl.fonts", "cannot open " << aConfFileName);
     }
+}
+
+void PrintFontManager::addFontconfigFile( const OString& rFileName )
+{
+    const char* pFileName = rFileName.getStr();
+    bool bFileOk = (FcConfigAppFontAddFile(FcConfigGetCurrent(), reinterpret_cast<FcChar8 const *>(pFileName) ) == FcTrue);
+
+    SAL_INFO("vcl.fonts", "FcConfigAppFontAddFile(\"" << pFileName << "\") => " << std::boolalpha << bFileOk);
+
+    if( !bFileOk )
+        return;
+
+    // FIXME: we want to add only the newly added font not re-add the whole
+    // application font set.
+    FontCfgWrapper& rWrapper = FontCfgWrapper::get();
+    rWrapper.addFontSet( FcSetApplication );
 }
 
 static void addtopattern(FcPattern *pPattern,

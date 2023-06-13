@@ -175,6 +175,9 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     */
     static void addFontconfigDir(const OString& rDirectory);
 
+    /* register an application specific font file for libfontconfig */
+    static void addFontconfigFile(const OString& rFile);
+
     std::set<OString> m_aPreviousLangSupportRequests;
     std::vector<OUString> m_aCurrentRequests;
     Timer m_aFontInstallerTimer;
