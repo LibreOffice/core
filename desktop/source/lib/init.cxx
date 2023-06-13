@@ -3486,6 +3486,8 @@ static void doc_iniUnoCommands ()
         OUString(".uno:NumberFormatCurrency"),
         OUString(".uno:NumberFormatPercent"),
         OUString(".uno:NumberFormatDecimal"),
+        OUString(".uno:NumberFormatIncDecimals"),
+        OUString(".uno:NumberFormatDecDecimals"),
         OUString(".uno:NumberFormatDate"),
         OUString(".uno:EditHeaderAndFooter"),
         OUString(".uno:FrameLineColor"),
