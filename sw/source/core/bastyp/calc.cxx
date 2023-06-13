@@ -153,7 +153,7 @@ const sal_Int32 coStartFlags =
 
 // Continuing characters may be any alphanumeric, underscore, or dot.
 const sal_Int32 coContFlags =
-    ( coStartFlags | i18n::KParseTokens::ASC_DOT )
+    (coStartFlags | i18n::KParseTokens::ASC_DOT | i18n::KParseTokens::GROUP_SEPARATOR_IN_NUMBER)
         & ~i18n::KParseTokens::IGNORE_LEADING_WS;
 
 extern "C" {
