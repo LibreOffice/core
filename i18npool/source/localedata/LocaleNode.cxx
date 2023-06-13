@@ -562,11 +562,11 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         switch (mnSection)
         {
             case 0:
-                of.writeRefFunction("getAllFormats0_", useLocale, "replaceTo0");
+                of.writeOUStringRefFunction("getAllFormats0_", useLocale, "replaceTo0");
                 of.writeRefFunction("getDateAcceptancePatterns_", useLocale);
                 break;
             case 1:
-                of.writeRefFunction("getAllFormats1_", useLocale, "replaceTo1");
+                of.writeOUStringRefFunction("getAllFormats1_", useLocale, "replaceTo1");
                 break;
         }
         ++mnSection;
@@ -610,17 +610,17 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         str = currNodeAttr.getValueByName("msgid");
         if (!aMsgIdSet.insert( str).second)
             incErrorStr( "Error: Duplicated msgid=\"%s\" in FormatElement.\n", str);
-        of.writeParameter("FormatKey", str, formatCount);
+        of.writeOUStringLiteralParameter("FormatKey", str, formatCount);
 
         str = currNodeAttr.getValueByName("default");
         bool bDefault = str == "true";
-        of.writeDefaultParameter("FormatElement", str, formatCount);
+        of.writeOUStringLiteralDefaultParameter("FormatElement", str, formatCount);
 
         aType = currNodeAttr.getValueByName("type");
-        of.writeParameter("FormatType", aType, formatCount);
+        of.writeOUStringLiteralParameter("FormatType", aType, formatCount);
 
         aUsage = currNodeAttr.getValueByName("usage");
-        of.writeParameter("FormatUsage", aUsage, formatCount);
+        of.writeOUStringLiteralParameter("FormatUsage", aUsage, formatCount);
 
         aFormatIndex = currNodeAttr.getValueByName("formatindex");
         sal_Int16 formatindex = static_cast<sal_Int16>(aFormatIndex.toInt32());
@@ -636,7 +636,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
             incErrorInt( "Error: Duplicated formatindex=\"%d\" in FormatElement.\n", formatindex);
             bShowNextFreeFormatIndex = true;
         }
-        of.writeIntParameter("Formatindex", formatCount, formatindex);
+        of.writeOUStringLiteralIntParameter("Formatindex", formatCount, formatindex);
 
         // Ensure only one default per usage and type.
         if (bDefault)
@@ -652,7 +652,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         const LocaleNode * n = currNode -> findNode("FormatCode");
         if (n)
         {
-            of.writeParameter("FormatCode", n->getValue(), formatCount);
+            of.writeOUStringLiteralParameter("FormatCode", n->getValue(), formatCount);
             // Check separator usage for some FormatCode elements.
             const LocaleNode* pCtype = nullptr;
             switch (formatindex)
@@ -821,9 +821,9 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
             incError( "No FormatCode in FormatElement.");
         n = currNode -> findNode("DefaultName");
         if (n)
-            of.writeParameter("FormatDefaultName", n->getValue(), formatCount);
+            of.writeOUStringLiteralParameter("FormatDefaultName", n->getValue(), formatCount);
         else
-            of.writeParameter("FormatDefaultName", std::u16string_view(), formatCount);
+            of.writeOUStringLiteralParameter("FormatDefaultName", std::u16string_view(), formatCount);
 
     }
 
@@ -918,7 +918,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
     of.writeAsciiString(" = ");
     of.writeInt( formatCount - mnFormats);
     of.writeAsciiString(";\n");
-    of.writeAsciiString("static const sal_Unicode* ");
+    of.writeAsciiString("static constexpr rtl::OUStringConstExpr ");
     of.writeAsciiString("FormatElementsArray");
     of.writeInt(mnSection);
     of.writeAsciiString("[] = {\n");
@@ -964,7 +964,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
     switch (mnSection)
     {
         case 0:
-            of.writeFunction("getAllFormats0_", "FormatElementsCount0", "FormatElementsArray0", "replaceFrom0", "replaceTo0");
+            of.writeOUStringFunction("getAllFormats0_", "FormatElementsCount0", "FormatElementsArray0", "replaceFrom0", "replaceTo0");
             break;
         case 1:
             of.writeFunction("getAllFormats1_", "FormatElementsCount1", "FormatElementsArray1", "replaceFrom1", "replaceTo1");

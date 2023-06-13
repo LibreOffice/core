@@ -45,7 +45,7 @@ using namespace com::sun::star;
 typedef sal_Unicode**   (* MyFunc_Type)( sal_Int16&);
 typedef sal_Unicode const *** (* MyFunc_Type2)( sal_Int16&, sal_Int16& );
 typedef sal_Unicode const **** (* MyFunc_Type3)( sal_Int16&, sal_Int16&, sal_Int16& );
-typedef sal_Unicode const * const * (* MyFunc_FormatCode)( sal_Int16&, sal_Unicode const *&, sal_Unicode const *& );
+typedef OUString const * (* MyFunc_FormatCode)( sal_Int16&, sal_Unicode const *&, sal_Unicode const *& );
 
 #ifndef DISABLE_DYNLOADING
 
@@ -830,7 +830,7 @@ LocaleDataImpl::getAllFormats( const Locale& rLocale )
         MyFunc_FormatCode         func;
         sal_Unicode const        *from;
         sal_Unicode const        *to;
-        sal_Unicode const *const *formatArray;
+        OUString const           *formatArray;
         sal_Int16                 formatCount;
 
         FormatSection() : func(nullptr), from(nullptr), to(nullptr), formatArray(nullptr), formatCount(0) {}
@@ -852,20 +852,19 @@ LocaleDataImpl::getAllFormats( const Locale& rLocale )
     sal_Int32 f = 0;
     for (const FormatSection & s : section)
     {
-        sal_Unicode const * const * const formatArray = s.formatArray;
+        OUString const * const formatArray = s.formatArray;
         if ( formatArray )
         {
             for (int i = 0, nOff = 0; i < s.formatCount; ++i, nOff += 7, ++f)
             {
-                FormatElement elem(
-                        OUString(formatArray[nOff]).replaceAll(s.from, s.to),
-                        OUString(formatArray[nOff + 1]),
-                        OUString(formatArray[nOff + 2]),
-                        OUString(formatArray[nOff + 3]),
-                        OUString(formatArray[nOff + 4]),
+                seqRange[f] = FormatElement(
+                        formatArray[nOff].replaceAll(s.from, s.to),
+                        formatArray[nOff + 1],
+                        formatArray[nOff + 2],
+                        formatArray[nOff + 3],
+                        formatArray[nOff + 4],
                         formatArray[nOff + 5][0],
                         formatArray[nOff + 6][0] != 0);
-                seqRange[f] = elem;
             }
         }
     }
