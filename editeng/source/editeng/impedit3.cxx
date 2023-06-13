@@ -52,6 +52,7 @@
 #include <svl/asiancfg.hxx>
 
 #include <svx/compatflags.hxx>
+#include <sfx2/viewsh.hxx>
 
 #include <editeng/hngpnctitem.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
@@ -67,6 +68,7 @@
 #include <i18nlangtag/mslangid.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/lok.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
@@ -4696,14 +4698,28 @@ Reference < i18n::XExtendedInputSequenceChecker > const & ImpEditEngine::ImplGet
 
 Color ImpEditEngine::GetAutoColor() const
 {
-    Color aColor = GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
+    Color aColor;
 
-    if ( GetBackgroundColor() != COL_AUTO )
+    if (comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current())
     {
-        if ( GetBackgroundColor().IsDark() && aColor.IsDark() )
+        // Get document background color from current view instead
+        aColor = SfxViewShell::Current()->GetColorConfigColor(svtools::DOCCOLOR);
+        if (aColor.IsDark())
             aColor = COL_WHITE;
-        else if ( GetBackgroundColor().IsBright() && aColor.IsBright() )
+        else
             aColor = COL_BLACK;
+    }
+    else
+    {
+        aColor = GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
+
+        if ( GetBackgroundColor() != COL_AUTO )
+        {
+            if ( GetBackgroundColor().IsDark() && aColor.IsDark() )
+                aColor = COL_WHITE;
+            else if ( GetBackgroundColor().IsBright() && aColor.IsBright() )
+                aColor = COL_BLACK;
+        }
     }
 
     return aColor;

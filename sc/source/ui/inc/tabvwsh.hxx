@@ -393,6 +393,8 @@ public:
     void afterCallbackRegistered() override;
     /// See SfxViewShell::NotifyCursor().
     void NotifyCursor(SfxViewShell* pViewShell) const override;
+    /// See SfxViewShell::GetColorConfigColor().
+    ::Color GetColorConfigColor(svtools::ColorConfigEntry nColorType) const override;
     /// Emits a LOK_CALLBACK_INVALIDATE_HEADER for all views whose current tab is equal to nCurrentTabIndex
     static void notifyAllViewsHeaderInvalidation(const SfxViewShell* pForViewShell, HeaderType eHeaderType, SCTAB nCurrentTabIndex);
     static bool isAnyEditViewInRange(const SfxViewShell* pForViewShell, bool bColumns, SCCOLROW nStart, SCCOLROW nEnd);

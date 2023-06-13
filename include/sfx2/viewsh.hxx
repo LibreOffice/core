@@ -72,6 +72,7 @@ namespace com::sun::star::ui { class XContextMenuInterceptor; }
 namespace com::sun::star::ui { struct ContextMenuExecuteEvent; }
 namespace com::sun::star::view { class XRenderable; }
 namespace tools { class Rectangle; }
+namespace svtools { enum ColorConfigEntry : int; }
 
 enum class SfxPrinterChangeFlags
 {
@@ -406,6 +407,8 @@ public:
     virtual void afterCallbackRegistered();
     /// See OutlinerViewShell::GetEditWindowForActiveOLEObj().
     virtual vcl::Window* GetEditWindowForActiveOLEObj() const override;
+    /// Get a color config color from this view
+    virtual ::Color GetColorConfigColor(svtools::ColorConfigEntry nColorType) const;
 
     /// Set the LibreOfficeKit language of this view.
     void SetLOKLanguageTag(const OUString& rBcp47LanguageTag);
