@@ -7693,8 +7693,14 @@ void DocxAttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
     OString sIss;
     short nEsc = rEscapement.GetEsc(), nProp = rEscapement.GetProportionalHeight();
 
+    bool bParaStyle = false;
+    if (m_rExport.m_bStyDef && m_rExport.m_pCurrentStyle)
+    {
+        bParaStyle = m_rExport.m_pCurrentStyle->Which() == RES_TXTFMTCOLL;
+    }
+
     // Simplify styles to avoid impossible complexity. Import and export as defaults only
-    if ( m_rExport.m_bStyDef && nEsc )
+    if ( m_rExport.m_bStyDef && nEsc && !(bParaStyle && nEsc < 0))
     {
         nProp = DFLT_ESC_PROP;
         nEsc = (nEsc > 0) ? DFLT_ESC_AUTO_SUPER : DFLT_ESC_AUTO_SUB;

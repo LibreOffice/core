@@ -1088,7 +1088,7 @@ public:
      Processes properties deferred using deferCharacterProperty(). To be called whenever the top
      CONTEXT_CHARACTER is going to be used (e.g. by appendText()).
     */
-    void processDeferredCharacterProperties();
+    void processDeferredCharacterProperties(bool bCharContext = true);
 
     sal_Int32 getNumberingProperty(const sal_Int32 nListId, sal_Int32 nListLevel, const OUString& aProp);
     /// Get a property of the current numbering style's current level.
