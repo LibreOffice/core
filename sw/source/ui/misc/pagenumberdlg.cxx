@@ -23,6 +23,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/virdev.hxx>
+#include <tools/gen.hxx>
 
 SwPageNumberDlg::SwPageNumberDlg(weld::Window* pParent)
     : SfxDialogController(pParent, "modules/swriter/ui/pagenumberdlg.ui", "PageNumberDialog")
@@ -49,6 +50,7 @@ SwPageNumberDlg::SwPageNumberDlg(weld::Window* pParent)
     SvxNumOptionsTabPageHelper::GetI18nNumbering(m_xPageNumberTypeLB->get_widget(),
                                                  ::std::numeric_limits<sal_uInt16>::max());
     m_xPageNumberTypeLB->connect_changed(LINK(this, SwPageNumberDlg, NumberTypeSelectHdl));
+    m_xIncludePageTotal->connect_toggled(LINK(this, SwPageNumberDlg, IncludePageTotalChangeHdl));
     updateImage();
 }
 
@@ -81,6 +83,11 @@ IMPL_LINK_NOARG(SwPageNumberDlg, NumberTypeSelectHdl, weld::ComboBox&, void)
     m_nPageNumberType = m_xPageNumberTypeLB->get_active_id();
 }
 
+IMPL_LINK_NOARG(SwPageNumberDlg, IncludePageTotalChangeHdl, weld::Toggleable&, void)
+{
+    updateImage();
+}
+
 bool SwPageNumberDlg::GetMirrorOnEvenPages()
 {
     return m_xMirrorOnEvenPages->get_sensitive()
@@ -103,8 +110,7 @@ void SwPageNumberDlg::updateImage()
     int nBackgroundWidth = 75;
     int nBackgroundHeight = 105;
 
-    int nSpriteWidth = 10;
-    int nSpriteHeight = 14;
+    int nMargin = 7;
 
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
     Size aVDSize(nBackgroundWidth, nBackgroundHeight);
@@ -112,17 +118,29 @@ void SwPageNumberDlg::updateImage()
     pVirtualDev->SetBackground(Color(0xF0, 0xF0, 0xF0));
     pVirtualDev->Erase();
 
-    int y = m_aPageNumberPosition ? (nBackgroundHeight - nSpriteHeight - 5) : 5;
-    int x = 5;
+    OUString sText = "#";
+
+    if (m_xIncludePageTotal->get_state() == TRISTATE_TRUE)
+    {
+        sText += " / #";
+    }
+
+    DrawTextFlags eFlags = DrawTextFlags::Left;
+
     if (m_aPageNumberAlignment == 1)
     {
-        x = (nBackgroundWidth - nSpriteWidth) / 2;
+        eFlags = DrawTextFlags::Center;
     }
     else if (m_aPageNumberAlignment == 2)
     {
-        x = nBackgroundWidth - nSpriteWidth - 5;
+        eFlags = DrawTextFlags::Right;
     }
-    pVirtualDev->DrawText(Point(x, y), "#");
+
+    eFlags |= m_aPageNumberPosition ? DrawTextFlags::Bottom : DrawTextFlags::Top;
+
+    pVirtualDev->DrawText(
+        tools::Rectangle(nMargin, nMargin, nBackgroundWidth - nMargin, nBackgroundHeight - nMargin),
+        sText, eFlags);
 
     m_xPreviewImage->set_image(pVirtualDev);
 }
