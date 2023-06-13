@@ -54,14 +54,14 @@ void XMLTextNumRuleInfo::Set(
         const css::uno::Reference < css::text::XTextContent > & xTextContent,
         const bool bOutlineStyleAsNormalListStyle,
         const XMLTextListAutoStylePool& rListAutoPool,
-        const bool bExportTextNumberElement )
+        const bool bExportTextNumberElement,
+        const bool bListIdIsDefault )
 {
     Reset();
     // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
     mbOutlineStyleAsNormalListStyle = bOutlineStyleAsNormalListStyle;
 
     Reference< XPropertySet > xPropSet( xTextContent, UNO_QUERY );
-    Reference<XPropertyState> xPropState(xTextContent, UNO_QUERY);
     Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
 
     // check if this paragraph supports a numbering
@@ -138,13 +138,9 @@ void XMLTextNumRuleInfo::Set(
         if( xPropSetInfo->hasPropertyByName( "ListId" ) )
         {
             xPropSet->getPropertyValue( "ListId" ) >>= msListId;
-
-            if (xPropState.is())
-            {
-                mbListIdIsDefault
-                    = xPropState->getPropertyState("ListId") == PropertyState_DEFAULT_VALUE;
-            }
         }
+
+        mbListIdIsDefault = bListIdIsDefault;
 
         mbContinueingPreviousSubTree = false;
         if( xPropSetInfo->hasPropertyByName( "ContinueingPreviousSubTree" ) )
