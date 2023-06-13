@@ -5266,27 +5266,40 @@ static void ImplHandleIMENotify( HWND hWnd, WPARAM wParam )
 static bool
 ImplHandleGetObject(HWND hWnd, LPARAM lParam, WPARAM wParam, LRESULT & nRet)
 {
-    // IA2 should be enabled automatically
-    AllSettings aSettings = Application::GetSettings();
-    MiscSettings aMisc = aSettings.GetMiscSettings();
-    aMisc.SetEnableATToolSupport( true );
-    aSettings.SetMiscSettings( aMisc );
-    Application::SetSettings( aSettings );
-
-    if (!Application::GetSettings().GetMiscSettings().GetEnableATToolSupport())
-        return false; // locked down somehow ?
-
-    ImplSVData* pSVData = ImplGetSVData();
-
-    // Make sure to launch Accessibility only the following criteria are satisfied
-    // to avoid RFT interrupts regular accessibility processing
-    if ( !pSVData->mxAccessBridge.is() )
+    uno::Reference<accessibility::XMSAAService> xMSAA;
+    if (ImplSalYieldMutexTryToAcquire())
     {
-        if( !InitAccessBridge() )
-            return false;
+        // IA2 should be enabled automatically
+        AllSettings aSettings = Application::GetSettings();
+        MiscSettings aMisc = aSettings.GetMiscSettings();
+        aMisc.SetEnableATToolSupport( true );
+        aSettings.SetMiscSettings( aMisc );
+        Application::SetSettings( aSettings );
+
+        if (!Application::GetSettings().GetMiscSettings().GetEnableATToolSupport())
+            return false; // locked down somehow ?
+
+        ImplSVData* pSVData = ImplGetSVData();
+
+        // Make sure to launch Accessibility only the following criteria are satisfied
+        // to avoid RFT interrupts regular accessibility processing
+        if ( !pSVData->mxAccessBridge.is() )
+        {
+            if( !InitAccessBridge() )
+                return false;
+        }
+        xMSAA.set(pSVData->mxAccessBridge, uno::UNO_QUERY);
+        ImplSalYieldMutexRelease();
+    }
+    else
+    {   // tdf#155794: access without locking: hopefully this should be fine
+        // as the bridge is typically inited in Desktop::Main() already and the
+        // WM_GETOBJECT is received only on the main thread and by the time in
+        // VCL shutdown when ImplSvData dies there should not be Windows any
+        // more that could receive messages.
+        xMSAA.set(ImplGetSVData()->mxAccessBridge, uno::UNO_QUERY);
     }
 
-    uno::Reference< accessibility::XMSAAService > xMSAA( pSVData->mxAccessBridge, uno::UNO_QUERY );
     if ( xMSAA.is() )
     {
         // mhOnSetTitleWnd not set to reasonable value anywhere...
@@ -5823,12 +5836,11 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             break;
 
         case WM_GETOBJECT:
-            ImplSalYieldMutexAcquireWithWait();
+            // tdf#155794: this must complete without taking SolarMutex
             if ( ImplHandleGetObject( hWnd, lParam, wParam, nRet ) )
             {
                 rDef = int(false);
             }
-            ImplSalYieldMutexRelease();
             break;
 
         case WM_APPCOMMAND:
