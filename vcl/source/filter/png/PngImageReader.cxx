@@ -266,7 +266,8 @@ void getImportantChunks(SvStream& rInStream, SvStream& rOutStream, sal_uInt32 nW
                 // Seek back to start of chunk
                 rInStream.SeekRel(-PNG_TYPE_SIZE - PNG_SIZE_SIZE);
                 // Copy chunk to rOutStream
-                std::vector<uint8_t> aData(nChunkSize + PNG_TYPE_SIZE + PNG_SIZE_SIZE);
+                std::vector<uint8_t> aData(nChunkSize + PNG_TYPE_SIZE + PNG_SIZE_SIZE
+                                           + PNG_CRC_SIZE);
                 rInStream.ReadBytes(aData.data(),
                                     PNG_TYPE_SIZE + PNG_SIZE_SIZE + nChunkSize + PNG_CRC_SIZE);
                 rOutStream.WriteBytes(aData.data(),
