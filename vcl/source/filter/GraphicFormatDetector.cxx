@@ -849,13 +849,14 @@ bool GraphicFormatDetector::checkGIF()
 bool GraphicFormatDetector::checkPNG()
 {
     SeekGuard aGuard(mrStream, mnStreamPosition);
-    if (mnFirstLong == 0x89504e47 && mnSecondLong == 0x0d0a1a0a)
+    uint64_t nSignature = (static_cast<uint64_t>(mnFirstLong) << 32) | mnSecondLong;
+    if (nSignature == PNG_SIGNATURE)
     {
         maMetadata.mnFormat = GraphicFileFormat::PNG;
         if (mbExtendedInfo)
         {
             sal_uInt32 nTemp32;
-            mrStream.Seek(mnStreamPosition + 8);
+            mrStream.Seek(mnStreamPosition + PNG_SIGNATURE_SIZE);
             do
             {
                 sal_uInt8 cByte = 0;
@@ -901,9 +902,9 @@ bool GraphicFormatDetector::checkPNG()
                 // read up to the start of the image
                 mrStream.ReadUInt32(nLen32);
                 mrStream.ReadUInt32(nTemp32);
-                while (mrStream.good() && nTemp32 != 0x49444154)
+                while (mrStream.good() && nTemp32 != PNG_IDAT_SIGNATURE)
                 {
-                    if (nTemp32 == 0x70485973) // physical pixel dimensions
+                    if (nTemp32 == PNG_PHYS_SIGNATURE) // physical pixel dimensions
                     {
                         sal_uLong nXRes;
                         sal_uLong nYRes;
@@ -935,7 +936,7 @@ bool GraphicFormatDetector::checkPNG()
 
                         nLen32 -= 9;
                     }
-                    else if (nTemp32 == 0x74524e53) // transparency
+                    else if (nTemp32 == PNG_TRNS_SIGNATURE) // transparency
                     {
                         maMetadata.mbIsTransparent = true;
                         maMetadata.mbIsAlpha = (cColType != 0 && cColType != 2);

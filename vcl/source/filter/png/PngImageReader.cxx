@@ -51,21 +51,6 @@ void lclReadStream(png_structp pPng, png_bytep pOutBytes, png_size_t nBytesToRea
     }
 }
 
-constexpr int PNG_SIGNATURE_SIZE = 8;
-constexpr int PNG_IHDR_SIZE = 13;
-constexpr int PNG_TYPE_SIZE = 4;
-constexpr int PNG_SIZE_SIZE = 4;
-constexpr int PNG_CRC_SIZE = 4;
-constexpr int PNG_IEND_SIZE = 0;
-constexpr sal_uInt64 PNG_SIGNATURE = 0x89504E470D0A1A0A;
-constexpr sal_uInt32 PNG_IHDR_SIGNATURE = 0x49484452;
-constexpr sal_uInt32 PNG_IDAT_SIGNATURE = 0x49444154;
-constexpr sal_uInt32 PNG_ACTL_SIGNATURE = 0x6163544C;
-constexpr sal_uInt32 PNG_FCTL_SIGNATURE = 0x6663544C;
-constexpr sal_uInt32 PNG_FDAT_SIGNATURE = 0x66644154;
-constexpr sal_uInt32 PNG_IEND_SIGNATURE = 0x49454E44;
-constexpr sal_uInt32 PNG_IEND_CRC = 0xAE426082;
-
 bool isPng(SvStream& rStream)
 {
     // Check signature bytes
