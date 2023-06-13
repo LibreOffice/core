@@ -1537,6 +1537,34 @@ static bool isGraphicNode(const SwFrameFormat* pFrameFormat)
     return index.GetNode().IsGrfNode();
 }
 
+/// Determines if the at-para rAnchor is anchored at the start or end of rAnchorCheckPam.
+static bool IsAtParaMatch(const SwPaM& rAnchorCheckPam, const SwFormatAnchor& rAnchor)
+{
+    if (rAnchor.GetAnchorId() != RndStdIds::FLY_AT_PARA)
+    {
+        return false;
+    }
+
+    if (rAnchorCheckPam.Start()->GetNode() == *rAnchor.GetAnchorNode())
+    {
+        return true;
+    }
+
+    if (rAnchorCheckPam.End()->GetNode() == *rAnchor.GetAnchorNode())
+    {
+        SwTextNode* pEndTextNode = rAnchorCheckPam.End()->GetNode().GetTextNode();
+        if (pEndTextNode && rAnchorCheckPam.End()->GetContentIndex() == pEndTextNode->Len())
+        {
+            // rAnchorCheckPam covers the entire last text node, rAnchor is at-para, consider this
+            // as "inside pam" rather than "at the end of pam".
+            return false;
+        }
+        return true;
+    }
+
+    return false;
+}
+
 // move previously appended paragraphs into a text frames
 // to support import filters
 uno::Reference< text::XTextContent > SAL_CALL
@@ -1717,9 +1745,7 @@ SwXText::convertToTextFrame(
         // and testFloatingTablesAnchor for why it excludes pre/post table
         // added nodes
         if (!isGraphicNode(pFrameFormat)
-            && (   (RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()
-                    && (    oAnchorCheckPam->Start()->GetNode() == *rAnchor.GetAnchorNode()
-                        ||  oAnchorCheckPam->End()->GetNode() == *rAnchor.GetAnchorNode()))
+            && (IsAtParaMatch(*oAnchorCheckPam, rAnchor)
                 || (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()
                     && (    *oAnchorCheckPam->Start() == *rAnchor.GetContentAnchor()
                         ||  *oAnchorCheckPam->End() == *rAnchor.GetContentAnchor()))))
