@@ -1348,12 +1348,12 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf151818_SmartArtFontColor)
                                                         uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPortion(xPara->createEnumeration()->nextElement(),
                                                  uno::UNO_QUERY);
-    sal_Int32 nActualColor{ 0 };
+    Color nActualColor{ 0 };
     xPortion->getPropertyValue("CharColor") >>= nActualColor;
     // Without fix the test would have failed with:
-    // - Expected:  4478058 (0x44546A)
-    // - Actual  : 16777215 (0xFFFFFF), that is text was white
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x44546A), nActualColor);
+    // - Expected: rgba[44546aff]
+    // - Actual  : rgba[ffffffff], that is text was white
+    CPPUNIT_ASSERT_EQUAL(Color(0x44546A), nActualColor);
 
     // clrScheme. For map between name in xlsx and index from CharColorTheme see
     // oox::drawingml::Color::getSchemeColorIndex()
