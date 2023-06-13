@@ -25,6 +25,7 @@
 #include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
 #include <svl/languageoptions.hxx>
+#include <optional>
 
 namespace sc {
 
@@ -51,9 +52,13 @@ bool NumFmtUtil::isLatinScript( sal_uLong nFormat, ScDocument& rDoc )
         aDecSep = ScGlobal::getLocaleData().getNumDecimalSep();
     else
     {
-        LocaleDataWrapper aLocaleData(
-            comphelper::getProcessComponentContext(), LanguageTag(nFormatLang));
-        aDecSep = aLocaleData.getNumDecimalSep();
+        // LocaleDataWrapper can be expensive to construct, so cache the result for
+        // repeated calls
+        static std::optional<LocaleDataWrapper> localeCache;
+        if (!localeCache || localeCache->getLanguageTag().getLanguageType() != nFormatLang)
+            localeCache.emplace(
+                comphelper::getProcessComponentContext(), LanguageTag(nFormatLang));
+        aDecSep = localeCache->getNumDecimalSep();
     }
 
     SvtScriptType nScript = rDoc.GetStringScriptType(aDecSep);
