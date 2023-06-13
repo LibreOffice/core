@@ -134,7 +134,7 @@ void OnlineAccessibilityCheck::runAccessibilityCheck(SwNode* pNode)
     {
         SdrObject* pObject = pFrameFormat->FindSdrObject();
         if (pObject)
-            m_aAccessibilityCheck.checkObject(pObject);
+            m_aAccessibilityCheck.checkObject(pNode, pObject);
     }
 
     auto aCollection = m_aAccessibilityCheck.getIssueCollection();

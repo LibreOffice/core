@@ -49,7 +49,7 @@ public:
     }
 
     void check() override;
-    void checkObject(SdrObject* pObject);
+    void checkObject(SwNode* pNode, SdrObject* pObject);
     void checkNode(SwNode* pNode);
     void checkDocumentProperties();
 };

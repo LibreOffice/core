@@ -1337,7 +1337,7 @@ public:
 } // end anonymous namespace
 
 // Check Shapes, TextBox
-void AccessibilityCheck::checkObject(SdrObject* pObject)
+void AccessibilityCheck::checkObject(SwNode* pCurrent, SdrObject* pObject)
 {
     if (!pObject)
         return;
@@ -1381,6 +1381,8 @@ void AccessibilityCheck::checkObject(SdrObject* pObject)
 
             pIssue->setObjectID(pObject->GetName());
             pIssue->setDoc(*m_pDoc);
+            if (pCurrent)
+                pIssue->setNode(pCurrent);
         }
     }
 }
@@ -1469,19 +1471,13 @@ void AccessibilityCheck::check()
                 if (pNodeCheck)
                     pNodeCheck->check(pNode);
             }
-        }
-    }
 
-    IDocumentDrawModelAccess& rDrawModelAccess = m_pDoc->getIDocumentDrawModelAccess();
-    auto* pModel = rDrawModelAccess.GetDrawModel();
-    for (sal_uInt16 nPage = 0; nPage < pModel->GetPageCount(); ++nPage)
-    {
-        SdrPage* pPage = pModel->GetPage(nPage);
-        for (size_t nObject = 0; nObject < pPage->GetObjCount(); ++nObject)
-        {
-            SdrObject* pObject = pPage->GetObj(nObject);
-            if (pObject)
-                checkObject(pObject);
+            for (SwFrameFormat* const& pFrameFormat : pNode->GetAnchoredFlys())
+            {
+                SdrObject* pObject = pFrameFormat->FindSdrObject();
+                if (pObject)
+                    checkObject(pNode, pObject);
+            }
         }
     }
 }
