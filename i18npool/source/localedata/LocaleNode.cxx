@@ -1485,9 +1485,9 @@ static void lcl_writeAbbrFullNarrNames( const OFileWriter & of, const LocaleNode
         sal_uInt32 nChar = aFullName.iterateCodePoints( &o3tl::temporary(sal_Int32(0)));
         aNarrName = OUString( &nChar, 1);
     }
-    of.writeParameter( elementTag, "DefaultAbbrvName",  aAbbrName, i, j);
-    of.writeParameter( elementTag, "DefaultFullName",   aFullName, i, j);
-    of.writeParameter( elementTag, "DefaultNarrowName", aNarrName, i, j);
+    of.writeOUStringLiteralParameter( elementTag, "DefaultAbbrvName",  aAbbrName, i, j);
+    of.writeOUStringLiteralParameter( elementTag, "DefaultFullName",   aFullName, i, j);
+    of.writeOUStringLiteralParameter( elementTag, "DefaultNarrowName", aNarrName, i, j);
 }
 
 static void lcl_writeTabTagString( const OFileWriter & of, const char* pTag, const char* pStr )
@@ -1550,7 +1550,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
     OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
         useLocale = useLocale.replace( '-', '_');
-        of.writeRefFunction("getAllCalendars_", useLocale);
+        of.writeOUStringRefFunction("getAllCalendars_", useLocale);
         return;
     }
     sal_Int16 nbOfCalendars = sal::static_int_cast<sal_Int16>( getNumberOfChildren() );
@@ -1585,7 +1585,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
     for ( i = 0; i < nbOfCalendars; i++) {
         LocaleNode * calNode = getChildAt (i);
         OUString calendarID = calNode -> getAttr().getValueByName("unoid");
-        of.writeParameter( "calendarID", calendarID, i);
+        of.writeOUStringLiteralParameter( "calendarID", calendarID, i);
         bool bGregorian = calendarID == "gregorian";
         if (!bHasGregorian)
             bHasGregorian = bGregorian;
@@ -1597,7 +1597,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         else
             calIt->second = true;
         str = calNode -> getAttr().getValueByName("default");
-        of.writeDefaultParameter("Calendar", str, i);
+        of.writeOUStringLiteralDefaultParameter("Calendar", str, i);
 
         sal_Int16 nChild = 0;
 
@@ -1614,8 +1614,8 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             }
         }
         if (!ref_name.isEmpty() && daysNode == nullptr) {
-            of.writeParameter("dayRef", u"ref", i);
-            of.writeParameter("dayRefName", ref_name, i);
+            of.writeOUStringLiteralParameter("dayRef", u"ref", i);
+            of.writeOUStringLiteralParameter("dayRefName", ref_name, i);
             nbOfDays[i] = 0;
         } else {
             if (daysNode == nullptr)
@@ -1627,7 +1627,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             for (j = 0; j < nbOfDays[i]; j++) {
                 LocaleNode *currNode = daysNode -> getChildAt(j);
                 OUString dayID( currNode->getChildAt(0)->getValue());
-                of.writeParameter("dayID", dayID, i, j);
+                of.writeOUStringLiteralParameter("dayID", dayID, i, j);
                 if ( j == 0 && bGregorian && dayID != "sun" )
                     incError( "First day of a week of a Gregorian calendar must be <DayID>sun</DayID>");
                 lcl_writeAbbrFullNarrNames( of, currNode, elementTag, i, j);
@@ -1647,8 +1647,8 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             }
         }
         if (!ref_name.isEmpty() && monthsNode == nullptr) {
-            of.writeParameter("monthRef", u"ref", i);
-            of.writeParameter("monthRefName", ref_name, i);
+            of.writeOUStringLiteralParameter("monthRef", u"ref", i);
+            of.writeOUStringLiteralParameter("monthRefName", ref_name, i);
             nbOfMonths[i] = 0;
         } else {
             if (monthsNode == nullptr)
@@ -1660,7 +1660,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             for (j = 0; j < nbOfMonths[i]; j++) {
                 LocaleNode *currNode = monthsNode -> getChildAt(j);
                 OUString monthID( currNode->getChildAt(0)->getValue());
-                of.writeParameter("monthID", monthID, i, j);
+                of.writeOUStringLiteralParameter("monthID", monthID, i, j);
                 if ( j == 0 && bGregorian && monthID != "jan" )
                     incError( "First month of a year of a Gregorian calendar must be <MonthID>jan</MonthID>");
                 lcl_writeAbbrFullNarrNames( of, currNode, elementTag, i, j);
@@ -1683,8 +1683,8 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             }
         }
         if (!ref_name.isEmpty() && genitiveMonthsNode == nullptr) {
-            of.writeParameter("genitiveMonthRef", u"ref", i);
-            of.writeParameter("genitiveMonthRefName", ref_name, i);
+            of.writeOUStringLiteralParameter("genitiveMonthRef", u"ref", i);
+            of.writeOUStringLiteralParameter("genitiveMonthRefName", ref_name, i);
             nbOfGenitiveMonths[i] = 0;
         } else {
             if (genitiveMonthsNode == nullptr)
@@ -1696,7 +1696,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             for (j = 0; j < nbOfGenitiveMonths[i]; j++) {
                 LocaleNode *currNode = genitiveMonthsNode -> getChildAt(j);
                 OUString genitiveMonthID( currNode->getChildAt(0)->getValue());
-                of.writeParameter("genitiveMonthID", genitiveMonthID, i, j);
+                of.writeOUStringLiteralParameter("genitiveMonthID", genitiveMonthID, i, j);
                 if ( j == 0 && bGregorian && genitiveMonthID != "jan" )
                     incError( "First genitive month of a year of a Gregorian calendar must be <MonthID>jan</MonthID>");
                 lcl_writeAbbrFullNarrNames( of, currNode, elementTag, i, j);
@@ -1720,8 +1720,8 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             }
         }
         if (!ref_name.isEmpty() && partitiveMonthsNode == nullptr) {
-            of.writeParameter("partitiveMonthRef", u"ref", i);
-            of.writeParameter("partitiveMonthRefName", ref_name, i);
+            of.writeOUStringLiteralParameter("partitiveMonthRef", u"ref", i);
+            of.writeOUStringLiteralParameter("partitiveMonthRefName", ref_name, i);
             nbOfPartitiveMonths[i] = 0;
         } else {
             if (partitiveMonthsNode == nullptr)
@@ -1733,7 +1733,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             for (j = 0; j < nbOfPartitiveMonths[i]; j++) {
                 LocaleNode *currNode = partitiveMonthsNode -> getChildAt(j);
                 OUString partitiveMonthID( currNode->getChildAt(0)->getValue());
-                of.writeParameter("partitiveMonthID", partitiveMonthID, i, j);
+                of.writeOUStringLiteralParameter("partitiveMonthID", partitiveMonthID, i, j);
                 if ( j == 0 && bGregorian && partitiveMonthID != "jan" )
                     incError( "First partitive month of a year of a Gregorian calendar must be <MonthID>jan</MonthID>");
                 lcl_writeAbbrFullNarrNames( of, currNode, elementTag, i, j);
@@ -1753,8 +1753,8 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             }
         }
         if (!ref_name.isEmpty() && erasNode == nullptr) {
-            of.writeParameter("eraRef", u"ref", i);
-            of.writeParameter("eraRefName", ref_name, i);
+            of.writeOUStringLiteralParameter("eraRef", u"ref", i);
+            of.writeOUStringLiteralParameter("eraRefName", ref_name, i);
             nbOfEras[i] = 0;
         } else {
             if (erasNode == nullptr)
@@ -1776,14 +1776,14 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                         continue;   // for
                     }
                     OUString eraID( currNode->getChildAt(0)->getValue());
-                    of.writeParameter("eraID", eraID, i, j);
+                    of.writeOUStringLiteralParameter("eraID", eraID, i, j);
                     if ( j == 0 && bGregorian && eraID != "bc" )
                         incError( "First era of a Gregorian calendar must be <EraID>bc</EraID>");
                     if ( j == 1 && bGregorian && eraID != "ad" )
                         incError( "Second era of a Gregorian calendar must be <EraID>ad</EraID>");
                     of.writeAsciiString("\n");
-                    of.writeParameter(elementTag, "DefaultAbbrvName",currNode->getChildAt(1)->getValue() ,i, j);
-                    of.writeParameter(elementTag, "DefaultFullName",currNode->getChildAt(2)->getValue() , i, j);
+                    of.writeOUStringLiteralParameter(elementTag, "DefaultAbbrvName",currNode->getChildAt(1)->getValue() ,i, j);
+                    of.writeOUStringLiteralParameter(elementTag, "DefaultFullName",currNode->getChildAt(2)->getValue() , i, j);
                 }
             }
         }
@@ -1804,7 +1804,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 if (j >= nbOfDays[i])
                     incErrorStr( "Error: <StartDayOfWeek> <DayID> must be one of the <DaysOfWeek>, but is: %s\n", str);
             }
-            of.writeParameter("startDayOfWeek", str, i);
+            of.writeOUStringLiteralParameter("startDayOfWeek", str, i);
             ++nChild;
         }
 
@@ -1815,7 +1815,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             if (nDays < 1 || (0 < nbOfDays[i] && nbOfDays[i] < nDays))
                 incErrorInt( "Error: Bad value of MinimalDaysInFirstWeek: %d, must be 1 <= value <= days_in_week\n",
                         nDays);
-            of.writeIntParameter("minimalDaysInFirstWeek", i, nDays);
+            of.writeOUStringLiteralIntParameter("minimalDaysInFirstWeek", i, nDays);
         }
     }
     if (!bHasGregorian)
@@ -1825,48 +1825,43 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
     of.writeInt(nbOfCalendars);
     of.writeAsciiString(";\n\n");
 
-    of.writeAsciiString("static const sal_Unicode nbOfDays[] = {");
-    for(i = 0; i < nbOfCalendars - 1; i++) {
-        of.writeInt(nbOfDays[i]);
-        of.writeAsciiString(", ");
+    of.writeAsciiString("static const OUStringLiteral nbOfDays = u\"");
+    for(i = 0; i < nbOfCalendars; i++) {
+        of.writeAsciiString("\\x");
+        of.writeHexInt(nbOfDays[i]);
     }
-    of.writeInt(nbOfDays[i]);
-    of.writeAsciiString("};\n");
+    of.writeAsciiString("\";\n");
 
-    of.writeAsciiString("static const sal_Unicode nbOfMonths[] = {");
-    for(i = 0; i < nbOfCalendars - 1; i++) {
-        of.writeInt(nbOfMonths[i]);
-        of.writeAsciiString(", ");
+    of.writeAsciiString("static const OUStringLiteral nbOfMonths = u\"");
+    for(i = 0; i < nbOfCalendars; i++) {
+        of.writeAsciiString("\\x");
+        of.writeHexInt(nbOfMonths[i]);
     }
-    of.writeInt(nbOfMonths[i]);
-    of.writeAsciiString("};\n");
+    of.writeAsciiString("\";\n");
 
-    of.writeAsciiString("static const sal_Unicode nbOfGenitiveMonths[] = {");
-    for(i = 0; i < nbOfCalendars - 1; i++) {
-        of.writeInt(nbOfGenitiveMonths[i]);
-        of.writeAsciiString(", ");
+    of.writeAsciiString("static const OUStringLiteral nbOfGenitiveMonths = u\"");
+    for(i = 0; i < nbOfCalendars; i++) {
+        of.writeAsciiString("\\x");
+        of.writeHexInt(nbOfGenitiveMonths[i]);
     }
-    of.writeInt(nbOfGenitiveMonths[i]);
-    of.writeAsciiString("};\n");
+    of.writeAsciiString("\";\n");
 
-    of.writeAsciiString("static const sal_Unicode nbOfPartitiveMonths[] = {");
-    for(i = 0; i < nbOfCalendars - 1; i++) {
-        of.writeInt(nbOfPartitiveMonths[i]);
-        of.writeAsciiString(", ");
+    of.writeAsciiString("static const OUStringLiteral nbOfPartitiveMonths = u\"");
+    for(i = 0; i < nbOfCalendars; i++) {
+        of.writeAsciiString("\\x");
+        of.writeHexInt(nbOfPartitiveMonths[i]);
     }
-    of.writeInt(nbOfPartitiveMonths[i]);
-    of.writeAsciiString("};\n");
+    of.writeAsciiString("\";\n");
 
-    of.writeAsciiString("static const sal_Unicode nbOfEras[] = {");
-    for(i = 0; i < nbOfCalendars - 1; i++) {
-        of.writeInt(nbOfEras[i]);
-        of.writeAsciiString(", ");
+    of.writeAsciiString("static const OUStringLiteral nbOfEras = u\"");
+    for(i = 0; i < nbOfCalendars; i++) {
+        of.writeAsciiString("\\x");
+        of.writeHexInt(nbOfEras[i]);
     }
-    of.writeInt(nbOfEras[i]);
-    of.writeAsciiString("};\n");
+    of.writeAsciiString("\";\n");
 
 
-    of.writeAsciiString("static const sal_Unicode* calendars[] = {\n");
+    of.writeAsciiString("static constexpr rtl::OUStringConstExpr calendars[] = {\n");
     of.writeAsciiString("\tnbOfDays,\n");
     of.writeAsciiString("\tnbOfMonths,\n");
     of.writeAsciiString("\tnbOfGenitiveMonths,\n");
@@ -1889,7 +1884,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
     }
 
     of.writeAsciiString("};\n\n");
-    of.writeFunction("getAllCalendars_", "calendarsCount", "calendars");
+    of.writeOUStringFunction("getAllCalendars_", "calendarsCount", "calendars");
 }
 
 static bool isIso4217( const OUString& rStr )

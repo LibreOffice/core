@@ -40,9 +40,11 @@ public:
     void  writeOUStringLiteralCharacters(std::u16string_view str) const;
     void  writeAsciiString(const char *str)const ;
     void  writeInt(sal_Int16 nb) const;
+    void  writeHexInt(sal_Int16 nb) const;
     void  writeOUStringRefFunction(const char *func, std::u16string_view useLocale) const;
     void  writeOUStringRefFunction(const char *func, std::u16string_view useLocale, const char *to) const;
     void  writeFunction(const char *func, const char *count, const char *array) const;
+    void  writeOUStringFunction(const char *func, const char *count, const char *array) const;
     void  writeRefFunction(const char *func, std::u16string_view useLocale) const;
     void  writeFunction(const char *func, const char *count, const char *array, const char *from, const char *to) const;
     void  writeOUStringFunction(const char *func, const char *count, const char *array, const char *from, const char *to) const;
@@ -59,8 +61,10 @@ public:
     void  writeParameter(const char* pAsciiStr, std::u16string_view aChars, sal_Int16 count) const;
     void  writeOUStringLiteralParameter(const char* pAsciiStr, std::u16string_view aChars, sal_Int16 count) const;
     void  writeParameter(const char* pAsciiStr, std::u16string_view aChars, sal_Int16 count0, sal_Int16 count1) const;
+    void  writeOUStringLiteralParameter(const char* pAsciiStr, std::u16string_view aChars, sal_Int16 count0, sal_Int16 count1) const;
     void  writeParameter(const char* pTagStr, const char* pAsciiStr, std::u16string_view aChars, const sal_Int16 count) const;
     void  writeParameter(const char* pTagStr, const char* pAsciiStr, std::u16string_view aChars, sal_Int16 count0, sal_Int16 count1) const;
+    void  writeOUStringLiteralParameter(const char* pTagStr, const char* pAsciiStr, std::u16string_view aChars, sal_Int16 count0, sal_Int16 count1) const;
     void  closeOutput() const;
     /// Return the locale string, something like en_US or de_DE
     const char * getLocale() const { return theLocale.c_str(); }

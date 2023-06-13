@@ -162,7 +162,7 @@ private:
     ///
     /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::i18n::CalendarItem2 > getCalendarItems(
-            sal_Unicode const * const * const allCalendars,
+            OUString const * allCalendars,
             sal_Int16 & rnOffset,
             const sal_Int16 nWhichItem,
             const sal_Int16 nCalendar,

@@ -43,6 +43,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star;
 
 typedef sal_Unicode**   (* MyFunc_Type)( sal_Int16&);
+typedef OUString const * (* MyFuncOUString_Type)( sal_Int16&);
 typedef sal_Unicode const *** (* MyFunc_Type2)( sal_Int16&, sal_Int16& );
 typedef sal_Unicode const **** (* MyFunc_Type3)( sal_Int16&, sal_Int16&, sal_Int16& );
 typedef OUString const * (* MyFunc_FormatCode)( sal_Int16&, sal_Unicode const *&, sal_Unicode const *& );
@@ -679,14 +680,14 @@ Sequence< CalendarItem2 > &LocaleDataImpl::getCalendarItemByName(const OUString&
 }
 
 Sequence< CalendarItem2 > LocaleDataImpl::getCalendarItems(
-        sal_Unicode const * const * const allCalendars, sal_Int16 & rnOffset,
+        OUString const * allCalendars, sal_Int16 & rnOffset,
         const sal_Int16 nWhichItem, const sal_Int16 nCalendar,
         const Locale & rLocale, const Sequence< Calendar2 > & calendarsSeq )
 {
     Sequence< CalendarItem2 > aItems;
     if ( allCalendars[rnOffset] == std::u16string_view(u"ref") )
     {
-        aItems = getCalendarItemByName( OUString( allCalendars[rnOffset+1]), rLocale, calendarsSeq, nWhichItem);
+        aItems = getCalendarItemByName( allCalendars[rnOffset+1], rLocale, calendarsSeq, nWhichItem);
         rnOffset += 2;
     }
     else
@@ -701,9 +702,9 @@ Sequence< CalendarItem2 > LocaleDataImpl::getCalendarItems(
             case REF_PMONTHS:
                 for (CalendarItem2& rItem : asNonConstRange(aItems))
                 {
-                    rItem = CalendarItem2{ OUString(allCalendars[rnOffset]),
-                            OUString(allCalendars[rnOffset+1]),
-                            OUString(allCalendars[rnOffset+2]), OUString(allCalendars[rnOffset+3])};
+                    rItem = CalendarItem2{ allCalendars[rnOffset],
+                            allCalendars[rnOffset+1],
+                            allCalendars[rnOffset+2], allCalendars[rnOffset+3]};
                     rnOffset += 4;
                 }
                 break;
@@ -711,9 +712,9 @@ Sequence< CalendarItem2 > LocaleDataImpl::getCalendarItems(
                 // Absent narrow name.
                 for (CalendarItem2& rItem : asNonConstRange(aItems))
                 {
-                    rItem = CalendarItem2{ OUString(allCalendars[rnOffset]),
-                            OUString(allCalendars[rnOffset+1]),
-                            OUString(allCalendars[rnOffset+2]), OUString()};
+                    rItem = CalendarItem2{ allCalendars[rnOffset],
+                            allCalendars[rnOffset+1],
+                            allCalendars[rnOffset+2], OUString()};
                     rnOffset += 3;
                 }
                 break;
@@ -728,9 +729,9 @@ Sequence< Calendar2 > SAL_CALL
 LocaleDataImpl::getAllCalendars2( const Locale& rLocale )
 {
 
-    sal_Unicode const * const * allCalendars = nullptr;
+    OUString const * allCalendars = nullptr;
 
-    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getAllCalendars" ));
+    MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getAllCalendars" ));
 
     if ( func ) {
         sal_Int16 calendarsCount = 0;
