@@ -2553,7 +2553,7 @@ vcl::Window* SfxViewShell::GetEditWindowForActiveOLEObj() const
     return pEditWin;
 }
 
-::Color SfxViewShell::GetColorConfigColor(svtools::ColorConfigEntry nColorType) const
+::Color SfxViewShell::GetColorConfigColor(svtools::ColorConfigEntry /*nColorType*/) const
 {
     SAL_WARN("sfx.view", "SfxViewShell::GetColorConfigColor not overriden!");
     return {};
