@@ -1355,6 +1355,22 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf89288)
                 "PortionType::Kern");
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf139863)
+{
+    // Given a document with 2 paragraphs of mixed Complex scripts:
+    createSwDoc("tdf139863.fodt");
+
+    // When laying out that document:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // Then make sure the text is not split into multiple portions.
+    // Without the fix we don’t even reach here, as the old code resulted in a
+    // lone surrogate which can’t be converted to UTF-8 for the layout dump and
+    // we get an assert in OString::toUtf8().
+    assertXPath(pXmlDoc, "//body/txt[1]/SwParaPortion/SwLineLayout/child::*", 1);
+    assertXPath(pXmlDoc, "//body/txt[2]/SwParaPortion/SwLineLayout/child::*", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
