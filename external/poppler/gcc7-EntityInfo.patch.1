@@ -2,28 +2,35 @@ gcc 7.3.1 says:
 
 workdir/UnpackedTarball/poppler/poppler/CertificateInfo.cc:42:34: error: function ‘X509CertificateInfo::EntityInfo& X509CertificateInfo::EntityInfo::operator=(X509CertificateInfo::EntityInfo&&)’ defaulted on its redeclaration with an exception-specification that differs from the implicit exception-specification ‘’
 
---- poppler/poppler/CertificateInfo.h.orig	2022-09-14 19:32:12.426351385 +0200
-+++ poppler/poppler/CertificateInfo.h	2022-09-14 19:32:18.947347812 +0200
-@@ -70,7 +70,7 @@
-         ~EntityInfo();
+workdir/UnpackedTarball/poppler/poppler/CertificateInfo.cc: In member function ‘void X509CertificateInfo::setPublicKeyInfo(X509CertificateInfo::PublicKeyInfo&&)’:
+workdir/UnpackedTarball/poppler/poppler/CertificateInfo.cc:106:39: error: use of deleted function ‘X509CertificateInfo::PublicKeyInfo& X509CertificateInfo::PublicKeyInfo::operator=(X509CertificateInfo::PublicKeyInfo&&)’
+     public_key_info = std::move(pkInfo);
+                                       ^
+In file included from workdir/UnpackedTarball/poppler/poppler/CertificateInfo.cc:15:0:
+workdir/UnpackedTarball/poppler/poppler/CertificateInfo.h:58:24: note: ‘X509CertificateInfo::PublicKeyInfo& X509CertificateInfo::PublicKeyInfo::operator=(X509CertificateInfo::PublicKeyInfo&&) noexcept’ is implicitly deleted because its exception-specification does not match the implicit exception-specification ‘’
+         PublicKeyInfo &operator=(PublicKeyInfo &&) noexcept = default;
+                        ^~~~~~~~
+
+--- poppler/poppler/CertificateInfo.h.orig	2023-06-05 19:29:14.000000000 +0900
++++ poppler/poppler/CertificateInfo.h	2023-06-19 18:10:55.760031700 +0900
+@@ -55,7 +55,7 @@
+         PublicKeyInfo() = default;
  
-         EntityInfo(EntityInfo &&) noexcept;
--        EntityInfo &operator=(EntityInfo &&) noexcept;
-+        EntityInfo &operator=(EntityInfo &&) /*noexcept*/;
+         PublicKeyInfo(PublicKeyInfo &&) noexcept = default;
+-        PublicKeyInfo &operator=(PublicKeyInfo &&) noexcept = default;
++        PublicKeyInfo &operator=(PublicKeyInfo &&) /*noexcept*/ = default;
+ 
+         PublicKeyInfo(const PublicKeyInfo &) = delete;
+         PublicKeyInfo &operator=(const PublicKeyInfo &) = delete;
+@@ -71,7 +71,7 @@
+         ~EntityInfo() = default;
+ 
+         EntityInfo(EntityInfo &&) noexcept = default;
+-        EntityInfo &operator=(EntityInfo &&) noexcept = default;
++        EntityInfo &operator=(EntityInfo &&) /*noexcept*/ = default;
  
          EntityInfo(const EntityInfo &) = delete;
          EntityInfo &operator=(const EntityInfo &) = delete;
---- poppler/poppler/CertificateInfo.cc.orig	2022-09-14 19:31:10.225385467 +0200
-+++ poppler/poppler/CertificateInfo.cc	2022-09-14 19:31:12.572384182 +0200
-@@ -39,7 +39,7 @@
- 
- X509CertificateInfo::EntityInfo::EntityInfo(X509CertificateInfo::EntityInfo &&other) noexcept = default;
- 
--X509CertificateInfo::EntityInfo &X509CertificateInfo::EntityInfo::operator=(X509CertificateInfo::EntityInfo &&other) noexcept = default;
-+X509CertificateInfo::EntityInfo &X509CertificateInfo::EntityInfo::operator=(X509CertificateInfo::EntityInfo &&other) /*noexcept*/ = default;
- 
- X509CertificateInfo::X509CertificateInfo() : ku_extensions(KU_NONE), cert_version(-1), is_self_signed(false) { }
- 
 --- poppler/poppler/GfxFont.cc.orig	2022-09-14 20:24:32.569607333 +0200
 +++ poppler/poppler/GfxFont.cc	2022-09-14 20:24:52.323596186 +0200
 @@ -180,7 +180,7 @@

@@ -2,7 +2,7 @@
 
 note: to get the 3rd one, use -DENABLE_CPP=on
 
-mkdir build && cd build && cmake .. -DENABLE_DCTDECODER=libjpeg -DHAVE_CAIRO=off -DENABLE_LIBOPENJPEG=none -DENABLE_CMS=none -DENABLE_LIBCURL=off -DENABLE_ZLIB=off -DENABLE_ZLIB_UNCOMPRESS=off -DENABLE_NSS3=off -DENABLE_LIBPNG=off -DENABLE_LIBTIFF=off -DENABLE_SPLASH=off -DENABLE_UTILS=off -DENABLE_CPP=off -DENABLE_GLIB=off -DENABLE_GOBJECT_INTROSPECTION=off -DENABLE_GTK_DOC=off -DENABLE_QT5=off
+mkdir build && cd build && cmake .. -DENABLE_DCTDECODER=libjpeg -DHAVE_CAIRO=off -DENABLE_LIBOPENJPEG=none -DENABLE_CMS=none -DENABLE_LIBCURL=off -DENABLE_ZLIB=off -DENABLE_ZLIB_UNCOMPRESS=off -DENABLE_GPGME=off -DENABLE_NSS3=off -DENABLE_LIBPNG=off -DENABLE_LIBTIFF=off -DENABLE_SPLASH=off -DENABLE_UTILS=off -DENABLE_CPP=off -DENABLE_GLIB=off -DENABLE_GOBJECT_INTROSPECTION=off -DENABLE_GTK_DOC=off -DENABLE_QT5=off -DENABLE_QT6
 
 manually disabled these because cmake failed to do it:
 HAVE_CAIRO
@@ -16,7 +16,7 @@ new file mode 100644
 index 0fbd336a..451213f8 100644
 --- /dev/null
 +++ b/config.h
-@@ -0,0 +1,220 @@
+@@ -0,0 +1,229 @@
 +/* config.h.  Generated from config.h.cmake by cmake.  */
 +
 +/* Build against libcurl. */
@@ -45,6 +45,15 @@ index 0fbd336a..451213f8 100644
 +
 +/* Build against libnss3 for digital signature validation */
 +/* #define ENABLE_NSS3 1 */
++
++/* Build against libgpgme for digital signature validation */
++/* #undef ENABLE_GPGME */
++
++/* Signatures enabled */
++/* #define ENABLE_SIGNATURES 1 */
++
++/* Default signature backend */
++/* #define DEFAULT_SIGNATURE_BACKEND "NSS" */
 +
 +/* Use cairo for rendering. */
 +/* #define HAVE_CAIRO 1 */
@@ -173,7 +182,7 @@ index 0fbd336a..451213f8 100644
 +#define PACKAGE_NAME "poppler"
 +
 +/* Define to the full name and version of this package. */
-+#define PACKAGE_STRING "poppler 23.03.0"
++#define PACKAGE_STRING "poppler 23.06.0"
 +
 +/* Define to the one symbol short name of this package. */
 +#define PACKAGE_TARNAME "poppler"
@@ -182,7 +191,7 @@ index 0fbd336a..451213f8 100644
 +#define PACKAGE_URL ""
 +
 +/* Define to the version of this package. */
-+#define PACKAGE_VERSION "23.03.0"
++#define PACKAGE_VERSION "23.06.0"
 +
 +/* Poppler data dir */
 +#define POPPLER_DATADIR "/usr/local/share/poppler"
@@ -200,7 +209,7 @@ index 0fbd336a..451213f8 100644
 +/* #undef USE_FLOAT */
 +
 +/* Version number of package */
-+#define VERSION "23.03.0"
++#define VERSION "23.06.0"
 +
 +#if defined(__APPLE__)
 +#elif defined (_WIN32)
@@ -281,7 +290,7 @@ index 0fbd336a..451213f8 100644
 +
 +/* Defines the poppler version. */
 +#ifndef POPPLER_VERSION
-+#define POPPLER_VERSION "23.03.0"
++#define POPPLER_VERSION "23.06.0"
 +#endif
 +
 +/* Use single precision arithmetic in the Splash backend */
@@ -373,7 +382,7 @@ index 0fbd336a..451213f8 100644
 +//------------------------------------------------------------------------
 +
 +// copyright notice
-+#define popplerCopyright "Copyright 2005-2022 The Poppler Developers - http://poppler.freedesktop.org"
++#define popplerCopyright "Copyright 2005-2023 The Poppler Developers - http://poppler.freedesktop.org"
 +#define xpdfCopyright "Copyright 1996-2011, 2022 Glyph & Cog, LLC"
 +
 +//------------------------------------------------------------------------
@@ -433,9 +442,9 @@ index 0fbd336a..451213f8 100644
 +
 +#include "poppler-global.h"
 +
-+#define POPPLER_VERSION "23.03.0"
++#define POPPLER_VERSION "23.06.0"
 +#define POPPLER_VERSION_MAJOR 23
-+#define POPPLER_VERSION_MINOR 03
++#define POPPLER_VERSION_MINOR 06
 +#define POPPLER_VERSION_MICRO 0
 +
 +namespace poppler

@@ -1,8 +1,8 @@
 disable freetype dependent code
 
---- poppler/poppler/Form.cc.orig	2022-09-14 15:46:48.588316681 +0200
-+++ poppler/poppler/Form.cc	2022-09-14 15:48:01.468274551 +0200
-@@ -46,7 +46,7 @@
+--- poppler/poppler/Form.cc.orig	2023-06-05 19:29:14.000000000 +0900
++++ poppler/poppler/Form.cc	2023-06-14 18:50:22.232312300 +0900
+@@ -48,7 +48,7 @@
  #include <cstdlib>
  #include <cstring>
  #include <cctype>
@@ -11,7 +11,7 @@ disable freetype dependent code
  #include "goo/gmem.h"
  #include "goo/gfile.h"
  #include "goo/GooString.h"
-@@ -77,8 +77,8 @@
+@@ -78,8 +78,8 @@
  #include "fofi/FoFiTrueType.h"
  #include "fofi/FoFiIdentifier.h"
  
@@ -20,18 +20,18 @@ disable freetype dependent code
 +//#include <ft2build.h>
 +//#include FT_FREETYPE_H
  
- // return a newly allocated char* containing an UTF16BE string of size length
- char *pdfDocEncodingToUTF16(const std::string &orig, int *length)
-@@ -2743,6 +2743,8 @@
+ // helper for using std::visit to get a dependent false for static_asserts
+ // to help get compile errors if one ever extends variants
+@@ -2760,6 +2760,8 @@
  
- Form::AddFontResult Form::addFontToDefaultResources(const std::string &filepath, int faceIndex, const std::string &fontFamily, const std::string &fontStyle)
+ Form::AddFontResult Form::addFontToDefaultResources(const std::string &filepath, int faceIndex, const std::string &fontFamily, const std::string &fontStyle, bool forceName)
  {
 +    return {};
 +#if 0
      if (!GooString::endsWith(filepath, ".ttf") && !GooString::endsWith(filepath, ".ttc") && !GooString::endsWith(filepath, ".otf")) {
          error(errIO, -1, "We only support embedding ttf/ttc/otf fonts for now. The font file for {0:s} {1:s} was {2:s}", fontFamily.c_str(), fontStyle.c_str(), filepath.c_str());
          return {};
-@@ -2951,6 +2953,7 @@
+@@ -2994,6 +2996,7 @@
      }
  
      return { dictFontName, fontDictRef };
