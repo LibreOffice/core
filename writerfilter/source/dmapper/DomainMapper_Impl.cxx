@@ -2996,7 +2996,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
         // If we are in comments, then disable CharGrabBag, comment text doesn't support that.
         uno::Sequence< beans::PropertyValue > aValues = pPropertyMap->GetPropertyValues(/*bCharGrabBag=*/!m_bIsInComments);
 
-        if (m_bStartTOC || m_bStartIndex || m_bStartBibliography)
+        if (IsInTOC() || m_bStartIndex || m_bStartBibliography)
             for( auto& rValue : asNonConstRange(aValues) )
             {
                 if (rValue.Name == "CharHidden")
@@ -3407,6 +3407,14 @@ void DomainMapper_Impl::fillEmptyFrameProperties(std::vector<beans::PropertyValu
             PROP_TOP_MARGIN,    PROP_TOP_BORDER_DISTANCE };
     for (size_t i = 0; i < aMarginIds.size(); ++i)
         rFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(aMarginIds[i]), static_cast<sal_Int32>(0)));
+}
+
+bool DomainMapper_Impl::IsInTOC() const
+{
+    if (IsInHeaderFooter())
+        return m_bStartTOCHeaderFooter;
+    else
+        return m_bStartTOC;
 }
 
 void DomainMapper_Impl::ConvertHeaderFooterToTextFrame(bool bDynamicHeightTop, bool bDynamicHeightBottom)
@@ -7125,7 +7133,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                 break;
             }
             }
-            if (m_bStartTOC && (aIt->second.eFieldId == FIELD_PAGEREF) )
+            if (IsInTOC() && (aIt->second.eFieldId == FIELD_PAGEREF))
             {
                 bCreateField = false;
             }
@@ -7541,7 +7549,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                 break;
                 case FIELD_PAGEREF:
                 case FIELD_REF:
-                if (xFieldProperties.is() && !m_bStartTOC)
+                if (xFieldProperties.is() && !IsInTOC())
                 {
                     bool bPageRef = aIt->second.eFieldId == FIELD_PAGEREF;
 
@@ -8223,9 +8231,9 @@ void DomainMapper_Impl::PopFieldContext()
                 else
                 {
                     xToInsert.set(pContext->GetTC(), uno::UNO_QUERY);
-                    if( !xToInsert.is() && !m_bStartTOC && !m_bStartIndex && !m_bStartBibliography )
+                    if (!xToInsert.is() && !IsInTOC() && !m_bStartIndex && !m_bStartBibliography)
                         xToInsert = pContext->GetTextField();
-                    if( xToInsert.is() && !m_bStartTOC && !m_bStartIndex && !m_bStartBibliography)
+                    if (xToInsert.is() && !IsInTOC() && !m_bStartIndex && !m_bStartBibliography)
                     {
                         PropertyMap aMap;
                         // Character properties of the field show up here the
@@ -8299,7 +8307,8 @@ void DomainMapper_Impl::PopFieldContext()
                                 if (!pContext->GetHyperlinkTarget().isEmpty())
                                     xCrsrProperties->setPropertyValue("HyperLinkTarget", uno::Any(pContext->GetHyperlinkTarget()));
 
-                                if (m_bStartTOC) {
+                                if (IsInTOC())
+                                {
                                     OUString sDisplayName("Index Link");
                                     xCrsrProperties->setPropertyValue("VisitedCharStyleName",uno::Any(sDisplayName));
                                     xCrsrProperties->setPropertyValue("UnvisitedCharStyleName",uno::Any(sDisplayName));
