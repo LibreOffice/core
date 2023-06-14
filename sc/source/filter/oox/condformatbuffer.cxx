@@ -264,7 +264,7 @@ namespace {
     else if (rAttribs.hasAttribute(XML_indexed))
     {
         sal_uInt32 nIndexed = rAttribs.getUnsigned(XML_indexed, 0);
-        if (nIndexed < sizeof(IndexedColors))
+        if (nIndexed < std::size(IndexedColors))
             nColor = IndexedColors[nIndexed];
     }
 
