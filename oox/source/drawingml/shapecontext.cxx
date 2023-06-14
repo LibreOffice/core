@@ -124,7 +124,7 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const 
     case XML_nvSpPr:
         break;
     default:
-        SAL_WARN("oox", "ShapeContext::onCreateContext: unhandled element: " << getBaseToken(aElementToken));
+        SAL_INFO("oox", "ShapeContext::onCreateContext: unhandled element: " << getBaseToken(aElementToken));
         break;
     }
 
