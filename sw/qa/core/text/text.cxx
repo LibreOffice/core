@@ -1309,6 +1309,52 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testFloattableOverlap)
     CPPUNIT_ASSERT(!rRect1.Overlaps(rRect2));
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf89288)
+{
+    // Given a document with 2 paragraphs of mixed Complex and Western text,
+    // and 2 other paragrpahs of mixed Western and Asian text:
+    createSwDoc("tdf89288.fodt");
+
+    // When laying out that document:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // Then make sure there is no kern portions between the Western and Complex
+    // portions:
+    assertXPath(pXmlDoc, "//body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion", 3);
+    assertXPath(pXmlDoc,
+                "//body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Text']", 3);
+    assertXPath(pXmlDoc,
+                "//body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Kern']", 0);
+
+    assertXPath(pXmlDoc, "//body/txt[2]/SwParaPortion/SwLineLayout/SwLinePortion", 3);
+    assertXPath(pXmlDoc,
+                "//body/txt[2]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Text']", 3);
+    assertXPath(pXmlDoc,
+                "//body/txt[2]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Kern']", 0);
+
+    // But also make sure there is a kern portion between each Western and Asian
+    // portion:
+    assertXPath(pXmlDoc, "//body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion", 5);
+    assertXPath(pXmlDoc,
+                "//body/txt[3]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Text']", 3);
+    assertXPath(pXmlDoc,
+                "//body/txt[3]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Kern']", 2);
+    assertXPath(pXmlDoc, "//body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[2]", "type",
+                "PortionType::Kern");
+    assertXPath(pXmlDoc, "//body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[4]", "type",
+                "PortionType::Kern");
+
+    assertXPath(pXmlDoc, "//body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion", 5);
+    assertXPath(pXmlDoc,
+                "//body/txt[4]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Text']", 3);
+    assertXPath(pXmlDoc,
+                "//body/txt[4]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Kern']", 2);
+    assertXPath(pXmlDoc, "//body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion[2]", "type",
+                "PortionType::Kern");
+    assertXPath(pXmlDoc, "//body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion[4]", "type",
+                "PortionType::Kern");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
