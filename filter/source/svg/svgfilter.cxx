@@ -441,10 +441,16 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
 
                                     Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
                                     bool bIsSlideVisible = true;     // default: true
-                                    xPropSet->getPropertyValue( "Visible" )  >>= bIsSlideVisible;
-                                    if (!bIsSlideVisible)
-                                        continue;
-
+                                    if (xPropSet.is())
+                                    {
+                                        Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+                                        if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("Visible"))
+                                        {
+                                            xPropSet->getPropertyValue( "Visible" )  >>= bIsSlideVisible;
+                                            if (!bIsSlideVisible)
+                                                continue;
+                                        }
+                                    }
                                     mSelectedPages.push_back(xDrawPage);
                                 }
                             }
@@ -494,10 +500,16 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
                             uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPages->getByIndex( i ), uno::UNO_QUERY );
                             Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
                             bool bIsSlideVisible = true;     // default: true
-                            xPropSet->getPropertyValue( "Visible" )  >>= bIsSlideVisible;
-                            if (!bIsSlideVisible)
-                                continue;
-
+                            if (xPropSet.is())
+                            {
+                                Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+                                if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("Visible"))
+                                {
+                                    xPropSet->getPropertyValue( "Visible" )  >>= bIsSlideVisible;
+                                    if (!bIsSlideVisible)
+                                        continue;
+                                }
+                            }
                             mSelectedPages.push_back(xDrawPage);
                         }
                     }
