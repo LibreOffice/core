@@ -8196,6 +8196,9 @@ void DomainMapper_Impl::StartOrEndBookmark( const OUString& rId )
                 else
                 {
                     xCursor = xText->createTextCursorByRange( aBookmarkIter->second.m_xTextRange );
+                }
+                if (!aBookmarkIter->second.m_bIsStartOfText)
+                {
                     xCursor->goRight( 1, false );
                 }
 
@@ -8337,6 +8340,9 @@ void DomainMapper_Impl::startOrEndPermissionRange(sal_Int32 permissinId)
                 else
                 {
                     xCursor = xText->createTextCursorByRange(aPermIter->second.m_xTextRange);
+                }
+                if (!aPermIter->second.m_bIsStartOfText)
+                {
                     xCursor->goRight(1, false);
                 }
 
