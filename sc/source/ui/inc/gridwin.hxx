@@ -373,7 +373,8 @@ public:
     void            PaintTile( VirtualDevice& rDevice,
                                int nOutputWidth, int nOutputHeight,
                                int nTilePosX, int nTilePosY,
-                               tools::Long nTileWidth, tools::Long nTileHeight );
+                               tools::Long nTileWidth, tools::Long nTileHeight,
+                               SCCOL nTiledRenderingAreaEndCol, SCROW nTiledRenderingAreaEndRow );
 
     /// @see Window::LogicInvalidate().
     void LogicInvalidate(const tools::Rectangle* pRectangle) override;

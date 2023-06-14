@@ -1543,7 +1543,8 @@ namespace
 void ScGridWindow::PaintTile( VirtualDevice& rDevice,
                               int nOutputWidth, int nOutputHeight,
                               int nTilePosX, int nTilePosY,
-                              tools::Long nTileWidth, tools::Long nTileHeight )
+                              tools::Long nTileWidth, tools::Long nTileHeight,
+                              SCCOL nTiledRenderingAreaEndCol, SCROW nTiledRenderingAreaEndRow )
 {
     Fraction origZoomX = mrViewData.GetZoomX();
     Fraction origZoomY = mrViewData.GetZoomY();
@@ -1629,9 +1630,8 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     }
 
     // size of the document including drawings, charts, etc.
-    SCCOL nEndCol = 0;
-    SCROW nEndRow = 0;
-    rDoc.GetTiledRenderingArea(nTab, nEndCol, nEndRow);
+    SCCOL nEndCol = nTiledRenderingAreaEndCol;
+    SCROW nEndRow = nTiledRenderingAreaEndRow;
 
     if (nEndCol < nBottomRightTileCol)
         nEndCol = nBottomRightTileCol;
