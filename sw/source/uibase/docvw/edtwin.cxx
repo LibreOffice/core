@@ -634,6 +634,14 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                 eStyle = PointerStyle::HideWhitespace;
         }
 
+        if( m_pShadCursor )
+        {
+            if( text::HoriOrientation::LEFT == m_eOrient )    // Arrow to the right
+                eStyle = PointerStyle::AutoScrollE;
+            else    // Arrow to the left
+                eStyle = PointerStyle::AutoScrollW;
+        }
+
         SetPointer( eStyle );
     }
 }
@@ -4537,16 +4545,16 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     !rSh.HasSelection() && !GetOutDev()->GetConnectMetaFile() )
                 {
                     SwRect aRect;
-                    sal_Int16 eOrient;
+
                     SwFillMode eMode = rSh.GetViewOptions()->GetShdwCursorFillMode();
-                    if( rSh.GetShadowCursorPos( aDocPt, eMode, aRect, eOrient ))
+                    if( rSh.GetShadowCursorPos( aDocPt, eMode, aRect, m_eOrient ))
                     {
                         if( !m_pShadCursor )
                             m_pShadCursor.reset( new SwShadowCursor( *this,
                                 rSh.GetViewOptions()->GetDirectCursorColor() ) );
-                        if( text::HoriOrientation::RIGHT != eOrient && text::HoriOrientation::CENTER != eOrient )
-                            eOrient = text::HoriOrientation::LEFT;
-                        m_pShadCursor->SetPos( aRect.Pos(), aRect.Height(), static_cast< sal_uInt16 >(eOrient) );
+                        if( text::HoriOrientation::RIGHT != m_eOrient && text::HoriOrientation::CENTER != m_eOrient )
+                            m_eOrient = text::HoriOrientation::LEFT;
+                        m_pShadCursor->SetPos( aRect.Pos(), aRect.Height(), static_cast< sal_uInt16 >(m_eOrient) );
                         bDelShadCursor = false;
                     }
                 }

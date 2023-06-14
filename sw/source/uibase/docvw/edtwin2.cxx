@@ -660,24 +660,6 @@ void SwEditWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     SwWrtShell* pWrtShell = GetView().GetWrtShellPtr();
     if(!pWrtShell)
         return;
-    bool bPaintShadowCursor = false;
-    if( m_pShadCursor )
-    {
-        tools::Rectangle aRect( m_pShadCursor->GetRect());
-        // fully resides inside?
-        if( rRect.Contains( aRect ) )
-        {
-            // then cancel
-            m_pShadCursor.reset();
-        }
-        else if( rRect.Overlaps( aRect ))
-        {
-            // resides somewhat above, then everything is clipped outside
-            // and we have to make the "inner part" at the end of the
-            // Paint visible again. Otherwise Paint errors occur!
-            bPaintShadowCursor = true;
-        }
-    }
 
     if ( GetView().GetVisArea().GetWidth()  <= 0 ||
               GetView().GetVisArea().GetHeight() <= 0 )
@@ -698,9 +680,6 @@ void SwEditWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
         }
         pWrtShell->setOutputToWindow(false);
     }
-
-    if( bPaintShadowCursor )
-        m_pShadCursor->Paint();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

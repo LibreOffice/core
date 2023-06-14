@@ -19,13 +19,14 @@
 
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <shdwcrsr.hxx>
+#include <vcl/ptrstyle.hxx>
 
 using namespace ::com::sun::star;
 
 SwShadowCursor::~SwShadowCursor()
 {
     if( USHRT_MAX != m_nOldMode )
-        DrawCursor( m_aOldPt, m_nOldHeight, m_nOldMode );
+        DrawCursor( m_nOldMode);
 }
 
 void SwShadowCursor::SetPos( const Point& rPt, tools::Long nHeight, sal_uInt16 nMode )
@@ -35,63 +36,21 @@ void SwShadowCursor::SetPos( const Point& rPt, tools::Long nHeight, sal_uInt16 n
     if( m_aOldPt != aPt || m_nOldHeight != nHeight || m_nOldMode != nMode )
     {
         if( USHRT_MAX != m_nOldMode )
-            DrawCursor( m_aOldPt, m_nOldHeight, m_nOldMode );
+            DrawCursor( m_nOldMode);
 
-        DrawCursor( aPt, nHeight, nMode );
+        DrawCursor( nMode);
         m_nOldMode = nMode;
         m_nOldHeight = nHeight;
         m_aOldPt = aPt;
     }
 }
 
-void SwShadowCursor::DrawTri( const Point& rPt, tools::Long nHeight, bool bLeft )
+void SwShadowCursor::DrawCursor( sal_uInt16 nMode )
 {
-    tools::Long nLineDiff = nHeight / 2;
-    tools::Long nLineDiffHalf = nLineDiff / 2;
-
-    // Dot above
-    Point aPt1( (bLeft ? rPt.X() - 3 : rPt.X() + 3),
-                rPt.Y() + nLineDiffHalf );
-    // Dot below
-    Point aPt2( aPt1.X(), aPt1.Y() + nHeight - nLineDiff - 1 );
-    tools::Long nDiff = bLeft ? -1 : 1;
-    while( aPt1.Y() <= aPt2.Y() )
-    {
-        m_pWin->GetOutDev()->DrawLine( aPt1, aPt2 );
-        aPt1.AdjustY( 1 );
-        aPt2.AdjustY( -1 );
-        aPt2.setX( aPt1.AdjustX(nDiff ) );
-    }
-}
-
-void SwShadowCursor::DrawCursor( const Point& rPt, tools::Long nHeight, sal_uInt16 nMode )
-{
-    nHeight = (((nHeight / 4)+1) * 4) + 1;
-
-    m_pWin->GetOutDev()->Push();
-
-    m_pWin->SetMapMode(MapMode(MapUnit::MapPixel));
-    m_pWin->GetOutDev()->SetRasterOp( RasterOp::Xor );
-
-    m_pWin->GetOutDev()->SetLineColor( Color( ColorTransparency, sal_uInt32(m_aCol) ^ sal_uInt32(COL_WHITE) ) );
-
-    // 1. The Line:
-    m_pWin->GetOutDev()->DrawLine( Point( rPt.X(), rPt.Y() + 1),
-              Point( rPt.X(), rPt.Y() - 2 + nHeight ));
-
-    // 2. The Triangle
-    if( text::HoriOrientation::LEFT == nMode || text::HoriOrientation::CENTER == nMode )    // Arrow to the right
-        DrawTri( rPt, nHeight, false );
-    if( text::HoriOrientation::RIGHT == nMode || text::HoriOrientation::CENTER == nMode )   // Arrow to the left
-        DrawTri( rPt, nHeight, true );
-
-    m_pWin->GetOutDev()->Pop();
-}
-
-void SwShadowCursor::Paint()
-{
-    if( USHRT_MAX != m_nOldMode )
-        DrawCursor( m_aOldPt, m_nOldHeight, m_nOldMode );
+    if( text::HoriOrientation::LEFT == nMode )    // Arrow to the right
+        m_pWin->SetPointer(PointerStyle::AutoScrollE);
+    else   // Arrow to the left
+        m_pWin->SetPointer(PointerStyle::AutoScrollW);
 }
 
 tools::Rectangle SwShadowCursor::GetRect() const

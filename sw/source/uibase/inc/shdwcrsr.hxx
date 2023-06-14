@@ -33,8 +33,7 @@ class SwShadowCursor
     tools::Long m_nOldHeight;
     sal_uInt16 m_nOldMode;
 
-    void DrawTri( const Point& rPt, tools::Long nHeight, bool bLeft );
-    void DrawCursor( const Point& rPt, tools::Long nHeight, sal_uInt16 nMode );
+    void DrawCursor( sal_uInt16 nMode );
 
 public:
     SwShadowCursor( vcl::Window& rWin, const Color& rCol )
@@ -42,8 +41,6 @@ public:
     ~SwShadowCursor();
 
     void SetPos( const Point& rPt, tools::Long nHeight, sal_uInt16 nMode );
-
-    void Paint();
 
     tools::Rectangle GetRect() const;
 };
