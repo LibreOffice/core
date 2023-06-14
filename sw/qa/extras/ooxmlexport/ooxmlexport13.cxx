@@ -58,6 +58,53 @@ DECLARE_OOXMLEXPORT_TEST(testTdf126994_lostPageBreak, "tdf126994_lostPageBreak.d
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 3, getPages() );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf155690, "tdf155690.docx")
+{
+    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xBookmarks = xBookmarksSupplier->getBookmarks();
+    {
+        uno::Reference<text::XTextContent> xMark(xBookmarks->getByName("row1_1"), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xMark.is());
+        // the problem was that the start was after the H
+        CPPUNIT_ASSERT_EQUAL(OUString("Hello world"), xMark->getAnchor()->getString());
+    }
+    {
+        uno::Reference<text::XTextContent> xMark(xBookmarks->getByName("row1_2"), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xMark.is());
+        CPPUNIT_ASSERT_EQUAL(OUString("Hello world"), xMark->getAnchor()->getString());
+    }
+    {
+        uno::Reference<text::XTextContent> xMark(xBookmarks->getByName("row1_3"), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xMark.is());
+        CPPUNIT_ASSERT_EQUAL(OUString("ello world"), xMark->getAnchor()->getString());
+    }
+    {
+        uno::Reference<text::XTextContent> xMark(xBookmarks->getByName("row1_4"), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xMark.is());
+        CPPUNIT_ASSERT_EQUAL(OUString("Hello world"), xMark->getAnchor()->getString());
+    }
+    {
+        uno::Reference<text::XTextContent> xMark(xBookmarks->getByName("row2_1"), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xMark.is());
+        CPPUNIT_ASSERT_EQUAL(OUString("Hello world"), xMark->getAnchor()->getString());
+    }
+    {
+        uno::Reference<text::XTextContent> xMark(xBookmarks->getByName("row2_1"), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xMark.is());
+        CPPUNIT_ASSERT_EQUAL(OUString("Hello world"), xMark->getAnchor()->getString());
+    }
+    {
+        uno::Reference<text::XTextContent> xMark(xBookmarks->getByName("row2_3"), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xMark.is());
+        CPPUNIT_ASSERT_EQUAL(OUString("ello world"), xMark->getAnchor()->getString());
+    }
+    {
+        uno::Reference<text::XTextContent> xMark(xBookmarks->getByName("row2_4"), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xMark.is());
+        CPPUNIT_ASSERT_EQUAL(OUString("Hello world"), xMark->getAnchor()->getString());
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf121374_sectionHF)
 {
     loadAndReload("tdf121374_sectionHF.odt");
