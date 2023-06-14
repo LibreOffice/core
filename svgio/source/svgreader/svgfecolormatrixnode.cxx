@@ -25,7 +25,8 @@ namespace svgio::svgreader
 {
 SvgFeColorMatrixNode::SvgFeColorMatrixNode(SvgDocument& rDocument, SvgNode* pParent)
     : SvgNode(SVGToken::FeColorMatrix, rDocument, pParent)
-    , maType(Type::None)
+    , maType(ColorType::None)
+    , maValues(1.0)
 {
 }
 
@@ -43,8 +44,22 @@ void SvgFeColorMatrixNode::parseAttribute(const OUString& /*rTokenName*/, SVGTok
             {
                 if (o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"luminanceToAlpha"))
                 {
-                    maType = Type::LuminanceToAlpha;
+                    maType = ColorType::LuminanceToAlpha;
                 }
+                else if (o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"saturate"))
+                {
+                    maType = ColorType::Saturate;
+                }
+            }
+            break;
+        }
+        case SVGToken::Values:
+        {
+            SvgNumber aNum;
+
+            if (readSingleNumber(aContent, aNum))
+            {
+                maValues = aNum;
             }
             break;
         }
@@ -57,12 +72,20 @@ void SvgFeColorMatrixNode::parseAttribute(const OUString& /*rTokenName*/, SVGTok
 
 void SvgFeColorMatrixNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget) const
 {
-    if (maType == Type::LuminanceToAlpha)
+    if (maType == ColorType::LuminanceToAlpha)
     {
         const drawinglayer::primitive2d::Primitive2DReference xRef(
             new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
                 std::move(rTarget),
                 std::make_shared<basegfx::BColorModifier_luminance_to_alpha>()));
+        rTarget = drawinglayer::primitive2d::Primitive2DContainer{ xRef };
+    }
+    else if (maType == ColorType::Saturate)
+    {
+        const drawinglayer::primitive2d::Primitive2DReference xRef(
+            new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
+                std::move(rTarget),
+                std::make_shared<basegfx::BColorModifier_saturate>(maValues.getNumber())));
         rTarget = drawinglayer::primitive2d::Primitive2DContainer{ xRef };
     }
 }

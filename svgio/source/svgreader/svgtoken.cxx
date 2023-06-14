@@ -113,6 +113,7 @@ namespace svgio::svgreader
         const char aSVGStrXMaxYMax[] = "xMaxYMax";
         const char aSVGStrMeet[] = "meet";
         const char aSVGStrSlice[] = "slice";
+        const char aSVGStrValues[] = "values";
 
         const char aSVGStrDefs[] = "defs";
         const char aSVGStrG[] = "g";
@@ -265,6 +266,7 @@ namespace svgio::svgreader
                 { aSVGStrXMaxYMax, SVGToken::XMaxYMax },
                 { aSVGStrMeet, SVGToken::Meet },
                 { aSVGStrSlice, SVGToken::Slice },
+                { aSVGStrValues, SVGToken::Values },
 
                 { aSVGStrDefs, SVGToken::Defs },
                 { aSVGStrG, SVGToken::G },

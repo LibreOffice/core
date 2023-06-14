@@ -38,6 +38,7 @@
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
+#include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/sceneprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/attribute/lineattribute.hxx>
@@ -1127,11 +1128,14 @@ void Primitive2dXmlDump::decomposeAndWrite(
             case PRIMITIVE2D_ID_MODIFIEDCOLORPRIMITIVE2D:
             {
                 // ModifiedColorPrimitive2D.
+                const ModifiedColorPrimitive2D& rModifiedColorPrimitive2D
+                    = dynamic_cast<const ModifiedColorPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("modifiedColor");
-                drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
-                pBasePrimitive->get2DDecomposition(aPrimitiveContainer,
-                                                   drawinglayer::geometry::ViewInformation2D());
-                decomposeAndWrite(aPrimitiveContainer, rWriter);
+                const basegfx::BColorModifierSharedPtr& aColorModifier
+                    = rModifiedColorPrimitive2D.getColorModifier();
+                rWriter.attribute("modifier", aColorModifier->getModifierName());
+
+                decomposeAndWrite(rModifiedColorPrimitive2D.getChildren(), rWriter);
                 rWriter.endElement();
                 break;
             }
