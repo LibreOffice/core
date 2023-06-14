@@ -64,13 +64,19 @@
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/justifyitem.hxx>
 #include <tools/mapunit.hxx>
+#include <vcl/lazydelete.hxx>
 
 using namespace ::com::sun::star;
 
 EditDLL& EditDLL::Get()
 {
-    static EditDLL theEditDLL;
-    return theEditDLL;
+    /**
+      Prevent use-after-free errors during application shutdown.
+      Previously this data was function-static, but then data in i18npool would
+      be torn down before the destructor here ran, causing a crash.
+    */
+    static vcl::DeleteOnDeinit< EditDLL > gaEditDll;
+    return *gaEditDll.get();
 }
 
 DefItems::DefItems()

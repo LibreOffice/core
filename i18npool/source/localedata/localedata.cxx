@@ -1105,19 +1105,12 @@ LocaleDataImpl::getFollowPageWords( const Locale& rLocale )
 Sequence< OUString > SAL_CALL
 LocaleDataImpl::getTransliterations( const Locale& rLocale )
 {
-    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getTransliterations" ));
+    MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getTransliterations" ));
 
     if ( func ) {
         sal_Int16 transliterationsCount = 0;
-        sal_Unicode **transliterationsArray = func(transliterationsCount);
-
-        Sequence< OUString > seq(transliterationsCount);
-        auto seqRange = asNonConstRange(seq);
-        for(int i = 0; i < transliterationsCount; i++) {
-            OUString  elem(transliterationsArray[i]);
-            seqRange[i] = elem;
-        }
-        return seq;
+        const OUString *transliterationsArray = func(transliterationsCount);
+        return Sequence< OUString >(transliterationsArray, transliterationsCount);
     }
     else {
         return {};
@@ -1153,13 +1146,14 @@ LocaleDataImpl::getLanguageCountryInfo( const Locale& rLocale )
 ForbiddenCharacters SAL_CALL
 LocaleDataImpl::getForbiddenCharacters( const Locale& rLocale )
 {
-    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getForbiddenCharacters" ));
+    MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getForbiddenCharacters" ));
 
     if ( func ) {
         sal_Int16 LCForbiddenCharactersCount = 0;
-        sal_Unicode **LCForbiddenCharactersArray = func(LCForbiddenCharactersCount);
+        OUString const *LCForbiddenCharactersArray = func(LCForbiddenCharactersCount);
+        assert(LCForbiddenCharactersCount == 3);
         ForbiddenCharacters chars{
-            OUString(LCForbiddenCharactersArray[0]), OUString(LCForbiddenCharactersArray[1])};
+            LCForbiddenCharactersArray[0], LCForbiddenCharactersArray[1]};
         return chars;
     }
     else {
@@ -1171,12 +1165,13 @@ LocaleDataImpl::getForbiddenCharacters( const Locale& rLocale )
 OUString
 LocaleDataImpl::getHangingCharacters( const Locale& rLocale )
 {
-    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getForbiddenCharacters" ));
+    MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getForbiddenCharacters" ));
 
     if ( func ) {
         sal_Int16 LCForbiddenCharactersCount = 0;
-        sal_Unicode **LCForbiddenCharactersArray = func(LCForbiddenCharactersCount);
-        return OUString(LCForbiddenCharactersArray[2]);
+        const OUString *LCForbiddenCharactersArray = func(LCForbiddenCharactersCount);
+        assert(LCForbiddenCharactersCount == 3);
+        return LCForbiddenCharactersArray[2];
     }
 
     return OUString();
@@ -1185,18 +1180,12 @@ LocaleDataImpl::getHangingCharacters( const Locale& rLocale )
 Sequence< OUString >
 LocaleDataImpl::getBreakIteratorRules( const Locale& rLocale  )
 {
-    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getBreakIteratorRules" ));
+    MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getBreakIteratorRules" ));
 
     if ( func ) {
         sal_Int16 LCBreakIteratorRuleCount = 0;
-        sal_Unicode **LCBreakIteratorRulesArray = func(LCBreakIteratorRuleCount);
-        Sequence< OUString > seq(LCBreakIteratorRuleCount);
-        auto seqRange = asNonConstRange(seq);
-        for(int i = 0; i < LCBreakIteratorRuleCount; i++) {
-            OUString  elem(LCBreakIteratorRulesArray[i]);
-            seqRange[i] = elem;
-        }
-        return seq;
+        OUString const *LCBreakIteratorRulesArray = func(LCBreakIteratorRuleCount);
+        return Sequence< OUString >(LCBreakIteratorRulesArray, LCBreakIteratorRuleCount);
     }
     else {
         return {};
@@ -1207,18 +1196,12 @@ LocaleDataImpl::getBreakIteratorRules( const Locale& rLocale  )
 Sequence< OUString > SAL_CALL
 LocaleDataImpl::getReservedWord( const Locale& rLocale  )
 {
-    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getReservedWords" ));
+    MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getReservedWords" ));
 
     if ( func ) {
         sal_Int16 LCReservedWordsCount = 0;
-        sal_Unicode **LCReservedWordsArray = func(LCReservedWordsCount);
-        Sequence< OUString > seq(LCReservedWordsCount);
-        auto seqRange = asNonConstRange(seq);
-        for(int i = 0; i < LCReservedWordsCount; i++) {
-            OUString  elem(LCReservedWordsArray[i]);
-            seqRange[i] = elem;
-        }
-        return seq;
+        OUString const *LCReservedWordsArray = func(LCReservedWordsCount);
+        return Sequence< OUString >(LCReservedWordsArray, LCReservedWordsCount);
     }
     else {
         return {};

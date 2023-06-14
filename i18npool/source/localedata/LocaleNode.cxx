@@ -2071,7 +2071,7 @@ void LCTransliterationNode::generateCode (const OFileWriter &of) const
     OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
         useLocale = useLocale.replace( '-', '_');
-        of.writeRefFunction("getTransliterations_", useLocale);
+        of.writeOUStringRefFunction("getTransliterations_", useLocale);
         return;
     }
     sal_Int16 nbOfModules = 0;
@@ -2080,20 +2080,20 @@ void LCTransliterationNode::generateCode (const OFileWriter &of) const
     for ( sal_Int32 i = 0; i < getNumberOfChildren(); i++,nbOfModules++) {
         LocaleNode * transNode = getChildAt (i);
         str = transNode->getAttr().getValueByIndex(0);
-        of.writeParameter("Transliteration", str, nbOfModules);
+        of.writeOUStringLiteralParameter("Transliteration", str, nbOfModules);
     }
     of.writeAsciiString("static const sal_Int16 nbOfTransliterations = ");
     of.writeInt(nbOfModules);
     of.writeAsciiString(";\n\n");
 
-    of.writeAsciiString("\nstatic const sal_Unicode* LCTransliterationsArray[] = {\n");
+    of.writeAsciiString("\nstatic constexpr rtl::OUStringConstExpr LCTransliterationsArray[] = {\n");
     for( sal_Int16 i = 0; i < nbOfModules; i++) {
         of.writeAsciiString("\tTransliteration");
         of.writeInt(i);
         of.writeAsciiString(",\n");
     }
     of.writeAsciiString("};\n\n");
-    of.writeFunction("getTransliterations_", "nbOfTransliterations", "LCTransliterationsArray");
+    of.writeOUStringFunction("getTransliterations_", "nbOfTransliterations", "LCTransliterationsArray");
 }
 
 namespace {
@@ -2125,9 +2125,9 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
     OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
         useLocale = useLocale.replace( '-', '_');
-        of.writeRefFunction("getForbiddenCharacters_", useLocale);
-        of.writeRefFunction("getBreakIteratorRules_", useLocale);
-        of.writeRefFunction("getReservedWords_", useLocale);
+        of.writeOUStringRefFunction("getForbiddenCharacters_", useLocale);
+        of.writeOUStringRefFunction("getBreakIteratorRules_", useLocale);
+        of.writeOUStringRefFunction("getReservedWords_", useLocale);
         return;
     }
     const LocaleNode * reserveNode = findNode("ReservedWords");
@@ -2155,7 +2155,7 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
             ++nError;
             fprintf( stderr, "Error: No content for ReservedWords %s.\n", ReserveWord[i].name);
         }
-        of.writeParameter("ReservedWord", str, nbOfWords);
+        of.writeOUStringLiteralParameter("ReservedWord", str, nbOfWords);
         // "true", ..., "below" trigger untranslated warning.
         if (!bEnglishLocale && curNode && i <= 7 &&
                 str.equalsIgnoreAsciiCaseAscii( ReserveWord[i].value))
@@ -2168,52 +2168,52 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
     of.writeAsciiString("static const sal_Int16 nbOfReservedWords = ");
     of.writeInt(nbOfWords);
     of.writeAsciiString(";\n\n");
-    of.writeAsciiString("\nstatic const sal_Unicode* LCReservedWordsArray[] = {\n");
+    of.writeAsciiString("\nstatic constexpr rtl::OUStringConstExpr LCReservedWordsArray[] = {\n");
     for( i = 0; i < nbOfWords; i++) {
         of.writeAsciiString("\tReservedWord");
         of.writeInt(i);
         of.writeAsciiString(",\n");
     }
     of.writeAsciiString("};\n\n");
-    of.writeFunction("getReservedWords_", "nbOfReservedWords", "LCReservedWordsArray");
+    of.writeOUStringFunction("getReservedWords_", "nbOfReservedWords", "LCReservedWordsArray");
 
     if (forbidNode)    {
-         of.writeParameter( "forbiddenBegin", forbidNode -> getChildAt(0)->getValue());
-         of.writeParameter( "forbiddenEnd", forbidNode -> getChildAt(1)->getValue());
-         of.writeParameter( "hangingChars", forbidNode -> getChildAt(2)->getValue());
+         of.writeOUStringLiteralParameter( "forbiddenBegin", forbidNode -> getChildAt(0)->getValue());
+         of.writeOUStringLiteralParameter( "forbiddenEnd", forbidNode -> getChildAt(1)->getValue());
+         of.writeOUStringLiteralParameter( "hangingChars", forbidNode -> getChildAt(2)->getValue());
     } else {
-         of.writeParameter( "forbiddenBegin", std::u16string_view());
-         of.writeParameter( "forbiddenEnd", std::u16string_view());
-         of.writeParameter( "hangingChars", std::u16string_view());
+         of.writeOUStringLiteralParameter( "forbiddenBegin", std::u16string_view());
+         of.writeOUStringLiteralParameter( "forbiddenEnd", std::u16string_view());
+         of.writeOUStringLiteralParameter( "hangingChars", std::u16string_view());
     }
-    of.writeAsciiString("\nstatic const sal_Unicode* LCForbiddenCharactersArray[] = {\n");
+    of.writeAsciiString("\nstatic constexpr rtl::OUStringConstExpr LCForbiddenCharactersArray[] = {\n");
     of.writeAsciiString("\tforbiddenBegin,\n");
     of.writeAsciiString("\tforbiddenEnd,\n");
     of.writeAsciiString("\thangingChars\n");
     of.writeAsciiString("};\n\n");
-    of.writeFunction("getForbiddenCharacters_", "3", "LCForbiddenCharactersArray");
+    of.writeOUStringFunction("getForbiddenCharacters_", "3", "LCForbiddenCharactersArray");
 
     if (breakNode) {
-         of.writeParameter( "EditMode", breakNode -> getChildAt(0)->getValue());
-         of.writeParameter( "DictionaryMode", breakNode -> getChildAt(1)->getValue());
-         of.writeParameter( "WordCountMode", breakNode -> getChildAt(2)->getValue());
-         of.writeParameter( "CharacterMode", breakNode -> getChildAt(3)->getValue());
-         of.writeParameter( "LineMode", breakNode -> getChildAt(4)->getValue());
+         of.writeOUStringLiteralParameter( "EditMode", breakNode -> getChildAt(0)->getValue());
+         of.writeOUStringLiteralParameter( "DictionaryMode", breakNode -> getChildAt(1)->getValue());
+         of.writeOUStringLiteralParameter( "WordCountMode", breakNode -> getChildAt(2)->getValue());
+         of.writeOUStringLiteralParameter( "CharacterMode", breakNode -> getChildAt(3)->getValue());
+         of.writeOUStringLiteralParameter( "LineMode", breakNode -> getChildAt(4)->getValue());
     } else {
-         of.writeParameter( "EditMode", std::u16string_view());
-         of.writeParameter( "DictionaryMode", std::u16string_view());
-         of.writeParameter( "WordCountMode", std::u16string_view());
-         of.writeParameter( "CharacterMode", std::u16string_view());
-         of.writeParameter( "LineMode", std::u16string_view());
+         of.writeOUStringLiteralParameter( "EditMode", std::u16string_view());
+         of.writeOUStringLiteralParameter( "DictionaryMode", std::u16string_view());
+         of.writeOUStringLiteralParameter( "WordCountMode", std::u16string_view());
+         of.writeOUStringLiteralParameter( "CharacterMode", std::u16string_view());
+         of.writeOUStringLiteralParameter( "LineMode", std::u16string_view());
     }
-    of.writeAsciiString("\nstatic const sal_Unicode* LCBreakIteratorRulesArray[] = {\n");
+    of.writeAsciiString("\nstatic constexpr rtl::OUStringConstExpr LCBreakIteratorRulesArray[] = {\n");
     of.writeAsciiString("\tEditMode,\n");
     of.writeAsciiString("\tDictionaryMode,\n");
     of.writeAsciiString("\tWordCountMode,\n");
     of.writeAsciiString("\tCharacterMode,\n");
     of.writeAsciiString("\tLineMode\n");
     of.writeAsciiString("};\n\n");
-    of.writeFunction("getBreakIteratorRules_", "5", "LCBreakIteratorRulesArray");
+    of.writeOUStringFunction("getBreakIteratorRules_", "5", "LCBreakIteratorRulesArray");
 
 }
 

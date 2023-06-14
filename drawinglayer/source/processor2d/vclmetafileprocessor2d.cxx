@@ -520,7 +520,8 @@ void VclMetafileProcessor2D::popList()
 }
 
 // init static break iterator
-uno::Reference<css::i18n::XBreakIterator> VclMetafileProcessor2D::mxBreakIterator;
+vcl::DeleteOnDeinit<uno::Reference<css::i18n::XBreakIterator>>
+    VclMetafileProcessor2D::mxBreakIterator;
 
 VclMetafileProcessor2D::VclMetafileProcessor2D(const geometry::ViewInformation2D& rViewInformation,
                                                OutputDevice& rOutDev)
@@ -1470,12 +1471,13 @@ void VclMetafileProcessor2D::processTextSimplePortionPrimitive2D(
     // #i101169# if(pTextDecoratedCandidate)
     {
         // support for TEXT_ MetaFile actions only for decorated texts
-        if (!mxBreakIterator.is())
+        if (!mxBreakIterator.get() || !mxBreakIterator.get()->get())
         {
             uno::Reference<uno::XComponentContext> xContext(
                 ::comphelper::getProcessComponentContext());
-            mxBreakIterator = i18n::BreakIterator::create(xContext);
+            mxBreakIterator.set(i18n::BreakIterator::create(xContext));
         }
+        auto& rBreakIterator = *mxBreakIterator.get()->get();
 
         const OUString& rTxt = rTextCandidate.getText();
         const sal_Int32 nTextLength(rTextCandidate.getTextLength()); // rTxt.getLength());
@@ -1486,13 +1488,13 @@ void VclMetafileProcessor2D::processTextSimplePortionPrimitive2D(
             const sal_Int32 nTextPosition(rTextCandidate.getTextPosition());
 
             sal_Int32 nDone;
-            sal_Int32 nNextCellBreak(mxBreakIterator->nextCharacters(
+            sal_Int32 nNextCellBreak(rBreakIterator.nextCharacters(
                 rTxt, nTextPosition, rLocale, css::i18n::CharacterIteratorMode::SKIPCELL, 0,
                 nDone));
-            css::i18n::Boundary nNextWordBoundary(mxBreakIterator->getWordBoundary(
+            css::i18n::Boundary nNextWordBoundary(rBreakIterator.getWordBoundary(
                 rTxt, nTextPosition, rLocale, css::i18n::WordType::ANY_WORD, true));
             sal_Int32 nNextSentenceBreak(
-                mxBreakIterator->endOfSentence(rTxt, nTextPosition, rLocale));
+                rBreakIterator.endOfSentence(rTxt, nTextPosition, rLocale));
             const OString aCommentStringA("XTEXT_EOC");
             const OString aCommentStringB("XTEXT_EOW");
             const OString aCommentStringC("XTEXT_EOS");
@@ -1504,21 +1506,21 @@ void VclMetafileProcessor2D::processTextSimplePortionPrimitive2D(
                 {
                     mpMetaFile->AddAction(
                         new MetaCommentAction(aCommentStringA, i - nTextPosition));
-                    nNextCellBreak = mxBreakIterator->nextCharacters(
+                    nNextCellBreak = rBreakIterator.nextCharacters(
                         rTxt, i, rLocale, css::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
                 }
                 if (i == nNextWordBoundary.endPos)
                 {
                     mpMetaFile->AddAction(
                         new MetaCommentAction(aCommentStringB, i - nTextPosition));
-                    nNextWordBoundary = mxBreakIterator->getWordBoundary(
+                    nNextWordBoundary = rBreakIterator.getWordBoundary(
                         rTxt, i + 1, rLocale, css::i18n::WordType::ANY_WORD, true);
                 }
                 if (i == nNextSentenceBreak)
                 {
                     mpMetaFile->AddAction(
                         new MetaCommentAction(aCommentStringC, i - nTextPosition));
-                    nNextSentenceBreak = mxBreakIterator->endOfSentence(rTxt, i + 1, rLocale);
+                    nNextSentenceBreak = rBreakIterator.endOfSentence(rTxt, i + 1, rLocale);
                 }
             }
         }

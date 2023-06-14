@@ -24,6 +24,7 @@ $(eval $(call gb_CppunitTest_use_libraries,svx_styles, \
     cppu \
     cppuhelper \
     docmodel \
+    editeng \
     svx \
     sal \
     subsequenttest \

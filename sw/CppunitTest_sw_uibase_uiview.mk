@@ -21,6 +21,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_uibase_uiview, \
     comphelper \
     cppu \
     cppuhelper \
+    editeng \
     sal \
     sfx \
     subsequenttest \
