@@ -1312,7 +1312,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testFloattableOverlap)
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf89288)
 {
     // Given a document with 2 paragraphs of mixed Complex and Western text,
-    // and 2 other paragrpahs of mixed Western and Asian text:
+    // and 2 other paragraphs of mixed Western and Asian text:
     createSwDoc("tdf89288.fodt");
 
     // When laying out that document:
