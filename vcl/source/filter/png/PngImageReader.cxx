@@ -129,6 +129,8 @@ int handle_unknown_chunk(png_structp png, png_unknown_chunkp chunk)
     APNGInfo* aAPNGInfo = static_cast<APNGInfo*>(png_get_user_chunk_ptr(png));
     if (sName == "acTL")
     {
+        if (chunk->size < sizeof(acTLChunk))
+            return -1;
         aAPNGInfo->maACTLChunk = *reinterpret_cast<acTLChunk*>(chunk->data);
         aAPNGInfo->maACTLChunk.num_frames = OSL_SWAPDWORD(aAPNGInfo->maACTLChunk.num_frames);
         aAPNGInfo->maACTLChunk.num_plays = OSL_SWAPDWORD(aAPNGInfo->maACTLChunk.num_plays);
