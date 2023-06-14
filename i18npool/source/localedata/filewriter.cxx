@@ -58,7 +58,7 @@ void OFileWriter::writeStringCharacters(std::u16string_view str) const
 void OFileWriter::writeOUStringLiteralCharacters(std::u16string_view str) const
 {
     for(size_t i = 0; i < str.size(); i++)
-        fprintf(m_f, "\\x%x", str[i]);
+        fprintf(m_f, "\\x%04x", str[i]);
 }
 
 void OFileWriter::writeOUStringRefFunction(const char *func, std::u16string_view useLocale) const
@@ -197,6 +197,13 @@ void OFileWriter::writeParameter(const char* pAsciiStr, std::u16string_view aCha
     fprintf(m_f, "static const sal_Unicode %s[] = {", pAsciiStr);
     writeStringCharacters(aChars);
     fprintf(m_f, "0x0};\n");
+}
+
+void OFileWriter::writeOUStringLiteralParameter(const char* pAsciiStr, std::u16string_view aChars) const
+{
+    fprintf(m_f, "static constexpr OUStringLiteral %s = u\"", pAsciiStr);
+    writeOUStringLiteralCharacters(aChars);
+    fprintf(m_f, "\";\n");
 }
 
 void OFileWriter::writeParameter(const char* pAsciiStr, std::u16string_view aChars, sal_Int16 count) const

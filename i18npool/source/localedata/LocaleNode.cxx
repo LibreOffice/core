@@ -179,6 +179,43 @@ OUString LocaleNode::writeParameterCheckLen( const OFileWriter &of,
     return aVal;
 }
 
+OUString LocaleNode::writeOUStringLiteralParameterCheckLen( const OFileWriter &of,
+        const char* pParameterName, const LocaleNode* pNode,
+        sal_Int32 nMinLen, sal_Int32 nMaxLen ) const
+{
+    OUString aVal;
+    if (pNode)
+        aVal = pNode->getValue();
+    else if (nMinLen >= 0)  // -1: optional => empty, 0: must be present, empty
+    {
+        ++nError;
+        fprintf( stderr, "Error: node NULL pointer for parameter %s.\n",
+                pParameterName);
+    }
+    // write empty data if error
+    of.writeOUStringLiteralParameter( pParameterName, aVal);
+    sal_Int32 nLen = aVal.getLength();
+    if (nLen < nMinLen)
+    {
+        ++nError;
+        fprintf( stderr, "Error: less than %" SAL_PRIdINT32 " character%s (%" SAL_PRIdINT32 ") in %s '%s'.\n",
+                nMinLen, (nMinLen > 1 ? "s" : ""),
+                nLen,
+                (pNode ? OSTR( pNode->getName()) : ""),
+                OSTR( aVal));
+    }
+    else if (nLen > nMaxLen && nMaxLen >= 0)
+    {
+        ++nError;
+        fprintf( stderr,
+                "Error: more than %" SAL_PRIdINT32 " character%s (%" SAL_PRIdINT32 ") in %s '%s' not supported by application.\n",
+                nMaxLen, (nMaxLen > 1 ? "s" : ""),
+                nLen,
+                (pNode ? OSTR( pNode->getName()) : ""),
+                OSTR( aVal));
+    }
+    return aVal;
+}
 
 OUString LocaleNode::writeParameterCheckLen( const OFileWriter &of,
         const char* pNodeName, const char* pParameterName,
@@ -194,6 +231,24 @@ OUString LocaleNode::writeParameterCheckLen( const OFileWriter &of,
         fprintf( stderr, "Error: node %s not found.\n", pNodeName);
         // write empty data if error
         of.writeParameter( pParameterName, aVal);
+    }
+    return aVal;
+}
+
+OUString LocaleNode::writeOUStringLiteralParameterCheckLen( const OFileWriter &of,
+        const char* pNodeName, const char* pParameterName,
+        sal_Int32 nMinLen, sal_Int32 nMaxLen ) const
+{
+    OUString aVal;
+    const LocaleNode * pNode = findNode( pNodeName);
+    if (pNode || nMinLen < 0)
+        aVal = writeOUStringLiteralParameterCheckLen( of, pParameterName, pNode, nMinLen, nMaxLen);
+    else
+    {
+        ++nError;
+        fprintf( stderr, "Error: node %s not found.\n", pNodeName);
+        // write empty data if error
+        of.writeOUStringLiteralParameter( pParameterName, aVal);
     }
     return aVal;
 }
@@ -288,54 +343,54 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
     OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
         useLocale = useLocale.replace( '-', '_');
-        of.writeRefFunction("getLocaleItem_", useLocale);
+        of.writeOUStringRefFunction("getLocaleItem_", useLocale);
         return;
     }
     OUString str =   getAttr().getValueByName("unoid");
     of.writeAsciiString("\n\n");
-    of.writeParameter("LC_CTYPE_Unoid", str);
+    of.writeOUStringLiteralParameter("LC_CTYPE_Unoid", str);
 
     aDateSep =
-        writeParameterCheckLen( of, "DateSeparator", "dateSeparator", 1, 1);
+        writeOUStringLiteralParameterCheckLen( of, "DateSeparator", "dateSeparator", 1, 1);
     OUString aThoSep =
-        writeParameterCheckLen( of, "ThousandSeparator", "thousandSeparator", 1, 1);
+        writeOUStringLiteralParameterCheckLen( of, "ThousandSeparator", "thousandSeparator", 1, 1);
     aDecSep =
-        writeParameterCheckLen( of, "DecimalSeparator", "decimalSeparator", 1, 1);
+        writeOUStringLiteralParameterCheckLen( of, "DecimalSeparator", "decimalSeparator", 1, 1);
     OUString aDecSepAlt =
-        writeParameterCheckLen( of, "DecimalSeparatorAlternative", "decimalSeparatorAlternative", -1, 1);
+        writeOUStringLiteralParameterCheckLen( of, "DecimalSeparatorAlternative", "decimalSeparatorAlternative", -1, 1);
     OUString aTimeSep =
-        writeParameterCheckLen( of, "TimeSeparator", "timeSeparator", 1, 1);
+        writeOUStringLiteralParameterCheckLen( of, "TimeSeparator", "timeSeparator", 1, 1);
     OUString aTime100Sep =
-        writeParameterCheckLen( of, "Time100SecSeparator", "time100SecSeparator", 1, 1);
+        writeOUStringLiteralParameterCheckLen( of, "Time100SecSeparator", "time100SecSeparator", 1, 1);
     OUString aListSep =
-        writeParameterCheckLen( of, "ListSeparator", "listSeparator", 1, 1);
+        writeOUStringLiteralParameterCheckLen( of, "ListSeparator", "listSeparator", 1, 1);
 
     OUString aLDS;
 
     sepNode = findNode("LongDateDayOfWeekSeparator");
     aLDS = sepNode->getValue();
-    of.writeParameter("LongDateDayOfWeekSeparator", aLDS);
+    of.writeOUStringLiteralParameter("LongDateDayOfWeekSeparator", aLDS);
     if (aLDS == ",")
         fprintf( stderr, "Warning: %s\n",
                 "LongDateDayOfWeekSeparator is only a comma not followed by a space. Usually this is not the case and may lead to concatenated display names like \"Wednesday,May 9, 2007\".");
 
     sepNode = findNode("LongDateDaySeparator");
     aLDS = sepNode->getValue();
-    of.writeParameter("LongDateDaySeparator", aLDS);
+    of.writeOUStringLiteralParameter("LongDateDaySeparator", aLDS);
     if (aLDS == "," || aLDS == ".")
         fprintf( stderr, "Warning: %s\n",
                 "LongDateDaySeparator is only a comma or dot not followed by a space. Usually this is not the case and may lead to concatenated display names like \"Wednesday, May 9,2007\".");
 
     sepNode = findNode("LongDateMonthSeparator");
     aLDS = sepNode->getValue();
-    of.writeParameter("LongDateMonthSeparator", aLDS);
+    of.writeOUStringLiteralParameter("LongDateMonthSeparator", aLDS);
     if (aLDS.isEmpty())
         fprintf( stderr, "Warning: %s\n",
                 "LongDateMonthSeparator is empty. Usually this is not the case and may lead to concatenated display names like \"Wednesday, May9, 2007\".");
 
     sepNode = findNode("LongDateYearSeparator");
     aLDS = sepNode->getValue();
-    of.writeParameter("LongDateYearSeparator", aLDS);
+    of.writeOUStringLiteralParameter("LongDateYearSeparator", aLDS);
     if (aLDS.isEmpty())
         fprintf( stderr, "Warning: %s\n",
                 "LongDateYearSeparator is empty. Usually this is not the case and may lead to concatenated display names like \"Wednesday, 2007May 9\".");
@@ -380,13 +435,13 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
                 "Don't forget to adapt corresponding FormatCode elements when changing separators.");
 
     OUString aQuoteStart =
-        writeParameterCheckLen( of, "QuotationStart", "quotationStart", 1, 1);
+        writeOUStringLiteralParameterCheckLen( of, "QuotationStart", "quotationStart", 1, 1);
     OUString aQuoteEnd =
-        writeParameterCheckLen( of, "QuotationEnd", "quotationEnd", 1, 1);
+        writeOUStringLiteralParameterCheckLen( of, "QuotationEnd", "quotationEnd", 1, 1);
     OUString aDoubleQuoteStart =
-        writeParameterCheckLen( of, "DoubleQuotationStart", "doubleQuotationStart", 1, 1);
+        writeOUStringLiteralParameterCheckLen( of, "DoubleQuotationStart", "doubleQuotationStart", 1, 1);
     OUString aDoubleQuoteEnd =
-        writeParameterCheckLen( of, "DoubleQuotationEnd", "doubleQuotationEnd", 1, 1);
+        writeOUStringLiteralParameterCheckLen( of, "DoubleQuotationEnd", "doubleQuotationEnd", 1, 1);
 
     if (aQuoteStart.toChar() <= 127 && aQuoteEnd.toChar() > 127)
         fprintf( stderr, "Warning: %s\n",
@@ -478,12 +533,12 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
                     "DoubleQuotationEnd may be wrong:", ic, OSTR( aDoubleQuoteEnd));
     }
 
-    writeParameterCheckLen( of, "TimeAM", "timeAM", 1, -1);
-    writeParameterCheckLen( of, "TimePM", "timePM", 1, -1);
+    writeOUStringLiteralParameterCheckLen( of, "TimeAM", "timeAM", 1, -1);
+    writeOUStringLiteralParameterCheckLen( of, "TimePM", "timePM", 1, -1);
     sepNode = findNode("MeasurementSystem");
-    of.writeParameter("measurementSystem", sepNode->getValue());
+    of.writeOUStringLiteralParameter("measurementSystem", sepNode->getValue());
 
-    of.writeAsciiString("\nstatic const sal_Unicode* LCType[] = {\n");
+    of.writeAsciiString("\nstatic constexpr rtl::OUStringConstExpr LCType[] = {\n");
     of.writeAsciiString("\tLC_CTYPE_Unoid,\n");
     of.writeAsciiString("\tdateSeparator,\n");
     of.writeAsciiString("\tthousandSeparator,\n");
@@ -504,7 +559,7 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
     of.writeAsciiString("\tLongDateYearSeparator,\n");
     of.writeAsciiString("\tdecimalSeparatorAlternative\n");
     of.writeAsciiString("};\n\n");
-    of.writeFunction("getLocaleItem_", "SAL_N_ELEMENTS(LCType)", "LCType");
+    of.writeOUStringFunction("getLocaleItem_", "SAL_N_ELEMENTS(LCType)", "LCType");
 }
 
 

@@ -58,6 +58,7 @@ public:
     bool  writeDefaultParameter(const char* pAsciiStr, std::u16string_view str, sal_Int16 count) const;
     bool  writeOUStringLiteralDefaultParameter(const char* pAsciiStr, std::u16string_view str, sal_Int16 count) const;
     void  writeParameter(const char* pAsciiStr, std::u16string_view aChars) const;
+    void  writeOUStringLiteralParameter(const char* pAsciiStr, std::u16string_view aChars) const;
     void  writeParameter(const char* pAsciiStr, std::u16string_view aChars, sal_Int16 count) const;
     void  writeOUStringLiteralParameter(const char* pAsciiStr, std::u16string_view aChars, sal_Int16 count) const;
     void  writeParameter(const char* pAsciiStr, std::u16string_view aChars, sal_Int16 count0, sal_Int16 count1) const;
@@ -115,7 +116,9 @@ public:
     // nMaxLen <  0 : any length
     // nMaxLen >= 0 : warning if more than nMaxLen characters
     OUString writeParameterCheckLen( const OFileWriter &of, const char* pParameterName, const LocaleNode* pNode, sal_Int32 nMinLen, sal_Int32 nMaxLen ) const;
+    OUString writeOUStringLiteralParameterCheckLen( const OFileWriter &of, const char* pParameterName, const LocaleNode* pNode, sal_Int32 nMinLen, sal_Int32 nMaxLen ) const;
     OUString writeParameterCheckLen( const OFileWriter &of, const char* pNodeName, const char* pParameterName, sal_Int32 nMinLen, sal_Int32 nMaxLen ) const;
+    OUString writeOUStringLiteralParameterCheckLen( const OFileWriter &of, const char* pNodeName, const char* pParameterName, sal_Int32 nMinLen, sal_Int32 nMaxLen ) const;
     // ++nError with output to stderr
     void incError( const char* pStr ) const;
     // ++nError with output to stderr

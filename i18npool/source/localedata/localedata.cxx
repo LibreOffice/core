@@ -389,31 +389,31 @@ LocaleDataImpl::~LocaleDataImpl()
 LocaleDataItem SAL_CALL
 LocaleDataImpl::getLocaleItem( const Locale& rLocale )
 {
-    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getLocaleItem" ));
+    MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getLocaleItem" ));
 
     if ( func ) {
         sal_Int16 dataItemCount = 0;
-        sal_Unicode **dataItem = func(dataItemCount);
+        OUString const *dataItem = func(dataItemCount);
 
         LocaleDataItem item{
-                OUString(dataItem[0]),
-                OUString(dataItem[1]),
-                OUString(dataItem[2]),
-                OUString(dataItem[3]),
-                OUString(dataItem[4]),
-                OUString(dataItem[5]),
-                OUString(dataItem[6]),
-                OUString(dataItem[7]),
-                OUString(dataItem[8]),
-                OUString(dataItem[9]),
-                OUString(dataItem[10]),
-                OUString(dataItem[11]),
-                OUString(dataItem[12]),
-                OUString(dataItem[13]),
-                OUString(dataItem[14]),
-                OUString(dataItem[15]),
-                OUString(dataItem[16]),
-                OUString(dataItem[17])
+                dataItem[0],
+                dataItem[1],
+                dataItem[2],
+                dataItem[3],
+                dataItem[4],
+                dataItem[5],
+                dataItem[6],
+                dataItem[7],
+                dataItem[8],
+                dataItem[9],
+                dataItem[10],
+                dataItem[11],
+                dataItem[12],
+                dataItem[13],
+                dataItem[14],
+                dataItem[15],
+                dataItem[16],
+                dataItem[17]
                 };
         return item;
     }
@@ -427,34 +427,34 @@ LocaleDataImpl::getLocaleItem( const Locale& rLocale )
 LocaleDataItem2 SAL_CALL
 LocaleDataImpl::getLocaleItem2( const Locale& rLocale )
 {
-    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getLocaleItem" ));
+    MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getLocaleItem" ));
 
     if ( func ) {
         sal_Int16 dataItemCount = 0;
-        sal_Unicode **dataItem = func(dataItemCount);
+        OUString const *dataItem = func(dataItemCount);
 
         assert(dataItemCount >= 18);
 
         LocaleDataItem2 item{
-                OUString(dataItem[0]),
-                OUString(dataItem[1]),
-                OUString(dataItem[2]),
-                OUString(dataItem[3]),
-                OUString(dataItem[4]),
-                OUString(dataItem[5]),
-                OUString(dataItem[6]),
-                OUString(dataItem[7]),
-                OUString(dataItem[8]),
-                OUString(dataItem[9]),
-                OUString(dataItem[10]),
-                OUString(dataItem[11]),
-                OUString(dataItem[12]),
-                OUString(dataItem[13]),
-                OUString(dataItem[14]),
-                OUString(dataItem[15]),
-                OUString(dataItem[16]),
-                OUString(dataItem[17]),
-                dataItemCount >= 19 ? OUString(dataItem[18]) : OUString()
+                dataItem[0],
+                dataItem[1],
+                dataItem[2],
+                dataItem[3],
+                dataItem[4],
+                dataItem[5],
+                dataItem[6],
+                dataItem[7],
+                dataItem[8],
+                dataItem[9],
+                dataItem[10],
+                dataItem[11],
+                dataItem[12],
+                dataItem[13],
+                dataItem[14],
+                dataItem[15],
+                dataItem[16],
+                dataItem[17],
+                dataItemCount >= 19 ? dataItem[18] : OUString()
                 };
         return item;
     }
