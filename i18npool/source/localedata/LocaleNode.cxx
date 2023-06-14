@@ -618,7 +618,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         {
             case 0:
                 of.writeOUStringRefFunction("getAllFormats0_", useLocale, "replaceTo0");
-                of.writeRefFunction("getDateAcceptancePatterns_", useLocale);
+                of.writeOUStringRefFunction("getDateAcceptancePatterns_", useLocale);
                 break;
             case 1:
                 of.writeOUStringRefFunction("getAllFormats1_", useLocale, "replaceTo1");
@@ -1288,14 +1288,14 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
 
         for (sal_Int16 i = 0; i < nbOfDateAcceptancePatterns; ++i)
         {
-            of.writeParameter("DateAcceptancePattern", theDateAcceptancePatterns[i], i);
+            of.writeOUStringLiteralParameter("DateAcceptancePattern", theDateAcceptancePatterns[i], i);
         }
 
         of.writeAsciiString("static const sal_Int16 DateAcceptancePatternsCount = ");
         of.writeInt( nbOfDateAcceptancePatterns);
         of.writeAsciiString(";\n");
 
-        of.writeAsciiString("static const sal_Unicode* DateAcceptancePatternsArray[] = {\n");
+        of.writeAsciiString("static constexpr rtl::OUStringConstExpr DateAcceptancePatternsArray[] = {\n");
         for (sal_Int16 i = 0; i < nbOfDateAcceptancePatterns; ++i)
         {
             of.writeAsciiString("\t");
@@ -1305,7 +1305,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         }
         of.writeAsciiString("};\n\n");
 
-        of.writeFunction("getDateAcceptancePatterns_", "DateAcceptancePatternsCount", "DateAcceptancePatternsArray");
+        of.writeOUStringFunction("getDateAcceptancePatterns_", "DateAcceptancePatternsCount", "DateAcceptancePatternsArray");
     }
 
     ++mnSection;

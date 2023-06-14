@@ -875,17 +875,17 @@ LocaleDataImpl::getAllFormats( const Locale& rLocale )
 Sequence< OUString > SAL_CALL
 LocaleDataImpl::getDateAcceptancePatterns( const Locale& rLocale )
 {
-    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getDateAcceptancePatterns" ));
+    MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getDateAcceptancePatterns" ));
 
     if (func)
     {
         sal_Int16 patternsCount = 0;
-        sal_Unicode **patternsArray = func( patternsCount );
+        OUString const *patternsArray = func( patternsCount );
         Sequence< OUString > seq( patternsCount );
         auto seqRange = asNonConstRange(seq);
         for (sal_Int16 i = 0; i < patternsCount; ++i)
         {
-            seqRange[i] = OUString( patternsArray[i] );
+            seqRange[i] = patternsArray[i];
         }
         return seq;
     }
