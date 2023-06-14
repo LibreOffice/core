@@ -56,6 +56,7 @@ $(eval $(call gb_Library_use_externals,writerfilter,\
 	icuuc \
 	icu_headers \
 	libxml2 \
+	frozen \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,writerfilter,\

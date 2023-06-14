@@ -109,6 +109,7 @@ $(eval $(call gb_Library_use_externals,sd,\
 		avahi \
 	) \
 	icu_headers \
+	frozen \
 ))
 
 ifneq ($(DBUS_HAVE_GLIB),)

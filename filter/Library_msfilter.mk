@@ -21,7 +21,10 @@ $(eval $(call gb_Library_Library,msfilter))
 
 $(eval $(call gb_Library_set_componentfile,msfilter,filter/source/msfilter/msfilter,services))
 
-$(eval $(call gb_Library_use_external,msfilter,boost_headers))
+$(eval $(call gb_Library_use_externals,msfilter,\
+    boost_headers \
+    frozen \
+))
 
 $(eval $(call gb_Library_use_sdk_api,msfilter))
 

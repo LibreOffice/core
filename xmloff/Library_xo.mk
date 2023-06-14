@@ -41,7 +41,10 @@ $(eval $(call gb_Library_add_defs,xo,\
     -DXMLOFF_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_use_external,xo,boost_headers))
+$(eval $(call gb_Library_use_externals,xo,\
+    boost_headers \
+    frozen \
+))
 
 $(eval $(call gb_Library_use_custom_headers,xo,\
 	officecfg/registry \

@@ -24,13 +24,16 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <unordered_map>
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
 
 namespace oox::drawingml {
 
 namespace
 {
 
-const std::unordered_map<sal_Int32, model::SystemColorType> constSystemColorMap =
+constexpr frozen::unordered_map<sal_Int32, model::SystemColorType, 30> constSystemColorMap
 {
     { XML_scrollBar, model::SystemColorType::ScrollBar },
     { XML_background, model::SystemColorType::Background },
@@ -64,7 +67,7 @@ const std::unordered_map<sal_Int32, model::SystemColorType> constSystemColorMap 
     { XML_menuBar, model::SystemColorType::MenuBar }
 };
 
-const std::unordered_map<sal_Int32, model::TransformationType> constTransformTypeMap =
+constexpr frozen::unordered_map<sal_Int32, model::TransformationType, 28> constTransformTypeMap
 {
     { XML_alpha, model::TransformationType::Alpha },
     { XML_alphaMod, model::TransformationType::AlphaMod },

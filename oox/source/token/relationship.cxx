@@ -10,21 +10,28 @@
 #include <oox/token/relationship.hxx>
 
 #include <sal/log.hxx>
-#include <map>
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
 
-namespace oox {
+namespace oox
+{
+
+namespace
+{
+
+constexpr frozen::unordered_map<Relationship, std::u16string_view, 48> constRelationshipMap
+{
+#include "relationship.inc"
+};
+
+} // end anonymous ns
 
 OUString getRelationship(Relationship eRelationship)
 {
-    static const std::map<Relationship, OUString> aMap =
-    {
-#include "relationship.inc"
-    };
-
-    auto itr = aMap.find(eRelationship);
-    if (itr != aMap.end())
-        return itr->second;
-
+    auto iterator = constRelationshipMap.find(eRelationship);
+    if (iterator != constRelationshipMap.end())
+        return OUString(iterator->second);
     SAL_WARN("oox", "could not find an entry for the relationship: " << static_cast<int>(eRelationship));
     return OUString();
 }

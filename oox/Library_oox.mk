@@ -65,6 +65,7 @@ $(eval $(call gb_Library_use_libraries,oox,\
 
 $(eval $(call gb_Library_use_externals,oox,\
 	boost_headers \
+	frozen \
 ))
 
 ifeq ($(TLS),OPENSSL)

@@ -8,6 +8,9 @@
  */
 #include <oox/token/tokens.hxx>
 #include <drawingml/table/tablestyle.hxx>
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
 
 using namespace oox;
 using namespace oox::drawingml::table;
@@ -194,13 +197,18 @@ static void createStyleIdMap()
         = std::make_pair(OUString("Dark-Style-2"), OUString("Accent5"));
 }
 
-static std::map<OUString, sal_Int32> tokens = { { "", XML_dk1 },
-                                                { "Accent1", XML_accent1 },
-                                                { "Accent2", XML_accent2 },
-                                                { "Accent3", XML_accent3 },
-                                                { "Accent4", XML_accent4 },
-                                                { "Accent5", XML_accent5 },
-                                                { "Accent6", XML_accent6 } };
+constexpr frozen::unordered_map<std::u16string_view, sal_Int32, 6> tokens{
+    { u"Accent1", XML_accent1 }, { u"Accent2", XML_accent2 }, { u"Accent3", XML_accent3 },
+    { u"Accent4", XML_accent4 }, { u"Accent5", XML_accent5 }, { u"Accent6", XML_accent6 }
+};
+
+sal_Int32 resolveToken(OUString const& rString)
+{
+    auto interator = tokens.find(rString);
+    if (interator != tokens.end())
+        return interator->second;
+    return XML_dk1;
+}
 
 void setBorderLineType(const oox::drawingml::LinePropertiesPtr& pLineProp, sal_Int32 nToken)
 {
@@ -444,7 +452,7 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
             setBorderLineType(pLastColBottomBorder, XML_solidFill);
             setBorderLineType(pLastColInsideHBorder, XML_solidFill);
 
-            sal_Int32 accent_val = tokens[mStyleIdMap[styleId].second];
+            sal_Int32 accent_val = resolveToken(mStyleIdMap[styleId].second);
 
             wholeTblTextColor.setSchemeClr(XML_dk1);
             firstRowTextColor.setSchemeClr(XML_lt1);
@@ -509,7 +517,7 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
             wholeTblTextColor.setSchemeClr(XML_lt1);
             firstRowTextColor.setSchemeClr(XML_lt1);
 
-            accent_val = tokens[mStyleIdMap[styleId].second];
+            accent_val = resolveToken(mStyleIdMap[styleId].second);
 
             pTblBgFillProperties->maFillColor.setSchemeClr(accent_val);
             pFirstRowBottomBorder->maLineFill.maFillColor.setSchemeClr(XML_lt1);
@@ -554,7 +562,7 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
         sal_Int32 accent_val;
 
         if (!accent_name.isEmpty())
-            accent_val = tokens[mStyleIdMap[styleId].second];
+            accent_val = resolveToken(mStyleIdMap[styleId].second);
         else
             accent_val = XML_tx1;
 
@@ -591,7 +599,7 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
         sal_Int32 accent_val;
 
         if (!accent_name.isEmpty())
-            accent_val = tokens[mStyleIdMap[styleId].second];
+            accent_val = resolveToken(mStyleIdMap[styleId].second);
         else
             accent_val = XML_tx1;
 
@@ -628,7 +636,7 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
         sal_Int32 accent_val;
 
         if (!accent_name.isEmpty())
-            accent_val = tokens[mStyleIdMap[styleId].second];
+            accent_val = resolveToken(mStyleIdMap[styleId].second);
         else
             accent_val = XML_tx1;
 
@@ -665,7 +673,7 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
         sal_Int32 accent_val;
 
         if (!accent_name.isEmpty())
-            accent_val = tokens[mStyleIdMap[styleId].second];
+            accent_val = resolveToken(mStyleIdMap[styleId].second);
         else
             accent_val = XML_dk1;
 
@@ -713,7 +721,7 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
         sal_Int32 accent_val;
 
         if (!accent_name.isEmpty())
-            accent_val = tokens[mStyleIdMap[styleId].second];
+            accent_val = resolveToken(mStyleIdMap[styleId].second);
         else
             accent_val = XML_dk1;
 
@@ -753,7 +761,7 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
         sal_Int32 accent_val;
 
         if (!accent_name.isEmpty())
-            accent_val = tokens[mStyleIdMap[styleId].second];
+            accent_val = resolveToken(mStyleIdMap[styleId].second);
         else
             accent_val = XML_dk1;
 
@@ -780,7 +788,7 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
         sal_Int32 accent_val;
 
         if (!accent_name.isEmpty())
-            accent_val = tokens[mStyleIdMap[styleId].second];
+            accent_val = resolveToken(mStyleIdMap[styleId].second);
         else
             accent_val = XML_dk1;
 
@@ -823,7 +831,7 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
 
         if (!accent_name.isEmpty())
         {
-            accent_val = tokens[mStyleIdMap[styleId].second];
+            accent_val = resolveToken(mStyleIdMap[styleId].second);
             transform_val = XML_shade;
         }
         else
@@ -866,7 +874,7 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
         sal_Int32 accent_val;
 
         if (!accent_name.isEmpty())
-            accent_val = tokens[mStyleIdMap[styleId].second];
+            accent_val = resolveToken(mStyleIdMap[styleId].second);
         else
             accent_val = XML_dk1;
 
