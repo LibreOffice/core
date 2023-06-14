@@ -874,7 +874,7 @@ public:
     void ConvertHeaderFooterToTextFrame(bool, bool);
     static void fillEmptyFrameProperties(std::vector<css::beans::PropertyValue>& rFrameProperties, bool bSetAnchorToChar);
 
-    bool IsInTOC() const { return m_bStartTOC; }
+    bool IsInTOC() const;
 
     void PushFootOrEndnote( bool bIsFootnote );
     void PopFootOrEndnote();
