@@ -904,13 +904,13 @@ LocaleDataImpl::getDateAcceptancePatterns( const Locale& rLocale )
 OUString
 LocaleDataImpl::getCollatorRuleByAlgorithm( const Locale& rLocale, std::u16string_view algorithm )
 {
-    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getCollatorImplementation" ));
+    MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getCollatorImplementation" ));
     if ( func ) {
         sal_Int16 collatorCount = 0;
-        sal_Unicode **collatorArray = func(collatorCount);
+        OUString const *collatorArray = func(collatorCount);
         for(sal_Int16 i = 0; i < collatorCount; i++)
             if (algorithm == collatorArray[i * COLLATOR_ELEMENTS + COLLATOR_OFFSET_ALGO])
-                return OUString(collatorArray[i * COLLATOR_ELEMENTS + COLLATOR_OFFSET_RULE]);
+                return collatorArray[i * COLLATOR_ELEMENTS + COLLATOR_OFFSET_RULE];
     }
     return OUString();
 }
@@ -919,18 +919,17 @@ LocaleDataImpl::getCollatorRuleByAlgorithm( const Locale& rLocale, std::u16strin
 Sequence< Implementation > SAL_CALL
 LocaleDataImpl::getCollatorImplementations( const Locale& rLocale )
 {
-    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getCollatorImplementation" ));
+    MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getCollatorImplementation" ));
 
     if ( func ) {
         sal_Int16 collatorCount = 0;
-        sal_Unicode **collatorArray = func(collatorCount);
+        OUString const *collatorArray = func(collatorCount);
         Sequence< Implementation > seq(collatorCount);
         auto seqRange = asNonConstRange(seq);
         for(sal_Int16 i = 0; i < collatorCount; i++) {
-            Implementation impl(
-                    OUString(collatorArray[i * COLLATOR_ELEMENTS + COLLATOR_OFFSET_ALGO]),
+            seqRange[i] = Implementation(
+                    collatorArray[i * COLLATOR_ELEMENTS + COLLATOR_OFFSET_ALGO],
                     collatorArray[i * COLLATOR_ELEMENTS + COLLATOR_OFFSET_DEFAULT][0] != 0);
-            seqRange[i] = impl;
         }
         return seq;
     }
@@ -942,15 +941,15 @@ LocaleDataImpl::getCollatorImplementations( const Locale& rLocale )
 Sequence< OUString > SAL_CALL
 LocaleDataImpl::getCollationOptions( const Locale& rLocale )
 {
-    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getCollationOptions" ));
+    MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getCollationOptions" ));
 
     if ( func ) {
         sal_Int16 optionsCount = 0;
-        sal_Unicode **optionsArray = func(optionsCount);
+        OUString const *optionsArray = func(optionsCount);
         Sequence< OUString > seq(optionsCount);
         auto seqRange = asNonConstRange(seq);
         for(sal_Int16 i = 0; i < optionsCount; i++) {
-            seqRange[i] = OUString( optionsArray[i] );
+            seqRange[i] = optionsArray[i];
         }
         return seq;
     }
@@ -962,17 +961,12 @@ LocaleDataImpl::getCollationOptions( const Locale& rLocale )
 Sequence< OUString > SAL_CALL
 LocaleDataImpl::getSearchOptions( const Locale& rLocale )
 {
-    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getSearchOptions" ));
+    MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getSearchOptions" ));
 
     if ( func ) {
         sal_Int16 optionsCount = 0;
-        sal_Unicode **optionsArray = func(optionsCount);
-        Sequence< OUString > seq(optionsCount);
-        auto seqRange = asNonConstRange(seq);
-        for(sal_Int16 i = 0; i < optionsCount; i++) {
-            seqRange[i] = OUString( optionsArray[i] );
-        }
-        return seq;
+        OUString const *optionsArray = func(optionsCount);
+        return Sequence< OUString >(optionsArray, optionsCount);
     }
     else {
         return {};

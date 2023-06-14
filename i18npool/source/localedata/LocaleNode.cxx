@@ -1316,8 +1316,8 @@ void LCCollationNode::generateCode (const OFileWriter &of) const
     OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
         useLocale = useLocale.replace( '-', '_');
-        of.writeRefFunction("getCollatorImplementation_", useLocale);
-        of.writeRefFunction("getCollationOptions_", useLocale);
+        of.writeOUStringRefFunction("getCollatorImplementation_", useLocale);
+        of.writeOUStringRefFunction("getCollationOptions_", useLocale);
         return;
     }
     sal_Int16 nbOfCollations = 0;
@@ -1329,11 +1329,11 @@ void LCCollationNode::generateCode (const OFileWriter &of) const
         {
             OUString str;
             str = currNode->getAttr().getValueByName("unoid");
-            of.writeParameter("CollatorID", str, j);
+            of.writeOUStringLiteralParameter("CollatorID", str, j);
             str = currNode->getValue();
-            of.writeParameter("CollatorRule", str, j);
+            of.writeOUStringLiteralParameter("CollatorRule", str, j);
             str = currNode -> getAttr().getValueByName("default");
-            of.writeDefaultParameter("Collator", str, j);
+            of.writeOUStringLiteralDefaultParameter("Collator", str, j);
             of.writeAsciiString("\n");
 
             nbOfCollations++;
@@ -1344,7 +1344,7 @@ void LCCollationNode::generateCode (const OFileWriter &of) const
             nbOfCollationOptions = sal::static_int_cast<sal_Int16>( pCollationOptions->getNumberOfChildren() );
             for( sal_Int16 i=0; i<nbOfCollationOptions; i++ )
             {
-                of.writeParameter("collationOption", pCollationOptions->getChildAt( i )->getValue(), i );
+                of.writeOUStringLiteralParameter("collationOption", pCollationOptions->getChildAt( i )->getValue(), i );
             }
 
             of.writeAsciiString("static const sal_Int16 nbOfCollationOptions = ");
@@ -1356,7 +1356,7 @@ void LCCollationNode::generateCode (const OFileWriter &of) const
     of.writeInt(nbOfCollations);
     of.writeAsciiString(";\n\n");
 
-    of.writeAsciiString("\nstatic const sal_Unicode* LCCollatorArray[] = {\n");
+    of.writeAsciiString("\nstatic constexpr rtl::OUStringConstExpr LCCollatorArray[] = {\n");
     for(sal_Int16 j = 0; j < nbOfCollations; j++) {
         of.writeAsciiString("\tCollatorID");
         of.writeInt(j);
@@ -1372,16 +1372,17 @@ void LCCollationNode::generateCode (const OFileWriter &of) const
     }
     of.writeAsciiString("};\n\n");
 
-    of.writeAsciiString("static const sal_Unicode* collationOptions[] = {");
+    of.writeAsciiString("static constexpr rtl::OUStringConstExpr collationOptions[] = {");
     for( sal_Int16 j=0; j<nbOfCollationOptions; j++ )
     {
+        if (j)
+            of.writeAsciiString( ", " );
         of.writeAsciiString( "collationOption" );
         of.writeInt( j );
-        of.writeAsciiString( ", " );
     }
-    of.writeAsciiString("NULL };\n");
-    of.writeFunction("getCollatorImplementation_", "nbOfCollations", "LCCollatorArray");
-    of.writeFunction("getCollationOptions_", "nbOfCollationOptions", "collationOptions");
+    of.writeAsciiString("};\n");
+    of.writeOUStringFunction("getCollatorImplementation_", "nbOfCollations", "LCCollatorArray");
+    of.writeOUStringFunction("getCollationOptions_", "nbOfCollationOptions", "collationOptions");
 }
 
 void LCSearchNode::generateCode (const OFileWriter &of) const
@@ -1389,7 +1390,7 @@ void LCSearchNode::generateCode (const OFileWriter &of) const
     OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
         useLocale = useLocale.replace( '-', '_');
-        of.writeRefFunction("getSearchOptions_", useLocale);
+        of.writeOUStringRefFunction("getSearchOptions_", useLocale);
         return;
     }
 
@@ -1405,22 +1406,23 @@ void LCSearchNode::generateCode (const OFileWriter &of) const
     sal_Int32   nSearchOptions = pSearchOptions->getNumberOfChildren();
     for( i=0; i<nSearchOptions; i++ )
     {
-        of.writeParameter("searchOption", pSearchOptions->getChildAt( i )->getValue(), sal::static_int_cast<sal_Int16>(i) );
+        of.writeOUStringLiteralParameter("searchOption", pSearchOptions->getChildAt( i )->getValue(), sal::static_int_cast<sal_Int16>(i) );
     }
 
     of.writeAsciiString("static const sal_Int16 nbOfSearchOptions = ");
     of.writeInt( sal::static_int_cast<sal_Int16>( nSearchOptions ) );
     of.writeAsciiString(";\n\n");
 
-    of.writeAsciiString("static const sal_Unicode* searchOptions[] = {");
+    of.writeAsciiString("static constexpr rtl::OUStringConstExpr searchOptions[] = {");
     for( i=0; i<nSearchOptions; i++ )
     {
+        if (i)
+            of.writeAsciiString( ", " );
         of.writeAsciiString( "searchOption" );
         of.writeInt( sal::static_int_cast<sal_Int16>(i) );
-        of.writeAsciiString( ", " );
     }
-    of.writeAsciiString("NULL };\n");
-    of.writeFunction("getSearchOptions_", "nbOfSearchOptions", "searchOptions");
+    of.writeAsciiString(" };\n");
+    of.writeOUStringFunction("getSearchOptions_", "nbOfSearchOptions", "searchOptions");
 }
 
 void LCIndexNode::generateCode (const OFileWriter &of) const
