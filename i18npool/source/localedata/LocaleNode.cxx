@@ -967,7 +967,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
             of.writeOUStringFunction("getAllFormats0_", "FormatElementsCount0", "FormatElementsArray0", "replaceFrom0", "replaceTo0");
             break;
         case 1:
-            of.writeFunction("getAllFormats1_", "FormatElementsCount1", "FormatElementsArray1", "replaceFrom1", "replaceTo1");
+            of.writeOUStringFunction("getAllFormats1_", "FormatElementsCount1", "FormatElementsArray1", "replaceFrom1", "replaceTo1");
             break;
     }
 
