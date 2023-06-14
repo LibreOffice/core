@@ -45,6 +45,11 @@ namespace basegfx
         return ::basegfx::BColor(fLuminance, fLuminance, fLuminance);
     }
 
+    OUString BColorModifier_gray::getModifierName() const
+    {
+        return "gray";
+    }
+
     BColorModifier_invert::~BColorModifier_invert()
     {
     }
@@ -57,6 +62,11 @@ namespace basegfx
     ::basegfx::BColor BColorModifier_invert::getModifiedColor(const ::basegfx::BColor& aSourceColor) const
     {
         return ::basegfx::BColor(1.0 - aSourceColor.getRed(), 1.0 - aSourceColor.getGreen(), 1.0 - aSourceColor.getBlue());
+    }
+
+    OUString BColorModifier_invert::getModifierName() const
+    {
+        return "invert";
     }
 
     BColorModifier_luminance_to_alpha::~BColorModifier_luminance_to_alpha()
@@ -73,6 +83,11 @@ namespace basegfx
         const double fAlpha(1.0 - ((aSourceColor.getRed() * 0.2125) + (aSourceColor.getGreen() * 0.7154) + (aSourceColor.getBlue() * 0.0721)));
 
         return ::basegfx::BColor(fAlpha, fAlpha, fAlpha);
+    }
+
+    OUString BColorModifier_luminance_to_alpha::getModifierName() const
+    {
+        return "luminance_to_alpha";
     }
 
     BColorModifier_replace::~BColorModifier_replace()
@@ -96,6 +111,11 @@ namespace basegfx
         return maBColor;
     }
 
+    OUString BColorModifier_replace::getModifierName() const
+    {
+        return "replace";
+    }
+
     BColorModifier_interpolate::~BColorModifier_interpolate()
     {
     }
@@ -115,6 +135,40 @@ namespace basegfx
     ::basegfx::BColor BColorModifier_interpolate::getModifiedColor(const ::basegfx::BColor& aSourceColor) const
     {
         return interpolate(maBColor, aSourceColor, mfValue);
+    }
+
+    OUString BColorModifier_interpolate::getModifierName() const
+    {
+        return "interpolate";
+    }
+
+    BColorModifier_saturate::~BColorModifier_saturate()
+    {
+    }
+
+    bool BColorModifier_saturate::operator==(const BColorModifier& rCompare) const
+    {
+        const BColorModifier_saturate* pCompare = dynamic_cast< const BColorModifier_saturate* >(&rCompare);
+
+        if(!pCompare)
+        {
+            return false;
+        }
+
+        return mfValue == pCompare->mfValue;
+    }
+
+    ::basegfx::BColor BColorModifier_saturate::getModifiedColor(const ::basegfx::BColor& aSourceColor) const
+    {
+        return basegfx::BColor(
+            (0.213 + 0.787 * mfValue) * aSourceColor.getRed() + (0.715 - 0.715 * mfValue) * aSourceColor.getGreen() + (0.072 - 0.072 * mfValue) * aSourceColor.getBlue(),
+            (0.213 - 0.213 * mfValue) * aSourceColor.getRed() + (0.715 + 0.285 * mfValue) * aSourceColor.getGreen() + (0.072 - 0.072 * mfValue) * aSourceColor.getBlue(),
+            (0.213 - 0.213 * mfValue) * aSourceColor.getRed() + (0.715 - 0.715 * mfValue) * aSourceColor.getGreen() + (0.072 + 0.928 * mfValue) * aSourceColor.getBlue());
+    }
+
+    OUString BColorModifier_saturate::getModifierName() const
+    {
+        return "saturate";
     }
 
     BColorModifier_black_and_white::~BColorModifier_black_and_white()
@@ -145,6 +199,11 @@ namespace basegfx
         {
             return ::basegfx::BColor(1.0, 1.0, 1.0);
         }
+    }
+
+    OUString BColorModifier_black_and_white::getModifierName() const
+    {
+        return "black_and_white";
     }
 
     BColorModifier_gamma::BColorModifier_gamma(double fValue)
@@ -191,6 +250,11 @@ namespace basegfx
         {
             return aSourceColor;
         }
+    }
+
+    OUString BColorModifier_gamma::getModifierName() const
+    {
+        return "gamma";
     }
 
     BColorModifier_RGBLuminanceContrast::BColorModifier_RGBLuminanceContrast(double fRed, double fGreen, double fBlue, double fLuminance, double fContrast)
@@ -270,6 +334,11 @@ namespace basegfx
         }
     }
 
+    OUString BColorModifier_RGBLuminanceContrast::getModifierName() const
+    {
+        return "RGBLuminanceContrast";
+    }
+
     BColorModifier_randomize::BColorModifier_randomize(double fRandomPart)
     : mfRandomPart(fRandomPart)
     {
@@ -319,6 +388,11 @@ namespace basegfx
                 comphelper::rng::uniform_real_distribution(0.0, nextafter(mfRandomPart, DBL_MAX)),
             aSourceColor.getBlue() * fMulA +
                 comphelper::rng::uniform_real_distribution(0.0, nextafter(mfRandomPart, DBL_MAX)));
+    }
+
+    OUString BColorModifier_randomize::getModifierName() const
+    {
+        return "randomize";
     }
 
     ::basegfx::BColor BColorModifierStack::getModifiedColor(const ::basegfx::BColor& rSource) const

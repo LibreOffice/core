@@ -153,17 +153,30 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf155819)
     assertXPath(pDocument, "/primitive2D/transform/transform", 4);
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testFilterLuminanceToAlpha)
+CPPUNIT_TEST_FIXTURE(Test, testFilterSaturate)
 {
-    Primitive2DSequence aSequenceTdf132246 = parseSvg(u"/svgio/qa/cppunit/data/filterLuminanceToAlpha.svg");
-    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf132246.getLength()));
+    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/filterSaturate.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequenceTdf132246);
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequence);
 
     CPPUNIT_ASSERT (pDocument);
 
-    assertXPath(pDocument, "/primitive2D/transform/modifiedColor");
+    assertXPath(pDocument, "/primitive2D/transform/modifiedColor", "modifier", "saturate");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFilterLuminanceToAlpha)
+{
+    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/filterLuminanceToAlpha.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequence);
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/modifiedColor", "modifier", "luminance_to_alpha");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFilterFeGaussianBlur)

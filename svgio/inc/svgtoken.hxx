@@ -122,6 +122,7 @@ namespace svgio::svgreader
             XMaxYMax,
             Meet,
             Slice,
+            Values,
 
             // structural elements
             Defs,
