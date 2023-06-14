@@ -1,0 +1,76 @@
+disable NSS/GPGMEPP dependent code.
+
+--- poppler/poppler/Form.cc.orig	2023-06-05 19:29:14.000000000 +0900
++++ poppler/poppler/Form.cc	2023-06-17 16:51:27.873431500 +0900
+@@ -64,7 +64,7 @@
+ #include "Form.h"
+ #include "PDFDoc.h"
+ #include "DateInfo.h"
+-#include "CryptoSignBackend.h"
++/*#include "CryptoSignBackend.h"*/
+ #include "SignatureInfo.h"
+ #include "CertificateInfo.h"
+ #include "XRef.h"
+@@ -577,7 +577,7 @@
+ {
+     return static_cast<FormFieldSignature *>(field)->validateSignature(doVerifyCert, forceRevalidation, validationTime, ocspRevocationCheck, enableAIA);
+ }
+-
++#if 0
+ // update hash with the specified range of data from the file
+ static bool hashFileRange(FILE *f, CryptoSign::SigningInterface *handler, Goffset start, Goffset end)
+ {
+@@ -607,10 +607,12 @@
+     delete[] buf;
+     return true;
+ }
++#endif
+ 
+ bool FormWidgetSignature::signDocument(const std::string &saveFilename, const std::string &certNickname, const std::string &password, const GooString *reason, const GooString *location, const std::optional<GooString> &ownerPassword,
+                                        const std::optional<GooString> &userPassword)
+ {
++#if 0
+     auto backend = CryptoSign::Factory::createActive();
+     if (!backend) {
+         return false;
+@@ -698,6 +700,8 @@
+     fclose(file);
+ 
+     return true;
++#endif
++    return false;
+ }
+ 
+ bool FormWidgetSignature::signDocumentWithAppearance(const std::string &saveFilename, const std::string &certNickname, const std::string &password, const GooString *reason, const GooString *location,
+@@ -2316,6 +2320,7 @@
+ 
+ void FormFieldSignature::hashSignedDataBlock(CryptoSign::VerificationInterface *handler, Goffset block_len)
+ {
++#if 0
+     if (!handler) {
+         return;
+     }
+@@ -2335,6 +2340,7 @@
+             i += BLOCK_SIZE;
+         }
+     }
++#endif
+ }
+ 
+ FormSignatureType FormWidgetSignature::signatureType() const
+@@ -2349,6 +2355,7 @@
+ 
+ SignatureInfo *FormFieldSignature::validateSignature(bool doVerifyCert, bool forceRevalidation, time_t validationTime, bool ocspRevocationCheck, bool enableAIA)
+ {
++#if 0
+     auto backend = CryptoSign::Factory::createActive();
+     if (!backend) {
+         return signature_info;
+@@ -2425,6 +2432,7 @@
+     const CertificateValidationStatus cert_val_state = signature_handler->validateCertificate(std::chrono::system_clock::from_time_t(validationTime), ocspRevocationCheck, enableAIA);
+     signature_info->setCertificateValStatus(cert_val_state);
+ 
++#endif
+     return signature_info;
+ }
+ 
