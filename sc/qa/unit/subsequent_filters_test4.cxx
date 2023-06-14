@@ -1905,6 +1905,19 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testForcepoint107)
     pDocSh->DoHardRecalc();
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf155402)
+{
+    createScDoc("xlsx/tdf155402.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    // Before the fix =CELL("FILENAME"; D2) returns 'file:///X:/dr/own.ods'#$Sheet1
+    // After the fix =CELL("FILENAME"; D2) returns file :///X:/dr/[own.ods]Sheet1
+    OUString aFilename = pDoc->GetString(1, 0, 0);
+    sal_Int32 nPos = aFilename.lastIndexOf('/');
+    aFilename = OUString::Concat(aFilename.subView(nPos));
+    CPPUNIT_ASSERT_EQUAL(OUString("/[tdf155402.xlsx]Sheet1"), aFilename);
+}
+
 ScFiltersTest4::ScFiltersTest4()
     : ScModelTestBase("sc/qa/unit/data")
 {

@@ -2331,7 +2331,7 @@ void ScInterpreter::ScCell()
             PushString(aStr);
         }
         else if( aInfoType == "FILENAME" )
-        {   // file name and table name: 'FILENAME'#$TABLE
+        {
             SCTAB nTab = aCellPos.Tab();
             OUString aFuncResult;
             if( nTab < mrDoc.GetTableCount() )
@@ -2346,9 +2346,27 @@ void ScInterpreter::ScCell()
                         const INetURLObject& rURLObj = pShell->GetMedium()->GetURLObject();
                         OUString aTabName;
                         mrDoc.GetName( nTab, aTabName );
-                        aFuncResult = "'"
-                            + rURLObj.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous)
-                            + "'#$" + aTabName;
+
+                        FormulaGrammar::AddressConvention eConv = maCalcConfig.meStringRefAddressSyntax;
+                        if (eConv == FormulaGrammar::CONV_UNSPECIFIED)
+                            eConv = mrDoc.GetAddressConvention();
+
+                        if (eConv == FormulaGrammar::CONV_XL_A1 ||
+                            eConv == FormulaGrammar::CONV_XL_R1C1 ||
+                            eConv == FormulaGrammar::CONV_XL_OOX)
+                        {
+                            // file name and table name: FILEPATH/[FILENAME]TABLE
+                            aFuncResult = rURLObj.GetPartBeforeLastName()
+                                + "[" + rURLObj.GetLastName(INetURLObject::DecodeMechanism::Unambiguous)
+                                + "]" + aTabName;
+                        }
+                        else
+                        {
+                            // file name and table name: 'FILEPATH/FILENAME'#$TABLE
+                            aFuncResult = "'"
+                                + rURLObj.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous)
+                                + "'#$" + aTabName;
+                        }
                     }
                 }
             }
@@ -2515,8 +2533,6 @@ void ScInterpreter::ScCellExternal()
     }
     else if ( aInfoType == "FILENAME" )
     {
-        // 'file URI'#$SheetName
-
         const OUString* p = pRefMgr->getExternalFileName(nFileId);
         if (!p)
         {
@@ -2525,7 +2541,27 @@ void ScInterpreter::ScCellExternal()
             return;
         }
 
-        OUString aBuf = "'" + *p + "'#$" + aTabName;
+        OUString aBuf;
+        FormulaGrammar::AddressConvention eConv = maCalcConfig.meStringRefAddressSyntax;
+        if (eConv == FormulaGrammar::CONV_UNSPECIFIED)
+            eConv = mrDoc.GetAddressConvention();
+
+        if (eConv == FormulaGrammar::CONV_XL_A1 ||
+            eConv == FormulaGrammar::CONV_XL_R1C1 ||
+            eConv == FormulaGrammar::CONV_XL_OOX)
+        {
+            // 'file URI/[FileName]SheetName
+            sal_Int32 nPos = p->lastIndexOf('/');
+            aBuf = OUString::Concat(p->subView(0, nPos + 1))
+                + "[" + p->subView(nPos + 1) + "]"
+                + aTabName;
+        }
+        else
+        {
+            // 'file URI'#$SheetName
+            aBuf = "'" + *p + "'#$" + aTabName;
+        }
+
         PushString(aBuf);
     }
     else if ( aInfoType == "CONTENTS" )
