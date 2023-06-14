@@ -1430,9 +1430,9 @@ void LCIndexNode::generateCode (const OFileWriter &of) const
     OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
         useLocale = useLocale.replace( '-', '_');
-        of.writeRefFunction("getIndexAlgorithm_", useLocale);
-        of.writeRefFunction("getUnicodeScripts_", useLocale);
-        of.writeRefFunction("getFollowPageWords_", useLocale);
+        of.writeOUStringRefFunction("getIndexAlgorithm_", useLocale);
+        of.writeOUStringRefFunction("getUnicodeScripts_", useLocale);
+        of.writeOUStringRefFunction("getFollowPageWords_", useLocale);
         return;
     }
     sal_Int16 nbOfIndexs = 0;
@@ -1444,28 +1444,28 @@ void LCIndexNode::generateCode (const OFileWriter &of) const
         {
             OUString str;
             str = currNode->getAttr().getValueByName("unoid");
-            of.writeParameter("IndexID", str, nbOfIndexs);
+            of.writeOUStringLiteralParameter("IndexID", str, nbOfIndexs);
             str = currNode->getAttr().getValueByName("module");
-            of.writeParameter("IndexModule", str, nbOfIndexs);
+            of.writeOUStringLiteralParameter("IndexModule", str, nbOfIndexs);
             str = currNode->getValue();
-            of.writeParameter("IndexKey", str, nbOfIndexs);
+            of.writeOUStringLiteralParameter("IndexKey", str, nbOfIndexs);
             str = currNode -> getAttr().getValueByName("default");
-            of.writeDefaultParameter("Index", str, nbOfIndexs);
+            of.writeOUStringLiteralDefaultParameter("Index", str, nbOfIndexs);
             str = currNode -> getAttr().getValueByName("phonetic");
-            of.writeDefaultParameter("Phonetic", str, nbOfIndexs);
+            of.writeOUStringLiteralDefaultParameter("Phonetic", str, nbOfIndexs);
             of.writeAsciiString("\n");
 
             nbOfIndexs++;
         }
         if( currNode->getName() == "UnicodeScript" )
         {
-            of.writeParameter("unicodeScript", currNode->getValue(), nbOfUnicodeScripts );
+            of.writeOUStringLiteralParameter("unicodeScript", currNode->getValue(), nbOfUnicodeScripts );
             nbOfUnicodeScripts++;
 
         }
         if( currNode->getName() == "FollowPageWord" )
         {
-            of.writeParameter("followPageWord", currNode->getValue(), nbOfPageWords);
+            of.writeOUStringLiteralParameter("followPageWord", currNode->getValue(), nbOfPageWords);
             nbOfPageWords++;
         }
     }
@@ -1473,7 +1473,7 @@ void LCIndexNode::generateCode (const OFileWriter &of) const
     of.writeInt(nbOfIndexs);
     of.writeAsciiString(";\n\n");
 
-    of.writeAsciiString("\nstatic const sal_Unicode* IndexArray[] = {\n");
+    of.writeAsciiString("\nstatic constexpr rtl::OUStringConstExpr IndexArray[] = {\n");
     for(sal_Int16 i = 0; i < nbOfIndexs; i++) {
         of.writeAsciiString("\tIndexID");
         of.writeInt(i);
@@ -1501,30 +1501,41 @@ void LCIndexNode::generateCode (const OFileWriter &of) const
     of.writeInt( nbOfUnicodeScripts );
     of.writeAsciiString(";\n\n");
 
-    of.writeAsciiString("static const sal_Unicode* UnicodeScriptArray[] = {");
+    of.writeAsciiString("static constexpr rtl::OUStringConstExpr UnicodeScriptArray[] = {");
     for( sal_Int16 i=0; i<nbOfUnicodeScripts; i++ )
     {
+        if (i)
+            of.writeAsciiString( ", " );
         of.writeAsciiString( "unicodeScript" );
         of.writeInt( i );
-        of.writeAsciiString( ", " );
     }
-    of.writeAsciiString("NULL };\n\n");
+    of.writeAsciiString(" };\n\n");
 
     of.writeAsciiString("static const sal_Int16 nbOfPageWords = ");
     of.writeInt(nbOfPageWords);
     of.writeAsciiString(";\n\n");
 
-    of.writeAsciiString("static const sal_Unicode* FollowPageWordArray[] = {\n");
-    for(sal_Int16 i = 0; i < nbOfPageWords; i++) {
-        of.writeAsciiString("\tfollowPageWord");
-        of.writeInt(i);
-        of.writeAsciiString(",\n");
+    // MSVC doesnt like zero sized arrays
+    if (nbOfPageWords == 0)
+    {
+        // generate dummy array, reuse unicodeScript0 for dummy entry
+        of.writeAsciiString("//dummy array, we have zero entries\n");
+        of.writeAsciiString("static constexpr rtl::OUStringConstExpr FollowPageWordArray[] = { unicodeScript0 };\n\n");
     }
-    of.writeAsciiString("\tNULL\n};\n\n");
-
-    of.writeFunction("getIndexAlgorithm_", "nbOfIndexs", "IndexArray");
-    of.writeFunction("getUnicodeScripts_", "nbOfUnicodeScripts", "UnicodeScriptArray");
-    of.writeFunction("getFollowPageWords_", "nbOfPageWords", "FollowPageWordArray");
+    else
+    {
+        of.writeAsciiString("static constexpr rtl::OUStringConstExpr FollowPageWordArray[] = {\n");
+        for(sal_Int16 i = 0; i < nbOfPageWords; i++) {
+            if (i)
+                of.writeAsciiString(",\n");
+            of.writeAsciiString("\tfollowPageWord");
+            of.writeInt(i);
+        }
+        of.writeAsciiString("\t\n};\n\n");
+    }
+    of.writeOUStringFunction("getIndexAlgorithm_", "nbOfIndexs", "IndexArray");
+    of.writeOUStringFunction("getUnicodeScripts_", "nbOfUnicodeScripts", "UnicodeScriptArray");
+    of.writeOUStringFunction("getFollowPageWords_", "nbOfPageWords", "FollowPageWordArray");
 }
 
 

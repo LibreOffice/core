@@ -973,10 +973,10 @@ LocaleDataImpl::getSearchOptions( const Locale& rLocale )
     }
 }
 
-sal_Unicode **
+OUString const *
 LocaleDataImpl::getIndexArray(const Locale& rLocale, sal_Int16& indexCount)
 {
-    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getIndexAlgorithm" ));
+    MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getIndexAlgorithm" ));
 
     if (func)
         return func(indexCount);
@@ -987,7 +987,7 @@ Sequence< OUString >
 LocaleDataImpl::getIndexAlgorithm( const Locale& rLocale )
 {
     sal_Int16 indexCount = 0;
-    sal_Unicode **indexArray = getIndexArray(rLocale, indexCount);
+    OUString const *indexArray = getIndexArray(rLocale, indexCount);
 
     if ( indexArray ) {
         Sequence< OUString > seq(indexCount);
@@ -1006,12 +1006,12 @@ OUString
 LocaleDataImpl::getDefaultIndexAlgorithm( const Locale& rLocale )
 {
     sal_Int16 indexCount = 0;
-    sal_Unicode **indexArray = getIndexArray(rLocale, indexCount);
+    OUString const *indexArray = getIndexArray(rLocale, indexCount);
 
     if ( indexArray ) {
         for(sal_Int16 i = 0; i < indexCount; i++) {
             if (indexArray[i*5 + 3][0])
-                return OUString(indexArray[i*5]);
+                return indexArray[i*5];
         }
     }
     return OUString();
@@ -1021,7 +1021,7 @@ bool
 LocaleDataImpl::hasPhonetic( const Locale& rLocale )
 {
     sal_Int16 indexCount = 0;
-    sal_Unicode **indexArray = getIndexArray(rLocale, indexCount);
+    OUString const *indexArray = getIndexArray(rLocale, indexCount);
 
     if ( indexArray ) {
         for(sal_Int16 i = 0; i < indexCount; i++) {
@@ -1032,11 +1032,11 @@ LocaleDataImpl::hasPhonetic( const Locale& rLocale )
     return false;
 }
 
-sal_Unicode **
+OUString const *
 LocaleDataImpl::getIndexArrayForAlgorithm(const Locale& rLocale, std::u16string_view algorithm)
 {
     sal_Int16 indexCount = 0;
-    sal_Unicode **indexArray = getIndexArray(rLocale, indexCount);
+    OUString const *indexArray = getIndexArray(rLocale, indexCount);
     if ( indexArray ) {
         for(sal_Int16 i = 0; i < indexCount; i++) {
             if (algorithm == indexArray[i*5])
@@ -1049,36 +1049,36 @@ LocaleDataImpl::getIndexArrayForAlgorithm(const Locale& rLocale, std::u16string_
 bool
 LocaleDataImpl::isPhonetic( const Locale& rLocale, std::u16string_view algorithm )
 {
-    sal_Unicode **indexArray = getIndexArrayForAlgorithm(rLocale, algorithm);
+    OUString const *indexArray = getIndexArrayForAlgorithm(rLocale, algorithm);
     return indexArray && indexArray[4][0];
 }
 
 OUString
 LocaleDataImpl::getIndexKeysByAlgorithm( const Locale& rLocale, std::u16string_view algorithm )
 {
-    sal_Unicode **indexArray = getIndexArrayForAlgorithm(rLocale, algorithm);
+    OUString const *indexArray = getIndexArrayForAlgorithm(rLocale, algorithm);
     return indexArray ? (OUString::Concat(u"0-9") + indexArray[2]) : OUString();
 }
 
 OUString
 LocaleDataImpl::getIndexModuleByAlgorithm( const Locale& rLocale, std::u16string_view algorithm )
 {
-    sal_Unicode **indexArray = getIndexArrayForAlgorithm(rLocale, algorithm);
-    return indexArray ? OUString(indexArray[1]) : OUString();
+    OUString const *indexArray = getIndexArrayForAlgorithm(rLocale, algorithm);
+    return indexArray ? indexArray[1] : OUString();
 }
 
 Sequence< UnicodeScript >
 LocaleDataImpl::getUnicodeScripts( const Locale& rLocale )
 {
-    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getUnicodeScripts" ));
+    MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getUnicodeScripts" ));
 
     if ( func ) {
         sal_Int16 scriptCount = 0;
-        sal_Unicode **scriptArray = func(scriptCount);
+        OUString const *scriptArray = func(scriptCount);
         Sequence< UnicodeScript > seq(scriptCount);
         auto seqRange = asNonConstRange(seq);
         for(sal_Int16 i = 0; i < scriptCount; i++) {
-            seqRange[i] = UnicodeScript( o3tl::toInt32(std::u16string_view(scriptArray[i], 1)) );
+            seqRange[i] = UnicodeScript( o3tl::toInt32(scriptArray[i].subView(0, 1)) );
         }
         return seq;
     }
@@ -1090,17 +1090,12 @@ LocaleDataImpl::getUnicodeScripts( const Locale& rLocale )
 Sequence< OUString >
 LocaleDataImpl::getFollowPageWords( const Locale& rLocale )
 {
-    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getFollowPageWords" ));
+    MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getFollowPageWords" ));
 
     if ( func ) {
         sal_Int16 wordCount = 0;
-        sal_Unicode **wordArray = func(wordCount);
-        Sequence< OUString > seq(wordCount);
-        auto seqRange = asNonConstRange(seq);
-        for(sal_Int16 i = 0; i < wordCount; i++) {
-            seqRange[i] = OUString(wordArray[i]);
-        }
-        return seq;
+        OUString const *wordArray = func(wordCount);
+        return Sequence< OUString >(wordArray, wordCount);
     }
     else {
         return {};

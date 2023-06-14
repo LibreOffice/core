@@ -149,8 +149,8 @@ private:
 
     /// @throws css::uno::RuntimeException
     oslGenericFunction getFunctionSymbol( const css::lang::Locale& rLocale, const char* pFunction );
-    sal_Unicode ** getIndexArray(const css::lang::Locale& rLocale, sal_Int16& indexCount);
-    sal_Unicode ** getIndexArrayForAlgorithm(const css::lang::Locale& rLocale, std::u16string_view rAlgorithm);
+    OUString const * getIndexArray(const css::lang::Locale& rLocale, sal_Int16& indexCount);
+    OUString const * getIndexArrayForAlgorithm(const css::lang::Locale& rLocale, std::u16string_view rAlgorithm);
     /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::i18n::CalendarItem2 > &
         getCalendarItemByName(const OUString& name,
