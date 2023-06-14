@@ -407,6 +407,7 @@
 #define RID_CUISTR_OPT_READONLY                     NC_("RID_CUISTR_OPT_READONLY", "This property is locked for editing.")
 
 #define RID_LANGUAGETOOL_LEAVE_EMPTY                NC_("RID_LANGUAGETOOL_LEAVE_EMPTY", "Leave this field empty to use the free version")
+#define RID_LANGUAGETOOL_REST_LEAVE_EMPTY           NC_("RID_LANGUAGETOOL_REST_LEAVE_EMPTY", "Leave this field empty to use LanguageTool protocol")
 
 // Translatable names of color schemes
 #define RID_COLOR_SCHEME_LIBREOFFICE_AUTOMATIC      NC_("RID_COLOR_SCHEME_LIBREOFFICE_AUTOMATIC", "Automatic")
