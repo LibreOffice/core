@@ -308,7 +308,7 @@ public:
                             tools::Long nTileHeight ) override;
 
     /// @see vcl::ITiledRenderable::getDocumentSize().
-    virtual Size getDocumentSize() override;
+    virtual Size getDocumentSize() final override;
 
     /// @see vcl::ITiledRenderable::getDataArea().
     virtual Size getDataArea(long nPart) override;
@@ -397,6 +397,9 @@ public:
 
     /// @see vcl::ITiledRenderable::getViewRenderState().
     OString getViewRenderState() override;
+
+private:
+    Size getDocumentSize(SCCOL& rnTiledRenderingAreaEndCol, SCROW& rnTiledRenderingAreaEndRow );
 };
 
 class ScDrawPagesObj final : public cppu::WeakImplHelper<
