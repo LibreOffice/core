@@ -242,6 +242,12 @@ DECLARE_ODFEXPORT_TEST(testSpellOutNumberingTypes, "spellout-numberingtypes.odt"
     }
 }
 
+// DECLARE_ODFEXPORT_TEST(tdf133507_contextualSpacingSection, "tdf133507_contextualSpacingSection.odt")
+// {
+//     // Previously this was one page (no UL spacing) or three pages (every para had spacing)
+//     CPPUNIT_ASSERT_EQUAL(2, getPages());
+// }
+
 // MAILMERGE Add conditional to expand / collapse bookmarks
 DECLARE_ODFEXPORT_TEST(tdf101856_overlapped, "tdf101856_overlapped.odt")
 {

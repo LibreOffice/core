@@ -583,7 +583,7 @@ void GetSpacingValuesOfFrame( const SwFrame& rFrame,
                             SwTwips& onLowerSpacing,
                             SwTwips& onLineSpacing,
                             bool& obIsLineSpacingProportional,
-                            bool bIdenticalStyles );
+                            bool bIdenticalStyles, bool bIdenticalSections = true );
 
 /** method to get the content of the table cell
 

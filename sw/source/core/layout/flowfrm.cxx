@@ -1464,9 +1464,20 @@ const SwFrame* SwFlowFrame::GetPrevFrameForUpperSpaceCalc_( const SwFrame* _pPro
     return pPrevFrame;
 }
 
+// This should be renamed to something like lcl_ApplyULSpacing
 /// Compare styles attached to these text frames.
 static bool lcl_IdenticalStyles(const SwFrame* pPrevFrame, const SwFrame* pFrame)
 {
+    if (!pFrame || !pFrame->IsTextFrame())
+        return false;
+
+    // Identical styles only applies if "the paragraphs belong to the same content area".
+    if (pPrevFrame && pPrevFrame->FindSctFrame() != pFrame->FindSctFrame())
+    {
+        SAL_WARN("sw","DEBUG prev["<<pPrevFrame->FindSctFrame()<<"] sct["<<pFrame->FindSctFrame()<<"]");
+        // return false;
+    }
+
     SwTextFormatColl *pPrevFormatColl = nullptr;
     if (pPrevFrame && pPrevFrame->IsTextFrame())
     {
@@ -1475,15 +1486,10 @@ static bool lcl_IdenticalStyles(const SwFrame* pPrevFrame, const SwFrame* pFrame
             pTextFrame->GetTextNodeForParaProps()->GetFormatColl());
     }
 
-    bool bIdenticalStyles = false;
-    if (pFrame && pFrame->IsTextFrame())
-    {
-        const SwTextFrame *pTextFrame = static_cast< const SwTextFrame * >( pFrame );
-        SwTextFormatColl *const pFormatColl = dynamic_cast<SwTextFormatColl*>(
-            pTextFrame->GetTextNodeForParaProps()->GetFormatColl());
-        bIdenticalStyles = pPrevFormatColl == pFormatColl;
-    }
-    return bIdenticalStyles;
+    const SwTextFrame* pTextFrame = static_cast<const SwTextFrame*>(pFrame);
+    SwTextFormatColl* const pFormatColl
+        = dynamic_cast<SwTextFormatColl*>(pTextFrame->GetTextNodeForParaProps()->GetFormatColl());
+    return pPrevFormatColl == pFormatColl;
 }
 
 static bool lcl_getContextualSpacing(const SwFrame* pPrevFrame)
@@ -1564,7 +1570,7 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
             GetSpacingValuesOfFrame( (*pPrevFrame),
                                    nPrevLowerSpace, nPrevLineSpacing,
                                    bPrevLineSpacingProportional,
-                                   bIdenticalStyles);
+                                   bIdenticalStyles, pPrevFrame->FindSctFrame() == m_rThis.FindSctFrame());
             if( rIDSA.get(DocumentSettingId::PARA_SPACE_MAX) )
             {
                 // FIXME: apply bHalfContextualSpacing for better portability?
