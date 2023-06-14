@@ -1948,7 +1948,7 @@ void PowerPointExport::WriteDefaultColorSchemes(const FSHelperPtr& pFS)
 {
     for (int nId = PredefinedClrSchemeId::dk2; nId != PredefinedClrSchemeId::Count; nId++)
     {
-        OUString sName = PredefinedClrNames[static_cast<PredefinedClrSchemeId>(nId)];
+        OUString sName(getPredefinedClrNames(static_cast<PredefinedClrSchemeId>(nId)));
         sal_Int32 nColor = 0;
 
         switch (nId)

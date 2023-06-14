@@ -36,6 +36,7 @@ $(eval $(call gb_Library_use_externals,scfilt,\
 	boost_headers \
 	$(call gb_Helper_optional,OPENCL,clew) \
 	mdds_headers \
+	frozen \
 ))
 
 $(eval $(call gb_Library_use_libraries,scfilt,\

@@ -907,6 +907,18 @@ void FontworkHelpers::applyPropsToRuns(const std::vector<beans::PropertyValue>& 
         }
     }
 }
+namespace
+{
+constexpr const std::array<std::u16string_view, 5> aCharPropNames{
+    u"CharColorLumMod", u"CharColorLumOff", u"CharColorTheme", u"CharComplexColor",
+    u"CharTransparence"
+};
+
+constexpr const std::array<std::u16string_view, 5> aShapePropNames{
+    u"FillColorLumMod", u"FillColorLumOff", u"FillColorTheme", u"FillComplexColor",
+    u"FillTransparence"
+};
+}
 
 void FontworkHelpers::createCharFillPropsFromShape(
     const uno::Reference<beans::XPropertySet>& rXPropSet,
@@ -932,17 +944,12 @@ void FontworkHelpers::createCharFillPropsFromShape(
         rCharPropVec.push_back(comphelper::makePropertyValue(u"CharColor", sal_Int32(aColor)));
     }
 
-    const std::array<OUString, 5> aCharPropNames
-        = { u"CharColorLumMod", u"CharColorLumOff", u"CharColorTheme", u"CharComplexColor",
-            u"CharTransparence" };
-    const std::array<OUString, 5> aShapePropNames
-        = { u"FillColorLumMod", u"FillColorLumOff", u"FillColorTheme", u"FillComplexColor",
-            u"FillTransparence" };
     for (size_t i = 0; i < 5; i++)
     {
-        if (xPropSetInfo->hasPropertyByName(aShapePropNames[i]))
+        OUString aPropertyName(aShapePropNames[i]);
+        if (xPropSetInfo->hasPropertyByName(aPropertyName))
             rCharPropVec.push_back(comphelper::makePropertyValue(
-                aCharPropNames[i], rXPropSet->getPropertyValue(aShapePropNames[i])));
+                OUString(aCharPropNames[i]), rXPropSet->getPropertyValue(aPropertyName)));
     }
 }
 
@@ -1041,29 +1048,32 @@ typedef std::multimap<sal_Int32, GradientStopColor> ColorMapType;
 
 namespace
 {
+constexpr const std::array<std::u16string_view, 12> W14ColorNames{
+    u"tx1",     u"bg1",     u"tx2",     u"bg2",     u"accent1", u"accent2",
+    u"accent3", u"accent4", u"accent5", u"accent6", u"hlink",   u"folHlink"
+};
+
+constexpr const std::array<std::u16string_view, 12> WColorNames{
+    u"text1",   u"background1", u"text2",   u"background2", u"accent1",   u"accent2",
+    u"accent3", u"accent4",     u"accent5", u"accent6",     u"hyperlink", u"followedHyperlink"
+};
+
 // Returns the string to be used in w14:schemeClr in case of w14:textOutline or w14:textFill
 OUString lcl_getW14MarkupStringForThemeColor(const model::ComplexColor& rComplexColor)
 {
-    const std::array<OUString, 12> W14ColorNames
-        = { u"tx1",     u"bg1",     u"tx2",     u"bg2",     u"accent1", u"accent2",
-            u"accent3", u"accent4", u"accent5", u"accent6", u"hlink",   u"folHlink" };
     const sal_uInt8 nClrNameIndex = std::clamp<sal_uInt8>(
         sal_Int32(rComplexColor.getSchemeType()), sal_Int32(model::ThemeColorType::Dark1),
         sal_Int32(model::ThemeColorType::FollowedHyperlink));
-    return W14ColorNames[nClrNameIndex];
+    return OUString(W14ColorNames[nClrNameIndex]);
 }
 
 // Returns the string to be used in w:themeColor. It is exported via CharThemeColor.
 OUString lcl_getWMarkupStringForThemeColor(const model::ComplexColor& rComplexColor)
 {
-    const std::array<OUString, 12> WColorNames
-        = { u"text1",   u"background1", u"text2",     u"background2",
-            u"accent1", u"accent2",     u"accent3",   u"accent4",
-            u"accent5", u"accent6",     u"hyperlink", u"followedHyperlink" };
     const sal_uInt8 nClrNameIndex = std::clamp<sal_uInt8>(
         sal_Int32(rComplexColor.getSchemeType()), sal_Int32(model::ThemeColorType::Dark1),
         sal_Int32(model::ThemeColorType::FollowedHyperlink));
-    return WColorNames[nClrNameIndex];
+    return OUString(WColorNames[nClrNameIndex]);
 }
 
 // Puts the value of the first occurrence of rType in rComplexColor into rValue and returns true.

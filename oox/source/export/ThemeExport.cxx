@@ -19,6 +19,9 @@
 #include <sax/fastattribs.hxx>
 #include <unordered_map>
 #include <oox/export/drawingml.hxx>
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
 
 namespace oox
 {
@@ -143,16 +146,84 @@ bool ThemeExport::writeFontScheme(model::FontScheme const& rFontScheme)
     return true;
 }
 
+namespace
+{
+constexpr frozen::unordered_map<model::TransformationType, sal_Int32, 4> constTransformTypeTokenMap{
+    { model::TransformationType::Tint, XML_tint },
+    { model::TransformationType::Shade, XML_shade },
+    { model::TransformationType::LumMod, XML_lumMod },
+    { model::TransformationType::LumOff, XML_lumOff },
+};
+
+constexpr frozen::unordered_map<model::ThemeColorType, const char*, 12> constThemeColorTypeTokenMap{
+    { model::ThemeColorType::Dark1, "dk1" },
+    { model::ThemeColorType::Light1, "lt1" },
+    { model::ThemeColorType::Dark2, "dk2" },
+    { model::ThemeColorType::Light2, "lt2" },
+    { model::ThemeColorType::Accent1, "accent1" },
+    { model::ThemeColorType::Accent2, "accent2" },
+    { model::ThemeColorType::Accent3, "accent3" },
+    { model::ThemeColorType::Accent4, "accent4" },
+    { model::ThemeColorType::Accent5, "accent5" },
+    { model::ThemeColorType::Accent6, "accent6" },
+    { model::ThemeColorType::Hyperlink, "hlink" },
+    { model::ThemeColorType::FollowedHyperlink, "folHlink" }
+};
+
+constexpr frozen::unordered_map<model::SystemColorType, const char*, 30>
+    constSystemColorTypeTokenMap{
+        { model::SystemColorType::DarkShadow3D, "3dDkShadow" },
+        { model::SystemColorType::Light3D, "3dLight" },
+        { model::SystemColorType::ActiveBorder, "activeBorder" },
+        { model::SystemColorType::ActiveCaption, "activeCaption" },
+        { model::SystemColorType::AppWorkspace, "appWorkspace" },
+        { model::SystemColorType::Background, "background" },
+        { model::SystemColorType::ButtonFace, "btnFace" },
+        { model::SystemColorType::ButtonHighlight, "btnHighlight" },
+        { model::SystemColorType::ButtonShadow, "btnShadow" },
+        { model::SystemColorType::ButtonText, "btnText" },
+        { model::SystemColorType::CaptionText, "captionText" },
+        { model::SystemColorType::GradientActiveCaption, "gradientActiveCaption" },
+        { model::SystemColorType::GradientInactiveCaption, "gradientInactiveCaption" },
+        { model::SystemColorType::GrayText, "grayText" },
+        { model::SystemColorType::Highlight, "highlight" },
+        { model::SystemColorType::HighlightText, "highlightText" },
+        { model::SystemColorType::HotLight, "hotLight" },
+        { model::SystemColorType::InactiveBorder, "inactiveBorder" },
+        { model::SystemColorType::InactiveCaption, "inactiveCaption" },
+        { model::SystemColorType::InactiveCaptionText, "inactiveCaptionText" },
+        { model::SystemColorType::InfoBack, "infoBk" },
+        { model::SystemColorType::InfoText, "infoText" },
+        { model::SystemColorType::Menu, "menu" },
+        { model::SystemColorType::MenuBar, "menuBar" },
+        { model::SystemColorType::MenuHighlight, "menuHighlight" },
+        { model::SystemColorType::MenuText, "menuText" },
+        { model::SystemColorType::ScrollBar, "scrollBar" },
+        { model::SystemColorType::Window, "window" },
+        { model::SystemColorType::WindowFrame, "windowFrame" },
+        { model::SystemColorType::WindowText, "windowText" }
+    };
+
+constexpr frozen::unordered_map<sal_Int32, model::ThemeColorType, 12> constTokenMap{
+    { XML_dk1, model::ThemeColorType::Dark1 },
+    { XML_lt1, model::ThemeColorType::Light1 },
+    { XML_dk2, model::ThemeColorType::Dark2 },
+    { XML_lt2, model::ThemeColorType::Light2 },
+    { XML_accent1, model::ThemeColorType::Accent1 },
+    { XML_accent2, model::ThemeColorType::Accent2 },
+    { XML_accent3, model::ThemeColorType::Accent3 },
+    { XML_accent4, model::ThemeColorType::Accent4 },
+    { XML_accent5, model::ThemeColorType::Accent5 },
+    { XML_accent6, model::ThemeColorType::Accent6 },
+    { XML_hlink, model::ThemeColorType::Hyperlink },
+    { XML_folHlink, model::ThemeColorType::FollowedHyperlink }
+};
+
+} // end anonymous ns
+
 void ThemeExport::writeColorTransformations(
     std::vector<model::Transformation> const& rTransformations)
 {
-    static std::unordered_map<model::TransformationType, sal_Int32> constTransformTypeTokenMap = {
-        { model::TransformationType::Tint, XML_tint },
-        { model::TransformationType::Shade, XML_shade },
-        { model::TransformationType::LumMod, XML_lumMod },
-        { model::TransformationType::LumOff, XML_lumOff },
-    };
-
     for (model::Transformation const& rTransformation : rTransformations)
     {
         auto iterator = constTransformTypeTokenMap.find(rTransformation.meType);
@@ -192,19 +263,6 @@ void ThemeExport::writeColorHSL(model::ComplexColor const& rComplexColor)
 
 void ThemeExport::writeColorScheme(model::ComplexColor const& rComplexColor)
 {
-    static std::unordered_map<model::ThemeColorType, const char*> constThemeColorTypeTokenMap
-        = { { model::ThemeColorType::Dark1, "dk1" },
-            { model::ThemeColorType::Light1, "lt1" },
-            { model::ThemeColorType::Dark2, "dk2" },
-            { model::ThemeColorType::Light2, "lt2" },
-            { model::ThemeColorType::Accent1, "accent1" },
-            { model::ThemeColorType::Accent2, "accent2" },
-            { model::ThemeColorType::Accent3, "accent3" },
-            { model::ThemeColorType::Accent4, "accent4" },
-            { model::ThemeColorType::Accent5, "accent5" },
-            { model::ThemeColorType::Accent6, "accent6" },
-            { model::ThemeColorType::Hyperlink, "hlink" },
-            { model::ThemeColorType::FollowedHyperlink, "folHlink" } };
     auto iterator = constThemeColorTypeTokenMap.find(rComplexColor.meSchemeType);
     if (iterator != constThemeColorTypeTokenMap.end())
     {
@@ -217,40 +275,8 @@ void ThemeExport::writeColorScheme(model::ComplexColor const& rComplexColor)
 
 void ThemeExport::writeColorSystem(model::ComplexColor const& rComplexColor)
 {
-    static std::unordered_map<model::SystemColorType, const char*> constThemeColorTypeTokenMap = {
-        { model::SystemColorType::DarkShadow3D, "3dDkShadow" },
-        { model::SystemColorType::Light3D, "3dLight" },
-        { model::SystemColorType::ActiveBorder, "activeBorder" },
-        { model::SystemColorType::ActiveCaption, "activeCaption" },
-        { model::SystemColorType::AppWorkspace, "appWorkspace" },
-        { model::SystemColorType::Background, "background" },
-        { model::SystemColorType::ButtonFace, "btnFace" },
-        { model::SystemColorType::ButtonHighlight, "btnHighlight" },
-        { model::SystemColorType::ButtonShadow, "btnShadow" },
-        { model::SystemColorType::ButtonText, "btnText" },
-        { model::SystemColorType::CaptionText, "captionText" },
-        { model::SystemColorType::GradientActiveCaption, "gradientActiveCaption" },
-        { model::SystemColorType::GradientInactiveCaption, "gradientInactiveCaption" },
-        { model::SystemColorType::GrayText, "grayText" },
-        { model::SystemColorType::Highlight, "highlight" },
-        { model::SystemColorType::HighlightText, "highlightText" },
-        { model::SystemColorType::HotLight, "hotLight" },
-        { model::SystemColorType::InactiveBorder, "inactiveBorder" },
-        { model::SystemColorType::InactiveCaption, "inactiveCaption" },
-        { model::SystemColorType::InactiveCaptionText, "inactiveCaptionText" },
-        { model::SystemColorType::InfoBack, "infoBk" },
-        { model::SystemColorType::InfoText, "infoText" },
-        { model::SystemColorType::Menu, "menu" },
-        { model::SystemColorType::MenuBar, "menuBar" },
-        { model::SystemColorType::MenuHighlight, "menuHighlight" },
-        { model::SystemColorType::MenuText, "menuText" },
-        { model::SystemColorType::ScrollBar, "scrollBar" },
-        { model::SystemColorType::Window, "window" },
-        { model::SystemColorType::WindowFrame, "windowFrame" },
-        { model::SystemColorType::WindowText, "windowText" },
-    };
-    auto iterator = constThemeColorTypeTokenMap.find(rComplexColor.meSystemColorType);
-    if (iterator != constThemeColorTypeTokenMap.end())
+    auto iterator = constSystemColorTypeTokenMap.find(rComplexColor.meSystemColorType);
+    if (iterator != constSystemColorTypeTokenMap.end())
     {
         const char* sValue = iterator->second;
         mpFS->startElementNS(XML_a, XML_sysClr, XML_val, sValue);
@@ -845,21 +871,7 @@ bool ThemeExport::writeFormatScheme(model::FormatScheme const& rFormatScheme)
 
 bool ThemeExport::writeColorSet(model::Theme const& rTheme)
 {
-    static std::unordered_map<sal_Int32, model::ThemeColorType> constTokenMap
-        = { { XML_dk1, model::ThemeColorType::Dark1 },
-            { XML_lt1, model::ThemeColorType::Light1 },
-            { XML_dk2, model::ThemeColorType::Dark2 },
-            { XML_lt2, model::ThemeColorType::Light2 },
-            { XML_accent1, model::ThemeColorType::Accent1 },
-            { XML_accent2, model::ThemeColorType::Accent2 },
-            { XML_accent3, model::ThemeColorType::Accent3 },
-            { XML_accent4, model::ThemeColorType::Accent4 },
-            { XML_accent5, model::ThemeColorType::Accent5 },
-            { XML_accent6, model::ThemeColorType::Accent6 },
-            { XML_hlink, model::ThemeColorType::Hyperlink },
-            { XML_folHlink, model::ThemeColorType::FollowedHyperlink } };
-
-    static std::array<sal_Int32, 12> constTokenArray
+    static const constexpr std::array<sal_Int32, 12> constTokenArray
         = { XML_dk1,     XML_lt1,     XML_dk2,     XML_lt2,     XML_accent1, XML_accent2,
             XML_accent3, XML_accent4, XML_accent5, XML_accent6, XML_hlink,   XML_folHlink };
 
@@ -869,11 +881,15 @@ bool ThemeExport::writeColorSet(model::Theme const& rTheme)
 
     for (auto nToken : constTokenArray)
     {
-        model::ThemeColorType eColorType = constTokenMap[nToken];
-        Color aColor = pColorSet->getColor(eColorType);
-        mpFS->startElementNS(XML_a, nToken);
-        mpFS->singleElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(sal_Int32(aColor)));
-        mpFS->endElementNS(XML_a, nToken);
+        auto iterator = constTokenMap.find(nToken);
+        if (iterator != constTokenMap.end())
+        {
+            model::ThemeColorType eColorType = iterator->second;
+            Color aColor = pColorSet->getColor(eColorType);
+            mpFS->startElementNS(XML_a, nToken);
+            mpFS->singleElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(sal_Int32(aColor)));
+            mpFS->endElementNS(XML_a, nToken);
+        }
     }
 
     return true;

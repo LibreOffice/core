@@ -25,7 +25,6 @@
 #include <memory>
 #include <utility>
 #include <vector>
-
 #include <oox/dllapi.h>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -50,21 +49,7 @@ enum PredefinedClrSchemeId {
     Count
 };
 
-static std::map<PredefinedClrSchemeId, OUString> PredefinedClrNames =
-{
-    { dk1,  "dk1" },
-    { lt1, "lt1" },
-    { dk2, "dk2" },
-    { lt2, "lt2" },
-    { accent1, "accent1" },
-    { accent2, "accent2" },
-    { accent3, "accent3" },
-    { accent4, "accent4" },
-    { accent5, "accent5" },
-    { accent6, "accent6" },
-    { hlink, "hlink" },
-    { folHlink, "folHlink" }
-};
+OOX_DLLPUBLIC std::u16string_view getPredefinedClrNames(PredefinedClrSchemeId eID);
 
 class ClrMap
 {

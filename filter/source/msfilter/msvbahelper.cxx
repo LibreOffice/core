@@ -42,7 +42,9 @@
 #include <svtools/acceleratorexecute.hxx>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#include <map>
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
 
 using namespace ::com::sun::star;
 
@@ -643,64 +645,51 @@ static sal_uInt16 parseChar( sal_Unicode c )
     return nVclKey;
 }
 
-namespace {
-
-struct KeyCodeEntry
+namespace
 {
-   const char* sName;
-   sal_uInt16 nCode;
+
+constexpr frozen::unordered_map<std::u16string_view, sal_uInt16, 34> s_KeyCodes
+{
+    { u"BACKSPACE", KEY_BACKSPACE },
+    { u"BS", KEY_BACKSPACE },
+    { u"DELETE", KEY_DELETE },
+    { u"DEL", KEY_DELETE },
+    { u"DOWN", KEY_DOWN },
+    { u"UP", KEY_UP },
+    { u"LEFT", KEY_LEFT },
+    { u"RIGHT", KEY_RIGHT },
+    { u"END", KEY_END },
+    { u"ESCAPE", KEY_ESCAPE },
+    { u"ESC", KEY_ESCAPE },
+    { u"HELP", KEY_HELP },
+    { u"HOME", KEY_HOME },
+    { u"PGDN", KEY_PAGEDOWN },
+    { u"PGUP", KEY_PAGEUP },
+    { u"INSERT", KEY_INSERT },
+    { u"SCROLLLOCK", KEY_SCROLLLOCK },
+    { u"NUMLOCK", KEY_NUMLOCK },
+    { u"TAB", KEY_TAB },
+    { u"F1", KEY_F1 },
+    { u"F2", KEY_F2 },
+    { u"F3", KEY_F3 },
+    { u"F4", KEY_F4 },
+    { u"F5", KEY_F5 },
+    { u"F6", KEY_F6 },
+    { u"F7", KEY_F7 },
+    { u"F8", KEY_F8 },
+    { u"F9", KEY_F9 },
+    { u"F10", KEY_F10 },
+    { u"F11", KEY_F11 },
+    { u"F12", KEY_F12 },
+    { u"F13", KEY_F13 },
+    { u"F14", KEY_F14 },
+    { u"F15", KEY_F15 }
 };
 
-}
-
-KeyCodeEntry const aMSKeyCodesData[] = {
-    { "BACKSPACE", KEY_BACKSPACE },
-    { "BS", KEY_BACKSPACE },
-    { "DELETE", KEY_DELETE },
-    { "DEL", KEY_DELETE },
-    { "DOWN", KEY_DOWN },
-    { "UP", KEY_UP },
-    { "LEFT", KEY_LEFT },
-    { "RIGHT", KEY_RIGHT },
-    { "END", KEY_END },
-    { "ESCAPE", KEY_ESCAPE },
-    { "ESC", KEY_ESCAPE },
-    { "HELP", KEY_HELP },
-    { "HOME", KEY_HOME },
-    { "PGDN", KEY_PAGEDOWN },
-    { "PGUP", KEY_PAGEUP },
-    { "INSERT", KEY_INSERT },
-    { "SCROLLLOCK", KEY_SCROLLLOCK },
-    { "NUMLOCK", KEY_NUMLOCK },
-    { "TAB", KEY_TAB },
-    { "F1", KEY_F1 },
-    { "F2", KEY_F2 },
-    { "F3", KEY_F3 },
-    { "F4", KEY_F4 },
-    { "F5", KEY_F5 },
-    { "F6", KEY_F6 },
-    { "F7", KEY_F7 },
-    { "F8", KEY_F8 },
-    { "F9", KEY_F9 },
-    { "F10", KEY_F10 },
-    { "F11", KEY_F11 },
-    { "F12", KEY_F12 },
-    { "F13", KEY_F13 },
-    { "F14", KEY_F14 },
-    { "F15", KEY_F15 },
-};
+} // end anonymous namespace
 
 awt::KeyEvent parseKeyEvent( std::u16string_view Key )
 {
-    static std::map< OUString, sal_uInt16 > s_KeyCodes = []()
-    {
-        std::map< OUString, sal_uInt16 > tmp;
-        for (KeyCodeEntry const & i : aMSKeyCodesData)
-        {
-            tmp[ OUString::createFromAscii( i.sName ) ] = i.nCode;
-        }
-        return tmp;
-    }();
     std::u16string_view sKeyCode;
     sal_uInt16 nVclKey = 0;
 
@@ -731,7 +720,7 @@ awt::KeyEvent parseKeyEvent( std::u16string_view Key )
             nVclKey |= parseChar( sKeyCode[ 0 ] );
         else
         {
-            auto it = s_KeyCodes.find( OUString(sKeyCode) );
+            auto it = s_KeyCodes.find(sKeyCode);
             if ( it == s_KeyCodes.end() ) // unknown or unsupported
                 throw uno::RuntimeException();
             nVclKey |= it->second;

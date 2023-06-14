@@ -25,6 +25,10 @@
 #include <tools/multisel.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
+
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
@@ -72,12 +76,15 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox::ppt {
-
-static std::map<PredefinedClrSchemeId, sal_Int32> PredefinedClrTokens =
+namespace oox::ppt
 {
-    //{ dk1, XML_dk1 },
-    //{ lt1, XML_lt1 },
+
+namespace
+{
+constexpr frozen::unordered_map<PredefinedClrSchemeId, sal_Int32, 12> constPredefinedClrTokens
+{
+    { dk1, XML_dk1 },
+    { lt1, XML_lt1 },
     { dk2, XML_dk2 },
     { lt2, XML_lt2 },
     { accent1, XML_accent1 },
@@ -89,6 +96,15 @@ static std::map<PredefinedClrSchemeId, sal_Int32> PredefinedClrTokens =
     { hlink, XML_hlink },
     { folHlink, XML_folHlink }
 };
+
+sal_Int32 getPredefinedClrTokens(PredefinedClrSchemeId eID)
+{
+    auto iterator = constPredefinedClrTokens.find(eID);
+    if (iterator == constPredefinedClrTokens.end())
+        return XML_TOKEN_INVALID;
+    return iterator->second;
+}
+} // end anonymous ns
 
 PresentationFragmentHandler::PresentationFragmentHandler(XmlFilterBase& rFilter, const OUString& rFragmentPath)
     : FragmentHandler2( rFilter, rFragmentPath )
@@ -227,8 +243,9 @@ void PresentationFragmentHandler::saveThemeToGrabBag(const oox::drawingml::Theme
                 ClrScheme rClrScheme = pThemePtr->getClrScheme();
                 for (int nId = PredefinedClrSchemeId::dk2; nId != PredefinedClrSchemeId::Count; nId++)
                 {
-                    sal_uInt32 nToken = PredefinedClrTokens[static_cast<PredefinedClrSchemeId>(nId)];
-                    const OUString& sName = PredefinedClrNames[static_cast<PredefinedClrSchemeId>(nId)];
+                    auto eID = static_cast<PredefinedClrSchemeId>(nId);
+                    sal_uInt32 nToken = getPredefinedClrTokens(eID);
+                    OUString sName(getPredefinedClrNames(eID));
                     ::Color nColor;
 
                     rClrScheme.getColor(nToken, nColor);

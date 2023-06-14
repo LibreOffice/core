@@ -18,11 +18,10 @@
  */
 
 #include <XMLRtlGutterPropertyHandler.hxx>
-
-#include <set>
-
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_set.h>
 #include <com/sun/star/uno/Any.hxx>
-
 #include <xmloff/xmluconv.hxx>
 
 using namespace com::sun::star;
@@ -31,13 +30,18 @@ XMLRtlGutterPropertyHandler::XMLRtlGutterPropertyHandler() = default;
 
 XMLRtlGutterPropertyHandler::~XMLRtlGutterPropertyHandler() = default;
 
+namespace
+{
+constexpr frozen::unordered_set<std::u16string_view, 4> constRtlModes{ u"rl-tb", u"tb-rl", u"rl",
+                                                                       u"tb" };
+} // end anonymous ns
+
 bool XMLRtlGutterPropertyHandler::importXML(const OUString& rStrImpValue, uno::Any& rValue,
                                             const SvXMLUnitConverter&) const
 {
     // Infer RtlGutter from WritingMode.
-    std::set<OUString> aRtlModes = { "rl-tb", "tb-rl", "rl", "tb" };
-    auto it = aRtlModes.find(rStrImpValue);
-    rValue <<= (it != aRtlModes.end());
+    auto it = constRtlModes.find(rStrImpValue);
+    rValue <<= (it != constRtlModes.end());
     return true;
 }
 

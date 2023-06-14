@@ -27,9 +27,43 @@
 #include <oox/token/tokens.hxx>
 #include <comphelper/sequence.hxx>
 
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
+
 using namespace com::sun::star;
 
 namespace oox::drawingml {
+
+namespace
+{
+
+constexpr frozen::unordered_map<PredefinedClrSchemeId, std::u16string_view, 12> constPredefinedClrNames
+{
+    { dk1, u"dk1" },
+    { lt1, u"lt1" },
+    { dk2, u"dk2" },
+    { lt2, u"lt2" },
+    { accent1, u"accent1" },
+    { accent2, u"accent2" },
+    { accent3, u"accent3" },
+    { accent4, u"accent4" },
+    { accent5, u"accent5" },
+    { accent6, u"accent6" },
+    { hlink, u"hlink" },
+    { folHlink, u"folHlink" }
+};
+
+} // end anonymous namespace
+
+std::u16string_view getPredefinedClrNames(PredefinedClrSchemeId eID)
+{
+    std::u16string_view empty;
+    auto iterator = constPredefinedClrNames.find(eID);
+    if (iterator == constPredefinedClrNames.end())
+        return empty;
+    return iterator->second;
+}
 
 bool ClrMap::getColorMap( sal_Int32& nClrToken )
 {

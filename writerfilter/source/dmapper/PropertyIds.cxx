@@ -18,13 +18,16 @@
  */
 #include <rtl/ustring.hxx>
 #include "PropertyIds.hxx"
-#include <unordered_map>
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
 
 namespace writerfilter::dmapper{
 
-const OUString & getPropertyName( PropertyIds eId )
+namespace
 {
-    static const std::unordered_map<PropertyIds, OUString> map {
+    constexpr frozen::unordered_map<PropertyIds, std::u16string_view, 347> constPropertyMap
+    {
         { PROP_CHAR_WEIGHT, u"CharWeight"},
         { PROP_CHAR_POSTURE, u"CharPosture"},
         { PROP_CHAR_STRIKEOUT, u"CharStrikeout"},
@@ -373,7 +376,15 @@ const OUString & getPropertyName( PropertyIds eId )
         { PROP_PARA_CONNECT_BORDERS, u"ParaIsConnectBorder"},
         { PROP_DECORATIVE, u"Decorative"},
     };
-    return map.at(eId);
+} // end anonymous ns
+
+OUString getPropertyName( PropertyIds eId )
+{
+    auto iterator = constPropertyMap.find(eId);
+    if (iterator != constPropertyMap.end())
+        return OUString(iterator->second);
+
+    return OUString();
 }
 
 bool isCharacterProperty( const PropertyIds eId )
