@@ -4779,6 +4779,46 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf152246)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf155161)
+{
+// TODO: We seem to get a fallback font on Windows
+#ifndef _WIN32
+    vcl::filter::PDFDocument aDocument;
+    load(u"tdf155161.odt", aDocument);
+
+    // Check that all fonts in the document are Type 3 fonts
+    int nFonts = 0;
+    for (const auto& aElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"));
+        if (pType && pType->GetValue() == "Font")
+        {
+            auto pSubtype = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Subtype"));
+            CPPUNIT_ASSERT(pSubtype);
+            CPPUNIT_ASSERT_EQUAL(OString("Type3"), pSubtype->GetValue());
+
+            auto pName = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Name"));
+            CPPUNIT_ASSERT(pName);
+            CPPUNIT_ASSERT_EQUAL(OString("Cantarell-Regular"), pName->GetValue());
+
+            nFonts++;
+        }
+    }
+
+#ifdef MACOSX
+    // There must be two fonts
+    CPPUNIT_ASSERT_EQUAL(2, nFonts);
+#else
+    // But it seems that embedded variable fonts don’t register all supported
+    // styles on Linux, so the bold and regular text use the same regular font.
+    CPPUNIT_ASSERT(nFonts);
+#endif
+#endif
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
