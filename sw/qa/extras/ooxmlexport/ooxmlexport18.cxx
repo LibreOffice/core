@@ -850,6 +850,20 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135786, "tdf135786.docx")
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf155736, "tdf155736_PageNumbers_footer.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/footer");
+    assertXPath(pXmlDoc, "/root/page[2]/footer");
+    //Without the fix in place, it would have failed with
+    //- Expected: Page * of *
+    //- Actual  : Page of
+    CPPUNIT_ASSERT_EQUAL(OUString("Page * of *"), parseDump("/root/page[1]/footer/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Page * of *"), parseDump("/root/page[2]/footer/txt/text()"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
