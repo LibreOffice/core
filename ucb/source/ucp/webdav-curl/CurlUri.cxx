@@ -115,6 +115,10 @@ CurlUri::CurlUri(::std::u16string_view const rURI)
     }
 
     // use curl to parse the URI, to get a consistent interpretation
+    if (rURI.find(u'\0') != std::u16string_view::npos)
+    {
+        throw DAVException(DAVException::DAV_INVALID_ARG);
+    }
     OString const utf8URI(OUStringToOString(rURI, RTL_TEXTENCODING_UTF8));
     auto uc = curl_url_set(m_pUrl.get(), CURLUPART_URL, utf8URI.getStr(), 0);
     if (uc != CURLUE_OK)
