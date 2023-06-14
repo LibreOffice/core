@@ -1957,7 +1957,7 @@ void LCCurrencyNode::generateCode (const OFileWriter &of) const
     OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
         useLocale = useLocale.replace( '-', '_');
-        of.writeRefFunction("getAllCurrencies_", useLocale);
+        of.writeOUStringRefFunction("getAllCurrencies_", useLocale);
         return;
     }
     sal_Int16 nbOfCurrencies = 0;
@@ -1968,11 +1968,11 @@ void LCCurrencyNode::generateCode (const OFileWriter &of) const
     for ( sal_Int32 i = 0; i < getNumberOfChildren(); i++,nbOfCurrencies++) {
         LocaleNode * currencyNode = getChildAt (i);
         str = currencyNode->getAttr().getValueByName("default");
-        bool bDefault = of.writeDefaultParameter("Currency", str, nbOfCurrencies);
+        bool bDefault = of.writeOUStringLiteralDefaultParameter("Currency", str, nbOfCurrencies);
         str = currencyNode->getAttr().getValueByName("usedInCompatibleFormatCodes");
-        bool bCompatible = of.writeDefaultParameter("CurrencyUsedInCompatibleFormatCodes", str, nbOfCurrencies);
+        bool bCompatible = of.writeOUStringLiteralDefaultParameter("CurrencyUsedInCompatibleFormatCodes", str, nbOfCurrencies);
         str = currencyNode->getAttr().getValueByName("legacyOnly");
-        bool bLegacy = of.writeDefaultParameter("CurrencyLegacyOnly", str, nbOfCurrencies);
+        bool bLegacy = of.writeOUStringLiteralDefaultParameter("CurrencyLegacyOnly", str, nbOfCurrencies);
         if (bLegacy && (bDefault || bCompatible))
             incError( "Currency: if legacyOnly==true, both 'default' and 'usedInCompatibleFormatCodes' must be false.");
         if (bDefault)
@@ -1988,12 +1988,12 @@ void LCCurrencyNode::generateCode (const OFileWriter &of) const
             bTheCompatible = true;
         }
         str = currencyNode -> findNode ("CurrencyID") -> getValue();
-        of.writeParameter("currencyID", str, nbOfCurrencies);
+        of.writeOUStringLiteralParameter("currencyID", str, nbOfCurrencies);
         // CurrencyID MUST be ISO 4217.
         if (!bLegacy && !isIso4217(str))
             incError( "CurrencyID is not ISO 4217");
         str = currencyNode -> findNode ("CurrencySymbol") -> getValue();
-        of.writeParameter("currencySymbol", str, nbOfCurrencies);
+        of.writeOUStringLiteralParameter("currencySymbol", str, nbOfCurrencies);
         // Check if this currency really is the one used in number format
         // codes. In case of ref=... mechanisms it may be that TheCurrency
         // couldn't had been determined from the current locale (i.e. is
@@ -2001,16 +2001,16 @@ void LCCurrencyNode::generateCode (const OFileWriter &of) const
         if (bCompatible && !sTheCompatibleCurrency.isEmpty() && sTheCompatibleCurrency != str)
             incErrorStrStr( "Error: CurrencySymbol \"%s\" flagged as usedInCompatibleFormatCodes doesn't match \"%s\" determined from format codes.\n", str, sTheCompatibleCurrency);
         str = currencyNode -> findNode ("BankSymbol") -> getValue();
-        of.writeParameter("bankSymbol", str, nbOfCurrencies);
+        of.writeOUStringLiteralParameter("bankSymbol", str, nbOfCurrencies);
         // BankSymbol currently must be ISO 4217. May change later if
         // application always uses CurrencyID instead of BankSymbol.
         if (!bLegacy && !isIso4217(str))
             incError( "BankSymbol is not ISO 4217");
         str = currencyNode -> findNode ("CurrencyName") -> getValue();
-        of.writeParameter("currencyName", str, nbOfCurrencies);
+        of.writeOUStringLiteralParameter("currencyName", str, nbOfCurrencies);
         str = currencyNode -> findNode ("DecimalPlaces") -> getValue();
         sal_Int16 nDecimalPlaces = static_cast<sal_Int16>(str.toInt32());
-        of.writeIntParameter("currencyDecimalPlaces", nbOfCurrencies, nDecimalPlaces);
+        of.writeOUStringLiteralIntParameter("currencyDecimalPlaces", nbOfCurrencies, nDecimalPlaces);
         of.writeAsciiString("\n");
     };
 
@@ -2022,7 +2022,7 @@ void LCCurrencyNode::generateCode (const OFileWriter &of) const
     of.writeAsciiString("static const sal_Int16 currencyCount = ");
     of.writeInt(nbOfCurrencies);
     of.writeAsciiString(";\n\n");
-    of.writeAsciiString("static const sal_Unicode* currencies[] = {\n");
+    of.writeAsciiString("static constexpr rtl::OUStringConstExpr currencies[] = {\n");
     for(sal_Int16 i = 0; i < nbOfCurrencies; i++) {
         of.writeAsciiString("\tcurrencyID");
         of.writeInt(i);
@@ -2050,7 +2050,7 @@ void LCCurrencyNode::generateCode (const OFileWriter &of) const
         of.writeAsciiString(",\n");
     }
     of.writeAsciiString("};\n\n");
-    of.writeFunction("getAllCurrencies_", "currencyCount", "currencies");
+    of.writeOUStringFunction("getAllCurrencies_", "currencyCount", "currencies");
 }
 
 void LCTransliterationNode::generateCode (const OFileWriter &of) const

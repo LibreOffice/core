@@ -786,26 +786,25 @@ LocaleDataImpl::getAllCalendars( const Locale& rLocale )
 Sequence< Currency2 > SAL_CALL
 LocaleDataImpl::getAllCurrencies2( const Locale& rLocale )
 {
-    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getAllCurrencies" ));
+    MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getAllCurrencies" ));
 
     if ( func ) {
         sal_Int16 currencyCount = 0;
-        sal_Unicode **allCurrencies = func(currencyCount);
+        OUString const *allCurrencies = func(currencyCount);
 
         Sequence< Currency2 > seq(currencyCount);
         auto seqRange = asNonConstRange(seq);
         for(int i = 0, nOff = 0; i < currencyCount; i++, nOff += 8 ) {
-            Currency2 cur(
-                    OUString(allCurrencies[nOff]), // string ID
-                    OUString(allCurrencies[nOff+1]), // string Symbol
-                    OUString(allCurrencies[nOff+2]), // string BankSymbol
-                    OUString(allCurrencies[nOff+3]), // string Name
+            seqRange[i] = Currency2(
+                    allCurrencies[nOff], // string ID
+                    allCurrencies[nOff+1], // string Symbol
+                    allCurrencies[nOff+2], // string BankSymbol
+                    allCurrencies[nOff+3], // string Name
                     allCurrencies[nOff+4][0] != 0, // boolean Default
                     allCurrencies[nOff+5][0] != 0, // boolean UsedInCompatibleFormatCodes
                     allCurrencies[nOff+6][0],   // short DecimalPlaces
                     allCurrencies[nOff+7][0] != 0 // boolean LegacyOnly
                     );
-            seqRange[i] = cur;
         }
         return seq;
     }
