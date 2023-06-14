@@ -45,6 +45,7 @@ OptLanguageToolTabPage::OptLanguageToolTabPage(weld::Container* pPage,
     m_xBaseURLED->set_placeholder_text(CuiResId(RID_LANGUAGETOOL_LEAVE_EMPTY));
     m_xUsernameED->set_placeholder_text(CuiResId(RID_LANGUAGETOOL_LEAVE_EMPTY));
     m_xApiKeyED->set_placeholder_text(CuiResId(RID_LANGUAGETOOL_LEAVE_EMPTY));
+    m_xRestProtocol->set_placeholder_text(CuiResId(RID_LANGUAGETOOL_REST_LEAVE_EMPTY));
 }
 
 OptLanguageToolTabPage::~OptLanguageToolTabPage() {}
