@@ -441,6 +441,7 @@ namespace basegfx
                     {
                         const double fColorOff(aCurrColor->getStopOffset());
                         aNewAlpha.emplace_back(fColorOff, rAlphaStops.getInterpolatedBColor(fColorOff, 0, aAlphaStopRange));
+                        aNewColor.emplace_back(fColorOff, aCurrColor->getStopColor());
                         bRealChange = true;
                         aCurrColor++;
                     }
@@ -448,6 +449,7 @@ namespace basegfx
                     {
                         const double fAlphaOff(aCurrAlpha->getStopOffset());
                         aNewColor.emplace_back(fAlphaOff, rColorStops.getInterpolatedBColor(fAlphaOff, 0, aColorStopRange));
+                        aNewAlpha.emplace_back(fAlphaOff, aCurrAlpha->getStopColor());
                         bRealChange = true;
                         aCurrAlpha++;
                     }

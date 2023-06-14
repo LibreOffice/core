@@ -66,6 +66,16 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testFontworkColorGradientWord)
     assertXPath(pXmlDoc, sPath + "w14:gs[3]", "pos", "100000");
     assertXPath(pXmlDoc, sPath + "w14:gs[3]/w14:srgbClr", "val", "00ffff");
 }
+
+CPPUNIT_TEST_FIXTURE(TestMCGR, testTdf155825_SourcOffsetRangeDifferent)
+{
+    // Color gradient has offset range [0,0.8] and transparency gradient has offset range [0,1].
+    loadFromURL(u"tdf155825_MCGR_SourceOffsetRangeDifferent.fodp");
+    // Save it to PPTX
+    // Without fix, a debug-build would have crashed in oox/source/export/drawingml.cxx from
+    // assert(false && "oox::WriteGradientFill: non-synchronized gradients (!)");
+    save("Impress Office Open XML");
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
