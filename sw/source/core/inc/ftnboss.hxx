@@ -46,7 +46,7 @@ enum class SwNeighbourAdjust {
 
 typedef std::vector<SwFootnoteFrame*> SwFootnoteFrames;
 
-class SAL_DLLPUBLIC_RTTI SwFootnoteBossFrame: public SwLayoutFrame
+class SW_DLLPUBLIC SwFootnoteBossFrame: public SwLayoutFrame
 {
     // for private footnote operations
     friend class SwFrame;

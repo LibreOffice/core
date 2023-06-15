@@ -2701,7 +2701,11 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
     if (GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS)
         && IsFirstTextLine())
     {
-        const tools::Long nUpper = m_pFrame->getFramePrintArea().Top();
+        tools::Long nUpper = m_pFrame->getFramePrintArea().Top();
+        // Make sure that increase only happens in case the upper spacing comes from the upper
+        // margin of the current text frame, not because of a lower spacing of the previous text
+        // frame.
+        nUpper -= m_pFrame->GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid();
         // Increase the rectangle
         if( nUpper > 0 && nTop >= nUpper  )
             aLine.SubTop( nUpper );
