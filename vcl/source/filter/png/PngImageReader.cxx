@@ -164,8 +164,11 @@ int handle_unknown_chunk(png_structp png, png_unknown_chunkp chunk)
         }
         else if (sName == "fdAT")
         {
-            std::unique_ptr<fdATChunk> aChunk = std::make_unique<fdATChunk>();
             size_t nDataSize = chunk->size;
+            if (nDataSize < 4)
+                return -1;
+
+            std::unique_ptr<fdATChunk> aChunk = std::make_unique<fdATChunk>();
             aChunk->frame_data.resize(nDataSize);
             // Replace sequence number with the IDAT signature
             sal_uInt32 nIDATSwapped = OSL_SWAPDWORD(PNG_IDAT_SIGNATURE);
