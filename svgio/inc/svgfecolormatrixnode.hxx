@@ -28,6 +28,7 @@ namespace svgio::svgreader
 enum class ColorType
 {
     None,
+    HueRotate,
     Saturate,
     LuminanceToAlpha
 };
@@ -36,7 +37,7 @@ class SvgFeColorMatrixNode final : public SvgNode
 {
 private:
     ColorType maType;
-    SvgNumber maValues;
+    OUString maValuesContent;
 
 public:
     SvgFeColorMatrixNode(SvgDocument& rDocument, SvgNode* pParent);
