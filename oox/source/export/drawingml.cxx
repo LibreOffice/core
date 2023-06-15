@@ -663,6 +663,16 @@ void DrawingML::WriteGradientFill( const Reference< XPropertySet >& rXPropSet )
             fTransparency = nTransparency * 0.01;
         }
 
+        // tdf#155852 The gradient might wrongly have StepCount==0, as the draw:gradient-step-count
+        // attribute in ODF does not belong to the gradient definition but is an attribute in
+        // the graphic style of the shape.
+        if (GetProperty(rXPropSet, "FillGradientStepCount"))
+        {
+            sal_Int16 nStepCount = 0;
+            mAny >>= nStepCount;
+            aGradient.SetSteps(nStepCount);
+        }
+
         WriteGradientFill(&aGradient, 0, pTransparenceGradient, fTransparency);
 
         mpFS->endElementNS(XML_a, XML_gradFill);
