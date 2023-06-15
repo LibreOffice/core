@@ -2823,6 +2823,26 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf149089)
     CPPUNIT_ASSERT_EQUAL(nGridWidth1, nGridWidth2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf62032ApplyStyle)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf62032_apply_style.odt");
+    SwWrtShell* pWrtSh = pDoc->GetDocShell()->GetWrtShell();
+
+    pWrtSh->Down(/*bSelect=*/false);
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+        { "Style", uno::Any(OUString("A 2")) },
+        { "FamilyName", uno::Any(OUString("ParagraphStyles")) },
+    });
+    dispatchCommand(mxComponent, ".uno:StyleApply", aPropertyValues);
+
+    // Without the fix in place, it fails with:
+    // - Expected: 1.1
+    // - Actual  : 2
+    CPPUNIT_ASSERT_EQUAL(OUString("1.1"),
+                         getProperty<OUString>(getParagraph(2), "ListLabelString").trim());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
