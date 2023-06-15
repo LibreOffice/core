@@ -171,8 +171,6 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
 
         bool IsMouseOverSidebarWin() const { return mbMouseOver; }
 
-        void SetLanguage(const SvxLanguageItem& rNewItem);
-
         void ChangeSidebarItem( SwSidebarItem const & rSidebarItem );
         virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
@@ -216,7 +214,6 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
         virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
         void        SetSizePixel( const Size& rNewSize ) override;
-        SfxItemSet  DefaultItem();
 
         DECL_DLLPRIVATE_LINK(ModifyHdl, LinkParamNone*, void);
         DECL_DLLPRIVATE_LINK(ScrollHdl, weld::ScrolledWindow&, void);
@@ -227,8 +224,6 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
         DECL_DLLPRIVATE_LINK(MouseMoveHdl, const MouseEvent&, bool);
 
         sal_uInt32 CountFollowing();
-
-        SvxLanguageItem GetLanguage() const;
 
         void SetMenuButtonColors();
 

@@ -280,13 +280,6 @@ void SwAnnotationWin::ShowAnchorOnly(const Point &aPoint)
         mpShadow->setVisible(false);
 }
 
-SfxItemSet SwAnnotationWin::DefaultItem()
-{
-    SfxItemSet aItem( mrView.GetDocShell()->GetPool() );
-    aItem.Put(SvxFontHeightItem(200,100,EE_CHAR_FONTHEIGHT));
-    return aItem;
-}
-
 void SwAnnotationWin::InitControls()
 {
     // window controls for author and date
@@ -345,8 +338,6 @@ void SwAnnotationWin::InitControls()
     mpOutlinerView->SetBackgroundColor(COL_TRANSPARENT);
     mpOutlinerView->SetOutputArea( PixelToLogic( tools::Rectangle(0,0,1,1) ) );
 
-    mpOutlinerView->SetAttribs(DefaultItem());
-
     mxVScrollbar->set_direction(false);
     mxVScrollbar->connect_vadjustment_changed(LINK(this, SwAnnotationWin, ScrollHdl));
     mxVScrollbar->connect_mouse_move(LINK(this, SwAnnotationWin, MouseMoveHdl));
@@ -395,7 +386,6 @@ void SwAnnotationWin::InitControls()
     mxMenuButton->connect_key_press(LINK(this, SwAnnotationWin, KeyInputHdl));
     mxMenuButton->connect_mouse_move(LINK(this, SwAnnotationWin, MouseMoveHdl));
 
-    SetLanguage(GetLanguage());
     GetOutlinerView()->StartSpeller(mxSidebarTextControl->GetDrawingArea());
     SetPostItText();
     mpOutliner->CompleteOnlineSpelling();
@@ -911,67 +901,6 @@ void SwAnnotationWin::SetReadonly(bool bSet)
     GetOutlinerView()->SetReadOnly(bSet);
 }
 
-void SwAnnotationWin::SetLanguage(const SvxLanguageItem& rNewItem)
-{
-    IDocumentUndoRedo& rUndoRedo(
-        mrView.GetDocShell()->GetDoc()->GetIDocumentUndoRedo());
-    const bool bDocUndoEnabled = rUndoRedo.DoesUndo();
-    const bool bOutlinerUndoEnabled = mpOutliner->IsUndoEnabled();
-    const bool bOutlinerModified = mpOutliner->IsModified();
-    const bool bDisableAndRestoreUndoMode = !bDocUndoEnabled && bOutlinerUndoEnabled;
-
-    if (bDisableAndRestoreUndoMode)
-    {
-        // doc undo is disabled, but outliner was enabled, turn outliner undo off
-        // for the duration of this function
-        mpOutliner->EnableUndo(false);
-    }
-
-    Link<LinkParamNone*,void> aLink = mpOutliner->GetModifyHdl();
-    mpOutliner->SetModifyHdl( Link<LinkParamNone*,void>() );
-    ESelection aOld = GetOutlinerView()->GetSelection();
-
-    ESelection aNewSelection( 0, 0, mpOutliner->GetParagraphCount()-1, EE_TEXTPOS_ALL );
-    GetOutlinerView()->SetSelection( aNewSelection );
-    SfxItemSet aEditAttr(GetOutlinerView()->GetAttribs());
-    aEditAttr.Put(rNewItem);
-    GetOutlinerView()->SetAttribs( aEditAttr );
-
-    if (!mpOutliner->IsUndoEnabled() && !bOutlinerModified)
-    {
-        // if undo was disabled (e.g. this is a redo action) and we were
-        // originally 'unmodified' keep it that way
-        mpOutliner->ClearModifyFlag();
-    }
-
-    GetOutlinerView()->SetSelection(aOld);
-    mpOutliner->SetModifyHdl( aLink );
-
-    EEControlBits nCntrl = mpOutliner->GetControlWord();
-    // turn off
-    nCntrl &= ~EEControlBits::ONLINESPELLING;
-    mpOutliner->SetControlWord(nCntrl);
-
-    if (SwWrtShell* pWrtShell = mrView.GetWrtShellPtr())
-    {
-        const SwViewOption* pVOpt = pWrtShell->GetViewOptions();
-        //turn back on
-        if (pVOpt->IsOnlineSpell())
-            nCntrl |= EEControlBits::ONLINESPELLING;
-        else
-            nCntrl &= ~EEControlBits::ONLINESPELLING;
-    }
-    mpOutliner->SetControlWord(nCntrl);
-
-    mpOutliner->CompleteOnlineSpelling();
-
-    // restore original mode
-    if (bDisableAndRestoreUndoMode)
-        mpOutliner->EnableUndo(true);
-
-    Invalidate();
-}
-
 void SwAnnotationWin::GetFocus()
 {
     if (mxSidebarTextControl)
@@ -1251,7 +1180,6 @@ void SwAnnotationWin::ResetAttributes()
 {
     mpOutlinerView->RemoveAttribsKeepLanguages(true);
     mpOutliner->RemoveFields();
-    mpOutlinerView->SetAttribs(DefaultItem());
 }
 
 int SwAnnotationWin::GetPrefScrollbarWidth() const

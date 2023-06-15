@@ -178,8 +178,7 @@ enum class SwFormatFieldHintWhich
     REMOVED    = 2,
     FOCUS      = 3,
     CHANGED    = 4,
-    LANGUAGE   = 5,
-    RESOLVED   = 6
+    RESOLVED   = 5
 };
 
 class SW_DLLPUBLIC SwFormatFieldHint final : public SfxHint

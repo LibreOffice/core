@@ -267,6 +267,8 @@ public:
     void        Paste( bool bUseSpecial = false );
     void        PasteSpecial();
 
+    void SetStyleSheet(const OUString& rStyleName);
+
     const SfxStyleSheet*  GetStyleSheet() const;
     SfxStyleSheet*  GetStyleSheet();
 

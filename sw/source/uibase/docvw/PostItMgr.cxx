@@ -442,35 +442,6 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 }
                 break;
             }
-
-            case SwFormatFieldHintWhich::LANGUAGE:
-            {
-                SwFormatField* pFormatField = dynamic_cast<SwFormatField*>(&rBC);
-                for (auto const& postItField : mvPostItFields)
-                {
-                    if ( pFormatField == postItField->GetBroadcaster() )
-                    {
-                        if (postItField->mpPostIt)
-                        {
-                            const SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( postItField->GetFormatField().GetField()->GetLanguage() );
-                            sal_uInt16 nLangWhichId = 0;
-                            switch (nScriptType)
-                            {
-                            case SvtScriptType::LATIN :    nLangWhichId = EE_CHAR_LANGUAGE ; break;
-                            case SvtScriptType::ASIAN :    nLangWhichId = EE_CHAR_LANGUAGE_CJK; break;
-                            case SvtScriptType::COMPLEX :  nLangWhichId = EE_CHAR_LANGUAGE_CTL; break;
-                            default: break;
-                            }
-                            postItField->mpPostIt->SetLanguage(
-                                SvxLanguageItem(
-                                postItField->GetFormatField().GetField()->GetLanguage(),
-                                nLangWhichId) );
-                        }
-                        break;
-                    }
-                }
-                break;
-            }
         }
     }
     else if ( const SfxStyleSheetModifiedHint * pStyleHint = dynamic_cast<const SfxStyleSheetModifiedHint*>(&rHint) )

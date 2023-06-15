@@ -715,6 +715,18 @@ void OutlinerView::CreateSelectionList (std::vector<Paragraph*> &aSelList)
     }
 }
 
+void OutlinerView::SetStyleSheet(const OUString& rStyleName)
+{
+    ParaRange aParas = ImpGetSelectedParagraphs(false);
+
+    auto pStyle = pOwner->GetStyleSheetPool()->Find(rStyleName, SfxStyleFamily::Para);
+    if (!pStyle)
+        return;
+
+    for (sal_Int32 nPara = aParas.nStartPara; nPara <= aParas.nEndPara; nPara++)
+        pOwner->SetStyleSheet(nPara, static_cast<SfxStyleSheet*>(pStyle));
+}
+
 const SfxStyleSheet* OutlinerView::GetStyleSheet() const
 {
     return pEditView->GetStyleSheet();

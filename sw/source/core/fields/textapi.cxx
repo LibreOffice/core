@@ -22,6 +22,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <docsh.hxx>
 #include <docstyle.hxx>
+#include <strings.hrc>
 #include <SwStyleNameMapper.hxx>
 #include <unoprnms.hxx>
 #include <editeng/eeitem.hxx>
@@ -189,6 +190,9 @@ void SwTextAPIEditSource::SetString( const OUString& rText )
         m_pImpl->mpOutliner->Clear();
 
     EnsureOutliner();
+
+    if (auto pStyle = m_pImpl->mpOutliner->GetStyleSheetPool()->Find(SwResId(STR_POOLCOLL_COMMENT), SfxStyleFamily::Para))
+        m_pImpl->mpOutliner->SetStyleSheet(0, static_cast<SfxStyleSheet*>(pStyle));
     m_pImpl->mpOutliner->Insert( rText );
 }
 

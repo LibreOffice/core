@@ -189,7 +189,7 @@ void SwAnnotationWin::SetPostItText()
     else
     {
         mpOutliner->Clear();
-        GetOutlinerView()->SetAttribs(DefaultItem());
+        GetOutlinerView()->SetStyleSheet(SwResId(STR_POOLCOLL_COMMENT));
         GetOutlinerView()->InsertText(sNewText);
     }
 
@@ -456,7 +456,6 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject const & rText)
 
     //remove all attributes and reset our standard ones
     GetOutlinerView()->GetEditView().RemoveAttribsKeepLanguages(true);
-    GetOutlinerView()->SetAttribs(DefaultItem());
     // lets insert an undo step so the initial text can be easily deleted
     // but do not use UpdateData() directly, would set modified state again and reentrance into Mgr
     mpOutliner->SetModifyHdl( Link<LinkParamNone*,void>() );
@@ -486,21 +485,6 @@ void SwAnnotationWin::UpdateText(const OUString& aText)
     mpOutliner->Clear();
     GetOutlinerView()->InsertText(aText);
     UpdateData();
-}
-
-SvxLanguageItem SwAnnotationWin::GetLanguage() const
-{
-    // set initial language for outliner
-    SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( mpField->GetLanguage() );
-    sal_uInt16 nLangWhichId = 0;
-    switch (nScriptType)
-    {
-        case SvtScriptType::LATIN :    nLangWhichId = EE_CHAR_LANGUAGE ; break;
-        case SvtScriptType::ASIAN :    nLangWhichId = EE_CHAR_LANGUAGE_CJK; break;
-        case SvtScriptType::COMPLEX :  nLangWhichId = EE_CHAR_LANGUAGE_CTL; break;
-        default: OSL_FAIL("GetLanguage: wrong script type");
-    }
-    return SvxLanguageItem(mpField->GetLanguage(),nLangWhichId);
 }
 
 bool SwAnnotationWin::IsReadOnlyOrProtected() const
