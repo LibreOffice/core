@@ -78,6 +78,8 @@
 #include <tblafmt.hxx>
 #include <sfx2/watermarkitem.hxx>
 #include <svl/grabbagitem.hxx>
+#include <PostItMgr.hxx>
+#include <AnnotationWin.hxx>
 #include <SwUndoFmt.hxx>
 #include <strings.hrc>
 #include <AccessibilityCheck.hxx>
@@ -129,6 +131,12 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                     if( pFormat )
                         aName = pFormat->GetName();
                 }
+                else if (pShell->GetSelectionType() == SelectionType::PostIt)
+                {
+                    auto pStyle = pShell->GetPostItMgr()->GetActiveSidebarWin()->GetOutlinerView()->GetStyleSheet();
+                    if (pStyle)
+                        aName = pStyle->GetName();
+                }
                 else
                 {
                     SwTextFormatColl* pColl = pShell->GetCurTextFormatColl();
@@ -154,8 +162,15 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                 if(!pShell->IsFrameSelected())
                 {
                     OUString aProgName;
-                    SwTextFormatColl* pColl = pShell->GetCurTextFormatColl();
-                    if(pColl)
+                    if (pShell->GetSelectionType() == SelectionType::PostIt)
+                    {
+                        if (auto pStyle = pShell->GetPostItMgr()->GetActiveSidebarWin()->GetOutlinerView()->GetStyleSheet())
+                        {
+                            aName = pStyle->GetName();
+                            aProgName = SwStyleNameMapper::GetProgName(aName, SwGetPoolIdFromName::TxtColl);
+                        }
+                    }
+                    else if (auto pColl = pShell->GetCurTextFormatColl())
                     {
                         aName = pColl->GetName();
                         sal_uInt16 nId = pColl->GetPoolFormatId();
@@ -392,12 +407,17 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                     case SID_STYLE_UPDATE_BY_EXAMPLE:
                     case SID_STYLE_EDIT:
                     {
-                        SwTextFormatColl* pColl = GetWrtShell()->GetCurTextFormatColl();
-                        if(pColl)
+                        if (GetWrtShell()->GetSelectionType() == SelectionType::PostIt)
                         {
-                            aParam = pColl->GetName();
-                            rReq.AppendItem(SfxStringItem(nSlot, aParam));
+                            auto pOLV = GetWrtShell()->GetPostItMgr()->GetActiveSidebarWin()->GetOutlinerView();
+                            if (auto pStyle = pOLV->GetStyleSheet())
+                                aParam = pStyle->GetName();
                         }
+                        else if (auto pColl = GetWrtShell()->GetCurTextFormatColl())
+                            aParam = pColl->GetName();
+
+                        if (!aParam.isEmpty())
+                            rReq.AppendItem(SfxStringItem(nSlot, aParam));
                     }
                     break;
                 }
@@ -520,6 +540,10 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                     default:
                         OSL_FAIL("Invalid SlotId");
                 }
+
+                // Update formatting toolbar buttons status
+                if (GetWrtShell()->GetSelectionType() == SelectionType::PostIt)
+                    GetView()->GetViewFrame().GetBindings().InvalidateAll(false);
 
                 if (bReturns)
                 {
@@ -1159,15 +1183,22 @@ SfxStyleFamily SwDocShell::ApplyStyles(const OUString &rName, SfxStyleFamily nFa
         }
         case SfxStyleFamily::Para:
         {
-            // When outline-folding is enabled, MakeAllOutlineContentTemporarilyVisible makes
-            // application of a paragraph style that has an outline-level greater than the previous
-            // outline node become folded content of the previous outline node if the previous
-            // outline node's content is folded.
-            MakeAllOutlineContentTemporarilyVisible a(GetDoc());
-            // #i62675#
-            // clear also list attributes at affected text nodes, if paragraph
-            // style has the list style attribute set.
-            pSh->SetTextFormatColl( pStyle->GetCollection(), true );
+            if (pSh->GetPostItMgr() && pSh->GetPostItMgr()->HasActiveSidebarWin())
+            {
+                pSh->GetPostItMgr()->GetActiveSidebarWin()->GetOutlinerView()->SetStyleSheet(rName);
+            }
+            else
+            {
+                // When outline-folding is enabled, MakeAllOutlineContentTemporarilyVisible makes
+                // application of a paragraph style that has an outline-level greater than the previous
+                // outline node become folded content of the previous outline node if the previous
+                // outline node's content is folded.
+                MakeAllOutlineContentTemporarilyVisible a(GetDoc());
+                // #i62675#
+                // clear also list attributes at affected text nodes, if paragraph
+                // style has the list style attribute set.
+                pSh->SetTextFormatColl( pStyle->GetCollection(), true );
+            }
             break;
         }
         case SfxStyleFamily::Frame:

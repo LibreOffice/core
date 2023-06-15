@@ -290,11 +290,6 @@ interface Annotation : _Annotation
         StateMethod = StateDisableItems ;
     ]
 
-    SID_STYLE_FAMILY2
-    [
-        StateMethod = StateDisableItems ;
-    ]
-
     SID_STYLE_FAMILY3
     [
         StateMethod = StateDisableItems ;
@@ -326,36 +321,6 @@ interface Annotation : _Annotation
     ]
 
     SID_STYLE_NEW_BY_EXAMPLE // status(fina|play)
-    [
-        StateMethod = StateDisableItems ;
-    ]
-
-    SID_STYLE_APPLY // status(fina|play)
-    [
-        StateMethod = StateDisableItems ;
-    ]
-
-    SID_STYLE_NEW // ole : no, status : ?
-    [
-        StateMethod = StateDisableItems ;
-    ]
-
-    SID_STYLE_EDIT // ole : no, status : ?
-    [
-        StateMethod = StateDisableItems ;
-    ]
-
-    SID_STYLE_DELETE // ole : no, status : ?
-    [
-        StateMethod = StateDisableItems ;
-    ]
-
-    SID_STYLE_HIDE
-    [
-        StateMethod = StateDisableItems ;
-    ]
-
-    SID_STYLE_SHOW
     [
         StateMethod = StateDisableItems ;
     ]
