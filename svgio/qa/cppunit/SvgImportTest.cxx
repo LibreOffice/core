@@ -402,6 +402,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf45771)
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "familyname", "Times New Roman");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf155833)
+{
+    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/tdf155833.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequence);
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform/transform/transform/transform/transform/bitmap", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf97941)
 {
     //Check tspan fontsize when using relative units
