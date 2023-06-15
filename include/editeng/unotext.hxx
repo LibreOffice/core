@@ -64,6 +64,7 @@ struct SfxItemPropertyMapEntry;
 #define WID_PORTIONTYPE             OWN_ATTR_VALUE_START+2
 #define WID_NUMBERINGSTARTVALUE     OWN_ATTR_VALUE_START+3
 #define WID_PARAISNUMBERINGRESTART  OWN_ATTR_VALUE_START+4
+#define WID_PARASTYLENAME           OWN_ATTR_VALUE_START+5
 
 #define SVX_UNOEDIT_NUMBERING_PROPERTY \
     { UNO_NAME_NUMBERING_RULES,        EE_PARA_NUMBULLET,  cppu::UnoType<css::container::XIndexReplace>::get(), 0, 0 }, \
@@ -186,6 +187,9 @@ public:
     virtual void            SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet ) override;
     virtual void            RemoveAttribs( const ESelection& rSelection ) override;
     virtual void            GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList ) const override;
+
+    virtual OUString        GetStyleSheet(sal_Int32 nPara) const override;
+    virtual void            SetStyleSheet(sal_Int32 nPara, const OUString& rStyleName) override;
 
     SfxItemState            GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const override;
     SfxItemState            GetItemState( sal_Int32 nPara, sal_uInt16 nWhich ) const override;

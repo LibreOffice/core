@@ -21,6 +21,9 @@
 #include <doc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <docsh.hxx>
+#include <docstyle.hxx>
+#include <SwStyleNameMapper.hxx>
+#include <unoprnms.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/outlobj.hxx>
@@ -44,6 +47,8 @@ static const SvxItemPropertySet* ImplGetSvxTextPortionPropertySet()
         SVX_UNOEDIT_FONT_PROPERTIES,
         SVX_UNOEDIT_OUTLINER_PROPERTIES,
         SVX_UNOEDIT_PARA_PROPERTIES,
+        {UNO_NAME_PARA_STYLE_NAME, WID_PARASTYLENAME,
+            cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
         {u"TextField",                 EE_FEATURE_FIELD,
             cppu::UnoType<text::XTextField>::get(), beans::PropertyAttribute::READONLY, 0 },
         {u"TextPortionType",           WID_PORTIONTYPE,
@@ -78,6 +83,25 @@ struct SwTextAPIEditSource_Impl
     std::unique_ptr<SvxOutlinerForwarder> mpTextForwarder;
     sal_Int32                       mnRef;
 };
+
+namespace {
+
+class SwTextAPIForwarder : public SvxOutlinerForwarder
+{
+public:
+    using SvxOutlinerForwarder::SvxOutlinerForwarder;
+    OUString GetStyleSheet(sal_Int32 nPara) const override
+    {
+        return SwStyleNameMapper::GetProgName(SvxOutlinerForwarder::GetStyleSheet(nPara), SwGetPoolIdFromName::TxtColl);
+    }
+
+    void SetStyleSheet(sal_Int32 nPara, const OUString& rStyleName) override
+    {
+        SvxOutlinerForwarder::SetStyleSheet(nPara, SwStyleNameMapper::GetUIName(rStyleName, SwGetPoolIdFromName::TxtColl));
+    }
+};
+
+}
 
 SwTextAPIEditSource::SwTextAPIEditSource( const SwTextAPIEditSource& rSource )
 : SvxEditSource( *this )
@@ -119,22 +143,29 @@ void SwTextAPIEditSource::Dispose()
     m_pImpl->mpOutliner.reset();
 }
 
-SvxTextForwarder* SwTextAPIEditSource::GetTextForwarder()
+void SwTextAPIEditSource::EnsureOutliner()
 {
-    if( !m_pImpl->mpPool )
-        return nullptr; // mpPool == 0 can be used to flag this as disposed
-
     if( !m_pImpl->mpOutliner )
     {
         //init draw model first
         m_pImpl->mpDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
         m_pImpl->mpOutliner.reset(new Outliner(m_pImpl->mpPool, OutlinerMode::TextObject));
+        m_pImpl->mpOutliner->SetStyleSheetPool(
+            static_cast<SwDocStyleSheetPool*>(m_pImpl->mpDoc->GetDocShell()->GetStyleSheetPool())->GetEEStyleSheetPool());
         m_pImpl->mpDoc->SetCalcFieldValueHdl(m_pImpl->mpOutliner.get());
     }
+}
+
+SvxTextForwarder* SwTextAPIEditSource::GetTextForwarder()
+{
+    if( !m_pImpl->mpPool )
+        return nullptr; // mpPool == 0 can be used to flag this as disposed
+
+    EnsureOutliner();
 
     if( !m_pImpl->mpTextForwarder )
     {
-        m_pImpl->mpTextForwarder.reset(new SvxOutlinerForwarder(*m_pImpl->mpOutliner, false));
+        m_pImpl->mpTextForwarder.reset(new SwTextAPIForwarder(*m_pImpl->mpOutliner, false));
     }
 
     return m_pImpl->mpTextForwarder.get();
@@ -144,14 +175,7 @@ void SwTextAPIEditSource::SetText( OutlinerParaObject const & rText )
 {
     if ( m_pImpl->mpPool )
     {
-        if( !m_pImpl->mpOutliner )
-        {
-            //init draw model first
-            m_pImpl->mpDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
-            m_pImpl->mpOutliner.reset(new Outliner(m_pImpl->mpPool, OutlinerMode::TextObject));
-            m_pImpl->mpDoc->SetCalcFieldValueHdl(m_pImpl->mpOutliner.get());
-        }
-
+        EnsureOutliner();
         m_pImpl->mpOutliner->SetText( rText );
     }
 }
@@ -161,15 +185,10 @@ void SwTextAPIEditSource::SetString( const OUString& rText )
     if ( !m_pImpl->mpPool )
         return;
 
-    if( !m_pImpl->mpOutliner )
-    {
-        //init draw model first
-        m_pImpl->mpDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
-        m_pImpl->mpOutliner.reset(new Outliner(m_pImpl->mpPool, OutlinerMode::TextObject));
-        m_pImpl->mpDoc->SetCalcFieldValueHdl(m_pImpl->mpOutliner.get());
-    }
-    else
+    if ( m_pImpl->mpOutliner )
         m_pImpl->mpOutliner->Clear();
+
+    EnsureOutliner();
     m_pImpl->mpOutliner->Insert( rText );
 }
 

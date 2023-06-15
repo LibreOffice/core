@@ -152,6 +152,9 @@ public:
     virtual void        RemoveAttribs( const ESelection& rSelection ) = 0;
     virtual void        GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList ) const = 0;
 
+    virtual OUString    GetStyleSheet(sal_Int32 nPara) const = 0;
+    virtual void        SetStyleSheet(sal_Int32 nPara, const OUString& rStyleName) = 0;
+
     virtual SfxItemState    GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const = 0;
     virtual SfxItemState    GetItemState( sal_Int32 nPara, sal_uInt16 nWhich ) const = 0;
 

@@ -371,6 +371,9 @@ public:
     virtual void RemoveAttribs(const ESelection& rSelection) override;
     virtual void GetPortions(sal_Int32 nPara, std::vector<sal_Int32>& rList) const override;
 
+    virtual OUString GetStyleSheet(sal_Int32 nPara) const override;
+    virtual void SetStyleSheet(sal_Int32 nPara, const OUString& rStyleName) override;
+
     virtual SfxItemState GetItemState(const ESelection& rSel, sal_uInt16 nWhich) const override;
     virtual SfxItemState GetItemState(sal_Int32 nPara, sal_uInt16 nWhich) const override;
 
@@ -1017,6 +1020,23 @@ void WeldTextForwarder::GetPortions(sal_Int32 nPara, std::vector<sal_Int32>& rLi
     EditEngine* pEditEngine = m_rEditAcc.GetEditEngine();
     if (pEditEngine)
         pEditEngine->GetPortions(nPara, rList);
+}
+
+OUString WeldTextForwarder::GetStyleSheet(sal_Int32 nPara) const
+{
+    EditEngine* pEditEngine = m_rEditAcc.GetEditEngine();
+    if (auto pStyle = pEditEngine ? pEditEngine->GetStyleSheet(nPara) : nullptr)
+        return pStyle->GetName();
+    return OUString();
+}
+
+void WeldTextForwarder::SetStyleSheet(sal_Int32 nPara, const OUString& rStyleName)
+{
+    EditEngine* pEditEngine = m_rEditAcc.GetEditEngine();
+    auto pStyleSheetPool = pEditEngine ? pEditEngine->GetStyleSheetPool() : nullptr;
+    if (auto pStyle
+        = pStyleSheetPool ? pStyleSheetPool->Find(rStyleName, SfxStyleFamily::Para) : nullptr)
+        pEditEngine->SetStyleSheet(nPara, static_cast<SfxStyleSheet*>(pStyle));
 }
 
 void WeldTextForwarder::QuickInsertText(const OUString& rText, const ESelection& rSel)

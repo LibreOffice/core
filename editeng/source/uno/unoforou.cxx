@@ -186,6 +186,20 @@ void SvxOutlinerForwarder::GetPortions( sal_Int32 nPara, std::vector<sal_Int32>&
     const_cast<EditEngine&>(rOutliner.GetEditEngine()).GetPortions( nPara, rList );
 }
 
+OUString SvxOutlinerForwarder::GetStyleSheet(sal_Int32 nPara) const
+{
+    if (auto pStyle = rOutliner.GetStyleSheet(nPara))
+        return pStyle->GetName();
+    return OUString();
+}
+
+void SvxOutlinerForwarder::SetStyleSheet(sal_Int32 nPara, const OUString& rStyleName)
+{
+    auto pStyleSheetPool = rOutliner.GetStyleSheetPool();
+    if (auto pStyle = pStyleSheetPool ? pStyleSheetPool->Find(rStyleName, SfxStyleFamily::Para) : nullptr)
+        rOutliner.SetStyleSheet(nPara, static_cast<SfxStyleSheet*>(pStyle));
+}
+
 void SvxOutlinerForwarder::QuickInsertText( const OUString& rText, const ESelection& rSel )
 {
     flushCache();

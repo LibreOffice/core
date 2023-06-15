@@ -103,6 +103,9 @@ namespace accessibility
         void            RemoveAttribs( const ESelection& /*rSelection*/ ) override {}
         void            GetPortions( sal_Int32 /*nPara*/, std::vector<sal_Int32>& /*rList*/ ) const override {}
 
+        OUString    GetStyleSheet(sal_Int32 /*nPara*/) const override { return OUString(); }
+        void        SetStyleSheet(sal_Int32 /*nPara*/, const OUString& /*rStyleName*/) override {}
+
         SfxItemState    GetItemState( const ESelection& /*rSel*/, sal_uInt16 /*nWhich*/ ) const override { return SfxItemState::UNKNOWN; }
         SfxItemState    GetItemState( sal_Int32 /*nPara*/, sal_uInt16 /*nWhich*/ ) const override { return SfxItemState::UNKNOWN; }
 

@@ -46,6 +46,9 @@ public:
 
     sal_Int32               CalcEditEngineIndex( sal_Int32 nPara, sal_Int32 nLogicalIndex );
 
+    virtual OUString        GetStyleSheet(sal_Int32 nPara) const override;
+    virtual void            SetStyleSheet(sal_Int32 nPara, const OUString& rStyleName) override;
+
     virtual SfxItemState    GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const override;
     virtual SfxItemState    GetItemState( sal_Int32 nPara, sal_uInt16 nWhich ) const override;
 

@@ -31,6 +31,7 @@ class SwTextAPIEditSource final : public SvxEditSource
 {
     SwTextAPIEditSource_Impl* m_pImpl;
 
+    void EnsureOutliner();
     virtual std::unique_ptr<SvxEditSource> Clone() const override;
     virtual SvxTextForwarder*   GetTextForwarder() override;
     virtual void                UpdateData() override;

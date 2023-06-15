@@ -1071,6 +1071,35 @@ CPPUNIT_TEST_FIXTURE(Test, testParagraphMarkerMarkupRoundtrip)
     assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:name='T2']/style:text-properties", "color", "#ff0000");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testCommentStyles)
+{
+    createSwDoc();
+
+    auto xFactory(mxComponent.queryThrow<lang::XMultiServiceFactory>());
+    auto xComment(xFactory->createInstance("com.sun.star.text.textfield.Annotation").queryThrow<text::XTextContent>());
+    auto xCommentText(getProperty<uno::Reference<text::XTextRange>>(xComment, "TextRange"));
+    xCommentText->setString("Hello World");
+    xCommentText.queryThrow<beans::XPropertySet>()->setPropertyValue("ParaStyleName", uno::Any(OUString("Heading")));
+
+    xComment->attach(getParagraph(1)->getEnd());
+
+    saveAndReload("writer8");
+
+    auto xFields(mxComponent.queryThrow<text::XTextFieldsSupplier>()->getTextFields()->createEnumeration());
+    xComment.set(xFields->nextElement().queryThrow<text::XTextContent>());
+    CPPUNIT_ASSERT(xComment.queryThrow<lang::XServiceInfo>()->supportsService("com.sun.star.text.textfield.Annotation"));
+
+    xCommentText.set(getProperty<uno::Reference<text::XTextRange>>(xComment, "TextRange"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading"), getProperty<OUString>(xCommentText, "ParaStyleName"));
+
+    auto xStyleFamilies(mxComponent.queryThrow<style::XStyleFamiliesSupplier>()->getStyleFamilies());
+    auto xParaStyles(xStyleFamilies->getByName("ParagraphStyles"));
+    auto xStyle(xParaStyles.queryThrow<container::XNameAccess>()->getByName("Heading"));
+    CPPUNIT_ASSERT_EQUAL(getProperty<float>(xStyle, "CharHeight"), getProperty<float>(xCommentText, "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE,
+                         xCommentText.queryThrow<beans::XPropertyState>()->getPropertyState("CharHeight"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

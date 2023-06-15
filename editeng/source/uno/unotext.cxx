@@ -431,7 +431,30 @@ void SvxUnoTextRangeBase::_setPropertyValue( const OUString& PropertyName, const
             ESelection aSel( GetSelection() );
             bool bParaAttrib = (pMap->nWID >= EE_PARA_START) && ( pMap->nWID <= EE_PARA_END );
 
-            if( nPara == -1 && !bParaAttrib )
+            if (pMap->nWID == WID_PARASTYLENAME)
+            {
+                OUString aStyle = aValue.get<OUString>();
+
+                sal_Int32 nEndPara;
+
+                if( nPara == -1 )
+                {
+                    nPara = aSel.nStartPara;
+                    nEndPara = aSel.nEndPara;
+                }
+                else
+                {
+                    // only one paragraph
+                    nEndPara = nPara;
+                }
+
+                while( nPara <= nEndPara )
+                {
+                    pForwarder->SetStyleSheet(nPara, aStyle);
+                    nPara++;
+                }
+            }
+            else if ( nPara == -1 && !bParaAttrib )
             {
                 SfxItemSet aOldSet( pForwarder->GetAttribs( aSel ) );
                 // we have a selection and no para attribute
@@ -653,6 +676,12 @@ void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertyMapEntry* pMap,
         }
         break;
 
+    case WID_PARASTYLENAME:
+        {
+            rAny <<= GetEditSource()->GetTextForwarder()->GetStyleSheet(maSelection.nStartPara);
+        }
+        break;
+
     default:
         if(!GetPropertyValueHelper( *const_cast<SfxItemSet*>(&rSet), pMap, rAny, &maSelection, GetEditSource() ))
             rAny = SvxItemPropertySet::getPropertyValue(pMap, rSet, true, false );
@@ -780,6 +809,8 @@ void SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUString >& a
     std::optional<SfxItemSet> pOldParaSet;
     std::optional<SfxItemSet> pNewParaSet;
 
+    std::optional<OUString> aStyleName;
+
     for( ; nCount; nCount--, pPropertyNames++, pValues++ )
     {
         const SfxItemPropertyMapEntry* pMap = mpPropSet->getPropertyMapEntry( *pPropertyNames );
@@ -788,7 +819,11 @@ void SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUString >& a
         {
             bool bParaAttrib = (pMap->nWID >= EE_PARA_START) && ( pMap->nWID <= EE_PARA_END );
 
-            if( (nPara == -1) && !bParaAttrib )
+            if (pMap->nWID == WID_PARASTYLENAME)
+            {
+                aStyleName.emplace((*pValues).get<OUString>());
+            }
+            else if( (nPara == -1) && !bParaAttrib )
             {
                 if( !pNewAttrSet )
                 {
@@ -833,7 +868,7 @@ void SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUString >& a
 
     bool bNeedsUpdate = false;
 
-    if( pNewParaSet )
+    if( pNewParaSet || aStyleName )
     {
         if( pNewParaSet->Count() )
         {
@@ -842,6 +877,8 @@ void SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUString >& a
                 SfxItemSet aSet( pForwarder->GetParaAttribs( nTempPara ) );
                 aSet.Put( *pNewParaSet );
                 pForwarder->SetParaAttribs( nTempPara, aSet );
+                if (aStyleName)
+                    pForwarder->SetStyleSheet(nTempPara, *aStyleName);
                 nTempPara++;
             }
             bNeedsUpdate = true;
@@ -984,6 +1021,7 @@ beans::PropertyState SvxUnoTextRangeBase::_getPropertyState(const SfxItemPropert
 
             case WID_NUMBERINGSTARTVALUE:
             case WID_PARAISNUMBERINGRESTART:
+            case WID_PARASTYLENAME:
                 eItemState = SfxItemState::SET;
                 bItemStateSet = true;
                 break;
@@ -1117,6 +1155,7 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
 
         case WID_NUMBERINGSTARTVALUE:
         case WID_PARAISNUMBERINGRESTART:
+        case WID_PARASTYLENAME:
             eItemState = SfxItemState::SET;
             bItemStateSet = true;
             break;
@@ -2307,6 +2346,15 @@ void SvxDummyTextSource::RemoveAttribs( const ESelection& )
 }
 
 void SvxDummyTextSource::GetPortions( sal_Int32, std::vector<sal_Int32>& ) const
+{
+}
+
+OUString SvxDummyTextSource::GetStyleSheet(sal_Int32) const
+{
+    return OUString();
+}
+
+void SvxDummyTextSource::SetStyleSheet(sal_Int32, const OUString&)
 {
 }
 

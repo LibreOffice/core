@@ -30,7 +30,7 @@ class Outliner;
 
 //  SvxOutlinerForwarder - SvxTextForwarder for Outliner
 
-class EDITENG_DLLPUBLIC SvxOutlinerForwarder final : public SvxTextForwarder
+class EDITENG_DLLPUBLIC SvxOutlinerForwarder : public SvxTextForwarder
 {
 private:
     Outliner&           rOutliner;
@@ -62,6 +62,9 @@ public:
     virtual void        SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet ) override;
     virtual void        RemoveAttribs( const ESelection& rSelection ) override;
     virtual void        GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList ) const override;
+
+    virtual OUString    GetStyleSheet(sal_Int32 nPara) const override;
+    virtual void        SetStyleSheet(sal_Int32 nPara, const OUString& rStyleName) override;
 
     virtual SfxItemState    GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const override;
     virtual SfxItemState    GetItemState( sal_Int32 nPara, sal_uInt16 nWhich ) const override;

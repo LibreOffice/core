@@ -530,6 +530,20 @@ void SvxAccessibleTextAdapter::GetPortions( sal_Int32 nPara, std::vector<sal_Int
     mpTextForwarder->GetPortions( nPara, rList );
 }
 
+OUString SvxAccessibleTextAdapter::GetStyleSheet(sal_Int32 nPara) const
+{
+    assert(mpTextForwarder && "SvxAccessibleTextAdapter: no forwarder");
+
+    return mpTextForwarder->GetStyleSheet(nPara);
+}
+
+void SvxAccessibleTextAdapter::SetStyleSheet(sal_Int32 nPara, const OUString& rStyleName)
+{
+    assert(mpTextForwarder && "SvxAccessibleTextAdapter: no forwarder");
+
+    mpTextForwarder->SetStyleSheet(nPara, rStyleName);
+}
+
 SfxItemState SvxAccessibleTextAdapter::GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const
 {
     assert(mpTextForwarder && "SvxAccessibleTextAdapter: no forwarder");
