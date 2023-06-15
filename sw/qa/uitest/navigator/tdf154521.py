@@ -85,4 +85,118 @@ class tdf154521(UITestCase):
 
             self.xUITest.executeCommand(".uno:Sidebar")
 
+    def getTitle(self, document):
+        xController = document.getCurrentController()
+        xSidebar = xController.getSidebar()
+        xDecks = xSidebar.getDecks()
+        xNavigator = xDecks['NavigatorDeck']
+        xPanels = xNavigator.getPanels()
+        xPanel = xPanels['SwNavigatorPanel']
+        title = xPanel.getTitle()
+        # empty title of SwNavigatorPanel to allow to query the name of the selected bookmark
+        xPanel.setTitle("")
+        return title
+
+    def test_query_selected_bookmark(self):
+        global selectionChangedResult
+        with self.ui_test.create_doc_in_start_center("writer") as xDoc:
+
+            # click on the bookmark name in the Navigator
+
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
+
+            self.xUITest.executeCommand(".uno:Sidebar")
+            xWriterEdit.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "SwNavigatorPanel"}))
+
+            xNavigatorPanel = xWriterEdit.getChild("NavigatorPanel")
+            xToolBar = xNavigatorPanel.getChild("content5")
+            xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "0"})) # 'root' button
+
+            # type "foo", and create 3 bookmarks on it
+
+            self.xUITest.executeCommand(".uno:Escape")
+
+            xDoc.Text.insertString(xDoc.Text.getStart(), "foo", False)
+            self.xUITest.executeCommand(".uno:SelectAll")
+
+            for i in range(3):
+                with self.ui_test.execute_dialog_through_command(".uno:InsertBookmark", close_button="insert"):
+                    pass
+
+            # check selected bookmarks in Navigator
+
+            xWriterEdit.executeAction("FOCUS", tuple())
+
+            xContentTree = xNavigatorPanel.getChild("contenttree")
+
+            self.ui_test.wait_until_property_is_updated(xContentTree, "SelectEntryText", "Bookmark 1")
+            self.assertEqual(get_state_as_dict(xContentTree)["SelectEntryText"], "Bookmark 1")
+            self.assertEqual(get_state_as_dict(xContentTree)["SelectionCount"], "1")
+
+#            self.xUITest.executeCommand(".uno:Escape")
+
+            # get the title of SwNavigatorPanel with emptying it to access to the selected bookmark
+            self.assertEqual(self.getTitle(xDoc), "Navigator")
+            # title was emptied
+            self.assertEqual(self.getTitle(xDoc), "")
+
+            # Select nested bookmark in Navigator
+
+            xContentTree.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
+
+            # This jumped to Bookmark 1 after selection
+            self.ui_test.wait_until_property_is_updated(xContentTree, "SelectEntryText", "Bookmark 1")
+            self.assertEqual(get_state_as_dict(xContentTree)["SelectEntryText"], "Bookmark 1")
+            self.assertEqual(get_state_as_dict(xContentTree)["SelectionCount"], "1")
+
+            # This was "Navigator"
+            self.assertEqual(self.getTitle(xDoc), "Bookmark 1")
+
+            # Try the same selection with Bookmark 2
+            xContentTree.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
+            self.ui_test.wait_until_property_is_updated(xContentTree, "SelectEntryText", "Bookmark 2")
+            self.assertEqual(get_state_as_dict(xContentTree)["SelectEntryText"], "Bookmark 2")
+            self.assertEqual(get_state_as_dict(xContentTree)["SelectionCount"], "1")
+            xContentTree.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
+            self.ui_test.wait_until_property_is_updated(xContentTree, "SelectEntryText", "Bookmark 2")
+            self.assertEqual(get_state_as_dict(xContentTree)["SelectEntryText"], "Bookmark 2")
+            self.assertEqual(get_state_as_dict(xContentTree)["SelectionCount"], "1")
+
+            # This was "Navigator"
+            self.assertEqual(self.getTitle(xDoc), "Bookmark 2")
+
+            # Try the same selection with Bookmark 3
+
+            # why we need this extra UP?
+            xContentTree.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
+            self.ui_test.wait_until_property_is_updated(xContentTree, "SelectEntryText", "Bookmark 2")
+            xContentTree.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
+            self.ui_test.wait_until_property_is_updated(xContentTree, "SelectEntryText", "Bookmark 3")
+
+            self.assertEqual(get_state_as_dict(xContentTree)["SelectEntryText"], "Bookmark 3")
+            self.assertEqual(get_state_as_dict(xContentTree)["SelectionCount"], "1")
+            xContentTree.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
+            self.ui_test.wait_until_property_is_updated(xContentTree, "SelectEntryText", "Bookmark 3")
+            self.assertEqual(get_state_as_dict(xContentTree)["SelectEntryText"], "Bookmark 3")
+            self.assertEqual(get_state_as_dict(xContentTree)["SelectionCount"], "1")
+
+            # This was "Navigator"
+            self.assertEqual(self.getTitle(xDoc), "Bookmark 3")
+
+            # go to the previous item
+
+            # why we need this extra UP?
+            xContentTree.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
+            self.ui_test.wait_until_property_is_updated(xContentTree, "SelectEntryText", "Bookmark 3")
+            xContentTree.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
+            self.ui_test.wait_until_property_is_updated(xContentTree, "SelectEntryText", "Bookmarks")
+            self.assertEqual(get_state_as_dict(xContentTree)["SelectEntryText"], "Bookmarks")
+            xContentTree.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
+
+            # This was "Navigator"
+            self.assertEqual(self.getTitle(xDoc), "")
+
+            self.xUITest.executeCommand(".uno:Sidebar")
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
