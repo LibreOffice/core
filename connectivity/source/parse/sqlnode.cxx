@@ -803,7 +803,7 @@ void OSQLParser::killThousandSeparator(OSQLParseNode* pLiteral)
 {
     if ( pLiteral )
     {
-        if ( s_xLocaleData->getLocaleItem( m_pData->aLocale ).decimalSeparator.toChar() == ',' )
+        if ( s_xLocaleData.get()->get()->getLocaleItem( m_pData->aLocale ).decimalSeparator.toChar() == ',' )
         {
             pLiteral->m_aNodeValue = pLiteral->m_aNodeValue.replace('.', sal_Unicode());
             // and replace decimal
@@ -1118,7 +1118,7 @@ OUString OSQLParser::stringToDouble(const OUString& _rValue,sal_Int16 _nScale)
     OUString aValue;
     if(!m_xCharClass.is())
         m_xCharClass  = CharacterClassification::create( m_xContext );
-    if( s_xLocaleData.is() )
+    if( s_xLocaleData.get() )
     {
         try
         {
@@ -1129,7 +1129,8 @@ OUString OSQLParser::stringToDouble(const OUString& _rValue,sal_Int16 _nScale)
                 sal_Int32 nPos = aValue.lastIndexOf('.');
                 if((nPos+_nScale) < aValue.getLength())
                     aValue = aValue.replaceAt(nPos+_nScale,aValue.getLength()-nPos-_nScale, u"");
-                aValue = aValue.replaceAt(aValue.lastIndexOf('.'),1,s_xLocaleData->getLocaleItem(m_pData->aLocale).decimalSeparator);
+                OUString sDecimalSeparator = s_xLocaleData.get()->get()->getLocaleItem(m_pData->aLocale).decimalSeparator;
+                aValue = aValue.replaceAt(aValue.lastIndexOf('.'), 1, sDecimalSeparator);
                 return aValue;
             }
         }
@@ -1247,7 +1248,7 @@ std::unique_ptr<OSQLParseNode> OSQLParser::predicateTree(OUString& rErrorMessage
                 s_pScanner->SetRule(OSQLScanner::GetSTRINGRule());
                 break;
             default:
-                if ( s_xLocaleData->getLocaleItem( m_pData->aLocale ).decimalSeparator.toChar() == ',' )
+                if ( s_xLocaleData.get()->get()->getLocaleItem( m_pData->aLocale ).decimalSeparator.toChar() == ',' )
                     s_pScanner->SetRule(OSQLScanner::GetGERRule());
                 else
                     s_pScanner->SetRule(OSQLScanner::GetENGRule());
@@ -1330,8 +1331,8 @@ OSQLParser::OSQLParser(css::uno::Reference< css::uno::XComponentContext > xConte
         s_pScanner->setScanner();
         s_pGarbageCollector = new OSQLParseNodesGarbageCollector();
 
-        if(!s_xLocaleData.is())
-            s_xLocaleData = LocaleData::create(m_xContext);
+        if(!s_xLocaleData.get())
+            s_xLocaleData.set(LocaleData::create(m_xContext));
 
         // reset to UNKNOWN_RULE
         static_assert(OSQLParseNode::UNKNOWN_RULE==0, "UNKNOWN_RULE must be 0 for memset to 0 to work");
@@ -1482,8 +1483,6 @@ OSQLParser::~OSQLParser()
 
         delete s_pGarbageCollector;
         s_pGarbageCollector = nullptr;
-        // Is only set the first time, so we should delete it only when there are no more instances
-        s_xLocaleData = nullptr;
 
         RuleIDMap().swap(s_aReverseRuleIDLookup);
     }

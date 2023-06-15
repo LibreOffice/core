@@ -25,6 +25,7 @@
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/sqlerror.hxx>
 #include <comphelper/singletonref.hxx>
+#include <vcl/lazydelete.hxx>
 
 #include <map>
 #include <memory>
@@ -138,7 +139,7 @@ namespace connectivity
         sal_Int32                   m_nDateFormatKey;
         css::uno::Reference< css::uno::XComponentContext >    m_xContext;
         css::uno::Reference< css::i18n::XCharacterClassification> m_xCharClass;
-        static css::uno::Reference< css::i18n::XLocaleData4>       s_xLocaleData;
+        static vcl::DeleteOnDeinit<css::uno::Reference< css::i18n::XLocaleData4>> s_xLocaleData;
 
         // convert a string into double trim it to scale of _nscale and then transform it back to string
         OUString stringToDouble(const OUString& _rValue,sal_Int16 _nScale);

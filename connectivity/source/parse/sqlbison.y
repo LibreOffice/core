@@ -4493,7 +4493,7 @@ sal_Int32			OSQLParser::s_nRefCount	= 0;
 //	::osl::Mutex		OSQLParser::s_aMutex;
 OSQLScanner*		OSQLParser::s_pScanner = nullptr;
 OSQLParseNodesGarbageCollector*		OSQLParser::s_pGarbageCollector = nullptr;
-css::uno::Reference< css::i18n::XLocaleData4>  OSQLParser::s_xLocaleData = nullptr;
+vcl::DeleteOnDeinit<css::uno::Reference< css::i18n::XLocaleData4>> OSQLParser::s_xLocaleData(vcl::DeleteOnDeinitFlag::Empty);
 
 void setParser(OSQLParser* _pParser)
 {
