@@ -793,6 +793,90 @@ SwTextFrame::SwTextFrame(SwTextNode * const pNode, SwFrame* pSib,
     m_pMergedPara = CheckParaRedlineMerge(*this, *pNode, eMode);
 }
 
+void SwTextFrame::dumpAsXml(xmlTextWriterPtr writer) const
+{
+    (void)xmlTextWriterStartElement(writer, reinterpret_cast<const xmlChar*>("txt"));
+    dumpAsXmlAttributes(writer);
+    sw::MergedPara const*const pMerged(GetMergedPara());
+    if (pMerged)
+    {
+        (void)xmlTextWriterStartElement( writer, BAD_CAST( "merged" ) );
+        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "paraPropsNodeIndex" ), "%" SAL_PRIdINT32, sal_Int32(pMerged->pParaPropsNode->GetIndex()) );
+        for (auto const& e : pMerged->extents)
+        {
+            (void)xmlTextWriterStartElement( writer, BAD_CAST( "extent" ) );
+            (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "txtNodeIndex" ), "%" SAL_PRIdINT32, sal_Int32(e.pNode->GetIndex()) );
+            (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "start" ), "%" SAL_PRIdINT32, e.nStart );
+            (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "end" ), "%" SAL_PRIdINT32, e.nEnd );
+            (void)xmlTextWriterEndElement( writer );
+        }
+        (void)xmlTextWriterEndElement( writer );
+    }
+
+    (void)xmlTextWriterStartElement(writer, BAD_CAST("infos"));
+    dumpInfosAsXml(writer);
+    (void)xmlTextWriterEndElement(writer);
+
+    // Dump Anchored objects if any
+    const SwSortedObjs* pAnchored = GetDrawObjs();
+    if ( pAnchored && pAnchored->size() > 0 )
+    {
+        (void)xmlTextWriterStartElement( writer, BAD_CAST( "anchored" ) );
+
+        for (SwAnchoredObject* pObject : *pAnchored)
+        {
+            pObject->dumpAsXml( writer );
+        }
+
+        (void)xmlTextWriterEndElement( writer );
+    }
+
+    // Dump the children
+    OUString aText = GetText(  );
+    for ( int i = 0; i < 32; i++ )
+    {
+        aText = aText.replace( i, '*' );
+    }
+    auto nTextOffset = static_cast<sal_Int32>(GetOffset());
+    sal_Int32 nTextLength = aText.getLength() - nTextOffset;
+    if (const SwTextFrame* pTextFrameFollow = GetFollow())
+    {
+        nTextLength = static_cast<sal_Int32>(pTextFrameFollow->GetOffset() - GetOffset());
+    }
+    OString aText8
+        = OUStringToOString(aText.subView(nTextOffset, nTextLength), RTL_TEXTENCODING_UTF8);
+    (void)xmlTextWriterWriteString( writer,
+            reinterpret_cast<const xmlChar *>(aText8.getStr(  )) );
+    if (const SwParaPortion* pPara = GetPara())
+    {
+        (void)xmlTextWriterStartElement(writer, BAD_CAST("SwParaPortion"));
+        TextFrameIndex nOffset(0);
+        const OUString& rText = GetText();
+        (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("ptr"), "%p", pPara);
+        const SwLineLayout* pLine = pPara;
+        if (IsFollow())
+        {
+            nOffset += GetOffset();
+        }
+        while (pLine)
+        {
+            (void)xmlTextWriterStartElement(writer, BAD_CAST("SwLineLayout"));
+            pLine->dumpAsXmlAttributes(writer, rText, nOffset);
+            const SwLinePortion* pPor = pLine->GetFirstPortion();
+            while (pPor)
+            {
+                pPor->dumpAsXml(writer, rText, nOffset);
+                pPor = pPor->GetNextPortion();
+            }
+            (void)xmlTextWriterEndElement(writer);
+            pLine = pLine->GetNext();
+        }
+        (void)xmlTextWriterEndElement(writer);
+    }
+
+    (void)xmlTextWriterEndElement(writer);
+}
+
 namespace sw {
 
 SwTextFrame * MakeTextFrame(SwTextNode & rNode, SwFrame *const pSibling,

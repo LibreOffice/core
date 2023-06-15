@@ -174,9 +174,6 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
 
     switch ( GetType(  ) )
     {
-    case SwFrameType::Txt:
-        name = "txt";
-        break;
     case SwFrameType::NoTxt:
         name = "notxt";
         break;
@@ -188,26 +185,6 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
         (void)xmlTextWriterStartElement( writer, reinterpret_cast<const xmlChar *>(name) );
 
         dumpAsXmlAttributes( writer );
-
-        if (IsTextFrame())
-        {
-            const SwTextFrame *pTextFrame = static_cast<const SwTextFrame *>(this);
-            sw::MergedPara const*const pMerged(pTextFrame->GetMergedPara());
-            if (pMerged)
-            {
-                (void)xmlTextWriterStartElement( writer, BAD_CAST( "merged" ) );
-                (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "paraPropsNodeIndex" ), "%" SAL_PRIdINT32, sal_Int32(pMerged->pParaPropsNode->GetIndex()) );
-                for (auto const& e : pMerged->extents)
-                {
-                    (void)xmlTextWriterStartElement( writer, BAD_CAST( "extent" ) );
-                    (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "txtNodeIndex" ), "%" SAL_PRIdINT32, sal_Int32(e.pNode->GetIndex()) );
-                    (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "start" ), "%" SAL_PRIdINT32, e.nStart );
-                    (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "end" ), "%" SAL_PRIdINT32, e.nEnd );
-                    (void)xmlTextWriterEndElement( writer );
-                }
-                (void)xmlTextWriterEndElement( writer );
-            }
-        }
 
         (void)xmlTextWriterStartElement( writer, BAD_CAST( "infos" ) );
         dumpInfosAsXml( writer );
@@ -227,57 +204,7 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
             (void)xmlTextWriterEndElement( writer );
         }
 
-        // Dump the children
-        if ( IsTextFrame(  ) )
-        {
-            const SwTextFrame *pTextFrame = static_cast<const SwTextFrame *>(this);
-            OUString aText = pTextFrame->GetText(  );
-            for ( int i = 0; i < 32; i++ )
-            {
-                aText = aText.replace( i, '*' );
-            }
-            auto nTextOffset = static_cast<sal_Int32>(pTextFrame->GetOffset());
-            sal_Int32 nTextLength = aText.getLength() - nTextOffset;
-            if (const SwTextFrame* pTextFrameFollow = pTextFrame->GetFollow())
-            {
-                nTextLength = static_cast<sal_Int32>(pTextFrameFollow->GetOffset() - pTextFrame->GetOffset());
-            }
-            OString aText8
-                = OUStringToOString(aText.subView(nTextOffset, nTextLength), RTL_TEXTENCODING_UTF8);
-            (void)xmlTextWriterWriteString( writer,
-                                      reinterpret_cast<const xmlChar *>(aText8.getStr(  )) );
-            if (const SwParaPortion* pPara = pTextFrame->GetPara())
-            {
-                (void)xmlTextWriterStartElement(writer, BAD_CAST("SwParaPortion"));
-                TextFrameIndex nOffset(0);
-                const OUString& rText = pTextFrame->GetText();
-                (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("ptr"), "%p", pPara);
-                const SwLineLayout* pLine = pPara;
-                if (pTextFrame->IsFollow())
-                {
-                    nOffset += pTextFrame->GetOffset();
-                }
-                while (pLine)
-                {
-                    (void)xmlTextWriterStartElement(writer, BAD_CAST("SwLineLayout"));
-                    pLine->dumpAsXmlAttributes(writer, rText, nOffset);
-                    const SwLinePortion* pPor = pLine->GetFirstPortion();
-                    while (pPor)
-                    {
-                        pPor->dumpAsXml(writer, rText, nOffset);
-                        pPor = pPor->GetNextPortion();
-                    }
-                    (void)xmlTextWriterEndElement(writer);
-                    pLine = pLine->GetNext();
-                }
-                (void)xmlTextWriterEndElement(writer);
-            }
-
-        }
-        else
-        {
-            dumpChildrenAsXml( writer );
-        }
+        dumpChildrenAsXml( writer );
         (void)xmlTextWriterEndElement( writer );
     }
 }
