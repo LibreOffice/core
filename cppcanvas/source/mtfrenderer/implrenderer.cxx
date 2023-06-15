@@ -2404,12 +2404,11 @@ namespace cppcanvas::internal
                     {
                         MetaFloatTransparentAction* pAct = static_cast<MetaFloatTransparentAction*>(pCurrAct);
 
-                        internal::MtfAutoPtr pMtf(
+                        std::unique_ptr< GDIMetaFile > pMtf(
                             new ::GDIMetaFile( pAct->GetGDIMetaFile() ) );
 
                         // TODO(P2): Use native canvas gradients here (saves a lot of UNO calls)
-                        internal::GradientAutoPtr pGradient(
-                            pAct->GetGradient() );
+                        std::optional< Gradient > pGradient( pAct->GetGradient() );
 
                         DBG_TESTSOLARMUTEX();
 

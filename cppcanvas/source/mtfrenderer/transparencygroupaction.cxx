@@ -83,8 +83,8 @@ namespace cppcanvas::internal
                     Size of the transparency group object, in current
                     state coordinate system.
                 */
-                TransparencyGroupAction( MtfAutoPtr&&                   rGroupMtf,
-                                         GradientAutoPtr&&              rAlphaGradient,
+                TransparencyGroupAction( std::unique_ptr< GDIMetaFile >&& rGroupMtf,
+                                         std::optional< Gradient >&&    rAlphaGradient,
                                          const ::basegfx::B2DPoint&     rDstPoint,
                                          const ::basegfx::B2DVector&    rDstSize,
                                          const CanvasSharedPtr&         rCanvas,
@@ -104,8 +104,8 @@ namespace cppcanvas::internal
                 virtual sal_Int32 getActionCount() const override;
 
             private:
-                MtfAutoPtr                                          mpGroupMtf;
-                GradientAutoPtr                                     mpAlphaGradient;
+                std::unique_ptr< GDIMetaFile >                      mpGroupMtf;
+                std::optional< Gradient >                           mpAlphaGradient;
 
                 const ::basegfx::B2DSize                            maDstSize;
 
@@ -135,8 +135,8 @@ namespace cppcanvas::internal
                                                       aLocalTransformation );
             }
 
-            TransparencyGroupAction::TransparencyGroupAction( MtfAutoPtr&&                  rGroupMtf,
-                                                              GradientAutoPtr&&             rAlphaGradient,
+            TransparencyGroupAction::TransparencyGroupAction( std::unique_ptr< GDIMetaFile >&& rGroupMtf,
+                                                              std::optional< Gradient >&&   rAlphaGradient,
                                                               const ::basegfx::B2DPoint&    rDstPoint,
                                                               const ::basegfx::B2DVector&   rDstSize,
                                                               const CanvasSharedPtr&        rCanvas,
@@ -453,8 +453,8 @@ namespace cppcanvas::internal
 
         }
 
-        std::shared_ptr<Action> TransparencyGroupActionFactory::createTransparencyGroupAction( MtfAutoPtr&&                 rGroupMtf,
-                                                                                       GradientAutoPtr&&            rAlphaGradient,
+        std::shared_ptr<Action> TransparencyGroupActionFactory::createTransparencyGroupAction( std::unique_ptr< GDIMetaFile >&& rGroupMtf,
+                                                                                       std::optional< Gradient >&&  rAlphaGradient,
                                                                                        const ::basegfx::B2DPoint&   rDstPoint,
                                                                                        const ::basegfx::B2DVector&  rDstSize,
                                                                                        const CanvasSharedPtr&       rCanvas,
