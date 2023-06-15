@@ -1065,6 +1065,11 @@ static bool lcl_SetTextFormatColl( SwNode* pNode, void* pArgs )
                 pCNd->ResetAttr( RES_PARATR_LIST_ISCOUNTED );
                 pCNd->ResetAttr( RES_PARATR_LIST_ID );
             }
+            else
+            {
+                // forcing reset of list level from parapgaph
+                pCNd->SetAttr(pFormat->GetFormatAttr(RES_PARATR_LIST_LEVEL));
+            }
         }
     }
 
