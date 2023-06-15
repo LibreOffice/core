@@ -347,6 +347,67 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListIdState)
     CPPUNIT_ASSERT(!id.isEmpty());
 }
 
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListIdOnRestart)
+{
+    // Test that a restart of a continued list, by itself, does not introduce a unneeded xml:id
+    // and text:continue-list, but uses text:continue-numbering, and is imported correctly.
+
+    // Given a document with a list with a restart after break:
+    loadFromURL(u"listRestartAfterBreak.fodt");
+
+    auto xTextDocument(mxComponent.queryThrow<css::text::XTextDocument>());
+    auto xParaEnumAccess(xTextDocument->getText().queryThrow<css::container::XEnumerationAccess>());
+    auto xParaEnum(xParaEnumAccess->createEnumeration());
+
+    auto xPara(xParaEnum->nextElement().queryThrow<beans::XPropertySet>());
+    auto aActual(xPara->getPropertyValue("ListLabelString").get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(OUString("1."), aActual);
+    OUString list_id = xPara->getPropertyValue("ListId").get<OUString>();
+    xParaEnum->nextElement(); // Skip empty intermediate paragraph
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY_THROW);
+    aActual = xPara->getPropertyValue("ListLabelString").get<OUString>();
+    CPPUNIT_ASSERT_EQUAL(OUString("2."), aActual);
+    CPPUNIT_ASSERT_EQUAL(list_id, xPara->getPropertyValue("ListId").get<OUString>());
+    xParaEnum->nextElement(); // Skip empty intermediate paragraph
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    aActual = xPara->getPropertyValue("ListLabelString").get<OUString>();
+    // Check that restart was applied correctly, with simple 'text:continue-numbering="true"'
+    CPPUNIT_ASSERT_EQUAL(OUString("1."), aActual);
+    CPPUNIT_ASSERT_EQUAL(list_id, xPara->getPropertyValue("ListId").get<OUString>());
+
+    // When storing that document as ODF:
+    saveAndReload("writer8");
+
+    xTextDocument.set(mxComponent, uno::UNO_QUERY_THROW);
+    xParaEnumAccess.set(xTextDocument->getText(), uno::UNO_QUERY_THROW);
+    xParaEnum.set(xParaEnumAccess->createEnumeration());
+
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY_THROW);
+    aActual = xPara->getPropertyValue("ListLabelString").get<OUString>();
+    CPPUNIT_ASSERT_EQUAL(OUString("1."), aActual);
+    list_id = xPara->getPropertyValue("ListId").get<OUString>();
+    xParaEnum->nextElement(); // Skip empty intermediate paragraph
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY_THROW);
+    aActual = xPara->getPropertyValue("ListLabelString").get<OUString>();
+    CPPUNIT_ASSERT_EQUAL(OUString("2."), aActual);
+    CPPUNIT_ASSERT_EQUAL(list_id, xPara->getPropertyValue("ListId").get<OUString>());
+    xParaEnum->nextElement(); // Skip empty intermediate paragraph
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY_THROW);
+    aActual = xPara->getPropertyValue("ListLabelString").get<OUString>();
+    CPPUNIT_ASSERT_EQUAL(OUString("1."), aActual);
+    CPPUNIT_ASSERT_EQUAL(list_id, xPara->getPropertyValue("ListId").get<OUString>());
+
+    // Then make sure that no xml:id="..." attribute is written, even in restarted case:
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "//text:list", 3);
+    assertXPathNoAttribute(pXmlDoc, "//text:list[1]", "id");
+    assertXPathNoAttribute(pXmlDoc, "//text:list[2]", "id");
+    assertXPathNoAttribute(pXmlDoc, "//text:list[3]", "id");
+    assertXPathNoAttribute(pXmlDoc, "//text:list[3]", "continue-list");
+    assertXPath(pXmlDoc, "//text:list[3]", "continue-numbering", "true");
+}
+
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testClearingBreakExport)
 {
     // Given a document with a clearing break:

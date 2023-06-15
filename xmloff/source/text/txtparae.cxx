@@ -1104,8 +1104,7 @@ void XMLTextParagraphExport::exportListChange(
                                 mpTextListsHelper->GetListStyleOfLastProcessedList() &&
                              // Inconsistent behavior regarding lists (#i92811#)
                              sContinueListId ==
-                                mpTextListsHelper->GetLastProcessedListId() &&
-                             !rNextInfo.IsRestart() )
+                                mpTextListsHelper->GetLastProcessedListId() )
                         {
                             GetExport().AddAttribute( XML_NAMESPACE_TEXT,
                                                       XML_CONTINUE_NUMBERING,
@@ -1120,15 +1119,15 @@ void XMLTextParagraphExport::exportListChange(
                                                           XML_CONTINUE_LIST,
                                                           sContinueListId );
                             }
+                        }
 
-                            if ( rNextInfo.IsRestart() &&
-                                 ( nListLevelsToBeOpened != 1 ||
-                                   !rNextInfo.HasStartValue() ) )
-                            {
-                                bRestartNumberingAtContinuedList = true;
-                                nRestartValueForContinuedList =
-                                            rNextInfo.GetListLevelStartValue();
-                            }
+                        if ( rNextInfo.IsRestart() &&
+                             ( nListLevelsToBeOpened != 1 ||
+                               !rNextInfo.HasStartValue() ) )
+                        {
+                            bRestartNumberingAtContinuedList = true;
+                            nRestartValueForContinuedList =
+                                        rNextInfo.GetListLevelStartValue();
                         }
 
                         mpTextListsHelper->KeepListAsProcessed( sNewListId,
@@ -1804,12 +1803,11 @@ struct XMLTextParagraphExport::DocumentListNodes
         sal_Int32 index; // see SwNode::GetIndex and SwNodeOffset
         sal_uInt64 style_id; // actually a pointer to NumRule
         OUString list_id;
-        bool isRestart;
     };
     std::vector<NodeData> docListNodes;
     DocumentListNodes(const css::uno::Reference<css::frame::XModel>& xModel)
     {
-        // Sequence of nodes, each of them represented by four-element sequence,
+        // Sequence of nodes, each of them represented by three-element sequence,
         // corresponding to NodeData members
         css::uno::Sequence<css::uno::Sequence<css::uno::Any>> nodes;
         if (auto xPropSet = xModel.query<css::beans::XPropertySet>())
@@ -1828,9 +1826,9 @@ struct XMLTextParagraphExport::DocumentListNodes
         docListNodes.reserve(nodes.getLength());
         for (const auto& node : nodes)
         {
-            assert(node.getLength() == 4);
+            assert(node.getLength() == 3);
             docListNodes.push_back({ node[0].get<sal_Int32>(), node[1].get<sal_uInt64>(),
-                                     node[2].get<OUString>(), node[3].get<bool>() });
+                                     node[2].get<OUString>() });
         }
 
         std::sort(docListNodes.begin(), docListNodes.end(),
@@ -1884,10 +1882,9 @@ struct XMLTextParagraphExport::DocumentListNodes
                 if (it->index + 1 != next->index)
                 {
                     // we have a gap before the next node with the same list and style,
-                    // with no other lists in between. There will be a continuation;
-                    // in case of restart, there will be a reference to the id;
-                    // otherwise, there will be simple 'text:continue-numbering="true"'.
-                    return !next->isRestart;
+                    // with no other lists in between. There will be a continuation with a
+                    // simple 'text:continue-numbering="true"'.
+                    return true;
                 }
                 it = next; // walk through adjacent nodes of the same list
             }
