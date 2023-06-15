@@ -371,6 +371,10 @@ void SwAnchoredObject::dumpAsXml( xmlTextWriterPtr writer ) const
     (void)xmlTextWriterStartElement( writer, BAD_CAST( getElementName() ) );
     (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "ptr" ), "%p", this );
     (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("anchor-frame"), BAD_CAST(OString::number(mpAnchorFrame->GetFrameId()).getStr()));
+    if (mpPageFrame)
+    {
+        (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("page-frame"), BAD_CAST(OString::number(mpPageFrame->GetFrameId()).getStr()));
+    }
     SwTextFrame* pAnchorCharFrame = const_cast<SwAnchoredObject*>(this)->FindAnchorCharFrame();
     if (pAnchorCharFrame)
     {
