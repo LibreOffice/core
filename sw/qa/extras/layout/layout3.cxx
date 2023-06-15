@@ -193,21 +193,21 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf122878)
 {
     createSwDoc("tdf122878.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    // FIXME: the XPath should be adjusted when the proper floating table would be imported
     const sal_Int32 nTblTop
         = getXPath(pXmlDoc, "/root/page[1]/footer/txt/anchored/fly/tab/infos/bounds", "top")
               .toInt32();
-    const sal_Int32 nFirstPageParaCount
-        = getXPathContent(pXmlDoc, "count(/root/page[1]/body/txt)").toInt32();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(30), nFirstPageParaCount);
-    for (sal_Int32 i = 1; i <= nFirstPageParaCount; ++i)
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    SwFrame* pBody = pPage1->FindBodyCont();
+    for (SwFrame* pFrame = pBody->GetLower(); pFrame; pFrame = pFrame->GetNext())
     {
-        const OString xPath = "/root/page[1]/body/txt[" + OString::number(i) + "]/infos/bounds";
-        const sal_Int32 nTxtBottom = getXPath(pXmlDoc, xPath, "top").toInt32()
-                                     + getXPath(pXmlDoc, xPath, "height").toInt32();
+        const sal_Int32 nTxtBottom = pFrame->getFrameArea().Bottom();
         // No body paragraphs should overlap the table in the footer
-        CPPUNIT_ASSERT_MESSAGE(OString("testing paragraph #" + OString::number(i)).getStr(),
-                               nTxtBottom <= nTblTop);
+        CPPUNIT_ASSERT_MESSAGE(
+            OString("testing paragraph #" + OString::number(pFrame->GetFrameId())).getStr(),
+            nTxtBottom <= nTblTop);
     }
 }
 
