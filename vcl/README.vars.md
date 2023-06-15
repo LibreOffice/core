@@ -12,6 +12,7 @@ These are the general environment variables used in the VCL:
 * `SAL_USE_SYSTEM_LOOP` - calls std::abort on nested event loop calls. Currently just for Qt with many crashes. WIP.
 
 * `SAL_NO_FONT_LOOKUP` - disable font search and fallback and always use a hard-coded font name (for some unit tests)
+* `SAL_NON_APPLICATION_FONT_USE` - control use of non-bundled fonts, values are `deny` or `abort`
 
 * `LO_COLLECT_UIINFO` - enable the uitesting logging, value is expected to be a relative file name that
 will be used to write the log under `instdir/uitest/`.
