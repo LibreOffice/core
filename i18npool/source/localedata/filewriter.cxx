@@ -176,12 +176,30 @@ void OFileWriter::writeFunction3(const char *func, const char *style, const char
     fprintf(m_f, "\treturn %s;\n}\n", array);
 }
 
+void OFileWriter::writeOUStringFunction3(const char *func, const char *style, const char* levels, const char* attr, const char *array) const
+{
+    fprintf(m_f, "const OUString ***  SAL_CALL %s%s( sal_Int16& nStyles, sal_Int16& nLevels, sal_Int16& nAttributes )\n{\n", func, theLocale.c_str());
+    fprintf(m_f, "\tnStyles     = %s;\n", style);
+    fprintf(m_f, "\tnLevels     = %s;\n", levels);
+    fprintf(m_f, "\tnAttributes = %s;\n", attr);
+    fprintf(m_f, "\treturn (const OUString ***) %s;\n}\n", array);
+}
+
 void OFileWriter::writeRefFunction3(const char *func, std::u16string_view useLocale) const
 {
     OString aRefLocale( OUStringToOString(useLocale, RTL_TEXTENCODING_ASCII_US) );
     const char* locale = aRefLocale.getStr();
     fprintf(m_f, "extern const sal_Unicode ****  SAL_CALL %s%s(sal_Int16& nStyles, sal_Int16& nLevels, sal_Int16& nAttributes);\n", func, locale);
     fprintf(m_f, "const sal_Unicode ****  SAL_CALL %s%s(sal_Int16& nStyles, sal_Int16& nLevels, sal_Int16& nAttributes)\n{\n", func, theLocale.c_str());
+    fprintf(m_f, "\treturn %s%s(nStyles, nLevels, nAttributes);\n}\n", func, locale);
+}
+
+void OFileWriter::writeOUStringRefFunction3(const char *func, std::u16string_view useLocale) const
+{
+    OString aRefLocale( OUStringToOString(useLocale, RTL_TEXTENCODING_ASCII_US) );
+    const char* locale = aRefLocale.getStr();
+    fprintf(m_f, "extern const OUString ****  SAL_CALL %s%s(sal_Int16& nStyles, sal_Int16& nLevels, sal_Int16& nAttributes);\n", func, locale);
+    fprintf(m_f, "const OUString ****  SAL_CALL %s%s(sal_Int16& nStyles, sal_Int16& nLevels, sal_Int16& nAttributes)\n{\n", func, theLocale.c_str());
     fprintf(m_f, "\treturn %s%s(nStyles, nLevels, nAttributes);\n}\n", func, locale);
 }
 

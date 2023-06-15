@@ -44,7 +44,7 @@ using namespace com::sun::star;
 
 typedef OUString const * (* MyFuncOUString_Type)( sal_Int16&);
 typedef OUString const ** (* MyFunc_Type2)( sal_Int16&, sal_Int16& );
-typedef sal_Unicode const **** (* MyFunc_Type3)( sal_Int16&, sal_Int16&, sal_Int16& );
+typedef OUString const *** (* MyFunc_Type3)( sal_Int16&, sal_Int16&, sal_Int16& );
 typedef OUString const * (* MyFunc_FormatCode)( sal_Int16&, sal_Unicode const *&, sal_Unicode const *& );
 
 #ifndef DISABLE_DYNLOADING
@@ -1327,20 +1327,20 @@ LocaleDataImpl::getOutlineNumberingLevels( const lang::Locale& rLocale )
         sal_Int16 nStyles;
         sal_Int16 nLevels;
         sal_Int16 nAttributes;
-        sal_Unicode const **** p0 = func( nStyles, nLevels, nAttributes );
+        OUString const *** p0 = func( nStyles, nLevels, nAttributes );
 
         Sequence< Reference<container::XIndexAccess> > aRet( nStyles );
         auto aRetRange = asNonConstRange(aRet);
-        sal_Unicode const **** pStyle = p0;
+        OUString const *** pStyle = p0;
         for( i=0;  i<nStyles;  i++ )
         {
             int j;
 
             std::unique_ptr<OutlineNumberingLevel_Impl[]> level(new OutlineNumberingLevel_Impl[ nLevels+1 ]);
-            sal_Unicode const *** pLevel = pStyle[i];
+            OUString const ** pLevel = pStyle[i];
             for( j = 0;  j < nLevels;  j++ )
             {
-                sal_Unicode const ** pAttribute = pLevel[j];
+                OUString const * pAttribute = pLevel[j];
                 for( int k=0; k<nAttributes; k++ )
                 {
                     OUString tmp( pAttribute[k] );

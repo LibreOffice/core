@@ -2294,7 +2294,7 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
     OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
         useLocale = useLocale.replace( '-', '_');
-        of.writeRefFunction3("getOutlineNumberingLevels_", useLocale);
+        of.writeOUStringRefFunction3("getOutlineNumberingLevels_", useLocale);
         return;
     }
 
@@ -2331,7 +2331,7 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
             {
                 const char* name = attr[k];
                 OUString   value = q.getValueByName( name );
-                of.writeParameter("outline", name, value,
+                of.writeOUStringLiteralParameter("outline", name, value,
                         sal::static_int_cast<sal_Int16>(i),
                         sal::static_int_cast<sal_Int16>(j) );
             }
@@ -2372,7 +2372,7 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
     {
         for( sal_Int32 j=0; j<nLevels.back(); j++ )
         {
-            of.writeAsciiString("static const sal_Unicode* outline");
+            of.writeAsciiString("static constexpr rtl::OUStringConstExpr outline");
             of.writeAsciiString("Style");
             of.writeInt( sal::static_int_cast<sal_Int16>(i) );
             of.writeAsciiString("Level");
@@ -2387,7 +2387,7 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
                 of.writeInt( sal::static_int_cast<sal_Int16>(j) );
                 of.writeAsciiString(", ");
             }
-            of.writeAsciiString("NULL };\n");
+            of.writeAsciiString(" };\n");
         }
     }
 
@@ -2396,8 +2396,7 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
 
     for( sal_Int32 i=0; i<nStyles; i++ )
     {
-        of.writeAsciiString("static const sal_Unicode** outline");
-        of.writeAsciiString( "Style" );
+        of.writeAsciiString("static constexpr rtl::OUStringConstExpr const * outlineStyle" );
         of.writeInt( sal::static_int_cast<sal_Int16>(i) );
         of.writeAsciiString("[] = { ");
 
@@ -2413,7 +2412,7 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
     }
     of.writeAsciiString("\n");
 
-    of.writeAsciiString("static const sal_Unicode*** LCOutlineNumberingLevelsArray[] = {\n" );
+    of.writeAsciiString("static constexpr rtl::OUStringConstExpr const * const * LCOutlineNumberingLevelsArray[] = {\n" );
     for( sal_Int32 i=0; i<nStyles; i++ )
     {
         of.writeAsciiString( "\t" );
@@ -2422,7 +2421,7 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
         of.writeAsciiString(",\n");
     }
     of.writeAsciiString("\tNULL\n};\n\n");
-    of.writeFunction3("getOutlineNumberingLevels_", "outlineNbOfStyles", "outlineNbOfLevelsPerStyle",
+    of.writeOUStringFunction3("getOutlineNumberingLevels_", "outlineNbOfStyles", "outlineNbOfLevelsPerStyle",
             "outlineNbOfAttributesPerLevel", "LCOutlineNumberingLevelsArray");
 }
 
