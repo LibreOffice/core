@@ -533,6 +533,24 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf67238)
     CPPUNIT_ASSERT(!((rTable.GetTableBox("C3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf155685)
+{
+    createSwDoc("table-at-end-of-cell.fodt");
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->GoNextCell();
+    pWrtShell->GoNextCell();
+    pWrtShell->GoNextCell();
+    pWrtShell->SelAll();
+    pWrtShell->Delete();
+    // this crashed
+    pWrtShell->Undo();
+    pWrtShell->Undo();
+    pWrtShell->Redo();
+    // this crashed
+    pWrtShell->Redo();
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf147220)
 {
     createSwDoc();
