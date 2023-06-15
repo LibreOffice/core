@@ -24,8 +24,12 @@
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star::accessibility;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
 @implementation AquaA11yRoleHelper
@@ -153,16 +157,22 @@ using namespace ::com::sun::star::uno;
             }
         }
     } else if ( accessibleContext -> getAccessibleRole() == AccessibleRole::COMBO_BOX ) {
-        Reference < XAccessible > rxAccessible = accessibleContext -> getAccessibleChild(0);
-        if ( rxAccessible.is() ) {
-            Reference < XAccessibleContext > rxAccessibleContext = rxAccessible -> getAccessibleContext();
-            if ( rxAccessibleContext.is() && rxAccessibleContext -> getAccessibleRole() == AccessibleRole::TEXT ) {
-                sal_Int64 nStateSet = rxAccessibleContext -> getAccessibleStateSet();
-                if ( !(nStateSet & AccessibleStateType::EDITABLE ) ) {
-                    [ nativeRole release ];
-                    nativeRole = NSAccessibilityPopUpButtonRole;
+        try {
+            Reference < XAccessible > rxAccessible = accessibleContext -> getAccessibleChild(0);
+            if ( rxAccessible.is() ) {
+                Reference < XAccessibleContext > rxAccessibleContext = rxAccessible -> getAccessibleContext();
+                if ( rxAccessibleContext.is() && rxAccessibleContext -> getAccessibleRole() == AccessibleRole::TEXT ) {
+                    sal_Int64 nStateSet = rxAccessibleContext -> getAccessibleStateSet();
+                    if ( !(nStateSet & AccessibleStateType::EDITABLE ) ) {
+                        [ nativeRole release ];
+                        nativeRole = NSAccessibilityPopUpButtonRole;
+                    }
                 }
             }
+        }
+        catch (const IndexOutOfBoundsException&)
+        {
+            SAL_WARN("vcl", "No valid accessible objects in parent");
         }
     }
     return nativeRole;

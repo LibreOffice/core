@@ -106,7 +106,13 @@ Reference< XAccessible > DocumentFocusListener::getAccessible(const EventObject&
             Reference< XAccessibleContext > xParentContext( xParent->getAccessibleContext() );
             if( xParentContext.is() )
             {
-                return xParentContext->getAccessibleChild( xContext->getAccessibleIndexInParent() );
+                try {
+                    return xParentContext->getAccessibleChild( xContext->getAccessibleIndexInParent() );
+                }
+                catch (const IndexOutOfBoundsException&)
+                {
+                    SAL_WARN("vcl", "Accessible object has invalid index in parent");
+                }
             }
         }
     }
@@ -153,13 +159,19 @@ void DocumentFocusListener::attachRecursive(
 
         if( ! (nStateSet & AccessibleStateType::MANAGES_DESCENDANTS) )
         {
-            sal_Int64 n, nmax = xContext->getAccessibleChildCount();
-            for( n = 0; n < nmax; n++ )
-            {
-                Reference< XAccessible > xChild( xContext->getAccessibleChild( n ) );
+            try {
+                sal_Int64 n, nmax = xContext->getAccessibleChildCount();
+                for( n = 0; n < nmax; n++ )
+                {
+                    Reference< XAccessible > xChild( xContext->getAccessibleChild( n ) );
 
-                if( xChild.is() )
-                    attachRecursive(xChild);
+                    if( xChild.is() )
+                        attachRecursive(xChild);
+                }
+            }
+            catch (const IndexOutOfBoundsException&)
+            {
+                SAL_WARN("vcl", "Accessible object index does not exist in parent");
             }
         }
     }
@@ -197,13 +209,19 @@ void DocumentFocusListener::detachRecursive(
 
         if( ! (nStateSet & AccessibleStateType::MANAGES_DESCENDANTS) )
         {
-            sal_Int64 n, nmax = xContext->getAccessibleChildCount();
-            for( n = 0; n < nmax; n++ )
-            {
-                Reference< XAccessible > xChild( xContext->getAccessibleChild( n ) );
+            try {
+                sal_Int64 n, nmax = xContext->getAccessibleChildCount();
+                for( n = 0; n < nmax; n++ )
+                {
+                    Reference< XAccessible > xChild( xContext->getAccessibleChild( n ) );
 
-                if( xChild.is() )
-                    detachRecursive(xChild);
+                    if( xChild.is() )
+                        detachRecursive(xChild);
+                }
+            }
+            catch (const IndexOutOfBoundsException&)
+            {
+                SAL_WARN("vcl", "Accessible object index does not exist in parent");
             }
         }
     }
