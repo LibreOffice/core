@@ -1453,7 +1453,7 @@ void SwDocStyleSheet::MergeIndentAttrsOfListStyle( SfxItemSet& rSet )
 }
 
 // handling of parameter <bResetIndentAttrsAtParagraphStyle>
-void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
+void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet, const bool bBroadcast,
                                   const bool bResetIndentAttrsAtParagraphStyle )
 {
     // if applicable determine format first
@@ -1715,7 +1715,11 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
             pNewDsc.reset();
         }
         else
+        {
             m_rDoc.ChgFormat(*pFormat, aSet);       // put all that is set
+            if (bBroadcast)
+                m_pPool->Broadcast(SfxStyleSheetHint(SfxHintId::StyleSheetModified, *this));
+        }
     }
     else
     {

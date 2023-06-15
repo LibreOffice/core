@@ -1565,8 +1565,7 @@ void StyleList::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
     if (!m_bDontUpdate && nId != SfxHintId::Dying
         && (dynamic_cast<const SfxStyleSheetPoolHint*>(&rHint)
             || dynamic_cast<const SfxStyleSheetHint*>(&rHint)
-            || dynamic_cast<const SfxStyleSheetModifiedHint*>(&rHint)
-            || nId == SfxHintId::StyleSheetModified))
+            || dynamic_cast<const SfxStyleSheetModifiedHint*>(&rHint)))
     {
         if (!pIdle)
         {

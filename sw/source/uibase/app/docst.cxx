@@ -594,7 +594,7 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl, LinkParamNone*, void)
         ::SfxToSwPageDescAttr( *pWrtShell, aSet  );
         // reset indent attributes at paragraph style, if a list style
         // will be applied and no indent attributes will be applied.
-        m_xTmp->SetItemSet( aSet, true );
+        m_xTmp->SetItemSet( aSet, false, true );
     }
     else
     {
@@ -614,7 +614,7 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl, LinkParamNone*, void)
             ::ConvertAttrGenToChar(aTmpSet, m_xTmp->GetItemSet());
         }
 
-        m_xTmp->SetItemSet( aTmpSet );
+        m_xTmp->SetItemSet( aTmpSet, false );
 
         if( SfxStyleFamily::Page == m_nFamily && SvtCTLOptions::IsCTLFontEnabled() )
         {
@@ -667,7 +667,7 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl, LinkParamNone*, void)
             SfxItemSet aTmpSet(*m_pDlg->GetOutputItemSet());
 
             aTmpSet.ClearItem(XATTR_FILLSTYLE);
-            m_xTmp->SetItemSet(aTmpSet);
+            m_xTmp->SetItemSet(aTmpSet, false);
         }
     }
 

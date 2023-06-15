@@ -430,7 +430,10 @@ void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
             bChanged = changeBackground(rAttrSet, *pNewSet, *pColorSet) || bChanged;
 
             if (bChanged)
+            {
                 pDocument->ChgFormat(*pTextFormatCollection, *pNewSet);
+                pPool->Broadcast(SfxStyleSheetHint(SfxHintId::StyleSheetModified, *pStyle));
+            }
         }
         pStyle = static_cast<SwDocStyleSheet*>(pPool->Next());
     }

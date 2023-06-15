@@ -99,7 +99,7 @@ public:
      which indicates that the indent attributes at a paragraph style should
      be reset in case that a list style is applied to the paragraph style and
      no indent attributes are applied. */
-    void                    SetItemSet( const SfxItemSet& rSet,
+    void                    SetItemSet( const SfxItemSet& rSet, const bool bBroadcast = true,
                                         const bool bResetIndentAttrsAtParagraphStyle = false );
 
     virtual SfxItemSet&     GetItemSet() override;

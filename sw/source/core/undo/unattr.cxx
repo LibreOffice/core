@@ -226,6 +226,15 @@ void SwUndoFormatAttr::UndoImpl(::sw::UndoRedoContext & rContext)
     if ( RES_FLYFRMFMT == m_nFormatWhich || RES_DRAWFRMFMT == m_nFormatWhich ) {
         rContext.SetSelections(static_cast<SwFrameFormat*>(pFormat), nullptr);
     }
+
+    SfxStyleFamily nFamily = SfxStyleFamily::None;
+    if (RES_TXTFMTCOLL == m_nFormatWhich || RES_CONDTXTFMTCOLL == m_nFormatWhich)
+        nFamily = SfxStyleFamily::Para;
+    else if (RES_CHRFMT == m_nFormatWhich)
+        nFamily = SfxStyleFamily::Char;
+
+    if (pFormat && nFamily != SfxStyleFamily::None)
+        rContext.GetDoc().BroadcastStyleOperation(pFormat->GetName(), nFamily, SfxHintId::StyleSheetModified);
 }
 
 // Check if it is still in Doc
