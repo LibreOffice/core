@@ -141,44 +141,6 @@ void LocaleNode::generateCode (const OFileWriter &of) const
 }
 
 
-OUString LocaleNode::writeParameterCheckLen( const OFileWriter &of,
-        const char* pParameterName, const LocaleNode* pNode,
-        sal_Int32 nMinLen, sal_Int32 nMaxLen ) const
-{
-    OUString aVal;
-    if (pNode)
-        aVal = pNode->getValue();
-    else if (nMinLen >= 0)  // -1: optional => empty, 0: must be present, empty
-    {
-        ++nError;
-        fprintf( stderr, "Error: node NULL pointer for parameter %s.\n",
-                pParameterName);
-    }
-    // write empty data if error
-    of.writeParameter( pParameterName, aVal);
-    sal_Int32 nLen = aVal.getLength();
-    if (nLen < nMinLen)
-    {
-        ++nError;
-        fprintf( stderr, "Error: less than %" SAL_PRIdINT32 " character%s (%" SAL_PRIdINT32 ") in %s '%s'.\n",
-                nMinLen, (nMinLen > 1 ? "s" : ""),
-                nLen,
-                (pNode ? OSTR( pNode->getName()) : ""),
-                OSTR( aVal));
-    }
-    else if (nLen > nMaxLen && nMaxLen >= 0)
-    {
-        ++nError;
-        fprintf( stderr,
-                "Error: more than %" SAL_PRIdINT32 " character%s (%" SAL_PRIdINT32 ") in %s '%s' not supported by application.\n",
-                nMaxLen, (nMaxLen > 1 ? "s" : ""),
-                nLen,
-                (pNode ? OSTR( pNode->getName()) : ""),
-                OSTR( aVal));
-    }
-    return aVal;
-}
-
 OUString LocaleNode::writeOUStringLiteralParameterCheckLen( const OFileWriter &of,
         const char* pParameterName, const LocaleNode* pNode,
         sal_Int32 nMinLen, sal_Int32 nMaxLen ) const
@@ -213,24 +175,6 @@ OUString LocaleNode::writeOUStringLiteralParameterCheckLen( const OFileWriter &o
                 nLen,
                 (pNode ? OSTR( pNode->getName()) : ""),
                 OSTR( aVal));
-    }
-    return aVal;
-}
-
-OUString LocaleNode::writeParameterCheckLen( const OFileWriter &of,
-        const char* pNodeName, const char* pParameterName,
-        sal_Int32 nMinLen, sal_Int32 nMaxLen ) const
-{
-    OUString aVal;
-    const LocaleNode * pNode = findNode( pNodeName);
-    if (pNode || nMinLen < 0)
-        aVal = writeParameterCheckLen( of, pParameterName, pNode, nMinLen, nMaxLen);
-    else
-    {
-        ++nError;
-        fprintf( stderr, "Error: node %s not found.\n", pNodeName);
-        // write empty data if error
-        of.writeParameter( pParameterName, aVal);
     }
     return aVal;
 }
