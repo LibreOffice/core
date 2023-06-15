@@ -76,6 +76,31 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testTdf155825_SourcOffsetRangeDifferent)
     // assert(false && "oox::WriteGradientFill: non-synchronized gradients (!)");
     save("Impress Office Open XML");
 }
+
+CPPUNIT_TEST_FIXTURE(TestMCGR, testStepCount)
+{
+    // Given a document with two-color gradient with StepCount 4.
+    loadFromURL(u"tdf155852_MCGR_StepCount4.fodp");
+    // Save it to PPTX
+    save("Impress Office Open XML");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
+
+    // Without the fix the colors in the sections were wrong. And when opening a file with StepCount
+    // and saving it immedialtly to pptx, a continues gradient might be produced.
+
+    const OString sPath = "//a:gradFill/a:gsLst/";
+    // The default way of load and save would have produced 2 stops, but we need start stop, end stop
+    // and 3*2 inner stops.
+    assertXPath(pXmlDoc, sPath + "a:gs", 8);
+    // A sharp color changes nees a pair of two stops with same offset.
+    assertXPath(pXmlDoc, sPath + "a:gs[@pos='25000']", 2);
+    assertXPath(pXmlDoc, sPath + "a:gs[@pos='50000']", 2);
+    assertXPath(pXmlDoc, sPath + "a:gs[@pos='75000']", 2);
+    // Without fix the color was 808080.
+    assertXPath(pXmlDoc, sPath + "a:gs[@pos='75000'][1]/a:srgbClr", "val", "55aaaa");
+    // Without fix the color was 40bfbf, producing a gradient in the last segment.
+    assertXPath(pXmlDoc, sPath + "a:gs[@pos='75000'][2]/a:srgbClr", "val", "00ffff");
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

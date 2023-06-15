@@ -746,7 +746,6 @@ void BColorStops::doApplySteps(sal_uInt16 nStepCount)
             // the same color as the previous one ended
             aNewColorStops.push_back(*aColorL);
         }
-
         if (!basegfx::fTools::equalZero(fDelta))
         {
             // create in-between steps, always two at the same position to
@@ -757,20 +756,21 @@ void BColorStops::doApplySteps(sal_uInt16 nStepCount)
             if (rStartColor != rEndColor)
             {
                 // get relative single-step width
-                const double fSingleStep(1.0 / static_cast<double>(nStepCount));
+                // tdf155852 Use same method for the color as in rendering.
+                const double fSingleStep(1.0 / static_cast<double>(nStepCount - 1));
+                const double fOffsetStep(fDelta / static_cast<double>(nStepCount));
 
                 for (sal_uInt16 a(1); a < nStepCount; a++)
                 {
-                    // calculate position since being used twice
-                    const double fPosition(fStart
-                                           + (fDelta * (static_cast<double>(a) * fSingleStep)));
+                    // calculate stop position since being used twice
+                    const double fPosition(fStart + fOffsetStep * static_cast<double>(a));
 
-                    // add start color of sub-segment
+                    // add end color of previous sub-segment
                     aNewColorStops.emplace_back(
                         fPosition, basegfx::interpolate(rStartColor, rEndColor,
                                                         static_cast<double>(a - 1) * fSingleStep));
 
-                    // add end color of sub-segment
+                    // add start color of current sub-segment
                     aNewColorStops.emplace_back(
                         fPosition, basegfx::interpolate(rStartColor, rEndColor,
                                                         static_cast<double>(a) * fSingleStep));
