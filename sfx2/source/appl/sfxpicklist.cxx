@@ -131,8 +131,7 @@ void SfxPickListImpl::AddDocumentToPickList( const SfxObjectShell* pDocSh )
             aFilter,
             aTitle,
             aThumbnail,
-            oIsReadOnly,
-            std::nullopt);
+            oIsReadOnly);
 
     if ( aURL.GetProtocol() == INetProtocol::File )
         Application::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::DecodeMechanism::NONE ),
