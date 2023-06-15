@@ -310,45 +310,37 @@ namespace svgio::svgreader
             if(aNewTarget.empty())
                 return;
 
-            if(aTarget.equal(aViewBox))
+            // create mapping
+            const SvgAspectRatio& rRatio = maSvgAspectRatio;
+
+            // even when ratio is not set, use the defaults
+            // let mapping be created from SvgAspectRatio
+            const basegfx::B2DHomMatrix aEmbeddingTransform(rRatio.createMapping(aTarget, aViewBox));
+
+            if(!aEmbeddingTransform.isIdentity())
             {
-                // just add to rTarget
-                rTarget.append(aNewTarget);
+                const drawinglayer::primitive2d::Primitive2DReference xRef(
+                    new drawinglayer::primitive2d::TransformPrimitive2D(
+                        aEmbeddingTransform,
+                        std::move(aNewTarget)));
+
+                aNewTarget = drawinglayer::primitive2d::Primitive2DContainer { xRef };
             }
-            else
+
+            if(!rRatio.isMeetOrSlice())
             {
-                // create mapping
-                const SvgAspectRatio& rRatio = maSvgAspectRatio;
+                // need to embed in MaskPrimitive2D to ensure clipping
+                const drawinglayer::primitive2d::Primitive2DReference xMask(
+                    new drawinglayer::primitive2d::MaskPrimitive2D(
+                        basegfx::B2DPolyPolygon(
+                            basegfx::utils::createPolygonFromRect(aTarget)),
+                        std::move(aNewTarget)));
 
-                // even when ratio is not set, use the defaults
-                // let mapping be created from SvgAspectRatio
-                const basegfx::B2DHomMatrix aEmbeddingTransform(rRatio.createMapping(aTarget, aViewBox));
-
-                if(!aEmbeddingTransform.isIdentity())
-                {
-                    const drawinglayer::primitive2d::Primitive2DReference xRef(
-                        new drawinglayer::primitive2d::TransformPrimitive2D(
-                            aEmbeddingTransform,
-                            std::move(aNewTarget)));
-
-                    aNewTarget = drawinglayer::primitive2d::Primitive2DContainer { xRef };
-                }
-
-                if(!rRatio.isMeetOrSlice())
-                {
-                    // need to embed in MaskPrimitive2D to ensure clipping
-                    const drawinglayer::primitive2d::Primitive2DReference xMask(
-                        new drawinglayer::primitive2d::MaskPrimitive2D(
-                            basegfx::B2DPolyPolygon(
-                                basegfx::utils::createPolygonFromRect(aTarget)),
-                            std::move(aNewTarget)));
-
-                    aNewTarget = drawinglayer::primitive2d::Primitive2DContainer { xMask };
-                }
-
-                // embed and add to rTarget, take local extra-transform into account
-                pStyle->add_postProcess(rTarget, std::move(aNewTarget), getTransform());
+                aNewTarget = drawinglayer::primitive2d::Primitive2DContainer { xMask };
             }
+
+            // embed and add to rTarget, take local extra-transform into account
+            pStyle->add_postProcess(rTarget, std::move(aNewTarget), getTransform());
         }
 
 } // end of namespace svgio::svgreader
