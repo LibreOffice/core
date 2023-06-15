@@ -71,6 +71,11 @@
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
+#include <com/sun/star/ui/XSidebarProvider.hpp>
+#include <com/sun/star/ui/XDecks.hpp>
+#include <com/sun/star/ui/XDeck.hpp>
+#include <com/sun/star/ui/XPanels.hpp>
+#include <com/sun/star/ui/XPanel.hpp>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <SwRewriter.hxx>
@@ -5381,6 +5386,43 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
             m_pActiveShell->GotoMark(pCnt->GetName());
             m_pActiveShell->EndAction();
             m_sSelectedItem = pCnt->GetName();
+
+            // If the hidden title of SwNavigatorPanel was emptied via UNO XPanel interface,
+            // store the name of the selected bookmark there. This allows to query the
+            // selected bookmark using UNO e.g. in add-ons, i.e. to disambiguate when
+            // multiple bookmarks are there on the selected text range.
+            // Note: this is a workaround because getDialog() of XPanel is not implemented
+            // for SwNavigatorPanel.
+            uno::Reference< frame::XModel > xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
+
+            Reference<frame::XController2> xController( xModel->getCurrentController(), uno::UNO_QUERY);
+            if ( !xController.is() )
+                break;
+
+            Reference<ui::XSidebarProvider> xSidebarProvider = xController->getSidebar();
+            if ( !xSidebarProvider.is() )
+                break;
+
+            Reference<ui::XDecks> xDecks = xSidebarProvider->getDecks();
+            if ( !xDecks.is() )
+                break;
+
+            Reference<ui::XDeck> xDeck ( xDecks->getByName("NavigatorDeck"), uno::UNO_QUERY);
+            if ( !xDeck.is() )
+                break;
+
+            Reference<ui::XPanels> xPanels = xDeck->getPanels();
+            if ( !xPanels.is() )
+                break;
+
+            if (xPanels->hasByName("SwNavigatorPanel"))
+            {
+                Reference<ui::XPanel> xPanel ( xPanels->getByName("SwNavigatorPanel"), uno::UNO_QUERY);
+                if ( !xPanel.is() || !xPanel->getTitle().isEmpty() )
+                    break;
+
+                xPanel->setTitle( pCnt->GetName() );
+            }
         }
         break;
         case ContentTypeId::REGION    :
