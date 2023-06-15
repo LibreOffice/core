@@ -165,8 +165,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFeColorMatrix)
 
     //assertXPath(pDocument, "/primitive2D/transform/mask/modifiedColor", "modifier", "matrix");
     assertXPath(pDocument, "/primitive2D/transform/mask/modifiedColor[1]", "modifier", "saturate");
-    //assertXPath(pDocument, "/primitive2D/transform/mask/modifiedColor", "modifier", "hueRotate");
-    assertXPath(pDocument, "/primitive2D/transform/mask/modifiedColor[2]", "modifier", "luminance_to_alpha");
+    assertXPath(pDocument, "/primitive2D/transform/mask/modifiedColor[2]", "modifier", "hueRotate");
+    assertXPath(pDocument, "/primitive2D/transform/mask/modifiedColor[3]", "modifier", "luminance_to_alpha");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFilterFeGaussianBlur)

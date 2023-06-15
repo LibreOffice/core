@@ -236,6 +236,31 @@ namespace basegfx
         SAL_DLLPRIVATE virtual OUString getModifierName() const override;
     };
 
+    /** Apply hueRotate
+        This derivation is used for the svg importer and does exactly what SVG
+        defines for this needed case.
+
+        See:
+        https://www.w3.org/TR/filter-effects/#elementdef-fecolormatrix
+    */
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_hueRotate final : public BColorModifier
+    {
+    private:
+        basegfx::B3DHomMatrix       maHueMatrix;
+
+    public:
+        BColorModifier_hueRotate(double fRad);
+
+        virtual ~BColorModifier_hueRotate() override;
+
+        // compare operator
+        SAL_DLLPRIVATE virtual bool operator==(const BColorModifier& rCompare) const override;
+
+        // compute modified color
+        SAL_DLLPRIVATE virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
+        SAL_DLLPRIVATE virtual OUString getModifierName() const override;
+    };
+
     /** convert color to black and white
 
         returns black when the luminance of the given color is less than

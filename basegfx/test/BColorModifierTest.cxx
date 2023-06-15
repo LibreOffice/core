@@ -237,6 +237,38 @@ public:
         CPPUNIT_ASSERT(aBColorModifier->operator==(*aBColorModifier2));
     }
 
+    void testHueRotate()
+    {
+        const basegfx::BColorModifierSharedPtr aBColorModifier
+            = std::make_shared<basegfx::BColorModifier_hueRotate>(basegfx::deg2rad(180.0));
+
+        CPPUNIT_ASSERT_EQUAL(maWhite, aBColorModifier->getModifiedColor(maWhite));
+        CPPUNIT_ASSERT_EQUAL(maGray, aBColorModifier->getModifiedColor(maGray));
+        CPPUNIT_ASSERT_EQUAL(maBlack, aBColorModifier->getModifiedColor(maBlack));
+
+        BColor aExpectedRed(0.0, 0.426, 0.426);
+        CPPUNIT_ASSERT_EQUAL(aExpectedRed, aBColorModifier->getModifiedColor(maRed));
+        BColor aExpectedGreen(1.0, 0.43, 1.0);
+        CPPUNIT_ASSERT_EQUAL(aExpectedGreen, aBColorModifier->getModifiedColor(maGreen));
+        BColor aExpectedBlue(0.144, 0.144, 0);
+        CPPUNIT_ASSERT_EQUAL(aExpectedBlue, aBColorModifier->getModifiedColor(maBlue));
+        BColor aExpectedYellow(0.856, 0.856, 1.0);
+        CPPUNIT_ASSERT_EQUAL(aExpectedYellow, aBColorModifier->getModifiedColor(maYellow));
+        BColor aExpectedMagenta(0.0, 0.57, 0.0);
+        CPPUNIT_ASSERT_EQUAL(aExpectedMagenta, aBColorModifier->getModifiedColor(maMagenta));
+        BColor aExpectedCyan(1.0, 0.574, 0.574);
+        CPPUNIT_ASSERT_EQUAL(aExpectedCyan, aBColorModifier->getModifiedColor(maCyan));
+
+        CPPUNIT_ASSERT(aBColorModifier->operator==(*aBColorModifier));
+        const basegfx::BColorModifierSharedPtr aBColorModifierInvert
+            = std::make_shared<basegfx::BColorModifier_invert>();
+        CPPUNIT_ASSERT(*aBColorModifier != *aBColorModifierInvert);
+
+        const basegfx::BColorModifierSharedPtr aBColorModifier2
+            = std::make_shared<basegfx::BColorModifier_hueRotate>(basegfx::deg2rad(180.0));
+        CPPUNIT_ASSERT(aBColorModifier->operator==(*aBColorModifier2));
+    }
+
     CPPUNIT_TEST_SUITE(bcolormodifier);
     CPPUNIT_TEST(testGray);
     CPPUNIT_TEST(testInvert);
@@ -244,6 +276,7 @@ public:
     CPPUNIT_TEST(testStack);
     CPPUNIT_TEST(testSaturate);
     CPPUNIT_TEST(testLuminanceToAlpha);
+    CPPUNIT_TEST(testHueRotate);
     CPPUNIT_TEST_SUITE_END();
 };
 

@@ -187,6 +187,57 @@ namespace basegfx
         return "saturate";
     }
 
+    BColorModifier_hueRotate::BColorModifier_hueRotate(double fRad)
+    {
+        const double fCos = cos(fRad);
+        const double fSin = sin(fRad);
+
+        maHueMatrix.set(0, 0, 0.213 + fCos * 0.787 - fSin * 0.213);
+        maHueMatrix.set(0, 1, 0.715 - fCos * 0.715 - fSin * 0.715);
+        maHueMatrix.set(0, 2, 0.072 - fCos * 0.072 + fSin * 0.928);
+        maHueMatrix.set(1, 0, 0.213 - fCos * 0.213 + fSin * 0.143);
+        maHueMatrix.set(1, 1, 0.715 + fCos * 0.285 + fSin * 0.140);
+        maHueMatrix.set(1, 2, 0.072 - fCos * 0.072 - fSin * 0.283);
+        maHueMatrix.set(2, 0, 0.213 - fCos * 0.213 - fSin * 0.787);
+        maHueMatrix.set(2, 1, 0.715 - fCos * 0.715 + fSin * 0.715);
+        maHueMatrix.set(2, 2, 0.072 + fCos * 0.928 + fSin * 0.072);
+    }
+
+    BColorModifier_hueRotate::~BColorModifier_hueRotate()
+    {
+    }
+
+    bool BColorModifier_hueRotate::operator==(const BColorModifier& rCompare) const
+    {
+        const BColorModifier_hueRotate* pCompare = dynamic_cast< const BColorModifier_hueRotate* >(&rCompare);
+
+        if(!pCompare)
+        {
+            return false;
+        }
+
+        return maHueMatrix == pCompare->maHueMatrix;
+    }
+
+    ::basegfx::BColor BColorModifier_hueRotate::getModifiedColor(const ::basegfx::BColor& aSourceColor) const
+    {
+        basegfx::B3DHomMatrix aColorMatrix;
+        aColorMatrix.set(0, 0, aSourceColor.getRed());
+        aColorMatrix.set(1, 0, aSourceColor.getGreen());
+        aColorMatrix.set(2, 0, aSourceColor.getBlue());
+
+        aColorMatrix = maHueMatrix * aColorMatrix;
+        return ::basegfx::BColor(
+                std::clamp(aColorMatrix.get(0, 0), 0.0, 1.0),
+                std::clamp(aColorMatrix.get(1, 0), 0.0, 1.0),
+                std::clamp(aColorMatrix.get(2, 0), 0.0, 1.0));
+    }
+
+    OUString BColorModifier_hueRotate::getModifierName() const
+    {
+        return "hueRotate";
+    }
+
     BColorModifier_black_and_white::~BColorModifier_black_and_white()
     {
     }

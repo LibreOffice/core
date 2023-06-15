@@ -26,7 +26,6 @@ namespace svgio::svgreader
 SvgFeColorMatrixNode::SvgFeColorMatrixNode(SvgDocument& rDocument, SvgNode* pParent)
     : SvgNode(SVGToken::FeColorMatrix, rDocument, pParent)
     , maType(ColorType::None)
-    , maValues(1.0)
 {
 }
 
@@ -50,17 +49,16 @@ void SvgFeColorMatrixNode::parseAttribute(const OUString& /*rTokenName*/, SVGTok
                 {
                     maType = ColorType::Saturate;
                 }
+                else if (o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"hueRotate"))
+                {
+                    maType = ColorType::HueRotate;
+                }
             }
             break;
         }
         case SVGToken::Values:
         {
-            SvgNumber aNum;
-
-            if (readSingleNumber(aContent, aNum))
-            {
-                maValues = aNum;
-            }
+            maValuesContent = aContent;
             break;
         }
         default:
@@ -82,10 +80,23 @@ void SvgFeColorMatrixNode::apply(drawinglayer::primitive2d::Primitive2DContainer
     }
     else if (maType == ColorType::Saturate)
     {
+        SvgNumber aNum(1.0);
+        readSingleNumber(maValuesContent, aNum);
+
         const drawinglayer::primitive2d::Primitive2DReference xRef(
             new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
                 std::move(rTarget),
-                std::make_shared<basegfx::BColorModifier_saturate>(maValues.getNumber())));
+                std::make_shared<basegfx::BColorModifier_saturate>(aNum.getNumber())));
+        rTarget = drawinglayer::primitive2d::Primitive2DContainer{ xRef };
+    }
+    else if (maType == ColorType::HueRotate)
+    {
+        SvgNumber aNum(0.0);
+        readSingleNumber(maValuesContent, aNum);
+        const drawinglayer::primitive2d::Primitive2DReference xRef(
+            new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
+                std::move(rTarget), std::make_shared<basegfx::BColorModifier_hueRotate>(
+                                        basegfx::deg2rad(aNum.getNumber()))));
         rTarget = drawinglayer::primitive2d::Primitive2DContainer{ xRef };
     }
 }
