@@ -292,6 +292,7 @@ public:
     void testInsertPdf();
     void testTdf143760WrapContourToOff();
     void testHatchFill();
+    void testTdf62032ApplyStyle();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest4);
     CPPUNIT_TEST(testTdf96515);
@@ -417,6 +418,7 @@ public:
     CPPUNIT_TEST(testInsertPdf);
     CPPUNIT_TEST(testTdf143760WrapContourToOff);
     CPPUNIT_TEST(testHatchFill);
+    CPPUNIT_TEST(testTdf62032ApplyStyle);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -4138,6 +4140,26 @@ void SwUiWriterTest4::testHatchFill()
 
     // tdf#146822 Without fix this had failed, because the transparency value of the hatch was not exported.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(30), getProperty<sal_Int32>(getShape(1), "FillTransparence"));
+}
+
+void SwUiWriterTest4::testTdf62032ApplyStyle()
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf62032_apply_style.odt");
+    SwWrtShell* pWrtSh = pDoc->GetDocShell()->GetWrtShell();
+
+    pWrtSh->Down(/*bSelect=*/false);
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+        { "Style", uno::Any(OUString("A 2")) },
+        { "FamilyName", uno::Any(OUString("ParagraphStyles")) },
+    });
+    dispatchCommand(mxComponent, ".uno:StyleApply", aPropertyValues);
+
+    // Without the fix in place, it fails with:
+    // - Expected: 1.1
+    // - Actual  : 2
+    CPPUNIT_ASSERT_EQUAL(OUString("1.1"),
+                         getProperty<OUString>(getParagraph(2), "ListLabelString").trim());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest4);
