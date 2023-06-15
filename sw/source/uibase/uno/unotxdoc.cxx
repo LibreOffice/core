@@ -1974,8 +1974,8 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         // A hack to avoid writing random list ids to ODF when they are not referred later
         // see XMLTextParagraphExport::DocumentListNodes ctor
 
-        // Sequence of nodes, each of them represented by four-element sequence:
-        // [ index, styleIntPtr, list_id, isRestart ]
+        // Sequence of nodes, each of them represented by three-element sequence:
+        // [ index, styleIntPtr, list_id ]
         std::vector<css::uno::Sequence<css::uno::Any>> nodes;
 
         const SwDoc& rDoc = *m_pDocShell->GetDoc();
@@ -1989,9 +1989,8 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
             {
                 css::uno::Any index(pTextNode->GetIndex().get());
                 css::uno::Any list_id(pTextNode->GetListId());
-                css::uno::Any isRestart(pTextNode->IsListRestart());
 
-                nodes.push_back({ index, styleIntPtr, list_id, isRestart });
+                nodes.push_back({ index, styleIntPtr, list_id });
             }
         }
         return css::uno::Any(comphelper::containerToSequence(nodes));
