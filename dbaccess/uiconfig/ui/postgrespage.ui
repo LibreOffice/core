@@ -1,35 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="dba">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">1000000000000</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkBox" id="SpecialPostgresPage">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
-    <property name="border_width">6</property>
+    <property name="border-width">6</property>
     <property name="orientation">vertical</property>
     <property name="spacing">12</property>
     <child>
       <object class="GtkLabel" id="header">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="halign">start</property>
-        <property name="margin_bottom">6</property>
+        <property name="margin-bottom">6</property>
+        <property name="label" translatable="yes" context="postgrespage|header">Set up a connection to a PostgreSQL database</property>
+        <attributes>
+          <attribute name="weight" value="bold"/>
+        </attributes>
         <child internal-child="accessible">
-          <object class="AtkObject">
+          <object class="AtkObject" id="header-atkobject">
             <property name="AtkObject::accessible-description" translatable="yes" context="specialpostgrespage|header">Set up connection to a PostgreSQL database</property>
             <property name="AtkObject::accessible-role">static</property>
           </object>
         </child>
-        <attributes>
-          <attribute name="weight" value="bold"/>
-        </attributes>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -40,17 +41,18 @@
     <child>
       <object class="GtkLabel" id="helpLabel">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="postgrespage|helpLabel">Please enter the required information to connect to a PostgreSQL database, either by entering the host name, port number and server, or by entering the connection string.</property>
+        <property name="wrap">True</property>
+        <property name="width-chars">72</property>
+        <property name="max-width-chars">72</property>
+        <property name="xalign">0</property>
         <child internal-child="accessible">
-          <object class="AtkObject">
+          <object class="AtkObject" id="helpLabel-atkobject">
             <property name="AtkObject::accessible-description" translatable="yes" context="specialpostgrespage|helpLabel">Please enter the required information to connect to a PostgreSQL database. Please contact your system administrator if you are unsure about the following settings. </property>
             <property name="AtkObject::accessible-role">static</property>
           </object>
         </child>
-        <property name="wrap">True</property>
-        <property name="width_chars">72</property>
-        <property name="max_width_chars">72</property>
-        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -59,96 +61,124 @@
       </packing>
     </child>
     <child>
-      <!-- n-columns=1 n-rows=1 -->
+      <object class="GtkLabel" id="helpSupport">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="postgrespage|helpSupport">Please contact your system administrator if you are unsure</property>
+        <property name="xalign">0</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">2</property>
+      </packing>
+    </child>
+    <child>
+      <!-- n-columns=2 n-rows=3 -->
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
-        <property name="row_spacing">6</property>
-        <property name="column_spacing">12</property>
+        <property name="row-spacing">6</property>
+        <property name="column-spacing">12</property>
         <child>
           <object class="GtkLabel" id="dbNameLabel">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="specialpostgrespage|dbNameLabel">_Database name:</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">dbNameEntry</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">dbNameEntry</property>
             <property name="xalign">1</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="hostNameLabel">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="specialpostgrespage|hostNameLabel">_Server:</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">hostNameEntry</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">hostNameEntry</property>
             <property name="xalign">1</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="portNumLabel">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="specialpostgrespage|portNumLabel">_Port number:</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">portNumEntry</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">portNumEntry</property>
             <property name="xalign">1</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">2</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkEntry" id="dbNameEntry">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can-focus">True</property>
             <property name="hexpand">True</property>
+            <property name="activates-default">True</property>
             <property name="truncate-multiline">True</property>
-            <property name="activates_default">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="dbNameEntry-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="postgrespage|extended_tip|dbNameEntry">Enter the name of the database.</property>
+              </object>
+            </child>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkEntry" id="hostNameEntry">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can-focus">True</property>
             <property name="hexpand">True</property>
+            <property name="activates-default">True</property>
             <property name="truncate-multiline">True</property>
-            <property name="activates_default">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="hostNameEntry-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="postgrespage|extended_tip|hostNameEntry">Enter the server url of the database. </property>
+              </object>
+            </child>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">1</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox" id="box1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <property name="spacing">12</property>
             <child>
               <object class="GtkSpinButton" id="portNumEntry">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
-                <property name="activates_default">True</property>
+                <property name="activates-default">True</property>
                 <property name="truncate-multiline">True</property>
                 <property name="adjustment">adjustment1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="portNumEntry-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="postgrespage|extended_tip|portNumEntry">Enter the port number of the DBMS service. Default for PostgreSQL is 5432.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -159,7 +189,7 @@
             <child>
               <object class="GtkLabel" id="portNumDefLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="specialpostgrespage|portNumDefLabel">Default: 5432</property>
               </object>
               <packing>
@@ -170,43 +200,43 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">2</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
       </object>
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">2</property>
+        <property name="position">3</property>
       </packing>
     </child>
     <child>
-      <!-- n-columns=2 n-rows=1 -->
+      <!-- n-columns=1 n-rows=2 -->
       <object class="GtkGrid" id="grid2">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
-        <property name="row_spacing">6</property>
-        <property name="column_spacing">12</property>
+        <property name="row-spacing">6</property>
+        <property name="column-spacing">12</property>
         <child>
           <object class="GtkLabel" id="connectionStringLabel">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes" context="specialpostgrespage|connectionStringLabel">And/OR Enter the DBMS/driver-specific connection string here</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">browseurl</property>
+            <property name="label" translatable="yes" context="specialpostgrespage|connectionStringLabel">Alternatively, enter the driver-specific connection string here</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">browseurl</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
         <child>
           <!-- n-columns=2 n-rows=1 -->
-          <object class="GtkGrid" id ="grid3">
+          <object class="GtkGrid" id="grid3">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="hexpand">True</property>
@@ -217,6 +247,11 @@
                 <property name="hexpand">True</property>
                 <property name="activates-default">True</property>
                 <property name="truncate-multiline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="browseurl-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="postgrespage|extended_tip|browseurl">Enter the complete connector URL to access the PostGreSQL DBMS service. The connector URL is in the form "postgresql://myHost:port/MyDatabase".</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -235,18 +270,15 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
         </child>
       </object>
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">3</property>
+        <property name="position">4</property>
       </packing>
     </child>
   </object>

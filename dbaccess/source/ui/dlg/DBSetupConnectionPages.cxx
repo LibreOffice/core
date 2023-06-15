@@ -503,29 +503,14 @@ using namespace ::com::sun::star;
     }
 
     // OPostgresConnectionPageSetup
-    OPostgresConnectionPageSetup::OPostgresConnectionPageSetup( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs ,sal_uInt16 _nPortId, TranslateId pDefaultPortResId, TranslateId pHelpTextResId, TranslateId pHeaderTextResId, TranslateId pConnectionTextResId)
+    OPostgresConnectionPageSetup::OPostgresConnectionPageSetup( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs , sal_uInt16 _nPortId )
         : OGenericAdministrationPage(pPage, pController, "dbaccess/ui/postgrespage.ui", "SpecialPostgresPage", _rCoreAttrs)
         , m_nPortId(_nPortId)
-        , m_xHeaderText(m_xBuilder->weld_label("header"))
-        , m_xFTHelpText(m_xBuilder->weld_label("helpLabel"))
-        , m_xFTDatabasename(m_xBuilder->weld_label("dbNameLabel"))
         , m_xETDatabasename(m_xBuilder->weld_entry("dbNameEntry"))
-        , m_xFTHostname(m_xBuilder->weld_label("hostNameLabel"))
         , m_xETHostname(m_xBuilder->weld_entry("hostNameEntry"))
-        , m_xFTPortNumber(m_xBuilder->weld_label("portNumLabel"))
-        , m_xFTDefaultPortNumber(m_xBuilder->weld_label("portNumDefLabel"))
         , m_xNFPortNumber(m_xBuilder->weld_spin_button("portNumEntry"))
-        , m_xFTConnection(m_xBuilder->weld_label("connectionStringLabel"))
         , m_xConnectionURL(new OConnectionURLEdit(m_xBuilder->weld_entry("browseurl"), m_xBuilder->weld_label("browselabel")))
-        // , m_pCollection(nullptr)
     {
-        m_xFTConnection->set_label(DBA_RES(pConnectionTextResId));
-        m_xFTDefaultPortNumber->set_label(DBA_RES(pDefaultPortResId));
-        OUString sHelpText = DBA_RES(pHelpTextResId);
-        m_xFTHelpText->set_label(sHelpText);
-        //TODO this code snippet is redundant
-        m_xHeaderText->set_label(DBA_RES(pHeaderTextResId));
-
         m_xETDatabasename->connect_changed(LINK(this, OGenericAdministrationPage, OnControlEntryModifyHdl));
         m_xETHostname->connect_changed(LINK(this, OGenericAdministrationPage, OnControlEntryModifyHdl));
         m_xNFPortNumber->connect_value_changed(LINK(this, OGenericAdministrationPage, OnControlSpinButtonModifyHdl));
@@ -546,11 +531,7 @@ using namespace ::com::sun::star;
     {
         return std::make_unique<OPostgresConnectionPageSetup>(pPage, pController,
                                                           _rAttrSet,
-                                                          DSID_POSTGRES_PORTNUMBER,
-                                                          STR_POSTGRES_DEFAULT,
-                                                          STR_POSTGRES_HELPTEXT,
-                                                          STR_POSTGRES_HEADERTEXT,
-                                                          STR_COMMONURL);
+                                                          DSID_POSTGRES_PORTNUMBER);
     }
 
     void OPostgresConnectionPageSetup::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
@@ -571,14 +552,8 @@ using namespace ::com::sun::star;
         return bChangedSomething;
     }
 
-    void OPostgresConnectionPageSetup::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
+    void OPostgresConnectionPageSetup::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& /*_rControlList*/)
     {
-        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xFTHelpText.get()));
-        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xFTDatabasename.get()));
-        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xFTHostname.get()));
-        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xFTPortNumber.get()));
-        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xFTDefaultPortNumber.get()));
-        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xFTConnection.get()));
     }
 
     void OPostgresConnectionPageSetup::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
@@ -588,7 +563,6 @@ using namespace ::com::sun::star;
         bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
-        m_xFTConnection->show();
         m_xConnectionURL->show();
         m_xConnectionURL->ShowPrefix( false);
 

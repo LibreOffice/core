@@ -222,11 +222,7 @@ namespace dbaui
     public:
         OPostgresConnectionPageSetup(weld::Container* pPage, weld::DialogController* pController
                                         , const SfxItemSet& _rCoreAttrs
-                                        , sal_uInt16 _nPortId
-                                        , TranslateId pDefaultPortResId
-                                        , TranslateId pHelpTextResId
-                                        , TranslateId pHeaderTextResId
-                                        , TranslateId pConnectionTextResId );
+                                        , sal_uInt16 _nPortId );
     virtual ~OPostgresConnectionPageSetup() override;
     static std::unique_ptr<OGenericAdministrationPage> CreatePostgresTabPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet );
     ::dbaccess::ODsnTypeCollection* m_pCollection;
@@ -241,16 +237,9 @@ namespace dbaui
         TypedWhichId<SfxInt32Item> m_nPortId;
 
         std::unique_ptr<weld::Label> m_xHeaderText;
-        std::unique_ptr<weld::Label> m_xFTHelpText;
-        std::unique_ptr<weld::Label> m_xFTDatabasename;
         std::unique_ptr<weld::Entry> m_xETDatabasename;
-        std::unique_ptr<weld::Label> m_xFTHostname;
         std::unique_ptr<weld::Entry> m_xETHostname;
-        std::unique_ptr<weld::Label> m_xFTPortNumber;
-        std::unique_ptr<weld::Label> m_xFTDefaultPortNumber;
         std::unique_ptr<weld::SpinButton> m_xNFPortNumber;
-
-        std::unique_ptr<weld::Label> m_xFTConnection;
         std::unique_ptr<OConnectionURLEdit> m_xConnectionURL;
 
         /** used for the connection URL
