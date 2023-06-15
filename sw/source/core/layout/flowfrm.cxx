@@ -1464,7 +1464,7 @@ const SwFrame* SwFlowFrame::GetPrevFrameForUpperSpaceCalc_( const SwFrame* _pPro
     return pPrevFrame;
 }
 
-// This should be renamed to something like lcl_ApplyULSpacing
+// This should be renamed to something like lcl_UseULSpacing
 /// Compare styles attached to these text frames.
 static bool lcl_IdenticalStyles(const SwFrame* pPrevFrame, const SwFrame* pFrame)
 {
@@ -1473,10 +1473,7 @@ static bool lcl_IdenticalStyles(const SwFrame* pPrevFrame, const SwFrame* pFrame
 
     // Identical styles only applies if "the paragraphs belong to the same content area".
     if (pPrevFrame && pPrevFrame->FindSctFrame() != pFrame->FindSctFrame())
-    {
-        SAL_WARN("sw","DEBUG prev["<<pPrevFrame->FindSctFrame()<<"] sct["<<pFrame->FindSctFrame()<<"]");
-        // return false;
-    }
+        return false;
 
     SwTextFormatColl *pPrevFormatColl = nullptr;
     if (pPrevFrame && pPrevFrame->IsTextFrame())
@@ -1570,7 +1567,7 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
             GetSpacingValuesOfFrame( (*pPrevFrame),
                                    nPrevLowerSpace, nPrevLineSpacing,
                                    bPrevLineSpacingProportional,
-                                   bIdenticalStyles, pPrevFrame->FindSctFrame() == m_rThis.FindSctFrame());
+                                   bIdenticalStyles);
             if( rIDSA.get(DocumentSettingId::PARA_SPACE_MAX) )
             {
                 // FIXME: apply bHalfContextualSpacing for better portability?

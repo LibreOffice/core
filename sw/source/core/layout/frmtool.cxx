@@ -3955,7 +3955,7 @@ void GetSpacingValuesOfFrame( const SwFrame& rFrame,
                             SwTwips& onLowerSpacing,
                             SwTwips& onLineSpacing,
                             bool& obIsLineSpacingProportional,
-                            bool bIdenticalStyles, bool bIdenticalSections )
+                            bool bIdenticalStyles )
 {
     if ( !rFrame.IsFlowFrame() )
     {
@@ -3973,8 +3973,6 @@ void GetSpacingValuesOfFrame( const SwFrame& rFrame,
 
         onLineSpacing = 0;
         obIsLineSpacingProportional = false;
-        SAL_WARN("sw","DEBUG::GetSpacingValuesOfFrame Lower["<<onLowerSpacing<<"] context["<<rULSpace.GetContext()<<"]["<<rULSpace.GetLower()<<"] prev IsTextFrame["<<rFrame.IsTextFrame()<<"] bIdenticalStyles["<<bIdenticalStyles<<"] bIdenticalSections["<<bIdenticalSections<<"]");
-        assert (!bIdenticalStyles || bIdenticalSections || !rULSpace.GetContext() || !rULSpace.GetLower());
         if ( rFrame.IsTextFrame() )
         {
             onLineSpacing = static_cast<const SwTextFrame&>(rFrame).GetLineSpace();
