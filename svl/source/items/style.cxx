@@ -690,7 +690,7 @@ SfxStyleSheetBasePool& SfxStyleSheetBasePool::operator+=( const SfxStyleSheetBas
 
 SfxStyleSheetBase* SfxStyleSheetBasePool::Find(const OUString& rName,
                                                SfxStyleFamily eFamily,
-                                               SfxStyleSearchBits eMask) const
+                                               SfxStyleSearchBits eMask)
 {
     SfxStyleSheetIterator aIter(this, eFamily, eMask);
     return aIter.Find(rName);

@@ -86,7 +86,7 @@ void ImpEditEngine::SetStyleSheet( sal_Int32 nPara, SfxStyleSheet* pStyle )
             EndListening( *pCurStyle );
         pNode->SetStyleSheet( pStyle, aStatus.UseCharAttribs() );
         if ( pStyle )
-            StartListening(*pStyle, DuplicateHandling::Prevent);
+            StartListening(*pStyle, DuplicateHandling::Allow);
 
         if (pNode->GetWrongList())
             pNode->GetWrongList()->ResetInvalidRange(0, pNode->Len());

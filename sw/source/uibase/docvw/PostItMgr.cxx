@@ -45,6 +45,7 @@
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <docstyle.hxx>
 #include <fldbas.hxx>
 #include <fmtfld.hxx>
 #include <docufld.hxx>
@@ -223,6 +224,9 @@ SwPostItMgr::SwPostItMgr(SwView* pView)
     */
     // we want to receive stuff like SfxHintId::DocChanged
     StartListening(*mpView->GetDocShell());
+    // listen to stylesheet pool to update on stylesheet rename,
+    // as EditTextObject references styles by name.
+    StartListening(*static_cast<SwDocStyleSheetPool*>(mpView->GetDocShell()->GetStyleSheetPool())->GetEEStyleSheetPool());
     if (!mvPostItFields.empty())
     {
         mbWaitingForCalcRects = true;
@@ -236,7 +240,7 @@ SwPostItMgr::~SwPostItMgr()
         Application::RemoveUserEvent( mnEventId );
     // forget about all our Sidebar windows
     RemoveSidebarWin();
-    EndListening( *mpView->GetDocShell() );
+    EndListeningAll();
 
     mPages.clear();
 }
@@ -467,6 +471,14 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 }
                 break;
             }
+        }
+    }
+    else if ( const SfxStyleSheetModifiedHint * pStyleHint = dynamic_cast<const SfxStyleSheetModifiedHint*>(&rHint) )
+    {
+        for (const auto& postItField : mvPostItFields)
+        {
+            auto pField = static_cast<SwPostItField*>(postItField->GetFormatField().GetField());
+            pField->ChangeStyleSheetName(pStyleHint->GetOldName(), pStyleHint->GetStyleSheet());
         }
     }
     else

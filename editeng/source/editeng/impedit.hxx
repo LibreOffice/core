@@ -477,7 +477,7 @@ public:
 //  ImpEditEngine
 
 
-class ImpEditEngine : public SfxListener
+class ImpEditEngine : public SfxListener, public svl::StyleSheetUser
 {
     friend class EditEngine;
 
@@ -1013,6 +1013,8 @@ public:
 
     void                UpdateParagraphsWithStyleSheet( SfxStyleSheet* pStyle );
     void                RemoveStyleFromParagraphs( SfxStyleSheet const * pStyle );
+
+    bool isUsedByModel() const override { return true; }
 
     OutputDevice*       GetRefDevice() const { return pRefDev.get(); }
     void                SetRefDevice( OutputDevice* pRefDef );

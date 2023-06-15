@@ -272,7 +272,7 @@ public:
 
     SfxStyleSheetBase*  First(SfxStyleFamily eFamily, SfxStyleSearchBits eMask = SfxStyleSearchBits::All);
     SfxStyleSheetBase*  Next();
-    virtual SfxStyleSheetBase*  Find( const OUString&, SfxStyleFamily eFam, SfxStyleSearchBits n=SfxStyleSearchBits::All ) const;
+    virtual SfxStyleSheetBase*  Find( const OUString&, SfxStyleFamily eFam, SfxStyleSearchBits n=SfxStyleSearchBits::All );
 
     virtual bool                SetParent(SfxStyleFamily eFam,
                                           const OUString &rStyle,

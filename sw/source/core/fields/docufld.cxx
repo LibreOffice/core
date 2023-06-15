@@ -1846,6 +1846,12 @@ sal_Int32 SwPostItField::GetNumberOfParagraphs() const
     return mpText ? mpText->Count() : 1;
 }
 
+void SwPostItField::ChangeStyleSheetName(std::u16string_view rOldName, const SfxStyleSheetBase* pStyleSheet)
+{
+    if (mpText && pStyleSheet)
+        mpText->ChangeStyleSheetName(pStyleSheet->GetFamily(), rOldName, pStyleSheet->GetName());
+}
+
 void SwPostItField::SetPostItId(const sal_uInt32 nPostItId)
 {
     m_nPostItId = nPostItId == 0 ? s_nLastPostItId++ : nPostItId;

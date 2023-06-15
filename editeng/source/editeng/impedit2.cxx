@@ -2925,6 +2925,8 @@ EditPaM ImpEditEngine::ImpInsertParaBreak( EditPaM& rPaM, bool bKeepEndingAttrib
         InsertUndo(std::make_unique<EditUndoSplitPara>(pEditEngine, aEditDoc.GetPos(rPaM.GetNode()), rPaM.GetIndex()));
 
     EditPaM aPaM( aEditDoc.InsertParaBreak( rPaM, bKeepEndingAttribs ) );
+    if (auto pStyle = aPaM.GetNode()->GetStyleSheet())
+        StartListening(*pStyle, DuplicateHandling::Allow);
 
     if ( GetStatus().DoOnlineSpelling() )
     {

@@ -207,6 +207,7 @@ public:
 class SwDocStyleSheetPool final : public SfxStyleSheetBasePool
 {
     rtl::Reference< SwDocStyleSheet > mxStyleSheet;
+    rtl::Reference< SfxStyleSheetPool > mxEEStyleSheetPool;
     SwDoc&              m_rDoc;
     bool                m_bOrganizer : 1;     ///< Organizer
 
@@ -222,7 +223,7 @@ public:
             SfxStyleSearchBits nMask = SfxStyleSearchBits::All) override;
 
     virtual SfxStyleSheetBase* Find( const OUString&, SfxStyleFamily eFam,
-                                    SfxStyleSearchBits n=SfxStyleSearchBits::All ) const override;
+                                    SfxStyleSearchBits n=SfxStyleSearchBits::All ) override;
 
     virtual bool SetParent( SfxStyleFamily eFam, const OUString &rStyle,
                             const OUString &rParent ) override;
@@ -234,6 +235,7 @@ public:
     virtual std::unique_ptr<SfxStyleSheetIterator> CreateIterator( SfxStyleFamily, SfxStyleSearchBits nMask = SfxStyleSearchBits::All) override;
 
     SwDoc& GetDoc() const { return m_rDoc; }
+    SfxStyleSheetPool* GetEEStyleSheetPool() { return mxEEStyleSheetPool.get(); }
 
     void dispose();
 

@@ -67,6 +67,7 @@
 #include <docsh.hxx>
 #include <wrtsh.hxx>
 #include <doc.hxx>
+#include <docstyle.hxx>
 #include <docufld.hxx>
 #include <swmodule.hxx>
 
@@ -321,6 +322,7 @@ void SwAnnotationWin::InitControls()
 
     SwDocShell* aShell = mrView.GetDocShell();
     mpOutliner.reset(new Outliner(&aShell->GetPool(),OutlinerMode::TextObject));
+    mpOutliner->SetStyleSheetPool(static_cast<SwDocStyleSheetPool*>(aShell->GetStyleSheetPool())->GetEEStyleSheetPool());
     aShell->GetDoc()->SetCalcFieldValueHdl( mpOutliner.get() );
     mpOutliner->SetUpdateLayout( true );
 
@@ -352,6 +354,9 @@ void SwAnnotationWin::InitControls()
     EEControlBits nCntrl = mpOutliner->GetControlWord();
     // TODO: crash when AUTOCOMPLETE enabled
     nCntrl |= EEControlBits::MARKFIELDS | EEControlBits::PASTESPECIAL | EEControlBits::AUTOCORRECT | EEControlBits::USECHARATTRIBS; // | EEControlBits::AUTOCOMPLETE;
+    // Our stylesheet pool follows closely the core paragraph styles.
+    // We don't want the rtf import (during paste) to mess with that.
+    nCntrl &= ~EEControlBits::RTFSTYLESHEETS;
 
     if (SwWrtShell* pWrtShell = mrView.GetWrtShellPtr())
     {
