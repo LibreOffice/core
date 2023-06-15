@@ -2756,22 +2756,26 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
         }
 
         // write font dict
-        auto nFontDict = createObject();
-        aLine.setLength(0);
-        aLine.append(OString::number(nFontDict) + " 0 obj\n<<");
-        for (auto nFontID : aUsedFonts)
+        auto nFontDict = -1;
+        if (!aUsedFonts.empty())
         {
-            aLine.append("/F"
-                + OString::number(nFontID)
-                + " "
-                + OString::number(rFontIDToObject[nFontID])
-                + " 0 R");
+            nFontDict = createObject();
+            aLine.setLength(0);
+            aLine.append(OString::number(nFontDict) + " 0 obj\n<<");
+            for (auto nFontID : aUsedFonts)
+            {
+                aLine.append("/F"
+                    + OString::number(nFontID)
+                    + " "
+                    + OString::number(rFontIDToObject[nFontID])
+                    + " 0 R");
+            }
+            aLine.append(">>\nendobj\n\n");
+            if (!updateObject(nFontDict))
+                return false;
+            if (!writeBuffer(aLine))
+                return false;
         }
-        aLine.append(">>\nendobj\n\n");
-        if (!updateObject(nFontDict))
-            return false;
-        if (!writeBuffer(aLine))
-            return false;
 
         // write ExtGState objects
         if (!aUsedAlpha.empty())
@@ -2807,7 +2811,8 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
         // write resources dict
         aLine.setLength(0);
         aLine.append(OString::number(nResources) + " 0 obj\n");
-        aResourceDict.append(aLine, nFontDict);
+        if (!aUsedFonts.empty())
+            aResourceDict.append(aLine, nFontDict);
         aLine.append("endobj\n\n");
         if (!updateObject(nResources))
             return false;
