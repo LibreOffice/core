@@ -2471,12 +2471,9 @@ bool  SwDocStyleSheet::IsUsed() const
     if (m_rDoc.IsUsed(*pMod))
         return true;
 
-    SfxStyleSheetIterator aIter(static_cast<SwDocStyleSheetPool*>(m_pPool)->GetEEStyleSheetPool(), nFamily);
-    auto pStyle = aIter.Find(GetName());
-    if (pStyle && pStyle->IsUsed())
-        return true;
-
-    return false;
+    SfxStyleSheetIterator aIter(static_cast<SwDocStyleSheetPool*>(m_pPool)->GetEEStyleSheetPool(), nFamily,
+                                SfxStyleSearchBits::Used);
+    return aIter.Find(GetName()) != nullptr;
 }
 
 OUString SwDocStyleSheet::GetUsedBy()
@@ -3010,7 +3007,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         {
             SwTextFormatColl* pColl = (*rDoc.GetTextFormatColls())[ i ];
 
-            const bool bUsed = bOrganizer || rDoc.IsUsed(*pColl);
+            const bool bUsed = bOrganizer || rDoc.IsUsed(*pColl) || IsUsedInComments(pColl->GetName());
             if ( ( !bSearchHidden && pColl->IsHidden( ) && !bUsed ) || pColl->IsDefault() )
                 continue;
 
@@ -3410,6 +3407,13 @@ void SwStyleSheetIterator::AppendStyleList(const std::vector<OUString>& rList,
         if ( ( !bTestUsed && bMatchHidden ) || ( bTestUsed && bUsed ) )
             m_aLst.Append( eFamily, i );
     }
+}
+
+bool SwStyleSheetIterator::IsUsedInComments(const OUString& rName)
+{
+    auto pPool = static_cast<const SwDocStyleSheetPool*>(pBasePool)->GetEEStyleSheetPool();
+    SfxStyleSheetIterator aIter(pPool, GetSearchFamily(), SfxStyleSearchBits::Used);
+    return aIter.Find(rName) != nullptr;
 }
 
 void SwDocStyleSheetPool::InvalidateIterator()

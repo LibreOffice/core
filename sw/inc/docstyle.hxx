@@ -181,6 +181,7 @@ class SwStyleSheetIterator final : public SfxStyleSheetIterator, public SfxListe
     sal_uInt32          m_nLastPos;
     bool                m_bFirstCalled;
 
+    bool IsUsedInComments(const OUString& rName);
     void                AppendStyleList(const std::vector<OUString>& rLst,
                                         bool        bUsed,
                                         bool        bTestHidden,
@@ -235,7 +236,7 @@ public:
     virtual std::unique_ptr<SfxStyleSheetIterator> CreateIterator( SfxStyleFamily, SfxStyleSearchBits nMask = SfxStyleSearchBits::All) override;
 
     SwDoc& GetDoc() const { return m_rDoc; }
-    SfxStyleSheetPool* GetEEStyleSheetPool() { return mxEEStyleSheetPool.get(); }
+    SfxStyleSheetPool* GetEEStyleSheetPool() const { return mxEEStyleSheetPool.get(); }
 
     void dispose();
 
