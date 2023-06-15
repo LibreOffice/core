@@ -296,8 +296,8 @@ void LCInfoNode::generateCode (const OFileWriter &of) const
         aLanguage = languageNode->getChildAt(0)->getValue();
         if (aLanguage.getLength() != 2 && aLanguage.getLength() != 3)
             incErrorStr( "Error: langID '%s' not 2-3 characters\n", aLanguage);
-        of.writeParameter("langID", aLanguage);
-        of.writeParameter("langDefaultName", languageNode->getChildAt(1)->getValue());
+        of.writeOUStringLiteralParameter("langID", aLanguage);
+        of.writeOUStringLiteralParameter("langDefaultName", languageNode->getChildAt(1)->getValue());
     }
     else
         incError( "No Language node.");
@@ -306,8 +306,8 @@ void LCInfoNode::generateCode (const OFileWriter &of) const
         OUString aCountry( countryNode->getChildAt(0)->getValue());
         if (!(aCountry.isEmpty() || aCountry.getLength() == 2))
             incErrorStr( "Error: countryID '%s' not empty or more than 2 characters\n", aCountry);
-        of.writeParameter("countryID", aCountry);
-        of.writeParameter("countryDefaultName", countryNode->getChildAt(1)->getValue());
+        of.writeOUStringLiteralParameter("countryID", aCountry);
+        of.writeOUStringLiteralParameter("countryDefaultName", countryNode->getChildAt(1)->getValue());
     }
     else
         incError( "No Country node.");
@@ -319,18 +319,18 @@ void LCInfoNode::generateCode (const OFileWriter &of) const
             incErrorStr( "Error: invalid Variant '%s'\n", aVariant);
         if (!(aVariant.isEmpty() || aLanguage == "qlt"))
             incErrorStrStr( "Error: Variant '%s' given but Language '%s' is not 'qlt'\n", aVariant, aLanguage);
-        of.writeParameter("Variant", aVariant);
+        of.writeOUStringLiteralParameter("Variant", aVariant);
     }
     else
-        of.writeParameter("Variant", std::u16string_view());
-    of.writeAsciiString("\nstatic const sal_Unicode* LCInfoArray[] = {\n");
+        of.writeOUStringLiteralParameter("Variant", std::u16string_view());
+    of.writeAsciiString("\nstatic constexpr rtl::OUStringConstExpr LCInfoArray[] = {\n");
     of.writeAsciiString("\tlangID,\n");
     of.writeAsciiString("\tlangDefaultName,\n");
     of.writeAsciiString("\tcountryID,\n");
     of.writeAsciiString("\tcountryDefaultName,\n");
     of.writeAsciiString("\tVariant\n");
     of.writeAsciiString("};\n\n");
-    of.writeFunction("getLCInfo_", "SAL_N_ELEMENTS(LCInfoArray)", "LCInfoArray");
+    of.writeOUStringFunction("getLCInfo_", "SAL_N_ELEMENTS(LCInfoArray)", "LCInfoArray");
 }
 
 

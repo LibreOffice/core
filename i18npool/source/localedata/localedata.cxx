@@ -42,7 +42,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star;
 
-typedef sal_Unicode**   (* MyFunc_Type)( sal_Int16&);
 typedef OUString const * (* MyFuncOUString_Type)( sal_Int16&);
 typedef sal_Unicode const *** (* MyFunc_Type2)( sal_Int16&, sal_Int16& );
 typedef sal_Unicode const **** (* MyFunc_Type3)( sal_Int16&, sal_Int16&, sal_Int16& );
@@ -1123,16 +1122,16 @@ LocaleDataImpl::getTransliterations( const Locale& rLocale )
 LanguageCountryInfo SAL_CALL
 LocaleDataImpl::getLanguageCountryInfo( const Locale& rLocale )
 {
-    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getLCInfo" ));
+    MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getLCInfo" ));
 
     if ( func ) {
         sal_Int16 LCInfoCount = 0;
-        sal_Unicode **LCInfoArray = func(LCInfoCount);
-        LanguageCountryInfo info{OUString(LCInfoArray[0]),
-                OUString(LCInfoArray[1]),
-                OUString(LCInfoArray[2]),
-                OUString(LCInfoArray[3]),
-                OUString(LCInfoArray[4])};
+        OUString const *LCInfoArray = func(LCInfoCount);
+        LanguageCountryInfo info{LCInfoArray[0],
+                LCInfoArray[1],
+                LCInfoArray[2],
+                LCInfoArray[3],
+                LCInfoArray[4]};
         return info;
     }
     else {
