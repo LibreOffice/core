@@ -87,6 +87,9 @@ void ImpEditEngine::SetStyleSheet( sal_Int32 nPara, SfxStyleSheet* pStyle )
         pNode->SetStyleSheet( pStyle, aStatus.UseCharAttribs() );
         if ( pStyle )
             StartListening(*pStyle, DuplicateHandling::Prevent);
+
+        if (pNode->GetWrongList())
+            pNode->GetWrongList()->ResetInvalidRange(0, pNode->Len());
         ParaAttribsChanged( pNode );
     }
     if (IsUpdateLayout())
@@ -110,6 +113,8 @@ void ImpEditEngine::UpdateParagraphsWithStyleSheet( SfxStyleSheet* pStyle )
             else
                 pNode->SetStyleSheet( pStyle, false );
 
+            if (pNode->GetWrongList())
+                pNode->GetWrongList()->ResetInvalidRange(0, pNode->Len());
             ParaAttribsChanged( pNode );
         }
     }
