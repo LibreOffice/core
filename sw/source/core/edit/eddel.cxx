@@ -106,6 +106,12 @@ void SwEditShell::DeleteSel(SwPaM& rPam, bool const isArtificialSelection, bool 
         SwPaM * pPam = &rPam;
         if (oSelectAll)
         {
+            if (!oSelectAll->second.empty())
+            {
+                SwRewriter aRewriter;
+                aRewriter.AddRule(UndoArg1, SwResId(STR_MULTISEL));
+                GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::DELETE, &aRewriter);
+            }
             // tdf#155685 tables at the end must be deleted separately
             for (SwTableNode *const pTable : oSelectAll->second)
             {
@@ -122,6 +128,10 @@ void SwEditShell::DeleteSel(SwPaM& rPam, bool const isArtificialSelection, bool 
         GetDoc()->getIDocumentContentOperations().DeleteAndJoin(*pPam,
             isArtificialSelection ? SwDeleteFlags::ArtificialSelection : SwDeleteFlags::Default);
         SaveTableBoxContent( pPam->GetPoint() );
+        if (oSelectAll && !oSelectAll->second.empty())
+        {
+            GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::END, nullptr);
+        }
     }
 
     // Selection is not needed anymore
