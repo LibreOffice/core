@@ -1309,6 +1309,36 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testFloattableOverlap)
     CPPUNIT_ASSERT(!rRect1.Overlaps(rRect2));
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testParaUpperMarginFlyIntersect)
+{
+    // Given a document with 2 paragraphs, the paragraphs have both upper and lower spacing of 567
+    // twips:
+    createSwDoc("para-upper-margin-fly-intersect.docx");
+
+    // When laying out that document:
+    calcLayout();
+
+    // Then make sure that we shift down the text in the second paragraph only based on the 2nd para
+    // upper margin, not based on the 1st para lower margin:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    int nFlyCount
+        = getXPathContent(pXmlDoc,
+                          "count(//SwParaPortion/SwLineLayout/child::*[@type='PortionType::Fly'])")
+              .toInt32();
+    int nHeight = 0;
+    for (int i = 1; i <= nFlyCount; ++i)
+    {
+        OString xPath = "(//SwParaPortion/SwLineLayout/child::*[@type='PortionType::Fly'])["
+                        + OString::number(i) + "]";
+        nHeight += getXPath(pXmlDoc, xPath, "height").toInt32();
+    }
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 521 (~500)
+    // - Actual  : 857 (~1000)
+    // I.e. both upper and lower margin was taken into account.
+    CPPUNIT_ASSERT_EQUAL(521, nHeight);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
