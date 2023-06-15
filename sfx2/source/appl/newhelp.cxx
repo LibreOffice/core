@@ -1175,8 +1175,7 @@ BookmarksTabPage_Impl::~BookmarksTabPage_Impl()
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
         SvtHistoryOptions::AppendItem(EHistoryType::HelpBookmarks, m_xBookmarksBox->get_id(i), "",
-                                      m_xBookmarksBox->get_text(i), std::nullopt, std::nullopt,
-                                      std::nullopt);
+                                      m_xBookmarksBox->get_text(i), std::nullopt, std::nullopt);
     }
 
     m_xBookmarksBox.reset();

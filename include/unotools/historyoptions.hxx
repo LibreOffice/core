@@ -73,13 +73,11 @@ namespace SvtHistoryOptions
         @param sTitle      document title to save in history
         @param sThumbnail  base64 encoded thumbnail of the item
         @param oIsReadOnly item was opened editable or read-only
-        @param oIsPinned   item is pinned in the user-interface
     */
     UNOTOOLS_DLLPUBLIC void AppendItem(EHistoryType eHistory, const OUString& sURL,
                                        const OUString& sFilter, const OUString& sTitle,
                                        const std::optional<OUString>& sThumbnail,
-                                       std::optional<bool> oIsReadOnly,
-                                       std::optional<bool> oIsPinned);
+                                       std::optional<bool> oIsReadOnly);
 
     /** Delete item from the specified list.
     */
