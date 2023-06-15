@@ -50,7 +50,9 @@ public:
     void  writeOUStringFunction(const char *func, const char *count, const char *array, const char *from, const char *to) const;
     void  writeRefFunction(const char *func, std::u16string_view useLocale, const char *to) const;
     void  writeFunction2(const char *func, const char *style, const char* attr, const char *array) const;
+    void  writeOUStringFunction2(const char *func, const char *style, const char* attr, const char *array) const;
     void  writeRefFunction2(const char *func, std::u16string_view useLocale) const;
+    void  writeOUStringRefFunction2(const char *func, std::u16string_view useLocale) const;
     void  writeFunction3(const char *func, const char *style, const char* levels, const char* attr, const char *array) const;
     void  writeRefFunction3(const char *func, std::u16string_view useLocale) const;
     void  writeIntParameter(const char* pAsciiStr, const sal_Int16 count, sal_Int16 val) const;
@@ -64,6 +66,7 @@ public:
     void  writeParameter(const char* pAsciiStr, std::u16string_view aChars, sal_Int16 count0, sal_Int16 count1) const;
     void  writeOUStringLiteralParameter(const char* pAsciiStr, std::u16string_view aChars, sal_Int16 count0, sal_Int16 count1) const;
     void  writeParameter(const char* pTagStr, const char* pAsciiStr, std::u16string_view aChars, const sal_Int16 count) const;
+    void  writeOUStringLiteralParameter(const char* pTagStr, const char* pAsciiStr, std::u16string_view aChars, const sal_Int16 count) const;
     void  writeParameter(const char* pTagStr, const char* pAsciiStr, std::u16string_view aChars, sal_Int16 count0, sal_Int16 count1) const;
     void  writeOUStringLiteralParameter(const char* pTagStr, const char* pAsciiStr, std::u16string_view aChars, sal_Int16 count0, sal_Int16 count1) const;
     void  closeOutput() const;

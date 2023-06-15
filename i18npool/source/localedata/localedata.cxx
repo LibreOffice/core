@@ -43,7 +43,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star;
 
 typedef OUString const * (* MyFuncOUString_Type)( sal_Int16&);
-typedef sal_Unicode const *** (* MyFunc_Type2)( sal_Int16&, sal_Int16& );
+typedef OUString const ** (* MyFunc_Type2)( sal_Int16&, sal_Int16& );
 typedef sal_Unicode const **** (* MyFunc_Type3)( sal_Int16&, sal_Int16&, sal_Int16& );
 typedef OUString const * (* MyFunc_FormatCode)( sal_Int16&, sal_Unicode const *&, sal_Unicode const *& );
 
@@ -1219,7 +1219,7 @@ LocaleDataImpl::getContinuousNumberingLevels( const lang::Locale& rLocale )
         // invoke function
         sal_Int16 nStyles;
         sal_Int16 nAttributes;
-        sal_Unicode const *** p0 = func( nStyles, nAttributes );
+        OUString const ** p0 = func( nStyles, nAttributes );
 
         // allocate memory for nAttributes attributes for each of the nStyles styles.
         Sequence< Sequence<beans::PropertyValue> > pv( nStyles );
@@ -1228,20 +1228,18 @@ LocaleDataImpl::getContinuousNumberingLevels( const lang::Locale& rLocale )
             i = Sequence<beans::PropertyValue>( nAttributes );
         }
 
-        sal_Unicode const *** pStyle = p0;
+        OUString const ** pStyle = p0;
         for( int i=0;  i<nStyles;  i++ ) {
-            sal_Unicode const ** pAttribute = pStyle[i];
+            OUString const * pAttribute = pStyle[i];
             auto pvElementRange = asNonConstRange(pvRange[i]);
             for( int j=0;  j<nAttributes;  j++ ) { // prefix, numberingtype, ...
-                sal_Unicode const * pString = pAttribute[j];
+                OUString const & pString = pAttribute[j];
                 beans::PropertyValue& rVal = pvElementRange[j];
                 OUString sVal;
-                if( pString ) {
-                    if( 0 != j && 2 != j )
-                        sVal = pString;
-                    else if( *pString )
-                        sVal = OUString( pString, 1 );
-                }
+                if( 0 != j && 2 != j )
+                    sVal = pString;
+                else if( !pString.isEmpty() )
+                    sVal = pString.copy( 0, 1 );
 
                 switch( j )
                 {

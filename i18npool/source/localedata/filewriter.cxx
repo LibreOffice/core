@@ -141,12 +141,29 @@ void OFileWriter::writeFunction2(const char *func, const char *style, const char
     fprintf(m_f, "\treturn %s;\n}\n", array);
 }
 
+void OFileWriter::writeOUStringFunction2(const char *func, const char *style, const char* attr, const char *array) const
+{
+    fprintf(m_f, "const OUString **  SAL_CALL %s%s( sal_Int16& nStyles, sal_Int16& nAttributes )\n{\n", func, theLocale.c_str());
+    fprintf(m_f, "\tnStyles     = %s;\n", style);
+    fprintf(m_f, "\tnAttributes = %s;\n", attr);
+    fprintf(m_f, "\treturn (const OUString **)%s;\n}\n", array);
+}
+
 void OFileWriter::writeRefFunction2(const char *func, std::u16string_view useLocale) const
 {
     OString aRefLocale( OUStringToOString(useLocale, RTL_TEXTENCODING_ASCII_US) );
     const char* locale = aRefLocale.getStr();
     fprintf(m_f, "extern const sal_Unicode ***  SAL_CALL %s%s(sal_Int16& nStyles, sal_Int16& nAttributes);\n", func, locale);
     fprintf(m_f, "const sal_Unicode ***  SAL_CALL %s%s(sal_Int16& nStyles, sal_Int16& nAttributes)\n{\n", func, theLocale.c_str());
+    fprintf(m_f, "\treturn %s%s(nStyles, nAttributes);\n}\n", func, locale);
+}
+
+void OFileWriter::writeOUStringRefFunction2(const char *func, std::u16string_view useLocale) const
+{
+    OString aRefLocale( OUStringToOString(useLocale, RTL_TEXTENCODING_ASCII_US) );
+    const char* locale = aRefLocale.getStr();
+    fprintf(m_f, "extern const OUString **  SAL_CALL %s%s(sal_Int16& nStyles, sal_Int16& nAttributes);\n", func, locale);
+    fprintf(m_f, "const OUString **  SAL_CALL %s%s(sal_Int16& nStyles, sal_Int16& nAttributes)\n{\n", func, theLocale.c_str());
     fprintf(m_f, "\treturn %s%s(nStyles, nAttributes);\n}\n", func, locale);
 }
 
@@ -239,6 +256,13 @@ void OFileWriter::writeParameter(const char* pTagStr, const char* pAsciiStr, std
     fprintf(m_f, "static const sal_Unicode %s%s%d[] = {", pTagStr, pAsciiStr, count);
     writeStringCharacters(aChars);
     fprintf(m_f, "0x0};\n");
+}
+
+void OFileWriter::writeOUStringLiteralParameter(const char* pTagStr, const char* pAsciiStr, std::u16string_view aChars, const sal_Int16 count) const
+{
+    fprintf(m_f, "static constexpr OUStringLiteral %s%s%d = u\"", pTagStr, pAsciiStr, count);
+    writeOUStringLiteralCharacters(aChars);
+    fprintf(m_f, "\";\n");
 }
 
 void OFileWriter::writeParameter(const char* pTagStr, const char* pAsciiStr, std::u16string_view aChars, sal_Int16 count0, sal_Int16 count1) const

@@ -2223,7 +2223,7 @@ void LCNumberingLevelNode::generateCode (const OFileWriter &of) const
     OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
         useLocale = useLocale.replace( '-', '_');
-        of.writeRefFunction2("getContinuousNumberingLevels_", useLocale);
+        of.writeOUStringRefFunction2("getContinuousNumberingLevels_", useLocale);
         return;
     }
 
@@ -2243,7 +2243,7 @@ void LCNumberingLevelNode::generateCode (const OFileWriter &of) const
         {
             const char* name = attr[j];
             OUString   value = q.getValueByName( name );
-            of.writeParameter("continuous", name, value, sal::static_int_cast<sal_Int16>(i) );
+            of.writeOUStringLiteralParameter("continuous", name, value, sal::static_int_cast<sal_Int16>(i) );
         }
     }
 
@@ -2258,7 +2258,7 @@ void LCNumberingLevelNode::generateCode (const OFileWriter &of) const
     // generate code. (intermediate arrays)
     for( i=0; i<nStyles; i++ )
     {
-        of.writeAsciiString("\nstatic const sal_Unicode* continuousStyle" );
+        of.writeAsciiString("\nstatic constexpr rtl::OUStringConstExpr continuousStyle" );
         of.writeInt( sal::static_int_cast<sal_Int16>(i) );
         of.writeAsciiString("[] = {\n");
         for( sal_Int32 j=0; j<nAttributes; j++)
@@ -2269,12 +2269,12 @@ void LCNumberingLevelNode::generateCode (const OFileWriter &of) const
             of.writeInt(sal::static_int_cast<sal_Int16>(i));
             of.writeAsciiString(",\n");
         }
-        of.writeAsciiString("\t0\n};\n\n");
+        of.writeAsciiString("\t\n};\n\n");
     }
 
     // generate code. (top-level array)
     of.writeAsciiString("\n");
-    of.writeAsciiString("static const sal_Unicode** LCContinuousNumberingLevelsArray[] = {\n" );
+    of.writeAsciiString("static const rtl::OUStringConstExpr* LCContinuousNumberingLevelsArray[] = {\n" );
     for( i=0; i<nStyles; i++ )
     {
         of.writeAsciiString( "\t" );
@@ -2283,7 +2283,7 @@ void LCNumberingLevelNode::generateCode (const OFileWriter &of) const
         of.writeAsciiString( ",\n");
     }
     of.writeAsciiString("\t0\n};\n\n");
-    of.writeFunction2("getContinuousNumberingLevels_", "continuousNbOfStyles",
+    of.writeOUStringFunction2("getContinuousNumberingLevels_", "continuousNbOfStyles",
             "continuousNbOfAttributesPerStyle", "LCContinuousNumberingLevelsArray");
 }
 
