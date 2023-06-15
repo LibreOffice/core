@@ -1967,15 +1967,28 @@ void SwDoc::DelTable(SwTableNode *const pTableNd)
         }
 
         // Save the cursors (UNO and otherwise)
-        SwPaM aSavePaM( *pTableNd->EndOfSectionNode() );
-        if (! aSavePaM.Move(fnMoveForward, GoInNode))
+        SwPaM const* pSavePaM(nullptr);
+        SwPaM forwardPaM(*pTableNd->EndOfSectionNode());
+        if (forwardPaM.Move(fnMoveForward, GoInNode))
         {
-            aSavePaM.GetMark()->Assign( *pTableNd );
-            aSavePaM.Move( fnMoveBackward, GoInNode );
+            pSavePaM = &forwardPaM;
         }
+        SwPaM backwardPaM(*pTableNd);
+        if (backwardPaM.Move(fnMoveBackward, GoInNode))
+        {
+            if (pSavePaM == nullptr
+                    // try to stay in the same outer table cell
+                || (forwardPaM.GetPoint()->GetNode().FindTableNode() != pTableNd->StartOfSectionNode()->FindTableNode()
+                    && forwardPaM.GetPoint()->GetNode().StartOfSectionIndex()
+                        < backwardPaM.GetPoint()->GetNode().StartOfSectionIndex()))
+            {
+                pSavePaM = &backwardPaM;
+            }
+        }
+        assert(pSavePaM); // due to bNewTextNd this must succeed
         {
             SwPaM const tmpPaM(*pTableNd, *pTableNd->EndOfSectionNode());
-            ::PaMCorrAbs(tmpPaM, *aSavePaM.GetMark());
+            ::PaMCorrAbs(tmpPaM, *pSavePaM->GetPoint());
         }
 
         // Move hard PageBreaks to the succeeding Node
@@ -2017,15 +2030,28 @@ void SwDoc::DelTable(SwTableNode *const pTableNd)
         }
 
         // Save the cursors (UNO and otherwise)
-        SwPaM aSavePaM( *pTableNd->EndOfSectionNode() );
-        if (! aSavePaM.Move(fnMoveForward, GoInNode))
+        SwPaM const* pSavePaM(nullptr);
+        SwPaM forwardPaM(*pTableNd->EndOfSectionNode());
+        if (forwardPaM.Move(fnMoveForward, GoInNode))
         {
-            aSavePaM.GetMark()->Assign( *pTableNd );
-            aSavePaM.Move( fnMoveBackward, GoInNode );
+            pSavePaM = &forwardPaM;
         }
+        SwPaM backwardPaM(*pTableNd);
+        if (backwardPaM.Move(fnMoveBackward, GoInNode))
+        {
+            if (pSavePaM == nullptr
+                    // try to stay in the same outer table cell
+                || (forwardPaM.GetPoint()->GetNode().FindTableNode() != pTableNd->StartOfSectionNode()->FindTableNode()
+                    && forwardPaM.GetPoint()->GetNode().StartOfSectionIndex()
+                        < backwardPaM.GetPoint()->GetNode().StartOfSectionIndex()))
+            {
+                pSavePaM = &backwardPaM;
+            }
+        }
+        assert(pSavePaM); // due to bNewTextNd this must succeed
         {
             SwPaM const tmpPaM(*pTableNd, *pTableNd->EndOfSectionNode());
-            ::PaMCorrAbs(tmpPaM, *aSavePaM.GetMark());
+            ::PaMCorrAbs(tmpPaM, *pSavePaM->GetPoint());
         }
 
         // Move hard PageBreaks to the succeeding Node
