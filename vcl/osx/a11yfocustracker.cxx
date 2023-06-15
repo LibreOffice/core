@@ -30,8 +30,10 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 using namespace ::com::sun::star::accessibility;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
 AquaA11yFocusTracker& TheAquaA11yFocusTracker()
@@ -118,10 +120,16 @@ void AquaA11yFocusTracker::notify_toolbox_item_focus(ToolBox *pToolBox)
 
         if( xContext.is() )
         {
-            ToolBox::ImplToolItems::size_type nPos = pToolBox->GetItemPos( pToolBox->GetHighlightItemId() );
-            if( nPos != ToolBox::ITEM_NOTFOUND )
-                setFocusedObject( xContext->getAccessibleChild( nPos ) );
-                    //TODO: ToolBox::ImplToolItems::size_type -> sal_Int32!
+            try {
+                ToolBox::ImplToolItems::size_type nPos = pToolBox->GetItemPos( pToolBox->GetHighlightItemId() );
+                if( nPos != ToolBox::ITEM_NOTFOUND )
+                    setFocusedObject( xContext->getAccessibleChild( nPos ) );
+                        //TODO: ToolBox::ImplToolItems::size_type -> sal_Int32!
+            }
+            catch (const IndexOutOfBoundsException&)
+            {
+                SAL_WARN("vcl", "Accessible object has invalid index in parent");
+            }
         }
     }
 }
@@ -150,11 +158,17 @@ void AquaA11yFocusTracker::toolbox_open_floater(vcl::Window *pWindow)
             return;
         }
         if ( rxContext -> getAccessibleChildCount() > 0 ) {
-            Reference < XAccessible > rxAccessibleChild = rxContext -> getAccessibleChild( 0 );
-            if ( ! rxAccessibleChild.is() ) {
-                return;
+            try {
+                Reference < XAccessible > rxAccessibleChild = rxContext -> getAccessibleChild( 0 );
+                if ( ! rxAccessibleChild.is() ) {
+                    return;
+                }
+                setFocusedObject ( rxAccessibleChild );
             }
-            setFocusedObject ( rxAccessibleChild );
+            catch (const IndexOutOfBoundsException&)
+            {
+                SAL_WARN("vcl", "No valid accessible objects in parent");
+            }
         }
     }
 }

@@ -45,6 +45,7 @@
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
@@ -339,18 +340,24 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
             NSMutableArray * children = [ [ NSMutableArray alloc ] init ];
             Reference< XAccessibleContext > xContext( [ self accessibleContext ] );
 
-            sal_Int64 cnt = xContext -> getAccessibleChildCount();
-            for ( sal_Int64 i = 0; i < cnt; i++ ) {
-                Reference< XAccessible > xChild( xContext -> getAccessibleChild( i ) );
-                if( xChild.is() ) {
-                    Reference< XAccessibleContext > xChildContext( xChild -> getAccessibleContext() );
-                    // the menubar is already accessible (including Apple- and Application-Menu) through NSApplication => omit it here
-                    if ( xChildContext.is() && AccessibleRole::MENU_BAR != xChildContext -> getAccessibleRole() ) {
-                        id wrapper = [ AquaA11yFactory wrapperForAccessibleContext: xChildContext ];
-                        [ children addObject: wrapper ];
-                        [ wrapper release ];
+            try {
+                sal_Int64 cnt = xContext -> getAccessibleChildCount();
+                for ( sal_Int64 i = 0; i < cnt; i++ ) {
+                    Reference< XAccessible > xChild( xContext -> getAccessibleChild( i ) );
+                    if( xChild.is() ) {
+                        Reference< XAccessibleContext > xChildContext( xChild -> getAccessibleContext() );
+                        // the menubar is already accessible (including Apple- and Application-Menu) through NSApplication => omit it here
+                        if ( xChildContext.is() && AccessibleRole::MENU_BAR != xChildContext -> getAccessibleRole() ) {
+                            id wrapper = [ AquaA11yFactory wrapperForAccessibleContext: xChildContext ];
+                            [ children addObject: wrapper ];
+                            [ wrapper release ];
+                        }
                     }
                 }
+            }
+            catch (const IndexOutOfBoundsException&)
+            {
+                SAL_WARN("vcl", "Accessible object has invalid index in parent");
             }
 
             // if not already acting as RadioGroup now is the time to replace RadioButtons with RadioGroups and remove RadioButtons
@@ -1063,15 +1070,21 @@ static Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
             }
 
             if( bSafeToIterate ) {
-                for ( sal_Int64 i = 0; i < rxAccessibleContext -> getAccessibleChildCount(); i++ ) {
-                    Reference < XAccessible > rxAccessibleChild = rxAccessibleContext -> getAccessibleChild ( i );
-                    if ( rxAccessibleChild.is() && rxAccessibleChild -> getAccessibleContext().is() && rxAccessibleChild -> getAccessibleContext() -> getAccessibleRole() != AccessibleRole::LIST ) {
-                        Reference < XAccessibleContext > myHitChild = hitTestRunner ( point, rxAccessibleChild -> getAccessibleContext() );
-                        if ( myHitChild.is() ) {
-                            hitChild = myHitChild;
-                            break;
+                try {
+                    for ( sal_Int64 i = 0; i < rxAccessibleContext -> getAccessibleChildCount(); i++ ) {
+                        Reference < XAccessible > rxAccessibleChild = rxAccessibleContext -> getAccessibleChild ( i );
+                        if ( rxAccessibleChild.is() && rxAccessibleChild -> getAccessibleContext().is() && rxAccessibleChild -> getAccessibleContext() -> getAccessibleRole() != AccessibleRole::LIST ) {
+                            Reference < XAccessibleContext > myHitChild = hitTestRunner ( point, rxAccessibleChild -> getAccessibleContext() );
+                            if ( myHitChild.is() ) {
+                                hitChild = myHitChild;
+                                break;
+                            }
                         }
                     }
+                }
+                catch (const IndexOutOfBoundsException&)
+                {
+                    SAL_WARN("vcl", "Accessible object has invalid index in parent");
                 }
             }
         }
