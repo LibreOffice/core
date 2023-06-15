@@ -194,7 +194,7 @@ class BigPtrArrayPrinter(object):
             # libstdc++ unique_ptr is a std::tuple which contains multiple
             # _M_head_impl members and gdb may pick the wrong one by default
             # so have to manually cast it to the one that contains the array
-            self.blocks = array['m_ppInf']['_M_t']['_M_t'].cast(gdb.lookup_type("std::_Head_base<0, BlockInfo**, false>"))['_M_head_impl']
+            self.blocks = array['m_ppInf']['_M_t']['_M_t'].cast(gdb.lookup_type("std::_Head_base<0ul, BlockInfo**, false>"))['_M_head_impl']
             self.count = array['m_nSize']
             self.pos = 0
             self.block_count = array['m_nBlock']
