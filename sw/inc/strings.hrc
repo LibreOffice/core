@@ -152,6 +152,7 @@
 #define STR_POOLCOLL_LABEL_FRAME                NC_("STR_POOLCOLL_LABEL_FRAME", "Text")
 #define STR_POOLCOLL_LABEL_DRAWING              NC_("STR_POOLCOLL_LABEL_DRAWING", "Drawing")
 #define STR_POOLCOLL_LABEL_FIGURE               NC_("STR_POOLCOLL_LABEL_FIGURE", "Figure")
+#define STR_POOLCOLL_COMMENT                    NC_("STR_POOLCOLL_COMMENT", "Comment")
 #define STR_POOLCOLL_ENVELOPE_ADDRESS           NC_("STR_POOLCOLL_ENVELOPE_ADDRESS", "Addressee")
 #define STR_POOLCOLL_SEND_ADDRESS               NC_("STR_POOLCOLL_SEND_ADDRESS", "Sender")
 #define STR_POOLCOLL_TOX_IDXH                   NC_("STR_POOLCOLL_TOX_IDXH", "Index Heading")

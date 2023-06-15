@@ -556,7 +556,8 @@ const std::vector<OUString>& SwStyleNameMapper::GetExtraProgNameArray()
         "Addressee",
         "Sender",
         "Endnote",
-        "Drawing", // RES_POOLCOLL_LABEL_DRAWING
+        "Drawing",
+        "Comment", // RES_POOLCOLL_COMMENT
     };
     return s_aExtraProgNameArray;
 }

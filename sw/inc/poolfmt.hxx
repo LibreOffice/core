@@ -356,6 +356,8 @@ RES_POOLCOLL_SEND_ADDRESS,                              ///< Sender.
 RES_POOLCOLL_ENDNOTE,                                   ///< Endnotes.
 
 RES_POOLCOLL_LABEL_DRAWING,                             ///< Label drawing objects.
+RES_POOLCOLL_COMMENT,                                   ///< Comment
+
 RES_POOLCOLL_EXTRA_END,
 
 /// Group indices.

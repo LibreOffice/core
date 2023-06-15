@@ -386,7 +386,8 @@ const TranslateId STR_POOLCOLL_EXTRA_ARY[]
     STR_POOLCOLL_ENVELOPE_ADDRESS,
     STR_POOLCOLL_SEND_ADDRESS,
     STR_POOLCOLL_ENDNOTE,
-    STR_POOLCOLL_LABEL_DRAWING
+    STR_POOLCOLL_LABEL_DRAWING,
+    STR_POOLCOLL_COMMENT
 };
 
 const TranslateId STR_POOLCOLL_REGISTER_ARY[] =
@@ -1009,6 +1010,13 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
                 aSet.Put( aLN );
             }
             break;
+
+        case RES_POOLCOLL_COMMENT:       // Comment
+            {
+                SetAllScriptItem(aSet, SvxFontHeightItem(PT_10, 100, RES_CHRATR_FONTSIZE));
+            }
+            break;
+
         // User defined indexes:
         case RES_POOLCOLL_TOX_USERH:            // Header
             lcl_SetRegister( m_rDoc, aSet, 0, true, false );
