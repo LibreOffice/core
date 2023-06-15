@@ -2755,7 +2755,7 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
         }
 
         // write font dict
-        auto nFontDict = -1;
+        sal_Int32 nFontDict = -1;
         if (!aUsedFonts.empty())
         {
             nFontDict = createObject();
