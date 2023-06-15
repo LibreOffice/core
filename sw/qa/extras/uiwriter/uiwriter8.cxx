@@ -2653,6 +2653,27 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf73483)
     assertXPath(pXml, para_style_path, "master-page-name", "Right_20_Page");
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf62032ApplyStyle)
+{
+    createSwDoc("tdf62032_apply_style.odt");
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtSh = pDoc->GetDocShell()->GetWrtShell();
+
+    pWrtSh->Down(/*bSelect=*/false);
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+        { "Style", uno::Any(OUString("A 2")) },
+        { "FamilyName", uno::Any(OUString("ParagraphStyles")) },
+    });
+    dispatchCommand(mxComponent, ".uno:StyleApply", aPropertyValues);
+
+    // Without the fix in place, it fails with:
+    // - Expected: 1.1
+    // - Actual  : 2
+    CPPUNIT_ASSERT_EQUAL(OUString("1.1"),
+                         getProperty<OUString>(getParagraph(2), "ListLabelString").trim());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
