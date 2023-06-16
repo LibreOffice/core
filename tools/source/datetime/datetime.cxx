@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <tools/datetime.hxx>
+#include <tools/duration.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 
@@ -152,6 +153,13 @@ DateTime& DateTime::operator -=( const tools::Time& rTime )
     return *this;
 }
 
+DateTime& DateTime::operator +=( const tools::Duration& rDuration )
+{
+    AddDays(rDuration.GetDays());
+    operator+=(rDuration.GetTime());
+    return *this;
+}
+
 DateTime operator +( const DateTime& rDateTime, sal_Int32 nDays )
 {
     DateTime aDateTime( rDateTime );
@@ -180,27 +188,19 @@ DateTime operator -( const DateTime& rDateTime, const tools::Time& rTime )
     return aDateTime;
 }
 
+DateTime operator +( const DateTime& rDateTime, const tools::Duration& rDuration )
+{
+    DateTime aDateTime(rDateTime);
+    aDateTime.AddDays( rDuration.GetDays());
+    aDateTime += rDuration.GetTime();
+    return aDateTime;
+}
+
 void DateTime::AddTime( double fTimeInDays )
 {
-    double fInt, fFrac;
-    if ( fTimeInDays < 0.0 )
-    {
-        fInt = ::rtl::math::approxCeil( fTimeInDays );
-        fFrac = fInt <= fTimeInDays ? 0.0 : fTimeInDays - fInt;
-    }
-    else
-    {
-        fInt = ::rtl::math::approxFloor( fTimeInDays );
-        fFrac = fInt >= fTimeInDays ? 0.0 : fTimeInDays - fInt;
-    }
-    AddDays( sal_Int32(fInt) );     // full days
-    if ( fFrac )
-    {
-        tools::Time aTime(0);  // default ctor calls system time, we don't need that
-        fFrac *= ::tools::Time::nanoSecPerDay;   // time expressed in nanoseconds
-        aTime.MakeTimeFromNS( static_cast<sal_Int64>(fFrac) );    // method handles negative ns
-        operator+=( aTime );
-    }
+    // Use Duration to diminish floating point accuracy errors.
+    tools::Duration aDuration(fTimeInDays);
+    operator+=(aDuration);
 }
 
 DateTime operator +( const DateTime& rDateTime, double fTimeInDays )

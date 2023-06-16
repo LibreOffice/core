@@ -708,7 +708,8 @@ public:
                                  sc::UpdatedRangeNames& rIndexes) const;
     void        Fill( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         sal_uInt64 nFillCount, FillDir eFillDir, FillCmd eFillCmd, FillDateCmd eFillDateCmd,
-                        double nStepValue, double nMaxValue, ScProgress* pProgress);
+                        double nStepValue, const tools::Duration& rDurationStep,
+                        double nMaxValue, ScProgress* pProgress);
     OUString    GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW nEndY );
 
     void UpdateSelectionFunction( ScFunctionData& rData, const ScMarkData& rMark );
@@ -1179,13 +1180,14 @@ private:
     void        FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 sal_uInt64 nFillCount, FillDir eFillDir, FillCmd eFillCmd,
                                 FillDateCmd eFillDateCmd,
-                                double nStepValue, double nMaxValue, sal_uInt16 nMinDigits,
+                                double nStepValue, const tools::Duration& rDurationStep,
+                                double nMaxValue, sal_uInt16 nMinDigits,
                                 bool bAttribs, ScProgress* pProgress,
                                 bool bSkipOverlappedCells = false,
                                 std::vector<sal_Int32>* pNonOverlappedCellIdx = nullptr);
     void        FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 FillCmd& rCmd, FillDateCmd& rDateCmd,
-                                double& rInc, sal_uInt16& rMinDigits,
+                                double& rInc, tools::Duration& rDuration, sal_uInt16& rMinDigits,
                                 ScUserListData*& rListData, sal_uInt16& rListIndex,
                                 bool bHasFiltered, bool& rSkipOverlappedCells,
                                 std::vector<sal_Int32>& rNonOverlappedCellIdx );

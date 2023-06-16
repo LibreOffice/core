@@ -29,6 +29,7 @@
 #include <vcl/svapp.hxx>
 #include <osl/thread.hxx>
 #include <osl/diagnose.h>
+#include <tools/duration.hxx>
 #include <document.hxx>
 #include <attrib.hxx>
 #include <table.hxx>
@@ -1175,7 +1176,7 @@ void ScDocument::Fill(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScProg
         {
             maTabs[rTab]->Fill(nCol1, nRow1, nCol2, nRow2,
                             nFillCount, eFillDir, eFillCmd, eFillDateCmd,
-                            nStepValue, nMaxValue, pProgress);
+                            nStepValue, tools::Duration(), nMaxValue, pProgress);
             RefreshAutoFilter(aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aEnd.Row(), rTab);
         }
     }
