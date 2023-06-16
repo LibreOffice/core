@@ -2687,6 +2687,18 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_ListsWithNumFormat)
     assertXPathNoAttribute(pDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:ol[4]", "type");
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTdf155871)
+{
+    createSwDoc("tdf155871.fodt");
+    ExportToReqif();
+
+    SvMemoryStream aStream;
+    WrapReqifFromTempFile(aStream);
+    xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
+    // Without the fix in place, this would fail
+    CPPUNIT_ASSERT(pDoc);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
