@@ -1790,7 +1790,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
     OUString resultString(str.getStr(), str.getLength(), RTL_TEXTENCODING_ASCII_US,
                           RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT|RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT|RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT);
-    if (resultString.indexOf("office:mimetype=\"application/vnd.oasis.opendocument.text\"") == -1)
+    if (!resultString.startsWith("<?xml") || resultString.indexOf("office:mimetype=\"application/vnd.oasis.opendocument.text\"") == -1)
         return false;
 
     Reference<css::frame::XDesktop2> xDesktop = css::frame::Desktop::create(comphelper::getProcessComponentContext());
