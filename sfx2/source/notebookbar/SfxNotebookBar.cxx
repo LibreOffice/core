@@ -290,26 +290,6 @@ bool SfxNotebookBar::IsActive(bool bConsiderSingleToolbar)
     return false;
 }
 
-void SfxNotebookBar::ResetActiveToolbarModeToDefault(vcl::EnumContext::Application eApp)
-{
-    const OUString appName( lcl_getAppName( eApp ) );
-
-    if ( appName.isEmpty() )
-        return;
-
-    const OUString aPath = "org.openoffice.Office.UI.ToolbarMode/Applications/" + appName;
-
-    utl::OConfigurationTreeRoot aAppNode(
-                                        ::comphelper::getProcessComponentContext(),
-                                        aPath,
-                                        true);
-    if ( !aAppNode.isValid() )
-        return;
-
-    aAppNode.setNodeValue( "Active", Any( OUString( "Default" ) ) );
-    aAppNode.commit();
-}
-
 void SfxNotebookBar::ExecMethod(SfxBindings& rBindings, const OUString& rUIName)
 {
     // Save active UI file name
@@ -374,18 +354,6 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
             || bReloadNotebookbar || comphelper::LibreOfficeKit::isActive())
         {
             const SfxViewShell* pViewShell = SfxViewShell::Current();
-
-            // Notebookbar was loaded too early what caused:
-            //   * in LOK: Paste Special feature was incorrectly initialized
-            // Skip first request so Notebookbar will be initialized after document was loaded
-            static std::map<const void*, bool> bSkippedFirstInit;
-            if (comphelper::LibreOfficeKit::isActive() && eApp == vcl::EnumContext::Application::Writer
-                && bSkippedFirstInit.find(pViewShell) == bSkippedFirstInit.end())
-            {
-                bSkippedFirstInit[pViewShell] = true;
-                ResetActiveToolbarModeToDefault(eApp);
-                return false;
-            }
 
             RemoveListeners(pSysWindow);
 
