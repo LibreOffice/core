@@ -200,6 +200,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/swriter/ui/templatedialog2.ui"
         || rUIFile == u"modules/swriter/ui/templatedialog8.ui"
         || rUIFile == u"modules/swriter/ui/textgridpage.ui"
+        || rUIFile == u"modules/swriter/ui/titlepage.ui"
         || rUIFile == u"modules/swriter/ui/tocdialog.ui"
         || rUIFile == u"modules/swriter/ui/tocentriespage.ui"
         || rUIFile == u"modules/swriter/ui/tocindexpage.ui"

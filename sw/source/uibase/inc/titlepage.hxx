@@ -31,6 +31,7 @@ private:
     const SwPageDesc* mpNormalDesc;
 
     std::unique_ptr<weld::RadioButton> m_xUseExistingPagesRB;
+    std::unique_ptr<weld::RadioButton> m_xInsertNewPagesRB; // required by LOK JSDialogs
     std::unique_ptr<weld::SpinButton> m_xPageCountNF;
     std::unique_ptr<weld::RadioButton> m_xDocumentStartRB;
     std::unique_ptr<weld::RadioButton> m_xPageStartRB;
