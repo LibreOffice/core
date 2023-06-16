@@ -82,7 +82,7 @@ SwModelessRedlineAcceptDlg::SwModelessRedlineAcceptDlg(
     SfxBindings* _pBindings, SwChildWinWrapper* pChild, weld::Window *pParent)
     : SfxModelessDialogController(_pBindings, pChild, pParent,
         "svx/ui/acceptrejectchangesdialog.ui", "AcceptRejectChangesDialog")
-    , m_xContentArea(m_xDialog->weld_content_area())
+    , m_xContentArea(m_xBuilder->weld_container("container"))
     , m_pChildWin(pChild)
 {
     m_xImplDlg.reset(new SwRedlineAcceptDlg(m_xDialog, m_xBuilder.get(), m_xContentArea.get()));
