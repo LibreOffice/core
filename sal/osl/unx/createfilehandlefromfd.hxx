@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SAL_OSL_UNX_CREATEFILEHANDLEFROMFD_HXX
-#define INCLUDED_SAL_OSL_UNX_CREATEFILEHANDLEFROMFD_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -18,7 +17,5 @@ namespace osl::detail
 {
 oslFileHandle createFileHandleFromFD(int fd); // defined in file.cxx
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
