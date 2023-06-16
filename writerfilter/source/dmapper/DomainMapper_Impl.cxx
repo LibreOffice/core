@@ -3008,7 +3008,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
         }
         else
         {
-            if (m_bStartTOC || m_bStartIndex || m_bStartBibliography || m_nStartGenericField != 0)
+            if (IsInTOC() || m_bStartIndex || m_bStartBibliography || m_nStartGenericField != 0)
             {
                 if (IsInHeaderFooter() && !m_bStartTOCHeaderFooter)
                 {
