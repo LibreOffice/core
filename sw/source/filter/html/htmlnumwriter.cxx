@@ -326,7 +326,7 @@ Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
         else
             aTag = OOO_STRING_SVTOOLS_HTML_orderlist;
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + aTag), false );
-        if (rWrt.mbXHTML && i != nNextDepth + 1)
+        if (rWrt.mbXHTML && (i != nNextDepth + 1 || (i != 1 && rNextInfo.IsNumbered())))
         {
             // for all skipped sublevels, close a li
             HTMLOutFuncs::Out_AsciiTag(
