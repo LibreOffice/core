@@ -8026,7 +8026,7 @@ SfxInt16Item PageColumnType SID_ATTR_PAGE_COLUMN
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
