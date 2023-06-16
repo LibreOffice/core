@@ -26,6 +26,11 @@
 
 #include <iomanip>
 
+namespace tools
+{
+class Duration;
+}
+
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC DateTime : public Date, public tools::Time
 {
 public:
@@ -83,6 +88,8 @@ public:
     void            AddTime( double fTimeInDays );
     DateTime&       operator +=( const tools::Time& rTime );
     DateTime&       operator -=( const tools::Time& rTime );
+    /** Duration can be negative, so adding it will subtract its value. */
+    DateTime&       operator +=( const tools::Duration& rDuration );
 
     TOOLS_DLLPUBLIC friend DateTime operator +( const DateTime& rDateTime, sal_Int32 nDays );
     TOOLS_DLLPUBLIC friend DateTime operator -( const DateTime& rDateTime, sal_Int32 nDays );
@@ -94,6 +101,8 @@ public:
     TOOLS_DLLPUBLIC friend double   operator -( const DateTime& rDateTime1, const DateTime& rDateTime2 );
     TOOLS_DLLPUBLIC friend sal_Int64 operator -( const DateTime& rDateTime, const Date& rDate )
                         { return static_cast<const Date&>(rDateTime) - rDate; }
+    /** Duration can be negative, so adding it will subtract its value. */
+    TOOLS_DLLPUBLIC friend DateTime operator +( const DateTime& rDateTime, const tools::Duration& rDuration );
 
     DateTime&       operator =( const DateTime& rDateTime );
     DateTime&       operator =( const css::util::DateTime& rUDateTime );
