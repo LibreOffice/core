@@ -153,9 +153,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf155819)
     assertXPath(pDocument, "/primitive2D/transform/transform", 4);
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testFilterSaturate)
+CPPUNIT_TEST_FIXTURE(Test, testFeColorMatrix)
 {
-    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/filterSaturate.svg");
+    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/filterFeColorMatrix.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
@@ -163,20 +163,10 @@ CPPUNIT_TEST_FIXTURE(Test, testFilterSaturate)
 
     CPPUNIT_ASSERT (pDocument);
 
-    assertXPath(pDocument, "/primitive2D/transform/modifiedColor", "modifier", "saturate");
-}
-
-CPPUNIT_TEST_FIXTURE(Test, testFilterLuminanceToAlpha)
-{
-    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/filterLuminanceToAlpha.svg");
-    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
-
-    drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequence);
-
-    CPPUNIT_ASSERT (pDocument);
-
-    assertXPath(pDocument, "/primitive2D/transform/modifiedColor", "modifier", "luminance_to_alpha");
+    //assertXPath(pDocument, "/primitive2D/transform/mask/transform[1]/modifiedColor", "modifier", "matrix");
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform[2]/modifiedColor", "modifier", "saturate");
+    //assertXPath(pDocument, "/primitive2D/transform/mask/transform[3]/modifiedColor", "modifier", "hueRotate");
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform[4]/modifiedColor", "modifier", "luminance_to_alpha");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFilterFeGaussianBlur)
