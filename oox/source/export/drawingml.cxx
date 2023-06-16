@@ -757,11 +757,15 @@ void DrawingML::WriteGradientFill(
     {
         // extract and correct/process ColorStops
         basegfx::utils::prepareColorStops(*pColorGradient, aColorStops, aSingleColor);
-    }
 
+        // tdf#155827 Convert 'axial' to 'linear' before synchronize and for each gradient separate.
+        if (aColorStops.size() > 0 && awt::GradientStyle_AXIAL == pColorGradient->GetGradientStyle())
+            aColorStops.doApplyAxial();
+    }
     if (nullptr != pTransparenceGradient)
     {
         // remember basic Gradient definition to use
+        // So we can get the gradient geometry in any case from pGradient.
         if (nullptr == pGradient)
         {
             pGradient = pTransparenceGradient;
@@ -769,6 +773,11 @@ void DrawingML::WriteGradientFill(
 
         // extract and correct/process AlphaStops
         basegfx::utils::prepareColorStops(*pTransparenceGradient, aAlphaStops, aSingleAlpha);
+        if (aAlphaStops.size() > 0
+            && awt::GradientStyle_AXIAL == pTransparenceGradient->GetGradientStyle())
+        {
+            aAlphaStops.doApplyAxial();
+        }
     }
 
     if (nullptr == pGradient)
@@ -779,18 +788,17 @@ void DrawingML::WriteGradientFill(
         return;
     }
 
-    // apply steps if used. Need to do that before synchronizeColorStops
-    // since that may add e.g. for AlphaStops all-the-same no-data entries,
-    // so the number of entries might change
+    // Apply steps if used. That increases the number of stops and thus needs to be done before
+    // synchronize.
     if (pGradient->GetSteps())
     {
         aColorStops.doApplySteps(pGradient->GetSteps());
-        aAlphaStops.doApplySteps(pGradient->GetSteps());
+        // transparency gradients are always automatic, so do not have steps.
     }
 
     // synchronize ColorStops and AlphaStops as preparation to export
     // so also gradients 'coupled' indirectly using the 'FillTransparenceGradient'
-    // method (at import time) will be exported again
+    // method (at import time) will be exported again.
     basegfx::utils::synchronizeColorStops(aColorStops, aAlphaStops, aSingleColor, aSingleAlpha);
 
     if (aColorStops.size() != aAlphaStops.size())
@@ -801,44 +809,23 @@ void DrawingML::WriteGradientFill(
         return;
     }
 
-    bool bRadialOrEllipticalOrRectOrSquare(false);
-    bool bLinear(false);
-    bool bAxial(false);
-
-    switch (pGradient->GetGradientStyle())
+    bool bLinearOrAxial(awt::GradientStyle_LINEAR == pGradient->GetGradientStyle()
+                        || awt::GradientStyle_AXIAL == pGradient->GetGradientStyle());
+    if (!bLinearOrAxial)
     {
-        case awt::GradientStyle_LINEAR:
-        {
-            // remember being linear, nothing else to be done
-            bLinear = true;
-            break;
-        }
-        case awt::GradientStyle_AXIAL:
-        {
-            // use tooling to convert from GradientStyle_AXIAL to GradientStyle_LINEAR
-            // NOTE: Since aColorStops and aAlphaStops are already synched (see
-            // synchronizeColorStops above) this can be done directly here
-            aColorStops.doApplyAxial();
-            aAlphaStops.doApplyAxial();
-
-            // remember being axial
-            bAxial = true;
-            break;
-        }
-        default:
         // case awt::GradientStyle_RADIAL:
         // case awt::GradientStyle_ELLIPTICAL:
         // case awt::GradientStyle_RECT:
         // case awt::GradientStyle_SQUARE:
-        {
-            // all these types need the gradients to be mirrored
-            aColorStops.reverseColorStops();
-            aAlphaStops.reverseColorStops();
-
-            bRadialOrEllipticalOrRectOrSquare = true;
-            break;
-        }
+        // all these types need the gradients to be mirrored
+        aColorStops.reverseColorStops();
+        aAlphaStops.reverseColorStops();
     }
+
+    // If there were one stop, prepareColorStops() method would have cleared aColorStops, same for
+    // aAlphaStops. In case of empty stops vectors synchronizeColorStops() method creates two stops
+    // for each. So at this point we have at least two stops and can fulfill the requirement of
+    // <gsLst> element to have at least two child elements.
 
     // export GradientStops (with alpha)
     mpFS->startElementNS(XML_a, XML_gsLst);
@@ -858,21 +845,21 @@ void DrawingML::WriteGradientFill(
 
     mpFS->endElementNS( XML_a, XML_gsLst );
 
-    if (bLinear || bAxial)
+    if (bLinearOrAxial)
     {
-        // cases where gradient rotation has to be exported
+        // CT_LinearShadeProperties, cases where gradient rotation has to be exported
+        // 'scaled' does not exist in LO, so only 'ang'.
         const sal_Int16 nAngle(pGradient->GetAngle());
         mpFS->singleElementNS(
             XML_a, XML_lin, XML_ang,
             OString::number(((3600 - static_cast<sal_Int32>(nAngle) + 900) * 6000) % 21600000));
     }
-
-    if (bRadialOrEllipticalOrRectOrSquare)
+    else
     {
-        // cases where gradient path has to be exported
+        // CT_PathShadeProperties, cases where gradient path has to be exported
+        // Concentric fill is not yet implemented, therefore no type 'shape', only 'circle' or 'rect'
         const bool bCircle(pGradient->GetGradientStyle() == awt::GradientStyle_RADIAL ||
             pGradient->GetGradientStyle() == awt::GradientStyle_ELLIPTICAL);
-
         WriteGradientPath(*pGradient, mpFS, bCircle);
     }
 }
