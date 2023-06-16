@@ -173,17 +173,16 @@ class XModifiable2(unittest.TestCase):
         xDoc = self._uno.openTemplateFromTDOC('WriteProtected.odt')
 
         # perform unit test:
-        #       it is unable to set modified flag using text editing
-        #       when modification of the flag was disabled as
+        #       it is able to set modified flag using text editing despite
         #       ODT file was marked to be opened as read-only
-        self.assertFalse(xDoc.isSetModifiedEnabled())
+        self.assertTrue(xDoc.isSetModifiedEnabled())
         self.assertFalse(xDoc.isModified())
 
         cursor = xDoc.Text.createTextCursor()
         xDoc.Text.insertString(cursor, "The first paragraph", 0)
 
-        self.assertFalse(xDoc.isSetModifiedEnabled())
-        self.assertFalse(xDoc.isModified())
+        self.assertTrue(xDoc.isSetModifiedEnabled())
+        self.assertTrue(xDoc.isModified())
 
         # clean up
         xDoc.close(True)
