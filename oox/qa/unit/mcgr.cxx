@@ -92,7 +92,7 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testStepCount)
     // The default way of load and save would have produced 2 stops, but we need start stop, end stop
     // and 3*2 inner stops.
     assertXPath(pXmlDoc, sPath + "a:gs", 8);
-    // A sharp color changes nees a pair of two stops with same offset.
+    // A sharp color changes needs a pair of two stops with same offset.
     assertXPath(pXmlDoc, sPath + "a:gs[@pos='25000']", 2);
     assertXPath(pXmlDoc, sPath + "a:gs[@pos='50000']", 2);
     assertXPath(pXmlDoc, sPath + "a:gs[@pos='75000']", 2);
