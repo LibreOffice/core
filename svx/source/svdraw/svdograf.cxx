@@ -480,22 +480,20 @@ Size SdrGrafObj::getOriginalSize() const
 {
     Size aSize = GetGrafPrefSize();
 
-    if (aGrafInfo.IsCropped())
-    {
-        const tools::Long aCroppedTop(OutputDevice::LogicToLogic(aGrafInfo.GetTopCrop(), getSdrModelFromSdrObject().GetScaleUnit(), GetGrafPrefMapMode().GetMapUnit()));
-        const tools::Long aCroppedBottom(OutputDevice::LogicToLogic(aGrafInfo.GetBottomCrop(), getSdrModelFromSdrObject().GetScaleUnit(), GetGrafPrefMapMode().GetMapUnit()));
-        const tools::Long aCroppedLeft(OutputDevice::LogicToLogic(aGrafInfo.GetLeftCrop(), getSdrModelFromSdrObject().GetScaleUnit(), GetGrafPrefMapMode().GetMapUnit()));
-        const tools::Long aCroppedRight(OutputDevice::LogicToLogic(aGrafInfo.GetRightCrop(), getSdrModelFromSdrObject().GetScaleUnit(), GetGrafPrefMapMode().GetMapUnit()));
-        const tools::Long aCroppedWidth(aSize.getWidth() - aCroppedLeft + aCroppedRight);
-        const tools::Long aCroppedHeight(aSize.getHeight() - aCroppedTop + aCroppedBottom);
-
-        aSize = Size ( aCroppedWidth, aCroppedHeight);
-    }
-
-    if ( GetGrafPrefMapMode().GetMapUnit() == MapUnit::MapPixel )
+    if (GetGrafPrefMapMode().GetMapUnit() == MapUnit::MapPixel)
         aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, MapMode(getSdrModelFromSdrObject().GetScaleUnit()));
     else
         aSize = OutputDevice::LogicToLogic(aSize, GetGrafPrefMapMode(), MapMode(getSdrModelFromSdrObject().GetScaleUnit()));
+
+    if (aGrafInfo.IsCropped())
+    {
+        const tools::Long aCroppedWidth(aSize.getWidth() - aGrafInfo.GetLeftCrop()
+                                        - aGrafInfo.GetRightCrop());
+        const tools::Long aCroppedHeight(aSize.getHeight() - aGrafInfo.GetTopCrop()
+                                         - aGrafInfo.GetBottomCrop());
+
+        aSize = Size(aCroppedWidth, aCroppedHeight);
+    }
 
     return aSize;
 }
