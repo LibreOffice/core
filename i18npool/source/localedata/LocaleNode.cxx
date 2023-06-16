@@ -1459,7 +1459,7 @@ void LCIndexNode::generateCode (const OFileWriter &of) const
     of.writeInt(nbOfPageWords);
     of.writeAsciiString(";\n\n");
 
-    // MSVC doesnt like zero sized arrays
+    // MSVC doesn't like zero sized arrays
     if (nbOfPageWords == 0)
     {
         // generate dummy array, reuse unicodeScript0 for dummy entry
