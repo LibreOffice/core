@@ -835,10 +835,10 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="PrintPreviewD">
+      <object class="GtkMenuItem" id="WebHtmlD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:PrintPreview</property>
+        <property name="action_name">.uno:WebHtml</property>
       </object>
     </child>
     <child>

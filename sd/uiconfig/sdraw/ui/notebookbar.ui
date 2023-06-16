@@ -554,10 +554,10 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuFile-PrintPreview">
+      <object class="GtkMenuItem" id="MenuFile-WebHtml">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:PrintPreview</property>
+        <property name="action_name">.uno:WebHtml</property>
       </object>
     </child>
     <child>
@@ -2896,9 +2896,9 @@
                                 <property name="toolbar_style">both-horiz</property>
                                 <property name="show_arrow">False</property>
                                 <child>
-                                  <object class="GtkToolButton" id="File-PrintPreview1">
+                                  <object class="GtkToolButton" id="File-WebHtml">
                                     <property name="visible">True</property>
-                                    <property name="action_name">.uno:PrintPreview</property>
+                                    <property name="action_name">.uno:WebHtml</property>
                                     <property name="use_underline">True</property>
                                   </object>
                                   <packing>
