@@ -21,6 +21,7 @@
 
 #include <config_options.h>
 #include <basegfx/basegfxdllapi.h>
+#include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <rtl/ustring.hxx>
@@ -231,6 +232,33 @@ namespace basegfx
         // compare operator
         SAL_DLLPRIVATE virtual bool operator==(const BColorModifier& rCompare) const override;
 
+        // compute modified color
+        SAL_DLLPRIVATE virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
+        SAL_DLLPRIVATE virtual OUString getModifierName() const override;
+    };
+
+    /** Apply matrix
+        This derivation is used for the svg importer and does exactly what SVG
+        defines for this needed case.
+
+        See:
+        https://www.w3.org/TR/filter-effects/#elementdef-fecolormatrix
+    */
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_matrix final : public BColorModifier
+    {
+    private:
+        basegfx::B3DHomMatrix       maMatrix;
+
+    public:
+        BColorModifier_matrix(basegfx::B3DHomMatrix aMatrix)
+        :   maMatrix(aMatrix)
+        {
+        }
+
+        virtual ~BColorModifier_matrix() override;
+
+        // compare operator
+        SAL_DLLPRIVATE virtual bool operator==(const BColorModifier& rCompare) const override;
         // compute modified color
         SAL_DLLPRIVATE virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
         SAL_DLLPRIVATE virtual OUString getModifierName() const override;

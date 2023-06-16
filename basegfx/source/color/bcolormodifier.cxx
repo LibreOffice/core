@@ -142,6 +142,38 @@ namespace basegfx
         return "interpolate";
     }
 
+    BColorModifier_matrix::~BColorModifier_matrix()
+    {
+    }
+
+    bool BColorModifier_matrix::operator==(const BColorModifier& rCompare) const
+    {
+        const BColorModifier_matrix* pCompare = dynamic_cast< const BColorModifier_matrix* >(&rCompare);
+
+        if(!pCompare)
+        {
+            return false;
+        }
+
+        return maMatrix == pCompare->maMatrix;
+    }
+
+    ::basegfx::BColor BColorModifier_matrix::getModifiedColor(const ::basegfx::BColor& aSourceColor) const
+    {
+        basegfx::B3DHomMatrix aColorMatrix;
+        aColorMatrix.set(0, 0, aSourceColor.getRed());
+        aColorMatrix.set(1, 0, aSourceColor.getGreen());
+        aColorMatrix.set(2, 0, aSourceColor.getBlue());
+
+        aColorMatrix = maMatrix * aColorMatrix;
+        return ::basegfx::BColor(aColorMatrix.get(0, 0), aColorMatrix.get(1, 0), aColorMatrix.get(2, 0));
+    }
+
+    OUString BColorModifier_matrix::getModifierName() const
+    {
+        return "matrix";
+    }
+
     BColorModifier_saturate::BColorModifier_saturate(double fValue)
     {
         maSatMatrix.set(0, 0, 0.213 + 0.787 * fValue);

@@ -53,6 +53,10 @@ void SvgFeColorMatrixNode::parseAttribute(const OUString& /*rTokenName*/, SVGTok
                 {
                     maType = ColorType::HueRotate;
                 }
+                else if (o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"matrix"))
+                {
+                    maType = ColorType::Matrix;
+                }
             }
             break;
         }
@@ -97,6 +101,15 @@ void SvgFeColorMatrixNode::apply(drawinglayer::primitive2d::Primitive2DContainer
             new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
                 std::move(rTarget), std::make_shared<basegfx::BColorModifier_hueRotate>(
                                         basegfx::deg2rad(aNum.getNumber()))));
+        rTarget = drawinglayer::primitive2d::Primitive2DContainer{ xRef };
+    }
+    else if (maType == ColorType::Matrix)
+    {
+        basegfx::B3DHomMatrix aMatrix = readFilterMatrix(maValuesContent, *this);
+
+        const drawinglayer::primitive2d::Primitive2DReference xRef(
+            new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
+                std::move(rTarget), std::make_shared<basegfx::BColorModifier_matrix>(aMatrix)));
         rTarget = drawinglayer::primitive2d::Primitive2DContainer{ xRef };
     }
 }
