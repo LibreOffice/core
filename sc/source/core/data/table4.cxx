@@ -28,6 +28,7 @@
 #include <vcl/keycodes.hxx>
 #include <rtl/math.hxx>
 #include <unotools/charclass.hxx>
+#include <tools/duration.hxx>
 #include <osl/diagnose.h>
 
 #include <attrib.hxx>
@@ -215,32 +216,20 @@ double approxDiff( double a, double b )
     return rtl::math::round(c, -std::max(nExp, nExpArg));
 }
 
-double approxTimeDiff( double a, double b )
+double approxTypedDiff( double a, double b, bool bTime, tools::Duration& rDuration )
 {
-    // Scale to hours, round to "nanohours" (multiple nanoseconds), scale back.
-    // Get back 0.0416666666666667 instead of 0.041666666700621136 or
-    // 0.041666666664241347 (raw a-b) for one hour, or worse the approxDiff()
-    // 0.041666666659999997 value. Though there is no such correct value,
-    // IEEE-754 nearest values are
-    // 0.041666666666666664353702032030923874117434024810791015625
-    // (0x3FA5555555555555) and
-    // 0.04166666666666667129259593593815225176513195037841796875
-    // (0x3FA5555555555556).
-    // This works also for a diff of seconds, unless corner cases would be
-    // discovered, which would make it necessary to ditch the floating point
-    // and convert to/from time structure values instead.
-    return rtl::math::round((a - b) * 24, 9) / 24;
-}
-
-double approxTypedDiff( double a, double b, bool bTime )
-{
-    return bTime ? approxTimeDiff( a, b) : approxDiff( a, b);
+    if (bTime)
+    {
+        rDuration = tools::Duration(a - b);
+        return rDuration.GetInDays();
+    }
+    return approxDiff( a, b);
 }
 }
 
 void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             FillCmd& rCmd, FillDateCmd& rDateCmd,
-                            double& rInc, sal_uInt16& rMinDigits,
+                            double& rInc, tools::Duration& rDuration, sal_uInt16& rMinDigits,
                             ScUserListData*& rListData, sal_uInt16& rListIndex,
                             bool bHasFiltered, bool& rSkipOverlappedCells,
                             std::vector<sal_Int32>& rNonOverlappedCellIdx)
@@ -248,6 +237,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     OSL_ENSURE( nCol1==nCol2 || nRow1==nRow2, "FillAnalyse: invalid range" );
 
     rInc = 0.0;
+    rDuration = tools::Duration();
     rMinDigits = 0;
     rListData = nullptr;
     rCmd = FILL_SIMPLE;
@@ -413,6 +403,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 }
                 else if (nValueCount >= 2)
                 {
+                    tools::Duration aDuration;
                     for (SCSIZE i = 1; i < nValueCount && bVal; i++)
                     {
                         aPrevCell = aCurrCell;
@@ -421,11 +412,16 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         aCurrCell = GetCellValue(nColCurr, nRowCurr);
                         if (aCurrCell.getType() == CELLTYPE_VALUE)
                         {
+                            const bool bTime = (nCurrCellFormatType == SvNumFormatType::TIME ||
+                                    nCurrCellFormatType == SvNumFormatType::DATETIME);
                             double nDiff = approxTypedDiff(aCurrCell.getDouble(), aPrevCell.getDouble(),
-                                    (nCurrCellFormatType == SvNumFormatType::TIME ||
-                                     nCurrCellFormatType == SvNumFormatType::DATETIME));
+                                    bTime, aDuration);
                             if (i == 1)
+                            {
                                 rInc = nDiff;
+                                if (bTime)
+                                    rDuration = aDuration;
+                            }
                             if (!::rtl::math::approxEqual(nDiff, rInc, 13))
                                 bVal = false;
                             else if ((aCurrCell.getDouble() == 0.0 || aCurrCell.getDouble() == 1.0)
@@ -645,9 +641,10 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         {
             if (nCount > 1)
             {
+                tools::Duration aDuration;
                 double nVal1 = aFirstCell.getDouble();
                 double nVal2 = GetValue(nCol+nAddX, nRow+nAddY);
-                rInc = approxTypedDiff( nVal2, nVal1, bTime);
+                rInc = approxTypedDiff( nVal2, nVal1, bTime, aDuration);
                 nCol = sal::static_int_cast<SCCOL>( nCol + nAddX );
                 nRow = sal::static_int_cast<SCROW>( nRow + nAddY );
                 bool bVal = true;
@@ -657,7 +654,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     if (aCell.getType() == CELLTYPE_VALUE)
                     {
                         nVal2 = aCell.getDouble();
-                        double nDiff = approxTypedDiff( nVal2, nVal1, bTime);
+                        double nDiff = approxTypedDiff( nVal2, nVal1, bTime, aDuration);
                         if ( !::rtl::math::approxEqual( nDiff, rInc, 13 ) )
                             bVal = false;
                         else if ((nVal2 == 0.0 || nVal2 == 1.0) &&
@@ -670,6 +667,8 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         bVal = false;
                     nCol = sal::static_int_cast<SCCOL>( nCol + nAddX );
                     nRow = sal::static_int_cast<SCROW>( nRow + nAddY );
+                    if (bVal && bTime)
+                        rDuration = aDuration;
                 }
                 if (bVal)
                     rCmd = FILL_LINEAR;
@@ -1092,6 +1091,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         FillCmd eFillCmd;
         FillDateCmd eDateCmd = {};
         double nInc;
+        tools::Duration aDurationInc;
         sal_uInt16 nMinDigits;
         ScUserListData* pListData = nullptr;
         sal_uInt16 nListIndex;
@@ -1100,12 +1100,12 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         if (bVertical)
             FillAnalyse(static_cast<SCCOL>(nCol),nRow1,
                     static_cast<SCCOL>(nCol),nRow2, eFillCmd,eDateCmd,
-                    nInc, nMinDigits, pListData, nListIndex,
+                    nInc, aDurationInc, nMinDigits, pListData, nListIndex,
                     bHasFiltered, bSkipOverlappedCells, aNonOverlappedCellIdx);
         else
             FillAnalyse(nCol1,static_cast<SCROW>(nRow),
                     nCol2,static_cast<SCROW>(nRow), eFillCmd,eDateCmd,
-                    nInc, nMinDigits, pListData, nListIndex,
+                    nInc, aDurationInc, nMinDigits, pListData, nListIndex,
                     bHasFiltered, bSkipOverlappedCells, aNonOverlappedCellIdx);
 
         if (pListData)
@@ -1214,17 +1214,20 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         else
         {
             if (!bPositive)
+            {
                 nInc = -nInc;
+                aDurationInc = -aDurationInc;
+            }
             double nEndVal = (nInc>=0.0) ? MAXDOUBLE : -MAXDOUBLE;
             if (bVertical)
                 FillSeries( static_cast<SCCOL>(nCol), nRow1,
                         static_cast<SCCOL>(nCol), nRow2, nFillCount, eFillDir,
-                        eFillCmd, eDateCmd, nInc, nEndVal, nMinDigits, false,
+                        eFillCmd, eDateCmd, nInc, aDurationInc, nEndVal, nMinDigits, false,
                         pProgress, bSkipOverlappedCells, &aNonOverlappedCellIdx);
             else
                 FillSeries( nCol1, static_cast<SCROW>(nRow), nCol2,
                         static_cast<SCROW>(nRow), nFillCount, eFillDir,
-                        eFillCmd, eDateCmd, nInc, nEndVal, nMinDigits, false,
+                        eFillCmd, eDateCmd, nInc, aDurationInc, nEndVal, nMinDigits, false,
                         pProgress, bSkipOverlappedCells, &aNonOverlappedCellIdx);
             if (pProgress)
                 nProgress = pProgress->GetState();
@@ -1375,6 +1378,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
         FillCmd eFillCmd;
         FillDateCmd eDateCmd;
         double nInc;
+        tools::Duration aDurationInc;
         sal_uInt16 nMinDigits;
         ScUserListData* pListData = nullptr;
         sal_uInt16 nListIndex;
@@ -1385,7 +1389,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
         //       after FillAnalyse / FillSeries fully handle them.
         // Now FillAnalyse called as if there are filtered rows, so it will work in the old way.
         FillAnalyse(nCol1, nRow1, nCol2, nRow2, eFillCmd, eDateCmd,
-                    nInc, nMinDigits, pListData, nListIndex,
+                    nInc, aDurationInc, nMinDigits, pListData, nListIndex,
                     true, bSkipOverlappedCells, aNonOverlappedCellIdx);
 
         if ( pListData )                            // user defined list
@@ -1530,9 +1534,18 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                 nStart = 0.0;
             if ( eFillCmd == FILL_LINEAR )
             {
-                double nAdd = nInc;
-                bValueOk = ( SubTotal::SafeMult( nAdd, static_cast<double>(nIndex) ) &&
-                             SubTotal::SafePlus( nStart, nAdd ) );
+                if (aDurationInc)
+                {
+                    bool bOverflow;
+                    tools::Duration aDuration( aDurationInc.Mult( nIndex, bOverflow));
+                    bValueOk = SubTotal::SafePlus( nStart, aDuration.GetInDays()) && !bOverflow;
+                }
+                else
+                {
+                    double nAdd = nInc;
+                    bValueOk = ( SubTotal::SafeMult( nAdd, static_cast<double>(nIndex) ) &&
+                                 SubTotal::SafePlus( nStart, nAdd ) );
+                }
             }
             else        // date
             {
@@ -2153,7 +2166,8 @@ inline bool isOverflow( const double& rVal, const double& rMax, const double& rS
 
 void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     sal_uInt64 nFillCount, FillDir eFillDir, FillCmd eFillCmd, FillDateCmd eFillDateCmd,
-                    double nStepValue, double nMaxValue, sal_uInt16 nArgMinDigits,
+                    double nStepValue, const tools::Duration& rDurationStep,
+                    double nMaxValue, sal_uInt16 nArgMinDigits,
                     bool bAttribs, ScProgress* pProgress,
                     bool bSkipOverlappedCells, std::vector<sal_Int32>* pNonOverlappedCellIdx )
 {
@@ -2420,10 +2434,18 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                         //  use multiplication instead of repeated addition
                                         //  to avoid accumulating rounding errors
                                         nVal = nStartVal;
-                                        double nAdd = nStepValue;
-                                        if ( !SubTotal::SafeMult( nAdd, static_cast<double>(++nIndex) ) ||
-                                                !SubTotal::SafePlus( nVal, nAdd ) )
-                                            bError = true;
+                                        if (rDurationStep)
+                                        {
+                                            tools::Duration aDuration( rDurationStep.Mult( ++nIndex, bError));
+                                            bError |= !SubTotal::SafePlus( nVal, aDuration.GetInDays());
+                                        }
+                                        else
+                                        {
+                                            double nAdd = nStepValue;
+                                            if ( !SubTotal::SafeMult( nAdd, static_cast<double>(++nIndex) ) ||
+                                                    !SubTotal::SafePlus( nVal, nAdd ) )
+                                                bError = true;
+                                        }
                                     }
                                     break;
                                 case FILL_GROWTH:
@@ -2525,10 +2547,18 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                             //  use multiplication instead of repeated addition
                                             //  to avoid accumulating rounding errors
                                             nVal = nStartVal;
-                                            double nAdd = nStepValue;
-                                            if ( !SubTotal::SafeMult( nAdd, static_cast<double>(++nIndex) ) ||
-                                                    !SubTotal::SafePlus( nVal, nAdd ) )
-                                                bError = true;
+                                            if (rDurationStep)
+                                            {
+                                                tools::Duration aDuration( rDurationStep.Mult( ++nIndex, bError));
+                                                bError |= !SubTotal::SafePlus( nVal, aDuration.GetInDays());
+                                            }
+                                            else
+                                            {
+                                                double nAdd = nStepValue;
+                                                if ( !SubTotal::SafeMult( nAdd, static_cast<double>(++nIndex) ) ||
+                                                        !SubTotal::SafePlus( nVal, nAdd ) )
+                                                    bError = true;
+                                            }
                                         }
                                         break;
                                     case FILL_GROWTH:
@@ -2598,13 +2628,14 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
 void ScTable::Fill( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     sal_uInt64 nFillCount, FillDir eFillDir, FillCmd eFillCmd, FillDateCmd eFillDateCmd,
-                    double nStepValue, double nMaxValue, ScProgress* pProgress)
+                    double nStepValue, const tools::Duration& rDurationStep,
+                    double nMaxValue, ScProgress* pProgress)
 {
     if (eFillCmd == FILL_AUTO)
         FillAuto(nCol1, nRow1, nCol2, nRow2, nFillCount, eFillDir, pProgress);
     else
         FillSeries(nCol1, nRow1, nCol2, nRow2, nFillCount, eFillDir,
-                    eFillCmd, eFillDateCmd, nStepValue, nMaxValue, 0, true, pProgress);
+                    eFillCmd, eFillDateCmd, nStepValue, rDurationStep, nMaxValue, 0, true, pProgress);
 }
 
 void ScTable::AutoFormatArea(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
