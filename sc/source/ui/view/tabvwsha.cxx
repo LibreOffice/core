@@ -933,6 +933,8 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
     ScMarkData&         rMark       = GetViewData().GetMarkData();
     ScModule*           pScMod      = SC_MOD();
     SdrObject*          pEditObject = GetDrawView()->GetTextEditObject();
+    OutlinerView*       pOLV        = GetDrawView()->GetTextEditOutlinerView();
+    ESelection          aSelection  = pOLV ? pOLV->GetSelection() : ESelection();
     OUString            aRefName;
     bool                bUndo       = rDoc.IsUndoEnabled();
 
@@ -1683,7 +1685,11 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
     // reactivate text editing instead:
     auto pFuText = dynamic_cast<FuText*>(GetDrawFuncPtr());
     if (pFuText && pEditObject != GetDrawView()->GetTextEditObject())
+    {
         pFuText->SetInEditMode(pEditObject);
+        if (GetDrawView()->GetTextEditOutlinerView())
+            GetDrawView()->GetTextEditOutlinerView()->SetSelection(aSelection);
+    }
 }
 
 void ScTabViewShell::GetStyleState( SfxItemSet& rSet )
