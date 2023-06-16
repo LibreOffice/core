@@ -21,7 +21,7 @@
 
 #include "svgnode.hxx"
 #include "svgstyleattributes.hxx"
-#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b3dhommatrix.hxx>
 
 namespace svgio::svgreader
 {
@@ -29,6 +29,7 @@ enum class ColorType
 {
     None,
     HueRotate,
+    Matrix,
     Saturate,
     LuminanceToAlpha
 };

@@ -24,6 +24,7 @@
 #include <o3tl/string_view.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/matrix/b3dhommatrix.hxx>
 #include <svgtoken.hxx>
 #include <unordered_map>
 
@@ -842,6 +843,39 @@ namespace svgio::svgreader
             }
 
             return basegfx::B2DRange();
+        }
+
+        basegfx::B3DHomMatrix readFilterMatrix(std::u16string_view rCandidate, InfoProvider const & rInfoProvider)
+        {
+            basegfx::B3DHomMatrix aMatrix;
+            const sal_Int32 nLen(rCandidate.size());
+
+            sal_Int32 nPos(0);
+            skip_char(rCandidate, ' ', ',', nPos, nLen);
+
+            SvgNumber aVal;
+
+            // create a 3x5 matrix using the first 15 values from the list of 20 matrix values.
+            // FIXME: support alpha (the last 5 values)
+            for (sal_uInt16 nRow = 0; nRow < 3; ++nRow)
+            {
+                for (sal_uInt16 nColumn = 0; nColumn < 5; ++nColumn)
+                {
+                    // return earlier if there are not enough values
+                    if (nPos >= nLen)
+                    {
+                        return basegfx::B3DHomMatrix();
+                    }
+
+                    if(readNumberAndUnit(rCandidate, nPos, aVal, nLen))
+                    {
+                        aMatrix.set(nRow, nColumn, aVal.solve(rInfoProvider));
+                        skip_char(rCandidate, ' ', ',', nPos, nLen);
+                    }
+                }
+            }
+
+            return aMatrix;
         }
 
         basegfx::B2DHomMatrix readTransform(std::u16string_view rCandidate, InfoProvider const & rInfoProvider)
