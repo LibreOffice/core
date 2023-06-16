@@ -1,0 +1,6 @@
+sglobal: access via New - Master Document
+sweb: access via New - HTML Document
+swform: access via Database - form I assume
+swreport: access via Database - report I assume
+swriter: the normal writer menu, accessed via New - Text Document
+swxform: access via New - XML Form Document
