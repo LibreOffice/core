@@ -247,7 +247,12 @@ void SfxObjectShell::EnableSetModified( bool bEnable )
 
 bool SfxObjectShell::IsEnableSetModified() const
 {
-    return pImpl->m_bEnableSetModified && !IsReadOnly();
+    // tdf#146547 read-only does not prevent modified, instead try to prevent
+    // setting "internal" documents that may be displayed in some dialog but
+    // which the user didn't load or activate to modified.
+    return pImpl->m_bEnableSetModified && !IsPreview()
+        && eCreateMode != SfxObjectCreateMode::ORGANIZER
+        && eCreateMode != SfxObjectCreateMode::INTERNAL;
 }
 
 

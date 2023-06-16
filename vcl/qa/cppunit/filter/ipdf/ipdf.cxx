@@ -110,6 +110,10 @@ CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testPDFAddVisibleSignatureLastPage)
     SdrView* pView = SfxViewShell::Current()->GetDrawView();
     svx::SignatureLineHelper::setShapeCertificate(pView, xCert);
 
+    // the document is modified now, but Sign function can't show SaveAs dialog
+    // in unit test, so just clear the modified
+    pObjectShell->SetModified(false);
+
     // When: do the actual signing.
     pObjectShell->SignDocumentContentUsingCertificate(xCert);
 
