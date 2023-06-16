@@ -101,6 +101,33 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testStepCount)
     // Without fix the color was 40bfbf, producing a gradient in the last segment.
     assertXPath(pXmlDoc, sPath + "a:gs[@pos='75000'][2]/a:srgbClr", "val", "00ffff");
 }
+
+CPPUNIT_TEST_FIXTURE(TestMCGR, testAxialColorLinearTrans)
+{
+    // Given a document with a shape with axial color gradient from inside red to outside cyan and
+    // two-stop linear transparency gradient from start 80% to end 0%.
+    loadFromURL(u"tdf155827_MCGR_AxialColorLinearTrans.fodp");
+    // Save it to PPTX
+    save("Impress Office Open XML");
+    // OOXML has transparency together with color. Transparency is stored as opacity.
+    // Expected: pos 0 #00ffff 20000, pos 50000 #ff0000 60000, pos 100000 #00ffff 100000.
+    // Because of conversion through gray color the opacity values are not exact. If rounding
+    // method will be changed, the test needs to be adjusted.
+
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
+    const OString sPath = "//a:gradFill/a:gsLst/";
+    assertXPath(pXmlDoc, sPath + "a:gs", 3);
+    assertXPath(pXmlDoc, sPath + "a:gs[1]", "pos", "0");
+    assertXPath(pXmlDoc, sPath + "a:gs[1]/a:srgbClr", "val", "00ffff");
+    assertXPath(pXmlDoc, sPath + "a:gs[1]/a:srgbClr/a:alpha", "val", "20000");
+    assertXPath(pXmlDoc, sPath + "a:gs[2]", "pos", "50000");
+    assertXPath(pXmlDoc, sPath + "a:gs[2]/a:srgbClr", "val", "ff0000");
+    assertXPath(pXmlDoc, sPath + "a:gs[2]/a:srgbClr/a:alpha", "val", "60396");
+    assertXPath(pXmlDoc, sPath + "a:gs[3]", "pos", "100000");
+    assertXPath(pXmlDoc, sPath + "a:gs[3]/a:srgbClr", "val", "00ffff");
+    // no <a:alpha> element for default val="100000"
+    assertXPath(pXmlDoc, sPath + "a:gs[3]/a:srgbClr/a:alpha", 0);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
