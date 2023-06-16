@@ -780,7 +780,7 @@ void DrawController::ThrowIfDisposed() const
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose || mbDisposing)
     {
-        SAL_WARN("sd", "Calling disposed DrawController object. Throwing exception:");
+        SAL_WARN("sd", "Calling disposed DrawController object. Throwing exception.");
         throw lang::DisposedException (
             "DrawController object has already been disposed",
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
