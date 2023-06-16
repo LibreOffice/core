@@ -589,7 +589,13 @@ bool SfxObjectShell::PrepareClose
         {
             // Save by each Dispatcher
             const SfxPoolItem *pPoolItem;
-            if ( IsSaveVersionOnClose() )
+            if (IsReadOnly())
+            {
+                SfxBoolItem aWarnItem( SID_FAIL_ON_WARNING, bUI );
+                const SfxPoolItem* ppArgs[] = { &aWarnItem, nullptr };
+                pPoolItem = pFrame->GetBindings().ExecuteSynchron(SID_SAVEASDOC, ppArgs);
+            }
+            else if (IsSaveVersionOnClose())
             {
                 SfxStringItem aItem( SID_DOCINFO_COMMENTS, SfxResId(STR_AUTOMATICVERSION) );
                 SfxBoolItem aWarnItem( SID_FAIL_ON_WARNING, bUI );

@@ -91,6 +91,7 @@ xmlDocPtr MathMLExportTest::exportAndParse()
 
 void MathMLExportTest::testBlank()
 {
+    mxDocShell->DoInitNew();
     mxDocShell->SetText("x`y~~z");
     xmlDocPtr pDoc = exportAndParse();
     assertXPath(pDoc, "/m:math/m:semantics/m:mrow/m:mspace[1]", "width", "0.5em");
@@ -99,6 +100,7 @@ void MathMLExportTest::testBlank()
 
 void MathMLExportTest::testTdf97049()
 {
+    mxDocShell->DoInitNew();
     mxDocShell->SetText("intd {{1 over x} dx}");
     xmlDocPtr pDoc = exportAndParse();
     assertXPath(pDoc, "/m:math/m:semantics/m:mrow/m:mo[1]", "stretchy", "true");
@@ -111,6 +113,7 @@ void MathMLExportTest::testTdf101022()
 {
 #define CHECK_MATHVARIANT(capital, small) do                            \
     {                                                                   \
+        mxDocShell->DoInitNew();                                        \
         mxDocShell->SetText("%GAMMA %iGAMMA {ital %GAMMA} {nitalic %iGAMMA} " \
                             "%gamma %igamma {ital %gamma} {nitalic %igamma}"); \
         xmlDocPtr pDoc = exportAndParse();                              \

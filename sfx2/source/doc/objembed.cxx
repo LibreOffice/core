@@ -28,6 +28,7 @@
 #include <sfx2/app.hxx>
 #include <objshimp.hxx>
 #include <sfx2/event.hxx>
+#include <sfx2/sfxbasemodel.hxx>
 
 #include <comphelper/fileformat.h>
 #include <svtools/embedtransfer.hxx>
@@ -118,8 +119,14 @@ void SfxObjectShell::SetVisArea( const tools::Rectangle & rVisArea )
         pImpl->m_aVisArea = rVisArea;
         if ( GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
         {
-            if ( IsEnableSetModified() )
+            if (IsEnableSetModified()
+                // Base forms use EMBEDDED but they actually live in their own
+                // frame - resizing that shouldn't set it to modified.
+                && pImpl->pBaseModel
+                && pImpl->pBaseModel->getIdentifier() != "com.sun.star.sdb.FormDesign")
+            {
                 SetModified();
+            }
 
             SfxGetpApp()->NotifyEvent(SfxEventHint( SfxEventHintId::VisAreaChanged, GlobalEventConfig::GetEventName(GlobalEventId::VISAREACHANGED), this));
         }
