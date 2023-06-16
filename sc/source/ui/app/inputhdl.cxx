@@ -4269,6 +4269,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
 
                     if (comphelper::LibreOfficeKit::isActive() && pActiveViewSh)
                     {
+                        UpdateActiveView();
                         EditView* pActiveView = pTopView ? pTopView : pTableView;
                         ESelection aSel = pActiveView ? pActiveView->GetSelection() : ESelection();
 
