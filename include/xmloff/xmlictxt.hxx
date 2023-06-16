@@ -120,6 +120,9 @@ public:
 #define XMLOFF_WARN_UNKNOWN_ELEMENT(area, token) \
     SAL_WARN(area, "unknown element " << SvXMLImport::getPrefixAndNameFromToken(token));
 
+#define XMLOFF_INFO_UNKNOWN_ELEMENT(area, token) \
+    SAL_INFO(area, "unknown element " << SvXMLImport::getPrefixAndNameFromToken(token));
+
 #endif // INCLUDED_XMLOFF_XMLICTXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
