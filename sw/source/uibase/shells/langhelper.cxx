@@ -93,10 +93,9 @@ namespace SwLangHelper
     bool SetLanguageStatus( OutlinerView* pOLV, SfxRequest &rReq, SwView const &rView, SwWrtShell &rSh )
     {
         bool bRestoreSelection = false;
-        SfxItemSet aEditAttr(pOLV->GetAttribs());
         ESelection   aSelection  = pOLV->GetSelection();
         EditView   & rEditView   = pOLV->GetEditView();
-        EditEngine * pEditEngine = rEditView.GetEditEngine();
+        SfxItemSet aEditAttr(rEditView.GetEmptyItemSet());
 
         // get the language
         OUString aNewLangText;
@@ -172,30 +171,6 @@ namespace SwLangHelper
                     SwLangHelper::ResetLanguages( rSh, pOLV );
                 else
                     SwLangHelper::SetLanguage( rSh, pOLV, aSelection, aNewLangText, bForSelection, aEditAttr );
-
-                // ugly hack, as it seems that EditView/EditEngine does not update their spellchecking marks
-                // when setting a new language attribute
-                if (bForSelection)
-                {
-                    if (SwWrtShell* pWrtShell = rView.GetWrtShellPtr())
-                    {
-                        const SwViewOption* pVOpt = pWrtShell->GetViewOptions();
-                        EEControlBits nCntrl = pEditEngine->GetControlWord();
-                        // turn off
-                        nCntrl &= ~EEControlBits::ONLINESPELLING;
-                        pEditEngine->SetControlWord(nCntrl);
-
-                        //turn back on
-                        if (pVOpt->IsOnlineSpell())
-                            nCntrl |= EEControlBits::ONLINESPELLING;
-                        else
-                            nCntrl &= ~EEControlBits::ONLINESPELLING;
-                        pEditEngine->SetControlWord(nCntrl);
-
-                        pEditEngine->CompleteOnlineSpelling();
-                        rEditView.Invalidate();
-                    }
-                }
 
                 if (!bForSelection)
                 {
@@ -369,6 +344,18 @@ namespace SwLangHelper
             rEditView.RemoveAttribs( true, EE_CHAR_LANGUAGE );
             rEditView.RemoveAttribs( true, EE_CHAR_LANGUAGE_CJK );
             rEditView.RemoveAttribs( true, EE_CHAR_LANGUAGE_CTL );
+
+            // ugly hack, as it seems that EditView/EditEngine does not update their spellchecking marks
+            // when setting a new language attribute
+            EditEngine* pEditEngine = rEditView.GetEditEngine();
+            EEControlBits nCntrl = pEditEngine->GetControlWord();
+            // turn off
+            pEditEngine->SetControlWord(nCntrl & ~EEControlBits::ONLINESPELLING);
+            //turn back on
+            pEditEngine->SetControlWord(nCntrl);
+            pEditEngine->CompleteOnlineSpelling();
+
+            rEditView.Invalidate();
         }
         else
         {
