@@ -67,7 +67,7 @@ Duration::Duration(double fTimeInDays)
         fFrac = ::rtl::math::approxFloor(fFrac);
         sal_Int64 nNS = static_cast<sal_Int64>(fFrac);
         // Round by 1 nanosecond if it's just 1 off to a second, i.e.
-        // 0999999999 or 0000000001. This could be losened to rounding by 2 or
+        // 0999999999 or 0000000001. This could be loosened to rounding by 2 or
         // such if necessary.
         const sal_Int64 nN = nNS % Time::nanoSecPerSec;
         if (std::abs(nN) == 1)
