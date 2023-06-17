@@ -236,7 +236,7 @@ Duration Duration::Mult(sal_Int32 nMult, bool& rbOverflow) const
     }
     if (bBadNS)
     {
-        // Simple calculation in overall nanoseconds overflew, try with
+        // Simple calculation in overall nanoseconds overflowed, try with
         // individual components.
         const sal_uInt64 nMult64 = (nMult < 0) ? -nMult : nMult;
         do
