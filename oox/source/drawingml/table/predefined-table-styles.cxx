@@ -204,9 +204,9 @@ constexpr frozen::unordered_map<std::u16string_view, sal_Int32, 6> tokens{
 
 sal_Int32 resolveToken(OUString const& rString)
 {
-    auto interator = tokens.find(rString);
-    if (interator != tokens.end())
-        return interator->second;
+    auto iterator = tokens.find(rString);
+    if (iterator != tokens.end())
+        return iterator->second;
     return XML_dk1;
 }
 
