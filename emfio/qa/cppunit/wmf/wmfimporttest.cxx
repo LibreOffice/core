@@ -45,6 +45,7 @@ public:
     {
     }
 
+    void testEOFWmf();
     void testNonPlaceableWmf();
     void testTdf88163NonPlaceableWmf();
     void testTdf88163PlaceableWmf();
@@ -63,6 +64,7 @@ public:
     void testStockObject();
 
     CPPUNIT_TEST_SUITE(WmfTest);
+    CPPUNIT_TEST(testEOFWmf);
     CPPUNIT_TEST(testNonPlaceableWmf);
     CPPUNIT_TEST(testTdf88163NonPlaceableWmf);
     CPPUNIT_TEST(testTdf88163PlaceableWmf);
@@ -81,6 +83,31 @@ public:
     CPPUNIT_TEST(testStockObject);
     CPPUNIT_TEST_SUITE_END();
 };
+
+void WmfTest::testEOFWmf()
+{
+    // tdf#155887 Test META_EOF with size different than 3
+    // It should be properly displayed as MS Office do
+    SvFileStream aFileStream(getFullUrl(u"EOF.wmf"), StreamMode::READ);
+    GDIMetaFile aGDIMetaFile;
+    ReadWindowMetafile(aFileStream, aGDIMetaFile);
+
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
+
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "/metafile/push", 2);
+    assertXPath(pDoc, "/metafile/push[2]", "flags", "PushClipRegion");
+    assertXPath(pDoc, "/metafile/push[2]/fillcolor", 2);
+    assertXPath(pDoc, "/metafile/push[2]/fillcolor[1]", "color", "#000000");
+    assertXPath(pDoc, "/metafile/push[2]/fillcolor[2]", "color", "#d0d0d0");
+    assertXPath(pDoc, "/metafile/push[2]/linecolor", 60);
+    assertXPath(pDoc, "/metafile/push[2]/polyline", 209);
+    assertXPath(pDoc, "/metafile/push[2]/polyline[1]/point", 5);
+    assertXPath(pDoc, "/metafile/push[2]/polyline[1]/point[3]", "x", "16906");
+    assertXPath(pDoc, "/metafile/push[2]/polyline[1]/point[3]", "y", "12673");
+    assertXPath(pDoc, "/metafile/push[2]/textarray", 307);
+}
 
 void WmfTest::testNonPlaceableWmf()
 {

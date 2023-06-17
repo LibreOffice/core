@@ -156,6 +156,7 @@ namespace
     #else
         switch( nRecType )
         {
+        case W_META_EOF: return "W_META_EOF";
         case W_META_SETBKCOLOR: return "META_SETBKCOLOR";
         case W_META_SETBKMODE: return "META_SETBKMODE";
         case W_META_SETMAPMODE: return "META_SETMAPMODE";
@@ -1523,10 +1524,10 @@ namespace emfio
                     // changing mnUnitsPerInch as a tool to scale wmf
                     mnUnitsPerInch *= fRatio;
 
-                    SAL_INFO("emfio", "Placeable bounds "
-                        " left: " << aPlaceableBound.Left() << " top: " << aPlaceableBound.Top()
-                        << " right: " << aPlaceableBound.Right() << " bottom: " << aPlaceableBound.Bottom());
                 }
+                SAL_INFO("emfio", "Placeable bounds "
+                                  " left: " << aPlaceableBound.Left() << " top: " << aPlaceableBound.Top() <<
+                                  " right: " << aPlaceableBound.Right() << " bottom: " << aPlaceableBound.Bottom());
             }
 
             mpInputStream->Seek( nStrmPos );
@@ -1606,14 +1607,10 @@ namespace emfio
                 {
                     mpInputStream->ReadUInt32(mnRecSize).ReadUInt16( nFunction );
 
-                    if (
-                         !mpInputStream->good() ||
-                         (mnRecSize < 3) ||
-                         (mnRecSize == 3 && nFunction == W_META_EOF)
-                       )
+                    if (!mpInputStream->good() || (mnRecSize < 3) || (nFunction == W_META_EOF))
                     {
-                        if( mpInputStream->eof() )
-                            mpInputStream->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                        if (mpInputStream->eof())
+                            mpInputStream->SetError(SVSTREAM_FILEFORMAT_ERROR);
 
                         break;
                     }
@@ -1727,10 +1724,11 @@ namespace emfio
                     bRet = false;
                     break;
                 }
-                else if ( nRSize == 3 && nFunction == W_META_EOF )
+                else if (nFunction == W_META_EOF)
                 {
                     break;
                 }
+
                 switch( nFunction )
                 {
                     case W_META_EOF:
@@ -2043,9 +2041,11 @@ namespace emfio
             pStm->SetError( SVSTREAM_GENERALERROR );
             bRet = false;
         }
-
         if (!bRet)
+        {
+            SAL_WARN("emfio", "Unable to calculate Placeable Bounds");
             return;
+        }
 
         if (aWinExt)
         {
