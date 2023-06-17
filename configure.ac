@@ -2452,6 +2452,11 @@ AC_ARG_WITH(system-dragonbox,
         [Use dragonbox already on system.]),,
     [with_system_dragonbox="$with_system_headers"])
 
+AC_ARG_WITH(system-frozen,
+    AS_HELP_STRING([--with-system-frozen],
+        [Use frozen already on system.]),,
+    [with_system_frozen="$with_system_headers"])
+
 AC_ARG_WITH(system-libfixmath,
     AS_HELP_STRING([--with-system-libfixmath],
         [Use libfixmath already on system.]),,
@@ -10541,6 +10546,27 @@ else
 fi
 AC_SUBST([SYSTEM_DRAGONBOX])
 AC_SUBST([DRAGONBOX_CFLAGS])
+
+dnl ===================================================================
+dnl Check for system frozen
+dnl ===================================================================
+AC_MSG_CHECKING([which frozen to use])
+if test "$with_system_frozen" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_FROZEN=TRUE
+    AC_LANG_PUSH([C++])
+    save_CPPFLAGS=$CPPFLAGS
+    AC_CHECK_HEADER([frozen/unordered_map.h], [],
+       [AC_MSG_ERROR([frozen/unordered_map.h not found. install frozen headers])], [])
+    AC_LANG_POP([C++])
+    CPPFLAGS=$save_CPPFLAGS
+else
+    AC_MSG_RESULT([internal])
+    BUILD_TYPE="$BUILD_TYPE FROZEN"
+    SYSTEM_FROZEN=
+fi
+AC_SUBST([SYSTEM_FROZEN])
+AC_SUBST([FROZEN_CFLAGS])
 
 dnl ===================================================================
 dnl Check for system libfixmath

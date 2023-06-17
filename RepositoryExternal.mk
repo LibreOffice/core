@@ -4298,6 +4298,14 @@ endif # ENABLE_ZXING
 endif # SYSTEM_ZXING
 
 
+ifneq ($(SYSTEM_FROZEN),)
+define gb_LinkTarget__use_frozen
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(FROZEN_CFLAGS)
+)
+endef
+else
 define gb_LinkTarget__use_frozen
 $(call gb_LinkTarget_use_unpacked,$(1),frozen)
 $(call gb_LinkTarget_set_include,$(1),\
@@ -4305,6 +4313,6 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 endef
-
+endif
 
 # vim: set noet sw=4 ts=4:
