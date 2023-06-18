@@ -127,8 +127,8 @@ void OFileWriter::writeOUStringRefFunction3(const char *func, std::u16string_vie
 {
     OString aRefLocale( OUStringToOString(useLocale, RTL_TEXTENCODING_ASCII_US) );
     const char* locale = aRefLocale.getStr();
-    fprintf(m_f, "extern const OUString ****  SAL_CALL %s%s(sal_Int16& nStyles, sal_Int16& nLevels, sal_Int16& nAttributes);\n", func, locale);
-    fprintf(m_f, "const OUString ****  SAL_CALL %s%s(sal_Int16& nStyles, sal_Int16& nLevels, sal_Int16& nAttributes)\n{\n", func, theLocale.c_str());
+    fprintf(m_f, "extern const OUString ***  SAL_CALL %s%s(sal_Int16& nStyles, sal_Int16& nLevels, sal_Int16& nAttributes);\n", func, locale);
+    fprintf(m_f, "const OUString ***  SAL_CALL %s%s(sal_Int16& nStyles, sal_Int16& nLevels, sal_Int16& nAttributes)\n{\n", func, theLocale.c_str());
     fprintf(m_f, "\treturn %s%s(nStyles, nLevels, nAttributes);\n}\n", func, locale);
 }
 
