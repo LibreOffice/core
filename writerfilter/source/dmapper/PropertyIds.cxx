@@ -26,7 +26,7 @@ namespace writerfilter::dmapper{
 
 namespace
 {
-    constexpr frozen::unordered_map<PropertyIds, std::u16string_view, 347> constPropertyMap
+    constexpr auto constPropertyMap = frozen::make_unordered_map<PropertyIds, std::u16string_view>(
     {
         { PROP_CHAR_WEIGHT, u"CharWeight"},
         { PROP_CHAR_POSTURE, u"CharPosture"},
@@ -378,7 +378,7 @@ namespace
         { PROP_CURSOR_NOT_IGNORE_TABLES_IN_HF, u"CursorNotIgnoreTables"},
         { PROP_PARA_CONNECT_BORDERS, u"ParaIsConnectBorder"},
         { PROP_DECORATIVE, u"Decorative"},
-    };
+    });
 } // end anonymous ns
 
 OUString getPropertyName( PropertyIds eId )
