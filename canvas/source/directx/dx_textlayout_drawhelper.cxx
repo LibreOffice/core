@@ -68,6 +68,7 @@ namespace dxcanvas
         const ::basegfx::B2ISize&              rOutputOffset,
         const css::rendering::StringContext&   rText,
         const css::uno::Sequence< double >&    rLogicalAdvancements,
+        const css::uno::Sequence< sal_Bool >&  rKashidaPositions,
         const css::uno::Reference<
             css::rendering::XCanvasFont >&     rCanvasFont,
         const css::geometry::Matrix2D&         rFontMatrix,
@@ -213,11 +214,13 @@ namespace dxcanvas
                 for( sal_Int32 i=0; i<nLen; ++i )
                     DXArray.push_back(basegfx::fround(rLogicalAdvancements[i]));
 
+                o3tl::span<const sal_Bool> aKashidaArray(rKashidaPositions.getConstArray(), rKashidaPositions.getLength());
+
                 // draw the String
                 xVirtualDevice->DrawTextArray( aEmptyPoint,
                                               aText,
                                               DXArray,
-                                              {},
+                                              aKashidaArray,
                                               rText.StartPosition,
                                               rText.Length,
                                               bIsRTL ? SalLayoutFlags::BiDiRtl : SalLayoutFlags::NONE);

@@ -69,6 +69,7 @@ namespace cppcanvas::internal
                                                      sal_Int32                      nStartPos,
                                                      sal_Int32                      nLen,
                                                      KernArraySpan                  pDXArray,
+                                                     o3tl::span<const sal_Bool>     pKashidaArray,
                                                      VirtualDevice&                 rVDev,
                                                      const CanvasSharedPtr&         rCanvas,
                                                      const OutDevState&             rState,

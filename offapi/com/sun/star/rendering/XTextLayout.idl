@@ -143,6 +143,53 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         raises (com::sun::star::lang::IllegalArgumentException);
 
 
+    /** Query the Kashida insertion positions in the input string.<p>
+
+        This method returns a sequence of Kashida insertion positions, one for
+        each character in the input string (<em>not</em> for every
+        glyph. There might be multiple glyphs per input character, or
+        multiple input characters per glyph).<p>
+
+        A Kashida insertion position is a boolean indicating if Kashida should
+        inserted after this character.<p>
+
+        This method can be used to query for the layout's default Kashida
+        insertion positions, which can subsequently be changed and applied to
+        the layout via
+        XTextLayout::applyKashidaPositions().<p>
+
+        @returns a sequence of booleans specifying the Kashida insertion
+        positions per character.
+
+        @see XTextLayout::applyKashidaPositions)
+
+        @since LibreOffice 7.6
+     */
+    sequence<boolean>            queryKashidaPositions();
+
+
+    /** Apply Kashida insertion positions for the layout string.<p>
+
+        This method applies the specified Kashida insertion positions to every
+        logical character in the input string (<em>not</em> for every
+        glyph. There might be multiple glyphs per input character, or
+        multiple input characters per glyph).<p>
+
+        @param aPositions
+        A sequence of booleans specifying Kashida insertion positions.
+
+        @see XTextLayout::queryKashidaPositions()
+
+        @throws com::sun::star::lang::IllegalArgumentException
+        if the size of aPositions is not zero and does not match the number of
+        characters in the text.
+
+        @since LibreOffice 7.6
+     */
+    void                        applyKashidaPositions( [in] sequence< boolean > aPositions )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+
     /** Query the overall bounding box of the text.<p>
 
         This method is similar to

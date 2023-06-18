@@ -229,6 +229,7 @@ namespace cppcanvas::internal
                                   sal_Int32                                 nStartPos,
                                   sal_Int32                                 nLen,
                                   const uno::Sequence< double >&            rOffsets,
+                                  const uno::Sequence< sal_Bool >&          rKashidas,
                                   const CanvasSharedPtr&                    rCanvas,
                                   const OutDevState&                        rState,
                                   const ::basegfx::B2DHomMatrix*            pTextTransform )
@@ -255,6 +256,7 @@ namespace cppcanvas::internal
                                   "::cppcanvas::internal::initArrayAction(): Invalid font" );
 
                 o_rTextLayout->applyLogicalAdvancements( rOffsets );
+                o_rTextLayout->applyKashidaPositions( rKashidas );
 
             }
 
@@ -457,6 +459,10 @@ namespace cppcanvas::internal
                                            io_rTextLayout,
                                            nLayoutWidth,
                                            rSubset ) );
+                    uno::Sequence< sal_Bool > aOrigKashidaPositions(io_rTextLayout->queryKashidaPositions());
+                    uno::Sequence< sal_Bool > aKashidaPositions(aOrigKashidaPositions.getArray() + rSubset.mnSubsetBegin,
+                                                                rSubset.mnSubsetEnd - rSubset.mnSubsetBegin);
+                    xTextLayout->applyKashidaPositions(aKashidaPositions);
                 }
 
                 io_rTextLayout = xTextLayout;
@@ -1017,6 +1023,7 @@ namespace cppcanvas::internal
                                  sal_Int32                      nStartPos,
                                  sal_Int32                      nLen,
                                  const uno::Sequence< double >& rOffsets,
+                                 const uno::Sequence< sal_Bool >& rKashidas,
                                  const CanvasSharedPtr&         rCanvas,
                                  const OutDevState&             rState );
 
@@ -1025,6 +1032,7 @@ namespace cppcanvas::internal
                                  sal_Int32                      nStartPos,
                                  sal_Int32                      nLen,
                                  const uno::Sequence< double >& rOffsets,
+                                 const uno::Sequence< sal_Bool >& rKashidas,
                                  const CanvasSharedPtr&         rCanvas,
                                  const OutDevState&             rState,
                                  const ::basegfx::B2DHomMatrix& rTextTransform );
@@ -1061,6 +1069,7 @@ namespace cppcanvas::internal
                                               sal_Int32                         nStartPos,
                                               sal_Int32                         nLen,
                                               const uno::Sequence< double >&    rOffsets,
+                                              const uno::Sequence< sal_Bool >&  rKashidas,
                                               const CanvasSharedPtr&            rCanvas,
                                               const OutDevState&                rState ) :
                 mpCanvas( rCanvas )
@@ -1074,6 +1083,7 @@ namespace cppcanvas::internal
                                  nStartPos,
                                  nLen,
                                  rOffsets,
+                                 rKashidas,
                                  rCanvas,
                                  rState, nullptr );
             }
@@ -1083,6 +1093,7 @@ namespace cppcanvas::internal
                                               sal_Int32                         nStartPos,
                                               sal_Int32                         nLen,
                                               const uno::Sequence< double >&    rOffsets,
+                                              const uno::Sequence< sal_Bool >&  rKashidas,
                                               const CanvasSharedPtr&            rCanvas,
                                               const OutDevState&                rState,
                                               const ::basegfx::B2DHomMatrix&    rTextTransform ) :
@@ -1097,6 +1108,7 @@ namespace cppcanvas::internal
                                  nStartPos,
                                  nLen,
                                  rOffsets,
+                                 rKashidas,
                                  rCanvas,
                                  rState,
                                  &rTextTransform );
@@ -1206,6 +1218,7 @@ namespace cppcanvas::internal
                                        sal_Int32                        nStartPos,
                                        sal_Int32                        nLen,
                                        const uno::Sequence< double >&   rOffsets,
+                                       const uno::Sequence< sal_Bool >& rKashidas,
                                        VirtualDevice const &            rVDev,
                                        const CanvasSharedPtr&           rCanvas,
                                        const OutDevState&               rState  );
@@ -1219,6 +1232,7 @@ namespace cppcanvas::internal
                                        sal_Int32                        nStartPos,
                                        sal_Int32                        nLen,
                                        const uno::Sequence< double >&   rOffsets,
+                                       const uno::Sequence< sal_Bool >& rKashidas,
                                        VirtualDevice const &            rVDev,
                                        const CanvasSharedPtr&           rCanvas,
                                        const OutDevState&               rState,
@@ -1273,6 +1287,7 @@ namespace cppcanvas::internal
                                                           sal_Int32                         nStartPos,
                                                           sal_Int32                         nLen,
                                                           const uno::Sequence< double >&    rOffsets,
+                                                          const uno::Sequence< sal_Bool >&  rKashidas,
                                                           VirtualDevice const &             rVDev,
                                                           const CanvasSharedPtr&            rCanvas,
                                                           const OutDevState&                rState  ) :
@@ -1296,6 +1311,7 @@ namespace cppcanvas::internal
                                  nStartPos,
                                  nLen,
                                  rOffsets,
+                                 rKashidas,
                                  rCanvas,
                                  rState, nullptr );
             }
@@ -1310,6 +1326,7 @@ namespace cppcanvas::internal
                                                           sal_Int32                         nStartPos,
                                                           sal_Int32                         nLen,
                                                           const uno::Sequence< double >&    rOffsets,
+                                                          const uno::Sequence< sal_Bool >&  rKashidas,
                                                           VirtualDevice const &             rVDev,
                                                           const CanvasSharedPtr&            rCanvas,
                                                           const OutDevState&                rState,
@@ -1334,6 +1351,7 @@ namespace cppcanvas::internal
                                  nStartPos,
                                  nLen,
                                  rOffsets,
+                                 rKashidas,
                                  rCanvas,
                                  rState,
                                  &rTextTransform );
@@ -1967,6 +1985,7 @@ namespace cppcanvas::internal
                                            sal_Int32                        nStartPos,
                                            sal_Int32                        nLen,
                                            KernArraySpan                    pDXArray,
+                                           o3tl::span<const sal_Bool>       pKashidaArray,
                                            VirtualDevice&                   rVDev,
                                            const CanvasSharedPtr&           rCanvas,
                                            const OutDevState&               rState,
@@ -1994,7 +2013,7 @@ namespace cppcanvas::internal
                                                                  static_cast<sal_uInt16>(nStartPos),
                                                                  static_cast<sal_uInt16>(nStartPos),
                                                                  static_cast<sal_uInt16>(nLen),
-                                                                 0, pDXArray ) );
+                                                                 0, pDXArray, pKashidaArray ) );
                 rVDev.SetFont(aOrigFont);
 
                 if( !bHaveOutlines )
@@ -2097,6 +2116,7 @@ namespace cppcanvas::internal
                                                              sal_Int32                      nStartPos,
                                                              sal_Int32                      nLen,
                                                              KernArraySpan                  pDXArray,
+                                                             o3tl::span<const sal_Bool>     pKashidaArray,
                                                              VirtualDevice&                 rVDev,
                                                              const CanvasSharedPtr&         rCanvas,
                                                              const OutDevState&             rState,
@@ -2129,6 +2149,7 @@ namespace cppcanvas::internal
                             nStartPos,
                             nLen,
                             pDXArray,
+                            pKashidaArray,
                             rVDev,
                             rCanvas,
                             rState,
@@ -2145,6 +2166,8 @@ namespace cppcanvas::internal
                               nLen,
                               rVDev,
                               rState ));
+
+            const uno::Sequence< sal_Bool > aKashidas(pKashidaArray.data(), pKashidaArray.size());
 
             // determine type of text action to create
             // =======================================
@@ -2240,6 +2263,7 @@ namespace cppcanvas::internal
                                                     nStartPos,
                                                     nLen,
                                                     aCharWidths,
+                                                    aKashidas,
                                                     rCanvas,
                                                     rState,
                                                     *rParms.maTextTransformation );
@@ -2250,6 +2274,7 @@ namespace cppcanvas::internal
                                                     nStartPos,
                                                     nLen,
                                                     aCharWidths,
+                                                    aKashidas,
                                                     rCanvas,
                                                     rState );
                 }
@@ -2268,6 +2293,7 @@ namespace cppcanvas::internal
                                                     nStartPos,
                                                     nLen,
                                                     aCharWidths,
+                                                    aKashidas,
                                                     rVDev,
                                                     rCanvas,
                                                     rState,
@@ -2284,6 +2310,7 @@ namespace cppcanvas::internal
                                                     nStartPos,
                                                     nLen,
                                                     aCharWidths,
+                                                    aKashidas,
                                                     rVDev,
                                                     rCanvas,
                                                     rState );

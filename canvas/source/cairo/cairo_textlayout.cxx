@@ -131,6 +131,26 @@ namespace cairocanvas
         maLogicalAdvancements = aAdvancements;
     }
 
+    uno::Sequence< sal_Bool > SAL_CALL TextLayout::queryKashidaPositions(  )
+    {
+        std::unique_lock aGuard( m_aMutex );
+
+        return maKashidaPositions;
+    }
+
+    void SAL_CALL TextLayout::applyKashidaPositions( const uno::Sequence< sal_Bool >& aPositions )
+    {
+        std::unique_lock aGuard( m_aMutex );
+
+        if( aPositions.hasElements() && aPositions.getLength() != maText.Length )
+        {
+            SAL_WARN("canvas.cairo", "TextLayout::applyKashidaPositions(): mismatching number of positions" );
+            throw lang::IllegalArgumentException("mismatching number of positions", getXWeak(), 1);
+        }
+
+        maKashidaPositions = aPositions;
+    }
+
     geometry::RealRectangle2D SAL_CALL TextLayout::queryTextBounds(  )
     {
         std::unique_lock aGuard( m_aMutex );
@@ -263,8 +283,9 @@ namespace cairocanvas
         if (maLogicalAdvancements.hasElements())
         {
             KernArray aOffsets(setupTextOffsets(maLogicalAdvancements, viewState, renderState));
+            o3tl::span<const sal_Bool> aKashidaArray(maKashidaPositions.getConstArray(), maKashidaPositions.getLength());
 
-            rOutDev.DrawTextArray( rOutpos, maText.Text, aOffsets, {},
+            rOutDev.DrawTextArray( rOutpos, maText.Text, aOffsets, aKashidaArray,
                                    ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
                                    ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) );
         }

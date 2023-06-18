@@ -121,6 +121,7 @@ namespace vclcanvas
             rendering::CompositeOperation::SOURCE);
 
         KernArray aOffsets(setupTextOffsets(maLogicalAdvancements, aViewState, aRenderState));
+        o3tl::span<const sal_Bool> aKashidaArray(maKashidaPositions.getArray(), maKashidaPositions.getLength());
 
         std::vector< uno::Reference< rendering::XPolyPolygon2D> > aOutlineSequence;
         ::basegfx::B2DPolyPolygonVector aOutlines;
@@ -131,7 +132,8 @@ namespace vclcanvas
             maText.StartPosition,
             maText.Length,
             0,
-            aOffsets))
+            aOffsets,
+            aKashidaArray))
         {
             aOutlineSequence.reserve(aOutlines.size());
             sal_Int32 nIndex (0);
@@ -214,6 +216,23 @@ namespace vclcanvas
                          "TextLayout::applyLogicalAdvancements(): mismatching number of advancements" );
 
         maLogicalAdvancements = aAdvancements;
+    }
+
+    uno::Sequence< sal_Bool > SAL_CALL TextLayout::queryKashidaPositions(  )
+    {
+        SolarMutexGuard aGuard;
+
+        return maKashidaPositions;
+    }
+
+    void SAL_CALL TextLayout::applyKashidaPositions( const uno::Sequence< sal_Bool >& aPositions )
+    {
+        SolarMutexGuard aGuard;
+
+        ENSURE_ARG_OR_THROW( !aPositions.hasElements() || aPositions.getLength() == maText.Length,
+                         "TextLayout::applyKashidaPositions(): mismatching number of positions" );
+
+        maKashidaPositions = aPositions;
     }
 
     geometry::RealRectangle2D SAL_CALL TextLayout::queryTextBounds(  )
@@ -337,6 +356,7 @@ namespace vclcanvas
         {
             // TODO(P2): cache that
             KernArray aOffsets(setupTextOffsets(maLogicalAdvancements, viewState, renderState));
+            o3tl::span<const sal_Bool> aKashidaArray(maKashidaPositions.getConstArray(), maKashidaPositions.getLength());
 
             // TODO(F3): ensure correct length and termination for DX
             // array (last entry _must_ contain the overall width)
@@ -344,7 +364,7 @@ namespace vclcanvas
             rOutDev.DrawTextArray( rOutpos,
                                    maText.Text,
                                    aOffsets,
-                                   {},
+                                   aKashidaArray,
                                    ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
                                    ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) );
         }
