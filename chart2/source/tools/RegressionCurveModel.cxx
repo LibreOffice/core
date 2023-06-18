@@ -182,6 +182,7 @@ void SAL_CALL RegressionCurveModel::setEquationProperties( const uno::Reference<
             ModifyListenerHelper::removeListener( m_xEquationProperties, m_xModifyEventForwarder );
 
         m_xEquationProperties.set( xEquationProperties );
+        m_xEquationProperties->setPropertyValue( "MayHaveCorrelationCoefficient", uno::Any( m_eRegressionCurveType != CURVE_TYPE_MOVING_AVERAGE ) );
         ModifyListenerHelper::addListener( m_xEquationProperties, m_xModifyEventForwarder );
         fireModifyEvent();
     }

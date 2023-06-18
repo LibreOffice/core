@@ -915,6 +915,20 @@ bool RegressionCurveHelper::hasEquation( const Reference< chart2::XRegressionCur
     return bHasEquation;
 }
 
+bool RegressionCurveHelper::MayHaveCorrelationCoefficient( const Reference< chart2::XRegressionCurve > & xCurve )
+{
+    bool bMayHaveCorrelationCoefficient = true;
+    if( xCurve.is())
+    {
+        uno::Reference< beans::XPropertySet > xEquationProp( xCurve->getEquationProperties() );
+        if( xEquationProp.is() )
+        {
+            xEquationProp->getPropertyValue( "MayHaveCorrelationCoefficient") >>= bMayHaveCorrelationCoefficient;
+        }
+    }
+    return bMayHaveCorrelationCoefficient;
+}
+
 } //namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
