@@ -847,6 +847,7 @@ namespace cppcanvas::internal
                                              int                            nIndex,
                                              int                            nLength,
                                              KernArraySpan                pCharWidths,
+                                             o3tl::span<const sal_Bool>     pKashidaArray,
                                              const ActionFactoryParameters& rParms,
                                              bool                           bSubsettableActions )
         {
@@ -943,6 +944,7 @@ namespace cppcanvas::internal
                     nIndex,
                     nLength,
                     pCharWidths,
+                    pKashidaArray,
                     rParms.mrVDev,
                     rParms.mrCanvas,
                     rState,
@@ -1008,6 +1010,7 @@ namespace cppcanvas::internal
                             0/*nStartPos*/,
                             nLen,
                             aStrikeoutCharWidths,
+                            pKashidaArray,
                             rParms.mrVDev,
                             rParms.mrCanvas,
                             rState,
@@ -2450,6 +2453,7 @@ namespace cppcanvas::internal
                             pAct->GetIndex(),
                             nLen,
                             {},
+                            {},
                             rFactoryParms,
                             bSubsettableActions );
                     }
@@ -2471,6 +2475,7 @@ namespace cppcanvas::internal
                             pAct->GetIndex(),
                             nLen,
                             pAct->GetDXArray(),
+                            pAct->GetKashidaArray(),
                             rFactoryParms,
                             bSubsettableActions );
                     }
@@ -2578,6 +2583,7 @@ namespace cppcanvas::internal
                             pAct->GetIndex(),
                             nLen,
                             aDXArray,
+                            {},
                             rFactoryParms,
                             bSubsettableActions );
                     }

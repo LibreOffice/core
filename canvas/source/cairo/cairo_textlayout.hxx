@@ -60,6 +60,8 @@ namespace cairocanvas
         virtual css::uno::Sequence< css::geometry::RealRectangle2D > SAL_CALL queryMeasures(  ) override;
         virtual css::uno::Sequence< double > SAL_CALL queryLogicalAdvancements(  ) override;
         virtual void SAL_CALL applyLogicalAdvancements( const css::uno::Sequence< double >& aAdvancements ) override;
+        virtual css::uno::Sequence< sal_Bool > SAL_CALL queryKashidaPositions(  ) override;
+        virtual void SAL_CALL applyKashidaPositions( const css::uno::Sequence< sal_Bool >& aPositions ) override;
         virtual css::geometry::RealRectangle2D SAL_CALL queryTextBounds(  ) override;
         virtual double SAL_CALL justify( double nSize ) override;
         virtual double SAL_CALL combinedJustify( const css::uno::Sequence< css::uno::Reference< css::rendering::XTextLayout > >& aNextLayouts, double nSize ) override;
@@ -94,6 +96,7 @@ namespace cairocanvas
     private:
         css::rendering::StringContext              maText;
         css::uno::Sequence< double >               maLogicalAdvancements;
+        css::uno::Sequence< sal_Bool >             maKashidaPositions;
         CanvasFont::Reference                      mpFont;
         SurfaceProviderRef                         mpRefDevice;
         sal_Int8                                   mnTextDirection;

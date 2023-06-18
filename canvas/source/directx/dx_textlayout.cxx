@@ -93,6 +93,26 @@ namespace dxcanvas
         maLogicalAdvancements = aAdvancements;
     }
 
+    uno::Sequence< sal_Bool > SAL_CALL TextLayout::queryKashidaPositions(  )
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+
+        return maKashidaPositions;
+    }
+
+    void SAL_CALL TextLayout::applyKashidaPositions( const uno::Sequence< sal_Bool >& aPositions )
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+
+        if( aPositions.hasElements() && aPositions.getLength() != maText.Length )
+        {
+            SAL_WARN("canvas.directx", "TextLayout::applyKashidaPositions(): mismatching number of positions" );
+            throw lang::IllegalArgumentException("mismatching number of positions", getXWeak(), 1);
+        }
+
+        maKashidaPositions = aPositions;
+    }
+
     geometry::RealRectangle2D SAL_CALL TextLayout::queryTextBounds( )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -205,6 +225,7 @@ namespace dxcanvas
             rOutputOffset,
             maText,
             maLogicalAdvancements,
+            maKashidaPositions,
             mpFont,
             mpFont->getFontMatrix(),
             bAlphaSurface,

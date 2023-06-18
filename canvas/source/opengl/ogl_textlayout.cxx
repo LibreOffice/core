@@ -73,6 +73,26 @@ namespace oglcanvas
         maLogicalAdvancements = aAdvancements;
     }
 
+    uno::Sequence< sal_Bool > SAL_CALL TextLayout::queryKashidaPositions(  )
+    {
+        std::unique_lock aGuard( m_aMutex );
+
+        return maKashidaPositions;
+    }
+
+    void SAL_CALL TextLayout::applyKashidaPositions( const uno::Sequence< sal_Bool >& aPositions )
+    {
+        std::unique_lock aGuard( m_aMutex );
+
+        if( aPositions.hasElements() && aPositions.getLength() != maText.Length )
+        {
+            SAL_WARN("canvas.ogl", "TextLayout::applyKashidaPositions(): mismatching number of positions" );
+            throw lang::IllegalArgumentException("mismatching number of positions", getXWeak(), 1);
+        }
+
+        maKashidaPositions = aPositions;
+    }
+
     geometry::RealRectangle2D SAL_CALL TextLayout::queryTextBounds(  )
     {
         std::unique_lock aGuard( m_aMutex );
