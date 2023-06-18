@@ -53,6 +53,7 @@ enum
     PROP_EQUATION_XNAME,
     PROP_EQUATION_YNAME,
     PROP_EQUATION_SHOW_CORRELATION_COEFF,
+    PROP_EQUATION_MAY_HAVE_CORRELATION_COEFF,
     PROP_EQUATION_REF_PAGE_SIZE,
     PROP_EQUATION_REL_POS,
     PROP_EQUATION_NUMBER_FORMAT
@@ -81,6 +82,12 @@ void lcl_AddPropertiesToVector(
 
     rOutProperties.emplace_back( "ShowCorrelationCoefficient",
                   PROP_EQUATION_SHOW_CORRELATION_COEFF,
+                  cppu::UnoType<bool>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+
+    rOutProperties.emplace_back( "MayHaveCorrelationCoefficient",
+                  PROP_EQUATION_MAY_HAVE_CORRELATION_COEFF,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
@@ -117,6 +124,7 @@ void lcl_AddPropertiesToVector(
             ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, PROP_EQUATION_XNAME, OUString("x") );
             ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, PROP_EQUATION_YNAME, OUString("f(x)") );
             ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, PROP_EQUATION_SHOW_CORRELATION_COEFF, false );
+            ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, PROP_EQUATION_MAY_HAVE_CORRELATION_COEFF, true );
             //::chart::PropertyHelper::setPropertyValueDefault( aOutMap, PROP_EQUATION_SEPARATOR, OUString( '\n' ));
 
             // override other defaults
