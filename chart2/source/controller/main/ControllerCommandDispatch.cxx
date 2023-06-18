@@ -285,23 +285,28 @@ void ControllerState::update(
         // Trendline Equation
         bMayFormatTrendlineEquation = bMayDeleteTrendlineEquation = RegressionCurveHelper::hasEquation( xRegCurve );
         bMayAddTrendlineEquation = !bMayDeleteTrendlineEquation;
+        bMayAddR2Value = RegressionCurveHelper::MayHaveCorrelationCoefficient( xRegCurve ) && bMayAddTrendlineEquation;
     }
     else if( aObjectType == OBJECTTYPE_DATA_CURVE_EQUATION )
     {
         bMayFormatTrendlineEquation = true;
         bool bHasR2Value = false;
+        bool bMayHaveR2 = true;
         try
         {
             uno::Reference< beans::XPropertySet > xEquationProperties =
                 ObjectIdentifier::getObjectPropertySet( aSelObjCID, xModel );
             if( xEquationProperties.is() )
+            {
                 xEquationProperties->getPropertyValue( "ShowCorrelationCoefficient" ) >>= bHasR2Value;
+                xEquationProperties->getPropertyValue( "MayHaveCorrelationCoefficient" ) >>= bMayHaveR2;
+            }
         }
         catch(const uno::RuntimeException&)
         {
             TOOLS_WARN_EXCEPTION("chart2", "" );
         }
-        bMayAddR2Value = !bHasR2Value;
+        bMayAddR2Value = !bHasR2Value && bMayHaveR2;
         bMayDeleteR2Value = bHasR2Value;
     }
 }
@@ -672,8 +677,10 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ ".uno:InsertMeanValue" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddMeanValue;
     m_aCommandAvailability[ ".uno:InsertTrendline" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddTrendline;
     m_aCommandAvailability[ ".uno:InsertTrendlineEquation" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddTrendlineEquation;
-    m_aCommandAvailability[ ".uno:InsertTrendlineEquationAndR2" ] = m_aCommandAvailability[ ".uno:InsertTrendlineEquation" ];
-    m_aCommandAvailability[ ".uno:InsertR2Value" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddR2Value;
+    m_aCommandAvailability[ ".uno:InsertTrendlineEquationAndR2" ] =
+        m_aCommandAvailability[ ".uno:InsertTrendlineEquation" ] && m_apControllerState->bMayAddR2Value;
+    m_aCommandAvailability[ ".uno:InsertR2Value" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddR2Value
+        && !m_apControllerState->bMayAddTrendlineEquation;
     m_aCommandAvailability[ ".uno:DeleteR2Value" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteR2Value;
 
     m_aCommandAvailability[ ".uno:InsertXErrorBars" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddXErrorBars;
