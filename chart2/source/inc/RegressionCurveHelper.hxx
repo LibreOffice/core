@@ -199,6 +199,7 @@ namespace chart::RegressionCurveHelper
         const rtl::Reference<::chart::RegressionCurveModel>& xCurve );
 
     OOO_DLLPUBLIC_CHARTTOOLS bool hasEquation(const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
+    OOO_DLLPUBLIC_CHARTTOOLS bool MayHaveCorrelationCoefficient(const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
 } //  namespace chart
 
