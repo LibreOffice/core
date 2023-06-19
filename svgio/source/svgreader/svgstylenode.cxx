@@ -28,7 +28,7 @@ namespace svgio::svgreader
             SvgDocument& rDocument,
             SvgNode* pParent)
         :   SvgNode(SVGToken::Style, rDocument, pParent),
-            mbTextCss(false)
+            mbTextCss(true)
         {
         }
 
@@ -57,9 +57,9 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"text/css"))
+                        if(!o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"text/css"))
                         {
-                            setTextCss(true);
+                            setTextCss(false);
                         }
                     }
                     break;
