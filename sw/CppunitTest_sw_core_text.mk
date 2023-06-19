@@ -14,6 +14,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,sw_core_text))
 $(eval $(call gb_CppunitTest_use_common_precompiled_header,sw_core_text))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_core_text, \
+    sw/qa/core/text/frmform \
     sw/qa/core/text/text \
 ))
 
