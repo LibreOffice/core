@@ -2758,7 +2758,7 @@ void SAL_CALL SlideshowImpl::gotoNextEffect(  )
     if( !(mxShow.is() && mpSlideController && mpShowWindow) )
         return;
 
-    if( mbIsPaused )
+    if( mbIsPaused && mpShowWindow->GetShowWindowMode() != SHOWWINDOWMODE_END )
         resume();
 
     const ShowWindowMode eMode = mpShowWindow->GetShowWindowMode();
@@ -2784,13 +2784,10 @@ void SAL_CALL SlideshowImpl::gotoPreviousEffect(  )
     if( !(mxShow.is() && mpSlideController && mpShowWindow) )
         return;
 
-    if( mbIsPaused )
-        resume();
-
     const ShowWindowMode eMode = mpShowWindow->GetShowWindowMode();
-    if( (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK) )
+    if( (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK) || mbIsPaused )
     {
-        mpShowWindow->RestartShow();
+        resume();
     }
     else
     {
