@@ -1486,16 +1486,17 @@ void ExtCfDataBarRule::finalizeImport()
             else if (maModel.maColorScaleType == "formula")
                 pEntry->SetType(COLORSCALE_FORMULA);
             else if (maModel.maColorScaleType == "num")
-                pEntry->SetType(COLORSCALE_VALUE);
-
-            if (!maModel.msScaleTypeValue.isEmpty())
             {
-                sal_Int32 nSize = 0;
-                rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
-                double fValue = rtl::math::stringToDouble(maModel.msScaleTypeValue, '.', '\0', &eStatus, &nSize);
-                if (eStatus == rtl_math_ConversionStatus_Ok && nSize == maModel.msScaleTypeValue.getLength())
+                pEntry->SetType(COLORSCALE_VALUE);
+                if (!maModel.msScaleTypeValue.isEmpty())
                 {
-                    pEntry->SetValue(fValue);
+                    sal_Int32 nSize = 0;
+                    rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
+                    double fValue = rtl::math::stringToDouble(maModel.msScaleTypeValue, '.', '\0', &eStatus, &nSize);
+                    if (eStatus == rtl_math_ConversionStatus_Ok && nSize == maModel.msScaleTypeValue.getLength())
+                    {
+                        pEntry->SetValue(fValue);
+                    }
                 }
             }
             break;
