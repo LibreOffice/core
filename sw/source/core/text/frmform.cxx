@@ -362,7 +362,13 @@ void SwTextFrame::MakePos()
             }
             // Possibly this fly was positioned relative to us, invalidate its position now that our
             // position is changed.
-            pFly->UnlockPosition();
+            SwPageFrame* pPageFrame = pFly->FindPageFrame();
+            if (pPageFrame && pFly->getFrameArea().Pos() == pPageFrame->getFrameArea().Pos())
+            {
+                // The position was just adjusted to be be inside the page frame, so not really
+                // positioned, unlock the position once to allow a recalc.
+                pFly->UnlockPosition();
+            }
             pFly->InvalidatePos();
         }
     }
