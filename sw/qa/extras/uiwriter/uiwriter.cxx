@@ -155,6 +155,21 @@ int CountFilesInDirectory(const OUString &rURL)
 
     return nRet;
 }
+
+static void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xComponent, const OUString& rCommand, const uno::Sequence<beans::PropertyValue>& rPropertyValues)
+{
+    uno::Reference<frame::XController> xController = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY_THROW)->getCurrentController();
+    CPPUNIT_ASSERT(xController.is());
+    uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFrame.is());
+
+    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    uno::Reference<frame::XDispatchHelper> xDispatchHelper(frame::DispatchHelper::create(xContext));
+    CPPUNIT_ASSERT(xDispatchHelper.is());
+
+    xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
+}
+
 }
 
 class SwUiWriterTest : public SwModelTestBase, public HtmlTestTools
@@ -790,9 +805,8 @@ void SwUiWriterTest::testBookmarkCopy()
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFormulaNumberWithGroupSeparator)
 {
-    createSwDoc("tdf125154.odt");
-    dispatchCommand(mxComponent, ".uno:UpdateAll", {});
-    SwDoc* pDoc = getSwDoc();
+    SwDoc* pDoc = createDoc("tdf125154.odt");
+    lcl_dispatchCommand(mxComponent, ".uno:UpdateAll", {});
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(true);
     SwField const* pField;
@@ -4191,20 +4205,6 @@ void SwUiWriterTest::testShapeAnchorUndo()
     rUndoManager.Undo();
 
     CPPUNIT_ASSERT_EQUAL(pObject->GetLogicRect(), aOrigLogicRect);
-}
-
-static void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xComponent, const OUString& rCommand, const uno::Sequence<beans::PropertyValue>& rPropertyValues)
-{
-    uno::Reference<frame::XController> xController = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY_THROW)->getCurrentController();
-    CPPUNIT_ASSERT(xController.is());
-    uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xFrame.is());
-
-    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
-    uno::Reference<frame::XDispatchHelper> xDispatchHelper(frame::DispatchHelper::create(xContext));
-    CPPUNIT_ASSERT(xDispatchHelper.is());
-
-    xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf149595)
