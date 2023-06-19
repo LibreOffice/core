@@ -27,6 +27,8 @@
 
 class IntlWrapper;
 
+/// Contains the line numbering properties of this paragraph. Format -> Paragraph -> Outline & List
+/// tab, Line Numbering section is the UI for this.
 class SW_DLLPUBLIC SwFormatLineNumber final : public SfxPoolItem
 {
     sal_uLong m_nStartValue   :24; ///< Starting value for the paragraph. 0 == no starting value.
