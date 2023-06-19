@@ -52,7 +52,8 @@ void ThemeExport::write(OUString const& rPath, model::Theme const& rTheme)
     OUString aThemeName = rTheme.GetName();
 
     mpFS->startElementNS(XML_a, XML_theme, FSNS(XML_xmlns, XML_a),
-                         mpFilterBase->getNamespaceURL(OOX_NS(dml)), XML_name, aThemeName);
+                         mpFilterBase->getNamespaceURL(OOX_NS(dml)), FSNS(XML_xmlns, XML_r),
+                         mpFilterBase->getNamespaceURL(OOX_NS(officeRel)), XML_name, aThemeName);
 
     mpFS->startElementNS(XML_a, XML_themeElements);
 
