@@ -30,12 +30,10 @@ public:
 
 CPPUNIT_TEST_FIXTURE(CanvasTest, testComposite)
 {
-#if ENABLE_CAIRO_CANVAS
     ScopedVclPtrInstance<WorkWindow> pWin( nullptr, WB_STDWORK );
 
     uno::Reference<rendering::XCanvas> xCanvas = pWin->GetOutDev()->GetCanvas ();
-    if( !xCanvas.is() )
-        return; // can't get a canvas working at all - truly headless ?
+    CPPUNIT_ASSERT(xCanvas.is());
 
     // a huge canvas ...
     Size aSize (1, 1);
@@ -70,8 +68,6 @@ CPPUNIT_TEST_FIXTURE(CanvasTest, testComposite)
         XCachedPrimitive    fillPolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState )
 #endif
     }
-
-#endif
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
