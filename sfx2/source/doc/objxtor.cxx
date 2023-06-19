@@ -247,6 +247,7 @@ SfxObjectShell::SfxObjectShell( const SfxModelFlags i_nCreationFlags )
     , bHasName(false)
     , bIsInGenerateThumbnail (false)
     , mbAvoidRecentDocs(false)
+    , bRememberSignature(false)
 {
     if (i_nCreationFlags & SfxModelFlags::EMBEDDED_OBJECT)
         eCreateMode = SfxObjectCreateMode::EMBEDDED;
@@ -276,6 +277,7 @@ SfxObjectShell::SfxObjectShell(SfxObjectCreateMode eMode)
     , bHasName(false)
     , bIsInGenerateThumbnail(false)
     , mbAvoidRecentDocs(false)
+    , bRememberSignature(false)
 {
 }
 
