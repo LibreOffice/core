@@ -53,8 +53,9 @@ if test -z "$MACOSX_CODESIGNING_IDENTITY"; then
 
     # Skip codesigning for non-release builds if there is no identity set but
     # set entitlements to allow Xcode's Instruments application to connect to
-    # the application
-    codesign --force --identifier="${MACOSX_BUNDLE_IDENTIFIER}" --sign - $entitlements "$APP_BUNDLE" || exit 1
+    # the application. Note: the following command fails on some Mac Intel
+    # machines, and since this not a release build, ignore any failures.
+    codesign --force --identifier="${MACOSX_BUNDLE_IDENTIFIER}" --sign - $entitlements "$APP_BUNDLE"
     exit 0
 fi
 
