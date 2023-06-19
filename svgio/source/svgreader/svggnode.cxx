@@ -19,6 +19,7 @@
 
 #include <svggnode.hxx>
 #include <osl/diagnose.h>
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
 namespace svgio::svgreader
 {
@@ -85,31 +86,26 @@ namespace svgio::svgreader
 
         void SvgGNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DContainer& rTarget, bool bReferenced) const
         {
-            if(SVGToken::Defs == getType())
-            {
-                // #i125258# no decompose needed for defs element, call parent for SVGTokenDefs
-                SvgNode::decomposeSvgNode(rTarget, bReferenced);
-            }
-            else
-            {
-                // #i125258# for SVGTokenG decompose children
-                const SvgStyleAttributes* pStyle = getSvgStyleAttributes();
+            SvgNode::decomposeSvgNode(rTarget, bReferenced);
 
-                if(pStyle)
+            // if g element has transform, apply it
+            if(SVGToken::G == getType())
+            {
+                if(getTransform())
                 {
-                    const double fOpacity(pStyle->getOpacity().getNumber());
+                    drawinglayer::primitive2d::Primitive2DContainer aSource(std::move(rTarget));
+                    // create embedding group element with transformation
+                    const drawinglayer::primitive2d::Primitive2DReference xRef(
+                        new drawinglayer::primitive2d::TransformPrimitive2D(
+                            *getTransform(),
+                            std::move(aSource)));
 
-                    if(fOpacity > 0.0 && Display::None != getDisplay())
+                    aSource = drawinglayer::primitive2d::Primitive2DContainer { xRef };
+
+                    if(!aSource.empty())
                     {
-                        drawinglayer::primitive2d::Primitive2DContainer aContent;
-
-                        // decompose children
-                        SvgNode::decomposeSvgNode(aContent, bReferenced);
-
-                        if(!aContent.empty())
-                        {
-                            pStyle->add_postProcess(rTarget, std::move(aContent), getTransform());
-                        }
+                        // append to current target
+                        rTarget.append(aSource);
                     }
                 }
             }
