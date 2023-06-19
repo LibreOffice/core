@@ -299,21 +299,10 @@ namespace
                 {
                     SvgStyleNode* pNew = new SvgStyleNode(maDocument, mpTarget);
                     mpTarget = pNew;
-                    const sal_uInt32 nAttributes(xAttribs->getLength());
 
-                    if(0 == nAttributes)
-                    {
-                        // #i125326# no attributes, thus also no type="text/css". This is allowed to be missing,
-                        // thus do mark this style as CssStyle. This is required to read the contained
-                        // text (which defines the css style)
-                        pNew->setTextCss(true);
-                    }
-                    else
-                    {
-                        // #i125326# there are attributes, read them. This will set isTextCss to true if
-                        // a type="text/css" is contained as exact match, else not
-                        mpTarget->parseAttributes(xAttribs);
-                    }
+                    // #i125326# there are attributes, read them. This will set isTextCss to false if
+                    // type attibute is different to "text/css"
+                    mpTarget->parseAttributes(xAttribs);
 
                     if(pNew->isTextCss())
                     {
