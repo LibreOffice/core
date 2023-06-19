@@ -287,9 +287,6 @@ SwHTMLFrameType SwHTMLWriter::GuessFrameType( const SwFrameFormat& rFrameFormat,
 
 void SwHTMLWriter::CollectFlyFrames()
 {
-    OSL_ENSURE( HTML_CFG_MAX+1 == MAX_BROWSERS,
-            "number of browser configurations has changed" );
-
     SwPosFlyFrames aFlyPos(
         m_pDoc->GetAllFlyFormats(m_bWriteAll ? nullptr : m_pCurrentPam.get(), true));
 
@@ -308,7 +305,7 @@ void SwHTMLWriter::CollectFlyFrames()
         {
         case RndStdIds::FLY_AT_PAGE:
         case RndStdIds::FLY_AT_FLY:
-            nMode = aHTMLOutFramePageFlyTable[eType][m_nExportMode];
+            nMode = getHTMLOutFramePageFlyTable(eType, m_nExportMode);
             break;
 
         case RndStdIds::FLY_AT_PARA:
@@ -325,22 +322,22 @@ void SwHTMLWriter::CollectFlyFrames()
                     pACNd->GetAttr(RES_MARGIN_RIGHT);
                 if (rTextLeftMargin.GetTextLeft() || rRightMargin.GetRight())
                 {
-                    nMode = aHTMLOutFrameParaFrameTable[eType][m_nExportMode];
+                    nMode = getHTMLOutFrameParaFrameTable(eType, m_nExportMode);
                     break;
                 }
             }
-            nMode = aHTMLOutFrameParaPrtAreaTable[eType][m_nExportMode];
+            nMode = getHTMLOutFrameParaPrtAreaTable(eType, m_nExportMode);
             break;
 
         case RndStdIds::FLY_AT_CHAR:
             if( text::RelOrientation::FRAME == eHoriRel || text::RelOrientation::PRINT_AREA == eHoriRel )
-                nMode = aHTMLOutFrameParaPrtAreaTable[eType][m_nExportMode];
+                nMode = getHTMLOutFrameParaPrtAreaTable(eType, m_nExportMode);
             else
-                nMode = aHTMLOutFrameParaOtherTable[eType][m_nExportMode];
+                nMode = getHTMLOutFrameParaOtherTable(eType, m_nExportMode);
             break;
 
         default:
-            nMode = aHTMLOutFrameParaPrtAreaTable[eType][m_nExportMode];
+            nMode = getHTMLOutFrameParaPrtAreaTable(eType, m_nExportMode);
             break;
         }
 

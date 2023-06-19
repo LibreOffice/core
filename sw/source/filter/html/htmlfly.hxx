@@ -79,19 +79,17 @@ namespace o3tl {
     template<> struct typed_flags<HtmlContainerFlags> : is_typed_flags<HtmlContainerFlags, 0x03> {};
 }
 
-const sal_uInt16 MAX_FRMTYPES = HTML_FRMTYPE_END;
-const sal_uInt16 MAX_BROWSERS = 3;
-
 struct AllHtmlFlags {
     HtmlOut            nOut;
     HtmlPosition       nPosition;
     HtmlContainerFlags nContainer;
 };
-extern AllHtmlFlags const aHTMLOutFramePageFlyTable[MAX_FRMTYPES][MAX_BROWSERS];
-extern AllHtmlFlags const aHTMLOutFrameParaFrameTable[MAX_FRMTYPES][MAX_BROWSERS];
-extern AllHtmlFlags const aHTMLOutFrameParaPrtAreaTable[MAX_FRMTYPES][MAX_BROWSERS];
-extern AllHtmlFlags const aHTMLOutFrameParaOtherTable[MAX_FRMTYPES][MAX_BROWSERS];
-extern AllHtmlFlags const aHTMLOutFrameAsCharTable[MAX_FRMTYPES][MAX_BROWSERS];
+
+AllHtmlFlags getHTMLOutFramePageFlyTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode);
+AllHtmlFlags getHTMLOutFrameParaFrameTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode);
+AllHtmlFlags getHTMLOutFrameParaPrtAreaTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode);
+AllHtmlFlags getHTMLOutFrameParaOtherTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode);
+AllHtmlFlags getHTMLOutFrameAsCharTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode);
 
 class SwHTMLPosFlyFrame
 {

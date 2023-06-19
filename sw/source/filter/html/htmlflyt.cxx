@@ -18,8 +18,12 @@
  */
 
 #include "htmlfly.hxx"
+#include <svtools/htmlcfg.hxx>
 
-AllHtmlFlags const aHTMLOutFramePageFlyTable[MAX_FRMTYPES][MAX_BROWSERS] =
+constexpr sal_uInt16 MAX_FRMTYPES = HTML_FRMTYPE_END;
+constexpr sal_uInt16 MAX_BROWSERS = HTML_CFG_MAX + 1;
+
+constexpr AllHtmlFlags aHTMLOutFramePageFlyTable[][MAX_BROWSERS] =
 {
     {
         // text frame with table
@@ -102,7 +106,16 @@ AllHtmlFlags const aHTMLOutFramePageFlyTable[MAX_FRMTYPES][MAX_BROWSERS] =
     }
 };
 
-AllHtmlFlags const aHTMLOutFrameParaFrameTable[MAX_FRMTYPES][MAX_BROWSERS] =
+AllHtmlFlags getHTMLOutFramePageFlyTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode)
+{
+    static_assert(std::size(aHTMLOutFramePageFlyTable) == MAX_FRMTYPES);
+    assert(eFrameType < HTML_FRMTYPE_END);
+    assert(nExportMode <= HTML_CFG_MAX);
+
+    return aHTMLOutFramePageFlyTable[eFrameType][nExportMode];
+}
+
+constexpr AllHtmlFlags aHTMLOutFrameParaFrameTable[][MAX_BROWSERS] =
 {
     {
         // text frame with table
@@ -186,7 +199,16 @@ AllHtmlFlags const aHTMLOutFrameParaFrameTable[MAX_FRMTYPES][MAX_BROWSERS] =
     }
 };
 
-AllHtmlFlags const aHTMLOutFrameParaPrtAreaTable[MAX_FRMTYPES][MAX_BROWSERS] =
+AllHtmlFlags getHTMLOutFrameParaFrameTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode)
+{
+    static_assert(std::size(aHTMLOutFrameParaFrameTable) == MAX_FRMTYPES);
+    assert(eFrameType < HTML_FRMTYPE_END);
+    assert(nExportMode <= HTML_CFG_MAX);
+
+    return aHTMLOutFrameParaFrameTable[eFrameType][nExportMode];
+}
+
+constexpr AllHtmlFlags aHTMLOutFrameParaPrtAreaTable[][MAX_BROWSERS] =
 {
     {
         // text frame with table
@@ -269,7 +291,16 @@ AllHtmlFlags const aHTMLOutFrameParaPrtAreaTable[MAX_FRMTYPES][MAX_BROWSERS] =
     }
 };
 
-AllHtmlFlags const aHTMLOutFrameParaOtherTable[MAX_FRMTYPES][MAX_BROWSERS] =
+AllHtmlFlags getHTMLOutFrameParaPrtAreaTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode)
+{
+    static_assert(std::size(aHTMLOutFrameParaPrtAreaTable) == MAX_FRMTYPES);
+    assert(eFrameType < HTML_FRMTYPE_END);
+    assert(nExportMode <= HTML_CFG_MAX);
+
+    return aHTMLOutFrameParaPrtAreaTable[eFrameType][nExportMode];
+}
+
+constexpr AllHtmlFlags aHTMLOutFrameParaOtherTable[][MAX_BROWSERS] =
 {
     {
         // text frame with table
@@ -352,7 +383,16 @@ AllHtmlFlags const aHTMLOutFrameParaOtherTable[MAX_FRMTYPES][MAX_BROWSERS] =
     }
 };
 
-AllHtmlFlags const aHTMLOutFrameAsCharTable[MAX_FRMTYPES][MAX_BROWSERS] =
+AllHtmlFlags getHTMLOutFrameParaOtherTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode)
+{
+    static_assert(std::size(aHTMLOutFrameParaOtherTable) == MAX_FRMTYPES);
+    assert(eFrameType < HTML_FRMTYPE_END);
+    assert(nExportMode <= HTML_CFG_MAX);
+
+    return aHTMLOutFrameParaOtherTable[eFrameType][nExportMode];
+}
+
+constexpr AllHtmlFlags aHTMLOutFrameAsCharTable[][MAX_BROWSERS] =
 {
     {
         // text frame with table
@@ -434,5 +474,14 @@ AllHtmlFlags const aHTMLOutFrameAsCharTable[MAX_FRMTYPES][MAX_BROWSERS] =
         { HtmlOut::GraphicFrame, HtmlPosition::Inside, HtmlContainerFlags::NONE }       // Netscape 4
     }
 };
+
+AllHtmlFlags getHTMLOutFrameAsCharTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode)
+{
+    static_assert(std::size(aHTMLOutFrameAsCharTable) == MAX_FRMTYPES);
+    assert(eFrameType < HTML_FRMTYPE_END);
+    assert(nExportMode <= HTML_CFG_MAX);
+
+    return aHTMLOutFrameAsCharTable[eFrameType][nExportMode];
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
