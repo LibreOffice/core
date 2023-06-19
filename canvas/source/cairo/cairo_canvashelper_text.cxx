@@ -190,6 +190,9 @@ namespace cairocanvas
         aVCLFont.SetColor( aColor );
         aVCLFont.SetFillColor( aColor );
 
+        if (pFont->getEmphasisMark())
+            aVCLFont.SetEmphasisMark(FontEmphasisMark(pFont->getEmphasisMark()));
+
         // no need to replicate this for mp2ndOutDev, we're modifying only aVCLFont here.
         if( !setupFontTransform( rOutDev, o_rOutPos, aVCLFont, viewState, renderState ) )
             return false;

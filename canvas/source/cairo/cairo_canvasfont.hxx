@@ -70,10 +70,13 @@ namespace cairocanvas
 
         vcl::Font const & getVCLFont() const;
 
+        sal_uInt32 getEmphasisMark() const { return mnEmphasisMark; }
+
     private:
         ::canvas::vcltools::VCLObject<vcl::Font> maFont;
         css::rendering::FontRequest              maFontRequest;
         SurfaceProviderRef                       mpRefDevice;
+        sal_uInt32                               mnEmphasisMark;
     };
 
 }
