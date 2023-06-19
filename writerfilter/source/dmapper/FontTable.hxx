@@ -52,7 +52,7 @@ class FontTable : public LoggedProperties, public LoggedTable
     FontEntry::Pointer_t  getFontEntry(sal_uInt32 nIndex);
 
     void addEmbeddedFont(const css::uno::Reference<css::io::XInputStream>& stream,
-                         const OUString& fontName, const char* extra,
+                         const OUString& fontName, std::u16string_view extra,
                          std::vector<unsigned char> const & key);
 
  private:
@@ -88,14 +88,14 @@ typedef tools::SvRef< FontTable >          FontTablePtr;
 class EmbeddedFontHandler : public LoggedProperties
 {
 public:
-    EmbeddedFontHandler(FontTable& rFontTable, OUString fontName, const char* style);
+    EmbeddedFontHandler(FontTable& rFontTable, OUString fontName, std::u16string_view style);
     virtual ~EmbeddedFontHandler() override;
 private:
     virtual void lcl_attribute( Id name, Value& val ) override;
     virtual void lcl_sprm( Sprm& rSprm ) override;
     FontTable& m_fontTable;
     OUString m_fontName;
-    const char* const m_style;
+    std::u16string_view m_style;
     OUString m_fontKey;
     css::uno::Reference<css::io::XInputStream> m_inputStream;
 };

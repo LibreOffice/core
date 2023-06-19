@@ -65,7 +65,7 @@ public:
       @param eot whether the data is compressed in Embedded OpenType format
     */
     bool addEmbeddedFont( const css::uno::Reference< css::io::XInputStream >& stream,
-        const OUString& fontName, const char* extra,
+        const OUString& fontName, std::u16string_view extra,
         std::vector< unsigned char > const & key, bool eot = false);
 
     /**
@@ -76,7 +76,7 @@ public:
       @param fontName name of the font (e.g. 'Times New Roman')
       @param extra additional text to use for name (e.g. to distinguish regular from bold, italic,...), "?" for unique
     */
-    static OUString fileUrlForTemporaryFont( const OUString& fontName, const char* extra );
+    static OUString fileUrlForTemporaryFont( const OUString& fontName, std::u16string_view extra );
 
     /**
       Adds the accumulated fonts to the list of known fonts. The fonts are used only until application

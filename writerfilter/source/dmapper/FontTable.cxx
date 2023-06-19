@@ -119,10 +119,10 @@ void FontTable::lcl_sprm(Sprm& rSprm)
             if( pProperties )
             {
                 EmbeddedFontHandler handler(*this, m_pImpl->pCurrentEntry->sFontName,
-                    nSprmId == NS_ooxml::LN_CT_Font_embedRegular ? ""
-                    : nSprmId == NS_ooxml::LN_CT_Font_embedBold ? "b"
-                    : nSprmId == NS_ooxml::LN_CT_Font_embedItalic ? "i"
-                    : /*NS_ooxml::LN_CT_Font_embedBoldItalic*/ "bi" );
+                    nSprmId == NS_ooxml::LN_CT_Font_embedRegular ? u""
+                    : nSprmId == NS_ooxml::LN_CT_Font_embedBold ? u"b"
+                    : nSprmId == NS_ooxml::LN_CT_Font_embedItalic ? u"i"
+                    : /*NS_ooxml::LN_CT_Font_embedBoldItalic*/ u"bi" );
                 pProperties->resolve( handler );
             }
             break;
@@ -226,7 +226,7 @@ sal_uInt32 FontTable::size()
 }
 
 void FontTable::addEmbeddedFont(const css::uno::Reference<css::io::XInputStream>& stream,
-                                const OUString& fontName, const char* extra,
+                                const OUString& fontName, std::u16string_view extra,
                                 std::vector<unsigned char> const & key)
 {
     if (!m_pImpl->xEmbeddedFontHelper)
@@ -234,11 +234,11 @@ void FontTable::addEmbeddedFont(const css::uno::Reference<css::io::XInputStream>
     m_pImpl->xEmbeddedFontHelper->addEmbeddedFont(stream, fontName, extra, key);
 }
 
-EmbeddedFontHandler::EmbeddedFontHandler(FontTable& rFontTable, OUString _fontName, const char* _style )
+EmbeddedFontHandler::EmbeddedFontHandler(FontTable& rFontTable, OUString _fontName, std::u16string_view style )
 : LoggedProperties("EmbeddedFontHandler")
 , m_fontTable( rFontTable )
 , m_fontName(std::move( _fontName ))
-, m_style( _style )
+, m_style( style )
 {
 }
 

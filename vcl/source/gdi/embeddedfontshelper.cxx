@@ -66,7 +66,7 @@ void EmbeddedFontsHelper::clearTemporaryFontFiles()
 }
 
 bool EmbeddedFontsHelper::addEmbeddedFont( const uno::Reference< io::XInputStream >& stream, const OUString& fontName,
-    const char* extra, std::vector< unsigned char > const & key, bool eot )
+    std::u16string_view extra, std::vector< unsigned char > const & key, bool eot )
 {
     OUString fileUrl = EmbeddedFontsHelper::fileUrlForTemporaryFont( fontName, extra );
     osl::File file( fileUrl );
@@ -189,7 +189,7 @@ void EmbeddedFontsHelper::activateFonts()
     m_aAccumulatedFonts.clear();
 }
 
-OUString EmbeddedFontsHelper::fileUrlForTemporaryFont( const OUString& fontName, const char* extra )
+OUString EmbeddedFontsHelper::fileUrlForTemporaryFont( const OUString& fontName, std::u16string_view extra )
 {
     OUString path = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
     rtl::Bootstrap::expandMacros( path );
@@ -197,10 +197,10 @@ OUString EmbeddedFontsHelper::fileUrlForTemporaryFont( const OUString& fontName,
     osl::Directory::createPath( path );
     OUString filename = fontName;
     static int uniqueCounter = 0;
-    if( strcmp( extra, "?" ) == 0 )
+    if( extra == u"?" )
         filename += OUString::number( uniqueCounter++ );
     else
-        filename += OStringToOUString( extra, RTL_TEXTENCODING_ASCII_US );
+        filename += extra;
     filename += ".ttf"; // TODO is it always ttf?
     return path + filename;
 }
