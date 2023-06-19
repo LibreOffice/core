@@ -24,15 +24,9 @@ class CanvasTest : public test::BootstrapFixture
 {
 public:
     CanvasTest() : BootstrapFixture(true, false) {}
-
-    void testComposite();
-
-    CPPUNIT_TEST_SUITE(CanvasTest);
-    CPPUNIT_TEST(testComposite);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void CanvasTest::testComposite()
+CPPUNIT_TEST_FIXTURE(CanvasTest, testComposite)
 {
 #ifdef LINUX
     ScopedVclPtrInstance<WorkWindow> pWin( nullptr, WB_STDWORK );
@@ -77,8 +71,6 @@ void CanvasTest::testComposite()
 
 #endif
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(CanvasTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
