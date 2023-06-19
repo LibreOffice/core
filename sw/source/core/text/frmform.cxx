@@ -367,7 +367,7 @@ void SwTextFrame::MakePos()
             SwPageFrame* pPageFrame = pFly->FindPageFrame();
             if (pPageFrame && pFly->getFrameArea().Pos() == pPageFrame->getFrameArea().Pos())
             {
-                // The position was just adjusted to be be inside the page frame, so not really
+                // The position was just adjusted to be inside the page frame, so not really
                 // positioned, unlock the position once to allow a recalc.
                 pFly->UnlockPosition();
             }
