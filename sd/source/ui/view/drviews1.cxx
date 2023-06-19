@@ -33,6 +33,7 @@
 #include <svx/svdoole2.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/module.hxx>
+#include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/fmshell.hxx>
 #include <tools/debug.hxx>
@@ -471,7 +472,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
 
     // If the master view toolbar is to be shown we turn it on after the
     // edit mode has been changed.
-    if (::sd::ViewShell::mpImpl->mbIsInitialized
+    if (::sd::ViewShell::mpImpl->mbIsInitialized && !sfx2::SfxNotebookBar::IsActive()
         && IsMainViewShell())
     {
         if (bShowMasterViewToolbar)
