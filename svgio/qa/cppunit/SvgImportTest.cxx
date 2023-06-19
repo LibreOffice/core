@@ -302,9 +302,26 @@ CPPUNIT_TEST_FIXTURE(Test, testFontsizeRelative)
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "familyname", "serif");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf145896)
+{
+    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/tdf145896.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequence);
+
+    CPPUNIT_ASSERT (pDocument);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: #ffff00
+    // - Actual  : #000000
+    assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor[1]", "color", "#ffff00");
+    assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor[2]", "color", "#008000");
+    assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor[3]", "color", "#0000ff");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf97717)
 {
-    //Check when font-size uses relative units (em,ex) and it's based on its parent's font-size
     Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/tdf97717.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
 
