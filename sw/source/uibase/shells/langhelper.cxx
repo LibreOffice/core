@@ -247,23 +247,7 @@ namespace SwLangHelper
             }
             //Set the default document language
             rWrtSh.SetDefault( SvxLanguageItem( nLang, nLangWhichId ) );
-
-            //Resolves: fdo#35282 Clear the language from all Text Styles, and
-            //fallback to default document language
-            const SwTextFormatColls *pColls = rWrtSh.GetDoc()->GetTextFormatColls();
-            for(size_t i = 0, nCount = pColls->size(); i < nCount; ++i)
-            {
-                SwTextFormatColl &rTextColl = *(*pColls)[ i ];
-                rTextColl.ResetFormatAttr(nLangWhichId);
-            }
-            //Resolves: fdo#35282 Clear the language from all Character Styles,
-            //and fallback to default document language
-            const SwCharFormats *pCharFormats = rWrtSh.GetDoc()->GetCharFormats();
-            for(size_t i = 0, nCount = pCharFormats->size(); i < nCount; ++i)
-            {
-                SwCharFormat &rCharFormat = *(*pCharFormats)[ i ];
-                rCharFormat.ResetFormatAttr(nLangWhichId);
-            }
+            rWrtSh.GetDoc()->GetDocShell()->Broadcast(SfxHint(SfxHintId::LanguageChanged));
 
             // #i102191: hard set respective language attribute in text document
             // (for all text in the document - which should be selected by now...)
@@ -324,6 +308,7 @@ namespace SwLangHelper
                 rWrtSh.SetDefault( SvxLanguageItem( LANGUAGE_NONE, i ) );
                 aAttribs.insert( i );
             }
+            rWrtSh.GetDoc()->GetDocShell()->Broadcast(SfxHint(SfxHintId::LanguageChanged));
 
             // set all language attributes to default
             // (for all text in the document - which should be selected by now...)

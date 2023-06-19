@@ -479,6 +479,11 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 }
                 break;
             }
+            case SfxHintId::LanguageChanged:
+            {
+                SetSpellChecking();
+                break;
+            }
             case SfxHintId::SwSplitNodeOperation:
             {
                 // if we are in a SplitNode/Cut operation, do not delete note and then add again, as this will flicker

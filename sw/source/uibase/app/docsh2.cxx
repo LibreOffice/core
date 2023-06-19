@@ -875,8 +875,11 @@ void SwDocShell::Execute(SfxRequest& rReq)
             }
             break;
             case SID_SPELLCHECKER_CHANGED:
+            {
                 //! false, true, true is on the save side but a probably overdone
                 SwModule::CheckSpellChanges(false, true, true, false );
+                Broadcast(SfxHint(SfxHintId::LanguageChanged));
+            }
             break;
 
         case SID_MAIL_PREPAREEXPORT:

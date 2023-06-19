@@ -1243,11 +1243,9 @@ void SwAnnotationWin::SetSpellChecking()
     {
         const SwViewOption* pVOpt = pWrtShell->GetViewOptions();
         EEControlBits nCntrl = mpOutliner->GetControlWord();
+        mpOutliner->SetControlWord(nCntrl & ~EEControlBits::ONLINESPELLING);
         if (pVOpt->IsOnlineSpell())
-            nCntrl |= EEControlBits::ONLINESPELLING;
-        else
-            nCntrl &= ~EEControlBits::ONLINESPELLING;
-        mpOutliner->SetControlWord(nCntrl);
+            mpOutliner->SetControlWord(nCntrl | EEControlBits::ONLINESPELLING);
 
         mpOutliner->CompleteOnlineSpelling();
         Invalidate();
