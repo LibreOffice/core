@@ -371,42 +371,6 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
                 pObj->SetMergedItemSet(aAttr);
             }
         }
-        else
-        {
-            // Creating an object with fill.
-            SdrPage* pThemePage = pPage;
-            if (pThemePage->TRG_HasMasterPage())
-            {
-                pThemePage = &pThemePage->TRG_GetMasterPage();
-            }
-
-            auto const& pTheme = pThemePage->getSdrPageProperties().GetTheme();
-            if (pTheme)
-            {
-                // We construct an object on a page where the master page has a theme. Take the
-                // accent1 color from that theme, make sure it has priority over the shape's
-                // document-global style.
-                SfxItemSet aAttr(mpView->GetDefaultAttr());
-
-                aAttr.Put(XFillStyleItem(css::drawing::FillStyle_SOLID));
-
-                model::ThemeColorType eColorType = model::ThemeColorType::Accent1;
-                Color aColor = pTheme->GetColor(eColorType);
-                XFillColorItem aFillColorItem("", aColor);
-                aFillColorItem.getComplexColor().setSchemeColor(eColorType);
-                aAttr.Put(aFillColorItem);
-
-                aAttr.Put(XLineStyleItem(css::drawing::LineStyle_SOLID));
-
-                // Line color is 50% darker than the fill color.
-                aColor.ApplyTintOrShade(-5000);
-                XLineColorItem aLineColorItem("", aColor);
-                // TODO no theme or theme effect for line colors yet.
-                aAttr.Put(aLineColorItem);
-
-                pObj->SetMergedItemSet(aAttr);
-            }
-        }
     }
 }
 
