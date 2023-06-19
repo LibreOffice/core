@@ -263,8 +263,8 @@ OUString EmbeddedFontsHelper::fontFileUrl( std::u16string_view familyName, FontF
     vcl::font::PhysicalFontFace* selected = nullptr;
 
     // Maybe we don't find the perfect match for the font. E.G. we have fonts with the same family name
-    // but not same bold or italic etc..
-    // In this case we add all the fonts having the family name of tyhe used font:
+    // but not same bold or italic etc...
+    // In this case we add all the fonts having the family name of the used font:
     //  - we store all these fonts in familyNameFonts during loop
     //  - if we haven't found the perfect match we store all fonts in familyNameFonts
     typedef std::vector<vcl::font::PhysicalFontFace*> FontList;
