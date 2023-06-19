@@ -297,7 +297,7 @@ OUString EmbeddedFontsHelper::fontFileUrl( std::u16string_view familyName, FontF
             { // Some fonts specify 'DONTKNOW' for some things, still a good match, if we don't find a better one.
                 selected = f;
             }
-            // adding "not perfact match" to familyNameFonts vector
+            // adding "not perfect match" to familyNameFonts vector
             familyNameFonts.push_back(f);
 
         }
