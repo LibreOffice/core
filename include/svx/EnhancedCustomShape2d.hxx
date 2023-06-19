@@ -79,26 +79,26 @@ namespace o3tl
 class SVXCORE_DLLPUBLIC EnhancedCustomShape2d final : public SfxItemSet
 {
         SdrObjCustomShape&          mrSdrObjCustomShape;
-        MSO_SPT                     eSpType;
+        MSO_SPT                     m_eSpType;
 
-        sal_Int32                   nCoordLeft;
-        sal_Int32                   nCoordTop;
-        sal_Int32                   nCoordWidthG;
-        sal_Int32                   nCoordHeightG;
-        sal_Int32                   nCoordWidth;
-        sal_Int32                   nCoordHeight;
-        tools::Rectangle                   aLogicRect;
+        sal_Int32                   m_nCoordLeft;
+        sal_Int32                   m_nCoordTop;
+        sal_Int32                   m_nCoordWidthG;
+        sal_Int32                   m_nCoordHeightG;
+        sal_Int32                   m_nCoordWidth;
+        sal_Int32                   m_nCoordHeight;
+        tools::Rectangle                   m_aLogicRect;
 
-        double                      fXScale;
-        double                      fYScale;
-        double                      fXRatio;
-        double                      fYRatio;
+        double                      m_fXScale;
+        double                      m_fYScale;
+        double                      m_fXRatio;
+        double                      m_fYRatio;
 
-        bool                        bOOXMLShape;
+        bool                        m_bOOXMLShape;
 
-        sal_Int32                   nXRef;
-        sal_Int32                   nYRef;
-        sal_uInt32                  nColorData;
+        sal_Int32                   m_nXRef;
+        sal_Int32                   m_nYRef;
+        sal_uInt32                  m_nColorData;
 
         /*
 
@@ -107,24 +107,24 @@ class SVXCORE_DLLPUBLIC EnhancedCustomShape2d final : public SfxItemSet
             bool bReady;
             double fValue;
         };
-        css::uno::Sequence< OUString >                                                       seqEquations;
-        std::vector< std::shared_ptr< EnhancedCustomShape::ExpressionNode > >                           vNodesSharedPtr;
-        std::vector< EquationResult >                                                                   vEquationResults;
+        css::uno::Sequence< OUString >                                                       m_seqEquations;
+        std::vector< std::shared_ptr< EnhancedCustomShape::ExpressionNode > >                           m_vNodesSharedPtr;
+        std::vector< EquationResult >                                                                   m_vEquationResults;
 
-        css::uno::Sequence< css::drawing::EnhancedCustomShapeSegment >            seqSegments;
-        css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair>       seqCoordinates;
-        css::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame >          seqTextFrames;
-        css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair>       seqGluePoints;
-        css::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue >    seqAdjustmentValues;
-        css::uno::Sequence< css::beans::PropertyValues >                          seqHandles;
-        css::uno::Sequence< css::awt::Size >                                      seqSubViewSize;
+        css::uno::Sequence< css::drawing::EnhancedCustomShapeSegment >            m_seqSegments;
+        css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair>       m_seqCoordinates;
+        css::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame >          m_seqTextFrames;
+        css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair>       m_seqGluePoints;
+        css::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue >    m_seqAdjustmentValues;
+        css::uno::Sequence< css::beans::PropertyValues >                          m_seqHandles;
+        css::uno::Sequence< css::awt::Size >                                      m_seqSubViewSize;
 
-        bool                    bFilled         : 1;
-        bool                    bStroked        : 1;
+        bool                    m_bFilled         : 1;
+        bool                    m_bStroked        : 1;
 
-        bool                    bFlipH;
-        bool                    bFlipV;
-        Degree100               nRotateAngle;
+        bool                    m_bFlipH;
+        bool                    m_bFlipV;
+        Degree100               m_nRotateAngle;
 
         SAL_DLLPRIVATE bool     SetAdjustValueAsDouble( const double& rValue, const sal_Int32 nIndex );
         SAL_DLLPRIVATE Color    GetColorData( const Color& rFillColor, sal_uInt32 nIndex, double dBrightness ) const;
@@ -183,15 +183,15 @@ class SVXCORE_DLLPUBLIC EnhancedCustomShape2d final : public SfxItemSet
         };
 
         sal_Int32 GetLuminanceChange( sal_uInt32 nIndex ) const;
-        SAL_DLLPRIVATE bool     IsFlipVert() const { return bFlipV; };
-        SAL_DLLPRIVATE bool     IsFlipHorz() const { return bFlipH; };
-        SAL_DLLPRIVATE Degree100 GetRotateAngle() const { return nRotateAngle; };
+        SAL_DLLPRIVATE bool     IsFlipVert() const { return m_bFlipV; };
+        SAL_DLLPRIVATE bool     IsFlipHorz() const { return m_bFlipH; };
+        SAL_DLLPRIVATE Degree100 GetRotateAngle() const { return m_nRotateAngle; };
 
         rtl::Reference<SdrObject>      CreateLineGeometry();
         rtl::Reference<SdrObject>      CreateObject( bool bLineGeometryNeededOnly );
         void                    ApplyGluePoints( SdrObject* pObj );
         tools::Rectangle        GetTextRect() const;
-        const tools::Rectangle& GetLogicRect() const { return aLogicRect; }
+        const tools::Rectangle& GetLogicRect() const { return m_aLogicRect; }
 
         sal_uInt32              GetHdlCount() const;
         bool                    GetHandlePosition( const sal_uInt32 nIndex, Point& rReturnPosition ) const;
