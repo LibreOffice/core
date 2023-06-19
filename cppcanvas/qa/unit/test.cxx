@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_cairo_canvas.h>
+
 #include <sal/config.h>
 
 #include <test/bootstrapfixture.hxx>
@@ -28,7 +30,7 @@ public:
 
 CPPUNIT_TEST_FIXTURE(CanvasTest, testComposite)
 {
-#ifdef LINUX
+#if ENABLE_CAIRO_CANVAS
     ScopedVclPtrInstance<WorkWindow> pWin( nullptr, WB_STDWORK );
 
     uno::Reference<rendering::XCanvas> xCanvas = pWin->GetOutDev()->GetCanvas ();
