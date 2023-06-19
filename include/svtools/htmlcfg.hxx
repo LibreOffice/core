@@ -25,9 +25,9 @@
 
 // !!!be aware!!!: the following defines are _not_ used as values in the configuration file
 //                  this is because of compatibility reasons
-#define HTML_CFG_MSIE 1 // Internet Explorer
-#define HTML_CFG_WRITER 2 // Writer
-#define HTML_CFG_NS40 3 // Netscape 4.0
+#define HTML_CFG_MSIE 0 // Internet Explorer
+#define HTML_CFG_WRITER 1 // Writer
+#define HTML_CFG_NS40 2 // Netscape 4.0
 
 #define HTML_CFG_MAX HTML_CFG_NS40
 

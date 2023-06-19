@@ -80,7 +80,7 @@ namespace o3tl {
 }
 
 const sal_uInt16 MAX_FRMTYPES = HTML_FRMTYPE_END;
-const sal_uInt16 MAX_BROWSERS = 4;
+const sal_uInt16 MAX_BROWSERS = 3;
 
 struct AllHtmlFlags {
     HtmlOut            nOut;
