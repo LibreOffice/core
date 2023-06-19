@@ -4413,7 +4413,7 @@
             <constraints>
               <enumeration oor:value="0">
                 <info>
-                  <desc>Html 3.2</desc>
+                  <desc>Obsolete; equivalent to 4</desc>
                 </info>
               </enumeration>
               <enumeration oor:value="1">
@@ -4423,7 +4423,7 @@
               </enumeration>
               <enumeration oor:value="2">
                 <info>
-                  <desc>Netscape 3.0</desc>
+                  <desc>Obsolete; equivalent to 4</desc>
                 </info>
               </enumeration>
               <enumeration oor:value="3">
