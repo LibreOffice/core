@@ -398,8 +398,8 @@ ErrCode SwHTMLWriter::WriteStream()
     if( HTML_CFG_MSIE == m_nExportMode )
         m_nHTMLMode |= HTMLMODE_NBSP_IN_TABLES;
 
-    if( HTML_CFG_WRITER == m_nExportMode || HTML_CFG_NS40 == m_nExportMode || HTML_CFG_MSIE == m_nExportMode )
-        m_nHTMLMode |= HTMLMODE_ABS_POS_FLY | HTMLMODE_ABS_POS_DRAW;
+    // For all three of HTML_CFG_WRITER, HTML_CFG_NS40, HTML_CFG_MSIE
+    m_nHTMLMode |= HTMLMODE_ABS_POS_FLY | HTMLMODE_ABS_POS_DRAW;
 
     if( HTML_CFG_WRITER == m_nExportMode )
         m_nHTMLMode |= HTMLMODE_FLY_MARGINS;
