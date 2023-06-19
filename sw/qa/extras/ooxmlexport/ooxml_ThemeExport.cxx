@@ -97,6 +97,49 @@ DECLARE_SW_ROUNDTRIP_TEST(testCharUnderlineTheme_DOCX, "Test_CharUnderlineThemeC
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2509), rTransforms[0].mnValue);
 }
 
+DECLARE_SW_ROUNDTRIP_TEST(testParaBackgroundTheme_DOCX, "Test_ThemeTextParaBackgroundColor.docx",
+                          nullptr, Test)
+{
+    {
+        auto xParagraph = getParagraph(1);
+        CPPUNIT_ASSERT(xParagraph.is());
+        auto xComplexColor = getProperty<uno::Reference<util::XComplexColor>>(
+            xParagraph, "ParaBackgroundComplexColor");
+        auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent3, aComplexColor.getSchemeType());
+        auto const& rTransforms = aComplexColor.getTransformations();
+        CPPUNIT_ASSERT_EQUAL(size_t(1), rTransforms.size());
+        CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTransforms[0].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(8000), rTransforms[0].mnValue);
+    }
+
+    {
+        auto xParagraph = getParagraph(2);
+        CPPUNIT_ASSERT(xParagraph.is());
+        auto xComplexColor = getProperty<uno::Reference<util::XComplexColor>>(
+            xParagraph, "ParaBackgroundComplexColor");
+        auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent6, aComplexColor.getSchemeType());
+        auto const& rTransforms = aComplexColor.getTransformations();
+        CPPUNIT_ASSERT_EQUAL(size_t(1), rTransforms.size());
+        CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTransforms[0].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(8000), rTransforms[0].mnValue);
+    }
+
+    {
+        auto xParagraph = getParagraph(3);
+        CPPUNIT_ASSERT(xParagraph.is());
+        auto xComplexColor = getProperty<uno::Reference<util::XComplexColor>>(
+            xParagraph, "ParaBackgroundComplexColor");
+        auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent3, aComplexColor.getSchemeType());
+        auto const& rTransforms = aComplexColor.getTransformations();
+        CPPUNIT_ASSERT_EQUAL(size_t(1), rTransforms.size());
+        CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTransforms[0].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(8000), rTransforms[0].mnValue);
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
