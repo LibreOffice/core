@@ -203,7 +203,7 @@ public:
     bool    IsEmpty() const;
 
     bool    GetFirstVisibleAttr( SCROW& rFirstRow ) const;
-    bool    GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData ) const;
+    bool    GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData, bool bSkipEmpty ) const;
     bool    HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const;
     bool    IsVisibleEqual( const ScAttrArray& rOther,
                             SCROW nStartRow, SCROW nEndRow ) const;

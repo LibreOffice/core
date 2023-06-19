@@ -37,6 +37,8 @@
 #include <markdata.hxx>
 #include <progress.hxx>
 #include <prnsave.hxx>
+#include <printopt.hxx>
+#include <scmod.hxx>
 #include <tabprotection.hxx>
 #include <sheetevents.hxx>
 #include <segmenttree.hxx>
@@ -610,6 +612,8 @@ bool ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes, bool bC
     SCROW nMaxY = 0;
     SCCOL i;
 
+    bool bSkipEmpty = SC_MOD()->GetPrintOptions().GetSkipEmpty();
+
     for (i=0; i<aCol.size(); i++)               // Test data
     {
         if (bCalcHiddens || !rDocument.ColHidden(i, nTab))
@@ -661,7 +665,7 @@ bool ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes, bool bC
         if (bCalcHiddens || !rDocument.ColHidden(i, nTab))
         {
             SCROW nLastRow;
-            if (aCol[i].GetLastVisibleAttr( nLastRow ))
+            if (aCol[i].GetLastVisibleAttr( nLastRow, bSkipEmpty ))
             {
                 bFound = true;
                 nMaxX = i;
@@ -697,7 +701,7 @@ bool ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes, bool bC
 
                 // also don't include default-formatted columns before that
                 SCROW nDummyRow;
-                while ( nMaxX > nMaxDataX && !aCol[nMaxX].GetLastVisibleAttr( nDummyRow ) )
+                while ( nMaxX > nMaxDataX && !aCol[nMaxX].GetLastVisibleAttr( nDummyRow, bSkipEmpty ) )
                     --nMaxX;
                 break;
             }
@@ -762,10 +766,12 @@ bool ScTable::GetPrintAreaVer( SCCOL nStartCol, SCCOL nEndCol,
     SCROW nMaxY = 0;
     SCCOL i;
 
+    bool bSkipEmpty = SC_MOD()->GetPrintOptions().GetSkipEmpty();
+
     for (i=nStartCol; i<=nEndCol && i < aCol.size(); i++)              // Test attribute
     {
         SCROW nLastRow;
-        if (aCol[i].GetLastVisibleAttr( nLastRow ))
+        if (aCol[i].GetLastVisibleAttr( nLastRow, bSkipEmpty ))
         {
             bFound = true;
             if (nLastRow > nMaxY)

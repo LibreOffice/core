@@ -313,7 +313,7 @@ public:
     bool    HasSelectionMatrixFragment(const ScMarkData& rMark, const ScRangeList& rRangeList) const;
 
     bool    GetFirstVisibleAttr( SCROW& rFirstRow ) const;
-    bool    GetLastVisibleAttr( SCROW& rLastRow ) const;
+    bool    GetLastVisibleAttr( SCROW& rLastRow, bool bSkipEmpty ) const;
     bool    HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const;
     bool    IsVisibleAttrEqual( const ScColumn& rCol, SCROW nStartRow, SCROW nEndRow ) const;
 
@@ -890,11 +890,11 @@ inline bool ScColumn::GetFirstVisibleAttr( SCROW& rFirstRow ) const
     return pAttrArray->GetFirstVisibleAttr( rFirstRow );
 }
 
-inline bool ScColumn::GetLastVisibleAttr( SCROW& rLastRow ) const
+inline bool ScColumn::GetLastVisibleAttr( SCROW& rLastRow, bool bSkipEmpty ) const
 {
     // row of last cell is needed
     SCROW nLastData = GetLastDataPos();    // always including notes, 0 if none
-    return pAttrArray->GetLastVisibleAttr( rLastRow, nLastData );
+    return pAttrArray->GetLastVisibleAttr( rLastRow, nLastData, bSkipEmpty );
 }
 
 inline bool ScColumn::HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const

@@ -1942,7 +1942,7 @@ bool ScAttrArray::GetFirstVisibleAttr( SCROW& rFirstRow ) const
 
 const SCROW SC_VISATTR_STOP = 84;
 
-bool ScAttrArray::GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData ) const
+bool ScAttrArray::GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData, bool bSkipEmpty ) const
 {
     if ( mvData.empty() )
     {
@@ -1971,31 +1971,43 @@ bool ScAttrArray::GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData ) const
         rLastRow = nLastData;
         return false;
     }
-
-    // Find a run below last data row.
+    // tdf#93315: If "Suppress output of empty pages" in Calc Options is not checked, show empty
+    // (containing only empty data cells) page in the document
     bool bFound = false;
-    Search( nLastData, nPos );
-    while ( nPos < mvData.size() )
+    if (bSkipEmpty)
     {
-        // find range of visually equal formats
-        SCSIZE nEndPos = nPos;
-        while ( nEndPos < mvData.size()-1 &&
-                mvData[nEndPos].pPattern->IsVisibleEqual( *mvData[nEndPos+1].pPattern))
-            ++nEndPos;
-        SCROW nAttrStartRow = ( nPos > 0 ) ? ( mvData[nPos-1].nEndRow + 1 ) : 0;
-        if ( nAttrStartRow <= nLastData )
-            nAttrStartRow = nLastData + 1;
-        SCROW nAttrSize = mvData[nEndPos].nEndRow + 1 - nAttrStartRow;
-        if ( nAttrSize >= SC_VISATTR_STOP )
-            break;  // while, ignore this range and below
-        else if ( mvData[nEndPos].pPattern->IsVisible() )
+        Search( nLastData, nPos );
+        while ( nPos < mvData.size() )
         {
-            rLastRow = mvData[nEndPos].nEndRow;
-            bFound = true;
+            // find range of visually equal formats
+            SCSIZE nEndPos = nPos;
+            while ( nEndPos < mvData.size()-1 &&
+                    mvData[nEndPos].pPattern->IsVisibleEqual(*mvData[nEndPos+1].pPattern))
+                ++nEndPos;
+            SCROW nAttrStartRow = ( nPos > 0 ) ? ( mvData[nPos-1].nEndRow + 1) : 0;
+            if ( nAttrStartRow <= nLastData )
+                nAttrStartRow = nLastData + 1;
+            SCROW nAttrSize = mvData[nEndPos].nEndRow + 1 - nAttrStartRow;
+            if ( nAttrSize >= SC_VISATTR_STOP )
+                break;  // while, ignore this range and below
+            else if ( mvData[nEndPos].pPattern->IsVisible() )
+            {
+                rLastRow = mvData[nEndPos].nEndRow;
+                bFound = true;
+            }
+            nPos = nEndPos + 1;
         }
-        nPos = nEndPos + 1;
     }
-
+    else
+    {
+        if ((nPos > 0 && mvData[nPos-1].pPattern->IsVisible())
+                || (nPos > 1 && !mvData[nPos-1].pPattern->IsVisibleEqual(*mvData[nPos-2].pPattern)))
+        {
+            rLastRow = mvData[nPos-1].nEndRow;
+            return true;
+        }
+        rLastRow = nLastData;
+    }
     return bFound;
 }
 
