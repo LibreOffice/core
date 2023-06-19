@@ -2215,7 +2215,6 @@ connectivity/source/sdbcx/VView.cxx
 connectivity/workben/iniParser/main.cxx
 connectivity/workben/little/main.cxx
 connectivity/workben/skeleton/SResultSet.hxx
-cppcanvas/qa/unit/test.cxx
 cppcanvas/source/inc/action.hxx
 cppcanvas/source/inc/canvasgraphichelper.hxx
 cppcanvas/source/inc/implrenderer.hxx

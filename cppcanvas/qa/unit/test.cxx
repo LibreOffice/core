@@ -11,7 +11,6 @@
 
 #include <sal/config.h>
 
-
 #include <vcl/wrkwin.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/virdev.hxx>
@@ -63,41 +62,44 @@ static std::ostream& operator<<(std::ostream& rStream, const std::vector<sal_Boo
 class CanvasTest : public test::BootstrapFixture
 {
 public:
-    CanvasTest() : BootstrapFixture(true, false) {}
+    CanvasTest()
+        : BootstrapFixture(true, false)
+    {
+    }
 };
 
 CPPUNIT_TEST_FIXTURE(CanvasTest, testComposite)
 {
-    ScopedVclPtrInstance<WorkWindow> pWin( nullptr, WB_STDWORK );
+    ScopedVclPtrInstance<WorkWindow> pWin(nullptr, WB_STDWORK);
 
-    uno::Reference<rendering::XCanvas> xCanvas = pWin->GetOutDev()->GetCanvas ();
+    uno::Reference<rendering::XCanvas> xCanvas = pWin->GetOutDev()->GetCanvas();
     CPPUNIT_ASSERT(xCanvas.is());
 
     // a huge canvas ...
-    Size aSize (1, 1);
-    uno::Reference<rendering::XBitmap> xBitmap = xCanvas->getDevice ()->createCompatibleAlphaBitmap(
-                        vcl::unotools::integerSize2DFromSize( aSize ) );
-    CPPUNIT_ASSERT( xBitmap.is() );
+    Size aSize(1, 1);
+    uno::Reference<rendering::XBitmap> xBitmap = xCanvas->getDevice()->createCompatibleAlphaBitmap(
+        vcl::unotools::integerSize2DFromSize(aSize));
+    CPPUNIT_ASSERT(xBitmap.is());
 
-    uno::Reference< rendering::XBitmapCanvas > xBitmapCanvas( xBitmap, uno::UNO_QUERY );
-    CPPUNIT_ASSERT( xBitmapCanvas.is() );
+    uno::Reference<rendering::XBitmapCanvas> xBitmapCanvas(xBitmap, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xBitmapCanvas.is());
 
     BitmapEx aBitmapEx;
     {
         // clear the canvas and basic sanity check ...
         xBitmapCanvas->clear();
-        CPPUNIT_ASSERT( aBitmapEx.Create( xBitmapCanvas, aSize ) );
-        CPPUNIT_ASSERT( aBitmapEx.IsAlpha() );
-        CPPUNIT_ASSERT( !aBitmapEx.GetAlphaMask().IsEmpty() );
+        CPPUNIT_ASSERT(aBitmapEx.Create(xBitmapCanvas, aSize));
+        CPPUNIT_ASSERT(aBitmapEx.IsAlpha());
+        CPPUNIT_ASSERT(!aBitmapEx.GetAlphaMask().IsEmpty());
     }
 
     {
         // render something
         rendering::RenderState aDefaultState;
-        uno::Sequence< double > aRedTransparent{ 1.0, // R
-                                                 0.0, // G
-                                                 0.0, // B
-                                                 0.5 }; // A
+        uno::Sequence<double> aRedTransparent{ 1.0, // R
+                                               0.0, // G
+                                               0.0, // B
+                                               0.5 }; // A
         aDefaultState.DeviceColor = aRedTransparent;
 #if 0
         // words fail me to describe the sheer beauty of allocating a UNO
