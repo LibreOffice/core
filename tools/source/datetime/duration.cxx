@@ -187,8 +187,10 @@ Duration Duration::Mult(sal_Int32 nMult, bool& rbOverflow) const
             if (o3tl::checked_multiply(static_cast<sal_uInt64>(maTime.GetHour()), nMult64, nH))
                 break;
             sal_uInt64 nD;
-            if (o3tl::checked_multiply(static_cast<sal_uInt64>(mnDays < 0 ? -mnDays : mnDays),
-                                       nMult64, nD))
+            if (o3tl::checked_multiply(
+                    mnDays < 0 ? static_cast<sal_uInt64>(-static_cast<sal_Int64>(mnDays))
+                               : static_cast<sal_uInt64>(mnDays),
+                    nMult64, nD))
                 break;
             if (nN > Time::nanoSecPerSec)
             {
