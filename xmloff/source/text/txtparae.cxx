@@ -1330,6 +1330,106 @@ struct XMLTextParagraphExport::Impl
     }
 };
 
+struct XMLTextParagraphExport::DocumentListNodes
+{
+    struct NodeData
+    {
+        sal_Int32 index; // see SwNode::GetIndex and SwNodeOffset
+        sal_uInt64 style_id; // actually a pointer to NumRule
+        OUString list_id;
+    };
+    std::vector<NodeData> docListNodes;
+    DocumentListNodes(const css::uno::Reference<css::frame::XModel>& xModel)
+    {
+        // Sequence of nodes, each of them represented by three-element sequence,
+        // corresponding to NodeData members
+        css::uno::Sequence<css::uno::Sequence<css::uno::Any>> nodes;
+        if (auto xPropSet = xModel.query<css::beans::XPropertySet>())
+        {
+            try
+            {
+                // See SwXTextDocument::getPropertyValue
+                xPropSet->getPropertyValue("ODFExport_ListNodes") >>= nodes;
+            }
+            catch (css::beans::UnknownPropertyException&)
+            {
+                // That's absolutely fine!
+            }
+        }
+
+        docListNodes.reserve(nodes.getLength());
+        for (const auto& node : nodes)
+        {
+            assert(node.getLength() == 3);
+            docListNodes.push_back({ node[0].get<sal_Int32>(), node[1].get<sal_uInt64>(),
+                                     node[2].get<OUString>() });
+        }
+
+        std::sort(docListNodes.begin(), docListNodes.end(),
+                  [](const NodeData& lhs, const NodeData& rhs) { return lhs.index < rhs.index; });
+    }
+    bool ShouldSkipListId(const Reference<XTextContent>& xTextContent) const
+    {
+        if (docListNodes.empty())
+            return false;
+
+        if (auto xPropSet = xTextContent.query<css::beans::XPropertySet>())
+        {
+            sal_Int32 index = 0;
+            try
+            {
+                // See SwXParagraph::Impl::GetPropertyValues_Impl
+                xPropSet->getPropertyValue("ODFExport_NodeIndex") >>= index;
+            }
+            catch (css::beans::UnknownPropertyException&)
+            {
+                // That's absolutely fine!
+                return false;
+            }
+
+            auto it = std::lower_bound(docListNodes.begin(), docListNodes.end(), index,
+                                       [](const NodeData& lhs, sal_Int32 rhs)
+                                       { return lhs.index < rhs; });
+            if (it == docListNodes.end() || it->index != index)
+                return false;
+
+            // We need to write the id, when there will be continuation of the list either with
+            // a different list style, or after another list.
+
+            for (auto next = it + 1; next != docListNodes.end(); ++next)
+            {
+                if (it->list_id != next->list_id)
+                {
+                    // List changed. We will have to refer to this id, only if there will
+                    // appear a continuation of this list
+                    return std::find_if(next + 1, docListNodes.end(),
+                                        [list_id = it->list_id](const NodeData& data)
+                                        { return data.list_id == list_id; })
+                           == docListNodes.end();
+                }
+
+                if (it->style_id != next->style_id)
+                {
+                    // Same list, new style -> this "next" will refer to the id, no skipping
+                    return false;
+                }
+                if (it->index + 1 != next->index)
+                {
+                    // we have a gap before the next node with the same list and style,
+                    // with no other lists in between. There will be a continuation with a
+                    // simple 'text:continue-numbering="true"'.
+                    return true;
+                }
+                it = next; // walk through adjacent nodes of the same list
+            }
+            // all nodes were adjacent and of the same list and style -> no continuation, skip id
+            return true;
+        }
+
+        return false;
+    }
+};
+
 XMLTextParagraphExport::XMLTextParagraphExport(
         SvXMLExport& rExp,
         SvXMLAutoStylePoolP & rASP
@@ -1795,106 +1895,6 @@ bool XMLTextParagraphExport::ExportListId() const
     return (GetExport().getExportFlags() & SvXMLExportFlags::OASIS)
            && GetExport().getSaneDefaultVersion() >= SvtSaveOptions::ODFSVER_012;
 }
-
-struct XMLTextParagraphExport::DocumentListNodes
-{
-    struct NodeData
-    {
-        sal_Int32 index; // see SwNode::GetIndex and SwNodeOffset
-        sal_uInt64 style_id; // actually a pointer to NumRule
-        OUString list_id;
-    };
-    std::vector<NodeData> docListNodes;
-    DocumentListNodes(const css::uno::Reference<css::frame::XModel>& xModel)
-    {
-        // Sequence of nodes, each of them represented by three-element sequence,
-        // corresponding to NodeData members
-        css::uno::Sequence<css::uno::Sequence<css::uno::Any>> nodes;
-        if (auto xPropSet = xModel.query<css::beans::XPropertySet>())
-        {
-            try
-            {
-                // See SwXTextDocument::getPropertyValue
-                xPropSet->getPropertyValue("ODFExport_ListNodes") >>= nodes;
-            }
-            catch (css::beans::UnknownPropertyException&)
-            {
-                // That's absolutely fine!
-            }
-        }
-
-        docListNodes.reserve(nodes.getLength());
-        for (const auto& node : nodes)
-        {
-            assert(node.getLength() == 3);
-            docListNodes.push_back({ node[0].get<sal_Int32>(), node[1].get<sal_uInt64>(),
-                                     node[2].get<OUString>() });
-        }
-
-        std::sort(docListNodes.begin(), docListNodes.end(),
-                  [](const NodeData& lhs, const NodeData& rhs) { return lhs.index < rhs.index; });
-    }
-    bool ShouldSkipListId(const Reference<XTextContent>& xTextContent) const
-    {
-        if (docListNodes.empty())
-            return false;
-
-        if (auto xPropSet = xTextContent.query<css::beans::XPropertySet>())
-        {
-            sal_Int32 index = 0;
-            try
-            {
-                // See SwXParagraph::Impl::GetPropertyValues_Impl
-                xPropSet->getPropertyValue("ODFExport_NodeIndex") >>= index;
-            }
-            catch (css::beans::UnknownPropertyException&)
-            {
-                // That's absolutely fine!
-                return false;
-            }
-
-            auto it = std::lower_bound(docListNodes.begin(), docListNodes.end(), index,
-                                       [](const NodeData& lhs, sal_Int32 rhs)
-                                       { return lhs.index < rhs; });
-            if (it == docListNodes.end() || it->index != index)
-                return false;
-
-            // We need to write the id, when there will be continuation of the list either with
-            // a different list style, or after another list.
-
-            for (auto next = it + 1; next != docListNodes.end(); ++next)
-            {
-                if (it->list_id != next->list_id)
-                {
-                    // List changed. We will have to refer to this id, only if there will
-                    // appear a continuation of this list
-                    return std::find_if(next + 1, docListNodes.end(),
-                                        [list_id = it->list_id](const NodeData& data)
-                                        { return data.list_id == list_id; })
-                           == docListNodes.end();
-                }
-
-                if (it->style_id != next->style_id)
-                {
-                    // Same list, new style -> this "next" will refer to the id, no skipping
-                    return false;
-                }
-                if (it->index + 1 != next->index)
-                {
-                    // we have a gap before the next node with the same list and style,
-                    // with no other lists in between. There will be a continuation with a
-                    // simple 'text:continue-numbering="true"'.
-                    return true;
-                }
-                it = next; // walk through adjacent nodes of the same list
-            }
-            // all nodes were adjacent and of the same list and style -> no continuation, skip id
-            return true;
-        }
-
-        return false;
-    }
-};
 
 bool XMLTextParagraphExport::ShouldSkipListId(const Reference<XTextContent>& xTextContent)
 {
