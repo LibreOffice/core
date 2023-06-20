@@ -21,7 +21,7 @@
 
 #include <QtInstance.hxx>
 
-class KF5SalInstance final : public QtInstance
+class KFSalInstance final : public QtInstance
 {
     bool hasNativeFileSelection() const override;
     rtl::Reference<QtFilePicker>
@@ -29,7 +29,7 @@ class KF5SalInstance final : public QtInstance
                  QFileDialog::FileMode) override;
 
 public:
-    explicit KF5SalInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo);
+    explicit KFSalInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

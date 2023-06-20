@@ -24,7 +24,7 @@
 
 class QGridLayout;
 
-class KF5FilePicker final : public QtFilePicker
+class KFFilePicker final : public QtFilePicker
 {
     Q_OBJECT
 
@@ -33,8 +33,8 @@ private:
     std::unique_ptr<QGridLayout> _layout;
 
 public:
-    explicit KF5FilePicker(css::uno::Reference<css::uno::XComponentContext> const& context,
-                           QFileDialog::FileMode);
+    explicit KFFilePicker(css::uno::Reference<css::uno::XComponentContext> const& context,
+                          QFileDialog::FileMode);
 
     // XFilePickerControlAccess functions
     virtual void SAL_CALL setValue(sal_Int16 nControlId, sal_Int16 nControlAction,
@@ -56,7 +56,7 @@ private:
     bool eventFilter(QObject* watched, QEvent* event) override;
 
 private Q_SLOTS:
-    // the KF5 file picker has its own automatic extension handling
+    // the KF5/KF6 file picker has its own automatic extension handling
     void updateAutomaticFileExtension() override {}
 };
 

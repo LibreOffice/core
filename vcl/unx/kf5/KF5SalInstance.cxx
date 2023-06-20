@@ -32,14 +32,14 @@
 
 using namespace com::sun::star;
 
-KF5SalInstance::KF5SalInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo)
+KFSalInstance::KFSalInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo)
     : QtInstance(pQApp, bUseCairo)
 {
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mxToolkitName = constructToolkitID(u"kf5");
 }
 
-bool KF5SalInstance::hasNativeFileSelection() const
+bool KFSalInstance::hasNativeFileSelection() const
 {
     if (Application::GetDesktopEnvironment() == "PLASMA5")
         return true;
@@ -47,8 +47,8 @@ bool KF5SalInstance::hasNativeFileSelection() const
 }
 
 rtl::Reference<QtFilePicker>
-KF5SalInstance::createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
-                             QFileDialog::FileMode eMode)
+KFSalInstance::createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
+                            QFileDialog::FileMode eMode)
 {
     if (!IsMainThread())
     {
@@ -59,11 +59,11 @@ KF5SalInstance::createPicker(css::uno::Reference<css::uno::XComponentContext> co
         return pPicker;
     }
 
-    // In order to insert custom controls, KF5FilePicker currently relies on KFileWidget
+    // In order to insert custom controls, KFFilePicker currently relies on KFileWidget
     // being used in the native file picker, which is only the case for KDE Plasma.
     // Therefore, return the plain qt5 one in order to not lose custom controls.
     if (Application::GetDesktopEnvironment() == "PLASMA5")
-        return new KF5FilePicker(context, eMode);
+        return new KFFilePicker(context, eMode);
     return QtInstance::createPicker(context, eMode);
 }
 
@@ -80,7 +80,7 @@ VCLPLUG_KF5_PUBLIC SalInstance* create_SalInstance()
     std::unique_ptr<QApplication> pQApp
         = QtInstance::CreateQApplication(*pFakeArgc, pFakeArgv.get());
 
-    KF5SalInstance* pInstance = new KF5SalInstance(pQApp, bUseCairo);
+    KFSalInstance* pInstance = new KFSalInstance(pQApp, bUseCairo);
     pInstance->MoveFakeCmdlineArgs(pFakeArgv, pFakeArgc, aFakeArgvFreeable);
 
     new QtData();
