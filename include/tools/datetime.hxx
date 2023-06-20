@@ -102,6 +102,9 @@ public:
     TOOLS_DLLPUBLIC friend DateTime operator +( const DateTime& rDateTime, const tools::Time& rTime );
     TOOLS_DLLPUBLIC friend DateTime operator -( const DateTime& rDateTime, const tools::Time& rTime );
     TOOLS_DLLPUBLIC friend double   operator -( const DateTime& rDateTime1, const DateTime& rDateTime2 );
+    /** Same as friend operator-() to be able to disable operator-() to find
+        places where tools::Duration could be used instead. */
+    static  double  Sub( const DateTime& rDateTime1, const DateTime& rDateTime2 );
     TOOLS_DLLPUBLIC friend sal_Int64 operator -( const DateTime& rDateTime, const Date& rDate )
                         { return static_cast<const Date&>(rDateTime) - rDate; }
     /** Duration can be negative, so adding it will subtract its value. */

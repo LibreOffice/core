@@ -196,6 +196,12 @@ DateTime operator +( const DateTime& rDateTime, double fTimeInDays )
 
 double operator -( const DateTime& rDateTime1, const DateTime& rDateTime2 )
 {
+    return DateTime::Sub( rDateTime1, rDateTime2);
+}
+
+// static
+double DateTime::Sub( const DateTime& rDateTime1, const DateTime& rDateTime2 )
+{
     if (static_cast<const tools::Time&>(rDateTime1) != static_cast<const tools::Time&>(rDateTime2))
     {
         // Use Duration to diminish floating point accuracy errors.
