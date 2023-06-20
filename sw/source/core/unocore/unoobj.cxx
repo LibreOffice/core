@@ -74,6 +74,8 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/profilezone.hxx>
+#include <comphelper/flagguard.hxx>
+#include <swmodule.hxx>
 
 using namespace ::com::sun::star;
 
@@ -158,6 +160,11 @@ void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer,
     const bool bOldShowProgress = xWrt->m_bShowProgress;
     xWrt->m_bShowProgress = false;
     xWrt->m_bHideDeleteRedlines = pLayout && pLayout->IsHideRedlines();
+    // tdf#155951 SwWriter::Write calls EndAllAction, and that
+    // called SelectShell(), triggering selection change event, which
+    // resulted infinite recursion, if selectionChanged() calls
+    // XTextRange::getString() e.g. on the selected range.
+    ::comphelper::FlagRestorationGuard g(g_bNoInterrupt, true);
 
     if( ! aWriter.Write( xWrt ).IsError() )
     {

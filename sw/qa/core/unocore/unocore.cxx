@@ -15,6 +15,8 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/document/XDocumentInsertable.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -910,6 +912,57 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testConvertToTextFrame)
     // - Actual  : SwNodeIndex (node 49)
     // i.e. Frame3 was anchored much later, in the body text, not in Frame4.
     CPPUNIT_ASSERT_EQUAL(aPaM.GetPoint()->nNode, aFrame3Anchor);
+}
+
+namespace
+{
+/// This selection listener calls XTextRange::getString() on a selection change, which triggered
+/// a new selection change event by accident, resulting infinite recursion and crash
+struct SelectionChangeListener : public cppu::WeakImplHelper<view::XSelectionChangeListener>
+{
+public:
+    SelectionChangeListener();
+    // view::XSelectionChangeListener
+    void SAL_CALL selectionChanged(const lang::EventObject& rEvent) override;
+
+    // lang::XEventListener
+    void SAL_CALL disposing(const lang::EventObject& rSource) override;
+};
+}
+
+SelectionChangeListener::SelectionChangeListener() {}
+
+void SelectionChangeListener::selectionChanged(const lang::EventObject& rEvent)
+{
+    uno::Reference<view::XSelectionSupplier> xSelectionSupplier(rEvent.Source, uno::UNO_QUERY);
+    css::uno::Reference<css::container::XIndexAccess> xSelection(xSelectionSupplier->getSelection(),
+                                                                 css::uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSelection->getCount());
+    css::uno::Reference<css::text::XTextRange> xTextRange(xSelection->getByIndex(0),
+                                                          css::uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xTextRange->getString().startsWith("test"));
+}
+
+void SelectionChangeListener::disposing(const lang::EventObject& /*rSource*/) {}
+
+CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testTdf155951)
+{
+    createSwDoc();
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, "test", /*bAbsorb=*/false);
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<view::XSelectionSupplier> xController(xModel->getCurrentController(),
+                                                         uno::UNO_QUERY);
+    xController->addSelectionChangeListener(new SelectionChangeListener());
+
+    // This crashed here because of infinite recursion
+    dispatchCommand(mxComponent, ".uno:WordLeftSel", {});
+
+    // this needs to wait for dispatching (trigger also a second selection change)
+    xText->insertString(xCursor, "test", /*bAbsorb=*/false);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
