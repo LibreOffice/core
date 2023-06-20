@@ -1076,8 +1076,12 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testOleNodataReqIf)
     CPPUNIT_ASSERT(!aSource.isEmpty());
 }
 
-DECLARE_HTMLEXPORT_TEST(testNoLangReqIf, "reqif-no-lang.odt")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testNoLangReqIf)
 {
+    createSwDoc("reqif-no-lang.odt");
+    setFilterOptions("xhtmlns=reqif-xhtml");
+    save(mpFilter);
+
     SvMemoryStream aStream;
     WrapReqifFromTempFile(aStream);
     xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
