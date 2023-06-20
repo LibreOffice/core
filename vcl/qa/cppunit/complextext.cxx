@@ -479,4 +479,56 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf153440)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf107718)
+{
+#if !defined _WIN32 // TODO: Fails on jenkins but passes locally
+    vcl::Font aFont(u"Source Han Sans", u"Regular", Size(0, 72));
+
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
+
+    bool bAdded = addFont(pOutDev, u"tdf107718.otf", u"Source Han Sans");
+    CPPUNIT_ASSERT_EQUAL(true, bAdded);
+
+    OUString aText(u"\u4E16\u1109\u1168\u11BC\u302E");
+    for (bool bVertical : { false, true })
+    {
+        aFont.SetVertical(bVertical);
+        pOutDev->SetFont(aFont);
+
+        auto pLayout = pOutDev->ImplLayout(aText, 0, -1, Point(0, 0), 0, {}, {});
+
+        int nStart = 0;
+        DevicePoint aPos;
+        const GlyphItem* pGlyphItem;
+        while (pLayout->GetNextGlyph(&pGlyphItem, aPos, nStart))
+        {
+            // Check that we found a font for all characters, a zero glyph ID
+            // means no font was found so the rest of the test would be
+            // meaningless.
+            CPPUNIT_ASSERT(pGlyphItem->glyphId());
+
+            // Assert that we are indeed doing vertical layout for vertical
+            // font since the bug does not happen for horizontal text.
+            CPPUNIT_ASSERT_EQUAL(bVertical, pGlyphItem->IsVertical());
+
+            // For the second glyph, assert that it is a composition of characters 1 to 4
+            // Without the fix this fails with:
+            // - Expected: 4
+            // - Actual  : 1
+            if (nStart == 2)
+            {
+                CPPUNIT_ASSERT_EQUAL(1, pGlyphItem->charPos());
+                CPPUNIT_ASSERT_EQUAL(4, pGlyphItem->charCount());
+            }
+        }
+
+        // Assert there are only three glyphs
+        // Without the fix this fails with:
+        // - Expected: 3
+        // - Actual  : 5
+        CPPUNIT_ASSERT_EQUAL(3, nStart);
+    }
+#endif
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
