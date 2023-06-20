@@ -1,0 +1,25 @@
+<svg
+  width="100%"
+  height="100%"
+  viewBox="0 0 150 500"
+  preserveAspectRatio="xMidYMid meet"
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+  <!-- ref -->
+  <defs>
+    <g id="circles">
+      <circle cx="30" cy="30" r="20" fill="blue" fill-opacity="0.5" />
+    </g>
+  </defs>
+  <clipPath id="myClip">
+    <!--
+      Everything outside the circle will be
+      clipped and therefore invisible.
+    -->
+    <circle r="35" />
+  </clipPath>
+
+  <use xlink:href="#circles" transform="translate(0 50)" clip-path="url(#myClip)" />
+  <use xlink:href="#circles" transform="translate(0 100)" />
+</svg>
+
