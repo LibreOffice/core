@@ -320,6 +320,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf145896)
     assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor[3]", "color", "#0000ff");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf155932)
+{
+    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/tdf155932.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequence);
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/mask/mask/unifiedtransparence", "transparence", "50");
+    assertXPath(pDocument, "/primitive2D/transform/mask/mask/unifiedtransparence[1]/polypolygoncolor", "color", "#0000ff");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf97717)
 {
     Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/tdf97717.svg");

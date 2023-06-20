@@ -94,7 +94,7 @@ namespace svgio::svgreader
 
                 if(!aContent.empty())
                 {
-                    pStyle->add_postProcess(rTarget, std::move(aContent), getTransform());
+                    pStyle->add_postProcess(rTarget, std::move(aContent), getTransform(), true);
                 }
             }
         }
