@@ -66,6 +66,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdogrp.hxx>
+#include <svx/ColorSets.hxx>
 #include <sdmod.hxx>
 #include <sdpage.hxx>
 
@@ -2042,12 +2043,23 @@ void PowerPointExport::WriteNotesMaster()
                                          "application/vnd.openxmlformats-officedocument.presentationml.notesMaster+xml");
     // write theme per master
 
-    WriteTheme(mnMasterPages, nullptr);
+    // TODO: Need to implement theme support for note master, so the
+    // note master has his own theme associated.
 
-    // add implicit relation to the presentation theme
-    addRelation(pFS->getOutputStream(),
-                oox::getRelationship(Relationship::THEME),
-                Concat2View("../theme/theme" + OUString::number(mnMasterPages + 1) + ".xml"));
+    // For now just use the default theme
+    auto const* pDefaultColorSet = svx::ColorSets::get().getColorSet(u"LibreOffice");
+    if (pDefaultColorSet)
+    {
+        auto pTheme = std::make_shared<model::Theme>("Office Theme");
+        pTheme->setColorSet(std::make_shared<model::ColorSet>(*pDefaultColorSet));
+
+        WriteTheme(mnMasterPages, pTheme.get());
+
+        // add implicit relation to the presentation theme
+        addRelation(pFS->getOutputStream(),
+                    oox::getRelationship(Relationship::THEME),
+                    Concat2View("../theme/theme" + OUString::number(mnMasterPages + 1) + ".xml"));
+    }
 
     pFS->startElementNS(XML_p, XML_notesMaster, PNMSS);
 
