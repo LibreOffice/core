@@ -286,54 +286,71 @@ namespace emfio
 
     void WmfReader::ReadRecordParams( sal_uInt32 nRecordSize, sal_uInt16 nFunc )
     {
+        bool bRecordOk = true;
         SAL_INFO("emfio", "\t" << record_type_name(nFunc));
-        switch( nFunc )
+        switch(nFunc)
         {
             case W_META_SETBKCOLOR:
             {
-                SetBkColor( ReadColor() );
+                if (nRecordSize != 5)
+                    bRecordOk = false;
+                SetBkColor(ReadColor());
             }
             break;
 
             case W_META_SETBKMODE:
             {
+                // It could have Reserved values. Both 4 and 5 sizes are allowed
+                if ((nRecordSize != 4) && (nRecordSize != 5))
+                    bRecordOk = false;
                 sal_uInt16 nDat = 0;
                 mpInputStream->ReadUInt16( nDat );
                 SetBkMode( static_cast<BackgroundMode>(nDat) );
             }
             break;
 
-            // !!!
             case W_META_SETMAPMODE:
             {
-                sal_Int16 nMapMode = 0;
-                mpInputStream->ReadInt16( nMapMode );
-                SetMapMode( static_cast<MappingMode>(nMapMode) );
+                if (nRecordSize != 4)
+                    bRecordOk = false;
+                sal_uInt16 nMapMode = 0;
+                mpInputStream->ReadUInt16(nMapMode);
+                SetMapMode(static_cast<MappingMode>(nMapMode));
             }
             break;
 
             case W_META_SETROP2:
             {
+                // It could have Reserved values. Both 4 and 5 sizes are allowed
+                if ((nRecordSize != 4) && (nRecordSize != 5))
+                    bRecordOk = false;
                 sal_uInt16 nROP2 = 0;
-                mpInputStream->ReadUInt16( nROP2 );
-                SetRasterOp( static_cast<WMFRasterOp>(nROP2) );
+                mpInputStream->ReadUInt16(nROP2);
+                SetRasterOp(static_cast<WMFRasterOp>(nROP2));
+                mpInputStream->SeekRel(2); // reserved data
             }
             break;
 
             case W_META_SETTEXTCOLOR:
             {
+                if (nRecordSize != 5)
+                    bRecordOk = false;
                 SetTextColor( ReadColor() );
             }
             break;
 
             case W_META_SETWINDOWORG:
             {
+                if (nRecordSize != 5)
+                    bRecordOk = false;
                 SetWinOrg( ReadYX() );
             }
             break;
 
             case W_META_SETWINDOWEXT:
             {
+                if (nRecordSize != 5)
+                    bRecordOk = false;
                 short nWidth = 0, nHeight = 0;
                 mpInputStream->ReadInt16( nHeight ).ReadInt16( nWidth );
                 SetWinExt( Size( nWidth, nHeight ) );
@@ -342,6 +359,8 @@ namespace emfio
 
             case W_META_OFFSETWINDOWORG:
             {
+                if (nRecordSize != 5)
+                    bRecordOk = false;
                 short nXAdd = 0, nYAdd = 0;
                 mpInputStream->ReadInt16( nYAdd ).ReadInt16( nXAdd );
                 SetWinOrgOffset( nXAdd, nYAdd );
@@ -350,6 +369,8 @@ namespace emfio
 
             case W_META_SCALEWINDOWEXT:
             {
+                if (nRecordSize != 7)
+                    bRecordOk = false;
                 short nXNum = 0, nXDenom = 0, nYNum = 0, nYDenom = 0;
                 mpInputStream->ReadInt16( nYDenom ).ReadInt16( nYNum ).ReadInt16( nXDenom ).ReadInt16( nXNum );
                 if (!nYDenom || !nXDenom)
@@ -363,10 +384,16 @@ namespace emfio
 
             case W_META_SETVIEWPORTORG:
             case W_META_SETVIEWPORTEXT:
+            {
+                if (nRecordSize != 5)
+                    bRecordOk = false;
+            }
             break;
 
             case W_META_OFFSETVIEWPORTORG:
             {
+                if (nRecordSize != 5)
+                    bRecordOk = false;
                 short nXAdd = 0, nYAdd = 0;
                 mpInputStream->ReadInt16( nYAdd ).ReadInt16( nXAdd );
                 SetDevOrgOffset( nXAdd, nYAdd );
@@ -375,6 +402,8 @@ namespace emfio
 
             case W_META_SCALEVIEWPORTEXT:
             {
+                if (nRecordSize != 7)
+                    bRecordOk = false;
                 short nXNum = 0, nXDenom = 0, nYNum = 0, nYDenom = 0;
                 mpInputStream->ReadInt16( nYDenom ).ReadInt16( nYNum ).ReadInt16( nXDenom ).ReadInt16( nXNum );
                 if (!nYDenom || !nXDenom)
@@ -388,30 +417,40 @@ namespace emfio
 
             case W_META_LINETO:
             {
+                if (nRecordSize != 5)
+                    bRecordOk = false;
                 LineTo( ReadYX() );
             }
             break;
 
             case W_META_MOVETO:
             {
+                if (nRecordSize != 5)
+                    bRecordOk = false;
                 MoveTo( ReadYX() );
             }
             break;
 
             case W_META_INTERSECTCLIPRECT:
             {
-                IntersectClipRect( ReadRectangle() );
+                if (nRecordSize != 7)
+                    bRecordOk = false;
+                IntersectClipRect(ReadRectangle());
             }
             break;
 
             case W_META_RECTANGLE:
             {
-                DrawRect( ReadRectangle() );
+                if (nRecordSize != 7)
+                    bRecordOk = false;
+                DrawRect(ReadRectangle());
             }
             break;
 
             case W_META_ROUNDRECT:
             {
+                if (nRecordSize != 9)
+                    bRecordOk = false;
                 Size aSize( ReadYXExt() );
                 DrawRoundRect( ReadRectangle(), Size( aSize.Width() / 2, aSize.Height() / 2 ) );
             }
@@ -419,12 +458,16 @@ namespace emfio
 
             case W_META_ELLIPSE:
             {
-                DrawEllipse( ReadRectangle() );
+                if (nRecordSize != 7)
+                    bRecordOk = false;
+                DrawEllipse(ReadRectangle());
             }
             break;
 
             case W_META_ARC:
             {
+                if (nRecordSize != 11)
+                    bRecordOk = false;
                 Point aEnd( ReadYX() );
                 Point aStart( ReadYX() );
                 tools::Rectangle aRect( ReadRectangle() );
@@ -435,6 +478,8 @@ namespace emfio
 
             case W_META_PIE:
             {
+                if (nRecordSize != 11)
+                    bRecordOk = false;
                 Point     aEnd( ReadYX() );
                 Point     aStart( ReadYX() );
                 tools::Rectangle aRect( ReadRectangle() );
@@ -451,6 +496,8 @@ namespace emfio
 
             case W_META_CHORD:
             {
+                if (nRecordSize != 11)
+                    bRecordOk = false;
                 Point aEnd( ReadYX() );
                 Point aStart( ReadYX() );
                 tools::Rectangle aRect( ReadRectangle() );
@@ -461,8 +508,6 @@ namespace emfio
 
             case W_META_POLYGON:
             {
-                bool bRecordOk = true;
-
                 sal_uInt16 nPoints(0);
                 mpInputStream->ReadUInt16(nPoints);
 
@@ -481,12 +526,6 @@ namespace emfio
                 SAL_WARN_IF(!bRecordOk, "emfio", "polygon record has more points than we can handle");
 
                 bRecordOk &= mpInputStream->good();
-
-                if (!bRecordOk)
-                {
-                    mpInputStream->SetError( SVSTREAM_FILEFORMAT_ERROR );
-                    break;
-                }
             }
             break;
 
@@ -497,11 +536,8 @@ namespace emfio
                 mpInputStream->ReadUInt16( nPolyCount );
                 if (nPolyCount && mpInputStream->good())
                 {
-                    bool bRecordOk = true;
                     if (nPolyCount > mpInputStream->remainingSize() / sizeof(sal_uInt16))
-                    {
                         break;
-                    }
 
                     // Number of points of each polygon. Determine total number of points
                     std::unique_ptr<sal_uInt16[]> xPolygonPointCounts(new sal_uInt16[nPolyCount]);
@@ -526,10 +562,7 @@ namespace emfio
                     bRecordOk &= mpInputStream->good();
 
                     if (!bRecordOk)
-                    {
-                        mpInputStream->SetError( SVSTREAM_FILEFORMAT_ERROR );
                         break;
-                    }
 
                     // Polygon points are:
                     for (sal_uInt16 a = 0; a < nPolyCount && mpInputStream->good(); ++a)
@@ -556,10 +589,7 @@ namespace emfio
                     bRecordOk &= mpInputStream->good();
 
                     if (!bRecordOk)
-                    {
-                        mpInputStream->SetError( SVSTREAM_FILEFORMAT_ERROR );
                         break;
-                    }
 
                     DrawPolyPolygon( aPolyPoly );
                 }
@@ -568,8 +598,6 @@ namespace emfio
 
             case W_META_POLYLINE:
             {
-                bool bRecordOk = true;
-
                 sal_uInt16 nPoints(0);
                 mpInputStream->ReadUInt16(nPoints);
 
@@ -588,17 +616,13 @@ namespace emfio
                 SAL_WARN_IF(!bRecordOk, "emfio", "polyline record has more points than we can handle");
 
                 bRecordOk &= mpInputStream->good();
-
-                if (!bRecordOk)
-                {
-                    mpInputStream->SetError( SVSTREAM_FILEFORMAT_ERROR );
-                    break;
-                }
             }
             break;
 
             case W_META_SAVEDC:
             {
+                if (nRecordSize != 3)
+                    bRecordOk = false;
                 Push();
             }
             break;
@@ -606,14 +630,19 @@ namespace emfio
             case W_META_RESTOREDC:
             {
                 sal_Int16 nSavedDC(0);
-                mpInputStream->ReadInt16( nSavedDC );
-                SAL_INFO( "emfio", "\t\t SavedDC: " << nSavedDC );
-                Pop( nSavedDC );
+                if (nRecordSize != 4)
+                    bRecordOk = false;
+                mpInputStream->ReadInt16(nSavedDC);
+                SAL_INFO("emfio", "\t\t SavedDC: " << nSavedDC);
+                SAL_WARN_IF(nSavedDC < 0,  "emfio", "TODO implement relative to the current state");
+                Pop(nSavedDC);
             }
             break;
 
             case W_META_SETPIXEL:
             {
+                if (nRecordSize != 7)
+                    bRecordOk = false;
                 const Color aColor = ReadColor();
                 DrawPixel( ReadYX(), aColor );
             }
@@ -621,6 +650,8 @@ namespace emfio
 
             case W_META_OFFSETCLIPRGN:
             {
+                if (nRecordSize != 5)
+                    bRecordOk = false;
                 MoveClipRegion( ReadYXExt() );
             }
             break;
@@ -629,11 +660,11 @@ namespace emfio
             {
                 //record is Recordsize, RecordFunction, StringLength, <String>, YStart, XStart
                 const sal_uInt32 nNonStringLen = sizeof(sal_uInt32) + 4 * sizeof(sal_uInt16);
-                const sal_uInt32 nRecSize = mnRecSize * 2;
+                const sal_uInt32 nRecSize = nRecordSize * 2;
 
                 if (nRecSize < nNonStringLen)
                 {
-                    SAL_WARN("emfio", "W_META_TEXTOUT too short");
+                    bRecordOk = false;
                     break;
                 }
 
@@ -662,11 +693,11 @@ namespace emfio
             {
                 //record is Recordsize, RecordFunction, Y, X, StringLength, options, maybe rectangle, <String>
                 sal_uInt32 nNonStringLen = sizeof(sal_uInt32) + 5 * sizeof(sal_uInt16);
-                const sal_uInt32 nRecSize = mnRecSize * 2;
+                const sal_uInt32 nRecSize = nRecordSize * 2;
 
                 if (nRecSize < nNonStringLen)
                 {
-                    SAL_WARN("emfio", "W_META_EXTTEXTOUT too short");
+                    bRecordOk = false;
                     break;
                 }
 
@@ -682,7 +713,7 @@ namespace emfio
 
                     if (nRecSize < nNonStringLen)
                     {
-                        SAL_WARN("emfio", "W_META_TEXTOUT too short");
+                        bRecordOk = false;
                         break;
                     }
                     const Point aTopLeft = ReadPoint();
@@ -796,6 +827,8 @@ namespace emfio
             case W_META_SELECTOBJECT:
             case W_META_SELECTPALETTE:
             {
+                if (nRecordSize != 4)
+                    bRecordOk = false;
                 sal_uInt16   nObjIndex = 0;
                 mpInputStream->ReadUInt16( nObjIndex );
                 SelectObject( nObjIndex );
@@ -804,6 +837,9 @@ namespace emfio
 
             case W_META_SETTEXTALIGN:
             {
+                // It could have Reserved values. Both 4 and 5 sizes are allowed
+                if ((nRecordSize != 4) && (nRecordSize != 5))
+                    bRecordOk = false;
                 sal_uInt16  nAlign = 0;
                 mpInputStream->ReadUInt16( nAlign );
                 SetTextAlign( nAlign );
@@ -821,9 +857,15 @@ namespace emfio
                 mpInputStream->ReadUInt32( nRasterOperation );
                 SAL_INFO("emfio", "\t\t Raster operation: 0x" << std::hex << nRasterOperation << std::dec << ", No source bitmap: " << bNoSourceBitmap);
 
-                if( nFunc == W_META_STRETCHBLT )
-                    mpInputStream->ReadInt16( nSrcHeight ).ReadInt16( nSrcWidth );
-
+                if (nFunc == W_META_STRETCHBLT)
+                {
+                    if (nRecordSize < 18)
+                        bRecordOk = false;
+                    mpInputStream->ReadInt16(nSrcHeight).ReadInt16(nSrcWidth);
+                }
+                else
+                    if (nRecordSize < 16)
+                        bRecordOk = false;
                 mpInputStream->ReadInt16( nYSrc ).ReadInt16( nXSrc );
                 if ( bNoSourceBitmap )
                     mpInputStream->SeekRel( 2 ); // Skip Reserved 2 bytes (it must be ignored)
@@ -878,10 +920,16 @@ namespace emfio
                 Bitmap      aBmp;
                 const bool bNoSourceBitmap = ( nFunc != W_META_STRETCHDIB ) && ( nRecordSize == ( ( static_cast< sal_uInt32 >( nFunc ) >> 8 ) + 3 ) );
 
+                if (nRecordSize < 12)
+                    bRecordOk = false;
                 mpInputStream->ReadUInt32( nRasterOperation );
                 SAL_INFO("emfio", "\t\t Raster operation: 0x" << std::hex << nRasterOperation << std::dec << ", No source bitmap: " << bNoSourceBitmap);
-                if( nFunc == W_META_STRETCHDIB )
-                    mpInputStream->ReadUInt16( nColorUsage );
+                if (nFunc == W_META_STRETCHDIB)
+                {
+                    if (nRecordSize < 15)
+                        bRecordOk = false;
+                    mpInputStream->ReadUInt16(nColorUsage);
+                }
 
                 // nSrcHeight and nSrcWidth is the number of pixels that has to been used
                 // If they are set to zero, it is as indicator not to scale the bitmap later
@@ -939,6 +987,8 @@ namespace emfio
                 sal_uInt32 nRed(0), nGreen(0), nBlue(0), nCount(1);
                 sal_uInt16 nStyle(0), nColorUsage(0);
 
+                if (nRecordSize < 5)
+                    bRecordOk = false;
                 mpInputStream->ReadUInt16( nStyle ).ReadUInt16( nColorUsage );
                 BrushStyle eStyle = static_cast<BrushStyle>(nStyle);
                 SAL_INFO( "emfio", "\t\t Style:" << nStyle << ", ColorUsage: " << nColorUsage );
@@ -975,6 +1025,8 @@ namespace emfio
 
             case W_META_DELETEOBJECT:
             {
+                if (nRecordSize != 4)
+                    bRecordOk = false;
                 sal_uInt16 nIndex = 0;
                 mpInputStream->ReadUInt16( nIndex );
                 DeleteObject( nIndex );
@@ -985,9 +1037,11 @@ namespace emfio
             {
                 sal_uInt16 nStart = 0;
                 sal_uInt16 nNumberOfEntries = 0;
-                mpInputStream->ReadUInt16( nStart );
-                mpInputStream->ReadUInt16( nNumberOfEntries );
+                mpInputStream->ReadUInt16(nStart);
+                mpInputStream->ReadUInt16(nNumberOfEntries);
 
+                if (nRecordSize != 2u * nNumberOfEntries + 5u)
+                    bRecordOk = false;
                 SAL_INFO("emfio", "\t\t Start 0x" << std::hex << nStart << std::dec << ", Number of entries: " << nNumberOfEntries);
                 sal_uInt32 nPalleteEntry;
                 std::vector< Color > aPaletteColors;
@@ -1018,7 +1072,10 @@ namespace emfio
 
             case W_META_CREATEPENINDIRECT:
             {
-                LineInfo   aLineInfo;
+                // FIXME For some WMF correct size is 8 and for some 9
+                if ((nRecordSize != 8) && (nRecordSize != 9))
+                    bRecordOk = false;
+                LineInfo aLineInfo;
                 sal_uInt16 nStyle = 0;
                 sal_uInt16 nWidth = 0;
                 sal_uInt16 nHeight = 0;
@@ -1032,6 +1089,8 @@ namespace emfio
 
             case W_META_CREATEBRUSHINDIRECT:
             {
+                if (nRecordSize != 7)
+                    bRecordOk = false;
                 sal_uInt16  nBrushStyle = 0;
                 mpInputStream->ReadUInt16( nBrushStyle );
                 BrushStyle eBrushStyle = static_cast<BrushStyle>(nBrushStyle);
@@ -1078,9 +1137,14 @@ namespace emfio
                     eCharSet = osl_getThreadTextEncoding();
                 if ( eCharSet == RTL_TEXTENCODING_SYMBOL )
                     eCharSet = RTL_TEXTENCODING_MS_1252;
-                aLogFont.alfFaceName = OUString( lfFaceName, strlen(lfFaceName), eCharSet );
+                size_t nLength = strlen(lfFaceName);
+                aLogFont.alfFaceName = OUString( lfFaceName, nLength, eCharSet );
+                SAL_INFO("emfio", "\tFacename: " << lfFaceName);
 
-                CreateObject(std::make_unique<WinMtfFontStyle>( aLogFont ));
+                if ((nRecordSize < 12) || (nRecordSize > 28))
+                    bRecordOk = false;
+                else
+                    CreateObject(std::make_unique<WinMtfFontStyle>(aLogFont));
             }
             break;
 
@@ -1105,15 +1169,19 @@ namespace emfio
             }
             break;
 
-            case W_META_EXCLUDECLIPRECT :
+            case W_META_EXCLUDECLIPRECT:
             {
-                SAL_WARN( "emfio", "TODO:  Not working correctly. Please fill the bug report" );
-                ExcludeClipRect( ReadRectangle() );
+                if (nRecordSize != 7)
+                    bRecordOk = false;
+                SAL_WARN("emfio", "TODO:  Not working correctly. Please fill the bug report");
+                ExcludeClipRect(ReadRectangle());
             }
             break;
 
             case W_META_PATBLT:
             {
+                if (nRecordSize != 9)
+                    bRecordOk = false;
                 sal_uInt32 nROP = 0;
                 mpInputStream->ReadUInt32( nROP );
                 Size aSize = ReadYXExt();
@@ -1125,6 +1193,8 @@ namespace emfio
 
             case W_META_SELECTCLIPREGION:
             {
+                if (nRecordSize != 4)
+                    bRecordOk = false;
                 sal_uInt16 nObjIndex = 0;
                 mpInputStream->ReadUInt16( nObjIndex );
                 SAL_WARN( "emfio", "TODO: W_META_SELECTCLIPREGION is not implemented. Please fill the bug report" );
@@ -1136,161 +1206,180 @@ namespace emfio
             }
             break;
 
-            case W_META_ESCAPE :
+            case W_META_ESCAPE:
             {
-                // mnRecSize has been checked previously to be greater than 3
-                sal_uInt64 nMetaRecSize = static_cast< sal_uInt64 >(mnRecSize - 2 ) * 2;
+                sal_uInt64 nMetaRecSize = static_cast<sal_uInt64>(nRecordSize - 2) * 2;
                 sal_uInt64 nMetaRecEndPos = mpInputStream->Tell() + nMetaRecSize;
 
-                // taking care that mnRecSize does not exceed the maximal stream position
-                if ( nMetaRecEndPos > mnEndPos )
+                // taking care that nRecordSize does not exceed the maximal stream position
+                if (nMetaRecEndPos > mnEndPos)
                 {
-                    mpInputStream->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                    mpInputStream->SetError(SVSTREAM_FILEFORMAT_ERROR);
                     break;
                 }
-                if (mnRecSize >= 4 )    // minimal escape length
+                sal_uInt16 nMode = 0, nLen = 0;
+                mpInputStream->ReadUInt16(nMode).ReadUInt16(nLen);
+                if (nRecordSize != ((nLen + 1u) >> 1u) + 5u)
                 {
-                    sal_uInt16  nMode = 0, nLen = 0;
-                    mpInputStream->ReadUInt16( nMode )
-                         .ReadUInt16( nLen );
-                    if ( ( nMode == W_MFCOMMENT ) && ( nLen >= 4 ) )
+                    bRecordOk = false;
+                    break;
+                }
+                if ((nMode == W_MFCOMMENT) && (nLen >= 4))
+                {
+                    sal_uInt32 nNewMagic = 0; // we have to read int32 for
+                    // META_ESCAPE_ENHANCED_METAFILE CommentIdentifier
+                    mpInputStream->ReadUInt32(nNewMagic);
+
+                    if (nNewMagic == 0x2c2a4f4f && nLen >= 14)
                     {
-                        sal_uInt32 nNewMagic = 0; // we have to read int32 for
-                        mpInputStream->ReadUInt32( nNewMagic );   // META_ESCAPE_ENHANCED_METAFILE CommentIdentifier
+                        sal_uInt16 nMagic2 = 0;
+                        mpInputStream->ReadUInt16(nMagic2);
+                        if (nMagic2 == 0x0a) // 2nd half of magic
+                        { // continue with private escape
+                            sal_uInt32 nCheck = 0, nEsc = 0;
+                            mpInputStream->ReadUInt32(nCheck).ReadUInt32(nEsc);
 
-                        if( nNewMagic == 0x2c2a4f4f &&  nLen >= 14 )
-                        {
-                            sal_uInt16 nMagic2 = 0;
-                            mpInputStream->ReadUInt16( nMagic2 );
-                            if( nMagic2 == 0x0a ) // 2nd half of magic
-                            {                     // continue with private escape
-                                sal_uInt32 nCheck = 0, nEsc = 0;
-                                mpInputStream->ReadUInt32( nCheck )
-                                     .ReadUInt32( nEsc );
+                            sal_uInt32 nEscLen = nLen - 14;
+                            if (nEscLen <= (nRecordSize * 2))
+                            {
+#ifdef OSL_BIGENDIAN
+                                sal_uInt32 nTmp = OSL_SWAPDWORD(nEsc);
+                                sal_uInt32 nCheckSum = rtl_crc32(0, &nTmp, 4);
+#else
+                                sal_uInt32 nCheckSum = rtl_crc32(0, &nEsc, 4);
+#endif
+                                std::unique_ptr<sal_Int8[]> pData;
 
-                                sal_uInt32 nEscLen = nLen - 14;
-                                if ( nEscLen <= (mnRecSize * 2 ) )
+                                if ((static_cast<sal_uInt64>(nEscLen) + mpInputStream->Tell())
+                                    > nMetaRecEndPos)
                                 {
-    #ifdef OSL_BIGENDIAN
-                                    sal_uInt32 nTmp = OSL_SWAPDWORD( nEsc );
-                                    sal_uInt32 nCheckSum = rtl_crc32( 0, &nTmp, 4 );
-    #else
-                                    sal_uInt32 nCheckSum = rtl_crc32( 0, &nEsc, 4 );
-    #endif
-                                    std::unique_ptr<sal_Int8[]> pData;
-
-                                    if ( ( static_cast< sal_uInt64 >( nEscLen ) + mpInputStream->Tell() ) > nMetaRecEndPos )
+                                    mpInputStream->SetError(SVSTREAM_FILEFORMAT_ERROR);
+                                    break;
+                                }
+                                if (nEscLen > 0)
+                                {
+                                    pData.reset(new sal_Int8[nEscLen]);
+                                    mpInputStream->ReadBytes(pData.get(), nEscLen);
+                                    nCheckSum = rtl_crc32(nCheckSum, pData.get(), nEscLen);
+                                }
+                                if (nCheck == nCheckSum)
+                                {
+                                    switch (nEsc)
                                     {
-                                        mpInputStream->SetError( SVSTREAM_FILEFORMAT_ERROR );
-                                        break;
-                                    }
-                                    if ( nEscLen > 0 )
-                                    {
-                                        pData.reset(new sal_Int8[ nEscLen ]);
-                                        mpInputStream->ReadBytes(pData.get(), nEscLen);
-                                        nCheckSum = rtl_crc32( nCheckSum, pData.get(), nEscLen );
-                                    }
-                                    if ( nCheck == nCheckSum )
-                                    {
-                                        switch( nEsc )
+                                        case PRIVATE_ESCAPE_UNICODE:
                                         {
-                                            case PRIVATE_ESCAPE_UNICODE :
+                                            // we will use text instead of polygons only if we have the correct font
+                                            if (Application::GetDefaultDevice()->IsFontAvailable(
+                                                    GetFont().GetFamilyName()))
                                             {
-                                                // we will use text instead of polygons only if we have the correct font
-                                                if ( Application::GetDefaultDevice()->IsFontAvailable( GetFont().GetFamilyName() ) )
-                                                {
-                                                    Point  aPt;
-                                                    sal_uInt32  nStringLen, nDXCount;
-                                                    KernArray aDXAry;
-                                                    SvMemoryStream aMemoryStream( nEscLen );
-                                                    aMemoryStream.WriteBytes(pData.get(), nEscLen);
-                                                    aMemoryStream.Seek( STREAM_SEEK_TO_BEGIN );
-                                                    sal_Int32 nTmpX(0), nTmpY(0);
-                                                    aMemoryStream.ReadInt32( nTmpX )
-                                                                 .ReadInt32( nTmpY )
-                                                                 .ReadUInt32( nStringLen );
-                                                    aPt.setX( nTmpX );
-                                                    aPt.setY( nTmpY );
+                                                Point aPt;
+                                                sal_uInt32 nStringLen, nDXCount;
+                                                KernArray aDXAry;
+                                                SvMemoryStream aMemoryStream(nEscLen);
+                                                aMemoryStream.WriteBytes(pData.get(), nEscLen);
+                                                aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+                                                sal_Int32 nTmpX(0), nTmpY(0);
+                                                aMemoryStream.ReadInt32(nTmpX)
+                                                    .ReadInt32(nTmpY)
+                                                    .ReadUInt32(nStringLen);
+                                                aPt.setX(nTmpX);
+                                                aPt.setY(nTmpY);
 
-                                                    if ( ( static_cast< sal_uInt64 >( nStringLen ) * sizeof( sal_Unicode ) ) < ( nEscLen - aMemoryStream.Tell() ) )
+                                                if ((static_cast<sal_uInt64>(nStringLen)
+                                                    * sizeof(sal_Unicode))
+                                                    < (nEscLen - aMemoryStream.Tell()))
+                                                {
+                                                    OUString aString = read_uInt16s_ToOUString(
+                                                        aMemoryStream, nStringLen);
+                                                    aMemoryStream.ReadUInt32(nDXCount);
+                                                    if ((static_cast<sal_uInt64>(nDXCount)
+                                                        * sizeof(sal_Int32))
+                                                        >= (nEscLen - aMemoryStream.Tell()))
+                                                        nDXCount = 0;
+                                                    if (nDXCount)
+                                                        aDXAry.resize(nDXCount);
+                                                    for (sal_uInt32 i = 0; i < nDXCount; i++)
                                                     {
-                                                        OUString aString = read_uInt16s_ToOUString(aMemoryStream, nStringLen);
-                                                        aMemoryStream.ReadUInt32( nDXCount );
-                                                        if ( ( static_cast< sal_uInt64 >( nDXCount ) * sizeof( sal_Int32 ) ) >= ( nEscLen - aMemoryStream.Tell() ) )
-                                                            nDXCount = 0;
-                                                        if ( nDXCount )
-                                                            aDXAry.resize(nDXCount);
-                                                        for  (sal_uInt32 i = 0; i < nDXCount; i++ )
-                                                        {
-                                                            sal_Int32 val;
-                                                            aMemoryStream.ReadInt32( val);
-                                                            aDXAry.set(i, val);
-                                                        }
-                                                        aMemoryStream.ReadUInt32(mnSkipActions);
-                                                        DrawText( aPt, aString, aDXAry.empty() ? nullptr : &aDXAry );
+                                                        sal_Int32 val;
+                                                        aMemoryStream.ReadInt32(val);
+                                                        aDXAry.set(i, val);
                                                     }
+                                                    aMemoryStream.ReadUInt32(mnSkipActions);
+                                                    DrawText(aPt, aString,
+                                                             aDXAry.empty() ? nullptr : &aDXAry);
                                                 }
                                             }
-                                            break;
                                         }
+                                        break;
                                     }
                                 }
                             }
                         }
-                        else if ( (nNewMagic == static_cast< sal_uInt32 >(0x43464D57)) && (nLen >= 34) && ( static_cast<sal_Int32>(nLen + 10) <= static_cast<sal_Int32>(mnRecSize * 2) ))
+                    }
+                    else if ((nNewMagic == static_cast<sal_uInt32>(0x43464D57)) && (nLen >= 34)
+                            && (static_cast<sal_Int32>(nLen + 10)
+                                <= static_cast<sal_Int32>(nRecordSize * 2)))
+                    {
+                        sal_uInt32 nComType = 0, nVersion = 0, nFlags = 0, nComRecCount = 0,
+                                nCurRecSize = 0, nRemainingSize = 0, nEMFTotalSize = 0;
+                        sal_uInt16 nCheck = 0;
+
+                        mpInputStream->ReadUInt32(nComType)
+                            .ReadUInt32(nVersion)
+                            .ReadUInt16(nCheck)
+                            .ReadUInt32(nFlags)
+                            .ReadUInt32(nComRecCount)
+                            .ReadUInt32(nCurRecSize)
+                            .ReadUInt32(nRemainingSize)
+                            .ReadUInt32(
+                                nEMFTotalSize); // the nRemainingSize is not mentioned in MSDN documentation
+                            // but it seems to be required to read in data produced by OLE
+
+                        if (nComType == 0x01 && nVersion == 0x10000 && nComRecCount)
                         {
-                            sal_uInt32 nComType = 0, nVersion = 0, nFlags = 0, nComRecCount = 0,
-                                       nCurRecSize = 0, nRemainingSize = 0, nEMFTotalSize = 0;
-                            sal_uInt16 nCheck = 0;
-
-                            mpInputStream->ReadUInt32( nComType ).ReadUInt32( nVersion ).ReadUInt16( nCheck ).ReadUInt32( nFlags )
-                                 .ReadUInt32( nComRecCount ).ReadUInt32( nCurRecSize )
-                                 .ReadUInt32( nRemainingSize ).ReadUInt32( nEMFTotalSize ); // the nRemainingSize is not mentioned in MSDN documentation
-                                                                      // but it seems to be required to read in data produced by OLE
-
-                            if( nComType == 0x01 && nVersion == 0x10000 && nComRecCount )
+                            if (!mnEMFRec)
+                            { // first EMF comment
+                                mnEMFRecCount = nComRecCount;
+                                mnEMFSize = nEMFTotalSize;
+                                if (mnEMFSize > mpInputStream->remainingSize())
+                                {
+                                    SAL_WARN("emfio",
+                                            "emf size claims to be larger than remaining data");
+                                    mpEMFStream.reset();
+                                }
+                                else
+                                    mpEMFStream = std::vector<sal_uInt8>();
+                            }
+                            else if ((mnEMFRecCount != nComRecCount)
+                                    || (mnEMFSize != nEMFTotalSize)) // add additional checks here
                             {
-                                if( !mnEMFRec)
-                                {   // first EMF comment
-                                    mnEMFRecCount = nComRecCount;
-                                    mnEMFSize = nEMFTotalSize;
-                                    if (mnEMFSize > mpInputStream->remainingSize())
-                                    {
-                                        SAL_WARN("emfio", "emf size claims to be larger than remaining data");
-                                        mpEMFStream.reset();
-                                    }
-                                    else
-                                        mpEMFStream = std::vector<sal_uInt8>();
-                                }
-                                else if( (mnEMFRecCount != nComRecCount ) || (mnEMFSize != nEMFTotalSize ) ) // add additional checks here
-                                {
-                                    // total records should be the same as in previous comments
-                                    mnEMFRecCount = 0xFFFFFFFF;
-                                    mpEMFStream.reset();
-                                }
-                                mnEMFRec++;
+                                // total records should be the same as in previous comments
+                                mnEMFRecCount = 0xFFFFFFFF;
+                                mpEMFStream.reset();
+                            }
+                            mnEMFRec++;
 
-                                if (mpEMFStream && nCurRecSize + 34 > nLen)
-                                {
-                                    mnEMFRecCount = 0xFFFFFFFF;
-                                    mpEMFStream.reset();
-                                }
+                            if (mpEMFStream && nCurRecSize + 34 > nLen)
+                            {
+                                mnEMFRecCount = 0xFFFFFFFF;
+                                mpEMFStream.reset();
+                            }
 
-                                if (mpEMFStream && nCurRecSize > mpInputStream->remainingSize())
-                                {
-                                    SAL_WARN("emfio", "emf record size claims to be larger than remaining data");
-                                    mnEMFRecCount = 0xFFFFFFFF;
-                                    mpEMFStream.reset();
-                                }
+                            if (mpEMFStream && nCurRecSize > mpInputStream->remainingSize())
+                            {
+                                SAL_WARN("emfio",
+                                        "emf record size claims to be larger than remaining data");
+                                mnEMFRecCount = 0xFFFFFFFF;
+                                mpEMFStream.reset();
+                            }
 
-                                if (mpEMFStream)
+                            if (mpEMFStream)
+                            {
+                                std::vector<sal_Int8> aBuf(nCurRecSize);
+                                sal_uInt32 nCount = mpInputStream->ReadBytes(aBuf.data(), nCurRecSize);
+                                if (nCount == nCurRecSize)
                                 {
-                                    std::vector<sal_Int8> aBuf(nCurRecSize);
-                                    sal_uInt32 nCount = mpInputStream->ReadBytes(aBuf.data(), nCurRecSize);
-                                    if( nCount == nCurRecSize )
-                                    {
-                                        mpEMFStream->insert(mpEMFStream->end(), aBuf.begin(), aBuf.end());
-                                    }
+                                    mpEMFStream->insert(mpEMFStream->end(), aBuf.begin(), aBuf.end());
                                 }
                             }
                         }
@@ -1304,7 +1393,7 @@ namespace emfio
             case W_META_SETSTRETCHBLTMODE:
             case W_META_SETTEXTCHAREXTRA:
             case W_META_SETTEXTJUSTIFICATION:
-            case W_META_FLOODFILL :
+            case W_META_FLOODFILL:
             case W_META_FILLREGION:
             case W_META_FRAMEREGION:
             case W_META_INVERTREGION:
@@ -1332,6 +1421,13 @@ namespace emfio
             {
                 SAL_WARN("emfio", "Unknown Meta Action: 0x" << std::hex << nFunc << std::dec);
             }
+        }
+
+        if (!bRecordOk)
+        {
+            SAL_WARN("emfio", "WMF validation failed, record: " <<
+                              record_type_name(nFunc) << ", size: " << nRecordSize);
+            mpInputStream->SetError(SVSTREAM_FILEFORMAT_ERROR);
         }
 
         // tdf#127471
@@ -1672,10 +1768,10 @@ namespace emfio
                     }
                     break;
 
-                    case W_META_SETMAPMODE :
+                    case W_META_SETMAPMODE:
                     {
-                        sal_Int16 nMapMode(0);
-                        pStm->ReadInt16( nMapMode );
+                        sal_uInt16 nMapMode(0);
+                        pStm->ReadUInt16(nMapMode);
                         eMapMode = static_cast<MappingMode>(nMapMode);
                     }
                     break;
@@ -1690,7 +1786,7 @@ namespace emfio
 
                     case W_META_RECTANGLE:
                     case W_META_INTERSECTCLIPRECT:
-                    case W_META_EXCLUDECLIPRECT :
+                    case W_META_EXCLUDECLIPRECT:
                     case W_META_ELLIPSE:
                     {
                         GetWinExtMax( ReadRectangle(), aBound, eMapMode );
