@@ -89,6 +89,7 @@ private:
     void                ImplGetSignatureInformations(bool bUseTempStream, bool bCacheLastSignature);
     void                ImplFillSignaturesBox();
     void                ImplShowSignaturesDetails();
+    bool                IsThereCertificateMgr();
 
     css::uno::Reference<css::security::XCertificate> getCertificate(const SignatureInformation& rInfo);
     css::uno::Reference<css::xml::crypto::XSecurityEnvironment> getSecurityEnvironmentForCertificate(

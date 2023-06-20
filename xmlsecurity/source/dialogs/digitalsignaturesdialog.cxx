@@ -115,6 +115,16 @@ namespace
 
         m_nODF = nTmp;
     }
+    const std::vector<std::u16string_view> aGUIServersWindows = { u"Gpg4win\\kleopatra.exe",
+                                                   u"Gpg4win\\bin\\kleopatra.exe",
+                                                   u"GNU\\GnuPG\\kleopatra.exe",
+                                                   u"GNU\\GnuPG\\launch-gpa.exe",
+                                                   u"GNU\\GnuPG\\gpa.exe",
+                                                   u"GnuPG\\bin\\gpa.exe",
+                                                   u"GNU\\GnuPG\\bin\\kleopatra.exe",
+                                                   u"GNU\\GnuPG\\bin\\launch-gpa.exe",
+                                                   u"GNU\\GnuPG\\bin\\gpa.exe"};
+    const std::vector<std::u16string_view> aGUIServersNix = { u"kleopatra", u"seahorse", u"gpa", u"kgpg" };
 }
 
 DigitalSignaturesDialog::DigitalSignaturesDialog(
@@ -199,6 +209,11 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     {
         m_xAddBtn->hide();
         m_xRemoveBtn->hide();
+        m_xStartCertMgrBtn->hide();
+    }
+
+    if ( !IsThereCertificateMgr() )
+    {
         m_xStartCertMgrBtn->hide();
     }
 }
@@ -473,22 +488,54 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, RemoveButtonHdl, weld::Button&, void)
     }
 }
 
+bool DigitalSignaturesDialog::IsThereCertificateMgr()
+{
+    static std::vector<std::u16string_view> aGUIServers;
+#ifdef _WIN32
+    static const OUString aPath = [] {
+        sal::systools::CoTaskMemAllocated<wchar_t> sPath;
+        HRESULT hr
+            = SHGetKnownFolderPath(FOLDERID_ProgramFilesX86, KF_FLAG_DEFAULT, nullptr, &sPath);
+        if (SUCCEEDED(hr))
+            return OUString(o3tl::toU(sPath));
+        return OUString();
+    }();
+    if (aPath.isEmpty())
+        return false;
+    aGUIServers = aGUIServersWindows;
+#else
+    const char* cPath = getenv("PATH");
+    if (!cPath)
+        return false;
+    OUString aPath(cPath, strlen(cPath), osl_getThreadTextEncoding());
+    aGUIServers = aGUIServersNix;
+#endif
+
+    if (aGUIServers.empty())
+        return false;
+
+    OUString sFoundGUIServer, sExecutable;
+
+    for ( auto const &rServer : aGUIServers )
+    {
+        osl::FileBase::RC searchError = osl::File::searchFileURL(OUString(rServer), aPath, sFoundGUIServer );
+        if (searchError == osl::FileBase::E_None)
+        {
+            osl::File::getSystemPathFromFileURL( sFoundGUIServer, sExecutable );
+            break;
+        }
+    }
+
+    return ( !sExecutable.isEmpty() );
+}
+
 IMPL_LINK_NOARG(DigitalSignaturesDialog, CertMgrButtonHdl, weld::Button&, void)
 {
+    static std::vector<std::u16string_view> aGUIServers;
 #ifdef _WIN32
     // FIXME: call GpgME::dirInfo("bindir") somewhere in
     // SecurityEnvironmentGpg or whatnot
     // FIXME: perhaps poke GpgME for uiserver, and hope it returns something useful?
-    static const std::u16string_view aGUIServers[] = { u"Gpg4win\\kleopatra.exe",
-                                                   u"Gpg4win\\bin\\kleopatra.exe",
-                                                   u"GNU\\GnuPG\\kleopatra.exe",
-                                                   u"GNU\\GnuPG\\launch-gpa.exe",
-                                                   u"GNU\\GnuPG\\gpa.exe",
-                                                   u"GnuPG\\bin\\gpa.exe",
-                                                   u"GNU\\GnuPG\\bin\\kleopatra.exe",
-                                                   u"GNU\\GnuPG\\bin\\launch-gpa.exe",
-                                                   u"GNU\\GnuPG\\bin\\gpa.exe",
-                                                 };
     static const OUString aPath = [] {
         sal::systools::CoTaskMemAllocated<wchar_t> sPath;
         HRESULT hr
@@ -499,17 +546,21 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, CertMgrButtonHdl, weld::Button&, void)
     }();
     if (aPath.isEmpty())
         return;
+    aGUIServers = aGUIServersWindows;
 #else
-    static const std::u16string_view aGUIServers[] = { u"kleopatra", u"seahorse", u"gpa", u"kgpg" };
     const char* cPath = getenv("PATH");
     if (!cPath)
         return;
     OUString aPath(cPath, strlen(cPath), osl_getThreadTextEncoding());
+    aGUIServers = aGUIServersNix;
 #endif
+
+    if (aGUIServers.empty())
+        return;
 
     OUString sFoundGUIServer, sExecutable;
 
-    for ( auto const &rServer : aGUIServers )
+    for ( auto const &rServer : aGUIServers)
     {
         osl::FileBase::RC searchError = osl::File::searchFileURL(OUString(rServer), aPath, sFoundGUIServer );
         if (searchError == osl::FileBase::E_None)
