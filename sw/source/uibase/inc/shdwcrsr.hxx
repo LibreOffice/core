@@ -20,7 +20,6 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_SHDWCRSR_HXX
 
 #include <tools/gen.hxx>
-#include <tools/color.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/window.hxx>
 #include <limits.h>
