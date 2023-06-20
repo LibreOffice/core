@@ -163,18 +163,16 @@ namespace svgio::svgreader
                 aTransform = *getTransform() * aTransform;
             }
 
-            if(!aTransform.isIdentity())
-            {
-                const drawinglayer::primitive2d::Primitive2DReference xRef(
-                    new drawinglayer::primitive2d::TransformPrimitive2D(
-                        aTransform,
-                        std::move(aNewTarget)));
+            const SvgStyleAttributes* pStyle = getSvgStyleAttributes();
 
-                rTarget.push_back(xRef);
-            }
-            else
+            if(pStyle)
             {
-                rTarget.append(aNewTarget);
+                const double fOpacity(pStyle->getOpacity().getNumber());
+
+                if(fOpacity > 0.0 && Display::None != getDisplay())
+                {
+                    pStyle->add_postProcess(rTarget, std::move(aNewTarget), aTransform, false);
+                }
             }
         }
 

@@ -2867,7 +2867,9 @@ namespace svgio::svgreader
                 return maClipPathXLink;
             }
 
-            if(getCssStyleParent())
+            // This is called from add_postProcess so only check the parent style
+            // if it has a local css style, because it's the first in the stack
+            if(mrOwner.hasLocalCssStyle())
             {
                 const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
 
@@ -2905,14 +2907,19 @@ namespace svgio::svgreader
                 return maFilterXLink;
             }
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
-
-            if (pSvgStyleAttributes && maResolvingParent[32] < nStyleDepthLimit)
+            // This is called from add_postProcess so only check the parent style
+            // if it has a local css style, because it's the first in the stack
+            if(mrOwner.hasLocalCssStyle())
             {
-                ++maResolvingParent[32];
-                auto ret = pSvgStyleAttributes->getFilterXLink();
-                --maResolvingParent[32];
-                return ret;
+                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+
+                if (pSvgStyleAttributes && maResolvingParent[32] < nStyleDepthLimit)
+                {
+                    ++maResolvingParent[32];
+                    auto ret = pSvgStyleAttributes->getFilterXLink();
+                    --maResolvingParent[32];
+                    return ret;
+                }
             }
 
             return OUString();
@@ -2940,14 +2947,19 @@ namespace svgio::svgreader
                 return maMaskXLink;
             }
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
-
-            if (pSvgStyleAttributes && maResolvingParent[25] < nStyleDepthLimit)
+            // This is called from add_postProcess so only check the parent style
+            // if it has a local css style, because it's the first in the stack
+            if(mrOwner.hasLocalCssStyle())
             {
-                ++maResolvingParent[25];
-                auto ret = pSvgStyleAttributes->getMaskXLink();
-                --maResolvingParent[25];
-                return ret;
+                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+
+                if (pSvgStyleAttributes && maResolvingParent[25] < nStyleDepthLimit)
+                {
+                    ++maResolvingParent[25];
+                    auto ret = pSvgStyleAttributes->getMaskXLink();
+                    --maResolvingParent[25];
+                    return ret;
+                }
             }
 
             return OUString();

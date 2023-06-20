@@ -163,10 +163,10 @@ CPPUNIT_TEST_FIXTURE(Test, testFeColorMatrix)
 
     CPPUNIT_ASSERT (pDocument);
 
-    //assertXPath(pDocument, "/primitive2D/transform/mask/transform[1]/modifiedColor", "modifier", "matrix");
-    assertXPath(pDocument, "/primitive2D/transform/mask/transform[2]/modifiedColor", "modifier", "saturate");
-    //assertXPath(pDocument, "/primitive2D/transform/mask/transform[3]/modifiedColor", "modifier", "hueRotate");
-    assertXPath(pDocument, "/primitive2D/transform/mask/transform[4]/modifiedColor", "modifier", "luminance_to_alpha");
+    //assertXPath(pDocument, "/primitive2D/transform/mask/modifiedColor", "modifier", "matrix");
+    assertXPath(pDocument, "/primitive2D/transform/mask/modifiedColor[1]", "modifier", "saturate");
+    //assertXPath(pDocument, "/primitive2D/transform/mask/modifiedColor", "modifier", "hueRotate");
+    assertXPath(pDocument, "/primitive2D/transform/mask/modifiedColor[2]", "modifier", "luminance_to_alpha");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFilterFeGaussianBlur)
@@ -717,10 +717,24 @@ CPPUNIT_TEST_FIXTURE(Test, testClipPathAndParentStyle)
 
     CPPUNIT_ASSERT (pDocument);
 
-    assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", "color", "#ff0000");
-    assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke/line", "color", "#000000");
-    assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke/line", "width", "5");
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor", "color", "#ff0000");
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygonstroke/line", "color", "#000000");
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygonstroke/line", "width", "5");
 
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf155814)
+{
+    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/tdf155814.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/mask/mask/transform/unifiedtransparence", "transparence", "50");
+    assertXPath(pDocument, "/primitive2D/transform/mask/mask/transform/unifiedtransparence/polypolygoncolor", "color", "#0000ff");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testClipPathAndStyle)
@@ -735,9 +749,9 @@ CPPUNIT_TEST_FIXTURE(Test, testClipPathAndStyle)
 
     CPPUNIT_ASSERT (pDocument);
 
-    assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", "color", "#ccccff");
-    assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke/line", "color", "#0000cc");
-    assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke/line", "width", "2");
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor", "color", "#ccccff");
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygonstroke/line", "color", "#0000cc");
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygonstroke/line", "width", "2");
 
 }
 
@@ -915,10 +929,10 @@ CPPUNIT_TEST_FIXTURE(Test, testMaskText)
     CPPUNIT_ASSERT (pDocument);
 
     assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor", "color", "#000000");
-    assertXPath(pDocument, "/primitive2D/transform/transform/textsimpleportion", "fontcolor", "#ffffff");
-    assertXPath(pDocument, "/primitive2D/transform/transform/textsimpleportion", "text", "Black White");
-    assertXPath(pDocument, "/primitive2D/transform/transform/textsimpleportion", "height", "26");
-    assertXPath(pDocument, "/primitive2D/transform/transform/textsimpleportion", "familyname", "Times New Roman");
+    assertXPath(pDocument, "/primitive2D/transform/transform/transform/textsimpleportion", "fontcolor", "#ffffff");
+    assertXPath(pDocument, "/primitive2D/transform/transform/transform/textsimpleportion", "text", "Black White");
+    assertXPath(pDocument, "/primitive2D/transform/transform/transform/textsimpleportion", "height", "26");
+    assertXPath(pDocument, "/primitive2D/transform/transform/transform/textsimpleportion", "familyname", "Times New Roman");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf99994)
@@ -1096,12 +1110,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf155733)
 
     CPPUNIT_ASSERT (pDocument);
 
-    assertXPath(pDocument, "/primitive2D/transform/transform[1]/softedge", "radius", "5");
+    assertXPath(pDocument, "/primitive2D/transform/softedge", "radius", "5");
 
     // Without the fix in place, the softedge would have been applied to the second element
     // - Expected: 1
     // - Actual  : 0
-    assertXPath(pDocument, "/primitive2D/transform/transform[2]/unifiedtransparence", "transparence", "50");
+    assertXPath(pDocument, "/primitive2D/transform/transform/unifiedtransparence", "transparence", "50");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf97663)
