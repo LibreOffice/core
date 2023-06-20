@@ -304,7 +304,7 @@ namespace
                     mpTarget = pNew;
 
                     // #i125326# there are attributes, read them. This will set isTextCss to false if
-                    // type attibute is different to "text/css"
+                    // type attribute is different to "text/css"
                     mpTarget->parseAttributes(xAttribs);
 
                     if(pNew->isTextCss())
