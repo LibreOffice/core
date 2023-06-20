@@ -2078,11 +2078,43 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::finishParagraph(
 }
 
 uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::insertTextPortion(
-        const OUString& /*rText*/,
-        const uno::Sequence< beans::PropertyValue >& /*rCharAndParaProps*/,
-        const uno::Reference< text::XTextRange>& /*rTextRange*/ )
+        const OUString& rText,
+        const uno::Sequence< beans::PropertyValue >& rCharAndParaProps,
+        const uno::Reference< text::XTextRange>& rTextRange )
 {
+    SolarMutexGuard aGuard;
+
     uno::Reference< text::XTextRange > xRet;
+
+    if (!rTextRange.is())
+        return xRet;
+
+    SvxUnoTextRangeBase* pRange = comphelper::getFromUnoTunnel<SvxUnoTextRange>(rTextRange);
+    if (!pRange)
+        return xRet;
+
+    SvxEditSource *pEditSource = GetEditSource();
+    SvxTextForwarder *pTextForwarder = pEditSource ? pEditSource->GetTextForwarder() : nullptr;
+
+    if (pTextForwarder)
+    {
+        pRange->setString(rText);
+
+        ESelection aSelection(pRange->GetSelection());
+
+        pTextForwarder->RemoveAttribs(aSelection);
+        pEditSource->UpdateData();
+
+        SfxItemSet aItemSet( *pTextForwarder->GetEmptyItemSetPtr() );
+        SvxPropertyValuesToItemSet( aItemSet, rCharAndParaProps,
+                ImplGetSvxTextPortionSfxPropertySet(), pTextForwarder, aSelection.nStartPara );
+        pTextForwarder->QuickSetAttribs( aItemSet, aSelection);
+        rtl::Reference<SvxUnoTextRange> pNewRange = new SvxUnoTextRange( *this );
+        xRet = pNewRange;
+        pNewRange->SetSelection(aSelection);
+        for( const beans::PropertyValue& rProp : rCharAndParaProps )
+            pNewRange->setPropertyValue( rProp.Name, rProp.Value );
+    }
     return xRet;
 }
 
