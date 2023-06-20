@@ -28,7 +28,7 @@ void XSheetAnnotationAnchor::testGetAnnotation()
     uno::Reference<sheet::XSheetAnnotation> xAnnotation(xAnchor->getAnnotation(), UNO_SET_THROW);
     CPPUNIT_ASSERT_MESSAGE("Unable to get XSheetAnnotation", xAnnotation.is());
 
-    CPPUNIT_ASSERT_MESSAGE("Unable to check: getAuthor()", xAnnotation->getAuthor().isEmpty());
+    CPPUNIT_ASSERT_MESSAGE("Unable to check: getAuthor()", !xAnnotation->getAuthor().isEmpty());
     CPPUNIT_ASSERT_MESSAGE("Unable to check: getDate()", !xAnnotation->getDate().isEmpty());
     CPPUNIT_ASSERT_MESSAGE("Unable to check: getIsVisible()", !xAnnotation->getIsVisible());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to check: getPosition()", table::CellAddress(0, 2, 3),

@@ -57,6 +57,13 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <utility>
+#include <strings.hrc>
+
+#include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XTextAppend.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
+#include <comphelper/propertyvalue.hxx>
 
 using namespace com::sun::star;
 
@@ -493,8 +500,10 @@ void ScPostIt::SetAuthor( const OUString& rAuthor )
 
 void ScPostIt::AutoStamp()
 {
-    maNoteData.maDate = ScGlobal::getLocaleData().getDate( Date( Date::SYSTEM ) );
-    maNoteData.maAuthor = SvtUserOptions().GetID();
+    maNoteData.maDate = ScGlobal::getLocaleData().getDate( Date( Date::SYSTEM ) ) + " " +
+        ScGlobal::getLocaleData().getTime(DateTime(DateTime::SYSTEM), false);
+    const OUString aAuthor = SvtUserOptions().GetFullName();
+    maNoteData.maAuthor = !aAuthor.isEmpty() ? aAuthor : ScResId(STR_CHG_UNKNOWN_AUTHOR);
 }
 
 const OutlinerParaObject* ScPostIt::GetOutlinerObject() const
@@ -793,24 +802,54 @@ void ScPostIt::RemoveCaption()
     }
 }
 
+static void lcl_FormatAndInsertAuthorAndDatepara(SdrCaptionObj* pCaption, OUStringBuffer& aUserData, bool bUserWithTrackText)
+{
+    uno::Reference<drawing::XShape> xShape = pCaption->getUnoShape();
+    uno::Reference<text::XText> xText(xShape, uno::UNO_QUERY);
+    uno::Reference<text::XTextAppend> xBodyTextAppend(xText, uno::UNO_QUERY);
+
+    if (xBodyTextAppend.is())
+    {
+        uno::Sequence< beans::PropertyValue > aArgs;
+        if (bUserWithTrackText)
+        {
+            xBodyTextAppend->insertTextPortion(aUserData.makeStringAndClear(), aArgs, xText->getStart());
+        }
+        else
+        {
+            xBodyTextAppend->insertTextPortion("\n--------\n", aArgs, xText->getStart());
+            aArgs = {
+                comphelper::makePropertyValue("CharWeight", uno::Any(awt::FontWeight::BOLD)),
+            };
+            xBodyTextAppend->insertTextPortion(aUserData.makeStringAndClear(), aArgs, xText->getStart());
+        }
+    }
+}
+
 rtl::Reference<SdrCaptionObj> ScNoteUtil::CreateTempCaption(
         ScDocument& rDoc, const ScAddress& rPos, SdrPage& rDrawPage,
         std::u16string_view rUserText, const tools::Rectangle& rVisRect, bool bTailFront )
 {
+    bool bUserWithTrackText = false;
     OUStringBuffer aBuffer( rUserText );
     // add plain text of invisible (!) cell note (no formatting etc.)
     SdrCaptionObj* pNoteCaption = nullptr;
     const ScPostIt* pNote = rDoc.GetNote( rPos );
     if( pNote && !pNote->IsCaptionShown() )
     {
-        if( !aBuffer.isEmpty() )
-            aBuffer.append( "\n--------\n" + pNote->GetText() );
+        if (!aBuffer.isEmpty())
+        {
+            bUserWithTrackText = true;
+            aBuffer.append("\n--------\n");
+        }
+        else
+        {
+            aBuffer.append(pNote->GetAuthor()
+                + ", "
+                + pNote->GetDate());
+        }
         pNoteCaption = pNote->GetOrCreateCaption( rPos );
     }
-
-    // create a caption if any text exists
-    if( !pNoteCaption && aBuffer.isEmpty() )
-        return rtl::Reference<SdrCaptionObj>();
 
     // prepare visible rectangle (add default distance to all borders)
     tools::Rectangle aVisRect(
@@ -826,33 +865,32 @@ rtl::Reference<SdrCaptionObj> ScNoteUtil::CreateTempCaption(
     rtl::Reference<SdrCaptionObj> pCaption = aCreator.GetCaption();  // just for ease of use
     rDrawPage.InsertObject( pCaption.get() );
 
-
-    // clone the edit text object, unless user text is present, then set this text
-    if( pNoteCaption && rUserText.empty() )
+    // clone the edit text object, then seta and format the Author and date text
+    if (pNoteCaption)
     {
         if( OutlinerParaObject* pOPO = pNoteCaption->GetOutlinerParaObject() )
             pCaption->SetOutlinerParaObject( *pOPO );
+        // Setting and formatting rUserText: Author name and date time
+        lcl_FormatAndInsertAuthorAndDatepara(pCaption.get(), aBuffer, bUserWithTrackText);
         // set formatting (must be done after setting text) and resize the box to fit the text
         if (auto pStyleSheet = pNoteCaption->GetStyleSheet())
             pCaption->SetStyleSheet(pStyleSheet, true);
-        pCaption->SetMergedItemSetAndBroadcast( pNoteCaption->GetMergedItemSet() );
-        tools::Rectangle aCaptRect( pCaption->GetLogicRect().TopLeft(), pNoteCaption->GetLogicRect().GetSize() );
-        pCaption->SetLogicRect( aCaptRect );
+        pCaption->SetMergedItemSetAndBroadcast(pNoteCaption->GetMergedItemSet());
     }
     else
     {
-        // if pNoteCaption is null, then aBuffer contains some text
-        pCaption->SetText( aBuffer.makeStringAndClear() );
+        pCaption->SetText(aBuffer.makeStringAndClear());
         if (auto pStyleSheet = rDoc.GetStyleSheetPool()->Find(ScResId(STR_STYLENAME_NOTE), SfxStyleFamily::Frame))
             pCaption->SetStyleSheet(static_cast<SfxStyleSheet*>(pStyleSheet), true);
-        // adjust caption size to text size
-        tools::Long nMaxWidth = ::std::min< tools::Long >( aVisRect.GetWidth() * 2 / 3, SC_NOTECAPTION_MAXWIDTH_TEMP );
-        pCaption->SetMergedItem( makeSdrTextAutoGrowWidthItem( true ) );
-        pCaption->SetMergedItem( makeSdrTextMinFrameWidthItem( SC_NOTECAPTION_WIDTH ) );
-        pCaption->SetMergedItem( makeSdrTextMaxFrameWidthItem( nMaxWidth ) );
-        pCaption->SetMergedItem( makeSdrTextAutoGrowHeightItem( true ) );
-        pCaption->AdjustTextFrameWidthAndHeight();
     }
+
+    // adjust caption size to text size
+    tools::Long nMaxWidth = ::std::min< tools::Long >( aVisRect.GetWidth() * 2 / 3, SC_NOTECAPTION_MAXWIDTH_TEMP );
+    pCaption->SetMergedItem( makeSdrTextAutoGrowWidthItem( true ) );
+    pCaption->SetMergedItem( makeSdrTextMinFrameWidthItem( SC_NOTECAPTION_WIDTH ) );
+    pCaption->SetMergedItem( makeSdrTextMaxFrameWidthItem( nMaxWidth ) );
+    pCaption->SetMergedItem( makeSdrTextAutoGrowHeightItem( true ) );
+    pCaption->AdjustTextFrameWidthAndHeight();
 
     // move caption into visible area
     aCreator.AutoPlaceCaption( &aVisRect );
