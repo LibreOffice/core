@@ -2549,7 +2549,7 @@ static NSArray *getMergedAccessibilityChildren(NSArray *pDefaultChildren, NSArra
 
     if (pObject && [pObject isKindOfClass:[SalFrameView class]])
     {
-        mpParentView = (SalFrameView *)pObject;
+        mpParentView = static_cast<SalFrameView *>(pObject);
         [mpParentView retain];
     }
 

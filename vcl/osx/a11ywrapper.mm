@@ -1266,7 +1266,7 @@ static Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
 {
     NSNumber *pNumber = [ self accessibilityAttributeValue: NSAccessibilityOrientationAttribute ];
     if ( pNumber )
-        return (NSAccessibilityOrientation)[ pNumber integerValue ];
+        return NSAccessibilityOrientation([ pNumber integerValue ]);
     else
         return NSAccessibilityOrientationUnknown;
 }
@@ -1555,7 +1555,7 @@ static Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
             com::sun::star::awt::Point location = pAccessibleComponent->getLocationOnScreen();
             com::sun::star::awt::Size size = pAccessibleComponent->getSize();
             NSRect screenRect = sal::aqua::getTotalScreenBounds();
-            NSRect frame = NSMakeRect( (float)location.X, (float)( screenRect.size.height - size.Height - location.Y ), (float)size.Width, (float)size.Height );
+            NSRect frame = NSMakeRect( float(location.X), float( screenRect.size.height - size.Height - location.Y ), float(size.Width), float(size.Height) );
             return frame;
         }
     } catch ( DisposedException& ) {
