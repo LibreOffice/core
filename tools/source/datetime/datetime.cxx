@@ -196,18 +196,13 @@ DateTime operator +( const DateTime& rDateTime, double fTimeInDays )
 
 double operator -( const DateTime& rDateTime1, const DateTime& rDateTime2 )
 {
-    sal_Int32 nDays = static_cast<const Date&>(rDateTime1)
-        - static_cast<const Date&>(rDateTime2);
-    sal_Int64 nTime = rDateTime1.GetNSFromTime() - rDateTime2.GetNSFromTime();
-    if ( nTime )
+    if (static_cast<const tools::Time&>(rDateTime1) != static_cast<const tools::Time&>(rDateTime2))
     {
-        double fTime = double(nTime);
-        fTime /= ::tools::Time::nanoSecPerDay; // convert from nanoseconds to fraction
-        if ( nDays < 0 && fTime > 0.0 )
-            fTime = 1.0 - fTime;
-        return double(nDays) + fTime;
+        // Use Duration to diminish floating point accuracy errors.
+        const tools::Duration aDuration( rDateTime2, rDateTime1);
+        return aDuration.GetInDays();
     }
-    return double(nDays);
+    return static_cast<const Date&>(rDateTime1) - static_cast<const Date&>(rDateTime2);
 }
 
 void DateTime::GetWin32FileDateTime( sal_uInt32 & rLower, sal_uInt32 & rUpper ) const
