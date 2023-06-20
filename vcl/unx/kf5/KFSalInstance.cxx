@@ -36,7 +36,8 @@ KFSalInstance::KFSalInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCair
     : QtInstance(pQApp, bUseCairo)
 {
     ImplSVData* pSVData = ImplGetSVData();
-    pSVData->maAppData.mxToolkitName = constructToolkitID(u"kf5");
+    const OUString sToolkit = u"kf" + OUString::number(QT_VERSION_MAJOR);
+    pSVData->maAppData.mxToolkitName = constructToolkitID(sToolkit);
 }
 
 bool KFSalInstance::hasNativeFileSelection() const
