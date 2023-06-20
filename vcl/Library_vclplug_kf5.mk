@@ -30,7 +30,7 @@ $(eval $(call gb_Library_set_include,vclplug_kf5,\
 ))
 
 $(eval $(call gb_Library_add_defs,vclplug_kf5,\
-    -DVCLPLUG_KF5_IMPLEMENTATION \
+    -DVCLPLUG_KF_IMPLEMENTATION \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,vclplug_kf5))
