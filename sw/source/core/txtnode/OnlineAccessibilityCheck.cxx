@@ -256,6 +256,7 @@ void OnlineAccessibilityCheck::lookForPreviousNodeAndUpdate(const SwPosition& rN
 
     if (pNode && (pNode->IsContentNode() || pNode->IsTableNode()))
     {
+        runDocumentLevelAccessibilityCheck();
         runAccessibilityCheck(pNode);
         updateNodeStatus(pNode);
 
@@ -305,6 +306,20 @@ void OnlineAccessibilityCheck::resetAndQueue(SwNode* pNode)
     m_aNodes.erase(pNode);
     runAccessibilityCheck(pNode);
     updateNodeStatus(pNode);
+    updateStatusbar();
+}
+
+void OnlineAccessibilityCheck::resetAndQueueDocumentLevel()
+{
+    if (utl::ConfigManager::IsFuzzing())
+        return;
+
+    bool bOnlineCheckStatus
+        = officecfg::Office::Common::Accessibility::OnlineAccessibilityCheck::get();
+    if (!bOnlineCheckStatus)
+        return;
+
+    runDocumentLevelAccessibilityCheck();
     updateStatusbar();
 }
 

@@ -8,6 +8,8 @@
  *
  */
 
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
 #include <AccessibilityIssue.hxx>
 #include <AccessibilityCheckStrings.hrc>
 #include <drawdoc.hxx>
@@ -42,7 +44,8 @@ void AccessibilityIssue::setObjectID(OUString const& rID) { m_sObjectID = rID; }
 
 bool AccessibilityIssue::canGotoIssue() const
 {
-    if (m_pDoc && m_eIssueObject != IssueObject::UNKNOWN)
+    if (m_pDoc && m_eIssueObject != IssueObject::UNKNOWN
+        && m_eIssueObject != IssueObject::DOCUMENT_TITLE)
         return true;
     return false;
 }
@@ -119,7 +122,8 @@ void AccessibilityIssue::gotoIssue() const
 bool AccessibilityIssue::canQuickFixIssue() const
 {
     return m_eIssueObject == IssueObject::GRAPHIC || m_eIssueObject == IssueObject::OLE
-           || m_eIssueObject == IssueObject::SHAPE || m_eIssueObject == IssueObject::FORM;
+           || m_eIssueObject == IssueObject::SHAPE || m_eIssueObject == IssueObject::FORM
+           || m_eIssueObject == IssueObject::DOCUMENT_TITLE;
 }
 
 void AccessibilityIssue::quickFixIssue() const
@@ -155,6 +159,26 @@ void AccessibilityIssue::quickFixIssue() const
                 SdrObject* pObj = pPage->GetObjByName(m_sObjectID);
                 if (pObj)
                     pObj->SetTitle(aNameDialog.GetName());
+            }
+        }
+        break;
+        case IssueObject::DOCUMENT_TITLE:
+        {
+            OUString aDesc = SwResId(STR_ENTER_DOCUMENT_TITLE);
+            SvxNameDialog aNameDialog(m_pParent, "", aDesc);
+            if (aNameDialog.run() == RET_OK)
+            {
+                SwDocShell* pShell = m_pDoc->GetDocShell();
+                if (!pShell)
+                    return;
+
+                const uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+                    pShell->GetModel(), uno::UNO_QUERY_THROW);
+                const uno::Reference<document::XDocumentProperties> xDocumentProperties(
+                    xDPS->getDocumentProperties());
+                xDocumentProperties->setTitle(aNameDialog.GetName());
+
+                m_pDoc->getOnlineAccessibilityCheck()->resetAndQueueDocumentLevel();
             }
         }
         break;
