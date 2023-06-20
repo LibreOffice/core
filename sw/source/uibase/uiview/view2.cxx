@@ -1888,7 +1888,8 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 std::unique_ptr<sw::OnlineAccessibilityCheck> const& rOnlineAccessibilityCheck = rShell.GetDoc()->getOnlineAccessibilityCheck();
                 if (rOnlineAccessibilityCheck)
                 {
-                    sal_Int32 nIssues = rOnlineAccessibilityCheck->getNumberOfAccessibilityIssues();
+                    sal_Int32 nIssues = rOnlineAccessibilityCheck->getNumberOfAccessibilityIssues()
+                        + rOnlineAccessibilityCheck->getNumberOfDocumentLevelAccessibilityIssues();
                     rSet.Put(SfxInt32Item(FN_STAT_ACCESSIBILITY_CHECK, nIssues));
                 }
             }

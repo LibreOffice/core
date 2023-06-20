@@ -1263,8 +1263,10 @@ public:
         OUString sTitle = xDocumentProperties->getTitle();
         if (o3tl::trim(sTitle).empty())
         {
-            lclAddIssue(m_rIssueCollection, SwResId(STR_DOCUMENT_TITLE),
-                        sfx::AccessibilityIssueID::DOCUMENT_TITLE);
+            auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_DOCUMENT_TITLE),
+                                      sfx::AccessibilityIssueID::DOCUMENT_TITLE);
+            pIssue->setDoc(*pDoc);
+            pIssue->setIssueObject(IssueObject::DOCUMENT_TITLE);
         }
     }
 };

@@ -40,6 +40,7 @@
 #define STR_DOCUMENT_DEFAULT_LANGUAGE   NC_("STR_DOCUMENT_DEFAULT_LANGUAGE", "Document default language is not set.")
 #define STR_STYLE_NO_LANGUAGE           NC_("STR_STYLE_NO_LANGUAGE", "Style “%STYLE_NAME%” has no language set.")
 #define STR_DOCUMENT_TITLE              NC_("STR_DOCUMENT_TITLE", "Document title is not set.")
+#define STR_ENTER_DOCUMENT_TITLE        NC_("STR_ENTER_DOCUMENT_TITLE", "Enter document title:")
 
 #define STR_ENTER_ALT                   NC_("STR_ENTER_ALT", "Enter alternative text:")
 

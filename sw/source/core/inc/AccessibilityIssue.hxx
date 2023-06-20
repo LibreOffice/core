@@ -25,6 +25,7 @@ enum class IssueObject
     FORM,
     TABLE,
     TEXT,
+    DOCUMENT_TITLE,
 };
 
 class SW_DLLPUBLIC AccessibilityIssue final : public sfx::AccessibilityIssue

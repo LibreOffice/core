@@ -67,8 +67,14 @@ public:
     OnlineAccessibilityCheck(SwDoc& rDocument);
     void update(SwPosition const& rNewPos);
     void resetAndQueue(SwNode* pNode);
+    void resetAndQueueDocumentLevel();
     void updateCheckerActivity();
     sal_Int32 getNumberOfAccessibilityIssues() { return m_nAccessibilityIssues; }
+    sal_Int32 getNumberOfDocumentLevelAccessibilityIssues()
+    {
+        return m_pDocumentAccessibilityIssues ? m_pDocumentAccessibilityIssues->getIssues().size()
+                                              : sal_Int32(0);
+    }
 };
 
 } // end sw
