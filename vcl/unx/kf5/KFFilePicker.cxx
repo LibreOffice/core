@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "KF5FilePicker.hxx"
-#include <KF5FilePicker.moc>
+#include "KFFilePicker.hxx"
+#include <KFFilePicker.moc>
 
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <cppuhelper/supportsservice.hxx>

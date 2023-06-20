@@ -10,7 +10,7 @@
 $(eval $(call gb_CustomTarget_CustomTarget,vcl/unx/kf5))
 
 $(call gb_CustomTarget_get_target,vcl/unx/kf5) : \
-	$(call gb_CustomTarget_get_workdir,vcl/unx/kf5)/KF5FilePicker.moc
+	$(call gb_CustomTarget_get_workdir,vcl/unx/kf5)/KFFilePicker.moc
 
 $(call gb_CustomTarget_get_workdir,vcl/unx/kf5)/%.moc : \
 		$(SRCDIR)/vcl/unx/kf5/%.hxx \

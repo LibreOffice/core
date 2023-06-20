@@ -27,8 +27,8 @@
 
 #include <QtData.hxx>
 
-#include "KF5FilePicker.hxx"
-#include "KF5SalInstance.hxx"
+#include "KFFilePicker.hxx"
+#include "KFSalInstance.hxx"
 
 using namespace com::sun::star;
 
