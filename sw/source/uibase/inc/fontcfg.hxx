@@ -49,6 +49,7 @@
 
 //pt-size of fonts
 #define FONTSIZE_DEFAULT            240
+#define FONTSIZE_KOREAN_DEFAULT     200
 #define FONTSIZE_CJK_DEFAULT        210
 #define FONTSIZE_OUTLINE            280
 

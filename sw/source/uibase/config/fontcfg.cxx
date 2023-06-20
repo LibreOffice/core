@@ -264,6 +264,10 @@ sal_Int32 SwStdFontConfig::GetDefaultHeightFor(sal_uInt16 nFontType, LanguageTyp
     {
         nRet = nRet * 4 / 3;
     }
+    if( eLang == LANGUAGE_KOREAN )
+    {
+        nRet = FONTSIZE_KOREAN_DEFAULT;
+    }
     return nRet;
 }
 
