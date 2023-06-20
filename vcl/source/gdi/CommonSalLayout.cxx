@@ -391,7 +391,7 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                             aDirection = bRightToLeft ? HB_DIRECTION_RTL : HB_DIRECTION_LTR;
                         }
 
-                        if (aSubRuns.empty() || aSubRuns.back().maDirection != aDirection)
+                        if (aSubRuns.empty() || aSubRuns.back().maDirection != aDirection || aSubRuns.back().maScript != aScript)
                             aSubRuns.push_back({ nPrevIdx, nIdx, aScript, aDirection });
                         else
                             aSubRuns.back().mnEnd = nIdx;
