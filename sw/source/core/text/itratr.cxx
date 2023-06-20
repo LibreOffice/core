@@ -1520,6 +1520,32 @@ bool SwTextFrame::HasNonLastSplitFlyDrawObj() const
     return false;
 }
 
+bool SwTextFrame::IsEmptyMasterWithSplitFly() const
+{
+    if (!IsEmptyMaster())
+    {
+        return false;
+    }
+
+    if (!m_pDrawObjs || m_pDrawObjs->size() != 1)
+    {
+        return false;
+    }
+
+    SwFlyFrame* pFlyFrame = (*m_pDrawObjs)[0]->DynCastFlyFrame();
+    if (!pFlyFrame || !pFlyFrame->IsFlySplitAllowed())
+    {
+        return false;
+    }
+
+    if (mnOffset != GetFollow()->GetOffset())
+    {
+        return false;
+    }
+
+    return true;
+}
+
 SwTwips SwTextNode::GetWidthOfLeadingTabs() const
 {
     SwTwips nRet = 0;

@@ -794,6 +794,10 @@ public:
     /// a follow, i.e. not the last in a master -> follow 1 -> ... -> last follow chain?
     bool HasNonLastSplitFlyDrawObj() const;
 
+    /// This text frame has a follow and the text frame don't contain text. Additionally one split
+    /// fly is anchored to the text frame.
+    bool IsEmptyMasterWithSplitFly() const;
+
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const override;
 };
 

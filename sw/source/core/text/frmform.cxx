@@ -650,6 +650,12 @@ void SwTextFrame::AdjustFollow_( SwTextFormatter &rLine,
         }
     }
 
+    if (IsEmptyMasterWithSplitFly())
+    {
+        // A split fly is anchored to us, don't move content from the follow frame to this one.
+        return;
+    }
+
     // The Offset moved
     if( GetFollow() )
     {
@@ -2037,6 +2043,18 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
                 pPre->GetAttrSet()->GetKeep().GetValue() )
             {
                 pPre->InvalidatePos();
+            }
+
+            if (IsEmptyMasterWithSplitFly())
+            {
+                // A fly is anchored to us, reduce size, so we definitely still fit the current
+                // page.
+                SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
+                aRectFnSet.SetHeight(aFrm, 0);
+
+                SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
+                aRectFnSet.SetTop(aPrt, 0);
+                aRectFnSet.SetHeight(aPrt, 0);
             }
         }
     }

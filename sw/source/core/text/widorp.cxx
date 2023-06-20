@@ -37,6 +37,9 @@
 #include <ftnfrm.hxx>
 #include <pagefrm.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <sortedobjs.hxx>
+#include <anchoredobject.hxx>
+#include <flyfrm.hxx>
 
 #undef WIDOWTWIPS
 
@@ -237,6 +240,31 @@ bool SwTextFrameBreak::IsBreakNow( SwTextMargin &rLine )
 
         bool bFirstLine = 1 == rLine.GetLineNr() && !rLine.GetPrev();
         m_bBreak = true;
+
+        if (bFirstLine)
+        {
+            bool bFits = m_pFrame->getFrameArea().Bottom() <= m_pFrame->GetUpper()->getFramePrintArea().Bottom();
+            if (!m_pFrame->IsFollow() && !bFits)
+            {
+                // This is a master that doesn't fit the current parent.
+                if (m_pFrame->GetDrawObjs() && m_pFrame->GetDrawObjs()->size() == 1)
+                {
+                    SwFlyFrame* pFlyFrame = (*m_pFrame->GetDrawObjs())[0]->DynCastFlyFrame();
+                    if (pFlyFrame && pFlyFrame->IsFlySplitAllowed())
+                    {
+                        // It has a split fly anchored to it.
+                        if (pFlyFrame->GetFrameFormat().GetVertOrient().GetPos() < 0)
+                        {
+                            // Negative vertical offset means that visually it already has a
+                            // previous line. Consider that, otherwise the split fly would move to
+                            // the next page as well, which is not wanted.
+                            bFirstLine = false;
+                        }
+                    }
+                }
+            }
+        }
+
         if( ( bFirstLine && m_pFrame->GetIndPrev() )
             || ( rLine.GetLineNr() <= rLine.GetDropLines() ) )
         {
