@@ -2502,17 +2502,19 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     if( !bOnlineSpellChgd )
         return;
 
-    bool bOnlineSpl = rOpt.IsOnlineSpell();
-    for(SwViewShell& rSh : GetRingContainer())
+    if ( !comphelper::LibreOfficeKit::isActive() )
     {
-        if(&rSh == this)
-            continue;
-        rSh.mpOpt->SetOnlineSpell( bOnlineSpl );
-        vcl::Window *pTmpWin = rSh.GetWin();
-        if( pTmpWin )
-            pTmpWin->Invalidate();
+        bool bOnlineSpl = rOpt.IsOnlineSpell();
+        for(SwViewShell& rSh : GetRingContainer())
+        {
+            if(&rSh == this)
+                continue;
+            rSh.mpOpt->SetOnlineSpell( bOnlineSpl );
+            vcl::Window *pTmpWin = rSh.GetWin();
+            if( pTmpWin )
+                pTmpWin->Invalidate();
+        }
     }
-
 }
 
 void SwViewShell::SetUIOptions( const SwViewOption &rOpt )
