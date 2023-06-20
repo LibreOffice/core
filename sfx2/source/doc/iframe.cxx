@@ -174,14 +174,18 @@ sal_Bool SAL_CALL IFrameObject::load(
         uno::Reference<frame::XFramesSupplier> xParentFrame = xFrame->getCreator();
         SfxObjectShell* pDoc = SfxMacroLoader::GetObjectShell(xParentFrame);
 
-        bool bUpdateAllowed(true);
-        if (pDoc)
+        const bool bIsFactoryURL = aTargetURL.Complete.startsWith("private:factory/");
+        if (!bIsFactoryURL)
         {
-            comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = pDoc->getEmbeddedObjectContainer();
-            bUpdateAllowed = rEmbeddedObjectContainer.getUserAllowsLinkUpdate();
+            bool bUpdateAllowed(true);
+            if (pDoc)
+            {
+                comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = pDoc->getEmbeddedObjectContainer();
+                bUpdateAllowed = rEmbeddedObjectContainer.getUserAllowsLinkUpdate();
+            }
+            if (!bUpdateAllowed)
+                return false;
         }
-        if (!bUpdateAllowed)
-            return false;
 
         OUString sReferer;
         if (pDoc && pDoc->HasName())
