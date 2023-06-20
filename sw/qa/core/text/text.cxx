@@ -1309,6 +1309,29 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testFloattableOverlap)
     CPPUNIT_ASSERT(!rRect1.Overlaps(rRect2));
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testFloattableAnchorNextPage)
+{
+    // Given a document with 3 floating tables, the last one has a negative vertical offset, so the
+    // floating table is on page 1, but its anchor frame is effectively on page 2:
+    createSwDoc("floattable-anchor-next-page.docx");
+
+    // When laying out that document:
+    calcLayout();
+
+    // Then make sure all 3 floating tables are on page 1:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    CPPUNIT_ASSERT(pPage1->GetSortedObjs());
+    const SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 3
+    // - Actual  : 2
+    // i.e. the last floating table was on the wrong page (page 2).
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), rPage1Objs.size());
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf89288)
 {
     // Given a document with 2 paragraphs of mixed Complex and Western text,
