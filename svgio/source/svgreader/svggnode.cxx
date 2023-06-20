@@ -19,7 +19,6 @@
 
 #include <svggnode.hxx>
 #include <osl/diagnose.h>
-#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
 namespace svgio::svgreader
 {
@@ -86,26 +85,26 @@ namespace svgio::svgreader
 
         void SvgGNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DContainer& rTarget, bool bReferenced) const
         {
-            SvgNode::decomposeSvgNode(rTarget, bReferenced);
-
-            // if g element has transform, apply it
-            if(SVGToken::G == getType())
+            if(SVGToken::Defs == getType())
             {
-                if(getTransform())
+                // #i125258# no decompose needed for defs element, call parent for SVGTokenDefs
+                SvgNode::decomposeSvgNode(rTarget, bReferenced);
+            }
+            else
+            {
+                // #i125258# for SVGTokenG decompose children
+                const SvgStyleAttributes* pStyle = getSvgStyleAttributes();
+
+                if(pStyle)
                 {
-                    drawinglayer::primitive2d::Primitive2DContainer aSource(std::move(rTarget));
-                    // create embedding group element with transformation
-                    const drawinglayer::primitive2d::Primitive2DReference xRef(
-                        new drawinglayer::primitive2d::TransformPrimitive2D(
-                            *getTransform(),
-                            std::move(aSource)));
+                    drawinglayer::primitive2d::Primitive2DContainer aContent;
 
-                    aSource = drawinglayer::primitive2d::Primitive2DContainer { xRef };
+                    // decompose children
+                    SvgNode::decomposeSvgNode(aContent, bReferenced);
 
-                    if(!aSource.empty())
+                    if(!aContent.empty())
                     {
-                        // append to current target
-                        rTarget.append(aSource);
+                        pStyle->add_postProcess(rTarget, std::move(aContent), getTransform(), false);
                     }
                 }
             }

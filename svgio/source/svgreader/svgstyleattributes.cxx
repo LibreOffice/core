@@ -1161,7 +1161,8 @@ namespace svgio::svgreader
         void SvgStyleAttributes::add_postProcess(
             drawinglayer::primitive2d::Primitive2DContainer& rTarget,
             drawinglayer::primitive2d::Primitive2DContainer&& rSource,
-            const std::optional<basegfx::B2DHomMatrix>& pTransform) const
+            const std::optional<basegfx::B2DHomMatrix>& pTransform,
+            bool bIsPrimitive) const
         {
             if(rSource.empty())
                 return;
@@ -1175,15 +1176,20 @@ namespace svgio::svgreader
 
             drawinglayer::primitive2d::Primitive2DContainer aSource(std::move(rSource));
 
-            if(basegfx::fTools::less(fOpacity, 1.0))
+            // tdf#97717: only apply opacity when it's a primitive, otherwise, it might be
+            // applied more than once, since getOpacity() checks the parents
+            if (bIsPrimitive)
             {
-                // embed in UnifiedTransparencePrimitive2D
-                const drawinglayer::primitive2d::Primitive2DReference xRef(
-                    new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
-                        std::move(aSource),
-                        1.0 - fOpacity));
+                if(basegfx::fTools::less(fOpacity, 1.0))
+                {
+                    // embed in UnifiedTransparencePrimitive2D
+                    const drawinglayer::primitive2d::Primitive2DReference xRef(
+                        new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
+                            std::move(aSource),
+                            1.0 - fOpacity));
 
-                aSource = drawinglayer::primitive2d::Primitive2DContainer { xRef };
+                    aSource = drawinglayer::primitive2d::Primitive2DContainer { xRef };
+                }
             }
 
             if(pTransform)
