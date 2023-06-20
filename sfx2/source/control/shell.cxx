@@ -671,7 +671,7 @@ void SfxShell::UIFeatureChanged()
     if ( pFrame && pFrame->IsVisible() )
     {
         // Also force an update, if dispatcher is already updated otherwise
-        // something my get stuck in the bunkered tools. Asynchronous call to
+        // something may get stuck in the bunkered tools. Asynchronous call to
         // prevent recursion.
         if ( !pImpl->pUpdater )
             pImpl->pUpdater.reset( new svtools::AsynchronLink( Link<void*,void>( this, DispatcherUpdate_Impl ) ) );

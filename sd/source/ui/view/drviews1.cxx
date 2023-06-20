@@ -506,6 +506,9 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
     Invalidate( SID_HANDOUT_MASTER_MODE );
     InvalidateWindows();
 
+    if (sfx2::SfxNotebookBar::IsActive())
+        UIFeatureChanged();
+
     SetContextName(GetSidebarContextName());
 
 }
