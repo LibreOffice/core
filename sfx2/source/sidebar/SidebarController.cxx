@@ -686,7 +686,10 @@ void SidebarController::SwitchToDeck (
         std::shared_ptr<DeckDescriptor> xDeckDescriptor = mpResourceManager->GetDeckDescriptor(rsDeckId);
 
         if (xDeckDescriptor)
+        {
             SwitchToDeck(*xDeckDescriptor, maCurrentContext);
+            Deck::LOKSendSidebarFullUpdate();
+        }
     }
 }
 

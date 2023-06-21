@@ -37,7 +37,6 @@
 #include <com/sun/star/ui/XSidebarPanel.hpp>
 
 #include <utility>
-#include <vcl/jsdialog/executor.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -305,12 +304,6 @@ sal_Int32 PlacePanels (
                 nY += nDeckSeparatorHeight;
             }
         }
-    }
-
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        sal_uInt64 nShellId = reinterpret_cast<sal_uInt64>(SfxViewShell::Current());
-        jsdialog::SendFullUpdate(std::to_string(nShellId) + "sidebar", "Panel");
     }
 
     return nY;
