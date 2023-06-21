@@ -341,7 +341,7 @@ const DateTime theExcelCutOverDate( Date( 1, 3, 1900 ));
 
 double XclRoot::GetDoubleFromDateTime( const DateTime& rDateTime ) const
 {
-    double fValue = rDateTime - GetNullDate();
+    double fValue = DateTime::Sub( rDateTime, GetNullDate());
     // adjust dates before 1900-03-01 to get correct time values in the range [0.0,1.0)
     /* XXX: this is only used when reading BIFF, otherwise we'd have to check
      * for dateCompatibility==true as mentioned below. */

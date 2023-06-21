@@ -334,7 +334,7 @@ void ScViewFunc::InsertCurrentTime(SvNumFormatType nReqFmt, const OUString& rUnd
             case SvNumFormatType::DATETIME:
                 {
                     DateTime aActDateTime( DateTime::SYSTEM );
-                    fVal = aActDateTime - DateTime( pFormatter->GetNullDate());
+                    fVal = DateTime::Sub( aActDateTime, DateTime( pFormatter->GetNullDate()));
                     if (nCurNumFormatType == SvNumFormatType::DATETIME)
                         nFormat = nCurNumFormat;
                 }
@@ -470,10 +470,7 @@ void ScViewFunc::InsertCurrentTime(SvNumFormatType nReqFmt, const OUString& rUnd
                     default:
                         {
                             DateTime aActDateTime( DateTime::SYSTEM );
-                            // Converting the null date to DateTime forces the
-                            // correct operator-() to be used, resulting in a
-                            // fractional date+time instead of only date value.
-                            fVal = aActDateTime - DateTime( pFormatter->GetNullDate());
+                            fVal = DateTime::Sub( aActDateTime, DateTime( pFormatter->GetNullDate()));
                         }
                 }
                 break;

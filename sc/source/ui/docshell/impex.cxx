@@ -1426,8 +1426,9 @@ static bool lcl_PutString(
                 pCalendar->setValue( i18n::CalendarFieldIndex::MILLISECOND, 0 );
                 if ( pCalendar->isValid() )
                 {
-                    double fDiff = DateTime(pDocFormatter->GetNullDate()) -
-                        pCalendar->getEpochStart();
+                    // Whole days diff.
+                    double fDiff = DateTime::Sub( DateTime(pDocFormatter->GetNullDate()),
+                            pCalendar->getEpochStart());
                     // #i14974# must use getLocalDateTime to get the same
                     // date values as set above
                     double fDays = pCalendar->getLocalDateTime() + fFrac;
