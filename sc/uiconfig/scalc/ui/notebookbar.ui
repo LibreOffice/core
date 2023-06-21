@@ -1380,31 +1380,10 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuPage-DefinePrintArea">
+      <object class="GtkMenuItem" id="MenuPage-PrintRangesMenu">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:DefinePrintArea</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuPage-AddPrintArea">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:AddPrintArea</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuPage-EditPrintArea">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:EditPrintArea</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuPage-DeletePrintArea">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:DeletePrintArea</property>
+        <property name="action_name">.uno:PrintRangesMenu</property>
       </object>
     </child>
     <child>

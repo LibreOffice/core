@@ -409,14 +409,7 @@
       <menu:menuitem menu:id=".uno:FontDialog"/>
       <menu:menuitem menu:id=".uno:ParagraphDialog"/>
       <menu:menuitem menu:id=".uno:PageFormatDialog"/>
-      <menu:menu menu:id=".uno:PrintRangesMenu">
-        <menu:menupopup>
-          <menu:menuitem menu:id=".uno:DefinePrintArea"/>
-          <menu:menuitem menu:id=".uno:AddPrintArea"/>
-          <menu:menuitem menu:id=".uno:EditPrintArea"/>
-          <menu:menuitem menu:id=".uno:DeletePrintArea"/>
-        </menu:menupopup>
-      </menu:menu>
+      <menu:menuitem menu:id=".uno:PrintRangesMenu"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ConditionalFormatMenu"/>
       <menu:menuitem menu:id=".uno:AutoFormat"/>

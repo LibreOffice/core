@@ -523,6 +523,20 @@
           <value>showtrackedchanges</value>
         </prop>
       </node>
+      <node oor:name="c42" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:PrintRangesMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>printranges</value>
+        </prop>
+      </node>
       <node oor:name="WindowListMenu" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:WindowList</value>
