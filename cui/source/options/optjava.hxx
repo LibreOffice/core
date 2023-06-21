@@ -200,7 +200,9 @@ public:
     void             SetFocus() { m_xPathList->grab_focus(); }
 
     OUString                GetClassPath() const;
+#if HAVE_FEATURE_JAVA
     void                    SetClassPath( const OUString& _rPath );
+#endif
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

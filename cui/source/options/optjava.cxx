@@ -935,6 +935,7 @@ OUString SvxJavaClassPathDlg::GetClassPath() const
     return sPath.makeStringAndClear();
 }
 
+#if HAVE_FEATURE_JAVA
 void SvxJavaClassPathDlg::SetClassPath( const OUString& _rPath )
 {
     if ( m_sOldPath.isEmpty() )
@@ -963,5 +964,6 @@ void SvxJavaClassPathDlg::SetClassPath( const OUString& _rPath )
     }
     SelectHdl_Impl(*m_xPathList);
 }
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
