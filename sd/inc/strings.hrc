@@ -130,6 +130,8 @@
 #define STR_UNDO_INSERT_FILE                            NC_("STR_UNDO_INSERT_FILE", "Insert file")
 #define STR_UNDO_INSERT_SPECCHAR                        NC_("STR_UNDO_INSERT_SPECCHAR", "Insert special character")
 #define STR_UNDO_SET_PRESLAYOUT                         NC_("STR_UNDO_SET_PRESLAYOUT", "Apply presentation layout")
+#define STR_UNDO_HIDE_SLIDE                             NC_("STR_UNDO_HIDE_SLIDE", "Hide slide")
+#define STR_UNDO_SHOW_SLIDE                             NC_("STR_UNDO_SHOW_SLIDE", "Show slide")
 #define STR_PLAY                                        NC_("STR_PLAY", "~Play")
 #define STR_STOP                                        NC_("STR_STOP", "Sto~p")
 #define STR_UNDO_ORIGINALSIZE                           NC_("STR_UNDO_ORIGINALSIZE", "Original Size")

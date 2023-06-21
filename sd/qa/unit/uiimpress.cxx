@@ -56,6 +56,8 @@
 #include <unomodel.hxx>
 #include <osl/thread.hxx>
 #include <slideshow.hxx>
+#include <sdresid.hxx>
+#include <strings.hrc>
 
 using namespace ::com::sun::star;
 
@@ -489,6 +491,62 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf100950)
 
     // Without the fix in place, this test would have failed here
     CPPUNIT_ASSERT(rPageSelector.IsPageSelected(2));
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf130581)
+{
+    createSdImpressDoc();
+
+    // Hide slide and check the number of available undo actions
+    dispatchCommand(mxComponent, ".uno:ShowSlide", {});
+    dispatchCommand(mxComponent, ".uno:HideSlide", {});
+
+    // There should be a single undo action, i.e., hide slide
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    sd::UndoManager* pUndoManager = pDocument->GetUndoManager();
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pUndoManager->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(SdResId(STR_UNDO_HIDE_SLIDE), pUndoManager->GetUndoActionComment());
+    sd::slidesorter::SlideSorterViewShell* pSSVS = getSlideSorterViewShell();
+
+    // Check if the page is actually hidden
+    auto& rSSController = pSSVS->GetSlideSorter().GetController();
+    auto& rPageSelector = rSSController.GetPageSelector();
+    CPPUNIT_ASSERT_EQUAL(true, rPageSelector.IsPageExcluded(0));
+
+    // Undo hide slide action and check the number of available redo actions
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pUndoManager->GetRedoActionCount());
+    CPPUNIT_ASSERT_EQUAL(SdResId(STR_UNDO_HIDE_SLIDE), pUndoManager->GetRedoActionComment());
+    CPPUNIT_ASSERT_EQUAL(false, rPageSelector.IsPageExcluded(0));
+
+    // Show slide and check the number of available undo actions
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    CPPUNIT_ASSERT_EQUAL(true, rPageSelector.IsPageExcluded(0));
+    dispatchCommand(mxComponent, ".uno:ShowSlide", {});
+    // Without the fix in place, this test would have failed with
+    // - Expected: 2
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pUndoManager->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(SdResId(STR_UNDO_SHOW_SLIDE), pUndoManager->GetUndoActionComment());
+    CPPUNIT_ASSERT_EQUAL(false, rPageSelector.IsPageExcluded(0));
+
+    // Undo show slide action and check the number of available undo/redo actions
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pUndoManager->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(SdResId(STR_UNDO_HIDE_SLIDE), pUndoManager->GetUndoActionComment());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pUndoManager->GetRedoActionCount());
+    CPPUNIT_ASSERT_EQUAL(SdResId(STR_UNDO_SHOW_SLIDE), pUndoManager->GetRedoActionComment());
+    CPPUNIT_ASSERT_EQUAL(true, rPageSelector.IsPageExcluded(0));
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf129346)

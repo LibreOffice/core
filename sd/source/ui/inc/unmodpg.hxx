@@ -19,6 +19,9 @@
 
 #pragma once
 
+#include <model/SlsPageDescriptor.hxx>
+#include <model/SlsSharedPageDescriptor.hxx>
+
 #include <xmloff/autolayout.hxx>
 
 #include <sdundo.hxx>
@@ -50,6 +53,31 @@ public:
     virtual ~ModifyPageUndoAction() override;
     virtual void Undo() override;
     virtual void Redo() override;
+};
+
+class ChangeSlideExclusionStateUndoAction final : public SdUndoAction
+{
+public:
+    ChangeSlideExclusionStateUndoAction(SdDrawDocument* pDocument,
+                                        const sd::slidesorter::model::PageDescriptor::State eState,
+                                        const bool bOldStateValue);
+
+    ChangeSlideExclusionStateUndoAction(
+        SdDrawDocument* pDocument, const sd::slidesorter::model::SharedPageDescriptor& rpDescriptor,
+        const sd::slidesorter::model::PageDescriptor::State eState, const bool bOldStateValue);
+
+    virtual void Undo() override;
+    virtual void Redo() override;
+
+    virtual OUString GetComment() const override;
+
+    void AddPageDescriptor(const sd::slidesorter::model::SharedPageDescriptor& rpDescriptor);
+
+private:
+    sd::slidesorter::model::PageDescriptor::State meState;
+    bool mbOldStateValue;
+    std::vector<sd::slidesorter::model::SharedPageDescriptor> mrpDescriptors;
+    const OUString maComment;
 };
 
 class RenameLayoutTemplateUndoAction final : public SdUndoAction

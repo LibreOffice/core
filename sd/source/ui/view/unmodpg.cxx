@@ -36,6 +36,12 @@
 #include <drawdoc.hxx>
 #include <utility>
 
+#include <ViewShell.hxx>
+#include <ViewShellBase.hxx>
+#include <DrawDocShell.hxx>
+#include <SlideSorter.hxx>
+#include <SlideSorterViewShell.hxx>
+#include <view/SlideSorterView.hxx>
 
 ModifyPageUndoAction::ModifyPageUndoAction(
     SdDrawDocument* pTheDoc,
@@ -169,6 +175,69 @@ void ModifyPageUndoAction::Redo()
 
 ModifyPageUndoAction::~ModifyPageUndoAction()
 {
+}
+
+ChangeSlideExclusionStateUndoAction::ChangeSlideExclusionStateUndoAction(
+    SdDrawDocument* pDocument, const sd::slidesorter::model::PageDescriptor::State eState,
+    const bool bOldStateValue)
+    : SdUndoAction(pDocument)
+    , meState(eState)
+    , mbOldStateValue(bOldStateValue)
+    , maComment(bOldStateValue ? SdResId(STR_UNDO_SHOW_SLIDE) : SdResId(STR_UNDO_HIDE_SLIDE))
+{
+}
+
+ChangeSlideExclusionStateUndoAction::ChangeSlideExclusionStateUndoAction(
+    SdDrawDocument* pDocument, const sd::slidesorter::model::SharedPageDescriptor& rpDescriptor,
+    const sd::slidesorter::model::PageDescriptor::State eState, const bool bOldStateValue)
+    : ChangeSlideExclusionStateUndoAction(pDocument, eState, bOldStateValue)
+{
+    mrpDescriptors.push_back(rpDescriptor);
+}
+
+void ChangeSlideExclusionStateUndoAction::AddPageDescriptor(
+    const sd::slidesorter::model::SharedPageDescriptor& rpDescriptor)
+{
+    mrpDescriptors.push_back(rpDescriptor);
+}
+
+void ChangeSlideExclusionStateUndoAction::Undo()
+{
+    sd::DrawDocShell* pDocShell = mpDoc ? mpDoc->GetDocSh() : nullptr;
+    sd::ViewShell* pViewShell = pDocShell ? pDocShell->GetViewShell() : nullptr;
+    if (pViewShell)
+    {
+        sd::slidesorter::SlideSorterViewShell* pSlideSorterViewShell
+            = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewShell->GetViewShellBase());
+        if (pSlideSorterViewShell)
+        {
+            for (const sd::slidesorter::model::SharedPageDescriptor& rpDescriptor : mrpDescriptors)
+                pSlideSorterViewShell->GetSlideSorter().GetView().SetState(rpDescriptor, meState,
+                                                                           mbOldStateValue);
+        }
+    }
+}
+
+void ChangeSlideExclusionStateUndoAction::Redo()
+{
+    sd::DrawDocShell* pDocShell = mpDoc ? mpDoc->GetDocSh() : nullptr;
+    sd::ViewShell* pViewShell = pDocShell ? pDocShell->GetViewShell() : nullptr;
+    if (pViewShell)
+    {
+        sd::slidesorter::SlideSorterViewShell* pSlideSorterViewShell
+            = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewShell->GetViewShellBase());
+        if (pSlideSorterViewShell)
+        {
+            for (const sd::slidesorter::model::SharedPageDescriptor& rpDescriptor : mrpDescriptors)
+                pSlideSorterViewShell->GetSlideSorter().GetView().SetState(rpDescriptor, meState,
+                                                                           !mbOldStateValue);
+        }
+    }
+}
+
+OUString ChangeSlideExclusionStateUndoAction::GetComment() const
+{
+    return maComment;
 }
 
 RenameLayoutTemplateUndoAction::RenameLayoutTemplateUndoAction(

@@ -92,6 +92,20 @@ public:
     */
     SD_DLLPUBLIC bool IsPageSelected(int nPageIndex);
 
+    /** Return whether the specified page is visible.  This convenience
+        method is a substitute for
+        SlideSorterModel::GetPageDescriptor(i)->HasState(ST_Visible) is
+        included here to make this class more self contained.
+    */
+    bool IsPageVisible(int nPageIndex);
+
+    /** Return whether the specified page is excluded.  This convenience
+        method is a substitute for
+        SlideSorterModel::GetPageDescriptor(i)->HasState(ST_Excluded) is
+        included here to make this class more self contained.
+    */
+    SD_DLLPUBLIC bool IsPageExcluded(int nPageIndex);
+
     /** Deselect the descriptor that is associated with the given page.
         The current page is updated to the first slide
         of the remaining selection.

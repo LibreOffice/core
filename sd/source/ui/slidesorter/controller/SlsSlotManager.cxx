@@ -1164,18 +1164,25 @@ void SlotManager::ChangeSlideExclusionState (
     const model::SharedPageDescriptor& rpDescriptor,
     const bool bExcludeSlide)
 {
+    SdDrawDocument* pDocument = mrSlideSorter.GetModel().GetDocument();
+    SfxUndoManager* pManager = pDocument->GetDocSh()->GetUndoManager();
     if (rpDescriptor)
     {
         mrSlideSorter.GetView().SetState(
             rpDescriptor,
             model::PageDescriptor::ST_Excluded,
             bExcludeSlide);
+        pManager->AddUndoAction(std::make_unique<ChangeSlideExclusionStateUndoAction>(
+            pDocument, rpDescriptor, model::PageDescriptor::ST_Excluded, !bExcludeSlide));
     }
     else
     {
         model::PageEnumeration aSelectedPages (
             model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
                 mrSlideSorter.GetModel()));
+        std::unique_ptr<ChangeSlideExclusionStateUndoAction> pChangeSlideExclusionStateUndoAction(
+            new ChangeSlideExclusionStateUndoAction(pDocument, model::PageDescriptor::ST_Excluded,
+                                                    !bExcludeSlide));
         while (aSelectedPages.HasMoreElements())
         {
             model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
@@ -1183,7 +1190,9 @@ void SlotManager::ChangeSlideExclusionState (
                 pDescriptor,
                 model::PageDescriptor::ST_Excluded,
                 bExcludeSlide);
+            pChangeSlideExclusionStateUndoAction->AddPageDescriptor(pDescriptor);
         }
+        pManager->AddUndoAction(std::move(pChangeSlideExclusionStateUndoAction));
     }
 
     SfxBindings& rBindings (mrSlideSorter.GetViewShell()->GetViewFrame()->GetBindings());
