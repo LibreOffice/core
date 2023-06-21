@@ -598,6 +598,8 @@ void ScViewFunc::PasteFromSystem()
                     PasteFromSystem(SotClipboardFormatId::RICHTEXT);
                 else if (aDataHelper.HasFormat(SotClipboardFormatId::HTML))
                     PasteFromSystem(SotClipboardFormatId::HTML);
+                else if (aDataHelper.HasFormat(SotClipboardFormatId::BITMAP))
+                    PasteFromSystem(SotClipboardFormatId::BITMAP);
                 else if (aDataHelper.HasFormat(SotClipboardFormatId::HTML_SIMPLE))
                     PasteFromSystem(SotClipboardFormatId::HTML_SIMPLE);
                 else if (aDataHelper.HasFormat(SotClipboardFormatId::SYLK))
