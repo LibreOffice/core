@@ -173,7 +173,6 @@ Duration Duration::Mult(sal_Int32 nMult, bool& rbOverflow) const
         const sal_uInt64 nMult64 = (nMult < 0) ? -nMult : nMult;
         do
         {
-            rbOverflow = true;
             sal_uInt64 nN;
             if (o3tl::checked_multiply(static_cast<sal_uInt64>(maTime.GetNanoSec()), nMult64, nN))
                 break;
