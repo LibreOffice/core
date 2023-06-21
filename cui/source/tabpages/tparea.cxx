@@ -26,6 +26,7 @@
 #include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xbtmpit.hxx>
+#include <svx/xgrscit.hxx>
 #include <cuitabarea.hxx>
 #include <sfx2/tabdlg.hxx>
 
@@ -194,6 +195,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
         case drawing::FillStyle_GRADIENT:
         {
             m_rXFSet.Put( rSet.Get( GetWhich( XATTR_FILLGRADIENT ) ) );
+            m_rXFSet.Put(rSet.Get(GetWhich(XATTR_GRADIENTSTEPCOUNT)));
             SelectFillType(*m_xBtnGradient);
             break;
         }

@@ -37,8 +37,6 @@
 #include <basegfx/utils/gradienttools.hxx>
 #include <sal/log.hxx>
 
-#define DEFAULT_GRADIENTSTEP 64
-
 using namespace com::sun::star;
 
 SvxGradientTabPage::SvxGradientTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
@@ -186,10 +184,17 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
 {
     std::unique_ptr<basegfx::BGradient> pBGradient;
     size_t nPos = m_xGradientLB->IsNoSelection() ? VALUESET_ITEM_NOTFOUND : m_xGradientLB->GetSelectItemPos();
+
+    sal_uInt16 nValue = 0; // automatic step count
+    if (!m_xCbIncrement->get_active())
+        nValue = m_xMtrIncrement->get_value();
+
     if( nPos != VALUESET_ITEM_NOTFOUND )
     {
         pBGradient.reset(new basegfx::BGradient( m_pGradientList->GetGradient( static_cast<sal_uInt16>(nPos) )->GetGradient() ));
         OUString aString = m_xGradientLB->GetItemText( m_xGradientLB->GetSelectedItemId() );
+        // update StepCount to current value to be in sync with FillGradientStepCount
+        pBGradient->SetSteps(nValue);
         rSet->Put( XFillGradientItem( aString, *pBGradient ) );
     }
     else
@@ -204,13 +209,9 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
                     static_cast<sal_uInt16>(m_xMtrBorder->get_value(FieldUnit::NONE)),
                     static_cast<sal_uInt16>(m_xMtrColorFrom->get_value(FieldUnit::NONE)),
                     static_cast<sal_uInt16>(m_xMtrColorTo->get_value(FieldUnit::NONE)),
-                    static_cast<sal_uInt16>(m_xMtrIncrement->get_value()) ));
+                    nValue));
         rSet->Put( XFillGradientItem( OUString(), *pBGradient ) );
     }
-
-    sal_uInt16 nValue = 0;
-    if (!m_xCbIncrement->get_active())
-        nValue = m_xMtrIncrement->get_value();
 
     assert( pBGradient && "basegfx::BGradient could not be created" );
     rSet->Put( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
@@ -220,8 +221,7 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
 
 void SvxGradientTabPage::Reset( const SfxItemSet* )
 {
-    m_xMtrIncrement->set_value(DEFAULT_GRADIENTSTEP);
-    ChangeGradientHdl_Impl();
+    ChangeGradientHdl_Impl(); // includes setting m_xCbIncrement and m_xMtrIncrement
 
     // determine state of the buttons
     if( m_pGradientList->Count() )
@@ -293,6 +293,10 @@ void SvxGradientTabPage::ModifiedHdl_Impl( void const * pControl )
 
     css::awt::GradientStyle eXGS = static_cast<css::awt::GradientStyle>(m_xLbGradientType->get_active());
 
+    sal_uInt16 nValue = 0; // automatic
+    if (!m_xCbIncrement->get_active())
+        nValue = static_cast<sal_uInt16>(m_xMtrIncrement->get_value());
+
     basegfx::BGradient aBGradient(
                           createColorStops(),
                           eXGS,
@@ -302,15 +306,12 @@ void SvxGradientTabPage::ModifiedHdl_Impl( void const * pControl )
                           static_cast<sal_uInt16>(m_xMtrBorder->get_value(FieldUnit::NONE)),
                           static_cast<sal_uInt16>(m_xMtrColorFrom->get_value(FieldUnit::NONE)),
                           static_cast<sal_uInt16>(m_xMtrColorTo->get_value(FieldUnit::NONE)),
-                          static_cast<sal_uInt16>(m_xMtrIncrement->get_value()) );
+                          nValue);
 
     // enable/disable controls
     if (pControl == m_xLbGradientType.get() || pControl == this)
         SetControlState_Impl( eXGS );
 
-    sal_uInt16 nValue = 0;
-    if (!m_xCbIncrement->get_active())
-        nValue = static_cast<sal_uInt16>(m_xMtrIncrement->get_value());
     m_rXFSet.Put( XGradientStepCountItem( nValue ) );
 
     // displaying in XOutDev
@@ -360,6 +361,9 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl, weld::Button&, void)
 
     if( !nError )
     {
+        sal_uInt16 nValue = 0; // automatic step count
+        if (!m_xCbIncrement->get_active())
+            nValue = m_xMtrIncrement->get_value();
         basegfx::BGradient aBGradient(
                               createColorStops(),
                               static_cast<css::awt::GradientStyle>(m_xLbGradientType->get_active()),
@@ -369,7 +373,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl, weld::Button&, void)
                               static_cast<sal_uInt16>(m_xMtrBorder->get_value(FieldUnit::NONE)),
                               static_cast<sal_uInt16>(m_xMtrColorFrom->get_value(FieldUnit::NONE)),
                               static_cast<sal_uInt16>(m_xMtrColorTo->get_value(FieldUnit::NONE)),
-                              static_cast<sal_uInt16>(m_xMtrIncrement->get_value()) );
+                              nValue);
 
         m_pGradientList->Insert(std::make_unique<XGradientEntry>(aBGradient, aName), nCount);
 
@@ -400,6 +404,10 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl, weld::Button&, void)
 
     OUString aName( m_pGradientList->GetGradient( static_cast<sal_uInt16>(nPos) )->GetName() );
 
+    sal_uInt16 nValue = 0; // automatic step count
+    if (!m_xCbIncrement->get_active())
+        nValue = m_xMtrIncrement->get_value();
+
     basegfx::BGradient aBGradient(
                           createColorStops(),
                           static_cast<css::awt::GradientStyle>(m_xLbGradientType->get_active()),
@@ -409,7 +417,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl, weld::Button&, void)
                           static_cast<sal_uInt16>(m_xMtrBorder->get_value(FieldUnit::NONE)),
                           static_cast<sal_uInt16>(m_xMtrColorFrom->get_value(FieldUnit::NONE)),
                           static_cast<sal_uInt16>(m_xMtrColorTo->get_value(FieldUnit::NONE)),
-                          static_cast<sal_uInt16>(m_xMtrIncrement->get_value()) );
+                          nValue);
 
     m_pGradientList->Replace(std::make_unique<XGradientEntry>(aBGradient, aName), nPos);
 
@@ -527,6 +535,10 @@ void SvxGradientTabPage::ChangeGradientHdl_Impl()
 
     css::awt::GradientStyle eXGS = pGradient->GetGradientStyle();
     sal_uInt16 nValue = pGradient->GetSteps();
+    if (const XGradientStepCountItem* pGradientStepCountItem = m_rOutAttrs.GetItemIfSet(GetWhich(XATTR_GRADIENTSTEPCOUNT)))
+    {
+        nValue = pGradientStepCountItem->GetValue();
+    }
     if( nValue == 0 )
     {
         m_xCbIncrement->set_state(TRISTATE_TRUE);
