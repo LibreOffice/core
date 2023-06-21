@@ -190,6 +190,12 @@ sal_Int16 unicode::getScriptClassFromUScriptCode(UScriptCode eScript)
         case USCRIPT_TRADITIONAL_HAN:
         case USCRIPT_JAPANESE:
         case USCRIPT_KOREAN:
+#if (U_ICU_VERSION_MAJOR_NUM > 4) || (U_ICU_VERSION_MAJOR_NUM == 4 && U_ICU_VERSION_MINOR_NUM >= 8)
+        case USCRIPT_TANGUT:
+#endif
+#if (U_ICU_VERSION_MAJOR_NUM >= 66)
+        case USCRIPT_KHITAN_SMALL_SCRIPT:
+#endif
             nRet = ScriptType::ASIAN;
             break;
         case USCRIPT_ARABIC:
