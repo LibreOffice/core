@@ -190,12 +190,8 @@ sal_Int16 unicode::getScriptClassFromUScriptCode(UScriptCode eScript)
         case USCRIPT_TRADITIONAL_HAN:
         case USCRIPT_JAPANESE:
         case USCRIPT_KOREAN:
-#if (U_ICU_VERSION_MAJOR_NUM > 4) || (U_ICU_VERSION_MAJOR_NUM == 4 && U_ICU_VERSION_MINOR_NUM >= 8)
         case USCRIPT_TANGUT:
-#endif
-#if (U_ICU_VERSION_MAJOR_NUM >= 66)
         case USCRIPT_KHITAN_SMALL_SCRIPT:
-#endif
             nRet = ScriptType::ASIAN;
             break;
         case USCRIPT_ARABIC:
@@ -775,7 +771,6 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
         case USCRIPT_WARANG_CITI:
             sRet = "hoc";
             break;
-#if (U_ICU_VERSION_MAJOR_NUM > 4) || (U_ICU_VERSION_MAJOR_NUM == 4 && U_ICU_VERSION_MINOR_NUM >= 8)
         case USCRIPT_AFAKA:
             sRet = "djk";
             break;
@@ -803,8 +798,6 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
         case USCRIPT_WOLEAI:
             sRet = "woe";
             break;
-#endif
-#if (U_ICU_VERSION_MAJOR_NUM >= 49)
         case USCRIPT_ANATOLIAN_HIEROGLYPHS:
             sRet = "hlu";
             break;
@@ -814,16 +807,12 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
         case USCRIPT_TIRHUTA:
             sRet = "mai";
             break;
-#endif
-#if (U_ICU_VERSION_MAJOR_NUM >= 52)
         case USCRIPT_CAUCASIAN_ALBANIAN:
             sRet = "xag";
             break;
         case USCRIPT_MAHAJANI:
             sRet = "mwr";
             break;
-#endif
-#if (U_ICU_VERSION_MAJOR_NUM >= 54)
         case USCRIPT_AHOM:
             sRet = "aho";
             break;
@@ -842,8 +831,6 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
         case USCRIPT_SIDDHAM:
             sRet = "sa-Sidd";
             break;
-#endif
-#if (U_ICU_VERSION_MAJOR_NUM >= 58)
         case USCRIPT_ADLAM:
             sRet = "mis-Adlm";   // Adlam for Fulani, no language code
             break;
@@ -868,8 +855,6 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
         case USCRIPT_SYMBOLS_EMOJI:
             sRet = "mis-Zsye";   // Emoji variant
             break;
-#endif
-#if (U_ICU_VERSION_MAJOR_NUM >= 60)
         case USCRIPT_MASARAM_GONDI:
             sRet = "gon-Gonm";  // macro language code, could be wsg,esg,gno
             break;
@@ -879,8 +864,6 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
         case USCRIPT_ZANABAZAR_SQUARE:
             sRet = "mn-Zanb";   // abugida to write Mongolian
             break;
-#endif
-#if (U_ICU_VERSION_MAJOR_NUM >= 62)
         case USCRIPT_DOGRA:
             sRet = "dgo";       // Dogri proper
             break;
@@ -902,8 +885,6 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
         case USCRIPT_OLD_SOGDIAN:
             sRet = "sog";
             break;
-#endif
-#if (U_ICU_VERSION_MAJOR_NUM >= 64)
         case USCRIPT_ELYMAIC:
             sRet = "arc-Elym";
             break;
@@ -916,8 +897,6 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
         case USCRIPT_WANCHO:
             sRet = "nnp-Wcho";
             break;
-#endif
-#if (U_ICU_VERSION_MAJOR_NUM >= 66)
         case USCRIPT_CHORASMIAN:
             sRet = "xco-Chrs";
             break;
@@ -930,7 +909,6 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
         case USCRIPT_YEZIDI:
             sRet = "kmr-Yezi";
             break;
-#endif
 #if (U_ICU_VERSION_MAJOR_NUM >= 70)
         case USCRIPT_CYPRO_MINOAN:
             sRet = "mis-Cpmn";  // Uncoded with script

@@ -850,11 +850,7 @@ OUString URIHelper::resolveIdnaHost(OUString const & url) {
     UErrorCode e = U_ZERO_ERROR;
     std::unique_ptr<icu::IDNA> idna(
         icu::IDNA::createUTS46Instance(
-            (UIDNA_USE_STD3_RULES | UIDNA_CHECK_BIDI | UIDNA_CHECK_CONTEXTJ
-#if U_ICU_VERSION_MAJOR_NUM >= 49
-             | UIDNA_CHECK_CONTEXTO
-#endif
-             ),
+            (UIDNA_USE_STD3_RULES | UIDNA_CHECK_BIDI | UIDNA_CHECK_CONTEXTJ | UIDNA_CHECK_CONTEXTO),
             e));
     if (U_FAILURE(e)) {
         SAL_WARN("vcl.gdi", "icu::IDNA::createUTS46Instance " << e);

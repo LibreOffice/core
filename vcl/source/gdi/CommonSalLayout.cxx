@@ -82,60 +82,17 @@ struct SubRun
 }
 
 namespace {
-#if U_ICU_VERSION_MAJOR_NUM >= 63
-    enum class VerticalOrientation {
-        Upright            = U_VO_UPRIGHT,
-        Rotated            = U_VO_ROTATED,
-        TransformedUpright = U_VO_TRANSFORMED_UPRIGHT,
-        TransformedRotated = U_VO_TRANSFORMED_ROTATED
-    };
-#else
-    #include "VerticalOrientationData.cxx"
-
-    // These must match the values in the file included above.
-    enum class VerticalOrientation {
-        Upright            = 0,
-        Rotated            = 1,
-        TransformedUpright = 2,
-        TransformedRotated = 3
-    };
-#endif
-
-    VerticalOrientation GetVerticalOrientation(sal_UCS4 cCh, const LanguageTag& rTag)
+    int32_t GetVerticalOrientation(sal_UCS4 cCh, const LanguageTag& rTag)
     {
         // Override orientation of fullwidth colon , semi-colon,
         // and Bopomofo tonal marks.
         if ((cCh == 0xff1a || cCh == 0xff1b
            || cCh == 0x2ca || cCh == 0x2cb || cCh == 0x2c7 || cCh == 0x2d9)
                 && rTag.getLanguage() == "zh")
-            return VerticalOrientation::TransformedUpright;
+            return U_VO_TRANSFORMED_UPRIGHT;
 
-#if U_ICU_VERSION_MAJOR_NUM >= 63
-        int32_t nRet = u_getIntPropertyValue(cCh, UCHAR_VERTICAL_ORIENTATION);
-#else
-        uint8_t nRet = 1;
-
-        if (cCh < 0x10000)
-        {
-            nRet = sVerticalOrientationValues[sVerticalOrientationPages[0][cCh >> kVerticalOrientationCharBits]]
-                                  [cCh & ((1 << kVerticalOrientationCharBits) - 1)];
-        }
-        else if (cCh < (kVerticalOrientationMaxPlane + 1) * 0x10000)
-        {
-            nRet = sVerticalOrientationValues[sVerticalOrientationPages[sVerticalOrientationPlanes[(cCh >> 16) - 1]]
-                                                   [(cCh & 0xffff) >> kVerticalOrientationCharBits]]
-                                   [cCh & ((1 << kVerticalOrientationCharBits) - 1)];
-        }
-        else
-        {
-            // Default value for unassigned
-            SAL_WARN("vcl.gdi", "Getting VerticalOrientation for codepoint outside Unicode range");
-        }
-#endif
-
-        return VerticalOrientation(nRet);
+        return u_getIntPropertyValue(cCh, UCHAR_VERTICAL_ORIENTATION);
     }
-
 } // namespace
 
 SalLayoutGlyphs GenericSalLayout::GetGlyphs() const
@@ -358,7 +315,7 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                     {
                         sal_Int32 nPrevIdx = nIdx;
                         sal_UCS4 aChar = rArgs.mrStr.iterateCodePoints(&nIdx);
-                        VerticalOrientation aVo = GetVerticalOrientation(aChar, rArgs.maLanguageTag);
+                        int32_t aVo = GetVerticalOrientation(aChar, rArgs.maLanguageTag);
 
                         sal_UCS4 aVariationSelector = 0;
                         if (nIdx < nEndRunPos)
@@ -379,9 +336,8 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                         // they should be shaped in horizontal direction
                         // and then rotated.
                         // See http://unicode.org/reports/tr50/#vo
-                        if (aVo == VerticalOrientation::Upright ||
-                            aVo == VerticalOrientation::TransformedUpright ||
-                            (aVo == VerticalOrientation::TransformedRotated &&
+                        if (aVo == U_VO_UPRIGHT || aVo == U_VO_TRANSFORMED_UPRIGHT ||
+                            (aVo == U_VO_TRANSFORMED_ROTATED &&
                              HasVerticalAlternate(aChar, aVariationSelector)))
                         {
                             aDirection = HB_DIRECTION_TTB;

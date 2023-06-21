@@ -1553,8 +1553,6 @@ void SubsetMap::InitList()
                 case UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_D:
                     aAllSubsets.emplace_back( 0x2B740, 0x2B81F, SvxResId(RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_D) );
                     break;
-// Note ICU version 49 (NOT 4.9), so the MAJOR_NUM is two digits.
-#if U_ICU_VERSION_MAJOR_NUM >= 49
                 case UBLOCK_ARABIC_EXTENDED_A:
                     aAllSubsets.emplace_back( 0x08A0, 0x08FF, SvxResId(RID_SUBSETSTR_ARABIC_EXTENDED_A) );
                     break;
@@ -1588,8 +1586,6 @@ void SubsetMap::InitList()
                 case UBLOCK_TAKRI:
                     aAllSubsets.emplace_back( 0x11680, 0x116CF, SvxResId(RID_SUBSETSTR_TAKRI) );
                     break;
-#endif
-#if U_ICU_VERSION_MAJOR_NUM >= 54
                 case UBLOCK_BASSA_VAH:
                     aAllSubsets.emplace_back( 0x16AD0, 0x16AFF, SvxResId(RID_SUBSETSTR_BASSA_VAH) );
                     break;
@@ -1686,8 +1682,6 @@ void SubsetMap::InitList()
                 case UBLOCK_WARANG_CITI:
                     aAllSubsets.emplace_back( 0x118A0, 0x118FF, SvxResId(RID_SUBSETSTR_WARANG_CITI) );
                     break;
-#endif
-#if U_ICU_VERSION_MAJOR_NUM >= 56
                 case UBLOCK_AHOM:
                     aAllSubsets.emplace_back( 0x11700, 0x1173F, SvxResId(RID_SUBSETSTR_AHOM) );
                     break;
@@ -1718,8 +1712,6 @@ void SubsetMap::InitList()
                 case UBLOCK_SUTTON_SIGNWRITING:
                     aAllSubsets.emplace_back( 0x1D800, 0x1DAAF, SvxResId(RID_SUBSETSTR_SUTTON_SIGNWRITING) );
                     break;
-#endif
-#if (U_ICU_VERSION_MAJOR_NUM >= 58)
                 case UBLOCK_ADLAM:
                     aAllSubsets.emplace_back( 0x1E900, 0x1E95F, SvxResId(RID_SUBSETSTR_ADLAM) );
                     break;
@@ -1753,8 +1745,6 @@ void SubsetMap::InitList()
                 case UBLOCK_TANGUT_COMPONENTS:
                     aAllSubsets.emplace_back( 0x18800, 0x18AFF, SvxResId(RID_SUBSETSTR_TANGUT_COMPONENTS) );
                     break;
-#endif
-#if (U_ICU_VERSION_MAJOR_NUM >= 60)
                 case UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_F:
                     aAllSubsets.emplace_back( 0x2CEB0, 0x2EBE0, SvxResId(RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_F) );
                     break;
@@ -1776,8 +1766,6 @@ void SubsetMap::InitList()
                 case UBLOCK_ZANABAZAR_SQUARE:
                     aAllSubsets.emplace_back( 0x11A00, 0x11A4F, SvxResId(RID_SUBSETSTR_ZANABAZAR_SQUARE) );
                     break;
-#endif
-#if (U_ICU_VERSION_MAJOR_NUM >= 62)
                 case UBLOCK_CHESS_SYMBOLS:
                     aAllSubsets.emplace_back( 0x1FA00, 0x1FA6F, SvxResId(RID_SUBSETSTR_CHESS_SYMBOLS) );
                     break;
@@ -1811,8 +1799,6 @@ void SubsetMap::InitList()
                 case UBLOCK_SOGDIAN:
                     aAllSubsets.emplace_back( 0x10F30, 0x10F6F, SvxResId(RID_SUBSETSTR_SOGDIAN) );
                     break;
-#endif
-#if (U_ICU_VERSION_MAJOR_NUM >= 64)
                 case UBLOCK_EGYPTIAN_HIEROGLYPH_FORMAT_CONTROLS:
                     aAllSubsets.emplace_back( 0x13430, 0x1343F, SvxResId(RID_SUBSETSTR_EGYPTIAN_HIEROGLYPH_FORMAT_CONTROLS) );
                     break;
@@ -1840,8 +1826,6 @@ void SubsetMap::InitList()
                 case UBLOCK_WANCHO:
                     aAllSubsets.emplace_back( 0x1E2C0, 0x1E2FF, SvxResId(RID_SUBSETSTR_WANCHO) );
                     break;
-#endif
-#if (U_ICU_VERSION_MAJOR_NUM >= 66)
                 case UBLOCK_CHORASMIAN:
                     aAllSubsets.emplace_back( 0x10FB0, 0x10FDF, SvxResId(RID_SUBSETSTR_CHORASMIAN) );
                     break;
@@ -1866,7 +1850,6 @@ void SubsetMap::InitList()
                 case UBLOCK_YEZIDI:
                     aAllSubsets.emplace_back( 0x10E80, 0x10EBF, SvxResId(RID_SUBSETSTR_YEZIDI) );
                     break;
-#endif
 #if (U_ICU_VERSION_MAJOR_NUM >= 70)
                 case UBLOCK_ARABIC_EXTENDED_B:
                     aAllSubsets.emplace_back( 0x0870, 0x089F, SvxResId(RID_SUBSETSTR_ARABIC_EXTENDED_B) );

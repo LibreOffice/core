@@ -252,16 +252,6 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                     funclen = get_collator_data_ja_phonetic_alphanumeric_last_length;
                 }
 #endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ko
-#if (U_ICU_VERSION_MAJOR_NUM < 53)
-            } else if ( rLocale.Language == "ko" ) {
-                if ( rAlgorithm == "charset" )
-                {
-                    func = get_collator_data_ko_charset;
-                    funclen = get_collator_data_ko_charset_length;
-                }
-#endif
-#endif
 #if WITH_LOCALE_ALL || WITH_LOCALE_ku
             } else if ( rLocale.Language == "ku" ) {
                 if ( rAlgorithm == "alphanumeric" )

@@ -35,12 +35,10 @@ public:
     void testWeak();
     void testAsian();
     void testThai();
-#if (U_ICU_VERSION_MAJOR_NUM > 51)
     void testLao();
 #ifdef TODO
     void testNorthernThai();
     void testKhmer();
-#endif
 #endif
     void testJapanese();
     void testChinese();
@@ -52,12 +50,10 @@ public:
     CPPUNIT_TEST(testWeak);
     CPPUNIT_TEST(testAsian);
     CPPUNIT_TEST(testThai);
-#if (U_ICU_VERSION_MAJOR_NUM > 51)
     CPPUNIT_TEST(testLao);
 #ifdef TODO
     CPPUNIT_TEST(testKhmer);
     CPPUNIT_TEST(testNorthernThai);
-#endif
 #endif
     CPPUNIT_TEST(testJapanese);
     CPPUNIT_TEST(testChinese);
@@ -837,7 +833,6 @@ void TestBreakIterator::testAsian()
     }
 }
 
-#if (U_ICU_VERSION_MAJOR_NUM > 51)
 //A test to ensure that our Lao word boundary detection is useful
 void TestBreakIterator::testLao()
 {
@@ -870,7 +865,6 @@ void TestBreakIterator::testLao()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(12), aBounds.endPos);
 #endif
 }
-#endif
 
 //A test to ensure that our thai word boundary detection is useful
 void TestBreakIterator::testThai()

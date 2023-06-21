@@ -10753,7 +10753,7 @@ ICU_RECLASSIFIED_CONDITIONAL_JAPANESE_STARTER="TRUE"
 ICU_RECLASSIFIED_HEBREW_LETTER="TRUE"
 ICU_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/icu/source/i18n -I${WORKDIR}/UnpackedTarball/icu/source/common"
 ICU_LIBS_internal="-L${WORKDIR}/UnpackedTarball/icu/source/lib"
-libo_CHECK_SYSTEM_MODULE([icu],[ICU],[icu-i18n >= 4.6])
+libo_CHECK_SYSTEM_MODULE([icu],[ICU],[icu-i18n >= 66])
 if test "$SYSTEM_ICU" = TRUE; then
     AC_LANG_PUSH([C++])
     AC_MSG_CHECKING([for unicode/rbbi.h])
@@ -10763,11 +10763,6 @@ if test "$SYSTEM_ICU" = TRUE; then
     ICU_VERSION=`$PKG_CONFIG --modversion icu-i18n 2>/dev/null`
     ICU_MAJOR=`echo $ICU_VERSION | cut -d"." -f1`
     ICU_MINOR=`echo $ICU_VERSION | cut -d"." -f2`
-
-    if test "$ICU_MAJOR" -ge 50; then
-        AC_MSG_NOTICE([Ignore ICU_MINOR as obviously the libraries don't include the minor version in their names any more])
-        ICU_MINOR=
-    fi
 
     if test "$CROSS_COMPILING" != TRUE; then
         # using the system icu tools can lead to version confusion, use the
@@ -10784,22 +10779,15 @@ if test "$SYSTEM_ICU" = TRUE; then
         if test -z "$SYSTEM_GENCMN"; then
             AC_MSG_ERROR([\'gencmn\' not found in \$PATH, install the icu development tool \'gencmn\'])
         fi
-        if test "$ICU_MAJOR" -lt 49; then
-            ICU_RECLASSIFIED_PREPEND_SET_EMPTY=
-            ICU_RECLASSIFIED_CONDITIONAL_JAPANESE_STARTER=
-            ICU_RECLASSIFIED_HEBREW_LETTER=
-        fi
     fi
 fi
-if test "$ICU_MAJOR" -ge "59"; then
-    # As of ICU 59 it defaults to typedef char16_t UChar; which is available
-    # with -std=c++11 but not all external libraries can be built with that,
-    # for those use a bit-compatible typedef uint16_t UChar; see
-    # icu/source/common/unicode/umachine.h
-    ICU_UCHAR_TYPE="-DUCHAR_TYPE=uint16_t"
-else
-    ICU_UCHAR_TYPE=""
-fi
+
+# As of ICU 59 it defaults to typedef char16_t UChar; which is available
+# with -std=c++11 but not all external libraries can be built with that,
+# for those use a bit-compatible typedef uint16_t UChar; see
+# icu/source/common/unicode/umachine.h
+ICU_UCHAR_TYPE="-DUCHAR_TYPE=uint16_t"
+
 AC_SUBST(SYSTEM_GENBRK)
 AC_SUBST(SYSTEM_GENCCODE)
 AC_SUBST(SYSTEM_GENCMN)

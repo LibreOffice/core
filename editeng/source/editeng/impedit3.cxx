@@ -268,20 +268,12 @@ static Point lcl_ImplCalcRotatedPos( Point rPos, Point rOrigin, double nSin, dou
 #define isAinChar(c)        IS_JOINING_GROUP((c), AIN)
 #define isAlefChar(c)       IS_JOINING_GROUP((c), ALEF)
 #define isDalChar(c)        IS_JOINING_GROUP((c), DAL)
-#if U_ICU_VERSION_MAJOR_NUM >= 58
 #define isFehChar(c)       (IS_JOINING_GROUP((c), FEH) || IS_JOINING_GROUP((c), AFRICAN_FEH))
-#else
-#define isFehChar(c)        IS_JOINING_GROUP((c), FEH)
-#endif
 #define isGafChar(c)        IS_JOINING_GROUP((c), GAF)
 #define isHehChar(c)        IS_JOINING_GROUP((c), HEH)
 #define isKafChar(c)        IS_JOINING_GROUP((c), KAF)
 #define isLamChar(c)        IS_JOINING_GROUP((c), LAM)
-#if U_ICU_VERSION_MAJOR_NUM >= 58
 #define isQafChar(c)       (IS_JOINING_GROUP((c), QAF) || IS_JOINING_GROUP((c), AFRICAN_QAF))
-#else
-#define isQafChar(c)        IS_JOINING_GROUP((c), QAF)
-#endif
 #define isRehChar(c)        IS_JOINING_GROUP((c), REH)
 #define isTahChar(c)        IS_JOINING_GROUP((c), TAH)
 #define isTehMarbutaChar(c) IS_JOINING_GROUP((c), TEH_MARBUTA)
@@ -296,9 +288,7 @@ static bool isBehChar(sal_Unicode cCh)
     {
     case U_JG_BEH:
     case U_JG_NOON:
-#if U_ICU_VERSION_MAJOR_NUM >= 58
     case U_JG_AFRICAN_NOON:
-#endif
     case U_JG_NYA:
     case U_JG_YEH:
     case U_JG_FARSI_YEH:
