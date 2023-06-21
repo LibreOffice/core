@@ -5,7 +5,7 @@ obtained from:
 
 And subset using hb-subset to contain only the one glyph used in the test:
 
-  hb-subset static/NotoEmoji-Regular.ttf "🌿 " -o tdf153440.ttf --drop-tables=GSUB,STAT,vhea,vmtx
+  hb-subset static/NotoEmoji-Regular.ttf --unicodes="1F33F,0020" --drop-tables=GSUB,STAT,vhea,vmtx -o tdf153440.ttf
 
 The space is added to the subset as it seems needed to get the font to work on
 Windows. (The --drop-tables argument is not necessary be saves a few bytes of
