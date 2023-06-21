@@ -151,8 +151,7 @@ public:
         if (nId == SfxHintId::StyleSheetModified)
         {
             pStyleSheet->SetName(pDocStyleSheet->GetName());
-            pStyleSheet->GetItemSet().ClearItem();
-            EnsureStyleHierarchy(pDocStyleSheet->GetName(), pDocStyleSheet->GetFamily());
+            UpdateStyleHierarchyFrom(pStyleSheet, pDocStyleSheet);
             static_cast<SfxStyleSheet*>(pStyleSheet)->Broadcast(SfxHint(SfxHintId::DataChanged));
         }
         else if (nId == SfxHintId::StyleSheetErased)
@@ -162,21 +161,19 @@ public:
     SfxStyleSheetBase* Find(const OUString& rName, SfxStyleFamily eFamily,
                             SfxStyleSearchBits = SfxStyleSearchBits::All) override
     {
-        if (eFamily != SfxStyleFamily::All)
-            EnsureStyleHierarchy(rName, eFamily);
-        return SfxStyleSheetPool::Find(rName, eFamily);
+        auto pStyleSheet = SfxStyleSheetPool::Find(rName, eFamily);
+
+        if (auto pDocStyleSheet = pStyleSheet ? nullptr : m_pOwner->Find(rName, eFamily))
+        {
+            pStyleSheet = &Make(pDocStyleSheet->GetName(), pDocStyleSheet->GetFamily());
+            UpdateStyleHierarchyFrom(pStyleSheet, pDocStyleSheet);
+        }
+
+        return pStyleSheet;
     }
 
-    void EnsureStyleHierarchy(const OUString& rName, SfxStyleFamily eFamily)
+    void UpdateStyleHierarchyFrom(SfxStyleSheetBase* pStyleSheet, SfxStyleSheetBase* pDocStyleSheet)
     {
-        auto pDocStyleSheet = m_pOwner->Find(rName, eFamily);
-        if (!pDocStyleSheet)
-            return;
-
-        auto pStyleSheet = SfxStyleSheetPool::Find(rName, eFamily);
-        if (!pStyleSheet)
-            pStyleSheet = &Make(rName, eFamily);
-
         FillItemSet(pStyleSheet, pDocStyleSheet);
 
         // Remember now, as the next calls will invalidate pDocStyleSheet.
@@ -193,61 +190,50 @@ public:
     void FillItemSet(SfxStyleSheetBase* pDestSheet, SfxStyleSheetBase* pSourceSheet)
     {
         auto& rItemSet = pDestSheet->GetItemSet();
-        if (rItemSet.Count() > 0)
-            return;
+        rItemSet.ClearItem();
 
         auto pCol = static_cast<SwDocStyleSheet*>(pSourceSheet)->GetCollection();
-        if (!pCol->GetAttrSet().Count())
-            return;
+        SfxItemIter aIter(pCol->GetAttrSet());
+        std::optional<SvxLRSpaceItem> oLRSpaceItem;
 
-        const WhichRangesContainer aRanges(svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END,
-                                                      RES_PARATR_BEGIN, RES_PARATR_END,
-                                                      RES_FRMATR_BEGIN, RES_FRMATR_END>);
-
-        for (const auto& range : aRanges)
+        for (auto pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
         {
-            std::optional<SvxLRSpaceItem> oLRSpaceItem;
+            if (aIter.GetItemState(false) != SfxItemState::SET)
+                continue;
 
-            for (auto i = range.first; i < range.second; ++i)
+            auto nWhich = pItem->Which();
+            auto nSlotId = rPool.GetSlotId(nWhich);
+            auto nNewWhich = rPool.GetSecondaryPool()->GetWhich(nSlotId);
+            if (nNewWhich != nSlotId)
+                rItemSet.Put(pItem->CloneSetWhich(nNewWhich));
+            else if (nWhich == RES_MARGIN_FIRSTLINE)
             {
-                const SfxPoolItem* pItem;
-                if (pCol->GetItemState(i, false, &pItem) != SfxItemState::SET)
-                    continue;
-
-                auto nSlotId = rPool.GetSlotId(i);
-                auto nNewWhich = rPool.GetSecondaryPool()->GetWhich(nSlotId);
-                if (nNewWhich != nSlotId)
-                    rItemSet.Put(pItem->CloneSetWhich(nNewWhich));
-                else if (i == RES_MARGIN_FIRSTLINE)
-                {
-                    if (!oLRSpaceItem)
-                        oLRSpaceItem.emplace(EE_PARA_LRSPACE);
-                    auto pFirstLineItem = static_cast<const SvxFirstLineIndentItem*>(pItem);
-                    (*oLRSpaceItem).SetTextFirstLineOffsetValue(pFirstLineItem->GetTextFirstLineOffset());
-                    (*oLRSpaceItem).SetAutoFirst(pFirstLineItem->IsAutoFirst());
-                }
-                else if (i == RES_MARGIN_TEXTLEFT)
-                {
-                    if (!oLRSpaceItem)
-                        oLRSpaceItem.emplace(EE_PARA_LRSPACE);
-                    (*oLRSpaceItem).SetTextLeft(static_cast<const SvxTextLeftMarginItem*>(pItem)->GetTextLeft());
-                }
-                else if (i == RES_MARGIN_RIGHT)
-                {
-                    if (!oLRSpaceItem)
-                        oLRSpaceItem.emplace(EE_PARA_LRSPACE);
-                    (*oLRSpaceItem).SetRight(static_cast<const SvxRightMarginItem*>(pItem)->GetRight());
-                }
-                else if (i == RES_CHRATR_BACKGROUND)
-                {
-                    auto pBrushItem = static_cast<const SvxBrushItem*>(pItem);
-                    rItemSet.Put(SvxColorItem(pBrushItem->GetColor(), EE_CHAR_BKGCOLOR));
-                }
+                if (!oLRSpaceItem)
+                    oLRSpaceItem.emplace(EE_PARA_LRSPACE);
+                auto pFirstLineItem = static_cast<const SvxFirstLineIndentItem*>(pItem);
+                (*oLRSpaceItem).SetTextFirstLineOffsetValue(pFirstLineItem->GetTextFirstLineOffset());
+                (*oLRSpaceItem).SetAutoFirst(pFirstLineItem->IsAutoFirst());
             }
-
-            if (oLRSpaceItem)
-                rItemSet.Put(*oLRSpaceItem);
+            else if (nWhich == RES_MARGIN_TEXTLEFT)
+            {
+                if (!oLRSpaceItem)
+                    oLRSpaceItem.emplace(EE_PARA_LRSPACE);
+                (*oLRSpaceItem).SetTextLeft(static_cast<const SvxTextLeftMarginItem*>(pItem)->GetTextLeft());
+            }
+            else if (nWhich == RES_MARGIN_RIGHT)
+            {
+                if (!oLRSpaceItem)
+                    oLRSpaceItem.emplace(EE_PARA_LRSPACE);
+                (*oLRSpaceItem).SetRight(static_cast<const SvxRightMarginItem*>(pItem)->GetRight());
+            }
+            else if (nWhich == RES_CHRATR_BACKGROUND)
+            {
+                auto pBrushItem = static_cast<const SvxBrushItem*>(pItem);
+                rItemSet.Put(SvxColorItem(pBrushItem->GetColor(), EE_CHAR_BKGCOLOR));
+            }
         }
+        if (oLRSpaceItem)
+            rItemSet.Put(*oLRSpaceItem);
     }
 };
 
@@ -2767,6 +2753,7 @@ bool  SwDocStyleSheetPool::SetParent( SfxStyleFamily eFam,
         if( bRet )
         {
             // only for Broadcasting
+            mxStyleSheet->SetPhysical( false );
             mxStyleSheet->PresetName( rStyle );
             mxStyleSheet->PresetParent( rParent );
             if( SfxStyleFamily::Para == eFam )
