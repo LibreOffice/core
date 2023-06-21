@@ -124,7 +124,7 @@ double SwDateTimeField::GetDateTime(SwDoc& rDoc, const DateTime& rDT)
     SvNumberFormatter* pFormatter = rDoc.GetNumberFormatter();
     const Date& rNullDate = pFormatter->GetNullDate();
 
-    double fResult = rDT - DateTime(rNullDate);
+    double fResult = DateTime::Sub(rDT, DateTime(rNullDate));
 
     return fResult;
 }
