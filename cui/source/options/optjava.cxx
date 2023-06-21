@@ -934,6 +934,7 @@ void SvxJavaClassPathDlg::SetClassPath( const OUString& _rPath )
     if ( m_sOldPath.isEmpty() )
         m_sOldPath = _rPath;
     m_xPathList->clear();
+#if HAVE_FEATURE_JAVA
     if (!_rPath.isEmpty())
     {
         std::vector paths = jfw_convertUserPathList(_rPath);
@@ -955,6 +956,7 @@ void SvxJavaClassPathDlg::SetClassPath( const OUString& _rPath )
         // select first entry
         m_xPathList->select(0);
     }
+#endif
     SelectHdl_Impl(*m_xPathList);
 }
 
