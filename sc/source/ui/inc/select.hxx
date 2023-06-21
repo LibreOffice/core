@@ -40,12 +40,12 @@ public:
 class ScViewFunctionSet : public FunctionSet            // View (Gridwin / keyboard)
 {
 private:
-    ScViewData*             pViewData;
-    ScViewSelectionEngine*  pEngine;
+    ScViewData*             m_pViewData;
+    ScViewSelectionEngine*  m_pEngine;
 
-    bool            bAnchor;
-    bool            bStarted;
-    ScAddress       aAnchorPos;
+    bool            m_bAnchor;
+    bool            m_bStarted;
+    ScAddress       m_aAnchorPos;
 
     ScSplitPos      GetWhich() const;
 
