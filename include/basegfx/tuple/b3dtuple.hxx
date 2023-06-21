@@ -112,7 +112,9 @@ namespace basegfx
 
         bool operator==(const B3DTuple& rTup) const
         {
-            return mfX == rTup.mfX && mfY == rTup.mfY && mfZ == rTup.mfZ;
+            return ::basegfx::fTools::equal(mfX, rTup.mfX) &&
+                ::basegfx::fTools::equal(mfY, rTup.mfY) &&
+                ::basegfx::fTools::equal(mfZ, rTup.mfZ);
         }
 
         bool operator!=(const B3DTuple& rTup) const { return !operator==(rTup); }
