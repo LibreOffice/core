@@ -142,63 +142,172 @@ bool unicode::isWhiteSpace( const sal_Unicode ch) {
 sal_Int16 unicode::getScriptClassFromUScriptCode(UScriptCode eScript)
 {
     //See unicode/uscript.h
-    static const sal_Int16 scriptTypes[] =
-    {
-        ScriptType::WEAK, ScriptType::WEAK, ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::COMPLEX,
-        ScriptType::ASIAN, ScriptType::LATIN, ScriptType::LATIN, ScriptType::LATIN, ScriptType::COMPLEX,
-        ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::LATIN, ScriptType::LATIN,
-    // 15
-        ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::ASIAN, ScriptType::ASIAN, ScriptType::COMPLEX,
-        ScriptType::ASIAN, ScriptType::COMPLEX, ScriptType::ASIAN, ScriptType::COMPLEX, ScriptType::COMPLEX,
-        ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::LATIN,
-    // 30
-        ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::COMPLEX,
-        ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-        ScriptType::LATIN, ScriptType::ASIAN, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    // 45
-        ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::COMPLEX,
-        ScriptType::LATIN, ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::LATIN,
-        ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    // 60
-        ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-        ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::LATIN, ScriptType::COMPLEX,
-        ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::ASIAN, ScriptType::ASIAN,
-    // 75
-        ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-        ScriptType::LATIN, ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-        ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    // 90
-        ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-        ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-        ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::WEAK, ScriptType::WEAK, ScriptType::COMPLEX,
-    // 105
-        ScriptType::ASIAN, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-        ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-        ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::ASIAN,
-    // 120
-        ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-        ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::WEAK, ScriptType::WEAK,
-        ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    // 135
-        ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-        ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-        ScriptType::COMPLEX,
-        ScriptType::WEAK
-    };
-
     sal_Int16 nRet;
-    if (eScript < USCRIPT_COMMON)
-        nRet = ScriptType::WEAK;
-    else if (static_cast<size_t>(eScript) >= SAL_N_ELEMENTS(scriptTypes))
-        nRet = ScriptType::COMPLEX;         // anything new is going to be pretty wild
-    else
-        nRet = scriptTypes[eScript];
+    switch (eScript)
+    {
+        case USCRIPT_INVALID_CODE:
+        case USCRIPT_COMMON:
+        case USCRIPT_INHERITED:
+        case USCRIPT_UNWRITTEN_LANGUAGES:
+        case USCRIPT_UNKNOWN:
+        case USCRIPT_MATHEMATICAL_NOTATION:
+        case USCRIPT_SYMBOLS:
+        case USCRIPT_WARANG_CITI:
+            nRet = ScriptType::WEAK;
+            break;
+        case USCRIPT_ARMENIAN:
+        case USCRIPT_CHEROKEE:
+        case USCRIPT_COPTIC:
+        case USCRIPT_CYRILLIC:
+        case USCRIPT_GEORGIAN:
+        case USCRIPT_GOTHIC:
+        case USCRIPT_GREEK:
+        case USCRIPT_LATIN:
+        case USCRIPT_OGHAM:
+        case USCRIPT_OLD_ITALIC:
+        case USCRIPT_RUNIC:
+        case USCRIPT_CANADIAN_ABORIGINAL:
+        case USCRIPT_BRAILLE:
+        case USCRIPT_CYPRIOT:
+        case USCRIPT_OSMANYA:
+        case USCRIPT_SHAVIAN:
+        case USCRIPT_KATAKANA_OR_HIRAGANA:
+        case USCRIPT_GLAGOLITIC:
+        case USCRIPT_CIRTH:
+        case USCRIPT_OLD_CHURCH_SLAVONIC_CYRILLIC:
+        case USCRIPT_OLD_HUNGARIAN:
+        case USCRIPT_LATIN_FRAKTUR:
+        case USCRIPT_LATIN_GAELIC:
+            nRet = ScriptType::LATIN;
+            break;
+        case USCRIPT_BOPOMOFO:
+        case USCRIPT_HAN:
+        case USCRIPT_HANGUL:
+        case USCRIPT_HIRAGANA:
+        case USCRIPT_KATAKANA:
+        case USCRIPT_YI:
+        case USCRIPT_SIMPLIFIED_HAN:
+        case USCRIPT_TRADITIONAL_HAN:
+        case USCRIPT_JAPANESE:
+        case USCRIPT_KOREAN:
+            nRet = ScriptType::ASIAN;
+            break;
+        case USCRIPT_ARABIC:
+        case USCRIPT_BENGALI:
+        case USCRIPT_DESERET:
+        case USCRIPT_DEVANAGARI:
+        case USCRIPT_ETHIOPIC:
+        case USCRIPT_GUJARATI:
+        case USCRIPT_GURMUKHI:
+        case USCRIPT_HEBREW:
+        case USCRIPT_KANNADA:
+        case USCRIPT_KHMER:
+        case USCRIPT_LAO:
+        case USCRIPT_MALAYALAM:
+        case USCRIPT_MONGOLIAN:
+        case USCRIPT_MYANMAR:
+        case USCRIPT_ORIYA:
+        case USCRIPT_SINHALA:
+        case USCRIPT_SYRIAC:
+        case USCRIPT_TAMIL:
+        case USCRIPT_TELUGU:
+        case USCRIPT_THAANA:
+        case USCRIPT_THAI:
+        case USCRIPT_TIBETAN:
+        case USCRIPT_TAGALOG:
+        case USCRIPT_HANUNOO:
+        case USCRIPT_BUHID:
+        case USCRIPT_TAGBANWA:
+        case USCRIPT_LIMBU:
+        case USCRIPT_LINEAR_B:
+        case USCRIPT_TAI_LE:
+        case USCRIPT_UGARITIC:
+        case USCRIPT_BUGINESE:
+        case USCRIPT_KHAROSHTHI:
+        case USCRIPT_SYLOTI_NAGRI:
+        case USCRIPT_NEW_TAI_LUE:
+        case USCRIPT_TIFINAGH:
+        case USCRIPT_OLD_PERSIAN:
+        case USCRIPT_BALINESE:
+        case USCRIPT_BATAK:
+        case USCRIPT_BLISSYMBOLS:
+        case USCRIPT_BRAHMI:
+        case USCRIPT_CHAM:
+        case USCRIPT_DEMOTIC_EGYPTIAN:
+        case USCRIPT_HIERATIC_EGYPTIAN:
+        case USCRIPT_EGYPTIAN_HIEROGLYPHS:
+        case USCRIPT_KHUTSURI:
+        case USCRIPT_PAHAWH_HMONG:
+        case USCRIPT_HARAPPAN_INDUS:
+        case USCRIPT_JAVANESE:
+        case USCRIPT_KAYAH_LI:
+        case USCRIPT_LEPCHA:
+        case USCRIPT_LINEAR_A:
+        case USCRIPT_MANDAEAN:
+        case USCRIPT_MAYAN_HIEROGLYPHS:
+        case USCRIPT_MEROITIC:
+        case USCRIPT_NKO:
+        case USCRIPT_ORKHON:
+        case USCRIPT_OLD_PERMIC:
+        case USCRIPT_PHAGS_PA:
+        case USCRIPT_PHOENICIAN:
+        case USCRIPT_PHONETIC_POLLARD:
+        case USCRIPT_RONGORONGO:
+        case USCRIPT_SARATI:
+        case USCRIPT_ESTRANGELO_SYRIAC:
+        case USCRIPT_WESTERN_SYRIAC:
+        case USCRIPT_EASTERN_SYRIAC:
+        case USCRIPT_TENGWAR:
+        case USCRIPT_VAI:
+        case USCRIPT_VISIBLE_SPEECH:
+        case USCRIPT_CUNEIFORM:
+        case USCRIPT_CARIAN:
+        case USCRIPT_LANNA:
+        case USCRIPT_LYCIAN:
+        case USCRIPT_LYDIAN:
+        case USCRIPT_OL_CHIKI:
+        case USCRIPT_REJANG:
+        case USCRIPT_SAURASHTRA:
+        case USCRIPT_SIGN_WRITING:
+        case USCRIPT_SUNDANESE:
+        case USCRIPT_MOON:
+        case USCRIPT_MEITEI_MAYEK:
+        case USCRIPT_IMPERIAL_ARAMAIC:
+        case USCRIPT_AVESTAN:
+        case USCRIPT_CHAKMA:
+        case USCRIPT_KAITHI:
+        case USCRIPT_MANICHAEAN:
+        case USCRIPT_INSCRIPTIONAL_PAHLAVI:
+        case USCRIPT_PSALTER_PAHLAVI:
+        case USCRIPT_BOOK_PAHLAVI:
+        case USCRIPT_INSCRIPTIONAL_PARTHIAN:
+        case USCRIPT_SAMARITAN:
+        case USCRIPT_TAI_VIET:
+        case USCRIPT_BAMUM:
+        case USCRIPT_LISU:
+        case USCRIPT_NAKHI_GEBA:
+        case USCRIPT_OLD_SOUTH_ARABIAN:
+        case USCRIPT_BASSA_VAH:
+        case USCRIPT_DUPLOYAN_SHORTAND:
+        case USCRIPT_ELBASAN:
+        case USCRIPT_GRANTHA:
+        case USCRIPT_KPELLE:
+        case USCRIPT_LOMA:
+        case USCRIPT_MENDE:
+        case USCRIPT_MEROITIC_CURSIVE:
+        case USCRIPT_OLD_NORTH_ARABIAN:
+        case USCRIPT_NABATAEAN:
+        case USCRIPT_PALMYRENE:
+        case USCRIPT_SINDHI:
+        default:         // anything new is going to be pretty wild
+            nRet = ScriptType::COMPLEX;
+            break;
+    }
     return nRet;
 }
 
 sal_Int16 unicode::getScriptClassFromLanguageTag( const LanguageTag& rLanguageTag )
 {
-    static UScriptCode nMaxScript = static_cast<UScriptCode>(u_getIntPropertyMaxValue(UCHAR_SCRIPT));
     constexpr int32_t nBuf = 42;
     UScriptCode aBuf[nBuf];
     if (rLanguageTag.hasScript())
@@ -222,8 +331,6 @@ sal_Int16 unicode::getScriptClassFromLanguageTag( const LanguageTag& rLanguageTa
         if (nScripts == 0 || !U_SUCCESS(status))
             return css::i18n::ScriptType::LATIN;
     }
-    if (aBuf[0] > nMaxScript)
-        return css::i18n::ScriptType::COMPLEX;
     return getScriptClassFromUScriptCode( aBuf[0]);
 }
 
