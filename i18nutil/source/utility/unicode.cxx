@@ -152,7 +152,7 @@ sal_Int16 unicode::getScriptClassFromUScriptCode(UScriptCode eScript)
         case USCRIPT_UNKNOWN:
         case USCRIPT_MATHEMATICAL_NOTATION:
         case USCRIPT_SYMBOLS:
-        case USCRIPT_WARANG_CITI:
+        case USCRIPT_CODE_LIMIT:
             nRet = ScriptType::WEAK;
             break;
         case USCRIPT_ARMENIAN:
@@ -305,6 +305,7 @@ sal_Int16 unicode::getScriptClassFromUScriptCode(UScriptCode eScript)
         case USCRIPT_NABATAEAN:
         case USCRIPT_PALMYRENE:
         case USCRIPT_SINDHI:
+        case USCRIPT_WARANG_CITI:
         default:         // anything new is going to be pretty wild
             nRet = ScriptType::COMPLEX;
             break;
