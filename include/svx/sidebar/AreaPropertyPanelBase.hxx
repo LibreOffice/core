@@ -151,7 +151,7 @@ protected:
     std::unique_ptr< XFillFloatTransparenceItem >   mpFloatTransparenceItem;
     std::unique_ptr< SfxUInt16Item >                mpTransparenceItem;
 
-    // MCGR: Preserve in-between ColorStops until we have an UI to edit these
+    // MCGR: Preserve ColorStops until we have a UI to edit these
     basegfx::BColorStops maColorStops;
 
     DECL_DLLPRIVATE_LINK(SelectFillTypeHdl, weld::ComboBox&, void );
@@ -169,7 +169,7 @@ protected:
     void SelectFillAttrHdl_Impl();
     void FillStyleChanged(bool bUpdateModel);
 
-    // MCGR: Preserve in-between ColorStops until we have an UI to edit these
+    // MCGR: Preserve ColorStops until we have a UI to edit these
     basegfx::BColorStops createColorStops();
 };
 
