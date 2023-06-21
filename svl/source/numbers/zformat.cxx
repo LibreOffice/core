@@ -3228,7 +3228,7 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
         case NF_KEY_AMPM:               // AM/PM
             if ( !bCalendarSet )
             {
-                double fDiff = DateTime(rScan.GetNullDate()) - GetCal().getEpochStart();
+                double fDiff = DateTime::Sub( DateTime(rScan.GetNullDate()), GetCal().getEpochStart());
                 fDiff += fNumberOrig;
                 GetCal().setLocalDateTime( fDiff );
                 bCalendarSet = true;
@@ -3688,13 +3688,13 @@ static bool lcl_getValidDate( const DateTime& rNullDate, const DateTime& rEpochS
     static const DateTime aCE( Date(1,1,1));
     static const DateTime aMin( Date(1,1, SAL_MIN_INT16));
     static const DateTime aMax( Date(31,12, SAL_MAX_INT16), tools::Time(23,59,59, tools::Time::nanoSecPerSec - 1));
-    static const double fMin = aMin - aCE;
-    static const double fMax = aMax - aCE;
+    static const double fMin = DateTime::Sub( aMin, aCE);
+    static const double fMax = DateTime::Sub( aMax, aCE);
     // Value must be representable in our tools::Date proleptic Gregorian
     // calendar as well.
-    const double fOff = (rNullDate - aCE) + fNumber;
+    const double fOff = DateTime::Sub( rNullDate, aCE) + fNumber;
     // Add diff between epochs to serial date number.
-    const double fDiff = rNullDate - rEpochStart;
+    const double fDiff = DateTime::Sub( rNullDate, rEpochStart);
     fNumber += fDiff;
     return fMin <= fOff && fOff <= fMax;
 }

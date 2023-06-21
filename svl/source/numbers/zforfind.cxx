@@ -2265,7 +2265,7 @@ input for the following reasons:
 
         if ( res && pCal->isValid() )
         {
-            double fDiff = DateTime(*moNullDate) - pCal->getEpochStart();
+            double fDiff = DateTime::Sub( DateTime(*moNullDate), pCal->getEpochStart());
             fDays = ::rtl::math::approxFloor( pCal->getLocalDateTime() );
             fDays -= fDiff;
             nTryOrder = nFormatOrder; // break for
