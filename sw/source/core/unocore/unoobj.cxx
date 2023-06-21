@@ -1934,6 +1934,7 @@ void SwUnoCursorHelper::SetPropertyValues(
 
     // Build set of attributes we want to fetch
     WhichRangesContainer aRanges;
+    std::vector<std::pair<const SfxItemPropertyMapEntry*, const uno::Any&>> aSideEffectsEntries;
     std::vector<std::pair<const SfxItemPropertyMapEntry*, const uno::Any&>> aEntries;
     aEntries.reserve(aPropertyValues.size());
     for (const auto& rPropVal : aPropertyValues)
@@ -1954,39 +1955,44 @@ void SwUnoCursorHelper::SetPropertyValues(
             aPropertyVetoExMsg += "Property is read-only: '" + rPropertyName + "' ";
             continue;
         }
-        aRanges = aRanges.MergeRange(pEntry->nWID, pEntry->nWID);
-        aEntries.emplace_back(pEntry, rPropVal.Value);
+        if (propertyCausesSideEffectsInNodes(pEntry->nWID))
+        {
+            aSideEffectsEntries.emplace_back(pEntry, rPropVal.Value);
+        }
+        else
+        {
+            aRanges = aRanges.MergeRange(pEntry->nWID, pEntry->nWID);
+            aEntries.emplace_back(pEntry, rPropVal.Value);
+        }
+    }
+
+    // Entries with side effects first, using dedicated one-element SfxItemSet for each
+    for (const auto& [pEntry, rValue] : aSideEffectsEntries)
+    {
+        SfxItemSet aItemSet(rDoc.GetAttrPool(), pEntry->nWID, pEntry->nWID);
+        // we need to get up-to-date item set from nodes
+        SwUnoCursorHelper::GetCursorAttr(rPaM, aItemSet);
+        // this can set some attributes in nodes' mpAttrSet
+        if (!SwUnoCursorHelper::SetCursorPropertyValue(*pEntry, rValue, rPaM, aItemSet))
+            rPropSet.setPropertyValue(*pEntry, rValue, aItemSet);
+        SwUnoCursorHelper::SetCursorAttr(rPaM, aItemSet, nAttrMode, false /*bTableMode*/);
     }
 
     if (!aEntries.empty())
     {
         // Fetch, overwrite, and re-set the attributes from the core
         SfxItemSet aItemSet(rDoc.GetAttrPool(), std::move(aRanges));
+        // we need to get up-to-date item set from nodes
+        SwUnoCursorHelper::GetCursorAttr(rPaM, aItemSet);
 
-        bool bPreviousPropertyCausesSideEffectsInNodes = false;
-        for (size_t i = 0; i < aEntries.size(); ++i)
+        for (const auto& [pEntry, rValue] : aEntries)
         {
-            SfxItemPropertyMapEntry const*const pEntry = aEntries[i].first;
-            bool bPropertyCausesSideEffectsInNodes =
-                propertyCausesSideEffectsInNodes(pEntry->nWID);
-
-            // we need to get up-to-date item set from nodes
-            if (i == 0 || bPreviousPropertyCausesSideEffectsInNodes)
-            {
-                aItemSet.ClearItem();
-                SwUnoCursorHelper::GetCursorAttr(rPaM, aItemSet);
-            }
-
-            const uno::Any &rValue = aEntries[i].second;
             // this can set some attributes in nodes' mpAttrSet
             if (!SwUnoCursorHelper::SetCursorPropertyValue(*pEntry, rValue, rPaM, aItemSet))
                 rPropSet.setPropertyValue(*pEntry, rValue, aItemSet);
-
-            if (i + 1 == aEntries.size() || bPropertyCausesSideEffectsInNodes)
-                SwUnoCursorHelper::SetCursorAttr(rPaM, aItemSet, nAttrMode, false/*bTableMode*/);
-
-            bPreviousPropertyCausesSideEffectsInNodes = bPropertyCausesSideEffectsInNodes;
         }
+
+        SwUnoCursorHelper::SetCursorAttr(rPaM, aItemSet, nAttrMode, false /*bTableMode*/);
     }
 
     if (!aUnknownExMsg.isEmpty())

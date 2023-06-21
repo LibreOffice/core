@@ -587,6 +587,17 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153128)
     CPPUNIT_ASSERT_LESS(sal_Int32(30), nFirstLineHeight);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf155945)
+{
+    createSwDoc("tdf155945.docx");
+
+    CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
+    // Without a fix in place, this would fail with
+    // - Expected: 0
+    // - Actual  : 423
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(2), "ParaBottomMargin"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
