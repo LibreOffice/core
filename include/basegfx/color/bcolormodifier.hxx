@@ -22,6 +22,7 @@
 #include <config_options.h>
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
+#include <basegfx/matrix/b3dhommatrix.hxx>
 #include <rtl/ustring.hxx>
 
 #include <osl/diagnose.h>
@@ -220,13 +221,10 @@ namespace basegfx
     class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_saturate final : public BColorModifier
     {
     private:
-        double                      mfValue;
+        basegfx::B3DHomMatrix       maSatMatrix;
 
     public:
-        BColorModifier_saturate(double fValue)
-        :   mfValue(fValue)
-        {
-        }
+        BColorModifier_saturate(double fValue);
 
         virtual ~BColorModifier_saturate() override;
 

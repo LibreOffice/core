@@ -142,6 +142,19 @@ namespace basegfx
         return "interpolate";
     }
 
+    BColorModifier_saturate::BColorModifier_saturate(double fValue)
+    {
+        maSatMatrix.set(0, 0, 0.213 + 0.787 * fValue);
+        maSatMatrix.set(0, 1, 0.715 - 0.715 * fValue);
+        maSatMatrix.set(0, 2, 0.072 - 0.072 * fValue);
+        maSatMatrix.set(1, 0, 0.213 - 0.213 * fValue);
+        maSatMatrix.set(1, 1, 0.715 + 0.285 * fValue);
+        maSatMatrix.set(1, 2, 0.072 - 0.072 * fValue);
+        maSatMatrix.set(2, 0, 0.213 - 0.213 * fValue);
+        maSatMatrix.set(2, 1, 0.715 - 0.715 * fValue);
+        maSatMatrix.set(2, 2, 0.072 + 0.928 * fValue);
+    }
+
     BColorModifier_saturate::~BColorModifier_saturate()
     {
     }
@@ -155,15 +168,18 @@ namespace basegfx
             return false;
         }
 
-        return mfValue == pCompare->mfValue;
+        return maSatMatrix == pCompare->maSatMatrix;
     }
 
     ::basegfx::BColor BColorModifier_saturate::getModifiedColor(const ::basegfx::BColor& aSourceColor) const
     {
-        return basegfx::BColor(
-            (0.213 + 0.787 * mfValue) * aSourceColor.getRed() + (0.715 - 0.715 * mfValue) * aSourceColor.getGreen() + (0.072 - 0.072 * mfValue) * aSourceColor.getBlue(),
-            (0.213 - 0.213 * mfValue) * aSourceColor.getRed() + (0.715 + 0.285 * mfValue) * aSourceColor.getGreen() + (0.072 - 0.072 * mfValue) * aSourceColor.getBlue(),
-            (0.213 - 0.213 * mfValue) * aSourceColor.getRed() + (0.715 - 0.715 * mfValue) * aSourceColor.getGreen() + (0.072 + 0.928 * mfValue) * aSourceColor.getBlue());
+        basegfx::B3DHomMatrix aColorMatrix;
+        aColorMatrix.set(0, 0, aSourceColor.getRed());
+        aColorMatrix.set(1, 0, aSourceColor.getGreen());
+        aColorMatrix.set(2, 0, aSourceColor.getBlue());
+
+        aColorMatrix = maSatMatrix * aColorMatrix;
+        return ::basegfx::BColor(aColorMatrix.get(0, 0), aColorMatrix.get(1, 0), aColorMatrix.get(2, 0));
     }
 
     OUString BColorModifier_saturate::getModifierName() const
