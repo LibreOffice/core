@@ -10748,9 +10748,6 @@ dnl Check for system icu
 dnl ===================================================================
 ICU_MAJOR=72
 ICU_MINOR=1
-ICU_RECLASSIFIED_PREPEND_SET_EMPTY="TRUE"
-ICU_RECLASSIFIED_CONDITIONAL_JAPANESE_STARTER="TRUE"
-ICU_RECLASSIFIED_HEBREW_LETTER="TRUE"
 ICU_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/icu/source/i18n -I${WORKDIR}/UnpackedTarball/icu/source/common"
 ICU_LIBS_internal="-L${WORKDIR}/UnpackedTarball/icu/source/lib"
 libo_CHECK_SYSTEM_MODULE([icu],[ICU],[icu-i18n >= 66])
@@ -10793,9 +10790,6 @@ AC_SUBST(SYSTEM_GENCCODE)
 AC_SUBST(SYSTEM_GENCMN)
 AC_SUBST(ICU_MAJOR)
 AC_SUBST(ICU_MINOR)
-AC_SUBST(ICU_RECLASSIFIED_PREPEND_SET_EMPTY)
-AC_SUBST(ICU_RECLASSIFIED_CONDITIONAL_JAPANESE_STARTER)
-AC_SUBST(ICU_RECLASSIFIED_HEBREW_LETTER)
 AC_SUBST(ICU_UCHAR_TYPE)
 
 dnl ==================================================================

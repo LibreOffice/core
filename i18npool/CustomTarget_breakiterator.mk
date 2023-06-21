@@ -84,7 +84,8 @@ $(i18npool_BIDIR)/%_brk.c : $(i18npool_BIDIR)/%.brk $(call gb_ExternalExecutable
 			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),CCD)
 
-$(i18npool_BIDIR)/%.brk : $(i18npool_BIDIR)/%.txt $(call gb_ExternalExecutable_get_dependencies,genbrk)
+$(i18npool_BIDIR)/%.brk : $(SRCDIR)/i18npool/source/breakiterator/data/%.txt \
+		$(call gb_ExternalExecutable_get_dependencies,genbrk)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),BRK,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),BRK)
 	$(call gb_Helper_abbreviate_dirs,\
@@ -92,32 +93,5 @@ $(i18npool_BIDIR)/%.brk : $(i18npool_BIDIR)/%.txt $(call gb_ExternalExecutable_g
 		$(if $(SYSTEM_ICU),,-i $(call gb_UnpackedTarball_get_dir,icu)/source/data/out/tmp) \
 		-r $< -o $@ $(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),BRK)
-
-# fdo#31271 ")" reclassified in more recent Unicode Standards / ICU 4.4
-# * Prepend set empty as of Unicode Version 6.1 / ICU 49, which bails out if used.
-#   NOTE: strips every line with _word_ 'Prepend', including $Prepend
-# * Conditional_Japanese_Starter does not exist in ICU < 49, which bail out if used.
-# * Hebrew_Letter does not exist in ICU < 49, which bail out if used.
-#   NOTE: I sincerely hope there is a better way to avoid problems than this abominable
-#   sed substitution...
-$(i18npool_BIDIR)/%.txt : \
-	$(SRCDIR)/i18npool/source/breakiterator/data/%.txt | $(i18npool_BIDIR)/.dir
-	sed -e "s#\[:LineBreak =  Close_Punctuation:\]#\[& \[:LineBreak = Close_Parenthesis:\]\]#" \
-		$(if $(ICU_RECLASSIFIED_CONDITIONAL_JAPANESE_STARTER),,\
-			-e '/\[:LineBreak =  Conditional_Japanese_Starter:\]/d' \
-			-e 's# $$CJ##' \
-		) \
-		$(if $(ICU_RECLASSIFIED_HEBREW_LETTER),,\
-			-e '/\[:LineBreak =  Hebrew_Letter:\]/d' \
-			-e '/^$$HLcm =/d' \
-			-e '/^$$HLcm $$NUcm;/d' \
-			-e '/^$$NUcm $$HLcm;/d' \
-			-e '/^$$HL $$CM+;/d' \
-			-e 's# | $$HL\(cm\)\?##g' \
-			-e 's#$$HLcm ##g' \
-			-e 's# $$HL##g' \
-		) \
-		$(if $(ICU_RECLASSIFIED_PREPEND_SET_EMPTY),-e "/Prepend/d") \
-		$< > $@
 
 # vim: set noet sw=4 ts=4:
