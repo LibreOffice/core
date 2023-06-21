@@ -125,6 +125,18 @@ void tools::Time::init( sal_uInt32 nHour, sal_uInt32 nMin, sal_uInt32 nSec, sal_
     nHour    += nMin / minInHour;
     nMin     %= minInHour;
 
+    // 922337 * HOUR_MASK = 9223370000000000000 largest possible value, 922338
+    // would be -9223364073709551616.
+    assert(HOUR_MASK * nHour >= 0 && "use tools::Duration with days instead!");
+    if (HOUR_MASK * nHour < 0)
+        nHour = 922337;
+
+    // But as is, GetHour() retrieves only sal_uInt16. Though retrieving in
+    // nanoseconds or milliseconds might be possible this is all crap.
+    assert(nHour <= SAL_MAX_UINT16 && "use tools::Duration with days instead!");
+    if (nHour > SAL_MAX_UINT16)
+        nHour = SAL_MAX_UINT16;
+
     // construct time
     nTime = nNanoSec +
             nSec  * SEC_MASK +
