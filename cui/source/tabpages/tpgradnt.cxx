@@ -548,9 +548,11 @@ void SvxGradientTabPage::ChangeGradientHdl_Impl()
     m_xLbColorTo->SetNoSelection();
     m_xLbColorTo->SelectEntry(Color(pGradient->GetColorStops().back().getStopColor()));
 
-    // MCGR: preserve in-between ColorStops if given
-    if (pGradient->GetColorStops().size() > 2)
-        m_aColorStops = basegfx::BColorStops(pGradient->GetColorStops().begin() + 1, pGradient->GetColorStops().end() - 1);
+    // MCGR: preserve ColorStops if given.
+    // tdf#155901 We need offset of first and last stop, so include them.
+    if (pGradient->GetColorStops().size() >= 2)
+        m_aColorStops = basegfx::BColorStops(pGradient->GetColorStops().begin(),
+                                             pGradient->GetColorStops().end());
     else
         m_aColorStops.clear();
 
@@ -641,14 +643,19 @@ basegfx::BColorStops SvxGradientTabPage::createColorStops()
 {
     basegfx::BColorStops aColorStops;
 
-    aColorStops.emplace_back(0.0, m_xLbColorFrom->GetSelectEntryColor().getBColor());
-
-    if(!m_aColorStops.empty())
+    if(m_aColorStops.size() >= 2)
     {
-        aColorStops.insert(aColorStops.begin(), m_aColorStops.begin(), m_aColorStops.end());
+        aColorStops.emplace_back(m_aColorStops.front().getStopOffset(),
+                                 m_xLbColorFrom->GetSelectEntryColor().getBColor());
+        aColorStops.insert(aColorStops.begin(), m_aColorStops.begin() + 1, m_aColorStops.end() - 1);
+        aColorStops.emplace_back(m_aColorStops.back().getStopOffset(),
+                                 m_xLbColorTo->GetSelectEntryColor().getBColor());
     }
-
-    aColorStops.emplace_back(1.0, m_xLbColorTo->GetSelectEntryColor().getBColor());
+    else
+    {
+        aColorStops.emplace_back(0.0, m_xLbColorFrom->GetSelectEntryColor().getBColor());
+        aColorStops.emplace_back(1.0, m_xLbColorTo->GetSelectEntryColor().getBColor());
+    }
 
     return aColorStops;
 }

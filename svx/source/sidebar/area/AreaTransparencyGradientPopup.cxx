@@ -84,9 +84,11 @@ void AreaTransparencyGradientPopup::InitStatus(XFillFloatTransparenceItem const 
     mxMtrTrgrStartValue->set_value(static_cast<sal_uInt16>(((static_cast<sal_uInt16>(aStart.GetRed()) + 1) * 100) / 255), FieldUnit::PERCENT);
     mxMtrTrgrEndValue->set_value(static_cast<sal_uInt16>(((static_cast<sal_uInt16>(aEnd.GetRed()) + 1) * 100) / 255), FieldUnit::PERCENT);
 
-    // MCGR: preserve in-between ColorStops if given
-    if (aGradient.GetColorStops().size() > 2)
-        maColorStops = basegfx::BColorStops(aGradient.GetColorStops().begin() + 1, aGradient.GetColorStops().end() - 1);
+    // MCGR: preserve ColorStops if given
+    // tdf#155901 We need offset of first and last stop, so include them.
+    if (aGradient.GetColorStops().size() >= 2)
+        maColorStops = basegfx::BColorStops(aGradient.GetColorStops().begin(),
+                                            aGradient.GetColorStops().end());
     else
         maColorStops.clear();
 
@@ -121,7 +123,7 @@ void AreaTransparencyGradientPopup::Rearrange(XFillFloatTransparenceItem const *
     }
 }
 
-void AreaTransparencyGradientPopup::ExecuteValueModify(sal_uInt8 nStartCol, sal_uInt8 nEndCol)
+void AreaTransparencyGradientPopup::ExecuteValueModify()
 {
     //Added
     sal_Int16 aMtrValue = static_cast<sal_Int16>(mxMtrTrgrAngle->get_value(FieldUnit::DEGREE));
@@ -133,10 +135,22 @@ void AreaTransparencyGradientPopup::ExecuteValueModify(sal_uInt8 nStartCol, sal_
     //End of new code
 
     basegfx::BColorStops aColorStops;
-    aColorStops.emplace_back(0.0, Color(nStartCol, nStartCol, nStartCol).getBColor());
-    if(!maColorStops.empty())
-        aColorStops.insert(aColorStops.begin(), maColorStops.begin(), maColorStops.end());
-    aColorStops.emplace_back(1.0, Color(nEndCol, nEndCol, nEndCol).getBColor());
+    basegfx::BColor aStartBColor(mxMtrTrgrStartValue->get_value(FieldUnit::PERCENT) / 100.0);
+    aStartBColor.clamp();
+    basegfx::BColor aEndBColor(mxMtrTrgrEndValue->get_value(FieldUnit::PERCENT) / 100.0);
+    aEndBColor.clamp();
+
+    if (maColorStops.size() >= 2)
+    {
+        aColorStops.emplace_back(maColorStops.front().getStopOffset(), aStartBColor);
+        aColorStops.insert(aColorStops.begin(), maColorStops.begin() + 1, maColorStops.end() - 1);
+        aColorStops.emplace_back(maColorStops.back().getStopOffset(), aEndBColor);
+    }
+    else
+    {
+        aColorStops.emplace_back(0.0, aStartBColor);
+        aColorStops.emplace_back(1.0, aEndBColor);
+    }
 
     basegfx::BGradient aTmpGradient(
         aColorStops,
@@ -156,33 +170,27 @@ void AreaTransparencyGradientPopup::ExecuteValueModify(sal_uInt8 nStartCol, sal_
 
 IMPL_LINK_NOARG(AreaTransparencyGradientPopup, ModifiedTrgrHdl_Impl, weld::MetricSpinButton&, void)
 {
-    sal_uInt8 nStartCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(mxMtrTrgrStartValue->get_value(FieldUnit::PERCENT)) * 255) / 100);
-    sal_uInt8 nEndCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(mxMtrTrgrEndValue->get_value(FieldUnit::PERCENT)) * 255) / 100);
-    ExecuteValueModify( nStartCol, nEndCol );
+    ExecuteValueModify();
 }
 
 IMPL_LINK_NOARG(AreaTransparencyGradientPopup, Left_Click45_Impl, const OUString&, void)
 {
-    sal_uInt8 nStartCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(mxMtrTrgrStartValue->get_value(FieldUnit::PERCENT)) * 255) / 100);
-    sal_uInt8 nEndCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(mxMtrTrgrEndValue->get_value(FieldUnit::PERCENT)) * 255) / 100);
     sal_uInt16 nTemp = static_cast<sal_uInt16>(mxMtrTrgrAngle->get_value(FieldUnit::DEGREE));
     if (nTemp>=315)
         nTemp -= 360;
     nTemp += 45;
     mxMtrTrgrAngle->set_value(nTemp, FieldUnit::DEGREE);
-    ExecuteValueModify(nStartCol, nEndCol);
+    ExecuteValueModify();
 }
 
 IMPL_LINK_NOARG(AreaTransparencyGradientPopup, Right_Click45_Impl, const OUString&, void)
 {
-    sal_uInt8 nStartCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(mxMtrTrgrStartValue->get_value(FieldUnit::PERCENT)) * 255) / 100);
-    sal_uInt8 nEndCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(mxMtrTrgrEndValue->get_value(FieldUnit::PERCENT)) * 255) / 100);
     sal_uInt16 nTemp = static_cast<sal_uInt16>(mxMtrTrgrAngle->get_value(FieldUnit::DEGREE));
     if (nTemp<45)
         nTemp += 360;
     nTemp -= 45;
     mxMtrTrgrAngle->set_value(nTemp, FieldUnit::DEGREE);
-    ExecuteValueModify(nStartCol, nEndCol);
+    ExecuteValueModify();
 }
 
 void AreaTransparencyGradientPopup::GrabFocus()

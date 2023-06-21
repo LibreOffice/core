@@ -138,7 +138,7 @@ private:
 
     MapUnit meUnit;
 
-    // MCGR: Preserve in-between ColorStops until we have an UI to edit these
+    // MCGR: Preserve ColorStops until we have a UI to edit these
     basegfx::BColorStops maColorStops;
 
     DECL_LINK(FillBackgroundHdl, weld::ComboBox&, void);
@@ -176,7 +176,7 @@ private:
 
     static FieldUnit GetCurrentUnit(SfxItemState eState, const SfxPoolItem* pState);
 
-    // MCGR: Preserve in-between ColorStops until we have an UI to edit these
+    // MCGR: Preserve ColorStops until we have a UI to edit these
     basegfx::BColorStops createColorStops();
 };
 
