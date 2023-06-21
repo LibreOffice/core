@@ -101,9 +101,14 @@ public:
                         { return operator+( rDateTime, -fTimeInDays ); }
     TOOLS_DLLPUBLIC friend DateTime operator +( const DateTime& rDateTime, const tools::Time& rTime );
     TOOLS_DLLPUBLIC friend DateTime operator -( const DateTime& rDateTime, const tools::Time& rTime );
-    TOOLS_DLLPUBLIC friend double   operator -( const DateTime& rDateTime1, const DateTime& rDateTime2 );
-    /** Same as friend operator-() to be able to disable operator-() to find
-        places where tools::Duration could be used instead. */
+    /** Use operator-() if a duration is to be remembered or processed. */
+    TOOLS_DLLPUBLIC friend tools::Duration operator -( const DateTime& rDateTime1, const DateTime& rDateTime2 );
+    /** Use Sub() if the floating point "time in days" value is to be
+        processed. This also takes a shortcut for whole days values (equal
+        times), and only for times inflicted values uses an intermediary
+        tools::Duration for conversion. Note that the resulting floating point
+        value neverthless in many cases is not an exact representation down to
+        nanoseconds. */
     static  double  Sub( const DateTime& rDateTime1, const DateTime& rDateTime2 );
     TOOLS_DLLPUBLIC friend sal_Int64 operator -( const DateTime& rDateTime, const Date& rDate )
                         { return static_cast<const Date&>(rDateTime) - rDate; }

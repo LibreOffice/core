@@ -194,9 +194,9 @@ DateTime operator +( const DateTime& rDateTime, double fTimeInDays )
     return aDateTime;
 }
 
-double operator -( const DateTime& rDateTime1, const DateTime& rDateTime2 )
+tools::Duration operator -( const DateTime& rDateTime1, const DateTime& rDateTime2 )
 {
-    return DateTime::Sub( rDateTime1, rDateTime2);
+    return tools::Duration( rDateTime2, rDateTime1);
 }
 
 // static
