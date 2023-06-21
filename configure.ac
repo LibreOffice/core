@@ -10779,18 +10779,11 @@ if test "$SYSTEM_ICU" = TRUE; then
     fi
 fi
 
-# As of ICU 59 it defaults to typedef char16_t UChar; which is available
-# with -std=c++11 but not all external libraries can be built with that,
-# for those use a bit-compatible typedef uint16_t UChar; see
-# icu/source/common/unicode/umachine.h
-ICU_UCHAR_TYPE="-DUCHAR_TYPE=uint16_t"
-
 AC_SUBST(SYSTEM_GENBRK)
 AC_SUBST(SYSTEM_GENCCODE)
 AC_SUBST(SYSTEM_GENCMN)
 AC_SUBST(ICU_MAJOR)
 AC_SUBST(ICU_MINOR)
-AC_SUBST(ICU_UCHAR_TYPE)
 
 dnl ==================================================================
 dnl Breakpad

@@ -22,7 +22,7 @@ $(eval $(call gb_ExternalProject_use_externals,libmspub,\
 	zlib \
 ))
 
-libmspub_CPPFLAGS := $(CPPFLAGS) $(ICU_UCHAR_TYPE) $(BOOST_CPPFLAGS)
+libmspub_CPPFLAGS := $(CPPFLAGS) $(BOOST_CPPFLAGS)
 # Needed when workdir/UnpackedTarball/libmspub/src/lib/MSPUBCollector.cpp includes Boost 1.79.0
 # boost/multi_array.hpp, which indirectly includes
 # workdir/UnpackedTarball/boost/boost/functional.hpp using std::unary_/binary_function:

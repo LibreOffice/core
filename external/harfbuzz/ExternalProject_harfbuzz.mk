@@ -47,7 +47,6 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) :
 				$(call gb_ExternalProject_get_build_flags,harfbuzz) \
 				$(if $(ENABLE_RUNTIME_OPTIMIZATIONS),,-frtti) \
 				$(CXXFLAGS) $(CXXFLAGS_CXX11) \
-				$(ICU_UCHAR_TYPE) \
 				$(if $(filter LINUX,$(OS)),-fvisibility=hidden)' \
 			LDFLAGS="$(call gb_ExternalProject_get_link_flags,harfbuzz)" \
 			MAKE=$(MAKE) \
