@@ -86,6 +86,64 @@ Duration::Duration(double fTimeInDays)
     }
 }
 
+Duration::Duration(sal_Int32 nDays, const Time& rTime)
+    : mnDays(nDays)
+{
+    assert(nDays == 0 || rTime.GetTime() == 0 || (nDays < 0) == (rTime.GetTime() < 0));
+    sal_uInt64 nN = rTime.GetNanoSec();
+    sal_uInt64 nS = rTime.GetSec();
+    if (nN >= Time::nanoSecPerSec)
+    {
+        nS += nN / Time::nanoSecPerSec;
+        nN %= Time::nanoSecPerSec;
+    }
+    sal_uInt64 nM = rTime.GetMin();
+    if (nS >= Time::secondPerMinute)
+    {
+        nM += nS / Time::secondPerMinute;
+        nS %= Time::secondPerMinute;
+    }
+    sal_uInt64 nH = rTime.GetHour();
+    if (nM >= Time::minutePerHour)
+    {
+        nH += nM / Time::minutePerHour;
+        nM %= Time::minutePerHour;
+    }
+    if (nH >= Time::hourPerDay)
+    {
+        sal_Int64 nDiff = nH / Time::hourPerDay;
+        nH %= Time::hourPerDay;
+        bool bOverflow = false;
+        if (rTime.GetTime() < 0)
+        {
+            nDiff = -nDiff;
+            bOverflow = (nDiff < SAL_MIN_INT32);
+            bOverflow |= o3tl::checked_add(mnDays, static_cast<sal_Int32>(nDiff), mnDays);
+            if (bOverflow)
+                mnDays = SAL_MIN_INT32;
+        }
+        else
+        {
+            bOverflow = (nDiff > SAL_MAX_INT32);
+            bOverflow |= o3tl::checked_add(mnDays, static_cast<sal_Int32>(nDiff), mnDays);
+            if (bOverflow)
+                mnDays = SAL_MAX_INT32;
+        }
+        assert(!bOverflow);
+        if (bOverflow)
+        {
+            nH = Time::hourPerDay - 1;
+            nM = Time::minutePerHour - 1;
+            nS = Time::secondPerMinute - 1;
+            nN = Time::nanoSecPerSec - 1;
+        }
+    }
+    maTime = Time(nH, nM, nS, nN);
+    if (rTime.GetTime() < 0)
+        maTime = -maTime;
+    assert(mnDays == 0 || maTime.GetTime() == 0 || (mnDays < 0) == (maTime.GetTime() < 0));
+}
+
 Duration::Duration(sal_Int32 nDays, sal_Int64 nTime)
     : maTime(nTime)
     , mnDays(nDays)

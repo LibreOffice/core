@@ -104,6 +104,23 @@ void DurationTest::testDuration()
         const Duration aN = -aD;
         CPPUNIT_ASSERT_EQUAL(1.5, aN.GetInDays());
     }
+    {
+        const Duration aD(1, Time(2, 3, 4, 5));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aD.GetDays());
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(2), aD.GetTime().GetHour());
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(3), aD.GetTime().GetMin());
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(4), aD.GetTime().GetSec());
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(5), aD.GetTime().GetNanoSec());
+    }
+    {
+        // 235929599 seconds == SAL_MAX_UINT16 hours + 59 minutes + 59 seconds
+        const Duration aD(0, Time(0, 0, 235929599));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2730), aD.GetDays());
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(15), aD.GetTime().GetHour());
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(59), aD.GetTime().GetMin());
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(59), aD.GetTime().GetSec());
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0), aD.GetTime().GetNanoSec());
+    }
     { // Add()
         const DateTime aS(Date(23, 11, 1999), Time(0, 0, 0));
         const DateTime aE(Date(23, 11, 1999), Time(1, 23, 45));

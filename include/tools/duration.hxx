@@ -34,6 +34,11 @@ public:
     /** Difference in days, like DateTime()-DateTime(). */
     explicit Duration(double fTimeInDays);
 
+    /** Time can be a limited duration as well and can have out-of-range
+        values, it will be normalized. Sign of both days and Time must be equal
+        unless one is 0. */
+    Duration(sal_Int32 nDays, const Time& rTime);
+
     bool IsNegative() const { return mnDays < 0 || maTime.GetTime() < 0; }
     sal_Int32 GetDays() const { return mnDays; }
     const Time& GetTime() const { return maTime; }
