@@ -3409,7 +3409,7 @@ void SwStyleSheetIterator::AppendStyleList(const std::vector<OUString>& rList,
     }
 }
 
-bool SwStyleSheetIterator::IsUsedInComments(const OUString& rName)
+bool SwStyleSheetIterator::IsUsedInComments(const OUString& rName) const
 {
     auto pPool = static_cast<const SwDocStyleSheetPool*>(pBasePool)->GetEEStyleSheetPool();
     SfxStyleSheetIterator aIter(pPool, GetSearchFamily(), SfxStyleSearchBits::Used);
