@@ -1006,6 +1006,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf131722, "tdf131722.docx")
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf155945)
+{
+    createSwDoc("tdf155945.docx");
+
+    CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
+    // Without a fix in place, this would fail with
+    // - Expected: 0
+    // - Actual  : 423
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(2), "ParaBottomMargin"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
