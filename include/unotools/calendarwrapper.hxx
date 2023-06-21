@@ -115,7 +115,7 @@ public:
 
     /// set a local (!) Gregorian DateTime
     void                setGregorianDateTime( const DateTime& rDateTime )
-                                    { setLocalDateTime( rDateTime - aEpochStart ); }
+                                    { setLocalDateTime( DateTime::Sub( rDateTime, aEpochStart)); }
 
 };
 
