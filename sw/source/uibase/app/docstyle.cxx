@@ -109,7 +109,6 @@ public:
         {
             auto pStyle = m_pPool->Find(rName, nFamily);
             pSet->SetParent(pStyle ? &pStyle->GetItemSet() : nullptr);
-            Broadcast(SfxHint(SfxHintId::DataChanged));
             return true;
         }
         return false;
@@ -154,6 +153,7 @@ public:
             pStyleSheet->SetName(pDocStyleSheet->GetName());
             pStyleSheet->GetItemSet().ClearItem();
             EnsureStyleHierarchy(pDocStyleSheet->GetName(), pDocStyleSheet->GetFamily());
+            static_cast<SfxStyleSheet*>(pStyleSheet)->Broadcast(SfxHint(SfxHintId::DataChanged));
         }
         else if (nId == SfxHintId::StyleSheetErased)
             Remove(pStyleSheet);
@@ -248,8 +248,6 @@ public:
             if (oLRSpaceItem)
                 rItemSet.Put(*oLRSpaceItem);
         }
-
-        static_cast<SfxStyleSheet*>(pDestSheet)->Broadcast(SfxHint(SfxHintId::DataChanged));
     }
 };
 
@@ -1648,6 +1646,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet, const bool bBroadcast,
     }
 
     SwFormat* pFormat = nullptr;
+    std::vector<sal_uInt16> aWhichIdsToReset;
     std::unique_ptr<SwPageDesc> pNewDsc;
     size_t nPgDscPos = 0;
 
@@ -1726,14 +1725,14 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet, const bool bBroadcast,
                  rSet.GetItemState(RES_MARGIN_FIRSTLINE, false) != SfxItemState::SET &&
                  m_pColl->GetItemState(RES_MARGIN_FIRSTLINE, false) == SfxItemState::SET)
             {
-                m_rDoc.ResetAttrAtFormat(RES_MARGIN_FIRSTLINE, *m_pColl);
+                aWhichIdsToReset.emplace_back(RES_MARGIN_FIRSTLINE);
             }
             if ( bResetIndentAttrsAtParagraphStyle &&
                  rSet.GetItemState( RES_PARATR_NUMRULE, false ) == SfxItemState::SET &&
                  rSet.GetItemState(RES_MARGIN_TEXTLEFT, false) != SfxItemState::SET &&
                  m_pColl->GetItemState(RES_MARGIN_TEXTLEFT, false) == SfxItemState::SET)
             {
-                m_rDoc.ResetAttrAtFormat(RES_MARGIN_TEXTLEFT, *m_pColl);
+                aWhichIdsToReset.emplace_back(RES_MARGIN_TEXTLEFT);
             }
 
             // #i56252: If a standard numbering style is assigned to a standard paragraph style
@@ -1863,12 +1862,14 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet, const bool bBroadcast,
             {
                 // use method <SwDoc::ResetAttrAtFormat(..)> in order to
                 // create an Undo object for the attribute reset.
-                m_rDoc.ResetAttrAtFormat( rSet.GetWhichByPos(aIter.GetCurPos()),
-                                        *pFormat );
+                aWhichIdsToReset.emplace_back(rSet.GetWhichByPos(aIter.GetCurPos()));
             }
 
             pItem = aIter.NextItem();
         } while (pItem);
+
+        m_rDoc.ResetAttrAtFormat(aWhichIdsToReset, *pFormat);
+
         SfxItemSet aSet(rSet);
         aSet.ClearInvalidItems();
 

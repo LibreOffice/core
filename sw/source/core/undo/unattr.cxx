@@ -233,7 +233,7 @@ void SwUndoFormatAttr::UndoImpl(::sw::UndoRedoContext & rContext)
     else if (RES_CHRFMT == m_nFormatWhich)
         nFamily = SfxStyleFamily::Char;
 
-    if (pFormat && nFamily != SfxStyleFamily::None)
+    if (m_oOldSet && m_oOldSet->Count() > 0 && nFamily != SfxStyleFamily::None)
         rContext.GetDoc().BroadcastStyleOperation(pFormat->GetName(), nFamily, SfxHintId::StyleSheetModified);
 }
 
@@ -549,14 +549,16 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
 }
 
 SwUndoFormatResetAttr::SwUndoFormatResetAttr( SwFormat& rChangedFormat,
-                                        const sal_uInt16 nWhichId )
+                                              const std::vector<sal_uInt16>& rIds )
     : SwUndo( SwUndoId::RESETATTR, rChangedFormat.GetDoc() )
     , m_pChangedFormat( &rChangedFormat )
-    , m_nWhichId( nWhichId )
+    , m_aSet(*rChangedFormat.GetAttrSet().GetPool())
 {
-    const SfxPoolItem* pItem = nullptr;
-    if (rChangedFormat.GetItemState(nWhichId, false, &pItem ) == SfxItemState::SET && pItem) {
-        m_pOldItem.reset( pItem->Clone() );
+    for (const auto& nWhichId : rIds)
+    {
+        const SfxPoolItem* pItem = nullptr;
+        if (rChangedFormat.GetItemState(nWhichId, false, &pItem ) == SfxItemState::SET && pItem)
+            m_aSet.Put(*pItem);
     }
 }
 
@@ -566,18 +568,30 @@ SwUndoFormatResetAttr::~SwUndoFormatResetAttr()
 
 void SwUndoFormatResetAttr::UndoImpl(::sw::UndoRedoContext &)
 {
-    if (m_pOldItem)
-    {
-        m_pChangedFormat->SetFormatAttr( *m_pOldItem );
-    }
+    m_pChangedFormat->SetFormatAttr(m_aSet);
+    BroadcastStyleChange();
 }
 
 void SwUndoFormatResetAttr::RedoImpl(::sw::UndoRedoContext &)
 {
-    if (m_pOldItem)
-    {
-        m_pChangedFormat->ResetFormatAttr( m_nWhichId );
-    }
+    SfxItemIter aIter(m_aSet);
+    for (auto pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+        m_pChangedFormat->ResetFormatAttr(pItem->Which());
+    BroadcastStyleChange();
+}
+
+void SwUndoFormatResetAttr::BroadcastStyleChange()
+{
+    auto nWhich = m_pChangedFormat->Which();
+    SfxStyleFamily nFamily = SfxStyleFamily::None;
+
+    if (RES_TXTFMTCOLL == nWhich || RES_CONDTXTFMTCOLL == nWhich)
+        nFamily = SfxStyleFamily::Para;
+    else if (RES_CHRFMT == nWhich)
+        nFamily = SfxStyleFamily::Char;
+
+    if (nFamily != SfxStyleFamily::None)
+        m_pChangedFormat->GetDoc()->BroadcastStyleOperation(m_pChangedFormat->GetName(), nFamily, SfxHintId::StyleSheetModified);
 }
 
 SwUndoResetAttr::SwUndoResetAttr( const SwPaM& rRange, sal_uInt16 nFormatId )

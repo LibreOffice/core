@@ -498,14 +498,16 @@ void SwDoc::SetAttr( const SfxItemSet& rSet, SwFormat& rFormat )
     getIDocumentState().SetModified();
 }
 
-void SwDoc::ResetAttrAtFormat( const sal_uInt16 nWhichId,
+void SwDoc::ResetAttrAtFormat( const std::vector<sal_uInt16>& rIds,
                                SwFormat& rChangedFormat )
 {
     std::unique_ptr<SwUndo> pUndo;
     if (GetIDocumentUndoRedo().DoesUndo())
-        pUndo.reset(new SwUndoFormatResetAttr( rChangedFormat, nWhichId ));
+        pUndo.reset(new SwUndoFormatResetAttr( rChangedFormat, rIds ));
 
-    const bool bAttrReset = rChangedFormat.ResetFormatAttr( nWhichId );
+    bool bAttrReset = false;
+    for (const auto& nWhichId : rIds)
+        bAttrReset = rChangedFormat.ResetFormatAttr(nWhichId) || bAttrReset;
 
     if ( bAttrReset )
     {

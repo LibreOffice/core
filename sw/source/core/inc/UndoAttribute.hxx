@@ -132,7 +132,7 @@ class SwUndoFormatResetAttr final : public SwUndo
 {
     public:
         SwUndoFormatResetAttr( SwFormat& rChangedFormat,
-                            const sal_uInt16 nWhichId );
+                               const std::vector<sal_uInt16>& rIds );
         virtual ~SwUndoFormatResetAttr() override;
 
         virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
@@ -141,10 +141,10 @@ class SwUndoFormatResetAttr final : public SwUndo
     private:
         // format at which a certain attribute is reset.
         SwFormat * const m_pChangedFormat;
-        // which ID of the reset attribute
-        const sal_uInt16 m_nWhichId;
         // old attribute which has been reset - needed for undo.
-        std::unique_ptr<SfxPoolItem> m_pOldItem;
+        SfxItemSet m_aSet;
+
+        void BroadcastStyleChange();
 };
 
 class SwUndoDontExpandFormat final : public SwUndo

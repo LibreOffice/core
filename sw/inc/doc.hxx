@@ -729,7 +729,7 @@ public:
     void SetAttr( const SfxItemSet&, SwFormat& );
 
     // method to reset a certain attribute at the given format
-    void ResetAttrAtFormat( const sal_uInt16 nWhichId,
+    void ResetAttrAtFormat( const std::vector<sal_uInt16>& rIds,
                             SwFormat& rChangedFormat );
 
     /** Set attribute as new default attribute in current document.
