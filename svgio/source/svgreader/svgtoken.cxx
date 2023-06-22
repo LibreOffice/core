@@ -243,6 +243,19 @@ SVGToken StrToSVGToken(const OUString& rStr, bool bCaseIndependent)
     }
 }
 
+OUString SVGTokenToStr(const SVGToken& rToken)
+{
+    for (auto it = aSVGTokenMapperList.begin(); it != aSVGTokenMapperList.end(); ++it)
+    {
+        if (it->second == rToken)
+        {
+            OUString aFirst(it->first);
+            return aFirst;
+        }
+    }
+    return OUString();
+}
+
 OUString getStrTitle()
 {
     return OUString(constToken_Title);

@@ -187,6 +187,7 @@ namespace svgio::svgreader
         };
 
         SVGToken StrToSVGToken(const OUString& rStr, bool bCaseIndependent);
+        OUString SVGTokenToStr(const SVGToken& rToken);
 
         OUString getStrTitle();
         OUString getStrDesc();

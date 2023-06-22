@@ -160,6 +160,21 @@ namespace svgio::svgreader
                 // add CssStyle if found
                 maCssStyleVector.push_back(pNew);
             }
+
+            // check if there is a css style with element inside element
+            if(pParent)
+            {
+                OUString sParentType(SVGTokenToStr(pParent->getType()));
+
+                aNewConcatenated = sParentType + rClassStr;
+                pNew = rDocument.findGlobalCssStyleAttributes(aNewConcatenated);
+
+                if(pNew)
+                {
+                    // add CssStyle if found
+                    maCssStyleVector.push_back(pNew);
+                }
+            }
         }
 
         void SvgNode::fillCssStyleVector(const OUString& rClassStr, const SvgStyleAttributes& rOriginal)
