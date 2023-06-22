@@ -2367,7 +2367,7 @@ EditPaM ImpEditEngine::DeleteLeftOrRight( const EditSelection& rSel, sal_uInt8 n
             {
                 const OUString& rString = aCurPos.GetNode()->GetString();
                 sal_Int32 nCode = rString.iterateCodePoints(&nIndex, -1);
-                if (unicode::isIVSSelector(nCode) && nIndex > 0 &&
+                if (unicode::isVariationSelector(nCode) && nIndex > 0 &&
                         unicode::isCJKIVSCharacter(rString.iterateCodePoints(&nIndex, -1)))
                 {
                     nCharMode = i18n::CharacterIteratorMode::SKIPCELL;

@@ -22,6 +22,7 @@
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <sal/types.h>
 #include <rtl/ustrbuf.hxx>
+#include <unicode/uchar.h>
 #include <unicode/uscript.h>
 #include <i18nutil/i18nutildllapi.h>
 
@@ -55,10 +56,9 @@ public:
 
         @return  True if code is a Unicode variation sequence selector.
      */
-    static bool isIVSSelector(sal_uInt32 nCode)
+    static bool isVariationSelector(sal_uInt32 nCode)
     {
-        return (nCode >= 0xFE00 && nCode <= 0xFE0F) // Variation Selectors block
-               || (nCode >= 0xE0100 && nCode <= 0xE01EF); // Variation Selectors Supplement block
+        return u_getIntPropertyValue(nCode, UCHAR_VARIATION_SELECTOR) != 0;
     }
 
     /** Check for base characters of a CJK ideographic variation sequence (IVS)

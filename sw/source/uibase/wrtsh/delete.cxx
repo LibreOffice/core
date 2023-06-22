@@ -266,7 +266,7 @@ bool SwWrtShell::DelLeft()
                 nCode = sStr.iterateCodePoints( &o3tl::temporary(sal_Int32(0)) );
             }
 
-            if ( unicode::isIVSSelector( nCode ) )
+            if ( unicode::isVariationSelector( nCode ) )
             {
                 SwCursorShell::Push();
                 SwCursorShell::Left(1, SwCursorSkipMode::Chars);
