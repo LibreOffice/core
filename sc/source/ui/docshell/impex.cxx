@@ -70,6 +70,8 @@
 #include <memory>
 #include <string_view>
 
+#include <unicode/uchar.h>
+
 #include <osl/endian.h>
 
 // We don't want to end up with 2GB read in one line just because of malformed
@@ -552,6 +554,8 @@ void ScImportExport::WriteUnicodeOrByteEndl( SvStream& rStrm )
         endl( rStrm );
 }
 
+// tdf#104927
+// http://www.unicode.org/reports/tr11/
 sal_Int32 ScImportExport::CountVisualWidth(const OUString& rStr, sal_Int32& nIdx, sal_Int32 nMaxWidth)
 {
     sal_Int32 nWidth = 0;
@@ -559,9 +563,10 @@ sal_Int32 ScImportExport::CountVisualWidth(const OUString& rStr, sal_Int32& nIdx
     {
         sal_uInt32 nCode = rStr.iterateCodePoints(&nIdx);
 
-        if (unicode::isCJKIVSCharacter(nCode) || (nCode >= 0x3000 && nCode <= 0x303F))
+        auto nEaWidth = u_getIntPropertyValue(nCode, UCHAR_EAST_ASIAN_WIDTH);
+        if (nEaWidth == U_EA_FULLWIDTH || nEaWidth == U_EA_WIDE)
             nWidth += 2;
-        else if (!unicode::isIVSSelector(nCode))
+        else if (!u_getIntPropertyValue(nCode, UCHAR_DEFAULT_IGNORABLE_CODE_POINT))
             nWidth += 1;
     }
 
@@ -570,7 +575,7 @@ sal_Int32 ScImportExport::CountVisualWidth(const OUString& rStr, sal_Int32& nIdx
         sal_Int32 nTmpIdx = nIdx;
         sal_uInt32 nCode = rStr.iterateCodePoints(&nTmpIdx);
 
-        if (unicode::isIVSSelector(nCode))
+        if (u_getIntPropertyValue(nCode, UCHAR_DEFAULT_IGNORABLE_CODE_POINT))
             nIdx = nTmpIdx;
     }
     return nWidth;
