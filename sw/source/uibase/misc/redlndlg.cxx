@@ -153,6 +153,7 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(std::shared_ptr<weld::Window> xParent, we
     , m_bOnlyFormatedRedlines(false)
     , m_bRedlnAutoFormat(bAutoFormat)
     , m_bInhibitActivate(false)
+    , m_bHasTrackedColumn(false)
     , m_xTabPagesCTRL(new SvxAcceptChgCtr(pContentArea))
     , m_xPopup(pBuilder->weld_menu("writermenu"))
     , m_xSortMenu(pBuilder->weld_menu("writersortmenu"))
@@ -489,7 +490,7 @@ void SwRedlineAcceptDlg::Activate()
 
 SwRedlineTable::size_type SwRedlineAcceptDlg::CalcDiff(SwRedlineTable::size_type nStart, bool bChild)
 {
-    if (!nStart)
+    if (!nStart || m_bHasTrackedColumn)
     {
         Init();
         return SwRedlineTable::npos;
@@ -767,6 +768,10 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
     SwRedlineTable::size_type nCount = pSh->GetRedlineCount();
     nEnd = std::min(nEnd, (nCount - 1)); // also treats nEnd=SwRedlineTable::npos (until the end)
 
+    // reset m_bHasTrackedColumn before searching tracked column again
+    if ( m_bHasTrackedColumn && nStart == 0 )
+        m_bHasTrackedColumn = false;
+
     if (nEnd == SwRedlineTable::npos)
         return;     // no redlines in the document
 
@@ -871,6 +876,12 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
                 {
                     // table redline didn't fit in the stored ones, create new parent
                     aTableParents.push_back(i);
+                }
+
+                // it needs major tree update later because of tracked table columns
+                if ( !m_bHasTrackedColumn && !bRowChange )
+                {
+                    m_bHasTrackedColumn = true;
                 }
             }
             else

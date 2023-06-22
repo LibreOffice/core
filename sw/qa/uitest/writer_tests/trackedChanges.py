@@ -597,4 +597,69 @@ class trackedchanges(UITestCase):
 
                 self.assertEqual(0, len(changesList.getChildren()))
 
+    def test_tdf155847_multiple_tracked_columns_crash(self):
+        with self.ui_test.load_file(get_url_for_data_file("TC-table-del-add.docx")) as document:
+
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
+
+            # accept all changes and insert new columns with change tracking
+            self.xUITest.executeCommand(".uno:AcceptAllTrackedChanges")
+            tables = document.getTextTables()
+            self.assertEqual(2, len(tables))
+            self.assertEqual(len(tables[0].getColumns()), 3)
+            self.xUITest.executeCommand(".uno:InsertColumnsAfter")
+            self.xUITest.executeCommand(".uno:DeleteColumns")
+            self.assertEqual(len(tables[0].getColumns()), 4)
+
+            xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+            xToolkit.processEventsToIdle()
+
+            # check and reject changes
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
+                changesList = xTrackDlg.getChild("writerchanges")
+
+                # six changes, but only one visible in the Manage Changes dialog window
+                state = get_state_as_dict(changesList)
+                self.assertEqual(state['Children'], '6')
+
+                # This was 4 (missing handling of multiple different columns)
+                self.assertEqual(state['VisibleCount'], '2')
+                # Now: 2 changes (deleted and inserted columns)
+                self.assertEqual(2, len(changesList.getChildren()))
+
+                # select second tracked table column in tree list
+                xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+                changesList.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
+
+                # while not empty, i.e. starts with CH_TXT_TRACKED_DUMMY_CHAR
+                while len(get_state_as_dict(xWriterEdit)["SelectedText"]):
+                    xToolkit.processEventsToIdle()
+
+                # reject column insertion
+
+                xAccBtn = xTrackDlg.getChild("reject")
+                # Without the fix in place, it would have crashed here
+                xAccBtn.executeAction("CLICK", tuple())
+
+                # inserted column is removed
+
+                self.assertEqual(len(tables[0].getColumns()), 3)
+
+                # single parent left in the dialog window
+                self.assertEqual(1, len(changesList.getChildren()))
+
+                # accept column deletion
+
+                xAccBtn = xTrackDlg.getChild("accept")
+                xAccBtn.executeAction("CLICK", tuple())
+
+                # deleted column is removed
+
+                self.assertEqual(len(tables[0].getColumns()), 2)
+
+                # no changes in the dialog window
+
+                self.assertEqual(0, len(changesList.getChildren()))
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

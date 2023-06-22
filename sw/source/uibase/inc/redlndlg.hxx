@@ -77,6 +77,9 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg final
     // prevent update dialog data during longer operations (cf #102657#)
     bool                    m_bInhibitActivate;
 
+    // table column changes have not continuous redline ranges: it needs major tree list update
+    bool                    m_bHasTrackedColumn;
+
     std::unique_ptr<SvxAcceptChgCtr> m_xTabPagesCTRL;
     std::unique_ptr<weld::Menu> m_xPopup, m_xSortMenu;
     SvxTPView* m_pTPView;
