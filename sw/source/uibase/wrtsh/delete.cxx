@@ -257,26 +257,21 @@ bool SwWrtShell::DelLeft()
 
         OpenMark();
         SwCursorShell::Left(1, SwCursorSkipMode::Chars);
-        if (SvtScriptType::ASIAN == GetScriptType())
-        {
-            sal_uInt32 nCode = GetChar(false);
-            if ( rtl::isSurrogate( nCode ) )
-            {
-                OUString sStr = GetSelText();
-                nCode = sStr.iterateCodePoints( &o3tl::temporary(sal_Int32(0)) );
-            }
 
-            if ( unicode::isVariationSelector( nCode ) )
-            {
-                SwCursorShell::Push();
-                SwCursorShell::Left(1, SwCursorSkipMode::Chars);
-                OUString sStr = GetSelText();
-                nCode = sStr.iterateCodePoints( &o3tl::temporary(sal_Int32(0)) );
-                if ( unicode::isCJKIVSCharacter( nCode ) )
-                    SwCursorShell::Pop( SwCursorShell::PopMode::DeleteStack );
-                else
-                    SwCursorShell::Pop( SwCursorShell::PopMode::DeleteCurrent ); // For the weak script.
-            }
+        // If we are deleting a variation selector, we want to delete the
+        // whole sequence.
+        sal_uInt32 nCode = GetChar(false);
+        if ( rtl::isSurrogate( nCode ) )
+        {
+            OUString sStr = GetSelText();
+            nCode = sStr.iterateCodePoints( &o3tl::temporary(sal_Int32(0)) );
+        }
+
+        if ( unicode::isVariationSelector( nCode ) )
+        {
+            SwCursorShell::Push();
+            SwCursorShell::Left(1, SwCursorSkipMode::Chars);
+            SwCursorShell::Pop( SwCursorShell::PopMode::DeleteStack );
         }
     }
     bool bRet = Delete(true);

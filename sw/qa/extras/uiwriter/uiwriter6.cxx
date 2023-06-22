@@ -695,26 +695,22 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf113481)
     const uno::Reference<text::XTextRange> xPara1 = getParagraph(1);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xPara1->getString().getLength());
 
-    // In case that weak script is treated as CJK script, remove one character.
+    // Also variation sequence of weak characters that are treated as CJK script
     pWrtShell->Down(false);
     pWrtShell->EndPara();
     // Before: U+4E2D U+2205 U+FE00. After: U+4E2D U+2205
-    if (pWrtShell->GetScriptType() == SvtScriptType::ASIAN)
-    {
-        pWrtShell->DelLeft();
-        const uno::Reference<text::XTextRange> xPara2 = getParagraph(2);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xPara2->getString().getLength());
-        CPPUNIT_ASSERT_EQUAL(u'\x2205', xPara2->getString()[1]);
-    }
+    pWrtShell->DelLeft();
+    const uno::Reference<text::XTextRange> xPara2 = getParagraph(2);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xPara2->getString().getLength());
+    CPPUNIT_ASSERT_EQUAL(u'\x4E2D', xPara2->getString()[0]);
 
-    // Characters of other scripts, remove one character.
+    // Also variation sequence of other scripts
     pWrtShell->Down(false);
     pWrtShell->EndPara();
     // Before: U+1820 U+180B. After: U+1820
     pWrtShell->DelLeft();
     const uno::Reference<text::XTextRange> xPara3 = getParagraph(3);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xPara3->getString().getLength());
-    CPPUNIT_ASSERT_EQUAL(u'\x1820', xPara3->getString()[0]);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xPara3->getString().getLength());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf115013)

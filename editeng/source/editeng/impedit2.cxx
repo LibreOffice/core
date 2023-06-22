@@ -2361,17 +2361,15 @@ EditPaM ImpEditEngine::DeleteLeftOrRight( const EditSelection& rSel, sal_uInt8 n
         if ( nDelMode == DeleteMode::Simple )
         {
             sal_uInt16 nCharMode = i18n::CharacterIteratorMode::SKIPCHARACTER;
-            // Check if we are deleting a CJK ideograph variance sequence (IVS).
+            // If we are deleting a variation selector, we want to delete the
+            // whole sequence (cell).
             sal_Int32 nIndex = aCurPos.GetIndex();
             if (nIndex > 0)
             {
                 const OUString& rString = aCurPos.GetNode()->GetString();
                 sal_Int32 nCode = rString.iterateCodePoints(&nIndex, -1);
-                if (unicode::isVariationSelector(nCode) && nIndex > 0 &&
-                        unicode::isCJKIVSCharacter(rString.iterateCodePoints(&nIndex, -1)))
-                {
+                if (unicode::isVariationSelector(nCode))
                     nCharMode = i18n::CharacterIteratorMode::SKIPCELL;
-                }
             }
             aDelStart = CursorLeft(aCurPos, nCharMode);
         }
