@@ -294,7 +294,7 @@ namespace basegfx
         returns black when the luminance of the given color is less than
         the given threshold value in the range [0.0 .. 1.0], else white
     */
-    class SAL_WARN_UNUSED UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) BColorModifier_black_and_white final : public BColorModifier
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_black_and_white final : public BColorModifier
     {
     private:
         double                      mfValue;

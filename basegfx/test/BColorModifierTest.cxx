@@ -352,6 +352,32 @@ public:
         CPPUNIT_ASSERT(aBColorModifier->operator==(*aBColorModifier2));
     }
 
+    void testBlackAndWhite()
+    {
+        const basegfx::BColorModifierSharedPtr aBColorModifier
+            = std::make_shared<basegfx::BColorModifier_black_and_white>(0.5);
+
+        CPPUNIT_ASSERT_EQUAL(maWhite, aBColorModifier->getModifiedColor(maWhite));
+        CPPUNIT_ASSERT_EQUAL(maWhite, aBColorModifier->getModifiedColor(maGray));
+        CPPUNIT_ASSERT_EQUAL(maBlack, aBColorModifier->getModifiedColor(maBlack));
+
+        CPPUNIT_ASSERT_EQUAL(maBlack, aBColorModifier->getModifiedColor(maRed));
+        CPPUNIT_ASSERT_EQUAL(maWhite, aBColorModifier->getModifiedColor(maGreen));
+        CPPUNIT_ASSERT_EQUAL(maBlack, aBColorModifier->getModifiedColor(maBlue));
+        CPPUNIT_ASSERT_EQUAL(maWhite, aBColorModifier->getModifiedColor(maYellow));
+        CPPUNIT_ASSERT_EQUAL(maBlack, aBColorModifier->getModifiedColor(maMagenta));
+        CPPUNIT_ASSERT_EQUAL(maWhite, aBColorModifier->getModifiedColor(maCyan));
+
+        CPPUNIT_ASSERT(aBColorModifier->operator==(*aBColorModifier));
+        const basegfx::BColorModifierSharedPtr aBColorModifierInvert
+            = std::make_shared<basegfx::BColorModifier_invert>();
+        CPPUNIT_ASSERT(*aBColorModifier != *aBColorModifierInvert);
+
+        const basegfx::BColorModifierSharedPtr aBColorModifier2
+            = std::make_shared<basegfx::BColorModifier_black_and_white>(0.5);
+        CPPUNIT_ASSERT(aBColorModifier->operator==(*aBColorModifier2));
+    }
+
     CPPUNIT_TEST_SUITE(bcolormodifier);
     CPPUNIT_TEST(testGray);
     CPPUNIT_TEST(testInvert);
@@ -362,6 +388,7 @@ public:
     CPPUNIT_TEST(testHueRotate);
     CPPUNIT_TEST(testMatrix);
     CPPUNIT_TEST(testIdentityMatrix);
+    CPPUNIT_TEST(testBlackAndWhite);
     CPPUNIT_TEST_SUITE_END();
 };
 
