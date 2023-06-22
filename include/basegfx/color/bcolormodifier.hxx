@@ -23,7 +23,6 @@
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/color/bcolor.hxx>
-#include <basegfx/matrix/b3dhommatrix.hxx>
 #include <rtl/ustring.hxx>
 
 #include <osl/diagnose.h>
