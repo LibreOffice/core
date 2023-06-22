@@ -249,7 +249,7 @@ const char* const* autodetect_plugin_list()
               desktop == DESKTOP_XFCE  ||
               desktop == DESKTOP_MATE )
         pList = pStandardFallbackList;
-    else if (desktop == DESKTOP_PLASMA5 || desktop == DESKTOP_LXQT)
+    else if (desktop == DESKTOP_PLASMA5 || desktop == DESKTOP_PLASMA6 || desktop == DESKTOP_LXQT)
         pList = pKDEFallbackList;
 
     return pList;
@@ -426,7 +426,7 @@ const OUString& SalGetDesktopEnvironment()
     // Order to match desktops.hxx' DesktopType
     static const char * const desktop_strings[] = {
         "none", "unknown", "GNOME", "UNITY",
-        "XFCE", "MATE", "PLASMA5", "LXQT" };
+        "XFCE", "MATE", "PLASMA5", "PLASMA6", "LXQT" };
     static OUString aDesktopEnvironment;
     if( aDesktopEnvironment.isEmpty())
     {

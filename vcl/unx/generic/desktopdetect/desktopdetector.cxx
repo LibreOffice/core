@@ -117,6 +117,13 @@ static bool is_plasma5_desktop()
     return pFullVersion && pSessionVersion && (0 == strcmp(pSessionVersion, "5"));
 }
 
+static bool is_plasma6_desktop()
+{
+    static const char* pFullVersion = getenv("KDE_FULL_SESSION");
+    static const char* pSessionVersion = getenv("KDE_SESSION_VERSION");
+    return pFullVersion && pSessionVersion && (0 == strcmp(pSessionVersion, "6"));
+}
+
 extern "C"
 {
 
@@ -132,6 +139,8 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
             return DESKTOP_LXQT;
         if (aOver.equalsIgnoreAsciiCase("plasma5") || aOver.equalsIgnoreAsciiCase("plasma"))
             return DESKTOP_PLASMA5;
+        if (aOver.equalsIgnoreAsciiCase("plasma6"))
+            return DESKTOP_PLASMA6;
         if ( aOver.equalsIgnoreAsciiCase( "gnome" ) )
             return DESKTOP_GNOME;
         if ( aOver.equalsIgnoreAsciiCase( "gnome-wayland" ) )
@@ -190,6 +199,8 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
 
     if (is_plasma5_desktop())
         return DESKTOP_PLASMA5;
+    if (is_plasma6_desktop())
+        return DESKTOP_PLASMA6;
 
     // tdf#121275 if we still can't tell, and WAYLAND_DISPLAY
     // is set, default to gtk3
