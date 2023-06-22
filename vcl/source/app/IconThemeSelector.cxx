@@ -70,6 +70,7 @@ IconThemeSelector::GetIconThemeForDesktopEnvironment(const OUString& desktopEnvi
 #else
     OUString r;
     if ( desktopEnvironment.equalsIgnoreAsciiCase("plasma5") ||
+         desktopEnvironment.equalsIgnoreAsciiCase("plasma6") ||
          desktopEnvironment.equalsIgnoreAsciiCase("lxqt") ) {
         if (!bPreferDarkIconTheme)
             r = "breeze";
