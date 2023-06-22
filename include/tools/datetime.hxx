@@ -107,7 +107,7 @@ public:
         processed. This also takes a shortcut for whole days values (equal
         times), and only for times inflicted values uses an intermediary
         tools::Duration for conversion. Note that the resulting floating point
-        value neverthless in many cases is not an exact representation down to
+        value nevertheless in many cases is not an exact representation down to
         nanoseconds. */
     static  double  Sub( const DateTime& rDateTime1, const DateTime& rDateTime2 );
     TOOLS_DLLPUBLIC friend sal_Int64 operator -( const DateTime& rDateTime, const Date& rDate )
