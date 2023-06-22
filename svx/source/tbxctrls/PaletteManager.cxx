@@ -210,6 +210,9 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
             rColorSet.Clear();
             sal_uInt16 nItemId = 0;
 
+            if (!pColorSet)
+                return;
+
             svx::ThemeColorPaletteManager aThemeColorManager(pColorSet);
             moThemePaletteCollection = aThemeColorManager.generate();
 
