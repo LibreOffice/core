@@ -18,7 +18,6 @@
  */
 
 #include <viewopt.hxx>
-#include <IDocumentSettingAccess.hxx>
 #include <SwPortionHandler.hxx>
 #include "inftxt.hxx"
 #include "porexp.hxx"
@@ -216,11 +215,8 @@ void SwBlankPortion::Paint( const SwTextPaintInfo &rInf ) const
     {
         if (rInf.GetOpt().IsBlank())
         {
-            // Draw tilde or degree sign
-            OUString aMarker = (rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess()
-                                    .get(DocumentSettingId::USE_VARIABLE_WIDTH_NBSP)
-                                  ? u"~"
-                                  : u"°");
+            // Draw degree sign
+            OUString aMarker = u"°";
 
             SwPosSize aMarkerSize(rInf.GetTextSize(aMarker));
             Point aPos(rInf.GetPos());
@@ -248,14 +244,9 @@ void SwBlankPortion::Paint( const SwTextPaintInfo &rInf ) const
     }
 }
 
-bool SwBlankPortion::GetExpText( const SwTextSizeInfo& rInf, OUString &rText ) const
+bool SwBlankPortion::GetExpText( const SwTextSizeInfo& /*rInf*/, OUString &rText ) const
 {
-    if (m_cChar == CHAR_HARDBLANK
-        && rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
-            DocumentSettingId::USE_VARIABLE_WIDTH_NBSP))
-        rText = OUString(CH_BLANK);
-    else
-        rText = OUString(m_cChar);
+    rText = OUString(m_cChar);
 
     return true;
 }

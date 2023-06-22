@@ -1270,7 +1270,6 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         "MsWordCompTrailingBlanks",
         "SubtractFlysAnchoredAtFlys",
         "EmptyDbFieldHidesPara",
-        "UseVariableWidthNBSP",
     };
 
     bool bAreUserSettingsFromDocument = officecfg::Office::Common::Load::UserDefinedSettings::get();

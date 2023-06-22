@@ -107,8 +107,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mnImagePreferredDPI(0),
     mbAutoFirstLineIndentDisregardLineSpace(true),
     mbNoNumberingShowFollowBy(false),
-    mbDropCapPunctuation(true),
-    mbUseVariableWidthNBSP(false)
+    mbDropCapPunctuation(true)
 
     // COMPATIBILITY FLAGS END
 {
@@ -137,8 +136,6 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
         mbSubtractFlys                      = aOptions.GetDefault( SvtCompatibilityEntry::Index::SubtractFlysAnchoredAtFlys );
         mbEmptyDbFieldHidesPara
             = aOptions.GetDefault(SvtCompatibilityEntry::Index::EmptyDbFieldHidesPara);
-        mbUseVariableWidthNBSP
-            = aOptions.GetDefault(SvtCompatibilityEntry::Index::UseVariableWidthNBSP);
     }
     else
     {
@@ -158,7 +155,6 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
         mbMsWordCompTrailingBlanks          = false;
         mbSubtractFlys                      = false;
         mbEmptyDbFieldHidesPara             = true;
-        mbUseVariableWidthNBSP              = false;
     }
 
     // COMPATIBILITY FLAGS END
@@ -255,7 +251,6 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
             return mbDoNotBreakWrappedTables;
         case DocumentSettingId::NO_NUMBERING_SHOW_FOLLOWBY: return mbNoNumberingShowFollowBy;
         case DocumentSettingId::DROP_CAP_PUNCTUATION: return mbDropCapPunctuation;
-        case DocumentSettingId::USE_VARIABLE_WIDTH_NBSP: return mbUseVariableWidthNBSP;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -448,10 +443,6 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
 
         case DocumentSettingId::DROP_CAP_PUNCTUATION:
             mbDropCapPunctuation = value;
-            break;
-
-        case DocumentSettingId::USE_VARIABLE_WIDTH_NBSP:
-            mbUseVariableWidthNBSP = value;
             break;
 
         // COMPATIBILITY FLAGS END
@@ -726,7 +717,6 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     mbFrameAutowidthWithMorePara = rSource.mbFrameAutowidthWithMorePara;
     mbFootnoteInColumnToPageEnd = rSource.mbFootnoteInColumnToPageEnd;
     mbDropCapPunctuation = rSource.mbDropCapPunctuation;
-    mbUseVariableWidthNBSP = rSource.mbUseVariableWidthNBSP;
 }
 
 sal_uInt32 sw::DocumentSettingManager::Getn32DummyCompatibilityOptions1() const
@@ -1024,11 +1014,6 @@ void sw::DocumentSettingManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbEmptyDbFieldHidesPara"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::boolean(mbEmptyDbFieldHidesPara).getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
-
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbUseVariableWidthNBSP"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
-                                BAD_CAST(OString::boolean(mbUseVariableWidthNBSP).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbContinuousEndnotes"));

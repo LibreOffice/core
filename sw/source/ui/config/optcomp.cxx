@@ -122,8 +122,7 @@ static sal_uInt32 convertBools2Ulong_Impl
     bool _bProtectForm,
     bool _bMsWordCompTrailingBlanks,
     bool bSubtractFlysAnchoredAtFlys,
-    bool bEmptyDbFieldHidesPara,
-    bool bUseVariableWidthNBSP
+    bool bEmptyDbFieldHidesPara
 )
 {
     sal_uInt32 nRet = 0;
@@ -172,9 +171,6 @@ static sal_uInt32 convertBools2Ulong_Impl
         nRet |= nSetBit;
     nSetBit = nSetBit << 1;
     if (bEmptyDbFieldHidesPara)
-        nRet |= nSetBit;
-    nSetBit = nSetBit << 1;
-    if (bUseVariableWidthNBSP)
         nRet |= nSetBit;
 
     return nRet;
@@ -245,8 +241,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
             rEntry.getValue<bool>( SvtCompatibilityEntry::Index::ProtectForm ),
             rEntry.getValue<bool>( SvtCompatibilityEntry::Index::MsWordTrailingBlanks ),
             rEntry.getValue<bool>( SvtCompatibilityEntry::Index::SubtractFlysAnchoredAtFlys ),
-            rEntry.getValue<bool>( SvtCompatibilityEntry::Index::EmptyDbFieldHidesPara ),
-            rEntry.getValue<bool>( SvtCompatibilityEntry::Index::UseVariableWidthNBSP ) );
+            rEntry.getValue<bool>( SvtCompatibilityEntry::Index::EmptyDbFieldHidesPara ));
         m_xFormattingLB->append(OUString::number(nOptions), sNewEntry);
     }
 }
@@ -338,8 +333,7 @@ sal_uInt32 SwCompatibilityOptPage::GetDocumentOptions() const
             rIDocumentSettingAccess.get( DocumentSettingId::PROTECT_FORM ),
             rIDocumentSettingAccess.get( DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS ),
             rIDocumentSettingAccess.get( DocumentSettingId::SUBTRACT_FLYS ),
-            rIDocumentSettingAccess.get( DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA ),
-            rIDocumentSettingAccess.get( DocumentSettingId::USE_VARIABLE_WIDTH_NBSP ) );
+            rIDocumentSettingAccess.get( DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA ) );
     }
     return nRet;
 }
@@ -439,11 +433,6 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
 
                     case SvtCompatibilityEntry::Index::EmptyDbFieldHidesPara:
                         m_pWrtShell->SetEmptyDbFieldHidesPara(bChecked);
-                        break;
-
-                    case SvtCompatibilityEntry::Index::UseVariableWidthNBSP:
-                        m_pWrtShell->GetDoc()->getIDocumentSettingAccess()
-                            .set(DocumentSettingId::USE_VARIABLE_WIDTH_NBSP, bChecked);
                         break;
 
                     default:
