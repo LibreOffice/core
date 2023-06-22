@@ -217,6 +217,26 @@ const char* const* autodetect_plugin_list()
         nullptr
     };
 
+    static const char* const pPlasma6FallbackList[] =
+    {
+#if ENABLE_KF6
+        "kf6",
+#endif
+#if ENABLE_KF5
+        "kf5",
+#endif
+#if ENABLE_GTK3_KDE5
+        "gtk3_kde5",
+#endif
+#if ENABLE_GTK3
+        "gtk3",
+#endif
+#if ENABLE_GEN
+        "gen",
+#endif
+        nullptr
+    };
+
     static const char* const pStandardFallbackList[] =
     {
 #if ENABLE_GTK3
@@ -250,8 +270,10 @@ const char* const* autodetect_plugin_list()
               desktop == DESKTOP_XFCE  ||
               desktop == DESKTOP_MATE )
         pList = pStandardFallbackList;
-    else if (desktop == DESKTOP_PLASMA5 || desktop == DESKTOP_PLASMA6 || desktop == DESKTOP_LXQT)
+    else if (desktop == DESKTOP_PLASMA5 || desktop == DESKTOP_LXQT)
         pList = pKDEFallbackList;
+    else if (desktop == DESKTOP_PLASMA6)
+        pList = pPlasma6FallbackList;
 
     return pList;
 }
