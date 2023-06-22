@@ -981,6 +981,7 @@ void ScPatternAttr::GetFromEditItemSet( const SfxItemSet* pEditSet )
         return;
     GetFromEditItemSet( GetItemSet(), *pEditSet );
     mxHashCode.reset();
+    mxVisible.reset();
 }
 
 void ScPatternAttr::FillEditParaItems( SfxItemSet* pEditSet ) const
@@ -1024,6 +1025,7 @@ void ScPatternAttr::DeleteUnchanged( const ScPatternAttr* pOldAttrs )
                 {
                     rThisSet.ClearItem( nSubWhich );
                     mxHashCode.reset();
+                    mxVisible.reset();
                 }
             }
             else if ( eOldState != SfxItemState::DONTCARE )
@@ -1033,6 +1035,7 @@ void ScPatternAttr::DeleteUnchanged( const ScPatternAttr* pOldAttrs )
                 {
                     rThisSet.ClearItem( nSubWhich );
                     mxHashCode.reset();
+                    mxVisible.reset();
                 }
             }
         }
@@ -1054,6 +1057,7 @@ void ScPatternAttr::ClearItems( const sal_uInt16* pWhich )
     for (sal_uInt16 i=0; pWhich[i]; i++)
         rSet.ClearItem(pWhich[i]);
     mxHashCode.reset();
+    mxVisible.reset();
 }
 
 static SfxStyleSheetBase* lcl_CopyStyleToPool
@@ -1190,6 +1194,13 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
 
 bool ScPatternAttr::IsVisible() const
 {
+    if (!mxVisible)
+        mxVisible = CalcVisible();
+    return *mxVisible;
+}
+
+bool ScPatternAttr::CalcVisible() const
+{
     const SfxItemSet& rSet = GetItemSet();
 
     if ( const SvxBrushItem* pItem = rSet.GetItemIfSet( ATTR_BACKGROUND ) )
@@ -1312,6 +1323,7 @@ void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle, bool bClearDirectFor
         pStyle = nullptr;
     }
     mxHashCode.reset();
+    mxVisible.reset();
 }
 
 void ScPatternAttr::UpdateStyleSheet(const ScDocument& rDoc)
@@ -1338,6 +1350,7 @@ void ScPatternAttr::UpdateStyleSheet(const ScDocument& rDoc)
     else
         pStyle = nullptr;
     mxHashCode.reset();
+    mxVisible.reset();
 }
 
 void ScPatternAttr::StyleToName()
@@ -1350,6 +1363,7 @@ void ScPatternAttr::StyleToName()
         pStyle = nullptr;
         GetItemSet().SetParent( nullptr );
         mxHashCode.reset();
+        mxVisible.reset();
     }
 }
 

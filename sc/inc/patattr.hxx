@@ -54,6 +54,7 @@ class SC_DLLPUBLIC ScPatternAttr final : public SfxSetItem
 {
     std::optional<OUString>  pName;
     mutable std::optional<sal_uInt32> mxHashCode;
+    mutable std::optional<bool> mxVisible;
     ScStyleSheet*              pStyle;
     sal_uInt64                 mnKey;
 public:
@@ -184,11 +185,12 @@ public:
     // TODO: tdf#135215: This is a band-aid to detect changes and invalidate the hash,
     // a proper way would be probably to override SfxItemSet::Changed(), but 6cb400f41df0dd10
     // hardcoded SfxSetItem to contain SfxItemSet.
-    SfxItemSet& GetItemSet() { mxHashCode.reset(); return SfxSetItem::GetItemSet(); }
+    SfxItemSet& GetItemSet() { mxHashCode.reset(); mxVisible.reset(); return SfxSetItem::GetItemSet(); }
     using SfxSetItem::GetItemSet;
 
 private:
     void                    CalcHashCode() const;
+    bool                    CalcVisible() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
