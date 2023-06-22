@@ -2285,17 +2285,27 @@ void NotebookbarTabControlBase::SetContext( vcl::EnumContext::Context eContext )
 
     bool bHandled = false;
 
+    TabPage* pPage = GetTabPage(mnCurPageId);
+    // Try to stay on the current tab (unless the new context has a special tab)
+    if (pPage && eLastContext != vcl::EnumContext::Context::Any
+        && pPage->HasContext(vcl::EnumContext::Context::Any) && pPage->IsEnabled())
+    {
+        bHandled = true;
+    }
+
     for (int nChild = 0; nChild < GetPageCount(); ++nChild)
     {
         sal_uInt16 nPageId = TabControl::GetPageId(nChild);
-        TabPage* pPage = GetTabPage(nPageId);
+        pPage = GetTabPage(nPageId);
 
         if (!pPage)
             continue;
 
         SetPageVisible(nPageId, pPage->HasContext(eContext) || pPage->HasContext(vcl::EnumContext::Context::Any));
 
-        if (pPage->HasContext(eContext) && eContext != vcl::EnumContext::Context::Any)
+        if (eContext != vcl::EnumContext::Context::Any
+            && (!bHandled || !pPage->HasContext(vcl::EnumContext::Context::Any))
+            && pPage->HasContext(eContext))
         {
             SetCurPageId(nPageId);
             bHandled = true;
