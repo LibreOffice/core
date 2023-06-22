@@ -476,9 +476,9 @@ void ScDrawView::SetMarkedOriginalSize()
         }
         else if (nIdent == SdrObjKind::Graphic)
         {
-            const Graphic& rGraphic = static_cast<SdrGrafObj*>(pObj)->GetGraphic();
+            const SdrGrafObj* pSdrGrafObj = static_cast<const SdrGrafObj*>(pObj);
 
-            MapMode aSourceMap = rGraphic.GetPrefMapMode();
+            MapMode aSourceMap = pSdrGrafObj->GetGraphic().GetPrefMapMode();
             MapMode aDestMap( MapUnit::Map100thMM );
             if (aSourceMap.GetMapUnit() == MapUnit::MapPixel)
             {
@@ -488,16 +488,8 @@ void ScDrawView::SetMarkedOriginalSize()
                 aDestMap.SetScaleX(aNormScaleX);
                 aDestMap.SetScaleY(aNormScaleY);
             }
-            if (pViewData)
-            {
-                vcl::Window* pActWin = pViewData->GetActiveWin();
-                if (pActWin)
-                {
-                    aOriginalSize = pActWin->LogicToLogic(
-                                    rGraphic.GetPrefSize(), &aSourceMap, &aDestMap );
-                    bDo = true;
-                }
-            }
+            aOriginalSize = pSdrGrafObj->getOriginalSize();
+            bDo = true;
         }
 
         if ( bDo )
