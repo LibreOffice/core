@@ -61,19 +61,6 @@ public:
         return u_getIntPropertyValue(nCode, UCHAR_VARIATION_SELECTOR) != 0;
     }
 
-    /** Check for base characters of a CJK ideographic variation sequence (IVS)
-
-        @param nCode  A Unicode code point.
-
-        @return  True if code is a Unicode base character part of CJK IVS
-     */
-    static bool isCJKIVSCharacter(sal_uInt32 nCode)
-    {
-        return (nCode >= 0x4E00 && nCode <= 0x9FFF) // CJK Unified Ideographs
-               || (nCode >= 0x3400 && nCode <= 0x4DBF) // CJK Unified Ideographs Extension A
-               || (nCode >= 0x20000 && nCode <= 0x2A6DF); // CJK Unified Ideographs Extension B
-    }
-
     //Map an ISO 15924 script code to Latin/Asian/Complex/Weak
     static sal_Int16 getScriptClassFromUScriptCode(UScriptCode eScript);
 
