@@ -41,7 +41,8 @@ KF5SalInstance::KF5SalInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCa
 
 bool KF5SalInstance::hasNativeFileSelection() const
 {
-    if (Application::GetDesktopEnvironment() == "PLASMA5")
+    const OUString sDesktop = Application::GetDesktopEnvironment();
+    if (sDesktop == "PLASMA5" || sDesktop == "PLASMA6")
         return true;
     return QtInstance::hasNativeFileSelection();
 }
@@ -61,8 +62,9 @@ KF5SalInstance::createPicker(css::uno::Reference<css::uno::XComponentContext> co
 
     // In order to insert custom controls, KF5FilePicker currently relies on KFileWidget
     // being used in the native file picker, which is only the case for KDE Plasma.
-    // Therefore, return the plain qt5 one in order to not lose custom controls.
-    if (Application::GetDesktopEnvironment() == "PLASMA5")
+    // Therefore, return the plain qt5/qt6 one in order to not lose custom controls otherwise.
+    const OUString sDesktop = Application::GetDesktopEnvironment();
+    if (sDesktop == "PLASMA5" || sDesktop == "PLASMA6")
         return new KF5FilePicker(context, eMode);
     return QtInstance::createPicker(context, eMode);
 }
