@@ -683,21 +683,20 @@ public:
 class NewlineSpacingCheck : public NodeCheck
 {
 private:
-    static SwTextNode* getNextTextNode(SwNode* pCurrent)
+    static SwTextNode* getPrevTextNode(SwNode* pCurrent)
     {
         SwTextNode* pTextNode = nullptr;
 
         auto nIndex = pCurrent->GetIndex();
-        auto nCount = pCurrent->GetNodes().Count();
 
-        nIndex++; // go to next node
+        nIndex--; // go to previous node
 
-        while (pTextNode == nullptr && nIndex < nCount)
+        while (pTextNode == nullptr && nIndex >= SwNodeOffset(0))
         {
             auto pNode = pCurrent->GetNodes()[nIndex];
             if (pNode->IsTextNode())
                 pTextNode = pNode->GetTextNode();
-            nIndex++;
+            nIndex--;
         }
 
         return pTextNode;
@@ -721,16 +720,16 @@ public:
         auto nParagraphLength = pTextNode->GetText().getLength();
         if (nParagraphLength == 0)
         {
-            SwTextNode* pNextTextNode = getNextTextNode(pCurrent);
-            if (!pNextTextNode)
+            SwTextNode* pPrevTextNode = getPrevTextNode(pCurrent);
+            if (!pPrevTextNode)
                 return;
-            if (pNextTextNode->GetText().getLength() == 0)
+            if (pPrevTextNode->GetText().getLength() == 0)
             {
                 auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_NEWLINES_SPACE),
                                           sfx::AccessibilityIssueID::TEXT_FORMATTING);
                 pIssue->setIssueObject(IssueObject::TEXT);
-                pIssue->setNode(pNextTextNode);
-                SwDoc& rDocument = pNextTextNode->GetDoc();
+                pIssue->setNode(pTextNode);
+                SwDoc& rDocument = pTextNode->GetDoc();
                 pIssue->setDoc(rDocument);
             }
         }

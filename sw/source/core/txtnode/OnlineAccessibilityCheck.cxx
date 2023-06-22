@@ -248,15 +248,16 @@ void OnlineAccessibilityCheck::lookForPreviousNodeAndUpdate(const SwPosition& rN
         return;
     }
 
+    // Run the docement level Accessibility Check
+    runDocumentLevelAccessibilityCheck();
+
     // Get the real previous node from index
     SwNode* pNode = pCurrentNode->GetNodes()[m_nPreviousNodeIndex];
 
     if (pNode && (pNode->IsContentNode() || pNode->IsTableNode()))
     {
-        runDocumentLevelAccessibilityCheck();
         runAccessibilityCheck(pNode);
         updateNodeStatus(pNode);
-        updateStatusbar();
 
         // Assign previous node and index
         m_pPreviousNode = std::move(pCurrentWeak);
@@ -264,9 +265,14 @@ void OnlineAccessibilityCheck::lookForPreviousNodeAndUpdate(const SwPosition& rN
     }
     else
     {
+        runAccessibilityCheck(pCurrentNode);
+        updateNodeStatus(pCurrentNode);
+
         m_pPreviousNode.reset();
         m_nPreviousNodeIndex = SwNodeOffset(-1);
     }
+
+    updateStatusbar();
 }
 
 void OnlineAccessibilityCheck::clearAccessibilityIssuesFromAllNodes()
