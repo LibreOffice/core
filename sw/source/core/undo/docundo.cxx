@@ -30,6 +30,7 @@
 #include <pam.hxx>
 #include <swundo.hxx>
 #include <UndoCore.hxx>
+#include <wrtsh.hxx>
 #include <editsh.hxx>
 #include <unobaseclass.hxx>
 #include <IDocumentDrawModelAccess.hxx>
@@ -666,7 +667,10 @@ bool UndoManager::impl_DoUndoRedo(UndoOrRedoType undoOrRedo, size_t nUndoOffset)
 
     UnoActionContext c(& rDoc); // exception-safe StartAllAction/EndAllAction
 
-    SwEditShell *const pEditShell(rDoc.GetEditShell());
+    SwView* pViewShell = dynamic_cast<SwView*>(SfxViewShell::Current());
+    SwEditShell *const pEditShell(
+        comphelper::LibreOfficeKit::isActive() && pViewShell ? pViewShell->GetWrtShellPtr()
+        : rDoc.GetEditShell());
     OSL_ENSURE(pEditShell, "sw::UndoManager needs a SwEditShell!");
     if (!pEditShell)
     {
