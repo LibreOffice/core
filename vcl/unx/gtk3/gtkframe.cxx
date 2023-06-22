@@ -990,6 +990,11 @@ void GtkSalFrame::InitCommon()
 #endif
     m_pDrawingArea = GTK_DRAWING_AREA(gtk_drawing_area_new());
 #endif
+    if (GTK_IS_WINDOW(m_pWindow))
+    {
+        Size aDefWindowSize = calcDefaultSize();
+        gtk_window_set_default_size(GTK_WINDOW(m_pWindow), aDefWindowSize.Width(), aDefWindowSize.Height());
+    }
     gtk_widget_set_can_focus(GTK_WIDGET(m_pFixedContainer), true);
     gtk_widget_set_size_request(GTK_WIDGET(m_pFixedContainer), 1, 1);
 #if !GTK_CHECK_VERSION(4,0,0)
