@@ -2290,22 +2290,22 @@ void NotebookbarTabControlBase::SetContext( vcl::EnumContext::Context eContext )
         sal_uInt16 nPageId = TabControl::GetPageId(nChild);
         TabPage* pPage = GetTabPage(nPageId);
 
-        if (pPage)
+        if (!pPage)
+            continue;
+
+        SetPageVisible(nPageId, pPage->HasContext(eContext) || pPage->HasContext(vcl::EnumContext::Context::Any));
+
+        if (pPage->HasContext(eContext) && eContext != vcl::EnumContext::Context::Any)
         {
-            SetPageVisible(nPageId, pPage->HasContext(eContext) || pPage->HasContext(vcl::EnumContext::Context::Any));
+            SetCurPageId(nPageId);
+            bHandled = true;
+            bLastContextWasSupported = true;
+        }
 
-            if (!bHandled && bLastContextWasSupported
-                && pPage->HasContext(vcl::EnumContext::Context::Default))
-            {
-                SetCurPageId(nPageId);
-            }
-
-            if (pPage->HasContext(eContext) && eContext != vcl::EnumContext::Context::Any)
-            {
-                SetCurPageId(nPageId);
-                bHandled = true;
-                bLastContextWasSupported = true;
-            }
+        if (!bHandled && bLastContextWasSupported
+            && pPage->HasContext(vcl::EnumContext::Context::Default))
+        {
+            SetCurPageId(nPageId);
         }
     }
 
