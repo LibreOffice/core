@@ -1140,6 +1140,7 @@ haiku*)
     test_gtk3=no
     test_gtk3_kde5=no
     test_kf5=yes
+    test_kf6=yes
     enable_odk=no
     enable_coinmp=no
     enable_pdfium=no
@@ -1186,6 +1187,7 @@ test "${test_gstreamer_1_0+set}" = set || test_gstreamer_1_0="$using_x11"
 test "${test_gtk3+set}" = set || test_gtk3="$using_x11"
 test "${test_gtk4+set}" = set || test_gtk4="$using_x11"
 test "${test_kf5+set}" = set || test_kf5="$using_x11"
+test "${test_kf6+set}" = set || test_kf6="$using_x11"
 # don't handle test_qt5, so it can disable test_kf5 later
 test "${test_qt6+set}" = set || test_qt6="$using_x11"
 test "${test_randr+set}" = set || test_randr="$using_x11"
@@ -1217,6 +1219,7 @@ disable_x11_tests()
     test_gtk3=no
     test_gtk4=no
     test_kf5=no
+    test_kf6=no
     test_qt5=no
     test_qt6=no
     test_randr=no
@@ -1768,6 +1771,13 @@ AC_ARG_ENABLE(kf5,
         [Determines whether to use Qt5/KF5 vclplug on platforms where Qt5 and
          KF5 are available.]),
 ,)
+
+AC_ARG_ENABLE(kf6,
+    AS_HELP_STRING([--enable-kf6],
+        [Determines whether to use KF6 vclplug on platforms where Qt6 and
+         KF6 are available.]),
+,)
+
 
 AC_ARG_ENABLE(gtk3_kde5,
     AS_HELP_STRING([--enable-gtk3-kde5],
@@ -6033,6 +6043,15 @@ if test "$test_kf5" = "yes" -a "$enable_kf5" = "yes"; then
         enable_qt5=yes
     fi
 fi
+
+if test "$test_kf6" = "yes" -a "$enable_kf6" = "yes"; then
+    if test "$enable_qt6" = "no"; then
+        AC_MSG_ERROR([KF6 support depends on QT6, so it conflicts with --disable-qt6])
+    else
+        enable_qt6=yes
+    fi
+fi
+
 
 AC_MSG_CHECKING([whether to build the pagein binaries for oosplash])
 if test "${enable_pagein}" != no -a -z "$DISABLE_DYNLOADING"; then
@@ -11650,6 +11669,7 @@ libo_ENABLE_VCLPLUG([gtk3])
 libo_ENABLE_VCLPLUG([gtk3_kde5])
 libo_ENABLE_VCLPLUG([gtk4])
 libo_ENABLE_VCLPLUG([kf5])
+libo_ENABLE_VCLPLUG([kf6])
 libo_ENABLE_VCLPLUG([qt5])
 libo_ENABLE_VCLPLUG([qt6])
 
@@ -12849,7 +12869,7 @@ AC_SUBST(ENABLE_SCRIPTING_JAVASCRIPT)
 AC_SUBST(SYSTEM_RHINO)
 AC_SUBST(RHINO_JAR)
 
-# This is only used in Qt5/Qt6/KF5 checks to determine if /usr/lib64
+# This is only used in Qt5/Qt6/KF5/KF6 checks to determine if /usr/lib64
 # paths should be added to library search path. So lets put all 64-bit
 # platforms there.
 supports_multilib=
@@ -13034,7 +13054,8 @@ QT6_LIBS=""
 QMAKE6="qmake"
 MOC6="moc"
 QT6_PLATFORMS_SRCDIR=""
-if test \( "$test_qt6" = "yes" -a "$ENABLE_QT6" = "TRUE" \)
+if test \( "$test_kf6" = "yes" -a "$ENABLE_KF6" = "TRUE" \) -o \
+        \( "$test_qt6" = "yes" -a "$ENABLE_QT6" = "TRUE" \)
 then
     qt6_incdirs="$QT6INC /usr/include/qt6 /usr/include $x_includes"
     qt6_libdirs="$QT6LIB /usr/lib/qt6 /usr/lib $x_libraries"
@@ -13242,6 +13263,82 @@ int main(int argc, char **argv) {
 fi
 AC_SUBST(KF5_CFLAGS)
 AC_SUBST(KF5_LIBS)
+
+dnl ===================================================================
+dnl KF6 Integration
+dnl ===================================================================
+
+KF6_CFLAGS=""
+KF6_LIBS=""
+if test \( "$test_kf6" = "yes" -a "$ENABLE_KF6" = "TRUE" \)
+then
+    if test "$OS" = "HAIKU"; then
+        haiku_arch="`echo $RTL_ARCH | tr X x`"
+        kf6_haiku_incdirs="`findpaths -c ' ' -a $haiku_arch B_FIND_PATH_HEADERS_DIRECTORY`"
+        kf6_haiku_libdirs="`findpaths -c ' ' -a $haiku_arch B_FIND_PATH_DEVELOP_LIB_DIRECTORY`"
+    fi
+
+    kf6_incdirs="$KF6INC /usr/include $kf6_haiku_incdirs $x_includes"
+    kf6_libdirs="$KF6LIB /usr/lib /usr/lib/kf6 /usr/lib/kf6/devel $kf6_haiku_libdirs $x_libraries"
+    if test -n "$supports_multilib"; then
+        kf6_libdirs="$kf6_libdirs /usr/lib64 /usr/lib64/kf6 /usr/lib64/kf6/devel"
+    fi
+
+    kf6_test_include="KF6/KIOFileWidgets/KFileWidget"
+    kf6_test_library="libKF6KIOFileWidgets.so"
+    kf6_libdirs="$qt6_libdir $kf6_libdirs"
+
+    dnl Check for KF6 headers
+    AC_MSG_CHECKING([for KF6 headers])
+    kf6_incdir="no"
+    for kf6_check in $kf6_incdirs; do
+        if test -r "$kf6_check/$kf6_test_include"; then
+            kf6_incdir="$kf6_check/KF6"
+            break
+        fi
+    done
+    AC_MSG_RESULT([$kf6_incdir])
+    if test "x$kf6_incdir" = "xno"; then
+        AC_MSG_ERROR([KF6 headers not found.  Please specify the root of your KF6 installation by exporting KF6DIR before running "configure".])
+    fi
+
+    dnl Check for KF6 libraries
+    AC_MSG_CHECKING([for KF6 libraries])
+    kf6_libdir="no"
+    for kf6_check in $kf6_libdirs; do
+        if test -r "$kf6_check/$kf6_test_library"; then
+            kf6_libdir="$kf6_check"
+            break
+        fi
+    done
+
+    AC_MSG_RESULT([$kf6_libdir])
+    if test "x$kf6_libdir" = "xno"; then
+        AC_MSG_ERROR([KF6 libraries not found.  Please specify the root of your KF6 installation by exporting KF6DIR before running "configure".])
+    fi
+
+    KF6_CFLAGS="-I$kf6_incdir -I$kf6_incdir/KCoreAddons -I$kf6_incdir/KI18n -I$kf6_incdir/KConfigCore -I$kf6_incdir/KWindowSystem -I$kf6_incdir/KIO -I$kf6_incdir/KIOCore -I$kf6_incdir/KIOWidgets -I$kf6_incdir/KIOFileWidgets -I$qt6_incdir -I$qt6_incdir/QtCore -I$qt6_incdir/QtGui -I$qt6_incdir/QtWidgets -I$qt6_incdir/QtNetwork -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT -DQT_NO_VERSION_TAGGING"
+    KF6_LIBS="-L$kf6_libdir -lKF6CoreAddons -lKF6I18n -lKF6ConfigCore -lKF6WindowSystem -lKF6KIOCore -lKF6KIOWidgets -lKF6KIOFileWidgets -L$qt6_libdir -lQt6Core -lQt6Gui -lQt6Widgets -lQt6Network"
+    KF6_CFLAGS=$(printf '%s' "$KF6_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+
+    AC_LANG_PUSH([C++])
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS $KF6_CFLAGS"
+    dnl KF6 development version as of 2023-06 uses version number 5.240
+    AC_MSG_CHECKING([whether KDE is >= 5.240])
+       AC_RUN_IFELSE([AC_LANG_SOURCE([[
+#include <kcoreaddons_version.h>
+
+int main(int argc, char **argv) {
+       if (KCOREADDONS_VERSION_MAJOR == 6 || (KCOREADDONS_VERSION_MAJOR == 5 && KCOREADDONS_VERSION_MINOR >= 240)) return 0;
+       else return 1;
+}
+       ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([KDE version too old])],[])
+    CXXFLAGS=$save_CXXFLAGS
+    AC_LANG_POP([C++])
+fi
+AC_SUBST(KF6_CFLAGS)
+AC_SUBST(KF6_LIBS)
 
 dnl ===================================================================
 dnl Test whether to include Evolution 2 support

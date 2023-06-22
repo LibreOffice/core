@@ -137,6 +137,7 @@ SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
                  */
                 if (aUsedModuleBase == "gtk4" || aUsedModuleBase == "gtk3" ||
                     aUsedModuleBase == "gtk3_kde5" || aUsedModuleBase == "kf5" ||
+                    aUsedModuleBase == "kf6" ||
                     aUsedModuleBase == "qt5" || aUsedModuleBase == "qt6" ||
                     aUsedModuleBase == "win")
                 {
@@ -337,6 +338,9 @@ SalInstance *CreateSalInstance()
 #endif
 #if ENABLE_QT5
         "qt5",
+#endif
+#if ENABLE_KF6
+        "kf6",
 #endif
 #if ENABLE_QT6
         "qt6",

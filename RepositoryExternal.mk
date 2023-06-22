@@ -3117,7 +3117,31 @@ endef
 
 endif # ENABLE_KF5
 
+ifneq (,$(filter TRUE,$(ENABLE_KF6)))
 
+define gb_LinkTarget__use_kf6
+$(call gb_LinkTarget_set_include,$(1),\
+	$(subst -isystem/,-isystem /,$(filter -I% -isystem%,$(subst -isystem /,-isystem/,$(KF6_CFLAGS)))) \
+	$$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_add_cxxflags,$(1),\
+	$(filter-out -I% -isystem%,$(subst -isystem /,-isystem/,$(KF6_CFLAGS))) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(KF6_LIBS) \
+)
+
+endef
+
+else # !ENABLE_KF6
+
+define gb_LinkTarget__use_kf6
+
+endef
+
+endif # ENABLE_KF6
 
 ifneq (,$(filter TRUE,$(ENABLE_QT5) $(ENABLE_GTK3_KDE5)))
 

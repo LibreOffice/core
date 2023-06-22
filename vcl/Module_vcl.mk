@@ -97,6 +97,14 @@ $(eval $(call gb_Module_add_targets,vcl,\
 ))
 endif
 
+ifneq ($(ENABLE_KF6),)
+$(eval $(call gb_Module_add_targets,vcl,\
+    CustomTarget_kf6_moc \
+    Library_vclplug_kf6 \
+))
+endif
+
+
 ifneq ($(ENABLE_QT5),)
 $(eval $(call gb_Module_add_targets,vcl,\
     CustomTarget_qt5_moc \

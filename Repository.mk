@@ -318,6 +318,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,kde, \
 
 $(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,$(gb_haiku_or_kde), \
     $(if $(ENABLE_KF5),vclplug_kf5) \
+    $(if $(ENABLE_KF6),vclplug_kf6) \
     $(if $(ENABLE_QT5),vclplug_qt5) \
     $(if $(ENABLE_QT6),vclplug_qt6) \
     $(if $(ENABLE_GTK3_KDE5),vclplug_gtk3_kde5) \
