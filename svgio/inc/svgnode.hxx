@@ -120,6 +120,9 @@ namespace svgio::svgreader
 
             /// helper for filling the CssStyle vector once dependent on mbCssStyleVectorBuilt
             void fillCssStyleVector(const OUString& rClassStr, const SvgStyleAttributes& rOriginal);
+            void addCssStyle(
+                const SvgDocument& rDocument,
+                const OUString& aConcatenated);
             void fillCssStyleVectorUsingHierarchyAndSelectors(
                 const OUString& rClassStr,
                 const SvgNode& rCurrent,
