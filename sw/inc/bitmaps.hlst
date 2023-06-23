@@ -116,4 +116,6 @@ inline constexpr OUStringLiteral RID_BMP_PREVIEW_FALLBACK = u"sw/res/image-examp
 inline constexpr OUStringLiteral RID_BMP_A11Y_CHECK_ISSUES_NOT_FOUND = u"svx/res/a11y_check_issues_not_found.png";
 inline constexpr OUStringLiteral RID_BMP_A11Y_CHECK_ISSUES_FOUND = u"svx/res/a11y_check_issues_found.png";
 
+inline constexpr OUStringLiteral RID_BMP_QUERYINSMODE = u"res/queryinsmode.png";
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

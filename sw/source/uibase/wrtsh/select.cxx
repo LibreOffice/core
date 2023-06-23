@@ -41,6 +41,12 @@
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 
+#include <vcl/weld.hxx>
+#include <vcl/builder.hxx>
+#include <officecfg/Office/Common.hxx>
+#include <unotools/configmgr.hxx>
+#include <bitmaps.hlst>
+
 namespace com::sun::star::util {
     struct SearchOptions2;
 }
@@ -678,6 +684,25 @@ void SwWrtShell::LeaveBlockMode()
 
 void SwWrtShell::SetInsMode( bool bOn )
 {
+    const bool bDoAsk = officecfg::Office::Common::Misc::QuerySetInsMode::get();
+    if (!bOn && bDoAsk) {
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetView().GetFrameWeld(), "cui/ui/querysetinsmodedialog.ui"));
+        std::unique_ptr<weld::Dialog> xQuery(xBuilder->weld_dialog("SetInsModeDialog"));
+        std::unique_ptr<weld::Image> xImage(xBuilder->weld_image("imSetInsMode"));
+        std::unique_ptr<weld::CheckButton> xCheckBox(xBuilder->weld_check_button("cbDontShowAgain"));
+
+        xImage->set_from_icon_name(RID_BMP_QUERYINSMODE);
+
+        const int nResult = xQuery->run();
+
+        std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Misc::QuerySetInsMode::set(xCheckBox->get_active(), xChanges);
+        xChanges->commit();
+
+        if ( nResult == static_cast<int>(RET_NO) )
+            return;
+    }
     m_bIns = bOn;
     SwCursorShell::SetOverwriteCursor( !m_bIns );
     const SfxBoolItem aTmp( SID_ATTR_INSERT, m_bIns );
