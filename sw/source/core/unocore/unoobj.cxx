@@ -2258,15 +2258,6 @@ SwXTextCursor::setPropertyValue(
         }
         rUnoCursor.SetSkipOverProtectSections(bSet);
     }
-    else if (rPropertyName == UNO_NAME_RESET_PARAGRAPH_LIST_ATTRIBUTES)
-    {
-        SwTextNode* pTextNode= GetPaM()->GetPointNode().GetTextNode();
-
-        if(pTextNode)
-        {
-            pTextNode->ResetAttr(RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END);
-        }
-    }
     else if (rPropertyName == UNO_NAME_NO_FORMAT_ATTR)
     {
         bool bSet(false);
