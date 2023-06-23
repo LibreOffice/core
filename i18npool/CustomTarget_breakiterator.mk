@@ -85,7 +85,8 @@ $(i18npool_BIDIR)/%_brk.c : $(i18npool_BIDIR)/%.brk $(call gb_ExternalExecutable
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),CCD)
 
 $(i18npool_BIDIR)/%.brk : $(SRCDIR)/i18npool/source/breakiterator/data/%.txt \
-		$(call gb_ExternalExecutable_get_dependencies,genbrk)
+		$(call gb_ExternalExecutable_get_dependencies,genbrk) \
+		| $(i18npool_BIDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),BRK,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),BRK)
 	$(call gb_Helper_abbreviate_dirs,\
