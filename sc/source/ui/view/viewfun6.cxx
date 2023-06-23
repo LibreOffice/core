@@ -541,9 +541,6 @@ void ScViewFunc::EditNote()
 
     if ( ScDrawView* pScDrawView = GetScDrawView() )
        pScDrawView->SyncForGrid( pCaption );
-    // #i33764# enable the resize handles before starting edit mode
-    if( FuPoor* pDraw = GetDrawFuncPtr() )
-        static_cast< FuSelection* >( pDraw )->ActivateNoteHandles( pCaption );
 
     // activate object (as in FuSelection::TestComment)
     GetViewData().GetDispatcher().Execute( SID_DRAW_NOTEEDIT, SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
