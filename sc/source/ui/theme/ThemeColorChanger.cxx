@@ -16,6 +16,8 @@
 #include <docmodel/theme/Theme.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/brushitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/borderline.hxx>
 
 #include <stlpool.hxx>
 #include <stlsheet.hxx>
@@ -35,6 +37,26 @@ ThemeColorChanger::~ThemeColorChanger() = default;
 
 namespace
 {
+bool changeBorderLine(editeng::SvxBorderLine* pBorderLine, model::ColorSet const& rColorSet)
+{
+    if (!pBorderLine)
+        return false;
+
+    model::ComplexColor const& rComplexColor = pBorderLine->getComplexColor();
+    if (rComplexColor.meType == model::ColorType::Scheme)
+    {
+        auto eThemeType = rComplexColor.meSchemeType;
+
+        if (eThemeType != model::ThemeColorType::Unknown)
+        {
+            Color aColor = rColorSet.resolveColor(rComplexColor);
+            pBorderLine->SetColor(aColor);
+            return true;
+        }
+    }
+    return false;
+}
+
 void changeCellItems(SfxItemSet& rItemSet, model::ColorSet const& rColorSet)
 {
     const SfxPoolItem* pItem = nullptr;
@@ -74,6 +96,20 @@ void changeCellItems(SfxItemSet& rItemSet, model::ColorSet const& rColorSet)
                 rItemSet.Put(aNewBrushItem);
             }
         }
+    }
+    if (rItemSet.HasItem(ATTR_BORDER, &pItem))
+    {
+        auto const* pBoxItem = static_cast<const SvxBoxItem*>(pItem);
+        SvxBoxItem rNewItem(*pBoxItem);
+        bool bChanged = false;
+
+        bChanged = changeBorderLine(rNewItem.GetBottom(), rColorSet) || bChanged;
+        bChanged = changeBorderLine(rNewItem.GetTop(), rColorSet) || bChanged;
+        bChanged = changeBorderLine(rNewItem.GetLeft(), rColorSet) || bChanged;
+        bChanged = changeBorderLine(rNewItem.GetRight(), rColorSet) || bChanged;
+
+        if (bChanged)
+            rItemSet.Put(rNewItem);
     }
 }
 } // end anonymous ns
