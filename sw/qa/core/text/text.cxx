@@ -18,6 +18,7 @@
 #include <com/sun/star/text/XDocumentIndex.hpp>
 
 #include <vcl/gdimtf.hxx>
+#include <vcl/metaact.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -1422,6 +1423,38 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testParaUpperMarginFlyIntersect)
     // - Actual  : 857 (~1000)
     // I.e. both upper and lower margin was taken into account.
     CPPUNIT_ASSERT_EQUAL(521, nHeight);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf129810)
+{
+    // Load the document, which embeds a CJK font.
+    createSwDoc("tdf129810.odt");
+
+    // Render the document to a metafile.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDocShell* pShell = pTextDoc->GetDocShell();
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    CPPUNIT_ASSERT(xMetaFile);
+
+    // Find the fist text array action
+    for (size_t nAction = 0; nAction < xMetaFile->GetActionSize(); nAction++)
+    {
+        auto pAction = xMetaFile->GetAction(nAction);
+        if (pAction->GetType() == MetaActionType::TEXTARRAY)
+        {
+            auto pTextArrayAction = static_cast<MetaTextArrayAction*>(pAction);
+            auto pDXArray = pTextArrayAction->GetDXArray();
+
+            // There should be 13 chars on the first line
+            CPPUNIT_ASSERT_GREATER(size_t(13), pDXArray.size());
+
+            // Assert we are using the expected width for uncompressed chars
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(720), pDXArray[0]);
+            // Assert we are using the expected width for compressed chars
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(500), pDXArray[6] - pDXArray[5]);
+            break;
+        }
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
