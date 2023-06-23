@@ -303,9 +303,9 @@ void PresenterController::UpdatePaneTitles()
         return;
 
     // Get placeholders and their values.
-    static const OUStringLiteral sCurrentSlideNumberPlaceholder (u"CURRENT_SLIDE_NUMBER");
-    static const OUStringLiteral sCurrentSlideNamePlaceholder (u"CURRENT_SLIDE_NAME");
-    static const OUStringLiteral sSlideCountPlaceholder (u"SLIDE_COUNT");
+    static constexpr OUStringLiteral sCurrentSlideNumberPlaceholder (u"CURRENT_SLIDE_NUMBER");
+    static constexpr OUStringLiteral sCurrentSlideNamePlaceholder (u"CURRENT_SLIDE_NAME");
+    static constexpr OUStringLiteral sSlideCountPlaceholder (u"SLIDE_COUNT");
 
     // Get string for slide count.
     OUString sSlideCount ("---");

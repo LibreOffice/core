@@ -155,7 +155,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
     m_aHeightArray.clear();
 
     sal_uInt16 nPos = 0; // Id is nPos+1
-    static const OUStringLiteral aFontHeightCommand( u".uno:FontHeight?FontHeight.Height:float=" );
+    static constexpr OUStringLiteral aFontHeightCommand( u".uno:FontHeight?FontHeight.Height:float=" );
 
     // first insert font size names (for simplified/traditional chinese)
     FontSizeNames   aFontSizeNames( Application::GetSettings().GetUILanguageTag().getLanguageType() );

@@ -718,7 +718,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             aURLObj.SetSmartURL( aCurOutputURL );
             OUString aPath = aURLObj.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
 
-            static const OUStringLiteral aDelim( u"/" );
+            static constexpr OUStringLiteral aDelim( u"/" );
             if (!aPath.isEmpty() && !aPath.endsWith(aDelim))
                 aPath += aDelim;
             if (bCurFileNameFromColumn)

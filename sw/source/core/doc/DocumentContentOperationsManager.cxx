@@ -1122,7 +1122,7 @@ namespace
         if( bRegExpRplc )
         {
             sal_Int32 nPos = 0;
-            static const OUStringLiteral sPara(u"\\n");
+            static constexpr OUStringLiteral sPara(u"\\n");
             for (;;)
             {
                 nPos = rStr.indexOf( sPara, nPos );

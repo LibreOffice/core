@@ -1837,35 +1837,35 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
     of.writeInt(nbOfCalendars);
     of.writeAsciiString(";\n\n");
 
-    of.writeAsciiString("static const OUStringLiteral nbOfDays = u\"");
+    of.writeAsciiString("static constexpr OUStringLiteral nbOfDays = u\"");
     for(i = 0; i < nbOfCalendars; i++) {
         of.writeAsciiString("\\x");
         of.writeHexInt(nbOfDays[i]);
     }
     of.writeAsciiString("\";\n");
 
-    of.writeAsciiString("static const OUStringLiteral nbOfMonths = u\"");
+    of.writeAsciiString("static constexpr OUStringLiteral nbOfMonths = u\"");
     for(i = 0; i < nbOfCalendars; i++) {
         of.writeAsciiString("\\x");
         of.writeHexInt(nbOfMonths[i]);
     }
     of.writeAsciiString("\";\n");
 
-    of.writeAsciiString("static const OUStringLiteral nbOfGenitiveMonths = u\"");
+    of.writeAsciiString("static constexpr OUStringLiteral nbOfGenitiveMonths = u\"");
     for(i = 0; i < nbOfCalendars; i++) {
         of.writeAsciiString("\\x");
         of.writeHexInt(nbOfGenitiveMonths[i]);
     }
     of.writeAsciiString("\";\n");
 
-    of.writeAsciiString("static const OUStringLiteral nbOfPartitiveMonths = u\"");
+    of.writeAsciiString("static constexpr OUStringLiteral nbOfPartitiveMonths = u\"");
     for(i = 0; i < nbOfCalendars; i++) {
         of.writeAsciiString("\\x");
         of.writeHexInt(nbOfPartitiveMonths[i]);
     }
     of.writeAsciiString("\";\n");
 
-    of.writeAsciiString("static const OUStringLiteral nbOfEras = u\"");
+    of.writeAsciiString("static constexpr OUStringLiteral nbOfEras = u\"");
     for(i = 0; i < nbOfCalendars; i++) {
         of.writeAsciiString("\\x");
         of.writeHexInt(nbOfEras[i]);

@@ -134,7 +134,7 @@ void LangSelectionStatusbarController::LangMenu(
 
     // add first few entries to main menu
     sal_Int16 nItemId = static_cast< sal_Int16 >(MID_LANG_SEL_1);
-    static const OUStringLiteral sAsterisk(u"*");  // multiple languages in current selection
+    static constexpr OUStringLiteral sAsterisk(u"*");  // multiple languages in current selection
     const OUString sNone( SvtLanguageTable::GetLanguageString( LANGUAGE_NONE ));
     std::map< sal_Int16, OUString > aLangMap;
     for (auto const& langItem : aLangItems)

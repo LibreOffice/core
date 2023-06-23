@@ -160,7 +160,7 @@ OUString ConvertDateTime_Impl( std::u16string_view rName,
 {
      Date aD(uDT);
      tools::Time aT(uDT);
-     static const OUStringLiteral aDelim( u", " );
+     static constexpr OUStringLiteral aDelim( u", " );
      OUString aStr = rWrapper.getDate( aD )
                    + aDelim
                    + rWrapper.getTime( aT );

@@ -118,7 +118,7 @@ Reference< XInterface > SAL_CALL UIControllerFactory::createInstanceWithArgument
     const Sequence< Any >&                  Arguments,
     const Reference< XComponentContext >& )
 {
-    static const OUStringLiteral aPropModuleName( u"ModuleIdentifier" );
+    static constexpr OUStringLiteral aPropModuleName( u"ModuleIdentifier" );
 
     OUString   aPropName;
     PropertyValue   aPropValue;

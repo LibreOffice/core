@@ -31,7 +31,7 @@ namespace unodevtools {
 bool readOption( OUString * pValue, const char * pOpt,
                      sal_uInt32 * pnIndex, std::u16string_view aArg)
 {
-    static const OUStringLiteral dash = u"-";
+    static constexpr OUStringLiteral dash = u"-";
     if(aArg.find(dash) != 0)
         return false;
 

@@ -4213,7 +4213,7 @@ void SvxCurrencyToolBoxControl::inner_GetCurrencySymbols(
     CollatorWrapper aCollator( ::comphelper::getProcessComponentContext() );
     aCollator.loadDefaultCollator( Application::GetSettings().GetLanguageTag().getLocale(), 0 );
 
-    static const OUStringLiteral aTwoSpace(u"  ");
+    static constexpr OUStringLiteral aTwoSpace(u"  ");
 
     // appending "long symbol" list
     for( sal_uInt16 i = 1; i < nCount; ++i )

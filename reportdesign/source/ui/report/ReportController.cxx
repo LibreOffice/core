@@ -3990,7 +3990,7 @@ void OReportController::checkChartEnabled()
             ::utl::OConfigurationTreeRoot::createWithComponentContext( m_xContext, "/org.openoffice.Office.ReportDesign" ) );
 
         bool bChartEnabled = false;
-        static const OUStringLiteral sPropertyName( u"UserData/Chart" );
+        static constexpr OUStringLiteral sPropertyName( u"UserData/Chart" );
         if ( aConfiguration.hasByHierarchicalName(sPropertyName) )
             aConfiguration.getNodeValue( sPropertyName ) >>= bChartEnabled;
         m_bChartEnabled = bChartEnabled;

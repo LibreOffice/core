@@ -886,7 +886,7 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
             // this property)
             bool bHasErrorBarRangesFromData = false;
             {
-                static const OUStringLiteral aErrorBarStylePropName( u"ErrorBarStyle");
+                static constexpr OUStringLiteral aErrorBarStylePropName( u"ErrorBarStyle");
                 uno::Any aErrorBarStyle(
                     SchXMLTools::getPropertyFromContext( aErrorBarStylePropName, pPropStyleContext, pStylesCtxt ));
                 if( aErrorBarStyle.hasValue())

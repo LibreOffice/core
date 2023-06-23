@@ -1074,7 +1074,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
     // check if any type is given
     // when no types are given then we have to return all tables e.g. TABLE
 
-    static const OUStringLiteral aTable(u"TABLE");
+    static constexpr OUStringLiteral aTable(u"TABLE");
 
     bool bTableFound = true;
     sal_Int32 nLength = types.getLength();

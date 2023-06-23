@@ -314,7 +314,7 @@ void lclGetFormulaFromStringList( OUString& rFmlaStr, std::u16string_view rStrin
     @return  true = Conversion successful. */
 bool lclGetStringListFromFormula( OUString& rStringList, const OUString& rFmlaStr, sal_Unicode cFmlaSep )
 {
-    static const OUStringLiteral aQuotes( u"\"\"" );
+    static constexpr OUStringLiteral aQuotes( u"\"\"" );
 
     rStringList.clear();
     bool bIsStringList = !rFmlaStr.isEmpty();

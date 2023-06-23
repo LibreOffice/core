@@ -58,7 +58,7 @@ void DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::Reference<
 
     xWriterHandler->setOutputStream( xOutStream );
 
-    static const OUStringLiteral aWhiteSpace( u" " );
+    static constexpr OUStringLiteral aWhiteSpace( u" " );
 
     // write the namespace
     rtl::Reference<::comphelper::AttributeList> pRootAttrList = new ::comphelper::AttributeList;

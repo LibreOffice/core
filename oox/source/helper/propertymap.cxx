@@ -909,7 +909,7 @@ void PropertyMap::dumpCode( const Reference< XPropertySet >& rXPropSet )
 {
     Reference< XPropertySetInfo > info = rXPropSet->getPropertySetInfo ();
     const Sequence< Property > props = info->getProperties ();
-    static const OUStringLiteral sType = u"Type";
+    static constexpr OUStringLiteral sType = u"Type";
 
     for (const Property& rProp : props) {
 

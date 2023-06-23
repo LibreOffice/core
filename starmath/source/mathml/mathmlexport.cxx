@@ -292,12 +292,12 @@ bool SmXMLExportWrapper::WriteThroughComponent(const Reference<embed::XStorage>&
     }
 
     uno::Reference<beans::XPropertySet> xSet(xStream, uno::UNO_QUERY);
-    static const OUStringLiteral sMediaType = u"MediaType";
-    static const OUStringLiteral sTextXml = u"text/xml";
+    static constexpr OUStringLiteral sMediaType = u"MediaType";
+    static constexpr OUStringLiteral sTextXml = u"text/xml";
     xSet->setPropertyValue(sMediaType, Any(OUString(sTextXml)));
 
     // all streams must be encrypted in encrypted document
-    static const OUStringLiteral sUseCommonStoragePasswordEncryption
+    static constexpr OUStringLiteral sUseCommonStoragePasswordEncryption
         = u"UseCommonStoragePasswordEncryption";
     xSet->setPropertyValue(sUseCommonStoragePasswordEncryption, Any(true));
 

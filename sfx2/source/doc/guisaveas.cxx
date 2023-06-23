@@ -726,13 +726,13 @@ sal_Int8 ModelData_Impl::CheckStateForSave()
     // check acceptable entries for media descriptor
     ::comphelper::SequenceAsHashMap aAcceptedArgs;
 
-    static const OUStringLiteral aVersionCommentString(u"VersionComment");
-    static const OUStringLiteral aAuthorString(u"Author");
-    static const OUStringLiteral aDontTerminateEdit(u"DontTerminateEdit");
-    static const OUStringLiteral aInteractionHandlerString(u"InteractionHandler");
-    static const OUStringLiteral aStatusIndicatorString(u"StatusIndicator");
-    static const OUStringLiteral aFailOnWarningString(u"FailOnWarning");
-    static const OUStringLiteral aNoFileSync(u"NoFileSync");
+    static constexpr OUStringLiteral aVersionCommentString(u"VersionComment");
+    static constexpr OUStringLiteral aAuthorString(u"Author");
+    static constexpr OUStringLiteral aDontTerminateEdit(u"DontTerminateEdit");
+    static constexpr OUStringLiteral aInteractionHandlerString(u"InteractionHandler");
+    static constexpr OUStringLiteral aStatusIndicatorString(u"StatusIndicator");
+    static constexpr OUStringLiteral aFailOnWarningString(u"FailOnWarning");
+    static constexpr OUStringLiteral aNoFileSync(u"NoFileSync");
 
     if ( GetMediaDescr().find( aVersionCommentString ) != GetMediaDescr().end() )
         aAcceptedArgs[ aVersionCommentString ] = GetMediaDescr()[ aVersionCommentString ];

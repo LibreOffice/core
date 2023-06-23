@@ -807,7 +807,7 @@ void SwGlossaryDlg::Init()
     const OUString sSelStr(::GetCurrGlosGroup().getToken(0, GLOS_DELIM));
     const sal_Int32 nSelPath = o3tl::toInt32(o3tl::getToken(::GetCurrGlosGroup(), 1, GLOS_DELIM));
     // #i66304# - "My AutoText" comes from mytexts.bau, but should be translated
-    static const OUStringLiteral sMyAutoTextEnglish(u"My AutoText");
+    static constexpr OUStringLiteral sMyAutoTextEnglish(u"My AutoText");
     const OUString sMyAutoTextTranslated(SwResId(STR_MY_AUTOTEXT));
     for(size_t nId = 0; nId < nCnt; ++nId )
     {

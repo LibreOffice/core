@@ -1702,7 +1702,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf87533_bidi)
 {
     createSwDoc("tdf87533_bidi.docx");
     // "w:bidi" (specified inside Default paragraph properties) should not be ignored
-    static const OUStringLiteral writingMode = u"WritingMode"; //getPropertyName(PROP_WRITING_MODE);
+    static constexpr OUStringLiteral writingMode = u"WritingMode"; //getPropertyName(PROP_WRITING_MODE);
 
     // check: "Default Style" master-style has RTL
     {

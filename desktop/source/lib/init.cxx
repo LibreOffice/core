@@ -5945,7 +5945,7 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
     {
         boost::property_tree::ptree aChild;
         boost::property_tree::ptree aChildren;
-        static const OUStringLiteral sPageStyles(u"PageStyles");
+        static constexpr OUStringLiteral sPageStyles(u"PageStyles");
         uno::Reference<beans::XPropertySet> xProperty;
         uno::Reference<container::XNameContainer> xContainer;
 

@@ -3081,7 +3081,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
         case SID_RECORDMACRO :
         {
             // try to find any active recorder on this frame
-            static const OUStringLiteral sProperty(u"DispatchRecorderSupplier");
+            static constexpr OUStringLiteral sProperty(u"DispatchRecorderSupplier");
             css::uno::Reference< css::frame::XFrame > xFrame =
                     GetFrame().GetFrameInterface();
 
@@ -3143,7 +3143,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
         {
             if ( auto xLayoutManager = getLayoutManager(GetFrame()) )
             {
-                static const OUStringLiteral aStatusbarResString( u"private:resource/statusbar/statusbar" );
+                static constexpr OUStringLiteral aStatusbarResString( u"private:resource/statusbar/statusbar" );
                 // Evaluate parameter.
                 const SfxBoolItem* pShowItem = rReq.GetArg<SfxBoolItem>(rReq.GetSlot());
                 bool bShow( true );

@@ -79,17 +79,17 @@ void TypeDetectionExporter::doExport( const Reference< XOutputStream >& xOS,  co
 {
     try
     {
-        static const OUStringLiteral sComponentData       ( u"oor:component-data" );
-        static const OUStringLiteral sNode                ( u"node" );
-        static const OUStringLiteral sName                ( u"oor:name" );
-        static const OUStringLiteral sWhiteSpace          ( u" " );
-        static const OUStringLiteral sUIName              ( u"UIName" );
-        static const OUStringLiteral sComma               ( u"," );
-        static const OUStringLiteral sDelim               ( u";" );
-        static const OUStringLiteral sData                ( u"Data" );
-        static const OUStringLiteral sDocTypePrefix       ( u"doctype:" );
-        static const OUStringLiteral sFilterAdaptorService( u"com.sun.star.comp.Writer.XmlFilterAdaptor" );
-        static const OUStringLiteral sXSLTFilterService   ( u"com.sun.star.documentconversion.XSLTFilter" );
+        static constexpr OUStringLiteral sComponentData       ( u"oor:component-data" );
+        static constexpr OUStringLiteral sNode                ( u"node" );
+        static constexpr OUStringLiteral sName                ( u"oor:name" );
+        static constexpr OUStringLiteral sWhiteSpace          ( u" " );
+        static constexpr OUStringLiteral sUIName              ( u"UIName" );
+        static constexpr OUStringLiteral sComma               ( u"," );
+        static constexpr OUStringLiteral sDelim               ( u";" );
+        static constexpr OUStringLiteral sData                ( u"Data" );
+        static constexpr OUStringLiteral sDocTypePrefix       ( u"doctype:" );
+        static constexpr OUStringLiteral sFilterAdaptorService( u"com.sun.star.comp.Writer.XmlFilterAdaptor" );
+        static constexpr OUStringLiteral sXSLTFilterService   ( u"com.sun.star.documentconversion.XSLTFilter" );
 
 
         // set up sax writer and connect to given output stream
@@ -206,9 +206,9 @@ void TypeDetectionExporter::addProperty( const Reference< XWriter >& xHandler, c
 {
     try
     {
-        static const OUStringLiteral sProp( u"prop" );
-        static const OUStringLiteral sValue( u"value" );
-        static const OUStringLiteral sWhiteSpace          ( u" " );
+        static constexpr OUStringLiteral sProp( u"prop" );
+        static constexpr OUStringLiteral sValue( u"value" );
+        static constexpr OUStringLiteral sWhiteSpace          ( u" " );
 
         rtl::Reference<::comphelper::AttributeList>pAttrList = new ::comphelper::AttributeList;
         pAttrList->AddAttribute ( "oor:name", rName );
@@ -233,9 +233,9 @@ void TypeDetectionExporter::addLocaleProperty( const Reference< XWriter >& xHand
 {
     try
     {
-        static const OUStringLiteral sProp( u"prop" );
-        static const OUStringLiteral sValue( u"value" );
-        static const OUStringLiteral sWhiteSpace          ( u" " );
+        static constexpr OUStringLiteral sProp( u"prop" );
+        static constexpr OUStringLiteral sValue( u"value" );
+        static constexpr OUStringLiteral sWhiteSpace          ( u" " );
 
         rtl::Reference<::comphelper::AttributeList> pAttrList = new ::comphelper::AttributeList;
         pAttrList->AddAttribute ( "oor:name", rName );

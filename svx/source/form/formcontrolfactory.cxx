@@ -433,7 +433,7 @@ namespace svxform
                 case FormComponentType::IMAGEBUTTON:
                 case FormComponentType::IMAGECONTROL:
                 {
-                    static const OUStringLiteral sScaleModeProperty( u"ScaleMode" );
+                    static constexpr OUStringLiteral sScaleModeProperty( u"ScaleMode" );
                     if ( xPSI->hasPropertyByName( sScaleModeProperty ) )
                         _rxControlModel->setPropertyValue( sScaleModeProperty, Any( ImageScaleMode::ISOTROPIC ) );
                 }

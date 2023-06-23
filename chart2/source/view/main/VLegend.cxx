@@ -421,7 +421,7 @@ awt::Size lcl_placeLegendEntries(
                     try
                     {
                         OUString aLabelString = rEntries[0].xLabel->getString();
-                        static const OUStringLiteral sDots = u"...";
+                        static constexpr OUStringLiteral sDots = u"...";
                         for (sal_Int32 nNewLen = aLabelString.getLength() - sDots.getLength(); nNewLen > 0; )
                         {
                             OUString aNewLabel = aLabelString.subView(0, nNewLen) + sDots;

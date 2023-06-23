@@ -307,14 +307,14 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
         xPropSet->setPropertyValue( sContourPolyPolygon, Any(aPointSequenceSequence) );
     }
 
-    static const OUStringLiteral sIsPixelContour(u"IsPixelContour");
+    static constexpr OUStringLiteral sIsPixelContour(u"IsPixelContour");
 
     if( xPropSetInfo->hasPropertyByName( sIsPixelContour ) )
     {
         xPropSet->setPropertyValue( sIsPixelContour, Any(bPixelWidth) );
     }
 
-    static const OUStringLiteral sIsAutomaticContour(u"IsAutomaticContour");
+    static constexpr OUStringLiteral sIsAutomaticContour(u"IsAutomaticContour");
 
     if( xPropSetInfo->hasPropertyByName( sIsAutomaticContour ) )
     {

@@ -2195,7 +2195,7 @@ void SdXMLPageShapeContext::startFastElement (sal_Int32 nElement,
     if(xPropSet.is())
     {
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
-        static const OUStringLiteral aPageNumberStr(u"PageNumber");
+        static constexpr OUStringLiteral aPageNumberStr(u"PageNumber");
         if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(aPageNumberStr))
             xPropSet->setPropertyValue(aPageNumberStr, uno::Any( mnPageNumber ));
     }
@@ -2627,7 +2627,7 @@ void SdXMLObjectShapeContext::startFastElement (sal_Int32 /*nElement*/,
 
             if ( GetImport().IsPackageURL( maHref ) )
             {
-                static const OUStringLiteral  sURL( u"vnd.sun.star.EmbeddedObject:" );
+                static constexpr OUStringLiteral  sURL( u"vnd.sun.star.EmbeddedObject:" );
 
                 if ( aPersistName.startsWith( sURL ) )
                     aPersistName = aPersistName.copy( sURL.getLength() );
@@ -2675,7 +2675,7 @@ void SdXMLObjectShapeContext::endFastElement(sal_Int32 nElement)
     if( mxBase64Stream.is() )
     {
         OUString aPersistName( GetImport().ResolveEmbeddedObjectURLFromBase64() );
-        static const OUStringLiteral  sURL( u"vnd.sun.star.EmbeddedObject:" );
+        static constexpr OUStringLiteral  sURL( u"vnd.sun.star.EmbeddedObject:" );
 
         aPersistName = aPersistName.copy( sURL.getLength() );
 
@@ -2991,7 +2991,7 @@ void SdXMLPluginShapeContext::endFastElement(sal_Int32 nElement)
     {
         if ( maSize.Width && maSize.Height )
         {
-            static const OUStringLiteral sVisibleArea(  u"VisibleArea"  );
+            static constexpr OUStringLiteral sVisibleArea(  u"VisibleArea"  );
             uno::Reference< beans::XPropertySetInfo > aXPropSetInfo( xProps->getPropertySetInfo() );
             if ( !aXPropSetInfo.is() || aXPropSetInfo->hasPropertyByName( sVisibleArea ) )
             {
@@ -3671,7 +3671,7 @@ void SdXMLCustomShapeContext::endFastElement(sal_Int32 nElement)
 
         if (aScale.getX() < 0.0)
         {
-            static const OUStringLiteral sName(u"MirroredX");
+            static constexpr OUStringLiteral sName(u"MirroredX");
             //fdo#84043 Merge, if property exists, otherwise append it
             auto aI = std::find_if(maCustomShapeGeometry.begin(), maCustomShapeGeometry.end(),
                 [](beans::PropertyValue& rValue) { return rValue.Name == sName; });
@@ -3697,7 +3697,7 @@ void SdXMLCustomShapeContext::endFastElement(sal_Int32 nElement)
 
         if (aScale.getY() < 0.0)
         {
-            static const OUStringLiteral sName(u"MirroredY");
+            static constexpr OUStringLiteral sName(u"MirroredY");
             //fdo#84043 Merge, if property exists, otherwise append it
             auto aI = std::find_if(maCustomShapeGeometry.begin(), maCustomShapeGeometry.end(),
                 [](beans::PropertyValue& rValue) { return rValue.Name == sName; });

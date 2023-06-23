@@ -356,7 +356,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
     if (aLocaleStr.isEmpty())
         aLocaleStr = officecfg::System::L10N::Locale::get();
 
-    static const OUStringLiteral EN_US = u"en-US";
+    static constexpr OUStringLiteral EN_US = u"en-US";
     if (aLocaleStr.isEmpty())
         aLocaleStr = EN_US;
 

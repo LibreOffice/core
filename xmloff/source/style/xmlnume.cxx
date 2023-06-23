@@ -798,7 +798,7 @@ void SvxXMLNumRuleExport::exportStyles( bool bUsed, bool bExportChapterNumbering
     if( !xFamilies.is() )
         return;
 
-    static const OUStringLiteral aNumberStyleName( u"NumberingStyles" );
+    static constexpr OUStringLiteral aNumberStyleName( u"NumberingStyles" );
 
     Reference< XIndexAccess > xStyles;
     if( !xFamilies->hasByName( aNumberStyleName ) )

@@ -2617,9 +2617,9 @@ void SmXMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfP
     if (!xInfo.is())
         return;
 
-    static const OUStringLiteral sFormula(u"Formula");
-    static const OUStringLiteral sBasicLibraries(u"BasicLibraries");
-    static const OUStringLiteral sDialogLibraries(u"DialogLibraries");
+    static constexpr OUStringLiteral sFormula(u"Formula");
+    static constexpr OUStringLiteral sBasicLibraries(u"BasicLibraries");
+    static constexpr OUStringLiteral sDialogLibraries(u"DialogLibraries");
     for (const PropertyValue& rValue : aConfProps)
     {
         if (rValue.Name != sFormula && rValue.Name != sBasicLibraries

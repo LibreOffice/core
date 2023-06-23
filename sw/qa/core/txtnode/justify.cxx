@@ -77,7 +77,7 @@ template <typename Function> void CharWidthArray::InvokeWithKernArray(Function f
 CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSpaceDistributionHalfSpace)
 {
     // Related to: tdf#149017
-    static const OUStringLiteral aText = u"ne del pro";
+    static constexpr OUStringLiteral aText = u"ne del pro";
     CharWidthArray aActual{ 720, 639, 360, 720, 639, 400, 360, 720, 480, 720 };
     CharWidthArray aExpected{ 720, 851, 573, 720, 639, 612, 573, 720, 480, 720 };
 
@@ -89,7 +89,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSpaceDistributionHalfSpace)
 CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSpaceDistributionNoHalfSpace)
 {
     // Related to: tdf#149017
-    static const OUStringLiteral aText = u"ne del pro";
+    static constexpr OUStringLiteral aText = u"ne del pro";
     CharWidthArray aActual{ 720, 639, 360, 720, 639, 400, 360, 720, 480, 720 };
     CharWidthArray aExpected{ 720, 639, 785, 720, 639, 400, 785, 720, 480, 720 };
 
@@ -101,7 +101,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSpaceDistributionNoHalfSpace)
 CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSpaceDistributionUnicodeIVS)
 {
     // Related to: tdf#148594
-    static const OUStringLiteral aText
+    static constexpr OUStringLiteral aText
         = u"\u9B54\u9AD8\u4E00\U000E01E1\u4E08\u4F55\u9B54\u9AD8\u4E00\U000E01E1";
     CharWidthArray aActual{ 1600, 1600, 1600, 0, 0, 1600, 1600, 1600, 1600, 1600, 0, 0 };
     CharWidthArray aExpected{ 1800, 1800, 1800, 0, 0, 1800, 1800, 1800, 1800, 1800, 0, 0 };
@@ -114,7 +114,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSnapToGrid)
 {
     tools::Long nDelta = 0;
     // "曰〈道高一尺化太平〉云云"
-    static const OUStringLiteral aText
+    static constexpr OUStringLiteral aText
         = u"\u66f0\u3008\u9053\u9ad8\u4e00\u5c3a\u5316\u592a\u5e73\u3009\u4e91\u4e91";
     CharWidthArray aActual{ 880, 880, 880, 880, 880, 880, 880, 880, 880, 880, 880, 880 };
     CharWidthArray aExpected{
@@ -131,7 +131,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSnapToGridMixWidth)
     // Related to: tdf#149365
     tools::Long nDelta = 0;
     // "中中中ｹｺｻｼｽｾｿｶｹｺ" ( mixing fullwidth ideograph and half-width kana )
-    static const OUStringLiteral aText
+    static constexpr OUStringLiteral aText
         = u"\u4e2d\u4e2d\u4e2d\uff79\uff7a\uff7b\uff7c\uff7d\uff7e\uff7f\uff76\uff79\uff7a";
     CharWidthArray aActual{ 640, 640, 640, 320, 320, 320, 320, 320, 320, 320, 320, 320, 320 };
     CharWidthArray aExpected{ 800, 800, 760, 400, 400, 400, 400, 400, 400, 400, 400, 400, 360 };
@@ -145,7 +145,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSnapToGridIVS)
 {
     // Related to: tdf#149214
     tools::Long nDelta = 0;
-    static const OUStringLiteral aText = u"\u9053\u9ad8\u4e00\U000E01E2\u5c3a\u5316";
+    static constexpr OUStringLiteral aText = u"\u9053\u9ad8\u4e00\U000E01E2\u5c3a\u5316";
 
     CharWidthArray aActual{ 800, 800, 800, 0, 0, 800, 800 };
     CharWidthArray aExpected{ 800, 800, 800, 0, 0, 800, 800 };

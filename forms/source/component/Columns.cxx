@@ -83,8 +83,8 @@ const css::uno::Sequence<OUString>& getColumnTypes()
 
 sal_Int32 getColumnTypeByModelName(const OUString& aModelName)
 {
-    static const OUStringLiteral aModelPrefix (u"com.sun.star.form.component.");
-    static const OUStringLiteral aCompatibleModelPrefix (u"stardiv.one.form.component.");
+    static constexpr OUStringLiteral aModelPrefix (u"com.sun.star.form.component.");
+    static constexpr OUStringLiteral aCompatibleModelPrefix (u"stardiv.one.form.component.");
 
     sal_Int32 nTypeId = -1;
     if (aModelName == FRM_COMPONENT_EDIT)

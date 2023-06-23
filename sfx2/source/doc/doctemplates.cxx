@@ -1950,7 +1950,7 @@ sal_Bool SfxDocTplService::addTemplate( const OUString& rGroupName,
         Content aResultContent;
         if ( Content::create( aNewTemplateTargetURL, xEnv, comphelper::getProcessComponentContext(), aResultContent ) )
         {
-            static const OUStringLiteral aPropertyName( u"IsReadOnly" );
+            static constexpr OUStringLiteral aPropertyName( u"IsReadOnly" );
             uno::Any aProperty;
             bool bReadOnly = false;
             if ( getProperty( aResultContent, aPropertyName, aProperty ) && ( aProperty >>= bReadOnly ) && bReadOnly )

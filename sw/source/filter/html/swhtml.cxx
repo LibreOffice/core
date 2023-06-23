@@ -169,7 +169,7 @@ OUString HTMLReader::GetTemplateName(SwDoc& rDoc) const
         // HTML import into Writer, avoid loading the Writer/Web template.
         return OUString();
 
-    static const OUStringLiteral sTemplateWithoutExt(u"internal/html");
+    static constexpr OUStringLiteral sTemplateWithoutExt(u"internal/html");
     SvtPathOptions aPathOpt;
 
     // first search for OpenDocument Writer/Web template
@@ -5605,7 +5605,7 @@ void HTMLReader::SetupFilterOptions()
         return;
 
     OUString aFilterOptions = pItem->GetValue();
-    static const OUStringLiteral aXhtmlNsKey(u"xhtmlns=");
+    static constexpr OUStringLiteral aXhtmlNsKey(u"xhtmlns=");
     if (aFilterOptions.startsWith(aXhtmlNsKey))
     {
         OUString aNamespace = aFilterOptions.copy(aXhtmlNsKey.getLength());

@@ -215,7 +215,7 @@ XMLPageExport::XMLPageExport(SvXMLExport & rExp)
                 "getStyleFamilies() from XModel failed for export!" );
     if( xFamilies.is() )
     {
-        static const OUStringLiteral aPageStyleName(u"PageStyles");
+        static constexpr OUStringLiteral aPageStyleName(u"PageStyles");
 
         if( xFamilies->hasByName( aPageStyleName ) )
         {

@@ -419,7 +419,7 @@ void PieChartTypeTemplate::applyStyle2(
 
         if( nSeriesIndex == nOuterSeriesIndex ) //@todo in future this will depend on Orientation of the radius axis scale
         {
-            static const OUStringLiteral aOffsetPropName( u"Offset" );
+            static constexpr OUStringLiteral aOffsetPropName( u"Offset" );
             // get offset mode
             chart2::PieChartOffsetMode ePieOffsetMode;
             getFastPropertyValue( PROP_PIE_TEMPLATE_OFFSET_MODE ) >>= ePieOffsetMode;

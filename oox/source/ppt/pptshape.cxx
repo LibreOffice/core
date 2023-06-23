@@ -182,7 +182,7 @@ void PPTShape::addShape(
         if (sServiceName != "com.sun.star.drawing.GraphicObjectShape" &&
             sServiceName != "com.sun.star.drawing.OLE2Shape")
         {
-            static const OUStringLiteral sOutlinerShapeService(u"com.sun.star.presentation.OutlinerShape");
+            static constexpr OUStringLiteral sOutlinerShapeService(u"com.sun.star.presentation.OutlinerShape");
             SAL_INFO("oox.ppt","has master: " << std::hex << rSlidePersist.getMasterPersist().get());
             switch (mnSubType)
             {

@@ -1413,7 +1413,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 if(mnRotation)
                 {
                     uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
-                    static const OUStringLiteral aGrabBagPropName = u"FrameInteropGrabBag";
+                    static constexpr OUStringLiteral aGrabBagPropName = u"FrameInteropGrabBag";
                     uno::Sequence<beans::PropertyValue> aGrabBag;
                     xPropertySet->getPropertyValue(aGrabBagPropName) >>= aGrabBag;
                     beans::PropertyValue aPair(comphelper::makePropertyValue("mso-rotation-angle",

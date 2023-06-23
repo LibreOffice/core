@@ -282,7 +282,7 @@ void SAL_CALL GeometryHandler::inspect( const uno::Reference< uno::XInterface > 
         const uno::Reference< container::XNameContainer > xObjectAsContainer( _rxInspectee, uno::UNO_QUERY );
         m_xReportComponent.set( xObjectAsContainer->getByName("ReportComponent"), uno::UNO_QUERY );
 
-        static const OUStringLiteral sRowSet(u"RowSet");
+        static constexpr OUStringLiteral sRowSet(u"RowSet");
         if ( xObjectAsContainer->hasByName( sRowSet ) )
         {
             const uno::Any aRowSet( xObjectAsContainer->getByName(sRowSet) );
@@ -2093,8 +2093,8 @@ void GeometryHandler::impl_createFunction(const OUString& _sFunctionName,std::u1
     m_xFunction.set(report::Function::create(m_xContext));
     m_xFunction->setName( _sFunctionName );
 
-    static const OUStringLiteral sPlaceHolder1(u"%Column");
-    static const OUStringLiteral sPlaceHolder2(u"%FunctionName");
+    static constexpr OUStringLiteral sPlaceHolder1(u"%Column");
+    static constexpr OUStringLiteral sPlaceHolder2(u"%FunctionName");
     OUString sFormula(_aFunction.m_sFormula);
     sFormula = sFormula.replaceAll(sPlaceHolder1,_sDataField);
     sFormula = sFormula.replaceAll(sPlaceHolder2,_sFunctionName);

@@ -705,8 +705,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf38778)
     loadAndSave("tdf38778_properties_in_run_for_field.doc");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
-    static const OUStringLiteral psz(u"20");
-    static const OUStringLiteral pszCs(u"20");
+    static constexpr OUStringLiteral psz(u"20");
+    static constexpr OUStringLiteral pszCs(u"20");
 
     // w:fldCharType="begin"
     assertXPath(pXmlDoc,        "/w:document/w:body/w:p[1]/w:r[3]/w:rPr/w:sz",   "val", psz);

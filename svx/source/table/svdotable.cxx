@@ -263,7 +263,7 @@ void SdrTableObjImpl::CropTableModelToSelection(const CellPos& rStart, const Cel
 
     // copy row heights
     Reference< XTableRows > xNewRows(mxTable->getRows(), css::uno::UNO_SET_THROW );
-    static const OUStringLiteral sHeight( u"Height" );
+    static constexpr OUStringLiteral sHeight( u"Height" );
     for( sal_Int32 nRow = 0; nRow < nRows; ++nRow )
     {
         Reference< XPropertySet > xNewSet( xNewRows->getByIndex( nRow ), UNO_QUERY_THROW );
@@ -272,7 +272,7 @@ void SdrTableObjImpl::CropTableModelToSelection(const CellPos& rStart, const Cel
 
     // copy column widths
     Reference< XTableColumns > xNewColumns( mxTable->getColumns(), css::uno::UNO_SET_THROW );
-    static const OUStringLiteral sWidth( u"Width" );
+    static constexpr OUStringLiteral sWidth( u"Width" );
     for( sal_Int32 nCol = 0; nCol < nColumns; ++nCol )
     {
         Reference< XPropertySet > xNewSet( xNewColumns->getByIndex( nCol ), UNO_QUERY_THROW );
@@ -537,7 +537,7 @@ void SdrTableObjImpl::DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset 
 
     try
     {
-        static const OUStringLiteral sSize( u"Size" );
+        static constexpr OUStringLiteral sSize( u"Size" );
         if( mbHorizontal )
         {
             if (nEdge <= getRowCount())

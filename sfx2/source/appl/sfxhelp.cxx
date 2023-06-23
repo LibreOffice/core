@@ -207,7 +207,7 @@ static OUString const & HelpLocaleString()
     if (!aLocaleStr.isEmpty())
         return aLocaleStr;
 
-    static const OUStringLiteral aEnglish(u"en-US");
+    static constexpr OUStringLiteral aEnglish(u"en-US");
     // detect installed locale
     aLocaleStr = utl::ConfigManager::getUILocale();
 

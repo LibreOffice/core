@@ -183,7 +183,7 @@ void SmartTagMenuController::FillMenu()
     sal_Int16 nItemCount = m_xPopupMenu->getItemCount();
     if (nItemCount > 0)
     {
-        static const OUStringLiteral aCommand = u".uno:AutoCorrectDlg?OpenSmartTag:bool=true";
+        static constexpr OUStringLiteral aCommand = u".uno:AutoCorrectDlg?OpenSmartTag:bool=true";
         m_xPopupMenu->insertSeparator(nItemCount++);
         auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aCommand, m_aModuleName);
         m_xPopupMenu->insertItem(nMenuId, vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties),

@@ -91,7 +91,7 @@ sal_Int32 lcl_getBuildIDFromGenerator( std::u16string_view rGenerator )
 {
     //returns -1 if nothing found
     sal_Int32 nBuildId = -1;
-    static const OUStringLiteral sBuildCompare(  u"$Build-"  );
+    static constexpr OUStringLiteral sBuildCompare(  u"$Build-"  );
     size_t nBegin = rGenerator.find( sBuildCompare );
     if( nBegin != std::u16string_view::npos )
     {
@@ -632,7 +632,7 @@ void setXMLRangePropertyAtDataSequence(
         return;
     try
     {
-        static const OUStringLiteral aXMLRangePropName(  u"CachedXMLRange" );
+        static constexpr OUStringLiteral aXMLRangePropName(  u"CachedXMLRange" );
         Reference< beans::XPropertySet > xProp( xDataSequence, uno::UNO_QUERY_THROW );
         Reference< beans::XPropertySetInfo > xInfo( xProp->getPropertySetInfo());
         if( xInfo.is() && xInfo->hasPropertyByName( aXMLRangePropName ))
@@ -654,7 +654,7 @@ bool getXMLRangePropertyFromDataSequence(
     {
         try
         {
-            static const OUStringLiteral aXMLRangePropName(  u"CachedXMLRange" );
+            static constexpr OUStringLiteral aXMLRangePropName(  u"CachedXMLRange" );
             Reference< beans::XPropertySet > xProp( xDataSequence, uno::UNO_QUERY_THROW );
             Reference< beans::XPropertySetInfo > xInfo( xProp->getPropertySetInfo());
             bResult =
@@ -840,7 +840,7 @@ Reference< chart2::data::XDataProvider > getDataProviderFromParent( const Refere
         Reference< lang::XMultiServiceFactory > xFact( xChild->getParent(), uno::UNO_QUERY );
         if( xFact.is() )
         {
-            static const OUStringLiteral aDataProviderServiceName( u"com.sun.star.chart2.data.DataProvider");
+            static constexpr OUStringLiteral aDataProviderServiceName( u"com.sun.star.chart2.data.DataProvider");
             const uno::Sequence< OUString > aServiceNames( xFact->getAvailableServiceNames());
             const OUString * pBegin = aServiceNames.getConstArray();
             const OUString * pEnd = pBegin + aServiceNames.getLength();

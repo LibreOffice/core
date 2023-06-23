@@ -103,7 +103,7 @@ static void lcl_ResizeTextShapeToFitAvailableSpace( SvxShapeText& rShape2DText,
     if( !nAvgCharWidth )
         return;
 
-    static const OUStringLiteral sDots = u"...";
+    static constexpr OUStringLiteral sDots = u"...";
     const sal_Int32 nCharsToRemove = ( nTextSize - nMaxLabelsSize ) / nAvgCharWidth + 1;
     sal_Int32 nNewLen = rLabel.size() - nCharsToRemove - sDots.getLength();
     // Prevent from showing only dots

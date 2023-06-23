@@ -155,9 +155,9 @@ void FontworkHelpers::putCustomShapeIntoTextPathMode(
         = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(aGeomPropSeq);
 
     // Reset old properties
-    static const OUStringLiteral sTextPath(u"TextPath");
-    static const OUStringLiteral sAdjustmentValues(u"AdjustmentValues");
-    static const OUStringLiteral sPresetTextWarp(u"PresetTextWarp");
+    static constexpr OUStringLiteral sTextPath(u"TextPath");
+    static constexpr OUStringLiteral sAdjustmentValues(u"AdjustmentValues");
+    static constexpr OUStringLiteral sPresetTextWarp(u"PresetTextWarp");
 
     resetPropertyValueInVec(aGeomPropVec, u"CoordinateSize");
     resetPropertyValueInVec(aGeomPropVec, u"Equations");

@@ -168,11 +168,11 @@ void ZipPackage::parseManifest()
         return;
 
     bool bManifestParsed = false;
-    static const OUStringLiteral sMeta (u"META-INF");
+    static constexpr OUStringLiteral sMeta (u"META-INF");
     if ( m_xRootFolder->hasByName( sMeta ) )
     {
         try {
-            static const OUStringLiteral sManifest (u"manifest.xml");
+            static constexpr OUStringLiteral sManifest (u"manifest.xml");
             Any aAny = m_xRootFolder->getByName( sMeta );
             uno::Reference< XNameContainer > xMetaInfFolder;
             aAny >>= xMetaInfFolder;
@@ -185,19 +185,19 @@ void ZipPackage::parseManifest()
                 {
                     uno::Reference < XManifestReader > xReader = ManifestReader::create( m_xContext );
 
-                    static const OUStringLiteral sPropFullPath (u"FullPath");
-                    static const OUStringLiteral sPropVersion (u"Version");
-                    static const OUStringLiteral sPropMediaType (u"MediaType");
-                    static const OUStringLiteral sPropInitialisationVector (u"InitialisationVector");
-                    static const OUStringLiteral sPropSalt (u"Salt");
-                    static const OUStringLiteral sPropIterationCount (u"IterationCount");
-                    static const OUStringLiteral sPropSize (u"Size");
-                    static const OUStringLiteral sPropDigest (u"Digest");
-                    static const OUStringLiteral sPropDerivedKeySize (u"DerivedKeySize");
-                    static const OUStringLiteral sPropDigestAlgorithm (u"DigestAlgorithm");
-                    static const OUStringLiteral sPropEncryptionAlgorithm (u"EncryptionAlgorithm");
-                    static const OUStringLiteral sPropStartKeyAlgorithm (u"StartKeyAlgorithm");
-                    static const OUStringLiteral sKeyInfo (u"KeyInfo");
+                    static constexpr OUStringLiteral sPropFullPath (u"FullPath");
+                    static constexpr OUStringLiteral sPropVersion (u"Version");
+                    static constexpr OUStringLiteral sPropMediaType (u"MediaType");
+                    static constexpr OUStringLiteral sPropInitialisationVector (u"InitialisationVector");
+                    static constexpr OUStringLiteral sPropSalt (u"Salt");
+                    static constexpr OUStringLiteral sPropIterationCount (u"IterationCount");
+                    static constexpr OUStringLiteral sPropSize (u"Size");
+                    static constexpr OUStringLiteral sPropDigest (u"Digest");
+                    static constexpr OUStringLiteral sPropDerivedKeySize (u"DerivedKeySize");
+                    static constexpr OUStringLiteral sPropDigestAlgorithm (u"DigestAlgorithm");
+                    static constexpr OUStringLiteral sPropEncryptionAlgorithm (u"EncryptionAlgorithm");
+                    static constexpr OUStringLiteral sPropStartKeyAlgorithm (u"StartKeyAlgorithm");
+                    static constexpr OUStringLiteral sKeyInfo (u"KeyInfo");
 
                     const uno::Sequence < uno::Sequence < PropertyValue > > aManifestSequence = xReader->readManifestSequence ( xSink->getInputStream() );
                     const Any *pKeyInfo = nullptr;
@@ -370,7 +370,7 @@ void ZipPackage::parseManifest()
         throw ZipIOException(
             THROW_WHERE "Could not parse manifest.xml" );
 
-    static const OUStringLiteral sMimetype (u"mimetype");
+    static constexpr OUStringLiteral sMimetype (u"mimetype");
     if ( m_xRootFolder->hasByName( sMimetype ) )
     {
         // get mediatype from the "mimetype" stream
@@ -447,7 +447,7 @@ void ZipPackage::parseContentType()
         return;
 
     try {
-        static const OUStringLiteral aContentTypes(u"[Content_Types].xml");
+        static constexpr OUStringLiteral aContentTypes(u"[Content_Types].xml");
         // the content type must exist in OFOPXML format!
         if ( !m_xRootFolder->hasByName( aContentTypes ) )
             throw io::IOException(THROW_WHERE "Wrong format!" );
@@ -1001,7 +1001,7 @@ uno::Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( c
 
 void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
 {
-    static const OUStringLiteral sMime (u"mimetype");
+    static constexpr OUStringLiteral sMime (u"mimetype");
     if ( m_xRootFolder->hasByName( sMime ) )
         m_xRootFolder->removeByName( sMime );
 
@@ -1214,7 +1214,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
 
             if ( m_xRootFolder->hasByName( sMeta ) )
             {
-                static const OUStringLiteral sManifest (u"manifest.xml");
+                static constexpr OUStringLiteral sManifest (u"manifest.xml");
 
                 uno::Reference< XNameContainer > xMetaInfFolder;
                 Any aAny = m_xRootFolder->getByName( sMeta );

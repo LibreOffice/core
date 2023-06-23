@@ -243,7 +243,7 @@ void XSpreadsheets2::testImportCellStyle()
 
     //new style created in dest
     uno::Reference< beans::XPropertySet > xSrcCellPropSet (xSrcCell, UNO_QUERY_THROW);
-    static const OUStringLiteral aCellProperty(u"CellStyle");
+    static constexpr OUStringLiteral aCellProperty(u"CellStyle");
     OUString aSrcStyleName;
     CPPUNIT_ASSERT(xSrcCellPropSet->getPropertyValue(aCellProperty) >>= aSrcStyleName);
 

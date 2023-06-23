@@ -56,7 +56,7 @@ void DialogSaveTest::test()
         uno::Reference< script::XStorageBasedLibraryContainer > xStorDlgLib(xDocScr->getDialogLibraries());
         CPPUNIT_ASSERT(xStorDlgLib.is());
         uno::Reference< script::XLibraryContainer > xDlgLib(xStorDlgLib, UNO_QUERY_THROW);
-        static const OUStringLiteral sStandard(u"Standard");
+        static constexpr OUStringLiteral sStandard(u"Standard");
         xBasLib->loadLibrary(sStandard);
         CPPUNIT_ASSERT(xBasLib->isLibraryLoaded(sStandard));
         // the whole point of this test is to test the "save" operation

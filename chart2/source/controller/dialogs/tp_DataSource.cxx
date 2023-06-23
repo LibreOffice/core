@@ -350,7 +350,7 @@ void DataSourceTabPage::fillSeriesListBox()
                 OUString aResString(::chart::SchResId( STR_DATA_UNNAMED_SERIES_WITH_INDEX ));
 
                 // replace index of unnamed series
-                static const OUStringLiteral aReplacementStr( u"%NUMBER" );
+                static constexpr OUStringLiteral aReplacementStr( u"%NUMBER" );
                 sal_Int32 nIndex = aResString.indexOf( aReplacementStr );
                 if( nIndex != -1 )
                     aLabel = aResString.replaceAt(
@@ -480,7 +480,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, RoleSelectionChangedHdl, weld::TreeView&, voi
     OUString aSelectedRange = lcl_GetSelectedRolesRange( *m_xLB_ROLE );
 
     // replace role in fixed text label
-    static const OUStringLiteral aReplacementStr( u"%VALUETYPE" );
+    static constexpr OUStringLiteral aReplacementStr( u"%VALUETYPE" );
     sal_Int32 nIndex = m_aFixedTextRange.indexOf( aReplacementStr );
     if( nIndex != -1 )
     {

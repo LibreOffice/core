@@ -83,7 +83,7 @@ void InformationDialog::InitDialog()
         aURL.Complete = maSaveAsURL;
         xURLTransformer->parseSmart( aURL, OUString() );
 
-        static const OUStringLiteral sFileProtocol( u"file:///" );
+        static constexpr OUStringLiteral sFileProtocol( u"file:///" );
         aPresentationURL.Complete = sFileProtocol + aURL.Name;
         aTitle = xURLTransformer->getPresentation( aPresentationURL, false );
 
@@ -93,8 +93,8 @@ void InformationDialog::InitDialog()
 
     OUString sPrimary( getString( STR_INFO_PRIMARY ) );
     OUString sSecondary( getString( eInfoString ) );
-    static const OUStringLiteral aOldSizePlaceholder( u"%OLDFILESIZE"  );
-    static const OUStringLiteral aNewSizePlaceholder( u"%NEWFILESIZE"  );
+    static constexpr OUStringLiteral aOldSizePlaceholder( u"%OLDFILESIZE"  );
+    static constexpr OUStringLiteral aNewSizePlaceholder( u"%NEWFILESIZE"  );
     const OUString aTitlePlaceholder( !aTitle.isEmpty() ? OUString("%TITLE"  )
                                                          : OUString("'%TITLE'") );
 

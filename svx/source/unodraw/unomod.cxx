@@ -373,7 +373,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( c
 
     uno::Reference< uno::XInterface > xRet;
 
-    static const OUStringLiteral aPackagePrefix( u"com.sun.star.presentation." );
+    static constexpr OUStringLiteral aPackagePrefix( u"com.sun.star.presentation." );
     if( aServiceSpecifier.startsWith( aPackagePrefix ) )
     {
         SvxShape* pShape = nullptr;

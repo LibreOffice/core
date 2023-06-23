@@ -314,11 +314,11 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testXAutoTextGroup)
 
     uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
 
-    static const OUStringLiteral sGroupName = u"TestGroup*1";
-    static const OUStringLiteral sTextName = u"TEST";
-    static const OUStringLiteral sTextNameNew = u"TESTRENAMED";
-    static const OUStringLiteral sTextTitle = u"Test Auto Text";
-    static const OUStringLiteral sTextTitleNew = u"Test Auto Text Renamed";
+    static constexpr OUStringLiteral sGroupName = u"TestGroup*1";
+    static constexpr OUStringLiteral sTextName = u"TEST";
+    static constexpr OUStringLiteral sTextNameNew = u"TESTRENAMED";
+    static constexpr OUStringLiteral sTextTitle = u"Test Auto Text";
+    static constexpr OUStringLiteral sTextTitleNew = u"Test Auto Text Renamed";
 
     // Create new temporary group
     uno::Reference<text::XAutoTextGroup> xAutoTextGroup
@@ -1187,7 +1187,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf129841)
     // Get SwXCellRange for the same cell
     css::uno::Reference<css::beans::XPropertySet> xCellRange(
         xTableCellRange->getCellRangeByName("A1:A1"), css::uno::UNO_QUERY_THROW);
-    static const OUStringLiteral sBackColor = u"BackColor";
+    static constexpr OUStringLiteral sBackColor = u"BackColor";
     // Apply background color to table cursor, and read background color from cell range
     css::uno::Any aRefColor(sal_Int32(0x00FF0000));
     xTableCursor->setPropertyValue(sBackColor, aRefColor);

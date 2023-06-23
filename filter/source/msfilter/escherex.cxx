@@ -599,7 +599,7 @@ void EscherPropertyContainer::CreateFillProperties(
     uno::Any aAny;
     AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapNone );
     AddOpt( ESCHER_Prop_AnchorText, ESCHER_AnchorMiddle );
-    static const OUStringLiteral aPropName( u"FillStyle" );
+    static constexpr OUStringLiteral aPropName( u"FillStyle" );
 
     if ( EscherPropertyValueHelper::GetPropertyValue(
             aAny, rXPropSet, aPropName ) )
@@ -2597,14 +2597,14 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
     if ( !(aGeoPropSet >>= aGeoPropSeq) )
         return;
 
-    static const OUStringLiteral sViewBox            ( u"ViewBox"  );
-    static const OUStringLiteral sTextRotateAngle    ( u"TextRotateAngle"  );
-    static const OUStringLiteral sExtrusion          ( u"Extrusion"  );
-    static const OUStringLiteral sEquations          ( u"Equations"  );
-    static const OUStringLiteral sPath               ( u"Path"  );
-    static const OUStringLiteral sTextPath           ( u"TextPath"  );
-    static const OUStringLiteral sHandles            ( u"Handles"  );
-    static const OUStringLiteral sAdjustmentValues   ( u"AdjustmentValues"  );
+    static constexpr OUStringLiteral sViewBox            ( u"ViewBox"  );
+    static constexpr OUStringLiteral sTextRotateAngle    ( u"TextRotateAngle"  );
+    static constexpr OUStringLiteral sExtrusion          ( u"Extrusion"  );
+    static constexpr OUStringLiteral sEquations          ( u"Equations"  );
+    static constexpr OUStringLiteral sPath               ( u"Path"  );
+    static constexpr OUStringLiteral sTextPath           ( u"TextPath"  );
+    static constexpr OUStringLiteral sHandles            ( u"Handles"  );
+    static constexpr OUStringLiteral sAdjustmentValues   ( u"AdjustmentValues"  );
 
     bool bAdjustmentValuesProp = false;
     uno::Any aAdjustmentValuesProp;

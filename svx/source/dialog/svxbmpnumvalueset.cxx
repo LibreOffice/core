@@ -213,7 +213,7 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                         aOrgRect.TopLeft(), aRectSize,
                         *pVDev );
     // Now comes the text
-    static const OUStringLiteral sValue(u"Value");
+    static constexpr OUStringLiteral sValue(u"Value");
     if( NumberingPageType::SINGLENUM == ePageType ||
            NumberingPageType::BULLET == ePageType )
     {

@@ -56,7 +56,7 @@ void ConfigurationTracer::TraceBoundResources (
 {
     const Sequence<Reference<XResourceId> > aResourceList (
         rxConfiguration->getResources(rxResourceId, OUString(), AnchorBindingMode_DIRECT));
-    static const OUStringLiteral sIndentation (u"    ");
+    static constexpr OUStringLiteral sIndentation (u"    ");
     for (Reference<XResourceId> const & resourceId : aResourceList)
     {
         OUString sLine (resourceId->getResourceURL());

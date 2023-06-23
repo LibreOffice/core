@@ -97,8 +97,8 @@ void HeaderMenuController::fillPopupMenu( const Reference< css::frame::XModel >&
         aCmd = ".uno:InsertPageFooter";
         aHeaderFooterIsOnStr = "FooterIsOn";
     }
-    static const OUStringLiteral aIsPhysicalStr( u"IsPhysical" );
-    static const OUStringLiteral aDisplayNameStr( u"DisplayName" );
+    static constexpr OUStringLiteral aIsPhysicalStr( u"IsPhysical" );
+    static constexpr OUStringLiteral aDisplayNameStr( u"DisplayName" );
 
     try
     {

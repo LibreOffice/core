@@ -194,7 +194,7 @@ void PresentationFragmentHandler::importCustomSlideShow(std::vector<CustomShow>&
                                                                     UNO_QUERY);
         if (xShow.is())
         {
-            static const OUStringLiteral sSlide = u"slides/slide";
+            static constexpr OUStringLiteral sSlide = u"slides/slide";
             for (size_t j = 0; j < rCustomShowList[i].maSldLst.size(); ++j)
             {
                 OUString sCustomSlide = rCustomShowList[i].maSldLst[j];
@@ -228,7 +228,7 @@ void PresentationFragmentHandler::saveThemeToGrabBag(const oox::drawingml::Theme
         {
             uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
 
-            static const OUStringLiteral aGrabBagPropName = u"InteropGrabBag";
+            static constexpr OUStringLiteral aGrabBagPropName = u"InteropGrabBag";
             if (xPropsInfo.is() && xPropsInfo->hasPropertyByName(aGrabBagPropName))
             {
                 // get existing grab bag

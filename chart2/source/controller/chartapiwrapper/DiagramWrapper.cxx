@@ -447,7 +447,7 @@ sal_Int32 lcl_getNewAPIIndexForOldAPIIndex(
 
 OUString lcl_getDiagramType( std::u16string_view rTemplateServiceName )
 {
-    static const OUStringLiteral aPrefix(u"com.sun.star.chart2.template.");
+    static constexpr OUStringLiteral aPrefix(u"com.sun.star.chart2.template.");
 
     if( o3tl::starts_with(rTemplateServiceName, aPrefix) )
     {

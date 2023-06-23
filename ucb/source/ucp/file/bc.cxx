@@ -685,7 +685,7 @@ BaseContent::setPropertyValues(
         return Sequence< Any >( Values.getLength() );
     }
 
-    static const OUStringLiteral Title(u"Title");
+    static constexpr OUStringLiteral Title(u"Title");
 
     // Special handling for files which have to be inserted
     if( m_nState & JustInserted )

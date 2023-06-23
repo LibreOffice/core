@@ -281,7 +281,7 @@ void SdrTableRTFParser::FillTable()
             nColCount = mxTable->getColumnCount();
         }
 
-        static const OUStringLiteral sWidth(u"Width");
+        static constexpr OUStringLiteral sWidth(u"Width");
         sal_Int32 nCol, nLastEdge = 0;
         for( nCol = 0; nCol < nColCount; nCol++ )
         {

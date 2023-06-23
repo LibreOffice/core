@@ -928,7 +928,7 @@ OUString AddonsOptions_Impl::GeneratePrefixURL()
 
 void AddonsOptions_Impl::ReadMenuMergeInstructions( MergeMenuInstructionContainer& aContainer )
 {
-    static const OUStringLiteral aMenuMergeRootName( u"AddonUI/OfficeMenuBarMerging/" );
+    static constexpr OUStringLiteral aMenuMergeRootName( u"AddonUI/OfficeMenuBarMerging/" );
 
     Sequence< OUString > aAddonMergeNodesSeq = GetNodeNames( aMenuMergeRootName );
 
@@ -1000,7 +1000,7 @@ void AddonsOptions_Impl::ReadMergeMenuData( std::u16string_view aMergeAddonInstr
 
 void AddonsOptions_Impl::ReadToolbarMergeInstructions( ToolbarMergingInstructions& rCachedToolbarMergingInstructions )
 {
-    static const OUStringLiteral aToolbarMergeRootName( u"AddonUI/OfficeToolbarMerging/" );
+    static constexpr OUStringLiteral aToolbarMergeRootName( u"AddonUI/OfficeToolbarMerging/" );
 
     Sequence< OUString > aAddonMergeNodesSeq = GetNodeNames( aToolbarMergeRootName );
     sal_uInt32           nCount = aAddonMergeNodesSeq.getLength();
@@ -1072,7 +1072,7 @@ void AddonsOptions_Impl::ReadMergeToolbarData( std::u16string_view aMergeAddonIn
 void AddonsOptions_Impl::ReadNotebookBarMergeInstructions(
     NotebookBarMergingInstructions& rCachedNotebookBarMergingInstructions)
 {
-    static const OUStringLiteral aNotebookBarMergeRootName(u"AddonUI/OfficeNotebookBarMerging/");
+    static constexpr OUStringLiteral aNotebookBarMergeRootName(u"AddonUI/OfficeNotebookBarMerging/");
 
     Sequence<OUString> aAddonMergeNodesSeq = GetNodeNames(aNotebookBarMergeRootName);
     sal_uInt32 nCount = aAddonMergeNodesSeq.getLength();
@@ -1147,7 +1147,7 @@ void AddonsOptions_Impl::ReadMergeNotebookBarData(
 
 void AddonsOptions_Impl::ReadStatusbarMergeInstructions( MergeStatusbarInstructionContainer& aContainer )
 {
-    static const OUStringLiteral aStatusbarMergeRootName( u"AddonUI/OfficeStatusbarMerging/" );
+    static constexpr OUStringLiteral aStatusbarMergeRootName( u"AddonUI/OfficeStatusbarMerging/" );
 
     Sequence< OUString > aAddonMergeNodesSeq = GetNodeNames( aStatusbarMergeRootName );
     sal_uInt32  nCount = aAddonMergeNodesSeq.getLength();

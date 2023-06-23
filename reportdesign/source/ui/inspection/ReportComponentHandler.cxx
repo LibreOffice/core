@@ -86,10 +86,10 @@ void SAL_CALL ReportComponentHandler::inspect(const uno::Reference< uno::XInterf
     try
     {
         uno::Reference< container::XNameContainer > xNameCont(Component,uno::UNO_QUERY);
-        static const OUStringLiteral sFormComponent(u"FormComponent");
+        static constexpr OUStringLiteral sFormComponent(u"FormComponent");
         if ( xNameCont->hasByName(sFormComponent) )
             xNameCont->getByName(sFormComponent) >>= m_xFormComponent;
-        static const OUStringLiteral sRowSet(u"RowSet");
+        static constexpr OUStringLiteral sRowSet(u"RowSet");
         if ( xNameCont->hasByName(sRowSet) )
         {
             uno::Reference<beans::XPropertySet> xProp(m_xFormComponentHandler,uno::UNO_QUERY);

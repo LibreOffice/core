@@ -335,8 +335,8 @@ namespace sfx2
                     bHasMacroLib = false;
                 else
                 {
-                    static const OUStringLiteral aStdLibName( u"Standard" );
-                    static const OUStringLiteral aVBAProject( u"VBAProject" );
+                    static constexpr OUStringLiteral aStdLibName( u"Standard" );
+                    static constexpr OUStringLiteral aVBAProject( u"VBAProject" );
                     const Sequence< OUString > aElements = xContainer->getElementNames();
                     for( const OUString& aElement : aElements )
                     {

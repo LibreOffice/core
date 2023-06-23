@@ -129,7 +129,7 @@
       <xsl:text>: public comphelper::ConfigurationGroup&lt; </xsl:text>
       <xsl:value-of select="$name"/>
       <xsl:text>&gt; {&#xA;</xsl:text>
-      <xsl:text>    static OUString path() { static const OUStringLiteral PATH(<!--
+      <xsl:text>    static OUString path() { static constexpr OUStringLiteral PATH(<!--
       -->u"</xsl:text>
       <xsl:value-of select="$path"/>
       <xsl:text>/</xsl:text>
@@ -163,7 +163,7 @@
     <xsl:text>: public comphelper::ConfigurationSet&lt; </xsl:text>
     <xsl:value-of select="$name"/>
     <xsl:text>&gt; {&#xA;</xsl:text>
-    <xsl:text>    static OUString path() { static const OUStringLiteral PATH(<!--
+    <xsl:text>    static OUString path() { static constexpr OUStringLiteral PATH(<!--
     -->u"</xsl:text>
     <xsl:value-of select="$path"/>
     <xsl:text>/</xsl:text>
@@ -252,7 +252,7 @@
       <xsl:text>&gt; </xsl:text>
     </xsl:if>
     <xsl:text>&gt; {&#xA;</xsl:text>
-    <xsl:text>    static OUString path() { static const OUStringLiteral PATH(<!--
+    <xsl:text>    static OUString path() { static constexpr OUStringLiteral PATH(<!--
     -->u"</xsl:text>
     <xsl:value-of select="$path"/>
     <xsl:text>/</xsl:text>

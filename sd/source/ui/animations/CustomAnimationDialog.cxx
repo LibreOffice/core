@@ -1570,7 +1570,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(weld::Container* 
     if( !xCurrentPage.is() )
         return;
 
-    static const OUStringLiteral aStrIsEmptyPresObj( u"IsEmptyPresentationObject" );
+    static constexpr OUStringLiteral aStrIsEmptyPresObj( u"IsEmptyPresentationObject" );
 
     sal_Int32 nShape, nCount = xCurrentPage->getCount();
     for( nShape = 0; nShape < nCount; nShape++ )

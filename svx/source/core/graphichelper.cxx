@@ -440,7 +440,7 @@ void GraphicHelper::SaveShapeAsGraphic(weld::Window* pParent,
         // populate filter dialog filter list and select default filter to match graphic mime type
 
         GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
-        static const OUStringLiteral aDefaultMimeType(u"image/png");
+        static constexpr OUStringLiteral aDefaultMimeType(u"image/png");
         OUString aDefaultFormatName;
         sal_uInt16 nCount = rGraphicFilter.GetExportFormatCount();
 

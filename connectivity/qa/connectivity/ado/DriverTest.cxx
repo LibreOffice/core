@@ -93,8 +93,8 @@ void AdoDriverTest::test_metadata()
     }
 
     const Any catalog;
-    static const OUStringLiteral schemaPattern = u"%";
-    static const OUStringLiteral tableNamePattern = u"%";
+    static constexpr OUStringLiteral schemaPattern = u"%";
+    static constexpr OUStringLiteral tableNamePattern = u"%";
     const Sequence< OUString > types;
 
     Reference< XResultSet > xResultSet =
@@ -107,7 +107,7 @@ void AdoDriverTest::test_metadata()
 
 void AdoDriverTest::test_select_default_all()
 {
-    static const OUStringLiteral sql = u"select \"FirstName\" from \"Students\" ORDER BY \"FirstName\"";
+    static constexpr OUStringLiteral sql = u"select \"FirstName\" from \"Students\" ORDER BY \"FirstName\"";
     Reference< XPreparedStatement > xStatement = m_xConnection->prepareStatement(sql);
     if (!xStatement.is())
     {

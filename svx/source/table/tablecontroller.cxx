@@ -563,7 +563,7 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
 
     RemoveSelection();
 
-    static const OUStringLiteral sSize( u"Size" );
+    static constexpr OUStringLiteral sSize( u"Size" );
     const bool bUndo(rModel.IsUndoEnabled());
 
     switch( nSId )

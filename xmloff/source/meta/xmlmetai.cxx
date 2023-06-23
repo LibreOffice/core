@@ -245,7 +245,7 @@ void SvXMLMetaDocumentContext::setBuildId(std::u16string_view i_rBuildId, const 
             {
                 OUStringBuffer sBuffer(
                     i_rBuildId.substr( nBegin+1, nEnd-nBegin-1 ) );
-                static const OUStringLiteral sBuildCompare(
+                static constexpr OUStringLiteral sBuildCompare(
                      u"$Build-"  );
                 nBegin = i_rBuildId.find( sBuildCompare, nEnd );
                 if ( nBegin != std::u16string_view::npos )
@@ -305,7 +305,7 @@ void SvXMLMetaDocumentContext::setBuildId(std::u16string_view i_rBuildId, const 
     {
         if( xImportInfo.is() )
         {
-            static const OUStringLiteral aPropName(u"BuildId");
+            static constexpr OUStringLiteral aPropName(u"BuildId");
             uno::Reference< beans::XPropertySetInfo > xSetInfo(
                 xImportInfo->getPropertySetInfo());
             if( xSetInfo.is() && xSetInfo->hasPropertyByName( aPropName ) )

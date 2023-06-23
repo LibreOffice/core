@@ -74,8 +74,8 @@ namespace rptui
         OUString sMatchExpression( m_sPattern );
         sMatchExpression = sMatchExpression.replaceAll(u"$$", _rFieldDataSource);
 
-        static const OUStringLiteral sLHSPattern( u"$1" );
-        static const OUStringLiteral sRHSPattern( u"$2" );
+        static constexpr OUStringLiteral sLHSPattern( u"$1" );
+        static constexpr OUStringLiteral sRHSPattern( u"$2" );
         sal_Int32 nLHSIndex( sMatchExpression.indexOf( sLHSPattern ) );
         sal_Int32 nRHSIndex( sMatchExpression.indexOf( sRHSPattern ) );
 

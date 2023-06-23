@@ -980,7 +980,7 @@ void TableModel::optimize()
             {
                 try
                 {
-                    static const OUStringLiteral sWidth(u"Width");
+                    static constexpr OUStringLiteral sWidth(u"Width");
                     sal_Int32 nWidth1 = 0, nWidth2 = 0;
                     uno::Reference<beans::XPropertySet> xSet1( static_cast< XCellRange* >( maColumns[nCol].get() ), uno::UNO_QUERY_THROW );
                     uno::Reference<beans::XPropertySet> xSet2( static_cast< XCellRange* >( maColumns[nCol-1].get() ), uno::UNO_QUERY_THROW );
@@ -1017,7 +1017,7 @@ void TableModel::optimize()
             {
                 try
                 {
-                    static const OUStringLiteral sHeight(u"Height");
+                    static constexpr OUStringLiteral sHeight(u"Height");
                     sal_Int32 nHeight1 = 0, nHeight2 = 0;
                     uno::Reference<beans::XPropertySet> xSet1( static_cast< XCellRange* >( maRows[nRow].get() ), uno::UNO_QUERY_THROW );
                     uno::Reference<beans::XPropertySet> xSet2( static_cast< XCellRange* >( maRows[nRow-1].get() ), uno::UNO_QUERY_THROW );

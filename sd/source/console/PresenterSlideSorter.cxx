@@ -1583,7 +1583,7 @@ OUString PresenterSlideSorter::MouseOverManager::GetFittingText (
         double nBestWidth (0);
         OUString sBestCandidate;
         sal_Int32 nLength (round(rsText.getLength() * nMaximalWidth / nTextWidth));
-        static const OUStringLiteral sEllipses (u"...");
+        static constexpr OUStringLiteral sEllipses (u"...");
         while (true)
         {
             const OUString sCandidate (rsText.subView(0,nLength) + sEllipses);

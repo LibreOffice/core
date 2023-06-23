@@ -962,7 +962,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( bool bPreferred, const css:
     }
 
     const OUString sIsoLang       = impl_ts_getLocale();
-    static const OUStringLiteral sDefaultLocale(u"en-US");
+    static constexpr OUStringLiteral sDefaultLocale(u"en-US");
 
     css::uno::Reference< css::container::XNameAccess > xKey;
     css::uno::Reference< css::container::XNameAccess > xCommand;

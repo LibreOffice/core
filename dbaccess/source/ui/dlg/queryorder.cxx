@@ -126,8 +126,8 @@ void DlgOrderCrit::impl_initializeOrderList_nothrow()
 {
     try
     {
-        static const OUStringLiteral sNameProperty = u"Name";
-        static const OUStringLiteral sAscendingProperty = u"IsAscending";
+        static constexpr OUStringLiteral sNameProperty = u"Name";
+        static constexpr OUStringLiteral sAscendingProperty = u"IsAscending";
 
         Reference< XIndexAccess > xOrderColumns( m_xQueryComposer->getOrderColumns(), UNO_SET_THROW );
         sal_Int32 nColumns = xOrderColumns->getCount();

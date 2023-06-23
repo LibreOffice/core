@@ -19,6 +19,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/collapseif \
     compilerplugins/clang/test/commaoperator \
     compilerplugins/clang/test/conditionalstring \
+    compilerplugins/clang/test/constexprliteral \
     compilerplugins/clang/test/constmethod \
     compilerplugins/clang/test/constmove \
     compilerplugins/clang/test/consttobool \

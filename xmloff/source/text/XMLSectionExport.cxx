@@ -1588,7 +1588,7 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
     if ( !xTextFieldsSupp.is() )
         return;
 
-    static const OUStringLiteral sFieldMaster_Bibliography(u"com.sun.star.text.FieldMaster.Bibliography");
+    static constexpr OUStringLiteral sFieldMaster_Bibliography(u"com.sun.star.text.FieldMaster.Bibliography");
 
     // get bibliography field master
     Reference<XNameAccess> xMasters =

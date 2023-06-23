@@ -831,7 +831,7 @@ void SdMiscTest::testTdf129898LayerDrawnInSlideshow()
     SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
 
     // Verify model
-    static const OUStringLiteral sName = u"DrawnInSlideshow";
+    static constexpr OUStringLiteral sName = u"DrawnInSlideshow";
     SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
     SdrLayer* pLayer = rLayerAdmin.GetLayer(sName);
     CPPUNIT_ASSERT_MESSAGE("No layer DrawnInSlideshow", pLayer);

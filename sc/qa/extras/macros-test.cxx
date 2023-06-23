@@ -269,9 +269,9 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf89920)
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testPasswordProtectedUnicodeString)
 {
     const OUString sCorrectString(u"English Русский 中文");
-    static const OUStringLiteral sMacroURL(
+    static constexpr OUStringLiteral sMacroURL(
         u"vnd.sun.Star.script:Protected.Module1.TestUnicodeString?language=Basic&location=document");
-    static const OUStringLiteral sLibName(u"Protected");
+    static constexpr OUStringLiteral sLibName(u"Protected");
 
     createScDoc("tdf57113.ods");
 
@@ -309,9 +309,9 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testPasswordProtectedUnicodeString)
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testPasswordProtectedArrayInUserType)
 {
-    static const OUStringLiteral sMacroURL(
+    static constexpr OUStringLiteral sMacroURL(
         u"vnd.sun.Star.script:Protected.Module1.TestMyType?language=Basic&location=document");
-    static const OUStringLiteral sLibName(u"Protected");
+    static constexpr OUStringLiteral sLibName(u"Protected");
 
     createScDoc("ProtectedArrayInCustomType.ods");
 

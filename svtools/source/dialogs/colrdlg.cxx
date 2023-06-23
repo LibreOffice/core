@@ -39,7 +39,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::ui::dialogs;
 
-const OUStringLiteral sColor = u"Color";
+constexpr OUStringLiteral sColor = u"Color";
 
 SvColorDialog::SvColorDialog()
     : meMode(svtools::ColorPickerMode::Select)

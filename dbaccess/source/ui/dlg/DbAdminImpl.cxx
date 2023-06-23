@@ -664,7 +664,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const SfxItemSet& _r
     try { xInfo = _rxDest->getPropertySetInfo(); }
     catch(Exception&) { }
 
-    static const OUStringLiteral sUrlProp(u"URL");
+    static constexpr OUStringLiteral sUrlProp(u"URL");
     // transfer the direct properties
     for (auto const& elem : m_aDirectPropTranslator)
     {

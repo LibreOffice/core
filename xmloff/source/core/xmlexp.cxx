@@ -731,7 +731,7 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
     mpImpl->mStreamName = sName; // Note: may be empty (XSLT)
 
     // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
-    static const OUStringLiteral sOutlineStyleAsNormalListStyle(
+    static constexpr OUStringLiteral sOutlineStyleAsNormalListStyle(
             u"OutlineStyleAsNormalListStyle" );
     if( xPropertySetInfo->hasPropertyByName( sOutlineStyleAsNormalListStyle ) )
     {
@@ -743,7 +743,7 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
     if( xPropertySetInfo->hasPropertyByName( sTargetStorage ) )
         mxExportInfo->getPropertyValue( sTargetStorage ) >>= mpImpl->mxTargetStorage;
 
-    static const OUStringLiteral sExportTextNumberElement(
+    static constexpr OUStringLiteral sExportTextNumberElement(
             u"ExportTextNumberElement" );
     if( xPropertySetInfo->hasPropertyByName( sExportTextNumberElement ) )
     {

@@ -45,24 +45,24 @@ using namespace ::com::sun::star;
 
 ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > const & xHandler,  const uno::Sequence< uno::Sequence < beans::PropertyValue > >& rManList )
 {
-    static const OUStringLiteral sKeyInfo                     ( u"KeyInfo" );
-    static const OUStringLiteral sPgpKeyIDProperty            ( u"KeyId" );
-    static const OUStringLiteral sPgpKeyPacketProperty        ( u"KeyPacket" );
-    static const OUStringLiteral sCipherValueProperty         ( u"CipherValue" );
-    static const OUStringLiteral sFullPathProperty     ( u"FullPath" );
-    static const OUStringLiteral sVersionProperty  ( u"Version" );
-    static const OUStringLiteral sMediaTypeProperty    ( u"MediaType" );
-    static const OUStringLiteral sIterationCountProperty   ( u"IterationCount" );
-    static const OUStringLiteral sDerivedKeySizeProperty  ( u"DerivedKeySize" );
-    static const OUStringLiteral sSaltProperty         ( u"Salt" );
-    static const OUStringLiteral sInitialisationVectorProperty( u"InitialisationVector" );
-    static const OUStringLiteral sSizeProperty         ( u"Size" );
-    static const OUStringLiteral sDigestProperty       ( u"Digest" );
-    static const OUStringLiteral sEncryptionAlgProperty    ( u"EncryptionAlgorithm" );
-    static const OUStringLiteral sStartKeyAlgProperty  ( u"StartKeyAlgorithm" );
-    static const OUStringLiteral sDigestAlgProperty    ( u"DigestAlgorithm" );
+    static constexpr OUStringLiteral sKeyInfo                     ( u"KeyInfo" );
+    static constexpr OUStringLiteral sPgpKeyIDProperty            ( u"KeyId" );
+    static constexpr OUStringLiteral sPgpKeyPacketProperty        ( u"KeyPacket" );
+    static constexpr OUStringLiteral sCipherValueProperty         ( u"CipherValue" );
+    static constexpr OUStringLiteral sFullPathProperty     ( u"FullPath" );
+    static constexpr OUStringLiteral sVersionProperty  ( u"Version" );
+    static constexpr OUStringLiteral sMediaTypeProperty    ( u"MediaType" );
+    static constexpr OUStringLiteral sIterationCountProperty   ( u"IterationCount" );
+    static constexpr OUStringLiteral sDerivedKeySizeProperty  ( u"DerivedKeySize" );
+    static constexpr OUStringLiteral sSaltProperty         ( u"Salt" );
+    static constexpr OUStringLiteral sInitialisationVectorProperty( u"InitialisationVector" );
+    static constexpr OUStringLiteral sSizeProperty         ( u"Size" );
+    static constexpr OUStringLiteral sDigestProperty       ( u"Digest" );
+    static constexpr OUStringLiteral sEncryptionAlgProperty    ( u"EncryptionAlgorithm" );
+    static constexpr OUStringLiteral sStartKeyAlgProperty  ( u"StartKeyAlgorithm" );
+    static constexpr OUStringLiteral sDigestAlgProperty    ( u"DigestAlgorithm" );
 
-    static const OUStringLiteral sWhiteSpace           ( u" " );
+    static constexpr OUStringLiteral sWhiteSpace           ( u" " );
 
     const OUString sSHA256_URL_ODF12     ( SHA256_URL_ODF12 );
     const OUString  sSHA1_Name           ( SHA1_NAME );

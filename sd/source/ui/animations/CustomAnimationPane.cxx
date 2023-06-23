@@ -944,7 +944,7 @@ Any CustomAnimationPane::getProperty1Value( sal_Int32 nType, const CustomAnimati
 
     case nPropertyTypeCharHeight:
         {
-            static const OUStringLiteral aAttributeName( u"CharHeight" );
+            static constexpr OUStringLiteral aAttributeName( u"CharHeight" );
             Any aValue( pEffect->getProperty( AnimationNodeType::SET, aAttributeName, EValue::To ) );
             if( !aValue.hasValue() )
                 aValue = pEffect->getProperty( AnimationNodeType::ANIMATE, aAttributeName, EValue::To );
@@ -1017,7 +1017,7 @@ bool CustomAnimationPane::setProperty1Value( sal_Int32 nType, const CustomAnimat
 
     case nPropertyTypeCharHeight:
         {
-            static const OUStringLiteral aAttributeName( u"CharHeight" );
+            static constexpr OUStringLiteral aAttributeName( u"CharHeight" );
             bEffectChanged = pEffect->setProperty( AnimationNodeType::SET, aAttributeName, EValue::To, rValue );
             if( !bEffectChanged )
                 bEffectChanged = pEffect->setProperty( AnimationNodeType::ANIMATE, aAttributeName, EValue::To, rValue );

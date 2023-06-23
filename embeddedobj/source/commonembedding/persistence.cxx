@@ -177,7 +177,7 @@ static void TransferMediaType( const uno::Reference< embed::XStorage >& i_rSourc
     {
         const uno::Reference< beans::XPropertySet > xSourceProps( i_rSource, uno::UNO_QUERY_THROW );
         const uno::Reference< beans::XPropertySet > xTargetProps( i_rTarget, uno::UNO_QUERY_THROW );
-        static const OUStringLiteral sMediaTypePropName( u"MediaType" );
+        static constexpr OUStringLiteral sMediaTypePropName( u"MediaType" );
         xTargetProps->setPropertyValue( sMediaTypePropName, xSourceProps->getPropertyValue( sMediaTypePropName ) );
     }
     catch( const uno::Exception& )

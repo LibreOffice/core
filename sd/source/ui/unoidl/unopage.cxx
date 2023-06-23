@@ -399,7 +399,7 @@ rtl::Reference<SdrObject> SdGenericDrawPage::CreateSdrObject_( const Reference< 
         return nullptr;
 
     OUString aType( xShape->getShapeType() );
-    static const OUStringLiteral aPrefix( u"com.sun.star.presentation." );
+    static constexpr OUStringLiteral aPrefix( u"com.sun.star.presentation." );
     if( !aType.startsWith( aPrefix ) )
     {
         return SvxFmDrawPage::CreateSdrObject_( xShape );

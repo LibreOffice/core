@@ -219,7 +219,7 @@ namespace rptui
                 return;
 
             OUString sDataField( _rxFormatted->getDataField() );
-            static const OUStringLiteral sFieldPrefix( u"field:[" );
+            static constexpr OUStringLiteral sFieldPrefix( u"field:[" );
             if ( sDataField.indexOf( sFieldPrefix ) != 0 )
                 // not bound to a table field
                 // TODO: we might also do this kind of thing for functions and expressions ...

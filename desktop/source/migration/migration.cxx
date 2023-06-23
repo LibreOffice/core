@@ -190,8 +190,8 @@ bool MigrationImpl::doMigration()
 
         copyFiles();
 
-        static const OUStringLiteral sMenubarResourceURL(u"private:resource/menubar/menubar");
-        static const OUStringLiteral sToolbarResourcePre(u"private:resource/toolbar/");
+        static constexpr OUStringLiteral sMenubarResourceURL(u"private:resource/menubar/menubar");
+        static constexpr OUStringLiteral sToolbarResourcePre(u"private:resource/toolbar/");
         for (MigrationModuleInfo & i : vModulesInfo) {
             OUString sModuleIdentifier = mapModuleShortNameToIdentifier(i.sModuleShortName);
             if (sModuleIdentifier.isEmpty())
@@ -307,8 +307,8 @@ void MigrationImpl::readAvailableMigrations(migrations_available& rAvailableMigr
     uno::Reference< XNameAccess > aMigrationAccess(getConfigAccess("org.openoffice.Setup/Migration/SupportedVersions"), uno::UNO_SET_THROW);
     const uno::Sequence< OUString > seqSupportedVersions = aMigrationAccess->getElementNames();
 
-    static const OUStringLiteral aVersionIdentifiers( u"VersionIdentifiers" );
-    static const OUStringLiteral aPriorityIdentifier( u"Priority" );
+    static constexpr OUStringLiteral aVersionIdentifiers( u"VersionIdentifiers" );
+    static constexpr OUStringLiteral aPriorityIdentifier( u"Priority" );
 
     for (OUString const & supportedVersion :seqSupportedVersions) {
         sal_Int32                 nPriority( 0 );
@@ -905,8 +905,8 @@ void MigrationImpl::runServices()
 std::vector< MigrationModuleInfo > MigrationImpl::detectUIChangesForAllModules() const
 {
     std::vector< MigrationModuleInfo > vModulesInfo;
-    static const OUStringLiteral MENUBAR(u"menubar");
-    static const OUStringLiteral TOOLBAR(u"toolbar");
+    static constexpr OUStringLiteral MENUBAR(u"menubar");
+    static constexpr OUStringLiteral TOOLBAR(u"toolbar");
 
     uno::Sequence< uno::Any > lArgs {uno::Any(m_aInfo.userdata + "/user/config/soffice.cfg/modules"),
                                      uno::Any(embed::ElementModes::READ)};
@@ -966,7 +966,7 @@ void MigrationImpl::compareOldAndNewConfig(const OUString& sParent,
         const uno::Reference< container::XIndexContainer >& xIndexNew,
         const OUString& sResourceURL)
 {
-    static const OUStringLiteral MENU_SEPARATOR(u" | ");
+    static constexpr OUStringLiteral MENU_SEPARATOR(u" | ");
 
     std::vector< MigrationItem > vOldItems;
     std::vector< MigrationItem > vNewItems;
@@ -1176,8 +1176,8 @@ void NewVersionUIInfo::init(const std::vector< MigrationModuleInfo >& vModulesIn
     m_lNewVersionToolbarSettingsSeq.realloc(vModulesInfo.size());
     auto p_lNewVersionToolbarSettingsSeq = m_lNewVersionToolbarSettingsSeq.getArray();
 
-    static const OUStringLiteral sMenubarResourceURL(u"private:resource/menubar/menubar");
-    static const OUStringLiteral sToolbarResourcePre(u"private:resource/toolbar/");
+    static constexpr OUStringLiteral sMenubarResourceURL(u"private:resource/menubar/menubar");
+    static constexpr OUStringLiteral sToolbarResourcePre(u"private:resource/toolbar/");
 
     uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier = ui::theModuleUIConfigurationManagerSupplier::get( ::comphelper::getProcessComponentContext() );
 

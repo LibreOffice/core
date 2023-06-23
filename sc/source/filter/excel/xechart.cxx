@@ -1911,8 +1911,8 @@ bool XclExpChSeries::ConvertDataSeries(
                     Reference< XColorScheme > xColorScheme = xDiagram->getDefaultColorScheme();
                     if( xColorScheme.is() )
                     {
-                        static const OUStringLiteral aFillStyleName = u"FillStyle";
-                        static const OUStringLiteral aColorName = u"Color";
+                        static constexpr OUStringLiteral aFillStyleName = u"FillStyle";
+                        static constexpr OUStringLiteral aColorName = u"Color";
                         namespace cssd = ::com::sun::star::drawing;
                         for( sal_Int32 nPointIdx = 0; nPointIdx < nMaxPointCount; ++nPointIdx )
                         {

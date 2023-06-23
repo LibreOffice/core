@@ -237,7 +237,7 @@ void SwHTMLWriter::SetupFilterOptions(std::u16string_view rFilterOptions)
 
     const uno::Sequence<OUString> aOptionSeq
         = comphelper::string::convertCommaSeparated(rFilterOptions);
-    static const OUStringLiteral aXhtmlNsKey(u"xhtmlns=");
+    static constexpr OUStringLiteral aXhtmlNsKey(u"xhtmlns=");
     for (const auto& rOption : aOptionSeq)
     {
         if (rOption == "XHTML")

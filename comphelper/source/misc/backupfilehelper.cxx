@@ -661,8 +661,8 @@ namespace
             const ExtensionInfoEntryVector& rToBeEnabled,
             const ExtensionInfoEntryVector& rToBeDisabled)
         {
-            static const OUStringLiteral aRegPathFront(u"/uno_packages/cache/registry/com.sun.star.comp.deployment.");
-            static const OUStringLiteral aRegPathBack(u".PackageRegistryBackend/backenddb.xml");
+            static constexpr OUStringLiteral aRegPathFront(u"/uno_packages/cache/registry/com.sun.star.comp.deployment.");
+            static constexpr OUStringLiteral aRegPathBack(u".PackageRegistryBackend/backenddb.xml");
             // first appearance to check
             {
                 const OUString aUnoPackagReg(OUString::Concat(rUserConfigWorkURL) + aRegPathFront + "bundle" + aRegPathBack);
@@ -1467,7 +1467,7 @@ namespace comphelper
             // points to registrymodifications.xcu
             OUString conf("${CONFIGURATION_LAYERS}");
             rtl::Bootstrap::expandMacros(conf);
-            static const OUStringLiteral aTokenUser(u"user:");
+            static constexpr OUStringLiteral aTokenUser(u"user:");
             sal_Int32 nStart(conf.indexOf(aTokenUser));
 
             if (-1 != nStart)

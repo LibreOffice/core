@@ -166,7 +166,7 @@ namespace dbtools
                         xComposer->setElementaryQuery( sStatement );
 
                         // the sort order
-                        static const OUStringLiteral sPropOrder( u"Order" );
+                        static constexpr OUStringLiteral sPropOrder( u"Order" );
                         if ( ::comphelper::hasProperty( sPropOrder, xQuery ) )
                         {
                             OUString sOrder;
@@ -176,7 +176,7 @@ namespace dbtools
 
                         // the filter
                         bool bApplyFilter = true;
-                        static const OUStringLiteral sPropApply( u"ApplyFilter" );
+                        static constexpr OUStringLiteral sPropApply( u"ApplyFilter" );
                         if ( ::comphelper::hasProperty( sPropApply, xQuery ) )
                         {
                             OSL_VERIFY( xQuery->getPropertyValue( sPropApply ) >>= bApplyFilter );

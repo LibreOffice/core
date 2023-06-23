@@ -286,7 +286,7 @@ void SdXMLGenericPageContext::endFastElement(sal_Int32 )
 
             if( !maUseHeaderDeclName.isEmpty() )
             {
-                static const OUStringLiteral aStrHeaderTextProp( u"HeaderText" );
+                static constexpr OUStringLiteral aStrHeaderTextProp( u"HeaderText" );
                 if( xInfo->hasPropertyByName( aStrHeaderTextProp ) )
                     xSet->setPropertyValue( aStrHeaderTextProp,
                                             Any( GetSdImport().GetHeaderDecl( maUseHeaderDeclName ) ) );
@@ -294,7 +294,7 @@ void SdXMLGenericPageContext::endFastElement(sal_Int32 )
 
             if( !maUseFooterDeclName.isEmpty() )
             {
-                static const OUStringLiteral aStrFooterTextProp( u"FooterText" );
+                static constexpr OUStringLiteral aStrFooterTextProp( u"FooterText" );
                 if( xInfo->hasPropertyByName( aStrFooterTextProp ) )
                     xSet->setPropertyValue( aStrFooterTextProp,
                                         Any( GetSdImport().GetFooterDecl( maUseFooterDeclName ) ) );
@@ -302,7 +302,7 @@ void SdXMLGenericPageContext::endFastElement(sal_Int32 )
 
             if( !maUseDateTimeDeclName.isEmpty() )
             {
-                static const OUStringLiteral aStrDateTimeTextProp( u"DateTimeText" );
+                static constexpr OUStringLiteral aStrDateTimeTextProp( u"DateTimeText" );
                 if( xInfo->hasPropertyByName( aStrDateTimeTextProp ) )
                 {
                     bool bFixed;
@@ -369,7 +369,7 @@ void SdXMLGenericPageContext::SetStyle( OUString const & rStyleName )
                     Reference< beans::XPropertySet > xPropSet( xPropSet1 );
                     Reference< beans::XPropertySet > xBackgroundSet;
 
-                    static const OUStringLiteral aBackground(u"Background");
+                    static constexpr OUStringLiteral aBackground(u"Background");
                     if( xPropSet1->getPropertySetInfo()->hasPropertyByName( aBackground ) )
                     {
                         Reference< beans::XPropertySetInfo > xInfo( xPropSet1->getPropertySetInfo() );

@@ -122,7 +122,7 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
         if( bOnlyIntntl )
             aSearchStr.append(cIntntlGrpSep);
         const OUString pSearchStr = aSearchStr.makeStringAndClear();
-        static const OUStringLiteral pDdEe = u"DdEe";
+        static constexpr OUStringLiteral pDdEe = u"DdEe";
         while( ImpStrChr( pSearchStr, *p ) )
         {
             aBuf.append( *p );
@@ -191,7 +191,7 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
             eScanType = SbxDOUBLE;
 
         // type detection?
-        static const OUStringLiteral pTypes = u"%!&#";
+        static constexpr OUStringLiteral pTypes = u"%!&#";
         if( ImpStrChr( pTypes, *p ) )
             p++;
     }

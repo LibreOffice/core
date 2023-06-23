@@ -1759,8 +1759,8 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
                 break;
             default:
             {
-                static const OUStringLiteral aNatNum(u"NATNUM");
-                static const OUStringLiteral aDBNum(u"DBNUM");
+                static constexpr OUStringLiteral aNatNum(u"NATNUM");
+                static constexpr OUStringLiteral aDBNum(u"DBNUM");
                 const OUString aBufStr( rString.toString());
                 sal_Int32 nNatNumNum;
                 sal_Int32 nDBNum;

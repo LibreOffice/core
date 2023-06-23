@@ -173,9 +173,9 @@ bool DocumentSignatureManager::isXML(std::u16string_view rURI)
 
     bool bIsXML = false;
     bool bPropsAvailable = false;
-    static const OUStringLiteral sPropFullPath(u"FullPath");
-    static const OUStringLiteral sPropMediaType(u"MediaType");
-    static const OUStringLiteral sPropDigest(u"Digest");
+    static constexpr OUStringLiteral sPropFullPath(u"FullPath");
+    static constexpr OUStringLiteral sPropMediaType(u"MediaType");
+    static constexpr OUStringLiteral sPropDigest(u"Digest");
 
     if (readManifest())
     {

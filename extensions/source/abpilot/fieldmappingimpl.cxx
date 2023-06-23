@@ -219,8 +219,8 @@ namespace abp
             const OUString* pExistentFields = aExistentFields.getConstArray();
             const OUString* pExistentFieldsEnd = pExistentFields + aExistentFields.getLength();
 
-            static const OUStringLiteral sProgrammaticNodeName( u"ProgrammaticFieldName" );
-            static const OUStringLiteral sAssignedNodeName( u"AssignedFieldName" );
+            static constexpr OUStringLiteral sProgrammaticNodeName( u"ProgrammaticFieldName" );
+            static constexpr OUStringLiteral sAssignedNodeName( u"AssignedFieldName" );
 
             for ( ; pExistentFields != pExistentFieldsEnd; ++pExistentFields )
             {

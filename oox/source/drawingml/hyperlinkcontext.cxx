@@ -81,7 +81,7 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper const & rParent,
         // ppaction://macro?name=MACRO_NAME
         // ppaction://program
 
-        static const OUStringLiteral sPPAction( u"ppaction://" );
+        static constexpr OUStringLiteral sPPAction( u"ppaction://" );
         if ( aAction.matchIgnoreAsciiCase( sPPAction ) )
         {
             OUString aPPAct( aAction.copy( sPPAction.getLength() ) );
@@ -90,7 +90,7 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper const & rParent,
 
             if ( aPPAction.match( "hlinkshowjump" ) )
             {
-                static const OUStringLiteral sJump( u"jump=" );
+                static constexpr OUStringLiteral sJump( u"jump=" );
                 if ( aPPAct.match( sJump, nIndex + 1 ) )
                 {
                     std::u16string_view aDestination( aPPAct.subView( nIndex + 1 + sJump.getLength() ) );
