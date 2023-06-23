@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="vcl">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -609,14 +609,13 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkLabel" id="includeevenodd">
+                                          <object class="GtkLabel" id="labelcopies">
                                             <property name="visible">True</property>
                                             <property name="can-focus">False</property>
                                             <property name="halign">start</property>
-                                            <property name="label" translatable="yes" context="printdialog|includeevenodd">Include:</property>
+                                            <property name="label" translatable="yes" context="printdialog|labelcopies">_Number of copies:</property>
                                             <property name="use-underline">True</property>
-                                            <property name="mnemonic-widget">evenoddbox</property>
-                                            <property name="xalign">0</property>
+                                            <property name="xalign">1</property>
                                           </object>
                                           <packing>
                                             <property name="left-attach">0</property>
@@ -624,19 +623,19 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkComboBoxText" id="evenoddbox">
+                                          <object class="GtkSpinButton" id="copycount">
                                             <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
-                                            <property name="hexpand">True</property>
-                                            <property name="active">0</property>
-                                            <items>
-                                              <item translatable="yes" context="printdialog|liststore3">Odd and Even Pages</item>
-                                              <item translatable="yes" context="printdialog|liststore3">Odd Pages</item>
-                                              <item translatable="yes" context="printdialog|liststore3">Even Pages</item>
-                                            </items>
+                                            <property name="can-focus">True</property>
+                                            <property name="halign">start</property>
+                                            <property name="valign">center</property>
+                                            <property name="activates-default">True</property>
+                                            <property name="text">1</property>
+                                            <property name="truncate-multiline">True</property>
+                                            <property name="adjustment">adjustment2</property>
+                                            <property name="value">1</property>
                                             <child internal-child="accessible">
-                                              <object class="AtkObject" id="evenoddbox-atkobject">
-                                                <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|evenoddbox">Select the subset of pages to print.</property>
+                                              <object class="AtkObject" id="copycount-atkobject">
+                                                <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|copycount">Enter the number of copies that you want to print.</property>
                                               </object>
                                             </child>
                                           </object>
@@ -661,7 +660,8 @@
                                           <object class="GtkGrid" id="gdCopiesExtra">
                                             <property name="visible">True</property>
                                             <property name="can-focus">False</property>
-                                            <property name="row-spacing">2</property>
+                                            <property name="margin-top">6</property>
+                                            <property name="row-spacing">3</property>
                                             <property name="column-spacing">6</property>
                                             <child>
                                               <object class="GtkLabel" id="fromwhich">
@@ -674,7 +674,7 @@
                                               </object>
                                               <packing>
                                                 <property name="left-attach">0</property>
-                                                <property name="top-attach">0</property>
+                                                <property name="top-attach">1</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -684,7 +684,7 @@
                                               </object>
                                               <packing>
                                                 <property name="left-attach">1</property>
-                                                <property name="top-attach">0</property>
+                                                <property name="top-attach">1</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -699,7 +699,7 @@
                                               </object>
                                               <packing>
                                                 <property name="left-attach">0</property>
-                                                <property name="top-attach">1</property>
+                                                <property name="top-attach">2</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -720,43 +720,6 @@
                                               </object>
                                               <packing>
                                                 <property name="left-attach">1</property>
-                                                <property name="top-attach">1</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkLabel" id="labelcopies">
-                                                <property name="visible">True</property>
-                                                <property name="can-focus">False</property>
-                                                <property name="halign">start</property>
-                                                <property name="label" translatable="yes" context="printdialog|labelcopies">_Number of copies:</property>
-                                                <property name="use-underline">True</property>
-                                                <property name="mnemonic-widget">copycount</property>
-                                                <property name="xalign">1</property>
-                                              </object>
-                                              <packing>
-                                                <property name="left-attach">0</property>
-                                                <property name="top-attach">2</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkSpinButton" id="copycount">
-                                                <property name="visible">True</property>
-                                                <property name="can-focus">True</property>
-                                                <property name="valign">center</property>
-                                                <property name="hexpand">True</property>
-                                                <property name="activates-default">True</property>
-                                                <property name="text">1</property>
-                                                <property name="truncate-multiline">True</property>
-                                                <property name="adjustment">adjustment2</property>
-                                                <property name="value">1</property>
-                                                <child internal-child="accessible">
-                                                  <object class="AtkObject" id="copycount-atkobject">
-                                                    <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|copycount">Enter the number of copies that you want to print.</property>
-                                                  </object>
-                                                </child>
-                                              </object>
-                                              <packing>
-                                                <property name="left-attach">1</property>
                                                 <property name="top-attach">2</property>
                                               </packing>
                                             </child>
@@ -767,12 +730,12 @@
                                                 <property name="halign">start</property>
                                                 <property name="label" translatable="yes" context="printdialog|cbPrintOrder">Order:</property>
                                                 <property name="use-underline">True</property>
-                                                <property name="mnemonic-widget">reverseorder</property>
+                                                <property name="mnemonic-widget">collate</property>
                                                 <property name="xalign">1</property>
                                               </object>
                                               <packing>
                                                 <property name="left-attach">0</property>
-                                                <property name="top-attach">4</property>
+                                                <property name="top-attach">3</property>
                                                 <property name="width">2</property>
                                               </packing>
                                             </child>
@@ -860,6 +823,42 @@
                                               </packing>
                                             </child>
                                             <child>
+                                              <object class="GtkLabel" id="includeevenodd">
+                                                <property name="visible">True</property>
+                                                <property name="can-focus">False</property>
+                                                <property name="halign">start</property>
+                                                <property name="label" translatable="yes" context="printdialog|includeevenodd">Include:</property>
+                                                <property name="use-underline">True</property>
+                                                <property name="xalign">0</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left-attach">0</property>
+                                                <property name="top-attach">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkComboBoxText" id="evenoddbox">
+                                                <property name="visible">True</property>
+                                                <property name="can-focus">False</property>
+                                                <property name="hexpand">True</property>
+                                                <property name="active">0</property>
+                                                <items>
+                                                  <item translatable="yes" context="printdialog|liststore3">Odd and Even Pages</item>
+                                                  <item translatable="yes" context="printdialog|liststore3">Odd Pages</item>
+                                                  <item translatable="yes" context="printdialog|liststore3">Even Pages</item>
+                                                </items>
+                                                <child internal-child="accessible">
+                                                  <object class="AtkObject" id="evenoddbox-atkobject">
+                                                    <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|evenoddbox">Select the subset of pages to print.</property>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="left-attach">1</property>
+                                                <property name="top-attach">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
                                               <placeholder/>
                                             </child>
                                             <child>
@@ -871,7 +870,7 @@
                                           <object class="GtkLabel" id="lbRangeExpander">
                                             <property name="visible">True</property>
                                             <property name="can-focus">False</property>
-                                            <property name="label" translatable="yes" context="printdialog|rangeexpander">_More</property>
+                                            <property name="label" translatable="yes" context="printdialog|rangeexpander">Collation and Paper Sides</property>
                                             <property name="use-underline">True</property>
                                           </object>
                                         </child>
@@ -1005,6 +1004,7 @@
                                           <object class="GtkGrid" id="expandpagegrid">
                                             <property name="visible">True</property>
                                             <property name="can-focus">False</property>
+                                            <property name="margin-top">6</property>
                                             <property name="row-spacing">6</property>
                                             <property name="column-spacing">6</property>
                                             <child>
@@ -1359,7 +1359,7 @@
                                           <object class="GtkLabel" id="lbLayoutExpander">
                                             <property name="visible">True</property>
                                             <property name="can-focus">False</property>
-                                            <property name="label" translatable="yes" context="printdialog|layoutexpander">M_ore</property>
+                                            <property name="label" translatable="yes" context="printdialog|layoutexpander">Pages per Sheet</property>
                                             <property name="use-underline">True</property>
                                           </object>
                                         </child>
@@ -1447,7 +1447,7 @@
     </child>
     <action-widgets>
       <action-widget response="-11">help</action-widget>
-      <action-widget response="-5" default="true">ok</action-widget>
+      <action-widget response="-5">ok</action-widget>
       <action-widget response="-6">cancel</action-widget>
     </action-widgets>
     <child internal-child="accessible">
@@ -1468,28 +1468,6 @@
       <widget name="expandpagegrid"/>
     </widgets>
   </object>
-  <object class="GtkSizeGroup" id="sizegroupLabel">
-    <widgets>
-      <widget name="rbAllPages"/>
-      <widget name="rbRangePages"/>
-      <widget name="rbRangeSelection"/>
-      <widget name="includeevenodd"/>
-      <widget name="labelsize"/>
-      <widget name="labelorientation"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup" id="sizegroupLabel2">
-    <widgets>
-      <widget name="fromwhich"/>
-      <widget name="labelpapersides"/>
-      <widget name="labelcopies"/>
-      <widget name="cbPrintOrder"/>
-      <widget name="pagestxt"/>
-      <widget name="pagemargintxt1"/>
-      <widget name="sheetmargintxt1"/>
-      <widget name="labelorder"/>
-    </widgets>
-  </object>
   <object class="GtkTreeStore" id="liststore1">
     <columns>
       <!-- column-name text -->
@@ -1498,4 +1476,6 @@
       <column type="gchararray"/>
     </columns>
   </object>
+  <object class="GtkSizeGroup" id="sizegroupLabel"/>
+  <object class="GtkSizeGroup" id="sizegroupLabel2"/>
 </interface>
