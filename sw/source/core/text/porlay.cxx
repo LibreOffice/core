@@ -1491,6 +1491,7 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
                 case 0x3008: case 0x300A: case 0x300C: case 0x300E:
                 case 0x3010: case 0x3014: case 0x3016: case 0x3018:
                 case 0x301A: case 0x301D:
+                case 0xFF08: case 0xFF3B: case 0xFF5B:
                     eState = SPECIAL_LEFT;
                     break;
                 // Right punctuation found
@@ -1498,9 +1499,11 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
                 case 0x300D: case 0x300F: case 0x3011: case 0x3015:
                 case 0x3017: case 0x3019: case 0x301B: case 0x301E:
                 case 0x301F:
+                case 0xFF09: case 0xFF3D: case 0xFF5D:
                     eState = SPECIAL_RIGHT;
                     break;
                 case 0x3001: case 0x3002:   // Fullstop or comma
+                case 0xFF0C: case 0xFF0E: case 0xFF1A: case 0xFF1B:
                     eState = SPECIAL_MIDDLE ;
                     break;
                 default:
