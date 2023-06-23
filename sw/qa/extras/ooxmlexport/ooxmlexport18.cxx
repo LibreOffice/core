@@ -308,6 +308,17 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153128)
     CPPUNIT_ASSERT_LESS(sal_Int32(30), nFirstLineHeight);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf133560)
+{
+    createSwDoc("lastEmptyLineWithDirectFormatting.docx");
+
+    CPPUNIT_ASSERT_EQUAL(4, getParagraphs());
+    // Without a fix in place, this would fail with
+    // - Expected: 12
+    // - Actual  : 48
+    CPPUNIT_ASSERT_EQUAL(12.0f, getProperty<float>(getParagraph(4), "CharHeight"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
