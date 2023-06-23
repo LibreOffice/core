@@ -951,7 +951,8 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
         aEvent.FeatureURL.Path == "SheetRightToLeft" ||
         aEvent.FeatureURL.Path == "SpacePara1" ||
         aEvent.FeatureURL.Path == "SpacePara15" ||
-        aEvent.FeatureURL.Path == "SpacePara2")
+        aEvent.FeatureURL.Path == "SpacePara2" ||
+        aEvent.FeatureURL.Path == "DataFilterAutoFilter")
     {
         bool bTemp = false;
 
