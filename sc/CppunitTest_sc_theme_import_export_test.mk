@@ -25,6 +25,7 @@ $(eval $(call gb_CppunitTest_use_externals,sc_theme_import_export_test, \
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_theme_import_export_test, \
     basegfx \
+    docmodel \
     comphelper \
     cppu \
     cppuhelper \
@@ -34,6 +35,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_theme_import_export_test, \
     sc \
     scqahelper \
     sfx \
+    svl \
     subsequenttest \
     test \
     tl \
