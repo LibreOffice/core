@@ -44,6 +44,7 @@
 #include <unotools/charclass.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
+#include <tools/duration.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::comphelper;
@@ -2556,7 +2557,10 @@ void TimeFormatter::ImplTimeReformat( std::u16string_view rStr, OUString& rOutSt
         rOutStr += OUString::createFromAscii(ostr.str());
     }
     else if ( mbDuration )
-        rOutStr = ImplGetLocaleDataWrapper().getDuration( aTempTime, bSecond, b100Sec );
+    {
+        tools::Duration aDuration( 0, aTempTime);
+        rOutStr = ImplGetLocaleDataWrapper().getDuration( aDuration, bSecond, b100Sec );
+    }
     else
     {
         rOutStr = ImplGetLocaleDataWrapper().getTime( aTempTime, bSecond, b100Sec );
@@ -2788,7 +2792,8 @@ OUString TimeFormatter::FormatTime(const tools::Time& rNewTime, TimeFieldFormat 
     }
     else if ( bDuration )
     {
-        aStr = rLocaleData.getDuration( rNewTime, bSec, b100Sec );
+        tools::Duration aDuration( 0, rNewTime);
+        aStr = rLocaleData.getDuration( aDuration, bSec, b100Sec );
     }
     else
     {

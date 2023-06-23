@@ -42,7 +42,11 @@ namespace com::sun::star::i18n { struct FormatElement; }
 namespace com::sun::star::i18n { struct CalendarItem2; }
 
 class Date;
-namespace tools { class Time; }
+namespace tools
+{
+class Time;
+class Duration;
+}
 class CalendarWrapper;
 
 enum class DateOrder {
@@ -311,7 +315,7 @@ public:
     OUString       getDate( const Date& rDate ) const;
     OUString       getTime( const tools::Time& rTime, bool bSec = true,
                             bool b100Sec = false ) const;
-    OUString       getDuration( const tools::Time& rTime,
+    OUString       getDuration( const tools::Duration& rDuration,
                             bool bSec = true, bool b100Sec = false ) const;
 
                         /** Simple number formatting

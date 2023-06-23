@@ -20,6 +20,7 @@
 #include <avmedia/mediaplayer.hxx>
 #include <avmedia/mediaitem.hxx>
 #include <tools/time.hxx>
+#include <tools/duration.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <strings.hrc>
 #include <helpids.h>
@@ -46,9 +47,11 @@ void MediaControlBase::UpdateTimeField( MediaItem const & aMediaItem, double fTi
     SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
 
-    aTimeString += rLocaleData.getDuration( tools::Time( 0, 0, static_cast< sal_uInt32 >( floor( fTime ) ) ) ) +
+    aTimeString += rLocaleData.getDuration(
+            tools::Duration( 0, 0, 0, static_cast<sal_uInt32>( floor( fTime )), 0)) +
         " / " +
-        rLocaleData.getDuration( tools::Time( 0, 0, static_cast< sal_uInt32 >( floor( aMediaItem.getDuration() ) )) );
+        rLocaleData.getDuration(
+                tools::Duration( 0, 0, 0, static_cast<sal_uInt32>( floor( aMediaItem.getDuration())), 0));
 
     if( mxTimeEdit->get_text() != aTimeString )
         mxTimeEdit->set_text( aTimeString );

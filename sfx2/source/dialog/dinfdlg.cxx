@@ -19,6 +19,7 @@
 
 #include <svl/eitem.hxx>
 #include <tools/datetime.hxx>
+#include <tools/duration.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <utility>
@@ -745,8 +746,7 @@ IMPL_LINK_NOARG(SfxDocumentPage, DeleteHdl, weld::Button&, void)
     m_xCreateValFt->set_label( ConvertDateTime_Impl( aName, uDT, rLocaleWrapper ) );
     m_xChangeValFt->set_label( "" );
     m_xPrintValFt->set_label( "" );
-    const tools::Time aTime( 0 );
-    m_xTimeLogValFt->set_label( rLocaleWrapper.getDuration( aTime ) );
+    m_xTimeLogValFt->set_label( rLocaleWrapper.getDuration( tools::Duration() ) );
     m_xDocNoValFt->set_label(OUString('1'));
     bHandleDelete = true;
 }
@@ -1065,8 +1065,10 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     const tools::Long nTime = rInfoItem.getEditingDuration();
     if ( bUseUserData )
     {
-        const tools::Time aT( nTime/3600, (nTime%3600)/60, nTime%60 );
-        m_xTimeLogValFt->set_label( rLocaleWrapper.getDuration( aT ) );
+        assert(SAL_MIN_INT32 <= nTime/86400 && nTime/86400 <= SAL_MAX_INT32);
+        const tools::Duration aD( static_cast<sal_Int32>(nTime)/86400,
+                (nTime%86400)/3600, (nTime%3600)/60, nTime%60, 0);
+        m_xTimeLogValFt->set_label( rLocaleWrapper.getDuration( aD ) );
         m_xDocNoValFt->set_label( OUString::number(
             rInfoItem.getEditingCycles() ) );
     }

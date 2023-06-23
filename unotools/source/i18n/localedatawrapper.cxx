@@ -41,6 +41,7 @@
 #include <rtl/math.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
+#include <tools/duration.hxx>
 #include <o3tl/string_view.hxx>
 #include <utility>
 
@@ -1173,28 +1174,32 @@ OUString LocaleDataWrapper::getTime( const tools::Time& rTime, bool bSec, bool b
     return aBuf.makeStringAndClear();
 }
 
-OUString LocaleDataWrapper::getDuration( const tools::Time& rTime, bool bSec, bool b100Sec ) const
+OUString LocaleDataWrapper::getDuration( const tools::Duration& rDuration, bool bSec, bool b100Sec ) const
 {
     OUStringBuffer aBuf(128);
 
-    if ( rTime < tools::Time( 0 ) )
-        aBuf.append(' ' );
+    if ( rDuration.IsNegative() )
+        aBuf.append(' ');
 
+    sal_Int64 nHours = static_cast<sal_Int64>(rDuration.GetDays()) * 24 +
+        (rDuration.IsNegative() ?
+         -static_cast<sal_Int64>(rDuration.GetTime().GetHour()) :
+         rDuration.GetTime().GetHour());
     if ( (true) /* IsTimeLeadingZero() */ )
-        ImplAddUNum( aBuf, rTime.GetHour(), 2 );
+        ImplAddNum( aBuf, nHours, 2 );
     else
-        ImplAddUNum( aBuf, rTime.GetHour() );
+        ImplAddNum( aBuf, nHours, 1 );
     aBuf.append( aLocaleDataItem.timeSeparator );
-    ImplAdd2UNum( aBuf, rTime.GetMin() );
+    ImplAdd2UNum( aBuf, rDuration.GetTime().GetMin() );
     if ( bSec )
     {
         aBuf.append( aLocaleDataItem.timeSeparator );
-        ImplAdd2UNum( aBuf, rTime.GetSec() );
+        ImplAdd2UNum( aBuf, rDuration.GetTime().GetSec() );
 
         if ( b100Sec )
         {
             aBuf.append( aLocaleDataItem.time100SecSeparator );
-            ImplAdd9UNum( aBuf, rTime.GetNanoSec() );
+            ImplAdd9UNum( aBuf, rDuration.GetTime().GetNanoSec() );
         }
     }
 

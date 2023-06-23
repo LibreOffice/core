@@ -38,6 +38,7 @@
 #include <utility>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
+#include <tools/duration.hxx>
 
 using namespace ::com::sun::star;
 
@@ -512,7 +513,7 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
             SvtSysLocale                aSysLocale;
             const LocaleDataWrapper&    aLocaleData = aSysLocale.GetLocaleData();
 
-            aText += " ( " + aLocaleData.getDuration( ::tools::Time( 0, 0, mnPauseTimeout ) ) + " )";
+            aText += " ( " + aLocaleData.getDuration( ::tools::Duration( 0, 0, 0, mnPauseTimeout, 0 )) + " )";
             pVDev->DrawText( Point( aOffset.Width(), 0 ), aText );
             GetOutDev()->DrawOutDev( Point( aOutOrg.X(), aOffset.Height() ), aVDevSize, Point(), aVDevSize, *pVDev );
             bDrawn = true;
