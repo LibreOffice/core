@@ -137,6 +137,7 @@
 #include <table.hxx>
 #include <refundo.hxx>
 #include <columnspanset.hxx>
+#include <CommonProperties.hxx>
 
 #include <memory>
 
@@ -156,12 +157,10 @@ static const SfxItemPropertySet* lcl_GetCellsPropertySet()
         { SC_UNONAME_ASIANVERT,ATTR_VERTICAL_ASIAN,cppu::UnoType<bool>::get(),                  0, 0 },
         { SC_UNONAME_BOTTBORDER,ATTR_BORDER,       ::cppu::UnoType<table::BorderLine>::get(), 0, BOTTOM_BORDER | CONVERT_TWIPS },
         { SC_UNONAME_BOTTBORDER2,ATTR_BORDER,      ::cppu::UnoType<table::BorderLine2>::get(), 0, BOTTOM_BORDER | CONVERT_TWIPS },
-        { SC_UNONAME_CELLBACK, ATTR_BACKGROUND,    cppu::UnoType<sal_Int32>::get(),            0, MID_BACK_COLOR },
-        { SC_UNONAME_CELL_BACKGROUND_COMPLEX_COLOR, ATTR_BACKGROUND, cppu::UnoType<css::util::XComplexColor>::get(), 0, MID_BACKGROUND_COMPLEX_COLOR },
+        CELL_BACKGROUND_COLOR_PROPERTIES
         { SC_UNONAME_CELLPRO,  ATTR_PROTECTION,    cppu::UnoType<util::CellProtection>::get(), 0, 0 },
         { SC_UNONAME_CELLSTYL, SC_WID_UNO_CELLSTYL,cppu::UnoType<OUString>::get(),        0, 0 },
-        { SC_UNONAME_CCOLOR,   ATTR_FONT_COLOR,    cppu::UnoType<sal_Int32>::get(),            0, 0 },
-        { SC_UNONAME_CHAR_COMPLEX_COLOR,   ATTR_FONT_COLOR, cppu::UnoType<css::util::XComplexColor>::get(), 0, MID_BACKGROUND_COMPLEX_COLOR },
+        CHAR_COLOR_PROPERTIES
         { SC_UNONAME_COUTL,    ATTR_FONT_CONTOUR,  cppu::UnoType<bool>::get(),                  0, 0 },
         { SC_UNONAME_CCROSS,   ATTR_FONT_CROSSEDOUT,cppu::UnoType<bool>::get(),                 0, MID_CROSSED_OUT },
         { SC_UNONAME_CEMPHAS,  ATTR_FONT_EMPHASISMARK,cppu::UnoType<sal_Int16>::get(),         0, MID_EMPHASIS },
@@ -267,12 +266,10 @@ static const SfxItemPropertySet* lcl_GetRangePropertySet()
         { SC_UNONAME_ASIANVERT,ATTR_VERTICAL_ASIAN,cppu::UnoType<bool>::get(),                  0, 0 },
         { SC_UNONAME_BOTTBORDER,ATTR_BORDER,       ::cppu::UnoType<table::BorderLine>::get(), 0, BOTTOM_BORDER | CONVERT_TWIPS },
         { SC_UNONAME_BOTTBORDER2,ATTR_BORDER,      ::cppu::UnoType<table::BorderLine2>::get(), 0, BOTTOM_BORDER | CONVERT_TWIPS },
-        { SC_UNONAME_CELLBACK, ATTR_BACKGROUND,    cppu::UnoType<sal_Int32>::get(),            0, MID_BACK_COLOR },
-        { SC_UNONAME_CELL_BACKGROUND_COMPLEX_COLOR, ATTR_BACKGROUND, cppu::UnoType<css::util::XComplexColor>::get(), 0, MID_BACKGROUND_COMPLEX_COLOR },
+        CELL_BACKGROUND_COLOR_PROPERTIES
         { SC_UNONAME_CELLPRO,  ATTR_PROTECTION,    cppu::UnoType<util::CellProtection>::get(), 0, 0 },
         { SC_UNONAME_CELLSTYL, SC_WID_UNO_CELLSTYL,cppu::UnoType<OUString>::get(),        0, 0 },
-        { SC_UNONAME_CCOLOR,   ATTR_FONT_COLOR,    cppu::UnoType<sal_Int32>::get(),            0, 0 },
-        { SC_UNONAME_CHAR_COMPLEX_COLOR,   ATTR_FONT_COLOR, cppu::UnoType<css::util::XComplexColor>::get(), 0, MID_BACKGROUND_COMPLEX_COLOR },
+        CHAR_COLOR_PROPERTIES
         { SC_UNONAME_COUTL,    ATTR_FONT_CONTOUR,  cppu::UnoType<bool>::get(),                  0, 0 },
         { SC_UNONAME_CCROSS,   ATTR_FONT_CROSSEDOUT,cppu::UnoType<bool>::get(),                 0, MID_CROSSED_OUT },
         { SC_UNONAME_CEMPHAS,  ATTR_FONT_EMPHASISMARK,cppu::UnoType<sal_Int16>::get(),         0, MID_EMPHASIS },
@@ -379,12 +376,10 @@ static const SfxItemPropertySet* lcl_GetCellPropertySet()
         { SC_UNONAME_ASIANVERT,ATTR_VERTICAL_ASIAN,cppu::UnoType<bool>::get(),                  0, 0 },
         { SC_UNONAME_BOTTBORDER,ATTR_BORDER,       ::cppu::UnoType<table::BorderLine>::get(), 0, BOTTOM_BORDER | CONVERT_TWIPS },
         { SC_UNONAME_BOTTBORDER2,ATTR_BORDER,      ::cppu::UnoType<table::BorderLine2>::get(), 0, BOTTOM_BORDER | CONVERT_TWIPS },
-        { SC_UNONAME_CELLBACK, ATTR_BACKGROUND,    cppu::UnoType<sal_Int32>::get(),            0, MID_BACK_COLOR },
-        { SC_UNONAME_CELL_BACKGROUND_COMPLEX_COLOR, ATTR_BACKGROUND, cppu::UnoType<css::util::XComplexColor>::get(), 0, MID_BACKGROUND_COMPLEX_COLOR },
+        CELL_BACKGROUND_COLOR_PROPERTIES
         { SC_UNONAME_CELLPRO,  ATTR_PROTECTION,    cppu::UnoType<util::CellProtection>::get(), 0, 0 },
         { SC_UNONAME_CELLSTYL, SC_WID_UNO_CELLSTYL,cppu::UnoType<OUString>::get(),        0, 0 },
-        { SC_UNONAME_CCOLOR,   ATTR_FONT_COLOR,    cppu::UnoType<sal_Int32>::get(),            0, 0 },
-        { SC_UNONAME_CHAR_COMPLEX_COLOR,   ATTR_FONT_COLOR, cppu::UnoType<css::util::XComplexColor>::get(), 0, MID_BACKGROUND_COMPLEX_COLOR },
+        CHAR_COLOR_PROPERTIES
         { SC_UNONAME_COUTL,    ATTR_FONT_CONTOUR,  cppu::UnoType<bool>::get(),                  0, 0 },
         { SC_UNONAME_CCROSS,   ATTR_FONT_CROSSEDOUT,cppu::UnoType<bool>::get(),                 0, MID_CROSSED_OUT },
         { SC_UNONAME_CEMPHAS,  ATTR_FONT_EMPHASISMARK,cppu::UnoType<sal_Int16>::get(),         0, MID_EMPHASIS },
@@ -497,12 +492,10 @@ static const SfxItemPropertySet* lcl_GetColumnPropertySet()
         { SC_UNONAME_ASIANVERT,ATTR_VERTICAL_ASIAN,cppu::UnoType<bool>::get(),                  0, 0 },
         { SC_UNONAME_BOTTBORDER,ATTR_BORDER,       ::cppu::UnoType<table::BorderLine>::get(), 0, BOTTOM_BORDER | CONVERT_TWIPS },
         { SC_UNONAME_BOTTBORDER2,ATTR_BORDER,      ::cppu::UnoType<table::BorderLine2>::get(), 0, BOTTOM_BORDER | CONVERT_TWIPS },
-        { SC_UNONAME_CELLBACK, ATTR_BACKGROUND,    cppu::UnoType<sal_Int32>::get(),            0, MID_BACK_COLOR },
-        { SC_UNONAME_CELL_BACKGROUND_COMPLEX_COLOR, ATTR_BACKGROUND, cppu::UnoType<css::util::XComplexColor>::get(), 0, MID_BACKGROUND_COMPLEX_COLOR },
+        CELL_BACKGROUND_COLOR_PROPERTIES
         { SC_UNONAME_CELLPRO,  ATTR_PROTECTION,    cppu::UnoType<util::CellProtection>::get(), 0, 0 },
         { SC_UNONAME_CELLSTYL, SC_WID_UNO_CELLSTYL,cppu::UnoType<OUString>::get(),        0, 0 },
-        { SC_UNONAME_CCOLOR,   ATTR_FONT_COLOR,    cppu::UnoType<sal_Int32>::get(),            0, 0 },
-        { SC_UNONAME_CHAR_COMPLEX_COLOR,   ATTR_FONT_COLOR, cppu::UnoType<css::util::XComplexColor>::get(), 0, MID_BACKGROUND_COMPLEX_COLOR },
+        CHAR_COLOR_PROPERTIES
         { SC_UNONAME_COUTL,    ATTR_FONT_CONTOUR,  cppu::UnoType<bool>::get(),                  0, 0 },
         { SC_UNONAME_CCROSS,   ATTR_FONT_CROSSEDOUT,cppu::UnoType<bool>::get(),                 0, MID_CROSSED_OUT },
         { SC_UNONAME_CEMPHAS,  ATTR_FONT_EMPHASISMARK,cppu::UnoType<sal_Int16>::get(),         0, MID_EMPHASIS },
@@ -610,12 +603,10 @@ static const SfxItemPropertySet* lcl_GetRowPropertySet()
         { SC_UNONAME_ASIANVERT,ATTR_VERTICAL_ASIAN,cppu::UnoType<bool>::get(),                  0, 0 },
         { SC_UNONAME_BOTTBORDER,ATTR_BORDER,       ::cppu::UnoType<table::BorderLine>::get(), 0, BOTTOM_BORDER | CONVERT_TWIPS },
         { SC_UNONAME_BOTTBORDER2,ATTR_BORDER,      ::cppu::UnoType<table::BorderLine2>::get(), 0, BOTTOM_BORDER | CONVERT_TWIPS },
-        { SC_UNONAME_CELLBACK, ATTR_BACKGROUND,    cppu::UnoType<sal_Int32>::get(),            0, MID_BACK_COLOR },
-        { SC_UNONAME_CELL_BACKGROUND_COMPLEX_COLOR, ATTR_BACKGROUND, cppu::UnoType<css::util::XComplexColor>::get(), 0, MID_BACKGROUND_COMPLEX_COLOR },
+        CELL_BACKGROUND_COLOR_PROPERTIES
         { SC_UNONAME_CELLPRO,  ATTR_PROTECTION,    cppu::UnoType<util::CellProtection>::get(), 0, 0 },
         { SC_UNONAME_CELLSTYL, SC_WID_UNO_CELLSTYL,cppu::UnoType<OUString>::get(),        0, 0 },
-        { SC_UNONAME_CCOLOR,   ATTR_FONT_COLOR,    cppu::UnoType<sal_Int32>::get(),            0, 0 },
-        { SC_UNONAME_CHAR_COMPLEX_COLOR,   ATTR_FONT_COLOR, cppu::UnoType<css::util::XComplexColor>::get(), 0, MID_BACKGROUND_COMPLEX_COLOR },
+        CHAR_COLOR_PROPERTIES
         { SC_UNONAME_COUTL,    ATTR_FONT_CONTOUR,  cppu::UnoType<bool>::get(),                  0, 0 },
         { SC_UNONAME_CCROSS,   ATTR_FONT_CROSSEDOUT,cppu::UnoType<bool>::get(),                 0, MID_CROSSED_OUT },
         { SC_UNONAME_CEMPHAS,  ATTR_FONT_EMPHASISMARK,cppu::UnoType<sal_Int16>::get(),         0, MID_EMPHASIS },
@@ -726,12 +717,10 @@ static const SfxItemPropertySet* lcl_GetSheetPropertySet()
         { SC_UNONAME_BORDCOL,  SC_WID_UNO_BORDCOL, cppu::UnoType<sal_Int32>::get(),            0, 0 },
         { SC_UNONAME_BOTTBORDER,ATTR_BORDER,       ::cppu::UnoType<table::BorderLine>::get(), 0, BOTTOM_BORDER | CONVERT_TWIPS },
         { SC_UNONAME_BOTTBORDER2,ATTR_BORDER,      ::cppu::UnoType<table::BorderLine2>::get(), 0, BOTTOM_BORDER | CONVERT_TWIPS },
-        { SC_UNONAME_CELLBACK, ATTR_BACKGROUND,    cppu::UnoType<sal_Int32>::get(),            0, MID_BACK_COLOR },
-        { SC_UNONAME_CELL_BACKGROUND_COMPLEX_COLOR, ATTR_BACKGROUND, cppu::UnoType<css::util::XComplexColor>::get(), 0, MID_BACKGROUND_COMPLEX_COLOR },
+        CELL_BACKGROUND_COLOR_PROPERTIES
         { SC_UNONAME_CELLPRO,  ATTR_PROTECTION,    cppu::UnoType<util::CellProtection>::get(), 0, 0 },
         { SC_UNONAME_CELLSTYL, SC_WID_UNO_CELLSTYL,cppu::UnoType<OUString>::get(),        0, 0 },
-        { SC_UNONAME_CCOLOR,   ATTR_FONT_COLOR,    cppu::UnoType<sal_Int32>::get(),            0, 0 },
-        { SC_UNONAME_CHAR_COMPLEX_COLOR,   ATTR_FONT_COLOR, cppu::UnoType<css::util::XComplexColor>::get(), 0, MID_BACKGROUND_COMPLEX_COLOR },
+        CHAR_COLOR_PROPERTIES
         { SC_UNONAME_COUTL,    ATTR_FONT_CONTOUR,  cppu::UnoType<bool>::get(),                  0, 0 },
         { SC_UNONAME_CCROSS,   ATTR_FONT_CROSSEDOUT,cppu::UnoType<bool>::get(),                 0, MID_CROSSED_OUT },
         { SC_UNONAME_CEMPHAS,  ATTR_FONT_EMPHASISMARK,cppu::UnoType<sal_Int16>::get(),         0, MID_EMPHASIS },
