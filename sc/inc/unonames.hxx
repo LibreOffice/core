@@ -133,6 +133,11 @@ inline constexpr OUStringLiteral SC_UNONAME_LEFTBORDER2      = u"LeftBorder2";
 inline constexpr OUStringLiteral SC_UNONAME_RIGHTBORDER2     = u"RightBorder2";
 inline constexpr OUStringLiteral SC_UNONAME_TOPBORDER2       = u"TopBorder2";
 
+inline constexpr OUStringLiteral SC_UNONAME_BOTTOM_BORDER_COMPLEX_COLOR = u"BottomBorderComplexColor";
+inline constexpr OUStringLiteral SC_UNONAME_LEFT_BORDER_COMPLEX_COLOR = u"LeftBorderComplexColor";
+inline constexpr OUStringLiteral SC_UNONAME_RIGHT_BORDER_COMPLEX_COLOR = u"RightBorderComplexColor";
+inline constexpr OUStringLiteral SC_UNONAME_TOP_BORDER_COMPLEX_COLOR = u"TopBorderComplexColor";
+
 inline constexpr OUStringLiteral SC_UNONAME_DIAGONAL_TLBR    = u"DiagonalTLBR";
 inline constexpr OUStringLiteral SC_UNONAME_DIAGONAL_BLTR    = u"DiagonalBLTR";
 
