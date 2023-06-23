@@ -58,6 +58,9 @@ inline constexpr sal_Int32 nCharClassNumericTypeMask =
     css::i18n::KCharacterType::PRINTABLE |
     css::i18n::KCharacterType::BASE_FORM;
 
+inline constexpr sal_Int32 nCharClassBaseType =
+    css::i18n::KCharacterType::BASE_FORM;
+
 class UNOTOOLS_DLLPUBLIC CharClass
 {
     LanguageTag                 maLanguageTag;
@@ -167,6 +170,7 @@ public:
     bool isDigit( const OUString& rStr, sal_Int32 nPos ) const;
     bool isAlphaNumeric( const OUString& rStr, sal_Int32 nPos ) const;
     bool isLetterNumeric( const OUString& rStr, sal_Int32 nPos ) const;
+    bool isBase( const OUString& rStr, sal_Int32 nPos ) const;
     bool isUpper( const OUString& rStr, sal_Int32 nPos ) const;
     bool isLetter( const OUString& rStr ) const;
     bool isNumeric( const OUString& rStr ) const;

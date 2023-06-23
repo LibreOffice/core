@@ -2110,7 +2110,7 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
                     bFirstSent = true;
                 [[fallthrough]];
             default:
-                if (!(rAppCC.isLetterNumeric(*pText, sal_Int32(nPos))
+                if (!(rAppCC.isBase(*pText, sal_Int32(nPos))
                         || '/' == cChar )) //  '/' should not be a word separator (e.g. '1/2' needs to be handled as one word for replacement)
                 {
                     --nPos;     // revert ++nPos which was decremented in for loop

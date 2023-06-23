@@ -253,6 +253,23 @@ bool CharClass::isLetterNumeric( const OUString& rStr ) const
     return false;
 }
 
+bool CharClass::isBase( const OUString& rStr, sal_Int32 nPos ) const
+{
+    sal_Unicode c = rStr[nPos];
+    if ( c < 128 )
+        return rtl::isAsciiAlphanumeric( c );
+
+    try
+    {
+        return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) & nCharClassBaseType ) != 0;
+    }
+    catch ( const Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
+    }
+    return false;
+}
+
 bool CharClass::isUpper( const OUString& rStr, sal_Int32 nPos ) const
 {
     sal_Unicode c = rStr[nPos];
