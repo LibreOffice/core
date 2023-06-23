@@ -1007,7 +1007,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131386)
     createSwDoc("hidden-para-separator.rtf");
     SwDoc const* const pDoc = getSwDoc();
     SwNodeIndex ix(pDoc->GetNodes().GetEndOfContent(), -1);
-    CPPUNIT_ASSERT(!ix.GetNode().GetTextNode()->GetAttr(RES_PARATR_LIST_AUTOFMT).GetStyleHandle());
+    CPPUNIT_ASSERT(ix.GetNode()
+                       .GetTextNode()
+                       ->GetAttr(RES_PARATR_LIST_AUTOFMT)
+                       .GetStyleHandle()
+                       ->Get(RES_CHRATR_HIDDEN)
+                       .GetValue());
     --ix;
     --ix;
     CPPUNIT_ASSERT(ix.GetNode()

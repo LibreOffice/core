@@ -2330,6 +2330,13 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
         rPam.DeleteMark();
         m_rDoc.GetNodes().Delete( aRg.aStart, nNodeDiff+1 );
     }
+
+    if (!m_rDoc.getIDocumentRedlineAccess().IsIgnoreRedline()
+        && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty())
+    {
+        m_rDoc.getIDocumentRedlineAccess().CompressRedlines();
+    }
+
     m_rDoc.getIDocumentState().SetModified();
 
     return true;

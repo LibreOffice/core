@@ -1461,8 +1461,8 @@ DECLARE_RTFEXPORT_TEST(testTdf104390, "tdf104390.rtf")
     CPPUNIT_ASSERT_EQUAL(36.f, getProperty<float>(xRun, "CharHeight"));
     CPPUNIT_ASSERT_EQUAL(OUString("Courier New"), getProperty<OUString>(xRun, "CharFontName"));
 
-    // Ensure there is only one run
-    CPPUNIT_ASSERT_MESSAGE("Extra elements in paragraph", !xRunEnum->hasMoreElements());
+    // Ensure this run covers whole paragraph text (ignore possible empty "paragraph marker" run)
+    CPPUNIT_ASSERT_EQUAL(xPara->getString().getLength(), xRun->getString().getLength());
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf153681, "tdf153681.odt")

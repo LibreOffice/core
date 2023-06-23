@@ -95,6 +95,7 @@
 #include <rtl/uri.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/string.hxx>
 
 #include <dmapper/GraphicZOrderHelper.hxx>
@@ -702,28 +703,31 @@ void DomainMapper_Impl::AddDummyParaForTableInSection()
     }
 }
 
- static OUString lcl_FindLastBookmark(const uno::Reference<text::XTextCursor>& xCursor)
+ static OUString lcl_FindLastBookmark(const uno::Reference<text::XTextCursor>& xCursor,
+                                     bool bAlreadyExpanded)
  {
      OUString sName;
      if (!xCursor.is())
          return sName;
 
      // Select 1 previous element
-     xCursor->goLeft(1, true);
+     if (!bAlreadyExpanded)
+         xCursor->goLeft(1, true);
+     comphelper::ScopeGuard unselectGuard(
+         [xCursor, bAlreadyExpanded]()
+         {
+             if (!bAlreadyExpanded)
+                 xCursor->goRight(1, true);
+         });
+
      uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xCursor, uno::UNO_QUERY);
      if (!xParaEnumAccess.is())
-     {
-         xCursor->goRight(1, true);
          return sName;
-     }
 
      // Iterate through selection paragraphs
      uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
      if (!xParaEnum->hasMoreElements())
-     {
-         xCursor->goRight(1, true);
          return sName;
-     }
 
      // Iterate through first para portions
      uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParaEnum->nextElement(),
@@ -744,7 +748,6 @@ void DomainMapper_Impl::AddDummyParaForTableInSection()
          }
      }
 
-     xCursor->goRight(1, true);
      return sName;
  }
 
@@ -775,80 +778,114 @@ void DomainMapper_Impl::RemoveLastParagraph( )
             xCursor->gotoEnd(false);
         }
         else
-            xCursor = m_aTextAppendStack.top().xCursor;
-        uno::Reference<container::XEnumerationAccess> xEnumerationAccess(xCursor, uno::UNO_QUERY);
+            xCursor.set(m_aTextAppendStack.top().xCursor, uno::UNO_SET_THROW);
+
         // Keep the character properties of the last but one paragraph, even if
         // it's empty. This works for headers/footers, and maybe in other cases
         // as well, but surely not in textboxes.
         // fdo#58327: also do this at the end of the document: when pasting,
         // a table before the cursor position would be deleted
-        // (but only for paste/insert, not load; otherwise it can happen that
-        // flys anchored at the disposed paragraph are deleted (fdo47036.rtf))
         bool const bEndOfDocument(m_aTextAppendStack.size() == 1);
 
-        // Try to find and remember last bookmark in document: it potentially
-        // can be deleted by xCursor->setString() but not by xParagraph->dispose()
-        OUString sLastBookmarkName;
-        if (bEndOfDocument)
-            sLastBookmarkName = lcl_FindLastBookmark(xCursor);
-
-        if ((IsInHeaderFooter() || (bEndOfDocument && !m_bIsNewDoc))
-            && xEnumerationAccess.is())
+        uno::Reference<lang::XComponent> xParagraph;
+        if (IsInHeaderFooter() || bEndOfDocument)
         {
-            uno::Reference<container::XEnumeration> xEnumeration = xEnumerationAccess->createEnumeration();
-            uno::Reference<lang::XComponent> xParagraph(xEnumeration->nextElement(), uno::UNO_QUERY);
-            xParagraph->dispose();
-        }
-        else if (xCursor.is())
-        {
-            xCursor->goLeft( 1, true );
-            // If this is a text on a shape, possibly the text has the trailing
-            // newline removed already.
-            if (xCursor->getString() == SAL_NEWLINE_STRING ||
-                    // tdf#105444 comments need an exception, if SAL_NEWLINE_STRING defined as "\r\n"
-                    (sizeof(SAL_NEWLINE_STRING)-1 == 2 && xCursor->getString() == "\n"))
+            if (uno::Reference<container::XEnumerationAccess> xEA{ xCursor, uno::UNO_QUERY })
             {
-                uno::Reference<beans::XPropertySet> xDocProps(GetTextDocument(), uno::UNO_QUERY);
-                static const OUStringLiteral aRecordChanges(u"RecordChanges");
-                uno::Any aPreviousValue(xDocProps->getPropertyValue(aRecordChanges));
+                xParagraph.set(xEA->createEnumeration()->nextElement(), uno::UNO_QUERY);
+            }
+        }
 
-                // disable redlining for this operation, otherwise we might
-                // end up with an unwanted recorded deletion
-                xDocProps->setPropertyValue(aRecordChanges, uno::Any(false));
+        xCursor->goLeft(1, true);
+        // If this is a text on a shape, possibly the text has the trailing
+        // newline removed already. RTF may also not have the trailing newline.
+        if (!(xCursor->getString() == SAL_NEWLINE_STRING ||
+              // tdf#105444 comments need an exception, if SAL_NEWLINE_STRING defined as "\r\n"
+              (sizeof(SAL_NEWLINE_STRING) - 1 == 2 && xCursor->getString() == "\n")))
+            return;
 
-                // delete
-                xCursor->setString(OUString());
+        uno::Reference<beans::XPropertySet> xDocProps(GetTextDocument(), uno::UNO_QUERY_THROW);
+        static constexpr OUStringLiteral RecordChanges(u"RecordChanges");
 
-                // While removing paragraphs that contain section properties, reset list
-                // related attributes to prevent them leaking into the following section's lists
-                if (GetParaSectpr())
+        comphelper::ScopeGuard redlineRestore(
+            [xDocProps, aPreviousValue = xDocProps->getPropertyValue(RecordChanges)]()
+            { xDocProps->setPropertyValue(RecordChanges, aPreviousValue); });
+
+        // disable redlining, otherwise we might end up with an unwanted recorded operations
+        xDocProps->setPropertyValue(RecordChanges, uno::Any(false));
+
+        if (xParagraph)
+        {
+            // move all anchored objects to the previous paragraph
+            uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(GetTextDocument(),
+                                                                         uno::UNO_QUERY_THROW);
+            auto xDrawPage = xDrawPageSupplier->getDrawPage();
+            if (xDrawPage && xDrawPage->hasElements())
+            {
+                // Cursor already spans two paragraphs
+                uno::Reference<container::XEnumerationAccess> xEA(xCursor,
+                                                                  uno::UNO_QUERY_THROW);
+                auto xEnumeration = xEA->createEnumeration();
+                uno::Reference<text::XTextRange> xPrevParagraph(xEnumeration->nextElement(),
+                                                                uno::UNO_QUERY_THROW);
+
+                uno::Reference<text::XTextRange> xParaRange(xParagraph, uno::UNO_QUERY_THROW);
+                uno::Reference<text::XTextRangeCompare> xRegionCompare(xParaRange->getText(),
+                                                                       uno::UNO_QUERY_THROW);
+                const sal_Int32 count = xDrawPage->getCount();
+                for (sal_Int32 i = 0; i < count; ++i)
                 {
-                    uno::Reference<beans::XPropertySet> XCursorProps(xCursor, uno::UNO_QUERY);
-                    XCursorProps->setPropertyValue("ResetParagraphListAttributes", uno::Any());
-                }
-
-                // call to xCursor->setString possibly did remove final bookmark
-                // from previous paragraph. We need to restore it, if there was any.
-                if (sLastBookmarkName.getLength())
-                {
-                    OUString sBookmarkNameAfterRemoval = lcl_FindLastBookmark(xCursor);
-                    if (sBookmarkNameAfterRemoval.isEmpty())
+                    try
                     {
-                        // Yes, it was removed. Restore
-                        uno::Reference<text::XTextContent> xBookmark(
-                            m_xTextFactory->createInstance("com.sun.star.text.Bookmark"),
-                            uno::UNO_QUERY_THROW);
-
-                        uno::Reference<container::XNamed> xBkmNamed(xBookmark,
-                                                                    uno::UNO_QUERY_THROW);
-                        xBkmNamed->setName(sLastBookmarkName);
-                        xTextAppend->insertTextContent(
-                            uno::Reference<text::XTextRange>(xCursor, uno::UNO_QUERY_THROW),
-                            xBookmark, !xCursor->isCollapsed());
+                        uno::Reference<text::XTextContent> xShape(xDrawPage->getByIndex(i),
+                                                                  uno::UNO_QUERY_THROW);
+                        uno::Reference<text::XTextRange> xAnchor(xShape->getAnchor(),
+                                                                 uno::UNO_SET_THROW);
+                        if (xRegionCompare->compareRegionStarts(xAnchor, xParaRange) <= 0
+                            && xRegionCompare->compareRegionEnds(xAnchor, xParaRange) >= 0)
+                        {
+                            xShape->attach(xPrevParagraph);
+                        }
+                    }
+                    catch (const uno::Exception&)
+                    {
+                        // Can happen e.g. in compareRegion*, when the shape is in a header,
+                        // and paragraph in body
                     }
                 }
-                // restore redline options again
-                xDocProps->setPropertyValue(aRecordChanges, aPreviousValue);
+            }
+
+            xParagraph->dispose();
+        }
+        else
+        {
+            // Try to find and remember last bookmark in document: it potentially
+            // can be deleted by xCursor->setString() but not by xParagraph->dispose()
+            OUString sLastBookmarkName;
+            if (bEndOfDocument)
+                sLastBookmarkName = lcl_FindLastBookmark(xCursor, true);
+
+            // The cursor already selects across the paragraph break
+            // delete
+            xCursor->setString(OUString());
+
+            // call to xCursor->setString possibly did remove final bookmark
+            // from previous paragraph. We need to restore it, if there was any.
+            if (sLastBookmarkName.getLength())
+            {
+                OUString sBookmarkNameAfterRemoval = lcl_FindLastBookmark(xCursor, false);
+                if (sBookmarkNameAfterRemoval.isEmpty())
+                {
+                    // Yes, it was removed. Restore
+                    uno::Reference<text::XTextContent> xBookmark(
+                        m_xTextFactory->createInstance("com.sun.star.text.Bookmark"),
+                        uno::UNO_QUERY_THROW);
+
+                    uno::Reference<container::XNamed> xBkmNamed(xBookmark,
+                                                                uno::UNO_QUERY_THROW);
+                    xBkmNamed->setName(sLastBookmarkName);
+                    xTextAppend->insertTextContent(xCursor, xBookmark, !xCursor->isCollapsed());
+                }
             }
         }
     }
