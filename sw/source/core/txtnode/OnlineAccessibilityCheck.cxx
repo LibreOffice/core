@@ -248,7 +248,7 @@ void OnlineAccessibilityCheck::lookForPreviousNodeAndUpdate(const SwPosition& rN
         return;
     }
 
-    // Run the docement level Accessibility Check
+    // Run the document level Accessibility Check
     runDocumentLevelAccessibilityCheck();
 
     // Get the real previous node from index
