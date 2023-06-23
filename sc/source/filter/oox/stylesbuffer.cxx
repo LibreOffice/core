@@ -1498,6 +1498,11 @@ void Border::finalizeImport( bool bRTL )
     convertBorderLine( maApiData.maTop,    maModel.maTop );
     convertBorderLine( maApiData.maBottom, maModel.maBottom );
 
+    maApiData.maComplexColorLeft = maModel.maLeft.maColor.createComplexColor(getBaseFilter().getGraphicHelper(), -1);
+    maApiData.maComplexColorRight = maModel.maRight.maColor.createComplexColor(getBaseFilter().getGraphicHelper(), -1);
+    maApiData.maComplexColorTop = maModel.maTop.maColor.createComplexColor(getBaseFilter().getGraphicHelper(), -1);
+    maApiData.maComplexColorBottom = maModel.maBottom.maColor.createComplexColor(getBaseFilter().getGraphicHelper(), -1);
+
     if( maModel.mbDiagTLtoBR )
         convertBorderLine( maApiData.maTLtoBR, maModel.maDiagonal );
     if( maModel.mbDiagBLtoTR )
@@ -1509,22 +1514,26 @@ void Border::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
     if( maApiData.mbBorderUsed )
     {
          SvxBoxItem aBoxItem( ATTR_BORDER );
-         ::editeng::SvxBorderLine aLine;
+         editeng::SvxBorderLine aLine;
 
          if (SvxBoxItem::LineToSvxLine(maApiData.maLeft, aLine, false))
          {
+             aLine.setComplexColor(maApiData.maComplexColorLeft);
              aBoxItem.SetLine( &aLine, SvxBoxItemLine::LEFT );
          }
          if (SvxBoxItem::LineToSvxLine(maApiData.maRight, aLine, false))
          {
+             aLine.setComplexColor(maApiData.maComplexColorRight);
              aBoxItem.SetLine( &aLine, SvxBoxItemLine::RIGHT );
          }
          if (SvxBoxItem::LineToSvxLine(maApiData.maTop, aLine, false))
          {
+             aLine.setComplexColor(maApiData.maComplexColorTop);
              aBoxItem.SetLine( &aLine, SvxBoxItemLine::TOP );
          }
          if (SvxBoxItem::LineToSvxLine(maApiData.maBottom, aLine, false))
          {
+             aLine.setComplexColor(maApiData.maComplexColorBottom);
              aBoxItem.SetLine( &aLine, SvxBoxItemLine::BOTTOM );
          }
          ScfTools::PutItem( rItemSet, aBoxItem, bSkipPoolDefs );

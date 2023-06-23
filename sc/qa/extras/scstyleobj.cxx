@@ -61,6 +61,7 @@ ScStyleObj::ScStyleObj()
     , XNamed("ScStyleObj")
     , XPropertySet({ "BottomBorder",
                      "BottomBorder2",
+                     "BottomBorderComplexColor",
                      "CellProtection",
                      "CharLocale",
                      "CharLocaleAsian",
@@ -75,14 +76,17 @@ ScStyleObj::ScStyleObj()
                      "HoriJustify",
                      "LeftBorder",
                      "LeftBorder2",
+                     "LeftBorderComplexColor",
                      "NumberFormat",
                      "Orientation",
                      "RightBorder",
                      "RightBorder2",
+                     "RightBorderComplexColor",
                      "ShadowFormat",
                      "TableBorder",
                      "TopBorder",
                      "TopBorder2",
+                     "TopBorderComplexColor",
                      "UserDefinedAttributes",
                      "CellBackgroundComplexColor" })
 {

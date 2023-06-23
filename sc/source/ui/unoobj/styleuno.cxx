@@ -108,8 +108,7 @@ static const SfxItemPropertySet* lcl_GetCellStyleSet()
     static const SfxItemPropertyMapEntry aCellStyleMap_Impl[] =
     {
         {SC_UNONAME_ASIANVERT,ATTR_VERTICAL_ASIAN,cppu::UnoType<bool>::get(),                  0, 0 },
-        {SC_UNONAME_BOTTBORDER,ATTR_BORDER,       ::cppu::UnoType<table::BorderLine>::get(),        0, BOTTOM_BORDER | CONVERT_TWIPS },
-        {SC_UNONAME_BOTTBORDER2,ATTR_BORDER,       ::cppu::UnoType<table::BorderLine2>::get(),        0, BOTTOM_BORDER | CONVERT_TWIPS },
+        CELL_BORDER_PROPERTIES
         CELL_BACKGROUND_COLOR_PROPERTIES
         {SC_UNONAME_CELLPRO,  ATTR_PROTECTION,    ::cppu::UnoType<util::CellProtection>::get(), 0, 0 },
         CHAR_COLOR_PROPERTIES
@@ -163,8 +162,6 @@ static const SfxItemPropertySet* lcl_GetCellStyleSet()
         {SC_UNONAME_CELLHJUS_METHOD, ATTR_HOR_JUSTIFY_METHOD, ::cppu::UnoType<sal_Int32>::get(),   0, 0 },
         {SC_UNONAME_CELLTRAN, ATTR_BACKGROUND,    cppu::UnoType<bool>::get(),            0, MID_GRAPHIC_TRANSPARENT },
         {SC_UNONAME_WRAP,     ATTR_LINEBREAK,     cppu::UnoType<bool>::get(),            0, 0 },
-        {SC_UNONAME_LEFTBORDER,ATTR_BORDER,       ::cppu::UnoType<table::BorderLine>::get(),        0, LEFT_BORDER | CONVERT_TWIPS },
-        {SC_UNONAME_LEFTBORDER2,ATTR_BORDER,       ::cppu::UnoType<table::BorderLine2>::get(),        0, LEFT_BORDER | CONVERT_TWIPS },
         {SC_UNONAME_NUMFMT,   ATTR_VALUE_FORMAT,  ::cppu::UnoType<sal_Int32>::get(),            0, 0 },
 //      {SC_UNONAME_NUMRULES, SC_WID_UNO_NUMRULES,cppu::UnoType<container::XIndexReplace>::get(), 0, 0 },
         {SC_UNONAME_CELLORI,  ATTR_STACKED,       ::cppu::UnoType<table::CellOrientation>::get(),   0, 0 },
@@ -179,16 +176,12 @@ static const SfxItemPropertySet* lcl_GetCellStyleSet()
         {SC_UNONAME_PLMARGIN, ATTR_MARGIN,        ::cppu::UnoType<sal_Int32>::get(),            0, MID_MARGIN_L_MARGIN  | CONVERT_TWIPS },
         {SC_UNONAME_PRMARGIN, ATTR_MARGIN,        ::cppu::UnoType<sal_Int32>::get(),            0, MID_MARGIN_R_MARGIN  | CONVERT_TWIPS },
         {SC_UNONAME_PTMARGIN, ATTR_MARGIN,        ::cppu::UnoType<sal_Int32>::get(),            0, MID_MARGIN_UP_MARGIN | CONVERT_TWIPS },
-        {SC_UNONAME_RIGHTBORDER,ATTR_BORDER,      ::cppu::UnoType<table::BorderLine>::get(),        0, RIGHT_BORDER | CONVERT_TWIPS },
-        {SC_UNONAME_RIGHTBORDER2,ATTR_BORDER,      ::cppu::UnoType<table::BorderLine2>::get(),        0, RIGHT_BORDER | CONVERT_TWIPS },
         {SC_UNONAME_ROTANG,   ATTR_ROTATE_VALUE,  ::cppu::UnoType<sal_Int32>::get(),            0, 0 },
         {SC_UNONAME_ROTREF,   ATTR_ROTATE_MODE,   ::cppu::UnoType<sal_Int32>::get(),    0, 0 },
         {SC_UNONAME_SHADOW,   ATTR_SHADOW,        ::cppu::UnoType<table::ShadowFormat>::get(),  0, 0 | CONVERT_TWIPS },
         {SC_UNONAME_SHRINK_TO_FIT, ATTR_SHRINKTOFIT, cppu::UnoType<bool>::get(),               0, 0 },
         {SC_UNONAME_TBLBORD,  SC_WID_UNO_TBLBORD, ::cppu::UnoType<table::TableBorder>::get(),       0, 0 | CONVERT_TWIPS },
         {SC_UNONAME_TBLBORD,  SC_WID_UNO_TBLBORD2, ::cppu::UnoType<table::TableBorder2>::get(),       0, 0 | CONVERT_TWIPS },
-        {SC_UNONAME_TOPBORDER,ATTR_BORDER,        ::cppu::UnoType<table::BorderLine>::get(),        0, TOP_BORDER | CONVERT_TWIPS },
-        {SC_UNONAME_TOPBORDER2,ATTR_BORDER,        ::cppu::UnoType<table::BorderLine2>::get(),        0, TOP_BORDER | CONVERT_TWIPS },
         {SC_UNONAME_USERDEF,  ATTR_USERDEF,       cppu::UnoType<container::XNameContainer>::get(), 0, 0 },
         {SC_UNONAME_CELLVJUS, ATTR_VER_JUSTIFY,   ::cppu::UnoType<sal_Int32>::get(),    0, 0 },
         {SC_UNONAME_CELLVJUS_METHOD, ATTR_VER_JUSTIFY_METHOD, ::cppu::UnoType<sal_Int32>::get(),   0, 0 },

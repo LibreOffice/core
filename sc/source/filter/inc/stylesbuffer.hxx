@@ -411,6 +411,10 @@ struct ApiBorderData
     ApiBorderLine       maRight;            /// Right line format
     ApiBorderLine       maTop;              /// Top line format
     ApiBorderLine       maBottom;           /// Bottom line format
+    model::ComplexColor maComplexColorLeft;
+    model::ComplexColor maComplexColorRight;
+    model::ComplexColor maComplexColorTop;
+    model::ComplexColor maComplexColorBottom;
     ApiBorderLine       maTLtoBR;           /// Diagonal top-left to bottom-right line format.
     ApiBorderLine       maBLtoTR;           /// Diagonal bottom-left to top-right line format.
     bool                mbBorderUsed;       /// True = left/right/top/bottom line format used.
