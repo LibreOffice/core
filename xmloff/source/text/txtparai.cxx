@@ -1725,21 +1725,6 @@ void XMLParaContext::endFastElement(sal_Int32 )
     // insert a paragraph break
     xTxtImport->InsertControlCharacter( ControlCharacter::APPEND_PARAGRAPH );
 
-    if (m_aMarkerStyleName.hasValue())
-    {
-        if (auto xPropSet = xStart.query<css::beans::XPropertySet>())
-        {
-            try
-            {
-                xPropSet->setPropertyValue("ListAutoFormat", m_aMarkerStyleName);
-            }
-            catch (const css::beans::UnknownPropertyException&)
-            {
-                // no problem
-            }
-        }
-    }
-
     // create a cursor that select the whole last paragraph
     Reference < XTextCursor > xAttrCursor;
     try {
@@ -1805,6 +1790,21 @@ void XMLParaContext::endFastElement(sal_Int32 )
                                                bHeading ? nOutlineLevel : -1,
                                                true,
                                                mbOutlineContentVisible);
+
+    if (m_aMarkerStyleName.hasValue())
+    {
+        if (auto xPropSet = xStart.query<css::beans::XPropertySet>())
+        {
+            try
+            {
+                xPropSet->setPropertyValue("ListAutoFormat", m_aMarkerStyleName);
+            }
+            catch (const css::beans::UnknownPropertyException&)
+            {
+                // no problem
+            }
+        }
+    }
 
     // handle list style header
     if (bHeading && (bIsListHeader || bIsRestart))
