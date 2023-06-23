@@ -7,30 +7,24 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapixml_test.hxx>
+#include "helper/qahelper.hxx"
 
-#include <com/sun/star/lang/XComponent.hpp>
-#include <comphelper/servicehelper.hxx>
 #include <docsh.hxx>
+#include <scitems.hxx>
+#include <editeng/brushitem.hxx>
 
 using namespace css;
 
-class ThemeImportExportTest : public UnoApiXmlTest
+class ThemeImportExportTest : public ScModelTestBase
 {
 public:
     ThemeImportExportTest()
-        : UnoApiXmlTest("sc/qa/unit/data")
+        : ScModelTestBase("sc/qa/unit/data")
     {
     }
-
-    void test();
-
-    CPPUNIT_TEST_SUITE(ThemeImportExportTest);
-    CPPUNIT_TEST(test);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void ThemeImportExportTest::test()
+CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testThemeExport)
 {
     loadFromURL(u"xlsx/CalcThemeTest.xlsx");
 
@@ -64,7 +58,43 @@ void ThemeImportExportTest::test()
     assertXPath(pXmlDoc, "/x:styleSheet/x:fills/x:fill[4]/x:patternFill/x:fgColor", "theme", "4");
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(ThemeImportExportTest);
+CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testCellBackgroundThemeColor)
+{
+    loadFromURL(u"xlsx/Test_ThemeColor_Text_Background_Border.xlsx");
+
+    ScDocument* pDoc = getScDoc();
+
+    {
+        const ScPatternAttr* pPattern = pDoc->GetPattern(0, 0, 0);
+        const SfxPoolItem* pItem = nullptr;
+        pPattern->GetItemSet().HasItem(ATTR_BACKGROUND, &pItem);
+        CPPUNIT_ASSERT(pItem);
+
+        auto* pBrushItem = static_cast<const SvxBrushItem*>(pItem);
+        CPPUNIT_ASSERT_EQUAL(Color(0x27ced7), pBrushItem->GetColor());
+        auto aComplexColor = pBrushItem->getComplexColor();
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent3, aComplexColor.getSchemeType());
+        CPPUNIT_ASSERT_EQUAL(size_t(0), aComplexColor.getTransformations().size());
+    }
+
+    {
+        const ScPatternAttr* pPattern = pDoc->GetPattern(0, 1, 0);
+        const SfxPoolItem* pItem = nullptr;
+        pPattern->GetItemSet().HasItem(ATTR_BACKGROUND, &pItem);
+        CPPUNIT_ASSERT(pItem);
+
+        auto* pBrushItem = static_cast<const SvxBrushItem*>(pItem);
+        CPPUNIT_ASSERT_EQUAL(Color(0xd4f5f7), pBrushItem->GetColor());
+        auto aComplexColor = pBrushItem->getComplexColor();
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent3, aComplexColor.getSchemeType());
+        auto& rTransformations = aComplexColor.getTransformations();
+        CPPUNIT_ASSERT_EQUAL(size_t(2), rTransformations.size());
+        CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(2000), rTransformations[0].mnValue);
+        CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff, rTransformations[1].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(7999), rTransformations[1].mnValue);
+    }
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
