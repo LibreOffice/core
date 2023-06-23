@@ -90,31 +90,47 @@ Duration::Duration(sal_Int32 nDays, const Time& rTime)
     : mnDays(nDays)
 {
     assert(nDays == 0 || rTime.GetTime() == 0 || (nDays < 0) == (rTime.GetTime() < 0));
-    sal_uInt64 nN = rTime.GetNanoSec();
-    sal_uInt64 nS = rTime.GetSec();
-    if (nN >= Time::nanoSecPerSec)
+    Normalize(rTime.GetHour(), rTime.GetMin(), rTime.GetSec(), rTime.GetNanoSec(),
+              ((nDays < 0) || (rTime.GetTime() < 0)));
+}
+
+Duration::Duration(sal_Int32 nDays, sal_uInt32 nHours, sal_uInt32 nMinutes, sal_uInt32 nSeconds,
+                   sal_uInt64 nNanoseconds)
+    : mnDays(nDays)
+{
+    Normalize(nHours, nMinutes, nSeconds, nNanoseconds, nDays < 0);
+}
+
+Duration::Duration(sal_Int32 nDays, sal_Int64 nTime)
+    : maTime(nTime)
+    , mnDays(nDays)
+{
+}
+
+void Duration::Normalize(sal_uInt64 nHours, sal_uInt64 nMinutes, sal_uInt64 nSeconds,
+                         sal_uInt64 nNanoseconds, bool bNegative)
+{
+    if (nNanoseconds >= Time::nanoSecPerSec)
     {
-        nS += nN / Time::nanoSecPerSec;
-        nN %= Time::nanoSecPerSec;
+        nSeconds += nNanoseconds / Time::nanoSecPerSec;
+        nNanoseconds %= Time::nanoSecPerSec;
     }
-    sal_uInt64 nM = rTime.GetMin();
-    if (nS >= Time::secondPerMinute)
+    if (nSeconds >= Time::secondPerMinute)
     {
-        nM += nS / Time::secondPerMinute;
-        nS %= Time::secondPerMinute;
+        nMinutes += nSeconds / Time::secondPerMinute;
+        nSeconds %= Time::secondPerMinute;
     }
-    sal_uInt64 nH = rTime.GetHour();
-    if (nM >= Time::minutePerHour)
+    if (nMinutes >= Time::minutePerHour)
     {
-        nH += nM / Time::minutePerHour;
-        nM %= Time::minutePerHour;
+        nHours += nMinutes / Time::minutePerHour;
+        nMinutes %= Time::minutePerHour;
     }
-    if (nH >= Time::hourPerDay)
+    if (nHours >= Time::hourPerDay)
     {
-        sal_Int64 nDiff = nH / Time::hourPerDay;
-        nH %= Time::hourPerDay;
+        sal_Int64 nDiff = nHours / Time::hourPerDay;
+        nHours %= Time::hourPerDay;
         bool bOverflow = false;
-        if (rTime.GetTime() < 0)
+        if (bNegative)
         {
             nDiff = -nDiff;
             bOverflow = (nDiff < SAL_MIN_INT32);
@@ -132,22 +148,16 @@ Duration::Duration(sal_Int32 nDays, const Time& rTime)
         assert(!bOverflow);
         if (bOverflow)
         {
-            nH = Time::hourPerDay - 1;
-            nM = Time::minutePerHour - 1;
-            nS = Time::secondPerMinute - 1;
-            nN = Time::nanoSecPerSec - 1;
+            nHours = Time::hourPerDay - 1;
+            nMinutes = Time::minutePerHour - 1;
+            nSeconds = Time::secondPerMinute - 1;
+            nNanoseconds = Time::nanoSecPerSec - 1;
         }
     }
-    maTime = Time(nH, nM, nS, nN);
-    if (rTime.GetTime() < 0)
+    maTime = Time(nHours, nMinutes, nSeconds, nNanoseconds);
+    if (bNegative)
         maTime = -maTime;
     assert(mnDays == 0 || maTime.GetTime() == 0 || (mnDays < 0) == (maTime.GetTime() < 0));
-}
-
-Duration::Duration(sal_Int32 nDays, sal_Int64 nTime)
-    : maTime(nTime)
-    , mnDays(nDays)
-{
 }
 
 void Duration::ApplyTime(sal_Int64 nNS)
@@ -163,7 +173,7 @@ void Duration::ApplyTime(sal_Int64 nNS)
         nNS = -Time::nanoSecPerDay + nNS;
     }
     maTime.MakeTimeFromNS(nNS);
-    assert(mnDays == 0 || maTime.GetTime() == 0 || (mnDays < 0) == (nNS < 0));
+    assert(mnDays == 0 || maTime.GetTime() == 0 || (mnDays < 0) == (maTime.GetTime() < 0));
 }
 
 void Duration::SetTimeDiff(const Time& rStart, const Time& rEnd)
