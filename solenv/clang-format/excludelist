@@ -7768,6 +7768,7 @@ sax/test/sax/testwriter.cxx
 sax/test/saxdemo.cxx
 sax/test/testcomponent.cxx
 sc/inc/ChartTools.hxx
+sc/inc/CommonProperties.hxx
 sc/inc/NumberFormatControl.hxx
 sc/inc/PivotTableDataProvider.hxx
 sc/inc/PivotTableDataSequence.hxx
