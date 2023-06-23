@@ -840,21 +840,31 @@ model::ComplexColor Color::createComplexColor(const GraphicHelper& /*rGraphicHel
         return aNewComplexColor;
     }
 
-    if (getLumMod() != 10000)
-        aNewComplexColor.addTransformation({model::TransformationType::LumMod, getLumMod()});
-
-    if (getLumOff() != 0)
-        aNewComplexColor.addTransformation({model::TransformationType::LumOff, getLumOff()});
-
-    if (getTintOrShade() > 0)
+    for(auto const& aTransform : maTransforms)
     {
-        aNewComplexColor.addTransformation({model::TransformationType::Tint, getTintOrShade()});
+        sal_Int16 nValue = sal_Int16(aTransform.mnValue / 10);
+
+        switch(aTransform.mnToken)
+        {
+            case XML_lumMod:
+                if (nValue != 10'000)
+                    aNewComplexColor.addTransformation({model::TransformationType::LumMod, nValue});
+                break;
+            case XML_lumOff:
+                if (nValue != 0)
+                    aNewComplexColor.addTransformation({model::TransformationType::LumOff, nValue});
+                break;
+            case XML_tint:
+                if (nValue != 0)
+                    aNewComplexColor.addTransformation({model::TransformationType::Tint, nValue});
+                break;
+            case XML_shade:
+                if (nValue != 0)
+                    aNewComplexColor.addTransformation({model::TransformationType::Shade, nValue});
+                break;
+        }
     }
-    else if (getTintOrShade() < 0)
-    {
-        sal_Int16 nShade = o3tl::narrowing<sal_Int16>(-getTintOrShade());
-        aNewComplexColor.addTransformation({model::TransformationType::Shade, nShade});
-    }
+
     return aNewComplexColor;
 }
 
