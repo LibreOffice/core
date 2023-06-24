@@ -294,7 +294,8 @@ Color::Color() :
     mnC1( 0 ),
     mnC2( 0 ),
     mnC3( 0 ),
-    mnAlpha( MAX_PERCENT )
+    mnAlpha( MAX_PERCENT ),
+    meThemeColorType( model::ThemeColorType::Unknown )
 {
 }
 
