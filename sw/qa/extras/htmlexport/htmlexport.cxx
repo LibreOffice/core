@@ -2695,6 +2695,20 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTdf155871)
     CPPUNIT_ASSERT(pDoc);
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_ListsNoStartAttribute)
+{
+    createSwDoc("twoListsWithSameStyle.fodt");
+    ExportToReqif();
+
+    SvMemoryStream aStream;
+    WrapReqifFromTempFile(aStream);
+    xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
+    CPPUNIT_ASSERT(pDoc);
+
+    // No 'start' attribute must be present in 'ol'
+    assertXPath(pDoc, "//reqif-xhtml:ol[@start]", 0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
