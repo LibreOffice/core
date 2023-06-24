@@ -97,7 +97,7 @@ void SvgFeColorMatrixNode::apply(drawinglayer::primitive2d::Primitive2DContainer
     else if (maType == ColorType::Saturate)
     {
         SvgNumber aNum(1.0);
-        readSingleNumber(maValuesContent, aNum);
+        (void)readSingleNumber(maValuesContent, aNum);
 
         const drawinglayer::primitive2d::Primitive2DReference xRef(
             new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
@@ -108,7 +108,7 @@ void SvgFeColorMatrixNode::apply(drawinglayer::primitive2d::Primitive2DContainer
     else if (maType == ColorType::HueRotate)
     {
         SvgNumber aNum(0.0);
-        readSingleNumber(maValuesContent, aNum);
+        (void)readSingleNumber(maValuesContent, aNum);
         const drawinglayer::primitive2d::Primitive2DReference xRef(
             new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
                 std::move(rTarget), std::make_shared<basegfx::BColorModifier_hueRotate>(
