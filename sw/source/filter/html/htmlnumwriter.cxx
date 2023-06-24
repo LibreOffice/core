@@ -217,10 +217,10 @@ SwHTMLWriter& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
             // Ordered list: <OL>
             sOut += OOO_STRING_SVTOOLS_HTML_orderlist;
 
-            // determine the type by the format
-            char cType = 0;
-            if (!rWrt.mbReqIF) // No 'type' attribute in ReqIF
+            if (!rWrt.mbReqIF) // No 'type' nor 'start' attribute in ReqIF
             {
+                // determine the type by the format
+                char cType = 0;
                 switch (eType)
                 {
                 case SVX_NUM_CHARS_UPPER_LETTER:
@@ -238,28 +238,28 @@ SwHTMLWriter& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
                     cType = 'i';
                     break;
                 }
-            }
-            if( cType )
-            {
-                sOut += " " OOO_STRING_SVTOOLS_HTML_O_type "=\"" + OStringChar(cType) + "\"";
-            }
+                if( cType )
+                {
+                    sOut += " " OOO_STRING_SVTOOLS_HTML_O_type "=\"" + OStringChar(cType) + "\"";
+                }
 
-            sal_uInt16 nStartVal = rNumFormat.GetStart();
-            if( bStartValue && 1 == nStartVal && i == rInfo.GetDepth()-1 )
-            {
-                if ( rWrt.m_pCurrentPam->GetPointNode().GetTextNode()->GetNum() )
+                sal_uInt16 nStartVal = rNumFormat.GetStart();
+                if( bStartValue && 1 == nStartVal && i == rInfo.GetDepth()-1 )
                 {
-                    nStartVal = static_cast< sal_uInt16 >( rWrt.m_pCurrentPam->GetPointNode()
-                                .GetTextNode()->GetNumberVector()[i] );
+                    if ( rWrt.m_pCurrentPam->GetPointNode().GetTextNode()->GetNum() )
+                    {
+                        nStartVal = static_cast< sal_uInt16 >( rWrt.m_pCurrentPam->GetPointNode()
+                                    .GetTextNode()->GetNumberVector()[i] );
+                    }
+                    else
+                    {
+                        OSL_FAIL( "<OutHTML_NumberBulletListStart(..) - text node has no number." );
+                    }
                 }
-                else
+                if( nStartVal != 1 )
                 {
-                    OSL_FAIL( "<OutHTML_NumberBulletListStart(..) - text node has no number." );
+                    sOut += " " OOO_STRING_SVTOOLS_HTML_O_start "=\"" + OString::number(static_cast<sal_Int32>(nStartVal)) + "\"";
                 }
-            }
-            if( nStartVal != 1 )
-            {
-                sOut += " " OOO_STRING_SVTOOLS_HTML_O_start "=\"" + OString::number(static_cast<sal_Int32>(nStartVal)) + "\"";
             }
         }
 
