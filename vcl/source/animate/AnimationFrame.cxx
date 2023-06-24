@@ -45,6 +45,9 @@ BitmapChecksum AnimationFrame::GetChecksum() const
     UInt32ToSVBT32(o3tl::to_underlying(meDisposal), aBT32);
     nCrc = vcl_get_checksum(nCrc, aBT32, 4);
 
+    UInt32ToSVBT32(o3tl::to_underlying(meBlend), aBT32);
+    nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+
     UInt32ToSVBT32(sal_uInt32(mbUserInput), aBT32);
     nCrc = vcl_get_checksum(nCrc, aBT32, 4);
 

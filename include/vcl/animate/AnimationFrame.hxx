@@ -28,6 +28,12 @@ enum class Disposal
     Previous
 };
 
+enum class Blend
+{
+    Source,
+    Over
+};
+
 struct AnimationFrame
 {
     BitmapEx maBitmapEx;
@@ -35,22 +41,26 @@ struct AnimationFrame
     Size maSizePixel;
     tools::Long mnWait;
     Disposal meDisposal;
+    Blend meBlend;
     bool mbUserInput;
 
     AnimationFrame()
         : mnWait(0)
         , meDisposal(Disposal::Not)
+        , meBlend(Blend::Over)
         , mbUserInput(false)
     {
     }
 
     AnimationFrame(const BitmapEx& rBitmapEx, const Point& rPositionPixel, const Size& rSizePixel,
-                   tools::Long nWait = 0, Disposal eDisposal = Disposal::Not)
+                   tools::Long nWait = 0, Disposal eDisposal = Disposal::Not,
+                   Blend eBlend = Blend::Over)
         : maBitmapEx(rBitmapEx)
         , maPositionPixel(rPositionPixel)
         , maSizePixel(rSizePixel)
         , mnWait(nWait)
         , meDisposal(eDisposal)
+        , meBlend(eBlend)
         , mbUserInput(false)
     {
     }
@@ -60,7 +70,7 @@ struct AnimationFrame
         return (rAnimationFrame.maBitmapEx == maBitmapEx
                 && rAnimationFrame.maPositionPixel == maPositionPixel
                 && rAnimationFrame.maSizePixel == maSizePixel && rAnimationFrame.mnWait == mnWait
-                && rAnimationFrame.meDisposal == meDisposal
+                && rAnimationFrame.meDisposal == meDisposal && rAnimationFrame.meBlend == meBlend
                 && rAnimationFrame.mbUserInput == mbUserInput);
     }
 

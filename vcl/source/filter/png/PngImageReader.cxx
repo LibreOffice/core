@@ -685,11 +685,12 @@ bool reader(SvStream& rStream, Graphic& rGraphic,
             {
                 Point aFirstPoint(0, 0);
                 auto aDisposal = static_cast<Disposal>(aFctlChunk->dispose_op);
+                auto aBlend = static_cast<Blend>(aFctlChunk->blend_op);
                 if (aDisposal == Disposal::Previous)
                     aDisposal = Disposal::Back;
                 AnimationFrame aAnimationFrame(
                     aBitmapEx, aFirstPoint, aCanvasSize,
-                    NumDenToTime(aFctlChunk->delay_num, aFctlChunk->delay_den), aDisposal);
+                    NumDenToTime(aFctlChunk->delay_num, aFctlChunk->delay_den), aDisposal, aBlend);
                 aAnimation.Insert(aAnimationFrame);
             }
         }
@@ -699,6 +700,7 @@ bool reader(SvStream& rStream, Graphic& rGraphic,
             fcTLChunk* aFctlChunk
                 = static_cast<fcTLChunk*>(aAPNGInfo.maFrameData[nSequenceIndex++].get());
             Disposal aDisposal = static_cast<Disposal>(aFctlChunk->dispose_op);
+            Blend aBlend = static_cast<Blend>(aFctlChunk->blend_op);
             if (i == 0 && aDisposal == Disposal::Back)
                 aDisposal = Disposal::Previous;
             SvMemoryStream aFrameStream;
@@ -730,7 +732,7 @@ bool reader(SvStream& rStream, Graphic& rGraphic,
             Size aSize(aFctlChunk->width, aFctlChunk->height);
             AnimationFrame aAnimationFrame(
                 aFrameBitmapEx, aStartPoint, aSize,
-                NumDenToTime(aFctlChunk->delay_num, aFctlChunk->delay_den), aDisposal);
+                NumDenToTime(aFctlChunk->delay_num, aFctlChunk->delay_den), aDisposal, aBlend);
             aAnimation.Insert(aAnimationFrame);
         }
         rGraphic = aAnimation;

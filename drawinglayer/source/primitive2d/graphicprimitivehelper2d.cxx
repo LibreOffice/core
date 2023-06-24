@@ -252,6 +252,15 @@ namespace drawinglayer::primitive2d
                     // prepare step
                     const AnimationFrame& rAnimationFrame = maAnimation.Get(sal_uInt16(mnNextFrameToPrepare));
 
+                    bool bSourceBlending = rAnimationFrame.meBlend == Blend::Source;
+
+                    if (bSourceBlending)
+                    {
+                        tools::Rectangle aArea(rAnimationFrame.maPositionPixel, rAnimationFrame.maBitmapEx.GetSizePixel());
+                        maVirtualDevice->Erase(aArea);
+                        maVirtualDeviceMask->Erase(aArea);
+                    }
+
                     switch (rAnimationFrame.meDisposal)
                     {
                         case Disposal::Not:
@@ -278,14 +287,13 @@ namespace drawinglayer::primitive2d
                         {
                             // #i70772# react on no mask, for primitives, too.
                             const AlphaMask & rMask(rAnimationFrame.maBitmapEx.GetAlphaMask());
-                            const Bitmap & rContent(rAnimationFrame.maBitmapEx.GetBitmap());
 
                             maVirtualDeviceMask->Erase();
-                            maVirtualDevice->DrawBitmap(rAnimationFrame.maPositionPixel, rContent);
+                            maVirtualDevice->DrawBitmapEx(rAnimationFrame.maPositionPixel, rAnimationFrame.maBitmapEx);
 
                             if (rMask.IsEmpty())
                             {
-                                const ::tools::Rectangle aRect(rAnimationFrame.maPositionPixel, rContent.GetSizePixel());
+                                const ::tools::Rectangle aRect(rAnimationFrame.maPositionPixel, rAnimationFrame.maBitmapEx.GetSizePixel());
                                 maVirtualDeviceMask->SetFillColor(COL_BLACK);
                                 maVirtualDeviceMask->SetLineColor();
                                 maVirtualDeviceMask->DrawRect(aRect);
