@@ -27,14 +27,11 @@ $(eval $(call gb_UnpackedTarball_add_patches,gpgmepp, \
     external/gpgmepp/w32-build-fixes-2.patch \
     $(if $(filter LINUX,$(OS)),external/gpgmepp/asan.patch) \
     $(if $(filter LINUX,$(OS)),external/gpgmepp/rpath.patch) \
-    external/gpgmepp/gcc9.patch \
     external/gpgmepp/ubsan.patch \
     external/gpgmepp/c++20.patch \
     external/gpgmepp/clang-cl.patch \
     external/gpgmepp/configure.patch \
     external/gpgmepp/w32-include.patch \
     external/gpgmepp/Wincompatible-function-pointer-types.patch \
-    external/gpgmepp/0001-cpp-Fix-building-with-C-11.patch.1 \
-    external/gpgmepp/macos-include.patch \
 ))
 # vim: set noet sw=4 ts=4:

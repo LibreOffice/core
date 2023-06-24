@@ -1,15 +1,17 @@
-diff -ru gpgme.orig/m4/ax_cxx_compile_stdcxx.m4 gpgme/m4/ax_cxx_compile_stdcxx.m4
---- gpgme.orig/m4/ax_cxx_compile_stdcxx.m4	2016-05-27 22:04:36.000000000 +0200
-+++ gpgme/m4/ax_cxx_compile_stdcxx.m4	2017-09-29 17:34:49.795243600 +0200
-@@ -156,7 +156,7 @@
+diff -ru gpgme.orig/src/debug.h gpgme/src/debug.h
+--- gpgme.orig/src/debug.h	2023-04-17 22:09:48.000000000 +0900
++++ gpgme/src/debug.h	2023-06-25 20:43:29.267407815 +0900
+@@ -21,6 +21,10 @@
+ #ifndef DEBUG_H
+ #define DEBUG_H
  
- #error "This is not a C++ compiler"
- 
--#elif __cplusplus < 201103L
-+#elif __cplusplus < 201103L && !(defined _MSC_VER)
- 
- #error "This is not a C++11 compiler"
- 
++#ifdef _MSC_VER
++#include <BaseTsd.h>
++typedef SSIZE_T ssize_t;
++#endif
+ #include <string.h>
+ #ifdef HAVE_STDINT_H
+ #include <stdint.h>
 diff -ru gpgme.orig/src/dirinfo.c gpgme/src/dirinfo.c
 --- gpgme.orig/src/dirinfo.c	2017-03-21 11:09:41.000000000 +0100
 +++ gpgme/src/dirinfo.c	2017-09-30 08:36:13.239279300 +0200
