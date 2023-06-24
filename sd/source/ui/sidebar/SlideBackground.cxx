@@ -406,8 +406,7 @@ void SlideBackground::Update()
             // MCGR: preserve ColorStops if given.
             // tdf#155901 We need offset of first and last stop, so include them.
             if (aBGradient.GetColorStops().size() >= 2)
-                maColorStops = basegfx::BColorStops(aBGradient.GetColorStops().begin(),
-                                                    aBGradient.GetColorStops().end());
+                maColorStops = aBGradient.GetColorStops();
             else
                 maColorStops.clear();
         }
@@ -1293,11 +1292,11 @@ basegfx::BColorStops SlideBackground::createColorStops()
 
     if (maColorStops.size() >= 2)
     {
-        aColorStops.emplace_back(maColorStops.front().getStopOffset(),
-                                 mxFillGrad1->GetSelectEntryColor().getBColor());
-        aColorStops.insert(aColorStops.begin(), maColorStops.begin() + 1, maColorStops.end() - 1);
-        aColorStops.emplace_back(maColorStops.back().getStopOffset(),
-                                 mxFillGrad2->GetSelectEntryColor().getBColor());
+        aColorStops = maColorStops;
+        aColorStops.front() = basegfx::BColorStop(maColorStops.front().getStopOffset(),
+                                                  mxFillGrad1->GetSelectEntryColor().getBColor());
+        aColorStops.back() = basegfx::BColorStop(maColorStops.back().getStopOffset(),
+                                                 mxFillGrad2->GetSelectEntryColor().getBColor());
     }
     else
     {

@@ -87,8 +87,7 @@ void AreaTransparencyGradientPopup::InitStatus(XFillFloatTransparenceItem const 
     // MCGR: preserve ColorStops if given
     // tdf#155901 We need offset of first and last stop, so include them.
     if (aGradient.GetColorStops().size() >= 2)
-        maColorStops = basegfx::BColorStops(aGradient.GetColorStops().begin(),
-                                            aGradient.GetColorStops().end());
+        maColorStops = aGradient.GetColorStops();
     else
         maColorStops.clear();
 
@@ -142,9 +141,9 @@ void AreaTransparencyGradientPopup::ExecuteValueModify()
 
     if (maColorStops.size() >= 2)
     {
-        aColorStops.emplace_back(maColorStops.front().getStopOffset(), aStartBColor);
-        aColorStops.insert(aColorStops.begin(), maColorStops.begin() + 1, maColorStops.end() - 1);
-        aColorStops.emplace_back(maColorStops.back().getStopOffset(), aEndBColor);
+        aColorStops = maColorStops;
+        aColorStops.front() = basegfx::BColorStop(maColorStops.front().getStopOffset(), aStartBColor);
+        aColorStops.back() = basegfx::BColorStop(maColorStops.back().getStopOffset(), aEndBColor);
     }
     else
     {

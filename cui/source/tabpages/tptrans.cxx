@@ -370,7 +370,7 @@ void SvxTransparenceTabPage::Reset(const SfxItemSet* rAttrs)
     // MCGR: preserve ColorStops if given
     // tdf#155901 We need offset of first and last stop, so include them.
     if (rGradient.GetColorStops().size() >= 2)
-        maColorStops = basegfx::BColorStops(rGradient.GetColorStops().begin(), rGradient.GetColorStops().end());
+        maColorStops = rGradient.GetColorStops();
     else
         maColorStops.clear();
 
@@ -519,9 +519,9 @@ basegfx::BColorStops SvxTransparenceTabPage::createColorStops()
 
     if(maColorStops.size() >= 2)
     {
-        aColorStops.emplace_back(maColorStops.front().getStopOffset(), aStartBColor);
-        aColorStops.insert(aColorStops.begin(), maColorStops.begin() + 1, maColorStops.end() - 1);
-        aColorStops.emplace_back(maColorStops.back().getStopOffset(), aEndBColor);
+        aColorStops = maColorStops;
+        aColorStops.front() = basegfx::BColorStop(maColorStops.front().getStopOffset(), aStartBColor);
+        aColorStops.back() = basegfx::BColorStop(maColorStops.back().getStopOffset(), aEndBColor);
     }
     else
     {
