@@ -26,6 +26,7 @@ namespace svgio::svgreader
 SvgFeColorMatrixNode::SvgFeColorMatrixNode(SvgDocument& rDocument, SvgNode* pParent)
     : SvgNode(SVGToken::FeColorMatrix, rDocument, pParent)
     , maType(ColorType::None)
+    , maIn(In::SourceGraphic)
 {
 }
 
@@ -63,6 +64,17 @@ void SvgFeColorMatrixNode::parseAttribute(const OUString& /*rTokenName*/, SVGTok
         case SVGToken::Values:
         {
             maValuesContent = aContent;
+            break;
+        }
+        case SVGToken::In:
+        {
+            if (!aContent.isEmpty())
+            {
+                if (o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"SourceAlpha"))
+                {
+                    maIn = In::SourceAlpha;
+                }
+            }
             break;
         }
         default:
@@ -110,6 +122,15 @@ void SvgFeColorMatrixNode::apply(drawinglayer::primitive2d::Primitive2DContainer
         const drawinglayer::primitive2d::Primitive2DReference xRef(
             new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
                 std::move(rTarget), std::make_shared<basegfx::BColorModifier_matrix>(aMatrix)));
+        rTarget = drawinglayer::primitive2d::Primitive2DContainer{ xRef };
+    }
+
+    if (maIn == In::SourceAlpha)
+    {
+        const drawinglayer::primitive2d::Primitive2DReference xRef(
+            new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
+                std::move(rTarget), std::make_shared<basegfx::BColorModifier_alpha>()));
+
         rTarget = drawinglayer::primitive2d::Primitive2DContainer{ xRef };
     }
 }

@@ -20,24 +20,12 @@
 #pragma once
 
 #include "svgnode.hxx"
+#include "svgfilternode.hxx"
 #include "svgstyleattributes.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 namespace svgio::svgreader
 {
-/*
-FIXME: If no value is provided and this is the first filter primitive,
-then this filter primitive will use SourceGraphic as its input.
-If no value is provided and this is a subsequent filter primitive,
-then this filter primitive will use the result from the previous
-filter primitive as its input.
-*/
-enum class In
-{
-    None,
-    SourceGraphic
-};
-
 class SvgFeGaussianBlurNode final : public SvgNode
 {
 private:
