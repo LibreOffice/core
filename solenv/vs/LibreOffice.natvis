@@ -147,6 +147,16 @@
       </ArrayItems>
     </Expand>
   </Type>
+  <Type Name="o3tl::span &lt; * &gt;">
+    <DisplayString Condition="size_ == 0">o3tl::span (empty)</DisplayString>
+    <DisplayString>o3tl::span of {size_,d} {"$T1",sb}</DisplayString>
+    <Expand>
+      <ArrayItems>
+        <Size>size_</Size>
+        <ValuePointer>reinterpret_cast &lt; const $T1 * &gt;( data_ )</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
   <Type Name="BigPtrArray">
     <DisplayString>{{{m_nSize,d} nodes}}</DisplayString>
     <Expand>
