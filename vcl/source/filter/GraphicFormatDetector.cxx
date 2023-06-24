@@ -1249,7 +1249,7 @@ bool GraphicFormatDetector::checkSVG()
                                                       SVG_CHECK_SIZE, nDecompressedSize);
     nCheckSize = std::min<sal_uInt64>(nDecompressedSize, 256);
     bool bIsSvg(false);
-    bool bIsGZip = (nDecompressedSize > 0);
+    bool bIsGZip = mbWasCompressed;
     const char* pCheckArrayAsCharArray = reinterpret_cast<char*>(pCheckArray);
     // check for XML
     // #119176# SVG files which have no xml header at all have shown up this is optional
@@ -1279,11 +1279,11 @@ bool GraphicFormatDetector::checkSVG()
 
         if (bIsGZip)
         {
-            nCheckSize = std::min<sal_uInt64>(nDecompressedSize, 2048);
+            nCheckSize = std::min<sal_uInt64>(nDecompressedSize, SVG_CHECK_SIZE);
         }
         else
         {
-            nCheckSize = std::min<sal_uInt64>(mnStreamLength, 2048);
+            nCheckSize = std::min<sal_uInt64>(mnStreamLength, SVG_CHECK_SIZE);
             mrStream.Seek(mnStreamPosition);
             nCheckSize = mrStream.ReadBytes(sExtendedOrDecompressedFirstBytes, nCheckSize);
         }
@@ -1400,7 +1400,6 @@ sal_uInt8* GraphicFormatDetector::checkAndUncompressBuffer(sal_uInt8* aUncompres
         mbWasCompressed = true;
         return aUncompressedBuffer;
     }
-    nRetSize = 0;
     mbWasCompressed = false;
     return maFirstBytes.data();
 }
