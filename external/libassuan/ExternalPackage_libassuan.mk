@@ -15,7 +15,7 @@ ifneq ($(DISABLE_DYNLOADING),TRUE)
 
 ifeq ($(OS),LINUX)
 
-$(eval $(call gb_ExternalPackage_add_file,libassuan,$(LIBO_LIB_FOLDER)/libassuan.so.0,src/.libs/libassuan.so.0.8.5))
+$(eval $(call gb_ExternalPackage_add_file,libassuan,$(LIBO_LIB_FOLDER)/libassuan.so.0,src/.libs/libassuan.so.0.8.6))
 
 else ifeq ($(OS),MACOSX)
 
