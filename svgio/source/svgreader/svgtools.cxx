@@ -855,9 +855,8 @@ namespace svgio::svgreader
 
             SvgNumber aVal;
 
-            // create a 3x5 matrix using the first 15 values from the list of 20 matrix values.
-            // FIXME: support alpha (the last 5 values)
-            for (sal_uInt16 nRow = 0; nRow < 3; ++nRow)
+            // create a 4x4 matrix from the list of 20 matrix values.
+            for (sal_uInt16 nRow = 0; nRow < 4; ++nRow)
             {
                 for (sal_uInt16 nColumn = 0; nColumn < 5; ++nColumn)
                 {
@@ -869,7 +868,9 @@ namespace svgio::svgreader
 
                     if(readNumberAndUnit(rCandidate, nPos, aVal, nLen))
                     {
-                        aMatrix.set(nRow, nColumn, aVal.solve(rInfoProvider));
+                        // ignore the last column
+                        if (nColumn < 4)
+                            aMatrix.set(nRow, nColumn, aVal.solve(rInfoProvider));
                         skip_char(rCandidate, ' ', ',', nPos, nLen);
                     }
                 }
