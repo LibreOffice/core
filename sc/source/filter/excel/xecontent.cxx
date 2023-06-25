@@ -670,7 +670,7 @@ XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rF
             vcl::Font aFont;
             ::Color aColor;
             ScPatternAttr::fillFontOnly(aFont, rItemSet);
-            ScPatternAttr::fillColor(aColor, rItemSet, SC_AUTOCOL_RAW);
+            ScPatternAttr::fillColor(aColor, rItemSet, ScAutoFontColorMode::Raw);
             maFontData.FillFromVclFont(aFont, aColor);
             mnFontColorId = GetPalette().InsertColor(maFontData.maColor, EXC_COLOR_CELLTEXT);
         }

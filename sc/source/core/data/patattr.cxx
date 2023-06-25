@@ -447,11 +447,11 @@ void ScPatternAttr::fillColor(Color& rColor, const SfxItemSet& rItemSet, ScAutoF
         aColor = pColorItem->GetValue();
 
 
-    if ((aColor == COL_AUTO && eAutoMode != SC_AUTOCOL_RAW)
-        || eAutoMode == SC_AUTOCOL_IGNOREFONT
-        || eAutoMode == SC_AUTOCOL_IGNOREALL)
+    if ((aColor == COL_AUTO && eAutoMode != ScAutoFontColorMode::Raw)
+        || eAutoMode == ScAutoFontColorMode::IgnoreFont
+        || eAutoMode == ScAutoFontColorMode::IgnoreAll)
     {
-        if ( eAutoMode == SC_AUTOCOL_BLACK )
+        if ( eAutoMode == ScAutoFontColorMode::Black )
             aColor = COL_BLACK;
         else
         {
@@ -471,12 +471,12 @@ void ScPatternAttr::fillColor(Color& rColor, const SfxItemSet& rItemSet, ScAutoF
 
             //  if background color attribute is transparent, use window color for brightness comparisons
             if (aBackColor == COL_TRANSPARENT
-                || eAutoMode == SC_AUTOCOL_IGNOREBACK
-                || eAutoMode == SC_AUTOCOL_IGNOREALL)
+                || eAutoMode == ScAutoFontColorMode::IgnoreBack
+                || eAutoMode == ScAutoFontColorMode::IgnoreAll)
             {
                 if (!comphelper::LibreOfficeKit::isActive())
                 {
-                    if ( eAutoMode == SC_AUTOCOL_PRINT )
+                    if ( eAutoMode == ScAutoFontColorMode::Print )
                         aBackColor = COL_WHITE;
                     else if ( pBackConfigColor )
                     {
@@ -502,7 +502,7 @@ void ScPatternAttr::fillColor(Color& rColor, const SfxItemSet& rItemSet, ScAutoF
 
             //  get system text color for comparison
             Color aSysTextColor;
-            if ( eAutoMode == SC_AUTOCOL_PRINT )
+            if ( eAutoMode == ScAutoFontColorMode::Print )
                 aSysTextColor = COL_BLACK;
             else if ( pTextConfigColor )
             {
@@ -527,7 +527,7 @@ void ScPatternAttr::fillColor(Color& rColor, const SfxItemSet& rItemSet, ScAutoF
             }
             else
             {
-                //  use aSysTextColor (black for SC_AUTOCOL_PRINT, from style settings otherwise)
+                //  use aSysTextColor (black for ScAutoFontColorMode::Print, from style settings otherwise)
                 aColor = aSysTextColor;
             }
         }

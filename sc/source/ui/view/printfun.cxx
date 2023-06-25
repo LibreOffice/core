@@ -1907,7 +1907,7 @@ tools::Long ScPrintFunc::DoNotes( tools::Long nNoteStart, bool bDoPrint, ScPrevi
     pEditEngine->SetDefaults( *pEditDefaults );
 
     vcl::Font aMarkFont;
-    ScAutoFontColorMode eColorMode = bUseStyleColor ? SC_AUTOCOL_DISPLAY : SC_AUTOCOL_PRINT;
+    ScAutoFontColorMode eColorMode = bUseStyleColor ? ScAutoFontColorMode::Display : ScAutoFontColorMode::Print;
     rDoc.GetPool()->GetDefaultItem(ATTR_PATTERN).fillFont(aMarkFont, eColorMode);
     pDev->SetFont(aMarkFont);
     tools::Long nMarkLen = pDev->GetTextWidth("GW99999:");
@@ -2322,7 +2322,7 @@ void ScPrintFunc::PrintPage( tools::Long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX
 
         ScPatternAttr aPattern( rDoc.GetPool() );
         vcl::Font aFont;
-        ScAutoFontColorMode eColorMode = bUseStyleColor ? SC_AUTOCOL_DISPLAY : SC_AUTOCOL_PRINT;
+        ScAutoFontColorMode eColorMode = bUseStyleColor ? ScAutoFontColorMode::Display : ScAutoFontColorMode::Print;
         aPattern.fillFont(aFont, eColorMode, pDev);
         pDev->SetFont(aFont);
 

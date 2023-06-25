@@ -180,7 +180,7 @@ void ScModelTestBase::testFormats(ScDocument* pDoc,std::u16string_view sFormat)
     Color aColor;
 
     pPattern->fillFontOnly(aFont);
-    pPattern->fillColor(aColor, SC_AUTOCOL_RAW);
+    pPattern->fillColor(aColor, ScAutoFontColorMode::Raw);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font size should be 10", tools::Long(200), aFont.GetFontSize().getHeight());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font color should be black", COL_AUTO, aColor);
     pPattern = pDoc->GetPattern(0,1,1);
@@ -194,7 +194,7 @@ void ScModelTestBase::testFormats(ScDocument* pDoc,std::u16string_view sFormat)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
     pPattern = pDoc->GetPattern(1,0,1);
     pPattern->fillFontOnly(aFont);
-    pPattern->fillColor(aColor, SC_AUTOCOL_RAW);
+    pPattern->fillColor(aColor, ScAutoFontColorMode::Raw);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be blue", COL_BLUE, aColor);
     pPattern = pDoc->GetPattern(1,1,1);
     pPattern->fillFontOnly(aFont);

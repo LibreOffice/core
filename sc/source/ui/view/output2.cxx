@@ -325,12 +325,12 @@ void ScDrawStringsVars::SetPattern(
     if ( pOutput->mbUseStyleColor )
     {
         if ( pOutput->mbForceAutoColor )
-            eColorMode = bCellContrast ? SC_AUTOCOL_IGNOREALL : SC_AUTOCOL_IGNOREFONT;
+            eColorMode = bCellContrast ? ScAutoFontColorMode::IgnoreAll : ScAutoFontColorMode::IgnoreFont;
         else
-            eColorMode = bCellContrast ? SC_AUTOCOL_IGNOREBACK : SC_AUTOCOL_DISPLAY;
+            eColorMode = bCellContrast ? ScAutoFontColorMode::IgnoreBack : ScAutoFontColorMode::Display;
     }
     else
-        eColorMode = SC_AUTOCOL_PRINT;
+        eColorMode = ScAutoFontColorMode::Print;
 
     if (bPixelToLogic)
         pPattern->fillFont(aFont, eColorMode, pFmtDevice, nullptr, pCondSet, nScript, &aBackConfigColor, &aTextConfigColor);
