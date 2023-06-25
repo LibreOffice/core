@@ -13,6 +13,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,frozen,$(FROZEN_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_add_patches,frozen,\
 	external/frozen/defines_h_constexpr_string.patch.0 \
+	external/frozen/cid1532449_use_move_ctor.0 \
 ))
 
 # vim: set noet sw=4 ts=4:
