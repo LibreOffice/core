@@ -573,7 +573,7 @@ void XclExpChTrTabIdBuffer::InitFillup()
 
 sal_uInt16 XclExpChTrTabIdBuffer::GetId( sal_uInt16 nIndex ) const
 {
-    OSL_ENSURE( nIndex < nBufSize, "XclExpChTrTabIdBuffer::GetId - out of range" );
+    assert(nIndex < nBufSize && "XclExpChTrTabIdBuffer::GetId - out of range");
     return pBuffer[ nIndex ];
 }
 
@@ -1025,6 +1025,13 @@ static void lcl_WriteCell( XclExpXmlStream& rStrm, sal_Int32 nElement, const ScA
 
 void XclExpChTrCellContent::SaveXml( XclExpXmlStream& rRevisionLogStrm )
 {
+    if (IsDeletedTab(aPosition.Tab()))
+    {
+        // seen on attempt to export tdf66241-1.ods to xlsx
+        SAL_WARN("sc", "XclExpChTrCellContent: unable to export position with tab of EXC_TAB_DELETED");
+        return;
+    }
+
     sax_fastparser::FSHelperPtr pStream = rRevisionLogStrm.GetCurrentStream();
     pStream->startElement( XML_rcc,
             XML_rId,                    OString::number(GetActionNumber()),
@@ -1155,6 +1162,13 @@ static const char* lcl_GetAction( sal_uInt16 nOpCode )
 
 void XclExpChTrInsert::SaveXml( XclExpXmlStream& rRevisionLogStrm )
 {
+    if (IsDeletedTab(aRange.aStart.Tab()))
+    {
+        // seen on attempt to export tdf66241-1.ods to xlsx
+        SAL_WARN("sc", "XclExpChTrCellContent: unable to export position with tab of EXC_TAB_DELETED");
+        return;
+    }
+
     sax_fastparser::FSHelperPtr pStream = rRevisionLogStrm.GetCurrentStream();
     pStream->startElement( XML_rrc,
             XML_rId,    OString::number(GetActionNumber()),
@@ -1279,6 +1293,13 @@ std::size_t XclExpChTrMoveRange::GetActionByteCount() const
 
 void XclExpChTrMoveRange::SaveXml( XclExpXmlStream& rRevisionLogStrm )
 {
+    if (IsDeletedTab(aDestRange.aStart.Tab()) || IsDeletedTab(aSourceRange.aStart.Tab()))
+    {
+        // seen on attempt to export tdf66241-1.ods to xlsx
+        SAL_WARN("sc", "XclExpChTrCellContent: unable to export position with tab of EXC_TAB_DELETED");
+        return;
+    }
+
     sax_fastparser::FSHelperPtr pStream = rRevisionLogStrm.GetCurrentStream();
 
     pStream->startElement( XML_rm,
