@@ -1232,7 +1232,7 @@ sal_uInt16 XclExpFontBuffer::Insert(const SfxItemSet& rItemSet, sal_Int16 nScrip
     // #i17050# script type now provided by caller
     vcl::Font aFont = XclExpFontHelper::GetFontFromItemSet(GetRoot(), rItemSet, nScript);
     Color aColor;
-    ScPatternAttr::fillColor(aColor, rItemSet, SC_AUTOCOL_RAW);
+    ScPatternAttr::fillColor(aColor, rItemSet, ScAutoFontColorMode::Raw);
     return Insert(XclFontData(aFont, aColor), eColorType, bAppFont );
 }
 

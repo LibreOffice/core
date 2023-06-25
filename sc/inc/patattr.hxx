@@ -39,15 +39,15 @@ enum class ScRotateDir : sal_uInt8;
 
 ///  how to treat COL_AUTO in GetFont:
 
-enum ScAutoFontColorMode
+enum class ScAutoFontColorMode
 {
-    SC_AUTOCOL_RAW,         ///< COL_AUTO is returned
-    SC_AUTOCOL_BLACK,       ///< always use black
-    SC_AUTOCOL_PRINT,       ///< black or white, depending on background
-    SC_AUTOCOL_DISPLAY,     ///< from style settings, or black/white if needed
-    SC_AUTOCOL_IGNOREFONT,  ///< like DISPLAY, but ignore stored font color (assume COL_AUTO)
-    SC_AUTOCOL_IGNOREBACK,  ///< like DISPLAY, but ignore stored background color (use configured color)
-    SC_AUTOCOL_IGNOREALL    ///< like DISPLAY, but ignore stored font and background colors
+    Raw,         ///< COL_AUTO is returned
+    Black,       ///< always use black
+    Print,       ///< black or white, depending on background
+    Display,     ///< from style settings, or black/white if needed
+    IgnoreFont,  ///< like DISPLAY, but ignore stored font color (assume COL_AUTO)
+    IgnoreBack,  ///< like DISPLAY, but ignore stored background color (use configured color)
+    IgnoreAll    ///< like DISPLAY, but ignore stored font and background colors
 };
 
 class SC_DLLPUBLIC ScPatternAttr final : public SfxSetItem

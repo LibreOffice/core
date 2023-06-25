@@ -390,7 +390,7 @@ XclExpStringRef lclCreateFormattedString(
         // construct font from current text portion
         SvxFont aFont(XclExpFontHelper::GetFontFromItemSet(rRoot, rItemSet, nScript));
         Color aColor;
-        ScPatternAttr::fillColor(aColor, rItemSet, SC_AUTOCOL_RAW);
+        ScPatternAttr::fillColor(aColor, rItemSet, ScAutoFontColorMode::Raw);
 
         // Excel start position of this portion
         sal_Int32 nXclPortionStart = xString->Len();
@@ -504,7 +504,7 @@ XclExpStringRef lclCreateFormattedString(
                     nScript = nLastScript;
                 SvxFont aFont( XclExpFontHelper::GetFontFromItemSet(rRoot, aItemSet, nScript));
                 Color aColor;
-                ScPatternAttr::fillColor(aColor, aItemSet, SC_AUTOCOL_RAW);
+                ScPatternAttr::fillColor(aColor, aItemSet, ScAutoFontColorMode::Raw);
 
                 nLastScript = nScript;
 
@@ -736,7 +736,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                 SfxItemSet aEditSet( mrEE.GetAttribs( aSel ) );
                 ScPatternAttr::GetFromEditItemSet( aItemSet, aEditSet );
                 ScPatternAttr::fillFontOnly(aFont, aItemSet);
-                ScPatternAttr::fillColor(aColor, aItemSet, SC_AUTOCOL_RAW);
+                ScPatternAttr::fillColor(aColor, aItemSet, ScAutoFontColorMode::Raw);
 
                 // font name and style
                 aNewData.maName = XclTools::GetXclFontName( aFont.GetFamilyName() );
