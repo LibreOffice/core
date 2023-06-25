@@ -2081,27 +2081,27 @@ OUString ImplSdPPTImport::ReadMedia( sal_uInt32 nMediaRef ) const
 }
 
 // import of objects
-void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInfoAtom const * pIAtom, const OUString& aMacroName )
+void ImplSdPPTImport::FillSdAnimationInfo(SdAnimationInfo* pInfo, const PptInteractiveInfoAtom& rIAtom, const OUString& rMacroName)
 {
     // set local information into pInfo
-    if( pIAtom->nSoundRef )
+    if( rIAtom.nSoundRef )
     {
-        pInfo->SetBookmark( ReadSound( pIAtom->nSoundRef ) );   // path to sound file in MS DOS notation
+        pInfo->SetBookmark( ReadSound( rIAtom.nSoundRef ) );   // path to sound file in MS DOS notation
         pInfo->meClickAction = css::presentation::ClickAction_SOUND;           // RunProgramAction
     }
 
-    switch ( pIAtom->nAction )
+    switch ( rIAtom.nAction )
     {
 
         case 0x02 :                                         // RunProgramAction
         {
             pInfo->meClickAction = css::presentation::ClickAction_PROGRAM;
-            pInfo->SetBookmark( aMacroName );                   // program name in aBookmark
+            pInfo->SetBookmark(rMacroName);                   // program name in aBookmark
         }
         break;
         case 0x03 :                                         // JumpAction
         {
-            switch( pIAtom->nJump )
+            switch( rIAtom.nJump )
             {
                 case 0x01 :
                     pInfo->meClickAction = css::presentation::ClickAction_NEXTPAGE;        // Next slide
@@ -2131,14 +2131,14 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
         {
             SdHyperlinkEntry* pPtr = nullptr;
             for (SdHyperlinkEntry & entry : m_aHyperList) {
-                if ( entry.nIndex == pIAtom->nExHyperlinkId ) {
+                if ( entry.nIndex == rIAtom.nExHyperlinkId ) {
                     pPtr = &entry;
                     break;
                 }
             }
             if ( pPtr )
             {
-                switch( pIAtom->nHyperlinkType )
+                switch( rIAtom.nHyperlinkType )
                 {
                     case 9:
                     case 8:                                         // hyperlink : URL
@@ -2691,7 +2691,7 @@ rtl::Reference<SdrObject> ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData
                                 // interactive object
                                 SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pObj, true);
 
-                                FillSdAnimationInfo( pInfo, &aInteractiveInfoAtom, aMacroName );
+                                FillSdAnimationInfo(pInfo, aInteractiveInfoAtom, aMacroName);
                                 if ( aInteractiveInfoAtom.nAction == 6 ) // Sj -> media action
                                 {
                                     rHdClientData.SeekToContent( rStCtrl );
