@@ -519,8 +519,7 @@ void AreaPropertyPanelBase::FillStyleChanged(bool bUpdateModel)
                         // MCGR: preserve ColorStops if given
                         // tdf#155901 We need offset of first and last stop, so include them.
                         if (aGradient.GetColorStops().size() >= 2)
-                            maColorStops = basegfx::BColorStops(aGradient.GetColorStops().begin(),
-                                                                aGradient.GetColorStops().end());
+                            maColorStops = aGradient.GetColorStops();
                         else
                             maColorStops.clear();
 
