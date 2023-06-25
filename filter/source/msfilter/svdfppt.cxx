@@ -216,7 +216,7 @@ sal_uInt16 PptSlidePersistList::FindPage(sal_uInt32 nId) const
     return PPTSLIDEPERSIST_ENTRY_NOTFOUND;
 }
 
-SvStream& ReadPptInteractiveInfoAtom( SvStream& rIn, PptInteractiveInfoAtom& rAtom )
+bool ReadPptInteractiveInfoAtom( SvStream& rIn, PptInteractiveInfoAtom& rAtom )
 {
     rIn.ReadUInt32( rAtom.nSoundRef )
        .ReadUInt32( rAtom.nExHyperlinkId )
@@ -228,7 +228,7 @@ SvStream& ReadPptInteractiveInfoAtom( SvStream& rIn, PptInteractiveInfoAtom& rAt
        .ReadUChar( rAtom.nUnknown1 )
        .ReadUChar( rAtom.nUnknown2 )
        .ReadUChar( rAtom.nUnknown3 );
-    return rIn;
+    return rIn.good();
 }
 
 SvStream& ReadPptExOleObjAtom( SvStream& rIn, PptExOleObjAtom& rAtom )

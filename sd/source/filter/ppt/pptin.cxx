@@ -2686,44 +2686,45 @@ rtl::Reference<SdrObject> ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData
                             if ( SeekToRec( rSt, PPT_PST_InteractiveInfoAtom, nHdRecEnd, &aHdInteractiveInfoAtom ) )
                             {
                                 PptInteractiveInfoAtom aInteractiveInfoAtom;
-                                ReadPptInteractiveInfoAtom( rSt, aInteractiveInfoAtom );
-
-                                // interactive object
-                                SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pObj, true);
-
-                                FillSdAnimationInfo(pInfo, aInteractiveInfoAtom, aMacroName);
-                                if ( aInteractiveInfoAtom.nAction == 6 ) // Sj -> media action
+                                if (ReadPptInteractiveInfoAtom(rSt, aInteractiveInfoAtom))
                                 {
-                                    rHdClientData.SeekToContent( rStCtrl );
-                                    DffRecordHeader aObjRefAtomHd;
-                                    if ( SeekToRec( rSt, PPT_PST_ExObjRefAtom, nHdRecEnd, &aObjRefAtomHd ) )
+                                    // interactive object
+                                    SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pObj, true);
+
+                                    FillSdAnimationInfo(pInfo, aInteractiveInfoAtom, aMacroName);
+                                    if ( aInteractiveInfoAtom.nAction == 6 ) // Sj -> media action
                                     {
-                                        sal_uInt32 nRef;
-                                        rSt.ReadUInt32( nRef );
-                                        OUString aMediaURL( ReadMedia( nRef ) );
-                                        if ( aMediaURL.isEmpty() )
-                                            aMediaURL = ReadSound( nRef );
-                                        if ( !aMediaURL.isEmpty() )
+                                        rHdClientData.SeekToContent( rStCtrl );
+                                        DffRecordHeader aObjRefAtomHd;
+                                        if ( SeekToRec( rSt, PPT_PST_ExObjRefAtom, nHdRecEnd, &aObjRefAtomHd ) )
                                         {
-                                            rtl::Reference<SdrMediaObj> pMediaObj = new SdrMediaObj(
-                                                pObj->getSdrModelFromSdrObject(),
-                                                pObj->GetSnapRect());
-                                            pMediaObj->SetMergedItemSet( pObj->GetMergedItemSet() );
-
-                                            //--remove object from maAnimations list and add the new object instead
-                                            Ppt97AnimationPtr pAnimation;
+                                            sal_uInt32 nRef;
+                                            rSt.ReadUInt32( nRef );
+                                            OUString aMediaURL( ReadMedia( nRef ) );
+                                            if ( aMediaURL.isEmpty() )
+                                                aMediaURL = ReadSound( nRef );
+                                            if ( !aMediaURL.isEmpty() )
                                             {
-                                                tAnimationMap::iterator aFound = maAnimations.find( pObj.get() );
-                                                if( aFound != maAnimations.end() )
-                                                {
-                                                    pAnimation = (*aFound).second;
-                                                    maAnimations.erase(aFound);
-                                                }
-                                                maAnimations[pMediaObj.get()] = pAnimation;
-                                            }
+                                                rtl::Reference<SdrMediaObj> pMediaObj = new SdrMediaObj(
+                                                    pObj->getSdrModelFromSdrObject(),
+                                                    pObj->GetSnapRect());
+                                                pMediaObj->SetMergedItemSet( pObj->GetMergedItemSet() );
 
-                                            pObj = pMediaObj;  // SJ: hoping that pObj is not inserted in any list
-                                            pMediaObj->setURL( aMediaURL, ""/*TODO?*/ );
+                                                //--remove object from maAnimations list and add the new object instead
+                                                Ppt97AnimationPtr pAnimation;
+                                                {
+                                                    tAnimationMap::iterator aFound = maAnimations.find( pObj.get() );
+                                                    if( aFound != maAnimations.end() )
+                                                    {
+                                                        pAnimation = (*aFound).second;
+                                                        maAnimations.erase(aFound);
+                                                    }
+                                                    maAnimations[pMediaObj.get()] = pAnimation;
+                                                }
+
+                                                pObj = pMediaObj;  // SJ: hoping that pObj is not inserted in any list
+                                                pMediaObj->setURL( aMediaURL, ""/*TODO?*/ );
+                                            }
                                         }
                                     }
                                 }

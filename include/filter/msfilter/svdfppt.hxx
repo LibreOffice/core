@@ -130,7 +130,7 @@ struct MSFILTER_DLLPUBLIC PptInteractiveInfoAtom
 
 public:
 
-    MSFILTER_DLLPUBLIC friend SvStream& ReadPptInteractiveInfoAtom( SvStream& rIn, PptInteractiveInfoAtom& rAtom );
+    MSFILTER_DLLPUBLIC friend bool ReadPptInteractiveInfoAtom( SvStream& rIn, PptInteractiveInfoAtom& rAtom );
 };
 
 enum PptPageKind { PPT_MASTERPAGE, PPT_SLIDEPAGE, PPT_NOTEPAGE };
