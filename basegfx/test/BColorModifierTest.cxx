@@ -285,6 +285,10 @@ public:
         aMatrix.set(2, 1, 0.0);
         aMatrix.set(2, 2, 0.0);
         aMatrix.set(2, 3, 0.0);
+        aMatrix.set(3, 0, 0.0);
+        aMatrix.set(3, 1, 0.0);
+        aMatrix.set(3, 2, 0.0);
+        aMatrix.set(3, 3, 1.0);
 
         const basegfx::BColorModifierSharedPtr aBColorModifier
             = std::make_shared<basegfx::BColorModifier_matrix>(aMatrix);
@@ -321,12 +325,19 @@ public:
         aMatrix.set(0, 0, 1.0);
         aMatrix.set(0, 1, 0.0);
         aMatrix.set(0, 2, 0.0);
+        aMatrix.set(0, 3, 0.0);
         aMatrix.set(1, 0, 0.0);
         aMatrix.set(1, 1, 1.0);
         aMatrix.set(1, 2, 0.0);
+        aMatrix.set(1, 3, 0.0);
         aMatrix.set(2, 0, 0.0);
         aMatrix.set(2, 1, 0.0);
         aMatrix.set(2, 2, 1.0);
+        aMatrix.set(2, 3, 0.0);
+        aMatrix.set(3, 0, 0.0);
+        aMatrix.set(3, 1, 0.0);
+        aMatrix.set(3, 2, 0.0);
+        aMatrix.set(3, 3, 1.0);
 
         const basegfx::BColorModifierSharedPtr aBColorModifier
             = std::make_shared<basegfx::BColorModifier_matrix>(aMatrix);

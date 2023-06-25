@@ -183,6 +183,7 @@ namespace basegfx
         aColorMatrix.set(0, 0, aSourceColor.getRed());
         aColorMatrix.set(1, 0, aSourceColor.getGreen());
         aColorMatrix.set(2, 0, aSourceColor.getBlue());
+        // TODO: add support for alpha
 
         aColorMatrix = maMatrix * aColorMatrix;
         return ::basegfx::BColor(aColorMatrix.get(0, 0), aColorMatrix.get(1, 0), aColorMatrix.get(2, 0));
