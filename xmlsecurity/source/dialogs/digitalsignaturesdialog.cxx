@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <array>
 #include <string_view>
 
 #include <digitalsignaturesdialog.hxx>
@@ -115,7 +116,8 @@ namespace
 
         m_nODF = nTmp;
     }
-    const std::vector<std::u16string_view> aGUIServersWindows = { u"Gpg4win\\kleopatra.exe",
+#ifdef _WIN32
+    constexpr std::array<std::u16string_view, 9> aGUIServers = { u"Gpg4win\\kleopatra.exe",
                                                    u"Gpg4win\\bin\\kleopatra.exe",
                                                    u"GNU\\GnuPG\\kleopatra.exe",
                                                    u"GNU\\GnuPG\\launch-gpa.exe",
@@ -124,7 +126,10 @@ namespace
                                                    u"GNU\\GnuPG\\bin\\kleopatra.exe",
                                                    u"GNU\\GnuPG\\bin\\launch-gpa.exe",
                                                    u"GNU\\GnuPG\\bin\\gpa.exe"};
-    const std::vector<std::u16string_view> aGUIServersNix = { u"kleopatra", u"seahorse", u"gpa", u"kgpg" };
+#else
+    constexpr std::array<std::u16string_view, 4> aGUIServers = { u"kleopatra", u"seahorse", u"gpa", u"kgpg" };
+#endif
+
 }
 
 DigitalSignaturesDialog::DigitalSignaturesDialog(
@@ -490,7 +495,6 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, RemoveButtonHdl, weld::Button&, void)
 
 bool DigitalSignaturesDialog::IsThereCertificateMgr()
 {
-    static std::vector<std::u16string_view> aGUIServers;
 #ifdef _WIN32
     static const OUString aPath = [] {
         sal::systools::CoTaskMemAllocated<wchar_t> sPath;
@@ -502,17 +506,12 @@ bool DigitalSignaturesDialog::IsThereCertificateMgr()
     }();
     if (aPath.isEmpty())
         return false;
-    aGUIServers = aGUIServersWindows;
 #else
     const char* cPath = getenv("PATH");
     if (!cPath)
         return false;
     OUString aPath(cPath, strlen(cPath), osl_getThreadTextEncoding());
-    aGUIServers = aGUIServersNix;
 #endif
-
-    if (aGUIServers.empty())
-        return false;
 
     OUString sFoundGUIServer, sExecutable;
 
@@ -531,7 +530,6 @@ bool DigitalSignaturesDialog::IsThereCertificateMgr()
 
 IMPL_LINK_NOARG(DigitalSignaturesDialog, CertMgrButtonHdl, weld::Button&, void)
 {
-    static std::vector<std::u16string_view> aGUIServers;
 #ifdef _WIN32
     // FIXME: call GpgME::dirInfo("bindir") somewhere in
     // SecurityEnvironmentGpg or whatnot
@@ -546,13 +544,11 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, CertMgrButtonHdl, weld::Button&, void)
     }();
     if (aPath.isEmpty())
         return;
-    aGUIServers = aGUIServersWindows;
 #else
     const char* cPath = getenv("PATH");
     if (!cPath)
         return;
     OUString aPath(cPath, strlen(cPath), osl_getThreadTextEncoding());
-    aGUIServers = aGUIServersNix;
 #endif
 
     if (aGUIServers.empty())
