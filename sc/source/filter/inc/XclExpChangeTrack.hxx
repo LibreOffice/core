@@ -28,6 +28,7 @@
 #include "xestring.hxx"
 #include "excrecds.hxx"
 #include "xlformula.hxx"
+#include "xllink.hxx"
 #include "xeformula.hxx"
 
 class ExcXmlRecord : public ExcRecord
@@ -365,6 +366,7 @@ protected:
     static inline void          Write2DAddress( XclExpStream& rStrm, const ScAddress& rAddress );
     static inline void          Write2DRange( XclExpStream& rStrm, const ScRange& rRange );
     inline sal_uInt16           GetTabId( SCTAB nTabId ) const;
+    inline bool                 IsDeletedTab( SCTAB nTab ) const;
     inline void                 WriteTabId( XclExpStream& rStrm, SCTAB nTabId ) const;
 
                                 // save header data, call SaveActionData()
@@ -419,6 +421,11 @@ inline void XclExpChTrAction::Write2DRange( XclExpStream& rStrm, const ScRange& 
             << static_cast<sal_uInt16>(rRange.aEnd.Row())
             << static_cast<sal_uInt16>(rRange.aStart.Col())
             << static_cast<sal_uInt16>(rRange.aEnd.Col());
+}
+
+inline bool XclExpChTrAction::IsDeletedTab(SCTAB nTab) const
+{
+    return rTabInfo.GetXclTab(nTab) == EXC_TAB_DELETED;
 }
 
 inline sal_uInt16 XclExpChTrAction::GetTabId( SCTAB nTab ) const
