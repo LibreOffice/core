@@ -86,7 +86,7 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testStepCount)
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
 
     // Without the fix the colors in the sections were wrong. And when opening a file with StepCount
-    // and saving it immedialtly to pptx, a continues gradient might be produced.
+    // and saving it immediately to pptx, a continuous gradient might be produced.
 
     const OString sPath = "//a:gradFill/a:gsLst/";
     // The default way of load and save would have produced 2 stops, but we need start stop, end stop
