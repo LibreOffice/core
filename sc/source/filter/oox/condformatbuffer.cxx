@@ -1376,6 +1376,11 @@ std::vector< std::unique_ptr<ExtCfCondFormat> >& CondFormatBuffer::importExtCond
     return maExtCondFormats;
 }
 
+std::vector<std::unique_ptr<ScFormatEntry> >& CondFormatBuffer::importExtFormatEntries()
+{
+    return maExtFormatEntries;
+}
+
 sal_Int32 CondFormatBuffer::convertToApiOperator( sal_Int32 nToken )
 {
     switch( nToken )
