@@ -647,7 +647,7 @@ std::optional<Color> ScColorScaleFormat::GetColor( const ScAddress& rAddr ) cons
     calcMinMax(nMin, nMax);
 
     // this check is for safety
-    if(nMin >= nMax)
+    if(nMin > nMax)
         return std::optional<Color>();
 
     ScColorScaleEntries::const_iterator itr = begin();
