@@ -864,6 +864,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf155736, "tdf155736_PageNumbers_footer.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Page * of *"), parseDump("/root/page[2]/footer/txt/text()"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf155903, "tdf155903.odt")
+{
+    // Without the accompanying fix in place, this test would have crashed,
+    // because the exported file was corrupted.
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

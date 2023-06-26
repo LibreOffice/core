@@ -1272,7 +1272,10 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
         xShapeProps->getPropertyValue("Graphic") >>= xGraphic;
     }
 
-    bool bHasMediaURL = xShapeProps.is() && xShapeProps->getPropertySetInfo()->hasPropertyByName("MediaURL") && (xShapeProps->getPropertyValue("MediaURL") >>= sMediaURL);
+    // tdf#155903 Only for PPTX, Microsoft does not support this feature in Word and Excel.
+    bool bHasMediaURL = GetDocumentType() == DOCUMENT_PPTX && xShapeProps.is()
+                        && xShapeProps->getPropertySetInfo()->hasPropertyByName("MediaURL")
+                        && (xShapeProps->getPropertyValue("MediaURL") >>= sMediaURL);
 
     if (!xGraphic.is() && !bHasMediaURL)
     {
