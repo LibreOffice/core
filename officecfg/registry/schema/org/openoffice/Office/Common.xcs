@@ -610,7 +610,7 @@
       <prop oor:name="DynamicBorderColors" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>specifies whether the controls should use dynamic border
-          coloring, if possible. Dymamic border coloring means that when the
+          coloring, if possible. Dynamic border coloring means that when the
           mouse is hovered over a control, and when a control receives the
           focus, this is indicated with special border colors.</desc>
         </info>
