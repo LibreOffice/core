@@ -182,6 +182,27 @@ CPPUNIT_TEST_FIXTURE(Test, testFilterFeGaussianBlur)
     assertXPath(pDocument, "/primitive2D/transform/softedge", "radius", "5");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testFilterFeOffset)
+{
+    Primitive2DSequence aSequenceTdf132246 = parseSvg(u"/svgio/qa/cppunit/data/filterFeOffset.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf132246.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequenceTdf132246);
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform", "xy11", "1");
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform", "xy12", "0");
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform", "xy13", "44");
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform", "xy21", "0");
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform", "xy22", "1");
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform", "xy23", "66");
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform", "xy31", "0");
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform", "xy32", "0");
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform", "xy33", "1");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf87309)
 {
     Primitive2DSequence aSequenceTdf87309 = parseSvg(u"/svgio/qa/cppunit/data/tdf87309.svg");

@@ -43,6 +43,7 @@
 #include <svgclippathnode.hxx>
 #include <svgfegaussianblurnode.hxx>
 #include <svgfecolormatrixnode.hxx>
+#include <svgfeoffsetnode.hxx>
 #include <svgfilternode.hxx>
 #include <svgmasknode.hxx>
 #include <svgmarkernode.hxx>
@@ -332,6 +333,13 @@ namespace
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }
+                case SVGToken::FeColorMatrix:
+                {
+                    /// new node for feColorMatrix
+                    mpTarget = new SvgFeColorMatrixNode(maDocument, mpTarget);
+                    mpTarget->parseAttributes(xAttribs);
+                    break;
+                }
                 case SVGToken::FeGaussianBlur:
                 {
                     /// new node for feGaussianBlur
@@ -339,10 +347,10 @@ namespace
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }
-                case SVGToken::FeColorMatrix:
+                case SVGToken::FeOffset:
                 {
-                    /// new node for feColorMatrix
-                    mpTarget = new SvgFeColorMatrixNode(maDocument, mpTarget);
+                    /// new node for feOffset
+                    mpTarget = new SvgFeOffsetNode(maDocument, mpTarget);
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }
@@ -452,8 +460,9 @@ namespace
                 case SVGToken::Mask:
 
                 /// structural elements for filters
-                case SVGToken::FeGaussianBlur:
                 case SVGToken::FeColorMatrix:
+                case SVGToken::FeGaussianBlur:
+                case SVGToken::FeOffset:
                 case SVGToken::Filter:
 
                 /// structural element marker
