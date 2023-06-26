@@ -850,6 +850,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135786, "tdf135786.docx")
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf155903, "tdf155903.odt")
+{
+    // Without the accompanying fix in place, this test would have crashed,
+    // because the exported file was corrupted.
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
