@@ -21,6 +21,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_apitests, \
     sw/qa/api/SwXDocumentSettings \
     sw/qa/api/SwXFootnoteProperties \
     sw/qa/api/SwXTextFrame \
+    sw/qa/api/SwXFootnoteText \
     sw/qa/api/SwXTextField \
     sw/qa/api/SwXTextTable \
 ))
