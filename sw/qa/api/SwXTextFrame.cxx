@@ -7,15 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/lang/xserviceinfo.hxx>
 #include <test/lang/xcomponent.hxx>
-#include <unotest/macros_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
-
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
@@ -28,21 +25,39 @@ namespace
 /**
  * Test for Java API test of file com.sun.star.comp.office.SwXTextFrame.csv
  */
-class SwXTextFrame final : public test::BootstrapFixture,
-                           public unotest::MacrosTest,
+class SwXTextFrame final : public UnoApiTest,
                            public apitest::XServiceInfo,
                            public apitest::XComponent
 {
-    uno::Reference<text::XTextDocument> mxTextDocument;
-
 public:
-    virtual void setUp() override;
-    virtual void tearDown() override;
-
     SwXTextFrame()
-        : apitest::XServiceInfo("SwXTextFrame", "com.sun.star.text.TextFrame"){};
-    uno::Reference<uno::XInterface> init() override;
-    const uno::Reference<text::XTextDocument>& getTextDocument() const { return mxTextDocument; }
+        : UnoApiTest("")
+        , apitest::XServiceInfo("SwXTextFrame", "com.sun.star.text.TextFrame")
+    {
+    }
+
+    virtual void setUp() override
+    {
+        UnoApiTest::setUp();
+        mxDesktop.set(frame::Desktop::create(mxComponentContext));
+        mxComponent = loadFromDesktop("private:factory/swriter");
+        CPPUNIT_ASSERT(mxComponent.is());
+    }
+
+    uno::Reference<uno::XInterface> init() override
+    {
+        uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<text::XTextFrame> xTextFrame(
+            xMSF->createInstance("com.sun.star.text.TextFrame"), uno::UNO_QUERY_THROW);
+        auto xText = xTextDocument->getText();
+        auto xTextCursor = xText->createTextCursor();
+        CPPUNIT_ASSERT(xTextCursor.is());
+        xText->insertTextContent(xTextCursor, xTextFrame, false);
+        xTextCursor->gotoEnd(false);
+        return xTextFrame;
+    }
+
     void triggerDesktopTerminate() override { mxDesktop->terminate(); }
 
     CPPUNIT_TEST_SUITE(SwXTextFrame);
@@ -53,38 +68,6 @@ public:
     CPPUNIT_TEST(testRemoveEventListener);
     CPPUNIT_TEST_SUITE_END();
 };
-
-void SwXTextFrame::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-    mxTextDocument = uno::Reference<text::XTextDocument>(
-        loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument"),
-        uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(mxTextDocument.is());
-}
-
-void SwXTextFrame::tearDown()
-{
-    if (mxTextDocument.is())
-        mxTextDocument->dispose();
-
-    test::BootstrapFixture::tearDown();
-}
-
-uno::Reference<uno::XInterface> SwXTextFrame::init()
-{
-    uno::Reference<lang::XMultiServiceFactory> xMSF(mxTextDocument, uno::UNO_QUERY_THROW);
-    uno::Reference<text::XTextFrame> xTextFrame(xMSF->createInstance("com.sun.star.text.TextFrame"),
-                                                uno::UNO_QUERY_THROW);
-    auto xText = getTextDocument()->getText();
-    auto xTextCursor = xText->createTextCursor();
-    CPPUNIT_ASSERT(xTextCursor.is());
-    xText->insertTextContent(xTextCursor, xTextFrame, false);
-    xTextCursor->gotoEnd(false);
-    return xTextFrame;
-}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwXTextFrame);
 }
