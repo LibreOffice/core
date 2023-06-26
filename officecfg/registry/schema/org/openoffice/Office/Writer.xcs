@@ -4464,7 +4464,7 @@
           </info>
           <value>8</value>
         </prop>
-        <prop oor:name="MaxListLen" oor:type="xs:int" oor:nillable="false">
+        <prop oor:name="MaxListLen" oor:type="xs:long" oor:nillable="false">
           <!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  max. entries -->
           <info>
             <desc>Sets the maximum number of words to be recalled.</desc>

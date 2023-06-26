@@ -4,7 +4,7 @@
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">50</property>
-    <property name="upper">65535</property>
+    <property name="upper">4294967295</property>
     <property name="value">500</property>
     <property name="step_increment">25</property>
     <property name="page_increment">100</property>

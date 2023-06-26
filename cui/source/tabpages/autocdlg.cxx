@@ -1981,7 +1981,6 @@ bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet* )
     bool bModified = false, bCheck;
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     SvxSwAutoFormatFlags *pOpt = &pAutoCorrect->GetSwFlags();
-    sal_uInt16 nVal;
 
     bCheck = m_xCBActiv->get_active();
     bModified |= pOpt->bAutoCompleteWords != bCheck;
@@ -1999,13 +1998,13 @@ bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet* )
     bModified |= pOpt->bAutoCmpltShowAsTip != bCheck;
     pOpt->bAutoCmpltShowAsTip = bCheck;
 
-    nVal = static_cast<sal_uInt16>(m_xNFMinWordlen->get_value());
+    sal_uInt16 nVal = static_cast<sal_uInt16>(m_xNFMinWordlen->get_value());
     bModified |= nVal != pOpt->nAutoCmpltWordLen;
     pOpt->nAutoCmpltWordLen = nVal;
 
-    nVal = static_cast<sal_uInt16>(m_xNFMaxEntries->get_value());
-    bModified |= nVal != pOpt->nAutoCmpltListLen;
-    pOpt->nAutoCmpltListLen = nVal;
+    sal_uInt32 nList = static_cast<sal_uInt32>(m_xNFMaxEntries->get_value());
+    bModified |= nList != pOpt->nAutoCmpltListLen;
+    pOpt->nAutoCmpltListLen = nList;
 
     const int nPos = m_xDCBExpandKey->get_active();
     if (nPos != -1)

@@ -86,7 +86,8 @@ struct EDITENG_DLLPUBLIC SvxSwAutoFormatFlags
     sal_UCS4 cBullet;
     sal_UCS4 cByInputBullet;
 
-    sal_uInt16 nAutoCmpltWordLen, nAutoCmpltListLen;
+    sal_uInt32 nAutoCmpltListLen;
+    sal_uInt16 nAutoCmpltWordLen;
     sal_uInt16 nAutoCmpltExpandKey;
 
     sal_uInt8 nRightMargin;

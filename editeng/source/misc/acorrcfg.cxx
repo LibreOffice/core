@@ -524,9 +524,9 @@ void SvxSwAutoCorrCfg::Load(bool bInit)
                 break; // "Completion/MinWordLen",
                 case  35:
                 {
-                    sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
+                    sal_Int64 nVal = 0; pValues[nProp] >>= nVal;
                     rSwFlags.nAutoCmpltListLen =
-                        sal::static_int_cast< sal_uInt16 >(nVal);
+                        sal::static_int_cast< sal_uInt32 >(nVal);
                 }
                 break; // "Completion/MaxListLen",
                 case  36: rSwFlags.bAutoCmpltCollectWords = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Completion/CollectWords",
