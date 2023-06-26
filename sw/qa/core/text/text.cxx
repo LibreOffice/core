@@ -1427,7 +1427,13 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testParaUpperMarginFlyIntersect)
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf129810)
 {
-    // Load the document, which embeds a CJK font.
+    // Load the document.
+    // The document embeds a subset of "Source Han Serif SC" so that it works
+    // even when the font is not installed.
+    //
+    // Font subset created with:
+    //
+    // hb-subset SourceHanSerif.ttc -y 12 -u '20,3002,4FE1,540C,5E76,606F,610F,6237,6536,65B9,65E0,6B3E,6C42,7684,786E,8981,8BA4,8BEF,8D26,8D35,FF0C' -o SourceHanSerif.ttf
     createSwDoc("tdf129810.odt");
 
     // Render the document to a metafile.
@@ -1445,8 +1451,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf129810)
             auto pTextArrayAction = static_cast<MetaTextArrayAction*>(pAction);
             auto pDXArray = pTextArrayAction->GetDXArray();
 
-            // There should be 13 chars on the first line
-            CPPUNIT_ASSERT_GREATER(size_t(13), pDXArray.size());
+            // There should be 14 chars on the first line
+            CPPUNIT_ASSERT_EQUAL(size_t(14), pDXArray.size());
 
             // Assert we are using the expected width for uncompressed chars
             CPPUNIT_ASSERT_EQUAL(sal_Int32(720), pDXArray[0]);
