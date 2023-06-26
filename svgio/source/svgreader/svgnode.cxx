@@ -184,6 +184,100 @@ namespace {
             }
         }
 
+        void SvgNode::fillCssStyleVectorUsingParent(const SvgNode& rCurrent)
+        {
+            const SvgDocument& rDocument = getDocument();
+
+            if(!rDocument.hasGlobalCssStyleAttributes())
+                return;
+
+            const SvgNode* pParent = rCurrent.getParent();
+
+            if (!pParent)
+                return;
+
+            OUString sParentId;
+            if (pParent->getId().has_value())
+            {
+                sParentId = pParent->getId().value();
+            }
+            std::vector <OUString> aParentClasses = parseClass(*pParent);
+            OUString sParentType(SVGTokenToStr(pParent->getType()));
+
+            if(rCurrent.getId())
+            {
+                const OUString& rId = *rCurrent.getId();
+
+                if(!rId.isEmpty())
+                {
+                    if (!sParentId.isEmpty())
+                    {
+                        const OUString aConcatenated("#" + sParentId + ">#" + rId);
+                        addCssStyle(rDocument, aConcatenated);
+                    }
+
+                    for(const auto &aParentClass : aParentClasses)
+                    {
+                        const OUString aConcatenated("." + aParentClass + ">#" + rId);
+                        addCssStyle(rDocument, aConcatenated);
+                    }
+
+                    if (!sParentType.isEmpty())
+                    {
+                        const OUString aConcatenated(sParentType + ">#" + rId);
+                        addCssStyle(rDocument, aConcatenated);
+                    }
+                }
+
+            }
+
+            std::vector <OUString> aClasses = parseClass(rCurrent);
+            for(const auto &aClass : aClasses)
+            {
+
+                if (!sParentId.isEmpty())
+                {
+                    const OUString aConcatenated("#" + sParentId + ">." + aClass);
+                    addCssStyle(rDocument, aConcatenated);
+                }
+
+                for(const auto &aParentClass : aParentClasses)
+                {
+                    const OUString aConcatenated("." + aParentClass + ">." + aClass);
+                    addCssStyle(rDocument, aConcatenated);
+                }
+
+                if (!sParentType.isEmpty())
+                {
+                    const OUString aConcatenated(sParentType + ">." + aClass);
+                    addCssStyle(rDocument, aConcatenated);
+                }
+            }
+
+            OUString sCurrentType(SVGTokenToStr(getType()));
+
+            if(!sCurrentType.isEmpty())
+            {
+                if (!sParentId.isEmpty())
+                {
+                    const OUString aConcatenated("#" + sParentId + ">" + sCurrentType);
+                    addCssStyle(rDocument, aConcatenated);
+                }
+
+                for(const auto &aParentClass : aParentClasses)
+                {
+                    const OUString aConcatenated("." + aParentClass + ">" + sCurrentType);
+                    addCssStyle(rDocument, aConcatenated);
+                }
+
+                if (!sParentType.isEmpty())
+                {
+                    const OUString aConcatenated(sParentType + ">" + sCurrentType);
+                    addCssStyle(rDocument, aConcatenated);
+                }
+            }
+        }
+
         void SvgNode::fillCssStyleVector(const SvgStyleAttributes& rOriginal)
         {
             OSL_ENSURE(!mbCssStyleVectorBuilt, "OOps, fillCssStyleVector called double ?!?");
@@ -211,8 +305,12 @@ namespace {
                 maCssStyleVector.push_back(mpLocalCssStyle.get());
             }
 
+            // tdf#156038 check for child combinator
+            fillCssStyleVectorUsingParent(*this);
+
             // check the hierarchy for concatenated patterns of Selectors
             fillCssStyleVectorUsingHierarchyAndSelectors(*this, OUString());
+
 
             // tdf#99115, Add css selector '*' style only if the element is on top of the hierarchy
             // meaning its parent is <svg>
