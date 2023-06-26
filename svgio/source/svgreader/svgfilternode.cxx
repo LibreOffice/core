@@ -18,8 +18,9 @@
  */
 
 #include <svgfilternode.hxx>
-#include <svgfegaussianblurnode.hxx>
 #include <svgfecolormatrixnode.hxx>
+#include <svgfegaussianblurnode.hxx>
+#include <svgfeoffsetnode.hxx>
 
 namespace svgio::svgreader
 {
@@ -53,6 +54,12 @@ void SvgFilterNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTarg
             const SvgFeColorMatrixNode& rFeColorMatrixNode
                 = dynamic_cast<const SvgFeColorMatrixNode&>(*pCandidate);
             rFeColorMatrixNode.apply(rTarget);
+        }
+        else if (pCandidate->getType() == SVGToken::FeOffset)
+        {
+            const SvgFeOffsetNode& rFeOffsetNode
+                = dynamic_cast<const SvgFeOffsetNode&>(*pCandidate);
+            rFeOffsetNode.apply(rTarget);
         }
     }
 }
