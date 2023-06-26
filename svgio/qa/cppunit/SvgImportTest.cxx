@@ -179,8 +179,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFilterFeGaussianBlur)
 
     CPPUNIT_ASSERT (pDocument);
 
-    assertXPath(pDocument, "/primitive2D/transform/modifiedColor", "modifier", "alpha");
-    assertXPath(pDocument, "/primitive2D/transform/modifiedColor/softedge", "radius", "5");
+    assertXPath(pDocument, "/primitive2D/transform/softedge", "radius", "5");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf87309)

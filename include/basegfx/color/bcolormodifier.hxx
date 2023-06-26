@@ -127,26 +127,6 @@ namespace basegfx
         SAL_DLLPRIVATE virtual OUString getModifierName() const override;
     };
 
-    /**
-     * convert to alpha
-    */
-    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_alpha final : public BColorModifier
-    {
-    public:
-        BColorModifier_alpha()
-        {
-        }
-
-        virtual ~BColorModifier_alpha() override;
-
-        // compare operator
-        SAL_DLLPRIVATE virtual bool operator==(const BColorModifier& rCompare) const override;
-
-        // compute modified color
-        SAL_DLLPRIVATE virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
-        SAL_DLLPRIVATE virtual OUString getModifierName() const override;
-    };
-
     /** convert to alpha based on luminance
 
         returns a color where red green and blue are first weighted and added

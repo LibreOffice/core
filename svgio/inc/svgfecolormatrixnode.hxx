@@ -20,7 +20,6 @@
 #pragma once
 
 #include "svgnode.hxx"
-#include "svgfilternode.hxx"
 #include "svgstyleattributes.hxx"
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
@@ -40,7 +39,6 @@ class SvgFeColorMatrixNode final : public SvgNode
 private:
     ColorType maType;
     OUString maValuesContent;
-    In maIn;
 
 public:
     SvgFeColorMatrixNode(SvgDocument& rDocument, SvgNode* pParent);
