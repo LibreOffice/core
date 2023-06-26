@@ -134,6 +134,17 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf155321_CondFormatColor_XLSX)
     CPPUNIT_ASSERT_EQUAL(Color(99, 190, 123), aColor);
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf156028_ColorScale_XLSX)
+{
+    createScDoc("xlsx/tdf156028.xlsx");
+
+    ScDocument* pDoc = getScDoc();
+    ScConditionalFormat* pCondFormat = pDoc->GetCondFormat(0, 0, 0);
+    ScRefCellValue aCellA1(*pDoc, ScAddress(0, 0, 0));
+    Color aColor = pCondFormat->GetData(aCellA1, ScAddress(0, 0, 0)).mxColorScale.value();
+    CPPUNIT_ASSERT_EQUAL(Color(99, 190, 123), aColor);
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf138601_CondFormatXLSX)
 {
     createScDoc("xlsx/tdf138601.xlsx");
