@@ -19,7 +19,8 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_apitests, \
     sw/qa/api/SwXBodyText \
     sw/qa/api/SwXDocumentIndex \
     sw/qa/api/SwXDocumentSettings \
-	sw/qa/api/SwXTextFrame \
+    sw/qa/api/SwXFootnoteProperties \
+    sw/qa/api/SwXTextFrame \
     sw/qa/api/SwXTextField \
     sw/qa/api/SwXTextTable \
 ))
