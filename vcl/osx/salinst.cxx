@@ -588,6 +588,7 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
         NSTimeInterval now = [[NSProcessInfo processInfo] systemUptime];
         mbTimerProcessed = false;
 
+        int noLoops = 0;
         do
         {
             SolarMutexReleaser aReleaser;
@@ -607,6 +608,12 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
             [NSApp updateWindows];
 
             if ( !bHandleAllCurrentEvents || !pEvent || now < [pEvent timestamp] )
+                break;
+            // noelgrandin: I see sporadic hangs on the macos jenkins boxes, and the backtrace
+            // points to the this loop - let us see if breaking out of here after too many
+            // trips around helps.
+            noLoops++;
+            if (noLoops == 100)
                 break;
         }
         while( true );
