@@ -9,6 +9,7 @@
 
 #include <sfx2/lokhelper.hxx>
 #include <config_buildconfig.h>
+#include <config_cairo_rgba.h>
 #include <config_features.h>
 
 #include <stdio.h>
@@ -4229,7 +4230,11 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
 static int doc_getTileMode(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
 {
     SetLastExceptionMsg();
+#if ENABLE_CAIRO_RGBA
+    return LOK_TILEMODE_RGBA;
+#else
     return LOK_TILEMODE_BGRA;
+#endif
 }
 
 static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
