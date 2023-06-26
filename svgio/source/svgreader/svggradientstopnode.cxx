@@ -35,7 +35,7 @@ namespace svgio::svgreader
 
         const SvgStyleAttributes* SvgGradientStopNode::getSvgStyleAttributes() const
         {
-            return checkForCssStyle("stop", maSvgStyleAttributes);
+            return checkForCssStyle(maSvgStyleAttributes);
         }
 
         void SvgGradientStopNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)

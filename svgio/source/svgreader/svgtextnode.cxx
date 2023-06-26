@@ -41,7 +41,7 @@ namespace svgio::svgreader
 
         const SvgStyleAttributes* SvgTextNode::getSvgStyleAttributes() const
         {
-            return checkForCssStyle("text", maSvgStyleAttributes);
+            return checkForCssStyle(maSvgStyleAttributes);
         }
 
         void SvgTextNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)

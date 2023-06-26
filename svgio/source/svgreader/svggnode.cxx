@@ -38,16 +38,9 @@ namespace svgio::svgreader
 
         const SvgStyleAttributes* SvgGNode::getSvgStyleAttributes() const
         {
-            if (SVGToken::Defs == getType())
-            {
-                // tdf#98599 attributes may be inherit by the children, therefore read them
-                return checkForCssStyle("defs", maSvgStyleAttributes);
-            }
-            else
-            {
-                // #i125258# for SVGToken::G take CssStyles into account
-                return checkForCssStyle("g", maSvgStyleAttributes);
-            }
+            // tdf#98599 attributes may be inherit by the children, therefore read them
+            // #i125258# for SVGToken::G take CssStyles into account
+            return checkForCssStyle(maSvgStyleAttributes);
         }
 
         void SvgGNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)

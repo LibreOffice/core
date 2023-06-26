@@ -219,14 +219,14 @@ namespace
                 case SVGToken::Polygon:
                 {
                     /// new node for Polygon
-                    mpTarget = new SvgPolyNode(maDocument, mpTarget, false);
+                    mpTarget = new SvgPolyNode(aSVGToken, maDocument, mpTarget);
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }
                 case SVGToken::Polyline:
                 {
                     /// new node for Polyline
-                    mpTarget = new SvgPolyNode(maDocument, mpTarget, true);
+                    mpTarget = new SvgPolyNode(aSVGToken, maDocument, mpTarget);
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }

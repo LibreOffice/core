@@ -54,9 +54,7 @@ namespace svgio::svgreader
 
         const SvgStyleAttributes* SvgGradientNode::getSvgStyleAttributes() const
         {
-            return checkForCssStyle(
-                SVGToken::LinearGradient == getType() ? OUString("linearGradient") : OUString("radialGradient"),
-                maSvgStyleAttributes);
+            return checkForCssStyle(maSvgStyleAttributes);
         }
 
         void SvgGradientNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)
