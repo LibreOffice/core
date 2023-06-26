@@ -247,7 +247,7 @@ void ScreenshotTest::processDialogBatchFile(std::u16string_view rFile)
     const OUString aURL(aDirectories.getURLFromSrc(rFile));
     SvFileStream aStream(aURL, StreamMode::READ);
     OString aNextUIFile;
-    const OString aComment("#");
+    static constexpr OStringLiteral aComment("#");
 
     while (aStream.ReadLine(aNextUIFile))
     {

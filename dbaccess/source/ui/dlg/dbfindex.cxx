@@ -254,8 +254,8 @@ void ODbaseIndexDialog::Init()
 
     // first assume for all indexes they're free
 
-    OUString const aIndexExt("ndx");
-    OUString const aTableExt("dbf");
+    static constexpr OUStringLiteral aIndexExt(u"ndx");
+    static constexpr OUStringLiteral aTableExt(u"dbf");
 
     std::vector< OUString > aUsedIndexes;
 

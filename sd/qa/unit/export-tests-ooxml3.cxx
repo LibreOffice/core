@@ -513,7 +513,8 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf100348_convert_Fontwork2TextWarp
 
     // Resulting pptx has to contain the TextWarp shape
     xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
-    const OString sPathStart("/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr/a:prstTxWarp");
+    static constexpr OStringLiteral sPathStart(
+        "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr/a:prstTxWarp");
     assertXPath(pXmlDocContent, sPathStart + "[@prst='textWave1']");
     const OString sPathAdj(sPathStart + "/a:avLst/a:gd");
     assertXPath(pXmlDocContent, sPathAdj + "[@name='adj1' and  @fmla='val 18750']");
@@ -599,7 +600,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf99497_keepAppearanceOfCircleKind
 
     // slide 1 45° -> adj1 = 20493903, 270° -> adj2 = 5400000, <a:noFill/> exists
     xmlDocUniquePtr pXmlDocContent1 = parseExport("ppt/slides/slide1.xml");
-    const OString sPathStart1("/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:prstGeom");
+    static constexpr OStringLiteral sPathStart1("/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:prstGeom");
     assertXPath(pXmlDocContent1, sPathStart1 + "[@prst='arc']");
     const OString sPathAdj1(sPathStart1 + "/a:avLst/a:gd");
     assertXPath(pXmlDocContent1, sPathAdj1 + "[@name='adj1' and  @fmla='val 20493903']");
@@ -608,7 +609,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf99497_keepAppearanceOfCircleKind
 
     // slide 2 270° -> adj1 = 5400000, 180° -> adj2 = 10800000
     xmlDocUniquePtr pXmlDocContent2 = parseExport("ppt/slides/slide2.xml");
-    const OString sPathStart2("/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:prstGeom");
+    static constexpr OStringLiteral sPathStart2("/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:prstGeom");
     assertXPath(pXmlDocContent2, sPathStart2 + "[@prst='chord']");
     const OString sPathAdj2(sPathStart2 + "/a:avLst/a:gd");
     assertXPath(pXmlDocContent2, sPathAdj2 + "[@name='adj1' and  @fmla='val 5400000']");
@@ -616,7 +617,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf99497_keepAppearanceOfCircleKind
 
     // slide 3 120° -> adj1 = 12600000, 30° -> adj2 = 20946396
     xmlDocUniquePtr pXmlDocContent3 = parseExport("ppt/slides/slide3.xml");
-    const OString sPathStart3("/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:prstGeom");
+    static constexpr OStringLiteral sPathStart3("/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:prstGeom");
     assertXPath(pXmlDocContent3, sPathStart3 + "[@prst='pie']");
     const OString sPathAdj3(sPathStart3 + "/a:avLst/a:gd");
     assertXPath(pXmlDocContent3, sPathAdj3 + "[@name='adj1' and  @fmla='val 12600000']");
@@ -965,7 +966,8 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf135843)
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
-    const OString sPathStart("/p:sld/p:cSld/p:spTree/p:graphicFrame/a:graphic/a:graphicData/a:tbl");
+    static constexpr OStringLiteral sPathStart(
+        "/p:sld/p:cSld/p:spTree/p:graphicFrame/a:graphic/a:graphicData/a:tbl");
     assertXPath(pXmlDoc, sPathStart + "/a:tr[1]/a:tc[1]/a:tcPr/a:lnL/a:solidFill");
     assertXPath(pXmlDoc, sPathStart + "/a:tr[1]/a:tc[1]/a:tcPr/a:lnR/a:solidFill");
     assertXPath(pXmlDoc, sPathStart + "/a:tr[1]/a:tc[1]/a:tcPr/a:lnT/a:solidFill");

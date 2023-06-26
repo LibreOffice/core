@@ -1134,7 +1134,7 @@ void VMLExport::AddLineDimensions( const tools::Rectangle& rRectangle )
 
     if ( mnGroupLevel == 1 )
     {
-        const OString aPt( "pt" );
+        static constexpr OStringLiteral aPt( "pt" );
         aLeft = OString::number( double( rRectangle.Left() ) / 20 ) + aPt;
         aTop = OString::number( double( rRectangle.Top() ) / 20 ) + aPt;
         aRight = OString::number( double( rRectangle.Right() ) / 20 ) + aPt;

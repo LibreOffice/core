@@ -375,7 +375,7 @@ void SAL_CALL SdXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
 {
     SvXMLImport::initialize( aArguments );
 
-    OUString const sOrganizerMode("OrganizerMode");
+    static constexpr OUStringLiteral sOrganizerMode(u"OrganizerMode");
     bool bStyleOnly(false);
 
     css::beans::PropertyValue aPropValue;

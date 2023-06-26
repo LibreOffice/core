@@ -920,7 +920,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkDirectColor)
 
     // Examine the saved markup.
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    const OString sElement = "//w:txbxContent/w:p/w:r/w:rPr/";
+    static constexpr OStringLiteral sElement = "//w:txbxContent/w:p/w:r/w:rPr/";
 
     // Make sure the fallback in <w:color> has correct value.
     assertXPath(pXmlDoc, sElement + "w:color", "val", "2E8B57");

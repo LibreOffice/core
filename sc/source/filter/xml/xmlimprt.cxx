@@ -1170,8 +1170,7 @@ void SAL_CALL ScXMLImport::startDocument()
             xImportInfo.is() ? xImportInfo->getPropertySetInfo() : nullptr);
     if (xPropertySetInfo.is())
     {
-        OUString const sOrganizerMode(
-            "OrganizerMode");
+        static constexpr OUStringLiteral sOrganizerMode(u"OrganizerMode");
         if (xPropertySetInfo->hasPropertyByName(sOrganizerMode))
         {
             bool bStyleOnly(false);

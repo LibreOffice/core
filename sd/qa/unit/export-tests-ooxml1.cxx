@@ -1326,8 +1326,8 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testRoundtripPrstDash)
         = { "dash",         "dashDot", "dot",        "lgDash",        "lgDashDot",
             "lgDashDotDot", "sysDash", "sysDashDot", "sysDashDotDot", "sysDot" };
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
-    const OString sStart = "/p:sld/p:cSld/p:spTree/p:sp[";
-    const OString sEnd = "]/p:spPr/a:ln/a:prstDash";
+    static constexpr OStringLiteral sStart = "/p:sld/p:cSld/p:spTree/p:sp[";
+    static constexpr OStringLiteral sEnd = "]/p:spPr/a:ln/a:prstDash";
     for (sal_uInt16 i = 0; i < 10; i++)
     {
         OString sXmlPath = sStart + OString::number(i + 1) + sEnd;
@@ -1410,7 +1410,8 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf100348FontworkBitmapFill)
     // Make sure the fontwork shape has a blip bitmap fill and a colored outline.
     // Without the patch, fill and outline were black.
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
-    const OString sPathStart("//p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr");
+    static constexpr OStringLiteral sPathStart(
+        "//p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr");
     assertXPath(pXmlDoc, sPathStart + "/a:blipFill/a:blip", 1);
     assertXPath(pXmlDoc, sPathStart + "/a:ln/a:solidFill/a:srgbClr", "val", "ffbf00");
 }
@@ -1423,7 +1424,8 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf100348FontworkGradientGlow)
     // Make sure the fontwork shape has a gradient fill and a colored glow.
     // Without the patch, fill was black and no glow applied.
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
-    const OString sPathStart("//p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr");
+    static constexpr OStringLiteral sPathStart(
+        "//p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr");
     assertXPath(pXmlDoc, sPathStart + "/a:gradFill/a:gsLst/a:gs[1]/a:srgbClr", "val", "8d281e");
     assertXPath(pXmlDoc, sPathStart + "/a:effectLst/a:glow", "rad", "63360");
     assertXPath(pXmlDoc, sPathStart + "/a:effectLst/a:glow/a:srgbClr", "val", "ff4500");
@@ -1446,7 +1448,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf128345GradientLinear)
 
     // Make sure the shape has a lin fill. Without the patch, fill was solid red.
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
-    const OString sPathStart("//p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:gradFill");
+    static constexpr OStringLiteral sPathStart("//p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:gradFill");
     assertXPath(pXmlDoc, sPathStart + "/a:lin", "ang", "3600000");
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs", 2);
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]", "pos", "25000");
@@ -1465,7 +1467,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf128345GradientRadial)
     // Make sure the shape has transparency. In OOXML alpha means 'opacity' with default
     // 100000 for full opak, so only the full transparency with val 0 should be written.
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
-    const OString sPathStart("//p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:gradFill");
+    static constexpr OStringLiteral sPathStart("//p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:gradFill");
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs", 2);
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr", "val", "ff0000");
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", 0);
@@ -1504,7 +1506,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf134969TransparencyOnColorGradien
 
     // Make sure the shape has a transparency in gradient stops.
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
-    const OString sPathStart("//p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:gradFill");
+    static constexpr OStringLiteral sPathStart("//p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:gradFill");
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs", 2);
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", "val", "60000");
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val", "60000");
@@ -1516,7 +1518,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testArcTo)
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
-    const OString sPath("//a:custGeom/a:pathLst/a:path/a:arcTo");
+    static constexpr OStringLiteral sPath("//a:custGeom/a:pathLst/a:path/a:arcTo");
     assertXPath(pXmlDoc, sPath, "wR", "3");
     assertXPath(pXmlDoc, sPath, "hR", "3");
     assertXPath(pXmlDoc, sPath, "stAng", "1800000");

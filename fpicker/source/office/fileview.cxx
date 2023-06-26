@@ -1499,7 +1499,7 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    OUString const aDateSep( ", " );
+    static constexpr OUStringLiteral aDateSep( u", " );
 
     for (auto const& elem : maContent)
     {

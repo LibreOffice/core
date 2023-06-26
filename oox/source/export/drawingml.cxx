@@ -1512,7 +1512,7 @@ OUString GraphicExport::writeToStorage(const Graphic& rGraphic , bool bRelPathTo
         xOutStream->writeBytes(Sequence<sal_Int8>(static_cast<const sal_Int8*>(aData), nDataSize));
         xOutStream->closeOutput();
 
-        const OString sRelPathToMedia = "media/image";
+        static constexpr OStringLiteral sRelPathToMedia = "media/image";
         OString sRelationCompPrefix;
         if (bRelPathToMedia)
             sRelationCompPrefix = "../";

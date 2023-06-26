@@ -728,10 +728,10 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testPresetShapesExport)
     xmlDocUniquePtr pXmlDocCT = parseExport("ppt/slides/slide1.xml");
     const OString sPattern(
         "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:prstGeom[@prst='_T_']/a:avLst/a:gd[_N_]");
-    const OString sT("_T_");
-    const OString sN("_N_");
-    const OString sPropertyName("name");
-    const OString sPropertyFmla("fmla");
+    static constexpr OStringLiteral sT("_T_");
+    static constexpr OStringLiteral sN("_N_");
+    static constexpr OStringLiteral sPropertyName("name");
+    static constexpr OStringLiteral sPropertyFmla("fmla");
 
     size_t i = 0;
     while (i < SAL_N_ELEMENTS(sShapeTypeAndValues))

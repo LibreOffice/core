@@ -28,7 +28,7 @@ namespace
     sal_Int32 lcl_IndexOfUnicode(
         std::string_view rSource, const sal_Int32 nFrom = 0 )
     {
-        const OString sHexDigits = "0123456789abcdefABCDEF";
+        static constexpr std::string_view sHexDigits = "0123456789abcdefABCDEF";
         size_t nIndex = rSource.find( "\\u", nFrom );
         if( nIndex == std::string_view::npos )
         {
@@ -37,7 +37,7 @@ namespace
         bool bIsUnicode = true;
         for( short nDist = 2; nDist <= 5; ++nDist )
         {
-            if( sHexDigits.indexOf( rSource[nIndex + nDist] ) == -1 )
+            if( sHexDigits.find( rSource[nIndex + nDist] ) == std::string_view::npos )
             {
                 bIsUnicode = false;
             }

@@ -129,7 +129,7 @@ void SvxScriptOrgDialog::Init( std::u16string_view language  )
     Sequence< Reference< browse::XBrowseNode > > children;
 
     OUString userStr("user");
-    OUString const shareStr("share");
+    static constexpr OUStringLiteral shareStr(u"share");
 
     try
     {

@@ -40,6 +40,7 @@ public:
     bool VisitReturnStmt(ReturnStmt const*);
     bool VisitDeclRefExpr(DeclRefExpr const*);
     bool VisitMemberExpr(MemberExpr const*);
+    bool VisitUnaryOperator(UnaryOperator const*);
 
 private:
     std::unordered_set<VarDecl const *> potentialVars;
@@ -58,6 +59,11 @@ bool StringStatic::preRun()
     StringRef fn(handler.getMainFileName());
     // passing around pointers to global OUString
     if (loplugin::hasPathnamePrefix(fn, SRCDIR "/filter/source/svg/"))
+         return false;
+    // call replaceAll on a 'const OUString", for which there is no OUStringLiteral equivalent
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/i18npool/qa/cppunit/test_breakiterator.cxx"))
+         return false;
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sd/qa/unit/export-tests-ooxml2.cxx"))
          return false;
     return true;
 }
@@ -80,51 +86,72 @@ bool StringStatic::VisitVarDecl(VarDecl const* varDecl)
     if (ignoreLocation(varDecl))
         return true;
     QualType qt = varDecl->getType();
-    if (!varDecl->hasGlobalStorage())
-        return true;
-    if (varDecl->hasGlobalStorage() && !varDecl->isStaticLocal()) {
-        //TODO: For a non-public static member variable from an included file, we could still
-        // examine it further if all its uses must be seen in that included file:
-        if (!compiler.getSourceManager().isInMainFile(varDecl->getLocation())) {
-            return true;
-        }
-    }
     if (!varDecl->isThisDeclarationADefinition()
         || !qt.isConstQualified())
         return true;
-    if (qt->isArrayType())
-        qt = qt->getAsArrayTypeUnsafe()->getElementType();
 
-    auto tc = loplugin::TypeCheck(qt);
-    if (!tc.Class("OUString").Namespace("rtl").GlobalNamespace()
-        && !tc.Class("OString").Namespace("rtl").GlobalNamespace())
-        return true;
-    if (varDecl->hasInit())
+    if (varDecl->hasGlobalStorage())
     {
-        Expr const * expr = varDecl->getInit();
-        while (true) {
-            if (ExprWithCleanups const * exprWithCleanups = dyn_cast<ExprWithCleanups>(expr)) {
-                expr = exprWithCleanups->getSubExpr();
-            }
-            else if (CastExpr const * castExpr = dyn_cast<CastExpr>(expr)) {
-                expr = castExpr->getSubExpr();
-            }
-            else if (MaterializeTemporaryExpr const * materializeExpr = dyn_cast<MaterializeTemporaryExpr>(expr)) {
-                expr = materializeExpr->getSubExpr();
-            }
-            else if (CXXBindTemporaryExpr const * bindExpr = dyn_cast<CXXBindTemporaryExpr>(expr)) {
-                expr = bindExpr->getSubExpr();
-            }
-            else if (CXXConstructExpr const * constructExpr = dyn_cast<CXXConstructExpr>(expr)) {
-                if (constructExpr->getNumArgs() == 0) {
-                    return true;
-                }
-                expr = constructExpr->getArg(0);
-            } else if (isa<CallExpr>(expr)) {
+        if (varDecl->hasGlobalStorage() && !varDecl->isStaticLocal()) {
+            //TODO: For a non-public static member variable from an included file, we could still
+            // examine it further if all its uses must be seen in that included file:
+            if (!compiler.getSourceManager().isInMainFile(varDecl->getLocation())) {
                 return true;
-            } else {
-                break;
             }
+        }
+        if (qt->isArrayType())
+            qt = qt->getAsArrayTypeUnsafe()->getElementType();
+
+        auto tc = loplugin::TypeCheck(qt);
+        if (!tc.Class("OUString").Namespace("rtl").GlobalNamespace()
+            && !tc.Class("OString").Namespace("rtl").GlobalNamespace())
+            return true;
+        if (varDecl->hasInit())
+        {
+            Expr const * expr = varDecl->getInit();
+            while (true) {
+                if (ExprWithCleanups const * exprWithCleanups = dyn_cast<ExprWithCleanups>(expr)) {
+                    expr = exprWithCleanups->getSubExpr();
+                }
+                else if (CastExpr const * castExpr = dyn_cast<CastExpr>(expr)) {
+                    expr = castExpr->getSubExpr();
+                }
+                else if (MaterializeTemporaryExpr const * materializeExpr = dyn_cast<MaterializeTemporaryExpr>(expr)) {
+                    expr = materializeExpr->getSubExpr();
+                }
+                else if (CXXBindTemporaryExpr const * bindExpr = dyn_cast<CXXBindTemporaryExpr>(expr)) {
+                    expr = bindExpr->getSubExpr();
+                }
+                else if (CXXConstructExpr const * constructExpr = dyn_cast<CXXConstructExpr>(expr)) {
+                    if (constructExpr->getNumArgs() == 0) {
+                        return true;
+                    }
+                    expr = constructExpr->getArg(0);
+                } else if (isa<CallExpr>(expr)) {
+                    return true;
+                } else {
+                    break;
+                }
+            }
+        }
+    }
+    else
+    {
+        if (isa<ParmVarDecl>(varDecl))
+            return true;
+        loplugin::TypeCheck const tc(varDecl->getType());
+        if (!(tc.Class("OString").Namespace("rtl").GlobalNamespace()
+              || tc.Class("OUString").Namespace("rtl").GlobalNamespace()))
+        {
+            return true;
+        }
+        if (varDecl->hasInit())
+        {
+            auto cxxConstruct = dyn_cast<CXXConstructExpr>(varDecl->getInit()->IgnoreImplicit());
+            if (!cxxConstruct || cxxConstruct->getNumArgs() == 0)
+                return true;
+            if (!isa<clang::StringLiteral>(cxxConstruct->getArg(0)))
+                return true;
         }
     }
     potentialVars.insert(varDecl);
@@ -190,6 +217,25 @@ bool StringStatic::VisitMemberExpr(MemberExpr const * expr)
         return true;
     }
     excludeVars.insert(varDecl);
+    return true;
+}
+
+bool StringStatic::VisitUnaryOperator(UnaryOperator const * expr)
+{
+    if (ignoreLocation(expr))
+        return true;
+    if (expr->getOpcode() != UO_AddrOf)
+        return true;
+    if (this->ignoreLocation(expr))
+        return true;
+    auto const dre = dyn_cast<DeclRefExpr>(
+        expr->getSubExpr()->IgnoreParenImpCasts());
+    if (!dre)
+        return true;
+    auto const vd = dyn_cast<VarDecl>(dre->getDecl());
+    if (!vd)
+        return true;
+    excludeVars.insert(vd->getCanonicalDecl());
     return true;
 }
 

@@ -16,6 +16,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/System.hxx>
+#include <o3tl/string_view.hxx>
 #include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
 #include <rtl/ustring.hxx>
 #include <svtools/langhelp.hxx>
@@ -117,12 +118,12 @@ OUString getInstalledLocaleForSystemUILanguage(const css::uno::Sequence<OUString
         {
             // Get the list of langpacks that this build was configured to include
             std::vector<OUString> aPackages;
-            OUString const sAvailableLocales(WITH_LANG);
+            static constexpr std::u16string_view sAvailableLocales(u"" WITH_LANG);
             std::vector<OUString> aAvailable;
             sal_Int32 nIndex = 0;
             do
             {
-                aAvailable.emplace_back(sAvailableLocales.getToken(0, ' ', nIndex));
+                aAvailable.emplace_back(o3tl::getToken(sAvailableLocales, 0, ' ', nIndex));
             }
             while (nIndex >= 0);
             // See which one matches the desired ui locale

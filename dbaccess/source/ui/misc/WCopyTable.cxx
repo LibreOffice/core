@@ -992,7 +992,7 @@ void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, 
     _rColumns.clear();
 
     OFieldDescription* pActFieldDescr = nullptr;
-    OUString const sCreateParam("x");
+    static constexpr OUStringLiteral sCreateParam(u"x");
     // ReadOnly-Flag
     // On drop no line must be editable.
     // On add only empty lines must be editable.

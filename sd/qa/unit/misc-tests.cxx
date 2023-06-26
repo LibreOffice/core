@@ -475,7 +475,7 @@ void SdMiscTest::testTdf101242_ODF_add_settings()
     // Verify, that the saved document still has the ODF attributes
     xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'styles.xml'", pXmlDoc);
-    const OString sPathStart(
+    static constexpr OStringLiteral sPathStart(
         "/office:document-styles/office:master-styles/draw:layer-set/draw:layer");
     assertXPath(pXmlDoc,
                 sPathStart + "[@draw:name='backgroundobjects' and @draw:protected='true']");
@@ -485,10 +485,11 @@ void SdMiscTest::testTdf101242_ODF_add_settings()
     // Verify, that the saved document has got the items in settings.xml
     xmlDocUniquePtr pXmlDoc2 = parseExport("settings.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'settings.xml'", pXmlDoc2);
-    const OString sPathStart2("/office:document-settings/office:settings/"
-                              "config:config-item-set[@config:name='ooo:view-settings']/"
-                              "config:config-item-map-indexed[@config:name='Views']/"
-                              "config:config-item-map-entry");
+    static constexpr OStringLiteral sPathStart2(
+        "/office:document-settings/office:settings/"
+        "config:config-item-set[@config:name='ooo:view-settings']/"
+        "config:config-item-map-indexed[@config:name='Views']/"
+        "config:config-item-map-entry");
     // Value is a bitfield with first Byte in order '* * * measurelines controls backgroundobjects background layout'
     // The first three bits depend on initialization and may change. The values in file are Base64 encoded.
     OUString sBase64;
@@ -529,7 +530,7 @@ void SdMiscTest::testTdf101242_ODF_no_settings()
     // Verify, that the saved document still has the ODF attributes
     xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'styles.xml'", pXmlDoc);
-    const OString sPathStart(
+    static constexpr OStringLiteral sPathStart(
         "/office:document-styles/office:master-styles/draw:layer-set/draw:layer");
     assertXPath(pXmlDoc,
                 sPathStart + "[@draw:name='backgroundobjects' and @draw:protected='true']");
@@ -539,10 +540,11 @@ void SdMiscTest::testTdf101242_ODF_no_settings()
     // Verify, that the saved document has no layer items in settings.xml
     xmlDocUniquePtr pXmlDoc2 = parseExport("settings.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'settings.xml'", pXmlDoc2);
-    const OString sPathStart2("/office:document-settings/office:settings/"
-                              "config:config-item-set[@config:name='ooo:view-settings']/"
-                              "config:config-item-map-indexed[@config:name='Views']/"
-                              "config:config-item-map-entry");
+    static constexpr OStringLiteral sPathStart2(
+        "/office:document-settings/office:settings/"
+        "config:config-item-set[@config:name='ooo:view-settings']/"
+        "config:config-item-map-indexed[@config:name='Views']/"
+        "config:config-item-map-entry");
     assertXPath(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='VisibleLayers']", 0);
     assertXPath(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='PrintableLayers']", 0);
     assertXPath(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='LockedLayers']", 0);
@@ -566,7 +568,7 @@ void SdMiscTest::testTdf101242_settings_keep()
     // Verify, that the saved document has the ODF attributes
     xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'styles.xml'", pXmlDoc);
-    const OString sPathStart(
+    static constexpr OStringLiteral sPathStart(
         "/office:document-styles/office:master-styles/draw:layer-set/draw:layer");
     assertXPath(pXmlDoc,
                 sPathStart + "[@draw:name='backgroundobjects' and @draw:protected='true']");
@@ -576,10 +578,11 @@ void SdMiscTest::testTdf101242_settings_keep()
     // Verify, that the saved document still has the items in settings.xml
     xmlDocUniquePtr pXmlDoc2 = parseExport("settings.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'settings.xml'", pXmlDoc2);
-    const OString sPathStart2("/office:document-settings/office:settings/"
-                              "config:config-item-set[@config:name='ooo:view-settings']/"
-                              "config:config-item-map-indexed[@config:name='Views']/"
-                              "config:config-item-map-entry");
+    static constexpr OStringLiteral sPathStart2(
+        "/office:document-settings/office:settings/"
+        "config:config-item-set[@config:name='ooo:view-settings']/"
+        "config:config-item-map-indexed[@config:name='Views']/"
+        "config:config-item-map-entry");
     // Value is a bitfield with first Byte in order '* * * measurelines controls backgroundobjects background layout'
     // The first three bits depend on initialization and may change. The values in file are Base64 encoded.
     OUString sBase64;
@@ -621,7 +624,7 @@ void SdMiscTest::testTdf101242_settings_remove()
     // Verify, that the saved document has the ODF attributes
     xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'styles.xml'", pXmlDoc);
-    const OString sPathStart(
+    static constexpr OStringLiteral sPathStart(
         "/office:document-styles/office:master-styles/draw:layer-set/draw:layer");
     assertXPath(pXmlDoc,
                 sPathStart + "[@draw:name='backgroundobjects' and @draw:protected='true']");
@@ -631,10 +634,11 @@ void SdMiscTest::testTdf101242_settings_remove()
     // Verify, that the saved document has no layer items in settings.xml
     xmlDocUniquePtr pXmlDoc2 = parseExport("settings.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'settings.xml'", pXmlDoc2);
-    const OString sPathStart2("/office:document-settings/office:settings/"
-                              "config:config-item-set[@config:name='ooo:view-settings']/"
-                              "config:config-item-map-indexed[@config:name='Views']/"
-                              "config:config-item-map-entry");
+    static constexpr OStringLiteral sPathStart2(
+        "/office:document-settings/office:settings/"
+        "config:config-item-set[@config:name='ooo:view-settings']/"
+        "config:config-item-map-indexed[@config:name='Views']/"
+        "config:config-item-map-entry");
     assertXPath(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='VisibleLayers']", 0);
     assertXPath(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='PrintableLayers']", 0);
     assertXPath(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='LockedLayers']", 0);
@@ -666,10 +670,11 @@ void SdMiscTest::testTdf119392()
     // Verify correct bit order in bitfield in the config items in settings.xml
     xmlDocUniquePtr pXmlDoc = parseExport("settings.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'settings.xml'", pXmlDoc);
-    const OString sPathStart("/office:document-settings/office:settings/"
-                             "config:config-item-set[@config:name='ooo:view-settings']/"
-                             "config:config-item-map-indexed[@config:name='Views']/"
-                             "config:config-item-map-entry");
+    static constexpr OStringLiteral sPathStart(
+        "/office:document-settings/office:settings/"
+        "config:config-item-set[@config:name='ooo:view-settings']/"
+        "config:config-item-map-indexed[@config:name='Views']/"
+        "config:config-item-map-entry");
     // First Byte is in order 'V-L -P- V-- measurelines controls backgroundobjects background layout'
     // Bits need to be: visible=10111111=0xbf=191 printable=01011111=0x5f=95 locked=10000000=0x80=128
     // The values in file are Base64 encoded.
@@ -766,7 +771,8 @@ void SdMiscTest::testTdf98839_ShearVFlipH()
     save("draw8");
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'content.xml'", pXmlDoc);
-    const OString sPathStart("/office:document-content/office:body/office:drawing/draw:page");
+    static constexpr OStringLiteral sPathStart(
+        "/office:document-content/office:body/office:drawing/draw:page");
     assertXPath(pXmlDoc, sPathStart);
     const OUString sTransform = getXPath(pXmlDoc, sPathStart + "/draw:custom-shape", "transform");
 

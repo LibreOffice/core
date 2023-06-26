@@ -1239,7 +1239,7 @@ void VclMetafileProcessor2D::processTextHierarchyFieldPrimitive2D(
 {
     // support for FIELD_SEQ_BEGIN, FIELD_SEQ_END and URL. It wraps text primitives (but is not limited to)
     // thus do the MetafileAction embedding stuff but just handle recursively.
-    const OString aCommentStringCommon("FIELD_SEQ_BEGIN");
+    static constexpr OStringLiteral aCommentStringCommon("FIELD_SEQ_BEGIN");
     OUString aURL;
 
     switch (rFieldPrimitive.getType())
@@ -1333,7 +1333,7 @@ void VclMetafileProcessor2D::processTextHierarchyBulletPrimitive2D(
 void VclMetafileProcessor2D::processTextHierarchyParagraphPrimitive2D(
     const primitive2d::TextHierarchyParagraphPrimitive2D& rParagraphPrimitive)
 {
-    const OString aCommentString("XTEXT_EOP");
+    static constexpr OStringLiteral aCommentString("XTEXT_EOP");
     static bool bSuppressPDFExtOutDevDataSupport(false); // loplugin:constvars:ignore
 
     if (nullptr == mpPDFExtOutDevData || bSuppressPDFExtOutDevDataSupport)
@@ -1495,9 +1495,9 @@ void VclMetafileProcessor2D::processTextSimplePortionPrimitive2D(
                 rTxt, nTextPosition, rLocale, css::i18n::WordType::ANY_WORD, true));
             sal_Int32 nNextSentenceBreak(
                 rBreakIterator.endOfSentence(rTxt, nTextPosition, rLocale));
-            const OString aCommentStringA("XTEXT_EOC");
-            const OString aCommentStringB("XTEXT_EOW");
-            const OString aCommentStringC("XTEXT_EOS");
+            static constexpr OStringLiteral aCommentStringA("XTEXT_EOC");
+            static constexpr OStringLiteral aCommentStringB("XTEXT_EOW");
+            static constexpr OStringLiteral aCommentStringC("XTEXT_EOS");
 
             for (sal_Int32 i(nTextPosition); i < nTextPosition + nTextLength; i++)
             {

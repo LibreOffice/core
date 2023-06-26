@@ -15,6 +15,7 @@
 static const OUString TEST1 = "xxx";
 
 void f(rtl_uString const*);
+void f(const OUString&);
 
 void test2()
 {
@@ -26,4 +27,11 @@ void test2()
     (void)XXX2;
     static const OUString DATA = "xxx";
     f(DATA.pData);
+}
+
+void test3()
+{
+    // expected-error@+1 {{rather declare this using OUStringLiteral/OStringLiteral/char[] [loplugin:stringstatic]}}
+    OUString const literal = u"foo";
+    f(literal);
 }

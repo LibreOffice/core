@@ -80,9 +80,10 @@ void Chart2GeometryTest::testTdf135184RoundLineCap()
     xmlDocUniquePtr pXmlDoc = parseExport("Object 1/content.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
-    const OString sStyleStart("/office:document-content/office:automatic-styles");
-    const OString sCap("/style:graphic-properties[@svg:stroke-linecap='round']");
-    const OString sChartStart("/office:document-content/office:body/office:chart/chart:chart");
+    static constexpr OStringLiteral sStyleStart("/office:document-content/office:automatic-styles");
+    static constexpr OStringLiteral sCap("/style:graphic-properties[@svg:stroke-linecap='round']");
+    static constexpr OStringLiteral sChartStart(
+        "/office:document-content/office:body/office:chart/chart:chart");
     OString sPredicate;
     // chart area
     const OUString sOUAreaStyleName = getXPathContent(pXmlDoc, sChartStart + "/@chart:style-name");
@@ -108,9 +109,10 @@ void Chart2GeometryTest::testTdf135184RoundLineCap2()
     xmlDocUniquePtr pXmlDoc = parseExport("Object 1/content.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
-    const OString sStyleStart("/office:document-content/office:automatic-styles");
-    const OString sCap("/style:graphic-properties[@svg:stroke-linecap='round']");
-    const OString sChartStart("/office:document-content/office:body/office:chart/chart:chart");
+    static constexpr OStringLiteral sStyleStart("/office:document-content/office:automatic-styles");
+    static constexpr OStringLiteral sCap("/style:graphic-properties[@svg:stroke-linecap='round']");
+    static constexpr OStringLiteral sChartStart(
+        "/office:document-content/office:body/office:chart/chart:chart");
     OString sPredicate;
     // legend
     const OString sLegend(sChartStart + "/chart:legend");
@@ -138,11 +140,11 @@ void Chart2GeometryTest::testTdf135184RoundLineCap3()
     xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
-    const OString sDash("/c:spPr/a:ln/a:prstDash");
+    static constexpr OStringLiteral sDash("/c:spPr/a:ln/a:prstDash");
     // chart area
     assertXPath(pXmlDoc, "/c:chartSpace" + sDash, "val", "dashDot");
     // data series line
-    const OString sStart("/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser");
+    static constexpr OStringLiteral sStart("/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser");
     assertXPath(pXmlDoc, sStart + sDash, "val", "dash");
     // regression-curve (trendline)
     assertXPath(pXmlDoc, sStart + "/c:trendline" + sDash, "val", "sysDot");
@@ -156,8 +158,8 @@ void Chart2GeometryTest::testTdf135184RoundLineCap4()
     xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
-    const OString sChartStart("/c:chartSpace/c:chart");
-    const OString sDash("/c:spPr/a:ln/a:prstDash");
+    static constexpr OStringLiteral sChartStart("/c:chartSpace/c:chart");
+    static constexpr OStringLiteral sDash("/c:spPr/a:ln/a:prstDash");
     assertXPath(pXmlDoc, sChartStart + "/c:legend" + sDash, "val", "sysDot");
     const OString sSeries(sChartStart + "/c:plotArea/c:pieChart/c:ser/c:dPt[3]");
     assertXPath(pXmlDoc, sSeries + sDash, "val", "dash");
@@ -472,7 +474,7 @@ void Chart2GeometryTest::testTdf135366_CustomLabelText()
     CPPUNIT_ASSERT(pXmlDoc);
 
     // Find custom text. As of version 7.0 it is in a <text:span> element.
-    const OString sCustomTextPath(
+    static constexpr OStringLiteral sCustomTextPath(
         "//office:document-content/office:body/office:chart/chart:chart/chart:plot-area"
         "/chart:series/chart:data-point[2]/chart:data-label/text:p/text:span");
     assertXPath(pXmlDoc, sCustomTextPath, 1);

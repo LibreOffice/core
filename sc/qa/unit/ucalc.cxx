@@ -463,7 +463,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf113027)
 
     // Add a formula containing a remote reference, i.e., to another sheet
     const ScAddress aScAddress(0, 0, 0);
-    const OUString aFormula = "='Sheet 2'!RC";
+    static constexpr OUStringLiteral aFormula = u"='Sheet 2'!RC";
     m_pDoc->SetString(aScAddress, aFormula);
 
     // Switch from relative to absolute cell reference

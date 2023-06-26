@@ -3524,20 +3524,21 @@ void XMLShapeExport::ImpExportMediaShape(
     auto pPluginOBJ = std::make_unique<SvXMLElementExport>(mrExport, XML_NAMESPACE_DRAW, XML_PLUGIN, !( nFeatures & XMLShapeExportFlags::NO_WS ), true);
 
     // export parameters
-    const OUString aFalseStr(  "false"  ), aTrueStr(  "true"  );
+    static constexpr OUStringLiteral aFalseStr( u"false" );
+    static constexpr OUStringLiteral aTrueStr( u"true" );
 
     bool bLoop = false;
     static constexpr OUStringLiteral aLoopStr(  u"Loop"  );
     xPropSet->getPropertyValue( aLoopStr ) >>= bLoop;
     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aLoopStr );
-    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, bLoop ? aTrueStr : aFalseStr );
+    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, bLoop ? OUString(aTrueStr) : OUString(aFalseStr) );
     delete new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true );
 
     bool bMute = false;
     static constexpr OUStringLiteral aMuteStr(  u"Mute"  );
     xPropSet->getPropertyValue( aMuteStr ) >>= bMute;
     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aMuteStr );
-    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, bMute ? aTrueStr : aFalseStr );
+    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, bMute ? OUString(aTrueStr) : OUString(aFalseStr) );
     delete new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true );
 
     sal_Int16 nVolumeDB = 0;

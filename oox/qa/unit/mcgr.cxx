@@ -34,7 +34,7 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testFontworkColorGradient)
     // linear gradient with 30deg angle
     assertXPath(pXmlDoc, "//a:r/a:rPr/a:gradFill/a:lin", "ang", "3600000");
     // three color stops, no transparency
-    const OString sPath = "//a:r/a:rPr/a:gradFill/a:gsLst/";
+    static constexpr OStringLiteral sPath = "//a:r/a:rPr/a:gradFill/a:gsLst/";
     assertXPath(pXmlDoc, sPath + "a:gs", 3);
     assertXPath(pXmlDoc, sPath + "a:gs[1]", "pos", "0");
     assertXPath(pXmlDoc, sPath + "a:gs[1]/a:srgbClr", "val", "ff1493");
@@ -57,7 +57,7 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testFontworkColorGradientWord)
     // linear gradient with 30deg angle
     assertXPath(pXmlDoc, "//w14:lin", "ang", "3600000");
     // three color stops, no transparency
-    const OString sPath = "//w14:gradFill/w14:gsLst/";
+    static constexpr OStringLiteral sPath = "//w14:gradFill/w14:gsLst/";
     assertXPath(pXmlDoc, sPath + "w14:gs", 3);
     assertXPath(pXmlDoc, sPath + "w14:gs[1]", "pos", "0");
     assertXPath(pXmlDoc, sPath + "w14:gs[1]/w14:srgbClr", "val", "ff1493");
@@ -88,7 +88,7 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testStepCount)
     // Without the fix the colors in the sections were wrong. And when opening a file with StepCount
     // and saving it immediately to pptx, a continuous gradient might be produced.
 
-    const OString sPath = "//a:gradFill/a:gsLst/";
+    static constexpr OStringLiteral sPath = "//a:gradFill/a:gsLst/";
     // The default way of load and save would have produced 2 stops, but we need start stop, end stop
     // and 3*2 inner stops.
     assertXPath(pXmlDoc, sPath + "a:gs", 8);
@@ -115,7 +115,7 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testAxialColorLinearTrans)
     // method will be changed, the test needs to be adjusted.
 
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
-    const OString sPath = "//a:gradFill/a:gsLst/";
+    static constexpr OStringLiteral sPath = "//a:gradFill/a:gsLst/";
     assertXPath(pXmlDoc, sPath + "a:gs", 3);
     assertXPath(pXmlDoc, sPath + "a:gs[1]", "pos", "0");
     assertXPath(pXmlDoc, sPath + "a:gs[1]/a:srgbClr", "val", "00ffff");

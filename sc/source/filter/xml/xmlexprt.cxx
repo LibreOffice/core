@@ -1826,7 +1826,7 @@ void ScXMLExport::CopySourceStream( sal_Int32 nStartOffset, sal_Int32 nEndOffset
 
     if ( getExportFlags() & SvXMLExportFlags::PRETTY )
     {
-        const OString aOutStr("\n   ");
+        static constexpr OStringLiteral aOutStr("\n   ");
         uno::Sequence<sal_Int8> aOutSeq( reinterpret_cast<sal_Int8 const *>(aOutStr.getStr()), aOutStr.getLength() );
         xDestStream->writeBytes( aOutSeq );
     }

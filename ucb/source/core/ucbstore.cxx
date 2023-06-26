@@ -681,10 +681,10 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
 
                         aOldValuesKey += "/";
 
-                        OUString const aHandleKey("/Handle");
-                        OUString const aValueKey("/Value");
-                        OUString const aStateKey("/State");
-                        OUString const aAttrKey("/Attributes");
+                        static constexpr OUStringLiteral aHandleKey(u"/Handle");
+                        static constexpr OUStringLiteral aValueKey(u"/Value");
+                        static constexpr OUStringLiteral aStateKey(u"/State");
+                        static constexpr OUStringLiteral aAttrKey(u"/Attributes");
 
                         for ( const OUString& rPropName : aElems )
                         {

@@ -443,7 +443,7 @@ OUString ModelData_Impl::GetDocServiceName()
 
 void ModelData_Impl::CheckInteractionHandler()
 {
-    const OUString sInteractionHandler {"InteractionHandler"};
+    static constexpr OUStringLiteral sInteractionHandler {u"InteractionHandler"};
     ::comphelper::SequenceAsHashMap::const_iterator aInteractIter =
             m_aMediaDescrHM.find( sInteractionHandler );
 

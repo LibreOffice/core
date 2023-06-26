@@ -951,7 +951,7 @@ static bool impl_showOfflineHelp(const OUString& rURL, weld::Widget* pDialogPare
 
     // Get a html tempfile (for the flatpak case, create it in XDG_CACHE_HOME instead of /tmp for
     // technical reasons, so that it can be accessed by the browser running outside the sandbox):
-    OUString const aExtension(".html");
+    static constexpr OUStringLiteral aExtension(u".html");
     OUString * parent = nullptr;
     if (flatpak::isFlatpak() && !flatpak::createTemporaryHtmlDirectory(&parent)) {
         return false;

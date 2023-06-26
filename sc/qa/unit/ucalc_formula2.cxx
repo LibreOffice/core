@@ -3452,7 +3452,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncMDETERM)
 
     m_pDoc->InsertTab(0, "MDETERM_test");
     ScAddress aPos(8, 0, 0);
-    OUString const aColCodes("ABCDEFGH");
+    static constexpr std::u16string_view aColCodes(u"ABCDEFGH");
     OUStringBuffer aFormulaBuffer("=MDETERM(A1:B2)");
     for (SCSIZE nSize = 3; nSize <= 8; nSize++)
     {

@@ -271,14 +271,14 @@ void ODbAdminDialog::createItemSet(std::unique_ptr<SfxItemSet>& _rpSet, rtl::Ref
     _rpPool = nullptr;
     _rpDefaults = nullptr;
 
-    const OUString sFilterAll( "%" );
+    static constexpr OUStringLiteral sFilterAll( u"%" );
     // create and initialize the defaults
     _rpDefaults = new std::vector<SfxPoolItem*>(DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1);
     SfxPoolItem** pCounter = _rpDefaults->data();  // want to modify this without affecting the out param _rppDefaults
     *pCounter++ = new SfxStringItem(DSID_NAME, OUString());
     *pCounter++ = new SfxStringItem(DSID_ORIGINALNAME, OUString());
     *pCounter++ = new SfxStringItem(DSID_CONNECTURL, OUString());
-    *pCounter++ = new OStringListItem(DSID_TABLEFILTER, Sequence< OUString >(&sFilterAll, 1));
+    *pCounter++ = new OStringListItem(DSID_TABLEFILTER, Sequence< OUString >{sFilterAll});
     *pCounter++ = new DbuTypeCollectionItem(DSID_TYPECOLLECTION, _pTypeCollection);
     *pCounter++ = new SfxBoolItem(DSID_INVALID_SELECTION, false);
     *pCounter++ = new SfxBoolItem(DSID_READONLY, false);

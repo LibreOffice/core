@@ -994,11 +994,11 @@ void FontSubstConfiguration::readLocaleSubst( const OUString& rBcp47 ) const
     it->second.aSubstAttributes.reserve( nFonts );
 
     // strings for subst retrieval, construct only once
-    OUString const aSubstFontsStr     ( "SubstFonts" );
-    OUString const aSubstFontsMSStr   ( "SubstFontsMS" );
-    OUString const aSubstWeightStr    ( "FontWeight" );
-    OUString const aSubstWidthStr     ( "FontWidth" );
-    OUString const aSubstTypeStr      ( "FontType" );
+    static constexpr OUStringLiteral aSubstFontsStr  ( u"SubstFonts" );
+    static constexpr OUStringLiteral aSubstFontsMSStr( u"SubstFontsMS" );
+    static constexpr OUStringLiteral aSubstWeightStr ( u"FontWeight" );
+    static constexpr OUStringLiteral aSubstWidthStr  ( u"FontWidth" );
+    static constexpr OUStringLiteral aSubstTypeStr   ( u"FontType" );
     for( const OUString& rFontName : aFonts )
     {
         Reference< XNameAccess > xFont;

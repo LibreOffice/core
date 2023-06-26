@@ -150,7 +150,7 @@ MergeDataFile::MergeDataFile(
         OString sLang;
         //Get language id from path
         {
-            const OString sTransSource("translations/source/");
+            static constexpr OStringLiteral sTransSource("translations/source/");
             const sal_Int32 nStart =
                 sPoFileName.indexOf(sTransSource)+sTransSource.getLength();
             const sal_Int32 nCount =

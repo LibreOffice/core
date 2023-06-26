@@ -197,7 +197,7 @@ void XMLTextStyleContext::CreateAndInsert( bool bOverwrite )
     Reference< XPropertySetInfo > xPropSetInfo =
                 xPropSet->getPropertySetInfo();
 
-    OUString const sIsAutoUpdate("IsAutoUpdate");
+    static constexpr OUStringLiteral sIsAutoUpdate(u"IsAutoUpdate");
     if( xPropSetInfo->hasPropertyByName( sIsAutoUpdate ) )
     {
         xPropSet->setPropertyValue( sIsAutoUpdate, Any(m_isAutoUpdate) );
@@ -264,7 +264,7 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
     Reference< XPropertySetInfo > xPropSetInfo =
                 xPropSet->getPropertySetInfo();
 
-    OUString const sOutlineLevel("OutlineLevel");
+    static constexpr OUStringLiteral sOutlineLevel(u"OutlineLevel");
     if( xPropSetInfo->hasPropertyByName( sOutlineLevel ))
     {
         if (m_nOutlineLevel >= 0)
@@ -274,7 +274,7 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
     }
 
     // Consider set empty list style (#i69523#)
-    OUString const sNumberingStyleName("NumberingStyleName");
+    static constexpr OUStringLiteral sNumberingStyleName(u"NumberingStyleName");
     if (m_bListStyleSet &&
          xPropSetInfo->hasPropertyByName( sNumberingStyleName ) )
     {
@@ -362,7 +362,7 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
     const Reference < XNameContainer >& rPageStyles =
         GetImport().GetTextImport()->GetPageStyles();
 
-    OUString const sPageDescName("PageDescName");
+    static constexpr OUStringLiteral sPageDescName(u"PageDescName");
     if( ( sDisplayName.isEmpty() ||
           (rPageStyles.is() &&
            rPageStyles->hasByName( sDisplayName )) ) &&

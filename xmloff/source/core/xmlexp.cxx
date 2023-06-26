@@ -866,7 +866,7 @@ uno::Sequence< OUString > SAL_CALL SvXMLExport::getSupportedServiceNames(  )
 OUString
 SvXMLExport::EnsureNamespace(OUString const & i_rNamespace)
 {
-    OUString const aPreferredPrefix("gen");
+    static constexpr OUStringLiteral aPreferredPrefix(u"gen");
     OUString sPrefix;
     sal_uInt16 nKey( GetNamespaceMap_().GetKeyByName( i_rNamespace ) );
     if( XML_NAMESPACE_UNKNOWN == nKey )

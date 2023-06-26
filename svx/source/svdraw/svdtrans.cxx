@@ -686,7 +686,7 @@ void SdrFormatter::Undirty()
 
 OUString SdrFormatter::GetStr(tools::Long nVal) const
 {
-    const OUString aNullCode("0");
+    static constexpr OUStringLiteral aNullCode(u"0");
 
     if(!nVal)
     {
@@ -753,7 +753,7 @@ OUString SdrFormatter::GetStr(tools::Long nVal) const
     {
         // insert comma char (decimal separator)
         // remove trailing zeros
-        while(nC > 0 && aStr[aStr.getLength() - 1] == aNullCode[0])
+        while(nC > 0 && aStr[aStr.getLength() - 1] == aNullCode.getStr()[0])
         {
             aStr.remove(aStr.getLength() - 1, 1);
             nC--;
@@ -787,7 +787,7 @@ OUString SdrFormatter::GetStr(tools::Long nVal) const
     if(aStr.isEmpty())
         aStr.append(aNullCode);
 
-    if(bNeg && (aStr.getLength() > 1 || aStr[0] != aNullCode[0]))
+    if(bNeg && (aStr.getLength() > 1 || aStr[0] != aNullCode.getStr()[0]))
     {
         aStr.insert(0, "-");
     }

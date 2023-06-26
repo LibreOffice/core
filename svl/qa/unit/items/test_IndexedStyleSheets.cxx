@@ -146,7 +146,7 @@ void IndexedStyleSheetsTest::StyleSheetsCanBeRetrievedByTheirName()
 
 void IndexedStyleSheetsTest::KnowsThatItStoresAStyleSheet()
 {
-    OUString const name1("name1");
+    static constexpr OUStringLiteral name1(u"name1");
     rtl::Reference<SfxStyleSheetBase> sheet1(new MockedStyleSheet(name1));
     rtl::Reference<SfxStyleSheetBase> sheet2(new MockedStyleSheet(name1));
     rtl::Reference<SfxStyleSheetBase> sheet3(new MockedStyleSheet("name2"));

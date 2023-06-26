@@ -50,13 +50,13 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nCnt, const char* pExtString )
         OString t;
         if( pExtString )
         {
-            const OString s("@<<@123>>");
+            static constexpr std::string_view s("@<<@123>>");
 
             t = pExtString;
 
             sal_Int32 n = t.indexOf(s);
             if( n != -1 )
-                t = t.copy(n + s.getLength());
+                t = t.copy(n + s.size());
 
             t = comphelper::string::stripEnd(t, '(');
 

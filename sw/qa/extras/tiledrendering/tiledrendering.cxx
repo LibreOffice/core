@@ -3971,11 +3971,11 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDateContentControl)
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAuthorField)
 {
     SwXTextDocument* pXTextDocument = createDoc();
-    const OUString sAuthor("Abcd Xyz");
+    static constexpr OUStringLiteral sAuthor(u"Abcd Xyz");
 
     uno::Sequence<beans::PropertyValue> aPropertyValues1(comphelper::InitPropertySequence(
     {
-        {".uno:Author", uno::Any(sAuthor)},
+        {".uno:Author", uno::Any(OUString(sAuthor))},
     }));
     pXTextDocument->initializeForTiledRendering(aPropertyValues1);
 
@@ -4010,10 +4010,10 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAuthorField)
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSavedAuthorField)
 {
     SwXTextDocument* pXTextDocument = createDoc("savedauthorfield.odt");
-    const OUString sAuthor("XYZ ABCD");
+    static constexpr OUStringLiteral sAuthor(u"XYZ ABCD");
     uno::Sequence<beans::PropertyValue> aPropertyValues1(comphelper::InitPropertySequence(
     {
-        {".uno:Author", uno::Any(sAuthor)},
+        {".uno:Author", uno::Any(OUString(sAuthor))},
     }));
     pXTextDocument->initializeForTiledRendering(aPropertyValues1);
 
