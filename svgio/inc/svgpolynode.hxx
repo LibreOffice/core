@@ -37,13 +37,11 @@ namespace svgio::svgreader
             std::optional<basegfx::B2DPolygon>    mpPolygon;
             std::optional<basegfx::B2DHomMatrix>  mpaTransform;
 
-            bool                        mbIsPolyline : 1; // true = polyline, false = polygon
-
         public:
             SvgPolyNode(
+                SVGToken aType,
                 SvgDocument& rDocument,
-                SvgNode* pParent,
-                bool bIsPolyline);
+                SvgNode* pParent);
             virtual ~SvgPolyNode() override;
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;

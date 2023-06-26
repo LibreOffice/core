@@ -116,15 +116,14 @@ namespace svgio::svgreader
 
         protected:
             /// helper to evtl. link to css style
-            const SvgStyleAttributes* checkForCssStyle(const OUString& rClassStr, const SvgStyleAttributes& rOriginal) const;
+            const SvgStyleAttributes* checkForCssStyle(const SvgStyleAttributes& rOriginal) const;
 
             /// helper for filling the CssStyle vector once dependent on mbCssStyleVectorBuilt
-            void fillCssStyleVector(const OUString& rClassStr, const SvgStyleAttributes& rOriginal);
+            void fillCssStyleVector(const SvgStyleAttributes& rOriginal);
             void addCssStyle(
                 const SvgDocument& rDocument,
                 const OUString& aConcatenated);
             void fillCssStyleVectorUsingHierarchyAndSelectors(
-                const OUString& rClassStr,
                 const SvgNode& rCurrent,
                 const OUString& aConcatenated);
 

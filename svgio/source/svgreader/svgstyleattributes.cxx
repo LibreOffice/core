@@ -1127,7 +1127,8 @@ namespace svgio::svgreader
                 // create fill
                 basegfx::B2DPolyPolygon aPath(rPath);
 
-                if(SVGToken::Path == mrOwner.getType() || SVGToken::Polygon == mrOwner.getType())
+                if(SVGToken::Path == mrOwner.getType() || SVGToken::Polygon == mrOwner.getType()
+                        || SVGToken::Polyline == mrOwner.getType())
                 {
                     if(FillRule::evenodd != getClipRule() && FillRule::evenodd != getFillRule())
                     {
@@ -1149,7 +1150,8 @@ namespace svgio::svgreader
 
             // Svg supports markers for path, polygon, polyline and line
             if(SVGToken::Path == mrOwner.getType() ||         // path
-                SVGToken::Polygon == mrOwner.getType() ||     // polygon, polyline
+                SVGToken::Polygon == mrOwner.getType() ||     // polygon
+                SVGToken::Polyline == mrOwner.getType() ||     // polyline
                 SVGToken::Line == mrOwner.getType() ||        // line
                 SVGToken::Style == mrOwner.getType())        // tdf#150323
             {

@@ -42,7 +42,7 @@ namespace svgio::svgreader
 
         const SvgStyleAttributes* SvgEllipseNode::getSvgStyleAttributes() const
         {
-            return checkForCssStyle("ellipse", maSvgStyleAttributes);
+            return checkForCssStyle(maSvgStyleAttributes);
         }
 
         void SvgEllipseNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)

@@ -93,7 +93,6 @@ namespace {
 } //namespace
 
         void SvgNode::fillCssStyleVectorUsingHierarchyAndSelectors(
-            const OUString& rClassStr,
             const SvgNode& rCurrent,
             const OUString& aConcatenated)
         {
@@ -116,7 +115,7 @@ namespace {
                     if(pParent)
                     {
                         // check for combined selectors at parent first so that higher specificity will be in front
-                        fillCssStyleVectorUsingHierarchyAndSelectors(rClassStr, *pParent, aNewConcatenated);
+                        fillCssStyleVectorUsingHierarchyAndSelectors(*pParent, aNewConcatenated);
                     }
                     addCssStyle(rDocument, aNewConcatenated);
 
@@ -136,7 +135,7 @@ namespace {
                 if(pParent)
                 {
                     // check for combined selectors at parent first so that higher specificity will be in front
-                    fillCssStyleVectorUsingHierarchyAndSelectors(rClassStr, *pParent, aNewConcatenated);
+                    fillCssStyleVectorUsingHierarchyAndSelectors(*pParent, aNewConcatenated);
                 }
                 addCssStyle(rDocument, aNewConcatenated);
 
@@ -151,26 +150,28 @@ namespace {
                 }
             }
 
+            OUString sCurrentType(SVGTokenToStr(getType()));
+
             // check for class-dependent references to CssStyles
-            if(rClassStr.isEmpty())
+            if(sCurrentType.isEmpty())
                 return;
 
             OUString aNewConcatenated(aConcatenated);
 
-            if(!rCurrent.getId() && !rCurrent.getClass() && 0 == aConcatenated.indexOf(rClassStr))
+            if(!rCurrent.getId() && !rCurrent.getClass() && 0 == aConcatenated.indexOf(sCurrentType))
             {
-                // no new CssStyle Selector and already starts with rClassStr, do not concatenate;
+                // no new CssStyle Selector and already starts with sCurrentType, do not concatenate;
                 // we pass an 'empty' node (in the sense of CssStyle Selector)
             }
             else
             {
-                aNewConcatenated = rClassStr + aConcatenated;
+                aNewConcatenated = sCurrentType + aConcatenated;
             }
 
             if(pParent)
             {
                 // check for combined selectors at parent first so that higher specificity will be in front
-                fillCssStyleVectorUsingHierarchyAndSelectors(rClassStr, *pParent, aNewConcatenated);
+                fillCssStyleVectorUsingHierarchyAndSelectors(*pParent, aNewConcatenated);
             }
 
             addCssStyle(rDocument, aNewConcatenated);
@@ -179,11 +180,11 @@ namespace {
             if(pParent)
             {
                 OUString sParentType(SVGTokenToStr(pParent->getType()));
-                addCssStyle(rDocument, sParentType + rClassStr);
+                addCssStyle(rDocument, sParentType + sCurrentType);
             }
         }
 
-        void SvgNode::fillCssStyleVector(const OUString& rClassStr, const SvgStyleAttributes& rOriginal)
+        void SvgNode::fillCssStyleVector(const SvgStyleAttributes& rOriginal)
         {
             OSL_ENSURE(!mbCssStyleVectorBuilt, "OOps, fillCssStyleVector called double ?!?");
             mbCssStyleVectorBuilt = true;
@@ -211,7 +212,7 @@ namespace {
             }
 
             // check the hierarchy for concatenated patterns of Selectors
-            fillCssStyleVectorUsingHierarchyAndSelectors(rClassStr, *this, OUString());
+            fillCssStyleVectorUsingHierarchyAndSelectors(*this, OUString());
 
             // tdf#99115, Add css selector '*' style only if the element is on top of the hierarchy
             // meaning its parent is <svg>
@@ -233,12 +234,12 @@ namespace {
             maCssStyleVector.push_back(&rOriginal);
         }
 
-        const SvgStyleAttributes* SvgNode::checkForCssStyle(const OUString& rClassStr, const SvgStyleAttributes& rOriginal) const
+        const SvgStyleAttributes* SvgNode::checkForCssStyle(const SvgStyleAttributes& rOriginal) const
         {
             if(!mbCssStyleVectorBuilt)
             {
                 // build needed CssStyleVector for local node
-                const_cast< SvgNode* >(this)->fillCssStyleVector(rClassStr, rOriginal);
+                const_cast< SvgNode* >(this)->fillCssStyleVector(rOriginal);
             }
 
             if(maCssStyleVector.empty())
