@@ -585,17 +585,6 @@ SfxStyleSheetBasePool::~SfxStyleSheetBasePool()
     Clear();
 }
 
-bool SfxStyleSheetBasePool::SetParent(SfxStyleFamily eFam, const OUString& rStyle, const OUString& rParent)
-{
-    SfxStyleSheetIterator aIter(this, eFam, SfxStyleSearchBits::All);
-    SfxStyleSheetBase *pStyle = aIter.Find(rStyle);
-    OSL_ENSURE(pStyle, "Template not found. Writer with solar <2541?");
-    if(pStyle)
-        return pStyle->SetParent(rParent);
-    else
-        return false;
-}
-
 std::unique_ptr<SfxStyleSheetIterator> SfxStyleSheetBasePool::CreateIterator
 (
  SfxStyleFamily eFam,

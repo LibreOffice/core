@@ -2712,63 +2712,6 @@ void SwDocStyleSheetPool::Remove( SfxStyleSheetBase* pStyle)
         Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetErased, *pStyle ) );
 }
 
-bool  SwDocStyleSheetPool::SetParent( SfxStyleFamily eFam,
-                                      const OUString &rStyle, const OUString &rParent )
-{
-    SwFormat* pFormat = nullptr, *pParent = nullptr;
-    switch( eFam )
-    {
-    case SfxStyleFamily::Char :
-        if( nullptr != ( pFormat = lcl_FindCharFormat( m_rDoc, rStyle ) ) && !rParent.isEmpty() )
-            pParent = lcl_FindCharFormat(m_rDoc, rParent );
-        break;
-
-    case SfxStyleFamily::Para :
-        if( nullptr != ( pFormat = lcl_FindParaFormat( m_rDoc, rStyle ) ) && !rParent.isEmpty() )
-            pParent = lcl_FindParaFormat( m_rDoc, rParent );
-        break;
-
-    case SfxStyleFamily::Frame:
-        if( nullptr != ( pFormat = lcl_FindFrameFormat( m_rDoc, rStyle ) ) && !rParent.isEmpty() )
-            pParent = lcl_FindFrameFormat( m_rDoc, rParent );
-        break;
-
-    case SfxStyleFamily::Page:
-    case SfxStyleFamily::Pseudo:
-        break;
-
-    default:
-        OSL_ENSURE(false, "unknown style family");
-    }
-
-    bool bRet = false;
-    if( pFormat && pFormat->DerivedFrom() &&
-        pFormat->DerivedFrom()->GetName() != rParent )
-    {
-        {
-            SwImplShellAction aTmpSh( m_rDoc );
-            bRet = pFormat->SetDerivedFrom( pParent );
-        }
-
-        if( bRet )
-        {
-            // only for Broadcasting
-            mxStyleSheet->SetPhysical( false );
-            mxStyleSheet->PresetName( rStyle );
-            mxStyleSheet->PresetParent( rParent );
-            if( SfxStyleFamily::Para == eFam )
-                mxStyleSheet->PresetFollow( static_cast<SwTextFormatColl*>(pFormat)->
-                        GetNextTextFormatColl().GetName() );
-            else
-                mxStyleSheet->PresetFollow( OUString() );
-
-            Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetModified, *mxStyleSheet ) );
-        }
-    }
-
-    return bRet;
-}
-
 SfxStyleSheetBase* SwDocStyleSheetPool::Find(const OUString& rName,
                                              SfxStyleFamily eFam, SfxStyleSearchBits n)
 {

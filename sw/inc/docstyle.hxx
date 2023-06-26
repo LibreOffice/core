@@ -226,9 +226,6 @@ public:
     virtual SfxStyleSheetBase* Find( const OUString&, SfxStyleFamily eFam,
                                     SfxStyleSearchBits n=SfxStyleSearchBits::All ) override;
 
-    virtual bool SetParent( SfxStyleFamily eFam, const OUString &rStyle,
-                            const OUString &rParent ) override;
-
     virtual void Remove( SfxStyleSheetBase* pStyle) override;
 
     bool    IsOrganizerMode() const         { return m_bOrganizer; }

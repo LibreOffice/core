@@ -580,7 +580,8 @@ void StyleList::DropHdl(const OUString& rStyle, const OUString& rParent)
     m_bDontUpdate = true;
     const SfxStyleFamilyItem* pItem = GetFamilyItem();
     const SfxStyleFamily eFam = pItem->GetFamily();
-    m_pStyleSheetPool->SetParent(eFam, rStyle, rParent);
+    if (auto pStyle = m_pStyleSheetPool->Find(rStyle, eFam))
+        pStyle->SetParent(rParent);
     m_bDontUpdate = false;
 }
 

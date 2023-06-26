@@ -1114,17 +1114,10 @@ void XStyleFamily::insertByName(const OUString& rName, const uno::Any& rElement)
         SfxStyleSearchBits nMask = SfxStyleSearchBits::All;
         if(m_rEntry.family() == SfxStyleFamily::Para && !pNewStyle->IsConditional())
             nMask &= ~SfxStyleSearchBits::SwCondColl;
-        m_pBasePool->Make(sStyleName, m_rEntry.family(), nMask);
+        auto pStyle = &m_pBasePool->Make(sStyleName, m_rEntry.family(), nMask);
         pNewStyle->SetDoc(m_pDocShell->GetDoc(), m_pBasePool);
         pNewStyle->SetStyleName(sStyleName);
-        const OUString sParentStyleName(pNewStyle->GetParentStyleName());
-        if (!sParentStyleName.isEmpty())
-        {
-            SfxStyleSheetBase* pParentBase = m_pBasePool->Find(sParentStyleName, m_rEntry.family());
-            if(pParentBase && pParentBase->GetFamily() == m_rEntry.family() &&
-                pParentBase->GetPool() == m_pBasePool)
-                m_pBasePool->SetParent(m_rEntry.family(), sStyleName, sParentStyleName);
-        }
+        pStyle->SetParent(pNewStyle->GetParentStyleName());
         // after all, we still need to apply the properties of the descriptor
         pNewStyle->ApplyDescriptorProperties();
     }
