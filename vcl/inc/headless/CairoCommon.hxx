@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 #include <config_features.h>
+#include <config_cairo_rgba.h>
 
 #include <cairo.h>
 
@@ -40,12 +41,17 @@
 
 #include <unordered_map>
 
-//Using formats that match cairo's formats. For android we patch cairo,
-//which is internal in that case, to swap the rgb components so that
-//cairo then matches the OpenGL GL_RGBA format so we can use it there
-//where we don't have GL_BGRA support.
+// Using formats that match cairo's formats.
 // SVP_24BIT_FORMAT is used to store 24-bit images in 3-byte pixels to conserve memory.
-#if defined(ANDROID) && !HAVE_FEATURE_ANDROID_LOK
+
+/*
+ For internal cairo we have the option --enable-cairo-rgba which is potentially
+ useful for Andoid or Online to switch the rgb components. For Android cairo then
+ matches the OpenGL GL_RGBA format so we can use it there where we don't have
+ GL_BGRA support. Similarly for Online we can then use cairo's pixel data
+ without needing to swizzle it for use as a canvas ImageData.
+*/
+#if ENABLE_CAIRO_RGBA
 #define SVP_24BIT_FORMAT (ScanlineFormat::N24BitTcRgb | ScanlineFormat::TopDown)
 #define SVP_CAIRO_FORMAT (ScanlineFormat::N32BitTcRgba | ScanlineFormat::TopDown)
 #define SVP_CAIRO_BLUE 1

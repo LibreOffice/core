@@ -1164,7 +1164,7 @@ std::unique_ptr<BitmapBuffer> FastConvert24BitRgbTo32BitCairo(const BitmapBuffer
         sal_uInt8* pD = pDst->mpBits + y * pDst->mnScanlineSize;
         for (tools::Long x = 0; x < nWidth; ++x)
         {
-#if defined(ANDROID) && !HAVE_FEATURE_ANDROID_LOK
+#if ENABLE_CAIRO_RGBA
             static_assert((SVP_CAIRO_FORMAT & ~ScanlineFormat::TopDown)
                               == ScanlineFormat::N32BitTcRgba,
                           "Expected SVP_CAIRO_FORMAT set to N32BitTcBgra");

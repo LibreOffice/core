@@ -2472,6 +2472,10 @@ AC_ARG_WITH(system-hunspell,
         [Use libhunspell already on system.]),,
     [with_system_hunspell="$with_system_libs"])
 
+libo_FUZZ_ARG_ENABLE(cairo-rgba,
+    AS_HELP_STRING([--enable-cairo-rgba],
+        [Use RGBA order, instead of default BRGA. Not possible with --with-system-cairo]))
+
 libo_FUZZ_ARG_ENABLE(zxing,
     AS_HELP_STRING([--disable-zxing],
        [Disable use of zxing external library.]))
@@ -13520,6 +13524,20 @@ fi
 AC_SUBST(USE_XINERAMA)
 AC_SUBST(XINERAMA_LINK)
 
+AC_MSG_CHECKING([whether to use non-standard RGBA32 cairo pixel order])
+if test -z "$enable_cairo_rgba" -a "$_os" = "Android"; then
+    enable_cairo_rgba=yes
+fi
+if test "$enable_cairo_rgba" = yes; then
+    AC_DEFINE(ENABLE_CAIRO_RGBA)
+    ENABLE_CAIRO_RGBA=TRUE
+    AC_MSG_RESULT([yes])
+else
+    ENABLE_CAIRO_RGBA=
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_CAIRO_RGBA)
+
 dnl ===================================================================
 dnl Test whether to build cairo or rely on the system version
 dnl ===================================================================
@@ -13528,7 +13546,7 @@ if test "$test_cairo" = "yes"; then
     AC_MSG_CHECKING([whether to use the system cairo])
 
     : ${with_system_cairo:=$with_system_libs}
-    if test "$with_system_cairo" = "yes"; then
+    if test "$with_system_cairo" = "yes" -a "$enable_cairo_rgba" != "yes"; then
         SYSTEM_CAIRO=TRUE
         AC_MSG_RESULT([yes])
 
@@ -14778,6 +14796,7 @@ AC_CONFIG_HEADERS([config_host/config_dconf.h])
 AC_CONFIG_HEADERS([config_host/config_eot.h])
 AC_CONFIG_HEADERS([config_host/config_extensions.h])
 AC_CONFIG_HEADERS([config_host/config_cairo_canvas.h])
+AC_CONFIG_HEADERS([config_host/config_cairo_rgba.h])
 AC_CONFIG_HEADERS([config_host/config_cxxabi.h])
 AC_CONFIG_HEADERS([config_host/config_dbus.h])
 AC_CONFIG_HEADERS([config_host/config_features.h])

@@ -110,29 +110,33 @@ static void dumpTile(const char *pNameStem,
         for (int x = 0; x < nWidth; ++x)
         {
             const char* pixel = row + x * 4;
-            if (mode == LOK_TILEMODE_RGBA)
-            {
-                ofs.write(pixel, 3); // Skip alpha
-            }
-            else if (mode == LOK_TILEMODE_BGRA)
-            {
-                const int alpha = *(pixel + 3);
-                char buf[3];
-                if (alpha == 0)
-                {
-                    buf[0] = 0;
-                    buf[1] = 0;
-                    buf[2] = 0;
-                }
-                else
-                {
-                    buf[0] = (*(pixel + 2) * 255 + alpha / 2) / alpha;
-                    buf[1] = (*(pixel + 1) * 255 + alpha / 2) / alpha;
-                    buf[2] = (*(pixel + 0) * 255 + alpha / 2) / alpha;
-                }
 
-                ofs.write(buf, 3);
+            const int alpha = *(pixel + 3);
+            char buf[3];
+            if (alpha == 0)
+            {
+                buf[0] = 0;
+                buf[1] = 0;
+                buf[2] = 0;
             }
+            else
+            {
+                switch (mode)
+                {
+                    case LOK_TILEMODE_RGBA:
+                        buf[0] = (*(pixel + 0) * 255 + alpha / 2) / alpha;
+                        buf[1] = (*(pixel + 1) * 255 + alpha / 2) / alpha;
+                        buf[2] = (*(pixel + 2) * 255 + alpha / 2) / alpha;
+                        break;
+                    case LOK_TILEMODE_BGRA:
+                        buf[0] = (*(pixel + 2) * 255 + alpha / 2) / alpha;
+                        buf[1] = (*(pixel + 1) * 255 + alpha / 2) / alpha;
+                        buf[2] = (*(pixel + 0) * 255 + alpha / 2) / alpha;
+                        break;
+                }
+            }
+
+            ofs.write(buf, 3);
             if (dumpText)
             {
                 int lowResI = (pixel[0] + pixel[1] + pixel[2])/(3*16);
