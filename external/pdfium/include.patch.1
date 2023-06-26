@@ -1,0 +1,21 @@
+--- pdfium/core/fxcodec/fx_codec.h.orig        2023-06-01 18:01:21.463535717 +0200
++++ pdfium/core/fxcodec/fx_codec.h     2023-06-01 18:01:26.144536561 +0200
+@@ -8,6 +8,7 @@
+ #define CORE_FXCODEC_FX_CODEC_H_
+ 
+ #include <map>
++#include <cstdint>
+ 
+ #include "third_party/base/optional.h"
+ 
+--- pdfium/constants/annotation_flags.h.orig	2023-06-26 14:53:05.531326301 +0200
++++ pdfium/constants/annotation_flags.h	2023-06-26 14:53:10.921369624 +0200
+@@ -5,6 +5,8 @@
+ #ifndef CONSTANTS_ANNOTATION_FLAGS_H_
+ #define CONSTANTS_ANNOTATION_FLAGS_H_
+ 
++#include <stdint.h>
++
+ namespace pdfium {
+ namespace annotation_flags {
+ 
