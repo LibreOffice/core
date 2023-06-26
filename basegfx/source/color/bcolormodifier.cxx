@@ -69,25 +69,6 @@ namespace basegfx
         return "invert";
     }
 
-    BColorModifier_alpha::~BColorModifier_alpha()
-    {
-    }
-
-    bool BColorModifier_alpha::operator==(const BColorModifier& rCompare) const
-    {
-        return dynamic_cast< const BColorModifier_alpha* >(&rCompare) != nullptr;
-    }
-
-    ::basegfx::BColor BColorModifier_alpha::getModifiedColor(const ::basegfx::BColor& /*aSourceColor*/) const
-    {
-        return ::basegfx::BColor(0.0, 0.0, 0.0);
-    }
-
-    OUString BColorModifier_alpha::getModifierName() const
-    {
-        return "alpha";
-    }
-
     BColorModifier_luminance_to_alpha::~BColorModifier_luminance_to_alpha()
     {
     }

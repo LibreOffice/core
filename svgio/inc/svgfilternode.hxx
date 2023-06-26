@@ -25,12 +25,6 @@
 
 namespace svgio::svgreader
 {
-enum class In
-{
-    SourceGraphic,
-    SourceAlpha
-};
-
 class SvgFilterNode final : public SvgNode
 {
 public:

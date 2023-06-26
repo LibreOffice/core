@@ -20,7 +20,6 @@
 #pragma once
 
 #include "svgnode.hxx"
-#include "svgfilternode.hxx"
 #include "svgstyleattributes.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
@@ -30,7 +29,6 @@ class SvgFeGaussianBlurNode final : public SvgNode
 {
 private:
     SvgNumber maStdDeviation;
-    In maIn;
 
 public:
     SvgFeGaussianBlurNode(SvgDocument& rDocument, SvgNode* pParent);

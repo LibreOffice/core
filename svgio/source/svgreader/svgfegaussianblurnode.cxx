@@ -18,7 +18,6 @@
  */
 
 #include <svgfegaussianblurnode.hxx>
-#include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/softedgeprimitive2d.hxx>
 #include <o3tl/string_view.hxx>
 
@@ -27,7 +26,6 @@ namespace svgio::svgreader
 SvgFeGaussianBlurNode::SvgFeGaussianBlurNode(SvgDocument& rDocument, SvgNode* pParent)
     : SvgNode(SVGToken::FeGaussianBlur, rDocument, pParent)
     , maStdDeviation(SvgNumber(0.0))
-    , maIn(In::SourceGraphic)
 {
 }
 
@@ -52,21 +50,6 @@ void SvgFeGaussianBlurNode::parseAttribute(const OUString& /*rTokenName*/, SVGTo
             }
             break;
         }
-        case SVGToken::In:
-        {
-            if (!aContent.isEmpty())
-            {
-                if (o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"SourceGraphic"))
-                {
-                    maIn = In::SourceGraphic;
-                }
-                else if (o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"SourceAlpha"))
-                {
-                    maIn = In::SourceAlpha;
-                }
-            }
-            break;
-        }
         default:
         {
             break;
@@ -76,23 +59,11 @@ void SvgFeGaussianBlurNode::parseAttribute(const OUString& /*rTokenName*/, SVGTo
 
 void SvgFeGaussianBlurNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget) const
 {
-    if (maStdDeviation.getNumber() != 0.0)
-    {
-        const drawinglayer::primitive2d::Primitive2DReference xRef(
-            new drawinglayer::primitive2d::SoftEdgePrimitive2D(maStdDeviation.getNumber(),
-                                                               std::move(rTarget)));
+    const drawinglayer::primitive2d::Primitive2DReference xRef(
+        new drawinglayer::primitive2d::SoftEdgePrimitive2D(maStdDeviation.getNumber(),
+                                                           std::move(rTarget)));
 
-        rTarget = drawinglayer::primitive2d::Primitive2DContainer{ xRef };
-    }
-
-    if (maIn == In::SourceAlpha)
-    {
-        const drawinglayer::primitive2d::Primitive2DReference xRef(
-            new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
-                std::move(rTarget), std::make_shared<basegfx::BColorModifier_alpha>()));
-
-        rTarget = drawinglayer::primitive2d::Primitive2DContainer{ xRef };
-    }
+    rTarget = drawinglayer::primitive2d::Primitive2DContainer{ xRef };
 }
 
 } // end of namespace svgio::svgreader
