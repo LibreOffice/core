@@ -307,6 +307,7 @@ public:
     CondFormatRef       importCondFormatting( SequenceInputStream& rStrm );
     ExtCfDataBarRuleRef createExtCfDataBarRule(ScDataBarFormatData* pTarget);
     std::vector< std::unique_ptr<ExtCfCondFormat> >& importExtCondFormat();
+    std::vector<std::unique_ptr<ScFormatEntry> >& importExtFormatEntries();
 
     /** Converts an OOXML condition operator token to the API constant. */
     static sal_Int32    convertToApiOperator( sal_Int32 nToken );
@@ -324,6 +325,7 @@ private:
     CondFormatVec       maCondFormats;      /// All conditional formatting in a sheet.
     ExtCfDataBarRuleVec        maCfRules;          /// All external conditional formatting rules in a sheet.
     std::vector< std::unique_ptr<ExtCfCondFormat> > maExtCondFormats;
+    std::vector<std::unique_ptr<ScFormatEntry> > maExtFormatEntries;
     sal_Int32 mnNonPrioritizedRuleNextPriority = 1048576;
 };
 
