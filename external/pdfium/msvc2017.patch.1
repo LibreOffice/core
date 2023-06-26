@@ -1,0 +1,15 @@
+--- pdfium/third_party/abseil-cpp/absl/base/policy_checks.h.orig	2023-06-26 19:10:40.362247395 +0200
++++ pdfium/third_party/abseil-cpp/absl/base/policy_checks.h	2023-06-26 19:10:55.204269825 +0200
+@@ -46,9 +46,9 @@
+ 
+ // We support Visual Studio 2019 (MSVC++ 16.0) and later.
+ // This minimum will go up.
+-#if defined(_MSC_VER) && _MSC_VER < 1920 && !defined(__clang__)
+-#error "This package requires Visual Studio 2019 (MSVC++ 16.0) or higher."
+-#endif
++//#if defined(_MSC_VER) && _MSC_VER < 1920 && !defined(__clang__)
++//#error "This package requires Visual Studio 2019 (MSVC++ 16.0) or higher."
++//#endif
+ 
+ // We support GCC 7 and later.
+ // This minimum will go up.
