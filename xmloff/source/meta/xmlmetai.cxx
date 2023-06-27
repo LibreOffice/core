@@ -283,11 +283,11 @@ void SvXMLMetaDocumentContext::setBuildId(std::u16string_view i_rBuildId, const 
         assert(firstSlash != std::u16string_view::npos);
         for (size_t i = firstSlash + 1; i < i_rBuildId.size(); ++i)
         {
-            if (rtl::isAsciiDigit(i_rBuildId[i]))
+            if (rtl::isAsciiDigit(i_rBuildId[i]) || '.' == i_rBuildId[i])
             {
                 sNumber.append(i_rBuildId[i]);
             }
-            else if ('.' != i_rBuildId[i])
+            else
             {
                 break;
             }
