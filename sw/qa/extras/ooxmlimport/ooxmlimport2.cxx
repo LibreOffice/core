@@ -23,6 +23,9 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 
+#include <comphelper/propertysequence.hxx>
+#include <vcl/BitmapReadAccess.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <xmloff/odffields.hxx>
 
 #include <wrtsh.hxx>
@@ -1144,6 +1147,37 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154695)
 
         checkPropVal(OUString("TokenHyperlinkEnd"), aLevel[5], "TokenType", nLevel);
     }
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf156078)
+{
+    // Given a DOCX with compat level 15, and a tab stop outside of paragraph right indent
+    createSwDoc("tdf156078_rightTabOutsideParaRightIndent.docx");
+
+    // Export it to a PNG (96 ppi)
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "PixelWidth", uno::Any(sal_Int32(816)) },
+                                           { "PixelHeight", uno::Any(sal_Int32(1056)) } }));
+    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
+        { { "FilterName", uno::Any(OUString("writer_png_Export")) },
+          { "FilterData", uno::Any(aFilterData) } }));
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    xStorable->storeToURL(maTempFile.GetURL(), aDescriptor);
+    CPPUNIT_ASSERT(maTempFile.IsValid());
+
+    Graphic exported;
+    GraphicFilter::LoadGraphic(maTempFile.GetURL(), {}, exported);
+    Bitmap bmp = exported.GetBitmapEx().GetBitmap();
+    Bitmap::ScopedReadAccess pAccess(bmp);
+
+    // "1" must export to the top right corner; check its pixels
+    bool numberPixelsFound = false;
+    for (tools::Long y = 90; y < 130; ++y)
+        for (tools::Long x = 680; x < 720; ++x)
+            if (Color(pAccess->GetPixel(y, x)).IsDark())
+                numberPixelsFound = true;
+
+    CPPUNIT_ASSERT(numberPixelsFound);
 }
 
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
