@@ -41,26 +41,14 @@ private:
 
     ScopedVclPtr<VirtualDevice> m_xVirDev;
 
-    std::deque<OUString>   m_aRecentCharList;
-    std::deque<OUString>   m_aRecentCharFontList;
-    std::deque<OUString>   m_aFavCharList;
-    std::deque<OUString>   m_aFavCharFontList;
+    SfxCharmapContainer m_aCharmapContents;
 
-    SvxCharView m_aRecentCharView[16];
-    SvxCharView m_aFavCharView[16];
     std::unique_ptr<weld::Label> m_xRecentLabel;
     std::unique_ptr<weld::Button> m_xDlgBtn;
-    std::unique_ptr<weld::CustomWeld> m_xRecentCharView[16];
-    std::unique_ptr<weld::CustomWeld> m_xFavCharView[16];
 
     DECL_LINK(CharClickHdl, SvxCharView*, void);
     DECL_LINK(OpenDlgHdl, weld::Button&, void);
-
-    void            getFavCharacterList();
-    void            updateFavCharControl();
-
-    void            getRecentCharacterList(); //gets both recent char and recent char font list
-    void            updateRecentCharControl();
+    DECL_LINK(UpdateRecentHdl, void*, void);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

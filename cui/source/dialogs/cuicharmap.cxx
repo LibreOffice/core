@@ -58,38 +58,7 @@ SvxCharacterMap::SvxCharacterMap(weld::Widget* pParent, const SfxItemSet* pSet,
     , m_xVirDev(VclPtr<VirtualDevice>::Create())
     , isSearchMode(true)
     , m_xFrame(std::move(xFrame))
-    , m_aRecentCharView{SvxCharView(m_xVirDev),
-                        SvxCharView(m_xVirDev),
-                        SvxCharView(m_xVirDev),
-                        SvxCharView(m_xVirDev),
-                        SvxCharView(m_xVirDev),
-                        SvxCharView(m_xVirDev),
-                        SvxCharView(m_xVirDev),
-                        SvxCharView(m_xVirDev),
-                        SvxCharView(m_xVirDev),
-                        SvxCharView(m_xVirDev),
-                        SvxCharView(m_xVirDev),
-                        SvxCharView(m_xVirDev),
-                        SvxCharView(m_xVirDev),
-                        SvxCharView(m_xVirDev),
-                        SvxCharView(m_xVirDev),
-                        SvxCharView(m_xVirDev)}
-    , m_aFavCharView{SvxCharView(m_xVirDev),
-                     SvxCharView(m_xVirDev),
-                     SvxCharView(m_xVirDev),
-                     SvxCharView(m_xVirDev),
-                     SvxCharView(m_xVirDev),
-                     SvxCharView(m_xVirDev),
-                     SvxCharView(m_xVirDev),
-                     SvxCharView(m_xVirDev),
-                     SvxCharView(m_xVirDev),
-                     SvxCharView(m_xVirDev),
-                     SvxCharView(m_xVirDev),
-                     SvxCharView(m_xVirDev),
-                     SvxCharView(m_xVirDev),
-                     SvxCharView(m_xVirDev),
-                     SvxCharView(m_xVirDev),
-                     SvxCharView(m_xVirDev)}
+    , m_aCharmapContents(*m_xBuilder, m_xVirDev)
     , m_aShowChar(m_xVirDev)
     , m_xOKBtn(m_xFrame.is() ? m_xBuilder->weld_button("insert") : m_xBuilder->weld_button("ok"))
     , m_xFontText(m_xBuilder->weld_label("fontft"))
@@ -101,41 +70,7 @@ SvxCharacterMap::SvxCharacterMap(weld::Widget* pParent, const SfxItemSet* pSet,
     , m_xDecimalCodeText(m_xBuilder->weld_entry("decimalvalue"))
     , m_xFavouritesBtn(m_xBuilder->weld_button("favbtn"))
     , m_xCharName(m_xBuilder->weld_label("charname"))
-    , m_xRecentGrid(m_xBuilder->weld_widget("viewgrid"))
-    , m_xFavGrid(m_xBuilder->weld_widget("favgrid"))
     , m_xShowChar(new weld::CustomWeld(*m_xBuilder, "showchar", m_aShowChar))
-    , m_xRecentCharView{std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar1", m_aRecentCharView[0]),
-                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar2", m_aRecentCharView[1]),
-                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar3", m_aRecentCharView[2]),
-                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar4", m_aRecentCharView[3]),
-                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar5", m_aRecentCharView[4]),
-                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar6", m_aRecentCharView[5]),
-                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar7", m_aRecentCharView[6]),
-                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar8", m_aRecentCharView[7]),
-                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar9", m_aRecentCharView[8]),
-                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar10", m_aRecentCharView[9]),
-                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar11", m_aRecentCharView[10]),
-                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar12", m_aRecentCharView[11]),
-                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar13", m_aRecentCharView[12]),
-                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar14", m_aRecentCharView[13]),
-                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar15", m_aRecentCharView[14]),
-                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar16", m_aRecentCharView[15])}
-    , m_xFavCharView{std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar1", m_aFavCharView[0]),
-                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar2", m_aFavCharView[1]),
-                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar3", m_aFavCharView[2]),
-                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar4", m_aFavCharView[3]),
-                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar5", m_aFavCharView[4]),
-                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar6", m_aFavCharView[5]),
-                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar7", m_aFavCharView[6]),
-                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar8", m_aFavCharView[7]),
-                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar9", m_aFavCharView[8]),
-                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar10", m_aFavCharView[9]),
-                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar11", m_aFavCharView[10]),
-                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar12", m_aFavCharView[11]),
-                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar13", m_aFavCharView[12]),
-                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar14", m_aFavCharView[13]),
-                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar15", m_aFavCharView[14]),
-                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar16", m_aFavCharView[15])}
     , m_xShowSet(new SvxShowCharSet(m_xBuilder->weld_scrolled_window("showscroll", true), m_xVirDev))
     , m_xShowSetArea(new weld::CustomWeld(*m_xBuilder, "showcharset", *m_xShowSet))
     , m_xSearchSet(new SvxSearchCharSet(m_xBuilder->weld_scrolled_window("searchscroll", true), m_xVirDev))
@@ -149,9 +84,6 @@ SvxCharacterMap::SvxCharacterMap(weld::Widget* pParent, const SfxItemSet* pSet,
     m_xCharName->set_size_request(m_aShowChar.get_preferred_size().Width(), m_xCharName->get_text_height() * 4);
     //lock the size request of this widget to the width of the original .ui string
     m_xHexCodeText->set_size_request(m_xHexCodeText->get_preferred_size().Width(), -1);
-    //so things don't jump around if all the children are hidden
-    m_xRecentGrid->set_size_request(-1, m_aRecentCharView[0].get_preferred_size().Height());
-    m_xFavGrid->set_size_request(-1, m_aFavCharView[0].get_preferred_size().Height());
 
     init();
 
@@ -222,234 +154,12 @@ void SvxCharacterMap::DisableFontSelection()
     m_xFontLB->set_sensitive(false);
 }
 
-
-void SvxCharacterMap::getRecentCharacterList()
+IMPL_LINK_NOARG(SvxCharacterMap, UpdateFavHdl, void*, void)
 {
-    //retrieve recent character list
-    const css::uno::Sequence< OUString > rRecentCharList( officecfg::Office::Common::RecentCharacters::RecentCharacterList::get() );
-    for (OUString const & s : rRecentCharList)
-    {
-        maRecentCharList.push_back(s);
-    }
-
-    //retrieve recent character font list
-    const css::uno::Sequence< OUString > rRecentCharFontList( officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::get() );
-    for (OUString const & s : rRecentCharFontList)
-    {
-        maRecentCharFontList.push_back(s);
-    }
-
-    // tdf#135997: make sure that the two lists are same length
-    const auto nCommonLength = std::min(maRecentCharList.size(), maRecentCharFontList.size());
-    maRecentCharList.resize(nCommonLength);
-    maRecentCharFontList.resize(nCommonLength);
-}
-
-
-void SvxCharacterMap::getFavCharacterList()
-{
-    maFavCharList.clear();
-    maFavCharFontList.clear();
-    //retrieve recent character list
-    const css::uno::Sequence< OUString > rFavCharList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::get() );
-    for (const OUString& s : rFavCharList)
-    {
-        maFavCharList.push_back(s);
-    }
-
-    //retrieve recent character font list
-    const css::uno::Sequence< OUString > rFavCharFontList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::get() );
-    for (const OUString& s : rFavCharFontList)
-    {
-        maFavCharFontList.push_back(s);
-    }
-
-    // tdf#135997: make sure that the two lists are same length
-    const auto nCommonLength = std::min(maFavCharList.size(), maFavCharFontList.size());
-    maFavCharList.resize(nCommonLength);
-    maFavCharFontList.resize(nCommonLength);
-}
-
-static std::pair<std::deque<OUString>::const_iterator, std::deque<OUString>::const_iterator>
-findInPair(std::u16string_view str1, const std::deque<OUString>& rContainer1,
-           std::u16string_view str2, const std::deque<OUString>& rContainer2)
-{
-    assert(rContainer1.size() == rContainer2.size());
-
-    for (auto it1 = std::find(rContainer1.begin(), rContainer1.end(), str1);
-         it1 != rContainer1.end(); it1 = std::find(std::next(it1), rContainer1.end(), str1))
-    {
-        auto it2 = rContainer2.begin() + (it1 - rContainer1.begin());
-        if (*it2 == str2)
-            return { it1, it2 };
-    }
-    return { rContainer1.end(), rContainer2.end() };
-}
-
-std::pair<std::deque<OUString>::const_iterator, std::deque<OUString>::const_iterator>
-SvxCharacterMap::getRecentChar(std::u16string_view sTitle, std::u16string_view rFont) const
-{
-    return findInPair(sTitle, maRecentCharList, rFont, maRecentCharFontList);
-}
-
-std::pair<std::deque<OUString>::const_iterator, std::deque<OUString>::const_iterator>
-SvxCharacterMap::getFavChar(std::u16string_view sTitle, std::u16string_view rFont) const
-{
-    return findInPair(sTitle, maFavCharList, rFont, maFavCharFontList);
-}
-
-
-void SvxCharacterMap::updateRecentCharControl()
-{
-    assert(maRecentCharList.size() == maRecentCharFontList.size());
-
-    int i = 0;
-    for ( std::deque< OUString >::iterator it = maRecentCharList.begin(), it2 = maRecentCharFontList.begin();
-        it != maRecentCharList.end() && it2 != maRecentCharFontList.end();
-        ++it, ++it2, i++)
-    {
-        m_aRecentCharView[i].SetText(*it);
-        vcl::Font rFont = m_aRecentCharView[i].GetFont();
-        rFont.SetFamilyName( *it2 );
-        m_aRecentCharView[i].SetFont(rFont);
-        m_aRecentCharView[i].Show();
-    }
-
-    for(; i < 16 ; i++)
-    {
-        m_aRecentCharView[i].SetText(OUString());
-        m_aRecentCharView[i].Hide();
-    }
-}
-
-void SvxCharacterMap::updateRecentCharacterList(const OUString& sTitle, const OUString& rFont)
-{
-    // if recent char to be added is already in list, remove it
-    if( const auto& [itChar, itChar2] = getRecentChar(sTitle, rFont);
-        itChar != maRecentCharList.end() &&  itChar2 != maRecentCharFontList.end() )
-    {
-        maRecentCharList.erase( itChar );
-        maRecentCharFontList.erase( itChar2);
-    }
-
-    if (maRecentCharList.size() == 16)
-    {
-        maRecentCharList.pop_back();
-        maRecentCharFontList.pop_back();
-    }
-
-    maRecentCharList.push_front(sTitle);
-    maRecentCharFontList.push_front(rFont);
-
-    css::uno::Sequence< OUString > aRecentCharList(maRecentCharList.size());
-    auto aRecentCharListRange = asNonConstRange(aRecentCharList);
-    css::uno::Sequence< OUString > aRecentCharFontList(maRecentCharFontList.size());
-    auto aRecentCharFontListRange = asNonConstRange(aRecentCharFontList);
-
-    for (size_t i = 0; i < maRecentCharList.size(); ++i)
-    {
-        aRecentCharListRange[i] = maRecentCharList[i];
-        aRecentCharFontListRange[i] = maRecentCharFontList[i];
-    }
-
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::RecentCharacters::RecentCharacterList::set(aRecentCharList, batch);
-    officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::set(aRecentCharFontList, batch);
-    batch->commit();
-
-    updateRecentCharControl();
-}
-
-
-void SvxCharacterMap::updateFavCharacterList(const OUString& sTitle, const OUString& rFont)
-{
-    // if Fav char to be added is already in list, remove it
-    if( const auto& [itChar, itChar2] = getFavChar(sTitle, rFont);
-        itChar != maFavCharList.end() &&  itChar2 != maFavCharFontList.end() )
-    {
-        maFavCharList.erase( itChar );
-        maFavCharFontList.erase( itChar2);
-    }
-
-    if (maFavCharList.size() == 16)
-    {
-        maFavCharList.pop_back();
-        maFavCharFontList.pop_back();
-    }
-
-    maFavCharList.push_back(sTitle);
-    maFavCharFontList.push_back(rFont);
-
-    css::uno::Sequence< OUString > aFavCharList(maFavCharList.size());
-    auto aFavCharListRange = asNonConstRange(aFavCharList);
-    css::uno::Sequence< OUString > aFavCharFontList(maFavCharFontList.size());
-    auto aFavCharFontListRange = asNonConstRange(aFavCharFontList);
-
-    for (size_t i = 0; i < maFavCharList.size(); ++i)
-    {
-        aFavCharListRange[i] = maFavCharList[i];
-        aFavCharFontListRange[i] = maFavCharFontList[i];
-    }
-
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::set(aFavCharList, batch);
-    officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::set(aFavCharFontList, batch);
-    batch->commit();
-}
-
-
-void SvxCharacterMap::updateFavCharControl()
-{
-    assert(maFavCharList.size() == maFavCharFontList.size());
-
-    int i = 0;
-    for ( std::deque< OUString >::iterator it = maFavCharList.begin(), it2 = maFavCharFontList.begin();
-        it != maFavCharList.end() && it2 != maFavCharFontList.end();
-        ++it, ++it2, i++)
-    {
-        m_aFavCharView[i].SetText(*it);
-        vcl::Font rFont = m_aFavCharView[i].GetFont();
-        rFont.SetFamilyName( *it2 );
-        m_aFavCharView[i].SetFont(rFont);
-        m_aFavCharView[i].Show();
-    }
-
-    for(; i < 16 ; i++)
-    {
-        m_aFavCharView[i].SetText(OUString());
-        m_aFavCharView[i].Hide();
-    }
     m_xShowSet->getFavCharacterList();
     m_xSearchSet->getFavCharacterList();
     // tdf#109214 - redraw highlight of the favorite characters
     m_xShowSet->Invalidate();
-}
-
-void SvxCharacterMap::deleteFavCharacterFromList(std::u16string_view sTitle, std::u16string_view rFont)
-{
-    // if Fav char is found, remove it
-    if( const auto& [itChar, itChar2] = getFavChar(sTitle, rFont);
-        itChar != maFavCharList.end() &&  itChar2 != maFavCharFontList.end() )
-    {
-        maFavCharList.erase( itChar );
-        maFavCharFontList.erase( itChar2);
-    }
-
-    css::uno::Sequence< OUString > aFavCharList(maFavCharList.size());
-    auto aFavCharListRange = asNonConstRange(aFavCharList);
-    css::uno::Sequence< OUString > aFavCharFontList(maFavCharFontList.size());
-    auto aFavCharFontListRange = asNonConstRange(aFavCharFontList);
-
-    for (size_t i = 0; i < maFavCharList.size(); ++i)
-    {
-        aFavCharListRange[i] = maFavCharList[i];
-        aFavCharFontListRange[i] = maFavCharFontList[i];
-    }
-
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::set(aFavCharList, batch);
-    officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::set(aFavCharFontList, batch);
-    batch->commit();
 }
 
 void SvxCharacterMap::init()
@@ -549,38 +259,16 @@ void SvxCharacterMap::init()
         m_xOKBtn->set_sensitive(true);
     }
 
-    getRecentCharacterList();
-    updateRecentCharControl();
-
-    getFavCharacterList();
-    updateFavCharControl();
-
-    bool bHasInsert = m_xFrame.is();
-
-    for(int i = 0; i < 16; i++)
-    {
-        m_aRecentCharView[i].SetHasInsert(bHasInsert);
-        m_aRecentCharView[i].setMouseClickHdl(LINK(this,SvxCharacterMap, CharClickHdl));
-        m_aRecentCharView[i].setClearClickHdl(LINK(this,SvxCharacterMap, RecentClearClickHdl));
-        m_aRecentCharView[i].setClearAllClickHdl(LINK(this,SvxCharacterMap, RecentClearAllClickHdl));
-        m_aFavCharView[i].SetHasInsert(bHasInsert);
-        m_aFavCharView[i].setMouseClickHdl(LINK(this,SvxCharacterMap, CharClickHdl));
-        m_aFavCharView[i].setClearClickHdl(LINK(this,SvxCharacterMap, FavClearClickHdl));
-        m_aFavCharView[i].setClearAllClickHdl(LINK(this,SvxCharacterMap, FavClearAllClickHdl));
-    }
+    m_aCharmapContents.init(m_xFrame.is(),
+                            LINK(this, SvxCharacterMap, CharClickHdl),
+                            LINK(this, SvxCharacterMap, UpdateFavHdl),
+                            Link<void*, void>());
 
     setCharName(90);
 
     m_xSearchText->connect_focus_in(LINK( this, SvxCharacterMap, SearchFieldGetFocusHdl ));
     m_xSearchText->connect_changed(LINK(this, SvxCharacterMap, SearchUpdateHdl));
 }
-
-bool SvxCharacterMap::isFavChar(std::u16string_view sTitle, std::u16string_view rFont)
-{
-    const auto& [itChar, itFont] = getFavChar(sTitle, rFont);
-    return itChar != maFavCharList.end() && itFont != maFavCharFontList.end();
-}
-
 
 void SvxCharacterMap::setFavButtonState(std::u16string_view sTitle, std::u16string_view rFont)
 {
@@ -592,16 +280,14 @@ void SvxCharacterMap::setFavButtonState(std::u16string_view sTitle, std::u16stri
     else
         m_xFavouritesBtn->set_sensitive(true);
 
-    if (isFavChar(sTitle, rFont))
+    if (m_aCharmapContents.isFavChar(sTitle, rFont))
     {
         m_xFavouritesBtn->set_label(CuiResId(RID_CUISTR_REMOVE_FAVORITES));
     }
     else
     {
-        if(maFavCharList.size() == 16)
-        {
+        if (m_aCharmapContents.FavCharListIsFull())
             m_xFavouritesBtn->set_sensitive(false);
-        }
 
         m_xFavouritesBtn->set_label(CuiResId(RID_CUISTR_ADD_FAVORITES));
     }
@@ -656,7 +342,7 @@ void SvxCharacterMap::insertCharToDoc(const OUString& sGlyph)
         };
         comphelper::dispatchCommand(".uno:InsertSymbol", m_xFrame, aArgs);
 
-        updateRecentCharacterList(sGlyph, aFont.GetFamilyName());
+        m_aCharmapContents.updateRecentCharacterList(sGlyph, aFont.GetFamilyName());
 
     } else {
         sal_UCS4 cChar = sGlyph.iterateCodePoints(&o3tl::temporary(sal_Int32(0)));
@@ -783,70 +469,6 @@ IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl, weld::ComboBox&, void)
     }
 }
 
-IMPL_LINK(SvxCharacterMap, RecentClearClickHdl, SvxCharView*, rView, void)
-{
-    const OUString& sTitle = rView->GetText();
-    OUString sFont = rView->GetFont().GetFamilyName();
-
-    // if recent char to be added is already in list, remove it
-    if( const auto& [itChar, itChar2] = getRecentChar(sTitle, sFont);
-        itChar != maRecentCharList.end() &&  itChar2 != maRecentCharFontList.end() )
-    {
-        maRecentCharList.erase( itChar );
-        maRecentCharFontList.erase( itChar2);
-    }
-
-    css::uno::Sequence< OUString > aRecentCharList(maRecentCharList.size());
-    auto aRecentCharListRange = asNonConstRange(aRecentCharList);
-    css::uno::Sequence< OUString > aRecentCharFontList(maRecentCharFontList.size());
-    auto aRecentCharFontListRange = asNonConstRange(aRecentCharFontList);
-
-    for (size_t i = 0; i < maRecentCharList.size(); ++i)
-    {
-        aRecentCharListRange[i] = maRecentCharList[i];
-        aRecentCharFontListRange[i] = maRecentCharFontList[i];
-    }
-
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::RecentCharacters::RecentCharacterList::set(aRecentCharList, batch);
-    officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::set(aRecentCharFontList, batch);
-    batch->commit();
-
-    updateRecentCharControl();
-}
-
-IMPL_LINK_NOARG(SvxCharacterMap, RecentClearAllClickHdl, SvxCharView*, void)
-{
-    maRecentCharList.clear();
-    maRecentCharFontList.clear();
-
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::RecentCharacters::RecentCharacterList::set({ }, batch);
-    officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::set({ }, batch);
-    batch->commit();
-
-    updateRecentCharControl();
-}
-
-IMPL_LINK(SvxCharacterMap, FavClearClickHdl, SvxCharView*, rView, void)
-{
-    deleteFavCharacterFromList(rView->GetText(), rView->GetFont().GetFamilyName());
-    updateFavCharControl();
-}
-
-IMPL_LINK_NOARG(SvxCharacterMap, FavClearAllClickHdl, SvxCharView*, void)
-{
-    maFavCharList.clear();
-    maFavCharFontList.clear();
-
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::set({ }, batch);
-    officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::set({ }, batch);
-    batch->commit();
-
-    updateFavCharControl();
-}
-
 IMPL_LINK_NOARG(SvxCharacterMap, SearchFieldGetFocusHdl, weld::Widget&, void)
 {
     m_xOKBtn->set_sensitive(false);
@@ -955,7 +577,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, InsertClickHdl, weld::Button&, void)
     insertCharToDoc(sChar);
     // Need to update recent character list, when OK button does not insert
     if(!m_xFrame.is())
-        updateRecentCharacterList(sChar, aFont.GetFamilyName());
+        m_aCharmapContents.updateRecentCharacterList(sChar, aFont.GetFamilyName());
     m_xDialog->response(RET_OK);
 }
 
@@ -963,23 +585,23 @@ IMPL_LINK_NOARG(SvxCharacterMap, FavSelectHdl, weld::Button&, void)
 {
     if (m_xFavouritesBtn->get_label().match(CuiResId(RID_CUISTR_ADD_FAVORITES)))
     {
-        updateFavCharacterList(m_aShowChar.GetText(), m_aShowChar.GetFont().GetFamilyName());
+        m_aCharmapContents.updateFavCharacterList(m_aShowChar.GetText(), m_aShowChar.GetFont().GetFamilyName());
         setFavButtonState(m_aShowChar.GetText(), m_aShowChar.GetFont().GetFamilyName());
     }
     else
     {
-        deleteFavCharacterFromList(m_aShowChar.GetText(), m_aShowChar.GetFont().GetFamilyName());
+        m_aCharmapContents.deleteFavCharacterFromList(m_aShowChar.GetText(), m_aShowChar.GetFont().GetFamilyName());
         m_xFavouritesBtn->set_label(CuiResId(RID_CUISTR_ADD_FAVORITES));
         m_xFavouritesBtn->set_sensitive(false);
     }
 
-    updateFavCharControl();
+    m_aCharmapContents.updateFavCharControl();
 }
 
 IMPL_LINK_NOARG(SvxCharacterMap, FavClickHdl, SvxShowCharSet*, void)
 {
-    getFavCharacterList();
-    updateFavCharControl();
+    m_aCharmapContents.getFavCharacterList();
+    m_aCharmapContents.updateFavCharControl();
 }
 
 IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)

@@ -83,13 +83,9 @@ private:
     std::unique_ptr<const SubsetMap> pSubsetMap;
     bool isSearchMode;
     css::uno::Reference<css::frame::XFrame> m_xFrame;
-    std::deque<OUString> maRecentCharList;
-    std::deque<OUString> maRecentCharFontList;
-    std::deque<OUString> maFavCharList;
-    std::deque<OUString> maFavCharFontList;
 
-    SvxCharView m_aRecentCharView[16];
-    SvxCharView m_aFavCharView[16];
+    SfxCharmapContainer m_aCharmapContents;
+
     SvxShowText m_aShowChar;
 
     std::unique_ptr<weld::Button> m_xOKBtn;
@@ -102,11 +98,7 @@ private:
     std::unique_ptr<weld::Entry> m_xDecimalCodeText;
     std::unique_ptr<weld::Button> m_xFavouritesBtn;
     std::unique_ptr<weld::Label> m_xCharName;
-    std::unique_ptr<weld::Widget> m_xRecentGrid;
-    std::unique_ptr<weld::Widget> m_xFavGrid;
     std::unique_ptr<weld::CustomWeld> m_xShowChar;
-    std::unique_ptr<weld::CustomWeld> m_xRecentCharView[16];
-    std::unique_ptr<weld::CustomWeld> m_xFavCharView[16];
     std::unique_ptr<SvxShowCharSet> m_xShowSet;
     std::unique_ptr<weld::CustomWeld> m_xShowSetArea;
     std::unique_ptr<SvxSearchCharSet> m_xSearchSet;
@@ -135,14 +127,11 @@ private:
     DECL_DLLPRIVATE_LINK(DecimalCodeChangeHdl, weld::Entry&, void);
     DECL_DLLPRIVATE_LINK(HexCodeChangeHdl, weld::Entry&, void);
     DECL_DLLPRIVATE_LINK(CharClickHdl, SvxCharView*, void);
-    DECL_DLLPRIVATE_LINK(RecentClearClickHdl, SvxCharView*, void);
-    DECL_DLLPRIVATE_LINK(FavClearClickHdl, SvxCharView*, void);
-    DECL_DLLPRIVATE_LINK(RecentClearAllClickHdl, SvxCharView*, void);
-    DECL_DLLPRIVATE_LINK(FavClearAllClickHdl, SvxCharView*, void);
     DECL_DLLPRIVATE_LINK(InsertClickHdl, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(FavSelectHdl, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(SearchUpdateHdl, weld::Entry&, void);
     DECL_DLLPRIVATE_LINK(SearchFieldGetFocusHdl, weld::Widget&, void);
+    DECL_DLLPRIVATE_LINK(UpdateFavHdl, void*, void);
 
     static void fillAllSubsets(weld::ComboBox& rListBox);
     void selectCharByCode(Radix radix);
@@ -164,30 +153,13 @@ public:
     void SetChar(sal_UCS4);
     sal_UCS4 GetChar() const;
 
-    void getRecentCharacterList(); //gets both recent char and recent char font list
-    void updateRecentCharacterList(const OUString& rChar, const OUString& rFont);
-
-    void getFavCharacterList(); //gets both Fav char and Fav char font list
-    void updateFavCharacterList(const OUString& rChar, const OUString& rFont);
-    void deleteFavCharacterFromList(std::u16string_view rChar, std::u16string_view rFont);
-    bool isFavChar(std::u16string_view sTitle, std::u16string_view rFont);
-
-    void updateRecentCharControl();
     void insertCharToDoc(const OUString& sChar);
 
-    void updateFavCharControl();
     void setFavButtonState(std::u16string_view sTitle, std::u16string_view rFont);
 
     void setCharName(sal_UCS4 nDecimalValue);
 
     void toggleSearchView(bool state);
-
-private:
-    std::pair<std::deque<OUString>::const_iterator, std::deque<OUString>::const_iterator>
-    getRecentChar(std::u16string_view sTitle, std::u16string_view rFont) const;
-
-    std::pair<std::deque<OUString>::const_iterator, std::deque<OUString>::const_iterator>
-    getFavChar(std::u16string_view sTitle, std::u16string_view rFont) const;
 };
 
 #endif

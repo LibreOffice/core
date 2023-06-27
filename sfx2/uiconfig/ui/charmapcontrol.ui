@@ -27,7 +27,7 @@
         </child>
         <child>
           <!-- n-columns=1 n-rows=1 -->
-          <object class="GtkGrid" id="grid1">
+          <object class="GtkGrid" id="favgrid">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
@@ -268,7 +268,7 @@
         </child>
         <child>
           <!-- n-columns=1 n-rows=1 -->
-          <object class="GtkGrid" id="grid2">
+          <object class="GtkGrid" id="viewgrid">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
