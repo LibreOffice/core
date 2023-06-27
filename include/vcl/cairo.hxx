@@ -32,7 +32,7 @@
 
 /*
  For internal cairo we have the option --enable-cairo-rgba which is potentially
- useful for Andoid or Online to switch the rgb components. For Android cairo then
+ useful for Android or Online to switch the rgb components. For Android cairo then
  matches the OpenGL GL_RGBA format so we can use it there where we don't have
  GL_BGRA support. Similarly for Online we can then use cairo's pixel data
  without needing to swizzle it for use as a canvas ImageData.
