@@ -477,14 +477,14 @@ Public Sub Main()
 		objOleTest2.AttrAny2 = "VBString "
 
 		'testinout_methodXInterfaces substitutes the argument with the object set in in_methodXInterface
-		objOleTest.AttrAny2 = "VBString  this string was written in the UNO component to the inout pararmeter"
+		objOleTest.AttrAny2 = "VBString  this string was written in the UNO component to the inout parameter"
 		objOleTest.in_methodXInterface(objOleTest)
 		objOleTest.testinout_methodXInterface2(objOleTest2)
 		Dim tmpVar As Object
 		tmpVar = System.DBNull.Value
 		tmpVar = objOleTest2.AttrAny2
 		Debug.Print("in: Uno out: the same object // " & CStr(tmpVar))
-		If tmpVar <> "VBString  this string was written in the UNO component to the inout pararmeter" Then
+		If tmpVar <> "VBString  this string was written in the UNO component to the inout parameter" Then
 			MsgBox("error")
 		End If
 
