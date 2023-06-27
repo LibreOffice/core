@@ -19,6 +19,7 @@
 
 #include <svgfilternode.hxx>
 #include <svgfecolormatrixnode.hxx>
+#include <svgfefloodnode.hxx>
 #include <svgfegaussianblurnode.hxx>
 #include <svgfeoffsetnode.hxx>
 
@@ -60,6 +61,11 @@ void SvgFilterNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTarg
             const SvgFeOffsetNode& rFeOffsetNode
                 = dynamic_cast<const SvgFeOffsetNode&>(*pCandidate);
             rFeOffsetNode.apply(rTarget);
+        }
+        else if (pCandidate->getType() == SVGToken::FeFlood)
+        {
+            const SvgFeFloodNode& rFeFloodNode = dynamic_cast<const SvgFeFloodNode&>(*pCandidate);
+            rFeFloodNode.apply(rTarget);
         }
     }
 }

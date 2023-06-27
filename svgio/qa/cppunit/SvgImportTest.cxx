@@ -203,6 +203,24 @@ CPPUNIT_TEST_FIXTURE(Test, testFilterFeOffset)
     assertXPath(pDocument, "/primitive2D/transform/mask/transform", "xy33", "1");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testFilterFeFlood)
+{
+    Primitive2DSequence aSequenceTdf132246 = parseSvg(u"/svgio/qa/cppunit/data/filterFeFlood.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf132246.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequenceTdf132246);
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/unifiedtransparence", "transparence", "50");
+    assertXPath(pDocument, "/primitive2D/transform/unifiedtransparence/polypolygoncolor", "color", "#008000");
+    assertXPath(pDocument, "/primitive2D/transform/unifiedtransparence/polypolygoncolor/polypolygon", "height", "100");
+    assertXPath(pDocument, "/primitive2D/transform/unifiedtransparence/polypolygoncolor/polypolygon", "width", "100");
+    assertXPath(pDocument, "/primitive2D/transform/unifiedtransparence/polypolygoncolor/polypolygon", "minx", "50");
+    assertXPath(pDocument, "/primitive2D/transform/unifiedtransparence/polypolygoncolor/polypolygon", "miny", "50");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf87309)
 {
     Primitive2DSequence aSequenceTdf87309 = parseSvg(u"/svgio/qa/cppunit/data/tdf87309.svg");

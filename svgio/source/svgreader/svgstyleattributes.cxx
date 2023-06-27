@@ -1166,9 +1166,6 @@ namespace svgio::svgreader
             const std::optional<basegfx::B2DHomMatrix>& pTransform,
             bool bIsPrimitive) const
         {
-            if(rSource.empty())
-                return;
-
             const double fOpacity(getOpacity().solve(mrOwner));
 
             if(basegfx::fTools::equalZero(fOpacity))
