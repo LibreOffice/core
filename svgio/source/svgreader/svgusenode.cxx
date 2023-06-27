@@ -128,39 +128,40 @@ namespace svgio::svgreader
 
         void SvgUseNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DContainer& rTarget, bool /*bReferenced*/) const
         {
+            drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
+            basegfx::B2DHomMatrix aTransform;
+
             // try to access link to content
             const SvgNode* pXLink = getDocument().findSvgNodeById(maXLink);
 
-            if (!pXLink || Display::None == pXLink->getDisplay() || mbDecomposingSvgNode)
-                return;
-
-            // decompose children
-            drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
-
-            // todo: in case mpXLink is a SVGToken::Svg or SVGToken::Symbol the
-            // SVG docs want the getWidth() and getHeight() from this node
-            // to be valid for the subtree.
-            mbDecomposingSvgNode = true;
-            const_cast< SvgNode* >(pXLink)->setAlternativeParent(this);
-            pXLink->decomposeSvgNode(aNewTarget, true);
-            const_cast< SvgNode* >(pXLink)->setAlternativeParent();
-            mbDecomposingSvgNode = false;
-
-            if(aNewTarget.empty())
-                return;
-
-            basegfx::B2DHomMatrix aTransform;
-
-            if(getX().isSet() || getY().isSet())
+            if (pXLink)
             {
-                aTransform.translate(
-                    getX().solve(*this, NumberType::xcoordinate),
-                    getY().solve(*this, NumberType::ycoordinate));
-            }
+                if (Display::None == pXLink->getDisplay() || mbDecomposingSvgNode)
+                    return;
 
-            if(getTransform())
-            {
-                aTransform = *getTransform() * aTransform;
+                // todo: in case mpXLink is a SVGToken::Svg or SVGToken::Symbol the
+                // SVG docs want the getWidth() and getHeight() from this node
+                // to be valid for the subtree.
+                mbDecomposingSvgNode = true;
+                const_cast< SvgNode* >(pXLink)->setAlternativeParent(this);
+                pXLink->decomposeSvgNode(aNewTarget, true);
+                const_cast< SvgNode* >(pXLink)->setAlternativeParent();
+                mbDecomposingSvgNode = false;
+
+                if(aNewTarget.empty())
+                    return;
+
+                if(getX().isSet() || getY().isSet())
+                {
+                    aTransform.translate(
+                        getX().solve(*this, NumberType::xcoordinate),
+                        getY().solve(*this, NumberType::ycoordinate));
+                }
+
+                if(getTransform())
+                {
+                    aTransform = *getTransform() * aTransform;
+                }
             }
 
             const SvgStyleAttributes* pStyle = getSvgStyleAttributes();
