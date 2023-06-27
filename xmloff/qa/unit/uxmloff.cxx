@@ -171,33 +171,35 @@ void Test::testMetaGenerator()
         { "OpenOffice/4.1.4$Unix OpenOffice.org_project/414m2$Build-9785", "414$9785", SvXMLImport::AOO_4x },
 
         // LO versions
-        { "LibreOffice/3.3$Linux LibreOffice_project/330m17$Build-3", "330$3;33", SvXMLImport::LO_3x },
-        { "BrOffice/3.3$Win32 LibreOffice_project/330m19$Build-8", "330$8;33", SvXMLImport::LO_3x },
-        { "LibreOffice/3.4$Linux LibreOffice_project/340m1$Build-1206", "340$1206;34", SvXMLImport::LO_3x },
-        { "LibreOffice/3.5$Linux_X86_64 LibreOffice_project/3fa2330-e49ffd2-90d118b-705e248-051e21c", ";35", SvXMLImport::LO_3x },
-        { "LibreOffice/3.6$Windows_x86 LibreOffice_project/a9a0717-273e462-768e6e3-978247f-65e65f", ";36", SvXMLImport::LO_3x },
-        { "LibreOffice/4.0.2.2$Windows_x86 LibreOffice_project/4c82dcdd6efcd48b1d8bba66bfe1989deee49c3", ";4022", SvXMLImport::LO_41x },
-        { "LibreOffice/4.1.2.3$MacOSX_x86 LibreOffice_project/40b2d7fde7e8d2d7bc5a449dc65df4d08a7dd38", ";4123", SvXMLImport::LO_41x },
-        { "LibreOffice/4.2.8.2$Windows_x86 LibreOffice_project/48d50dbfc06349262c9d50868e5c1f630a573ebd", ";4282", SvXMLImport::LO_42x },
-        { "LibreOffice_from_Collabora_4.2-8/4.2.10.8$Linux_x86 LibreOffice_project/84584cc237b2eb93f7684d8fcd063bb37e87b5fb", ";42108", SvXMLImport::LO_42x },
-        { "LibreOffice/4.3.3.2$Linux_x86 LibreOffice_project/9bb7eadab57b6755b1265afa86e04bf45fbfc644", ";4332", SvXMLImport::LO_43x },
-        { "LibreOffice_from_Collabora_4.4-10/4.4.10.9$Linux_x86 LibreOffice_project/5600b19b88a01bbb669b0900100760758dff8c26", ";44109", SvXMLImport::LO_44x },
-        { "LibreOffice/4.3.3.2$Linux_X86_64 LibreOffice_project/430m0$Build-2", "430$2;4332", SvXMLImport::LO_43x },
-        { "LibreOffice/4.4.3.2$Linux_x86 LibreOffice_project/88805f81e9fe61362df02b9941de8e38a9b5fd16", ";4432", SvXMLImport::LO_44x },
-        { "LibreOffice/5.0.1.1$Linux_x86 LibreOffice_project/00m0$Build-1", "00$1;5011", SvXMLImport::LO_5x },
-        { "LibreOffice/5.0.3.2$Windows_X86_64 LibreOffice_project/e5f16313668ac592c1bfb310f4390624e3dbfb75", ";5032", SvXMLImport::LO_5x },
-        { "Collabora_Office/5.0.10.19$Linux_X86_64 LibreOffice_project/95060d44300d8866fa81c16fc8fe2afe22d63777", ";501019", SvXMLImport::LO_5x },
-        { "LibreOffice/5.1.6.2.0$Linux_X86_64 LibreOffice_project/10$Build-2", ";51620", SvXMLImport::LO_5x },
-        { "Collabora_Office/5.1.10.17$Linux_X86_64 LibreOffice_project/a104cbe76eefca3cf23973da68893d2225fd718b", ";511017", SvXMLImport::LO_5x },
-        { "LibreOffice/5.2.1.2$Windows_X86_64 LibreOffice_project/31dd62db80d4e60af04904455ec9c9219178d620", ";5212", SvXMLImport::LO_5x },
-        { "LibreOffice_Vanilla/5.2.3.5$MacOSX_X86_64 LibreOffice_project/83adc9c35c74e0badc710d981405858b1179a327", ";5235", SvXMLImport::LO_5x },
-        { "LibreOffice/5.3.4.2$Windows_X86_64 LibreOffice_project/f82d347ccc0be322489bf7da61d7e4ad13fe2ff3", ";5342", SvXMLImport::LO_5x },
-        { "Collabora_Office/5.3.10.27$Linux_X86_64 LibreOffice_project/7a5a5378661e338a44666c08773cc796b8d1c84a", ";531027", SvXMLImport::LO_5x },
-        { "LibreOfficeDev/5.4.7.0.0$Linux_X86_64 LibreOffice_project/ba7461fc88c08e75e315f786020a2946e56166c9", ";54700", SvXMLImport::LO_5x },
-        { "LibreOfficeDev/6.0.3.0.0$Linux_X86_64 LibreOffice_project/34442b85bfb0c451738b4db023345a7484463321", ";60300", SvXMLImport::LO_6x },
-        { "LibreOffice_powered_by_CIBDev/6.3.9.0.0$Linux_X86_64 LibreOffice_project/c87f331d2900eab70ac3021cbe530926efa6499f", ";63900", SvXMLImport::LO_63x },
-        { "LibreOffice_powered_by_CIBDev/6.4.0.0.0$Linux_X86_64 LibreOffice_project/e29e100174c133d27e953934311d68602c4515b7", ";64000", SvXMLImport::LO_63x },
-        { "LibreOfficeDev/7.0.6.0.0$Linux_X86_64 LibreOffice_project/dfc40e2292c6e19e285c10ed8c8044d9454107d0", ";70600", SvXMLImport::LO_7x },
+        { "LibreOffice/3.3$Linux LibreOffice_project/330m17$Build-3", "330$3;3.3", SvXMLImport::LO_3x },
+        { "BrOffice/3.3$Win32 LibreOffice_project/330m19$Build-8", "330$8;3.3", SvXMLImport::LO_3x },
+        { "LibreOffice/3.4$Linux LibreOffice_project/340m1$Build-1206", "340$1206;3.4", SvXMLImport::LO_3x },
+        { "LibreOffice/3.5$Linux_X86_64 LibreOffice_project/3fa2330-e49ffd2-90d118b-705e248-051e21c", ";3.5", SvXMLImport::LO_3x },
+        { "LibreOffice/3.6$Windows_x86 LibreOffice_project/a9a0717-273e462-768e6e3-978247f-65e65f", ";3.6", SvXMLImport::LO_3x },
+        { "LibreOffice/4.0.2.2$Windows_x86 LibreOffice_project/4c82dcdd6efcd48b1d8bba66bfe1989deee49c3", ";4.0.2.2", SvXMLImport::LO_41x },
+        { "LibreOffice/4.1.2.3$MacOSX_x86 LibreOffice_project/40b2d7fde7e8d2d7bc5a449dc65df4d08a7dd38", ";4.1.2.3", SvXMLImport::LO_41x },
+        { "LibreOffice/4.2.8.2$Windows_x86 LibreOffice_project/48d50dbfc06349262c9d50868e5c1f630a573ebd", ";4.2.8.2", SvXMLImport::LO_42x },
+        { "LibreOffice_from_Collabora_4.2-8/4.2.10.8$Linux_x86 LibreOffice_project/84584cc237b2eb93f7684d8fcd063bb37e87b5fb", ";4.2.10.8", SvXMLImport::LO_42x },
+        { "LibreOffice/4.3.3.2$Linux_x86 LibreOffice_project/9bb7eadab57b6755b1265afa86e04bf45fbfc644", ";4.3.3.2", SvXMLImport::LO_43x },
+        { "LibreOffice_from_Collabora_4.4-10/4.4.10.9$Linux_x86 LibreOffice_project/5600b19b88a01bbb669b0900100760758dff8c26", ";4.4.10.9", SvXMLImport::LO_44x },
+        { "LibreOffice/4.3.3.2$Linux_X86_64 LibreOffice_project/430m0$Build-2", "430$2;4.3.3.2", SvXMLImport::LO_43x },
+        { "LibreOffice/4.4.3.2$Linux_x86 LibreOffice_project/88805f81e9fe61362df02b9941de8e38a9b5fd16", ";4.4.3.2", SvXMLImport::LO_44x },
+        { "LibreOffice/5.0.1.1$Linux_x86 LibreOffice_project/00m0$Build-1", "00$1;5.0.1.1", SvXMLImport::LO_5x },
+        { "LibreOffice/5.0.3.2$Windows_X86_64 LibreOffice_project/e5f16313668ac592c1bfb310f4390624e3dbfb75", ";5.0.3.2", SvXMLImport::LO_5x },
+        { "Collabora_Office/5.0.10.19$Linux_X86_64 LibreOffice_project/95060d44300d8866fa81c16fc8fe2afe22d63777", ";5.0.10.19", SvXMLImport::LO_5x },
+        { "LibreOffice/5.1.6.2.0$Linux_X86_64 LibreOffice_project/10$Build-2", ";5.1.6.2.0", SvXMLImport::LO_5x },
+        { "Collabora_Office/5.1.10.17$Linux_X86_64 LibreOffice_project/a104cbe76eefca3cf23973da68893d2225fd718b", ";5.1.10.17", SvXMLImport::LO_5x },
+        { "LibreOffice/5.2.1.2$Windows_X86_64 LibreOffice_project/31dd62db80d4e60af04904455ec9c9219178d620", ";5.2.1.2", SvXMLImport::LO_5x },
+        { "LibreOffice_Vanilla/5.2.3.5$MacOSX_X86_64 LibreOffice_project/83adc9c35c74e0badc710d981405858b1179a327", ";5.2.3.5", SvXMLImport::LO_5x },
+        { "LibreOffice/5.3.4.2$Windows_X86_64 LibreOffice_project/f82d347ccc0be322489bf7da61d7e4ad13fe2ff3", ";5.3.4.2", SvXMLImport::LO_5x },
+        { "Collabora_Office/5.3.10.27$Linux_X86_64 LibreOffice_project/7a5a5378661e338a44666c08773cc796b8d1c84a", ";5.3.10.27", SvXMLImport::LO_5x },
+        { "LibreOfficeDev/5.4.7.0.0$Linux_X86_64 LibreOffice_project/ba7461fc88c08e75e315f786020a2946e56166c9", ";5.4.7.0.0", SvXMLImport::LO_5x },
+        { "LibreOfficeDev/6.0.3.0.0$Linux_X86_64 LibreOffice_project/34442b85bfb0c451738b4db023345a7484463321", ";6.0.3.0.0", SvXMLImport::LO_6x },
+        { "LibreOffice_powered_by_CIBDev/6.3.9.0.0$Linux_X86_64 LibreOffice_project/c87f331d2900eab70ac3021cbe530926efa6499f", ";6.3.9.0.0", SvXMLImport::LO_63x },
+        { "LibreOffice_powered_by_CIBDev/6.4.0.0.0$Linux_X86_64 LibreOffice_project/e29e100174c133d27e953934311d68602c4515b7", ";6.4.0.0.0", SvXMLImport::LO_63x },
+        { "LibreOfficeDev/7.0.6.0.0$Linux_X86_64 LibreOffice_project/dfc40e2292c6e19e285c10ed8c8044d9454107d0", ";7.0.6.0.0", SvXMLImport::LO_7x },
+        { "CIB_OfficeDev/6.4.0.19$Linux_X86_64 LibreOffice_project/2e04f804b5f82770435f250873f07b3384d95504", ";6.4.0.19", SvXMLImport::LO_63x },
+        { "LibreOfficeDev/24.2.0.0.alpha0$Linux_X86_64 LibreOffice_project/b81e7b6f3c71fb3ade1cb665444ac730dac0a9a9", ";24.2.0.0.", SvXMLImport::LO_New },
     };
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(tests); ++i)
@@ -213,14 +215,15 @@ void Test::testMetaGenerator()
                 OUString::createFromAscii(tests[i].generator), xInfoSet);
         if (tests[i].buildId[0] != '\0')
         {
-            CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(tests[i].buildId),
-                    xInfoSet->getPropertyValue("BuildId").get<OUString>());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(tests[i].generator,
+                                 OUString::createFromAscii(tests[i].buildId),
+                                 xInfoSet->getPropertyValue("BuildId").get<OUString>());
         }
         else
         {
-            CPPUNIT_ASSERT(!xInfoSet->getPropertyValue("BuildId").hasValue());
+            CPPUNIT_ASSERT_MESSAGE(tests[i].generator, !xInfoSet->getPropertyValue("BuildId").hasValue());
         }
-        CPPUNIT_ASSERT_EQUAL(tests[i].result, pImport->getGeneratorVersion());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(tests[i].generator, tests[i].result, pImport->getGeneratorVersion());
     }
 }
 

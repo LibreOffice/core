@@ -693,7 +693,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
                 if( !sBuildId.isEmpty() )
                 {
                     sal_Int32 nIndex = sBuildId.indexOf('$');
-                    if( nIndex != -1 )
+                    if (sBuildId.indexOf(';') == -1 && nIndex != -1)
                     {
                         sal_Int32 nUPD = o3tl::toInt32(sBuildId.subView( 0, nIndex ));
 
