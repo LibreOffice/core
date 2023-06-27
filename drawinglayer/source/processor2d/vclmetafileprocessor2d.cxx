@@ -2295,6 +2295,11 @@ void VclMetafileProcessor2D::processUnifiedTransparencePrimitive2D(
 
                 // various content, create content-metafile
                 GDIMetaFile aContentMetafile;
+
+                // tdf#155479 always forward propagate SVG flag for sub-content,
+                // it may contain cannotBeHandledByVCL gradients or transparencyGradients
+                aContentMetafile.setSVG(mpOutputDevice->GetConnectMetaFile()->getSVG());
+
                 const tools::Rectangle aPrimitiveRectangle(
                     impDumpToMetaFile(rContent, aContentMetafile));
 
@@ -2391,8 +2396,7 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
 
         // tdf#155479 Yepp, as already mentioned above we need to add
         // some MCGR infos in case of SVG export, prepare that here
-        if (nullptr != mpOutputDevice->GetConnectMetaFile()
-            && mpOutputDevice->GetConnectMetaFile()->getSVG())
+        if (mpOutputDevice->GetConnectMetaFile()->getSVG())
         {
             // for SVG, do not use decompose & prep extra data
             bSVGTransparencyColorStops = true;
@@ -2411,11 +2415,9 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
         // vcl/metafile, so add it directly. various content, create content-metafile
         GDIMetaFile aContentMetafile;
 
-        // tdf#155479 do not forget to forward SVG flag for sub-content
-        if (bSVGTransparencyColorStops)
-        {
-            aContentMetafile.setSVG(true);
-        }
+        // tdf#155479 always forward propagate SVG flag for sub-content,
+        // it may contain cannotBeHandledByVCL gradients or transparencyGradients
+        aContentMetafile.setSVG(mpOutputDevice->GetConnectMetaFile()->getSVG());
 
         const tools::Rectangle aPrimitiveRectangle(impDumpToMetaFile(rContent, aContentMetafile));
 
