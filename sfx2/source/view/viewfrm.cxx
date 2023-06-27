@@ -308,9 +308,12 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                             m_pFrame->RemoveInfoBar(u"readonly");
                         if (m_pMed)
                         {
+                            bool const isEnableSetModified(m_pSh->IsEnableSetModified());
+                            m_pSh->EnableSetModified(false);
                             // tdf#116066: DoSaveCompleted should be called after SetReadOnlyUI
                             m_pSh->DoSaveCompleted(m_pMed);
                             m_pSh->Broadcast(SfxHint(SfxHintId::ModeChanged));
+                            m_pSh->EnableSetModified(isEnableSetModified);
                         }
                     }
                 }
