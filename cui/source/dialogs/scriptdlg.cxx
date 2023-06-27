@@ -128,9 +128,6 @@ void SvxScriptOrgDialog::Init( std::u16string_view language  )
 
     Sequence< Reference< browse::XBrowseNode > > children;
 
-    OUString userStr("user");
-    static constexpr OUStringLiteral shareStr(u"share");
-
     try
     {
         Reference< browse::XBrowseNodeFactory > xFac = browse::theBrowseNodeFactory::get(xCtx);
@@ -155,17 +152,15 @@ void SvxScriptOrgDialog::Init( std::u16string_view language  )
         bool app = false;
         OUString uiName = childNode->getName();
         OUString factoryURL;
-        if ( uiName == userStr || uiName == shareStr )
+        if (uiName == "user")
         {
             app = true;
-            if ( uiName == userStr )
-            {
-                uiName = m_sMyMacros;
-            }
-            else
-            {
-                uiName = m_sProdMacros;
-            }
+            uiName = m_sMyMacros;
+        }
+        else if (uiName == "share")
+        {
+            app = true;
+            uiName = m_sProdMacros;
         }
         else
         {

@@ -1512,16 +1512,14 @@ OUString GraphicExport::writeToStorage(const Graphic& rGraphic , bool bRelPathTo
         xOutStream->writeBytes(Sequence<sal_Int8>(static_cast<const sal_Int8*>(aData), nDataSize));
         xOutStream->closeOutput();
 
-        static constexpr OStringLiteral sRelPathToMedia = "media/image";
-        OString sRelationCompPrefix;
+        const char* sRelationCompPrefix;
         if (bRelPathToMedia)
             sRelationCompPrefix = "../";
         else
             sRelationCompPrefix = getRelationCompPrefix(meDocumentType);
         sPath = OUStringBuffer()
-                    .appendAscii(sRelationCompPrefix.getStr())
-                    .appendAscii(sRelPathToMedia.getStr())
-                    .append(nImageCount)
+                    .appendAscii(sRelationCompPrefix)
+                    .append("media/image" + OUString::number(nImageCount))
                     .appendAscii(pExtension)
                     .makeStringAndClear();
 

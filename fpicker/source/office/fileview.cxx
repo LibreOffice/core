@@ -1499,8 +1499,6 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    static constexpr OUStringLiteral aDateSep( u", " );
-
     for (auto const& elem : maContent)
     {
         // title, type, size, date
@@ -1514,7 +1512,7 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
             SvtSysLocale aSysLocale;
             const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
             elem->maDisplayDate = rLocaleData.getDate( elem->maModDate )
-                                  + aDateSep
+                                  + ", "
                                   + rLocaleData.getTime( elem->maModDate, false );
         }
 

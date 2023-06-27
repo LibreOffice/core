@@ -254,9 +254,6 @@ void ODbaseIndexDialog::Init()
 
     // first assume for all indexes they're free
 
-    static constexpr OUStringLiteral aIndexExt(u"ndx");
-    static constexpr OUStringLiteral aTableExt(u"dbf");
-
     std::vector< OUString > aUsedIndexes;
 
     aURL.SetSmartProtocol(INetProtocol::File);
@@ -267,11 +264,11 @@ void ODbaseIndexDialog::Init()
         osl::FileBase::getSystemPathFromFileURL(rURL,aName);
         aURL.SetSmartURL(aName);
         OUString aExt = aURL.getExtension();
-        if (aExt == aIndexExt)
+        if (aExt == "ndx")
         {
             m_aFreeIndexList.emplace_back(aURL.getName() );
         }
-        else if (aExt == aTableExt)
+        else if (aExt == "dbf")
         {
             m_aTableInfoList.emplace_back(aURL.getName() );
             OTableInfo& rTabInfo = m_aTableInfoList.back();
