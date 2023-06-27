@@ -131,6 +131,9 @@ void AccessibilityIssue::quickFixIssue() const
     if (!m_pDoc)
         return;
 
+    if (m_eIssueObject != IssueObject::UNKNOWN)
+        gotoIssue();
+
     switch (m_eIssueObject)
     {
         case IssueObject::GRAPHIC:
