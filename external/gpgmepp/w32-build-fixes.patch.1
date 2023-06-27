@@ -1,17 +1,15 @@
 diff -ru gpgme.orig/src/debug.h gpgme/src/debug.h
---- gpgme.orig/src/debug.h	2023-04-17 22:09:48.000000000 +0900
-+++ gpgme/src/debug.h	2023-06-25 20:43:29.267407815 +0900
-@@ -21,6 +21,10 @@
- #ifndef DEBUG_H
- #define DEBUG_H
- 
-+#ifdef _MSC_VER
-+#include <BaseTsd.h>
-+typedef SSIZE_T ssize_t;
-+#endif
- #include <string.h>
- #ifdef HAVE_STDINT_H
- #include <stdint.h>
+--- gpgme.orig/src/debug.h
++++ gpgme/src/debug.h
+@@ -180,7 +180,7 @@ static inline gpgme_ssize_t
+ _trace_sysres_ssize_t (gpgme_ssize_t res, int lvl, const char *func, int line)
+ {
+   if (res >= 0)
+-    _gpgme_debug (NULL, lvl, 3, func, NULL, NULL, "result=%zd", (ssize_t)res);
++    _gpgme_debug (NULL, lvl, 3, func, NULL, NULL, "result=%zd", res);
+   else
+     _gpgme_debug (NULL, lvl, -1, NULL, NULL, NULL,
+                   "%s:%d: error: %s (%d)\n",
 diff -ru gpgme.orig/src/dirinfo.c gpgme/src/dirinfo.c
 --- gpgme.orig/src/dirinfo.c	2017-03-21 11:09:41.000000000 +0100
 +++ gpgme/src/dirinfo.c	2017-09-30 08:36:13.239279300 +0200
