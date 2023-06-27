@@ -86,7 +86,7 @@ protected:
     // get table data, update if necessary
     inline SwAccessibleTableData_Impl& GetTableData();
 
-    // Is table data evailable?
+    // Is table data available?
     bool HasTableData() const { return (mpTableData != nullptr); }
 
     virtual void Notify(const SfxHint&) override;
