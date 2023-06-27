@@ -225,7 +225,24 @@ uno::Any SwVbaDocument::ContentControls(const uno::Any& index)
     uno::Reference<XCollection> xContentControls(
         new SwVbaContentControls(this, mxContext, mxTextDocument, "", ""));
     if (index.hasValue())
-        return xContentControls->Item(index, uno::Any());
+    {
+        try
+        {
+            return xContentControls->Item(index, uno::Any());
+        }
+        catch (lang::IndexOutOfBoundsException&)
+        {
+            // Hack: Instead of an index, it might be a float that was mistakenly treated as a long,
+            // which can happen with any valid positive integer when specified as a double like
+            // ActiveDocument.ContentControls(1841581653#).
+            if (index.getValueTypeClass() == css::uno::TypeClass_LONG)
+            {
+                sal_Int32 nLong(0);
+                index >>= nLong;
+                return xContentControls->Item(uno::Any(static_cast<double>(nLong)), uno::Any());
+            }
+        }
+    }
 
     return uno::Any(xContentControls);
 }
