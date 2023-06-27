@@ -172,50 +172,72 @@ public:
                 OUString const loVersion(buildIds.copy(ix + 1));
                 if (!loVersion.isEmpty())
                 {
-                    if ('3' == loVersion[0])
-                    {
-                        mnGeneratorVersion = SvXMLImport::LO_3x;
-                    }
-                    else if ('4' == loVersion[0])
-                    {
-                        if (loVersion.getLength() > 1
-                            && (loVersion[1] == '0' || loVersion[1] == '1'))
+                    auto const firstDot(loVersion.indexOf('.'));
+                    if (firstDot == 1)
+                    {   // old version scheme 3.3 ... 7.6
+                        if ('3' == loVersion[0])
                         {
-                            mnGeneratorVersion = SvXMLImport::LO_41x; // 4.0/4.1
+                            mnGeneratorVersion = SvXMLImport::LO_3x;
                         }
-                        else if (loVersion.getLength() > 1 && '2' == loVersion[1])
+                        else if ('4' == loVersion[0])
                         {
-                            mnGeneratorVersion = SvXMLImport::LO_42x; // 4.2
+                            if (loVersion.getLength() > 2
+                                && (loVersion[2] == '0' || loVersion[2] == '1'))
+                            {
+                                mnGeneratorVersion = SvXMLImport::LO_41x; // 4.0/4.1
+                            }
+                            else if (loVersion.getLength() > 2 && '2' == loVersion[2])
+                            {
+                                mnGeneratorVersion = SvXMLImport::LO_42x; // 4.2
+                            }
+                            else if (loVersion.getLength() > 2 && '3' == loVersion[2])
+                            {
+                                mnGeneratorVersion = SvXMLImport::LO_43x; // 4.3
+                            }
+                            else if (loVersion.getLength() > 2 && '4' == loVersion[2])
+                            {
+                                mnGeneratorVersion = SvXMLImport::LO_44x; // 4.4
+                            }
                         }
-                        else if (loVersion.getLength() > 1 && '3' == loVersion[1])
+                        else if ('5' == loVersion[0])
                         {
-                            mnGeneratorVersion = SvXMLImport::LO_43x; // 4.3
+                            mnGeneratorVersion = SvXMLImport::LO_5x;
                         }
-                        else if (loVersion.getLength() > 1 && '4' == loVersion[1])
+                        else if ('6' == loVersion[0])
                         {
-                            mnGeneratorVersion = SvXMLImport::LO_44x; // 4.4
+                            if (loVersion.getLength() > 2
+                                && (loVersion[2] == '0' || loVersion[2] == '1'
+                                    || loVersion[2] == '2'))
+                            {
+                                mnGeneratorVersion = SvXMLImport::LO_6x; // 6.0/6.1/6.2
+                            }
+                            else
+                            {
+                                mnGeneratorVersion = SvXMLImport::LO_63x; // 6.3/6.4
+                            }
                         }
-                    }
-                    else if ('5' == loVersion[0])
-                    {
-                        mnGeneratorVersion = SvXMLImport::LO_5x;
-                    }
-                    else if ('6' == loVersion[0])
-                    {
-                        if (loVersion.getLength() > 1
-                            && (loVersion[1] == '0' || loVersion[1] == '1'
-                                || loVersion[1] == '2'))
+                        else if ('7' == loVersion[0])
                         {
-                            mnGeneratorVersion = SvXMLImport::LO_6x; // 6.0/6.1/6.2
+                            mnGeneratorVersion = SvXMLImport::LO_7x;
                         }
                         else
                         {
-                            mnGeneratorVersion = SvXMLImport::LO_63x; // 6.3/6.4
+                            SAL_INFO("xmloff.core", "unknown LO version: " << loVersion);
                         }
                     }
-                    else if ('7' == loVersion[0])
+                    else if (1 < firstDot) // new version scheme 24.2 ...
                     {
-                        mnGeneratorVersion = SvXMLImport::LO_7x;
+                        OUString const nMajor(loVersion.subView(0, firstDot));
+                        auto const year(nMajor.toInt32());
+                        //auto const month(loVersion.copy(firstDot+1).toInt32());
+                        if (0 < year)
+                        {
+                            mnGeneratorVersion = SvXMLImport::LO_New;
+                        }
+                        else
+                        {
+                            SAL_INFO("xmloff.core", "unknown LO version: " << loVersion);
+                        }
                     }
                     else
                     {
