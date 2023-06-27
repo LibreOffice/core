@@ -273,11 +273,11 @@ void SvXMLMetaDocumentContext::setBuildId(OUString const& i_rBuildId, const uno:
         assert(firstSlash != -1);
         for (sal_Int32 i = firstSlash + 1; i < i_rBuildId.getLength(); ++i)
         {
-            if (rtl::isAsciiDigit(i_rBuildId[i]))
+            if (rtl::isAsciiDigit(i_rBuildId[i]) || '.' == i_rBuildId[i])
             {
                 sNumber.append(i_rBuildId[i]);
             }
-            else if ('.' != i_rBuildId[i])
+            else
             {
                 break;
             }
