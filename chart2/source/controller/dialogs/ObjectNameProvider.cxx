@@ -597,33 +597,41 @@ OUString ObjectNameProvider::getHelpText( std::u16string_view rObjectCID, const 
                             if ( !(xEqProp->getPropertyValue( "YName") >>= aYName) )
                                 aYName = "f(x)";
                         }
-                        xCalculator->setRegressionProperties(aDegree, bForceIntercept, aInterceptValue, 2, aMovingType);
+                        xCalculator->setRegressionProperties(aDegree, bForceIntercept, aInterceptValue, aPeriod, aMovingType);
                         xCalculator->setXYNames ( aXName, aYName );
                         RegressionCurveHelper::initializeCurveCalculator( xCalculator, xSeries, xChartModel );
 
-                        // replace formula
-                        OUString aWildcard = "%FORMULA";
-                        sal_Int32 nIndex = aRet.indexOf( aWildcard );
-                        if( nIndex != -1 )
+                        // change text for Moving Average
+                        if ( RegressionCurveHelper::getRegressionType( xCurve ) == SvxChartRegress::MovingAverage )
                         {
-                            OUString aFormula ( xCalculator->getRepresentation() );
-                            if ( cDecSeparator != '.' )
-                            {
-                                aFormula = aFormula.replace( '.', cDecSeparator );
-                            }
-                            aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), aFormula );
+                            aRet = xCalculator->getRepresentation();
                         }
-
-                        // replace r^2
-                        aWildcard = "%RSQUARED";
-                        nIndex = aRet.indexOf( aWildcard );
-                        if( nIndex != -1 )
+                        else
                         {
-                            double fR( xCalculator->getCorrelationCoefficient());
-                            aRet = aRet.replaceAt(
-                                nIndex, aWildcard.getLength(),
-                                ::rtl::math::doubleToUString(
-                                    fR*fR, rtl_math_StringFormat_G, 4, cDecSeparator, true ));
+                            // replace formula
+                            OUString aWildcard = "%FORMULA";
+                            sal_Int32 nIndex = aRet.indexOf( aWildcard );
+                            if( nIndex != -1 )
+                            {
+                                OUString aFormula ( xCalculator->getRepresentation() );
+                                if ( cDecSeparator != '.' )
+                                {
+                                    aFormula = aFormula.replace( '.', cDecSeparator );
+                                }
+                                aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), aFormula );
+                            }
+
+                            // replace r^2
+                            aWildcard = "%RSQUARED";
+                            nIndex = aRet.indexOf( aWildcard );
+                            if( nIndex != -1 )
+                            {
+                                double fR( xCalculator->getCorrelationCoefficient());
+                                aRet = aRet.replaceAt(
+                                    nIndex, aWildcard.getLength(),
+                                    ::rtl::math::doubleToUString(
+                                        fR*fR, rtl_math_StringFormat_G, 4, cDecSeparator, true ));
+                            }
                         }
                     }
                     catch( const uno::Exception & )
