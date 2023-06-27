@@ -404,7 +404,7 @@ public class _XSimpleFileAccess extends MultiMethodTest {
     * existence, second file <b>I_do_not_exists.txt</b> is checked
     * for existence. <p>
     * Has <b> OK </b> status if in the first case method returns
-    * <code>true</code> and in the second - <code>flase</code>
+    * <code>true</code> and in the second - <code>false</code>
     * and no exceptions were thrown. <p>
     */
     public void _exists() {
