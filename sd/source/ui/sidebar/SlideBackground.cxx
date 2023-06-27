@@ -1133,7 +1133,8 @@ IMPL_LINK_NOARG(SlideBackground, FillColorHdl, ColorListBox&, void)
         break;
         case drawing::FillStyle_GRADIENT:
         {
-            basegfx::BGradient aGradient(createColorStops());
+            basegfx::BGradient aGradient = GetGradientSetOrDefault();
+            aGradient.SetColorStops(createColorStops());
 
             // the name doesn't really matter, it'll be converted to unique one eventually,
             // but it has to be non-empty
