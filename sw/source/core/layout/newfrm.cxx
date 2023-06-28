@@ -507,6 +507,10 @@ void SwRootFrame::Init( SwFrameFormat* pFormat )
     SwNodeIndex aTmp( *pDoc->GetNodes().GetEndOfContent().StartOfSectionNode(), 1 );
     ::InsertCnt_( pLay, pDoc, aTmp.GetIndex(), true );
 
+    // tdf#156077 create all pages for at-page anchored flys now because all
+    // these flys must be attached to some page when Init() is finished
+    AssertFlyPages();
+
     if( rSettingAccess.get(DocumentSettingId::GLOBAL_DOCUMENT) )
         rFieldsAccess.UpdateRefFields();
     //b6433357: Update page fields after loading
