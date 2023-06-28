@@ -44,6 +44,17 @@
 #include <unordered_map>
 #include <vector>
 
+#define TAB_OFFSET          3
+/// Space to the left and right of the tabitem
+#define TAB_ITEM_OFFSET_X     3
+/// Space to the top and bottom of the tabitem
+#define TAB_ITEM_OFFSET_Y     3
+#define TAB_EXTRASPACE_X    6
+#define TAB_BORDER_LEFT     1
+#define TAB_BORDER_TOP      1
+#define TAB_BORDER_RIGHT    2
+#define TAB_BORDER_BOTTOM   2
+
 class ImplTabItem final
 {
     sal_uInt16 m_nId;
@@ -239,14 +250,14 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, tools::Long nMaxWidth )
     if( aImageSize.Height() > aSize.Height() )
         aSize.setHeight( aImageSize.Height() );
 
-    aSize.AdjustWidth(TAB_TABOFFSET_X*2 );
-    aSize.AdjustHeight(TAB_TABOFFSET_Y*2 );
+    aSize.AdjustWidth(TAB_ITEM_OFFSET_X*2 );
+    aSize.AdjustHeight(TAB_ITEM_OFFSET_Y*2 );
 
     tools::Rectangle aCtrlRegion( Point( 0, 0 ), aSize );
     tools::Rectangle aBoundingRgn, aContentRgn;
-    const TabitemValue aControlValue(tools::Rectangle(TAB_TABOFFSET_X, TAB_TABOFFSET_Y,
-                                               aSize.Width() - TAB_TABOFFSET_X * 2,
-                                               aSize.Height() - TAB_TABOFFSET_Y * 2));
+    const TabitemValue aControlValue(tools::Rectangle(TAB_ITEM_OFFSET_X, TAB_ITEM_OFFSET_Y,
+                                               aSize.Width() - TAB_ITEM_OFFSET_X * 2,
+                                               aSize.Height() - TAB_ITEM_OFFSET_Y * 2));
     if(GetNativeControlRegion( ControlType::TabItem, ControlPart::Entire, aCtrlRegion,
                                            ControlState::ENABLED, aControlValue,
                                            aBoundingRgn, aContentRgn ) )
@@ -270,7 +281,7 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, tools::Long nMaxWidth )
                 pItem->maFormatText = pItem->maFormatText.replaceAt( pItem->maFormatText.getLength()-aAppendStr.getLength()-1, 1, u"" );
             aSize.setWidth( GetOutDev()->GetCtrlTextWidth( pItem->maFormatText ) );
             aSize.AdjustWidth(aImageSize.Width() );
-            aSize.AdjustWidth(TAB_TABOFFSET_X*2 );
+            aSize.AdjustWidth(TAB_ITEM_OFFSET_X*2 );
         }
         while ( (aSize.Width()+4 >= nMaxWidth) && (pItem->maFormatText.getLength() > aAppendStr.getLength()) );
         if ( aSize.Width()+4 >= nMaxWidth )
@@ -879,10 +890,10 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem co
     bNativeOK = rRenderContext.IsNativeControlSupported(ControlType::TabItem, ControlPart::Entire);
     if ( bNativeOK )
     {
-        TabitemValue tiValue(tools::Rectangle(pItem->maRect.Left() + TAB_TABOFFSET_X,
-                                       pItem->maRect.Top() + TAB_TABOFFSET_Y,
-                                       pItem->maRect.Right() - TAB_TABOFFSET_X,
-                                       pItem->maRect.Bottom() - TAB_TABOFFSET_Y));
+        TabitemValue tiValue(tools::Rectangle(pItem->maRect.Left() + TAB_ITEM_OFFSET_X,
+                                       pItem->maRect.Top() + TAB_ITEM_OFFSET_Y,
+                                       pItem->maRect.Right() - TAB_ITEM_OFFSET_X,
+                                       pItem->maRect.Bottom() - TAB_ITEM_OFFSET_Y));
         if (pItem->maRect.Left() < 5)
             tiValue.mnAlignment |= TabitemFlags::LeftAligned;
         if (pItem->maRect.Right() > mnLastWidth - 5)
