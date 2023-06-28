@@ -32,6 +32,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
+#include <com/sun/star/util/SearchFlags.hpp>
 
 #include <i18nutil/searchopt.hxx>
 #include <comphelper/processfactory.hxx>
@@ -487,8 +488,7 @@ void SwMacrosTest::testFindReplace()
 
     bool bCancel(false);
     i18nutil::SearchOptions2 opts(
-            util::SearchAlgorithms_REGEXP,
-            65536,
+            css::util::SearchFlags::LEV_RELAXED,
             "$",
             "",
             lang::Locale("en", "US", ""),

@@ -209,13 +209,6 @@ public:
 
     /* replace back references in the replace string by the sub expressions from the search result */
     void ReplaceBackReferences( OUString& rReplaceStr, std::u16string_view rStr, const css::util::SearchResult& rResult ) const;
-
-    /** Upgrade SearchOptions to SearchOptions2 for places that don't handle
-        SearchOptions2 yet. Better fix your module if you want to support
-        wildcard search.
-     */
-    static i18nutil::SearchOptions2 UpgradeToSearchOptions2( const i18nutil::SearchOptions& rOptions );
-
 };
 
 }   // namespace utl

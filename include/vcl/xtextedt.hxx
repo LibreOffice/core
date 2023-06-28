@@ -22,7 +22,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/texteng.hxx>
 
-namespace i18nutil { struct SearchOptions; }
+namespace i18nutil { struct SearchOptions2; }
 
 class VCL_DLLPUBLIC ExtTextEngine final : public TextEngine
 {
@@ -31,7 +31,7 @@ public:
                         virtual ~ExtTextEngine() override;
 
     TextSelection       MatchGroup( const TextPaM& rCursor ) const;
-    bool                Search( TextSelection& rSel, const i18nutil::SearchOptions& rSearchOptions, bool bForward = true ) const;
+    bool                Search( TextSelection& rSel, const i18nutil::SearchOptions2& rSearchOptions, bool bForward = true ) const;
 };
 
 #endif // INCLUDED_VCL_XTEXTEDT_HXX

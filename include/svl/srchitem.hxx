@@ -239,20 +239,11 @@ bool SvxSearchItem::GetSelection() const
 
 bool SvxSearchItem::GetRegExp() const
 {
-    // Ensure old and new algorithm types are in sync until all places are
-    // adapted to use only new types.
-    assert( (m_aSearchOpt.algorithmType == css::util::SearchAlgorithms_REGEXP) ==
-            (m_aSearchOpt.AlgorithmType2 == css::util::SearchAlgorithms2::REGEXP));
     return m_aSearchOpt.AlgorithmType2 == css::util::SearchAlgorithms2::REGEXP ;
 }
 
 bool SvxSearchItem::GetWildcard() const
 {
-    // Ensure old and new algorithm types are in sync, in this case old is not
-    // REGEXP or APPROXIMATE.
-    assert( m_aSearchOpt.AlgorithmType2 != css::util::SearchAlgorithms2::WILDCARD ||
-            (m_aSearchOpt.algorithmType != css::util::SearchAlgorithms_REGEXP &&
-             m_aSearchOpt.algorithmType != css::util::SearchAlgorithms_APPROXIMATE) );
     return m_aSearchOpt.AlgorithmType2 == css::util::SearchAlgorithms2::WILDCARD ;
 }
 
@@ -293,10 +284,6 @@ void SvxSearchItem::SetLEVLonger( sal_uInt16 nVal )
 
 bool SvxSearchItem::IsLevenshtein() const
 {
-    // Ensure old and new algorithm types are in sync until all places are
-    // adapted to use only new types.
-    assert( (m_aSearchOpt.algorithmType == css::util::SearchAlgorithms_APPROXIMATE) ==
-            (m_aSearchOpt.AlgorithmType2 == css::util::SearchAlgorithms2::APPROXIMATE));
     return m_aSearchOpt.AlgorithmType2 == css::util::SearchAlgorithms2::APPROXIMATE;
 }
 

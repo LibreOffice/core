@@ -498,7 +498,6 @@ static void lcl_SelectSameStrings(SwWrtShell& rSh, bool bWordOnly, bool bCaseSen
     rSh.Push();
 
     i18nutil::SearchOptions2 aSearchOpt(
-                        SearchAlgorithms_ABSOLUTE,
                         ( bWordOnly ? SearchFlags::NORM_WORD_ONLY : 0 ),
                         rSh.GetSelText(), OUString(),
                         GetAppLanguageTag().getLocale(),

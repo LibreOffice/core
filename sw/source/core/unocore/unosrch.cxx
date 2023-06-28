@@ -569,7 +569,6 @@ void SwXTextSearch::FillSearchOptions( i18nutil::SearchOptions2& rSearchOpt ) co
 {
     if( m_bSimilarity )
     {
-        rSearchOpt.algorithmType = util::SearchAlgorithms_APPROXIMATE;
         rSearchOpt.AlgorithmType2 = util::SearchAlgorithms2::APPROXIMATE;
         rSearchOpt.changedChars = m_nLevExchange;
         rSearchOpt.deletedChars = m_nLevRemove;
@@ -579,12 +578,10 @@ void SwXTextSearch::FillSearchOptions( i18nutil::SearchOptions2& rSearchOpt ) co
     }
     else if( m_bExpr )
     {
-        rSearchOpt.algorithmType = util::SearchAlgorithms_REGEXP;
         rSearchOpt.AlgorithmType2 = util::SearchAlgorithms2::REGEXP;
     }
     else
     {
-        rSearchOpt.algorithmType = util::SearchAlgorithms_ABSOLUTE;
         rSearchOpt.AlgorithmType2 = util::SearchAlgorithms2::ABSOLUTE;
     }
 

@@ -306,7 +306,6 @@ void SwEditShell::ApplyAutoMark()
         sal_Int32 const nLEV_Shorter  = 1;    //! -> insertedChars;
 
         i18nutil::SearchOptions2 aSearchOpt(
-                            SearchAlgorithms_ABSOLUTE,
                             SearchFlags::LEV_RELAXED,
                             "", "",
                             SvtSysLocale().GetLanguageTag().getLocale(),

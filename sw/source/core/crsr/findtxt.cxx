@@ -803,7 +803,7 @@ bool DoSearch(SwPaM & rSearchPam,
                 {
                     const lang::Locale aLocale(
                             g_pBreakIt->GetLocale( eCurrLang ) );
-                    rSText.SetLocale( utl::TextSearch::UpgradeToSearchOptions2( rSearchOpt), aLocale );
+                    rSText.SetLocale(rSearchOpt, aLocale);
                     eLastLang = eCurrLang;
                 }
             }
@@ -924,7 +924,7 @@ struct SwFindParaText : public SwFindParas
         : m_rSearchOpt( rOpt )
         , m_rCursor( rCursor )
         , m_pLayout(pLayout)
-        , m_aSText( utl::TextSearch::UpgradeToSearchOptions2(rOpt) )
+        , m_aSText(rOpt)
         , m_bReplace( bRepl )
         , m_bSearchInNotes( bSearchInNotes )
     {}
@@ -1127,7 +1127,7 @@ std::optional<OUString> ReplaceBackReferences(const i18nutil::SearchOptions2& rS
                 ? sw::FrameContainsNode(*pFrame, pPam->GetMark()->GetNodeIndex())
                 : pTextNode == pMarkTextNode))
         {
-            utl::TextSearch aSText( utl::TextSearch::UpgradeToSearchOptions2( rSearchOpt) );
+            utl::TextSearch aSText(rSearchOpt);
             SearchResult aResult;
             OUString aReplaceStr( rSearchOpt.replaceString );
             if (bParaEnd)

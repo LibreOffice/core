@@ -75,7 +75,6 @@ static bool lcl_Equals( const i18nutil::SearchOptions2& rSO1, const i18nutil::Se
     return
         rSO1.AlgorithmType2 == rSO2.AlgorithmType2 &&
         rSO1.WildcardEscapeCharacter == rSO2.WildcardEscapeCharacter &&
-        rSO1.algorithmType == rSO2.algorithmType &&
         rSO1.searchFlag == rSO2.searchFlag &&
         rSO1.searchString == rSO2.searchString &&
         rSO1.replaceString == rSO2.replaceString &&
@@ -134,41 +133,6 @@ TextSearch::TextSearch( const i18nutil::SearchOptions2& rPara )
     xTextSearch = getXTextSearch( rPara );
 }
 
-i18nutil::SearchOptions2 TextSearch::UpgradeToSearchOptions2( const i18nutil::SearchOptions& rOptions )
-{
-    sal_Int16 nAlgorithmType2;
-    switch (rOptions.algorithmType)
-    {
-        case SearchAlgorithms_REGEXP:
-            nAlgorithmType2 = SearchAlgorithms2::REGEXP;
-            break;
-        case SearchAlgorithms_APPROXIMATE:
-            nAlgorithmType2 = SearchAlgorithms2::APPROXIMATE;
-            break;
-        case SearchAlgorithms_ABSOLUTE:
-            nAlgorithmType2 = SearchAlgorithms2::ABSOLUTE;
-            break;
-        default:
-            for (;;) std::abort();
-    }
-    // It would be nice if an inherited struct had a ctor that takes an
-    // instance of the object the struct derived from...
-    i18nutil::SearchOptions2 aOptions2(
-            rOptions.algorithmType,
-            rOptions.searchFlag,
-            rOptions.searchString,
-            rOptions.replaceString,
-            rOptions.Locale,
-            rOptions.changedChars,
-            rOptions.deletedChars,
-            rOptions.insertedChars,
-            rOptions.transliterateFlags,
-            nAlgorithmType2,
-            0       // no wildcard search, no escape character...
-            );
-    return aOptions2;
-}
-
 void TextSearch::Init( const SearchParam & rParam,
                         const css::lang::Locale& rLocale )
 {
@@ -179,7 +143,6 @@ void TextSearch::Init( const SearchParam & rParam,
     {
     case SearchParam::SearchType::Wildcard:
         aSOpt.AlgorithmType2 = SearchAlgorithms2::WILDCARD;
-        aSOpt.algorithmType = SearchAlgorithms::SearchAlgorithms_MAKE_FIXED_SIZE;    // no old enum for that
         aSOpt.WildcardEscapeCharacter = rParam.GetWildEscChar();
         if (rParam.IsWildMatchSel())
             aSOpt.searchFlag |= SearchFlags::WILD_MATCH_SELECTION;
@@ -187,12 +150,10 @@ void TextSearch::Init( const SearchParam & rParam,
 
     case SearchParam::SearchType::Regexp:
         aSOpt.AlgorithmType2 = SearchAlgorithms2::REGEXP;
-        aSOpt.algorithmType = SearchAlgorithms_REGEXP;
         break;
 
     case SearchParam::SearchType::Normal:
         aSOpt.AlgorithmType2 = SearchAlgorithms2::ABSOLUTE;
-        aSOpt.algorithmType = SearchAlgorithms_ABSOLUTE;
         break;
 
     default:

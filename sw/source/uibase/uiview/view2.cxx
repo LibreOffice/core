@@ -2611,7 +2611,7 @@ bool SwView::JumpToSwMark( std::u16string_view rMark )
                 m_pWrtShell->EnterStdMode();
 
                 i18nutil::SearchOptions2 aSearchOpt(
-                                    SearchAlgorithms_ABSOLUTE, 0,
+                                    0,
                                     sName, OUString(),
                                     SvtSysLocale().GetLanguageTag().getLocale(),
                                     0,0,0,

@@ -41,7 +41,7 @@ namespace com::sun::star::datatransfer::clipboard {
     class XClipboard;
 }
 namespace i18nutil {
-    struct SearchOptions;
+    struct SearchOptions2;
 }
 
 
@@ -217,8 +217,8 @@ public:
     // tdf#49482: Moves the start of the PaM to the center of the textview
     void                CenterPaM( const TextPaM& rPaM );
 
-    bool                Search( const i18nutil::SearchOptions& rSearchOptions, bool bForward );
-    sal_uInt16          Replace( const i18nutil::SearchOptions& rSearchOptions, bool bAll, bool bForward );
+    bool                Search( const i18nutil::SearchOptions2& rSearchOptions, bool bForward );
+    sal_uInt16          Replace( const i18nutil::SearchOptions2& rSearchOptions, bool bAll, bool bForward );
 
     bool                IndentBlock();
     bool                UnindentBlock();

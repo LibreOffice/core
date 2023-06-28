@@ -100,8 +100,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
     SfxPoolItem( nId ),
     ConfigItem( CFG_ROOT_NODE ),
 
-    m_aSearchOpt      ( SearchAlgorithms_ABSOLUTE,
-                        SearchFlags::LEV_RELAXED,
+    m_aSearchOpt      ( SearchFlags::LEV_RELAXED,
                         OUString(),
                         OUString(),
                         lang::Locale(),
@@ -135,17 +134,14 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
     if (aOpt.IsUseWildcard())
     {
         m_aSearchOpt.AlgorithmType2 = SearchAlgorithms2::WILDCARD;
-        m_aSearchOpt.algorithmType = SearchAlgorithms_ABSOLUTE; // something valid
     }
     if (aOpt.IsUseRegularExpression())
     {
         m_aSearchOpt.AlgorithmType2 = SearchAlgorithms2::REGEXP;
-        m_aSearchOpt.algorithmType = SearchAlgorithms_REGEXP;
     }
     if (aOpt.IsSimilaritySearch())
     {
         m_aSearchOpt.AlgorithmType2 = SearchAlgorithms2::APPROXIMATE;
-        m_aSearchOpt.algorithmType = SearchAlgorithms_APPROXIMATE;
     }
     if (aOpt.IsWholeWordsOnly())
         m_aSearchOpt.searchFlag |= SearchFlags::NORM_WORD_ONLY;
@@ -238,8 +234,7 @@ SvxSearchItem* SvxSearchItem::Clone( SfxItemPool *) const
 static bool equalsWithoutLocaleOrReplace(const i18nutil::SearchOptions2& rItem1,
                                          const i18nutil::SearchOptions2& rItem2)
 {
-    return rItem1.algorithmType         == rItem2.algorithmType &&
-           rItem1.searchFlag            == rItem2.searchFlag    &&
+    return rItem1.searchFlag            == rItem2.searchFlag    &&
            rItem1.searchString          == rItem2.searchString  &&
            //rItem1.replaceString       == rItem2.replaceString &&
            //rItem1.Locale              == rItem2.Locale        &&
@@ -353,12 +348,10 @@ void SvxSearchItem::SetRegExp( bool bVal )
     if ( bVal )
     {
         m_aSearchOpt.AlgorithmType2 = SearchAlgorithms2::REGEXP;
-        m_aSearchOpt.algorithmType = SearchAlgorithms_REGEXP;
     }
     else if ( SearchAlgorithms2::REGEXP == m_aSearchOpt.AlgorithmType2 )
     {
         m_aSearchOpt.AlgorithmType2 = SearchAlgorithms2::ABSOLUTE;
-        m_aSearchOpt.algorithmType = SearchAlgorithms_ABSOLUTE;
     }
 }
 
@@ -368,12 +361,10 @@ void SvxSearchItem::SetWildcard( bool bVal )
     if ( bVal )
     {
         m_aSearchOpt.AlgorithmType2 = SearchAlgorithms2::WILDCARD;
-        m_aSearchOpt.algorithmType = SearchAlgorithms_ABSOLUTE; // something valid
     }
     else if ( SearchAlgorithms2::REGEXP == m_aSearchOpt.AlgorithmType2 )
     {
         m_aSearchOpt.AlgorithmType2 = SearchAlgorithms2::ABSOLUTE;
-        m_aSearchOpt.algorithmType = SearchAlgorithms_ABSOLUTE;
     }
 }
 
@@ -392,12 +383,10 @@ void SvxSearchItem::SetLevenshtein( bool bVal )
     if ( bVal )
     {
         m_aSearchOpt.AlgorithmType2 = SearchAlgorithms2::APPROXIMATE;
-        m_aSearchOpt.algorithmType = SearchAlgorithms_APPROXIMATE;
     }
     else if ( SearchAlgorithms2::APPROXIMATE == m_aSearchOpt.AlgorithmType2 )
     {
         m_aSearchOpt.AlgorithmType2 = SearchAlgorithms2::ABSOLUTE;
-        m_aSearchOpt.algorithmType = SearchAlgorithms_ABSOLUTE;
     }
 }
 
@@ -460,7 +449,7 @@ bool SvxSearchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_SEARCH_ASIANOPTIONS:
             rVal <<= m_bAsianOptions; break;
         case MID_SEARCH_ALGORITHMTYPE:
-            rVal <<= static_cast<sal_Int16>(m_aSearchOpt.algorithmType); break;
+            rVal <<= static_cast<sal_Int16>(i18nutil::downgradeSearchAlgorithms2(m_aSearchOpt.AlgorithmType2)); break;
         case MID_SEARCH_ALGORITHMTYPE2:
             rVal <<= m_aSearchOpt.AlgorithmType2; break;
         case MID_SEARCH_FLAGS:
@@ -626,9 +615,15 @@ bool SvxSearchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_SEARCH_ASIANOPTIONS:
             bRet = (rVal >>= m_bAsianOptions); break;
         case MID_SEARCH_ALGORITHMTYPE:
-            bRet = (rVal >>= nInt); m_aSearchOpt.algorithmType = static_cast<SearchAlgorithms>(static_cast<sal_Int16>(nInt)); break;
+            bRet = (rVal >>= nInt);
+            if (bRet)
+                m_aSearchOpt.AlgorithmType2 = i18nutil::upgradeSearchAlgorithms(static_cast<SearchAlgorithms>(static_cast<sal_Int16>(nInt)));
+            break;
         case MID_SEARCH_ALGORITHMTYPE2:
-            bRet = (rVal >>= nInt); m_aSearchOpt.AlgorithmType2 = static_cast<sal_Int16>(nInt); break;
+            bRet = (rVal >>= nInt);
+            if (bRet)
+                m_aSearchOpt.AlgorithmType2 = static_cast<sal_Int16>(nInt);
+            break;
         case MID_SEARCH_FLAGS:
             bRet = (rVal >>= m_aSearchOpt.searchFlag); break;
         case MID_SEARCH_SEARCHSTRING:

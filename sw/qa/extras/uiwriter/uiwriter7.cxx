@@ -683,7 +683,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testSearchWithTransliterate)
         pDoc->getIDocumentContentOperations().InsertString(aPaM, "This is Other PARAGRAPH");
     }
     i18nutil::SearchOptions2 SearchOpt;
-    SearchOpt.algorithmType = css::util::SearchAlgorithms_ABSOLUTE;
     SearchOpt.searchFlag = css::util::SearchFlags::ALL_IGNORE_CASE;
     SearchOpt.searchString = "other";
     SearchOpt.replaceString.clear();
@@ -727,8 +726,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf73660)
     pWrtShell->Insert("Now we have enough text let's test search for all the cases");
     //searching for all 5 strings entered with soft-hyphen, search string contains no soft-hyphen
     i18nutil::SearchOptions2 searchOpt;
-    searchOpt.algorithmType = css::util::SearchAlgorithms_REGEXP;
     searchOpt.searchFlag = css::util::SearchFlags::NORM_WORD_ONLY;
+    searchOpt.AlgorithmType2 = css::util::SearchAlgorithms2::REGEXP;
     //case 1
     searchOpt.searchString = "First";
     CPPUNIT_ASSERT_EQUAL(

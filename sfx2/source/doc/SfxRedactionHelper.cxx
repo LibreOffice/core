@@ -532,12 +532,10 @@ void SfxRedactionHelper::fillSearchOptions(i18nutil::SearchOptions2& rSearchOpt,
     if (rTarget.sType == RedactionTargetType::REDACTION_TARGET_REGEX
         || rTarget.sType == RedactionTargetType::REDACTION_TARGET_PREDEFINED)
     {
-        rSearchOpt.algorithmType = util::SearchAlgorithms_REGEXP;
         rSearchOpt.AlgorithmType2 = util::SearchAlgorithms2::REGEXP;
     }
     else
     {
-        rSearchOpt.algorithmType = util::SearchAlgorithms_ABSOLUTE;
         rSearchOpt.AlgorithmType2 = util::SearchAlgorithms2::ABSOLUTE;
     }
 

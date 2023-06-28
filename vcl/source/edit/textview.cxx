@@ -2071,7 +2071,7 @@ void TextView::CenterPaM( const TextPaM& rPaM )
     Scroll(0, (nVisStartY + nVisEndY) / 2 - aRect.TopLeft().getY());
 }
 
-bool TextView::Search( const i18nutil::SearchOptions& rSearchOptions, bool bForward )
+bool TextView::Search( const i18nutil::SearchOptions2& rSearchOptions, bool bForward )
 {
     bool bFound = false;
     TextSelection aSel( GetSelection() );
@@ -2099,7 +2099,7 @@ bool TextView::Search( const i18nutil::SearchOptions& rSearchOptions, bool bForw
     return bFound;
 }
 
-sal_uInt16 TextView::Replace( const i18nutil::SearchOptions& rSearchOptions, bool bAll, bool bForward )
+sal_uInt16 TextView::Replace( const i18nutil::SearchOptions2& rSearchOptions, bool bAll, bool bForward )
 {
     sal_uInt16 nFound = 0;
 
