@@ -2188,6 +2188,14 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
         }
         break;
 
+        case FN_STAT_ACCESSIBILITY_CHECK:
+        {
+            const SfxStringItem sDeckName(SID_SIDEBAR_DECK, "A11yCheckDeck");
+            GetViewFrame().GetDispatcher()->ExecuteList(SID_SIDEBAR_DECK, SfxCallMode::RECORD,
+                { &sDeckName });
+        }
+        break;
+
         case FN_STAT_BOOKMARK:
         if ( pArgs )
         {
