@@ -774,8 +774,7 @@ typedef enum
     LOK_CALLBACK_VALIDITY_INPUT_HELP = 51,
 
     /**
-     * This is currently Calc only. Indicates the document background
-     * color in the payload as a RGB hex string (RRGGBB).
+     * Indicates the document background color in the payload as a RGB hex string (RRGGBB).
      */
     LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR = 52,
 
