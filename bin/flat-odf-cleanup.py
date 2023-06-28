@@ -134,7 +134,7 @@ def remove_unused(root):
     # 3) unused list styles - keep referenced from still used paragraph styles
     usedliststyles = set()
     for style in root.findall(".//*[@{urn:oasis:names:tc:opendocument:xmlns:style:1.0}list-style-name]"):
-        usedliststyles.add(style.get("{urn:oasis:names:tc:opendocument:xmlns:style:1.0}list-style-name)"))
+        usedliststyles.add(style.get("{urn:oasis:names:tc:opendocument:xmlns:style:1.0}list-style-name"))
     for list_ in root.findall(".//{urn:oasis:names:tc:opendocument:xmlns:text:1.0}list[@{urn:oasis:names:tc:opendocument:xmlns:text:1.0}style-name]"):
         usedliststyles.add(list_.get("{urn:oasis:names:tc:opendocument:xmlns:text:1.0}style-name"))
     for listitem in root.findall(".//{urn:oasis:names:tc:opendocument:xmlns:text:1.0}list-item[@{urn:oasis:names:tc:opendocument:xmlns:text:1.0}style-override]"):
@@ -276,6 +276,17 @@ def remove_unused(root):
             if "{http://openoffice.org/2009/office}paragraph-rsid" in tp.attrib:
                 print("removing paragraph-rsid from " + style.get("{urn:oasis:names:tc:opendocument:xmlns:style:1.0}name"))
                 del tp.attrib["{http://openoffice.org/2009/office}paragraph-rsid"]
+
+    # 15) unused user field decls
+    useduserfields = set()
+    for field in root.findall(".//{urn:oasis:names:tc:opendocument:xmlns:text:1.0}user-field-get"):
+        useduserfields.add(field.get("{urn:oasis:names:tc:opendocument:xmlns:text:1.0}name"))
+    for field in root.findall(".//{urn:oasis:names:tc:opendocument:xmlns:text:1.0}user-field-input"):
+        useduserfields.add(field.get("{urn:oasis:names:tc:opendocument:xmlns:text:1.0}name"))
+    for field in root.findall(".//{urn:oasis:names:tc:opendocument:xmlns:text:1.0}user-field-decl"):
+        if not(field.get("{urn:oasis:names:tc:opendocument:xmlns:text:1.0}name") in useduserfields):
+            print("removing unused user-field-decl " + field.get("{urn:oasis:names:tc:opendocument:xmlns:text:1.0}name"))
+            root.find(".//{urn:oasis:names:tc:opendocument:xmlns:text:1.0}user-field-decls").remove(field)
 
     # remove office:settings
     settings = root.find(".//{urn:oasis:names:tc:opendocument:xmlns:office:1.0}settings")
