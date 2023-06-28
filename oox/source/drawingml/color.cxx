@@ -434,10 +434,18 @@ void Color::addChartTintTransformation( double fTint )
         maTransforms.emplace_back( XML_tint, MAX_PERCENT - nValue );
 }
 
-void Color::addExcelTintTransformation( double fTint )
+void Color::addExcelTintTransformation(double fTint)
 {
-    sal_Int32 nValue = getLimitedValue< sal_Int32, double >( fTint * MAX_PERCENT + 0.5, -MAX_PERCENT, MAX_PERCENT );
-    maTransforms.emplace_back( XLS_TOKEN( tint ), nValue );
+    sal_Int32 nValue = std::round(std::abs(fTint) * 100'000.0);
+    if (fTint > 0.0)
+    {
+        maTransforms.emplace_back(XML_lumMod, 100'000 - nValue);
+        maTransforms.emplace_back(XML_lumOff, nValue);
+    }
+    else if (fTint < 0.0)
+    {
+        maTransforms.emplace_back(XML_lumMod, 100'000 - nValue);
+    }
 }
 
 void Color::clearTransformations()
@@ -723,23 +731,6 @@ model::ComplexColor Color::getComplexColor() const
                         mnC3 = static_cast< sal_Int32 >( MAX_PERCENT - (MAX_PERCENT - mnC3) * fFactor );
                     }
                 break;
-                case XLS_TOKEN( tint ):
-                    // Excel tint: move luminance relative to current value
-                    toHsl();
-                    OSL_ENSURE( (-MAX_PERCENT <= transform.mnValue) && (transform.mnValue <= MAX_PERCENT), "Color::getColor - invalid tint value" );
-                    if( (-MAX_PERCENT <= transform.mnValue) && (transform.mnValue < 0) )
-                    {
-                        // negative: luminance towards 0% (black)
-                        lclModValue( mnC3, transform.mnValue + MAX_PERCENT );
-                    }
-                    else if( (0 < transform.mnValue) && (transform.mnValue <= MAX_PERCENT) )
-                    {
-                        // positive: luminance towards 100% (white)
-                        mnC3 = MAX_PERCENT - mnC3;
-                        lclModValue( mnC3, MAX_PERCENT - transform.mnValue );
-                        mnC3 = MAX_PERCENT - mnC3;
-                    }
-                break;
 
                 case XML_gray:
                     // change color to gray, weighted RGB: 22% red, 72% green, 6% blue
@@ -844,7 +835,7 @@ model::ComplexColor Color::createComplexColor(const GraphicHelper& /*rGraphicHel
     {
         sal_Int16 nValue = sal_Int16(aTransform.mnValue / 10);
 
-        switch(aTransform.mnToken)
+        switch (aTransform.mnToken)
         {
             case XML_lumMod:
                 if (nValue != 10'000)
