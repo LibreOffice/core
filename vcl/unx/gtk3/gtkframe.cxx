@@ -841,8 +841,7 @@ void GtkSalFrame::window_resize(tools::Long nWidth, tools::Long nHeight)
     }
     gtk_window_set_default_size(GTK_WINDOW(m_pWindow), nWidth, nHeight);
 #if !GTK_CHECK_VERSION(4,0,0)
-    if (gtk_widget_get_visible(m_pWindow))
-        gtk_window_resize(GTK_WINDOW(m_pWindow), nWidth, nHeight);
+    gtk_window_resize(GTK_WINDOW(m_pWindow), nWidth, nHeight);
 #endif
 }
 
