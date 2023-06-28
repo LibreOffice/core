@@ -159,6 +159,45 @@ void A11yCheckIssuesPanel::ImplDestroy()
 
 A11yCheckIssuesPanel::~A11yCheckIssuesPanel() { suppress_fun_call_w_exception(ImplDestroy()); }
 
+void A11yCheckIssuesPanel::removeOldWidgets()
+{
+    for (auto const& xEntry : m_aDocumentEntries)
+        m_xBoxDocument->move(xEntry->get_widget(), nullptr);
+    m_xExpanderDocument->set_visible(false);
+
+    for (auto const& xEntry : m_aStylesEntries)
+        m_xBoxStyles->move(xEntry->get_widget(), nullptr);
+    m_xExpanderStyles->set_visible(false);
+
+    for (auto const& xEntry : m_aNoAltEntries)
+        m_xBoxNoAlt->move(xEntry->get_widget(), nullptr);
+    m_xExpanderNoAlt->set_visible(false);
+
+    for (auto const& xEntry : m_aTableEntries)
+        m_xBoxTable->move(xEntry->get_widget(), nullptr);
+    m_xExpanderTable->set_visible(false);
+
+    for (auto const& xEntry : m_aFormattingEntries)
+        m_xBoxFormatting->move(xEntry->get_widget(), nullptr);
+    m_xExpanderFormatting->set_visible(false);
+
+    for (auto const& xEntry : m_aHyperlinkEntries)
+        m_xBoxHyperlink->move(xEntry->get_widget(), nullptr);
+    m_xExpanderHyperlink->set_visible(false);
+
+    for (auto const& xEntry : m_aFakesEntries)
+        m_xBoxFakes->move(xEntry->get_widget(), nullptr);
+    m_xExpanderFakes->set_visible(false);
+
+    for (auto const& xEntry : m_aNumberingEntries)
+        m_xBoxNumbering->move(xEntry->get_widget(), nullptr);
+    m_xExpanderNumbering->set_visible(false);
+
+    for (auto const& xEntry : m_aOtherEntries)
+        m_xBoxOther->move(xEntry->get_widget(), nullptr);
+    m_xExpanderOther->set_visible(false);
+}
+
 void A11yCheckIssuesPanel::populateIssues()
 {
     if (!mpDoc)
@@ -167,23 +206,7 @@ void A11yCheckIssuesPanel::populateIssues()
     aCheck.check();
     m_aIssueCollection = aCheck.getIssueCollection();
 
-    // Remove old issue widgets
-    for (auto const& xEntry : m_aDocumentEntries)
-        m_xBoxDocument->move(xEntry->get_widget(), nullptr);
-    for (auto const& xEntry : m_aStylesEntries)
-        m_xBoxStyles->move(xEntry->get_widget(), nullptr);
-    for (auto const& xEntry : m_aNoAltEntries)
-        m_xBoxNoAlt->move(xEntry->get_widget(), nullptr);
-    for (auto const& xEntry : m_aTableEntries)
-        m_xBoxTable->move(xEntry->get_widget(), nullptr);
-    for (auto const& xEntry : m_aFormattingEntries)
-        m_xBoxFormatting->move(xEntry->get_widget(), nullptr);
-    for (auto const& xEntry : m_aHyperlinkEntries)
-        m_xBoxHyperlink->move(xEntry->get_widget(), nullptr);
-    for (auto const& xEntry : m_aFakesEntries)
-        m_xBoxFakes->move(xEntry->get_widget(), nullptr);
-    for (auto const& xEntry : m_aNumberingEntries)
-        m_xBoxNumbering->move(xEntry->get_widget(), nullptr);
+    removeOldWidgets();
 
     sal_Int32 iDocument = 0;
     sal_Int32 iStyles = 0;
