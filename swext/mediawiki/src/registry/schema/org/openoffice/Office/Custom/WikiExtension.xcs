@@ -90,7 +90,7 @@
 				<info><desc>The general error shown in case the document could not be sent to the wiki server.</desc></info>
 			</prop>
             <prop oor:name="NoWikiFilter" oor:type="xs:string" oor:localized="true">
-				<info><desc>The error is shown in case wiki filter is not evailable.</desc></info>
+				<info><desc>The error is shown in case wiki filter is not available.</desc></info>
 			</prop>
             <prop oor:name="NoConnectionToURL" oor:type="xs:string" oor:localized="true">
 				<info><desc>The error is shown in case no wiki system was found on specified URL.</desc></info>
