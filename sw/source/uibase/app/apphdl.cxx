@@ -998,6 +998,8 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, Con
                     {
                         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_APPLICATION_BACKGROUND_COLOR,
                             aViewColors.m_aAppBackgroundColor.AsRGBHexString().toUtf8().getStr());
+                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR,
+                            aViewColors.m_aDocColor.AsRGBHexString().toUtf8().getStr());
                     }
                 }
             }
