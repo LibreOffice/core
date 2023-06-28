@@ -46,7 +46,7 @@
 
 #define TAB_OFFSET          3
 /// Space to the left and right of the tabitem
-#define TAB_ITEM_OFFSET_X     3
+#define TAB_ITEM_OFFSET_X     10
 /// Space to the top and bottom of the tabitem
 #define TAB_ITEM_OFFSET_Y     3
 #define TAB_EXTRASPACE_X    6
