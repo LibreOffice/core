@@ -28,7 +28,7 @@ namespace svgio::svgreader
 constexpr const std::u16string_view constToken_Title = u"title";
 constexpr const std::u16string_view constToken_Desc = u"desc";
 
-constexpr frozen::unordered_map<std::u16string_view, SVGToken, 143> aSVGTokenMapperList
+constexpr frozen::unordered_map<std::u16string_view, SVGToken, 144> aSVGTokenMapperList
 {
     { u"width", SVGToken::Width },
     { u"height", SVGToken::Height },
@@ -81,6 +81,7 @@ constexpr frozen::unordered_map<std::u16string_view, SVGToken, 143> aSVGTokenMap
     { u"clipPath", SVGToken::ClipPathNode },
     { u"clip-path", SVGToken::ClipPathProperty },
     { u"feColorMatrix", SVGToken::FeColorMatrix },
+    { u"feDropShadow", SVGToken::FeDropShadow },
     { u"feFlood", SVGToken::FeFlood },
     { u"feGaussianBlur", SVGToken::FeGaussianBlur },
     { u"feOffset", SVGToken::FeOffset },
