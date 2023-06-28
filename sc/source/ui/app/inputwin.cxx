@@ -1813,23 +1813,10 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
 
         sal_Int32 nParaStart, nParaEnd, nPosStart, nPosEnd;
 
-        ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-        if (pViewSh && pViewSh->isLOKMobilePhone())
-        {
-            // We use IME - do not select anything, put cursor at the end
-            nParaStart = nParaEnd = m_xEditView->GetEditEngine()->GetParagraphCount() ?
-                (m_xEditView->GetEditEngine()->GetParagraphCount() - 1) : 0;
-            nPosStart = nPosEnd = m_xEditView->GetEditEngine()->GetTextLen(nParaStart);
-        }
-        else
-        {
-            nParaStart = pParaPoint ? pParaPoint->X() : 0;
-            nParaEnd = pParaPoint ? pParaPoint->Y() : 0;
-            nPosStart = m_xEditView->GetPosNoField(nParaStart, aSelectionStartEnd.X());
-            nPosEnd = m_xEditView->GetPosNoField(nParaEnd, aSelectionStartEnd.Y());
-
-
-        }
+        nParaStart = pParaPoint ? pParaPoint->X() : 0;
+        nParaEnd = pParaPoint ? pParaPoint->Y() : 0;
+        nPosStart = m_xEditView->GetPosNoField(nParaStart, aSelectionStartEnd.X());
+        nPosEnd = m_xEditView->GetPosNoField(nParaEnd, aSelectionStartEnd.Y());
 
         m_xEditView->SetSelection(ESelection(nParaStart, nPosStart, nParaEnd, nPosEnd));
         SC_MOD()->InputSelection( m_xEditView.get() );
