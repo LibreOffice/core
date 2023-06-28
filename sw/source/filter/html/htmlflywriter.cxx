@@ -1228,6 +1228,34 @@ OUString lclWriteOutImap(SwHTMLWriter& rHTMLWrt, const SfxItemSet& rItemSet, con
     return aIMapName;
 }
 
+OUString getFrameFormatText(const SwFrameFormat& rFrameFormat)
+{
+    const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
+    const SwNodeIndex* pSttIx = rFlyContent.GetContentIdx();
+    if (!pSttIx)
+        return {};
+
+    const SwNodeOffset nStt = pSttIx->GetIndex();
+    const auto& nodes = rFrameFormat.GetDoc()->GetNodes();
+    const SwNodeOffset nEnd = nodes[nStt]->EndOfSectionIndex();
+
+    OUStringBuffer result;
+    for (SwNodeOffset i = nStt + 1; i < nEnd; ++i)
+    {
+        if (const auto* pTextNd = nodes[i]->GetTextNode())
+        {
+            if (!result.isEmpty())
+                result.append("\n");
+            result.append(pTextNd->GetExpandText(
+                nullptr, 0, -1, true, true, false,
+                ExpandMode::ExpandFields | ExpandMode::HideInvisible | ExpandMode::HideDeletions
+                | ExpandMode::HideFieldmarkCommands));
+        }
+    }
+
+    return result.makeStringAndClear();
+}
+
 }
 
 Writer& OutHTML_ImageStart( HtmlWriter& rHtml, Writer& rWrt, const SwFrameFormat &rFrameFormat,
@@ -1452,13 +1480,19 @@ Writer& OutHTML_ImageStart( HtmlWriter& rHtml, Writer& rWrt, const SwFrameFormat
 
     if (bReplacement)
     {
+        OUString aAltText = rAlternateText;
+        // In ReqIF mode, output text from the frame instead
+        if (rHTMLWrt.mbReqIF)
+            if (OUString aFrameText = getFrameFormatText(rFrameFormat); !aFrameText.isEmpty())
+                aAltText = aFrameText;
+
         // XHTML object replacement image's alternate text doesn't use the
         // "alt" attribute.
-        if (rAlternateText.isEmpty())
+        if (aAltText.isEmpty())
             // Empty alternate text is not valid.
             rHtml.characters(" ");
         else
-            rHtml.characters(rAlternateText.toUtf8());
+            rHtml.characters(aAltText.toUtf8());
     }
 
     return rHTMLWrt;
