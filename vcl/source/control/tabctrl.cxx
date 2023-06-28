@@ -90,8 +90,6 @@ ImplTabItem::ImplTabItem(sal_uInt16 nId)
 
 struct ImplTabCtrlData
 {
-    std::unordered_map< int, int >        maLayoutPageIdToLine;
-    std::unordered_map< int, int >        maLayoutLineToPageId;
     std::vector< ImplTabItem >      maItemList;
     VclPtr<ListBox>                 mpListBox;
 };
@@ -187,16 +185,6 @@ void TabControl::ImplInitSettings( bool bBackground )
     }
 }
 
-void TabControl::ImplFreeLayoutData()
-{
-    if( HasLayoutData() )
-    {
-        ImplClearLayoutData();
-        mpTabCtrlData->maLayoutPageIdToLine.clear();
-        mpTabCtrlData->maLayoutLineToPageId.clear();
-    }
-}
-
 TabControl::TabControl( vcl::Window* pParent, WinBits nStyle ) :
     Control( WindowType::TABCONTROL )
 {
@@ -214,8 +202,6 @@ void TabControl::dispose()
     Window *pParent = GetParent();
     if (pParent && pParent->IsDialog())
         GetParent()->RemoveChildEventListener( LINK( this, TabControl, ImplWindowEventListener ) );
-
-    ImplFreeLayoutData();
 
     // delete TabCtrl data
     if (mpTabCtrlData)
@@ -633,8 +619,6 @@ tools::Rectangle TabControl::ImplGetTabRect(const ImplTabItem* pItem, tools::Lon
 
 void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
 {
-    ImplFreeLayoutData();
-
     ImplTabItem*    pOldItem = ImplGetItem( nOldId );
     ImplTabItem*    pItem = ImplGetItem( nId );
     TabPage*        pOldPage = pOldItem ? pOldItem->mpTabPage.get() : nullptr;
@@ -1276,8 +1260,6 @@ void TabControl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectang
 
 void TabControl::setAllocation(const Size &rAllocation)
 {
-    ImplFreeLayoutData();
-
     if ( !IsReallyShown() )
         return;
 
@@ -1645,8 +1627,6 @@ bool TabControl::DeactivatePage()
 
 void TabControl::SetTabPageSizePixel( const Size& rSize )
 {
-    ImplFreeLayoutData();
-
     Size aNewSize( rSize );
     aNewSize.AdjustWidth(TAB_OFFSET*2 );
     tools::Rectangle aRect = ImplGetTabRect( TAB_PAGERECT,
@@ -1698,7 +1678,6 @@ void TabControl::InsertPage( sal_uInt16 nPageId, const OUString& rText,
     if ( IsUpdateMode() )
         Invalidate();
 
-    ImplFreeLayoutData();
     if( mpTabCtrlData->mpListBox ) // reposition/resize listbox
         Resize();
 
@@ -1745,8 +1724,6 @@ void TabControl::RemovePage( sal_uInt16 nPageId )
     mbFormat = true;
     if ( IsUpdateMode() )
         Invalidate();
-
-    ImplFreeLayoutData();
 
     CallEventListeners( VclEventId::TabpageRemoved, reinterpret_cast<void*>(nPageId) );
 }
@@ -1886,8 +1863,6 @@ void TabControl::SelectTabPage( sal_uInt16 nPageId )
     if ( !nPageId || (nPageId == mnCurPageId) )
         return;
 
-    ImplFreeLayoutData();
-
     CallEventListeners( VclEventId::TabpageDeactivate, reinterpret_cast<void*>(mnCurPageId) );
     if ( DeactivatePage() )
     {
@@ -1956,7 +1931,6 @@ void TabControl::SetPageText( sal_uInt16 nPageId, const OUString& rText )
     }
     if ( IsUpdateMode() )
         Invalidate();
-    ImplFreeLayoutData();
     CallEventListeners( VclEventId::TabpagePageTextChanged, reinterpret_cast<void*>(nPageId) );
 }
 
@@ -2046,65 +2020,6 @@ void TabControl::SetPageImage( sal_uInt16 i_nPageId, const Image& i_rImage )
         if ( IsUpdateMode() )
             Invalidate();
     }
-}
-
-tools::Rectangle TabControl::GetCharacterBounds( sal_uInt16 nPageId, tools::Long nIndex ) const
-{
-    tools::Rectangle aRet;
-
-    if( !HasLayoutData() || mpTabCtrlData->maLayoutPageIdToLine.empty() )
-        FillLayoutData();
-
-    if( HasLayoutData() )
-    {
-        std::unordered_map< int, int >::const_iterator it = mpTabCtrlData->maLayoutPageIdToLine.find( static_cast<int>(nPageId) );
-        if( it != mpTabCtrlData->maLayoutPageIdToLine.end() )
-        {
-            Pair aPair = mxLayoutData->GetLineStartEnd( it->second );
-            if( (aPair.B() - aPair.A()) >= nIndex )
-                aRet = mxLayoutData->GetCharacterBounds( aPair.A() + nIndex );
-        }
-    }
-
-    return aRet;
-}
-
-tools::Long TabControl::GetIndexForPoint( const Point& rPoint, sal_uInt16& rPageId ) const
-{
-    tools::Long nRet = -1;
-
-    if( !HasLayoutData() || mpTabCtrlData->maLayoutPageIdToLine.empty() )
-        FillLayoutData();
-
-    if( HasLayoutData() )
-    {
-        int nIndex = mxLayoutData->GetIndexForPoint( rPoint );
-        if( nIndex != -1 )
-        {
-            // what line (->pageid) is this index in ?
-            int nLines = mxLayoutData->GetLineCount();
-            int nLine = -1;
-            while( ++nLine < nLines )
-            {
-                Pair aPair = mxLayoutData->GetLineStartEnd( nLine );
-                if( aPair.A() <= nIndex && aPair.B() >= nIndex )
-                {
-                    nRet = nIndex - aPair.A();
-                    rPageId = static_cast<sal_uInt16>(mpTabCtrlData->maLayoutLineToPageId[ nLine ]);
-                    break;
-                }
-            }
-        }
-    }
-
-    return nRet;
-}
-
-void TabControl::FillLayoutData() const
-{
-    mpTabCtrlData->maLayoutLineToPageId.clear();
-    mpTabCtrlData->maLayoutPageIdToLine.clear();
-    const_cast<TabControl*>(this)->Invalidate();
 }
 
 tools::Rectangle TabControl::GetTabBounds( sal_uInt16 nPageId ) const

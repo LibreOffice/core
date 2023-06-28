@@ -69,7 +69,6 @@ protected:
     SAL_DLLPRIVATE void         ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem const * pItem,
                                              const tools::Rectangle& rCurRect, bool bFirstInGroup,
                                              bool bLastInGroup);
-    SAL_DLLPRIVATE void         ImplFreeLayoutData();
     SAL_DLLPRIVATE bool         ImplHandleKeyEvent( const KeyEvent& rKeyEvent );
 
     DECL_DLLPRIVATE_LINK( ImplListBoxSelectHdl, ListBox&, void );
@@ -78,7 +77,6 @@ protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void         ImplInit( vcl::Window* pParent, WinBits nStyle );
 
-    virtual void                FillLayoutData() const override;
     virtual const vcl::Font&    GetCanonicalFont( const StyleSettings& _rStyle ) const override;
     virtual const Color&        GetCanonicalTextColor( const StyleSettings& _rStyle ) const override;
     virtual bool                ImplPlaceTabs( tools::Long nWidth );
@@ -153,16 +151,6 @@ public:
 
     void                SetActivatePageHdl( const Link<TabControl*,void>& rLink ) { maActivateHdl = rLink; }
     void                SetDeactivatePageHdl( const Link<TabControl*, bool>& rLink ) { maDeactivateHdl = rLink; }
-
-    // returns (control relative) bounding rectangle for the
-    // character at index nIndex relative to the text of page nPageId
-    using Control::GetCharacterBounds;
-    tools::Rectangle GetCharacterBounds( sal_uInt16 nPageId, tools::Long nIndex ) const;
-
-    // returns the index relative to the text of page nPageId (also returned)
-    // at position rPoint (control relative)
-    using Control::GetIndexForPoint;
-    tools::Long GetIndexForPoint( const Point& rPoint, sal_uInt16& rPageId ) const;
 
     // returns the rectangle of the tab for page nPageId
     tools::Rectangle GetTabBounds( sal_uInt16 nPageId ) const;

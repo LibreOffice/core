@@ -586,7 +586,7 @@ awt::Rectangle VCLXAccessibleTabPage::getCharacterBounds( sal_Int32 nIndex )
     if ( m_pTabControl )
     {
         tools::Rectangle aPageRect = m_pTabControl->GetTabBounds( m_nPageId );
-        tools::Rectangle aCharRect = m_pTabControl->GetCharacterBounds( m_nPageId, nIndex );
+        tools::Rectangle aCharRect; // m_pTabControl->GetCharacterBounds( m_nPageId, nIndex );
         aCharRect.Move( -aPageRect.Left(), -aPageRect.Top() );
         aBounds = AWTRectangle( aCharRect );
     }
@@ -595,21 +595,21 @@ awt::Rectangle VCLXAccessibleTabPage::getCharacterBounds( sal_Int32 nIndex )
 }
 
 
-sal_Int32 VCLXAccessibleTabPage::getIndexAtPoint( const awt::Point& aPoint )
+sal_Int32 VCLXAccessibleTabPage::getIndexAtPoint( const awt::Point& /*aPoint*/ )
 {
     OExternalLockGuard aGuard( this );
 
     sal_Int32 nIndex = -1;
-    if ( m_pTabControl )
-    {
-        sal_uInt16 nPageId = 0;
-        tools::Rectangle aPageRect = m_pTabControl->GetTabBounds( m_nPageId );
-        Point aPnt( VCLPoint( aPoint ) );
-        aPnt += aPageRect.TopLeft();
-        sal_Int32 nI = m_pTabControl->GetIndexForPoint( aPnt, nPageId );
-        if ( nI != -1 && m_nPageId == nPageId )
-            nIndex = nI;
-    }
+//    if ( m_pTabControl )
+//    {
+//        sal_uInt16 nPageId = 0;
+//        tools::Rectangle aPageRect = m_pTabControl->GetTabBounds( m_nPageId );
+//        Point aPnt( VCLPoint( aPoint ) );
+//        aPnt += aPageRect.TopLeft();
+//        sal_Int32 nI = m_pTabControl->GetIndexForPoint( aPnt, nPageId );
+//        if ( nI != -1 && m_nPageId == nPageId )
+//            nIndex = nI;
+//    }
 
     return nIndex;
 }
