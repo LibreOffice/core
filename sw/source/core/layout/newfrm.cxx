@@ -502,6 +502,11 @@ void SwRootFrame::Init( SwFrameFormat* pFormat )
     ::InsertCnt_( pLay, pDoc, aTmp.GetIndex(), true );
     //Remove masters that haven't been replaced yet from the list.
     RemoveMasterObjs( mpDrawPage );
+
+    // tdf#156077 create all pages for at-page anchored flys now because all
+    // these flys must be attached to some page when Init() is finished
+    AssertFlyPages();
+
     if( rSettingAccess.get(DocumentSettingId::GLOBAL_DOCUMENT) )
         rFieldsAccess.UpdateRefFields();
     //b6433357: Update page fields after loading

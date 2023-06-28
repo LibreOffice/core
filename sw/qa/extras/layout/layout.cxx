@@ -108,6 +108,18 @@ void SwLayoutWriter::CheckRedlineFootnotesHidden()
     assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[2]/txt[1]/Text[1]", "Portion", "mo");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf156077)
+{
+    createDoc("s4_min2.fodt");
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of pages does not match!", 3, getPages());
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly", 3);
+    assertXPath(pXmlDoc, "/root/page[2]/anchored/fly", 1);
+    // this was 0, the at-page anchored flys were not displayed
+    assertXPath(pXmlDoc, "/root/page[3]/anchored/fly", 3);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFootnotes)
 {
     createDoc("redline_footnotes.odt");
