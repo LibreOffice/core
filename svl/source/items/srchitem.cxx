@@ -31,6 +31,8 @@
 #include <svl/memberid.h>
 #include <i18nlangtag/languagetag.hxx>
 
+#include <unordered_set>
+
 using namespace utl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
@@ -489,191 +491,157 @@ bool SvxSearchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 bool SvxSearchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
-    bool bRet = false;
-    sal_Int32 nInt = 0;
+    auto ExtractNumericAny = [](const css::uno::Any& a, auto& target)
+    {
+        sal_Int32 nInt;
+        if (!(a >>= nInt))
+            return false;
+        target = static_cast<std::remove_reference_t<decltype(target)>>(nInt);
+        return true;
+    };
     switch ( nMemberId )
     {
         case 0 :
         {
             Sequence< PropertyValue > aSeq;
-            if ( ( rVal >>= aSeq ) && ( aSeq.getLength() == SRCH_PARAMS ) )
+            if (!(rVal >>= aSeq) || aSeq.getLength() != SRCH_PARAMS)
+                break;
+            std::unordered_set<OUString> aConvertedParams;
+            for (const auto& rProp : aSeq)
             {
-                sal_Int16 nConvertedCount( 0 );
-                for ( const auto& rProp : std::as_const(aSeq) )
+                if (rProp.Name == SRCH_PARA_OPTIONS)
                 {
-                    if ( rProp.Name == SRCH_PARA_OPTIONS )
+                    if (css::util::SearchOptions2 nTmpSearchOpt2; rProp.Value >>= nTmpSearchOpt2)
                     {
-                        css::util::SearchOptions2 nTmpSearchOpt2;
-                        if ( rProp.Value >>= nTmpSearchOpt2 )
-                        {
-                            m_aSearchOpt = nTmpSearchOpt2;
-                            ++nConvertedCount;
-                        }
-                    }
-                    else if ( rProp.Name == SRCH_PARA_FAMILY )
-                    {
-                        sal_uInt16 nTemp( 0 );
-                        if ( rProp.Value >>= nTemp )
-                        {
-                            m_eFamily = SfxStyleFamily( nTemp );
-                            ++nConvertedCount;
-                        }
-                    }
-                    else if ( rProp.Name == SRCH_PARA_COMMAND )
-                    {
-                        sal_uInt16 nTmp;
-                        if ( rProp.Value >>= nTmp )
-                        {
-                            m_nCommand = static_cast<SvxSearchCmd>(nTmp);
-                            ++nConvertedCount;
-                        }
-                    }
-                    else if ( rProp.Name == SRCH_PARA_CELLTYPE )
-                    {
-                        sal_uInt16 nTmp;
-                        if ( rProp.Value >>= nTmp )
-                        {
-                            m_nCellType = static_cast<SvxSearchCellType>(nTmp);
-                            ++nConvertedCount;
-                        }
-                    }
-                    else if ( rProp.Name == SRCH_PARA_APPFLAG )
-                    {
-                        sal_uInt16 nTmp;
-                        if ( rProp.Value >>= nTmp )
-                        {
-                            m_nAppFlag = static_cast<SvxSearchApp>(nTmp);
-                            ++nConvertedCount;
-                        }
-                    }
-                    else if ( rProp.Name == SRCH_PARA_ROWDIR )
-                    {
-                        if ( rProp.Value >>= m_bRowDirection )
-                            ++nConvertedCount;
-                    }
-                    else if ( rProp.Name == SRCH_PARA_ALLTABLES )
-                    {
-                        if ( rProp.Value >>= m_bAllTables )
-                            ++nConvertedCount;
-                    }
-                    else if ( rProp.Name == SRCH_PARA_SEARCHFILTERED )
-                    {
-                        if ( rProp.Value >>= m_bSearchFiltered )
-                            ++nConvertedCount;
-                    }
-                    else if ( rProp.Name == SRCH_PARA_SEARCHFORMATTED )
-                    {
-                        if ( rProp.Value >>= m_bSearchFormatted )
-                            ++nConvertedCount;
-                    }
-                    else if ( rProp.Name == SRCH_PARA_BACKWARD )
-                    {
-                        if ( rProp.Value >>= m_bBackward )
-                            ++nConvertedCount;
-                    }
-                    else if ( rProp.Name == SRCH_PARA_PATTERN )
-                    {
-                        if ( rProp.Value >>= m_bPattern )
-                            ++nConvertedCount;
-                    }
-                    else if ( rProp.Name == SRCH_PARA_CONTENT )
-                    {
-                        if ( rProp.Value >>= m_bContent )
-                            ++nConvertedCount;
-                    }
-                    else if ( rProp.Name == SRCH_PARA_ASIANOPT )
-                    {
-                        if ( rProp.Value >>= m_bAsianOptions )
-                            ++nConvertedCount;
+                        m_aSearchOpt = nTmpSearchOpt2;
+                        aConvertedParams.insert(rProp.Name);
                     }
                 }
-
-                bRet = ( nConvertedCount == SRCH_PARAMS );
+                else if (rProp.Name == SRCH_PARA_FAMILY)
+                {
+                    if (SvxSearchItem::PutValue(rProp.Value, MID_SEARCH_STYLEFAMILY))
+                        aConvertedParams.insert(rProp.Name);
+                }
+                else if (rProp.Name == SRCH_PARA_COMMAND)
+                {
+                    if (SvxSearchItem::PutValue(rProp.Value, MID_SEARCH_COMMAND))
+                        aConvertedParams.insert(rProp.Name);
+                }
+                else if (rProp.Name == SRCH_PARA_CELLTYPE)
+                {
+                    if (SvxSearchItem::PutValue(rProp.Value, MID_SEARCH_CELLTYPE))
+                        aConvertedParams.insert(rProp.Name);
+                }
+                else if (rProp.Name == SRCH_PARA_APPFLAG)
+                {
+                    if (ExtractNumericAny(rProp.Value, m_nAppFlag))
+                        aConvertedParams.insert(rProp.Name);
+                }
+                else if (rProp.Name == SRCH_PARA_ROWDIR)
+                {
+                    if (SvxSearchItem::PutValue(rProp.Value, MID_SEARCH_ROWDIRECTION))
+                        aConvertedParams.insert(rProp.Name);
+                }
+                else if (rProp.Name == SRCH_PARA_ALLTABLES)
+                {
+                    if (SvxSearchItem::PutValue(rProp.Value, MID_SEARCH_ALLTABLES))
+                        aConvertedParams.insert(rProp.Name);
+                }
+                else if (rProp.Name == SRCH_PARA_SEARCHFILTERED)
+                {
+                    if (SvxSearchItem::PutValue(rProp.Value, MID_SEARCH_SEARCHFILTERED))
+                        aConvertedParams.insert(rProp.Name);
+                }
+                else if (rProp.Name == SRCH_PARA_SEARCHFORMATTED)
+                {
+                    if (SvxSearchItem::PutValue(rProp.Value, MID_SEARCH_SEARCHFORMATTED))
+                        aConvertedParams.insert(rProp.Name);
+                }
+                else if (rProp.Name == SRCH_PARA_BACKWARD)
+                {
+                    if (SvxSearchItem::PutValue(rProp.Value, MID_SEARCH_BACKWARD))
+                        aConvertedParams.insert(rProp.Name);
+                }
+                else if (rProp.Name == SRCH_PARA_PATTERN)
+                {
+                    if (SvxSearchItem::PutValue(rProp.Value, MID_SEARCH_PATTERN))
+                        aConvertedParams.insert(rProp.Name);
+                }
+                else if (rProp.Name == SRCH_PARA_CONTENT)
+                {
+                    if (SvxSearchItem::PutValue(rProp.Value, MID_SEARCH_CONTENT))
+                        aConvertedParams.insert(rProp.Name);
+                }
+                else if (rProp.Name == SRCH_PARA_ASIANOPT)
+                {
+                    if (SvxSearchItem::PutValue(rProp.Value, MID_SEARCH_ASIANOPTIONS))
+                        aConvertedParams.insert(rProp.Name);
+                }
             }
-            break;
+            return aConvertedParams.size() == SRCH_PARAMS;
         }
         case MID_SEARCH_COMMAND:
-            bRet = (rVal >>= nInt); m_nCommand = static_cast<SvxSearchCmd>(nInt); break;
+            return ExtractNumericAny(rVal, m_nCommand);
         case MID_SEARCH_STYLEFAMILY:
-            bRet = (rVal >>= nInt); m_eFamily =  static_cast<SfxStyleFamily>(static_cast<sal_Int16>(nInt)); break;
+            return ExtractNumericAny(rVal, m_eFamily);
         case MID_SEARCH_CELLTYPE:
-            bRet = (rVal >>= nInt); m_nCellType = static_cast<SvxSearchCellType>(nInt); break;
+            return ExtractNumericAny(rVal, m_nCellType);
         case MID_SEARCH_ROWDIRECTION:
-            bRet = (rVal >>= m_bRowDirection); break;
+            return (rVal >>= m_bRowDirection);
         case MID_SEARCH_ALLTABLES:
-            bRet = (rVal >>= m_bAllTables); break;
+            return (rVal >>= m_bAllTables);
         case MID_SEARCH_SEARCHFILTERED:
-            bRet = (rVal >>= m_bSearchFiltered); break;
+            return (rVal >>= m_bSearchFiltered);
         case MID_SEARCH_SEARCHFORMATTED:
-            bRet = (rVal >>= m_bSearchFormatted); break;
+            return (rVal >>= m_bSearchFormatted);
         case MID_SEARCH_BACKWARD:
-            bRet = (rVal >>= m_bBackward); break;
+            return (rVal >>= m_bBackward);
         case MID_SEARCH_PATTERN:
-            bRet = (rVal >>= m_bPattern); break;
+            return (rVal >>= m_bPattern);
         case MID_SEARCH_CONTENT:
-            bRet = (rVal >>= m_bContent); break;
+            return (rVal >>= m_bContent);
         case MID_SEARCH_ASIANOPTIONS:
-            bRet = (rVal >>= m_bAsianOptions); break;
+            return (rVal >>= m_bAsianOptions);
         case MID_SEARCH_ALGORITHMTYPE:
-            bRet = (rVal >>= nInt);
-            if (bRet)
-                m_aSearchOpt.AlgorithmType2 = i18nutil::upgradeSearchAlgorithms(static_cast<SearchAlgorithms>(static_cast<sal_Int16>(nInt)));
-            break;
-        case MID_SEARCH_ALGORITHMTYPE2:
-            bRet = (rVal >>= nInt);
-            if (bRet)
-                m_aSearchOpt.AlgorithmType2 = static_cast<sal_Int16>(nInt);
-            break;
-        case MID_SEARCH_FLAGS:
-            bRet = (rVal >>= m_aSearchOpt.searchFlag); break;
-        case MID_SEARCH_SEARCHSTRING:
-            bRet = (rVal >>= m_aSearchOpt.searchString); break;
-        case MID_SEARCH_REPLACESTRING:
-            bRet = (rVal >>= m_aSearchOpt.replaceString); break;
-        case MID_SEARCH_CHANGEDCHARS:
-            bRet = (rVal >>= m_aSearchOpt.changedChars); break;
-        case MID_SEARCH_DELETEDCHARS:
-            bRet = (rVal >>= m_aSearchOpt.deletedChars); break;
-        case MID_SEARCH_INSERTEDCHARS:
-            bRet = (rVal >>= m_aSearchOpt.insertedChars); break;
-        case MID_SEARCH_TRANSLITERATEFLAGS:
-        {
-            bRet = (rVal >>= nInt);
-            if (bRet)
-                m_aSearchOpt.transliterateFlags = static_cast<TransliterationFlags>(nInt);
-            break;
-        }
-        case MID_SEARCH_LOCALE:
-        {
-            bRet = (rVal >>= nInt);
-            if ( bRet )
+            if (SearchAlgorithms eVal; ExtractNumericAny(rVal, eVal))
             {
-                if ( LanguageType(nInt) == LANGUAGE_NONE )
-                {
-                    m_aSearchOpt.Locale = css::lang::Locale();
-                }
-                else
-                {
-                    m_aSearchOpt.Locale = LanguageTag::convertToLocale( LanguageType(nInt) );
-                }
+                m_aSearchOpt.AlgorithmType2 = i18nutil::upgradeSearchAlgorithms(eVal);
+                return true;
             }
             break;
-        }
+        case MID_SEARCH_ALGORITHMTYPE2:
+            return (rVal >>= m_aSearchOpt.AlgorithmType2);
+        case MID_SEARCH_FLAGS:
+            return (rVal >>= m_aSearchOpt.searchFlag);
+        case MID_SEARCH_SEARCHSTRING:
+            return (rVal >>= m_aSearchOpt.searchString);
+        case MID_SEARCH_REPLACESTRING:
+            return (rVal >>= m_aSearchOpt.replaceString);
+        case MID_SEARCH_CHANGEDCHARS:
+            return (rVal >>= m_aSearchOpt.changedChars);
+        case MID_SEARCH_DELETEDCHARS:
+            return (rVal >>= m_aSearchOpt.deletedChars);
+        case MID_SEARCH_INSERTEDCHARS:
+            return (rVal >>= m_aSearchOpt.insertedChars);
+        case MID_SEARCH_TRANSLITERATEFLAGS:
+            return ExtractNumericAny(rVal, m_aSearchOpt.transliterateFlags);
+        case MID_SEARCH_LOCALE:
+            if (LanguageType aVal; ExtractNumericAny(rVal, aVal))
+            {
+                m_aSearchOpt.Locale = (aVal == LANGUAGE_NONE) ? css::lang::Locale()
+                                                              : LanguageTag::convertToLocale(aVal);
+                return true;
+            }
+            break;
         case MID_SEARCH_STARTPOINTX:
-        {
-            bRet = (rVal >>= m_nStartPointX);
-            break;
-        }
+            return (rVal >>= m_nStartPointX);
         case MID_SEARCH_STARTPOINTY:
-        {
-            bRet = (rVal >>= m_nStartPointY);
-            break;
-        }
+            return (rVal >>= m_nStartPointY);
         default:
             OSL_FAIL( "Unknown MemberId" );
     }
 
-    return bRet;
+    return false;
 }
 
 sal_Int32 SvxSearchItem::GetStartPointX() const
