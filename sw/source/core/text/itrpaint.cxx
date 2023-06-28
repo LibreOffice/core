@@ -149,8 +149,8 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     //compatibility settings: allow tabstop text to exceed right margin
     const auto& iDSA = GetInfo().GetTextFrame()->GetDoc().getIDocumentSettingAccess();
     const bool bTabOverMargin = iDSA.get(DocumentSettingId::TAB_OVER_MARGIN);
-    const bool bTabOverflow = iDSA.get(DocumentSettingId::TAB_OVERFLOW);
-    if (bTabOverMargin || bTabOverflow)
+    const bool bTabOverSpacing = iDSA.get(DocumentSettingId::TAB_OVER_SPACING);
+    if (bTabOverMargin || bTabOverSpacing)
     {
         SwLinePortion* pPorIter = pPor;
         while( pPorIter )
