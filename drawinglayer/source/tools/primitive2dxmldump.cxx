@@ -40,6 +40,7 @@
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/sceneprimitive2d.hxx>
+#include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
@@ -1116,11 +1117,17 @@ void Primitive2dXmlDump::decomposeAndWrite(
             case PRIMITIVE2D_ID_SHADOWPRIMITIVE2D:
             {
                 // ShadowPrimitive2D.
+                const ShadowPrimitive2D& rShadowPrimitive2D
+                    = dynamic_cast<const ShadowPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("shadow");
-                drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
-                pBasePrimitive->get2DDecomposition(aPrimitiveContainer,
-                                                   drawinglayer::geometry::ViewInformation2D());
-                decomposeAndWrite(aPrimitiveContainer, rWriter);
+                rWriter.attribute("color",
+                                  convertColorToString(rShadowPrimitive2D.getShadowColor()));
+                rWriter.attributeDouble("blur", rShadowPrimitive2D.getShadowBlur());
+
+                rWriter.startElement("transform");
+                writeMatrix(rWriter, rShadowPrimitive2D.getShadowTransform());
+                rWriter.endElement();
+
                 rWriter.endElement();
                 break;
             }

@@ -42,6 +42,7 @@
 #include <svgimagenode.hxx>
 #include <svgclippathnode.hxx>
 #include <svgfecolormatrixnode.hxx>
+#include <svgfedropshadownode.hxx>
 #include <svgfefloodnode.hxx>
 #include <svgfegaussianblurnode.hxx>
 #include <svgfeoffsetnode.hxx>
@@ -341,6 +342,13 @@ namespace
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }
+                case SVGToken::FeDropShadow:
+                {
+                    /// new node for feDropShadow
+                    mpTarget = new SvgFeDropShadowNode(maDocument, mpTarget);
+                    mpTarget->parseAttributes(xAttribs);
+                    break;
+                }
                 case SVGToken::FeFlood:
                 {
                     /// new node for feFlood
@@ -469,6 +477,7 @@ namespace
 
                 /// structural elements for filters
                 case SVGToken::FeColorMatrix:
+                case SVGToken::FeDropShadow:
                 case SVGToken::FeFlood:
                 case SVGToken::FeGaussianBlur:
                 case SVGToken::FeOffset:
