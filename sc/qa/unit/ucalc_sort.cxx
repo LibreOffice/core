@@ -1972,8 +1972,8 @@ class TestQueryIterator
     typedef ScQueryCellIteratorBase< ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::Generic > Base;
 public:
     TestQueryIterator( ScDocument& rDocument, ScInterpreterContext& rContext, SCTAB nTable,
-        const ScQueryParam& aParam, bool bMod )
-    : Base( rDocument, rContext, nTable, aParam, bMod )
+        const ScQueryParam& aParam, bool bMod, bool bReverse = false )
+    : Base( rDocument, rContext, nTable, aParam, bMod, bReverse )
     {
     }
     using Base::BinarySearch; // make public

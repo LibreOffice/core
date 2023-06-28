@@ -593,6 +593,18 @@ const XclFunctionInfo saFuncTable_2016[] =
     EXC_FUNCENTRY_V_VR(  ocMaxIfs_MS,           3,  MX, 0,  "MAXIFS" )
 };
 
+
+/** Functions new in Excel 2021.
+
+
+    @See sc/source/filter/oox/formulabase.cxx saFuncTable2021 for V,VR,RO,...
+ */
+const XclFunctionInfo saFuncTable_2021[] =
+{
+    EXC_FUNCENTRY_V_VR(  ocXLookup,    3,  6,  0,  "XLOOKUP" )
+};
+
+
 #define EXC_FUNCENTRY_ODF( opcode, minparam, maxparam, flags, asciiname ) \
     { opcode, NOID, minparam,     maxparam,     V, { VR },       EXC_FUNCFLAG_IMPORTONLY|(flags), EXC_FUNCNAME_ODF( asciiname ) }, \
     { opcode,  255, (minparam)+1, (maxparam)+1, V, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY|(flags), EXC_FUNCNAME_ODF( asciiname ) }
@@ -669,6 +681,7 @@ XclFunctionProvider::XclFunctionProvider( const XclRoot& rRoot )
     (this->*pFillFunc)(saFuncTable_2010, std::end(saFuncTable_2010));
     (this->*pFillFunc)(saFuncTable_2013, std::end(saFuncTable_2013));
     (this->*pFillFunc)(saFuncTable_2016, std::end(saFuncTable_2016));
+    (this->*pFillFunc)(saFuncTable_2021, std::end(saFuncTable_2021));
     (this->*pFillFunc)(saFuncTable_Odf, std::end(saFuncTable_Odf));
     (this->*pFillFunc)(saFuncTable_OOoLO, std::end(saFuncTable_OOoLO));
 }
