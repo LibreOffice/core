@@ -264,6 +264,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocVarS,            {{ Reference                                            }, 1, Value }},
     { ocWhitespace,      {{ Bounds                                               }, 0, Bounds }},
     { ocWorkday_MS,      {{ Value, Value, Value, Reference                       }, 0, Value }},
+    { ocXLookup,         {{ Value, ReferenceOrForceArray, ReferenceOrForceArray, Value, Value, Value }, 0, Value }},
     { ocXor,             {{ Reference                                            }, 1, Value }},
     { ocZTest,           {{ Reference, Value, Value                              }, 0, Value }},
     { ocZTest_MS,        {{ Reference, Value, Value                              }, 0, Value }},

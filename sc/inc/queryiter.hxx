@@ -62,7 +62,7 @@ class ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::Direct >
 {
 protected:
     ScQueryCellIteratorAccessSpecific( ScDocument& rDocument, ScInterpreterContext& rContext,
-        const ScQueryParam& rParam );
+        const ScQueryParam& rParam, bool bReverseSearch );
     // Initialize position for new column.
     void InitPos();
     // Increase position (next row).
@@ -71,12 +71,19 @@ protected:
     // should call IncPos().
     void IncBlock();
 
+    // Decrease position (prev row).
+    void DecPos();
+    // Prev mdds block. If access is not direct/linear, then
+    // should call DecPos().
+    void DecBlock();
+
     // These members needs to be available already in the base class.
     typedef sc::CellStoreType::const_position_type PositionType;
     PositionType maCurPos;
     ScQueryParam    maParam;
     ScDocument&     rDoc;
     ScInterpreterContext& mrContext;
+    bool            mbReverseSearch;
     SCTAB           nTab;
     SCCOL           nCol;
     SCROW           nRow;
@@ -98,12 +105,16 @@ public:
     bool IncPosImpl();
 protected:
     ScQueryCellIteratorAccessSpecific( ScDocument& rDocument, ScInterpreterContext& rContext,
-        const ScQueryParam& rParam );
+        const ScQueryParam& rParam, bool bReverseSearch );
     void InitPosStart();
-    void InitPosFinish( SCROW beforeRow, SCROW lastRow );
+    void InitPosFinish( SCROW beforeRow, SCROW lastRow, bool bFirstMatch );
     void IncPos() { IncPosImpl<false>(); }
     bool IncPosFast() { return IncPosImpl<true>(); }
     void IncBlock() { IncPos(); } // Cannot skip entire block, not linear.
+
+    // Initialize for backward search. (no need for SortedCache)
+    static void DecPos() {};
+    static void DecBlock() {};
 
     // These members needs to be available already in the base class.
     typedef sc::CellStoreType::const_position_type PositionType;
@@ -111,6 +122,7 @@ protected:
     ScQueryParam    maParam;
     ScDocument&     rDoc;
     ScInterpreterContext& mrContext;
+    bool            mbReverseSearch;
     SCTAB           nTab;
     SCCOL           nCol;
     SCROW           nRow;
@@ -163,17 +175,24 @@ protected:
     sal_uInt8            nTestEqualCondition;
     bool            bAdvanceQuery;
     bool            bIgnoreMismatchOnLeadingStrings;
+    bool            bSortedBinarySearch;
+    bool            bXLookUp;
+    SCCOL           nBestFitCol;
+    SCROW           nBestFitRow;
 
     // Make base members directly visible here (templated bases need 'this->').
     using AccessBase::maCurPos;
     using AccessBase::maParam;
     using AccessBase::rDoc;
     using AccessBase::mrContext;
+    using AccessBase::mbReverseSearch;
     using AccessBase::nTab;
     using AccessBase::nCol;
     using AccessBase::nRow;
     using AccessBase::IncPos;
     using AccessBase::IncBlock;
+    using AccessBase::DecPos;
+    using AccessBase::DecBlock;
     using typename AccessBase::BinarySearchCellType;
     using AccessBase::MakeBinarySearchIndexer;
     using TypeBase::HandleItemFound;
@@ -227,9 +246,14 @@ protected:
     bool            IsEqualConditionFulfilled() const
                         { return nTestEqualCondition == nTestEqualConditionFulfilled; }
 
+    void            HandleBestFitItemFound(SCCOL nBFitCol, SCROW nBFitRow)
+                        {
+                            nBestFitCol = nBFitCol;
+                            nBestFitRow = nBFitRow;
+                        }
 public:
                     ScQueryCellIteratorBase(ScDocument& rDocument, ScInterpreterContext& rContext, SCTAB nTable,
-                                            const ScQueryParam& aParam, bool bMod);
+                                            const ScQueryParam& aParam, bool bMod, bool bReverse);
                                         // when !bMod, the QueryParam has to be filled
                                         // (bIsString)
 
@@ -238,6 +262,12 @@ public:
     void            SetAdvanceQueryParamEntryField( bool bVal )
                         { bAdvanceQuery = bVal; }
     void            AdvanceQueryParamEntryField();
+
+    void            SetSortedBinarySearchMode( bool bVal )
+                        { bSortedBinarySearch = bVal; }
+
+    void            SetXlookupMode( bool bVal )
+                        { bXLookUp = bVal; }
 };
 
 
@@ -259,11 +289,13 @@ class ScQueryCellIterator
     using Base::maParam;
     using Base::rDoc;
     using Base::mrContext;
+    using Base::mbReverseSearch;
     using Base::nTab;
     using Base::nCol;
     using Base::nRow;
     using Base::InitPos;
     using Base::IncPos;
+    using Base::DecPos;
     using Base::bIgnoreMismatchOnLeadingStrings;
     using Base::SetStopOnMismatch;
     using Base::SetTestEqualCondition;
@@ -279,13 +311,17 @@ class ScQueryCellIterator
     using Base::nTestEqualConditionEnabled;
     using Base::PerformQuery;
     using Base::getThisResult;
+    using Base::nBestFitCol;
+    using Base::nBestFitRow;
+    using Base::bSortedBinarySearch;
+    using Base::bXLookUp;
 
     bool GetThis();
 
 public:
     ScQueryCellIterator(ScDocument& rDocument, ScInterpreterContext& rContext, SCTAB nTable,
-                        const ScQueryParam& aParam, bool bMod)
-        : Base( rDocument, rContext, nTable, aParam, bMod ) {}
+                        const ScQueryParam& aParam, bool bMod, bool bReverse)
+        : Base( rDocument, rContext, nTable, aParam, bMod, bReverse ) {}
     bool GetFirst();
     bool GetNext();
     SCCOL GetCol() const { return nCol; }
@@ -320,8 +356,8 @@ class ScQueryCellIteratorSortedCache
     typedef ScQueryCellIterator< ScQueryCellIteratorAccess::SortedCache > Base;
 public:
     ScQueryCellIteratorSortedCache(ScDocument& rDocument, ScInterpreterContext& rContext,
-        SCTAB nTable, const ScQueryParam& aParam, bool bMod)
-    : Base( rDocument, rContext, nTable, aParam, bMod ) {}
+        SCTAB nTable, const ScQueryParam& aParam, bool bMod, bool bReverse )
+    : Base( rDocument, rContext, nTable, aParam, bMod, bReverse ) {}
     // Returns true if this iterator can be used for the given query.
     static bool CanBeUsed(ScDocument& rDoc, const ScQueryParam& aParam,
         SCTAB nTab, const ScFormulaCell* cell, const ScComplexRefData* refData,
@@ -357,8 +393,8 @@ protected:
 
 public:
     ScCountIfCellIterator(ScDocument& rDocument, ScInterpreterContext& rContext, SCTAB nTable,
-                          const ScQueryParam& aParam, bool bMod)
-        : Base( rDocument, rContext, nTable, aParam, bMod ) {}
+                          const ScQueryParam& aParam, bool bMod, bool bReverse)
+        : Base( rDocument, rContext, nTable, aParam, bMod, bReverse ) {}
     sal_uInt64 GetCount();
 };
 
@@ -370,8 +406,8 @@ class ScCountIfCellIteratorSortedCache
     typedef ScCountIfCellIterator< ScQueryCellIteratorAccess::SortedCache > Base;
 public:
     ScCountIfCellIteratorSortedCache(ScDocument& rDocument, ScInterpreterContext& rContext,
-        SCTAB nTable, const ScQueryParam& aParam, bool bMod)
-    : Base( rDocument, rContext, nTable, aParam, bMod ) {}
+        SCTAB nTable, const ScQueryParam& aParam, bool bMod, bool bReverse)
+    : Base( rDocument, rContext, nTable, aParam, bMod, bReverse ) {}
     // Returns true if this iterator can be used for the given query.
     static bool CanBeUsed(ScDocument& rDoc, const ScQueryParam& aParam,
         SCTAB nTab, const ScFormulaCell* cell, const ScComplexRefData* refData,

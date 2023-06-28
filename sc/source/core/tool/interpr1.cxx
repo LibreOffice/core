@@ -62,7 +62,6 @@
 #include <doubleref.hxx>
 #include <queryparam.hxx>
 #include <queryentry.hxx>
-#include <queryiter.hxx>
 #include <tokenarray.hxx>
 #include <compare.hxx>
 #include <comphelper/lok.hxx>
@@ -4778,7 +4777,7 @@ private:
     they are equal, and 1 when the matrix value is larger than the query
     value. */
 sal_Int32 lcl_CompareMatrix2Query(
-    SCSIZE i, const VectorMatrixAccessor& rMat, const ScQueryEntry& rEntry)
+    SCSIZE i, const VectorMatrixAccessor& rMat, const ScQueryParam& rParam, const ScQueryEntry& rEntry, bool bMatchWholeCell )
 {
     if (rMat.IsEmpty(i))
     {
@@ -4819,7 +4818,61 @@ sal_Int32 lcl_CompareMatrix2Query(
     OUString aStr1 = rMat.GetString(i);
     OUString aStr2 = rEntry.GetQueryItem().maString.getString();
 
-    return ScGlobal::GetCollator().compareString(aStr1, aStr2); // case-insensitive
+    // bRealWildOrRegExp
+    if (rParam.eSearchType != utl::SearchParam::SearchType::Normal &&
+        ((rEntry.eOp == SC_EQUAL) || (rEntry.eOp == SC_NOT_EQUAL)))
+    {
+        sal_Int32 nStart = 0;
+        sal_Int32 nEnd = aStr1.getLength();
+
+        bool bMatch = rEntry.GetSearchTextPtr(rParam.eSearchType, rParam.bCaseSens, bMatchWholeCell)
+            ->SearchForward(aStr1, &nStart, &nEnd);
+        // from 614 on, nEnd is behind the found text
+        if (bMatch && bMatchWholeCell
+            && (nStart != 0 || nEnd != aStr1.getLength()))
+            bMatch = false;    // RegExp must match entire cell string
+
+        bool bOk = ((rEntry.eOp == SC_NOT_EQUAL) ? !bMatch : bMatch);
+
+        if (bOk)
+            return 0; // we have a WildOrRegExp match
+    }
+
+    CollatorWrapper& rCollator = ScGlobal::GetCollator(rParam.bCaseSens);
+    return rCollator.compareString(aStr1, aStr2);
+}
+
+/** returns -1 when matrix(i) value is smaller than matrix(j) value, 0 when
+    they are equal, and 1 when larger */
+sal_Int32 lcl_Compare2MatrixCells( SCSIZE i, const VectorMatrixAccessor& rMat, SCSIZE j )
+{
+    // empty always less than anything else
+    if (rMat.IsEmpty(i))
+        return ( rMat.IsEmpty(j) ? 0 : -1 );
+    else if (rMat.IsEmpty(j))
+        return 1;
+
+    bool bByString = rMat.IsStringOrEmpty(j); // string, empty has already been handled
+    if (rMat.IsValue(i))
+    {
+        const double nVal1 = rMat.GetDouble(i);
+        if (!std::isfinite(nVal1))
+            return 1;   // error always greater than numeric or string
+
+        if (bByString)
+            return -1;  // numeric always less than string
+
+        const double nVal2 = rMat.GetDouble(j);
+        if (nVal1 == nVal2)
+            return 0;
+
+        return ( nVal1 < nVal2 ? -1 : 1 );
+    }
+
+    if (!bByString)
+        return 1;       // string always greater than numeric
+
+    return ScGlobal::GetCollator().compareString(rMat.GetString(i), rMat.GetString(j)); // case-insensitive
 }
 
 /** returns the last item with the identical value as the original item
@@ -4862,35 +4915,50 @@ void lcl_GetLastMatch( SCSIZE& rIndex, const VectorMatrixAccessor& rMat,
 
 void ScInterpreter::ScMatch()
 {
-
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 2, 3 ) )
         return;
 
-    double fTyp;
-    if (nParamCount == 3)
-        fTyp = GetDouble();
-    else
-        fTyp = 1.0;
-    SCCOL nCol1 = 0;
-    SCROW nRow1 = 0;
-    SCTAB nTab1 = 0;
-    SCCOL nCol2 = 0;
-    SCROW nRow2 = 0;
-    ScMatrixRef pMatSrc = nullptr;
+    VectorSearchArguments vsa;
+    vsa.isXLookup   = false;
 
+    // get match mode
+    double fType = ( nParamCount == 3 ? GetDouble() : 1.0 );
+    switch ( static_cast<int>(fType) )
+    {
+        case -1 :
+            vsa.eMatchMode  = exactorG;
+            vsa.eSearchMode = searchbdesc;
+            break;
+        case 0 :
+            vsa.eMatchMode  = exactorNA;
+            vsa.eSearchMode = searchfwd;
+            break;
+        case 1 :
+            // default value
+            vsa.eMatchMode  = exactorS;
+            vsa.eSearchMode = searchbasc;
+            break;
+        default :
+            PushIllegalParameter();
+            return;
+    }
+
+    // get vector to be searched
     switch (GetStackType())
     {
         case svSingleRef:
-            PopSingleRef( nCol1, nRow1, nTab1);
-            nCol2 = nCol1;
-            nRow2 = nRow1;
+            PopSingleRef( vsa.nCol1, vsa.nRow1, vsa.nTab1);
+            vsa.nCol2   = vsa.nCol1;
+            vsa.nRow2   = vsa.nRow1;
+            vsa.pMatSrc = nullptr;
         break;
         case svDoubleRef:
         {
+            vsa.pMatSrc = nullptr;
             SCTAB nTab2 = 0;
-            PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
-            if (nTab1 != nTab2 || (nCol1 != nCol2 && nRow1 != nRow2))
+            PopDoubleRef(vsa.nCol1, vsa.nRow1, vsa.nTab1, vsa.nCol2, vsa.nRow2, nTab2);
+            if (vsa.nTab1 != nTab2 || (vsa.nCol1 != vsa.nCol2 && vsa.nRow1 != vsa.nRow2))
             {
                 PushIllegalParameter();
                 return;
@@ -4901,11 +4969,11 @@ void ScInterpreter::ScMatch()
         case svExternalDoubleRef:
         {
             if (GetStackType() == svMatrix)
-                pMatSrc = PopMatrix();
+                vsa.pMatSrc = PopMatrix();
             else
-                PopExternalDoubleRef(pMatSrc);
+                PopExternalDoubleRef(vsa.pMatSrc);
 
-            if (!pMatSrc)
+            if (!vsa.pMatSrc)
             {
                 PushIllegalParameter();
                 return;
@@ -4917,41 +4985,24 @@ void ScInterpreter::ScMatch()
             return;
     }
 
+    // get search value
     if (nGlobalError == FormulaError::NONE)
     {
-        double fVal;
-        ScQueryParam rParam;
-        rParam.nCol1       = nCol1;
-        rParam.nRow1       = nRow1;
-        rParam.nCol2       = nCol2;
-        rParam.nTab        = nTab1;
-        const ScComplexRefData* refData = nullptr;
-
-        ScQueryEntry& rEntry = rParam.GetEntry(0);
-        ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-        rEntry.bDoQuery = true;
-        if (fTyp < 0.0)
-            rEntry.eOp = SC_GREATER_EQUAL;
-        else if (fTyp > 0.0)
-            rEntry.eOp = SC_LESS_EQUAL;
         switch ( GetStackType() )
         {
             case svDouble:
             {
-                fVal = GetDouble();
-                rItem.mfVal = fVal;
-                rItem.meType = ScQueryEntry::ByValue;
+                vsa.isStringSearch = false;
+                vsa.fSearchVal = GetDouble();
             }
             break;
             case svString:
             {
-                rItem.meType = ScQueryEntry::ByString;
-                rItem.maString = GetString();
+                vsa.isStringSearch = true;
+                vsa.sSearchStr = GetString();
             }
             break;
             case svDoubleRef :
-                refData = GetStackDoubleRef();
-                [[fallthrough]];
             case svSingleRef :
             {
                 ScAddress aAdr;
@@ -4963,14 +5014,13 @@ void ScInterpreter::ScMatch()
                 ScRefCellValue aCell(mrDoc, aAdr);
                 if (aCell.hasNumeric())
                 {
-                    fVal = GetCellValue(aAdr, aCell);
-                    rItem.meType = ScQueryEntry::ByValue;
-                    rItem.mfVal = fVal;
+                    vsa.isStringSearch = false;
+                    vsa.fSearchVal = GetCellValue(aAdr, aCell);
                 }
                 else
                 {
-                    GetCellString(rItem.maString, aCell);
-                    rItem.meType = ScQueryEntry::ByString;
+                    vsa.isStringSearch = true;
+                    GetCellString(vsa.sSearchStr, aCell);
                 }
             }
             break;
@@ -4985,25 +5035,22 @@ void ScInterpreter::ScMatch()
                 }
                 if (pToken->GetType() == svDouble)
                 {
-                    rItem.meType = ScQueryEntry::ByValue;
-                    rItem.mfVal = pToken->GetDouble();
+                    vsa.isStringSearch = false;
+                    vsa.fSearchVal = pToken->GetDouble();
                 }
                 else
                 {
-                    rItem.meType = ScQueryEntry::ByString;
-                    rItem.maString = pToken->GetString();
+                    vsa.isStringSearch = true;
+                    vsa.sSearchStr = pToken->GetString();
                 }
             }
             break;
             case svExternalDoubleRef:
             case svMatrix :
             {
-                svl::SharedString aStr;
                 ScMatValType nType = GetDoubleOrStringFromMatrix(
-                        rItem.mfVal, aStr);
-                rItem.maString = aStr;
-                rItem.meType = ScMatrix::IsNonValueType(nType) ?
-                    ScQueryEntry::ByString : ScQueryEntry::ByValue;
+                        vsa.fSearchVal, vsa.sSearchStr);
+                vsa.isStringSearch = ScMatrix::IsNonValueType(nType);
             }
             break;
             default:
@@ -5012,163 +5059,17 @@ void ScInterpreter::ScMatch()
                 return;
             }
         }
-        if (rItem.meType == ScQueryEntry::ByString)
-        {
-            bool bIsVBAMode = mrDoc.IsInVBAMode();
 
-            if ( bIsVBAMode )
-                rParam.eSearchType = utl::SearchParam::SearchType::Wildcard;
-            else
-                rParam.eSearchType = DetectSearchType(rEntry.GetQueryItem().maString.getString(), mrDoc);
-        }
-
-        if (pMatSrc) // The source data is matrix array.
-        {
-            SCSIZE nC, nR;
-            pMatSrc->GetDimensions( nC, nR);
-            if (nC > 1 && nR > 1)
-            {
-                // The source matrix must be a vector.
-                PushIllegalParameter();
-                return;
-            }
-
-            // Do not propagate errors from matrix while searching.
-            pMatSrc->SetErrorInterpreter( nullptr);
-
-            SCSIZE nMatCount = (nC == 1) ? nR : nC;
-            VectorMatrixAccessor aMatAcc(*pMatSrc, nC == 1);
-
-            // simple serial search for equality mode (source data doesn't
-            // need to be sorted).
-
-            if (rEntry.eOp == SC_EQUAL)
-            {
-                for (SCSIZE i = 0; i < nMatCount; ++i)
-                {
-                    if (lcl_CompareMatrix2Query( i, aMatAcc, rEntry) == 0)
-                    {
-                        PushDouble(i+1); // found !
-                        return;
-                    }
-                }
-                PushNA(); // not found
-                return;
-            }
-
-            // binary search for non-equality mode (the source data is
-            // assumed to be sorted).
-
-            bool bAscOrder = (rEntry.eOp == SC_LESS_EQUAL);
-            SCSIZE nFirst = 0, nLast = nMatCount-1, nHitIndex = 0;
-            for (SCSIZE nLen = nLast-nFirst; nLen > 0; nLen = nLast-nFirst)
-            {
-                SCSIZE nMid = nFirst + nLen/2;
-                sal_Int32 nCmp = lcl_CompareMatrix2Query( nMid, aMatAcc, rEntry);
-                if (nCmp == 0)
-                {
-                    // exact match.  find the last item with the same value.
-                    lcl_GetLastMatch( nMid, aMatAcc, nMatCount);
-                    PushDouble( nMid+1);
-                    return;
-                }
-
-                if (nLen == 1) // first and last items are next to each other.
-                {
-                    if (nCmp < 0)
-                        nHitIndex = bAscOrder ? nLast : nFirst;
-                    else
-                        nHitIndex = bAscOrder ? nFirst : nLast;
-                    break;
-                }
-
-                if (nCmp < 0)
-                {
-                    if (bAscOrder)
-                        nFirst = nMid;
-                    else
-                        nLast = nMid;
-                }
-                else
-                {
-                    if (bAscOrder)
-                        nLast = nMid;
-                    else
-                        nFirst = nMid;
-                }
-            }
-
-            if (nHitIndex == nMatCount-1) // last item
-            {
-                sal_Int32 nCmp = lcl_CompareMatrix2Query( nHitIndex, aMatAcc, rEntry);
-                if ((bAscOrder && nCmp <= 0) || (!bAscOrder && nCmp >= 0))
-                {
-                    // either the last item is an exact match or the real
-                    // hit is beyond the last item.
-                    PushDouble( nHitIndex+1);
-                    return;
-                }
-            }
-
-            if (nHitIndex > 0) // valid hit must be 2nd item or higher
-            {
-                if ( ! ( rItem.meType == ScQueryEntry::ByString &&  aMatAcc.IsValue( nHitIndex-1 ) ) &&
-                     ! ( rItem.meType == ScQueryEntry::ByValue  && !aMatAcc.IsValue( nHitIndex-1 ) ) )
-                    PushDouble( nHitIndex); // non-exact match
-                else
-                    PushNA();
-                return;
-            }
-
-            PushNA();
-            return;
-        }
-
-        // The source data is cell range.
-        SCCOLROW nDelta = 0;
-        if (nCol1 == nCol2)
-        {                                           // search row in column
-            rParam.nRow2 = nRow2;
-            rEntry.nField = nCol1;
-            ScAddress aResultPos( nCol1, nRow1, nTab1);
-            if (!LookupQueryWithCache( aResultPos, rParam, refData))
-            {
-                PushNA();
-                return;
-            }
-            nDelta = aResultPos.Row() - nRow1;
-        }
+        // execute search
+        if ( SearchVectorForValue( vsa ) )
+            PushDouble( vsa.nIndex );
         else
-        {                                           // search column in row
-            SCCOL nC;
-            rParam.bByRow = false;
-            rParam.nRow2 = nRow1;
-            rEntry.nField = nCol1;
-            ScQueryCellIteratorDirect aCellIter(mrDoc, mrContext, nTab1, rParam, false);
-            // Advance Entry.nField in Iterator if column changed
-            aCellIter.SetAdvanceQueryParamEntryField( true );
-            if (fTyp == 0.0)
-            {                                       // EQUAL
-                if ( aCellIter.GetFirst() )
-                    nC = aCellIter.GetCol();
-                else
-                {
-                    PushNA();
-                    return;
-                }
-            }
+        {
+            if ( vsa.isResultNA )
+                PushNA();
             else
-            {                                       // <= or >=
-                SCROW nR;
-                if ( !aCellIter.FindEqualOrSortedLastInRange( nC, nR ) )
-                {
-                    PushNA();
-                    return;
-                }
-            }
-            nDelta = nC - nCol1;
+                return; // error occurred and has already been pushed
         }
-        PushDouble(static_cast<double>(nDelta + 1));
     }
     else
         PushIllegalParameter();
@@ -5628,7 +5529,7 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
             }
             else
             {
-                ScQueryCellIteratorDirect aCellIter(mrDoc, mrContext, nTab1, rParam, false);
+                ScQueryCellIteratorDirect aCellIter(mrDoc, mrContext, nTab1, rParam, false, false);
                 // Increment Entry.nField in iterator when switching to next column.
                 aCellIter.SetAdvanceQueryParamEntryField( true );
                 if ( aCellIter.GetFirst() )
@@ -5887,12 +5788,12 @@ void ScInterpreter::ScCountIf()
                 if(ScCountIfCellIteratorSortedCache::CanBeUsed(mrDoc, rParam, nTab1, pMyFormulaCell,
                         refData, mrContext))
                 {
-                    ScCountIfCellIteratorSortedCache aCellIter(mrDoc, mrContext, nTab1, rParam, false);
+                    ScCountIfCellIteratorSortedCache aCellIter(mrDoc, mrContext, nTab1, rParam, false, false);
                     fCount += aCellIter.GetCount();
                 }
                 else
                 {
-                    ScCountIfCellIteratorDirect aCellIter(mrDoc, mrContext, nTab1, rParam, false);
+                    ScCountIfCellIteratorDirect aCellIter(mrDoc, mrContext, nTab1, rParam, false, false);
                     fCount += aCellIter.GetCount();
                 }
             }
@@ -6290,7 +6191,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                 if( ScQueryCellIteratorSortedCache::CanBeUsed( mrDoc, rParam, nTab1, pMyFormulaCell,
                         refData, mrContext ))
                 {
-                    ScQueryCellIteratorSortedCache aCellIter(mrDoc, mrContext, nTab1, rParam, false);
+                    ScQueryCellIteratorSortedCache aCellIter(mrDoc, mrContext, nTab1, rParam, false, false);
                     // Increment Entry.nField in iterator when switching to next column.
                     aCellIter.SetAdvanceQueryParamEntryField( true );
                     if ( aCellIter.GetFirst() )
@@ -6305,7 +6206,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                 }
                 else
                 {
-                    ScQueryCellIteratorDirect aCellIter(mrDoc, mrContext, nTab1, rParam, false);
+                    ScQueryCellIteratorDirect aCellIter(mrDoc, mrContext, nTab1, rParam, false, false);
                     // Increment Entry.nField in iterator when switching to next column.
                     aCellIter.SetAdvanceQueryParamEntryField( true );
                     if ( aCellIter.GetFirst() )
@@ -7062,12 +6963,13 @@ void ScInterpreter::ScLookup()
         // assumed to be sorted in ascending order).
 
         SCCOLROW nDelta = -1;
+        bool bMatchWholeCell = mrDoc.GetDocOptions().IsMatchWholeCell();
 
         SCSIZE nFirst = 0, nLast = nLenMajor-1; //, nHitIndex = 0;
         for (SCSIZE nLen = nLast-nFirst; nLen > 0; nLen = nLast-nFirst)
         {
             SCSIZE nMid = nFirst + nLen/2;
-            sal_Int32 nCmp = lcl_CompareMatrix2Query( nMid, aMatAcc2, rEntry);
+            sal_Int32 nCmp = lcl_CompareMatrix2Query( nMid, aMatAcc2, aParam, rEntry, bMatchWholeCell );
             if (nCmp == 0)
             {
                 // exact match.  find the last item with the same value.
@@ -7093,7 +6995,7 @@ void ScInterpreter::ScLookup()
 
         if (nDelta == static_cast<SCCOLROW>(nLenMajor-2)) // last item
         {
-            sal_Int32 nCmp = lcl_CompareMatrix2Query(nDelta+1, aMatAcc2, rEntry);
+            sal_Int32 nCmp = lcl_CompareMatrix2Query(nDelta+1, aMatAcc2, aParam, rEntry, bMatchWholeCell );
             if (nCmp <= 0)
             {
                 // either the last item is an exact match or the real
@@ -7255,7 +7157,7 @@ void ScInterpreter::ScLookup()
     if (rItem.meType == ScQueryEntry::ByString)
         aParam.eSearchType = DetectSearchType(rItem.maString.getString(), mrDoc);
 
-    ScQueryCellIteratorDirect aCellIter(mrDoc, mrContext, nTab1, aParam, false);
+    ScQueryCellIteratorDirect aCellIter(mrDoc, mrContext, nTab1, aParam, false, false);
     SCCOL nC;
     SCROW nR;
     // Advance Entry.nField in iterator upon switching columns if
@@ -7491,8 +7393,13 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
         return;
 
     ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+    svl::SharedString aParamStr;
     if (rItem.meType == ScQueryEntry::ByString)
+    {
         aParam.eSearchType = DetectSearchType(rItem.maString.getString(), mrDoc);
+        aParamStr = rItem.maString;
+    }
+
     if (pMat)
     {
         SCSIZE nMatCount = bHLookup ? nC : nR;
@@ -7502,7 +7409,6 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
 //!!!!!!!
 //TODO: enable regex on matrix strings
 //!!!!!!!
-            svl::SharedString aParamStr = rItem.maString;
             if ( bSorted )
             {
                 CollatorWrapper& rCollator = ScGlobal::GetCollator();
@@ -7612,6 +7518,7 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
     }
     else
     {
+        // not a matrix
         rEntry.nField = nCol1;
         bool bFound = false;
         SCCOL nCol = 0;
@@ -7620,7 +7527,7 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
             rEntry.eOp = SC_LESS_EQUAL;
         if ( bHLookup )
         {
-            ScQueryCellIteratorDirect aCellIter(mrDoc, mrContext, nTab1, aParam, false);
+            ScQueryCellIteratorDirect aCellIter(mrDoc, mrContext, nTab1, aParam, false, false);
             // advance Entry.nField in Iterator upon switching columns
             aCellIter.SetAdvanceQueryParamEntryField( true );
             if ( bSorted )
@@ -7638,7 +7545,7 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
         else
         {
             ScAddress aResultPos( nCol1, nRow1, nTab1);
-            bFound = LookupQueryWithCache( aResultPos, aParam, refData);
+            bFound = LookupQueryWithCache( aResultPos, aParam, refData, 0, false );
             nRow = aResultPos.Row();
             nCol = nSpIndex;
         }
@@ -7715,6 +7622,300 @@ bool ScInterpreter::FillEntry(ScQueryEntry& rEntry)
 void ScInterpreter::ScVLookup()
 {
     CalculateLookup(false);
+}
+
+void ScInterpreter::ScXLookup()
+{
+/* TODO
+   -use VectorSearchArguments and SearchVectorForValue() with ScLookup, ScHLookup and ScVLookup
+    as well to reduce redundant code, can de done later with lots of other MATCH/LOOKUP related code
+    that can be unified
+   -BinarySearch not supported for columns (horizontal search), now just use linear mode in this case
+   -improve efficiency of code
+*/
+    sal_uInt8 nParamCount = GetByte();
+    if ( !MustHaveParamCount( nParamCount, 3, 6 ) )
+        return;
+
+    VectorSearchArguments vsa;
+    vsa.isXLookup   = true;
+
+    if ( nParamCount == 6 )
+    {
+        sal_Int16 k = GetInt16();
+        if ( k >= -2 && k <= 2 && k != 0 )
+            vsa.eSearchMode = static_cast<SearchMode>(k);
+        else
+        {
+            PushIllegalParameter();
+            return;
+        }
+    }
+    else
+        vsa.eSearchMode = searchfwd;
+
+    if ( nParamCount >= 5 )
+    {
+        sal_Int16 k = GetInt16();
+        if ( k >= -1 && k <= 2 )
+            vsa.eMatchMode = static_cast<MatchMode>(k);
+        else
+        {
+            PushIllegalParameter();
+            return;
+        }
+    }
+    else
+        vsa.eMatchMode = exactorNA;
+
+    // Optional 4th argument to set return values if not found (default is #N/A)
+    formula::FormulaConstTokenRef xNotFound;
+    if ( nParamCount >= 4 && GetStackType() != svEmptyCell )
+        xNotFound = PopToken();
+
+    // 3rd argument is return value array
+    ScMatrixRef prMat = nullptr;
+    SCSIZE nrC = 0, nrR = 0;
+    StackVar eType = GetStackType();
+    switch ( eType )
+    {
+        case svDoubleRef :
+        case svSingleRef :
+        case svExternalDoubleRef :
+        case svExternalSingleRef :
+        case svMatrix :
+            prMat = GetMatrix();
+            if ( prMat )
+                prMat->GetDimensions( nrC, nrR );
+            else
+            {
+                PushIllegalParameter();
+                return;
+            }
+            break;
+
+        default :
+            PushIllegalParameter();
+            return;
+    }
+
+    // 2nd argument is vector to be searched
+    SCSIZE nsC = 0, nsR = 0;
+    switch ( GetStackType() )
+    {
+        case svSingleRef:
+            vsa.pMatSrc = nullptr;
+            PopSingleRef( vsa.nCol1, vsa.nRow1, vsa.nTab1);
+            vsa.nCol2   = vsa.nCol1;
+            vsa.nRow2   = vsa.nRow1;
+            nsC = vsa.nCol2 - vsa.nCol1 + 1;
+            nsR = vsa.nRow2 - vsa.nRow1 + 1;
+        break;
+        case svDoubleRef:
+        {
+            vsa.pMatSrc = nullptr;
+            SCTAB nTab2 = 0;
+            PopDoubleRef(vsa.nCol1, vsa.nRow1, vsa.nTab1, vsa.nCol2, vsa.nRow2, nTab2);
+            if (vsa.nTab1 != nTab2 || (vsa.nCol1 != vsa.nCol2 && vsa.nRow1 != vsa.nRow2))
+            {
+                PushIllegalParameter();
+                return;
+            }
+            nsC = vsa.nCol2 - vsa.nCol1 + 1;
+            nsR = vsa.nRow2 - vsa.nRow1 + 1;
+        }
+        break;
+        case svMatrix:
+        case svExternalDoubleRef:
+        {
+            if (GetStackType() == svMatrix)
+                vsa.pMatSrc = PopMatrix();
+            else
+                PopExternalDoubleRef(vsa.pMatSrc);
+
+            if (!vsa.pMatSrc)
+            {
+                PushIllegalParameter();
+                return;
+            }
+            vsa.pMatSrc->GetDimensions( nsC, nsR);
+        }
+        break;
+
+        default:
+            PushIllegalParameter();
+            return;
+    }
+    if ( ( nsR >= nsC && nsR != nrR ) || ( nsR < nsC && nsC != nrC ) )
+    {
+        // search matrix must have same number of elements as result matrix in search direction
+        PushIllegalParameter();
+        return;
+    }
+
+    // 1st argument is search value
+    if (nGlobalError == FormulaError::NONE)
+    {
+        switch ( GetStackType() )
+        {
+            case svDouble:
+            {
+                vsa.isStringSearch = false;
+                vsa.fSearchVal = GetDouble();
+            }
+            break;
+
+            case svString:
+            {
+                vsa.isStringSearch = true;
+                vsa.sSearchStr = GetString();
+            }
+            break;
+
+            case svDoubleRef :
+            case svSingleRef :
+            {
+                ScAddress aAdr;
+                if ( !PopDoubleRefOrSingleRef( aAdr ) )
+                {
+                    PushInt(0);
+                    return ;
+                }
+                ScRefCellValue aCell(mrDoc, aAdr);
+                if (aCell.hasNumeric())
+                {
+                    vsa.isStringSearch = false;
+                    vsa.fSearchVal = GetCellValue(aAdr, aCell);
+                }
+                else
+                {
+                    vsa.isStringSearch = true;
+                    GetCellString(vsa.sSearchStr, aCell);
+                }
+            }
+            break;
+
+            case svExternalSingleRef:
+            {
+                ScExternalRefCache::TokenRef pToken;
+                PopExternalSingleRef(pToken);
+                if (nGlobalError != FormulaError::NONE)
+                {
+                    PushError( nGlobalError);
+                    return;
+                }
+                if (pToken->GetType() == svDouble)
+                {
+                    vsa.isStringSearch = false;
+                    vsa.fSearchVal = pToken->GetDouble();
+                }
+                else
+                {
+                    vsa.isStringSearch = false;
+                    vsa.sSearchStr = pToken->GetString();
+                }
+            }
+            break;
+
+            case svExternalDoubleRef:
+            case svMatrix :
+            {
+                ScMatValType nType = GetDoubleOrStringFromMatrix(
+                        vsa.fSearchVal, vsa.sSearchStr);
+                vsa.isStringSearch = ScMatrix::IsNonValueType(nType);
+            }
+            break;
+
+            default:
+            {
+                PushIllegalParameter();
+                return;
+            }
+        }
+    }
+
+    // start search
+    if ( SearchVectorForValue( vsa ) )
+    {
+        //  found, output result
+        assert( vsa.bVLookup ? ( o3tl::make_unsigned(vsa.nIndex) < nrR ) :
+                               ( o3tl::make_unsigned(vsa.nIndex) < nrC ) );
+        SCSIZE nX;
+        SCSIZE nY;
+        SCSIZE nResCols;
+        SCSIZE nResRows;
+        if ( vsa.bVLookup )
+        {
+            nX = static_cast<SCSIZE>(0);
+            nY = vsa.nIndex;
+            nResCols = nrC;
+            nResRows = 1;
+        }
+        else
+        {
+            nX = vsa.nIndex;
+            nY = static_cast<SCSIZE>(0);
+            nResCols = 1;
+            nResRows = nrR;
+        }
+        // if result matrix has more than one row or column push matrix else push single value
+        if ( nResCols > 1 || nResRows > 1 )
+        {
+            // result is matrix, make/fill matrix with output and push that
+            ScMatrixRef pResMat = GetNewMat( nResCols, nResRows, /*bEmpty*/true );
+            if ( pResMat )
+            {
+                for ( SCSIZE i = 0; i < nResCols; i++ )
+                {
+                    for ( SCSIZE j = 0; j < nResRows; j++ )
+                    {
+                        SCSIZE ri;
+                        SCSIZE rj;
+                        if ( vsa.bVLookup )
+                        {
+                            ri = nX + i;
+                            rj = nY;
+                        }
+                        else
+                        {
+                            ri = nX;
+                            rj = nY + j;
+                        }
+                        if ( prMat->IsStringOrEmpty( ri, rj ) )
+                            pResMat->PutString( prMat->GetString( ri, rj ), i, j );
+                        else
+                            pResMat->PutDouble( prMat->GetDouble( ri, rj ), i, j );
+                    }
+                }
+                PushMatrix( pResMat );
+            }
+            else
+            {
+                PushIllegalParameter();
+                return;
+            }
+        }
+        else
+        {
+            // result is a single value
+            if ( prMat->IsStringOrEmpty( nX, nY) )
+                PushString( prMat->GetString( nX, nY ).getString() );
+            else
+                PushDouble( prMat->GetDouble( nX, nY ) );
+        }
+    }
+    else
+    {
+        if ( vsa.isResultNA )
+        {
+            if ( xNotFound && ( xNotFound->GetType() != svMissing ) )
+                PushTokenRef(xNotFound);
+            else
+                PushNA();
+        }
+    }
+
+    return;
 }
 
 void ScInterpreter::ScSubTotal()
@@ -8094,7 +8295,7 @@ void ScInterpreter::ScDBCount()
             // so the source range has to be restricted, like before the introduction
             // of ScDBQueryParamBase.
             p->nCol1 = p->nCol2 = p->mnField;
-            ScQueryCellIteratorDirect aCellIter(mrDoc, mrContext, nTab, *p, true);
+            ScQueryCellIteratorDirect aCellIter(mrDoc, mrContext, nTab, *p, true, false);
             if ( aCellIter.GetFirst() )
             {
                 do
@@ -10193,28 +10394,465 @@ utl::SearchParam::SearchType ScInterpreter::DetectSearchType( std::u16string_vie
     return utl::SearchParam::SearchType::Normal;
 }
 
+bool ScInterpreter::SearchMatrixForValue( VectorSearchArguments& vsa, ScQueryParam& rParam, ScQueryEntry& rEntry, ScQueryEntry::Item& rItem )
+{
+    SCSIZE nC, nR;
+    vsa.pMatSrc->GetDimensions( nC, nR);
+    if (nC > 1 && nR > 1)
+    {
+        // The source matrix must be a vector.
+        PushIllegalParameter();
+        return false;
+    }
+    vsa.bVLookup = ( nC == 1 );
+
+    // Do not propagate errors from matrix while searching.
+    vsa.pMatSrc->SetErrorInterpreter( nullptr );
+
+    SCSIZE nMatCount = (vsa.bVLookup ? nR : nC);
+    VectorMatrixAccessor aMatAcc(*(vsa.pMatSrc), vsa.bVLookup);
+    bool bMatchWholeCell = mrDoc.GetDocOptions().IsMatchWholeCell();
+
+    switch ( vsa.eSearchMode )
+    {
+        case searchfwd :
+        {
+            switch ( vsa.eMatchMode )
+            {
+                case exactorNA :
+                case wildcard :
+                    // simple serial search for equality mode (source data doesn't
+                    // need to be sorted).
+                    for (SCSIZE i = 0; i < nMatCount; ++i)
+                    {
+                        if (lcl_CompareMatrix2Query( i, aMatAcc, rParam, rEntry, bMatchWholeCell ) == 0)
+                        {
+                            vsa.nHitIndex = i+1; // found !
+                            break;
+                        }
+                    }
+                    break;
+
+                case exactorS :
+                case exactorG :
+                    for (SCSIZE i = 0; i < nMatCount; ++i)
+                    {
+                        sal_Int32 result = lcl_CompareMatrix2Query( i, aMatAcc, rParam, rEntry, bMatchWholeCell );
+                        if (result == 0)
+                        {
+                            vsa.nHitIndex = i+1; // found !
+                            break;
+                        }
+                        else if (vsa.eMatchMode == exactorS && result == -1)
+                        {
+                            if ( vsa.nBestFit == SCSIZE_MAX )
+                                vsa.nBestFit = i;
+                            else
+                            {
+                                // replace value of vsa.nBestFit if value(i) > value(vsa.nBestFit)
+                                if ( lcl_Compare2MatrixCells( i, aMatAcc, vsa.nBestFit) == 1 )
+                                    vsa.nBestFit = i;
+                            }
+                        }
+                        else if (vsa.eMatchMode == exactorG && result == 1)
+                        {
+                            if ( vsa.nBestFit == SCSIZE_MAX )
+                                vsa.nBestFit = i;
+                            else
+                            {
+                                // replace value of vsa.nBestFit if value(i) < value(vsa.nBestFit)
+                                if ( lcl_Compare2MatrixCells( i, aMatAcc, vsa.nBestFit) == -1 )
+                                    vsa.nBestFit = i;
+                            }
+                        }
+                        // else do nothing
+                    }
+                    break;
+
+                default :
+                    PushIllegalParameter();
+                    return false;
+            }
+        }
+        break;
+
+        case searchrev:
+            {
+                switch ( vsa.eMatchMode )
+                {
+                    case exactorNA :
+                    case wildcard :
+                        // simple serial search for equality mode (source data doesn't
+                        // need to be sorted).
+                        for ( SCSIZE i = nMatCount - 1; i > 0; i-- )
+                        {
+                            if (lcl_CompareMatrix2Query(i, aMatAcc, rParam, rEntry, bMatchWholeCell) == 0)
+                            {
+                                vsa.nHitIndex = i + 1; // found !
+                                break;
+                            }
+                        }
+                        break;
+
+                    case exactorS :
+                    case exactorG :
+                        for (SCSIZE i = nMatCount - 1; i-- > 0; )
+                        {
+                            sal_Int32 result = lcl_CompareMatrix2Query( i, aMatAcc, rParam, rEntry, bMatchWholeCell );
+                            if (result == 0)
+                            {
+                                vsa.nHitIndex = i + 1; // found !
+                                break;
+                            }
+                            else if (vsa.eMatchMode == exactorS && result == -1)
+                            {
+                                if ( vsa.nBestFit == SCSIZE_MAX )
+                                    vsa.nBestFit = i;
+                                else
+                                {
+                                    // replace value of vsa.nBestFit if value(i) > value(vsa.nBestFit)
+                                    if ( lcl_Compare2MatrixCells( i, aMatAcc, vsa.nBestFit) == 1 )
+                                        vsa.nBestFit = i;
+                                }
+                            }
+                            else if (vsa.eMatchMode == exactorG && result == 1)
+                            {
+                                if ( vsa.nBestFit == SCSIZE_MAX )
+                                    vsa.nBestFit = i;
+                                else
+                                {
+                                    // replace value of vsa.nBestFit if value(i) < value(vsa.nBestFit)
+                                    if ( lcl_Compare2MatrixCells( i, aMatAcc, vsa.nBestFit) == -1 )
+                                        vsa.nBestFit = i;
+                                }
+                            }
+                            // else do nothing
+                        }
+                        break;
+
+                    default :
+                        PushIllegalParameter();
+                        return false;
+                }
+            }
+            break;
+
+        case searchbasc:
+        case searchbdesc:
+            {
+                // binary search for non-equality mode (the source data is sorted)
+                bool bAscOrder = ( vsa.eSearchMode == searchbasc );
+                SCSIZE nFirst = 0;
+                SCSIZE nLast  = nMatCount - 1;
+                for ( SCSIZE nLen = nLast - nFirst; nLen > 0; nLen = nLast - nFirst )
+                {
+                    SCSIZE nMid = nFirst + nLen / 2;
+                    sal_Int32 nCmp = lcl_CompareMatrix2Query( nMid, aMatAcc, rParam, rEntry, bMatchWholeCell );
+                    if ( nCmp == 0 )
+                    {
+                        // exact match.  find the last item with the same value.
+                        lcl_GetLastMatch( nMid, aMatAcc, nMatCount);
+                        vsa.nHitIndex = nMid + 1;
+                        break;
+                    }
+
+                    if ( nLen == 1 ) // first and last items are next to each other.
+                    {
+                        if ( bAscOrder && vsa.eMatchMode == exactorS )
+                            vsa.nHitIndex = ( nCmp > 0 ? nFirst : nLast );
+                        else if ( !bAscOrder && vsa.eMatchMode == exactorG )
+                            vsa.nHitIndex = ( nCmp < 0 ? nFirst : nLast );
+                        break;
+                    }
+                    else
+                    {
+                        if ( nCmp < 0 )
+                        {
+                            if ( bAscOrder )
+                                nFirst = nMid;
+                            else
+                                nLast = nMid;
+                        }
+                        else
+                        {
+                            if ( bAscOrder )
+                                nLast = nMid;
+                            else
+                                nFirst = nMid;
+                        }
+
+                        if ( vsa.nHitIndex == nMatCount - 1 ) // last item
+                        {
+                            nCmp = lcl_CompareMatrix2Query( vsa.nHitIndex, aMatAcc, rParam, rEntry, bMatchWholeCell );
+                            if ( ( vsa.eMatchMode == exactorS && nCmp <= 0 ) ||
+                                 ( vsa.eMatchMode == exactorG && nCmp >= 0 ) )
+                            {
+                                // either the last item is an exact match or the real
+                                // hit is beyond the last item.
+                                vsa.nHitIndex++;
+                            }
+                            else
+                                vsa.nHitIndex = 0;
+                        }
+                    }
+                }
+            }
+            break;
+
+        default:
+            PushIllegalParameter();
+            return false;
+    }
+
+    if ((vsa.nHitIndex > 0) && ((rItem.meType == ScQueryEntry::ByString && aMatAcc.IsValue(vsa.nHitIndex - 1)) ||
+        (rItem.meType == ScQueryEntry::ByValue && !aMatAcc.IsValue(vsa.nHitIndex - 1))))
+    {
+        vsa.nHitIndex = 0;
+        vsa.isResultNA = true;
+        return false;
+    }
+    return true;
+}
+
+bool ScInterpreter::SearchRangeForValue( VectorSearchArguments& vsa, ScQueryParam& rParam, ScQueryEntry& rEntry )
+{
+    vsa.bVLookup = ( vsa.nCol1 == vsa.nCol2 );
+    switch ( vsa.eSearchMode )
+    {
+        case searchfwd:
+        case searchrev:
+        case searchbasc:
+        case searchbdesc:
+            {
+                if (vsa.bVLookup)
+                {
+                    // search of rows in column
+                    rParam.bByRow = true;
+                    ScAddress aResultPos( vsa.nCol1, vsa.nRow1, vsa.nTab1 );
+                    const ScComplexRefData* refData = nullptr;
+                    if ( LookupQueryWithCache( aResultPos, rParam, refData, vsa.eSearchMode, vsa.isXLookup ) )
+                        vsa.nHitIndex = aResultPos.Row() - vsa.nRow1 + 1;
+                }
+                else
+                {
+                    // search of columns in row
+                    rParam.bByRow = false;
+                    bool bReverseSearch = (vsa.eSearchMode == searchrev);
+                    ScQueryCellIteratorDirect aCellIter(mrDoc, mrContext, vsa.nTab1, rParam, false, bReverseSearch);
+                    // Advance Entry.nField in Iterator if column changed
+                    aCellIter.SetAdvanceQueryParamEntryField(true);
+                    aCellIter.SetXlookupMode(vsa.isXLookup);
+                    // TODO: no binary search for column (horizontal) search (use linear)
+                    aCellIter.SetSortedBinarySearchMode(false);
+                    if (rEntry.eOp == SC_EQUAL)
+                    {
+                        if (aCellIter.GetFirst())
+                            vsa.nHitIndex = aCellIter.GetCol() - vsa.nCol1 + 1;
+                    }
+                    else
+                    {
+                        SCCOL nC;
+                        SCROW nR;
+                        if (aCellIter.FindEqualOrSortedLastInRange(nC, nR))
+                            vsa.nHitIndex = nC - vsa.nCol1 + 1;
+                    }
+                }
+            }
+            break;
+
+        default :
+            PushIllegalParameter();
+            return false;
+    }
+    return true;
+}
+
+
+/** When search value is found, the index is stored in struct VectorSearchArguments.nIndex
+    and SearchVectorForValue() returns true. When search value is not found or an error
+    occurs, SearchVectorForValue() pushes the relevant (error)message and returns false,
+    expect when SearchVectorForValue() is called by ScXLookup and the search value is not
+    found.
+    This difference in behaviour is because MATCH returns the found index and XLOOKUP
+    uses the found index to determine the result(s) to be pushed and may return a custom
+    value when the search value is not found.
+*/
+bool ScInterpreter::SearchVectorForValue( VectorSearchArguments& vsa )
+{
+    // preparations
+    ScQueryParam rParam;
+    rParam.nCol1 = vsa.nCol1;
+    rParam.nRow1 = vsa.nRow1;
+    rParam.nCol2 = vsa.nCol2;
+    rParam.nRow2 = vsa.nRow2;
+    rParam.nTab  = vsa.nTab1;
+
+    ScQueryEntry& rEntry = rParam.GetEntry(0);
+    rEntry = rParam.GetEntry(0);
+    rEntry.nField = vsa.eSearchMode != searchrev ? vsa.nCol1 : vsa.nCol2;
+    rEntry.bDoQuery = true;
+    ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+    switch ( vsa.eMatchMode )
+    {
+        case exactorNA :
+            rEntry.eOp = SC_EQUAL;
+            break;
+
+        case exactorS :
+            rEntry.eOp = SC_LESS_EQUAL;
+            break;
+
+        case exactorG :
+            rEntry.eOp = SC_GREATER_EQUAL;
+            break;
+
+        case wildcard :
+            // this mode can only used with XLOOKUP
+            if ( vsa.isXLookup )
+            {
+                rEntry.eOp = SC_EQUAL;
+                if ( vsa.isStringSearch )
+                {
+                    if ( mrDoc.IsInVBAMode() )
+                        rParam.eSearchType = utl::SearchParam::SearchType::Wildcard;
+                    else
+                    {
+                        // set searchtype hard to wildcard or regexp if applicable, the XLOOKUP
+                        // argument prevails over the configuration setting
+                        if ( MayBeWildcard( vsa.sSearchStr.getString() ) )
+                            rParam.eSearchType = utl::SearchParam::SearchType::Wildcard;
+                        else if ( MayBeRegExp( vsa.sSearchStr.getString() ) )
+                            rParam.eSearchType = utl::SearchParam::SearchType::Regexp;
+                    }
+                }
+            }
+            else
+            {
+                PushIllegalParameter();
+                return false;
+            }
+            break;
+
+        default :
+            PushIllegalParameter();
+            return false;
+    }
+    if ( vsa.isStringSearch )
+    {
+        rItem.meType   = ScQueryEntry::ByString;
+        rItem.maString = vsa.sSearchStr;
+        if ( !vsa.isXLookup )
+        {
+            if ( mrDoc.IsInVBAMode() )
+                rParam.eSearchType = utl::SearchParam::SearchType::Wildcard;
+            else
+                rParam.eSearchType = DetectSearchType(rEntry.GetQueryItem().maString.getString(), mrDoc);
+        }
+    }
+    else
+    {
+        rItem.mfVal = vsa.fSearchVal;
+        rItem.meType = ScQueryEntry::ByValue;
+    }
+
+    // execute search
+    if (vsa.pMatSrc) // The source data is matrix array.
+    {
+        // matrix
+        if ( !SearchMatrixForValue( vsa, rParam, rEntry, rItem ) )
+            return false;
+    }
+    else
+    {
+        // not a matrix
+        if ( !SearchRangeForValue( vsa, rParam, rEntry ) )
+            return false;
+    }
+
+    // MATCH expects index starting with 1, XLOOKUP expects index starting with 0
+    if ( vsa.nHitIndex > 0 )
+    {
+        vsa.nIndex = ( vsa.isXLookup ? --vsa.nHitIndex : vsa.nHitIndex );
+        return true;
+    }
+    else  if ( vsa.nHitIndex == 0 && vsa.nBestFit != SCSIZE_MAX )
+    {
+        if ( vsa.isXLookup )
+        {
+            vsa.nIndex = vsa.nBestFit;
+            if ( !vsa.pMatSrc )
+            {
+                vsa.nIndex -= ( vsa.bVLookup ? vsa.nRow1 : vsa.nCol1 );
+            }
+        }
+        else
+        {
+            vsa.nIndex = ++vsa.nBestFit;
+        }
+        return true;
+    }
+
+    // nomatch
+    vsa.isResultNA = true;
+    return false;
+}
+
 static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument& rDoc, ScInterpreterContext& rContext,
         const ScQueryParam & rParam, const ScQueryEntry & rEntry, const ScFormulaCell* cell,
-        const ScComplexRefData* refData )
+        const ScComplexRefData* refData, sal_Int8 nSearchMode, bool bXlookupMode )
 {
     if (rEntry.eOp != SC_EQUAL)
     {
         // range lookup <= or >=
         SCCOL nCol;
         SCROW nRow;
-        ScQueryCellIteratorDirect aCellIter( rDoc, rContext, rParam.nTab, rParam, false);
-        if( aCellIter.FindEqualOrSortedLastInRange( nCol, nRow ))
+        bool bLessOrEqual = rEntry.eOp == SC_LESS || rEntry.eOp == SC_LESS_EQUAL;
+        // we can use binary search if the SearchMode is searchbasc or searchbdesc
+        if (ScQueryCellIteratorSortedCache::CanBeUsed(rDoc, rParam, rParam.nTab, cell, refData, rContext) ||
+            (static_cast<SearchMode>(nSearchMode) == searchbasc && !bLessOrEqual) ||
+            (static_cast<SearchMode>(nSearchMode) == searchbdesc && bLessOrEqual))
         {
-            o_rResultPos.SetCol( nCol);
-            o_rResultPos.SetRow( nRow);
-            return true;
+            // search for the first LessOrEqual value if SearchMode is desc or
+            // search for the first GreaterOrEqual value if SearchMode is asc
+            ScQueryCellIteratorSortedCache aCellIter(rDoc, rContext, rParam.nTab, rParam, false, false);
+            aCellIter.SetXlookupMode(bXlookupMode);
+            if (aCellIter.GetFirst())
+            {
+                o_rResultPos.SetCol(aCellIter.GetCol());
+                o_rResultPos.SetRow(aCellIter.GetRow());
+                return true;
+            }
+        }
+        else
+        {
+            // search for the last LessOrEqual value or GreaterOrEqual value
+            bool bReverse = (static_cast<SearchMode>(nSearchMode) == searchrev);
+            ScQueryCellIteratorDirect aCellIter(rDoc, rContext, rParam.nTab, rParam, false, bReverse);
+
+            aCellIter.SetSortedBinarySearchMode(static_cast<SearchMode>(nSearchMode) == searchbasc ||
+                static_cast<SearchMode>(nSearchMode) == searchbdesc);
+            aCellIter.SetXlookupMode(bXlookupMode);
+            if (aCellIter.FindEqualOrSortedLastInRange(nCol, nRow))
+            {
+                o_rResultPos.SetCol(nCol);
+                o_rResultPos.SetRow(nRow);
+                return true;
+            }
         }
     }
     else // EQUAL
     {
-        if( ScQueryCellIteratorSortedCache::CanBeUsed( rDoc, rParam, rParam.nTab, cell, refData, rContext ))
+        // we can use binary search for rows if the SearchMode is searchbasc or searchbdesc
+        bool bLiteral = rParam.eSearchType == utl::SearchParam::SearchType::Normal &&
+            rEntry.GetQueryItem().meType == ScQueryEntry::ByString;
+        bool bBinary = rParam.bByRow &&
+            (bLiteral || rEntry.GetQueryItem().meType == ScQueryEntry::ByValue);
+
+        if( bBinary && (ScQueryCellIteratorSortedCache::CanBeUsed( rDoc, rParam, rParam.nTab, cell, refData, rContext ) ||
+            static_cast<SearchMode>(nSearchMode) == searchbasc || static_cast<SearchMode>(nSearchMode) == searchbdesc ))
         {
-            ScQueryCellIteratorSortedCache aCellIter( rDoc, rContext, rParam.nTab, rParam, false);
+            ScQueryCellIteratorSortedCache aCellIter( rDoc, rContext, rParam.nTab, rParam, false, false );
+            aCellIter.SetXlookupMode(bXlookupMode);
             if (aCellIter.GetFirst())
             {
                 o_rResultPos.SetCol( aCellIter.GetCol());
@@ -10224,7 +10862,9 @@ static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument& rDoc, ScInter
         }
         else
         {
-            ScQueryCellIteratorDirect aCellIter( rDoc, rContext, rParam.nTab, rParam, false);
+            bool bReverse = (static_cast<SearchMode>(nSearchMode) == searchrev);
+            ScQueryCellIteratorDirect aCellIter( rDoc, rContext, rParam.nTab, rParam, false, bReverse );
+            aCellIter.SetXlookupMode(bXlookupMode);
             if (aCellIter.GetFirst())
             {
                 o_rResultPos.SetCol( aCellIter.GetCol());
@@ -10275,12 +10915,12 @@ static SCROW lcl_getPrevRowWithEmptyValueLookup( const ScLookupCache& rCache,
 }
 
 bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
-        const ScQueryParam & rParam, const ScComplexRefData* refData ) const
+        const ScQueryParam & rParam, const ScComplexRefData* refData,
+        sal_Int8 nSearchMode, bool bXlookupMode ) const
 {
     bool bFound = false;
     const ScQueryEntry& rEntry = rParam.GetEntry(0);
     bool bColumnsMatch = (rParam.nCol1 == rEntry.nField);
-    OSL_ENSURE( bColumnsMatch, "ScInterpreter::LookupQueryWithCache: columns don't match");
     // At least all volatile functions that generate indirect references have
     // to force non-cached lookup.
     /* TODO: We could further classify volatile functions into reference
@@ -10288,13 +10928,14 @@ bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
      * direct lookups here. We could even further attribute volatility per
      * parameter so it would affect only the lookup range parameter. */
     if (!bColumnsMatch || GetVolatileType() != NOT_VOLATILE)
-        bFound = lcl_LookupQuery( o_rResultPos, mrDoc, mrContext, rParam, rEntry, pMyFormulaCell, refData);
+        bFound = lcl_LookupQuery( o_rResultPos, mrDoc, mrContext, rParam, rEntry, pMyFormulaCell,
+            refData, nSearchMode, bXlookupMode );
     else
     {
         ScRange aLookupRange( rParam.nCol1, rParam.nRow1, rParam.nTab,
                 rParam.nCol2, rParam.nRow2, rParam.nTab);
         ScLookupCache& rCache = mrDoc.GetLookupCache( aLookupRange, &mrContext );
-        ScLookupCache::QueryCriteria aCriteria( rEntry);
+        ScLookupCache::QueryCriteria aCriteria( rEntry );
         ScLookupCache::Result eCacheResult = rCache.lookup( o_rResultPos,
                 aCriteria, aPos);
 
@@ -10319,7 +10960,8 @@ bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
         {
             case ScLookupCache::NOT_CACHED :
             case ScLookupCache::CRITERIA_DIFFERENT :
-                bFound = lcl_LookupQuery( o_rResultPos, mrDoc, mrContext, rParam, rEntry, pMyFormulaCell, refData);
+                bFound = lcl_LookupQuery( o_rResultPos, mrDoc, mrContext, rParam, rEntry,
+                    pMyFormulaCell, refData, nSearchMode, bXlookupMode );
                 if (eCacheResult == ScLookupCache::NOT_CACHED)
                     rCache.insert( o_rResultPos, aCriteria, aPos, bFound);
                 break;
