@@ -44,6 +44,7 @@
 #include <svgfecolormatrixnode.hxx>
 #include <svgfedropshadownode.hxx>
 #include <svgfefloodnode.hxx>
+#include <svgfeimagenode.hxx>
 #include <svgfegaussianblurnode.hxx>
 #include <svgfeoffsetnode.hxx>
 #include <svgfilternode.hxx>
@@ -356,6 +357,13 @@ namespace
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }
+                case SVGToken::FeImage:
+                {
+                    /// new node for feImage
+                    mpTarget = new SvgFeImageNode(maDocument, mpTarget);
+                    mpTarget->parseAttributes(xAttribs);
+                    break;
+                }
                 case SVGToken::FeGaussianBlur:
                 {
                     /// new node for feGaussianBlur
@@ -479,6 +487,7 @@ namespace
                 case SVGToken::FeColorMatrix:
                 case SVGToken::FeDropShadow:
                 case SVGToken::FeFlood:
+                case SVGToken::FeImage:
                 case SVGToken::FeGaussianBlur:
                 case SVGToken::FeOffset:
                 case SVGToken::Filter:

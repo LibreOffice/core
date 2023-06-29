@@ -83,6 +83,7 @@ namespace svgio::svgreader
             FeColorMatrix,
             FeDropShadow,
             FeFlood,
+            FeImage,
             FeGaussianBlur,
             FeOffset,
             Filter,

@@ -238,6 +238,19 @@ CPPUNIT_TEST_FIXTURE(Test, testFilterFeDropShadow)
     assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", "color", "#ffc0cb");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testFilterFeImage)
+{
+    Primitive2DSequence aSequenceTdf132246 = parseSvg(u"/svgio/qa/cppunit/data/filterFeImage.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf132246.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequenceTdf132246);
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/transform/bitmap");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf87309)
 {
     Primitive2DSequence aSequenceTdf87309 = parseSvg(u"/svgio/qa/cppunit/data/tdf87309.svg");

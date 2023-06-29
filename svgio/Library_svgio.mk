@@ -63,6 +63,7 @@ $(eval $(call gb_Library_add_exception_objects,svgio,\
     svgio/source/svgreader/svgfecolormatrixnode \
     svgio/source/svgreader/svgfedropshadownode \
     svgio/source/svgreader/svgfefloodnode \
+    svgio/source/svgreader/svgfeimagenode \
     svgio/source/svgreader/svgfegaussianblurnode \
     svgio/source/svgreader/svgfeoffsetnode \
     svgio/source/svgreader/svgfilternode \
