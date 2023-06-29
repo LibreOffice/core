@@ -53,6 +53,10 @@
 #include <o3tl/safeint.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
+#include <oox/token/relationship.hxx>
+#include <oox/export/ThemeExport.hxx>
+#include <docmodel/theme/Theme.hxx>
+#include <svx/svdpage.hxx>
 #include <memory>
 
 using namespace oox;
@@ -860,6 +864,28 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
     if( !maTableList.IsEmpty() )
     {
         InitializeSave();
+
+        auto* pDrawLayer = GetDoc().GetDrawLayer();
+        if (pDrawLayer)
+        {
+            SdrPage* pPage = pDrawLayer->GetPage(0);
+            if (pPage)
+            {
+                std::shared_ptr<model::Theme> pTheme = pPage->getSdrPageProperties().GetTheme();
+                if (pTheme)
+                {
+                    OUString sThemeRelationshipPath = "theme/theme1.xml";
+                    OUString sThemeDocumentPath = "xl/" + sThemeRelationshipPath;
+
+                    oox::ThemeExport aThemeExport(&rStrm, oox::drawingml::DOCUMENT_XLSX);
+                    aThemeExport.write(sThemeDocumentPath, *pTheme);
+
+                    rStrm.addRelation(rStrm.GetCurrentStream()->getOutputStream(),
+                                      oox::getRelationship(Relationship::THEME),
+                                      sThemeRelationshipPath);
+                }
+            }
+        }
 
         aHeader.WriteXml( rStrm );
 

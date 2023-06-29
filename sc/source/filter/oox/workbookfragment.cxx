@@ -64,6 +64,7 @@
 #include <vcl/weld.hxx>
 
 #include <oox/core/fastparser.hxx>
+#include <svx/svdpage.hxx>
 #include <comphelper/threadpool.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
@@ -486,6 +487,12 @@ void WorkbookFragment::finalizeImport()
     // load all worksheets
     importSheetFragments(*this, aSheetFragments);
 
+    SdrPage* pPage = pModel->GetPage(0);
+    if (pPage && pTheme && !pTheme->GetName().isEmpty())
+    {
+        pPage->getSdrPageProperties().SetTheme(pTheme);
+    }
+
     // assumes getTables().finalizeImport ( which creates the DatabaseRanges )
     // has been called already
     getTables().applyAutoFilters();
@@ -511,6 +518,7 @@ void WorkbookFragment::finalizeImport()
         rxFragment.clear();
         rxSheetGlob.reset();
     }
+
 
     getDocImport().finalize();
 
