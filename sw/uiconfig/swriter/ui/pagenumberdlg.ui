@@ -24,6 +24,8 @@
                 <property name="label" translatable="yes" context="stock">_OK</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
                 <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
