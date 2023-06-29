@@ -107,6 +107,7 @@
 #include <libxml/xmlwriter.h>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <unordered_map>
+#include <unordered_set>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -242,7 +243,7 @@ class LOKDocumentFocusListener :
     static constexpr sal_Int64 MAX_ATTACHABLE_CHILDREN = 30;
 
     const SfxViewShell* m_pViewShell;
-    std::set< uno::Reference< uno::XInterface > > m_aRefList;
+    std::unordered_set< uno::Reference< uno::XInterface > > m_aRefList;
     OUString m_sFocusedParagraph;
     bool m_bFocusedParagraphNotified;
     sal_Int32 m_nCaretPosition;
