@@ -25,8 +25,7 @@ namespace sd::slidesorter::controller {
 
 Properties::Properties()
     : maBackgroundColor(Application::GetSettings().GetStyleSettings().GetWindowColor()),
-      maSelectionColor(Application::GetSettings().GetStyleSettings().GetHighlightColor()),
-      mbIsUIReadOnly(false)
+      maSelectionColor(Application::GetSettings().GetStyleSettings().GetHighlightColor())
 {
 }
 

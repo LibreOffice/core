@@ -45,15 +45,9 @@ public:
     const Color& GetSelectionColor() const { return maSelectionColor; }
     void SetSelectionColor(const Color& rColor);
 
-    /** The UI can be set to be read only independently from the model status.
-        Used for instance in the presenter view.
-    */
-    bool IsUIReadOnly() const { return mbIsUIReadOnly; }
-
 private:
     Color maBackgroundColor;
     Color maSelectionColor;
-    bool mbIsUIReadOnly;
 };
 
 } // end of namespace ::sd::slidesorter::controller

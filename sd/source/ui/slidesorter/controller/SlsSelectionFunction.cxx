@@ -466,9 +466,6 @@ bool SelectionFunction::KeyInput (const KeyEvent& rEvent)
         case KEY_DELETE:
         case KEY_BACKSPACE:
         {
-            if (mrSlideSorter.GetProperties()->IsUIReadOnly())
-                break;
-
             mrController.GetSelectionManager()->DeleteSelectedPages(rCode.GetCode()==KEY_DELETE);
 
             mnShiftKeySelectionAnchor = -1;
@@ -560,10 +557,7 @@ void SelectionFunction::MoveFocus (
 
 void SelectionFunction::DoCut()
 {
-    if ( ! mrSlideSorter.GetProperties()->IsUIReadOnly())
-    {
-        mrController.GetClipboard().DoCut();
-    }
+    mrController.GetClipboard().DoCut();
 }
 
 void SelectionFunction::DoCopy()
@@ -573,10 +567,7 @@ void SelectionFunction::DoCopy()
 
 void SelectionFunction::DoPaste()
 {
-    if ( ! mrSlideSorter.GetProperties()->IsUIReadOnly())
-    {
-        mrController.GetClipboard().DoPaste();
-    }
+    mrController.GetClipboard().DoPaste();
 }
 
 bool SelectionFunction::cancel()
@@ -950,10 +941,7 @@ void SelectionFunction::ModeHandler::StartDrag (
     if (SD_MOD()->pTransferDrag != nullptr)
         return;
 
-    if ( ! mrSlideSorter.GetProperties()->IsUIReadOnly())
-    {
-        mrSelectionFunction.SwitchToDragAndDropMode(rMousePosition);
-    }
+    mrSelectionFunction.SwitchToDragAndDropMode(rMousePosition);
 }
 
 //===== NormalModeHandler =====================================================
