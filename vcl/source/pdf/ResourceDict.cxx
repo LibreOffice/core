@@ -42,9 +42,9 @@ void appendResourceMap(OStringBuffer& rBuf, const char* pPrefix,
 
 void ResourceDict::append(OStringBuffer& rBuf, sal_Int32 nFontDictObject)
 {
-    rBuf.append("<</Font ");
-    rBuf.append(nFontDictObject);
-    rBuf.append(" 0 R\n");
+    rBuf.append("<<\n");
+    if (nFontDictObject)
+        rBuf.append("/Font " + OString::number(nFontDictObject) + " 0 R\n");
     appendResourceMap(rBuf, "XObject", m_aXObjects);
     appendResourceMap(rBuf, "ExtGState", m_aExtGStates);
     appendResourceMap(rBuf, "Shading", m_aShadings);
