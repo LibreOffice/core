@@ -28,7 +28,6 @@
 class SwShadowCursor
 {
     VclPtr<vcl::Window> m_pWin;
-    Color m_aCol;
     Point m_aOldPt;
     tools::Long m_nOldHeight;
     sal_uInt16 m_nOldMode;
@@ -36,8 +35,8 @@ class SwShadowCursor
     void DrawCursor( sal_uInt16 nMode );
 
 public:
-    SwShadowCursor( vcl::Window& rWin, const Color& rCol )
-        : m_pWin( &rWin ), m_aCol( rCol ), m_nOldHeight(0), m_nOldMode( USHRT_MAX ) {}
+    SwShadowCursor( vcl::Window& rWin )
+        : m_pWin( &rWin ), m_nOldHeight(0), m_nOldMode( USHRT_MAX ) {}
     ~SwShadowCursor();
 
     void SetPos( const Point& rPt, tools::Long nHeight, sal_uInt16 nMode );

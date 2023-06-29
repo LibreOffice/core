@@ -11,6 +11,7 @@
 // expected-no-diagnostics
 #else
 
+#include <map>
 #include <memory>
 #include <vector>
 #include <ostream>
@@ -376,6 +377,49 @@ namespace TouchFromOutsideAnalysis1
         void FindPageWindow(int x);
     };
 };
+
+namespace WriteOnlyAnalysis4
+{
+    struct ImplTabCtrlData
+    // expected-error@-1 {{read maLayoutLineToPageId [loplugin:unusedfields]}}
+    // expected-error@-2 {{outside maLayoutLineToPageId [loplugin:unusedfields]}}
+    {
+        std::map< int, int > maLayoutLineToPageId;
+    };
+    class TabControl
+    // expected-error@-1 {{read mpTabCtrlData [loplugin:unusedfields]}}
+    // expected-error@-2 {{outside-constructor mpTabCtrlData [loplugin:unusedfields]}}
+    {
+        std::unique_ptr<ImplTabCtrlData> mpTabCtrlData;
+
+        void foo(int nLine, int& rPageId)
+        {
+            rPageId = mpTabCtrlData->maLayoutLineToPageId[ nLine ];
+        }
+    };
+}
+
+namespace WriteOnlyAnalysis5
+{
+    struct ImplTabCtrlData
+    // expected-error@-1 {{read maLayoutLineToPageId [loplugin:unusedfields]}}
+    // expected-error@-2 {{write maLayoutLineToPageId [loplugin:unusedfields]}}
+    // expected-error@-3 {{outside maLayoutLineToPageId [loplugin:unusedfields]}}
+    {
+        std::map< int, int > maLayoutLineToPageId;
+    };
+    class TabControl
+    // expected-error@-1 {{read mpTabCtrlData [loplugin:unusedfields]}}
+    // expected-error@-2 {{outside-constructor mpTabCtrlData [loplugin:unusedfields]}}
+    {
+        std::unique_ptr<ImplTabCtrlData> mpTabCtrlData;
+
+        void foo(int nLine, int nPageId)
+        {
+            mpTabCtrlData->maLayoutLineToPageId[ nLine ] = nPageId;
+        }
+    };
+}
 
 #endif
 

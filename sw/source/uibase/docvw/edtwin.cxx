@@ -4550,8 +4550,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     if( rSh.GetShadowCursorPos( aDocPt, eMode, aRect, m_eOrient ))
                     {
                         if( !m_pShadCursor )
-                            m_pShadCursor.reset( new SwShadowCursor( *this,
-                                rSh.GetViewOptions()->GetDirectCursorColor() ) );
+                            m_pShadCursor.reset( new SwShadowCursor( *this ) );
                         if( text::HoriOrientation::RIGHT != m_eOrient && text::HoriOrientation::CENTER != m_eOrient )
                             m_eOrient = text::HoriOrientation::LEFT;
                         m_pShadCursor->SetPos( aRect.Pos(), aRect.Height(), static_cast< sal_uInt16 >(m_eOrient) );

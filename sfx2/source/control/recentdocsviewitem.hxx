@@ -52,7 +52,6 @@ private:
     OUString maURL;
 
     bool m_isReadOnly = false;
-    bool m_isPinned = false;
 
     OUString m_sHelpText;
 

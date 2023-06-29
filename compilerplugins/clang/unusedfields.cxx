@@ -168,6 +168,7 @@ private:
     void checkIfWrittenTo(const FieldDecl* fieldDecl, const Expr* memberExpr);
     bool isSomeKindOfZero(const Expr* arg);
     bool checkForWriteWhenUsingCollectionType(const CXXMethodDecl * calleeMethodDecl);
+    bool checkForUsingMap(const CXXMethodDecl * calleeMethodDecl);
     bool IsPassedByNonConst(const FieldDecl* fieldDecl, const Stmt * child, CallerWrapper callExpr,
                                         CalleeWrapper calleeFunctionDecl);
     compat::optional<CalleeWrapper> getCallee(CallExpr const *);
@@ -831,6 +832,7 @@ void UnusedFields::checkIfWrittenTo(const FieldDecl* fieldDecl, const Expr* memb
         }
         else if (auto operatorCallExpr = dyn_cast<CXXOperatorCallExpr>(parent))
         {
+            bool walk = false;
             auto callee = getCallee(operatorCallExpr);
             if (callee)
             {
@@ -839,16 +841,24 @@ void UnusedFields::checkIfWrittenTo(const FieldDecl* fieldDecl, const Expr* memb
                 if (calleeMethodDecl && operatorCallExpr->getArg(0) == child)
                 {
                     if (!calleeMethodDecl->isConst())
-                        bPotentiallyWrittenTo = checkForWriteWhenUsingCollectionType(calleeMethodDecl);
+                    {
+                        // If we are accessing a map entry, we want to keep walking up to determine
+                        // if it is written to.
+                        if (checkForUsingMap(calleeMethodDecl))
+                            walk = true;
+                        else
+                            bPotentiallyWrittenTo = checkForWriteWhenUsingCollectionType(calleeMethodDecl);
+                    }
                 }
                 else if (IsPassedByNonConst(fieldDecl, child, operatorCallExpr, *callee))
-                {
                     bPotentiallyWrittenTo = true;
-                }
             }
             else
                 bPotentiallyWrittenTo = true; // conservative, could improve
-            break;
+            if (walk)
+                walkUp();
+            else
+                break;
         }
         else if (auto cxxMemberCallExpr = dyn_cast<CXXMemberCallExpr>(parent))
         {
@@ -980,20 +990,20 @@ bool UnusedFields::checkForWriteWhenUsingCollectionType(const CXXMethodDecl * ca
 {
     auto const tc = loplugin::TypeCheck(calleeMethodDecl->getParent());
     bool listLike = false, setLike = false, mapLike = false, cssSequence = false;
-    if (tc.Class("deque").StdNamespace()
-        || tc.Class("list").StdNamespace()
-        || tc.Class("queue").StdNamespace()
-        || tc.Class("vector").StdNamespace())
+    // Noting that I am deliberately not calling StdNamespace() on these checks, the loplugin::TypeCheck
+    // code seems to be unreliable when dealing with ClassTemplateSpecializationDecl.
+    if (tc.Class("deque")
+        || tc.Class("list")
+        || tc.Class("queue")
+        || tc.Class("vector"))
     {
         listLike = true;
     }
-    else if (tc.Class("set").StdNamespace()
-        || tc.Class("unordered_set").StdNamespace())
+    else if (tc.Class("set") || tc.Class("unordered_set"))
     {
         setLike = true;
     }
-    else if (tc.Class("map").StdNamespace()
-        || tc.Class("unordered_map").StdNamespace())
+    else if (tc.Class("map") || tc.Class("unordered_map"))
     {
         mapLike = true;
     }
@@ -1038,6 +1048,16 @@ bool UnusedFields::checkForWriteWhenUsingCollectionType(const CXXMethodDecl * ca
     }
 
     return true;
+}
+
+bool UnusedFields::checkForUsingMap(const CXXMethodDecl * calleeMethodDecl)
+{
+    auto const tc = loplugin::TypeCheck(calleeMethodDecl->getParent());
+    if (!(tc.Class("map") || tc.Class("unordered_map")))
+        return false;
+    if (!calleeMethodDecl->isOverloadedOperator())
+        return false;
+    return calleeMethodDecl->getOverloadedOperator() == OO_Subscript;
 }
 
 bool UnusedFields::IsPassedByNonConst(const FieldDecl* fieldDecl, const Stmt * child, CallerWrapper callExpr,

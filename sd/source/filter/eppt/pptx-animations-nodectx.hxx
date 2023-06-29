@@ -22,7 +22,6 @@ typedef std::unique_ptr<NodeContext> NodeContextPtr;
 class NodeContext
 {
     const css::uno::Reference<css::animations::XAnimationNode> mxNode;
-    const bool mbMainSeqChild;
 
     std::vector<NodeContextPtr> maChildNodes;
     std::vector<Cond> maBeginCondList;

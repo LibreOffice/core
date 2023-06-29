@@ -128,7 +128,6 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
       mrParentView(rView),
       maURL(rURL),
       m_isReadOnly(isReadOnly),
-      m_isPinned(isPinned),
       m_bRemoveIconHighlighted(false),
       m_aRemoveRecentBitmap(BMP_RECENTDOC_REMOVE),
       m_aRemoveRecentBitmapHighlighted(BMP_RECENTDOC_REMOVE_HIGHLIGHTED)
@@ -231,7 +230,7 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
 
     maTitle = aTitle;
     maPreview1 = aThumbnail;
-    mbPinned = m_isPinned;
+    mbPinned = isPinned;
 }
 
 ::tools::Rectangle RecentDocsViewItem::updateHighlight(bool bVisible, const Point& rPoint)

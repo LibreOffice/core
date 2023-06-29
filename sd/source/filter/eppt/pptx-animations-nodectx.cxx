@@ -97,7 +97,6 @@ bool initCondList(const Any& rAny, std::vector<Cond>& rList, bool bIsMainSeqChil
 NodeContext::NodeContext(const Reference<XAnimationNode>& xNode, bool bMainSeqChild,
                          bool bIsIterateChild)
     : mxNode(xNode)
-    , mbMainSeqChild(bMainSeqChild)
     , mbValid(true)
     , mbOnSubTnLst(false)
     , mnEffectNodeType(-1)
@@ -111,10 +110,10 @@ NodeContext::NodeContext(const Reference<XAnimationNode>& xNode, bool bMainSeqCh
 
     // Put event triggered Audio time nodes to SubTnLst.
     // Add other types of nodes once we find more test cases.
-    mbOnSubTnLst = initCondList(getNodeForCondition()->getBegin(), maBeginCondList, mbMainSeqChild)
+    mbOnSubTnLst = initCondList(getNodeForCondition()->getBegin(), maBeginCondList, bMainSeqChild)
                    && mxNode->getType() == AnimationNodeType::AUDIO;
 
-    initCondList(getNodeForCondition()->getEnd(), maEndCondList, mbMainSeqChild);
+    initCondList(getNodeForCondition()->getEnd(), maEndCondList, bMainSeqChild);
 }
 
 void NodeContext::initUserData()

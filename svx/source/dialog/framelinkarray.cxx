@@ -289,7 +289,6 @@ struct ArrayImpl
 {
     // used to reduce the memory consumption of cells
     rtl::Reference<SfxItemPool> mxPool;
-    const Cell*         mpDefaultCell;
     CellVec             maCells;
     std::vector<sal_Int32>   maWidths;
     std::vector<sal_Int32>   maHeights;
@@ -357,9 +356,9 @@ ArrayImpl::ArrayImpl( sal_Int32 nWidth, sal_Int32 nHeight ) :
     mbYCoordsDirty( false ),
     mbMayHaveCellRotation( false )
 {
-    mpDefaultCell = &mxPool->Put(Cell());
+    const Cell* pDefaultCell = &mxPool->Put(Cell());
     // default-construct all vectors
-    maCells.resize( mnWidth * mnHeight, mpDefaultCell );
+    maCells.resize( mnWidth * mnHeight, pDefaultCell );
     maWidths.resize( mnWidth, 0 );
     maHeights.resize( mnHeight, 0 );
     maXCoords.resize( mnWidth + 1, 0 );

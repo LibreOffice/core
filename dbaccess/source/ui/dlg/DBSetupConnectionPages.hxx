@@ -236,7 +236,6 @@ namespace dbaui
 
         TypedWhichId<SfxInt32Item> m_nPortId;
 
-        std::unique_ptr<weld::Label> m_xHeaderText;
         std::unique_ptr<weld::Entry> m_xETDatabasename;
         std::unique_ptr<weld::Entry> m_xETHostname;
         std::unique_ptr<weld::SpinButton> m_xNFPortNumber;
