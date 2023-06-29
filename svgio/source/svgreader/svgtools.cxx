@@ -1354,11 +1354,10 @@ namespace svgio::svgreader
             return !rSvgStringVector.empty();
         }
 
-        void readImageLink(const OUString& rCandidate, OUString& rXLink, OUString& rUrl, OUString& rMimeType, OUString& rData)
+        void readImageLink(const OUString& rCandidate, OUString& rXLink, OUString& rUrl, OUString& rData)
         {
             rXLink.clear();
             rUrl.clear();
-            rMimeType.clear();
             rData.clear();
 
             if(!readLocalLink(rCandidate, rXLink))
@@ -1376,11 +1375,11 @@ namespace svgio::svgreader
                     skip_char(rCandidate, ' ', nPos, nLen);
                     copyToLimiter(rCandidate, ';', nPos, aBuffer, nLen);
                     skip_char(rCandidate, ' ', ';', nPos, nLen);
-                    rMimeType = aBuffer.makeStringAndClear();
+                    const OUString aMimeType = aBuffer.makeStringAndClear();
 
-                    if(!rMimeType.isEmpty() && nPos < nLen)
+                    if(!aMimeType.isEmpty() && nPos < nLen)
                     {
-                        if(rMimeType.startsWith("image"))
+                        if(aMimeType.startsWith("image"))
                         {
                             // image data
                             std::u16string_view aData(rCandidate.subView(nPos));

@@ -43,7 +43,6 @@ namespace svgio::svgreader
             OUString           maXLink;        // internal link
             OUString           maUrl;          // external link
 
-            OUString           maMimeType;     // mimetype and
             OUString           maData;         // base64 data
 
         public:
