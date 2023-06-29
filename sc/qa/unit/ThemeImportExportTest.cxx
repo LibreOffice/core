@@ -41,11 +41,9 @@ CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testThemeExport)
     // Fonts
     assertXPath(pXmlDoc, "/x:styleSheet/x:fonts/x:font", 6);
 
-    assertXPath(pXmlDoc, "/x:styleSheet/x:fonts/x:font[5]/x:color", "rgb",
-                "FFFFC000"); // need to be theme probably
+    assertXPath(pXmlDoc, "/x:styleSheet/x:fonts/x:font[5]/x:color", "theme", "7");
 
-    assertXPath(pXmlDoc, "/x:styleSheet/x:fonts/x:font[6]/x:color", "rgb",
-                "FF9C5700"); // need to be theme probably
+    assertXPath(pXmlDoc, "/x:styleSheet/x:fonts/x:font[6]/x:color", "rgb", "FF9C5700");
 
     // Fills
     assertXPath(pXmlDoc, "/x:styleSheet/x:fills/x:fill", 4);
@@ -92,9 +90,9 @@ void checkCellBackgroundThemeColor(ScDocument* pDoc)
         auto& rTransformations = aComplexColor.getTransformations();
         CPPUNIT_ASSERT_EQUAL(size_t(2), rTransformations.size());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(2000), rTransformations[0].mnValue);
+        CPPUNIT_ASSERT_EQUAL(20, sal_Int32(std::round(rTransformations[0].mnValue / 100.0)));
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff, rTransformations[1].meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(7999), rTransformations[1].mnValue);
+        CPPUNIT_ASSERT_EQUAL(80, sal_Int32(std::round(rTransformations[1].mnValue / 100.0)));
     }
 
     // A3
@@ -118,6 +116,8 @@ void checkCellBackgroundThemeColor(ScDocument* pDoc)
 CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testCellBackgroundThemeColor)
 {
     loadFromURL(u"xlsx/Test_ThemeColor_Text_Background_Border.xlsx");
+    checkCellBackgroundThemeColor(getScDoc());
+    saveAndReload("Calc Office Open XML");
     checkCellBackgroundThemeColor(getScDoc());
 }
 
@@ -151,9 +151,9 @@ void checkCellTextThemeColor(ScDocument* pDoc)
         auto& rTransformations = aComplexColor.getTransformations();
         CPPUNIT_ASSERT_EQUAL(size_t(2), rTransformations.size());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(6000), rTransformations[0].mnValue);
+        CPPUNIT_ASSERT_EQUAL(60, sal_Int32(std::round(rTransformations[0].mnValue / 100.0)));
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff, rTransformations[1].meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(3999), rTransformations[1].mnValue);
+        CPPUNIT_ASSERT_EQUAL(40, sal_Int32(std::round(rTransformations[1].mnValue / 100.0)));
     }
 
     // B3
@@ -177,6 +177,8 @@ void checkCellTextThemeColor(ScDocument* pDoc)
 CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testCellTextThemeColor)
 {
     loadFromURL(u"xlsx/Test_ThemeColor_Text_Background_Border.xlsx");
+    checkCellTextThemeColor(getScDoc());
+    saveAndReload("Calc Office Open XML");
     checkCellTextThemeColor(getScDoc());
 }
 
