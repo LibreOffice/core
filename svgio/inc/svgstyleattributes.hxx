@@ -205,19 +205,13 @@ namespace svgio::svgreader
 
             /// link to content. If set, the node can be fetched on demand
             OUString               maClipPathXLink;
-            const SvgClipPathNode* mpClipPathXLink;
             OUString               maFilterXLink;
-            const SvgFilterNode*   mpFilterXLink;
             OUString               maMaskXLink;
-            const SvgMaskNode*     mpMaskXLink;
 
             /// link to markers. If set, the node can be fetched on demand
             OUString               maMarkerStartXLink;
-            const SvgMarkerNode*        mpMarkerStartXLink;
             OUString               maMarkerMidXLink;
-            const SvgMarkerNode*        mpMarkerMidXLink;
             OUString               maMarkerEndXLink;
-            const SvgMarkerNode*        mpMarkerEndXLink;
 
             /// fill rule
             FillRule                    maFillRule;

@@ -1287,12 +1287,6 @@ namespace svgio::svgreader
             maTextDecoration(TextDecoration::notset),
             maTextAnchor(TextAnchor::notset),
             maVisibility(Visibility::notset),
-            mpClipPathXLink(nullptr),
-            mpFilterXLink(nullptr),
-            mpMaskXLink(nullptr),
-            mpMarkerStartXLink(nullptr),
-            mpMarkerMidXLink(nullptr),
-            mpMarkerEndXLink(nullptr),
             maFillRule(FillRule::notset),
             maClipRule(FillRule::notset),
             maBaselineShift(BaselineShift::Baseline),
@@ -2885,17 +2879,13 @@ namespace svgio::svgreader
 
         const SvgClipPathNode* SvgStyleAttributes::accessClipPathXLink() const
         {
-            if(!mpClipPathXLink)
+            const OUString aClipPath(getClipPathXLink());
+
+            if(!aClipPath.isEmpty())
             {
-                const OUString aClipPath(getClipPathXLink());
-
-                if(!aClipPath.isEmpty())
-                {
-                    return dynamic_cast< const SvgClipPathNode* >(mrOwner.getDocument().findSvgNodeById(aClipPath));
-                }
+                return dynamic_cast< const SvgClipPathNode* >(mrOwner.getDocument().findSvgNodeById(aClipPath));
             }
-
-            return mpClipPathXLink;
+            return nullptr;
         }
 
         OUString SvgStyleAttributes::getFilterXLink() const
@@ -2925,17 +2915,13 @@ namespace svgio::svgreader
 
         const SvgFilterNode* SvgStyleAttributes::accessFilterXLink() const
         {
-            if(!mpFilterXLink)
+            const OUString aFilter(getFilterXLink());
+
+            if(!aFilter.isEmpty())
             {
-                const OUString aFilter(getFilterXLink());
-
-                if(!aFilter.isEmpty())
-                {
-                    return dynamic_cast< const SvgFilterNode* >(mrOwner.getDocument().findSvgNodeById(aFilter));
-                }
+                return dynamic_cast< const SvgFilterNode* >(mrOwner.getDocument().findSvgNodeById(aFilter));
             }
-
-            return mpFilterXLink;
+            return nullptr;
         }
 
         OUString SvgStyleAttributes::getMaskXLink() const
@@ -2965,17 +2951,13 @@ namespace svgio::svgreader
 
         const SvgMaskNode* SvgStyleAttributes::accessMaskXLink() const
         {
-            if(!mpMaskXLink)
+            const OUString aMask(getMaskXLink());
+
+            if(!aMask.isEmpty())
             {
-                const OUString aMask(getMaskXLink());
-
-                if(!aMask.isEmpty())
-                {
-                    return dynamic_cast< const SvgMaskNode* >(mrOwner.getDocument().findSvgNodeById(aMask));
-                }
+                return dynamic_cast< const SvgMaskNode* >(mrOwner.getDocument().findSvgNodeById(aMask));
             }
-
-            return mpMaskXLink;
+            return nullptr;
         }
 
         OUString SvgStyleAttributes::getMarkerStartXLink() const
@@ -3000,17 +2982,13 @@ namespace svgio::svgreader
 
         const SvgMarkerNode* SvgStyleAttributes::accessMarkerStartXLink() const
         {
-            if(!mpMarkerStartXLink)
+            const OUString aMarker(getMarkerStartXLink());
+
+            if(!aMarker.isEmpty())
             {
-                const OUString aMarker(getMarkerStartXLink());
-
-                if(!aMarker.isEmpty())
-                {
-                    return dynamic_cast< const SvgMarkerNode* >(mrOwner.getDocument().findSvgNodeById(getMarkerStartXLink()));
-                }
+                return dynamic_cast< const SvgMarkerNode* >(mrOwner.getDocument().findSvgNodeById(getMarkerStartXLink()));
             }
-
-            return mpMarkerStartXLink;
+            return nullptr;
         }
 
         OUString SvgStyleAttributes::getMarkerMidXLink() const
@@ -3035,17 +3013,13 @@ namespace svgio::svgreader
 
         const SvgMarkerNode* SvgStyleAttributes::accessMarkerMidXLink() const
         {
-            if(!mpMarkerMidXLink)
+            const OUString aMarker(getMarkerMidXLink());
+
+            if(!aMarker.isEmpty())
             {
-                const OUString aMarker(getMarkerMidXLink());
-
-                if(!aMarker.isEmpty())
-                {
-                    return dynamic_cast< const SvgMarkerNode* >(mrOwner.getDocument().findSvgNodeById(getMarkerMidXLink()));
-                }
+                return dynamic_cast< const SvgMarkerNode* >(mrOwner.getDocument().findSvgNodeById(getMarkerMidXLink()));
             }
-
-            return mpMarkerMidXLink;
+            return nullptr;
         }
 
         OUString SvgStyleAttributes::getMarkerEndXLink() const
@@ -3070,17 +3044,13 @@ namespace svgio::svgreader
 
         const SvgMarkerNode* SvgStyleAttributes::accessMarkerEndXLink() const
         {
-            if(!mpMarkerEndXLink)
+            const OUString aMarker(getMarkerEndXLink());
+
+            if(!aMarker.isEmpty())
             {
-                const OUString aMarker(getMarkerEndXLink());
-
-                if(!aMarker.isEmpty())
-                {
-                    return dynamic_cast< const SvgMarkerNode* >(mrOwner.getDocument().findSvgNodeById(getMarkerEndXLink()));
-                }
+                return dynamic_cast< const SvgMarkerNode* >(mrOwner.getDocument().findSvgNodeById(getMarkerEndXLink()));
             }
-
-            return mpMarkerEndXLink;
+            return nullptr;
         }
 
         SvgNumber SvgStyleAttributes::getBaselineShiftNumber() const
