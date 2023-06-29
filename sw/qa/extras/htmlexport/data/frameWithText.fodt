@@ -16,7 +16,7 @@
    <text:p>A frame with text below</text:p>
    <text:p><draw:frame draw:style-name="fr1" draw:name="Frame1" text:anchor-type="as-char" svg:width="50mm" draw:z-index="0">
      <draw:text-box fo:min-height="27mm">
-      <text:p text:style-name="P1">Some text in frame</text:p>
+      <text:p text:style-name="P1">Some text in frame &amp; &lt;foo&gt;</text:p>
      </draw:text-box>
     </draw:frame></text:p>
    <text:p>A text after the frame</text:p>

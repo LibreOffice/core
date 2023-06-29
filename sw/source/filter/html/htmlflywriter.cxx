@@ -42,6 +42,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <svx/svdograf.hxx>
+#include <comphelper/xmlencode.hxx>
 
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
@@ -1246,10 +1247,10 @@ OUString getFrameFormatText(const SwFrameFormat& rFrameFormat)
         {
             if (!result.isEmpty())
                 result.append("\n");
-            result.append(pTextNd->GetExpandText(
+            result.append(comphelper::string::encodeForXml(pTextNd->GetExpandText(
                 nullptr, 0, -1, true, true, false,
                 ExpandMode::ExpandFields | ExpandMode::HideInvisible | ExpandMode::HideDeletions
-                | ExpandMode::HideFieldmarkCommands));
+                    | ExpandMode::HideFieldmarkCommands)));
         }
     }
 
