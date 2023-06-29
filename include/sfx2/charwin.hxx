@@ -83,11 +83,9 @@ class SFX2_DLLPUBLIC SfxCharmapContainer
     std::unique_ptr<weld::Widget> m_xRecentGrid;
     std::unique_ptr<weld::Widget> m_xFavGrid;
 
-    Link<SvxCharView*, void> m_aMouseClickHdl;
     Link<void*, void> m_aUpdateFavHdl;
     Link<void*, void> m_aUpdateRecentHdl;
 
-    DECL_DLLPRIVATE_LINK(CharClickHdl, SvxCharView*, void);
     DECL_DLLPRIVATE_LINK(RecentClearClickHdl, SvxCharView*, void);
     DECL_DLLPRIVATE_LINK(FavClearClickHdl, SvxCharView*, void);
     DECL_DLLPRIVATE_LINK(RecentClearAllClickHdl, SvxCharView*, void);

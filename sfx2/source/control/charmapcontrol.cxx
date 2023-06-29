@@ -394,11 +394,6 @@ bool SfxCharmapContainer::isFavChar(std::u16string_view sTitle, std::u16string_v
     return itChar != m_aFavCharList.end() && itFont != m_aFavCharFontList.end();
 }
 
-IMPL_LINK(SfxCharmapContainer, CharClickHdl, SvxCharView*, pView, void)
-{
-    m_aMouseClickHdl.Call(pView);
-}
-
 IMPL_LINK(SfxCharmapContainer, RecentClearClickHdl, SvxCharView*, rView, void)
 {
     const OUString& sTitle = rView->GetText();
