@@ -2756,7 +2756,7 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
         }
 
         // write font dict
-        sal_Int32 nFontDict = -1;
+        sal_Int32 nFontDict = 0;
         if (!aUsedFonts.empty())
         {
             nFontDict = createObject();
@@ -2811,8 +2811,7 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
         // write resources dict
         aLine.setLength(0);
         aLine.append(OString::number(nResources) + " 0 obj\n");
-        if (!aUsedFonts.empty())
-            aResourceDict.append(aLine, nFontDict);
+        aResourceDict.append(aLine, nFontDict);
         aLine.append("endobj\n\n");
         if (!updateObject(nResources))
             return false;
