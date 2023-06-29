@@ -50,6 +50,7 @@ private:
     std::unique_ptr<weld::Button> m_xWide;
     std::unique_ptr<weld::Button> m_xMirrored;
     std::unique_ptr<weld::Button> m_xLast;
+    std::unique_ptr<weld::Button> m_xMoreButton;
 
     std::unique_ptr<weld::Label> m_xLeft;
     std::unique_ptr<weld::Label> m_xRight;
@@ -88,6 +89,7 @@ private:
     DECL_LINK( SelectMarginHdl, weld::Button&, void );
     DECL_LINK( ModifyLRMarginHdl, weld::MetricSpinButton&, void );
     DECL_LINK( ModifyULMarginHdl, weld::MetricSpinButton&, void );
+    DECL_LINK(MoreButtonClickHdl_Impl, weld::Button&, void);
 
     static void ExecuteMarginLRChange(
         const tools::Long nPageLeftMargin,

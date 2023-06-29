@@ -469,6 +469,23 @@
             <property name="position">11</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkButton" id="moreoptions">
+            <property name="label" translatable="yes" context="pagemargincontrol|moreoptions">_More Options</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes" context="pagemargincontrol|moreoptions|tooltip_text">More Options</property>
+            <property name="relief">none</property>
+            <property name="use_underline">True</property>
+            <property name="always_show_image">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">12</property>
+          </packing>
+        </child>
       </object>
     </child>
   </object>

@@ -91,6 +91,7 @@ namespace sw::sidebar {
 
 PageMarginControl::PageMarginControl(PageMarginPopup* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "modules/swriter/ui/pagemargincontrol.ui", "PageMarginControl")
+    , m_xMoreButton(m_xBuilder->weld_button("moreoptions"))
     , m_xLeft(m_xBuilder->weld_label("leftLabel"))
     , m_xRight(m_xBuilder->weld_label("rightLabel"))
     , m_xInner(m_xBuilder->weld_label("innerLabel"))
@@ -170,12 +171,14 @@ PageMarginControl::PageMarginControl(PageMarginPopup* pControl, weld::Widget* pP
     m_xWide->show();
     m_xMirrored->show();
     m_xLast->show();
+    m_xMoreButton->show();
 
     m_xNarrow->connect_clicked( LINK( this, PageMarginControl, SelectMarginHdl ) );
     m_xNormal->connect_clicked( LINK( this, PageMarginControl, SelectMarginHdl ) );
     m_xWide->connect_clicked( LINK( this, PageMarginControl, SelectMarginHdl ) );
     m_xMirrored->connect_clicked( LINK( this, PageMarginControl, SelectMarginHdl ) );
     m_xLast->connect_clicked( LINK( this, PageMarginControl, SelectMarginHdl ) );
+    m_xMoreButton->connect_clicked( LINK(this, PageMarginControl, MoreButtonClickHdl_Impl));
 
     m_bUserCustomValuesAvailable = GetUserCustomValues();
 
@@ -223,7 +226,7 @@ PageMarginControl::PageMarginControl(PageMarginPopup* pControl, weld::Widget* pP
 
 void PageMarginControl::GrabFocus()
 {
-    m_xNarrow->grab_focus();
+    m_xMoreButton->grab_focus();
 }
 
 PageMarginControl::~PageMarginControl()
@@ -468,6 +471,14 @@ IMPL_LINK_NOARG( PageMarginControl, ModifyULMarginHdl, weld::MetricSpinButton&, 
     ExecuteMarginULChange( m_nPageTopMargin, m_nPageBottomMargin );
     SetMetricFieldMaxValues( m_aPageSize );
     m_bCustomValuesUsed = true;
+}
+
+IMPL_LINK_NOARG(PageMarginControl, MoreButtonClickHdl_Impl, weld::Button&, void)
+{
+    if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
+        pViewFrm->GetBindings().GetDispatcher()->Execute(FN_FORMAT_PAGE_SETTING_DLG,
+                                                         SfxCallMode::ASYNCHRON);
+    m_xControl->EndPopupMode();
 }
 
 bool PageMarginControl::GetUserCustomValues()
