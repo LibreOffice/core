@@ -14,5 +14,5 @@
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:PrintPagePreview"/>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:PrintPreview"/>
+  <menu:menuitem menu:id=".uno:ClosePreview"/>
 </menu:menupopup>
