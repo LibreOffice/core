@@ -102,6 +102,10 @@ static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter,
                     rJsonWriter.put("ondemand", true);
             }
         }
+        if (rChildren.size() > 0 && !pTabListBox->IsExpanded(pEntry))
+        {
+            rJsonWriter.put("collapsed", true);
+        }
 
         if (bCheckButtons)
         {

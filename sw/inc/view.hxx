@@ -350,6 +350,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
 public: // #i123922# Needs to be called from a 2nd place now as a helper method
     SAL_DLLPRIVATE bool          InsertGraphicDlg( SfxRequest& );
+    sal_Int32 m_nNaviExpandedStatus = -1;
 
 protected:
 
