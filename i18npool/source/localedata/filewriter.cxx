@@ -132,11 +132,6 @@ void OFileWriter::writeOUStringRefFunction3(const char *func, std::u16string_vie
     fprintf(m_f, "\treturn %s%s(nStyles, nLevels, nAttributes);\n}\n", func, locale);
 }
 
-void OFileWriter::writeIntParameter(const char* pAsciiStr, const sal_Int16 count, sal_Int16 val) const
-{
-    fprintf(m_f, "static const sal_Unicode %s%d[] = {%d};\n", pAsciiStr, count, val);
-}
-
 void OFileWriter::writeOUStringLiteralIntParameter(const char* pAsciiStr, const sal_Int16 count, sal_Int16 val) const
 {
     fprintf(m_f, "static constexpr OUStringLiteral %s%d = u\"\\x%x\";\n", pAsciiStr, count, val);

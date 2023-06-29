@@ -186,8 +186,6 @@ public:
     ScNavipiCfg&        GetNavipiCfg();
     ScAddInCfg&         GetAddInCfg();
     svtools::ColorConfig&   GetColorConfig();
-    SvtAccessibilityOptions& GetAccessOptions();
-    SvtCTLOptions&      GetCTLOptions();
     SC_DLLPUBLIC SvtUserOptions& GetUserOptions();
 
     void                ModifyOptions( const SfxItemSet& rOptSet );

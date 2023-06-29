@@ -175,8 +175,6 @@ public:
     SwToolbarConfigItem*GetWebToolbarConfig()   { return m_pWebToolbarConfig.get(); }
     SwDBConfig*         GetDBConfig();
     svtools::ColorConfig&   GetColorConfig();
-    SvtAccessibilityOptions&    GetAccessibilityOptions();
-    SvtCTLOptions&      GetCTLOptions();
     SvtUserOptions&     GetUserOptions();
 
     // Iterate over views.

@@ -61,10 +61,6 @@ class SW_DLLPUBLIC SwGrfNode final: public SwNoTextNode
                std::u16string_view rGrfName, const OUString& rFltName,
                SwGrfFormatColl* pGrfColl,
                SwAttrSet const * pAutoAttr );
-    SwGrfNode( SwNode& rWhere,
-               const GraphicObject& rGrfObj,
-               SwGrfFormatColl* pGrfColl,
-               SwAttrSet const * pAutoAttr );
 
     void InsertLink( std::u16string_view rGrfName, const OUString& rFltName );
 

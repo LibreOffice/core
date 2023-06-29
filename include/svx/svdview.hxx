@@ -232,8 +232,6 @@ public:
     // and more...
     OUString GetStatusText();
 
-    SvtAccessibilityOptions& getAccessibilityOptions() { return maAccessibilityOptions;}
-
     virtual void onAccessibilityOptionsChanged();
 
     // Do not create ObjectContact locally, but offer a call to allow override

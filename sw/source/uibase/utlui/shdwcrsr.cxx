@@ -53,25 +53,4 @@ void SwShadowCursor::DrawCursor( sal_uInt16 nMode )
         m_pWin->SetPointer(PointerStyle::AutoScrollW);
 }
 
-tools::Rectangle SwShadowCursor::GetRect() const
-{
-    tools::Long nH = m_nOldHeight;
-    Point aPt( m_aOldPt );
-
-    nH = (((nH / 4)+1) * 4) + 1;
-    tools::Long nWidth = nH / 4 + 3 + 1;
-
-    Size aSz( nWidth, nH );
-
-    if( text::HoriOrientation::RIGHT == m_nOldMode )
-        aPt.AdjustX( -(aSz.Width()) );
-    else if( text::HoriOrientation::CENTER == m_nOldMode )
-    {
-        aPt.AdjustX( -(aSz.Width()) );
-        aSz.setWidth( aSz.Width() * 2 );
-    }
-
-    return m_pWin->PixelToLogic( tools::Rectangle( aPt, aSz ) );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

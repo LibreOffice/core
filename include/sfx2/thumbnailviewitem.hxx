@@ -100,8 +100,6 @@ public:
 
     bool isPinned () const { return mbPinned; }
 
-    void setPinned (bool state);
-
     /** Updates own highlight status based on the aPoint position.
 
         Returns rectangle that needs to be invalidated.

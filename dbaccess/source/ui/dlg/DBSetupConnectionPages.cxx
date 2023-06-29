@@ -625,14 +625,6 @@ using namespace ::com::sun::star;
         impl_setURL( _rURL, true);
     }
 
-    OUString OPostgresConnectionPageSetup::impl_getURL() const
-    {
-        // get the pure text
-        OUString sURL = m_xConnectionURL->GetTextNoPrefix();
-        OSL_ENSURE( m_pCollection, "OConnectionHelper::impl_getURL: have no interpreter for the URLs!" );
-        return sURL;
-    }
-
     // OMySQLJDBCConnectionPageSetup
     OJDBCConnectionPageSetup::OJDBCConnectionPageSetup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
         : OConnectionTabPageSetup(pPage, pController, "dbaccess/ui/jdbcconnectionpage.ui", "JDBCConnectionPage", rCoreAttrs,

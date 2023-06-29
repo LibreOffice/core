@@ -784,7 +784,6 @@ public:
     void            SetPaintFirstLineHdl(const Link<PaintFirstLineInfo*,void>& rLink) { maPaintFirstLineHdl = rLink; }
 
     void            SetModifyHdl( const Link<LinkParamNone*,void>& rLink );
-    Link<LinkParamNone*,void> const & GetModifyHdl() const;
 
     void            SetNotifyHdl( const Link<EENotify&,void>& rLink );
 

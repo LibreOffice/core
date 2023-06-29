@@ -168,8 +168,6 @@ struct ImplSVAppData
     bool m_bUseSystemLoop = false;
 
     DECL_STATIC_LINK(ImplSVAppData, ImplQuitMsg, void*, void);
-    DECL_STATIC_LINK(ImplSVAppData, ImplEndAllDialogsMsg, void*, void);
-    DECL_STATIC_LINK(ImplSVAppData, ImplEndAllPopupsMsg, void*, void);
 };
 
 /// Cache multiple scalings for the same bitmap

@@ -39,13 +39,6 @@ public:
         mpBuffer->maPalette = rPalette;
     }
 
-    void SetPaletteEntryCount(sal_uInt16 nCount)
-    {
-        assert(mpBuffer && "Access is not valid!");
-
-        mpBuffer->maPalette.SetEntryCount(nCount);
-    }
-
     void SetPaletteColor(sal_uInt16 nColor, const BitmapColor& rBitmapColor)
     {
         assert(mpBuffer && "Access is not valid!");

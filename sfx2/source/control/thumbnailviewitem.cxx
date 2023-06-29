@@ -86,11 +86,6 @@ void ThumbnailViewItem::setHighlight (bool state)
     mbHover = state;
 }
 
-void ThumbnailViewItem::setPinned (bool state)
-{
-    mbPinned = state;
-}
-
 ::tools::Rectangle ThumbnailViewItem::updateHighlight(bool bVisible, const Point& rPoint)
 {
     bool bNeedsPaint = false;

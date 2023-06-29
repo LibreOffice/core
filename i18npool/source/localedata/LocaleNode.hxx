@@ -49,7 +49,6 @@ public:
     void  writeOUStringRefFunction2(const char *func, std::u16string_view useLocale) const;
     void  writeOUStringFunction3(const char *func, const char *style, const char* levels, const char* attr, const char *array) const;
     void  writeOUStringRefFunction3(const char *func, std::u16string_view useLocale) const;
-    void  writeIntParameter(const char* pAsciiStr, const sal_Int16 count, sal_Int16 val) const;
     void  writeOUStringLiteralIntParameter(const char* pAsciiStr, const sal_Int16 count, sal_Int16 val) const;
     bool  writeOUStringLiteralDefaultParameter(const char* pAsciiStr, std::u16string_view str, sal_Int16 count) const;
     void  writeOUStringLiteralParameter(const char* pAsciiStr, std::u16string_view aChars) const;

@@ -821,16 +821,6 @@ bool DrawViewShell::IsSelected(sal_uInt16 nPage)
     return false;
 }
 
-bool DrawViewShell::IsVisible(sal_uInt16 nPage)
-{
-    slidesorter::SlideSorterViewShell* pVShell
-        = slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase());
-    if (pVShell != nullptr)
-        return pVShell->GetSlideSorter().GetController().GetPageSelector().IsPageVisible(nPage);
-
-    return false;
-}
-
 /**
  * Switch to desired page.
  * nSelectPage refers to the current EditMode

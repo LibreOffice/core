@@ -248,9 +248,7 @@ namespace dbaui
         void        impl_setURL( std::u16string_view _rURL, bool _bPrefix );
         void        setURLNoPrefix( std::u16string_view _rURL );
         void        setURL( std::u16string_view _rURL );
-        OUString    impl_getURL() const;
         bool        commitURL();
-
     };
 
 

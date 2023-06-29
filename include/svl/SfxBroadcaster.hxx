@@ -57,10 +57,6 @@ public:
         return true to break the loop.  */
     void  ForAllListeners(std::function<bool(SfxListener*)> f) const;
 
-    /** Get a vector of the current listeners - used by unit test code.
-     */
-    std::vector<SfxListener*> GetListenersForUnitTest() const;
-
     friend class SfxListener;
     friend class ::SfxBroadcasterTest;
 };

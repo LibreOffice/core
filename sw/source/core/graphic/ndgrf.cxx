@@ -76,21 +76,6 @@ SwGrfNode::SwGrfNode(
     ReRead(rGrfName, rFltName, pGraphic, false);
 }
 
-SwGrfNode::SwGrfNode( SwNode& rWhere,
-                      const GraphicObject& rGrfObj,
-                      SwGrfFormatColl *pGrfColl,
-                      SwAttrSet const * pAutoAttr ) :
-    SwNoTextNode( rWhere, SwNodeType::Grf, pGrfColl, pAutoAttr ),
-    maGrfObj(rGrfObj),
-    mbInBaseLinkSwapIn(true),
-    // #i73788#
-    mbLinkedInputStreamReady( false ),
-    mbIsStreamReadOnly( false )
-{
-    mbInSwapIn = mbChangeTwipSize  =
-        mbFrameInPaint = mbScaleImageMap = false;
-}
-
 /** Create new SW/G reader.
  *
  * Use this ctor if you want to read a linked graphic.

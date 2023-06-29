@@ -108,11 +108,6 @@ void Outliner::SetModifyHdl( const Link<LinkParamNone*,void>& rLink )
     pEditEngine->SetModifyHdl( rLink );
 }
 
-Link<LinkParamNone*,void> const & Outliner::GetModifyHdl() const
-{
-    return pEditEngine->GetModifyHdl();
-}
-
 void Outliner::SetNotifyHdl( const Link<EENotify&,void>& rLink )
 {
     pEditEngine->aOutlinerNotifyHdl = rLink;

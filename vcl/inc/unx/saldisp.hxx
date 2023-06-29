@@ -152,7 +152,6 @@ public:
                                            int      r,
                                            int      g,
                                            int      b ) const;
-    Pixel           GetPixel( std::optional<Color> nColor ) const;
 };
 
 class SalI18N_InputMethod;

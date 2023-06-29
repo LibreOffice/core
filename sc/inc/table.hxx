@@ -983,11 +983,9 @@ public:
     SCROW       FirstVisibleRow(SCROW nStartRow, SCROW nEndRow) const;
     SCROW       LastVisibleRow(SCROW nStartRow, SCROW nEndRow) const;
     SCROW       CountVisibleRows(SCROW nStartRow, SCROW nEndRow) const;
-    SCROW       CountHiddenRows(SCROW nStartRow, SCROW nEndRow) const;
     tools::Long GetTotalRowHeight(SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZero = true) const;
 
     SCCOL       CountVisibleCols(SCCOL nStartCol, SCCOL nEndCol) const;
-    SCCOL       CountHiddenCols(SCCOL nStartCol, SCCOL nEndCol) const;
 
     SCCOLROW    LastHiddenColRow(SCCOLROW nPos, bool bCol) const;
 

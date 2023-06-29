@@ -40,8 +40,6 @@ public:
     ~SwShadowCursor();
 
     void SetPos( const Point& rPt, tools::Long nHeight, sal_uInt16 nMode );
-
-    tools::Rectangle GetRect() const;
 };
 
 #endif

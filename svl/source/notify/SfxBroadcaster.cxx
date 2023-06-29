@@ -141,18 +141,6 @@ void SfxBroadcaster::ForAllListeners(std::function<bool(SfxListener*)> f) const
     }
 }
 
-std::vector<SfxListener*> SfxBroadcaster::GetListenersForUnitTest() const
-{
-    std::vector<SfxListener*> rv;
-    for (size_t i = 0; i < m_Listeners.size(); ++i)
-    {
-        SfxListener* const pListener = m_Listeners[i];
-        if (pListener)
-            rv.push_back(pListener);
-    }
-    return rv;
-}
-
 bool SfxBroadcaster::HasListeners() const { return GetListenerCount() != 0; }
 
 size_t SfxBroadcaster::GetListenerCount() const

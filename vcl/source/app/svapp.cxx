@@ -290,23 +290,6 @@ const vcl::KeyCode* Application::GetReservedKeyCode( size_t i )
         return &ReservedKeys[i];
 }
 
-IMPL_STATIC_LINK_NOARG( ImplSVAppData, ImplEndAllPopupsMsg, void*, void )
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    while (pSVData->mpWinData->mpFirstFloat)
-        pSVData->mpWinData->mpFirstFloat->EndPopupMode(FloatWinPopupEndFlags::Cancel);
-}
-
-IMPL_STATIC_LINK_NOARG( ImplSVAppData, ImplEndAllDialogsMsg, void*, void )
-{
-    vcl::Window* pAppWindow = Application::GetFirstTopLevelWindow();
-    while (pAppWindow)
-    {
-        vcl::EndAllDialogs(pAppWindow);
-        pAppWindow = Application::GetNextTopLevelWindow(pAppWindow);
-    }
-}
-
 void Application::notifyWindow(vcl::LOKWindowId /*nLOKWindowId*/,
                                const OUString& /*rAction*/,
                                const std::vector<vcl::LOKPayloadItem>& /*rPayload = std::vector<LOKPayloadItem>()*/) const

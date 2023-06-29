@@ -158,13 +158,6 @@ Reference<frame::XController> SlideSorter::GetXController() const
     return xController;
 }
 
-void SlideSorter::Paint (const ::tools::Rectangle& rRepaintArea)
-{
-    GetController().Paint(
-        rRepaintArea,
-        GetContentWindow());
-}
-
 void SlideSorter::SetupControls()
 {
     GetVerticalScrollBar()->Show();

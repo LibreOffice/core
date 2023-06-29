@@ -895,28 +895,6 @@ svtools::ColorConfig& ScModule::GetColorConfig()
     return *m_pColorConfig;
 }
 
-SvtAccessibilityOptions& ScModule::GetAccessOptions()
-{
-    if ( !m_pAccessOptions )
-    {
-        m_pAccessOptions.reset( new SvtAccessibilityOptions );
-        m_pAccessOptions->AddListener(this);
-    }
-
-    return *m_pAccessOptions;
-}
-
-SvtCTLOptions& ScModule::GetCTLOptions()
-{
-    if ( !m_pCTLOptions )
-    {
-        m_pCTLOptions.reset( new SvtCTLOptions );
-        m_pCTLOptions->AddListener(this);
-    }
-
-    return *m_pCTLOptions;
-}
-
 SvtUserOptions&  ScModule::GetUserOptions()
 {
     if( !m_pUserOptions )

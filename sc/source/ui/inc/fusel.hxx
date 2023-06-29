@@ -36,8 +36,6 @@ public:
     virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
 
-    void    ActivateNoteHandles(SdrObject* pObj);
-
 private:
     bool TestDetective( const SdrPageView* pPV, const Point& rPos );  // -> fusel2
 
