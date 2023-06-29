@@ -141,7 +141,7 @@ namespace svgio::svgreader
 
                     if(nLen)
                     {
-                        readImageLink(aContent, maXLink, maUrl, maMimeType, maData);
+                        readImageLink(aContent, maXLink, maUrl, maData);
                     }
                     break;
                 }
@@ -204,7 +204,7 @@ namespace svgio::svgreader
             const basegfx::B2DRange aTarget(fX, fY, fX + fWidth, fY + fHeight);
             basegfx::B2DRange aViewBox(aTarget);
 
-            if(!maMimeType.isEmpty() && !maData.isEmpty())
+            if(!maData.isEmpty())
             {
                 // use embedded base64 encoded data
                 css::uno::Sequence< sal_Int8 > aPass;

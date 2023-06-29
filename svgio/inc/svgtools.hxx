@@ -125,7 +125,7 @@ namespace svgio::svgreader
         typedef ::std::vector< OUString > SvgStringVector;
         bool readSvgStringVector(std::u16string_view rCandidate, SvgStringVector& rSvgStringVector);
 
-        void readImageLink(const OUString& rCandidate, OUString& rXLink, OUString& rUrl, OUString& rMimeType, OUString& rData);
+        void readImageLink(const OUString& rCandidate, OUString& rXLink, OUString& rUrl, OUString& rData);
 
         OUString consolidateContiguousSpace(const OUString& rCandidate);
         OUString xmlSpaceHandling(const OUString& rCandidate, bool bIsDefault);
