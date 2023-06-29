@@ -2576,6 +2576,25 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_ListsNoStartAttribute)
     assertXPath(pDoc, "//reqif-xhtml:ol[@start]", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_FrameTextAsObjectAltText)
+{
+    createSwDoc("frameWithText.fodt");
+    ExportToReqif();
+
+    SvMemoryStream aStream;
+    WrapReqifFromTempFile(aStream);
+    xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
+    CPPUNIT_ASSERT(pDoc);
+
+    // Without the fix, this would fail with
+    // - Expected: Some text in frame
+    // - Actual  : Frame1
+    // i.e., frame name was used as the object element content, not frame text
+    assertXPathContent(pDoc,
+                       "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p[2]/reqif-xhtml:object",
+                       "Some text in frame");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
