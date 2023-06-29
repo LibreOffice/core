@@ -21,6 +21,7 @@
 #include <svgfecolormatrixnode.hxx>
 #include <svgfedropshadownode.hxx>
 #include <svgfefloodnode.hxx>
+#include <svgfeimagenode.hxx>
 #include <svgfegaussianblurnode.hxx>
 #include <svgfeoffsetnode.hxx>
 
@@ -73,6 +74,11 @@ void SvgFilterNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTarg
             const SvgFeDropShadowNode& rFeDropShadowNode
                 = dynamic_cast<const SvgFeDropShadowNode&>(*pCandidate);
             rFeDropShadowNode.apply(rTarget);
+        }
+        else if (pCandidate->getType() == SVGToken::FeImage)
+        {
+            const SvgFeImageNode& rFeImageNode = dynamic_cast<const SvgFeImageNode&>(*pCandidate);
+            rFeImageNode.apply(rTarget);
         }
     }
 }
