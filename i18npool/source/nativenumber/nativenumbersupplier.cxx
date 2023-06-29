@@ -586,15 +586,11 @@ OUString getNumberText(const Locale& rLocale, const OUString& rNumberString,
     for (i = 0; i < len; i++)
     {
         sal_Unicode ch = src[i];
-        if (isNumber(ch))
+        if (isNumber(ch) || ch == aSeparators.DecimalSeparator)
         {
             ++count;
             sBuf.append(ch);
         }
-        else if (ch == aSeparators.DecimalSeparator)
-            // Convert any decimal separator to point - in case libnumbertext has a different one
-            // for this locale (it seems that point is supported for all locales in libnumbertext)
-            sBuf.append('.');
         else if (ch == aSeparators.ThousandSeparator && count > 0)
             continue;
         else if (isMinus(ch) && count == 0)
