@@ -51,6 +51,7 @@
 #include <svx/sdtacitm.hxx>
 #include <svx/sdtayitm.hxx>
 #include <svx/sdtaiitm.hxx>
+#include <svx/SvxXTextColumns.hxx>
 #include <svx/xit.hxx>
 #include <svx/xflclit.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -1141,6 +1142,19 @@ css::uno::Any SdStyleSheet::getPropertyValue_Impl(const OUString& PropertyName)
     else if( pEntry->nWID == WID_STYLE_HIDDEN )
     {
         aAny <<= IsHidden( );
+    }
+    else if (pEntry->nWID == OWN_ATTR_TEXTCOLUMNS)
+    {
+        const SfxItemSet& rStyleSet = GetItemSet();
+
+        auto xIf = SvxXTextColumns_createInstance();
+        css::uno::Reference<css::text::XTextColumns> xCols(xIf, css::uno::UNO_QUERY_THROW);
+        xCols->setColumnCount(rStyleSet.Get(SDRATTR_TEXTCOLUMNS_NUMBER).GetValue());
+        css::uno::Reference<css::beans::XPropertySet> xProp(xIf, css::uno::UNO_QUERY_THROW);
+        xProp->setPropertyValue(
+            "AutomaticDistance",
+            css::uno::Any(rStyleSet.Get(SDRATTR_TEXTCOLUMNS_SPACING).GetValue()));
+        aAny <<= xIf;
     }
     else
     {
