@@ -68,9 +68,6 @@ public:
         : SwModelTestBase("/sw/qa/extras/rtfimport/data/", "Rich Text Format")
     {
     }
-
-protected:
-    AllSettings m_aSavedSettings;
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testN695479)

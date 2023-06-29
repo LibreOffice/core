@@ -82,38 +82,6 @@ static const char *GetAtomName( Display *d, Atom a )
 { return Null( XGetAtomName( d, a ) ); }
 #endif
 
-static int ColorDiff( int r, int g, int b )
-{ return (r*r)+(g*g)+(b*b); }
-
-static int ColorDiff( Color c1, int r, int g, int b )
-{ return ColorDiff( static_cast<int>(c1.GetRed())-r,
-                    static_cast<int>(c1.GetGreen())-g,
-                    static_cast<int>(c1.GetBlue())-b ); }
-
-static int sal_Shift( Pixel nMask )
-{
-    int i = 24;
-    if( nMask < 0x00010000 ) { nMask <<= 16; i -= 16; }
-    if( nMask < 0x01000000 ) { nMask <<=  8; i -=  8; }
-    if( nMask < 0x10000000 ) { nMask <<=  4; i -=  4; }
-    if( nMask < 0x40000000 ) { nMask <<=  2; i -=  2; }
-    if( nMask < 0x80000000 ) {               i -=  1; }
-    return i;
-}
-
-static int sal_significantBits( Pixel nMask )
-{
-    int nRotate = sizeof(Pixel)*4;
-    int nBits = 0;
-    while( nRotate-- )
-    {
-        if( nMask & 1 )
-            nBits++;
-        nMask >>= 1;
-    }
-    return nBits;
-}
-
 // check if the resolution is sane
 static bool sal_ValidDPI(tools::Long nDPI)
 {
@@ -2314,8 +2282,6 @@ Time SalDisplay::GetEventTimeImpl( bool i_bAlwaysReget ) const
 }
 
 SalVisual::SalVisual()
-    : eRGBMode_(SalRGB::RGB), nRedShift_(0), nGreenShift_(0), nBlueShift_(0)
-    , nRedBits_(0), nGreenBits_(0), nBlueBits_(0)
 {
     visual = nullptr;
 }
@@ -2323,97 +2289,12 @@ SalVisual::SalVisual()
 SalVisual::SalVisual( const XVisualInfo* pXVI )
 {
     *static_cast<XVisualInfo*>(this) = *pXVI;
-    if( GetClass() != TrueColor )
-    {
-        eRGBMode_ = SalRGB::RGB;
-        nRedShift_ = nGreenShift_ = nBlueShift_ = 0;
-        nRedBits_ = nGreenBits_ = nBlueBits_ = 0;
-        return;
-    }
-
-    nRedShift_      = sal_Shift( red_mask );
-    nGreenShift_    = sal_Shift( green_mask );
-    nBlueShift_     = sal_Shift( blue_mask );
-
-    nRedBits_       = sal_significantBits( red_mask );
-    nGreenBits_     = sal_significantBits( green_mask );
-    nBlueBits_      = sal_significantBits( blue_mask );
-
-    if( GetDepth() == 24 )
-        if( red_mask == 0xFF0000 )
-            if( green_mask == 0xFF00 )
-                if( blue_mask  == 0xFF )
-                    eRGBMode_ = SalRGB::RGB;
-                else
-                    eRGBMode_ = SalRGB::otherSalRGB;
-            else if( blue_mask  == 0xFF00 )
-                if( green_mask == 0xFF )
-                    eRGBMode_ = SalRGB::RBG;
-                else
-                    eRGBMode_ = SalRGB::otherSalRGB;
-            else
-                eRGBMode_ = SalRGB::otherSalRGB;
-        else if( green_mask == 0xFF0000 )
-            if( red_mask == 0xFF00 )
-                if( blue_mask  == 0xFF )
-                    eRGBMode_ = SalRGB::GRB;
-                else
-                    eRGBMode_ = SalRGB::otherSalRGB;
-            else if( blue_mask == 0xFF00 )
-                if( red_mask  == 0xFF )
-                    eRGBMode_ = SalRGB::GBR;
-                else
-                    eRGBMode_ = SalRGB::otherSalRGB;
-            else
-                eRGBMode_ = SalRGB::otherSalRGB;
-        else if( blue_mask == 0xFF0000 )
-            if( red_mask == 0xFF00 )
-                if( green_mask  == 0xFF )
-                    eRGBMode_ = SalRGB::BRG;
-                else
-                    eRGBMode_ = SalRGB::otherSalRGB;
-            else if( green_mask == 0xFF00 )
-                if( red_mask == 0xFF )
-                    eRGBMode_ = SalRGB::BGR;
-                else
-                    eRGBMode_ = SalRGB::otherSalRGB;
-            else
-                eRGBMode_ = SalRGB::otherSalRGB;
-        else
-            eRGBMode_ = SalRGB::otherSalRGB;
-    else
-        eRGBMode_ = SalRGB::otherSalRGB;
 }
 
 // Converts the order of bytes of a Pixel into bytes of a Color
 // This is not reversible for the 6 XXXA
 
 // Color is RGB (ABGR) a=0xFF000000, r=0xFF0000, g=0xFF00, b=0xFF
-
-#define SALCOLOR        SalRGB::RGB
-#define SALCOLORREVERSE SalRGB::BGR
-
-Pixel SalVisual::GetTCPixel( Color nColor ) const
-{
-    if( SALCOLOR == eRGBMode_ )
-        return static_cast<Pixel>(sal_uInt32(nColor));
-
-    Pixel r = static_cast<Pixel>( nColor.GetRed() );
-    Pixel g = static_cast<Pixel>( nColor.GetGreen() );
-    Pixel b = static_cast<Pixel>( nColor.GetBlue() );
-
-    if( SALCOLORREVERSE == eRGBMode_ )
-        return (b << 16) | (g << 8) | r;
-
-    if( SalRGB::otherSalRGB != eRGBMode_ ) // 8+8+8=24
-        return (r << nRedShift_) | (g << nGreenShift_) | (b << nBlueShift_);
-
-    if( nRedShift_ > 0 )   r <<= nRedShift_;   else r >>= -nRedShift_;
-    if( nGreenShift_ > 0 ) g <<= nGreenShift_; else g >>= -nGreenShift_;
-    if( nBlueShift_ > 0 )  b <<= nBlueShift_;  else b >>= -nBlueShift_;
-
-    return (r&red_mask) | (g&green_mask) | (b&blue_mask);
-}
 
 SalColormap::SalColormap( const SalDisplay *pDisplay, Colormap hColormap,
                           SalX11Screen nXScreen )
@@ -2566,63 +2447,6 @@ SalColormap::~SalColormap()
     {
         delete m_aVisual.visual;
     }
-}
-
-void SalColormap::GetPalette()
-{
-    Pixel i;
-    m_aPalette = std::vector<Color>(m_nUsed);
-
-    std::unique_ptr<XColor[]> aColor(new XColor[m_nUsed]);
-
-    for( i = 0; i < m_nUsed; i++ )
-    {
-        aColor[i].red = aColor[i].green = aColor[i].blue = 0;
-        aColor[i].pixel = i;
-    }
-
-    XQueryColors( m_pDisplay->GetDisplay(), m_hColormap, aColor.get(), m_nUsed );
-
-    for( i = 0; i < m_nUsed; i++ )
-    {
-        m_aPalette[i] = Color( aColor[i].red   >> 8,
-                                       aColor[i].green >> 8,
-                                       aColor[i].blue  >> 8 );
-    }
-}
-
-static sal_uInt16 sal_Lookup( const std::vector<Color>& rPalette,
-                                int r, int g, int b,
-                                Pixel nUsed )
-{
-    sal_uInt16 nPixel = 0;
-    int    nBest  = ColorDiff( rPalette[0], r, g, b );
-
-    for( Pixel i = 1; i < nUsed; i++ )
-    {
-        int n = ColorDiff( rPalette[i], r, g, b );
-
-        if( n < nBest )
-        {
-            if( !n )
-                return i;
-
-            nPixel = i;
-            nBest  = n;
-        }
-    }
-    return nPixel;
-}
-
-void SalColormap::GetLookupTable()
-{
-    m_aLookupTable = std::vector<sal_uInt16>(16*16*16);
-
-    int i = 0;
-    for( int r = 0; r < 256; r += 17 )
-        for( int g = 0; g < 256; g += 17 )
-            for( int b = 0; b < 256; b += 17 )
-                m_aLookupTable[i++] = sal_Lookup( m_aPalette, r, g, b, m_nUsed );
 }
 
 inline bool SalColormap::GetXPixel( XColor &rColor,

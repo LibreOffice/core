@@ -367,7 +367,6 @@ public:
     bool            IsModified() const;
 
     void            SetModifyHdl( const Link<LinkParamNone*,void>& rLink );
-    Link<LinkParamNone*,void> const & GetModifyHdl() const;
 
     bool            IsInSelectionMode() const;
 

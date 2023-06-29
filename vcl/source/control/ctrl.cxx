@@ -141,14 +141,6 @@ tools::Long Control::GetIndexForPoint( const Point& rPoint ) const
     return mxLayoutData ? mxLayoutData->GetIndexForPoint( rPoint ) : -1;
 }
 
-tools::Long ControlLayoutData::GetLineCount() const
-{
-    tools::Long nLines = m_aLineIndices.size();
-    if( nLines == 0 && !m_aDisplayText.isEmpty() )
-        nLines = 1;
-    return nLines;
-}
-
 Pair ControlLayoutData::GetLineStartEnd( tools::Long nLine ) const
 {
     Pair aPair( -1, -1 );

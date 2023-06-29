@@ -1665,12 +1665,6 @@ void EditEngine::SetModifyHdl( const Link<LinkParamNone*,void>& rLink )
     pImpEditEngine->SetModifyHdl( rLink );
 }
 
-Link<LinkParamNone*,void> const & EditEngine::GetModifyHdl() const
-{
-    return pImpEditEngine->GetModifyHdl();
-}
-
-
 void EditEngine::ClearModifyFlag()
 {
     pImpEditEngine->SetModifyFlag( false );

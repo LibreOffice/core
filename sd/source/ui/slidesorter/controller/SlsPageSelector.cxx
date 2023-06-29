@@ -218,15 +218,6 @@ bool PageSelector::IsPageSelected(int nPageIndex)
         return false;
 }
 
-bool PageSelector::IsPageVisible(int nPageIndex)
-{
-    SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
-    if (pDescriptor)
-        return pDescriptor->HasState(PageDescriptor::ST_Visible);
-    else
-        return false;
-}
-
 int PageSelector::GetPageCount() const
 {
     return mrModel.GetPageCount();

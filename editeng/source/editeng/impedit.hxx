@@ -978,7 +978,6 @@ public:
     bool            IsModified() const      { return aEditDoc.IsModified(); }
     void            SetModifyFlag( bool b ) { aEditDoc.SetModified( b ); }
     void            SetModifyHdl( const Link<LinkParamNone*,void>& rLink ) { aModifyHdl = rLink; }
-    const Link<LinkParamNone*,void>& GetModifyHdl() const { return aModifyHdl; }
 
     bool            IsInSelectionMode() const { return bInSelection; }
 

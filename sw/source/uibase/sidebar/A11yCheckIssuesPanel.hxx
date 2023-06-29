@@ -88,7 +88,6 @@ private:
     std::unique_ptr<weld::Box> m_xBoxNumbering;
     std::unique_ptr<weld::Box> m_xBoxOther;
     sfx::AccessibilityIssueCollection m_aIssueCollection;
-    std::function<sfx::AccessibilityIssueCollection()> m_getIssueCollection;
     void removeOldWidgets();
     void populateIssues();
 

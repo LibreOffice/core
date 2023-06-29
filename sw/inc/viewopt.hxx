@@ -208,7 +208,6 @@ struct SwViewColors
             && m_aIndexShadingsColor == rOther.m_aIndexShadingsColor
             && m_aLinksColor == rOther.m_aLinksColor
             && m_aVisitedLinksColor == rOther.m_aVisitedLinksColor
-            && m_aDirectCursorColor == rOther.m_aDirectCursorColor
             && m_aTextGridColor == rOther.m_aTextGridColor
             && m_aSpellColor == rOther.m_aSpellColor
             && m_aGrammarColor == rOther.m_aGrammarColor
@@ -230,7 +229,6 @@ struct SwViewColors
     Color m_aIndexShadingsColor; // background color of indexes
     Color m_aLinksColor;
     Color m_aVisitedLinksColor;
-    Color m_aDirectCursorColor;
     Color m_aTextGridColor;
     Color m_aSpellColor;     // mark color of online spell checking
     Color m_aGrammarColor;
@@ -815,7 +813,6 @@ public:
     const Color& GetIndexShadingsColor() const;
     const Color& GetLinksColor() const;
     const Color& GetVisitedLinksColor() const;
-    const Color& GetDirectCursorColor() const;
     const Color& GetTextGridColor() const;
     const Color& GetSpellColor() const;
     const Color& GetGrammarColor() const;

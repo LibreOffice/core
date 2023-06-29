@@ -69,20 +69,8 @@ extern "C" srv_vendor_t sal_GetServerVendor( Display *p_display );
 
 // MSB/Bigendian view (Color == RGB, r=0xFF0000, g=0xFF00, b=0xFF)
 
-enum class SalRGB { RGB,  RBG,
-              GBR,  GRB,
-              BGR,  BRG,
-              otherSalRGB };
-
 class SalVisual : public XVisualInfo
 {
-    SalRGB          eRGBMode_;
-    int             nRedShift_;
-    int             nGreenShift_;
-    int             nBlueShift_;
-    int             nRedBits_;
-    int             nGreenBits_;
-    int             nBlueBits_;
 public:
                             SalVisual();
                             SalVisual( const XVisualInfo* pXVI );
@@ -91,8 +79,6 @@ public:
     Visual         *GetVisual() const { return visual; }
     int             GetClass() const { return c_class; }
     int             GetDepth() const { return depth; }
-
-            Pixel           GetTCPixel( Color nColor ) const;
 };
 
 // A move-only flag, used by SalColormap to track ownership of its m_aVisual.visual:
@@ -118,13 +104,10 @@ class SalColormap
     std::vector<Color>      m_aPalette;         // Pseudocolor
     SalVisual               m_aVisual;
     OwnershipFlag           m_aVisualOwnership;
-    std::vector<sal_uInt16>     m_aLookupTable;     // Pseudocolor: 12bit reduction
     Pixel                   m_nWhitePixel;
     Pixel                   m_nBlackPixel;
     Pixel                   m_nUsed;            // Pseudocolor
 
-    void            GetPalette();
-    void            GetLookupTable();
 public:
     SalColormap( const SalDisplay*  pSalDisplay,
                  Colormap           hColormap,

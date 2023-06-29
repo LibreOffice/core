@@ -56,7 +56,6 @@ SwViewColors::SwViewColors() :
     m_aIndexShadingsColor(COL_LIGHTGRAY),
     m_aLinksColor(COL_BLUE),
     m_aVisitedLinksColor(COL_RED),
-    m_aDirectCursorColor(COL_BLUE),
     m_aTextGridColor(COL_LIGHTGRAY),
     m_aSpellColor(COL_LIGHTRED),
     m_aGrammarColor(COL_LIGHTBLUE),
@@ -111,8 +110,6 @@ SwViewColors::SwViewColors(const svtools::ColorConfig& rConfig)
     m_aShadowColor = aValue.nColor;
     if(aValue.bIsVisible)
         m_nAppearanceFlags |= ViewOptFlags::Shadow;
-
-    m_aDirectCursorColor = rConfig.GetColorValue(svtools::WRITERDIRECTCURSOR).nColor;
 
     m_aTextGridColor = rConfig.GetColorValue(svtools::WRITERTEXTGRID).nColor;
 
@@ -490,11 +487,6 @@ const Color& SwViewOption::GetLinksColor() const
 const Color& SwViewOption::GetVisitedLinksColor() const
 {
     return m_aColorConfig.m_aVisitedLinksColor;
-}
-
-const Color& SwViewOption::GetDirectCursorColor() const
-{
-    return m_aColorConfig.m_aDirectCursorColor;
 }
 
 const Color& SwViewOption::GetTextGridColor() const
