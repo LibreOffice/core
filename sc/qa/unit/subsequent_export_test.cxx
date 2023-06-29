@@ -105,8 +105,13 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf139167)
                 "FFFFFF00");
 }
 
-CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf113271)
+CPPUNIT_TEST_FIXTURE(ScExportTest, testFontColorWithMultipleAttributesDefined)
 {
+    // Related: TDF #113271
+    // Test font color where "rgb" and "theme" attribute is defined and
+    // is imported and exported correctly. Theme should have priority,
+    // so LO is fine to ignore "rgb" at export.
+
     createScDoc("xlsx/tdf113271.xlsx");
 
     save("Calc Office Open XML");
@@ -115,10 +120,11 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf113271)
 
     assertXPath(pDoc, "/x:styleSheet/x:fonts", "count", "6");
 
-    // Without the fix in place, this test would have failed with
-    // - Expected: FF000000
-    // - Actual  : FFFFFFFF
-    assertXPath(pDoc, "/x:styleSheet/x:fonts/x:font[1]/x:color", "rgb", "FF000000");
+    // Expect "theme" attribute to be set correctly
+    assertXPath(pDoc, "/x:styleSheet/x:fonts/x:font[1]/x:color", "theme", "1");
+    // We don't export "rgb" attribute
+    assertXPathNoAttribute(pDoc, "/x:styleSheet/x:fonts/x:font[1]/x:color", "rgb");
+    // Just making sure the checked font is the correct one
     assertXPath(pDoc, "/x:styleSheet/x:fonts/x:font[1]/x:name", "val", "Calibri");
 }
 

@@ -64,6 +64,7 @@
 #include <oox/token/relationship.hxx>
 #include <oox/export/drawingml.hxx>
 #include <oox/export/utils.hxx>
+#include <oox/export/ColorExportUtils.hxx>
 #include <formula/grammar.hxx>
 #include <oox/ole/vbaexport.hxx>
 #include <excelvbaproject.hxx>
@@ -884,15 +885,19 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
         pStream->singleElement(XML_vertAlign, XML_val, pVertAlign);
     pStream->singleElement(XML_sz, XML_val, OString::number( rFontData.mnHeight / 20.0 )); // Twips->Pt
 
-    if (rFontData.maComplexColor.getFinalColor() != Color( ColorAlpha, 0, 0xFF, 0xFF, 0xFF))
+    auto& rComplexColor = rFontData.maComplexColor;
+    if (rComplexColor.isValidSchemeType())
+    {
+        sal_Int32 nTheme = oox::convertThemeColorTypeToExcelThemeNumber(rComplexColor.getSchemeType());
+        double fTintShade = oox::convertColorTransformsToTintOrShade(rComplexColor);
+        pStream->singleElement(XML_color,
+            XML_theme, OString::number(nTheme),
+            XML_tint, sax_fastparser::UseIf(OString::number(fTintShade), fTintShade != 0.0));
+    }
+    else if (rComplexColor.getFinalColor() != Color( ColorAlpha, 0, 0xFF, 0xFF, 0xFF))
     {
         pStream->singleElement(XML_color,
-                // OOXTODO: XML_auto,       bool
-                // OOXTODO: XML_indexed,    uint
-                XML_rgb, XclXmlUtils::ToOString(rFontData.maComplexColor.getFinalColor())
-                // OOXTODO: XML_theme,      index into <clrScheme/>
-                // OOXTODO: XML_tint,       double
-        );
+            XML_rgb, XclXmlUtils::ToOString(rComplexColor.getFinalColor()));
     }
     pStream->singleElement(nFontId, XML_val, rFontData.maName);
     pStream->singleElement(XML_family, XML_val, OString::number(  rFontData.mnFamily ));

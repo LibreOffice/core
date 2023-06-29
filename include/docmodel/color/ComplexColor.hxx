@@ -100,6 +100,11 @@ public:
 
     ThemeColorType getSchemeType() const { return meSchemeType; }
 
+    bool isValidSchemeType() const
+    {
+        return meType == model::ColorType::Scheme && meSchemeType != ThemeColorType::Unknown;
+    }
+
     Color getRGBColor() const { return Color(mnComponent1, mnComponent2, mnComponent3); }
 
     std::vector<Transformation> const& getTransformations() const { return maTransformations; }
