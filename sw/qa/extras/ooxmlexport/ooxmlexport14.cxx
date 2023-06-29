@@ -1348,6 +1348,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf146346, "tdf146346.docx")
 {
     // This was 2 (by bad docDefault vertical margins around tables in footnotes)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    // only first page has table
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // check first page: all tables on the first page
+    assertXPath(pXmlDoc, "/root/page[1]//anchored/fly", 8);
+    assertXPath(pXmlDoc, "/root/page[1]//anchored/fly/tab", 8);
+
+    // FIXME no second page (regression since multi-page floating tables?)
+    //assertXPath(pXmlDoc, "/root/page[2]", 0);
 }
 #endif
 
