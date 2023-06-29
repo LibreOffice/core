@@ -1135,6 +1135,12 @@ SwContentTree::SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNaviga
         OUString sDocTitle = pView->GetDocShell()->GetTitle();
         if (lcl_DocOutLineExpandStateMap.find(sDocTitle) != lcl_DocOutLineExpandStateMap.end())
             mOutLineNodeMap = lcl_DocOutLineExpandStateMap[sDocTitle];
+        if (comphelper::LibreOfficeKit::isActive()) {
+            if (pView->m_nNaviExpandedStatus < 0)
+                m_nActiveBlock = 1;
+            else
+                m_nActiveBlock = pView->m_nNaviExpandedStatus;
+        }
     }
 
     m_aUpdTimer.SetInvokeHandler(LINK(this, SwContentTree, TimerUpdate));
@@ -1149,6 +1155,8 @@ SwContentTree::~SwContentTree()
     {
         OUString sDocTitle = pView->GetDocShell()->GetTitle();
         lcl_DocOutLineExpandStateMap[sDocTitle] = mOutLineNodeMap;
+        if (comphelper::LibreOfficeKit::isActive())
+            pView->m_nNaviExpandedStatus = m_nActiveBlock;
     }
     clear(); // If applicable erase content types previously.
     m_aUpdTimer.Stop();
@@ -2223,6 +2231,19 @@ bool SwContentTree::RequestingChildren(const weld::TreeIter& rParent)
     }
 
     return false;
+}
+
+void SwContentTree::ExpandAllHeadings()
+{
+    if (HasHeadings())
+    {
+        std::unique_ptr<weld::TreeIter> xEntry = GetEntryAtAbsPos(0);
+        if (xEntry)
+        {
+            if (!IsAllExpanded(*m_xTreeView, *xEntry))
+                ExpandOrCollapseAll(*m_xTreeView, *xEntry);
+        }
+    }
 }
 
 SdrObject* SwContentTree::GetDrawingObjectsByContent(const SwContent *pCnt)

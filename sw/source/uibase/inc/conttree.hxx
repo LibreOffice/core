@@ -274,6 +274,8 @@ public:
     // return true if it has any children
     bool RequestingChildren(const weld::TreeIter& rParent);
 
+    void ExpandAllHeadings();
+
     virtual void Notify(SfxBroadcaster& rBC, SfxHint const& rHint) override;
 
     sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt);
