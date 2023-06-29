@@ -61,7 +61,12 @@ void AccessibilityIssue::gotoIssue() const
         case IssueObject::OLE:
         {
             SwWrtShell* pWrtShell = m_pDoc->GetDocShell()->GetWrtShell();
-            pWrtShell->GotoFly(m_sObjectID, FLYCNTTYPE_ALL, true);
+            bool bSelected = pWrtShell->GotoFly(m_sObjectID, FLYCNTTYPE_ALL, true);
+            if (bSelected && pWrtShell->IsFrameSelected())
+            {
+                pWrtShell->HideCursor();
+                pWrtShell->EnterSelFrameMode();
+            }
             if (comphelper::LibreOfficeKit::isActive())
                 pWrtShell->ShowCursor();
         }
