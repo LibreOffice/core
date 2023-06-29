@@ -91,7 +91,7 @@ public:
     Color&          GetColor()                      { return aColor; }
     void            SetColor( const Color& rCol)    { aColor = rCol; }
 
-    model::ComplexColor getComplexColor() const
+    const model::ComplexColor& getComplexColor() const
     {
         return maComplexColor;
     }
