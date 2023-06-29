@@ -5775,6 +5775,7 @@ if test "$cross_compiling" = "yes"; then
         DYNLOADING
         EPOXY
         EXPAT
+        FROZEN
         GLM
         GRAPHITE
         HARFBUZZ
