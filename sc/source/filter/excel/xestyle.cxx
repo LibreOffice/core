@@ -52,6 +52,7 @@
 
 #include <o3tl/safeint.hxx>
 #include <oox/export/utils.hxx>
+#include <oox/export/ColorExportUtils.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/relationship.hxx>
@@ -1974,18 +1975,26 @@ void XclExpCellArea::SaveXml( XclExpXmlStream& rStrm ) const
 
         if (maForeColor != COL_TRANSPARENT || maBackColor != COL_TRANSPARENT)
         {
-            if (maForegroundComplexColor.getType() == model::ColorType::Scheme)
+            if (maForegroundComplexColor.isValidSchemeType())
             {
-                rStyleSheet->singleElement(XML_fgColor, XML_theme, OString::number(sal_Int32(maForegroundComplexColor.getSchemeType())));
+                sal_Int32 nTheme = oox::convertThemeColorTypeToExcelThemeNumber(maForegroundComplexColor.getSchemeType());
+                double fTintShade = oox::convertColorTransformsToTintOrShade(maForegroundComplexColor);
+                rStyleSheet->singleElement(XML_fgColor,
+                    XML_theme, OString::number(nTheme),
+                    XML_tint, sax_fastparser::UseIf(OString::number(fTintShade), fTintShade != 0.0));
             }
             else if (maForeColor != COL_TRANSPARENT)
             {
                 rStyleSheet->singleElement(XML_fgColor, XML_rgb, XclXmlUtils::ToOString(maForeColor));
             }
 
-            if (maBackgroundComplexColor.getType() == model::ColorType::Scheme)
+            if (maBackgroundComplexColor.isValidSchemeType())
             {
-                rStyleSheet->singleElement(XML_fgColor, XML_theme, OString::number(sal_Int32(maBackgroundComplexColor.getSchemeType())));
+                sal_Int32 nTheme = oox::convertThemeColorTypeToExcelThemeNumber(maBackgroundComplexColor.getSchemeType());
+                double fTintShade = oox::convertColorTransformsToTintOrShade(maBackgroundComplexColor);
+                rStyleSheet->singleElement(XML_bgColor,
+                    XML_theme, OString::number(nTheme),
+                    XML_tint, sax_fastparser::UseIf(OString::number(fTintShade), fTintShade != 0.0));
             }
             else if (maBackColor != COL_TRANSPARENT)
             {
@@ -1994,9 +2003,14 @@ void XclExpCellArea::SaveXml( XclExpXmlStream& rStrm ) const
         }
         else
         {
-            if (maForegroundComplexColor.getType() == model::ColorType::Scheme)
+            if (maForegroundComplexColor.isValidSchemeType())
             {
-                rStyleSheet->singleElement(XML_fgColor, XML_theme, OString::number(sal_Int32(maForegroundComplexColor.getSchemeType())));
+                sal_Int32 nTheme = oox::convertThemeColorTypeToExcelThemeNumber(maForegroundComplexColor.getSchemeType());
+                double fTintShade = oox::convertColorTransformsToTintOrShade(maForegroundComplexColor);
+
+                rStyleSheet->singleElement(XML_fgColor,
+                    XML_theme, OString::number(nTheme),
+                    XML_tint, sax_fastparser::UseIf(OString::number(fTintShade), fTintShade != 0.0));
             }
             else if (mnForeColor != 0)
             {
@@ -2005,7 +2019,11 @@ void XclExpCellArea::SaveXml( XclExpXmlStream& rStrm ) const
 
             if (maBackgroundComplexColor.getType() == model::ColorType::Scheme)
             {
-                rStyleSheet->singleElement(XML_fgColor, XML_theme, OString::number(sal_Int32(maBackgroundComplexColor.getSchemeType())));
+                sal_Int32 nTheme = oox::convertThemeColorTypeToExcelThemeNumber(maBackgroundComplexColor.getSchemeType());
+                double fTintShade = oox::convertColorTransformsToTintOrShade(maBackgroundComplexColor);
+                rStyleSheet->singleElement(XML_bgColor,
+                    XML_theme, OString::number(nTheme),
+                    XML_tint, sax_fastparser::UseIf(OString::number(fTintShade), fTintShade != 0.0));
             }
             else if (mnBackColor != 0)
             {
@@ -2037,7 +2055,13 @@ void XclExpColor::SaveXml( XclExpXmlStream& rStrm ) const
     rStyleSheet->startElement(XML_fill);
     rStyleSheet->startElement(XML_patternFill);
     if (maComplexColor.getType() == model::ColorType::Scheme)
-        rStyleSheet->singleElement(XML_bgColor, XML_theme, OString::number(sal_Int32(maComplexColor.getSchemeType())));
+    {
+        sal_Int32 nTheme = oox::convertThemeColorTypeToExcelThemeNumber(maComplexColor.getSchemeType());
+        double fTintShade = oox::convertColorTransformsToTintOrShade(maComplexColor);
+        rStyleSheet->singleElement(XML_bgColor,
+                    XML_theme, OString::number(nTheme),
+                    XML_tint, sax_fastparser::UseIf(OString::number(fTintShade), fTintShade != 0.0));
+    }
     else
         rStyleSheet->singleElement(XML_bgColor, XML_rgb, XclXmlUtils::ToOString(maColor));
 
