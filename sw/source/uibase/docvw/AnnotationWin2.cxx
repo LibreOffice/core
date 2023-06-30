@@ -56,6 +56,7 @@
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
 #include <vcl/gradient.hxx>
+#include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/ptrstyle.hxx>
@@ -161,6 +162,13 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
     // of the SysObj can provide meaningful results
     UnclipVisibleSysObj();
 
+    vcl::PDFExtOutDevData *const pPDFExtOutDevData(
+        dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData()));
+    if (pPDFExtOutDevData && pPDFExtOutDevData->GetIsExportTaggedPDF())
+    {
+        pPDFExtOutDevData->BeginStructureElement(vcl::PDFWriter::NonStructElement, OUString());
+    }
+
     pDev->Push();
 
     pDev->SetFillColor(mColorDark);
@@ -238,6 +246,11 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
     }
 
     pDev->Pop();
+
+    if (pPDFExtOutDevData && pPDFExtOutDevData->GetIsExportTaggedPDF())
+    {
+        pPDFExtOutDevData->EndStructureElement();
+    }
 }
 
 void SwAnnotationWin::SetPosSizePixelRect(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
