@@ -2526,11 +2526,20 @@ XFillFloatTransparenceItem* XFillFloatTransparenceItem::Clone( SfxItemPool* /*pP
 
 bool XFillFloatTransparenceItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
+    if (MID_GRADIENT_STARTINTENSITY == nMemberId
+        || MID_GRADIENT_ENDINTENSITY == nMemberId
+        || MID_GRADIENT_STEPCOUNT == nMemberId)
+    {
+        // tdf#155913 handle attributes not suppoted by transparency gradient as error
+        return false;
+    }
+
     if (!IsEnabled() && nMemberId == MID_NAME)
     {
         // make sure that we return empty string in case of query for
         // "FillTransparenceGradientName" if the item is disabled
         rVal <<= OUString();
+        return true;
     }
 
     return XFillGradientItem::QueryValue( rVal, nMemberId );
@@ -2538,6 +2547,14 @@ bool XFillFloatTransparenceItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMem
 
 bool XFillFloatTransparenceItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 {
+    if (MID_GRADIENT_STARTINTENSITY == nMemberId
+        || MID_GRADIENT_ENDINTENSITY == nMemberId
+        || MID_GRADIENT_STEPCOUNT == nMemberId)
+    {
+        // tdf#155913 handle attributes not suppoted by transparency gradient as error
+        return false;
+    }
+
     return XFillGradientItem::PutValue( rVal, nMemberId );
 }
 

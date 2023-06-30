@@ -619,6 +619,8 @@ namespace drawinglayer::primitive2d
 
                     if (rGradient.GetStartIntens() != 100 || rGradient.GetEndIntens() != 100)
                     {
+                        // tdf#155913 Start/EndIntens is not used for transparency gradient,
+                        // so might even get asserted (?)
                         // this may also be set for transparence, so need to take care of it
                         aColorStops.blendToIntensity(
                             rGradient.GetStartIntens() * 0.01,
@@ -626,19 +628,14 @@ namespace drawinglayer::primitive2d
                             basegfx::BColor()); // COL_BLACK
                     }
 
+                    // tdf#155913 GradientStepCount is not used for transparency gradient
                     return attribute::FillGradientAttribute(
                         rGradient.GetGradientStyle(),
                         static_cast<double>(rGradient.GetBorder()) * 0.01,
                         static_cast<double>(rGradient.GetXOffset()) * 0.01,
                         static_cast<double>(rGradient.GetYOffset()) * 0.01,
                         toRadians(rGradient.GetAngle()),
-                        aColorStops,
-                        // oops - the gradientStepCount was missing here. If we want to use
-                        // a combination of gradient & transparencyGradient to represent
-                        // imported gradients of formats which do originally support transparency
-                        // in gradients, then the gradient has to be exactly defined the same,
-                        // including the (evtl. used) gradientStepCount
-                        rSet.Get(XATTR_GRADIENTSTEPCOUNT).GetValue());
+                        aColorStops);
                 }
             }
 
