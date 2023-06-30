@@ -690,7 +690,7 @@ void GDIMetaFile::Move( long nX, long nY, long nDPIX, long nDPIY )
     }
 }
 
-void GDIMetaFile::Scale( double fScaleX, double fScaleY )
+void GDIMetaFile::ScaleActions(double const fScaleX, double const fScaleY)
 {
     for( MetaAction* pAct = FirstAction(); pAct; pAct = NextAction() )
     {
@@ -706,6 +706,11 @@ void GDIMetaFile::Scale( double fScaleX, double fScaleY )
 
         pModAct->Scale( fScaleX, fScaleY );
     }
+}
+
+void GDIMetaFile::Scale( double fScaleX, double fScaleY )
+{
+    ScaleActions(fScaleX, fScaleY);
 
     m_aPrefSize.setWidth( FRound( m_aPrefSize.Width() * fScaleX ) );
     m_aPrefSize.setHeight( FRound( m_aPrefSize.Height() * fScaleY ) );
