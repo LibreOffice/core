@@ -493,6 +493,8 @@ SvxSecurityTabPage::SvxSecurityTabPage(weld::Container* pPage, weld::DialogContr
     , m_xTSAURLsFrame(m_xBuilder->weld_container("tsaurls"))
     , m_xTSAURLsPB(m_xBuilder->weld_button("tsas"))
     , m_xNoPasswordSaveFT(m_xBuilder->weld_label("nopasswordsave"))
+    , m_xCertMgrPathLB(m_xBuilder->weld_button("browse"))
+    , m_xParameterEdit(m_xBuilder->weld_entry("parameterfield"))
 {
     //fdo#65595, we need height-for-width support here, but for now we can
     //bodge it
@@ -516,8 +518,44 @@ SvxSecurityTabPage::SvxSecurityTabPage(weld::Container* pPage, weld::DialogContr
     m_xMacroSecPB->connect_clicked( LINK( this, SvxSecurityTabPage, MacroSecPBHdl ) );
     m_xCertPathPB->connect_clicked( LINK( this, SvxSecurityTabPage, CertPathPBHdl ) );
     m_xTSAURLsPB->connect_clicked( LINK( this, SvxSecurityTabPage, TSAURLsPBHdl ) );
+    m_xCertMgrPathLB->connect_clicked( LINK( this, SvxSecurityTabPage, CertMgrPBHdl ) );
 
     ActivatePage( rSet );
+}
+
+IMPL_LINK_NOARG(SvxSecurityTabPage, CertMgrPBHdl, weld::Button&, void)
+{
+    try
+    {
+        FileDialogHelper aHelper(css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+                                 FileDialogFlags::NONE, nullptr);
+        OUString sPath = m_xParameterEdit->get_text();
+        if (sPath.isEmpty())
+            sPath = "/usr/bin";
+
+        OUString sUrl;
+        osl::FileBase::getFileURLFromSystemPath(sPath, sUrl);
+        aHelper.SetDisplayDirectory(sUrl);
+
+        if (ERRCODE_NONE == aHelper.Execute())
+        {
+            sUrl = aHelper.GetPath();
+            if (osl::FileBase::getSystemPathFromFileURL(sUrl, sPath) != osl::FileBase::E_None)
+            {
+                sPath.clear();
+            }
+            m_xParameterEdit->set_text(sPath);
+        }
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        OUString sCurCertMgr = m_xParameterEdit->get_text();
+        officecfg::Office::Common::Security::Scripting::CertMgrPath::set(sCurCertMgr, pBatch);
+        pBatch->commit();
+    }
+    catch (const uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("cui.options", "CertMgrPBHdl");
+    }
 }
 
 SvxSecurityTabPage::~SvxSecurityTabPage()
@@ -750,6 +788,17 @@ void SvxSecurityTabPage::InitControls()
     {
         m_xSavePasswordsCB->set_sensitive( false );
     }
+
+    try
+    {
+        OUString sCurCertMgr = officecfg::Office::Common::Security::Scripting::CertMgrPath::get();
+
+        if (!sCurCertMgr.isEmpty())
+            m_xParameterEdit->set_text(sCurCertMgr);
+    }
+    catch (const uno::Exception&)
+    {
+    }
 }
 
 std::unique_ptr<SfxTabPage> SvxSecurityTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet )
@@ -801,6 +850,15 @@ bool SvxSecurityTabPage::FillItemSet( SfxItemSet* )
         CheckAndSave( SvtSecurityOptions::EOption::DocWarnRecommendPassword, m_xSecOptDlg->IsRecommPasswdChecked(), bModified );
         CheckAndSave( SvtSecurityOptions::EOption::CtrlClickHyperlink, m_xSecOptDlg->IsCtrlHyperlinkChecked(), bModified );
         CheckAndSave( SvtSecurityOptions::EOption::BlockUntrustedRefererLinks, m_xSecOptDlg->IsBlockUntrustedRefererLinksChecked(), bModified );
+    }
+
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+        comphelper::ConfigurationChanges::create());
+    if (m_xParameterEdit->get_value_changed_from_saved())
+    {
+        OUString sCurCertMgr = m_xParameterEdit->get_text();
+        officecfg::Office::Common::Security::Scripting::CertMgrPath::set(sCurCertMgr, pBatch);
+        pBatch->commit();
     }
 
     return bModified;

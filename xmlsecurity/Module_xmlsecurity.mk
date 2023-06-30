@@ -15,6 +15,10 @@ $(eval $(call gb_Module_add_targets,xmlsecurity,\
 	UIConfig_xmlsec \
 ))
 
+$(eval $(call gb_Library_use_custom_headers,xmlsecurity,\
+    officecfg/registry \
+))
+
 $(eval $(call gb_Module_add_slowcheck_targets,xmlsecurity,\
     CppunitTest_xmlsecurity_pdfsigning \
 ))

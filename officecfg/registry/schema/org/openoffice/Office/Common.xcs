@@ -2406,6 +2406,12 @@
             <desc>Contains the last path manually selected by the user for the CertDir property.</desc>
           </info>
         </prop>
+        <prop oor:name="CertMgrPath" oor:type="xs:string" oor:nillable="false">
+          <info>
+            <desc>Contains the path of certificate manager if specified.</desc>
+          </info>
+          <value></value>
+        </prop>
         <prop oor:name="TSAURLs" oor:type="oor:string-list">
           <info>
             <desc>Contains the URLs or Time Stamping Authority servers.</desc>

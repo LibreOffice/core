@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <rtl/ustring.hxx>
 #include <sal/config.h>
 
 #include <string_view>
@@ -27,6 +28,8 @@
 #include <biginteger.hxx>
 #include <sax/tools/converter.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/configuration.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -116,17 +119,21 @@ namespace
         m_nODF = nTmp;
     }
 #ifdef _WIN32
-    constexpr std::u16string_view aGUIServers[]  = { u"Gpg4win\\kleopatra.exe",
-                                                   u"Gpg4win\\bin\\kleopatra.exe",
-                                                   u"GNU\\GnuPG\\kleopatra.exe",
-                                                   u"GNU\\GnuPG\\launch-gpa.exe",
-                                                   u"GNU\\GnuPG\\gpa.exe",
-                                                   u"GnuPG\\bin\\gpa.exe",
-                                                   u"GNU\\GnuPG\\bin\\kleopatra.exe",
-                                                   u"GNU\\GnuPG\\bin\\launch-gpa.exe",
-                                                   u"GNU\\GnuPG\\bin\\gpa.exe"};
+std::vector<std::u16string_view> aGUIServers
+    = { u"Gpg4win\\kleopatra.exe",
+        u"Gpg4win\\bin\\kleopatra.exe",
+        u"GNU\\GnuPG\\kleopatra.exe",
+        u"GNU\\GnuPG\\launch-gpa.exe",
+        u"GNU\\GnuPG\\gpa.exe",
+        u"GnuPG\\bin\\gpa.exe",
+        u"GNU\\GnuPG\\bin\\kleopatra.exe",
+        u"GNU\\GnuPG\\bin\\launch-gpa.exe",
+        u"GNU\\GnuPG\\bin\\gpa.exe",
+        officecfg::Office::Common::Security::Scripting::CertMgrPath::get() };
 #else
-    constexpr std::u16string_view aGUIServers[] = { u"kleopatra", u"seahorse", u"gpa", u"kgpg" };
+std::vector<std::u16string_view> aGUIServers
+    = { u"kleopatra", u"seahorse", u"gpa", u"kgpg",
+        officecfg::Office::Common::Security::Scripting::CertMgrPath::get() };
 #endif
 
 }
@@ -216,9 +223,9 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
         m_xStartCertMgrBtn->hide();
     }
 
-    if ( !IsThereCertificateMgr() )
+    if (!IsThereCertificateMgr())
     {
-        m_xStartCertMgrBtn->hide();
+        m_xStartCertMgrBtn->set_sensitive(false);
     }
 }
 
@@ -311,23 +318,19 @@ bool DigitalSignaturesDialog::canAddRemove()
             //It the user presses 'Add' or 'Remove' several times then, then the warning
             //is shown every time until the user presses 'OK'. From then on, the warning
             //is not displayed anymore as long as the signatures dialog is alive.
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
-                                                      VclMessageType::Question, VclButtonsType::YesNo,
-                                                      XsResId(STR_XMLSECDLG_QUERY_REMOVEDOCSIGNBEFORESIGN)));
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+                m_xDialog.get(), VclMessageType::Question, VclButtonsType::YesNo,
+                XsResId(STR_XMLSECDLG_QUERY_REMOVEDOCSIGNBEFORESIGN)));
             if (xBox->run() == RET_NO)
                 ret = false;
             else
                 m_bWarningShowSignMacro = true;
-
         }
     }
     return ret;
 }
 
-bool DigitalSignaturesDialog::canAdd()
-{
-    return canAddRemove();
-}
+bool DigitalSignaturesDialog::canAdd() { return canAddRemove(); }
 
 bool DigitalSignaturesDialog::canRemove()
 {
@@ -492,10 +495,11 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, RemoveButtonHdl, weld::Button&, void)
     }
 }
 
-bool DigitalSignaturesDialog::IsThereCertificateMgr()
+bool DigitalSignaturesDialog::GetPathAllOS(OUString& aPath)
 {
 #ifdef _WIN32
-    static const OUString aPath = [] {
+    aPath = []
+    {
         sal::systools::CoTaskMemAllocated<wchar_t> sPath;
         HRESULT hr
             = SHGetKnownFolderPath(FOLDERID_ProgramFilesX86, KF_FLAG_DEFAULT, nullptr, &sPath);
@@ -509,77 +513,91 @@ bool DigitalSignaturesDialog::IsThereCertificateMgr()
     const char* cPath = getenv("PATH");
     if (!cPath)
         return false;
-    OUString aPath(cPath, strlen(cPath), osl_getThreadTextEncoding());
+    aPath = OUString(cPath, strlen(cPath), osl_getThreadTextEncoding());
 #endif
+    return (!aPath.isEmpty());
+}
 
-    OUString sFoundGUIServer, sExecutable;
+void DigitalSignaturesDialog::GetCertificateManager(OUString& aPath, OUString& sExecutable,
+                                            OUString& sFoundGUIServer)
+{
+    aGUIServers.pop_back();
+    aGUIServers.push_back(officecfg::Office::Common::Security::Scripting::CertMgrPath::get());
 
-    for ( auto const &rServer : aGUIServers )
+    for (auto it = aGUIServers.rbegin(); it != aGUIServers.rend(); ++it)
     {
-        osl::FileBase::RC searchError = osl::File::searchFileURL(OUString(rServer), aPath, sFoundGUIServer );
+        const auto& rServer = *it;
+
+        if (rServer.empty())
+            continue;
+
+        bool bValidSetMgr = (it == aGUIServers.rbegin() && rServer.size() > 0);
+        sal_Int32 nLastBackslashIndex = -1;
+
+        if (bValidSetMgr)
+        {
+#ifdef _WIN32
+            nLastBackslashIndex = rServer.find_last_of('\\');
+#else
+            nLastBackslashIndex = rServer.find_last_of('/');
+#endif
+        }
+
+        osl::FileBase::RC searchError = osl::File::searchFileURL(
+            OUString(bValidSetMgr ? rServer.substr(nLastBackslashIndex + 1) : rServer), aPath,
+            sFoundGUIServer);
         if (searchError == osl::FileBase::E_None)
         {
-            osl::File::getSystemPathFromFileURL( sFoundGUIServer, sExecutable );
+            osl::File::getSystemPathFromFileURL(sFoundGUIServer, sExecutable);
+            if (it != aGUIServers.rbegin())
+            {
+                std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+                    comphelper::ConfigurationChanges::create());
+                officecfg::Office::Common::Security::Scripting::CertMgrPath::set(sExecutable,
+                                                                                 pBatch);
+                pBatch->commit();
+            }
+
             break;
         }
     }
+}
 
-    return ( !sExecutable.isEmpty() );
+bool DigitalSignaturesDialog::IsThereCertificateMgr()
+{
+    OUString aPath, sFoundGUIServer, sExecutable;
+    if (!GetPathAllOS(aPath))
+        return false;
+    GetCertificateManager(aPath, sExecutable, sFoundGUIServer);
+    return (!sExecutable.isEmpty());
 }
 
 IMPL_LINK_NOARG(DigitalSignaturesDialog, CertMgrButtonHdl, weld::Button&, void)
 {
-#ifdef _WIN32
-    // FIXME: call GpgME::dirInfo("bindir") somewhere in
-    // SecurityEnvironmentGpg or whatnot
-    // FIXME: perhaps poke GpgME for uiserver, and hope it returns something useful?
-    static const OUString aPath = [] {
-        sal::systools::CoTaskMemAllocated<wchar_t> sPath;
-        HRESULT hr
-            = SHGetKnownFolderPath(FOLDERID_ProgramFilesX86, KF_FLAG_DEFAULT, nullptr, &sPath);
-        if (SUCCEEDED(hr))
-            return OUString(o3tl::toU(sPath));
-        return OUString();
-    }();
-    if (aPath.isEmpty())
+    OUString aPath, sFoundGUIServer, sExecutable;
+    if (!GetPathAllOS(aPath))
         return;
-#else
-    const char* cPath = getenv("PATH");
-    if (!cPath)
-        return;
-    OUString aPath(cPath, strlen(cPath), osl_getThreadTextEncoding());
-#endif
 
-    OUString sFoundGUIServer, sExecutable;
+    GetCertificateManager(aPath, sExecutable, sFoundGUIServer);
 
-    for ( auto const &rServer : aGUIServers)
+    if (!sExecutable.isEmpty())
     {
-        osl::FileBase::RC searchError = osl::File::searchFileURL(OUString(rServer), aPath, sFoundGUIServer );
-        if (searchError == osl::FileBase::E_None)
-        {
-            osl::File::getSystemPathFromFileURL( sFoundGUIServer, sExecutable );
-            break;
-        }
+        uno::Reference<uno::XComponentContext> xContext
+            = ::comphelper::getProcessComponentContext();
+        uno::Reference<css::system::XSystemShellExecute> xSystemShell(
+            css::system::SystemShellExecute::create(xContext));
 
+        xSystemShell->execute(sExecutable, OUString(),
+                              css::system::SystemShellExecuteFlags::DEFAULTS);
     }
 
-    if ( !sExecutable.isEmpty() )
-    {
-        uno::Reference< uno::XComponentContext > xContext =
-            ::comphelper::getProcessComponentContext();
-        uno::Reference< css::system::XSystemShellExecute > xSystemShell(
-                 css::system::SystemShellExecute::create(xContext) );
+    OUString sDialogText = (sExecutable.isEmpty() ?
+        XsResId(STR_XMLSECDLG_NO_CERT_MANAGER) : XsResId(STR_XMLSECDLG_OPENED_CRTMGR) + sExecutable);
 
-        xSystemShell->execute( sExecutable, OUString(),
-            css::system::SystemShellExecuteFlags::DEFAULTS );
-    }
-    else
-    {
-        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
-                                                      VclMessageType::Info, VclButtonsType::Ok,
-                                                      XsResId(STR_XMLSECDLG_NO_CERT_MANAGER)));
-        xInfoBox->run();
-    }
+    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(
+        m_xDialog.get(), VclMessageType::Info, VclButtonsType::Ok,
+        sDialogText));
+    xInfoBox->run();
 }
 
 IMPL_LINK_NOARG(DigitalSignaturesDialog, StartVerifySignatureHdl, LinkParamNone*, bool)

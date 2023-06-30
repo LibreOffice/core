@@ -35,6 +35,7 @@
 #define STR_THUMBPRINT_SHA1                         NC_("STR_THUMBPRINT_SHA1", "Thumbprint SHA1")
 #define STR_THUMBPRINT_MD5                          NC_("STR_THUMBPRINT_MD5", "Thumbprint MD5")
 
+#define STR_XMLSECDLG_OPENED_CRTMGR                 NC_("STR_XMLSECDLG_OPENED_CRTMGR", "You have opened the certificate manager at\n")
 #define STR_XMLSECDLG_OLD_ODF_FORMAT                NC_("STR_XMLSECDLG_OLD_ODF_FORMAT", "This document contains signatures in ODF 1.1 (OpenOffice.org 2.x) format. " \
                                                        "Signing documents in %PRODUCTNAME %PRODUCTVERSION requires ODF 1.2 format version. " \
                                                        "Thus no signatures can be added or removed to this document.\n\n" \

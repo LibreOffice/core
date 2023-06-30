@@ -104,6 +104,9 @@ private:
 
     std::unique_ptr<weld::Label> m_xNoPasswordSaveFT;
 
+    std::unique_ptr<weld::Button> m_xCertMgrPathLB;
+    std::unique_ptr<weld::Entry> m_xParameterEdit;
+
     DECL_LINK(SecurityOptionsHdl, weld::Button&, void);
     DECL_LINK(SavePasswordHdl, weld::Toggleable&, void);
     DECL_LINK(MasterPasswordHdl, weld::Button&, void);
@@ -112,6 +115,7 @@ private:
     DECL_LINK(MacroSecPBHdl, weld::Button&, void );
     DECL_LINK(CertPathPBHdl, weld::Button&, void );
     DECL_LINK(TSAURLsPBHdl, weld::Button&, void );
+    DECL_LINK(CertMgrPBHdl, weld::Button&, void );
 
     void                InitControls();
 
