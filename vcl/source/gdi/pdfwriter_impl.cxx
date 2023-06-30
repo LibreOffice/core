@@ -10738,12 +10738,13 @@ void PDFWriterImpl::beginStructureElementMCSeq()
     }
 }
 
-void PDFWriterImpl::endStructureElementMCSeq()
+void PDFWriterImpl::endStructureElementMCSeq(EndMode const endMode)
 {
-    if( m_nCurrentStructElement > 0 && // StructTreeRoot
-        ( m_bEmitStructure || m_aStructure[ m_nCurrentStructElement ].m_eType == PDFWriter::NonStructElement ) &&
-        m_aStructure[ m_nCurrentStructElement ].m_bOpenMCSeq // must have an opened MC sequence
-        )
+    if (m_nCurrentStructElement > 0 // not StructTreeRoot
+        && (m_bEmitStructure
+            || (endMode != EndMode::OnlyStruct
+                && m_aStructure[m_nCurrentStructElement].m_eType == PDFWriter::NonStructElement))
+        && m_aStructure[m_nCurrentStructElement].m_bOpenMCSeq)
     {
         writeBuffer( "EMC\n" );
         m_aStructure[ m_nCurrentStructElement ].m_bOpenMCSeq = false;
@@ -10779,7 +10780,7 @@ sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, 
         return -1;
 
     // close eventual current MC sequence
-    endStructureElementMCSeq();
+    endStructureElementMCSeq(EndMode::OnlyStruct);
 
     if( m_nCurrentStructElement == 0 &&
         eType != PDFWriter::Document && eType != PDFWriter::NonStructElement )
