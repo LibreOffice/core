@@ -1062,7 +1062,8 @@ i12626
     void endPage();
 
     void beginStructureElementMCSeq();
-    void endStructureElementMCSeq();
+    enum class EndMode { Default, OnlyStruct };
+    void endStructureElementMCSeq(EndMode = EndMode::Default);
     /** checks whether a non struct element lies in the ancestor hierarchy
         of the current structure element
 
