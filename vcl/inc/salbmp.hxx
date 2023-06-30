@@ -104,6 +104,11 @@ public:
         return false;
     }
 
+    virtual bool            Invert()
+    {
+        return false;
+    }
+
 #if defined MACOSX || defined IOS
     // Related: tdf#146842 Eliminate temporary copies of SkiaSalBitmap when
     // printing

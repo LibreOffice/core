@@ -623,6 +623,31 @@ bool SkiaSalBitmap::AlphaBlendWith(const SalBitmap& rSalBmp)
     return true;
 }
 
+bool SkiaSalBitmap::Invert()
+{
+#ifdef DBG_UTIL
+    assert(mWriteAccessCount == 0);
+#endif
+    // Normally this would need to convert contents of mBuffer for all possible formats,
+    // so just let the VCL algorithm do it.
+    // Avoid the costly SkImage->buffer->SkImage conversion.
+    if (!mBuffer && mImage && !mEraseColorSet)
+    {
+        // This is 8-bit bitmap serving as alpha/transparency/mask, so the image itself needs no alpha.
+        sk_sp<SkSurface> surface = createSkSurface(mSize, kOpaque_SkAlphaType);
+        surface->getCanvas()->clear(SK_ColorWHITE);
+        SkPaint paint;
+        paint.setBlendMode(SkBlendMode::kDifference);
+        surface->getCanvas()->drawImage(
+            mImage, 0, 0, SkSamplingOptions(SkFilterMode::kLinear, SkMipmapMode::kLinear), &paint);
+        ResetToSkImage(makeCheckedImageSnapshot(surface));
+        DataChanged();
+        SAL_INFO("vcl.skia.trace", "invert(" << this << ")");
+        return true;
+    }
+    return false;
+}
+
 SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
 {
 #ifdef DBG_UTIL

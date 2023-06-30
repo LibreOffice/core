@@ -64,6 +64,7 @@ public:
     virtual bool ConvertToGreyscale() override;
     virtual bool Erase(const Color& color) override;
     virtual bool AlphaBlendWith(const SalBitmap& rSalBmp) override;
+    virtual bool Invert() override;
 #if defined MACOSX || defined IOS
     virtual CGImageRef CreateWithMask(const SalBitmap& rMask, int nX, int nY, int nWidth,
                                       int nHeight) const override;

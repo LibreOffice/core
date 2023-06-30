@@ -77,7 +77,7 @@ bool Bitmap::Invert()
 
             pAcc->SetPalette(aBmpPal);
         }
-        else
+        else if (!mxSalBmp->Invert()) // try optimised call first
         {
             const tools::Long nWidth = pAcc->Width();
             const tools::Long nHeight = pAcc->Height();
