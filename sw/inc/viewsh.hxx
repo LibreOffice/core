@@ -153,7 +153,6 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
                                     // in this case MakeVisible is ineffectual.
     bool  mbInEndAction     :1;  // Avoid problems, cf. viewsh.cxx.
     bool  mbPreview         :1;  // If true it is a Preview-SwViewShell.
-    bool  mbFrameView       :1;  // If true it is a  (HTML-)Frame.
     bool  mbEnableSmooth    :1;  // Disable SmoothScroll, e.g. for drag
                                     // of scrollbars.
     bool      mbShowHeaderSeparator:1; ///< Flag to say that we are showing the header control
@@ -514,8 +513,6 @@ public:
                  SfxItemPool& GetAttrPool();
 
     bool IsPreview() const { return mbPreview; }
-
-    bool IsFrameView()  const { return mbFrameView; }
 
     // Invalidates pages and contents.
     // When bSizeChanged==true, adds/removes

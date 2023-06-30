@@ -294,7 +294,7 @@ void SwView::SetVisArea( const Point &rPt, bool bUpdateScrollbar )
     // Let's see how far we get with half BrushSize.
     Point aPt = GetEditWin().LogicToPixel( rPt );
 #if HAVE_FEATURE_DESKTOP
-    const tools::Long nTmp = GetWrtShell().IsFrameView() ? 4 : 8;
+    const tools::Long nTmp = 8;
     aPt.AdjustX( -(aPt.X() % nTmp) );
     aPt.AdjustY( -(aPt.Y() % nTmp) );
 #endif
