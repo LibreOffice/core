@@ -1878,8 +1878,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
         else
         {
             // Invalid property name
-            SAL_WARN("sw.uno", "Unknown/incorrect property " << rProp.Name << ", failing");
-            throw uno::RuntimeException("Unknown/incorrect property " + rProp.Name);
+            throw beans::UnknownPropertyException("Unknown property " + rProp.Name);
         }
     }
     if(!bWrongArg && (pSetBrush || pSetSize || pSetVOrient))
