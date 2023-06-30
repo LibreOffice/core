@@ -109,7 +109,6 @@ private:
     std::unique_ptr<weld::TreeView> m_xPPDValueBox;
     std::unique_ptr<weld::Entry> m_xCustomEdit;
 
-    std::unique_ptr<weld::ComboBox> m_xLevelBox;
     std::unique_ptr<weld::ComboBox> m_xSpaceBox;
     std::unique_ptr<weld::ComboBox> m_xDepthBox;
 
@@ -127,8 +126,6 @@ public:
     RTSDevicePage(weld::Widget* pPage, RTSDialog* pDialog);
     ~RTSDevicePage();
 
-    sal_uLong getLevel() const;
-    sal_uLong getPDFDevice() const;
     sal_uLong getDepth() const;
     sal_uLong getColorDevice() const;
 };

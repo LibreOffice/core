@@ -161,7 +161,7 @@
       </packing>
     </child>
     <child>
-      <!-- n-columns=2 n-rows=3 -->
+      <!-- n-columns=2 n-rows=2 -->
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -178,7 +178,7 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">2</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
@@ -192,39 +192,6 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="label9">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="printerdevicepage|label9">Printer language _type:</property>
-            <property name="use-underline">True</property>
-            <property name="mnemonic-widget">level</property>
-            <property name="xalign">1</property>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkComboBoxText" id="level">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="hexpand">True</property>
-            <items>
-              <item id="0" translatable="yes" context="printerdevicepage|liststore1">Automatic : %s</item>
-              <item id="1" translatable="yes" context="printerdevicepage|liststore1">PostScript (Level from driver)</item>
-              <item id="2" translatable="yes" context="printerdevicepage|liststore1">PostScript Level 1</item>
-              <item id="3" translatable="yes" context="printerdevicepage|liststore1">PostScript Level 2</item>
-              <item id="4" translatable="yes" context="printerdevicepage|liststore1">PostScript Level 3</item>
-              <item id="10" translatable="yes" context="printerdevicepage|liststore1">PDF</item>
-            </items>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
             <property name="top-attach">0</property>
           </packing>
         </child>
@@ -240,7 +207,7 @@
           </object>
           <packing>
             <property name="left-attach">1</property>
-            <property name="top-attach">1</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
         <child>
@@ -254,7 +221,7 @@
           </object>
           <packing>
             <property name="left-attach">1</property>
-            <property name="top-attach">2</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
       </object>

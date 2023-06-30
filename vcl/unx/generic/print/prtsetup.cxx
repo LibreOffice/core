@@ -115,8 +115,6 @@ IMPL_LINK( RTSDialog, ClickButton, weld::Button&, rButton, void )
         {
             m_aJobData.m_nColorDepth    = m_xDevicePage->getDepth();
             m_aJobData.m_nColorDevice   = m_xDevicePage->getColorDevice();
-            m_aJobData.m_nPSLevel       = m_xDevicePage->getLevel();
-            m_aJobData.m_nPDFDevice     = m_xDevicePage->getPDFDevice();
         }
         m_xDialog->response(RET_OK);
     }
@@ -271,7 +269,6 @@ RTSDevicePage::RTSDevicePage(weld::Widget* pPage, RTSDialog* pParent)
     , m_xPPDKeyBox(m_xBuilder->weld_tree_view("options"))
     , m_xPPDValueBox(m_xBuilder->weld_tree_view("values"))
     , m_xCustomEdit(m_xBuilder->weld_entry("custom"))
-    , m_xLevelBox(m_xBuilder->weld_combo_box("level"))
     , m_xSpaceBox(m_xBuilder->weld_combo_box("colorspace"))
     , m_xDepthBox(m_xBuilder->weld_combo_box("colordepth"))
     , m_aReselectCustomIdle("RTSDevicePage m_aReselectCustomIdle")
@@ -286,7 +283,6 @@ RTSDevicePage::RTSDevicePage(weld::Widget* pPage, RTSDialog* pParent)
     m_xPPDKeyBox->connect_changed( LINK( this, RTSDevicePage, SelectHdl ) );
     m_xPPDValueBox->connect_changed( LINK( this, RTSDevicePage, SelectHdl ) );
 
-    m_xLevelBox->connect_changed(LINK(this, RTSDevicePage, ComboChangedHdl));
     m_xSpaceBox->connect_changed(LINK(this, RTSDevicePage, ComboChangedHdl));
     m_xDepthBox->connect_changed(LINK(this, RTSDevicePage, ComboChangedHdl));
 
@@ -301,36 +297,6 @@ RTSDevicePage::RTSDevicePage(weld::Widget* pPage, RTSDialog* pParent)
         case -1:
             m_xSpaceBox->set_active(2);
             break;
-    }
-
-    sal_Int32 nLevelEntryData = 0; //automatic
-    if( m_pParent->m_aJobData.m_nPDFDevice == 2 ) //explicit PDF
-        nLevelEntryData = 10;
-    else if (m_pParent->m_aJobData.m_nPSLevel > 0) //explicit PS Level
-        nLevelEntryData = m_pParent->m_aJobData.m_nPSLevel+1;
-    else if (m_pParent->m_aJobData.m_nPDFDevice == 1) //automatically PDF
-        nLevelEntryData = 0;
-    else if (m_pParent->m_aJobData.m_nPDFDevice == -1) //explicitly PS from driver
-        nLevelEntryData = 1;
-
-    bool bAutoIsPDF = officecfg::Office::Common::Print::Option::Printer::PDFAsStandardPrintJobFormat::get();
-
-    assert(nLevelEntryData != 0
-            || "Generic Printer" == m_pParent->m_aJobData.m_aPrinterName
-            || int(bAutoIsPDF) == m_pParent->m_aJobData.m_nPDFDevice);
-
-    OUString sStr = m_xLevelBox->get_text(0);
-    OUString sId = m_xLevelBox->get_id(0);
-    m_xLevelBox->insert(0, sStr.replaceAll("%s", bAutoIsPDF ? m_xLevelBox->get_text(5) : m_xLevelBox->get_text(1)), &sId, nullptr, nullptr);
-    m_xLevelBox->remove(1);
-
-    for (int i = 0; i < m_xLevelBox->get_count(); ++i)
-    {
-        if (m_xLevelBox->get_id(i).toInt32() == nLevelEntryData)
-        {
-            m_xLevelBox->set_active(i);
-            break;
-        }
     }
 
     if (m_pParent->m_aJobData.m_nColorDepth == 8)
@@ -391,24 +357,6 @@ sal_uLong RTSDevicePage::getColorDevice() const
             return -1;
     }
     return 0;
-}
-
-sal_uLong RTSDevicePage::getLevel() const
-{
-    auto nLevel = m_xLevelBox->get_active_id().toInt32();
-    if (nLevel == 0)
-        return 0;   //automatic
-    return nLevel < 10 ? nLevel-1 : 0;
-}
-
-sal_uLong RTSDevicePage::getPDFDevice() const
-{
-    auto nLevel = m_xLevelBox->get_active_id().toInt32();
-    if (nLevel > 9)
-        return 2;   //explicitly PDF
-    else if (nLevel == 0)
-        return 0;   //automatic
-    return -1;      //explicitly PS
 }
 
 IMPL_LINK(RTSDevicePage, ModifyHdl, weld::Entry&, rEdit, void)
