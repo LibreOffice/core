@@ -1280,7 +1280,7 @@ public:
 
     void check(SwDoc* pDoc) override
     {
-        for (SwTextFootnote const* pTextFootnote : pDoc->GetFootnoteIdxs())
+        for (SwTextFootnote* pTextFootnote : pDoc->GetFootnoteIdxs())
         {
             SwFormatFootnote const& rFootnote = pTextFootnote->GetFootnote();
             if (rFootnote.IsEndNote())
@@ -1289,7 +1289,10 @@ public:
             }
             else
             {
-                lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_FOOTNOTES));
+                auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_FOOTNOTES));
+                pIssue->setDoc(*pDoc);
+                pIssue->setIssueObject(IssueObject::FOOTNOTE);
+                pIssue->setTextFootnote(pTextFootnote);
             }
         }
     }
