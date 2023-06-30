@@ -416,7 +416,8 @@ public:
         sal_Int16 nFirstLineIndex,
         sal_Int16 nListTabPos,
         const OUString &rNumberingString,
-        const SvxBrushItem* pBrush ) override;
+        const SvxBrushItem* pBrush,
+        bool isLegal ) override;
 
     void WriteField_Impl(const SwField* pField, ww::eField eType,
             const OUString& rFieldCmd, FieldFlags nMode,

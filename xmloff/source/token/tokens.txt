@@ -1036,6 +1036,7 @@ inverse
 is-active
 is-data-layout-field
 is-hidden
+is-legal
 is-selection
 isbn
 italic

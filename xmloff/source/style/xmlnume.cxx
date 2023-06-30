@@ -84,6 +84,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
     sal_Int16 eAdjust = HoriOrientation::LEFT;
     OUString sPrefix, sSuffix, sListFormat;
     OUString sTextStyleName;
+    bool bIsLegal = false;
     bool bHasColor = false;
     sal_Int32 nColor = 0;
     sal_Int32 nSpaceBefore = 0, nMinLabelWidth = 0, nMinLabelDist = 0;
@@ -124,6 +125,10 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
         else if (rProp.Name == "ListFormat")
         {
             rProp.Value >>= sListFormat;
+        }
+        else if (rProp.Name == "IsLegal")
+        {
+            rProp.Value >>= bIsLegal;
         }
         else if (rProp.Name == "BulletChar")
         {
@@ -255,6 +260,11 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
         {
             GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
                     GetExport().EncodeStyleName( sTextStyleName ) );
+        }
+        if (bIsLegal)
+        {
+            if (GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
+                GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_IS_LEGAL, "true");
         }
         if (!sListFormat.isEmpty())
         {

@@ -157,6 +157,8 @@ class SvxXMLListLevelStyleContext_Impl : public SvXMLImportContext
     bool            bNum : 1;
     bool            bHasColor : 1;
 
+    bool            m_bIsLegal = false;
+
     void SetRelSize( sal_Int16 nRel ) { nRelSize = nRel; }
     void SetColor( Color nColor )
         { m_nColor = nColor; bHasColor = true; }
@@ -304,6 +306,9 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
         case XML_ELEMENT(STYLE, XML_NUM_LIST_FORMAT):
         case XML_ELEMENT(LO_EXT, XML_NUM_LIST_FORMAT):
             sListFormat = std::make_optional(aIter.toString());
+            break;
+        case XML_ELEMENT(LO_EXT, XML_IS_LEGAL):
+            m_bIsLegal = aIter.toBoolean();
             break;
         case XML_ELEMENT(STYLE, XML_NUM_LETTER_SYNC):
             if( bNum )
@@ -521,6 +526,9 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
     }
 
     aProperties.push_back(comphelper::makePropertyValue("ListFormat", *sListFormat));
+
+    if (m_bIsLegal)
+        aProperties.push_back(comphelper::makePropertyValue("IsLegal", true));
 
     return comphelper::containerToSequence(aProperties);
 }

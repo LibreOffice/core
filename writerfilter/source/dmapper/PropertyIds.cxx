@@ -220,6 +220,7 @@ const OUString & getPropertyName( PropertyIds eId )
         { PROP_LEVEL_FOLLOW, u"LabelFollowedBy"},
         { PROP_LEVEL_PARAGRAPH_STYLES, u"LevelParagraphStyles"},
         { PROP_LEVEL_FORMAT, u"LevelFormat"},
+        { PROP_LEVEL_IS_LEGAL, u"IsLegal"},
         { PROP_LIST_FORMAT, u"ListFormat"},
         { PROP_TOKEN_TYPE, u"TokenType"},
         { PROP_TOKEN_HYPERLINK_START, u"TokenHyperlinkStart"},

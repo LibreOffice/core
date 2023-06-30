@@ -219,13 +219,13 @@ public:
     void EndAbstractNumbering() override;
 
     /// All the numbering level information.
-    void
-    NumberingLevel(sal_uInt8 nLevel, sal_uInt16 nStart, sal_uInt16 nNumberingType,
-                   SvxAdjust eAdjust, const sal_uInt8* pNumLvlPos, sal_uInt8 nFollow,
-                   const wwFont* pFont, const SfxItemSet* pOutSet, sal_Int16 nIndentAt,
-                   sal_Int16 nFirstLineIndex, sal_Int16 nListTabPos,
-                   const OUString& rNumberingString,
-                   const SvxBrushItem* pBrush) override; //For i120928,to export graphic of bullet
+    void NumberingLevel(sal_uInt8 nLevel, sal_uInt16 nStart, sal_uInt16 nNumberingType,
+                        SvxAdjust eAdjust, const sal_uInt8* pNumLvlPos, sal_uInt8 nFollow,
+                        const wwFont* pFont, const SfxItemSet* pOutSet, sal_Int16 nIndentAt,
+                        sal_Int16 nFirstLineIndex, sal_Int16 nListTabPos,
+                        const OUString& rNumberingString,
+                        const SvxBrushItem* pBrush, //For i120928,to export graphic of bullet
+                        bool isLegal) override;
 
     void WriteField_Impl(const SwField* pField, ww::eField eType, const OUString& rFieldCmd,
                          FieldFlags nMode);

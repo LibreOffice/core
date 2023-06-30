@@ -98,6 +98,12 @@ published service NumberingLevel
         @since LibreOffice 7.2
      */
     [optional, property] string ListFormat;
+
+    /** Specifies if this level should use Arabic numbers for all levels
+
+        @since LibreOffice 24.2
+     */
+    [optional, property] boolean IsLegal;
 };
 
 

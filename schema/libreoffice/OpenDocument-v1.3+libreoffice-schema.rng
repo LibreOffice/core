@@ -3149,6 +3149,21 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
   </rng:define>
 
   <!-- TODO no proposal -->
+  <rng:define name="text-list-level-style-number-attr" combine="interleave">
+    <rng:ref name="common-level-attlist"/>
+  </rng:define>
+  <rng:define name="text-outline-level-style-attlist" combine="interleave">
+    <rng:ref name="common-level-attlist"/>
+  </rng:define>
+  <rng:define name="common-level-attlist">
+    <rng:optional>
+      <rng:attribute name="loext:is-legal">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
   <rng:define name="paragraph-content" combine="choice"
    xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0">
     <rng:element name="text:bibliography-mark">

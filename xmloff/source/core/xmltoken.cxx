@@ -1136,6 +1136,7 @@ namespace xmloff::token {
         TOKEN( "is-active",                       XML_IS_ACTIVE ),
         TOKEN( "is-data-layout-field",            XML_IS_DATA_LAYOUT_FIELD ),
         TOKEN( "is-hidden",                       XML_IS_HIDDEN ),
+        TOKEN( "is-legal",                        XML_IS_LEGAL ),
         TOKEN( "is-selection",                    XML_IS_SELECTION ),
         TOKEN( "isbn",                            XML_ISBN ),
         TOKEN( "italic",                          XML_ITALIC ),

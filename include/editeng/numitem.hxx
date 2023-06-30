@@ -67,7 +67,7 @@ public:
     SvxNumberType & operator =(SvxNumberType const &) = default;
 
     OUString        GetNumStr( sal_Int32 nNo ) const;
-    OUString        GetNumStr( sal_Int32 nNo, const css::lang::Locale& rLocale ) const;
+    OUString        GetNumStr( sal_Int32 nNo, const css::lang::Locale& rLocale, bool bIsLegal = false ) const;
 
     void            SetNumberingType(SvxNumType nSet) {nNumType = nSet;}
     SvxNumType      GetNumberingType() const {return nNumType;}
@@ -152,6 +152,8 @@ private:
 
     OUString            sCharStyleName;     // Character Style
 
+    bool mbIsLegal = false; // "Legal" level numbering = all levels use arabic numbering
+
 public:
     explicit SvxNumberFormat( SvxNumType nNumberingType );
     SvxNumberFormat(const SvxNumberFormat& rFormat);
@@ -223,6 +225,9 @@ public:
 
     static Size     GetGraphicSizeMM100(const Graphic* pGraphic);
     static OUString CreateRomanString( sal_Int32 nNo, bool bUpper );
+
+    bool GetIsLegal() const { return mbIsLegal; }
+    void SetIsLegal(bool val) { mbIsLegal = val; }
 };
 
 //Feature-Flags (only sal_uInt16!)

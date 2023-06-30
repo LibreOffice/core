@@ -7483,7 +7483,8 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
         sal_Int16 nFirstLineIndex,
         sal_Int16 nListTabPos,
         const OUString &rNumberingString,
-        const SvxBrushItem* pBrush)
+        const SvxBrushItem* pBrush,
+        bool isLegal)
 {
     m_pSerializer->startElementNS(XML_w, XML_lvl, FSNS(XML_w, XML_ilvl), OString::number(nLevel));
 
@@ -7503,6 +7504,10 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
             m_pSerializer->singleElementNS( XML_w, XML_pStyle ,
                 FSNS( XML_w, XML_val ), m_rExport.m_pStyles->GetStyleId(nId) );
     }
+
+    if (isLegal)
+        m_pSerializer->singleElementNS(XML_w, XML_isLgl);
+
     // format
     OString aCustomFormat;
     OString aFormat(lcl_ConvertNumberingType(nNumberingType, pOutSet, aCustomFormat, "decimal"));
