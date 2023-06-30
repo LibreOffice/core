@@ -34,30 +34,45 @@ CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testThemeExport)
 
     save("Calc Office Open XML");
 
-    xmlDocUniquePtr pXmlDoc = parseExport("xl/styles.xml");
+    {
+        xmlDocUniquePtr pXmlDoc = parseExport("xl/theme/theme1.xml");
+        OString aClrScheme = "/a:theme/a:themeElements/a:clrScheme";
+        assertXPath(pXmlDoc, aClrScheme, "name", "Office");
+        assertXPath(pXmlDoc, aClrScheme + "/a:dk1/a:srgbClr", "val", "000000");
+        assertXPath(pXmlDoc, aClrScheme + "/a:lt1/a:srgbClr", "val", "ffffff");
+        assertXPath(pXmlDoc, aClrScheme + "/a:dk2/a:srgbClr", "val", "44546a");
+        assertXPath(pXmlDoc, aClrScheme + "/a:lt2/a:srgbClr", "val", "e7e6e6");
+        assertXPath(pXmlDoc, aClrScheme + "/a:accent1/a:srgbClr", "val", "4472c4");
+        assertXPath(pXmlDoc, aClrScheme + "/a:accent2/a:srgbClr", "val", "ed7d31");
+        assertXPath(pXmlDoc, aClrScheme + "/a:accent3/a:srgbClr", "val", "a5a5a5");
+        assertXPath(pXmlDoc, aClrScheme + "/a:accent4/a:srgbClr", "val", "ffc000");
+        assertXPath(pXmlDoc, aClrScheme + "/a:accent5/a:srgbClr", "val", "5b9bd5");
+        assertXPath(pXmlDoc, aClrScheme + "/a:accent6/a:srgbClr", "val", "70ad47");
+        assertXPath(pXmlDoc, aClrScheme + "/a:hlink/a:srgbClr", "val", "0563c1");
+        assertXPath(pXmlDoc, aClrScheme + "/a:folHlink/a:srgbClr", "val", "954f72");
+    }
 
-    assertXPath(pXmlDoc, "/x:styleSheet", 1);
+    {
+        xmlDocUniquePtr pXmlDoc = parseExport("xl/styles.xml");
 
-    // Fonts
-    assertXPath(pXmlDoc, "/x:styleSheet/x:fonts/x:font", 6);
+        assertXPath(pXmlDoc, "/x:styleSheet", 1);
 
-    assertXPath(pXmlDoc, "/x:styleSheet/x:fonts/x:font[5]/x:color", "theme", "7");
+        // Fonts
+        OString aFont = "/x:styleSheet/x:fonts/x:font";
+        assertXPath(pXmlDoc, aFont, 6);
+        assertXPath(pXmlDoc, aFont + "[5]/x:color", "theme", "7");
+        assertXPath(pXmlDoc, aFont + "[6]/x:color", "rgb", "FF9C5700");
 
-    assertXPath(pXmlDoc, "/x:styleSheet/x:fonts/x:font[6]/x:color", "rgb", "FF9C5700");
-
-    // Fills
-    assertXPath(pXmlDoc, "/x:styleSheet/x:fills/x:fill", 4);
-
-    assertXPath(pXmlDoc, "/x:styleSheet/x:fills/x:fill[1]/x:patternFill", "patternType", "none");
-
-    assertXPath(pXmlDoc, "/x:styleSheet/x:fills/x:fill[2]/x:patternFill", "patternType", "gray125");
-
-    assertXPath(pXmlDoc, "/x:styleSheet/x:fills/x:fill[3]/x:patternFill", "patternType", "solid");
-    assertXPath(pXmlDoc, "/x:styleSheet/x:fills/x:fill[3]/x:patternFill/x:fgColor", "rgb",
-                "FFFFEB9C");
-
-    assertXPath(pXmlDoc, "/x:styleSheet/x:fills/x:fill[4]/x:patternFill", "patternType", "solid");
-    assertXPath(pXmlDoc, "/x:styleSheet/x:fills/x:fill[4]/x:patternFill/x:fgColor", "theme", "4");
+        // Fills
+        OString aFill = "/x:styleSheet/x:fills/x:fill";
+        assertXPath(pXmlDoc, aFill, 4);
+        assertXPath(pXmlDoc, aFill + "[1]/x:patternFill", "patternType", "none");
+        assertXPath(pXmlDoc, aFill + "[2]/x:patternFill", "patternType", "gray125");
+        assertXPath(pXmlDoc, aFill + "[3]/x:patternFill", "patternType", "solid");
+        assertXPath(pXmlDoc, aFill + "[3]/x:patternFill/x:fgColor", "rgb", "FFFFEB9C");
+        assertXPath(pXmlDoc, aFill + "[4]/x:patternFill", "patternType", "solid");
+        assertXPath(pXmlDoc, aFill + "[4]/x:patternFill/x:fgColor", "theme", "4");
+    }
 }
 
 // Round 100th percent to percent value - so that small differences don't fail the test
