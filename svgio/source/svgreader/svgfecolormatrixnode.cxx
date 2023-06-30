@@ -25,7 +25,7 @@ namespace svgio::svgreader
 {
 SvgFeColorMatrixNode::SvgFeColorMatrixNode(SvgDocument& rDocument, SvgNode* pParent)
     : SvgNode(SVGToken::FeColorMatrix, rDocument, pParent)
-    , maType(ColorType::None)
+    , maType(ColorType::Matrix)
 {
 }
 
