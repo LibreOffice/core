@@ -18,17 +18,44 @@
         {
             "name": "gvfs",
             "buildsystem": "meson",
-            "config-opts": [ "-Dsystemduserunitdir=no", "-Dtmpfilesdir=no", "-Dinstalled_tests=true",
-            "-Dadmin=false", "-Dafc=false", "-Dafp=false",
-            "-Darchive=false", "-Dcdda=false", "-Ddnssd=false", "-Dgoa=false", "-Dgoogle=false",
-            "-Dgphoto2=false", "-Dhttp=false", "-Dmtp=false", "-Dnfs=false", "-Dsftp=false", "-Dsmb=false",
-            "-Dudisks2=false", "-Dbluray=false", "-Dfuse=false", "-Dgcr=false", "-Dgcrypt=false",
-            "-Dgudev=false", "-Dkeyring=false", "-Dlogind=false", "-Dlibusb=false" ],
+            "config-opts": [
+                "-Dsystemduserunitdir=no",
+                "-Dtmpfilesdir=no",
+                "-Dinstalled_tests=true",
+                "-Dadmin=false",
+                "-Dafc=false",
+                "-Dafp=false",
+                "-Darchive=false",
+                "-Dcdda=false",
+                "-Ddnssd=false",
+                "-Dgoa=false",
+                "-Dgoogle=false",
+                "-Dgphoto2=false",
+                "-Dhttp=false",
+                "-Dmtp=false",
+                "-Dnfs=false",
+                "-Dsftp=false",
+                "-Dsmb=false",
+                "-Dudisks2=false",
+                "-Dbluray=false",
+                "-Dfuse=false",
+                "-Dgcr=false",
+                "-Dgcrypt=false",
+                "-Dgudev=false",
+                "-Dkeyring=false",
+                "-Dlogind=false",
+                "-Dlibusb=false"
+            ],
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.gnome.org/GNOME/gvfs/-/archive/1.50.4/gvfs-1.50.4.tar.gz",
-                    "sha256": "c67bba49c5b1dbe0b8b8f53b45eab545f6a6ce36fcdf3c11ac92464732b60ea5"
+                    "url": "https://download.gnome.org/sources/gvfs/1.50/gvfs-1.50.5.tar.xz",
+                    "sha256": "b86f09b7331c8642ecebf46a3cda0692f5eb26086f132326a5483c2ebf86a4cb",
+                    "x-checker-data": {
+                        "type": "gnome",
+                        "name": "gvfs",
+                        "stable-only": true
+                    }
                 }
             ]
         },
@@ -48,8 +75,14 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://kerberos.org/dist/krb5/1.20/krb5-1.20.1.tar.gz",
-                    "sha256": "704aed49b19eb5a7178b34b2873620ec299db08752d6a8574f95d41879ab8851"
+                    "url": "https://kerberos.org/dist/krb5/1.21/krb5-1.21.tar.gz",
+                    "sha256": "69f8aaff85484832df67a4bbacd99b9259bd95aab8c651fbbe65cdc9620ea93b",
+                    "x-checker-data": {
+                        "type": "html",
+                        "url": "https://kerberos.org/dist/",
+                        "version-pattern": "Kerberos V5 Release ([\\d\\.]+) - current release",
+                        "url-template": "https://kerberos.org/dist/krb5/$major.$minor/krb5-$version.tar.gz"
+                    }
                 }
             ]
         },
