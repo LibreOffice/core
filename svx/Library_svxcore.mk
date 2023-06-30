@@ -329,8 +329,9 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/sdr/properties/connectorproperties \
     svx/source/sdr/properties/e3dcompoundproperties \
     svx/source/sdr/properties/oleproperties \
-    svx/source/svdraw/clonelist \
     svx/source/svdraw/charthelper \
+    svx/source/svdraw/constructhelper \
+    svx/source/svdraw/clonelist \
     svx/source/svdraw/gradtrns \
     svx/source/svdraw/polypolygoneditor \
     svx/source/svdraw/presetooxhandleadjustmentrelations \

@@ -22,6 +22,7 @@
 #include <drawview.hxx>
 
 #include <editeng/outlobj.hxx>
+#include <svx/constructhelper.hxx>
 // Create default drawing objects via keyboard
 #include <svx/svdopath.hxx>
 #include <svx/svdocapt.hxx>
@@ -48,38 +49,6 @@ FuConstRectangle::FuConstRectangle(ScTabViewShell& rViewSh, vcl::Window* pWin, S
 
 FuConstRectangle::~FuConstRectangle()
 {
-}
-
-/**
- * set line starts and ends for the object to be created
- */
-
-namespace {
-
-::basegfx::B2DPolyPolygon getPolygon(TranslateId pResId, const SdrModel& rModel)
-{
-    ::basegfx::B2DPolyPolygon aRetval;
-    XLineEndListRef pLineEndList(rModel.GetLineEndList());
-
-    if( pLineEndList.is() )
-    {
-        OUString aArrowName( SvxResId(pResId) );
-        tools::Long nCount = pLineEndList->Count();
-        tools::Long nIndex;
-        for( nIndex = 0; nIndex < nCount; nIndex++ )
-        {
-            const XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nIndex);
-            if( pEntry->GetName() == aArrowName )
-            {
-                aRetval = pEntry->GetLineEnd();
-                break;
-            }
-        }
-    }
-
-    return aRetval;
-}
-
 }
 
 bool FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
@@ -206,135 +175,7 @@ void FuConstRectangle::Activate()
 
 void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, const SdrObject& rObj, sal_uInt16 nSlotId)
 {
-    SdrModel& rModel(rObj.getSdrModelFromSdrObject());
-
-    if ( !(nSlotId == SID_LINE_ARROW_START      ||
-         nSlotId == SID_LINE_ARROW_END        ||
-         nSlotId == SID_LINE_ARROWS           ||
-         nSlotId == SID_LINE_ARROW_CIRCLE     ||
-         nSlotId == SID_LINE_CIRCLE_ARROW     ||
-         nSlotId == SID_LINE_ARROW_SQUARE     ||
-         nSlotId == SID_LINE_SQUARE_ARROW     ||
-         nSlotId == SID_DRAW_MEASURELINE) )
-        return;
-
-
-    // set attributes of line start and ends
-
-    // arrowhead
-    ::basegfx::B2DPolyPolygon aArrow( getPolygon( RID_SVXSTR_ARROW, rModel ) );
-    if( !aArrow.count() )
-    {
-        ::basegfx::B2DPolygon aNewArrow;
-        aNewArrow.append(::basegfx::B2DPoint(10.0, 0.0));
-        aNewArrow.append(::basegfx::B2DPoint(0.0, 30.0));
-        aNewArrow.append(::basegfx::B2DPoint(20.0, 30.0));
-        aNewArrow.setClosed(true);
-        aArrow.append(aNewArrow);
-    }
-
-    // Circles
-    ::basegfx::B2DPolyPolygon aCircle( getPolygon( RID_SVXSTR_CIRCLE, rModel ) );
-    if( !aCircle.count() )
-    {
-        ::basegfx::B2DPolygon aNewCircle = ::basegfx::utils::createPolygonFromEllipse(::basegfx::B2DPoint(0.0, 0.0), 250.0, 250.0);
-        aNewCircle.setClosed(true);
-        aCircle.append(aNewCircle);
-    }
-
-    // Square
-    ::basegfx::B2DPolyPolygon aSquare( getPolygon( RID_SVXSTR_SQUARE, rModel ) );
-    if( !aSquare.count() )
-    {
-        ::basegfx::B2DPolygon aNewSquare;
-        aNewSquare.append(::basegfx::B2DPoint(0.0, 0.0));
-        aNewSquare.append(::basegfx::B2DPoint(10.0, 0.0));
-        aNewSquare.append(::basegfx::B2DPoint(10.0, 10.0));
-        aNewSquare.append(::basegfx::B2DPoint(0.0, 10.0));
-        aNewSquare.setClosed(true);
-        aSquare.append(aNewSquare);
-    }
-
-    SfxItemSet aSet( rModel.GetItemPool() );
-    tools::Long nWidth = 200; // (1/100th mm)
-
-    // determine line width and calculate with it the line end width
-    if( aSet.GetItemState( XATTR_LINEWIDTH ) != SfxItemState::DONTCARE )
-    {
-        tools::Long nValue = aSet.Get( XATTR_LINEWIDTH ).GetValue();
-        if( nValue > 0 )
-            nWidth = nValue * 3;
-    }
-
-    switch (nSlotId)
-    {
-        case SID_LINE_ARROWS:
-        case SID_DRAW_MEASURELINE:
-        {
-            // connector with arrow ends
-            rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_ARROW), aArrow));
-            rAttr.Put(XLineStartWidthItem(nWidth));
-            rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_ARROW), aArrow));
-            rAttr.Put(XLineEndWidthItem(nWidth));
-        }
-        break;
-
-        case SID_LINE_ARROW_START:
-        case SID_LINE_ARROW_CIRCLE:
-        case SID_LINE_ARROW_SQUARE:
-        {
-            // connector with arrow start
-            rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_ARROW), aArrow));
-            rAttr.Put(XLineStartWidthItem(nWidth));
-        }
-        break;
-
-        case SID_LINE_ARROW_END:
-        case SID_LINE_CIRCLE_ARROW:
-        case SID_LINE_SQUARE_ARROW:
-        {
-            // connector with arrow end
-            rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_ARROW), aArrow));
-            rAttr.Put(XLineEndWidthItem(nWidth));
-        }
-        break;
-    }
-
-    // and again, for the still missing ends
-    switch (nSlotId)
-    {
-        case SID_LINE_ARROW_CIRCLE:
-        {
-            // circle end
-            rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_CIRCLE), aCircle));
-            rAttr.Put(XLineEndWidthItem(nWidth));
-        }
-        break;
-
-        case SID_LINE_CIRCLE_ARROW:
-        {
-            // circle start
-            rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_CIRCLE), aCircle));
-            rAttr.Put(XLineStartWidthItem(nWidth));
-        }
-        break;
-
-        case SID_LINE_ARROW_SQUARE:
-        {
-            // square end
-            rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_SQUARE), aSquare));
-            rAttr.Put(XLineEndWidthItem(nWidth));
-        }
-        break;
-
-        case SID_LINE_SQUARE_ARROW:
-        {
-            // square start
-            rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_SQUARE), aSquare));
-            rAttr.Put(XLineStartWidthItem(nWidth));
-        }
-        break;
-    }
+    ConstructHelper::SetLineEnds(rAttr, rObj, nSlotId, 200);
 }
 
 void FuConstRectangle::Deactivate()
