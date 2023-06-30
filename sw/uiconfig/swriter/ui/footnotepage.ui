@@ -44,10 +44,10 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label7">
+              <object class="GtkLabel" id="offset">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="footnotepage|label7">Counting</property>
+                <property name="label" translatable="yes" context="footnotepage|offset">Start at</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -86,10 +86,10 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="offset">
+              <object class="GtkLabel" id="label7">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="footnotepage|offset">Start at</property>
+                <property name="label" translatable="yes" context="footnotepage|label7">Counting</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
