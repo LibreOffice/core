@@ -302,7 +302,6 @@ private:
     std::vector<css::uno::Any> m_newValues;
     std::vector<css::uno::Any> m_oldValues;
     bool m_bIgnoreRuntimeExceptionsWhileFiring = false;
-    bool m_bFireEvents = true;
 
     /** notifies the given changes in property's values, <em>plus</em> all property changes collected during recent
         |setDependentFastPropertyValue| calls.

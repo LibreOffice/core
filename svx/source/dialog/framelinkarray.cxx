@@ -65,7 +65,6 @@ public:
     SvxRotateMode       meRotMode;
     double              mfOrientation;
 
-    bool                mbMergeOrig;
     bool                mbOverlapX;
     bool                mbOverlapY;
 
@@ -90,7 +89,7 @@ public:
     const Style& GetStyleTLBR() const { return maTLBR; }
     const Style& GetStyleBLTR() const { return maBLTR; }
 
-    bool                IsMerged() const { return mbMergeOrig || mbOverlapX || mbOverlapY; }
+    bool                IsMerged() const { return mbOverlapX || mbOverlapY; }
     bool                IsRotated() const { return mfOrientation != 0.0; }
 
     void                MirrorSelfX();
@@ -209,7 +208,6 @@ Cell::Cell() :
     mnAddBottom( 0 ),
     meRotMode(SvxRotateMode::SVX_ROTATE_MODE_STANDARD ),
     mfOrientation( 0.0 ),
-    mbMergeOrig( false ),
     mbOverlapX( false ),
     mbOverlapY( false )
 {
@@ -236,7 +234,6 @@ bool Cell::operator==(const SfxPoolItem& rItem) const
         && mnAddTop == rOther.mnAddTop
         && mnAddBottom == rOther.mnAddBottom
         && meRotMode == rOther.meRotMode
-        && mbMergeOrig == rOther.mbMergeOrig
         && mbOverlapX == rOther.mbOverlapX
         && mbOverlapY == rOther.mbOverlapY;
 }
@@ -270,14 +267,12 @@ static void lclSetMergedRange( SfxItemPool& rPool, CellVec& rCells, sal_Int32 nW
         {
             const Cell* pCell = rCells[ nRow * nWidth + nCol ];
             Cell aTempCell(*pCell);
-            aTempCell.mbMergeOrig = false;
             aTempCell.mbOverlapX = nCol > nFirstCol;
             aTempCell.mbOverlapY = nRow > nFirstRow;
             rCells[ nRow * nWidth + nCol ] = &rPool.Put(aTempCell);
         }
     }
     Cell aTempCell(*rCells[ nFirstRow * nWidth + nFirstCol ]);
-    aTempCell.mbMergeOrig = false;
     rCells[ nFirstRow * nWidth + nFirstCol ] = &rPool.Put(aTempCell);
 }
 
@@ -1068,20 +1063,6 @@ void Array::MirrorSelfX()
             Cell aTempCell(CELL(mxImpl->GetMirrorCol( nCol ), nRow));
             aTempCell.MirrorSelfX();
             aNewCells.push_back( &mxImpl->mxPool->Put(aTempCell) );
-        }
-    }
-    for( nRow = 0; nRow < mxImpl->mnHeight; ++nRow )
-    {
-        for( nCol = 0; nCol < mxImpl->mnWidth; ++nCol )
-        {
-            if( CELL( nCol, nRow ).mbMergeOrig )
-            {
-                sal_Int32 nLastCol = mxImpl->GetMergedLastCol( nCol, nRow );
-                sal_Int32 nLastRow = mxImpl->GetMergedLastRow( nCol, nRow );
-                lclSetMergedRange( *mxImpl->mxPool, aNewCells, mxImpl->mnWidth,
-                    mxImpl->GetMirrorCol( nLastCol ), nRow,
-                    mxImpl->GetMirrorCol( nCol ), nLastRow );
-            }
         }
     }
     mxImpl->maCells.swap( aNewCells );

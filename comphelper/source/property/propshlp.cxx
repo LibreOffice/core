@@ -515,9 +515,6 @@ void OPropertySetHelper::fire(std::unique_lock<std::mutex>& rGuard, sal_Int32* p
                               sal_Int32 nHandles, // This is the Count of the array
                               bool bVetoable)
 {
-    if (!m_bFireEvents)
-        return;
-
     // Only fire, if one or more properties changed
     if (!nHandles)
         return;
