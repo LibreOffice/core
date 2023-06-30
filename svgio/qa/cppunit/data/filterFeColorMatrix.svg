@@ -18,7 +18,6 @@
   <filter id="colorMeGreen">
     <feColorMatrix
       in="SourceGraphic"
-      type="matrix"
       values="0 0 0 0 0
               1 1 1 1 0
               0 0 0 0 0

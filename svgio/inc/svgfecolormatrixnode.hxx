@@ -27,7 +27,6 @@ namespace svgio::svgreader
 {
 enum class ColorType
 {
-    None,
     HueRotate,
     Matrix,
     Saturate,
