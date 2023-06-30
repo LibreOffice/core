@@ -31,6 +31,7 @@ AccessibilityIssue::AccessibilityIssue(sfx::AccessibilityIssueID eIssueID)
     , m_eIssueObject(IssueObject::UNKNOWN)
     , m_pDoc(nullptr)
     , m_pNode(nullptr)
+    , m_pTextFootnote(nullptr)
     , m_nStart(0)
     , m_nEnd(0)
 {
@@ -114,6 +115,15 @@ void AccessibilityIssue::gotoIssue() const
             pPaM->SetMark();
             *pPaM->GetMark() = aMark;
             pWrtShell->EndAllAction();
+            if (comphelper::LibreOfficeKit::isActive())
+                pWrtShell->ShowCursor();
+        }
+        break;
+        case IssueObject::FOOTNOTE:
+        {
+            SwWrtShell* pWrtShell = m_pDoc->GetDocShell()->GetWrtShell();
+            if (m_pTextFootnote)
+                pWrtShell->GotoFootnoteAnchor(*m_pTextFootnote);
             if (comphelper::LibreOfficeKit::isActive())
                 pWrtShell->ShowCursor();
         }

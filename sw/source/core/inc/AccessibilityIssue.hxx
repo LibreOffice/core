@@ -13,6 +13,7 @@
 
 #include <sfx2/AccessibilityIssue.hxx>
 #include <doc.hxx>
+#include <txtftn.hxx>
 
 namespace sw
 {
@@ -26,6 +27,7 @@ enum class IssueObject
     TABLE,
     TEXT,
     DOCUMENT_TITLE,
+    FOOTNOTE,
 };
 
 class SW_DLLPUBLIC AccessibilityIssue final : public sfx::AccessibilityIssue
@@ -36,6 +38,7 @@ private:
     OUString m_sObjectID;
     std::vector<OUString> m_aIssueAdditionalInfo;
     SwNode* m_pNode;
+    SwTextFootnote* m_pTextFootnote;
 
     sal_Int32 m_nStart;
     sal_Int32 m_nEnd;
@@ -47,6 +50,7 @@ public:
     void setDoc(SwDoc& rDoc);
     void setObjectID(OUString const& rID);
     void setNode(SwNode* pNode) { m_pNode = pNode; }
+    void setTextFootnote(SwTextFootnote* pTextFootnote) { m_pTextFootnote = pTextFootnote; }
 
     void setStart(sal_Int32 nStart) { m_nStart = nStart; }
 
@@ -68,6 +72,7 @@ public:
     sal_Int32 getStart() { return m_nStart; }
     sal_Int32 getEnd() { return m_nEnd; }
     SwNode* getNode() { return m_pNode; }
+    SwTextFootnote* getTextFootnote() { return m_pTextFootnote; }
 };
 
 } // end sw namespace
