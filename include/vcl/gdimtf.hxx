@@ -115,6 +115,7 @@ public:
     void            Move( tools::Long nX, tools::Long nY );
     // additional Move method getting specifics how to handle MapMode( MapUnit::MapPixel )
     void            Move( tools::Long nX, tools::Long nY, tools::Long nDPIX, tools::Long nDPIY );
+    void            ScaleActions(double fScaleX, double fScaleY);
     void            Scale( double fScaleX, double fScaleY );
     void            Scale( const Fraction& rScaleX, const Fraction& rScaleY );
     void            Rotate( Degree10 nAngle10 );
