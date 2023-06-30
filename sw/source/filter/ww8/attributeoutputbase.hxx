@@ -368,7 +368,8 @@ public:
         sal_Int16 nFirstLineIndex,
         sal_Int16 nListTabPos,
         const OUString &rNumberingString,
-        const SvxBrushItem* pBrush) = 0; // #i120928 export graphic of bullet
+        const SvxBrushItem* pBrush, // #i120928 export graphic of bullet
+        bool isLegal) = 0;
 
 protected:
 

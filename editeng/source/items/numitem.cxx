@@ -113,7 +113,13 @@ OUString SvxNumberType::GetNumStr( sal_Int32 nNo ) const
     return GetNumStr( nNo, aLang.getLocale() );
 }
 
-OUString SvxNumberType::GetNumStr( sal_Int32 nNo, const css::lang::Locale& rLocale ) const
+static bool isArabicNumberingType(SvxNumType t)
+{
+    return t == SVX_NUM_ARABIC || t == SVX_NUM_ARABIC_ZERO || t == SVX_NUM_ARABIC_ZERO3
+           || t == SVX_NUM_ARABIC_ZERO4 || t == SVX_NUM_ARABIC_ZERO5;
+}
+
+OUString SvxNumberType::GetNumStr( sal_Int32 nNo, const css::lang::Locale& rLocale, bool bIsLegal ) const
 {
     lcl_getFormatter(xFormatter);
     if(!xFormatter.is())
@@ -133,11 +139,12 @@ OUString SvxNumberType::GetNumStr( sal_Int32 nNo, const css::lang::Locale& rLoca
                         return OUString('0');
                     else
                     {
+                        SvxNumType nActType = !bIsLegal || isArabicNumberingType(nNumType) ? nNumType : SVX_NUM_ARABIC;
                         static constexpr OUStringLiteral sNumberingType = u"NumberingType";
                         static constexpr OUStringLiteral sValue = u"Value";
                         Sequence< PropertyValue > aProperties
                         {
-                            comphelper::makePropertyValue(sNumberingType, static_cast<sal_uInt16>(nNumType)),
+                            comphelper::makePropertyValue(sNumberingType, static_cast<sal_uInt16>(nActType)),
                             comphelper::makePropertyValue(sValue, nNo)
                         };
 
@@ -366,6 +373,7 @@ SvxNumberFormat& SvxNumberFormat::operator=( const SvxNumberFormat& rFormat )
     pBulletFont.reset();
     if(rFormat.pBulletFont)
         pBulletFont = *rFormat.pBulletFont;
+    mbIsLegal = rFormat.mbIsLegal;
     return *this;
 }
 
@@ -392,7 +400,8 @@ bool  SvxNumberFormat::operator==( const SvxNumberFormat& rFormat) const
         nBulletColor        != rFormat.nBulletColor   ||
         nBulletRelSize      != rFormat.nBulletRelSize ||
         IsShowSymbol()      != rFormat.IsShowSymbol() ||
-        sCharStyleName      != rFormat.sCharStyleName
+        sCharStyleName      != rFormat.sCharStyleName ||
+        mbIsLegal           != rFormat.mbIsLegal
         )
         return false;
     if (
@@ -1006,7 +1015,7 @@ OUString SvxNumRule::MakeNumString( const SvxNodeNum& rNum ) const
                     if(SVX_NUM_BITMAP != rNFmt.GetNumberingType())
                     {
                         const LanguageTag& rLang = Application::GetSettings().GetLanguageTag();
-                        aStr.append(rNFmt.GetNumStr( rNum.GetLevelVal()[ i ], rLang.getLocale()  ));
+                        aStr.append(rNFmt.GetNumStr( rNum.GetLevelVal()[ i ], rLang.getLocale(), rMyNFmt.GetIsLegal() ));
                     }
                     else
                         bDot = false;

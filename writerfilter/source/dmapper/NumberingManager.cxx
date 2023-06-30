@@ -55,7 +55,7 @@ namespace writerfilter::dmapper {
 template <typename T>
 static beans::PropertyValue lcl_makePropVal(PropertyIds nNameID, T const & aValue)
 {
-    return {getPropertyName(nNameID), 0, uno::Any(aValue), beans::PropertyState_DIRECT_VALUE};
+    return comphelper::makePropertyValue(getPropertyName(nNameID), aValue);
 }
 
 static sal_Int32 lcl_findProperty( const uno::Sequence< beans::PropertyValue >& aProps, std::u16string_view sName )
@@ -111,6 +111,7 @@ void ListLevel::SetValue( Id nId, sal_Int32 nValue )
             m_nNFC = nValue;
         break;
         case NS_ooxml::LN_CT_Lvl_isLgl:
+            m_bIsLegal = true;
         break;
         case NS_ooxml::LN_CT_Lvl_legacy:
         break;
@@ -267,6 +268,9 @@ uno::Sequence<beans::PropertyValue> ListLevel::GetLevelProperties(bool bDefaults
     std::optional<PropertyMap::Property> aPropFont = getProperty(PROP_CHAR_FONT_NAME);
     if (aPropFont)
         aNumberingProperties.emplace_back( getPropertyName(PROP_BULLET_FONT_NAME), 0, aPropFont->second, beans::PropertyState_DIRECT_VALUE );
+
+    if (m_bIsLegal)
+        aNumberingProperties.push_back(lcl_makePropVal(PROP_LEVEL_IS_LEGAL, true));
 
     return comphelper::containerToSequence(aNumberingProperties);
 }

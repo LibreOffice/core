@@ -1123,6 +1123,7 @@ namespace xmloff::token {
         XML_IS_ACTIVE,
         XML_IS_DATA_LAYOUT_FIELD,
         XML_IS_HIDDEN,
+        XML_IS_LEGAL,
         XML_IS_SELECTION,
         XML_ISBN,
         XML_ITALIC,

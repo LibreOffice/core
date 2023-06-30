@@ -1100,6 +1100,28 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentStyles)
                          xCommentText.queryThrow<beans::XPropertyState>()->getPropertyState("CharHeight"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf150408_IsLegal)
+{
+    loadAndReload("IsLegal.fodt");
+
+    // Second level's numbering should use Arabic numbers for first level reference
+    auto xPara = getParagraph(1);
+    CPPUNIT_ASSERT_EQUAL(OUString("CH I"), getProperty<OUString>(xPara, "ListLabelString"));
+    xPara = getParagraph(2);
+    CPPUNIT_ASSERT_EQUAL(OUString("Sect 1.01"), getProperty<OUString>(xPara, "ListLabelString"));
+    xPara = getParagraph(3);
+    CPPUNIT_ASSERT_EQUAL(OUString("CH II"), getProperty<OUString>(xPara, "ListLabelString"));
+    xPara = getParagraph(4);
+    CPPUNIT_ASSERT_EQUAL(OUString("Sect 2.01"), getProperty<OUString>(xPara, "ListLabelString"));
+
+    // Test that the markup stays at save-and-reload
+    xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
+    assertXPath(
+        pXmlDoc,
+        "/office:document-styles/office:styles/text:outline-style/text:outline-level-style[2]",
+        "is-legal", "true");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

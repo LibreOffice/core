@@ -52,6 +52,7 @@ class ListLevel : public PropertyMap
     std::optional<sal_Int32>               m_nTabstop;
     tools::SvRef< StyleSheetEntry >          m_pParaStyle;
     bool m_bHasValues = false;
+    bool m_bIsLegal = false;
 
 public:
 

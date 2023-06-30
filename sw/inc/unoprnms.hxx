@@ -898,6 +898,7 @@ inline constexpr OUStringLiteral UNO_NAME_DOC_INTEROP_GRAB_BAG = u"InteropGrabBa
 inline constexpr OUStringLiteral UNO_NAME_FRAME_INTEROP_GRAB_BAG = u"FrameInteropGrabBag";
 inline constexpr OUStringLiteral UNO_NAME_CHAR_HIGHLIGHT = u"CharHighlight";
 inline constexpr OUStringLiteral UNO_NAME_STYLE_INTEROP_GRAB_BAG = u"StyleInteropGrabBag";
+inline constexpr OUStringLiteral UNO_NAME_LEVEL_IS_LEGAL = u"IsLegal";
 inline constexpr OUStringLiteral UNO_NAME_CHAR_INTEROP_GRAB_BAG = u"CharInteropGrabBag";
 inline constexpr OUStringLiteral UNO_NAME_TEXT_VERT_ADJUST = u"TextVerticalAdjust";
 inline constexpr OUStringLiteral UNO_NAME_CELL_INTEROP_GRAB_BAG = u"CellInteropGrabBag";

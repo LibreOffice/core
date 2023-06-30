@@ -1297,6 +1297,9 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat
         aPropertyValues.push_back(comphelper::makePropertyValue("ListFormat", rFormat.GetListFormat()));
     }
 
+    if (rFormat.GetIsLegal())
+        aPropertyValues.push_back(comphelper::makePropertyValue(UNO_NAME_LEVEL_IS_LEGAL, true));
+
     //char style name
     aUString.clear();
     SwStyleNameMapper::FillProgName( rCharFormatName, aUString, SwGetPoolIdFromName::ChrFmt);
@@ -1874,6 +1877,11 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
             OUString uTmp;
             rProp.Value >>= uTmp;
             aFormat.SetListFormat(uTmp);
+        }
+        else if (rProp.Name == UNO_NAME_LEVEL_IS_LEGAL)
+        {
+            if (bool bVal; rProp.Value >>= bVal)
+                aFormat.SetIsLegal(bVal);
         }
         else
         {

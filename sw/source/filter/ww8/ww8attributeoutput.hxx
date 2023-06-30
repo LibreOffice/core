@@ -202,7 +202,8 @@ public:
         sal_Int16 nFirstLineIndex,
         sal_Int16 nListTabPos,
         const OUString &rNumberingString,
-        const SvxBrushItem* pBrush) override; //For i120928,transfer graphic of bullet
+        const SvxBrushItem* pBrush, //For i120928,transfer graphic of bullet
+        bool isLegal) override;
 
 protected:
     /// Output frames - the implementation.

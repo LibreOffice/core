@@ -711,7 +711,7 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
                 }
             }
             else if (rNumVector[i])
-                sReplacement = Get(i).GetNumStr(rNumVector[i], aLocale);
+                sReplacement = Get(i).GetNumStr(rNumVector[i], aLocale, rMyNFormat.GetIsLegal());
             else
                 sReplacement = "0";        // all 0 level are a 0
 
@@ -756,7 +756,7 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
             }
 
             if (rNumVector[i])
-                aStr.append(rNFormat.GetNumStr(rNumVector[i], aLocale));
+                aStr.append(rNFormat.GetNumStr(rNumVector[i], aLocale, rMyNFormat.GetIsLegal()));
             else
                 aStr.append("0");        // all 0 level are a 0
             if (i != nLevel && !aStr.isEmpty())
