@@ -717,6 +717,11 @@ void XclExpChTrAction::CompleteSaveAction( XclExpStream& /*rStrm*/ ) const
 
 void XclExpChTrAction::Save( XclExpStream& rStrm )
 {
+    if (UsesDeletedTab())
+    {
+        SAL_WARN("sc", "XclExpChTrAction : unable to export position with tab of EXC_TAB_DELETED");
+        return;
+    }
     PrepareSaveAction( rStrm );
     ExcRecord::Save( rStrm );
     if( pAddAction )
@@ -927,6 +932,11 @@ void XclExpChTrCellContent::GetCellData(
     }
 }
 
+bool XclExpChTrCellContent::UsesDeletedTab() const
+{
+    return IsDeletedTab(aPosition.Tab());
+}
+
 void XclExpChTrCellContent::SaveActionData( XclExpStream& rStrm ) const
 {
     WriteTabId( rStrm, aPosition.Tab() );
@@ -1117,6 +1127,11 @@ XclExpChTrInsert::~XclExpChTrInsert()
 {
 }
 
+bool XclExpChTrInsert::UsesDeletedTab() const
+{
+    return IsDeletedTab(aRange.aStart.Tab());
+}
+
 void XclExpChTrInsert::SaveActionData( XclExpStream& rStrm ) const
 {
     WriteTabId( rStrm, aRange.aStart.Tab() );
@@ -1206,6 +1221,11 @@ XclExpChTrInsertTab::~XclExpChTrInsertTab()
 {
 }
 
+bool XclExpChTrInsertTab::UsesDeletedTab() const
+{
+    return IsDeletedTab(nTab);
+}
+
 void XclExpChTrInsertTab::SaveActionData( XclExpStream& rStrm ) const
 {
     WriteTabId( rStrm, nTab );
@@ -1260,6 +1280,12 @@ XclExpChTrMoveRange::XclExpChTrMoveRange(
 
 XclExpChTrMoveRange::~XclExpChTrMoveRange()
 {
+}
+
+bool XclExpChTrMoveRange::UsesDeletedTab() const
+{
+    return IsDeletedTab(aDestRange.aStart.Tab()) ||
+           IsDeletedTab(aSourceRange.aStart.Tab());
 }
 
 void XclExpChTrMoveRange::SaveActionData( XclExpStream& rStrm ) const

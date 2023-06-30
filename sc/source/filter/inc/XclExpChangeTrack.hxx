@@ -378,6 +378,9 @@ protected:
                                 // override to get action size without header, called by GetLen()
     virtual std::size_t         GetActionByteCount() const = 0;
 
+                                // true if export would attempt to get the tab id of an unknown tab
+    virtual bool                UsesDeletedTab() const = 0;
+
                                 // do something before writing the record
     virtual void                PrepareSaveAction( XclExpStream& rStrm ) const;
                                 // do something after writing the record
@@ -479,6 +482,8 @@ class XclExpChTrCellContent final : public XclExpChTrAction, protected XclExpRoo
         const XclExpRoot& rRoot, const ScCellValue& rScCell, std::unique_ptr<XclExpChTrData>& rpData,
         sal_uInt32& rXclLength1, sal_uInt16& rXclLength2 );
 
+    virtual bool                UsesDeletedTab() const override;
+
     virtual void                SaveActionData( XclExpStream& rStrm ) const override;
 
 public:
@@ -504,6 +509,8 @@ protected:
     ScRange                     aRange;
 
     XclExpChTrInsert( const XclExpChTrInsert& rCopy );
+
+    virtual bool                UsesDeletedTab() const override;
 
     virtual void                SaveActionData( XclExpStream& rStrm ) const override;
     virtual void                PrepareSaveAction( XclExpStream& rStrm ) const override;
@@ -531,6 +538,9 @@ private:
     SCTAB                   nTab;
 
 protected:
+
+    virtual bool                UsesDeletedTab() const override;
+
     virtual void                SaveActionData( XclExpStream& rStrm ) const override;
 
 public:
@@ -552,6 +562,8 @@ class XclExpChTrMoveRange final : public XclExpChTrAction
 {
     ScRange                     aSourceRange;
     ScRange                     aDestRange;
+
+    virtual bool                UsesDeletedTab() const override;
 
     virtual void                SaveActionData( XclExpStream& rStrm ) const override;
     virtual void                PrepareSaveAction( XclExpStream& rStrm ) const override;
