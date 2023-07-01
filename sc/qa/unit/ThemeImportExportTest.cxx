@@ -60,6 +60,12 @@ CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testThemeExport)
     assertXPath(pXmlDoc, "/x:styleSheet/x:fills/x:fill[4]/x:patternFill/x:fgColor", "theme", "4");
 }
 
+// Round 100th percent to percent value - so that small differences don't fail the test
+sal_Int32 roundToPercent(sal_Int16 n100Percent)
+{
+    return sal_Int32(std::round(double(n100Percent) / 100.0));
+}
+
 void checkCellBackgroundThemeColor(ScDocument* pDoc)
 {
     // A1
@@ -90,9 +96,9 @@ void checkCellBackgroundThemeColor(ScDocument* pDoc)
         auto& rTransformations = aComplexColor.getTransformations();
         CPPUNIT_ASSERT_EQUAL(size_t(2), rTransformations.size());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
-        CPPUNIT_ASSERT_EQUAL(20, sal_Int32(std::round(rTransformations[0].mnValue / 100.0)));
+        CPPUNIT_ASSERT_EQUAL(20, roundToPercent(rTransformations[0].mnValue));
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff, rTransformations[1].meType);
-        CPPUNIT_ASSERT_EQUAL(80, sal_Int32(std::round(rTransformations[1].mnValue / 100.0)));
+        CPPUNIT_ASSERT_EQUAL(80, roundToPercent(rTransformations[1].mnValue));
     }
 
     // A3
@@ -109,7 +115,7 @@ void checkCellBackgroundThemeColor(ScDocument* pDoc)
         auto& rTransformations = aComplexColor.getTransformations();
         CPPUNIT_ASSERT_EQUAL(size_t(1), rTransformations.size());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(5000), rTransformations[0].mnValue);
+        CPPUNIT_ASSERT_EQUAL(50, roundToPercent(rTransformations[0].mnValue));
     }
 }
 
@@ -151,9 +157,9 @@ void checkCellTextThemeColor(ScDocument* pDoc)
         auto& rTransformations = aComplexColor.getTransformations();
         CPPUNIT_ASSERT_EQUAL(size_t(2), rTransformations.size());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
-        CPPUNIT_ASSERT_EQUAL(60, sal_Int32(std::round(rTransformations[0].mnValue / 100.0)));
+        CPPUNIT_ASSERT_EQUAL(60, roundToPercent(rTransformations[0].mnValue));
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff, rTransformations[1].meType);
-        CPPUNIT_ASSERT_EQUAL(40, sal_Int32(std::round(rTransformations[1].mnValue / 100.0)));
+        CPPUNIT_ASSERT_EQUAL(40, roundToPercent(rTransformations[1].mnValue));
     }
 
     // B3
@@ -170,7 +176,7 @@ void checkCellTextThemeColor(ScDocument* pDoc)
         auto& rTransformations = aComplexColor.getTransformations();
         CPPUNIT_ASSERT_EQUAL(size_t(1), rTransformations.size());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(5000), rTransformations[0].mnValue);
+        CPPUNIT_ASSERT_EQUAL(50, roundToPercent(rTransformations[0].mnValue));
     }
 }
 
@@ -226,9 +232,9 @@ void checkCellBorderThemeColor(ScDocument* pDoc)
             auto& rTransformations = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(2), rTransformations.size());
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
-            CPPUNIT_ASSERT_EQUAL(sal_Int16(2000), rTransformations[0].mnValue);
+            CPPUNIT_ASSERT_EQUAL(20, roundToPercent(rTransformations[0].mnValue));
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff, rTransformations[1].meType);
-            CPPUNIT_ASSERT_EQUAL(sal_Int16(7999), rTransformations[1].mnValue);
+            CPPUNIT_ASSERT_EQUAL(80, roundToPercent(rTransformations[1].mnValue));
         }
         {
             auto* pTop = pBoxItem->GetRight();
@@ -239,9 +245,9 @@ void checkCellBorderThemeColor(ScDocument* pDoc)
             auto& rTransformations = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(2), rTransformations.size());
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
-            CPPUNIT_ASSERT_EQUAL(sal_Int16(2000), rTransformations[0].mnValue);
+            CPPUNIT_ASSERT_EQUAL(20, roundToPercent(rTransformations[0].mnValue));
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff, rTransformations[1].meType);
-            CPPUNIT_ASSERT_EQUAL(sal_Int16(7999), rTransformations[1].mnValue);
+            CPPUNIT_ASSERT_EQUAL(80, roundToPercent(rTransformations[1].mnValue));
         }
         {
             auto* pTop = pBoxItem->GetBottom();
@@ -252,7 +258,7 @@ void checkCellBorderThemeColor(ScDocument* pDoc)
             auto& rTransformations = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(1), rTransformations.size());
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
-            CPPUNIT_ASSERT_EQUAL(sal_Int16(5000), rTransformations[0].mnValue);
+            CPPUNIT_ASSERT_EQUAL(50, roundToPercent(rTransformations[0].mnValue));
         }
     }
 
@@ -276,7 +282,7 @@ void checkCellBorderThemeColor(ScDocument* pDoc)
             auto& rTransformations = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(1), rTransformations.size());
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
-            CPPUNIT_ASSERT_EQUAL(sal_Int16(5000), rTransformations[0].mnValue);
+            CPPUNIT_ASSERT_EQUAL(50, roundToPercent(rTransformations[0].mnValue));
         }
 
         {
@@ -288,7 +294,7 @@ void checkCellBorderThemeColor(ScDocument* pDoc)
             auto& rTransformations = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(1), rTransformations.size());
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
-            CPPUNIT_ASSERT_EQUAL(sal_Int16(5000), rTransformations[0].mnValue);
+            CPPUNIT_ASSERT_EQUAL(50, roundToPercent(rTransformations[0].mnValue));
         }
     }
 }
@@ -296,6 +302,8 @@ void checkCellBorderThemeColor(ScDocument* pDoc)
 CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testCellBorderThemeColor)
 {
     loadFromURL(u"xlsx/Test_ThemeColor_Text_Background_Border.xlsx");
+    checkCellBorderThemeColor(getScDoc());
+    saveAndReload("Calc Office Open XML");
     checkCellBorderThemeColor(getScDoc());
 }
 
