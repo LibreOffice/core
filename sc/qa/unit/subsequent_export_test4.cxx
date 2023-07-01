@@ -923,7 +923,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf152581_bordercolorNotExportedToXLSX)
     CPPUNIT_ASSERT(pStyles);
 
     // Check if conditional format border color is exported
-    assertXPath(pStyles, "/x:styleSheet/x:dxfs/x:dxf/x:border/x:left/x:color", "rgb", "FFED7D31");
+    assertXPath(pStyles, "/x:styleSheet/x:dxfs/x:dxf/x:border/x:left/x:color", "theme", "5");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf140431)

@@ -1612,7 +1612,7 @@ void XclExpCellAlign::SaveXml( XclExpXmlStream& rStrm ) const
 namespace {
 
 void lclGetBorderLine(
-        sal_uInt8& rnXclLine, sal_uInt32& rnColorId,
+        sal_uInt8& rnXclLine, sal_uInt32& rnColorId, model::ComplexColor& rComplexColor,
         const ::editeng::SvxBorderLine* pLine, XclExpPalette& rPalette, XclBiff eBiff )
 {
     // Document: sc/qa/unit/data/README.cellborders
@@ -1690,9 +1690,15 @@ void lclGetBorderLine(
     if( (eBiff == EXC_BIFF2) && (rnXclLine != EXC_LINE_NONE) )
         rnXclLine = EXC_LINE_THIN;
 
-    rnColorId = (pLine && (rnXclLine != EXC_LINE_NONE)) ?
-        rPalette.InsertColor( pLine->GetColor(), EXC_COLOR_CELLBORDER ) :
-        XclExpPalette::GetColorIdFromIndex( 0 );
+    if (pLine && (rnXclLine != EXC_LINE_NONE))
+    {
+        rnColorId = rPalette.InsertColor(pLine->GetColor(), EXC_COLOR_CELLBORDER);
+        rComplexColor = pLine->getComplexColor();
+    }
+    else
+    {
+        rnColorId = XclExpPalette::GetColorIdFromIndex(0);
+    }
 }
 
 } // namespace
@@ -1718,13 +1724,15 @@ bool XclExpCellBorder::FillFromItemSet(
             const SvxLineItem& rTLBRItem = rItemSet.Get( ATTR_BORDER_TLBR );
             sal_uInt8 nTLBRLine;
             sal_uInt32 nTLBRColorId;
-            lclGetBorderLine( nTLBRLine, nTLBRColorId, rTLBRItem.GetLine(), rPalette, eBiff );
+            model::ComplexColor aTLBRComplexColor;
+            lclGetBorderLine( nTLBRLine, nTLBRColorId, aTLBRComplexColor, rTLBRItem.GetLine(), rPalette, eBiff );
             mbDiagTLtoBR = (nTLBRLine != EXC_LINE_NONE);
 
             const SvxLineItem& rBLTRItem = rItemSet.Get( ATTR_BORDER_BLTR );
             sal_uInt8 nBLTRLine;
             sal_uInt32 nBLTRColorId;
-            lclGetBorderLine( nBLTRLine, nBLTRColorId, rBLTRItem.GetLine(), rPalette, eBiff );
+            model::ComplexColor aBLTRComplexColor;
+            lclGetBorderLine( nBLTRLine, nBLTRColorId, aBLTRComplexColor, rBLTRItem.GetLine(), rPalette, eBiff );
             mbDiagBLtoTR = (nBLTRLine != EXC_LINE_NONE);
 
             if( ::ScHasPriority( rTLBRItem.GetLine(), rBLTRItem.GetLine() ) )
@@ -1750,10 +1758,12 @@ bool XclExpCellBorder::FillFromItemSet(
         case EXC_BIFF2:
         {
             const SvxBoxItem& rBoxItem = rItemSet.Get( ATTR_BORDER );
-            lclGetBorderLine( mnLeftLine,   mnLeftColorId,   rBoxItem.GetLeft(),   rPalette, eBiff );
-            lclGetBorderLine( mnRightLine,  mnRightColorId,  rBoxItem.GetRight(),  rPalette, eBiff );
-            lclGetBorderLine( mnTopLine,    mnTopColorId,    rBoxItem.GetTop(),    rPalette, eBiff );
-            lclGetBorderLine( mnBottomLine, mnBottomColorId, rBoxItem.GetBottom(), rPalette, eBiff );
+
+            lclGetBorderLine(mnLeftLine, mnLeftColorId, maComplexColorLeft, rBoxItem.GetLeft(), rPalette, eBiff);
+            lclGetBorderLine(mnRightLine, mnRightColorId, maComplexColorRight, rBoxItem.GetRight(), rPalette, eBiff);
+            lclGetBorderLine(mnTopLine, mnTopColorId, maComplexColorTop, rBoxItem.GetTop(), rPalette, eBiff);
+            lclGetBorderLine(mnBottomLine, mnBottomColorId, maComplexColorBottom, rBoxItem.GetBottom(), rPalette, eBiff);
+
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_BORDER, bStyle );
         }
 
@@ -1835,13 +1845,29 @@ static const char* ToLineStyle( sal_uInt8 nLineStyle )
     return "*unknown*";
 }
 
-static void lcl_WriteBorder( XclExpXmlStream& rStrm, sal_Int32 nElement, sal_uInt8 nLineStyle, const Color& rColor )
+static void lcl_WriteBorder(XclExpXmlStream& rStrm, sal_Int32 nElement, sal_uInt8 nLineStyle, const Color& rColor, model::ComplexColor const& rComplexColor)
 {
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
     if( nLineStyle == EXC_LINE_NONE )
+    {
         rStyleSheet->singleElement(nElement);
-    else if( rColor == Color( 0, 0, 0 ) )
+    }
+    else if (rComplexColor.isValidSchemeType())
+    {
+        rStyleSheet->startElement(nElement, XML_style, ToLineStyle(nLineStyle));
+
+        sal_Int32 nTheme = oox::convertThemeColorTypeToExcelThemeNumber(rComplexColor.getSchemeType());
+        double fTintShade = oox::convertColorTransformsToTintOrShade(rComplexColor);
+        rStyleSheet->singleElement(XML_color,
+                    XML_theme, OString::number(nTheme),
+                    XML_tint, sax_fastparser::UseIf(OString::number(fTintShade), fTintShade != 0.0));
+
+        rStyleSheet->endElement(nElement);
+    }
+    else if (rColor == Color(0, 0, 0))
+    {
         rStyleSheet->singleElement(nElement, XML_style, ToLineStyle(nLineStyle));
+    }
     else
     {
         rStyleSheet->startElement(nElement, XML_style, ToLineStyle(nLineStyle));
@@ -1850,22 +1876,24 @@ static void lcl_WriteBorder( XclExpXmlStream& rStrm, sal_Int32 nElement, sal_uIn
     }
 }
 
-void XclExpCellBorder::SaveXml( XclExpXmlStream& rStrm ) const
+void XclExpCellBorder::SaveXml(XclExpXmlStream& rStream) const
 {
-    sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
+    sax_fastparser::FSHelperPtr& rStyleSheet = rStream.GetCurrentStream();
 
-    XclExpPalette& rPalette = rStrm.GetRoot().GetPalette();
+    XclExpPalette& rPalette = rStream.GetRoot().GetPalette();
 
     rStyleSheet->startElement( XML_border,
             XML_diagonalUp,     ToPsz( mbDiagBLtoTR ),
             XML_diagonalDown,   ToPsz( mbDiagTLtoBR )
             // OOXTODO: XML_outline
     );
-    lcl_WriteBorder( rStrm, XML_left,       mnLeftLine,     rPalette.GetColor( mnLeftColor ) );
-    lcl_WriteBorder( rStrm, XML_right,      mnRightLine,    rPalette.GetColor( mnRightColor ) );
-    lcl_WriteBorder( rStrm, XML_top,        mnTopLine,      rPalette.GetColor( mnTopColor ) );
-    lcl_WriteBorder( rStrm, XML_bottom,     mnBottomLine,   rPalette.GetColor( mnBottomColor ) );
-    lcl_WriteBorder( rStrm, XML_diagonal,   mnDiagLine,     rPalette.GetColor( mnDiagColor ) );
+
+    lcl_WriteBorder(rStream, XML_left, mnLeftLine, rPalette.GetColor(mnLeftColor), maComplexColorLeft);
+    lcl_WriteBorder(rStream, XML_right, mnRightLine, rPalette.GetColor(mnRightColor), maComplexColorRight);
+    lcl_WriteBorder(rStream, XML_top, mnTopLine, rPalette.GetColor(mnTopColor), maComplexColorTop);
+    lcl_WriteBorder(rStream, XML_bottom, mnBottomLine, rPalette.GetColor(mnBottomColor), maComplexColorBottom);
+    lcl_WriteBorder(rStream, XML_diagonal, mnDiagLine, rPalette.GetColor(mnDiagColor), maComplexColorDiagonal);
+
     // OOXTODO: XML_vertical, XML_horizontal
     rStyleSheet->endElement( XML_border );
 }
@@ -2017,7 +2045,7 @@ void XclExpCellArea::SaveXml( XclExpXmlStream& rStrm ) const
                 rStyleSheet->singleElement(XML_fgColor, XML_rgb, XclXmlUtils::ToOString(rPalette.GetColor(mnForeColor)));
             }
 
-            if (maBackgroundComplexColor.getType() == model::ColorType::Scheme)
+            if (maBackgroundComplexColor.isValidSchemeType())
             {
                 sal_Int32 nTheme = oox::convertThemeColorTypeToExcelThemeNumber(maBackgroundComplexColor.getSchemeType());
                 double fTintShade = oox::convertColorTransformsToTintOrShade(maBackgroundComplexColor);
@@ -2054,7 +2082,7 @@ void XclExpColor::SaveXml( XclExpXmlStream& rStrm ) const
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
     rStyleSheet->startElement(XML_fill);
     rStyleSheet->startElement(XML_patternFill);
-    if (maComplexColor.getType() == model::ColorType::Scheme)
+    if (maComplexColor.isValidSchemeType())
     {
         sal_Int32 nTheme = oox::convertThemeColorTypeToExcelThemeNumber(maComplexColor.getSchemeType());
         double fTintShade = oox::convertColorTransformsToTintOrShade(maComplexColor);

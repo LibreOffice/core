@@ -339,13 +339,19 @@ struct XclExpCellAlign : public XclCellAlign
     @descr  Provides functions to fill from item sets and to fill to Excel record data. */
 struct XclExpCellBorder : public XclCellBorder
 {
-    sal_uInt32          mnLeftColorId;      /// Color ID for left line.
-    sal_uInt32          mnRightColorId;     /// Color ID for right line.
-    sal_uInt32          mnTopColorId;       /// Color ID for top line.
-    sal_uInt32          mnBottomColorId;    /// Color ID for bottom line.
-    sal_uInt32          mnDiagColorId;      /// Color ID for diagonal line(s).
+    sal_uInt32 mnLeftColorId;   /// Color ID for left line.
+    sal_uInt32 mnRightColorId;  /// Color ID for right line.
+    sal_uInt32 mnTopColorId;    /// Color ID for top line.
+    sal_uInt32 mnBottomColorId; /// Color ID for bottom line.
+    sal_uInt32 mnDiagColorId;   /// Color ID for diagonal line(s).
 
-    explicit            XclExpCellBorder();
+    model::ComplexColor maComplexColorLeft;
+    model::ComplexColor maComplexColorRight;
+    model::ComplexColor maComplexColorTop;
+    model::ComplexColor maComplexColorBottom;
+    model::ComplexColor maComplexColorDiagonal;
+
+    explicit XclExpCellBorder();
 
     /** Fills the border attributes from the passed item set.
         @descr  Fills only the attributes exported in the passed BIFF version.
