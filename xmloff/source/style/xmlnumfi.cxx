@@ -103,6 +103,7 @@ struct SvXMLNumberInfo
     bool        bGrouping           = false;
     bool        bDecReplace         = false;
     bool        bExpSign            = true;
+    bool        bExponentLowercase  = false;     /// Exponent is 'e' instead of 'E'
     bool        bDecAlign           = false;
     double      fDisplayFactor      = 1.0;
     OUString    aIntegerFractionDelimiter;
@@ -722,6 +723,11 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                 if (::sax::Converter::convertBool( bAttrBool, aIter.toView() ))
                     aNumInfo.bExpSign = bAttrBool;
                 break;
+            case XML_ELEMENT(NUMBER, XML_EXPONENT_LOWERCASE):
+            case XML_ELEMENT(LO_EXT, XML_EXPONENT_LOWERCASE):
+                if (::sax::Converter::convertBool( bAttrBool, aIter.toView() ))
+                    aNumInfo.bExponentLowercase = bAttrBool;
+                break;
             case XML_ELEMENT(NUMBER, XML_MIN_NUMERATOR_DIGITS):
                 if (::sax::Converter::convertNumber( nAttrVal, aIter.toView(), 0 ))
                     aNumInfo.nMinNumerDigits = nAttrVal;
@@ -1173,16 +1179,7 @@ void SvXMLNumFmtElementContext::endFastElement(sal_Int32 )
                         rParent.AddToCode( '#' );
                     }
                 }
-                rParent.AddNumber( aNumInfo );      // simple number
-
-                if ( aNumInfo.bExpSign )
-                    rParent.AddToCode( u"E+" );
-                else
-                    rParent.AddToCode( u"E" );
-                for (sal_Int32 i=0; i<aNumInfo.nExpDigits; i++)
-                {
-                    rParent.AddToCode( '0' );
-                }
+                rParent.AddNumber( aNumInfo );      //  number and exponent
             }
             break;
 
@@ -1868,6 +1865,23 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
             aNumStr.append( cAdd );
     }
 
+    // Scientific number
+    sal_Int32 nExpPos = -1;
+    if ( rInfo.nExpDigits > 0 )
+    {
+        nExpPos = aNumStr.getLength();
+        aNumStr.append( rInfo.bExponentLowercase ? u"e" : u"E" );
+                                // exponent sign is required with embedded text in exponent
+        if ( rInfo.bExpSign || ( nEmbeddedCount && ( rInfo.nDecimals + 1 < -rInfo.m_EmbeddedElements.begin()->first ) ) )
+        {
+            aNumStr.append( u"+" );
+        }
+        for (sal_Int32 i=0; i<rInfo.nExpDigits; i++)
+        {
+            aNumStr.append( '0' );
+        }
+    }
+
     if ( nEmbeddedCount )
     {
         //  insert embedded strings into number string
@@ -1893,6 +1907,8 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
                 aNumStr.insert(0, '#');
             }
             nZeroPos = nZeroPos + nAddCount;
+            if ( nExpPos > 0 )
+                nExpPos = nExpPos + nAddCount;
         }
 
         // m_EmbeddedElements is sorted with ascending positions - loop is from right to left
@@ -1900,7 +1916,9 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
         {
             sal_Int32 const nFormatPos = it.first;
             sal_Int32 nInsertPos = nZeroPos - nFormatPos;
-            if ( nInsertPos >= 0 )
+            if ( nExpPos > 0 && nInsertPos > nExpPos )
+                nInsertPos ++;
+            if ( 0 <= nInsertPos && nInsertPos <= aNumStr.getLength() )
             {
                 aNumStr.insert( nInsertPos, it.second );
             }

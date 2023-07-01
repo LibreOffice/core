@@ -2845,6 +2845,15 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:interleave>
   </rng:define>
 
+  <!-- TODO no proposal,  -->
+  <rng:define name="number-scientific-number-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:exponent-lowercase">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
   <!-- TODO no proposal -->
   <rng:define name="table-data-pilot-level-attlist" combine="interleave">
     <rng:optional>

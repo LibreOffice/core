@@ -3228,6 +3228,7 @@ display-units
 display-units-built-in-unit
 external-data
 exponent-interval
+exponent-lowercase
 forced-exponent-sign
 min-decimal-places
 max-denominator-value

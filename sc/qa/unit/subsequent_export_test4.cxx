@@ -1503,6 +1503,20 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testEmbeddedTextInDecimal)
     lcl_TestNumberFormat(*getScDoc(), "#,##0.000\" \"###\" \"###");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testLowercaseExponent)
+{
+    createScDoc("ods/tdf153993-Exponent-lower-case.ods");
+
+    // save to ODS and reload
+    saveAndReload("calc8");
+    lcl_TestNumberFormat(*getScDoc(), "0.000\" \"000\" \"e+\" \"0");
+
+    // save to XLSX and reload
+    // lower case not preserve in XLSX
+    saveAndReload("Calc Office Open XML");
+    lcl_TestNumberFormat(*getScDoc(), "0.000 000 E+ 0");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testTotalsRowFunction)
 {
     createScDoc("xlsx/totalsRowFunction.xlsx");

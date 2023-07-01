@@ -695,7 +695,7 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
 
 void SvXMLNumFmtExport::WriteScientificElement_Impl(
                             sal_Int32 nDecimals, sal_Int32 nMinDecimals, sal_Int32 nInteger, sal_Int32 nBlankInteger,
-                            bool bGrouping, sal_Int32 nExp, sal_Int32 nExpInterval, bool bExpSign,
+                            bool bGrouping, sal_Int32 nExp, sal_Int32 nExpInterval, bool bExpSign, bool bExponentLowercase,
                             const SvXMLEmbeddedTextEntryArr& rEmbeddedEntries )
 {
     FinishTextElement_Impl();
@@ -752,6 +752,13 @@ void SvXMLNumFmtExport::WriteScientificElement_Impl(
             ((eVersion < SvtSaveOptions::ODFSVER_013) ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER),
                              XML_FORCED_EXPONENT_SIGN,
                              bExpSign? XML_TRUE : XML_FALSE );
+    }
+    //  exponent string
+    // Export only for 1.x with extensions
+    if (eVersion & SvtSaveOptions::ODFSVER_EXTENDED)
+    {
+        if (bExponentLowercase)
+            m_rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_EXPONENT_LOWERCASE, XML_TRUE );
     }
 
     SvXMLElementExport aElem( m_rExport,
@@ -1351,6 +1358,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         bool bCurrFound  = false;
         bool bInInteger  = true;
         bool bExpSign = true;
+        bool bExponentLowercase = false;        // 'e' or 'E' for scientific notation
         bool bDecAlign   = false;               // decimal alignment with "?"
         sal_Int32 nExpDigits = 0;
         sal_Int32 nIntegerSymbols = 0;          // for embedded-text, including "#"
@@ -1421,6 +1429,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                     if ( pElemStr && ( pElemStr->getLength() == 1
                                   || ( pElemStr->getLength() == 2 && (*pElemStr)[1] == '-' ) ) )
                         bExpSign = false;       // for 0.00E0 or 0.00E-00
+                    if ( pElemStr && (*pElemStr)[0] == 'e' )
+                        bExponentLowercase = true;   // for 0.00e+00
                     break;
                 case NF_SYMBOLTYPE_CURRENCY:
                     bCurrFound = true;
@@ -1459,8 +1469,12 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
             // Enable embedded text in decimal part only if there's a decimal part
             if ( nPrecision )
                 nEmbeddedPositionsMax += nPrecision + 1;
+            // Enable embedded text in exponent in scientific number
+            if ( nFmtType == SvNumFormatType::SCIENTIFIC )
+                nEmbeddedPositionsMax += 1 + nExpDigits;
             nPos = 0;
             bEnd = false;
+            bExpFound = false;
             while (!bEnd)
             {
                 short nElemType = rFormat.GetNumForType( nPart, nPos );
@@ -1475,6 +1489,9 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         if ( pElemStr )
                             nDigitsPassed += pElemStr->getLength();
                         break;
+                    case NF_SYMBOLTYPE_EXP:
+                        bExpFound = true;
+                        [[fallthrough]];
                     case NF_SYMBOLTYPE_DECSEP:
                         nDigitsPassed++;
                         break;
@@ -1505,6 +1522,9 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
 
                             aEmbeddedEntries.push_back(
                                 SvXMLEmbeddedTextEntry( nPos, nEmbedPos, aEmbeddedStr, bSaveBlankWidthSymbol ));
+                            // exponent sign is required with embedded text in exponent
+                            if ( bExpFound && !bExpSign )
+                                bExpSign = true;
                         }
                         break;
                 }
@@ -1662,7 +1682,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                                 // as integer digits: use nIntegerSymbols instead of nLeading
                                 // nIntegerSymbols represents exponent interval (for engineering notation)
                                 WriteScientificElement_Impl( nPrecision, nMinDecimals, nLeading, nBlankInteger, bThousand, nExpDigits, nIntegerSymbols, bExpSign,
-                                    aEmbeddedEntries );
+                                    bExponentLowercase, aEmbeddedEntries );
                                 bAnyContent = true;
                                 break;
                             case SvNumFormatType::FRACTION:

@@ -71,7 +71,7 @@ private:
                                         bool bGrouping, sal_Int32 nTrailingThousands,
                                         const SvXMLEmbeddedTextEntryArr& rEmbeddedEntries );
     SAL_DLLPRIVATE void WriteScientificElement_Impl( sal_Int32 nDecimals, sal_Int32 nMinDecimals, sal_Int32 nInteger, sal_Int32 nBlankInteger,
-                                        bool bGrouping, sal_Int32 nExp, sal_Int32 nExpInterval, bool bExpSign,
+                                        bool bGrouping, sal_Int32 nExp, sal_Int32 nExpInterval, bool bExpSign, bool bExponentLowercase,
                                         const SvXMLEmbeddedTextEntryArr& rEmbeddedEntries );
     SAL_DLLPRIVATE void WriteFractionElement_Impl( sal_Int32 nInteger, sal_Int32 nBlankInteger, bool bGrouping,
                                                    const SvNumberformat& rFormat, sal_uInt16 nPart );
