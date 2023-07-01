@@ -26,6 +26,7 @@
 
 #include <app.hrc>
 #include <svl/itemset.hxx>
+#include <svx/constructhelper.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnedwit.hxx>
@@ -666,30 +667,6 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
 /**
  * set line starts and ends for the object to be created
  */
-static ::basegfx::B2DPolyPolygon getPolygon(TranslateId pResId, const SdrModel& rModel)
-{
-    ::basegfx::B2DPolyPolygon aRetval;
-    XLineEndListRef pLineEndList(rModel.GetLineEndList());
-
-    if( pLineEndList.is() )
-    {
-        OUString aArrowName(SvxResId(pResId));
-        ::tools::Long nCount = pLineEndList->Count();
-        ::tools::Long nIndex;
-        for( nIndex = 0; nIndex < nCount; nIndex++ )
-        {
-            const XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nIndex);
-            if( pEntry->GetName() == aArrowName )
-            {
-                aRetval = pEntry->GetLineEnd();
-                break;
-            }
-        }
-    }
-
-    return aRetval;
-}
-
 void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj)
 {
     if ( !((rObj.GetObjIdentifier() == SdrObjKind::Edge &&
@@ -710,7 +687,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj
     SdrModel& rModel(rObj.getSdrModelFromSdrObject());
 
     // arrowhead
-    ::basegfx::B2DPolyPolygon aArrow( getPolygon( RID_SVXSTR_ARROW, rModel ) );
+    ::basegfx::B2DPolyPolygon aArrow(ConstructHelper::GetLineEndPoly(RID_SVXSTR_ARROW, rModel));
     if( !aArrow.count() )
     {
         ::basegfx::B2DPolygon aNewArrow;
@@ -722,7 +699,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj
     }
 
     // Circles
-    ::basegfx::B2DPolyPolygon aCircle( getPolygon( RID_SVXSTR_CIRCLE, rModel ) );
+    ::basegfx::B2DPolyPolygon aCircle(ConstructHelper::GetLineEndPoly(RID_SVXSTR_CIRCLE, rModel));
     if( !aCircle.count() )
     {
         ::basegfx::B2DPolygon aNewCircle = ::basegfx::utils::createPolygonFromEllipse(::basegfx::B2DPoint(0.0, 0.0), 250.0, 250.0);
@@ -731,7 +708,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj
     }
 
     // Square
-    ::basegfx::B2DPolyPolygon aSquare( getPolygon( RID_SVXSTR_SQUARE, rModel ) );
+    ::basegfx::B2DPolyPolygon aSquare(ConstructHelper::GetLineEndPoly(RID_SVXSTR_SQUARE, rModel));
     if( !aSquare.count() )
     {
         ::basegfx::B2DPolygon aNewSquare;

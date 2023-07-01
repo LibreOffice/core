@@ -19,15 +19,21 @@
 
 #pragma once
 
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/long.hxx>
+#include <unotools/resmgr.hxx>
 
+class SdrModel;
 class SdrObject;
 class SfxItemSet;
 
 class SVXCORE_DLLPUBLIC ConstructHelper
 {
 public:
+    // Helper to find the shape for a given line end
+    static ::basegfx::B2DPolyPolygon GetLineEndPoly(TranslateId pResId, const SdrModel& rModel);
+
     // set line starts and ends for newly created objects
     static void SetLineEnds(SfxItemSet& rAttr, const SdrObject& rObj, sal_uInt16 nSlotId,
                             tools::Long nWidth);

@@ -34,7 +34,8 @@
 
 //using namespace ::com::sun::star;
 
-static ::basegfx::B2DPolyPolygon lcl_getPolygon(TranslateId pResId, const SdrModel& rModel)
+::basegfx::B2DPolyPolygon ConstructHelper::GetLineEndPoly(TranslateId pResId,
+                                                          const SdrModel& rModel)
 {
     ::basegfx::B2DPolyPolygon aRetval;
     XLineEndListRef pLineEndList(rModel.GetLineEndList());
@@ -72,7 +73,7 @@ void ConstructHelper::SetLineEnds(SfxItemSet& rAttr, const SdrObject& rObj, sal_
     // set attributes of line start and ends
 
     // arrowhead
-    ::basegfx::B2DPolyPolygon aArrow(lcl_getPolygon(RID_SVXSTR_ARROW, rModel));
+    ::basegfx::B2DPolyPolygon aArrow(GetLineEndPoly(RID_SVXSTR_ARROW, rModel));
     if (!aArrow.count())
     {
         ::basegfx::B2DPolygon aNewArrow;
@@ -84,7 +85,7 @@ void ConstructHelper::SetLineEnds(SfxItemSet& rAttr, const SdrObject& rObj, sal_
     }
 
     // Circles
-    ::basegfx::B2DPolyPolygon aCircle(lcl_getPolygon(RID_SVXSTR_CIRCLE, rModel));
+    ::basegfx::B2DPolyPolygon aCircle(GetLineEndPoly(RID_SVXSTR_CIRCLE, rModel));
     if (!aCircle.count())
     {
         ::basegfx::B2DPolygon aNewCircle = ::basegfx::utils::createPolygonFromEllipse(
@@ -94,7 +95,7 @@ void ConstructHelper::SetLineEnds(SfxItemSet& rAttr, const SdrObject& rObj, sal_
     }
 
     // Square
-    ::basegfx::B2DPolyPolygon aSquare(lcl_getPolygon(RID_SVXSTR_SQUARE, rModel));
+    ::basegfx::B2DPolyPolygon aSquare(GetLineEndPoly(RID_SVXSTR_SQUARE, rModel));
     if (!aSquare.count())
     {
         ::basegfx::B2DPolygon aNewSquare;
