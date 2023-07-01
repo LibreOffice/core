@@ -935,14 +935,13 @@ void SvxTableController::onFormatTable(const SfxRequest& rReq)
     SfxItemSet aNewAttr(rModel.GetItemPool());
 
     // merge drawing layer text distance items into SvxBoxItem used by the dialog
-    SvxBoxItem aBoxItem(TextDistancesToSvxBoxItem(aNewAttr));
-
-    SvxBoxInfoItem aBoxInfoItem( aNewAttr.Get( SDRATTR_TABLE_BORDER_INNER ) );
+    auto xBoxItem(std::make_shared<SvxBoxItem>(TextDistancesToSvxBoxItem(aNewAttr)));
+    auto xBoxInfoItem(std::make_shared<SvxBoxInfoItem>(aNewAttr.Get(SDRATTR_TABLE_BORDER_INNER)));
 
     MergeAttrFromSelectedCells(aNewAttr, false);
-    FillCommonBorderAttrFromSelectedCells( aBoxItem, aBoxInfoItem );
-    aNewAttr.Put( aBoxItem );
-    aNewAttr.Put( aBoxInfoItem );
+    FillCommonBorderAttrFromSelectedCells(*xBoxItem, *xBoxInfoItem);
+    aNewAttr.Put(*xBoxItem);
+    aNewAttr.Put(*xBoxInfoItem);
 
     // Fill in shadow properties.
     const SfxItemSet& rTableItemSet = rTableObj.GetMergedItemSet();
@@ -963,7 +962,7 @@ void SvxTableController::onFormatTable(const SfxRequest& rReq)
         rModel, false) );
 
     // Even Cancel Button is returning positive(101) value,
-    xDlg->StartExecuteAsync([xDlg, this, aBoxItem, aBoxInfoItem](int nResult){
+    xDlg->StartExecuteAsync([xDlg, this, xBoxItem, xBoxInfoItem](int nResult){
         if (nResult == RET_OK)
         {
             SfxItemSet aNewSet(*(xDlg->GetOutputItemSet()));
@@ -975,14 +974,14 @@ void SvxTableController::onFormatTable(const SfxRequest& rReq)
             //unchanged state back to their input properties
             if (aNewSet.GetItemState(SDRATTR_TABLE_BORDER, false) != SfxItemState::SET)
             {
-                aNewSet.Put(aBoxItem);
+                aNewSet.Put(*xBoxItem);
             }
             if (aNewSet.GetItemState(SDRATTR_TABLE_BORDER_INNER, false) != SfxItemState::SET)
             {
-                aNewSet.Put(aBoxInfoItem);
+                aNewSet.Put(*xBoxInfoItem);
             }
 
-            SvxBoxItemToTextDistances(aBoxItem, aNewSet);
+            SvxBoxItemToTextDistances(*xBoxItem, aNewSet);
 
             if (checkTableObject() && mxTable.is())
             {
