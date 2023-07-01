@@ -133,6 +133,9 @@ static void dumpTile(const char *pNameStem,
                         buf[1] = (*(pixel + 1) * 255 + alpha / 2) / alpha;
                         buf[2] = (*(pixel + 0) * 255 + alpha / 2) / alpha;
                         break;
+                    default:
+                        assert(false && "unhandled LibreOfficeKitTileMode");
+                        break;
                 }
             }
 
