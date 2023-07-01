@@ -28,9 +28,9 @@
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
 
-SvxFormatCellsDialog::SvxFormatCellsDialog(weld::Window* pParent, const SfxItemSet* pAttr, const SdrModel& rModel, bool bStyle)
-    : SfxTabDialogController(pParent, "cui/ui/formatcellsdialog.ui", "FormatCellsDialog", pAttr, bStyle)
-    , mrOutAttrs(*pAttr)
+SvxFormatCellsDialog::SvxFormatCellsDialog(weld::Window* pParent, const SfxItemSet& rAttr, const SdrModel& rModel, bool bStyle)
+    : SfxTabDialogController(pParent, "cui/ui/formatcellsdialog.ui", "FormatCellsDialog", &rAttr, bStyle)
+    , mrOutAttrs(rAttr)
     , mpColorTab(rModel.GetColorList())
     , mnColorTabState ( ChangeType::NONE )
     , mpGradientList(rModel.GetGradientList())
