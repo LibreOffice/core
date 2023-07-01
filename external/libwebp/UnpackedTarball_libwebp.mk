@@ -15,7 +15,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libwebp,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,libwebp,\
 	external/libwebp/Makefile.vc.patch \
-	external/libwebp/CVE-2023-1999.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
