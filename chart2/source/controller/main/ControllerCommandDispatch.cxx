@@ -678,9 +678,9 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ ".uno:InsertDataLabel" ] = bIsWritable;
     m_aCommandAvailability[ ".uno:InsertMeanValue" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddMeanValue;
     m_aCommandAvailability[ ".uno:InsertTrendline" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddTrendline;
-    m_aCommandAvailability[ ".uno:InsertTrendlineEquation" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddTrendlineEquation;
-    m_aCommandAvailability[ ".uno:InsertTrendlineEquationAndR2" ] =
-        m_aCommandAvailability[ ".uno:InsertTrendlineEquation" ] && m_apControllerState->bMayAddR2Value;
+    const bool bInsertTrendlineEquation = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddTrendlineEquation;
+    m_aCommandAvailability[ ".uno:InsertTrendlineEquation" ] = bInsertTrendlineEquation;
+    m_aCommandAvailability[ ".uno:InsertTrendlineEquationAndR2" ] = bInsertTrendlineEquation && m_apControllerState->bMayAddR2Value;
     m_aCommandAvailability[ ".uno:InsertR2Value" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddR2Value
         && !m_apControllerState->bMayAddTrendlineEquation;
     m_aCommandAvailability[ ".uno:DeleteR2Value" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteR2Value;
