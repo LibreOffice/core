@@ -2530,7 +2530,7 @@ bool XFillFloatTransparenceItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMem
         || MID_GRADIENT_ENDINTENSITY == nMemberId
         || MID_GRADIENT_STEPCOUNT == nMemberId)
     {
-        // tdf#155913 handle attributes not suppoted by transparency gradient as error
+        // tdf#155913 handle attributes not supported by transparency gradient as error
         return false;
     }
 
@@ -2551,7 +2551,7 @@ bool XFillFloatTransparenceItem::PutValue( const css::uno::Any& rVal, sal_uInt8 
         || MID_GRADIENT_ENDINTENSITY == nMemberId
         || MID_GRADIENT_STEPCOUNT == nMemberId)
     {
-        // tdf#155913 handle attributes not suppoted by transparency gradient as error
+        // tdf#155913 handle attributes not supported by transparency gradient as error
         return false;
     }
 
