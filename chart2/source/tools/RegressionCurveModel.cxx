@@ -182,9 +182,17 @@ void SAL_CALL RegressionCurveModel::setEquationProperties( const uno::Reference<
             ModifyListenerHelper::removeListener( m_xEquationProperties, m_xModifyEventForwarder );
 
         m_xEquationProperties.set( xEquationProperties );
-        m_xEquationProperties->setPropertyValue( "MayHaveCorrelationCoefficient", uno::Any( m_eRegressionCurveType != CURVE_TYPE_MOVING_AVERAGE ) );
+        setPropertyMayHaveR2();
         ModifyListenerHelper::addListener( m_xEquationProperties, m_xModifyEventForwarder );
         fireModifyEvent();
+    }
+}
+
+void RegressionCurveModel::setPropertyMayHaveR2()
+{
+    if( m_xEquationProperties.is()) {
+        bool bMayHaveR2 = m_eRegressionCurveType != CURVE_TYPE_MOVING_AVERAGE;
+        m_xEquationProperties->setPropertyValue( "MayHaveCorrelationCoefficient", uno::Any( bMayHaveR2 ) );
     }
 }
 
@@ -238,6 +246,7 @@ void SAL_CALL RegressionCurveModel::disposing( const lang::EventObject& /* Sourc
 // ____ OPropertySet ____
 void RegressionCurveModel::firePropertyChangeEvent()
 {
+    setPropertyMayHaveR2();
     fireModifyEvent();
 }
 
