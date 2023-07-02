@@ -398,6 +398,9 @@ protected:
     void            GetMenuStateSel(SfxItemSet& rSet);
 
 private:
+    DrawViewShell(const DrawViewShell&) = delete;
+    DrawViewShell& operator=(const DrawViewShell&) = delete;
+
     void Construct (DrawDocShell* pDocSh, PageKind ePageKind);
 
     /** Depending on the given request create a new page or duplicate an
