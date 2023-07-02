@@ -207,7 +207,7 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
             auto pColorSet = pObjectShell->GetThemeColors();
             mnColorCount = 12;
             rColorSet.Clear();
-            sal_uInt16 nItemId = 0;
+            sal_uInt16 nItemId = 1;
 
             if (!pColorSet)
                 return;
