@@ -26,6 +26,7 @@
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/docmacromode.hxx>
+#include <sfx2/namedcolor.hxx>
 #include <bitset.hxx>
 #include <vcl/timer.hxx>
 
@@ -132,6 +133,9 @@ struct SfxObjectShell_Impl final : public ::sfx2::IMacroDocumentAccess
 
     /// Holds Infobars until View is fully loaded
     std::vector<InfobarData> m_aPendingInfobars;
+
+    // Recent colors used by toolbar buttons
+    std::unordered_map<sal_uInt16, NamedColor> m_aRecentColors;
 
     SfxObjectShell_Impl( SfxObjectShell& _rDocShell );
     virtual ~SfxObjectShell_Impl();

@@ -210,7 +210,6 @@ class SVXCORE_DLLPUBLIC SvxColorToolBoxControl final : public cppu::ImplInherita
     bool m_bSplitButton;
     sal_uInt16 m_nSlotId;
     ColorSelectFunction m_aColorSelectFunction;
-    DECL_DLLPRIVATE_LINK(SelectedHdl, const NamedColor&, void);
 
     weld::Window* GetParentFrame() const;
 
