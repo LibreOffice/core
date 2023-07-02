@@ -163,7 +163,7 @@ void checkCommonTrendline(
         Reference<chart2::XRegressionCurve> const & xCurve,
         double aExpectedExtrapolateForward, double aExpectedExtrapolateBackward,
         bool aExpectedForceIntercept, double aExpectedInterceptValue,
-        bool aExpectedShowEquation, bool aExpectedR2)
+        bool aExpectedShowEquation, bool aExpectedR2, bool aExpectedMayHaveR2)
 {
     Reference<XPropertySet> xProperties( xCurve , uno::UNO_QUERY );
     CPPUNIT_ASSERT(xProperties.is());
@@ -197,6 +197,10 @@ void checkCommonTrendline(
     bool bShowCorrelationCoefficient = false;
     CPPUNIT_ASSERT(xEquationProperties->getPropertyValue("ShowCorrelationCoefficient") >>= bShowCorrelationCoefficient);
     CPPUNIT_ASSERT_EQUAL(aExpectedR2, bShowCorrelationCoefficient);
+
+    bool bMayHaveR2 = false;
+    CPPUNIT_ASSERT(xEquationProperties->getPropertyValue("MayHaveCorrelationCoefficient") >>= bMayHaveR2);
+    CPPUNIT_ASSERT_EQUAL(aExpectedMayHaveR2, bMayHaveR2);
 }
 
 void checkNameAndType(Reference<XPropertySet> const & xProperties, const OUString& aExpectedName, const OUString& aExpectedServiceName)
@@ -226,7 +230,7 @@ void checkLinearTrendline(
         xCurve,
         aExpectedExtrapolateForward, aExpectedExtrapolateBackward,
         /*aExpectedForceIntercept*/false, aExpectedInterceptValue,
-        /*aExpectedShowEquation*/true, /*aExpectedR2*/false);
+        /*aExpectedShowEquation*/true, /*aExpectedR2*/false, /*aExpectedMayHaveR2*/true);
 }
 
 void checkPolynomialTrendline(
@@ -248,7 +252,7 @@ void checkPolynomialTrendline(
         xCurve,
         aExpectedExtrapolateForward, aExpectedExtrapolateBackward,
         /*aExpectedForceIntercept*/true, aExpectedInterceptValue,
-        /*aExpectedShowEquation*/true, /*aExpectedR2*/true);
+        /*aExpectedShowEquation*/true, /*aExpectedR2*/true, /*aExpectedMayHaveR2*/true);
 }
 
 void checkMovingAverageTrendline(
@@ -262,6 +266,12 @@ void checkMovingAverageTrendline(
     sal_Int32 aPeriod = 2;
     CPPUNIT_ASSERT(xProperties->getPropertyValue("MovingAveragePeriod") >>= aPeriod);
     CPPUNIT_ASSERT_EQUAL(aExpectedPeriod, aPeriod);
+
+    checkCommonTrendline(
+        xCurve,
+        /*aExpectedExtrapolateForward*/0.0, /*aExpectedExtrapolateBackward*/0.0,
+        /*aExpectedForceIntercept*/false, /*aExpectedInterceptValue*/0.0,
+        /*aExpectedShowEquation*/false, /*aExpectedR2*/false, /*aExpectedMayHaveR2*/false);
 }
 
 void checkTrendlinesInChart(uno::Reference< chart2::XChartDocument > const & xChartDoc)
