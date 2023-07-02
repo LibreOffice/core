@@ -2751,6 +2751,8 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
         case ContentTypeId::INDEX:
         case ContentTypeId::REFERENCE :
         case ContentTypeId::TEXTFIELD:
+        case ContentTypeId::FOOTNOTE:
+        case ContentTypeId::ENDNOTE:
             // cannot be inserted, neither as URL nor as section
         break;
         case ContentTypeId::URLFIELD:
