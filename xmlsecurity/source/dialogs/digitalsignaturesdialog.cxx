@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <array>
 #include <string_view>
 
 #include <digitalsignaturesdialog.hxx>
@@ -117,7 +116,7 @@ namespace
         m_nODF = nTmp;
     }
 #ifdef _WIN32
-    constexpr std::array<std::u16string_view, 9> aGUIServers = { u"Gpg4win\\kleopatra.exe",
+    constexpr std::u16string_view aGUIServers[]  = { u"Gpg4win\\kleopatra.exe",
                                                    u"Gpg4win\\bin\\kleopatra.exe",
                                                    u"GNU\\GnuPG\\kleopatra.exe",
                                                    u"GNU\\GnuPG\\launch-gpa.exe",
@@ -127,7 +126,7 @@ namespace
                                                    u"GNU\\GnuPG\\bin\\launch-gpa.exe",
                                                    u"GNU\\GnuPG\\bin\\gpa.exe"};
 #else
-    constexpr std::array<std::u16string_view, 4> aGUIServers = { u"kleopatra", u"seahorse", u"gpa", u"kgpg" };
+    constexpr std::u16string_view aGUIServers[] = { u"kleopatra", u"seahorse", u"gpa", u"kgpg" };
 #endif
 
 }
@@ -550,9 +549,6 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, CertMgrButtonHdl, weld::Button&, void)
         return;
     OUString aPath(cPath, strlen(cPath), osl_getThreadTextEncoding());
 #endif
-
-    if (aGUIServers.empty())
-        return;
 
     OUString sFoundGUIServer, sExecutable;
 
