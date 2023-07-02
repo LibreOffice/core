@@ -2282,7 +2282,6 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
 
     if( !m_aFlags.bAFormatByInput )
     {
-        m_nEndNdIdx = m_aEndNdIdx.GetIndex();
         ::StartProgress( STR_STATSTR_AUTOFORMAT, sal_Int32(m_aNdIdx.GetIndex()),
                          sal_Int32(m_nEndNdIdx),
                          m_pDoc->GetDocShell() );
