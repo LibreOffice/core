@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/drawitem.hxx>
 #include <tbxcolorupdate.hxx>
@@ -40,10 +41,11 @@
 namespace svx
 {
     ToolboxButtonColorUpdaterBase::ToolboxButtonColorUpdaterBase(bool bWideButton, OUString aCommandLabel,
-                                                                 OUString aCommandURL,
+                                                                 OUString aCommandURL, sal_uInt16 nSlotId,
                                                                  css::uno::Reference<css::frame::XFrame> xFrame)
         : mbWideButton(bWideButton)
         , mbWasHiContrastMode(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
+        , mnSlotId(nSlotId)
         , maCurColor(COL_TRANSPARENT)
         , meImageType(vcl::ImageType::Size16)
         , maCommandLabel(std::move(aCommandLabel))
@@ -54,6 +56,23 @@ namespace svx
 
     void ToolboxButtonColorUpdaterBase::Init(sal_uInt16 nSlotId)
     {
+        if (mbWideButton)
+        {
+            Update(COL_TRANSPARENT, true);
+            return;
+        }
+
+        if (rtl::Reference xModel = dynamic_cast<SfxBaseModel*>(mxFrame->getController()->getModel().get()))
+        {
+            auto pDocSh = xModel->GetObjectShell();
+            StartListening(*pDocSh);
+            if (auto oColor = pDocSh->GetRecentColor(nSlotId))
+            {
+                Update(*oColor);
+                return;
+            }
+        }
+
         switch (nSlotId)
         {
             case SID_ATTR_CHAR_COLOR:
@@ -80,11 +99,32 @@ namespace svx
         }
     }
 
+    void ToolboxButtonColorUpdaterBase::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
+    {
+        if (rHint.GetId() == SfxHintId::Dying)
+        {
+            EndListeningAll();
+        }
+        else if (rHint.GetId() == SfxHintId::ColorsChanged)
+        {
+            if (auto oColor = static_cast<SfxObjectShell&>(rBC).GetRecentColor(mnSlotId))
+                Update(*oColor);
+        }
+    }
+
+    void ToolboxButtonColorUpdaterBase::SetRecentColor(const NamedColor &rNamedColor)
+    {
+        if (rtl::Reference xModel = dynamic_cast<SfxBaseModel*>(mxFrame->getController()->getModel().get()))
+            xModel->GetObjectShell()->SetRecentColor(mnSlotId, rNamedColor);
+        else if (!mbWideButton)
+            Update(rNamedColor);
+    }
+
     VclToolboxButtonColorUpdater::VclToolboxButtonColorUpdater(
             sal_uInt16 nSlotId, ToolBoxItemId nTbxBtnId, ToolBox* pToolBox, bool bWideButton,
             const OUString& rCommandLabel, const OUString& rCommandURL,
             const css::uno::Reference<css::frame::XFrame>& rFrame)
-        : ToolboxButtonColorUpdaterBase(bWideButton, rCommandLabel, rCommandURL, rFrame)
+        : ToolboxButtonColorUpdaterBase(bWideButton, rCommandLabel, rCommandURL, nSlotId, rFrame)
         , mnBtnId(nTbxBtnId)
         , mpTbx(pToolBox)
     {
@@ -138,14 +178,11 @@ namespace svx
     void ToolboxButtonColorUpdaterBase::Update(const NamedColor &rNamedColor)
     {
         Update(rNamedColor.m_aColor);
-        if (!mbWideButton)
-        {
-            // Also show the current color as QuickHelpText
-            OUString colorSuffix = OUString(" (%1)").replaceFirst("%1", rNamedColor.m_aName);
-            OUString colorHelpText = maCommandLabel + colorSuffix;
 
-            SetQuickHelpText(colorHelpText);
-        }
+        // Also show the current color as QuickHelpText
+        OUString colorSuffix = OUString(" (%1)").replaceFirst("%1", rNamedColor.m_aName);
+        OUString colorHelpText = maCommandLabel + colorSuffix;
+        SetQuickHelpText(colorHelpText);
     }
 
     void ToolboxButtonColorUpdaterBase::Update(const Color& rColor, bool bForceUpdate)
@@ -250,7 +287,7 @@ namespace svx
 
     ToolboxButtonColorUpdater::ToolboxButtonColorUpdater(sal_uInt16 nSlotId, const OUString& rTbxBtnId, weld::Toolbar* ptrTbx, bool bWideButton,
                                                          const OUString& rCommandLabel, const css::uno::Reference<css::frame::XFrame>& rFrame)
-        : ToolboxButtonColorUpdaterBase(bWideButton, rCommandLabel, rTbxBtnId, rFrame)
+        : ToolboxButtonColorUpdaterBase(bWideButton, rCommandLabel, rTbxBtnId, nSlotId, rFrame)
         , msBtnId(rTbxBtnId)
         , mpTbx(ptrTbx)
     {

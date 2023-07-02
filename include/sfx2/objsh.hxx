@@ -47,6 +47,7 @@
 
 namespace weld {class Button; }
 namespace model {class ColorSet; }
+struct NamedColor;
 class SbxValue;
 class SbxArray;
 class BasicManager;
@@ -563,6 +564,9 @@ public:
     css::uno::Reference< css::script::XLibraryContainer >
                                 GetDialogContainer();
     StarBASIC*                  GetBasic() const;
+
+    std::optional<NamedColor> GetRecentColor(sal_uInt16 nSlotId);
+    void SetRecentColor(sal_uInt16 nSlotId, const NamedColor& rColor);
 
     virtual std::set<Color>     GetDocColors();
     virtual std::shared_ptr<model::ColorSet> GetThemeColors();

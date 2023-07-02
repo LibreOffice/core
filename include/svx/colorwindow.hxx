@@ -99,7 +99,6 @@ private:
     std::unique_ptr<weld::CustomWeld> mxRecentColorSetWin;
     weld::Button* mpDefaultButton;
 
-    Link<const NamedColor&, void> maSelectedLink;
     DECL_DLLPRIVATE_LINK(SelectHdl, ValueSet*, void);
     DECL_DLLPRIVATE_LINK(SelectPaletteHdl, weld::ComboBox&, void);
     DECL_DLLPRIVATE_LINK(AutoColorClickHdl, weld::Button&, void);
@@ -127,8 +126,6 @@ public:
     NamedColor          GetSelectEntryColor() const;
 
     virtual void        statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
-
-    void SetSelectedHdl( const Link<const NamedColor&, void>& rLink ) { maSelectedLink = rLink; }
 
     virtual void GrabFocus() override;
 };

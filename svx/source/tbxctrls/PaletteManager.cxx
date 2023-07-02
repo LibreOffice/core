@@ -378,6 +378,12 @@ void PaletteManager::AddRecentColor(const Color& rRecentColor, const OUString& r
     batch->commit();
 }
 
+void PaletteManager::SetSplitButtonColor(const NamedColor& rColor)
+{
+    if (mpBtnUpdater)
+        mpBtnUpdater->SetRecentColor(rColor);
+}
+
 void PaletteManager::SetBtnUpdater(svx::ToolboxButtonColorUpdaterBase* pBtnUpdater)
 {
     mpBtnUpdater = pBtnUpdater;
@@ -401,8 +407,7 @@ void PaletteManager::PopupColorPicker(weld::Window* pParent, const OUString& aCo
             Color aLastColor = m_pColorDlg->GetColor();
             OUString sColorName = "#" + aLastColor.AsRGBHexString().toAsciiUpperCase();
             NamedColor aNamedColor(aLastColor, sColorName);
-            if (mpBtnUpdater)
-                mpBtnUpdater->Update(aNamedColor);
+            SetSplitButtonColor(aNamedColor);
             AddRecentColor(aLastColor, sColorName);
             maColorSelectFunction(aCommandCopy, aNamedColor);
         }

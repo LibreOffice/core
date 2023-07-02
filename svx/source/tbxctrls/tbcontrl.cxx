@@ -2226,7 +2226,7 @@ IMPL_LINK(ColorWindow, SelectHdl, ValueSet*, pColorSet, void)
             mxPaletteManager->ReloadRecentColorSet(*mxRecentColorSet);
     }
 
-    maSelectedLink.Call(aNamedColor);
+    mxPaletteManager->SetSplitButtonColor(aNamedColor);
 
     // deliberate take a copy here in case maMenuButton.set_inactive
     // triggers a callback that destroys ourself
@@ -2272,7 +2272,7 @@ IMPL_LINK(ColorWindow, AutoColorClickHdl, weld::Button&, rButton, void)
     mxRecentColorSet->SetNoSelection();
     mpDefaultButton = &rButton;
 
-    maSelectedLink.Call(aNamedColor);
+    mxPaletteManager->SetSplitButtonColor(aNamedColor);
 
     // deliberate take a copy here in case maMenuButton.set_inactive
     // triggers a callback that destroys ourself
@@ -3636,9 +3636,6 @@ std::unique_ptr<WeldToolbarPopup> SvxColorToolBoxControl::weldPopupWindow()
                         [this] { return GetParentFrame(); },
                         m_aColorSelectFunction);
 
-    if ( m_bSplitButton )
-        xPopover->SetSelectedHdl( LINK( this, SvxColorToolBoxControl, SelectedHdl ) );
-
     return xPopover;
 }
 
@@ -3661,9 +3658,6 @@ VclPtr<vcl::Window> SvxColorToolBoxControl::createVclPopupWindow( vcl::Window* p
                         [this] { return GetParentFrame(); },
                         m_aColorSelectFunction);
 
-    if ( m_bSplitButton )
-        xPopover->SetSelectedHdl( LINK( this, SvxColorToolBoxControl, SelectedHdl ) );
-
     mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
         std::move(xPopover), true);
 
@@ -3674,11 +3668,6 @@ VclPtr<vcl::Window> SvxColorToolBoxControl::createVclPopupWindow( vcl::Window* p
     mxInterimPopover->Show();
 
     return mxInterimPopover;
-}
-
-IMPL_LINK(SvxColorToolBoxControl, SelectedHdl, const NamedColor&, rColor, void)
-{
-    m_xBtnUpdater->Update(rColor);
 }
 
 void SvxColorToolBoxControl::statusChanged( const css::frame::FeatureStateEvent& rEvent )

@@ -314,6 +314,21 @@ std::shared_ptr<SfxDocumentInfoDialog> SfxObjectShell::CreateDocumentInfoDialog(
     return std::make_shared<SfxDocumentInfoDialog>(pParent, rSet);
 }
 
+std::optional<NamedColor> SfxObjectShell::GetRecentColor(sal_uInt16 nSlotId)
+{
+    auto it = pImpl->m_aRecentColors.find(nSlotId);
+    if (it != pImpl->m_aRecentColors.end())
+        return it->second;
+
+    return std::nullopt;
+}
+
+void SfxObjectShell::SetRecentColor(sal_uInt16 nSlotId, const NamedColor& rColor)
+{
+    pImpl->m_aRecentColors[nSlotId] = rColor;
+    Broadcast(SfxHint(SfxHintId::ColorsChanged));
+}
+
 std::set<Color> SfxObjectShell::GetDocColors()
 {
     std::set<Color> empty;

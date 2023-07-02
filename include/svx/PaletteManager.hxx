@@ -71,6 +71,7 @@ public:
     tools::Long        GetColorCount() const;
     tools::Long        GetRecentColorCount() const;
     void        AddRecentColor(const Color& rRecentColor, const OUString& rColorName, bool bFront = true);
+    void        SetSplitButtonColor(const NamedColor& rColor);
 
     void        SetBtnUpdater(svx::ToolboxButtonColorUpdaterBase* pBtnUpdater);
     void        PopupColorPicker(weld::Window* pParent, const OUString& aCommand, const Color& rInitialColor);

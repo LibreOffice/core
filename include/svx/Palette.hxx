@@ -20,55 +20,11 @@
 #pragma once
 
 #include <sal/config.h>
+#include <sfx2/namedcolor.hxx>
 
 #include <functional>
 
-#include <rtl/ustring.hxx>
-#include <tools/color.hxx>
-#include <svx/svxdllapi.h>
-
-#include <docmodel/color/ComplexColor.hxx>
-#include <docmodel/theme/ThemeColorType.hxx>
-
 class SvxColorValueSet;
-
-struct SVXCORE_DLLPUBLIC NamedColor
-{
-    Color m_aColor;
-    OUString m_aName;
-    sal_Int16 m_nThemeIndex = -1;
-    sal_Int16 m_nLumMod = 10000;
-    sal_Int16 m_nLumOff = 0;
-
-    NamedColor() = default;
-
-    NamedColor(Color const& rColor, OUString const& rName)
-        : m_aColor(rColor)
-        , m_aName(rName)
-    {}
-
-    model::ComplexColor getComplexColor()
-    {
-        model::ComplexColor aComplexColor;
-
-        auto eThemeColorType = model::convertToThemeColorType(m_nThemeIndex);
-
-        if (eThemeColorType != model::ThemeColorType::Unknown)
-        {
-            aComplexColor.setSchemeColor(eThemeColorType);
-
-            if (m_nLumMod != 10000)
-                aComplexColor.addTransformation({model::TransformationType::LumMod, m_nLumMod});
-
-            if (m_nLumMod != 0)
-                aComplexColor.addTransformation({model::TransformationType::LumOff, m_nLumOff});
-        }
-
-        aComplexColor.setFinalColor(m_aColor);
-
-        return aComplexColor;
-    }
-};
 
 typedef std::function<void(const OUString&, const NamedColor&)> ColorSelectFunction;
 

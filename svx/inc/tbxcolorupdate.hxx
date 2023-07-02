@@ -25,6 +25,7 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/toolboxid.hxx>
+#include <svl/lstner.hxx>
 #include <svx/Palette.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
@@ -48,15 +49,17 @@ namespace svx
 
         formerly known as SvxTbxButtonColorUpdater_Impl, residing in svx/source/tbxctrls/colorwindow.hxx.
     */
-    class ToolboxButtonColorUpdaterBase
+    class ToolboxButtonColorUpdaterBase : public SfxListener
     {
     public:
         ToolboxButtonColorUpdaterBase(bool bWideButton, OUString aCommandLabel,
-                                      OUString aCommandURL,
+                                      OUString aCommandURL, sal_uInt16 nSlotId,
                                       css::uno::Reference<css::frame::XFrame> xFrame);
 
         virtual ~ToolboxButtonColorUpdaterBase();
 
+        void        Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
+        void        SetRecentColor(const NamedColor& rNamedColor);
         void        Update( const NamedColor& rNamedColor );
         void        Update( const Color& rColor, bool bForceUpdate = false );
         Color const & GetCurrentColor() const { return maCurColor; }
@@ -69,6 +72,7 @@ namespace svx
     protected:
         bool        mbWideButton;
         bool        mbWasHiContrastMode;
+        sal_uInt16  mnSlotId;
         Color       maCurColor;
         tools::Rectangle   maUpdRect;
         Size        maBmpSize;
