@@ -119,6 +119,7 @@ private:
 
     rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
     css::uno::Reference< css::beans::XPropertySet > m_xEquationProperties;
+    void setPropertyMayHaveR2();
 };
 
 // implementations for factory instantiation
