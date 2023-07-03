@@ -60,46 +60,42 @@ bool Bitmap::Erase(const Color& rFillColor)
 
 bool Bitmap::Invert()
 {
-    BitmapScopedWriteAccess pAcc(*this);
-    bool bRet = false;
+    ScopedReadAccess pReadAcc(*this);
 
-    if (pAcc)
+    if (pReadAcc->HasPalette())
     {
-        if (pAcc->HasPalette())
+        BitmapScopedWriteAccess pWriteAcc(*this);
+        BitmapPalette aBmpPal(pWriteAcc->GetPalette());
+        const sal_uInt16 nCount = aBmpPal.GetEntryCount();
+
+        for (sal_uInt16 i = 0; i < nCount; i++)
         {
-            BitmapPalette aBmpPal(pAcc->GetPalette());
-            const sal_uInt16 nCount = aBmpPal.GetEntryCount();
-
-            for (sal_uInt16 i = 0; i < nCount; i++)
-            {
-                aBmpPal[i].Invert();
-            }
-
-            pAcc->SetPalette(aBmpPal);
-        }
-        else if (!mxSalBmp->Invert()) // try optimised call first
-        {
-            const tools::Long nWidth = pAcc->Width();
-            const tools::Long nHeight = pAcc->Height();
-
-            for (tools::Long nY = 0; nY < nHeight; nY++)
-            {
-                Scanline pScanline = pAcc->GetScanline(nY);
-                for (tools::Long nX = 0; nX < nWidth; nX++)
-                {
-                    BitmapColor aBmpColor = pAcc->GetPixelFromData(pScanline, nX);
-                    aBmpColor.Invert();
-                    pAcc->SetPixelOnData(pScanline, nX, aBmpColor);
-                }
-            }
+            aBmpPal[i].Invert();
         }
 
-        mxSalBmp->InvalidateChecksum();
-        pAcc.reset();
-        bRet = true;
+        pWriteAcc->SetPalette(aBmpPal);
+    }
+    else if (!mxSalBmp->Invert()) // try optimised call first
+    {
+        BitmapScopedWriteAccess pWriteAcc(*this);
+        const tools::Long nWidth = pWriteAcc->Width();
+        const tools::Long nHeight = pWriteAcc->Height();
+
+        for (tools::Long nY = 0; nY < nHeight; nY++)
+        {
+            Scanline pScanline = pWriteAcc->GetScanline(nY);
+            for (tools::Long nX = 0; nX < nWidth; nX++)
+            {
+                BitmapColor aBmpColor = pWriteAcc->GetPixelFromData(pScanline, nX);
+                aBmpColor.Invert();
+                pWriteAcc->SetPixelOnData(pScanline, nX, aBmpColor);
+            }
+        }
     }
 
-    return bRet;
+    mxSalBmp->InvalidateChecksum();
+
+    return true;
 }
 
 namespace
