@@ -437,6 +437,13 @@ bool SwTextFrame::FormatEmpty()
             aTextFly.IsOn() && aTextFly.IsAnyObj( aRect ) && !bHasNonLastSplitFlyDrawObj )
         return false;
 
+    if (IsEmptyWithSplitFly())
+    {
+        // We don't want this optimization in case the paragraph is not really empty, because it has
+        // a fly frame and it also needs space for the empty paragraph in a next line.
+        return false;
+    }
+
     // only need to check one node because of early return on GetMerged()
     for (SwContentIndex const* pIndex = GetTextNodeFirst()->GetFirstIndex();
          pIndex; pIndex = pIndex->GetNext())

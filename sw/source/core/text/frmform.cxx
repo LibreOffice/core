@@ -1082,6 +1082,15 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
                                !rFrameBreak.IsInside( rLine ) )
                            : rFrameBreak.IsBreakNow( rLine ) ) ) )
                      ? 1 : 0;
+
+    SwTextFormatInfo& rInf = rLine.GetInfo();
+    if (nNew == 0 && !nStrLen && !rInf.GetTextFly().IsOn() && IsEmptyWithSplitFly())
+    {
+        // Empty paragraph, so IsBreakNow() is not called, but we should split the fly portion and
+        // the paragraph marker.
+        nNew = 1;
+    }
+
     // i#84870
     // no split of text frame, which only contains an as-character anchored object
     bool bOnlyContainsAsCharAnchoredObj =

@@ -798,6 +798,10 @@ public:
     /// fly is anchored to the text frame.
     bool IsEmptyMasterWithSplitFly() const;
 
+    /// This text frame is not split, doesn't fit the upper, has a single split fly anchored to it
+    /// with a negative vertical offset. Such frames may need explicit splitting.
+    bool IsEmptyWithSplitFly() const;
+
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const override;
 };
 
