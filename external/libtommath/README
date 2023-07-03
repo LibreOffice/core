@@ -3,4 +3,4 @@ integer library written entirely in C.
 
 Used by embedded firebird (external/firebird).
 
-http://www.libtom.org/LibTomMath/
+From [https://www.libtom.net/LibTomMath/].
