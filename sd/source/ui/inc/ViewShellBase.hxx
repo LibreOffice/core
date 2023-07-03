@@ -223,6 +223,8 @@ public:
     void NotifyCursor(SfxViewShell* pViewShell) const override;
     /// See SfxViewShell::GetColorConfigColor().
     ::Color GetColorConfigColor(svtools::ColorConfigEntry nColorType) const override;
+    /// See SfxViewShell::GetColorConfigName().
+    OUString GetColorConfigName() const override;
 
     void setLOKVisibleArea(const ::tools::Rectangle& rArea) { maLOKVisibleArea = rArea; }
     virtual ::tools::Rectangle getLOKVisibleArea() const override { return maLOKVisibleArea; }

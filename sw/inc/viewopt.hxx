@@ -857,7 +857,7 @@ public:
 
 inline bool SwViewOption::operator==( const SwViewOption &rOpt ) const
 {
-    return IsEqualFlags( rOpt ) && m_nZoom == rOpt.GetZoom() && m_aColorConfig == rOpt.m_aColorConfig;
+    return IsEqualFlags( rOpt ) && m_nZoom == rOpt.GetZoom() && m_aColorConfig == rOpt.m_aColorConfig && m_sThemeName == rOpt.m_sThemeName;
 }
 
 inline void SwViewOption::SetUIOptions( const SwViewOption& rVOpt )

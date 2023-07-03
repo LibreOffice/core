@@ -1091,6 +1091,18 @@ void ViewShellBase::NotifyCursor(SfxViewShell* pOtherShell) const
     return {};
 }
 
+OUString ViewShellBase::GetColorConfigName() const
+{
+    if (DrawViewShell* pCurrentDrawShell = dynamic_cast<DrawViewShell*>(GetMainViewShell().get()))
+    {
+        const SdViewOptions& rViewOptions = pCurrentDrawShell->GetViewOptions();
+        return rViewOptions.msColorSchemeName;
+    }
+
+    SAL_WARN("sd", "dynamic_cast to DrawViewShell failed");
+    return {};
+}
+
 //===== ViewShellBase::Implementation =========================================
 
 ViewShellBase::Implementation::Implementation (ViewShellBase& rBase)

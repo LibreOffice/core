@@ -516,6 +516,11 @@ void ScTabViewShell::NotifyCursor(SfxViewShell* pOtherShell) const
     return {};
 }
 
+OUString ScTabViewShell::GetColorConfigName() const
+{
+    return GetViewData().GetOptions().GetColorSchemeName();
+}
+
 css::uno::Reference<css::datatransfer::XTransferable2> ScTabViewShell::GetClipData(vcl::Window* pWin)
 {
     SfxViewFrame* pViewFrame = nullptr;

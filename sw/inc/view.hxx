@@ -675,6 +675,8 @@ public:
     void NotifyCursor(SfxViewShell* pViewShell) const override;
     /// See SfxViewShell::GetColorConfigColor().
     ::Color GetColorConfigColor(svtools::ColorConfigEntry nColorType) const override;
+    /// See SfxViewShell::GetColorConfigName().
+    OUString GetColorConfigName() const override;
     void ShowUIElement(const OUString& sElementURL) const;
 
 
