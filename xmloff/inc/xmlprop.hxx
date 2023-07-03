@@ -580,7 +580,6 @@ inline constexpr OUStringLiteral PROP_SnapToGrid = u"SnapToGrid";
 inline constexpr OUStringLiteral PROP_SoftEdgeRadius = u"SoftEdgeRadius";
 inline constexpr OUStringLiteral PROP_SolidType = u"SolidType";
 inline constexpr OUStringLiteral PROP_SortByXValues = u"SortByXValues";
-inline constexpr OUStringLiteral PROP_SortByYValues = u"SortByYValues";
 inline constexpr OUStringLiteral PROP_Sound = u"Sound";
 inline constexpr OUStringLiteral PROP_Speed = u"Speed";
 inline constexpr OUStringLiteral PROP_SplineOrder = u"SplineOrder";

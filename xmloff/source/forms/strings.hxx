@@ -133,7 +133,6 @@ namespace xmloff
     inline constexpr OUStringLiteral PROPERTY_VISUAL_EFFECT = u"VisualEffect";
     inline constexpr OUStringLiteral PROPERTY_IMAGE_POSITION = u"ImagePosition";
     inline constexpr OUStringLiteral PROPERTY_IMAGE_ALIGN = u"ImageAlign";
-    inline constexpr OUStringLiteral PROPERTY_SCALE_IMAGE = u"ScaleImage";
     inline constexpr OUStringLiteral PROPERTY_GROUP_NAME = u"GroupName";
 
     inline constexpr OUStringLiteral PROPERTY_BOUND_CELL = u"BoundCell";

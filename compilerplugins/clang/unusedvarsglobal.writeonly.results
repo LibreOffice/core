@@ -1,15 +1,17 @@
-basctl/source/basicide/localizationmgr.cxx:57
-    rtl::OUStringLiteral<2> aSemi
+basctl/source/basicide/localizationmgr.cxx:58
+    OUStringLiteral<2> aSemi
 chart2/source/view/inc/ViewDefines.hxx:29
     double ZDIRECTION
-connectivity/source/drivers/hsqldb/HDriver.cxx:346
-    Reference<class com::sun::star::frame::XTerminateListener> s_xTerminateListener
+connectivity/source/drivers/hsqldb/HDriver.cxx:377
+    Reference<XTerminateListener> s_xTerminateListener
 connectivity/source/drivers/mysqlc/mysqlc_databasemetadata.cxx:39
     std::string wild
-connectivity/source/inc/dbase/DIndex.hxx:26
-    rtl::OStringLiteral<10> dBASE_III_GROUP
-cppuhelper/source/servicemanager.cxx:2009
+cppuhelper/source/servicemanager.cxx:2008
     std::vector<css::uno::Mapping> maMaps
+forms/source/inc/frm_strings.hxx:216
+    OUStringLiteral<15> PROPERTY_HIGHLIGHT_COLOR
+forms/source/inc/frm_strings.hxx:217
+    OUStringLiteral<19> PROPERTY_HIGHLIGHT_TEXT_COLOR
 hwpfilter/source/grammar.cxx:307
     int yynerrs
 hwpfilter/source/hbox.h:67
@@ -18,94 +20,8 @@ hwpfilter/source/ksc5601.h:184
     hchar[4888] ksc5601_2uni_page4a
 hwpfilter/source/nodes.h:95
     std::vector<std::unique_ptr<Node> > nodelist
-idlc/source/idlccompile.cxx:47
-    int yydebug
-include/comphelper/storagehelper.hxx:29
-    rtl::OUStringLiteral<14> PACKAGE_STORAGE_FORMAT_STRING
-include/editeng/unoprnms.hxx:24
-    rtl::OUStringLiteral<15> UNO_NAME_CHAR_COLOR_THEME
-include/editeng/unoprnms.hxx:25
-    rtl::OUStringLiteral<21> UNO_NAME_CHAR_COLOR_TINT_OR_SHADE
-include/editeng/unoprnms.hxx:29
-    rtl::OUStringLiteral<14> UNO_NAME_CHAR_UNDERLINE
-include/svl/inettype.hxx:106
-    rtl::OUStringLiteral<11> CONTENT_TYPE_STR_IMAGE_WEBP
-include/svtools/soerr.hxx:36
-    ErrMsgCode[] RID_SO_ERROR_HANDLER
-include/tools/color.hxx:471
-    Color COL_AUTHOR1_DARK
-include/tools/color.hxx:472
-    Color COL_AUTHOR1_NORMAL
-include/tools/color.hxx:473
-    Color COL_AUTHOR1_LIGHT
-include/tools/color.hxx:474
-    Color COL_AUTHOR2_DARK
-include/tools/color.hxx:475
-    Color COL_AUTHOR2_NORMAL
-include/tools/color.hxx:476
-    Color COL_AUTHOR2_LIGHT
-include/tools/color.hxx:477
-    Color COL_AUTHOR3_DARK
-include/tools/color.hxx:478
-    Color COL_AUTHOR3_NORMAL
-include/tools/color.hxx:479
-    Color COL_AUTHOR3_LIGHT
-include/tools/color.hxx:480
-    Color COL_AUTHOR4_DARK
-include/tools/color.hxx:481
-    Color COL_AUTHOR4_NORMAL
-include/tools/color.hxx:482
-    Color COL_AUTHOR4_LIGHT
-include/tools/color.hxx:483
-    Color COL_AUTHOR5_DARK
-include/tools/color.hxx:484
-    Color COL_AUTHOR5_NORMAL
-include/tools/color.hxx:485
-    Color COL_AUTHOR5_LIGHT
-include/tools/color.hxx:486
-    Color COL_AUTHOR6_DARK
-include/tools/color.hxx:487
-    Color COL_AUTHOR6_NORMAL
-include/tools/color.hxx:488
-    Color COL_AUTHOR6_LIGHT
-include/tools/color.hxx:489
-    Color COL_AUTHOR7_DARK
-include/tools/color.hxx:490
-    Color COL_AUTHOR7_NORMAL
-include/tools/color.hxx:491
-    Color COL_AUTHOR7_LIGHT
-include/tools/color.hxx:492
-    Color COL_AUTHOR8_DARK
-include/tools/color.hxx:493
-    Color COL_AUTHOR8_NORMAL
-include/tools/color.hxx:494
-    Color COL_AUTHOR8_LIGHT
-include/tools/color.hxx:495
-    Color COL_AUTHOR9_DARK
-include/tools/color.hxx:496
-    Color COL_AUTHOR9_NORMAL
-include/tools/color.hxx:497
-    Color COL_AUTHOR9_LIGHT
-include/tools/color.hxx:498
-    Color COL_AUTHOR_TABLE_INS
-include/tools/color.hxx:499
-    Color COL_AUTHOR_TABLE_DEL
-include/tools/urlobj.hxx:40
-    rtl::OUStringLiteral<7> INET_FTP_SCHEME
-include/tools/urlobj.hxx:41
-    rtl::OUStringLiteral<8> INET_HTTP_SCHEME
-include/tools/urlobj.hxx:42
-    rtl::OUStringLiteral<9> INET_HTTPS_SCHEME
-include/tools/urlobj.hxx:43
-    rtl::OUStringLiteral<8> INET_FILE_SCHEME
-include/tools/urlobj.hxx:44
-    rtl::OUStringLiteral<8> INET_MAILTO_SCHEME
-include/vcl/animate/Animation.hxx:97
-    sal_uLong mnAnimCount
-include/vcl/salnativewidgets.hxx:351
-    int m_nOverlap
-include/xmloff/odffields.hxx:45
-    rtl::OUStringLiteral<11> ODF_FORMDATE_CURRENTDATE_FORMAT
+include/vcl/animate/Animation.hxx:98
+    sal_uLong gAnimationRendererCount
 libreofficekit/qa/gtktiledviewer/gtv-comments-sidebar.cxx:31
     gpointer gtv_comments_sidebar_parent_class
 libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:62
@@ -113,7 +29,7 @@ libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:62
 sal/osl/unx/system.cxx:164
     void *[3] dummy
 sal/qa/osl/condition/osl_Condition_Const.h:41
-    rtl::OUString aTestCon
+    OUString aTestCon
 sal/qa/osl/condition/osl_Condition_Const.h:43
     char[17] pTestString
 sal/qa/osl/file/osl_File_Const.h:63
@@ -121,45 +37,45 @@ sal/qa/osl/file/osl_File_Const.h:63
 sal/qa/osl/file/osl_File_Const.h:64
     char[1] pBuffer_Blank
 sal/qa/osl/file/osl_File_Const.h:119
-    rtl::OUString aRootURL
+    OUString aRootURL
 sal/qa/osl/file/osl_File_Const.h:129
-    rtl::OUString aCanURL2
+    OUString aCanURL2
 sal/qa/osl/file/osl_File_Const.h:131
-    rtl::OUString aCanURL3
+    OUString aCanURL3
 sal/qa/osl/file/osl_File_Const.h:132
-    rtl::OUString aCanURL4
+    OUString aCanURL4
 sal/qa/osl/file/osl_File_Const.h:139
-    rtl::OUString aTmpName7
+    OUString aTmpName7
 sal/qa/osl/file/osl_File_Const.h:144
-    rtl::OUString aRelURL1
+    OUString aRelURL1
 sal/qa/osl/file/osl_File_Const.h:145
-    rtl::OUString aRelURL2
+    OUString aRelURL2
 sal/qa/osl/file/osl_File_Const.h:146
-    rtl::OUString aRelURL3
+    OUString aRelURL3
 sal/qa/osl/file/osl_File_Const.h:148
-    rtl::OUString aRelURL5
+    OUString aRelURL5
 sal/qa/osl/file/osl_File_Const.h:149
-    rtl::OUString aLnkURL1
+    OUString aLnkURL1
 sal/qa/osl/file/osl_File_Const.h:160
-    rtl::OUString aSysPathLnk
+    OUString aSysPathLnk
 sal/qa/osl/file/osl_File_Const.h:161
-    rtl::OUString aFifoSys
+    OUString aFifoSys
 sal/qa/osl/file/osl_File_Const.h:168
-    rtl::OUString aTypeURL1
+    OUString aTypeURL1
 sal/qa/osl/file/osl_File_Const.h:169
-    rtl::OUString aTypeURL2
+    OUString aTypeURL2
 sal/qa/osl/file/osl_File_Const.h:170
-    rtl::OUString aTypeURL3
+    OUString aTypeURL3
 sal/qa/osl/file/osl_File_Const.h:185
-    rtl::OUString aVolURL2
+    OUString aVolURL2
 sal/qa/osl/file/osl_File_Const.h:187
-    rtl::OUString aVolURL3
+    OUString aVolURL3
 sal/qa/osl/file/osl_File_Const.h:188
-    rtl::OUString aVolURL4
+    OUString aVolURL4
 sal/qa/osl/file/osl_File_Const.h:189
-    rtl::OUString aVolURL5
+    OUString aVolURL5
 sal/qa/osl/file/osl_File_Const.h:190
-    rtl::OUString aVolURL6
+    OUString aVolURL6
 sal/qa/osl/security/osl_Security_Const.h:48
     char[17] pTestString
 sal/qa/OStringBuffer/rtl_String_Const.h:275
@@ -216,61 +132,77 @@ sal/qa/OStringBuffer/rtl_String_Const.h:450
     sal_Int32[12] input2StrLastNormal
 sal/qa/OStringBuffer/rtl_String_Const.h:454
     sal_Int32[12] expValStrLastNormal
-sc/inc/mtvelements.hxx:116
-    mdds::mtv::lu_factor_t loop_unrolling
-sc/source/core/data/drwlayer.cxx:86
+sc/source/core/data/drwlayer.cxx:102
     E3dObjFactory * pF3d
-sfx2/inc/strings.hxx:48
-    rtl::OUStringLiteral<7> STR_TEMPLATE_NAME31_DEF
-sfx2/inc/strings.hxx:49
-    rtl::OUStringLiteral<5> STR_TEMPLATE_NAME32_DEF
+scripting/source/provider/ActiveMSPList.cxx:73
+    NonDocMSPCreator theCreator
+sd/inc/bitmaps.hlst:212
+    OUStringLiteral<31> BMP_PREV_SLIDE_MOUSE_OVER
+sd/inc/bitmaps.hlst:214
+    OUStringLiteral<31> BMP_NEXT_SLIDE_MOUSE_OVER
+sd/inc/bitmaps.hlst:216
+    OUStringLiteral<35> BMP_MENU_SLIDE_MOUSE_OVER
 sfx2/source/appl/appdata.cxx:44
     BasicDLL * pBasic
 sfx2/source/appl/shutdownicon.hxx:53
-    rtl::OUStringLiteral<24> WRITER_URL
+    OUStringLiteral<24> WRITER_URL
 sfx2/source/appl/shutdownicon.hxx:54
-    rtl::OUStringLiteral<22> CALC_URL
+    OUStringLiteral<22> CALC_URL
 sfx2/source/appl/shutdownicon.hxx:55
-    rtl::OUStringLiteral<25> IMPRESS_URL
+    OUStringLiteral<25> IMPRESS_URL
 sfx2/source/appl/shutdownicon.hxx:56
-    rtl::OUStringLiteral<35> IMPRESS_WIZARD_URL
+    OUStringLiteral<35> IMPRESS_WIZARD_URL
 sfx2/source/appl/shutdownicon.hxx:57
-    rtl::OUStringLiteral<22> DRAW_URL
+    OUStringLiteral<22> DRAW_URL
 sfx2/source/appl/shutdownicon.hxx:58
-    rtl::OUStringLiteral<22> MATH_URL
+    OUStringLiteral<22> MATH_URL
 sfx2/source/appl/shutdownicon.hxx:59
-    rtl::OUStringLiteral<38> BASE_URL
+    OUStringLiteral<38> BASE_URL
 sfx2/source/appl/shutdownicon.hxx:60
-    rtl::OUStringLiteral<21> STARTMODULE_URL
+    OUStringLiteral<21> STARTMODULE_URL
 sfx2/source/appl/shutdownicon.hxx:106
     _Bool bModalMode
-soltools/cpp/cpp.h:246
+soltools/cpp/cpp.h:245
     Nlist * kwdefined
 starmath/inc/mathml/attribute.hxx:192
     SmMlAttributePos[1] MlAttributeListEmpty
 starmath/inc/mathml/attribute.hxx:193
     SmMlAttributePos[1] MlAttributeListMath
-starmath/inc/mathml/mathmlMo.hxx:106
+starmath/inc/mathml/mathmlMo.hxx:107
     std::vector<moOperatorData> moOperatorDataDictionary
 starmath/inc/mathml/starmathdatabase.hxx:189
     Color COL_SM_DIV_BLACK
 starmath/inc/mathml/starmathdatabase.hxx:190
     Color COL_SM_DIV_BLUE
 svl/source/items/style.cxx:60
-    (anonymous namespace)::DbgStyleSheetReferences aDbgStyleSheetReferences
-sw/source/core/inc/swfont.hxx:996
+    DbgStyleSheetReferences aDbgStyleSheetReferences
+sw/inc/doc.hxx:343
+    SwDoc * s_pLast
+sw/inc/unoprnms.hxx:211
+    OUStringLiteral<19> UNO_NAME_REGISTER_MODE_ACTIVE
+sw/inc/unoprnms.hxx:333
+    OUStringLiteral<16> UNO_NAME_STATISTIC_TYPE_ID
+sw/source/core/inc/rootfrm.hxx:111
+    SwRootFrame * s_pLast
+sw/source/core/inc/swfont.hxx:999
     SvStatistics g_SvStat
-sw/source/filter/ww8/ww8par6.cxx:1088
+sw/source/filter/ww8/ww8par6.cxx:1091
     sal_uInt16[2] nLef
-sw/source/filter/ww8/ww8par6.cxx:1089
+sw/source/filter/ww8/ww8par6.cxx:1092
     sal_uInt16[2] nRig
-sw/source/filter/ww8/ww8par6.cxx:1141
+sw/source/filter/ww8/ww8par6.cxx:1144
     sal_uInt16[2] nTop
-sw/source/filter/ww8/ww8par6.cxx:1142
+sw/source/filter/ww8/ww8par6.cxx:1145
     sal_uInt16[2] nBot
-unotools/source/config/eventcfg.cxx:377
+unotools/source/config/eventcfg.cxx:376
     rtl::Reference<GlobalEventConfig> createImpl
+vcl/inc/qt5/QtX11Support.hxx:19
+    xcb_atom_t m_nWindowGroupAtom
 vcl/qa/cppunit/timer.cxx:54
-    (anonymous namespace)::WatchDog * aWatchDog
-vcl/unx/gtk3/a11y/atkutil.cxx:444
-    (anonymous namespace)::WindowList g_aWindowList
+    WatchDog * aWatchDog
+vcl/unx/gtk3/a11y/atkutil.cxx:435
+    WindowList g_aWindowList
+xmloff/inc/xmlprop.hxx:583
+    OUStringLiteral<14> PROP_SortByYValues
+xmloff/source/forms/strings.hxx:136
+    OUStringLiteral<11> PROPERTY_SCALE_IMAGE

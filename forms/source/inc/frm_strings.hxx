@@ -213,8 +213,6 @@ inline constexpr OUStringLiteral PROPERTY_BACKGROUNDCOLOR = u"BackgroundColor";
 inline constexpr OUStringLiteral PROPERTY_ICONSIZE = u"IconSize";
 inline constexpr OUStringLiteral PROPERTY_TEXTLINECOLOR = u"TextLineColor";
 inline constexpr OUStringLiteral PROPERTY_HIDEINACTIVESELECTION = u"HideInactiveSelection";
-inline constexpr OUStringLiteral PROPERTY_HIGHLIGHT_COLOR = u"HighlightColor";
-inline constexpr OUStringLiteral PROPERTY_HIGHLIGHT_TEXT_COLOR = u"HighlightTextColor";
 
 inline constexpr OUStringLiteral PROPERTY_STANDARD_THEME = u"StandardTheme";
 
