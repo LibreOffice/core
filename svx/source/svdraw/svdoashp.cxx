@@ -950,9 +950,9 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     // Path/GluePoints
     static constexpr OUString sGluePoints( u"GluePoints"_ustr );
     pAny = aGeometryItem.GetPropertyValueByName( sPath, sGluePoints );
-    if ( !pAny && pDefCustomShape && pDefCustomShape->nGluePoints && pDefCustomShape->pGluePoints )
+    if (!pAny && pDefCustomShape && !pDefCustomShape->pGluePoints.empty())
     {
-        sal_Int32 i, nCount = pDefCustomShape->nGluePoints;
+        sal_Int32 i, nCount = pDefCustomShape->pGluePoints.size();
         uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqGluePoints( nCount );
         auto pseqGluePoints = seqGluePoints.getArray();
         for ( i = 0; i < nCount; i++ )
@@ -1170,12 +1170,12 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
         case DefaultType::Gluepoints :
         {
             pAny = rGeometryItem.GetPropertyValueByName( sPath, "GluePoints" );
-            if ( pAny && pDefCustomShape && pDefCustomShape->nGluePoints && pDefCustomShape->pGluePoints )
+            if (pAny && pDefCustomShape && !pDefCustomShape->pGluePoints.empty())
             {
                 uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqGluePoints1;
                 if ( *pAny >>= seqGluePoints1 )
                 {
-                    sal_Int32 i, nCount = pDefCustomShape->nGluePoints;
+                    sal_Int32 i, nCount = pDefCustomShape->pGluePoints.size();
                     uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqGluePoints2( nCount );
                     auto pseqGluePoints2 = seqGluePoints2.getArray();
                     for ( i = 0; i < nCount; i++ )
@@ -1187,7 +1187,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
                         bIsDefaultGeometry = true;
                 }
             }
-            else if ( pDefCustomShape && ( pDefCustomShape->nGluePoints == 0 ) )
+            else if (pDefCustomShape && pDefCustomShape->pGluePoints.empty())
                 bIsDefaultGeometry = true;
         }
         break;

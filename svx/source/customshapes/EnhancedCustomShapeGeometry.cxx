@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+
 #include <sal/config.h>
 
 #include <cmath>
@@ -134,7 +135,7 @@ const mso_CustomShape msoArc =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptArcHandle), SAL_N_ELEMENTS( mso_sptArcHandle )        // handles
 };
 
@@ -151,7 +152,7 @@ const mso_CustomShape msoTextSimple =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     nullptr, 0     // handles
 };
 
@@ -168,7 +169,7 @@ const mso_CustomShape msoRectangle =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     nullptr, 0     // handles
 };
 
@@ -213,7 +214,7 @@ const mso_CustomShape msoRoundRectangle =
     const_cast<SvxMSDffTextRectangles*>(mso_sptRoundRectangleTextRect), SAL_N_ELEMENTS( mso_sptRoundRectangleTextRect ),
     21600, 21600,
     10800, 10800,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptRoundRectangleHandle), SAL_N_ELEMENTS( mso_sptRoundRectangleHandle )      // handles
 };
 
@@ -238,7 +239,7 @@ const mso_CustomShape msoRightTriangle =
     const_cast<SvxMSDffTextRectangles*>(mso_sptRightTriangleTextRect), SAL_N_ELEMENTS( mso_sptRightTriangleTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptRightTriangleGluePoints), SAL_N_ELEMENTS( mso_sptRightTriangleGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptRightTriangleGluePoints),
     nullptr, 0     // handles
 };
 
@@ -267,7 +268,7 @@ const mso_CustomShape msoEllipse =
     const_cast<SvxMSDffTextRectangles*>(mso_sptEllipseTextRect), SAL_N_ELEMENTS( mso_sptEllipseTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptEllipseGluePoints), SAL_N_ELEMENTS( mso_sptEllipseGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptEllipseGluePoints),
     nullptr, 0     // handles
 };
 
@@ -318,7 +319,7 @@ const mso_CustomShape msoParallelogram =
     const_cast<SvxMSDffTextRectangles*>(mso_sptParallelogramTextRect), SAL_N_ELEMENTS( mso_sptParallelogramTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptParallelogramGluePoints), SAL_N_ELEMENTS( mso_sptParallelogramGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptParallelogramGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptParallelogramHandle), SAL_N_ELEMENTS( mso_sptParallelogramHandle )        // handles
 };
 
@@ -339,7 +340,7 @@ const mso_CustomShape msoDiamond =
     const_cast<SvxMSDffTextRectangles*>(mso_sptDiamondTextRect), SAL_N_ELEMENTS( mso_sptDiamondTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptStandardGluePoints), SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptStandardGluePoints),
     nullptr, 0     // handles
 };
 
@@ -383,7 +384,7 @@ const mso_CustomShape msoTrapezoid =
     const_cast<SvxMSDffTextRectangles*>(mso_sptTrapezoidTextRect), SAL_N_ELEMENTS( mso_sptTrapezoidTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptTrapezoidGluePoints), SAL_N_ELEMENTS( mso_sptTrapezoidGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptTrapezoidGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptTrapezoidHandle), SAL_N_ELEMENTS( mso_sptTrapezoidHandle )        // handles
 };
 
@@ -474,7 +475,7 @@ const mso_CustomShape msoOctagon =
     const_cast<SvxMSDffTextRectangles*>(mso_sptOctagonTextRect), SAL_N_ELEMENTS( mso_sptOctagonTextRect ),
     21600, 21600,
     10800, 10800,
-    const_cast<SvxMSDffVertPair*>(mso_sptStandardGluePoints), SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptStandardGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptOctagonHandle), SAL_N_ELEMENTS( mso_sptOctagonHandle )        // handles
 };
 
@@ -520,7 +521,7 @@ const mso_CustomShape msoIsocelesTriangle =
     const_cast<SvxMSDffTextRectangles*>(mso_sptIsocelesTriangleTextRect), SAL_N_ELEMENTS( mso_sptIsocelesTriangleTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptIsocelesTriangleGluePoints), SAL_N_ELEMENTS( mso_sptIsocelesTriangleGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptIsocelesTriangleGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptIsocelesTriangleHandle), SAL_N_ELEMENTS( mso_sptIsocelesTriangleHandle )      // handles
 };
 
@@ -559,7 +560,7 @@ const mso_CustomShape msoHexagon =
     const_cast<SvxMSDffTextRectangles*>(mso_sptHexagonTextRect), SAL_N_ELEMENTS( mso_sptHexagonTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptStandardGluePoints), SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptStandardGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptHexagonHandle), SAL_N_ELEMENTS( mso_sptHexagonHandle )        // handles
 };
 
@@ -586,7 +587,7 @@ const mso_CustomShape msoPentagon =
     const_cast<SvxMSDffTextRectangles*>(mso_sptPentagonTextRect), SAL_N_ELEMENTS( mso_sptPentagonTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptPentagonGluePoints), SAL_N_ELEMENTS( mso_sptPentagonGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptPentagonGluePoints),
     nullptr, 0     // handles
 };
 
@@ -621,7 +622,7 @@ const mso_CustomShape msoPlus =
     const_cast<SvxMSDffTextRectangles*>(mso_sptPlusTextRect), SAL_N_ELEMENTS( mso_sptPlusTextRect ),
     21600, 21600,
     10800, 10800,
-    const_cast<SvxMSDffVertPair*>(mso_sptStandardGluePoints), SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptStandardGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptPlusHandle), SAL_N_ELEMENTS( mso_sptPlusHandle )      // handles
 };
 
@@ -678,7 +679,7 @@ const mso_CustomShape msoCan =
     const_cast<SvxMSDffTextRectangles*>(mso_sptCanTextRect), SAL_N_ELEMENTS( mso_sptCanTextRect ),
     88, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptCanGluePoints), SAL_N_ELEMENTS( mso_sptCanGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptCanGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptCanHandle), SAL_N_ELEMENTS( mso_sptCanHandle )        // handles
 };
 
@@ -720,7 +721,7 @@ const mso_CustomShape msoArrow =
     const_cast<SvxMSDffTextRectangles*>(mso_sptArrowTextRect), SAL_N_ELEMENTS( mso_sptArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptArrowHandle), SAL_N_ELEMENTS( mso_sptArrowHandle )        // handles
 };
 
@@ -755,7 +756,7 @@ const mso_CustomShape msoLeftArrow =
     const_cast<SvxMSDffTextRectangles*>(mso_sptLeftArrowTextRect), SAL_N_ELEMENTS( mso_sptLeftArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptLeftArrowHandle), SAL_N_ELEMENTS( mso_sptLeftArrowHandle )        // handles
 };
 
@@ -786,7 +787,7 @@ const mso_CustomShape msoDownArrow =
     const_cast<SvxMSDffTextRectangles*>(mso_sptDownArrowTextRect), SAL_N_ELEMENTS( mso_sptDownArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptDownArrowHandle), SAL_N_ELEMENTS( mso_sptDownArrowHandle )        // handles
 };
 
@@ -821,7 +822,7 @@ const mso_CustomShape msoUpArrow =
     const_cast<SvxMSDffTextRectangles*>(mso_sptUpArrowTextRect), SAL_N_ELEMENTS( mso_sptUpArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptUpArrowHandle), SAL_N_ELEMENTS( mso_sptUpArrowHandle )        // handles
 };
 
@@ -870,7 +871,7 @@ const mso_CustomShape msoLeftRightArrow =
     const_cast<SvxMSDffTextRectangles*>(mso_sptLeftRightArrowTextRect), SAL_N_ELEMENTS( mso_sptLeftRightArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptLeftRightArrowHandle), SAL_N_ELEMENTS( mso_sptLeftRightArrowHandle )      // handles
 };
 
@@ -906,7 +907,7 @@ const mso_CustomShape msoUpDownArrow =
     const_cast<SvxMSDffTextRectangles*>(mso_sptUpDownArrowTextRect), SAL_N_ELEMENTS( mso_sptUpDownArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptUpDownArrowHandle), SAL_N_ELEMENTS( mso_sptUpDownArrowHandle )        // handles
 };
 
@@ -956,7 +957,7 @@ const mso_CustomShape msoQuadArrow =
     const_cast<SvxMSDffTextRectangles*>(mso_sptQuadArrowTextRect), SAL_N_ELEMENTS( mso_sptQuadArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptQuadArrowHandle), SAL_N_ELEMENTS( mso_sptQuadArrowHandle )        // handles
 };
 
@@ -1005,7 +1006,7 @@ const mso_CustomShape msoLeftRightUpArrow =
     const_cast<SvxMSDffTextRectangles*>(mso_sptLeftRightUpArrowTextRect), SAL_N_ELEMENTS( mso_sptLeftRightUpArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptLeftRightUpArrowHandle), SAL_N_ELEMENTS( mso_sptLeftRightUpArrowHandle )      // handles
 };
 
@@ -1049,7 +1050,7 @@ const mso_CustomShape msoBentArrow =
     const_cast<SvxMSDffTextRectangles*>(mso_sptBentArrowTextRect), SAL_N_ELEMENTS( mso_sptBentArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptBentArrowHandle), SAL_N_ELEMENTS( mso_sptBentArrowHandle )        // handles
 };
 
@@ -1080,7 +1081,7 @@ const mso_CustomShape msoUturnArrow =
     const_cast<SvxMSDffTextRectangles*>(mso_sptUturnArrowTextRect), SAL_N_ELEMENTS( mso_sptUturnArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     nullptr, 0     // handles
 };
 
@@ -1132,7 +1133,7 @@ const mso_CustomShape msoLeftUpArrow =
     const_cast<SvxMSDffTextRectangles*>(mso_sptLeftUpArrowTextRect), SAL_N_ELEMENTS( mso_sptLeftUpArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptLeftUpArrowHandle), SAL_N_ELEMENTS( mso_sptLeftUpArrowHandle )        // handles
 };
 
@@ -1185,7 +1186,7 @@ const mso_CustomShape msoBentUpArrow =
     const_cast<SvxMSDffTextRectangles*>(mso_sptBentUpArrowTextRect), SAL_N_ELEMENTS( mso_sptBentUpArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptBentUpArrowHandle), SAL_N_ELEMENTS( mso_sptBentUpArrowHandle )
 };
 
@@ -1294,7 +1295,7 @@ const mso_CustomShape msoCurvedRightArrow =
     const_cast<SvxMSDffTextRectangles*>(mso_sptCurvedRightTextRect), SAL_N_ELEMENTS( mso_sptCurvedRightTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptCurvedRightGluePoints), SAL_N_ELEMENTS( mso_sptCurvedRightGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptCurvedRightGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptCurvedRightHandles), SAL_N_ELEMENTS( mso_sptCurvedRightHandles )
 };
 
@@ -1350,7 +1351,7 @@ const mso_CustomShape msoCurvedDownArrow =
    const_cast<SvxMSDffTextRectangles*>(mso_sptCurvedDownTextRect), SAL_N_ELEMENTS( mso_sptCurvedDownTextRect ),
    21600, 21600,
    MIN_INT32, MIN_INT32,
-   const_cast<SvxMSDffVertPair*>(mso_sptCurvedDownGluePoints), SAL_N_ELEMENTS( mso_sptCurvedDownGluePoints ),
+   std::span<const SvxMSDffVertPair>(mso_sptCurvedDownGluePoints),
    const_cast<SvxMSDffHandle*>(mso_sptCurvedDownHandles), SAL_N_ELEMENTS( mso_sptCurvedDownHandles )
 };
 
@@ -1457,7 +1458,7 @@ const mso_CustomShape msoCurvedUpArrow =
    const_cast<SvxMSDffTextRectangles*>(mso_sptCurvedUpTextRect), SAL_N_ELEMENTS( mso_sptCurvedUpTextRect ),
    21600, 21600,
    MIN_INT32, MIN_INT32,
-   const_cast<SvxMSDffVertPair*>(mso_sptCurvedUpGluePoints), SAL_N_ELEMENTS( mso_sptCurvedUpGluePoints ),
+   std::span<const SvxMSDffVertPair>(mso_sptCurvedUpGluePoints),
    const_cast<SvxMSDffHandle*>(mso_sptCurvedUpHandles), SAL_N_ELEMENTS( mso_sptCurvedUpHandles )
 };
 
@@ -1511,7 +1512,7 @@ const mso_CustomShape msoCurvedLeftArrow =
     const_cast<SvxMSDffTextRectangles*>(mso_sptCurvedLeftTextRect), SAL_N_ELEMENTS( mso_sptCurvedLeftTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptCurvedLeftGluePoints), SAL_N_ELEMENTS( mso_sptCurvedLeftGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptCurvedLeftGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptCurvedLeftHandles), SAL_N_ELEMENTS( mso_sptCurvedLeftHandles )
 };
 
@@ -1555,7 +1556,7 @@ const mso_CustomShape msoStripedRightArrow =
     const_cast<SvxMSDffTextRectangles*>(mso_sptStripedRightArrowTextRect), SAL_N_ELEMENTS( mso_sptStripedRightArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptStripedRightArrowHandle), SAL_N_ELEMENTS( mso_sptStripedRightArrowHandle )
 };
 
@@ -1592,7 +1593,7 @@ const mso_CustomShape msoNotchedRightArrow =
     const_cast<SvxMSDffTextRectangles*>(mso_sptNotchedRightArrowTextRect), SAL_N_ELEMENTS( mso_sptNotchedRightArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptNotchedRightArrowHandle), SAL_N_ELEMENTS( mso_sptNotchedRightArrowHandle )
 };
 
@@ -1631,7 +1632,7 @@ const mso_CustomShape msoHomePlate =
     const_cast<SvxMSDffTextRectangles*>(mso_sptHomePlateTextRect), SAL_N_ELEMENTS( mso_sptHomePlateTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptHomePlateHandle), SAL_N_ELEMENTS( mso_sptHomePlateHandle )
 };
 
@@ -1671,7 +1672,7 @@ const mso_CustomShape msoChevron =
     const_cast<SvxMSDffTextRectangles*>(mso_sptChevronTextRect), SAL_N_ELEMENTS( mso_sptChevronTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptChevronHandle), SAL_N_ELEMENTS( mso_sptChevronHandle )
 };
 
@@ -1720,7 +1721,7 @@ const mso_CustomShape msoRightArrowCallout =
     const_cast<SvxMSDffTextRectangles*>(mso_sptRightArrowCalloutTextRect), SAL_N_ELEMENTS( mso_sptRightArrowCalloutTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptRightArrowCalloutHandle), SAL_N_ELEMENTS( mso_sptRightArrowCalloutHandle )
 };
 
@@ -1769,7 +1770,7 @@ const mso_CustomShape msoLeftArrowCallout =
     const_cast<SvxMSDffTextRectangles*>(mso_sptLeftArrowCalloutTextRect), SAL_N_ELEMENTS( mso_sptLeftArrowCalloutTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptLeftArrowCalloutHandle), SAL_N_ELEMENTS( mso_sptLeftArrowCalloutHandle )
 };
 
@@ -1818,7 +1819,7 @@ const mso_CustomShape msoUpArrowCallout =
     const_cast<SvxMSDffTextRectangles*>(mso_sptUpArrowCalloutTextRect), SAL_N_ELEMENTS( mso_sptUpArrowCalloutTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptUpArrowCalloutHandle), SAL_N_ELEMENTS( mso_sptUpArrowCalloutHandle )
 };
 
@@ -1867,7 +1868,7 @@ const mso_CustomShape msoDownArrowCallout =
     const_cast<SvxMSDffTextRectangles*>(mso_sptDownArrowCalloutTextRect), SAL_N_ELEMENTS( mso_sptDownArrowCalloutTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptDownArrowCalloutHandle), SAL_N_ELEMENTS( mso_sptDownArrowCalloutHandle )
 };
 
@@ -1920,7 +1921,7 @@ const mso_CustomShape msoLeftRightArrowCallout =
     const_cast<SvxMSDffTextRectangles*>(mso_sptLeftRightArrowCalloutTextRect), SAL_N_ELEMENTS( mso_sptLeftRightArrowCalloutTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptLeftRightArrowCalloutHandle), SAL_N_ELEMENTS( mso_sptLeftRightArrowCalloutHandle )
 };
 
@@ -1973,7 +1974,7 @@ const mso_CustomShape msoUpDownArrowCallout =
     const_cast<SvxMSDffTextRectangles*>(mso_sptUpDownArrowCalloutTextRect), SAL_N_ELEMENTS( mso_sptUpDownArrowCalloutTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptUpDownArrowCalloutHandle), SAL_N_ELEMENTS( mso_sptUpDownArrowCalloutHandle )
 };
 
@@ -2029,7 +2030,7 @@ const mso_CustomShape msoQuadArrowCallout =
     const_cast<SvxMSDffTextRectangles*>(mso_sptQuadArrowCalloutTextRect), SAL_N_ELEMENTS( mso_sptQuadArrowCalloutTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptQuadArrowCalloutHandle), SAL_N_ELEMENTS( mso_sptQuadArrowCalloutHandle )
 };
 
@@ -2125,7 +2126,7 @@ const mso_CustomShape msoCircularArrow =
     const_cast<SvxMSDffTextRectangles*>(mso_sptCircularArrowTextRect), SAL_N_ELEMENTS( mso_sptCircularArrowTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptCircularArrowHandle), SAL_N_ELEMENTS( mso_sptCircularArrowHandle )        // handles
 };
 
@@ -2179,7 +2180,7 @@ const mso_CustomShape msoCube =
     const_cast<SvxMSDffTextRectangles*>(mso_sptCubeTextRect), SAL_N_ELEMENTS( mso_sptCubeTextRect ),
     21600, 21600,
     10800, 10800,
-    const_cast<SvxMSDffVertPair*>(mso_sptCubeGluePoints), SAL_N_ELEMENTS( mso_sptCubeGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptCubeGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptCubeHandle), SAL_N_ELEMENTS( mso_sptCubeHandle )
 };
 
@@ -2224,7 +2225,7 @@ const mso_CustomShape msoBevel =
     const_cast<SvxMSDffTextRectangles*>(mso_sptBevelTextRect), SAL_N_ELEMENTS( mso_sptBevelTextRect ),
     21600, 21600,
     10800, 10800,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptBevelHandle), SAL_N_ELEMENTS( mso_sptBevelHandle )
 };
 
@@ -2276,7 +2277,7 @@ const mso_CustomShape msoFoldedCorner =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFoldedCornerTextRect), SAL_N_ELEMENTS( mso_sptFoldedCornerTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptStandardGluePoints), SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptStandardGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptFoldedCornerHandle), SAL_N_ELEMENTS( mso_sptFoldedCornerHandle )
 };
 
@@ -2320,7 +2321,7 @@ const mso_CustomShape msoActionButtonBlank =
     const_cast<SvxMSDffTextRectangles*>(mso_sptActionButtonBlankTextRect), SAL_N_ELEMENTS( mso_sptActionButtonBlankTextRect ),
     21600, 21600,
     10800, 10800,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptButtonHandle), SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
@@ -2408,7 +2409,7 @@ const mso_CustomShape msoActionButtonHome =
     const_cast<SvxMSDffTextRectangles*>(mso_sptActionButtonTextRect), SAL_N_ELEMENTS( mso_sptActionButtonTextRect ),
     21600, 21600,
     10800, 10800,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptButtonHandle), SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
@@ -2518,7 +2519,7 @@ const mso_CustomShape msoActionButtonHelp =
     const_cast<SvxMSDffTextRectangles*>(mso_sptActionButtonTextRect), SAL_N_ELEMENTS( mso_sptActionButtonTextRect ),
     21600, 21600,
     10800, 10800,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptButtonHandle), SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
@@ -2606,7 +2607,7 @@ const mso_CustomShape msoActionButtonInformation =
     const_cast<SvxMSDffTextRectangles*>(mso_sptActionButtonTextRect), SAL_N_ELEMENTS( mso_sptActionButtonTextRect ),
     21600, 21600,
     10800, 10800,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptButtonHandle), SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
@@ -2659,7 +2660,7 @@ const mso_CustomShape msoActionButtonBackPrevious =
     const_cast<SvxMSDffTextRectangles*>(mso_sptActionButtonTextRect), SAL_N_ELEMENTS( mso_sptActionButtonTextRect ),
     21600, 21600,
     10800, 10800,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptButtonHandle), SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
@@ -2682,7 +2683,7 @@ const mso_CustomShape msoActionButtonForwardNext =
     const_cast<SvxMSDffTextRectangles*>(mso_sptActionButtonTextRect), SAL_N_ELEMENTS( mso_sptActionButtonTextRect ),
     21600, 21600,
     10800, 10800,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptButtonHandle), SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
@@ -2749,7 +2750,7 @@ const mso_CustomShape msoActionButtonBeginning =
     const_cast<SvxMSDffTextRectangles*>(mso_sptActionButtonTextRect), SAL_N_ELEMENTS( mso_sptActionButtonTextRect ),
     21600, 21600,
     10800, 10800,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptButtonHandle), SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
@@ -2774,7 +2775,7 @@ const mso_CustomShape msoActionButtonEnd =
     const_cast<SvxMSDffTextRectangles*>(mso_sptActionButtonTextRect), SAL_N_ELEMENTS( mso_sptActionButtonTextRect ),
     21600, 21600,
     10800, 10800,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptButtonHandle), SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
@@ -2863,7 +2864,7 @@ const mso_CustomShape msoActionButtonReturn =
     const_cast<SvxMSDffTextRectangles*>(mso_sptActionButtonTextRect), SAL_N_ELEMENTS( mso_sptActionButtonTextRect ),
     21600, 21600,
     10800, 10800,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptButtonHandle), SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
@@ -2923,7 +2924,7 @@ const mso_CustomShape msoActionButtonDocument =
     const_cast<SvxMSDffTextRectangles*>(mso_sptActionButtonTextRect), SAL_N_ELEMENTS( mso_sptActionButtonTextRect ),
     21600, 21600,
     10800, 10800,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptButtonHandle), SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
@@ -2999,7 +3000,7 @@ const mso_CustomShape msoActionButtonSound =
     const_cast<SvxMSDffTextRectangles*>(mso_sptActionButtonTextRect), SAL_N_ELEMENTS( mso_sptActionButtonTextRect ),
     21600, 21600,
     10800, 10800,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptButtonHandle), SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
@@ -3084,7 +3085,7 @@ const mso_CustomShape msoActionButtonMovie =
     const_cast<SvxMSDffTextRectangles*>(mso_sptActionButtonTextRect), SAL_N_ELEMENTS( mso_sptActionButtonTextRect ),
     21600, 21600,
     10800, 10800,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptButtonHandle), SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
@@ -3127,7 +3128,7 @@ const mso_CustomShape msoSmileyFace =
     const_cast<SvxMSDffTextRectangles*>(mso_sptEllipseTextRect), SAL_N_ELEMENTS( mso_sptEllipseTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptEllipseGluePoints), SAL_N_ELEMENTS( mso_sptEllipseGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptEllipseGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptSmileyHandle), SAL_N_ELEMENTS( mso_sptSmileyHandle )      // handles
 };
 
@@ -3159,7 +3160,7 @@ const mso_CustomShape msoDonut =
     const_cast<SvxMSDffTextRectangles*>(mso_sptEllipseTextRect), SAL_N_ELEMENTS( mso_sptEllipseTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptEllipseGluePoints), SAL_N_ELEMENTS( mso_sptEllipseGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptEllipseGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptDonutHandle), SAL_N_ELEMENTS( mso_sptDonutHandle )        // handles
 };
 
@@ -3208,7 +3209,7 @@ const mso_CustomShape msoNoSmoking =
     const_cast<SvxMSDffTextRectangles*>(mso_sptEllipseTextRect), SAL_N_ELEMENTS( mso_sptEllipseTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptEllipseGluePoints), SAL_N_ELEMENTS( mso_sptEllipseGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptEllipseGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptNoSmokingHandle), SAL_N_ELEMENTS( mso_sptNoSmokingHandle )        // handles
 };
 
@@ -3251,7 +3252,7 @@ const mso_CustomShape msoBlockArc =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptBlockArcHandle), SAL_N_ELEMENTS( mso_sptBlockArcHandle )      // handles
 };
 
@@ -3315,7 +3316,7 @@ const mso_CustomShape msoHeart =
     const_cast<SvxMSDffTextRectangles*>(mso_sptHeartTextRect), SAL_N_ELEMENTS( mso_sptHeartTextRect ),
     21615, 21602,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptHeartGluePoints), SAL_N_ELEMENTS( mso_sptHeartGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptHeartGluePoints),
     nullptr, 0     // handles
 };
 
@@ -3343,7 +3344,7 @@ const mso_CustomShape msoLightningBold =
     const_cast<SvxMSDffTextRectangles*>(mso_sptLightningBoldTextRect), SAL_N_ELEMENTS( mso_sptLightningBoldTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptLightningBoldGluePoints), SAL_N_ELEMENTS( mso_sptLightningBoldGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptLightningBoldGluePoints),
     nullptr, 0     // handles
 };
 
@@ -3447,7 +3448,7 @@ const mso_CustomShape msoSun =
     const_cast<SvxMSDffTextRectangles*>(mso_sptSunTextRect), SAL_N_ELEMENTS( mso_sptSunTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptStandardGluePoints), SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptStandardGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptSunHandle), SAL_N_ELEMENTS( mso_sptSunHandle )        // handles
 };
 
@@ -3499,7 +3500,7 @@ const mso_CustomShape msoMoon =
     const_cast<SvxMSDffTextRectangles*>(mso_sptMoonTextRect), SAL_N_ELEMENTS( mso_sptMoonTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptMoonGluePoints), SAL_N_ELEMENTS( mso_sptMoonGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptMoonGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptMoonHandle), SAL_N_ELEMENTS( mso_sptMoonHandle )      // handles
 };
 
@@ -3558,7 +3559,7 @@ const mso_CustomShape msoBracketPair =
     const_cast<SvxMSDffTextRectangles*>(mso_sptBracketPairTextRect), SAL_N_ELEMENTS( mso_sptBracketPairTextRect ),
     21600, 21600,
     10800, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptStandardGluePoints), SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptStandardGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptBracketPairHandle), SAL_N_ELEMENTS( mso_sptBracketPairHandle )        // handles
 };
 
@@ -3584,7 +3585,7 @@ const mso_CustomShape msoPlaque =
     const_cast<SvxMSDffTextRectangles*>(mso_sptPlaqueTextRect), SAL_N_ELEMENTS( mso_sptPlaqueTextRect ),
     21600, 21600,
     10800, 10800,
-    const_cast<SvxMSDffVertPair*>(mso_sptStandardGluePoints), SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptStandardGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptPlaqueHandle), SAL_N_ELEMENTS( mso_sptPlaqueHandle )      // handles
 };
 
@@ -3642,7 +3643,7 @@ const mso_CustomShape msoBracePair =
     const_cast<SvxMSDffTextRectangles*>(mso_sptBracePairTextRect), SAL_N_ELEMENTS( mso_sptBracePairTextRect ),
     21600, 21600,
     10800, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptStandardGluePoints), SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptStandardGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptBracePairHandle), SAL_N_ELEMENTS( mso_sptBracePairHandle )        // handles
 };
 
@@ -3685,7 +3686,7 @@ const mso_CustomShape msoLeftBracket =
     const_cast<SvxMSDffTextRectangles*>(mso_sptLeftBracketTextRect), SAL_N_ELEMENTS( mso_sptLeftBracketTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptLeftBracketGluePoints), SAL_N_ELEMENTS( mso_sptLeftBracketGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptLeftBracketGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptLeftBracketHandle), SAL_N_ELEMENTS( mso_sptLeftBracketHandle )        // handles
 };
 const SvxMSDffVertPair mso_sptRightBracketVert[] =   // adj value 0 -> 10800
@@ -3715,7 +3716,7 @@ const mso_CustomShape msoRightBracket =
     const_cast<SvxMSDffTextRectangles*>(mso_sptRightBracketTextRect), SAL_N_ELEMENTS( mso_sptRightBracketTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptRightBracketGluePoints), SAL_N_ELEMENTS( mso_sptRightBracketGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptRightBracketGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptRightBracketHandle), SAL_N_ELEMENTS( mso_sptRightBracketHandle )      // handles
 };
 
@@ -3771,7 +3772,7 @@ const mso_CustomShape msoLeftBrace =     // adj value0 0 -> 5400
     const_cast<SvxMSDffTextRectangles*>(mso_sptLeftBraceTextRect), SAL_N_ELEMENTS( mso_sptLeftBraceTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptLeftBracketGluePoints), SAL_N_ELEMENTS( mso_sptLeftBracketGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptLeftBracketGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptLeftBraceHandle), SAL_N_ELEMENTS( mso_sptLeftBraceHandle )        // handles
 };
 const SvxMSDffVertPair mso_sptRightBraceVert[] =
@@ -3804,7 +3805,7 @@ const mso_CustomShape msoRightBrace =        // adj value0 0 -> 5400
     const_cast<SvxMSDffTextRectangles*>(mso_sptRightBraceTextRect), SAL_N_ELEMENTS( mso_sptRightBraceTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptRightBracketGluePoints), SAL_N_ELEMENTS( mso_sptRightBracketGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptRightBracketGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptRightBraceHandle), SAL_N_ELEMENTS( mso_sptRightBraceHandle )      // handles
 };
 
@@ -3834,7 +3835,7 @@ const mso_CustomShape msoIrregularSeal1 =
     const_cast<SvxMSDffTextRectangles*>(mso_sptIrregularSeal1TextRect), SAL_N_ELEMENTS( mso_sptIrregularSeal1TextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptIrregularSeal1GluePoints), SAL_N_ELEMENTS( mso_sptIrregularSeal1GluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptIrregularSeal1GluePoints),
     nullptr, 0     // handles
 };
 
@@ -3866,7 +3867,7 @@ const mso_CustomShape msoIrregularSeal2 =
     const_cast<SvxMSDffTextRectangles*>(mso_sptIrregularSeal2TextRect), SAL_N_ELEMENTS( mso_sptIrregularSeal2TextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptIrregularSeal2GluePoints), SAL_N_ELEMENTS( mso_sptIrregularSeal2GluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptIrregularSeal2GluePoints),
     nullptr, 0     // handles
 };
 
@@ -3902,7 +3903,7 @@ const mso_CustomShape msoSeal4 =
     const_cast<SvxMSDffTextRectangles*>(mso_sptSeal4TextRect), SAL_N_ELEMENTS( mso_sptSeal4TextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptSealHandle), SAL_N_ELEMENTS( mso_sptSealHandle )      // handles
 };
 
@@ -3930,7 +3931,7 @@ const mso_CustomShape msoStar =
     const_cast<SvxMSDffTextRectangles*>(mso_sptStarTextRect), SAL_N_ELEMENTS( mso_sptStarTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptStarGluePoints), SAL_N_ELEMENTS(mso_sptStarGluePoints),
+    std::span<const SvxMSDffVertPair>( mso_sptStarGluePoints ),
     nullptr, 0     // handles
 };
 
@@ -4059,7 +4060,7 @@ const mso_CustomShape msoSeal8 =
     const_cast<SvxMSDffTextRectangles*>(mso_sptSealTextRect), SAL_N_ELEMENTS( mso_sptSealTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptSealHandle), SAL_N_ELEMENTS( mso_sptSealHandle )      // handles
 };
 const SvxMSDffVertPair mso_sptSeal16Vert[] = // adj value 0 -> 10800
@@ -4155,7 +4156,7 @@ const mso_CustomShape msoSeal16 =
     const_cast<SvxMSDffTextRectangles*>(mso_sptSealTextRect), SAL_N_ELEMENTS( mso_sptSealTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptSealHandle), SAL_N_ELEMENTS( mso_sptSealHandle )      // handles
 };
 const SvxMSDffVertPair mso_sptSeal24Vert[] =
@@ -4183,7 +4184,7 @@ const mso_CustomShape msoSeal24 =
     const_cast<SvxMSDffTextRectangles*>(mso_sptSealTextRect), SAL_N_ELEMENTS( mso_sptSealTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptSealHandle), SAL_N_ELEMENTS( mso_sptSealHandle )      // handles
 };
 const SvxMSDffCalculationData mso_sptSeal32Calc[] =
@@ -4351,7 +4352,7 @@ const mso_CustomShape msoSeal32 =
     const_cast<SvxMSDffTextRectangles*>(mso_sptSealTextRect), SAL_N_ELEMENTS( mso_sptSealTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptSealHandle), SAL_N_ELEMENTS( mso_sptSealHandle )
 };
 
@@ -4448,7 +4449,7 @@ const mso_CustomShape msoRibbon2 =
     const_cast<SvxMSDffTextRectangles*>(mso_sptRibbon2TextRect), SAL_N_ELEMENTS( mso_sptRibbon2TextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptRibbon2Handle), SAL_N_ELEMENTS( mso_sptRibbon2Handle )
 };
 
@@ -4529,7 +4530,7 @@ const mso_CustomShape msoRibbon =
     const_cast<SvxMSDffTextRectangles*>(mso_sptRibbonTextRect), SAL_N_ELEMENTS( mso_sptRibbonTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptRibbonGluePoints), SAL_N_ELEMENTS( mso_sptRibbonGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptRibbonGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptRibbonHandle), SAL_N_ELEMENTS( mso_sptRibbonHandle )
 };
 //msosptEllipseRibbon
@@ -4674,7 +4675,7 @@ const mso_CustomShape msosptEllipseRibbon =
     const_cast<SvxMSDffTextRectangles*>(mso_sptEllipseRibbonTextRect), SAL_N_ELEMENTS( mso_sptEllipseRibbonTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptEllipseRibbonHandle), SAL_N_ELEMENTS( mso_sptEllipseRibbonHandle )
 };
 
@@ -4814,7 +4815,7 @@ const mso_CustomShape msosptEllipseRibbon2 =
     const_cast<SvxMSDffTextRectangles*>(mso_sptEllipseRibbon2TextRect), SAL_N_ELEMENTS( mso_sptEllipseRibbon2TextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptEllipseRibbon2Handle), SAL_N_ELEMENTS( mso_sptEllipseRibbon2Handle )
 };
 // End
@@ -4880,7 +4881,7 @@ const mso_CustomShape msoVerticalScroll =
     const_cast<SvxMSDffTextRectangles*>(mso_sptScrollTextRect), SAL_N_ELEMENTS( mso_sptScrollTextRect ),
     21600, 21600,
     11000, 10800,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptVerticalScrollHandle), SAL_N_ELEMENTS( mso_sptVerticalScrollHandle )
 };
 const SvxMSDffVertPair mso_sptHorizontalScrollVert[] =   // adjustment1 : 0 - 5400
@@ -4926,7 +4927,7 @@ const mso_CustomShape msoHorizontalScroll =
     const_cast<SvxMSDffTextRectangles*>(mso_sptScrollTextRect), SAL_N_ELEMENTS( mso_sptScrollTextRect ),
     21600, 21600,
     10800, 11000,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptHorizontalScrollHandle), SAL_N_ELEMENTS( mso_sptHorizontalScrollHandle )
 };
 
@@ -4943,7 +4944,7 @@ const mso_CustomShape msoFlowChartProcess =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptStandardGluePoints), SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptStandardGluePoints),
     nullptr, 0     // handles
 };
 
@@ -4980,7 +4981,7 @@ const mso_CustomShape msoFlowChartAlternateProcess =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFlowChartAlternateProcessTextRect), SAL_N_ELEMENTS( mso_sptFlowChartAlternateProcessTextRect ),
     21600, 21600,
     10800, 10800,
-    const_cast<SvxMSDffVertPair*>(mso_sptStandardGluePoints), SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptStandardGluePoints),
     nullptr, 0     // handles
 };
 
@@ -5001,7 +5002,7 @@ const mso_CustomShape msoFlowChartDecision =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFlowChartDecisionTextRect), SAL_N_ELEMENTS( mso_sptFlowChartDecisionTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptStandardGluePoints), SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptStandardGluePoints),
     nullptr, 0     // handles
 };
 
@@ -5026,7 +5027,7 @@ const mso_CustomShape msoFlowChartInputOutput =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFlowChartInputOutputTextRect), SAL_N_ELEMENTS( mso_sptFlowChartInputOutputTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptFlowChartInputOutputGluePoints), SAL_N_ELEMENTS( mso_sptFlowChartInputOutputGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptFlowChartInputOutputGluePoints),
     nullptr, 0     // handles
 };
 
@@ -5057,7 +5058,7 @@ const mso_CustomShape msoFlowChartPredefinedProcess =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFlowChartPredefinedProcessTextRect), SAL_N_ELEMENTS( mso_sptFlowChartPredefinedProcessTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     nullptr, 0     // handles
 };
 
@@ -5088,7 +5089,7 @@ const mso_CustomShape msoFlowChartInternalStorage =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFlowChartInternalStorageTextRect), SAL_N_ELEMENTS( mso_sptFlowChartInternalStorageTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     nullptr, 0     // handles
 };
 
@@ -5119,7 +5120,7 @@ const mso_CustomShape msoFlowChartDocument =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFlowChartDocumentTextRect), SAL_N_ELEMENTS( mso_sptFlowChartDocumentTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptFlowChartDocumentGluePoints), SAL_N_ELEMENTS( mso_sptFlowChartDocumentGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptFlowChartDocumentGluePoints),
     nullptr, 0     // handles
 };
 
@@ -5158,7 +5159,7 @@ const mso_CustomShape msoFlowChartMultidocument =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFlowChartMultidocumentTextRect), SAL_N_ELEMENTS( mso_sptFlowChartMultidocumentTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptFlowChartMultidocumentGluePoints), SAL_N_ELEMENTS( mso_sptFlowChartMultidocumentGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptFlowChartMultidocumentGluePoints),
     nullptr, 0     // handles
 };
 
@@ -5184,7 +5185,7 @@ const mso_CustomShape msoFlowChartTerminator =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFlowChartTerminatorTextRect), SAL_N_ELEMENTS( mso_sptFlowChartTerminatorTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptStandardGluePoints), SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptStandardGluePoints),
     nullptr, 0     // handles
 };
 
@@ -5206,7 +5207,7 @@ const mso_CustomShape msoFlowChartPreparation =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFlowChartPreparationTextRect), SAL_N_ELEMENTS( mso_sptFlowChartPreparationTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptStandardGluePoints), SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptStandardGluePoints),
     nullptr, 0     // handles
 };
 
@@ -5231,7 +5232,7 @@ const mso_CustomShape msoFlowChartManualInput =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFlowChartManualInputTextRect), SAL_N_ELEMENTS( mso_sptFlowChartManualInputTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptFlowChartManualInputGluePoints), SAL_N_ELEMENTS( mso_sptFlowChartManualInputGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptFlowChartManualInputGluePoints),
     nullptr, 0     // handles
 };
 
@@ -5256,7 +5257,7 @@ const mso_CustomShape msoFlowChartManualOperation =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFlowChartManualOperationTextRect), SAL_N_ELEMENTS( mso_sptFlowChartManualOperationTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptFlowChartManualOperationGluePoints), SAL_N_ELEMENTS( mso_sptFlowChartManualOperationGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptFlowChartManualOperationGluePoints),
     nullptr, 0     // handles
 };
 
@@ -5281,7 +5282,7 @@ const mso_CustomShape msoFlowChartConnector =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFlowChartConnectorTextRect), SAL_N_ELEMENTS( mso_sptFlowChartConnectorTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptEllipseGluePoints), SAL_N_ELEMENTS( mso_sptEllipseGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptEllipseGluePoints),
     nullptr, 0     // handles
 };
 
@@ -5303,7 +5304,7 @@ const mso_CustomShape msoFlowChartOffpageConnector =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFlowChartOffpageConnectorTextRect), SAL_N_ELEMENTS( mso_sptFlowChartOffpageConnectorTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptStandardGluePoints), SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptStandardGluePoints),
     nullptr, 0     // handles
 };
 
@@ -5325,7 +5326,7 @@ const mso_CustomShape msoFlowChartPunchedCard =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFlowChartPunchedCardTextRect), SAL_N_ELEMENTS( mso_sptFlowChartPunchedCardTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptStandardGluePoints), SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptStandardGluePoints),
     nullptr, 0     // handles
 };
 
@@ -5363,7 +5364,7 @@ const mso_CustomShape msoFlowChartPunchedTape =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFlowChartPunchedTapeTextRect), SAL_N_ELEMENTS( mso_sptFlowChartPunchedTapeTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptFlowChartPunchedTapeGluePoints), SAL_N_ELEMENTS( mso_sptFlowChartPunchedTapeGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptFlowChartPunchedTapeGluePoints),
     nullptr, 0     // handles
 };
 
@@ -5396,7 +5397,7 @@ const mso_CustomShape msoFlowChartSummingJunction =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFlowChartSummingJunctionTextRect), SAL_N_ELEMENTS( mso_sptFlowChartSummingJunctionTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptEllipseGluePoints), SAL_N_ELEMENTS( mso_sptEllipseGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptEllipseGluePoints),
     nullptr, 0     // handles
 };
 
@@ -5427,7 +5428,7 @@ const mso_CustomShape msoFlowChartOr =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFlowChartOrTextRect), SAL_N_ELEMENTS( mso_sptFlowChartOrTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptEllipseGluePoints), SAL_N_ELEMENTS( mso_sptEllipseGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptEllipseGluePoints),
     nullptr, 0     // handles
 };
 
@@ -5452,7 +5453,7 @@ const mso_CustomShape msoFlowChartCollate =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFlowChartCollateTextRect), SAL_N_ELEMENTS( mso_sptFlowChartCollateTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptFlowChartCollateGluePoints), SAL_N_ELEMENTS( mso_sptFlowChartCollateGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptFlowChartCollateGluePoints),
     nullptr, 0     // handles
 };
 
@@ -5480,7 +5481,7 @@ const mso_CustomShape msoFlowChartSort =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFlowChartSortTextRect), SAL_N_ELEMENTS( mso_sptFlowChartSortTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     nullptr, 0     // handles
 };
 
@@ -5505,7 +5506,7 @@ const mso_CustomShape msoFlowChartExtract =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFlowChartExtractTextRect), SAL_N_ELEMENTS( mso_sptFlowChartExtractTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptFlowChartExtractGluePoints), SAL_N_ELEMENTS( mso_sptFlowChartExtractGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptFlowChartExtractGluePoints),
     nullptr, 0     // handles
 };
 
@@ -5526,7 +5527,7 @@ const mso_CustomShape msoFlowChartMerge =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFlowChartMergeTextRect), SAL_N_ELEMENTS( mso_sptFlowChartMergeTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptFlowChartExtractGluePoints), SAL_N_ELEMENTS( mso_sptFlowChartExtractGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptFlowChartExtractGluePoints),
     nullptr, 0     // handles
 };
 
@@ -5556,7 +5557,7 @@ const mso_CustomShape msoFlowChartOnlineStorage =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFlowChartOnlineStorageTextRect), SAL_N_ELEMENTS( mso_sptFlowChartOnlineStorageTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptFlowChartOnlineStorageGluePoints), SAL_N_ELEMENTS( mso_sptFlowChartOnlineStorageGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptFlowChartOnlineStorageGluePoints),
     nullptr, 0     // handles
 };
 
@@ -5582,7 +5583,7 @@ const mso_CustomShape msoFlowChartDelay =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFlowChartDelayTextRect), SAL_N_ELEMENTS( mso_sptFlowChartDelayTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptStandardGluePoints), SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptStandardGluePoints),
     nullptr, 0     // handles
 };
 
@@ -5611,7 +5612,7 @@ const mso_CustomShape msoFlowChartMagneticTape =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFlowChartMagneticTapeTextRect), SAL_N_ELEMENTS( mso_sptFlowChartMagneticTapeTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptStandardGluePoints), SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptStandardGluePoints),
     nullptr, 0     // handles
 };
 
@@ -5644,7 +5645,7 @@ const mso_CustomShape msoFlowChartMagneticDisk =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFlowChartMagneticDiskTextRect), SAL_N_ELEMENTS( mso_sptFlowChartMagneticDiskTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptFlowChartMagneticDiskGluePoints), SAL_N_ELEMENTS( mso_sptFlowChartMagneticDiskGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptFlowChartMagneticDiskGluePoints),
     nullptr, 0     // handles
 };
 
@@ -5677,7 +5678,7 @@ const mso_CustomShape msoFlowChartMagneticDrum =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFlowChartMagneticDrumTextRect), SAL_N_ELEMENTS( mso_sptFlowChartMagneticDrumTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptFlowChartMagneticDrumGluePoints), SAL_N_ELEMENTS( mso_sptFlowChartMagneticDrumGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptFlowChartMagneticDrumGluePoints),
     nullptr, 0     // handles
 };
 
@@ -5703,7 +5704,7 @@ const mso_CustomShape msoFlowChartDisplay =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFlowChartDisplayTextRect), SAL_N_ELEMENTS( mso_sptFlowChartDisplayTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptStandardGluePoints), SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptStandardGluePoints),
     nullptr, 0     // handles
 };
 
@@ -5796,7 +5797,7 @@ const mso_CustomShape msoWedgeRectCallout =
     const_cast<SvxMSDffTextRectangles*>(mso_sptWedgeRectCalloutTextRect), SAL_N_ELEMENTS( mso_sptWedgeRectCalloutTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptWedgeRectCalloutGluePoints), SAL_N_ELEMENTS( mso_sptWedgeRectCalloutGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptWedgeRectCalloutGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle), SAL_N_ELEMENTS( mso_sptCalloutHandle )        // handles
 };
 const SvxMSDffVertPair mso_sptWedgeRRectCalloutVert[] =
@@ -5832,7 +5833,7 @@ const mso_CustomShape msoWedgeRRectCallout =
     const_cast<SvxMSDffTextRectangles*>(mso_sptWedgeRRectCalloutTextRect), SAL_N_ELEMENTS( mso_sptWedgeRRectCalloutTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle), SAL_N_ELEMENTS( mso_sptCalloutHandle )        // handles
 };
 const SvxMSDffVertPair mso_sptBalloonVert[] =
@@ -5871,7 +5872,7 @@ const mso_CustomShape msoBalloon =
     const_cast<SvxMSDffTextRectangles*>(mso_sptBalloonTextRect), SAL_N_ELEMENTS( mso_sptBalloonTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptBalloonHandle), SAL_N_ELEMENTS( mso_sptBalloonHandle )        // handles
 };
 const SvxMSDffVertPair mso_sptWedgeEllipseCalloutVert[] =
@@ -5930,7 +5931,7 @@ const mso_CustomShape msoWedgeEllipseCallout =
     const_cast<SvxMSDffTextRectangles*>(mso_sptWedgeEllipseCalloutTextRect), SAL_N_ELEMENTS( mso_sptWedgeEllipseCalloutTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptWedgeEllipseCalloutGluePoints), SAL_N_ELEMENTS( mso_sptWedgeEllipseCalloutGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptWedgeEllipseCalloutGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle), SAL_N_ELEMENTS( mso_sptCalloutHandle )        // handles
 };
 
@@ -6035,7 +6036,7 @@ const mso_CustomShape msoCloudCallout =
     const_cast<SvxMSDffTextRectangles*>(mso_sptCloudCalloutTextRect), SAL_N_ELEMENTS( mso_sptCloudCalloutTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle), SAL_N_ELEMENTS( mso_sptCalloutHandle )        // handles
 };
 
@@ -6113,7 +6114,7 @@ const mso_CustomShape msoWave =
     const_cast<SvxMSDffTextRectangles*>(mso_sptWaveTextRect), SAL_N_ELEMENTS( mso_sptWaveTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptWaveGluePoints), SAL_N_ELEMENTS( mso_sptWaveGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptWaveGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptWaveHandle), SAL_N_ELEMENTS( mso_sptWaveHandle )
 };
 
@@ -6195,7 +6196,7 @@ const mso_CustomShape msoDoubleWave =
     const_cast<SvxMSDffTextRectangles*>(mso_sptDoubleWaveTextRect), SAL_N_ELEMENTS( mso_sptDoubleWaveTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptDoubleWaveGluePoints), SAL_N_ELEMENTS( mso_sptDoubleWaveGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptDoubleWaveGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptDoubleWaveHandle), SAL_N_ELEMENTS( mso_sptDoubleWaveHandle )
 };
 
@@ -6216,7 +6217,7 @@ sal_Int16 GetCustomShapeConnectionTypeDefault( MSO_SPT eSpType )
 {
     sal_Int16 nGluePointType = css::drawing::EnhancedCustomShapeGluePointType::SEGMENTS;
     const mso_CustomShape* pDefCustomShape = GetCustomShapeContent( eSpType );
-    if ( pDefCustomShape && pDefCustomShape->nGluePoints )
+    if (pDefCustomShape && !pDefCustomShape->pGluePoints.empty())
         nGluePointType = css::drawing::EnhancedCustomShapeGluePointType::CUSTOM;
     else
     {
@@ -6311,7 +6312,7 @@ const mso_CustomShape msoTextPlainText =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextPlainTextHandle), SAL_N_ELEMENTS( mso_sptTextPlainTextHandle )
 };
 
@@ -6348,7 +6349,7 @@ const mso_CustomShape msoTextStop =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextStopHandle), SAL_N_ELEMENTS( mso_sptTextStopHandle )
 };
 
@@ -6379,7 +6380,7 @@ const mso_CustomShape msoTextTriangle =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextTriangleHandle), SAL_N_ELEMENTS( mso_sptTextTriangleHandle )
 };
 const SvxMSDffVertPair mso_sptTextTriangleInvertedVert[] =
@@ -6400,7 +6401,7 @@ const mso_CustomShape msoTextTriangleInverted =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextTriangleHandle), SAL_N_ELEMENTS( mso_sptTextTriangleHandle )
 };
 
@@ -6432,7 +6433,7 @@ const mso_CustomShape msoTextChevron =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextChevronHandle), SAL_N_ELEMENTS( mso_sptTextChevronHandle )
 };
 
@@ -6464,7 +6465,7 @@ const mso_CustomShape msoTextChevronInverted =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextChevronInvertedHandle), SAL_N_ELEMENTS( mso_sptTextChevronInvertedHandle )
 };
 //V 0 0 21600 ?f2 0 ?f0 21600 ?f0
@@ -6505,7 +6506,7 @@ const mso_CustomShape msoTextRingInside =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextRingInsideHandle), SAL_N_ELEMENTS( mso_sptTextRingInsideHandle )
 };
 //mso_sptTextRingOutside
@@ -6540,7 +6541,7 @@ const mso_CustomShape msoTextRingOutside =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextRingOutsideHandle), SAL_N_ELEMENTS( mso_sptTextRingOutsideHandle )
 };
 
@@ -6572,7 +6573,7 @@ const mso_CustomShape msoTextFadeRight =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextFadeRightHandle), SAL_N_ELEMENTS( mso_sptTextFadeRightHandle )
 };
 
@@ -6594,7 +6595,7 @@ const mso_CustomShape msoTextFadeLeft =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextFadeLeftHandle), SAL_N_ELEMENTS( mso_sptTextFadeLeftHandle )
 };
 
@@ -6616,7 +6617,7 @@ const mso_CustomShape msoTextFadeUp =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextFadeUpHandle), SAL_N_ELEMENTS( mso_sptTextFadeUpHandle )
 };
 
@@ -6638,7 +6639,7 @@ const mso_CustomShape msoTextFadeDown =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextFadeDownHandle), SAL_N_ELEMENTS( mso_sptTextFadeDownHandle )
 };
 
@@ -6660,7 +6661,7 @@ const mso_CustomShape msoTextSlantUp =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextSlantUpHandle), SAL_N_ELEMENTS( mso_sptTextSlantUpHandle )
 };
 
@@ -6682,7 +6683,7 @@ const mso_CustomShape msoTextSlantDown =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextSlantDownHandle), SAL_N_ELEMENTS( mso_sptTextSlantDownHandle )
 };
 
@@ -6710,7 +6711,7 @@ const mso_CustomShape msoTextCascadeUp =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextCascadeUpHandle), SAL_N_ELEMENTS( mso_sptTextCascadeUpHandle )
 };
 
@@ -6732,7 +6733,7 @@ const mso_CustomShape msoTextCascadeDown =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextCascadeDownHandle), SAL_N_ELEMENTS( mso_sptTextCascadeDownHandle )
 };
 
@@ -6770,7 +6771,7 @@ const mso_CustomShape msoTextArchUpCurve =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextArchUpCurveHandle), SAL_N_ELEMENTS( mso_sptTextArchUpCurveHandle )
 };
 
@@ -6800,7 +6801,7 @@ const mso_CustomShape msoTextArchDownCurve =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextArchDownCurveHandle), SAL_N_ELEMENTS( mso_sptTextArchDownCurveHandle )
 };
 
@@ -6838,7 +6839,7 @@ const mso_CustomShape msoTextCircleCurve =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextCircleCurveHandle), SAL_N_ELEMENTS( mso_sptTextCircleCurveHandle )
 };
 
@@ -6881,7 +6882,7 @@ const mso_CustomShape msoTextButtonCurve =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextButtonCurveHandle), SAL_N_ELEMENTS( mso_sptTextButtonCurveHandle )
 };
 
@@ -6927,7 +6928,7 @@ const mso_CustomShape msoTextArchUpPour =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextArchPourHandle), SAL_N_ELEMENTS( mso_sptTextArchPourHandle )
 };
 
@@ -6953,7 +6954,7 @@ const mso_CustomShape msoTextArchDownPour =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextArchPourHandle), SAL_N_ELEMENTS( mso_sptTextArchPourHandle )
 };
 
@@ -7000,7 +7001,7 @@ const mso_CustomShape msoTextCirclePour =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextCirclePourHandle), SAL_N_ELEMENTS( mso_sptTextCirclePourHandle )
 };
 
@@ -7068,7 +7069,7 @@ const mso_CustomShape msoTextButtonPour =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextButtonPourHandle), SAL_N_ELEMENTS( mso_sptTextButtonPourHandle )
 };
 
@@ -7108,7 +7109,7 @@ const mso_CustomShape msoTextCurveUp =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextCurveUpHandle), SAL_N_ELEMENTS( mso_sptTextCurveUpHandle )
 };
 
@@ -7134,7 +7135,7 @@ const mso_CustomShape msoTextCurveDown =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextCurveDownHandle), SAL_N_ELEMENTS( mso_sptTextCurveDownHandle )
 };
 
@@ -7174,7 +7175,7 @@ const mso_CustomShape msoTextCanUp =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextCanUpHandle), SAL_N_ELEMENTS( mso_sptTextCanUpHandle )
 };
 
@@ -7207,7 +7208,7 @@ const mso_CustomShape msoTextCanDown =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextCanDownHandle), SAL_N_ELEMENTS( mso_sptTextCanDownHandle )
 };
 
@@ -7241,7 +7242,7 @@ const mso_CustomShape msoTextInflate =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextInflateHandle), SAL_N_ELEMENTS( mso_sptTextInflateHandle )
 };
 
@@ -7271,7 +7272,7 @@ const mso_CustomShape msoTextDeflate =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextDeflateHandle), SAL_N_ELEMENTS( mso_sptTextDeflateHandle )
 };
 
@@ -7310,7 +7311,7 @@ const mso_CustomShape msoTextInflateBottom =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextInflateBottomHandle), SAL_N_ELEMENTS( mso_sptTextInflateBottomHandle )
 };
 
@@ -7349,7 +7350,7 @@ const mso_CustomShape msoTextDeflateBottom =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextDeflateBottomHandle), SAL_N_ELEMENTS( mso_sptTextDeflateBottomHandle )
 };
 
@@ -7386,7 +7387,7 @@ const mso_CustomShape msoTextInflateTop =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextInflateTopHandle), SAL_N_ELEMENTS( mso_sptTextInflateTopHandle )
 };
 
@@ -7423,7 +7424,7 @@ const mso_CustomShape msoTextDeflateTop =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextDeflateTopHandle), SAL_N_ELEMENTS( mso_sptTextDeflateTopHandle )
 };
 
@@ -7469,7 +7470,7 @@ const mso_CustomShape msoTextDeflateInflate =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextDeflateInflateHandle), SAL_N_ELEMENTS( mso_sptTextDeflateInflateHandle )
 };
 
@@ -7523,7 +7524,7 @@ const mso_CustomShape msoTextDeflateInflateDeflate =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTextDeflateInflateDeflateHandle), SAL_N_ELEMENTS( mso_sptTextDeflateInflateDeflateHandle )
 };
 
@@ -7546,7 +7547,7 @@ const mso_CustomShape msoTextWave1 =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptWaveGluePoints), SAL_N_ELEMENTS( mso_sptWaveGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptWaveGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptWaveHandle), SAL_N_ELEMENTS( mso_sptWaveHandle )
 };
 
@@ -7564,7 +7565,7 @@ const mso_CustomShape msoTextWave2 =
     const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptWaveGluePoints), SAL_N_ELEMENTS( mso_sptWaveGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptWaveGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptWaveHandle), SAL_N_ELEMENTS( mso_sptWaveHandle )
 };
 
@@ -7587,7 +7588,7 @@ const mso_CustomShape msoTextWave3 =
     const_cast<SvxMSDffTextRectangles*>(mso_sptDoubleWaveTextRect), SAL_N_ELEMENTS( mso_sptDoubleWaveTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptDoubleWaveGluePoints), SAL_N_ELEMENTS( mso_sptDoubleWaveGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptDoubleWaveGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptDoubleWaveHandle), SAL_N_ELEMENTS( mso_sptDoubleWaveHandle )
 };
 
@@ -7605,7 +7606,7 @@ const mso_CustomShape msoTextWave4 =
     const_cast<SvxMSDffTextRectangles*>(mso_sptDoubleWaveTextRect), SAL_N_ELEMENTS( mso_sptDoubleWaveTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    const_cast<SvxMSDffVertPair*>(mso_sptDoubleWaveGluePoints), SAL_N_ELEMENTS( mso_sptDoubleWaveGluePoints ),
+    std::span<const SvxMSDffVertPair>(mso_sptDoubleWaveGluePoints),
     const_cast<SvxMSDffHandle*>(mso_sptDoubleWaveHandle), SAL_N_ELEMENTS( mso_sptDoubleWaveHandle )
 };
 
@@ -7772,7 +7773,7 @@ const mso_CustomShape msoCallout90 =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle1), SAL_N_ELEMENTS( mso_sptCalloutHandle1 )
 };
 const mso_CustomShape msoCallout1 =
@@ -7784,7 +7785,7 @@ const mso_CustomShape msoCallout1 =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle1), SAL_N_ELEMENTS( mso_sptCalloutHandle1 )
 };
 const mso_CustomShape msoCallout2 =
@@ -7796,7 +7797,7 @@ const mso_CustomShape msoCallout2 =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle2), SAL_N_ELEMENTS( mso_sptCalloutHandle2 )
 };
 const mso_CustomShape msoCallout3 =
@@ -7808,7 +7809,7 @@ const mso_CustomShape msoCallout3 =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle3), SAL_N_ELEMENTS( mso_sptCalloutHandle3 )
 };
 const mso_CustomShape msoAccentCallout90 =
@@ -7820,7 +7821,7 @@ const mso_CustomShape msoAccentCallout90 =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle1), SAL_N_ELEMENTS( mso_sptCalloutHandle1 )
 };
 const mso_CustomShape msoAccentCallout1 =
@@ -7832,7 +7833,7 @@ const mso_CustomShape msoAccentCallout1 =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle1), SAL_N_ELEMENTS( mso_sptCalloutHandle1 )
 };
 const mso_CustomShape msoAccentCallout2 =
@@ -7844,7 +7845,7 @@ const mso_CustomShape msoAccentCallout2 =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle2), SAL_N_ELEMENTS( mso_sptCalloutHandle2 )
 };
 const mso_CustomShape msoAccentCallout3 =
@@ -7856,7 +7857,7 @@ const mso_CustomShape msoAccentCallout3 =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle3), SAL_N_ELEMENTS( mso_sptCalloutHandle3 )
 };
 const mso_CustomShape msoBorderCallout90 =
@@ -7868,7 +7869,7 @@ const mso_CustomShape msoBorderCallout90 =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle1), SAL_N_ELEMENTS( mso_sptCalloutHandle1 )
 };
 const mso_CustomShape msoBorderCallout1 =
@@ -7880,7 +7881,7 @@ const mso_CustomShape msoBorderCallout1 =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle1), SAL_N_ELEMENTS( mso_sptCalloutHandle1 )
 };
 const mso_CustomShape msoBorderCallout2 =
@@ -7892,7 +7893,7 @@ const mso_CustomShape msoBorderCallout2 =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle2), SAL_N_ELEMENTS( mso_sptCalloutHandle2 )
 };
 const mso_CustomShape msoBorderCallout3 =
@@ -7904,7 +7905,7 @@ const mso_CustomShape msoBorderCallout3 =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle3), SAL_N_ELEMENTS( mso_sptCalloutHandle3 )
 };
 const mso_CustomShape msoAccentBorderCallout90 =
@@ -7916,7 +7917,7 @@ const mso_CustomShape msoAccentBorderCallout90 =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle1), SAL_N_ELEMENTS( mso_sptCalloutHandle1 )
 };
 const mso_CustomShape msoAccentBorderCallout1 =
@@ -7928,7 +7929,7 @@ const mso_CustomShape msoAccentBorderCallout1 =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle1), SAL_N_ELEMENTS( mso_sptCalloutHandle1 )
 };
 const mso_CustomShape msoAccentBorderCallout2 =
@@ -7940,7 +7941,7 @@ const mso_CustomShape msoAccentBorderCallout2 =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle2), SAL_N_ELEMENTS( mso_sptCalloutHandle2 )
 };
 const mso_CustomShape msoAccentBorderCallout3 =
@@ -7952,7 +7953,7 @@ const mso_CustomShape msoAccentBorderCallout3 =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle3), SAL_N_ELEMENTS( mso_sptCalloutHandle3 )
 };
 
@@ -7973,7 +7974,7 @@ const mso_CustomShape msoStraightConnector1 =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     nullptr, 0
 };
 
@@ -7994,7 +7995,7 @@ const mso_CustomShape msoBentConnector2 =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     nullptr, 0
 };
 
@@ -8028,7 +8029,7 @@ const mso_CustomShape msoBentConnector3 =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptBentConnector3Handle), SAL_N_ELEMENTS( mso_sptBentConnector3Handle )
 };
 
@@ -8068,7 +8069,7 @@ const mso_CustomShape msoBentConnector4 =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptBentConnector4Handle), SAL_N_ELEMENTS( mso_sptBentConnector4Handle )
 };
 
@@ -8113,7 +8114,7 @@ const mso_CustomShape msoBentConnector5 =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptBentConnector5Handle), SAL_N_ELEMENTS( mso_sptBentConnector5Handle )
 };
 
@@ -8134,7 +8135,7 @@ const mso_CustomShape msoCurvedConnector2 =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     nullptr, 0
 };
 
@@ -8171,7 +8172,7 @@ const mso_CustomShape msoCurvedConnector3 =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptCurvedConnector3Handle), SAL_N_ELEMENTS( mso_sptCurvedConnector3Handle )
 };
 
@@ -8224,7 +8225,7 @@ const mso_CustomShape msoCurvedConnector4 =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptCurvedConnector4Handle), SAL_N_ELEMENTS( mso_sptCurvedConnector4Handle )
 };
 
@@ -8287,7 +8288,7 @@ const mso_CustomShape msoCurvedConnector5 =
     nullptr, 0,
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptCurvedConnector5Handle), SAL_N_ELEMENTS( mso_sptCurvedConnector5Handle )
 };
 
@@ -8348,7 +8349,7 @@ const mso_CustomShape msoTearDrop =
     const_cast<SvxMSDffTextRectangles*>(mso_sptTearDropTextRect), SAL_N_ELEMENTS( mso_sptTearDropTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    std::span<const SvxMSDffVertPair>(),
     const_cast<SvxMSDffHandle*>(mso_sptTearDropHandle), SAL_N_ELEMENTS(mso_sptTearDropHandle)        // handles
 };
 

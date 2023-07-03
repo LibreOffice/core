@@ -82,8 +82,7 @@ struct mso_CustomShape
     sal_Int32                               nCoordHeight;
     sal_Int32                               nXRef;
     sal_Int32                               nYRef;
-    SvxMSDffVertPair*                       pGluePoints;
-    sal_uInt32                              nGluePoints;
+    std::span<const SvxMSDffVertPair>       pGluePoints;
     SvxMSDffHandle*                         pHandles;
     sal_uInt32                              nHandles;
 };
