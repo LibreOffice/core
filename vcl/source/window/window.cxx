@@ -2818,11 +2818,11 @@ Point Window::ScreenToOutputPixel( const Point& rPos ) const
     return Point( rPos.X() - GetOutDev()->mnOutOffX, rPos.Y() - GetOutDev()->mnOutOffY );
 }
 
-tools::Long Window::ImplGetUnmirroredOutOffX()
+tools::Long Window::ImplGetUnmirroredOutOffX() const
 {
     // revert mnOutOffX changes that were potentially made in ImplPosSizeWindow
     tools::Long offx = GetOutDev()->mnOutOffX;
-    OutputDevice *pOutDev = GetOutDev();
+    const OutputDevice *pOutDev = GetOutDev();
     if( pOutDev->HasMirroredGraphics() )
     {
         if( mpWindowImpl->mpParent && !mpWindowImpl->mpParent->mpWindowImpl->mbFrame && mpWindowImpl->mpParent->GetOutDev()->ImplIsAntiparallel() )
@@ -2844,14 +2844,14 @@ tools::Long Window::ImplGetUnmirroredOutOffX()
 Point Window::OutputToNormalizedScreenPixel( const Point& rPos ) const
 {
     // relative to top level parent
-    tools::Long offx = const_cast<vcl::Window*>(this)->ImplGetUnmirroredOutOffX();
+    tools::Long offx = ImplGetUnmirroredOutOffX();
     return Point( rPos.X()+offx, rPos.Y() + GetOutDev()->mnOutOffY );
 }
 
 Point Window::NormalizedScreenToOutputPixel( const Point& rPos ) const
 {
     // relative to top level parent
-    tools::Long offx = const_cast<vcl::Window*>(this)->ImplGetUnmirroredOutOffX();
+    tools::Long offx = ImplGetUnmirroredOutOffX();
     return Point( rPos.X()-offx, rPos.Y() - GetOutDev()->mnOutOffY );
 }
 

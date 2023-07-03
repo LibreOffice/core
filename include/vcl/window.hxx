@@ -692,7 +692,7 @@ private:
 
     SAL_DLLPRIVATE tools::Rectangle     ImplOutputToUnmirroredAbsoluteScreenPixel( const tools::Rectangle& rRect ) const;
     SAL_DLLPRIVATE tools::Rectangle     ImplUnmirroredAbsoluteScreenToOutputPixel( const tools::Rectangle& rRect ) const;
-    SAL_DLLPRIVATE tools::Long                 ImplGetUnmirroredOutOffX();
+    SAL_DLLPRIVATE tools::Long          ImplGetUnmirroredOutOffX() const;
 
     // retrieves the list of owner draw decorated windows for this window hierarchy
     SAL_DLLPRIVATE ::std::vector<VclPtr<vcl::Window> >& ImplGetOwnerDrawList();
