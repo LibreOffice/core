@@ -1546,6 +1546,47 @@ bool SwTextFrame::IsEmptyMasterWithSplitFly() const
     return true;
 }
 
+bool SwTextFrame::IsEmptyWithSplitFly() const
+{
+    if (IsFollow())
+    {
+        return false;
+    }
+
+    if (GetTextNodeFirst()->GetSwAttrSet().HasItem(RES_PAGEDESC))
+    {
+        return false;
+    }
+
+    if (getFrameArea().Bottom() <= GetUpper()->getFramePrintArea().Bottom())
+    {
+        return false;
+    }
+
+    // This is a master that doesn't fit the current parent.
+    if (!m_pDrawObjs || m_pDrawObjs->size() != 1)
+    {
+        return false;
+    }
+
+    SwFlyFrame* pFlyFrame = (*m_pDrawObjs)[0]->DynCastFlyFrame();
+    if (!pFlyFrame || !pFlyFrame->IsFlySplitAllowed())
+    {
+        return false;
+    }
+
+    // It has a split fly anchored to it.
+    if (pFlyFrame->GetFrameFormat().GetVertOrient().GetPos() >= 0)
+    {
+        return false;
+    }
+
+    // Negative vertical offset means that visually it already may have a first line.
+    // Consider that, we may need to split the frame, so the fly frame is on one page and the empty
+    // paragraph's frame is on a next page.
+    return true;
+}
+
 SwTwips SwTextNode::GetWidthOfLeadingTabs() const
 {
     SwTwips nRet = 0;
