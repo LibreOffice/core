@@ -697,6 +697,34 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf145584)
     CPPUNIT_ASSERT_EQUAL(OUString("World"), sText);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf152575)
+{
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
+    createSwDoc("152575.fodt");
+
+    // Save as PDF.
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "ExportNotesInMargin", uno::Any(true) } }));
+
+    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
+        { { "FilterName", uno::Any(OUString("writer_pdf_Export")) },
+          { "FilterData", uno::Any(aFilterData) },
+          { "URL", uno::Any(maTempFile.GetURL()) } }));
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:ExportToPDF", aDescriptor);
+
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    CPPUNIT_ASSERT_EQUAL(3, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/1);
+    CPPUNIT_ASSERT(pPdfPage);
+    // Without the fix for tdf#152575 this would be only 42 objects
+    CPPUNIT_ASSERT_EQUAL(51, pPdfPage->getObjectCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf140731)
 {
     createSwDoc();

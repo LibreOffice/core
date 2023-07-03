@@ -3009,13 +3009,16 @@ void SAL_CALL SwXTextDocument::render(
                     SwWrtShell* pWrtShell = pSwView ? pSwView->GetWrtShellPtr() : nullptr;
 
                     SwPrintData rSwPrtOptions = *m_pRenderData->GetSwPrtOptions();
+                    if (bIsPDFExport)
+                    {
+                        rSwPrtOptions.SetPrintPostIts(
+                                lcl_GetBoolProperty(rxOptions, "ExportNotesInMargin")
+                                    ? SwPostItMode::InMargins
+                                    : SwPostItMode::NONE);
+                    }
 
                     if (bIsPDFExport && (bFirstPage || bHasPDFExtOutDevData) && pWrtShell)
                     {
-                        rSwPrtOptions.SetPrintPostIts(
-                            lcl_GetBoolProperty(rxOptions, "ExportNotesInMargin")
-                                ? SwPostItMode::InMargins
-                                : SwPostItMode::NONE);
                         SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, aPageRange, bIsSkipEmptyPages, false, rSwPrtOptions );
                     }
 
