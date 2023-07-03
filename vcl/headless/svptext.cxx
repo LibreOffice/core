@@ -23,7 +23,7 @@
 #include <vcl/fontcharmap.hxx>
 #include <basegfx/range/b2ibox.hxx>
 #include <headless/svpgdi.hxx>
-#include <impfontmetricdata.hxx>
+#include <font/FontMetricData.hxx>
 #include <sallayout.hxx>
 
 void SvpSalGraphics::SetFont(LogicalFontInstance* pIFSD, int nFallbackLevel)

@@ -71,7 +71,7 @@
 #include <win/winlayout.hxx>
 #include <win/wingdiimpl.hxx>
 #include <impfontcharmap.hxx>
-#include <impfontmetricdata.hxx>
+#include <font/FontMetricData.hxx>
 #include <impglyphitem.hxx>
 
 #if HAVE_FEATURE_SKIA

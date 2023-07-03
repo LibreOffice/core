@@ -45,7 +45,7 @@
 #include <langboost.hxx>
 #include <font/LogicalFontInstance.hxx>
 #include <fontattributes.hxx>
-#include <impfontmetricdata.hxx>
+#include <font/FontMetricData.hxx>
 #include <font/FontSelectPattern.hxx>
 #include <font/PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFace.hxx>

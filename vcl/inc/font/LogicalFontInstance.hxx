@@ -30,7 +30,7 @@
 #include <tools/degree.hxx>
 
 #include <font/FontSelectPattern.hxx>
-#include <impfontmetricdata.hxx>
+#include <font/FontMetricData.hxx>
 #include <glyphid.hxx>
 
 #include <optional>

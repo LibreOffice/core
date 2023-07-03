@@ -30,7 +30,7 @@
 #include <font/FontSelectPattern.hxx>
 #include <font/PhysicalFontFace.hxx>
 #include <font/LogicalFontInstance.hxx>
-#include <impfontmetricdata.hxx>
+#include <font/FontMetricData.hxx>
 #include <sft.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>

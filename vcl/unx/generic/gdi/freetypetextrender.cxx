@@ -34,7 +34,7 @@
 #include <unx/fc_fontoptions.hxx>
 #include <unx/freetype_glyphcache.hxx>
 #include <font/PhysicalFontFace.hxx>
-#include <impfontmetricdata.hxx>
+#include <font/FontMetricData.hxx>
 
 #include <sallayout.hxx>
 

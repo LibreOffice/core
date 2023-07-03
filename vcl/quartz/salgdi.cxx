@@ -42,7 +42,7 @@
 #include <quartz/ctfonts.hxx>
 #include <fontsubset.hxx>
 #include <impfont.hxx>
-#include <impfontmetricdata.hxx>
+#include <font/FontMetricData.hxx>
 #include <font/fontsubstitution.hxx>
 #include <font/PhysicalFontCollection.hxx>
 

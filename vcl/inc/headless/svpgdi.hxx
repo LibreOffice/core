@@ -34,7 +34,7 @@
 #include <salgdi.hxx>
 #include <sallayout.hxx>
 #include <unx/cairotextrender.hxx>
-#include <impfontmetricdata.hxx>
+#include <font/FontMetricData.hxx>
 
 #include <headless/SvpGraphicsBackend.hxx>
 #include <headless/CairoCommon.hxx>

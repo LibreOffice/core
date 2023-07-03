@@ -34,7 +34,7 @@
 
 #include <fontattributes.hxx>
 #include <font/LogicalFontInstance.hxx>
-#include <impfontmetricdata.hxx>
+#include <font/FontMetricData.hxx>
 
 #include <unordered_map>
 

@@ -14248,7 +14248,7 @@ vcl/inc/impdel.hxx
 vcl/inc/impfont.hxx
 vcl/inc/impfontcache.hxx
 vcl/inc/impfontcharmap.hxx
-vcl/inc/impfontmetricdata.hxx
+vcl/inc/font/FontMetricData.hxx
 vcl/inc/impgraph.hxx
 vcl/inc/implimagetree.hxx
 vcl/inc/jobdata.hxx

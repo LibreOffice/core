@@ -48,7 +48,7 @@
 
 
 #include <font/LogicalFontInstance.hxx>
-#include <impfontmetricdata.hxx>
+#include <font/FontMetricData.hxx>
 #include <font/PhysicalFontFace.hxx>
 #include <salgdi.hxx>
 
