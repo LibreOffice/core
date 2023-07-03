@@ -305,6 +305,7 @@ public:
     void                        InitFillup();
 
     sal_uInt16                  GetId( sal_uInt16 nIndex ) const;
+    bool                        HasId( sal_uInt16 nIndex ) const;
     void                        Remove();
 
     sal_uInt16           GetBufferCount() const
@@ -465,6 +466,8 @@ struct XclExpChTrData
     void                        Write(
                                     XclExpStream& rStrm,
                                     const XclExpChTrTabIdBuffer& rTabIdBuffer );
+
+    bool                        UsesDeletedTab(const XclExpChTrTabIdBuffer& rTabIdBuffer) const;
 };
 
 // XclExpChTrCellContent - changed cell content

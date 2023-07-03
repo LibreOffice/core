@@ -577,6 +577,11 @@ sal_uInt16 XclExpChTrTabIdBuffer::GetId( sal_uInt16 nIndex ) const
     return pBuffer[ nIndex ];
 }
 
+bool XclExpChTrTabIdBuffer::HasId( sal_uInt16 nIndex ) const
+{
+    return nIndex < nBufSize;
+}
+
 void XclExpChTrTabIdBuffer::Remove()
 {
     OSL_ENSURE( pBuffer.get() <= pLast, "XclExpChTrTabIdBuffer::Remove - buffer empty" );
@@ -807,6 +812,31 @@ void XclExpChTrData::Write( XclExpStream& rStrm, const XclExpChTrTabIdBuffer& rT
     }
 }
 
+static bool lcl_IsDeletedTab(const XclExpChTrTabIdBuffer& rTabIdBuffer, sal_uInt16 nIndex)
+{
+    return !rTabIdBuffer.HasId(nIndex);
+}
+
+bool XclExpChTrData::UsesDeletedTab(const XclExpChTrTabIdBuffer& rTabIdBuffer) const
+{
+    if (nType != EXC_CHTR_TYPE_FORMULA)
+        return false;
+
+    for( const auto& rLogEntry : maRefLog )
+    {
+        if (rLogEntry.mpUrl && rLogEntry.mpFirstTab)
+            continue;
+        if (lcl_IsDeletedTab(rTabIdBuffer, rLogEntry.mnFirstXclTab))
+            return true;
+        bool bSingleTab = rLogEntry.mnFirstXclTab == rLogEntry.mnLastXclTab;
+        if (!bSingleTab)
+            continue;
+        if (lcl_IsDeletedTab(rTabIdBuffer, rLogEntry.mnLastXclTab))
+            return true;
+    }
+    return false;
+}
+
 XclExpChTrCellContent::XclExpChTrCellContent(
         const ScChangeActionContent& rAction,
         const XclExpRoot& rRoot,
@@ -934,7 +964,11 @@ void XclExpChTrCellContent::GetCellData(
 
 bool XclExpChTrCellContent::UsesDeletedTab() const
 {
-    return IsDeletedTab(aPosition.Tab());
+    if (IsDeletedTab(aPosition.Tab()))
+        return true;
+    if (pOldData && pOldData->UsesDeletedTab(rIdBuffer))
+        return true;
+    return pNewData && pNewData->UsesDeletedTab(rIdBuffer);
 }
 
 void XclExpChTrCellContent::SaveActionData( XclExpStream& rStrm ) const
