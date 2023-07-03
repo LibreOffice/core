@@ -932,9 +932,9 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
 
     static constexpr OUString sCoordinates( u"Coordinates"_ustr );
     pAny = aGeometryItem.GetPropertyValueByName( sPath, sCoordinates );
-    if ( !pAny && pDefCustomShape && pDefCustomShape->nVertices && pDefCustomShape->pVertices )
+    if (!pAny && pDefCustomShape && !pDefCustomShape->pVertices.empty())
     {
-        sal_Int32 i, nCount = pDefCustomShape->nVertices;
+        sal_Int32 i, nCount = pDefCustomShape->pVertices.size();
         uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqCoordinates( nCount );
         auto pseqCoordinates = seqCoordinates.getArray();
         for ( i = 0; i < nCount; i++ )
@@ -1145,12 +1145,12 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
         case DefaultType::Path :
         {
             pAny = rGeometryItem.GetPropertyValueByName( sPath, "Coordinates" );
-            if ( pAny && pDefCustomShape && pDefCustomShape->nVertices && pDefCustomShape->pVertices )
+            if (pAny && pDefCustomShape && !pDefCustomShape->pVertices.empty())
             {
                 uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqCoordinates1;
                 if ( *pAny >>= seqCoordinates1 )
                 {
-                    sal_Int32 i, nCount = pDefCustomShape->nVertices;
+                    sal_Int32 i, nCount = pDefCustomShape->pVertices.size();
                     uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqCoordinates2( nCount );
                     auto pseqCoordinates2 = seqCoordinates2.getArray();
                     for ( i = 0; i < nCount; i++ )
@@ -1162,7 +1162,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
                         bIsDefaultGeometry = true;
                 }
             }
-            else if ( pDefCustomShape && ( ( pDefCustomShape->nVertices == 0 ) || ( pDefCustomShape->pVertices == nullptr ) ) )
+            else if (pDefCustomShape && pDefCustomShape->pVertices.empty())
                 bIsDefaultGeometry = true;
         }
         break;

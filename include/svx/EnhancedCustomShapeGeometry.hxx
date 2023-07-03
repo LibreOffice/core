@@ -70,8 +70,7 @@ struct SvxMSDffHandle
 };
 struct mso_CustomShape
 {
-    SvxMSDffVertPair*                       pVertices;
-    sal_uInt32                              nVertices;
+    std::span<const SvxMSDffVertPair>       pVertices;
     sal_uInt16*                             pElements;
     sal_uInt32                              nElements;
     SvxMSDffCalculationData*                pCalculation;
