@@ -394,6 +394,7 @@ SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 
             m_bEdit = true;
         break;
         case ContentTypeId::DRAWOBJECT:
+            m_sTypeToken = "drawingobject";
             m_bEdit = true;
         break;
         default: break;
