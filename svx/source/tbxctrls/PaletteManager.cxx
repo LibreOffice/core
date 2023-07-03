@@ -430,8 +430,6 @@ void PaletteManager::DispatchColorCommand(const OUString& aCommand, const NamedC
         comphelper::makePropertyValue(aObj.GetURLPath()+ ".Color", sal_Int32(rColor.m_aColor)),
     };
 
-    printf ("Sending: %s\n", aObj.GetURLPath().toUtf8().getStr());
-
     if (rColor.m_nThemeIndex != -1)
     {
         model::ComplexColor aComplexColor;
