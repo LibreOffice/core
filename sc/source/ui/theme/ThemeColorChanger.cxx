@@ -18,6 +18,7 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/borderline.hxx>
+#include <svx/svditer.hxx>
 
 #include <stlpool.hxx>
 #include <stlsheet.hxx>
@@ -129,9 +130,9 @@ void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
         pStyle = static_cast<ScStyleSheet*>(pPool->Next());
     }
 
-    // Change Cell / Text attributes
     for (SCTAB nTab = 0; nTab < rDocument.GetTableCount(); nTab++)
     {
+        // Change Cell / Text attributes
         ScDocAttrIterator aAttributeIterator(rDocument, nTab, 0, 0, rDocument.MaxCol(),
                                              rDocument.MaxRow());
         SCCOL nCol = 0;
@@ -143,6 +144,16 @@ void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
             auto* pNonConstPattern = const_cast<ScPatternAttr*>(pPattern);
             auto& rItemSet = pNonConstPattern->GetItemSet();
             changeCellItems(rItemSet, *pColorSet);
+        }
+
+        // Change all SdrObjects
+        SdrPage* pPage = rDocument.GetDrawLayer()->GetPage(static_cast<sal_uInt16>(nTab));
+        SdrObjListIter aIter(pPage, SdrIterMode::DeepNoGroups);
+        SdrObject* pObject = aIter.Next();
+        while (pObject)
+        {
+            svx::theme::updateSdrObject(*pColorSet, pObject);
+            pObject = aIter.Next();
         }
     }
 }
