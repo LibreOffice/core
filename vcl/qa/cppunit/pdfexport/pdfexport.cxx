@@ -4670,6 +4670,71 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testRexportResourceItemReference)
     CPPUNIT_ASSERT(pFontWidths);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf48707_1)
+{
+    // Import the bugdoc and export as PDF.
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    saveAsPDF(u"tdf48707-1.fodt");
+
+    // Parse the export result with pdfium.
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    auto pPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT(pPage);
+
+    int nPageObjectCount = pPage->getObjectCount();
+
+    CPPUNIT_ASSERT_EQUAL(6, nPageObjectCount);
+
+    auto pTextPage = pPage->getTextPage();
+
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPage->getObject(i);
+        // The text and path objects (underline and overline) should all be red.
+        if (pPageObject->getType() == vcl::pdf::PDFPageObjectType::Text)
+            CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, pPageObject->getFillColor());
+        else
+            CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, pPageObject->getStrokeColor());
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf48707_2)
+{
+    // Import the bugdoc and export as PDF.
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    saveAsPDF(u"tdf48707-2.fodt");
+
+    // Parse the export result with pdfium.
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    auto pPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT(pPage);
+
+    int nPageObjectCount = pPage->getObjectCount();
+
+    CPPUNIT_ASSERT_EQUAL(13, nPageObjectCount);
+
+    auto pTextPage = pPage->getTextPage();
+
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPage->getObject(i);
+        if (pPageObject->getType() != vcl::pdf::PDFPageObjectType::Path)
+            continue;
+
+        // The table-like paths should be red, underline and overline should be black.
+        if (i >= 8)
+            CPPUNIT_ASSERT_EQUAL(COL_BLACK, pPageObject->getStrokeColor());
+        else
+            CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, pPageObject->getStrokeColor());
+    }
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -7760,6 +7760,9 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, tools::Long nWidth, FontStr
     if ( aUnderlineColor.IsTransparent() )
         aUnderlineColor = aStrikeoutColor;
 
+    if ( aOverlineColor.IsTransparent() )
+        aOverlineColor = aStrikeoutColor;
+
     if ( (eUnderline == LINESTYLE_SMALLWAVE) ||
          (eUnderline == LINESTYLE_WAVE) ||
          (eUnderline == LINESTYLE_DOUBLEWAVE) ||
