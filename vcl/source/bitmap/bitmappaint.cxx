@@ -61,6 +61,8 @@ bool Bitmap::Erase(const Color& rFillColor)
 bool Bitmap::Invert()
 {
     ScopedReadAccess pReadAcc(*this);
+    if (!pReadAcc)
+        return false;
 
     if (pReadAcc->HasPalette())
     {
