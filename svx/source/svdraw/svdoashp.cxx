@@ -1036,14 +1036,16 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     // Equations
     static constexpr OUString sEquations(  u"Equations"_ustr  );
     pAny = aGeometryItem.GetPropertyValueByName( sEquations );
-    if ( !pAny && pDefCustomShape && pDefCustomShape->nCalculation && pDefCustomShape->pCalculation )
+    if (!pAny && pDefCustomShape && !pDefCustomShape->pCalculation.empty() )
     {
-        sal_Int32 i, nCount = pDefCustomShape->nCalculation;
+        sal_Int32 i, nCount = pDefCustomShape->pCalculation.size();
         uno::Sequence< OUString > seqEquations( nCount );
         auto pseqEquations = seqEquations.getArray();
-        const SvxMSDffCalculationData* pData = pDefCustomShape->pCalculation;
-        for ( i = 0; i < nCount; i++, pData++ )
+        for (i = 0; i < nCount; i++)
+        {
+            const SvxMSDffCalculationData* pData = &pDefCustomShape->pCalculation[i];
             pseqEquations[ i ] = EnhancedCustomShape2d::GetEquation( pData->nFlags, pData->nVal[ 0 ], pData->nVal[ 1 ], pData->nVal[ 2 ] );
+        }
         aPropVal.Name = sEquations;
         aPropVal.Value <<= seqEquations;
         aGeometryItem.SetPropertyValue( aPropVal );
@@ -1274,24 +1276,26 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
         case DefaultType::Equations :
         {
             pAny = rGeometryItem.GetPropertyValueByName( "Equations" );
-            if ( pAny && pDefCustomShape && pDefCustomShape->nCalculation && pDefCustomShape->pCalculation )
+            if (pAny && pDefCustomShape && !pDefCustomShape->pCalculation.empty())
             {
                 uno::Sequence<OUString> seqEquations1;
                 if ( *pAny >>= seqEquations1 )
                 {
-                    sal_Int32 i, nCount = pDefCustomShape->nCalculation;
+                    sal_Int32 i, nCount = pDefCustomShape->pCalculation.size();
                     uno::Sequence<OUString> seqEquations2( nCount );
                     auto pseqEquations2 = seqEquations2.getArray();
 
-                    const SvxMSDffCalculationData* pData = pDefCustomShape->pCalculation;
-                    for ( i = 0; i < nCount; i++, pData++ )
+                    for (i = 0; i < nCount; i++)
+                    {
+                        const SvxMSDffCalculationData* pData = &pDefCustomShape->pCalculation[i];
                         pseqEquations2[ i ] = EnhancedCustomShape2d::GetEquation( pData->nFlags, pData->nVal[ 0 ], pData->nVal[ 1 ], pData->nVal[ 2 ] );
+                    }
 
                     if ( seqEquations1 == seqEquations2 )
                         bIsDefaultGeometry = true;
                 }
             }
-            else if ( pDefCustomShape && ( ( pDefCustomShape->nCalculation == 0 ) || ( pDefCustomShape->pCalculation == nullptr ) ) )
+            else if (pDefCustomShape && pDefCustomShape->pCalculation.empty())
                 bIsDefaultGeometry = true;
         }
         break;

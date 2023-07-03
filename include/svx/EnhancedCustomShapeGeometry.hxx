@@ -73,8 +73,7 @@ struct mso_CustomShape
     std::span<const SvxMSDffVertPair>       pVertices;
     sal_uInt16*                             pElements;
     sal_uInt32                              nElements;
-    SvxMSDffCalculationData*                pCalculation;
-    sal_uInt32                              nCalculation;
+    std::span<const SvxMSDffCalculationData> pCalculation;
     sal_Int32*                              pDefData;
     SvxMSDffTextRectangles*                 pTextRect;
     sal_uInt32                              nTextRect;
