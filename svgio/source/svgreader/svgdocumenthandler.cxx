@@ -413,8 +413,7 @@ namespace
 
                 default:
                 {
-                    /// invalid token, ignore
-                    SAL_INFO( "svgio", "Unknown Base SvgToken <" + aName + "> (!)" );
+                    mpTarget = new SvgNode(SVGToken::Unknown, maDocument, mpTarget);
                     break;
                 }
             }
@@ -498,6 +497,8 @@ namespace
                 /// structural element pattern
                 case SVGToken::Pattern:
 
+                default:
+
                 /// content handling after parsing
                 {
                     if(mpTarget)
@@ -515,10 +516,6 @@ namespace
                         OSL_ENSURE(false, "Closing token, but no context (!)");
                     }
                     break;
-                }
-                default:
-                {
-                    /// invalid token, ignore
                 }
             }
 

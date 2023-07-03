@@ -395,20 +395,10 @@ namespace {
             mbDecomposing(false),
             mbCssStyleVectorBuilt(false)
         {
-            OSL_ENSURE(SVGToken::Unknown != maType, "SvgNode with unknown type created (!)");
-
-            if(pParent)
+            // tdf#150124 ignore when parent is unknown
+            if(pParent && pParent->getType() != SVGToken::Unknown)
             {
                 pParent->maChildren.emplace_back(this);
-            }
-            else
-            {
-#ifdef DBG_UTIL
-                if(SVGToken::Svg != getType())
-                {
-                    OSL_ENSURE(false, "No parent for this node (!)");
-                }
-#endif
             }
         }
 

@@ -1,0 +1,12 @@
+<svg id="svg-root" width="100%" height="100%"
+  viewBox="0 0 480 360" xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+  <invented>
+  <rect id='r1' x='0' y='0' width='50' height='50' fill='red'/>
+  <g>
+    <rect id='r2' x='60' y='0' width='50' height='50' fill='green'/>
+  </g>
+  <circle id="myCircle" cx="50" cy="50" r="40" stroke="blue" />
+  </invented>
+  <use href="myCircle" x="20" fill="white" stroke="red" />
+</svg>
