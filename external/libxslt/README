@@ -1,1 +1,1 @@
-Gnome xslt library written in C, from [http://xmlsoft.org/xslt/]
+libxslt is an XSLT processor based on libxml2, from [https://gitlab.gnome.org/GNOME/libxslt/]
