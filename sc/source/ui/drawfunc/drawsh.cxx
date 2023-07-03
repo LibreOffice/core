@@ -260,9 +260,9 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 
                 if( pView->AreObjectsMarked() )
                 {
-                    SfxItemSet aNewArgs = rReq.GetArgs()->CloneAsValue();
-                    lcl_convertStringArguments(aNewArgs);
-                    pView->SetAttrToMarked( aNewArgs, false );
+                    std::unique_ptr<SfxItemSet> aNewArgs = rReq.GetArgs()->Clone();
+                    lcl_convertStringArguments(*aNewArgs);
+                    pView->SetAttrToMarked(*aNewArgs, false);
                 }
                 else
                     pView->SetDefaultAttr( *rReq.GetArgs(), false);
