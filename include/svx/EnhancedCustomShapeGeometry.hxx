@@ -75,8 +75,7 @@ struct mso_CustomShape
     sal_uInt32                              nElements;
     std::span<const SvxMSDffCalculationData> pCalculation;
     sal_Int32*                              pDefData;
-    SvxMSDffTextRectangles*                 pTextRect;
-    sal_uInt32                              nTextRect;
+    std::span<const SvxMSDffTextRectangles> pTextRect;
     sal_Int32                               nCoordWidth;
     sal_Int32                               nCoordHeight;
     sal_Int32                               nXRef;

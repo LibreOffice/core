@@ -1015,14 +1015,14 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     // Path/TextFrames
     static constexpr OUString sTextFrames( u"TextFrames"_ustr );
     pAny = aGeometryItem.GetPropertyValueByName( sPath, sTextFrames );
-    if ( !pAny && pDefCustomShape && pDefCustomShape->nTextRect && pDefCustomShape->pTextRect )
+    if (!pAny && pDefCustomShape && !pDefCustomShape->pTextRect.empty())
     {
-        sal_Int32 i, nCount = pDefCustomShape->nTextRect;
+        sal_Int32 i, nCount = pDefCustomShape->pTextRect.size();
         uno::Sequence<drawing::EnhancedCustomShapeTextFrame> seqTextFrames( nCount );
         auto pseqTextFrames = seqTextFrames.getArray();
-        const SvxMSDffTextRectangles* pRectangles = pDefCustomShape->pTextRect;
-        for ( i = 0; i < nCount; i++, pRectangles++ )
+        for (i = 0; i < nCount; i++)
         {
+            const SvxMSDffTextRectangles* pRectangles = &pDefCustomShape->pTextRect[i];
             EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pseqTextFrames[ i ].TopLeft.First,     pRectangles->nPairA.nValA );
             EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pseqTextFrames[ i ].TopLeft.Second,    pRectangles->nPairA.nValB );
             EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pseqTextFrames[ i ].BottomRight.First,  pRectangles->nPairB.nValA );
@@ -1303,17 +1303,17 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
         case DefaultType::TextFrames :
         {
             pAny = rGeometryItem.GetPropertyValueByName( sPath, "TextFrames" );
-            if ( pAny && pDefCustomShape && pDefCustomShape->nTextRect && pDefCustomShape->pTextRect )
+            if (pAny && pDefCustomShape && !pDefCustomShape->pTextRect.empty())
             {
                 uno::Sequence<drawing::EnhancedCustomShapeTextFrame> seqTextFrames1;
                 if ( *pAny >>= seqTextFrames1 )
                 {
-                    sal_Int32 i, nCount = pDefCustomShape->nTextRect;
+                    sal_Int32 i, nCount = pDefCustomShape->pTextRect.size();
                     uno::Sequence<drawing::EnhancedCustomShapeTextFrame> seqTextFrames2( nCount );
                     auto pseqTextFrames2 = seqTextFrames2.getArray();
-                    const SvxMSDffTextRectangles* pRectangles = pDefCustomShape->pTextRect;
-                    for ( i = 0; i < nCount; i++, pRectangles++ )
+                    for (i = 0; i < nCount; i++)
                     {
+                        const SvxMSDffTextRectangles* pRectangles = &pDefCustomShape->pTextRect[i];
                         EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pseqTextFrames2[ i ].TopLeft.First,    pRectangles->nPairA.nValA );
                         EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pseqTextFrames2[ i ].TopLeft.Second,   pRectangles->nPairA.nValB );
                         EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pseqTextFrames2[ i ].BottomRight.First,  pRectangles->nPairB.nValA );
@@ -1323,7 +1323,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
                         bIsDefaultGeometry = true;
                 }
             }
-            else if ( pDefCustomShape && ( ( pDefCustomShape->nTextRect == 0 ) || ( pDefCustomShape->pTextRect == nullptr ) ) )
+            else if (pDefCustomShape && pDefCustomShape->pTextRect.empty())
                 bIsDefaultGeometry = true;
         }
         break;
