@@ -3306,7 +3306,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf152231)
                 ++nPara;
                 auto pKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject->Lookup("K"));
                 CPPUNIT_ASSERT(pKids);
-                // one problem was that that some StructElem were missing kids
+                // one problem was that some StructElem were missing kids
                 CPPUNIT_ASSERT(!pKids->GetElements().empty());
             }
         }
