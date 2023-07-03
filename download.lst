@@ -294,8 +294,8 @@ LIBASSUAN_TARBALL := libassuan-2.5.6.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBATOMIC_OPS_SHA256SUM := 1d6a279edf81767e74d2ad2c9fce09459bc65f12c6525a40b0cb3e53c089f665
-LIBATOMIC_OPS_TARBALL := libatomic_ops-7.6.8.tar.gz
+LIBATOMIC_OPS_SHA256SUM := 15676e7674e11bda5a7e50a73f4d9e7d60452271b8acf6fd39a71fefdf89fa31
+LIBATOMIC_OPS_TARBALL := libatomic_ops-7.8.0.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts

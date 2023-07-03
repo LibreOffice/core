@@ -25,6 +25,7 @@ $(call gb_ExternalProject_get_state_target,libatomic_ops,build) :
 			CXXFLAGS="$(CXXFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_VISIBILITY_FLAGS_CXX) $(call gb_ExternalProject_get_build_flags,libatomic_ops)" \
 			LDFLAGS="$(call gb_ExternalProject_get_link_flags,libatomic_ops)") \
 		$(gb_RUN_CONFIGURE) ./configure \
+			--disable-gpl \
 			$(gb_CONFIGURE_PLATFORMS) \
 		&& $(MAKE) \
 	)
