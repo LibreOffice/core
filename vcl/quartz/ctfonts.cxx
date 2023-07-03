@@ -76,12 +76,12 @@ CoreTextFont::~CoreTextFont()
         CFRelease(mpCTFont);
 }
 
-void CoreTextFont::GetFontMetric( ImplFontMetricDataRef const & rxFontMetric )
+void CoreTextFont::GetFontMetric( FontMetricDataRef const & rxFontMetric )
 {
     rxFontMetric->ImplCalcLineSpacing(this);
     rxFontMetric->ImplInitBaselines(this);
 
-    // since ImplFontMetricData::mnWidth is only used for stretching/squeezing fonts
+    // since FontMetricData::mnWidth is only used for stretching/squeezing fonts
     // setting this width to the pixel height of the fontsize is good enough
     // it also makes the calculation of the stretch factor simple
     rxFontMetric->SetWidth( lrint( CTFontGetSize(mpCTFont) * mfFontStretch) );

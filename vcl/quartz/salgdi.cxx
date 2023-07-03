@@ -208,7 +208,7 @@ void AquaSalGraphics::SetTextColor( Color nColor )
     maShared.maTextColor = nColor;
 }
 
-void AquaSalGraphics::GetFontMetric(ImplFontMetricDataRef& rxFontMetric, int nFallbackLevel)
+void AquaSalGraphics::GetFontMetric(FontMetricDataRef& rxFontMetric, int nFallbackLevel)
 {
     if (nFallbackLevel < MAX_FALLBACK && mpFont[nFallbackLevel])
     {

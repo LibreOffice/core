@@ -834,7 +834,7 @@ void WinSalGraphics::SetFont(LogicalFontInstance* pFont, int nFallbackLevel)
     }
 }
 
-void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFallbackLevel )
+void WinSalGraphics::GetFontMetric( FontMetricDataRef& rxFontMetric, int nFallbackLevel )
 {
     // temporarily change the HDC to the font in the fallback level
     rtl::Reference<WinFontInstance> pFontInstance = mpWinFontEntry[nFallbackLevel];

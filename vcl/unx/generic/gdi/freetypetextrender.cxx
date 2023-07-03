@@ -110,7 +110,7 @@ void FreeTypeTextRenderImpl::GetDevFontList( vcl::font::PhysicalFontCollection* 
     GenPspGraphics::GetDevFontListHelper(pFontCollection);
 }
 
-void FreeTypeTextRenderImpl::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFallbackLevel )
+void FreeTypeTextRenderImpl::GetFontMetric( FontMetricDataRef& rxFontMetric, int nFallbackLevel )
 {
     if( nFallbackLevel >= MAX_FALLBACK )
         return;

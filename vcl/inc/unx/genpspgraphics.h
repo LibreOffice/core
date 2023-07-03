@@ -41,7 +41,7 @@ namespace psp { struct JobData; class PrinterGfx; }
 class FreetypeFontInstance;
 class FontAttributes;
 class SalInfoPrinter;
-class ImplFontMetricData;
+class FontMetricData;
 
 class VCL_DLLPUBLIC GenPspGraphics final : public SalGraphicsAutoDelegateToImpl
 {
@@ -78,7 +78,7 @@ public:
 
     virtual void            SetTextColor( Color nColor ) override;
     virtual void            SetFont(LogicalFontInstance*, int nFallbackLevel) override;
-    virtual void            GetFontMetric( ImplFontMetricDataRef&, int nFallbackLevel ) override;
+    virtual void            GetFontMetric( FontMetricDataRef&, int nFallbackLevel ) override;
     virtual FontCharMapRef  GetFontCharMap() const override;
     virtual bool            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const override;
     virtual void            GetDevFontList( vcl::font::PhysicalFontCollection* ) override;

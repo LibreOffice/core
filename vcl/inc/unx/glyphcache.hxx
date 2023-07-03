@@ -121,7 +121,7 @@ public:
     FT_Face                 GetFtFace() const;
     const FontConfigFontOptions* GetFontOptions() const;
 
-    void                    GetFontMetric(ImplFontMetricDataRef const &) const;
+    void                    GetFontMetric(FontMetricDataRef const &) const;
 
     bool                    GetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const;
     bool                    GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const;

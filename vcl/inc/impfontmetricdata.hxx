@@ -28,8 +28,8 @@
 
 #include <vector>
 
-class ImplFontMetricData;
-typedef tools::SvRef<ImplFontMetricData> ImplFontMetricDataRef;
+class FontMetricData;
+typedef tools::SvRef<FontMetricData> FontMetricDataRef;
 
 class OutputDevice;
 namespace vcl::font
@@ -38,10 +38,10 @@ class FontSelectPattern;
 }
 class LogicalFontInstance;
 
-class VCL_DLLPUBLIC ImplFontMetricData final : public FontAttributes, public SvRefBase
+class VCL_DLLPUBLIC FontMetricData final : public FontAttributes, public SvRefBase
 {
 public:
-    explicit        ImplFontMetricData( const vcl::font::FontSelectPattern& );
+    explicit        FontMetricData( const vcl::font::FontSelectPattern& );
 
     // font instance attributes from the font request
     tools::Long            GetWidth() const                                                { return mnWidth; }

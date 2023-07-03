@@ -74,7 +74,7 @@ class VCL_PLUGIN_PUBLIC LogicalFontInstance : public salhelper::SimpleReferenceO
 public: // TODO: make data members private
     virtual ~LogicalFontInstance() override;
 
-    ImplFontMetricDataRef mxFontMetric; // Font attributes
+    FontMetricDataRef mxFontMetric; // Font attributes
     const ConvertChar* mpConversion; // used e.g. for StarBats->StarSymbol
 
     tools::Long mnLineHeight;

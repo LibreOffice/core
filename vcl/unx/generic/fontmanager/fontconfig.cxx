@@ -1193,7 +1193,7 @@ void PrintFontManager::Substitute(vcl::font::FontSelectPattern &rPattern, OUStri
         {
             // Some fonts exist in "more_fonts", but have no U+00B7 MIDDLE DOT
             // so will always glyph fallback on measuring mnBulletOffset in
-            // ImplFontMetricData::ImplInitTextLineSize
+            // FontMetricData::ImplInitTextLineSize
             return;
         }
         if (rPattern.maTargetName == "Linux Libertine G" && rPattern.maSearchName == "Linux Libertine O")

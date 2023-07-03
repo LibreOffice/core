@@ -28,7 +28,7 @@
 
 LogicalFontInstance::LogicalFontInstance(const vcl::font::PhysicalFontFace& rFontFace,
                                          const vcl::font::FontSelectPattern& rFontSelData)
-    : mxFontMetric(new ImplFontMetricData(rFontSelData))
+    : mxFontMetric(new FontMetricData(rFontSelData))
     , mpConversion(nullptr)
     , mnLineHeight(0)
     , mnOwnOrientation(0)

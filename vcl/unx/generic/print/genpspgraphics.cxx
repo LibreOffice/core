@@ -282,7 +282,7 @@ void GenPspGraphics::ClearDevFontCache()
     FreetypeManager::get().ClearFontCache();
 }
 
-void GenPspGraphics::GetFontMetric(ImplFontMetricDataRef& rxFontMetric, int nFallbackLevel)
+void GenPspGraphics::GetFontMetric(FontMetricDataRef& rxFontMetric, int nFallbackLevel)
 {
     if (nFallbackLevel >= MAX_FALLBACK)
         return;

@@ -90,7 +90,7 @@ class CoreTextFont final : public LogicalFontInstance
 public:
     ~CoreTextFont() override;
 
-    void       GetFontMetric( ImplFontMetricDataRef const & );
+    void       GetFontMetric( FontMetricDataRef const & );
     bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const override;
 
     CTFontRef GetCTFont() const { return mpCTFont; }
@@ -532,7 +532,7 @@ public:
     // set the font
     virtual void            SetFont( LogicalFontInstance*, int nFallbackLevel ) override;
     // get the current font's metrics
-    virtual void            GetFontMetric( ImplFontMetricDataRef&, int nFallbackLevel ) override;
+    virtual void            GetFontMetric( FontMetricDataRef&, int nFallbackLevel ) override;
     // get the repertoire of the current font
     virtual FontCharMapRef  GetFontCharMap() const override;
     virtual bool            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const override;

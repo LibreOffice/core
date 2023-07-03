@@ -31,7 +31,7 @@ void SvpSalGraphics::SetFont(LogicalFontInstance* pIFSD, int nFallbackLevel)
     m_aTextRenderImpl.SetFont(pIFSD, nFallbackLevel);
 }
 
-void SvpSalGraphics::GetFontMetric( ImplFontMetricDataRef& xFontMetric, int nFallbackLevel )
+void SvpSalGraphics::GetFontMetric( FontMetricDataRef& xFontMetric, int nFallbackLevel )
 {
     m_aTextRenderImpl.GetFontMetric(xFontMetric, nFallbackLevel);
 }

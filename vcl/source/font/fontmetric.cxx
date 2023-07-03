@@ -130,7 +130,7 @@ size_t FontMetric::GetHashValueIgnoreColor() const
     return hash;
 }
 
-ImplFontMetricData::ImplFontMetricData( const vcl::font::FontSelectPattern& rFontSelData )
+FontMetricData::FontMetricData( const vcl::font::FontSelectPattern& rFontSelData )
     : FontAttributes( rFontSelData )
     , mnHeight ( rFontSelData.mnHeight )
     , mnWidth ( rFontSelData.mnWidth )
@@ -176,7 +176,7 @@ ImplFontMetricData::ImplFontMetricData( const vcl::font::FontSelectPattern& rFon
     SetStyleName( rFontSelData.GetStyleName() );
 }
 
-bool ImplFontMetricData::ShouldNotUseUnderlineMetrics() const
+bool FontMetricData::ShouldNotUseUnderlineMetrics() const
 {
     if (utl::ConfigManager::IsFuzzing())
         return false;
@@ -191,7 +191,7 @@ bool ImplFontMetricData::ShouldNotUseUnderlineMetrics() const
     return false;
 }
 
-bool ImplFontMetricData::ImplInitTextLineSizeHarfBuzz(LogicalFontInstance* pFont)
+bool FontMetricData::ImplInitTextLineSizeHarfBuzz(LogicalFontInstance* pFont)
 {
     if (ShouldNotUseUnderlineMetrics())
         return false;
@@ -252,7 +252,7 @@ bool ImplFontMetricData::ImplInitTextLineSizeHarfBuzz(LogicalFontInstance* pFont
     return true;
 }
 
-void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
+void FontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
 {
     mnBulletOffset = ( pDev->GetTextWidth( OUString( u' ' ) ) - pDev->GetTextWidth( OUString( u'\x00b7' ) ) ) >> 1 ;
 
@@ -345,7 +345,7 @@ void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
 }
 
 
-void ImplFontMetricData::ImplInitAboveTextLineSize( const OutputDevice* pDev )
+void FontMetricData::ImplInitAboveTextLineSize( const OutputDevice* pDev )
 {
     ImplInitTextLineSize(pDev);
 
@@ -375,7 +375,7 @@ void ImplFontMetricData::ImplInitAboveTextLineSize( const OutputDevice* pDev )
     mnAboveWUnderlineOffset = nCeiling + (nIntLeading + 1) / 2;
 }
 
-void ImplFontMetricData::ImplInitFlags( const OutputDevice* pDev )
+void FontMetricData::ImplInitFlags( const OutputDevice* pDev )
 {
     const vcl::Font& rFont ( pDev->GetFont() );
     bool bCentered = true;
@@ -392,7 +392,7 @@ void ImplFontMetricData::ImplInitFlags( const OutputDevice* pDev )
     SetFullstopCenteredFlag( bCentered );
 }
 
-bool ImplFontMetricData::ShouldUseWinMetrics(int nAscent, int nDescent, int nTypoAscent,
+bool FontMetricData::ShouldUseWinMetrics(int nAscent, int nDescent, int nTypoAscent,
                                              int nTypoDescent, int nWinAscent,
                                              int nWinDescent) const
 {
@@ -425,7 +425,7 @@ constexpr auto ASCENT_HHEA = static_cast<hb_ot_metrics_tag_t>(HB_TAG('H', 'a', '
 constexpr auto DESCENT_HHEA = static_cast<hb_ot_metrics_tag_t>(HB_TAG('H', 'd', 's', 'c'));
 constexpr auto LINEGAP_HHEA = static_cast<hb_ot_metrics_tag_t>(HB_TAG('H', 'l', 'g', 'p'));
 
-void ImplFontMetricData::ImplCalcLineSpacing(LogicalFontInstance* pFontInstance)
+void FontMetricData::ImplCalcLineSpacing(LogicalFontInstance* pFontInstance)
 {
     mnAscent = mnDescent = mnExtLeading = mnIntLeading = 0;
     auto* pFace = pFontInstance->GetFontFace();
@@ -538,7 +538,7 @@ void ImplFontMetricData::ImplCalcLineSpacing(LogicalFontInstance* pFontInstance)
         mnIntLeading = mnAscent + mnDescent - mnHeight;
 }
 
-void ImplFontMetricData::ImplInitBaselines(LogicalFontInstance *pFontInstance)
+void FontMetricData::ImplInitBaselines(LogicalFontInstance *pFontInstance)
 {
     hb_font_t* pHbFont = pFontInstance->GetHbFont();
     double fScale = 0;
