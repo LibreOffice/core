@@ -2539,13 +2539,13 @@ bool EscherPropertyContainer::IsDefaultObject(
 void EscherPropertyContainer::LookForPolarHandles( const MSO_SPT eShapeType, sal_Int32& nAdjustmentsWhichNeedsToBeConverted )
 {
     const mso_CustomShape* pDefCustomShape = GetCustomShapeContent( eShapeType );
-    if ( !(pDefCustomShape && pDefCustomShape->nHandles && pDefCustomShape->pHandles) )
+    if ( !pDefCustomShape || pDefCustomShape->pHandles.empty() )
         return;
 
-    sal_Int32 k, nkCount = pDefCustomShape->nHandles;
-    const SvxMSDffHandle* pData = pDefCustomShape->pHandles;
-    for ( k = 0; k < nkCount; k++, pData++ )
+    sal_Int32 k, nkCount = pDefCustomShape->pHandles.size();
+    for (k = 0; k < nkCount; k++)
     {
+        const SvxMSDffHandle* pData = &pDefCustomShape->pHandles[k];
         if ( pData->nFlags & SvxMSDffHandleFlags::POLAR )
         {
             if ( ( pData->nPositionY >= 0x256 ) || ( pData->nPositionY <= 0x107 ) )

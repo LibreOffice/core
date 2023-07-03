@@ -1054,14 +1054,14 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     // Handles
     static constexpr OUString sHandles(  u"Handles"_ustr  );
     pAny = aGeometryItem.GetPropertyValueByName( sHandles );
-    if ( !pAny && pDefCustomShape && pDefCustomShape->nHandles && pDefCustomShape->pHandles )
+    if  (!pAny && pDefCustomShape && !pDefCustomShape->pHandles.empty())
     {
-        sal_Int32 i, nCount = pDefCustomShape->nHandles;
-        const SvxMSDffHandle* pData = pDefCustomShape->pHandles;
+        sal_Int32 i, nCount = pDefCustomShape->pHandles.size();
         uno::Sequence<beans::PropertyValues> seqHandles( nCount );
         auto pseqHandles = seqHandles.getArray();
-        for ( i = 0; i < nCount; i++, pData++ )
+        for (i = 0; i < nCount; i++)
         {
+            const SvxMSDffHandle* pData = &pDefCustomShape->pHandles[i];
             sal_Int32 nPropertiesNeeded;
             beans::PropertyValues& rPropValues = pseqHandles[ i ];
             nPropertiesNeeded = GetNumberOfProperties( pData );

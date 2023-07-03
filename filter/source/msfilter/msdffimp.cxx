@@ -2175,12 +2175,13 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
     else
     {
         const mso_CustomShape* pDefCustomShape = GetCustomShapeContent( rObjData.eShapeType );
-        if ( pDefCustomShape && pDefCustomShape->nHandles && pDefCustomShape->pHandles )
+        if (pDefCustomShape && !pDefCustomShape->pHandles.empty())
         {
-            sal_uInt32 i, nCnt = pDefCustomShape->nHandles;
-            const SvxMSDffHandle* pData = pDefCustomShape->pHandles;
-            for ( i = 0; i < nCnt; i++, pData++ )
+            // TODO: This is very similar to EscherPropertyContainer::LookForPolarHandles
+            sal_uInt32 i, nCnt = pDefCustomShape->pHandles.size();
+            for (i = 0; i < nCnt; i++)
             {
+                const SvxMSDffHandle* pData = &pDefCustomShape->pHandles[i];
                 if ( pData->nFlags & SvxMSDffHandleFlags::POLAR )
                 {
                     if ( ( pData->nPositionY >= 0x256 ) || ( pData->nPositionY <= 0x107 ) )

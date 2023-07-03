@@ -81,8 +81,7 @@ struct mso_CustomShape
     sal_Int32                               nXRef;
     sal_Int32                               nYRef;
     std::span<const SvxMSDffVertPair>       pGluePoints;
-    SvxMSDffHandle*                         pHandles;
-    sal_uInt32                              nHandles;
+    std::span<const SvxMSDffHandle>         pHandles;
 };
 
 #define MSO_I | sal_Int32(0x80000000)
