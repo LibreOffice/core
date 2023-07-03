@@ -104,6 +104,12 @@ ScValidationDlg::ScValidationDlg(weld::Window* pParent, const SfxItemSet* pArgSe
 
 void ScValidationDlg::EndDialog(int nResponse)
 {
+    // tdf#155708 - do not close, just hide validation window if we click in another sheet
+    if (nResponse == nCloseResponseToJustHide && getDialog()->get_visible())
+    {
+        getDialog()->hide();
+        return;
+    }
     // tdf#137215 ensure original modality of true is restored before dialog loop ends
     if (m_bOwnRefHdlr)
         RemoveRefDlg(true);

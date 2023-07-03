@@ -522,12 +522,21 @@ void SfxChildWindow::Show( ShowFlags nFlags )
     {
         if (!xController->getDialog()->get_visible())
         {
-            weld::DialogController::runAsync(xController,
-                [this](sal_Int32 nResult) {
-                    if (nResult == nCloseResponseToJustHide)
-                        return;
-                    xController->Close();
-                });
+            if (nScValidityWindowSlotID == GetType())
+            {
+                // tdf#155708 - do not run a new (Async) validation window,
+                // because we already have one in sync mode, just show the running one
+                xController->getDialog()->show();
+            }
+            else
+            {
+                weld::DialogController::runAsync(xController,
+                    [this](sal_Int32 nResult) {
+                        if (nResult == nCloseResponseToJustHide)
+                            return;
+                        xController->Close();
+                    });
+            }
         }
     }
     else
