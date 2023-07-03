@@ -154,6 +154,8 @@ class ScValidationDlg
     bool    m_bOwnRefHdlr:1;
     bool    m_bRefInputting:1;
 
+    const int nCloseResponseToJustHide = -42;
+
     std::unique_ptr<weld::Container> m_xHBox;
 
     bool    EnterRefStatus();
