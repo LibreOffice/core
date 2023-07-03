@@ -2735,14 +2735,14 @@ void SwEditShell::AutoFormat( const SvxSwAutoFormatFlags* pAFlags )
         {
             if( rPaM.HasMark() )
             {
-                SwAutoFormat aFormat( this, aAFFlags, &rPaM.Start()->GetNode(),
+                SwAutoFormat( this, aAFFlags, &rPaM.Start()->GetNode(),
                                      &rPaM.End()->GetNode() );
             }
         }
     }
     else
     {
-        SwAutoFormat aFormat( this, std::move(aAFFlags) );
+        SwAutoFormat( this, std::move(aAFFlags) );
     }
 
     EndUndo( SwUndoId::AUTOFORMAT );
