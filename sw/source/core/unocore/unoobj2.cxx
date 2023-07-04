@@ -1319,12 +1319,14 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
         break;
         default:
         {
-            // then it is the body text
-            const uno::Reference<frame::XModel> xModel =
-                rDoc.GetDocShell()->GetBaseModel();
-            const uno::Reference< text::XTextDocument > xDoc(
-                xModel, uno::UNO_QUERY);
-            xParentText = xDoc->getText();
+            if (SwDocShell *const pDocSh = rDoc.GetDocShell())
+            {
+                // then it is the body text
+                const uno::Reference<frame::XModel> xModel = pDocSh->GetBaseModel();
+                const uno::Reference< text::XTextDocument > xDoc(
+                    xModel, uno::UNO_QUERY);
+                xParentText = xDoc->getText();
+            }
         }
     }
     OSL_ENSURE(xParentText.is(), "no parent text?");
