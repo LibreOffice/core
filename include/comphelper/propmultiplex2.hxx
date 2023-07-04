@@ -80,7 +80,6 @@ class COMPHELPER_DLLPUBLIC OPropertyChangeMultiplexer2 final
     OPropertyChangeListener2* m_pListener;
     sal_Int32 m_nLockCount;
     bool m_bListening : 1;
-    bool const m_bAutoSetRelease : 1;
 
     void onListenerDestruction();
     virtual ~OPropertyChangeMultiplexer2() override;
@@ -88,8 +87,7 @@ class COMPHELPER_DLLPUBLIC OPropertyChangeMultiplexer2 final
 public:
     OPropertyChangeMultiplexer2(std::mutex& rMutex, std::unique_lock<std::mutex>& rGuard,
                                 OPropertyChangeListener2* _pListener,
-                                const css::uno::Reference<css::beans::XPropertySet>& _rxSet,
-                                bool _bAutoReleaseSet = true);
+                                const css::uno::Reference<css::beans::XPropertySet>& _rxSet);
 
     // XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;

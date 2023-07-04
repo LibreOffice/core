@@ -1543,7 +1543,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 if (auto* pTableShape = dynamic_cast<sdr::table::SdrTableObj*>(SdrObject::getSdrObjectFromXShape(mxShape)))
                 {
                     tools::Rectangle aArea{};
-                    pTableShape->LayoutTableHeight(aArea, /*bFit=*/false);
+                    pTableShape->LayoutTableHeight(aArea);
                     sal_Int32 nCorrectedHeight = aArea.GetHeight();
                     const auto& aShapeSize = mxShape->getSize();
                     if( nCorrectedHeight > aShapeSize.Height )

@@ -256,7 +256,7 @@ public:
     /// Next time layouting would be done, skip it (to layout at the end of multiple actions).
     void SetSkipChangeLayout(bool bSkipChangeLayout);
 
-    void LayoutTableHeight(tools::Rectangle& rArea, bool bFit);
+    void LayoutTableHeight(tools::Rectangle& rArea);
 
     virtual void onEditOutlinerStatusEvent( EditStatus* pEditStatus ) override;
 

@@ -2376,11 +2376,11 @@ void SdrTableObj::CropTableModelToSelection(const CellPos& rStart, const CellPos
     mpImpl->CropTableModelToSelection(rStart, rEnd);
 }
 
-void SdrTableObj::LayoutTableHeight(tools::Rectangle& rArea, bool bFit)
+void SdrTableObj::LayoutTableHeight(tools::Rectangle& rArea)
 {
     if( mpImpl.is() && mpImpl->mpLayouter)
     {
-        mpImpl->mpLayouter->LayoutTableHeight(rArea, bFit);
+        mpImpl->mpLayouter->LayoutTableHeight(rArea, /*bFit*/false);
     }
 }
 

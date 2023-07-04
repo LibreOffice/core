@@ -51,14 +51,12 @@ void OPropertyChangeListener2::setAdapter(std::unique_lock<std::mutex>& /*rGuard
 OPropertyChangeMultiplexer2::OPropertyChangeMultiplexer2(std::mutex& rMutex,
                                                          std::unique_lock<std::mutex>& rGuard,
                                                          OPropertyChangeListener2* _pListener,
-                                                         const Reference<XPropertySet>& _rxSet,
-                                                         bool _bAutoReleaseSet)
+                                                         const Reference<XPropertySet>& _rxSet)
     : m_rMutex(rMutex)
     , m_xSet(_rxSet)
     , m_pListener(_pListener)
     , m_nLockCount(0)
     , m_bListening(false)
-    , m_bAutoSetRelease(_bAutoReleaseSet)
 {
     m_pListener->setAdapter(rGuard, this);
 }
@@ -84,8 +82,7 @@ void OPropertyChangeMultiplexer2::dispose(std::unique_lock<std::mutex>& rGuard)
     m_pListener = nullptr;
     m_bListening = false;
 
-    if (m_bAutoSetRelease)
-        m_xSet = nullptr;
+    m_xSet = nullptr;
 }
 
 void OPropertyChangeMultiplexer2::onListenerDestruction()
@@ -114,8 +111,7 @@ void SAL_CALL OPropertyChangeMultiplexer2::disposing(const EventObject& /*_rSour
     m_pListener = nullptr;
     m_bListening = false;
 
-    if (m_bAutoSetRelease)
-        m_xSet = nullptr;
+    m_xSet = nullptr;
 }
 
 // XPropertyChangeListener

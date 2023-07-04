@@ -848,8 +848,7 @@ namespace basegfx
             css::drawing::LineCap eCap,
             double fMaxAllowedAngle,
             double fMaxPartOfEdge,
-            double fMiterMinimumAngle,
-            basegfx::triangulator::B2DTriangleVector* pTriangles)
+            double fMiterMinimumAngle)
         {
             if(fMaxAllowedAngle > M_PI_2)
             {
@@ -959,7 +958,7 @@ namespace basegfx
                                         fHalfLineWidth,
                                         eJoin,
                                         fMiterMinimumAngle,
-                                        pTriangles));
+                                        nullptr));
                             }
                             else if(aOrientation == B2VectorOrientation::Negative)
                             {
@@ -976,7 +975,7 @@ namespace basegfx
                                         fHalfLineWidth,
                                         eJoin,
                                         fMiterMinimumAngle,
-                                        pTriangles));
+                                        nullptr));
                             }
                         }
 
@@ -995,7 +994,7 @@ namespace basegfx
                                     bLast && eCap == css::drawing::LineCap_ROUND,
                                     bFirst && eCap == css::drawing::LineCap_SQUARE,
                                     bLast && eCap == css::drawing::LineCap_SQUARE,
-                                    pTriangles));
+                                    nullptr));
                         }
                         else
                         {
@@ -1007,7 +1006,7 @@ namespace basegfx
                                     false,
                                     false,
                                     false,
-                                    pTriangles));
+                                    nullptr));
                         }
 
                         // prepare next step
@@ -1030,17 +1029,7 @@ namespace basegfx
                             aCandidate.getB2DPoint(0),
                             fHalfLineWidth));
 
-                    if(nullptr != pTriangles)
-                    {
-                        const basegfx::triangulator::B2DTriangleVector aResult(
-                            basegfx::triangulator::triangulate(
-                                aCircle));
-                        pTriangles->insert(pTriangles->end(), aResult.begin(), aResult.end());
-                    }
-                    else
-                    {
-                        aRetval.append(aCircle);
-                    }
+                    aRetval.append(aCircle);
                 }
 
                 return aRetval;

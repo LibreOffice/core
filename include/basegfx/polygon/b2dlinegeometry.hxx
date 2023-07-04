@@ -139,8 +139,7 @@ namespace basegfx::utils
             css::drawing::LineCap eCap,
             double fMaxAllowedAngle = basegfx::deg2rad(12.5),
             double fMaxPartOfEdge = 0.4,
-            double fMiterMinimumAngle = basegfx::deg2rad(15.0),
-            basegfx::triangulator::B2DTriangleVector* pTriangles = nullptr);
+            double fMiterMinimumAngle = basegfx::deg2rad(15.0));
 
 } // end of namespace basegfx::utils
 
