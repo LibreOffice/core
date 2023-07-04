@@ -3314,6 +3314,96 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf152231)
     CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nPara)>(12), nPara);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf152235)
+{
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    // Enable PDF/UA
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+        { { "PDFUACompliance", uno::Any(true) },
+          { "Watermark", uno::Any(OUString("kendy")) },
+          // need to set a font to avoid assertions about missing "Helvetica"
+          { "WatermarkFontName", uno::Any(OUString("Liberation Sans")) },
+          { "SelectPdfVersion", uno::Any(sal_Int32(17)) } }));
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+    mxComponent = loadFromDesktop("private:factory/swriter");
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    vcl::filter::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents");
+    CPPUNIT_ASSERT(pContents);
+    vcl::filter::PDFStreamElement* pStream = pContents->GetStream();
+    CPPUNIT_ASSERT(pStream);
+    SvMemoryStream& rObjectStream = pStream->GetMemory();
+    // Uncompress it.
+    SvMemoryStream aUncompressed;
+    ZCodec aZCodec;
+    aZCodec.BeginCompression();
+    rObjectStream.Seek(0);
+    aZCodec.Decompress(rObjectStream, aUncompressed);
+    CPPUNIT_ASSERT(aZCodec.EndCompression());
+
+    auto pStart = static_cast<const char*>(aUncompressed.GetData());
+    const char* const pEnd = pStart + aUncompressed.GetSize();
+
+    enum
+    {
+        Default,
+        Artifact,
+        Tagged
+    } state
+        = Default;
+
+    auto nLine(0);
+    auto nTagged(0);
+    auto nArtifacts(0);
+    while (true)
+    {
+        ++nLine;
+        auto const pLine = ::std::find(pStart, pEnd, '\n');
+        if (pLine == pEnd)
+        {
+            break;
+        }
+        std::string_view const line(pStart, pLine - pStart);
+        pStart = pLine + 1;
+        if (!line.empty() && line[0] != '%')
+        {
+            ::std::cerr << nLine << ": " << line << "\n";
+            if (o3tl::starts_with(line, "/Artifact "))
+            {
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("unexpected nesting", Default, state);
+                state = Artifact;
+                ++nArtifacts;
+            }
+            else if (o3tl::starts_with(line, "/Standard<</MCID "))
+            {
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("unexpected nesting", Default, state);
+                state = Tagged;
+                ++nTagged;
+            }
+            else if (line == "EMC")
+            {
+                CPPUNIT_ASSERT_MESSAGE("unexpected end", state != Default);
+                state = Default;
+            }
+            else if (nLine > 1) // first line is expected "0.1 w"
+            {
+                CPPUNIT_ASSERT_MESSAGE("unexpected content outside MCS", state != Default);
+            }
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("unclosed MCS", Default, state);
+    CPPUNIT_ASSERT(nTagged >= 0); // text in body
+    CPPUNIT_ASSERT(nArtifacts >= 2); // 1 watermark + 1 other thing
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf149140)
 {
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
