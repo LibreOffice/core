@@ -858,8 +858,8 @@ Public Function CreateCurrencyField(Optional ByVal ControlName As Variant _
 &apos;&apos;&apos;	Specific args:
 &apos;&apos;&apos;		Border: &quot;3D&quot; (default) or &quot;FLAT&quot; or &quot;NONE&quot;
 &apos;&apos;&apos;		SpinButton:: when True (default = False), a spin button is present
-&apos;&apos;&apos;		MinValue: the smallest value that can be entered in the control. Dafault = -1000000
-&apos;&apos;&apos;		MaxValue: the largest value that can be entered in the control. Dafault = +1000000
+&apos;&apos;&apos;		MinValue: the smallest value that can be entered in the control. Default = -1000000
+&apos;&apos;&apos;		MaxValue: the largest value that can be entered in the control. Default = +1000000
 &apos;&apos;&apos;		Increment: the step when the spin button is pressed. Default = 1
 &apos;&apos;&apos;		Accuracy: specifies the decimal accuracy. Default = 2 decimal digits
 &apos;&apos;&apos;	Returns:
@@ -920,8 +920,8 @@ Public Function CreateDateField(Optional ByVal ControlName As Variant _
 &apos;&apos;&apos;	Specific args:
 &apos;&apos;&apos;		Border: &quot;3D&quot; (default) or &quot;FLAT&quot; or &quot;NONE&quot;
 &apos;&apos;&apos;		Dropdown:: when True (default = False), a dropdown button is shown
-&apos;&apos;&apos;		MinDate: the smallest date that can be entered in the control. Dafault = 1900-01-01
-&apos;&apos;&apos;		MaxDate: the largest Date that can be entered in the control. Dafault = 2200-12-31
+&apos;&apos;&apos;		MinDate: the smallest date that can be entered in the control. Default = 1900-01-01
+&apos;&apos;&apos;		MaxDate: the largest Date that can be entered in the control. Default = 2200-12-31
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
 &apos;&apos;&apos;	Example:
@@ -1133,8 +1133,8 @@ Public Function CreateFormattedField(Optional ByVal ControlName As Variant _
 &apos;&apos;&apos;	Specific args:
 &apos;&apos;&apos;		Border: &quot;3D&quot; (default) or &quot;FLAT&quot; or &quot;NONE&quot;
 &apos;&apos;&apos;		SpinButton:: when True (default = False), a spin button is present
-&apos;&apos;&apos;		MinValue: the smallest value that can be entered in the control. Dafault = -1000000
-&apos;&apos;&apos;		MaxValue: the largest value that can be entered in the control. Dafault = +1000000
+&apos;&apos;&apos;		MinValue: the smallest value that can be entered in the control. Default = -1000000
+&apos;&apos;&apos;		MaxValue: the largest value that can be entered in the control. Default = +1000000
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
 &apos;&apos;&apos;	Example:
@@ -1407,8 +1407,8 @@ Public Function CreateNumericField(Optional ByVal ControlName As Variant _
 &apos;&apos;&apos;	Specific args:
 &apos;&apos;&apos;		Border: &quot;3D&quot; (default) or &quot;FLAT&quot; or &quot;NONE&quot;
 &apos;&apos;&apos;		SpinButton:: when True (default = False), a spin button is present
-&apos;&apos;&apos;		MinValue: the smallest value that can be entered in the control. Dafault = -1000000
-&apos;&apos;&apos;		MaxValue: the largest value that can be entered in the control. Dafault = +1000000
+&apos;&apos;&apos;		MinValue: the smallest value that can be entered in the control. Default = -1000000
+&apos;&apos;&apos;		MaxValue: the largest value that can be entered in the control. Default = +1000000
 &apos;&apos;&apos;		Increment: the step when the spin button is pressed. Default = 1
 &apos;&apos;&apos;		Accuracy: specifies the decimal accuracy. Default = 2 decimal digits
 &apos;&apos;&apos;	Returns:
@@ -1614,8 +1614,8 @@ Public Function CreateScrollBar(Optional ByVal ControlName As Variant _
 &apos;&apos;&apos;	Specific args:
 &apos;&apos;&apos;		Orientation: H[orizontal] or V[ertical]
 &apos;&apos;&apos;		Border: &quot;3D&quot; (default) or &quot;FLAT&quot; or &quot;NONE&quot;
-&apos;&apos;&apos;		MinValue: the smallest value that can be entered in the control. Dafault = 0
-&apos;&apos;&apos;		MaxValue: the largest value that can be entered in the control. Dafault = 100
+&apos;&apos;&apos;		MinValue: the smallest value that can be entered in the control. Default = 0
+&apos;&apos;&apos;		MaxValue: the largest value that can be entered in the control. Default = 100
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
 &apos;&apos;&apos;	Example:
@@ -1794,8 +1794,8 @@ Public Function CreateTimeField(Optional ByVal ControlName As Variant _
 &apos;&apos;&apos;	Create a new control of type TimeField in the actual dialog.
 &apos;&apos;&apos;	Specific args:
 &apos;&apos;&apos;		Border: &quot;3D&quot; (default) or &quot;FLAT&quot; or &quot;NONE&quot;
-&apos;&apos;&apos;		MinTime: the smallest time that can be entered in the control. Dafault = 0
-&apos;&apos;&apos;		MaxTime: the largest time that can be entered in the control. Dafault = 24h
+&apos;&apos;&apos;		MinTime: the smallest time that can be entered in the control. Default = 0
+&apos;&apos;&apos;		MaxTime: the largest time that can be entered in the control. Default = 24h
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
 &apos;&apos;&apos;	Example:
