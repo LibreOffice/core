@@ -2573,6 +2573,21 @@ uno::Sequence<beans::PropertyState> SwXStyle::getPropertyStates(const uno::Seque
                 }
             }
             break;
+            case XATTR_FILLSTYLE:
+            {
+                if (m_rEntry.m_eFamily == SfxStyleFamily::Frame
+                    && xStyle->GetFrameFormat()->DerivedFrom() == GetDoc()->GetDfltFrameFormat())
+                {   // tdf#156155 mpDfltFrameFormat is the parent, but because
+                    // it IsDefault() it is not enumerated/exported as a style
+                    // to ODF, so export its one important value here.
+                    pStates[i] = beans::PropertyState_DIRECT_VALUE;
+                }
+                else
+                {
+                    pStates[i] = pPropSet->getPropertyState(*pEntry, *pSourceSet);
+                }
+            }
+            break;
             case RES_BACKGROUND:
             {
                 // for FlyFrames we need to mark the used properties from type RES_BACKGROUND
