@@ -9,6 +9,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 from libreoffice.uno.propertyvalue import mkPropertyValues
+import platform
 
 class dateFormFieldDialog(UITestCase):
 
@@ -138,6 +139,9 @@ class dateFormFieldDialog(UITestCase):
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "ALT+DOWN"}))
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "ESC"}))
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-            self.assertEqual(writer_doc.getText().getString(), "\nClick to choose a date")
+            if platform.system() == "Windows":
+                self.assertEqual(writer_doc.getText().getString(), "\r\nClick to choose a date")
+            else:
+                self.assertEqual(writer_doc.getText().getString(), "\nClick to choose a date")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
