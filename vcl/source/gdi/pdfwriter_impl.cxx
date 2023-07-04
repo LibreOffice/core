@@ -11076,8 +11076,8 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
         && (m_bEmitStructure
             // allow it for topmost non-structured element
             || (m_aContext.Tagged
-                && 0 < m_aStructure[m_nCurrentStructElement].m_nParentElement
-                && m_aStructure[m_aStructure[m_nCurrentStructElement].m_nParentElement].m_eType != PDFWriter::NonStructElement)))
+                && (0 == m_aStructure[m_nCurrentStructElement].m_nParentElement
+                    || m_aStructure[m_aStructure[m_nCurrentStructElement].m_nParentElement].m_eType != PDFWriter::NonStructElement))))
     {
         PDFWriter::StructElement eType = m_aStructure[ m_nCurrentStructElement ].m_eType;
         switch( eAttr )

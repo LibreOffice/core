@@ -1262,6 +1262,13 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
     pDev->Pop();
 
     rWriter.Push();
+    // tdf#152235 tag around the reference to the XObject on the page
+    rWriter.BeginStructureElement(vcl::PDFWriter::NonStructElement, ::std::u16string_view());
+    rWriter.SetStructureAttribute(vcl::PDFWriter::Type, vcl::PDFWriter::Pagination);
+    rWriter.SetStructureAttribute(vcl::PDFWriter::Subtype, vcl::PDFWriter::Watermark);
+    // HACK: this should produce *nothing* itself but is necessary to output
+    // the Artifact tag here, not inside the XObject
+    rWriter.DrawPolyLine({});
     rWriter.SetMapMode( MapMode( MapUnit::MapPoint ) );
     rWriter.SetFont( aFont );
     rWriter.SetTextColor(maWatermarkColor);
@@ -1304,6 +1311,7 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
     rWriter.BeginTransparencyGroup();
     rWriter.DrawText( aTextPoint, msWatermark );
     rWriter.EndTransparencyGroup( aTextRect, 50 );
+    rWriter.EndStructureElement();
     rWriter.Pop();
 }
 
@@ -1350,6 +1358,13 @@ void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rP
     pDev->Pop();
 
     rWriter.Push();
+    // tdf#152235 tag around the reference to the XObject on the page
+    rWriter.BeginStructureElement(vcl::PDFWriter::NonStructElement, ::std::u16string_view());
+    rWriter.SetStructureAttribute(vcl::PDFWriter::Type, vcl::PDFWriter::Pagination);
+    rWriter.SetStructureAttribute(vcl::PDFWriter::Subtype, vcl::PDFWriter::Watermark);
+    // HACK: this should produce *nothing* itself but is necessary to output
+    // the Artifact tag here, not inside the XObject
+    rWriter.DrawPolyLine({});
     rWriter.SetMapMode( MapMode( MapUnit::MapPoint ) );
     rWriter.SetFont(aFont);
     rWriter.SetTextColor( Color(19,20,22) );
@@ -1385,6 +1400,7 @@ void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rP
         aTextPoint.Move( nTextWidth*1.5, 0 );
     }
 
+    rWriter.EndStructureElement();
     rWriter.Pop();
 }
 
