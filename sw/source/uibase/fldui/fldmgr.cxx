@@ -1086,7 +1086,7 @@ bool SwFieldMgr::InsertField(
 
                         // Paste HTML content.
                         SwTranslateHelper::PasteHTMLToPaM(
-                                *pCurShell, pCursorPos, rRefmarkText.toUtf8(), /*bSetSelection=*/true);
+                                *pCurShell, pCursorPos, rRefmarkText.toUtf8());
 
                         // Undo the above SplitNode().
                         aRefmarkPam.SetMark();

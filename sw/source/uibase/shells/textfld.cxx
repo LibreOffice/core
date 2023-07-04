@@ -807,8 +807,7 @@ FIELD_INSERT:
                     if (pFieldResult)
                     {
                         // Paste HTML content.
-                        SwTranslateHelper::PasteHTMLToPaM(rSh, pCursorPos, aFieldResult.toUtf8(),
-                                                          true);
+                        SwTranslateHelper::PasteHTMLToPaM(rSh, pCursorPos, aFieldResult.toUtf8());
                         if (pCursorPos->GetPoint()->GetContentIndex() == 0)
                         {
                             // The paste created a last empty text node, remove it.
@@ -975,7 +974,7 @@ FIELD_INSERT:
             rSh.GetDoc()->getIDocumentContentOperations().DeleteAndJoin(aPaM);
             OUString aFieldResult;
             aMap["FieldResult"] >>= aFieldResult;
-            SwTranslateHelper::PasteHTMLToPaM(rSh, &aPaM, aFieldResult.toUtf8(), true);
+            SwTranslateHelper::PasteHTMLToPaM(rSh, &aPaM, aFieldResult.toUtf8());
         }
 
         rSh.EndAction();
@@ -1394,7 +1393,7 @@ FIELD_INSERT:
         rSh.GetDoc()->getIDocumentContentOperations().DeleteAndJoin(aPaM);
         OUString aFieldResult;
         aMap["FieldResult"] >>= aFieldResult;
-        SwTranslateHelper::PasteHTMLToPaM(rSh, &aPaM, aFieldResult.toUtf8(), true);
+        SwTranslateHelper::PasteHTMLToPaM(rSh, &aPaM, aFieldResult.toUtf8());
 
         rSh.EndAction();
         rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::UPDATE_FORM_FIELD, nullptr);

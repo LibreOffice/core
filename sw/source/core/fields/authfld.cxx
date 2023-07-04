@@ -623,7 +623,7 @@ OUString SwAuthorityField::GetAuthority(const SwRootFrame* pLayout, const SwForm
                 }
                 else if (AUTH_FIELD_URL == eField)
                 {
-                    aText += GetURI(true);
+                    aText += GetRelativeURI();
                 }
                 else
                 {
@@ -656,7 +656,7 @@ OUString SwAuthorityField::GetAbsoluteURL() const
                                     INetURLObject::DecodeMechanism::WithCharset);
 }
 
-OUString SwAuthorityField::GetURI(bool bRelative) const
+OUString SwAuthorityField::GetRelativeURI() const
 {
     OUString sTmp = GetFieldText(AUTH_FIELD_URL);
 
@@ -688,10 +688,7 @@ OUString SwAuthorityField::GetURI(bool bRelative) const
         sTmp = xUriRef->getUriReference();
     }
 
-    // If the URI is not supposed to be relative, we return here the full URI
-    if (!bRelative)
-        return sTmp;
-
+    // convert to relative
     bool bSaveRelFSys = officecfg::Office::Common::Save::URL::FileSystem::get();
     if (xUriRef.is() && bSaveRelFSys && xUriRef->getScheme() == aBaseURIScheme)
     {

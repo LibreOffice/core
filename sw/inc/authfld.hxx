@@ -221,10 +221,9 @@ public:
     OUString GetAbsoluteURL() const;
 
     /**
-     * Returns full URI for the URL, relative if specified
-     * \param   bRelative   whether the path should be relative (when dealing with local files)
+     * Returns relative URI for the URL
      */
-    OUString GetURI(bool bRelative) const;
+    OUString GetRelativeURI() const;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };

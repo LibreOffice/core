@@ -161,8 +161,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
             SwPaM* pCursorPos = rSh.GetCursor();
             pCursorPos->Move(fnMoveBackward, GoInContent);
             // Paste HTML content.
-            SwTranslateHelper::PasteHTMLToPaM(rSh, pCursorPos, aSectionContent.toUtf8(),
-                                              /*bSetSelection=*/true);
+            SwTranslateHelper::PasteHTMLToPaM(rSh, pCursorPos, aSectionContent.toUtf8());
             if (pCursorPos->GetPoint()->GetContentIndex() == 0)
             {
                 // The paste created a last empty text node, remove it.

@@ -463,7 +463,7 @@ void UpdateSections(SfxRequest& rReq, SwWrtShell& rWrtSh)
             rWrtSh.EndSelect();
 
             OUString aSectionText = aMap["Content"].get<OUString>();
-            SwTranslateHelper::PasteHTMLToPaM(rWrtSh, pCursorPos, aSectionText.toUtf8(), true);
+            SwTranslateHelper::PasteHTMLToPaM(rWrtSh, pCursorPos, aSectionText.toUtf8());
         }
     }
 
@@ -575,7 +575,7 @@ void UpdateBookmarks(SfxRequest& rReq, SwWrtShell& rWrtSh)
             // Paste HTML content.
             SwPaM* pCursorPos = rWrtSh.GetCursor();
             *pCursorPos = aPasteEnd;
-            SwTranslateHelper::PasteHTMLToPaM(rWrtSh, pCursorPos, aBookmarkText.toUtf8(), true);
+            SwTranslateHelper::PasteHTMLToPaM(rWrtSh, pCursorPos, aBookmarkText.toUtf8());
 
             // Update the bookmark to point to the new content.
             SwPaM aPasteStart(pMark->GetMarkEnd());
@@ -664,7 +664,7 @@ void UpdateBookmark(SfxRequest& rReq, SwWrtShell& rWrtSh)
     // Paste HTML content.
     SwPaM* pCursorPos = rWrtSh.GetCursor();
     *pCursorPos = aPasteEnd;
-    SwTranslateHelper::PasteHTMLToPaM(rWrtSh, pCursorPos, aBookmarkText.toUtf8(), true);
+    SwTranslateHelper::PasteHTMLToPaM(rWrtSh, pCursorPos, aBookmarkText.toUtf8());
 
     // Update the bookmark to point to the new content.
     SwPaM aPasteStart(pBookmark->GetMarkEnd());
@@ -1108,7 +1108,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
                         // Paste HTML content.
                         SwTranslateHelper::PasteHTMLToPaM(
-                            rWrtSh, pCursorPos, aBookmarkText.toUtf8(), /*bSetSelection=*/true);
+                            rWrtSh, pCursorPos, aBookmarkText.toUtf8());
                         if (pCursorPos->GetPoint()->GetContentIndex() == 0)
                         {
                             // The paste created a last empty text node, remove it.

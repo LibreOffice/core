@@ -40,7 +40,7 @@
 
 namespace SwTranslateHelper
 {
-OString ExportPaMToHTML(SwPaM* pCursor, bool bReplacePTag)
+OString ExportPaMToHTML(SwPaM* pCursor)
 {
     SolarMutexGuard gMutex;
     OString aResult;
@@ -58,11 +58,8 @@ OString ExportPaMToHTML(SwPaM* pCursor, bool bReplacePTag)
         }
         aResult
             = OString(static_cast<const char*>(aMemoryStream.GetData()), aMemoryStream.GetSize());
-        if (bReplacePTag)
-        {
-            aResult = aResult.replaceAll("<p", "<span");
-            aResult = aResult.replaceAll("</p>", "</span>");
-        }
+        aResult = aResult.replaceAll("<p", "<span");
+        aResult = aResult.replaceAll("</p>", "</span>");
 
         // HTML has for that <br> and <p> also does new line
         aResult = aResult.replaceAll("<ul>", "");
@@ -75,7 +72,7 @@ OString ExportPaMToHTML(SwPaM* pCursor, bool bReplacePTag)
     return {};
 }
 
-void PasteHTMLToPaM(SwWrtShell& rWrtSh, SwPaM* pCursor, const OString& rData, bool bSetSelection)
+void PasteHTMLToPaM(SwWrtShell& rWrtSh, SwPaM* pCursor, const OString& rData)
 {
     SolarMutexGuard gMutex;
     rtl::Reference<vcl::unohelper::HtmlTransferable> pHtmlTransferable
@@ -86,10 +83,7 @@ void PasteHTMLToPaM(SwWrtShell& rWrtSh, SwPaM* pCursor, const OString& rData, bo
         if (aDataHelper.GetXTransferable().is()
             && SwTransferable::IsPasteSpecial(rWrtSh, aDataHelper))
         {
-            if (bSetSelection)
-            {
-                rWrtSh.SetSelection(*pCursor);
-            }
+            rWrtSh.SetSelection(*pCursor);
             SwTransferable::Paste(rWrtSh, aDataHelper);
             rWrtSh.KillSelection(nullptr, false);
         }
@@ -190,10 +184,10 @@ void TranslateDocumentCancellable(SwWrtShell& rWrtSh, const TranslateAPIConfig& 
                 }
             }
 
-            const auto aOut = SwTranslateHelper::ExportPaMToHTML(cursor.get(), true);
+            const auto aOut = SwTranslateHelper::ExportPaMToHTML(cursor.get());
             const auto aTranslatedOut = linguistic::Translate(
                 rConfig.m_xTargetLanguage, rConfig.m_xAPIUrl, rConfig.m_xAuthKey, aOut);
-            SwTranslateHelper::PasteHTMLToPaM(rWrtSh, cursor.get(), aTranslatedOut, true);
+            SwTranslateHelper::PasteHTMLToPaM(rWrtSh, cursor.get(), aTranslatedOut);
 
             if (xStatusIndicator.is())
                 xStatusIndicator->setValue((100 * ++nProgress) / nCount);

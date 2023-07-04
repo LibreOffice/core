@@ -179,7 +179,7 @@ void SwTextRefMark::UpdateFieldContent(SwDoc* pDoc, SwWrtShell& rWrtSh, OUString
         // Paste HTML content.
         SwPaM* pCursorPos = rWrtSh.GetCursor();
         *pCursorPos = aPasteEnd;
-        SwTranslateHelper::PasteHTMLToPaM(rWrtSh, pCursorPos, aContent.toUtf8(), true);
+        SwTranslateHelper::PasteHTMLToPaM(rWrtSh, pCursorPos, aContent.toUtf8());
 
         // Update the refmark to point to the new content.
         sal_Int32 nOldStart = this->GetStart();
