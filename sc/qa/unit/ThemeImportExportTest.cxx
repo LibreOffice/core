@@ -111,9 +111,9 @@ void checkCellBackgroundThemeColor(ScDocument* pDoc)
         auto& rTransformations = aComplexColor.getTransformations();
         CPPUNIT_ASSERT_EQUAL(size_t(2), rTransformations.size());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
-        CPPUNIT_ASSERT_EQUAL(20, roundToPercent(rTransformations[0].mnValue));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(20), roundToPercent(rTransformations[0].mnValue));
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff, rTransformations[1].meType);
-        CPPUNIT_ASSERT_EQUAL(80, roundToPercent(rTransformations[1].mnValue));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(80), roundToPercent(rTransformations[1].mnValue));
     }
 
     // A3
@@ -130,7 +130,7 @@ void checkCellBackgroundThemeColor(ScDocument* pDoc)
         auto& rTransformations = aComplexColor.getTransformations();
         CPPUNIT_ASSERT_EQUAL(size_t(1), rTransformations.size());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
-        CPPUNIT_ASSERT_EQUAL(50, roundToPercent(rTransformations[0].mnValue));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(50), roundToPercent(rTransformations[0].mnValue));
     }
 }
 
@@ -172,9 +172,9 @@ void checkCellTextThemeColor(ScDocument* pDoc)
         auto& rTransformations = aComplexColor.getTransformations();
         CPPUNIT_ASSERT_EQUAL(size_t(2), rTransformations.size());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
-        CPPUNIT_ASSERT_EQUAL(60, roundToPercent(rTransformations[0].mnValue));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(60), roundToPercent(rTransformations[0].mnValue));
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff, rTransformations[1].meType);
-        CPPUNIT_ASSERT_EQUAL(40, roundToPercent(rTransformations[1].mnValue));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(40), roundToPercent(rTransformations[1].mnValue));
     }
 
     // B3
@@ -191,7 +191,7 @@ void checkCellTextThemeColor(ScDocument* pDoc)
         auto& rTransformations = aComplexColor.getTransformations();
         CPPUNIT_ASSERT_EQUAL(size_t(1), rTransformations.size());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
-        CPPUNIT_ASSERT_EQUAL(50, roundToPercent(rTransformations[0].mnValue));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(50), roundToPercent(rTransformations[0].mnValue));
     }
 }
 
@@ -247,9 +247,9 @@ void checkCellBorderThemeColor(ScDocument* pDoc)
             auto& rTransformations = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(2), rTransformations.size());
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
-            CPPUNIT_ASSERT_EQUAL(20, roundToPercent(rTransformations[0].mnValue));
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(20), roundToPercent(rTransformations[0].mnValue));
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff, rTransformations[1].meType);
-            CPPUNIT_ASSERT_EQUAL(80, roundToPercent(rTransformations[1].mnValue));
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(80), roundToPercent(rTransformations[1].mnValue));
         }
         {
             auto* pTop = pBoxItem->GetRight();
@@ -260,9 +260,9 @@ void checkCellBorderThemeColor(ScDocument* pDoc)
             auto& rTransformations = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(2), rTransformations.size());
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
-            CPPUNIT_ASSERT_EQUAL(20, roundToPercent(rTransformations[0].mnValue));
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(20), roundToPercent(rTransformations[0].mnValue));
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff, rTransformations[1].meType);
-            CPPUNIT_ASSERT_EQUAL(80, roundToPercent(rTransformations[1].mnValue));
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(80), roundToPercent(rTransformations[1].mnValue));
         }
         {
             auto* pTop = pBoxItem->GetBottom();
@@ -273,7 +273,7 @@ void checkCellBorderThemeColor(ScDocument* pDoc)
             auto& rTransformations = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(1), rTransformations.size());
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
-            CPPUNIT_ASSERT_EQUAL(50, roundToPercent(rTransformations[0].mnValue));
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(50), roundToPercent(rTransformations[0].mnValue));
         }
     }
 
@@ -297,7 +297,7 @@ void checkCellBorderThemeColor(ScDocument* pDoc)
             auto& rTransformations = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(1), rTransformations.size());
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
-            CPPUNIT_ASSERT_EQUAL(50, roundToPercent(rTransformations[0].mnValue));
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(50), roundToPercent(rTransformations[0].mnValue));
         }
 
         {
@@ -309,7 +309,7 @@ void checkCellBorderThemeColor(ScDocument* pDoc)
             auto& rTransformations = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(1), rTransformations.size());
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
-            CPPUNIT_ASSERT_EQUAL(50, roundToPercent(rTransformations[0].mnValue));
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(50), roundToPercent(rTransformations[0].mnValue));
         }
     }
 }
