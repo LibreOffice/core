@@ -25,6 +25,8 @@
 #include <o3tl/safeint.hxx>
 #include <osl/endian.h>
 #include <unotools/collatorwrapper.hxx>
+
+#include <autostyle_helper.hxx>
 #include <swtypes.hxx>
 #include <hintids.hxx>
 #include <cmdid.h>
@@ -2279,6 +2281,56 @@ SwXTextCursor::setPropertyValue(
         else
         {
             m_nAttrMode = SetAttrMode::DEFAULT;
+        }
+    }
+    else if (rPropertyName == "ParaAutoStyleDef")
+    {
+        // Create an autostyle from passed definition (sequence of PropertyValue, same
+        // as in XAutoStyleFamily::insertStyle), using the currently applied properties
+        // from the paragraph to not lose their values when creating complex properties
+        // like SvxULSpaceItem, when only part of the properties stored there is passed;
+        // and apply it to the paragraph.
+        uno::Sequence<beans::PropertyValue> def;
+        if (!(rValue >>= def))
+            throw lang::IllegalArgumentException();
+
+        // See SwUnoCursorHelper::SetPropertyValues
+
+        auto pPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARA_AUTO_STYLE);
+
+        // Build set of attributes we want to fetch
+        WhichRangesContainer aRanges;
+        for (auto& rPropVal : def)
+        {
+            SfxItemPropertyMapEntry const* pEntry =
+                pPropSet->getPropertyMap().getByName(rPropVal.Name);
+            if (!pEntry)
+                continue; // PropValuesToAutoStyleItemSet ignores invalid names
+
+            aRanges = aRanges.MergeRange(pEntry->nWID, pEntry->nWID);
+        }
+
+        if (!aRanges.empty())
+        {
+            SfxItemSet aAutoStyleItemSet(rUnoCursor.GetDoc().GetAttrPool(), std::move(aRanges));
+            // we need to get up-to-date item set: this makes sure that the complex properties,
+            // that are only partially defined by passed definition, do not lose the rest of
+            // their already present data (which will become part of the autostyle, too).
+            SwUnoCursorHelper::GetCursorAttr(rUnoCursor, aAutoStyleItemSet);
+            // Set normal set ranges before putting into autostyle, to the same ranges
+            // that are used for paragraph autostyle in SwXAutoStyleFamily::insertStyle
+            aAutoStyleItemSet.SetRanges(aTextNodeSetRange);
+
+            // Fill the prepared item set, containing current paragraph property values,
+            // with the passed definition, and create the autostyle.
+            auto pStyle = PropValuesToAutoStyleItemSet(
+                rUnoCursor.GetDoc(), IStyleAccess::AUTO_STYLE_PARA, def, aAutoStyleItemSet);
+
+            SwFormatAutoFormat aFormat(RES_AUTO_STYLE);
+            aFormat.SetStyleHandle(pStyle);
+            SfxItemSet rSet(rUnoCursor.GetDoc().GetAttrPool(), RES_AUTO_STYLE, RES_AUTO_STYLE);
+            rSet.Put(aFormat);
+            SwUnoCursorHelper::SetCursorAttr(rUnoCursor, rSet, m_nAttrMode);
         }
     }
     else
