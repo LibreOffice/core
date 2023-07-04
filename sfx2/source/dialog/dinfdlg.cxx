@@ -1025,6 +1025,16 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     {
         m_xFileValEd->set_label(aName);
         m_xFileValEd->set_uri(aName);
+
+        // Disable setting/changing password on text files.
+        // Perhaps this needs to be done for both Online and Desktop.
+        OUString sExtension(INetURLObject(rMainURL).getExtension());
+        if (!sExtension.isEmpty())
+        {
+            sExtension = sExtension.toAsciiLowerCase();
+            if (sExtension.equalsAscii("txt") || sExtension.equalsAscii("csv"))
+                m_xChangePassBtn->set_sensitive(false);
+        }
     }
     else
     {
