@@ -39,7 +39,7 @@ WEBDOCS = ["htm", "html", "stw", "txt", "vor", "oth"]
 
 WRITERDOCS = ["doc", "dot", "rtf", "sxw", "stw", "sdw", "vor", "txt", "htm?",
               "xml", "wp", "wpd", "wps", "odt", "ott", "fodt", "docm", "docx",
-              "dotm", "dotx"]
+              "dotm", "dotx", "pages"]
 
 TEMPLATES = ["stw", "dot", "vor", "stc", "xlt", "sti", "pot", "std", "stw",
              "dotm", "dotx", "potm", "potx", "xltm", "xltx"]
