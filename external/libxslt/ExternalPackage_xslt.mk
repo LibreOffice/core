@@ -25,7 +25,7 @@ $(eval $(call gb_ExternalPackage_add_file,xslt,$(LIBO_LIB_FOLDER)/libexslt.dll,w
 endif
 else # OS!=WNT
 $(eval $(call gb_ExternalPackage_add_file,xslt,$(LIBO_LIB_FOLDER)/libxslt.so.1,libxslt/.libs/libxslt.so.1.1.$(LIBXSLT_VERSION_MICRO)))
-$(eval $(call gb_ExternalPackage_add_file,xslt,$(LIBO_LIB_FOLDER)/libexslt.so.0,libexslt/.libs/libexslt.so.0.8.20))
+$(eval $(call gb_ExternalPackage_add_file,xslt,$(LIBO_LIB_FOLDER)/libexslt.so.0,libexslt/.libs/libexslt.so.0.8.21))
 endif
 endif # DISABLE_DYNLOADING
 
