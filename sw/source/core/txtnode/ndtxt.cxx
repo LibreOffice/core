@@ -1603,7 +1603,9 @@ void SwTextNode::Update(
             pSortedObjs->UpdateAll();
         }
         // also sort the objs on the page frame
-        pSortedObjs = pFrame->FindPageFrame()->GetSortedObjs();
+        if (SwPageFrame *pPage = pFrame->FindPageFrame())
+            pSortedObjs = pPage->GetSortedObjs();
+
         if (pSortedObjs) // doesn't exist yet if called for inserting as-char fly
         {
             pSortedObjs->UpdateAll();
