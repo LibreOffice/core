@@ -50,6 +50,8 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/paperinf.hxx>
 #include <editeng/wghtitem.hxx>
+
+#include <autostyle_helper.hxx>
 #include <pagedesc.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -3530,33 +3532,25 @@ void SwXAutoStyleFamily::Notify(const SfxHint& rHint)
         m_pDocShell = nullptr;
 }
 
-uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
-    const uno::Sequence< beans::PropertyValue >& Values )
+std::shared_ptr<SfxItemSet>
+PropValuesToAutoStyleItemSet(SwDoc& rDoc, IStyleAccess::SwAutoStyleFamily eFamily,
+                             const uno::Sequence<beans::PropertyValue>& Values, SfxItemSet& aSet)
 {
-    if (!m_pDocShell)
-    {
-        throw uno::RuntimeException();
-    }
-
-    WhichRangesContainer pRange;
     const SfxItemPropertySet* pPropSet = nullptr;
-    switch( m_eFamily )
+    switch( eFamily )
     {
         case IStyleAccess::AUTO_STYLE_CHAR:
         {
-            pRange = aCharAutoFormatSetRange;
             pPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_CHAR_AUTO_STYLE);
             break;
         }
         case IStyleAccess::AUTO_STYLE_RUBY:
         {
-            pRange = WhichRangesContainer(RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY);
             pPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_RUBY_AUTO_STYLE);
             break;
         }
         case IStyleAccess::AUTO_STYLE_PARA:
         {
-            pRange = aTextNodeSetRange; // checked, already added support for [XATTR_FILL_FIRST, XATTR_FILL_LAST]
             pPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARA_AUTO_STYLE);
             break;
         }
@@ -3566,8 +3560,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
     if( !pPropSet)
         throw uno::RuntimeException();
 
-    SwAttrSet aSet( m_pDocShell->GetDoc()->GetAttrPool(), pRange );
-    const bool bTakeCareOfDrawingLayerFillStyle(IStyleAccess::AUTO_STYLE_PARA == m_eFamily);
+    const bool bTakeCareOfDrawingLayerFillStyle(IStyleAccess::AUTO_STYLE_PARA == eFamily);
 
     if(!bTakeCareOfDrawingLayerFillStyle)
     {
@@ -3592,7 +3585,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
         // set parent to ItemSet to ensure XFILL_NONE as XFillStyleItem
         // to make cases in RES_BACKGROUND work correct; target *is* a style
         // where this is the case
-        aSet.SetParent(&m_pDocShell->GetDoc()->GetDfltTextFormatColl()->GetAttrSet());
+        aSet.SetParent(&rDoc.GetDfltTextFormatColl()->GetAttrSet());
 
         // here the used DrawingLayer FillStyles are imported when family is
         // equal to IStyleAccess::AUTO_STYLE_PARA, thus we will need to serve the
@@ -3633,7 +3626,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
 
                 if(bDoIt)
                 {
-                    const SfxItemPool& rPool = m_pDocShell->GetDoc()->GetAttrPool();
+                    const SfxItemPool& rPool = rDoc.GetAttrPool();
                     const MapUnit eMapUnit(rPool.GetMetric(pEntry->nWID));
 
                     if(eMapUnit != MapUnit::Map100thMM)
@@ -3684,7 +3677,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
                 }
                 case RES_BACKGROUND:
                 {
-                    const std::unique_ptr<SvxBrushItem> aOriginalBrushItem(getSvxBrushItemFromSourceSet(aSet, RES_BACKGROUND, true, m_pDocShell->GetDoc()->IsInXMLImport()));
+                    const std::unique_ptr<SvxBrushItem> aOriginalBrushItem(getSvxBrushItemFromSourceSet(aSet, RES_BACKGROUND, true, rDoc.IsInXMLImport()));
                     std::unique_ptr<SvxBrushItem> aChangedBrushItem(aOriginalBrushItem->Clone());
 
                     aChangedBrushItem->PutValue(aValue, nMemberId);
@@ -3747,10 +3740,44 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
     // currently in principle only needed when bTakeCareOfDrawingLayerFillStyle,
     // but does not hurt and is easily forgotten later eventually, so keep it
     // as common case
-    m_pDocShell->GetDoc()->CheckForUniqueItemForLineFillNameOrIndex(aSet);
+    rDoc.CheckForUniqueItemForLineFillNameOrIndex(aSet);
 
-    // AutomaticStyle creation
-    std::shared_ptr<SfxItemSet> pSet = m_pDocShell->GetDoc()->GetIStyleAccess().cacheAutomaticStyle( aSet, m_eFamily );
+    return rDoc.GetIStyleAccess().cacheAutomaticStyle(aSet, eFamily);
+}
+
+uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
+    const uno::Sequence< beans::PropertyValue >& Values )
+{
+    if (!m_pDocShell)
+    {
+        throw uno::RuntimeException();
+    }
+
+    WhichRangesContainer pRange;
+    switch (m_eFamily)
+    {
+    case IStyleAccess::AUTO_STYLE_CHAR:
+    {
+        pRange = aCharAutoFormatSetRange;
+        break;
+    }
+    case IStyleAccess::AUTO_STYLE_RUBY:
+    {
+        pRange = WhichRangesContainer(RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY);
+        break;
+    }
+    case IStyleAccess::AUTO_STYLE_PARA:
+    {
+        pRange = aTextNodeSetRange; // checked, already added support for [XATTR_FILL_FIRST, XATTR_FILL_LAST]
+        break;
+    }
+    default:
+        throw uno::RuntimeException();
+    }
+
+    SwAttrSet aEmptySet(m_pDocShell->GetDoc()->GetAttrPool(), pRange);
+    auto pSet = PropValuesToAutoStyleItemSet(*m_pDocShell->GetDoc(), m_eFamily, Values, aEmptySet);
+
     uno::Reference<style::XAutoStyle> xRet = new SwXAutoStyle(m_pDocShell->GetDoc(), pSet, m_eFamily);
 
     return xRet;

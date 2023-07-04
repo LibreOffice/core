@@ -1180,6 +1180,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156078)
     CPPUNIT_ASSERT(numberPixelsFound);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf141969)
+{
+    // Given a file with a table with a style setting font height, and a text re-defining the height
+    createSwDoc("tdf141969-font_in_table_with_style.docx");
+
+    auto xTable = getParagraphOrTable(2);
+    uno::Reference<text::XText> xCell(getCell(xTable, "A1"), uno::UNO_QUERY_THROW);
+    auto xParaOfCell = getParagraphOfText(1, xCell);
+    auto xRun = getRun(xParaOfCell, 1);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("<<link:website>>"), xRun->getString());
+    // Without a fix, this would fail with
+    // - Expected: 8
+    // - Actual  : 11
+    CPPUNIT_ASSERT_EQUAL(8.0f, getProperty<float>(xRun, "CharHeight"));
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
