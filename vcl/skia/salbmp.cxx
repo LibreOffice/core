@@ -888,10 +888,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage(DirectImage direct) const
         SkiaZone zone;
         const bool scaling = imageSize(mImage) != mSize;
         SkPixmap pixmap;
-        // Note: We cannot do this when 'scaling' because SkCanvas::drawImageRect()
-        // with kAlpha_8_SkColorType as source and destination would act as SkBlendMode::kSrcOver
-        // despite SkBlendMode::kSrc set (https://bugs.chromium.org/p/skia/issues/detail?id=9692).
-        if (mImage->peekPixels(&pixmap) && !scaling)
+        if (mImage->peekPixels(&pixmap))
         {
             assert(pixmap.colorType() == kN32_SkColorType);
             // In non-GPU mode, convert 32bit data to 8bit alpha, this is faster than
