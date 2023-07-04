@@ -1152,7 +1152,6 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags
 {
     GetMainWindow()->ApplySettings(*pDev);
 
-    Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = GetSizePixel();
     vcl::Font aFont = GetMainWindow()->GetDrawPixelFont( pDev );
 
@@ -1168,7 +1167,7 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags
     bool bBackground = IsControlBackground();
     if ( bBorder || bBackground )
     {
-        tools::Rectangle aRect( aPos, aSize );
+        tools::Rectangle aRect( rPos, aSize );
         // aRect.Top() += nEditHeight;
         if ( bBorder )
         {
@@ -1192,7 +1191,7 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags
         // First, draw the edit part
         Size aOrigSize(m_pImpl->m_pSubEdit->GetSizePixel());
         m_pImpl->m_pSubEdit->SetSizePixel(Size(aSize.Width(), nEditHeight));
-        m_pImpl->m_pSubEdit->Draw( pDev, aPos, nFlags );
+        m_pImpl->m_pSubEdit->Draw( pDev, rPos, nFlags );
         m_pImpl->m_pSubEdit->SetSizePixel(aOrigSize);
 
         // Second, draw the listbox
@@ -1220,14 +1219,14 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags
             }
         }
 
-        tools::Rectangle aClip( aPos, aSize );
+        tools::Rectangle aClip( rPos, aSize );
         pDev->IntersectClipRegion( aClip );
         sal_Int32 nLines = static_cast<sal_Int32>( nTextHeight > 0 ? (aSize.Height()-nEditHeight)/nTextHeight : 1 );
         if ( !nLines )
             nLines = 1;
         const sal_Int32 nTEntry = IsReallyVisible() ? m_pImpl->m_pImplLB->GetTopEntry() : 0;
 
-        tools::Rectangle aTextRect( aPos, aSize );
+        tools::Rectangle aTextRect( rPos, aSize );
 
         aTextRect.AdjustLeft(3*nOnePixel );
         aTextRect.AdjustRight( -(3*nOnePixel) );
