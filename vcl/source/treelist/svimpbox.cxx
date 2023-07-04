@@ -667,7 +667,7 @@ void SvImpLBox::ShowCursor( bool bShow )
 }
 
 
-void SvImpLBox::UpdateAll( bool bInvalidateCompleteView )
+void SvImpLBox::UpdateAll()
 {
     FindMostRight();
     m_aVerSBar->SetRange( Range(0, m_pView->GetVisibleCount()-1 ) );
@@ -677,10 +677,7 @@ void SvImpLBox::UpdateAll( bool bInvalidateCompleteView )
     if( m_bSimpleTravel && m_pCursor && m_pView->HasFocus() )
         m_pView->Select( m_pCursor );
     ShowCursor( true );
-    if( bInvalidateCompleteView )
-        m_pView->Invalidate();
-    else
-        m_pView->Invalidate( GetVisibleArea() );
+    m_pView->Invalidate( GetVisibleArea() );
 }
 
 IMPL_LINK( SvImpLBox, ScrollLeftRightHdl, ScrollBar *, pScrollBar, void )
@@ -1238,7 +1235,7 @@ void SvImpLBox::Resize()
     if( m_pView->GetEntryHeight())
     {
         AdjustScrollBars( m_aOutputSize );
-        UpdateAll(false);
+        UpdateAll();
     }
     // HACK, as in floating and docked windows the scrollbars might not be drawn
     // correctly/not be drawn at all after resizing!
@@ -2975,7 +2972,7 @@ void SvImpLBox::SetUpdateMode( bool bMode )
     {
         m_bUpdateMode = bMode;
         if( m_bUpdateMode )
-            UpdateAll( false );
+            UpdateAll();
     }
 }
 

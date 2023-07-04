@@ -44,7 +44,7 @@ public:
     // returns 0 if position is just past the last entry
     SvTreeListEntry* GetEntry(const Point& rPoint) const override;
 
-    void UpdateAll(bool bInvalidateCompleteView) override;
+    void UpdateAll() override;
 
     bool KeyInput(const KeyEvent&) override;
 
