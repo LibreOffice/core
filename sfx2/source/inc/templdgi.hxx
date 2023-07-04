@@ -108,7 +108,7 @@ protected:
     void Initialize();
     void EnableHierarchical(bool, StyleList& rStyleList);
 
-    void FilterSelect( sal_uInt16 nFilterIdx, bool bForce );
+    void FilterSelect( sal_uInt16 nFilterIdx );
     void SetFamilyState( sal_uInt16 nSlotId, const SfxTemplateItem* );
     void SetWaterCanState( const SfxBoolItem* pItem );
     bool IsSafeForWaterCan() const;

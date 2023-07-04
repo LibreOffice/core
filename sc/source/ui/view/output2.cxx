@@ -1477,7 +1477,7 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
     LayoutStrings(bPixelToLogic);
 }
 
-tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScAddress &rAddress)
+tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic)
 {
     bool bOrigIsInLayoutStrings = mpDoc->IsInLayoutStrings();
     mpDoc->SetLayoutStrings(true);
@@ -1535,7 +1535,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
     {
         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
         SCROW nY = pThisRowInfo->nRowNo;
-        if ((bPaint && pThisRowInfo->bChanged) || (!bPaint && rAddress.Row() == nY))
+        if (pThisRowInfo->bChanged)
         {
             tools::Long nPosX = nInitPosX;
             if ( nLoopStartX < nX1 )
@@ -2091,16 +2091,6 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                                 }
                             }
 
-                            // if we are not painting, it means we are interested in
-                            // the area of the text that covers the specified cell
-                            if (!bPaint && rAddress.Col() == nX)
-                            {
-                                tools::Rectangle aRect;
-                                mpDev->GetTextBoundRect(aRect, aShort);
-                                aRect += aDrawTextPos;
-                                return aRect;
-                            }
-
                             if (bMetaFile || pFmtDevice != mpDev || aZoomX != aZoomY)
                             {
                                 size_t nLen = aShort.getLength();
@@ -2117,14 +2107,12 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                                         aDX.set(i, static_cast<sal_Int32>(aDX[i] / fMul + 0.5));
                                 }
 
-                                if (bPaint)
-                                    mpDev->DrawTextArray(aDrawTextPos, aShort, aDX, {}, 0, nLen);
+                                mpDev->DrawTextArray(aDrawTextPos, aShort, aDX, {}, 0, nLen);
                             }
                             else
                             {
-                                if (bPaint)
-                                    mpDev->DrawText(aDrawTextPos, aShort, 0, -1, nullptr, nullptr,
-                                        aVars.GetLayoutGlyphs(aShort));
+                                mpDev->DrawText(aDrawTextPos, aShort, 0, -1, nullptr, nullptr,
+                                    aVars.GetLayoutGlyphs(aShort));
                             }
                         }
 
@@ -2138,7 +2126,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
 
                         // PDF: whole-cell hyperlink from formula?
                         bool bHasURL = pPDFData && aCell.getType() == CELLTYPE_FORMULA && aCell.getFormula()->IsHyperLinkCell();
-                        if (bPaint && bHasURL)
+                        if (bHasURL)
                         {
                             tools::Rectangle aURLRect( aURLStart, aVars.GetTextSize() );
                             lcl_DoHyperlinkResult(mpDev, aURLRect, aCell);

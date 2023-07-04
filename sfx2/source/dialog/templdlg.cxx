@@ -505,7 +505,7 @@ void SfxCommonTemplateDialog_Impl::EnableHierarchical(bool const bEnable, StyleL
         // If bHierarchical, then the family can have changed
         // minus one since hierarchical is inserted at the start
         m_bWantHierarchical = false; // before FilterSelect
-        FilterSelect(mxFilterLb->get_active() - 1, true);
+        FilterSelect(mxFilterLb->get_active() - 1);
     }
     SelectStyle(aSelectedEntry, false, rStyleList);
 }
@@ -513,12 +513,9 @@ void SfxCommonTemplateDialog_Impl::EnableHierarchical(bool const bEnable, StyleL
 // Other filters; can be switched by the users or as a result of new or
 // editing, if the current document has been assigned a different filter.
 void SfxCommonTemplateDialog_Impl::FilterSelect(
-    sal_uInt16 nEntry, // Idx of the new Filters
-    bool bForce) // Force update, even if the new filter is equal to the current
+    sal_uInt16 nEntry // Idx of the new Filters
+    )
 {
-    if (nEntry == nActFilter && !bForce)
-        return;
-
     nActFilter = nEntry;
     m_aStyleList.FilterSelect(nActFilter, true);
 }
