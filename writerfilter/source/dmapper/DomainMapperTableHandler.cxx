@@ -24,6 +24,9 @@
 #include "DomainMapperTableHandler.hxx"
 #include "DomainMapper_Impl.hxx"
 #include "StyleSheetTable.hxx"
+
+#include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
+#include <com/sun/star/beans/XTolerantMultiPropertySet.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/table/TableBorderDistances.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
@@ -1065,10 +1068,28 @@ css::uno::Sequence<css::beans::PropertyValues> DomainMapperTableHandler::endTabl
     return aRowProperties;
 }
 
+static bool isAbsent(const std::vector<beans::PropertyValue>& propvals, const OUString& name)
+{
+    return std::find_if(propvals.begin(), propvals.end(),
+                        [&name](const beans::PropertyValue& propval)
+                        { return propval.Name == name; })
+           == propvals.end();
+}
+
 // table style has got bigger precedence than docDefault style,
 // but lower precedence than the paragraph styles and direct paragraph formatting
 void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParagraph rParaProp, std::vector< PropertyIds > aAllTableParaProperties, const css::beans::PropertyValues rCellProperties)
 {
+    // Setting paragraph or character properties using setPropertyValue may have unwanted
+    // side effects; e.g., setting a paragraph's font size can reset font size in a runs
+    // of the paragraph, which have own formatting, which should have highest precedence.
+    // Thus we have to collect property values, construct an autostyle, and assign it to
+    // the paragraph, to avoid such side effects.
+
+    // 1. Collect all the table-style-defined properties, that aren't overridden by the
+    //    paragraph style or direct formatting
+    std::vector<beans::PropertyValue> aProps;
+
     for( auto const& eId : aAllTableParaProperties )
     {
         // apply paragraph and character properties of the table style on table paragraphs
@@ -1136,47 +1157,24 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                 // use table style when no paragraph style setting or a docDefault value is applied instead of it
                 if ( aParaStyle == uno::Any() || bDocDefault || bCompatOverride ) try
                 {
-                    // check property state of paragraph
                     uno::Reference<text::XParagraphCursor> xParagraph(
                         rParaProp.m_rEndParagraph->getText()->createTextCursorByRange(rParaProp.m_rEndParagraph), uno::UNO_QUERY_THROW );
                     // select paragraph
                     xParagraph->gotoStartOfParagraph( true );
-                    uno::Reference< beans::XPropertyState > xParaProperties( xParagraph, uno::UNO_QUERY_THROW );
-                    if ( xParaProperties->getPropertyState(sPropertyName) == css::beans::PropertyState_DEFAULT_VALUE )
-                    {
-                        // don't overwrite empty paragraph with table style, if it has a direct paragraph formatting
-                        if ( bIsParaLevel && xParagraph->getString().getLength() == 0 )
-                            continue;
+                    // don't overwrite empty paragraph with table style, if it has a direct paragraph formatting
+                    if ( bIsParaLevel && xParagraph->getString().getLength() == 0 )
+                        continue;
 
-                        if ( eId != PROP_FILL_COLOR )
-                        {
-                            // apply style setting when the paragraph doesn't modify it
-                            rParaProp.m_rPropertySet->setPropertyValue( sPropertyName, pCellProp->Value );
-                        }
-                        else
-                        {
-                            // we need this for complete import of table-style based paragraph background color
-                            rParaProp.m_rPropertySet->setPropertyValue( "FillColor",  pCellProp->Value );
-                            rParaProp.m_rPropertySet->setPropertyValue( "FillStyle",  uno::Any(drawing::FillStyle_SOLID) );
-                        }
+                    if ( eId != PROP_FILL_COLOR )
+                    {
+                        // apply style setting when the paragraph doesn't modify it
+                        aProps.push_back(comphelper::makePropertyValue(sPropertyName, pCellProp->Value));
                     }
                     else
                     {
-                        // apply style setting only on text portions without direct modification of it
-                        uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xParagraph, uno::UNO_QUERY);
-                        uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
-                        uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
-                        uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
-                        while ( xRunEnum->hasMoreElements() )
-                        {
-                            uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
-                            uno::Reference< beans::XPropertyState > xRunProperties( xRun, uno::UNO_QUERY_THROW );
-                            if ( xRunProperties->getPropertyState(sPropertyName) == css::beans::PropertyState_DEFAULT_VALUE )
-                            {
-                                 uno::Reference< beans::XPropertySet > xRunPropertySet( xRun, uno::UNO_QUERY_THROW );
-                                 xRunPropertySet->setPropertyValue( sPropertyName, pCellProp->Value );
-                            }
-                        }
+                        // we need this for complete import of table-style based paragraph background color
+                        aProps.push_back(comphelper::makePropertyValue("FillColor",  pCellProp->Value));
+                        aProps.push_back(comphelper::makePropertyValue("FillStyle",  uno::Any(drawing::FillStyle_SOLID)));
                     }
                 }
                 catch ( const uno::Exception & )
@@ -1185,6 +1183,41 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                 }
             }
         }
+    }
+
+    if (!aProps.empty())
+    {
+        // 2. Get all properties directly defined in the paragraph
+        uno::Reference<beans::XPropertySetInfo> xPropSetInfo(
+            rParaProp.m_rPropertySet->getPropertySetInfo(), uno::UNO_SET_THROW);
+        auto props = xPropSetInfo->getProperties();
+        uno::Sequence<OUString> propNames(props.getLength());
+        std::transform(props.begin(), props.end(), propNames.getArray(),
+                       [](const beans::Property& prop) { return prop.Name; });
+        uno::Reference<beans::XTolerantMultiPropertySet> xTolPara(rParaProp.m_rPropertySet,
+                                                                  uno::UNO_QUERY_THROW);
+        // getDirectPropertyValuesTolerant requires a sorted sequence.
+        // Let's hope XPropertySetInfo::getProperties returns a sorted sequence.
+        for (auto& val : xTolPara->getDirectPropertyValuesTolerant(propNames))
+        {
+            // 3. Add them to aProps, unless such properties are already there
+            //    (which means, that 'val' comes from docDefault)
+            if (val.Result == beans::TolerantPropertySetResultType::SUCCESS
+                && val.State == beans::PropertyState_DIRECT_VALUE
+                && isAbsent(aProps, val.Name))
+            {
+                aProps.push_back(comphelper::makePropertyValue(val.Name, val.Value));
+            }
+        }
+
+        // 4. Create an autostyle, and assign it to the paragraph. The hidden ParaAutoStyleDef
+        //    property is handled in SwXTextCursor::setPropertyValue.
+        uno::Reference<beans::XPropertySet> xCursorProps(
+            rParaProp.m_rEndParagraph->getText()->createTextCursorByRange(
+                rParaProp.m_rEndParagraph),
+            uno::UNO_QUERY_THROW);
+        xCursorProps->setPropertyValue("ParaAutoStyleDef",
+                                       uno::Any(comphelper::containerToSequence(aProps)));
     }
 }
 
