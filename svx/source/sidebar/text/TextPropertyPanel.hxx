@@ -53,8 +53,6 @@ private:
     std::unique_ptr<ToolbarUnoDispatcher> mxFontEffectsDispatch;
     std::unique_ptr<weld::Toolbar> mxFontAdjust;
     std::unique_ptr<ToolbarUnoDispatcher> mxFontAdjustDispatch;
-    std::unique_ptr<weld::Toolbar> mxToolBoxFontColorSw;
-    std::unique_ptr<ToolbarUnoDispatcher> mxToolBoxFontColorSwDispatch;
     std::unique_ptr<weld::Toolbar> mxToolBoxFontColor;
     std::unique_ptr<ToolbarUnoDispatcher> mxToolBoxFontColorDispatch;
     std::unique_ptr<weld::Toolbar> mxToolBoxBackgroundColor;

@@ -161,31 +161,7 @@
             <property name="can-focus">False</property>
             <property name="spacing">6</property>
             <child>
-              <object class="GtkToolbar" id="colorbar_writer">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="toolbar-style">icons</property>
-                <property name="show-arrow">False</property>
-                <property name="icon_size">2</property>
-                <child>
-                  <object class="GtkMenuToolButton" id=".uno:FontColor">
-                    <property name="visible">True</property>
-                    <property name="use-underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToolbar" id="colorbar_others">
+              <object class="GtkToolbar" id="colorbar">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="toolbar-style">icons</property>
@@ -205,7 +181,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
@@ -228,7 +204,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -251,7 +227,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">3</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>

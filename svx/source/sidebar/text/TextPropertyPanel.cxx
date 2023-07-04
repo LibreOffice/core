@@ -49,9 +49,7 @@ TextPropertyPanel::TextPropertyPanel(weld::Widget* pParent, const css::uno::Refe
     , mxFontEffectsDispatch(new ToolbarUnoDispatcher(*mxFontEffects, *m_xBuilder, rxFrame))
     , mxFontAdjust(m_xBuilder->weld_toolbar("fontadjust"))
     , mxFontAdjustDispatch(new ToolbarUnoDispatcher(*mxFontAdjust, *m_xBuilder, rxFrame))
-    , mxToolBoxFontColorSw(m_xBuilder->weld_toolbar("colorbar_writer"))
-    , mxToolBoxFontColorSwDispatch(new ToolbarUnoDispatcher(*mxToolBoxFontColorSw, *m_xBuilder, rxFrame))
-    , mxToolBoxFontColor(m_xBuilder->weld_toolbar("colorbar_others"))
+    , mxToolBoxFontColor(m_xBuilder->weld_toolbar("colorbar"))
     , mxToolBoxFontColorDispatch(new ToolbarUnoDispatcher(*mxToolBoxFontColor, *m_xBuilder, rxFrame))
     , mxToolBoxBackgroundColor(m_xBuilder->weld_toolbar("colorbar_background"))
     , mxToolBoxBackgroundColorDispatch(new ToolbarUnoDispatcher(*mxToolBoxBackgroundColor, *m_xBuilder, rxFrame))
@@ -78,7 +76,6 @@ TextPropertyPanel::~TextPropertyPanel()
     mxDefaultBarDispatch.reset();
     mxPositionBarDispatch.reset();
     mxSpacingBarDispatch.reset();
-    mxToolBoxFontColorSwDispatch.reset();
     mxToolBoxFontColorDispatch.reset();
     mxToolBoxBackgroundColorDispatch.reset();
     mxFontAdjustDispatch.reset();
@@ -90,7 +87,6 @@ TextPropertyPanel::~TextPropertyPanel()
     mxDefaultBar.reset();
     mxPositionBar.reset();
     mxSpacingBar.reset();
-    mxToolBoxFontColorSw.reset();
     mxToolBoxFontColor.reset();
     mxToolBoxBackgroundColor.reset();
     mxFontAdjust.reset();
@@ -143,8 +139,6 @@ void TextPropertyPanel::HandleContextChange (
             break;
     }
 
-    mxToolBoxFontColor->set_visible(!bWriterText);
-    mxToolBoxFontColorSw->set_visible(bWriterText);
     mxToolBoxBackgroundColor->set_visible(bWriterText || bDrawText);
     mxResetBar->set_visible(bWriterText || bCalcText);
     mxDefaultBar->set_visible(bDrawText);

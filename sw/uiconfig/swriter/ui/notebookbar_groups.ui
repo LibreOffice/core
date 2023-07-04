@@ -1343,7 +1343,7 @@
                           <object class="GtkMenuToolButton" id="fontcolor">
                             <property name="visible">True</property>
                             <property name="is_important">True</property>
-                            <property name="action_name">.uno:FontColor</property>
+                            <property name="action_name">.uno:Color</property>
                             <property name="use_underline">True</property>
                           </object>
                           <packing>
