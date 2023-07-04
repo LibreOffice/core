@@ -2673,6 +2673,10 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
         ResourceDict aResourceDict;
         std::list<StreamRedirect> aOutputStreams;
 
+        // Scale for glyph outlines.
+        double fScaleX = GetDPIX() / 72.;
+        double fScaleY = GetDPIY() / 72.;
+
         for (auto i = 1u; i < nGlyphs; i++)
         {
             auto nStream = pGlyphStreams[i];
@@ -2753,9 +2757,12 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
             const auto& rOutline = rGlyph.getOutline();
             if (rOutline.count())
             {
-                // XXX I have no idea why this transformation matrix is needed.
-                aContents.append("q 10 0 0 10 0 ");
-                appendDouble(m_aPages.back().getHeight() * -10, aContents, 3);
+                aContents.append("q ");
+                appendDouble(fScaleX, aContents);
+                aContents.append(" 0 0 ");
+                appendDouble(fScaleY, aContents);
+                aContents.append(" 0 ");
+                appendDouble(m_aPages.back().getHeight() * -fScaleY, aContents, 3);
                 aContents.append(" cm\n");
                 m_aPages.back().appendPolyPolygon(rOutline, aContents);
                 aContents.append("f\n");
