@@ -50,7 +50,11 @@ public:
 
 private:
     void testUnloadedGraphic();
-    void testUnloadedGraphicLoading();
+    void testUnloadedGraphicLoadingPng();
+    void testUnloadedGraphicLoadingGif();
+    void testUnloadedGraphicLoadingJpg();
+    void testUnloadedGraphicLoadingTif();
+    void testUnloadedGraphicLoadingWebp();
     void testUnloadedGraphicWmf();
     void testUnloadedGraphicAlpha();
     void testUnloadedGraphicSizeUnit();
@@ -91,7 +95,11 @@ private:
 
     CPPUNIT_TEST_SUITE(GraphicTest);
     CPPUNIT_TEST(testUnloadedGraphic);
-    CPPUNIT_TEST(testUnloadedGraphicLoading);
+    CPPUNIT_TEST(testUnloadedGraphicLoadingPng);
+    CPPUNIT_TEST(testUnloadedGraphicLoadingGif);
+    CPPUNIT_TEST(testUnloadedGraphicLoadingJpg);
+    CPPUNIT_TEST(testUnloadedGraphicLoadingTif);
+    CPPUNIT_TEST(testUnloadedGraphicLoadingWebp);
     CPPUNIT_TEST(testUnloadedGraphicWmf);
     CPPUNIT_TEST(testUnloadedGraphicAlpha);
     CPPUNIT_TEST(testUnloadedGraphicSizeUnit);
@@ -294,25 +302,79 @@ void GraphicTest::testUnloadedGraphic()
     CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
 }
 
-void GraphicTest::testUnloadedGraphicLoading()
+void GraphicTest::testUnloadedGraphicLoadingPng()
 {
-    const OUString aFormats[] = { "png", "gif", "jpg", "tif", "webp" };
+    Graphic aGraphic = makeUnloadedGraphic(u"png");
 
-    for (OUString const& sFormat : aFormats)
-    {
-        Graphic aGraphic = makeUnloadedGraphic(sFormat);
+    // check available
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(120), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+    CPPUNIT_ASSERT(aGraphic.GetSizeBytes() > 0);
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
 
-        // check available
-        CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
-        CPPUNIT_ASSERT_EQUAL(tools::Long(120), aGraphic.GetSizePixel().Width());
-        CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetSizePixel().Height());
-        CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
-        CPPUNIT_ASSERT(aGraphic.GetSizeBytes() > 0);
-        CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, checkBitmap(aGraphic));
+}
 
-        if (sFormat != "jpg")
-            CPPUNIT_ASSERT_EQUAL(true, checkBitmap(aGraphic));
-    }
+void GraphicTest::testUnloadedGraphicLoadingGif()
+{
+    Graphic aGraphic = makeUnloadedGraphic(u"gif");
+
+    // check available
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(120), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+    CPPUNIT_ASSERT(aGraphic.GetSizeBytes() > 0);
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+
+    CPPUNIT_ASSERT_EQUAL(true, checkBitmap(aGraphic));
+}
+
+void GraphicTest::testUnloadedGraphicLoadingJpg()
+{
+    Graphic aGraphic = makeUnloadedGraphic(u"jpg");
+
+    // check available
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(120), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+    CPPUNIT_ASSERT(aGraphic.GetSizeBytes() > 0);
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+
+    CPPUNIT_ASSERT_EQUAL(false, checkBitmap(aGraphic));
+}
+
+void GraphicTest::testUnloadedGraphicLoadingTif()
+{
+    Graphic aGraphic = makeUnloadedGraphic(u"tif");
+
+    // check available
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(120), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+    CPPUNIT_ASSERT(aGraphic.GetSizeBytes() > 0);
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+
+    CPPUNIT_ASSERT_EQUAL(true, checkBitmap(aGraphic));
+}
+
+void GraphicTest::testUnloadedGraphicLoadingWebp()
+{
+    Graphic aGraphic = makeUnloadedGraphic(u"webp");
+
+    // check available
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(120), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+    CPPUNIT_ASSERT(aGraphic.GetSizeBytes() > 0);
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+
+    CPPUNIT_ASSERT_EQUAL(true, checkBitmap(aGraphic));
 }
 
 void GraphicTest::testUnloadedGraphicWmf()

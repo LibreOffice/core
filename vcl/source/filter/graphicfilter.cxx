@@ -100,13 +100,9 @@
 // and somewhen later enable the support unconditionally.
 static bool supportNativeWebp()
 {
+    // Enable support only for unittests
     const char* const testname = getenv("LO_TESTNAME");
-    if(testname == nullptr)
-        return false;
-    // Enable support only for those unittests that test it.
-    if( std::string_view("_anonymous_namespace___GraphicTest__testUnloadedGraphicLoading_") == testname
-        || std::string_view("VclFiltersTest__testExportImport_") == testname
-        || o3tl::starts_with(std::string_view(testname), "WebpFilterTest__"))
+    if(testname)
         return true;
     return false;
 }
