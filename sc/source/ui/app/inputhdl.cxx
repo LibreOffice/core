@@ -1137,6 +1137,9 @@ void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
         return;
     }
 
+    if ( !pActiveViewSh )
+        return;
+
     ScDocShell* pDocSh = pActiveViewSh->GetViewData().GetDocShell();
     const sal_Unicode cSep = ScCompiler::GetNativeSymbolChar(ocSep);
     const sal_Unicode cSheetSep = pDocSh->GetDocument().GetSheetSeparator();
