@@ -609,8 +609,11 @@ void SfxViewShell::StartPrint( const uno::Sequence < beans::PropertyValue >& rPr
     css::beans::PropertyValue* pJobNameVal = xNewController->getValue("JobName");
     if (!pJobNameVal)
     {
-        xNewController->setValue("JobName", Any(GetObjectShell()->GetTitle(1)));
-        xNewController->setPrinterModified(mbPrinterSettingsModified);
+        if (SfxObjectShell* pDoc = GetObjectShell())
+        {
+            xNewController->setValue("JobName", Any(pDoc->GetTitle(1)));
+            xNewController->setPrinterModified(mbPrinterSettingsModified);
+        }
     }
 }
 
