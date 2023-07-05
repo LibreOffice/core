@@ -120,7 +120,7 @@ namespace {
                     addCssStyle(rDocument, aNewConcatenated);
 
                     // look further up in the hierarchy
-                    if(pParent && pParent->getId())
+                    if(!aConcatenated.isEmpty() && pParent && pParent->getId())
                     {
                         const OUString& rParentId = pParent->getId().value();
                         addCssStyle(rDocument, "#" + rParentId + aConcatenated);
@@ -140,7 +140,7 @@ namespace {
                 addCssStyle(rDocument, aNewConcatenated);
 
                 // look further up in the hierarchy
-                if(pParent)
+                if(!aConcatenated.isEmpty() && pParent)
                 {
                     std::vector <OUString> aParentClasses = parseClass(*pParent);
                     for(const auto &aParentClass : aParentClasses)
