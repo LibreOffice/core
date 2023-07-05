@@ -230,6 +230,19 @@ void FuConstruct::Deactivate()
     mpView->SetEditMode(SdrViewEditMode::Edit);
 }
 
+bool FuConstruct::IsIgnoreUnexpectedMouseButtonUp()
+{
+    // tdf#153446 if there is a MouseButtonUp without a previous MouseButtonDown event,
+    // the MouseButtonDown was probably swallowed by a gain-focus action,
+    // and then this MouseButtonUp should be ignored
+
+    if (bMBDown || bIsInDragMode)
+        return false;
+
+    // Don't ignore if there are pending mouse-initiated tasks to complete.
+    return !mpView->IsDragObj() && !mpWindow->IsMouseCaptured() && !mpView->IsAction();
+}
+
 /**
  * set style sheet for the object to be created
  */

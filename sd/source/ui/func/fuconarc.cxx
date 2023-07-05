@@ -130,6 +130,9 @@ bool FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )
 
 bool FuConstructArc::MouseButtonUp( const MouseEvent& rMEvt )
 {
+    if (rMEvt.IsLeft() && IsIgnoreUnexpectedMouseButtonUp())
+        return false;
+
     bool bReturn = false;
     bool bCreated = false;
 

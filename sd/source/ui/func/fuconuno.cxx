@@ -91,6 +91,9 @@ bool FuConstructUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
 
 bool FuConstructUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
 {
+    if (rMEvt.IsLeft() && IsIgnoreUnexpectedMouseButtonUp())
+        return false;
+
     bool bReturn = false;
 
     if ( mpView->IsCreateObj() && rMEvt.IsLeft() )

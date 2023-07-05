@@ -40,6 +40,9 @@ public:
 
     virtual void SelectionHasChanged() override { bSelectionChanged = true; }
 
+    // Without a preceding MouseButtonDown, a MouseButtonUp event should probably be ignored
+    bool IsIgnoreUnexpectedMouseButtonUp();
+
     // SJ: setting stylesheet, the use of a filled or unfilled style
     // is determined by the member nSlotId :
     void SetStyleSheet(SfxItemSet& rAttr, SdrObject* pObj);

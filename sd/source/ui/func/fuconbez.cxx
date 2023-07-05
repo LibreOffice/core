@@ -190,6 +190,9 @@ bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 
 bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
 {
+    if (rMEvt.IsLeft() && IsIgnoreUnexpectedMouseButtonUp())
+        return false;
+
     bool bReturn = false;
     bool bCreated = false;
 
