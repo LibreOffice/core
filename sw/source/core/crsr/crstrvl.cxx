@@ -1334,8 +1334,17 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
         && !rNds.GetOutLineNds().empty() )
     {
         // only for nodes in outline nodes
-        SwOutlineNodes::size_type nPos;
-        if(rNds.GetOutLineNds().Seek_Entry(pTextNd, &nPos))
+        SwOutlineNodes::size_type nPos = 0;
+        bool bFoundOutline = rNds.GetOutLineNds().Seek_Entry(pTextNd, &nPos);
+        if (!bFoundOutline && nPos && (IsAttrAtPos::AllowContaining & rContentAtPos.eContentAtPos))
+        {
+            // nPos points to the first found outline node not before pTextNd, or to end();
+            // when bFoundOutline is false, and nPos is not 0, it means that there were
+            // outline nodes before pTextNd, and nPos-1 points to the last of those.
+            pTextNd = rNds.GetOutLineNds()[nPos - 1]->GetTextNode();
+            bFoundOutline = true;
+        }
+        if (bFoundOutline)
         {
             rContentAtPos.eContentAtPos = IsAttrAtPos::Outline;
             rContentAtPos.sStr = sw::GetExpandTextMerged(GetLayout(), *pTextNd, true, false, ExpandMode::ExpandFootnote);

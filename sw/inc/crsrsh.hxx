@@ -87,15 +87,16 @@ enum class IsAttrAtPos
     ContentCheck     = 0x0400,
     SmartTag         = 0x0800,
     FormControl      = 0x1000,
-    TableRedline     = 0x2000
+    TableRedline     = 0x2000,
 #ifdef DBG_UTIL
-    ,CurrAttrs       = 0x4000        ///< only for debugging
-    ,TableBoxValue   = 0x8000        ///< only for debugging
+    CurrAttrs       = 0x4000,        ///< only for debugging
+    TableBoxValue   = 0x8000,        ///< only for debugging
 #endif
-    , ContentControl = 0x10000
+    ContentControl = 0x10000,
+    AllowContaining = 0x20000, // With Outline, finds an outline node for non-outline position
 };
 namespace o3tl {
-    template<> struct typed_flags<IsAttrAtPos> : is_typed_flags<IsAttrAtPos, 0x1ffff> {};
+    template<> struct typed_flags<IsAttrAtPos> : is_typed_flags<IsAttrAtPos, 0x3ffff> {};
 }
 
 struct SwContentAtPos
