@@ -57,8 +57,6 @@ void SmOoxmlExport::ConvertFromStarMath( const ::sax_fastparser::FSHelperPtr& se
         m_pSerializer->startElementNS(XML_m, XML_oMathParaPr);
         if (nAlign == FormulaImExportBase::eFormulaAlign::CENTER)
             m_pSerializer->singleElementNS(XML_m, XML_jc, FSNS(XML_m, XML_val), "center");
-        if (nAlign == FormulaImExportBase::eFormulaAlign::GROUPEDCENTER)
-            m_pSerializer->singleElementNS(XML_m, XML_jc, FSNS(XML_m, XML_val), "center");
         if (nAlign == FormulaImExportBase::eFormulaAlign::LEFT)
             m_pSerializer->singleElementNS(XML_m, XML_jc, FSNS(XML_m, XML_val), "left");
         if (nAlign == FormulaImExportBase::eFormulaAlign::RIGHT)

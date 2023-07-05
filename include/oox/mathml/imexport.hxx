@@ -41,7 +41,7 @@ public:
             oox::core::OoxmlVersion version,
             oox::drawingml::DocumentType documentType, sal_Int8 nAlign) = 0;
     virtual void writeFormulaRtf( OStringBuffer& rBuffer, rtl_TextEncoding nEncoding ) = 0;
-    enum eFormulaAlign { INLINE, CENTER, GROUPEDCENTER, LEFT, RIGHT };
+    enum eFormulaAlign { INLINE, CENTER, LEFT, RIGHT };
 
 protected:
     FormulaImExportBase();
