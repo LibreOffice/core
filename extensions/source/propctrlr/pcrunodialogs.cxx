@@ -45,11 +45,11 @@ namespace pcr
     OTabOrderDialog::OTabOrderDialog( const Reference< XComponentContext >& _rxContext )
         :OGenericUnoDialog( _rxContext )
     {
-        registerProperty( PROPERTY_CONTROLCONTEXT, OWN_PROPERTY_ID_CONTROLCONTEXT,
+        registerProperty( PROPERTY_CONTROLCONTEXT, static_cast<sal_Int32>(OwnPropertyId::CONTROLCONTEXT),
             PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT,
             &m_xControlContext, cppu::UnoType<decltype(m_xControlContext)>::get() );
 
-        registerProperty( PROPERTY_TABBINGMODEL, OWN_PROPERTY_ID_TABBINGMODEL,
+        registerProperty( PROPERTY_TABBINGMODEL, static_cast<sal_Int32>(OwnPropertyId::TABBINGMODEL),
             PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT,
             &m_xTabbingModel, cppu::UnoType<decltype(m_xTabbingModel)>::get() );
     }

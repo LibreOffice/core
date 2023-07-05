@@ -39,7 +39,7 @@ namespace pcr
         :OGenericUnoDialog( _rxContext )
         ,m_pItemPoolDefaults(nullptr)
     {
-        registerProperty(PROPERTY_INTROSPECTEDOBJECT, OWN_PROPERTY_ID_INTROSPECTEDOBJECT,
+        registerProperty(PROPERTY_INTROSPECTEDOBJECT, static_cast<sal_Int32>(OwnPropertyId::INTROSPECTEDOBJECT),
             PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT,
             &m_xControlModel, cppu::UnoType<decltype(m_xControlModel)>::get());
     }

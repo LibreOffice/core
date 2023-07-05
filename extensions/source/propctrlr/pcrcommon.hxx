@@ -31,11 +31,13 @@
 namespace pcr
 {
 
-
-    #define OWN_PROPERTY_ID_INTROSPECTEDOBJECT      0x0010
-    #define OWN_PROPERTY_ID_CURRENTPAGE             0x0011
-    #define OWN_PROPERTY_ID_CONTROLCONTEXT          0x0012
-    #define OWN_PROPERTY_ID_TABBINGMODEL            0x0013
+    enum class OwnPropertyId
+    {
+        INTROSPECTEDOBJECT = 0x0010,
+        CURRENTPAGE        = 0x0011,
+        CONTROLCONTEXT     = 0x0012,
+        TABBINGMODEL       = 0x0013
+    };
 
 
     //= types

@@ -131,13 +131,13 @@ namespace pcr
         Sequence< Property > aProps{
             Property(
                 PROPERTY_CURRENTPAGE,
-                OWN_PROPERTY_ID_CURRENTPAGE,
+                static_cast<sal_Int32>(OwnPropertyId::CURRENTPAGE),
                 ::cppu::UnoType<OUString>::get(),
                 PropertyAttribute::TRANSIENT
             ),
             Property(
                 PROPERTY_INTROSPECTEDOBJECT,
-                OWN_PROPERTY_ID_INTROSPECTEDOBJECT,
+                static_cast<sal_Int32>(OwnPropertyId::INTROSPECTEDOBJECT),
                 cppu::UnoType<XPropertySet>::get(),
                 PropertyAttribute::TRANSIENT | PropertyAttribute::CONSTRAINED
             )
@@ -148,15 +148,17 @@ namespace pcr
 
     sal_Bool SAL_CALL FormController::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue )
     {
-        switch ( nHandle )
+        switch ( static_cast<OwnPropertyId>(nHandle) )
         {
-        case OWN_PROPERTY_ID_INTROSPECTEDOBJECT:
+        case OwnPropertyId::INTROSPECTEDOBJECT:
             if ( rValue.getValueTypeClass() != TypeClass_INTERFACE )
                 throw IllegalArgumentException();
             break;
-        case OWN_PROPERTY_ID_CURRENTPAGE:
+        case OwnPropertyId::CURRENTPAGE:
             if ( rValue.getValueTypeClass() != TypeClass_STRING )
                 throw IllegalArgumentException();
+            break;
+        default:
             break;
         }
 
@@ -168,9 +170,9 @@ namespace pcr
 
     void SAL_CALL FormController::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue)
     {
-        switch ( _nHandle )
+        switch ( static_cast<OwnPropertyId>(_nHandle) )
         {
-        case OWN_PROPERTY_ID_INTROSPECTEDOBJECT:
+        case OwnPropertyId::INTROSPECTEDOBJECT:
         {
             Reference< XObjectInspectorModel > xModel( getInspectorModel() );
             if ( xModel.is() )
@@ -194,8 +196,10 @@ namespace pcr
             }
         }
         break;
-        case OWN_PROPERTY_ID_CURRENTPAGE:
+        case OwnPropertyId::CURRENTPAGE:
             restoreViewData( _rValue );
+            break;
+        default:
             break;
         }
     }
@@ -203,14 +207,16 @@ namespace pcr
 
     void SAL_CALL FormController::getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const
     {
-        switch ( nHandle )
+        switch ( static_cast<OwnPropertyId>(nHandle) )
         {
-        case OWN_PROPERTY_ID_INTROSPECTEDOBJECT:
+        case OwnPropertyId::INTROSPECTEDOBJECT:
             rValue <<= m_xCurrentInspectee;
             break;
 
-        case OWN_PROPERTY_ID_CURRENTPAGE:
+        case OwnPropertyId::CURRENTPAGE:
             rValue = const_cast< FormController* >( this )->getViewData();
+            break;
+        default:
             break;
         }
     }

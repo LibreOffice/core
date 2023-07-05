@@ -25,11 +25,15 @@
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <comphelper/diagnose_ex.hxx>
 
-#define TEXTTYPE_SINGLELINE     0
-#define TEXTTYPE_MULTILINE      1
-#define TEXTTYPE_RICHTEXT       2
-
-
+namespace
+{
+    enum class TextType
+    {
+        SINGLELINE = 0,
+        MULTILINE  = 1,
+        RICHTEXT   = 2
+    };
+};
 namespace pcr
 {
 
@@ -91,21 +95,21 @@ namespace pcr
 
             case PROPERTY_ID_TEXTTYPE:
             {
-                sal_Int32 nTextType = TEXTTYPE_SINGLELINE;
+                TextType nTextType = TextType::SINGLELINE;
                 bool bRichText = false;
                 OSL_VERIFY( m_xComponent->getPropertyValue( PROPERTY_RICHTEXT ) >>= bRichText );
                 if ( bRichText )
-                    nTextType = TEXTTYPE_RICHTEXT;
+                    nTextType = TextType::RICHTEXT;
                 else
                 {
                     bool bMultiLine = false;
                     OSL_VERIFY( m_xComponent->getPropertyValue( PROPERTY_MULTILINE ) >>= bMultiLine );
                     if ( bMultiLine )
-                        nTextType = TEXTTYPE_MULTILINE;
+                        nTextType = TextType::MULTILINE;
                     else
-                        nTextType = TEXTTYPE_SINGLELINE;
+                        nTextType = TextType::SINGLELINE;
                 }
-                aReturn <<= nTextType;
+                aReturn <<= static_cast<sal_Int32>(nTextType);
             }
             break;
 
@@ -150,13 +154,13 @@ namespace pcr
             {
                 bool bMultiLine = false;
                 bool bRichText = false;
-                sal_Int32 nTextType = TEXTTYPE_SINGLELINE;
+                sal_Int32 nTextType = static_cast<sal_Int32>(TextType::SINGLELINE);
                 OSL_VERIFY( _rValue >>= nTextType );
-                switch ( nTextType )
+                switch ( static_cast<TextType>(nTextType) )
                 {
-                case TEXTTYPE_SINGLELINE: bMultiLine = bRichText = false; break;
-                case TEXTTYPE_MULTILINE:  bMultiLine = true; bRichText = false; break;
-                case TEXTTYPE_RICHTEXT:   bMultiLine = true; bRichText = true; break;
+                case TextType::SINGLELINE: bMultiLine = bRichText = false; break;
+                case TextType::MULTILINE:  bMultiLine = true; bRichText = false; break;
+                case TextType::RICHTEXT:   bMultiLine = true; bRichText = true; break;
                 default:
                     OSL_FAIL( "EditPropertyHandler::setPropertyValue: invalid text type!" );
                 }
@@ -261,21 +265,23 @@ namespace pcr
         {
         case PROPERTY_ID_TEXTTYPE:
         {
-            sal_Int32 nTextType = TEXTTYPE_SINGLELINE;
-            getPropertyValue( PROPERTY_TEXTTYPE ) >>= nTextType;
+            sal_Int32 nTextTypeInt = static_cast<sal_Int32>(TextType::SINGLELINE);
+            getPropertyValue( PROPERTY_TEXTTYPE ) >>= nTextTypeInt;
+
+            TextType nTextType = static_cast<TextType>(nTextTypeInt);
 
             if ( impl_isSupportedProperty_nothrow( PROPERTY_ID_WORDBREAK ) )
-                _rxInspectorUI->enablePropertyUI( PROPERTY_WORDBREAK,   nTextType == TEXTTYPE_RICHTEXT );
-            _rxInspectorUI->enablePropertyUI( PROPERTY_MAXTEXTLEN,      nTextType != TEXTTYPE_RICHTEXT );
-            _rxInspectorUI->enablePropertyUI( PROPERTY_ECHO_CHAR,       nTextType == TEXTTYPE_SINGLELINE );
-            _rxInspectorUI->enablePropertyUI( PROPERTY_FONT,            nTextType != TEXTTYPE_RICHTEXT );
-            _rxInspectorUI->enablePropertyUI( PROPERTY_ALIGN,           nTextType != TEXTTYPE_RICHTEXT );
-            _rxInspectorUI->enablePropertyUI( PROPERTY_DEFAULT_TEXT,    nTextType != TEXTTYPE_RICHTEXT );
-            _rxInspectorUI->enablePropertyUI( PROPERTY_SHOW_SCROLLBARS, nTextType != TEXTTYPE_SINGLELINE );
-            _rxInspectorUI->enablePropertyUI( PROPERTY_LINEEND_FORMAT,  nTextType != TEXTTYPE_SINGLELINE );
-            _rxInspectorUI->enablePropertyUI( PROPERTY_VERTICAL_ALIGN,  nTextType == TEXTTYPE_SINGLELINE );
+                _rxInspectorUI->enablePropertyUI( PROPERTY_WORDBREAK,   nTextType == TextType::RICHTEXT );
+            _rxInspectorUI->enablePropertyUI( PROPERTY_MAXTEXTLEN,      nTextType != TextType::RICHTEXT );
+            _rxInspectorUI->enablePropertyUI( PROPERTY_ECHO_CHAR,       nTextType == TextType::SINGLELINE );
+            _rxInspectorUI->enablePropertyUI( PROPERTY_FONT,            nTextType != TextType::RICHTEXT );
+            _rxInspectorUI->enablePropertyUI( PROPERTY_ALIGN,           nTextType != TextType::RICHTEXT );
+            _rxInspectorUI->enablePropertyUI( PROPERTY_DEFAULT_TEXT,    nTextType != TextType::RICHTEXT );
+            _rxInspectorUI->enablePropertyUI( PROPERTY_SHOW_SCROLLBARS, nTextType != TextType::SINGLELINE );
+            _rxInspectorUI->enablePropertyUI( PROPERTY_LINEEND_FORMAT,  nTextType != TextType::SINGLELINE );
+            _rxInspectorUI->enablePropertyUI( PROPERTY_VERTICAL_ALIGN,  nTextType == TextType::SINGLELINE );
 
-            _rxInspectorUI->showCategory( "Data", nTextType != TEXTTYPE_RICHTEXT );
+            _rxInspectorUI->showCategory( "Data", nTextType != TextType::RICHTEXT );
         }
         break;
 

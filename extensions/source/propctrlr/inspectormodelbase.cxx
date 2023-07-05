@@ -28,13 +28,16 @@
 
 namespace pcr
 {
-
-
-#define MODEL_PROPERTY_ID_HAS_HELP_SECTION      2000
-#define MODEL_PROPERTY_ID_MIN_HELP_TEXT_LINES   2001
-#define MODEL_PROPERTY_ID_MAX_HELP_TEXT_LINES   2002
-#define MODEL_PROPERTY_ID_IS_READ_ONLY          2003
-
+   namespace
+   {
+        enum class ModelPropertyId
+        {
+            HAS_HELP_SECTION    = 2000,
+            MIN_HELP_TEXT_LINES = 2001,
+            MAX_HELP_TEXT_LINES = 2002,
+            IS_READ_ONLY        = 2003
+        };
+   };
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::uno::Any;
@@ -94,25 +97,25 @@ namespace pcr
     {
         registerProperty(
             "HasHelpSection",
-            MODEL_PROPERTY_ID_HAS_HELP_SECTION,
+            static_cast<sal_Int32>(ModelPropertyId::HAS_HELP_SECTION),
             PropertyAttribute::READONLY,
             &m_bHasHelpSection, cppu::UnoType<decltype(m_bHasHelpSection)>::get()
         );
         registerProperty(
             "MinHelpTextLines",
-            MODEL_PROPERTY_ID_MIN_HELP_TEXT_LINES,
+            static_cast<sal_Int32>(ModelPropertyId::MIN_HELP_TEXT_LINES),
             PropertyAttribute::READONLY,
             &m_nMinHelpTextLines, cppu::UnoType<decltype(m_nMinHelpTextLines)>::get()
         );
         registerProperty(
             "MaxHelpTextLines",
-            MODEL_PROPERTY_ID_MAX_HELP_TEXT_LINES,
+            static_cast<sal_Int32>(ModelPropertyId::MAX_HELP_TEXT_LINES),
             PropertyAttribute::READONLY,
             &m_nMaxHelpTextLines, cppu::UnoType<decltype(m_nMaxHelpTextLines)>::get()
         );
         registerProperty(
             "IsReadOnly",
-            MODEL_PROPERTY_ID_IS_READ_ONLY,
+            static_cast<sal_Int32>(ModelPropertyId::IS_READ_ONLY),
             PropertyAttribute::BOUND,
             &m_bIsReadOnly, cppu::UnoType<decltype(m_bIsReadOnly)>::get()
         );
@@ -225,7 +228,7 @@ namespace pcr
 
     void SAL_CALL ImplInspectorModel::setIsReadOnly( sal_Bool IsReadOnly )
     {
-        setFastPropertyValue( MODEL_PROPERTY_ID_IS_READ_ONLY, Any( IsReadOnly ) );
+        setFastPropertyValue( static_cast<sal_Int32>(ModelPropertyId::IS_READ_ONLY), Any( IsReadOnly ) );
     }
 
     sal_Bool SAL_CALL ImplInspectorModel::supportsService( const OUString& ServiceName )
