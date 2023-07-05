@@ -1998,7 +1998,7 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, S
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_BKGCOLOR ) == SfxItemState::SET ) )
     {
         auto& aColor = rSet.Get( EE_CHAR_BKGCOLOR ).GetValue();
-        rFont.SetTransparent(aColor == COL_TRANSPARENT);
+        rFont.SetTransparent(aColor.IsTransparent());
         rFont.SetFillColor(aColor);
     }
     if ( bSearchInParent || ( rSet.GetItemState( nWhich_FontHeight ) == SfxItemState::SET ) )

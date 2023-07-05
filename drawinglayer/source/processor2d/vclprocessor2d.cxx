@@ -185,11 +185,8 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
 
             // set FillColor Attribute
             const Color aFillColor(rTextCandidate.getTextFillColor());
-            if (aFillColor != COL_TRANSPARENT)
-            {
-                aFont.SetFillColor(aFillColor);
-                aFont.SetTransparent(false);
-            }
+            aFont.SetTransparent(aFillColor.IsTransparent());
+            aFont.SetFillColor(aFillColor);
 
             // handle additional font attributes
             const primitive2d::TextDecoratedPortionPrimitive2D* pTCPP = nullptr;

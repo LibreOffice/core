@@ -230,7 +230,7 @@ EditCharAttribBackgroundColor::EditCharAttribBackgroundColor(
 void EditCharAttribBackgroundColor::SetFont( SvxFont& rFont, OutputDevice* )
 {
     Color aColor = static_cast<const SvxColorItem*>(GetItem())->GetValue();
-    rFont.SetTransparent(aColor == COL_TRANSPARENT);
+    rFont.SetTransparent(aColor.IsTransparent());
     rFont.SetFillColor(aColor);
 }
 

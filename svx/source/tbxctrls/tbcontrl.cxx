@@ -2349,7 +2349,7 @@ void ColorWindow::SelectEntry(const NamedColor& rNamedColor)
 
     const Color &rColor = rNamedColor.m_aColor;
 
-    if (mxButtonAutoColor->get_visible() && (rColor == COL_TRANSPARENT || rColor == COL_AUTO))
+    if (mxButtonAutoColor->get_visible() && rColor.IsFullyTransparent())
     {
         mpDefaultButton = mxButtonAutoColor.get();
         return;
