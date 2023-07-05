@@ -180,25 +180,95 @@ constexpr frozen::unordered_map<std::u16string_view, SVGToken, 145> aSVGTokenMap
     { u"flowRoot", SVGToken::FlowRoot }
 };
 
-constexpr frozen::unordered_map<std::u16string_view, SVGToken, 32> aLowerCaseList
+// The same elements as the map above but lowercase. CSS is case insensitive
+// TODO: create separate maps for css and xml elements
+constexpr frozen::unordered_map<std::u16string_view, SVGToken, 145> aSVGLowerCaseTokenMapperList
 {
+    { u"width", SVGToken::Width },
+    { u"height", SVGToken::Height },
     { u"viewbox", SVGToken::ViewBox },
+    { u"transform", SVGToken::Transform },
+    { u"style", SVGToken::Style },
+    { u"display", SVGToken::Display }, // #i121656#
+    { u"d", SVGToken::D },
+    { u"x", SVGToken::X },
+    { u"y", SVGToken::Y },
+    { u"xmlns", SVGToken::Xmlns },
+    { u"version", SVGToken::Version },
+    { u"id", SVGToken::Id },
+    { u"in", SVGToken::In },
+    { u"rx", SVGToken::Rx },
+    { u"ry", SVGToken::Ry },
+    { u"points", SVGToken::Points },
+    { u"dx", SVGToken::Dx },
+    { u"dy", SVGToken::Dy },
+    { u"rotate", SVGToken::Rotate },
     { u"textlength", SVGToken::TextLength },
     { u"lengthadjust", SVGToken::LengthAdjust },
+    { u"font", SVGToken::Font },
+    { u"font-family", SVGToken::FontFamily },
+    { u"font-size", SVGToken::FontSize },
+    { u"font-size-adjust", SVGToken::FontSizeAdjust },
+    { u"font-stretch", SVGToken::FontStretch },
+    { u"font-style", SVGToken::FontStyle },
+    { u"font-variant", SVGToken::FontVariant },
+    { u"font-weight", SVGToken::FontWeight },
+    { u"direction", SVGToken::Direction },
+    { u"letter-spacing", SVGToken::LetterSpacing },
+    { u"text-decoration", SVGToken::TextDecoration },
+    { u"unicode-bidi", SVGToken::UnicodeBidi },
+    { u"word-spacing", SVGToken::WordSpacing },
+    { u"tspan", SVGToken::Tspan },
+    { u"tref", SVGToken::Tref },
     { u"textpath", SVGToken::TextPath },
     { u"startoffset", SVGToken::StartOffset },
+    { u"method", SVGToken::Method },
+    { u"spacing", SVGToken::Spacing },
+    { u"stddeviation", SVGToken::StdDeviation },
+    { u"text-align", SVGToken::TextAlign },
     { u"pathlength", SVGToken::PathLength },
+    { u"type", SVGToken::Type },
+    { u"class", SVGToken::Class },
+    { u"text-anchor", SVGToken::TextAnchor },
+    { u"xml:space", SVGToken::XmlSpace },
+    { u"color", SVGToken::Color },
     { u"clippath", SVGToken::ClipPathNode },
+    { u"clip-path", SVGToken::ClipPathProperty },
+    { u"fecolormatrix", SVGToken::FeColorMatrix },
+    { u"fedropshadow", SVGToken::FeDropShadow },
+    { u"feflood", SVGToken::FeFlood },
+    { u"feimage", SVGToken::FeImage },
+    { u"fegaussianblur", SVGToken::FeGaussianBlur },
+    { u"feoffset", SVGToken::FeOffset },
+    { u"filter", SVGToken::Filter },
+    { u"flood-color", SVGToken::FloodColor },
+    { u"flood-opacity", SVGToken::FloodOpacity },
+    { u"mask", SVGToken::Mask },
     { u"clippathunits", SVGToken::ClipPathUnits },
     { u"maskunits", SVGToken::MaskUnits },
     { u"maskcontentunits", SVGToken::MaskContentUnits },
+    { u"clip-rule", SVGToken::ClipRule },
+    { u"marker", SVGToken::Marker },
+    { u"marker-start", SVGToken::MarkerStart },
+    { u"marker-mid", SVGToken::MarkerMid },
+    { u"marker-end", SVGToken::MarkerEnd },
+    { u"refx", SVGToken::RefX },
+    { u"refy", SVGToken::RefY },
     { u"markerunits", SVGToken::MarkerUnits },
     { u"markerwidth", SVGToken::MarkerWidth },
     { u"markerheight", SVGToken::MarkerHeight },
+    { u"orient", SVGToken::Orient },
+    { u"pattern", SVGToken::Pattern },
     { u"patternunits", SVGToken::PatternUnits },
     { u"patterncontentunits", SVGToken::PatternContentUnits },
     { u"patterntransform", SVGToken::PatternTransform },
+    { u"opacity", SVGToken::Opacity },
+    { u"visibility", SVGToken::Visibility },
+    { u"title", SVGToken::Title },
+    { u"desc", SVGToken::Desc },
     { u"preserveaspectratio", SVGToken::PreserveAspectRatio },
+    { u"defer", SVGToken::Defer },
+    { u"none", SVGToken::None },
     { u"xminymin", SVGToken::XMinYMin },
     { u"xmidymin", SVGToken::XMidYMin },
     { u"xmaxymin", SVGToken::XMaxYMin },
@@ -208,42 +278,92 @@ constexpr frozen::unordered_map<std::u16string_view, SVGToken, 32> aLowerCaseLis
     { u"xminymax", SVGToken::XMinYMax },
     { u"xmidymax", SVGToken::XMidYMax },
     { u"xmaxymax", SVGToken::XMaxYMax },
+    { u"meet", SVGToken::Meet },
+    { u"slice", SVGToken::Slice },
+    { u"values", SVGToken::Values },
+
+    { u"defs", SVGToken::Defs },
+    { u"g", SVGToken::G },
+    { u"svg", SVGToken::Svg },
+    { u"symbol", SVGToken::Symbol },
+    { u"use", SVGToken::Use },
+    { u"a", SVGToken::A },
+
+    { u"circle", SVGToken::Circle },
+    { u"ellipse", SVGToken::Ellipse },
+    { u"line", SVGToken::Line },
+    { u"path", SVGToken::Path },
+    { u"polygon", SVGToken::Polygon },
+    { u"polyline", SVGToken::Polyline },
+    { u"rect", SVGToken::Rect },
+    { u"image", SVGToken::Image },
+
     { u"lineargradient", SVGToken::LinearGradient },
     { u"radialgradient", SVGToken::RadialGradient },
+    { u"stop", SVGToken::Stop },
+    { u"offset", SVGToken::Offset },
+    { u"x1", SVGToken::X1 },
+    { u"y1", SVGToken::Y1 },
+    { u"x2", SVGToken::X2 },
+    { u"y2", SVGToken::Y2 },
+    { u"cx", SVGToken::Cx },
+    { u"cy", SVGToken::Cy },
+    { u"fx", SVGToken::Fx },
+    { u"fy", SVGToken::Fy },
+    { u"r", SVGToken::R },
     { u"gradientunits", SVGToken::GradientUnits },
     { u"gradienttransform", SVGToken::GradientTransform },
     { u"spreadmethod", SVGToken::SpreadMethod },
+    { u"href", SVGToken::Href },
+    { u"xlink:href", SVGToken::XlinkHref },
+    { u"stop-color", SVGToken::StopColor },
+    { u"stop-opacity", SVGToken::StopOpacity },
+
+    { u"fill", SVGToken::Fill },
+    { u"fill-opacity", SVGToken::FillOpacity },
+    { u"fill-rule", SVGToken::FillRule },
+
+    { u"stroke", SVGToken::Stroke },
+    { u"stroke-dasharray", SVGToken::StrokeDasharray },
+    { u"stroke-dashoffset", SVGToken::StrokeDashoffset },
+    { u"stroke-linecap", SVGToken::StrokeLinecap },
+    { u"stroke-linejoin", SVGToken::StrokeLinejoin },
+    { u"stroke-miterlimit", SVGToken::StrokeMiterlimit },
+    { u"stroke-opacity", SVGToken::StrokeOpacity },
+    { u"stroke-width", SVGToken::StrokeWidth },
+
+    { u"text", SVGToken::Text },
+    { u"baseline-shift", SVGToken::BaselineShift },
     { u"flowroot", SVGToken::FlowRoot }
 };
+
+static_assert(sizeof(aSVGTokenMapperList) == sizeof(aSVGLowerCaseTokenMapperList),
+        "Number of elements in both maps must be the same");
 
 SVGToken StrToSVGToken(const OUString& rStr, bool bCaseIndependent)
 {
     OUString aSearchString = rStr.startsWith("svg:") ? rStr.copy(4) : rStr;
 
-    auto const aResult = aSVGTokenMapperList.find(aSearchString);
-
-    if (aResult == aSVGTokenMapperList.end())
+    if (bCaseIndependent)
     {
-        if (bCaseIndependent)
+        auto const aResult(aSVGLowerCaseTokenMapperList.find(aSearchString.toAsciiLowerCase()));
+
+        if (aResult != aSVGLowerCaseTokenMapperList.end())
         {
-            auto const aResultLowerCase(aLowerCaseList.find(rStr.toAsciiLowerCase()));
-
-            if (aResultLowerCase == aLowerCaseList.end())
-            {
-                return SVGToken::Unknown;
-            }
-            else
-            {
-                return aResultLowerCase->second;
-            }
+            return aResult->second;
         }
-
-        return SVGToken::Unknown;
     }
     else
     {
-        return aResult->second;
+        auto const aResult(aSVGTokenMapperList.find(aSearchString));
+
+        if (aResult != aSVGTokenMapperList.end())
+        {
+            return aResult->second;
+        }
     }
+
+    return SVGToken::Unknown;
 }
 
 OUString SVGTokenToStr(const SVGToken& rToken)
