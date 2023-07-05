@@ -2325,7 +2325,7 @@ vcl::Window* SfxViewShell::GetEditWindowForActiveOLEObj() const
 
 OUString SfxViewShell::GetColorConfigName() const
 {
-    SAL_WARN("sfx.view", "SfxViewShell::GetColorConfigName not overriden!");
+    SAL_WARN("sfx.view", "SfxViewShell::GetColorConfigName not overridden!");
     return {};
 }
 
