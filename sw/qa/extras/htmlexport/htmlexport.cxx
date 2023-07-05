@@ -1119,8 +1119,12 @@ DECLARE_HTMLEXPORT_TEST(testTdf132739, "tdf132739.odt")
                 "background: #5983b0; border: 1px solid #333333; padding: 0.04in");
 }
 
-DECLARE_HTMLEXPORT_TEST(testFieldShadeReqIf, "field-shade-reqif.odt")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFieldShadeReqIf)
 {
+    createSwDoc("field-shade-reqif.odt");
+    setFilterOptions("xhtmlns=reqif-xhtml");
+    save(mpFilter);
+
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
