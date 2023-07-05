@@ -424,6 +424,9 @@ private:
                         uno::Reference<text::XTextContent> const& xParagraph, SwTextNode* pTextNode,
                         sal_Int32 nTextStart)
     {
+        if (xTextRange->getString().isEmpty())
+            return;
+
         Color nParaBackColor(COL_AUTO);
         uno::Reference<beans::XPropertySet> xParagraphProperties(xParagraph, uno::UNO_QUERY);
         if (!(xParagraphProperties->getPropertyValue("ParaBackColor") >>= nParaBackColor))
@@ -475,7 +478,7 @@ private:
         // If not character background color, try paragraph background color
         if (aBackgroundColor == COL_AUTO)
             aBackgroundColor = nParaBackColor;
-        else if (!xTextRange->getString().isEmpty())
+        else
         {
             auto pIssue
                 = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_FORMATTING_CONVEYS_MEANING),
@@ -503,7 +506,12 @@ private:
         double fContrastRatio = calculateContrastRatio(aForegroundColor, aBackgroundColor);
         if (fContrastRatio < 4.5)
         {
-            lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_CONTRAST));
+            auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_CONTRAST));
+            pIssue->setIssueObject(IssueObject::TEXT);
+            pIssue->setNode(pTextNode);
+            pIssue->setDoc(pTextNode->GetDoc());
+            pIssue->setStart(nTextStart);
+            pIssue->setEnd(nTextStart + xTextRange->getString().getLength());
         }
     }
 
