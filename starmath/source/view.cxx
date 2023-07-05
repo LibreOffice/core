@@ -415,8 +415,8 @@ void SmGraphicWidget::GetFocus()
 {
     if (!SmViewShell::IsInlineEditEnabled())
         return;
-    if (GetView().GetEditWindow())
-        GetView().GetEditWindow()->Flush();
+    if (SmEditWindow* pEdit = GetView().GetEditWindow())
+        pEdit->Flush();
     //Let view shell know what insertions should be done in visual editor
     GetView().SetInsertIntoEditWindow(false);
     SetIsCursorVisible(true);
@@ -591,8 +591,7 @@ void SmGraphicWidget::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     {
         SetIsCursorVisible(false);  // (old) cursor must be drawn again
 
-        const SmEditWindow* pEdit = GetView().GetEditWindow();
-        if (pEdit)
+        if (const SmEditWindow* pEdit = GetView().GetEditWindow())
         {   // get new position for formula-cursor (for possible altered formula)
             sal_Int32  nRow;
             sal_uInt16 nCol;
@@ -1568,8 +1567,9 @@ void SmViewShell::ShowError(const SmErrorDesc* pErrorDesc)
     if (pErrorDesc || nullptr != (pErrorDesc = GetDoc()->GetParser()->GetError()) )
     {
         SetStatusText( pErrorDesc->m_aText );
-        GetEditWindow()->MarkError( Point( pErrorDesc->m_pNode->GetColumn(),
-                                           pErrorDesc->m_pNode->GetRow()));
+        if (SmEditWindow* pEdit = GetEditWindow())
+            pEdit->MarkError( Point( pErrorDesc->m_pNode->GetColumn(),
+                                               pErrorDesc->m_pNode->GetRow()));
     }
 }
 
@@ -1612,8 +1612,7 @@ void SmViewShell::Insert( SfxMedium& rMedium )
         return;
 
     OUString aText = pDoc->GetText();
-    SmEditWindow *pEditWin = GetEditWindow();
-    if (pEditWin)
+    if (SmEditWindow *pEditWin = GetEditWindow())
         pEditWin->InsertText( aText );
     else
     {
@@ -1649,8 +1648,7 @@ void SmViewShell::InsertFrom(SfxMedium &rMedium)
         return;
 
     OUString aText = pDoc->GetText();
-    SmEditWindow *pEditWin = GetEditWindow();
-    if (pEditWin)
+    if (SmEditWindow *pEditWin = GetEditWindow())
         pEditWin->InsertText(aText);
     else
         SAL_WARN( "starmath", "EditWindow missing" );
@@ -1720,8 +1718,8 @@ void SmViewShell::Execute(SfxRequest& rReq)
                 auto pTrans = dynamic_cast<TransferableHelper*>(xTrans.get());
                 if (pTrans)
                 {
-                    SmEditWindow *pEditWin = GetEditWindow();
-                    pTrans->CopyToClipboard(pEditWin->GetClipboard());
+                    if (pWin)
+                        pTrans->CopyToClipboard(pWin->GetClipboard());
                 }
             }
         }
@@ -1729,15 +1727,17 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
         case SID_PASTEOBJECT:
         {
-            SmEditWindow *pEditWin = GetEditWindow();
-            TransferableDataHelper aData(TransferableDataHelper::CreateFromClipboard(pEditWin->GetClipboard()));
             uno::Reference < io::XInputStream > xStrm;
-            SotClipboardFormatId nId;
-            if( aData.GetTransferable().is() &&
-                ( aData.HasFormat( nId = SotClipboardFormatId::EMBEDDED_OBJ ) ||
-                  (aData.HasFormat( SotClipboardFormatId::OBJECTDESCRIPTOR ) &&
-                   aData.HasFormat( nId = SotClipboardFormatId::EMBED_SOURCE ))))
-                xStrm = aData.GetInputStream(nId, OUString());
+            if (pWin)
+            {
+                TransferableDataHelper aData(TransferableDataHelper::CreateFromClipboard(pWin->GetClipboard()));
+                SotClipboardFormatId nId;
+                if( aData.GetTransferable().is() &&
+                    ( aData.HasFormat( nId = SotClipboardFormatId::EMBEDDED_OBJ ) ||
+                      (aData.HasFormat( SotClipboardFormatId::OBJECTDESCRIPTOR ) &&
+                       aData.HasFormat( nId = SotClipboardFormatId::EMBED_SOURCE ))))
+                    xStrm = aData.GetInputStream(nId, OUString());
+            }
 
             if (xStrm.is())
             {
@@ -1782,16 +1782,18 @@ void SmViewShell::Execute(SfxRequest& rReq)
                 bool bCallExec = nullptr == pWin;
                 if( !bCallExec )
                 {
-                    SmEditWindow *pEditWin = GetEditWindow();
-                    TransferableDataHelper aDataHelper(
-                        TransferableDataHelper::CreateFromClipboard(
-                                                    pEditWin->GetClipboard()));
+                    if (pWin)
+                    {
+                        TransferableDataHelper aDataHelper(
+                            TransferableDataHelper::CreateFromClipboard(
+                                                        pWin->GetClipboard()));
 
-                    if( aDataHelper.GetTransferable().is() &&
-                        aDataHelper.HasFormat( SotClipboardFormatId::STRING ))
-                        pWin->Paste();
-                    else
-                        bCallExec = true;
+                        if( aDataHelper.GetTransferable().is() &&
+                            aDataHelper.HasFormat( SotClipboardFormatId::STRING ))
+                            pWin->Paste();
+                        else
+                            bCallExec = true;
+                    }
                 }
                 if( bCallExec )
                 {
@@ -1851,51 +1853,53 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
         case SID_IMPORT_MATHML_CLIPBOARD:
         {
-            SmEditWindow *pEditWin = GetEditWindow();
-            TransferableDataHelper aDataHelper(TransferableDataHelper::CreateFromClipboard(pEditWin->GetClipboard()));
-            uno::Reference < io::XInputStream > xStrm;
-            if  ( aDataHelper.GetTransferable().is() )
+            if (pWin)
             {
-                SotClipboardFormatId nId = SotClipboardFormatId::MATHML;
-                if (aDataHelper.HasFormat(nId))
+                TransferableDataHelper aDataHelper(TransferableDataHelper::CreateFromClipboard(pWin->GetClipboard()));
+                uno::Reference < io::XInputStream > xStrm;
+                if  ( aDataHelper.GetTransferable().is() )
                 {
-                    xStrm = aDataHelper.GetInputStream(nId, "");
-                    if (xStrm.is())
-                    {
-                        SfxMedium aClipboardMedium;
-                        aClipboardMedium.GetItemSet(); //generate initial itemset, not sure if necessary
-                        std::shared_ptr<const SfxFilter> pMathFilter =
-                            SfxFilter::GetFilterByName(MATHML_XML);
-                        aClipboardMedium.SetFilter(pMathFilter);
-                        aClipboardMedium.setStreamToLoadFrom(xStrm, true /*bIsReadOnly*/);
-                        InsertFrom(aClipboardMedium);
-                        GetDoc()->UpdateText();
-                    }
-                }
-                else
-                {
-                    nId = SotClipboardFormatId::STRING;
+                    SotClipboardFormatId nId = SotClipboardFormatId::MATHML;
                     if (aDataHelper.HasFormat(nId))
                     {
-                        // In case of FORMAT_STRING no stream exists, need to generate one
-                        OUString aString;
-                        if (aDataHelper.GetString( nId, aString))
+                        xStrm = aDataHelper.GetInputStream(nId, "");
+                        if (xStrm.is())
                         {
-                            // tdf#117091 force xml declaration to exist
-                            if (!aString.startsWith("<?xml"))
-                                aString = "<?xml version=\"1.0\"?>\n" + aString;
-
                             SfxMedium aClipboardMedium;
-                            aClipboardMedium.GetItemSet(); //generates initial itemset, not sure if necessary
+                            aClipboardMedium.GetItemSet(); //generate initial itemset, not sure if necessary
                             std::shared_ptr<const SfxFilter> pMathFilter =
                                 SfxFilter::GetFilterByName(MATHML_XML);
                             aClipboardMedium.SetFilter(pMathFilter);
-
-                            SvMemoryStream aStrm( const_cast<sal_Unicode *>(aString.getStr()), aString.getLength() * sizeof(sal_Unicode), StreamMode::READ);
-                            uno::Reference<io::XInputStream> xStrm2( new ::utl::OInputStreamWrapper(aStrm) );
-                            aClipboardMedium.setStreamToLoadFrom(xStrm2, true /*bIsReadOnly*/);
+                            aClipboardMedium.setStreamToLoadFrom(xStrm, true /*bIsReadOnly*/);
                             InsertFrom(aClipboardMedium);
                             GetDoc()->UpdateText();
+                        }
+                    }
+                    else
+                    {
+                        nId = SotClipboardFormatId::STRING;
+                        if (aDataHelper.HasFormat(nId))
+                        {
+                            // In case of FORMAT_STRING no stream exists, need to generate one
+                            OUString aString;
+                            if (aDataHelper.GetString( nId, aString))
+                            {
+                                // tdf#117091 force xml declaration to exist
+                                if (!aString.startsWith("<?xml"))
+                                    aString = "<?xml version=\"1.0\"?>\n" + aString;
+
+                                SfxMedium aClipboardMedium;
+                                aClipboardMedium.GetItemSet(); //generates initial itemset, not sure if necessary
+                                std::shared_ptr<const SfxFilter> pMathFilter =
+                                    SfxFilter::GetFilterByName(MATHML_XML);
+                                aClipboardMedium.SetFilter(pMathFilter);
+
+                                SvMemoryStream aStrm( const_cast<sal_Unicode *>(aString.getStr()), aString.getLength() * sizeof(sal_Unicode), StreamMode::READ);
+                                uno::Reference<io::XInputStream> xStrm2( new ::utl::OInputStreamWrapper(aStrm) );
+                                aClipboardMedium.setStreamToLoadFrom(xStrm2, true /*bIsReadOnly*/);
+                                InsertFrom(aClipboardMedium);
+                                GetDoc()->UpdateText();
+                            }
                         }
                     }
                 }
@@ -2240,16 +2244,14 @@ SmViewShell::~SmViewShell()
     //!! this view shell is not active anymore !!
     // Thus 'SmGetActiveView' will give a 0 pointer.
     // Thus we need to supply this view as argument
-    SmEditWindow *pEditWin = GetEditWindow();
-    if (pEditWin)
+    if (SmEditWindow *pEditWin = GetEditWindow())
         pEditWin->DeleteEditView();
     mxGraphicWindow.disposeAndClear();
 }
 
 void SmViewShell::Deactivate( bool bIsMDIActivate )
 {
-    SmEditWindow *pEdit = GetEditWindow();
-    if ( pEdit )
+    if (SmEditWindow *pEdit = GetEditWindow())
         pEdit->Flush();
 
     SfxViewShell::Deactivate( bIsMDIActivate );
