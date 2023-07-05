@@ -590,7 +590,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
             if (rMarkList.GetMarkCount() == 1
                 && ( rMarkList.GetMark(0)->GetMarkedSdrObj() == mxTextObj.get().get()) )
             {
-                if( mxTextObj.get().is() && !GetTextObj()->GetOutlinerParaObject() )
+                if (!GetTextObj()->GetOutlinerParaObject() )
                     bEmptyTextObj = true;
                 else
                     bFirstObjCreated = true;
