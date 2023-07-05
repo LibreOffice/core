@@ -3537,12 +3537,6 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
   </rng:define>
 
   <rng:define name="draw-frame-attlist" combine="interleave">
-    <!-- https://issues.oasis-open.org/browse/OFFICE-4136 -->
-    <rng:optional>
-      <rng:attribute name="loext:decorative">
-        <rng:ref name="boolean"/>
-      </rng:attribute>
-    </rng:optional>
     <!-- TODO(vmiklos) no proposal for multi-page floating tables -->
     <rng:optional>
       <rng:attribute name="loext:may-break-between-pages">
@@ -3552,6 +3546,7 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
   </rng:define>
 
   <rng:define name="style-graphic-properties-attlist" combine="interleave">
+    <!-- https://issues.oasis-open.org/browse/OFFICE-4142 -->
     <rng:optional>
       <rng:attribute name="loext:decorative">
         <rng:ref name="boolean"/>
