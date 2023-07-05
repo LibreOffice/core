@@ -1165,7 +1165,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(weld::Container* pPage, weld::DialogCon
     m_bOldAsian = SvtCJKOptions::IsAnyEnabled();
     m_xAsianSupportCB->set_active(m_bOldAsian);
     m_xAsianSupportCB->save_state();
-    bool bReadonly = SvtCJKOptions::IsReadOnly(SvtCJKOptions::E_ALL);
+    bool bReadonly = SvtCJKOptions::IsAnyReadOnly();
     m_xAsianSupportCB->set_sensitive(!bReadonly);
     SupportHdl(*m_xAsianSupportCB);
 
@@ -1651,7 +1651,7 @@ IMPL_LINK_NOARG(OfaLanguagesTabPage, LocaleSettingHdl, weld::ComboBox&, void)
     }
     // second check if CJK must be enabled
     // #103299# - if CJK support is not readonly
-    if(!SvtCJKOptions::IsReadOnly(SvtCJKOptions::E_ALL))
+    if(!SvtCJKOptions::IsAnyReadOnly())
     {
         bool bIsCJKFixed = bool(nType & SvtScriptType::ASIAN);
         lcl_checkLanguageCheckBox(*m_xAsianSupportCB, bIsCJKFixed, m_bOldAsian);

@@ -22,18 +22,6 @@
 
 namespace SvtCJKOptions
 {
-enum EOption
-{
-    E_CJKFONT,
-    E_VERTICALTEXT,
-    E_ASIANTYPOGRAPHY,
-    E_JAPANESEFIND,
-    E_RUBY,
-    E_CHANGECASEMAP,
-    E_DOUBLELINES,
-    E_ALL // special one for IsAnyEnabled()/SetAll() functionality
-};
-
 SVL_DLLPUBLIC bool IsCJKFontEnabled();
 SVL_DLLPUBLIC bool IsVerticalTextEnabled();
 SVL_DLLPUBLIC bool IsAsianTypographyEnabled();
@@ -44,7 +32,7 @@ SVL_DLLPUBLIC bool IsDoubleLinesEnabled();
 
 SVL_DLLPUBLIC void SetAll(bool bSet);
 SVL_DLLPUBLIC bool IsAnyEnabled();
-SVL_DLLPUBLIC bool IsReadOnly(EOption eOption);
+SVL_DLLPUBLIC bool IsAnyReadOnly();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
