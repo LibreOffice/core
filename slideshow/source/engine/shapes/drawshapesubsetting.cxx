@@ -579,16 +579,24 @@ namespace slideshow::internal
                             aLastWordStart = aNext;
                             [[fallthrough]];
                         case DrawShapeSubsetting::CLASS_CHARACTER_CELL_END:
+                            // tdf#113290
+                            // This is a special case since a character cell
+                            // (AKA grapheme cluster) can have multiple
+                            // characters, so if we passed nCurrCharCount to
+                            // io_rFunctor() it would stop at the first
+                            // character in the cluster, so we subtract one
+                            // so that it matches when we reach the start of
+                            // the next cluster.
                             if( !io_rFunctor( DrawShapeSubsetting::CLASS_CHARACTER_CELL_END,
-                                              nCurrCharCount,
+                                              nCurrCharCount - 1,
                                               aLastCharStart,
-                                              aNext ) )
+                                              aCurr ) )
                             {
                                 return;
                             }
 
                             ++nCurrCharCount;
-                            aLastCharStart = aNext;
+                            aLastCharStart = aCurr;
                             break;
                     }
 
