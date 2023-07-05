@@ -1053,7 +1053,10 @@ public:
         assert(nLevel >= 0);
         if (nLevel > m_nPreviousLevel && std::abs(nLevel - m_nPreviousLevel) > 1)
         {
-            lclAddIssue(m_rIssueCollection, SwResId(STR_HEADINGS_NOT_IN_ORDER));
+            auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_HEADINGS_NOT_IN_ORDER));
+            pIssue->setIssueObject(IssueObject::TEXT);
+            pIssue->setDoc(pCurrent->GetDoc());
+            pIssue->setNode(pCurrent);
         }
         m_nPreviousLevel = nLevel;
     }
@@ -1184,7 +1187,10 @@ public:
                 = resultString.replaceAll("%LEVEL_CURRENT%", OUString::number(currentLevel));
             resultString = resultString.replaceAll("%LEVEL_PREV%", OUString::number(m_prevLevel));
 
-            lclAddIssue(m_rIssueCollection, resultString);
+            auto pIssue = lclAddIssue(m_rIssueCollection, resultString);
+            pIssue->setIssueObject(IssueObject::TEXT);
+            pIssue->setDoc(pCurrent->GetDoc());
+            pIssue->setNode(pCurrent);
         }
 
         // Updating previous level.
