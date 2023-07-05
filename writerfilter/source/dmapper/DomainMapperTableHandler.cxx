@@ -1089,13 +1089,14 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
     // 1. Collect all the table-style-defined properties, that aren't overridden by the
     //    paragraph style or direct formatting
     std::vector<beans::PropertyValue> aProps;
+    std::optional<OUString> oParagraphText;
 
     for( auto const& eId : aAllTableParaProperties )
     {
         // apply paragraph and character properties of the table style on table paragraphs
         // if there is no direct paragraph formatting
-        bool bIsParaLevel = rParaProp.m_pPropertyMap->isSet(eId);
-        if ( !bIsParaLevel || isCharacterProperty(eId) )
+        bool bSetDirectlyInParaLevel = rParaProp.m_pPropertyMap->isSet(eId);
+        if ( !bSetDirectlyInParaLevel || isCharacterProperty(eId) )
         {
             if ( (eId == PROP_PARA_LEFT_MARGIN || eId == PROP_PARA_FIRST_LINE_INDENT) &&
                     rParaProp.m_pPropertyMap->isSet(PROP_NUMBERING_RULES) )
@@ -1111,7 +1112,20 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
             // this cell applies the table style property
             if (pCellProp != rCellProperties.end())
             {
-                bool bDocDefault;
+                if (bSetDirectlyInParaLevel) // it is a character property set directly in the paragraph
+                {
+                    if (!oParagraphText) // do it only once
+                    {
+                        uno::Reference<text::XParagraphCursor> xParagraph(
+                            rParaProp.m_rEndParagraph->getText()->createTextCursorByRange(rParaProp.m_rEndParagraph), uno::UNO_QUERY_THROW );
+                        // select paragraph
+                        xParagraph->gotoStartOfParagraph( true );
+                        oParagraphText = xParagraph->getString();
+                    }
+                    // don't overwrite empty paragraph with table style, if it has a direct paragraph formatting
+                    if (oParagraphText->isEmpty())
+                        continue;
+                }
                 // handle paragraph background color defined in CellColorHandler
                 if (eId == PROP_FILL_COLOR)
                 {
@@ -1127,6 +1141,7 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                 OUString sParaStyleName;
                 rParaProp.m_rPropertySet->getPropertyValue("ParaStyleName") >>= sParaStyleName;
                 StyleSheetEntryPtr pEntry = m_rDMapper_Impl.GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(sParaStyleName);
+                bool bDocDefault;
                 uno::Any aParaStyle = m_rDMapper_Impl.GetPropertyFromStyleSheet(eId, pEntry, true, true, &bDocDefault);
                 // A very strange compatibility rule says that the DEFAULT style's specified fontsize of 11 or 12
                 // or a specified left justify will always be overridden by the table-style.
@@ -1150,16 +1165,8 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                 }
 
                 // use table style when no paragraph style setting or a docDefault value is applied instead of it
-                if ( aParaStyle == uno::Any() || bDocDefault || bCompatOverride ) try
+                if (!aParaStyle.hasValue() || bDocDefault || bCompatOverride) try
                 {
-                    uno::Reference<text::XParagraphCursor> xParagraph(
-                        rParaProp.m_rEndParagraph->getText()->createTextCursorByRange(rParaProp.m_rEndParagraph), uno::UNO_QUERY_THROW );
-                    // select paragraph
-                    xParagraph->gotoStartOfParagraph( true );
-                    // don't overwrite empty paragraph with table style, if it has a direct paragraph formatting
-                    if ( bIsParaLevel && xParagraph->getString().getLength() == 0 )
-                        continue;
-
                     // apply style setting when the paragraph doesn't modify it
                     aProps.push_back(comphelper::makePropertyValue(sPropertyName, pCellProp->Value));
                     if (eId == PROP_FILL_COLOR)
