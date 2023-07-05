@@ -111,8 +111,8 @@ public:
     virtual const OUString& GetFollow() const override;
     const OUString& GetLink() const;
 
-    virtual sal_uLong GetHelpId( OUString& rFile ) override;
-    virtual void SetHelpId( const OUString& r, sal_uLong nId ) override;
+    virtual sal_uInt32 GetHelpId( OUString& rFile ) override;
+    virtual void SetHelpId( const OUString& r, sal_uInt32 nId ) override;
 
     /** Preset the members without physical access.
      Used by StyleSheetPool. */

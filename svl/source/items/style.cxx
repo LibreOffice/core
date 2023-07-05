@@ -270,13 +270,13 @@ std::optional<SfxItemSet> SfxStyleSheetBase::GetItemSetForPreview()
 /**
  * Set help file and ID and return it
  */
-sal_uLong SfxStyleSheetBase::GetHelpId( OUString& rFile )
+sal_uInt32 SfxStyleSheetBase::GetHelpId( OUString& rFile )
 {
     rFile = aHelpFile;
     return nHelpId;
 }
 
-void SfxStyleSheetBase::SetHelpId( const OUString& rFile, sal_uLong nId )
+void SfxStyleSheetBase::SetHelpId( const OUString& rFile, sal_uInt32 nId )
 {
     aHelpFile = rFile;
     nHelpId = nId;

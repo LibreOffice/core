@@ -62,7 +62,7 @@ public:
     virtual bool        HasFollowSupport() const override;
     virtual bool        HasParentSupport() const override;
     virtual bool        HasClearParentSupport() const override;
-    virtual void        SetHelpId( const OUString& r, sal_uLong nId ) override;
+    virtual void        SetHelpId( const OUString& r, sal_uInt32 nId ) override;
 
     bool IsEditable();
 

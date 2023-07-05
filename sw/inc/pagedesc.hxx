@@ -275,7 +275,7 @@ public:
     sal_uInt16 GetPoolFormatId() const         { return m_Master.GetPoolFormatId(); }
     void SetPoolFormatId(sal_uInt16 const nId) { m_Master.SetPoolFormatId(nId); }
     sal_uInt16 GetPoolHelpId() const        { return m_Master.GetPoolHelpId(); }
-    void SetPoolHelpId(sal_uInt16 const nId){ m_Master.SetPoolHelpId(nId); }
+    void SetPoolHelpId(sal_uInt32 const nId){ m_Master.SetPoolHelpId(nId); }
     sal_uInt8 GetPoolHlpFileId() const      { return m_Master.GetPoolHlpFileId(); }
     void SetPoolHlpFileId(sal_uInt8 const nId) { m_Master.SetPoolHlpFileId(nId); }
 

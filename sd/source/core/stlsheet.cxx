@@ -650,7 +650,7 @@ struct ApiNameMap
         { std::u16string_view(u"Arrow Dashed"), HID_POOLSHEET_LINES_DASHED }
       };
 
-OUString GetApiNameForHelpId(sal_uLong nId)
+OUString GetApiNameForHelpId(sal_uInt32 nId)
 {
     if ((nId >= HID_PSEUDOSHEET_OUTLINE1) && (nId <= HID_PSEUDOSHEET_OUTLINE9))
         return "outline" + OUStringChar(sal_Unicode('1' + (nId - HID_PSEUDOSHEET_OUTLINE1)));
@@ -685,7 +685,7 @@ sal_uInt32 GetHelpIdForApiName(std::u16string_view sName)
 }
 }
 
-void SdStyleSheet::SetHelpId( const OUString& r, sal_uLong nId )
+void SdStyleSheet::SetHelpId( const OUString& r, sal_uInt32 nId )
 {
     SfxStyleSheet::SetHelpId( r, nId );
 

@@ -53,7 +53,7 @@ class SW_DLLPUBLIC SwFormat : public sw::BorderCacheOwner, public sw::Broadcasti
     sal_uInt16 m_nWhichId;
     sal_uInt16 m_nPoolFormatId;        /**< Id for "automatically" created formats.
                                        (is not hard attribution!!!) */
-    sal_uInt16 m_nPoolHelpId;       ///< HelpId for this Pool-style.
+    sal_uInt32 m_nPoolHelpId;       ///< HelpId for this Pool-style.
     sal_uInt8 m_nPoolHlpFileId;     ///< FilePos to Doc to these style helps.
     bool   m_bAutoFormat : 1;      /**< FALSE: it is a template.
                                        default is true! */
@@ -164,8 +164,8 @@ public:
     void SetPoolFormatId( sal_uInt16 nId ) { m_nPoolFormatId = nId; }
 
     /// Get and set Help-IDs for document templates.
-    sal_uInt16 GetPoolHelpId() const { return m_nPoolHelpId; }
-    void SetPoolHelpId( sal_uInt16 nId ) { m_nPoolHelpId = nId; }
+    sal_uInt32 GetPoolHelpId() const { return m_nPoolHelpId; }
+    void SetPoolHelpId( sal_uInt32 nId ) { m_nPoolHelpId = nId; }
     sal_uInt8 GetPoolHlpFileId() const { return m_nPoolHlpFileId; }
     void SetPoolHlpFileId( sal_uInt8 nId ) { m_nPoolHlpFileId = nId; }
 

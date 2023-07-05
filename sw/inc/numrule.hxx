@@ -254,7 +254,7 @@ public:
 
     /// Query and set Help-IDs for document styles.
     sal_uInt16 GetPoolHelpId() const        { return mnPoolHelpId; }
-    void SetPoolHelpId( sal_uInt16 nId )    { mnPoolHelpId = nId; }
+    void SetPoolHelpId( sal_uInt32 nId )    { mnPoolHelpId = nId; }
     sal_uInt8 GetPoolHlpFileId() const      { return mnPoolHlpFileId; }
     void SetPoolHlpFileId( sal_uInt8 nId )  { mnPoolHlpFileId = nId; }
 

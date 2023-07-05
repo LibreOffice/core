@@ -2468,7 +2468,7 @@ OUString SwDocStyleSheet::GetUsedBy()
     return m_pNumRule ? m_pNumRule->MakeParagraphStyleListString() : OUString();
 }
 
-sal_uLong  SwDocStyleSheet::GetHelpId( OUString& rFile )
+sal_uInt32  SwDocStyleSheet::GetHelpId( OUString& rFile )
 {
     sal_uInt16 nId = 0;
     sal_uInt16 nPoolId = 0;
@@ -2567,10 +2567,9 @@ sal_uLong  SwDocStyleSheet::GetHelpId( OUString& rFile )
     return nId;
 }
 
-void  SwDocStyleSheet::SetHelpId( const OUString& r, sal_uLong nId )
+void  SwDocStyleSheet::SetHelpId( const OUString& r, sal_uInt32 nId )
 {
     sal_uInt8 nFileId = static_cast< sal_uInt8 >(m_rDoc.SetDocPattern( r ));
-    sal_uInt16 nHId = static_cast< sal_uInt16 >(nId); //!! SFX changed over to ULONG arbitrarily!
 
     SwFormat* pTmpFormat = nullptr;
     switch( nFamily )
@@ -2579,12 +2578,12 @@ void  SwDocStyleSheet::SetHelpId( const OUString& r, sal_uLong nId )
     case SfxStyleFamily::Para : pTmpFormat = m_pColl;       break;
     case SfxStyleFamily::Frame: pTmpFormat = m_pFrameFormat;     break;
     case SfxStyleFamily::Page :
-        const_cast<SwPageDesc*>(m_pDesc)->SetPoolHelpId( nHId );
+        const_cast<SwPageDesc*>(m_pDesc)->SetPoolHelpId( nId );
         const_cast<SwPageDesc*>(m_pDesc)->SetPoolHlpFileId( nFileId );
         break;
 
     case SfxStyleFamily::Pseudo:
-        const_cast<SwNumRule*>(m_pNumRule)->SetPoolHelpId( nHId );
+        const_cast<SwNumRule*>(m_pNumRule)->SetPoolHelpId( nId );
         const_cast<SwNumRule*>(m_pNumRule)->SetPoolHlpFileId( nFileId );
         break;
 
@@ -2594,7 +2593,7 @@ void  SwDocStyleSheet::SetHelpId( const OUString& r, sal_uLong nId )
     }
     if( pTmpFormat )
     {
-        pTmpFormat->SetPoolHelpId( nHId );
+        pTmpFormat->SetPoolHelpId( nId );
         pTmpFormat->SetPoolHlpFileId( nFileId );
     }
 }

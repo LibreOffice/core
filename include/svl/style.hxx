@@ -125,7 +125,7 @@ protected:
     SfxItemSet*             pSet;           // ItemSet
     SfxStyleSearchBits      nMask;          // Flags
 
-    sal_uLong               nHelpId;        // help ID
+    sal_uInt32              nHelpId;        // help ID
 
     bool                    bMySet;         // sal_True: delete Set in dtor
     bool                    bHidden;
@@ -169,8 +169,8 @@ public:
     virtual bool IsHidden() const { return bHidden; }
     virtual void SetHidden( bool bValue );
 
-    virtual sal_uLong GetHelpId( OUString& rFile );
-    virtual void   SetHelpId( const OUString& r, sal_uLong nId );
+    virtual sal_uInt32 GetHelpId( OUString& rFile );
+    virtual void   SetHelpId( const OUString& r, sal_uInt32 nId );
 
     virtual SfxItemSet& GetItemSet();
     /// Due to writer's usual lack of sanity this is a separate function for
