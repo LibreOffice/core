@@ -297,6 +297,7 @@ private:
 DECL_ABSTDLG_CLASS(AbstractSvxObjectTitleDescDialog,SvxObjectTitleDescDialog)
     virtual void GetTitle(OUString& rName) override;
     virtual void GetDescription(OUString& rName) override;
+    virtual void IsDecorative(bool & rIsDecorative) override;
 };
 
 // AbstractSvxMultiPathDialog_Impl
@@ -523,7 +524,7 @@ public:
                                             const OUString& rName, const OUString& rDesc) override;
     // #i68101#
     virtual VclPtr<AbstractSvxObjectNameDialog> CreateSvxObjectNameDialog(weld::Window* pParent, const OUString& rName) override;
-    virtual VclPtr<AbstractSvxObjectTitleDescDialog> CreateSvxObjectTitleDescDialog(weld::Window* pParent, const OUString& rTitle, const OUString& rDescription) override;
+    virtual VclPtr<AbstractSvxObjectTitleDescDialog> CreateSvxObjectTitleDescDialog(weld::Window* pParent, const OUString& rTitle, const OUString& rDescription, bool isDecorative) override;
     virtual VclPtr<AbstractSvxMultiPathDialog>    CreateSvxMultiPathDialog(weld::Window* pParent) override;
     virtual VclPtr<AbstractSvxMultiPathDialog>    CreateSvxPathSelectDialog(weld::Window* pParent) override;
     virtual VclPtr<AbstractSvxHpLinkDlg>          CreateSvxHpLinkDlg(SfxChildWindow* pChild, SfxBindings* pBindings, weld::Window* pParent) override;

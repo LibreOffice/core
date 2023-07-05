@@ -1216,6 +1216,31 @@ OUString SdrUndoObjStrAttr::GetComment() const
     return aStr;
 }
 
+SdrUndoObjDecorative::SdrUndoObjDecorative(SdrObject & rObj, bool const WasDecorative)
+    : SdrUndoObj(rObj)
+    , m_WasDecorative(WasDecorative)
+{
+}
+
+void SdrUndoObjDecorative::Undo()
+{
+    ImpShowPageOfThisObject();
+
+    mxObj->SetDecorative(m_WasDecorative);
+}
+
+void SdrUndoObjDecorative::Redo()
+{
+    mxObj->SetDecorative(!m_WasDecorative);
+
+    ImpShowPageOfThisObject();
+}
+
+OUString SdrUndoObjDecorative::GetComment() const
+{
+    return ImpGetDescriptionStr(STR_UndoObjDecorative);
+}
+
 
 SdrUndoLayer::SdrUndoLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel)
     : SdrUndoAction(rNewModel)
@@ -1712,6 +1737,12 @@ std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoObjectStrAttr( SdrObjec
                                                         const OUString& sNewStr )
 {
     return std::make_unique<SdrUndoObjStrAttr>( rObject, eObjStrAttrType, sOldStr, sNewStr );
+}
+
+std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoObjectDecorative(
+        SdrObject& rObject, bool const WasDecorative)
+{
+    return std::make_unique<SdrUndoObjDecorative>(rObject, WasDecorative);
 }
 
 

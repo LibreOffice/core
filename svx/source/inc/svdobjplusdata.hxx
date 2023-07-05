@@ -32,6 +32,7 @@ class SdrObjPlusData final
     OUString aObjName;
     OUString aObjTitle;
     OUString aObjDescription;
+    bool isDecorative = false;
 
 public:
     SdrObjPlusData();

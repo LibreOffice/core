@@ -475,6 +475,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxPluginPropertyMap()
         // #i68101#
         { UNO_NAME_MISC_OBJ_TITLE,        OWN_ATTR_MISC_OBJ_TITLE         , cppu::UnoType<OUString>::get(),    0,  0},
         { UNO_NAME_MISC_OBJ_DESCRIPTION,  OWN_ATTR_MISC_OBJ_DESCRIPTION   , cppu::UnoType<OUString>::get(),    0,  0},
+        { u"Decorative", OWN_ATTR_MISC_OBJ_DECORATIVE, ::cppu::UnoType<bool>::get(), 0,  0 },
     };
 
     return aPluginPropertyMap_Impl;
@@ -509,6 +510,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxFramePropertyMap()
         // #i68101#
         { UNO_NAME_MISC_OBJ_TITLE,        OWN_ATTR_MISC_OBJ_TITLE         , cppu::UnoType<OUString>::get(),    0,  0},
         { UNO_NAME_MISC_OBJ_DESCRIPTION,  OWN_ATTR_MISC_OBJ_DESCRIPTION   , cppu::UnoType<OUString>::get(),    0,  0},
+        { u"Decorative", OWN_ATTR_MISC_OBJ_DECORATIVE, ::cppu::UnoType<bool>::get(), 0,  0 },
     };
 
     return aFramePropertyMap_Impl;
@@ -542,6 +544,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxAppletPropertyMap()
         // #i68101#
         { UNO_NAME_MISC_OBJ_TITLE,        OWN_ATTR_MISC_OBJ_TITLE         , cppu::UnoType<OUString>::get(),    0,  0},
         { UNO_NAME_MISC_OBJ_DESCRIPTION,  OWN_ATTR_MISC_OBJ_DESCRIPTION   , cppu::UnoType<OUString>::get(),    0,  0},
+        { u"Decorative", OWN_ATTR_MISC_OBJ_DECORATIVE, ::cppu::UnoType<bool>::get(), 0,  0 },
     };
 
     return aAppletPropertyMap_Impl;
@@ -598,6 +601,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxControlShapePropertyM
         // #i68101#
         { UNO_NAME_MISC_OBJ_TITLE,        OWN_ATTR_MISC_OBJ_TITLE         , cppu::UnoType<OUString>::get(),    0,  0},
         { UNO_NAME_MISC_OBJ_DESCRIPTION,  OWN_ATTR_MISC_OBJ_DESCRIPTION   , cppu::UnoType<OUString>::get(),    0,  0},
+        { u"Decorative", OWN_ATTR_MISC_OBJ_DECORATIVE, ::cppu::UnoType<bool>::get(), 0,  0 },
         // #i112587#
         { UNO_NAME_MISC_OBJ_PRINTABLE,    SDRATTR_OBJPRINTABLE            , cppu::UnoType<bool>::get(),                      0,  0},
         { u"Visible",                      SDRATTR_OBJVISIBLE              , cppu::UnoType<bool>::get(),                      0,  0},
@@ -624,6 +628,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxPageShapePropertyMap(
         // #i68101#
         { UNO_NAME_MISC_OBJ_TITLE,        OWN_ATTR_MISC_OBJ_TITLE         , cppu::UnoType<OUString>::get(),    0,  0},
         { UNO_NAME_MISC_OBJ_DESCRIPTION,  OWN_ATTR_MISC_OBJ_DESCRIPTION   , cppu::UnoType<OUString>::get(),    0,  0},
+        { u"Decorative", OWN_ATTR_MISC_OBJ_DECORATIVE, ::cppu::UnoType<bool>::get(), 0,  0 },
     };
 
     return aPageShapePropertyMap_Impl;
@@ -709,6 +714,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxMediaShapePropertyMap
         // #i68101#
         { UNO_NAME_MISC_OBJ_TITLE,        OWN_ATTR_MISC_OBJ_TITLE         , cppu::UnoType<OUString>::get(),    0,  0},
         { UNO_NAME_MISC_OBJ_DESCRIPTION,  OWN_ATTR_MISC_OBJ_DESCRIPTION   , cppu::UnoType<OUString>::get(),    0,  0},
+        { u"Decorative", OWN_ATTR_MISC_OBJ_DECORATIVE, ::cppu::UnoType<bool>::get(), 0,  0 },
         {u"PrivateStream", OWN_ATTR_MEDIA_STREAM, cppu::UnoType<css::io::XInputStream>::get(), 0, 0},
         {u"PrivateTempFileURL", OWN_ATTR_MEDIA_TEMPFILEURL, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::READONLY, 0},
         { u"MediaMimeType", OWN_ATTR_MEDIA_MIMETYPE, cppu::UnoType<OUString>::get(), 0, 0},
@@ -738,6 +744,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxTableShapePropertyMap
         { u"UINameSingular",               OWN_ATTR_UINAME_SINGULAR        , ::cppu::UnoType<OUString>::get(),    css::beans::PropertyAttribute::READONLY,   0},
         { UNO_NAME_MISC_OBJ_TITLE,        OWN_ATTR_MISC_OBJ_TITLE         , cppu::UnoType<OUString>::get(),    0,  0},
         { UNO_NAME_MISC_OBJ_DESCRIPTION,  OWN_ATTR_MISC_OBJ_DESCRIPTION   , cppu::UnoType<OUString>::get(),    0,  0},
+        { u"Decorative", OWN_ATTR_MISC_OBJ_DECORATIVE, ::cppu::UnoType<bool>::get(), 0,  0 },
         { u"Model",                        OWN_ATTR_OLEMODEL               , cppu::UnoType<css::table::XTable>::get(), css::beans::PropertyAttribute::READONLY, 0},
         { u"TableTemplate",                OWN_ATTR_TABLETEMPLATE          , cppu::UnoType<css::container::XIndexAccess>::get(), 0, 0},
         { u"UseFirstRowStyle",             OWN_ATTR_TABLETEMPLATE_FIRSTROW, cppu::UnoType<bool>::get(),0, 0},

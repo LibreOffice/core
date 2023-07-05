@@ -3237,6 +3237,21 @@ OUString SwFlyFrameFormat::GetObjDescription() const
         return msDesc;
 }
 
+void SwFlyFrameFormat::SetObjDecorative(bool const isDecorative)
+{
+    SdrObject* pMasterObject = FindSdrObject();
+    OSL_ENSURE( pMasterObject, "<SwFlyFrameFormat::SetDescription(..)> - missing <SdrObject> instance" );
+    if ( !pMasterObject )
+    {
+        return;
+    }
+
+    SetFormatAttr(SfxBoolItem(RES_DECORATIVE, isDecorative));
+    pMasterObject->SetDecorative(isDecorative);
+    // does anybody care about a broadcast?
+}
+
+
 /** SwFlyFrameFormat::IsBackgroundTransparent - for #99657#
 
     OD 22.08.2002 - overriding virtual method and its default implementation,

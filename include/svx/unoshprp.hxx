@@ -196,7 +196,8 @@
 #define OWN_ATTR_TEXTFITTOSIZESCALE             (OWN_ATTR_VALUE_START+105)
 #define OWN_ATTR_TEXTCOLUMNS                    (OWN_ATTR_VALUE_START+106)
 #define OWN_ATTR_HYPERLINK                      (OWN_ATTR_VALUE_START+107)
-// ATTENTION: current maximum is OWN_ATTR_VALUE_START+107 svx; wnen adding values, update
+#define OWN_ATTR_MISC_OBJ_DECORATIVE            (OWN_ATTR_VALUE_START+108)
+// ATTENTION: current maximum is OWN_ATTR_VALUE_START+108 svx; when adding values, update
 // OWN_ATTR_VALUE_END in include/svl/solar.hrc accordingly
 
 // #FontWork#
@@ -369,6 +370,7 @@
     /* #i68101# */ \
     { UNO_NAME_MISC_OBJ_TITLE,        OWN_ATTR_MISC_OBJ_TITLE         , ::cppu::UnoType<OUString>::get(),    0,  0}, \
     { UNO_NAME_MISC_OBJ_DESCRIPTION,  OWN_ATTR_MISC_OBJ_DESCRIPTION   , ::cppu::UnoType<OUString>::get(),    0,  0}, \
+    { u"Decorative", OWN_ATTR_MISC_OBJ_DECORATIVE, ::cppu::UnoType<bool>::get(), 0,  0}, \
     { UNO_NAME_HYPERLINK, OWN_ATTR_HYPERLINK, ::cppu::UnoType<OUString>::get(), 0,  0}, \
     { u"WritingMode", SDRATTR_WRITINGMODE2, ::cppu::UnoType<sal_Int16>::get(), 0,  0},
 

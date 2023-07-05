@@ -202,6 +202,15 @@ published service Shape
     */
     [optional, property] string Description;
 
+    /** Determines if the shape is purely decorative.
+
+        If `TRUE`, it is considered not part of the document content,
+        and may be ignored by assistive technologies.
+
+        @since LibreOffice 7.6
+    */
+    [optional, property] boolean Decorative;
+
 };
 
 

@@ -2395,6 +2395,16 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
         }
         break;
     }
+    case OWN_ATTR_MISC_OBJ_DECORATIVE:
+    {
+        bool isDecorative;
+        if (rValue >>= isDecorative)
+        {
+            pSdrObject->SetDecorative(isDecorative);
+            return true;
+        }
+        break;
+    }
 
     case SDRATTR_OBJPRINTABLE:
     {
@@ -2836,6 +2846,13 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
     {
         OUString aDescription( GetSdrObject()->GetDescription() );
         rValue <<= aDescription;
+        break;
+    }
+
+    case OWN_ATTR_MISC_OBJ_DECORATIVE:
+    {
+        bool const isDecorative(GetSdrObject()->IsDecorative());
+        rValue <<= isDecorative;
         break;
     }
 

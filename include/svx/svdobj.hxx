@@ -380,6 +380,8 @@ public:
     virtual OUString GetTitle() const;
     virtual void SetDescription(const OUString& rStr);
     virtual OUString GetDescription() const;
+    virtual void SetDecorative(bool isDecorative);
+    virtual bool IsDecorative() const;
 
     // for group objects
     bool IsGroupObject() const;

@@ -476,6 +476,20 @@ private:
 
 };
 
+class SdrUndoObjDecorative final : public SdrUndoObj
+{
+private:
+    bool const m_WasDecorative;
+
+public:
+    SdrUndoObjDecorative(SdrObject & rObj, bool const WasDecorative);
+
+    virtual void Undo() override;
+    virtual void Redo() override;
+
+    virtual OUString GetComment() const override;
+};
+
 
 /*
  * Layer
@@ -747,6 +761,8 @@ public:
                                                     SdrUndoObjStrAttr::ObjStrAttrType eObjStrAttrType,
                                                     const OUString& sOldStr,
                                                     const OUString& sNewStr );
+    static std::unique_ptr<SdrUndoAction> CreateUndoObjectDecorative(SdrObject& rObject,
+            bool const WasDecorative);
 
     // Diagram ModelData changes
     virtual std::unique_ptr<SdrUndoAction> CreateUndoDiagramModelData( SdrObject& rObject, std::shared_ptr< svx::diagram::DiagramDataState >& rStartState );

@@ -682,6 +682,9 @@ OUString GetUndoComment(SwUndoId eId)
         case SwUndoId::DELETE_SECTIONS:
             pId = STR_DELETE_SECTIONS;
             break;
+        case SwUndoId::FLYFRMFMT_DECORATIVE:
+            pId = STR_UNDO_FLYFRMFMT_DECORATIVE;
+            break;
     }
 
     assert(pId);

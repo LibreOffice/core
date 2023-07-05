@@ -2045,6 +2045,55 @@ void SwFEShell::SetObjDescription( const OUString& rDescription )
     }
 }
 
+bool SwFEShell::IsObjDecorative() const
+{
+    if (!Imp()->HasDrawView())
+    {
+        return false;
+    }
+
+    SdrMarkList const& rMarkList(Imp()->GetDrawView()->GetMarkedObjectList());
+    if (rMarkList.GetMarkCount() != 1)
+    {
+        return false;
+    }
+
+    SdrObject const*const pObj(rMarkList.GetMark(0)->GetMarkedSdrObj());
+    SwFrameFormat const*const pFormat(FindFrameFormat(pObj));
+    if (pFormat->Which() == RES_FLYFRMFMT)
+    {
+        return dynamic_cast<const SwFlyFrameFormat&>(*pFormat).GetAttrSet().Get(RES_DECORATIVE).GetValue();
+    }
+    return pObj->IsDecorative();
+}
+
+void SwFEShell::SetObjDecorative(bool const isDecorative)
+{
+    if (!Imp()->HasDrawView())
+    {
+        return;
+    }
+
+    SdrMarkList const& rMarkList(Imp()->GetDrawView()->GetMarkedObjectList());
+    if (rMarkList.GetMarkCount() != 1)
+    {
+        return;
+    }
+
+    SdrObject *const pObj(rMarkList.GetMark(0)->GetMarkedSdrObj());
+    SwFrameFormat *const pFormat(FindFrameFormat(pObj));
+    if (pFormat->Which() == RES_FLYFRMFMT)
+    {
+        GetDoc()->SetFlyFrameDecorative(dynamic_cast<SwFlyFrameFormat&>(*pFormat),
+                                       isDecorative);
+    }
+    else
+    {
+        pObj->SetDecorative(isDecorative);
+    }
+}
+
+
 void SwFEShell::AlignFormulaToBaseline( const uno::Reference < embed::XEmbeddedObject >& xObj )
 {
 #if OSL_DEBUG_LEVEL > 0

@@ -68,6 +68,8 @@ public:
     virtual OUString GetTitle() const override;
     virtual void SetDescription(const OUString& rStr) override;
     virtual OUString GetDescription() const override;
+    virtual void SetDecorative(bool isDecorative) override;
+    virtual bool IsDecorative() const override;
 
     virtual const tools::Rectangle& GetCurrentBoundRect() const override;
     virtual const tools::Rectangle& GetLastBoundRect() const override;

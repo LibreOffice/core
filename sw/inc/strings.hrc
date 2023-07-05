@@ -592,6 +592,7 @@
 #define STR_PARAGRAPH_SIGN_UNDO                 NC_("STR_PARAGRAPH_SIGN_UNDO", "Paragraph sign")
 #define STR_UNDO_FLYFRMFMT_TITLE                NC_("STR_UNDO_FLYFRMFMT_TITLE", "Change object title of $1")
 #define STR_UNDO_FLYFRMFMT_DESCRIPTION          NC_("STR_UNDO_FLYFRMFMT_DESCRIPTION", "Change object description of $1")
+#define STR_UNDO_FLYFRMFMT_DECORATIVE           NC_("STR_UNDO_FLYFRMFMT_DECORATIVE", "Change decorative of $1")
 #define STR_UNDO_TBLSTYLE_CREATE                NC_("STR_UNDO_TBLSTYLE_CREATE", "Create table style: $1")
 #define STR_UNDO_TBLSTYLE_DELETE                NC_("STR_UNDO_TBLSTYLE_DELETE", "Delete table style: $1")
 #define STR_UNDO_TBLSTYLE_UPDATE                NC_("STR_UNDO_TBLSTYLE_UPDATE", "Update table style: $1")

@@ -637,6 +637,8 @@ public:
                          const OUString& sNewTitle );
     void SetFlyFrameDescription( SwFlyFrameFormat& rFlyFrameFormat,
                                const OUString& sNewDescription );
+    void SetFlyFrameDecorative(SwFlyFrameFormat& rFlyFrameFormat,
+                               bool isDecorative);
 
     // Footnotes
     // Footnote information
