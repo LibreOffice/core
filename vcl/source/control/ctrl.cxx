@@ -434,10 +434,7 @@ tools::Rectangle Control::DrawControlText( OutputDevice& _rTargetDevice, const t
     bool autoacc = ImplGetSVData()->maNWFData.mbAutoAccel;
 
     if (autoacc && !mbShowAccelerator)
-    {
         rPStr = removeMnemonicFromString( _rStr );
-        nPStyle &= ~DrawTextFlags::HideMnemonic;
-    }
 
     if( !GetReferenceDevice() || ( GetReferenceDevice() == &_rTargetDevice ) )
     {
@@ -459,10 +456,7 @@ tools::Rectangle Control::GetControlTextRect( OutputDevice& _rTargetDevice, cons
     bool autoacc = ImplGetSVData()->maNWFData.mbAutoAccel;
 
     if (autoacc && !mbShowAccelerator)
-    {
         rPStr = removeMnemonicFromString( _rStr );
-        nPStyle &= ~DrawTextFlags::HideMnemonic;
-    }
 
     if ( !GetReferenceDevice() || ( GetReferenceDevice() == &_rTargetDevice ) )
     {

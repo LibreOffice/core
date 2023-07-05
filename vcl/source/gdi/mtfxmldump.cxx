@@ -114,8 +114,6 @@ OUString convertDrawTextFlagsToString(DrawTextFlags eDrawTextFlags)
         aStrings.emplace_back("WordBreakHyphenation");
     if (eDrawTextFlags & DrawTextFlags::CenterEllipsis)
         aStrings.emplace_back("CenterEllipsis");
-    if (eDrawTextFlags & DrawTextFlags::HideMnemonic)
-        aStrings.emplace_back("HideMnemonic");
 
     OUString aString;
 

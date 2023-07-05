@@ -41,11 +41,10 @@ enum class DrawTextFlags
     NewsEllipsis = 0x00004000,
     WordBreakHyphenation = 0x00008000 | WordBreak,
     CenterEllipsis = 0x00010000,
-    HideMnemonic = 0x00020000,
 };
 namespace o3tl
 {
-template <> struct typed_flags<DrawTextFlags> : is_typed_flags<DrawTextFlags, 0x3ffff>
+template <> struct typed_flags<DrawTextFlags> : is_typed_flags<DrawTextFlags, 0x1ffff>
 {
 };
 }
