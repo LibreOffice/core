@@ -29,7 +29,7 @@ namespace chart
 
 FeatureCommandDispatchBase::FeatureCommandDispatchBase( const Reference< uno::XComponentContext >& rxContext )
     :CommandDispatch( rxContext )
-    ,m_nFeatureId( 0 )
+    ,m_nFeatureId( ChartCommandID::NONE )
 {
 }
 
@@ -79,7 +79,7 @@ void FeatureCommandDispatchBase::dispatch( const util::URL& URL,
 }
 
 void FeatureCommandDispatchBase::implDescribeSupportedFeature( const char* pAsciiCommandURL,
-    sal_uInt16 nId, sal_Int16 nGroup )
+    ChartCommandID nId, sal_Int16 nGroup )
 {
     ControllerFeature aFeature;
     aFeature.Command = OUString::createFromAscii( pAsciiCommandURL );

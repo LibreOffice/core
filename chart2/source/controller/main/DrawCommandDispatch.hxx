@@ -61,9 +61,9 @@ protected:
 
 private:
     void setInsertObj(SdrObjKind eObj);
-    rtl::Reference<SdrObject> createDefaultObject( const sal_uInt16 nID );
+    rtl::Reference<SdrObject> createDefaultObject( const ChartCommandID nID );
 
-    bool parseCommandURL( const OUString& rCommandURL, sal_uInt16* pnFeatureId, OUString* pBaseCommand, OUString* pCustomShapeType );
+    bool parseCommandURL( const OUString& rCommandURL, ChartCommandID* pnFeatureId, OUString* pBaseCommand, OUString* pCustomShapeType );
 
     ChartController* m_pChartController;
     OUString m_aCustomShapeType;

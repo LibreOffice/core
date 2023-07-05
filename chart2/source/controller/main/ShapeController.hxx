@@ -64,7 +64,7 @@ private:
     void executeDispatch_TransformDialog();
     void executeDispatch_ObjectTitleDescription();
     void executeDispatch_RenameObject();
-    void executeDispatch_ChangeZOrder( sal_uInt16 nId );
+    void executeDispatch_ChangeZOrder( ChartCommandID nId );
     void executeDispatch_FontDialog();
     void executeDispatch_ParagraphDialog();
 

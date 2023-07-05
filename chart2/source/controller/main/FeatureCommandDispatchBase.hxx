@@ -22,12 +22,50 @@
 
 #include <com/sun/star/frame/DispatchInformation.hpp>
 
+enum class ChartCommandID
+{
+    NONE                         = 0,
+
+    //Draw Command Ids:
+    DrawObjectSelect             = 1,
+    DrawLine                     = 2,
+    DrawLineArrowEnd             = 3,
+    DrawRect                     = 4,
+    DrawEllipse                  = 5,
+    DrawFreelineNoFill           = 6,
+    DrawText                     = 7,
+    DrawTextVertical             = 8,
+    DrawCaption                  = 9,
+    DrawCaptionVertical          = 10,
+    DrawToolboxCsBasic           = 11,
+    DrawToolboxCsSymbol          = 12,
+    DrawToolboxCsArrow           = 13,
+    DrawToolboxCsFlowchart       = 14,
+    DrawToolboxCsCallout         = 15,
+    DrawToolboxCsStar            = 16,
+
+    //Shape Controller Command Ids:
+    ShapeFormatLine              =  21,
+    ShapeFormatArea              =  22,
+    ShapeTextAttributes          =  23,
+    ShapeTransformDialog         =  24,
+    ShapeObjectTitleDescription  =  25,
+    ShapeRenameObject            =  26,
+    ShapeBringToFront            =  28,
+    ShapeForward                 =  29,
+    ShapeBackward                = 30,
+    ShapeSendToBack              = 31,
+    ShapeFontDialog              = 35,
+    ShapeParagraphDialog         = 36
+};
+
+
 namespace chart
 {
 
 struct ControllerFeature: public css::frame::DispatchInformation
 {
-    sal_uInt16 nFeatureId;
+    ChartCommandID nFeatureId;
 };
 
 typedef std::map< OUString,
@@ -84,12 +122,12 @@ protected:
             the command group of the feature. This is important for configuring the controller UI
             by the user, see also <type scope="css::frame">CommandGroup</type>.
     */
-    void implDescribeSupportedFeature( const char* pAsciiCommandURL, sal_uInt16 nId,
+    void implDescribeSupportedFeature( const char* pAsciiCommandURL, ChartCommandID nId,
         sal_Int16 nGroup );
 
     mutable SupportedFeatures m_aSupportedFeatures;
 
-    sal_uInt16 m_nFeatureId;
+    ChartCommandID m_nFeatureId;
 };
 
 } //  namespace chart

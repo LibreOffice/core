@@ -18,7 +18,6 @@
  */
 
 #include "DrawCommandDispatch.hxx"
-#include "DrawCommandDispatch.h"
 #include <ChartController.hxx>
 #include <DrawViewWrapper.hxx>
 #include <chartview/DrawModelWrapper.hxx>
@@ -68,7 +67,7 @@ DrawCommandDispatch::~DrawCommandDispatch()
 
 bool DrawCommandDispatch::isFeatureSupported( const OUString& rCommandURL )
 {
-    sal_uInt16 nFeatureId = 0;
+    ChartCommandID nFeatureId = ChartCommandID::NONE;
     OUString aBaseCommand;
     OUString aCustomShapeType;
     return parseCommandURL( rCommandURL, &nFeatureId, &aBaseCommand, &aCustomShapeType );
@@ -165,7 +164,7 @@ void DrawCommandDispatch::setAttributes( SdrObject* pObj )
 
 void DrawCommandDispatch::setLineEnds( SfxItemSet& rAttr )
 {
-    if ( !(m_nFeatureId == COMMAND_ID_LINE_ARROW_END && m_pChartController) )
+    if ( !(m_nFeatureId == ChartCommandID::DrawLineArrowEnd && m_pChartController) )
         return;
 
     DrawModelWrapper* pDrawModelWrapper = m_pChartController->GetDrawModelWrapper();
@@ -217,27 +216,27 @@ FeatureState DrawCommandDispatch::getState( const OUString& rCommand )
     aReturn.bEnabled = false;
     aReturn.aState <<= false;
 
-    sal_uInt16 nFeatureId = 0;
+    ChartCommandID nFeatureId = ChartCommandID::NONE;
     OUString aBaseCommand;
     OUString aCustomShapeType;
     if ( parseCommandURL( rCommand, &nFeatureId, &aBaseCommand, &aCustomShapeType ) )
     {
         switch ( nFeatureId )
         {
-            case COMMAND_ID_OBJECT_SELECT:
-            case COMMAND_ID_DRAW_LINE:
-            case COMMAND_ID_LINE_ARROW_END:
-            case COMMAND_ID_DRAW_RECT:
-            case COMMAND_ID_DRAW_ELLIPSE:
-            case COMMAND_ID_DRAW_FREELINE_NOFILL:
-            case COMMAND_ID_DRAW_TEXT:
-            case COMMAND_ID_DRAW_CAPTION:
-            case COMMAND_ID_DRAWTBX_CS_BASIC:
-            case COMMAND_ID_DRAWTBX_CS_SYMBOL:
-            case COMMAND_ID_DRAWTBX_CS_ARROW:
-            case COMMAND_ID_DRAWTBX_CS_FLOWCHART:
-            case COMMAND_ID_DRAWTBX_CS_CALLOUT:
-            case COMMAND_ID_DRAWTBX_CS_STAR:
+            case ChartCommandID::DrawObjectSelect:
+            case ChartCommandID::DrawLine:
+            case ChartCommandID::DrawLineArrowEnd:
+            case ChartCommandID::DrawRect:
+            case ChartCommandID::DrawEllipse:
+            case ChartCommandID::DrawFreelineNoFill:
+            case ChartCommandID::DrawText:
+            case ChartCommandID::DrawCaption:
+            case ChartCommandID::DrawToolboxCsBasic:
+            case ChartCommandID::DrawToolboxCsSymbol:
+            case ChartCommandID::DrawToolboxCsArrow:
+            case ChartCommandID::DrawToolboxCsFlowchart:
+            case ChartCommandID::DrawToolboxCsCallout:
+            case ChartCommandID::DrawToolboxCsStar:
                 {
                     aReturn.bEnabled = true;
                     aReturn.aState <<= false;
@@ -260,7 +259,7 @@ void DrawCommandDispatch::execute( const OUString& rCommand, const Sequence< bea
     ChartDrawMode eDrawMode = CHARTDRAW_SELECT;
     SdrObjKind eKind = SdrObjKind::NONE;
 
-    sal_uInt16 nFeatureId = 0;
+    ChartCommandID nFeatureId = ChartCommandID::NONE;
     OUString aBaseCommand;
     OUString aCustomShapeType;
     if ( !parseCommandURL( rCommand, &nFeatureId, &aBaseCommand, &aCustomShapeType ) )
@@ -272,56 +271,56 @@ void DrawCommandDispatch::execute( const OUString& rCommand, const Sequence< bea
 
     switch ( nFeatureId )
     {
-        case COMMAND_ID_OBJECT_SELECT:
+        case ChartCommandID::DrawObjectSelect:
             {
                 eDrawMode = CHARTDRAW_SELECT;
                 eKind = SdrObjKind::NONE;
             }
             break;
-        case COMMAND_ID_DRAW_LINE:
-        case COMMAND_ID_LINE_ARROW_END:
+        case ChartCommandID::DrawLine:
+        case ChartCommandID::DrawLineArrowEnd:
             {
                 eDrawMode = CHARTDRAW_INSERT;
                 eKind = SdrObjKind::Line;
             }
             break;
-        case COMMAND_ID_DRAW_RECT:
+        case ChartCommandID::DrawRect:
             {
                 eDrawMode = CHARTDRAW_INSERT;
                 eKind = SdrObjKind::Rectangle;
             }
             break;
-        case COMMAND_ID_DRAW_ELLIPSE:
+        case ChartCommandID::DrawEllipse:
             {
                 eDrawMode = CHARTDRAW_INSERT;
                 eKind = SdrObjKind::CircleOrEllipse;
             }
             break;
-        case COMMAND_ID_DRAW_FREELINE_NOFILL:
+        case ChartCommandID::DrawFreelineNoFill:
             {
                 eDrawMode = CHARTDRAW_INSERT;
                 eKind = SdrObjKind::FreehandLine;
             }
             break;
-        case COMMAND_ID_DRAW_TEXT:
+        case ChartCommandID::DrawText:
             {
                 eDrawMode = CHARTDRAW_INSERT;
                 eKind = SdrObjKind::Text;
                 bCreate = true;
             }
             break;
-        case COMMAND_ID_DRAW_CAPTION:
+        case ChartCommandID::DrawCaption:
             {
                 eDrawMode = CHARTDRAW_INSERT;
                 eKind = SdrObjKind::Caption;
             }
             break;
-        case COMMAND_ID_DRAWTBX_CS_BASIC:
-        case COMMAND_ID_DRAWTBX_CS_SYMBOL:
-        case COMMAND_ID_DRAWTBX_CS_ARROW:
-        case COMMAND_ID_DRAWTBX_CS_FLOWCHART:
-        case COMMAND_ID_DRAWTBX_CS_CALLOUT:
-        case COMMAND_ID_DRAWTBX_CS_STAR:
+        case ChartCommandID::DrawToolboxCsBasic:
+        case ChartCommandID::DrawToolboxCsSymbol:
+        case ChartCommandID::DrawToolboxCsArrow:
+        case ChartCommandID::DrawToolboxCsFlowchart:
+        case ChartCommandID::DrawToolboxCsCallout:
+        case ChartCommandID::DrawToolboxCsStar:
             {
                 eDrawMode = CHARTDRAW_INSERT;
                 eKind = SdrObjKind::CustomShape;
@@ -368,7 +367,7 @@ void DrawCommandDispatch::execute( const OUString& rCommand, const Sequence< bea
         SdrPageView* pPageView = pDrawViewWrapper->GetSdrPageView();
         if (pDrawViewWrapper->InsertObjectAtView(pObj.get(), *pPageView))
             m_pChartController->SetAndApplySelection(Reference<drawing::XShape>(pObj->getUnoShape(), uno::UNO_QUERY));
-        if ( nFeatureId == COMMAND_ID_DRAW_TEXT )
+        if ( nFeatureId == ChartCommandID::DrawText )
         {
             m_pChartController->StartTextEdit();
         }
@@ -377,20 +376,20 @@ void DrawCommandDispatch::execute( const OUString& rCommand, const Sequence< bea
 
 void DrawCommandDispatch::describeSupportedFeatures()
 {
-    implDescribeSupportedFeature( ".uno:SelectObject",      COMMAND_ID_OBJECT_SELECT,           CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:Line",              COMMAND_ID_DRAW_LINE,               CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:LineArrowEnd",      COMMAND_ID_LINE_ARROW_END,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:Rect",              COMMAND_ID_DRAW_RECT,               CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:Ellipse",           COMMAND_ID_DRAW_ELLIPSE,            CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:Freeline_Unfilled", COMMAND_ID_DRAW_FREELINE_NOFILL,    CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:DrawText",          COMMAND_ID_DRAW_TEXT,               CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:DrawCaption",       COMMAND_ID_DRAW_CAPTION,            CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes",       COMMAND_ID_DRAWTBX_CS_BASIC,        CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes",      COMMAND_ID_DRAWTBX_CS_SYMBOL,       CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes",       COMMAND_ID_DRAWTBX_CS_ARROW,        CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes",   COMMAND_ID_DRAWTBX_CS_FLOWCHART,    CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:CalloutShapes",     COMMAND_ID_DRAWTBX_CS_CALLOUT,      CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:StarShapes",        COMMAND_ID_DRAWTBX_CS_STAR,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:SelectObject",      ChartCommandID::DrawObjectSelect,           CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:Line",              ChartCommandID::DrawLine,               CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:LineArrowEnd",      ChartCommandID::DrawLineArrowEnd,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:Rect",              ChartCommandID::DrawRect,               CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:Ellipse",           ChartCommandID::DrawEllipse,            CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:Freeline_Unfilled", ChartCommandID::DrawFreelineNoFill,    CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:DrawText",          ChartCommandID::DrawText,               CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:DrawCaption",       ChartCommandID::DrawCaption,            CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:BasicShapes",       ChartCommandID::DrawToolboxCsBasic,        CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:SymbolShapes",      ChartCommandID::DrawToolboxCsSymbol,       CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes",       ChartCommandID::DrawToolboxCsArrow,        CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes",   ChartCommandID::DrawToolboxCsFlowchart,    CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:CalloutShapes",     ChartCommandID::DrawToolboxCsCallout,      CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:StarShapes",        ChartCommandID::DrawToolboxCsStar,         CommandGroup::INSERT );
 }
 
 void DrawCommandDispatch::setInsertObj(SdrObjKind eObj)
@@ -402,7 +401,7 @@ void DrawCommandDispatch::setInsertObj(SdrObjKind eObj)
     }
 }
 
-rtl::Reference<SdrObject> DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
+rtl::Reference<SdrObject> DrawCommandDispatch::createDefaultObject( const ChartCommandID nID )
 {
     rtl::Reference<SdrObject> pObj;
     DrawViewWrapper* pDrawViewWrapper = ( m_pChartController ? m_pChartController->GetDrawViewWrapper() : nullptr );
@@ -432,8 +431,8 @@ rtl::Reference<SdrObject> DrawCommandDispatch::createDefaultObject( const sal_uI
 
                 switch ( nID )
                 {
-                    case COMMAND_ID_DRAW_LINE:
-                    case COMMAND_ID_LINE_ARROW_END:
+                    case ChartCommandID::DrawLine:
+                    case ChartCommandID::DrawLineArrowEnd:
                         {
                             if ( auto const pathObj = dynamic_cast<SdrPathObj*>( pObj.get()) )
                             {
@@ -450,7 +449,7 @@ rtl::Reference<SdrObject> DrawCommandDispatch::createDefaultObject( const sal_uI
                             }
                         }
                         break;
-                    case COMMAND_ID_DRAW_FREELINE_NOFILL:
+                    case ChartCommandID::DrawFreelineNoFill:
                         {
                             if ( auto const pathObj = dynamic_cast<SdrPathObj*>( pObj.get()) )
                             {
@@ -470,13 +469,13 @@ rtl::Reference<SdrObject> DrawCommandDispatch::createDefaultObject( const sal_uI
                             }
                         }
                         break;
-                    case COMMAND_ID_DRAW_TEXT:
-                    case COMMAND_ID_DRAW_TEXT_VERTICAL:
+                    case ChartCommandID::DrawText:
+                    case ChartCommandID::DrawTextVertical:
                         {
                             if ( SdrTextObj* pTextObj = DynCastSdrTextObj( pObj.get()) )
                             {
                                 pTextObj->SetLogicRect( aRect );
-                                bool bVertical = ( nID == COMMAND_ID_DRAW_TEXT_VERTICAL );
+                                bool bVertical = ( nID == ChartCommandID::DrawTextVertical );
                                 pTextObj->SetVerticalWriting( bVertical );
                                 if ( bVertical )
                                 {
@@ -490,12 +489,12 @@ rtl::Reference<SdrObject> DrawCommandDispatch::createDefaultObject( const sal_uI
                             }
                         }
                         break;
-                    case COMMAND_ID_DRAW_CAPTION:
-                    case COMMAND_ID_DRAW_CAPTION_VERTICAL:
+                    case ChartCommandID::DrawCaption:
+                    case ChartCommandID::DrawCaptionVertical:
                         {
                             if ( SdrCaptionObj* pCaptionObj = dynamic_cast<SdrCaptionObj*>( pObj.get()) )
                             {
-                                bool bIsVertical( nID == COMMAND_ID_DRAW_CAPTION_VERTICAL );
+                                bool bIsVertical( nID == ChartCommandID::DrawCaptionVertical );
                                 pCaptionObj->SetVerticalWriting( bIsVertical );
                                 if ( bIsVertical )
                                 {
@@ -526,11 +525,11 @@ rtl::Reference<SdrObject> DrawCommandDispatch::createDefaultObject( const sal_uI
     return pObj;
 }
 
-bool DrawCommandDispatch::parseCommandURL( const OUString& rCommandURL, sal_uInt16* pnFeatureId,
+bool DrawCommandDispatch::parseCommandURL( const OUString& rCommandURL, ChartCommandID* pnFeatureId,
     OUString* pBaseCommand, OUString* pCustomShapeType )
 {
     bool bFound = true;
-    sal_uInt16 nFeatureId = 0;
+    ChartCommandID nFeatureId = ChartCommandID::NONE;
     OUString aBaseCommand;
     OUString aType;
 
@@ -546,32 +545,32 @@ bool DrawCommandDispatch::parseCommandURL( const OUString& rCommandURL, sal_uInt
 
             switch ( nFeatureId )
             {
-                case COMMAND_ID_DRAWTBX_CS_BASIC:
+                case ChartCommandID::DrawToolboxCsBasic:
                     {
                         aType = "diamond";
                     }
                     break;
-                case COMMAND_ID_DRAWTBX_CS_SYMBOL:
+                case ChartCommandID::DrawToolboxCsSymbol:
                     {
                         aType = "smiley";
                     }
                     break;
-                case COMMAND_ID_DRAWTBX_CS_ARROW:
+                case ChartCommandID::DrawToolboxCsArrow:
                     {
                         aType = "left-right-arrow";
                     }
                     break;
-                case COMMAND_ID_DRAWTBX_CS_FLOWCHART:
+                case ChartCommandID::DrawToolboxCsFlowchart:
                     {
                         aType = "flowchart-internal-storage";
                     }
                     break;
-                case COMMAND_ID_DRAWTBX_CS_CALLOUT:
+                case ChartCommandID::DrawToolboxCsCallout:
                     {
                         aType = "round-rectangular-callout";
                     }
                     break;
-                case COMMAND_ID_DRAWTBX_CS_STAR:
+                case ChartCommandID::DrawToolboxCsStar:
                     {
                         aType = "star5";
                     }
