@@ -560,7 +560,33 @@ CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth,
                 sal_uInt32 x = nWidth;
                 while( x-- )
                 {
-                    *pDest++ = (pSourcePixels->readPixel() == 0) ? nColor : 0;
+                    // Fix failure to generate the correct color mask
+                    // OutputDevice::ImplDrawRotateText() draws black text but
+                    // that will generate gray pixels due to antialiasing so
+                    // count dark gray the same as black, light gray the same
+                    // as white, and the rest as medium gray.
+                    // The results are not smooth since LibreOffice appears to
+                    // redraw these semi-transparent masks repeatedly without
+                    // clearing the background so the semi-transparent pixels
+                    // will grow darker with repeatedly redraws due to
+                    // cumulative blending. But it is now better than before.
+                    sal_uInt8 nAlpha = 255 - pSourcePixels->readPixel().GetRed();
+                    sal_uInt32 nPremultColor = nColor;
+                    if ( nAlpha < 192 )
+                    {
+                        if ( nAlpha < 64 )
+                        {
+                            nPremultColor = 0;
+                        }
+                        else
+                        {
+                            reinterpret_cast<sal_uInt8*>(&nPremultColor)[0] /= 2;
+                            reinterpret_cast<sal_uInt8*>(&nPremultColor)[1] /= 2;
+                            reinterpret_cast<sal_uInt8*>(&nPremultColor)[2] /= 2;
+                            reinterpret_cast<sal_uInt8*>(&nPremultColor)[3] /= 2;
+                        }
+                    }
+                    *pDest++ = nPremultColor;
                 }
                 pSource += mnBytesPerRow;
             }
