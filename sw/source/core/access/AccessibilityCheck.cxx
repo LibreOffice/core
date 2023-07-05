@@ -306,8 +306,11 @@ public:
                 OUString sNumbering = rPair.first + " " + rPair.second + "...";
                 OUString sIssueText
                     = SwResId(STR_FAKE_NUMBERING).replaceAll("%NUMBERING%", sNumbering);
-                lclAddIssue(m_rIssueCollection, sIssueText,
-                            sfx::AccessibilityIssueID::MANUAL_NUMBERING);
+                auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
+                                          sfx::AccessibilityIssueID::MANUAL_NUMBERING);
+                pIssue->setIssueObject(IssueObject::TEXT);
+                pIssue->setDoc(pCurrent->GetDoc());
+                pIssue->setNode(pCurrent);
             }
         }
     }
