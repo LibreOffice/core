@@ -604,6 +604,9 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
         }
     }
 
+    if (rMEvt.IsLeft() && !mxTextObj.get().is() && IsIgnoreUnexpectedMouseButtonUp())
+        return false;
+
     if( mpView && mpView->IsDragObj())
     {
         // object was moved
