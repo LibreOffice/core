@@ -1115,15 +1115,10 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                 // handle paragraph background color defined in CellColorHandler
                 if (eId == PROP_FILL_COLOR)
                 {
-                    // table style defines paragraph background color, use the correct property name
                     auto pFillStyleProp = std::find_if(rCellProperties.begin(), rCellProperties.end(),
                         [](const beans::PropertyValue& rProp) { return rProp.Name == "FillStyle"; });
-                    if ( pFillStyleProp != rCellProperties.end() &&
-                         pFillStyleProp->Value == uno::Any(drawing::FillStyle_SOLID) )
-                    {
-                        sPropertyName = "ParaBackColor";
-                    }
-                    else
+                    if ( pFillStyleProp == rCellProperties.end() ||
+                         pFillStyleProp->Value != uno::Any(drawing::FillStyle_SOLID) )
                     {
                         // FillStyle_NONE, skip table style usage for paragraph background color
                         continue;
@@ -1165,15 +1160,11 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                     if ( bIsParaLevel && xParagraph->getString().getLength() == 0 )
                         continue;
 
-                    if ( eId != PROP_FILL_COLOR )
-                    {
-                        // apply style setting when the paragraph doesn't modify it
-                        aProps.push_back(comphelper::makePropertyValue(sPropertyName, pCellProp->Value));
-                    }
-                    else
+                    // apply style setting when the paragraph doesn't modify it
+                    aProps.push_back(comphelper::makePropertyValue(sPropertyName, pCellProp->Value));
+                    if (eId == PROP_FILL_COLOR)
                     {
                         // we need this for complete import of table-style based paragraph background color
-                        aProps.push_back(comphelper::makePropertyValue("FillColor",  pCellProp->Value));
                         aProps.push_back(comphelper::makePropertyValue("FillStyle",  uno::Any(drawing::FillStyle_SOLID)));
                     }
                 }
