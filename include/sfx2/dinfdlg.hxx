@@ -276,7 +276,7 @@ public:
     ~CustomPropertiesTimeField();
 };
 
-class DurationDialog_Impl : public weld::GenericDialogController
+class DurationDialog_Impl final : public weld::GenericDialogController
 {
     std::unique_ptr<weld::CheckButton> m_xNegativeCB;
     std::unique_ptr<weld::SpinButton> m_xYearNF;

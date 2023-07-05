@@ -27,7 +27,7 @@
 #include <mutex>
 #include <vector>
 
-class SvxShapeCollection
+class SvxShapeCollection final
     : public cppu::WeakAggImplHelper3<css::drawing::XShapes, css::lang::XServiceInfo,
                                       css::lang::XComponent>
 {

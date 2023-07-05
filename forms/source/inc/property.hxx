@@ -326,7 +326,7 @@ private:
 
 
 // a class implementing the comphelper::IPropertyInfoService
-class ConcreteInfoService : public ::comphelper::IPropertyInfoService
+class ConcreteInfoService final : public ::comphelper::IPropertyInfoService
 {
 public:
     virtual ~ConcreteInfoService() {}

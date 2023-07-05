@@ -85,7 +85,7 @@ private:
 
 };
 
-class FreetypeFontFace : public vcl::font::PhysicalFontFace
+class FreetypeFontFace final : public vcl::font::PhysicalFontFace
 {
 private:
     FreetypeFontInfo*             mpFreetypeFontInfo;

@@ -96,7 +96,7 @@ class FormulaParserImpl;
     instance is contained in the global filter data to prevent construction and
     destruction of internal buffers for every imported formula.
  */
-class FormulaParser : public FormulaProcessorBase
+class FormulaParser final : public FormulaProcessorBase
 {
 public:
     explicit            FormulaParser( const WorkbookHelper& rHelper );

@@ -16,7 +16,7 @@
 
 namespace oox::xls {
 
-class FormulaBuffer : public WorkbookHelper
+class FormulaBuffer final : public WorkbookHelper
 {
 public:
     /**

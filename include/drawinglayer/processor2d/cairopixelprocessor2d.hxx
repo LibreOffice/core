@@ -37,7 +37,7 @@ class SingleLinePrimitive2D;
 
 namespace drawinglayer::processor2d
 {
-class DRAWINGLAYER_DLLPUBLIC CairoPixelProcessor2D : public BaseProcessor2D
+class DRAWINGLAYER_DLLPUBLIC CairoPixelProcessor2D final : public BaseProcessor2D
 {
     // the modifiedColorPrimitive stack
     basegfx::BColorModifierStack maBColorModifierStack;

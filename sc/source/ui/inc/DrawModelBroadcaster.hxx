@@ -29,7 +29,7 @@
 
 class SdrModel;
 
-class ScDrawModelBroadcaster : public SfxListener,
+class ScDrawModelBroadcaster final : public SfxListener,
     public ::cppu::WeakImplHelper< css::document::XShapeEventBroadcaster >
 {
     mutable std::mutex maListenerMutex;

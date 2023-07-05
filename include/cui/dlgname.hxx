@@ -23,7 +23,7 @@
 #include <vcl/weld.hxx>
 
 /// Dialog for editing a name
-class CUI_DLLPUBLIC SvxNameDialog : public weld::GenericDialogController
+class CUI_DLLPUBLIC SvxNameDialog final : public weld::GenericDialogController
 {
 private:
     std::unique_ptr<weld::Entry> m_xEdtName;
@@ -74,7 +74,7 @@ public:
 /** #i68101#
     Dialog for editing Object name
     plus uniqueness-callback-linkHandler */
-class SvxObjectNameDialog : public weld::GenericDialogController
+class SvxObjectNameDialog final : public weld::GenericDialogController
 {
 private:
     // name
@@ -101,7 +101,7 @@ public:
 
 /** #i68101#
     Dialog for editing Object Title and Description */
-class SvxObjectTitleDescDialog : public weld::GenericDialogController
+class SvxObjectTitleDescDialog final : public weld::GenericDialogController
 {
 private:
     // title

@@ -30,7 +30,7 @@ typedef rtl::Reference<sdr::table::Cell> CellRef;
 
 namespace sdr::properties
 {
-class CellTextProvider : public svx::ITextProvider
+class CellTextProvider final : public svx::ITextProvider
 {
 public:
     explicit CellTextProvider(sdr::table::CellRef xCell);
@@ -44,7 +44,7 @@ private:
     const sdr::table::CellRef m_xCell;
 };
 
-class CellProperties : public TextProperties
+class CellProperties final : public TextProperties
 {
 protected:
     // create a new itemset

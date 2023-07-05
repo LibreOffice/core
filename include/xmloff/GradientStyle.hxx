@@ -48,7 +48,7 @@ public:
         OUString& rStrName );
 };
 
-class XMLOFF_DLLPUBLIC XMLGradientStopContext: public SvXMLImportContext
+class XMLOFF_DLLPUBLIC XMLGradientStopContext final : public SvXMLImportContext
 {
 public:
     XMLGradientStopContext(

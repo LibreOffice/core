@@ -61,7 +61,7 @@ VCL_DLLPUBLIC basegfx::B2DRange getClippedFillDamage(cairo_t* cr);
 VCL_DLLPUBLIC basegfx::B2DRange getClippedStrokeDamage(cairo_t* cr);
 VCL_DLLPUBLIC basegfx::B2DRange getStrokeDamage(cairo_t* cr);
 
-class SystemDependentData_CairoPath : public basegfx::SystemDependentData
+class SystemDependentData_CairoPath final : public basegfx::SystemDependentData
 {
 private:
     // the path data itself
