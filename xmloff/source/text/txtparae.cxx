@@ -3143,13 +3143,6 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
         }
     }
 
-    // TODO remove
-    if (xPropSetInfo->hasPropertyByName("Decorative")
-        && rPropSet->getPropertyValue("Decorative").get<bool>())
-    {
-        GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_DECORATIVE, XML_TRUE);
-    }
-
     if (xPropSetInfo->hasPropertyByName("IsSplitAllowed")
         && rPropSet->getPropertyValue("IsSplitAllowed").get<bool>())
     {
