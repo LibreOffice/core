@@ -182,6 +182,26 @@ published service Shape
         @since LibreOffice 4.3
      */
     [optional, property] short RelativeWidthRelation;
+
+    /** contains short title for the object
+
+        <p>This short title is visible as an alternative tag in HTML format.
+        Accessibility tools can read this text.</p>
+
+        @since OOo 2.2
+    */
+    [optional, property] string Title;
+
+    /** contains description for the object
+
+        <p>The long description text can be entered to describe an object in
+        more detail to users with screen reader software. The description is
+        visible as an alternative tag for accessibility tools.</p>
+
+        @since OOo 2.2
+    */
+    [optional, property] string Description;
+
 };
 
 
