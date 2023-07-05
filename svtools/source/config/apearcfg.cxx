@@ -64,16 +64,16 @@ void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
 
     nMouseOptions &=  ~ MouseSettingsOptions(MouseSettingsOptions::AutoCenterPos | MouseSettingsOptions::AutoDefBtnPos);
 
-    SnapType nSnapMode = static_cast<SnapType>(officecfg::Office::Common::View::Dialog::MousePositioning::get());
+    sal_uInt16 nSnapMode = officecfg::Office::Common::View::Dialog::MousePositioning::get();
     switch ( nSnapMode )
     {
-    case SnapType::ToButton:
+    case 0: // ToButton
         nMouseOptions |= MouseSettingsOptions::AutoDefBtnPos;
         break;
-    case SnapType::ToMiddle:
+    case 1: // ToMiddle
         nMouseOptions |= MouseSettingsOptions::AutoCenterPos;
         break;
-    case SnapType::NONE:
+    case 2: // NONE
     default:
         break;
     }

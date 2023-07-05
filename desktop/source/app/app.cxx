@@ -1827,16 +1827,16 @@ void Desktop::OverrideSystemSettings( AllSettings& rSettings )
 
     DragFullOptions nDragFullOptions = hStyleSettings.GetDragFullOptions();
 
-    DragMode nDragMode = static_cast<DragMode>(officecfg::Office::Common::View::Window::Drag::get());
+    sal_uInt16 nDragMode = officecfg::Office::Common::View::Window::Drag::get();
     switch ( nDragMode )
     {
-    case DragMode::FullWindow:
+    case 0: //FullWindow:
         nDragFullOptions |= DragFullOptions::All;
         break;
-    case DragMode::Frame:
+    case 1: // Frame:
         nDragFullOptions &= ~DragFullOptions::All;
         break;
-    case DragMode::SystemDep:
+    case 2: // SystemDep
     default:
         break;
     }

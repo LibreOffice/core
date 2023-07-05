@@ -21,20 +21,6 @@
 #include <svtools/svtdllapi.h>
 
 class Application;
-enum class MouseMiddleButtonAction;
-
-enum class SnapType {
-    ToButton = 0,
-    ToMiddle,
-    NONE
-};
-
-enum class DragMode {
-    FullWindow,
-    Frame,
-    SystemDep
-};
-
 
 namespace SvtTabAppearanceCfg
 {
