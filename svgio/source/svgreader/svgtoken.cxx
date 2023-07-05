@@ -25,9 +25,6 @@
 namespace svgio::svgreader
 {
 
-constexpr const std::u16string_view constToken_Title = u"title";
-constexpr const std::u16string_view constToken_Desc = u"desc";
-
 constexpr frozen::unordered_map<std::u16string_view, SVGToken, 145> aSVGTokenMapperList
 {
     { u"width", SVGToken::Width },
@@ -110,8 +107,8 @@ constexpr frozen::unordered_map<std::u16string_view, SVGToken, 145> aSVGTokenMap
     { u"patternTransform", SVGToken::PatternTransform },
     { u"opacity", SVGToken::Opacity },
     { u"visibility", SVGToken::Visibility },
-    { constToken_Title, SVGToken::Title },
-    { constToken_Desc, SVGToken::Desc },
+    { u"title", SVGToken::Title },
+    { u"desc", SVGToken::Desc },
     { u"preserveAspectRatio", SVGToken::PreserveAspectRatio },
     { u"defer", SVGToken::Defer },
     { u"none", SVGToken::None },
@@ -260,16 +257,6 @@ OUString SVGTokenToStr(const SVGToken& rToken)
         }
     }
     return OUString();
-}
-
-OUString getStrTitle()
-{
-    return OUString(constToken_Title);
-}
-
-OUString getStrDesc()
-{
-    return OUString(constToken_Desc);
 }
 
 } // end of namespace svgio
