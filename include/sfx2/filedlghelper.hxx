@@ -123,7 +123,6 @@ public:
         SignatureLine,
         TemplateImport,
         WriterCreateAddressList,
-        WriterInsertDoc,
         WriterInsertImage,
         WriterInsertScript,
         WriterExport,
