@@ -317,6 +317,22 @@ CPPUNIT_TEST_FIXTURE(Test, testDOCfDontBreakWrappedTables)
     // set.
     CPPUNIT_ASSERT(bDontBreakWrappedTables);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testDOCFloatingTableHiddenAnchor)
+{
+    // Given a document with a normal table and a floating table with a hidden anchor:
+    createSwDoc("floattable-hidden-anchor.doc");
+
+    // When laying out that document:
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+
+    // Then make sure that both tables are visible:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 1
+    // i.e. the floating table was lost.
+    assertXPath(pLayout, "//tab", 2);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

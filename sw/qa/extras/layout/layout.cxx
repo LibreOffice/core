@@ -3493,6 +3493,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf109137)
         { "FilterName", uno::Any(OUString("writer8")) },
     }));
     xStorable->storeToURL(maTempFile.GetURL(), aDescriptor);
+    mxComponent->dispose();
     mxComponent = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.text.TextDocument");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // This was 0, the blue rectangle moved from the 1st to the 2nd page.
