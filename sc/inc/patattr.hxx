@@ -43,7 +43,6 @@ enum class ScRotateDir : sal_uInt8;
 enum class ScAutoFontColorMode
 {
     Raw,         ///< COL_AUTO is returned
-    Black,       ///< always use black
     Print,       ///< black or white, depending on background
     Display,     ///< from style settings, or black/white if needed
     IgnoreFont,  ///< like DISPLAY, but ignore stored font color (assume COL_AUTO)

@@ -461,89 +461,82 @@ void ScPatternAttr::fillColor(model::ComplexColor& rComplexColor, const SfxItemS
         || eAutoMode == ScAutoFontColorMode::IgnoreFont
         || eAutoMode == ScAutoFontColorMode::IgnoreAll)
     {
-        if (eAutoMode == ScAutoFontColorMode::Black)
+        //  get background color from conditional or own set
+        Color aBackColor;
+        if ( pCondSet )
         {
+            const SvxBrushItem* pItem = pCondSet->GetItemIfSet(ATTR_BACKGROUND);
+            if (!pItem)
+                pItem = &rItemSet.Get(ATTR_BACKGROUND);
+            aBackColor = pItem->GetColor();
+        }
+        else
+        {
+            aBackColor = rItemSet.Get(ATTR_BACKGROUND).GetColor();
+        }
+
+        //  if background color attribute is transparent, use window color for brightness comparisons
+        if (aBackColor == COL_TRANSPARENT
+            || eAutoMode == ScAutoFontColorMode::IgnoreBack
+            || eAutoMode == ScAutoFontColorMode::IgnoreAll)
+        {
+            if (!comphelper::LibreOfficeKit::isActive())
+            {
+                if ( eAutoMode == ScAutoFontColorMode::Print )
+                    aBackColor = COL_WHITE;
+                else if ( pBackConfigColor )
+                {
+                    // pBackConfigColor can be used to avoid repeated lookup of the configured color
+                    aBackColor = *pBackConfigColor;
+                }
+                else
+                    aBackColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+            }
+            else
+            {
+                // Get document color from current view instead
+                SfxViewShell* pSfxViewShell = SfxViewShell::Current();
+                ScTabViewShell* pViewShell = dynamic_cast<ScTabViewShell*>(pSfxViewShell);
+                if (pViewShell)
+                {
+                    const ScViewData& pViewData = pViewShell->GetViewData();
+                    const ScViewOptions& aViewOptions = pViewData.GetOptions();
+                    aBackColor = aViewOptions.GetDocColor();
+                }
+            }
+        }
+
+        //  get system text color for comparison
+        Color aSysTextColor;
+        if (eAutoMode == ScAutoFontColorMode::Print)
+        {
+            aSysTextColor = COL_BLACK;
+        }
+        else if (pTextConfigColor)
+        {
+            // pTextConfigColor can be used to avoid repeated lookup of the configured color
+            aSysTextColor = *pTextConfigColor;
+        }
+        else
+        {
+            aSysTextColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
+        }
+
+        //  select the resulting color
+        if ( aBackColor.IsDark() && aSysTextColor.IsDark() )
+        {
+            //  use white instead of dark on dark
+            aColor = COL_WHITE;
+        }
+        else if ( aBackColor.IsBright() && aSysTextColor.IsBright() )
+        {
+            //  use black instead of bright on bright
             aColor = COL_BLACK;
         }
         else
         {
-            //  get background color from conditional or own set
-            Color aBackColor;
-            if ( pCondSet )
-            {
-                const SvxBrushItem* pItem = pCondSet->GetItemIfSet(ATTR_BACKGROUND);
-                if (!pItem)
-                    pItem = &rItemSet.Get(ATTR_BACKGROUND);
-                aBackColor = pItem->GetColor();
-            }
-            else
-            {
-                aBackColor = rItemSet.Get(ATTR_BACKGROUND).GetColor();
-            }
-
-            //  if background color attribute is transparent, use window color for brightness comparisons
-            if (aBackColor == COL_TRANSPARENT
-                || eAutoMode == ScAutoFontColorMode::IgnoreBack
-                || eAutoMode == ScAutoFontColorMode::IgnoreAll)
-            {
-                if (!comphelper::LibreOfficeKit::isActive())
-                {
-                    if ( eAutoMode == ScAutoFontColorMode::Print )
-                        aBackColor = COL_WHITE;
-                    else if ( pBackConfigColor )
-                    {
-                        // pBackConfigColor can be used to avoid repeated lookup of the configured color
-                        aBackColor = *pBackConfigColor;
-                    }
-                    else
-                        aBackColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
-                }
-                else
-                {
-                    // Get document color from current view instead
-                    SfxViewShell* pSfxViewShell = SfxViewShell::Current();
-                    ScTabViewShell* pViewShell = dynamic_cast<ScTabViewShell*>(pSfxViewShell);
-                    if (pViewShell)
-                    {
-                        const ScViewData& pViewData = pViewShell->GetViewData();
-                        const ScViewOptions& aViewOptions = pViewData.GetOptions();
-                        aBackColor = aViewOptions.GetDocColor();
-                    }
-                }
-            }
-
-            //  get system text color for comparison
-            Color aSysTextColor;
-            if (eAutoMode == ScAutoFontColorMode::Print)
-            {
-                aSysTextColor = COL_BLACK;
-            }
-            else if (pTextConfigColor)
-            {
-                // pTextConfigColor can be used to avoid repeated lookup of the configured color
-                aSysTextColor = *pTextConfigColor;
-            }
-            else
-            {
-                aSysTextColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
-            }
-
-            //  select the resulting color
-            if ( aBackColor.IsDark() && aSysTextColor.IsDark() )
-            {
-                //  use white instead of dark on dark
-                aColor = COL_WHITE;
-            }
-            else if ( aBackColor.IsBright() && aSysTextColor.IsBright() )
-            {
-                //  use black instead of bright on bright
-                aColor = COL_BLACK;
-            }
-            else
-            {
-                //  use aSysTextColor (black for ScAutoFontColorMode::Print, from style settings otherwise)
-                aColor = aSysTextColor;
-            }
+            //  use aSysTextColor (black for ScAutoFontColorMode::Print, from style settings otherwise)
+            aColor = aSysTextColor;
         }
     }
     aComplexColor.setFinalColor(aColor);
