@@ -437,8 +437,7 @@ Bitmap Bitmap::CreateMask(const Color& rTransColor) const
     // it anymore.
     // TODO: Possibly remove the 1bpp code later.
 
-    if ((pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitLsbPal
-         || pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal)
+    if ((pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal)
         && pReadAcc->GetBestMatchingColor(COL_WHITE) == pReadAcc->GetBestMatchingColor(rTransColor))
     {
         // if we're a 1 bit pixel already, and the transcolor matches the color that would replace it
@@ -460,8 +459,7 @@ Bitmap Bitmap::CreateMask(const Color& rTransColor) const
     const BitmapColor aTest(pReadAcc->GetBestMatchingColor(rTransColor));
 
     if (pWriteAcc->GetScanlineFormat() == pReadAcc->GetScanlineFormat() && aWhite.GetIndex() == 1
-        && (pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitLsbPal
-            || pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal))
+        && (pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal))
     {
         for (tools::Long nY = 0; nY < nHeight; ++nY)
         {

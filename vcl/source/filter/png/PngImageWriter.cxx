@@ -133,7 +133,6 @@ static bool pngWrite(SvStream& rStream, const BitmapEx& rBitmapEx, int nCompress
         switch (eScanlineFormat)
         {
             case ScanlineFormat::N1BitMsbPal:
-            case ScanlineFormat::N1BitLsbPal:
             {
                 colorType = PNG_COLOR_TYPE_PALETTE;
                 bitDepth = 1;

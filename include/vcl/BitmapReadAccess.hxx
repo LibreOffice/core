@@ -130,8 +130,6 @@ public:
 
     static BitmapColor GetPixelForN1BitMsbPal(ConstScanline pScanline, tools::Long nX,
                                               const ColorMask& rMask);
-    static BitmapColor GetPixelForN1BitLsbPal(ConstScanline pScanline, tools::Long nX,
-                                              const ColorMask& rMask);
     static BitmapColor GetPixelForN8BitPal(ConstScanline pScanline, tools::Long nX,
                                            const ColorMask& rMask);
     static BitmapColor GetPixelForN24BitTcBgr(ConstScanline pScanline, tools::Long nX,
@@ -158,8 +156,6 @@ public:
                                                const ColorMask& rMask);
 
     static void SetPixelForN1BitMsbPal(Scanline pScanline, tools::Long nX,
-                                       const BitmapColor& rBitmapColor, const ColorMask& rMask);
-    static void SetPixelForN1BitLsbPal(Scanline pScanline, tools::Long nX,
                                        const BitmapColor& rBitmapColor, const ColorMask& rMask);
     static void SetPixelForN8BitPal(Scanline pScanline, tools::Long nX,
                                     const BitmapColor& rBitmapColor, const ColorMask& rMask);

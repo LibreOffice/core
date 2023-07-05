@@ -9387,36 +9387,6 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
     CHECK_RETURN2(writeBuffer(aLine));
 }
 
-namespace
-{
-    unsigned char reverseByte(unsigned char b)
-    {
-        b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
-        b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
-        b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
-        return b;
-    }
-
-    //tdf#103051 convert any N1BitLsbPal to N1BitMsbPal
-    Bitmap getExportBitmap(const Bitmap &rBitmap)
-    {
-        Bitmap::ScopedReadAccess pAccess(const_cast<Bitmap&>(rBitmap));
-        const ScanlineFormat eFormat = pAccess->GetScanlineFormat();
-        if (eFormat != ScanlineFormat::N1BitLsbPal)
-            return rBitmap;
-        Bitmap aNewBmp(rBitmap);
-        BitmapScopedWriteAccess xWriteAcc(aNewBmp);
-        const int nScanLineBytes = (pAccess->Width() + 7U) / 8U;
-        for (tools::Long nY = 0L; nY < xWriteAcc->Height(); ++nY)
-        {
-            Scanline pBitSwap = xWriteAcc->GetScanline(nY);
-            for (int x = 0; x < nScanLineBytes; ++x)
-                pBitSwap[x] = reverseByte(pBitSwap[x]);
-        }
-        return aNewBmp;
-    }
-}
-
 bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject, bool bMask )
 {
     if (rObject.m_aReferenceXObject.hasExternalPDFData() && !m_aContext.UseReferenceXObject)
@@ -9431,7 +9401,7 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject, bool bMask )
     bool    bWriteMask = false;
     if( ! bMask )
     {
-        aBitmap = getExportBitmap(rObject.m_aBitmap.GetBitmap());
+        aBitmap = rObject.m_aBitmap.GetBitmap();
         if( rObject.m_aBitmap.IsAlpha() )
         {
             if( m_aContext.Version >= PDFWriter::PDFVersion::PDF_1_4 )
@@ -9445,14 +9415,14 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject, bool bMask )
         {
             if( rObject.m_aBitmap.IsAlpha() )
             {
-                aBitmap = getExportBitmap(rObject.m_aBitmap.GetAlphaMask());
+                aBitmap = rObject.m_aBitmap.GetAlphaMask();
                 aBitmap.Convert( BmpConversion::N1BitThreshold );
                 SAL_WARN_IF(aBitmap.getPixelFormat() != vcl::PixelFormat::N8_BPP, "vcl.pdfwriter", "mask conversion failed" );
             }
         }
         else if (aBitmap.getPixelFormat() != vcl::PixelFormat::N8_BPP)
         {
-            aBitmap = getExportBitmap(rObject.m_aBitmap.GetAlphaMask().GetBitmap());
+            aBitmap = rObject.m_aBitmap.GetAlphaMask().GetBitmap();
             aBitmap.Convert( BmpConversion::N8BitGreys );
             SAL_WARN_IF(aBitmap.getPixelFormat() != vcl::PixelFormat::N8_BPP, "vcl.pdfwriter", "alpha mask conversion failed" );
         }

@@ -57,12 +57,6 @@ void SalBitmap::updateChecksum() const
                     extraBitsMask = mask1Bit[ extraBitsCount ];
                     break;
                 }
-                case ScanlineFormat::N1BitLsbPal:
-                {
-                    static const sal_uInt8 mask1Bit[] = { 0x01, 0x03, 0x07, 0x0f, 0x1f, 0x3f, 0x7f, 0xff };
-                    extraBitsMask = mask1Bit[ extraBitsCount ];
-                    break;
-                }
                 default:
                     break;
             }

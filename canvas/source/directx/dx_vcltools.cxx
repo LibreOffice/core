@@ -267,7 +267,6 @@ namespace dxcanvas::tools
                             }
                             break;
 
-                        case ScanlineFormat::N1BitLsbPal:
                         case ScanlineFormat::N24BitTcRgb:
                         case ScanlineFormat::N32BitTcAbgr:
                         case ScanlineFormat::N32BitTcArgb:

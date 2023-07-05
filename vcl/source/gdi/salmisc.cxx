@@ -250,7 +250,6 @@ std::unique_ptr<BitmapBuffer> StretchAndConvert(
     switch( nDstScanlineFormat )
     {
         IMPL_CASE_SET_FORMAT( N1BitMsbPal, 1 );
-        IMPL_CASE_SET_FORMAT( N1BitLsbPal, 1 );
         IMPL_CASE_SET_FORMAT( N8BitPal, 8 );
         IMPL_CASE_SET_FORMAT( N24BitTcBgr, 24 );
         IMPL_CASE_SET_FORMAT( N24BitTcRgb, 24 );
@@ -302,7 +301,6 @@ std::unique_ptr<BitmapBuffer> StretchAndConvert(
 
     // do we need a destination palette or color mask?
     if( ( nDstScanlineFormat == ScanlineFormat::N1BitMsbPal ) ||
-        ( nDstScanlineFormat == ScanlineFormat::N1BitLsbPal ) ||
         ( nDstScanlineFormat == ScanlineFormat::N8BitPal ) )
     {
         assert(pDstPal && "destination buffer requires palette");
