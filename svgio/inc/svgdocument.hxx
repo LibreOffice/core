@@ -34,6 +34,9 @@ namespace svgio::svgreader
             /// the document hierarchy with all root nodes
             SvgNodeVector           maNodes;
 
+            /// invalid nodes that have no parent
+            SvgNodeVector           maOrphanNodes;
+
             /// the absolute path of the Svg file in progress (if available)
             const OUString     maAbsolutePath;
 
@@ -72,6 +75,9 @@ namespace svgio::svgreader
             /// data read access
             const SvgNodeVector& getSvgNodeVector() const { return maNodes; }
             const OUString& getAbsolutePath() const { return maAbsolutePath; }
+
+            /// invalid nodes that have no parent
+            void addOrphanNode(SvgNode* pOrphan) { maOrphanNodes.emplace_back(pOrphan); }
         };
 
 } // end of namespace svgio::svgreader

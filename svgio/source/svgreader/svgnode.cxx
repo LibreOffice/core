@@ -395,10 +395,13 @@ namespace {
             mbDecomposing(false),
             mbCssStyleVectorBuilt(false)
         {
-            // tdf#150124 ignore when parent is unknown
-            if(pParent && pParent->getType() != SVGToken::Unknown)
+            if (pParent)
             {
-                pParent->maChildren.emplace_back(this);
+                // tdf#150124 ignore when parent is unknown
+                if (pParent->getType() != SVGToken::Unknown)
+                    pParent->maChildren.emplace_back(this);
+                else
+                    mrDocument.addOrphanNode(this);
             }
         }
 
