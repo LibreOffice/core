@@ -714,16 +714,14 @@ IMPL_LINK(SwView, VertScrollHdl, weld::Scrollbar&, rScrollbar, void)
                         aRect.SetBottom( aRect.Top() );
 
                         OUString sPageStr( GetPageStr( nPhNum, nVirtNum, sDisplay ));
-                        SwContentAtPos aCnt( IsAttrAtPos::Outline );
+                        SwContentAtPos aCnt(IsAttrAtPos::Outline | IsAttrAtPos::AllowContaining);
                         bool bSuccess = m_pWrtShell->GetContentAtPos(aPos, aCnt);
                         if (bSuccess && !aCnt.sStr.isEmpty())
                         {
-                            sPageStr += "  - ";
                             sal_Int32 nChunkLen = std::min<sal_Int32>(aCnt.sStr.getLength(), 80);
                             std::u16string_view sChunk = aCnt.sStr.subView(0, nChunkLen);
-                            sPageStr = sChunk + sPageStr;
-                            sPageStr = sPageStr.replace('\t', ' ');
-                            sPageStr = sPageStr.replace(0x0a, ' ');
+                            sPageStr = sPageStr + "  - " + sChunk;
+                            sPageStr = sPageStr.replace('\t', ' ').replace(0x0a, ' ');
                         }
 
                         Help::ShowQuickHelp(m_pVScrollbar, aRect, sPageStr,
