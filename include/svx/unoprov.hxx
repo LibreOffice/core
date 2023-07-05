@@ -99,8 +99,8 @@ namespace comphelper { class PropertySetInfo; }
 
 namespace SvxPropertySetInfoPool
 {
-    UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) rtl::Reference<comphelper::PropertySetInfo> const & getDrawingDefaults() noexcept;
-    UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) rtl::Reference<comphelper::PropertySetInfo> const & getWriterDrawingDefaults() noexcept;
+    SVXCORE_DLLPUBLIC rtl::Reference<comphelper::PropertySetInfo> const & getDrawingDefaults() noexcept;
+    SVXCORE_DLLPUBLIC rtl::Reference<comphelper::PropertySetInfo> const & getWriterDrawingDefaults() noexcept;
 };
 
 #endif

@@ -21,7 +21,7 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <editeng/eeitem.hxx>
 #include <svx/unopool.hxx>
-
+#include <svx/unoprov.hxx>
 #include <drawdoc.hxx>
 #include "unopool.hxx"
 
@@ -59,7 +59,7 @@ private:
 }
 
 SdUnoDrawPool::SdUnoDrawPool(SdDrawDocument* pModel)
-: SvxUnoDrawPool( pModel ), mpDrawModel( pModel )
+: SvxUnoDrawPool( pModel, SvxPropertySetInfoPool::getDrawingDefaults() ), mpDrawModel( pModel )
 {
 }
 

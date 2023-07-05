@@ -39,25 +39,8 @@
 using namespace ::com::sun::star;
 using namespace ::cppu;
 
-static rtl::Reference<comphelper::PropertySetInfo> const & getDefaults(SvxUnoDrawPoolDefaults nServiceId)
-{
-    switch (nServiceId)
-    {
-        case SvxUnoDrawPoolDefaults::Drawing: return SvxPropertySetInfoPool::getDrawingDefaults();
-        case SvxUnoDrawPoolDefaults::Writer: return SvxPropertySetInfoPool::getWriterDrawingDefaults();
-        default: std::abort();
-    }
-}
-
-SvxUnoDrawPool::SvxUnoDrawPool(SdrModel* pModel, SvxUnoDrawPoolDefaults nServiceId)
-: PropertySetHelper( getDefaults(nServiceId) ), mpModel( pModel )
-{
-    init();
-}
-
-/* deprecated */
-SvxUnoDrawPool::SvxUnoDrawPool(SdrModel* pModel)
-: PropertySetHelper( SvxPropertySetInfoPool::getDrawingDefaults() ), mpModel( pModel )
+SvxUnoDrawPool::SvxUnoDrawPool(SdrModel* pModel, rtl::Reference<comphelper::PropertySetInfo> const & xDefaults)
+: PropertySetHelper( xDefaults ), mpModel( pModel )
 {
     init();
 }
