@@ -388,7 +388,7 @@ void SwLayoutViewConfig::Load()
                 case 16: m_rParent.SetViewLayoutBookMode(bSet); break;// "ViewLayout/BookMode",
                 case 17: m_rParent.SetDefaultPageMode(bSet,true); break;// "Other/IsSquaredPageMode",
                 case 18: m_rParent.SetApplyCharUnit(bSet, true); break;// "Other/ApplyUserChar"
-                case 29: m_rParent.SetShowScrollBarTips(bSet); break;// "Window/ShowScrollBarTips",
+                case 19: m_rParent.SetShowScrollBarTips(bSet); break;// "Window/ShowScrollBarTips",
             }
         }
     }
