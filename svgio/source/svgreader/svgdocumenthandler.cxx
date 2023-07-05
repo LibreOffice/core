@@ -525,14 +525,7 @@ namespace
 
                 if(!aText.isEmpty())
                 {
-                    if(SVGToken::Title == aSVGToken)
-                    {
-                        mpTarget->parseAttribute(getStrTitle(), aSVGToken, aText);
-                    }
-                    else // if(SVGTokenDesc == aSVGToken)
-                    {
-                        mpTarget->parseAttribute(getStrDesc(), aSVGToken, aText);
-                    }
+                    mpTarget->parseAttribute(SVGTokenToStr(aSVGToken), aSVGToken, aText);
                 }
             }
 
