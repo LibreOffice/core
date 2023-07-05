@@ -1672,7 +1672,8 @@ static sal_Int32 lcl_GetGluePointId(const Reference<XShape>& xShape, sal_Int32 n
         bool bFlipH = false;
         bool bFlipV = false;
         Reference<XPropertySet> xShapeProps(xShape, UNO_QUERY);
-        if (xShapeProps->getPropertySetInfo()->hasPropertyByName("CustomShapeGeometry"))
+        if (xShapeProps.is() && xShapeProps->getPropertySetInfo()
+                && xShapeProps->getPropertySetInfo()->hasPropertyByName("CustomShapeGeometry"))
         {
             Sequence<PropertyValue> aGeometrySeq;
             xShapeProps->getPropertyValue("CustomShapeGeometry") >>= aGeometrySeq;
