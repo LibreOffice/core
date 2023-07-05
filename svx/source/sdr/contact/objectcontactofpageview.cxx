@@ -303,15 +303,34 @@ namespace sdr::contact
 
             if(pActiveGroupList)
             {
-                if(nullptr != pActiveGroupList->getSdrPageFromSdrObjList())
+                // tdf#122735
+                // Here it is necessary to check for SdrObject 1st, that may
+                // return nullptr if it is not a SdrObject/SdrObjGroup.
+                // Checking for SrPage OTOH will *always* try to return
+                // something useful due to SdrObjGroup::getSdrPageFromSdrObjList
+                // using getSdrPageFromSdrObject which will recursively go up the
+                // hierarchy to get the SdrPage the SdrObject belongs to, so
+                // this will *not* be nullptr for e.g. a SdrObjGroup if the
+                // SdrObjGroup is inserted to a SdrPage.
+                // NOTE: It is also possible to use dynamic_cast<SdrObjGroup*>
+                //       here, but getSdrObjectFromSdrObjList and
+                //       getSdrPageFromSdrObjListexist  to not need to do that
+                SdrObject* pSdrObject(pActiveGroupList->getSdrObjectFromSdrObjList());
+
+                if(nullptr != pSdrObject)
                 {
-                    // It's a Page itself
-                    return &(pActiveGroupList->getSdrPageFromSdrObjList()->GetViewContact());
+                    // It is a group object
+                    return &(pSdrObject->GetViewContact());
                 }
-                else if(pActiveGroupList->getSdrObjectFromSdrObjList())
+                else
                 {
-                    // Group object
-                    return &(pActiveGroupList->getSdrObjectFromSdrObjList()->GetViewContact());
+                    SdrPage* pSdrPage(pActiveGroupList->getSdrPageFromSdrObjList());
+
+                    if(nullptr != pSdrPage)
+                    {
+                        // It's a Page itself
+                        return &(pSdrPage->GetViewContact());
+                    }
                 }
             }
             else if(GetSdrPage())
