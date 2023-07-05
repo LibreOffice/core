@@ -3370,6 +3370,22 @@ void SwWW8ImplReader::SetToggleAttr(sal_uInt8 nAttrId, bool bOn)
                                              : SvxCaseMap::NotMapped, RES_CHRATR_CASEMAP ) );
             break;
         case 7:
+            if (m_pPaM->GetPoint()->GetContentIndex() == 0 && m_xFormatOfJustInsertedApo)
+            {
+                // We just inserted a frame and we're at the next paragraph start.
+                SwFrameFormat* pFormat = m_xFormatOfJustInsertedApo->GetFormat();
+                if (pFormat)
+                {
+                    SwNode* pAnchorNode = pFormat->GetAnchor().GetAnchorNode();
+                    if (pAnchorNode && *pAnchorNode == m_pPaM->GetPoint()->GetNode())
+                    {
+                        // The anchor paragraph would be hidden, leading to hiding the frame as
+                        // well, prevent that.
+                        break;
+                    }
+                }
+            }
+
             NewAttr(SvxCharHiddenItem(bOn, RES_CHRATR_HIDDEN));
             break;
         case 8:
