@@ -141,6 +141,16 @@ OUString SdrVirtObj::GetDescription() const
     return mxRefObj->GetDescription();
 }
 
+void SdrVirtObj::SetDecorative(bool const isDecorative)
+{
+    return mxRefObj->SetDecorative(isDecorative);
+}
+
+bool SdrVirtObj::IsDecorative() const
+{
+    return mxRefObj->IsDecorative();
+}
+
 const tools::Rectangle& SdrVirtObj::GetCurrentBoundRect() const
 {
     auto aRectangle = mxRefObj->GetCurrentBoundRect(); // TODO: Optimize this.

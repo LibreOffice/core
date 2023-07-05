@@ -44,6 +44,23 @@ class SwUndoFlyStrAttr final : public SwUndo
         const OUString msNewStr;
 };
 
+class SwUndoFlyDecorative final : public SwUndo
+{
+    public:
+        SwUndoFlyDecorative(SwFlyFrameFormat& rFlyFrameFormat,
+                            bool isDecorative);
+        virtual ~SwUndoFlyDecorative() override;
+
+        virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+        virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
+
+        virtual SwRewriter GetRewriter() const override;
+
+    private:
+        SwFlyFrameFormat & m_rFlyFrameFormat;
+        bool const m_IsDecorative;
+};
+
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOFLYSTRATTR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

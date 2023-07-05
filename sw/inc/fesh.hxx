@@ -379,6 +379,8 @@ public:
     void SetObjTitle( const OUString& rTitle );
     OUString GetObjDescription() const;
     void SetObjDescription( const OUString& rDescription );
+    bool IsObjDecorative() const;
+    void SetObjDecorative(bool isDecorative);
 
     bool IsFrameSelected() const;
     bool GetFlyFrameAttr( SfxItemSet &rSet ) const;

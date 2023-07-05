@@ -868,6 +868,40 @@ OUString SdrObject::GetDescription() const
     return OUString();
 }
 
+void SdrObject::SetDecorative(bool const isDecorative)
+{
+    ImpForcePlusData();
+
+    if (m_pPlusData->isDecorative == isDecorative)
+    {
+        return;
+    }
+
+    if (getSdrModelFromSdrObject().IsUndoEnabled())
+    {
+        std::unique_ptr<SdrUndoAction> pUndoAction(
+            SdrUndoFactory::CreateUndoObjectDecorative(
+                    *this, m_pPlusData->isDecorative));
+        getSdrModelFromSdrObject().BegUndo(pUndoAction->GetComment());
+        getSdrModelFromSdrObject().AddUndo(std::move(pUndoAction));
+    }
+
+    m_pPlusData->isDecorative = isDecorative;
+
+    if (getSdrModelFromSdrObject().IsUndoEnabled())
+    {
+        getSdrModelFromSdrObject().EndUndo();
+    }
+
+    SetChanged();
+    BroadcastObjectChange();
+}
+
+bool SdrObject::IsDecorative() const
+{
+    return m_pPlusData == nullptr ? false : m_pPlusData->isDecorative;
+}
+
 sal_uInt32 SdrObject::GetOrdNum() const
 {
     if (SdrObjList* pParentList = getParentSdrObjListFromSdrObject())

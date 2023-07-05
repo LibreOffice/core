@@ -595,6 +595,28 @@ void SwDoc::SetFlyFrameDescription( SwFlyFrameFormat& rFlyFrameFormat,
     getIDocumentState().SetModified();
 }
 
+void SwDoc::SetFlyFrameDecorative(SwFlyFrameFormat& rFlyFrameFormat,
+                                  bool const isDecorative)
+{
+    if (rFlyFrameFormat.GetAttrSet().Get(RES_DECORATIVE).GetValue() == isDecorative)
+    {
+        return;
+    }
+
+    ::sw::DrawUndoGuard const drawUndoGuard(GetIDocumentUndoRedo());
+
+    if (GetIDocumentUndoRedo().DoesUndo())
+    {
+        GetIDocumentUndoRedo().AppendUndo(
+            std::make_unique<SwUndoFlyDecorative>(rFlyFrameFormat, isDecorative));
+    }
+
+    rFlyFrameFormat.SetObjDecorative(isDecorative);
+
+    getIDocumentState().SetModified();
+}
+
+
 bool SwDoc::SetFrameFormatToFly( SwFrameFormat& rFormat, SwFrameFormat& rNewFormat,
                             SfxItemSet* pSet, bool bKeepOrient )
 {

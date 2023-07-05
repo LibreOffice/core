@@ -50,6 +50,7 @@ SdrObjPlusData* SdrObjPlusData::Clone(SdrObject* pObj1) const
     pNewPlusData->aObjName = aObjName;
     pNewPlusData->aObjTitle = aObjTitle;
     pNewPlusData->aObjDescription = aObjDescription;
+    pNewPlusData->isDecorative = isDecorative;
 
     return pNewPlusData;
 }

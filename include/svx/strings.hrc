@@ -258,6 +258,7 @@
 #define STR_UndoObjName                                     NC_("STR_UndoObjName", "Change object name of %1 to")
 #define STR_UndoObjTitle                                    NC_("STR_UndoObjTitle", "Change object title of %1")
 #define STR_UndoObjDescription                              NC_("STR_UndoObjDescription", "Change object description of %1")
+#define STR_UndoObjDecorative                               NC_("STR_UndoObjDecorative", "Change decorative of %1")
 #define STR_ItemValON                                       NC_("STR_ItemValON", "on")
 #define STR_ItemValOFF                                      NC_("STR_ItemValOFF", "off")
 #define STR_ItemValYES                                      NC_("STR_ItemValYES", "yes")

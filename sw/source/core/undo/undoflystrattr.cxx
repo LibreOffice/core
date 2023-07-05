@@ -88,4 +88,35 @@ SwRewriter SwUndoFlyStrAttr::GetRewriter() const
     return aResult;
 }
 
+SwUndoFlyDecorative::SwUndoFlyDecorative(SwFlyFrameFormat& rFlyFrameFormat,
+        bool const isDecorative)
+    : SwUndo(SwUndoId::FLYFRMFMT_DECORATIVE, rFlyFrameFormat.GetDoc())
+    , m_rFlyFrameFormat(rFlyFrameFormat)
+    , m_IsDecorative(isDecorative)
+{
+}
+
+SwUndoFlyDecorative::~SwUndoFlyDecorative()
+{
+}
+
+void SwUndoFlyDecorative::UndoImpl(::sw::UndoRedoContext &)
+{
+    m_rFlyFrameFormat.SetObjDecorative(!m_IsDecorative);
+}
+
+void SwUndoFlyDecorative::RedoImpl(::sw::UndoRedoContext &)
+{
+    m_rFlyFrameFormat.SetObjDecorative(m_IsDecorative);
+}
+
+SwRewriter SwUndoFlyDecorative::GetRewriter() const
+{
+    SwRewriter aResult;
+
+    aResult.AddRule(UndoArg1, m_rFlyFrameFormat.GetName());
+
+    return aResult;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

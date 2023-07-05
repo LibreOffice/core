@@ -110,12 +110,16 @@ private:
     // description
     std::unique_ptr<weld::TextView> m_xEdtDescription;
 
+    std::unique_ptr<weld::CheckButton> m_xDecorativeCB;
+
 public:
     // constructor
-    SvxObjectTitleDescDialog(weld::Window* pWindow, const OUString& rTitle, const OUString& rDesc);
+    SvxObjectTitleDescDialog(weld::Window* pWindow, const OUString& rTitle, const OUString& rDesc,
+                             bool isDecorative);
     // data access
     OUString GetTitle() const { return m_xEdtTitle->get_text(); }
     OUString GetDescription() const { return m_xEdtDescription->get_text(); }
+    bool IsDecorative() const { return m_xDecorativeCB->get_active(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

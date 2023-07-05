@@ -87,10 +87,12 @@ IMPL_LINK_NOARG(SvxObjectNameDialog, ModifyHdl, weld::Entry&, void)
 // Dialog for editing Object Title and Description
 
 SvxObjectTitleDescDialog::SvxObjectTitleDescDialog(weld::Window* pParent, const OUString& rTitle,
-                                                   const OUString& rDescription)
+                                                   const OUString& rDescription,
+                                                   bool const isDecorative)
     : GenericDialogController(pParent, "cui/ui/objecttitledescdialog.ui", "ObjectTitleDescDialog")
     , m_xEdtTitle(m_xBuilder->weld_entry("object_title_entry"))
     , m_xEdtDescription(m_xBuilder->weld_text_view("desc_entry"))
+    , m_xDecorativeCB(m_xBuilder->weld_check_button("decorative"))
 {
     //lock height to initial height
     m_xEdtDescription->set_size_request(-1, m_xEdtDescription->get_text_height() * 5);
@@ -100,6 +102,8 @@ SvxObjectTitleDescDialog::SvxObjectTitleDescDialog(weld::Window* pParent, const 
 
     // activate title
     m_xEdtTitle->select_region(0, -1);
+
+    m_xDecorativeCB->set_active(isDecorative);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

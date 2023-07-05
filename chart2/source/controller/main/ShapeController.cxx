@@ -402,16 +402,19 @@ void ShapeController::executeDispatch_ObjectTitleDescription()
 
     OUString aTitle( pSelectedObj->GetTitle() );
     OUString aDescription( pSelectedObj->GetDescription() );
+    bool isDecorative(pSelectedObj->IsDecorative());
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     weld::Window* pChartWindow(m_pChartController->GetChartFrame());
     ScopedVclPtr< AbstractSvxObjectTitleDescDialog > pDlg(
-        pFact->CreateSvxObjectTitleDescDialog(pChartWindow, aTitle, aDescription));
+        pFact->CreateSvxObjectTitleDescDialog(pChartWindow, aTitle, aDescription, isDecorative));
     if ( pDlg->Execute() == RET_OK )
     {
         pDlg->GetTitle( aTitle );
         pDlg->GetDescription( aDescription );
+        pDlg->IsDecorative(isDecorative);
         pSelectedObj->SetTitle( aTitle );
         pSelectedObj->SetDescription( aDescription );
+        pSelectedObj->SetDecorative(isDecorative);
     }
 }
 

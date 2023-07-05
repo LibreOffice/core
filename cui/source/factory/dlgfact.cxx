@@ -630,6 +630,11 @@ void AbstractSvxObjectTitleDescDialog_Impl::GetDescription(OUString& rDescriptio
     rDescription = m_xDlg->GetDescription();
 }
 
+void AbstractSvxObjectTitleDescDialog_Impl::IsDecorative(bool & rIsDecorative)
+{
+    rIsDecorative = m_xDlg->IsDecorative();
+}
+
 OUString AbstractSvxMultiPathDialog_Impl::GetPath() const
 {
     return m_xDlg->GetPath();
@@ -1098,9 +1103,9 @@ VclPtr<AbstractSvxObjectNameDialog> AbstractDialogFactory_Impl::CreateSvxObjectN
     return VclPtr<AbstractSvxObjectNameDialog_Impl>::Create(std::make_unique<SvxObjectNameDialog>(pParent, rName));
 }
 
-VclPtr<AbstractSvxObjectTitleDescDialog> AbstractDialogFactory_Impl::CreateSvxObjectTitleDescDialog(weld::Window* pParent, const OUString& rTitle, const OUString& rDescription)
+VclPtr<AbstractSvxObjectTitleDescDialog> AbstractDialogFactory_Impl::CreateSvxObjectTitleDescDialog(weld::Window* pParent, const OUString& rTitle, const OUString& rDescription, bool const isDecorative)
 {
-    return VclPtr<AbstractSvxObjectTitleDescDialog_Impl>::Create(std::make_unique<SvxObjectTitleDescDialog>(pParent, rTitle, rDescription));
+    return VclPtr<AbstractSvxObjectTitleDescDialog_Impl>::Create(std::make_unique<SvxObjectTitleDescDialog>(pParent, rTitle, rDescription, isDecorative));
 }
 
 VclPtr<AbstractSvxMultiPathDialog> AbstractDialogFactory_Impl::CreateSvxMultiPathDialog(weld::Window* pParent)

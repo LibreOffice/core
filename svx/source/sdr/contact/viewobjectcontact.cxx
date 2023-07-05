@@ -398,7 +398,7 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
     // was done at ImplRenderPaintProc::createRedirectedPrimitive2DSequence before
     if (!xNewPrimitiveSequence.empty() && isExportPDFTags())
     {
-        if (nullptr != pSdrObj)
+        if (nullptr != pSdrObj && !pSdrObj->IsDecorative())
         {
             vcl::PDFWriter::StructElement eElement(vcl::PDFWriter::NonStructElement);
             const SdrInventor nInventor(pSdrObj->GetObjInventor());

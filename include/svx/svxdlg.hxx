@@ -186,6 +186,7 @@ protected:
 public:
     virtual void GetTitle(OUString& rTitle) = 0;
     virtual void GetDescription(OUString& rDescription) = 0;
+    virtual void IsDecorative(bool & rIsDecorative) = 0;
 };
 
 /// Abstract class provides the get information from the numbering and position dialog.
@@ -380,7 +381,7 @@ public:
 
     // #i68101#
     virtual VclPtr<AbstractSvxObjectNameDialog> CreateSvxObjectNameDialog(weld::Window* pParent, const OUString& rName) = 0;
-    virtual VclPtr<AbstractSvxObjectTitleDescDialog> CreateSvxObjectTitleDescDialog(weld::Window* pParent, const OUString& rTitle, const OUString& rDescription) = 0;
+    virtual VclPtr<AbstractSvxObjectTitleDescDialog> CreateSvxObjectTitleDescDialog(weld::Window* pParent, const OUString& rTitle, const OUString& rDescription, bool isDecorative) = 0;
     virtual VclPtr<AbstractSvxMultiPathDialog>    CreateSvxMultiPathDialog(weld::Window* pParent) = 0 ;
     virtual VclPtr<AbstractSvxMultiPathDialog>    CreateSvxPathSelectDialog(weld::Window* pParent) = 0 ;
     virtual VclPtr<AbstractSvxHpLinkDlg>  CreateSvxHpLinkDlg(SfxChildWindow* pChild, SfxBindings* pBindings, weld::Window* pParent) = 0;

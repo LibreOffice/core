@@ -615,18 +615,21 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                 OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
                 OUString aTitle(pSelected->GetTitle());
                 OUString aDescription(pSelected->GetDescription());
+                bool isDecorative(pSelected->IsDecorative());
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 ScopedVclPtr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(GetView().GetFrameWeld(),
-                            aTitle, aDescription));
+                            aTitle, aDescription, isDecorative));
 
                 if(RET_OK == pDlg->Execute())
                 {
                     pDlg->GetTitle(aTitle);
                     pDlg->GetDescription(aDescription);
+                    pDlg->IsDecorative(isDecorative);
 
                     pSelected->SetTitle(aTitle);
                     pSelected->SetDescription(aDescription);
+                    pSelected->SetDecorative(isDecorative);
 
                     pSh->SetModified();
                 }
