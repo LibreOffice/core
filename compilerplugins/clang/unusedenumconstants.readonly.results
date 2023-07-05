@@ -1,55 +1,53 @@
-bridges/source/cpp_uno/gcc3_linux_x86-64/abi.cxx:79
-    enum (anonymous namespace)::x86_64_reg_class X86_64_SSEUP_CLASS
-bridges/source/cpp_uno/gcc3_linux_x86-64/abi.cxx:80
-    enum (anonymous namespace)::x86_64_reg_class X86_64_X87_CLASS
-bridges/source/cpp_uno/gcc3_linux_x86-64/abi.cxx:81
-    enum (anonymous namespace)::x86_64_reg_class X86_64_X87UP_CLASS
+chart2/source/controller/main/DrawCommandDispatch.h:31
+    enum DrawCommandID COMMAND_ID_DRAW_TEXT_VERTICAL
+chart2/source/controller/main/DrawCommandDispatch.h:33
+    enum DrawCommandID COMMAND_ID_DRAW_CAPTION_VERTICAL
 chart2/source/inc/CharacterProperties.hxx:120
-    enum chart::CharacterProperties::(anonymous at /home/noel/libo2/chart2/source/inc/CharacterProperties.hxx:41:5) FAST_PROPERTY_ID_END_CHAR_PROP
-chart2/source/inc/TitleHelper.hxx:47
+    enum chart::CharacterProperties::(unnamed at /home/noel/libo-plugin/chart2/source/inc/CharacterProperties.hxx:41:5) FAST_PROPERTY_ID_END_CHAR_PROP
+chart2/source/inc/TitleHelper.hxx:49
     enum chart::TitleHelper::eTitleType NORMAL_TITLE_END
-chart2/source/view/inc/ShapeFactory.hxx:49
-    enum chart::SymbolEnum Symbol_Square
-chart2/source/view/inc/ShapeFactory.hxx:50
-    enum chart::SymbolEnum Symbol_Diamond
 chart2/source/view/inc/ShapeFactory.hxx:51
-    enum chart::SymbolEnum Symbol_DownArrow
+    enum chart::SymbolEnum Symbol_Square
 chart2/source/view/inc/ShapeFactory.hxx:52
-    enum chart::SymbolEnum Symbol_UpArrow
+    enum chart::SymbolEnum Symbol_Diamond
 chart2/source/view/inc/ShapeFactory.hxx:53
-    enum chart::SymbolEnum Symbol_RightArrow
+    enum chart::SymbolEnum Symbol_DownArrow
 chart2/source/view/inc/ShapeFactory.hxx:54
-    enum chart::SymbolEnum Symbol_LeftArrow
+    enum chart::SymbolEnum Symbol_UpArrow
 chart2/source/view/inc/ShapeFactory.hxx:55
-    enum chart::SymbolEnum Symbol_Bowtie
+    enum chart::SymbolEnum Symbol_RightArrow
 chart2/source/view/inc/ShapeFactory.hxx:56
-    enum chart::SymbolEnum Symbol_Sandglass
+    enum chart::SymbolEnum Symbol_LeftArrow
 chart2/source/view/inc/ShapeFactory.hxx:57
-    enum chart::SymbolEnum Symbol_Circle
+    enum chart::SymbolEnum Symbol_Bowtie
 chart2/source/view/inc/ShapeFactory.hxx:58
-    enum chart::SymbolEnum Symbol_Star
+    enum chart::SymbolEnum Symbol_Sandglass
 chart2/source/view/inc/ShapeFactory.hxx:59
-    enum chart::SymbolEnum Symbol_X
+    enum chart::SymbolEnum Symbol_Circle
 chart2/source/view/inc/ShapeFactory.hxx:60
-    enum chart::SymbolEnum Symbol_Plus
+    enum chart::SymbolEnum Symbol_Star
 chart2/source/view/inc/ShapeFactory.hxx:61
-    enum chart::SymbolEnum Symbol_Asterisk
+    enum chart::SymbolEnum Symbol_X
 chart2/source/view/inc/ShapeFactory.hxx:62
-    enum chart::SymbolEnum Symbol_HorizontalBar
+    enum chart::SymbolEnum Symbol_Plus
 chart2/source/view/inc/ShapeFactory.hxx:63
+    enum chart::SymbolEnum Symbol_Asterisk
+chart2/source/view/inc/ShapeFactory.hxx:64
+    enum chart::SymbolEnum Symbol_HorizontalBar
+chart2/source/view/inc/ShapeFactory.hxx:65
     enum chart::SymbolEnum Symbol_VerticalBar
 configmgr/source/access.hxx:443
-    enum configmgr::Access::(anonymous at /home/noel/libo2/configmgr/source/access.hxx:441:5) IS_GROUP_MEMBER
+    enum configmgr::Access::(unnamed at /home/noel/libo-plugin/configmgr/source/access.hxx:441:5) IS_GROUP_MEMBER
 configmgr/source/access.hxx:443
-    enum configmgr::Access::(anonymous at /home/noel/libo2/configmgr/source/access.hxx:441:5) IS_SET_MEMBER
+    enum configmgr::Access::(unnamed at /home/noel/libo-plugin/configmgr/source/access.hxx:441:5) IS_SET_MEMBER
 configmgr/source/components.hxx:149
     enum configmgr::Components::ModificationTarget Dconf
 configmgr/source/parsemanager.hxx:43
-    enum configmgr::ParseManager::(anonymous at /home/noel/libo2/configmgr/source/parsemanager.hxx:43:5) NAMESPACE_OOR
+    enum configmgr::ParseManager::(unnamed at /home/noel/libo-plugin/configmgr/source/parsemanager.hxx:43:5) NAMESPACE_OOR
 configmgr/source/parsemanager.hxx:43
-    enum configmgr::ParseManager::(anonymous at /home/noel/libo2/configmgr/source/parsemanager.hxx:43:5) NAMESPACE_XS
+    enum configmgr::ParseManager::(unnamed at /home/noel/libo-plugin/configmgr/source/parsemanager.hxx:43:5) NAMESPACE_XS
 configmgr/source/parsemanager.hxx:43
-    enum configmgr::ParseManager::(anonymous at /home/noel/libo2/configmgr/source/parsemanager.hxx:43:5) NAMESPACE_XSI
+    enum configmgr::ParseManager::(unnamed at /home/noel/libo-plugin/configmgr/source/parsemanager.hxx:43:5) NAMESPACE_XSI
 connectivity/source/drivers/evoab2/NConnection.hxx:37
     connectivity::evoab::SDBCAddress::sdbc_address_type Unknown
 cui/source/options/optgenrl.cxx:63
@@ -58,135 +56,127 @@ dbaccess/source/core/inc/SingleSelectQueryComposer.hxx:71
     enum dbaccess::OSingleSelectQueryComposer::EColumnType SelectColumns
 dbaccess/source/ui/inc/sqlmessage.hxx:56
     enum dbaui::MessBoxStyle DefaultCancel
-drawinglayer/source/tools/emfphelperdata.cxx:61
-    enum emfplushelper::(anonymous at /home/noel/libo2/drawinglayer/source/tools/emfphelperdata.cxx:59:5) WrapModeTile
-drawinglayer/source/tools/emfphelperdata.cxx:62
-    enum emfplushelper::(anonymous at /home/noel/libo2/drawinglayer/source/tools/emfphelperdata.cxx:59:5) WrapModeTileFlipX
 drawinglayer/source/tools/emfphelperdata.cxx:63
-    enum emfplushelper::(anonymous at /home/noel/libo2/drawinglayer/source/tools/emfphelperdata.cxx:59:5) WrapModeTileFlipY
+    enum emfplushelper::(unnamed at /home/noel/libo-plugin/drawinglayer/source/tools/emfphelperdata.cxx:61:5) WrapModeTile
 drawinglayer/source/tools/emfphelperdata.cxx:64
-    enum emfplushelper::(anonymous at /home/noel/libo2/drawinglayer/source/tools/emfphelperdata.cxx:59:5) WrapModeTileFlipXY
-drawinglayer/source/tools/emfphelperdata.hxx:107
-    enum emfplushelper::PixelOffsetMode PixelOffsetModeDefault
+    enum emfplushelper::(unnamed at /home/noel/libo-plugin/drawinglayer/source/tools/emfphelperdata.cxx:61:5) WrapModeTileFlipX
+drawinglayer/source/tools/emfphelperdata.cxx:65
+    enum emfplushelper::(unnamed at /home/noel/libo-plugin/drawinglayer/source/tools/emfphelperdata.cxx:61:5) WrapModeTileFlipY
+drawinglayer/source/tools/emfphelperdata.cxx:66
+    enum emfplushelper::(unnamed at /home/noel/libo-plugin/drawinglayer/source/tools/emfphelperdata.cxx:61:5) WrapModeTileFlipXY
 drawinglayer/source/tools/emfphelperdata.hxx:108
-    enum emfplushelper::PixelOffsetMode PixelOffsetModeHighSpeed
+    enum emfplushelper::PixelOffsetMode PixelOffsetModeDefault
 drawinglayer/source/tools/emfphelperdata.hxx:109
+    enum emfplushelper::PixelOffsetMode PixelOffsetModeHighSpeed
+drawinglayer/source/tools/emfphelperdata.hxx:110
     enum emfplushelper::PixelOffsetMode PixelOffsetModeHighQuality
-drawinglayer/source/tools/emfphelperdata.hxx:111
+drawinglayer/source/tools/emfphelperdata.hxx:112
     enum emfplushelper::PixelOffsetMode PixelOffsetModeHalf
-drawinglayer/source/tools/emfphelperdata.hxx:116
-    enum emfplushelper::SmoothingMode SmoothingModeDefault
 drawinglayer/source/tools/emfphelperdata.hxx:117
-    enum emfplushelper::SmoothingMode SmoothingModeHighSpeed
+    enum emfplushelper::SmoothingMode SmoothingModeDefault
 drawinglayer/source/tools/emfphelperdata.hxx:118
+    enum emfplushelper::SmoothingMode SmoothingModeHighSpeed
+drawinglayer/source/tools/emfphelperdata.hxx:119
     enum emfplushelper::SmoothingMode SmoothingModeHighQuality
-drawinglayer/source/tools/emfphelperdata.hxx:120
-    enum emfplushelper::SmoothingMode SmoothingModeAntiAlias8x4
 drawinglayer/source/tools/emfphelperdata.hxx:121
+    enum emfplushelper::SmoothingMode SmoothingModeAntiAlias8x4
+drawinglayer/source/tools/emfphelperdata.hxx:122
     enum emfplushelper::SmoothingMode SmoothingModeAntiAlias8x8
-drawinglayer/source/tools/emfphelperdata.hxx:126
-    enum emfplushelper::InterpolationMode InterpolationModeDefault
 drawinglayer/source/tools/emfphelperdata.hxx:127
-    enum emfplushelper::InterpolationMode InterpolationModeLowQuality
+    enum emfplushelper::InterpolationMode InterpolationModeDefault
 drawinglayer/source/tools/emfphelperdata.hxx:128
-    enum emfplushelper::InterpolationMode InterpolationModeHighQuality
+    enum emfplushelper::InterpolationMode InterpolationModeLowQuality
 drawinglayer/source/tools/emfphelperdata.hxx:129
-    enum emfplushelper::InterpolationMode InterpolationModeBilinear
+    enum emfplushelper::InterpolationMode InterpolationModeHighQuality
 drawinglayer/source/tools/emfphelperdata.hxx:130
-    enum emfplushelper::InterpolationMode InterpolationModeBicubic
+    enum emfplushelper::InterpolationMode InterpolationModeBilinear
 drawinglayer/source/tools/emfphelperdata.hxx:131
-    enum emfplushelper::InterpolationMode InterpolationModeNearestNeighbor
+    enum emfplushelper::InterpolationMode InterpolationModeBicubic
 drawinglayer/source/tools/emfphelperdata.hxx:132
-    enum emfplushelper::InterpolationMode InterpolationModeHighQualityBilinear
+    enum emfplushelper::InterpolationMode InterpolationModeNearestNeighbor
 drawinglayer/source/tools/emfphelperdata.hxx:133
+    enum emfplushelper::InterpolationMode InterpolationModeHighQualityBilinear
+drawinglayer/source/tools/emfphelperdata.hxx:134
     enum emfplushelper::InterpolationMode InterpolationModeHighQualityBicubic
-drawinglayer/source/tools/emfphelperdata.hxx:138
-    enum emfplushelper::TextRenderingHint TextRenderingHintSystemDefault
 drawinglayer/source/tools/emfphelperdata.hxx:139
-    enum emfplushelper::TextRenderingHint TextRenderingHintSingleBitPerPixelGridFit
+    enum emfplushelper::TextRenderingHint TextRenderingHintSystemDefault
 drawinglayer/source/tools/emfphelperdata.hxx:140
-    enum emfplushelper::TextRenderingHint TextRenderingHintSingleBitPerPixel
+    enum emfplushelper::TextRenderingHint TextRenderingHintSingleBitPerPixelGridFit
 drawinglayer/source/tools/emfphelperdata.hxx:141
-    enum emfplushelper::TextRenderingHint TextRenderingHintAntialiasGridFit
+    enum emfplushelper::TextRenderingHint TextRenderingHintSingleBitPerPixel
 drawinglayer/source/tools/emfphelperdata.hxx:142
-    enum emfplushelper::TextRenderingHint TextRenderingHintAntialias
+    enum emfplushelper::TextRenderingHint TextRenderingHintAntialiasGridFit
 drawinglayer/source/tools/emfphelperdata.hxx:143
+    enum emfplushelper::TextRenderingHint TextRenderingHintAntialias
+drawinglayer/source/tools/emfphelperdata.hxx:144
     enum emfplushelper::TextRenderingHint TextRenderingHintClearTypeGridFit
-drawinglayer/source/tools/emfphelperdata.hxx:148
-    enum emfplushelper::UnitType UnitTypeWorld
 drawinglayer/source/tools/emfphelperdata.hxx:149
-    enum emfplushelper::UnitType UnitTypeDisplay
+    enum emfplushelper::UnitType UnitTypeWorld
 drawinglayer/source/tools/emfphelperdata.hxx:150
-    enum emfplushelper::UnitType UnitTypePixel
+    enum emfplushelper::UnitType UnitTypeDisplay
 drawinglayer/source/tools/emfphelperdata.hxx:151
-    enum emfplushelper::UnitType UnitTypePoint
+    enum emfplushelper::UnitType UnitTypePixel
 drawinglayer/source/tools/emfphelperdata.hxx:152
-    enum emfplushelper::UnitType UnitTypeInch
+    enum emfplushelper::UnitType UnitTypePoint
 drawinglayer/source/tools/emfphelperdata.hxx:153
-    enum emfplushelper::UnitType UnitTypeDocument
+    enum emfplushelper::UnitType UnitTypeInch
 drawinglayer/source/tools/emfphelperdata.hxx:154
+    enum emfplushelper::UnitType UnitTypeDocument
+drawinglayer/source/tools/emfphelperdata.hxx:155
     enum emfplushelper::UnitType UnitTypeMillimeter
-drawinglayer/source/tools/emfphelperdata.hxx:159
-    enum emfplushelper::EmfPlusCombineMode EmfPlusCombineModeReplace
 drawinglayer/source/tools/emfphelperdata.hxx:160
-    enum emfplushelper::EmfPlusCombineMode EmfPlusCombineModeIntersect
+    enum emfplushelper::EmfPlusCombineMode EmfPlusCombineModeReplace
 drawinglayer/source/tools/emfphelperdata.hxx:161
-    enum emfplushelper::EmfPlusCombineMode EmfPlusCombineModeUnion
+    enum emfplushelper::EmfPlusCombineMode EmfPlusCombineModeIntersect
 drawinglayer/source/tools/emfphelperdata.hxx:162
-    enum emfplushelper::EmfPlusCombineMode EmfPlusCombineModeXOR
+    enum emfplushelper::EmfPlusCombineMode EmfPlusCombineModeUnion
 drawinglayer/source/tools/emfphelperdata.hxx:163
-    enum emfplushelper::EmfPlusCombineMode EmfPlusCombineModeExclude
+    enum emfplushelper::EmfPlusCombineMode EmfPlusCombineModeXOR
 drawinglayer/source/tools/emfphelperdata.hxx:164
+    enum emfplushelper::EmfPlusCombineMode EmfPlusCombineModeExclude
+drawinglayer/source/tools/emfphelperdata.hxx:165
     enum emfplushelper::EmfPlusCombineMode EmfPlusCombineModeComplement
 drawinglayer/source/tools/emfpimage.hxx:31
     emfplushelper::ImageDataType ImageDataTypeBitmap
 drawinglayer/source/tools/emfpimage.hxx:32
     emfplushelper::ImageDataType ImageDataTypeMetafile
-drawinglayer/source/tools/emfppen.hxx:58
-    enum emfplushelper::LineCapType LineCapTypeFlat
-drawinglayer/source/tools/emfppen.hxx:59
-    enum emfplushelper::LineCapType LineCapTypeSquare
 drawinglayer/source/tools/emfppen.hxx:60
-    enum emfplushelper::LineCapType LineCapTypeRound
+    enum emfplushelper::LineCapType LineCapTypeFlat
 drawinglayer/source/tools/emfppen.hxx:61
-    enum emfplushelper::LineCapType LineCapTypeTriangle
+    enum emfplushelper::LineCapType LineCapTypeSquare
 drawinglayer/source/tools/emfppen.hxx:62
-    enum emfplushelper::LineCapType LineCapTypeNoAnchor
+    enum emfplushelper::LineCapType LineCapTypeRound
 drawinglayer/source/tools/emfppen.hxx:63
-    enum emfplushelper::LineCapType LineCapTypeSquareAnchor
+    enum emfplushelper::LineCapType LineCapTypeTriangle
 drawinglayer/source/tools/emfppen.hxx:64
-    enum emfplushelper::LineCapType LineCapTypeRoundAnchor
+    enum emfplushelper::LineCapType LineCapTypeNoAnchor
 drawinglayer/source/tools/emfppen.hxx:65
-    enum emfplushelper::LineCapType LineCapTypeDiamondAnchor
+    enum emfplushelper::LineCapType LineCapTypeSquareAnchor
 drawinglayer/source/tools/emfppen.hxx:66
-    enum emfplushelper::LineCapType LineCapTypeArrowAnchor
+    enum emfplushelper::LineCapType LineCapTypeRoundAnchor
 drawinglayer/source/tools/emfppen.hxx:67
-    enum emfplushelper::LineCapType LineCapTypeAnchorMask
+    enum emfplushelper::LineCapType LineCapTypeDiamondAnchor
 drawinglayer/source/tools/emfppen.hxx:68
+    enum emfplushelper::LineCapType LineCapTypeArrowAnchor
+drawinglayer/source/tools/emfppen.hxx:69
+    enum emfplushelper::LineCapType LineCapTypeAnchorMask
+drawinglayer/source/tools/emfppen.hxx:70
     enum emfplushelper::LineCapType LineCapTypeCustom
-drawinglayer/source/tools/emfppen.hxx:73
-    enum emfplushelper::LineJoinType LineJoinTypeMiter
-drawinglayer/source/tools/emfppen.hxx:74
-    enum emfplushelper::LineJoinType LineJoinTypeBevel
-drawinglayer/source/tools/emfppen.hxx:75
-    enum emfplushelper::LineJoinType LineJoinTypeRound
-drawinglayer/source/tools/emfppen.hxx:76
-    enum emfplushelper::LineJoinType LineJoinTypeMiterClipped
-drawinglayer/source/tools/emfppen.hxx:81
-    enum emfplushelper::DashedLineCapType DashedLineCapTypeFlat
-drawinglayer/source/tools/emfppen.hxx:82
-    enum emfplushelper::DashedLineCapType DashedLineCapTypeRound
 drawinglayer/source/tools/emfppen.hxx:83
+    enum emfplushelper::DashedLineCapType DashedLineCapTypeFlat
+drawinglayer/source/tools/emfppen.hxx:84
+    enum emfplushelper::DashedLineCapType DashedLineCapTypeRound
+drawinglayer/source/tools/emfppen.hxx:85
     enum emfplushelper::DashedLineCapType DashedLineCapTypeTriangle
-drawinglayer/source/tools/emfppen.hxx:88
-    enum emfplushelper::PenAlignment PenAlignmentCenter
-drawinglayer/source/tools/emfppen.hxx:89
-    enum emfplushelper::PenAlignment PenAlignmentInset
 drawinglayer/source/tools/emfppen.hxx:90
-    enum emfplushelper::PenAlignment PenAlignmentLeft
+    enum emfplushelper::PenAlignment PenAlignmentCenter
 drawinglayer/source/tools/emfppen.hxx:91
-    enum emfplushelper::PenAlignment PenAlignmentOutset
+    enum emfplushelper::PenAlignment PenAlignmentInset
 drawinglayer/source/tools/emfppen.hxx:92
+    enum emfplushelper::PenAlignment PenAlignmentLeft
+drawinglayer/source/tools/emfppen.hxx:93
+    enum emfplushelper::PenAlignment PenAlignmentOutset
+drawinglayer/source/tools/emfppen.hxx:94
     enum emfplushelper::PenAlignment PenAlignmentRight
 drawinglayer/source/tools/emfpregion.hxx:28
     emfplushelper::RegionNodeDataType RegionNodeDataTypeAnd
@@ -232,12 +222,338 @@ drawinglayer/source/tools/emfpstringformat.hxx:65
     enum emfplushelper::StringTrimming StringTrimmingEllipsisWord
 drawinglayer/source/tools/emfpstringformat.hxx:66
     enum emfplushelper::StringTrimming StringTrimmingEllipsisPath
-editeng/source/misc/SvXMLAutoCorrectTokenHandler.hxx:26
+editeng/source/misc/SvXMLAutoCorrectTokenHandler.hxx:25
     enum SvXMLAutoCorrectToken BLOCK
-editeng/source/misc/SvXMLAutoCorrectTokenHandler.hxx:27
+editeng/source/misc/SvXMLAutoCorrectTokenHandler.hxx:26
     enum SvXMLAutoCorrectToken BLOCKLIST
-emfio/inc/mtftools.hxx:83
+emfio/inc/mtftools.hxx:38
+    enum emfio::RegionMode RGN_AND
+emfio/inc/mtftools.hxx:39
+    enum emfio::RegionMode RGN_OR
+emfio/inc/mtftools.hxx:40
+    enum emfio::RegionMode RGN_XOR
+emfio/inc/mtftools.hxx:41
+    enum emfio::RegionMode RGN_DIFF
+emfio/inc/mtftools.hxx:57
+    enum emfio::ModifyWorldTransformMode MWT_IDENTITY
+emfio/inc/mtftools.hxx:58
+    enum emfio::ModifyWorldTransformMode MWT_LEFTMULTIPLY
+emfio/inc/mtftools.hxx:59
+    enum emfio::ModifyWorldTransformMode MWT_RIGHTMULTIPLY
+emfio/inc/mtftools.hxx:60
+    enum emfio::ModifyWorldTransformMode MWT_SET
+emfio/inc/mtftools.hxx:69
+    enum emfio::StockObject WHITE_BRUSH
+emfio/inc/mtftools.hxx:70
+    enum emfio::StockObject LTGRAY_BRUSH
+emfio/inc/mtftools.hxx:71
+    enum emfio::StockObject GRAY_BRUSH
+emfio/inc/mtftools.hxx:72
+    enum emfio::StockObject DKGRAY_BRUSH
+emfio/inc/mtftools.hxx:73
+    enum emfio::StockObject BLACK_BRUSH
+emfio/inc/mtftools.hxx:74
+    enum emfio::StockObject NULL_BRUSH
+emfio/inc/mtftools.hxx:75
+    enum emfio::StockObject WHITE_PEN
+emfio/inc/mtftools.hxx:76
+    enum emfio::StockObject BLACK_PEN
+emfio/inc/mtftools.hxx:77
+    enum emfio::StockObject NULL_PEN
+emfio/inc/mtftools.hxx:91
     enum emfio::WMFRasterOp Nop
+emfio/inc/mtftools.hxx:101
+    enum emfio::MappingMode MM_LOMETRIC
+emfio/inc/mtftools.hxx:102
+    enum emfio::MappingMode MM_HIMETRIC
+emfio/inc/mtftools.hxx:103
+    enum emfio::MappingMode MM_LOENGLISH
+emfio/inc/mtftools.hxx:104
+    enum emfio::MappingMode MM_HIENGLISH
+emfio/inc/mtftools.hxx:105
+    enum emfio::MappingMode MM_TWIPS
+emfio/inc/mtftools.hxx:106
+    enum emfio::MappingMode MM_ISOTROPIC
+emfio/inc/mtftools.hxx:118
+    enum emfio::GraphicsMode GM_ADVANCED
+emfio/inc/mtftools.hxx:174
+    enum emfio::TextAlignmentMode TA_UPDATECP
+emfio/inc/mtftools.hxx:178
+    enum emfio::TextAlignmentMode TA_RIGHT_CENTER
+emfio/inc/mtftools.hxx:180
+    enum emfio::TextAlignmentMode TA_BOTTOM
+emfio/inc/mtftools.hxx:183
+    enum emfio::TextAlignmentMode TA_BASELINE
+emfio/inc/mtftools.hxx:193
+    enum emfio::TernaryRasterOperation SRCPAINT
+emfio/inc/mtftools.hxx:198
+    enum emfio::TernaryRasterOperation PATINVERT
+emfio/inc/mtftools.hxx:207
+    enum emfio::PenStyle PS_SOLID
+emfio/inc/mtftools.hxx:208
+    enum emfio::PenStyle PS_DASH
+emfio/inc/mtftools.hxx:209
+    enum emfio::PenStyle PS_DOT
+emfio/inc/mtftools.hxx:210
+    enum emfio::PenStyle PS_DASHDOT
+emfio/inc/mtftools.hxx:211
+    enum emfio::PenStyle PS_DASHDOTDOT
+emfio/inc/mtftools.hxx:212
+    enum emfio::PenStyle PS_NULL
+emfio/inc/mtftools.hxx:213
+    enum emfio::PenStyle PS_INSIDEFRAME
+emfio/inc/mtftools.hxx:216
+    enum emfio::PenStyle PS_STYLE_MASK
+emfio/inc/mtftools.hxx:218
+    enum emfio::PenStyle PS_ENDCAP_ROUND
+emfio/inc/mtftools.hxx:219
+    enum emfio::PenStyle PS_ENDCAP_SQUARE
+emfio/inc/mtftools.hxx:220
+    enum emfio::PenStyle PS_ENDCAP_FLAT
+emfio/inc/mtftools.hxx:221
+    enum emfio::PenStyle PS_ENDCAP_STYLE_MASK
+emfio/inc/mtftools.hxx:223
+    enum emfio::PenStyle PS_JOIN_ROUND
+emfio/inc/mtftools.hxx:224
+    enum emfio::PenStyle PS_JOIN_BEVEL
+emfio/inc/mtftools.hxx:225
+    enum emfio::PenStyle PS_JOIN_MITER
+emfio/inc/mtftools.hxx:226
+    enum emfio::PenStyle PS_JOIN_STYLE_MASK
+emfio/inc/mtftools.hxx:228
+    enum emfio::PenStyle PS_GEOMETRIC
+emfio/inc/mtftools.hxx:236
+    enum emfio::CharacterSet DEFAULT_CHARSET
+emfio/inc/mtftools.hxx:261
+    enum emfio::ExtTextOutOptions ETO_OPAQUE
+emfio/inc/mtftools.hxx:262
+    enum emfio::ExtTextOutOptions ETO_CLIPPED
+emfio/inc/mtftools.hxx:264
+    enum emfio::ExtTextOutOptions ETO_GLYPH_INDEX
+emfio/inc/mtftools.hxx:265
+    enum emfio::ExtTextOutOptions ETO_RTLREADING
+emfio/inc/mtftools.hxx:267
+    enum emfio::ExtTextOutOptions ETO_NO_RECT
+emfio/inc/mtftools.hxx:268
+    enum emfio::ExtTextOutOptions ETO_PDY
+emfio/inc/mtftools.hxx:276
+    enum emfio::PitchFont FIXED_PITCH
+emfio/inc/mtftools.hxx:277
+    enum emfio::PitchFont VARIABLE_PITCH
+emfio/inc/mtftools.hxx:285
+    enum emfio::FamilyFont FF_SWISS
+emfio/inc/mtftools.hxx:286
+    enum emfio::FamilyFont FF_MODERN
+emfio/inc/mtftools.hxx:287
+    enum emfio::FamilyFont FF_SCRIPT
+emfio/inc/mtftools.hxx:288
+    enum emfio::FamilyFont FF_DECORATIVE
+emfio/inc/mtftools.hxx:293
+    enum emfio::WeightFont FW_THIN
+emfio/inc/mtftools.hxx:295
+    enum emfio::WeightFont FW_LIGHT
+emfio/inc/mtftools.hxx:297
+    enum emfio::WeightFont FW_MEDIUM
+emfio/inc/mtftools.hxx:298
+    enum emfio::WeightFont FW_SEMIBOLD
+emfio/inc/mtftools.hxx:299
+    enum emfio::WeightFont FW_BOLD
+emfio/inc/mtftools.hxx:301
+    enum emfio::WeightFont FW_ULTRALIGHT
+emfio/inc/mtftools.hxx:302
+    enum emfio::WeightFont FW_ULTRABOLD
+emfio/inc/mtftools.hxx:309
+    enum emfio::BrushStyle BS_SOLID
+emfio/inc/mtftools.hxx:310
+    enum emfio::BrushStyle BS_NULL
+emfio/inc/mtftools.hxx:311
+    enum emfio::BrushStyle BS_HOLLOW
+emfio/inc/mtftools.hxx:313
+    enum emfio::BrushStyle BS_PATTERN
+emfio/source/reader/emfreader.cxx:182
+    enum (anonymous namespace)::EMFPointTypes PT_CLOSEFIGURE
+emfio/source/reader/emfreader.cxx:183
+    enum (anonymous namespace)::EMFPointTypes PT_LINETO
+emfio/source/reader/emfreader.cxx:184
+    enum (anonymous namespace)::EMFPointTypes PT_BEZIERTO
+emfio/source/reader/emfreader.cxx:185
+    enum (anonymous namespace)::EMFPointTypes PT_MOVETO
+emfio/source/reader/wmfreader.cxx:48
+    enum (anonymous namespace)::WMFRecords W_META_EOF
+emfio/source/reader/wmfreader.cxx:49
+    enum (anonymous namespace)::WMFRecords W_META_SETBKCOLOR
+emfio/source/reader/wmfreader.cxx:50
+    enum (anonymous namespace)::WMFRecords W_META_SETBKMODE
+emfio/source/reader/wmfreader.cxx:51
+    enum (anonymous namespace)::WMFRecords W_META_SETMAPMODE
+emfio/source/reader/wmfreader.cxx:52
+    enum (anonymous namespace)::WMFRecords W_META_SETROP2
+emfio/source/reader/wmfreader.cxx:53
+    enum (anonymous namespace)::WMFRecords W_META_SETRELABS
+emfio/source/reader/wmfreader.cxx:54
+    enum (anonymous namespace)::WMFRecords W_META_SETPOLYFILLMODE
+emfio/source/reader/wmfreader.cxx:55
+    enum (anonymous namespace)::WMFRecords W_META_SETSTRETCHBLTMODE
+emfio/source/reader/wmfreader.cxx:56
+    enum (anonymous namespace)::WMFRecords W_META_SETTEXTCHAREXTRA
+emfio/source/reader/wmfreader.cxx:57
+    enum (anonymous namespace)::WMFRecords W_META_SETTEXTCOLOR
+emfio/source/reader/wmfreader.cxx:58
+    enum (anonymous namespace)::WMFRecords W_META_SETTEXTJUSTIFICATION
+emfio/source/reader/wmfreader.cxx:59
+    enum (anonymous namespace)::WMFRecords W_META_SETWINDOWORG
+emfio/source/reader/wmfreader.cxx:60
+    enum (anonymous namespace)::WMFRecords W_META_SETWINDOWEXT
+emfio/source/reader/wmfreader.cxx:61
+    enum (anonymous namespace)::WMFRecords W_META_SETVIEWPORTORG
+emfio/source/reader/wmfreader.cxx:62
+    enum (anonymous namespace)::WMFRecords W_META_SETVIEWPORTEXT
+emfio/source/reader/wmfreader.cxx:63
+    enum (anonymous namespace)::WMFRecords W_META_OFFSETWINDOWORG
+emfio/source/reader/wmfreader.cxx:64
+    enum (anonymous namespace)::WMFRecords W_META_SCALEWINDOWEXT
+emfio/source/reader/wmfreader.cxx:65
+    enum (anonymous namespace)::WMFRecords W_META_OFFSETVIEWPORTORG
+emfio/source/reader/wmfreader.cxx:66
+    enum (anonymous namespace)::WMFRecords W_META_SCALEVIEWPORTEXT
+emfio/source/reader/wmfreader.cxx:67
+    enum (anonymous namespace)::WMFRecords W_META_LINETO
+emfio/source/reader/wmfreader.cxx:68
+    enum (anonymous namespace)::WMFRecords W_META_MOVETO
+emfio/source/reader/wmfreader.cxx:69
+    enum (anonymous namespace)::WMFRecords W_META_EXCLUDECLIPRECT
+emfio/source/reader/wmfreader.cxx:70
+    enum (anonymous namespace)::WMFRecords W_META_INTERSECTCLIPRECT
+emfio/source/reader/wmfreader.cxx:71
+    enum (anonymous namespace)::WMFRecords W_META_ARC
+emfio/source/reader/wmfreader.cxx:72
+    enum (anonymous namespace)::WMFRecords W_META_ELLIPSE
+emfio/source/reader/wmfreader.cxx:73
+    enum (anonymous namespace)::WMFRecords W_META_FLOODFILL
+emfio/source/reader/wmfreader.cxx:74
+    enum (anonymous namespace)::WMFRecords W_META_PIE
+emfio/source/reader/wmfreader.cxx:75
+    enum (anonymous namespace)::WMFRecords W_META_RECTANGLE
+emfio/source/reader/wmfreader.cxx:76
+    enum (anonymous namespace)::WMFRecords W_META_ROUNDRECT
+emfio/source/reader/wmfreader.cxx:77
+    enum (anonymous namespace)::WMFRecords W_META_PATBLT
+emfio/source/reader/wmfreader.cxx:78
+    enum (anonymous namespace)::WMFRecords W_META_SAVEDC
+emfio/source/reader/wmfreader.cxx:79
+    enum (anonymous namespace)::WMFRecords W_META_SETPIXEL
+emfio/source/reader/wmfreader.cxx:80
+    enum (anonymous namespace)::WMFRecords W_META_OFFSETCLIPRGN
+emfio/source/reader/wmfreader.cxx:81
+    enum (anonymous namespace)::WMFRecords W_META_TEXTOUT
+emfio/source/reader/wmfreader.cxx:82
+    enum (anonymous namespace)::WMFRecords W_META_BITBLT
+emfio/source/reader/wmfreader.cxx:83
+    enum (anonymous namespace)::WMFRecords W_META_STRETCHBLT
+emfio/source/reader/wmfreader.cxx:84
+    enum (anonymous namespace)::WMFRecords W_META_POLYGON
+emfio/source/reader/wmfreader.cxx:85
+    enum (anonymous namespace)::WMFRecords W_META_POLYLINE
+emfio/source/reader/wmfreader.cxx:86
+    enum (anonymous namespace)::WMFRecords W_META_ESCAPE
+emfio/source/reader/wmfreader.cxx:87
+    enum (anonymous namespace)::WMFRecords W_META_RESTOREDC
+emfio/source/reader/wmfreader.cxx:88
+    enum (anonymous namespace)::WMFRecords W_META_FILLREGION
+emfio/source/reader/wmfreader.cxx:89
+    enum (anonymous namespace)::WMFRecords W_META_FRAMEREGION
+emfio/source/reader/wmfreader.cxx:90
+    enum (anonymous namespace)::WMFRecords W_META_INVERTREGION
+emfio/source/reader/wmfreader.cxx:91
+    enum (anonymous namespace)::WMFRecords W_META_PAINTREGION
+emfio/source/reader/wmfreader.cxx:92
+    enum (anonymous namespace)::WMFRecords W_META_SELECTCLIPREGION
+emfio/source/reader/wmfreader.cxx:93
+    enum (anonymous namespace)::WMFRecords W_META_SELECTOBJECT
+emfio/source/reader/wmfreader.cxx:94
+    enum (anonymous namespace)::WMFRecords W_META_SETTEXTALIGN
+emfio/source/reader/wmfreader.cxx:95
+    enum (anonymous namespace)::WMFRecords W_META_DRAWTEXT
+emfio/source/reader/wmfreader.cxx:96
+    enum (anonymous namespace)::WMFRecords W_META_CHORD
+emfio/source/reader/wmfreader.cxx:97
+    enum (anonymous namespace)::WMFRecords W_META_SETMAPPERFLAGS
+emfio/source/reader/wmfreader.cxx:98
+    enum (anonymous namespace)::WMFRecords W_META_EXTTEXTOUT
+emfio/source/reader/wmfreader.cxx:99
+    enum (anonymous namespace)::WMFRecords W_META_SETDIBTODEV
+emfio/source/reader/wmfreader.cxx:100
+    enum (anonymous namespace)::WMFRecords W_META_SELECTPALETTE
+emfio/source/reader/wmfreader.cxx:101
+    enum (anonymous namespace)::WMFRecords W_META_REALIZEPALETTE
+emfio/source/reader/wmfreader.cxx:102
+    enum (anonymous namespace)::WMFRecords W_META_ANIMATEPALETTE
+emfio/source/reader/wmfreader.cxx:103
+    enum (anonymous namespace)::WMFRecords W_META_SETPALENTRIES
+emfio/source/reader/wmfreader.cxx:104
+    enum (anonymous namespace)::WMFRecords W_META_POLYPOLYGON
+emfio/source/reader/wmfreader.cxx:105
+    enum (anonymous namespace)::WMFRecords W_META_RESIZEPALETTE
+emfio/source/reader/wmfreader.cxx:106
+    enum (anonymous namespace)::WMFRecords W_META_DIBBITBLT
+emfio/source/reader/wmfreader.cxx:107
+    enum (anonymous namespace)::WMFRecords W_META_DIBSTRETCHBLT
+emfio/source/reader/wmfreader.cxx:108
+    enum (anonymous namespace)::WMFRecords W_META_DIBCREATEPATTERNBRUSH
+emfio/source/reader/wmfreader.cxx:109
+    enum (anonymous namespace)::WMFRecords W_META_STRETCHDIB
+emfio/source/reader/wmfreader.cxx:110
+    enum (anonymous namespace)::WMFRecords W_META_EXTFLOODFILL
+emfio/source/reader/wmfreader.cxx:111
+    enum (anonymous namespace)::WMFRecords W_META_RESETDC
+emfio/source/reader/wmfreader.cxx:112
+    enum (anonymous namespace)::WMFRecords W_META_STARTDOC
+emfio/source/reader/wmfreader.cxx:113
+    enum (anonymous namespace)::WMFRecords W_META_STARTPAGE
+emfio/source/reader/wmfreader.cxx:114
+    enum (anonymous namespace)::WMFRecords W_META_ENDPAGE
+emfio/source/reader/wmfreader.cxx:115
+    enum (anonymous namespace)::WMFRecords W_META_ABORTDOC
+emfio/source/reader/wmfreader.cxx:116
+    enum (anonymous namespace)::WMFRecords W_META_ENDDOC
+emfio/source/reader/wmfreader.cxx:117
+    enum (anonymous namespace)::WMFRecords W_META_DELETEOBJECT
+emfio/source/reader/wmfreader.cxx:118
+    enum (anonymous namespace)::WMFRecords W_META_CREATEPALETTE
+emfio/source/reader/wmfreader.cxx:119
+    enum (anonymous namespace)::WMFRecords W_META_CREATEBRUSH
+emfio/source/reader/wmfreader.cxx:120
+    enum (anonymous namespace)::WMFRecords W_META_CREATEPATTERNBRUSH
+emfio/source/reader/wmfreader.cxx:121
+    enum (anonymous namespace)::WMFRecords W_META_CREATEPENINDIRECT
+emfio/source/reader/wmfreader.cxx:122
+    enum (anonymous namespace)::WMFRecords W_META_CREATEFONTINDIRECT
+emfio/source/reader/wmfreader.cxx:123
+    enum (anonymous namespace)::WMFRecords W_META_CREATEBRUSHINDIRECT
+emfio/source/reader/wmfreader.cxx:124
+    enum (anonymous namespace)::WMFRecords W_META_CREATEBITMAPINDIRECT
+emfio/source/reader/wmfreader.cxx:125
+    enum (anonymous namespace)::WMFRecords W_META_CREATEBITMAP
+emfio/source/reader/wmfreader.cxx:126
+    enum (anonymous namespace)::WMFRecords W_META_CREATEREGION
+extensions/source/update/check/updatehdl.hxx:64
+    enum UpdateState UPDATESTATE_AUTO_START
+filter/source/msfilter/msdffimp.cxx:179
+    enum (anonymous namespace)::OfficeArtBlipRecInstance EMF
+filter/source/msfilter/msdffimp.cxx:180
+    enum (anonymous namespace)::OfficeArtBlipRecInstance WMF
+filter/source/msfilter/msdffimp.cxx:181
+    enum (anonymous namespace)::OfficeArtBlipRecInstance PICT
+filter/source/msfilter/msdffimp.cxx:182
+    enum (anonymous namespace)::OfficeArtBlipRecInstance JPEG_RGB
+filter/source/msfilter/msdffimp.cxx:183
+    enum (anonymous namespace)::OfficeArtBlipRecInstance JPEG_CMYK
+filter/source/msfilter/msdffimp.cxx:184
+    enum (anonymous namespace)::OfficeArtBlipRecInstance PNG
+filter/source/msfilter/msdffimp.cxx:185
+    enum (anonymous namespace)::OfficeArtBlipRecInstance DIB
+filter/source/msfilter/msdffimp.cxx:186
+    enum (anonymous namespace)::OfficeArtBlipRecInstance TIFF
 framework/inc/xml/imagesdocumenthandler.hxx:39
     enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ELEMENT_IMAGECONTAINER
 framework/inc/xml/imagesdocumenthandler.hxx:40
@@ -288,25 +604,25 @@ framework/inc/xml/toolboxdocumenthandler.hxx:51
     enum framework::OReadToolBoxDocumentHandler::ToolBox_XML_Entry TB_ATTRIBUTE_STYLE
 framework/inc/xml/toolboxdocumenthandler.hxx:52
     enum framework::OReadToolBoxDocumentHandler::ToolBox_XML_Entry TB_ATTRIBUTE_UINAME
-include/connectivity/dbtools.hxx:817
-    enum connectivity::dbase::DBFType dBaseIII
-include/connectivity/dbtools.hxx:818
-    enum connectivity::dbase::DBFType dBaseIV
-include/connectivity/dbtools.hxx:819
-    enum connectivity::dbase::DBFType dBaseV
-include/connectivity/dbtools.hxx:820
-    enum connectivity::dbase::DBFType VisualFoxPro
 include/connectivity/dbtools.hxx:821
-    enum connectivity::dbase::DBFType VisualFoxProAuto
+    enum connectivity::dbase::DBFType dBaseIII
 include/connectivity/dbtools.hxx:822
-    enum connectivity::dbase::DBFType dBaseFS
+    enum connectivity::dbase::DBFType dBaseIV
 include/connectivity/dbtools.hxx:823
-    enum connectivity::dbase::DBFType dBaseFSMemo
+    enum connectivity::dbase::DBFType dBaseV
 include/connectivity/dbtools.hxx:824
-    enum connectivity::dbase::DBFType dBaseIIIMemo
+    enum connectivity::dbase::DBFType VisualFoxPro
+include/connectivity/dbtools.hxx:825
+    enum connectivity::dbase::DBFType VisualFoxProAuto
 include/connectivity/dbtools.hxx:826
-    enum connectivity::dbase::DBFType dBaseIVMemoSQL
+    enum connectivity::dbase::DBFType dBaseFS
 include/connectivity/dbtools.hxx:827
+    enum connectivity::dbase::DBFType dBaseFSMemo
+include/connectivity/dbtools.hxx:828
+    enum connectivity::dbase::DBFType dBaseIIIMemo
+include/connectivity/dbtools.hxx:830
+    enum connectivity::dbase::DBFType dBaseIVMemoSQL
+include/connectivity/dbtools.hxx:831
     enum connectivity::dbase::DBFType FoxProMemo
 include/connectivity/sqliterator.hxx:42
     enum connectivity::TraversalParts TableNames
@@ -314,11 +630,37 @@ include/desktop/exithelper.h:30
     int EXITHELPER_CRASH_WITH_RESTART
 include/desktop/exithelper.h:32
     int EXITHELPER_NORMAL_RESTART
-include/editeng/editeng.hxx:126
+include/docmodel/color/ComplexColor.hxx:28
+    enum model::ColorType Palette
+include/docmodel/theme/FormatScheme.hxx:213
+    enum model::BlipEffectType AlphaBiLevel
+include/docmodel/theme/FormatScheme.hxx:214
+    enum model::BlipEffectType AlphaCeiling
+include/docmodel/theme/FormatScheme.hxx:215
+    enum model::BlipEffectType AlphaFloor
+include/docmodel/theme/FormatScheme.hxx:216
+    enum model::BlipEffectType AlphaInverse
+include/docmodel/theme/FormatScheme.hxx:217
+    enum model::BlipEffectType AlphaModulate
+include/docmodel/theme/FormatScheme.hxx:219
+    enum model::BlipEffectType AlphaReplace
+include/docmodel/theme/FormatScheme.hxx:221
+    enum model::BlipEffectType Blur
+include/docmodel/theme/FormatScheme.hxx:223
+    enum model::BlipEffectType ColorReplace
+include/docmodel/theme/FormatScheme.hxx:224
+    enum model::BlipEffectType DuoTone
+include/docmodel/theme/FormatScheme.hxx:225
+    enum model::BlipEffectType FillOverlay
+include/docmodel/theme/FormatScheme.hxx:227
+    enum model::BlipEffectType HSL
+include/docmodel/theme/FormatScheme.hxx:229
+    enum model::BlipEffectType Tint
+include/editeng/editeng.hxx:130
     enum GetAttribsFlags STYLESHEET
-include/editeng/editeng.hxx:127
+include/editeng/editeng.hxx:131
     enum GetAttribsFlags PARAATTRIBS
-include/editeng/editstat.hxx:46
+include/editeng/editstat.hxx:47
     enum EEControlBits AUTOCOMPLETE
 include/editeng/flditem.hxx:91
     enum SvxDateFormat System
@@ -338,9 +680,9 @@ include/framework/framelistanalyzer.hxx:40
     enum FrameAnalyzerFlags Model
 include/framework/framelistanalyzer.hxx:45
     enum FrameAnalyzerFlags Zombie
-include/i18nutil/casefolding.hxx:40
-    enum MappingType CasedLetterMask
 include/i18nutil/casefolding.hxx:41
+    enum MappingType CasedLetterMask
+include/i18nutil/casefolding.hxx:42
     enum MappingType NotValue
 include/LibreOfficeKit/LibreOfficeKitEnums.h:33
     LibreOfficeKitPartMode LOK_PARTMODE_SLIDES
@@ -350,48 +692,50 @@ include/LibreOfficeKit/LibreOfficeKitEnums.h:40
     LibreOfficeKitTileMode LOK_TILEMODE_RGBA
 include/LibreOfficeKit/LibreOfficeKitEnums.h:99
     LibreOfficeKitOptionalFeatures LOK_FEATURE_RANGE_HEADERS
+include/LibreOfficeKit/LibreOfficeKitEnums.h:900
+    LibreOfficeKitCallbackType LOK_CALLBACK_MEDIA_SHAPE
 include/o3tl/unit_conversion.hxx:47
     enum o3tl::Length count
-include/oox/core/filterbase.hxx:77
+include/oox/core/filterbase.hxx:83
     enum oox::core::OoxmlVersion ISOIEC_29500_2008
-include/oox/mathml/export.hxx:33
-    enum oox::FormulaExportBase::eFormulaAlign GROUPEDCENTER
+include/oox/mathml/imexport.hxx:44
+    enum oox::FormulaImExportBase::eFormulaAlign GROUPEDCENTER
+include/sfx2/filedlghelper.hxx:126
+    enum sfx2::FileDialogHelper::Context WriterInsertDoc
 include/sfx2/lnkbase.hxx:54
     enum sfx2::SvBaseLinkObjectType DdeExternal
+include/svl/cjkoptions.hxx:27
+    enum SvtCJKOptions::EOption E_CJKFONT
+include/svl/cjkoptions.hxx:28
+    enum SvtCJKOptions::EOption E_VERTICALTEXT
+include/svl/cjkoptions.hxx:29
+    enum SvtCJKOptions::EOption E_ASIANTYPOGRAPHY
+include/svl/cjkoptions.hxx:30
+    enum SvtCJKOptions::EOption E_JAPANESEFIND
+include/svl/cjkoptions.hxx:31
+    enum SvtCJKOptions::EOption E_RUBY
+include/svl/cjkoptions.hxx:32
+    enum SvtCJKOptions::EOption E_CHANGECASEMAP
+include/svl/cjkoptions.hxx:33
+    enum SvtCJKOptions::EOption E_DOUBLELINES
 include/svl/ctloptions.hxx:64
     enum SvtCTLOptions::TextNumerals NUMERALS_HINDI
 include/svl/ctloptions.hxx:65
     enum SvtCTLOptions::TextNumerals NUMERALS_SYSTEM
 include/svl/ctloptions.hxx:66
     enum SvtCTLOptions::TextNumerals NUMERALS_CONTEXT
+include/svl/ctloptions.hxx:74
+    enum SvtCTLOptions::EOption E_CTLSEQUENCECHECKING
+include/svl/ctloptions.hxx:75
+    enum SvtCTLOptions::EOption E_CTLCURSORMOVEMENT
+include/svl/ctloptions.hxx:76
+    enum SvtCTLOptions::EOption E_CTLTEXTNUMERALS
 include/svl/ctloptions.hxx:77
     enum SvtCTLOptions::EOption E_CTLSEQUENCECHECKINGRESTRICTED
 include/svl/ctloptions.hxx:78
     enum SvtCTLOptions::EOption E_CTLSEQUENCECHECKINGTYPEANDREPLACE
-include/svl/languageoptions.hxx:60
-    enum SvtLanguageOptions::EOption E_CJKFONT
-include/svl/languageoptions.hxx:61
-    enum SvtLanguageOptions::EOption E_VERTICALTEXT
-include/svl/languageoptions.hxx:62
-    enum SvtLanguageOptions::EOption E_ASIANTYPOGRAPHY
-include/svl/languageoptions.hxx:63
-    enum SvtLanguageOptions::EOption E_JAPANESEFIND
-include/svl/languageoptions.hxx:64
-    enum SvtLanguageOptions::EOption E_RUBY
-include/svl/languageoptions.hxx:65
-    enum SvtLanguageOptions::EOption E_CHANGECASEMAP
-include/svl/languageoptions.hxx:66
-    enum SvtLanguageOptions::EOption E_DOUBLELINES
-include/svl/languageoptions.hxx:67
-    enum SvtLanguageOptions::EOption E_EMPHASISMARKS
-include/svl/languageoptions.hxx:68
-    enum SvtLanguageOptions::EOption E_VERTICALCALLOUT
-include/svl/languageoptions.hxx:72
-    enum SvtLanguageOptions::EOption E_CTLSEQUENCECHECKING
-include/svl/languageoptions.hxx:73
-    enum SvtLanguageOptions::EOption E_CTLCURSORMOVEMENT
-include/svl/languageoptions.hxx:74
-    enum SvtLanguageOptions::EOption E_CTLTEXTNUMERALS
+include/svl/hint.hxx:145
+    enum SfxHintId SwNameChanged
 include/svl/lockfilecommon.hxx:36
     enum LockFileComponent EDITTIME
 include/svl/lockfilecommon.hxx:36
@@ -402,12 +746,18 @@ include/svl/lockfilecommon.hxx:36
     enum LockFileComponent SYSUSERNAME
 include/svl/srchdefs.hxx:40
     enum SearchOptionFlags WILDCARD
-include/svtools/apearcfg.hxx:29
+include/svtools/apearcfg.hxx:27
+    enum SnapType ToButton
+include/svtools/apearcfg.hxx:28
     enum SnapType ToMiddle
-include/svtools/apearcfg.hxx:34
+include/svtools/apearcfg.hxx:33
     enum DragMode FullWindow
-include/svtools/apearcfg.hxx:35
+include/svtools/apearcfg.hxx:34
     enum DragMode Frame
+include/svtools/apearcfg.hxx:35
+    enum DragMode SystemDep
+include/svx/diagram/datamodel.hxx:41
+    enum svx::diagram::TypeConstant XML_doc
 include/svx/EnhancedCustomShapeGeometry.hxx:47
     enum SvxMSDffHandleFlags MIRRORED_X
 include/svx/EnhancedCustomShapeGeometry.hxx:48
@@ -418,19 +768,19 @@ include/svx/EnhancedCustomShapeGeometry.hxx:57
     enum SvxMSDffHandleFlags CENTER_X_IS_SPECIAL
 include/svx/EnhancedCustomShapeGeometry.hxx:58
     enum SvxMSDffHandleFlags CENTER_Y_IS_SPECIAL
-include/svx/flagsdef.hxx:106
-    enum TabulatorDisableFlags TypeRight
-include/svx/flagsdef.hxx:107
-    enum TabulatorDisableFlags TypeCenter
 include/svx/flagsdef.hxx:108
+    enum TabulatorDisableFlags TypeRight
+include/svx/flagsdef.hxx:109
+    enum TabulatorDisableFlags TypeCenter
+include/svx/flagsdef.hxx:110
     enum TabulatorDisableFlags TypeDecimal
-include/svx/flagsdef.hxx:112
-    enum TabulatorDisableFlags FillPoint
-include/svx/flagsdef.hxx:113
-    enum TabulatorDisableFlags FillDashLine
 include/svx/flagsdef.hxx:114
-    enum TabulatorDisableFlags FillSolidLine
+    enum TabulatorDisableFlags FillPoint
 include/svx/flagsdef.hxx:115
+    enum TabulatorDisableFlags FillDashLine
+include/svx/flagsdef.hxx:116
+    enum TabulatorDisableFlags FillSolidLine
+include/svx/flagsdef.hxx:117
     enum TabulatorDisableFlags FillSpecial
 include/svx/ruler.hxx:60
     enum SvxRulerDragFlags OBJECT_LEFT_INDENT_ONLY
@@ -438,35 +788,39 @@ include/svx/sdtakitm.hxx:31
     enum SdrTextAniKind Blink
 include/svx/svdhdl.hxx:108
     enum BitmapMarkerKind RectPlus_7x7
-include/svx/svdograf.hxx:51
+include/svx/svdobjkind.hxx:70
+    enum SdrObjKind E3D_INVENTOR_FIRST
+include/svx/svdobjkind.hxx:71
+    enum SdrObjKind E3D_INVENTOR_LAST
+include/svx/svdograf.hxx:42
     enum SdrGrafObjTransformsAttrs ROTATE
 include/svx/swframeposstrings.hxx:79
     enum SvxSwFramePosString::StringId STR_MAX
 include/svx/swframetypes.hxx:41
     enum RndStdIds HEADERR
+include/svx/unopool.hxx:34
+    enum SvxUnoDrawPoolDefaults Drawing
 include/tools/inetmsg.hxx:72
     enum InetMessageMime NUMHDR
 include/unotools/extendedsecurityoptions.hxx:27
     enum SvtExtendedSecurityOptions::OpenHyperlinkMode OPEN_NEVER
-include/unotools/fontcfg.hxx:51
+include/unotools/fontcfg.hxx:50
     enum ImplFontAttrs Default
-include/unotools/fontcfg.hxx:52
+include/unotools/fontcfg.hxx:51
     enum ImplFontAttrs Standard
-include/unotools/fontcfg.hxx:53
-    enum ImplFontAttrs Normal
-include/unotools/fontcfg.hxx:59
+include/unotools/fontcfg.hxx:58
     enum ImplFontAttrs Special
-include/unotools/fontcfg.hxx:68
+include/unotools/fontcfg.hxx:67
     enum ImplFontAttrs CTL
-include/unotools/fontcfg.hxx:69
+include/unotools/fontcfg.hxx:68
     enum ImplFontAttrs NoneLatin
-include/unotools/fontcfg.hxx:70
+include/unotools/fontcfg.hxx:69
     enum ImplFontAttrs Full
-include/unotools/fontcfg.hxx:83
+include/unotools/fontcfg.hxx:82
     enum ImplFontAttrs CJK_AllLang
-include/unotools/fontcfg.hxx:85
+include/unotools/fontcfg.hxx:84
     enum ImplFontAttrs AllSubscript
-include/unotools/fontcfg.hxx:86
+include/unotools/fontcfg.hxx:85
     enum ImplFontAttrs AllSerifStyle
 include/unotools/fontdefs.hxx:73
     enum DefaultFontType LATIN_DISPLAY
@@ -474,29 +828,29 @@ include/unotools/fontdefs.hxx:74
     enum DefaultFontType LATIN_FIXED
 include/unotools/fontdefs.hxx:84
     enum DefaultFontType CTL_DISPLAY
-include/vcl/bitmap.hxx:83
-    enum BmpCombine And
-include/vcl/errinf.hxx:89
+include/vcl/animate/AnimationFrame.hxx:33
+    enum Blend Source
+include/vcl/errinf.hxx:97
     enum DialogMask ButtonsYesNo
-include/vcl/errinf.hxx:92
+include/vcl/errinf.hxx:100
     enum DialogMask ButtonDefaultsCancel
-include/vcl/errinf.hxx:93
+include/vcl/errinf.hxx:101
     enum DialogMask ButtonDefaultsYes
-include/vcl/errinf.hxx:94
+include/vcl/errinf.hxx:102
     enum DialogMask ButtonDefaultsNo
 include/vcl/gfxlink.hxx:54
     enum GfxLinkType NativeFirst
 include/vcl/gfxlink.hxx:55
     enum GfxLinkType NativeLast
-include/vcl/GraphicObject.hxx:35
-    enum GraphicAdjustmentFlags DRAWMODE
 include/vcl/GraphicObject.hxx:36
-    enum GraphicAdjustmentFlags COLORS
+    enum GraphicAdjustmentFlags DRAWMODE
 include/vcl/GraphicObject.hxx:37
-    enum GraphicAdjustmentFlags MIRROR
+    enum GraphicAdjustmentFlags COLORS
 include/vcl/GraphicObject.hxx:38
-    enum GraphicAdjustmentFlags ROTATE
+    enum GraphicAdjustmentFlags MIRROR
 include/vcl/GraphicObject.hxx:39
+    enum GraphicAdjustmentFlags ROTATE
+include/vcl/GraphicObject.hxx:40
     enum GraphicAdjustmentFlags TRANSPARENCY
 include/vcl/graphictools.hxx:227
     enum SvtGraphicFill::FillType fillSolid
@@ -504,14 +858,20 @@ include/vcl/headbar.hxx:187
     enum HeaderBarItemBits RIGHTIMAGE
 include/vcl/help.hxx:41
     enum QuickHelpFlags NoAutoPos
-include/vcl/keycod.hxx:31
+include/vcl/keycod.hxx:29
     enum KeyFuncType REDO
-include/vcl/keycodes.hxx:174
+include/vcl/keycodes.hxx:176
     enum ModKeyFlags Mod1Msk
-include/vcl/keycodes.hxx:175
+include/vcl/keycodes.hxx:177
     enum ModKeyFlags Mod2Msk
-include/vcl/menu.hxx:78
+include/vcl/menu.hxx:75
     enum PopupMenuFlags ExecuteUp
+include/vcl/pdf/PDFAnnotAActionType.hxx:18
+    enum vcl::pdf::PDFAnnotAActionType Format
+include/vcl/pdf/PDFAnnotAActionType.hxx:19
+    enum vcl::pdf::PDFAnnotAActionType Validate
+include/vcl/pdf/PDFAnnotAActionType.hxx:20
+    enum vcl::pdf::PDFAnnotAActionType Calculate
 include/vcl/pdf/PDFAnnotationSubType.hxx:17
     enum vcl::pdf::PDFAnnotationSubType Unknown
 include/vcl/pdf/PDFAnnotationSubType.hxx:26
@@ -548,6 +908,16 @@ include/vcl/pdf/PDFFillMode.hxx:19
     enum vcl::pdf::PDFFillMode Winding
 include/vcl/pdf/PDFFindFlags.hxx:22
     enum vcl::pdf::PDFFindFlags Consecutive
+include/vcl/pdf/PDFFormFieldType.hxx:17
+    enum vcl::pdf::PDFFormFieldType Unknown
+include/vcl/pdf/PDFFormFieldType.hxx:18
+    enum vcl::pdf::PDFFormFieldType PushButton
+include/vcl/pdf/PDFFormFieldType.hxx:20
+    enum vcl::pdf::PDFFormFieldType RadioButton
+include/vcl/pdf/PDFFormFieldType.hxx:22
+    enum vcl::pdf::PDFFormFieldType ListBox
+include/vcl/pdf/PDFFormFieldType.hxx:24
+    enum vcl::pdf::PDFFormFieldType Signature
 include/vcl/pdf/PDFObjectType.hxx:17
     enum vcl::pdf::PDFObjectType Unknown
 include/vcl/pdf/PDFObjectType.hxx:18
@@ -592,62 +962,52 @@ include/vcl/pdf/PDFTextRenderMode.hxx:24
     enum vcl::pdf::PDFTextRenderMode FillStrokeClip
 include/vcl/pdf/PDFTextRenderMode.hxx:25
     enum vcl::pdf::PDFTextRenderMode Clip
-include/vcl/pdfwriter.hxx:109
-    enum vcl::PDFWriter::PDFVersion PDF_1_2
-include/vcl/pdfwriter.hxx:109
-    enum vcl::PDFWriter::PDFVersion PDF_1_3
-include/vcl/pdfwriter.hxx:121
+include/vcl/pdfwriter.hxx:125
     enum vcl::PDFWriter::StructElement Article
-include/vcl/pdfwriter.hxx:121
+include/vcl/pdfwriter.hxx:125
     enum vcl::PDFWriter::StructElement Part
-include/vcl/pdfwriter.hxx:125
+include/vcl/pdfwriter.hxx:129
     enum vcl::PDFWriter::StructElement H2
-include/vcl/pdfwriter.hxx:125
+include/vcl/pdfwriter.hxx:129
     enum vcl::PDFWriter::StructElement H3
-include/vcl/pdfwriter.hxx:125
+include/vcl/pdfwriter.hxx:129
     enum vcl::PDFWriter::StructElement H4
-include/vcl/pdfwriter.hxx:125
+include/vcl/pdfwriter.hxx:129
     enum vcl::PDFWriter::StructElement H5
-include/vcl/pdfwriter.hxx:125
+include/vcl/pdfwriter.hxx:129
     enum vcl::PDFWriter::StructElement H6
-include/vcl/pdfwriter.hxx:130
+include/vcl/pdfwriter.hxx:134
     enum vcl::PDFWriter::StructElement Reference
-include/vcl/pdfwriter.hxx:139
+include/vcl/pdfwriter.hxx:146
     enum vcl::PDFWriter::StructAttribute BlockAlign
-include/vcl/pdfwriter.hxx:139
+include/vcl/pdfwriter.hxx:146
     enum vcl::PDFWriter::StructAttribute InlineAlign
-include/vcl/pdfwriter.hxx:140
+include/vcl/pdfwriter.hxx:147
     enum vcl::PDFWriter::StructAttribute LineHeight
-include/vcl/pdfwriter.hxx:140
-    enum vcl::PDFWriter::StructAttribute ListNumbering
-include/vcl/pdfwriter.hxx:162
-    enum vcl::PDFWriter::StructAttributeValue After
-include/vcl/pdfwriter.hxx:162
-    enum vcl::PDFWriter::StructAttributeValue Before
-include/vcl/pdfwriter.hxx:162
-    enum vcl::PDFWriter::StructAttributeValue Start
-include/vcl/pdfwriter.hxx:168
-    enum vcl::PDFWriter::StructAttributeValue Auto
+include/vcl/pdfwriter.hxx:169
+    enum vcl::PDFWriter::StructAttributeValue Background
+include/vcl/pdfwriter.hxx:169
+    enum vcl::PDFWriter::StructAttributeValue Layout
+include/vcl/pdfwriter.hxx:169
+    enum vcl::PDFWriter::StructAttributeValue Page
 include/vcl/pdfwriter.hxx:170
-    enum vcl::PDFWriter::StructAttributeValue Middle
+    enum vcl::PDFWriter::StructAttributeValue Watermark
 include/vcl/pdfwriter.hxx:172
+    enum vcl::PDFWriter::StructAttributeValue After
+include/vcl/pdfwriter.hxx:172
+    enum vcl::PDFWriter::StructAttributeValue Before
+include/vcl/pdfwriter.hxx:172
+    enum vcl::PDFWriter::StructAttributeValue Start
+include/vcl/pdfwriter.hxx:178
+    enum vcl::PDFWriter::StructAttributeValue Auto
+include/vcl/pdfwriter.hxx:180
+    enum vcl::PDFWriter::StructAttributeValue Middle
+include/vcl/pdfwriter.hxx:182
     enum vcl::PDFWriter::StructAttributeValue Normal
-include/vcl/pdfwriter.hxx:176
-    enum vcl::PDFWriter::StructAttributeValue Circle
-include/vcl/pdfwriter.hxx:176
-    enum vcl::PDFWriter::StructAttributeValue Decimal
-include/vcl/pdfwriter.hxx:176
-    enum vcl::PDFWriter::StructAttributeValue Disc
-include/vcl/pdfwriter.hxx:176
-    enum vcl::PDFWriter::StructAttributeValue LowerAlpha
-include/vcl/pdfwriter.hxx:176
-    enum vcl::PDFWriter::StructAttributeValue LowerRoman
-include/vcl/pdfwriter.hxx:176
-    enum vcl::PDFWriter::StructAttributeValue Square
-include/vcl/pdfwriter.hxx:176
-    enum vcl::PDFWriter::StructAttributeValue UpperAlpha
-include/vcl/pdfwriter.hxx:176
-    enum vcl::PDFWriter::StructAttributeValue UpperRoman
+include/vcl/pdfwriter.hxx:186
+    enum vcl::PDFWriter::StructAttributeValue Both
+include/vcl/pdfwriter.hxx:186
+    enum vcl::PDFWriter::StructAttributeValue Row
 include/vcl/prntypes.hxx:37
     enum PrintQueueFlags Ready
 include/vcl/prntypes.hxx:38
@@ -704,23 +1064,27 @@ include/vcl/rendercontext/DrawImageFlags.hxx:29
     enum DrawImageFlags Highlight
 include/vcl/rendercontext/DrawImageFlags.hxx:30
     enum DrawImageFlags Deactive
-include/vcl/rendercontext/DrawTextFlags.hxx:41
-    enum DrawTextFlags NewsEllipsis
+include/vcl/rendercontext/DrawTextFlags.hxx:44
+    enum DrawTextFlags HideMnemonic
+include/vcl/Scanline.hxx:33
+    enum ScanlineFormat N1BitLsbPal
 include/vcl/Scanline.hxx:44
     enum ScanlineFormat N32BitTcMask
+include/vcl/skia/SkiaHelper.hxx:30
+    enum SkiaHelper::RenderMethod RenderMetal
 include/vcl/vclenum.hxx:39
     enum MenuItemBits POPUPSELECT
 include/vcl/vclenum.hxx:112
     enum WindowBorderStyle NWF
-include/vcl/vclenum.hxx:149
+include/vcl/vclenum.hxx:129
     enum ExtTimeFieldFormat Long24H
-include/vcl/vclenum.hxx:149
+include/vcl/vclenum.hxx:129
     enum ExtTimeFieldFormat Short24H
-include/vcl/vclenum.hxx:150
+include/vcl/vclenum.hxx:130
     enum ExtTimeFieldFormat Long12H
-include/vcl/vclenum.hxx:150
+include/vcl/vclenum.hxx:130
     enum ExtTimeFieldFormat Short12H
-include/vcl/vclenum.hxx:151
+include/vcl/vclenum.hxx:131
     enum ExtTimeFieldFormat ShortDuration
 include/vcl/vclevent.hxx:120
     enum VclEventId TabpageRemovedAll
@@ -738,9 +1102,9 @@ include/vcl/wall.hxx:45
     enum WallpaperStyle BottomLeft
 include/vcl/wall.hxx:46
     enum WallpaperStyle Bottom
-include/xmloff/families.hxx:62
+include/xmloff/families.hxx:64
     enum XmlStyleFamily TEXT_ENDNOTECONFIG
-include/xmloff/xmlimp.hxx:120
+include/xmloff/xmlimp.hxx:121
     enum SvXMLImportFlags EMBEDDED
 linguistic/source/convdicxml.hxx:67
     enum ConvDicXMLToken TEXT_CONVERSION_DICTIONARY
@@ -748,9 +1112,9 @@ linguistic/source/convdicxml.hxx:68
     enum ConvDicXMLToken RIGHT_TEXT
 linguistic/source/convdicxml.hxx:69
     enum ConvDicXMLToken ENTRY
-o3tl/qa/test-enumarray.cxx:30
+o3tl/qa/test-enumarray.cxx:28
     enum MyEnum ONE
-o3tl/qa/test-enumarray.cxx:30
+o3tl/qa/test-enumarray.cxx:28
     enum MyEnum TWO
 o3tl/qa/test-typed_flags.cxx:20
     enum (anonymous namespace)::ConfigurationChangedHint TWO
@@ -770,10 +1134,28 @@ reportdesign/inc/conditionalexpression.hxx:84
     enum rptui::ComparisonOperation eLessOrEqual
 sal/qa/osl/file/osl_File.cxx:285
     enum (anonymous namespace)::oslCheckMode Exist
-sc/inc/dociter.hxx:258
-    enum ScQueryCellIterator::StopOnMismatchBits nStopOnMismatchExecuted
-sc/inc/dociter.hxx:266
-    enum ScQueryCellIterator::TestEqualConditionBits nTestEqualConditionFulfilled
+sc/inc/patattr.hxx:46
+    enum ScAutoFontColorMode Black
+sc/inc/queryiter.hxx:151
+    enum ScQueryCellIteratorBase::StopOnMismatchBits nStopOnMismatchExecuted
+sc/inc/queryiter.hxx:151
+    enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::CountIf>::StopOnMismatchBits nStopOnMismatchExecuted
+sc/inc/queryiter.hxx:151
+    enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::Generic>::StopOnMismatchBits nStopOnMismatchExecuted
+sc/inc/queryiter.hxx:151
+    enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::SortedCache, ScQueryCellIteratorType::CountIf>::StopOnMismatchBits nStopOnMismatchExecuted
+sc/inc/queryiter.hxx:151
+    enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::SortedCache, ScQueryCellIteratorType::Generic>::StopOnMismatchBits nStopOnMismatchExecuted
+sc/inc/queryiter.hxx:159
+    enum ScQueryCellIteratorBase::TestEqualConditionBits nTestEqualConditionFulfilled
+sc/inc/queryiter.hxx:159
+    enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::CountIf>::TestEqualConditionBits nTestEqualConditionFulfilled
+sc/inc/queryiter.hxx:159
+    enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::Generic>::TestEqualConditionBits nTestEqualConditionFulfilled
+sc/inc/queryiter.hxx:159
+    enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::SortedCache, ScQueryCellIteratorType::CountIf>::TestEqualConditionBits nTestEqualConditionFulfilled
+sc/inc/queryiter.hxx:159
+    enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::SortedCache, ScQueryCellIteratorType::Generic>::TestEqualConditionBits nTestEqualConditionFulfilled
 sc/inc/token.hxx:215
     enum ScTableRefToken::Item HEADERS_DATA
 sc/inc/token.hxx:216
@@ -782,7 +1164,7 @@ sc/inc/types.hxx:37
     enum ScMatValType NonvalueMask
 sc/inc/types.hxx:60
     enum ScFormulaVectorState FormulaVectorUnknown
-sc/qa/unit/ucalc_copypaste.cxx:261
+sc/qa/unit/ucalc_copypaste.cxx:46
     enum TestCopyPaste::CalcMode RecalcAtEnd
 sc/source/ui/inc/viewdata.hxx:42
     enum ScSplitMode SC_SPLIT_MODE_MAX_ENUM
@@ -792,118 +1174,102 @@ sc/source/ui/StatisticsDialogs/RegressionDialog.cxx:102
     enum (anonymous namespace)::ScRegType LOGARITHMIC
 sc/source/ui/StatisticsDialogs/RegressionDialog.cxx:103
     enum (anonymous namespace)::ScRegType POWER
-sc/source/ui/unoobj/condformatuno.cxx:274
+sc/source/ui/unoobj/condformatuno.cxx:273
     enum (anonymous namespace)::DateProperties Date_StyleName
-sc/source/ui/unoobj/condformatuno.cxx:275
+sc/source/ui/unoobj/condformatuno.cxx:274
     enum (anonymous namespace)::DateProperties DateType
-scaddins/source/datefunc/datefunc.hxx:40
-    enum ScaCategory Finance
+sc/source/ui/view/viewfun2.cxx:266
+    enum (anonymous namespace)::ScAutoSum ScAutoSumEnd
 scaddins/source/datefunc/datefunc.hxx:41
-    enum ScaCategory Inf
+    enum ScaCategory Finance
 scaddins/source/datefunc/datefunc.hxx:42
-    enum ScaCategory Math
+    enum ScaCategory Inf
 scaddins/source/datefunc/datefunc.hxx:43
+    enum ScaCategory Math
+scaddins/source/datefunc/datefunc.hxx:44
     enum ScaCategory Tech
-scaddins/source/pricing/pricing.hxx:48
+scaddins/source/pricing/pricing.hxx:47
     enum sca::pricing::ScaCategory DateTime
-scaddins/source/pricing/pricing.hxx:49
+scaddins/source/pricing/pricing.hxx:48
     enum sca::pricing::ScaCategory Text
-scaddins/source/pricing/pricing.hxx:51
+scaddins/source/pricing/pricing.hxx:50
     enum sca::pricing::ScaCategory Inf
-scaddins/source/pricing/pricing.hxx:52
+scaddins/source/pricing/pricing.hxx:51
     enum sca::pricing::ScaCategory Math
-scaddins/source/pricing/pricing.hxx:53
+scaddins/source/pricing/pricing.hxx:52
     enum sca::pricing::ScaCategory Tech
 sd/source/ui/slidesorter/cache/SlsRequestPriorityClass.hxx:39
     enum sd::slidesorter::cache::RequestPriorityClass MAX_CLASS
 slideshow/source/engine/shapes/viewshape.hxx:276
-    enum slideshow::internal::ViewShape::(anonymous at /home/noel/libo2/slideshow/source/engine/shapes/viewshape.hxx:276:13) MAX_RENDER_CACHE_ENTRIES
-slideshow/source/engine/slideview.cxx:242
-    enum slideshow::internal::(anonymous namespace)::LayerSpriteContainer::(anonymous at /home/noel/libo2/slideshow/source/engine/slideview.cxx:242:5) SPRITE_ULLAGE
-slideshow/source/engine/slideview.cxx:722
-    enum slideshow::internal::(anonymous namespace)::SlideView::(anonymous at /home/noel/libo2/slideshow/source/engine/slideview.cxx:722:5) LAYER_ULLAGE
+    enum slideshow::internal::ViewShape::(unnamed at /home/noel/libo-plugin/slideshow/source/engine/shapes/viewshape.hxx:276:13) MAX_RENDER_CACHE_ENTRIES
+slideshow/source/engine/slideview.cxx:243
+    enum slideshow::internal::(anonymous namespace)::LayerSpriteContainer::(unnamed at /home/noel/libo-plugin/slideshow/source/engine/slideview.cxx:243:5) SPRITE_ULLAGE
+slideshow/source/engine/slideview.cxx:723
+    enum slideshow::internal::(anonymous namespace)::SlideView::(unnamed at /home/noel/libo-plugin/slideshow/source/engine/slideview.cxx:723:5) LAYER_ULLAGE
 slideshow/source/inc/box2dtools.hxx:46
     enum box2d::utils::box2DNonsimulatedShapeUpdateType BOX2D_UPDATE_SIZE
 soltools/cpp/cpp.h:42
     int WS
-starmath/inc/mathml/def.hxx:55
-    enum SmMlElementType NMlStructural
 starmath/inc/mathml/def.hxx:56
+    enum SmMlElementType NMlStructural
+starmath/inc/mathml/def.hxx:57
     enum SmMlElementType NMlSmNode
-starmath/inc/mathml/def.hxx:58
-    enum SmMlElementType MlMath
-starmath/inc/mathml/def.hxx:59
-    enum SmMlElementType MlMi
-starmath/inc/mathml/def.hxx:60
-    enum SmMlElementType MlMerror
-starmath/inc/mathml/def.hxx:61
-    enum SmMlElementType MlMn
-starmath/inc/mathml/def.hxx:62
-    enum SmMlElementType MlMo
-starmath/inc/mathml/def.hxx:63
-    enum SmMlElementType MlMrow
-starmath/inc/mathml/def.hxx:64
-    enum SmMlElementType MlMtext
-starmath/inc/mathml/def.hxx:65
-    enum SmMlElementType MlMstyle
-svgio/inc/svgstyleattributes.hxx:60
+svgio/inc/svgstyleattributes.hxx:62
     enum svgio::svgreader::FontSize notset
-svl/source/numbers/zformat.cxx:305
-    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_DBNUM2
-svl/source/numbers/zformat.cxx:306
-    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_DBNUM3
-svl/source/numbers/zformat.cxx:307
-    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_DBNUM4
 svl/source/numbers/zformat.cxx:308
-    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_DBNUM5
+    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_DBNUM2
 svl/source/numbers/zformat.cxx:309
-    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_DBNUM6
+    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_DBNUM3
 svl/source/numbers/zformat.cxx:310
-    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_DBNUM7
+    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_DBNUM4
 svl/source/numbers/zformat.cxx:311
-    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_DBNUM8
+    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_DBNUM5
 svl/source/numbers/zformat.cxx:312
-    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_DBNUM9
+    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_DBNUM6
+svl/source/numbers/zformat.cxx:313
+    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_DBNUM7
+svl/source/numbers/zformat.cxx:314
+    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_DBNUM8
 svl/source/numbers/zformat.cxx:315
-    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM1
-svl/source/numbers/zformat.cxx:316
-    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM2
-svl/source/numbers/zformat.cxx:317
-    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM3
+    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_DBNUM9
 svl/source/numbers/zformat.cxx:318
-    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM4
+    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM1
 svl/source/numbers/zformat.cxx:319
-    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM5
+    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM2
 svl/source/numbers/zformat.cxx:320
-    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM6
+    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM3
 svl/source/numbers/zformat.cxx:321
-    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM7
+    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM4
 svl/source/numbers/zformat.cxx:322
-    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM8
+    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM5
 svl/source/numbers/zformat.cxx:323
-    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM9
+    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM6
 svl/source/numbers/zformat.cxx:324
-    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM10
+    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM7
 svl/source/numbers/zformat.cxx:325
-    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM11
+    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM8
 svl/source/numbers/zformat.cxx:326
-    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM12
+    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM9
 svl/source/numbers/zformat.cxx:327
-    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM13
+    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM10
 svl/source/numbers/zformat.cxx:328
-    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM14
+    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM11
 svl/source/numbers/zformat.cxx:329
-    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM15
+    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM12
 svl/source/numbers/zformat.cxx:330
-    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM16
+    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM13
 svl/source/numbers/zformat.cxx:331
-    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM17
+    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM14
 svl/source/numbers/zformat.cxx:332
-    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM18
+    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM15
 svl/source/numbers/zformat.cxx:333
+    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM16
+svl/source/numbers/zformat.cxx:334
+    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM17
+svl/source/numbers/zformat.cxx:335
+    enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM18
+svl/source/numbers/zformat.cxx:336
     enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM19
-svtools/inc/table/tablemodel.hxx:49
-    enum ColumnAttributeGroup ALL
 svx/source/inc/docrecovery.hxx:77
     enum EDocStates TryLoadBackup
 svx/source/inc/docrecovery.hxx:78
@@ -914,17 +1280,29 @@ svx/source/inc/docrecovery.hxx:85
     enum EDocStates Incomplete
 svx/source/inc/docrecovery.hxx:87
     enum EDocStates Succeeded
+svx/source/tbxctrls/fillctrl.cxx:56
+    enum (anonymous namespace)::eFillStyle SOLID
+svx/source/tbxctrls/fillctrl.cxx:57
+    enum (anonymous namespace)::eFillStyle GRADIENT
+svx/source/tbxctrls/fillctrl.cxx:58
+    enum (anonymous namespace)::eFillStyle HATCH
+svx/source/tbxctrls/fillctrl.cxx:59
+    enum (anonymous namespace)::eFillStyle BITMAP
 sw/inc/accmap.hxx:75
     enum AccessibleStates OPAQUE
+sw/inc/authfld.hxx:172
+    enum SwAuthorityField::TargetType UseDisplayURL
+sw/inc/authfld.hxx:173
+    enum SwAuthorityField::TargetType UseTargetURL
 sw/inc/crstate.hxx:32
     enum SwFillMode Space
 sw/inc/crstate.hxx:33
     enum SwFillMode Margin
 sw/inc/crstate.hxx:34
     enum SwFillMode Indent
-sw/inc/dbmgr.hxx:486
+sw/inc/dbmgr.hxx:488
     enum sw::DBConnURIType MSJET
-sw/inc/dbmgr.hxx:487
+sw/inc/dbmgr.hxx:489
     enum sw::DBConnURIType MSACE
 sw/inc/docary.hxx:73
     enum SwVectorModifyBase<class SwFrameFormat *>::DestructorPolicy FreeElements
@@ -932,24 +1310,20 @@ sw/inc/docary.hxx:73
     enum SwVectorModifyBase<class SwGrfFormatColl *>::DestructorPolicy FreeElements
 sw/inc/docary.hxx:73
     enum SwVectorModifyBase<class SwTextFormatColl *>::DestructorPolicy FreeElements
-sw/inc/docufld.hxx:117
-    enum SwExtUserSubType EU_FATHERSNAME
 sw/inc/docufld.hxx:118
+    enum SwExtUserSubType EU_FATHERSNAME
+sw/inc/docufld.hxx:119
     enum SwExtUserSubType EU_APARTMENT
 sw/inc/ndtyp.hxx:42
     enum SwNodeType ContentMask
 sw/inc/reffld.hxx:40
     enum REFERENCESUBTYPE REF_OUTLINE
-sw/inc/undobj.hxx:136
-    enum DelContentType Fly
 sw/inc/undobj.hxx:137
+    enum DelContentType Fly
+sw/inc/undobj.hxx:138
     enum DelContentType Bkm
 sw/source/core/inc/dbg_lay.hxx:28
     enum PROT Init
-sw/source/core/inc/rootfrm.hxx:50
-    enum sw::FieldmarkMode ShowCommand
-sw/source/core/inc/rootfrm.hxx:50
-    enum sw::FieldmarkMode ShowResult
 sw/source/core/inc/SwXMLBlockImport.hxx:78
     enum SwXMLTextBlockToken OFFICE_BODY
 sw/source/core/inc/SwXMLBlockImport.hxx:79
@@ -976,55 +1350,55 @@ sw/source/uibase/inc/envimg.hxx:33
     enum SwEnvAlign ENV_VER_LEFT
 sw/source/uibase/inc/envimg.hxx:34
     enum SwEnvAlign ENV_VER_CNTR
-tools/source/generic/poly.cxx:1122
-    enum (anonymous at /home/noel/libo2/tools/source/generic/poly.cxx:1122:5) maxRecursionDepth
-ucbhelper/source/client/proxydecider.cxx:126
+toolkit/inc/controls/table/tablemodel.hxx:49
+    enum ColumnAttributeGroup ALL
+tools/source/generic/poly.cxx:1132
+    enum (unnamed at /home/noel/libo-plugin/tools/source/generic/poly.cxx:1132:5) maxRecursionDepth
+ucb/source/ucp/webdav-curl/DAVTypes.hxx:183
+    enum http_dav_ucp::Depth DAVINFINITY
+ucbhelper/source/client/proxydecider.cxx:127
     enum ucbhelper::proxydecider_impl::InternetProxyDecider_Impl::ProxyType Automatic
+vcl/inc/dndhelper.hxx:31
+    enum vcl::DragOrDrop Drag
 vcl/inc/driverblocklist.hxx:65
     enum DriverBlocklist::OperatingSystem DRIVER_OS_WINDOWS_LAST
 vcl/inc/driverblocklist.hxx:73
     enum DriverBlocklist::OperatingSystem DRIVER_OS_OSX_LAST
-vcl/inc/fontsubset.hxx:42
+vcl/inc/fontsubset.hxx:44
     enum FontType ANY_TYPE1
+vcl/inc/pdf/pdfwriter_impl.hxx:86
+    enum vcl::pdf::GraphicsStateUpdateFlags MapMode
+vcl/inc/pdf/pdfwriter_impl.hxx:91
+    enum vcl::pdf::GraphicsStateUpdateFlags TransparentPercent
 vcl/inc/salptype.hxx:44
     enum SalPrinterError Abort
-vcl/source/app/svapp.cxx:1145
-    enum (anonymous at /home/noel/libo2/vcl/source/app/svapp.cxx:1145:1) hwEnv
-vcl/source/app/svapp.cxx:1145
-    enum (anonymous at /home/noel/libo2/vcl/source/app/svapp.cxx:1145:1) hwUI
+vcl/source/app/svapp.cxx:1132
+    enum (unnamed at /home/noel/libo-plugin/vcl/source/app/svapp.cxx:1132:1) hwEnv
+vcl/source/app/svapp.cxx:1132
+    enum (unnamed at /home/noel/libo-plugin/vcl/source/app/svapp.cxx:1132:1) hwUI
 vcl/source/filter/jpeg/Exif.hxx:40
     enum Tag ORIENTATION
-vcl/source/gdi/CommonSalLayout.cxx:134
-    enum (anonymous namespace)::VerticalOrientation Upright
-vcl/source/gdi/CommonSalLayout.cxx:137
-    enum (anonymous namespace)::VerticalOrientation TransformedRotated
-vcl/source/gdi/pdfwriter_impl.hxx:84
-    enum vcl::pdf::GraphicsStateUpdateFlags MapMode
-vcl/source/gdi/pdfwriter_impl.hxx:89
-    enum vcl::pdf::GraphicsStateUpdateFlags TransparentPercent
-vcl/source/window/printdlg.cxx:58
-    enum (anonymous at /home/noel/libo2/vcl/source/window/printdlg.cxx:55:1) ORIENTATION_PORTRAIT
-writerfilter/source/dmapper/PropertyIds.hxx:229
-    enum writerfilter::dmapper::PropertyIds PROP_PARA_HYPHENATION_NO_CAPS
-writerfilter/source/ooxml/OOXMLFactory.hxx:32
-    enum writerfilter::ooxml::ResourceType List
+vcl/source/window/printdlg.cxx:60
+    enum (unnamed at /home/noel/libo-plugin/vcl/source/window/printdlg.cxx:57:1) ORIENTATION_PORTRAIT
 writerfilter/source/ooxml/OOXMLFactory.hxx:33
+    enum writerfilter::ooxml::ResourceType List
+writerfilter/source/ooxml/OOXMLFactory.hxx:34
     enum writerfilter::ooxml::ResourceType Integer
-writerfilter/source/ooxml/OOXMLFactory.hxx:35
-    enum writerfilter::ooxml::ResourceType Hex
 writerfilter/source/ooxml/OOXMLFactory.hxx:36
-    enum writerfilter::ooxml::ResourceType HexColor
+    enum writerfilter::ooxml::ResourceType Hex
 writerfilter/source/ooxml/OOXMLFactory.hxx:37
+    enum writerfilter::ooxml::ResourceType HexColor
+writerfilter/source/ooxml/OOXMLFactory.hxx:38
     enum writerfilter::ooxml::ResourceType String
-writerfilter/source/ooxml/OOXMLFactory.hxx:39
+writerfilter/source/ooxml/OOXMLFactory.hxx:40
     enum writerfilter::ooxml::ResourceType Boolean
-writerfilter/source/ooxml/OOXMLFactory.hxx:48
-    enum writerfilter::ooxml::ResourceType TwipsMeasure_asSigned
 writerfilter/source/ooxml/OOXMLFactory.hxx:49
-    enum writerfilter::ooxml::ResourceType TwipsMeasure_asZero
+    enum writerfilter::ooxml::ResourceType TwipsMeasure_asSigned
 writerfilter/source/ooxml/OOXMLFactory.hxx:50
-    enum writerfilter::ooxml::ResourceType HpsMeasure
+    enum writerfilter::ooxml::ResourceType TwipsMeasure_asZero
 writerfilter/source/ooxml/OOXMLFactory.hxx:51
+    enum writerfilter::ooxml::ResourceType HpsMeasure
+writerfilter/source/ooxml/OOXMLFactory.hxx:52
     enum writerfilter::ooxml::ResourceType MeasurementOrPercent
 xmlsecurity/source/helper/ooxmlsecparser.cxx:964
     enum OOXMLSecParser::DsSignaturePropertyContext::SignatureProperty Info

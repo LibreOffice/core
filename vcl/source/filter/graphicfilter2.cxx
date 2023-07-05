@@ -27,20 +27,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <graphic/GraphicFormatDetector.hxx>
 
-namespace
-{
-enum class MetafileType : sal_uInt16
-{
-    Memory = 0x0001,
-    Disk   = 0x0002,
-};
-enum class MetafileVersion : sal_uInt16
-{
-    Version100 = 0x0100,
-    Version300 = 0x0300,
-};
-}
-
 GraphicDescriptor::GraphicDescriptor( const INetURLObject& rPath ) :
     pFileStm( ::utl::UcbStreamHelper::CreateStream( rPath.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ ).release() ),
     aPathExt( rPath.GetFileExtension().toAsciiLowerCase() ),

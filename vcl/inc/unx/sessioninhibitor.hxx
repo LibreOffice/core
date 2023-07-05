@@ -22,8 +22,6 @@
 enum ApplicationInhibitFlags
 {
     APPLICATION_INHIBIT_LOGOUT = (1 << 0),
-    APPLICATION_INHIBIT_SWITCH = (1 << 1),
-    APPLICATION_INHIBIT_SUSPEND = (1 << 2),
     APPLICATION_INHIBIT_IDLE = (1 << 3) // Inhibit the session being marked as idle
 };
 
