@@ -1469,8 +1469,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
         case SID_ATTR_CHAR_COLOR2:
         case SID_ATTR_CHAR_COLOR_EXT:
             {
-                const SequenceAsHashMap aMap(aArgs);
-                const util::Color aColor = aMap.getUnpackedValueOrDefault(PROPERTY_FONTCOLOR,util::Color());
+                const util::Color aColor( lcl_extractBackgroundColor( aArgs ) );
                 impl_setPropertyAtControls_throw(RID_STR_UNDO_CHANGEFONT,PROPERTY_CHARCOLOR,uno::Any(aColor),aArgs);
                 bForceBroadcast = true;
             }
