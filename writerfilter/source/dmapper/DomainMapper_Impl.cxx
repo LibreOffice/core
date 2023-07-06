@@ -7414,7 +7414,35 @@ void DomainMapper_Impl::CloseFieldCommand()
                         pContext->SetHyperlinkTarget(sTarget);
                 }
                 break;
-                case FIELD_IF           : break;
+                case FIELD_IF:
+                {
+                    if (vArguments.size() < 3)
+                    {
+                        SAL_WARN("writerfilter.dmapper", "IF field requires at lest 3 parameters!");
+                        break;
+                    }
+
+                    if (xFieldProperties.is())
+                    {
+                        // Following code assumes that last argument in field is false value
+                        // before it - true value and everything before them is a condition
+                        OUString sCondition;
+                        size_t i = 0;
+                        while (i < vArguments.size() - 2) {
+                            if (!sCondition.isEmpty())
+                                sCondition += " ";
+                            sCondition += vArguments[i++];
+                        }
+
+                        xFieldProperties->setPropertyValue(
+                            "TrueContent", uno::Any(vArguments[vArguments.size() - 2]));
+                        xFieldProperties->setPropertyValue(
+                            "FalseContent", uno::Any(vArguments[vArguments.size() - 1]));
+                        xFieldProperties->setPropertyValue(
+                            "Condition", uno::Any(sCondition));
+                    }
+                }
+                break;
                 case FIELD_INFO         : break;
                 case FIELD_INCLUDEPICTURE: break;
                 case FIELD_KEYWORDS     :
