@@ -315,6 +315,8 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
 
     if (aDstRect.Intersection(tools::Rectangle(aOutPt, aOutSz)).IsEmpty())
         return;
+    if (ImplLogicToDevicePixel(aOutSz).IsEmpty()) // nothing to draw
+        return;
 
     {
         Point aRelPt = aOutPt + Point(mnOutOffX, mnOutOffY);
