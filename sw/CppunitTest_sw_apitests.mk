@@ -36,6 +36,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_apitests, \
     sw/qa/api/SwXParagraphEnumeration \
     sw/qa/api/SwXReferenceMark \
     sw/qa/api/SwXStyleFamilies \
+    sw/qa/api/SwXReferenceMarks \
     sw/qa/api/SwXTextFrame \
     sw/qa/api/SwXTextField \
     sw/qa/api/SwXTextTable \
