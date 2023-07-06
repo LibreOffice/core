@@ -27,6 +27,7 @@
 #include <vcl/toolkit/svtabbx.hxx>
 #include <vcl/toolkit/svlbitm.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include "calendar.hxx"
 #include "iconview.hxx"
 #include "listbox.hxx"
 #include "messagedialog.hxx"
@@ -2167,6 +2168,34 @@ public:
     virtual void customize_scrollbars(const Color& rBackgroundColor, const Color& rShadowColor,
                                       const Color& rFaceColor) override;
     virtual ~SalInstanceScrolledWindow() override;
+};
+
+class SalInstanceCalendar : public SalInstanceWidget, public virtual weld::Calendar
+{
+private:
+    VclPtr<::Calendar> m_xCalendar;
+
+    DECL_LINK(SelectHdl, ::Calendar*, void);
+    DECL_LINK(ActivateHdl, ::Calendar*, void);
+
+public:
+    SalInstanceCalendar(::Calendar* pCalendar, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : SalInstanceWidget(pCalendar, pBuilder, bTakeOwnership)
+        , m_xCalendar(pCalendar)
+    {
+        m_xCalendar->SetSelectHdl(LINK(this, SalInstanceCalendar, SelectHdl));
+        m_xCalendar->SetActivateHdl(LINK(this, SalInstanceCalendar, ActivateHdl));
+    }
+
+    virtual void set_date(const Date& rDate) override { m_xCalendar->SetCurDate(rDate); }
+
+    virtual Date get_date() const override { return m_xCalendar->GetFirstSelectedDate(); }
+
+    virtual ~SalInstanceCalendar() override
+    {
+        m_xCalendar->SetSelectHdl(Link<::Calendar*, void>());
+        m_xCalendar->SetActivateHdl(Link<::Calendar*, void>());
+    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
