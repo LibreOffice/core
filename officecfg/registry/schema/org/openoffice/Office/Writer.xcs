@@ -4235,7 +4235,7 @@
               <desc>Specifies whether user-defined styles applied in the document are replaced by predefined text document styles.</desc>
               <label>Replace user-defined styles</label>
             </info>
-            <value>true</value>
+            <value>false</value>
           </prop>
           <prop oor:name="CombineParagraphs" oor:type="xs:boolean" oor:nillable="false">
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Combine single line paragraphs if length greater -->
