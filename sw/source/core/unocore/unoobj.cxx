@@ -2309,7 +2309,7 @@ SwXTextCursor::setPropertyValue(
 
         if (!aRanges.empty())
         {
-            SfxItemSet aAutoStyleItemSet(rUnoCursor.GetDoc().GetAttrPool(), std::move(aRanges));
+            SwAttrSet aAutoStyleItemSet(rUnoCursor.GetDoc().GetAttrPool(), std::move(aRanges));
             // we need to get up-to-date item set: this makes sure that the complex properties,
             // that are only partially defined by passed definition, do not lose the rest of
             // their already present data (which will become part of the autostyle, too).

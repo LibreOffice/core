@@ -20,6 +20,7 @@
 #include "swstylemanager.hxx"
 #include <svl/stylepool.hxx>
 #include <istyleaccess.hxx>
+#include <swatrset.hxx>
 #include <unordered_map>
 #include <osl/diagnose.h>
 
@@ -97,6 +98,7 @@ std::shared_ptr<SfxItemSet> SwStyleManager::getAutomaticStyle( const SfxItemSet&
                                                                    IStyleAccess::SwAutoStyleFamily eFamily,
                                                                    const OUString* pParentName )
 {
+    assert(eFamily != IStyleAccess::AUTO_STYLE_PARA || dynamic_cast<const SwAttrSet*>(&rSet));
     StylePool& rAutoPool
         = eFamily == IStyleAccess::AUTO_STYLE_CHAR ? m_aAutoCharPool : m_aAutoParaPool;
     return rAutoPool.insertItemSet( rSet, pParentName );
@@ -105,6 +107,7 @@ std::shared_ptr<SfxItemSet> SwStyleManager::getAutomaticStyle( const SfxItemSet&
 std::shared_ptr<SfxItemSet> SwStyleManager::cacheAutomaticStyle( const SfxItemSet& rSet,
                                                                    IStyleAccess::SwAutoStyleFamily eFamily )
 {
+    assert(eFamily != IStyleAccess::AUTO_STYLE_PARA || dynamic_cast<const SwAttrSet*>(&rSet));
     StylePool& rAutoPool
         = eFamily == IStyleAccess::AUTO_STYLE_CHAR ? m_aAutoCharPool : m_aAutoParaPool;
     std::shared_ptr<SfxItemSet> pStyle = rAutoPool.insertItemSet( rSet );
@@ -134,6 +137,7 @@ std::shared_ptr<SfxItemSet> SwStyleManager::getByName( const OUString& rName,
         rCache.addCompletePool( rAutoPool );
         pStyle = rCache.getByName( rName );
     }
+    assert(!pStyle || eFamily != IStyleAccess::AUTO_STYLE_PARA || dynamic_cast<SwAttrSet*>(pStyle.get()));
     return pStyle;
 }
 
@@ -147,6 +151,7 @@ void SwStyleManager::getAllStyles( std::vector<std::shared_ptr<SfxItemSet>> &rSt
     std::shared_ptr<SfxItemSet> pStyle = pIter->getNext();
     while( pStyle )
     {
+        assert(eFamily != IStyleAccess::AUTO_STYLE_PARA || dynamic_cast<SwAttrSet*>(pStyle.get()));
         rStyles.push_back( pStyle );
 
         pStyle = pIter->getNext();
