@@ -314,6 +314,7 @@ public:
     virtual std::unique_ptr<weld::Box> weld_box(const OUString& id) override;
     virtual std::unique_ptr<weld::Widget> weld_widget(const OUString& id) override;
     virtual std::unique_ptr<weld::Image> weld_image(const OUString& id) override;
+    virtual std::unique_ptr<weld::Calendar> weld_calendar(const OUString& id) override;
 
     static weld::MessageDialog*
     CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
@@ -859,6 +860,13 @@ public:
             bool bTakeOwnership);
     virtual void set_image(VirtualDevice* pDevice) override;
     virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override;
+};
+
+class JSCalendar : public JSWidget<SalInstanceCalendar, ::Calendar>
+{
+public:
+    JSCalendar(JSDialogSender* pSender, ::Calendar* pCalendar, SalInstanceBuilder* pBuilder,
+               bool bTakeOwnership);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

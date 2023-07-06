@@ -14,7 +14,7 @@
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
-          <object class="GtkCalendar" id="date">
+          <object class="GtkCalendar" id="date_picker">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="year">2019</property>

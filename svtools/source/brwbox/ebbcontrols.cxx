@@ -531,7 +531,7 @@ namespace svt
         , m_xMenuButton(m_xBuilder->weld_menu_button("button"))
         , m_xCalendarBuilder(Application::CreateBuilder(m_xMenuButton.get(), "svt/ui/datewindow.ui"))
         , m_xTopLevel(m_xCalendarBuilder->weld_widget("date_popup_window"))
-        , m_xCalendar(m_xCalendarBuilder->weld_calendar("date"))
+        , m_xCalendar(m_xCalendarBuilder->weld_calendar("date_picker"))
         , m_xExtras(m_xCalendarBuilder->weld_widget("extras"))
         , m_xTodayBtn(m_xCalendarBuilder->weld_button("today"))
         , m_xNoneBtn(m_xCalendarBuilder->weld_button("none"))

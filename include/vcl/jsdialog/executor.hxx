@@ -86,6 +86,10 @@ public:
         rButton.signal_selected(rIdent);
     }
 
+    static void trigger_selected(weld::Calendar& rCalendar) { rCalendar.signal_selected(); }
+
+    static void trigger_activated(weld::Calendar& rCalendar) { rCalendar.signal_activated(); }
+
     static void trigger_value_changed(weld::SpinButton& rSpinButton)
     {
         rSpinButton.signal_value_changed();

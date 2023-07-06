@@ -1258,6 +1258,19 @@ std::unique_ptr<weld::Image> JSInstanceBuilder::weld_image(const OUString& id)
     return pWeldWidget;
 }
 
+std::unique_ptr<weld::Calendar> JSInstanceBuilder::weld_calendar(const OUString& id)
+{
+    ::Calendar* pCalendar = m_xBuilder->get<::Calendar>(id);
+
+    auto pWeldWidget
+        = pCalendar ? std::make_unique<JSCalendar>(this, pCalendar, this, false) : nullptr;
+
+    if (pWeldWidget)
+        RememberWidget(id, pWeldWidget.get());
+
+    return pWeldWidget;
+}
+
 weld::MessageDialog*
 JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
                                        VclButtonsType eButtonType, const OUString& rPrimaryMessage,
@@ -2238,6 +2251,12 @@ void JSImage::set_image(const css::uno::Reference<css::graphic::XGraphic>& rImag
 {
     SalInstanceImage::set_image(rImage);
     sendUpdate();
+}
+
+JSCalendar::JSCalendar(JSDialogSender* pSender, ::Calendar* pCalendar, SalInstanceBuilder* pBuilder,
+                       bool bTakeOwnership)
+    : JSWidget<SalInstanceCalendar, ::Calendar>(pSender, pCalendar, pBuilder, bTakeOwnership)
+{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

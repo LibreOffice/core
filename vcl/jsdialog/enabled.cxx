@@ -279,6 +279,7 @@ bool isBuilderEnabledForPopup(std::u16string_view rUIFile)
         || rUIFile == u"modules/scalc/ui/floatingborderstyle.ui"
         || rUIFile == u"modules/scalc/ui/floatinglinestyle.ui"
         // svt
+        || rUIFile == u"svt/ui/datewindow.ui"
         || rUIFile == u"svt/ui/linewindow.ui"
         // svx
         || rUIFile == u"svx/ui/colorwindow.ui"
