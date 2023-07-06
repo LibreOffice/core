@@ -1657,9 +1657,21 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143311)
 {
     createSwDoc("tdf143311-1.docx");
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getShape(1), "Decorative"));
+    {
+        // add another one that's a SdrObject
+        uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShape(
+            xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+        xShapeProps->setPropertyValue("Decorative", uno::Any(true));
+        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage());
+        xDrawPage->add(xShape);
+    }
     // check DOCX filters
     saveAndReload("Office Open XML Text");
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getShape(1), "Decorative"));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getShape(2), "Decorative"));
     {
         // tdf#153925 not imported - check default and set it to test ODF filters
         uno::Reference<beans::XPropertySet> const xStyle(getStyles("FrameStyles")->getByName("Formula"), uno::UNO_QUERY_THROW);
@@ -1669,6 +1681,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143311)
     // check ODF filters
     saveAndReload("writer8");
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getShape(1), "Decorative"));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getShape(2), "Decorative"));
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getStyles("FrameStyles")->getByName("Formula"), "Decorative"));
 
     // check PDF export
@@ -1754,8 +1767,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143311)
     }
     CPPUNIT_ASSERT_EQUAL_MESSAGE("unclosed MCS", Default, state);
     CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nTagged)>(25), nTagged); // text in body
-    // 1 decorative image + 1 pre-existing rectangle border or something
-    CPPUNIT_ASSERT(nArtifacts >= 2);
+    // 1 decorative image + 1 decorative shape + 1 pre-existing rectangle border or something
+    CPPUNIT_ASSERT(nArtifacts >= 3);
 }
 
 void Test::testTextFormField()

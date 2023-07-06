@@ -69,6 +69,14 @@ ConnectorShapePropertiesContext::onCreateContext(sal_Int32 aElementToken,
 {
     switch (getBaseToken(aElementToken))
     {
+        case XML_extLst:
+        case XML_ext:
+            break;
+        case XML_decorative:
+        {
+            mpConnectorShapePtr->setDecorative(rAttribs.getBool(XML_val, false));
+            break;
+        }
         case XML_cNvPr:
             mpConnectorShapePtr->setId(rAttribs.getStringDefaulted(XML_id));
             mpConnectorShapePtr->setName(rAttribs.getStringDefaulted(XML_name));

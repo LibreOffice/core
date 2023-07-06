@@ -1383,6 +1383,26 @@ static bool lcl_isLockedCanvas(const uno::Reference<drawing::XShape>& xShape)
     });
 }
 
+void AddExtLst(sax_fastparser::FSHelperPtr const& pFS, DocxExport const& rExport,
+               uno::Reference<beans::XPropertySet> const& xShape)
+{
+    if (xShape->getPropertyValue("Decorative").get<bool>())
+    {
+        pFS->startElementNS(XML_a, XML_extLst,
+                            // apparently for DOCX the namespace isn't declared on the root
+                            FSNS(XML_xmlns, XML_a),
+                            rExport.GetFilter().getNamespaceURL(OOX_NS(dml)));
+        pFS->startElementNS(XML_a, XML_ext,
+                            // Word uses this "URI" which is obviously not a URI
+                            XML_uri, "{C183D7F6-B498-43B3-948B-1728B52AA6E4}");
+        pFS->singleElementNS(XML_adec, XML_decorative, FSNS(XML_xmlns, XML_adec),
+                             "http://schemas.microsoft.com/office/drawing/2017/decorative", XML_val,
+                             "1");
+        pFS->endElementNS(XML_a, XML_ext);
+        pFS->endElementNS(XML_a, XML_extLst);
+    }
+}
+
 void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFormat* pFrameFormat,
                                     int nAnchorId)
 {
@@ -1422,6 +1442,9 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
                              FSNS(XML_xmlns, XML_a),
                              m_pImpl->getExport().GetFilter().getNamespaceURL(OOX_NS(dml)));
     }
+    uno::Reference<beans::XPropertySet> const xShapeProps(xShape, uno::UNO_QUERY_THROW);
+    AddExtLst(pFS, m_pImpl->getExport(), xShapeProps);
+
     pFS->endElementNS(XML_wp, XML_docPr);
 
     uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY_THROW);

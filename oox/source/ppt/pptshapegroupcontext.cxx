@@ -65,6 +65,14 @@ ContextHandlerRef PPTShapeGroupContext::onCreateContext( sal_Int32 aElementToken
 
     switch( aElementToken )
     {
+    case OOX_TOKEN(dml, extLst):
+    case OOX_TOKEN(dml, ext):
+        break;
+    case OOX_TOKEN(adec, decorative):
+        {
+            mpGroupShapePtr->setDecorative(rAttribs.getBool(XML_val, false));
+        }
+        break;
     case PPT_TOKEN( cNvPr ):
     {
         // don't override SmartArt properties for embedded drawing's spTree

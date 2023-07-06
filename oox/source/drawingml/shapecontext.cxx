@@ -66,6 +66,14 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const 
     // nvSpPr CT_ShapeNonVisual begin
 //  case XML_drElemPr:
 //      break;
+    case XML_extLst:
+    case XML_ext:
+        break;
+    case XML_decorative:
+        {
+            mpShapePtr->setDecorative(rAttribs.getBool(XML_val, false));
+        }
+        break;
     case XML_cNvPr:
     {
         mpShapePtr->setHidden( rAttribs.getBool( XML_hidden, false ) );

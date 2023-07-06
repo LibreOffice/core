@@ -1144,6 +1144,10 @@ Reference< XShape > const & Shape::createAndInsert(
         {
             xSet->setPropertyValue( "Description", Any( msDescription ) );
         }
+        if (m_isDecorative)
+        {
+            xSet->setPropertyValue("Decorative", Any(m_isDecorative));
+        }
         if (aServiceName != "com.sun.star.text.TextFrame")
             rxShapes->add( mxShape );
 

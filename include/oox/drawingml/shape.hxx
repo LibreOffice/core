@@ -174,6 +174,7 @@ public:
     void                            setId( const OUString& rId ) { msId = rId; }
     const OUString&                 getId() const { return msId; }
     void                            setDescription( const OUString& rDescr ) { msDescription = rDescr; }
+    void                            setDecorative(bool const isDecorative) { m_isDecorative = isDecorative; }
     void                            setHidden( bool bHidden ) { mbHidden = bHidden; }
     void                            setHiddenMasterShape( bool bHiddenMasterShape ) { mbHiddenMasterShape = bHiddenMasterShape; }
     void                            setLocked( bool bLocked ) { mbLocked = bLocked; }
@@ -356,6 +357,7 @@ protected:
     OUString                    msInternalName; // used by diagram; not displayed in UI
     OUString                    msId;
     OUString                    msDescription;
+    bool                        m_isDecorative = false;
     sal_Int32                   mnSubType;      // if this type is not zero, then the shape is a placeholder
     std::optional< sal_Int32 >  moSubTypeIndex;
 
