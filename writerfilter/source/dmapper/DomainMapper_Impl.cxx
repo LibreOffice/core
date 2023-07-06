@@ -4087,7 +4087,7 @@ void DomainMapper_Impl::PopFootOrEndnote()
     }
     m_aRedlines.pop();
     m_eSkipFootnoteState = SkipFootnoteSeparator::OFF;
-    m_bInFootOrEndnote = false;
+    m_bInFootOrEndnote = m_bInFootnote = false;
     m_pFootnoteContext = nullptr;
     m_bFirstParagraphInCell = m_bSaveFirstParagraphInCell;
 }
