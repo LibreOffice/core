@@ -3037,6 +3037,33 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf152577)
     CPPUNIT_ASSERT(!pDBs->empty());
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf155796)
+{
+    createScDoc();
+
+    goToCell("A1:A3");
+    dispatchCommand(mxComponent, ".uno:ToggleMergeCells", {});
+    goToCell("A4:A6");
+    dispatchCommand(mxComponent, ".uno:ToggleMergeCells", {});
+
+    goToCell("A1:A6");
+
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_UP);
+    Scheduler::ProcessEventsToIdle();
+
+    ScRangeList aMarkedArea = getViewShell()->GetViewData().GetMarkData().GetMarkedRanges();
+    ScDocument* pDoc = getScDoc();
+    OUString aMarkedAreaString;
+    ScRangeStringConverter::GetStringFromRangeList(aMarkedAreaString, &aMarkedArea, pDoc,
+                                                   formula::FormulaGrammar::CONV_OOO);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Sheet1.A1:Sheet1.A3
+    // - Actual  : Sheet1.A1:Sheet1.A5
+    CPPUNIT_ASSERT_EQUAL(OUString("Sheet1.A1:Sheet1.A3"), aMarkedAreaString);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
