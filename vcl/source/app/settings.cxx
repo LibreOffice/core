@@ -2721,6 +2721,11 @@ void MiscSettings::SetEnableATToolSupport( bool bEnable )
         if( bEnable && !ImplInitAccessBridge() )
             return;
 
+        mxData->mnEnableATT = bEnable ? TRISTATE_TRUE : TRISTATE_FALSE;
+
+        if (getenv("LO_TESTNAME") != nullptr)
+            return; // No registry changing; no SettingsConfigItem modification
+
         HKEY hkey;
 
         // If the accessibility key in the Windows registry exists, change it synchronously
@@ -2761,7 +2766,6 @@ void MiscSettings::SetEnableATToolSupport( bool bEnable )
             setValue( "Accessibility",
                       "EnableATToolSupport",
                       bEnable ? OUString("true") : OUString("false" ) );
-        mxData->mnEnableATT = bEnable ? TRISTATE_TRUE : TRISTATE_FALSE;
     }
 }
 #endif
