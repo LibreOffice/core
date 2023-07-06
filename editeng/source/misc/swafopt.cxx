@@ -27,7 +27,6 @@ SvxSwAutoFormatFlags::SvxSwAutoFormatFlags()
     bAutoCorrect =
     bCapitalStartSentence =
     bCapitalStartWord =
-    bChgUserColl =
     bChgEnumNum =
     bAddNonBrkSpace =
     bChgOrdinalNumber =
@@ -42,6 +41,7 @@ SvxSwAutoFormatFlags::SvxSwAutoFormatFlags()
     bAFormatByInpDelSpacesAtSttEnd =
     bAFormatByInpDelSpacesBetweenLines = true;
 
+    bChgUserColl =
     bReplaceStyles =
     bDelEmptyNode =
     bWithRedlining =
