@@ -33,6 +33,7 @@
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <sal/log.hxx>
+#include <tools/json_writer.hxx>
 
 #include <calendar.hxx>
 #include <svdata.hxx>
@@ -1519,6 +1520,18 @@ Size Calendar::CalcWindowSizePixel() const
 Size Calendar::GetOptimalSize() const
 {
     return CalcWindowSizePixel();
+}
+
+void Calendar::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
+{
+    Control::DumpAsPropertyTree(rJsonWriter);
+
+    auto aDate = GetFirstSelectedDate();
+
+    rJsonWriter.put("type", "calendar");
+    rJsonWriter.put("day", aDate.GetDay());
+    rJsonWriter.put("month", aDate.GetMonth());
+    rJsonWriter.put("year", aDate.GetYear());
 }
 
 namespace
