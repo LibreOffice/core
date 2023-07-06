@@ -220,6 +220,8 @@ public:
 
     void            SetSelectHdl( const Link<Calendar*,void>& rLink ) { maSelectHdl = rLink; }
     void            SetActivateHdl( const Link<Calendar*,void>& rLink ) { maActivateHdl = rLink; }
+
+    virtual void    DumpAsPropertyTree(tools::JsonWriter&) override;
 };
 
 #endif // INCLUDED_VCL_CALENDAR_HXX
