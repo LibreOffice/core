@@ -30,6 +30,10 @@ class SwAccessiblePortionData;
 class SwTextFrame;
 class SwWrongList; // #i108125#
 
+namespace sw {
+    class WrongListIteratorCounter;
+}
+
 class SwTextMarkupHelper
 {
     public:
@@ -59,6 +63,8 @@ class SwTextMarkupHelper
     private:
         SwTextMarkupHelper( const SwTextMarkupHelper& ) = delete;
         SwTextMarkupHelper& operator=( const SwTextMarkupHelper& ) = delete;
+
+        std::unique_ptr<sw::WrongListIteratorCounter> getIterator(sal_Int32 nTextMarkupType);
 
         const SwAccessiblePortionData& mrPortionData;
 
