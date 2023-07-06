@@ -526,6 +526,9 @@ bool getCompatibilityScriptClassByBlock(sal_uInt32 currentChar, sal_Int16 &rScri
     // Few Spacing Modifier Letters that can be Bopomofo tonal marks.
     else if ( 0x2CA == currentChar || 0x2CB == currentChar || 0x2C7 == currentChar || 0x2D9 == currentChar )
         rScriptType = ScriptType::WEAK;
+    // tdf#52577 superscript numbers should be we weak.
+    else if ( 0xB2 == currentChar || 0xB3 == currentChar || 0xB9 == currentChar )
+        rScriptType = ScriptType::WEAK;
     // workaround for Coptic
     else if ( 0x2C80 <= currentChar && 0x2CE3 >= currentChar)
         rScriptType = ScriptType::LATIN;
