@@ -695,11 +695,6 @@ IMPL_LINK(SwView, VertScrollHdl, weld::Scrollbar&, rScrollbar, void)
             OUString sDisplay;
             if(m_pWrtShell->GetPageNumber( aPos.Y(), false, nPhNum, nVirtNum, sDisplay ))
             {
-                // The end scrollhandler invalidate the FN_STAT_PAGE,
-                // so we don't must do it again.
-        //      if(!GetViewFrame().GetFrame().IsInPlace())
-        //            S F X_BINDINGS().Update(FN_STAT_PAGE);
-
                 //QuickHelp:
                 if( m_pWrtShell->GetPageCnt() > 1 )
                 {
