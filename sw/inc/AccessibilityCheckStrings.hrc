@@ -34,6 +34,7 @@
 #define STR_FLOATING_TEXT               NC_("STR_FLOATING_TEXT", "Avoid floating text.")
 #define STR_HEADING_IN_TABLE            NC_("STR_HEADING_IN_TABLE", "Tables must not contain headings.")
 #define STR_HEADING_ORDER               NC_("STR_HEADING_ORDER", "A heading with outline level %LEVEL_CURRENT% must not follow a heading with outline level %LEVEL_PREV%.")
+#define STR_HEADING_START               NC_("STR_HEADING_START", "Outline levels should start with level 1, instead of level %LEVEL_CURRENT%.")
 #define STR_FONTWORKS                   NC_("STR_FONTWORKS", "Avoid Fontwork objects in your documents. Make sure you use it for samples or other meaningless text.")
 #define STR_TABLE_FORMATTING            NC_("STR_TABLE_FORMATTING", "Avoid using empty table cells for formatting.")
 
