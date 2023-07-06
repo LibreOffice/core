@@ -3523,7 +3523,7 @@ void SwXAutoStyleFamily::Notify(const SfxHint& rHint)
 
 std::shared_ptr<SfxItemSet>
 PropValuesToAutoStyleItemSet(SwDoc& rDoc, IStyleAccess::SwAutoStyleFamily eFamily,
-                             const uno::Sequence<beans::PropertyValue>& Values, SfxItemSet& aSet)
+                             const uno::Sequence<beans::PropertyValue>& Values, SwAttrSet& aSet)
 {
     const SfxItemPropertySet* pPropSet = nullptr;
     switch( eFamily )
