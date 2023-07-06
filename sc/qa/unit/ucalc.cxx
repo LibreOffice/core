@@ -4581,6 +4581,23 @@ CPPUNIT_TEST_FIXTURE(Test, testAutoFill)
     CPPUNIT_ASSERT_EQUAL( OUString("2nd"), m_pDoc->GetString( 0, 1, 0 ) );
     CPPUNIT_ASSERT_EQUAL( OUString("3rd"), m_pDoc->GetString( 0, 2, 0 ) );
 
+    // Clear column A for a new test.
+    clearRange(m_pDoc, ScRange(0,0,0,0,m_pDoc->MaxRow(),0));
+    m_pDoc->SetRowHidden(0, m_pDoc->MaxRow(), 0, false); // Show all rows.
+
+    m_pDoc->SetString( 0, 200, 0, "15:00" );
+    m_pDoc->SetString( 0, 201, 0, "15:20" );
+    m_pDoc->Fill( 0, 200, 0, 201, nullptr, aMarkData, 25, FILL_TO_BOTTOM, FILL_AUTO );
+
+    CPPUNIT_ASSERT_EQUAL( OUString("03:00:00 PM"), m_pDoc->GetString( 0, 200, 0 ) );
+
+    // tdf#153517: Without the fix in place, this test would have failed with
+    // - Expected: 03:20:00 PM
+    // - Actual  : 03:19:59 PM
+    CPPUNIT_ASSERT_EQUAL( OUString("03:20:00 PM"), m_pDoc->GetString( 0, 201, 0 ) );
+    CPPUNIT_ASSERT_EQUAL( OUString("03:40:00 PM"), m_pDoc->GetString( 0, 202, 0 ) );
+    CPPUNIT_ASSERT_EQUAL( OUString("04:00:00 PM"), m_pDoc->GetString( 0, 203, 0 ) );
+
     m_pDoc->DeleteTab(0);
 }
 
