@@ -1125,7 +1125,13 @@ public:
         const SwNode* startFly = pCurrent->FindFlyStartNode();
         if (startFly
             && startFly->GetFlyFormat()->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
-            lclAddIssue(m_rIssueCollection, SwResId(STR_FLOATING_TEXT));
+        {
+            auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_FLOATING_TEXT));
+            pIssue->setIssueObject(IssueObject::TEXTFRAME);
+            pIssue->setObjectID(startFly->GetFlyFormat()->GetName());
+            pIssue->setDoc(pCurrent->GetDoc());
+            pIssue->setNode(pCurrent);
+        }
     }
 };
 
@@ -1372,7 +1378,14 @@ void AccessibilityCheck::checkObject(SwNode* pCurrent, SdrObject* pObject)
     // (Floating objects with text create problems with reading order)
     if (pObject->HasText()
         && FindFrameFormat(pObject)->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
-        lclAddIssue(m_aIssueCollection, SwResId(STR_FLOATING_TEXT));
+    {
+        auto pIssue = lclAddIssue(m_aIssueCollection, SwResId(STR_FLOATING_TEXT));
+        pIssue->setIssueObject(IssueObject::TEXTFRAME);
+        pIssue->setObjectID(pObject->GetName());
+        pIssue->setDoc(*m_pDoc);
+        if (pCurrent)
+            pIssue->setNode(pCurrent);
+    }
 
     const SdrObjKind nObjId = pObject->GetObjIdentifier();
     const SdrInventor nInv = pObject->GetObjInventor();

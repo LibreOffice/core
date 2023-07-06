@@ -28,6 +28,7 @@ enum class IssueObject
     TEXT,
     DOCUMENT_TITLE,
     FOOTNOTE,
+    TEXTFRAME,
 };
 
 class SW_DLLPUBLIC AccessibilityIssue final : public sfx::AccessibilityIssue
