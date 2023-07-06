@@ -1383,8 +1383,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf146346, "tdf146346.docx")
     assertXPath(pXmlDoc, "/root/page[1]//anchored/fly", 8);
     assertXPath(pXmlDoc, "/root/page[1]//anchored/fly/tab", 8);
 
-    // FIXME no second page (regression since multi-page floating tables?)
-    //assertXPath(pXmlDoc, "/root/page[2]", 0);
+    // No second page.
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 1
+    // i.e. unwanted lower margin in the floating table's anchor paragraph in the footnote created a
+    // second page.
+    assertXPath(pXmlDoc, "/root/page[2]", 0);
 }
 #endif
 
