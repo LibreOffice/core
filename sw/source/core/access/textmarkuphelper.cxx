@@ -86,13 +86,13 @@ SwTextMarkupHelper::SwTextMarkupHelper( const SwAccessiblePortionData& rPortionD
 {
 }
 
-sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupType )
-{
-    sal_Int32 nTextMarkupCount( 0 );
 
+std::unique_ptr<sw::WrongListIteratorCounter> SwTextMarkupHelper::getIterator(sal_Int32 nTextMarkupType)
+{
+    std::unique_ptr<sw::WrongListIteratorCounter> pIter;
     if (mpTextMarkupList)
     {
-        nTextMarkupCount = mpTextMarkupList->Count();
+        pIter.reset(new sw::WrongListIteratorCounter(*mpTextMarkupList));
     }
     else
     {
@@ -100,10 +100,21 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
         SwWrongList const* (SwTextNode::*const pGetWrongList)() const = getTextMarkupFunc(nTextMarkupType);
         if (pGetWrongList)
         {
-            sw::WrongListIteratorCounter iter(*m_pTextFrame, pGetWrongList);
-            nTextMarkupCount = iter.GetElementCount();
+            pIter.reset(new sw::WrongListIteratorCounter(*m_pTextFrame, pGetWrongList));
         }
     }
+
+    return pIter;
+}
+
+
+sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupType )
+{
+    sal_Int32 nTextMarkupCount( 0 );
+
+    std::unique_ptr<sw::WrongListIteratorCounter> pIter = getIterator(nTextMarkupType);
+    if (pIter)
+        nTextMarkupCount = pIter->GetElementCount();
 
     return nTextMarkupCount;
 }
@@ -122,21 +133,7 @@ css::accessibility::TextSegment
     aTextMarkupSegment.SegmentStart = -1;
     aTextMarkupSegment.SegmentEnd = -1;
 
-    std::unique_ptr<sw::WrongListIteratorCounter> pIter;
-    if (mpTextMarkupList)
-    {
-        pIter.reset(new sw::WrongListIteratorCounter(*mpTextMarkupList));
-    }
-    else
-    {
-        assert(m_pTextFrame);
-        SwWrongList const* (SwTextNode::*const pGetWrongList)() const = getTextMarkupFunc(nTextMarkupType);
-        if (pGetWrongList)
-        {
-            pIter.reset(new sw::WrongListIteratorCounter(*m_pTextFrame, pGetWrongList));
-        }
-    }
-
+    std::unique_ptr<sw::WrongListIteratorCounter> pIter = getIterator(nTextMarkupType);
     if (pIter)
     {
         auto const oElement(pIter->GetElementAt(nTextMarkupIndex));
@@ -175,21 +172,7 @@ css::uno::Sequence< css::accessibility::TextSegment >
         return uno::Sequence< css::accessibility::TextSegment >();
     }
 
-    std::unique_ptr<sw::WrongListIteratorCounter> pIter;
-    if (mpTextMarkupList)
-    {
-        pIter.reset(new sw::WrongListIteratorCounter(*mpTextMarkupList));
-    }
-    else
-    {
-        assert(m_pTextFrame);
-        SwWrongList const* (SwTextNode::*const pGetWrongList)() const = getTextMarkupFunc(nTextMarkupType);
-        if (pGetWrongList)
-        {
-            pIter.reset(new sw::WrongListIteratorCounter(*m_pTextFrame, pGetWrongList));
-        }
-    }
-
+    std::unique_ptr<sw::WrongListIteratorCounter> pIter = getIterator(nTextMarkupType);
     std::vector< css::accessibility::TextSegment > aTmpTextMarkups;
     if (pIter)
     {
