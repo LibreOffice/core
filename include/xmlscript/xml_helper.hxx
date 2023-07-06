@@ -88,10 +88,9 @@ public:
     virtual OUString SAL_CALL getValueByIndex( sal_Int16 nPos ) override;
     virtual OUString SAL_CALL getValueByName( OUString const & rName ) override;
 
-protected:
+private:
     ::std::vector< css::uno::Reference<
                       css::xml::sax::XAttributeList > > _subElems;
-private:
     OUString const _name;
     ::std::vector< OUString > _attrNames;
     ::std::vector< OUString > _attrValues;

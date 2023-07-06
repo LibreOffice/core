@@ -59,7 +59,7 @@ class SvtAccessibilityOptions;
 class SwPagePreviewLayout;
 class SwTextFrame;
 
-struct SwAccessibilityOptions;
+class SwAccessibilityOptions;
 namespace vcl { class Region; }
 class SwPostItMgr;
 class SdrPaintWindow;

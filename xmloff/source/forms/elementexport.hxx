@@ -39,7 +39,6 @@ namespace xmloff
     //= OElementExport
     class OElementExport : public OPropertyExport
     {
-    protected:
         css::uno::Sequence< css::script::ScriptEventDescriptor >
                                 m_aEvents;
 

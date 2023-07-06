@@ -86,8 +86,6 @@ class SW_DLLPUBLIC SwDrawTextInfo
     // inside second half of bound rect, used for Accessibility
     bool m_bPosMatchesBounds :1;
 
-public:
-
 #ifdef DBG_UTIL
     // These flags should control that the appropriate Set-function has been
     // called before calling the Get-function of a member
@@ -106,6 +104,8 @@ public:
     bool m_bUppr  : 1;
     bool m_bDrawSp: 1;
 #endif
+
+public:
 
     /// constructor for simple strings
     SwDrawTextInfo( SwViewShell const *pSh, OutputDevice &rOut,

@@ -71,11 +71,11 @@ public:
 
 class AddressWalkerWriter : public AddressWalker
 {
-public:
     ScDocShell*                         mpDocShell;
     ScDocument&                         mrDocument;
     formula::FormulaGrammar::Grammar    meGrammar;
 
+public:
     AddressWalkerWriter(const ScAddress& aInitialAddress, ScDocShell* pDocShell, ScDocument& rDocument,
             formula::FormulaGrammar::Grammar eGrammar );
 

@@ -61,9 +61,9 @@ namespace sc
 
 class ScDocFunc
 {
-protected:
     ScDocShell&     rDocShell;
 
+protected:
     bool            AdjustRowHeight( const ScRange& rRange, bool bPaint, bool bApi );
     void            CreateOneName( ScRangeName& rList,
                                     SCCOL nPosX, SCROW nPosY, SCTAB nTab,

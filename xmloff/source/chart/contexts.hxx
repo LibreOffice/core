@@ -35,7 +35,6 @@ namespace com::sun::star::xml::sax {
 
 class SchXMLDocContext : public virtual SvXMLImportContext
 {
-protected:
     SchXMLImportHelper& mrImportHelper;
 
 public:

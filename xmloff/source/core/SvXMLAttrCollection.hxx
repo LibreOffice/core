@@ -18,10 +18,10 @@
 
 class SvXMLAttrCollection
 {
-public:
     SvXMLNamespaceMap      aNamespaceMap;
     std::vector<SvXMLAttr> aAttrs;
 
+public:
     bool operator==(const SvXMLAttrCollection &rCmp) const;
     bool AddAttr( const OUString& rLName,
                       const OUString& rValue );

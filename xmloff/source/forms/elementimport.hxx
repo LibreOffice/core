@@ -437,7 +437,6 @@ namespace xmloff
         friend class OListOptionImport;
         friend class OComboItemImport;
 
-    protected:
         std::vector<OUString >
                         m_aListSource;
         std::vector< OUString >

@@ -101,6 +101,7 @@ protected:
     virtual void lcl_endGlossaryEntry() {}
     virtual void lcl_checkId(const sal_Int32) {}
 
+private:
 #ifdef DBG_UTIL
     LoggedResourcesHelper mHelper;
 #endif
@@ -119,6 +120,7 @@ protected:
     virtual void lcl_attribute(Id name, Value& val) = 0;
     virtual void lcl_sprm(Sprm& sprm) = 0;
 
+private:
 #ifdef DBG_UTIL
     LoggedResourcesHelper mHelper;
 #endif
@@ -135,6 +137,7 @@ public:
 protected:
     virtual void lcl_entry(writerfilter::Reference<Properties>::Pointer_t ref) = 0;
 
+private:
 #ifdef DBG_UTIL
     LoggedResourcesHelper mHelper;
 #endif

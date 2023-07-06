@@ -647,7 +647,7 @@ inline void SwHTMLWriter::OutCSS1_Property( std::string_view pProp,
 // positions in the document.
 // In dtor all data is restored and the created PaM is deleted again.
 
-struct HTMLSaveData
+class HTMLSaveData
 {
     SwHTMLWriter& rWrt;
     std::shared_ptr<SwUnoCursor> pOldPam;
@@ -661,6 +661,7 @@ struct HTMLSaveData
     bool bOldOutFooter : 1;
     bool bOldOutFlyFrame : 1;
 
+public:
     HTMLSaveData( SwHTMLWriter&, SwNodeOffset nStt, SwNodeOffset nEnd,
                   bool bSaveNum=true,
                   const SwFrameFormat *pFrameFormat=nullptr  );

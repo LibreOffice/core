@@ -70,9 +70,8 @@ public:
 
     void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) override;
 
-    sdr::table::CellRef mxCell;
-
 private:
+    sdr::table::CellRef mxCell;
     const CellTextProvider maTextProvider;
 };
 

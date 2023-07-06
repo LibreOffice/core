@@ -360,18 +360,19 @@ struct DXFEdgeTypeLine : public DXFEdgeType
     virtual bool EvaluateGroup( DXFGroupReader & rDGR ) override;
 };
 
-struct DXFEdgeTypeCircularArc : public DXFEdgeType
+class DXFEdgeTypeCircularArc : public DXFEdgeType
 {
     DXFVector aCenter;                  // 10,20
     double    fRadius;                  // 40
     double    fStartAngle;              // 50
     double    fEndAngle;                // 51
     sal_Int32 nIsCounterClockwiseFlag;  // 73
+public:
     DXFEdgeTypeCircularArc();
     virtual bool EvaluateGroup( DXFGroupReader & rDGR ) override;
 };
 
-struct DXFEdgeTypeEllipticalArc : public DXFEdgeType
+class DXFEdgeTypeEllipticalArc : public DXFEdgeType
 {
     DXFVector aCenter;                  // 10,20
     DXFVector aEndPoint;                // 11,21
@@ -379,19 +380,19 @@ struct DXFEdgeTypeEllipticalArc : public DXFEdgeType
     double    fStartAngle;              // 50
     double    fEndAngle;                // 51
     sal_Int32 nIsCounterClockwiseFlag;  // 73
-
+public:
     DXFEdgeTypeEllipticalArc();
     virtual bool EvaluateGroup( DXFGroupReader & rDGR ) override;
 };
 
-struct DXFEdgeTypeSpline : public DXFEdgeType
+class DXFEdgeTypeSpline : public DXFEdgeType
 {
     sal_Int32 nDegree;                  // 94
     sal_Int32 nRational;                // 73
     sal_Int32 nPeriodic;                // 74
     sal_Int32 nKnotCount;               // 75
     sal_Int32 nControlCount;            // 76
-
+public:
     DXFEdgeTypeSpline();
     virtual bool EvaluateGroup( DXFGroupReader & rDGR ) override;
 };

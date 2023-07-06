@@ -539,7 +539,6 @@ public:
 class SwInsTableDlg;
 class AbstractInsTableDlg_Impl : public AbstractInsTableDlg
 {
-protected:
     std::shared_ptr<weld::DialogController> m_xDlg;
 public:
     explicit AbstractInsTableDlg_Impl(std::shared_ptr<weld::DialogController> p)
@@ -620,7 +619,6 @@ public:
 class SwMultiTOXTabDialog;
 class AbstractMultiTOXTabDialog_Impl : public AbstractMultiTOXTabDialog
 {
-protected:
     std::shared_ptr<SwMultiTOXTabDialog> m_xDlg;
 public:
     explicit AbstractMultiTOXTabDialog_Impl(std::shared_ptr<SwMultiTOXTabDialog> p)

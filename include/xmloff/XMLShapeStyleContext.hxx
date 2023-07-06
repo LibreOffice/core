@@ -33,10 +33,9 @@ class XMLOFF_DLLPUBLIC XMLShapeStyleContext: public XMLPropStyleContext
 {
     OUString     m_sControlDataStyleName;
     bool         m_bIsNumRuleAlreadyConverted;
-
-protected:
     OUString     m_sListStyleName;
 
+protected:
     virtual void SetAttribute( sal_Int32 nElement, const OUString& rValue ) override;
 public:
 

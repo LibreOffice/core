@@ -66,6 +66,7 @@ class ShutdownIcon : public ShutdownIconServiceBase
         bool                    m_bSystemDialogs;
         std::unique_ptr<sfx2::FileDialogHelper> m_pFileDlg;
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< css::frame::XDesktop2 > m_xDesktop;
 
         static rtl::Reference<ShutdownIcon> pShutdownIcon; // one instance
 
@@ -134,8 +135,6 @@ class ShutdownIcon : public ShutdownIconServiceBase
         virtual void SAL_CALL setFastPropertyValue(       ::sal_Int32                  nHandle,
                                                     const css::uno::Any& aValue ) override;
         virtual css::uno::Any SAL_CALL getFastPropertyValue( ::sal_Int32 nHandle ) override;
-
-        css::uno::Reference< css::frame::XDesktop2 > m_xDesktop;
 
 #ifdef _WIN32
         static void EnableAutostartW32( const OUString &aShortcutName );

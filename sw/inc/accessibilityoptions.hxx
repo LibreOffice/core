@@ -18,11 +18,11 @@
  */
 #pragma once
 
-struct SwAccessibilityOptions
+class SwAccessibilityOptions
 {
     bool bIsAlwaysAutoColor         :1;
     bool bIsStopAnimatedGraphics    :1;
-
+public:
     SwAccessibilityOptions() :
         bIsAlwaysAutoColor(false),
         bIsStopAnimatedGraphics(false) {}
