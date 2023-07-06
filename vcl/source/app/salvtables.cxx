@@ -76,7 +76,6 @@
 #include <vcl/toolkit/viewdataentry.hxx>
 #include <vcl/virdev.hxx>
 #include <bitmaps.hlst>
-#include <calendar.hxx>
 #include <menutogglebutton.hxx>
 #include <verticaltabctrl.hxx>
 #include <window.h>
@@ -3293,34 +3292,6 @@ public:
     virtual OUString get_text() const override { return m_xProgressBar->GetText(); }
 
     virtual void set_text(const OUString& rText) override { m_xProgressBar->SetText(rText); }
-};
-
-class SalInstanceCalendar : public SalInstanceWidget, public virtual weld::Calendar
-{
-private:
-    VclPtr<::Calendar> m_xCalendar;
-
-    DECL_LINK(SelectHdl, ::Calendar*, void);
-    DECL_LINK(ActivateHdl, ::Calendar*, void);
-
-public:
-    SalInstanceCalendar(::Calendar* pCalendar, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : SalInstanceWidget(pCalendar, pBuilder, bTakeOwnership)
-        , m_xCalendar(pCalendar)
-    {
-        m_xCalendar->SetSelectHdl(LINK(this, SalInstanceCalendar, SelectHdl));
-        m_xCalendar->SetActivateHdl(LINK(this, SalInstanceCalendar, ActivateHdl));
-    }
-
-    virtual void set_date(const Date& rDate) override { m_xCalendar->SetCurDate(rDate); }
-
-    virtual Date get_date() const override { return m_xCalendar->GetFirstSelectedDate(); }
-
-    virtual ~SalInstanceCalendar() override
-    {
-        m_xCalendar->SetSelectHdl(Link<::Calendar*, void>());
-        m_xCalendar->SetActivateHdl(Link<::Calendar*, void>());
-    }
 };
 }
 
