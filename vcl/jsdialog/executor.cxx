@@ -603,6 +603,27 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                 }
             }
         }
+        else if (sControlType == "calendar")
+        {
+            auto pCalendar = dynamic_cast<weld::Calendar*>(pWidget);
+            if (pCalendar && sAction == "selectdate")
+            {
+                // MM/DD/YYYY
+                OUString aDate = rData["data"];
+
+                if (aDate.getLength() < 10)
+                    return false;
+
+                sal_Int32 aMonth = o3tl::toInt32(aDate.subView(0, 2));
+                sal_Int32 aDay = o3tl::toInt32(aDate.subView(3, 2));
+                sal_Int32 aYear = o3tl::toInt32(aDate.subView(6, 4));
+
+                pCalendar->set_date(Date(aDay, aMonth, aYear));
+                LOKTrigger::trigger_selected(*pCalendar);
+                LOKTrigger::trigger_activated(*pCalendar);
+                return true;
+            }
+        }
     }
 
     return false;

@@ -1569,8 +1569,8 @@ SvtCalendarBox::SvtCalendarBox(std::unique_ptr<weld::MenuButton> pControl, bool 
     : m_bUseLabel(bUseLabel)
     , m_xControl(std::move(pControl))
     , m_xBuilder(Application::CreateBuilder(m_xControl.get(), "svt/ui/datewindow.ui"))
-    , m_xTopLevel(m_xBuilder->weld_widget("date_popup_window"))
-    , m_xCalendar(m_xBuilder->weld_calendar("date"))
+    , m_xTopLevel(m_xBuilder->weld_popover("date_popup_window"))
+    , m_xCalendar(m_xBuilder->weld_calendar("date_picker"))
 {
     m_xControl->set_popover(m_xTopLevel.get());
     m_xCalendar->connect_selected(LINK(this, SvtCalendarBox, SelectHdl));
