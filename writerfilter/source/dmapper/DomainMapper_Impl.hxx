@@ -879,7 +879,7 @@ public:
     void PushFootOrEndnote( bool bIsFootnote );
     void PopFootOrEndnote();
     bool IsInFootOrEndnote() const { return m_bInFootOrEndnote; }
-    bool IsInFootnote() const { return m_bInFootnote; }
+    bool IsInFootnote() const { return IsInFootOrEndnote() && m_bInFootnote; }
 
     void StartCustomFootnote(const PropertyMapPtr pContext);
     void EndCustomFootnote();
