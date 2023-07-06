@@ -1620,6 +1620,32 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                 uno::Reference<text::XTextContent> xContent = xTextAppendAndConvert->convertToTextFrame(xStart, xEnd, comphelper::containerToSequence(aFrameProperties));
                 xFrameAnchor.set(xContent->getAnchor(), uno::UNO_QUERY);
 
+                bool bConvertToFloatingInFootnote = false;
+                if (xContent.is() && xContent->getAnchor().is())
+                {
+                    uno::Reference<lang::XServiceInfo> xText(xContent->getAnchor()->getText(), uno::UNO_QUERY);
+                    if (xText.is())
+                    {
+                        bConvertToFloatingInFootnote = xText->supportsService("com.sun.star.text.Footnote");
+                    }
+                }
+
+                // paragraph of the anchoring point of the floating table needs zero top and bottom
+                // margins, if the table was a not floating table in the footnote, otherwise
+                // docDefault margins could result bigger vertical spaces around the table
+                if ( bConvertToFloatingInFootnote && xContent.is() )
+                {
+                    uno::Reference<beans::XPropertySet> xParagraph(
+                                    xContent->getAnchor(), uno::UNO_QUERY);
+                    if ( xParagraph.is() )
+                    {
+                        xParagraph->setPropertyValue("ParaTopMargin",
+                                    uno::Any(static_cast<sal_Int32>(0)));
+                        xParagraph->setPropertyValue("ParaBottomMargin",
+                                    uno::Any(static_cast<sal_Int32>(0)));
+                    }
+                }
+
                 AfterConvertToTextFrame(m_rDMapper_Impl, aFramedRedlines, redPos, redLen, redCell, redTable);
             }
 
