@@ -1196,15 +1196,20 @@ public:
         if (currentLevel - m_prevLevel > 1)
         {
             // Preparing and posting a warning.
-            OUString resultString = SwResId(STR_HEADING_ORDER);
+            OUString resultString;
+            if (!m_prevLevel)
+            {
+                resultString = SwResId(STR_HEADING_START);
+            }
+            else
+            {
+                resultString = SwResId(STR_HEADING_ORDER);
+                resultString
+                    = resultString.replaceAll("%LEVEL_PREV%", OUString::number(m_prevLevel));
+            }
             resultString
                 = resultString.replaceAll("%LEVEL_CURRENT%", OUString::number(currentLevel));
-            resultString = resultString.replaceAll("%LEVEL_PREV%", OUString::number(m_prevLevel));
-
-            auto pIssue = lclAddIssue(m_rIssueCollection, resultString);
-            pIssue->setIssueObject(IssueObject::TEXT);
-            pIssue->setDoc(pCurrent->GetDoc());
-            pIssue->setNode(pCurrent);
+            lclAddIssue(m_rIssueCollection, resultString);
         }
 
         // Updating previous level.
