@@ -2162,7 +2162,8 @@ void SwTextShell::GetState( SfxItemSet &rSet )
     sal_uInt16 nWhich = aIter.FirstWhich();
     while ( nWhich )
     {
-        switch ( nWhich )
+        const sal_uInt16 nSlotId = GetPool().GetSlotId(nWhich);
+        switch (nSlotId)
         {
         case FN_FORMAT_CURRENT_FOOTNOTE_DLG:
             if( !rSh.IsCursorInFootnote() )
