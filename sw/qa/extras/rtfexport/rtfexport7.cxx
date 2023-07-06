@@ -683,6 +683,44 @@ DECLARE_RTFEXPORT_TEST(testTdf113202, "tdf113202.rtf")
     CPPUNIT_ASSERT(getProperty<bool>(getParagraph(4), "ParaContextMargin"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf156030, "tdf156030.rtf")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(
+        xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    // As usual, fields given by FieldsAccess are not in same order as in the document
+    std::vector<std::vector<OUString>> aExpectedValues = {
+        { "1 FORMULA 2", "true value 1", "false value 1" }, // #1, condition should be 1 = 2
+        { "", "", "" }, // #9, not enough field params
+        { "1 1 FORMULA 1 2 1 true value 8 fal", "se", "value 8" }, // #8, nonsense in field params
+        { "1 1 FORMULA 1 2 1 true value 7 false", "value", "7" }, // #7, another parse error
+        { "1 < 2", "true value 6", "false value 6" }, // #6
+        { "1 > 2", "true value 5", "false value 5" }, // #5
+        { "1 <> 2", "true value 4", "false value 4" }, // #4
+        { "1 != 2", "true value 3", "false value 3" }, // #3
+        { "1 FORMULA FORMULA 2", "true value 2", "false value 2" }, // #2, condition expected 1 == 2
+    };
+    uno::Reference<beans::XPropertySet> xPropertySet;
+    OUString sValue;
+
+    for (const auto& aValues : aExpectedValues)
+    {
+        xPropertySet.set(xFields->nextElement(), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(xPropertySet.is());
+        CPPUNIT_ASSERT(xPropertySet->getPropertyValue("Condition") >>= sValue);
+        CPPUNIT_ASSERT_EQUAL(aValues[0], sValue);
+        CPPUNIT_ASSERT(xPropertySet->getPropertyValue("TrueContent") >>= sValue);
+        CPPUNIT_ASSERT_EQUAL(aValues[1], sValue);
+        CPPUNIT_ASSERT(xPropertySet->getPropertyValue("FalseContent") >>= sValue);
+        CPPUNIT_ASSERT_EQUAL(aValues[2], sValue);
+    }
+
+    // No more fields
+    CPPUNIT_ASSERT(!xFields->hasMoreElements());
+}
+
 DECLARE_RTFEXPORT_TEST(testTdf153195, "tdf153195.rtf")
 {
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
