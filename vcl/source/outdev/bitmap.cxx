@@ -190,93 +190,92 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
 
 Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
 {
-    Bitmap  aBmp;
+    if ( !mpGraphics && !AcquireGraphics() )
+        return Bitmap();
+
+    assert(mpGraphics);
+
     tools::Long    nX = ImplLogicXToDevicePixel( rSrcPt.X() );
     tools::Long    nY = ImplLogicYToDevicePixel( rSrcPt.Y() );
     tools::Long    nWidth = ImplLogicWidthToDevicePixel( rSize.Width() );
     tools::Long    nHeight = ImplLogicHeightToDevicePixel( rSize.Height() );
+    if ( nWidth <= 0 || nHeight <= 0 || nX > (mnOutWidth + mnOutOffX) || nY > (mnOutHeight + mnOutOffY))
+        return Bitmap();
 
-    if ( mpGraphics || AcquireGraphics() )
+    Bitmap  aBmp;
+    tools::Rectangle   aRect( Point( nX, nY ), Size( nWidth, nHeight ) );
+    bool bClipped = false;
+
+    // X-Coordinate outside of draw area?
+    if ( nX < mnOutOffX )
     {
-        assert(mpGraphics);
+        nWidth -= ( mnOutOffX - nX );
+        nX = mnOutOffX;
+        bClipped = true;
+    }
 
-        if ( nWidth > 0 && nHeight  > 0 && nX <= (mnOutWidth + mnOutOffX) && nY <= (mnOutHeight + mnOutOffY))
+    // Y-Coordinate outside of draw area?
+    if ( nY < mnOutOffY )
+    {
+        nHeight -= ( mnOutOffY - nY );
+        nY = mnOutOffY;
+        bClipped = true;
+    }
+
+    // Width outside of draw area?
+    if ( (nWidth + nX) > (mnOutWidth + mnOutOffX) )
+    {
+        nWidth  = mnOutOffX + mnOutWidth - nX;
+        bClipped = true;
+    }
+
+    // Height outside of draw area?
+    if ( (nHeight + nY) > (mnOutHeight + mnOutOffY) )
+    {
+        nHeight = mnOutOffY + mnOutHeight - nY;
+        bClipped = true;
+    }
+
+    if ( bClipped )
+    {
+        // If the visible part has been clipped, we have to create a
+        // Bitmap with the correct size in which we copy the clipped
+        // Bitmap to the correct position.
+        ScopedVclPtrInstance< VirtualDevice > aVDev(  *this  );
+
+        if ( aVDev->SetOutputSizePixel( aRect.GetSize() ) )
         {
-            tools::Rectangle   aRect( Point( nX, nY ), Size( nWidth, nHeight ) );
-            bool        bClipped = false;
-
-            // X-Coordinate outside of draw area?
-            if ( nX < mnOutOffX )
+            if ( aVDev->mpGraphics || aVDev->AcquireGraphics() )
             {
-                nWidth -= ( mnOutOffX - nX );
-                nX = mnOutOffX;
-                bClipped = true;
-            }
-
-            // Y-Coordinate outside of draw area?
-            if ( nY < mnOutOffY )
-            {
-                nHeight -= ( mnOutOffY - nY );
-                nY = mnOutOffY;
-                bClipped = true;
-            }
-
-            // Width outside of draw area?
-            if ( (nWidth + nX) > (mnOutWidth + mnOutOffX) )
-            {
-                nWidth  = mnOutOffX + mnOutWidth - nX;
-                bClipped = true;
-            }
-
-            // Height outside of draw area?
-            if ( (nHeight + nY) > (mnOutHeight + mnOutOffY) )
-            {
-                nHeight = mnOutOffY + mnOutHeight - nY;
-                bClipped = true;
-            }
-
-            if ( bClipped )
-            {
-                // If the visible part has been clipped, we have to create a
-                // Bitmap with the correct size in which we copy the clipped
-                // Bitmap to the correct position.
-                ScopedVclPtrInstance< VirtualDevice > aVDev(  *this  );
-
-                if ( aVDev->SetOutputSizePixel( aRect.GetSize() ) )
+                if ( (nWidth > 0) && (nHeight > 0) )
                 {
-                    if ( aVDev->mpGraphics || aVDev->AcquireGraphics() )
-                    {
-                        if ( (nWidth > 0) && (nHeight > 0) )
-                        {
-                            SalTwoRect aPosAry(nX, nY, nWidth, nHeight,
-                                              (aRect.Left() < mnOutOffX) ? (mnOutOffX - aRect.Left()) : 0L,
-                                              (aRect.Top() < mnOutOffY) ? (mnOutOffY - aRect.Top()) : 0L,
-                                              nWidth, nHeight);
-                            aVDev->mpGraphics->CopyBits(aPosAry, *mpGraphics, *this, *this);
-                        }
-                        else
-                        {
-                            OSL_ENSURE(false, "CopyBits with zero or negative width or height");
-                        }
-
-                        aBmp = aVDev->GetBitmap( Point(), aVDev->GetOutputSizePixel() );
-                    }
-                    else
-                        bClipped = false;
+                    SalTwoRect aPosAry(nX, nY, nWidth, nHeight,
+                                      (aRect.Left() < mnOutOffX) ? (mnOutOffX - aRect.Left()) : 0L,
+                                      (aRect.Top() < mnOutOffY) ? (mnOutOffY - aRect.Top()) : 0L,
+                                      nWidth, nHeight);
+                    aVDev->mpGraphics->CopyBits(aPosAry, *mpGraphics, *this, *this);
                 }
                 else
-                    bClipped = false;
-            }
-
-            if ( !bClipped )
-            {
-                std::shared_ptr<SalBitmap> pSalBmp = mpGraphics->GetBitmap( nX, nY, nWidth, nHeight, *this );
-
-                if( pSalBmp )
                 {
-                    aBmp.ImplSetSalBitmap(pSalBmp);
+                    OSL_ENSURE(false, "CopyBits with zero or negative width or height");
                 }
+
+                aBmp = aVDev->GetBitmap( Point(), aVDev->GetOutputSizePixel() );
             }
+            else
+                bClipped = false;
+        }
+        else
+            bClipped = false;
+    }
+
+    if ( !bClipped )
+    {
+        std::shared_ptr<SalBitmap> pSalBmp = mpGraphics->GetBitmap( nX, nY, nWidth, nHeight, *this );
+
+        if( pSalBmp )
+        {
+            aBmp.ImplSetSalBitmap(pSalBmp);
         }
     }
 
@@ -444,26 +443,26 @@ public:
             const tools::Long nDstWidth,
             const tools::Long nDstHeight)
     {
-        if (pSource && pSourceAlpha && pDestination)
-        {
-            ScanlineFormat nSourceFormat = pSource->GetScanlineFormat();
-            ScanlineFormat nDestinationFormat = pDestination->GetScanlineFormat();
+        if (!pSource || !pSourceAlpha || !pDestination)
+            return false;
 
-            switch (nSourceFormat)
+        ScanlineFormat nSourceFormat = pSource->GetScanlineFormat();
+        ScanlineFormat nDestinationFormat = pDestination->GetScanlineFormat();
+
+        switch (nSourceFormat)
+        {
+            case ScanlineFormat::N24BitTcRgb:
+            case ScanlineFormat::N24BitTcBgr:
             {
-                case ScanlineFormat::N24BitTcRgb:
-                case ScanlineFormat::N24BitTcBgr:
+                if ( (nSourceFormat == ScanlineFormat::N24BitTcBgr && nDestinationFormat == ScanlineFormat::N32BitTcBgra)
+                  || (nSourceFormat == ScanlineFormat::N24BitTcRgb && nDestinationFormat == ScanlineFormat::N32BitTcRgba))
                 {
-                    if ( (nSourceFormat == ScanlineFormat::N24BitTcBgr && nDestinationFormat == ScanlineFormat::N32BitTcBgra)
-                      || (nSourceFormat == ScanlineFormat::N24BitTcRgb && nDestinationFormat == ScanlineFormat::N32BitTcRgba))
-                    {
-                        blendBitmap24(pDestination, pSource, pSourceAlpha, nDstWidth, nDstHeight);
-                        return true;
-                    }
+                    blendBitmap24(pDestination, pSource, pSourceAlpha, nDstWidth, nDstHeight);
+                    return true;
                 }
-                break;
-                default: break;
             }
+            break;
+            default: break;
         }
         return false;
     }

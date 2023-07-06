@@ -300,25 +300,22 @@ bool Bitmap::HasGreyPalette8Bit() const
 
 BitmapChecksum Bitmap::GetChecksum() const
 {
-    BitmapChecksum nRet = 0;
+    if( !mxSalBmp )
+        return 0;
 
-    if( mxSalBmp )
+    BitmapChecksum nRet = mxSalBmp->GetChecksum();
+    if (!nRet)
     {
-        nRet = mxSalBmp->GetChecksum();
-
-        if (!nRet)
+        // nRet == 0 => probably, we were not able to acquire
+        // the buffer in SalBitmap::updateChecksum;
+        // so, we need to update the imp bitmap for this bitmap instance
+        // as we do in BitmapInfoAccess::ImplCreate
+        std::shared_ptr<SalBitmap> xNewImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
+        if (xNewImpBmp->Create(*mxSalBmp, getPixelFormat()))
         {
-            // nRet == 0 => probably, we were not able to acquire
-            // the buffer in SalBitmap::updateChecksum;
-            // so, we need to update the imp bitmap for this bitmap instance
-            // as we do in BitmapInfoAccess::ImplCreate
-            std::shared_ptr<SalBitmap> xNewImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
-            if (xNewImpBmp->Create(*mxSalBmp, getPixelFormat()))
-            {
-                Bitmap* pThis = const_cast<Bitmap*>(this);
-                pThis->mxSalBmp = xNewImpBmp;
-                nRet = mxSalBmp->GetChecksum();
-            }
+            Bitmap* pThis = const_cast<Bitmap*>(this);
+            pThis->mxSalBmp = xNewImpBmp;
+            nRet = mxSalBmp->GetChecksum();
         }
     }
 
@@ -1500,147 +1497,141 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
                      short nChannelRPercent, short nChannelGPercent, short nChannelBPercent,
                      double fGamma, bool bInvert, bool msoBrightness )
 {
-    bool bRet = false;
-
     // nothing to do => return quickly
     if( !nLuminancePercent && !nContrastPercent &&
         !nChannelRPercent && !nChannelGPercent && !nChannelBPercent &&
         ( fGamma == 1.0 ) && !bInvert )
     {
-        bRet = true;
+        return true;
     }
+
+    BitmapScopedWriteAccess pAcc(*this);
+    if( !pAcc )
+        return false;
+
+    BitmapColor aCol;
+    const tools::Long nW = pAcc->Width();
+    const tools::Long nH = pAcc->Height();
+    std::unique_ptr<sal_uInt8[]> cMapR(new sal_uInt8[ 256 ]);
+    std::unique_ptr<sal_uInt8[]> cMapG(new sal_uInt8[ 256 ]);
+    std::unique_ptr<sal_uInt8[]> cMapB(new sal_uInt8[ 256 ]);
+    double fM, fROff, fGOff, fBOff, fOff;
+
+    // calculate slope
+    if( nContrastPercent >= 0 )
+        fM = 128.0 / ( 128.0 - 1.27 * MinMax( nContrastPercent, 0, 100 ) );
     else
+        fM = ( 128.0 + 1.27 * MinMax( nContrastPercent, -100, 0 ) ) / 128.0;
+
+    if(!msoBrightness)
+        // total offset = luminance offset + contrast offset
+        fOff = MinMax( nLuminancePercent, -100, 100 ) * 2.55 + 128.0 - fM * 128.0;
+    else
+        fOff = MinMax( nLuminancePercent, -100, 100 ) * 2.55;
+
+    // channel offset = channel offset + total offset
+    fROff = nChannelRPercent * 2.55 + fOff;
+    fGOff = nChannelGPercent * 2.55 + fOff;
+    fBOff = nChannelBPercent * 2.55 + fOff;
+
+    // calculate gamma value
+    fGamma = ( fGamma <= 0.0 || fGamma > 10.0 ) ? 1.0 : ( 1.0 / fGamma );
+    const bool bGamma = ( fGamma != 1.0 );
+
+    // create mapping table
+    for( tools::Long nX = 0; nX < 256; nX++ )
     {
-        BitmapScopedWriteAccess pAcc(*this);
-
-        if( pAcc )
+        if(!msoBrightness)
         {
-            BitmapColor aCol;
-            const tools::Long nW = pAcc->Width();
-            const tools::Long nH = pAcc->Height();
-            std::unique_ptr<sal_uInt8[]> cMapR(new sal_uInt8[ 256 ]);
-            std::unique_ptr<sal_uInt8[]> cMapG(new sal_uInt8[ 256 ]);
-            std::unique_ptr<sal_uInt8[]> cMapB(new sal_uInt8[ 256 ]);
-            double fM, fROff, fGOff, fBOff, fOff;
+            cMapR[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( nX * fM + fROff ), 0, 255 ));
+            cMapG[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( nX * fM + fGOff ), 0, 255 ));
+            cMapB[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( nX * fM + fBOff ), 0, 255 ));
+        }
+        else
+        {
+            // LO simply uses (in a somewhat optimized form) "newcolor = (oldcolor-128)*contrast+brightness+128"
+            // as the formula, i.e. contrast first, brightness afterwards. MSOffice, for whatever weird reason,
+            // use neither first, but apparently it applies half of brightness before contrast and half afterwards.
+            cMapR[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( (nX+fROff/2-128) * fM + 128 + fROff/2 ), 0, 255 ));
+            cMapG[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( (nX+fGOff/2-128) * fM + 128 + fGOff/2 ), 0, 255 ));
+            cMapB[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( (nX+fBOff/2-128) * fM + 128 + fBOff/2 ), 0, 255 ));
+        }
+        if( bGamma )
+        {
+            cMapR[ nX ] = GAMMA( cMapR[ nX ], fGamma );
+            cMapG[ nX ] = GAMMA( cMapG[ nX ], fGamma );
+            cMapB[ nX ] = GAMMA( cMapB[ nX ], fGamma );
+        }
 
-            // calculate slope
-            if( nContrastPercent >= 0 )
-                fM = 128.0 / ( 128.0 - 1.27 * MinMax( nContrastPercent, 0, 100 ) );
-            else
-                fM = ( 128.0 + 1.27 * MinMax( nContrastPercent, -100, 0 ) ) / 128.0;
-
-            if(!msoBrightness)
-                // total offset = luminance offset + contrast offset
-                fOff = MinMax( nLuminancePercent, -100, 100 ) * 2.55 + 128.0 - fM * 128.0;
-            else
-                fOff = MinMax( nLuminancePercent, -100, 100 ) * 2.55;
-
-            // channel offset = channel offset + total offset
-            fROff = nChannelRPercent * 2.55 + fOff;
-            fGOff = nChannelGPercent * 2.55 + fOff;
-            fBOff = nChannelBPercent * 2.55 + fOff;
-
-            // calculate gamma value
-            fGamma = ( fGamma <= 0.0 || fGamma > 10.0 ) ? 1.0 : ( 1.0 / fGamma );
-            const bool bGamma = ( fGamma != 1.0 );
-
-            // create mapping table
-            for( tools::Long nX = 0; nX < 256; nX++ )
-            {
-                if(!msoBrightness)
-                {
-                    cMapR[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( nX * fM + fROff ), 0, 255 ));
-                    cMapG[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( nX * fM + fGOff ), 0, 255 ));
-                    cMapB[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( nX * fM + fBOff ), 0, 255 ));
-                }
-                else
-                {
-                    // LO simply uses (in a somewhat optimized form) "newcolor = (oldcolor-128)*contrast+brightness+128"
-                    // as the formula, i.e. contrast first, brightness afterwards. MSOffice, for whatever weird reason,
-                    // use neither first, but apparently it applies half of brightness before contrast and half afterwards.
-                    cMapR[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( (nX+fROff/2-128) * fM + 128 + fROff/2 ), 0, 255 ));
-                    cMapG[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( (nX+fGOff/2-128) * fM + 128 + fGOff/2 ), 0, 255 ));
-                    cMapB[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( (nX+fBOff/2-128) * fM + 128 + fBOff/2 ), 0, 255 ));
-                }
-                if( bGamma )
-                {
-                    cMapR[ nX ] = GAMMA( cMapR[ nX ], fGamma );
-                    cMapG[ nX ] = GAMMA( cMapG[ nX ], fGamma );
-                    cMapB[ nX ] = GAMMA( cMapB[ nX ], fGamma );
-                }
-
-                if( bInvert )
-                {
-                    cMapR[ nX ] = ~cMapR[ nX ];
-                    cMapG[ nX ] = ~cMapG[ nX ];
-                    cMapB[ nX ] = ~cMapB[ nX ];
-                }
-            }
-
-            // do modifying
-            if( pAcc->HasPalette() )
-            {
-                BitmapColor aNewCol;
-
-                for( sal_uInt16 i = 0, nCount = pAcc->GetPaletteEntryCount(); i < nCount; i++ )
-                {
-                    const BitmapColor& rCol = pAcc->GetPaletteColor( i );
-                    aNewCol.SetRed( cMapR[ rCol.GetRed() ] );
-                    aNewCol.SetGreen( cMapG[ rCol.GetGreen() ] );
-                    aNewCol.SetBlue( cMapB[ rCol.GetBlue() ] );
-                    pAcc->SetPaletteColor( i, aNewCol );
-                }
-            }
-            else if( pAcc->GetScanlineFormat() == ScanlineFormat::N24BitTcBgr )
-            {
-                for( tools::Long nY = 0; nY < nH; nY++ )
-                {
-                    Scanline pScan = pAcc->GetScanline( nY );
-
-                    for( tools::Long nX = 0; nX < nW; nX++ )
-                    {
-                        *pScan = cMapB[ *pScan ]; pScan++;
-                        *pScan = cMapG[ *pScan ]; pScan++;
-                        *pScan = cMapR[ *pScan ]; pScan++;
-                    }
-                }
-            }
-            else if( pAcc->GetScanlineFormat() == ScanlineFormat::N24BitTcRgb )
-            {
-                for( tools::Long nY = 0; nY < nH; nY++ )
-                {
-                    Scanline pScan = pAcc->GetScanline( nY );
-
-                    for( tools::Long nX = 0; nX < nW; nX++ )
-                    {
-                        *pScan = cMapR[ *pScan ]; pScan++;
-                        *pScan = cMapG[ *pScan ]; pScan++;
-                        *pScan = cMapB[ *pScan ]; pScan++;
-                    }
-                }
-            }
-            else
-            {
-                for( tools::Long nY = 0; nY < nH; nY++ )
-                {
-                    Scanline pScanline = pAcc->GetScanline(nY);
-                    for( tools::Long nX = 0; nX < nW; nX++ )
-                    {
-                        aCol = pAcc->GetPixelFromData( pScanline, nX );
-                        aCol.SetRed( cMapR[ aCol.GetRed() ] );
-                        aCol.SetGreen( cMapG[ aCol.GetGreen() ] );
-                        aCol.SetBlue( cMapB[ aCol.GetBlue() ] );
-                        pAcc->SetPixelOnData( pScanline, nX, aCol );
-                    }
-                }
-            }
-
-            pAcc.reset();
-            bRet = true;
+        if( bInvert )
+        {
+            cMapR[ nX ] = ~cMapR[ nX ];
+            cMapG[ nX ] = ~cMapG[ nX ];
+            cMapB[ nX ] = ~cMapB[ nX ];
         }
     }
 
-    return bRet;
+    // do modifying
+    if( pAcc->HasPalette() )
+    {
+        BitmapColor aNewCol;
+
+        for( sal_uInt16 i = 0, nCount = pAcc->GetPaletteEntryCount(); i < nCount; i++ )
+        {
+            const BitmapColor& rCol = pAcc->GetPaletteColor( i );
+            aNewCol.SetRed( cMapR[ rCol.GetRed() ] );
+            aNewCol.SetGreen( cMapG[ rCol.GetGreen() ] );
+            aNewCol.SetBlue( cMapB[ rCol.GetBlue() ] );
+            pAcc->SetPaletteColor( i, aNewCol );
+        }
+    }
+    else if( pAcc->GetScanlineFormat() == ScanlineFormat::N24BitTcBgr )
+    {
+        for( tools::Long nY = 0; nY < nH; nY++ )
+        {
+            Scanline pScan = pAcc->GetScanline( nY );
+
+            for( tools::Long nX = 0; nX < nW; nX++ )
+            {
+                *pScan = cMapB[ *pScan ]; pScan++;
+                *pScan = cMapG[ *pScan ]; pScan++;
+                *pScan = cMapR[ *pScan ]; pScan++;
+            }
+        }
+    }
+    else if( pAcc->GetScanlineFormat() == ScanlineFormat::N24BitTcRgb )
+    {
+        for( tools::Long nY = 0; nY < nH; nY++ )
+        {
+            Scanline pScan = pAcc->GetScanline( nY );
+
+            for( tools::Long nX = 0; nX < nW; nX++ )
+            {
+                *pScan = cMapR[ *pScan ]; pScan++;
+                *pScan = cMapG[ *pScan ]; pScan++;
+                *pScan = cMapB[ *pScan ]; pScan++;
+            }
+        }
+    }
+    else
+    {
+        for( tools::Long nY = 0; nY < nH; nY++ )
+        {
+            Scanline pScanline = pAcc->GetScanline(nY);
+            for( tools::Long nX = 0; nX < nW; nX++ )
+            {
+                aCol = pAcc->GetPixelFromData( pScanline, nX );
+                aCol.SetRed( cMapR[ aCol.GetRed() ] );
+                aCol.SetGreen( cMapG[ aCol.GetGreen() ] );
+                aCol.SetBlue( cMapB[ aCol.GetBlue() ] );
+                pAcc->SetPixelOnData( pScanline, nX, aCol );
+            }
+        }
+    }
+
+    pAcc.reset();
+
+    return true;
 }
 
 namespace
