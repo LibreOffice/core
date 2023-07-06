@@ -4968,10 +4968,13 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
     // Do not propagate previous found list, if
     // - destination is an empty paragraph which is not in a list and
     // - source contains at least one paragraph which is not in a list
+    // or
+    // - source is a table
     if ( pNumRuleToPropagate &&
-         pDestTextNd && !pDestTextNd->GetText().getLength() &&
+         ((pDestTextNd && !pDestTextNd->GetText().getLength() &&
          !pDestTextNd->IsInList() &&
-         !lcl_ContainsOnlyParagraphsInList( rPam ) )
+         !lcl_ContainsOnlyParagraphsInList(rPam)) ||
+         rPam.GetBound().nNode.GetNode().GetNodeType() == SwNodeType::Table) )
     {
         pNumRuleToPropagate = nullptr;
     }
