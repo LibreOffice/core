@@ -369,7 +369,7 @@ bool GraphicObject::ImplGetCropParams(const OutputDevice& rOut, Point& rPt, Size
         else
             bRectClipRegion = true;
 
-        rClipPolyPoly = aClipPoly;
+        rClipPolyPoly = tools::PolyPolygon(aClipPoly);
 
         if (maGraphic.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel)
             aSize100 = Application::GetDefaultDevice()->PixelToLogic( maGraphic.GetPrefSize(), aMap100 );

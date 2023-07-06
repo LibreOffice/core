@@ -326,7 +326,7 @@ Region::Region(const tools::Polygon& rPolygon)
 
     if(rPolygon.GetSize())
     {
-        ImplCreatePolyPolyRegion(rPolygon);
+        ImplCreatePolyPolyRegion(tools::PolyPolygon(rPolygon));
     }
 }
 

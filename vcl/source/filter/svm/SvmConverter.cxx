@@ -512,7 +512,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     rMtf.AddAction( new MetaRectAction( aRect ) );
 
                     if( bFatLine )
-                        rMtf.AddAction( new MetaPolyLineAction( aRect, aLineInfo ) );
+                        rMtf.AddAction( new MetaPolyLineAction( tools::Polygon(aRect), aLineInfo ) );
                 }
             }
             break;

@@ -83,10 +83,10 @@ public:
 
 public:
                         Polygon();
-                        Polygon( sal_uInt16 nSize );
+                        explicit Polygon( sal_uInt16 nSize );
                         Polygon( sal_uInt16 nPoints, const Point* pPtAry,
                                  const PolyFlags* pFlagAry = nullptr );
-                        Polygon( const tools::Rectangle& rRect );
+                        explicit Polygon( const tools::Rectangle& rRect );
                         Polygon( const tools::Rectangle& rRect,
                                  sal_uInt32 nHorzRound, sal_uInt32 nVertRound );
                         Polygon( const Point& rCenter,
@@ -196,8 +196,9 @@ private:
     TOOLS_DLLPRIVATE void  ImplDoOperation( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rResult, PolyClipOp nOperation ) const;
 
 public:
-                        PolyPolygon( sal_uInt16 nInitSize = 16 );
-                        PolyPolygon( const tools::Polygon& rPoly );
+                        explicit PolyPolygon( sal_uInt16 nInitSize = 16 );
+                        explicit PolyPolygon( const tools::Polygon& rPoly );
+                        explicit PolyPolygon( const tools::Rectangle& );
                         PolyPolygon( const tools::PolyPolygon& rPolyPoly );
                         PolyPolygon( tools::PolyPolygon&& rPolyPoly ) noexcept;
                         ~PolyPolygon();

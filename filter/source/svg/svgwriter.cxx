@@ -2811,7 +2811,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
         aPoly[ 2 ].setX( aPoly[ 1 ].X() ); aPoly[ 2 ].setY( aPoly[ 0 ].Y() + nLineHeight - 1 );
         aPoly[ 3 ].setX( aPoly[ 0 ].X() ); aPoly[ 3 ].setY( aPoly[ 2 ].Y() );
 
-        ImplWritePolyPolygon( aPoly, false );
+        ImplWritePolyPolygon( tools::PolyPolygon(aPoly), false );
     }
 
     if( rFont.GetUnderline() )
@@ -2823,7 +2823,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
         aPoly[ 2 ].setX( aPoly[ 1 ].X() ); aPoly[ 2 ].setY( aPoly[ 0 ].Y() + nLineHeight - 1 );
         aPoly[ 3 ].setX( aPoly[ 0 ].X() ); aPoly[ 3 ].setY( aPoly[ 2 ].Y() );
 
-        ImplWritePolyPolygon( aPoly, false );
+        ImplWritePolyPolygon( tools::PolyPolygon(aPoly), false );
     }
 }
 
@@ -3225,7 +3225,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     if( aPoly.GetSize() )
                     {
                         maAttributeWriter.AddPaintAttr( mpVDev->GetLineColor(), mpVDev->GetFillColor() );
-                        ImplWritePolyPolygon( aPoly, false );
+                        ImplWritePolyPolygon( tools::PolyPolygon(aPoly), false );
                     }
                 }
             }
@@ -3242,7 +3242,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     {
                         maAttributeWriter.AddPaintAttr( mpVDev->GetLineColor(), COL_TRANSPARENT );
                         ImplAddLineAttr( pA->GetLineInfo() );
-                        ImplWritePolyPolygon( rPoly, true );
+                        ImplWritePolyPolygon( tools::PolyPolygon(rPoly), true );
                     }
                 }
             }
@@ -3565,7 +3565,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                             mapCurShape->maId = aElementId + "_" + OUString::number(nEntryCount++);
                         }
 
-                        mapCurShape->maShapePolyPoly = aPoly;
+                        mapCurShape->maShapePolyPoly = tools::PolyPolygon(aPoly);
                     }
 
                     mapCurShape->maShapeLineColor = mpVDev->GetLineColor();

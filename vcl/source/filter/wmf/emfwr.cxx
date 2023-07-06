@@ -645,7 +645,7 @@ void EMFWriter::ImplWritePolygonRecord( const tools::Polygon& rPoly, bool bClose
         return;
 
     if( rPoly.HasFlags() )
-        ImplWritePath( rPoly, bClose );
+        ImplWritePath( tools::PolyPolygon(rPoly), bClose );
     else
     {
         if( bClose )

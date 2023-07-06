@@ -1263,7 +1263,7 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext,
         {
             rRenderContext.SetLineColor(aDoubleColor);
             tools::PolyPolygon aPolyPoly(1);
-            aPolyPoly.Insert(aRect);
+            aPolyPoly.Insert(tools::Polygon(aRect));
             rRenderContext.DrawTransparent(aPolyPoly, nTransparencePercent);
         }
     }
@@ -1280,7 +1280,7 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext,
             if (bDrawSel)
             {
                 tools::PolyPolygon aPolyPoly(1);
-                aPolyPoly.Insert(aRect);
+                aPolyPoly.Insert(tools::Polygon(aRect));
                 rRenderContext.DrawTransparent(aPolyPoly, nTransparencePercent);
             }
 
@@ -1299,7 +1299,7 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext,
             if (bDrawSel)
             {
                 tools::PolyPolygon aPolyPoly(1);
-                aPolyPoly.Insert(aRect);
+                aPolyPoly.Insert(tools::Polygon(aRect));
                 rRenderContext.DrawTransparent(aPolyPoly, nTransparencePercent);
             }
 

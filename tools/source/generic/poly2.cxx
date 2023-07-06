@@ -40,6 +40,10 @@ PolyPolygon::PolyPolygon( const tools::Polygon& rPoly )
     : mpImplPolyPolygon( rPoly )
 {
 }
+PolyPolygon::PolyPolygon( const tools::Rectangle& rRect )
+    : mpImplPolyPolygon( tools::Polygon(rRect) )
+{
+}
 
 PolyPolygon::PolyPolygon( const tools::PolyPolygon& rPolyPoly )
     : mpImplPolyPolygon( rPolyPoly.mpImplPolyPolygon )

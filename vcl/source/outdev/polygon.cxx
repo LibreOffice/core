@@ -444,7 +444,7 @@ void OutputDevice::ImplDrawPolygon( const tools::Polygon& rPoly, const tools::Po
 {
     if( pClipPolyPoly )
     {
-        ImplDrawPolyPolygon( rPoly, pClipPolyPoly );
+        ImplDrawPolyPolygon( tools::PolyPolygon(rPoly), pClipPolyPoly );
     }
     else
     {

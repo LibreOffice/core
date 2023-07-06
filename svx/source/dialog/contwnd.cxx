@@ -246,8 +246,8 @@ void ContourWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     {
         tools::PolyPolygon _aPolyPoly(2);
         rTarget.Push(vcl::PushFlags::FILLCOLOR);
-        _aPolyPoly.Insert(tools::Rectangle(Point(), GetGraphicSize()));
-        _aPolyPoly.Insert(aWorkRect);
+        _aPolyPoly.Insert(tools::Polygon(tools::Rectangle(Point(), GetGraphicSize())));
+        _aPolyPoly.Insert(tools::Polygon(aWorkRect));
         rTarget.SetFillColor(COL_LIGHTRED);
         rTarget.DrawTransparent(_aPolyPoly, 50);
         rTarget.Pop();

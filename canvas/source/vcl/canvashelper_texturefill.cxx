@@ -171,7 +171,7 @@ namespace vclcanvas
                 aTempPoly[3] = ::Point( ::basegfx::fround( aLeftBottom.getX() ),
                                         ::basegfx::fround( aLeftBottom.getY() ) );
                 aTempPoly[4] = aTempPoly[0];
-                rOutDev.DrawGradient( aTempPoly, vclGradient );
+                rOutDev.DrawGradient( ::tools::PolyPolygon(aTempPoly), vclGradient );
                 return;
             }
             // 3 colors with first and last being equal and 3 stops (at 0, 0.5 and 1) is an axial gradient:
@@ -196,7 +196,7 @@ namespace vclcanvas
                 aTempPoly[3] = ::Point( ::basegfx::fround( aLeftBottom.getX() ),
                                         ::basegfx::fround( aLeftBottom.getY() ) );
                 aTempPoly[4] = aTempPoly[0];
-                rOutDev.DrawGradient( aTempPoly, vclGradient );
+                rOutDev.DrawGradient( ::tools::PolyPolygon(aTempPoly), vclGradient );
                 return;
             }
 

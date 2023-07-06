@@ -476,7 +476,7 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
 
     if( xPolyPoly )
     {
-        aPoly = rRect;
+        aPoly = tools::Polygon(rRect);
         xPolyPoly->Insert( aPoly );
         xPolyPoly->Insert( aPoly );
     }
@@ -490,7 +490,7 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
         aExtRect.AdjustRight(1 );
         aExtRect.AdjustBottom(1 );
 
-        aPoly = aExtRect;
+        aPoly = tools::Polygon(aExtRect);
         ImplDrawPolygon( aPoly, pClixPolyPoly );
     }
 

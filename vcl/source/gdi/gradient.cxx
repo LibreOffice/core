@@ -603,7 +603,7 @@ void Gradient::DrawComplexGradientToMetafile(tools::Rectangle const& rRect, GDIM
 
     rMetaFile.AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
 
-    aPoly = rRect;
+    aPoly = tools::Polygon(rRect);
     xPolyPoly->Insert( aPoly );
     xPolyPoly->Insert( aPoly );
 

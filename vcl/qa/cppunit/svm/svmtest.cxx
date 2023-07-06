@@ -2078,7 +2078,7 @@ void SvmTest::testTransparent()
     tools::PolyPolygon aPolyPolygon(1);
     aPolyPolygon.Insert(aPolygon);
 
-    pVirtualDev->DrawTransparent(aPolygon, 50);
+    pVirtualDev->DrawTransparent(tools::PolyPolygon(aPolygon), 50);
 
     CPPUNIT_ASSERT(aGDIMetaFile.HasTransparentActions());
     checkTransparent(writeAndReadStream(aGDIMetaFile));

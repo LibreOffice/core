@@ -1545,7 +1545,7 @@ namespace cppcanvas::internal
                     case MetaActionType::GRADIENT:
                     {
                         MetaGradientAction* pGradAct = static_cast<MetaGradientAction*>(pCurrAct);
-                        createGradientAction( ::tools::Polygon( pGradAct->GetRect() ),
+                        createGradientAction( ::tools::PolyPolygon( pGradAct->GetRect() ),
                                               pGradAct->GetGradient(),
                                               rFactoryParms,
                                               true,
