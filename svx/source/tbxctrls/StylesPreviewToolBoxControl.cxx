@@ -35,12 +35,7 @@ StylesPreviewToolBoxControl::initialize(const css::uno::Sequence<css::uno::Any>&
     svt::ToolboxController::initialize(rArguments);
 
     if (m_xFrame.is())
-    {
         InitializeStyles(m_xFrame->getController()->getModel());
-
-        m_xDispatchProvider = css::uno::Reference<css::frame::XDispatchProvider>(
-            m_xFrame->getController(), css::uno::UNO_QUERY);
-    }
 }
 
 void SAL_CALL StylesPreviewToolBoxControl::dispose()
@@ -156,7 +151,7 @@ StylesPreviewToolBoxControl::createItemWindow(const css::uno::Reference<css::awt
             SolarMutexGuard aSolarMutexGuard;
 
             m_xVclBox = VclPtr<StylesPreviewWindow_Impl>::Create(
-                pParent, std::vector(m_aDefaultStyles), m_xDispatchProvider);
+                pParent, std::vector(m_aDefaultStyles), m_xFrame);
             xItemWindow = VCLUnoHelper::GetInterface(m_xVclBox);
         }
     }

@@ -23,6 +23,7 @@
 #include <vcl/InterimItemWindow.hxx>
 #include <svl/style.hxx>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <sfx2/sfxstatuslistener.hxx>
 
 class StylesPreviewWindow_Base;
@@ -95,7 +96,7 @@ class StylesPreviewWindow_Base
 protected:
     static constexpr unsigned STYLES_COUNT = 6;
 
-    css::uno::Reference<css::frame::XDispatchProvider> m_xDispatchProvider;
+    css::uno::Reference<css::frame::XFrame> m_xFrame;
 
     std::unique_ptr<weld::IconView> m_xStylesView;
 
@@ -115,9 +116,9 @@ protected:
     DECL_LINK(DoJsonProperty, const weld::json_prop_query&, bool);
 
 public:
-    StylesPreviewWindow_Base(
-        weld::Builder& xBuilder, std::vector<std::pair<OUString, OUString>>&& aDefaultStyles,
-        const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider);
+    StylesPreviewWindow_Base(weld::Builder& xBuilder,
+                             std::vector<std::pair<OUString, OUString>>&& aDefaultStyles,
+                             const css::uno::Reference<css::frame::XFrame>& xFrame);
     ~StylesPreviewWindow_Base();
 
     void Select(const OUString& rStyleName);
@@ -134,9 +135,9 @@ private:
 class StylesPreviewWindow_Impl final : public InterimItemWindow, public StylesPreviewWindow_Base
 {
 public:
-    StylesPreviewWindow_Impl(
-        vcl::Window* pParent, std::vector<std::pair<OUString, OUString>>&& aDefaultStyles,
-        const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider);
+    StylesPreviewWindow_Impl(vcl::Window* pParent,
+                             std::vector<std::pair<OUString, OUString>>&& aDefaultStyles,
+                             const css::uno::Reference<css::frame::XFrame>& xFrame);
     ~StylesPreviewWindow_Impl();
 
     void dispose();

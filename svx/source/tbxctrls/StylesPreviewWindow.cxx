@@ -208,7 +208,9 @@ bool StylesPreviewWindow_Base::Command(const CommandEvent& rEvent)
     {
         css::uno::Sequence<css::beans::PropertyValue> aArgs(0);
 
-        SfxToolBoxControl::Dispatch(m_xDispatchProvider,
+        const css::uno::Reference<css::frame::XDispatchProvider> xProvider(m_xFrame,
+                                                                           css::uno::UNO_QUERY);
+        SfxToolBoxControl::Dispatch(xProvider,
                                     rIdent == "update" ? OUString(".uno:StyleUpdateByExample")
                                                        : OUString(".uno:EditStyle"),
                                     aArgs);
@@ -442,8 +444,8 @@ void StyleItemController::DrawText(vcl::RenderContext& rRenderContext)
 
 StylesPreviewWindow_Base::StylesPreviewWindow_Base(
     weld::Builder& xBuilder, std::vector<std::pair<OUString, OUString>>&& aDefaultStyles,
-    const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider)
-    : m_xDispatchProvider(xDispatchProvider)
+    const css::uno::Reference<css::frame::XFrame>& xFrame)
+    : m_xFrame(xFrame)
     , m_xStylesView(xBuilder.weld_icon_view("stylesview"))
     , m_aUpdateTask(*this)
     , m_aDefaultStyles(std::move(aDefaultStyles))
@@ -456,7 +458,9 @@ StylesPreviewWindow_Base::StylesPreviewWindow_Base(
     m_xStylesView->connect_get_property_tree_elem(
         LINK(this, StylesPreviewWindow_Base, DoJsonProperty));
 
-    m_xStatusListener = new StyleStatusListener(this, xDispatchProvider);
+    const css::uno::Reference<css::frame::XDispatchProvider> xProvider(m_xFrame,
+                                                                       css::uno::UNO_QUERY);
+    m_xStatusListener = new StyleStatusListener(this, xProvider);
 
     m_pStylePoolChangeListener.reset(new StylePoolChangeListener(this));
 
@@ -471,7 +475,9 @@ IMPL_LINK(StylesPreviewWindow_Base, Selected, weld::IconView&, rIconView, void)
         comphelper::makePropertyValue("Template", sStyleName),
         comphelper::makePropertyValue("Family", sal_Int16(SfxStyleFamily::Para))
     };
-    SfxToolBoxControl::Dispatch(m_xDispatchProvider, ".uno:StyleApply", aArgs);
+    const css::uno::Reference<css::frame::XDispatchProvider> xProvider(m_xFrame,
+                                                                       css::uno::UNO_QUERY);
+    SfxToolBoxControl::Dispatch(xProvider, ".uno:StyleApply", aArgs);
 }
 
 IMPL_LINK(StylesPreviewWindow_Base, DoubleClick, weld::IconView&, rIconView, bool)
@@ -482,7 +488,9 @@ IMPL_LINK(StylesPreviewWindow_Base, DoubleClick, weld::IconView&, rIconView, boo
         comphelper::makePropertyValue("Param", sStyleName),
         comphelper::makePropertyValue("Family", sal_Int16(SfxStyleFamily::Para))
     };
-    SfxToolBoxControl::Dispatch(m_xDispatchProvider, ".uno:EditStyle", aArgs);
+    const css::uno::Reference<css::frame::XDispatchProvider> xProvider(m_xFrame,
+                                                                       css::uno::UNO_QUERY);
+    SfxToolBoxControl::Dispatch(xProvider, ".uno:EditStyle", aArgs);
 
     return true;
 }
@@ -651,10 +659,10 @@ void StylesPreviewWindow_Base::UpdateStylesList()
 
 StylesPreviewWindow_Impl::StylesPreviewWindow_Impl(
     vcl::Window* pParent, std::vector<std::pair<OUString, OUString>>&& aDefaultStyles,
-    const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider)
+    const css::uno::Reference<css::frame::XFrame>& xFrame)
     : InterimItemWindow(pParent, "svx/ui/stylespreview.ui", "ApplyStyleBox", true,
                         reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
-    , StylesPreviewWindow_Base(*m_xBuilder, std::move(aDefaultStyles), xDispatchProvider)
+    , StylesPreviewWindow_Base(*m_xBuilder, std::move(aDefaultStyles), xFrame)
 {
     SetOptimalSize();
 }

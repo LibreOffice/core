@@ -32,8 +32,6 @@ class StylesPreviewToolBoxControl final
     VclPtr<StylesPreviewWindow_Impl> m_xVclBox;
     std::unique_ptr<StylesPreviewWindow_Base> m_xWeldBox;
 
-    css::uno::Reference<css::frame::XDispatchProvider> m_xDispatchProvider;
-
     std::vector<std::pair<OUString, OUString>> m_aDefaultStyles;
 
 public:
