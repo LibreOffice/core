@@ -16,6 +16,8 @@
 #include <sax/fshelper.hxx>
 #include <nodeoffset.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+
 namespace rtl
 {
 template <typename> class Reference;
@@ -98,6 +100,9 @@ public:
     /// Writes the drawingML <a:ln> markup of a box item.
     void writeBoxItemLine(const SvxBoxItem& rBox);
 };
+
+void AddExtLst(sax_fastparser::FSHelperPtr const& pFS, DocxExport const& rExport,
+        css::uno::Reference<css::beans::XPropertySet> const& xShape);
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXSDREXPORT_HXX
 

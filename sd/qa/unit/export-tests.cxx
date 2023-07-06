@@ -199,6 +199,92 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTransparentBackground)
     checkFontAttributes<Color, SvxColorItem>(pObj2, COL_YELLOW, EE_CHAR_BKGCOLOR);
 }
 
+CPPUNIT_TEST_FIXTURE(SdExportTest, testDecorative)
+{
+    createSdImpressDoc("pptx/tdf141058-1.pptx");
+
+    auto doTest = [this](OString const test) {
+        ::std::set<OString> const decorative = {
+            "Picture 6",
+            "Rectangle 7",
+            "Group 24",
+            "Connector: Elbow 9",
+            "Connector: Elbow 11",
+            "Connector: Elbow 14",
+            "Connector: Elbow 17",
+            "Straight Arrow Connector 21",
+            "Straight Arrow Connector 22",
+            "Straight Arrow Connector 23",
+        };
+
+        uno::Reference<drawing::XDrawPage> const xPage(getPage(0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(test.getStr(), sal_Int32(5), xPage->getCount());
+        auto nDecorative(0);
+        auto nShapes(0);
+        auto nInnerDecorative(0);
+        auto nInnerShapes(0);
+        for (auto i = xPage->getCount(); i != 0; --i)
+        {
+            uno::Reference<beans::XPropertySet> xShape(getShape(i - 1, xPage));
+            uno::Reference<container::XNamed> xNamed(xShape, uno::UNO_QUERY);
+            OString const name(OUStringToOString(xNamed->getName(), RTL_TEXTENCODING_UTF8));
+            if (decorative.find(name) != decorative.end())
+            {
+                CPPUNIT_ASSERT_MESSAGE(OString(test + name).getStr(),
+                                       xShape->getPropertyValue("Decorative").get<bool>());
+                ++nDecorative;
+            }
+            else
+            {
+                CPPUNIT_ASSERT_MESSAGE(OString(test + name).getStr(),
+                                       !xShape->getPropertyValue("Decorative").get<bool>());
+                ++nShapes;
+            }
+            uno::Reference<drawing::XShapes> const xShapes(xShape, uno::UNO_QUERY);
+            if (xShapes.is())
+            {
+                for (auto j = xShapes->getCount(); j != 0; --j)
+                {
+                    uno::Reference<beans::XPropertySet> xInnerShape(xShapes->getByIndex(i - 1),
+                                                                    uno::UNO_QUERY);
+                    uno::Reference<container::XNamed> xInnerNamed(xInnerShape, uno::UNO_QUERY);
+                    OString const innerName(
+                        OUStringToOString(xInnerNamed->getName(), RTL_TEXTENCODING_UTF8));
+                    if (decorative.find(innerName) != decorative.end())
+                    {
+                        CPPUNIT_ASSERT_MESSAGE(
+                            OString(test + innerName).getStr(),
+                            xInnerShape->getPropertyValue("Decorative").get<bool>());
+                        ++nInnerDecorative;
+                    }
+                    else
+                    {
+                        CPPUNIT_ASSERT_MESSAGE(
+                            OString(test + innerName).getStr(),
+                            !xInnerShape->getPropertyValue("Decorative").get<bool>());
+                        ++nInnerShapes;
+                    }
+                }
+            }
+        }
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(test.getStr(), static_cast<decltype(nDecorative)>(3),
+                                     nDecorative);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(test.getStr(), static_cast<decltype(nShapes)>(2), nShapes);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(test.getStr(), static_cast<decltype(nInnerDecorative)>(7),
+                                     nInnerDecorative);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(test.getStr(), static_cast<decltype(nInnerShapes)>(16),
+                                     nInnerShapes);
+    };
+
+    doTest("initial pptx load: ");
+
+    saveAndReload("Impress Office Open XML");
+    doTest("reload OOXML: ");
+
+    saveAndReload("impress8");
+    doTest("reload ODF: ");
+}
+
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf142716)
 {
     createSdImpressDoc("pptx/tdf142716.pptx");
