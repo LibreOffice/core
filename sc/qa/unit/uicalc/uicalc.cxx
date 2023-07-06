@@ -1997,6 +1997,35 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testUnallocatedColumnsAttributes)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf155796)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    goToCell("A1:A3");
+    dispatchCommand(mxComponent, ".uno:ToggleMergeCells", {});
+    goToCell("A4:A6");
+    dispatchCommand(mxComponent, ".uno:ToggleMergeCells", {});
+
+    goToCell("A1:A6");
+
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_UP);
+    Scheduler::ProcessEventsToIdle();
+
+    ScRangeList aMarkedArea = ScDocShell::GetViewData()->GetMarkData().GetMarkedRanges();
+    OUString aMarkedAreaString;
+    ScRangeStringConverter::GetStringFromRangeList(aMarkedAreaString, &aMarkedArea, pDoc,
+                                                   formula::FormulaGrammar::CONV_OOO);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Sheet1.A1:Sheet1.A3
+    // - Actual  : Sheet1.A1:Sheet1.A5
+    CPPUNIT_ASSERT_EQUAL(OUString("Sheet1.A1:Sheet1.A3"), aMarkedAreaString);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
