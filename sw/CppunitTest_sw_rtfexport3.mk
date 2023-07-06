@@ -11,4 +11,8 @@
 
 $(eval $(call sw_rtfexport_test,3))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,sw_rtfexport3, \
+    svx \
+))
+
 # vim: set noet sw=4 ts=4:
