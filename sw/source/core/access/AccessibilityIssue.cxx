@@ -60,6 +60,7 @@ void AccessibilityIssue::gotoIssue() const
     {
         case IssueObject::GRAPHIC:
         case IssueObject::OLE:
+        case IssueObject::TEXTFRAME:
         {
             SwWrtShell* pWrtShell = m_pDoc->GetDocShell()->GetWrtShell();
             bool bSelected = pWrtShell->GotoFly(m_sObjectID, FLYCNTTYPE_ALL, true);
