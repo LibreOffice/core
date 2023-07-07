@@ -48,7 +48,6 @@ void XmpMetadata::write()
         if (mnPDF_A > 0)
         {
             OString sPdfVersion = OString::number(mnPDF_A);
-            OString sPdfConformance = (mnPDF_A == 1) ? "A" : "B";
 
             aXmlWriter.startElement("rdf:Description");
             aXmlWriter.attribute("rdf:about", OString(""));
@@ -59,7 +58,7 @@ void XmpMetadata::write()
             aXmlWriter.endElement();
 
             aXmlWriter.startElement("pdfaid:conformance");
-            aXmlWriter.content(sPdfConformance);
+            aXmlWriter.content("B");
             aXmlWriter.endElement();
 
             aXmlWriter.endElement();
@@ -108,7 +107,7 @@ void XmpMetadata::write()
         }
 
         // PDF/UA
-        if (mbPDF_UA)
+        if (mbPDF_UA && mnPDF_A == 0) // veraPDF says this is not allowed in PDF/A-[123][ab]
         {
             OString sPdfUaVersion = OString::number(1);
             aXmlWriter.startElement("rdf:Description");
