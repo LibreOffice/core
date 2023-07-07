@@ -90,7 +90,9 @@ SvxObjectTitleDescDialog::SvxObjectTitleDescDialog(weld::Window* pParent, const 
                                                    const OUString& rDescription,
                                                    bool const isDecorative)
     : GenericDialogController(pParent, "cui/ui/objecttitledescdialog.ui", "ObjectTitleDescDialog")
+    , m_xTitleFT(m_xBuilder->weld_label("object_title_label"))
     , m_xEdtTitle(m_xBuilder->weld_entry("object_title_entry"))
+    , m_xDescriptionFT(m_xBuilder->weld_label("desc_label"))
     , m_xEdtDescription(m_xBuilder->weld_text_view("desc_entry"))
     , m_xDecorativeCB(m_xBuilder->weld_check_button("decorative"))
 {
@@ -104,6 +106,17 @@ SvxObjectTitleDescDialog::SvxObjectTitleDescDialog(weld::Window* pParent, const 
     m_xEdtTitle->select_region(0, -1);
 
     m_xDecorativeCB->set_active(isDecorative);
+    m_xDecorativeCB->connect_toggled(LINK(this, SvxObjectTitleDescDialog, DecorativeHdl));
+    DecorativeHdl(*m_xDecorativeCB);
+}
+
+IMPL_LINK_NOARG(SvxObjectTitleDescDialog, DecorativeHdl, weld::Toggleable&, void)
+{
+    bool const bEnable(!m_xDecorativeCB->get_active());
+    m_xEdtTitle->set_sensitive(bEnable);
+    m_xTitleFT->set_sensitive(bEnable);
+    m_xEdtDescription->set_sensitive(bEnable);
+    m_xDescriptionFT->set_sensitive(bEnable);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

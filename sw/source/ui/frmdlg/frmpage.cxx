@@ -2860,6 +2860,7 @@ SwFrameAddPage::SwFrameAddPage(weld::Container* pPage, weld::DialogController* p
     , m_xNameED(m_xBuilder->weld_entry("name"))
     , m_xAltNameFT(m_xBuilder->weld_label("altname_label"))
     , m_xAltNameED(m_xBuilder->weld_entry("altname"))
+    , m_xDescriptionFT(m_xBuilder->weld_label("description_label"))
     , m_xDescriptionED(m_xBuilder->weld_text_view("description"))
     , m_xDecorativeCB(m_xBuilder->weld_check_button("decorative"))
     , m_xSequenceFrame(m_xBuilder->weld_widget("frmSequence"))
@@ -2884,6 +2885,8 @@ SwFrameAddPage::SwFrameAddPage(weld::Container* pPage, weld::DialogController* p
     m_xTextFlowLB->append(SvxFrameDirection::Vertical_LR_BT, SvxResId(RID_SVXSTR_PAGEDIR_LTR_BTT_VERT));
     m_xTextFlowLB->append(SvxFrameDirection::Environment, SvxResId(RID_SVXSTR_FRAMEDIR_SUPER));
     m_xDescriptionED->set_size_request(-1, m_xDescriptionED->get_preferred_size().Height());
+
+    m_xDecorativeCB->connect_toggled(LINK(this, SwFrameAddPage, DecorativeHdl));
 }
 
 SwFrameAddPage::~SwFrameAddPage()
@@ -3090,6 +3093,8 @@ void SwFrameAddPage::Reset(const SfxItemSet *rSet )
         m_xVertAlignLB->set_active(nPos);
     }
     m_xVertAlignLB->save_value();
+
+    DecorativeHdl(*m_xDecorativeCB);
 }
 
 bool SwFrameAddPage::FillItemSet(SfxItemSet *rSet)
@@ -3176,6 +3181,15 @@ IMPL_LINK_NOARG(SwFrameAddPage, EditModifyHdl, weld::Entry&, void)
     bool bEnable = !m_xNameED->get_text().isEmpty();
     m_xAltNameED->set_sensitive(bEnable);
     m_xAltNameFT->set_sensitive(bEnable);
+}
+
+IMPL_LINK_NOARG(SwFrameAddPage, DecorativeHdl, weld::Toggleable&, void)
+{
+    bool const bEnable(!m_xDecorativeCB->get_active());
+    m_xAltNameED->set_sensitive(bEnable);
+    m_xAltNameFT->set_sensitive(bEnable);
+    m_xDescriptionED->set_sensitive(bEnable);
+    m_xDescriptionFT->set_sensitive(bEnable);
 }
 
 void SwFrameAddPage::SetFormatUsed(bool bFormatUsed)
