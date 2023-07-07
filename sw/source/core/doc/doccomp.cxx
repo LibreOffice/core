@@ -241,7 +241,7 @@ private:
     static void CountDifference( const CompareData& rData, sal_uLong* pCounts );
     static void SetDiscard( const CompareData& rData,
                             char* pDiscard, const sal_uLong* pCounts );
-    static void CheckDiscard( sal_uLong nLen, char* pDiscard );
+    static void CheckDiscard( size_t nLen, char* pDiscard );
     static void ShiftBoundaries( CompareData& rData1, CompareData& rData2 );
 
 public:
@@ -642,17 +642,17 @@ void Compare::SetDiscard( const CompareData& rData,
     }
 }
 
-void Compare::CheckDiscard( sal_uLong nLen, char* pDiscard )
+void Compare::CheckDiscard( size_t nLen, char* pDiscard )
 {
-    for( sal_uLong n = 0; n < nLen; ++n )
+    for( size_t n = 0; n < nLen; ++n )
     {
         if( 2 == pDiscard[ n ] )
             pDiscard[n] = 0;
         else if( pDiscard[ n ] )
         {
-            sal_uLong j;
-            sal_uLong length;
-            sal_uLong provisional = 0;
+            size_t j;
+            size_t length;
+            size_t provisional = 0;
 
             /* Find end of this run of discardable lines.
                 Count how many are provisionally discardable.  */
@@ -685,9 +685,9 @@ void Compare::CheckDiscard( sal_uLong nLen, char* pDiscard )
             }
             else
             {
-                sal_uLong consec;
-                sal_uLong minimum = 1;
-                sal_uLong tem = length / 4;
+                size_t consec;
+                size_t minimum = 1;
+                size_t tem = length / 4;
 
                 /* MINIMUM is approximate square root of LENGTH/4.
                    A subrun of two or more provisionals can stand
