@@ -281,6 +281,7 @@ class SwFrameAddPage final : public SfxTabPage
     std::unique_ptr<weld::Entry> m_xNameED;
     std::unique_ptr<weld::Label> m_xAltNameFT;
     std::unique_ptr<weld::Entry> m_xAltNameED;
+    std::unique_ptr<weld::Label> m_xDescriptionFT;
     std::unique_ptr<weld::TextView> m_xDescriptionED;
     std::unique_ptr<weld::CheckButton> m_xDecorativeCB;
     std::unique_ptr<weld::Widget> m_xSequenceFrame;
@@ -302,6 +303,7 @@ class SwFrameAddPage final : public SfxTabPage
     std::unique_ptr<svx::FrameDirectionListBox> m_xTextFlowLB;
 
     DECL_LINK(EditModifyHdl, weld::Entry&, void);
+    DECL_LINK(DecorativeHdl, weld::Toggleable&, void);
     DECL_LINK(ChainModifyHdl, weld::ComboBox&, void);
 
     static const WhichRangesContainer s_aAddPgRg;

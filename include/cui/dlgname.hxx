@@ -105,12 +105,16 @@ class SvxObjectTitleDescDialog final : public weld::GenericDialogController
 {
 private:
     // title
+    std::unique_ptr<weld::Label> m_xTitleFT;
     std::unique_ptr<weld::Entry> m_xEdtTitle;
 
     // description
+    std::unique_ptr<weld::Label> m_xDescriptionFT;
     std::unique_ptr<weld::TextView> m_xEdtDescription;
 
     std::unique_ptr<weld::CheckButton> m_xDecorativeCB;
+
+    DECL_LINK(DecorativeHdl, weld::Toggleable&, void);
 
 public:
     // constructor
