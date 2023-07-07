@@ -404,8 +404,17 @@ bool SwNavigationPI::EditAction()
     if (pView->GetEditWin().HasFocus())
         return false;
 
-    SwWrtShell &rSh = m_pCreateView->GetWrtShell();
-    sal_uInt16 nNewPage = m_xEdit->get_value();
+    if (m_xEdit->get_text().isEmpty())
+        return false;
+    sal_Int64 nNewPage = m_xEdit->get_text().toInt32();
+    SwWrtShell& rSh = m_pCreateView->GetWrtShell();
+    sal_Int64 max = rSh.GetPageCnt();
+    if (nNewPage <= 0)
+        nNewPage = 1;
+    else if (nNewPage > max)
+        nNewPage = max;
+    m_xEdit->set_value(nNewPage);
+    m_xEdit->set_position(-1);
 
     rSh.GotoPage(nNewPage, true);
     m_pCreateView->GetViewFrame().GetBindings().Invalidate(FN_STAT_PAGE);
@@ -500,6 +509,25 @@ std::unique_ptr<PanelLayout> SwNavigationPI::Create(weld::Widget* pParent,
     return std::make_unique<SwNavigationPI>(pParent, rxFrame, pBindings, nullptr);
 }
 
+IMPL_LINK_NOARG(SwNavigationPI, PageModifiedHdl, weld::Entry&, void)
+{
+    SwView* pView = GetCreateView();
+    if (!pView)
+        return;
+    if (m_xEdit->get_text().isEmpty())
+        return;
+    sal_Int64 page_value = m_xEdit->get_text().toInt32();
+    SwWrtShell& rSh = m_pCreateView->GetWrtShell();
+    sal_Int64 max = rSh.GetPageCnt();
+    if (page_value <= 0)
+        m_xEdit->set_value(1);
+    else if (page_value > max)
+        m_xEdit->set_value(max);
+    else
+        m_xEdit->set_value(page_value);
+    m_xEdit->set_position(-1);
+}
+
 SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* _pBindings, SfxNavigator* pNavigatorDlg)
@@ -590,6 +618,7 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     m_xEdit->set_width_chars(3);
     m_xEdit->connect_activate(LINK(this, SwNavigationPI, EditActionHdl));
     m_xEdit->connect_value_changed(LINK(this, SwNavigationPI, PageEditModifyHdl));
+    m_xEdit->connect_changed(LINK(this, SwNavigationPI, PageModifiedHdl));
     m_xEdit->set_help_id("modules/swriter/ui/navigatorpanel/numericfield");
 
     if (!IsGlobalDoc())

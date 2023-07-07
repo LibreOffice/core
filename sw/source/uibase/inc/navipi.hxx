@@ -113,6 +113,7 @@ class SwNavigationPI final : public PanelLayout
     DECL_LINK( EditActionHdl, weld::Entry&, bool );
     DECL_LINK( SetFocusChildHdl, weld::Container&, void );
     DECL_LINK( NavigateByComboBoxSelectHdl, weld::ComboBox&, void );
+    DECL_LINK( PageModifiedHdl, weld::Entry&, void );
 
     bool EditAction();
     void UsePage();
