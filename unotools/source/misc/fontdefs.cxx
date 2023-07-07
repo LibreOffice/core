@@ -442,7 +442,6 @@ OUString GetEnglishSearchFontName(std::u16string_view rInName)
             {aHiraginoKakuGothicProN, "hiraginokakugothicpron"},
             {aHiraginoMaruGothicPro, "hiraginomarugothicpro"},
             {aHiraginoMaruGothicProN, "hiraginomarugothicpron"},
-            {aHiraginoMaruGothicProN, "hiraginomarugothicpron"},
             {aYuGothic, "yugothic"},
             {aYuGothicTai, "yugothictai"},
             {aYuMincho, "yumincho"},
