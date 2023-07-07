@@ -1863,6 +1863,8 @@ class EntryFormatter;
 // are managed by a more complex Formatter which can support doubles.
 class VCL_DLLPUBLIC FormattedSpinButton : virtual public Entry
 {
+    friend class ::LOKTrigger;
+
     Link<FormattedSpinButton&, void> m_aValueChangedHdl;
 
 protected:
