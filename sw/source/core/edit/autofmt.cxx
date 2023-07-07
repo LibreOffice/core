@@ -282,6 +282,8 @@ void SwAutoFormat::SetRedlineText_( sal_uInt16 nActionId )
         case STR_AUTOFMTREDL_ORDINAL:
         case STR_AUTOFMTREDL_NON_BREAK_SPACE:
         case STR_AUTOFMTREDL_TRANSLITERATE_RTL:
+        case STR_AUTOFMTREDL_ITALIC:
+        case STR_AUTOFMTREDL_STRIKETHROUGH:
             nSeqNo = ++m_nRedlAutoFormatSeqId;
             break;
         }
@@ -2109,6 +2111,44 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
                     SetRedlineText( STR_AUTOFMTREDL_NON_BREAK_SPACE );
                     if (pATst->FnAddNonBrkSpace(aACorrDoc, *pText, sal_Int32(nPos), eLang, bNbspRunNext))
                         --nPos;
+                    break;
+                }
+                [[fallthrough]];
+            case '-':
+                if (m_aFlags.bChgWeightUnderl)
+                {
+                    // consider Symbolfonts!
+                    if (!aFInfo.GetFrame())
+                        aFInfo.SetFrame(GetFrame(*m_pCurTextNd));
+                    if (!aFInfo.IsBullet(nPos))
+                    {
+                        SetRedlineText('/' == cChar ? STR_AUTOFMTREDL_ITALIC : STR_AUTOFMTREDL_STRIKETHROUGH);
+
+                        sal_Unicode cBlank = nSttPos ? (*pText)[sal_Int32(nSttPos) - 1] : 0;
+                        *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(nPos);
+
+                        if (pATst->FnChgWeightUnderl(aACorrDoc, *pText, sal_Int32(nPos)))
+                        {
+                            if (m_aFlags.bWithRedlining)
+                            {
+                                m_aNdIdx = m_aDelPam.GetPoint()->GetNode();
+                                m_pCurTextNd = m_aNdIdx.GetNode().GetTextNode();
+                                m_pCurTextFrame = GetFrame(*m_pCurTextNd);
+                                pText = &m_pCurTextFrame->GetText();
+                                m_aDelPam.SetMark();
+                                m_aDelPam.DeleteMark();
+                                aFInfo.SetFrame(nullptr);
+                            }
+                            //#125102# in case of the mode RedlineFlags::ShowDelete the ** are still contained in pText
+                            if (!(m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags()
+                                  & RedlineFlags::ShowDelete))
+                                nPos = m_pCurTextFrame->MapModelToViewPos(*m_aDelPam.GetPoint())
+                                       - TextFrameIndex(1);
+                            // Was a character deleted before starting?
+                            if (cBlank && cBlank != (*pText)[sal_Int32(nSttPos) - 1])
+                                --nSttPos;
+                        }
+                    }
                 }
                 break;
 

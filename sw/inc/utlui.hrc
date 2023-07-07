@@ -50,7 +50,9 @@ const TranslateId RID_SHELLRES_AUTOFMTSTRS[] =
     NC_("RID_SHELLRES_AUTOFMTSTRS", "Combine paragraphs"),
     NC_("RID_SHELLRES_AUTOFMTSTRS", "Add non breaking space"),
     NC_("RID_SHELLRES_AUTOFMTSTRS", "Transliterates RTL Hungarian text to Old Hungarian script"),
-    NC_("RID_SHELLRES_AUTOFMTSTRS", "DOI citation recognition")
+    NC_("RID_SHELLRES_AUTOFMTSTRS", "DOI citation recognition"),
+    NC_("RID_SHELLRES_AUTOFMTSTRS", "Automatic /italic/"),
+    NC_("RID_SHELLRES_AUTOFMTSTRS", "Automatic -strikethrough-"),
 };
 
 #endif
