@@ -142,7 +142,6 @@ class SvxStyleBox_Base
 {
 public:
     SvxStyleBox_Base(std::unique_ptr<weld::ComboBox> xWidget, OUString  rCommand, SfxStyleFamily eFamily,
-                     const Reference<XDispatchProvider>& rDispatchProvider,
                      const Reference<XFrame>& _xFrame, OUString aClearFormatKey,
                      OUString aMoreKey, bool bInSpecialMode, SvxStyleToolBoxControl& rCtrl);
 
@@ -237,7 +236,6 @@ protected:
     int                             m_nMaxUserDrawFontWidth;
     int                             m_nLastItemWithMenu;
     bool                            bRelease;
-    Reference< XDispatchProvider >  m_xDispatchProvider;
     Reference< XFrame >             m_xFrame;
     OUString                        m_aCommand;
     OUString                        aClearFormatKey;
@@ -257,7 +255,7 @@ class SvxStyleBox_Impl final : public InterimItemWindow
                              , public SvxStyleBox_Base
 {
 public:
-    SvxStyleBox_Impl(vcl::Window* pParent, const OUString& rCommand, SfxStyleFamily eFamily, const Reference< XDispatchProvider >& rDispatchProvider,
+    SvxStyleBox_Impl(vcl::Window* pParent, const OUString& rCommand, SfxStyleFamily eFamily,
                      const Reference< XFrame >& _xFrame,const OUString& rClearFormatKey, const OUString& rMoreKey, bool bInSpecialMode, SvxStyleToolBoxControl& rCtrl);
 
     virtual ~SvxStyleBox_Impl() override
@@ -864,7 +862,6 @@ class SfxStyleControllerItem_Impl : public SfxStatusListener
 SvxStyleBox_Base::SvxStyleBox_Base(std::unique_ptr<weld::ComboBox> xWidget,
                                    OUString aCommand,
                                    SfxStyleFamily eFamily,
-                                   const Reference< XDispatchProvider >& rDispatchProvider,
                                    const Reference< XFrame >& _xFrame,
                                    OUString _aClearFormatKey,
                                    OUString _aMoreKey,
@@ -877,7 +874,6 @@ SvxStyleBox_Base::SvxStyleBox_Base(std::unique_ptr<weld::ComboBox> xWidget,
     , m_nMaxUserDrawFontWidth(0)
     , m_nLastItemWithMenu(-1)
     , bRelease( true )
-    , m_xDispatchProvider( rDispatchProvider )
     , m_xFrame(_xFrame)
     , m_aCommand(std::move( aCommand ))
     , aClearFormatKey(std::move( _aClearFormatKey ))
@@ -909,14 +905,13 @@ IMPL_LINK(SvxStyleBox_Base, CustomGetSizeHdl, OutputDevice&, rArg, Size)
 SvxStyleBox_Impl::SvxStyleBox_Impl(vcl::Window* pParent,
                                    const OUString& rCommand,
                                    SfxStyleFamily eFamily,
-                                   const Reference< XDispatchProvider >& rDispatchProvider,
                                    const Reference< XFrame >& _xFrame,
                                    const OUString& rClearFormatKey,
                                    const OUString& rMoreKey,
                                    bool bInSpec, SvxStyleToolBoxControl& rCtrl)
     : InterimItemWindow(pParent, "svx/ui/applystylebox.ui", "ApplyStyleBox")
-    , SvxStyleBox_Base(m_xBuilder->weld_combo_box("applystyle"), rCommand, eFamily,
-                       rDispatchProvider, _xFrame, rClearFormatKey, rMoreKey, bInSpec, rCtrl)
+    , SvxStyleBox_Base(m_xBuilder->weld_combo_box("applystyle"), rCommand, eFamily, _xFrame,
+                       rClearFormatKey, rMoreKey, bInSpec, rCtrl)
 {
     InitControlBase(m_xWidget.get());
 
@@ -947,15 +942,14 @@ IMPL_LINK(SvxStyleBox_Base, MenuSelectHdl, const OUString&, rMenuIdent, void)
                                    comphelper::makePropertyValue("Family",
                                                                  sal_Int16( eStyleFamily )) };
 
+    const Reference<XDispatchProvider> xProvider(m_xFrame, UNO_QUERY);
     if (rMenuIdent == "update")
     {
-        SfxToolBoxControl::Dispatch( m_xDispatchProvider,
-            ".uno:StyleUpdateByExample", aArgs );
+        SfxToolBoxControl::Dispatch(xProvider, ".uno:StyleUpdateByExample", aArgs);
     }
     else if (rMenuIdent == "edit")
     {
-        SfxToolBoxControl::Dispatch( m_xDispatchProvider,
-            ".uno:EditStyle", aArgs );
+        SfxToolBoxControl::Dispatch(xProvider, ".uno:EditStyle", aArgs);
     }
 }
 
@@ -995,8 +989,8 @@ void SvxStyleBox_Base::Select(bool bNonTravelSelect)
             bClear = true;
             //not only apply default style but also call 'ClearFormatting'
             Sequence< PropertyValue > aEmptyVals;
-            SfxToolBoxControl::Dispatch( m_xDispatchProvider, ".uno:ResetAttributes",
-                aEmptyVals);
+            const Reference<XDispatchProvider> xProvider(m_xFrame, UNO_QUERY);
+            SfxToolBoxControl::Dispatch(xProvider, ".uno:ResetAttributes", aEmptyVals);
         }
         else if (aSearchEntry == aMoreKey && m_xWidget->get_active() == (m_xWidget->get_count() - 1))
         {
@@ -1048,15 +1042,17 @@ void SvxStyleBox_Base::Select(bool bNonTravelSelect)
     pArgs[0].Value  <<= aSearchEntry;
     pArgs[1].Name   = "Family";
     pArgs[1].Value  <<= sal_Int16( eStyleFamily );
+
+    const Reference<XDispatchProvider> xProvider(m_xFrame, UNO_QUERY);
     if( bCreateNew )
     {
         pArgs[0].Name   = "Param";
-        SfxToolBoxControl::Dispatch( m_xDispatchProvider, ".uno:StyleNewByExample", aArgs);
+        SfxToolBoxControl::Dispatch(xProvider, ".uno:StyleNewByExample", aArgs);
     }
     else
     {
         pArgs[0].Name   = "Template";
-        SfxToolBoxControl::Dispatch( m_xDispatchProvider, m_aCommand, aArgs );
+        SfxToolBoxControl::Dispatch(xProvider, m_aCommand, aArgs);
     }
 }
 
@@ -3348,7 +3344,6 @@ css::uno::Reference<css::awt::XWindow> SvxStyleToolBoxControl::createItemWindow(
         pImpl->m_xWeldBox.reset(new SvxStyleBox_Base(std::move(xWidget),
                                                      ".uno:StyleApply",
                                                      SfxStyleFamily::Para,
-                                                     Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ),
                                                      m_xFrame,
                                                      pImpl->aClearForm,
                                                      pImpl->aMore,
@@ -3365,7 +3360,6 @@ css::uno::Reference<css::awt::XWindow> SvxStyleToolBoxControl::createItemWindow(
             pImpl->m_xVclBox = VclPtr<SvxStyleBox_Impl>::Create(pParent,
                                                                 ".uno:StyleApply",
                                                                 SfxStyleFamily::Para,
-                                                                Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ),
                                                                 m_xFrame,
                                                                 pImpl->aClearForm,
                                                                 pImpl->aMore,
