@@ -207,7 +207,7 @@ void AtkListener::handleChildAdded(
 void AtkListener::handleChildRemoved(
     const uno::Reference< accessibility::XAccessibleContext >& rxParent,
     const uno::Reference< accessibility::XAccessible>& rxChild,
-    int nChildIndexHint)
+    sal_Int32 nChildIndexHint)
 {
     sal_Int32 nIndex = nChildIndexHint;
     if (nIndex != -1 && (nIndex < 0 || nIndex >= static_cast<sal_Int32>(m_aChildList.size())))
