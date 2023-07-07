@@ -2198,4 +2198,47 @@ public:
     }
 };
 
+class SalInstanceFormattedSpinButton : public SalInstanceEntry,
+                                       public virtual weld::FormattedSpinButton
+{
+private:
+    VclPtr<FormattedField> m_xButton;
+    weld::EntryFormatter* m_pFormatter;
+    Link<weld::Widget&, void> m_aLoseFocusHdl;
+
+    DECL_LINK(UpDownHdl, SpinField&, void);
+    DECL_LINK(LoseFocusHdl, Control&, void);
+
+public:
+    SalInstanceFormattedSpinButton(FormattedField* pButton, SalInstanceBuilder* pBuilder,
+                                   bool bTakeOwnership);
+
+    virtual void set_text(const OUString& rText) override;
+
+    virtual void connect_changed(const Link<weld::Entry&, void>& rLink) override;
+
+    virtual void connect_focus_out(const Link<weld::Widget&, void>& rLink) override;
+
+    virtual void SetFormatter(weld::EntryFormatter* pFormatter) override;
+
+    virtual void sync_value_from_formatter() override
+    {
+        // no-op for gen
+    }
+
+    virtual void sync_range_from_formatter() override
+    {
+        // no-op for gen
+    }
+
+    virtual void sync_increments_from_formatter() override
+    {
+        // no-op for gen
+    }
+
+    virtual Formatter& GetFormatter() override;
+
+    virtual ~SalInstanceFormattedSpinButton() override;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
