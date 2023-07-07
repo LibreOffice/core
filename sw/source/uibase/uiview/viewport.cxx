@@ -668,6 +668,8 @@ bool SwView::PageDownCursor(bool bSelect)
     return false;
 }
 
+static void HideQuickHelp(vcl::Window* pParent) { Help::ShowQuickHelp(pParent, {}, {}); }
+
 // Handler of the scrollbars
 IMPL_LINK(SwView, VertScrollHdl, weld::Scrollbar&, rScrollbar, void)
 {
@@ -677,6 +679,8 @@ IMPL_LINK(SwView, VertScrollHdl, weld::Scrollbar&, rScrollbar, void)
     if (rScrollbar.get_scroll_type() == ScrollType::Drag)
         m_pWrtShell->EnableSmooth( false );
 
+    bool bHidePending = nPgNum != 0;
+    nPgNum = 0; // avoid flicker from hiding then showing help window again
     EndScrollHdl(rScrollbar, false);
 
     if (!m_pWrtShell->GetViewOptions()->getBrowseMode() &&
@@ -698,35 +702,36 @@ IMPL_LINK(SwView, VertScrollHdl, weld::Scrollbar&, rScrollbar, void)
                 //QuickHelp:
                 if( m_pWrtShell->GetPageCnt() > 1 )
                 {
-                    if( !nPgNum || nPgNum != nPhNum )
+                    tools::Rectangle aRect;
+                    aRect.SetLeft( m_pVScrollbar->GetParent()->OutputToScreenPixel(
+                                        m_pVScrollbar->GetPosPixel() ).X() -8 );
+                    aRect.SetTop( m_pVScrollbar->OutputToScreenPixel(
+                                    m_pVScrollbar->GetPointerPosPixel() ).Y() );
+                    aRect.SetRight( aRect.Left() );
+                    aRect.SetBottom( aRect.Top() );
+
+                    OUString sPageStr( GetPageStr( nPhNum, nVirtNum, sDisplay ));
+                    SwContentAtPos aCnt(IsAttrAtPos::Outline | IsAttrAtPos::AllowContaining);
+                    bool bSuccess = m_pWrtShell->GetContentAtPos(aPos, aCnt);
+                    if (bSuccess && !aCnt.sStr.isEmpty())
                     {
-                        tools::Rectangle aRect;
-                        aRect.SetLeft( m_pVScrollbar->GetParent()->OutputToScreenPixel(
-                                            m_pVScrollbar->GetPosPixel() ).X() -8 );
-                        aRect.SetTop( m_pVScrollbar->OutputToScreenPixel(
-                                        m_pVScrollbar->GetPointerPosPixel() ).Y() );
-                        aRect.SetRight( aRect.Left() );
-                        aRect.SetBottom( aRect.Top() );
-
-                        OUString sPageStr( GetPageStr( nPhNum, nVirtNum, sDisplay ));
-                        SwContentAtPos aCnt(IsAttrAtPos::Outline | IsAttrAtPos::AllowContaining);
-                        bool bSuccess = m_pWrtShell->GetContentAtPos(aPos, aCnt);
-                        if (bSuccess && !aCnt.sStr.isEmpty())
-                        {
-                            sal_Int32 nChunkLen = std::min<sal_Int32>(aCnt.sStr.getLength(), 80);
-                            std::u16string_view sChunk = aCnt.sStr.subView(0, nChunkLen);
-                            sPageStr = sPageStr + "  - " + sChunk;
-                            sPageStr = sPageStr.replace('\t', ' ').replace(0x0a, ' ');
-                        }
-
-                        Help::ShowQuickHelp(m_pVScrollbar, aRect, sPageStr,
-                                        QuickHelpFlags::Right|QuickHelpFlags::VCenter);
+                        sal_Int32 nChunkLen = std::min<sal_Int32>(aCnt.sStr.getLength(), 80);
+                        std::u16string_view sChunk = aCnt.sStr.subView(0, nChunkLen);
+                        sPageStr = sPageStr + "  - " + sChunk;
+                        sPageStr = sPageStr.replace('\t', ' ').replace(0x0a, ' ');
                     }
+
+                    Help::ShowQuickHelp(m_pVScrollbar, aRect, sPageStr,
+                                    QuickHelpFlags::Right|QuickHelpFlags::VCenter);
+                    bHidePending = false;
                     nPgNum = nPhNum;
                 }
             }
         }
     }
+
+    if (bHidePending)
+        HideQuickHelp(m_pVScrollbar);
 
     if (rScrollbar.get_scroll_type() == ScrollType::Drag)
         m_pWrtShell->EnableSmooth( true );
@@ -741,7 +746,7 @@ void SwView::EndScrollHdl(weld::Scrollbar& rScrollbar, bool bHorizontal)
     if(nPgNum)
     {
         nPgNum = 0;
-        Help::ShowQuickHelp(bHorizontal ? m_pHScrollbar : m_pVScrollbar, tools::Rectangle(), OUString());
+        HideQuickHelp(bHorizontal ? m_pHScrollbar : m_pVScrollbar);
     }
     Point aPos( m_aVisArea.TopLeft() );
     bool bBorder = IsDocumentBorder();
