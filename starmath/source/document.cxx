@@ -373,7 +373,7 @@ Size SmDocShell::GetSize()
         ArrangeFormula();
         aRet = mpTree->GetSize();
 
-        if ( !aRet.Width() )
+        if ( !aRet.Width() || aRet.Width() == 1 )
             aRet.setWidth( 2000 );
         else
             aRet.AdjustWidth(maFormat.GetDistance( DIS_LEFTSPACE ) +
