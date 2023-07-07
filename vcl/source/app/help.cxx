@@ -363,6 +363,8 @@ void HelpTextWindow::SetHelpText( const OUString& rHelpText )
 
     Size aSize( CalcOutSize() );
     SetOutputSizePixel( aSize );
+    if (IsVisible())
+        PaintImmediately();
 }
 
 void HelpTextWindow::ImplShow()
