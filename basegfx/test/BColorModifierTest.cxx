@@ -293,21 +293,16 @@ public:
         const basegfx::BColorModifierSharedPtr aBColorModifier
             = std::make_shared<basegfx::BColorModifier_matrix>(aMatrix);
 
-        BColor aExpectedWhite(0.0, 3.0, 0.0);
-        CPPUNIT_ASSERT_EQUAL(aExpectedWhite, aBColorModifier->getModifiedColor(maWhite));
-        BColor aExpectedGray(0.0, 1.5, 0.0);
-        CPPUNIT_ASSERT_EQUAL(aExpectedGray, aBColorModifier->getModifiedColor(maGray));
-        CPPUNIT_ASSERT_EQUAL(maBlack, aBColorModifier->getModifiedColor(maBlack));
+        CPPUNIT_ASSERT_EQUAL(maGreen, aBColorModifier->getModifiedColor(maWhite));
+        CPPUNIT_ASSERT_EQUAL(maGreen, aBColorModifier->getModifiedColor(maGray));
+        CPPUNIT_ASSERT_EQUAL(maGreen, aBColorModifier->getModifiedColor(maBlack));
 
         CPPUNIT_ASSERT_EQUAL(maGreen, aBColorModifier->getModifiedColor(maRed));
         CPPUNIT_ASSERT_EQUAL(maGreen, aBColorModifier->getModifiedColor(maGreen));
         CPPUNIT_ASSERT_EQUAL(maGreen, aBColorModifier->getModifiedColor(maBlue));
-        BColor aExpectedYellow(0.0, 2.0, 0.0);
-        CPPUNIT_ASSERT_EQUAL(aExpectedYellow, aBColorModifier->getModifiedColor(maYellow));
-        BColor aExpectedMagenta = aExpectedYellow;
-        CPPUNIT_ASSERT_EQUAL(aExpectedMagenta, aBColorModifier->getModifiedColor(maMagenta));
-        BColor aExpectedCyan = aExpectedYellow;
-        CPPUNIT_ASSERT_EQUAL(aExpectedCyan, aBColorModifier->getModifiedColor(maCyan));
+        CPPUNIT_ASSERT_EQUAL(maGreen, aBColorModifier->getModifiedColor(maYellow));
+        CPPUNIT_ASSERT_EQUAL(maGreen, aBColorModifier->getModifiedColor(maMagenta));
+        CPPUNIT_ASSERT_EQUAL(maGreen, aBColorModifier->getModifiedColor(maCyan));
 
         CPPUNIT_ASSERT(aBColorModifier->operator==(*aBColorModifier));
         const basegfx::BColorModifierSharedPtr aBColorModifierInvert
