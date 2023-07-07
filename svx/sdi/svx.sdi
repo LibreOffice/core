@@ -11953,7 +11953,7 @@ XLineEndItem LineEnd SID_ATTR_LINE_END
 
 
 
-SfxUInt32Item TransformPosX SID_ATTR_TRANSFORM_POS_X
+SfxInt32Item TransformPosX SID_ATTR_TRANSFORM_POS_X
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -11972,7 +11972,7 @@ SfxUInt32Item TransformPosX SID_ATTR_TRANSFORM_POS_X
 
 
 
-SfxUInt32Item TransformPosY SID_ATTR_TRANSFORM_POS_Y
+SfxInt32Item TransformPosY SID_ATTR_TRANSFORM_POS_Y
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -12048,7 +12048,7 @@ SdrAngleItem TransformRotationAngle SID_ATTR_TRANSFORM_ANGLE
 
 
 
-SfxUInt32Item TransformRotationX SID_ATTR_TRANSFORM_ROT_X
+SfxInt32Item TransformRotationX SID_ATTR_TRANSFORM_ROT_X
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -12067,7 +12067,7 @@ SfxUInt32Item TransformRotationX SID_ATTR_TRANSFORM_ROT_X
 
 
 
-SfxUInt32Item TransformRotationY SID_ATTR_TRANSFORM_ROT_Y
+SfxInt32Item TransformRotationY SID_ATTR_TRANSFORM_ROT_Y
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
