@@ -529,10 +529,6 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
     if (rHelpText.isEmpty())
         return;
 
-    sal_uInt64 nCurTime = tools::Time::GetSystemTicks();
-    if ( ( nCurTime - aHelpData.mnLastHelpHideTime ) < o3tl::make_unsigned(HelpSettings::GetTipDelay()) )
-        bNoDelay = true;
-
     VclPtr<HelpTextWindow> pHelpWin = VclPtr<HelpTextWindow>::Create( pParent, rHelpText, nHelpWinStyle, nStyle );
     aHelpData.mpHelpWin = pHelpWin;
     pHelpWin->SetHelpArea( rHelpArea );
@@ -542,8 +538,19 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
     pHelpWin->SetOutputSizePixel( aSz );
     ImplSetHelpWindowPos( pHelpWin, nHelpWinStyle, nStyle, rScreenPos, rHelpArea );
     // if not called from Window::RequestHelp, then without delay...
-    if ( !aHelpData.mbRequestingHelp )
-        bNoDelay = true;
+    if (!bNoDelay)
+    {
+        if ( !aHelpData.mbRequestingHelp )
+        {
+            bNoDelay = true;
+        }
+        else
+        {
+            sal_uInt64 nCurTime = tools::Time::GetSystemTicks();
+            if ( ( nCurTime - aHelpData.mnLastHelpHideTime ) < o3tl::make_unsigned(HelpSettings::GetTipDelay()) )
+                bNoDelay = true;
+        }
+    }
     pHelpWin->ShowHelp(bNoDelay);
 }
 
