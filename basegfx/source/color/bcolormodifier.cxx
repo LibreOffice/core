@@ -164,9 +164,14 @@ namespace basegfx
         aColorMatrix.set(0, 0, aSourceColor.getRed());
         aColorMatrix.set(1, 0, aSourceColor.getGreen());
         aColorMatrix.set(2, 0, aSourceColor.getBlue());
+        aColorMatrix.set(3, 0, 1.0);
+        // TODO: add support for alpha
 
         aColorMatrix = maMatrix * aColorMatrix;
-        return ::basegfx::BColor(aColorMatrix.get(0, 0), aColorMatrix.get(1, 0), aColorMatrix.get(2, 0));
+        return ::basegfx::BColor(
+                std::clamp(aColorMatrix.get(0, 0), 0.0, 1.0),
+                std::clamp(aColorMatrix.get(1, 0), 0.0, 1.0),
+                std::clamp(aColorMatrix.get(2, 0), 0.0, 1.0));
     }
 
     OUString BColorModifier_matrix::getModifierName() const
