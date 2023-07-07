@@ -58,8 +58,6 @@ private:
     bool            mbModalMode;
     InitFlag        mnInitFlag; // used for deferred init
 
-    const int nCloseResponseToJustHide = -42;
-
     VclPtr<VclButtonBox> mpActionArea;
     VclPtr<VclBox>       mpContentArea;
 
