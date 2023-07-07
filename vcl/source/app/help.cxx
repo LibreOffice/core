@@ -446,12 +446,7 @@ IMPL_LINK( HelpTextWindow, TimerHdl, Timer*, pTimer, void)
 {
     if ( pTimer == &maShowTimer )
     {
-        if ( mnHelpWinStyle == HELPWINSTYLE_QUICK )
-        {
-            // start auto-hide-timer for non-ShowTip windows
-            if ( this == ImplGetSVHelpData().mpHelpWin )
-                maHideTimer.Start();
-        }
+        ResetHideTimer();
         ImplShow();
     }
     else
@@ -478,6 +473,16 @@ void HelpTextWindow::RequestHelp( const HelpEvent& /*rHEvt*/ )
 OUString HelpTextWindow::GetText() const
 {
     return maHelpText;
+}
+
+void HelpTextWindow::ResetHideTimer()
+{
+    if (mnHelpWinStyle == HELPWINSTYLE_QUICK)
+    {
+        // start auto-hide-timer for non-ShowTip windows
+        if (this == ImplGetSVHelpData().mpHelpWin)
+            maHideTimer.Start();
+    }
 }
 
 void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle,
@@ -515,6 +520,7 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
                 if( pHelpWin->IsVisible() )
                     pHelpWin->Invalidate();
             }
+            pHelpWin->ResetHideTimer(); // It is shown anew, so prolongate the hide timeout
             return;
         }
 

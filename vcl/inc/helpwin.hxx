@@ -69,6 +69,8 @@ public:
 
     Size                CalcOutSize() const;
     const tools::Rectangle&    GetHelpArea() const { return maHelpArea; }
+
+    void ResetHideTimer();
 };
 
 void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle,
