@@ -192,7 +192,7 @@ namespace svgio::svgreader
             DominantBaseline
         };
 
-        SVGToken StrToSVGToken(const OUString& rStr, bool bCaseIndependent);
+        SVGToken StrToSVGToken(std::u16string_view rStr, bool bIgnoreCase);
         OUString SVGTokenToStr(const SVGToken& rToken);
 
 } // end of namespace svgio::svgreader

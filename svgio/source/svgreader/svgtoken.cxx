@@ -21,11 +21,12 @@
 #include <frozen/bits/defines.h>
 #include <frozen/bits/elsa_std.h>
 #include <frozen/unordered_map.h>
+#include <o3tl/string_view.hxx>
 
 namespace svgio::svgreader
 {
 
-constexpr auto aSVGTokenMapperList = frozen::make_unordered_map<std::u16string_view, SVGToken>(
+constexpr auto aSVGTokenMap = frozen::make_unordered_map<std::u16string_view, SVGToken>(
 {
     { u"width", SVGToken::Width },
     { u"height", SVGToken::Height },
@@ -181,203 +182,30 @@ constexpr auto aSVGTokenMapperList = frozen::make_unordered_map<std::u16string_v
     { u"dominant-baseline", SVGToken::DominantBaseline }
 });
 
-// The same elements as the map above but lowercase. CSS is case insensitive
-// TODO: create separate maps for css and xml elements
-constexpr auto  aSVGLowerCaseTokenMapperList = frozen::make_unordered_map<std::u16string_view, SVGToken>(
+SVGToken StrToSVGToken(std::u16string_view rStr, bool bIgnoreCase)
 {
-    { u"width", SVGToken::Width },
-    { u"height", SVGToken::Height },
-    { u"viewbox", SVGToken::ViewBox },
-    { u"transform", SVGToken::Transform },
-    { u"style", SVGToken::Style },
-    { u"display", SVGToken::Display }, // #i121656#
-    { u"d", SVGToken::D },
-    { u"x", SVGToken::X },
-    { u"y", SVGToken::Y },
-    { u"xmlns", SVGToken::Xmlns },
-    { u"version", SVGToken::Version },
-    { u"id", SVGToken::Id },
-    { u"in", SVGToken::In },
-    { u"rx", SVGToken::Rx },
-    { u"ry", SVGToken::Ry },
-    { u"points", SVGToken::Points },
-    { u"dx", SVGToken::Dx },
-    { u"dy", SVGToken::Dy },
-    { u"rotate", SVGToken::Rotate },
-    { u"textlength", SVGToken::TextLength },
-    { u"lengthadjust", SVGToken::LengthAdjust },
-    { u"font", SVGToken::Font },
-    { u"font-family", SVGToken::FontFamily },
-    { u"font-size", SVGToken::FontSize },
-    { u"font-size-adjust", SVGToken::FontSizeAdjust },
-    { u"font-stretch", SVGToken::FontStretch },
-    { u"font-style", SVGToken::FontStyle },
-    { u"font-variant", SVGToken::FontVariant },
-    { u"font-weight", SVGToken::FontWeight },
-    { u"direction", SVGToken::Direction },
-    { u"letter-spacing", SVGToken::LetterSpacing },
-    { u"text-decoration", SVGToken::TextDecoration },
-    { u"unicode-bidi", SVGToken::UnicodeBidi },
-    { u"word-spacing", SVGToken::WordSpacing },
-    { u"tspan", SVGToken::Tspan },
-    { u"tref", SVGToken::Tref },
-    { u"textpath", SVGToken::TextPath },
-    { u"startoffset", SVGToken::StartOffset },
-    { u"method", SVGToken::Method },
-    { u"spacing", SVGToken::Spacing },
-    { u"stddeviation", SVGToken::StdDeviation },
-    { u"text-align", SVGToken::TextAlign },
-    { u"pathlength", SVGToken::PathLength },
-    { u"type", SVGToken::Type },
-    { u"class", SVGToken::Class },
-    { u"text-anchor", SVGToken::TextAnchor },
-    { u"xml:space", SVGToken::XmlSpace },
-    { u"color", SVGToken::Color },
-    { u"clippath", SVGToken::ClipPathNode },
-    { u"clip-path", SVGToken::ClipPathProperty },
-    { u"fecolormatrix", SVGToken::FeColorMatrix },
-    { u"fedropshadow", SVGToken::FeDropShadow },
-    { u"feflood", SVGToken::FeFlood },
-    { u"feimage", SVGToken::FeImage },
-    { u"fegaussianblur", SVGToken::FeGaussianBlur },
-    { u"feoffset", SVGToken::FeOffset },
-    { u"filter", SVGToken::Filter },
-    { u"flood-color", SVGToken::FloodColor },
-    { u"flood-opacity", SVGToken::FloodOpacity },
-    { u"mask", SVGToken::Mask },
-    { u"clippathunits", SVGToken::ClipPathUnits },
-    { u"maskunits", SVGToken::MaskUnits },
-    { u"maskcontentunits", SVGToken::MaskContentUnits },
-    { u"clip-rule", SVGToken::ClipRule },
-    { u"marker", SVGToken::Marker },
-    { u"marker-start", SVGToken::MarkerStart },
-    { u"marker-mid", SVGToken::MarkerMid },
-    { u"marker-end", SVGToken::MarkerEnd },
-    { u"refx", SVGToken::RefX },
-    { u"refy", SVGToken::RefY },
-    { u"markerunits", SVGToken::MarkerUnits },
-    { u"markerwidth", SVGToken::MarkerWidth },
-    { u"markerheight", SVGToken::MarkerHeight },
-    { u"orient", SVGToken::Orient },
-    { u"pattern", SVGToken::Pattern },
-    { u"patternunits", SVGToken::PatternUnits },
-    { u"patterncontentunits", SVGToken::PatternContentUnits },
-    { u"patterntransform", SVGToken::PatternTransform },
-    { u"opacity", SVGToken::Opacity },
-    { u"visibility", SVGToken::Visibility },
-    { u"title", SVGToken::Title },
-    { u"desc", SVGToken::Desc },
-    { u"preserveaspectratio", SVGToken::PreserveAspectRatio },
-    { u"defer", SVGToken::Defer },
-    { u"none", SVGToken::None },
-    { u"xminymin", SVGToken::XMinYMin },
-    { u"xmidymin", SVGToken::XMidYMin },
-    { u"xmaxymin", SVGToken::XMaxYMin },
-    { u"xminymid", SVGToken::XMinYMid },
-    { u"xmidymid", SVGToken::XMidYMid },
-    { u"xmaxymid", SVGToken::XMaxYMid },
-    { u"xminymax", SVGToken::XMinYMax },
-    { u"xmidymax", SVGToken::XMidYMax },
-    { u"xmaxymax", SVGToken::XMaxYMax },
-    { u"meet", SVGToken::Meet },
-    { u"slice", SVGToken::Slice },
-    { u"values", SVGToken::Values },
+    std::u16string_view aStr = rStr.starts_with(u"svg:") ? rStr.substr(4) : rStr;
 
-    { u"defs", SVGToken::Defs },
-    { u"g", SVGToken::G },
-    { u"svg", SVGToken::Svg },
-    { u"symbol", SVGToken::Symbol },
-    { u"switch", SVGToken::Switch },
-    { u"use", SVGToken::Use },
-    { u"a", SVGToken::A },
+    // TODO: a better alternative to the bIgnoreCase would be separate maps for SVG and CSS,
+    // the latter using case-insensitive hasher and comparator, with separate search functions.
 
-    { u"circle", SVGToken::Circle },
-    { u"ellipse", SVGToken::Ellipse },
-    { u"line", SVGToken::Line },
-    { u"path", SVGToken::Path },
-    { u"polygon", SVGToken::Polygon },
-    { u"polyline", SVGToken::Polyline },
-    { u"rect", SVGToken::Rect },
-    { u"image", SVGToken::Image },
-
-    { u"lineargradient", SVGToken::LinearGradient },
-    { u"radialgradient", SVGToken::RadialGradient },
-    { u"stop", SVGToken::Stop },
-    { u"offset", SVGToken::Offset },
-    { u"x1", SVGToken::X1 },
-    { u"y1", SVGToken::Y1 },
-    { u"x2", SVGToken::X2 },
-    { u"y2", SVGToken::Y2 },
-    { u"cx", SVGToken::Cx },
-    { u"cy", SVGToken::Cy },
-    { u"fx", SVGToken::Fx },
-    { u"fy", SVGToken::Fy },
-    { u"r", SVGToken::R },
-    { u"gradientunits", SVGToken::GradientUnits },
-    { u"gradienttransform", SVGToken::GradientTransform },
-    { u"spreadmethod", SVGToken::SpreadMethod },
-    { u"href", SVGToken::Href },
-    { u"xlink:href", SVGToken::XlinkHref },
-    { u"stop-color", SVGToken::StopColor },
-    { u"stop-opacity", SVGToken::StopOpacity },
-
-    { u"fill", SVGToken::Fill },
-    { u"fill-opacity", SVGToken::FillOpacity },
-    { u"fill-rule", SVGToken::FillRule },
-
-    { u"stroke", SVGToken::Stroke },
-    { u"stroke-dasharray", SVGToken::StrokeDasharray },
-    { u"stroke-dashoffset", SVGToken::StrokeDashoffset },
-    { u"stroke-linecap", SVGToken::StrokeLinecap },
-    { u"stroke-linejoin", SVGToken::StrokeLinejoin },
-    { u"stroke-miterlimit", SVGToken::StrokeMiterlimit },
-    { u"stroke-opacity", SVGToken::StrokeOpacity },
-    { u"stroke-width", SVGToken::StrokeWidth },
-
-    { u"text", SVGToken::Text },
-    { u"baseline-shift", SVGToken::BaselineShift },
-    { u"dominant-baseline", SVGToken::DominantBaseline }
-});
-
-static_assert(sizeof(aSVGTokenMapperList) == sizeof(aSVGLowerCaseTokenMapperList),
-        "Number of elements in both maps must be the same");
-
-SVGToken StrToSVGToken(const OUString& rStr, bool bCaseIndependent)
-{
-    OUString aSearchString = rStr.startsWith("svg:") ? rStr.copy(4) : rStr;
-
-    if (bCaseIndependent)
-    {
-        auto const aResult(aSVGLowerCaseTokenMapperList.find(aSearchString.toAsciiLowerCase()));
-
-        if (aResult != aSVGLowerCaseTokenMapperList.end())
-        {
-            return aResult->second;
-        }
-    }
-    else
-    {
-        auto const aResult(aSVGTokenMapperList.find(aSearchString));
-
-        if (aResult != aSVGTokenMapperList.end())
-        {
-            return aResult->second;
-        }
-    }
+    auto it = bIgnoreCase ? std::find_if(aSVGTokenMap.begin(), aSVGTokenMap.end(),
+                                         [aStr](const auto& el)
+                                         { return o3tl::equalsIgnoreAsciiCase(el.first, aStr); })
+                          : aSVGTokenMap.find(aStr);
+    if (it != aSVGTokenMap.end())
+        return it->second;
 
     return SVGToken::Unknown;
 }
 
 OUString SVGTokenToStr(const SVGToken& rToken)
 {
-    for (auto it = aSVGTokenMapperList.begin(); it != aSVGTokenMapperList.end(); ++it)
-    {
-        if (it->second == rToken)
-        {
-            OUString aFirst(it->first);
-            return aFirst;
-        }
-    }
+    auto it = std::find_if(aSVGTokenMap.begin(), aSVGTokenMap.end(),
+                           [rToken](const auto& el) { return el.second == rToken; });
+    if (it != aSVGTokenMap.end())
+        return OUString(it->first);
+
     return OUString();
 }
 
