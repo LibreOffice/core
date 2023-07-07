@@ -602,7 +602,7 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                 rDocument.ExtendMerge(cellSel);
             } while (oldSel != cellSel);
 
-            // Preserve the directionallity of the selection
+            // Preserve the directionality of the selection
             if (nCurX >= nBlockStartXOrig)
             {
                 nBlockStartX = cellSel.aStart.Col();
