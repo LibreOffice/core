@@ -1069,6 +1069,20 @@ std::unique_ptr<weld::SpinButton> JSInstanceBuilder::weld_spin_button(const OStr
     return pWeldWidget;
 }
 
+std::unique_ptr<weld::FormattedSpinButton>
+JSInstanceBuilder::weld_formatted_spin_button(const OString& id)
+{
+    FormattedField* pSpinButton = m_xBuilder->get<FormattedField>(id);
+    auto pWeldWidget = pSpinButton
+                           ? std::make_unique<JSFormattedSpinButton>(this, pSpinButton, this, false)
+                           : nullptr;
+
+    if (pWeldWidget)
+        RememberWidget(id, pWeldWidget.get());
+
+    return pWeldWidget;
+}
+
 std::unique_ptr<weld::CheckButton> JSInstanceBuilder::weld_check_button(const OString& id)
 {
     CheckBox* pCheckButton = m_xBuilder->get<CheckBox>(id);
@@ -1685,6 +1699,24 @@ void JSSpinButton::set_value(sal_Int64 value)
     (*pMap)[ACTION_TYPE] = "setText";
     (*pMap)["text"] = OUString::number(m_rFormatter.GetValue());
     sendAction(std::move(pMap));
+}
+
+JSFormattedSpinButton::JSFormattedSpinButton(JSDialogSender* pSender, ::FormattedField* pSpin,
+                                             SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : JSWidget<SalInstanceFormattedSpinButton, ::FormattedField>(pSender, pSpin, pBuilder,
+                                                                 bTakeOwnership)
+{
+}
+
+void JSFormattedSpinButton::set_text(const OUString& rText)
+{
+    SalInstanceFormattedSpinButton::set_text(rText);
+    sendUpdate();
+}
+
+void JSFormattedSpinButton::set_text_without_notify(const OUString& rText)
+{
+    SalInstanceFormattedSpinButton::set_text(rText);
 }
 
 JSMessageDialog::JSMessageDialog(JSDialogSender* pSender, ::MessageDialog* pDialog,

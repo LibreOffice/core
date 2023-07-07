@@ -334,6 +334,18 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                     return true;
                 }
             }
+
+            auto pFormattedField = dynamic_cast<weld::FormattedSpinButton*>(pWidget);
+            if (pFormattedField)
+            {
+                if (sAction == "change")
+                {
+                    pFormattedField->set_text(rData["data"]);
+                    LOKTrigger::trigger_changed(*pFormattedField);
+                    LOKTrigger::trigger_value_changed(*pFormattedField);
+                    return true;
+                }
+            }
         }
         else if (sControlType == "toolbox")
         {

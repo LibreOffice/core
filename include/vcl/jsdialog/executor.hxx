@@ -95,6 +95,11 @@ public:
         rSpinButton.signal_value_changed();
     }
 
+    static void trigger_value_changed(weld::FormattedSpinButton& rSpinButton)
+    {
+        rSpinButton.signal_value_changed();
+    }
+
     static void trigger_closed(weld::Popover& rPopover) { rPopover.popdown(); }
 
     static void trigger_key_press(weld::Widget& rWidget, const KeyEvent& rEvent)

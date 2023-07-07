@@ -295,6 +295,8 @@ public:
     virtual std::unique_ptr<weld::ComboBox> weld_combo_box(const OString& id) override;
     virtual std::unique_ptr<weld::Notebook> weld_notebook(const OString& id) override;
     virtual std::unique_ptr<weld::SpinButton> weld_spin_button(const OString& id) override;
+    virtual std::unique_ptr<weld::FormattedSpinButton>
+    weld_formatted_spin_button(const OString& id) override;
     virtual std::unique_ptr<weld::CheckButton> weld_check_button(const OString& id) override;
     virtual std::unique_ptr<weld::DrawingArea>
     weld_drawing_area(const OString& id, const a11yref& rA11yImpl = nullptr,
@@ -641,6 +643,17 @@ public:
                  bool bTakeOwnership);
 
     virtual void set_value(sal_Int64 value) override;
+};
+
+class JSFormattedSpinButton final
+    : public JSWidget<SalInstanceFormattedSpinButton, ::FormattedField>
+{
+public:
+    JSFormattedSpinButton(JSDialogSender* pSender, ::FormattedField* pSpin,
+                          SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+
+    virtual void set_text(const OUString& rText) override;
+    void set_text_without_notify(const OUString& rText);
 };
 
 class JSMessageDialog final : public JSWidget<SalInstanceMessageDialog, ::MessageDialog>
