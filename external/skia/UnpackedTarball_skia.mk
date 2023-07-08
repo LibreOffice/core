@@ -30,15 +30,14 @@ skia_patches := \
     fix-windows-dwrite.patch.1 \
     swap-buffers-rect.patch.1 \
     ubsan.patch.1 \
-    fast-png-write.patch.1 \
     fix-warnings.patch.1 \
     windows-libraries-system32.patch.1 \
     allow-no-es2restrictions.patch.1 \
     vk_mem_alloc.patch.1 \
-    constexpr-template.patch.0 \
     tdf147342.patch.0 \
     redefinition-of-op.patch.0 \
     0001-Added-missing-include-cstdio.patch \
+    fix-SkDebugf-link-error.patch.1 \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 

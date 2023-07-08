@@ -4,7 +4,7 @@
  */
 
 #include "include/core/SkTypes.h"
-#include "include/private/SkMalloc.h"
+#include "include/private/base/SkMalloc.h"
 
 #include <sal/log.hxx>
 #include <rtl/alloc.h>

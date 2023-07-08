@@ -1,8 +1,8 @@
 --- ./src/ports/SkFontHost_win.cpp
 +++ ./src/ports/SkFontHost_win.cpp
-@@ -349,7 +349,7 @@ static bool FindByLogFont(SkTypeface* face, void* ctx) {
+@@ -357,7 +357,7 @@ static bool FindByLogFont(SkTypeface* face, void* ctx) {
   */
- SkTypeface* SkCreateTypefaceFromLOGFONT(const LOGFONT& origLF) {
+ sk_sp<SkTypeface> SkCreateTypefaceFromLOGFONT(const LOGFONT& origLF) {
      LOGFONT lf = origLF;
 -    make_canonical(&lf);
 +//    make_canonical(&lf);

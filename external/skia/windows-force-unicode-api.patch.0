@@ -6,8 +6,8 @@ index f659adf0e9..34446fc7a1 100644
   *  corresponding typeface for the specified logfont. The caller is responsible
   *  for calling unref() when it is finished.
   */
--SK_API SkTypeface* SkCreateTypefaceFromLOGFONT(const LOGFONT&);
-+SK_API SkTypeface* SkCreateTypefaceFromLOGFONT(const LOGFONTW&);
+-SK_API sk_sp<SkTypeface> SkCreateTypefaceFromLOGFONT(const LOGFONT&);
++SK_API sk_sp<SkTypeface> SkCreateTypefaceFromLOGFONT(const LOGFONTW&);
  
  /**
   *  Copy the LOGFONT associated with this typeface into the lf parameter. Note

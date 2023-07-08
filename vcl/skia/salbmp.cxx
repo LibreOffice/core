@@ -33,9 +33,11 @@
 #include <skia/utils.hxx>
 #include <skia/zone.hxx>
 
+#include <SkBitmap.h>
 #include <SkCanvas.h>
 #include <SkImage.h>
 #include <SkPixelRef.h>
+#include <SkShader.h>
 #include <SkSurface.h>
 #include <SkSwizzle.h>
 #include <SkColorFilter.h>
@@ -1123,7 +1125,7 @@ void SkiaSalBitmap::EnsureBitmapData()
                                                        << static_cast<int>(mScaleQuality));
         Size savedSize = mSize;
         mSize = mPixelsSize;
-        ResetToSkImage(SkImage::MakeFromBitmap(GetAsSkBitmap()));
+        ResetToSkImage(SkImages::RasterFromBitmap(GetAsSkBitmap()));
         mSize = savedSize;
     }
 

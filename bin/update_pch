@@ -706,7 +706,7 @@ def is_allowed_if(line, module):
         return True
     if module == "external/skia":
         # We always set these.
-        if line == "#ifdef SK_VULKAN" or line == "#if SK_SUPPORT_GPU":
+        if line == "#ifdef SK_VULKAN" or line == "#if SK_GANESH":
             return True
     return False
 

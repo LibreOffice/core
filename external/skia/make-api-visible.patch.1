@@ -21,7 +21,7 @@ index 3e136a8f57..affb89e43e 100644
  #ifdef SK_METAL
 -std::unique_ptr<WindowContext> MakeMetalForMac(const MacWindowInfo&, const DisplayParams&);
 +SK_API std::unique_ptr<WindowContext> MakeMetalForMac(const MacWindowInfo&, const DisplayParams&);
- #ifdef SK_GRAPHITE_ENABLED
+ #if defined(SK_GRAPHITE)
  std::unique_ptr<WindowContext> MakeGraphiteMetalForMac(const MacWindowInfo&, const DisplayParams&);
  #endif
 diff --git a/tools/sk_app/unix/WindowContextFactory_unix.h b/tools/sk_app/unix/WindowContextFactory_unix.h
@@ -43,7 +43,7 @@ index 11bd2d2ac2..09c92dc417 100644
 +SK_API std::unique_ptr<WindowContext> MakeDawnVulkanForXlib(const XlibWindowInfo&, const DisplayParams&);
  #endif
  
- #if defined(SK_DAWN) && defined(SK_GRAPHITE_ENABLED)
+ #if defined(SK_DAWN) && defined(SK_GRAPHITE)
  std::unique_ptr<WindowContext> MakeGraphiteDawnVulkanForXlib(const XlibWindowInfo&,
                                                               const DisplayParams&);
  #endif
@@ -87,7 +87,7 @@ index c05a4f0acf..fc27cd2afb 100644
  #ifdef SK_DAWN
 -std::unique_ptr<WindowContext> MakeDawnD3D12ForWin(HWND, const DisplayParams&);
 +SK_API std::unique_ptr<WindowContext> MakeDawnD3D12ForWin(HWND, const DisplayParams&);
- #ifdef SK_GRAPHITE_ENABLED
+ #if defined(SK_GRAPHITE)
  std::unique_ptr<WindowContext> MakeGraphiteDawnD3D12ForWin(HWND, const DisplayParams&);
  #endif
  #endif

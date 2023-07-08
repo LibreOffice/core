@@ -20,6 +20,7 @@
 #include <comphelper/windowserrorstring.hxx>
 #include <sal/log.hxx>
 
+#include <SkBitmap.h>
 #include <SkCanvas.h>
 #include <SkPaint.h>
 #include <SkPixelRef.h>
@@ -244,7 +245,7 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
             // Resetting it here does not seem to cause any problem.
             logFont.lfOrientation = 0;
             logFont.lfEscapement = 0;
-            typeface.reset(SkCreateTypefaceFromLOGFONT(logFont));
+            typeface = SkCreateTypefaceFromLOGFONT(logFont);
             dwrite = false;
             if (!typeface)
                 return false;

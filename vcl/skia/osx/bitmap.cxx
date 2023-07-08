@@ -26,6 +26,7 @@
 
 #include <SkBitmap.h>
 #include <SkCanvas.h>
+#include <SkShader.h>
 
 using namespace SkiaHelper;
 

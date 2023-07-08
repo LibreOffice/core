@@ -21,12 +21,14 @@ index 106d366415..08dc19b5c8 100644
      sk_sp<SkSurface> getBackbufferSurface() override;
  
      bool isValid() override { return fValid; }
-@@ -46,16 +51,34 @@ protected:
+@@ -44,18 +49,36 @@
      void destroyContext();
      virtual void onDestroyContext() = 0;
  
 +    static void checkDestroyShared();
 +
+     void onSwapBuffers() override;
+ 
      bool                        fValid;
 +
 +    // We need to use just one GrDirectContext, so share all the relevant data.
@@ -36,7 +38,7 @@ index 106d366415..08dc19b5c8 100644
      sk_cfp<id<MTLCommandQueue>> fQueue;
 -    CAMetalLayer*               fMetalLayer;
 -    GrMTLHandle                 fDrawableHandle;
- #if GR_METAL_SDK_VERSION >= 230
+ #if SKGPU_GRAPHITE_METAL_SDK_VERSION >= 230
      // wrapping this in sk_cfp throws up an availability warning, so we'll track lifetime manually
      id<MTLBinaryArchive>        fPipelineArchive SK_API_AVAILABLE(macos(11.0), ios(14.0));
  #endif
@@ -62,7 +64,7 @@ diff --git a/tools/sk_app/MetalWindowContext.mm b/tools/sk_app/MetalWindowContex
 index d972e321a6..9f576944b7 100644
 --- a/tools/sk_app/MetalWindowContext.mm
 +++ b/tools/sk_app/MetalWindowContext.mm
-@@ -37,24 +37,30 @@ NSURL* MetalWindowContext::CacheURL() {
+@@ -40,24 +40,30 @@ NSURL* MetalWindowContext::CacheURL() {
  }
  
  void MetalWindowContext::initializeContext() {
@@ -98,7 +100,7 @@ index d972e321a6..9f576944b7 100644
 -
 -    fValid = this->onInitializeContext();
  
- #if GR_METAL_SDK_VERSION >= 230
+ #if SKGPU_GRAPHITE_METAL_SDK_VERSION >= 230
      if (fDisplayParams.fEnableBinaryArchive) {
 @@ -62,11 +68,11 @@ void MetalWindowContext::initializeContext() {
              sk_cfp<MTLBinaryArchiveDescriptor*> desc([MTLBinaryArchiveDescriptor new]);
@@ -116,7 +118,7 @@ index d972e321a6..9f576944b7 100644
                      SkDebugf("Error creating MTLBinaryArchive:\n%s\n",
                               error.debugDescription.UTF8String);
                  }
-@@ -74,46 +80,75 @@ void MetalWindowContext::initializeContext() {
+@@ -77,46 +83,75 @@ void MetalWindowContext::initializeContext() {
          }
      } else {
          if (@available(macOS 11.0, iOS 14.0, *)) {
@@ -131,7 +133,7 @@ index d972e321a6..9f576944b7 100644
 -    backendContext.fQueue.retain((GrMTLHandle)fQueue.get());
 +    backendContext.fDevice.retain((GrMTLHandle)d->fDevice.get());
 +    backendContext.fQueue.retain((GrMTLHandle)d->fQueue.get());
- #if GR_METAL_SDK_VERSION >= 230
+ #if SKGPU_GRAPHITE_METAL_SDK_VERSION >= 230
      if (@available(macOS 11.0, iOS 14.0, *)) {
 -        backendContext.fBinaryArchive.retain((__bridge GrMTLHandle)fPipelineArchive);
 +        backendContext.fBinaryArchive.retain((__bridge GrMTLHandle)d->fPipelineArchive);
@@ -192,7 +194,7 @@ index d972e321a6..9f576944b7 100644
 +        fGlobalShared->fContext.reset();
 +    }
 +
- #if GR_METAL_SDK_VERSION >= 230
+ #if SKGPU_GRAPHITE_METAL_SDK_VERSION >= 230
      if (@available(macOS 11.0, iOS 14.0, *)) {
 -        [fPipelineArchive release];
 +        [fGlobalShared->fPipelineArchive release];
@@ -207,8 +209,8 @@ index d972e321a6..9f576944b7 100644
  }
  
  sk_sp<SkSurface> MetalWindowContext::getBackbufferSurface() {
-@@ -154,7 +189,7 @@ sk_sp<SkSurface> MetalWindowContext::getBackbufferSurface() {
- void MetalWindowContext::swapBuffers() {
+@@ -159,7 +194,7 @@ sk_sp<SkSurface> MetalWindowContext::getBackbufferSurface() {
+ void MetalWindowContext::onSwapBuffers() {
      id<CAMetalDrawable> currentDrawable = (id<CAMetalDrawable>)fDrawableHandle;
  
 -    id<MTLCommandBuffer> commandBuffer([*fQueue commandBuffer]);
@@ -216,9 +218,9 @@ index d972e321a6..9f576944b7 100644
      commandBuffer.label = @"Present";
  
      [commandBuffer presentDrawable:currentDrawable];
-@@ -175,9 +210,9 @@ void MetalWindowContext::activate(bool isActive) {
+@@ -180,9 +215,9 @@ void MetalWindowContext::activate(bool isActive) {
      if (!isActive) {
- #if GR_METAL_SDK_VERSION >= 230
+ #if SKGPU_GRAPHITE_METAL_SDK_VERSION >= 230
          if (@available(macOS 11.0, iOS 14.0, *)) {
 -            if (fPipelineArchive) {
 +            if (fShared->fPipelineArchive) {
@@ -646,15 +648,15 @@ index c9db528ca4..634034da5a 100644
              return nullptr;
          }
      }
-@@ -542,7 +577,7 @@ void VulkanWindowContext::swapBuffers() {
+@@ -547,7 +582,7 @@ void VulkanWindowContext::swapBuffers() {
      GrFlushInfo info;
      info.fNumSemaphores = 1;
      info.fSignalSemaphores = &beSemaphore;
 -    skgpu::MutableTextureState presentState(VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, fPresentQueueIndex);
 +    skgpu::MutableTextureState presentState(VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, fShared->fPresentQueueIndex);
-     surface->flush(info, &presentState);
-     surface->recordingContext()->asDirectContext()->submit();
- 
+     auto dContext = surface->recordingContext()->asDirectContext();
+     dContext->flush(surface, info, &presentState);
+     dContext->submit();
 @@ -562,4 +597,6 @@ void VulkanWindowContext::swapBuffers() {
      fQueuePresentKHR(fPresentQueue, &presentInfo);
  }
@@ -666,7 +668,7 @@ diff --git a/tools/sk_app/VulkanWindowContext.h b/tools/sk_app/VulkanWindowConte
 index 7e1fdd9af5..946bca7522 100644
 --- a/tools/sk_app/VulkanWindowContext.h
 +++ b/tools/sk_app/VulkanWindowContext.h
-@@ -19,20 +19,24 @@
+@@ -16,19 +16,23 @@
  #include "tools/gpu/vk/VkTestUtils.h"
  #include "tools/sk_app/WindowContext.h"
  
@@ -686,7 +688,6 @@ index 7e1fdd9af5..946bca7522 100644
 +    static GrDirectContext* getSharedGrDirectContext() { return fGlobalShared ? fGlobalShared->fContext.get() : nullptr; }
 +
      sk_sp<SkSurface> getBackbufferSurface() override;
-     void swapBuffers() override;
  
 -    bool isValid() override { return fDevice != VK_NULL_HANDLE; }
 +    bool isValid() override { return fSurface != VK_NULL_HANDLE; }
@@ -710,8 +711,8 @@ index 7e1fdd9af5..946bca7522 100644
      struct BackbufferInfo {
          uint32_t        fImageIndex;          // image this is associated with
 @@ -64,11 +74,6 @@ private:
-     bool createBuffers(VkFormat format, VkImageUsageFlags, SkColorType colorType, VkSharingMode);
      void destroyBuffers();
+     void onSwapBuffers() override;
  
 -    VkInstance fInstance = VK_NULL_HANDLE;
 -    VkPhysicalDevice fPhysicalDevice = VK_NULL_HANDLE;
@@ -786,7 +787,7 @@ index 65ab8b9aa4..2d222385a3 100644
  
 -class GrDirectContext;
  class SkSurface;
- #ifdef SK_GRAPHITE_ENABLED
+ #if defined(SK_GRAPHITE)
  namespace skgpu::graphite {
 diff --git a/tools/sk_app/mac/MetalWindowContext_mac.mm b/tools/sk_app/mac/MetalWindowContext_mac.mm
 index 5bea8578fa..f7df061af0 100644

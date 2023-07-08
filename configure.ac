@@ -12180,12 +12180,12 @@ if test "$enable_skia" != "no" -a "$build_skia" = "yes" -a -z "$DISABLE_GUI"; th
         BUILD_TYPE="$BUILD_TYPE SKIA"
 
         if test "$OS" = "MACOSX"; then
-            AC_DEFINE(SK_SUPPORT_GPU,1)
+            AC_DEFINE(SK_GANESH,1)
             AC_DEFINE(SK_METAL,1)
             SKIA_GPU=METAL
             AC_SUBST(SKIA_GPU)
         else
-            AC_DEFINE(SK_SUPPORT_GPU,1)
+            AC_DEFINE(SK_GANESH,1)
             AC_DEFINE(SK_VULKAN,1)
             SKIA_GPU=VULKAN
             AC_SUBST(SKIA_GPU)

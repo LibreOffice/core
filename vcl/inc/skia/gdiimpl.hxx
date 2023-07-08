@@ -28,6 +28,7 @@
 #include <skia/utils.hxx>
 
 #include <SkPaint.h>
+#include <SkBlendMode.h>
 #include <optional>
 
 class SkiaFlushIdle;
