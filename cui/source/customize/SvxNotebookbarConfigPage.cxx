@@ -142,7 +142,6 @@ void SvxNotebookbarConfigPage::Init()
     m_xTopLevelListBox->clear();
     m_xContentsListBox->clear();
     m_xSaveInListBox->clear();
-    CustomNotebookbarGenerator::createCustomizedUIFile();
     OUString sNotebookbarInterface = getFileName(m_sFileName);
 
     OUString sScopeName
@@ -181,9 +180,8 @@ short SvxNotebookbarConfigPage::QueryReset()
     int nValue = xQueryBox->run();
     if (nValue == RET_YES)
     {
-        OUString sOriginalUIPath = CustomNotebookbarGenerator::getOriginalUIPath();
-        OUString sCustomizedUIPath = CustomNotebookbarGenerator::getCustomizedUIPath();
-        osl::File::copy(sOriginalUIPath, sCustomizedUIPath);
+        osl::File::remove(CustomNotebookbarGenerator::getCustomizedUIPath());
+
         OUString sNotebookbarInterface = getFileName(m_sFileName);
         Sequence<OUString> sSequenceEntries;
         CustomNotebookbarGenerator::setCustomizedUIItem(sSequenceEntries, sNotebookbarInterface);
@@ -396,6 +394,13 @@ void SvxNotebookbarConfigPage::SelectElement()
     OString sUIFileUIPath = CustomNotebookbarGenerator::getSystemPath(
         CustomNotebookbarGenerator::getCustomizedUIPath());
     xmlDocPtr pDoc = xmlParseFile(sUIFileUIPath.getStr());
+    if (!pDoc)
+    {
+        sUIFileUIPath = CustomNotebookbarGenerator::getSystemPath(
+            CustomNotebookbarGenerator::getOriginalUIPath());
+        pDoc = xmlParseFile(sUIFileUIPath.getStr());
+    }
+
     if (!pDoc)
         return;
     xmlNodePtr pNodePtr = xmlDocGetRootElement(pDoc);

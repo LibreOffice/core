@@ -184,7 +184,11 @@ static xmlDocPtr notebookbarXMLParser(const OString& rDocName, const OString& rU
 
 void CustomNotebookbarGenerator::modifyCustomizedUIFile(const Sequence<OUString>& sUIItemProperties)
 {
-    OString sCustomizedUIPath = getSystemPath(getCustomizedUIPath());
+    const OUString sUIPath = getCustomizedUIPath();
+    if (osl::File(sUIPath).open(osl_File_OpenFlag_Read) != osl::FileBase::E_None)
+        createCustomizedUIFile();
+
+    const OString sCustomizedUIPath = getSystemPath(sUIPath);
     for (auto const& aValue : sUIItemProperties)
     {
         std::vector<OString> aProperties(aUIPropertiesCount);
