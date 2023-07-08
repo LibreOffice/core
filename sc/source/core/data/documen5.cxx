@@ -528,11 +528,9 @@ void ScDocument::SetChartRangeList( std::u16string_view rChartName,
 
 bool ScDocument::HasData( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
-    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab]
-            && nCol < maTabs[nTab]->GetAllocatedColumnsCount())
-        return maTabs[nTab]->HasData( nCol, nRow );
-    else
-        return false;
+    if (ScTable* pTable = FetchTable(nTab) ; pTable && nCol < pTable->GetAllocatedColumnsCount())
+        return pTable->HasData(nCol, nRow);
+    return false;
 }
 
 uno::Reference< embed::XEmbeddedObject >

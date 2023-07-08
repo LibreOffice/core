@@ -4469,7 +4469,7 @@ struct ScDependantsCalculator
                         return false;
                     ScAddress aRefPos = aRef.toAbs(mrDoc, mrPos);
 
-                    if (!mrDoc.TableExists(aRefPos.Tab()))
+                    if (!mrDoc.HasTable(aRefPos.Tab()))
                         return false; // or true?
 
                     if (aRef.IsRowRel())

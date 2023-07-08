@@ -549,7 +549,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = try next again
         aScope.incTab();
     }
 
-    if (!ValidTab(aScope.Tab()) || aScope.Tab() >= static_cast<SCTAB>(maTabs.size()) || !maTabs[aScope.Tab()])
+    if (!HasTable(aScope.Tab()))
         aScope.setTab(0);
 
     ScTable* pTab = maTabs[aScope.Tab()].get();
@@ -628,7 +628,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = try next again
                 bNewTab = true;
             }
 
-            if (!ValidTab(aScope.Tab()) || aScope.Tab() >= static_cast<SCTAB>(maTabs.size()) || !maTabs[aScope.Tab()] )
+            if (!HasTable(aScope.Tab()))
             {
                 // Sheet doesn't exist at specified sheet position.  Restart at sheet 0.
                 aScope.setTab(0);

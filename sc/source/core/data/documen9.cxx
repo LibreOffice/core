@@ -146,11 +146,11 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
 
     SCTAB nDrawPages = 0;
     SCTAB nTab;
-    for (nTab=0; nTab < static_cast<SCTAB>(maTabs.size()); nTab++)
+    for (nTab = 0; nTab < GetTableCount(); nTab++)
         if (maTabs[nTab])
             nDrawPages = nTab + 1;          // needed number of pages
 
-    for (nTab=0; nTab<nDrawPages && nTab < static_cast<SCTAB>(maTabs.size()); nTab++)
+    for (nTab = 0; nTab < nDrawPages && nTab < GetTableCount(); nTab++)
     {
         mpDrawLayer->ScAddPage( nTab );     // always add page, with or without the table
         if (maTabs[nTab])
@@ -202,10 +202,8 @@ void ScDocument::UpdateDrawPrinter()
 
 void ScDocument::SetDrawPageSize(SCTAB nTab)
 {
-    if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
-        return;
-
-    maTabs[nTab]->SetDrawPageSize();
+    if (ScTable* pTable = FetchTable(nTab))
+        pTable->SetDrawPageSize();
 }
 
 bool ScDocument::IsChart( const SdrObject* pObject )
@@ -271,7 +269,7 @@ bool ScDocument::HasOLEObjectsInArea( const ScRange& rRange, const ScMarkData* p
         return false;
 
     SCTAB nStartTab = 0;
-    SCTAB nEndTab = static_cast<SCTAB>(maTabs.size());
+    SCTAB nEndTab = GetTableCount();
     if ( !pTabMark )
     {
         nStartTab = rRange.aStart.Tab();
@@ -390,7 +388,7 @@ SdrObject* ScDocument::GetObjectAtPoint( SCTAB nTab, const Point& rPos )
 {
     //  for Drag&Drop on draw object
     SdrObject* pFound = nullptr;
-    if (mpDrawLayer && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+    if (mpDrawLayer && nTab < GetTableCount() && maTabs[nTab])
     {
         SdrPage* pPage = mpDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
         OSL_ENSURE(pPage,"Page ?");
@@ -590,7 +588,7 @@ void ScDocument::SetImportingXML( bool bVal )
     {
         // #i57869# after loading, do the real RTL mirroring for the sheets that have the LoadingRTL flag set
 
-        for ( SCTAB nTab=0; nTab< static_cast<SCTAB>(maTabs.size()) && maTabs[nTab]; nTab++ )
+        for (SCTAB nTab = 0; nTab < GetTableCount() && maTabs[nTab]; nTab++)
             if ( maTabs[nTab]->IsLoadingRTL() )
             {
                 // SetLayoutRTL => SetDrawPageSize => ScDrawLayer::SetPageSize, includes RTL-mirroring;

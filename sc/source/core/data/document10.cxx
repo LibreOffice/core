@@ -140,7 +140,7 @@ bool ScDocument::CopyOneCellFromClip(
     // All good. Proceed with the pasting.
 
     SCTAB nTabEnd = rCxt.getTabEnd();
-    for (SCTAB i = rCxt.getTabStart(); i <= nTabEnd && i < static_cast<SCTAB>(maTabs.size()); ++i)
+    for (SCTAB i = rCxt.getTabStart(); i <= nTabEnd && i < GetTableCount(); ++i)
     {
         maTabs[i]->CopyOneCellFromClip(rCxt, nCol1, nRow1, nCol2, nRow2,  aClipRange.aStart.Row(), pSrcTab);
     }

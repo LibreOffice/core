@@ -77,8 +77,8 @@ bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
     nX = 0.0;
     if ( ValidColRow( nFCol, nFRow ) && ValidTab( nFTab ) &&
          ValidColRow( nVCol, nVRow ) && ValidTab( nVTab ) &&
-         nFTab < static_cast<SCTAB>( maTabs.size() ) && maTabs[nFTab] &&
-         nVTab < static_cast<SCTAB>( maTabs.size() ) && maTabs[nVTab] )
+         nFTab < GetTableCount() && maTabs[nFTab] &&
+         nVTab < GetTableCount() && maTabs[nVTab] )
     {
         CellType eFType = GetCellType(nFCol, nFRow, nFTab);
         CellType eVType = GetCellType(nVCol, nVRow, nVTab);
@@ -291,7 +291,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     else
         pCell = new ScFormulaCell(*this, aPos, rFormula, eGram, ScMatrixMode::Formula);
     pCell->SetMatColsRows( nCol2 - nCol1 + 1, nRow2 - nRow1 + 1 );
-    SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+    SCTAB nMax = GetTableCount();
     for (const auto& rTab : rMark)
     {
         if (rTab >= nMax)
@@ -365,7 +365,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,  // multiple (repeate
     SCROW k;
     i = 0;
     bool bStop = false;
-    SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+    SCTAB nMax = GetTableCount();
     for (const auto& rTab : rMark)
     {
         if (rTab >= nMax)
@@ -438,7 +438,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,  // multiple (repeate
            formula::FormulaGrammar::GRAM_NATIVE, ScMatrixMode::NONE );
     for( j = nCol1; j <= nCol2; j++ )
         for( k = nRow1; k <= nRow2; k++ )
-            for (i = 0; i < static_cast<SCTAB>(maTabs.size()); i++)
+            for (i = 0; i < GetTableCount(); i++)
             {
                 for (const auto& rTab : rMark)
                 {
@@ -530,27 +530,25 @@ bool ScDocument::MarkUsedExternalReferences( const ScTokenArray& rArr, const ScA
 bool ScDocument::GetNextSpellingCell(SCCOL& nCol, SCROW& nRow, SCTAB nTab,
                         bool bInSel, const ScMarkData& rMark) const
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        return maTabs[nTab]->GetNextSpellingCell( nCol, nRow, bInSel, rMark );
-    else
-        return false;
+    if (const ScTable* pTable = FetchTable(nTab))
+        return pTable->GetNextSpellingCell( nCol, nRow, bInSel, rMark );
+    return false;
 }
 
 bool ScDocument::GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, SCTAB nTab,
                                         const ScMarkData& rMark )
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        return maTabs[nTab]->GetNextMarkedCell( rCol, rRow, rMark );
-    else
-        return false;
+    if (ScTable* pTable = FetchTable(nTab))
+        return pTable->GetNextMarkedCell( rCol, rRow, rMark );
+    return false;
 }
 
 void ScDocument::ReplaceStyle(const SvxSearchItem& rSearchItem,
                               SCCOL nCol, SCROW nRow, SCTAB nTab,
                               const ScMarkData& rMark)
 {
-    if (nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        maTabs[nTab]->ReplaceStyle(rSearchItem, nCol, nRow, rMark, true/*bIsUndoP*/);
+    if (ScTable* pTable = FetchTable(nTab))
+        pTable->ReplaceStyle(rSearchItem, nCol, nRow, rMark, true/*bIsUndoP*/);
 }
 
 void ScDocument::CompileDBFormula()
@@ -588,21 +586,17 @@ void ScDocument::InvalidateTableArea()
 sal_Int32 ScDocument::GetMaxStringLen( SCTAB nTab, SCCOL nCol,
         SCROW nRowStart, SCROW nRowEnd, rtl_TextEncoding eCharSet ) const
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        return maTabs[nTab]->GetMaxStringLen( nCol, nRowStart, nRowEnd, eCharSet );
-    else
-        return 0;
+    if (const ScTable* pTable = FetchTable(nTab))
+        return pTable->GetMaxStringLen(nCol, nRowStart, nRowEnd, eCharSet);
+    return 0;
 }
 
 sal_Int32 ScDocument::GetMaxNumberStringLen( sal_uInt16& nPrecision, SCTAB nTab,
-                                    SCCOL nCol,
-                                    SCROW nRowStart, SCROW nRowEnd ) const
+                                    SCCOL nCol, SCROW nRowStart, SCROW nRowEnd ) const
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        return maTabs[nTab]->GetMaxNumberStringLen( nPrecision, nCol,
-            nRowStart, nRowEnd );
-    else
-        return 0;
+    if (const ScTable* pTable = FetchTable(nTab))
+        return pTable->GetMaxNumberStringLen(nPrecision, nCol, nRowStart, nRowEnd);
+    return 0;
 }
 
 bool ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
@@ -616,7 +610,7 @@ bool ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
     if (!aMark.IsMultiMarked() && !aMark.IsCellMarked(rCursor.Col(), rCursor.Row()))
         aMark.SetMarkArea(rCursor);
 
-    SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+    SCTAB nMax = GetTableCount();
     ScMarkData::const_iterator itr = aMark.begin(), itrEnd = aMark.end();
 
     for (; itr != itrEnd && *itr < nMax && !aData.getError(); ++itr)
@@ -716,8 +710,8 @@ sal_uLong ScDocument::AddCondFormat( std::unique_ptr<ScConditionalFormat> pNew, 
     if(!pNew)
         return 0;
 
-    if(ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        return maTabs[nTab]->AddCondFormat( std::move(pNew) );
+    if (ScTable* pTable = FetchTable(nTab))
+        return pTable->AddCondFormat(std::move(pNew));
 
     return 0;
 }
@@ -865,16 +859,15 @@ ScConditionalFormat* ScDocument::GetCondFormat(
 
 ScConditionalFormatList* ScDocument::GetCondFormList(SCTAB nTab) const
 {
-    if(ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+    if (HasTable(nTab))
         return maTabs[nTab]->GetCondFormList();
-
     return nullptr;
 }
 
 void ScDocument::SetCondFormList( ScConditionalFormatList* pList, SCTAB nTab )
 {
-    if(ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        maTabs[nTab]->SetCondFormList(pList);
+    if (ScTable* pTable = FetchTable(nTab))
+        pTable->SetCondFormList(pList);
 }
 
 const ScValidationData* ScDocument::GetValidationEntry( sal_uInt32 nIndex ) const
@@ -887,8 +880,8 @@ const ScValidationData* ScDocument::GetValidationEntry( sal_uInt32 nIndex ) cons
 
 void ScDocument::DeleteConditionalFormat(sal_uLong nOldIndex, SCTAB nTab)
 {
-    if(ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        maTabs[nTab]->DeleteConditionalFormat(nOldIndex);
+    if (ScTable* pTable = FetchTable(nTab))
+        pTable->DeleteConditionalFormat(nOldIndex);
 }
 
 bool ScDocument::HasDetectiveOperations() const

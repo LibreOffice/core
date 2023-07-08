@@ -129,7 +129,7 @@ void ScDocument::Broadcast( const ScHint& rHint )
     if ( rHint.GetStartAddress() != BCA_BRDCST_ALWAYS )
     {
         SCTAB nTab = rHint.GetStartAddress().Tab();
-        if (nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        if (nTab < GetTableCount() && maTabs[nTab])
             maTabs[nTab]->SetStreamValid(false);
     }
 }
@@ -223,8 +223,8 @@ void ScDocument::StartListeningCell( const ScAddress& rAddress,
 {
     OSL_ENSURE(pListener, "StartListeningCell: pListener Null");
     SCTAB nTab = rAddress.Tab();
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        maTabs[nTab]->StartListening( rAddress, pListener );
+    if (ScTable* pTable = FetchTable(nTab))
+        pTable->StartListening(rAddress, pListener);
 }
 
 void ScDocument::EndListeningCell( const ScAddress& rAddress,
@@ -232,28 +232,22 @@ void ScDocument::EndListeningCell( const ScAddress& rAddress,
 {
     OSL_ENSURE(pListener, "EndListeningCell: pListener Null");
     SCTAB nTab = rAddress.Tab();
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        maTabs[nTab]->EndListening( rAddress, pListener );
+    if (ScTable* pTable = FetchTable(nTab))
+        pTable->EndListening( rAddress, pListener );
 }
 
 void ScDocument::StartListeningCell(
     sc::StartListeningContext& rCxt, const ScAddress& rPos, SvtListener& rListener )
 {
-    ScTable* pTab = FetchTable(rPos.Tab());
-    if (!pTab)
-        return;
-
-    pTab->StartListening(rCxt, rPos, rListener);
+    if (ScTable* pTable = FetchTable(rPos.Tab()))
+        pTable->StartListening(rCxt, rPos, rListener);
 }
 
 void ScDocument::EndListeningCell(
     sc::EndListeningContext& rCxt, const ScAddress& rPos, SvtListener& rListener )
 {
-    ScTable* pTab = FetchTable(rPos.Tab());
-    if (!pTab)
-        return;
-
-    pTab->EndListening(rCxt, rPos, rListener);
+    if (ScTable* pTable = FetchTable(rPos.Tab()))
+        pTable->EndListening(rCxt, rPos, rListener);
 }
 
 void ScDocument::EndListeningFormulaCells( std::vector<ScFormulaCell*>& rCells )

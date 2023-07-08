@@ -528,19 +528,19 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks )
     {
         InitClipPtrs(pSourceDoc);
 
-        for (SCTAB i = 0; i < static_cast<SCTAB>(pSourceDoc->maTabs.size()); i++)
+        for (SCTAB i = 0; i < pSourceDoc->GetTableCount(); i++)
             if (pSourceDoc->maTabs[i])
                 if (!pMarks || pMarks->GetTableSelect(i))
                 {
                     OUString aString = pSourceDoc->maTabs[i]->GetName();
-                    if ( i < static_cast<SCTAB>(maTabs.size()) )
+                    if (i < GetTableCount())
                     {
                         maTabs[i].reset( new ScTable(*this, i, aString) );
 
                     }
                     else
                     {
-                        if( i > static_cast<SCTAB>(maTabs.size()) )
+                        if (i > GetTableCount())
                         {
                             maTabs.resize(i);
                         }
@@ -560,12 +560,12 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, SCTAB nTab )
     if (bIsClip)
     {
         InitClipPtrs(pSourceDoc);
-        if (nTab >= static_cast<SCTAB>(maTabs.size()))
+        if (nTab >= GetTableCount())
         {
             maTabs.resize(nTab+1);
         }
         maTabs[nTab].reset( new ScTable(*this, nTab, "baeh") );
-        if (nTab < static_cast<SCTAB>(pSourceDoc->maTabs.size()) && pSourceDoc->maTabs[nTab])
+        if (nTab < pSourceDoc->GetTableCount() && pSourceDoc->maTabs[nTab])
             maTabs[nTab]->SetLayoutRTL( pSourceDoc->maTabs[nTab]->IsLayoutRTL() );
     }
     else
@@ -577,7 +577,7 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, SCTAB nTab )
 void ScDocument::EnsureTable( SCTAB nTab )
 {
     bool bExtras = !bIsUndo;        // Column-Widths, Row-Heights, Flags
-    if (o3tl::make_unsigned(nTab) >= maTabs.size())
+    if (nTab >= GetTableCount())
         maTabs.resize(nTab+1);
 
     if (!maTabs[nTab])
@@ -586,18 +586,16 @@ void ScDocument::EnsureTable( SCTAB nTab )
 
 ScRefCellValue ScDocument::GetRefCellValue( const ScAddress& rPos )
 {
-    if (!TableExists(rPos.Tab()))
-        return ScRefCellValue(); // empty
-
-    return maTabs[rPos.Tab()]->GetRefCellValue(rPos.Col(), rPos.Row());
+    if (ScTable* pTable = FetchTable(rPos.Tab()))
+        return pTable->GetRefCellValue(rPos.Col(), rPos.Row());
+    return ScRefCellValue(); // empty
 }
 
 ScRefCellValue ScDocument::GetRefCellValue( const ScAddress& rPos, sc::ColumnBlockPosition& rBlockPos )
 {
-    if (!TableExists(rPos.Tab()))
-        return ScRefCellValue(); // empty
-
-    return maTabs[rPos.Tab()]->GetRefCellValue(rPos.Col(), rPos.Row(), rBlockPos);
+    if (ScTable* pTable = FetchTable(rPos.Tab()))
+        return pTable->GetRefCellValue(rPos.Col(), rPos.Row(), rBlockPos);
+    return ScRefCellValue(); // empty
 }
 
 svl::SharedStringPool& ScDocument::GetSharedStringPool()
@@ -613,9 +611,9 @@ const svl::SharedStringPool& ScDocument::GetSharedStringPool() const
 bool ScDocument::GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,
                                 bool bNotes) const
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+    if (const ScTable* pTable = FetchTable(nTab))
     {
-        bool bAny = maTabs[nTab]->GetPrintArea( rEndCol, rEndRow, bNotes, /*bCalcHiddens*/false);
+        bool bAny = pTable->GetPrintArea( rEndCol, rEndRow, bNotes, /*bCalcHiddens*/false);
         if (mpDrawLayer)
         {
             ScRange aDrawRange(0,0,nTab, MaxCol(),MaxRow(),nTab);
@@ -637,9 +635,9 @@ bool ScDocument::GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,
 bool ScDocument::GetPrintAreaHor( SCTAB nTab, SCROW nStartRow, SCROW nEndRow,
                                         SCCOL& rEndCol ) const
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+    if (const ScTable* pTable = FetchTable(nTab))
     {
-        bool bAny = maTabs[nTab]->GetPrintAreaHor( nStartRow, nEndRow, rEndCol );
+        bool bAny = pTable->GetPrintAreaHor( nStartRow, nEndRow, rEndCol );
         if (mpDrawLayer)
         {
             ScRange aDrawRange(0,nStartRow,nTab, MaxCol(),nEndRow,nTab);
@@ -659,9 +657,9 @@ bool ScDocument::GetPrintAreaHor( SCTAB nTab, SCROW nStartRow, SCROW nEndRow,
 bool ScDocument::GetPrintAreaVer( SCTAB nTab, SCCOL nStartCol, SCCOL nEndCol,
                                         SCROW& rEndRow, bool bNotes ) const
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+    if (const ScTable* pTable = FetchTable(nTab))
     {
-        bool bAny = maTabs[nTab]->GetPrintAreaVer( nStartCol, nEndCol, rEndRow, bNotes );
+        bool bAny = pTable->GetPrintAreaVer( nStartCol, nEndCol, rEndRow, bNotes );
         if (mpDrawLayer)
         {
             ScRange aDrawRange(nStartCol,0,nTab, nEndCol,MaxRow(),nTab);
@@ -680,9 +678,9 @@ bool ScDocument::GetPrintAreaVer( SCTAB nTab, SCCOL nStartCol, SCCOL nEndCol,
 
 bool ScDocument::GetDataStart( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow ) const
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+    if (const ScTable* pTable = FetchTable(nTab))
     {
-        bool bAny = maTabs[nTab]->GetDataStart( rStartCol, rStartRow );
+        bool bAny = pTable->GetDataStart( rStartCol, rStartRow );
         if (mpDrawLayer)
         {
             ScRange aDrawRange(0,0,nTab, MaxCol(),MaxRow(),nTab);
@@ -737,7 +735,7 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
     if (nOldPos == nNewPos)
         return false;
 
-    SCTAB nTabCount = static_cast<SCTAB>(maTabs.size());
+    SCTAB nTabCount = GetTableCount();
     if(nTabCount < 2)
         return false;
 
@@ -805,8 +803,8 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
 
 bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyMarked )
 {
-    if (SC_TAB_APPEND == nNewPos  || nNewPos >= static_cast<SCTAB>(maTabs.size()))
-        nNewPos = static_cast<SCTAB>(maTabs.size());
+    if (SC_TAB_APPEND == nNewPos  || nNewPos >= GetTableCount())
+        nNewPos = GetTableCount();
     OUString aName;
     GetName(nOldPos, aName);
 
@@ -828,14 +826,14 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
 
     if (bValid)
     {
-        if (nNewPos >= static_cast<SCTAB>(maTabs.size()))
+        if (nNewPos >= GetTableCount())
         {
-            nNewPos = static_cast<SCTAB>(maTabs.size());
+            nNewPos = GetTableCount();
             maTabs.emplace_back(new ScTable(*this, nNewPos, aName));
         }
         else
         {
-            if (ValidTab(nNewPos) && (nNewPos < static_cast<SCTAB>(maTabs.size())))
+            if (ValidTab(nNewPos) && nNewPos < GetTableCount())
             {
                 SetNoListening( true );
 
@@ -979,9 +977,9 @@ sal_uLong ScDocument::TransferTab( ScDocument& rSrcDoc, SCTAB nSrcPos,
     }
     else                        // replace existing tables
     {
-        if (ValidTab(nDestPos) && nDestPos < static_cast<SCTAB>(maTabs.size()) && maTabs[nDestPos])
+        if (ScTable* pTable = FetchTable(nDestPos))
         {
-            maTabs[nDestPos]->DeleteArea( 0,0, MaxCol(),MaxRow(), InsertDeleteFlags::ALL );
+            pTable->DeleteArea(0, 0, MaxCol(), MaxRow(), InsertDeleteFlags::ALL);
         }
         else
             bValid = false;
@@ -1130,38 +1128,31 @@ sal_uLong ScDocument::TransferTab( ScDocument& rSrcDoc, SCTAB nSrcPos,
 
 void ScDocument::SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const FormulaError nError)
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
-        if (maTabs[nTab])
-            maTabs[nTab]->SetError( nCol, nRow, nError );
+    if (ScTable* pTable = FetchTable(nTab))
+        pTable->SetError(nCol, nRow, nError);
 }
 
 void ScDocument::SetFormula(
     const ScAddress& rPos, const ScTokenArray& rArray )
 {
-    if (!TableExists(rPos.Tab()))
-        return;
-
-    maTabs[rPos.Tab()]->SetFormula(rPos.Col(), rPos.Row(), rArray, formula::FormulaGrammar::GRAM_DEFAULT);
+    if (ScTable* pTable = FetchTable(rPos.Tab()))
+        pTable->SetFormula(rPos.Col(), rPos.Row(), rArray, formula::FormulaGrammar::GRAM_DEFAULT);
 }
 
 void ScDocument::SetFormula(
     const ScAddress& rPos, const OUString& rFormula, formula::FormulaGrammar::Grammar eGram )
 {
-    if (!TableExists(rPos.Tab()))
-        return;
-
-    maTabs[rPos.Tab()]->SetFormula(rPos.Col(), rPos.Row(), rFormula, eGram);
+    if (ScTable* pTable = FetchTable(rPos.Tab()))
+        pTable->SetFormula(rPos.Col(), rPos.Row(), rFormula, eGram);
 }
 
 ScFormulaCell* ScDocument::SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell )
 {
-    if (!TableExists(rPos.Tab()))
-    {
-        delete pCell;
-        return nullptr;
-    }
+    if (ScTable* pTable = FetchTable(rPos.Tab()))
+        return pTable->SetFormulaCell(rPos.Col(), rPos.Row(), pCell);
 
-    return maTabs[rPos.Tab()]->SetFormulaCell(rPos.Col(), rPos.Row(), pCell);
+    delete pCell;
+    return nullptr;
 }
 
 bool ScDocument::SetFormulaCells( const ScAddress& rPos, std::vector<ScFormulaCell*>& rCells )
@@ -1169,11 +1160,9 @@ bool ScDocument::SetFormulaCells( const ScAddress& rPos, std::vector<ScFormulaCe
     if (rCells.empty())
         return false;
 
-    ScTable* pTab = FetchTable(rPos.Tab());
-    if (!pTab)
-        return false;
-
-    return pTab->SetFormulaCells(rPos.Col(), rPos.Row(), rCells);
+    if (ScTable* pTable = FetchTable(rPos.Tab()))
+        return pTable->SetFormulaCells(rPos.Col(), rPos.Row(), rCells);
+    return false;
 }
 
 void ScDocument::SetConsolidateDlgData( std::unique_ptr<ScConsolidateParam> pData )

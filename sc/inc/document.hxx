@@ -2620,7 +2620,6 @@ public:
     void                ConvertFormulaToValue( const ScRange& rRange, sc::TableValues* pUndo );
     void                SwapNonEmpty( sc::TableValues& rValues );
     void                finalizeOutlineImport();
-    bool                TableExists( SCTAB nTab ) const;
 
     // Returns the given column range, first allocating all the columns if necessary.
     SC_DLLPUBLIC ScColumnsRange GetWritableColumnsRange(SCTAB nTab, SCCOL nColBegin, SCCOL nColEnd);

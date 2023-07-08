@@ -183,7 +183,7 @@ public:
 SvtScriptType ScDocument::GetRangeScriptType(
     sc::ColumnBlockPosition& rBlockPos, const ScAddress& rPos, SCROW nLength )
 {
-    if (!TableExists(rPos.Tab()))
+    if (!HasTable(rPos.Tab()))
         return SvtScriptType::NONE;
 
     return maTabs[rPos.Tab()]->GetRangeScriptType(rBlockPos, rPos.Col(), rPos.Row(), rPos.Row()+nLength-1);
