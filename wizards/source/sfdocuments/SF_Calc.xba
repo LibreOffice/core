@@ -1085,7 +1085,7 @@ Const cstSubArgs = &quot;SourceRange, DestinationRange&quot;
 	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
 	sCopy = &quot;&quot;
 
-Check:string
+Check:
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not _IsStillAlive(True) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(SourceRange, &quot;SourceRange&quot;, Array(V_STRING, ScriptForge.V_OBJECT), , , CALCREFERENCE) Then GoTo Finally
