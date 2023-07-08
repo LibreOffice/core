@@ -751,7 +751,7 @@ void QtInstance::setActivePopup(QtFrame* pFrame)
 extern "C" {
 VCLPLUG_QT_PUBLIC SalInstance* create_SalInstance()
 {
-    static const bool bUseCairo = (nullptr != getenv("SAL_VCL_QT5_USE_CAIRO"));
+    static const bool bUseCairo = (nullptr == getenv("SAL_VCL_QT_USE_QFONT"));
 
     std::unique_ptr<char* []> pFakeArgv;
     std::unique_ptr<int> pFakeArgc;
