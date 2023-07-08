@@ -23,7 +23,6 @@
 -o sw.SwXTextEmbeddedObjects
 -o sw.SwXTextField
 -o sw.SwXTextFieldMasters
--o sw.SwXTextFieldTypes
 -o sw.SwXTextFrame
 -o sw.SwXTextFrameText
 -o sw.SwXTextGraphicObject

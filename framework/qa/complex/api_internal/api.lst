@@ -170,7 +170,6 @@ job232=sw.SwXTextDefaults
 job233=sw.SwXTextEmbeddedObjects
 job234=sw.SwXTextField
 job235=sw.SwXTextFieldMasters
-job236=sw.SwXTextFieldTypes
 job237=sw.SwXTextFrameText
 job238=sw.SwXTextGraphicObjects
 job239=sw.SwXTextPortionEnumeration
