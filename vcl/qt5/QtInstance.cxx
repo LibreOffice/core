@@ -218,9 +218,9 @@ OUString QtInstance::constructToolkitID(std::u16string_view sTKname)
     return sID;
 }
 
-QtInstance::QtInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo)
+QtInstance::QtInstance(std::unique_ptr<QApplication>& pQApp)
     : SalGenericInstance(std::make_unique<QtYieldMutex>())
-    , m_bUseCairo(bUseCairo)
+    , m_bUseCairo(nullptr == getenv("SAL_VCL_QT_USE_QFONT"))
     , m_pTimer(nullptr)
     , m_bSleeping(false)
     , m_pQApplication(std::move(pQApp))
@@ -751,8 +751,6 @@ void QtInstance::setActivePopup(QtFrame* pFrame)
 extern "C" {
 VCLPLUG_QT_PUBLIC SalInstance* create_SalInstance()
 {
-    static const bool bUseCairo = (nullptr == getenv("SAL_VCL_QT_USE_QFONT"));
-
     std::unique_ptr<char* []> pFakeArgv;
     std::unique_ptr<int> pFakeArgc;
     std::vector<FreeableCStr> aFakeArgvFreeable;
@@ -761,7 +759,7 @@ VCLPLUG_QT_PUBLIC SalInstance* create_SalInstance()
     std::unique_ptr<QApplication> pQApp
         = QtInstance::CreateQApplication(*pFakeArgc, pFakeArgv.get());
 
-    QtInstance* pInstance = new QtInstance(pQApp, bUseCairo);
+    QtInstance* pInstance = new QtInstance(pQApp);
     pInstance->MoveFakeCmdlineArgs(pFakeArgv, pFakeArgc, aFakeArgvFreeable);
 
     new QtData();

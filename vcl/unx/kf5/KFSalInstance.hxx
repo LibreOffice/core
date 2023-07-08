@@ -29,7 +29,7 @@ class KFSalInstance final : public QtInstance
                  QFileDialog::FileMode) override;
 
 public:
-    explicit KFSalInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo);
+    explicit KFSalInstance(std::unique_ptr<QApplication>& pQApp);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

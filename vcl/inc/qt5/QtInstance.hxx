@@ -99,7 +99,7 @@ protected:
     void notifyDisplayChanged();
 
 public:
-    explicit QtInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo = false);
+    explicit QtInstance(std::unique_ptr<QApplication>& pQApp);
     virtual ~QtInstance() override;
 
     // handle common SalInstance setup

@@ -32,8 +32,8 @@
 
 using namespace com::sun::star;
 
-KFSalInstance::KFSalInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo)
-    : QtInstance(pQApp, bUseCairo)
+KFSalInstance::KFSalInstance(std::unique_ptr<QApplication>& pQApp)
+    : QtInstance(pQApp)
 {
     ImplSVData* pSVData = ImplGetSVData();
     const OUString sToolkit = u"kf" + OUString::number(QT_VERSION_MAJOR);
@@ -73,8 +73,6 @@ KFSalInstance::createPicker(css::uno::Reference<css::uno::XComponentContext> con
 extern "C" {
 VCLPLUG_KF_PUBLIC SalInstance* create_SalInstance()
 {
-    static const bool bUseCairo = (nullptr == getenv("SAL_VCL_QT_USE_QFONT"));
-
     std::unique_ptr<char* []> pFakeArgv;
     std::unique_ptr<int> pFakeArgc;
     std::vector<FreeableCStr> aFakeArgvFreeable;
@@ -83,7 +81,7 @@ VCLPLUG_KF_PUBLIC SalInstance* create_SalInstance()
     std::unique_ptr<QApplication> pQApp
         = QtInstance::CreateQApplication(*pFakeArgc, pFakeArgv.get());
 
-    KFSalInstance* pInstance = new KFSalInstance(pQApp, bUseCairo);
+    KFSalInstance* pInstance = new KFSalInstance(pQApp);
     pInstance->MoveFakeCmdlineArgs(pFakeArgv, pFakeArgc, aFakeArgvFreeable);
 
     new QtData();
