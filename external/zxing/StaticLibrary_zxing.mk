@@ -79,29 +79,29 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,zxing,\
 	UnpackedTarball/zxing/core/src/oned/ODDataBarReader \
 	UnpackedTarball/zxing/core/src/oned/ODEAN8Writer \
 	UnpackedTarball/zxing/core/src/oned/ODEAN13Writer \
-	UnpackedTarball/zxing/core/src/oned/ODITFWriter \
 	UnpackedTarball/zxing/core/src/oned/ODITFReader \
+	UnpackedTarball/zxing/core/src/oned/ODITFWriter \
 	UnpackedTarball/zxing/core/src/oned/ODMultiUPCEANReader \
+	UnpackedTarball/zxing/core/src/oned/ODUPCEANCommon \
 	UnpackedTarball/zxing/core/src/oned/ODUPCAWriter \
 	UnpackedTarball/zxing/core/src/oned/ODUPCEWriter \
-	UnpackedTarball/zxing/core/src/oned/ODUPCEANCommon \
 	UnpackedTarball/zxing/core/src/oned/ODRowReader \
 	UnpackedTarball/zxing/core/src/oned/ODReader \
 	UnpackedTarball/zxing/core/src/oned/ODWriterHelper \
-	UnpackedTarball/zxing/core/src/pdf417/PDFCodewordDecoder \
-	UnpackedTarball/zxing/core/src/pdf417/PDFHighLevelEncoder \
-	UnpackedTarball/zxing/core/src/pdf417/PDFDetectionResultColumn \
-	UnpackedTarball/zxing/core/src/pdf417/PDFReader \
-	UnpackedTarball/zxing/core/src/pdf417/PDFBoundingBox \
-	UnpackedTarball/zxing/core/src/pdf417/PDFScanningDecoder \
-	UnpackedTarball/zxing/core/src/pdf417/PDFModulusGF \
-	UnpackedTarball/zxing/core/src/pdf417/PDFEncoder \
-	UnpackedTarball/zxing/core/src/pdf417/PDFDecodedBitStreamParser \
-	UnpackedTarball/zxing/core/src/pdf417/PDFWriter \
-	UnpackedTarball/zxing/core/src/pdf417/PDFDetectionResult \
-	UnpackedTarball/zxing/core/src/pdf417/PDFModulusPoly \
-	UnpackedTarball/zxing/core/src/pdf417/PDFDetector \
 	UnpackedTarball/zxing/core/src/pdf417/PDFBarcodeValue \
+	UnpackedTarball/zxing/core/src/pdf417/PDFBoundingBox \
+	UnpackedTarball/zxing/core/src/pdf417/PDFCodewordDecoder \
+	UnpackedTarball/zxing/core/src/pdf417/PDFDecoder \
+	UnpackedTarball/zxing/core/src/pdf417/PDFDetector \
+	UnpackedTarball/zxing/core/src/pdf417/PDFDetectionResult \
+	UnpackedTarball/zxing/core/src/pdf417/PDFDetectionResultColumn \
+	UnpackedTarball/zxing/core/src/pdf417/PDFEncoder \
+	UnpackedTarball/zxing/core/src/pdf417/PDFHighLevelEncoder \
+	UnpackedTarball/zxing/core/src/pdf417/PDFModulusGF \
+	UnpackedTarball/zxing/core/src/pdf417/PDFModulusPoly \
+	UnpackedTarball/zxing/core/src/pdf417/PDFReader \
+	UnpackedTarball/zxing/core/src/pdf417/PDFScanningDecoder \
+	UnpackedTarball/zxing/core/src/pdf417/PDFWriter \
 	UnpackedTarball/zxing/core/src/PerspectiveTransform \
 	UnpackedTarball/zxing/core/src/qrcode/QRBitMatrixParser \
 	UnpackedTarball/zxing/core/src/qrcode/QRCodecMode \

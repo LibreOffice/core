@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2023-02-24 12:48:45 using:
+ Generated on 2023-07-09 00:00:16 using:
  ./bin/update_pch external/zxing zxing --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -26,6 +26,7 @@
 #include <array>
 #include <cassert>
 #include <cctype>
+#include <climits>
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
