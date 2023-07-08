@@ -73,7 +73,7 @@ KFSalInstance::createPicker(css::uno::Reference<css::uno::XComponentContext> con
 extern "C" {
 VCLPLUG_KF_PUBLIC SalInstance* create_SalInstance()
 {
-    static const bool bUseCairo = (nullptr == getenv("SAL_VCL_KF5_USE_QFONT"));
+    static const bool bUseCairo = (nullptr == getenv("SAL_VCL_QT_USE_QFONT"));
 
     std::unique_ptr<char* []> pFakeArgv;
     std::unique_ptr<int> pFakeArgc;
