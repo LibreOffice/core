@@ -404,7 +404,7 @@ static bool main2()
     _CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_DEBUG|_CRTDBG_MODE_FILE);
     _CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDERR);
 #endif
-    // Create a desktop, to avoid popups interferring with active user session,
+    // Create a desktop, to avoid popups interfering with active user session,
     // because on Windows, we don't use svp vcl plugin for unit testing
     if (getenv("CPPUNIT_DEFAULT_DESKTOP") == nullptr)
     {
