@@ -40,7 +40,6 @@
 #include <string>
 #include <sal/log.hxx>
 #include <sal/types.h>
-#include <comphelper/scopeguard.hxx>
 #include <cppunittester/protectorfactory.hxx>
 #include <osl/module.h>
 #include <osl/module.hxx>
@@ -407,20 +406,10 @@ static bool main2()
 #endif
     // Create a desktop, to avoid popups interferring with active user session,
     // because on Windows, we don't use svp vcl plugin for unit testing
-    HDESK hDesktop = nullptr;
-    comphelper::ScopeGuard desktopRestore(
-        [&hDesktop, hPrevDesktop = GetThreadDesktop(GetCurrentThreadId())]()
-        {
-            if (hDesktop)
-            {
-                SetThreadDesktop(hPrevDesktop);
-                CloseDesktop(hDesktop);
-            }
-        });
     if (getenv("CPPUNIT_DEFAULT_DESKTOP") == nullptr)
     {
-        hDesktop = CreateDesktopW(L"LO_CPPUNIT_DESKTOP", nullptr, nullptr, 0, GENERIC_ALL, nullptr);
-        if (hDesktop)
+        if (HDESK hDesktop
+            = CreateDesktopW(L"LO_CPPUNIT_DESKTOP", nullptr, nullptr, 0, GENERIC_ALL, nullptr))
             SetThreadDesktop(hDesktop);
     }
 #endif
