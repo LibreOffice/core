@@ -1074,7 +1074,7 @@ static bool lcl_SetTextFormatColl( SwNode* pNode, void* pArgs )
             }
             else
             {
-                // forcing reset of list level from parapgaph
+                // forcing reset of list level from paragraph
                 pCNd->SetAttr(pFormat->GetFormatAttr(RES_PARATR_LIST_LEVEL));
             }
         }
