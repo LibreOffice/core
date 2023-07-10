@@ -165,6 +165,7 @@ PageSizeControl::PageSizeControl(PageSizePopup* pControl, weld::Widget* pParent)
     }
     mxSizeValueSet->SetNoSelection();
     mxSizeValueSet->SetSelectHdl( LINK(this, PageSizeControl, ImplSizeHdl ) );
+    mxSizeValueSet->SetOptimalDrawingAreaHeight();
     mxSizeValueSet->Show();
     mxSizeValueSet->Resize();
 
