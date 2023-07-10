@@ -93,6 +93,9 @@
 #include <pdf/pdfwriter_impl.hxx>
 #include <pdf/PdfConfig.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/map.h>
 
 using namespace::com::sun::star;
 
@@ -1839,37 +1842,33 @@ sal_Int32 PDFWriterImpl::emitStructIDTree(sal_Int32 const nObject)
 
 const char* PDFWriterImpl::getAttributeTag( PDFWriter::StructAttribute eAttr )
 {
-    static std::map< PDFWriter::StructAttribute, const char* > aAttributeStrings;
-    // fill maps once
-    if( aAttributeStrings.empty() )
-    {
-        aAttributeStrings[ PDFWriter::Placement ]           = "Placement";
-        aAttributeStrings[ PDFWriter::WritingMode ]         = "WritingMode";
-        aAttributeStrings[ PDFWriter::SpaceBefore ]         = "SpaceBefore";
-        aAttributeStrings[ PDFWriter::SpaceAfter ]          = "SpaceAfter";
-        aAttributeStrings[ PDFWriter::StartIndent ]         = "StartIndent";
-        aAttributeStrings[ PDFWriter::EndIndent ]           = "EndIndent";
-        aAttributeStrings[ PDFWriter::TextIndent ]          = "TextIndent";
-        aAttributeStrings[ PDFWriter::TextAlign ]           = "TextAlign";
-        aAttributeStrings[ PDFWriter::Width ]               = "Width";
-        aAttributeStrings[ PDFWriter::Height ]              = "Height";
-        aAttributeStrings[ PDFWriter::BlockAlign ]          = "BlockAlign";
-        aAttributeStrings[ PDFWriter::InlineAlign ]         = "InlineAlign";
-        aAttributeStrings[ PDFWriter::LineHeight ]          = "LineHeight";
-        aAttributeStrings[ PDFWriter::BaselineShift ]       = "BaselineShift";
-        aAttributeStrings[ PDFWriter::TextDecorationType ]  = "TextDecorationType";
-        aAttributeStrings[ PDFWriter::ListNumbering ]       = "ListNumbering";
-        aAttributeStrings[ PDFWriter::RowSpan ]             = "RowSpan";
-        aAttributeStrings[ PDFWriter::ColSpan ]             = "ColSpan";
-        aAttributeStrings[ PDFWriter::Scope ]               = "Scope";
-        aAttributeStrings[ PDFWriter::Role ]                = "Role";
-        aAttributeStrings[ PDFWriter::Type ]                = "Type";
-        aAttributeStrings[ PDFWriter::Subtype ]             = "Subtype";
-        aAttributeStrings[ PDFWriter::LinkAnnotation ]      = "LinkAnnotation";
-    }
+    static constexpr auto aAttributeStrings = frozen::make_map<PDFWriter::StructAttribute, const char*>({
+        { PDFWriter::Placement,         "Placement" },
+        { PDFWriter::WritingMode,       "WritingMode" },
+        { PDFWriter::SpaceBefore,       "SpaceBefore" },
+        { PDFWriter::SpaceAfter,        "SpaceAfter" },
+        { PDFWriter::StartIndent,       "StartIndent" },
+        { PDFWriter::EndIndent,         "EndIndent" },
+        { PDFWriter::TextIndent,        "TextIndent" },
+        { PDFWriter::TextAlign,         "TextAlign" },
+        { PDFWriter::Width,             "Width" },
+        { PDFWriter::Height,            "Height" },
+        { PDFWriter::BlockAlign,        "BlockAlign" },
+        { PDFWriter::InlineAlign,       "InlineAlign" },
+        { PDFWriter::LineHeight,        "LineHeight" },
+        { PDFWriter::BaselineShift,     "BaselineShift" },
+        { PDFWriter::TextDecorationType,"TextDecorationType" },
+        { PDFWriter::ListNumbering,     "ListNumbering" },
+        { PDFWriter::RowSpan,           "RowSpan" },
+        { PDFWriter::ColSpan,           "ColSpan" },
+        { PDFWriter::Scope,             "Scope" },
+        { PDFWriter::Role,              "Role" },
+        { PDFWriter::Type,              "Type" },
+        { PDFWriter::Subtype,           "Subtype" },
+        { PDFWriter::LinkAnnotation,    "LinkAnnotation" }
+    });
 
-    std::map< PDFWriter::StructAttribute, const char* >::const_iterator it =
-        aAttributeStrings.find( eAttr );
+    auto it = aAttributeStrings.find( eAttr );
 
     if( it == aAttributeStrings.end() )
         SAL_INFO("vcl.pdfwriter", "invalid PDFWriter::StructAttribute " << eAttr);
@@ -1879,54 +1878,50 @@ const char* PDFWriterImpl::getAttributeTag( PDFWriter::StructAttribute eAttr )
 
 const char* PDFWriterImpl::getAttributeValueTag( PDFWriter::StructAttributeValue eVal )
 {
-    static std::map< PDFWriter::StructAttributeValue, const char* > aValueStrings;
+    static constexpr auto aValueStrings = frozen::make_map<PDFWriter::StructAttributeValue, const char*>({
+        { PDFWriter::NONE,       "None" },
+        { PDFWriter::Block,      "Block" },
+        { PDFWriter::Inline,     "Inline" },
+        { PDFWriter::Before,     "Before" },
+        { PDFWriter::After,      "After" },
+        { PDFWriter::Start,      "Start" },
+        { PDFWriter::End,        "End" },
+        { PDFWriter::LrTb,       "LrTb" },
+        { PDFWriter::RlTb,       "RlTb" },
+        { PDFWriter::TbRl,       "TbRl" },
+        { PDFWriter::Center,     "Center" },
+        { PDFWriter::Justify,    "Justify" },
+        { PDFWriter::Auto,       "Auto" },
+        { PDFWriter::Middle,     "Middle" },
+        { PDFWriter::Normal,     "Normal" },
+        { PDFWriter::Underline,  "Underline" },
+        { PDFWriter::Overline,   "Overline" },
+        { PDFWriter::LineThrough,"LineThrough" },
+        { PDFWriter::Row,        "Row" },
+        { PDFWriter::Column,     "Column" },
+        { PDFWriter::Both,       "Both" },
+        { PDFWriter::Pagination, "Pagination" },
+        { PDFWriter::Layout,     "Layout" },
+        { PDFWriter::Page,       "Page" },
+        { PDFWriter::Background, "Background" },
+        { PDFWriter::Header,     "Header" },
+        { PDFWriter::Footer,     "Footer" },
+        { PDFWriter::Watermark,  "Watermark" },
+        { PDFWriter::Rb,         "rb" },
+        { PDFWriter::Cb,         "cb" },
+        { PDFWriter::Pb,         "pb" },
+        { PDFWriter::Tv,         "tv" },
+        { PDFWriter::Disc,       "Disc" },
+        { PDFWriter::Circle,     "Circle" },
+        { PDFWriter::Square,     "Square" },
+        { PDFWriter::Decimal,    "Decimal" },
+        { PDFWriter::UpperRoman, "UpperRoman" },
+        { PDFWriter::LowerRoman, "LowerRoman" },
+        { PDFWriter::UpperAlpha, "UpperAlpha" },
+        { PDFWriter::LowerAlpha, "LowerAlpha" }
+    });
 
-    if( aValueStrings.empty() )
-    {
-        aValueStrings[ PDFWriter::NONE ]                    = "None";
-        aValueStrings[ PDFWriter::Block ]                   = "Block";
-        aValueStrings[ PDFWriter::Inline ]                  = "Inline";
-        aValueStrings[ PDFWriter::Before ]                  = "Before";
-        aValueStrings[ PDFWriter::After ]                   = "After";
-        aValueStrings[ PDFWriter::Start ]                   = "Start";
-        aValueStrings[ PDFWriter::End ]                     = "End";
-        aValueStrings[ PDFWriter::LrTb ]                    = "LrTb";
-        aValueStrings[ PDFWriter::RlTb ]                    = "RlTb";
-        aValueStrings[ PDFWriter::TbRl ]                    = "TbRl";
-        aValueStrings[ PDFWriter::Center ]                  = "Center";
-        aValueStrings[ PDFWriter::Justify ]                 = "Justify";
-        aValueStrings[ PDFWriter::Auto ]                    = "Auto";
-        aValueStrings[ PDFWriter::Middle ]                  = "Middle";
-        aValueStrings[ PDFWriter::Normal ]                  = "Normal";
-        aValueStrings[ PDFWriter::Underline ]               = "Underline";
-        aValueStrings[ PDFWriter::Overline ]                = "Overline";
-        aValueStrings[ PDFWriter::LineThrough ]             = "LineThrough";
-        aValueStrings[ PDFWriter::Row ]                     = "Row";
-        aValueStrings[ PDFWriter::Column ]                  = "Column";
-        aValueStrings[ PDFWriter::Both ]                    = "Both";
-        aValueStrings[ PDFWriter::Pagination ]              = "Pagination";
-        aValueStrings[ PDFWriter::Layout ]                  = "Layout";
-        aValueStrings[ PDFWriter::Page ]                    = "Page";
-        aValueStrings[ PDFWriter::Background ]              = "Background";
-        aValueStrings[ PDFWriter::Header ]                  = "Header";
-        aValueStrings[ PDFWriter::Footer ]                  = "Footer";
-        aValueStrings[ PDFWriter::Watermark ]               = "Watermark";
-        aValueStrings[ PDFWriter::Rb ]                      = "rb";
-        aValueStrings[ PDFWriter::Cb ]                      = "cb";
-        aValueStrings[ PDFWriter::Pb ]                      = "pb";
-        aValueStrings[ PDFWriter::Tv ]                      = "tv";
-        aValueStrings[ PDFWriter::Disc ]                    = "Disc";
-        aValueStrings[ PDFWriter::Circle ]                  = "Circle";
-        aValueStrings[ PDFWriter::Square ]                  = "Square";
-        aValueStrings[ PDFWriter::Decimal ]                 = "Decimal";
-        aValueStrings[ PDFWriter::UpperRoman ]              = "UpperRoman";
-        aValueStrings[ PDFWriter::LowerRoman ]              = "LowerRoman";
-        aValueStrings[ PDFWriter::UpperAlpha ]              = "UpperAlpha";
-        aValueStrings[ PDFWriter::LowerAlpha ]              = "LowerAlpha";
-    }
-
-    std::map< PDFWriter::StructAttributeValue, const char* >::const_iterator it =
-        aValueStrings.find( eVal );
+    auto it = aValueStrings.find( eVal );
 
     if( it == aValueStrings.end() )
         SAL_INFO("vcl.pdfwriter", "invalid PDFWriter::StructAttributeValue " << eVal);
@@ -10592,48 +10587,46 @@ void PDFWriterImpl::setOutlineItemDest( sal_Int32 nItem, sal_Int32 nDestID )
 
 const char* PDFWriterImpl::getStructureTag( PDFWriter::StructElement eType )
 {
-    static std::map< PDFWriter::StructElement, const char* > aTagStrings;
-    if( aTagStrings.empty() )
-    {
-        aTagStrings[ PDFWriter::NonStructElement] = "NonStruct";
-        aTagStrings[ PDFWriter::Document ]      = "Document";
-        aTagStrings[ PDFWriter::Part ]          = "Part";
-        aTagStrings[ PDFWriter::Article ]       = "Art";
-        aTagStrings[ PDFWriter::Section ]       = "Sect";
-        aTagStrings[ PDFWriter::Division ]      = "Div";
-        aTagStrings[ PDFWriter::BlockQuote ]    = "BlockQuote";
-        aTagStrings[ PDFWriter::Caption ]       = "Caption";
-        aTagStrings[ PDFWriter::TOC ]           = "TOC";
-        aTagStrings[ PDFWriter::TOCI ]          = "TOCI";
-        aTagStrings[ PDFWriter::Index ]         = "Index";
-        aTagStrings[ PDFWriter::Paragraph ]     = "P";
-        aTagStrings[ PDFWriter::Heading ]       = "H";
-        aTagStrings[ PDFWriter::H1 ]            = "H1";
-        aTagStrings[ PDFWriter::H2 ]            = "H2";
-        aTagStrings[ PDFWriter::H3 ]            = "H3";
-        aTagStrings[ PDFWriter::H4 ]            = "H4";
-        aTagStrings[ PDFWriter::H5 ]            = "H5";
-        aTagStrings[ PDFWriter::H6 ]            = "H6";
-        aTagStrings[ PDFWriter::List ]          = "L";
-        aTagStrings[ PDFWriter::ListItem ]      = "LI";
-        aTagStrings[ PDFWriter::LILabel ]       = "Lbl";
-        aTagStrings[ PDFWriter::LIBody ]        = "LBody";
-        aTagStrings[ PDFWriter::Table ]         = "Table";
-        aTagStrings[ PDFWriter::TableRow ]      = "TR";
-        aTagStrings[ PDFWriter::TableHeader ]   = "TH";
-        aTagStrings[ PDFWriter::TableData ]     = "TD";
-        aTagStrings[ PDFWriter::Span ]          = "Span";
-        aTagStrings[ PDFWriter::Quote ]         = "Quote";
-        aTagStrings[ PDFWriter::Note ]          = "Note";
-        aTagStrings[ PDFWriter::Reference ]     = "Reference";
-        aTagStrings[ PDFWriter::BibEntry ]      = "BibEntry";
-        aTagStrings[ PDFWriter::Code ]          = "Code";
-        aTagStrings[ PDFWriter::Link ]          = "Link";
-        aTagStrings[ PDFWriter::Annot ]         = "Annot";
-        aTagStrings[ PDFWriter::Figure ]        = "Figure";
-        aTagStrings[ PDFWriter::Formula ]       = "Formula";
-        aTagStrings[ PDFWriter::Form ]          = "Form";
-    }
+    static constexpr auto aTagStrings = frozen::make_map<PDFWriter::StructElement, const char*>({
+        { PDFWriter::NonStructElement, "NonStruct" },
+        { PDFWriter::Document, "Document" },
+        { PDFWriter::Part,         "Part" },
+        { PDFWriter::Article,      "Art" },
+        { PDFWriter::Section,     "Sect" },
+        { PDFWriter::Division,    "Div" },
+        { PDFWriter::BlockQuote,  "BlockQuote" },
+        { PDFWriter::Caption,     "Caption" },
+        { PDFWriter::TOC,         "TOC" },
+        { PDFWriter::TOCI,        "TOCI" },
+        { PDFWriter::Index,       "Index" },
+        { PDFWriter::Paragraph,   "P" },
+        { PDFWriter::Heading,     "H" },
+        { PDFWriter::H1,          "H1" },
+        { PDFWriter::H2,          "H2" },
+        { PDFWriter::H3,          "H3" },
+        { PDFWriter::H4,          "H4" },
+        { PDFWriter::H5,          "H5" },
+        { PDFWriter::H6,          "H6" },
+        { PDFWriter::List,        "L" },
+        { PDFWriter::ListItem,    "LI" },
+        { PDFWriter::LILabel,     "Lbl" },
+        { PDFWriter::LIBody,      "LBody" },
+        { PDFWriter::Table,       "Table" },
+        { PDFWriter::TableRow,    "TR" },
+        { PDFWriter::TableHeader, "TH" },
+        { PDFWriter::TableData,   "TD" },
+        { PDFWriter::Span,        "Span" },
+        { PDFWriter::Quote,       "Quote" },
+        { PDFWriter::Note,        "Note" },
+        { PDFWriter::Reference,   "Reference" },
+        { PDFWriter::BibEntry,    "BibEntry" },
+        { PDFWriter::Code,        "Code" },
+        { PDFWriter::Link,        "Link" },
+        { PDFWriter::Annot,       "Annot" },
+        { PDFWriter::Figure,      "Figure" },
+        { PDFWriter::Formula,     "Formula"},
+        { PDFWriter::Form,        "Form" }
+    });
 
     if (eType == PDFWriter::Annot
         && m_aContext.Version < PDFWriter::PDFVersion::PDF_1_5)
@@ -10641,7 +10634,7 @@ const char* PDFWriterImpl::getStructureTag( PDFWriter::StructElement eType )
         return "Figure"; // fallback
     }
 
-    std::map< PDFWriter::StructElement, const char* >::const_iterator it = aTagStrings.find( eType );
+    auto it = aTagStrings.find( eType );
 
     return it != aTagStrings.end() ? it->second : "Div";
 }

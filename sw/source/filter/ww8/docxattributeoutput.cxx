@@ -157,6 +157,9 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unicode/regex.h>
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
 
 using ::editeng::SvxBorderLine;
 
@@ -294,7 +297,7 @@ void lclAddThemeValuesToCustomAttributes(
     rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList, model::ComplexColor const& rComplexColor,
     sal_Int32 nThemeAttrId, sal_Int32 nThemeTintAttrId, sal_Int32 nThemeShadeAttrId)
 {
-    static std::unordered_map<model::ThemeColorType, const char*> constThemeColorTypeTokenMap = {
+    static constexpr auto constThemeColorTypeTokenMap = frozen::make_unordered_map<model::ThemeColorType, const char*>({
         { model::ThemeColorType::Dark1, "dark1" },
         { model::ThemeColorType::Light1, "light1" },
         { model::ThemeColorType::Dark2, "dark2" },
@@ -307,12 +310,12 @@ void lclAddThemeValuesToCustomAttributes(
         { model::ThemeColorType::Accent6, "accent6" },
         { model::ThemeColorType::Hyperlink, "hyperlink" },
         { model::ThemeColorType::FollowedHyperlink, "followedHyperlink" }
-    };
+    });
 
     if (rComplexColor.getType() == model::ColorType::Scheme &&
         rComplexColor.getSchemeType() != model::ThemeColorType::Unknown)
     {
-        OString sSchemeType = constThemeColorTypeTokenMap[rComplexColor.getSchemeType()];
+        OString sSchemeType = constThemeColorTypeTokenMap.find(rComplexColor.getSchemeType())->second;
         if (rComplexColor.meThemeColorUsage == model::ThemeColorUsage::Text)
         {
             if (rComplexColor.getSchemeType() == model::ThemeColorType::Dark1)

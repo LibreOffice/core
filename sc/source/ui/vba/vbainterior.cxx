@@ -30,6 +30,9 @@
 #include "vbapalette.hxx"
 #include <document.hxx>
 #include <utility>
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/map.h>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
@@ -39,7 +42,7 @@ constexpr OUStringLiteral BACKCOLOR = u"CellBackColor";
 constexpr OUStringLiteral PATTERN = u"Pattern";
 constexpr OUStringLiteral PATTERNCOLOR = u"PatternColor";
 
-static std::map< sal_Int32, sal_Int32 > aPatternMap {
+constexpr auto aPatternMap = frozen::make_map<sal_Int32, sal_Int32>({
     { xlPatternAutomatic, 0 },
     { xlPatternChecker, 9 },
     { xlPatternCrissCross, 16 },
@@ -60,7 +63,7 @@ static std::map< sal_Int32, sal_Int32 > aPatternMap {
     { xlPatternSolid, 0 },
     { xlPatternUp, 8 },
     { xlPatternVertical, 6 }
-};
+});
 
 ScVbaInterior::ScVbaInterior( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, uno::Reference< beans::XPropertySet >   xProps, ScDocument* pScDoc ) : ScVbaInterior_BASE( xParent, xContext ), m_xProps(std::move(xProps)), m_pScDoc( pScDoc )
 {
@@ -97,7 +100,7 @@ ScVbaInterior::SetMixedColor()
     {
         m_nPattern = GetAttributeData( aPattern );
     }
-    sal_Int32 nPattern = aPatternMap[ m_nPattern ];
+    sal_Int32 nPattern = aPatternMap.find( m_nPattern )->second;
     // pattern color
     uno::Any aPatternColor = GetUserDefinedAttributes( PATTERNCOLOR );
     if( aPatternColor.hasValue() )

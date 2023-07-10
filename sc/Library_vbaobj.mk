@@ -23,6 +23,7 @@ $(eval $(call gb_Library_set_componentfile,vbaobj,sc/util/vbaobj,services))
 
 $(eval $(call gb_Library_use_externals,vbaobj,\
 	boost_headers \
+	frozen \
 	mdds_headers \
 ))
 

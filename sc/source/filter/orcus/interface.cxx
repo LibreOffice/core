@@ -52,6 +52,9 @@
 #include <stylehelper.hxx>
 #include <utility>
 #include <unordered_map>
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
 
 using namespace com::sun::star;
 
@@ -101,7 +104,7 @@ void ScOrcusGlobalSettings::set_origin_date(int year, int month, int day)
 void ScOrcusGlobalSettings::set_character_set(orcus::character_set_t cs)
 {
     // Keep the entries sorted by the key.
-    static const std::unordered_map<orcus::character_set_t, rtl_TextEncoding> rules = {
+    static constexpr auto rules = frozen::make_unordered_map<orcus::character_set_t, rtl_TextEncoding>({
         { orcus::character_set_t::big5, RTL_TEXTENCODING_BIG5 },
         { orcus::character_set_t::euc_jp, RTL_TEXTENCODING_EUC_JP },
         { orcus::character_set_t::euc_kr, RTL_TEXTENCODING_EUC_KR },
@@ -145,7 +148,7 @@ void ScOrcusGlobalSettings::set_character_set(orcus::character_set_t cs)
         { orcus::character_set_t::windows_1256, RTL_TEXTENCODING_MS_1256 },
         { orcus::character_set_t::windows_1257, RTL_TEXTENCODING_MS_1257 },
         { orcus::character_set_t::windows_1258, RTL_TEXTENCODING_MS_1258 },
-    };
+    });
 
     if (auto it = rules.find(cs); it != rules.end())
         mnTextEncoding = it->second;
