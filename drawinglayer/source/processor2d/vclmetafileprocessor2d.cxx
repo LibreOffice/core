@@ -1175,6 +1175,11 @@ void VclMetafileProcessor2D::processControlPrimitive2D(
     { // no corresponding PDF Form, use Figure instead
         mpPDFExtOutDevData->WrapBeginStructureElement(vcl::PDFWriter::Figure);
         mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::Placement, vcl::PDFWriter::Block);
+        auto const range(rControlPrimitive.getB2DRange(getViewInformation2D()));
+        tools::Rectangle const aLogicRect(
+            basegfx::fround(range.getMinX()), basegfx::fround(range.getMinY()),
+            basegfx::fround(range.getMaxX()), basegfx::fround(range.getMaxY()));
+        mpPDFExtOutDevData->SetStructureBoundingBox(aLogicRect);
         OUString const& rAltText(rControlPrimitive.GetAltText());
         if (!rAltText.isEmpty())
         {
