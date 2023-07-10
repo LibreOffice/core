@@ -60,6 +60,7 @@ namespace com::sun::star::geometry
     struct RealPoint2D;
     struct RealSize2D;
     struct RealRectangle2D;
+    struct Matrix2D;
 }
 
 namespace com::sun::star::rendering
@@ -87,6 +88,10 @@ namespace vclcanvas
                                  const css::rendering::ViewState&      viewState,
                                  const css::rendering::RenderState&    renderState,
                                  ::OutputDevice const &                rOutDev );
+
+        void setupFontWidth(const css::geometry::Matrix2D& rFontMatrix,
+                            vcl::Font&                     rFont,
+                            OutputDevice&                  rOutDev);
 
         /** Predicate, to determine whether polygon is actually an axis-aligned rectangle
 
