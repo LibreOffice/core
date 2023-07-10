@@ -1074,7 +1074,12 @@ static bool lcl_SetTextFormatColl( SwNode* pNode, void* pArgs )
             }
             else
             {
-                // forcing reset of list level from paragraph
+                // The List Level must be applied as direct formatting. The spec says:
+                // 19.495 The style:list-level attribute specifies the list level value
+                // of a list style that may be applied to any paragraph style.
+                // It does not directly specify the paragraph's list level value,
+                // but consumers can change the paragraph's list level value to the specified value
+                // when the paragraph style is applied.
                 pCNd->SetAttr(pFormat->GetFormatAttr(RES_PARATR_LIST_LEVEL));
             }
         }
