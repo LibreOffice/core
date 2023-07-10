@@ -846,9 +846,9 @@ namespace svgio::svgreader
             return basegfx::B2DRange();
         }
 
-        basegfx::B3DHomMatrix readFilterMatrix(std::u16string_view rCandidate, InfoProvider const & rInfoProvider)
+        std::vector<double> readFilterMatrix(std::u16string_view rCandidate, InfoProvider const & rInfoProvider)
         {
-            basegfx::B3DHomMatrix aMatrix;
+            std::vector<double> aVector;
             const sal_Int32 nLen(rCandidate.size());
 
             sal_Int32 nPos(0);
@@ -856,28 +856,16 @@ namespace svgio::svgreader
 
             SvgNumber aVal;
 
-            // create a 4x4 matrix from the list of 20 matrix values.
-            for (sal_uInt16 nRow = 0; nRow < 4; ++nRow)
+            while (nPos < nLen)
             {
-                for (sal_uInt16 nColumn = 0; nColumn < 5; ++nColumn)
+                if(readNumberAndUnit(rCandidate, nPos, aVal, nLen))
                 {
-                    // return earlier if there are not enough values
-                    if (nPos >= nLen)
-                    {
-                        return basegfx::B3DHomMatrix();
-                    }
-
-                    if(readNumberAndUnit(rCandidate, nPos, aVal, nLen))
-                    {
-                        // ignore the last column
-                        if (nColumn < 4)
-                            aMatrix.set(nRow, nColumn, aVal.solve(rInfoProvider));
-                        skip_char(rCandidate, ' ', ',', nPos, nLen);
-                    }
+                    aVector.push_back(aVal.solve(rInfoProvider));
+                    skip_char(rCandidate, ' ', ',', nPos, nLen);
                 }
             }
 
-            return aMatrix;
+            return aVector;
         }
 
         basegfx::B2DHomMatrix readTransform(std::u16string_view rCandidate, InfoProvider const & rInfoProvider)

@@ -246,11 +246,11 @@ namespace basegfx
     class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_matrix final : public BColorModifier
     {
     private:
-        basegfx::B3DHomMatrix       maMatrix;
+        std::vector<double>       maVector;
 
     public:
-        BColorModifier_matrix(basegfx::B3DHomMatrix aMatrix)
-        :   maMatrix(aMatrix)
+        BColorModifier_matrix(std::vector<double> aVector)
+        :   maVector(aVector)
         {
         }
 
