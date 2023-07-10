@@ -1037,6 +1037,7 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(weld::Container* pPage, weld::DialogC
     , m_xBulRelSizeMF(m_xBuilder->weld_metric_spin_button("relsize", FieldUnit::PERCENT))
     , m_xAllLevelFT(m_xBuilder->weld_label("sublevelsft"))
     , m_xAllLevelNF(m_xBuilder->weld_spin_button("sublevels"))
+    , m_xIsLegalCB(m_xBuilder->weld_check_button("islegal"))
     , m_xStartFT(m_xBuilder->weld_label("startatft"))
     , m_xStartED(m_xBuilder->weld_spin_button("startat"))
     , m_xBulletFT(m_xBuilder->weld_label("bulletft"))
@@ -1074,6 +1075,7 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(weld::Container* pPage, weld::DialogC
     m_xPrefixED->connect_changed(LINK(this, SvxNumOptionsTabPage, EditModifyHdl_Impl));
     m_xSuffixED->connect_changed(LINK(this, SvxNumOptionsTabPage, EditModifyHdl_Impl));
     m_xAllLevelNF->connect_value_changed(LINK(this,SvxNumOptionsTabPage, AllLevelHdl_Impl));
+    m_xIsLegalCB->connect_toggled(LINK(this, SvxNumOptionsTabPage, IsLegalHdl_Impl));
     m_xOrientLB->connect_changed(LINK(this, SvxNumOptionsTabPage, OrientHdl_Impl));
     m_xSameLevelCB->connect_toggled(LINK(this, SvxNumOptionsTabPage, SameLevelHdl_Impl));
     m_xBulRelSizeMF->connect_value_changed(LINK(this,SvxNumOptionsTabPage, BulRelSizeHdl_Impl));
@@ -1271,6 +1273,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
     bool bAllLevel = bContinuous && !bHTMLMode;
     m_xAllLevelFT->set_visible(bAllLevel);
     m_xAllLevelNF->set_visible(bAllLevel);
+    m_xIsLegalCB->set_visible(bAllLevel);
 
     m_xAllLevelsFrame->set_visible(bContinuous);
 
@@ -1334,6 +1337,8 @@ void SvxNumOptionsTabPage::InitControls()
     bool bSameBulColor  = true;
     bool bSameBulRelSize= true;
 
+    TriState isLegal = TRISTATE_INDET;
+
     const SvxNumberFormat* aNumFmtArr[SVX_MAX_NUM];
     OUString sFirstCharFmt;
     sal_Int16 eFirstOrient = text::VertOrientation::NONE;
@@ -1358,6 +1363,7 @@ void SvxNumOptionsTabPage::InitControls()
                 eFirstOrient = aNumFmtArr[i]->GetVertOrient();
                 if(bShowBitmap)
                     aFirstSize = aNumFmtArr[i]->GetGraphicSize();
+                isLegal = aNumFmtArr[i]->GetIsLegal() ? TRISTATE_TRUE : TRISTATE_FALSE;
             }
             if( i > nLvl)
             {
@@ -1367,6 +1373,8 @@ void SvxNumOptionsTabPage::InitControls()
                 bSamePrefix = aNumFmtArr[i]->GetPrefix() == aNumFmtArr[nLvl]->GetPrefix();
                 bSameSuffix = aNumFmtArr[i]->GetSuffix() == aNumFmtArr[nLvl]->GetSuffix();
                 bAllLevel &= aNumFmtArr[i]->GetIncludeUpperLevels() == aNumFmtArr[nLvl]->GetIncludeUpperLevels();
+                if (aNumFmtArr[i]->GetIsLegal() != aNumFmtArr[nLvl]->GetIsLegal())
+                    isLegal = TRISTATE_INDET;
                 bSameCharFmt    &= sFirstCharFmt == aNumFmtArr[i]->GetCharFormatName();
                 bSameVOrient    &= eFirstOrient == aNumFmtArr[i]->GetVertOrient();
                 if(bShowBitmap && bSameSize)
@@ -1438,6 +1446,9 @@ void SvxNumOptionsTabPage::InitControls()
     {
         m_xAllLevelNF->set_text("");
     }
+
+    m_xIsLegalCB->set_state(isLegal);
+    m_xIsLegalCB->set_sensitive(!m_xSameLevelCB->get_active());
 
     if(bBullRelSize)
     {
@@ -1518,6 +1529,7 @@ void SvxNumOptionsTabPage::SwitchNumberType( sal_uInt8 nType )
     bool bAllLevel = bNumeric && bAllLevelFeature && !bHTMLMode;
     m_xAllLevelFT->set_visible(bAllLevel);
     m_xAllLevelNF->set_visible(bAllLevel);
+    m_xIsLegalCB->set_visible(bAllLevel);
 
     m_xStartFT->set_visible(!(bBullet||bBitmap));
     m_xStartED->set_visible(!(bBullet||bBitmap));
@@ -1623,6 +1635,21 @@ IMPL_LINK(SvxNumOptionsTabPage, AllLevelHdl_Impl, weld::SpinButton&, rBox, void)
             pActNum->SetLevel(e, aNumFmt);
         }
         nMask <<= 1;
+    }
+    SetModified();
+}
+
+IMPL_LINK(SvxNumOptionsTabPage, IsLegalHdl_Impl, weld::Toggleable&, rBox, void)
+{
+    bool bSet = rBox.get_active();
+    for (sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
+    {
+        if (nActNumLvl & (sal_uInt16(1) << i))
+        {
+            SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
+            aNumFmt.SetIsLegal(bSet);
+            pActNum->SetLevel(i, aNumFmt);
+        }
     }
     SetModified();
 }
