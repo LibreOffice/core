@@ -1,0 +1,7 @@
+<svg id="svg1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <g id="g1" opacity=".1">
+        <circle id="circle1" cx="100" cy="60" fill="#f00" r="40"/>
+        <circle id="circle2" cx="70" cy="100" fill="#0f0" r="40"/>
+        <circle id="circle3" cx="130" cy="100" fill="#00f" r="40"/>
+    </g>
+</svg>

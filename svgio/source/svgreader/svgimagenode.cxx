@@ -340,7 +340,7 @@ namespace svgio::svgreader
             }
 
             // embed and add to rTarget, take local extra-transform into account
-            pStyle->add_postProcess(rTarget, std::move(aNewTarget), getTransform(), true);
+            pStyle->add_postProcess(rTarget, std::move(aNewTarget), getTransform());
         }
 
 } // end of namespace svgio::svgreader
