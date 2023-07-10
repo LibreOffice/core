@@ -3875,7 +3875,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testFormControlAnnot)
     CPPUNIT_ASSERT_EQUAL(OString("PrintField"), pO->GetValue());
     auto pRole = dynamic_cast<vcl::filter::PDFNameElement*>(pAObj->Lookup("Role"));
     CPPUNIT_ASSERT(pRole);
-    CPPUNIT_ASSERT_EQUAL(OString("Cb"), pRole->GetValue());
+    CPPUNIT_ASSERT_EQUAL(OString("cb"), pRole->GetValue());
     auto pKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pStructElem->Lookup("K"));
     auto nMCID(0);
     auto nRef(0);
