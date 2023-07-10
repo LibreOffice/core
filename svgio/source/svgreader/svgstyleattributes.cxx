@@ -1291,7 +1291,7 @@ namespace svgio::svgreader
             maClipRule(FillRule::notset),
             maBaselineShift(BaselineShift::Baseline),
             maBaselineShiftNumber(0),
-            maResolvingParent(33, 0),
+            maResolvingParent(30, 0),
             mbIsClipPathContent(SVGToken::ClipPathNode == mrOwner.getType()),
             mbStrokeDasharraySet(false)
         {
@@ -2376,11 +2376,11 @@ namespace svgio::svgreader
 
             const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
 
-            if (pSvgStyleAttributes && maResolvingParent[31] < nStyleDepthLimit)
+            if (pSvgStyleAttributes && maResolvingParent[25] < nStyleDepthLimit)
             {
-                ++maResolvingParent[31];
+                ++maResolvingParent[25];
                 auto ret = pSvgStyleAttributes->getClipRule();
-                --maResolvingParent[31];
+                --maResolvingParent[25];
                 return ret;
             }
 
@@ -2865,12 +2865,9 @@ namespace svgio::svgreader
             {
                 const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
 
-                if (pSvgStyleAttributes && maResolvingParent[30] < nStyleDepthLimit)
+                if (pSvgStyleAttributes)
                 {
-                    ++maResolvingParent[30];
-                    auto ret = pSvgStyleAttributes->getClipPathXLink();
-                    --maResolvingParent[30];
-                    return ret;
+                    return pSvgStyleAttributes->maClipPathXLink;
                 }
             }
 
@@ -2901,12 +2898,9 @@ namespace svgio::svgreader
             {
                 const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
 
-                if (pSvgStyleAttributes && maResolvingParent[32] < nStyleDepthLimit)
+                if (pSvgStyleAttributes)
                 {
-                    ++maResolvingParent[32];
-                    auto ret = pSvgStyleAttributes->getFilterXLink();
-                    --maResolvingParent[32];
-                    return ret;
+                    return pSvgStyleAttributes->maFilterXLink;
                 }
             }
 
@@ -2937,12 +2931,9 @@ namespace svgio::svgreader
             {
                 const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
 
-                if (pSvgStyleAttributes && maResolvingParent[25] < nStyleDepthLimit)
+                if (pSvgStyleAttributes)
                 {
-                    ++maResolvingParent[25];
-                    auto ret = pSvgStyleAttributes->getMaskXLink();
-                    --maResolvingParent[25];
-                    return ret;
+                    return pSvgStyleAttributes->maMaskXLink;
                 }
             }
 
