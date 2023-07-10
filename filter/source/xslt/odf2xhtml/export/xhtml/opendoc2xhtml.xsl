@@ -145,6 +145,11 @@
     <xsl:template name="start-main">
         <xsl:param name="globalData" />
 
+    <!-- disable style collection debug 
+        <xsl:call-template name="write-collected-styles">
+            <xsl:with-param name="globalData" select="$globalData" />
+        </xsl:call-template> -->
+
         <xsl:variable name="lang">
              <xsl:choose>
                  <xsl:when test="$globalData/meta-file/*/office:meta/dc:language">
