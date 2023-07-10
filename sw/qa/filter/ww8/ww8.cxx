@@ -25,6 +25,7 @@
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <sortedobjs.hxx>
 
 namespace
 {
@@ -355,6 +356,34 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableThenFloattable)
     // i.e. the two anchor positions were the same instead of first anchor followed by the second
     // anchor.
     CPPUNIT_ASSERT_EQUAL(nFly1Anchor + 1, nFly2Anchor);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testDOCVerticalFlyOffset)
+{
+    // Given a document with 2 pages, a floating table on the first page and an inline table on the
+    // second page:
+    createSwDoc("floattable-vertical-fly-offset.doc");
+
+    // When laying out that document:
+    calcLayout();
+
+    // Then make sure that the tables don't overlap:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    CPPUNIT_ASSERT(pPage1->GetSortedObjs());
+    const SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    // Page 1 has a floating table:
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
+    auto pPage2 = dynamic_cast<SwPageFrame*>(pPage1->GetNext());
+    // Without the accompanying fix in place, this test would have failed, there was no second page.
+    CPPUNIT_ASSERT(pPage2);
+    SwFrame* pBody2 = pPage2->GetLower();
+    SwFrame* pTable2 = pBody2->GetLower();
+    CPPUNIT_ASSERT(pTable2);
+    // Page 2 starts with an inline table:
+    CPPUNIT_ASSERT(pTable2->IsTabFrame());
 }
 }
 
