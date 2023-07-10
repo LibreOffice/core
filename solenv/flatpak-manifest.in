@@ -675,6 +675,13 @@
                     "dest-filename": "@ZXING_TARBALL@"
                 },
                 {
+                    "url": "https://dev-www.libreoffice.org/src/@FROZEN_TARBALL@",
+                    "sha256": "@FROZEN_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@FROZEN_TARBALL@"
+                },
+                {
                     "url": "https://dev-www.libreoffice.org/extern/@OPENSYMBOL_TTF@",
                     "sha256": "@OPENSYMBOL_SHA256SUM@",
                     "type": "file",
