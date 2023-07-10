@@ -168,9 +168,7 @@ namespace svgio::svgreader
 
             if(pStyle)
             {
-                const double fOpacity(pStyle->getOpacity().getNumber());
-
-                if(fOpacity > 0.0 && Display::None != getDisplay())
+                if(Display::None != getDisplay())
                 {
                     pStyle->add_postProcess(rTarget, std::move(aNewTarget), aTransform);
                 }

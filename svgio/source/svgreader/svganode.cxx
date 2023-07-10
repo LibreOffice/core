@@ -83,9 +83,7 @@ namespace svgio::svgreader
             if(!pStyle)
                 return;
 
-            const double fOpacity(pStyle->getOpacity().getNumber());
-
-            if (fOpacity > 0.0 && Display::None != getDisplay())
+            if (Display::None != getDisplay())
             {
                 drawinglayer::primitive2d::Primitive2DContainer aContent;
 
