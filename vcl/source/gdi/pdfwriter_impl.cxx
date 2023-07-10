@@ -1914,10 +1914,10 @@ const char* PDFWriterImpl::getAttributeValueTag( PDFWriter::StructAttributeValue
         aValueStrings[ PDFWriter::Header ]                  = "Header";
         aValueStrings[ PDFWriter::Footer ]                  = "Footer";
         aValueStrings[ PDFWriter::Watermark ]               = "Watermark";
-        aValueStrings[ PDFWriter::Rb ]                      = "Rb";
-        aValueStrings[ PDFWriter::Cb ]                      = "Cb";
-        aValueStrings[ PDFWriter::Pb ]                      = "Pb";
-        aValueStrings[ PDFWriter::Tv ]                      = "Tv";
+        aValueStrings[ PDFWriter::Rb ]                      = "rb";
+        aValueStrings[ PDFWriter::Cb ]                      = "cb";
+        aValueStrings[ PDFWriter::Pb ]                      = "pb";
+        aValueStrings[ PDFWriter::Tv ]                      = "tv";
         aValueStrings[ PDFWriter::Disc ]                    = "Disc";
         aValueStrings[ PDFWriter::Circle ]                  = "Circle";
         aValueStrings[ PDFWriter::Square ]                  = "Square";
