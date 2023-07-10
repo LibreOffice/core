@@ -28,7 +28,7 @@
 #include <ptqueue.hxx>
 #include <fntcache.hxx>
 
-#include "vprint.hxx"
+#include <vprint.hxx>
 
 using namespace ::com::sun::star;
 

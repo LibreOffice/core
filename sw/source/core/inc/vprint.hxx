@@ -22,6 +22,13 @@
 
 class SwRootFrame;
 class SwPageFrame;
+class SwPrintData;
+
 SwPageFrame const* sw_getPage(SwRootFrame const& rLayout, sal_Int32 const nPage);
+
+namespace sw
+{
+bool IsShrinkPageForPostIts(SwViewShell const& rShell, SwPrintData const&);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
