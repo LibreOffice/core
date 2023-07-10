@@ -22,6 +22,10 @@
 #include <memory>
 #include <set>
 
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_set.h>
+
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
@@ -2252,7 +2256,7 @@ SwXText::convertToSwTable(
         {
             try
             {
-                static const std::initializer_list<std::u16string_view> vDenylist = {
+                constexpr auto vDenylist = frozen::make_unordered_set<std::u16string_view>({
                     u"BottomBorder",
                     u"CharAutoKerning",
                     u"CharFontName",
@@ -2289,8 +2293,8 @@ SwXText::convertToSwTable(
                     u"ParaRightBorder",
                     u"ParaRightBorderDistance",
                     u"ParaRightBorderComplexColor",
-                };
-                if (std::find(vDenylist.begin(), vDenylist.end(), rTableProperty.Name) == vDenylist.end())
+                });
+                if (vDenylist.find(rTableProperty.Name) == vDenylist.end())
                 {
                     xRet->setPropertyValue(rTableProperty.Name, rTableProperty.Value);
                 }
