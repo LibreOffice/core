@@ -91,11 +91,6 @@ namespace
     public:
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
         SaveODFItem();
-        //See group ODF in Common.xcs
-        bool isLessODF1_2() const
-        {
-            return m_nODF < 3;
-        }
     };
 
     void SaveODFItem::ImplCommit() {}
@@ -295,13 +290,12 @@ bool DigitalSignaturesDialog::canAddRemove()
     OSL_ASSERT(maSignatureManager.getStore().is());
     bool bDoc1_1 = DocumentSignatureHelper::isODFPre_1_2(m_sODFVersion);
     SaveODFItem item;
-    bool bSave1_1 = item.isLessODF1_2();
 
     // see specification
     //cvs: specs/www/appwide/security/Electronic_Signatures_and_Security.sxw
     //Paragraph 'Behavior with regard to ODF 1.2'
     //For both, macro and document
-    if ( (!bSave1_1  && bDoc1_1) || (bSave1_1 && bDoc1_1) )
+    if ( bDoc1_1 )
     {
         //#4
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
