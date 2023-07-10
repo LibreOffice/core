@@ -20,7 +20,6 @@
 #pragma once
 
 #include <basegfx/color/bcolor.hxx>
-#include <basegfx/range/b3drange.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -110,7 +109,7 @@ namespace svgio::svgreader
         bool match_colorKeyword(basegfx::BColor& rColor, const OUString& rName);
         bool read_color(const OUString& rCandidate, basegfx::BColor& rColor, SvgNumber& rOpacity);
         basegfx::B2DRange readViewBox(std::u16string_view rCandidate, InfoProvider const & rInfoProvider);
-        basegfx::B3DHomMatrix readFilterMatrix(std::u16string_view rCandidate, InfoProvider const & rInfoProvider);
+        std::vector<double> readFilterMatrix(std::u16string_view rCandidate, InfoProvider const & rInfoProvider);
         basegfx::B2DHomMatrix readTransform(std::u16string_view rCandidate, InfoProvider const & rInfoProvider);
         bool readSingleNumber(std::u16string_view rCandidate, SvgNumber& aNum);
         bool readLocalLink(std::u16string_view rCandidate, OUString& rURL);

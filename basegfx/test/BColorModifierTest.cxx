@@ -272,22 +272,15 @@ public:
     void testMatrix()
     {
         // green matrix
-        basegfx::B3DHomMatrix aMatrix;
-        aMatrix.set(0, 0, 0.0);
-        aMatrix.set(0, 1, 0.0);
-        aMatrix.set(0, 2, 0.0);
-        aMatrix.set(0, 3, 0.0);
-        aMatrix.set(1, 0, 1.0);
-        aMatrix.set(1, 1, 1.0);
-        aMatrix.set(1, 2, 1.0);
-        aMatrix.set(1, 3, 1.0);
-        aMatrix.set(2, 0, 0.0);
-        aMatrix.set(2, 1, 0.0);
-        aMatrix.set(2, 2, 0.0);
-        aMatrix.set(2, 3, 0.0);
+        // clang-format off
+        std::vector<double> aVector = {0.0, 0.0, 0.0, 0.0, 0.0,
+                                       1.0, 1.0, 1.0, 1.0, 0.0,
+                                       0.0, 0.0, 0.0, 0.0, 0.0,
+                                       0.0, 0.0, 0.0, 1.0, 0.0};
+        // clang-format on
 
         const basegfx::BColorModifierSharedPtr aBColorModifier
-            = std::make_shared<basegfx::BColorModifier_matrix>(aMatrix);
+            = std::make_shared<basegfx::BColorModifier_matrix>(aVector);
 
         CPPUNIT_ASSERT_EQUAL(maGreen, aBColorModifier->getModifiedColor(maWhite));
         CPPUNIT_ASSERT_EQUAL(maGreen, aBColorModifier->getModifiedColor(maGray));
@@ -306,25 +299,54 @@ public:
         CPPUNIT_ASSERT(*aBColorModifier != *aBColorModifierInvert);
 
         const basegfx::BColorModifierSharedPtr aBColorModifier2
-            = std::make_shared<basegfx::BColorModifier_matrix>(aMatrix);
+            = std::make_shared<basegfx::BColorModifier_matrix>(aVector);
+        CPPUNIT_ASSERT(aBColorModifier->operator==(*aBColorModifier2));
+    }
+
+    void testMatrixShift()
+    {
+        // clang-format off
+        std::vector<double> aVector = {0.0, 0.0, 0.0, 0.0, 0.0,
+                                       0.0, 0.0, 0.0, 0.0, 1.0,
+                                       0.0, 0.0, 0.0, 0.0, 0.0,
+                                       0.0, 0.0, 0.0, 1.0, 0.0};
+        // clang-format on
+
+        const basegfx::BColorModifierSharedPtr aBColorModifier
+            = std::make_shared<basegfx::BColorModifier_matrix>(aVector);
+
+        CPPUNIT_ASSERT_EQUAL(maGreen, aBColorModifier->getModifiedColor(maWhite));
+        CPPUNIT_ASSERT_EQUAL(maGreen, aBColorModifier->getModifiedColor(maGray));
+        CPPUNIT_ASSERT_EQUAL(maGreen, aBColorModifier->getModifiedColor(maBlack));
+
+        CPPUNIT_ASSERT_EQUAL(maGreen, aBColorModifier->getModifiedColor(maRed));
+        CPPUNIT_ASSERT_EQUAL(maGreen, aBColorModifier->getModifiedColor(maGreen));
+        CPPUNIT_ASSERT_EQUAL(maGreen, aBColorModifier->getModifiedColor(maBlue));
+        CPPUNIT_ASSERT_EQUAL(maGreen, aBColorModifier->getModifiedColor(maYellow));
+        CPPUNIT_ASSERT_EQUAL(maGreen, aBColorModifier->getModifiedColor(maMagenta));
+        CPPUNIT_ASSERT_EQUAL(maGreen, aBColorModifier->getModifiedColor(maCyan));
+
+        CPPUNIT_ASSERT(aBColorModifier->operator==(*aBColorModifier));
+        const basegfx::BColorModifierSharedPtr aBColorModifierInvert
+            = std::make_shared<basegfx::BColorModifier_invert>();
+        CPPUNIT_ASSERT(*aBColorModifier != *aBColorModifierInvert);
+
+        const basegfx::BColorModifierSharedPtr aBColorModifier2
+            = std::make_shared<basegfx::BColorModifier_matrix>(aVector);
         CPPUNIT_ASSERT(aBColorModifier->operator==(*aBColorModifier2));
     }
 
     void testIdentityMatrix()
     {
-        basegfx::B3DHomMatrix aMatrix;
-        aMatrix.set(0, 0, 1.0);
-        aMatrix.set(0, 1, 0.0);
-        aMatrix.set(0, 2, 0.0);
-        aMatrix.set(1, 0, 0.0);
-        aMatrix.set(1, 1, 1.0);
-        aMatrix.set(1, 2, 0.0);
-        aMatrix.set(2, 0, 0.0);
-        aMatrix.set(2, 1, 0.0);
-        aMatrix.set(2, 2, 1.0);
+        // clang-format off
+        std::vector<double> aVector = {1.0, 0.0, 0.0, 0.0, 0.0,
+                                       0.0, 1.0, 0.0, 0.0, 0.0,
+                                       0.0, 0.0, 1.0, 0.0, 0.0,
+                                       0.0, 1.0, 0.0, 1.0, 0.0};
+        // clang-format on
 
         const basegfx::BColorModifierSharedPtr aBColorModifier
-            = std::make_shared<basegfx::BColorModifier_matrix>(aMatrix);
+            = std::make_shared<basegfx::BColorModifier_matrix>(aVector);
 
         CPPUNIT_ASSERT_EQUAL(maWhite, aBColorModifier->getModifiedColor(maWhite));
         CPPUNIT_ASSERT_EQUAL(maGray, aBColorModifier->getModifiedColor(maGray));
@@ -343,7 +365,7 @@ public:
         CPPUNIT_ASSERT(*aBColorModifier != *aBColorModifierInvert);
 
         const basegfx::BColorModifierSharedPtr aBColorModifier2
-            = std::make_shared<basegfx::BColorModifier_matrix>(aMatrix);
+            = std::make_shared<basegfx::BColorModifier_matrix>(aVector);
         CPPUNIT_ASSERT(aBColorModifier->operator==(*aBColorModifier2));
     }
 
@@ -356,6 +378,7 @@ public:
     CPPUNIT_TEST(testLuminanceToAlpha);
     CPPUNIT_TEST(testHueRotate);
     CPPUNIT_TEST(testMatrix);
+    CPPUNIT_TEST(testMatrixShift);
     CPPUNIT_TEST(testIdentityMatrix);
     CPPUNIT_TEST_SUITE_END();
 };

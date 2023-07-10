@@ -155,23 +155,41 @@ namespace basegfx
             return false;
         }
 
-        return maMatrix == pCompare->maMatrix;
+        return maVector == pCompare->maVector;
     }
 
     ::basegfx::BColor BColorModifier_matrix::getModifiedColor(const ::basegfx::BColor& aSourceColor) const
     {
-        basegfx::B3DHomMatrix aColorMatrix;
-        aColorMatrix.set(0, 0, aSourceColor.getRed());
-        aColorMatrix.set(1, 0, aSourceColor.getGreen());
-        aColorMatrix.set(2, 0, aSourceColor.getBlue());
-        aColorMatrix.set(3, 0, 1.0);
-        // TODO: add support for alpha
+        if (maVector.size() != 20)
+            return aSourceColor;
 
-        aColorMatrix = maMatrix * aColorMatrix;
+        const double aRed = maVector[0] * aSourceColor.getRed()
+            + maVector[1] * aSourceColor.getGreen()
+            + maVector[2] * aSourceColor.getBlue()
+            + maVector[3] * 1.0
+            + maVector[4];
+        const double aGreen = maVector[5] * aSourceColor.getRed()
+            + maVector[6] * aSourceColor.getGreen()
+            + maVector[7] * aSourceColor.getBlue()
+            + maVector[8] * 1.0
+            + maVector[9];
+        const double aBlue = maVector[10] * aSourceColor.getRed()
+            + maVector[11] * aSourceColor.getGreen()
+            + maVector[12] * aSourceColor.getBlue()
+            + maVector[13] * 1.0
+            + maVector[14];
+        /*TODO: add support for alpha
+        const double aAlpha = maVector[15] * aSourceColor.getRed()
+            + maVector[16] * aSourceColor.getGreen()
+            + maVector[17] * aSourceColor.getBlue()
+            + maVector[18] * 1.0
+            + maVector[19]);
+        */
+
         return ::basegfx::BColor(
-                std::clamp(aColorMatrix.get(0, 0), 0.0, 1.0),
-                std::clamp(aColorMatrix.get(1, 0), 0.0, 1.0),
-                std::clamp(aColorMatrix.get(2, 0), 0.0, 1.0));
+                std::clamp(aRed, 0.0, 1.0),
+                std::clamp(aGreen, 0.0, 1.0),
+                std::clamp(aBlue, 0.0, 1.0));
     }
 
     OUString BColorModifier_matrix::getModifierName() const

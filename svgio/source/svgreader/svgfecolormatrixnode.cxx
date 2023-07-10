@@ -105,11 +105,11 @@ void SvgFeColorMatrixNode::apply(drawinglayer::primitive2d::Primitive2DContainer
     }
     else if (maType == ColorType::Matrix)
     {
-        basegfx::B3DHomMatrix aMatrix = readFilterMatrix(maValuesContent, *this);
+        std::vector<double> aVector = readFilterMatrix(maValuesContent, *this);
 
         const drawinglayer::primitive2d::Primitive2DReference xRef(
             new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
-                std::move(rTarget), std::make_shared<basegfx::BColorModifier_matrix>(aMatrix)));
+                std::move(rTarget), std::make_shared<basegfx::BColorModifier_matrix>(aVector)));
         rTarget = drawinglayer::primitive2d::Primitive2DContainer{ xRef };
     }
 }
