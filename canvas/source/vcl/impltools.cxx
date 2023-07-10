@@ -135,6 +135,33 @@ namespace vclcanvas::tools
             return true;
         }
 
+        void setupFontWidth(const css::geometry::Matrix2D& rFontMatrix,
+                            vcl::Font&                     rFont,
+                            OutputDevice&                  rOutDev)
+        {
+            rFont.SetFontSize(Size(0, rFont.GetFontHeight()));
+
+            if (!::rtl::math::approxEqual(rFontMatrix.m00, rFontMatrix.m11))
+            {
+                const bool bOldMapState(rOutDev.IsMapModeEnabled());
+                rOutDev.EnableMapMode(false);
+
+                const Size aSize = rOutDev.GetFontMetric(rFont).GetFontSize();
+
+                const double fDividend(rFontMatrix.m10 + rFontMatrix.m11);
+                double fStretch = rFontMatrix.m00 + rFontMatrix.m01;
+
+                if (!::basegfx::fTools::equalZero(fDividend))
+                    fStretch /= fDividend;
+
+                const ::tools::Long nNewWidth = ::basegfx::fround(aSize.Width() * fStretch);
+
+                rFont.SetAverageFontWidth(nNewWidth);
+
+                rOutDev.EnableMapMode(bOldMapState);
+            }
+        }
+
         bool isRectangle( const ::tools::PolyPolygon& rPolyPoly )
         {
             // exclude some cheap cases first
