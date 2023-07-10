@@ -135,7 +135,6 @@ WinFontInstance::WinFontInstance(const WinFontFace& rPFF, const vcl::font::FontS
     : LogicalFontInstance(rPFF, rFSP)
     , m_pGraphics(nullptr)
     , m_hFont(nullptr)
-    , m_fScale(1.0f)
     , m_bIsCJKVerticalFont(false)
     , m_nTmDescent(0)
 {

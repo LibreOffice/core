@@ -867,7 +867,7 @@ void WinSalGraphics::GetFontMetric( FontMetricDataRef& rxFontMetric, int nFallba
     rxFontMetric->SetSlant( 0 );
 
     // transformation dependent font metrics
-    rxFontMetric->SetWidth(static_cast<int>(pFontInstance->GetScale() * aWinMetric.tmAveCharWidth));
+    rxFontMetric->SetWidth(aWinMetric.tmAveCharWidth);
 }
 
 FontCharMapRef WinSalGraphics::GetFontCharMap() const
@@ -1167,7 +1167,6 @@ bool WinFontInstance::ImplGetGlyphBoundRect(sal_GlyphId nId, tools::Rectangle& r
 
     const ::comphelper::ScopeGuard aFontRestoreScopeGuard([hFont, hOrigFont, hDC]()
         { if (hFont != hOrigFont) SelectObject(hDC, hOrigFont); });
-    const float fFontScale = GetScale();
 
     // use unity matrix
     MAT2 aMat;
@@ -1202,10 +1201,8 @@ bool WinFontInstance::ImplGetGlyphBoundRect(sal_GlyphId nId, tools::Rectangle& r
 
     rRect = tools::Rectangle( Point( +aGM.gmptGlyphOrigin.x, -aGM.gmptGlyphOrigin.y ),
         Size( aGM.gmBlackBoxX, aGM.gmBlackBoxY ) );
-    rRect.SetLeft(static_cast<int>( fFontScale * rRect.Left() ));
-    rRect.SetRight(static_cast<int>( fFontScale * rRect.Right() ) + 1);
-    rRect.SetTop(static_cast<int>( fFontScale * rRect.Top() ));
-    rRect.SetBottom(static_cast<int>( fFontScale * rRect.Bottom() ) + 1);
+    rRect.SetRight(rRect.Right() + 1);
+    rRect.SetBottom(rRect.Bottom() + 1);
     return true;
 }
 
@@ -1389,7 +1386,7 @@ bool WinFontInstance::GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& 
     // rescaling needed for the tools::PolyPolygon conversion
     if( rB2DPolyPoly.count() )
     {
-        const double fFactor(GetScale()/256);
+        const double fFactor(1.0f/256);
         rB2DPolyPoly.transform(basegfx::utils::createScaleB2DHomMatrix(fFactor, fFactor));
     }
 
