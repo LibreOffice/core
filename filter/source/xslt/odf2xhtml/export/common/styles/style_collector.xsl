@@ -504,6 +504,8 @@
     </xsl:template>
 
 
+    <!-- Context is <style:style> with all style properties elements containing attributes, accessed by */@prop 
+        overwriting the ODF style properties that are being inherited from the 'inheritedStyleProperties' parameter! -->
     <xsl:template name="create-inherited-style-properties">
         <xsl:param name="inheritedStyleProperties" />
 
@@ -511,8 +513,58 @@
            <!-- Writing all inherited style properties -->
             <xsl:for-each select="$inheritedStyleProperties/@*">
                 <xsl:sort select="name()" />
-                <xsl:copy-of select="." />
+
+                <!-- Normalization three ODF attributes to one ODF attribute fo:background color (only temporary not ODF conform but eases mapping to ODF)
+                There are two different background color: 
+                    1) fo:background-color
+                    2) draw:fill-color
+                    mapped to one in CSS.
+                    In addition if there is the attribute @draw:fill="none" the background is 'transparent' -->
+                <xsl:choose>
+                    <xsl:when test="name() = 'draw:fill-color' or name() = 'fo:background-color' or name() = 'draw:fill'">
+                        <xsl:choose>
+                            <xsl:when test="$inheritedStyleProperties/@draw:fill='none'">
+                                <xsl:attribute name="fo:background-color">transparent</xsl:attribute>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:choose>
+                                    <xsl:when test="name()!='draw:fill'">
+                                        <xsl:attribute name="fo:background-color"><xsl:value-of select="."/></xsl:attribute>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="fo:background-color">transparent</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:copy-of select="." />
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:for-each>
+
+            <xsl:if test="*/@draw:fill-color or */@fo:background-color or */@draw:fill">                
+                <xsl:choose>
+                    <xsl:when test="*/@draw:fill='none'">
+                        <xsl:attribute name="fo:background-color">transparent</xsl:attribute>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:choose>
+                            <xsl:when test="*/@draw:fill-color">
+                                <xsl:attribute name="fo:background-color"><xsl:value-of select="*/@draw:fill-color"/></xsl:attribute>
+                            </xsl:when>
+                            <xsl:when test="*/@fo:background-color">
+                                <xsl:attribute name="fo:background-color"><xsl:value-of select="*/@fo:background-color"/></xsl:attribute>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="fo:background-color">transparent</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:if>
+
 
             <!-- split border into border parts for better activation-check on style:joint-border feature -->
             <xsl:if test="*/@fo:border">
@@ -568,21 +620,20 @@
     <xsl:template name="write-collected-styles">
         <xsl:param name="globalData" />
 
-        <xsl:message>&lt;all-doc-styles&gt;</xsl:message>
+        <xsl:message>all-doc-styles:start</xsl:message>
         <xsl:for-each select="$globalData/all-doc-styles/style">
-            <xsl:message>&lt;style</xsl:message>
-            <xsl:message>style:family="<xsl:value-of select="current()/@style:family" />"&gt;</xsl:message>
-            <xsl:message>style:name="<xsl:value-of select="current()/@style:name" />" </xsl:message>
-            <xsl:message>   &lt;*</xsl:message>
+            <xsl:message>***style:start</xsl:message>
+            <xsl:message>style:family="<xsl:value-of select="current()/@style:family" />"</xsl:message>
+            <xsl:message>style:name="<xsl:value-of select="current()/@style:name" />"</xsl:message>
+            <xsl:message>   with properties:</xsl:message>
             <xsl:for-each select="*/@*">
                 <xsl:message>
                     <xsl:text></xsl:text>
                     <xsl:value-of select="name()" />="<xsl:value-of select="." />"</xsl:message>
             </xsl:for-each>
-            <xsl:message>/&gt;</xsl:message>
-            <xsl:message>&lt;/style&gt;</xsl:message>
+            <xsl:message>***style:end</xsl:message>
         </xsl:for-each>
-        <xsl:message>&lt;/all-doc-styles&gt;</xsl:message>
+        <xsl:message>all-doc-styles:end</xsl:message>
     </xsl:template>
 
     <xsl:template name="map-odf-style-properties">
