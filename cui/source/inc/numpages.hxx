@@ -235,6 +235,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
     std::unique_ptr<weld::MetricSpinButton> m_xBulRelSizeMF;
     std::unique_ptr<weld::Label> m_xAllLevelFT;
     std::unique_ptr<weld::SpinButton> m_xAllLevelNF;
+    std::unique_ptr<weld::CheckButton> m_xIsLegalCB;
     std::unique_ptr<weld::Label> m_xStartFT;
     std::unique_ptr<weld::SpinButton> m_xStartED;
     std::unique_ptr<weld::Label> m_xBulletFT;
@@ -273,6 +274,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
     DECL_LINK(EditModifyHdl_Impl, weld::Entry&, void);
     DECL_LINK(SpinModifyHdl_Impl, weld::SpinButton&, void);
     DECL_LINK(AllLevelHdl_Impl, weld::SpinButton&, void);
+    DECL_LINK(IsLegalHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(OrientHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(SameLevelHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(BulColorHdl_Impl, ColorListBox&, void);
