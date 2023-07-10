@@ -431,7 +431,8 @@ bool ScViewFunc::CopyToClipMultiRange( const ScDocument* pInputClipDoc, const Sc
 rtl::Reference<ScTransferObj> ScViewFunc::CopyToTransferable()
 {
     ScRange aRange;
-    if ( GetViewData().GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
+    auto eMarkType = GetViewData().GetSimpleArea( aRange );
+    if ( eMarkType == SC_MARK_SIMPLE || eMarkType == SC_MARK_SIMPLE_FILTERED )
     {
         ScDocument& rDoc = GetViewData().GetDocument();
         ScMarkData& rMark = GetViewData().GetMarkData();
