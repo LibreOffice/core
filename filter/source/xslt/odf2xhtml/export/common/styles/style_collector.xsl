@@ -576,7 +576,7 @@
 
            <!--All current attributes will override already inserted attributes of the same name
                XSLT Spec: "Adding an attribute to an element replaces any existing attribute of that element with the same expanded-name." -->
-            <xsl:for-each select="*/@*[name() != 'style:font-size-rel'][name() != 'fo:border']">
+            <xsl:for-each select="*/@*[name() != 'style:font-size-rel'][name() != 'fo:border'][name() != 'draw:fill-color']">
                 <xsl:copy-of select="." />
             </xsl:for-each>
 
