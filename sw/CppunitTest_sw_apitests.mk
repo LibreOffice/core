@@ -20,6 +20,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_apitests, \
     sw/qa/api/SwXBodyText \
     sw/qa/api/SwXBookmark \
     sw/qa/api/SwXBookmarks \
+    sw/qa/api/SwXChapterNumbering \
     sw/qa/api/SwXDocumentIndex \
     sw/qa/api/SwXDocumentIndexMark \
     sw/qa/api/SwXDocumentSettings \
