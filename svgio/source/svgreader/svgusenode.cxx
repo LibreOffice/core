@@ -172,7 +172,7 @@ namespace svgio::svgreader
 
                 if(fOpacity > 0.0 && Display::None != getDisplay())
                 {
-                    pStyle->add_postProcess(rTarget, std::move(aNewTarget), aTransform, false);
+                    pStyle->add_postProcess(rTarget, std::move(aNewTarget), aTransform);
                 }
             }
         }

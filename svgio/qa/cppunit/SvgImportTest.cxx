@@ -835,6 +835,22 @@ CPPUNIT_TEST_FIXTURE(Test, testRGBColor)
     assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor/polypolygon", "maxy", "110");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf149673)
+{
+    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/tdf149673.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/unifiedtransparence", "transparence", "90");
+    assertXPath(pDocument, "/primitive2D/transform/unifiedtransparence/polypolygoncolor[1]", "color", "#ff0000");
+    assertXPath(pDocument, "/primitive2D/transform/unifiedtransparence/polypolygoncolor[2]", "color", "#00ff00");
+    assertXPath(pDocument, "/primitive2D/transform/unifiedtransparence/polypolygoncolor[3]", "color", "#0000ff");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testRGBAColor)
 {
     Primitive2DSequence aSequenceRGBAColor = parseSvg(u"/svgio/qa/cppunit/data/RGBAColor.svg");

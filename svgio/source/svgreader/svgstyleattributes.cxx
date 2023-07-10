@@ -1163,8 +1163,7 @@ namespace svgio::svgreader
         void SvgStyleAttributes::add_postProcess(
             drawinglayer::primitive2d::Primitive2DContainer& rTarget,
             drawinglayer::primitive2d::Primitive2DContainer&& rSource,
-            const std::optional<basegfx::B2DHomMatrix>& pTransform,
-            bool bIsPrimitive) const
+            const std::optional<basegfx::B2DHomMatrix>& pTransform) const
         {
             const double fOpacity(getOpacity().solve(mrOwner));
 
@@ -1175,20 +1174,15 @@ namespace svgio::svgreader
 
             drawinglayer::primitive2d::Primitive2DContainer aSource(std::move(rSource));
 
-            // tdf#97717: only apply opacity when it's a primitive, otherwise, it might be
-            // applied more than once, since getOpacity() checks the parents
-            if (bIsPrimitive)
+            if(basegfx::fTools::less(fOpacity, 1.0))
             {
-                if(basegfx::fTools::less(fOpacity, 1.0))
-                {
-                    // embed in UnifiedTransparencePrimitive2D
-                    const drawinglayer::primitive2d::Primitive2DReference xRef(
-                        new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
-                            std::move(aSource),
-                            1.0 - fOpacity));
+                // embed in UnifiedTransparencePrimitive2D
+                const drawinglayer::primitive2d::Primitive2DReference xRef(
+                    new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
+                        std::move(aSource),
+                        1.0 - fOpacity));
 
-                    aSource = drawinglayer::primitive2d::Primitive2DContainer { xRef };
-                }
+                aSource = drawinglayer::primitive2d::Primitive2DContainer { xRef };
             }
 
             if(pTransform)
@@ -1291,7 +1285,7 @@ namespace svgio::svgreader
             maClipRule(FillRule::notset),
             maBaselineShift(BaselineShift::Baseline),
             maBaselineShiftNumber(0),
-            maResolvingParent(30, 0),
+            maResolvingParent(29, 0),
             mbIsClipPathContent(SVGToken::ClipPathNode == mrOwner.getType()),
             mbStrokeDasharraySet(false)
         {
@@ -2282,14 +2276,16 @@ namespace svgio::svgreader
                 return maOpacity;
             }
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
-
-            if (pSvgStyleAttributes && maResolvingParent[8] < nStyleDepthLimit)
+            // This is called from add_postProcess so only check the parent style
+            // if it has a local css style, because it's the first in the stack
+            if(mrOwner.hasLocalCssStyle())
             {
-                ++maResolvingParent[8];
-                auto ret = pSvgStyleAttributes->getOpacity();
-                --maResolvingParent[8];
-                return ret;
+                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+
+                if (pSvgStyleAttributes && pSvgStyleAttributes->maOpacity.isSet())
+                {
+                    return pSvgStyleAttributes->maOpacity;
+                }
             }
 
             // default is 1
@@ -3051,11 +3047,11 @@ namespace svgio::svgreader
             {
                 const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
 
-                if (pSvgStyleAttributes && maResolvingParent[29] < nStyleDepthLimit)
+                if (pSvgStyleAttributes && maResolvingParent[8] < nStyleDepthLimit)
                 {
-                    ++maResolvingParent[29];
+                    ++maResolvingParent[8];
                     const SvgNumber aParentNumber = pSvgStyleAttributes->getBaselineShiftNumber();
-                    --maResolvingParent[29];
+                    --maResolvingParent[8];
 
                     return SvgNumber(
                         aParentNumber.getNumber() * maBaselineShiftNumber.getNumber() * 0.01,
