@@ -519,20 +519,23 @@ public:
     /// @throws lang::IndexOutOfBoundsException
     /// @throws uno::RuntimeException
     void detachRecursive(
-        const uno::Reference< accessibility::XAccessible >& xAccessible
-    );
-
-    /// @throws lang::IndexOutOfBoundsException
-    /// @throws uno::RuntimeException
-    void detachRecursive(
-        const uno::Reference< accessibility::XAccessibleContext >& xContext
+        const uno::Reference< accessibility::XAccessible >& xAccessible,
+        bool bForce = false
     );
 
     /// @throws lang::IndexOutOfBoundsException
     /// @throws uno::RuntimeException
     void detachRecursive(
         const uno::Reference< accessibility::XAccessibleContext >& xContext,
-        const sal_Int64 nStateSet
+        bool bForce = false
+    );
+
+    /// @throws lang::IndexOutOfBoundsException
+    /// @throws uno::RuntimeException
+    void detachRecursive(
+        const uno::Reference< accessibility::XAccessibleContext >& xContext,
+        const sal_Int64 nStateSet,
+        bool bForce = false
     );
 
     /// @throws lang::IndexOutOfBoundsException
@@ -1032,25 +1035,30 @@ void LOKDocumentFocusListener::attachRecursive(
         {
             // Usually, when the document is loaded, a CARET_CHANGED accessibility event is automatically emitted
             // for the first paragraph. That allows to notify the paragraph content to the client, even if no input
-            // event occurred yet. However, in Cypress tests no accessibility event is automatically emitted until
-            // some input event occurs. So we use the following workaround to notify the content of the focused
-            // paragraph, without waiting for an input event.
+            // event occurred yet. However, when switching to a11y enabled in the client and in Cypress tests
+            // no accessibility event is automatically emitted until some input event occurs.
+            // So we use the following workaround to notify the content of the focused paragraph,
+            // without waiting for an input event.
             // Here we update the paragraph info related to the focused paragraph,
             // later when afterCallbackRegistered is executed we notify the paragraph content.
             sal_Int64 nChildCount = xContext->getAccessibleChildCount();
             if (nChildCount > 0)
             {
-                uno::Reference< accessibility::XAccessible > xChild( xContext->getAccessibleChild( 0 ) );
-                if( xChild.is() )
+                for (sal_Int64 n = 0; n < nChildCount; ++n)
                 {
-                    uno::Reference<css::accessibility::XAccessibleText> xAccText(xChild, uno::UNO_QUERY);
-                    if (xAccText.is())
+                    uno::Reference< accessibility::XAccessible > xChild(xContext->getAccessibleChild(n));
+                    if (xChild.is())
                     {
-                        sal_Int32 nPos = xAccText->getCaretPosition();
-                        if (nPos >= 0)
+                        uno::Reference<css::accessibility::XAccessibleText> xAccText(xChild, uno::UNO_QUERY);
+                        if (xAccText.is())
                         {
-                            attachRecursive(xChild);
-                            updateParagraphInfo(xAccText, false, "LOKDocumentFocusListener::attachRecursive(3)");
+                            sal_Int32 nPos = xAccText->getCaretPosition();
+                            if (nPos >= 0)
+                            {
+                                attachRecursive(xChild);
+                                updateParagraphInfo(xAccText, false, "LOKDocumentFocusListener::attachRecursive(3)");
+                                break;
+                            }
                         }
                     }
                 }
@@ -1060,18 +1068,20 @@ void LOKDocumentFocusListener::attachRecursive(
 }
 
 void LOKDocumentFocusListener::detachRecursive(
-    const uno::Reference< accessibility::XAccessible >& xAccessible
+    const uno::Reference< accessibility::XAccessible >& xAccessible,
+    bool bForce
 )
 {
     uno::Reference< accessibility::XAccessibleContext > xContext =
         xAccessible->getAccessibleContext();
 
     if( xContext.is() )
-        detachRecursive(xContext);
+        detachRecursive(xContext, bForce);
 }
 
 void LOKDocumentFocusListener::detachRecursive(
-    const uno::Reference< accessibility::XAccessibleContext >& xContext
+    const uno::Reference< accessibility::XAccessibleContext >& xContext,
+    bool bForce
 )
 {
     aboutView("LOKDocumentFocusListener::detachRecursive (2)", this, m_pViewShell);
@@ -1094,12 +1104,13 @@ void LOKDocumentFocusListener::detachRecursive(
         }
     }
 
-    detachRecursive(xContext, nStateSet);
+    detachRecursive(xContext, nStateSet, bForce);
 }
 
 void LOKDocumentFocusListener::detachRecursive(
     const uno::Reference< accessibility::XAccessibleContext >& xContext,
-    const sal_Int64 nStateSet
+    const sal_Int64 nStateSet,
+    bool bForce
 )
 {
     uno::Reference< accessibility::XAccessibleEventBroadcaster > xBroadcaster =
@@ -1109,12 +1120,11 @@ void LOKDocumentFocusListener::detachRecursive(
     {
         xBroadcaster->removeAccessibleEventListener(static_cast< accessibility::XAccessibleEventListener *>(this));
 
-        if( !( nStateSet & accessibility::AccessibleStateType::MANAGES_DESCENDANTS ) )
+        if( bForce || !( nStateSet & accessibility::AccessibleStateType::MANAGES_DESCENDANTS ) )
         {
             sal_Int64 nmax = xContext->getAccessibleChildCount();
             if( nmax > MAX_ATTACHABLE_CHILDREN )
                 nmax = MAX_ATTACHABLE_CHILDREN;
-
             for( sal_Int64 n = 0; n < nmax; n++ )
             {
                 uno::Reference< accessibility::XAccessible > xChild( xContext->getAccessibleChild( n ) );
@@ -2626,7 +2636,7 @@ void SfxViewShell::SetLOKAccessibilityState(bool bEnabled)
     {
         try
         {
-            rDocumentFocusListener.detachRecursive(xAccessible);
+            rDocumentFocusListener.detachRecursive(xAccessible, /*bForce*/ true);
         }
         catch (const uno::Exception&)
         {
