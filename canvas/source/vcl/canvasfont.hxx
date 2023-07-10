@@ -75,11 +75,14 @@ namespace vclcanvas
 
         vcl::Font const & getVCLFont() const;
 
+        const css::geometry::Matrix2D& getFontMatrix() const;
+
     private:
         ::canvas::vcltools::VCLObject<vcl::Font>                          maFont;
         css::rendering::FontRequest                                       maFontRequest;
         css::uno::Reference< css::rendering::XGraphicDevice>              mpRefDevice;
         OutDevProviderSharedPtr                                           mpOutDevProvider;
+        css::geometry::Matrix2D                                           maFontMatrix;
     };
 
 }
