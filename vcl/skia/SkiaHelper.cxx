@@ -72,7 +72,7 @@ bool isVCLSkiaEnabled() { return false; }
 #endif
 #if defined __GNUC__ && !defined __clang__
 #pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-unused-parameter"
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 #endif
 #include <src/image/SkImage_Base.h>
 #if defined __GNUC__ && !defined __clang__

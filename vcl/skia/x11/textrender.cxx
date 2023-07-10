@@ -25,7 +25,7 @@
 #endif
 #if defined __GNUC__ && !defined __clang__
 #pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-unused-value"
+#pragma GCC diagnostic ignored "-Wunused-value"
 #endif
 
 #include <skia/x11/textrender.hxx>
