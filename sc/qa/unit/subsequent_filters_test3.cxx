@@ -391,8 +391,9 @@ struct PaintListener : public SfxListener
         const ScPaintHint* pPaintHint = dynamic_cast<const ScPaintHint*>(&rHint);
         if (pPaintHint)
         {
-            if (pPaintHint->GetStartCol() <= 0 && pPaintHint->GetEndCol() >= 0
-                && pPaintHint->GetStartRow() <= 9 && pPaintHint->GetEndRow() >= 9)
+            if ((pPaintHint->GetStartCol() <= 0 && pPaintHint->GetEndCol() >= 0)
+                && ((pPaintHint->GetStartRow() <= 9 && pPaintHint->GetEndRow() >= 9)
+                    || (pPaintHint->GetStartRow() == 2 && pPaintHint->GetEndRow() == 3)))
             {
                 mbCalled = true;
             }
@@ -416,6 +417,26 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testCondFormatFormulaListenerXLSX)
     CPPUNIT_ASSERT(pFormat);
     pDoc->SetDocVisible(true);
     pDoc->SetValue(0, 0, 0, 2.0);
+
+    CPPUNIT_ASSERT(aListener.mbCalled);
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf131471)
+{
+    // Repaint range of conditional format in merged cell.
+    createScDoc("ods/tdf131471.ods");
+    ScDocShell* pDocSh = getScDocShell();
+    PaintListener aListener;
+    aListener.StartListening(*pDocSh);
+    ScDocument* pDoc = getScDoc();
+    ScConditionalFormatList* pList = pDoc->GetCondFormList(0);
+    CPPUNIT_ASSERT(pList);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pList->size());
+    ScConditionalFormat* pFormat = pList->begin()->get();
+    CPPUNIT_ASSERT(pFormat);
+    pDoc->SetDocVisible(true);
+    pDoc->SetValue(0, 0, 0, 1.0);
 
     CPPUNIT_ASSERT(aListener.mbCalled);
 }

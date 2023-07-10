@@ -488,7 +488,7 @@ void ScModelObj::RepaintRange( const ScRange& rRange )
 void ScModelObj::RepaintRange( const ScRangeList& rRange )
 {
     if (pDocShell)
-        pDocShell->PostPaint( rRange, PaintPartFlags::Grid );
+        pDocShell->PostPaint(rRange, PaintPartFlags::Grid, SC_PF_TESTMERGE);
 }
 
 static ScViewData* lcl_getViewMatchingDocZoomTab(const Fraction& rZoomX,
