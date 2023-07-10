@@ -694,7 +694,7 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
 
     if (isPDFTaggingEnabled && !GetPara()->HasNumberingPortion(SwParaPortion::FootnoteToo))
     {   // no Lbl needed => open paragraph tag now
-        Frame_Info aFrameInfo(*this);
+        Frame_Info aFrameInfo(*this, false);
         oTaggedParagraph.emplace(nullptr, &aFrameInfo, nullptr, rRenderContext);
     }
 

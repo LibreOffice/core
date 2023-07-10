@@ -157,7 +157,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     {   // there is a num portion but it is outside of the frame area and not painted
         assert(!roTaggedLabel);
         assert(!roTaggedParagraph);
-        Frame_Info aFrameInfo(*m_pFrame); // open LBody
+        Frame_Info aFrameInfo(*m_pFrame, false); // open LBody
         roTaggedParagraph.emplace(nullptr, &aFrameInfo, nullptr, *GetInfo().GetOut());
     }
 
@@ -437,7 +437,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             assert(roTaggedLabel);
             roTaggedLabel.reset(); // close Lbl
             assert(!roTaggedParagraph);
-            Frame_Info aFrameInfo(*m_pFrame); // open LBody
+            Frame_Info aFrameInfo(*m_pFrame, false); // open LBody
             roTaggedParagraph.emplace(nullptr, &aFrameInfo, nullptr, *pOut);
         }
 
@@ -473,7 +473,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                         {
                             roTaggedLabel.reset();
                         } // else, if the numbering isn't visible at all, no Lbl
-                        Frame_Info aFrameInfo(*m_pFrame); // open LBody
+                        Frame_Info aFrameInfo(*m_pFrame, false); // open LBody
                         roTaggedParagraph.emplace(nullptr, &aFrameInfo, nullptr, *GetInfo().GetOut());
                         return true;
                     }

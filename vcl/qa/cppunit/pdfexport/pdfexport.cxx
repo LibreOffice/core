@@ -4024,6 +4024,136 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testMediaShapeAnnot)
     CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nRef)>(1), nRef);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testFlyFrameHyperlinkAnnot)
+{
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+
+    // Enable PDF/UA
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+
+    saveAsPDF(u"image-hyperlink-alttext.fodt");
+
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"));
+    CPPUNIT_ASSERT(pAnnots);
+
+    // There should be one annotation
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pAnnots->GetElements().size());
+    auto pAnnotReference
+        = dynamic_cast<vcl::filter::PDFReferenceElement*>(pAnnots->GetElements()[0]);
+    CPPUNIT_ASSERT(pAnnotReference);
+    // check /Annot - produced by sw
+    vcl::filter::PDFObjectElement* pAnnot = pAnnotReference->LookupObject();
+    CPPUNIT_ASSERT(pAnnot);
+    CPPUNIT_ASSERT_EQUAL(
+        OString("Annot"),
+        static_cast<vcl::filter::PDFNameElement*>(pAnnot->Lookup("Type"))->GetValue());
+    CPPUNIT_ASSERT_EQUAL(
+        OString("Link"),
+        static_cast<vcl::filter::PDFNameElement*>(pAnnot->Lookup("Subtype"))->GetValue());
+
+    auto pContents = dynamic_cast<vcl::filter::PDFHexStringElement*>(pAnnot->Lookup("Contents"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Image2"),
+                         ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pContents));
+
+    auto pStructParent
+        = dynamic_cast<vcl::filter::PDFNumberElement*>(pAnnot->Lookup("StructParent"));
+    CPPUNIT_ASSERT(pStructParent);
+
+    vcl::filter::PDFReferenceElement* pStructElemRef(nullptr);
+
+    // check ParentTree to find StructElem
+    auto nRoots(0);
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject1 = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject1)
+            continue;
+        auto pType1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("Type"));
+        if (pType1 && pType1->GetValue() == "StructTreeRoot")
+        {
+            ++nRoots;
+            auto pParentTree
+                = dynamic_cast<vcl::filter::PDFReferenceElement*>(pObject1->Lookup("ParentTree"));
+            CPPUNIT_ASSERT(pParentTree);
+            auto pNumTree = pParentTree->LookupObject();
+            CPPUNIT_ASSERT(pNumTree);
+            auto pNums = dynamic_cast<vcl::filter::PDFArrayElement*>(pNumTree->Lookup("Nums"));
+            CPPUNIT_ASSERT(pNums);
+            auto nFound(0);
+            for (size_t i = 0; i < pNums->GetElements().size(); i += 2)
+            {
+                auto pI = dynamic_cast<vcl::filter::PDFNumberElement*>(pNums->GetElement(i));
+                if (pI->GetValue() == pStructParent->GetValue())
+                {
+                    ++nFound;
+                    CPPUNIT_ASSERT(i < pNums->GetElements().size() - 1);
+                    pStructElemRef
+                        = dynamic_cast<vcl::filter::PDFReferenceElement*>(pNums->GetElement(i + 1));
+                    CPPUNIT_ASSERT(pStructElemRef);
+                }
+            }
+            CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nFound)>(1), nFound);
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nRoots)>(1), nRoots);
+
+    // check /StructElem - produced by sw painting code
+    CPPUNIT_ASSERT(pStructElemRef);
+    auto pStructElem(pStructElemRef->LookupObject());
+    CPPUNIT_ASSERT(pStructElem);
+
+    auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pStructElem->Lookup("Type"));
+    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType->GetValue());
+    auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pStructElem->Lookup("S"));
+    CPPUNIT_ASSERT_EQUAL(OString("Link"), pS->GetValue());
+    auto pKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pStructElem->Lookup("K"));
+    auto nMCID(0);
+    auto nRef(0);
+    for (size_t i = 0; i < pKids->GetElements().size(); ++i)
+    {
+        auto pNum = dynamic_cast<vcl::filter::PDFNumberElement*>(pKids->GetElement(i));
+        auto pRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids->GetElement(i));
+        if (pNum)
+        {
+            ++nMCID;
+        }
+        if (pRef)
+        {
+            ++nRef;
+            auto pObjR = pRef->LookupObject();
+            auto pOType = dynamic_cast<vcl::filter::PDFNameElement*>(pObjR->Lookup("Type"));
+            CPPUNIT_ASSERT_EQUAL(OString("OBJR"), pOType->GetValue());
+            auto pAnnotRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pObjR->Lookup("Obj"));
+            CPPUNIT_ASSERT_EQUAL(pAnnot, pAnnotRef->LookupObject());
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nMCID)>(1), nMCID);
+    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nRef)>(1), nRef);
+
+    // the Link is inside a Figure
+    auto pParentRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pStructElem->Lookup("P"));
+    CPPUNIT_ASSERT(pParentRef);
+    auto pParent(pParentRef->LookupObject());
+    CPPUNIT_ASSERT(pParent);
+    auto pParentType = dynamic_cast<vcl::filter::PDFNameElement*>(pParent->Lookup("Type"));
+    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pParentType->GetValue());
+    auto pParentS = dynamic_cast<vcl::filter::PDFNameElement*>(pParent->Lookup("S"));
+    CPPUNIT_ASSERT_EQUAL(OString("Figure"), pParentS->GetValue());
+    auto pAlt = dynamic_cast<vcl::filter::PDFHexStringElement*>(pParent->Lookup("Alt"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Ship drawing - Very cute"),
+                         ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAlt));
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testFormControlAnnot)
 {
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");

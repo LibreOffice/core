@@ -408,7 +408,7 @@ bool SwTaggedPDFHelper::CheckReopenTag()
         {
             pKeyFrame = &rFrame;
         }
-        else if ( rFrame.IsFlyFrame() )
+        else if (rFrame.IsFlyFrame() && !mpFrameInfo->m_isLink)
         {
             const SwFormatAnchor& rAnchor =
                 static_cast<const SwFlyFrame*>(&rFrame)->GetFormat()->GetAnchor();
@@ -530,6 +530,23 @@ void SwTaggedPDFHelper::EndTag()
 #if OSL_DEBUG_LEVEL > 1
     aStructStack.pop_back();
 #endif
+}
+
+namespace {
+
+    // link the link annotation to the link structured element
+    void LinkLinkLink(vcl::PDFExtOutDevData & rPDFExtOutDevData, SwRect const& rRect)
+    {
+        const LinkIdMap& rLinkIdMap = SwEnhancedPDFExportHelper::GetLinkIdMap();
+        const Point aCenter = rRect.Center();
+        auto aIter = std::find_if(rLinkIdMap.begin(), rLinkIdMap.end(),
+            [&aCenter](const IdMapEntry& rEntry) { return rEntry.first.Contains(aCenter); });
+        if (aIter != rLinkIdMap.end())
+        {
+            sal_Int32 nLinkId = (*aIter).second;
+            rPDFExtOutDevData.SetStructureAttributeNumerical(vcl::PDFWriter::LinkAnnotation, nLinkId);
+        }
+    }
 }
 
 // Sets the attributes according to the structure type.
@@ -806,6 +823,12 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                 }
             }
         }
+
+        if (mpFrameInfo->m_isLink)
+        {
+            SwRect const aRect(mpFrameInfo->mrFrame.getFrameArea());
+            LinkLinkLink(*mpPDFExtOutDevData, aRect);
+        }
     }
 
     /*
@@ -906,17 +929,9 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
 
         if ( bLinkAttribute )
         {
-            const LinkIdMap& rLinkIdMap = SwEnhancedPDFExportHelper::GetLinkIdMap();
             SwRect aPorRect;
             rInf.CalcRect( *pPor, &aPorRect );
-            const Point aPorCenter = aPorRect.Center();
-            auto aIter = std::find_if(rLinkIdMap.begin(), rLinkIdMap.end(),
-                [&aPorCenter](const IdMapEntry& rEntry) { return rEntry.first.Contains(aPorCenter); });
-            if (aIter != rLinkIdMap.end())
-            {
-                sal_Int32 nLinkId = (*aIter).second;
-                mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::LinkAnnotation, nLinkId );
-            }
+            LinkLinkLink(*mpPDFExtOutDevData, aPorRect);
         }
     }
     else if (mpNumInfo && eType == vcl::PDFWriter::List)
@@ -1435,6 +1450,12 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
             // FlyFrame: Figure, Formula, Control
             // fly in content or fly at page
+            if (mpFrameInfo->m_isLink)
+            {   // tdf#154939 additional inner link element for flys
+                nPDFType = vcl::PDFWriter::Link;
+                aPDFType = aLinkString;
+            }
+            else
             {
                 const SwFlyFrame* pFly = static_cast<const SwFlyFrame*>(pFrame);
                 if (pFly->GetAnchorFrame()->FindFooterOrHeader() != nullptr
@@ -1985,6 +2006,10 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                         tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, aLinkRect.SVRect()));
                         const sal_Int32 nLinkId =
                             pPDFExtOutDevData->CreateLink(aRect, formatName, aLinkPageNum);
+
+                        // Store link info for tagged pdf output:
+                        const IdMapEntry aLinkEntry(aLinkRect, nLinkId);
+                        s_aLinkIdMap.push_back(aLinkEntry);
 
                         // Connect Link and Destination:
                         if ( bInternal )

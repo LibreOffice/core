@@ -33,6 +33,7 @@
 #include <calbck.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtclds.hxx>
+#include <fmturl.hxx>
 #include <strings.hrc>
 #include <swmodule.hxx>
 #include <rootfrm.hxx>
@@ -3503,8 +3504,19 @@ SwShortCut::SwShortCut( const SwFrame& rFrame, const SwRect& rRect )
 void SwLayoutFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
 {
     // #i16816# tagged pdf support
-    Frame_Info aFrameInfo( *this );
+    Frame_Info aFrameInfo(*this, false);
     SwTaggedPDFHelper aTaggedPDFHelper( nullptr, &aFrameInfo, nullptr, rRenderContext );
+    ::std::optional<SwTaggedPDFHelper> oTaggedLink;
+    if (IsFlyFrame())
+    {
+        // tdf#154939 Link nested inside Figure
+        auto const pItem(GetFormat()->GetAttrSet().GetItemIfSet(RES_URL));
+        if (pItem && !pItem->GetURL().isEmpty())
+        {
+            Frame_Info linkInfo(*this, true);
+            oTaggedLink.emplace(nullptr, &linkInfo, nullptr, rRenderContext);
+        }
+    }
 
     const SwFrame *pFrame = Lower();
     if ( !pFrame )
