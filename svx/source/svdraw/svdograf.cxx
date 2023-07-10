@@ -410,7 +410,7 @@ GraphicAttr SdrGrafObj::GetGraphicAttr( SdrGrafObjTransformsAttrs nTransformFlag
     {
         const bool      bMirror = bool( nTransformFlags & SdrGrafObjTransformsAttrs::MIRROR );
         const bool      bRotate = bool( nTransformFlags & SdrGrafObjTransformsAttrs::ROTATE ) &&
-            (maGeo.nRotationAngle && maGeo.nRotationAngle != 18000_deg100);
+            (maGeo.m_nRotationAngle && maGeo.m_nRotationAngle != 18000_deg100);
 
         // Need cropping info earlier
         const_cast<SdrGrafObj*>(this)->ImpSetAttrToGrafInfo();
@@ -421,7 +421,7 @@ GraphicAttr SdrGrafObj::GetGraphicAttr( SdrGrafObjTransformsAttrs nTransformFlag
 
         if( bMirror )
         {
-            sal_uInt16      nMirrorCase = ( maGeo.nRotationAngle == 18000_deg100 ) ? ( bMirrored ? 3 : 4 ) : ( bMirrored ? 2 : 1 );
+            sal_uInt16      nMirrorCase = ( maGeo.m_nRotationAngle == 18000_deg100 ) ? ( bMirrored ? 3 : 4 ) : ( bMirrored ? 2 : 1 );
             bool bHMirr = nMirrorCase == 2 || nMirrorCase == 4;
             bool bVMirr = nMirrorCase == 3 || nMirrorCase == 4;
 
@@ -429,7 +429,7 @@ GraphicAttr SdrGrafObj::GetGraphicAttr( SdrGrafObjTransformsAttrs nTransformFlag
         }
 
         if( bRotate )
-            aActAttr.SetRotation( to<Degree10>(maGeo.nRotationAngle ) );
+            aActAttr.SetRotation( to<Degree10>(maGeo.m_nRotationAngle ) );
     }
 
     return aActAttr;
@@ -559,9 +559,9 @@ void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
     bool bNoPresGrf = ( mpGraphicObject->GetType() != GraphicType::NONE ) && !m_bEmptyPresObj;
 
-    rInfo.bResizeFreeAllowed = maGeo.nRotationAngle.get() % 9000 == 0 ||
-                               maGeo.nRotationAngle.get() % 18000 == 0 ||
-                               maGeo.nRotationAngle.get() % 27000 == 0;
+    rInfo.bResizeFreeAllowed = maGeo.m_nRotationAngle.get() % 9000 == 0 ||
+                               maGeo.m_nRotationAngle.get() % 18000 == 0 ||
+                               maGeo.m_nRotationAngle.get() % 27000 == 0;
 
     rInfo.bResizePropAllowed = true;
     rInfo.bRotateFreeAllowed = bNoPresGrf;
@@ -916,16 +916,16 @@ rtl::Reference<SdrObject> SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAdd
                         // copy transformation
                     GeoStat aGeoStat(GetGeoStat());
 
-                    if(aGeoStat.nShearAngle)
+                    if(aGeoStat.m_nShearAngle)
                     {
                         aGeoStat.RecalcTan();
-                        pGrp->NbcShear(getRectangle().TopLeft(), aGeoStat.nShearAngle, aGeoStat.mfTanShearAngle, false);
+                        pGrp->NbcShear(getRectangle().TopLeft(), aGeoStat.m_nShearAngle, aGeoStat.mfTanShearAngle, false);
                     }
 
-                    if(aGeoStat.nRotationAngle)
+                    if(aGeoStat.m_nRotationAngle)
                     {
                         aGeoStat.RecalcSinCos();
-                        pGrp->NbcRotate(getRectangle().TopLeft(), aGeoStat.nRotationAngle, aGeoStat.mfSinRotationAngle, aGeoStat.mfCosRotationAngle);
+                        pGrp->NbcRotate(getRectangle().TopLeft(), aGeoStat.m_nRotationAngle, aGeoStat.mfSinRotationAngle, aGeoStat.mfCosRotationAngle);
                     }
                 }
 

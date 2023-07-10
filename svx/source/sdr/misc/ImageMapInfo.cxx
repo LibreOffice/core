@@ -77,7 +77,7 @@ IMapObject* SvxIMapInfo::GetHitIMapObject(const SdrObject* pObj, const Point& rW
                 static_cast<SdrGrafObjGeoData*>(pGrafObj->GetGeoData().release()));
 
             // Undo rotation
-            if (rGeo.nRotationAngle)
+            if (rGeo.m_nRotationAngle)
                 RotatePoint(aRelPoint, rRect.TopLeft(), -rGeo.mfSinRotationAngle,
                             rGeo.mfCosRotationAngle);
 
@@ -86,7 +86,7 @@ IMapObject* SvxIMapInfo::GetHitIMapObject(const SdrObject* pObj, const Point& rW
                 aRelPoint.setX(rRect.Right() + rRect.Left() - aRelPoint.X());
 
             // Undo shearing
-            if (rGeo.nShearAngle)
+            if (rGeo.m_nShearAngle)
                 ShearPoint(aRelPoint, rRect.TopLeft(), -rGeo.mfTanShearAngle);
 
             if (pGrafObj->GetGrafPrefMapMode().GetMapUnit() == MapUnit::MapPixel)

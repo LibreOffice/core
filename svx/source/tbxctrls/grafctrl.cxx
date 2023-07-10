@@ -689,19 +689,19 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                                 // #106181# rotate snap rect before setting it
                                 const GeoStat& aGeo = pObj->GetGeoStat();
 
-                                if (aGeo.nRotationAngle || aGeo.nShearAngle)
+                                if (aGeo.m_nRotationAngle || aGeo.m_nShearAngle)
                                 {
                                     tools::Polygon aPol(aNewRect);
 
                                     // also transform origin offset
-                                    if (aGeo.nShearAngle)
+                                    if (aGeo.m_nShearAngle)
                                     {
                                         ShearPoly(aPol,
                                                 aNewRect.TopLeft(),
                                                 aGeo.mfTanShearAngle);
                                         ShearPoint(aOffset, Point(0,0), aGeo.mfTanShearAngle);
                                     }
-                                    if (aGeo.nRotationAngle)
+                                    if (aGeo.m_nRotationAngle)
                                     {
                                         RotatePoly(aPol,
                                                 aNewRect.TopLeft(),

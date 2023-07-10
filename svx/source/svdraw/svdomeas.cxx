@@ -690,8 +690,8 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
             aTextPos.AdjustY( -(aTextSize2.Width()) );
         }
     }
-    if (aMPol.nTextAngle != maGeo.nRotationAngle) {
-        const_cast<SdrMeasureObj*>(this)->maGeo.nRotationAngle=aMPol.nTextAngle;
+    if (aMPol.nTextAngle != maGeo.m_nRotationAngle) {
+        const_cast<SdrMeasureObj*>(this)->maGeo.m_nRotationAngle=aMPol.nTextAngle;
         const_cast<SdrMeasureObj*>(this)->maGeo.RecalcSinCos();
     }
     RotatePoint(aTextPos,aPt1b,aMPol.nLineSin,aMPol.nLineCos);
@@ -700,8 +700,8 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
     rRect.Normalize();
     const_cast<SdrMeasureObj*>(this)->setRectangle(rRect);
 
-    if (aMPol.nTextAngle != maGeo.nRotationAngle) {
-        const_cast<SdrMeasureObj*>(this)->maGeo.nRotationAngle=aMPol.nTextAngle;
+    if (aMPol.nTextAngle != maGeo.m_nRotationAngle) {
+        const_cast<SdrMeasureObj*>(this)->maGeo.m_nRotationAngle=aMPol.nTextAngle;
         const_cast<SdrMeasureObj*>(this)->maGeo.RecalcSinCos();
     }
 }

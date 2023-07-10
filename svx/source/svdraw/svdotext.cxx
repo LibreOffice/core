@@ -419,9 +419,9 @@ void SdrTextObj::ImpJustifyRect(tools::Rectangle& rRect)
 
 void SdrTextObj::ImpCheckShear()
 {
-    if (mbNoShear && maGeo.nShearAngle)
+    if (mbNoShear && maGeo.m_nShearAngle)
     {
-        maGeo.nShearAngle = 0_deg100;
+        maGeo.m_nShearAngle = 0_deg100;
         maGeo.mfTanShearAngle = 0;
     }
 }
@@ -429,7 +429,7 @@ void SdrTextObj::ImpCheckShear()
 void SdrTextObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
     bool bNoTextFrame=!IsTextFrame();
-    rInfo.bResizeFreeAllowed=bNoTextFrame || ((maGeo.nRotationAngle.get() % 9000) == 0);
+    rInfo.bResizeFreeAllowed=bNoTextFrame || ((maGeo.m_nRotationAngle.get() % 9000) == 0);
     rInfo.bResizePropAllowed=true;
     rInfo.bRotateFreeAllowed=true;
     rInfo.bRotate90Allowed  =true;
@@ -565,10 +565,10 @@ void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, tools::Rectangle 
     basegfx::B2DHomMatrix aMatrix(basegfx::utils::createTranslateB2DHomMatrix(
         -rAnchorRect.Left(), -rAnchorRect.Top()));
 
-    if(maGeo.nRotationAngle)
+    if(maGeo.m_nRotationAngle)
     {
         // Unrotate!
-        aMatrix.rotate(-toRadians(maGeo.nRotationAngle));
+        aMatrix.rotate(-toRadians(maGeo.m_nRotationAngle));
     }
 
     aXorPolyPolygon.transform(aMatrix);
@@ -668,7 +668,7 @@ void SdrTextObj::TakeTextAnchorRect(tools::Rectangle& rAnchorRect) const
         if (aAnkRect.GetWidth()<2) aAnkRect.SetRight(aAnkRect.Left()+1 ); // minimum size h and v: 2 px
         if (aAnkRect.GetHeight()<2) aAnkRect.SetBottom(aAnkRect.Top()+1 );
     }
-    if (maGeo.nRotationAngle) {
+    if (maGeo.m_nRotationAngle) {
         Point aTmpPt(aAnkRect.TopLeft());
         RotatePoint(aTmpPt,aRotateRef,maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
         aTmpPt-=aAnkRect.TopLeft();
@@ -838,7 +838,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
         if (eVAdj==SDRTEXTVERTADJUST_BOTTOM)
             aTextPos.AdjustY(nFreeHgt );
     }
-    if (maGeo.nRotationAngle)
+    if (maGeo.m_nRotationAngle)
         RotatePoint(aTextPos,aAnkRect.TopLeft(),maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
 
     if (pAnchorRect)
@@ -1100,9 +1100,9 @@ rtl::Reference<SdrObject> SdrTextObj::CloneSdrObject(SdrModel& rTargetModel) con
 basegfx::B2DPolyPolygon SdrTextObj::TakeXorPoly() const
 {
     tools::Polygon aPol(getRectangle());
-    if (maGeo.nShearAngle)
+    if (maGeo.m_nShearAngle)
         ShearPoly(aPol, getRectangle().TopLeft(), maGeo.mfTanShearAngle);
-    if (maGeo.nRotationAngle)
+    if (maGeo.m_nRotationAngle)
         RotatePoly(aPol, getRectangle().TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
 
     basegfx::B2DPolyPolygon aRetval;
@@ -1129,7 +1129,7 @@ basegfx::B2DPolyPolygon SdrTextObj::TakeContour() const
         bool bFitToSize(IsFitToSize());
         if (bFitToSize) aR=aAnchor2;
         tools::Polygon aPol(aR);
-        if (maGeo.nRotationAngle) RotatePoly(aPol,aR.TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
+        if (maGeo.m_nRotationAngle) RotatePoly(aPol,aR.TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
 
         aRetval.append(aPol.getB2DPolygon());
     }
@@ -1139,7 +1139,7 @@ basegfx::B2DPolyPolygon SdrTextObj::TakeContour() const
 
 void SdrTextObj::RecalcSnapRect()
 {
-    if (maGeo.nRotationAngle || maGeo.nShearAngle)
+    if (maGeo.m_nRotationAngle || maGeo.m_nShearAngle)
     {
         maSnapRect = Rect2Poly(getRectangle(), maGeo).GetBoundRect();
     } else {
@@ -1163,9 +1163,9 @@ Point SdrTextObj::GetSnapPoint(sal_uInt32 i) const
         case 3: aP = aRectangle.BottomRight(); break;
         default: aP = aRectangle.Center(); break;
     }
-    if (maGeo.nShearAngle)
+    if (maGeo.m_nShearAngle)
         ShearPoint(aP, aRectangle.TopLeft(), maGeo.mfTanShearAngle);
-    if (maGeo.nRotationAngle)
+    if (maGeo.m_nRotationAngle)
         RotatePoint(aP, aRectangle.TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
     return aP;
 }
@@ -1654,8 +1654,8 @@ bool SdrTextObj::IsTopToBottom() const
 bool SdrTextObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& /*rPolyPolygon*/) const
 {
     // get turn and shear
-    double fRotate = toRadians(maGeo.nRotationAngle);
-    double fShearX = toRadians(maGeo.nShearAngle);
+    double fRotate = toRadians(maGeo.m_nRotationAngle);
+    double fShearX = toRadians(maGeo.m_nShearAngle);
 
     // get aRect, this is the unrotated snaprect
     tools::Rectangle aRectangle(getRectangle());
@@ -1708,9 +1708,9 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     }
 
     // reset object shear and rotations
-    maGeo.nRotationAngle = 0_deg100;
+    maGeo.m_nRotationAngle = 0_deg100;
     maGeo.RecalcSinCos();
-    maGeo.nShearAngle = 0_deg100;
+    maGeo.m_nShearAngle = 0_deg100;
     maGeo.RecalcTan();
 
     // if anchor is used, make position relative to it
@@ -1741,9 +1741,9 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     if(!basegfx::fTools::equalZero(fShearX))
     {
         GeoStat aGeoStat;
-        aGeoStat.nShearAngle = Degree100(FRound(basegfx::rad2deg<100>(atan(fShearX))));
+        aGeoStat.m_nShearAngle = Degree100(FRound(basegfx::rad2deg<100>(atan(fShearX))));
         aGeoStat.RecalcTan();
-        Shear(Point(), aGeoStat.nShearAngle, aGeoStat.mfTanShearAngle, false);
+        Shear(Point(), aGeoStat.m_nShearAngle, aGeoStat.mfTanShearAngle, false);
     }
 
     // rotation?
@@ -1754,9 +1754,9 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
         // #i78696#
         // fRotate is matematically correct, but aGeoStat.nRotationAngle is
         // mirrored -> mirror value here
-        aGeoStat.nRotationAngle = NormAngle36000(Degree100(FRound(-basegfx::rad2deg<100>(fRotate))));
+        aGeoStat.m_nRotationAngle = NormAngle36000(Degree100(FRound(-basegfx::rad2deg<100>(fRotate))));
         aGeoStat.RecalcSinCos();
-        Rotate(Point(), aGeoStat.nRotationAngle, aGeoStat.mfSinRotationAngle, aGeoStat.mfCosRotationAngle);
+        Rotate(Point(), aGeoStat.m_nRotationAngle, aGeoStat.mfSinRotationAngle, aGeoStat.mfCosRotationAngle);
     }
 
     // translate?
@@ -1891,10 +1891,10 @@ GDIMetaFile* SdrTextObj::GetTextScrollMetaFileAndRectangle(
 
     // get outliner set up. To avoid getting a somehow rotated MetaFile,
     // temporarily disable object rotation.
-    Degree100 nAngle(maGeo.nRotationAngle);
-    maGeo.nRotationAngle = 0_deg100;
+    Degree100 nAngle(maGeo.m_nRotationAngle);
+    maGeo.m_nRotationAngle = 0_deg100;
     ImpSetupDrawOutlinerForPaint( bContourFrame, rOutliner, aTextRect, aAnchorRect, aPaintRect, aFitXCorrection );
-    maGeo.nRotationAngle = nAngle;
+    maGeo.m_nRotationAngle = nAngle;
 
     tools::Rectangle aScrollFrameRect(aPaintRect);
     const SfxItemSet& rSet = GetObjectItemSet();

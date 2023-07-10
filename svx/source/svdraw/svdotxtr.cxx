@@ -42,7 +42,7 @@ using namespace com::sun::star;
 
 void SdrTextObj::NbcSetSnapRect(const tools::Rectangle& rRect)
 {
-    if (maGeo.nRotationAngle || maGeo.nShearAngle)
+    if (maGeo.m_nRotationAngle || maGeo.m_nShearAngle)
     {
         // Either the rotation or shear angle exists.
         tools::Rectangle aSR0(GetSnapRect());
@@ -84,12 +84,12 @@ void SdrTextObj::NbcSetLogicRect(const tools::Rectangle& rRect)
 
 Degree100 SdrTextObj::GetRotateAngle() const
 {
-    return maGeo.nRotationAngle;
+    return maGeo.m_nRotationAngle;
 }
 
 Degree100 SdrTextObj::GetShearAngle(bool /*bVertical*/) const
 {
-    return maGeo.nShearAngle;
+    return maGeo.m_nShearAngle;
 }
 
 void SdrTextObj::NbcMove(const Size& rSize)
@@ -102,8 +102,8 @@ void SdrTextObj::NbcMove(const Size& rSize)
 
 void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    bool bNotSheared=maGeo.nShearAngle==0_deg100;
-    bool bRotate90=bNotSheared && maGeo.nRotationAngle.get() % 9000 ==0;
+    bool bNotSheared=maGeo.m_nShearAngle==0_deg100;
+    bool bRotate90=bNotSheared && maGeo.m_nRotationAngle.get() % 9000 ==0;
     bool bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
     bool bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
     if (bXMirr || bYMirr) {
@@ -120,7 +120,7 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
         }
     }
 
-    if (maGeo.nRotationAngle==0_deg100 && maGeo.nShearAngle==0_deg100) {
+    if (maGeo.m_nRotationAngle==0_deg100 && maGeo.m_nShearAngle==0_deg100) {
         auto aRectangle = getRectangle();
         ResizeRect(aRectangle, rRef, xFact, yFact);
         setRectangle(aRectangle);
@@ -128,7 +128,7 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
         {
             maRectangle.Normalize();
             moveRectangle(aRectangle.Right() - aRectangle.Left(), aRectangle.Bottom() - aRectangle.Top());
-            maGeo.nRotationAngle=18000_deg100;
+            maGeo.m_nRotationAngle=18000_deg100;
             maGeo.RecalcSinCos();
         }
     }
@@ -157,19 +157,19 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     }
 
     if (bRotate90) {
-        bool bRota90=maGeo.nRotationAngle.get() % 9000 ==0;
+        bool bRota90=maGeo.m_nRotationAngle.get() % 9000 ==0;
         if (!bRota90) { // there's seems to be a rounding error occurring: correct it
-            Degree100 a=NormAngle36000(maGeo.nRotationAngle);
+            Degree100 a=NormAngle36000(maGeo.m_nRotationAngle);
             if (a<4500_deg100) a=0_deg100;
             else if (a<13500_deg100) a=9000_deg100;
             else if (a<22500_deg100) a=18000_deg100;
             else if (a<31500_deg100) a=27000_deg100;
             else a=0_deg100;
-            maGeo.nRotationAngle=a;
+            maGeo.m_nRotationAngle=a;
             maGeo.RecalcSinCos();
         }
-        if (bNotSheared!=(maGeo.nShearAngle==0_deg100)) { // correct a rounding error occurring with Shear
-            maGeo.nShearAngle=0_deg100;
+        if (bNotSheared!=(maGeo.m_nShearAngle==0_deg100)) { // correct a rounding error occurring with Shear
+            maGeo.m_nShearAngle=0_deg100;
             maGeo.RecalcTan();
         }
     }
@@ -198,12 +198,12 @@ void SdrTextObj::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, doubl
     tools::Rectangle aRectangle(aPoint1, aPoint2);
     setRectangle(aRectangle);
 
-    if (maGeo.nRotationAngle==0_deg100) {
-        maGeo.nRotationAngle=NormAngle36000(nAngle);
+    if (maGeo.m_nRotationAngle==0_deg100) {
+        maGeo.m_nRotationAngle=NormAngle36000(nAngle);
         maGeo.mfSinRotationAngle=sn;
         maGeo.mfCosRotationAngle=cs;
     } else {
-        maGeo.nRotationAngle=NormAngle36000(maGeo.nRotationAngle+nAngle);
+        maGeo.m_nRotationAngle=NormAngle36000(maGeo.m_nRotationAngle+nAngle);
         maGeo.RecalcSinCos();
     }
     SetBoundAndSnapRectsDirty();
@@ -238,12 +238,12 @@ void SdrTextObj::NbcShear(const Point& rRef, Degree100 /*nAngle*/, double tn, bo
 void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 {
     SetGlueReallyAbsolute(true);
-    bool bNotSheared=maGeo.nShearAngle==0_deg100;
+    bool bNotSheared=maGeo.m_nShearAngle==0_deg100;
     bool bRotate90 = false;
     if (bNotSheared &&
         (rRef1.X()==rRef2.X() || rRef1.Y()==rRef2.Y() ||
          std::abs(rRef1.X()-rRef2.X())==std::abs(rRef1.Y()-rRef2.Y()))) {
-        bRotate90=maGeo.nRotationAngle.get() % 9000 ==0;
+        bRotate90=maGeo.m_nRotationAngle.get() % 9000 ==0;
     }
     tools::Polygon aPol(Rect2Poly(getRectangle(),maGeo));
     sal_uInt16 i;
@@ -262,20 +262,20 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     setRectangle(aRectangle);
 
     if (bRotate90) {
-        bool bRota90=maGeo.nRotationAngle.get() % 9000 ==0;
+        bool bRota90=maGeo.m_nRotationAngle.get() % 9000 ==0;
         if (bRotate90 && !bRota90) { // there's seems to be a rounding error occurring: correct it
-            Degree100 a=NormAngle36000(maGeo.nRotationAngle);
+            Degree100 a=NormAngle36000(maGeo.m_nRotationAngle);
             if (a<4500_deg100) a=0_deg100;
             else if (a<13500_deg100) a=9000_deg100;
             else if (a<22500_deg100) a=18000_deg100;
             else if (a<31500_deg100) a=27000_deg100;
             else a=0_deg100;
-            maGeo.nRotationAngle=a;
+            maGeo.m_nRotationAngle=a;
             maGeo.RecalcSinCos();
         }
     }
-    if (bNotSheared!=(maGeo.nShearAngle==0_deg100)) { // correct a rounding error occurring with Shear
-        maGeo.nShearAngle=0_deg100;
+    if (bNotSheared!=(maGeo.m_nShearAngle==0_deg100)) { // correct a rounding error occurring with Shear
+        maGeo.m_nShearAngle=0_deg100;
         maGeo.RecalcTan();
     }
 

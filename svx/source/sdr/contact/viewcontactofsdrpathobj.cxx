@@ -122,7 +122,7 @@ namespace sdr::contact
                 aObjectMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
                     fScaleX, fScaleY,
                     -rGeoStat.mfTanShearAngle,
-                    rGeoStat.nRotationAngle ? toRadians(36000_deg100 - rGeoStat.nRotationAngle) : 0.0,
+                    rGeoStat.m_nRotationAngle ? toRadians(36000_deg100 - rGeoStat.m_nRotationAngle) : 0.0,
                     aObjectRange.getMinX(), aObjectRange.getMinY());
 
                 // create unit polygon from object's absolute path

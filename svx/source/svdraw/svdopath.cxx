@@ -1676,8 +1676,8 @@ void SdrPathObj::ImpForceLineAngle()
     const basegfx::B2DPoint aB2DDelt(aB2DPoint1 - aB2DPoint0);
     const Point aDelt(FRound(aB2DDelt.getX()), FRound(aB2DDelt.getY()));
 
-    maGeo.nRotationAngle=GetAngle(aDelt);
-    maGeo.nShearAngle=0_deg100;
+    maGeo.m_nRotationAngle=GetAngle(aDelt);
+    maGeo.m_nShearAngle=0_deg100;
     maGeo.RecalcSinCos();
     maGeo.RecalcTan();
 
@@ -2345,7 +2345,7 @@ void SdrPathObj::NbcMirror(const Point& rRefPnt1, const Point& rRefPnt2)
 
 void SdrPathObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
 {
-    if(!maGeo.nRotationAngle)
+    if(!maGeo.m_nRotationAngle)
     {
         rRect = GetSnapRect();
     }
@@ -2807,17 +2807,17 @@ bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DP
         }
         else
         {
-            if(maGeo.nShearAngle || maGeo.nRotationAngle)
+            if(maGeo.m_nShearAngle || maGeo.m_nRotationAngle)
             {
                 // get rotate and shear in drawingLayer notation
-                fRotate = toRadians(maGeo.nRotationAngle);
-                fShearX = toRadians(maGeo.nShearAngle);
+                fRotate = toRadians(maGeo.m_nRotationAngle);
+                fShearX = toRadians(maGeo.m_nShearAngle);
 
                 // build mathematically correct (negative shear and rotate) object transform
                 // containing shear and rotate to extract unsheared, unrotated polygon
                 basegfx::B2DHomMatrix aObjectMatrix;
                 aObjectMatrix.shearX(-maGeo.mfTanShearAngle);
-                aObjectMatrix.rotate(toRadians(36000_deg100 - maGeo.nRotationAngle));
+                aObjectMatrix.rotate(toRadians(36000_deg100 - maGeo.m_nRotationAngle));
 
                 // create inverse from it and back-transform polygon
                 basegfx::B2DHomMatrix aInvObjectMatrix(aObjectMatrix);
@@ -2905,9 +2905,9 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     basegfx::B2DPolyPolygon aNewPolyPolygon(rPolyPolygon);
 
     // reset object shear and rotations
-    maGeo.nRotationAngle = 0_deg100;
+    maGeo.m_nRotationAngle = 0_deg100;
     maGeo.RecalcSinCos();
-    maGeo.nShearAngle = 0_deg100;
+    maGeo.m_nShearAngle = 0_deg100;
     maGeo.RecalcTan();
 
     if( getSdrModelFromSdrObject().IsWriter() )
@@ -2953,7 +2953,7 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     if(!basegfx::fTools::equalZero(fShearX))
     {
         aTransform.shearX(tan(-atan(fShearX)));
-        maGeo.nShearAngle = Degree100(FRound(basegfx::rad2deg<100>(atan(fShearX))));
+        maGeo.m_nShearAngle = Degree100(FRound(basegfx::rad2deg<100>(atan(fShearX))));
         maGeo.RecalcTan();
     }
 
@@ -2967,7 +2967,7 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
         // #i78696#
         // fRotate is mathematically correct, but aGeoStat.nRotationAngle is
         // mirrored -> mirror value here
-        maGeo.nRotationAngle = NormAngle36000(Degree100(FRound(-basegfx::rad2deg<100>(fRotate))));
+        maGeo.m_nRotationAngle = NormAngle36000(Degree100(FRound(-basegfx::rad2deg<100>(fRotate))));
         maGeo.RecalcSinCos();
     }
 

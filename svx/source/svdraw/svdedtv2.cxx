@@ -1696,10 +1696,10 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
 
                     // if rotated, copy GeoStat, too.
                     const GeoStat& rSourceGeo = pCustomShape->GetGeoStat();
-                    if(rSourceGeo.nRotationAngle)
+                    if(rSourceGeo.m_nRotationAngle)
                     {
                         pTextObj->NbcRotate(
-                            pCustomShape->GetSnapRect().Center(), rSourceGeo.nRotationAngle,
+                            pCustomShape->GetSnapRect().Center(), rSourceGeo.m_nRotationAngle,
                             rSourceGeo.mfSinRotationAngle, rSourceGeo.mfCosRotationAngle);
                     }
 
@@ -2179,10 +2179,10 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
             GeoStat aGeoStat(pGraf ? pGraf->GetGeoStat() : pOle2->GetGeoStat());
             size_t nObj = nInsPos;
 
-            if (aGeoStat.nShearAngle)
+            if (aGeoStat.m_nShearAngle)
                 aGeoStat.RecalcTan();
 
-            if (aGeoStat.nRotationAngle)
+            if (aGeoStat.m_nRotationAngle)
                 aGeoStat.RecalcSinCos();
 
             for (size_t i = 0; i < nInsCnt; i++)
@@ -2194,11 +2194,11 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
                 SdrObject* pCandidate = pOL->GetObj(nObj);
 
                 // apply original transformation
-                if (aGeoStat.nShearAngle)
-                    pCandidate->NbcShear(aLogicRect.TopLeft(), aGeoStat.nShearAngle, aGeoStat.mfTanShearAngle, false);
+                if (aGeoStat.m_nShearAngle)
+                    pCandidate->NbcShear(aLogicRect.TopLeft(), aGeoStat.m_nShearAngle, aGeoStat.mfTanShearAngle, false);
 
-                if (aGeoStat.nRotationAngle)
-                    pCandidate->NbcRotate(aLogicRect.TopLeft(), aGeoStat.nRotationAngle, aGeoStat.mfSinRotationAngle, aGeoStat.mfCosRotationAngle);
+                if (aGeoStat.m_nRotationAngle)
+                    pCandidate->NbcRotate(aLogicRect.TopLeft(), aGeoStat.m_nRotationAngle, aGeoStat.mfSinRotationAngle, aGeoStat.mfCosRotationAngle);
 
                 SdrMark aNewMark(pCandidate, pPV);
                 aNewMarked.InsertEntry(aNewMark);

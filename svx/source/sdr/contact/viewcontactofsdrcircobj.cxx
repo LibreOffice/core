@@ -57,7 +57,7 @@ namespace sdr::contact
                 basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
                     aObjectRange.getWidth(), aObjectRange.getHeight(),
                     -rGeoStat.mfTanShearAngle,
-                    rGeoStat.nRotationAngle ? toRadians(36000_deg100 - rGeoStat.nRotationAngle) : 0.0,
+                    rGeoStat.m_nRotationAngle ? toRadians(36000_deg100 - rGeoStat.m_nRotationAngle) : 0.0,
                     aObjectRange.getMinX(), aObjectRange.getMinY()));
 
             // create primitive data

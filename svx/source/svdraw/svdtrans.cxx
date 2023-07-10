@@ -443,11 +443,11 @@ tools::Long GetLen(const Point& rPnt)
 
 void GeoStat::RecalcSinCos()
 {
-    if (nRotationAngle==0_deg100) {
+    if (m_nRotationAngle==0_deg100) {
         mfSinRotationAngle=0.0;
         mfCosRotationAngle=1.0;
     } else {
-        double a = toRadians(nRotationAngle);
+        double a = toRadians(m_nRotationAngle);
         mfSinRotationAngle=sin(a);
         mfCosRotationAngle=cos(a);
     }
@@ -455,10 +455,10 @@ void GeoStat::RecalcSinCos()
 
 void GeoStat::RecalcTan()
 {
-    if (nShearAngle==0_deg100) {
+    if (m_nShearAngle==0_deg100) {
         mfTanShearAngle=0.0;
     } else {
-        double a = toRadians(nShearAngle);
+        double a = toRadians(m_nShearAngle);
         mfTanShearAngle=tan(a);
     }
 }
@@ -472,8 +472,8 @@ tools::Polygon Rect2Poly(const tools::Rectangle& rRect, const GeoStat& rGeo)
     aPol[2]=rRect.BottomRight();
     aPol[3]=rRect.BottomLeft();
     aPol[4]=rRect.TopLeft();
-    if (rGeo.nShearAngle) ShearPoly(aPol,rRect.TopLeft(),rGeo.mfTanShearAngle);
-    if (rGeo.nRotationAngle) RotatePoly(aPol,rRect.TopLeft(),rGeo.mfSinRotationAngle,rGeo.mfCosRotationAngle);
+    if (rGeo.m_nShearAngle) ShearPoly(aPol,rRect.TopLeft(),rGeo.mfTanShearAngle);
+    if (rGeo.m_nRotationAngle) RotatePoly(aPol,rRect.TopLeft(),rGeo.mfSinRotationAngle,rGeo.mfCosRotationAngle);
     return aPol;
 }
 
@@ -481,20 +481,20 @@ namespace svx
 {
 tools::Rectangle polygonToRectangle(const tools::Polygon& rPolygon, GeoStat& rGeo)
 {
-    rGeo.nRotationAngle = GetAngle(rPolygon[1] - rPolygon[0]);
-    rGeo.nRotationAngle = NormAngle36000(rGeo.nRotationAngle);
+    rGeo.m_nRotationAngle = GetAngle(rPolygon[1] - rPolygon[0]);
+    rGeo.m_nRotationAngle = NormAngle36000(rGeo.m_nRotationAngle);
 
     // rotation successful
     rGeo.RecalcSinCos();
 
     Point aPoint1(rPolygon[1] - rPolygon[0]);
-    if (rGeo.nRotationAngle)
+    if (rGeo.m_nRotationAngle)
         RotatePoint(aPoint1, Point(0,0), -rGeo.mfSinRotationAngle, rGeo.mfCosRotationAngle); // -Sin to reverse rotation
     tools::Long nWidth = aPoint1.X();
 
     Point aPoint0(rPolygon[0]);
     Point aPoint3(rPolygon[3] - rPolygon[0]);
-    if (rGeo.nRotationAngle)
+    if (rGeo.m_nRotationAngle)
         RotatePoint(aPoint3, Point(0,0), -rGeo.mfSinRotationAngle, rGeo.mfCosRotationAngle); // -Sin to reverse rotation
     tools::Long nHeight = aPoint3.Y();
 
@@ -522,7 +522,7 @@ tools::Rectangle polygonToRectangle(const tools::Polygon& rPolygon, GeoStat& rGe
     if (nShearAngle > SDRMAXSHEAR)
         nShearAngle = SDRMAXSHEAR;
 
-    rGeo.nShearAngle = nShearAngle;
+    rGeo.m_nShearAngle = nShearAngle;
     rGeo.RecalcTan();
 
     Point aRU(aPoint0);

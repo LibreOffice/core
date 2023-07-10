@@ -224,7 +224,7 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight( tools::Rectangle& rR, bool bHgt,
         }
     }
 
-    if (maGeo.nRotationAngle)
+    if (maGeo.m_nRotationAngle)
     {
         // Object is rotated.
         Point aD1(rR.TopLeft());

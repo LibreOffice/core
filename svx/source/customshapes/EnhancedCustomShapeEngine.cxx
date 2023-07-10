@@ -207,11 +207,11 @@ rtl::Reference<SdrObject> EnhancedCustomShapeEngine::ImplForceGroupWithText(
 
             // if rotated, copy GeoStat, too.
             const GeoStat& rSourceGeo(rSdrObjCustomShape.GetGeoStat());
-            if ( rSourceGeo.nRotationAngle )
+            if ( rSourceGeo.m_nRotationAngle )
             {
                 pTextObj->NbcRotate(
                     rSdrObjCustomShape.GetSnapRect().Center(),
-                    rSourceGeo.nRotationAngle,
+                    rSourceGeo.m_nRotationAngle,
                     rSourceGeo.mfSinRotationAngle,
                     rSourceGeo.mfCosRotationAngle);
             }
@@ -297,9 +297,9 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
         tools::Rectangle aRect(pSdrObjCustomShape->GetSnapRect());
         const GeoStat& rGeoStat(pSdrObjCustomShape->GetGeoStat());
 
-        if ( rGeoStat.nShearAngle )
+        if ( rGeoStat.m_nShearAngle )
         {
-            Degree100 nShearAngle = rGeoStat.nShearAngle;
+            Degree100 nShearAngle = rGeoStat.m_nShearAngle;
             double nTan = rGeoStat.mfTanShearAngle;
             if (bFlipV != bFlipH)
             {
@@ -385,9 +385,9 @@ drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeom
             bool bFlipH = aCustomShape2d.IsFlipHorz();
             const GeoStat& rGeoStat(pSdrObjCustomShape->GetGeoStat());
 
-            if ( rGeoStat.nShearAngle )
+            if ( rGeoStat.m_nShearAngle )
             {
-                Degree100 nShearAngle = rGeoStat.nShearAngle;
+                Degree100 nShearAngle = rGeoStat.m_nShearAngle;
                 double nTan = rGeoStat.mfTanShearAngle;
                 if (bFlipV != bFlipH)
                 {

@@ -310,7 +310,7 @@ namespace sdr::contact
 
             // look for mirroring
             const GeoStat& rGeoStat(GetGrafObject().GetGeoStat());
-            const Degree100 nRotationAngle(rGeoStat.nRotationAngle);
+            const Degree100 nRotationAngle(rGeoStat.m_nRotationAngle);
             const bool bMirrored(GetGrafObject().IsMirrored());
 
             if (bMirrored)

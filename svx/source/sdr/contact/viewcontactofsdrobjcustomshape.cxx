@@ -52,7 +52,7 @@ namespace sdr::contact
                 const GeoStat& rGeoStat(GetCustomShapeObj().GetGeoStat());
 
                 // only correct when rotation and/or shear is used
-                if(rGeoStat.nShearAngle || rGeoStat.nRotationAngle )
+                if(rGeoStat.m_nShearAngle || rGeoStat.m_nRotationAngle )
                 {
                     // text range needs to be corrected by
                     // aObjectRange.getCenter() - aRotObjectRange.getCenter() since it's
@@ -66,14 +66,14 @@ namespace sdr::contact
 
                     aRotMatrix.translate(-aObjectRange.getMinimum().getX(), -aObjectRange.getMinimum().getY());
 
-                    if(rGeoStat.nShearAngle)
+                    if(rGeoStat.m_nShearAngle)
                     {
                         aRotMatrix.shearX(-rGeoStat.mfTanShearAngle);
                     }
 
-                    if(rGeoStat.nRotationAngle)
+                    if(rGeoStat.m_nRotationAngle)
                     {
-                        aRotMatrix.rotate(toRadians(36000_deg100 - rGeoStat.nRotationAngle));
+                        aRotMatrix.rotate(toRadians(36000_deg100 - rGeoStat.m_nRotationAngle));
                     }
 
                     aRotMatrix.translate(aObjectRange.getMinimum().getX(), aObjectRange.getMinimum().getY());
@@ -172,7 +172,7 @@ namespace sdr::contact
                     const double fExtraTextRotation(GetCustomShapeObj().GetExtraTextRotation());
                     const GeoStat& rGeoStat(GetCustomShapeObj().GetGeoStat());
 
-                    if(rGeoStat.nShearAngle || rGeoStat.nRotationAngle || !basegfx::fTools::equalZero(fExtraTextRotation))
+                    if(rGeoStat.m_nShearAngle || rGeoStat.m_nRotationAngle || !basegfx::fTools::equalZero(fExtraTextRotation))
                     {
                         if(aObjectRange != aTextRange)
                         {
@@ -192,14 +192,14 @@ namespace sdr::contact
                             aTextBoxMatrix.translate( aTranslation.getX(), aTranslation.getY() );
                         }
 
-                        if(rGeoStat.nShearAngle)
+                        if(rGeoStat.m_nShearAngle)
                         {
                             aTextBoxMatrix.shearX(-rGeoStat.mfTanShearAngle);
                         }
 
-                        if(rGeoStat.nRotationAngle)
+                        if(rGeoStat.m_nRotationAngle)
                         {
-                            aTextBoxMatrix.rotate(toRadians(36000_deg100 - rGeoStat.nRotationAngle));
+                            aTextBoxMatrix.rotate(toRadians(36000_deg100 - rGeoStat.m_nRotationAngle));
                         }
 
                         // give text it's target position

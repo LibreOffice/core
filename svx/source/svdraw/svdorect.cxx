@@ -122,8 +122,8 @@ XPolygon SdrRectObj::ImpCalcXPoly(const tools::Rectangle& rRect1, tools::Long nR
     aXPoly=aNewPoly;
 
     // these angles always relate to the top left corner of aRect
-    if (maGeo.nShearAngle) ShearXPoly(aXPoly, getRectangle().TopLeft(), maGeo.mfTanShearAngle);
-    if (maGeo.nRotationAngle) RotateXPoly(aXPoly, getRectangle().TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
+    if (maGeo.m_nShearAngle) ShearXPoly(aXPoly, getRectangle().TopLeft(), maGeo.mfTanShearAngle);
+    if (maGeo.m_nRotationAngle) RotateXPoly(aXPoly, getRectangle().TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
     return aXPoly;
 }
 
@@ -145,7 +145,7 @@ const XPolygon& SdrRectObj::GetXPoly() const
 void SdrRectObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
     bool bNoTextFrame=!IsTextFrame();
-    rInfo.bResizeFreeAllowed=bNoTextFrame || ((maGeo.nRotationAngle.get() % 9000) == 0);
+    rInfo.bResizeFreeAllowed=bNoTextFrame || ((maGeo.m_nRotationAngle.get() % 9000) == 0);
     rInfo.bResizePropAllowed=true;
     rInfo.bRotateFreeAllowed=true;
     rInfo.bRotate90Allowed  =true;
@@ -178,11 +178,11 @@ SdrObjKind SdrRectObj::GetObjIdentifier() const
 void SdrRectObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
 {
     rRect = getRectangle();
-    if (maGeo.nShearAngle==0_deg100)
+    if (maGeo.m_nShearAngle==0_deg100)
         return;
 
     tools::Long nDst=FRound((getRectangle().Bottom()-getRectangle().Top()) * maGeo.mfTanShearAngle);
-    if (maGeo.nShearAngle>0_deg100)
+    if (maGeo.m_nShearAngle>0_deg100)
     {
         Point aRef(rRect.TopLeft());
         rRect.AdjustLeft( -nDst );
@@ -206,7 +206,7 @@ OUString SdrRectObj::TakeObjNameSingul() const
 
     bool bRounded = GetEckenradius() != 0; // rounded down
     TranslateId pResId = bRounded ? STR_ObjNameSingulRECTRND : STR_ObjNameSingulRECT;
-    if (maGeo.nShearAngle)
+    if (maGeo.m_nShearAngle)
     {
         pResId = bRounded ? STR_ObjNameSingulPARALRND : STR_ObjNameSingulPARAL;  // parallelogram or, maybe, rhombus
     }
@@ -232,7 +232,7 @@ OUString SdrRectObj::TakeObjNamePlural() const
 
     bool bRounded = GetEckenradius() != 0; // rounded down
     TranslateId pResId = bRounded ? STR_ObjNamePluralRECTRND : STR_ObjNamePluralRECT;
-    if (maGeo.nShearAngle)
+    if (maGeo.m_nShearAngle)
     {
         pResId = bRounded ? STR_ObjNamePluralPARALRND : STR_ObjNamePluralPARAL;  // parallelogram or rhombus
     }
@@ -259,7 +259,7 @@ basegfx::B2DPolyPolygon SdrRectObj::TakeXorPoly() const
 void SdrRectObj::RecalcSnapRect()
 {
     tools::Long nEckRad=GetEckenradius();
-    if ((maGeo.nRotationAngle || maGeo.nShearAngle) && nEckRad!=0) {
+    if ((maGeo.m_nRotationAngle || maGeo.m_nShearAngle) && nEckRad!=0) {
         maSnapRect=GetXPoly().GetBoundRect();
     } else {
         SdrTextObj::RecalcSnapRect();
@@ -291,7 +291,7 @@ void SdrRectObj::AddToHdlList(SdrHdlList& rHdlList) const
         OSL_ENSURE(!IsTextEditActive(), "Do not use an ImpTextframeHdl for highlighting text in active text edit, this will collide with EditEngine paints (!)");
         std::unique_ptr<SdrHdl> pH(new ImpTextframeHdl(getRectangle()));
         pH->SetObj(const_cast<SdrRectObj*>(this));
-        pH->SetRotationAngle(maGeo.nRotationAngle);
+        pH->SetRotationAngle(maGeo.m_nRotationAngle);
         rHdlList.AddHdl(std::move(pH));
     }
 
@@ -323,18 +323,18 @@ void SdrRectObj::AddToHdlList(SdrHdlList& rHdlList) const
             case 9: aPnt = rRectangle.BottomRight();  eKind = SdrHdlKind::LowerRight; break;
         }
 
-        if (maGeo.nShearAngle)
+        if (maGeo.m_nShearAngle)
         {
             ShearPoint(aPnt,rRectangle.TopLeft(),maGeo.mfTanShearAngle);
         }
-        if (maGeo.nRotationAngle)
+        if (maGeo.m_nRotationAngle)
         {
             RotatePoint(aPnt,rRectangle.TopLeft(),maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
         }
 
         std::unique_ptr<SdrHdl> pH(new SdrHdl(aPnt,eKind));
         pH->SetObj(const_cast<SdrRectObj*>(this));
-        pH->SetRotationAngle(maGeo.nRotationAngle);
+        pH->SetRotationAngle(maGeo.m_nRotationAngle);
         rHdlList.AddHdl(std::move(pH));
     }
 }
@@ -366,7 +366,7 @@ bool SdrRectObj::applySpecialDrag(SdrDragStat& rDrag)
     {
         Point aPt(rDrag.GetNow());
 
-        if (maGeo.nRotationAngle)
+        if (maGeo.m_nRotationAngle)
             RotatePoint(aPt, getRectangle().TopLeft(), -maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
 
         sal_Int32 nRad(aPt.X() - getRectangle().Left());
@@ -404,7 +404,7 @@ OUString SdrRectObj::getSpecialDragComment(const SdrDragStat& rDrag) const
             Point aPt(rDrag.GetNow());
 
             // -sin for reversal
-            if (maGeo.nRotationAngle)
+            if (maGeo.m_nRotationAngle)
                 RotatePoint(aPt, getRectangle().TopLeft(), -maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
 
             sal_Int32 nRad(aPt.X() - getRectangle().Left());
@@ -491,9 +491,9 @@ SdrGluePoint SdrRectObj::GetVertexGluePoint(sal_uInt16 nPosNum) const
         case 2: aPt = rRectangle.BottomCenter(); aPt.AdjustY(nWdt ); break;
         case 3: aPt = rRectangle.LeftCenter();   aPt.AdjustX( -nWdt ); break;
     }
-    if (maGeo.nShearAngle)
+    if (maGeo.m_nShearAngle)
         ShearPoint(aPt, rRectangle.TopLeft(), maGeo.mfTanShearAngle);
-    if (maGeo.nRotationAngle)
+    if (maGeo.m_nRotationAngle)
         RotatePoint(aPt, rRectangle.TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
     aPt-=GetSnapRect().Center();
     SdrGluePoint aGP(aPt);
@@ -520,9 +520,9 @@ SdrGluePoint SdrRectObj::GetCornerGluePoint(sal_uInt16 nPosNum) const
         case 2: aPt = rRectangle.BottomRight(); aPt.AdjustX(nWdt ); aPt.AdjustY(nWdt ); break;
         case 3: aPt = rRectangle.BottomLeft();  aPt.AdjustX( -nWdt ); aPt.AdjustY(nWdt ); break;
     }
-    if (maGeo.nShearAngle)
+    if (maGeo.m_nShearAngle)
         ShearPoint(aPt, rRectangle.TopLeft(),maGeo.mfTanShearAngle);
-    if (maGeo.nRotationAngle)
+    if (maGeo.m_nRotationAngle)
         RotatePoint(aPt, rRectangle.TopLeft(),maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
     aPt-=GetSnapRect().Center();
     SdrGluePoint aGP(aPt);

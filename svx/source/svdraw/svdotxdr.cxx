@@ -55,13 +55,13 @@ void SdrTextObj::AddToHdlList(SdrHdlList& rHdlList) const
             case 6: aPnt = aRectangle.BottomCenter(); eKind=SdrHdlKind::Lower; break;
             case 7: aPnt = aRectangle.BottomRight();  eKind=SdrHdlKind::LowerRight; break;
         }
-        if (maGeo.nShearAngle)
+        if (maGeo.m_nShearAngle)
             ShearPoint(aPnt, aRectangle.TopLeft(), maGeo.mfTanShearAngle);
-        if (maGeo.nRotationAngle)
+        if (maGeo.m_nRotationAngle)
             RotatePoint(aPnt, aRectangle.TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
         std::unique_ptr<SdrHdl> pH(new SdrHdl(aPnt,eKind));
         pH->SetObj(const_cast<SdrTextObj*>(this));
-        pH->SetRotationAngle(maGeo.nRotationAngle);
+        pH->SetRotationAngle(maGeo.m_nRotationAngle);
         rHdlList.AddHdl(std::move(pH));
     }
 }
@@ -82,9 +82,9 @@ tools::Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
     bool bBigOrtho=bEcke && bOrtho && rDrag.GetView()->IsBigOrtho();
     Point aPos(rDrag.GetNow());
     // Unrotate:
-    if (maGeo.nRotationAngle) RotatePoint(aPos,aTmpRect.TopLeft(),-maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
+    if (maGeo.m_nRotationAngle) RotatePoint(aPos,aTmpRect.TopLeft(),-maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
     // Unshear:
-    if (maGeo.nShearAngle) ShearPoint(aPos,aTmpRect.TopLeft(),-maGeo.mfTanShearAngle);
+    if (maGeo.m_nShearAngle) ShearPoint(aPos,aTmpRect.TopLeft(),-maGeo.mfTanShearAngle);
 
     bool bLft=(eHdl==SdrHdlKind::UpperLeft || eHdl==SdrHdlKind::Left  || eHdl==SdrHdlKind::LowerLeft);
     bool bRgt=(eHdl==SdrHdlKind::UpperRight || eHdl==SdrHdlKind::Right || eHdl==SdrHdlKind::LowerRight);
@@ -153,14 +153,14 @@ bool SdrTextObj::applySpecialDrag(SdrDragStat& rDrag)
 {
     tools::Rectangle aNewRect(ImpDragCalcRect(rDrag));
 
-    if(aNewRect.TopLeft() != getRectangle().TopLeft() && (maGeo.nRotationAngle || maGeo.nShearAngle))
+    if(aNewRect.TopLeft() != getRectangle().TopLeft() && (maGeo.m_nRotationAngle || maGeo.m_nShearAngle))
     {
         Point aNewPos(aNewRect.TopLeft());
 
-        if (maGeo.nShearAngle)
+        if (maGeo.m_nShearAngle)
             ShearPoint(aNewPos, getRectangle().TopLeft(), maGeo.mfTanShearAngle);
 
-        if (maGeo.nRotationAngle)
+        if (maGeo.m_nRotationAngle)
             RotatePoint(aNewPos, getRectangle().TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
 
         aNewRect.SetPos(aNewPos);

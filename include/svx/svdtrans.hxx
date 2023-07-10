@@ -200,13 +200,13 @@ tools::Long GetLen(const Point& rPnt);
 
 class GeoStat { // Geometric state for a rect
 public:
-    Degree100 nRotationAngle;
-    Degree100 nShearAngle;
+    Degree100 m_nRotationAngle;
+    Degree100 m_nShearAngle;
     double   mfTanShearAngle;      // tan(nShearAngle)
     double   mfSinRotationAngle;   // sin(nRotationAngle)
     double   mfCosRotationAngle;   // cos(nRotationAngle)
 
-    GeoStat(): nRotationAngle(0),nShearAngle(0),mfTanShearAngle(0.0),mfSinRotationAngle(0.0),mfCosRotationAngle(1.0) {}
+    GeoStat(): m_nRotationAngle(0),m_nShearAngle(0),mfTanShearAngle(0.0),mfSinRotationAngle(0.0),mfCosRotationAngle(1.0) {}
     void RecalcSinCos();
     void RecalcTan();
 };
