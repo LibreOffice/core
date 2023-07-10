@@ -6068,7 +6068,7 @@ void DomainMapper_Impl::handleAuthor
 }
 
 static uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool bHyperlinks, const OUString& sChapterNoSeparator,
-                                   const uno::Sequence< beans::PropertyValues >& aLevel, const uno::Sequence<style::TabStop>& tabs)
+                                   const uno::Sequence< beans::PropertyValues >& aLevel, const std::optional<style::TabStop> numtab)
 {
     //create a copy of the level and add new entries
 
@@ -6107,12 +6107,12 @@ static uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool
 
         aNewLevel.push_back(item);
 
-        if (tabs.hasElements() && tokenType == tokENum)
+        if (numtab && tokenType == tokENum)
         {
             // There is a fixed tab stop position needed in the level after the numbering
             aNewLevel.push_back(
                 { comphelper::makePropertyValue(tokType, OUString("TokenTabStop")),
-                  comphelper::makePropertyValue("TabStopPosition", tabs[0].Position) });
+                  comphelper::makePropertyValue("TabStopPosition", numtab->Position) });
         }
     }
 
@@ -6494,7 +6494,7 @@ void DomainMapper_Impl::handleToc
             xLevelFormats->getByIndex( nLevel ) >>= aLevel;
 
             // Get the tab stops coming from the styles; store to the level definitions
-            uno::Sequence<style::TabStop> tabStops;
+            std::optional<style::TabStop> numTab;
             if (xChapterNumberingRules && xStyles)
             {
                 // This relies on the chapter numbering rules already defined
@@ -6519,13 +6519,38 @@ void DomainMapper_Impl::handleToc
                     xTOC->getPropertyValue("ParaStyleLevel" + OUString::number(nLevel)) >>= style;
                     uno::Reference<beans::XPropertySet> xStyle;
                     if (xStyles->getByName(style) >>= xStyle)
-                        xStyle->getPropertyValue("ParaTabStops") >>= tabStops;
+                    {
+                        if (uno::Reference<beans::XPropertyState> xPropState{ xStyle,
+                                                                              uno::UNO_QUERY })
+                        {
+                            if (xPropState->getPropertyState("ParaTabStops")
+                                == beans::PropertyState_DIRECT_VALUE)
+                            {
+                                if (uno::Sequence<style::TabStop> tabStops;
+                                    xStyle->getPropertyValue("ParaTabStops") >>= tabStops)
+                                {
+                                    // If the style only has one tab stop, Word uses it for
+                                    // page number, and generates the other from defaults
+                                    if (tabStops.getLength() > 1)
+                                        numTab = tabStops[0];
+                                }
+                            }
+                        }
+                    }
+                    if (!numTab)
+                    {
+                        // Generate the default position.
+                        // Word uses multiples of 440 twips for default chapter number tab stops
+                        numTab.emplace();
+                        numTab->Position
+                            = o3tl::convert(440 * nLevel, o3tl::Length::twip, o3tl::Length::mm100);
+                    }
                 }
             }
 
             uno::Sequence< beans::PropertyValues > aNewLevel = lcl_createTOXLevelHyperlinks(
                                                 bHyperlinks, sChapterNoSeparator,
-                                                aLevel, tabStops);
+                                                aLevel, numTab);
             xLevelFormats->replaceByIndex( nLevel, uno::Any( aNewLevel ) );
         }
     }
