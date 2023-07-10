@@ -103,7 +103,10 @@ struct Num_Info
 struct Frame_Info
 {
     const SwFrame& mrFrame;
-    Frame_Info( const SwFrame& rFrame ) : mrFrame( rFrame ) {};
+    bool const m_isLink;
+
+    Frame_Info(const SwFrame& rFrame, bool const isLink)
+        : mrFrame(rFrame), m_isLink(isLink) {}
 };
 
 struct Por_Info
