@@ -47,7 +47,8 @@ namespace vclcanvas
                       Size( 0, ::basegfx::fround(rFontRequest.CellSize) ) ) ),
         maFontRequest( rFontRequest ),
         mpRefDevice( &rDevice ),
-        mpOutDevProvider( rOutDevProvider )
+        mpOutDevProvider( rOutDevProvider ),
+        maFontMatrix( rFontMatrix )
     {
         maFont->SetAlignment( ALIGN_BASELINE );
         maFont->SetCharSet( (rFontRequest.FontDescription.IsSymbolFont==css::util::TriState_YES) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
@@ -63,27 +64,7 @@ namespace vclcanvas
         maFont->SetLanguage( LanguageTag::convertToLanguageType( rFontRequest.Locale, false));
 
         // adjust to stretched/shrunk font
-        if( !::rtl::math::approxEqual( rFontMatrix.m00, rFontMatrix.m11) )
-        {
-            OutputDevice& rOutDev( rOutDevProvider->getOutDev() );
-
-            const bool bOldMapState( rOutDev.IsMapModeEnabled() );
-            rOutDev.EnableMapMode(false);
-
-            const Size aSize = rOutDev.GetFontMetric( *maFont ).GetFontSize();
-
-            const double fDividend( rFontMatrix.m10 + rFontMatrix.m11 );
-            double fStretch = rFontMatrix.m00 + rFontMatrix.m01;
-
-            if( !::basegfx::fTools::equalZero( fDividend) )
-                fStretch /= fDividend;
-
-            const ::tools::Long nNewWidth = ::basegfx::fround( aSize.Width() * fStretch );
-
-            maFont->SetAverageFontWidth( nNewWidth );
-
-            rOutDev.EnableMapMode(bOldMapState);
-        }
+        tools::setupFontWidth(rFontMatrix, maFont.get(), rOutDevProvider->getOutDev());
 
         sal_uInt32 nEmphasisMark = 0;
 
@@ -171,6 +152,13 @@ namespace vclcanvas
     vcl::Font const & CanvasFont::getVCLFont() const
     {
         return *maFont;
+    }
+
+    const css::geometry::Matrix2D& CanvasFont::getFontMatrix() const
+    {
+        SolarMutexGuard aGuard;
+
+        return maFontMatrix;
     }
 }
 
