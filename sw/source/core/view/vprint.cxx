@@ -47,7 +47,7 @@
 #include <viscrs.hxx>
 #include <fmtpdsc.hxx>
 #include <PostItMgr.hxx>
-#include "vprint.hxx"
+#include <vprint.hxx>
 
 using namespace ::com::sun::star;
 
@@ -429,6 +429,17 @@ sw_getPage(SwRootFrame const& rLayout, sal_Int32 const nPage)
     return nullptr;
 }
 
+namespace sw
+{
+    // tdf#91680 Reserve space in margin for comments only if there are comments
+    bool IsShrinkPageForPostIts(SwViewShell const& rShell, SwPrintData const& rPrintData)
+    {
+        SwPostItMode const nPostItMode(rPrintData.GetPrintPostIts());
+        return nPostItMode == SwPostItMode::InMargins
+            && sw_GetPostIts(rShell.GetDoc()->getIDocumentFieldsAccess(), nullptr);
+    }
+}
+
 bool SwViewShell::PrintOrPDFExport(
     OutputDevice *pOutDev,
     SwPrintData const& rPrintData,
@@ -446,11 +457,8 @@ bool SwViewShell::PrintOrPDFExport(
     // output device is now provided by a call from outside the Writer)
     pOutDev->Push();
 
-    SwPostItMode nPostItMode = rPrintData.GetPrintPostIts();
 
-    // tdf#91680 Reserve space in margin for comments only if there are comments
-    const bool bHasPostItsToPrintInMargins = ( nPostItMode == SwPostItMode::InMargins ) &&
-                                sw_GetPostIts( GetDoc()->getIDocumentFieldsAccess(), nullptr );
+    const bool bHasPostItsToPrintInMargins(::sw::IsShrinkPageForPostIts(*this, rPrintData));
     ::std::optional<tools::Long> oOrigHeight;
 
     // Print/PDF export for (multi-)selection has already generated a

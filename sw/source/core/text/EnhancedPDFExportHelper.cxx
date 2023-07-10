@@ -74,6 +74,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <IMark.hxx>
 #include <printdata.hxx>
+#include <vprint.hxx>
 #include <SwNodeNum.hxx>
 #include <calbck.hxx>
 #include <stack>
@@ -1714,9 +1715,10 @@ SwEnhancedPDFExportHelper::~SwEnhancedPDFExportHelper()
 tools::Rectangle SwEnhancedPDFExportHelper::SwRectToPDFRect(const SwPageFrame* pCurrPage,
     const tools::Rectangle& rRectangle) const
 {
-    SwPostItMode nPostItMode = mrPrintData.GetPrintPostIts();
-    if (nPostItMode != SwPostItMode::InMargins)
+    if (!::sw::IsShrinkPageForPostIts(mrSh, mrPrintData)) // tdf#148729
+    {
         return rRectangle;
+    }
     //the page has been scaled by 75% and vertically centered, so adjust these
     //rectangles equivalently
     tools::Rectangle aRect(rRectangle);
