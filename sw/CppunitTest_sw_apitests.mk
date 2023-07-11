@@ -32,6 +32,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_apitests, \
     sw/qa/api/SwXFootnoteText \
     sw/qa/api/SwXFootnotes \
     sw/qa/api/SwXHeadFootText \
+    sw/qa/api/SwXNumberingRules \
     sw/qa/api/SwXStyleFamilies \
     sw/qa/api/SwXTextFrame \
     sw/qa/api/SwXTextField \
