@@ -205,20 +205,6 @@ public:
 private:
     virtual std::unique_ptr<Resetter> preTest(const char* filename) override
     {
-        if (getTestName().indexOf("ReqIf") != -1)
-        {
-            if (o3tl::ends_with(filename, ".xhtml"))
-            {
-                setImportFilterOptions("xhtmlns=reqif-xhtml");
-                // Bypass filter detect.
-                setImportFilterName("HTML (StarWriter)");
-            }
-            // Export options (implies XHTML).
-            setFilterOptions("xhtmlns=reqif-xhtml");
-        }
-        else
-            setFilterOptions("");
-
         if (filename == std::string_view("charborder.odt"))
         {
             // FIXME if padding-top gets exported as inches, not cms, we get rounding errors.
