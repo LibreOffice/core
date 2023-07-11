@@ -569,6 +569,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/undo/UndoUngroupSparklines \
     sc/source/ui/undo/UndoGroupSparklines \
     sc/source/ui/undo/UndoEditSparkline \
+    sc/source/ui/undo/UndoThemeChange \
     sc/source/ui/unoobj/ChartRangeSelectionListener \
     sc/source/ui/unoobj/addruno \
     sc/source/ui/unoobj/afmtuno \
