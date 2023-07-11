@@ -2517,6 +2517,23 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
 
         if (pTabPos)
         {
+            if (m_xFormatOfJustInsertedApo)
+            {
+                // We just inserted a floating table and we'll insert a next one.
+                SwFrameFormat* pFormat = m_xFormatOfJustInsertedApo->GetFormat();
+                if (pFormat)
+                {
+                    const SwNode* pAnchorNode = pFormat->GetAnchor().GetAnchorNode();
+                    SwPosition* pPoint = m_pPaM->GetPoint();
+                    if (pAnchorNode && *pAnchorNode == pPoint->GetNode())
+                    {
+                        // The two fly frames would have the same anchor position, leading to
+                        // potentially overlapping text, prevent that.
+                        AppendTextNode(*pPoint);
+                    }
+                }
+            }
+
             // Map a positioned table to a split fly.
             aFlySet.Put(SwFormatFlySplit(true));
         }
