@@ -32,9 +32,7 @@ namespace svgio::svgreader
             maX(0),
             maY(0),
             maWidth(0),
-            maHeight(0),
-            maRx(0),
-            maRy(0)
+            maHeight(0)
         {
         }
 
@@ -176,14 +174,11 @@ namespace svgio::svgreader
                 double frX(getRx().isSet() ? getRx().solve(*this, NumberType::xcoordinate) : 0.0);
                 double frY(getRy().isSet() ? getRy().solve(*this, NumberType::ycoordinate) : 0.0);
 
-                frX = std::max(0.0, frX);
-                frY = std::max(0.0, frY);
-
-                if(0.0 == frY && frX > 0.0)
+                if(!getRy().isSet() && 0.0 == frY && frX > 0.0)
                 {
                     frY = frX;
                 }
-                else if(0.0 == frX && frY > 0.0)
+                else if(!getRx().isSet() && 0.0 == frX && frY > 0.0)
                 {
                     frX = frY;
                 }

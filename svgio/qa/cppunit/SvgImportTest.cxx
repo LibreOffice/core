@@ -1048,11 +1048,11 @@ CPPUNIT_TEST_FIXTURE(Test, testClipRule)
     // - Actual  : 10
     assertXPath(pDocument, "/primitive2D/transform/mask[1]/polypolygon/polygon/point", 5);
     assertXPath(pDocument, "/primitive2D/transform/mask[1]/polypolygoncolor", "color", "#0000ff");
-    assertXPath(pDocument, "/primitive2D/transform/mask[1]/polypolygoncolor/polypolygon/polygon/point", 5);
+    assertXPath(pDocument, "/primitive2D/transform/mask[1]/polypolygoncolor/polypolygon/polygon/point", 4);
 
     assertXPath(pDocument, "/primitive2D/transform/mask[2]/polypolygon/polygon/point", 5);
     assertXPath(pDocument, "/primitive2D/transform/mask[2]/polypolygoncolor", "color", "#ff0000");
-    assertXPath(pDocument, "/primitive2D/transform/mask[2]/polypolygoncolor/polypolygon/polygon/point", 5);
+    assertXPath(pDocument, "/primitive2D/transform/mask[2]/polypolygoncolor/polypolygon/polygon/point", 4);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testi125329)
@@ -1269,6 +1269,22 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf94765)
     assertXPath(pDocument, "/primitive2D/transform/transform/svglineargradient[2]", "starty", "0");
     assertXPath(pDocument, "/primitive2D/transform/transform/svglineargradient[2]", "endx", "0");
     assertXPath(pDocument, "/primitive2D/transform/transform/svglineargradient[2]", "endy", "0");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf156236)
+{
+    Primitive2DSequence aSequenceTdf94765 = parseSvg(u"/svgio/qa/cppunit/data/tdf156236.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf94765.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequenceTdf94765));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor[1]/polypolygon", "path", "m50 180h-30v-60h60v60z");
+    assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor[2]/polypolygon", "path", "m150 180h15c8.2842712474619 0 15-6.7157287525381 15-15v-30c0-8.2842712474619-6.7157287525381-15-15-15h-30c-8.2842712474619 0-15 6.7157287525381-15 15v30c0 8.2842712474619 6.7157287525381 15 15 15z");
+    assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor[3]/polypolygon", "path", "m250 180h15c8.2842712474619 0 15-6.7157287525381 15-15v-30c0-8.2842712474619-6.7157287525381-15-15-15h-30c-8.2842712474619 0-15 6.7157287525381-15 15v30c0 8.2842712474619 6.7157287525381 15 15 15z");
+    assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor[4]/polypolygon", "path", "m350 180c16.5685424949238 0 30-6.7157287525381 30-15v-30c0-8.2842712474619-13.4314575050762-15-30-15s-30 6.7157287525381-30 15v30c0 8.2842712474619 13.4314575050762 15 30 15z");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testBehaviourWhenWidthAndHeightIsOrIsNotSet)
