@@ -167,7 +167,7 @@ $(share_WORKDIR)/%/LOKDocView-0.1.gir: \
 	mkdir -p $(dir $@)
 	PYTHONWARNINGS=default g-ir-scanner "${SRCDIR}/include/LibreOfficeKit/LibreOfficeKitGtk.h" \
 				 "${SRCDIR}/libreofficekit/source/gtk/lokdocview.cxx" \
-                 `${PKG_CONFIG} --cflags gobject-introspection-1.0 gtk+-3.0` \
+                 `${PKG_CONFIG} --cflags-only-I gobject-introspection-1.0 gtk+-3.0` \
 				 -I"${SRCDIR}/include/" \
                  --include=GLib-2.0 --include=GObject-2.0 --include=Gio-2.0 \
                  --library=libreofficekitgtk --library-path="${INSTDIR}/program" \
