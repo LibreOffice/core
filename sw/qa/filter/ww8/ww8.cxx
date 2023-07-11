@@ -333,6 +333,29 @@ CPPUNIT_TEST_FIXTURE(Test, testDOCFloatingTableHiddenAnchor)
     // i.e. the floating table was lost.
     assertXPath(pLayout, "//tab", 2);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testFloattableThenFloattable)
+{
+    // Given a document that contains a floating table, immediately followed by an other floating
+    // table:
+    // When importing the document & laying it out:
+    createSwDoc("floattable-then-floattable.doc");
+    calcLayout();
+
+    // Then make sure that the two floating table has different anchors:
+    SwDoc* pDoc = getSwDoc();
+    auto& rFlys = *pDoc->GetSpzFrameFormats();
+    auto pFly1 = rFlys[0];
+    SwNodeOffset nFly1Anchor = pFly1->GetAttrSet().GetAnchor().GetAnchorContentNode()->GetIndex();
+    auto pFly2 = rFlys[1];
+    SwNodeOffset nFly2Anchor = pFly2->GetAttrSet().GetAnchor().GetAnchorContentNode()->GetIndex();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 42
+    // - Actual  : 41
+    // i.e. the two anchor positions were the same instead of first anchor followed by the second
+    // anchor.
+    CPPUNIT_ASSERT_EQUAL(nFly1Anchor + 1, nFly2Anchor);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
