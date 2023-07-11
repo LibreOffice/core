@@ -2040,14 +2040,14 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="ParaLeftToRightD">
+      <object class="GtkRadioMenuItem" id="ParaLeftToRightD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ParaLeftToRight</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ParaRightToLeftD">
+      <object class="GtkRadioMenuItem" id="ParaRightToLeftD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ParaRightToLeft</property>
@@ -2080,21 +2080,21 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SpacePara1D">
+      <object class="GtkRadioMenuItem" id="SpacePara1D">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SpacePara1</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SpacePara15D">
+      <object class="GtkRadioMenuItem" id="SpacePara15D">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SpacePara15</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SpacePara2D">
+      <object class="GtkRadioMenuItem" id="SpacePara2D">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SpacePara2</property>
@@ -2407,14 +2407,14 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="MenuView-PageMode">
+      <object class="GtkRadioMenuItem" id="MenuView-PageMode">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:PageMode</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuView-MasterPage">
+      <object class="GtkRadioMenuItem" id="MenuView-MasterPage">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:MasterPage</property>
@@ -2523,14 +2523,14 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuView-OutputQualityColor">
+      <object class="GtkRadioMenuItem" id="MenuView-OutputQualityColor">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:OutputQualityColor</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuView-OutputQualityGrayscale">
+      <object class="GtkRadioMenuItem" id="MenuView-OutputQualityGrayscale">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:OutputQualityGrayscale</property>

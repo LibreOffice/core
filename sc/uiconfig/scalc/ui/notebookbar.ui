@@ -1923,14 +1923,14 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="MenuView-PagebreakMode">
+      <object class="GtkRadioMenuItem" id="MenuView-PagebreakMode">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:PagebreakMode</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuView-NormalViewMode">
+      <object class="GtkRadioMenuItem" id="MenuView-NormalViewMode">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:NormalViewMode</property>

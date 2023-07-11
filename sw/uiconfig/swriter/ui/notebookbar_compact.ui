@@ -837,14 +837,14 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuHome-ParaLeftToRight">
+      <object class="GtkRadioMenuItem" id="MenuHome-ParaLeftToRight">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ParaLeftToRight</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuHome-ParaRightToLeft">
+      <object class="GtkRadioMenuItem" id="MenuHome-ParaRightToLeft">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ParaRightToLeft</property>
@@ -2298,14 +2298,14 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="PrintLayoutD">
+      <object class="GtkRadioMenuItem" id="PrintLayoutD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:PrintLayout</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="BrowseViewF">
+      <object class="GtkRadioMenuItem" id="BrowseViewF">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:BrowseView</property>

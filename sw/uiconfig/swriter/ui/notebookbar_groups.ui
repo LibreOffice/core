@@ -311,7 +311,7 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="paradefault">
+      <object class="GtkRadioMenuItem" id="paradefault">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="notebookbar_groups|paradefault">Default Paragraph</property>
@@ -320,7 +320,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="title">
+      <object class="GtkRadioMenuItem" id="title">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="notebookbar_groups|title">Title</property>
@@ -329,7 +329,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="heading1">
+      <object class="GtkRadioMenuItem" id="heading1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="notebookbar_groups|heading1">Heading 1</property>
@@ -338,7 +338,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="heading2">
+      <object class="GtkRadioMenuItem" id="heading2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="notebookbar_groups|heading2">Heading 2</property>
@@ -347,7 +347,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="heading3">
+      <object class="GtkRadioMenuItem" id="heading3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="notebookbar_groups|heading3">Heading 3</property>
@@ -362,7 +362,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="chardefault">
+      <object class="GtkRadioMenuItem" id="chardefault">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="notebookbar_groups|chardefault">Default Character</property>
@@ -371,7 +371,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="italic">
+      <object class="GtkRadioMenuItem" id="italic">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="notebookbar_groups|italic">Emphasis</property>
@@ -380,7 +380,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="bold">
+      <object class="GtkRadioMenuItem" id="bold">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="notebookbar_groups|bold">Strong Emphasis</property>
@@ -398,7 +398,7 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="tablestylenone">
+      <object class="GtkRadioMenuItem" id="tablestylenone">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="notebookbar_groups|tablestylenone">None</property>
@@ -406,7 +406,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="tablestyledefault">
+      <object class="GtkRadioMenuItem" id="tablestyledefault">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="notebookbar_groups|tablestyledefault">Default</property>
@@ -414,7 +414,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="tablestyle1">
+      <object class="GtkRadioMenuItem" id="tablestyle1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="notebookbar_groups|tablestyle1">Style 1</property>
@@ -422,7 +422,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="tablestyle2">
+      <object class="GtkRadioMenuItem" id="tablestyle2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="notebookbar_groups|tablestyle2">Style 2</property>
@@ -430,7 +430,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="tablestyle3">
+      <object class="GtkRadioMenuItem" id="tablestyle3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="notebookbar_groups|tablestyle3">Style 3</property>

@@ -812,14 +812,14 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuHome-ParaLeftToRight">
+      <object class="GtkRadioMenuItem" id="MenuHome-ParaLeftToRight">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ParaLeftToRight</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuHome-ParaRightToLeft">
+      <object class="GtkRadioMenuItem" id="MenuHome-ParaRightToLeft">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ParaRightToLeft</property>
@@ -2108,14 +2108,14 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="MenuView-PrintLayout">
+      <object class="GtkRadioMenuItem" id="MenuView-PrintLayout">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:PrintLayout</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuView-BrowseView">
+      <object class="GtkRadioMenuItem" id="MenuView-BrowseView">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:BrowseView</property>

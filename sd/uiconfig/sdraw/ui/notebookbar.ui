@@ -1920,14 +1920,14 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuHome-ParaLeftToRight1">
+      <object class="GtkRadioMenuItem" id="MenuHome-ParaLeftToRight1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ParaLeftToRight</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuHome-ParaRightToLeft1">
+      <object class="GtkRadioMenuItem" id="MenuHome-ParaRightToLeft1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ParaRightToLeft</property>
@@ -2058,14 +2058,14 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="MenuView-PageMode">
+      <object class="GtkRadioMenuItem" id="MenuView-PageMode">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:PageMode</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuView-MasterPage">
+      <object class="GtkRadioMenuItem" id="MenuView-MasterPage">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:MasterPage</property>
@@ -2172,14 +2172,14 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuView-OutputQualityColor">
+      <object class="GtkRadioMenuItem" id="MenuView-OutputQualityColor">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:OutputQualityColor</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuView-OutputQualityGrayscale">
+      <object class="GtkRadioMenuItem" id="MenuView-OutputQualityGrayscale">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:OutputQualityGrayscale</property>

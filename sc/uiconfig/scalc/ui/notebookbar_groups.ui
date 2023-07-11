@@ -145,7 +145,7 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="stylemenudefault">
+      <object class="GtkRadioMenuItem" id="stylemenudefault">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Default&amp;FamilyName:string=CellStyles</property>
@@ -160,7 +160,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="stylemenuacc1">
+      <object class="GtkRadioMenuItem" id="stylemenuacc1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Accent 1&amp;FamilyName:string=CellStyles</property>
@@ -169,7 +169,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="stylemenuacc2">
+      <object class="GtkRadioMenuItem" id="stylemenuacc2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Accent 2&amp;FamilyName:string=CellStyles</property>
@@ -178,7 +178,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="stylemenuacc3">
+      <object class="GtkRadioMenuItem" id="stylemenuacc3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Accent 3&amp;FamilyName:string=CellStyles</property>
@@ -193,7 +193,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="stylemenuhed1">
+      <object class="GtkRadioMenuItem" id="stylemenuhed1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Heading 1&amp;FamilyName:string=CellStyles</property>
@@ -202,7 +202,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="stylemenuhed2">
+      <object class="GtkRadioMenuItem" id="stylemenuhed2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Heading 2&amp;FamilyName:string=CellStyles</property>
@@ -217,7 +217,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="stylemenustatg">
+      <object class="GtkRadioMenuItem" id="stylemenustatg">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Good&amp;FamilyName:string=CellStyles</property>
@@ -226,7 +226,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="stylemenustatn">
+      <object class="GtkRadioMenuItem" id="stylemenustatn">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Neutral&amp;FamilyName:string=CellStyles</property>
@@ -235,7 +235,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="stylemenustatb">
+      <object class="GtkRadioMenuItem" id="stylemenustatb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Bad&amp;FamilyName:string=CellStyles</property>
@@ -244,7 +244,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="stylemenustatw">
+      <object class="GtkRadioMenuItem" id="stylemenustatw">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Warning&amp;FamilyName:string=CellStyles</property>
@@ -253,7 +253,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="stylemenustate">
+      <object class="GtkRadioMenuItem" id="stylemenustate">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Error&amp;FamilyName:string=CellStyles</property>
@@ -268,7 +268,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="stylemenutxtn">
+      <object class="GtkRadioMenuItem" id="stylemenutxtn">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Note&amp;FamilyName:string=CellStyles</property>
@@ -277,7 +277,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="stylemenutxtf">
+      <object class="GtkRadioMenuItem" id="stylemenutxtf">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Footnote&amp;FamilyName:string=CellStyles</property>

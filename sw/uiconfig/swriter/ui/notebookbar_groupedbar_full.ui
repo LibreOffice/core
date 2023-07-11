@@ -2227,14 +2227,14 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="MenuParagraph-ParaLeftToRight">
+      <object class="GtkRadioMenuItem" id="MenuParagraph-ParaLeftToRight">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ParaLeftToRight</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuParagraph-ParaRightToLeft">
+      <object class="GtkRadioMenuItem" id="MenuParagraph-ParaRightToLeft">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ParaRightToLeft</property>
@@ -2287,21 +2287,21 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuParagraph-CommonAlignTop">
+      <object class="GtkRadioMenuItem" id="MenuParagraph-CommonAlignTop">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:CommonAlignTop</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuParagraph-CommonAlignVerticalCenter">
+      <object class="GtkRadioMenuItem" id="MenuParagraph-CommonAlignVerticalCenter">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:CommonAlignVerticalCenter</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuParagraph-CommonAlignBottom">
+      <object class="GtkRadioMenuItem" id="MenuParagraph-CommonAlignBottom">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:CommonAlignBottom</property>
@@ -3197,7 +3197,7 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="MenuStyles-TextBody">
+      <object class="GtkRadioMenuItem" id="MenuStyles-TextBody">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:TextBodyParaStyle</property>
@@ -3210,56 +3210,56 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuStyles-Title">
+      <object class="GtkRadioMenuItem" id="MenuStyles-Title">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:TitleParaStyle</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuStyles-Subtitle">
+      <object class="GtkRadioMenuItem" id="MenuStyles-Subtitle">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SubtitleParaStyle</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuStyles-Heading1">
+      <object class="GtkRadioMenuItem" id="MenuStyles-Heading1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Heading1ParaStyle</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuStyles-Heading2">
+      <object class="GtkRadioMenuItem" id="MenuStyles-Heading2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Heading2ParaStyle</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuStyles-Heading3">
+      <object class="GtkRadioMenuItem" id="MenuStyles-Heading3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Heading3ParaStyle</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuStyles-Heading4">
+      <object class="GtkRadioMenuItem" id="MenuStyles-Heading4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Heading4ParaStyle</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuStyles-QuoteParaStyle">
+      <object class="GtkRadioMenuItem" id="MenuStyles-QuoteParaStyle">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:QuoteParaStyle</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuStyles-PreformattedParaStyle">
+      <object class="GtkRadioMenuItem" id="MenuStyles-PreformattedParaStyle">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:PreformattedParaStyle</property>
@@ -3272,35 +3272,35 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuStyles-DefaultStyle">
+      <object class="GtkRadioMenuItem" id="MenuStyles-DefaultStyle">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:DefaultCharStyle</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuStyles-Emphasis">
+      <object class="GtkRadioMenuItem" id="MenuStyles-Emphasis">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:EmphasisCharStyle</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuStyles-EmphasisStrong">
+      <object class="GtkRadioMenuItem" id="MenuStyles-EmphasisStrong">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StrongEmphasisCharStyle</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuStyles-Citation">
+      <object class="GtkRadioMenuItem" id="MenuStyles-Citation">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:QuoteCharStyle</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuStyles-SourceCode">
+      <object class="GtkRadioMenuItem" id="MenuStyles-SourceCode">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SourceCharStyle</property>
@@ -3313,42 +3313,42 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuStyles-ListStyle">
+      <object class="GtkRadioMenuItem" id="MenuStyles-ListStyle">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:BulletListStyle</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuStyles-Numbering_123">
+      <object class="GtkRadioMenuItem" id="MenuStyles-Numbering_123">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:NumberListStyle</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuStyles-AlphaListStyle">
+      <object class="GtkRadioMenuItem" id="MenuStyles-AlphaListStyle">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:AlphaListStyle</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuStyles-AlphaLowListStyle">
+      <object class="GtkRadioMenuItem" id="MenuStyles-AlphaLowListStyle">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:AlphaLowListStyle</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuStyles-RomanListStyle">
+      <object class="GtkRadioMenuItem" id="MenuStyles-RomanListStyle">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:RomanListStyle</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuStyles-RomanLowListStyle">
+      <object class="GtkRadioMenuItem" id="MenuStyles-RomanLowListStyle">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:RomanLowListStyle</property>
@@ -3637,14 +3637,14 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="MenuView-PrintLayout">
+      <object class="GtkRadioMenuItem" id="MenuView-PrintLayout">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:PrintLayout</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuView-BrowseView">
+      <object class="GtkRadioMenuItem" id="MenuView-BrowseView">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:BrowseView</property>

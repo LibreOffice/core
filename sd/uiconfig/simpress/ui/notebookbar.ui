@@ -961,14 +961,14 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuHome-ParaLeftToRight">
+      <object class="GtkRadioMenuItem" id="MenuHome-ParaLeftToRight">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ParaLeftToRight</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuHome-ParaRightToLeft">
+      <object class="GtkRadioMenuItem" id="MenuHome-ParaRightToLeft">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ParaRightToLeft</property>
@@ -1777,14 +1777,14 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuSlideShow-OutputQualityColor">
+      <object class="GtkRadioMenuItem" id="MenuSlideShow-OutputQualityColor">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:OutputQualityColor</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuSlideShow-OutputQualityGrayscale">
+      <object class="GtkRadioMenuItem" id="MenuSlideShow-OutputQualityGrayscale">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:OutputQualityGrayscale</property>
@@ -2100,28 +2100,28 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="MenuView-NormalMultiPaneGUI">
+      <object class="GtkRadioMenuItem" id="MenuView-NormalMultiPaneGUI">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:NormalMultiPaneGUI</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuView-OutlineMode">
+      <object class="GtkRadioMenuItem" id="MenuView-OutlineMode">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:OutlineMode</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuView-NotesMode">
+      <object class="GtkRadioMenuItem" id="MenuView-NotesMode">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:NotesMode</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuView-DiaMode">
+      <object class="GtkRadioMenuItem" id="MenuView-DiaMode">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:DiaMode</property>
@@ -2134,21 +2134,21 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuView-SlideMasterPage">
+      <object class="GtkRadioMenuItem" id="MenuView-SlideMasterPage">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SlideMasterPage</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuView-NotesMasterPage">
+      <object class="GtkRadioMenuItem" id="MenuView-NotesMasterPage">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:NotesMasterPage</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuView-HandoutMode">
+      <object class="GtkRadioMenuItem" id="MenuView-HandoutMode">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:HandoutMode</property>
@@ -2255,14 +2255,14 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuView-OutputQualityColor">
+      <object class="GtkRadioMenuItem" id="MenuView-OutputQualityColor">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:OutputQualityColor</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuView-OutputQualityGrayscale">
+      <object class="GtkRadioMenuItem" id="MenuView-OutputQualityGrayscale">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:OutputQualityGrayscale</property>
