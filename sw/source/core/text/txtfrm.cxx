@@ -843,10 +843,13 @@ void SwTextFrame::dumpAsXml(xmlTextWriterPtr writer) const
     {
         nTextLength = static_cast<sal_Int32>(pTextFrameFollow->GetOffset() - GetOffset());
     }
-    OString aText8
-        = OUStringToOString(aText.subView(nTextOffset, nTextLength), RTL_TEXTENCODING_UTF8);
-    (void)xmlTextWriterWriteString( writer,
-            reinterpret_cast<const xmlChar *>(aText8.getStr(  )) );
+    if (nTextLength > 0)
+    {
+        OString aText8
+            = OUStringToOString(aText.subView(nTextOffset, nTextLength), RTL_TEXTENCODING_UTF8);
+        (void)xmlTextWriterWriteString( writer,
+                reinterpret_cast<const xmlChar *>(aText8.getStr(  )) );
+    }
     if (const SwParaPortion* pPara = GetPara())
     {
         (void)xmlTextWriterStartElement(writer, BAD_CAST("SwParaPortion"));
