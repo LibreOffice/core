@@ -24,6 +24,7 @@
 
 #define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
+// see sw/inc/comcore.hxx
 const TranslateId RID_SHELLRES_AUTOFMTSTRS[] =
 {
     NC_("RID_SHELLRES_AUTOFMTSTRS", "Remove empty paragraphs"),

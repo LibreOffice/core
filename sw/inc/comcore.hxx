@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_COMCORE_HXX
 
 // defines for the Autoformat Redline Comments
+// see sw/inc/utlui.hrc
 #define STR_AUTOFMTREDL_DEL_EMPTY_PARA          0
 #define STR_AUTOFMTREDL_USE_REPLACE             1
 #define STR_AUTOFMTREDL_CPTL_STT_WORD           2
