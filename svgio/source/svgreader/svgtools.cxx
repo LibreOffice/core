@@ -32,7 +32,7 @@
 
 namespace svgio::svgreader
 {
-        constexpr frozen::unordered_map<std::u16string_view, Color, 147> aColorTokenMapperList
+        constexpr auto aColorTokenMapperList = frozen::make_unordered_map<std::u16string_view, Color>(
         {
             { u"aliceblue", Color(240, 248, 255) },
             { u"antiquewhite", Color(250, 235, 215) },
@@ -181,7 +181,7 @@ namespace svgio::svgreader
             { u"whitesmoke", Color(245, 245, 245) },
             { u"yellow", Color(255, 255, 0) },
             { u"yellowgreen", Color(154, 205, 50) }
-        };
+        });
 
         basegfx::B2DHomMatrix SvgAspectRatio::createLinearMapping(const basegfx::B2DRange& rTarget, const basegfx::B2DRange& rSource)
         {

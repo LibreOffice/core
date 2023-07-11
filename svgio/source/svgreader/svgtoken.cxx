@@ -25,7 +25,7 @@
 namespace svgio::svgreader
 {
 
-constexpr frozen::unordered_map<std::u16string_view, SVGToken, 145> aSVGTokenMapperList
+constexpr auto aSVGTokenMapperList = frozen::make_unordered_map<std::u16string_view, SVGToken>(
 {
     { u"width", SVGToken::Width },
     { u"height", SVGToken::Height },
@@ -178,11 +178,11 @@ constexpr frozen::unordered_map<std::u16string_view, SVGToken, 145> aSVGTokenMap
     { u"text", SVGToken::Text },
     { u"baseline-shift", SVGToken::BaselineShift },
     { u"flowRoot", SVGToken::FlowRoot }
-};
+});
 
 // The same elements as the map above but lowercase. CSS is case insensitive
 // TODO: create separate maps for css and xml elements
-constexpr frozen::unordered_map<std::u16string_view, SVGToken, 145> aSVGLowerCaseTokenMapperList
+constexpr auto  aSVGLowerCaseTokenMapperList = frozen::make_unordered_map<std::u16string_view, SVGToken>(
 {
     { u"width", SVGToken::Width },
     { u"height", SVGToken::Height },
@@ -335,7 +335,7 @@ constexpr frozen::unordered_map<std::u16string_view, SVGToken, 145> aSVGLowerCas
     { u"text", SVGToken::Text },
     { u"baseline-shift", SVGToken::BaselineShift },
     { u"flowroot", SVGToken::FlowRoot }
-};
+});
 
 static_assert(sizeof(aSVGTokenMapperList) == sizeof(aSVGLowerCaseTokenMapperList),
         "Number of elements in both maps must be the same");
