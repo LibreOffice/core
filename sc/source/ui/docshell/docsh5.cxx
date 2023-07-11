@@ -432,7 +432,7 @@ void ScDocShell::UpdateAllRowHeights( const ScMarkData* pTabMark )
 
 void ScDocShell::UpdateAllRowHeights(const bool bOnlyUsedRows)
 {
-    // update automatic roow heights on all sheets using the newer ScDocRowHeightUpdater
+    // update automatic row heights on all sheets using the newer ScDocRowHeightUpdater
     ScSizeDeviceProvider aProv(this);
     ScDocRowHeightUpdater aUpdater(*m_pDocument, aProv.GetDevice(), aProv.GetPPTX(),
                                    aProv.GetPPTY(), nullptr);
