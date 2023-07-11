@@ -87,6 +87,12 @@ namespace sdr::contact
             // print? Default is false
             virtual bool isOutputToPrinter() const override;
 
+            // display page decoration? Default is true
+            virtual bool isPageDecorationActive() const override;
+
+            // display mster page content (ViewContactOfMasterPage)? Default is true
+            virtual bool isMasterPageActive() const override;
+
             // recording MetaFile? Default is false
             virtual bool isOutputToRecordingMetaFile() const override;
 

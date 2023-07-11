@@ -25,7 +25,6 @@ namespace sdr::contact
         DisplayInfo::DisplayInfo()
         :   maProcessLayers(true), // init layer info with all bits set to draw everything on default
             mbControlLayerProcessingActive(false),
-            mbPageProcessingActive(true),
             mbGhostedDrawModeActive(false),
             mbSubContentActive(false)
         {
@@ -53,14 +52,6 @@ namespace sdr::contact
             if(mbControlLayerProcessingActive != bDoProcess)
             {
                 mbControlLayerProcessingActive = bDoProcess;
-            }
-        }
-
-        void DisplayInfo::SetPageProcessingActive(bool bDoProcess)
-        {
-            if(mbPageProcessingActive != bDoProcess)
-            {
-                mbPageProcessingActive = bDoProcess;
             }
         }
 

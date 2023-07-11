@@ -159,6 +159,18 @@ bool ObjectContact::isOutputToPrinter() const
     return false;
 }
 
+// display page decoration? Default is true
+bool ObjectContact::isPageDecorationActive() const
+{
+    return true;
+}
+
+// display mster page content (ViewContactOfMasterPage)? Default is true
+bool ObjectContact::isMasterPageActive() const
+{
+    return true;
+}
+
 // recording MetaFile? Default is false
 bool ObjectContact::isOutputToRecordingMetaFile() const
 {

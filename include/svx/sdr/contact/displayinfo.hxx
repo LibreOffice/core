@@ -46,13 +46,6 @@ namespace sdr::contact
             // painting when the control layer needs to be painted as last layer
             bool                                            mbControlLayerProcessingActive : 1;
 
-            // Internal flag to decide if page stuff (background, border, MasterPage, grid, etc...)
-            // will be processed at all. This flag is user-defined and will not be changed from the
-            // processing mechanism. Default is true, thus set to false if PagePainting should be suppressed.
-            // For more granular switching page stuff painting on and off, use the according flags at the
-            // view (->Is*Visible())
-            bool                                            mbPageProcessingActive : 1;
-
             // Internal flag to remember if EnteredGroupDrawMode is active. Default is true
             // since this mode starts activated and gets switched off when reaching
             // the current group level. Should only be changed by instances which do
@@ -82,10 +75,6 @@ namespace sdr::contact
             // Access to ControlLayerProcessingActive flag
             void SetControlLayerProcessingActive(bool bDoPaint);
             bool GetControlLayerProcessingActive() const { return mbControlLayerProcessingActive; }
-
-            // Access to PageProcessingActive flag
-            void SetPageProcessingActive(bool bDoPaint);
-            bool GetPageProcessingActive() const { return mbPageProcessingActive; }
 
             // Save the original DrawMode from outdev
             void ClearGhostedDrawMode();

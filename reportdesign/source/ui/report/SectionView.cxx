@@ -39,7 +39,6 @@ OSectionView::OSectionView(
     ,m_pReportWindow( pEditor )
     ,m_pSectionWindow(_pSectionWindow)
 {
-    // SetPagePaintingAllowed(false);
     SetBufferedOutputAllowed(true);
     SetBufferedOverlayAllowed(true);
     SetPageBorderVisible(false);

@@ -142,7 +142,8 @@ void GraphCtrl::InitSdrModel()
     pView->SetEditMode();
 
     // #i72889# set needed flags
-    pView->SetPagePaintingAllowed(false);
+    pView->SetPageDecorationAllowed(false);
+    pView->SetMasterPageVisualizationAllowed(false);
     pView->SetBufferedOutputAllowed(true);
     pView->SetBufferedOverlayAllowed(true);
 

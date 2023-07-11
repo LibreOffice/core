@@ -493,7 +493,7 @@ sal_uInt32 ViewContactOfSdrPage::GetObjectCount() const
     // or MPBGO. Also OuterPageBorder, InnerPageBorder and two pairs of Grid and Helplines
     // (for front and back) which internally are visible or not depending on the current
     // front/back setting for those.
-    return 11;
+    return 10;
 }
 
 ViewContact& ViewContactOfSdrPage::GetViewContact(sal_uInt32 nIndex) const
@@ -522,7 +522,7 @@ ViewContact& ViewContactOfSdrPage::GetViewContact(sal_uInt32 nIndex) const
         case 7: return const_cast<ViewContactOfHelplines&>(maViewContactOfHelplinesBack);
         case 8: return const_cast<ViewContactOfPageHierarchy&>(maViewContactOfPageHierarchy);
         case 9: return const_cast<ViewContactOfGrid&>(maViewContactOfGridFront);
-        case 10: case 11: return const_cast<ViewContactOfHelplines&>(maViewContactOfHelplinesFront);
+        case 10: return const_cast<ViewContactOfHelplines&>(maViewContactOfHelplinesFront);
         default: assert(false);return const_cast<ViewContactOfHelplines&>(maViewContactOfHelplinesFront);
     }
 }

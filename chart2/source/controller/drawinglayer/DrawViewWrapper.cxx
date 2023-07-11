@@ -81,7 +81,6 @@ DrawViewWrapper::DrawViewWrapper(
 {
     SetBufferedOutputAllowed(true);
     SetBufferedOverlayAllowed(true);
-    SetPagePaintingAllowed(true);
 
     // #i12587# support for shapes in chart
     SdrOutliner* pOutliner = getOutliner();

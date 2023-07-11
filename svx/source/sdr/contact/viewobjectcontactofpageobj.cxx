@@ -65,6 +65,8 @@ public:
 
     // forward access to SdrPageView of ViewObjectContactOfPageObj
     virtual bool isOutputToPrinter() const override;
+    virtual bool isPageDecorationActive() const override;
+    virtual bool isMasterPageActive() const override;
     virtual bool isOutputToRecordingMetaFile() const override;
     virtual bool isOutputToPDFFile() const override;
     virtual bool isExportTaggedPDF() const override;
@@ -177,6 +179,8 @@ void PagePrimitiveExtractor::InvalidatePartOfView(const basegfx::B2DRange& rRang
 
 // forward access to SdrPageView to VOCOfPageObj
 bool PagePrimitiveExtractor::isOutputToPrinter() const { return mrViewObjectContactOfPageObj.GetObjectContact().isOutputToPrinter(); }
+bool PagePrimitiveExtractor::isPageDecorationActive() const { return mrViewObjectContactOfPageObj.GetObjectContact().isPageDecorationActive(); }
+bool PagePrimitiveExtractor::isMasterPageActive() const { return mrViewObjectContactOfPageObj.GetObjectContact().isMasterPageActive(); }
 bool PagePrimitiveExtractor::isOutputToRecordingMetaFile() const { return mrViewObjectContactOfPageObj.GetObjectContact().isOutputToRecordingMetaFile(); }
 bool PagePrimitiveExtractor::isOutputToPDFFile() const { return mrViewObjectContactOfPageObj.GetObjectContact().isOutputToPDFFile(); }
 bool PagePrimitiveExtractor::isExportTaggedPDF() const { return mrViewObjectContactOfPageObj.GetObjectContact().isExportTaggedPDF(); }

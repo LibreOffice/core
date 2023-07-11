@@ -63,7 +63,7 @@ bool ViewObjectContactOfPageSubObject::isPrimitiveVisible(const DisplayInfo& rDi
         return false;
     }
 
-    if(!rDisplayInfo.GetPageProcessingActive())
+    if(!GetObjectContact().isPageDecorationActive())
     {
         return false;
     }

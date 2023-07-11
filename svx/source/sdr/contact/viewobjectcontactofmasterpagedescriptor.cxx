@@ -46,7 +46,8 @@ namespace sdr::contact
                 return false;
             }
 
-            if(!rDisplayInfo.GetPageProcessingActive())
+            // display mster page content?
+            if (!GetObjectContact().isMasterPageActive())
             {
                 return false;
             }

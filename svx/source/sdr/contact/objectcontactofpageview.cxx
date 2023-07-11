@@ -379,6 +379,18 @@ namespace sdr::contact
             return (OUTDEV_PRINTER == mrPageWindow.GetPaintWindow().GetOutputDevice().GetOutDevType());
         }
 
+        // display page decoration? Default is true
+        bool ObjectContactOfPageView::isPageDecorationActive() const
+        {
+            return GetPageWindow().GetPageView().GetView().IsPageDecorationAllowed();
+        }
+
+        // display mster page content (ViewContactOfMasterPage)? Default is true
+        bool ObjectContactOfPageView::isMasterPageActive() const
+        {
+            return GetPageWindow().GetPageView().GetView().IsMasterPageVisualizationAllowed();
+        }
+
         // recording MetaFile?
         bool ObjectContactOfPageView::isOutputToRecordingMetaFile() const
         {

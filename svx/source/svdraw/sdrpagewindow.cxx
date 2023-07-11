@@ -350,9 +350,6 @@ void SdrPageWindow::RedrawAll( sdr::contact::ViewObjectContactRedirector* pRedir
         // Set region as redraw area
         aDisplayInfo.SetRedrawArea(rRegion);
 
-        // Draw/Impress
-        aDisplayInfo.SetPageProcessingActive(rView.IsPagePaintingAllowed()); // #i72889#
-
         // paint page
         GetObjectContact().ProcessDisplay(aDisplayInfo);
     }
@@ -411,8 +408,11 @@ void SdrPageWindow::RedrawLayer(const SdrLayerID* pId,
         aDisplayInfo.SetRedrawArea(rRegion);
 
         // Writer or calc, coming from original RedrawOneLayer.
-        // #i72889# no page painting for layer painting
-        aDisplayInfo.SetPageProcessingActive(false);
+        // #i72889# no page painting or MasterPage painting for layer painting
+        const bool bOldPageDecorationAllowed(GetPageView().GetView().IsPageDecorationAllowed());
+        const bool bOldMasterPageVisualizationAllowed(GetPageView().GetView().IsMasterPageVisualizationAllowed());
+        GetPageView().GetView().SetPageDecorationAllowed(false);
+        GetPageView().GetView().SetMasterPageVisualizationAllowed(false);
 
         if (pPageFrame) // Writer page frame for anchor based clipping
         {
@@ -421,6 +421,10 @@ void SdrPageWindow::RedrawLayer(const SdrLayerID* pId,
 
         // paint page
         GetObjectContact().ProcessDisplay(aDisplayInfo);
+
+        // reset temporarily changed flags
+        GetPageView().GetView().SetPageDecorationAllowed(bOldPageDecorationAllowed);
+        GetPageView().GetView().SetMasterPageVisualizationAllowed(bOldMasterPageVisualizationAllowed);
     }
 
     // reset redirector

@@ -177,8 +177,27 @@ protected:
     // directly painted to OutDev. Default is sal_False.
     bool mbBufferedOverlayAllowed : 1;
 
-    // Allow page painting at all?
-    bool mbPagePaintingAllowed : 1;
+    // Allow page decorations? Quick way to switch on/off all of page's decoration features,
+    // in addition to the more fine-granular other view settings (see *visible bools above).
+    // Default is true.
+    // This controls processing of the hierarchy elements:
+    // -ViewContactOfPageBackground: formally known as 'Wiese', the area behind the page
+    // -ViewContactOfPageShadow: page's shadow
+    // -ViewContactOfPageFill: the page's fill with PageColor/PaperColor
+    //   (MasterPage content here, not affected by this flag)
+    // -ViewContactOfOuterPageBorder: the border around the page
+    // -ViewContactOfInnerPageBorder: The border inside the page, moved inside by PageBorder distances
+    // -ViewContactOfGrid: the page's grid visualisation (background)
+    // -ViewContactOfHelplines: the page's Helplines (background)
+    //   (Page content here, not affected by this flag)
+    // -ViewContactOfGrid: the page's grid visualisation (foreground)
+    // -ViewContactOfHelplines: the page's Helplines (foreground)
+    // Note: background/foreground means that one is active, grid & helplines can be displayed in
+    //       front of or behind obect visualisations/page content
+    bool mbPageDecorationAllowed : 1;
+
+    // Allow MasterPage visualization, default is true
+    bool mbMasterPageVisualizationAllowed : 1;
 
     // Is this a preview renderer?
     bool mbPreviewRenderer : 1;
@@ -191,7 +210,7 @@ protected:
     bool mbPaintTextEdit : 1;        // if should paint currently edited text
 
 public:
-    // Interface for PagePaintingAllowed flag
+    // Interface for BufferedOoutputAllowed flag
     bool IsBufferedOutputAllowed() const;
     void SetBufferedOutputAllowed(bool bNew);
 
@@ -199,9 +218,13 @@ public:
     bool IsBufferedOverlayAllowed() const;
     void SetBufferedOverlayAllowed(bool bNew);
 
-    // Allow page painting at all?
-    bool IsPagePaintingAllowed() const { return mbPagePaintingAllowed;}
-    void SetPagePaintingAllowed(bool bNew);
+    // Allow page decorations? See details above at mbPageDecorationAllowed declaration
+    bool IsPageDecorationAllowed() const { return mbPageDecorationAllowed;}
+    void SetPageDecorationAllowed(bool bNew);
+
+    // Allow MasterPage visualization, default is true
+    bool IsMasterPageVisualizationAllowed() const { return mbMasterPageVisualizationAllowed;}
+    void SetMasterPageVisualizationAllowed(bool bNew);
 
     virtual rtl::Reference<sdr::overlay::OverlayManager> CreateOverlayManager(OutputDevice& rDevice) const;
 

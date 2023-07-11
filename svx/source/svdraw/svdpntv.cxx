@@ -158,7 +158,8 @@ SdrPaintView::SdrPaintView(SdrModel& rSdrModel, OutputDevice* pOut)
     , mbAnimationPause(false)
     , mbBufferedOutputAllowed(false)
     , mbBufferedOverlayAllowed(false)
-    , mbPagePaintingAllowed(true)
+    , mbPageDecorationAllowed(true)
+    , mbMasterPageVisualizationAllowed(true)
     , mbPreviewRenderer(false)
     , mbHideOle(false)
     , mbHideChart(false)
@@ -1182,11 +1183,19 @@ void SdrPaintView::SetBufferedOverlayAllowed(bool bNew)
 }
 
 
-void SdrPaintView::SetPagePaintingAllowed(bool bNew)
+void SdrPaintView::SetPageDecorationAllowed(bool bNew)
 {
-    if(bNew != mbPagePaintingAllowed)
+    if(bNew != mbPageDecorationAllowed)
     {
-        mbPagePaintingAllowed = bNew;
+        mbPageDecorationAllowed = bNew;
+    }
+}
+
+void SdrPaintView::SetMasterPageVisualizationAllowed(bool bNew)
+{
+    if(bNew != mbMasterPageVisualizationAllowed)
+    {
+        mbMasterPageVisualizationAllowed = bNew;
     }
 }
 
