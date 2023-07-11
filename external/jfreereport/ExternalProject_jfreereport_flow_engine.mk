@@ -20,7 +20,7 @@ $(eval $(call gb_ExternalProject_register_targets,jfreereport_flow_engine,\
 $(call gb_ExternalProject_get_state_target,jfreereport_flow_engine,build) :
 	$(call gb_Trace_StartRange,jfreereport_flow_engine,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		JAVA_HOME=$(JAVA_HOME_FOR_BUILD) \
+		unset MSYS_NO_PATHCONV && JAVA_HOME=$(JAVA_HOME_FOR_BUILD) \
 		$(ICECREAM_RUN) "$(ANT)" \
 			$(if $(verbose),-v,-q) \
 			-f build.xml \
