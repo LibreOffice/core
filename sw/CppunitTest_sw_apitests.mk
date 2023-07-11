@@ -26,6 +26,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_apitests, \
     sw/qa/api/SwXDocumentIndexMark \
     sw/qa/api/SwXDocumentSettings \
     sw/qa/api/SwXFieldEnumeration \
+    sw/qa/api/SwXFrames \
     sw/qa/api/SwXFootnote \
     sw/qa/api/SwXFootnoteProperties \
     sw/qa/api/SwXFootnoteText \
