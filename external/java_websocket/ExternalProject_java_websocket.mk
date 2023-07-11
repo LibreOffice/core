@@ -16,7 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,java_websocket,\
 $(call gb_ExternalProject_get_state_target,java_websocket,build) :
 	$(call gb_Trace_StartRange,java_websocket,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		JAVA_HOME=$(JAVA_HOME_FOR_BUILD) \
+		unset MSYS_NO_PATHCONV && JAVA_HOME=$(JAVA_HOME_FOR_BUILD) \
 		$(ICECREAM_RUN) "$(ANT)" \
 			$(if $(verbose),-v,-q) \
 			-f build.xml \

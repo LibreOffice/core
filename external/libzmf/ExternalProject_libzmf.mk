@@ -27,7 +27,7 @@ $(call gb_ExternalProject_get_state_target,libzmf,build) :
 	$(call gb_Trace_StartRange,libzmf,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		export PKG_CONFIG="" \
-		&& MAKE=$(MAKE) $(gb_RUN_CONFIGURE) ./configure \
+		&& unset MSYS_NO_PATHCONV && MAKE=$(MAKE) $(gb_RUN_CONFIGURE) ./configure \
 			--with-pic \
 			--enable-static \
 			--disable-shared \
