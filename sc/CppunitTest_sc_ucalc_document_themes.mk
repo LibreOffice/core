@@ -28,10 +28,13 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc_document_themes, \
     comphelper \
     cppu \
     cppuhelper \
+    docmodel \
+    editeng \
     sal \
     salhelper \
     sax \
     sc \
+    svl \
     scqahelper \
     sfx \
     svxcore \
