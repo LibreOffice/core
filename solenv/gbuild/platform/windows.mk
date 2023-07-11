@@ -19,6 +19,8 @@ gb_Helper_LIBRARY_PATH_VAR := PATH
 
 gb_MKTEMP := mktemp --tmpdir=$(TMPDIR) gbuild.XXXXXX
 
+gb_RUN_CONFIGURE := CONFIG_SHELL=$(shell cygpath -ms /bin/sh)
+
 # define _WIN32_WINNT and WINVER will be derived from it in sdkddkver.h
 # current baseline is Windows 7 (NT 6.1)
 # for _WIN32_IE, if _WIN32_WINNT >= 0x0600 the derived value from
