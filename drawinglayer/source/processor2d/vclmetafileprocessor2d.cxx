@@ -926,6 +926,9 @@ void VclMetafileProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimi
 void VclMetafileProcessor2D::processObjectInfoPrimitive2D(
     primitive2d::ObjectInfoPrimitive2D const& rObjectInfoPrimitive2D)
 {
+    // tdf#154982 process content first, so this object overrides any nested one
+    process(rObjectInfoPrimitive2D.getChildren());
+
     // currently StructureTagPrimitive2D is only used for SdrObjects - have to
     // avoid adding Alt text if the SdrObject is not actually tagged, as it
     // would then end up on an unrelated structure element.
@@ -963,9 +966,6 @@ void VclMetafileProcessor2D::processObjectInfoPrimitive2D(
             }
         }
     }
-
-    // process content
-    process(rObjectInfoPrimitive2D.getChildren());
 }
 
 void VclMetafileProcessor2D::processGraphicPrimitive2D(
