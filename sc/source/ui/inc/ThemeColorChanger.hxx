@@ -10,12 +10,13 @@
 
 #pragma once
 
+#include <scdllapi.h>
 #include <svx/theme/ThemeColorChanger.hxx>
 #include "docsh.hxx"
 
 namespace sc
 {
-class ThemeColorChanger : public svx::IThemeColorChanger
+class SC_DLLPUBLIC ThemeColorChanger : public svx::IThemeColorChanger
 {
     ScDocShell& m_rDocShell;
 
