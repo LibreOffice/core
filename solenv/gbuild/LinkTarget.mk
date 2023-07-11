@@ -279,11 +279,6 @@ endif
 # Note: if the *Object_dep_target does not exist it will be created by
 # concat-deps as PHONY
 ifeq ($(gb_FULLDEPS),$(true))
-$(dir $(call gb_CObject_get_dep_target,%)).dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
-$(dir $(call gb_CObject_get_dep_target,%))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_CObject_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@)
@@ -342,12 +337,6 @@ $(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,$(SRCDIR),%)
 endif
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(dir $(call gb_CxxObject_get_dep_target,%)).dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
-$(dir $(call gb_CxxObject_get_dep_target,%))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
 $(call gb_CxxObject_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@)
 
