@@ -12,7 +12,7 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,liblangtag))
 $(eval $(call gb_UnpackedTarball_set_tarball,liblangtag,$(LIBLANGTAG_TARBALL),,liblangtag))
 
 $(eval $(call gb_UnpackedTarball_set_pre_action,liblangtag,\
-	$(GNUTAR) -x -j -f $(gb_UnpackedTarget_TARFILE_LOCATION)/$(LANGTAGREG_TARBALL) \
+	$(GNUTAR) -x -j -f $(call gb_Helper_cyg_path,$(gb_UnpackedTarget_TARFILE_LOCATION)/$(LANGTAGREG_TARBALL)) \
 ))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,liblangtag))

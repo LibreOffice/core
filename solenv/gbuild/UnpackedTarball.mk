@@ -24,7 +24,7 @@ $(GNUTAR) \
 	$(3) \
 	-C $(UNPACKED_DIR) \
 	$(STRIP_COMPONENTS)=$(UNPACKED_STRIP_COMPONENTS) \
-	-f $(UNPACKED_TARBALL)
+	-f $(call gb_Helper_cyg_path,$(UNPACKED_TARBALL))
 endef
 
 define gb_UnpackedTarget__command_unzip
