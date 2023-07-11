@@ -25,8 +25,8 @@ gb_PrecompiledHeader__get_debugdir = $(if $(call gb_target_symbols_enabled,$(1))
 
 # $(call gb_PrecompiledHeader_generate_timestamp_rule,linktargetmakefilename)
 define gb_PrecompiledHeader_generate_timestamp_rule
-$(call gb_LinkTarget_get_pch_timestamp,$(1)) :
-	mkdir -p $$(dir $$@) && touch $$@
+$(call gb_LinkTarget_get_pch_timestamp,$(1)) : | $(dir $(call gb_LinkTarget_get_pch_timestamp,$(1))).dir
+	touch $$@
 
 endef
 
@@ -46,10 +46,8 @@ gb_PrecompiledHeader_flags_for_flags_file := $$(sort $(gb_PrecompiledHeader_cxxf
 # $(call gb_PrecompiledHeader_generate_rules,pchtarget,linktarget,linktargetmakefilename,pchcxxfile,compiler)
 define gb_PrecompiledHeader_generate_rules
 
-$(call gb_PrecompiledHeader_get_dep_target,$(1),$(3)) :
-	$$(call gb_Helper_abbreviate_dirs,\
-		mkdir -p $$(dir $$@) && \
-		echo "$$(call gb_PrecompiledHeader_get_target,$(1),$(3)) : $$(gb_Helper_PHONY)" > $$@)
+$(call gb_PrecompiledHeader_get_dep_target,$(1),$(3)) : | $(dir $(call gb_PrecompiledHeader_get_dep_target,$(1),$(3))).dir
+	echo "$$(call gb_PrecompiledHeader_get_target,$(1),$(3)) : $$(gb_Helper_PHONY)" > $$@
 
 # keep the flags the PCH was built with in a separate file, update the file if and only if the flags
 # change, and make the PCH depend on it => the PCH will be rebuilt on any flags change

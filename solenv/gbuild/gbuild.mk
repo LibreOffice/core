@@ -414,4 +414,7 @@ ifneq ($(CCACHE_DEPEND_MODE),)
 gb_COMPILER_SETUP += CCACHE_DEPEND=1
 endif
 
+$(WORKDIR)/%/.dir:
+	mkdir -p $(@D) && touch $@
+
 # vim: set noet sw=4:
