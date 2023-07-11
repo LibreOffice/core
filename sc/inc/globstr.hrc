@@ -548,6 +548,8 @@
 #define STR_UNDO_GROUP_SPARKLINES               NC_("STR_UNDO_GROUP_SPARKLINES", "Group Sparklines")
 #define STR_UNDO_UNGROUP_SPARKLINES             NC_("STR_UNDO_UNGROUP_SPARKLINES", "Ungroup Sparklines")
 #define STR_UNDO_EDIT_SPARKLINE                 NC_("STR_UNDO_EDIT_SPARKLINE", "Edit Sparkline")
+#define STR_UNDO_THEME_CHANGE                   NC_("STR_UNDO_THEME_CHANGE", "Theme Change")
+#define STR_UNDO_THEME_COLOR_CHANGE             NC_("STR_UNDO_THEME_COLOR_CHANGE", "Theme Color Change")
 
 #endif
 
