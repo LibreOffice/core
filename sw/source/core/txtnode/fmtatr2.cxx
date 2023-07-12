@@ -767,7 +767,7 @@ void MetaField::GetPrefixAndSuffix(
     }
 }
 
-sal_uInt32 MetaField::GetNumberFormat(std::u16string_view aContent) const
+sal_uInt32 MetaField::GetNumberFormat(const OUString& aContent) const
 {
     //TODO: this probably lacks treatment for some special cases
     sal_uInt32 nNumberFormat( m_nNumberFormat );

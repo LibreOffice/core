@@ -4007,21 +4007,14 @@ void SwDoc::SetColRowWidthHeight( SwTableBox& rCurrentBox, TableChgWidthHeightTy
     }
 }
 
-bool SwDoc::IsNumberFormat( std::u16string_view aString, sal_uInt32& F_Index, double& fOutNumber )
+bool SwDoc::IsNumberFormat( const OUString& aString, sal_uInt32& F_Index, double& fOutNumber )
 {
-    if( aString.size() > 308 ) // optimization matches svl:IsNumberFormat arbitrary value
+    if( aString.getLength() > 308 ) // optimization matches svl:IsNumberFormat arbitrary value
         return false;
 
     // remove any comment anchor marks
-    OUStringBuffer sStringBuffer(aString);
-    sal_Int32 nCommentPosition = sStringBuffer.indexOf( CH_TXTATR_INWORD );
-    while( nCommentPosition != -1 )
-    {
-        sStringBuffer.remove( nCommentPosition, 1 );
-        nCommentPosition = sStringBuffer.indexOf( CH_TXTATR_INWORD, nCommentPosition );
-    }
-
-    return GetNumberFormatter()->IsNumberFormat( sStringBuffer.makeStringAndClear(), F_Index, fOutNumber );
+    return GetNumberFormatter()->IsNumberFormat(
+        aString.replaceAll(OUStringChar(CH_TXTATR_INWORD), u""), F_Index, fOutNumber);
 }
 
 void SwDoc::ChkBoxNumFormat( SwTableBox& rBox, bool bCallUpdate )
