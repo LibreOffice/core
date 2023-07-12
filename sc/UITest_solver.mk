@@ -20,4 +20,6 @@ $(eval $(call gb_UITest_set_defs,solver, \
     BUNDLED_EXTENSIONS='$$$$BRAND_BASE_DIR/NONE' \
 ))
 
+$(eval $(call gb_UITest_use_oneprocess,solver))
+
 # vim: set noet sw=4 ts=4:
