@@ -47,6 +47,7 @@
 #include <svgtitledescnode.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 
 using namespace com::sun::star;
 
@@ -55,7 +56,7 @@ namespace svgio::svgreader
 
 namespace
 {
-    void whiteSpaceHandling(svgio::svgreader::SvgNode const * pNode)
+    svgio::svgreader::SvgCharacterNode* whiteSpaceHandling(svgio::svgreader::SvgNode const * pNode, svgio::svgreader::SvgCharacterNode* pLast)
     {
         if(pNode)
         {
@@ -74,7 +75,47 @@ namespace
                         {
                             // clean whitespace in text span
                             svgio::svgreader::SvgCharacterNode* pCharNode = static_cast< svgio::svgreader::SvgCharacterNode* >(pCandidate);
+
                             pCharNode->whiteSpaceHandling();
+
+                            // pCharNode may have lost all text. If that's the case, ignore
+                            // as invalid character node
+                            // Also ignore if textBeforeSpaceHandling just have spaces
+                            if(!pCharNode->getText().isEmpty() && !o3tl::trim(pCharNode->getTextBeforeSpaceHandling()).empty())
+                            {
+                                if(pLast)
+                                {
+                                    bool bAddGap(true);
+
+                                    // Do not add a gap if last node doesn't end with a space and
+                                    // current note doesn't start with a space
+                                    const sal_uInt32 nLastLength(pLast->getTextBeforeSpaceHandling().getLength());
+                                    if(pLast->getTextBeforeSpaceHandling()[nLastLength - 1] != ' ' && pCharNode->getTextBeforeSpaceHandling()[0] != ' ')
+                                        bAddGap = false;
+
+                                    // With this option a baseline shift between two char parts ('words')
+                                    // will not add a space 'gap' to the end of the (non-last) word. This
+                                    // seems to be the standard behaviour, see last bugdoc attached #122524#
+                                    const svgio::svgreader::SvgStyleAttributes* pStyleLast = pLast->getSvgStyleAttributes();
+                                    const svgio::svgreader::SvgStyleAttributes* pStyleCurrent = pCandidate->getSvgStyleAttributes();
+
+                                    if(pStyleLast && pStyleCurrent && pStyleLast->getBaselineShift() != pStyleCurrent->getBaselineShift())
+                                    {
+                                        bAddGap = false;
+                                    }
+
+                                    // add in-between whitespace (single space) to last
+                                    // known character node
+                                    if(bAddGap)
+                                    {
+                                        pLast->addGap();
+                                    }
+                                }
+
+                                // remember new last corrected character node
+                                pLast = pCharNode;
+                            }
+
                             break;
                         }
                         case SVGToken::Tspan:
@@ -82,7 +123,7 @@ namespace
                         case SVGToken::Tref:
                         {
                             // recursively clean whitespaces in subhierarchy
-                            whiteSpaceHandling(pCandidate);
+                            pLast = whiteSpaceHandling(pCandidate, pLast);
                             break;
                         }
                         default:
@@ -94,8 +135,9 @@ namespace
                 }
             }
         }
-    }
 
+        return pLast;
+    }
 } // end anonymous namespace
 
         SvgDocHdl::SvgDocHdl(const OUString& aAbsolutePath)
@@ -501,7 +543,7 @@ namespace
             if(pWhitespaceCheck)
             {
                 // cleanup read strings
-                whiteSpaceHandling(pWhitespaceCheck);
+                whiteSpaceHandling(pWhitespaceCheck, nullptr);
             }
         }
 
