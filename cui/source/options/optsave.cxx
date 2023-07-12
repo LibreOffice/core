@@ -283,7 +283,7 @@ bool SvxSaveTabPage::FillItemSet( SfxItemSet* rSet )
     {
         rSet->Put( SfxUInt16Item( SID_ATTR_AUTOSAVEMINUTE,
                                  static_cast<sal_uInt16>(m_xAutoSaveEdit->get_value()) ) );
-        bModified = bRequestRestart = true;
+        bModified = true;
     }
 
     if ( m_xUserAutoSaveCB->get_state_changed_from_saved() )

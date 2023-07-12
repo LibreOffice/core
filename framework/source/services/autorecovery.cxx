@@ -1780,15 +1780,6 @@ void AutoRecovery::implts_readAutoSaveConfig()
         m_eTimerType  = AutoRecovery::E_DONT_START_TIMER;
     }
     } /* SAFE */
-
-    // AutoSaveTimeIntervall [int] in min
-    sal_Int32 nTimeIntervall(
-        officecfg::Office::Common::Save::Document::AutoSaveTimeIntervall::get());
-
-    /* SAFE */ {
-    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
-    m_nAutoSaveTimeIntervall = nTimeIntervall;
-    } /* SAFE */
 }
 
 void AutoRecovery::implts_readConfig()
@@ -2216,7 +2207,11 @@ void AutoRecovery::implts_updateTimer()
 
     if (m_eTimerType == AutoRecovery::E_NORMAL_AUTOSAVE_INTERVALL)
     {
-        nMilliSeconds = (m_nAutoSaveTimeIntervall*60000); // [min] => 60.000 ms
+        nMilliSeconds
+            = m_nAutoSaveTimeIntervall
+                  ? m_nAutoSaveTimeIntervall
+                  : officecfg::Office::Common::Save::Document::AutoSaveTimeIntervall::get();
+        nMilliSeconds *= 60000; // [min] => 60.000 ms
     }
     else if (m_eTimerType == AutoRecovery::E_POLL_FOR_USER_IDLE)
     {
