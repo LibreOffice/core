@@ -319,6 +319,58 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testDataBarCondCopyPaste)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestCondformat, testColorScaleInMergedCell)
+{
+    m_pDoc->InsertTab(0, "Test");
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 1.0);
+
+    // Add a conditional format to A1.
+    auto pFormat = std::make_unique<ScConditionalFormat>(1, m_pDoc);
+    pFormat->SetRange(ScRange(0, 0, 0, 0, 0, 0));
+    auto pFormatTmp = pFormat.get();
+    sal_uLong nKey = m_pDoc->AddCondFormat(std::move(pFormat), 0);
+
+    // Add color scale entries.
+    // The coloring is based on the value. (BLUE (x <= 0), GREEN (x == 1), RED (x >= 2))
+    ScColorScaleFormat* pColorScaleFormat = new ScColorScaleFormat(m_pDoc);
+    ScColorScaleEntry* pEntryBlue = new ScColorScaleEntry(0, COL_BLUE);
+    ScColorScaleEntry* pEntryGreen = new ScColorScaleEntry(1, COL_GREEN);
+    ScColorScaleEntry* pEntryRed = new ScColorScaleEntry(2, COL_RED);
+    pColorScaleFormat->AddEntry(pEntryBlue);
+    pColorScaleFormat->AddEntry(pEntryGreen);
+    pColorScaleFormat->AddEntry(pEntryRed);
+
+    pFormatTmp->AddEntry(pColorScaleFormat);
+
+    // Apply the format to the range.
+    m_pDoc->AddCondFormatData(pFormatTmp->GetRange(), 0, nKey);
+
+    m_pDoc->DoMerge(0, 0, 0, 1, 0);  // A1:A2
+    CPPUNIT_ASSERT(m_pDoc->IsMerged(ScAddress(0, 0, 0)));
+
+    ScTableInfo aTabInfo;
+    m_pDoc->FillInfo(aTabInfo, 0, 0, 0, 1, 0, 1, 1, false, false);
+    RowInfo* pRowInfo = aTabInfo.mpRowInfo.get();
+
+    RowInfo* pRowInfoA1 = &pRowInfo[1];
+    ScCellInfo* pCellInfoA1 = &pRowInfoA1->cellInfo(0);
+    // Check if there is a color scale in A1.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There is no color scale in cell A1!", true,
+                                 pCellInfoA1->mxColorScale.has_value());
+
+    RowInfo* pRowInfoA2 = &pRowInfo[2];
+    ScCellInfo* pCellInfoA2 = &pRowInfoA2->cellInfo(0);
+    // Check if there is a color scale in A2.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There is no color scale in cell A2!", true,
+                                 pCellInfoA2->mxColorScale.has_value());
+
+    // Check that cells A1 and A2 have the same color scale. (GREEN)
+    CPPUNIT_ASSERT(pCellInfoA1->mxColorScale.value().IsRGBEqual(pCellInfoA2->mxColorScale.value()));
+
+    m_pDoc->DeleteTab(0);
+}
+
+
 CPPUNIT_TEST_FIXTURE(TestCondformat, testColorScaleCondCopyPaste)
 {
     m_pDoc->InsertTab(0, "Test");
