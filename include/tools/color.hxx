@@ -311,8 +311,8 @@ public:
       */
     bool IsDark() const
     {
-        // 62 is the number that means it also triggers on Ubuntu in dark mode
-        return GetLuminance() <= 62;
+        // tdf#156182 
+        return GetLuminance() <= 156;
     }
 
     /** Comparison with luminance thresholds.
