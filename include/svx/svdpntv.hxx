@@ -193,7 +193,7 @@ protected:
     // -ViewContactOfGrid: the page's grid visualisation (foreground)
     // -ViewContactOfHelplines: the page's Helplines (foreground)
     // Note: background/foreground means that one is active, grid & helplines can be displayed in
-    //       front of or behind obect visualisations/page content
+    //       front of or behind object visualisations/page content
     bool mbPageDecorationAllowed : 1;
 
     // Allow MasterPage visualization, default is true
