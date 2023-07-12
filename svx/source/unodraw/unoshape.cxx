@@ -2112,9 +2112,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
             Size aObjSize( aUnoRect.Width, aUnoRect.Height );
             ForceMetricToItemPoolMetric(aTopLeft);
             ForceMetricToItemPoolMetric(aObjSize);
-            tools::Rectangle aRect;
-            aRect.SetPos(aTopLeft);
-            aRect.SetSize(aObjSize);
+            tools::Rectangle aRect(aTopLeft, aObjSize);
             pSdrObject->SetSnapRect(aRect);
             return true;
         }

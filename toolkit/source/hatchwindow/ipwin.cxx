@@ -189,9 +189,7 @@ short SvResizeHelper::SelectMove( vcl::Window * pWin, const Point & rPos )
     }
     else
     {
-        tools::Rectangle aRect( GetTrackRectPixel( rPos ) );
-        aRect.SetSize( pWin->PixelToLogic( aRect.GetSize() ) );
-        aRect.SetPos( pWin->PixelToLogic( aRect.TopLeft() ) );
+        tools::Rectangle aRect = pWin->PixelToLogic(GetTrackRectPixel( rPos ));
         pWin->ShowTracking( aRect );
     }
     return nGrab;
