@@ -112,22 +112,13 @@ namespace {
  */
 bool isRepresentableInteger(double fAbsValue)
 {
+    static_assert(std::numeric_limits<double>::is_iec559
+                  && std::numeric_limits<double>::digits == 53);
     assert(fAbsValue >= 0.0);
-    const sal_Int64 kMaxInt = (static_cast< sal_Int64 >(1) << 53) - 1;
-    if (fAbsValue <= static_cast< double >(kMaxInt))
-    {
-        sal_Int64 nInt = static_cast< sal_Int64 >(fAbsValue);
-        // Check the integer range again because double comparison may yield
-        // true within the precision range.
-        // XXX loplugin:fpcomparison complains about floating-point comparison
-        // for static_cast<double>(nInt) == fAbsValue, though we actually want
-        // this here.
-        if (nInt > kMaxInt)
-            return false;
-        double fInt = static_cast< double >(nInt);
-        return !(fInt < fAbsValue) && !(fInt > fAbsValue);
-    }
-    return false;
+    if (fAbsValue >= 0x1p53)
+      return false;
+    sal_Int64 nInt = static_cast< sal_Int64 >(fAbsValue);
+    return nInt == fAbsValue;
 }
 
 // Returns 1-based index of least significant bit in a number, or zero if number is zero
@@ -724,12 +715,11 @@ double SAL_CALL rtl_math_approxValue( double fValue ) SAL_THROW_EXTERN_C()
 bool SAL_CALL rtl_math_approxEqual(double a, double b) SAL_THROW_EXTERN_C()
 {
     static const double e48 = 0x1p-48;
-    static const double e44 = 0x1p-44;
 
     if (a == b)
         return true;
 
-    if (a == 0.0 || b == 0.0)
+    if (a == 0.0 || b == 0.0 || std::signbit(a) != std::signbit(b))
         return false;
 
     const double d = fabs(a - b);
@@ -737,16 +727,16 @@ bool SAL_CALL rtl_math_approxEqual(double a, double b) SAL_THROW_EXTERN_C()
         return false;   // Nan or Inf involved
 
     a = fabs(a);
-    if (d > (a * e44))
+    if (d >= (a * e48))
         return false;
     b = fabs(b);
-    if (d > (b * e44))
+    if (d >= (b * e48))
         return false;
 
-    if (isRepresentableInteger(d) && isRepresentableInteger(a) && isRepresentableInteger(b))
+    if (isRepresentableInteger(a) && isRepresentableInteger(b))
         return false;   // special case for representable integers.
 
-    return (d < a * e48 && d < b * e48);
+    return true;
 }
 
 double SAL_CALL rtl_math_expm1(double fValue) SAL_THROW_EXTERN_C()
