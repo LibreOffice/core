@@ -122,6 +122,9 @@ namespace svgio::svgreader
             /// the string data
             OUString           maText;
 
+            // keep a copy of string data before space handling
+            OUString           maTextBeforeSpaceHandling;
+
             /// local helpers
             rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> createSimpleTextPrimitive(
                 SvgTextPosition& rSvgTextPosition,
@@ -141,10 +144,13 @@ namespace svgio::svgreader
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;
             void decomposeText(drawinglayer::primitive2d::Primitive2DContainer& rTarget, SvgTextPosition& rSvgTextPosition) const;
             void whiteSpaceHandling();
+            void addGap();
             void concatenate(std::u16string_view rText);
 
             /// Text content
             const OUString& getText() const { return maText; }
+
+            const OUString& getTextBeforeSpaceHandling() const { return maTextBeforeSpaceHandling; }
         };
 
 } // end of namespace svgio::svgreader

@@ -126,7 +126,6 @@ namespace svgio::svgreader
         void readImageLink(const OUString& rCandidate, OUString& rXLink, OUString& rUrl, OUString& rMimeType, OUString& rData);
 
         OUString consolidateContiguousSpace(const OUString& rCandidate);
-        OUString xmlSpaceHandling(const OUString& rCandidate, bool bIsDefault);
 
         // #125325# removes block comment of the general form '/* ... */', returns
         // an adapted string or the original if no comments included

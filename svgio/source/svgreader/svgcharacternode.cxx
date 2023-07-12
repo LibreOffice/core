@@ -554,7 +554,22 @@ namespace svgio::svgreader
 
         void SvgCharacterNode::whiteSpaceHandling()
         {
-            maText = xmlSpaceHandling(maText, XmlSpace::Default == getXmlSpace());
+            bool bIsDefault(XmlSpace::Default == getXmlSpace());
+            // if xml:space="default" then remove all newline characters, otherwise convert them to space
+            // convert tab to space too
+            maText = maTextBeforeSpaceHandling = maText.replaceAll(u"\n", bIsDefault ? u"" : u" ").replaceAll(u"\t", u" ");
+
+            if(bIsDefault)
+            {
+                // strip of all leading and trailing spaces
+                // and consolidate contiguous space
+                maText = consolidateContiguousSpace(maText.trim());
+            }
+        }
+
+        void SvgCharacterNode::addGap()
+        {
+            maText += " ";
         }
 
         void SvgCharacterNode::concatenate(std::u16string_view rText)

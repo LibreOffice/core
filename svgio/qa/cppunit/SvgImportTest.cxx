@@ -459,7 +459,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf85770)
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "height", "11");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "familyname", "Times New Roman");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "fontcolor", "#000000");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "text", "Start");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "text", "Start ");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "height", "11");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "familyname", "Times New Roman");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "fontcolor", "#000000");
@@ -840,6 +840,27 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf103888)
     assertXPath(pDocument, "/primitive2D/transform/transform/textsimpleportion[1]", "text", "Her");
     assertXPath(pDocument, "/primitive2D/transform/transform/textsimpleportion[2]", "text", "vor");
     assertXPath(pDocument, "/primitive2D/transform/transform/textsimpleportion[3]", "text", "hebung");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf156251)
+{
+    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/tdf156251.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 'You are '
+    // - Actual  : 'You are'
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "text", "You are ");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "text", "not ");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "text", "a banana!");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[4]", "text", "You are ");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[5]", "text", "not ");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[6]", "text", "a banana!");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testMaskText)
