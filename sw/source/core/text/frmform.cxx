@@ -1190,6 +1190,14 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
                 RemoveFootnote(nOld, nEnd - nOld);
             }
             ChangeOffset( GetFollow(), nEnd );
+
+            if (HasNonLastSplitFlyDrawObj())
+            {
+                // Make sure content from the last floating table anchor is not shifted to previous
+                // anchors.
+                nEnd = TextFrameIndex(0);
+            }
+
             GetFollow()->ManipOfst( nEnd );
         }
         else
