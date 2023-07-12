@@ -3964,9 +3964,11 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
 #if defined(IOS)
     double fDPIScale = 1.0;
 
+    // Onine uses the LOK_TILEMODE_RGBA by default so flip the normal flags
+    // to kCGImageAlphaPremultipliedLast | kCGImageByteOrder32Big
     CGContextRef pCGContext = CGBitmapContextCreate(pBuffer, nCanvasWidth, nCanvasHeight, 8,
                                                     nCanvasWidth * 4, CGColorSpaceCreateDeviceRGB(),
-                                                    kCGImageAlphaPremultipliedFirst | kCGImageByteOrder32Little);
+                                                    kCGImageAlphaPremultipliedLast | kCGImageByteOrder32Big);
 
     CGContextTranslateCTM(pCGContext, 0, nCanvasHeight);
     CGContextScaleCTM(pCGContext, fDPIScale, -fDPIScale);
@@ -4234,7 +4236,7 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
 static int doc_getTileMode(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
 {
     SetLastExceptionMsg();
-#if ENABLE_CAIRO_RGBA
+#if ENABLE_CAIRO_RGBA || defined IOS
     return LOK_TILEMODE_RGBA;
 #else
     return LOK_TILEMODE_BGRA;
@@ -6613,8 +6615,9 @@ static void doc_paintWindowForView(LibreOfficeKitDocument* pThis, unsigned nLOKW
     comphelper::LibreOfficeKit::setDPIScale(fDPIScale);
 
 #if defined(IOS)
-
-    CGContextRef cgc = CGBitmapContextCreate(pBuffer, nWidth, nHeight, 8, nWidth*4, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaNoneSkipFirst | kCGImageByteOrder32Little);
+    // Onine uses the LOK_TILEMODE_RGBA by default so flip the normal flags
+    // to kCGImageAlphaNoneSkipLast | kCGImageByteOrder32Big
+    CGContextRef cgc = CGBitmapContextCreate(pBuffer, nWidth, nHeight, 8, nWidth*4, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaNoneSkipLast | kCGImageByteOrder32Big);
 
     CGContextTranslateCTM(cgc, 0, nHeight);
     CGContextScaleCTM(cgc, fDPIScale, -fDPIScale);
