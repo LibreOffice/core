@@ -95,7 +95,7 @@ TableColumnsMap SwEnhancedPDFExportHelper::s_aTableColumnsMap;
 LinkIdMap SwEnhancedPDFExportHelper::s_aLinkIdMap;
 NumListIdMap SwEnhancedPDFExportHelper::s_aNumListIdMap;
 NumListBodyIdMap SwEnhancedPDFExportHelper::s_aNumListBodyIdMap;
-FrameTagIdMap SwEnhancedPDFExportHelper::s_aFrameTagIdMap;
+FrameTagSet SwEnhancedPDFExportHelper::s_FrameTagSet;
 
 LanguageType SwEnhancedPDFExportHelper::s_eLanguageDefault = LANGUAGE_SYSTEM;
 
@@ -360,32 +360,16 @@ SwTaggedPDFHelper::~SwTaggedPDFHelper()
 #endif
 }
 
-static auto GetReopenTagFromFrame(SwFrame const& rFrame) -> sal_Int32
-{
-    void const*const pKey = lcl_GetKeyFromFrame(rFrame);
-
-    if (pKey)
-    {
-        FrameTagIdMap const& rFrameTagIdMap(SwEnhancedPDFExportHelper::GetFrameTagIdMap());
-        auto const it(rFrameTagIdMap.find(pKey));
-        if (it != rFrameTagIdMap.end())
-        {
-            return (*it).second;
-        }
-    }
-    return -1;
-}
-
-sal_Int32 SwDrawContact::GetPDFAnchorStructureElementId(SdrObject const& rObj)
+void const* SwDrawContact::GetPDFAnchorStructureElementKey(SdrObject const& rObj)
 {
     SwFrame const*const pAnchorFrame(GetAnchoredObj(&rObj)->GetAnchorFrame());
-    return pAnchorFrame ? GetReopenTagFromFrame(*pAnchorFrame) : -1;
+    return pAnchorFrame ? lcl_GetKeyFromFrame(*pAnchorFrame) : nullptr;
 }
 
 bool SwTaggedPDFHelper::CheckReopenTag()
 {
     bool bRet = false;
-    sal_Int32 nReopenTag = -1;
+    void const* pReopenKey(nullptr);
     bool bContinue = false; // in some cases we just have to reopen a tag without early returning
 
     if ( mpFrameInfo )
@@ -422,21 +406,27 @@ bool SwTaggedPDFHelper::CheckReopenTag()
 
         if ( pKeyFrame )
         {
-            nReopenTag = GetReopenTagFromFrame(*pKeyFrame);
+            void const*const pKey = lcl_GetKeyFromFrame(*pKeyFrame);
+            FrameTagSet& rFrameTagSet(SwEnhancedPDFExportHelper::GetFrameTagSet());
+            if (rFrameTagSet.find(pKey) != rFrameTagSet.end()
+                || rFrame.IsFlyFrame()) // for hell layer flys
+            {
+                pReopenKey = pKey;
+            }
         }
     }
 
-    if ( -1 != nReopenTag )
+    if (pReopenKey)
     {
-        m_nRestoreCurrentTag = mpPDFExtOutDevData->GetCurrentStructureElement();
-        const bool bSuccess = mpPDFExtOutDevData->SetCurrentStructureElement( nReopenTag );
-        OSL_ENSURE( bSuccess, "Failed to reopen tag" );
+        sal_Int32 const id = mpPDFExtOutDevData->EnsureStructureElement(pReopenKey);
+        mpPDFExtOutDevData->BeginStructureElement(id);
+        ++m_nEndStructureElement;
 
 #if OSL_DEBUG_LEVEL > 1
         aStructStack.push_back( 99 );
 #endif
 
-        bRet = bSuccess;
+        bRet = true;
     }
 
     return bRet && !bContinue;
@@ -457,8 +447,33 @@ void SwTaggedPDFHelper::CheckRestoreTag() const
 
 void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUString& rString )
 {
+    void const* pKey(nullptr);
+
+    if ( mpFrameInfo )
+    {
+        const SwFrame& rFrame = mpFrameInfo->mrFrame;
+
+        if ( ( rFrame.IsPageFrame() && !static_cast<const SwPageFrame&>(rFrame).GetPrev() ) ||
+             ( rFrame.IsFlowFrame() && !SwFlowFrame::CastFlowFrame(&rFrame)->IsFollow() && SwFlowFrame::CastFlowFrame(&rFrame)->HasFollow() ) ||
+             ( rFrame.IsTextFrame() && rFrame.GetDrawObjs() ) ||
+             ( rFrame.IsRowFrame() && rFrame.IsInSplitTableRow() ) ||
+             ( rFrame.IsCellFrame() && const_cast<SwFrame&>(rFrame).GetNextCellLeaf() ) )
+        {
+            pKey = lcl_GetKeyFromFrame(rFrame);
+
+            if (pKey)
+            {
+                FrameTagSet& rFrameTagSet(SwEnhancedPDFExportHelper::GetFrameTagSet());
+                assert(rFrameTagSet.find(pKey) == rFrameTagSet.end());
+                rFrameTagSet.emplace(pKey);
+            }
+        }
+    }
+
     // write new tag
-    const sal_Int32 nId = mpPDFExtOutDevData->WrapBeginStructureElement( eType, rString );
+    const sal_Int32 nId = mpPDFExtOutDevData->EnsureStructureElement(pKey);
+    mpPDFExtOutDevData->InitStructureElement(nId, eType, rString);
+    mpPDFExtOutDevData->BeginStructureElement(nId);
     ++m_nEndStructureElement;
 
 #if OSL_DEBUG_LEVEL > 1
@@ -501,21 +516,6 @@ void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUS
             SwNodeNum const*const pNodeNum(pTextNd->GetNum(rTextFrame.getRootFrame()));
             NumListBodyIdMap& rNumListBodyIdMap = SwEnhancedPDFExportHelper::GetNumListBodyIdMap();
             rNumListBodyIdMap[ pNodeNum ] = nId;
-        }
-
-        if ( ( rFrame.IsPageFrame() && !static_cast<const SwPageFrame&>(rFrame).GetPrev() ) ||
-             ( rFrame.IsFlowFrame() && !SwFlowFrame::CastFlowFrame(&rFrame)->IsFollow() && SwFlowFrame::CastFlowFrame(&rFrame)->HasFollow() ) ||
-             ( rFrame.IsTextFrame() && rFrame.GetDrawObjs() ) ||
-             ( rFrame.IsRowFrame() && rFrame.IsInSplitTableRow() ) ||
-             ( rFrame.IsCellFrame() && const_cast<SwFrame&>(rFrame).GetNextCellLeaf() ) )
-        {
-            const void* pKey = lcl_GetKeyFromFrame( rFrame );
-
-            if ( pKey )
-            {
-                FrameTagIdMap& rFrameTagIdMap = SwEnhancedPDFExportHelper::GetFrameTagIdMap();
-                rFrameTagIdMap[ pKey ] = nId;
-            }
         }
     }
 
@@ -1688,7 +1688,7 @@ SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper( SwEditShell& rSh,
     s_aLinkIdMap.clear();
     s_aNumListIdMap.clear();
     s_aNumListBodyIdMap.clear();
-    s_aFrameTagIdMap.clear();
+    s_FrameTagSet.clear();
 
 #if OSL_DEBUG_LEVEL > 1
     aStructStack.clear();

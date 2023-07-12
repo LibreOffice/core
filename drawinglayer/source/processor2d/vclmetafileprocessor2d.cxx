@@ -2520,7 +2520,7 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
     // structured tag primitive
     const vcl::PDFWriter::StructElement& rTagElement(rStructureTagCandidate.getStructureElement());
     bool bTagUsed((vcl::PDFWriter::NonStructElement != rTagElement));
-    sal_Int32 nPreviousElement(-1);
+    bool bNeedEndAnchor(false);
 
     if (!rStructureTagCandidate.isTaggedSdrObject())
     {
@@ -2532,19 +2532,12 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
         // foreground object: tag as regular structure element
         if (!rStructureTagCandidate.isBackground())
         {
-            if (rStructureTagCandidate.GetAnchorStructureElementId() != -1)
+            if (rStructureTagCandidate.GetAnchorStructureElementKey() != nullptr)
             {
-                auto const nTemp = mpPDFExtOutDevData->GetCurrentStructureElement();
-                bool const bSuccess = mpPDFExtOutDevData->SetCurrentStructureElement(
-                    rStructureTagCandidate.GetAnchorStructureElementId());
-                if (bSuccess)
-                {
-                    nPreviousElement = nTemp;
-                }
-                else
-                {
-                    SAL_WARN("drawinglayer", "anchor structure element not found?");
-                }
+                sal_Int32 const id = mpPDFExtOutDevData->EnsureStructureElement(
+                    rStructureTagCandidate.GetAnchorStructureElementKey());
+                mpPDFExtOutDevData->BeginStructureElement(id);
+                bNeedEndAnchor = true;
             }
             mpPDFExtOutDevData->WrapBeginStructureElement(rTagElement);
             switch (rTagElement)
@@ -2620,13 +2613,9 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
     {
         // write end tag
         mpPDFExtOutDevData->EndStructureElement();
-        if (nPreviousElement != -1)
+        if (bNeedEndAnchor)
         {
-#ifndef NDEBUG
-            bool const bSuccess =
-#endif
-                mpPDFExtOutDevData->SetCurrentStructureElement(nPreviousElement);
-            assert(bSuccess);
+            mpPDFExtOutDevData->EndStructureElement();
         }
     }
 }

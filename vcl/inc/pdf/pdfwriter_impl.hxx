@@ -28,6 +28,7 @@
 #include <memory>
 #include <string_view>
 #include <vector>
+#include <stack>
 
 #include <pdf/ResourceDict.hxx>
 #include <pdf/BitmapID.hxx>
@@ -762,6 +763,7 @@ private:
     /* current object in the structure hierarchy
      */
     sal_Int32                           m_nCurrentStructElement;
+    std::stack<sal_Int32> m_StructElementStack;
     /* structure parent tree */
     std::vector< OString >         m_aStructParentTree;
     /* emit structure marks currently (aka. NonStructElement or not)

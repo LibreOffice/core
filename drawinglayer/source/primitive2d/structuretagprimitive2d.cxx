@@ -31,13 +31,13 @@ namespace drawinglayer::primitive2d
             bool bBackground,
             bool bIsImage,
             Primitive2DContainer&& aChildren,
-            sal_Int32 const nAnchorStructureElementId,
+            void const*const pAnchorStructureElementKey,
             ::std::vector<sal_Int32> const*const pAnnotIds)
         :   GroupPrimitive2D(std::move(aChildren)),
             maStructureElement(rStructureElement),
             mbBackground(bBackground),
             mbIsImage(bIsImage)
-        ,   m_nAnchorStructureElementId(nAnchorStructureElementId)
+        ,   m_pAnchorStructureElementKey(pAnchorStructureElementKey)
         {
             if (pAnnotIds)
             {

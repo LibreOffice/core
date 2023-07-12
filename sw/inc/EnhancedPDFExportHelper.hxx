@@ -187,7 +187,7 @@ typedef std::vector< IdMapEntry > LinkIdMap;
 typedef std::map< const SwTable*, TableColumnsMapEntry > TableColumnsMap;
 typedef std::map< const SwNumberTreeNode*, sal_Int32 > NumListIdMap;
 typedef std::map< const SwNumberTreeNode*, sal_Int32 > NumListBodyIdMap;
-typedef std::map< const void*, sal_Int32 > FrameTagIdMap;
+typedef std::set<const void*> FrameTagSet;
 
 class SwEnhancedPDFExportHelper
 {
@@ -215,7 +215,7 @@ class SwEnhancedPDFExportHelper
     static LinkIdMap s_aLinkIdMap;
     static NumListIdMap s_aNumListIdMap;
     static NumListBodyIdMap s_aNumListBodyIdMap;
-    static FrameTagIdMap s_aFrameTagIdMap;
+    static FrameTagSet s_FrameTagSet;
 
     static LanguageType s_eLanguageDefault;
 
@@ -247,7 +247,7 @@ class SwEnhancedPDFExportHelper
     static LinkIdMap& GetLinkIdMap() { return s_aLinkIdMap; }
     static NumListIdMap& GetNumListIdMap() {return s_aNumListIdMap; }
     static NumListBodyIdMap& GetNumListBodyIdMap() {return s_aNumListBodyIdMap; }
-    static FrameTagIdMap& GetFrameTagIdMap() { return s_aFrameTagIdMap; }
+    static FrameTagSet & GetFrameTagSet() { return s_FrameTagSet; }
 
     static LanguageType GetDefaultLanguage() {return s_eLanguageDefault; }
 
