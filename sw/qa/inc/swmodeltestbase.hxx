@@ -42,8 +42,6 @@
  */
 #define DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, password, BaseClass) \
     class TestName : public BaseClass { \
-        protected:\
-    virtual OUString getTestName() override { return #TestName; } \
         public:\
     CPPUNIT_TEST_SUITE(TestName); \
     CPPUNIT_TEST(Load_Verify_Reload_Verify); \
@@ -65,8 +63,6 @@
 
 #define DECLARE_SW_EXPORT_TEST(TestName, filename, password, BaseClass) \
     class TestName : public BaseClass { \
-        protected:\
-    virtual OUString getTestName() override { return #TestName; } \
         public:\
     CPPUNIT_TEST_SUITE(TestName); \
     CPPUNIT_TEST(Import_Export); \
@@ -100,8 +96,6 @@ protected:
     OUString mpFilter;
 
     sal_uInt32 mnStartTime;
-
-    virtual OUString getTestName() { return OUString(); }
 
     /// Copy&paste helper.
     void paste(std::u16string_view aFilename, OUString aInstance, css::uno::Reference<css::text::XTextRange> const& xTextRange);

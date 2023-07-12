@@ -27,7 +27,6 @@
     class TestName : public Test                                                                   \
     {                                                                                              \
     protected:                                                                                     \
-        virtual OUString getTestName() override { return #TestName; }                              \
         virtual void postLoad(const char*) override                                                \
         {                                                                                          \
             if (!bUseTempDir)                                                                      \
@@ -73,9 +72,6 @@
 #define DECLARE_LINKS_IMPORT_TEST(TestName, FileName, bAbsolute)                                   \
     class TestName : public Test                                                                   \
     {                                                                                              \
-    protected:                                                                                     \
-        virtual OUString getTestName() override { return #TestName; }                              \
-                                                                                                   \
     public:                                                                                        \
         CPPUNIT_TEST_SUITE(TestName);                                                              \
         CPPUNIT_TEST(Import);                                                                      \
