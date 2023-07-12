@@ -315,6 +315,7 @@ void FrameView::Update(SdOptions const * pOptions)
     SetMasterPagePaintCaching( pOptions->IsMasterPagePaintCaching() );
 
     SetDragWithCopy(pOptions->IsDragWithCopy());
+    SetDragThresholdPixels(pOptions->GetDragThresholdPixels());
     SetDoubleClickTextEdit( pOptions->IsDoubleClickTextEdit() );
     SetClickChangeRotation( pOptions->IsClickChangeRotation() );
 }

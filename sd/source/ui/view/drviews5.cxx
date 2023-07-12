@@ -225,6 +225,9 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
     if (mpDrawView->IsMasterPagePaintCaching() != pView->IsMasterPagePaintCaching())
         mpDrawView->SetMasterPagePaintCaching( pView->IsMasterPagePaintCaching() );
 
+    if (mpDrawView->GetDragThresholdPixels() != pView->GetDragThresholdPixels())
+        mpDrawView->SetDragThresholdPixels( pView->GetDragThresholdPixels() );
+
     // handle size: 9 pixels
     sal_uInt16 nTmp = mpDrawView->GetMarkHdlSizePixel();
     if( nTmp != 9 )

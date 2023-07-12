@@ -82,7 +82,7 @@ bool FuConstructUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
     {
         Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
         mpWindow->CaptureMouse();
-        sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+        sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(mpView->GetDragThresholdPixels(),0)).Width() );
         mpView->BegCreateObj(aPnt, nullptr, nDrgLog);
         bReturn = true;
     }

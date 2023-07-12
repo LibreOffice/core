@@ -222,6 +222,9 @@ private:
         the modules.
     */
     sal_uInt16  mnPrinterIndependentLayout;     // Misc/Compatibility/PrinterIndependentLayout
+
+    /// Minimum mouse move distance for it to register as a drag action
+    sal_Int32 mnDragThresholdPixels; // Misc/DragThresholdPixels
 // Misc
 
 protected:
@@ -276,6 +279,9 @@ public:
 
     double    GetPresentationPenWidth() const { Init(); return mnPenWidth; }
     void      SetPresentationPenWidth( double nPenWidth ) { if( mnPenWidth != nPenWidth ) { OptionsChanged(); mnPenWidth = nPenWidth; } }
+
+    sal_Int32 GetDragThresholdPixels() const;
+    void SetDragThreshold(sal_Int32 nDragThresholdPixels);
 
     void    SetStartWithTemplate( bool bOn ) { if( bStartWithTemplate != bOn ) { OptionsChanged(); bStartWithTemplate = bOn; } }
     void    SetMarkedHitMovesAlways( bool bOn ) { if( bMarkedHitMovesAlways != bOn ) { OptionsChanged(); bMarkedHitMovesAlways = bOn; } }

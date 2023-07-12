@@ -143,7 +143,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         return true;
     }
 
-    sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+    sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(mpView->GetDragThresholdPixels(),0)).Width() );
     sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
 
     if (comphelper::LibreOfficeKit::isActive())
@@ -657,7 +657,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
     Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
     sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
-    sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+    sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(mpView->GetDragThresholdPixels(),0)).Width() );
 
     if (mpView->IsFrameDragSingles() || !mpView->HasMarkablePoints())
     {
@@ -903,7 +903,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             {
                 mpView->EndAction();
 
-                sal_uInt16 nDrgLog2 = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+                sal_uInt16 nDrgLog2 = sal_uInt16 ( mpWindow->PixelToLogic(Size(mpView->GetDragThresholdPixels(),0)).Width() );
                 Point aPos = mpWindow->PixelToLogic( rMEvt.GetPosPixel() );
 
                 if (std::abs(aMDPos.X() - aPos.X()) < nDrgLog2 &&

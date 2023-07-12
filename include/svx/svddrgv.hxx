@@ -44,6 +44,7 @@ protected:
     tools::Rectangle            maDragLimit;
     OUString                    maInsPointUndoStr;
     SdrHdlKind                  meDragHdl;
+    sal_Int32                   mnDragThresholdPixels;
 
     bool mbFramDrag : 1;        // currently frame dragging
     bool mbMarkedHitMovesAlways : 1; // Persistent
@@ -111,6 +112,9 @@ public:
     // (Is reset to 'false' on each BegDrag, so set it after BegDrag.)
     void SetDragWithCopy(bool bOn) { mbDragWithCopy = bOn; }
     bool IsDragWithCopy() const { return mbDragWithCopy; }
+
+    void SetDragThresholdPixels(sal_Int32 nDragThresholdPixels) { mnDragThresholdPixels = nDragThresholdPixels; }
+    sal_Int32 GetDragThresholdPixels() const { return mnDragThresholdPixels; }
 
     void SetInsertGluePoint(bool bOn) { mbInsGluePoint = bOn; }
     bool IsInsertGluePoint() const { return mbInsGluePoint; }
