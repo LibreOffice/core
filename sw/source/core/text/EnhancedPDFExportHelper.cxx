@@ -458,7 +458,7 @@ void SwTaggedPDFHelper::CheckRestoreTag() const
 void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUString& rString )
 {
     // write new tag
-    const sal_Int32 nId = mpPDFExtOutDevData->BeginStructureElement( eType, rString );
+    const sal_Int32 nId = mpPDFExtOutDevData->WrapBeginStructureElement( eType, rString );
     ++m_nEndStructureElement;
 
 #if OSL_DEBUG_LEVEL > 1

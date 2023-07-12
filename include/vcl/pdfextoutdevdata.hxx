@@ -345,6 +345,11 @@ public:
     (e.g. a section can contain a heading and a paragraph). The structure hierarchy
     is build automatically from the Begin/EndStructureElement calls.
 
+    The easy way is to call WrapBeginStructureElement, but it's also possible
+    to call EnsureStructureElement/InitStructureElement/BeginStructureElement
+    (its 3 parts) manually for more control; this way a placeholder SE can be
+    inserted and initialised later.
+
     A structural element need not be contained on one page; e.g. paragraphs often
     run from one page to the next. In this case the corresponding EndStructureElement
     must be called while drawing the next page.
@@ -372,7 +377,11 @@ public:
     @returns
     the id of the newly created structural element
      */
-     sal_Int32 BeginStructureElement( PDFWriter::StructElement eType, const OUString& rAlias = OUString() );
+    sal_Int32 WrapBeginStructureElement(PDFWriter::StructElement eType, const OUString& rAlias = OUString());
+    sal_Int32 EnsureStructureElement(void const* key);
+    void InitStructureElement(sal_Int32 id, PDFWriter::StructElement eType, const OUString& rAlias);
+    void BeginStructureElement(sal_Int32 id);
+
     /** end a logical structure element
 
     @see BeginStructureElement

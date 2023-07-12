@@ -297,6 +297,8 @@ GEOMETRY lcl_convert( const MapMode& _rSource, const MapMode& _rDest, OutputDevi
     return aPoint;
 }
 
+void removePlaceholderSE(std::vector<PDFStructureElement> & rStructure, PDFStructureElement& rEle);
+
 } // end anonymous namespace
 
 void PDFWriter::AppendUnicodeTextString(const OUString& rString, OStringBuffer& rBuffer)
@@ -2088,19 +2090,20 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
 
 sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
 {
-    if(
+    assert(rEle.m_nOwnElement == 0 || rEle.m_oType);
+    if (rEle.m_nOwnElement != rEle.m_nParentElement // emit the struct tree root
        // do not emit NonStruct and its children
-       rEle.m_eType == PDFWriter::NonStructElement &&
-       rEle.m_nOwnElement != rEle.m_nParentElement // but of course emit the struct tree root
-       )
+        && *rEle.m_oType == PDFWriter::NonStructElement)
+    {
         return 0;
+    }
 
     for (auto const& child : rEle.m_aChildren)
     {
         if( child > 0 && o3tl::make_unsigned(child) < m_aStructure.size() )
         {
             PDFStructureElement& rChild = m_aStructure[ child ];
-            if( rChild.m_eType != PDFWriter::NonStructElement )
+            if (*rChild.m_oType != PDFWriter::NonStructElement)
             {
                 if( rChild.m_nParentElement == rEle.m_nOwnElement )
                     emitStructure( rChild );
@@ -2157,7 +2160,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
         if( !rEle.m_aAlias.isEmpty() )
             aLine.append( rEle.m_aAlias );
         else
-            aLine.append( getStructureTag( rEle.m_eType ) );
+            aLine.append( getStructureTag(*rEle.m_oType) );
         if (m_StructElemObjsWithID.find(rEle.m_nObject) != m_StructElemObjsWithID.end())
         {
             aLine.append("\n/ID ");
@@ -2223,7 +2226,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
             auto const it(m_aLinkPropertyMap.find(id));
             assert(it != m_aLinkPropertyMap.end());
 
-            if (rEle.m_eType == PDFWriter::Form)
+            if (*rEle.m_oType == PDFWriter::Form)
             {
                 assert(0 <= it->second && o3tl::make_unsigned(it->second) < m_aWidgets.size());
                 AppendAnnotKid(rEle, m_aWidgets[it->second]);
@@ -5187,6 +5190,7 @@ bool PDFWriterImpl::emitCatalog()
     sal_Int32 nStructureDict = 0;
     if(m_aStructure.size() > 1)
     {
+        removePlaceholderSE(m_aStructure, m_aStructure[0]);
         // check if dummy structure containers are needed
         addInternalStructureContainer(m_aStructure[0]);
         nStructureDict = m_aStructure[0].m_nObject = createObject();
@@ -10687,11 +10691,13 @@ void PDFWriterImpl::addRoleMap(OString aAlias, PDFWriter::StructElement eType)
 
 void PDFWriterImpl::beginStructureElementMCSeq()
 {
+    assert(m_nCurrentStructElement == 0 || m_aStructure[m_nCurrentStructElement].m_oType);
     if( m_bEmitStructure &&
         m_nCurrentStructElement > 0 && // StructTreeRoot
         // Document = SwPageFrame => this is not *inside* the page content
         // stream so do not emit MCID!
-        m_aStructure[m_nCurrentStructElement].m_eType != PDFWriter::Document &&
+        m_aStructure[m_nCurrentStructElement].m_oType &&
+        *m_aStructure[m_nCurrentStructElement].m_oType != PDFWriter::Document &&
         ! m_aStructure[ m_nCurrentStructElement ].m_bOpenMCSeq // already opened sequence
         )
     {
@@ -10702,7 +10708,7 @@ void PDFWriterImpl::beginStructureElementMCSeq()
         if( !rEle.m_aAlias.isEmpty() )
             aLine.append( rEle.m_aAlias );
         else
-            aLine.append( getStructureTag( rEle.m_eType ) );
+            aLine.append( getStructureTag(*rEle.m_oType) );
         aLine.append( "<</MCID " );
         aLine.append( nMCID );
         aLine.append( ">>BDC\n" );
@@ -10721,7 +10727,8 @@ void PDFWriterImpl::beginStructureElementMCSeq()
     // handle artifacts
     else if( ! m_bEmitStructure && m_aContext.Tagged &&
                m_nCurrentStructElement > 0 &&
-               m_aStructure[ m_nCurrentStructElement ].m_eType == PDFWriter::NonStructElement &&
+               m_aStructure[m_nCurrentStructElement].m_oType &&
+               *m_aStructure[m_nCurrentStructElement].m_oType == PDFWriter::NonStructElement &&
              ! m_aStructure[ m_nCurrentStructElement ].m_bOpenMCSeq // already opened sequence
              )
     {
@@ -10751,9 +10758,10 @@ void PDFWriterImpl::beginStructureElementMCSeq()
 void PDFWriterImpl::endStructureElementMCSeq(EndMode const endMode)
 {
     if (m_nCurrentStructElement > 0 // not StructTreeRoot
+        && m_aStructure[m_nCurrentStructElement].m_oType
         && (m_bEmitStructure
             || (endMode != EndMode::OnlyStruct
-                && m_aStructure[m_nCurrentStructElement].m_eType == PDFWriter::NonStructElement))
+                && m_aStructure[m_nCurrentStructElement].m_oType == PDFWriter::NonStructElement))
         && m_aStructure[m_nCurrentStructElement].m_bOpenMCSeq)
     {
         writeBuffer( "EMC\n" );
@@ -10770,7 +10778,8 @@ bool PDFWriterImpl::checkEmitStructure()
         sal_Int32 nEle = m_nCurrentStructElement;
         while( nEle > 0 && o3tl::make_unsigned(nEle) < m_aStructure.size() )
         {
-            if( m_aStructure[ nEle ].m_eType == PDFWriter::NonStructElement )
+            if (m_aStructure[nEle].m_oType
+                && *m_aStructure[nEle].m_oType == PDFWriter::NonStructElement)
             {
                 bEmit = false;
                 break;
@@ -10781,16 +10790,28 @@ bool PDFWriterImpl::checkEmitStructure()
     return bEmit;
 }
 
-sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, std::u16string_view rAlias )
+sal_Int32 PDFWriterImpl::ensureStructureElement()
 {
-    if( m_nCurrentPage < 0 )
-        return -1;
-
     if( ! m_aContext.Tagged )
         return -1;
 
-    // close eventual current MC sequence
-    endStructureElementMCSeq(EndMode::OnlyStruct);
+    sal_Int32 nNewId = sal_Int32(m_aStructure.size());
+    m_aStructure.emplace_back();
+    PDFStructureElement& rEle = m_aStructure.back();
+    // leave rEle.m_oType uninitialised
+    rEle.m_nOwnElement      = nNewId;
+    // temporary parent
+    rEle.m_nParentElement   = m_nCurrentStructElement;
+    rEle.m_nFirstPageObject = m_aPages[ m_nCurrentPage ].m_nPageObject;
+    m_aStructure[ m_nCurrentStructElement ].m_aChildren.push_back( nNewId );
+    return nNewId;
+}
+
+void PDFWriterImpl::initStructureElement(sal_Int32 const id,
+        PDFWriter::StructElement const eType, std::u16string_view const rAlias)
+{
+    if( ! m_aContext.Tagged )
+        return;
 
     if( m_nCurrentStructElement == 0 &&
         eType != PDFWriter::Document && eType != PDFWriter::NonStructElement )
@@ -10802,7 +10823,9 @@ sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, 
         {
             const std::vector< sal_Int32 >& rRootChildren = m_aStructure[0].m_aChildren;
             auto it = std::find_if(rRootChildren.begin(), rRootChildren.end(),
-                [&](sal_Int32 nElement) { return m_aStructure[ nElement ].m_eType == PDFWriter::Document; });
+                [&](sal_Int32 nElement) {
+                    return m_aStructure[nElement].m_oType
+                        && *m_aStructure[nElement].m_oType == PDFWriter::Document; });
             if( it != rRootChildren.end() )
             {
                 m_nCurrentStructElement = *it;
@@ -10817,15 +10840,17 @@ sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, 
         }
     }
 
-    sal_Int32 nNewId = sal_Int32(m_aStructure.size());
-    m_aStructure.emplace_back( );
-    PDFStructureElement& rEle = m_aStructure.back();
-    rEle.m_eType            = eType;
-    rEle.m_nOwnElement      = nNewId;
+    PDFStructureElement& rEle = m_aStructure[id];
+    assert(!rEle.m_oType);
+    rEle.m_oType.emplace(eType);
+    // remove it from its possibly placeholder parent; append to real parent
+    auto const it(std::find(m_aStructure[rEle.m_nParentElement].m_aChildren.begin(),
+        m_aStructure[rEle.m_nParentElement].m_aChildren.end(), id));
+    assert(it != m_aStructure[rEle.m_nParentElement].m_aChildren.end());
+    m_aStructure[rEle.m_nParentElement].m_aChildren.erase(it);
     rEle.m_nParentElement   = m_nCurrentStructElement;
     rEle.m_nFirstPageObject = m_aPages[ m_nCurrentPage ].m_nPageObject;
-    m_aStructure[ m_nCurrentStructElement ].m_aChildren.push_back( nNewId );
-    m_nCurrentStructElement = nNewId;
+    m_aStructure[m_nCurrentStructElement].m_aChildren.push_back(id);
 
     // handle alias names
     if( !rAlias.empty() && eType != PDFWriter::NonStructElement )
@@ -10837,12 +10862,41 @@ sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, 
         addRoleMap(aAliasName, eType);
     }
 
+    if (m_bEmitStructure && eType != PDFWriter::NonStructElement) // don't create nonexistent objects
+    {
+        rEle.m_nObject      = createObject();
+        // update parent's kids list
+        m_aStructure[ rEle.m_nParentElement ].m_aKids.emplace_back(rEle.m_nObject);
+        // ISO 14289-1:2014, Clause: 7.9
+        if (*rEle.m_oType == PDFWriter::Note)
+        {
+            m_StructElemObjsWithID.insert(rEle.m_nObject);
+        }
+    }
+}
+
+void PDFWriterImpl::beginStructureElement(sal_Int32 const id)
+{
+    if( m_nCurrentPage < 0 )
+        return;
+
+    if( ! m_aContext.Tagged )
+        return;
+
+    // close eventual current MC sequence
+    endStructureElementMCSeq(EndMode::OnlyStruct);
+
+    PDFStructureElement& rEle = m_aStructure[id];
+    m_nCurrentStructElement = id;
+
     if (g_bDebugDisableCompression)
     {
         OStringBuffer aLine( "beginStructureElement " );
         aLine.append( m_nCurrentStructElement );
         aLine.append( ": " );
-        aLine.append( getStructureTag( eType ) );
+        aLine.append( rEle.m_oType
+            ? getStructureTag(*rEle.m_oType)
+            : "<placeholder>" );
         if( !rEle.m_aAlias.isEmpty() )
         {
             aLine.append( " aliased as \"" );
@@ -10854,19 +10908,6 @@ sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, 
 
     // check whether to emit structure henceforth
     m_bEmitStructure = checkEmitStructure();
-
-    if( m_bEmitStructure ) // don't create nonexistent objects
-    {
-        rEle.m_nObject      = createObject();
-        // update parent's kids list
-        m_aStructure[ rEle.m_nParentElement ].m_aKids.emplace_back(rEle.m_nObject);
-        // ISO 14289-1:2014, Clause: 7.9
-        if (rEle.m_eType == PDFWriter::Note)
-        {
-            m_StructElemObjsWithID.insert(rEle.m_nObject);
-        }
-    }
-    return nNewId;
 }
 
 void PDFWriterImpl::endStructureElement()
@@ -10893,7 +10934,9 @@ void PDFWriterImpl::endStructureElement()
         aLine.append( "endStructureElement " );
         aLine.append( m_nCurrentStructElement );
         aLine.append( ": " );
-        aLine.append( getStructureTag( m_aStructure[ m_nCurrentStructElement ].m_eType ) );
+        aLine.append( m_aStructure[m_nCurrentStructElement].m_oType
+            ? getStructureTag(*m_aStructure[m_nCurrentStructElement].m_oType)
+            : "<placeholder>" );
         if( !m_aStructure[ m_nCurrentStructElement ].m_aAlias.isEmpty() )
         {
             aLine.append( " aliased as \"" );
@@ -10914,6 +10957,49 @@ void PDFWriterImpl::endStructureElement()
     }
 }
 
+namespace {
+
+void removePlaceholderSEImpl(std::vector<PDFStructureElement> & rStructure,
+        std::vector<sal_Int32>::iterator & rParentIt)
+{
+    PDFStructureElement& rEle(rStructure[*rParentIt]);
+    removePlaceholderSE(rStructure, rEle);
+
+    if (!rEle.m_oType)
+    {
+        // Placeholder was not initialised - should not happen when printing
+        // a full page, but might if a selection is printed, which can be only
+        // a shape without its anchor.
+        // Handle this by moving the children to the parent SE.
+        PDFStructureElement & rParent(rStructure[rEle.m_nParentElement]);
+        rParentIt = rParent.m_aChildren.erase(rParentIt);
+        std::vector<sal_Int32> children;
+        for (auto const child : rEle.m_aChildren)
+        {
+            PDFStructureElement& rChild = rStructure[child];
+            rChild.m_nParentElement = rEle.m_nParentElement;
+            children.push_back(rChild.m_nOwnElement);
+        }
+        rParentIt = rParent.m_aChildren.insert(rParentIt, children.begin(), children.end())
+            + children.size();
+    }
+    else
+    {
+        ++rParentIt;
+    }
+
+}
+
+void removePlaceholderSE(std::vector<PDFStructureElement> & rStructure, PDFStructureElement& rEle)
+{
+    for (auto it = rEle.m_aChildren.begin(); it != rEle.m_aChildren.end(); )
+    {
+        removePlaceholderSEImpl(rStructure, it);
+    }
+}
+
+} // end anonymous namespace
+
 /*
  * This function adds an internal structure list container to overcome the 8191 elements array limitation
  * in kids element emission.
@@ -10922,18 +11008,22 @@ void PDFWriterImpl::endStructureElement()
  */
 void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
 {
-    if( rEle.m_eType == PDFWriter::NonStructElement &&
-        rEle.m_nOwnElement != rEle.m_nParentElement )
+    if (rEle.m_nOwnElement != rEle.m_nParentElement
+        && *rEle.m_oType == PDFWriter::NonStructElement)
+    {
         return;
+    }
 
     for (auto const& child : rEle.m_aChildren)
     {
+        assert(child > 0 && o3tl::make_unsigned(child) < m_aStructure.size());
         if( child > 0 && o3tl::make_unsigned(child) < m_aStructure.size() )
         {
             PDFStructureElement& rChild = m_aStructure[ child ];
-            if( rChild.m_eType != PDFWriter::NonStructElement )
+            if (*rChild.m_oType != PDFWriter::NonStructElement)
             {
                 //triggered when a child of the rEle element is found
+                assert(rChild.m_nParentElement == rEle.m_nOwnElement);
                 if( rChild.m_nParentElement == rEle.m_nOwnElement )
                     addInternalStructureContainer( rChild );//examine the child
                 else
@@ -10974,7 +11064,7 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
         m_aStructure.emplace_back( );
         PDFStructureElement& rEleNew = m_aStructure.back();
         rEleNew.m_aAlias            = aAliasName;
-        rEleNew.m_eType             = PDFWriter::Division; // a new Div type container
+        rEleNew.m_oType.emplace(PDFWriter::Division); // a new Div type container
         rEleNew.m_nOwnElement       = nNewId;
         rEleNew.m_nParentElement    = nCurrentStructElement;
         //inherit the same page as the first child to be reparented
@@ -11025,7 +11115,9 @@ bool PDFWriterImpl::setCurrentStructureElement( sal_Int32 nEle )
             OStringBuffer aLine( "setCurrentStructureElement " );
             aLine.append( m_nCurrentStructElement );
             aLine.append( ": " );
-            aLine.append( getStructureTag( m_aStructure[ m_nCurrentStructElement ].m_eType ) );
+            aLine.append( m_aStructure[m_nCurrentStructElement].m_oType
+                ? getStructureTag(*m_aStructure[m_nCurrentStructElement].m_oType)
+                : "<placeholder>" );
             if( !m_aStructure[ m_nCurrentStructElement ].m_aAlias.isEmpty() )
             {
                 aLine.append( " aliased as \"" );
@@ -11047,15 +11139,17 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
     if( !m_aContext.Tagged )
         return false;
 
+    assert(m_aStructure[m_nCurrentStructElement].m_oType);
     bool bInsert = false;
     if (m_nCurrentStructElement > 0
         && (m_bEmitStructure
             // allow it for topmost non-structured element
             || (m_aContext.Tagged
                 && (0 == m_aStructure[m_nCurrentStructElement].m_nParentElement
-                    || m_aStructure[m_aStructure[m_nCurrentStructElement].m_nParentElement].m_eType != PDFWriter::NonStructElement))))
+                    || !m_aStructure[m_aStructure[m_nCurrentStructElement].m_nParentElement].m_oType
+                    || *m_aStructure[m_aStructure[m_nCurrentStructElement].m_nParentElement].m_oType != PDFWriter::NonStructElement))))
     {
-        PDFWriter::StructElement eType = m_aStructure[ m_nCurrentStructElement ].m_eType;
+        PDFWriter::StructElement const eType = *m_aStructure[m_nCurrentStructElement].m_oType;
         switch( eAttr )
         {
             case PDFWriter::Placement:
@@ -11274,7 +11368,7 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
         SAL_INFO("vcl.pdfwriter",
                  "rejecting setStructureAttribute( " << getAttributeTag( eAttr )
                  << ", " << getAttributeValueTag( eVal )
-                 << " ) on " << getStructureTag( m_aStructure[ m_nCurrentStructElement ].m_eType )
+                 << " ) on " << getStructureTag(*m_aStructure[m_nCurrentStructElement].m_oType)
                  << " (" << m_aStructure[ m_nCurrentStructElement ].m_aAlias
                  << ") element");
 
@@ -11286,6 +11380,7 @@ bool PDFWriterImpl::setStructureAttributeNumerical( enum PDFWriter::StructAttrib
     if( ! m_aContext.Tagged )
         return false;
 
+    assert(m_aStructure[m_nCurrentStructElement].m_oType);
     bool bInsert = false;
     if( m_nCurrentStructElement > 0 && m_bEmitStructure )
     {
@@ -11295,7 +11390,7 @@ bool PDFWriterImpl::setStructureAttributeNumerical( enum PDFWriter::StructAttrib
             return true;
         }
 
-        PDFWriter::StructElement eType = m_aStructure[ m_nCurrentStructElement ].m_eType;
+        PDFWriter::StructElement const eType = *m_aStructure[m_nCurrentStructElement].m_oType;
         switch( eAttr )
         {
             case PDFWriter::SpaceBefore:
@@ -11406,7 +11501,7 @@ bool PDFWriterImpl::setStructureAttributeNumerical( enum PDFWriter::StructAttrib
         SAL_INFO("vcl.pdfwriter",
                  "rejecting setStructureAttributeNumerical( " << getAttributeTag( eAttr )
                  << ", " << static_cast<int>(nValue)
-                 << " ) on " << getStructureTag( m_aStructure[ m_nCurrentStructElement ].m_eType )
+                 << " ) on " << getStructureTag(*m_aStructure[m_nCurrentStructElement].m_oType)
                  << " (" << m_aStructure[ m_nCurrentStructElement ].m_aAlias
                  << ") element");
 
@@ -11422,7 +11517,8 @@ void PDFWriterImpl::setStructureBoundingBox( const tools::Rectangle& rRect )
     if( !(m_nCurrentStructElement > 0 && m_bEmitStructure) )
         return;
 
-    PDFWriter::StructElement eType = m_aStructure[ m_nCurrentStructElement ].m_eType;
+    assert(m_aStructure[m_nCurrentStructElement].m_oType);
+    PDFWriter::StructElement const eType = *m_aStructure[m_nCurrentStructElement].m_oType;
     if( eType == PDFWriter::Figure      ||
         eType == PDFWriter::Formula     ||
         eType == PDFWriter::Form        ||
