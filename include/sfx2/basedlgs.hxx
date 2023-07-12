@@ -49,6 +49,7 @@ public:
     virtual void ChildWinDispose() {} // called from the associated SfxChildWin dtor
     virtual void Close(); // called by the SfxChildWin when the dialog is closed
     virtual void EndDialog(int nResponse); // called by the SfxChildWin to close the dialog
+    virtual bool CloseOnHide() const { return true; } // called from ScValidationDlg
 };
 
 class SfxModelessDialog_Impl;

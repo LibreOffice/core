@@ -156,8 +156,6 @@ public:
 };
 
 const int nCloseResponseToJustHide = -42;
-// sc.hrc --> SID_VALIDITY_REFERENCE: 26161
-const sal_uInt16 nScValidityWindowSlotID = 26161;
 
 #define SFX_DECL_CHILDWINDOW(Class) \
     public  :   \
