@@ -116,7 +116,6 @@ postprocess_DEPS_lingucomponent := main
 postprocess_FILES_lingucomponent := \
 	$(SRCDIR)/lingucomponent/config/Linguistic-lingucomponent-hyphenator.xcu \
 	$(SRCDIR)/lingucomponent/config/Linguistic-lingucomponent-spellchecker.xcu \
-	$(SRCDIR)/lingucomponent/config/Linguistic-lingucomponent-grammarchecker.xcu \
 	$(SRCDIR)/lingucomponent/config/Linguistic-lingucomponent-thesaurus.xcu \
 
 postprocess_FILES_main := \

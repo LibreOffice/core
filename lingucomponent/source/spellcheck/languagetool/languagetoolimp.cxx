@@ -56,8 +56,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::linguistic2;
 
-constexpr OUStringLiteral sDuden = u"duden";
-
 namespace
 {
 constexpr size_t MAX_SUGGESTIONS_SIZE = 10;
@@ -297,6 +295,14 @@ void parseProofreadingJSONResponse(ProofreadingResult& rResult, std::string&& aJ
         });
 }
 
+OUString getLocaleListURL()
+{
+    if (auto oURL = LanguageToolCfg::BaseURL::get())
+        if (!oURL->isEmpty())
+            return *oURL + "/languages";
+    return {};
+}
+
 OUString getCheckerURL()
 {
     if (auto oURL = LanguageToolCfg::BaseURL::get())
@@ -330,35 +336,44 @@ sal_Bool SAL_CALL LanguageToolGrammarChecker::hasLocale(const Locale& rLocale)
 
 uno::Sequence<Locale> SAL_CALL LanguageToolGrammarChecker::getLocales()
 {
-    osl::MutexGuard aGuard(linguistic::GetLinguMutex());
-
     if (m_aSuppLocales.hasElements())
         return m_aSuppLocales;
-
-    SvtLinguConfig aLinguCfg;
-    uno::Sequence<OUString> aLocaleList;
-
-    if (LanguageToolCfg::RestProtocol::get().value_or("") == sDuden)
+    if (!LanguageToolCfg::IsEnabled::get())
     {
-        aLocaleList.realloc(3);
-        aLocaleList.getArray()[0] = "de-DE";
-        aLocaleList.getArray()[1] = "en-US";
-        aLocaleList.getArray()[2] = "en-GB";
+        return m_aSuppLocales;
     }
-    else
-        aLinguCfg.GetLocaleListFor("GrammarCheckers",
-                                   "org.openoffice.lingu.LanguageToolGrammarChecker", aLocaleList);
 
-    auto nLength = aLocaleList.getLength();
-    m_aSuppLocales.realloc(nLength);
+    OUString localeUrl = getLocaleListURL();
+    if (localeUrl.isEmpty())
+    {
+        return m_aSuppLocales;
+    }
+    tools::Long statusCode = 0;
+    std::string response = makeHttpRequest(localeUrl, HTTP_METHOD::HTTP_GET, OString(), statusCode);
+    if (statusCode != 200)
+    {
+        return m_aSuppLocales;
+    }
+    if (response.empty())
+    {
+        return m_aSuppLocales;
+    }
+    boost::property_tree::ptree root;
+    std::stringstream aStream(response);
+    boost::property_tree::read_json(aStream, root);
+
+    size_t length = root.size();
+    m_aSuppLocales.realloc(length);
     auto pArray = m_aSuppLocales.getArray();
-    auto pLocaleList = aLocaleList.getArray();
-
-    for (auto i = 0; i < nLength; i++)
+    int i = 0;
+    for (auto it = root.begin(); it != root.end(); it++, i++)
     {
-        pArray[i] = LanguageTag::convertToLocale(pLocaleList[i]);
+        boost::property_tree::ptree& localeItem = it->second;
+        const std::string longCode = localeItem.get<std::string>("longCode");
+        Locale aLocale = LanguageTag::convertToLocale(
+            OUString(longCode.c_str(), longCode.length(), RTL_TEXTENCODING_UTF8));
+        pArray[i] = aLocale;
     }
-
     return m_aSuppLocales;
 }
 
