@@ -1418,7 +1418,10 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
 
                         if (firstLineNew != firstLineOld)
                         {
-                            pNd->SetAttr(firstLineNew);
+                            if (nStart == aRegion.Start()->GetNodeIndex())
+                            {
+                                pNd->SetAttr(firstLineNew);
+                            }
                         }
                         if (leftMarginNew != leftMarginOld)
                         {

@@ -25,6 +25,8 @@
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <unotxdoc.hxx>
+#include <ndtxt.hxx>
+#include <editeng/lrspitem.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -140,6 +142,65 @@ CPPUNIT_TEST_FIXTURE(Test, testDontBreakWrappedTables)
     // Without the accompanying fix in place, this test would have failed, the compat flag was not
     // set.
     CPPUNIT_ASSERT(bDontBreakWrappedTables);
+}
+
+static bool IsFirstLine(const SwTextNode* pTextNode)
+{
+    const SfxPoolItem* pItem = pTextNode->GetNoCondAttr(RES_MARGIN_FIRSTLINE, false);
+    return !!pItem;
+}
+
+DECLARE_WW8EXPORT_TEST(testInlinePageBreakFirstLine, "inlinePageBreakFirstLine.doc")
+{
+    SwDoc* pDoc = getSwDoc();
+    const SwNodes& rNodes = pDoc->GetNodes();
+
+    std::vector<SwTextNode*> aTextNodes;
+
+    for (SwNodeOffset nNode(0); nNode < rNodes.Count(); ++nNode)
+    {
+        SwNode* pNode = pDoc->GetNodes()[nNode];
+        SwTextNode* pTextNode = pNode->GetTextNode();
+        if (!pTextNode)
+            continue;
+        aTextNodes.push_back(pTextNode);
+    }
+
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aTextNodes.size());
+    CPPUNIT_ASSERT_EQUAL(OUString("First line"), aTextNodes[0]->GetText());
+    CPPUNIT_ASSERT(IsFirstLine(aTextNodes[0]));
+    // Here exists an inline pagebreak (a pagebreak without a paragraph before it)
+    // This text node is not indented because it is not the first line of the paragraph
+    CPPUNIT_ASSERT_EQUAL(OUString("Should not be indented"), aTextNodes[1]->GetText());
+    CPPUNIT_ASSERT(!IsFirstLine(aTextNodes[1]));
+    // Here is the actual second paragraph
+    CPPUNIT_ASSERT_EQUAL(OUString("Should be indented"), aTextNodes[2]->GetText());
+    CPPUNIT_ASSERT(IsFirstLine(aTextNodes[2]));
+}
+
+DECLARE_WW8EXPORT_TEST(testNonInlinePageBreakFirstLine, "nonInlinePageBreakFirstLine.doc")
+{
+    SwDoc* pDoc = getSwDoc();
+    const SwNodes& rNodes = pDoc->GetNodes();
+
+    std::vector<SwTextNode*> aTextNodes;
+
+    for (SwNodeOffset nNode(0); nNode < rNodes.Count(); ++nNode)
+    {
+        SwNode* pNode = pDoc->GetNodes()[nNode];
+        SwTextNode* pTextNode = pNode->GetTextNode();
+        if (!pTextNode)
+            continue;
+        aTextNodes.push_back(pTextNode);
+    }
+
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aTextNodes.size());
+    CPPUNIT_ASSERT_EQUAL(OUString("First line"), aTextNodes[0]->GetText());
+    CPPUNIT_ASSERT(IsFirstLine(aTextNodes[0]));
+    // Here exists a pagebreak after a paragraph
+    // This text node is indented because it is the first line of a paragraph
+    CPPUNIT_ASSERT_EQUAL(OUString("Should be indented"), aTextNodes[1]->GetText());
+    CPPUNIT_ASSERT(IsFirstLine(aTextNodes[1]));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf104704_mangledFooter, "tdf104704_mangledFooter.odt")
