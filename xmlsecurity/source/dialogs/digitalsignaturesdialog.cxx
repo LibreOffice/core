@@ -118,23 +118,29 @@ namespace
 
         m_nODF = nTmp;
     }
+
+    std::vector<std::u16string_view>& GetGUIServers()
+    {
+
 #ifdef _WIN32
-std::vector<std::u16string_view> aGUIServers
-    = { u"Gpg4win\\kleopatra.exe",
-        u"Gpg4win\\bin\\kleopatra.exe",
-        u"GNU\\GnuPG\\kleopatra.exe",
-        u"GNU\\GnuPG\\launch-gpa.exe",
-        u"GNU\\GnuPG\\gpa.exe",
-        u"GnuPG\\bin\\gpa.exe",
-        u"GNU\\GnuPG\\bin\\kleopatra.exe",
-        u"GNU\\GnuPG\\bin\\launch-gpa.exe",
-        u"GNU\\GnuPG\\bin\\gpa.exe",
-        officecfg::Office::Common::Security::Scripting::CertMgrPath::get() };
+        static std::vector<std::u16string_view> aGUIServers
+            = { u"Gpg4win\\kleopatra.exe",
+                u"Gpg4win\\bin\\kleopatra.exe",
+                u"GNU\\GnuPG\\kleopatra.exe",
+                u"GNU\\GnuPG\\launch-gpa.exe",
+                u"GNU\\GnuPG\\gpa.exe",
+                u"GnuPG\\bin\\gpa.exe",
+                u"GNU\\GnuPG\\bin\\kleopatra.exe",
+                u"GNU\\GnuPG\\bin\\launch-gpa.exe",
+                u"GNU\\GnuPG\\bin\\gpa.exe",
+                officecfg::Office::Common::Security::Scripting::CertMgrPath::get() };
 #else
-std::vector<std::u16string_view> aGUIServers
-    = { u"kleopatra", u"seahorse", u"gpa", u"kgpg",
-        officecfg::Office::Common::Security::Scripting::CertMgrPath::get() };
+        static std::vector<std::u16string_view> aGUIServers
+            = { u"kleopatra", u"seahorse", u"gpa", u"kgpg",
+                officecfg::Office::Common::Security::Scripting::CertMgrPath::get() };
 #endif
+        return aGUIServers;
+    }
 
 }
 
@@ -521,17 +527,17 @@ bool DigitalSignaturesDialog::GetPathAllOS(OUString& aPath)
 void DigitalSignaturesDialog::GetCertificateManager(OUString& aPath, OUString& sExecutable,
                                             OUString& sFoundGUIServer)
 {
-    aGUIServers.pop_back();
-    aGUIServers.push_back(officecfg::Office::Common::Security::Scripting::CertMgrPath::get());
+    GetGUIServers().pop_back();
+    GetGUIServers().push_back(officecfg::Office::Common::Security::Scripting::CertMgrPath::get());
 
-    for (auto it = aGUIServers.rbegin(); it != aGUIServers.rend(); ++it)
+    for (auto it = GetGUIServers().rbegin(); it != GetGUIServers().rend(); ++it)
     {
         const auto& rServer = *it;
 
         if (rServer.empty())
             continue;
 
-        bool bValidSetMgr = (it == aGUIServers.rbegin() && rServer.size() > 0);
+        bool bValidSetMgr = (it == GetGUIServers().rbegin() && rServer.size() > 0);
         sal_Int32 nLastBackslashIndex = -1;
 
         if (bValidSetMgr)
@@ -549,7 +555,7 @@ void DigitalSignaturesDialog::GetCertificateManager(OUString& aPath, OUString& s
         if (searchError == osl::FileBase::E_None)
         {
             osl::File::getSystemPathFromFileURL(sFoundGUIServer, sExecutable);
-            if (it != aGUIServers.rbegin())
+            if (it != GetGUIServers().rbegin())
             {
                 std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
                     comphelper::ConfigurationChanges::create());
