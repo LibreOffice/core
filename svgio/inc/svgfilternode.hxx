@@ -25,13 +25,13 @@
 
 namespace svgio::svgreader
 {
-class SvgFilterNode final : public SvgNode
+class SvgFilterNode : public SvgNode
 {
 public:
-    SvgFilterNode(SvgDocument& rDocument, SvgNode* pParent);
+    SvgFilterNode(SVGToken aType, SvgDocument& rDocument, SvgNode* pParent);
     virtual ~SvgFilterNode() override;
 
-    void apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget) const;
+    virtual void apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget) const;
 };
 
 } // end of namespace svgio::svgreader

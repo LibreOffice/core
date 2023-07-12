@@ -27,7 +27,7 @@
 namespace svgio::svgreader
 {
 SvgFeDropShadowNode::SvgFeDropShadowNode(SvgDocument& rDocument, SvgNode* pParent)
-    : SvgNode(SVGToken::FeDropShadow, rDocument, pParent)
+    : SvgFilterNode(SVGToken::FeDropShadow, rDocument, pParent)
     , maDx(0.0)
     , maDy(0.0)
     , maStdDeviation(0.0)

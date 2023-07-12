@@ -27,7 +27,7 @@
 namespace svgio::svgreader
 {
 SvgFeFloodNode::SvgFeFloodNode(SvgDocument& rDocument, SvgNode* pParent)
-    : SvgNode(SVGToken::FeFlood, rDocument, pParent)
+    : SvgFilterNode(SVGToken::FeFlood, rDocument, pParent)
     , maX(0.0)
     , maY(0.0)
     , maWidth(0.0)

@@ -19,13 +19,13 @@
 
 #pragma once
 
-#include "svgnode.hxx"
+#include "svgfilternode.hxx"
 #include "svgstyleattributes.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 namespace svgio::svgreader
 {
-class SvgFeGaussianBlurNode final : public SvgNode
+class SvgFeGaussianBlurNode final : public SvgFilterNode
 {
 private:
     SvgNumber maStdDeviation;
@@ -37,7 +37,7 @@ public:
     virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken,
                                 const OUString& aContent) override;
 
-    void apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget) const;
+    void apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget) const override;
 };
 
 } // end of namespace svgio::svgreader

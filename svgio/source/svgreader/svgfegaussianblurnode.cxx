@@ -24,7 +24,7 @@
 namespace svgio::svgreader
 {
 SvgFeGaussianBlurNode::SvgFeGaussianBlurNode(SvgDocument& rDocument, SvgNode* pParent)
-    : SvgNode(SVGToken::FeGaussianBlur, rDocument, pParent)
+    : SvgFilterNode(SVGToken::FeGaussianBlur, rDocument, pParent)
     , maStdDeviation(SvgNumber(0.0))
 {
 }

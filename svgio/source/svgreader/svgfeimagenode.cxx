@@ -30,7 +30,7 @@
 namespace svgio::svgreader
 {
 SvgFeImageNode::SvgFeImageNode(SvgDocument& rDocument, SvgNode* pParent)
-    : SvgNode(SVGToken::FeImage, rDocument, pParent)
+    : SvgFilterNode(SVGToken::FeImage, rDocument, pParent)
 {
 }
 

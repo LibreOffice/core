@@ -381,7 +381,7 @@ namespace
                 case SVGToken::Filter:
                 {
                     /// new node for Filter
-                    mpTarget = new SvgFilterNode(maDocument, mpTarget);
+                    mpTarget = new SvgFilterNode(aSVGToken, maDocument, mpTarget);
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }

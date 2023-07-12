@@ -27,8 +27,8 @@
 
 namespace svgio::svgreader
 {
-SvgFilterNode::SvgFilterNode(SvgDocument& rDocument, SvgNode* pParent)
-    : SvgNode(SVGToken::Filter, rDocument, pParent)
+SvgFilterNode::SvgFilterNode(SVGToken aType, SvgDocument& rDocument, SvgNode* pParent)
+    : SvgNode(aType, rDocument, pParent)
 {
 }
 
@@ -45,41 +45,9 @@ void SvgFilterNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTarg
     // apply children's filters
     for (sal_uInt32 a(0); a < nCount; a++)
     {
-        SvgNode* pCandidate = rChildren[a].get();
-        if (pCandidate->getType() == SVGToken::FeGaussianBlur)
-        {
-            const SvgFeGaussianBlurNode& rFeGaussianBlurNode
-                = dynamic_cast<const SvgFeGaussianBlurNode&>(*pCandidate);
-            rFeGaussianBlurNode.apply(rTarget);
-        }
-        else if (pCandidate->getType() == SVGToken::FeColorMatrix)
-        {
-            const SvgFeColorMatrixNode& rFeColorMatrixNode
-                = dynamic_cast<const SvgFeColorMatrixNode&>(*pCandidate);
-            rFeColorMatrixNode.apply(rTarget);
-        }
-        else if (pCandidate->getType() == SVGToken::FeOffset)
-        {
-            const SvgFeOffsetNode& rFeOffsetNode
-                = dynamic_cast<const SvgFeOffsetNode&>(*pCandidate);
-            rFeOffsetNode.apply(rTarget);
-        }
-        else if (pCandidate->getType() == SVGToken::FeFlood)
-        {
-            const SvgFeFloodNode& rFeFloodNode = dynamic_cast<const SvgFeFloodNode&>(*pCandidate);
-            rFeFloodNode.apply(rTarget);
-        }
-        else if (pCandidate->getType() == SVGToken::FeDropShadow)
-        {
-            const SvgFeDropShadowNode& rFeDropShadowNode
-                = dynamic_cast<const SvgFeDropShadowNode&>(*pCandidate);
-            rFeDropShadowNode.apply(rTarget);
-        }
-        else if (pCandidate->getType() == SVGToken::FeImage)
-        {
-            const SvgFeImageNode& rFeImageNode = dynamic_cast<const SvgFeImageNode&>(*pCandidate);
-            rFeImageNode.apply(rTarget);
-        }
+        SvgFilterNode* pFilterNode = dynamic_cast<SvgFilterNode*>(rChildren[a].get());
+        if (pFilterNode)
+            pFilterNode->apply(rTarget);
     }
 }
 

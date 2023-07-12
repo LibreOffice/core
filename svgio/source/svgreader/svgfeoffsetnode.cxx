@@ -24,7 +24,7 @@
 namespace svgio::svgreader
 {
 SvgFeOffsetNode::SvgFeOffsetNode(SvgDocument& rDocument, SvgNode* pParent)
-    : SvgNode(SVGToken::FeOffset, rDocument, pParent)
+    : SvgFilterNode(SVGToken::FeOffset, rDocument, pParent)
     , maDx(SvgNumber(0.0))
     , maDy(SvgNumber(0.0))
 {

@@ -19,12 +19,12 @@
 
 #pragma once
 
-#include "svgnode.hxx"
+#include "svgfilternode.hxx"
 #include "svgstyleattributes.hxx"
 
 namespace svgio::svgreader
 {
-class SvgFeDropShadowNode final : public SvgNode
+class SvgFeDropShadowNode final : public SvgFilterNode
 {
 private:
     SvgNumber maDx;
@@ -40,7 +40,7 @@ public:
     virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken,
                                 const OUString& aContent) override;
 
-    void apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget) const;
+    void apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget) const override;
 };
 
 } // end of namespace svgio::svgreader
