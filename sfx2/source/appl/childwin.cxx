@@ -639,7 +639,7 @@ void SfxChildWindow::Show( ShowFlags nFlags )
     {
         if (!xController->getDialog()->get_visible())
         {
-            if (nScValidityWindowSlotID == GetType())
+            if (!xController->CloseOnHide())
             {
                 // tdf#155708 - do not run a new (Async) validation window,
                 // because we already have one in sync mode, just show the running one

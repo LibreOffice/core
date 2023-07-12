@@ -180,6 +180,8 @@ public:
 
     virtual void EndDialog(int nResponse) override;
 
+    virtual bool CloseOnHide() const override { return false; }
+
     virtual void SetReference( const ScRange& rRef, ScDocument* pDoc ) override
     {
         if ( m_pHandler && m_pSetReferenceHdl )
