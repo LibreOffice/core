@@ -340,6 +340,13 @@ QAccessibleInterface* QtAccessibleWidget::child(int index) const
     Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
     if (!xAc.is())
         return nullptr;
+
+    if (index < 0 || index >= xAc->getAccessibleChildCount())
+    {
+        SAL_WARN("vcl.qt", "QtAccessibleWidget::child called with invalid index: " << index);
+        return nullptr;
+    }
+
     return QAccessible::queryAccessibleInterface(
         QtAccessibleRegistry::getQObject(xAc->getAccessibleChild(index)));
 }
