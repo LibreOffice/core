@@ -136,9 +136,9 @@ void SdrObjUserCall::Changed(const SdrObject& /*rObj*/, SdrUserCallType /*eType*
 {
 }
 
-sal_Int32 SdrObjUserCall::GetPDFAnchorStructureElementId(SdrObject const&)
+void const* SdrObjUserCall::GetPDFAnchorStructureElementKey(SdrObject const&)
 {
-    return -1;
+    return nullptr;
 }
 
 SdrObjMacroHitRec::SdrObjMacroHitRec() :

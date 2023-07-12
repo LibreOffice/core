@@ -1236,6 +1236,7 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
     m_aStructure.emplace_back( );
     m_aStructure[0].m_nOwnElement       = 0;
     m_aStructure[0].m_nParentElement    = 0;
+    //m_StructElementStack.push(0);
 
     Font aFont;
     aFont.SetFamilyName( "Times" );
@@ -10850,6 +10851,7 @@ void PDFWriterImpl::beginStructureElement(sal_Int32 const id)
     endStructureElementMCSeq(EndMode::OnlyStruct);
 
     PDFStructureElement& rEle = m_aStructure[id];
+    m_StructElementStack.push(m_nCurrentStructElement);
     m_nCurrentStructElement = id;
 
     if (g_bDebugDisableCompression)
@@ -10909,7 +10911,8 @@ void PDFWriterImpl::endStructureElement()
     }
 
     // "end" the structure element, the parent becomes current element
-    m_nCurrentStructElement = m_aStructure[ m_nCurrentStructElement ].m_nParentElement;
+    m_nCurrentStructElement = m_StructElementStack.top();
+    m_StructElementStack.pop();
 
     // check whether to emit structure henceforth
     m_bEmitStructure = checkEmitStructure();

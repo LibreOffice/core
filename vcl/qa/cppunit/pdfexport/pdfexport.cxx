@@ -3596,20 +3596,20 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf57423)
             {
                 switch (nFigure)
                 {
-                    case 0:
+                    case 2:
                         CPPUNIT_ASSERT_EQUAL(OUString(u"QR Code - Tells how to get to Mosegaard"),
                                              ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
                                                  *dynamic_cast<vcl::filter::PDFHexStringElement*>(
                                                      pObject->Lookup("Alt"))));
                         break;
-                    case 1:
+                    case 0:
                         CPPUNIT_ASSERT_EQUAL(OUString(u"Title: Arrows - Description:  Explains the "
                                                       u"different arrow appearances"),
                                              ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
                                                  *dynamic_cast<vcl::filter::PDFHexStringElement*>(
                                                      pObject->Lookup("Alt"))));
                         break;
-                    case 2:
+                    case 1:
                         CPPUNIT_ASSERT_EQUAL(
                             OUString(u"My blue triangle - Does not need further description"),
                             ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
@@ -3662,6 +3662,83 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf57423)
     CPPUNIT_ASSERT_EQUAL(int(3), nFigure);
     CPPUNIT_ASSERT_EQUAL(int(1), nFormula);
     CPPUNIT_ASSERT_EQUAL(int(4), nDiv);
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf154982)
+{
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+
+    // Enable PDF/UA
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+    saveAsPDF(u"tdf154982.odt");
+
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    int nFigure(0);
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"));
+        if (pType && pType->GetValue() == "StructElem")
+        {
+            auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"));
+            if (pS && pS->GetValue() == "Figure")
+            {
+                switch (nFigure)
+                {
+                    case 0:
+                        CPPUNIT_ASSERT_EQUAL(
+                            OUString(u"Here comes the signature - Please sign here"),
+                            ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
+                                *dynamic_cast<vcl::filter::PDFHexStringElement*>(
+                                    pObject->Lookup("Alt"))));
+                        break;
+                    case 1:
+                        CPPUNIT_ASSERT_EQUAL(OUString(u"Home"),
+                                             ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
+                                                 *dynamic_cast<vcl::filter::PDFHexStringElement*>(
+                                                     pObject->Lookup("Alt"))));
+                        break;
+                }
+
+                // the problem was that the figures in the hell layer were not
+                // below their anchor paragraphs in the structure tree
+                auto pParentRef
+                    = dynamic_cast<vcl::filter::PDFReferenceElement*>(pObject->Lookup("P"));
+                CPPUNIT_ASSERT(pParentRef);
+                auto pParent(pParentRef->LookupObject());
+                CPPUNIT_ASSERT(pParent);
+                auto pParentType
+                    = dynamic_cast<vcl::filter::PDFNameElement*>(pParent->Lookup("Type"));
+                CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pParentType->GetValue());
+                auto pParentS = dynamic_cast<vcl::filter::PDFNameElement*>(pParent->Lookup("S"));
+                CPPUNIT_ASSERT_EQUAL(OString("Standard"), pParentS->GetValue());
+
+                auto pPParentRef
+                    = dynamic_cast<vcl::filter::PDFReferenceElement*>(pParent->Lookup("P"));
+                CPPUNIT_ASSERT(pPParentRef);
+                auto pPParent(pPParentRef->LookupObject());
+                CPPUNIT_ASSERT(pPParent);
+                auto pPParentType
+                    = dynamic_cast<vcl::filter::PDFNameElement*>(pPParent->Lookup("Type"));
+                CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pPParentType->GetValue());
+                auto pPParentS = dynamic_cast<vcl::filter::PDFNameElement*>(pPParent->Lookup("S"));
+                CPPUNIT_ASSERT_EQUAL(OString("Document"), pPParentS->GetValue());
+                ++nFigure;
+            }
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL(int(2), nFigure);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf135192)

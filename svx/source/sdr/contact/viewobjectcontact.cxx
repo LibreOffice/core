@@ -436,10 +436,10 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
                     const bool bBackground(pSdrPage->IsMasterPage());
                     const bool bImage(SdrObjKind::Graphic == pSdrObj->GetObjIdentifier());
                     // note: there must be output device here, in PDF export
-                    sal_Int32 nAnchorId(-1);
+                    void const* pAnchorKey(nullptr);
                     if (auto const pUserCall = pSdrObj->GetUserCall())
                     {
-                        nAnchorId = pUserCall->GetPDFAnchorStructureElementId(*pSdrObj);
+                        pAnchorKey = pUserCall->GetPDFAnchorStructureElementKey(*pSdrObj);
                     }
 
                     ::std::vector<sal_Int32> annotIds;
@@ -457,7 +457,7 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
                             bBackground,
                             bImage,
                             std::move(xNewPrimitiveSequence),
-                            nAnchorId,
+                            pAnchorKey,
                             &annotIds));
                     xNewPrimitiveSequence = drawinglayer::primitive2d::Primitive2DContainer { xReference };
                 }
