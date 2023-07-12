@@ -743,6 +743,26 @@ void ScDocument::FillInfo(
                     pInfo->pShadowAttr = pShadowItem;
                     if (pInfo->pShadowAttr != pDefShadow)
                         bAnyShadow = true;
+
+                    const ScCondFormatIndexes& rCondFormatIndex
+                        = pStartPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData();
+
+                    if (pCondFormList && !pStartCond && !rCondFormatIndex.empty())
+                    {
+                        for (const auto& rItem : rCondFormatIndex)
+                        {
+                            const ScConditionalFormat* pCondForm = pCondFormList->GetFormat(rItem);
+                            if (pCondForm)
+                            {
+                                ScCondFormatData aData = pCondForm->GetData(
+                                    pInfo->maCell, ScAddress(nStartX, nStartY, nTab));
+
+                                // Color scale
+                                if (aData.mxColorScale && !pInfo->mxColorScale)
+                                    pInfo->mxColorScale = aData.mxColorScale;
+                            }
+                        }
+                    }
                 }
             }
         }
