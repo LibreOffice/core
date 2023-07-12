@@ -16,6 +16,7 @@
 #include <sortedobjs.hxx>
 #include <anchoredobject.hxx>
 #include <pagefrm.hxx>
+#include <txtfrm.hxx>
 
 namespace
 {
@@ -58,6 +59,25 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableNegativeVertOffset)
     // Instead we got a layout loop, aborted by the loop control, and the fly overlapped with the
     // 2nd paragraph.
     CPPUNIT_ASSERT_LESS(pPara2->getFrameArea().Top(), rFlyRect.Bottom());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFloattableAvoidManipOfst)
+{
+    // Given a document with a 6-page floating table and some anchor text:
+    createSwDoc("floattable-avoid-manip-ofst.docx");
+
+    // When laying out that document:
+    calcLayout();
+
+    // Then make sure all anchor text is on the last page:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwPageFrame* pLastPage = pLayout->GetLastPage();
+    SwLayoutFrame* pBodyFrame = pLastPage->FindBodyCont();
+    SwTextFrame* pAnchor = pBodyFrame->GetLower()->DynCastTextFrame();
+    // If this is not 0, that means some of the anchor text is shifted to a previous page, while
+    // anchors of non-last split fly frames should contain no text.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), pAnchor->GetOffset().get());
 }
 }
 
