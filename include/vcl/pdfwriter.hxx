@@ -1056,6 +1056,11 @@ The following structure describes the permissions used in PDF security
     (e.g. a section can contain a heading and a paragraph). The structure hierarchy
     is build automatically from the Begin/EndStructureElement calls.
 
+    The easy way is to call WrapBeginStructureElement, but it's also possible
+    to call EnsureStructureElement/InitStructureElement/BeginStructureElement
+    (its 3 parts) manually for more control; this way a placeholder SE can be
+    inserted and initialised later.
+
     A structural element need not be contained on one page; e.g. paragraphs often
     run from one page to the next. In this case the corresponding EndStructureElement
     must be called while drawing the next page.
@@ -1090,7 +1095,10 @@ The following structure describes the permissions used in PDF security
     @returns
     the new structure element's id for use in SetCurrentStructureElement
      */
-     sal_Int32 BeginStructureElement( enum StructElement eType, std::u16string_view rAlias );
+    void BeginStructureElement(sal_Int32 id);
+    sal_Int32 EnsureStructureElement();
+    void InitStructureElement(sal_Int32 id, PDFWriter::StructElement eType, std::u16string_view rAlias);
+
     /** end the current logical structure element
 
     Close the current structure element. The current element's

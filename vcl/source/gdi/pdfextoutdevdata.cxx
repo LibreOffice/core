@@ -53,6 +53,8 @@ struct PDFExtOutDevDataSync
                     CreateNote,
                     SetPageTransition,
 
+                    EnsureStructureElement,
+                    InitStructureElement,
                     BeginStructureElement,
                     EndStructureElement,
                     SetCurrentStructureElement,
@@ -95,7 +97,6 @@ struct GlobalSyncData
     ::std::map< sal_Int32, PDFLinkDestination > mFutureDestinations;
 
     sal_Int32 GetMappedId();
-    sal_Int32 GetMappedStructId( sal_Int32 );
 
     /** the way this appears to work: (only) everything that increments mCurId
         at recording time must put an item into mParaIds at playback time,
@@ -104,6 +105,7 @@ struct GlobalSyncData
     sal_Int32                   mCurId;
     std::vector< sal_Int32 >    mParaIds;
     std::vector< sal_Int32 >    mStructIdMap;
+    std::map<void const*, sal_Int32> mSEMap;
 
     sal_Int32                   mCurrentStructElement;
     std::vector< sal_Int32 >    mStructParents;
@@ -111,7 +113,7 @@ struct GlobalSyncData
             mCurId ( 0 ),
             mCurrentStructElement( 0 )
     {
-        mStructParents.push_back( 0 );
+        mStructParents.push_back(0); // because PDFWriterImpl has a dummy root
         mStructIdMap.push_back( 0 );
     }
     void PlayGlobalActions( PDFWriter& rWriter );
@@ -136,18 +138,6 @@ sal_Int32 GlobalSyncData::GetMappedId()
     }
 
     return nLinkId;
-}
-
-sal_Int32 GlobalSyncData::GetMappedStructId( sal_Int32 nStructId )
-{
-    if ( o3tl::make_unsigned(nStructId) < mStructIdMap.size() )
-        nStructId = mStructIdMap[ nStructId ];
-    else
-        nStructId = -1;
-
-    SAL_WARN_IF( nStructId < 0, "vcl", "unmapped structure id in GlobalSyncData" );
-
-    return nStructId;
 }
 
 void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
@@ -282,6 +272,8 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
                 mParaInts.pop_front();
             }
             break;
+            case PDFExtOutDevDataSync::EnsureStructureElement:
+            case PDFExtOutDevDataSync::InitStructureElement:
             case PDFExtOutDevDataSync::BeginStructureElement:
             case PDFExtOutDevDataSync::EndStructureElement:
             case PDFExtOutDevDataSync::SetCurrentStructureElement:
@@ -348,12 +340,28 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
         mActions.pop_front();
         switch( aDataSync.eAct )
         {
-            case PDFExtOutDevDataSync::BeginStructureElement :
+            case PDFExtOutDevDataSync::EnsureStructureElement:
             {
-                sal_Int32 nNewEl = rWriter.BeginStructureElement( mParaStructElements.front(), mParaOUStrings.front() ) ;
+#ifndef NDEBUG
+                sal_Int32 const id =
+#endif
+                    rWriter.EnsureStructureElement();
+                assert(id == -1 || id == mParaInts.front()); // identity mapping
+                mParaInts.pop_front();
+            }
+            break;
+            case PDFExtOutDevDataSync::InitStructureElement:
+            {
+                rWriter.InitStructureElement(mParaInts.front(), mParaStructElements.front(), mParaOUStrings.front());
+                mParaInts.pop_front();
                 mParaStructElements.pop_front();
                 mParaOUStrings.pop_front();
-                mpGlobalData->mStructIdMap.push_back( nNewEl );
+            }
+            break;
+            case PDFExtOutDevDataSync::BeginStructureElement :
+            {
+                rWriter.BeginStructureElement(mParaInts.front());
+                mParaInts.pop_front();
             }
             break;
             case PDFExtOutDevDataSync::EndStructureElement :
@@ -363,7 +371,7 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
             break;
             case PDFExtOutDevDataSync::SetCurrentStructureElement:
             {
-                rWriter.SetCurrentStructureElement( mpGlobalData->GetMappedStructId( mParaInts.front() ) );
+                rWriter.SetCurrentStructureElement(mParaInts.front());
                 mParaInts.pop_front();
             }
             break;
@@ -789,17 +797,57 @@ void PDFExtOutDevData::SetPageTransition( PDFWriter::PageTransition eType, sal_u
 
 /* local (page), actions have to be played synchronously to the actions of
    of the recorded metafile (created by each xRenderable->render()) */
-   sal_Int32 PDFExtOutDevData::BeginStructureElement( PDFWriter::StructElement eType, const OUString& rAlias )
+
+sal_Int32 PDFExtOutDevData::EnsureStructureElement(void const*const key)
 {
-    mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::BeginStructureElement );
+    sal_Int32 id(-1);
+    if (key != nullptr)
+    {
+        auto const it(mpGlobalSyncData->mSEMap.find(key));
+        if (it != mpGlobalSyncData->mSEMap.end())
+        {
+            id = it->second;
+        }
+    }
+    if (id == -1)
+    {
+        mpPageSyncData->PushAction(mrOutDev, PDFExtOutDevDataSync::EnsureStructureElement);
+        id = mpGlobalSyncData->mStructParents.size();
+        mpPageSyncData->mParaInts.push_back(id);
+        mpGlobalSyncData->mStructParents.push_back(mpGlobalSyncData->mCurrentStructElement);
+        if (key != nullptr)
+        {
+            mpGlobalSyncData->mSEMap.emplace(key, id);
+        }
+    }
+    return id;
+}
+
+void PDFExtOutDevData::InitStructureElement(sal_Int32 const id,
+        PDFWriter::StructElement const eType, const OUString& rAlias)
+{
+    mpPageSyncData->PushAction(mrOutDev, PDFExtOutDevDataSync::InitStructureElement);
+    mpPageSyncData->mParaInts.push_back(id);
     mpPageSyncData->mParaStructElements.push_back( eType );
     mpPageSyncData->mParaOUStrings.push_back( rAlias );
-    // need a global id
-    sal_Int32 nNewId = mpGlobalSyncData->mStructParents.size();
-    mpGlobalSyncData->mStructParents.push_back( mpGlobalSyncData->mCurrentStructElement );
-    mpGlobalSyncData->mCurrentStructElement = nNewId;
-    return nNewId;
 }
+
+void PDFExtOutDevData::BeginStructureElement(sal_Int32 const id)
+{
+    mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::BeginStructureElement );
+    mpPageSyncData->mParaInts.push_back(id);
+    mpGlobalSyncData->mCurrentStructElement = id;
+}
+
+sal_Int32 PDFExtOutDevData::WrapBeginStructureElement(
+        PDFWriter::StructElement const eType, const OUString& rAlias)
+{
+    sal_Int32 const id = EnsureStructureElement(nullptr);
+    InitStructureElement(id, eType, rAlias);
+    BeginStructureElement(id);
+    return id;
+}
+
 void PDFExtOutDevData::EndStructureElement()
 {
     mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::EndStructureElement );

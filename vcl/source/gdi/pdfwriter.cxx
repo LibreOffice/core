@@ -389,9 +389,20 @@ void PDFWriter::CreateNote( const tools::Rectangle& rRect, const PDFNote& rNote,
     xImplementation->createNote( rRect, rNote, nPageNr );
 }
 
-sal_Int32 PDFWriter::BeginStructureElement( PDFWriter::StructElement eType, std::u16string_view rAlias )
+sal_Int32 PDFWriter::EnsureStructureElement()
 {
-    return xImplementation->beginStructureElement( eType, rAlias );
+    return xImplementation->ensureStructureElement();
+}
+
+void PDFWriter::InitStructureElement(sal_Int32 const id,
+        PDFWriter::StructElement const eType, std::u16string_view const rAlias)
+{
+    return xImplementation->initStructureElement(id, eType, rAlias);
+}
+
+void PDFWriter::BeginStructureElement(sal_Int32 const id)
+{
+    return xImplementation->beginStructureElement(id);
 }
 
 void PDFWriter::EndStructureElement()

@@ -582,7 +582,7 @@ struct PDFStructureElementKid // for Kids entries
 struct PDFStructureElement
 {
     sal_Int32                                           m_nObject;
-    PDFWriter::StructElement                            m_eType;
+    ::std::optional<PDFWriter::StructElement>           m_oType;
     OString                                        m_aAlias;
     sal_Int32                                           m_nOwnElement; // index into structure vector
     sal_Int32                                           m_nParentElement; // index into structure vector
@@ -603,7 +603,6 @@ struct PDFStructureElement
 
     PDFStructureElement()
             : m_nObject( 0 ),
-              m_eType( PDFWriter::NonStructElement ),
               m_nOwnElement( -1 ),
               m_nParentElement( -1 ),
               m_nFirstPageObject( 0 ),
@@ -1330,7 +1329,9 @@ public:
     // notes
     void createNote( const tools::Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr );
     // structure elements
-    sal_Int32 beginStructureElement( PDFWriter::StructElement eType, std::u16string_view rAlias );
+    sal_Int32 ensureStructureElement();
+    void initStructureElement(sal_Int32 id, PDFWriter::StructElement eType, std::u16string_view rAlias);
+    void beginStructureElement(sal_Int32 id);
     void endStructureElement();
     bool setCurrentStructureElement( sal_Int32 nElement );
     bool setStructureAttribute( enum PDFWriter::StructAttribute eAttr, enum PDFWriter::StructAttributeValue eVal );

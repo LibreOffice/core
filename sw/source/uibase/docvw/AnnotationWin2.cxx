@@ -166,7 +166,7 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
         dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData()));
     if (pPDFExtOutDevData && pPDFExtOutDevData->GetIsExportTaggedPDF())
     {
-        pPDFExtOutDevData->BeginStructureElement(vcl::PDFWriter::NonStructElement, OUString());
+        pPDFExtOutDevData->WrapBeginStructureElement(vcl::PDFWriter::NonStructElement, OUString());
     }
 
     pDev->Push();

@@ -1094,7 +1094,7 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
     aLocation.Union(aEndRect);
     pDescriptor->Location = aLocation.SVRect();
 
-    pPDFExtOutDevData->BeginStructureElement(vcl::PDFWriter::Form);
+    pPDFExtOutDevData->WrapBeginStructureElement(vcl::PDFWriter::Form);
     pPDFExtOutDevData->CreateControl(*pDescriptor);
     pPDFExtOutDevData->EndStructureElement();
 
