@@ -509,6 +509,13 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="DragThresholdPixels" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Defines number of pixels the cursor can move before dragging.</desc>
+          <label>Drag Threshold</label>
+        </info>
+        <value>6</value>
+      </prop>
       <group oor:name="TextObject">
         <info>
           <desc>Contains text editing related configuration items.</desc>

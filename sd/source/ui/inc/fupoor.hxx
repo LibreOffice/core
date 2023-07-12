@@ -49,7 +49,6 @@ class FuPoor : public SimpleReferenceComponent
 public:
     static const int HITPIX = 2;                   // hit tolerance in pixel
     static const int HITLOG = 53;                  // hit tolerance in mm100
-    static const int DRGPIX = 2;                   // minimal drag move in pixel
     static const int DRGLOG = 53;                  // minimal drag move in mm100
 
 

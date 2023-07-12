@@ -90,7 +90,7 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
     {
         bReturn = true;
         sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
-        sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+        sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(mpView->GetDragThresholdPixels(),0)).Width() );
         mpWindow->CaptureMouse();
 
         SdrViewEvent aVEvt;
@@ -227,7 +227,7 @@ bool FuEditGluePoints::MouseButtonUp(const MouseEvent& rMEvt)
 
     FuDraw::MouseButtonUp(rMEvt);
 
-    sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+    sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(mpView->GetDragThresholdPixels(),0)).Width() );
     Point aPos = mpWindow->PixelToLogic( rMEvt.GetPosPixel() );
 
     if (std::abs(aMDPos.X() - aPos.X()) < nDrgLog &&
