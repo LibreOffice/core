@@ -1473,22 +1473,6 @@ namespace svgio::svgreader
             return rCandidate;
         }
 
-        OUString xmlSpaceHandling(const OUString& rCandidate, bool bIsDefault)
-        {
-            // if xml:space="default" then remove all newline characters, otherwise convert them to space
-            // convert tab to space too
-            OUString aRetval(rCandidate.replaceAll(u"\n", bIsDefault ? u"" : u" ").replaceAll(u"\t", u" "));
-
-            if(bIsDefault)
-            {
-                // strip of all leading and trailing spaces
-                // and consolidate contiguous space
-                aRetval = consolidateContiguousSpace(aRetval.trim());
-            }
-
-            return aRetval;
-        }
-
         ::std::vector< double > solveSvgNumberVector(const SvgNumberVector& rInput, const InfoProvider& rInfoProvider)
         {
             ::std::vector< double > aRetval;

@@ -1,0 +1,17 @@
+<svg viewBox="0 0 240 70" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    tspan {
+      fill: red;
+    }
+  </style>
+
+  <text x="10" y="30" class="small">
+    You are
+    <tspan>not</tspan>
+    a banana!
+  </text>
+  <text x="10" y="60" class="small">
+    You are<tspan>   not    </tspan>a banana!
+  </text>
+</svg>
+
