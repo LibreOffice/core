@@ -1646,6 +1646,24 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                     }
                 }
 
+                if (xContent.is())
+                {
+                    // By the time the frame is created, the anchor's paragraph marker character
+                    // properties are already imported. Check if we need to disable "vanish", that
+                    // would lead to a hidden floating table in Writer, but it does not in Word.
+                    uno::Reference<beans::XPropertySet> xParagraph(xContent->getAnchor(),
+                                                                   uno::UNO_QUERY);
+                    if (xParagraph.is())
+                    {
+                        bool bCharHidden{};
+                        xParagraph->getPropertyValue("CharHidden") >>= bCharHidden;
+                        if (bCharHidden)
+                        {
+                            xParagraph->setPropertyValue("CharHidden", uno::Any(false));
+                        }
+                    }
+                }
+
                 AfterConvertToTextFrame(m_rDMapper_Impl, aFramedRedlines, redPos, redLen, redCell, redTable);
             }
 
