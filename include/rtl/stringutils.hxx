@@ -19,6 +19,10 @@
 #include <cassert>
 #include <cstddef>
 
+#if defined LIBO_INTERNAL_ONLY
+#include <type_traits>
+#endif
+
 #include "sal/types.h"
 
 // The unittest uses slightly different code to help check that the proper
@@ -48,7 +52,8 @@ namespace rtl
 //
 struct SAL_WARN_UNUSED OStringChar {
     constexpr OStringChar(char theC): c(theC) {}
-    template<typename T> OStringChar(T &&) = delete;
+    template<typename T> OStringChar(
+        T, std::enable_if_t<std::is_arithmetic_v<T> || std::is_enum_v<T>, int> = 0) = delete;
     constexpr operator std::string_view() const { return {&c, 1}; }
     char const c;
 };
@@ -98,7 +103,8 @@ struct SAL_WARN_UNUSED OStringChar {
 struct SAL_WARN_UNUSED OUStringChar_ {
     constexpr OUStringChar_(sal_Unicode theC): c(theC) {}
     constexpr OUStringChar_(char theC): c(theC) { assert(c <= 0x7F); }
-    template<typename T> OUStringChar_(T &&) = delete;
+    template<typename T> OUStringChar_(
+        T, std::enable_if_t<std::is_arithmetic_v<T> || std::is_enum_v<T>, int> = 0) = delete;
     constexpr operator std::u16string_view() const { return {&c, 1}; }
     sal_Unicode const c;
 };
