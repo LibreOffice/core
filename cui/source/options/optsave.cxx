@@ -290,7 +290,7 @@ bool SvxSaveTabPage::FillItemSet( SfxItemSet* rSet )
     {
         rSet->Put( SfxBoolItem( SID_ATTR_USERAUTOSAVE,
                                m_xUserAutoSaveCB->get_active() ) );
-        bModified = true;
+        bModified = bRequestRestart = true;
     }
     // save relatively
     if ( m_xRelativeFsysCB->get_state_changed_from_saved() )
