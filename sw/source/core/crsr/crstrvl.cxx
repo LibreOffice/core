@@ -368,6 +368,8 @@ void SwCursorShell::GotoTOXMarkBase()
     // Take the 1. and get the index type. Ask it for the actual index.
     const SwTOXType* pType = aMarks[0]->GetTOXType();
     auto pContentFrame = pType->FindContentFrame(*GetDoc(), *GetLayout());
+    if(!pContentFrame)
+        return;
     SwCallLink aLk(*this); // watch Cursor-Moves
     SwCursorSaveState aSaveState(*m_pCurrentCursor);
     assert(pContentFrame->IsTextFrame());
