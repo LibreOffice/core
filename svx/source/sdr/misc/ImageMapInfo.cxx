@@ -58,13 +58,13 @@ IMapObject* SvxIMapInfo::GetHitIMapObject(const SdrObject* pObj, const Point& rW
         Size aGraphSize;
         Point aRelPoint(rWinPoint);
         ImageMap& rImageMap = const_cast<ImageMap&>(pIMapInfo->GetImageMap());
-        tools::Rectangle& rRect = const_cast<tools::Rectangle&>(pObj->GetLogicRect());
+        tools::Rectangle aRect = pObj->GetLogicRect();
 
         if (pCmpWnd)
         {
             MapMode aWndMode = pCmpWnd->GetMapMode();
             aRelPoint = pCmpWnd->LogicToLogic(rWinPoint, &aWndMode, &aMap100);
-            rRect = pCmpWnd->LogicToLogic(pObj->GetLogicRect(), &aWndMode, &aMap100);
+            aRect = pCmpWnd->LogicToLogic(pObj->GetLogicRect(), &aWndMode, &aMap100);
         }
 
         bool bObjSupported = false;
@@ -78,16 +78,16 @@ IMapObject* SvxIMapInfo::GetHitIMapObject(const SdrObject* pObj, const Point& rW
 
             // Undo rotation
             if (rGeo.m_nRotationAngle)
-                RotatePoint(aRelPoint, rRect.TopLeft(), -rGeo.mfSinRotationAngle,
+                RotatePoint(aRelPoint, aRect.TopLeft(), -rGeo.mfSinRotationAngle,
                             rGeo.mfCosRotationAngle);
 
             // Undo mirroring
             if (pGeoData->bMirrored)
-                aRelPoint.setX(rRect.Right() + rRect.Left() - aRelPoint.X());
+                aRelPoint.setX(aRect.Right() + aRect.Left() - aRelPoint.X());
 
             // Undo shearing
             if (rGeo.m_nShearAngle)
-                ShearPoint(aRelPoint, rRect.TopLeft(), -rGeo.mfTanShearAngle);
+                ShearPoint(aRelPoint, aRect.TopLeft(), -rGeo.mfTanShearAngle);
 
             if (pGrafObj->GetGrafPrefMapMode().GetMapUnit() == MapUnit::MapPixel)
                 aGraphSize = Application::GetDefaultDevice()->PixelToLogic(
@@ -108,8 +108,8 @@ IMapObject* SvxIMapInfo::GetHitIMapObject(const SdrObject* pObj, const Point& rW
         if (bObjSupported)
         {
             // Calculate relative position of mouse cursor
-            aRelPoint -= rRect.TopLeft();
-            pIMapObj = rImageMap.GetHitIMapObject(aGraphSize, rRect.GetSize(), aRelPoint);
+            aRelPoint -= aRect.TopLeft();
+            pIMapObj = rImageMap.GetHitIMapObject(aGraphSize, aRect.GetSize(), aRelPoint);
 
             // We don't care about deactivated objects
             if (pIMapObj && !pIMapObj->IsActive())
