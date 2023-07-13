@@ -40,6 +40,7 @@ skia_patches := \
     fix-SkDebugf-link-error.patch.1 \
     incomplete.patch.0 \
     ubsan-missing-typeinfo.patch.1 \
+    incomplete-type-SkImageGenerator.patch.1 \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 
