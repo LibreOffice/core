@@ -1401,8 +1401,9 @@ void SwView::StateTabWin(SfxItemSet& rSet)
     SwapPageMargin( rDesc, aPageLRSpace );
 
     SfxItemSetFixed<RES_PARATR_TABSTOP, RES_PARATR_TABSTOP,
-                    RES_LR_SPACE, RES_UL_SPACE>  aCoreSet( GetPool() );
-    // get also the list level indent values merged as LR-SPACE item, if needed.
+                    RES_MARGIN_FIRSTLINE, RES_MARGIN_RIGHT,
+                    RES_UL_SPACE, RES_UL_SPACE>  aCoreSet( GetPool() );
+    // get also the list level indent values, if needed.
     rSh.GetCurAttr( aCoreSet, true );
     const SelectionType nSelType = rSh.GetSelectionType();
 
