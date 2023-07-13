@@ -197,7 +197,7 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
     // sigma and equal buttons
     if (!bIsLOKMobilePhone)
     {
-        InsertItem      (SID_INPUT_SUM,      Image(StockImage::Yes, RID_BMP_INPUT_SUM), ToolBoxItemBits::DROPDOWNONLY, 3);
+        InsertItem      (SID_INPUT_SUM,      Image(StockImage::Yes, RID_BMP_INPUT_SUM), ToolBoxItemBits::DROPDOWN, 3);
         InsertItem      (SID_INPUT_EQUAL,    Image(StockImage::Yes, RID_BMP_INPUT_EQUAL), ToolBoxItemBits::NONE, 4);
         InsertItem      (SID_INPUT_CANCEL,   Image(StockImage::Yes, RID_BMP_INPUT_CANCEL), ToolBoxItemBits::NONE, 5);
         InsertItem      (SID_INPUT_OK,       Image(StockImage::Yes, RID_BMP_INPUT_OK), ToolBoxItemBits::NONE, 6);
@@ -365,6 +365,43 @@ void ScInputWindow::Select()
         pScMod->InputEnterHandler();
         SetSumAssignMode();
         mxTextWindow->Invalidate(); // Or else the Selection remains
+    }
+    else if (curItemId == SID_INPUT_SUM)
+    {
+        ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+        if (pViewSh)
+        {
+            bool bSubTotal = false;
+            bool bRangeFinder = false;
+            const OUString aFormula = pViewSh->DoAutoSum(bRangeFinder, bSubTotal, ocSum);
+            if (!aFormula.isEmpty())
+            {
+                SetFuncString(aFormula);
+                if (bRangeFinder && pScMod->IsEditMode())
+                {
+                    ScInputHandler* pHdl = pScMod->GetInputHdl(pViewSh);
+                    if (pHdl)
+                    {
+                        pHdl->InitRangeFinder(aFormula);
+
+                        //! SetSelection at the InputHandler?
+                        //! Set bSelIsRef?
+                        const sal_Int32 nOpen = aFormula.indexOf('(');
+                        const sal_Int32 nLen = aFormula.getLength();
+                        if (nOpen != -1 && nLen > nOpen)
+                        {
+                            ESelection aSel(0, nOpen + (bSubTotal ? 3 : 1), 0, nLen - 1);
+                            EditView* pTableView = pHdl->GetTableView();
+                            if (pTableView)
+                                pTableView->SetSelection(aSel);
+                            EditView* pTopView = pHdl->GetTopView();
+                            if (pTopView)
+                                pTopView->SetSelection(aSel);
+                        }
+                    }
+                }
+            }
+        }
     }
     else if (curItemId == SID_INPUT_EQUAL)
     {
