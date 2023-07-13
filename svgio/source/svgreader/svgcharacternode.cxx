@@ -622,17 +622,6 @@ namespace svgio::svgreader
                 // we have absolute positions, get first one as current text position X
                 maPosition.setX(rSvgTextPositions.getX()[0].solve(rInfoProvider, NumberType::xcoordinate));
                 mbAbsoluteX = true;
-
-                if(nSizeX > 1)
-                {
-                    // fill deltas to maX
-                    maX.reserve(nSizeX);
-
-                    for(sal_uInt32 a(1); a < nSizeX; a++)
-                    {
-                        maX.push_back(rSvgTextPositions.getX()[a].solve(rInfoProvider, NumberType::xcoordinate) - maPosition.getX());
-                    }
-                }
             }
             else
             {
@@ -644,22 +633,25 @@ namespace svgio::svgreader
             }
 
             const sal_uInt32 nSizeDx(rSvgTextPositions.getDx().size());
-
             if(nSizeDx)
             {
                 // relative positions given, translate position derived from parent
                 maPosition.setX(maPosition.getX() + rSvgTextPositions.getDx()[0].solve(rInfoProvider, NumberType::xcoordinate));
+            }
 
-                if(nSizeDx > 1)
+            // fill deltas to maX
+            maX.reserve(nSizeX);
+
+            for(sal_uInt32 a(1); a < nSizeX; a++)
+            {
+                double nPos = rSvgTextPositions.getX()[a].solve(rInfoProvider, NumberType::xcoordinate) - maPosition.getX();
+
+                if(a < nSizeDx)
                 {
-                    // fill deltas to maX
-                    maX.reserve(nSizeDx);
-
-                    for(sal_uInt32 a(1); a < nSizeDx; a++)
-                    {
-                        maX.push_back(rSvgTextPositions.getDx()[a].solve(rInfoProvider, NumberType::xcoordinate));
-                    }
+                    nPos += rSvgTextPositions.getDx()[a].solve(rInfoProvider, NumberType::xcoordinate);
                 }
+
+                maX.push_back(nPos);
             }
 
             // get text positions Y
@@ -670,17 +662,6 @@ namespace svgio::svgreader
                 // we have absolute positions, get first one as current text position Y
                 maPosition.setY(rSvgTextPositions.getY()[0].solve(rInfoProvider, NumberType::ycoordinate));
                 mbAbsoluteX = true;
-
-                if(nSizeY > 1)
-                {
-                    // fill deltas to maY
-                    maY.reserve(nSizeY);
-
-                    for(sal_uInt32 a(1); a < nSizeY; a++)
-                    {
-                        maY.push_back(rSvgTextPositions.getY()[a].solve(rInfoProvider, NumberType::ycoordinate) - maPosition.getY());
-                    }
-                }
             }
             else
             {
@@ -697,17 +678,21 @@ namespace svgio::svgreader
             {
                 // relative positions given, translate position derived from parent
                 maPosition.setY(maPosition.getY() + rSvgTextPositions.getDy()[0].solve(rInfoProvider, NumberType::ycoordinate));
+            }
 
-                if(nSizeDy > 1)
+            // fill deltas to maY
+            maY.reserve(nSizeY);
+
+            for(sal_uInt32 a(1); a < nSizeY; a++)
+            {
+                double nPos = rSvgTextPositions.getY()[a].solve(rInfoProvider, NumberType::ycoordinate) - maPosition.getY();
+
+                if(a < nSizeDy)
                 {
-                    // fill deltas to maY
-                    maY.reserve(nSizeDy);
-
-                    for(sal_uInt32 a(1); a < nSizeDy; a++)
-                    {
-                        maY.push_back(rSvgTextPositions.getDy()[a].solve(rInfoProvider, NumberType::ycoordinate));
-                    }
+                    nPos += rSvgTextPositions.getDy()[a].solve(rInfoProvider, NumberType::ycoordinate);
                 }
+
+                maY.push_back(nPos);
             }
         }
 
