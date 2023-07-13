@@ -226,22 +226,6 @@ static void lcl_DrawRedLines( OutputDevice& rOutDev,
     }
 }
 
-static Point lcl_ImplCalcRotatedPos( Point rPos, Point rOrigin, double nSin, double nCos )
-{
-    Point aRotatedPos;
-    // Translation...
-    Point aTranslatedPos( rPos);
-    aTranslatedPos -= rOrigin;
-
-    aRotatedPos.setX( static_cast<tools::Long>( nCos*aTranslatedPos.X() + nSin*aTranslatedPos.Y() ) );
-    aRotatedPos.setY( static_cast<tools::Long>(- ( nSin*aTranslatedPos.X() - nCos*aTranslatedPos.Y() )) );
-    aTranslatedPos = aRotatedPos;
-    // Translation...
-    aTranslatedPos += rOrigin;
-
-    return aTranslatedPos;
-}
-
 // For Kashidas from sw/source/core/text/porlay.cxx
 
 #define IS_JOINING_GROUP(c, g) ( u_getIntPropertyValue( (c), UCHAR_JOINING_GROUP ) == U_JG_##g )
@@ -3327,13 +3311,6 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
     // un-scrolled.
     // The rectangle is infinite.
     const Point aOrigin( aStartPos );
-    double nCos = 0.0, nSin = 0.0;
-    if ( nOrientation )
-    {
-        double nRealOrientation = toRadians(nOrientation);
-        nCos = cos( nRealOrientation );
-        nSin = sin( nRealOrientation );
-    }
 
     // #110496# Added some more optional metafile comments. This
     // change: factored out some duplicated code.
@@ -3797,7 +3774,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                             aTmpFont.SetEscapement( 0 );
                                         }
 
-                                        aOutPos = lcl_ImplCalcRotatedPos( aOutPos, aOrigin, nSin, nCos );
+                                        aOrigin.RotateAround(aOutPos, nOrientation);
                                         aTmpFont.SetOrientation( aTmpFont.GetOrientation()+nOrientation );
                                         aTmpFont.SetPhysFont(rOutDev);
 
@@ -3845,7 +3822,10 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                                 comphelper::string::padToLength( aBlanks, nTextLen, ' ' );
                                                 Point aUnderlinePos( aOutPos );
                                                 if ( nOrientation )
-                                                    aUnderlinePos = lcl_ImplCalcRotatedPos( aTmpPos, aOrigin, nSin, nCos );
+                                                {
+                                                    aUnderlinePos = aTmpPos;
+                                                    aOrigin.RotateAround(aUnderlinePos, nOrientation);
+                                                }
                                                 rOutDev.DrawStretchText( aUnderlinePos, aSz.Width(), aBlanks.makeStringAndClear(), 0, nTextLen );
 
                                                 aTmpFont.SetUnderline( LINESTYLE_NONE );
@@ -3879,7 +3859,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                             Point aTopLeft( aTmpPos );
                                             aTopLeft.AdjustY( -(pLine->GetMaxAscent()) );
                                             if ( nOrientation )
-                                                aTopLeft = lcl_ImplCalcRotatedPos( aTopLeft, aOrigin, nSin, nCos );
+                                                aOrigin.RotateAround(aTopLeft, nOrientation);
                                             tools::Rectangle aRect( aTopLeft, rTextPortion.GetSize() );
                                             rOutDev.DrawRect( aRect );
                                         }
