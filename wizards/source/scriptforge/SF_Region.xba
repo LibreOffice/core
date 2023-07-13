@@ -549,7 +549,7 @@ Public Function UTCDateTime(Optional ByVal LocalDateTime As Variant _
 &apos;&apos;&apos;	Return:
 &apos;&apos;&apos;		The local time converted to the corresponding UTC date and time as a Date
 &apos;&apos;&apos;		If the returned value is before 1900, it is likely that the Locale is not recognized
-&apos;&apos;&apos;		If the returned value matches the local time, it is likely that the the timezone is not recognized
+&apos;&apos;&apos;		If the returned value matches the local time, it is likely that the timezone is not recognized
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		regio.UTCDateTime(DateSerial(2022, 3, 20) + TimeSerial(17, 58, 17), &quot;Europe/Brussels&quot;, &quot;fr-BE&quot;)
 &apos;&apos;&apos;				&apos;	2022-03-20 16:58:17
@@ -601,7 +601,7 @@ Public Function UTCNow(Optional ByVal TimeZone As Variant _
 &apos;&apos;&apos;	Return:
 &apos;&apos;&apos;		The actual UTC date and time as a Date
 &apos;&apos;&apos;		If the returned value is before 1900, it is likely that the Locale is not recognized
-&apos;&apos;&apos;		If the returned value matches the local time, it is likely that the the timezone is not recognized
+&apos;&apos;&apos;		If the returned value matches the local time, it is likely that the timezone is not recognized
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		regio.UTCNow(&quot;Europe/Brussels&quot;, &quot;fr-BE&quot;)	&apos;	2022-03-20 16:58:17
 
