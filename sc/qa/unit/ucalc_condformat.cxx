@@ -12,6 +12,7 @@
 #include <conditio.hxx>
 #include <colorscale.hxx>
 
+#include <hints.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <docfunc.hxx>
@@ -24,6 +25,23 @@
 #include <svl/sharedstringpool.hxx>
 
 namespace {
+
+struct PaintListener : public SfxListener
+{
+    bool mbPaintAllMergedCell = false;
+    virtual void Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint) override
+    {
+        const ScPaintHint* pPaintHint = dynamic_cast<const ScPaintHint*>(&rHint);
+        if (pPaintHint)
+        {
+            if (pPaintHint->GetStartCol() == 0 && pPaintHint->GetEndCol() == 0
+                && pPaintHint->GetStartRow() == 0 && pPaintHint->GetEndRow() == 1)
+            {
+                mbPaintAllMergedCell = true;
+            }
+        }
+    }
+};
 
 struct ScDataBarLengthData
 {
@@ -1357,6 +1375,42 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testCondFormatVolatileFunctionRecalc)
     }
 
     CPPUNIT_ASSERT(bValid != bNewValid);
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestCondformat, testConditionStyleInMergedCell)
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    PaintListener aListener;
+    aListener.StartListening(*m_xDocShell);
+
+    m_pDoc->DoMerge(0, 0, 0, 1, 0); // A1:A2
+    CPPUNIT_ASSERT(m_pDoc->IsMerged(ScAddress(0, 0, 0)));
+
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 1.0);
+
+    // Add a conditional format.
+    auto pFormat = std::make_unique<ScConditionalFormat>(1, m_pDoc);
+    pFormat->SetRange(ScRange(0, 0, 0, 0, 0, 0));
+    auto pFormatTmp = pFormat.get();
+    sal_uLong nKey = m_pDoc->AddCondFormat(std::move(pFormat), 0);
+
+    // Add condition in which if the value equals 1, set the "Good" style.
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(
+        ScConditionMode::Equal, "=1", "", *m_pDoc, ScAddress(0, 0, 0), ScResId(STR_STYLENAME_GOOD));
+    pFormatTmp->AddEntry(pEntry);
+
+    // Apply the format to the range.
+    m_pDoc->AddCondFormatData(pFormatTmp->GetRange(), 0, nKey);
+
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
+    sal_uInt32 nOldFormat = pFormatTmp->GetKey();
+    const ScRangeList& rRangeList = pFormatTmp->GetRange();
+    rFunc.ReplaceConditionalFormat(nOldFormat, pFormatTmp->Clone(), 0, rRangeList);
+
+    CPPUNIT_ASSERT_EQUAL(true, aListener.mbPaintAllMergedCell);
 
     m_pDoc->DeleteTab(0);
 }

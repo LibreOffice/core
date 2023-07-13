@@ -5670,7 +5670,7 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, std::unique_ptr<
     }
 
     if(pRepaintRange)
-        rDocShell.PostPaint(*pRepaintRange, PaintPartFlags::Grid);
+        rDocShell.PostPaint(*pRepaintRange, PaintPartFlags::Grid, SC_PF_TESTMERGE);
 
     aModificator.SetDocumentModified();
     SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScAreasChanged));
