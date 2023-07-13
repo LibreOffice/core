@@ -309,7 +309,11 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
         case accessibility::AccessibleRole::BUTTON_DROPDOWN:
             return ATK_ROLE_PUSH_BUTTON;
         case accessibility::AccessibleRole::BUTTON_MENU:
+#if ATK_CHECK_VERSION(2, 46, 0)
+            return ATK_ROLE_PUSH_BUTTON_MENU;
+#else
             return ATK_ROLE_PUSH_BUTTON;
+#endif
         case accessibility::AccessibleRole::CAPTION:
             return ATK_ROLE_CAPTION;
         case accessibility::AccessibleRole::CHART:
