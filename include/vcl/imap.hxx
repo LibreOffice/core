@@ -95,7 +95,7 @@ public:
     IMapObject*         GetHitIMapObject( const Size& rOriginalSize,
                                           const Size& rDisplaySize,
                                           const Point& rRelHitPoint,
-                                          sal_uLong nFlags = 0 );
+                                          sal_uLong nFlags = 0 ) const;
 
     // returns the total amount of IMap objects
     size_t              GetIMapObjectCount() const { return maList.size(); }

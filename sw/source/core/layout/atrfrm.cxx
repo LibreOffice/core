@@ -3591,8 +3591,7 @@ IMapObject* SwFrameFormat::GetIMapObject( const Point& rPoint,
                 nFlags = IMAP_MIRROR_HORZ;
 
         }
-        return const_cast<ImageMap*>(rURL.GetMap())->GetHitIMapObject( aOrigSz,
-                                                aActSz, aPos, nFlags );
+        return rURL.GetMap()->GetHitIMapObject( aOrigSz, aActSz, aPos, nFlags );
     }
 
     return nullptr;

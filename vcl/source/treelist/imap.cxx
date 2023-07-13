@@ -771,7 +771,7 @@ void ImageMap::InsertIMapObject( std::unique_ptr<IMapObject> pNewObject )
 IMapObject* ImageMap::GetHitIMapObject( const Size& rTotalSize,
                                         const Size& rDisplaySize,
                                         const Point& rRelHitPoint,
-                                        sal_uLong nFlags )
+                                        sal_uLong nFlags ) const
 {
     Point aRelPoint( rTotalSize.Width() * rRelHitPoint.X() / rDisplaySize.Width(),
                      rTotalSize.Height() * rRelHitPoint.Y() / rDisplaySize.Height() );

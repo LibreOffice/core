@@ -57,7 +57,7 @@ IMapObject* SvxIMapInfo::GetHitIMapObject(const SdrObject* pObj, const Point& rW
         const MapMode aMap100(MapUnit::Map100thMM);
         Size aGraphSize;
         Point aRelPoint(rWinPoint);
-        ImageMap& rImageMap = const_cast<ImageMap&>(pIMapInfo->GetImageMap());
+        const ImageMap& rImageMap = pIMapInfo->GetImageMap();
         tools::Rectangle aRect = pObj->GetLogicRect();
 
         if (pCmpWnd)
