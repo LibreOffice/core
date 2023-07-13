@@ -114,6 +114,25 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTablesOuterNonsplitInner)
     // i.e. the inner floating table was not floating.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), xFrames->getCount());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testDOCXFloatingTableHiddenAnchor)
+{
+    // Given a document with a floating table, anchored in a paragraph that is hidden:
+    loadFromURL(u"floattable-hidden-anchor.docx");
+
+    // When checking the visibility of the the anchor paragraph:
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xText->createEnumeration();
+    uno::Reference<beans::XPropertySet> xAnchor(xParagraphs->nextElement(), uno::UNO_QUERY);
+
+    // Then make sure the anchor (and thus the table) is visible:
+    bool bCharHidden{};
+    CPPUNIT_ASSERT(xAnchor->getPropertyValue("CharHidden") >>= bCharHidden);
+    // Without the accompanying fix in place, this test would have failed, the paragraph + table was
+    // hidden.
+    CPPUNIT_ASSERT(!bCharHidden);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
