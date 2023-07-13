@@ -168,47 +168,6 @@ void SwFrame::dumpTopMostAsXml(xmlTextWriterPtr writer) const
     pFrame->dumpAsXml(writer);
 }
 
-void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
-{
-    const char *name = nullptr;
-
-    switch ( GetType(  ) )
-    {
-    case SwFrameType::NoTxt:
-        name = "notxt";
-        break;
-    default: break;
-    }
-
-    if ( name != nullptr )
-    {
-        (void)xmlTextWriterStartElement( writer, reinterpret_cast<const xmlChar *>(name) );
-
-        dumpAsXmlAttributes( writer );
-
-        (void)xmlTextWriterStartElement( writer, BAD_CAST( "infos" ) );
-        dumpInfosAsXml( writer );
-        (void)xmlTextWriterEndElement( writer );
-
-        // Dump Anchored objects if any
-        const SwSortedObjs* pAnchored = GetDrawObjs();
-        if ( pAnchored && pAnchored->size() > 0 )
-        {
-            (void)xmlTextWriterStartElement( writer, BAD_CAST( "anchored" ) );
-
-            for (SwAnchoredObject* pObject : *pAnchored)
-            {
-                pObject->dumpAsXml( writer );
-            }
-
-            (void)xmlTextWriterEndElement( writer );
-        }
-
-        dumpChildrenAsXml( writer );
-        (void)xmlTextWriterEndElement( writer );
-    }
-}
-
 void SwFrame::dumpInfosAsXml( xmlTextWriterPtr writer ) const
 {
     // output the Frame

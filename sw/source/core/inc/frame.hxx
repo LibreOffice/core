@@ -938,7 +938,7 @@ public:
 
 public:
     // if writer is NULL, dumps the layout structure as XML in layout.xml
-    virtual void dumpAsXml(xmlTextWriterPtr writer = nullptr) const;
+    virtual void dumpAsXml(xmlTextWriterPtr writer = nullptr) const = 0;
     void dumpTopMostAsXml(xmlTextWriterPtr writer = nullptr) const;
     void dumpInfosAsXml(xmlTextWriterPtr writer) const;
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const;

@@ -648,6 +648,19 @@ double SwNoTextFrame::getLocalFrameRotation() const
     return 0.0;
 }
 
+void SwNoTextFrame::dumpAsXml(xmlTextWriterPtr writer) const
+{
+    (void)xmlTextWriterStartElement(writer, reinterpret_cast<const xmlChar*>("notxt"));
+    dumpAsXmlAttributes(writer);
+
+    (void)xmlTextWriterStartElement(writer, BAD_CAST("infos"));
+    dumpInfosAsXml(writer);
+    (void)xmlTextWriterEndElement(writer);
+    dumpChildrenAsXml(writer);
+
+    (void)xmlTextWriterEndElement(writer);
+}
+
 /** Calculate the Bitmap's site, if needed */
 void SwNoTextFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs * )
 {

@@ -107,6 +107,8 @@ public:
 
     // RotateFlyFrame3 - Support for Transformations
     virtual void transform_translate(const Point& rOffset) override;
+
+    void dumpAsXml(xmlTextWriterPtr writer = nullptr) const override;
 };
 
 #endif
