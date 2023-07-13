@@ -120,7 +120,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDOCXFloatingTableHiddenAnchor)
     // Given a document with a floating table, anchored in a paragraph that is hidden:
     loadFromURL(u"floattable-hidden-anchor.docx");
 
-    // When checking the visibility of the the anchor paragraph:
+    // When checking the visibility of the anchor paragraph:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xText(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParagraphs = xText->createEnumeration();
