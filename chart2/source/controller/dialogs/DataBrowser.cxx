@@ -291,20 +291,15 @@ void SeriesHeader::SetPos()
     // series name edit field
     m_spSeriesName->set_margin_start(2);
 
-    aSize.setWidth(nSymbolHeight);
-    aSize.setHeight(12);
-    aSize = m_xDevice->LogicToPixel(aSize, MapMode(MapUnit::MapAppFont));
-    aSize.setWidth(m_nWidth - aSize.Width() - 2);
-    m_spSeriesName->set_size_request(aSize.Width(), aSize.Height());
+    sal_Int32 nHeightPx = m_xDevice->LogicToPixel(Size(0, 12), MapMode(MapUnit::MapAppFont)).Height();
+    m_spSeriesName->set_size_request(m_nWidth - aSize.Width() - 2, nHeightPx);
 
     // color bar
-    aSize.setHeight(3);
-    aSize = m_xDevice->LogicToPixel(aSize, MapMode(MapUnit::MapAppFont));
-    aSize.setWidth(m_nWidth);
-    m_spColorBar->set_size_request(aSize.Width(), aSize.Height());
+    nHeightPx = m_xDevice->LogicToPixel(Size(0, 3), MapMode(MapUnit::MapAppFont)).Height();
+    m_spColorBar->set_size_request(m_nWidth, nHeightPx);
 
     ScopedVclPtr<VirtualDevice> xVirDev(m_spColorBar->create_virtual_device());
-    xVirDev->SetOutputSizePixel(aSize);
+    xVirDev->SetOutputSizePixel(Size(m_nWidth, nHeightPx));
     xVirDev->SetFillColor(m_aColor);
     xVirDev->SetLineColor(m_aColor);
     xVirDev->DrawRect(tools::Rectangle(Point(0, 0), aSize));
