@@ -89,6 +89,54 @@ sal_uInt8 CustomshapesTest::countShapes()
     return xDrawPage->getCount();
 }
 
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf150302)
+{
+    loadFromURL(u"FontworkSameLetterHeights.fodg");
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of shapes", static_cast<sal_uInt8>(2),
+                                 countShapes());
+
+    bool bSameHeights = false;
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    SdrObjCustomShape* pSdrCustomShape(
+        static_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape)));
+    const SdrCustomShapeGeometryItem& rGeometryItem(
+        pSdrCustomShape->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY));
+    const css::uno::Any* pAny
+        = rGeometryItem.GetPropertyValueByName("TextPath", "SameLetterHeights");
+    if (pAny)
+        *pAny >>= bSameHeights;
+
+    CPPUNIT_ASSERT_MESSAGE("Wrong initial value", !bSameHeights);
+
+    // Mark Object
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    SdrView* pSdrView = pViewShell->GetDrawView();
+    pSdrView->MarkObj(pSdrCustomShape, pSdrView->GetSdrPageView());
+
+    dispatchCommand(mxComponent, ".uno:FontworkSameLetterHeights", {});
+
+    const SdrCustomShapeGeometryItem& rGeometryItem1
+        = pSdrCustomShape->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
+    pAny = rGeometryItem1.GetPropertyValueByName("TextPath", "SameLetterHeights");
+    if (pAny)
+        *pAny >>= bSameHeights;
+
+    CPPUNIT_ASSERT_MESSAGE("Wrong value after toggle", bSameHeights);
+
+    pSdrView->MarkObj(pSdrCustomShape, pSdrView->GetSdrPageView());
+
+    dispatchCommand(mxComponent, ".uno:FontworkSameLetterHeights", {});
+
+    const SdrCustomShapeGeometryItem& rGeometryItem2
+        = pSdrCustomShape->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
+    pAny = rGeometryItem2.GetPropertyValueByName("TextPath", "SameLetterHeights");
+    if (pAny)
+        *pAny >>= bSameHeights;
+
+    CPPUNIT_ASSERT_MESSAGE("Wrong value after toggle 2", !bSameHeights);
+}
+
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf147409_GeomItemHash)
 {
     loadFromURL(u"tdf147409_GeomItemHash.odg");

@@ -242,16 +242,15 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
         case SID_FONTWORK_SAME_LETTER_HEIGHTS:
         {
             css::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( "TextPath", "SameLetterHeights" );
+
+            bool bOn = false;
             if( pAny )
-            {
-                bool bOn = false;
                 (*pAny) >>= bOn;
-                bOn = !bOn;
-                css::beans::PropertyValue aPropValue;
-                aPropValue.Name = "SameLetterHeights";
-                aPropValue.Value <<= bOn;
-                rGeometryItem.SetPropertyValue("TextPath", aPropValue);
-            }
+            bOn = !bOn;
+            css::beans::PropertyValue aPropValue;
+            aPropValue.Name = "SameLetterHeights";
+            aPropValue.Value <<= bOn;
+            rGeometryItem.SetPropertyValue("TextPath", aPropValue);
         }
         break;
 
