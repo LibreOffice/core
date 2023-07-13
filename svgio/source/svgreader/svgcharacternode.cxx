@@ -263,31 +263,27 @@ namespace svgio::svgreader
 
                 // prepare TextArray
                 ::std::vector< double > aTextArray(rSvgTextPosition.getX());
-
                 if(!aTextArray.empty() && aTextArray.size() < nLength)
                 {
                     const sal_uInt32 nArray(aTextArray.size());
 
-                    if(nArray < nLength)
+                    double fStartX(0.0);
+
+                    if(rSvgTextPosition.getParent() && rSvgTextPosition.getParent()->getAbsoluteX())
                     {
-                        double fStartX(0.0);
+                        fStartX = rSvgTextPosition.getParent()->getPosition().getX();
+                    }
+                    else
+                    {
+                        fStartX = aTextArray[nArray - 1];
+                    }
 
-                        if(rSvgTextPosition.getParent() && rSvgTextPosition.getParent()->getAbsoluteX())
-                        {
-                            fStartX = rSvgTextPosition.getParent()->getPosition().getX();
-                        }
-                        else
-                        {
-                            fStartX = aTextArray[nArray - 1];
-                        }
+                    ::std::vector< double > aExtendArray(aTextLayouterDevice.getTextArray(getText(), nArray, nLength - nArray));
+                    aTextArray.reserve(nLength);
 
-                        ::std::vector< double > aExtendArray(aTextLayouterDevice.getTextArray(getText(), nArray, nLength - nArray));
-                        aTextArray.reserve(nLength);
-
-                        for(const auto &a : aExtendArray)
-                        {
-                            aTextArray.push_back(a + fStartX);
-                        }
+                    for(const auto &a : aExtendArray)
+                    {
+                        aTextArray.push_back(a + fStartX);
                     }
                 }
 
