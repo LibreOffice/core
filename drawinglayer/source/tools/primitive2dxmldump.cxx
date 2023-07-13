@@ -919,6 +919,15 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 const drawinglayer::attribute::FontAttribute& aFontAttribute
                     = rTextSimplePortionPrimitive2D.getFontAttribute();
                 rWriter.attribute("familyname", aFontAttribute.getFamilyName());
+                const std::vector<double> aDx = rTextSimplePortionPrimitive2D.getDXArray();
+                if (aDx.size())
+                {
+                    for (size_t iDx = 0; iDx < aDx.size(); ++iDx)
+                    {
+                        OString sName = "dx" + OString::number(iDx);
+                        rWriter.attribute(sName, OUString::number(aDx[iDx]));
+                    }
+                }
                 rWriter.endElement();
             }
             break;
