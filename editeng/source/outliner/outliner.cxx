@@ -945,18 +945,8 @@ void Outliner::PaintBullet(sal_Int32 nPara, const Point& rStartPos, const Point&
             {
                 // Both TopLeft and bottom left is not quite correct,
                 // since in EditEngine baseline ...
-                double nRealOrientation = toRadians(nOrientation);
-                double nCos = cos( nRealOrientation );
-                double nSin = sin( nRealOrientation );
-                Point aRotatedPos;
-                // Translation...
-                aTextPos -= rOrigin;
-                // Rotation...
-                aRotatedPos.setX(static_cast<tools::Long>(nCos*aTextPos.X() + nSin*aTextPos.Y()) );
-                aRotatedPos.setY(static_cast<tools::Long>(- (nSin*aTextPos.X() - nCos*aTextPos.Y())) );
-                aTextPos = aRotatedPos;
-                // Translation...
-                aTextPos += rOrigin;
+                rOrigin.RotateAround(aTextPos, nOrientation);
+
                 vcl::Font aRotatedFont( aBulletFont );
                 aRotatedFont.SetOrientation( nOrientation );
                 rOutDev.SetFont( aRotatedFont );
