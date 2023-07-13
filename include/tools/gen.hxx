@@ -74,7 +74,7 @@ inline bool equal(Pair const & p1, Pair const & p2)
 // Point
 
 class Size;
-class SAL_WARN_UNUSED UNLESS_MERGELIBS(SAL_DLLPUBLIC_EXPORT) Point final : protected Pair
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Point final : protected Pair
 {
 public:
     constexpr Point() {}
@@ -88,6 +88,7 @@ public:
     tools::Long                AdjustX( tools::Long nHorzMove ) { mnA += nHorzMove; return mnA; }
     tools::Long                AdjustY( tools::Long nVertMove ) { mnB += nVertMove; return mnB; }
 
+    // Rotate parameter point using This as origin; store result back into parameter point
     void                RotateAround( tools::Long& rX, tools::Long& rY, Degree10 nOrientation ) const;
     void                RotateAround( Point&, Degree10 nOrientation ) const;
 

@@ -217,7 +217,7 @@ void EditEngine::Draw( OutputDevice& rOutDev, const Point& rStartPos, Degree10 n
     if ( IsEffectivelyVertical() )
     {
         aStartPos.AdjustX(GetPaperSize().Width() );
-        aStartPos = Rotate( aStartPos, nOrientation, rStartPos );
+        rStartPos.RotateAround(aStartPos, nOrientation);
     }
     pImpEditEngine->Paint(rOutDev, aBigRect, aStartPos, false, nOrientation);
     if( rOutDev.GetConnectMetaFile() )

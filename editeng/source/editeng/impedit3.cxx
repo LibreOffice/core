@@ -114,28 +114,6 @@ struct TabInfo
 
 }
 
-Point Rotate( const Point& rPoint, Degree10 nOrientation, const Point& rOrigin )
-{
-    double nRealOrientation = toRadians(nOrientation);
-    double nCos = cos( nRealOrientation );
-    double nSin = sin( nRealOrientation );
-
-    Point aRotatedPos;
-    Point aTranslatedPos( rPoint );
-
-    // Translation
-    aTranslatedPos -= rOrigin;
-
-    // Rotation...
-    aRotatedPos.setX( static_cast<tools::Long>( nCos*aTranslatedPos.X() + nSin*aTranslatedPos.Y() ) );
-    aRotatedPos.setY( static_cast<tools::Long>(- ( nSin*aTranslatedPos.X() - nCos*aTranslatedPos.Y() )) );
-    aTranslatedPos = aRotatedPos;
-
-    // Translation...
-    aTranslatedPos += rOrigin;
-    return aTranslatedPos;
-}
-
 AsianCompressionFlags GetCharTypeForCompression( sal_Unicode cChar )
 {
     switch ( cChar )
@@ -231,8 +209,8 @@ static void lcl_DrawRedLines( OutputDevice& rOutDev,
 
         if (nOrientation)
         {
-            aPoint1 = Rotate(aPoint1, nOrientation, rOrigin);
-            aPoint2 = Rotate(aPoint2, nOrientation, rOrigin);
+            rOrigin.RotateAround(aPoint1, nOrientation);
+            rOrigin.RotateAround(aPoint2, nOrientation);
         }
 
         {

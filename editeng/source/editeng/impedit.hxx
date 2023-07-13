@@ -1360,7 +1360,6 @@ inline vcl::Cursor* ImpEditView::GetCursor()
 void ConvertItem( std::unique_ptr<SfxPoolItem>& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit );
 void ConvertAndPutItems( SfxItemSet& rDest, const SfxItemSet& rSource, const MapUnit* pSourceUnit = nullptr, const MapUnit* pDestUnit = nullptr );
 AsianCompressionFlags GetCharTypeForCompression( sal_Unicode cChar );
-Point Rotate( const Point& rPoint, Degree10 nOrientation, const Point& rOrigin );
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

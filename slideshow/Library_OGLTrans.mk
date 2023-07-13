@@ -28,6 +28,7 @@ $(eval $(call gb_Library_use_libraries,OGLTrans,\
     cppu \
     cppuhelper \
     sal \
+	tl \
     vcl \
 ))
 
