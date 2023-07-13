@@ -645,23 +645,23 @@ namespace svgio::svgreader
                 {
                     maPosition.setX(pParent->getPosition().getX());
                 }
+            }
 
-                const sal_uInt32 nSizeDx(rSvgTextPositions.getDx().size());
+            const sal_uInt32 nSizeDx(rSvgTextPositions.getDx().size());
 
-                if(nSizeDx)
+            if(nSizeDx)
+            {
+                // relative positions given, translate position derived from parent
+                maPosition.setX(maPosition.getX() + rSvgTextPositions.getDx()[0].solve(rInfoProvider, NumberType::xcoordinate));
+
+                if(nSizeDx > 1)
                 {
-                    // relative positions given, translate position derived from parent
-                    maPosition.setX(maPosition.getX() + rSvgTextPositions.getDx()[0].solve(rInfoProvider, NumberType::xcoordinate));
+                    // fill deltas to maX
+                    maX.reserve(nSizeDx);
 
-                    if(nSizeDx > 1)
+                    for(sal_uInt32 a(1); a < nSizeDx; a++)
                     {
-                        // fill deltas to maX
-                        maX.reserve(nSizeDx);
-
-                        for(sal_uInt32 a(1); a < nSizeDx; a++)
-                        {
-                            maX.push_back(rSvgTextPositions.getDx()[a].solve(rInfoProvider, NumberType::xcoordinate));
-                        }
+                        maX.push_back(rSvgTextPositions.getDx()[a].solve(rInfoProvider, NumberType::xcoordinate));
                     }
                 }
             }
@@ -693,23 +693,23 @@ namespace svgio::svgreader
                 {
                     maPosition.setY(pParent->getPosition().getY());
                 }
+            }
 
-                const sal_uInt32 nSizeDy(rSvgTextPositions.getDy().size());
+            const sal_uInt32 nSizeDy(rSvgTextPositions.getDy().size());
 
-                if(nSizeDy)
+            if(nSizeDy)
+            {
+                // relative positions given, translate position derived from parent
+                maPosition.setY(maPosition.getY() + rSvgTextPositions.getDy()[0].solve(rInfoProvider, NumberType::ycoordinate));
+
+                if(nSizeDy > 1)
                 {
-                    // relative positions given, translate position derived from parent
-                    maPosition.setY(maPosition.getY() + rSvgTextPositions.getDy()[0].solve(rInfoProvider, NumberType::ycoordinate));
+                    // fill deltas to maY
+                    maY.reserve(nSizeDy);
 
-                    if(nSizeDy > 1)
+                    for(sal_uInt32 a(1); a < nSizeDy; a++)
                     {
-                        // fill deltas to maY
-                        maY.reserve(nSizeDy);
-
-                        for(sal_uInt32 a(1); a < nSizeDy; a++)
-                        {
-                            maY.push_back(rSvgTextPositions.getDy()[a].solve(rInfoProvider, NumberType::ycoordinate));
-                        }
+                        maY.push_back(rSvgTextPositions.getDy()[a].solve(rInfoProvider, NumberType::ycoordinate));
                     }
                 }
             }
