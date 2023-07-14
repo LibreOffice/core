@@ -100,7 +100,10 @@ ScVbaInterior::SetMixedColor()
     {
         m_nPattern = GetAttributeData( aPattern );
     }
-    sal_Int32 nPattern = aPatternMap.find( m_nPattern )->second;
+    sal_Int32 nPattern = 0;
+    auto it = aPatternMap.find( m_nPattern );
+    if (it != aPatternMap.end())
+        nPattern = it->second;
     // pattern color
     uno::Any aPatternColor = GetUserDefinedAttributes( PATTERNCOLOR );
     if( aPatternColor.hasValue() )
