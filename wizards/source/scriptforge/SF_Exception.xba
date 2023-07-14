@@ -72,6 +72,7 @@ Const OVERWRITEERROR			=	&quot;OVERWRITEERROR&quot;
 Const READONLYERROR				=	&quot;READONLYERROR&quot;
 Const NOFILEMATCHERROR			=	&quot;NOFILEMATCHFOUND&quot;
 Const FOLDERCREATIONERROR		=	&quot;FOLDERCREATIONERROR&quot;
+Const FILESYSTEMERROR			=	&quot;FILESYSTEMERROR&quot;
 
 &apos;	SF_Services
 Const UNKNOWNSERVICEERROR		=	&quot;UNKNOWNSERVICEERROR&quot;
@@ -884,6 +885,10 @@ Try:
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(0)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;FOLDERCREATION&quot;, pvArgs(0), pvArgs(1))
+			Case FILESYSTEMERROR		&apos;	SF_FileSystem.---(ArgName, MethodName, ArgValue)
+				pvArgs(0) = _RightCase(pvArgs(0))
+				sMessage = sLocation _
+					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;FILESYSTEM&quot;, pvArgs(0), pvArgs(1), pvArgs(2))
 			Case UNKNOWNSERVICEERROR	&apos;	SF_Services.CreateScriptService(ArgName, Value, Library, Service)
 				pvArgs(0) = _RightCase(pvArgs(0))
 				sMessage = sLocation _

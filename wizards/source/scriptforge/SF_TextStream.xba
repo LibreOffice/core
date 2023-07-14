@@ -31,6 +31,12 @@ Option Explicit
 &apos;&apos;&apos;			https://api.libreoffice.org/docs/idl/ref/interfacecom_1_1sun_1_1star_1_1io_1_1XTextInputStream.html
 &apos;&apos;&apos;			https://api.libreoffice.org/docs/idl/ref/interfacecom_1_1sun_1_1star_1_1io_1_1XTextOutputStream.html
 &apos;&apos;&apos;
+&apos;&apos;&apos;		Disk file sstems and document&apos;s internal file systems
+&apos;&apos;&apos;			All methods and properties are applicable without restrictions on both file systems.
+&apos;&apos;&apos;			However, when updates are operated on text files embedded in a document, (with the WriteXXX() methods),
+&apos;&apos;&apos;			the updates are first done on a copy of the original file. When the file is closed, the copy
+&apos;&apos;&apos;			will overwrite the original file. The whole process is transparent for the user script.
+&apos;&apos;&apos;
 &apos;&apos;&apos;		Instantiation example:
 &apos;&apos;&apos;			Dim FSO As Object, myFile As Object
 &apos;&apos;&apos;				Set FSO = CreateScriptService(&quot;FileSystem&quot;)
@@ -52,7 +58,7 @@ Private [Me]				As Object
 Private [_Parent]			As Object
 Private ObjectType			As String		&apos; Must be TEXTSTREAM
 Private ServiceName			As String
-Private _FileName			As String		&apos; File where it is about
+Private _FileName			As String		&apos; File where it is about in URL format
 Private _IOMode				As Integer		&apos; ForReading, ForWriting or ForAppending
 Private _Encoding			As String		&apos; https://www.iana.org/assignments/character-sets/character-sets.xhtml
 Private _NewLine			As String		&apos; Line break in write mode
@@ -64,6 +70,12 @@ Private _FileHandler		As Object		&apos; com.sun.star.io.XInputStream or
 Private _InputStream		As Object		&apos; com.sun.star.io.TextInputStream
 Private _OutputStream		As Object		&apos; com.sun.star.io.TextOutputStream
 Private _ForceBlankLine		As Boolean		&apos; Workaround: XTextInputStream misses last line if file ends with newline
+
+&apos;	Document&apos;s file system only
+Private _IsEmbeddedFile		As Boolean		&apos; True when concerned file is embedded in a document
+Private _EmbeddedFileName	As String		&apos; When not blank and in update mode, the full embedded file name
+											&apos; This file is initially copied in a temporary storage, modified by the actual class,
+											&apos; and rewritten in the document when the textstream.CloseFile() method is run
 
 REM ============================================================ MODULE CONSTANTS
 
@@ -85,6 +97,8 @@ Private Sub Class_Initialize()
 	Set _InputStream = Nothing
 	Set _OutputStream = Nothing
 	_ForceBlankLine = False
+	_IsEmbeddedFile = False
+	_EmbeddedFileName = &quot;&quot;
 End Sub		&apos;	ScriptForge.SF_TextStream Constructor
 
 REM -----------------------------------------------------------------------------
@@ -208,6 +222,7 @@ Public Function CloseFile() As Boolean
 &apos;&apos;&apos;		myFile.CloseFile()
 
 Dim bClose As Boolean   	    &apos;   Return value
+Dim oSfa As Object				&apos;	com.sun.star.ucb.SimpleFileAccess
 Const cstThisSub = &quot;TextStream.CloseFile&quot;
 Const cstSubArgs = &quot;&quot;
 
@@ -227,6 +242,13 @@ Try:
 	Set _InputStream = Nothing
 	Set _OutputStream = Nothing
 	Set _FileHandler = Nothing
+
+	&apos;	Manage embedded file closure: copy temporary file to document internal storage
+	If _IsEmbeddedFile Then
+		Set oSfa = SF_Utils._GetUnoService(&quot;FileAccess&quot;)
+		oSfa.copy(_FileName, _EmbeddedFileName)
+	End If
+
 	bClose = True
 
 Finally:
@@ -664,7 +686,8 @@ Dim cstSubArgs As String
 		Case UCase(&quot;Encoding&quot;)
 			_PropertyGet = _Encoding
 		Case UCase(&quot;FileName&quot;)
-			_PropertyGet = SF_FileSystem._ConvertFromUrl(_FileName)		&apos; Depends on FileNaming
+			&apos;	Requested is the user visible file name in FileNaming notation
+			_PropertyGet = SF_FileSystem._ConvertFromUrl(Iif(_IsEmbeddedFile, _EmbeddedFileName, _FileName))
 		Case UCase(&quot;IOMode&quot;)
 			With SF_FileSystem
 				Select Case _IOMode

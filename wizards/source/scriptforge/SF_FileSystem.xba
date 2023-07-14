@@ -27,7 +27,7 @@ Option Explicit
 &apos;&apos;&apos;			File and folder names may be expressed either in the (preferable because portable) URL form
 &apos;&apos;&apos;			or in the more usual operating system notation (e.g. C:\... for Windows)
 &apos;&apos;&apos;			The notation, both for arguments and for returned values
-&apos;&apos;&apos;			is determined by the FileNaming property: either &quot;URL&quot; (default) or &quot;SYS&quot;
+&apos;&apos;&apos;			is determined by the FileNaming property: either &quot;ANY&quot; (default), &quot;URL&quot; or &quot;SYS&quot;
 &apos;&apos;&apos;
 &apos;&apos;&apos;				FileName: the full name of the file including the path without any ending path separator
 &apos;&apos;&apos;				FolderName: the full name of the folder including the path and the ending path separator
@@ -36,6 +36,23 @@ Option Explicit
 &apos;&apos;&apos;				NamePattern: any of the above names containing wildcards in its last component
 &apos;&apos;&apos;					Admitted wildcards are:	the &quot;?&quot; represents any single character
 &apos;&apos;&apos;											the &quot;*&quot; represents zero, one, or multiple characters
+&apos;&apos;&apos;
+&apos;&apos;&apos;		Disk file sstems and document&apos;s internal file systems
+&apos;&apos;&apos;			All the implemented properties and methods are applicable on usual disk file systems.
+&apos;&apos;&apos;				Root is usually something like &quot;C:\&quot; or &quot;/&quot; or their URL equivalents
+&apos;&apos;&apos;			Now, Libreoffice documents have an internal file system as well. Many of the proposed methods
+&apos;&apos;&apos;			support document&apos;s file systems too, however, for some of them, with restrictions.
+&apos;&apos;&apos;			Read the comments in the individual methods below.
+&apos;&apos;&apos;			It makes browing folders and files, adding, replacing files possible. Updates will be
+&apos;&apos;&apos;			saved with the document.
+&apos;&apos;&apos;			VERY POWERFUL but KNOW WHAT YOU&apos;RE DOING !!
+&apos;&apos;&apos;				The root of a document&apos;s file system is obtained from the &quot;FileSystem&quot; property of a document instance, like in:
+&apos;&apos;&apos;					Dim root As String, doc As Object, ui As Object
+&apos;&apos;&apos;					Set ui = CreateScriptService(&quot;ui&quot;)
+&apos;&apos;&apos;					Set doc = ui.GetDocument(ThisComponent)
+&apos;&apos;&apos;					root = doc.FileSystem
+&apos;&apos;&apos;				The file manifest.xml is managed automatically.
+&apos;&apos;&apos;				The FileNaming setting is ignored.
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Service invocation example:
 &apos;&apos;&apos;			Dim FSO As Variant
@@ -55,6 +72,7 @@ Const OVERWRITEERROR			=	&quot;OVERWRITEERROR&quot;		&apos;	Destination can not 
 Const READONLYERROR				=	&quot;READONLYERROR&quot;			&apos;	Destination has its read-only attribute set
 Const NOFILEMATCHERROR			=	&quot;NOFILEMATCHFOUND&quot;		&apos;	No file matches Source containing wildcards
 Const FOLDERCREATIONERROR		=	&quot;FOLDERCREATIONERROR&quot;	&apos;	FolderName is an existing folder or file
+Const FILESYSTEMERROR			=	&quot;FILESYSTEMERROR&quot;		&apos;	The method is not applicable on document&apos;s file systems
 
 REM ============================================================ MODULE CONSTANTS
 
@@ -62,6 +80,9 @@ REM ============================================================ MODULE CONSTANT
 Const cstForReading				=	1
 Const cstForWriting				=	2
 Const cstForAppending			=	8
+
+&apos;&apos;&apos;	Document file system
+Const DOCFILESYSTEM				=	&quot;vnd.sun.star.tdoc:/&quot;
 
 REM ===================================================== CONSTRUCTOR/DESTRUCTOR
 
@@ -286,6 +307,7 @@ Public Function CompareFiles(Optional ByVal FileName1 As Variant _
 &apos;&apos;&apos;	Compare 2 files and return True if they seem identical
 &apos;&apos;&apos;	The comparison may be based on the file attributes, like modification time,
 &apos;&apos;&apos;	or on their contents.
+&apos;&apos;&apos;	The method is not supporte for document&apos;s internal file systems.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		FileName1: The 1st file to compare
 &apos;&apos;&apos;		FileName2: The 2nd file to compare
@@ -294,6 +316,7 @@ Public Function CompareFiles(Optional ByVal FileName1 As Variant _
 &apos;&apos;&apos;		True when the files seem identical
 &apos;&apos;&apos;	Exceptions:
 &apos;&apos;&apos;		UNKNOWNFILEERROR		One of the files does not exist
+&apos;&apos;&apos;		FILESYSTEMERROR			The method is not applicable on document&apos;s file systems
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		FSO.FileNaming = &quot;SYS&quot;
 &apos;&apos;&apos;		MsgBox FSO.CompareFiles(&quot;C:\myFile1.txt&quot;, &quot;C:\myFile2.txt&quot;, CompareContents := True)
@@ -322,6 +345,11 @@ Check:
 	sFile = FileName2	:	iFile = 2
 	If Not SF_FileSystem.FileExists(sFile) Then GoTo CatchNotExists
 
+	sFile = FileName1	:	iFile = 1
+	If SF_FileSystem._IsDocFileSystem(sFile) Then GoTo CatchNotSupported
+	sFile = FileName2	:	iFile = 2
+	If SF_FileSystem._IsDocFileSystem(sFile) Then GoTo CatchNotSupported
+
 Try:
 	With ScriptForge.SF_Session
 		bCompare = .ExecutePythonScript(.SCRIPTISSHARED, _SF_.PythonHelper &amp; cstPyHelper _
@@ -338,6 +366,9 @@ Catch:
 	GoTo Finally
 CatchNotExists:
 	SF_Exception.RaiseFatal(UNKNOWNFILEERROR, &quot;FileName&quot; &amp; iFile, sFile)
+	GoTo Finally
+CatchNotSupported:
+	SF_Exception.RaiseFatal(FILESYSTEMERROR,  &quot;FileName&quot; &amp; iFile, Split(cstThisSub, &quot;.&quot;)(1), sFile)
 	GoTo Finally
 End Function    &apos;   ScriptForge.SF_FileSystem.CompareFiles
 
@@ -750,6 +781,7 @@ Dim vFiles As Variant			&apos;	Return value
 Dim oSfa As Object				&apos;	com.sun.star.ucb.SimpleFileAccess
 Dim sFolderName As String		&apos;	URL lias for FolderName
 Dim sFile As String				&apos;	Single file
+Dim bDocFileSystem As Boolean	&apos;	When True, a document file system is being explored
 Dim i As Long
 
 Const cstThisSub = &quot;FileSystem.Files&quot;
@@ -768,20 +800,30 @@ Check:
 	If SF_FileSystem.FileExists(FolderName) Then GoTo CatchFile				&apos; Must not be a file
 	If Not SF_FileSystem.FolderExists(FolderName) Then GoTo CatchFolder		&apos; Folder must exist
 
+	bDocFileSystem = SF_String.StartsWith(sFolderName, DOCFILESYSTEM)
+
 Try:
 	&apos;	Get files
 	Set oSfa = SF_Utils._GetUnoService(&quot;FileAccess&quot;)
-	vFiles = oSfa.getFolderContents(sFolderName, False)
+	vFiles = oSfa.getFolderContents(sFolderName, False)	&apos;	NB: The False argumentis ignored in document file systems
 	&apos;	Adjust notations
 	For i = 0 To UBound(vFiles)
 		sFile = SF_FileSystem._ConvertFromUrl(vFiles(i))
 		vFiles(i) = sFile
 	Next i
-	&apos;	Reduce list to those passing the filter
-	If Len(Filter) &gt; 0 Then
+
+	&apos;	Reduce list to valid items:
+		&apos;	- those passing the filter
+		&apos;	- files only, not folders: in documents file systems, the False argument of getFolderContents() is ignored.
+	If Len(Filter) &gt; 0 Or bDocFileSystem Then
 		For i = 0 To UBound(vFiles)
 			sFile = SF_FileSystem.GetName(vFiles(i))
-			If Not SF_String.IsLike(sFile, Filter) Then vFiles(i) = &quot;&quot;
+			If Len(Filter) &gt; 0 Then
+				If Not SF_String.IsLike(sFile, Filter) Then vFiles(i) = &quot;&quot;
+			End If
+			If bDocFileSystem Then
+				If oSfa.isFolder(ConvertToUrl(vFiles(i))) Then vFiles(i) = &quot;&quot;
+			End If
 		Next i
 		vFiles = Sf_Array.TrimArray(vFiles)
 	End If
@@ -936,6 +978,7 @@ Public Function GetFileLen(Optional ByVal FileName As Variant) As Currency
 &apos;&apos;&apos;		FileName: a string representing a file
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		File size if FileName exists
+&apos;&apos;&apos;		0 when FileName belongs to a document&apos;s internal file systems.
 &apos;&apos;&apos;	Exceptions:
 &apos;&apos;&apos;		UNKNOWNFILEERROR	The file does not exist of is a folder
 &apos;&apos;&apos;	Example:
@@ -956,10 +999,14 @@ Check:
 
 Try:
 	If SF_FileSystem.FileExists(FileName) Then
-		With ScriptForge.SF_Session
-			curSize = .ExecutePythonScript(.SCRIPTISSHARED, _SF_.PythonHelper &amp; cstPyHelper _
-							, _ConvertFromUrl(FileName))
-		End With
+		If SF_FileSystem._IsDocFileSystem(FileName) Then
+			curSize = 0
+		Else
+			With ScriptForge.SF_Session
+				curSize = .ExecutePythonScript(.SCRIPTISSHARED, _SF_.PythonHelper &amp; cstPyHelper _
+								, _ConvertFromUrl(FileName))
+			End With
+		End If
 	Else
 		GoTo CatchNotExists
 	End If
@@ -978,12 +1025,14 @@ End Function    &apos;   ScriptForge.SF_FileSystem.GetFileLen
 REM -----------------------------------------------------------------------------
 Public Function GetFileModified(Optional ByVal FileName As Variant) As Variant
 &apos;&apos;&apos;	Returns the last modified date for the given file
+&apos;&apos;&apos;	The method is not supporte for document&apos;s internal file systems.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		FileName: a string representing an existing file
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		The modification date and time as a Basic Date
 &apos;&apos;&apos;	Exceptions:
 &apos;&apos;&apos;		UNKNOWNFILEERROR	The file does not exist of is a folder
+&apos;&apos;&apos;		FILESYSTEMERROR		The method is not applicable on document&apos;s file systems
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		Dim a As Date
 &apos;&apos;&apos;			FSO.FileNaming = &quot;SYS&quot;
@@ -1003,6 +1052,7 @@ Check:
 	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not SF_Utils._ValidateFile(FileName, &quot;FileName&quot;) Then GoTo Finally
 	End If
+	If SF_FileSystem._IsDocFileSystem(FileName) Then GoTo CatchNotSupported
 
 Try:
 	Set oSfa = SF_Utils._GetUnoService(&quot;FileAccess&quot;)
@@ -1022,6 +1072,9 @@ Catch:
 	GoTo Finally
 CatchNotExists:
 	SF_Exception.RaiseFatal(UNKNOWNFILEERROR, &quot;FileName&quot;, FileName)
+	GoTo Finally
+CatchNotSupported:
+	SF_Exception.RaiseFatal(FILESYSTEMERROR, &quot;FileName&quot;, Split(cstThisSub, &quot;.&quot;)(1), FileName)
 	GoTo Finally
 End Function    &apos;   ScriptForge.SF_FileSystem.GetFileModified
 
@@ -1152,20 +1205,21 @@ Catch:
 End Function	&apos;	ScriptForge.SF_FileSystem.GetProperty
 
 REM -----------------------------------------------------------------------------
-Public Function GetTempName() As String
+Public Function GetTempName(Optional ByVal Extension As Variant) As String
 &apos;&apos;&apos;	Returns a randomly generated temporary file name that is useful for performing
 &apos;&apos;&apos;	operations that require a temporary file : the method does not create any file
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		A FileName as a String that can be used f.i. with CreateTextFile()
-&apos;&apos;&apos;		The FileName does not have any suffix
+&apos;&apos;&apos;		The FileName has as suffix the given extension.
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		Dim a As String
 &apos;&apos;&apos;			FSO.FileNaming = &quot;SYS&quot;
-&apos;&apos;&apos;			a = FSO.GetTempName() &amp; &quot;.txt&quot;
+&apos;&apos;&apos;			a = FSO.GetTempName(&quot;txt&quot;)	&apos;	/tmp/SF_123456.txt
+&apos;&apos;&apos;			a = FSO.GetTempName()		&apos;	/tmp/SF_234567
 
 Dim sFile As String				&apos;	Return value
-Dim sTempDir As String			&apos;	The path to a temporary folder
+Dim sExtension As String		&apos;	The given extension preceded by a dot
 Dim lRandom As Long				&apos;	Random integer
 
 Const cstThisSub = &quot;FileSystem.GetTempName&quot;
@@ -1175,11 +1229,15 @@ Const cstSubArgs = &quot;&quot;
 	sFile = &quot;&quot;
 
 Check:
-	SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
+	If IsMissing(Extension) Or IsEmpty(Extension) Then Extension = &quot;&quot;
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not SF_Utils._Validate(Extension, &quot;Extension&quot;, V_STRING) Then GoTo Catch
+	End If
 
 Try:
 	lRandom = SF_Session.ExecuteCalcFunction(&quot;RANDBETWEEN.NV&quot;, 1, 999999)
-	sFile = SF_FileSystem.TemporaryFolder &amp; &quot;SF_&quot; &amp; Right(&quot;000000&quot; &amp; lRandom, 6)
+	If Len(Extension) &gt; 0 Then sExtension = &quot;.&quot; &amp; Extension Else sExtension = &quot;&quot;
+	sFile = SF_FileSystem.TemporaryFolder &amp; &quot;SF_&quot; &amp; Right(&quot;000000&quot; &amp; lRandom, 6) &amp; sExtension
 
 Finally:
 	GetTempName = SF_FileSystem._ConvertFromUrl(sFile)
@@ -1195,6 +1253,7 @@ Public Function HashFile(Optional ByVal FileName As Variant _
 							) As String
 &apos;&apos;&apos;	Return an hexadecimal string representing a checksum of the given file
 &apos;&apos;&apos;	Next algorithms are supported: MD5, SHA1, SHA224, SHA256, SHA384 and SHA512
+&apos;&apos;&apos;	The method is not supporte for document&apos;s internal file systems.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		FileName: a string representing a file
 &apos;&apos;&apos;		Algorithm: The hashing algorithm to use
@@ -1203,6 +1262,7 @@ Public Function HashFile(Optional ByVal FileName As Variant _
 &apos;&apos;&apos;		A zero-length string when an error occurred
 &apos;&apos;&apos;	Exceptions:
 &apos;&apos;&apos;		UNKNOWNFILEERROR	The file does not exist of is a folder
+&apos;&apos;&apos;		FILESYSTEMERROR		The method is not applicable on document&apos;s file systems
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		Print SF_FileSystem.HashFile(&quot;C:\pagefile.sys&quot;, &quot;MD5&quot;)
 
@@ -1220,6 +1280,7 @@ Check:
 		If Not SF_Utils._Validate(Algorithm, &quot;Algorithm&quot;, V_STRING _
 					, Array(&quot;MD5&quot;, &quot;SHA1&quot;, &quot;SHA224&quot;, &quot;SHA256&quot;, &quot;SHA384&quot;, &quot;SHA512&quot;)) Then GoTo Finally
 	End If
+	If SF_FileSystem._IsDocFileSystem(FileName) Then GoTo CatchNotSupported
 
 Try:
 	If SF_FileSystem.FileExists(FileName) Then
@@ -1239,6 +1300,9 @@ Catch:
 	GoTo Finally
 CatchNotExists:
 	SF_Exception.RaiseFatal(UNKNOWNFILEERROR, &quot;FileName&quot;, FileName)
+	GoTo Finally
+CatchNotSupported:
+	SF_Exception.RaiseFatal(FILESYSTEMERROR, &quot;FileName&quot;, Split(cstThisSub, &quot;.&quot;)(1), FileName)
 	GoTo Finally
 End Function    &apos;   ScriptForge.SF_FileSystem.HashFile
 
@@ -1389,6 +1453,7 @@ Public Function Normalize(Optional ByVal FileName As Variant) As String
 &apos;&apos;&apos;	Normalize a pathname by collapsing redundant separators and up-level references
 &apos;&apos;&apos;	so that A//B, A/B/, A/./B and A/foo/../B all become A/B. 
 &apos;&apos;&apos;	On Windows, it converts forward slashes to backward slashes.
+&apos;&apos;&apos;	The method returns the input string when the file is from a document&apos;s internal file systems.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		FileName: a string representing a file. The file may not exist.
 &apos;&apos;&apos;	Returns:
@@ -1410,12 +1475,16 @@ Check:
 	End If
 
 Try:
-	With ScriptForge.SF_Session
-		sNorm = .ExecutePythonScript(.SCRIPTISSHARED, _SF_.PythonHelper &amp; cstPyHelper _
-						, _ConvertFromUrl(FileName))
-		&apos;	The Python os.path expects and returns a file name in os notation
-		If SF_FileSystem.FileNaming &lt;&gt; &quot;SYS&quot; Then sNorm = ConvertToUrl(sNorm)
-	End With
+	If SF_FileSystem._IsDocFileSystem(FileName) Then
+		sNorm = FileName
+	Else
+		With ScriptForge.SF_Session
+			sNorm = .ExecutePythonScript(.SCRIPTISSHARED, _SF_.PythonHelper &amp; cstPyHelper _
+							, _ConvertFromUrl(FileName))
+			&apos;	The Python os.path expects and returns a file name in os notation
+			If SF_FileSystem.FileNaming &lt;&gt; &quot;SYS&quot; Then sNorm = ConvertToUrl(sNorm)
+		End With
+	End If
 
 Finally:
 	Normalize = sNorm
@@ -1454,22 +1523,24 @@ Public Function OpenTextFile(Optional ByVal FileName As Variant _
 &apos;&apos;&apos;			If Not IsNull(myFile) Then	&apos; ... Go ahead with reading text lines
 
 Dim oTextStream As Object		&apos;	Return value
-Dim bExists As Boolean			&apos;	File to open does exist
+Dim bExists As Boolean			&apos;	When True, file to open does exist
+Dim bEmbeddedFile As Boolean	&apos;	When True, file to open is embedded in a document&apos;s internal file system
+Dim oSfa As Object				&apos;	com.sun.star.ucb.SimpleFileAccess
 Const cstThisSub = &quot;FileSystem.OpenTextFile&quot;
-Const cstSubArgs = &quot;FileName, [IOMode=1], [Create=False], [Encoding=&quot;&quot;UTF-8&quot;&quot;]&quot;
+Const cstSubArgs = &quot;FileName, [IOMode=1|2|8], [Create=False], [Encoding=&quot;&quot;UTF-8&quot;&quot;]&quot;
 
 	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
 	Set oTextStream = Nothing
 
 Check:
 	With SF_FileSystem
-		If IsMissing(IOMode) Or IsEmpty(IOMode) Then IOMode = ForReading
+		If IsMissing(IOMode) Or IsEmpty(IOMode) Then IOMode = cstForReading
 		If IsMissing(Create) Or IsEmpty(Create) Then Create = False
 		If IsMissing(Encoding) Or IsEmpty(Encoding) Then Encoding = &quot;UTF-8&quot;
 		If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 			If Not SF_Utils._ValidateFile(FileName, &quot;FileName&quot;) Then GoTo Finally
 			If Not SF_Utils._Validate(IOMode, &quot;IOMode&quot;, V_NUMERIC _
-					, Array(ForReading, ForWriting, ForAppending)) _
+					, Array(cstForReading, cstForWriting, cstForAppending)) _
 						Then GoTo Finally
 			If Not SF_Utils._Validate(Create, &quot;Create&quot;, V_BOOLEAN) Then GoTo Finally
 			If Not SF_Utils._Validate(Encoding, &quot;Encoding&quot;, V_STRING) Then GoTo Finally
@@ -1482,6 +1553,8 @@ Check:
 		End Select
 
 		If IOMode = ForAppending And Not bExists Then IOMode = ForWriting
+
+		bEmbeddedFile = SF_FileSystem._IsDocFileSystem(FileName)
 	End With
 
 Try:
@@ -1490,7 +1563,19 @@ Try:
 	With oTextStream
 		.[Me] = oTextStream
 		.[_Parent] = SF_FileSystem
-		._FileName = SF_FileSystem._ConvertToUrl(FileName)
+		._IsEmbeddedFile = bEmbeddedFile
+		If bEmbeddedFile And (IOMode = cstForWriting Or IOMode = cstForAppending) Then
+			&apos;	Updates of an embedded file are done on a copy
+			._EmbeddedFileName = SF_FileSystem._ConvertToUrl(FileName)
+			._FileName = SF_FileSystem._ConvertToUrl(SF_FileSystem.GetTempName(SF_FileSystem.GetExtension(FileName)))
+			&apos;	Create the copy if relevant
+			If bExists Then
+				Set oSfa = SF_Utils._GetUnoService(&quot;FileAccess&quot;)
+				oSfa.copy(._EmbeddedFileName, ._FileName)
+			End If
+		Else
+			._FileName = SF_FileSystem._ConvertToUrl(FileName)
+		End If
 		._IOMode = IOMode
 		._Encoding = Encoding
 		._FileExists = bExists
@@ -1517,14 +1602,17 @@ Public Function PickFile(Optional ByVal DefaultFile As Variant _
 &apos;&apos;&apos;	The mode, OPEN or SAVE, and the filter may be preset
 &apos;&apos;&apos;	If mode = SAVE and the picked file exists, a warning message will be displayed
 &apos;&apos;&apos;	Modified from Andrew Pitonyak&apos;s Base Macro Programming §10.4
+&apos;&apos;&apos;	The method is not supporte for document&apos;s internal file systems.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		DefaultFile:	Folder part: the FolderName from which to start. Default = the last selected folder
 &apos;&apos;&apos;						File part: the default file to open or save
 &apos;&apos;&apos;		Mode: &quot;OPEN&quot; (input file) or &quot;SAVE&quot; (output file)
 &apos;&apos;&apos;		Filter: by default only files having the given suffix will be displayed. Default = all suffixes
-&apos;&apos;&apos;			The filter combo box will contain the given SuffixFilter (if not &quot;*&quot;) and &quot;*.*&quot;
+&apos;&apos;&apos;			The filter combo box will contain the given suffix filter (if not &quot;*&quot;) and &quot;*.*&quot;
 &apos;&apos;&apos;	Returns:
-&apos;&apos;&apos;		The selected FileName in URL format or &quot;&quot; if the dialog was cancelled
+&apos;&apos;&apos;		The selected FileName in FileNaming format or &quot;&quot; if the dialog was cancelled
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		FILESYSTEMERROR		The method is not applicable on document&apos;s file systems
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		FSO.FileNaming = &quot;SYS&quot;
 &apos;&apos;&apos;		FSO.PickFile(&quot;C:\&quot;, &quot;OPEN&quot;, &quot;txt&quot;)		&apos; Only *.txt files are displayed
@@ -1553,6 +1641,7 @@ Check:
 		If Not SF_Utils._Validate(Mode, &quot;Mode&quot;, V_STRING, Array(&quot;OPEN&quot;, &quot;SAVE&quot;)) Then GoTo Finally
 		If Not SF_Utils._Validate(Filter, &quot;Filter&quot;, V_STRING) Then GoTo Finally
 	End If
+	If SF_FileSystem._IsDocFileSystem(DefaultFile) Then GoTo CatchNotSupported
 	DefaultFile = SF_FileSystem._ConvertToUrl(DefaultFile)
 
 Try:
@@ -1600,6 +1689,9 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
+CatchNotSupported:
+	SF_Exception.RaiseFatal(FILESYSTEMERROR, &quot;DefaultFile&quot;, Split(cstThisSub, &quot;.&quot;)(1), DefaultFile)
+	GoTo Finally
 End Function    &apos;   ScriptForge.SF_FileSystem.PickFile
 
 REM -----------------------------------------------------------------------------
@@ -1607,12 +1699,15 @@ Public Function PickFolder(Optional ByVal DefaultFolder As Variant _
 							, Optional ByVal FreeText As Variant _
 							) As String
 &apos;&apos;&apos;	Display a FolderPicker dialog box
+&apos;&apos;&apos;	The method is not supporte for document&apos;s internal file systems.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		DefaultFolder: the FolderName from which to start. Default = the last selected folder
 &apos;&apos;&apos;		FreeText: text to display in the dialog. Default = &quot;&quot;
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		The selected FolderName in URL or operating system format
 &apos;&apos;&apos;		The zero-length string if the dialog was cancelled
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		FILESYSTEMERROR		The method is not applicable on document&apos;s file systems
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		FSO.FileNaming = &quot;SYS&quot;
 &apos;&apos;&apos;		FSO.PickFolder(&quot;C:\&quot;, &quot;Choose a folder or press Cancel&quot;)
@@ -1634,6 +1729,7 @@ Check:
 		If Not SF_Utils._ValidateFile(DefaultFolder, &quot;DefaultFolder&quot;, , True) Then GoTo Finally
 		If Not SF_Utils._Validate(FreeText, &quot;FreeText&quot;, V_STRING) Then GoTo Finally
 	End If
+	If SF_FileSystem._IsDocFileSystem(DefaultFolder) Then GoTo CatchNotSupported
 	DefaultFolder = SF_FileSystem._ConvertToUrl(DefaultFolder)
 
 Try:
@@ -1656,6 +1752,9 @@ Finally:
 	SF_Utils._ExitFunction(cstThisSub)
 	Exit Function
 Catch:
+	GoTo Finally
+CatchNotSupported:
+	SF_Exception.RaiseFatal(FILESYSTEMERROR, &quot;DefaultFolder&quot;, Split(cstThisSub, &quot;.&quot;)(1), DefaultFolder)
 	GoTo Finally
 End Function    &apos;   ScriptForge.SF_FileSystem.PickFolder
 
@@ -1788,11 +1887,12 @@ Private Function _ConvertFromUrl(psFile) As String
 &apos;&apos;&apos;	Execute the builtin ConvertFromUrl function only when relevant
 &apos;&apos;&apos;		i.e. when FileNaming (how arguments and return values are provided) = &quot;SYS&quot;
 &apos;&apos;&apos;	Called at the bottom of methods returning file names
-&apos;&apos;&apos;	Remark: psFile might contain wildcards
+&apos;&apos;&apos;	Remarks:	psFile might contain wildcards
+&apos;&apos;&apos;				Files from document&apos;s file systems are never converted
 
 Const cstQuestion = &quot;$QUESTION$&quot;, cstStar = &quot;$STAR$&quot;	&apos;	Special tokens to replace wildcards
 
-	If SF_FileSystem.FileNaming = &quot;SYS&quot; Then
+	If SF_FileSystem.FileNaming = &quot;SYS&quot; And Not SF_FileSystem._IsDocFileSystem(psFile) Then
 		_ConvertFromUrl = Replace(Replace( _
 							ConvertFromUrl(Replace(Replace(psFile, &quot;?&quot;, cstQuestion), &quot;*&quot;, cstStar)) _
 							, cstQuestion, &quot;?&quot;), cstStar, &quot;*&quot;)
@@ -1807,12 +1907,13 @@ Private Function _ConvertToUrl(psFile) As String
 &apos;&apos;&apos;	Execute the builtin ConvertToUrl function only when relevant
 &apos;&apos;&apos;		i.e. when FileNaming (how arguments and return values are provided) &lt;&gt; &quot;URL&quot;
 &apos;&apos;&apos;	Called at the top of methods receiving file names as arguments
-&apos;&apos;&apos;	Remark: psFile might contain wildcards
+&apos;&apos;&apos;	Remarks:	psFile might contain wildcards
+&apos;&apos;&apos;				Files from document&apos;s file systems are never converted
 
-	If SF_FileSystem.FileNaming = &quot;URL&quot; Then
+	If SF_FileSystem.FileNaming = &quot;URL&quot; Or SF_FileSystem._IsDocFileSystem(psFile) Then
 		_ConvertToUrl = psFile
 	Else
-		&apos;	ConvertToUrl encodes &quot;?&quot;
+		&apos;	ConvertToUrl() encodes &quot;?&quot;
 		_ConvertToUrl = Replace(ConvertToUrl(psFile), &quot;%3F&quot;, &quot;?&quot;)
 	End If
 
@@ -1886,7 +1987,7 @@ Check:
 			Select Case bFile
 				Case True 	&apos; File
 					If Not .FileExists(psSource) Then GoTo CatchFileNotExists
-					If Not .FolderExists(.GetParentFolderName(psDestination)) Then GoTo CatchSourceFolderNotExists
+					If Not .FolderExists(.GetParentFolderName(psDestination)) Then GoTo CatchDestFolderNotExists
 					If .FolderExists(psDestination) Then GoTo CatchFolderNotFile
 					bDestExists = .FileExists(psDestination)
 					If pbOverWrite = False And bDestExists = True Then GoTo CatchDestinationExists
@@ -2129,6 +2230,14 @@ Dim sConfig As String		&apos;	Return value
 	_GetConfigFolder = SF_FileSystem._ConvertFromUrl(sConfig)
 
 End Function	&apos;	ScriptForge.FileSystem._GetConfigFolder
+
+REM -----------------------------------------------------------------------------
+Public Function _IsDocFileSystem(psFile As String) As Boolean
+&apos;&apos;&apos;	ReturnsTrue when the argument designates a document&apos;s internal file system
+
+	_IsDocFileSystem = SF_String.StartsWith(psFile, DOCFILESYSTEM, CaseSensitive := True)
+
+End Function	&apos;	ScriptForge.SF_FileSystem._IsDocFileSystem
 
 REM -----------------------------------------------------------------------------
 Public Function _ParseUrl(psUrl As String) As Object

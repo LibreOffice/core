@@ -250,6 +250,19 @@ Property Get ExportFilters() As Variant
 End Property	&apos;	SFDocuments.SF_Document.ExportFilters
 
 REM -----------------------------------------------------------------------------
+Property Get FileSystem() As String
+&apos;&apos;&apos;	Returns the root of the document&apos;s virtual file system
+&apos;&apos;&apos;	The &quot;FileSystem&quot; service may be used to explore it, as long as the document remains open
+&apos;&apos;&apos;	The property is not applicable to Base documents
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Dim sRoot As String, FSO
+&apos;&apos;&apos;		sRoot = oDoc.FileSystem
+&apos;&apos;&apos;		Set FSO = CreateScriptService(&quot;FileSystem&quot;)
+&apos;&apos;&apos;		MsgBox FSO.FolderExists(FSO.BuildPath(sRoot, &quot;Pictures&quot;))
+	FileSystem = _PropertyGet(&quot;FileSystem&quot;)
+End Property	&apos;	SFDocuments.SF_Document.FileSystem
+
+REM -----------------------------------------------------------------------------
 Property Get ImportFilters() As Variant
 &apos;&apos;&apos;	Returns the list of the import filter names applicable to the current document
 &apos;&apos;&apos;	as a zero-based array of strings
@@ -833,6 +846,7 @@ Public Function Properties() As Variant
 					, &quot;DocumentProperties&quot; _
 					, &quot;DocumentType&quot; _
 					, &quot;ExportFilters&quot; _
+					, &quot;FileSystem&quot; _
 					, &quot;ImportFilters&quot; _
 					, &quot;IsBase&quot; _
 					, &quot;IsCalc&quot; _
@@ -1573,6 +1587,8 @@ Private Function _PropertyGet(Optional ByVal psProperty As String) As Variant
 &apos;&apos;&apos;		psProperty: the name of the property
 
 Dim oProperties As Object			&apos;	Document or Custom properties
+Dim oTransient As Object			&apos;	com.sun.star.frame.TransientDocumentsDocumentContentFactory
+Dim oContent As Object				&apos;	com.sun.star.comp.ucb.TransientDocumentsContent
 Dim cstThisSub As String
 Const cstSubArgs = &quot;&quot;
 
@@ -1599,6 +1615,13 @@ Const cstSubArgs = &quot;&quot;
 			_PropertyGet = _DocumentType
 		Case &quot;ExportFilters&quot;
 			_PropertyGet = _GetFilterNames(True)
+		Case &quot;FileSystem&quot;
+			&apos;	Natural choice would have been to use the component.RunTimeUID property
+			&apos;	However it is optional in the OfficeDocument service and not available for Base documents
+			&apos;	Below a more generic alternative derived from the get_document_uri() method found in apso.py
+			Set oTransient = ScriptForge.SF_Utils._GetUnoService(&quot;TransientDocumentFactory&quot;)
+			Set oContent = oTransient.createDocumentContent(_Component)
+			_PropertyGet = oContent.getIdentifier().ContentIdentifier &amp; &quot;/&quot;
 		Case &quot;ImportFilters&quot;
 			_PropertyGet = _GetFilterNames(False)
 		Case &quot;IsBase&quot;, &quot;IsCalc&quot;, &quot;IsDraw&quot;, &quot;IsFormDocument&quot;, &quot;IsImpress&quot;, &quot;IsMath&quot;, &quot;IsWriter&quot;

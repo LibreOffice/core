@@ -694,7 +694,7 @@ class SFScriptForge:
                 """
             unodate = uno.createUnoStruct('com.sun.star.util.DateTime')
             unodate.Year, unodate.Month, unodate.Day, unodate.Hours, unodate.Minutes, unodate.Seconds, \
-            unodate.NanoSeconds, unodate.IsUTC = \
+                unodate.NanoSeconds, unodate.IsUTC = \
                 1899, 12, 30, 0, 0, 0, 0, False  # Identical to Basic TimeSerial() function
 
             if isinstance(date, float):
@@ -1156,8 +1156,8 @@ class SFScriptForge:
         def GetParentFolderName(self, filename):
             return self.ExecMethod(self.vbMethod, 'GetParentFolderName', filename)
 
-        def GetTempName(self):
-            return self.ExecMethod(self.vbMethod, 'GetTempName')
+        def GetTempName(self, extension = ''):
+            return self.ExecMethod(self.vbMethod, 'GetTempName', extension)
 
         def HashFile(self, filename, algorithm):
             py = ScriptForge.pythonhelpermodule + '$' + '_SF_FileSystem__HashFile'
@@ -2107,10 +2107,10 @@ class SFDocuments:
         serviceimplementation = 'basic'
         servicename = 'SFDocuments.Document'
         servicesynonyms = ('document', 'sfdocuments.document')
-        serviceproperties = dict(Description = True, DocumentType = False, ExportFilters = False, ImportFilters = False,
-                                 IsBase = False, IsCalc = False, IsDraw = False, IsFormDocument = False,
-                                 IsImpress = False, IsMath = False, IsWriter = False, Keywords = True, Readonly = False,
-                                 Subject = True, Title = True, XComponent = False)
+        serviceproperties = dict(Description = True, DocumentType = False, ExportFilters = False, FileSystem = False,
+                                 ImportFilters = False, IsBase = False, IsCalc = False, IsDraw = False,
+                                 IsFormDocument = False, IsImpress = False, IsMath = False, IsWriter = False,
+                                 Keywords = True, Readonly = False, Subject = True, Title = True, XComponent = False)
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty = True
 
@@ -2175,9 +2175,9 @@ class SFDocuments:
         serviceimplementation = 'basic'
         servicename = 'SFDocuments.Base'
         servicesynonyms = ('base', 'scriptforge.base')
-        serviceproperties = dict(DocumentType = False, IsBase = False, IsCalc = False, IsDraw = False,
-                                 IsFormDocument = False, IsImpress = False, IsMath = False, IsWriter = False,
-                                 XComponent = False)
+        serviceproperties = dict(DocumentType = False, FileSystem = False, IsBase = False, IsCalc = False,
+                                 IsDraw = False, IsFormDocument = False, IsImpress = False, IsMath = False,
+                                 IsWriter = False, XComponent = False)
 
         @classmethod
         def ReviewServiceArgs(cls, windowname = ''):
@@ -2233,10 +2233,10 @@ class SFDocuments:
         servicename = 'SFDocuments.Calc'
         servicesynonyms = ('calc', 'sfdocuments.calc')
         serviceproperties = dict(CurrentSelection = True, Sheets = False,
-                                 Description = True, DocumentType = False, ExportFilters = False, ImportFilters = False,
-                                 IsBase = False, IsCalc = False, IsDraw = False, IsFormDocument = False,
-                                 IsImpress = False, IsMath = False, IsWriter = False, Keywords = True, Readonly = False,
-                                 Subject = True, Title = True, XComponent = False)
+                                 Description = True, DocumentType = False, ExportFilters = False, FileSystem = False,
+                                 ImportFilters = False, IsBase = False, IsCalc = False, IsDraw = False,
+                                 IsFormDocument = False, IsImpress = False, IsMath = False, IsWriter = False,
+                                 Keywords = True, Readonly = False, Subject = True, Title = True, XComponent = False)
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty = True
 
@@ -2590,9 +2590,9 @@ class SFDocuments:
         serviceimplementation = 'basic'
         servicename = 'SFDocuments.FormDocument'
         servicesynonyms = ('formdocument', 'sfdocuments.formdocument')
-        serviceproperties = dict(DocumentType = False, IsBase = False, IsCalc = False, IsDraw = False,
-                                 IsFormDocument = False, IsImpress = False, IsMath = False, IsWriter = False,
-                                 Readonly = False, XComponent = False)
+        serviceproperties = dict(DocumentType = False, FileSystem = False, IsBase = False, IsCalc = False,
+                                 IsDraw = False, IsFormDocument = False, IsImpress = False, IsMath = False,
+                                 IsWriter = False, Readonly = False, XComponent = False)
 
         @classmethod
         def ReviewServiceArgs(cls, windowname = ''):
@@ -2627,10 +2627,10 @@ class SFDocuments:
         serviceimplementation = 'basic'
         servicename = 'SFDocuments.Writer'
         servicesynonyms = ('writer', 'sfdocuments.writer')
-        serviceproperties = dict(Description = True, DocumentType = False, ExportFilters = False, ImportFilters = False,
-                                 IsBase = False, IsCalc = False, IsDraw = False, IsFormDocument = False,
-                                 IsImpress = False, IsMath = False, IsWriter = False, Keywords = True, Readonly = False,
-                                 Subject = True, Title = True, XComponent = False)
+        serviceproperties = dict(Description = True, DocumentType = False, ExportFilters = False, FileSystem = False,
+                                 ImportFilters = False, IsBase = False, IsCalc = False, IsDraw = False,
+                                 IsFormDocument = False, IsImpress = False, IsMath = False, IsWriter = False,
+                                 Keywords = True, Readonly = False, Subject = True, Title = True, XComponent = False)
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty = True
 

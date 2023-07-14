@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.libreoffice.org/enter_bug.cgi?product=LibreOffice&bug_status=UNCONFIRMED&component=UI\n"
-"POT-Creation-Date: 2023-05-15 16:22:55\n"
+"POT-Creation-Date: 2023-07-14 16:26:26\n"
 "PO-Revision-Date: YYYY-MM-DD HH:MM:SS\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -410,6 +410,19 @@ msgid  ""
 "The operation is rejected.\n"
 "\n"
 "« %1 » = %2"
+msgstr ""
+
+#. SF_FileSystem not supported method error message
+#. %1: A method name
+#. %2: An identifier
+#. %3: A file or folder name
+#, kde-format
+msgctxt "FILESYSTEM"
+msgid  ""
+"The method « %2 » is not applicable on a document's internal file "
+"system.\n"
+"\n"
+"« %1 » = '%3'"
 msgstr ""
 
 #. SF_Services.CreateScriptService error message

@@ -508,6 +508,11 @@ Dim oDefaultContext As Object
 					Set .Toolkit = CreateUnoService(&quot;com.sun.star.awt.Toolkit&quot;)
 				End If
 				Set _GetUNOService = .Toolkit
+			Case &quot;TransientDocumentFactory&quot;
+				If IsEmpty(.TransientDocument) Or IsNull(.TransientDocument) Then
+					Set .TransientDocument = CreateUnoService(&quot;com.sun.star.frame.TransientDocumentsDocumentContentFactory&quot;)
+				End If
+				Set _GetUNOService = .TransientDocument
 			Case &quot;URLTransformer&quot;
 				If IsEmpty(.URLTransformer) Or IsNull(.URLTransformer) Then
 					Set .URLTransformer = CreateUnoService(&quot;com.sun.star.util.URLTransformer&quot;)
@@ -951,6 +956,7 @@ Dim bValid As Boolean		&apos;	Returned value
 Dim sFileNaming As String	&apos;	Alias of SF_FileSystem.FileNaming
 Dim oArgument As Variant	&apos;	Workaround &quot;Object variable not set&quot; error on 1st executable statement
 Const cstMaxLength = 256	&apos;	Maximum length of readable value
+Const DOCFILESYSTEM = &quot;vnd.sun.star.tdoc:/&quot;
 
 	&apos;	To avoid useless recursions, keep main function, only increase stack depth
 
@@ -984,6 +990,7 @@ Try:
 				If bValid Then
 					With SF_FileSystem
 						sFileNaming = .FileNaming
+						If SF_String.StartsWith(sFile, DOCFILESYSTEM) Then sFileNaming = &quot;URL&quot;
 						Select Case sFileNaming
 							Case &quot;ANY&quot;	:	bValid = SF_String.IsUrl(ConvertToUrl(sFile))
 							Case &quot;URL&quot;	:	bValid = SF_String.IsUrl(sFile)
