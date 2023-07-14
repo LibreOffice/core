@@ -400,8 +400,8 @@ void ScTable::DeleteCol(
     {
         for (SCCOL nCol = nStartCol + nSize; nCol < aCol.size(); ++nCol)
             aCol[nCol].SwapCol(aCol[nCol - nSize]);
-        // When delete column(s), inicialize the last columns from the default attributes
-        for (SCCOL nCol = aCol.size() - nSize; nCol < aCol.size(); ++nCol)
+        // When delete column(s), initialize the last columns from the default attributes
+        for (SCCOL nCol = aCol.size() < static_cast<SCCOL>(nSize) ? 0 : aCol.size() - nSize; nCol < aCol.size(); ++nCol)
             aCol[nCol].Init(nCol, aCol[nCol].GetTab(), rDocument, false);
     }
     else
