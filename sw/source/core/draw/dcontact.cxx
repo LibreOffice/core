@@ -2074,9 +2074,7 @@ void SwDrawContact::ChkPage()
     else
     {
         // --> #i28701# - use methods <GetPageFrame()> and <SetPageFrame>
-        if ( GetPageFrame() )
-            GetPageFrame()->RemoveDrawObjFromPage( maAnchoredDrawObj );
-        pPg->AppendDrawObjToPage( maAnchoredDrawObj );
+        maAnchoredDrawObj.RegisterAtPage(*pPg);
         maAnchoredDrawObj.SetPageFrame( pPg );
     }
 }

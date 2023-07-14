@@ -3209,10 +3209,7 @@ static void lcl_Regist( SwPageFrame *pPage, const SwFrame *pAnch )
             // #i87493#
             if ( pPage != pObj->GetPageFrame() )
             {
-                // #i28701#
-                if (SwPageFrame *pPg = pObj->GetPageFrame())
-                    pPg->RemoveDrawObjFromPage( *pObj );
-                pPage->AppendDrawObjToPage( *pObj );
+                pObj->RegisterAtPage(*pPage);
             }
         }
 

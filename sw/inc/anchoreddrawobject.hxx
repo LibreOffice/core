@@ -94,7 +94,6 @@ class SwAnchoredDrawObject final : public SwAnchoredObject
             page frame
         */
         virtual void RegisterAtCorrectPage() override;
-        virtual void RegisterAtPage(SwPageFrame &) override;
 
         virtual bool SetObjTop_( const SwTwips _nTop) override;
         virtual bool SetObjLeft_( const SwTwips _nLeft) override;
@@ -109,6 +108,7 @@ class SwAnchoredDrawObject final : public SwAnchoredObject
         // declaration of pure virtual methods of base class <SwAnchoredObject>
         virtual void MakeObjPos() override;
         virtual void InvalidateObjPos() override;
+        virtual void RegisterAtPage(SwPageFrame&) override;
         bool IsValidPos() const
         {
             return mbValidPos;

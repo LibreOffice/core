@@ -156,7 +156,6 @@ protected:
         page frame
     */
     virtual void RegisterAtCorrectPage() override;
-    virtual void RegisterAtPage(SwPageFrame &) override;
 
     virtual bool SetObjTop_( const SwTwips _nTop ) override;
     virtual bool SetObjLeft_( const SwTwips _nLeft ) override;
@@ -267,6 +266,7 @@ public:
     // #i26791# - pure virtual methods of base class <SwAnchoredObject>
     virtual void MakeObjPos() override;
     virtual void InvalidateObjPos() override;
+    virtual void RegisterAtPage(SwPageFrame&) override;
 
     virtual SwFrameFormat& GetFrameFormat() override;
     virtual const SwFrameFormat& GetFrameFormat() const override;

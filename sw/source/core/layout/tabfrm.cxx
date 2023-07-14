@@ -5276,10 +5276,7 @@ static bool lcl_ArrangeLowers( SwLayoutFrame *pLay, tools::Long lYStart, bool bI
                             if ( pPageFrame != pPageOfAnchor )
                             {
                                 pFly->InvalidatePos();
-                                if ( pPageFrame )
-                                    pPageFrame->MoveFly( pFly, pPageOfAnchor );
-                                else
-                                    pPageOfAnchor->AppendFlyToPage( pFly );
+                                pFly->RegisterAtPage(*pPageOfAnchor);
                             }
                         }
                         // OD 2004-05-11 #i28701# - Because of the introduction
@@ -5314,11 +5311,7 @@ static bool lcl_ArrangeLowers( SwLayoutFrame *pLay, tools::Long lYStart, bool bI
                             if ( pPageFrame != pPageOfAnchor )
                             {
                                 pAnchoredObj->InvalidateObjPos();
-                                if ( pPageFrame )
-                                {
-                                    pPageFrame->RemoveDrawObjFromPage( *pAnchoredObj );
-                                }
-                                pPageOfAnchor->AppendDrawObjToPage( *pAnchoredObj );
+                                pAnchoredObj->RegisterAtPage(*pPageOfAnchor);
                             }
                         }
                         // #i28701# - adjust last character
