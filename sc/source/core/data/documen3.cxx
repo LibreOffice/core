@@ -438,7 +438,7 @@ bool ScDocument::IsScenario( SCTAB nTab ) const
 void ScDocument::SetScenarioData( SCTAB nTab, const OUString& rComment,
                                         const Color& rColor, ScScenarioFlags nFlags )
 {
-    if (ScTable* pTable = FetchTable(nTab); pTable->IsScenario())
+    if (ScTable* pTable = FetchTable(nTab); pTable && pTable->IsScenario())
     {
         pTable->SetScenarioComment( rComment );
         pTable->SetScenarioColor( rColor );
@@ -469,7 +469,7 @@ bool ScDocument::IsDefaultTabBgColor( SCTAB nTab ) const
 void ScDocument::GetScenarioData( SCTAB nTab, OUString& rComment,
                                         Color& rColor, ScScenarioFlags& rFlags ) const
 {
-    if (const ScTable* pTable = FetchTable(nTab); pTable->IsScenario())
+    if (const ScTable* pTable = FetchTable(nTab); pTable && pTable->IsScenario())
     {
         pTable->GetScenarioComment( rComment );
         rColor = pTable->GetScenarioColor();
@@ -479,7 +479,7 @@ void ScDocument::GetScenarioData( SCTAB nTab, OUString& rComment,
 
 void ScDocument::GetScenarioFlags( SCTAB nTab, ScScenarioFlags& rFlags ) const
 {
-    if (const ScTable* pTable = FetchTable(nTab); pTable->IsScenario())
+    if (const ScTable* pTable = FetchTable(nTab); pTable && pTable->IsScenario())
         rFlags = pTable->GetScenarioFlags();
 }
 
@@ -722,7 +722,7 @@ bool ScDocument::HasCalcNotification( SCTAB nTab ) const
 void ScDocument::SetCalcNotification( SCTAB nTab )
 {
     // set only if not set before
-    if (ScTable* pTable = FetchTable(nTab) ; !pTable->GetCalcNotification())
+    if (ScTable* pTable = FetchTable(nTab) ; pTable && !pTable->GetCalcNotification())
         pTable->SetCalcNotification(true);
 }
 
