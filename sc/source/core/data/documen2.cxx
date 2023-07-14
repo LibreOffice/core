@@ -703,7 +703,7 @@ bool ScDocument::GetDataStart( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow ) 
 
 void ScDocument::GetTiledRenderingArea(SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow) const
 {
-    bool bHasPrintArea = GetPrintArea(nTab, rEndCol, rEndRow, false);
+    bool bHasPrintArea = GetCellArea(nTab, rEndCol, rEndRow);
 
     // we need some reasonable minimal document size
     ScViewData* pViewData = ScDocShell::GetViewData();
