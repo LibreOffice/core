@@ -2714,11 +2714,11 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
     SwRect aLine( rInf.X() + nLeftMin, nTop, rInf.RealWidth() - rInf.X()
                   + nLeftMar - nLeftMin , nHeight );
 
+    bool bWordFlyWrap = GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS);
     // tdf#116486: consider also the upper margin from getFramePrintArea because intersections
     //             with this additional space should lead to repositioning of paragraphs
     //             For compatibility we grab a related compat flag:
-    if (GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS)
-        && IsFirstTextLine())
+    if (bWordFlyWrap && IsFirstTextLine())
     {
         tools::Long nUpper = m_pFrame->getFramePrintArea().Top();
         // Make sure that increase only happens in case the upper spacing comes from the upper
@@ -2800,8 +2800,15 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
     if( !aInter.HasArea() )
         return;
 
-    const bool bFullLine =  aLine.Left()  == aInter.Left() &&
+    bool bFullLine =  aLine.Left()  == aInter.Left() &&
                             aLine.Right() == aInter.Right();
+    if (!bFullLine && bWordFlyWrap)
+    {
+        // Word >= 2013 style: if there is minimal space remaining, then handle that similar to a
+        // full line and put the actual empty paragraph below the fly.
+        bFullLine = std::abs(aLine.Left() - aInter.Left()) < MINLAY
+                    && std::abs(aLine.Right() - aInter.Right()) < MINLAY;
+    }
 
     // Although no text is left, we need to format another line,
     // because also empty lines need to avoid a Fly with no wrapping.
