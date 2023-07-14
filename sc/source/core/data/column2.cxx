@@ -3723,7 +3723,7 @@ namespace {
 
 class WeightedCounter
 {
-    sal_uLong mnCount;
+    size_t mnCount;
 public:
     WeightedCounter() : mnCount(0) {}
 
@@ -3732,7 +3732,7 @@ public:
         mnCount += getWeight(node);
     }
 
-    static sal_uLong getWeight(const sc::CellStoreType::value_type& node)
+    static size_t getWeight(const sc::CellStoreType::value_type& node)
     {
         switch (node.type)
         {
@@ -3753,14 +3753,14 @@ public:
         }
     }
 
-    sal_uLong getCount() const { return mnCount; }
+    size_t getCount() const { return mnCount; }
 };
 
 class WeightedCounterWithRows
 {
     const SCROW mnStartRow;
     const SCROW mnEndRow;
-    sal_uLong mnCount;
+    size_t mnCount;
 
 public:
     WeightedCounterWithRows(SCROW nStartRow, SCROW nEndRow)
@@ -3781,7 +3781,7 @@ public:
         }
     }
 
-    sal_uLong getCount() const { return mnCount; }
+    size_t getCount() const { return mnCount; }
 };
 
 }

@@ -2273,7 +2273,7 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
 
         if ( pCode->IsRecalcModeForced() )
         {
-            sal_uLong nValidation = rDocument.GetAttr(
+            sal_uInt32 nValidation = rDocument.GetAttr(
                     aPos.Col(), aPos.Row(), aPos.Tab(), ATTR_VALIDDATA )->GetValue();
             if ( nValidation )
             {

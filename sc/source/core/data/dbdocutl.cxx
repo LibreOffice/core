@@ -44,7 +44,7 @@ void ScDatabaseDocUtil::PutData(ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB 
     bool bValue = false;
     bool bEmptyFlag = false;
     bool bError = false;
-    sal_uLong nFormatIndex = 0;
+    sal_uInt32 nFormatIndex = 0;
 
     // wasNull calls only if null value was found?
 
