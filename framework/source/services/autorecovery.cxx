@@ -3086,7 +3086,13 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
             else if (nRetry > RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL)
                 nRetry = RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL;
             else if (nRetry <= GIVE_UP_RETRY)
+            {
+                // delete the empty file created by implts_generateNewTempURL
+                if (tools::isEmptyFileUrl(rInfo.NewTempURL))
+                    AutoRecovery::st_impl_removeFile(rInfo.NewTempURL);
+
                 throw; // force stacktrace to know if there exist might other reasons, why an AutoSave can fail !!!
+            }
 
             --nRetry;
         }
