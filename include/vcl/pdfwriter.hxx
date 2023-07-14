@@ -328,7 +328,7 @@ public:
            hyperlink to be executed on pushing the button.
 
            There will be no error checking or any kind of
-           conversion done to the URL parameter execept this:
+           conversion done to the URL parameter except this:
            it will be output as 7bit Ascii. The URL
            will appear literally in the PDF file produced
         */

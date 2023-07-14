@@ -293,7 +293,7 @@ public:
         @param rURL
         the URL the link shall point to.
         there will be no error checking or any kind of
-        conversion done to this parameter execept this:
+        conversion done to this parameter except this:
         it will be output as 7bit Ascii. The URL
         will appear literally in the PDF file produced
     */
