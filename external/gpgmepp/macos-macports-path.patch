@@ -1,0 +1,12 @@
+--- src/posix-util.c	2020-07-15 06:14:17.000000000 -0400
++++ src/posix-util.c	2023-07-14 19:09:58.000000000 -0400
+@@ -135,7 +135,8 @@
+   /* On apple, especially when started through gpgme-json via
+      the browser interface we should look into some additional
+      fallback paths. */
+-  const char *additional_path = "/usr/local/bin:/usr/local/MacGPG2/bin";
++  const char *additional_path
++    = "/usr/local/bin:/usr/local/MacGPG2/bin:/opt/homebrew/bin:/opt/local/bin";
+   if (!ret)
+     {
+       ret = walk_path_str (additional_path, pgm);
