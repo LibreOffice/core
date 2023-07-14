@@ -2057,10 +2057,12 @@ void SwDrawContact::ChkPage()
     }
 
     // --> #i28701#
+    // tdf#156287: use anchor page, not current bound rectangle's page,
+    // because an object can't move to a page other than its anchor anyway
     SwPageFrame* pPg = ( maAnchoredDrawObj.GetAnchorFrame() &&
                        maAnchoredDrawObj.GetAnchorFrame()->IsPageFrame() )
                      ? GetPageFrame()
-                     : FindPage( SwRect(GetMaster()->GetCurrentBoundRect()) );
+                     : maAnchoredDrawObj.FindPageFrameOfAnchor();
     if ( GetPageFrame() == pPg )
         return;
 
