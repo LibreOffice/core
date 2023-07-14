@@ -129,6 +129,7 @@
 #include <sfx2/DocumentMetadataAccess.hxx>
 #include "printhelper.hxx"
 #include <sfx2/sfxresid.hxx>
+#include <sfx2/filedlghelper.hxx>
 #include <comphelper/profilezone.hxx>
 #include <vcl/threadex.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -3023,13 +3024,13 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
         throw frame::IllegalArgumentIOException();
 
     bool bSaved = false;
+    ::comphelper::SequenceAsHashMap aArgHash(seqArguments);
     if ( !bSaveTo && m_pData->m_pObjectShell.is() && !sURL.isEmpty()
       && !sURL.startsWith( "private:stream" )
       && ::utl::UCBContentHelper::EqualURLs( getLocation(), sURL ) )
     {
         // this is the same file URL as the current document location, try to use storeOwn if possible
 
-        ::comphelper::SequenceAsHashMap aArgHash( seqArguments );
         static const OUStringLiteral aFilterString( u"FilterName"  );
         const OUString aFilterName( aArgHash.getUnpackedValueOrDefault( aFilterString, OUString() ) );
         if ( !aFilterName.isEmpty() )
@@ -3099,10 +3100,25 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
     SfxGetpApp()->NotifyEvent( SfxEventHint( bSaveTo ? SfxEventHintId::SaveToDoc : SfxEventHintId::SaveAsDoc, GlobalEventConfig::GetEventName( bSaveTo ? GlobalEventId::SAVETODOC : GlobalEventId::SAVEASDOC ),
                                             m_pData->m_pObjectShell.get() ) );
 
+    const OUString aFilterName(aArgHash.getUnpackedValueOrDefault("FilterName", OUString()));
+    OUString aPassword, aPasswordToModify;
+    if (!aArgHash.getUnpackedValueOrDefault("EncryptionData", Sequence<beans::NamedValue>())
+             .hasElements())
+        aPassword = aArgHash.getUnpackedValueOrDefault("Password", OUString());
+    if (!aArgHash.getUnpackedValueOrDefault("ModifyPasswordInfo", Sequence<beans::PropertyValue>())
+             .hasElements()
+        && aArgHash.getUnpackedValueOrDefault("ModifyPasswordInfo", static_cast<sal_Int32>(0)) == 0)
+        aPasswordToModify = aArgHash.getUnpackedValueOrDefault("PasswordToModify", OUString());
+    aArgHash.erase("PasswordToModify");
+
     std::optional<SfxAllItemSet> pItemSet(SfxGetpApp()->GetPool());
     pItemSet->Put(SfxStringItem(SID_FILE_NAME, sURL));
     if ( bSaveTo )
         pItemSet->Put(SfxBoolItem(SID_SAVETO, true));
+
+    if (!aFilterName.isEmpty() && (!aPassword.isEmpty() || !aPasswordToModify.isEmpty()))
+        sfx2::SetPassword(SfxGetpApp()->GetFilterMatcher().GetFilter4FilterName(aFilterName),
+                          &*pItemSet, aPassword, aPasswordToModify, false);
 
     TransformParameters(SID_SAVEASDOC, seqArguments, *pItemSet);
 

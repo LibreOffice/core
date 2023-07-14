@@ -3308,6 +3308,23 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
 
         bool bFullSheetPreview = sFullSheetPreview == u"true";
 
+        OUString filePassword;
+        if ((aIndex = aFilterOptions.indexOf(",Password=")) >= 0)
+        {
+            int bIndex = aFilterOptions.indexOf("PASSWORDEND");
+            filePassword = aFilterOptions.subView(aIndex + 10, bIndex - (aIndex + 10));
+            aFilterOptions = OUString::Concat(aFilterOptions.subView(0, aIndex))
+                             + aFilterOptions.subView(bIndex + 11);
+        }
+        OUString filePasswordToModify;
+        if ((aIndex = aFilterOptions.indexOf(",PasswordToModify=")) >= 0)
+        {
+            int bIndex = aFilterOptions.indexOf("PASSWORDTOMODIFYEND");
+            filePassword = aFilterOptions.subView(aIndex + 18, bIndex - (aIndex + 18));
+            aFilterOptions = OUString::Concat(aFilterOptions.subView(0, aIndex))
+                             + aFilterOptions.subView(bIndex + 19);
+        }
+
         // Select a pdf version if specified a valid one. If not specified then ignore.
         // If invalid then fail.
         sal_Int32 pdfVer = 0;
@@ -3382,6 +3399,10 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         {
             aSaveMediaDescriptor["FilterData"] <<= aFilterDataMap.getAsConstPropertyValueList();
         }
+        if (!filePassword.isEmpty())
+            aSaveMediaDescriptor["Password"] <<= filePassword;
+        if (!filePasswordToModify.isEmpty())
+            aSaveMediaDescriptor["PasswordToModify"] <<= filePasswordToModify;
 
         // add interaction handler too
         if (gImpl)
