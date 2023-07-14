@@ -31,6 +31,7 @@ private:
     void checkUsage();
     void checkNonConstUsage();
     void checkBuffer();
+    void checkOstr();
 
     void testcall( const char str[] );
 
@@ -46,6 +47,7 @@ CPPUNIT_TEST(checkConstexprCtor);
 CPPUNIT_TEST(checkUsage);
 CPPUNIT_TEST(checkNonConstUsage);
 CPPUNIT_TEST(checkBuffer);
+CPPUNIT_TEST(checkOstr);
 CPPUNIT_TEST_SUITE_END();
 };
 
@@ -271,6 +273,14 @@ void test::ostring::StringLiterals::checkBuffer()
     CPPUNIT_ASSERT_EQUAL( foodbazbard, buf.insert( 3, d ).toString() );
     CPPUNIT_ASSERT( !rtl_string_unittest_const_literal );
     CPPUNIT_ASSERT( !rtl_string_unittest_const_literal_function );
+}
+
+void test::ostring::StringLiterals::checkOstr() {
+#if __cplusplus >= 202002L
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), ""_ostr.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), "foobar"_ostr.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), "foo\0bar"_ostr.getLength());
+#endif
 }
 
 #undef CONST_CTOR_USED

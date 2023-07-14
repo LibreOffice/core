@@ -41,6 +41,7 @@ private:
     void checkOUStringChar();
     void checkUtf16();
     void checkEmbeddedNul();
+    void checkOstr();
 
     void testcall( const char str[] );
 
@@ -56,6 +57,7 @@ CPPUNIT_TEST(checkOUStringLiteral);
 CPPUNIT_TEST(checkOUStringChar);
 CPPUNIT_TEST(checkUtf16);
 CPPUNIT_TEST(checkEmbeddedNul);
+CPPUNIT_TEST(checkOstr);
 CPPUNIT_TEST_SUITE_END();
 };
 
@@ -423,6 +425,14 @@ void test::oustring::StringLiterals::checkEmbeddedNul() {
     CPPUNIT_ASSERT(!s.startsWith(rtlunittest::OUStringLiteral(a)));
     CPPUNIT_ASSERT(!s.startsWith(rtlunittest::OUStringLiteral(u"foo\0hidden")));
 /*TODO*/
+}
+
+void test::oustring::StringLiterals::checkOstr() {
+#if __cplusplus >= 202002L
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), u""_ostr.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), u"foobar"_ostr.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), u"foo\0bar"_ostr.getLength());
+#endif
 }
 
 } // namespace

@@ -86,8 +86,6 @@ This class is not part of public API and is meant to be used only in LibreOffice
 template<std::size_t N> class SAL_WARN_UNUSED OUStringLiteral {
     static_assert(N != 0);
     static_assert(N - 1 <= std::numeric_limits<sal_Int32>::max(), "literal too long");
-    friend class OUString;
-    friend class OUStringConstExpr;
 
 public:
 #if HAVE_CPP_CONSTEVAL
@@ -128,6 +126,9 @@ private:
         sal_Unicode buffer[N] = {}; //TODO: drop initialization for C++20 (P1331R2)
     };
 
+public:
+    // (Data members must be public so that OUStringLiteral is a structural type that can be used as
+    // a non-type template parameter type for rtl::detail::OUStringHolder:)
     union {
         rtl_uString str;
         Data more = {};
@@ -3413,6 +3414,18 @@ inline bool operator !=(StringConcatenation<char16_t> const & lhs, OUString cons
 #if defined LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 /// @cond INTERNAL
 
+#if __cplusplus >= 202002L
+
+namespace detail {
+
+template<OUStringLiteral L> struct OUStringHolder {
+    static constexpr auto & literal = L;
+};
+
+}
+
+#endif
+
 /**
  @internal
 */
@@ -3574,6 +3587,30 @@ using ::rtl::OUStringToOString;
 using ::rtl::OUStringLiteral;
 using ::rtl::OUStringChar;
 using ::rtl::Concat2View;
+#endif
+
+#if defined LIBO_INTERNAL_ONLY && __cplusplus >= 202002L
+
+template<
+#if defined RTL_STRING_UNITTEST
+    rtlunittest::
+#endif
+    OUStringLiteral L>
+constexpr
+#if defined RTL_STRING_UNITTEST
+    rtlunittest::
+#endif
+    OUString
+operator ""_ostr() {
+    return
+#if defined RTL_STRING_UNITTEST
+        rtlunittest
+#else
+        rtl
+#endif
+        ::detail::OUStringHolder<L>::literal;
+}
+
 #endif
 
 /// @cond INTERNAL
