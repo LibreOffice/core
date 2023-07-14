@@ -1,0 +1,11 @@
+--- src/posix-util.c	2023-04-20 07:35:50.000000000 -0400
++++ src/posix-util.c	2023-07-14 17:28:21.000000000 -0400
+@@ -145,7 +145,7 @@
+      the browser interface we should look into some additional
+      fallback paths. */
+   const char *additional_path
+-    = "/usr/local/bin:/usr/local/MacGPG2/bin:/opt/homebrew/bin";
++    = "/usr/local/bin:/usr/local/MacGPG2/bin:/opt/homebrew/bin:/opt/local/bin";
+   if (!ret)
+     {
+       ret = walk_path_str (additional_path, pgm);

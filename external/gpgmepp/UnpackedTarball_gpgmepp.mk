@@ -33,5 +33,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,gpgmepp, \
     external/gpgmepp/configure.patch \
     external/gpgmepp/w32-include.patch \
     external/gpgmepp/Wincompatible-function-pointer-types.patch \
+    external/gpgmepp/macos-macports-path.patch \
 ))
 # vim: set noet sw=4 ts=4:
