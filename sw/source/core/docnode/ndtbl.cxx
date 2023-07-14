@@ -1935,6 +1935,11 @@ void SwDoc::DeleteCol( const SwCursor& rCursor )
 
 void SwDoc::DelTable(SwTableNode *const pTableNd)
 {
+    {
+        // tdf#156267 remove DdeBookmarks before deleting nodes
+        SwDataChanged aTmp(SwPaM(*pTableNd, *pTableNd->EndOfSectionNode()));
+    }
+
     bool bNewTextNd = false;
     // Is it alone in a FlyFrame?
     SwNodeIndex aIdx( *pTableNd, -1 );
