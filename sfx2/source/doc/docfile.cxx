@@ -2664,7 +2664,9 @@ void SfxMedium::DoBackup_Impl()
             // save as ".bak" file
             INetURLObject aDest( aBakDir );
             aDest.insertName( aSource.getName() );
-            aDest.setExtension( u"bak" );
+            const OUString sExt
+                = aSource.hasExtension() ? aSource.getExtension() + ".bak" : OUString("bak");
+            aDest.setExtension(sExt);
             OUString aFileName = aDest.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
 
             // create a content for the source file
