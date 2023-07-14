@@ -1350,14 +1350,15 @@ void SwAnnotationWin::SetViewState(ViewState bViewState)
 
 SwAnnotationWin* SwAnnotationWin::GetTopReplyNote()
 {
-    SwAnnotationWin* pTopNote = this;
-    SwAnnotationWin* pSidebarWin = IsFollow() ? mrMgr.GetNextPostIt(KEY_PAGEUP, this) : nullptr;
-    while (pSidebarWin)
+    for (SwAnnotationWin* pTopNote = this;;)
     {
-        pTopNote = pSidebarWin;
-        pSidebarWin = pSidebarWin->IsFollow() ? mrMgr.GetNextPostIt(KEY_PAGEUP, pSidebarWin) : nullptr;
+        if (!pTopNote->IsFollow())
+            return pTopNote;
+        SwAnnotationWin* pPrev = mrMgr.GetNextPostIt(KEY_PAGEUP, pTopNote);
+        if (!pPrev)
+            return pTopNote;
+        pTopNote = pPrev;
     }
-    return pTopNote;
 }
 
 void SwAnnotationWin::SwitchToFieldPos()

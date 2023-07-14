@@ -235,8 +235,9 @@ void SwAnnotationWin::ToggleResolved()
 
 void SwAnnotationWin::ToggleResolvedForThread()
 {
-    GetTopReplyNote()->ToggleResolved();
-    mrMgr.UpdateResolvedStatus(GetTopReplyNote());
+    auto pTop = GetTopReplyNote();
+    pTop->ToggleResolved();
+    mrMgr.UpdateResolvedStatus(pTop);
     mrMgr.LayoutPostIts();
 }
 
@@ -263,17 +264,15 @@ sal_uInt32 SwAnnotationWin::CreateUniqueParaId()
 void SwAnnotationWin::DeleteThread()
 {
     // Go to the top and delete each comment one by one
-    SwAnnotationWin *current, *topNote;
-    current = topNote = GetTopReplyNote();
-    SwAnnotationWin* next = mrMgr.GetNextPostIt(KEY_PAGEDOWN, current);
-
-    while(next && next->GetTopReplyNote() == topNote)
+    SwAnnotationWin* topNote = GetTopReplyNote();
+    for (SwAnnotationWin* current = topNote;;)
     {
+        SwAnnotationWin* next = mrMgr.GetNextPostIt(KEY_PAGEDOWN, current);
         current->mnDeleteEventId = Application::PostUserEvent( LINK( current, SwAnnotationWin, DeleteHdl), nullptr, true );
+        if (!next || next->GetTopReplyNote() != topNote)
+            return;
         current = next;
-        next = mrMgr.GetNextPostIt(KEY_PAGEDOWN, current);
     }
-    current->mnDeleteEventId = Application::PostUserEvent( LINK( current, SwAnnotationWin, DeleteHdl), nullptr, true );
 }
 
 bool SwAnnotationWin::IsResolved() const
@@ -285,21 +284,15 @@ bool SwAnnotationWin::IsThreadResolved()
 {
     /// First Get the top note
     // then iterate downwards checking resolved status
-    SwAnnotationWin *pTopNote, *TopNote;
-    pTopNote = TopNote = GetTopReplyNote();
-    if (!pTopNote->IsResolved())
-        return false;
-
-    SwAnnotationWin* pSidebarWin = mrMgr.GetNextPostIt(KEY_PAGEDOWN, pTopNote);
-
-    while (pSidebarWin && pSidebarWin->GetTopReplyNote() == TopNote)
+    SwAnnotationWin* topNote = GetTopReplyNote();
+    for (SwAnnotationWin* current = topNote;;)
     {
-        pTopNote = pSidebarWin;
-        if (!pTopNote->IsResolved())
+        if (!current->IsResolved())
             return false;
-        pSidebarWin = mrMgr.GetNextPostIt(KEY_PAGEDOWN, pSidebarWin);
+        current = mrMgr.GetNextPostIt(KEY_PAGEDOWN, current);
+        if (!current || current->GetTopReplyNote() != topNote)
+            return true;
     }
-    return true;
 }
 
 void SwAnnotationWin::UpdateData()
@@ -377,45 +370,33 @@ sal_uInt32 SwAnnotationWin::MoveCaret()
 sal_uInt32 SwAnnotationWin::CalcParent()
 {
     SwTextField* pTextField = mpFormatField->GetTextField();
-    SwPosition aPosition( pTextField->GetTextNode(), pTextField->GetStart() );
-    SwTextAttr * const pTextAttr =
-        pTextField->GetTextNode().GetTextAttrForCharAt(
-            aPosition.GetContentIndex() - 1,
-            RES_TXTATR_ANNOTATION );
-    const SwField* pField = pTextAttr ? pTextAttr->GetFormatField().GetField() : nullptr;
-    sal_uInt32 nParentId = 0;
-    if (pField && pField->Which() == SwFieldIds::Postit)
-    {
-        const SwPostItField* pPostItField = static_cast<const SwPostItField*>(pField);
-        nParentId = pPostItField->GetPostItId();
-    }
-    return nParentId;
+    if (SwPosition aPosition(pTextField->GetTextNode(), pTextField->GetStart());
+        aPosition.GetContentIndex() > 0)
+        if (const SwTextAttr* pTextAttr = pTextField->GetTextNode().GetTextAttrForCharAt(
+                aPosition.GetContentIndex() - 1, RES_TXTATR_ANNOTATION))
+            if (const SwField* pField = pTextAttr->GetFormatField().GetField())
+                if (pField->Which() == SwFieldIds::Postit)
+                    return static_cast<const SwPostItField*>(pField)->GetPostItId();
+    return 0;
 }
 
 // counts how many SwPostItField we have right after the current one
 sal_uInt32 SwAnnotationWin::CountFollowing()
 {
-    sal_uInt32 aCount = 1;  // we start with 1, so we have to subtract one at the end again
     SwTextField* pTextField = mpFormatField->GetTextField();
     SwPosition aPosition( pTextField->GetTextNode(), pTextField->GetStart() );
 
-    SwTextAttr * pTextAttr = pTextField->GetTextNode().GetTextAttrForCharAt(
-                                        aPosition.GetContentIndex() + 1,
-                                        RES_TXTATR_ANNOTATION );
-    SwField* pField = pTextAttr
-                    ? const_cast<SwField*>(pTextAttr->GetFormatField().GetField())
-                    : nullptr;
-    while ( pField && ( pField->Which()== SwFieldIds::Postit ) )
+    for (sal_Int32 n = 1;; ++n)
     {
-        aCount++;
-        pTextAttr = pTextField->GetTextNode().GetTextAttrForCharAt(
-                                        aPosition.GetContentIndex() + aCount,
-                                        RES_TXTATR_ANNOTATION );
-        pField = pTextAttr
-               ? const_cast<SwField*>(pTextAttr->GetFormatField().GetField())
-               : nullptr;
+        SwTextAttr * pTextAttr = pTextField->GetTextNode().GetTextAttrForCharAt(
+                                            aPosition.GetContentIndex() + n,
+                                            RES_TXTATR_ANNOTATION );
+        if (!pTextAttr)
+            return n - 1;
+        const SwField* pField = pTextAttr->GetFormatField().GetField();
+        if (!pField || pField->Which() != SwFieldIds::Postit)
+            return n - 1;
     }
-    return aCount - 1;
 }
 
 void SwAnnotationWin::InitAnswer(OutlinerParaObject const & rText)
