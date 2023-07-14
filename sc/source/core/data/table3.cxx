@@ -2765,7 +2765,7 @@ bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
     }
     if (bValid)
     {
-        sal_uLong nVisible = 0;
+        SCSIZE nVisible = 0;
         for ( nCol=nCol1; nCol<=ClampToAllocatedColumns(nCol2); nCol++ )
             nVisible += aCol[nCol].VisibleCount( nRow1+1, nRow2 );
 

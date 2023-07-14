@@ -170,7 +170,7 @@ void ScStyleSheetPool::CopyStyleFrom( SfxStyleSheetBasePool* pSrcPool,
         if ( pDoc && pDoc->GetFormatExchangeList() &&
              (pItem = rSourceSet.GetItemIfSet( ATTR_VALUE_FORMAT, false )) )
         {
-            sal_uLong nOldFormat = pItem->GetValue();
+            sal_uInt32 nOldFormat = pItem->GetValue();
             SvNumberFormatterIndexTable::const_iterator it = pDoc->GetFormatExchangeList()->find(nOldFormat);
             if (it != pDoc->GetFormatExchangeList()->end())
             {

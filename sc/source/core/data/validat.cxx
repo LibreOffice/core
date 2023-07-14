@@ -790,7 +790,7 @@ rtl_uString* ScStringTokenIterator::Next()
 }
 
 /** Returns the number format of the passed cell, or the standard format. */
-sal_uLong lclGetCellFormat( const ScDocument& rDoc, const ScAddress& rPos )
+sal_uInt32 lclGetCellFormat( const ScDocument& rDoc, const ScAddress& rPos )
 {
     const ScPatternAttr* pPattern = rDoc.GetPattern( rPos.Col(), rPos.Row(), rPos.Tab() );
     if( !pPattern )

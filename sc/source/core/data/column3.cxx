@@ -2570,7 +2570,7 @@ class FilterEntriesHandler
     void processCell(const ScColumn& rColumn, SCROW nRow, ScRefCellValue& rCell, bool bIsEmptyCell=false)
     {
         SvNumberFormatter* pFormatter = mrColumn.GetDoc().GetFormatTable();
-        sal_uLong nFormat = mrColumn.GetNumberFormat(mrColumn.GetDoc().GetNonThreadedContext(), nRow);
+        sal_uInt32 nFormat = mrColumn.GetNumberFormat(mrColumn.GetDoc().GetNonThreadedContext(), nRow);
         OUString aStr = ScCellFormat::GetInputString(rCell, nFormat, *pFormatter, mrColumn.GetDoc(), mbFiltering);
 
         // Colors
@@ -3159,7 +3159,7 @@ double* ScColumn::GetValueCell( SCROW nRow )
 
 OUString ScColumn::GetInputString( const ScRefCellValue& aCell, SCROW nRow, bool bForceSystemLocale ) const
 {
-    sal_uLong nFormat = GetNumberFormat(GetDoc().GetNonThreadedContext(), nRow);
+    sal_uInt32 nFormat = GetNumberFormat(GetDoc().GetNonThreadedContext(), nRow);
     return ScCellFormat::GetInputString(aCell, nFormat, *(GetDoc().GetFormatTable()), GetDoc(), nullptr, false, bForceSystemLocale);
 }
 

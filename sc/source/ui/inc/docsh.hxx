@@ -281,7 +281,7 @@ public:
                                     ScMarkData& rMark, bool bRecord = true);
     void            ModifyScenario(SCTAB nTab, const OUString& rName, const OUString& rComment,
                                     const Color& rColor, ScScenarioFlags nFlags);
-    sal_uLong TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
+    bool TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
                                 SCTAB nDestPos, bool bInsertNew,
                                 bool bNotifyAndPaint );
 

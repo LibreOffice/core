@@ -860,7 +860,7 @@ SCTAB ScDocShell::MakeScenario( SCTAB nTab, const OUString& rName, const OUStrin
     return nTab;
 }
 
-sal_uLong ScDocShell::TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
+bool ScDocShell::TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
                                 SCTAB nDestPos, bool bInsertNew,
                                 bool bNotifyAndPaint )
 {
@@ -872,14 +872,14 @@ sal_uLong ScDocShell::TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
     aParam.maRanges.push_back(aRange);
     rSrcDoc.SetClipParam(aParam);
 
-    sal_uLong nErrVal =  m_pDocument->TransferTab( rSrcDoc, nSrcPos, nDestPos,
+    bool bValid =  m_pDocument->TransferTab( rSrcDoc, nSrcPos, nDestPos,
                     bInsertNew );       // no insert
 
     // TransferTab doesn't copy drawing objects with bInsertNew=FALSE
-    if ( nErrVal > 0 && !bInsertNew)
+    if ( bValid && !bInsertNew)
         m_pDocument->TransferDrawPage( rSrcDoc, nSrcPos, nDestPos );
 
-    if(nErrVal>0 && rSrcDoc.IsScenario( nSrcPos ))
+    if(bValid && rSrcDoc.IsScenario( nSrcPos ))
     {
         OUString aComment;
         Color  aColor;
@@ -896,7 +896,7 @@ sal_uLong ScDocShell::TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
 
     }
 
-    if ( nErrVal > 0 && rSrcDoc.IsTabProtected( nSrcPos ) )
+    if ( bValid && rSrcDoc.IsTabProtected( nSrcPos ) )
         m_pDocument->SetTabProtection(nDestPos, rSrcDoc.GetTabProtection(nSrcPos));
     if ( bNotifyAndPaint )
     {
@@ -904,7 +904,7 @@ sal_uLong ScDocShell::TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
             PostPaintExtras();
             PostPaintGridAll();
     }
-    return nErrVal;
+    return bValid;
 }
 
 bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRecord )

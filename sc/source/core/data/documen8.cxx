@@ -248,9 +248,9 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
                     if (maTabs[nTab])
                         maTabs[nTab]->SetStreamValid( false );
 
-                sal_uLong nOldFormat =
+                sal_uInt32 nOldFormat =
                     rSet.Get( ATTR_VALUE_FORMAT ).GetValue();
-                sal_uLong nNewFormat =
+                sal_uInt32 nNewFormat =
                     rChanges.Get( ATTR_VALUE_FORMAT ).GetValue();
                 LanguageType eNewLang, eOldLang;
                 eNewLang = eOldLang = LANGUAGE_DONTKNOW;

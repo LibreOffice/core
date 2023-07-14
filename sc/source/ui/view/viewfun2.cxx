@@ -2754,8 +2754,6 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
     bool bUndo(rDoc.IsUndoEnabled());
 
     bool bError = false;
-    bool bRefs = false;
-    bool bName = false;
 
     if (rSrcDoc.GetDrawLayer())
         pDocSh->MakeDrawLayer();
@@ -2781,23 +2779,12 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
     {
         SCTAB nSrcTab = pSrcTabs[i];
         SCTAB nDestTab1=nTab+i;
-        sal_uLong nErrVal = pDocSh->TransferTab( *pSrcShell, nSrcTab, nDestTab1,
+        bool bValid = pDocSh->TransferTab( *pSrcShell, nSrcTab, nDestTab1,
             false, false );     // no insert
 
-        switch (nErrVal)
+        if (!bValid)
         {
-            case 0:                     // internal error or full of errors
-                bError = true;
-                break;
-            case 2:
-                bRefs = true;
-                break;
-            case 3:
-                bName = true;
-                break;
-            case 4:
-                bRefs = bName = true;
-                break;
+            bError = true;
         }
 
     }
@@ -2856,11 +2843,6 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
     pDocSh->PostPaintExtras();
     pDocSh->PostPaintGridAll();
     pDocSh->SetDocumentModified();
-
-    if (bRefs)
-        ErrorMessage(STR_ABSREFLOST);
-    if (bName)
-        ErrorMessage(STR_NAMECONFLICT);
 }
 
 //  Move/Copy table to another document
@@ -2964,7 +2946,7 @@ void ScViewFunc::MoveTable(sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy,
         if (!bNewDoc && bUndo)
             rDestDoc.BeginDrawUndo();      // drawing layer must do its own undo actions
 
-        sal_uLong nErrVal =1;
+        bool bValid = true;
         if(nDestTab==SC_TAB_APPEND)
             nDestTab=rDestDoc.GetTableCount();
         SCTAB nDestTab1=nDestTab;
@@ -2980,19 +2962,19 @@ void ScViewFunc::MoveTable(sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy,
             rDestDoc.CreateValidTabName( aName );
             if ( !rDestDoc.InsertTab( nDestTab1, aName ) )
             {
-                nErrVal = 0;        // total error
+                bValid = false;        // total error
                 break;  // for
             }
             ScRange aRange( 0, 0, TheTabs[j], rDoc.MaxCol(), rDoc.MaxRow(), TheTabs[j] );
             aParam.maRanges.push_back(aRange);
         }
         rDoc.SetClipParam(aParam);
-        if ( nErrVal > 0 )
+        if ( bValid )
         {
             nDestTab1 = nDestTab;
             for(SCTAB nTab : TheTabs)
             {
-                nErrVal = pDestShell->TransferTab( *pDocShell, nTab, nDestTab1, false, false );
+                bValid = pDestShell->TransferTab( *pDocShell, nTab, nDestTab1, false, false );
                 nDestTab1++;
             }
         }
@@ -3011,27 +2993,11 @@ void ScViewFunc::MoveTable(sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy,
         }
 
         GetFrameWin()->LeaveWait();
-        switch (nErrVal)
+
+        if (!bValid)
         {
-            case 0:                     // internal error or full of errors
-            {
-                ErrorMessage(STR_TABINSERT_ERROR);
-                return;
-            }
-            case 2:
-                ErrorMessage(STR_ABSREFLOST);
-            break;
-            case 3:
-                ErrorMessage(STR_NAMECONFLICT);
-            break;
-            case 4:
-            {
-                ErrorMessage(STR_ABSREFLOST);
-                ErrorMessage(STR_NAMECONFLICT);
-            }
-            break;
-            default:
-            break;
+            ErrorMessage(STR_TABINSERT_ERROR);
+            return;
         }
 
         if (!bCopy)

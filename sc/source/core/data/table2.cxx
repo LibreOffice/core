@@ -666,7 +666,7 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
         {
             continue;
         }
-        sal_uLong nMax = 0;
+        sal_uInt32 nMax = 0;
         bool bDuplicate = false;
         for(const auto& rxCond : *mpCondFormatList)
         {

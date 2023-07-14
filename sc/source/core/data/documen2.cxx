@@ -943,13 +943,11 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
     return bValid;
 }
 
-sal_uLong ScDocument::TransferTab( ScDocument& rSrcDoc, SCTAB nSrcPos,
+bool ScDocument::TransferTab( ScDocument& rSrcDoc, SCTAB nSrcPos,
                                 SCTAB nDestPos, bool bInsertNew,
                                 bool bResultsOnly )
 {
-    sal_uLong nRetVal = 1;                  // 0 => error 1 = ok
-                                            // 3 => NameBox
-                                            // 4 => both
+    bool bRetVal = true;
 
     if (rSrcDoc.mpShell->GetMedium())
     {
@@ -1087,7 +1085,7 @@ sal_uLong ScDocument::TransferTab( ScDocument& rSrcDoc, SCTAB nSrcPos,
         maTabs[nDestPos]->SetPendingRowHeights( rSrcDoc.maTabs[nSrcPos]->IsPendingRowHeights() );
     }
     if (!bValid)
-        nRetVal = 0;
+        bRetVal = false;
     bool bVbaEnabled = IsInVBAMode();
 
     if ( bVbaEnabled  )
@@ -1125,7 +1123,7 @@ sal_uLong ScDocument::TransferTab( ScDocument& rSrcDoc, SCTAB nSrcPos,
         }
     }
 
-    return nRetVal;
+    return bRetVal;
 }
 
 void ScDocument::SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const FormulaError nError)

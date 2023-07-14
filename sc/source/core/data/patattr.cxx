@@ -1108,7 +1108,7 @@ static SfxStyleSheetBase* lcl_CopyStyleToPool
         if ( pFormatExchangeList &&
              (pSrcItem = rSrcSet.GetItemIfSet( ATTR_VALUE_FORMAT, false )) )
         {
-            sal_uLong nOldFormat = pSrcItem->GetValue();
+            sal_uInt32 nOldFormat = pSrcItem->GetValue();
             SvNumberFormatterIndexTable::const_iterator it = pFormatExchangeList->find(nOldFormat);
             if (it != pFormatExchangeList->end())
             {
@@ -1184,7 +1184,7 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
             {
                 //  Number format to Exchange List
 
-                sal_uLong nOldFormat = static_cast<const SfxUInt32Item*>(pSrcItem)->GetValue();
+                sal_uInt32 nOldFormat = static_cast<const SfxUInt32Item*>(pSrcItem)->GetValue();
                 SvNumberFormatterIndexTable::const_iterator it = pDestDoc->GetFormatExchangeList()->find(nOldFormat);
                 if (it != pDestDoc->GetFormatExchangeList()->end())
                 {

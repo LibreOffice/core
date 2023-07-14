@@ -320,8 +320,6 @@
 #define STR_UNDO_HIDETAB                        NC_("STR_UNDO_HIDETAB", "Hide sheet")
 #define STR_UNDO_HIDETABS                       NC_("STR_UNDO_HIDETABS", "Hide sheets")
 #define STR_UNDO_TAB_RTL                        NC_("STR_UNDO_TAB_RTL", "Flip sheet")
-#define STR_ABSREFLOST                          NC_("STR_ABSREFLOST", "The new table contains absolute references to other tables which may be incorrect!")
-#define STR_NAMECONFLICT                        NC_("STR_NAMECONFLICT", "Due to identical names, an existing range name in the destination document has been altered!")
 #define STR_ERR_AUTOFILTER                      NC_("STR_ERR_AUTOFILTER", "AutoFilter not possible")
 #define STR_CREATENAME_REPLACE                  NC_("STR_CREATENAME_REPLACE", "Replace existing definition of #?")
 #define STR_CREATENAME_MARKERR                  NC_("STR_CREATENAME_MARKERR", "Invalid selection for range names")
