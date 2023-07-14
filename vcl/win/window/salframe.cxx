@@ -1595,7 +1595,14 @@ void WinSalFrame::SetPluginParent( SystemParentData* pNewParent )
 void WinSalFrame::GetWorkArea( tools::Rectangle &rRect )
 {
     RECT aRect;
-    ImplSalGetWorkArea( mhWnd, &aRect, nullptr );
+
+    // pass cursor's position to ImplSalGetWorkArea to determine work area on
+    // multi monitor setups correctly.
+    POINT aPoint;
+    GetCursorPos(&aPoint);
+    RECT aRect2{ aPoint.x, aPoint.y, aPoint.x + 2, aPoint.y + 2 };
+
+    ImplSalGetWorkArea( mhWnd, &aRect, &aRect2 );
     rRect.SetLeft( aRect.left );
     rRect.SetRight( aRect.right-1 );
     rRect.SetTop( aRect.top );
