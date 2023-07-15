@@ -37,7 +37,7 @@ Option Explicit
 &apos;&apos;&apos;					Admitted wildcards are:	the &quot;?&quot; represents any single character
 &apos;&apos;&apos;											the &quot;*&quot; represents zero, one, or multiple characters
 &apos;&apos;&apos;
-&apos;&apos;&apos;		Disk file sstems and document&apos;s internal file systems
+&apos;&apos;&apos;		Disk file systems and document&apos;s internal file systems
 &apos;&apos;&apos;			All the implemented properties and methods are applicable on usual disk file systems.
 &apos;&apos;&apos;				Root is usually something like &quot;C:\&quot; or &quot;/&quot; or their URL equivalents
 &apos;&apos;&apos;			Now, Libreoffice documents have an internal file system as well. Many of the proposed methods
