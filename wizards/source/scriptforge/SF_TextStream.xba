@@ -31,7 +31,7 @@ Option Explicit
 &apos;&apos;&apos;			https://api.libreoffice.org/docs/idl/ref/interfacecom_1_1sun_1_1star_1_1io_1_1XTextInputStream.html
 &apos;&apos;&apos;			https://api.libreoffice.org/docs/idl/ref/interfacecom_1_1sun_1_1star_1_1io_1_1XTextOutputStream.html
 &apos;&apos;&apos;
-&apos;&apos;&apos;		Disk file sstems and document&apos;s internal file systems
+&apos;&apos;&apos;		Disk file systems and document&apos;s internal file systems
 &apos;&apos;&apos;			All methods and properties are applicable without restrictions on both file systems.
 &apos;&apos;&apos;			However, when updates are operated on text files embedded in a document, (with the WriteXXX() methods),
 &apos;&apos;&apos;			the updates are first done on a copy of the original file. When the file is closed, the copy
