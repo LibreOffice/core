@@ -661,7 +661,7 @@ ScFormulaParserPool& ScDocument::GetFormulaParserPool() const
 const ScSheetEvents* ScDocument::GetSheetEvents( SCTAB nTab ) const
 {
     if (const ScTable* pTable = FetchTable(nTab))
-        pTable->GetSheetEvents();
+        return pTable->GetSheetEvents();
     return nullptr;
 }
 
