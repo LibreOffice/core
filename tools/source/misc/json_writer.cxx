@@ -146,11 +146,6 @@ static bool writeEscapedSequence(sal_uInt32 ch, char*& pos)
 
     switch (ch)
     {
-        case '\b':
-        case '\t':
-        case '\n':
-        case '\f':
-        case '\r':
         case '"':
         case '/':
         case '\\':
