@@ -805,7 +805,7 @@ Check:
 Try:
 	&apos;	Get files
 	Set oSfa = SF_Utils._GetUnoService(&quot;FileAccess&quot;)
-	vFiles = oSfa.getFolderContents(sFolderName, False)	&apos;	NB: The False argumentis ignored in document file systems
+	vFiles = oSfa.getFolderContents(sFolderName, False)	&apos;	NB: The False argument is ignored in document file systems
 	&apos;	Adjust notations
 	For i = 0 To UBound(vFiles)
 		sFile = SF_FileSystem._ConvertFromUrl(vFiles(i))
