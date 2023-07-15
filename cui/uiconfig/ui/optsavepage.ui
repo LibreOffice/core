@@ -185,7 +185,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="margin-start">12</property>
+                <property name="margin-start">18</property>
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
@@ -215,7 +215,7 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">4</property>
+                <property name="top_attach">5</property>
               </packing>
             </child>
             <child>
@@ -253,7 +253,7 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">5</property>
+                <property name="top_attach">6</property>
               </packing>
             </child>
             <child>
@@ -273,6 +273,26 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="backupintodocumentfolder">
+                <property name="label" translatable="yes" context="optsavepage|backupintodocumentfolder">Place backup in same folder as document</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="margin-start">18</property>
+                <property name="use_underline">True</property>
+                <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="backupintodocumentfolder-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="optsavepage|backupintodocumentfolder">Specifies if the backup copy should be stored in the same folder as the original document. If not selected, the backup copy is stored in the folder specified in Tools - Options - %PRODUCTNAME - Paths - Backups.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">4</property>
               </packing>
             </child>
           </object>

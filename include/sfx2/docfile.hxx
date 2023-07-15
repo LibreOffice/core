@@ -250,7 +250,7 @@ public:
     SAL_DLLPRIVATE void CanDisposeStorage_Impl( bool bDisposeStorage );
     SAL_DLLPRIVATE bool WillDisposeStorageOnClose_Impl();
 
-    SAL_DLLPRIVATE void DoBackup_Impl();
+    SAL_DLLPRIVATE void DoBackup_Impl(bool bForceUsingBackupPath);
     SAL_DLLPRIVATE void DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalContent );
     SAL_DLLPRIVATE void DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalContent,
                                                 std::u16string_view aPrefix,

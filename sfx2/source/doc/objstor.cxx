@@ -1246,7 +1246,7 @@ bool SfxObjectShell::SaveTo_Impl
         const bool bDoBackup = officecfg::Office::Common::Save::Document::CreateBackup::get() && !comphelper::LibreOfficeKit::isActive();
         if ( bDoBackup )
         {
-            rMedium.DoBackup_Impl();
+            rMedium.DoBackup_Impl(/*bForceUsingBackupPath=*/false);
             if ( rMedium.GetError() )
             {
                 SetError(rMedium.GetErrorCode());

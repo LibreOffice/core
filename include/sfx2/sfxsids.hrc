@@ -526,7 +526,8 @@ class SvxZoomItem;
 // SaveTabPage
 #define SID_ATTR_DOCINFO                TypedWhichId<SfxBoolItem>(SID_OPTIONS_START +  0)
 #define SID_ATTR_BACKUP                 TypedWhichId<SfxBoolItem>(SID_OPTIONS_START +  1)
-#define SID_ATTR_AUTOSAVE               TypedWhichId<SfxBoolItem>(SID_OPTIONS_START +  2)
+#define SID_ATTR_BACKUP_BESIDE_ORIGINAL TypedWhichId<SfxBoolItem>(SID_OPTIONS_START +  2)
+#define SID_ATTR_AUTOSAVE               TypedWhichId<SfxBoolItem>(SID_OPTIONS_START +  3)
 #define SID_ATTR_USERAUTOSAVE           TypedWhichId<SfxBoolItem>(SID_OPTIONS_START +  4)
 #define SID_ATTR_AUTOSAVEMINUTE         TypedWhichId<SfxUInt16Item>(SID_OPTIONS_START +  5)
 #define SID_ATTR_WORKINGSET             TypedWhichId<SfxBoolItem>(SID_OPTIONS_START + 13)

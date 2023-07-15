@@ -46,6 +46,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xLoadDocPrinterCB;
     std::unique_ptr<weld::CheckButton> m_xDocInfoCB;
     std::unique_ptr<weld::CheckButton> m_xBackupCB;
+    std::unique_ptr<weld::CheckButton> m_xBackupIntoDocumentFolderCB;
     std::unique_ptr<weld::CheckButton> m_xAutoSaveCB;
     std::unique_ptr<weld::SpinButton> m_xAutoSaveEdit;
     std::unique_ptr<weld::Label> m_xMinuteFT;
@@ -61,6 +62,7 @@ private:
     std::unique_ptr<weld::Label> m_xODFWarningFT;
 
     DECL_LINK( AutoClickHdl_Impl, weld::Toggleable&, void );
+    DECL_LINK(BackupClickHdl_Impl, weld::Toggleable&, void);
     DECL_LINK( FilterHdl_Impl, weld::ComboBox&, void );
     DECL_LINK(ODFVersionHdl_Impl, weld::ComboBox&, void );
 

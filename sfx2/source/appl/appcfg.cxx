@@ -151,6 +151,10 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                             (officecfg::Office::Common::Save::Document::CreateBackup::get() && !comphelper::LibreOfficeKit::isActive()) )))
                         bRet = false;
                 break;
+            case SID_ATTR_BACKUP_BESIDE_ORIGINAL:
+                bRet = toSet_ifRW<officecfg::Office::Common::Save::Document::BackupIntoDocumentFolder>(
+                    rSet, SID_ATTR_BACKUP_BESIDE_ORIGINAL);
+                break;
             case SID_ATTR_PRETTYPRINTING:
                 bRet = toSet_ifRW<officecfg::Office::Common::Save::Document::PrettyPrinting>(
                     rSet, SID_ATTR_PRETTYPRINTING);
@@ -327,6 +331,9 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     // Backup
     toCfg_ifSet<officecfg::Office::Common::Save::Document::CreateBackup>(
         rSet, SID_ATTR_BACKUP, batch);
+
+    toCfg_ifSet<officecfg::Office::Common::Save::Document::BackupIntoDocumentFolder>(
+        rSet, SID_ATTR_BACKUP_BESIDE_ORIGINAL, batch);
 
     // PrettyPrinting
     toCfg_ifSet<officecfg::Office::Common::Save::Document::PrettyPrinting>(

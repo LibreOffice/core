@@ -2064,6 +2064,15 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="BackupIntoDocumentFolder" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools  Options - General  Save - [Section] Save -->
+          <info>
+            <desc>Specifies whether to save the backup copy into the same folder
+                as the original document.</desc>
+            <label>Place backup in same folder as document</label>
+          </info>
+          <value>false</value>
+        </prop>
         <prop oor:name="EditProperty" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools  Options - General  Save - [Section] Save -->
           <info>

@@ -84,6 +84,7 @@ SvxSaveTabPage::SvxSaveTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xLoadDocPrinterCB(m_xBuilder->weld_check_button("load_docprinter"))
     , m_xDocInfoCB(m_xBuilder->weld_check_button("docinfo"))
     , m_xBackupCB(m_xBuilder->weld_check_button("backup"))
+    , m_xBackupIntoDocumentFolderCB(m_xBuilder->weld_check_button("backupintodocumentfolder"))
     , m_xAutoSaveCB(m_xBuilder->weld_check_button("autosave"))
     , m_xAutoSaveEdit(m_xBuilder->weld_spin_button("autosave_spin"))
     , m_xMinuteFT(m_xBuilder->weld_label("autosave_mins"))
@@ -123,6 +124,7 @@ SvxSaveTabPage::SvxSaveTabPage(weld::Container* pPage, weld::DialogController* p
     m_xDocTypeLB->append(OUString::number(APP_MATH), aFilterClassesNode.getNodeValue("com.sun.star.formula.FormulaProperties/DisplayName").get<OUString>());
 
     m_xAutoSaveCB->connect_toggled( LINK( this, SvxSaveTabPage, AutoClickHdl_Impl ) );
+    m_xBackupCB->connect_toggled(LINK(this, SvxSaveTabPage, BackupClickHdl_Impl));
 
     SvtModuleOptions aModuleOpt;
     if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::MATH ) )
@@ -215,6 +217,7 @@ void SvxSaveTabPage::DetectHiddenControls()
     {
         // hide controls of "Backup"
         m_xBackupCB->hide();
+        m_xBackupIntoDocumentFolderCB->hide();
     }
 
     if ( aOptionsDlgOpt.IsOptionHidden( u"AutoSave", CFG_PAGE_AND_GROUP ) )
@@ -263,6 +266,14 @@ bool SvxSaveTabPage::FillItemSet( SfxItemSet* rSet )
     if ( m_xBackupCB->get_sensitive() && m_xBackupCB->get_state_changed_from_saved() )
     {
         rSet->Put( SfxBoolItem( SID_ATTR_BACKUP, m_xBackupCB->get_active() ) );
+        bModified = true;
+    }
+
+    if (m_xBackupIntoDocumentFolderCB->get_sensitive()
+        && m_xBackupIntoDocumentFolderCB->get_state_changed_from_saved())
+    {
+        rSet->Put(
+            SfxBoolItem(SID_ATTR_BACKUP_BESIDE_ORIGINAL, m_xBackupIntoDocumentFolderCB->get_active()));
         bModified = true;
     }
 
@@ -475,6 +486,12 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
     m_xBackupCB->set_active(officecfg::Office::Common::Save::Document::CreateBackup::get());
     m_xBackupCB->set_sensitive(!officecfg::Office::Common::Save::Document::CreateBackup::isReadOnly());
 
+    m_xBackupIntoDocumentFolderCB->set_active(
+        officecfg::Office::Common::Save::Document::BackupIntoDocumentFolder::get());
+    m_xBackupIntoDocumentFolderCB->set_sensitive(
+        !officecfg::Office::Common::Save::Document::BackupIntoDocumentFolder::isReadOnly()
+        && m_xBackupCB->get_active());
+
     m_xAutoSaveCB->set_active(officecfg::Office::Recovery::AutoSave::Enabled::get());
     m_xAutoSaveCB->set_sensitive(!officecfg::Office::Recovery::AutoSave::Enabled::isReadOnly());
 
@@ -503,6 +520,7 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
 
     m_xDocInfoCB->save_state();
     m_xBackupCB->save_state();
+    m_xBackupIntoDocumentFolderCB->save_state();
     m_xWarnAlienFormatCB->save_state();
     m_xAutoSaveCB->save_state();
     m_xAutoSaveEdit->save_value();
@@ -531,6 +549,11 @@ IMPL_LINK(SvxSaveTabPage, AutoClickHdl_Impl, weld::Toggleable&, rBox, void)
         m_xMinuteFT->set_sensitive(false);
         m_xUserAutoSaveCB->set_sensitive(false);
     }
+}
+
+IMPL_LINK_NOARG(SvxSaveTabPage, BackupClickHdl_Impl, weld::Toggleable&, void)
+{
+    m_xBackupIntoDocumentFolderCB->set_sensitive(m_xBackupCB->get_active());
 }
 
 static OUString lcl_ExtracUIName(const Sequence<PropertyValue> &rProperties, std::u16string_view rExtension)

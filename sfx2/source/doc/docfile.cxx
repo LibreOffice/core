@@ -2641,7 +2641,7 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
 }
 
 
-void SfxMedium::DoBackup_Impl()
+void SfxMedium::DoBackup_Impl(bool bForceUsingBackupPath)
 {
     // source file name is the logical name of this medium
     INetURLObject aSource( GetURLObject() );
@@ -2651,9 +2651,18 @@ void SfxMedium::DoBackup_Impl()
         return;
 
     bool        bSuccess = false;
+    bool bOnErrorRetryUsingBackupPath = false;
 
     // get path for backups
-    OUString aBakDir = SvtPathOptions().GetBackupPath();
+    OUString aBakDir;
+    if (!bForceUsingBackupPath
+        && officecfg::Office::Common::Save::Document::BackupIntoDocumentFolder::get())
+    {
+        aBakDir = aSource.GetPartBeforeLastName();
+        bOnErrorRetryUsingBackupPath = true;
+    }
+    else
+        aBakDir = SvtPathOptions().GetBackupPath();
     if( !aBakDir.isEmpty() )
     {
         // create content for the parent folder ( = backup folder )
@@ -2695,6 +2704,10 @@ void SfxMedium::DoBackup_Impl()
 
     if ( !bSuccess )
     {
+        // in case a webdav server prevents file creation, or a partition is full, or whatever...
+        if (bOnErrorRetryUsingBackupPath)
+            return DoBackup_Impl(/*bForceUsingBackupPath=*/true);
+
         pImpl->m_eError = ERRCODE_SFX_CANTCREATEBACKUP;
     }
 }
