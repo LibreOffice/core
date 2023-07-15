@@ -22,7 +22,7 @@ NoDisplay=false
 Icon=math
 Type=Application
 Categories=Office;Education;Science;Math;X-Red-Hat-Base;X-MandrivaLinux-Office-Other;
-Exec=${UNIXBASISROOTNAME} --math %%FILE%%
+Exec=env UBUNTU_MENUPROXY=0 ${UNIXBASISROOTNAME} --math %%FILE%%
 MimeType=application/vnd.oasis.opendocument.formula;application/vnd.sun.xml.math;application/vnd.oasis.opendocument.formula-template;text/mathml;application/mathml+xml;
 Name=%PRODUCTNAME Math
 GenericName=Formula Editor
