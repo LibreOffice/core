@@ -307,7 +307,7 @@ Public Function CompareFiles(Optional ByVal FileName1 As Variant _
 &apos;&apos;&apos;	Compare 2 files and return True if they seem identical
 &apos;&apos;&apos;	The comparison may be based on the file attributes, like modification time,
 &apos;&apos;&apos;	or on their contents.
-&apos;&apos;&apos;	The method is not supporte for document&apos;s internal file systems.
+&apos;&apos;&apos;	The method is not supported for document&apos;s internal file systems.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		FileName1: The 1st file to compare
 &apos;&apos;&apos;		FileName2: The 2nd file to compare
@@ -1025,7 +1025,7 @@ End Function    &apos;   ScriptForge.SF_FileSystem.GetFileLen
 REM -----------------------------------------------------------------------------
 Public Function GetFileModified(Optional ByVal FileName As Variant) As Variant
 &apos;&apos;&apos;	Returns the last modified date for the given file
-&apos;&apos;&apos;	The method is not supporte for document&apos;s internal file systems.
+&apos;&apos;&apos;	The method is not supported for document&apos;s internal file systems.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		FileName: a string representing an existing file
 &apos;&apos;&apos;	Returns:
@@ -1253,7 +1253,7 @@ Public Function HashFile(Optional ByVal FileName As Variant _
 							) As String
 &apos;&apos;&apos;	Return an hexadecimal string representing a checksum of the given file
 &apos;&apos;&apos;	Next algorithms are supported: MD5, SHA1, SHA224, SHA256, SHA384 and SHA512
-&apos;&apos;&apos;	The method is not supporte for document&apos;s internal file systems.
+&apos;&apos;&apos;	The method is not supported for document&apos;s internal file systems.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		FileName: a string representing a file
 &apos;&apos;&apos;		Algorithm: The hashing algorithm to use
@@ -1602,7 +1602,7 @@ Public Function PickFile(Optional ByVal DefaultFile As Variant _
 &apos;&apos;&apos;	The mode, OPEN or SAVE, and the filter may be preset
 &apos;&apos;&apos;	If mode = SAVE and the picked file exists, a warning message will be displayed
 &apos;&apos;&apos;	Modified from Andrew Pitonyak&apos;s Base Macro Programming §10.4
-&apos;&apos;&apos;	The method is not supporte for document&apos;s internal file systems.
+&apos;&apos;&apos;	The method is not supported for document&apos;s internal file systems.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		DefaultFile:	Folder part: the FolderName from which to start. Default = the last selected folder
 &apos;&apos;&apos;						File part: the default file to open or save
@@ -1699,7 +1699,7 @@ Public Function PickFolder(Optional ByVal DefaultFolder As Variant _
 							, Optional ByVal FreeText As Variant _
 							) As String
 &apos;&apos;&apos;	Display a FolderPicker dialog box
-&apos;&apos;&apos;	The method is not supporte for document&apos;s internal file systems.
+&apos;&apos;&apos;	The method is not supported for document&apos;s internal file systems.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		DefaultFolder: the FolderName from which to start. Default = the last selected folder
 &apos;&apos;&apos;		FreeText: text to display in the dialog. Default = &quot;&quot;
