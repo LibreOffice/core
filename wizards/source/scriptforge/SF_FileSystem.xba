@@ -43,7 +43,7 @@ Option Explicit
 &apos;&apos;&apos;			Now, Libreoffice documents have an internal file system as well. Many of the proposed methods
 &apos;&apos;&apos;			support document&apos;s file systems too, however, for some of them, with restrictions.
 &apos;&apos;&apos;			Read the comments in the individual methods below.
-&apos;&apos;&apos;			It makes browing folders and files, adding, replacing files possible. Updates will be
+&apos;&apos;&apos;			It makes browsing folders and files, adding, replacing files possible. Updates will be
 &apos;&apos;&apos;			saved with the document.
 &apos;&apos;&apos;			VERY POWERFUL but KNOW WHAT YOU&apos;RE DOING !!
 &apos;&apos;&apos;				The root of a document&apos;s file system is obtained from the &quot;FileSystem&quot; property of a document instance, like in:
