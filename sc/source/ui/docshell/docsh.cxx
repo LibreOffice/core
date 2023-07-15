@@ -131,6 +131,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/configmgr.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <uiitems.hxx>
@@ -1860,19 +1861,20 @@ bool ScDocShell::SaveAs( SfxMedium& rMedium )
         bNeedsRehash = ScPassHashHelper::needsPassHashRegen(*m_pDocument, PASSHASH_SHA256);
     }
 
-    // skip saving recovery file instead of showing re-type password dialog window
-    if ( bNeedsRehash && rMedium.GetFilter()->GetFilterName() == "calc8" &&
-            // it seems, utl::MediaDescriptor::PROP_AUTOSAVEEVENT is true at Save As, too,
-            // so check the backup path
-            rMedium.GetName().startsWith( SvtPathOptions().GetBackupPath() ) )
-    {
-        SAL_WARN("sc.filter", "Should re-type password for own format, won't export recovery file");
-        rMedium.SetError(ERRCODE_SFX_WRONGPASSWORD);
-        return false;
-    }
-
     if (pViewShell && bNeedsRehash)
     {
+        bool bAutoSaveEvent = false;
+        utl::MediaDescriptor lArgs(rMedium.GetArgs());
+        lArgs[utl::MediaDescriptor::PROP_AUTOSAVEEVENT] >>= bAutoSaveEvent;
+        if (bAutoSaveEvent)
+        {
+            // skip saving recovery file instead of showing re-type password dialog window
+            SAL_WARN("sc.filter",
+                     "Should re-type password for own format, won't export recovery file");
+            rMedium.SetError(ERRCODE_SFX_WRONGPASSWORD);
+            return false;
+        }
+
         if (!pViewShell->ExecuteRetypePassDlg(PASSHASH_SHA1))
             // password re-type cancelled.  Don't save the document.
             return false;
