@@ -2233,7 +2233,7 @@ End Function	&apos;	ScriptForge.FileSystem._GetConfigFolder
 
 REM -----------------------------------------------------------------------------
 Public Function _IsDocFileSystem(psFile As String) As Boolean
-&apos;&apos;&apos;	ReturnsTrue when the argument designates a document&apos;s internal file system
+&apos;&apos;&apos;	Returns True when the argument designates a document&apos;s internal file system
 
 	_IsDocFileSystem = SF_String.StartsWith(psFile, DOCFILESYSTEM, CaseSensitive := True)
 
