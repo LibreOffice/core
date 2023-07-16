@@ -103,8 +103,6 @@ public:
 private:
     explicit CoreTextFont(const CoreTextFontFace&, const vcl::font::FontSelectPattern&);
 
-    bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const override;
-
     CTFontRef mpCTFont;
 };
 
