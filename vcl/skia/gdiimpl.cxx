@@ -2036,8 +2036,8 @@ bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPolygon,
                               SkPoint::Make(toSkX(aPoly[1].X()), toSkY(aPoly[1].Y())) };
         SkColor colors[3] = { endColor, startColor, endColor };
         SkScalar border = SkDoubleToScalar(aGradient.GetBorder() / 100.0);
-        SkScalar pos[3]
-            = { std::min<SkScalar>(border, 0.5), 0.5, std::max<SkScalar>(1 - border, 0.5) };
+        SkScalar pos[3] = { std::min<SkScalar>(border * 0.5f, 0.5f), 0.5f,
+                            std::max<SkScalar>(1 - border * 0.5f, 0.5f) };
         shader = SkGradientShader::MakeLinear(points, colors, pos, 3, SkTileMode::kClamp);
     }
     else
