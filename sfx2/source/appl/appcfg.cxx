@@ -446,21 +446,15 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 
 void SfxApplication::SetOptions(const SfxItemSet &rSet)
 {
-    SvtPathOptions aPathOptions;
-
-    // Data is saved in DocInfo and IniManager
-
-    SfxAllItemSet aSendSet( rSet );
-
     // PathName
     if ( const SfxAllEnumItem* pEnumItem = rSet.GetItemIfSet(SID_ATTR_PATHNAME))
     {
-        sal_uInt32 nCount = pEnumItem->GetTextCount();
-        OUString aNoChangeStr( ' ' );
-        for( sal_uInt32 nPath=0; nPath<nCount; ++nPath )
+        sal_uInt16 nCount = pEnumItem->GetTextCount();
+        SvtPathOptions aPathOptions;
+        for( sal_uInt16 nPath=0; nPath<nCount; ++nPath )
         {
-            const OUString& sValue = pEnumItem->GetTextByPos(static_cast<sal_uInt16>(nPath));
-            if ( sValue != aNoChangeStr )
+            const OUString& sValue = pEnumItem->GetTextByPos(nPath);
+            if ( sValue != " " ) // "No change" string
             {
                 switch( static_cast<SvtPathOptions::Paths>(nPath) )
                 {
@@ -531,8 +525,6 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                 }
             }
         }
-
-        aSendSet.ClearItem( SID_ATTR_PATHNAME );
     }
 
     SetOptions_Impl( rSet );
