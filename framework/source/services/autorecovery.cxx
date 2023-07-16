@@ -1801,7 +1801,6 @@ void AutoRecovery::implts_readConfig()
 
     css::uno::Reference<css::container::XNameAccess> xRecoveryList(
             officecfg::Office::Recovery::RecoveryList::get());
-    const OUString sRECOVERY_ITEM_BASE_IDENTIFIER(RECOVERY_ITEM_BASE_IDENTIFIER);
     const css::uno::Sequence< OUString > lItems = xRecoveryList->getElementNames();
     const OUString*                      pItems = lItems.getConstArray();
     sal_Int32                            c      = lItems.getLength();
@@ -1833,9 +1832,9 @@ void AutoRecovery::implts_readConfig()
         implts_specifyAppModuleAndFactory(aInfo);
         implts_specifyDefaultFilterAndExtension(aInfo);
 
-        if (pItems[i].startsWith(sRECOVERY_ITEM_BASE_IDENTIFIER))
+        if (pItems[i].startsWith(RECOVERY_ITEM_BASE_IDENTIFIER))
         {
-            std::u16string_view sID = pItems[i].subView(sRECOVERY_ITEM_BASE_IDENTIFIER.getLength());
+            std::u16string_view sID = pItems[i].subView(RECOVERY_ITEM_BASE_IDENTIFIER.getLength());
             aInfo.ID = o3tl::toInt32(sID);
             /* SAFE */ {
             osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
@@ -1935,8 +1934,8 @@ void AutoRecovery::implts_specifyAppModuleAndFactory(AutoRecovery::TDocumentInfo
         rInfo.AppModule = xManager->identify(rInfo.Document);
 
     ::comphelper::SequenceAsHashMap lModuleDescription(xManager->getByName(rInfo.AppModule));
-    lModuleDescription[OUString(CFG_ENTRY_PROP_EMPTYDOCUMENTURL)] >>= rInfo.FactoryURL;
-    lModuleDescription[OUString(CFG_ENTRY_PROP_FACTORYSERVICE)] >>= rInfo.FactoryService;
+    lModuleDescription[CFG_ENTRY_PROP_EMPTYDOCUMENTURL] >>= rInfo.FactoryURL;
+    lModuleDescription[CFG_ENTRY_PROP_FACTORYSERVICE] >>= rInfo.FactoryService;
 }
 
 void AutoRecovery::implts_collectActiveViewNames( AutoRecovery::TDocumentInfo& i_rInfo )
@@ -3590,15 +3589,15 @@ css::frame::FeatureStateEvent AutoRecovery::implst_createFeatureStateEvent(     
     {
         // pack rInfo for transport via UNO
         ::comphelper::NamedValueCollection aInfo;
-        aInfo.put( OUString(CFG_ENTRY_PROP_ID), pInfo->ID );
-        aInfo.put( OUString(CFG_ENTRY_PROP_ORIGINALURL), pInfo->OrgURL );
-        aInfo.put( OUString(CFG_ENTRY_PROP_FACTORYURL), pInfo->FactoryURL );
-        aInfo.put( OUString(CFG_ENTRY_PROP_TEMPLATEURL), pInfo->TemplateURL );
-        aInfo.put( OUString(CFG_ENTRY_PROP_TEMPURL), pInfo->OldTempURL.isEmpty() ? pInfo->NewTempURL : pInfo->OldTempURL );
-        aInfo.put( OUString(CFG_ENTRY_PROP_MODULE), pInfo->AppModule);
-        aInfo.put( OUString(CFG_ENTRY_PROP_TITLE), pInfo->Title);
-        aInfo.put( OUString(CFG_ENTRY_PROP_VIEWNAMES), pInfo->ViewNames);
-        aInfo.put( OUString(CFG_ENTRY_PROP_DOCUMENTSTATE), sal_Int32(pInfo->DocumentState));
+        aInfo.put( CFG_ENTRY_PROP_ID, pInfo->ID );
+        aInfo.put( CFG_ENTRY_PROP_ORIGINALURL, pInfo->OrgURL );
+        aInfo.put( CFG_ENTRY_PROP_FACTORYURL, pInfo->FactoryURL );
+        aInfo.put( CFG_ENTRY_PROP_TEMPLATEURL, pInfo->TemplateURL );
+        aInfo.put( CFG_ENTRY_PROP_TEMPURL, pInfo->OldTempURL.isEmpty() ? pInfo->NewTempURL : pInfo->OldTempURL );
+        aInfo.put( CFG_ENTRY_PROP_MODULE, pInfo->AppModule);
+        aInfo.put( CFG_ENTRY_PROP_TITLE, pInfo->Title);
+        aInfo.put( CFG_ENTRY_PROP_VIEWNAMES, pInfo->ViewNames);
+        aInfo.put( CFG_ENTRY_PROP_DOCUMENTSTATE, sal_Int32(pInfo->DocumentState));
 
         aEvent.State <<= aInfo.getPropertyValues();
     }
