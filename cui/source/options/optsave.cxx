@@ -475,8 +475,8 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
     m_xBackupCB->set_active(officecfg::Office::Common::Save::Document::CreateBackup::get());
     m_xBackupCB->set_sensitive(!officecfg::Office::Common::Save::Document::CreateBackup::isReadOnly());
 
-    m_xAutoSaveCB->set_active(officecfg::Office::Common::Save::Document::AutoSave::get());
-    m_xAutoSaveCB->set_sensitive(!officecfg::Office::Common::Save::Document::AutoSave::isReadOnly());
+    m_xAutoSaveCB->set_active(officecfg::Office::Recovery::AutoSave::Enabled::get());
+    m_xAutoSaveCB->set_sensitive(!officecfg::Office::Recovery::AutoSave::Enabled::isReadOnly());
 
     m_xUserAutoSaveCB->set_active(officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled::get());
     m_xUserAutoSaveCB->set_sensitive(!officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled::isReadOnly());
@@ -484,8 +484,8 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
     m_xWarnAlienFormatCB->set_active(officecfg::Office::Common::Save::Document::WarnAlienFormat::get());
     m_xWarnAlienFormatCB->set_sensitive(!officecfg::Office::Common::Save::Document::WarnAlienFormat::isReadOnly());
 
-    m_xAutoSaveEdit->set_value(officecfg::Office::Common::Save::Document::AutoSaveTimeIntervall::get());
-    m_xAutoSaveEdit->set_sensitive(!officecfg::Office::Common::Save::Document::AutoSaveTimeIntervall::isReadOnly());
+    m_xAutoSaveEdit->set_value(officecfg::Office::Recovery::AutoSave::TimeIntervall::get());
+    m_xAutoSaveEdit->set_sensitive(!officecfg::Office::Recovery::AutoSave::TimeIntervall::isReadOnly());
 
     // save relatively
     m_xRelativeFsysCB->set_active(officecfg::Office::Common::Save::URL::FileSystem::get());

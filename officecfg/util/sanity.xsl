@@ -34,7 +34,7 @@
     <!-- match all elements that could possibly contain info/desc elements -->
     <xsl:template match="group|set|node-ref|prop|enumeration|length|minLength|maxLength|minInclusive|maxInclusive|minExclusive|maxExclusive|whiteSpace">
 
-        <xsl:if test="1>string-length(info/desc)">
+        <xsl:if test="(1>string-length(info/desc)) and (not(info/deprecated))">
             <!-- print TPF's path to current node -->
             <xsl:message terminate="yes">
 

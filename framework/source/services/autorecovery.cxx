@@ -386,11 +386,6 @@ private:
     bool m_bListenForDocEvents;
     bool m_bListenForConfigChanges;
 
-    /** @short  specify the time interval between two save actions.
-        @descr  tools::Time is measured in [min].
-     */
-    sal_Int32 m_nAutoSaveTimeIntervall;
-
     /** @short  for an asynchronous operation we must know, if there is
                 at least one running job (may be asynchronous!).
      */
@@ -1003,7 +998,6 @@ private:
 constexpr OUStringLiteral CFG_PACKAGE_RECOVERY = u"org.openoffice.Office.Recovery/";
 
 const char CFG_ENTRY_AUTOSAVE_ENABLED[] = "AutoSave/Enabled";
-const char CFG_ENTRY_AUTOSAVE_TIMEINTERVALL[] = "AutoSave/TimeIntervall"; //sic!
 
 constexpr OUStringLiteral CFG_ENTRY_REALDEFAULTFILTER = u"ooSetupFactoryActualFilter";
 
@@ -1218,7 +1212,6 @@ AutoRecovery::AutoRecovery(css::uno::Reference< css::uno::XComponentContext >  x
     , m_xContext                (std::move(xContext                                           ))
     , m_bListenForDocEvents     (false                                          )
     , m_bListenForConfigChanges (false                                          )
-    , m_nAutoSaveTimeIntervall  (0                                                  )
     , m_eJob                    (Job::NoJob)
     , m_aTimer( "framework::AutoRecovery m_aTimer" )
     , m_xAsyncDispatcher        (new vcl::EventPoster( LINK( this, AutoRecovery, implts_asyncDispatch )  ))
@@ -1646,9 +1639,6 @@ void SAL_CALL AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEven
                 }
             }
         }
-        else
-        if ( sPath == CFG_ENTRY_AUTOSAVE_TIMEINTERVALL )
-            pChanges[i].Element >>= m_nAutoSaveTimeIntervall;
     }
 
     } /* SAFE */
@@ -1754,7 +1744,7 @@ void AutoRecovery::implts_readAutoSaveConfig()
     implts_openConfig();
 
     // AutoSave [bool]
-    bool bEnabled(officecfg::Office::Common::Save::Document::AutoSave::get());
+    bool bEnabled(officecfg::Office::Recovery::AutoSave::Enabled::get());
 
     /* SAFE */ {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
@@ -2206,11 +2196,7 @@ void AutoRecovery::implts_updateTimer()
 
     if (m_eTimerType == AutoRecovery::E_NORMAL_AUTOSAVE_INTERVALL)
     {
-        nMilliSeconds
-            = m_nAutoSaveTimeIntervall
-                  ? m_nAutoSaveTimeIntervall
-                  : officecfg::Office::Common::Save::Document::AutoSaveTimeIntervall::get();
-        nMilliSeconds *= 60000; // [min] => 60.000 ms
+        nMilliSeconds = officecfg::Office::Recovery::AutoSave::TimeIntervall::get() * 60000; // [min] => 60.000 ms
     }
     else if (m_eTimerType == AutoRecovery::E_POLL_FOR_USER_IDLE)
     {

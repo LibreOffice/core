@@ -37,7 +37,7 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/presentation/SlideShow.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
-#include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/Recovery.hxx>
 #include <svl/stritem.hxx>
 #include <svl/urihelper.hxx>
 #include <basic/sbstar.hxx>
@@ -530,7 +530,7 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
     maInputFreezeTimer.SetTimeout( 20 );
 
         // no autosave during show
-    if( officecfg::Office::Common::Save::Document::AutoSave::get() )
+    if (officecfg::Office::Recovery::AutoSave::Enabled::get())
         mbAutoSaveWasOn = true;
 
     Application::AddEventListener( LINK( this, SlideshowImpl, EventListenerHdl ) );

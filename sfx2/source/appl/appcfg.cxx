@@ -155,9 +155,9 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_ATTR_AUTOSAVE :
                     {
                         bRet = true;
-                        if (!officecfg::Office::Common::Save::Document::AutoSave::isReadOnly())
+                        if (!officecfg::Office::Recovery::AutoSave::Enabled::isReadOnly())
                             if (!rSet.Put( SfxBoolItem( SID_ATTR_AUTOSAVE,
-                                    officecfg::Office::Common::Save::Document::AutoSave::get() )))
+                                    officecfg::Office::Recovery::AutoSave::Enabled::get() )))
                                 bRet = false;
                     }
                     break;
@@ -173,9 +173,9 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_ATTR_AUTOSAVEMINUTE :
                     {
                         bRet = true;
-                        if (!officecfg::Office::Common::Save::Document::AutoSaveTimeIntervall::isReadOnly())
+                        if (!officecfg::Office::Recovery::AutoSave::TimeIntervall::isReadOnly())
                             if (!rSet.Put( SfxUInt16Item( SID_ATTR_AUTOSAVEMINUTE,
-                                    officecfg::Office::Common::Save::Document::AutoSaveTimeIntervall::get() )))
+                                    officecfg::Office::Recovery::AutoSave::TimeIntervall::get() )))
                                 bRet = false;
                     }
                     break;
@@ -447,7 +447,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     // AutoSave
     if ( const SfxBoolItem *pItem = rSet.GetItemIfSet( SID_ATTR_AUTOSAVE ))
     {
-        officecfg::Office::Common::Save::Document::AutoSave::set(
+        officecfg::Office::Recovery::AutoSave::Enabled::set(
             pItem->GetValue(),
             batch);
     }
@@ -463,7 +463,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     // AutoSave-Time
     if ( const SfxUInt16Item *pItem = rSet.GetItemIfSet(SID_ATTR_AUTOSAVEMINUTE ))
     {
-        officecfg::Office::Common::Save::Document::AutoSaveTimeIntervall::set(
+        officecfg::Office::Recovery::AutoSave::TimeIntervall::set(
                 pItem->GetValue(),
                 batch);
     }

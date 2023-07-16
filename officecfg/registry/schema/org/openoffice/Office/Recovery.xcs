@@ -113,8 +113,11 @@
         <desc> </desc>
       </info>
       <prop oor:name="Enabled" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools  Options - General  Save - [Section] Save -->
         <info>
-          <desc> </desc>
+          <desc>Specifies whether all modified documents are automatically
+          saved in a time interval.</desc>
+          <label>AutoSave every</label>
         </info>
         <value>true</value>
       </prop>
@@ -125,9 +128,23 @@
         <value>false</value>
       </prop>
       <prop oor:name="TimeIntervall" oor:type="xs:int" oor:nillable="false">
+        <!-- UIHints: Tools  Options - General  Save - [Section] Save -->
         <info>
-          <desc> </desc>
+          <desc>Specifies the AutoSave time interval in minutes.</desc>
+          <label>Minutes</label>
         </info>
+        <constraints>
+          <minInclusive oor:value="1">
+            <info>
+              <desc>Specifies that the minimum time interval is 1 minute.</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="60">
+            <info>
+              <desc>Specifies that the maximum time interval is 60 minutes.</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
         <value>10</value>
       </prop>
       <prop oor:name="MinSpaceDocSave" oor:type="xs:int" oor:nillable="false">
