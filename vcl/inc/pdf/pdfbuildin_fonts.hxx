@@ -49,8 +49,6 @@ struct BuildinFont
 
 class BuildinFontInstance final : public LogicalFontInstance
 {
-    bool ImplGetGlyphBoundRect(sal_GlyphId nID, tools::Rectangle& rRect, bool) const override;
-
 public:
     BuildinFontInstance(const vcl::font::PhysicalFontFace&, const vcl::font::FontSelectPattern&);
 

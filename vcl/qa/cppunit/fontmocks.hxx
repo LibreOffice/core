@@ -30,9 +30,6 @@ public:
     {
         return true;
     }
-
-protected:
-    bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const override { return true; }
 };
 
 class TestFontFace : public vcl::font::PhysicalFontFace
