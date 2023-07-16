@@ -1363,10 +1363,10 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
             nPixelWidth, flags, pLayoutCache);
 
     DeviceCoordinate nEndGlyphCoord(0);
-    std::unique_ptr<double[]> xNaturalDXPixelArray;
+    std::unique_ptr<double[]> xDXPixelArray;
     if( !pDXArray.empty() )
     {
-        xNaturalDXPixelArray.reset(new double[nLen]);
+        xDXPixelArray.reset(new double[nLen]);
 
         if (mbMap)
         {
@@ -1374,16 +1374,16 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
             // keeping accuracy for lower levels
             int nSubPixels = pDXArray.get_factor();
             for (int i = 0; i < nLen; ++i)
-                xNaturalDXPixelArray[i] = ImplLogicWidthToDeviceSubPixel(pDXArray.get_subunit(i)) / nSubPixels;
+                xDXPixelArray[i] = ImplLogicWidthToDeviceSubPixel(pDXArray.get_subunit(i)) / nSubPixels;
         }
         else
         {
             for(int i = 0; i < nLen; ++i)
-                xNaturalDXPixelArray[i] = pDXArray.get(i);
+                xDXPixelArray[i] = pDXArray.get(i);
         }
 
-        aLayoutArgs.SetNaturalDXArray(xNaturalDXPixelArray.get());
-        nEndGlyphCoord = std::lround(xNaturalDXPixelArray[nLen - 1]);
+        aLayoutArgs.SetDXArray(xDXPixelArray.get());
+        nEndGlyphCoord = std::lround(xDXPixelArray[nLen - 1]);
     }
 
     if (!pKashidaArray.empty())

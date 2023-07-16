@@ -688,11 +688,11 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
             for (DeviceCoordinate a : aJustificationArray)
                 aNaturalJustificationArray.push_back(a);
             // change the DXArray temporarily (just for the justification)
-            aMultiArgs.mpNaturalDXArray = aNaturalJustificationArray.data();
+            aMultiArgs.mpDXArray = aNaturalJustificationArray.data();
         }
     }
 
-    ImplAdjustMultiLayout(rArgs, aMultiArgs, aMultiArgs.mpNaturalDXArray);
+    ImplAdjustMultiLayout(rArgs, aMultiArgs, aMultiArgs.mpDXArray);
 }
 
 void MultiSalLayout::ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,

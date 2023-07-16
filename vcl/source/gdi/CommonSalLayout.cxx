@@ -139,8 +139,8 @@ void GenericSalLayout::AdjustLayout(vcl::text::ImplLayoutArgs& rArgs)
 {
     SalLayout::AdjustLayout(rArgs);
 
-    if (rArgs.mpNaturalDXArray)
-        ApplyDXArray(rArgs.mpNaturalDXArray, rArgs.mpKashidaArray);
+    if (rArgs.mpDXArray)
+        ApplyDXArray(rArgs.mpDXArray, rArgs.mpKashidaArray);
     else if (rArgs.mnLayoutWidth)
         Justify(rArgs.mnLayoutWidth);
     // apply asian kerning if the glyphs are not already formatted
