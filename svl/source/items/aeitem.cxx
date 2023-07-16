@@ -35,7 +35,7 @@ SfxAllEnumItem::~SfxAllEnumItem()
 {
 }
 
-sal_Int32 SfxAllEnumItem::GetTextCount() const
+sal_uInt16 SfxAllEnumItem::GetTextCount() const
 {
     return m_Values.size();
 }
