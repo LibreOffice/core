@@ -29,7 +29,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/document/XCmisDocument.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <com/sun/star/document/XDocumentRecovery.hpp>
+#include <com/sun/star/document/XDocumentRecovery2.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
@@ -116,7 +116,7 @@ typedef ::cppu::WeakImplHelper  <   css::container::XChild
                                         ,   css::document::XDocumentPropertiesSupplier
                                         ,   css::document::XCmisDocument
                                         ,   css::rdf::XDocumentMetadataAccess
-                                        ,   css::document::XDocumentRecovery
+                                        ,   css::document::XDocumentRecovery2
                                         ,   css::document::XUndoManagerSupplier
                                         ,   css::document::XShapeEventBroadcaster
                                         ,   css::document::XDocumentEventBroadcaster
@@ -571,6 +571,9 @@ public:
     virtual sal_Bool SAL_CALL wasModifiedSinceLastSave() override;
     virtual void SAL_CALL storeToRecoveryFile( const OUString& i_TargetLocation, const css::uno::Sequence< css::beans::PropertyValue >& i_MediaDescriptor ) override;
     virtual void SAL_CALL recoverFromFile( const OUString& i_SourceLocation, const OUString& i_SalvagedFile, const css::uno::Sequence< css::beans::PropertyValue >& i_MediaDescriptor ) override;
+
+    // css.document.XDocumentRecovery2
+    virtual sal_Int64 SAL_CALL getModifiedStateDuration() override;
 
     // css.document.XUndoManagerSupplier
     virtual css::uno::Reference< css::document::XUndoManager > SAL_CALL getUndoManager(  ) override;

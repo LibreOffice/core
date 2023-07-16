@@ -50,7 +50,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <com/sun/star/document/XDocumentRecovery.hpp>
+#include <com/sun/star/document/XDocumentRecovery2.hpp>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
@@ -995,7 +995,7 @@ private:
 };
 
 // recovery.xcu
-constexpr OUStringLiteral CFG_PACKAGE_RECOVERY = u"org.openoffice.Office.Recovery/";
+constexpr OUStringLiteral CFG_PACKAGE_RECOVERY = u"/org.openoffice.Office.Recovery";
 
 const char CFG_ENTRY_AUTOSAVE_ENABLED[] = "AutoSave/Enabled";
 
@@ -2183,7 +2183,7 @@ void AutoRecovery::implts_updateTimer()
 {
     implts_stopTimer();
 
-    sal_Int32 nMilliSeconds = 0;
+    sal_Int64 nMilliSeconds = 0;
 
     /* SAFE */ {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
@@ -2196,7 +2196,27 @@ void AutoRecovery::implts_updateTimer()
 
     if (m_eTimerType == AutoRecovery::E_NORMAL_AUTOSAVE_INTERVALL)
     {
-        nMilliSeconds = officecfg::Office::Recovery::AutoSave::TimeIntervall::get() * 60000; // [min] => 60.000 ms
+        const sal_Int64 nConfiguredAutoSaveInterval
+            = officecfg::Office::Recovery::AutoSave::TimeIntervall::get()
+              * sal_Int64(60000); // [min] => 60.000 ms
+        nMilliSeconds = nConfiguredAutoSaveInterval;
+
+        // Calculate how soon the nearest dirty document's autosave time is;
+        // store the shortest document autosave timeout as the next timer timeout.
+        for (const auto& docInfo : m_lDocCache)
+        {
+            if (auto xDocRecovery2 = docInfo.Document.query<XDocumentRecovery2>())
+            {
+                sal_Int64 nDirtyDuration = xDocRecovery2->getModifiedStateDuration();
+                if (nDirtyDuration < 0)
+                    continue;
+                if (nDirtyDuration > nConfiguredAutoSaveInterval)
+                    nDirtyDuration = nConfiguredAutoSaveInterval; // nMilliSeconds will be 0
+
+                nMilliSeconds
+                    = std::min(nMilliSeconds, nConfiguredAutoSaveInterval - nDirtyDuration);
+            }
+        }
     }
     else if (m_eTimerType == AutoRecovery::E_POLL_FOR_USER_IDLE)
     {
@@ -2819,6 +2839,10 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
 
     CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
 
+    const sal_Int64 nConfiguredAutoSaveInterval
+        = officecfg::Office::Common::Save::Document::AutoSaveTimeIntervall::get()
+          * sal_Int64(60000); // min -> ms
+
     /* SAFE */ {
     osl::ResettableMutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
@@ -2856,6 +2880,18 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
         {
             aInfo.DocumentState |= DocState::Handled;
             continue;
+        }
+
+        if (auto xDocRecovery2 = xDocRecover.query<XDocumentRecovery2>())
+        {
+            const sal_Int64 nDirtyDuration = xDocRecovery2->getModifiedStateDuration();
+            // If the document became modified not too long ago, don't autosave it yet.
+            // Round up to second - if this document is almost ready for autosave, do it now.
+            if (nDirtyDuration + 999 < nConfiguredAutoSaveInterval)
+            {
+                aInfo.DocumentState |= DocState::Handled;
+                continue;
+            }
         }
 
         // check if this document is still used by a concurrent save operation

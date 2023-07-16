@@ -20,7 +20,9 @@
 #include <sal/config.h>
 
 #include <algorithm>
+#include <chrono>
 #include <memory>
+#include <optional>
 #include <config_features.h>
 
 #include <sfx2/sfxbasemodel.hxx>
@@ -216,7 +218,6 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     bool                                                       m_bSaving                ;
     bool                                                       m_bSuicide               ;
     bool                                                       m_bExternalTitle         ;
-    bool                                                       m_bModifiedSinceLastSave ;
     bool                                                       m_bDisposing             ;
     Reference< view::XPrintable>                               m_xPrintable             ;
     Reference< ui::XUIConfigurationManager2 >                  m_xUIConfigurationManager;
@@ -228,6 +229,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     ::rtl::Reference< ::sfx2::DocumentUndoManager >            m_pDocumentUndoManager   ;
     Sequence< document::CmisProperty>                          m_cmisProperties         ;
     std::shared_ptr<SfxGrabBagItem>                            m_xGrabBagItem           ;
+    std::optional<std::chrono::steady_clock::time_point>       m_oDirtyTimestamp        ;
 
     IMPL_SfxBaseModel_DataContainer( ::osl::Mutex& rMutex, SfxObjectShell* pObjectShell )
             :   m_pObjectShell          ( pObjectShell  )
@@ -238,7 +240,6 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             ,   m_bSaving               ( false     )
             ,   m_bSuicide              ( false     )
             ,   m_bExternalTitle        ( false     )
-            ,   m_bModifiedSinceLastSave( false     )
             ,   m_bDisposing            ( false     )
     {
         // increase global instance counter.
@@ -309,6 +310,19 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             ? new ::sfx2::DocumentMetadataAccess(
                 ::comphelper::getProcessComponentContext(), *m_pObjectShell)
             : nullptr;
+    }
+
+    void setModifiedForAutoSave(bool val)
+    {
+        if (val)
+        {
+            if (!m_oDirtyTimestamp)
+                m_oDirtyTimestamp.emplace(std::chrono::steady_clock::now());
+        }
+        else
+        {
+            m_oDirtyTimestamp.reset();
+        }
     }
 };
 
@@ -528,7 +542,7 @@ SfxBaseModel::~SfxBaseModel()
 Any SAL_CALL SfxBaseModel::queryInterface( const uno::Type& rType )
 {
     if  (   ( !m_bSupportEmbeddedScripts && rType.equals( cppu::UnoType<document::XEmbeddedScripts>::get() ) )
-        ||  ( !m_bSupportDocRecovery && rType.equals( cppu::UnoType<XDocumentRecovery>::get() ) )
+        ||  ( !m_bSupportDocRecovery && (rType.equals( cppu::UnoType<XDocumentRecovery>::get() ) || rType.equals( cppu::UnoType<XDocumentRecovery2>::get() )) )
         )
         return Any();
 
@@ -562,7 +576,7 @@ Sequence< uno::Type > SAL_CALL SfxBaseModel::getTypes()
         lcl_stripType( aTypes, cppu::UnoType<document::XEmbeddedScripts>::get() );
 
     if ( !m_bSupportDocRecovery )
-        lcl_stripType( aTypes, cppu::UnoType<XDocumentRecovery>::get() );
+        lcl_stripType( aTypes, cppu::UnoType<XDocumentRecovery2>::get() );
 
     return aTypes;
 }
@@ -1796,7 +1810,7 @@ void SAL_CALL SfxBaseModel::storeToURL( const   OUString&                   rURL
 sal_Bool SAL_CALL SfxBaseModel::wasModifiedSinceLastSave()
 {
     SfxModelGuard aGuard( *this );
-    return m_pData->m_bModifiedSinceLastSave;
+    return m_pData->m_oDirtyTimestamp.has_value();
 }
 
 void SAL_CALL SfxBaseModel::storeToRecoveryFile( const OUString& i_TargetLocation, const Sequence< PropertyValue >& i_MediaDescriptor )
@@ -1808,7 +1822,17 @@ void SAL_CALL SfxBaseModel::storeToRecoveryFile( const OUString& i_TargetLocatio
     impl_store( i_TargetLocation, i_MediaDescriptor, true );
 
     // no need for subsequent calls to storeToRecoveryFile, unless we're modified, again
-    m_pData->m_bModifiedSinceLastSave = false;
+    m_pData->setModifiedForAutoSave(false);
+}
+
+sal_Int64 SAL_CALL SfxBaseModel::getModifiedStateDuration()
+{
+    SfxModelGuard aGuard(*this);
+    if (!m_pData->m_oDirtyTimestamp)
+        return -1;
+    auto ms = std::chrono::ceil<std::chrono::milliseconds>(std::chrono::steady_clock::now()
+                                                           - *m_pData->m_oDirtyTimestamp);
+    return ms.count();
 }
 
 void SAL_CALL SfxBaseModel::recoverFromFile( const OUString& i_SourceLocation, const OUString& i_SalvagedFile, const Sequence< PropertyValue >& i_MediaDescriptor )
@@ -2883,7 +2907,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
         {
             impl_getPrintHelper();
             ListenForStorage_Impl( m_pData->m_pObjectShell->GetStorage() );
-            m_pData->m_bModifiedSinceLastSave = false;
+            m_pData->setModifiedForAutoSave(false);
         }
         break;
 
@@ -2902,13 +2926,13 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
         case SfxEventHintId::DocCreated:
         {
             impl_getPrintHelper();
-            m_pData->m_bModifiedSinceLastSave = false;
+            m_pData->setModifiedForAutoSave(false);
         }
         break;
 
         case SfxEventHintId::ModifyChanged:
         {
-            m_pData->m_bModifiedSinceLastSave = isModified();
+            m_pData->setModifiedForAutoSave(isModified());
         }
         break;
         default: break;
@@ -2947,7 +2971,7 @@ void SfxBaseModel::NotifyModifyListeners_Impl() const
 
     // this notification here is done too generously, we cannot simply assume that we're really modified
     // now, but we need to check it ...
-    m_pData->m_bModifiedSinceLastSave = const_cast< SfxBaseModel* >( this )->isModified();
+    m_pData->setModifiedForAutoSave(const_cast<SfxBaseModel*>(this)->isModified());
 }
 
 void SfxBaseModel::changing()
