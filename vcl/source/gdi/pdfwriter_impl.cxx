@@ -6983,7 +6983,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         if( m_aCurrentPDFState.m_aFont.IsWordLineMode() )
         {
             DevicePoint aStartPt;
-            DeviceCoordinate nWidth = 0;
+            double nWidth = 0;
             nIndex = 0;
             while (rLayout.GetNextGlyph(&pGlyph, aPos, nIndex))
             {

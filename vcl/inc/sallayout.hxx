@@ -61,9 +61,9 @@ class MultiSalLayout final : public SalLayout
 {
 public:
     void            DrawText(SalGraphics&) const override;
-    sal_Int32       GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const override;
-    DeviceCoordinate GetTextWidth() const final override;
-    DeviceCoordinate FillDXArray(std::vector<DeviceCoordinate>* pDXArray, const OUString& rStr) const override;
+    sal_Int32       GetTextBreak(double nMaxWidth, double nCharExtra, int nFactor) const override;
+    double          GetTextWidth() const final override;
+    double          FillDXArray(std::vector<double>* pDXArray, const OUString& rStr) const override;
     void            GetCaretPositions(int nArraySize, sal_Int32* pCaretXArray) const override;
     bool            GetNextGlyph(const GlyphItem** pGlyph, DevicePoint& rPos, int& nStart,
                                  const LogicalFontInstance** ppGlyphFont = nullptr) const override;
@@ -117,9 +117,9 @@ public:
     bool            IsKashidaPosValid(int nCharPos, int nNextCharPos) const final override;
 
     // used by upper layers
-    DeviceCoordinate GetTextWidth() const final override;
-    DeviceCoordinate FillDXArray(std::vector<DeviceCoordinate>* pDXArray, const OUString& rStr) const final override;
-    sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const final override;
+    double          GetTextWidth() const final override;
+    double          FillDXArray(std::vector<double>* pDXArray, const OUString& rStr) const final override;
+    sal_Int32       GetTextBreak(double nMaxWidth, double nCharExtra, int nFactor) const final override;
     void            GetCaretPositions(int nArraySize, sal_Int32* pCaretXArray) const final override;
 
     // used by display layers
@@ -144,7 +144,7 @@ private:
     void            Justify(DeviceCoordinate nNewWidth);
     void            ApplyAsianKerning(std::u16string_view rStr);
 
-    void            GetCharWidths(std::vector<DeviceCoordinate>& rCharWidths,
+    void            GetCharWidths(std::vector<double>& rCharWidths,
                                   const OUString& rStr) const;
 
     void            SetNeedFallback(vcl::text::ImplLayoutArgs&, sal_Int32, bool);

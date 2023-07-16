@@ -989,14 +989,13 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, KernArray* pKernAr
         return 0;
     }
 
-#if VCL_FLOAT_DEVICE_PIXEL
-    std::unique_ptr<std::vector<DeviceCoordinate>> xDXPixelArray;
+    std::unique_ptr<std::vector<double>> xDXPixelArray;
     if(pDXAry)
     {
-        xDXPixelArray.reset(new std::vector<DeviceCoordinate>(nLen));
+        xDXPixelArray.reset(new std::vector<double>(nLen));
     }
-    std::vector<DeviceCoordinate>* pDXPixelArray = xDXPixelArray.get();
-    DeviceCoordinate nWidth = pSalLayout->FillDXArray(pDXPixelArray, bCaret ? rStr : OUString());
+    std::vector<double>* pDXPixelArray = xDXPixelArray.get();
+    double nWidth = pSalLayout->FillDXArray(pDXPixelArray, bCaret ? rStr : OUString());
 
     // convert virtual char widths to virtual absolute positions
     if( pDXPixelArray )
@@ -1006,57 +1005,34 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, KernArray* pKernAr
             (*pDXPixelArray)[i] += (*pDXPixelArray)[i - 1];
         }
     }
-    if( mbMap )
-    {
-        if( pDXPixelArray )
-        {
-            for( int i = 0; i < nLen; ++i )
-            {
-                (*pDXPixelArray)[i] = ImplDevicePixelToLogicWidth((*pDXPixelArray)[i]);
-            }
-        }
-        nWidth = ImplDevicePixelToLogicWidth( nWidth );
-    }
-    if(pDXAry)
-    {
-        pDXAry->resize(nLen);
-        for( int i = 0; i < nLen; ++i )
-        {
-            (*pDXAry)[i] = basegfx::fround((*pDXPixelArray)[i]);
-        }
-    }
-    return basegfx::fround(nWidth);
-
-#else /* ! VCL_FLOAT_DEVICE_PIXEL */
-
-    tools::Long nWidth = pSalLayout->FillDXArray( pDXAry, bCaret ? rStr : OUString() );
-
-    // convert virtual char widths to virtual absolute positions
-    if( pDXAry )
-        for( int i = 1; i < nLen; ++i )
-            (*pDXAry)[ i ] += (*pDXAry)[ i-1 ];
 
     // convert from font units to logical units
-    if (pDXAry)
+    if (pDXPixelArray)
     {
         int nSubPixelFactor = pKernArray->get_factor();
         if (mbMap)
         {
             for (int i = 0; i < nLen; ++i)
-                (*pDXAry)[i] = ImplDevicePixelToLogicWidth( (*pDXAry)[i] * nSubPixelFactor );
+                (*pDXPixelArray)[i] = ImplDevicePixelToLogicWidth((*pDXPixelArray)[i] * nSubPixelFactor);
         }
         else if (nSubPixelFactor)
         {
             for (int i = 0; i < nLen; ++i)
-                (*pDXAry)[i] *= nSubPixelFactor;
+                (*pDXPixelArray)[i] *= nSubPixelFactor;
         }
+    }
+
+    if (pDXAry)
+    {
+        pDXAry->resize(nLen);
+        for (int i = 0; i < nLen; ++i)
+            (*pDXAry)[i] = basegfx::fround((*pDXPixelArray)[i]);
     }
 
     if (mbMap)
         nWidth = ImplDevicePixelToLogicWidth( nWidth );
 
-    return nWidth;
-#endif /* VCL_FLOAT_DEVICE_PIXEL */
+    return basegfx::fround(nWidth);
 }
 
 void OutputDevice::GetCaretPositions( const OUString& rStr, sal_Int32* pCaretXArray,

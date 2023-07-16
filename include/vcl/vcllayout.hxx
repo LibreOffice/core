@@ -93,9 +93,9 @@ public:
     }
 
     // methods using string indexing
-    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const = 0;
-    virtual DeviceCoordinate FillDXArray( std::vector<DeviceCoordinate>* pDXArray, const OUString& rStr ) const = 0;
-    virtual DeviceCoordinate GetTextWidth() const { return FillDXArray( nullptr, {} ); }
+    virtual sal_Int32 GetTextBreak(double nMaxWidth, double nCharExtra, int nFactor) const = 0;
+    virtual double  FillDXArray( std::vector<double>* pDXArray, const OUString& rStr ) const = 0;
+    virtual double  GetTextWidth() const { return FillDXArray( nullptr, {} ); }
     virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const = 0;
     virtual bool    IsKashidaPosValid ( int /*nCharPos*/, int /*nNextCharPos*/ ) const = 0; // i60594
 

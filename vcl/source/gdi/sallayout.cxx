@@ -255,7 +255,7 @@ SalLayoutGlyphs SalLayout::GetGlyphs() const
     return SalLayoutGlyphs(); // invalid
 }
 
-DeviceCoordinate GenericSalLayout::FillDXArray( std::vector<DeviceCoordinate>* pCharWidths, const OUString& rStr ) const
+double GenericSalLayout::FillDXArray( std::vector<double>* pCharWidths, const OUString& rStr ) const
 {
     if (pCharWidths)
         GetCharWidths(*pCharWidths, rStr);
@@ -264,12 +264,12 @@ DeviceCoordinate GenericSalLayout::FillDXArray( std::vector<DeviceCoordinate>* p
 }
 
 // the text width is the maximum logical extent of all glyphs
-DeviceCoordinate GenericSalLayout::GetTextWidth() const
+double GenericSalLayout::GetTextWidth() const
 {
     if (!m_GlyphItems.IsValid())
         return 0;
 
-    DeviceCoordinate nWidth = 0;
+    double nWidth = 0;
     for (auto const& aGlyphItem : m_GlyphItems)
         nWidth += aGlyphItem.newWidth();
 
@@ -470,15 +470,15 @@ void GenericSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray
     }
 }
 
-sal_Int32 GenericSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor ) const
+sal_Int32 GenericSalLayout::GetTextBreak(double nMaxWidth, double nCharExtra, int nFactor) const
 {
-    std::vector<DeviceCoordinate> aCharWidths;
+    std::vector<double> aCharWidths;
     GetCharWidths(aCharWidths, {});
 
-    DeviceCoordinate nWidth = 0;
+    double nWidth = 0;
     for( int i = mnMinCharPos; i < mnEndCharPos; ++i )
     {
-        DeviceCoordinate nDelta =  aCharWidths[ i - mnMinCharPos ] * nFactor;
+        double nDelta =  aCharWidths[ i - mnMinCharPos ] * nFactor;
 
         if (nDelta != 0)
         {
@@ -634,8 +634,7 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
 {
     SalLayout::AdjustLayout( rArgs );
     vcl::text::ImplLayoutArgs aMultiArgs = rArgs;
-    std::vector<DeviceCoordinate> aJustificationArray;
-    std::vector<double> aNaturalJustificationArray;
+    std::vector<double> aJustificationArray;
 
     if( !rArgs.HasDXArray() && rArgs.mnLayoutWidth )
     {
@@ -684,11 +683,8 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
             if( nWidthSum != nTargetWidth )
                 aJustificationArray[ nCharCount-1 ] = nTargetWidth;
 
-            aNaturalJustificationArray.reserve(aJustificationArray.size());
-            for (DeviceCoordinate a : aJustificationArray)
-                aNaturalJustificationArray.push_back(a);
             // change the DXArray temporarily (just for the justification)
-            aMultiArgs.mpDXArray = aNaturalJustificationArray.data();
+            aMultiArgs.mpDXArray = aJustificationArray.data();
         }
     }
 
@@ -976,7 +972,7 @@ void MultiSalLayout::DrawText( SalGraphics& rGraphics ) const
     // NOTE: now the baselevel font is active again
 }
 
-sal_Int32 MultiSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor ) const
+sal_Int32 MultiSalLayout::GetTextBreak(double nMaxWidth, double nCharExtra, int nFactor) const
 {
     if( mnLevel <= 0 )
         return -1;
@@ -984,8 +980,8 @@ sal_Int32 MultiSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoordi
         return mpLayouts[0]->GetTextBreak( nMaxWidth, nCharExtra, nFactor );
 
     int nCharCount = mnEndCharPos - mnMinCharPos;
-    std::vector<DeviceCoordinate> aCharWidths;
-    std::vector<DeviceCoordinate> aFallbackCharWidths;
+    std::vector<double> aCharWidths;
+    std::vector<double> aFallbackCharWidths;
     mpLayouts[0]->FillDXArray( &aCharWidths, {} );
 
     for( int n = 1; n < mnLevel; ++n )
@@ -997,7 +993,7 @@ sal_Int32 MultiSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoordi
                 aCharWidths[i] = aFallbackCharWidths[i];
     }
 
-    DeviceCoordinate nWidth = 0;
+    double nWidth = 0;
     for( int i = 0; i < nCharCount; ++i )
     {
         nWidth += aCharWidths[ i ] * nFactor;
@@ -1009,7 +1005,7 @@ sal_Int32 MultiSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoordi
     return -1;
 }
 
-DeviceCoordinate MultiSalLayout::GetTextWidth() const
+double MultiSalLayout::GetTextWidth() const
 {
     // Measure text width. There might be holes in each SalLayout due to
     // missing chars, so we use GetNextGlyph() to get the glyphs across all
@@ -1018,19 +1014,19 @@ DeviceCoordinate MultiSalLayout::GetTextWidth() const
     DevicePoint aPos;
     const GlyphItem* pGlyphItem;
 
-    DeviceCoordinate nWidth = 0;
+    double nWidth = 0;
     while (GetNextGlyph(&pGlyphItem, aPos, nStart))
         nWidth += pGlyphItem->newWidth();
 
     return nWidth;
 }
 
-DeviceCoordinate MultiSalLayout::FillDXArray( std::vector<DeviceCoordinate>* pCharWidths, const OUString& rStr ) const
+double MultiSalLayout::FillDXArray( std::vector<double>* pCharWidths, const OUString& rStr ) const
 {
     if (pCharWidths)
     {
         // prepare merging of fallback levels
-        std::vector<DeviceCoordinate> aTempWidths;
+        std::vector<double> aTempWidths;
         const int nCharCount = mnEndCharPos - mnMinCharPos;
         pCharWidths->clear();
         pCharWidths->resize(nCharCount, 0);
@@ -1047,7 +1043,7 @@ DeviceCoordinate MultiSalLayout::FillDXArray( std::vector<DeviceCoordinate>* pCh
                 // one char cannot be resolved from different fallbacks
                 if ((*pCharWidths)[i] != 0)
                     continue;
-                DeviceCoordinate nCharWidth = aTempWidths[i];
+                double nCharWidth = aTempWidths[i];
                 if (!nCharWidth)
                     continue;
                 (*pCharWidths)[i] = nCharWidth;

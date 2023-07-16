@@ -56,11 +56,11 @@ public:
     tools::Long            GetInternalLeading() const                                      { return mnIntLeading; }
     tools::Long            GetExternalLeading() const                                      { return mnExtLeading; }
     int             GetSlant() const                                                { return mnSlant; }
-    tools::Long            GetMinKashida() const                                           { return mnMinKashida; }
+    double                 GetMinKashida() const                                           { return mnMinKashida; }
     tools::Long            GetHangingBaseline() const                                      { return mnHangingBaseline; }
 
     void            SetSlant(int nSlant)                                            { mnSlant=nSlant; }
-    void            SetMinKashida( tools::Long nMinKashida )                               { mnMinKashida=nMinKashida; }
+    void            SetMinKashida(double nMinKashida )                                     { mnMinKashida=nMinKashida; }
 
     // font attributes queried from the font instance
     bool            IsFullstopCentered() const                                      { return mbFullstopCentered; }
@@ -117,7 +117,7 @@ private:
     tools::Long            mnIntLeading;               // Internal Leading
     tools::Long            mnExtLeading;               // External Leading
     int             mnSlant;                    // Slant (Italic/Oblique)
-    tools::Long            mnMinKashida;               // Minimal width of kashida (Arabic)
+    double                 mnMinKashida;               // Minimal width of kashida (Arabic)
     tools::Long            mnHangingBaseline;          // Offset of hanging baseline to Romn baseline
 
     // font attributes queried from the font instance

@@ -109,7 +109,7 @@ public: // TODO: make data members private
 
     double GetGlyphWidth(sal_GlyphId, bool = false, bool = true) const;
 
-    int GetKashidaWidth() const;
+    double GetKashidaWidth() const;
 
     void GetScale(double* nXScale, double* nYScale) const;
 

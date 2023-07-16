@@ -424,7 +424,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf152048)
     // Without the fix this fails with:
     // - Expected: 393
     // - Actual  : 511
-    CPPUNIT_ASSERT_EQUAL(DeviceCoordinate(nRefTextWidth + nKashida), pLayout->GetTextWidth());
+    CPPUNIT_ASSERT_EQUAL(double(nRefTextWidth + nKashida), pLayout->GetTextWidth());
 #endif
 }
 

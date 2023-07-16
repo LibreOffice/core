@@ -239,12 +239,12 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
     // horizontal text. That is the offset from original baseline to
     // the center of EM box. Maybe we can use OpenType base table to improve this
     // in the future.
-    DeviceCoordinate nBaseOffset = 0;
+    double nBaseOffset = 0;
     if (rArgs.mnFlags & SalLayoutFlags::Vertical)
     {
         hb_font_extents_t extents;
         if (hb_font_get_h_extents(pHbFont, &extents))
-            nBaseOffset = ( extents.ascender + extents.descender ) / 2;
+            nBaseOffset = ( extents.ascender + extents.descender ) / 2.0;
     }
 
     hb_buffer_t* pHbBuffer = hb_buffer_create();
@@ -505,7 +505,7 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                 if (hb_glyph_info_get_glyph_flags(&pHbGlyphInfos[i]) & HB_GLYPH_FLAG_SAFE_TO_INSERT_TATWEEL)
                     nGlyphFlags |= GlyphItemFlags::IS_SAFE_TO_INSERT_KASHIDA;
 
-                DeviceCoordinate nAdvance, nXOffset, nYOffset;
+                double nAdvance, nXOffset, nYOffset;
                 if (aSubRun.maDirection == HB_DIRECTION_TTB)
                 {
                     nGlyphFlags |= GlyphItemFlags::IS_VERTICAL;
@@ -523,7 +523,7 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                         GetFont().GetGlyphBoundRect(nGlyphIndex, aRect, true);
 
                         nXOffset = -(aRect.Top() / nXScale  + ( pHbPositions[i].y_advance
-                                    + ( aRect.GetHeight() / nXScale ) ) / 2 );
+                                    + ( aRect.GetHeight() / nXScale ) ) / 2.0 );
                     }
 
                 }
@@ -557,7 +557,7 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
     return true;
 }
 
-void GenericSalLayout::GetCharWidths(std::vector<DeviceCoordinate>& rCharWidths, const OUString& rStr) const
+void GenericSalLayout::GetCharWidths(std::vector<double>& rCharWidths, const OUString& rStr) const
 {
     const int nCharCount = mnEndCharPos - mnMinCharPos;
 
@@ -595,7 +595,7 @@ void GenericSalLayout::GetCharWidths(std::vector<DeviceCoordinate>& rCharWidths,
         {
             // More than one grapheme cluster, we want to distribute the glyph
             // width over them.
-            std::vector<DeviceCoordinate> aWidths(nGraphemeCount);
+            std::vector<double> aWidths(nGraphemeCount);
 
             // Check if the glyph has ligature caret positions.
             unsigned int nCarets = nGraphemeCount;
@@ -662,7 +662,7 @@ void GenericSalLayout::GetCharWidths(std::vector<DeviceCoordinate>& rCharWidths,
 void GenericSalLayout::ApplyDXArray(const double* pDXArray, const sal_Bool* pKashidaArray)
 {
     int nCharCount = mnEndCharPos - mnMinCharPos;
-    std::vector<DeviceCoordinate> aOldCharWidths;
+    std::vector<double> aOldCharWidths;
     std::unique_ptr<double[]> const pNewCharWidths(new double[nCharCount]);
 
     // Get the natural character widths (i.e. before applying DX adjustments).
@@ -679,7 +679,7 @@ void GenericSalLayout::ApplyDXArray(const double* pDXArray, const sal_Bool* pKas
 
     // Map of Kashida insertion points (in the glyph items vector) and the
     // requested width.
-    std::map<size_t, std::pair<DeviceCoordinate, DeviceCoordinate>> pKashidas;
+    std::map<size_t, std::pair<double, double>> pKashidas;
 
     // The accumulated difference in X position.
     double nDelta = 0;

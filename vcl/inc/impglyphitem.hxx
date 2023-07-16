@@ -24,6 +24,7 @@
 #include <tools/gen.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/outdev.hxx>
+#include <rtl/math.hxx>
 #include <vector>
 
 #include "font/LogicalFontInstance.hxx"
@@ -51,18 +52,18 @@ template <> struct typed_flags<GlyphItemFlags> : is_typed_flags<GlyphItemFlags, 
 class VCL_DLLPUBLIC GlyphItem
 {
     DevicePoint m_aLinearPos; // absolute position of non rotated string
-    DeviceCoordinate m_nOrigWidth; // original glyph width
+    double m_nOrigWidth; // original glyph width
     sal_Int32 m_nCharPos; // index in string
-    sal_Int32 m_nXOffset;
-    sal_Int32 m_nYOffset;
-    DeviceCoordinate m_nNewWidth; // width after adjustments
+    double m_nXOffset;
+    double m_nYOffset;
+    double m_nNewWidth; // width after adjustments
     sal_GlyphId m_aGlyphId;
     GlyphItemFlags m_nFlags;
     sal_Int8 m_nCharCount; // number of characters making up this glyph
 
 public:
     GlyphItem(int nCharPos, int nCharCount, sal_GlyphId aGlyphId, const DevicePoint& rLinearPos,
-              GlyphItemFlags nFlags, DeviceCoordinate nOrigWidth, int nXOffset, int nYOffset)
+              GlyphItemFlags nFlags, double nOrigWidth, double nXOffset, double nYOffset)
         : m_aLinearPos(rLinearPos)
         , m_nOrigWidth(nOrigWidth)
         , m_nCharPos(nCharPos)
@@ -93,24 +94,26 @@ public:
 
     sal_GlyphId glyphId() const { return m_aGlyphId; }
     int charCount() const { return m_nCharCount; }
-    DeviceCoordinate origWidth() const { return m_nOrigWidth; }
+    double origWidth() const { return m_nOrigWidth; }
     int charPos() const { return m_nCharPos; }
-    int xOffset() const { return m_nXOffset; }
-    int yOffset() const { return m_nYOffset; }
-    DeviceCoordinate newWidth() const { return m_nNewWidth; }
+    double xOffset() const { return m_nXOffset; }
+    double yOffset() const { return m_nYOffset; }
+    double newWidth() const { return m_nNewWidth; }
     const DevicePoint& linearPos() const { return m_aLinearPos; }
 
-    void setNewWidth(DeviceCoordinate width) { m_nNewWidth = width; }
-    void addNewWidth(DeviceCoordinate width) { m_nNewWidth += width; }
+    void setNewWidth(double width) { m_nNewWidth = width; }
+    void addNewWidth(double width) { m_nNewWidth += width; }
     void setLinearPos(const DevicePoint& point) { m_aLinearPos = point; }
     void setLinearPosX(double x) { m_aLinearPos.setX(x); }
     void adjustLinearPosX(double diff) { m_aLinearPos.adjustX(diff); }
     bool isLayoutEquivalent(const GlyphItem& other) const
     {
-        return m_aLinearPos == other.m_aLinearPos && m_nOrigWidth == other.m_nOrigWidth
-               && m_nCharPos == other.m_nCharPos && m_nXOffset == other.m_nXOffset
-               && m_nYOffset == other.m_nYOffset && m_nNewWidth == other.m_nNewWidth
-               && m_aGlyphId == other.m_aGlyphId && m_nCharCount == other.m_nCharCount
+        return rtl::math::approxEqual(m_aLinearPos.getX(), other.m_aLinearPos.getX(), 8)
+               && rtl::math::approxEqual(m_aLinearPos.getY(), other.m_aLinearPos.getY(), 8)
+               && m_nOrigWidth == other.m_nOrigWidth && m_nCharPos == other.m_nCharPos
+               && m_nXOffset == other.m_nXOffset && m_nYOffset == other.m_nYOffset
+               && m_nNewWidth == other.m_nNewWidth && m_aGlyphId == other.m_aGlyphId
+               && m_nCharCount == other.m_nCharCount
                && (m_nFlags & ~GlyphItemFlags::IS_UNSAFE_TO_BREAK)
                       == (other.m_nFlags & ~GlyphItemFlags::IS_UNSAFE_TO_BREAK);
     }

@@ -102,7 +102,7 @@ hb_font_t* LogicalFontInstance::GetHbFontUntransformed() const
     return pHbFont;
 }
 
-int LogicalFontInstance::GetKashidaWidth() const
+double LogicalFontInstance::GetKashidaWidth() const
 {
     sal_GlyphId nGlyph = GetGlyphIndex(0x0640);
     if (nGlyph)
