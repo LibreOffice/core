@@ -110,29 +110,21 @@ namespace
                 nullptr );
     }
 
-    std::vector<std::u16string_view>& GetGUIServers()
-    {
-
 #ifdef _WIN32
-        static std::vector<std::u16string_view> aGUIServers
-            = { u"Gpg4win\\kleopatra.exe",
-                u"Gpg4win\\bin\\kleopatra.exe",
-                u"GNU\\GnuPG\\kleopatra.exe",
-                u"GNU\\GnuPG\\launch-gpa.exe",
-                u"GNU\\GnuPG\\gpa.exe",
-                u"GnuPG\\bin\\gpa.exe",
-                u"GNU\\GnuPG\\bin\\kleopatra.exe",
-                u"GNU\\GnuPG\\bin\\launch-gpa.exe",
-                u"GNU\\GnuPG\\bin\\gpa.exe",
-                officecfg::Office::Common::Security::Scripting::CertMgrPath::get() };
+    constexpr std::u16string_view aGUIServers[]
+        = { u"Gpg4win\\kleopatra.exe",
+            u"Gpg4win\\bin\\kleopatra.exe",
+            u"GNU\\GnuPG\\kleopatra.exe",
+            u"GNU\\GnuPG\\launch-gpa.exe",
+            u"GNU\\GnuPG\\gpa.exe",
+            u"GnuPG\\bin\\gpa.exe",
+            u"GNU\\GnuPG\\bin\\kleopatra.exe",
+            u"GNU\\GnuPG\\bin\\launch-gpa.exe",
+            u"GNU\\GnuPG\\bin\\gpa.exe"};
 #else
-        static std::vector<std::u16string_view> aGUIServers
-            = { u"kleopatra", u"seahorse", u"gpa", u"kgpg",
-                officecfg::Office::Common::Security::Scripting::CertMgrPath::get() };
+    constexpr std::u16string_view aGUIServers[]
+        = { u"kleopatra", u"seahorse", u"gpa", u"kgpg"};
 #endif
-        return aGUIServers;
-    }
-
 }
 
 DigitalSignaturesDialog::DigitalSignaturesDialog(
@@ -272,16 +264,14 @@ bool DigitalSignaturesDialog::canAddRemove()
 {
     //FIXME: this func needs some cleanup, such as real split between
     //'canAdd' and 'canRemove' case
-    bool ret = true;
-
     uno::Reference<container::XNameAccess> xNameAccess = maSignatureManager.getStore();
     if (xNameAccess.is() && xNameAccess->hasByName("[Content_Types].xml"))
         // It's always possible to append an OOXML signature.
-        return ret;
+        return true;
 
     if (!maSignatureManager.getStore().is())
         // It's always possible to append a PDF signature.
-        return ret;
+        return true;
 
     OSL_ASSERT(maSignatureManager.getStore().is());
     bool bDoc1_1 = DocumentSignatureHelper::isODFPre_1_2(m_sODFVersion);
@@ -298,14 +288,13 @@ bool DigitalSignaturesDialog::canAddRemove()
                                                   VclMessageType::Warning, VclButtonsType::Ok,
                                                   XsResId(STR_XMLSECDLG_OLD_ODF_FORMAT)));
         xBox->run();
-        ret = false;
+        return false;
     }
 
     //As of OOo 3.2 the document signature includes in macrosignatures.xml. That is
     //adding a macro signature will break an existing document signature.
     //The sfx2 will remove the documentsignature when the user adds a macro signature
-    if (maSignatureManager.getSignatureMode() == DocumentSignatureMode::Macros
-        && ret)
+    if (maSignatureManager.getSignatureMode() == DocumentSignatureMode::Macros)
     {
         if (m_bHasDocumentSignature && !m_bWarningShowSignMacro)
         {
@@ -318,12 +307,12 @@ bool DigitalSignaturesDialog::canAddRemove()
                 m_xDialog.get(), VclMessageType::Question, VclButtonsType::YesNo,
                 XsResId(STR_XMLSECDLG_QUERY_REMOVEDOCSIGNBEFORESIGN)));
             if (xBox->run() == RET_NO)
-                ret = false;
-            else
-                m_bWarningShowSignMacro = true;
+                return false;
+
+            m_bWarningShowSignMacro = true;
         }
     }
-    return ret;
+    return true;
 }
 
 bool DigitalSignaturesDialog::canAdd() { return canAddRemove(); }
@@ -517,44 +506,36 @@ bool DigitalSignaturesDialog::GetPathAllOS(OUString& aPath)
 void DigitalSignaturesDialog::GetCertificateManager(OUString& aPath, OUString& sExecutable,
                                             OUString& sFoundGUIServer)
 {
-    GetGUIServers().pop_back();
-    GetGUIServers().push_back(officecfg::Office::Common::Security::Scripting::CertMgrPath::get());
-
-    for (auto it = GetGUIServers().rbegin(); it != GetGUIServers().rend(); ++it)
+    OUString aCetMgrConfig = officecfg::Office::Common::Security::Scripting::CertMgrPath::get();
+    if (!aCetMgrConfig.isEmpty())
     {
-        const auto& rServer = *it;
-
-        if (rServer.empty())
-            continue;
-
-        bool bValidSetMgr = (it == GetGUIServers().rbegin() && rServer.size() > 0);
-        sal_Int32 nLastBackslashIndex = -1;
-
-        if (bValidSetMgr)
-        {
 #ifdef _WIN32
-            nLastBackslashIndex = rServer.find_last_of('\\');
+        sal_Int32 nLastBackslashIndex = aCetMgrConfig.lastIndexOf('\\');
 #else
-            nLastBackslashIndex = rServer.find_last_of('/');
+        sal_Int32 nLastBackslashIndex = aCetMgrConfig.lastIndexOf('/');
 #endif
-        }
-
         osl::FileBase::RC searchError = osl::File::searchFileURL(
-            OUString(bValidSetMgr ? rServer.substr(nLastBackslashIndex + 1) : rServer), aPath,
+            aCetMgrConfig.copy(0, nLastBackslashIndex + 1), aPath,
+            sFoundGUIServer);
+        if (searchError == osl::FileBase::E_None)
+            return;
+    }
+
+    for (const auto& rServer: aGUIServers)
+    {
+        osl::FileBase::RC searchError = osl::File::searchFileURL(
+            OUString(rServer), aPath,
             sFoundGUIServer);
         if (searchError == osl::FileBase::E_None)
         {
             osl::File::getSystemPathFromFileURL(sFoundGUIServer, sExecutable);
-            if (it != GetGUIServers().rbegin())
-            {
-                std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-                    comphelper::ConfigurationChanges::create());
-                officecfg::Office::Common::Security::Scripting::CertMgrPath::set(sExecutable,
-                                                                                 pBatch);
-                pBatch->commit();
-            }
+            std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+                comphelper::ConfigurationChanges::create());
+            officecfg::Office::Common::Security::Scripting::CertMgrPath::set(sExecutable,
+                                                                                pBatch);
+            pBatch->commit();
 
-            break;
+            return;
         }
     }
 }
@@ -805,12 +786,15 @@ uno::Reference<security::XCertificate> DigitalSignaturesDialog::getCertificate(c
 
 uno::Reference<xml::crypto::XSecurityEnvironment> DigitalSignaturesDialog::getSecurityEnvironmentForCertificate(const uno::Reference<security::XCertificate>& xCert)
 {
-    if (xCert->getCertificateKind() == CertificateKind_OPENPGP)
-        return maSignatureManager.getGpgSecurityEnvironment();
-    else if (xCert->getCertificateKind() == CertificateKind_X509)
-        return maSignatureManager.getSecurityEnvironment();
-
-    throw RuntimeException("Unknown certificate kind");
+    switch(xCert->getCertificateKind())
+    {
+        case CertificateKind_OPENPGP:
+            return maSignatureManager.getGpgSecurityEnvironment();
+        case CertificateKind_X509:
+            return maSignatureManager.getSecurityEnvironment();
+        default:
+            throw RuntimeException("Unknown certificate kind");
+    }
 }
 
 //If bUseTempStream is true then the temporary signature stream is used.
