@@ -1512,7 +1512,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCssClassRedefinition)
     drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT (pDocument);
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "text", "test");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "text", "012");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "fontcolor", "#ff0000");
     assertXPath(
         pDocument, "/primitive2D/transform/textsimpleportion[1]", "familyname", "Open Symbol");

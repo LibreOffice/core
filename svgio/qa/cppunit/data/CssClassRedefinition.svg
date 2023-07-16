@@ -8,6 +8,6 @@
     <!-- finally c1 should be equal to fill:#ff0000 and font-family:Sans -->
     </style>
     <text x="20" y="20" >
-        <tspan class="c1">test</tspan>
+        <tspan class="c1">012</tspan>
     </text>
 </svg>
