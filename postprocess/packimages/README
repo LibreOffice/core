@@ -1,6 +1,6 @@
 Packs used images in sorted order into theme .zip files
 
-The essence of this module is contained within [[solenv/bin/packimages.pl]].
+The essence of this module is contained within [[solenv/bin/pack_images.py]].
 This script takes several sources of information:
 
 * the list of images used in every .src file that is compiled
