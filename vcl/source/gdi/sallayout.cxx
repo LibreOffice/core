@@ -276,9 +276,9 @@ double GenericSalLayout::GetTextWidth() const
     return nWidth;
 }
 
-void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
+void GenericSalLayout::Justify(double nNewWidth)
 {
-    DeviceCoordinate nOldWidth = GetTextWidth();
+    double nOldWidth = GetTextWidth();
     if( !nOldWidth || nNewWidth==nOldWidth )
         return;
 
@@ -292,7 +292,7 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
     std::vector<GlyphItem>::iterator pGlyphIter;
     // count stretchable glyphs
     int nStretchable = 0;
-    int nMaxGlyphWidth = 0;
+    double nMaxGlyphWidth = 0;
     for(pGlyphIter = m_GlyphItems.begin(); pGlyphIter != pGlyphIterRight; ++pGlyphIter)
     {
         if( !pGlyphIter->IsInCluster() )
@@ -311,7 +311,7 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
     pGlyphIterRight->setLinearPosX( nNewWidth );
 
     // justify glyph widths and positions
-    int nDiffWidth = nNewWidth - nOldWidth;
+    double nDiffWidth = nNewWidth - nOldWidth;
     if( nDiffWidth >= 0) // expanded case
     {
         // expand width by distributing space between glyphs evenly
@@ -326,7 +326,7 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
                 continue;
 
             // distribute extra space equally to stretchable glyphs
-            int nDeltaWidth = nDiffWidth / nStretchable--;
+            double nDeltaWidth = nDiffWidth / nStretchable--;
             nDiffWidth     -= nDeltaWidth;
             pGlyphIter->addNewWidth(nDeltaWidth);
             nDeltaSum      += nDeltaWidth;
@@ -335,13 +335,13 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
     else // condensed case
     {
         // squeeze width by moving glyphs proportionally
-        double fSqueeze = static_cast<double>(nNewWidth) / nOldWidth;
+        double fSqueeze = nNewWidth / nOldWidth;
         if(m_GlyphItems.size() > 1)
         {
             for( pGlyphIter = m_GlyphItems.begin(); ++pGlyphIter != pGlyphIterRight;)
             {
-                int nX = pGlyphIter->linearPos().getX();
-                nX = static_cast<int>(nX * fSqueeze);
+                double nX = pGlyphIter->linearPos().getX();
+                nX = nX * fSqueeze;
                 pGlyphIter->setLinearPosX( nX );
             }
         }
@@ -423,7 +423,7 @@ void GenericSalLayout::ApplyAsianKerning(std::u16string_view rStr)
                 continue;
 
             // apply punctuation compression to logical glyph widths
-            DeviceCoordinate nDelta = (nKernCurrent < nKernNext) ? nKernCurrent : nKernNext;
+            double nDelta = (nKernCurrent < nKernNext) ? nKernCurrent : nKernNext;
             if (nDelta < 0)
             {
                 nDelta = (nDelta * pGlyphIter->origWidth() + 2) / 4;
@@ -640,7 +640,7 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
     {
         // for stretched text in a MultiSalLayout the target width needs to be
         // distributed by individually adjusting its virtual character widths
-        DeviceCoordinate nTargetWidth = aMultiArgs.mnLayoutWidth;
+        double nTargetWidth = aMultiArgs.mnLayoutWidth;
         aMultiArgs.mnLayoutWidth = 0;
 
         // we need to get the original unmodified layouts ready
@@ -652,7 +652,7 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
         // #i17359# multilayout is not simplified yet, so calculating the
         // unjustified width needs handholding; also count the number of
         // stretchable virtual char widths
-        DeviceCoordinate nOrigWidth = 0;
+        double nOrigWidth = 0;
         int nStretchable = 0;
         for( int i = 0; i < nCharCount; ++i )
         {
@@ -665,14 +665,14 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
         // now we are able to distribute the extra width over the virtual char widths
         if( nOrigWidth && (nTargetWidth != nOrigWidth) )
         {
-            DeviceCoordinate nDiffWidth = nTargetWidth - nOrigWidth;
-            DeviceCoordinate nWidthSum = 0;
+            double nDiffWidth = nTargetWidth - nOrigWidth;
+            double nWidthSum = 0;
             for( int i = 0; i < nCharCount; ++i )
             {
-                DeviceCoordinate nJustWidth = aJustificationArray[i];
+                double nJustWidth = aJustificationArray[i];
                 if( (nJustWidth > 0) && (nStretchable > 0) )
                 {
-                    DeviceCoordinate nDeltaWidth = nDiffWidth / nStretchable;
+                    double nDeltaWidth = nDiffWidth / nStretchable;
                     nJustWidth += nDeltaWidth;
                     nDiffWidth -= nDeltaWidth;
                     --nStretchable;

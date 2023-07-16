@@ -1115,7 +1115,7 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, sal_Int32 nWidth,
 
 vcl::text::ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
                                                     const sal_Int32 nMinIndex, const sal_Int32 nLen,
-                                                    DeviceCoordinate nPixelWidth,
+                                                    double nPixelWidth,
                                                     SalLayoutFlags nLayoutFlags,
          vcl::text::TextLayoutCache const*const pLayoutCache) const
 {
@@ -1328,17 +1328,17 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
         pGlyphs = nullptr;
     }
 
-    DeviceCoordinate nPixelWidth = static_cast<DeviceCoordinate>(nLogicalWidth);
+    double nPixelWidth = nLogicalWidth;
     if( nLogicalWidth && mbMap )
     {
         // convert from logical units to physical units
-        nPixelWidth = LogicWidthToDeviceCoordinate( nLogicalWidth );
+        nPixelWidth = ImplLogicWidthToDeviceSubPixel(nLogicalWidth);
     }
 
     vcl::text::ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStr, nMinIndex, nLen,
             nPixelWidth, flags, pLayoutCache);
 
-    DeviceCoordinate nEndGlyphCoord(0);
+    double nEndGlyphCoord(0);
     std::unique_ptr<double[]> xDXPixelArray;
     if( !pDXArray.empty() )
     {
@@ -1405,7 +1405,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
     // adjust to right alignment if necessary
     if( aLayoutArgs.mnFlags & SalLayoutFlags::RightAlign )
     {
-        DeviceCoordinate nRTLOffset;
+        double nRTLOffset;
         if (!pDXArray.empty())
             nRTLOffset = nEndGlyphCoord;
         else if( nPixelWidth )

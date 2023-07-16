@@ -141,7 +141,7 @@ private:
                     GenericSalLayout& operator=( const GenericSalLayout& ) = delete;
 
     void            ApplyDXArray(const double*, const sal_Bool*);
-    void            Justify(DeviceCoordinate nNewWidth);
+    void            Justify(double nNewWidth);
     void            ApplyAsianKerning(std::u16string_view rStr);
 
     void            GetCharWidths(std::vector<double>& rCharWidths,

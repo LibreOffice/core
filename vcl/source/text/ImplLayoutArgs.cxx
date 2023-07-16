@@ -88,7 +88,7 @@ ImplLayoutArgs::ImplLayoutArgs(const OUString& rStr, int nMinCharPos, int nEndCh
     maRuns.ResetPos();
 }
 
-void ImplLayoutArgs::SetLayoutWidth(DeviceCoordinate nWidth) { mnLayoutWidth = nWidth; }
+void ImplLayoutArgs::SetLayoutWidth(double nWidth) { mnLayoutWidth = nWidth; }
 
 void ImplLayoutArgs::SetDXArray(double const* pDXArray) { mpDXArray = pDXArray; }
 

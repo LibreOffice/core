@@ -37,7 +37,7 @@ public:
     // positioning related inputs
     const double* mpDXArray; // in floating point pixel units
     const sal_Bool* mpKashidaArray;
-    DeviceCoordinate mnLayoutWidth; // in pixel units
+    double mnLayoutWidth; // in pixel units
     Degree10 mnOrientation; // in 0-3600 system
 
     // data for bidi and glyph+script fallback
@@ -47,7 +47,7 @@ public:
     ImplLayoutArgs(OUString const& rStr, int nMinCharPos, int nEndCharPos, SalLayoutFlags nFlags,
                    LanguageTag aLanguageTag, vcl::text::TextLayoutCache const* pLayoutCache);
 
-    void SetLayoutWidth(DeviceCoordinate nWidth);
+    void SetLayoutWidth(double nWidth);
     void SetDXArray(const double* pDXArray);
     void SetKashidaArray(const sal_Bool* pKashidaArray);
     void SetOrientation(Degree10 nOrientation);
