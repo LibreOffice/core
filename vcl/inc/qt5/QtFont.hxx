@@ -33,7 +33,6 @@ class QtFont final : public QFont, public LogicalFontInstance
     QtFontFace::CreateFontInstance(const vcl::font::FontSelectPattern&) const;
 
     bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const override;
-    bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const override;
 
     explicit QtFont(const vcl::font::PhysicalFontFace&, const vcl::font::FontSelectPattern&);
 };

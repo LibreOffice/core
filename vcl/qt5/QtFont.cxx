@@ -187,11 +187,4 @@ bool QtFont::GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& rB2DPolyP
     return true;
 }
 
-bool QtFont::ImplGetGlyphBoundRect(sal_GlyphId nId, tools::Rectangle& rRect, bool) const
-{
-    QRawFont aRawFont(QRawFont::fromFont(*this));
-    rRect = toRectangle(aRawFont.boundingRect(nId).toAlignedRect());
-    return true;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

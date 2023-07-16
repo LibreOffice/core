@@ -120,8 +120,6 @@ protected:
     explicit LogicalFontInstance(const vcl::font::PhysicalFontFace&,
                                  const vcl::font::FontSelectPattern&);
 
-    virtual bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const = 0;
-
     hb_font_t* InitHbFont();
     virtual void ImplInitHbFont(hb_font_t*) {}
 

@@ -50,13 +50,14 @@ void VclLogicalFontInstanceTest::testglyphboundrect()
 
     const tools::Long nExpectedX = 7;
     const tools::Long nExpectedY = -80;
+    const tools::Long nExpectedWidth = 51;
+    const tools::Long nExpectedHeight = 83;
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("x of glyph is wrong", nExpectedX, aBoundRect.getX());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("y of glyph is wrong", nExpectedY, aBoundRect.getY());
-    CPPUNIT_ASSERT_MESSAGE("height of glyph of wrong",
-                           aBoundRect.GetWidth() == 50 || aBoundRect.GetWidth() == 51);
-    CPPUNIT_ASSERT_MESSAGE("width of glyph of wrong",
-                           aBoundRect.GetHeight() == 82 || aBoundRect.GetHeight() == 83);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("height of glyph of wrong", nExpectedWidth, aBoundRect.GetWidth());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("width of glyph of wrong", nExpectedHeight,
+                                 aBoundRect.GetHeight());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclLogicalFontInstanceTest);
