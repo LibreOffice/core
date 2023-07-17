@@ -292,7 +292,7 @@ public:
                                    const tools::Rectangle &rControlRegion,
                                    ControlState nState,
                                    const ImplControlValue &aValue) = 0;
-    virtual void drawTextLayout(const GenericSalLayout& layout, bool bTextRenderModeForResolutionIndependentLayout) = 0;
+    virtual void drawTextLayout(const GenericSalLayout& layout) = 0;
     virtual void Flush() {}
     virtual void Flush( const tools::Rectangle& ) {}
     virtual void WindowBackingPropertiesChanged() {};
@@ -445,7 +445,7 @@ public:
                                    ControlState nState,
                                    const ImplControlValue &aValue) override;
 
-    virtual void drawTextLayout(const GenericSalLayout& layout, bool bTextRenderModeForResolutionIndependentLayout) override;
+    virtual void drawTextLayout(const GenericSalLayout& layout) override;
 
     bool supportsOperation(OutDevSupportType eType) const override;
 };

@@ -38,8 +38,7 @@ public:
                                    const tools::Rectangle& rControlRegion, ControlState nState,
                                    const ImplControlValue& aValue) override;
 
-    virtual void drawTextLayout(const GenericSalLayout& layout,
-                                bool bTextRenderModeForResolutionIndependentLayout) override;
+    virtual void drawTextLayout(const GenericSalLayout& layout) override;
 
     virtual void Flush() override;
     virtual void Flush(const tools::Rectangle&) override;

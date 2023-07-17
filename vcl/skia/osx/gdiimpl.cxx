@@ -294,9 +294,9 @@ bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart n
     return bOK;
 }
 
-void AquaSkiaSalGraphicsImpl::drawTextLayout(const GenericSalLayout& rLayout,
-                                             bool bSubpixelPositioning)
+void AquaSkiaSalGraphicsImpl::drawTextLayout(const GenericSalLayout& rLayout)
 {
+    const bool bSubpixelPositioning = rLayout.GetTextRenderModeForResolutionIndependentLayout();
     const CoreTextFont& rFont = *static_cast<const CoreTextFont*>(&rLayout.GetFont());
     const vcl::font::FontSelectPattern& rFontSelect = rFont.GetFontSelectPattern();
     int nHeight = rFontSelect.mnHeight;

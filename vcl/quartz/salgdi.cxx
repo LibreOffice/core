@@ -306,10 +306,10 @@ bool AquaSalGraphics::AddTempDevFont(vcl::font::PhysicalFontCollection*,
 
 void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 {
-    mpBackend->drawTextLayout(rLayout, rLayout.GetTextRenderModeForResolutionIndependentLayout());
+    mpBackend->drawTextLayout(rLayout);
 }
 
-void AquaGraphicsBackend::drawTextLayout(const GenericSalLayout& rLayout, bool bTextRenderModeForResolutionIndependentLayout)
+void AquaGraphicsBackend::drawTextLayout(const GenericSalLayout& rLayout)
 {
 #ifdef IOS
     if (!mrShared.checkContext())
@@ -397,7 +397,7 @@ void AquaGraphicsBackend::drawTextLayout(const GenericSalLayout& rLayout, bool b
         CGContextSetTextDrawingMode(mrShared.maContextHolder.get(), kCGTextFillStroke);
     }
 
-    if (bTextRenderModeForResolutionIndependentLayout)
+    if (rLayout.GetTextRenderModeForResolutionIndependentLayout())
     {
         CGContextSetAllowsFontSubpixelQuantization(mrShared.maContextHolder.get(), false);
         CGContextSetShouldSubpixelQuantizeFonts(mrShared.maContextHolder.get(), false);
