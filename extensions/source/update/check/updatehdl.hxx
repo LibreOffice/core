@@ -46,7 +46,6 @@ enum DialogControls
     CANCEL_BUTTON = 0,
     PAUSE_BUTTON,
     RESUME_BUTTON,
-    INSTALL_BUTTON,
     DOWNLOAD_BUTTON,
     CLOSE_BUTTON,
     HELP_BUTTON,
@@ -111,8 +110,6 @@ private:
     OUString           msDownloading;      // RID_UPDATE_STR_DOWNLOADING
     OUString           msReady2Install;    // RID_UPDATE_STR_READY_INSTALL
     OUString           msCancelMessage;    // RID_UPDATE_STR_CANCEL_DOWNLOAD
-    OUString           msInstallMessage;   // RID_UPDATE_STR_BEGIN_INSTALL
-    OUString           msInstallError;     // RID_UPDATE_STR_INSTALL_ERROR
     OUString           msOverwriteWarning; // RID_UPDATE_STR_OVERWRITE_WARNING
     OUString           msPercent;          // RID_UPDATE_STR_PERCENT
     OUString           msReloadWarning;    // RID_UPDATE_STR_OVERWRITE_WARNING
@@ -122,7 +119,6 @@ private:
     OUString           msDescription;      // RID_UPDATE_FT_DESCRIPTION
     OUString           msClose;            // RID_UPDATE_BTN_CLOSE
     OUString           msDownload;         // RID_UPDATE_BTN_DOWNLOAD
-    OUString           msInstall;          // RID_UPDATE_BTN_INSTALL
     OUString           msPauseBtn;         // RID_UPDATE_BTN_PAUSE
     OUString           msResumeBtn;        // RID_UPDATE_BTN_RESUME
     OUString           msCancelBtn;        // RID_UPDATE_BTN_CANCEL
@@ -173,7 +169,6 @@ public:
     void                    setState( UpdateState eState );
     OUString           getBubbleText( UpdateState eState );
     OUString           getBubbleTitle( UpdateState eState );
-    OUString           getDefaultInstErrMsg();
     bool                    showWarning( const OUString &rWarning ) const;
     bool                    showWarning( const OUString &rWarning, const OUString& rBtnText_1, const OUString& rBtnText_2 ) const;
     bool                    showOverwriteWarning( std::u16string_view rFileName ) const;

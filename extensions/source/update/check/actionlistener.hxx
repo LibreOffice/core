@@ -27,7 +27,6 @@ class IActionListener : public virtual salhelper::SimpleReferenceObject
 
     virtual void            cancel() = 0;
     virtual void            download() = 0;
-    virtual void            install() = 0;
     virtual void            pause() = 0;
     virtual void            resume() = 0;
     virtual void            closeAfterFailure() = 0;
