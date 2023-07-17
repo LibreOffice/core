@@ -534,9 +534,15 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                     nYOffset = -pHbPositions[i].y_offset;
                 }
 
-                nAdvance = std::lround(nAdvance * nXScale);
-                nXOffset = std::lround(nXOffset * nXScale);
-                nYOffset = std::lround(nYOffset * nYScale);
+                nAdvance = nAdvance * nXScale;
+                nXOffset = nXOffset * nXScale;
+                nYOffset = nYOffset * nYScale;
+                if (!GetSubpixelPositioning())
+                {
+                    nAdvance = std::lround(nAdvance);
+                    nXOffset = std::lround(nXOffset);
+                    nYOffset = std::lround(nYOffset);
+                }
 
                 DevicePoint aNewPos(aCurrPos.getX() + nXOffset, aCurrPos.getY() + nYOffset);
                 const GlyphItem aGI(nCharPos, nCharCount, nGlyphIndex, aNewPos, nGlyphFlags,

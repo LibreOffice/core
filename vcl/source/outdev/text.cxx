@@ -1351,15 +1351,16 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
             int nSubPixels = pDXArray.get_factor();
             for (int i = 0; i < nLen; ++i)
                 xDXPixelArray[i] = ImplLogicWidthToDeviceSubPixel(pDXArray.get_subunit(i)) / nSubPixels;
+            nEndGlyphCoord = xDXPixelArray[nLen - 1];
         }
         else
         {
             for(int i = 0; i < nLen; ++i)
                 xDXPixelArray[i] = pDXArray.get(i);
+            nEndGlyphCoord = std::lround(xDXPixelArray[nLen - 1]);
         }
 
         aLayoutArgs.SetDXArray(xDXPixelArray.get());
-        nEndGlyphCoord = std::lround(xDXPixelArray[nLen - 1]);
     }
 
     if (!pKashidaArray.empty())
@@ -1367,6 +1368,9 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
 
     // get matching layout object for base font
     std::unique_ptr<SalLayout> pSalLayout = mpGraphics->GetTextLayout(0);
+
+    if (pSalLayout)
+        pSalLayout->SetSubpixelPositioning(mbMap);
 
     // layout text
     if( pSalLayout && !pSalLayout->LayoutText( aLayoutArgs, pGlyphs ? pGlyphs->Impl(0) : nullptr ) )
@@ -1376,8 +1380,6 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
 
     if( !pSalLayout )
         return nullptr;
-
-    pSalLayout->SetSubpixelPositioning(mbMap);
 
     // do glyph fallback if needed
     // #105768# avoid fallback for very small font sizes
