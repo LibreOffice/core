@@ -7451,7 +7451,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                 {
                     if (vArguments.size() < 3)
                     {
-                        SAL_WARN("writerfilter.dmapper", "IF field requires at lest 3 parameters!");
+                        SAL_WARN("writerfilter.dmapper", "IF field requires at least 3 parameters!");
                         break;
                     }
 
