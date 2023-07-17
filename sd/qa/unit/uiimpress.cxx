@@ -493,7 +493,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf100950)
     CPPUNIT_ASSERT(rPageSelector.IsPageSelected(2));
 }
 
-CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf130581)
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf130581_undo_hide_show_slide)
 {
     createSdImpressDoc();
 
@@ -505,9 +505,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf130581)
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
     sd::UndoManager* pUndoManager = pDocument->GetUndoManager();
-    // Without the fix in place, this test would have failed with
-    // - Expected: 1
-    // - Actual  : 0
+    // Check if there is the correct undo action, i.e., hide slide
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pUndoManager->GetUndoActionCount());
     CPPUNIT_ASSERT_EQUAL(SdResId(STR_UNDO_HIDE_SLIDE), pUndoManager->GetUndoActionComment());
     sd::slidesorter::SlideSorterViewShell* pSSVS = getSlideSorterViewShell();
@@ -518,10 +516,8 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf130581)
     CPPUNIT_ASSERT_EQUAL(true, rPageSelector.IsPageExcluded(0));
 
     // Undo hide slide action and check the number of available redo actions
+    // including the correct undo action, i.e., hide slide
     dispatchCommand(mxComponent, ".uno:Undo", {});
-    // Without the fix in place, this test would have failed with
-    // - Expected: 1
-    // - Actual  : 0
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pUndoManager->GetRedoActionCount());
     CPPUNIT_ASSERT_EQUAL(SdResId(STR_UNDO_HIDE_SLIDE), pUndoManager->GetRedoActionComment());
     CPPUNIT_ASSERT_EQUAL(false, rPageSelector.IsPageExcluded(0));
@@ -530,18 +526,14 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf130581)
     dispatchCommand(mxComponent, ".uno:Redo", {});
     CPPUNIT_ASSERT_EQUAL(true, rPageSelector.IsPageExcluded(0));
     dispatchCommand(mxComponent, ".uno:ShowSlide", {});
-    // Without the fix in place, this test would have failed with
-    // - Expected: 2
-    // - Actual  : 0
+    // There should be two undo actions, i.e., show and hide slide
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pUndoManager->GetUndoActionCount());
     CPPUNIT_ASSERT_EQUAL(SdResId(STR_UNDO_SHOW_SLIDE), pUndoManager->GetUndoActionComment());
     CPPUNIT_ASSERT_EQUAL(false, rPageSelector.IsPageExcluded(0));
 
-    // Undo show slide action and check the number of available undo/redo actions
+    // Undo show slide and check the number of available undo/redo actions
     dispatchCommand(mxComponent, ".uno:Undo", {});
-    // Without the fix in place, this test would have failed with
-    // - Expected: 1
-    // - Actual  : 0
+    // There should be one undo action, i.e., hide slide, and one redo action, i.e., show slide
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pUndoManager->GetUndoActionCount());
     CPPUNIT_ASSERT_EQUAL(SdResId(STR_UNDO_HIDE_SLIDE), pUndoManager->GetUndoActionComment());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pUndoManager->GetRedoActionCount());
