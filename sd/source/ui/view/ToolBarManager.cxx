@@ -31,6 +31,7 @@
 #include <o3tl/deleter.hxx>
 #include <o3tl/enumrange.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/toolbarids.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -1043,42 +1044,47 @@ void ToolBarRules::SelectionHasChanged (
 
     mpToolBarManager->ResetToolBars(ToolBarManager::ToolBarGroup::Function);
 
-    switch (rView.GetContext())
+    if (!sfx2::SfxNotebookBar::IsActive())
     {
-        case SdrViewContext::Graphic:
-            if( !bTextEdit )
-                mpToolBarManager->SetToolBarShell(ToolBarManager::ToolBarGroup::Function, ToolbarId::Draw_Graf_Toolbox);
-            break;
-
-        case SdrViewContext::Media:
-            if( !bTextEdit )
-                mpToolBarManager->SetToolBarShell(ToolBarManager::ToolBarGroup::Function, ToolbarId::Draw_Media_Toolbox);
-            break;
-
-        case SdrViewContext::Table:
-            mpToolBarManager->SetToolBarShell(ToolBarManager::ToolBarGroup::Function, ToolbarId::Draw_Table_Toolbox);
-            bTextEdit = true;
-            break;
-
-        case SdrViewContext::Standard:
-        default:
-            if( !bTextEdit )
-            {
-                switch(rViewShell.GetShellType())
-                {
-                    case ::sd::ViewShell::ST_IMPRESS:
-                    case ::sd::ViewShell::ST_DRAW:
-                    case ::sd::ViewShell::ST_NOTES:
-                    case ::sd::ViewShell::ST_HANDOUT:
-                        mpToolBarManager->SetToolBar(
-                            ToolBarManager::ToolBarGroup::Function,
-                            ToolBarManager::msDrawingObjectToolBar);
-                        break;
-                    default:
-                        break;
-                }
+        switch (rView.GetContext())
+        {
+            case SdrViewContext::Graphic:
+                if (!bTextEdit)
+                    mpToolBarManager->SetToolBarShell(ToolBarManager::ToolBarGroup::Function,
+                                                      ToolbarId::Draw_Graf_Toolbox);
                 break;
-            }
+
+            case SdrViewContext::Media:
+                if (!bTextEdit)
+                    mpToolBarManager->SetToolBarShell(ToolBarManager::ToolBarGroup::Function,
+                                                      ToolbarId::Draw_Media_Toolbox);
+                break;
+
+            case SdrViewContext::Table:
+                mpToolBarManager->SetToolBarShell(ToolBarManager::ToolBarGroup::Function,
+                                                  ToolbarId::Draw_Table_Toolbox);
+                bTextEdit = true;
+                break;
+
+            case SdrViewContext::Standard:
+            default:
+                if (!bTextEdit)
+                {
+                    switch(rViewShell.GetShellType())
+                    {
+                        case ::sd::ViewShell::ST_IMPRESS:
+                        case ::sd::ViewShell::ST_DRAW:
+                        case ::sd::ViewShell::ST_NOTES:
+                        case ::sd::ViewShell::ST_HANDOUT:
+                            mpToolBarManager->SetToolBar(ToolBarManager::ToolBarGroup::Function,
+                                                         ToolBarManager::msDrawingObjectToolBar);
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+        }
     }
 
     if( bTextEdit )
