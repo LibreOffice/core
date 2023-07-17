@@ -87,7 +87,7 @@ void RootAccess::initBroadcaster(
         broadcaster->addChangesNotification(
             changesListener,
             css::util::ChangesEvent(
-                pSource, css::uno::Any( xBase ), set));
+                pSource, css::uno::Any( xBase ), set), path_.empty());
     }
 }
 

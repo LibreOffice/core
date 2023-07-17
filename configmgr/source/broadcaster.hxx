@@ -72,7 +72,7 @@ public:
 
     void addChangesNotification(
         css::uno::Reference< css::util::XChangesListener > const & listener,
-        css::util::ChangesEvent const & event);
+        css::util::ChangesEvent const & event, bool bRootListener);
 
     void send();
 
@@ -131,6 +131,7 @@ private:
     std::vector< ContainerNotification > containerElementReplacedNotifications_;
     std::vector< PropertyChangeNotification > propertyChangeNotifications_;
     std::vector< PropertiesChangeNotification > propertiesChangeNotifications_;
+    std::vector< ChangesNotification > rootChangesNotifications_;
     std::vector< ChangesNotification > changesNotifications_;
 };
 

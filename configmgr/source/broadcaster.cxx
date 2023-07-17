@@ -97,9 +97,12 @@ void Broadcaster::addPropertiesChangeNotification(
 
 void Broadcaster::addChangesNotification(
     css::uno::Reference< css::util::XChangesListener > const & listener,
-    css::util::ChangesEvent const & event)
+    css::util::ChangesEvent const & event, bool bRootListener)
 {
-    changesNotifications_.emplace_back(listener, event);
+    if (bRootListener)
+        rootChangesNotifications_.emplace_back(listener, event);
+    else
+        changesNotifications_.emplace_back(listener, event);
 }
 
 void Broadcaster::send() {
@@ -164,13 +167,17 @@ void Broadcaster::send() {
             appendMessage(messages, e);
         }
     }
-    for (auto& rNotification : changesNotifications_) {
-        try {
-            rNotification.listener->changesOccurred(rNotification.event);
-        } catch (css::lang::DisposedException &) {
-        } catch (css::uno::Exception & e) {
-            exception = cppu::getCaughtException();
-            appendMessage(messages, e);
+    // First root listeners, then the rest
+    for (const auto& container : { rootChangesNotifications_ , changesNotifications_})
+    {
+        for (auto& rNotification : container) {
+            try {
+                rNotification.listener->changesOccurred(rNotification.event);
+            } catch (css::lang::DisposedException &) {
+            } catch (css::uno::Exception & e) {
+                exception = cppu::getCaughtException();
+                appendMessage(messages, e);
+            }
         }
     }
     if (exception.hasValue()) {
