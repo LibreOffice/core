@@ -117,7 +117,6 @@ public:
     // IActionListener
     void cancel() override;
     void download() override;
-    void install() override;
     void pause() override;
     void resume() override;
     void closeAfterFailure() override;

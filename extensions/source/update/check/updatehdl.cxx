@@ -287,15 +287,6 @@ OUString UpdateHandler::getBubbleTitle( UpdateState eState )
 }
 
 
-OUString UpdateHandler::getDefaultInstErrMsg()
-{
-    osl::MutexGuard aGuard( maMutex );
-
-    loadStrings();
-
-    return substVariables( msInstallError );
-}
-
 // XActionListener
 
 void SAL_CALL UpdateHandler::disposing( const lang::EventObject& rEvt )
@@ -349,10 +340,6 @@ void SAL_CALL UpdateHandler::actionPerformed( awt::ActionEvent const & rEvent )
             break;
         case DOWNLOAD_BUTTON:
             mxActionListener->download();
-            break;
-        case INSTALL_BUTTON:
-            if ( showWarning( msInstallMessage ) )
-                mxActionListener->install();
             break;
         case PAUSE_BUTTON:
             mxActionListener->pause();
@@ -573,10 +560,8 @@ void UpdateHandler::updateState( UpdateState eState )
             break;
         case UPDATESTATE_DOWNLOAD_AVAIL:
             showControls( 0 );
-            enableControls( (1<<CLOSE_BUTTON) + (1<<INSTALL_BUTTON) );
             setControlProperty( TEXT_STATUS, "Text", uno::Any( substVariables(msReady2Install) ) );
             setControlProperty( TEXT_DESCRIPTION, "Text", uno::Any( substVariables(msDownloadDescr) ) );
-            focusControl( INSTALL_BUTTON );
             break;
         case UPDATESTATE_AUTO_START:
         case UPDATESTATES_COUNT:
@@ -627,8 +612,6 @@ void UpdateHandler::loadStrings()
     msDownloading   = loadString( loc, RID_UPDATE_STR_DOWNLOADING );
     msReady2Install = loadString( loc, RID_UPDATE_STR_READY_INSTALL );
     msCancelMessage = loadString( loc, RID_UPDATE_STR_CANCEL_DOWNLOAD );
-    msInstallMessage = loadString( loc, RID_UPDATE_STR_BEGIN_INSTALL );
-    msInstallError  = loadString( loc, RID_UPDATE_STR_INSTALL_ERROR );
     msOverwriteWarning = loadString( loc, RID_UPDATE_STR_OVERWRITE_WARNING );
     msPercent       = loadString( loc, RID_UPDATE_STR_PERCENT );
     msReloadWarning = loadString( loc, RID_UPDATE_STR_RELOAD_WARNING );
@@ -640,7 +623,6 @@ void UpdateHandler::loadStrings()
 
     msClose         = loadString( loc, RID_UPDATE_BTN_CLOSE );
     msDownload      = loadString( loc, RID_UPDATE_BTN_DOWNLOAD );
-    msInstall       = loadString( loc, RID_UPDATE_BTN_INSTALL );
     msPauseBtn      = loadString( loc, RID_UPDATE_BTN_PAUSE );
     msResumeBtn     = loadString( loc, RID_UPDATE_BTN_RESUME );
     msCancelBtn     = loadString( loc, RID_UPDATE_BTN_CANCEL );
@@ -1191,20 +1173,6 @@ void UpdateHandler::createDialog()
 
         insertControlModel ( xControlModel, BUTTON_MODEL, msButtonIDs[ CLOSE_BUTTON ],
                              awt::Rectangle( CLOSE_BTN_X, BUTTON_Y_POS, BUTTON_WIDTH, BUTTON_HEIGHT ),
-                             aProps );
-    }
-    {   // install button
-        uno::Sequence< beans::NamedValue > aProps
-        {
-            { "DefaultButton", uno::Any( false ) },
-            { "Enabled", uno::Any( true ) },
-            { "PushButtonType", uno::Any( sal_Int16(awt::PushButtonType_STANDARD) ) },
-            { "Label", uno::Any( msInstall ) },
-            { "HelpURL", uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_INSTALL )) }
-        };
-
-        insertControlModel ( xControlModel, BUTTON_MODEL, msButtonIDs[INSTALL_BUTTON],
-                             awt::Rectangle( INSTALL_BTN_X, BUTTON_Y_POS, BUTTON_WIDTH, BUTTON_HEIGHT ),
                              aProps );
     }
     {   // download button
