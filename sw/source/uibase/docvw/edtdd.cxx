@@ -260,9 +260,7 @@ SotExchangeDest SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject *
 {
     SwWrtShell &rSh = m_rView.GetWrtShell();
     const Point aDocPt( PixelToLogic( rPixPnt ) );
-    if( rSh.TestCurrPam( aDocPt )
-        || rSh.IsOverReadOnlyPos( aDocPt )
-        || rSh.DocPtInsideInputField( aDocPt ) )
+    if (rSh.IsOverReadOnlyPos(aDocPt) || rSh.DocPtInsideInputField(aDocPt))
         return SotExchangeDest::NONE;
 
     SdrObject *pObj = nullptr;

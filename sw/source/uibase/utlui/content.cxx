@@ -5553,7 +5553,7 @@ void NaviContentBookmark::Copy( TransferDataContainer& rData ) const
     rData.CopyByteString(SotClipboardFormatId::SONLK, sStrBuf);
 }
 
-bool NaviContentBookmark::Paste( const TransferableDataHelper& rData )
+bool NaviContentBookmark::Paste( const TransferableDataHelper& rData, const OUString& rsDesc )
 {
     OUString sStr;
     bool bRet = rData.GetString( SotClipboardFormatId::SONLK, sStr );
@@ -5564,6 +5564,8 @@ bool NaviContentBookmark::Paste( const TransferableDataHelper& rData )
         m_aDescription  = sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos );
         m_nDefaultDrag= static_cast<RegionMode>( o3tl::toInt32(o3tl::getToken(sStr, 0, NAVI_BOOKMARK_DELIM, nPos )) );
         m_nDocSh  = o3tl::toInt32(o3tl::getToken(sStr, 0, NAVI_BOOKMARK_DELIM, nPos ));
+        if (!rsDesc.isEmpty())
+            m_aDescription = rsDesc;
     }
     return bRet;
 }

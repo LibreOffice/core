@@ -1724,7 +1724,12 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
     if( pPt )
     {
         // external Drop
-        if( bPasteSelection ? !pMod->m_pXSelection : !pMod->m_pDragDrop )
+        if ((bPasteSelection ? !pMod->m_pXSelection : !pMod->m_pDragDrop) &&
+                // The following condition is used for tdf#156111 to prevent a selection from being
+                // cleared by the default case of the nDestination switch.
+                !(rSh.GetCursorCnt() == 1 && rSh.TestCurrPam(*pPt) &&
+                nDestination == SotExchangeDest::SWDOC_FREE_AREA &&
+                nFormat == SotClipboardFormatId::SONLK))
         {
             switch( nDestination )
             {
@@ -1929,7 +1934,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
                 if( pPt )
                 {
                     NaviContentBookmark aBkmk;
-                    if( aBkmk.Paste( rData ) )
+                    if (aBkmk.Paste(rData, rSh.GetSelText()))
                     {
                         if(bIsDefault)
                         {

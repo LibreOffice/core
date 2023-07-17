@@ -48,7 +48,7 @@ public:
     const OUString& GetDescription() const      { return m_aDescription; }
     RegionMode      GetDefaultDragType() const  { return m_nDefaultDrag; }
     void            Copy( TransferDataContainer& rData ) const;
-    bool            Paste( const TransferableDataHelper& rData );
+    bool            Paste( const TransferableDataHelper& rData, const OUString& rsDesc );
 };
 
 #endif
