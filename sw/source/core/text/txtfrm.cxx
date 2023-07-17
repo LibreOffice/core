@@ -2746,28 +2746,13 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
         CalcFootnoteFlag();
 }
 
-bool SwTextFrame::GetInfo( SfxPoolItem &rHint ) const
+bool SwTextFrame::GetInfo(SfxPoolItem& rHint) const
 {
-    if ( RES_VIRTPAGENUM_INFO == rHint.Which() && IsInDocBody() && ! IsFollow() )
+    if(RES_VIRTPAGENUM_INFO == rHint.Which() && IsInDocBody() && !IsFollow())
     {
-        SwVirtPageNumInfo &rInfo = static_cast<SwVirtPageNumInfo&>(rHint);
-        const SwPageFrame *pPage = FindPageFrame();
-        if ( pPage )
-        {
-            if ( pPage == rInfo.GetOrigPage() && !GetPrev() )
-            {
-                // this should be the one
-                // (could only differ temporarily; is that disturbing?)
-                rInfo.SetInfo( pPage, this );
-                return false;
-            }
-            if ( pPage->GetPhyPageNum() < rInfo.GetOrigPage()->GetPhyPageNum() &&
-                 (!rInfo.GetPage() || pPage->GetPhyPageNum() > rInfo.GetPage()->GetPhyPageNum()))
-            {
-                // this could be the one
-                rInfo.SetInfo( pPage, this );
-            }
-        }
+        SwVirtPageNumInfo& rInfo = static_cast<SwVirtPageNumInfo&>(rHint);
+        if(const SwPageFrame* pPage = FindPageFrame())
+            return pPage->UpdateVirtPageNumInfo(rInfo, this);
     }
     return true;
 }

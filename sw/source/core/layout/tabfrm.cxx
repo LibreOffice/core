@@ -3590,28 +3590,13 @@ void SwTabFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
     }
 }
 
-bool SwTabFrame::GetInfo( SfxPoolItem &rHint ) const
+bool SwTabFrame::GetInfo(SfxPoolItem& rHint) const
 {
-    if ( RES_VIRTPAGENUM_INFO == rHint.Which() && IsInDocBody() && !IsFollow() )
+    if(RES_VIRTPAGENUM_INFO == rHint.Which() && IsInDocBody() && !IsFollow())
     {
-        SwVirtPageNumInfo &rInfo = static_cast<SwVirtPageNumInfo&>(rHint);
-        const SwPageFrame *pPage = FindPageFrame();
-        if ( pPage  )
-        {
-            if ( pPage == rInfo.GetOrigPage() && !GetPrev() )
-            {
-                // Should be the one (can temporarily be different, should we be
-                //                    concerned about this possibility?)
-                rInfo.SetInfo( pPage, this );
-                return false;
-            }
-            if ( pPage->GetPhyPageNum() < rInfo.GetOrigPage()->GetPhyPageNum() &&
-                 (!rInfo.GetPage() || pPage->GetPhyPageNum() > rInfo.GetPage()->GetPhyPageNum()))
-            {
-                //This could be the one.
-                rInfo.SetInfo( pPage, this );
-            }
-        }
+        SwVirtPageNumInfo& rInfo = static_cast<SwVirtPageNumInfo&>(rHint);
+        if(const SwPageFrame* pPage = FindPageFrame())
+            return pPage->UpdateVirtPageNumInfo(rInfo, this);
     }
     return true;
 }
