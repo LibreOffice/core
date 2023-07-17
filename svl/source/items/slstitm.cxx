@@ -41,8 +41,7 @@ SfxStringListItem::SfxStringListItem( sal_uInt16 which, const std::vector<OUStri
     // Therefore the query after the count is commented out
     if( pList /*!!! && pList->Count() */ )
     {
-        mpList = std::make_shared<std::vector<OUString>>();
-        *mpList = *pList;
+        mpList = std::make_shared<std::vector<OUString>>(*pList);
     }
 }
 
@@ -97,26 +96,10 @@ void SfxStringListItem::SetString( const OUString& rStr )
 {
     mpList = std::make_shared<std::vector<OUString>>();
 
-    sal_Int32 nStart = 0;
     OUString aStr(convertLineEnd(rStr, LINEEND_CR));
-    for (;;)
-    {
-        const sal_Int32 nDelimPos = aStr.indexOf( '\r', nStart );
-        if ( nDelimPos < 0 )
-        {
-            if (nStart<aStr.getLength())
-            {
-                // put last string only if not empty
-                mpList->push_back(aStr.copy(nStart));
-            }
-            break;
-        }
-
-        mpList->push_back(aStr.copy(nStart, nDelimPos-nStart));
-
-        // skip both inserted string and delimiter
-        nStart = nDelimPos + 1 ;
-    }
+    // put last string only if not empty
+    for (sal_Int32 nStart = 0; nStart >= 0 && nStart < aStr.getLength();)
+        mpList->push_back(aStr.getToken(0, '\r', nStart));
 }
 
 
@@ -133,19 +116,17 @@ OUString SfxStringListItem::GetString()
             if (iter == end)
                 break;
 
-            aStr.append("\r");
+            aStr.append(SAL_NEWLINE_STRING);
         }
     }
-    return convertLineEnd(aStr.makeStringAndClear(), GetSystemLineEnd());
+    return aStr.makeStringAndClear();
 }
 
 
 void SfxStringListItem::SetStringList( const css::uno::Sequence< OUString >& rList )
 {
-    mpList = std::make_shared<std::vector<OUString>>();
-
-    // String belongs to the list
-    comphelper::sequenceToContainer(*mpList, rList);
+    mpList = std::make_shared<std::vector<OUString>>(
+        comphelper::sequenceToContainer<std::vector<OUString>>(rList));
 }
 
 void SfxStringListItem::GetStringList( css::uno::Sequence< OUString >& rList ) const
@@ -175,11 +156,8 @@ bool SfxStringListItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
 // virtual
 bool SfxStringListItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
 {
-    // GetString() is not const!!!
-    SfxStringListItem* pThis = const_cast< SfxStringListItem * >( this );
-
     css::uno::Sequence< OUString > aStringList;
-    pThis->GetStringList( aStringList );
+    GetStringList( aStringList );
     rVal <<= aStringList;
     return true;
 }
