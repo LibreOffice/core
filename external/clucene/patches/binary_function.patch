@@ -1,3 +1,26 @@
+--- src/core/CLucene/search/BooleanQuery.cpp
++++ src/core/CLucene/search/BooleanQuery.cpp
+@@ -25,7 +25,7 @@
+ CL_NS_USE(util)
+ CL_NS_DEF(search)
+ 
+-	class BooleanClause_Compare:public CL_NS_STD(binary_function)<const BooleanClause*,const BooleanClause*,bool>
++	class BooleanClause_Compare
+ 	{
+ 	public:
+ 		bool operator()( const BooleanClause* val1, const BooleanClause* val2 ) const {
+--- src/core/CLucene/util/_Arrays.h
++++ src/core/CLucene/util/_Arrays.h
+@@ -124,8 +124,7 @@
+ 	
+ 	template <typename _kt, typename _comparator, 
+ 		typename class1, typename class2>
+-	class CLListEquals:
+-		public CL_NS_STD(binary_function)<class1*,class2*,bool>
++	class CLListEquals
+ 	{
+ 	typedef typename class1::const_iterator _itr1;
+ 	typedef typename class2::const_iterator _itr2;
 --- src/core/CLucene/util/Equators.h
 +++ src/core/CLucene/util/Equators.h
 @@ -22,19 +22,19 @@
