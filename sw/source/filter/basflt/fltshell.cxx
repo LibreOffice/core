@@ -95,7 +95,7 @@ SwFltStackEntry::~SwFltStackEntry()
 void SwFltStackEntry::SetEndPos(const SwPosition& rEndPos)
 {
     // Release attribute and keep track of end
-    // Everything with sal_uInt16s, lest the inserting of new text at
+    // Everything with sal_uInt16s, because otherwise the inserting of new text at
     // the cursor position moves the attribute's range
     // That's not the desired behavior!
     m_bOpen = false;                  // release and remember END
