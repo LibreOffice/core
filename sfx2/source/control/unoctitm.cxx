@@ -1120,6 +1120,9 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "GroupSparklines" ||
              aEvent.FeatureURL.Path == "UngroupSparklines" ||
              aEvent.FeatureURL.Path == "FormatSparklineMenu" ||
+             aEvent.FeatureURL.Path == "DataDataPilotRun" ||
+             aEvent.FeatureURL.Path == "RecalcPivotTable" ||
+             aEvent.FeatureURL.Path == "DeletePivotTable" ||
              aEvent.FeatureURL.Path == "NumberFormatDecDecimals" ||
              aEvent.FeatureURL.Path == "NumberFormatIncDecimals" ||
              aEvent.FeatureURL.Path == "Protect" ||
