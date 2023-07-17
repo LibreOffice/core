@@ -2242,6 +2242,22 @@ SwNode* SwNodes::FindPrvNxtFrameNode( const SwNode& rFrameNd,
         else
         {
             pFrameNd = GoPrevSection( &aIdx, true, false );
+            // did we move *into* a table?
+            if (pFrameNd)
+            {
+                for (SwTableNode * pTable = pFrameNd->FindTableNode();
+                    pTable && pTable->EndOfSectionIndex() < rFrameNd.GetIndex();
+                    pTable = pTable->StartOfSectionNode()->FindTableNode())
+                {
+                    pFrameNd = pTable->EndOfSectionNode();
+                }
+                if (pFrameNd->IsEndNode())
+                {   // GoPrevSection() checks that text node isn't section-hidden,
+                    // so table node between can't be section-hidden either
+                    assert(pFrameNd->StartOfSectionNode()->IsTableNode());
+                    continue; // check other hidden conditions on next iteration
+                }
+            }
             if ( nullptr != pFrameNd && !(
                     ::CheckNodesRange( aIdx.GetNode(), rFrameNd, true ) &&
                     // Never out of the table at the start
@@ -2299,6 +2315,21 @@ SwNode* SwNodes::FindPrvNxtFrameNode( const SwNode& rFrameNd,
         else
         {
             pFrameNd = GoNextSection( &aIdx, true, false );
+            // did we move *into* a table?
+            if (pFrameNd)
+            {
+                for (SwTableNode * pTable = pFrameNd->FindTableNode();
+                    pTable && pEnd->GetIndex() < pTable->GetIndex();
+                    pTable = pTable->StartOfSectionNode()->FindTableNode())
+                {
+                    pFrameNd = pTable;
+                }
+                if (pFrameNd->IsTableNode())
+                {   // GoNextSection() checks that text node isn't section-hidden,
+                    // so table node between can't be section-hidden either
+                    continue; // check other hidden conditions on next iteration
+                }
+            }
             // NEVER leave the section when doing this!
             if (pFrameNd
                 && !(::CheckNodesRange(aIdx.GetNode(), rFrameNd, true)
@@ -2316,30 +2347,6 @@ SwNode* SwNodes::FindPrvNxtFrameNode( const SwNode& rFrameNd,
     }
     while (pFrameNd != nullptr);
 
-    // probably this is dead code, because the GoNextSection()
-    // should have ended up in the first text node in the table and
-    // then checked it's in a table?
-    {
-        aIdx = pEnd->GetIndex() + 1;
-
-        pFrameNd = nullptr;
-
-        // is there some sectionnodes before a tablenode?
-        while( aIdx.GetNode().IsSectionNode() )
-        {
-            const SwSection& rSect = aIdx.GetNode().
-                GetSectionNode()->GetSection();
-            if( rSect.IsHiddenFlag() )
-                aIdx = aIdx.GetNode().EndOfSectionIndex()+1;
-            else
-                ++aIdx;
-        }
-        if( aIdx.GetNode().IsTableNode() )
-        {
-            pFrameNd = &aIdx.GetNode();
-            assert(!"this isn't dead code?");
-        }
-    }
     return pFrameNd;
 }
 
