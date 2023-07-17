@@ -88,7 +88,10 @@ void ThemeDialog::runThemeColorEditDialog()
     auto pDialog = std::make_shared<svx::ThemeColorEditDialog>(mpWindow, *mpCurrentColorSet);
     weld::DialogController::runAsync(pDialog, [this, pDialog](sal_uInt32 nResult) {
         if (nResult != RET_OK)
+        {
+            mxAdd->set_sensitive(true);
             return;
+        }
         auto aColorSet = pDialog->getColorSet();
         if (!aColorSet.getName().isEmpty())
         {
@@ -102,6 +105,7 @@ void ThemeDialog::runThemeColorEditDialog()
             mpCurrentColorSet
                 = std::make_shared<model::ColorSet>(maColorSets[maColorSets.size() - 1]);
         }
+        mxAdd->set_sensitive(true);
     });
 }
 
@@ -110,6 +114,7 @@ IMPL_LINK(ThemeDialog, ButtonClicked, weld::Button&, rButton, void)
     if (mpCurrentColorSet && mxAdd.get() == &rButton)
     {
         runThemeColorEditDialog();
+        mxAdd->set_sensitive(false);
     }
 }
 
