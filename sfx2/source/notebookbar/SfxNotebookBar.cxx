@@ -49,6 +49,9 @@ static void NotebookbarAddonValues(
     std::vector<css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>>&
         aExtensionValues)
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+
     framework::AddonsOptions aAddonsItems;
 
     for (int nIdx = 0; nIdx < aAddonsItems.GetAddonsNotebookBarCount(); nIdx++)
