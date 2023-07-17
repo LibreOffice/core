@@ -39,6 +39,8 @@ class SwXFootnote;
 
 // ATT_FTN
 
+/// SfxPoolItem subclass for footnotes and endnotes, stored in the anchor text node. The start node
+/// for the footnote content is defined by m_pTextAttr.
 class SW_DLLPUBLIC SwFormatFootnote final
     : public SfxPoolItem
     , public sw::BroadcastingModify
