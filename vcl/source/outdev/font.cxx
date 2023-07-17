@@ -1133,7 +1133,11 @@ tools::Long OutputDevice::GetMinKashida() const
     if (!ImplNewFont())
         return 0;
 
-    return ImplDevicePixelToLogicWidth( mpFontInstance->mxFontMetric->GetMinKashida() );
+    auto nKashidaWidth = mpFontInstance->mxFontMetric->GetMinKashida();
+    if (!mbMap)
+        nKashidaWidth = std::ceil(nKashidaWidth);
+
+    return ImplDevicePixelToLogicWidth(nKashidaWidth);
 }
 
 sal_Int32 OutputDevice::ValidateKashidas ( const OUString& rTxt,

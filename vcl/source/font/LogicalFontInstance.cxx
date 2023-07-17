@@ -106,7 +106,7 @@ double LogicalFontInstance::GetKashidaWidth() const
 {
     sal_GlyphId nGlyph = GetGlyphIndex(0x0640);
     if (nGlyph)
-        return std::ceil(GetGlyphWidth(nGlyph));
+        return GetGlyphWidth(nGlyph);
     return 0;
 }
 

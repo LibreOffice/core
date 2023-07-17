@@ -757,6 +757,8 @@ void GenericSalLayout::ApplyDXArray(const double* pDXArray, const sal_Bool* pKas
     // Find Kashida glyph width and index.
     sal_GlyphId nKashidaIndex = GetFont().GetGlyphIndex(0x0640);
     double nKashidaWidth = GetFont().GetKashidaWidth();
+    if (!GetSubpixelPositioning())
+        nKashidaWidth = std::ceil(nKashidaWidth);
 
     if (nKashidaWidth <= 0)
     {
