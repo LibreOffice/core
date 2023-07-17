@@ -153,7 +153,7 @@ comphelper::detail::ConfigurationWrapper::ConfigurationWrapper():
 
         maNotifier = css::uno::Reference< css::util::XChangesNotifier >(xCfg, css::uno::UNO_QUERY);
         assert(maNotifier.is());
-        maListener = css::uno::Reference< ConfigurationChangesListener >(new ConfigurationChangesListener(*this));
+        maListener.set(new ConfigurationChangesListener(*this));
         maNotifier->addChangesListener(maListener);
     }
     catch(const css::uno::Exception&)
