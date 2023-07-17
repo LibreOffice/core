@@ -699,7 +699,6 @@ void ResourceManager::ReadLegacyAddons (const Reference<frame::XController>& rxC
         rPanelDescriptor.mbShowForReadOnlyDocuments = false;
         rPanelDescriptor.mbWantsCanvas = false;
         rPanelDescriptor.mbWantsAWT = true;
-        fprintf(stderr, "THIS PLACE\n");
         rPanelDescriptor.maContextList.AddContextDescription(Context(sModuleName, "any"), true, OUString());
     }
 }
