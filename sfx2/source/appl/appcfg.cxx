@@ -29,6 +29,7 @@
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/undo.hxx>
+#include <svl/whiter.hxx>
 
 #include <sfx2/sfxsids.hrc>
 
@@ -106,246 +107,156 @@ IMPL_LINK(SfxEventAsyncer_Impl, IdleHdl, Timer*, pAsyncIdle, void)
     delete this;
 }
 
+namespace
+{
+template <class Cfg, class Item> bool toSet(SfxItemSet& rSet, TypedWhichId<Item> wid)
+{
+    return rSet.Put(Item(wid, Cfg::get()));
+}
+template <class Cfg, class Item, class Val>
+bool toSet_withDefault(SfxItemSet& rSet, TypedWhichId<Item> wid, Val&& defVal)
+{
+    return rSet.Put(Item(wid, Cfg::get().value_or(std::move(defVal))));
+}
+template <class Cfg, class Item> bool toSet_ifRW(SfxItemSet& rSet, TypedWhichId<Item> wid)
+{
+    return Cfg::isReadOnly() || toSet<Cfg>(rSet, wid);
+}
+
+template <class Cfg, class Item>
+void toCfg_ifSet(const SfxItemSet& rSet, TypedWhichId<Item> wid,
+                 std::shared_ptr<comphelper::ConfigurationChanges> const& batch)
+{
+    if (const auto* pItem = rSet.GetItemIfSet(wid))
+        Cfg::set(pItem->GetValue(), batch);
+}
+}
 
 void SfxApplication::GetOptions( SfxItemSet& rSet )
 {
-    bool bRet = false;
-
-    const WhichRangesContainer& pRanges = rSet.GetRanges();
-
-    for (auto const & pRange : pRanges)
+    SfxWhichIter iter(rSet);
+    for (auto nWhich = iter.FirstWhich(); nWhich; nWhich = iter.NextWhich())
     {
-        for(sal_uInt16 nWhich = pRange.first; nWhich <= pRange.second; ++nWhich)
+        bool bRet = false;
+        switch(nWhich)
         {
-            switch(nWhich)
-            {
-                case SID_ATTR_BUTTON_BIGSIZE :
-                {
-                    if( rSet.Put( SfxBoolItem( SID_ATTR_BUTTON_BIGSIZE, SvtMiscOptions::AreCurrentSymbolsLarge() ) ) )
-                        bRet = true;
-                    break;
-                }
-                case SID_ATTR_BACKUP :
-                    {
-                        bRet = true;
-                        if (!officecfg::Office::Common::Save::Document::CreateBackup::isReadOnly())
-                            if (!rSet.Put( SfxBoolItem( SID_ATTR_BACKUP,
-                                    (officecfg::Office::Common::Save::Document::CreateBackup::get() && !comphelper::LibreOfficeKit::isActive()) )))
-                                bRet = false;
-                    }
-                    break;
-                case SID_ATTR_PRETTYPRINTING:
-                    {
-                        bRet = true;
-                        if (!officecfg::Office::Common::Save::Document::PrettyPrinting::isReadOnly())
-                            if (!rSet.Put( SfxBoolItem( SID_ATTR_PRETTYPRINTING,
-                                    officecfg::Office::Common::Save::Document::PrettyPrinting::get())))
-                                bRet = false;
-                    }
-                    break;
-                case SID_ATTR_WARNALIENFORMAT:
-                    {
-                        bRet = true;
-                        if (!officecfg::Office::Common::Save::Document::WarnAlienFormat::isReadOnly())
-                            if (!rSet.Put( SfxBoolItem( SID_ATTR_WARNALIENFORMAT,
-                                    officecfg::Office::Common::Save::Document::WarnAlienFormat::get() )))
-                                bRet = false;
-                    }
-                    break;
-                case SID_ATTR_AUTOSAVE :
-                    {
-                        bRet = true;
-                        if (!officecfg::Office::Recovery::AutoSave::Enabled::isReadOnly())
-                            if (!rSet.Put( SfxBoolItem( SID_ATTR_AUTOSAVE,
-                                    officecfg::Office::Recovery::AutoSave::Enabled::get() )))
-                                bRet = false;
-                    }
-                    break;
-                case SID_ATTR_AUTOSAVEPROMPT :
-                    {
-                        bRet = true;
-                        if (!officecfg::Office::Common::Save::Document::AutoSavePrompt::isReadOnly())
-                            if (!rSet.Put( SfxBoolItem( SID_ATTR_AUTOSAVEPROMPT,
-                                    officecfg::Office::Common::Save::Document::AutoSavePrompt::get())))
-                                bRet = false;
-                    }
-                    break;
-                case SID_ATTR_AUTOSAVEMINUTE :
-                    {
-                        bRet = true;
-                        if (!officecfg::Office::Recovery::AutoSave::TimeIntervall::isReadOnly())
-                            if (!rSet.Put( SfxUInt16Item( SID_ATTR_AUTOSAVEMINUTE,
-                                    officecfg::Office::Recovery::AutoSave::TimeIntervall::get() )))
-                                bRet = false;
-                    }
-                    break;
-                case SID_ATTR_USERAUTOSAVE :
-                    {
-                        bRet = true;
-                        if (!officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled::isReadOnly())
-                            if (!rSet.Put( SfxBoolItem( SID_ATTR_USERAUTOSAVE,
-                                    officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled::get() )))
-                                bRet = false;
-                    }
-                    break;
-                case SID_ATTR_DOCINFO :
-                    {
-                        bRet = true;
-                        if (!officecfg::Office::Common::Save::Document::EditProperty::isReadOnly())
-                            if (!rSet.Put( SfxBoolItem( SID_ATTR_DOCINFO,
-                                    officecfg::Office::Common::Save::Document::EditProperty::get())))
-                                bRet = false;
-                    }
-                    break;
-                case SID_ATTR_WORKINGSET :
-                    {
-                        bRet = true;
-                        if (!officecfg::Office::Common::Save::WorkingSet::isReadOnly())
-                            if (!rSet.Put( SfxBoolItem( SID_ATTR_WORKINGSET,
-                                    officecfg::Office::Common::Save::WorkingSet::get())))
-                                bRet = false;
-                    }
-                    break;
-                case SID_ATTR_SAVEDOCVIEW :
-                    {
-                        bRet = true;
-                        if (!officecfg::Office::Common::Save::Document::ViewInfo::isReadOnly())
-                            if (!rSet.Put( SfxBoolItem( SID_ATTR_SAVEDOCVIEW, officecfg::Office::Common::Save::Document::ViewInfo::get())))
-                                bRet = false;
-                    }
-                    break;
-                case SID_ATTR_METRIC :
-                    break;
-                case SID_HELPBALLOONS :
-                    if(rSet.Put( SfxBoolItem ( SID_HELPBALLOONS,
-                            officecfg::Office::Common::Help::ExtendedTip::get() ) ) )
-                        bRet = true;
-                    break;
-                case SID_HELPTIPS :
-                    if(rSet.Put( SfxBoolItem ( SID_HELPTIPS,
-                            officecfg::Office::Common::Help::Tip::get() ) ) )
-                        bRet = true;
-                    break;
-                case SID_HELP_STYLESHEET :
-                    if(rSet.Put( SfxStringItem ( SID_HELP_STYLESHEET,
-                               officecfg::Office::Common::Help::HelpStyleSheet::get() ) ) )
-                        bRet = true;
+            case SID_ATTR_BUTTON_BIGSIZE:
+                if( rSet.Put( SfxBoolItem( SID_ATTR_BUTTON_BIGSIZE, SvtMiscOptions::AreCurrentSymbolsLarge() ) ) )
+                    bRet = true;
                 break;
-                case SID_ATTR_UNDO_COUNT :
-                    if (rSet.Put(
-                            SfxUInt16Item (
-                                SID_ATTR_UNDO_COUNT,
-                                officecfg::Office::Common::Undo::Steps::get())))
-                    {
-                        bRet = true;
-                    }
-                    break;
-                case SID_ATTR_QUICKLAUNCHER :
+            case SID_ATTR_BACKUP:
+                bRet = true;
+                if (!officecfg::Office::Common::Save::Document::CreateBackup::isReadOnly())
+                    if (!rSet.Put( SfxBoolItem( SID_ATTR_BACKUP,
+                            (officecfg::Office::Common::Save::Document::CreateBackup::get() && !comphelper::LibreOfficeKit::isActive()) )))
+                        bRet = false;
+                break;
+            case SID_ATTR_PRETTYPRINTING:
+                bRet = toSet_ifRW<officecfg::Office::Common::Save::Document::PrettyPrinting>(
+                    rSet, SID_ATTR_PRETTYPRINTING);
+                break;
+            case SID_ATTR_WARNALIENFORMAT:
+                bRet = toSet_ifRW<officecfg::Office::Common::Save::Document::WarnAlienFormat>(
+                    rSet, SID_ATTR_WARNALIENFORMAT);
+                break;
+            case SID_ATTR_AUTOSAVE:
+                bRet = toSet_ifRW<officecfg::Office::Recovery::AutoSave::Enabled>(
+                    rSet, SID_ATTR_AUTOSAVE);
+                break;
+            case SID_ATTR_AUTOSAVEPROMPT:
+                bRet = toSet_ifRW<officecfg::Office::Common::Save::Document::AutoSavePrompt>(
+                    rSet, SID_ATTR_AUTOSAVEPROMPT);
+                break;
+            case SID_ATTR_AUTOSAVEMINUTE:
+                bRet = toSet_ifRW<officecfg::Office::Recovery::AutoSave::TimeIntervall>(
+                    rSet, SID_ATTR_AUTOSAVEMINUTE);
+                break;
+            case SID_ATTR_USERAUTOSAVE:
+                bRet = toSet_ifRW<officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled>(
+                    rSet, SID_ATTR_USERAUTOSAVE);
+                break;
+            case SID_ATTR_DOCINFO:
+                bRet = toSet_ifRW<officecfg::Office::Common::Save::Document::EditProperty>(
+                    rSet, SID_ATTR_DOCINFO);
+                break;
+            case SID_ATTR_WORKINGSET:
+                bRet = toSet_ifRW<officecfg::Office::Common::Save::WorkingSet>(
+                    rSet, SID_ATTR_WORKINGSET);
+                break;
+            case SID_ATTR_SAVEDOCVIEW:
+                bRet = toSet_ifRW<officecfg::Office::Common::Save::Document::ViewInfo>(
+                    rSet, SID_ATTR_SAVEDOCVIEW);
+                break;
+            case SID_ATTR_METRIC:
+                break;
+            case SID_HELPBALLOONS:
+                bRet = toSet<officecfg::Office::Common::Help::ExtendedTip>(rSet, SID_HELPBALLOONS);
+                break;
+            case SID_HELPTIPS :
+                bRet = toSet<officecfg::Office::Common::Help::Tip>(rSet, SID_HELPTIPS);
+                break;
+            case SID_HELP_STYLESHEET:
+                bRet = toSet<officecfg::Office::Common::Help::HelpStyleSheet>(rSet,
+                                                                              SID_HELP_STYLESHEET);
+                break;
+            case SID_ATTR_UNDO_COUNT:
+                bRet = toSet<officecfg::Office::Common::Undo::Steps>(rSet, SID_ATTR_UNDO_COUNT);
+                break;
+            case SID_ATTR_QUICKLAUNCHER:
+                if ( ShutdownIcon::IsQuickstarterInstalled() )
                 {
-                    if ( ShutdownIcon::IsQuickstarterInstalled() )
-                    {
-                        if ( rSet.Put( SfxBoolItem( SID_ATTR_QUICKLAUNCHER,
-                                                    ShutdownIcon::GetAutostart() ) ) )
-                            bRet = true;
-                    }
-                    else
-                    {
-                        rSet.DisableItem( SID_ATTR_QUICKLAUNCHER );
+                    if ( rSet.Put( SfxBoolItem( SID_ATTR_QUICKLAUNCHER,
+                                                ShutdownIcon::GetAutostart() ) ) )
                         bRet = true;
-                    }
-                    break;
                 }
-                case SID_SAVEREL_INET :
-                    {
-                        bRet = true;
-                        if (!officecfg::Office::Common::Save::URL::Internet::isReadOnly())
-                            if (!rSet.Put( SfxBoolItem ( SID_SAVEREL_INET,
-                                            officecfg::Office::Common::Save::URL::Internet::get() )))
-                                bRet = false;
-                    }
-                    break;
-                case SID_SAVEREL_FSYS :
-                    {
-                        bRet = true;
-                        if (!officecfg::Office::Common::Save::URL::FileSystem::isReadOnly())
-                            if (!rSet.Put( SfxBoolItem ( SID_SAVEREL_FSYS,
-                                officecfg::Office::Common::Save::URL::FileSystem::get() )))
-                                bRet = false;
-                    }
-                    break;
-                case SID_SECURE_URL :
-                    {
-                        bRet = true;
-                        if (!SvtSecurityOptions::IsReadOnly(SvtSecurityOptions::EOption::SecureUrls))
-                        {
-                            std::vector< OUString > seqURLs = SvtSecurityOptions::GetSecureURLs();
+                else
+                {
+                    rSet.DisableItem( SID_ATTR_QUICKLAUNCHER );
+                    bRet = true;
+                }
+                break;
+            case SID_SAVEREL_INET:
+                bRet = toSet_ifRW<officecfg::Office::Common::Save::URL::Internet>(
+                    rSet, SID_SAVEREL_INET);
+                break;
+            case SID_SAVEREL_FSYS:
+                bRet = toSet_ifRW<officecfg::Office::Common::Save::URL::FileSystem>(
+                    rSet, SID_SAVEREL_FSYS);
+                break;
+            case SID_SECURE_URL:
+                bRet = true;
+                if (!SvtSecurityOptions::IsReadOnly(SvtSecurityOptions::EOption::SecureUrls))
+                {
+                    std::vector< OUString > seqURLs = SvtSecurityOptions::GetSecureURLs();
 
-                            if( !rSet.Put( SfxStringListItem( SID_SECURE_URL, &seqURLs ) ) )
-                                bRet = false;
-                        }
-                    }
-                    break;
-                case SID_INET_PROXY_TYPE :
-                    if (rSet.Put(
-                            SfxUInt16Item(
-                                SID_INET_PROXY_TYPE,
-                                (officecfg::Inet::Settings::ooInetProxyType::
-                                 get().value_or(0)))))
-                    {
-                        bRet = true;
-                    }
-                    break;
-                case SID_INET_HTTP_PROXY_NAME :
-                    if (rSet.Put(
-                            SfxStringItem(
-                                SID_INET_HTTP_PROXY_NAME,
-                                officecfg::Inet::Settings::ooInetHTTPProxyName::
-                                get())))
-                    {
-                        bRet = true;
-                    }
-                    break;
-                case SID_INET_HTTP_PROXY_PORT :
-                    if (rSet.Put(
-                            SfxInt32Item(
-                                SID_INET_HTTP_PROXY_PORT,
-                                (officecfg::Inet::Settings::
-                                 ooInetHTTPProxyPort::get().value_or(0)))))
-                    {
-                        bRet = true;
-                    }
-                    break;
-                case SID_INET_FTP_PROXY_NAME :
-                    if (rSet.Put(
-                            SfxStringItem(
-                                SID_INET_FTP_PROXY_NAME,
-                                officecfg::Inet::Settings::ooInetFTPProxyName::
-                                get())))
-                    {
-                        bRet = true;
-                    }
-                    break;
-                case SID_INET_FTP_PROXY_PORT :
-                    if (rSet.Put(
-                            SfxInt32Item(
-                                SID_INET_FTP_PROXY_PORT,
-                                (officecfg::Inet::Settings::ooInetFTPProxyPort::
-                                 get().value_or(0)))))
-                    {
-                        bRet = true;
-                    }
-                    break;
-                case SID_INET_NOPROXY :
-                    if (rSet.Put(
-                            SfxStringItem(
-                                SID_INET_NOPROXY,
-                                (officecfg::Inet::Settings::ooInetNoProxy::
-                                 get()))))
-                    {
-                        bRet = true;
-                    }
-                    break;
-                case SID_ATTR_PATHNAME :
+                    if( !rSet.Put( SfxStringListItem( SID_SECURE_URL, &seqURLs ) ) )
+                        bRet = false;
+                }
+                break;
+            case SID_INET_PROXY_TYPE:
+                bRet = toSet_withDefault<officecfg::Inet::Settings::ooInetProxyType>(
+                    rSet, SID_INET_PROXY_TYPE, 0);
+                break;
+            case SID_INET_HTTP_PROXY_NAME:
+                bRet = toSet<officecfg::Inet::Settings::ooInetHTTPProxyName>(
+                    rSet, SID_INET_HTTP_PROXY_NAME);
+                break;
+            case SID_INET_HTTP_PROXY_PORT:
+                bRet = toSet_withDefault<officecfg::Inet::Settings::ooInetHTTPProxyPort>(
+                    rSet, SID_INET_HTTP_PROXY_PORT, 0);
+                break;
+            case SID_INET_FTP_PROXY_NAME:
+                bRet = toSet<officecfg::Inet::Settings::ooInetFTPProxyName>(
+                    rSet, SID_INET_FTP_PROXY_NAME);
+                break;
+            case SID_INET_FTP_PROXY_PORT:
+                bRet = toSet_withDefault<officecfg::Inet::Settings::ooInetFTPProxyPort>(
+                    rSet, SID_INET_FTP_PROXY_PORT, 0);
+                break;
+            case SID_INET_NOPROXY:
+                bRet = toSet<officecfg::Inet::Settings::ooInetNoProxy>(rSet, SID_INET_NOPROXY);
+                break;
+            case SID_ATTR_PATHNAME:
                 {
                     SfxAllEnumItem aValues(SID_ATTR_PATHNAME);
                     SvtPathOptions aPathCfg;
@@ -387,26 +298,20 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 }
                 break;
 
-                default:
-                    SAL_INFO( "sfx.appl", "W1:Wrong ID while getting Options!" );
-                    break;
-            }
-            SAL_WARN_IF(!bRet, "sfx.appl", "Putting options failed!");
+            default:
+                SAL_INFO( "sfx.appl", "W1:Wrong ID while getting Options!" );
+                break;
         }
+        SAL_WARN_IF(!bRet, "sfx.appl", "Putting options failed!");
     }
 }
 
 // TODO/CLEANUP: Why two SetOptions Methods?
 void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 {
-    SfxItemPool &rPool = GetPool();
-
-    SvtMiscOptions aMiscOptions;
-    std::shared_ptr< comphelper::ConfigurationChanges > batch(
-        comphelper::ConfigurationChanges::create());
-
     if ( const SfxBoolItem *pItem = rSet.GetItemIfSet(SID_ATTR_BUTTON_BIGSIZE) )
     {
+        SvtMiscOptions aMiscOptions;
         bool bBigSize = pItem->GetValue();
         aMiscOptions.SetSymbolsSize(
             sal::static_int_cast< sal_Int16 >(
@@ -420,128 +325,67 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         }
     }
 
+    std::shared_ptr< comphelper::ConfigurationChanges > batch(
+        comphelper::ConfigurationChanges::create());
+
     // Backup
-    if ( const SfxBoolItem *pItem = rSet.GetItemIfSet(SID_ATTR_BACKUP) )
-    {
-        officecfg::Office::Common::Save::Document::CreateBackup::set(
-                pItem->GetValue(),
-                batch );
-    }
+    toCfg_ifSet<officecfg::Office::Common::Save::Document::CreateBackup>(
+        rSet, SID_ATTR_BACKUP, batch);
 
     // PrettyPrinting
-    if ( const SfxBoolItem *pItem = rSet.GetItemIfSet( SID_ATTR_PRETTYPRINTING ) )
-    {
-        officecfg::Office::Common::Save::Document::PrettyPrinting::set(
-            pItem->GetValue(),
-            batch );
-    }
+    toCfg_ifSet<officecfg::Office::Common::Save::Document::PrettyPrinting>(
+        rSet, SID_ATTR_PRETTYPRINTING, batch);
 
     // WarnAlienFormat
-    if ( const SfxBoolItem *pItem = rSet.GetItemIfSet( SID_ATTR_WARNALIENFORMAT ) )
-    {
-        officecfg::Office::Common::Save::Document::WarnAlienFormat::set(
-                pItem->GetValue(),
-                batch);
-    }
+    toCfg_ifSet<officecfg::Office::Common::Save::Document::WarnAlienFormat>(
+        rSet, SID_ATTR_WARNALIENFORMAT, batch);
 
     // AutoSave
-    if ( const SfxBoolItem *pItem = rSet.GetItemIfSet( SID_ATTR_AUTOSAVE ))
-    {
-        officecfg::Office::Recovery::AutoSave::Enabled::set(
-            pItem->GetValue(),
-            batch);
-    }
+    toCfg_ifSet<officecfg::Office::Recovery::AutoSave::Enabled>(rSet, SID_ATTR_AUTOSAVE, batch);
 
     // AutoSave-Prompt
-    if ( const SfxBoolItem *pItem = rSet.GetItemIfSet( SID_ATTR_AUTOSAVEPROMPT ))
-    {
-        officecfg::Office::Common::Save::Document::AutoSavePrompt::set(
-            pItem->GetValue(),
-            batch);
-    }
+    toCfg_ifSet<officecfg::Office::Common::Save::Document::AutoSavePrompt>(
+        rSet, SID_ATTR_AUTOSAVEPROMPT, batch);
 
     // AutoSave-Time
-    if ( const SfxUInt16Item *pItem = rSet.GetItemIfSet(SID_ATTR_AUTOSAVEMINUTE ))
-    {
-        officecfg::Office::Recovery::AutoSave::TimeIntervall::set(
-                pItem->GetValue(),
-                batch);
-    }
+    toCfg_ifSet<officecfg::Office::Recovery::AutoSave::TimeIntervall>(
+        rSet, SID_ATTR_AUTOSAVEMINUTE, batch);
 
     // UserAutoSave
-    if ( const SfxBoolItem *pItem = rSet.GetItemIfSet(SID_ATTR_USERAUTOSAVE))
-    {
-        officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled::set(
-                pItem->GetValue(),
-                batch);
-    }
+    toCfg_ifSet<officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled>(
+        rSet, SID_ATTR_USERAUTOSAVE, batch);
 
     // DocInfo
-    if ( const SfxBoolItem *pItem = rSet.GetItemIfSet(SID_ATTR_DOCINFO) )
-    {
-        officecfg::Office::Common::Save::Document::EditProperty::set(
-            pItem->GetValue(),
-            batch);
-    }
+    toCfg_ifSet<officecfg::Office::Common::Save::Document::EditProperty>(
+        rSet, SID_ATTR_DOCINFO, batch);
 
     // Mark open Documents
-    if ( const SfxBoolItem *pItem = rSet.GetItemIfSet(SID_ATTR_WORKINGSET))
-    {
-        officecfg::Office::Common::Save::WorkingSet::set(
-            pItem->GetValue(),
-            batch);
-    }
+    toCfg_ifSet<officecfg::Office::Common::Save::WorkingSet>(rSet, SID_ATTR_WORKINGSET, batch);
 
     // Save window settings
-    if ( const SfxBoolItem *pItem = rSet.GetItemIfSet(SID_ATTR_SAVEDOCVIEW))
-    {
-        officecfg::Office::Common::Save::Document::ViewInfo::set(pItem->GetValue(), batch);
-    }
+    toCfg_ifSet<officecfg::Office::Common::Save::Document::ViewInfo>(
+        rSet, SID_ATTR_SAVEDOCVIEW, batch);
 
     // Metric
     const SfxPoolItem* pItem1 = nullptr;
-    if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_METRIC), true, &pItem1))
+    if (SfxItemState::SET == rSet.GetItemState(GetPool().GetWhich(SID_ATTR_METRIC), true, &pItem1))
     {
         DBG_ASSERT(dynamic_cast< const SfxUInt16Item *>( pItem1 ) !=  nullptr, "UInt16Item expected");
     }
 
     // HelpBalloons
-    if ( const SfxBoolItem *pItem = rSet.GetItemIfSet(SID_HELPBALLOONS))
-    {
-        officecfg::Office::Common::Help::ExtendedTip::set(
-                pItem->GetValue(),
-                batch);
-    }
+    toCfg_ifSet<officecfg::Office::Common::Help::ExtendedTip>(rSet, SID_HELPBALLOONS, batch);
 
     // HelpTips
-    if ( const SfxBoolItem *pItem = rSet.GetItemIfSet(SID_HELPTIPS))
-    {
-        officecfg::Office::Common::Help::Tip::set(
-                pItem->GetValue(),
-                batch);
-    }
+    toCfg_ifSet<officecfg::Office::Common::Help::Tip>(rSet, SID_HELPTIPS, batch);
 
-    if ( const SfxStringItem *pItem = rSet.GetItemIfSet(SID_HELP_STYLESHEET))
-    {
-        OUString sStyleSheet = pItem->GetValue();
-        officecfg::Office::Common::Help::HelpStyleSheet::set(sStyleSheet, batch);
-    }
+    toCfg_ifSet<officecfg::Office::Common::Help::HelpStyleSheet>(rSet, SID_HELP_STYLESHEET, batch);
 
     // SaveRelINet
-    if ( const SfxBoolItem *pItem = rSet.GetItemIfSet(SID_SAVEREL_INET))
-    {
-        officecfg::Office::Common::Save::URL::Internet::set(
-            pItem->GetValue(),
-            batch);
-    }
+    toCfg_ifSet<officecfg::Office::Common::Save::URL::Internet>(rSet, SID_SAVEREL_INET, batch);
 
     // SaveRelFSys
-    if ( const SfxBoolItem *pItem = rSet.GetItemIfSet(SID_SAVEREL_FSYS))
-    {
-        officecfg::Office::Common::Save::URL::FileSystem::set(
-            pItem->GetValue(),
-            batch);
-    }
+    toCfg_ifSet<officecfg::Office::Common::Save::URL::FileSystem>(rSet, SID_SAVEREL_FSYS, batch);
 
     // Undo-Count
     if ( const SfxUInt16Item *pItem = rSet.GetItemIfSet(SID_ATTR_UNDO_COUNT))
@@ -577,37 +421,17 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         ShutdownIcon::SetAutostart( pItem->GetValue() );
     }
 
-    if ( const SfxUInt16Item *pItem = rSet.GetItemIfSet(SID_INET_PROXY_TYPE))
-    {
-        officecfg::Inet::Settings::ooInetProxyType::set(
-            pItem->GetValue(), batch);
-    }
+    toCfg_ifSet<officecfg::Inet::Settings::ooInetProxyType>(rSet, SID_INET_PROXY_TYPE, batch);
 
-    if ( const SfxStringItem *pItem = rSet.GetItemIfSet( SID_INET_HTTP_PROXY_NAME ) )
-    {
-        officecfg::Inet::Settings::ooInetHTTPProxyName::set(
-            pItem->GetValue(), batch);
-    }
-    if ( const SfxInt32Item *pItem = rSet.GetItemIfSet( SID_INET_HTTP_PROXY_PORT ) )
-    {
-        officecfg::Inet::Settings::ooInetHTTPProxyPort::set(
-            pItem->GetValue(), batch);
-    }
-    if ( const SfxStringItem *pItem = rSet.GetItemIfSet( SID_INET_FTP_PROXY_NAME ) )
-    {
-        officecfg::Inet::Settings::ooInetFTPProxyName::set(
-            pItem->GetValue(), batch);
-    }
-    if (const SfxInt32Item *pItem = rSet.GetItemIfSet( SID_INET_FTP_PROXY_PORT ) )
-    {
-        officecfg::Inet::Settings::ooInetFTPProxyPort::set(
-            pItem->GetValue(), batch);
-    }
-    if ( const SfxStringItem* pStringItem = rSet.GetItemIfSet(SID_INET_NOPROXY))
-    {
-        officecfg::Inet::Settings::ooInetNoProxy::set(
-            pStringItem->GetValue(), batch);
-    }
+    toCfg_ifSet<officecfg::Inet::Settings::ooInetHTTPProxyName>(
+        rSet, SID_INET_HTTP_PROXY_NAME, batch);
+    toCfg_ifSet<officecfg::Inet::Settings::ooInetHTTPProxyPort>(
+        rSet, SID_INET_HTTP_PROXY_PORT, batch);
+    toCfg_ifSet<officecfg::Inet::Settings::ooInetFTPProxyName>(
+        rSet, SID_INET_FTP_PROXY_NAME, batch);
+    toCfg_ifSet<officecfg::Inet::Settings::ooInetFTPProxyPort>(
+        rSet, SID_INET_FTP_PROXY_PORT, batch);
+    toCfg_ifSet<officecfg::Inet::Settings::ooInetNoProxy>(rSet, SID_INET_NOPROXY, batch);
 
     // Secure-Referrer
     if ( const SfxStringListItem *pListItem = rSet.GetItemIfSet(SID_SECURE_URL))
