@@ -1383,9 +1383,6 @@ SwRect SwTextFly::AnchoredObjToRect( const SwAnchoredObject* pAnchoredObj,
 // Wrap only on sides with at least 2cm space for the text
 #define TEXT_MIN 1134
 
-// MS Word wraps on sides with even less space (value guessed).
-#define TEXT_MIN_SMALL 300
-
 // Wrap on both sides up to a frame width of 1.5cm
 #define FRAME_MAX 850
 
