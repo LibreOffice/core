@@ -40,6 +40,11 @@ ifneq ($(origin CXX),default)
 gb_CXX := $(CXX)
 endif
 
+# _SILENCE_CXX23_DENORM_DEPRECATION_WARNING is needed at least with Boost 1.82.0 using
+# std::numeric_limits::has_denorm in
+# workdir/UnpackedTarball/boost/boost/spirit/home/classic/core/primitives/impl/numerics.ipp, in turn
+# included from boost/spirit/include/classic_core.hpp as included from various of our code files:
+
 # _SCL_SECURE_NO_WARNINGS avoids deprecation warnings for STL algorithms
 # like std::copy, std::transform (when MSVC_USE_DEBUG_RUNTIME is enabled)
 
@@ -50,6 +55,7 @@ gb_COMPILERDEFS := \
 	-D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING \
 	-D_SILENCE_CXX17_OLD_ALLOCATOR_MEMBERS_DEPRECATION_WARNING \
 	-D_SILENCE_CXX17_RESULT_OF_DEPRECATION_WARNING \
+	-D_SILENCE_CXX23_DENORM_DEPRECATION_WARNING \
 	-D_CRT_NON_CONFORMING_SWPRINTFS \
 	-D_CRT_NONSTDC_NO_DEPRECATE \
 	-D_CRT_SECURE_NO_DEPRECATE \
