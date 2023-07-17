@@ -2802,12 +2802,12 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
 
     bool bFullLine =  aLine.Left()  == aInter.Left() &&
                             aLine.Right() == aInter.Right();
-    if (!bFullLine && bWordFlyWrap)
+    if (!bFullLine && bWordFlyWrap && !GetTextFrame()->IsInTab())
     {
-        // Word >= 2013 style: if there is minimal space remaining, then handle that similar to a
-        // full line and put the actual empty paragraph below the fly.
-        bFullLine = std::abs(aLine.Left() - aInter.Left()) < MINLAY
-                    && std::abs(aLine.Right() - aInter.Right()) < MINLAY;
+        // Word style: if there is minimal space remaining, then handle that similar to a full line
+        // and put the actual empty paragraph below the fly.
+        bFullLine = std::abs(aLine.Left() - aInter.Left()) < TEXT_MIN_SMALL
+                    && std::abs(aLine.Right() - aInter.Right()) < TEXT_MIN_SMALL;
     }
 
     // Although no text is left, we need to format another line,

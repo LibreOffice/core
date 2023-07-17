@@ -86,6 +86,9 @@ public:
                                        const bool bRight );
 };
 
+// MS Word wraps on sides with even less space (value guessed).
+#define TEXT_MIN_SMALL 300
+
 /**
    The purpose of this class is to be the universal interface between
    formatting/text output and the possibly overlapping free-flying frames.
