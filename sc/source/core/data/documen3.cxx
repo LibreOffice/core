@@ -2030,6 +2030,7 @@ void ScDocument::DoMergeContents( SCCOL nStartCol, SCROW nStartRow,
     OUString aCellStr;
     SCCOL nCol;
     SCROW nRow;
+    ScCellValue aCell;
     for (nRow=nStartRow; nRow<=nEndRow; nRow++)
         for (nCol=nStartCol; nCol<=nEndCol; nCol++)
         {
@@ -2039,12 +2040,18 @@ void ScDocument::DoMergeContents( SCCOL nStartCol, SCROW nStartRow,
                 if (!aTotal.isEmpty())
                     aTotal.append(' ');
                 aTotal.append(aCellStr);
+                ScAddress aPos(nCol, nRow, nTab);
+                if ((GetCellType(aPos) == CELLTYPE_EDIT) && aCell.isEmpty())
+                    aCell = ScRefCellValue(*this, aPos);
             }
             if (nCol != nStartCol || nRow != nStartRow)
                 SetString(nCol,nRow,nTab,"");
         }
 
-    SetString(nStartCol,nStartRow,nTab,aTotal.makeStringAndClear());
+    if (aCell.isEmpty() || !GetString(nStartCol, nStartRow, nTab).isEmpty())
+        SetString(nStartCol, nStartRow, nTab, aTotal.makeStringAndClear());
+    else
+        aCell.release(*this, ScAddress(nStartCol, nStartRow, nTab));
 }
 
 void ScDocument::DoEmptyBlock( SCCOL nStartCol, SCROW nStartRow,

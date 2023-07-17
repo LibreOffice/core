@@ -10752,6 +10752,23 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testUndoBackgroundColor)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMergedHyperlink)
+{
+    m_pDoc->InsertTab(0, "Table1");
+    m_pDoc->InitDrawLayer(m_xDocShell.get());
+
+    ScFieldEditEngine& pEE = m_pDoc->GetEditEngine();
+    pEE.SetTextCurrentDefaults("https://libreoffice.org/");
+    m_pDoc->SetEditText(ScAddress(1, 0, 0), pEE.CreateTextObject()); // B1
+
+    m_pDoc->DoMergeContents(0, 0, 1, 0, 0); // A1:B1
+
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, m_pDoc->GetCellType(ScAddress(0, 0, 0))); // A1
+    const EditTextObject* pEditObj = m_pDoc->GetEditText(ScAddress(0, 0, 0)); // A1
+    CPPUNIT_ASSERT(pEditObj);
+    CPPUNIT_ASSERT_EQUAL(OUString("https://libreoffice.org/"), pEditObj->GetText(0));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
