@@ -182,6 +182,8 @@ bool SwTextFrameBreak::IsInside( SwTextMargin const &rLine ) const
             }
         }
         if (!bFit && rLine.MaybeHasHints() && m_pFrame->GetFollow()
+            // tdf#153319 RemoveFootnote only works if this frame doesn't
+            && !rLine.GetNext() // contain the footnote portion
             // if using same footnote container as the follow, pointless to try?
             && m_pFrame->FindFootnoteBossFrame() != m_pFrame->GetFollow()->FindFootnoteBossFrame())
         {
