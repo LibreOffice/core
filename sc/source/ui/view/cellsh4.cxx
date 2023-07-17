@@ -27,6 +27,7 @@
 #include <inputhdl.hxx>
 #include <inputwin.hxx>
 #include <document.hxx>
+#include <officecfg/Office/Calc.hxx>
 #include <sc.hrc>
 
 void ScCellShell::ExecuteCursor( SfxRequest& rReq )
@@ -121,10 +122,13 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
     // If ScrollLock key is active, cell cursor stays on the current cell while
     // scrolling the grid.
     bool bScrollLock = false;
-    KeyIndicatorState eState = pFrameWin->GetIndicatorState();
-    if (eState & KeyIndicatorState::SCROLLLOCK)
-        bScrollLock = true;
-
+    // tdf#112876 - allow to disable for special keyboards
+    if (officecfg::Office::Calc::Input::UseScrollLock::get())
+    {
+        KeyIndicatorState eState = pFrameWin->GetIndicatorState();
+        if (eState & KeyIndicatorState::SCROLLLOCK)
+            bScrollLock = true;
+    }
     //OS: once for all should do, however!
     pTabViewShell->ExecuteInputDirect();
     switch ( nSlotId )

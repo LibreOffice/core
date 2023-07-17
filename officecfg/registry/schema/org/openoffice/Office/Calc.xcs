@@ -690,6 +690,13 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="UseScrollLock" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Toggles the scroll lock behavior allowing to disable it for special keyboards</desc>
+          <label>Toggles the scroll lock behavior allowing to disable it for special keyboards</label>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="LastFunctions" oor:type="oor:int-list" oor:nillable="false">
         <info>
           <desc>Specifies the functions last used.</desc>
