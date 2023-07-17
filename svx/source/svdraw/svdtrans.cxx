@@ -649,8 +649,8 @@ FrPair GetMapFactor(FieldUnit eS, FieldUnit eD)
 
 void SdrFormatter::Undirty()
 {
-    const o3tl::Length eFrom = MapToO3tlLength(eSrcMU, o3tl::Length::invalid);
-    const o3tl::Length eTo = MapToO3tlLength(eDstMU, o3tl::Length::invalid);
+    const o3tl::Length eFrom = MapToO3tlLength(m_eSrcMU, o3tl::Length::invalid);
+    const o3tl::Length eTo = MapToO3tlLength(m_eDstMU, o3tl::Length::invalid);
     if (eFrom != o3tl::Length::invalid && eTo != o3tl::Length::invalid)
     {
         const auto& [mul, div] = o3tl::getConversionMulDiv(eFrom, eTo);
@@ -671,16 +671,16 @@ void SdrFormatter::Undirty()
             nComma++;
             nDiv /= 10;
         }
-        nMul_ = nMul;
-        nDiv_ = nDiv;
-        nComma_ = nComma;
+        m_nMul = nMul;
+        m_nDiv = nDiv;
+        m_nComma = nComma;
     }
     else
     {
-        nMul_ = nDiv_ = 1;
-        nComma_ = 0;
+        m_nMul = m_nDiv = 1;
+        m_nComma = 0;
     }
-    bDirty=false;
+    m_bDirty=false;
 }
 
 
@@ -698,10 +698,10 @@ OUString SdrFormatter::GetStr(tools::Long nVal) const
     SvtSysLocale aSysLoc;
     const LocaleDataWrapper& rLoc = aSysLoc.GetLocaleData();
 
-    if (bDirty)
+    if (m_bDirty)
         const_cast<SdrFormatter*>(this)->Undirty();
 
-    sal_Int16 nC(nComma_);
+    sal_Int16 nC(m_nComma);
 
     if(bNeg)
         nVal = -nVal;
@@ -718,8 +718,8 @@ OUString SdrFormatter::GetStr(tools::Long nVal) const
         nC++;
     }
 
-    if(nMul_ != nDiv_)
-        nVal = BigMulDiv(nVal, nMul_, nDiv_);
+    if(m_nMul != m_nDiv)
+        nVal = BigMulDiv(nVal, m_nMul, m_nDiv);
 
     OUStringBuffer aStr = OUString::number(nVal);
 

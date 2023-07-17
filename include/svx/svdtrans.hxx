@@ -264,22 +264,22 @@ inline bool IsInch(FieldUnit eU) {
 }
 
 class SVXCORE_DLLPUBLIC SdrFormatter {
-    tools::Long      nMul_;
-    tools::Long      nDiv_;
-    short     nComma_;
-    bool      bDirty;
-    MapUnit   eSrcMU;
-    MapUnit   eDstMU;
+    tools::Long      m_nMul;
+    tools::Long      m_nDiv;
+    short     m_nComma;
+    bool      m_bDirty;
+    MapUnit   m_eSrcMU;
+    MapUnit   m_eDstMU;
 private:
     SVX_DLLPRIVATE void Undirty();
 public:
     SdrFormatter(MapUnit eSrc, MapUnit eDst)
-        : nMul_(0)
-        , nDiv_(0)
-        , nComma_(0)
-        , bDirty(true)
-        , eSrcMU(eSrc)
-        , eDstMU(eDst)
+        : m_nMul(0)
+        , m_nDiv(0)
+        , m_nComma(0)
+        , m_bDirty(true)
+        , m_eSrcMU(eSrc)
+        , m_eDstMU(eDst)
     {
     }
     OUString GetStr(tools::Long nVal) const;
