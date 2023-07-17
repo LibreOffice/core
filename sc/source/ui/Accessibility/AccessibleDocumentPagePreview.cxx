@@ -1027,7 +1027,8 @@ void ScShapeChildren::FillShapes(const tools::Rectangle& aPixelPaintRect, const 
             uno::Reference< drawing::XShape > xShape(pObj->getUnoShape(), uno::UNO_QUERY);
             if (xShape.is())
             {
-                tools::Rectangle aRect(pWin->LogicToPixel(VCLPoint(xShape->getPosition()), aMapMode), pWin->LogicToPixel(VCLSize(xShape->getSize()), aMapMode));
+                tools::Rectangle aRect(pWin->LogicToPixel(
+                    tools::Rectangle(VCLPoint(xShape->getPosition()), VCLSize(xShape->getSize())), aMapMode));
                 if(!aClippedPixelPaintRect.GetIntersection(aRect).IsEmpty())
                 {
                     ScShapeChild aShape;
