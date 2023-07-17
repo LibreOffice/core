@@ -127,7 +127,7 @@ SalLayout::SalLayout()
     maLanguageTag( LANGUAGE_DONTKNOW ),
     mnOrientation( 0 ),
     maDrawOffset( 0, 0 ),
-    mbTextRenderModeForResolutionIndependentLayout(false)
+    mbSubpixelPositioning(false)
 {}
 
 SalLayout::~SalLayout()
@@ -164,7 +164,7 @@ DevicePoint SalLayout::GetDrawPosition(const DevicePoint& rRelative) const
 
         double fX = aOfs.getX();
         double fY = aOfs.getY();
-        if (mbTextRenderModeForResolutionIndependentLayout)
+        if (mbSubpixelPositioning)
         {
             double nX = +fCos * fX + fSin * fY;
             double nY = +fCos * fY - fSin * fX;

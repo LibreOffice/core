@@ -177,8 +177,7 @@ void QtGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 {
     const QtFont* pFont = static_cast<const QtFont*>(&rLayout.GetFont());
     assert(pFont);
-    QRawFont aRawFont(
-        GetRawFont(*pFont, rLayout.GetTextRenderModeForResolutionIndependentLayout()));
+    QRawFont aRawFont(GetRawFont(*pFont, rLayout.GetSubpixelPositioning()));
 
     QVector<quint32> glyphIndexes;
     QVector<QPointF> positions;

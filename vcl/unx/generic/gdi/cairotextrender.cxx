@@ -241,7 +241,7 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
 {
     const LogicalFontInstance& rInstance = rLayout.GetFont();
 
-    const bool bResolutionIndependentLayoutEnabled = rLayout.GetTextRenderModeForResolutionIndependentLayout();
+    const bool bSubpixelPositioning = rLayout.GetSubpixelPositioning();
 
     /*
      * It might be ideal to cache surface and cairo context between calls and
@@ -279,7 +279,7 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
         const bool bVertical = pGlyph->IsVertical();
         glyph_extrarotation.push_back(bVertical ? 1 : 0);
 
-        if (bResolutionIndependentLayoutEnabled)
+        if (bSubpixelPositioning)
         {
             // tdf#150507 like skia, even when subpixel rendering pixel, snap y
             if (!bVertical)
@@ -419,12 +419,12 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
     const bool bDisableAA = !rStyleSettings.GetUseFontAAFromSystem() && !rGraphics.getAntiAlias();
 
     const cairo_font_options_t* pFontOptions = GetSalInstance()->GetCairoFontOptions();
-    if (pFontOptions || bDisableAA || bResolutionIndependentLayoutEnabled)
+    if (pFontOptions || bDisableAA || bSubpixelPositioning)
     {
         cairo_hint_style_t eHintStyle = pFontOptions ? cairo_font_options_get_hint_style(pFontOptions) : CAIRO_HINT_STYLE_DEFAULT;
-        bool bAllowedHintStyle = !bResolutionIndependentLayoutEnabled || (eHintStyle == CAIRO_HINT_STYLE_NONE || eHintStyle == CAIRO_HINT_STYLE_SLIGHT);
+        bool bAllowedHintStyle = !bSubpixelPositioning || (eHintStyle == CAIRO_HINT_STYLE_NONE || eHintStyle == CAIRO_HINT_STYLE_SLIGHT);
 
-        if (bDisableAA || !bAllowedHintStyle || bResolutionIndependentLayoutEnabled)
+        if (bDisableAA || !bAllowedHintStyle || bSubpixelPositioning)
         {
             // Disable font AA in case global AA setting is supposed to affect
             // font rendering (not the default) and AA is disabled.
@@ -436,7 +436,7 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
                 cairo_font_options_set_hint_style(pOptions, CAIRO_HINT_STYLE_SLIGHT);
             // Disable private CAIRO_ROUND_GLYPH_POS_ON by merging with font options known to have
             // CAIRO_ROUND_GLYPH_POS_OFF
-            if (bResolutionIndependentLayoutEnabled)
+            if (bSubpixelPositioning)
             {
                 cairo_font_options_merge(pOptions, CairoFontOptions::get());
                 // tdf#153699 skip this with cairo 1.17.8 as it has a problem

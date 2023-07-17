@@ -397,7 +397,7 @@ void AquaGraphicsBackend::drawTextLayout(const GenericSalLayout& rLayout)
         CGContextSetTextDrawingMode(mrShared.maContextHolder.get(), kCGTextFillStroke);
     }
 
-    if (rLayout.GetTextRenderModeForResolutionIndependentLayout())
+    if (rLayout.GetSubpixelPositioning())
     {
         CGContextSetAllowsFontSubpixelQuantization(mrShared.maContextHolder.get(), false);
         CGContextSetShouldSubpixelQuantizeFonts(mrShared.maContextHolder.get(), false);

@@ -225,7 +225,7 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
     // DWrite text renderer performs vertical writing better except printing.
     const bool bVerticalScreenText
         = !mbPrinter && rLayout.GetFont().GetFontSelectPattern().mbVertical;
-    const bool bRenderingModeNatural = rLayout.GetTextRenderModeForResolutionIndependentLayout();
+    const bool bRenderingModeNatural = rLayout.GetSubpixelPositioning();
     const bool bUseDWrite = bVerticalScreenText || bRenderingModeNatural;
     DrawTextLayout(rLayout, hDC, bUseDWrite, bRenderingModeNatural);
 

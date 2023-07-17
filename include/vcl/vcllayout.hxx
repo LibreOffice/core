@@ -82,14 +82,14 @@ public:
 
     Degree10        GetOrientation() const                  { return mnOrientation; }
 
-    void            SetTextRenderModeForResolutionIndependentLayout(bool bTextRenderModeForResolutionIndependentLayout)
+    void            SetSubpixelPositioning(bool bSubpixelPositioning)
     {
-        mbTextRenderModeForResolutionIndependentLayout = bTextRenderModeForResolutionIndependentLayout;
+        mbSubpixelPositioning = bSubpixelPositioning;
     }
 
-    bool            GetTextRenderModeForResolutionIndependentLayout() const
+    bool            GetSubpixelPositioning() const
     {
-        return mbTextRenderModeForResolutionIndependentLayout;
+        return mbSubpixelPositioning;
     }
 
     // methods using string indexing
@@ -125,7 +125,7 @@ protected:
     mutable Point   maDrawOffset;
     DevicePoint     maDrawBase;
 
-    bool            mbTextRenderModeForResolutionIndependentLayout;
+    bool            mbSubpixelPositioning;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1377,7 +1377,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
     if( !pSalLayout )
         return nullptr;
 
-    pSalLayout->SetTextRenderModeForResolutionIndependentLayout(mbMap);
+    pSalLayout->SetSubpixelPositioning(mbMap);
 
     // do glyph fallback if needed
     // #105768# avoid fallback for very small font sizes
