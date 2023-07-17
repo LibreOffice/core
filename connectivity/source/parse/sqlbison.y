@@ -2957,10 +2957,14 @@ interval_value_exp:
 */
 non_second_datetime_field:
 		SQL_TOKEN_YEAR
+	|	SQL_TOKEN_YEARDAY
 	|	SQL_TOKEN_MONTH
+	|	SQL_TOKEN_WEEK
+	|	SQL_TOKEN_WEEKDAY
 	|	SQL_TOKEN_DAY
 	|	SQL_TOKEN_HOUR
 	|	SQL_TOKEN_MINUTE
+	|	SQL_TOKEN_MILLISECOND
 	;
 start_field:
 		non_second_datetime_field opt_paren_precision
