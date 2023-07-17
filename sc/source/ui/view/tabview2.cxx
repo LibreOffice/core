@@ -194,6 +194,57 @@ bool checkBoundary(const ScDocument* pDoc, SCCOL& rCol, SCROW& rRow)
     return bGood;
 }
 
+void moveRefByCell(SCCOL& rNewX, SCROW& rNewY,
+                   SCCOL nMovX, SCROW nMovY, SCTAB nRefTab,
+                   const ScDocument& rDoc)
+{
+    bool bSelectLocked = true;
+    bool bSelectUnlocked = true;
+    const ScTableProtection* pTabProtection = rDoc.GetTabProtection(nRefTab);
+    if (pTabProtection && pTabProtection->isProtected())
+    {
+        bSelectLocked   = pTabProtection->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
+        bSelectUnlocked = pTabProtection->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
+    }
+
+    moveCursorByProtRule(rNewX, rNewY, nMovX, nMovY, nRefTab, &rDoc);
+    checkBoundary(&rDoc, rNewX, rNewY);
+
+    if (nMovX)
+    {
+        SCCOL nTempX = rNewX;
+        while (rDoc.IsHorOverlapped(nTempX, rNewY, nRefTab))
+        {
+            if (nMovX > 0)
+                ++nTempX;
+            else
+                --nTempX;
+            if (!checkBoundary(&rDoc, nTempX, rNewY))
+                break;
+        }
+        if (isCellQualified(&rDoc, nTempX, rNewY, nRefTab, bSelectLocked, bSelectUnlocked))
+            rNewX = nTempX;
+    }
+
+    if (nMovY)
+    {
+        SCROW nTempY = rNewY;
+        while (rDoc.IsVerOverlapped(rNewX, nTempY, nRefTab))
+        {
+            if (nMovY > 0)
+                ++nTempY;
+            else
+                --nTempY;
+            if (!checkBoundary(&rDoc, rNewX, nTempY))
+                break;
+        }
+        if (isCellQualified(&rDoc, rNewX, nTempY, nRefTab, bSelectLocked, bSelectUnlocked))
+            rNewY = nTempY;
+    }
+
+    rDoc.SkipOverlapped(rNewX, rNewY, nRefTab);
+}
+
 void moveCursorByMergedCell(SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY, SCCOL nStartX,
                             SCROW nStartY, SCTAB nTab, const ScDocument* pDoc)
 {
@@ -993,51 +1044,7 @@ void ScTabView::ExpandBlock(SCCOL nMovX, SCROW nMovY, ScFollowMode eMode)
         SCROW nNewY = aViewData.GetRefEndY();
         SCTAB nRefTab = aViewData.GetRefEndZ();
 
-        bool bSelectLocked = true;
-        bool bSelectUnlocked = true;
-        const ScTableProtection* pTabProtection = rDoc.GetTabProtection(nRefTab);
-        if (pTabProtection && pTabProtection->isProtected())
-        {
-            bSelectLocked   = pTabProtection->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
-            bSelectUnlocked = pTabProtection->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
-        }
-
-        moveCursorByProtRule(nNewX, nNewY, nMovX, nMovY, nRefTab, &rDoc);
-        checkBoundary(&rDoc, nNewX, nNewY);
-
-        if (nMovX)
-        {
-            SCCOL nTempX = nNewX;
-            while (rDoc.IsHorOverlapped(nTempX, nNewY, nRefTab))
-            {
-                if (nMovX > 0)
-                    ++nTempX;
-                else
-                    --nTempX;
-                if (!checkBoundary(&rDoc, nTempX, nNewY))
-                    break;
-            }
-            if (isCellQualified(&rDoc, nTempX, nNewY, nRefTab, bSelectLocked, bSelectUnlocked))
-                nNewX = nTempX;
-        }
-
-        if (nMovY)
-        {
-            SCROW nTempY = nNewY;
-            while (rDoc.IsVerOverlapped(nNewX, nTempY, nRefTab))
-            {
-                if (nMovY > 0)
-                    ++nTempY;
-                else
-                    --nTempY;
-                if (!checkBoundary(&rDoc, nNewX, nTempY))
-                    break;
-            }
-            if (isCellQualified(&rDoc, nNewX, nTempY, nRefTab, bSelectLocked, bSelectUnlocked))
-                nNewY = nTempY;
-        }
-
-        rDoc.SkipOverlapped(nNewX, nNewY, nRefTab);
+        moveRefByCell(nNewX, nNewY, nMovX, nMovY, nRefTab, rDoc);
         UpdateRef(nNewX, nNewY, nRefTab);
         SCCOL nTargetCol = nNewX;
         SCROW nTargetRow = nNewY;
