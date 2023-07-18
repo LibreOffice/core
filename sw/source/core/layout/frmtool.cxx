@@ -1606,6 +1606,16 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                 pPageMaker->CheckInsert( nIndex );
 
             pFrame->InsertBehind( pLay, pPrv );
+            if (!pPrv)
+            {
+                if (SwSectionFrame *const pSection = pLay->FindSctFrame())
+                {
+                    if (pSection && pSection->ContainsAny() == pFrame)
+                    {   // tdf#146258 section PrtArea depends on paragraph upper margin
+                        pSection->InvalidatePrt();
+                    }
+                }
+            }
             // #i27138#
             // notify accessibility paragraphs objects about changed
             // CONTENT_FLOWS_FROM/_TO relation.
