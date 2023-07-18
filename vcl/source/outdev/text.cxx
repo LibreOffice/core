@@ -1456,14 +1456,10 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, tools::Long nTextWid
         // problem with rounding errors especially for small nCharExtras
         // TODO: remove when layout units have subpixel granularity
         tools::Long nSubPixelFactor = 64;
-        nTextWidth *= nSubPixelFactor;
-        DeviceCoordinate nTextPixelWidth = LogicWidthToDeviceCoordinate( nTextWidth );
-        DeviceCoordinate nExtraPixelWidth = 0;
+        double nTextPixelWidth = ImplLogicWidthToDeviceSubPixel(nTextWidth * nSubPixelFactor);
+        double nExtraPixelWidth = 0;
         if( nCharExtra != 0 )
-        {
-            nCharExtra *= nSubPixelFactor;
-            nExtraPixelWidth = LogicWidthToDeviceCoordinate( nCharExtra );
-        }
+            nExtraPixelWidth = ImplLogicWidthToDeviceSubPixel(nCharExtra * nSubPixelFactor);
         nRetVal = pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor );
     }
 
@@ -1490,14 +1486,10 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, tools::Long nTextWid
         // TODO: remove when layout units have subpixel granularity
         tools::Long nSubPixelFactor = 64;
 
-        nTextWidth *= nSubPixelFactor;
-        DeviceCoordinate nTextPixelWidth = LogicWidthToDeviceCoordinate( nTextWidth );
-        DeviceCoordinate nExtraPixelWidth = 0;
+        double nTextPixelWidth = ImplLogicWidthToDeviceSubPixel(nTextWidth * nSubPixelFactor);
+        double nExtraPixelWidth = 0;
         if( nCharExtra != 0 )
-        {
-            nCharExtra *= nSubPixelFactor;
-            nExtraPixelWidth = LogicWidthToDeviceCoordinate( nCharExtra );
-        }
+            nExtraPixelWidth = ImplLogicWidthToDeviceSubPixel(nCharExtra * nSubPixelFactor);
 
         // calculate un-hyphenated break position
         nRetVal = pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor );
@@ -1508,7 +1500,7 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, tools::Long nTextWid
         if( pHyphenLayout )
         {
             // calculate subpixel width of hyphenation character
-            tools::Long nHyphenPixelWidth = pHyphenLayout->GetTextWidth() * nSubPixelFactor;
+            double nHyphenPixelWidth = pHyphenLayout->GetTextWidth() * nSubPixelFactor;
 
             // calculate hyphenated break position
             nTextPixelWidth -= nHyphenPixelWidth;
@@ -1689,7 +1681,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
                                                 nIndex, nLineLen );
                         sal_Int32 lc_x1 = pCaretXArray[2*(nMnemonicPos - nIndex)];
                         sal_Int32 lc_x2 = pCaretXArray[2*(nMnemonicPos - nIndex)+1];
-                        nMnemonicWidth = rTargetDevice.LogicWidthToDeviceCoordinate( std::abs(lc_x1 - lc_x2) );
+                        nMnemonicWidth = rTargetDevice.ImplLogicWidthToDeviceSubPixel(std::abs(lc_x1 - lc_x2));
 
                         Point       aTempPos = rTargetDevice.LogicToPixel( aPos );
                         nMnemonicX = rTargetDevice.GetOutOffXPixel() + aTempPos.X() + rTargetDevice.ImplLogicWidthToDevicePixel( std::min( lc_x1, lc_x2 ) );
@@ -1757,7 +1749,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
             /*sal_Bool bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray.get(), 0, aStr.getLength() );
             tools::Long lc_x1 = pCaretXArray[2*nMnemonicPos];
             tools::Long lc_x2 = pCaretXArray[2*nMnemonicPos+1];
-            nMnemonicWidth = rTargetDevice.LogicWidthToDeviceCoordinate( std::abs(lc_x1 - lc_x2) );
+            nMnemonicWidth = rTargetDevice.ImplLogicWidthToDeviceSubPixel(std::abs(lc_x1 - lc_x2));
 
             Point aTempPos = rTargetDevice.LogicToPixel( aPos );
             nMnemonicX = rTargetDevice.GetOutOffXPixel() + aTempPos.X() + rTargetDevice.ImplLogicWidthToDevicePixel( std::min(lc_x1, lc_x2) );
