@@ -2804,6 +2804,8 @@ void SwTabFramePainter::FindStylesForLine( Point& rStartPoint,
 /**
  * Special case: #i9860#
  * first line in follow table without repeated headlines
+ * Special case: tdf#150308
+ * first visible line of a table with preceding hidden deleted rows
  */
 static bool lcl_IsFirstRowInFollowTableWithoutRepeatedHeadlines(
         SwTabFrame const& rTabFrame, SwFrame const& rFrame, SvxBoxItem const& rBoxItem)
@@ -2812,7 +2814,11 @@ static bool lcl_IsFirstRowInFollowTableWithoutRepeatedHeadlines(
         dynamic_cast<const SwRowFrame*>(rFrame.GetUpper());
     return (pThisRowFrame
         && (pThisRowFrame->GetUpper() == &rTabFrame)
-        && rTabFrame.IsFollow()
+        && ( rTabFrame.IsFollow()
+            // tdf#150308 first table row isn't equal to the table row of the first
+            // row frame of the first table frame: there are invisible deleted rows
+            // in Hide Changes mode before the first visible table row
+            || rTabFrame.GetTable()->GetTabLines().front() != pThisRowFrame->GetTabLine() )
         && !rTabFrame.GetTable()->GetRowsToRepeat()
         &&  (  !pThisRowFrame->GetPrev()
             || static_cast<const SwRowFrame*>(pThisRowFrame->GetPrev())
