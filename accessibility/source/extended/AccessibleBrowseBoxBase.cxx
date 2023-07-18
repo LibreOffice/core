@@ -422,11 +422,7 @@ void AccessibleBrowseBoxBase::commitEvent(
             return;
 
     // build an event object
-    AccessibleEventObject aEvent;
-    aEvent.Source = *this;
-    aEvent.EventId = _nEventId;
-    aEvent.OldValue = _rOldValue;
-    aEvent.NewValue = _rNewValue;
+    AccessibleEventObject aEvent(*this, _nEventId, _rOldValue, _rNewValue, -1);
 
     // let the notifier handle this event
 
