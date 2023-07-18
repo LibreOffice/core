@@ -310,6 +310,7 @@ ScOrcusFactory::CellStoreToken::CellStoreToken(const ScAddress& rPos, OUString a
 ScOrcusFactory::ScOrcusFactory(ScDocument& rDoc, bool bSkipDefaultStyles) :
     maDoc(rDoc),
     maGlobalSettings(maDoc),
+    maRefResolver(maGlobalSettings),
     maSharedStrings(*this),
     maNamedExpressions(maDoc, maGlobalSettings),
     maStyles(*this, bSkipDefaultStyles),
@@ -407,6 +408,20 @@ orcus::spreadsheet::iface::import_named_expression* ScOrcusFactory::get_named_ex
 orcus::spreadsheet::iface::import_styles* ScOrcusFactory::get_styles()
 {
     return &maStyles;
+}
+
+os::iface::import_reference_resolver* ScOrcusFactory::get_reference_resolver(os::formula_ref_context_t cxt)
+{
+    switch (cxt)
+    {
+        case os::formula_ref_context_t::global:
+            return &maRefResolver;
+        case os::formula_ref_context_t::named_expression_base:
+        case os::formula_ref_context_t::named_range:
+            return nullptr;
+    }
+
+    return nullptr;
 }
 
 void ScOrcusFactory::finalize()
