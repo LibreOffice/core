@@ -213,6 +213,9 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
             rDoc.ExtendMerge( nStartX, nStartY, nEndX, nEndY, nTab );
         ScUpdateRect aRect( nStartX, nStartY, nEndX, nEndY );
 
+        if (rDoc.HasAttrib(nCurX, nCurY, nCurZ, HasAttrFlags::Merged))
+            rDoc.ExtendMerge(nStartX, nStartY, nCurX, nCurY, nCurZ);
+
         aViewData.SetRefEnd( nCurX, nCurY, nCurZ );
 
         nStartX = aViewData.GetRefStartX();
