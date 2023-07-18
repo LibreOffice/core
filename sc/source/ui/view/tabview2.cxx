@@ -198,6 +198,8 @@ void moveRefByCell(SCCOL& rNewX, SCROW& rNewY,
                    SCCOL nMovX, SCROW nMovY, SCTAB nRefTab,
                    const ScDocument& rDoc)
 {
+    SCCOL nOldX = rNewX;
+    SCROW nOldY = rNewY;
     bool bSelectLocked = true;
     bool bSelectUnlocked = true;
     const ScTableProtection* pTabProtection = rDoc.GetTabProtection(nRefTab);
@@ -224,6 +226,15 @@ void moveRefByCell(SCCOL& rNewX, SCROW& rNewY,
         }
         if (isCellQualified(&rDoc, nTempX, rNewY, nRefTab, bSelectLocked, bSelectUnlocked))
             rNewX = nTempX;
+
+        if (nMovX < 0 && rNewX > 0)
+        {
+            const ScMergeAttr* pMergeAttr = rDoc.GetAttr(rNewX, rNewY, nRefTab, ATTR_MERGE);
+            if (pMergeAttr && pMergeAttr->IsMerged() &&
+                nOldX >= rNewX &&
+                nOldX <= rNewX + pMergeAttr->GetRowMerge() - 1)
+                rNewX = rNewX - 1;
+        }
     }
 
     if (nMovY)
@@ -240,6 +251,15 @@ void moveRefByCell(SCCOL& rNewX, SCROW& rNewY,
         }
         if (isCellQualified(&rDoc, rNewX, nTempY, nRefTab, bSelectLocked, bSelectUnlocked))
             rNewY = nTempY;
+
+        if (nMovY < 0 && rNewY > 0)
+        {
+            const ScMergeAttr* pMergeAttr = rDoc.GetAttr(rNewX, rNewY, nRefTab, ATTR_MERGE);
+            if (pMergeAttr && pMergeAttr->IsMerged() &&
+                nOldY >= rNewY &&
+                nOldY <= rNewY + pMergeAttr->GetRowMerge() - 1)
+                rNewY = rNewY - 1;
+        }
     }
 
     rDoc.SkipOverlapped(rNewX, rNewY, nRefTab);
