@@ -504,7 +504,7 @@ namespace
                     && (!bMaster || (!pObj->IsNotVisibleAsMaster() && 0 != no))
                     && pObj->GetCurrentBoundRect().Contains(rPnt)
                     && !pText->IsHideContour()
-                    && SdrObjectPrimitiveHit(*pObj, rPnt, 0, rTextEditPV, &rVisLayers, false))
+                    && SdrObjectPrimitiveHit(*pObj, rPnt, {0, 0}, rTextEditPV, &rVisLayers, false))
                 {
                     bRet = GetDraftFillColor(pObj->GetMergedItemSet(), rCol);
                 }

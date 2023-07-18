@@ -80,7 +80,7 @@ namespace sdr::overlay
                     drawinglayer::processor2d::HitTestProcessor2D aHitTestProcessor2D(
                         aViewInformation2D,
                         rLogicPosition,
-                        fLogicTolerance,
+                        {fLogicTolerance, fLogicTolerance},
                         false);
 
                     for(auto & pCandidate : maVector)

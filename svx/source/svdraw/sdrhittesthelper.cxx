@@ -36,7 +36,7 @@
 SdrObject* SdrObjectPrimitiveHit(
     const SdrObject& rObject,
     const Point& rPnt,
-    sal_uInt16 nTol,
+    const basegfx::B2DVector& rHitTolerance,
     const SdrPageView& rSdrPageView,
     const SdrLayerIDSet* pVisiLayer,
     bool bTextOnly,
@@ -48,7 +48,7 @@ SdrObject* SdrObjectPrimitiveHit(
     {
         // group or scene with content. Single 3D objects also have a
         // true == rObject.GetSubList(), but no content
-        pResult = SdrObjListPrimitiveHit(*rObject.GetSubList(), rPnt, nTol, rSdrPageView, pVisiLayer, bTextOnly);
+        pResult = SdrObjListPrimitiveHit(*rObject.GetSubList(), rPnt, rHitTolerance, rSdrPageView, pVisiLayer, bTextOnly);
     }
     else
     {
@@ -73,12 +73,11 @@ SdrObject* SdrObjectPrimitiveHit(
                 // with split views uses multiple PageWindows nowadays)
                 if(rSdrPageView.PageWindowCount())
                 {
-                    const double fLogicTolerance(nTol);
                     const basegfx::B2DPoint aHitPosition(rPnt.X(), rPnt.Y());
                     const sdr::contact::ViewObjectContact& rVOC = rObject.GetViewContact().GetViewObjectContact(
                         rSdrPageView.GetPageWindow(0)->GetObjectContact());
 
-                    if(ViewObjectContactPrimitiveHit(rVOC, aHitPosition, fLogicTolerance, bTextOnly, pHitContainer))
+                    if(ViewObjectContactPrimitiveHit(rVOC, aHitPosition, rHitTolerance, bTextOnly, pHitContainer))
                     {
                           pResult = const_cast< SdrObject* >(&rObject);
                     }
@@ -94,7 +93,7 @@ SdrObject* SdrObjectPrimitiveHit(
 SdrObject* SdrObjListPrimitiveHit(
     const SdrObjList& rList,
     const Point& rPnt,
-    sal_uInt16 nTol,
+    const basegfx::B2DVector& rHitTolerance,
     const SdrPageView& rSdrPageView,
     const SdrLayerIDSet* pVisiLayer,
     bool bTextOnly)
@@ -107,7 +106,7 @@ SdrObject* SdrObjListPrimitiveHit(
         nObjNum--;
         SdrObject* pObj = rList.GetObj(nObjNum);
 
-        pRetval = SdrObjectPrimitiveHit(*pObj, rPnt, nTol, rSdrPageView, pVisiLayer, bTextOnly);
+        pRetval = SdrObjectPrimitiveHit(*pObj, rPnt, rHitTolerance, rSdrPageView, pVisiLayer, bTextOnly);
     }
 
     return pRetval;
@@ -117,7 +116,7 @@ SdrObject* SdrObjListPrimitiveHit(
 bool ViewObjectContactPrimitiveHit(
     const sdr::contact::ViewObjectContact& rVOC,
     const basegfx::B2DPoint& rHitPosition,
-    double fLogicHitTolerance,
+    const basegfx::B2DVector& rLogicHitTolerance,
     bool bTextOnly,
     drawinglayer::primitive2d::Primitive2DContainer* pHitContainer)
 {
@@ -127,9 +126,9 @@ bool ViewObjectContactPrimitiveHit(
     {
         // first do a rough B2DRange based HitTest; do not forget to
         // include the HitTolerance if given
-        if(basegfx::fTools::more(fLogicHitTolerance, 0.0))
+        if(rLogicHitTolerance.getX() > 0 || rLogicHitTolerance.getY() > 0)
         {
-            aObjectRange.grow(fLogicHitTolerance);
+            aObjectRange.grow(rLogicHitTolerance);
         }
 
         if(aObjectRange.isInside(rHitPosition))
@@ -146,7 +145,7 @@ bool ViewObjectContactPrimitiveHit(
                 drawinglayer::processor2d::HitTestProcessor2D aHitTestProcessor2D(
                     rViewInformation2D,
                     rHitPosition,
-                    fLogicHitTolerance,
+                    rLogicHitTolerance,
                     bTextOnly);
 
                 // ask for HitStack

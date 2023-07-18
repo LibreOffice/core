@@ -32,7 +32,11 @@ class SdrPageView;
 class SdrLayerIDSet;
 class SdrObjList;
 namespace sdr::contact { class ViewObjectContact; }
-namespace basegfx { class B2DPoint; }
+namespace basegfx
+{
+class B2DPoint;
+class B2DVector;
+}
 namespace drawinglayer::primitive2d { class Primitive2DContainer; }
 
 
@@ -41,7 +45,7 @@ namespace drawinglayer::primitive2d { class Primitive2DContainer; }
 SVXCORE_DLLPUBLIC SdrObject* SdrObjectPrimitiveHit(
     const SdrObject& rObject,
     const Point& rPnt,
-    sal_uInt16 nTol,
+    const basegfx::B2DVector& rHitTolerance,
     const SdrPageView& rSdrPageView,
     const SdrLayerIDSet* pVisiLayer,
     bool bTextOnly,
@@ -51,7 +55,7 @@ SVXCORE_DLLPUBLIC SdrObject* SdrObjectPrimitiveHit(
 SVXCORE_DLLPUBLIC SdrObject* SdrObjListPrimitiveHit(
     const SdrObjList& rList,
     const Point& rPnt,
-    sal_uInt16 nTol,
+    const basegfx::B2DVector& rHitTolerance,
     const SdrPageView& rSdrPageView,
     const SdrLayerIDSet* pVisiLayer,
     bool bTextOnly);
@@ -62,7 +66,7 @@ SVXCORE_DLLPUBLIC SdrObject* SdrObjListPrimitiveHit(
 bool ViewObjectContactPrimitiveHit(
     const sdr::contact::ViewObjectContact& rVOC,
     const basegfx::B2DPoint& rHitPosition,
-    double fLogicHitTolerance,
+    const basegfx::B2DVector& rLogicHitTolerance,
     bool bTextOnly,
     /// allow to get back the stack of primitives that lead to the hit
     drawinglayer::primitive2d::Primitive2DContainer* pHitContainer);

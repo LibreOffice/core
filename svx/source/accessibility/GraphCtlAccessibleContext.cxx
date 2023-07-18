@@ -181,7 +181,7 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleAt
 
     if(mpView && mpView->GetSdrPageView())
     {
-        pObj = SdrObjListPrimitiveHit(*mpPage, aPnt, 1, *mpView->GetSdrPageView(), nullptr, false);
+        pObj = SdrObjListPrimitiveHit(*mpPage, aPnt, {1, 1}, *mpView->GetSdrPageView(), nullptr, false);
     }
 
     if( pObj )

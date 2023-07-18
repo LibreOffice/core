@@ -166,6 +166,13 @@ public:
         maRangeY.grow(fValue);
     }
 
+    /// grow set by axis aware values from rTuple
+    void grow(const Tuple2D<TYPE>& rTuple)
+    {
+        maRangeX.grow(rTuple.getX());
+        maRangeY.grow(rTuple.getY());
+    }
+
     /// clamp value on range
     Tuple2D<TYPE> clamp(const Tuple2D<TYPE>& rTuple) const
     {

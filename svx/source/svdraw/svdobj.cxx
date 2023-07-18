@@ -1853,7 +1853,7 @@ SdrObject* SdrObject::CheckMacroHit(const SdrObjMacroHitRec& rRec) const
 {
     if(rRec.pPageView)
     {
-        return SdrObjectPrimitiveHit(*this, rRec.aPos, rRec.nTol, *rRec.pPageView, rRec.pVisiLayer, false);
+        return SdrObjectPrimitiveHit(*this, rRec.aPos, {static_cast<double>(rRec.nTol), static_cast<double>(rRec.nTol)}, *rRec.pPageView, rRec.pVisiLayer, false);
     }
 
     return nullptr;

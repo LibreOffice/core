@@ -1237,8 +1237,8 @@ bool FuSelection::HandleImageMapClick(const SdrObject* pObj, const Point& rPos)
     }
 
     const SdrLayerIDSet* pVisiLayer = &mpView->GetSdrPageView()->GetVisibleLayers();
-    sal_uInt16 nHitLog = sal_uInt16(mpWindow->PixelToLogic(Size(HITPIX, 0)).Width());
-    const ::tools::Long n2HitLog = nHitLog * 2;
+    double fHitLog = mpWindow->PixelToLogic(Size(HITPIX, 0)).Width();
+    const ::tools::Long n2HitLog = fHitLog * 2;
     Point aHitPosR(rPos);
     Point aHitPosL(rPos);
     Point aHitPosT(rPos);
@@ -1250,13 +1250,13 @@ bool FuSelection::HandleImageMapClick(const SdrObject* pObj, const Point& rPos)
     aHitPosB.AdjustY(-n2HitLog);
 
     if (!bClosed || !bFilled
-        || (SdrObjectPrimitiveHit(*pObj, aHitPosR, nHitLog, *mpView->GetSdrPageView(), pVisiLayer,
+        || (SdrObjectPrimitiveHit(*pObj, aHitPosR, {fHitLog, fHitLog}, *mpView->GetSdrPageView(), pVisiLayer,
                                   false)
-            && SdrObjectPrimitiveHit(*pObj, aHitPosL, nHitLog, *mpView->GetSdrPageView(),
+            && SdrObjectPrimitiveHit(*pObj, aHitPosL, {fHitLog, fHitLog}, *mpView->GetSdrPageView(),
                                      pVisiLayer, false)
-            && SdrObjectPrimitiveHit(*pObj, aHitPosT, nHitLog, *mpView->GetSdrPageView(),
+            && SdrObjectPrimitiveHit(*pObj, aHitPosT, {fHitLog, fHitLog}, *mpView->GetSdrPageView(),
                                      pVisiLayer, false)
-            && SdrObjectPrimitiveHit(*pObj, aHitPosB, nHitLog, *mpView->GetSdrPageView(),
+            && SdrObjectPrimitiveHit(*pObj, aHitPosB, {fHitLog, fHitLog}, *mpView->GetSdrPageView(),
                                      pVisiLayer, false)))
     {
         if (SvxIMapInfo::GetIMapInfo(pObj))

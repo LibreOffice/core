@@ -449,7 +449,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
             // includes grouping primitives (like TextHierarchyPrimitives we deed here)
             // but also all decomposed ones which lead to the creation of that primitive
             drawinglayer::primitive2d::Primitive2DContainer aHitContainer;
-            const bool bTEHit(pPV && SdrObjectPrimitiveHit(*pTextObj, aLocalLogicPosition, 0, *pPV, &pPV->GetVisibleLayers(), true, &aHitContainer));
+            const bool bTEHit(pPV && SdrObjectPrimitiveHit(*pTextObj, aLocalLogicPosition, {0, 0}, *pPV, &pPV->GetVisibleLayers(), true, &aHitContainer));
 
             if (bTEHit && !aHitContainer.empty())
             {
@@ -514,13 +514,21 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
         (eHit==SdrHitKind::MarkedObject || eHit==SdrHitKind::UnmarkedObject) &&
         (IsTextTool() || (IsEditMode() && IsQuickTextEditMode())) && pHitObj->HasTextEdit())
     {
+        auto pTextObj = DynCastSdrTextObj(pHitObj);
+
         // Around the TextEditArea there's a border to select without going into text edit mode.
-        tools::Rectangle aBoundRect(pHitObj->GetCurrentBoundRect());
+        tools::Rectangle aBoundRect;
+        const GeoStat& rGeo = pTextObj->GetGeoStat();
+        if (pTextObj && !rGeo.m_nRotationAngle && !rGeo.m_nShearAngle)
+        {
+            pTextObj->TakeTextEditArea(nullptr, nullptr, &aBoundRect, nullptr);
+        }
+        else
+            aBoundRect = pHitObj->GetCurrentBoundRect();
 
         // Force to SnapRect when Fontwork
-        if( auto pTextObj = DynCastSdrTextObj(pHitObj) )
-            if( pTextObj->IsFontwork() )
-                aBoundRect = pHitObj->GetSnapRect();
+        if( pTextObj && pTextObj->IsFontwork() )
+            aBoundRect = pHitObj->GetSnapRect();
 
         sal_Int32 nTolerance(mnHitTolLog);
         bool bBoundRectHit(false);
@@ -538,10 +546,11 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
             bBoundRectHit = true;
         }
 
-        if(!bBoundRectHit)
+        if(!bBoundRectHit && aBoundRect.Contains(aLocalLogicPosition))
         {
-            bool bTEHit(pPV &&
-                SdrObjectPrimitiveHit(*pHitObj, aLocalLogicPosition, 0, *pPV, &pPV->GetVisibleLayers(), true));
+            bool bTEHit(pPV
+                        && SdrObjectPrimitiveHit(*pHitObj, aLocalLogicPosition, { 2000.0, 0.0 },
+                                                 *pPV, &pPV->GetVisibleLayers(), true));
 
             // TextEdit attached to an object in a locked layer
             if (bTEHit && pPV->GetLockedLayers().IsSet(pHitObj->GetLayer()))

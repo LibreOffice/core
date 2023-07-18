@@ -2155,7 +2155,7 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
     aMouseRect.AdjustTop( -(aHalfConSiz.Height()) );
     aMouseRect.AdjustRight(aHalfConSiz.Width() );
     aMouseRect.AdjustBottom(aHalfConSiz.Height() );
-    sal_uInt16 nBoundHitTol=static_cast<sal_uInt16>(aHalfConSiz.Width())/2; if (nBoundHitTol==0) nBoundHitTol=1;
+    double fBoundHitTol=static_cast<double>(aHalfConSiz.Width())/2; if (fBoundHitTol==0.0) fBoundHitTol=1.0;
     size_t no=pOL->GetObjCount();
     bool bFnd = false;
     SdrObjConnection aTestCon;
@@ -2249,7 +2249,7 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
                 // if no connector is hit, try HitTest again, for BestConnector (=bCenter)
                 if(!bFnd &&
                     !bEdge &&
-                    SdrObjectPrimitiveHit(*pObj, rPt, nBoundHitTol, rPV, &rVisLayer, false))
+                    SdrObjectPrimitiveHit(*pObj, rPt, {fBoundHitTol, fBoundHitTol}, rPV, &rVisLayer, false))
                 {
                     // Suppress default connect at object inside bound
                     if(!pThis || !pThis->GetSuppressDefaultConnect())
@@ -2260,10 +2260,10 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
                     }
                 }
                 if (bFnd) {
-                    aMouseRect.AdjustLeft( -nBoundHitTol );
-                    aMouseRect.AdjustTop( -nBoundHitTol );
-                    aMouseRect.AdjustRight(nBoundHitTol );
-                    aMouseRect.AdjustBottom(nBoundHitTol );
+                    aMouseRect.AdjustLeft( -fBoundHitTol );
+                    aMouseRect.AdjustTop( -fBoundHitTol );
+                    aMouseRect.AdjustRight(fBoundHitTol );
+                    aMouseRect.AdjustBottom(fBoundHitTol );
                 }
 
             }
