@@ -44,6 +44,7 @@
 #include <vcl/dibtools.hxx>
 #include <o3tl/string_view.hxx>
 #include <editeng/brushitem.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <swmodule.hxx>
 #include <swdll.hxx>
@@ -201,22 +202,6 @@ public:
         rStream.WriteOString("}");
         rStream.Seek(0);
     }
-
-private:
-    virtual std::unique_ptr<Resetter> preTest(const char* filename) override
-    {
-        if (filename == std::string_view("charborder.odt"))
-        {
-            // FIXME if padding-top gets exported as inches, not cms, we get rounding errors.
-            SwGlobals::ensure(); // make sure that SW_MOD() is not 0
-            SwMasterUsrPref* pPref = const_cast<SwMasterUsrPref*>(SW_MOD()->GetUsrPref(false));
-            std::unique_ptr<Resetter> pResetter(
-                new Resetter([ pPref, eUnit = pPref->GetMetric() ]() { pPref->SetMetric(eUnit); }));
-            pPref->SetMetric(FieldUnit::CM);
-            return pResetter;
-        }
-        return nullptr;
-    }
 };
 
 #define DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(TestName, filename)                                      \
@@ -347,35 +332,49 @@ DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testFdo86857, "fdo86857.html")
     CPPUNIT_ASSERT_EQUAL(Color(0x66ffff), getProperty<Color>(xCell, "BackColor"));
 }
 
-DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testCharacterBorder, "charborder.odt")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testCharacterBorder)
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    // FIXME if padding-top gets exported as inches, not cms, we get rounding errors.
+    SwGlobals::ensure(); // make sure that SW_MOD() is not 0
+    SwMasterUsrPref* pPref = const_cast<SwMasterUsrPref*>(SW_MOD()->GetUsrPref(false));
+    FieldUnit eUnit = pPref->GetMetric();
+    pPref->SetMetric(FieldUnit::CM);
+    comphelper::ScopeGuard g([pPref, eUnit]() { pPref->SetMetric(eUnit); });
 
-    uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 1), uno::UNO_QUERY);
-    // Different Border
-    {
-        CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x6666FF, 12, 12, 12, 3, 37),
-                                    getProperty<table::BorderLine2>(xRun, "CharTopBorder"));
-        CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0xFF9900, 0, 99, 0, 2, 99),
-                                    getProperty<table::BorderLine2>(xRun, "CharLeftBorder"));
-        CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0xFF0000, 0, 169, 0, 1, 169),
-                                    getProperty<table::BorderLine2>(xRun, "CharBottomBorder"));
-        CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x0000FF, 0, 169, 0, 0, 169),
-                                    getProperty<table::BorderLine2>(xRun, "CharRightBorder"));
-    }
+    auto verify = [this]() {
+        CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    // Different Padding
-    {
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(450), getProperty<sal_Int32>(xRun, "CharTopBorderDistance"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(550),
-                             getProperty<sal_Int32>(xRun, "CharLeftBorderDistance"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(150),
-                             getProperty<sal_Int32>(xRun, "CharBottomBorderDistance"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(250),
-                             getProperty<sal_Int32>(xRun, "CharRightBorderDistance"));
-    }
+        uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+        // Different Border
+        {
+            CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x6666FF, 12, 12, 12, 3, 37),
+                                        getProperty<table::BorderLine2>(xRun, "CharTopBorder"));
+            CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0xFF9900, 0, 99, 0, 2, 99),
+                                        getProperty<table::BorderLine2>(xRun, "CharLeftBorder"));
+            CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0xFF0000, 0, 169, 0, 1, 169),
+                                        getProperty<table::BorderLine2>(xRun, "CharBottomBorder"));
+            CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x0000FF, 0, 169, 0, 0, 169),
+                                        getProperty<table::BorderLine2>(xRun, "CharRightBorder"));
+        }
 
-    // No shadow
+        // Different Padding
+        {
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(450),
+                                 getProperty<sal_Int32>(xRun, "CharTopBorderDistance"));
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(550),
+                                 getProperty<sal_Int32>(xRun, "CharLeftBorderDistance"));
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(150),
+                                 getProperty<sal_Int32>(xRun, "CharBottomBorderDistance"));
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(250),
+                                 getProperty<sal_Int32>(xRun, "CharRightBorderDistance"));
+        }
+
+        // No shadow
+    };
+    createSwDoc("charborder.odt");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
 #define DECLARE_HTMLEXPORT_TEST(TestName, filename)                                                \
