@@ -163,10 +163,6 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 bRet = toSet_ifRW<officecfg::Office::Recovery::AutoSave::Enabled>(
                     rSet, SID_ATTR_AUTOSAVE);
                 break;
-            case SID_ATTR_AUTOSAVEPROMPT:
-                bRet = toSet_ifRW<officecfg::Office::Common::Save::Document::AutoSavePrompt>(
-                    rSet, SID_ATTR_AUTOSAVEPROMPT);
-                break;
             case SID_ATTR_AUTOSAVEMINUTE:
                 bRet = toSet_ifRW<officecfg::Office::Recovery::AutoSave::TimeIntervall>(
                     rSet, SID_ATTR_AUTOSAVEMINUTE);
@@ -342,10 +338,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 
     // AutoSave
     toCfg_ifSet<officecfg::Office::Recovery::AutoSave::Enabled>(rSet, SID_ATTR_AUTOSAVE, batch);
-
-    // AutoSave-Prompt
-    toCfg_ifSet<officecfg::Office::Common::Save::Document::AutoSavePrompt>(
-        rSet, SID_ATTR_AUTOSAVEPROMPT, batch);
 
     // AutoSave-Time
     toCfg_ifSet<officecfg::Office::Recovery::AutoSave::TimeIntervall>(

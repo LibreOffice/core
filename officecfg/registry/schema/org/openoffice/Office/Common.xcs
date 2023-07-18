@@ -2073,15 +2073,6 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="AutoSavePrompt" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: Tools  Options - General  Save - [Section] Save -->
-          <info>
-            <desc>Shows a prompt during AutoSave,even when the document has a
-            filename.</desc>
-            <label>Prompt to save</label>
-          </info>
-          <value>true</value>
-        </prop>
         <prop oor:name="AutoSaveTimeIntervall" oor:type="xs:int" oor:nillable="false">
           <info>
             <deprecated>Not used anymore</deprecated>
