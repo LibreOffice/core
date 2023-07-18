@@ -1571,6 +1571,17 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf99474)
     CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xStyle, "CharColor"));
 }
 
+DECLARE_WW8EXPORT_TEST(testContinuousSectionsNoPageBreak, "continuous-sections.doc")
+{
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    // Continuous section breaks should not add new pages
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetPageDescCnt());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
