@@ -21,7 +21,7 @@
 
 #include <memory>
 
-#include "XMLElementPropertyContext.hxx"
+#include <xmloff/XMLElementPropertyContext.hxx>
 
 class SvXMLImport;
 class SvxXMLTabStopContext_Impl;

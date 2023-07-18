@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/style/GraphicLocation.hpp>
-#include "XMLElementPropertyContext.hxx"
+#include <xmloff/XMLElementPropertyContext.hxx>
 
 namespace com::sun::star {
     namespace io { class XOutputStream; }

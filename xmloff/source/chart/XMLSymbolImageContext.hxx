@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <XMLElementPropertyContext.hxx>
+#include <xmloff/XMLElementPropertyContext.hxx>
 
 namespace com::sun::star {
     namespace io { class XOutputStream; }

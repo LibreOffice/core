@@ -56,7 +56,7 @@
 #include <XMLFillBitmapSizePropertyHandler.hxx>
 #include <XMLBitmapLogicalSizePropertyHandler.hxx>
 #include <XMLBitmapRepeatOffsetPropertyHandler.hxx>
-#include <XMLComplexColorHandler.hxx>
+#include <xmloff/XMLComplexColorHandler.hxx>
 #include <vcl/graph.hxx>
 
 using namespace ::com::sun::star;
