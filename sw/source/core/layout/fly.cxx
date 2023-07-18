@@ -98,8 +98,12 @@ SwTwips GetFlyAnchorBottom(SwFlyFrame* pFly, const SwFrame& rAnchor)
         return 0;
     }
 
-    const IDocumentSettingAccess& rIDSA = pFly->GetFrameFormat().getIDocumentSettingAccess();
-    bool bLegacy = rIDSA.get(DocumentSettingId::TAB_OVER_MARGIN);
+    const auto& rFrameFormat = pFly->GetFrameFormat();
+    const IDocumentSettingAccess& rIDSA = rFrameFormat.getIDocumentSettingAccess();
+    // Allow overlap with bottom margin / footer only in case we're relative to the page frame.
+    bool bVertPageFrame = rFrameFormat.GetVertOrient().GetRelationOrient() == text::RelOrientation::PAGE_FRAME;
+    bool bInBody = rAnchor.IsInDocBody();
+    bool bLegacy = rIDSA.get(DocumentSettingId::TAB_OVER_MARGIN) && (bVertPageFrame || !bInBody);
     if (bLegacy)
     {
         // Word <= 2010 style: the fly can overlap with the bottom margin / footer area in case the
