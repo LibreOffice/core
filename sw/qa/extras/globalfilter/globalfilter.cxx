@@ -1283,6 +1283,29 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
     css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
+    // Parse the export result with pdfium.
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+
+    // The document has one page.
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pPdfTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pPdfTextPage);
+
+    int nChars = pPdfTextPage->countChars();
+    CPPUNIT_ASSERT_EQUAL(22, nChars);
+
+    // Check that the label strings were exported correctly
+    std::vector<sal_uInt32> aChars(nChars);
+    for (int i = 0; i < nChars; i++)
+        aChars[i] = pPdfTextPage->getUnicode(i);
+    OUString aText(aChars.data(), aChars.size());
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\u0623\r\n.\r\n\u0623.\u0623\r\n.\r\n\u0623.\u0623.\u0623\r\n."), aText);
+
+    // Parse the document again to get its raw content
+    // TODO: get the content from PDFiumPage somehow
     vcl::filter::PDFDocument aDocument;
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
     CPPUNIT_ASSERT(aDocument.Read(aStream));
@@ -1345,10 +1368,6 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
                 auto const endj(line.find(">Tj"));
                 if (endj != ::std::string_view::npos)
                 {
-                    auto const start(line.rfind("<", endj) + 1);
-                    // for these, expected length is 1 glyphs, each 2 digits
-                    // would be better to check the content but it depends on CMap
-                    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(endj - start)>(1 * 2), endj - start);
                     state = LblFoundText;
                     ++nLblTj;
                 }
@@ -1357,17 +1376,6 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
                     auto const endJ(line.find("]TJ"));
                     if (endJ != ::std::string_view::npos)
                     {
-                        auto const start(line.rfind("[", endJ) + 1);
-                        auto i(line.find("<", start));
-                        auto digits(0);
-                        while (i != ::std::string_view::npos && i < endJ)
-                        {
-                            auto const j(line.find(">", i));
-                            digits += j - (i+1);
-                            i = line.find("<", j);
-                        }
-                        // these have list-level numbers + one less ".", each 2 digits
-                        CPPUNIT_ASSERT_EQUAL(static_cast<decltype(digits)>((((nLbl/2 + 1) * 2) - 1) * 2), digits);
                         state = LblFoundText;
                         ++nLblTJ;
                     }
@@ -1386,8 +1394,7 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
     // tree into 3 Lbl.
     CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nLbl)>(6), nLbl);
     // these are quite arbitrary?
-    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nLbl)>(2), nLblTJ);
-    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nLbl)>(4), nLblTj);
+    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nLbl)>(6), nLblTJ + nLblTj);
 
     auto nL(0);
     for (const auto& rDocElement : aDocument.GetElements())
