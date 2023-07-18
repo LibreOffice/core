@@ -6432,6 +6432,7 @@ include/xmloff/SinglePropertySetInfoCache.hxx
 include/xmloff/XMLBase64ImportContext.hxx
 include/xmloff/XMLCharContext.hxx
 include/xmloff/XMLConstantsPropertyHandler.hxx
+include/xmloff/XMLElementPropertyContext.hxx
 include/xmloff/XMLEventExport.hxx
 include/xmloff/XMLEventsImportContext.hxx
 include/xmloff/XMLFilterServiceNames.h
@@ -15295,7 +15296,6 @@ xmloff/inc/XMLBitmapRepeatOffsetPropertyHandler.hxx
 xmloff/inc/XMLChartPropertySetMapper.hxx
 xmloff/inc/XMLChartStyleContext.hxx
 xmloff/inc/XMLClipPropertyHandler.hxx
-xmloff/inc/XMLElementPropertyContext.hxx
 xmloff/inc/XMLEmbeddedObjectExportFilter.hxx
 xmloff/inc/XMLEmbeddedObjectImportContext.hxx
 xmloff/inc/XMLEventImportHelper.hxx

@@ -9,11 +9,12 @@
 
 #pragma once
 
+#include <xmloff/dllapi.h>
 #include <memory>
-#include "XMLElementPropertyContext.hxx"
+#include <xmloff/XMLElementPropertyContext.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
 
-class XMLComplexColorContext final : public XMLElementPropertyContext
+class XMLOFF_DLLPUBLIC XMLComplexColorContext final : public XMLElementPropertyContext
 {
     model::ComplexColor maComplexColor;
     sal_Int32 mnRootElement;

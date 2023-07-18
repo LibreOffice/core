@@ -8,6 +8,7 @@
  */
 #pragma once
 
+#include <xmloff/dllapi.h>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
@@ -17,7 +18,7 @@ class Any;
 }
 class SvXMLExport;
 
-class XMLComplexColorExport
+class XMLOFF_DLLPUBLIC XMLComplexColorExport
 {
     SvXMLExport& mrExport;
 

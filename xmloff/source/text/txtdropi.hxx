@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <XMLElementPropertyContext.hxx>
+#include <xmloff/XMLElementPropertyContext.hxx>
 
 class XMLTextDropCapImportContext : public XMLElementPropertyContext
 {

@@ -23,7 +23,7 @@
 
 #include <memory>
 
-#include "XMLElementPropertyContext.hxx"
+#include <xmloff/XMLElementPropertyContext.hxx>
 
 class XMLTextColumnContext_Impl;
 class XMLTextColumnSepContext_Impl;

@@ -20,7 +20,7 @@
 #include <tools/debug.hxx>
 #include "XMLTextPropertySetContext.hxx"
 #include <XMLTextColumnsContext.hxx>
-#include <XMLComplexColorContext.hxx>
+#include <xmloff/XMLComplexColorContext.hxx>
 #include <XMLBackgroundImageContext.hxx>
 #include "XMLSectionFootnoteConfigImport.hxx"
 

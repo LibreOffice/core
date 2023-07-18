@@ -18,7 +18,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmlprhdl.hxx>
-#include <XMLComplexColorContext.hxx>
+#include <xmloff/XMLComplexColorContext.hxx>
 
 using namespace css;
 using namespace xmloff::token;
