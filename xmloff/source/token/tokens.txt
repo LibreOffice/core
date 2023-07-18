@@ -228,6 +228,7 @@ back-scale
 backface-culling
 background
 background-color
+background-complex-color
 background-image
 no-repeat
 bar

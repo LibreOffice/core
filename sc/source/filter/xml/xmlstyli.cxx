@@ -28,6 +28,7 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <comphelper/extract.hxx>
 #include <xmloff/xmlprcon.hxx>
+#include <xmloff/XMLComplexColorContext.hxx>
 #include "XMLTableHeaderFooterContext.hxx"
 #include "XMLConverter.hxx"
 #include "XMLTableShapeImportHelper.hxx"
@@ -42,6 +43,10 @@
 #include <document.hxx>
 #include <conditio.hxx>
 #include <rangelst.hxx>
+
+#include <xmloff/xmltypes.hxx>
+#include <xmloff/contextid.hxx>
+#include <xmloff/txtprmap.hxx>
 
 #define XML_LINE_LEFT 0
 #define XML_LINE_RIGHT 1
@@ -318,6 +323,10 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableCellPropsConte
             aProp.maValue <<=  sURL;
             rProperties.push_back( aProp );
         }
+    }
+    else if (nElement == XML_ELEMENT(LO_EXT, XML_BACKGROUND_COMPLEX_COLOR))
+    {
+        return new XMLComplexColorContext(GetImport(), nElement, xAttrList, rProp, rProperties);
     }
     return SvXMLPropertySetContext::createFastChildContext( nElement, xAttrList, rProperties, rProp );
 }
