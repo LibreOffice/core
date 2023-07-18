@@ -946,6 +946,28 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyAnchorKeepWithNext)
     const SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage2Objs.size());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyNoFooterOverlap)
+{
+    // Given a document with 2 pages, a floating table on both pages:
+    createSwDoc("floattable-no-footer-overlap.docx");
+
+    // When calculating the layout:
+    calcLayout();
+
+    // Then make sure the second page has a floating table:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    auto pPage2 = dynamic_cast<SwPageFrame*>(pPage1->GetNext());
+    // Without the accompanying fix in place, this test would have failed, there was no page 2, both
+    // floating tables were on page 1.
+    CPPUNIT_ASSERT(pPage2);
+    CPPUNIT_ASSERT(pPage2->GetSortedObjs());
+    const SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage2Objs.size());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
