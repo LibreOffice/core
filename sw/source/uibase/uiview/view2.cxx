@@ -1875,8 +1875,11 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 OUString aWordCount(SwResId(pResId));
                 aWordCount = aWordCount.replaceAll("$1", aWordArg);
                 aWordCount = aWordCount.replaceAll("$2", aCharArg);
-
                 rSet.Put( SfxStringItem( FN_STAT_WORDCOUNT, aWordCount ) );
+
+                SwPostItMgr* pPostItMgr = rShell.GetPostItMgr();
+                if (pPostItMgr)
+                    selectionStats.nComments = pPostItMgr->end() - pPostItMgr->begin();
 
                 SwWordCountWrapper *pWrdCnt = static_cast<SwWordCountWrapper*>(GetViewFrame().GetChildWindow(SwWordCountWrapper::GetChildWindowId()));
                 if (pWrdCnt)

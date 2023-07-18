@@ -30,6 +30,7 @@ SwDocStat::SwDocStat() :
     nAsianWord(0),
     nChar(0),
     nCharExcludingSpaces(0),
+    nComments(0),
     bModified(true)
 {}
 
@@ -45,6 +46,7 @@ void SwDocStat::Reset()
     nAsianWord = 0;
     nChar   = 0;
     nCharExcludingSpaces = 0;
+    nComments = 0;
     bModified = true;
 }
 
