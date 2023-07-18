@@ -237,6 +237,7 @@ public:
 
     const ScInputHandler* GetInputHandler() const { return mpInputHandler.get(); }
     ScInputHandler* GetInputHandler() { return mpInputHandler.get(); }
+    const OUString* GetEditString() const;
     void            UpdateInputHandler( bool bForce = false, bool bStopEditing = true );
     void            UpdateInputHandlerCellAdjust( SvxCellHorJustify eJust );
     bool            TabKeyInput(const KeyEvent& rKEvt);
