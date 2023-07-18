@@ -22,6 +22,8 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/resmgr.hxx>
+#include <unotools/useroptions.hxx>
+#include <unordered_map>
 
 namespace com::sun::star {
     namespace security { class XCertificate; }
@@ -64,13 +66,19 @@ private:
     std::unique_ptr<weld::Button>   m_xOKBtn;
     std::unique_ptr<weld::Label>    m_xFTDescription;
     std::unique_ptr<weld::Entry>    m_xDescriptionED;
+    std::unique_ptr<weld::Entry>    m_xSearchBox;
+
+    std::unordered_map<css::uno::Reference< css::xml::crypto::XXMLSecurityContext>,
+        css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > > xMemCerts;
+
 
     DECL_LINK(ViewButtonHdl, weld::Button&, void);
     DECL_LINK(CertificateHighlightHdl, weld::TreeView&, void);
     DECL_LINK(CertificateSelectHdl, weld::TreeView&, bool);
+    DECL_LINK(SearchModifyHdl, weld::Entry&, void);
 
     void ImplShowCertificateDetails();
-    void ImplInitialize();
+    void ImplInitialize(bool mbSearch = false);
 
     static void HandleOneUsageBit(OUString& string, int& bits, int bit, TranslateId name);
 
