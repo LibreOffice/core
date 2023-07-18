@@ -1455,7 +1455,9 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, tools::Long nTextWid
         // NOTE: be very careful to avoid rounding errors for nCharExtra case
         // problem with rounding errors especially for small nCharExtras
         // TODO: remove when layout units have subpixel granularity
-        tools::Long nSubPixelFactor = 64;
+        tools::Long nSubPixelFactor = 1;
+        if (!mbMap)
+            nSubPixelFactor = 64;
         double nTextPixelWidth = ImplLogicWidthToDeviceSubPixel(nTextWidth * nSubPixelFactor);
         double nExtraPixelWidth = 0;
         if( nCharExtra != 0 )
@@ -1484,7 +1486,9 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, tools::Long nTextWid
         // NOTE: be very careful to avoid rounding errors for nCharExtra case
         // problem with rounding errors especially for small nCharExtras
         // TODO: remove when layout units have subpixel granularity
-        tools::Long nSubPixelFactor = 64;
+        tools::Long nSubPixelFactor = 1;
+        if (!mbMap)
+            nSubPixelFactor = 64;
 
         double nTextPixelWidth = ImplLogicWidthToDeviceSubPixel(nTextWidth * nSubPixelFactor);
         double nExtraPixelWidth = 0;
