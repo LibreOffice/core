@@ -2026,6 +2026,48 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf155796)
     CPPUNIT_ASSERT_EQUAL(OUString("Sheet1.A1:Sheet1.A3"), aMarkedAreaString);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testKeyboardMergeRef)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
+    CPPUNIT_ASSERT(pFoundShell);
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScTabViewShell* pViewShell = pDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pViewShell);
+
+    goToCell("A1:A5");
+    dispatchCommand(mxComponent, ".uno:ToggleMergeCells", {});
+    goToCell("A6:A10");
+    dispatchCommand(mxComponent, ".uno:ToggleMergeCells", {});
+
+    insertStringToCell(*pModelObj, "B1", "=", false);
+
+    goToCell("A1");
+
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN | KEY_SHIFT);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN | KEY_SHIFT);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pViewShell->IsRefInputMode());
+    {
+        const OUString* pInput = pViewShell->GetEditString();
+        CPPUNIT_ASSERT(pInput);
+        CPPUNIT_ASSERT_EQUAL(OUString("=A1:A10"), *pInput);
+    }
+
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_UP | KEY_SHIFT);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_UP | KEY_SHIFT);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pViewShell->IsRefInputMode());
+    {
+        const OUString* pInput = pViewShell->GetEditString();
+        CPPUNIT_ASSERT(pInput);
+        CPPUNIT_ASSERT_EQUAL(OUString("=A1:A5"), *pInput);
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
