@@ -277,6 +277,7 @@ const std::tuple<TranslateId, OUString, OUString, tipModule> TIPOFTHEDAY_STRINGA
      { NC_("RID_CUI_TIPOFTHEDAY", "Press Shift+F1 to see any available extended tooltips in dialog boxes, when \"Extended tips\" is not enabled in Tools ▸ Options ▸ %PRODUCTNAME ▸ General."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/shared/05/00000120.html", "", soffice},
      { NC_("RID_CUI_TIPOFTHEDAY", "Never use certain arrow styles? Remove them by using the Delete button on the Format ▸ Text Box and Shape ▸ Line ▸ Arrow Styles tab."), "cui/ui/lineendstabpage/BTN_MODIFY", "", sdraw},
      { NC_("RID_CUI_TIPOFTHEDAY", "Don’t like the position of some icons on your toolbar? Change it with Tools ▸ Customize ▸ Toolbars tab ▸ Target."), "CUI_HID_SVX_CONFIG_TOOLBAR", "", soffice},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Can’t find a command in the menus? Try Shift+ESC."), ".uno:CommandPopup", "", soffice},
 };
 
 #define STR_HELP_LINK                   NC_("STR_HELP_LINK", "%PRODUCTNAME Help")
