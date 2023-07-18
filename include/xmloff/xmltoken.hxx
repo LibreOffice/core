@@ -311,6 +311,7 @@ namespace xmloff::token {
         XML_BACKFACE_CULLING,
         XML_BACKGROUND,
         XML_BACKGROUND_COLOR,
+        XML_BACKGROUND_COMPLEX_COLOR,
         XML_BACKGROUND_IMAGE,
         XML_BACKGROUND_NO_REPEAT,
         XML_BAR,
