@@ -350,7 +350,9 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     }
 
     SwFormTokens aTokens;
-    if (TOX_CONTENT == m_eType || TOX_ILLUSTRATIONS == m_eType )
+    const bool bNeedsLink
+        = TOX_CONTENT == m_eType || TOX_ILLUSTRATIONS == m_eType || TOX_TABLES == m_eType;
+    if (bNeedsLink)
     {
         SwFormToken aLinkStt (TOKEN_LINK_START);
         aLinkStt.sCharStyleName = SwResId(STR_POOLCHR_TOXJUMP);
@@ -378,7 +380,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
         aTokens.emplace_back(TOKEN_PAGE_NUMS);
     }
 
-    if (TOX_CONTENT == m_eType || TOX_ILLUSTRATIONS == m_eType)
+    if (bNeedsLink)
         aTokens.emplace_back(TOKEN_LINK_END);
 
     SetTemplate(0, SwResId(*pPoolId++));
