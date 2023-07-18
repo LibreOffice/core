@@ -1446,6 +1446,32 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf155796)
     CPPUNIT_ASSERT_EQUAL(OUString("Sheet1.A1:Sheet1.A3"), aMarkedAreaString);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf156174)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    insertNewSheet(*pDoc);
+
+    insertStringToCell("A1", u"1");
+    insertStringToCell("A2", u"2");
+    insertStringToCell("B1", u"3");
+    insertStringToCell("B2", u"4");
+
+    ScDBData* pDBData = new ScDBData("testDB", 1, 0, 0, 1, 1);
+    bool bInserted
+        = pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
+    CPPUNIT_ASSERT(bInserted);
+
+    insertNewSheet(*pDoc);
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "Index", uno::Any(sal_uInt16(3)) } }));
+    dispatchCommand(mxComponent, ".uno:Remove", aArgs);
+
+    ScDBCollection* pDBs = pDoc->GetDBCollection();
+    CPPUNIT_ASSERT(!pDBs->empty());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

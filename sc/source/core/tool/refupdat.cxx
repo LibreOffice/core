@@ -286,12 +286,7 @@ ScRefUpdateRes ScRefUpdate::Update( const ScDocument* pDoc, UpdateRefMode eUpdat
             bool bExp = (bExpand && IsExpand( theTab1, theTab2, nTab1, nDz ));
             bCut1 = lcl_MoveStart( theTab1, nTab1, nDz, nMaxTab );
             bCut2 = lcl_MoveEnd( theTab2, nTab1, nDz, nMaxTab );
-            if ( theTab2 < theTab1 )
-            {
-                eRet = UR_INVALID;
-                theTab2 = theTab1;
-            }
-            else if ( bCut1 || bCut2 )
+            if ( bCut1 || bCut2 )
                 eRet = UR_UPDATED;
             if ( bExp )
             {
