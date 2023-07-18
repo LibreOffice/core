@@ -23,7 +23,6 @@
 #include <rtl/ustring.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
-#include <svl/aeitem.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
@@ -140,10 +139,6 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
         bool bRet = false;
         switch(nWhich)
         {
-            case SID_ATTR_BUTTON_BIGSIZE:
-                if( rSet.Put( SfxBoolItem( SID_ATTR_BUTTON_BIGSIZE, SvtMiscOptions::AreCurrentSymbolsLarge() ) ) )
-                    bRet = true;
-                break;
             case SID_ATTR_BACKUP:
                 bRet = true;
                 if (!officecfg::Office::Common::Save::Document::CreateBackup::isReadOnly())
@@ -179,29 +174,6 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 bRet = toSet_ifRW<officecfg::Office::Common::Save::Document::EditProperty>(
                     rSet, SID_ATTR_DOCINFO);
                 break;
-            case SID_ATTR_WORKINGSET:
-                bRet = toSet_ifRW<officecfg::Office::Common::Save::WorkingSet>(
-                    rSet, SID_ATTR_WORKINGSET);
-                break;
-            case SID_ATTR_SAVEDOCVIEW:
-                bRet = toSet_ifRW<officecfg::Office::Common::Save::Document::ViewInfo>(
-                    rSet, SID_ATTR_SAVEDOCVIEW);
-                break;
-            case SID_ATTR_METRIC:
-                break;
-            case SID_HELPBALLOONS:
-                bRet = toSet<officecfg::Office::Common::Help::ExtendedTip>(rSet, SID_HELPBALLOONS);
-                break;
-            case SID_HELPTIPS :
-                bRet = toSet<officecfg::Office::Common::Help::Tip>(rSet, SID_HELPTIPS);
-                break;
-            case SID_HELP_STYLESHEET:
-                bRet = toSet<officecfg::Office::Common::Help::HelpStyleSheet>(rSet,
-                                                                              SID_HELP_STYLESHEET);
-                break;
-            case SID_ATTR_UNDO_COUNT:
-                bRet = toSet<officecfg::Office::Common::Undo::Steps>(rSet, SID_ATTR_UNDO_COUNT);
-                break;
             case SID_ATTR_QUICKLAUNCHER:
                 if ( ShutdownIcon::IsQuickstarterInstalled() )
                 {
@@ -233,10 +205,6 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                         bRet = false;
                 }
                 break;
-            case SID_INET_PROXY_TYPE:
-                bRet = toSet_withDefault<officecfg::Inet::Settings::ooInetProxyType>(
-                    rSet, SID_INET_PROXY_TYPE, 0);
-                break;
             case SID_INET_HTTP_PROXY_NAME:
                 bRet = toSet<officecfg::Inet::Settings::ooInetHTTPProxyName>(
                     rSet, SID_INET_HTTP_PROXY_NAME);
@@ -256,47 +224,6 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
             case SID_INET_NOPROXY:
                 bRet = toSet<officecfg::Inet::Settings::ooInetNoProxy>(rSet, SID_INET_NOPROXY);
                 break;
-            case SID_ATTR_PATHNAME:
-                {
-                    SfxAllEnumItem aValues(SID_ATTR_PATHNAME);
-                    SvtPathOptions aPathCfg;
-                    for ( sal_uInt16 nProp = static_cast<sal_uInt16>(SvtPathOptions::Paths::AddIn);
-                          nProp <= static_cast<sal_uInt16>(SvtPathOptions::Paths::Work); nProp++ )
-                    {
-                        OUString aValue;
-                        switch ( static_cast<SvtPathOptions::Paths>(nProp) )
-                        {
-                            case SvtPathOptions::Paths::AddIn:        osl::FileBase::getFileURLFromSystemPath( aPathCfg.GetAddinPath(), aValue ); break;
-                            case SvtPathOptions::Paths::AutoCorrect:  aValue = aPathCfg.GetAutoCorrectPath(); break;
-                            case SvtPathOptions::Paths::AutoText:     aValue = aPathCfg.GetAutoTextPath(); break;
-                            case SvtPathOptions::Paths::Backup:       aValue = aPathCfg.GetBackupPath(); break;
-                            case SvtPathOptions::Paths::Basic:        aValue = aPathCfg.GetBasicPath(); break;
-                            case SvtPathOptions::Paths::Bitmap:       aValue = aPathCfg.GetBitmapPath(); break;
-                            case SvtPathOptions::Paths::Config:       aValue = aPathCfg.GetConfigPath(); break;
-                            case SvtPathOptions::Paths::Dictionary:   aValue = aPathCfg.GetDictionaryPath(); break;
-                            case SvtPathOptions::Paths::Favorites:    aValue = aPathCfg.GetFavoritesPath(); break;
-                            case SvtPathOptions::Paths::Filter:       osl::FileBase::getFileURLFromSystemPath( aPathCfg.GetFilterPath(), aValue ); break;
-                            case SvtPathOptions::Paths::Gallery:      aValue = aPathCfg.GetGalleryPath(); break;
-                            case SvtPathOptions::Paths::Graphic:      aValue = aPathCfg.GetGraphicPath(); break;
-                            case SvtPathOptions::Paths::Help:         osl::FileBase::getFileURLFromSystemPath( aPathCfg.GetHelpPath(), aValue ); break;
-                            case SvtPathOptions::Paths::Linguistic:   aValue = aPathCfg.GetLinguisticPath(); break;
-                            case SvtPathOptions::Paths::Module:       osl::FileBase::getFileURLFromSystemPath( aPathCfg.GetModulePath(), aValue ); break;
-                            case SvtPathOptions::Paths::Palette:      aValue = aPathCfg.GetPalettePath(); break;
-                            case SvtPathOptions::Paths::Plugin:       osl::FileBase::getFileURLFromSystemPath( aPathCfg.GetPluginPath(), aValue ); break;
-                            case SvtPathOptions::Paths::Storage:      osl::FileBase::getFileURLFromSystemPath( aPathCfg.GetStoragePath(), aValue ); break;
-                            case SvtPathOptions::Paths::Temp:         aValue = aPathCfg.GetTempPath(); break;
-                            case SvtPathOptions::Paths::Template:     aValue = aPathCfg.GetTemplatePath(); break;
-                            case SvtPathOptions::Paths::UserConfig:   aValue = aPathCfg.GetUserConfigPath(); break;
-                            case SvtPathOptions::Paths::Work:         aValue = aPathCfg.GetWorkPath(); break;
-                            default: break;
-                        }
-                        aValues.SetTextByPos( nProp, aValue );
-                    }
-
-                    if (rSet.Put(aValues))
-                        bRet = true;
-                }
-                break;
 
             default:
                 SAL_INFO( "sfx.appl", "W1:Wrong ID while getting Options!" );
@@ -306,25 +233,8 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
     }
 }
 
-// TODO/CLEANUP: Why two SetOptions Methods?
-void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
+void SfxApplication::SetOptions_Nbc(const SfxItemSet& rSet)
 {
-    if ( const SfxBoolItem *pItem = rSet.GetItemIfSet(SID_ATTR_BUTTON_BIGSIZE) )
-    {
-        SvtMiscOptions aMiscOptions;
-        bool bBigSize = pItem->GetValue();
-        aMiscOptions.SetSymbolsSize(
-            sal::static_int_cast< sal_Int16 >(
-                bBigSize ? SFX_SYMBOLS_SIZE_LARGE : SFX_SYMBOLS_SIZE_SMALL ) );
-        SfxViewFrame* pCurrViewFrame = SfxViewFrame::GetFirst();
-        while ( pCurrViewFrame )
-        {
-            // update all "final" dispatchers
-            pCurrViewFrame->GetDispatcher()->Update_Impl(true);
-            pCurrViewFrame = SfxViewFrame::GetNext(*pCurrViewFrame);
-        }
-    }
-
     std::shared_ptr< comphelper::ConfigurationChanges > batch(
         comphelper::ConfigurationChanges::create());
 
@@ -358,27 +268,11 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     toCfg_ifSet<officecfg::Office::Common::Save::Document::EditProperty>(
         rSet, SID_ATTR_DOCINFO, batch);
 
-    // Mark open Documents
-    toCfg_ifSet<officecfg::Office::Common::Save::WorkingSet>(rSet, SID_ATTR_WORKINGSET, batch);
-
-    // Save window settings
-    toCfg_ifSet<officecfg::Office::Common::Save::Document::ViewInfo>(
-        rSet, SID_ATTR_SAVEDOCVIEW, batch);
-
-    // Metric
-    const SfxPoolItem* pItem1 = nullptr;
-    if (SfxItemState::SET == rSet.GetItemState(GetPool().GetWhich(SID_ATTR_METRIC), true, &pItem1))
-    {
-        DBG_ASSERT(dynamic_cast< const SfxUInt16Item *>( pItem1 ) !=  nullptr, "UInt16Item expected");
-    }
-
     // HelpBalloons
     toCfg_ifSet<officecfg::Office::Common::Help::ExtendedTip>(rSet, SID_HELPBALLOONS, batch);
 
     // HelpTips
     toCfg_ifSet<officecfg::Office::Common::Help::Tip>(rSet, SID_HELPTIPS, batch);
-
-    toCfg_ifSet<officecfg::Office::Common::Help::HelpStyleSheet>(rSet, SID_HELP_STYLESHEET, batch);
 
     // SaveRelINet
     toCfg_ifSet<officecfg::Office::Common::Save::URL::Internet>(rSet, SID_SAVEREL_INET, batch);
@@ -445,88 +339,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 
 void SfxApplication::SetOptions(const SfxItemSet &rSet)
 {
-    // PathName
-    if ( const SfxAllEnumItem* pEnumItem = rSet.GetItemIfSet(SID_ATTR_PATHNAME))
-    {
-        sal_uInt16 nCount = pEnumItem->GetTextCount();
-        SvtPathOptions aPathOptions;
-        for( sal_uInt16 nPath=0; nPath<nCount; ++nPath )
-        {
-            const OUString& sValue = pEnumItem->GetTextByPos(nPath);
-            if ( sValue != " " ) // "No change" string
-            {
-                switch( static_cast<SvtPathOptions::Paths>(nPath) )
-                {
-                    case SvtPathOptions::Paths::AddIn:
-                    {
-                        OUString aTmp;
-                        if( osl::FileBase::getSystemPathFromFileURL( sValue, aTmp ) == osl::FileBase::E_None )
-                            aPathOptions.SetAddinPath( aTmp );
-                        break;
-                    }
-
-                    case SvtPathOptions::Paths::AutoCorrect:  aPathOptions.SetAutoCorrectPath( sValue );break;
-                    case SvtPathOptions::Paths::AutoText:     aPathOptions.SetAutoTextPath( sValue );break;
-                    case SvtPathOptions::Paths::Backup:       aPathOptions.SetBackupPath( sValue );break;
-                    case SvtPathOptions::Paths::Basic:        aPathOptions.SetBasicPath( sValue );break;
-                    case SvtPathOptions::Paths::Bitmap:       aPathOptions.SetBitmapPath( sValue );break;
-                    case SvtPathOptions::Paths::Config:       aPathOptions.SetConfigPath( sValue );break;
-                    case SvtPathOptions::Paths::Dictionary:   aPathOptions.SetDictionaryPath( sValue );break;
-                    case SvtPathOptions::Paths::Favorites:    aPathOptions.SetFavoritesPath( sValue );break;
-                    case SvtPathOptions::Paths::Filter:
-                    {
-                        OUString aTmp;
-                        if( osl::FileBase::getSystemPathFromFileURL( sValue, aTmp ) == osl::FileBase::E_None )
-                            aPathOptions.SetFilterPath( aTmp );
-                        break;
-                    }
-                    case SvtPathOptions::Paths::Gallery:      aPathOptions.SetGalleryPath( sValue );break;
-                    case SvtPathOptions::Paths::Graphic:      aPathOptions.SetGraphicPath( sValue );break;
-                    case SvtPathOptions::Paths::Help:
-                    {
-                        OUString aTmp;
-                        if( osl::FileBase::getSystemPathFromFileURL( sValue, aTmp ) == osl::FileBase::E_None )
-                            aPathOptions.SetHelpPath( aTmp );
-                        break;
-                    }
-
-                    case SvtPathOptions::Paths::Linguistic:   aPathOptions.SetLinguisticPath( sValue );break;
-                    case SvtPathOptions::Paths::Module:
-                    {
-                        OUString aTmp;
-                        if( osl::FileBase::getSystemPathFromFileURL( sValue, aTmp ) == osl::FileBase::E_None )
-                            aPathOptions.SetModulePath( aTmp );
-                        break;
-                    }
-
-                    case SvtPathOptions::Paths::Palette:      aPathOptions.SetPalettePath( sValue );break;
-                    case SvtPathOptions::Paths::Plugin:
-                    {
-                        OUString aTmp;
-                        if( osl::FileBase::getSystemPathFromFileURL( sValue, aTmp ) == osl::FileBase::E_None )
-                            aPathOptions.SetPluginPath( aTmp );
-                        break;
-                    }
-
-                    case SvtPathOptions::Paths::Storage:
-                    {
-                        OUString aTmp;
-                        if( osl::FileBase::getSystemPathFromFileURL( sValue, aTmp ) == osl::FileBase::E_None )
-                            aPathOptions.SetStoragePath( aTmp );
-                        break;
-                    }
-
-                    case SvtPathOptions::Paths::Temp:         aPathOptions.SetTempPath( sValue );break;
-                    case SvtPathOptions::Paths::Template:     aPathOptions.SetTemplatePath( sValue );break;
-                    case SvtPathOptions::Paths::UserConfig:   aPathOptions.SetUserConfigPath( sValue );break;
-                    case SvtPathOptions::Paths::Work:         aPathOptions.SetWorkPath( sValue );break;
-                    default: SAL_WARN( "sfx.appl", "SfxApplication::SetOptions_Impl() Invalid path number found for set directories!" );
-                }
-            }
-        }
-    }
-
-    SetOptions_Impl( rSet );
+    SetOptions_Nbc( rSet );
 
     // Undo-Count
     Broadcast( SfxItemSetHint( rSet ) );

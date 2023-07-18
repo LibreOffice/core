@@ -70,7 +70,6 @@
 // class SfxObjectShellItem: public SfxPoolItem
 // class SfxViewFrameItem: public SfxPoolItem
 // class SfxWatermarkItem: public SfxPoolItem
-// class SfxAllEnumItem: public SfxPoolItem
 // class SfxEnumItemInterface: public SfxPoolItem
 //    class SvxAdjustItem : public SfxEnumItemInterface
 //    class SvxEscapementItem : public SfxEnumItemInterface

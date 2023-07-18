@@ -919,16 +919,6 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             }
         }
     }
-    else if(const SfxItemSetHint* pSfxItemSetHint = dynamic_cast<const SfxItemSetHint*>(&rHint))
-    {
-        if( SfxItemState::SET == pSfxItemSetHint->GetItemSet().GetItemState(SID_ATTR_PATHNAME))
-        {
-            ::GetGlossaries()->UpdateGlosPath( false );
-            SwGlossaryList* pList = ::GetGlossaryList();
-            if(pList->IsActive())
-                pList->Update();
-        }
-    }
     else
     {
         if (rHint.GetId() == SfxHintId::Deinitializing)

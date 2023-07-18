@@ -38,7 +38,6 @@
     <SvxSizeItem>:          <SID_ATTR_MAXSIZE>
     <SvxULSpaceItem>:       <SID_ATTR_LRSPACE>
     <SvxLRSpaceItem>:       <SID_ATTR_ULSPACE>
-    <SfxAllEnumItem>:       <SID_ATTR_PAPERTRAY>
     <SvxPaperBinItem>:      <SID_ATTR_PAPERBIN>
     <SvxBoolItem>:          <SID_ATTR_EXT1>
     <SvxBoolItem>:          <SID_ATTR_EXT2>

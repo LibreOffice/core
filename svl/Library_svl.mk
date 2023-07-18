@@ -112,7 +112,6 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/config/languageoptions \
     svl/source/crypto/cryptosign \
     svl/source/filepicker/pickerhistory \
-    svl/source/items/aeitem \
     svl/source/items/cenumitm \
     svl/source/items/cintitem \
     svl/source/items/custritm \
