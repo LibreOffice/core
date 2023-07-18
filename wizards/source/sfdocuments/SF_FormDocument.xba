@@ -103,7 +103,6 @@ Private Sub Class_Initialize()
 	Set _BaseComponent = Nothing
 	Set _FormDocument = Nothing
 	Set _DataSource = Nothing
-	Set _Database = Nothing
 	_PersistentName = &quot;&quot;
 	_HierarchicalName = &quot;&quot;
 End Sub		&apos;	SFDocuments.SF_FormDocument Constructor
