@@ -706,6 +706,7 @@ class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
 
     CellStoreTokensType maCellStoreTokens;
     ScOrcusGlobalSettings maGlobalSettings;
+    ScOrcusRefResolver maRefResolver;
     ScOrcusSharedStrings maSharedStrings;
     ScOrcusNamedExpression maNamedExpressions;
     std::vector<std::unique_ptr<ScOrcusSheet>> maSheets;
@@ -726,6 +727,8 @@ public:
     virtual orcus::spreadsheet::iface::import_shared_strings* get_shared_strings() override;
     virtual orcus::spreadsheet::iface::import_named_expression* get_named_expression() override;
     virtual orcus::spreadsheet::iface::import_styles* get_styles() override;
+    virtual orcus::spreadsheet::iface::import_reference_resolver* get_reference_resolver(
+        orcus::spreadsheet::formula_ref_context_t cxt) override;
     virtual void finalize() override;
 
     ScDocumentImport& getDoc();
