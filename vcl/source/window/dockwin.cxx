@@ -247,7 +247,7 @@ void DockingWindow::ImplStartDocking( const Point& rPos )
     if ( !mpFloatWin )
         pWin.disposeAndClear();
 
-    Point   aPos    = ImplOutputToFrame( Point() );
+    Point   aPos    = OutputToScreenPixel( Point() );
     Size    aSize   = Window::GetOutputSizePixel();
     mnTrackX        = aPos.X();
     mnTrackY        = aPos.Y();
@@ -445,7 +445,7 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
     else if ( !rTEvt.GetMouseEvent().IsSynthetic() || rTEvt.GetMouseEvent().IsModifierChanged() )
     {
         Point   aMousePos = rTEvt.GetMouseEvent().GetPosPixel();
-        Point   aFrameMousePos = ImplOutputToFrame( aMousePos );
+        Point   aFrameMousePos = OutputToScreenPixel( aMousePos );
         Size    aFrameSize = mpWindowImpl->mpFrameWindow->GetOutputSizePixel();
         if ( aFrameMousePos.X() < 0 )
             aFrameMousePos.setX( 0 );
@@ -455,10 +455,10 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
             aFrameMousePos.setX( aFrameSize.Width()-1 );
         if ( aFrameMousePos.Y() > aFrameSize.Height()-1 )
             aFrameMousePos.setY( aFrameSize.Height()-1 );
-        aMousePos = ImplFrameToOutput( aFrameMousePos );
+        aMousePos = ScreenToOutputPixel( aFrameMousePos );
         aMousePos.AdjustX( -(maMouseOff.X()) );
         aMousePos.AdjustY( -(maMouseOff.Y()) );
-        Point aFramePos = ImplOutputToFrame( aMousePos );
+        Point aFramePos = OutputToScreenPixel( aMousePos );
         tools::Rectangle aTrackRect( aFramePos, Size( mnTrackWidth, mnTrackHeight ) );
         tools::Rectangle aCompRect = aTrackRect;
         aFramePos.AdjustX(maMouseOff.X() );
@@ -507,7 +507,7 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
             else
                 nTrackStyle = ShowTrackFlags::Object;
             tools::Rectangle aShowTrackRect = aTrackRect;
-            aShowTrackRect.SetPos( ImplFrameToOutput( aShowTrackRect.TopLeft() ) );
+            aShowTrackRect.SetPos( ScreenToOutputPixel( aShowTrackRect.TopLeft() ) );
             ShowTracking( aShowTrackRect, nTrackStyle );
 
             // recalculate mouse offset, as the rectangle was changed

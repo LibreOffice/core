@@ -235,7 +235,7 @@ IMPL_LINK( Window, ImplTrackTimerHdl, Timer*, pTimer, void )
         const OutputDevice *pOutDev = GetOutDev();
         pOutDev->ReMirror( aMousePos );
     }
-    MouseEvent      aMEvt( ImplFrameToOutput( aMousePos ),
+    MouseEvent      aMEvt( ScreenToOutputPixel( aMousePos ),
                            mpWindowImpl->mpFrameData->mnClickCount, MouseEventModifiers::NONE,
                            mpWindowImpl->mpFrameData->mnMouseCode,
                            mpWindowImpl->mpFrameData->mnMouseCode );
@@ -321,7 +321,7 @@ void Window::EndTracking( TrackingEventFlags nFlags )
             pOutDev->ReMirror( aMousePos );
         }
 
-        MouseEvent      aMEvt( ImplFrameToOutput( aMousePos ),
+        MouseEvent      aMEvt( ScreenToOutputPixel( aMousePos ),
                                mpWindowImpl->mpFrameData->mnClickCount, MouseEventModifiers::NONE,
                                mpWindowImpl->mpFrameData->mnMouseCode,
                                mpWindowImpl->mpFrameData->mnMouseCode );
@@ -968,16 +968,6 @@ void Window::ImplSetMouseTransparent( bool bTransparent )
 {
     if (mpWindowImpl)
         mpWindowImpl->mbMouseTransparent = bTransparent;
-}
-
-Point Window::ImplOutputToFrame( const Point& rPos )
-{
-    return Point( rPos.X()+GetOutDev()->mnOutOffX, rPos.Y()+GetOutDev()->mnOutOffY );
-}
-
-Point Window::ImplFrameToOutput( const Point& rPos )
-{
-    return Point( rPos.X()-GetOutDev()->mnOutOffX, rPos.Y()-GetOutDev()->mnOutOffY );
 }
 
 void Window::SetCompoundControl( bool bCompound )

@@ -527,7 +527,7 @@ void ImplDockingWindowWrapper::ImplStartDocking( const Point& rPos )
     if ( !mpFloatWin )
         pWin.disposeAndClear();
 
-    Point   aPos    = GetWindow()->ImplOutputToFrame( Point() );
+    Point   aPos    = GetWindow()->OutputToScreenPixel( Point() );
     Size    aSize   = GetWindow()->GetOutputSizePixel();
     mnTrackX        = aPos.X();
     mnTrackY        = aPos.Y();
@@ -582,7 +582,7 @@ void ImplDockingWindowWrapper::Tracking( const TrackingEvent& rTEvt )
     else if ( !rTEvt.GetMouseEvent().IsSynthetic() || rTEvt.GetMouseEvent().IsModifierChanged() )
     {
         Point   aMousePos = rTEvt.GetMouseEvent().GetPosPixel();
-        Point   aFrameMousePos = GetWindow()->ImplOutputToFrame( aMousePos );
+        Point   aFrameMousePos = GetWindow()->OutputToScreenPixel( aMousePos );
         Size    aFrameSize = GetWindow()->ImplGetFrameWindow()->GetOutputSizePixel();
         if ( aFrameMousePos.X() < 0 )
             aFrameMousePos.setX( 0 );
@@ -592,10 +592,10 @@ void ImplDockingWindowWrapper::Tracking( const TrackingEvent& rTEvt )
             aFrameMousePos.setX( aFrameSize.Width()-1 );
         if ( aFrameMousePos.Y() > aFrameSize.Height()-1 )
             aFrameMousePos.setY( aFrameSize.Height()-1 );
-        aMousePos = GetWindow()->ImplFrameToOutput( aFrameMousePos );
+        aMousePos = GetWindow()->ScreenToOutputPixel( aFrameMousePos );
         aMousePos.AdjustX( -(maMouseOff.X()) );
         aMousePos.AdjustY( -(maMouseOff.Y()) );
-        Point aPos = GetWindow()->ImplOutputToFrame( aMousePos );
+        Point aPos = GetWindow()->OutputToScreenPixel( aMousePos );
         tools::Rectangle aTrackRect( aPos, Size( mnTrackWidth, mnTrackHeight ) );
         tools::Rectangle aCompRect = aTrackRect;
         aPos.AdjustX(maMouseOff.X() );
@@ -631,7 +631,7 @@ void ImplDockingWindowWrapper::Tracking( const TrackingEvent& rTEvt )
         else
             nTrackStyle = ShowTrackFlags::Big;
         tools::Rectangle aShowTrackRect = aTrackRect;
-        aShowTrackRect.SetPos( GetWindow()->ImplFrameToOutput( aShowTrackRect.TopLeft() ) );
+        aShowTrackRect.SetPos( GetWindow()->ScreenToOutputPixel( aShowTrackRect.TopLeft() ) );
 
         GetWindow()->ShowTracking( aShowTrackRect, nTrackStyle );
 

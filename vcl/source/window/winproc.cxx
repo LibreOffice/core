@@ -430,7 +430,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, NotifyEventType n
         // status did not change
         if ( pChild )
         {
-            Point aChildMousePos = pChild->ImplFrameToOutput( aMousePos );
+            Point aChildMousePos = pChild->ScreenToOutputPixel( aMousePos );
             if ( !bMouseLeave &&
                  (pChild == pWinFrameData->mpMouseMoveWin) &&
                  (aChildMousePos.X() == pWinFrameData->mnLastMouseWinX) &&
@@ -489,7 +489,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, NotifyEventType n
                             if( xDragGestureRecognizer.is() )
                             {
                                 // retrieve mouse position relative to mouse down window
-                                Point relLoc = pMouseDownWin->ImplFrameToOutput( Point(
+                                Point relLoc = pMouseDownWin->ScreenToOutputPixel( Point(
                                     pMouseDownWin->ImplGetFrameData()->mnFirstMouseX,
                                     pMouseDownWin->ImplGetFrameData()->mnFirstMouseY ) );
 
@@ -533,7 +533,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, NotifyEventType n
         {
             if ( pMouseMoveWin )
             {
-                Point       aLeaveMousePos = pMouseMoveWin->ImplFrameToOutput( aMousePos );
+                Point       aLeaveMousePos = pMouseMoveWin->ScreenToOutputPixel( aMousePos );
                 MouseEvent  aMLeaveEvt( aLeaveMousePos, nClicks, nMode | MouseEventModifiers::LEAVEWINDOW, nCode, nCode );
                 NotifyEvent aNLeaveEvt( NotifyEventType::MOUSEMOVE, pMouseMoveWin, &aMLeaveEvt );
                 pWinFrameData->mbInMouseMove = true;
@@ -617,7 +617,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, NotifyEventType n
         return false;
 
     // create mouse event
-    Point aChildPos = pChild->ImplFrameToOutput( aMousePos );
+    Point aChildPos = pChild->ScreenToOutputPixel( aMousePos );
     MouseEvent aMEvt( aChildPos, nClicks, nMode, nCode, nCode );
 
 
@@ -821,7 +821,7 @@ bool ImplLOKHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, NotifyEventType
     if (!pFrameData)
         return false;
 
-    Point aWinPos = xWindow->ImplFrameToOutput(aMousePos);
+    Point aWinPos = xWindow->ScreenToOutputPixel(aMousePos);
 
     pFrameData->mnLastMouseX = nX;
     pFrameData->mnLastMouseY = nY;
@@ -876,7 +876,7 @@ bool ImplLOKHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, NotifyEventType
             return false;
         }
 
-        Point dragOverPos = pDragWin->ImplFrameToOutput(aMousePos);
+        Point dragOverPos = pDragWin->ScreenToOutputPixel(aMousePos);
         static_cast<DNDListenerContainer *>(xDropTarget.get())->fireDropEvent(
             xDropTargetDropContext,
             css::datatransfer::dnd::DNDConstants::ACTION_MOVE,
@@ -1499,7 +1499,7 @@ static bool ImplHandleInputContextChange( vcl::Window* pWindow )
 static bool ImplCallWheelCommand( const VclPtr<vcl::Window>& pWindow, const Point& rPos,
                                   const CommandWheelData* pWheelData )
 {
-    Point               aCmdMousePos = pWindow->ImplFrameToOutput( rPos );
+    Point               aCmdMousePos = pWindow->ScreenToOutputPixel( rPos );
     CommandEvent        aCEvt( aCmdMousePos, CommandEventId::Wheel, true, pWheelData );
     NotifyEvent         aNCmdEvt( NotifyEventType::COMMAND, pWindow, &aCEvt );
     bool bPreNotify = ImplCallPreNotify( aNCmdEvt );

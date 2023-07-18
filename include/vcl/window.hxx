@@ -527,8 +527,6 @@ public:
 
     SAL_DLLPRIVATE WindowImpl*          ImplGetWindowImpl() const { return mpWindowImpl.get(); }
 
-    SAL_DLLPRIVATE Point                ImplFrameToOutput( const Point& rPos );
-
     SAL_DLLPRIVATE void                 ImplGrabFocus( GetFocusFlags nFlags );
     SAL_DLLPRIVATE void                 ImplGrabFocusToDocument( GetFocusFlags nFlags );
     SAL_DLLPRIVATE void                 ImplInvertFocus( const tools::Rectangle& rRect );
@@ -570,8 +568,6 @@ protected:
     virtual void                        dispose() override;
 
     SAL_DLLPRIVATE void                 ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData );
-
-    SAL_DLLPRIVATE Point                ImplOutputToFrame( const Point& rPos );
 
     SAL_DLLPRIVATE void                 ImplInvalidateParentFrameRegion( const vcl::Region& rRegion );
     SAL_DLLPRIVATE void                 ImplValidateFrameRegion( const vcl::Region* rRegion, ValidateFlags nFlags );

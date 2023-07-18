@@ -510,7 +510,7 @@ void Window::EnableChildPointerOverwrite( bool bOverwrite )
 
 void Window::SetPointerPosPixel( const Point& rPos )
 {
-    Point aPos = ImplOutputToFrame( rPos );
+    Point aPos = OutputToScreenPixel( rPos );
     const OutputDevice *pOutDev = GetOutDev();
     if( pOutDev->HasMirroredGraphics() )
     {
@@ -531,8 +531,8 @@ void Window::SetPointerPosPixel( const Point& rPos )
 void Window::SetLastMousePos(const Point& rPos)
 {
     // Do this conversion, so when GetPointerPosPixel() calls
-    // ImplFrameToOutput(), we get back the original position.
-    Point aPos = ImplOutputToFrame(rPos);
+    // ScreenToOutputPixel(), we get back the original position.
+    Point aPos = OutputToScreenPixel(rPos);
     mpWindowImpl->mpFrameData->mnLastMouseX = aPos.X();
     mpWindowImpl->mpFrameData->mnLastMouseY = aPos.Y();
 }
@@ -546,7 +546,7 @@ Point Window::GetPointerPosPixel()
         const OutputDevice *pOutDev = GetOutDev();
         pOutDev->ReMirror( aPos );
     }
-    return ImplFrameToOutput( aPos );
+    return ScreenToOutputPixel( aPos );
 }
 
 Point Window::GetLastPointerPosPixel()
@@ -558,7 +558,7 @@ Point Window::GetLastPointerPosPixel()
         const OutputDevice *pOutDev = GetOutDev();
         pOutDev->ReMirror( aPos );
     }
-    return ImplFrameToOutput( aPos );
+    return ScreenToOutputPixel( aPos );
 }
 
 void Window::ShowPointer( bool bVisible )
@@ -587,7 +587,7 @@ Window::PointerState Window::GetPointerState()
             const OutputDevice *pOutDev = GetOutDev();
             pOutDev->ReMirror( aSalPointerState.maPos );
         }
-        aState.maPos = ImplFrameToOutput( aSalPointerState.maPos );
+        aState.maPos = ScreenToOutputPixel( aSalPointerState.maPos );
         aState.mnState = aSalPointerState.mnState;
     }
     return aState;

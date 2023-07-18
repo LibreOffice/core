@@ -263,7 +263,7 @@ sal_Int32 DNDEventDispatcher::fireDragEnterEvent( vcl::Window *pWindow,
         if( xDropTarget.is() )
         {
             // retrieve relative mouse position
-            Point relLoc = pWindow->ImplFrameToOutput( rLocation );
+            Point relLoc = pWindow->ScreenToOutputPixel( rLocation );
             aSolarGuard.clear();
 
             n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->fireDragEnterEvent(
@@ -291,7 +291,7 @@ sal_Int32 DNDEventDispatcher::fireDragOverEvent( vcl::Window *pWindow,
         if( xDropTarget.is() )
         {
             // retrieve relative mouse position
-            Point relLoc = pWindow->ImplFrameToOutput( rLocation );
+            Point relLoc = pWindow->ScreenToOutputPixel( rLocation );
             aSolarGuard.clear();
 
             n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->fireDragOverEvent(
@@ -339,7 +339,7 @@ sal_Int32 DNDEventDispatcher::fireDropActionChangedEvent( vcl::Window *pWindow,
         if( xDropTarget.is() )
         {
             // retrieve relative mouse position
-            Point relLoc = pWindow->ImplFrameToOutput( rLocation );
+            Point relLoc = pWindow->ScreenToOutputPixel( rLocation );
             aGuard.clear();
 
             n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->fireDropActionChangedEvent(
@@ -370,7 +370,7 @@ sal_Int32 DNDEventDispatcher::fireDropEvent( vcl::Window *pWindow,
         if( xDropTarget.is() )
         {
             // retrieve relative mouse position
-            Point relLoc = pWindow->ImplFrameToOutput( rLocation );
+            Point relLoc = pWindow->ScreenToOutputPixel( rLocation );
             aGuard.clear();
 
             n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->fireDropEvent(
@@ -398,7 +398,7 @@ sal_Int32 DNDEventDispatcher::fireDragGestureEvent( vcl::Window *pWindow,
         if( xDragGestureRecognizer.is() )
         {
             // retrieve relative mouse position
-            Point relLoc = pWindow->ImplFrameToOutput( rOrigin );
+            Point relLoc = pWindow->ScreenToOutputPixel( rOrigin );
             aGuard.clear();
 
             n = static_cast < DNDListenerContainer * > ( xDragGestureRecognizer.get() )->fireDragGestureEvent(

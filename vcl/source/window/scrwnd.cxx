@@ -354,7 +354,7 @@ IMPL_LINK_NOARG(ImplWheelWindow, ImplScrollHdl, Timer *, void)
     {
         vcl::Window*             pWindow = GetParent();
         const Point         aMousePos( pWindow->OutputToScreenPixel( pWindow->GetPointerPosPixel() ) );
-        Point               aCmdMousePos( pWindow->ImplFrameToOutput( aMousePos ) );
+        Point               aCmdMousePos( pWindow->ScreenToOutputPixel( aMousePos ) );
         CommandScrollData   aScrollData( mnActDeltaX, mnActDeltaY );
         CommandEvent        aCEvt( aCmdMousePos, CommandEventId::AutoScroll, true, &aScrollData );
         NotifyEvent         aNCmdEvt( NotifyEventType::COMMAND, pWindow, &aCEvt );
