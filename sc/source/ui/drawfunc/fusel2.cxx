@@ -53,9 +53,8 @@ bool FuSelection::TestDetective( const SdrPageView* pPV, const Point& rPos )
     {
         if (ScDetectiveFunc::IsNonAlienArrow( pObject ))
         {
-            sal_uInt16 nHitLog = static_cast<sal_uInt16>(pWindow->PixelToLogic(
-                                Size(pView->GetHitTolerancePixel(),0)).Width());
-            if (SdrObjectPrimitiveHit(*pObject, rPos, nHitLog, *pPV, nullptr, false))
+            double fHitLog = pWindow->PixelToLogic(Size(pView->GetHitTolerancePixel(),0)).Width();
+            if (SdrObjectPrimitiveHit(*pObject, rPos, {fHitLog, fHitLog}, *pPV, nullptr, false))
             {
                 ScViewData& rViewData = rViewShell.GetViewData();
                 ScSplitPos ePos = rViewShell.FindWindow( pWindow );

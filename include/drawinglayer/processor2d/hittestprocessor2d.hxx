@@ -42,7 +42,7 @@ namespace drawinglayer::processor2d
             basegfx::B2DPoint           maDiscreteHitPosition;
 
             /// discrete HitTolerance
-            double                      mfDiscreteHitTolerance;
+            basegfx::B2DVector          maDiscreteHitTolerance;
 
             /// stack of HitPrimitives, taken care of during HitTest run
             primitive2d::Primitive2DContainer        maHitStack;
@@ -60,17 +60,17 @@ namespace drawinglayer::processor2d
             void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate) override;
             bool checkHairlineHitWithTolerance(
                 const basegfx::B2DPolygon& rPolygon,
-                double fDiscreteHitTolerance) const;
+                const basegfx::B2DVector& rDiscreteHitTolerance) const;
             bool checkFillHitWithTolerance(
                 const basegfx::B2DPolyPolygon& rPolyPolygon,
-                double fDiscreteHitTolerance) const;
+                const basegfx::B2DVector& rDiscreteHitTolerance) const;
             void check3DHit(const primitive2d::ScenePrimitive2D& rCandidate);
 
         public:
             HitTestProcessor2D(
                 const geometry::ViewInformation2D& rViewInformation,
                 const basegfx::B2DPoint& rLogicHitPosition,
-                double fLogicHitTolerance,
+                const basegfx::B2DVector& rLogicHitTolerance,
                 bool bHitTextOnly);
             virtual ~HitTestProcessor2D() override;
 
@@ -83,7 +83,7 @@ namespace drawinglayer::processor2d
 
             /// data read access
             const basegfx::B2DPoint& getDiscreteHitPosition() const { return maDiscreteHitPosition; }
-            double getDiscreteHitTolerance() const { return mfDiscreteHitTolerance; }
+            const basegfx::B2DVector& getDiscreteHitTolerance() const { return maDiscreteHitTolerance; }
             bool getCollectHitStack() const { return mbCollectHitStack; }
             bool getHit() const { return mbHit; }
             bool getHitTextOnly() const { return mbHitTextOnly; }

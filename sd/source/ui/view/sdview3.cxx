@@ -1378,9 +1378,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 SfxItemSet              aSet( mrDoc.GetPool() );
                 bool                    bClosed = pPickObj->IsClosedObj();
                 ::sd::Window* pWin = mpViewSh->GetActiveWindow();
-                sal_uInt16 nHitLog = static_cast<sal_uInt16>(pWin->PixelToLogic(
-                    Size(FuPoor::HITPIX, 0 ) ).Width());
-                const ::tools::Long              n2HitLog = nHitLog << 1;
+                double fHitLog = pWin->PixelToLogic(Size(FuPoor::HITPIX, 0 ) ).Width();
+                const ::tools::Long              n2HitLog = fHitLog * 2;
                 Point                   aHitPosR( rPos );
                 Point                   aHitPosL( rPos );
                 Point                   aHitPosT( rPos );
@@ -1393,10 +1392,10 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 aHitPosB.AdjustY( -n2HitLog );
 
                 if( bClosed &&
-                    SdrObjectPrimitiveHit(*pPickObj, aHitPosR, nHitLog, *GetSdrPageView(), pVisiLayer, false) &&
-                    SdrObjectPrimitiveHit(*pPickObj, aHitPosL, nHitLog, *GetSdrPageView(), pVisiLayer, false) &&
-                    SdrObjectPrimitiveHit(*pPickObj, aHitPosT, nHitLog, *GetSdrPageView(), pVisiLayer, false) &&
-                    SdrObjectPrimitiveHit(*pPickObj, aHitPosB, nHitLog, *GetSdrPageView(), pVisiLayer, false) )
+                    SdrObjectPrimitiveHit(*pPickObj, aHitPosR, {fHitLog, fHitLog}, *GetSdrPageView(), pVisiLayer, false) &&
+                    SdrObjectPrimitiveHit(*pPickObj, aHitPosL, {fHitLog, fHitLog}, *GetSdrPageView(), pVisiLayer, false) &&
+                    SdrObjectPrimitiveHit(*pPickObj, aHitPosT, {fHitLog, fHitLog}, *GetSdrPageView(), pVisiLayer, false) &&
+                    SdrObjectPrimitiveHit(*pPickObj, aHitPosB, {fHitLog, fHitLog}, *GetSdrPageView(), pVisiLayer, false) )
                 {
                     // area fill
                     if(eFill == drawing::FillStyle_SOLID )

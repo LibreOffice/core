@@ -312,7 +312,7 @@ bool SdrCaptionObj::beginSpecialDrag(SdrDragStat& rDrag) const
 
             Point aHit(rDrag.GetStart());
 
-            if(rDrag.GetPageView() && SdrObjectPrimitiveHit(*this, aHit, 0, *rDrag.GetPageView(), nullptr, false))
+            if(rDrag.GetPageView() && SdrObjectPrimitiveHit(*this, aHit, {0, 0}, *rDrag.GetPageView(), nullptr, false))
             {
                 return true;
             }

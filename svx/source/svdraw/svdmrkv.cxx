@@ -2318,7 +2318,7 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
             basegfx::fround(aGridOffset.getY()));
     }
 
-    sal_uInt16 nTol2(nTol);
+    double nTol2(nTol);
 
     // double tolerance for OLE, text frames and objects in
     // active text edit
@@ -2356,7 +2356,7 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
             {
                 if(!pMVisLay || pMVisLay->IsSet(pObj->GetLayer()))
                 {
-                    pRet = SdrObjectPrimitiveHit(*pObj, rPnt, nTol2, *pPV, &pPV->GetVisibleLayers(), false);
+                    pRet = SdrObjectPrimitiveHit(*pObj, rPnt, {nTol2, nTol2}, *pPV, &pPV->GetVisibleLayers(), false);
                 }
             }
         }

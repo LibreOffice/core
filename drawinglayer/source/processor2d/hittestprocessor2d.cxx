@@ -41,27 +41,25 @@ namespace drawinglayer::processor2d
 {
         HitTestProcessor2D::HitTestProcessor2D(const geometry::ViewInformation2D& rViewInformation,
             const basegfx::B2DPoint& rLogicHitPosition,
-            double fLogicHitTolerance,
+            const basegfx::B2DVector& rLogicHitTolerance,
             bool bHitTextOnly)
         :   BaseProcessor2D(rViewInformation),
-            mfDiscreteHitTolerance(0.0),
+            maDiscreteHitTolerance(rLogicHitTolerance),
             mbCollectHitStack(false),
             mbHit(false),
             mbHitTextOnly(bHitTextOnly)
         {
-            // init hit tolerance
-            mfDiscreteHitTolerance = fLogicHitTolerance;
+            // ensure input parameters for hit tolerance is >= 0.0
+            if (maDiscreteHitTolerance.getX() < 0.0)
+                maDiscreteHitTolerance.setX(0.0);
+            if (maDiscreteHitTolerance.getY() < 0.0)
+                maDiscreteHitTolerance.setY(0.0);
 
-            if(basegfx::fTools::less(mfDiscreteHitTolerance, 0.0))
-            {
-                // ensure input parameter for hit tolerance is >= 0.0
-                mfDiscreteHitTolerance = 0.0;
-            }
-            else if(basegfx::fTools::more(mfDiscreteHitTolerance, 0.0))
+            if (!maDiscreteHitTolerance.equalZero())
             {
                 // generate discrete hit tolerance
-                mfDiscreteHitTolerance = (getViewInformation2D().getObjectToViewTransformation()
-                    * basegfx::B2DVector(mfDiscreteHitTolerance, 0.0)).getLength();
+                maDiscreteHitTolerance
+                    = getViewInformation2D().getObjectToViewTransformation() * rLogicHitTolerance;
             }
 
             // generate discrete hit position
@@ -74,7 +72,7 @@ namespace drawinglayer::processor2d
 
         bool HitTestProcessor2D::checkHairlineHitWithTolerance(
             const basegfx::B2DPolygon& rPolygon,
-            double fDiscreteHitTolerance) const
+            const basegfx::B2DVector& rDiscreteHitTolerance) const
         {
             basegfx::B2DPolygon aLocalPolygon(rPolygon);
             aLocalPolygon.transform(getViewInformation2D().getObjectToViewTransformation());
@@ -82,9 +80,9 @@ namespace drawinglayer::processor2d
             // get discrete range
             basegfx::B2DRange aPolygonRange(aLocalPolygon.getB2DRange());
 
-            if(basegfx::fTools::more(fDiscreteHitTolerance, 0.0))
+            if(rDiscreteHitTolerance.getX() > 0 || rDiscreteHitTolerance.getY() > 0)
             {
-                aPolygonRange.grow(fDiscreteHitTolerance);
+                aPolygonRange.grow(rDiscreteHitTolerance);
             }
 
             // do rough range test first
@@ -94,7 +92,7 @@ namespace drawinglayer::processor2d
                 return basegfx::utils::isInEpsilonRange(
                     aLocalPolygon,
                     getDiscreteHitPosition(),
-                    fDiscreteHitTolerance);
+                    std::max(rDiscreteHitTolerance.getX(), rDiscreteHitTolerance.getY()));
             }
 
             return false;
@@ -102,7 +100,7 @@ namespace drawinglayer::processor2d
 
         bool HitTestProcessor2D::checkFillHitWithTolerance(
             const basegfx::B2DPolyPolygon& rPolyPolygon,
-            double fDiscreteHitTolerance) const
+            const basegfx::B2DVector& rDiscreteHitTolerance) const
         {
             bool bRetval(false);
             basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolyPolygon);
@@ -110,11 +108,13 @@ namespace drawinglayer::processor2d
 
             // get discrete range
             basegfx::B2DRange aPolygonRange(aLocalPolyPolygon.getB2DRange());
-            const bool bDiscreteHitToleranceUsed(basegfx::fTools::more(fDiscreteHitTolerance, 0.0));
 
-            if(bDiscreteHitToleranceUsed)
+            const bool bDiscreteHitToleranceUsed(rDiscreteHitTolerance.getX() > 0
+                                                 || rDiscreteHitTolerance.getY() > 0);
+
+            if (bDiscreteHitToleranceUsed)
             {
-                aPolygonRange.grow(fDiscreteHitTolerance);
+                aPolygonRange.grow(rDiscreteHitTolerance);
             }
 
             // do rough range test first
@@ -125,7 +125,7 @@ namespace drawinglayer::processor2d
                     basegfx::utils::isInEpsilonRange(
                         aLocalPolyPolygon,
                         getDiscreteHitPosition(),
-                        fDiscreteHitTolerance))
+                        std::max(rDiscreteHitTolerance.getX(), rDiscreteHitTolerance.getY())))
                 {
                     bRetval = true;
                 }
@@ -294,7 +294,7 @@ namespace drawinglayer::processor2d
                                     * basegfx::B2DVector(rLineAttribute.getWidth() * 0.5, 0.0));
                                 mbHit = checkHairlineHitWithTolerance(
                                     rPolygonCandidate.getB2DPolygon(),
-                                    getDiscreteHitTolerance() + aDiscreteHalfLineVector.getLength());
+                                    getDiscreteHitTolerance() + aDiscreteHalfLineVector);
                             }
                         }
                         else
@@ -332,7 +332,7 @@ namespace drawinglayer::processor2d
 
                         mbHit = checkHairlineHitWithTolerance(
                             rPolygonCandidate.getB2DPolygon(),
-                            getDiscreteHitTolerance() + aDiscreteHalfLineVector.getLength());
+                            getDiscreteHitTolerance() + aDiscreteHalfLineVector);
                     }
 
                     break;
@@ -516,7 +516,8 @@ namespace drawinglayer::processor2d
                             const basegfx::B2DPoint aPosition(getViewInformation2D().getObjectToViewTransformation() * rPositions[a]);
                             const basegfx::B2DVector aDistance(aPosition - getDiscreteHitPosition());
 
-                            if(aDistance.getLength() <= getDiscreteHitTolerance())
+                            if (aDistance.getLength() <= std::max(getDiscreteHitTolerance().getX(),
+                                                                  getDiscreteHitTolerance().getY()))
                             {
                                 mbHit = true;
                             }
