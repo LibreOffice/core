@@ -323,6 +323,7 @@ namespace xmloff::token {
         TOKEN( "backface-culling",                XML_BACKFACE_CULLING ),
         TOKEN( "background",                      XML_BACKGROUND ),
         TOKEN( "background-color",                XML_BACKGROUND_COLOR ),
+        TOKEN( "background-complex-color",        XML_BACKGROUND_COMPLEX_COLOR ),
         TOKEN( "background-image",                XML_BACKGROUND_IMAGE ),
         TOKEN( "no-repeat",                       XML_BACKGROUND_NO_REPEAT ),
         TOKEN( "bar",                             XML_BAR ),

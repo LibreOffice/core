@@ -29,6 +29,10 @@
 #include <xmloff/families.hxx>
 #include <xmloff/contextid.hxx>
 #include <xmloff/txtprmap.hxx>
+#include <xmloff/XMLComplexColorHandler.hxx>
+#include <xmloff/XMLComplexColorExport.hxx>
+#include <docmodel/color/ComplexColor.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 #include <sax/tools/converter.hxx>
 #include <com/sun/star/util/CellProtection.hpp>
 #include <com/sun/star/table/CellOrientation.hpp>
@@ -36,6 +40,7 @@
 #include <com/sun/star/table/CellHoriJustify.hpp>
 #include <com/sun/star/table/CellJustifyMethod.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/util/XComplexColor.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntry.hpp>
 #include <com/sun/star/sheet/XSheetCondition.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -63,6 +68,7 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     MAP( SC_UNONAME_BOTTBORDER, XML_NAMESPACE_FO, XML_BORDER_BOTTOM, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER, CTF_SC_BOTTOMBORDER ),
     MAP( SC_UNONAME_BOTTBORDER, XML_NAMESPACE_STYLE, XML_BORDER_LINE_WIDTH_BOTTOM, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER_WIDTH, CTF_SC_BOTTOMBORDERWIDTH ),
     MAP( SC_UNONAME_CELLBACK, XML_NAMESPACE_FO, XML_BACKGROUND_COLOR, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
+    MAP_EXT( SC_UNONAME_CELL_BACKGROUND_COMPLEX_COLOR, XML_NAMESPACE_LO_EXT, XML_BACKGROUND_COMPLEX_COLOR, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_COMPLEX_COLOR|MID_FLAG_ELEMENT_ITEM, CTF_COMPLEX_COLOR),
     MAP( SC_UNONAME_CELLPRO, XML_NAMESPACE_STYLE, XML_CELL_PROTECT, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_CELLPROTECTION|MID_FLAG_MERGE_PROPERTY, 0 ),
     MAP( SC_UNONAME_CELLPRO, XML_NAMESPACE_STYLE, XML_PRINT_CONTENT, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_PRINTCONTENT|MID_FLAG_MERGE_PROPERTY, 0 ),
     MAP( SC_UNONAME_CELLSTYL, XML_NAMESPACE_STYLE, XML_STYLE, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_STRING, CTF_SC_CELLSTYLE ),
@@ -130,6 +136,7 @@ const XMLPropertyMapEntry aXMLScRowStylesImportProperties[] =
     MAP( SC_UNONAME_CELLBACK, XML_NAMESPACE_FO, XML_BACKGROUND_COLOR, XML_TYPE_PROP_TABLE_ROW|XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
     MAP( SC_UNONAME_CELLHGT, XML_NAMESPACE_STYLE, XML_ROW_HEIGHT, XML_TYPE_PROP_TABLE_ROW|XML_TYPE_MEASURE, CTF_SC_ROWHEIGHT),
     MAP( SC_UNONAME_CELLTRAN, XML_NAMESPACE_FO, XML_BACKGROUND_COLOR, XML_TYPE_PROP_TABLE_ROW|XML_TYPE_ISTRANSPARENT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
+    MAP_EXT( SC_UNONAME_CELL_BACKGROUND_COMPLEX_COLOR, XML_NAMESPACE_LO_EXT, XML_BACKGROUND_COMPLEX_COLOR, XML_TYPE_PROP_TABLE_ROW|XML_TYPE_COMPLEX_COLOR, CTF_COMPLEX_COLOR ),
     MAP( SC_UNONAME_MANPAGE, XML_NAMESPACE_FO, XML_BREAK_BEFORE, XML_TYPE_PROP_TABLE_ROW|XML_SC_TYPE_BREAKBEFORE, CTF_SC_ROWBREAKBEFORE),
     MAP( SC_UNONAME_OHEIGHT, XML_NAMESPACE_STYLE, XML_USE_OPTIMAL_ROW_HEIGHT, XML_TYPE_PROP_TABLE_ROW|XML_TYPE_BOOL, CTF_SC_ROWOPTIMALHEIGHT),
     MAP_END()
@@ -160,6 +167,7 @@ const XMLPropertyMapEntry aXMLScTableStylesImportProperties[] =
 
     MAP( SC_UNONAME_CELLBACK, XML_NAMESPACE_FO, XML_BACKGROUND_COLOR, XML_TYPE_PROP_TABLE|XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
     MAP( SC_UNONAME_CELLTRAN, XML_NAMESPACE_FO, XML_BACKGROUND_COLOR, XML_TYPE_PROP_TABLE|XML_TYPE_ISTRANSPARENT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
+    MAP_EXT( SC_UNONAME_CELL_BACKGROUND_COMPLEX_COLOR, XML_NAMESPACE_LO_EXT, XML_BACKGROUND_COMPLEX_COLOR, XML_TYPE_PROP_TABLE|XML_TYPE_COMPLEX_COLOR, CTF_COMPLEX_COLOR ),
     MAP( SC_UNONAME_CELLVIS, XML_NAMESPACE_TABLE, XML_DISPLAY, XML_TYPE_PROP_TABLE|XML_TYPE_BOOL, 0 ),
     MAP( SC_UNONAME_PAGESTL, XML_NAMESPACE_STYLE, XML_MASTER_PAGE_NAME, XML_TYPE_PROP_TABLE|XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM, CTF_SC_MASTERPAGENAME ),
     MAP( SC_UNONAME_TABLAYOUT, XML_NAMESPACE_STYLE, XML_WRITING_MODE, XML_TYPE_PROP_TABLE|XML_TYPE_TEXT_WRITING_MODE, 0 ),
@@ -522,6 +530,7 @@ void ScXMLCellExportPropertyMapper::handleSpecialItem(
     // the SpecialItem ConditionlaFormat must not be handled by this method
     // the SpecialItem CharBackColor must not be handled by this method
 }
+
 void ScXMLCellExportPropertyMapper::handleElementItem(
             SvXMLExport& rExport,
             const XMLPropertyState& rProperty,
@@ -530,18 +539,33 @@ void ScXMLCellExportPropertyMapper::handleElementItem(
             sal_uInt32 /* nIdx */) const
 {
     sal_uInt32 nContextId = getPropertySetMapper()->GetEntryContextId( rProperty.mnIndex );
-    OUString sURL;
-    if ( ( nContextId == CTF_SC_HYPERLINK ) &&
-        ( rProperty.maValue >>= sURL ) &&
-        !sURL.isEmpty() )
+    switch (nContextId)
     {
-        rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sURL );
-        rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE,
-                                      XML_SIMPLE );
-        sal_uInt32 nPropIndex = rProperty.mnIndex;
-        sal_uInt16 nPrefix = getPropertySetMapper()->GetEntryNameSpace( nPropIndex );
-        OUString sLocalName = getPropertySetMapper()->GetEntryXMLName( nPropIndex );
-        SvXMLElementExport aElem( rExport, nPrefix, sLocalName, true, true );
+        case CTF_SC_HYPERLINK:
+        {
+            OUString sURL;
+            if ((rProperty.maValue >>= sURL) && !sURL.isEmpty())
+            {
+                rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sURL );
+                rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE,
+                                              XML_SIMPLE );
+                sal_uInt32 nPropIndex = rProperty.mnIndex;
+                sal_uInt16 nPrefix = getPropertySetMapper()->GetEntryNameSpace( nPropIndex );
+                OUString sLocalName = getPropertySetMapper()->GetEntryXMLName( nPropIndex );
+                SvXMLElementExport aElem( rExport, nPrefix, sLocalName, true, true );
+            }
+        }
+        break;
+        case CTF_COMPLEX_COLOR:
+        {
+            XMLComplexColorExport aExport(rExport);
+            aExport.exportXML(rProperty.maValue,
+                    getPropertySetMapper()->GetEntryNameSpace(rProperty.mnIndex),
+                    getPropertySetMapper()->GetEntryXMLName(rProperty.mnIndex));
+        }
+        break;
+        default:
+            break;
     }
 }
 
@@ -882,6 +906,11 @@ const XMLPropertyHandler* XMLScPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             case XML_SC_TYPE_VERTICAL :
             {
                 pHdl = new XmlScPropHdl_Vertical;
+            }
+            break;
+            case XML_TYPE_COMPLEX_COLOR:
+            {
+                pHdl = new XMLComplexColorHandler;
             }
             break;
         }
