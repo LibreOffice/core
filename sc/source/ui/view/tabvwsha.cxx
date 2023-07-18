@@ -631,6 +631,14 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OUString &rNam
     });
 }
 
+const OUString* ScTabViewShell::GetEditString() const
+{
+    if (mpInputHandler)
+        return &mpInputHandler->GetEditString();
+
+    return nullptr;
+}
+
 bool ScTabViewShell::IsRefInputMode() const
 {
     ScModule* pScMod = SC_MOD();
