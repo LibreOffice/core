@@ -42,7 +42,7 @@ class DNDEventDispatcher final : public ::cppu::WeakImplHelper<
     std::recursive_mutex m_aMutex;
     css::uno::Sequence< css::datatransfer::DataFlavor > m_aDataFlavorList;
 
-    vcl::Window* findTopLevelWindow(Point location);
+    vcl::Window* findTopLevelWindow(Point& location);
     /*
      * fire the events on the dnd listener container of the specified window
      */

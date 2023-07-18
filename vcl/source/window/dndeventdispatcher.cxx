@@ -42,7 +42,7 @@ DNDEventDispatcher::~DNDEventDispatcher()
     designate_currentwindow(nullptr);
 }
 
-vcl::Window* DNDEventDispatcher::findTopLevelWindow(Point location)
+vcl::Window* DNDEventDispatcher::findTopLevelWindow(Point& location)
 {
     SolarMutexGuard aSolarGuard;
 
