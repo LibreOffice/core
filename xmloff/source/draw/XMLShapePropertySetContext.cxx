@@ -19,7 +19,7 @@
 
 #include <XMLShapePropertySetContext.hxx>
 #include <XMLTextColumnsContext.hxx>
-#include <XMLComplexColorContext.hxx>
+#include <xmloff/XMLComplexColorContext.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnumi.hxx>
 #include <xmltabi.hxx>

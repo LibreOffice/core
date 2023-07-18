@@ -9,12 +9,13 @@
 
 #pragma once
 
+#include <xmloff/dllapi.h>
 #include <docmodel/uno/UnoComplexColor.hxx>
 
 using namespace ::xmloff::token;
 using namespace css;
 
-class XMLComplexColorHandler : public XMLPropertyHandler
+class XMLOFF_DLLPUBLIC XMLComplexColorHandler : public XMLPropertyHandler
 {
 public:
     bool importXML(const OUString& /*rStrImpValue*/, css::uno::Any& /*rValue*/,

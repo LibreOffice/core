@@ -60,7 +60,7 @@
 #include <XMLIsPercentagePropertyHandler.hxx>
 #include <XMLPercentOrMeasurePropertyHandler.hxx>
 #include <XMLTextColumnsPropertyHandler.hxx>
-#include <XMLComplexColorHandler.hxx>
+#include <xmloff/XMLComplexColorHandler.hxx>
 #include <animations.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmlsdtypes.hxx>

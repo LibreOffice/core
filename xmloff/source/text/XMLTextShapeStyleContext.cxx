@@ -27,8 +27,8 @@
 #include <xmloff/XMLEventsImportContext.hxx>
 #include <XMLShapePropertySetContext.hxx>
 #include <XMLTextColumnsContext.hxx>
-#include <XMLComplexColorContext.hxx>
 #include <XMLBackgroundImageContext.hxx>
+#include <xmloff/XMLComplexColorContext.hxx>
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/maptype.hxx>

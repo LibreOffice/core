@@ -24,7 +24,7 @@
 #include <xmltabe.hxx>
 #include <XMLTextColumnsExport.hxx>
 #include <XMLBackgroundImageExport.hxx>
-#include <XMLComplexColorExport.hxx>
+#include <xmloff/XMLComplexColorExport.hxx>
 
 class SvXMLExport;
 class XMLTextExportPropertySetMapper: public SvXMLExportPropertyMapper

@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <XMLComplexColorExport.hxx>
+#include <xmloff/XMLComplexColorExport.hxx>
 
 #include <sal/config.h>
 
