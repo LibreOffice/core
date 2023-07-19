@@ -57,12 +57,11 @@ void AccessibleStringWrap::GetCharacterBounds( sal_Int32 nIndex, tools::Rectangl
     }
     else
     {
-        sal_Int32 aXArray[2];
-        mrDev.GetCaretPositions( maText, aXArray, nIndex, 1 );
+        KernArray aDXArray;
+        mrDev.GetTextArray(maText, &aDXArray, nIndex, 1);
         rRect.SetLeft( 0 );
         rRect.SetTop( 0 );
-        rRect.SetSize( Size(mrDev.GetTextHeight(), std::abs(aXArray[0] - aXArray[1])) );
-        rRect.Move( std::min(aXArray[0], aXArray[1]), 0 );
+        rRect.SetSize(Size(mrDev.GetTextHeight(), aDXArray[0]));
     }
 
     if( mrFont.IsVertical() )
