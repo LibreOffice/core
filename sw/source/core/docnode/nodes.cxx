@@ -2239,7 +2239,8 @@ SwNode* SwNodes::FindPrvNxtFrameNode( const SwNode& rFrameNd,
                 pFrameNd = &aIdx.GetNode();
             }
         }
-        else
+        else if (pFrameNd->IsSectionNode()
+            || (pFrameNd->IsEndNode() && pFrameNd->StartOfSectionNode()->IsSectionNode()))
         {
             pFrameNd = GoPrevSection( &aIdx, true, false );
             // did we move *into* a table?
@@ -2271,6 +2272,10 @@ SwNode* SwNodes::FindPrvNxtFrameNode( const SwNode& rFrameNd,
             {
                 pFrameNd = nullptr; // no preceding content node, stop search
             }
+        }
+        else
+        {
+            pFrameNd = nullptr; // no preceding content node, stop search
         }
     }
     while (pFrameNd != nullptr);
@@ -2312,7 +2317,8 @@ SwNode* SwNodes::FindPrvNxtFrameNode( const SwNode& rFrameNd,
                 pFrameNd = &aIdx.GetNode();
             }
         }
-        else
+        else if (pFrameNd->IsSectionNode()
+            || (pFrameNd->IsEndNode() && pFrameNd->StartOfSectionNode()->IsSectionNode()))
         {
             pFrameNd = GoNextSection( &aIdx, true, false );
             // did we move *into* a table?
@@ -2343,6 +2349,10 @@ SwNode* SwNodes::FindPrvNxtFrameNode( const SwNode& rFrameNd,
             {
                 pFrameNd = nullptr; // no following content node, stop search
             }
+        }
+        else
+        {
+            pFrameNd = nullptr; // no preceding content node, stop search
         }
     }
     while (pFrameNd != nullptr);
