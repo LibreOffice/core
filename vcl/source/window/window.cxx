@@ -2921,18 +2921,16 @@ tools::Rectangle Window::GetWindowExtentsRelative(const vcl::Window *pRelativeWi
 
 tools::Rectangle Window::ImplGetWindowExtentsRelative(const vcl::Window *pRelativeWindow) const
 {
-    SalFrameGeometry g = mpWindowImpl->mpFrame->GetGeometry();
     // make sure we use the extent of our border window,
     // otherwise we miss a few pixels
     const vcl::Window *pWin = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow : this;
 
-    Point aPos( pWin->OutputToScreenPixel( Point(0,0) ) );
-    aPos.AdjustX(g.x() );
-    aPos.AdjustY(g.y() );
+    Point aPos( pWin->OutputToAbsoluteScreenPixel( Point(0,0) ) );
     Size aSize ( pWin->GetSizePixel() );
     // #104088# do not add decoration to the workwindow to be compatible to java accessibility api
     if( mpWindowImpl->mbFrame || (mpWindowImpl->mpBorderWindow && mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame && GetType() != WindowType::WORKWINDOW) )
     {
+        SalFrameGeometry g = mpWindowImpl->mpFrame->GetGeometry();
         aPos.AdjustX( -sal_Int32(g.leftDecoration()) );
         aPos.AdjustY( -sal_Int32(g.topDecoration()) );
         aSize.AdjustWidth(g.leftDecoration() + g.rightDecoration() );
