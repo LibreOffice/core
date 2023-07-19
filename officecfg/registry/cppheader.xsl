@@ -122,7 +122,7 @@
 
   <xsl:template match="group">
     <xsl:param name="path"/>
-    <xsl:if test=".//prop or .//set">
+    <xsl:if test="not(info/deprecated) and (.//prop or .//set)">
       <xsl:variable name="name" select="translate(@oor:name, '-.', '__')"/>
       <xsl:text>struct </xsl:text>
       <xsl:value-of select="$name"/>
@@ -157,115 +157,119 @@
 
   <xsl:template match="set">
     <xsl:param name="path"/>
-    <xsl:variable name="name" select="translate(@oor:name, '-.', '__')"/>
-    <xsl:text>struct </xsl:text>
-    <xsl:value-of select="$name"/>
-    <xsl:text>: public comphelper::ConfigurationSet&lt; </xsl:text>
-    <xsl:value-of select="$name"/>
-    <xsl:text>&gt; {&#xA;</xsl:text>
-    <xsl:text>    static OUString path() { static constexpr OUStringLiteral PATH(<!--
-    -->u"</xsl:text>
-    <xsl:value-of select="$path"/>
-    <xsl:text>/</xsl:text>
-    <xsl:value-of select="@oor:name"/>
-    <xsl:text>"); return PATH; }&#xA;</xsl:text>
-    <xsl:text>private:&#xA;</xsl:text>
-    <xsl:text>    </xsl:text>
-    <xsl:value-of select="$name"/>
-    <xsl:text>(); // not defined&#xA;</xsl:text>
-    <xsl:text>    ~</xsl:text>
-    <xsl:value-of select="$name"/>
-    <xsl:text>(); // not defined&#xA;</xsl:text>
-    <xsl:text>};&#xA;</xsl:text>
-    <xsl:text>&#xA;</xsl:text>
+    <xsl:if test="not(info/deprecated)">
+      <xsl:variable name="name" select="translate(@oor:name, '-.', '__')"/>
+      <xsl:text>struct </xsl:text>
+      <xsl:value-of select="$name"/>
+      <xsl:text>: public comphelper::ConfigurationSet&lt; </xsl:text>
+      <xsl:value-of select="$name"/>
+      <xsl:text>&gt; {&#xA;</xsl:text>
+      <xsl:text>    static OUString path() { static constexpr OUStringLiteral PATH(<!--
+      -->u"</xsl:text>
+      <xsl:value-of select="$path"/>
+      <xsl:text>/</xsl:text>
+      <xsl:value-of select="@oor:name"/>
+      <xsl:text>"); return PATH; }&#xA;</xsl:text>
+      <xsl:text>private:&#xA;</xsl:text>
+      <xsl:text>    </xsl:text>
+      <xsl:value-of select="$name"/>
+      <xsl:text>(); // not defined&#xA;</xsl:text>
+      <xsl:text>    ~</xsl:text>
+      <xsl:value-of select="$name"/>
+      <xsl:text>(); // not defined&#xA;</xsl:text>
+      <xsl:text>};&#xA;</xsl:text>
+      <xsl:text>&#xA;</xsl:text>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="prop">
     <xsl:param name="path"/>
-    <xsl:variable name="name" select="translate(@oor:name, '-.', '__')"/>
-    <xsl:text>struct </xsl:text>
-    <xsl:value-of select="$name"/>
-    <xsl:text>: public comphelper::</xsl:text>
-    <xsl:choose>
-      <xsl:when test="@oor:localized = 'true'">
-        <xsl:text>ConfigurationLocalizedProperty</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>ConfigurationProperty</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>&lt;</xsl:text>
-    <xsl:value-of select="$name"/>
-    <xsl:text>, </xsl:text>
-    <xsl:if test="not(@oor:nillable = 'false')">
-      <xsl:text>std::optional&lt;</xsl:text>
+    <xsl:if test="not(info/deprecated)">
+      <xsl:variable name="name" select="translate(@oor:name, '-.', '__')"/>
+      <xsl:text>struct </xsl:text>
+      <xsl:value-of select="$name"/>
+      <xsl:text>: public comphelper::</xsl:text>
+      <xsl:choose>
+        <xsl:when test="@oor:localized = 'true'">
+          <xsl:text>ConfigurationLocalizedProperty</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>ConfigurationProperty</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:text>&lt;</xsl:text>
+      <xsl:value-of select="$name"/>
+      <xsl:text>, </xsl:text>
+      <xsl:if test="not(@oor:nillable = 'false')">
+        <xsl:text>std::optional&lt;</xsl:text>
+      </xsl:if>
+      <xsl:choose>
+        <xsl:when test="@oor:type='oor:any'">
+          <xsl:text>com::sun::star::uno::Any</xsl:text>
+        </xsl:when>
+        <xsl:when test="@oor:type='xs:boolean'">
+          <xsl:text>bool</xsl:text>
+        </xsl:when>
+        <xsl:when test="@oor:type='xs:short'">
+          <xsl:text>sal_Int16</xsl:text>
+        </xsl:when>
+        <xsl:when test="@oor:type='xs:int'">
+          <xsl:text>sal_Int32</xsl:text>
+        </xsl:when>
+        <xsl:when test="@oor:type='xs:long'">
+          <xsl:text>sal_Int64</xsl:text>
+        </xsl:when>
+        <xsl:when test="@oor:type='xs:double'">
+          <xsl:text>double</xsl:text>
+        </xsl:when>
+        <xsl:when test="@oor:type='xs:string'">
+          <xsl:text>OUString</xsl:text>
+        </xsl:when>
+        <xsl:when test="@oor:type='xs:hexBinary'">
+          <xsl:text>com::sun::star::uno::Sequence&lt;sal_Int8&gt; </xsl:text>
+        </xsl:when>
+        <xsl:when test="@oor:type='oor:boolean-list'">
+          <xsl:text>com::sun::star::uno::Sequence&lt;bool&gt; </xsl:text>
+        </xsl:when>
+        <xsl:when test="@oor:type='oor:short-list'">
+          <xsl:text>com::sun::star::uno::Sequence&lt;sal_Int16&gt; </xsl:text>
+        </xsl:when>
+        <xsl:when test="@oor:type='oor:int-list'">
+          <xsl:text>com::sun::star::uno::Sequence&lt;sal_Int32&gt; </xsl:text>
+        </xsl:when>
+        <xsl:when test="@oor:type='oor:long-list'">
+          <xsl:text>com::sun::star::uno::Sequence&lt;sal_Int64&gt; </xsl:text>
+        </xsl:when>
+        <xsl:when test="@oor:type='oor:double-list'">
+          <xsl:text>com::sun::star::uno::Sequence&lt;double&gt; </xsl:text>
+        </xsl:when>
+        <xsl:when test="@oor:type='oor:string-list'">
+          <xsl:text>com::sun::star::uno::Sequence&lt;OUString&gt; </xsl:text>
+        </xsl:when>
+        <xsl:when test="@oor:type='oor:hexBinary-list'">
+          <xsl:text>com::sun::star::uno::Sequence&lt;<!--
+          -->com::sun::star::uno::Sequence&lt;sal_Int8&gt; &gt; </xsl:text>
+        </xsl:when>
+      </xsl:choose>
+      <xsl:if test="not(@oor:nillable = 'false')">
+        <xsl:text>&gt; </xsl:text>
+      </xsl:if>
+      <xsl:text>&gt; {&#xA;</xsl:text>
+      <xsl:text>    static OUString path() { static constexpr OUStringLiteral PATH(<!--
+      -->u"</xsl:text>
+      <xsl:value-of select="$path"/>
+      <xsl:text>/</xsl:text>
+      <xsl:value-of select="@oor:name"/>
+      <xsl:text>"); return PATH; }&#xA;</xsl:text>
+      <xsl:text>private:&#xA;</xsl:text>
+      <xsl:text>    </xsl:text>
+      <xsl:value-of select="$name"/>
+      <xsl:text>(); // not defined&#xA;</xsl:text>
+      <xsl:text>    ~</xsl:text>
+      <xsl:value-of select="$name"/>
+      <xsl:text>(); // not defined&#xA;</xsl:text>
+      <xsl:text>};&#xA;</xsl:text>
+      <xsl:text>&#xA;</xsl:text>
     </xsl:if>
-    <xsl:choose>
-      <xsl:when test="@oor:type='oor:any'">
-        <xsl:text>com::sun::star::uno::Any</xsl:text>
-      </xsl:when>
-      <xsl:when test="@oor:type='xs:boolean'">
-        <xsl:text>bool</xsl:text>
-      </xsl:when>
-      <xsl:when test="@oor:type='xs:short'">
-        <xsl:text>sal_Int16</xsl:text>
-      </xsl:when>
-      <xsl:when test="@oor:type='xs:int'">
-        <xsl:text>sal_Int32</xsl:text>
-      </xsl:when>
-      <xsl:when test="@oor:type='xs:long'">
-        <xsl:text>sal_Int64</xsl:text>
-      </xsl:when>
-      <xsl:when test="@oor:type='xs:double'">
-        <xsl:text>double</xsl:text>
-      </xsl:when>
-      <xsl:when test="@oor:type='xs:string'">
-        <xsl:text>OUString</xsl:text>
-      </xsl:when>
-      <xsl:when test="@oor:type='xs:hexBinary'">
-        <xsl:text>com::sun::star::uno::Sequence&lt;sal_Int8&gt; </xsl:text>
-      </xsl:when>
-      <xsl:when test="@oor:type='oor:boolean-list'">
-        <xsl:text>com::sun::star::uno::Sequence&lt;bool&gt; </xsl:text>
-      </xsl:when>
-      <xsl:when test="@oor:type='oor:short-list'">
-        <xsl:text>com::sun::star::uno::Sequence&lt;sal_Int16&gt; </xsl:text>
-      </xsl:when>
-      <xsl:when test="@oor:type='oor:int-list'">
-        <xsl:text>com::sun::star::uno::Sequence&lt;sal_Int32&gt; </xsl:text>
-      </xsl:when>
-      <xsl:when test="@oor:type='oor:long-list'">
-        <xsl:text>com::sun::star::uno::Sequence&lt;sal_Int64&gt; </xsl:text>
-      </xsl:when>
-      <xsl:when test="@oor:type='oor:double-list'">
-        <xsl:text>com::sun::star::uno::Sequence&lt;double&gt; </xsl:text>
-      </xsl:when>
-      <xsl:when test="@oor:type='oor:string-list'">
-        <xsl:text>com::sun::star::uno::Sequence&lt;OUString&gt; </xsl:text>
-      </xsl:when>
-      <xsl:when test="@oor:type='oor:hexBinary-list'">
-        <xsl:text>com::sun::star::uno::Sequence&lt;<!--
-        -->com::sun::star::uno::Sequence&lt;sal_Int8&gt; &gt; </xsl:text>
-      </xsl:when>
-    </xsl:choose>
-    <xsl:if test="not(@oor:nillable = 'false')">
-      <xsl:text>&gt; </xsl:text>
-    </xsl:if>
-    <xsl:text>&gt; {&#xA;</xsl:text>
-    <xsl:text>    static OUString path() { static constexpr OUStringLiteral PATH(<!--
-    -->u"</xsl:text>
-    <xsl:value-of select="$path"/>
-    <xsl:text>/</xsl:text>
-    <xsl:value-of select="@oor:name"/>
-    <xsl:text>"); return PATH; }&#xA;</xsl:text>
-    <xsl:text>private:&#xA;</xsl:text>
-    <xsl:text>    </xsl:text>
-    <xsl:value-of select="$name"/>
-    <xsl:text>(); // not defined&#xA;</xsl:text>
-    <xsl:text>    ~</xsl:text>
-    <xsl:value-of select="$name"/>
-    <xsl:text>(); // not defined&#xA;</xsl:text>
-    <xsl:text>};&#xA;</xsl:text>
-    <xsl:text>&#xA;</xsl:text>
   </xsl:template>
 </xsl:stylesheet>
