@@ -96,8 +96,8 @@ public:
     void addTextRectActions(const tools::Rectangle& rRectangle, const OUString& rText,
                             DrawTextFlags nStyle, GDIMetaFile& rGDIMetaFile) const;
 
-    ::std::vector<double> getTextArray(const OUString& rText, sal_uInt32 nIndex,
-                                       sal_uInt32 nLength) const;
+    ::std::vector<double> getTextArray(const OUString& rText, sal_uInt32 nIndex, sal_uInt32 nLength,
+                                       bool bCaret = false) const;
 
     ::std::vector<double> getCaretPositions(const OUString& rText, sal_uInt32 nIndex,
                                             sal_uInt32 nLength) const;

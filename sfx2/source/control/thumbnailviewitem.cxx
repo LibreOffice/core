@@ -319,10 +319,11 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
         {
             rSeq.resize(nFinalPrimCount + 1);
 
-            auto aCaretPositions = aTextDev.getCaretPositions(aText, nLineStart, nLineLength);
+            auto aTextArray = aTextDev.getTextArray(aText, nLineStart, nLineLength, true);
 
-            auto lc_x1 = aCaretPositions[2*(nMnemonicPos - nLineStart)];
-            auto lc_x2 = aCaretPositions[2*(nMnemonicPos - nLineStart)+1];
+            auto nPos = nMnemonicPos - nLineStart;
+            auto lc_x1 = nPos ? aTextArray[nPos - 1] : 0;
+            auto lc_x2 = aTextArray[nPos];
             auto fMnemonicWidth = std::abs(lc_x1 - lc_x2);
             auto fMnemonicHeight = aTextDev.getUnderlineHeight();
 

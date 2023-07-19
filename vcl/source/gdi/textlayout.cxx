@@ -58,6 +58,12 @@ namespace vcl
         m_rTargetDevice.GetCaretPositions( _rText, _pCaretXArray, _nStartIndex, _nLength );
     }
 
+    tools::Long DefaultTextLayout::GetTextArray( const OUString& _rText, KernArray* _pDXArray,
+        sal_Int32 _nStartIndex, sal_Int32 _nLength, bool bCaret ) const
+    {
+        return m_rTargetDevice.GetTextArray( _rText, _pDXArray, _nStartIndex, _nLength, bCaret );
+    }
+
     sal_Int32 DefaultTextLayout::GetTextBreak( const OUString& _rText, tools::Long _nMaxTextWidth, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const
     {
         return m_rTargetDevice.GetTextBreak( _rText, _nMaxTextWidth, _nStartIndex, _nLength );
@@ -78,6 +84,7 @@ namespace vcl
         virtual tools::Long        GetTextWidth( const OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen ) const override;
         virtual void        DrawText( const Point& _rStartPoint, const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength, std::vector< tools::Rectangle >* _pVector, OUString* _pDisplayText ) override;
         virtual void        GetCaretPositions( const OUString& _rText, sal_Int32* _pCaretXArray, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const override;
+        virtual tools::Long GetTextArray( const OUString& _rText, KernArray* _pDXAry, sal_Int32 _nStartIndex, sal_Int32 _nLength, bool bCaret = false ) const override;
         virtual sal_Int32   GetTextBreak(const OUString& _rText, tools::Long _nMaxTextWidth, sal_Int32 _nStartIndex, sal_Int32 _nLength) const override;
         virtual bool        DecomposeTextRectAction() const override;
 
@@ -87,7 +94,6 @@ namespace vcl
         tools::Rectangle   GetTextRect( const tools::Rectangle& _rRect, const OUString& _rText, DrawTextFlags _nStyle, Size* o_pDeviceSize );
 
     private:
-        tools::Long        GetTextArray( const OUString& _rText, KernArray* _pDXAry, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const;
 
         OutputDevice&   m_rTargetDevice;
         OutputDevice&   m_rReferenceDevice;
@@ -160,13 +166,13 @@ namespace vcl
         }
     }
 
-    tools::Long ReferenceDeviceTextLayout::GetTextArray( const OUString& _rText, KernArray* _pDXAry, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const
+    tools::Long ReferenceDeviceTextLayout::GetTextArray( const OUString& _rText, KernArray* _pDXAry, sal_Int32 _nStartIndex, sal_Int32 _nLength, bool bCaret ) const
     {
         if ( !lcl_normalizeLength( _rText, _nStartIndex, _nLength ) )
             return 0;
 
         // retrieve the character widths from the reference device
-        tools::Long nTextWidth = m_rReferenceDevice.GetTextArray( _rText, _pDXAry, _nStartIndex, _nLength );
+        tools::Long nTextWidth = m_rReferenceDevice.GetTextArray( _rText, _pDXAry, _nStartIndex, _nLength, bCaret );
 #if OSL_DEBUG_LEVEL > 1
         if ( _pDXAry )
         {

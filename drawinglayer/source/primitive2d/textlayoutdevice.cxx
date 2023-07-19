@@ -294,7 +294,7 @@ void TextLayouterDevice::addTextRectActions(const ::tools::Rectangle& rRectangle
 }
 
 std::vector<double> TextLayouterDevice::getTextArray(const OUString& rText, sal_uInt32 nIndex,
-                                                     sal_uInt32 nLength) const
+                                                     sal_uInt32 nLength, bool bCaret) const
 {
     std::vector<double> aRetval;
     sal_uInt32 nTextLength(nLength);
@@ -308,7 +308,7 @@ std::vector<double> TextLayouterDevice::getTextArray(const OUString& rText, sal_
     if (nTextLength)
     {
         KernArray aArray;
-        mrDevice.GetTextArray(rText, &aArray, nIndex, nTextLength);
+        mrDevice.GetTextArray(rText, &aArray, nIndex, nTextLength, bCaret);
         aRetval.reserve(aArray.size());
         for (size_t i = 0, nEnd = aArray.size(); i < nEnd; ++i)
             aRetval.push_back(aArray[i]);

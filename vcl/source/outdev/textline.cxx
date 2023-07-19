@@ -884,8 +884,6 @@ void OutputDevice::ImplDrawMnemonicLine( tools::Long nX, tools::Long nY, tools::
     tools::Long nBaseX = nX;
     if( /*HasMirroredGraphics() &&*/ IsRTLEnabled() )
     {
-        // add some strange offset
-        nX += 2;
         // revert the hack that will be done later in ImplDrawTextLine
         nX = nBaseX - nWidth - (nX - nBaseX - 1);
     }
