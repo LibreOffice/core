@@ -2903,17 +2903,22 @@ bool DocumentRedlineManager::AcceptRedline( const SwPaM& rPam, bool bCallDelete 
     // The Selection is only in the ContentSection. If there are Redlines
     // to Non-ContentNodes before or after that, then the Selections
     // expand to them.
-    SwPaM aPam( *rPam.GetMark(), *rPam.GetPoint() );
-    lcl_AdjustRedlineRange( aPam );
+    std::shared_ptr<SwUnoCursor> const pPam(m_rDoc.CreateUnoCursor(*rPam.GetPoint(), false));
+    if (rPam.HasMark())
+    {
+        pPam->SetMark();
+        *pPam->GetMark() = *rPam.GetMark();
+    }
+    lcl_AdjustRedlineRange(*pPam);
 
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
         m_rDoc.GetIDocumentUndoRedo().StartUndo( SwUndoId::ACCEPT_REDLINE, nullptr );
-        m_rDoc.GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoAcceptRedline>( aPam ));
+        m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoAcceptRedline>(*pPam));
     }
 
     int nRet = lcl_AcceptRejectRedl( lcl_AcceptRedline, maRedlineTable,
-                                     bCallDelete, aPam );
+                                     bCallDelete, *pPam );
     if( nRet > 0 )
     {
         CompressRedlines();
