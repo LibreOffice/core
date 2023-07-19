@@ -52,6 +52,7 @@ private:
     std::unique_ptr<EnglishFunctionNameChange> xConfigChange;
     const ScFuncDesc*   pFuncDesc;
     sal_uInt16          nArgs;
+    OUString m_aHelpId;
 
     ::std::vector< const formula::IFunctionDescription*> aLRUList;
 

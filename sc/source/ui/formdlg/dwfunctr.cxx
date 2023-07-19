@@ -57,6 +57,7 @@ ScFunctionWin::ScFunctionWin(weld::Widget* pParent)
     InitLRUList();
 
     nArgs=0;
+    m_aHelpId = xFuncList->get_help_id();
 
     // Description box has a height of 8 lines of text
     xFiFuncDesc->set_size_request(-1, 8 * xFiFuncDesc->get_text_height());
@@ -176,6 +177,13 @@ void ScFunctionWin::SetDescription()
             *pDesc->mxFuncDesc;
 
         xFiFuncDesc->set_text(aBuf);
+
+        // Update help ID for the selected entry
+        const OUString sHelpId = pDesc->getHelpId();
+        if (!sHelpId.isEmpty())
+            xFuncList->set_help_id(pDesc->getHelpId());
+        else
+            xFuncList->set_help_id(m_aHelpId);
     }
 }
 
