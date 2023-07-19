@@ -169,7 +169,7 @@ void OutputDevice::ImplDrawTextRect( tools::Long nBaseX, tools::Long nBaseY,
 
 void OutputDevice::ImplDrawTextBackground( const SalLayout& rSalLayout )
 {
-    const tools::Long nWidth = rSalLayout.GetTextWidth();
+    const double nWidth = rSalLayout.GetTextWidth();
     const DevicePoint aBase = rSalLayout.DrawBase();
     const tools::Long nX = aBase.getX();
     const tools::Long nY = aBase.getY();
@@ -193,7 +193,7 @@ tools::Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout
     tools::Long nX = aPoint.getX();
     tools::Long nY = aPoint.getY();
 
-    tools::Long nWidth = rSalLayout.GetTextWidth();
+    double nWidth = rSalLayout.GetTextWidth();
     tools::Long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
 
     nY -= mpFontInstance->mxFontMetric->GetAscent() + mnEmphasisAscent;
@@ -236,7 +236,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     if (!rSalLayout.GetBoundRect(aBoundRect))
     {
         // guess vertical text extents if GetBoundRect failed
-        tools::Long nRight = rSalLayout.GetTextWidth();
+        double nRight = rSalLayout.GetTextWidth();
         tools::Long nTop = mpFontInstance->mxFontMetric->GetAscent() + mnEmphasisAscent;
         tools::Long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
         aBoundRect = tools::Rectangle( 0, -nTop, nRight, nHeight - nTop );
@@ -1055,7 +1055,7 @@ void OutputDevice::GetCaretPositions( const OUString& rStr, sal_Int32* pCaretXAr
     }
 
     pSalLayout->GetCaretPositions( 2*nLen, pCaretXArray );
-    tools::Long nWidth = pSalLayout->GetTextWidth();
+    double nWidth = pSalLayout->GetTextWidth();
 
     // fixup unknown caret positions
     int i;
@@ -2303,7 +2303,7 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
     std::unique_ptr<SalLayout> pSalLayout;
     const Point aPoint;
     // calculate offset when nBase!=nIndex
-    tools::Long nXOffset = 0;
+    double nXOffset = 0;
     if( nBase != nIndex )
     {
         sal_Int32 nStart = std::min( nBase, nIndex );
@@ -2370,7 +2370,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
     std::unique_ptr<SalLayout> pSalLayout;
 
     // calculate offset when nBase!=nIndex
-    tools::Long nXOffset = 0;
+    double nXOffset = 0;
     if( nBase != nIndex )
     {
         sal_Int32 nStart = std::min( nBase, nIndex );
@@ -2395,7 +2395,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
             // transform polygon to pixel units
             basegfx::B2DHomMatrix aMatrix;
 
-            if( nXOffset | mnTextOffX | mnTextOffY )
+            if (nXOffset || mnTextOffX || mnTextOffY)
             {
                 DevicePoint aRotatedOfs(mnTextOffX, mnTextOffY);
                 aRotatedOfs -= pSalLayout->GetDrawPosition(DevicePoint(nXOffset, 0));
