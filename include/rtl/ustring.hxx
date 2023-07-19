@@ -3601,7 +3601,7 @@ constexpr
     rtlunittest::
 #endif
     OUString
-operator ""_ostr() {
+operator ""_ustr() {
     return
 #if defined RTL_STRING_UNITTEST
         rtlunittest
