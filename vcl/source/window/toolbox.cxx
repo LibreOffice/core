@@ -2782,8 +2782,6 @@ void ToolBox::ImplDrawFloatwinBorder(vcl::RenderContext& rRenderContext, ImplToo
     if ( pItem->maRect.IsEmpty() )
         return;
 
-    tools::Rectangle aRect( mpFloatWin->ImplGetItemEdgeClipRect() );
-    aRect.SetPos( AbsoluteScreenToOutputPixel( aRect.TopLeft() ) );
     rRenderContext.SetLineColor(rRenderContext.GetSettings().GetStyleSettings().GetShadowColor());
     Point p1, p2;
 

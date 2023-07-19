@@ -199,7 +199,7 @@ private:
     SAL_DLLPRIVATE const OUString& ImplGetHelpText( ToolBoxItemId nItemId ) const;
     SAL_DLLPRIVATE Size            ImplGetOptimalFloatingSize();
     SAL_DLLPRIVATE bool            ImplHasExternalMenubutton() const;
-    SAL_DLLPRIVATE void            ImplDrawFloatwinBorder(vcl::RenderContext& rRenderContext, ImplToolItem const * pItem );
+    static SAL_DLLPRIVATE void     ImplDrawFloatwinBorder(vcl::RenderContext& rRenderContext, ImplToolItem const * pItem );
 
     DECL_DLLPRIVATE_LINK(    ImplUpdateHdl, Timer*, void );
     DECL_DLLPRIVATE_LINK(    ImplCustomMenuListener, VclMenuEvent&, void );
