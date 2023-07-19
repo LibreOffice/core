@@ -1048,6 +1048,17 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150408_isLvl_RoundTrip)
     assertXPath(pXml, "/w:numbering/w:abstractNum/w:lvl[2]/w:isLgl");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf156372, "tdf156372.doc")
+{
+    sal_Int32 nHeight = parseDump("//page[1]/header/tab/row[1]/infos/bounds", "height").toInt32();
+    // Without a fix in place, this would fail with
+    // - Expected: 847
+    // - Actual  : 1327
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(847), nHeight, 5);
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
