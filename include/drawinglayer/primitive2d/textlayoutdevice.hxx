@@ -98,9 +98,6 @@ public:
 
     ::std::vector<double> getTextArray(const OUString& rText, sal_uInt32 nIndex, sal_uInt32 nLength,
                                        bool bCaret = false) const;
-
-    ::std::vector<double> getCaretPositions(const OUString& rText, sal_uInt32 nIndex,
-                                            sal_uInt32 nLength) const;
 };
 
 // helper methods for vcl font handling
