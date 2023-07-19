@@ -693,12 +693,25 @@ void SwFlowFrame::MoveSubTree( SwLayoutFrame* pParent, SwFrame* pSibling )
     // disappear automatically.
     SwSectionFrame *pSct;
 
+    SwFlyFrame* pFly = nullptr;
     if ( pOldParent && !pOldParent->Lower() &&
          ( pOldParent->IsInSct() &&
            !(pSct = pOldParent->FindSctFrame())->ContainsContent() &&
            !pSct->ContainsAny( true ) ) )
     {
             pSct->DelEmpty( false );
+    }
+    else if (pOldParent && !pOldParent->Lower()
+             && (pOldParent->IsInFly() && !(pFly = pOldParent->FindFlyFrame())->ContainsContent()
+                 && !pFly->ContainsAny()))
+    {
+        if (pFly->IsFlySplitAllowed())
+        {
+            // Master fly is empty now that we pasted the content to the follow, mark it for
+            // deletion.
+            auto pFlyAtContent = static_cast<SwFlyAtContentFrame*>(pFly);
+            pFlyAtContent->DelEmpty();
+        }
     }
 
     // If we're in a column section, we'd rather not call Calc "from below"

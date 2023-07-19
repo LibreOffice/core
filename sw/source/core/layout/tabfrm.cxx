@@ -1099,6 +1099,13 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
             if (nMinHeight > nRemainingSpaceForLastRow)
             {
                 bSplitRowAllowed = false;
+
+                if (!pRow->GetPrev() && aRectFnSet.GetHeight(pRow->getFrameArea()) > nRemainingSpaceForLastRow)
+                {
+                    // Split of pRow is not allowed, no previous row, the current row doesn't fit:
+                    // that's a failure, we'll have to move forward instead.
+                    return false;
+                }
             }
         }
     }
@@ -2500,6 +2507,19 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         // 2. If this row wants to keep, we need an additional row
         // 3. The table is allowed to split or we do not have a pIndPrev:
         SwFrame* pIndPrev = GetIndPrev();
+
+        SwFlyFrame* pFly = FindFlyFrame();
+        if (!pIndPrev && pFly && pFly->IsFlySplitAllowed())
+        {
+            auto pFlyAtContent = static_cast<SwFlyAtContentFrame*>(pFly);
+            SwFrame* pAnchor = pFlyAtContent->FindAnchorCharFrame();
+            if (pAnchor)
+            {
+                // If the anchor of the split has a previous frame, we're allowed to move forward.
+                pIndPrev = pAnchor->GetIndPrev();
+            }
+        }
+
         const SwRowFrame* pFirstNonHeadlineRow = GetFirstNonHeadlineRow();
         // #i120016# if this row wants to keep, allow split in case that all rows want to keep with next,
         // the table can not move forward as it is the first one and a split is in general allowed.
@@ -2754,11 +2774,23 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         //Let's see if we find some place anywhere...
         if (!bMovedFwd)
         {
+            bool bMoveAlways = false;
+            SwFrame* pUpper = GetUpper();
+            if (pUpper && pUpper->IsFlyFrame())
+            {
+                auto pFlyFrame = static_cast<SwFlyFrame*>(pUpper);
+                if (pFlyFrame->IsFlySplitAllowed())
+                {
+                    // If the anchor of the split has a previous frame, MoveFwd() is allowed to move
+                    // forward.
+                    bMoveAlways = true;
+                }
+            }
             // don't make the effort to move fwd if its known
             // conditions that are known not to work
             if (IsInFootnote() && ForbiddenForFootnoteCntFwd())
                 bMakePage = false;
-            else if (!MoveFwd(bMakePage, false))
+            else if (!MoveFwd(bMakePage, false, bMoveAlways))
                 bMakePage = false;
         }
 
@@ -2806,6 +2838,22 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
             // allowed to split.
             SwTwips nDistToUpperPrtBottom =
                 aRectFnSet.BottomDist( getFrameArea(), aRectFnSet.GetPrtBottom(*GetUpper()));
+
+            if (GetUpper()->IsFlyFrame())
+            {
+                SwFlyFrame* pFlyFrame = GetUpper()->FindFlyFrame();
+                if (pFlyFrame->IsFlySplitAllowed())
+                {
+                    SwTextFrame* pAnchor = pFlyFrame->FindAnchorCharFrame();
+                    if (pAnchor && pAnchor->HasFollow())
+                    {
+                        // The split fly's anchor has a follow frame, we can move there & try to
+                        // split again.
+                        bTryToSplit = true;
+                    }
+                }
+            }
+
             if ( nDistToUpperPrtBottom >= 0 || bTryToSplit )
             {
                 lcl_RecalcTable( *this, nullptr, aNotify );
