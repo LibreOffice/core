@@ -890,7 +890,7 @@ public:
                                               FontLineStyle eOverline,
                                               bool bUnderlineAbove = false );
 
-    void                        ImplDrawTextLine( tools::Long nBaseX, tools::Long nX, tools::Long nY, DeviceCoordinate nWidth,
+    void                        ImplDrawTextLine( tools::Long nBaseX, tools::Long nX, tools::Long nY, double nWidth,
                                                   FontStrikeout eStrikeout, FontLineStyle eUnderline,
                                                   FontLineStyle eOverline, bool bUnderlineAbove );
 

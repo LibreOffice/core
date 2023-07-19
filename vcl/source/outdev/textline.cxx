@@ -754,7 +754,7 @@ void OutputDevice::ImplDrawStrikeoutChar( tools::Long nBaseX, tools::Long nBaseY
 }
 
 void OutputDevice::ImplDrawTextLine( tools::Long nX, tools::Long nY,
-                                     tools::Long nDistX, DeviceCoordinate nWidth,
+                                     tools::Long nDistX, double nWidth,
                                      FontStrikeout eStrikeout,
                                      FontLineStyle eUnderline,
                                      FontLineStyle eOverline,
@@ -830,8 +830,8 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
 
         // calculate distance of each word from the base point
         DevicePoint aPos;
-        DeviceCoordinate nDist = 0;
-        DeviceCoordinate nWidth = 0;
+        double nDist = 0;
+        double nWidth = 0;
         const GlyphItem* pGlyph;
         int nStart = 0;
         while (rSalLayout.GetNextGlyph(&pGlyph, aPos, nStart))
@@ -845,7 +845,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
                     nDist = aPos.getX() - aStartPt.getX();
                     if( mpFontInstance->mnOrientation )
                     {
-                        const DeviceCoordinate nDY = aPos.getY() - aStartPt.getY();
+                        const double nDY = aPos.getY() - aStartPt.getY();
                         const double fRad = toRadians(mpFontInstance->mnOrientation);
                         nDist = FRound( nDist*cos(fRad) - nDY*sin(fRad) );
                     }
@@ -975,8 +975,7 @@ void OutputDevice::DrawTextLine( const Point& rPos, tools::Long nWidth,
         return;
 
     Point aPos = ImplLogicToDevicePixel( rPos );
-    DeviceCoordinate fWidth;
-    fWidth = LogicWidthToDeviceCoordinate( nWidth );
+    double fWidth = ImplLogicWidthToDeviceSubPixel(nWidth);
     aPos += Point( mnTextOffX, mnTextOffY );
     ImplDrawTextLine( aPos.X(), aPos.X(), 0, fWidth, eStrikeout, eUnderline, eOverline, bUnderlineAbove );
 
