@@ -1847,18 +1847,6 @@ void OutputDevice::SetPixelOffset( const Size& rOffset )
 }
 
 
-DeviceCoordinate OutputDevice::LogicWidthToDeviceCoordinate( tools::Long nWidth ) const
-{
-    if ( !mbMap )
-        return static_cast<DeviceCoordinate>(nWidth);
-
-#if VCL_FLOAT_DEVICE_PIXEL
-    return ImplLogicToSubPixel(nWidth, mnDPIX, maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX);
-#else
-    return ImplLogicToPixel(nWidth, mnDPIX, maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX);
-#endif
-}
-
 double OutputDevice::ImplLogicWidthToDeviceSubPixel(tools::Long nWidth) const
 {
     if (!mbMap)
