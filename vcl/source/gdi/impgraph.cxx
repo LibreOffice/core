@@ -1308,6 +1308,8 @@ bool ImpGraphic::swapOut()
         // reset the swap file
         mpSwapFile.reset();
 
+        mpGfxLink->getDataContainer().swapOut();
+
         // mark as swapped out
         mbSwapOut = true;
 
