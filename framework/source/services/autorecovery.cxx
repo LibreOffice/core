@@ -2840,7 +2840,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
     CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
 
     const sal_Int64 nConfiguredAutoSaveInterval
-        = officecfg::Office::Common::Save::Document::AutoSaveTimeIntervall::get()
+        = officecfg::Office::Recovery::AutoSave::TimeIntervall::get()
           * sal_Int64(60000); // min -> ms
 
     /* SAFE */ {
