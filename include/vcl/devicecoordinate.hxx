@@ -9,19 +9,7 @@
 
 #pragma once
 
-#include <config_vcl.h>
-
 #include <basegfx/point/b2dpoint.hxx>
 typedef basegfx::B2DPoint DevicePoint;
-
-#if VCL_FLOAT_DEVICE_PIXEL
-
-typedef double DeviceCoordinate;
-
-#else /* !VCL_FLOAT_DEVICE_PIXEL */
-
-typedef sal_Int32 DeviceCoordinate;
-
-#endif /* ! Carpet Cushion */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

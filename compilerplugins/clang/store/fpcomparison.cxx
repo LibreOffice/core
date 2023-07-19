@@ -31,8 +31,6 @@ public:
 
     virtual void run() override
     {
-        vclFloatDevicePixel = compiler.getPreprocessor()
-            .getIdentifierInfo("VCL_FLOAT_DEVICE_PIXEL")->hasMacroDefinition();
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 
@@ -43,7 +41,6 @@ private:
     bool ignore(FunctionDecl* );
     enum class EState { None, TraverseProcess, TraverseIgnore };
     EState meState = EState::None;
-    bool vclFloatDevicePixel;
 };
 
 bool FpComparison::TraverseFunctionDecl(FunctionDecl* function)
@@ -323,9 +320,8 @@ bool FpComparison::ignore(FunctionDecl* function)
         || dc.Function("testPlotAreaManualLayoutXLSX").Class("Chart2ExportTest").GlobalNamespace()
         || dc.Function("testLegendManualLayoutXLSX").Class("Chart2ExportTest").GlobalNamespace()
         || dc.Function("SetScreenNumber").Class("AquaSalFrame").GlobalNamespace()
-        || (vclFloatDevicePixel
-            && (dc.Function("Justify").Class("GenericSalLayout").GlobalNamespace()
-                || dc.Function("AdjustLayout").Class("MultiSalLayout").GlobalNamespace()))
+        || dc.Function("Justify").Class("GenericSalLayout").GlobalNamespace()
+        || dc.Function("AdjustLayout").Class("MultiSalLayout").GlobalNamespace()
         // vcl/headless/svpgdi.cxx, ba4a124b0c0c66fd275f5147d55eeec27ce78da9:
         || dc.Function("drawAlphaBitmap").Class("SvpSalGraphics").GlobalNamespace()
         || dc.Function("drawMask").Class("SvpSalGraphics").GlobalNamespace()

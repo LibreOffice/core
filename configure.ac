@@ -2076,11 +2076,6 @@ AC_ARG_ENABLE(customtarget-components,
     AS_HELP_STRING([--enable-customtarget-components],
         [Generates the static UNO object constructor mapping from the build.]))
 
-AC_ARG_ENABLE(float_device_pixel,
-    AS_HELP_STRING([--enable-float-device-pixel],
-                   [Uses doubles for VCL device coordinates instead of 32-bit integers.]),
-,)
-
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
@@ -9287,7 +9282,6 @@ else
     AC_MSG_RESULT([yes])
     ENABLE_FUZZERS="TRUE"
     AC_DEFINE([ENABLE_FUZZERS],1)
-    AC_DEFINE([VCL_FLOAT_DEVICE_PIXEL],1)
     BUILD_TYPE="$BUILD_TYPE FUZZERS"
 fi
 AC_SUBST(LIB_FUZZING_ENGINE)
@@ -11672,18 +11666,6 @@ dnl Check for system epoxy
 dnl ===================================================================
 EPOXY_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/epoxy/include"
 libo_CHECK_SYSTEM_MODULE([epoxy], [EPOXY], [epoxy >= 1.2])
-
-dnl ===================================================================
-dnl Set vcl option: coordinate device in double or sal_Int32
-dnl ===================================================================
-
-AC_MSG_CHECKING([Type to use for Device Pixel coordinates])
-if test "$enable_float_device_pixel" = yes; then
-    AC_DEFINE(VCL_FLOAT_DEVICE_PIXEL)
-    AC_MSG_RESULT([double])
-else
-    AC_MSG_RESULT([sal_Int32])
-fi
 
 dnl ===================================================================
 dnl Show which vclplugs will be built.
@@ -14991,7 +14973,6 @@ AC_CONFIG_HEADERS([config_host/config_skia.h])
 AC_CONFIG_HEADERS([config_host/config_typesizes.h])
 AC_CONFIG_HEADERS([config_host/config_validation.h])
 AC_CONFIG_HEADERS([config_host/config_vendor.h])
-AC_CONFIG_HEADERS([config_host/config_vcl.h])
 AC_CONFIG_HEADERS([config_host/config_vclplug.h])
 AC_CONFIG_HEADERS([config_host/config_version.h])
 AC_CONFIG_HEADERS([config_host/config_oauth2.h])
