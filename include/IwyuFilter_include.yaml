@@ -307,9 +307,6 @@ excludelist:
     include/vcl/decoview.hxx:
     # Full definition needed for VclPtr
     - vcl/outdev.hxx
-    include/vcl/devicecoordinate.hxx:
-    # Needed for #if configure switch
-    - basegfx/point/b2ipoint.hxx
     include/vcl/event.hxx:
     # Needed for enum type 
     - vcl/window.hxx

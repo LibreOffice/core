@@ -725,7 +725,7 @@ void OutputDevice::ImplDrawStrikeoutChar( tools::Long nBaseX, tools::Long nBaseY
     SetTextColor( aColor );
     ImplInitTextColor();
 
-    pLayout->DrawBase() = DevicePoint(nBaseX + mnTextOffX, nBaseY + mnTextOffY);
+    pLayout->DrawBase() = basegfx::B2DPoint(nBaseX + mnTextOffX, nBaseY + mnTextOffY);
 
     tools::Rectangle aPixelRect;
     aPixelRect.SetLeft( nBaseX+mnTextOffX );
@@ -826,10 +826,10 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
     if( bWordLine )
     {
         // draw everything relative to the layout base point
-        const DevicePoint aStartPt = rSalLayout.DrawBase();
+        const basegfx::B2DPoint aStartPt = rSalLayout.DrawBase();
 
         // calculate distance of each word from the base point
-        DevicePoint aPos;
+        basegfx::B2DPoint aPos;
         double nDist = 0;
         double nWidth = 0;
         const GlyphItem* pGlyph;
@@ -872,7 +872,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
     }
     else
     {
-        DevicePoint aStartPt = rSalLayout.GetDrawPosition();
+        basegfx::B2DPoint aStartPt = rSalLayout.GetDrawPosition();
         ImplDrawTextLine( aStartPt.getX(), aStartPt.getY(), 0,
                           rSalLayout.GetTextWidth(),
                           eStrikeout, eUnderline, eOverline, bUnderlineAbove );

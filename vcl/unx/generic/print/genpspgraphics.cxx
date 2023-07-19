@@ -131,7 +131,7 @@ void PspSalLayout::InitFont() const
 void GenPspGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 {
     const GlyphItem* pGlyph;
-    DevicePoint aPos;
+    basegfx::B2DPoint aPos;
     int nStart = 0;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
         m_pPrinterGfx->DrawGlyph(Point(aPos.getX(), aPos.getY()), *pGlyph);

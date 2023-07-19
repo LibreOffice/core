@@ -11,7 +11,7 @@
 #pragma once
 
 #include <vcl/dllapi.h>
-#include <vcl/devicecoordinate.hxx>
+#include <basegfx/point/b2dpoint.hxx>
 #include <tools/gen.hxx>
 
 namespace vcl::pdf
@@ -46,7 +46,7 @@ public:
     double get(size_t i) const { return f[i]; }
 
     Point transform(const Point& rPoint) const;
-    DevicePoint transform(const DevicePoint& rPoint) const;
+    basegfx::B2DPoint transform(const basegfx::B2DPoint& rPoint) const;
 };
 }
 

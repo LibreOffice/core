@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-09-12 11:52:19 using:
+ Generated on 2023-07-19 09:27:30 using:
  ./bin/update_pch starmath sm --cutoff=5 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -23,13 +23,16 @@
 #include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <algorithm>
+#include <assert.h>
 #include <cassert>
+#include <cmath>
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
 #include <functional>
 #include <limits.h>
 #include <limits>
+#include <math.h>
 #include <memory>
 #include <new>
 #include <optional>
@@ -44,12 +47,14 @@
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
-#include <osl/mutex.hxx>
+#include <osl/interlck.h>
 #include <rtl/alloc.h>
 #include <rtl/character.hxx>
 #include <rtl/locale.h>
+#include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
@@ -59,15 +64,15 @@
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
+#include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/cairo.hxx>
-#include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
-#include <comphelper/errcode.hxx>
 #include <vcl/font.hxx>
 #include <vcl/gradient.hxx>
+#include <vcl/kernarray.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/outdev.hxx>
@@ -95,54 +100,59 @@
 #include <vcl/wall.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
+#include <basegfx/basegfxdllapi.h>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/vector/b2enums.hxx>
+#include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <com/sun/star/awt/DeviceInfo.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
-#include <com/sun/star/i18n/WordType.hpp>
-#include <com/sun/star/text/textfield/Type.hpp>
+#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/genfunc.hxx>
 #include <comphelper/comphelperdllapi.h>
-#include <comphelper/fileformat.h>
+#include <comphelper/diagnose_ex.hxx>
+#include <comphelper/errcode.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppu/unotype.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <editeng/editdata.hxx>
 #include <editeng/editengdllapi.h>
-#include <editeng/editobj.hxx>
-#include <editeng/editstat.hxx>
-#include <editeng/eedata.hxx>
-#include <editeng/macros.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/safeint.hxx>
+#include <o3tl/span.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/docfile.hxx>
 #include <sfx2/shell.hxx>
 #include <sot/storage.hxx>
-#include <svl/SfxBroadcaster.hxx>
 #include <svl/hint.hxx>
 #include <svl/itemset.hxx>
 #include <svl/languageoptions.hxx>
+#include <svl/lstner.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/stritem.hxx>
-#include <svl/style.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/color.hxx>
 #include <tools/degree.hxx>
-#include <comphelper/diagnose_ex.hxx>
+#include <tools/fldunit.hxx>
 #include <tools/gen.hxx>
 #include <tools/lineend.hxx>
 #include <tools/link.hxx>
@@ -152,14 +162,15 @@
 #include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <tools/toolsdllapi.h>
+#include <typelib/typedescription.h>
+#include <uno/data.h>
 #include <unotools/fontdefs.hxx>
-#include <unotools/options.hxx>
+#include <unotools/resmgr.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <xmloff/dllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
-#include <ElementsDockingWindow.hxx>
 #include <cfgitem.hxx>
 #include <dialog.hxx>
 #include <document.hxx>

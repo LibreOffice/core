@@ -29,7 +29,6 @@
 #include <tools/poly.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/cairo.hxx>
-#include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/font.hxx>
 #include <vcl/kernarray.hxx>
@@ -55,6 +54,7 @@
 #include <vcl/vclreferencebase.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
@@ -1680,7 +1680,7 @@ public:
      @returns Physical point on the device.
      */
     SAL_DLLPRIVATE Point        ImplLogicToDevicePixel( const Point& rLogicPt ) const;
-    SAL_DLLPRIVATE DevicePoint  ImplLogicToDeviceSubPixel(const Point& rLogicPt) const;
+    SAL_DLLPRIVATE basegfx::B2DPoint ImplLogicToDeviceSubPixel(const Point& rLogicPt) const;
 
     /** Convert a logical width to a width in units of device pixels.
 
@@ -1708,7 +1708,7 @@ public:
     SAL_DLLPRIVATE tools::Long         ImplLogicHeightToDevicePixel( tools::Long nHeight ) const;
     SAL_DLLPRIVATE double              ImplLogicHeightToDeviceSubPixel(tools::Long nHeight) const;
 
-    SAL_DLLPRIVATE Point               SubPixelToLogic(const DevicePoint& rDevicePt) const;
+    SAL_DLLPRIVATE Point               SubPixelToLogic(const basegfx::B2DPoint& rDevicePt) const;
 
     /** Convert device pixels to a width in logical units.
 

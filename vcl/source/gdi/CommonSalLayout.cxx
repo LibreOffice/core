@@ -273,7 +273,7 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
     double nYScale = 0;
     GetFont().GetScale(&nXScale, &nYScale);
 
-    DevicePoint aCurrPos(0, 0);
+    basegfx::B2DPoint aCurrPos(0, 0);
     while (true)
     {
         int nBidiMinRunPos, nBidiEndRunPos;
@@ -544,7 +544,7 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                     nYOffset = std::lround(nYOffset);
                 }
 
-                DevicePoint aNewPos(aCurrPos.getX() + nXOffset, aCurrPos.getY() + nYOffset);
+                basegfx::B2DPoint aNewPos(aCurrPos.getX() + nXOffset, aCurrPos.getY() + nYOffset);
                 const GlyphItem aGI(nCharPos, nCharCount, nGlyphIndex, aNewPos, nGlyphFlags,
                                     nAdvance, nXOffset, nYOffset);
                 m_GlyphItems.push_back(aGI);
@@ -791,7 +791,7 @@ void GenericSalLayout::ApplyDXArray(const double* pDXArray, const sal_Bool* pKas
                 nOverlap = nExcess / (nCopies - 1);
         }
 
-        DevicePoint aPos = pGlyphIter->linearPos();
+        basegfx::B2DPoint aPos = pGlyphIter->linearPos();
         int nCharPos = pGlyphIter->charPos();
         GlyphItemFlags const nFlags = GlyphItemFlags::IS_IN_CLUSTER | GlyphItemFlags::IS_RTL_GLYPH;
         // Move to the left side of the adjusted width and start inserting

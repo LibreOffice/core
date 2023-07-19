@@ -616,7 +616,7 @@ struct PDFStructureElement
 // helper structure for drawLayout and friends
 struct PDFGlyph
 {
-    DevicePoint const m_aPos;
+    basegfx::B2DPoint const m_aPos;
     const GlyphItem* m_pGlyph;
     const LogicalFontInstance* m_pFont;
     sal_Int32 const   m_nNativeWidth;
@@ -624,7 +624,7 @@ struct PDFGlyph
     sal_uInt8 const   m_nMappedGlyphId;
     int const         m_nCharPos;
 
-    PDFGlyph( const DevicePoint& rPos,
+    PDFGlyph( const basegfx::B2DPoint& rPos,
               const GlyphItem* pGlyph,
               const LogicalFontInstance* pFont,
               sal_Int32 nNativeWidth,

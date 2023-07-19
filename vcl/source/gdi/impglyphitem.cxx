@@ -146,7 +146,8 @@ SalLayoutGlyphsImpl* SalLayoutGlyphsImpl::cloneCharRange(sal_Int32 index, sal_In
         return nullptr;
     // LinearPos needs adjusting to start at xOffset/yOffset for the first item,
     // that's how it's computed in GenericSalLayout::LayoutText().
-    DevicePoint zeroPoint = pos->linearPos() - DevicePoint(pos->xOffset(), pos->yOffset());
+    basegfx::B2DPoint zeroPoint
+        = pos->linearPos() - basegfx::B2DPoint(pos->xOffset(), pos->yOffset());
     // Add and adjust all glyphs until the given length.
     // The check is written as 'charPos + charCount <= endPos' rather than 'charPos < endPos'
     // (or similarly for RTL) to make sure we include complete glyphs. If a glyph is composed

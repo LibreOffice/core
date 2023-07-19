@@ -51,7 +51,7 @@ template <> struct typed_flags<GlyphItemFlags> : is_typed_flags<GlyphItemFlags, 
 
 class VCL_DLLPUBLIC GlyphItem
 {
-    DevicePoint m_aLinearPos; // absolute position of non rotated string
+    basegfx::B2DPoint m_aLinearPos; // absolute position of non rotated string
     double m_nOrigWidth; // original glyph width
     sal_Int32 m_nCharPos; // index in string
     double m_nXOffset;
@@ -62,8 +62,9 @@ class VCL_DLLPUBLIC GlyphItem
     sal_Int8 m_nCharCount; // number of characters making up this glyph
 
 public:
-    GlyphItem(int nCharPos, int nCharCount, sal_GlyphId aGlyphId, const DevicePoint& rLinearPos,
-              GlyphItemFlags nFlags, double nOrigWidth, double nXOffset, double nYOffset)
+    GlyphItem(int nCharPos, int nCharCount, sal_GlyphId aGlyphId,
+              const basegfx::B2DPoint& rLinearPos, GlyphItemFlags nFlags, double nOrigWidth,
+              double nXOffset, double nYOffset)
         : m_aLinearPos(rLinearPos)
         , m_nOrigWidth(nOrigWidth)
         , m_nCharPos(nCharPos)
@@ -99,11 +100,11 @@ public:
     double xOffset() const { return m_nXOffset; }
     double yOffset() const { return m_nYOffset; }
     double newWidth() const { return m_nNewWidth; }
-    const DevicePoint& linearPos() const { return m_aLinearPos; }
+    const basegfx::B2DPoint& linearPos() const { return m_aLinearPos; }
 
     void setNewWidth(double width) { m_nNewWidth = width; }
     void addNewWidth(double width) { m_nNewWidth += width; }
-    void setLinearPos(const DevicePoint& point) { m_aLinearPos = point; }
+    void setLinearPos(const basegfx::B2DPoint& point) { m_aLinearPos = point; }
     void setLinearPosX(double x) { m_aLinearPos.setX(x); }
     void adjustLinearPosX(double diff) { m_aLinearPos.adjustX(diff); }
     bool isLayoutEquivalent(const GlyphItem& other) const

@@ -246,7 +246,7 @@ bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, Sa
         mpRT->BeginDraw();
 
         int nStart = 0;
-        DevicePoint aPos;
+        basegfx::B2DPoint aPos;
         const GlyphItem* pGlyph;
         while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
         {

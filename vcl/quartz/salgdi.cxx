@@ -330,7 +330,7 @@ void AquaGraphicsBackend::drawTextLayout(const GenericSalLayout& rLayout)
     CTFontRef pCTFont = rFont.GetCTFont();
     CGAffineTransform aRotMatrix = CGAffineTransformMakeRotation(-rFont.mfFontRotation);
 
-    DevicePoint aPos;
+    basegfx::B2DPoint aPos;
     const GlyphItem* pGlyph;
     std::vector<CGGlyph> aGlyphIds;
     std::vector<CGPoint> aGlyphPos;

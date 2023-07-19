@@ -265,7 +265,7 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
     double nXScale, nYScale;
     dl_cairo_surface_get_device_scale(cairo_get_target(cr), &nXScale, &nYScale);
 
-    DevicePoint aPos;
+    basegfx::B2DPoint aPos;
     const GlyphItem* pGlyph;
     const GlyphItem* pPrevGlyph = nullptr;
     int nStart = 0;

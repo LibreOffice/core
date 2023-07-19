@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2023-01-10 23:28:48 using:
+ Generated on 2023-07-19 09:28:54 using:
  ./bin/update_pch oox oox --cutoff=6 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -90,7 +90,6 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/cairo.hxx>
-#include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
@@ -131,10 +130,13 @@
 #include <basegfx/tuple/Tuple2D.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/utils/bgradient.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
+#include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -192,6 +194,7 @@
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -202,6 +205,10 @@
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <docmodel/color/ComplexColor.hxx>
+#include <docmodel/dllapi.h>
+#include <docmodel/theme/ColorSet.hxx>
+#include <docmodel/theme/ThemeColor.hxx>
 #include <docmodel/theme/ThemeColorType.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawingml/colorchoicecontext.hxx>
@@ -219,6 +226,9 @@
 #include <drawingml/textparagraph.hxx>
 #include <drawingml/textspacing.hxx>
 #include <filter/msfilter/msfilterdllapi.h>
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/safeint.hxx>
@@ -236,7 +246,6 @@
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <svl/whichranges.hxx>
-#include <svx/ColorSets.hxx>
 #include <svx/itextprovider.hxx>
 #include <svx/msdffdef.hxx>
 #include <svx/sdtaditm.hxx>

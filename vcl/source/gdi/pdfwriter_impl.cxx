@@ -6477,9 +6477,9 @@ void PDFWriterImpl::drawShadow( SalLayout& rLayout, const OUString& rText, bool 
     tools::Long nOff = 1 + ((GetFontInstance()->mnLineHeight-24)/24);
     if( rFont.IsOutline() )
         nOff++;
-    rLayout.DrawBase() += DevicePoint(nOff, nOff);
+    rLayout.DrawBase() += basegfx::B2DPoint(nOff, nOff);
     drawLayout( rLayout, rText, bTextLines );
-    rLayout.DrawBase() -= DevicePoint(nOff, nOff);
+    rLayout.DrawBase() -= basegfx::B2DPoint(nOff, nOff);
 
     setFont( aSaveFont );
     setTextLineColor( aSaveTextLineColor );
@@ -6523,7 +6523,7 @@ void PDFWriterImpl::drawVerticalGlyphs(
             fSkewA = -fSkewB;
             fSkewB = 0.0;
         }
-        aDeltaPos += SubPixelToLogic(DevicePoint(nXOffset / fXScale, 0)) - SubPixelToLogic(DevicePoint());
+        aDeltaPos += SubPixelToLogic(basegfx::B2DPoint(nXOffset / fXScale, 0)) - SubPixelToLogic(basegfx::B2DPoint());
         if( i < rGlyphs.size()-1 )
         // #i120627# the text on the Y axis is reversed when export ppt file to PDF format
         {
@@ -6640,8 +6640,8 @@ void PDFWriterImpl::drawHorizontalGlyphs(
         {
             appendHex( rGlyphs[nPos].m_nMappedGlyphId, aUnkernedLine );
             // check if default glyph positioning is sufficient
-            const DevicePoint aThisPos = aMat.transform( rGlyphs[nPos].m_aPos );
-            const DevicePoint aPrevPos = aMat.transform( rGlyphs[nPos-1].m_aPos );
+            const basegfx::B2DPoint aThisPos = aMat.transform( rGlyphs[nPos].m_aPos );
+            const basegfx::B2DPoint aPrevPos = aMat.transform( rGlyphs[nPos-1].m_aPos );
             double fAdvance = aThisPos.getX() - aPrevPos.getX();
             fAdvance *= 1000.0 / nPixelFontHeight;
             const double fAdjustment = rGlyphs[nPos-1].m_nNativeWidth - fAdvance + 0.5;
@@ -6795,7 +6795,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     std::vector< PDFGlyph > aGlyphs;
     aGlyphs.reserve( nMaxGlyphs );
     // first get all the glyphs and register them; coordinates still in Pixel
-    DevicePoint aPos;
+    basegfx::B2DPoint aPos;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nIndex, &pGlyphFont))
     {
         const auto* pFace = pGlyphFont->GetFontFace();
@@ -6881,7 +6881,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         // The rectangle is the bounding box of the text, but also includes
         // ascent / descent to match the on-screen rendering.
         // This is the top left of the text without ascent / descent.
-        DevicePoint aDrawPosition(rLayout.GetDrawPosition());
+        basegfx::B2DPoint aDrawPosition(rLayout.GetDrawPosition());
         tools::Rectangle aRectangle(SubPixelToLogic(aDrawPosition),
                                     Size(ImplDevicePixelToLogicWidth(rLayout.GetTextWidth()), 0));
         aRectangle.AdjustTop(-aRefDevFontMetric.GetAscent());
@@ -6982,7 +6982,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         bool bUnderlineAbove = m_aCurrentPDFState.m_aFont.IsUnderlineAbove();
         if( m_aCurrentPDFState.m_aFont.IsWordLineMode() )
         {
-            DevicePoint aStartPt;
+            basegfx::B2DPoint aStartPt;
             double nWidth = 0;
             nIndex = 0;
             while (rLayout.GetNextGlyph(&pGlyph, aPos, nIndex))
@@ -7012,7 +7012,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         }
         else
         {
-            DevicePoint aStartPt = rLayout.GetDrawPosition();
+            basegfx::B2DPoint aStartPt = rLayout.GetDrawPosition();
             int nWidth = rLayout.GetTextWidth();
             drawTextLine( SubPixelToLogic(aStartPt),
                           ImplDevicePixelToLogicWidth( nWidth ),
@@ -7085,23 +7085,23 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
         if (!pGlyph->IsSpacing())
         {
-            DevicePoint aAdjOffset;
+            basegfx::B2DPoint aAdjOffset;
             if (pGlyph->IsVertical())
             {
-                aAdjOffset = DevicePoint(aOffsetVert.X(), aOffsetVert.Y());
+                aAdjOffset = basegfx::B2DPoint(aOffsetVert.X(), aOffsetVert.Y());
                 aAdjOffset.adjustX((-pGlyph->origWidth() + aEmphasisMark.GetWidth()) / 2);
             }
             else
             {
-                aAdjOffset = DevicePoint(aOffset.X(), aOffset.Y());
+                aAdjOffset = basegfx::B2DPoint(aOffset.X(), aOffset.Y());
                 aAdjOffset.adjustX(aRectangle.Left() + (aRectangle.GetWidth() - aEmphasisMark.GetWidth()) / 2 );
             }
 
             aAdjOffset = aRotScale.transform( aAdjOffset );
 
-            aAdjOffset -= DevicePoint(nEmphWidth2, nEmphHeight2);
+            aAdjOffset -= basegfx::B2DPoint(nEmphWidth2, nEmphHeight2);
 
-            DevicePoint aMarkDevPos(aPos);
+            basegfx::B2DPoint aMarkDevPos(aPos);
             aMarkDevPos += aAdjOffset;
             Point aMarkPos = SubPixelToLogic(aMarkDevPos);
             drawEmphasisMark( aMarkPos.X(), aMarkPos.Y(),

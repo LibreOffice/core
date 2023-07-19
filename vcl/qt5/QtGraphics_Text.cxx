@@ -190,7 +190,7 @@ void QtGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
     if (nOrientation)
         pQtLayout->SetOrientation(0_deg10);
 
-    DevicePoint aPos;
+    basegfx::B2DPoint aPos;
     const GlyphItem* pGlyph;
     int nStart = 0;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))

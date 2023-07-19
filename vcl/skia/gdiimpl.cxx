@@ -2129,7 +2129,7 @@ void SkiaSalGraphicsImpl::drawGenericLayout(const GenericSalLayout& layout, Colo
     glyphIds.reserve(256);
     glyphForms.reserve(256);
     verticals.reserve(256);
-    DevicePoint aPos;
+    basegfx::B2DPoint aPos;
     const GlyphItem* pGlyph;
     int nStart = 0;
     while (layout.GetNextGlyph(&pGlyph, aPos, nStart))

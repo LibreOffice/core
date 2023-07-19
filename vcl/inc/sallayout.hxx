@@ -22,13 +22,13 @@
 
 #include <sal/config.h>
 
+#include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <tools/gen.hxx>
 #include <tools/degree.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 #include <vcl/dllapi.h>
-#include <vcl/devicecoordinate.hxx>
 #include <vcl/vclenum.hxx> // for typedef sal_UCS4
 #include <vcl/vcllayout.hxx>
 
@@ -65,7 +65,7 @@ public:
     double          GetTextWidth() const final override;
     double          FillDXArray(std::vector<double>* pDXArray, const OUString& rStr) const override;
     void            GetCaretPositions(int nArraySize, sal_Int32* pCaretXArray) const override;
-    bool            GetNextGlyph(const GlyphItem** pGlyph, DevicePoint& rPos, int& nStart,
+    bool            GetNextGlyph(const GlyphItem** pGlyph, basegfx::B2DPoint& rPos, int& nStart,
                                  const LogicalFontInstance** ppGlyphFont = nullptr) const override;
     bool            GetOutline(basegfx::B2DPolyPolygonVector&) const override;
     bool            IsKashidaPosValid(int nCharPos, int nNextCharPos) const override;
@@ -126,7 +126,7 @@ public:
     LogicalFontInstance& GetFont() const
         { return *m_GlyphItems.GetFont(); }
 
-    bool            GetNextGlyph(const GlyphItem** pGlyph, DevicePoint& rPos, int& nStart,
+    bool            GetNextGlyph(const GlyphItem** pGlyph, basegfx::B2DPoint& rPos, int& nStart,
                                  const LogicalFontInstance** ppGlyphFont = nullptr) const override;
 
     const SalLayoutGlyphsImpl& GlyphsImpl() const { return m_GlyphItems; }

@@ -472,7 +472,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf153440)
         auto pLayout = pOutDev->ImplLayout(aText, 0, -1, Point(0, 0), 0, {}, {});
 
         int nStart = 0;
-        DevicePoint aPos;
+        basegfx::B2DPoint aPos;
         const GlyphItem* pGlyphItem;
         while (pLayout->GetNextGlyph(&pGlyphItem, aPos, nStart))
         {
@@ -507,7 +507,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf107718)
         auto pLayout = pOutDev->ImplLayout(aText, 0, -1, Point(0, 0), 0, {}, {});
 
         int nStart = 0;
-        DevicePoint aPos;
+        basegfx::B2DPoint aPos;
         const GlyphItem* pGlyphItem;
         while (pLayout->GetNextGlyph(&pGlyphItem, aPos, nStart))
         {

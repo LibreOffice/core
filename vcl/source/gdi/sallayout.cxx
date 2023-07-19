@@ -141,10 +141,10 @@ void SalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
     maLanguageTag = rArgs.maLanguageTag;
 }
 
-DevicePoint SalLayout::GetDrawPosition(const DevicePoint& rRelative) const
+basegfx::B2DPoint SalLayout::GetDrawPosition(const basegfx::B2DPoint& rRelative) const
 {
-    DevicePoint aPos(maDrawBase);
-    DevicePoint aOfs(rRelative.getX() + maDrawOffset.X(),
+    basegfx::B2DPoint aPos(maDrawBase);
+    basegfx::B2DPoint aOfs(rRelative.getX() + maDrawOffset.X(),
                      rRelative.getY() + maDrawOffset.Y());
 
     if( mnOrientation == 0_deg10 )
@@ -168,13 +168,13 @@ DevicePoint SalLayout::GetDrawPosition(const DevicePoint& rRelative) const
         {
             double nX = +fCos * fX + fSin * fY;
             double nY = +fCos * fY - fSin * fX;
-            aPos += DevicePoint(nX, nY);
+            aPos += basegfx::B2DPoint(nX, nY);
         }
         else
         {
             tools::Long nX = static_cast<tools::Long>( +fCos * fX + fSin * fY );
             tools::Long nY = static_cast<tools::Long>( +fCos * fY - fSin * fX );
-            aPos += DevicePoint(nX, nY);
+            aPos += basegfx::B2DPoint(nX, nY);
         }
     }
 
@@ -188,7 +188,7 @@ bool SalLayout::GetOutline(basegfx::B2DPolyPolygonVector& rVector) const
 
     basegfx::B2DPolyPolygon aGlyphOutline;
 
-    DevicePoint aPos;
+    basegfx::B2DPoint aPos;
     const GlyphItem* pGlyph;
     int nStart = 0;
     const LogicalFontInstance* pGlyphFont;
@@ -221,7 +221,7 @@ bool SalLayout::GetBoundRect(tools::Rectangle& rRect) const
 
     tools::Rectangle aRectangle;
 
-    DevicePoint aPos;
+    basegfx::B2DPoint aPos;
     const GlyphItem* pGlyph;
     int nStart = 0;
     const LogicalFontInstance* pGlyphFont;
@@ -494,7 +494,7 @@ sal_Int32 GenericSalLayout::GetTextBreak(double nMaxWidth, double nCharExtra, in
 }
 
 bool GenericSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
-                                    DevicePoint& rPos, int& nStart,
+                                    basegfx::B2DPoint& rPos, int& nStart,
                                     const LogicalFontInstance** ppGlyphFont) const
 {
     std::vector<GlyphItem>::const_iterator pGlyphIter = m_GlyphItems.begin();
@@ -523,7 +523,7 @@ bool GenericSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
         *ppGlyphFont = m_GlyphItems.GetFont().get();
 
     // calculate absolute position in pixel units
-    DevicePoint aRelativePos = pGlyphIter->linearPos();
+    basegfx::B2DPoint aRelativePos = pGlyphIter->linearPos();
 
     rPos = GetDrawPosition( aRelativePos );
 
@@ -714,7 +714,7 @@ void MultiSalLayout::ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,
     const GlyphItem* pGlyphs[MAX_FALLBACK];
     bool bValid[MAX_FALLBACK] = { false };
 
-    DevicePoint aPos;
+    basegfx::B2DPoint aPos;
     int nLevel = 0, n;
     for( n = 0; n < mnLevel; ++n )
     {
@@ -1011,7 +1011,7 @@ double MultiSalLayout::GetTextWidth() const
     // missing chars, so we use GetNextGlyph() to get the glyphs across all
     // layouts.
     int nStart = 0;
-    DevicePoint aPos;
+    basegfx::B2DPoint aPos;
     const GlyphItem* pGlyphItem;
 
     double nWidth = 0;
@@ -1073,7 +1073,7 @@ void MultiSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray )
 }
 
 bool MultiSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
-                                  DevicePoint& rPos, int& nStart,
+                                  basegfx::B2DPoint& rPos, int& nStart,
                                   const LogicalFontInstance** ppGlyphFont) const
 {
     // NOTE: nStart is tagged with current font index

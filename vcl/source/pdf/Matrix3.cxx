@@ -30,10 +30,10 @@ Point Matrix3::transform(const Point& rOrig) const
     return Point(x * f[0] + y * f[2] + f[4], x * f[1] + y * f[3] + f[5]);
 }
 
-DevicePoint Matrix3::transform(const DevicePoint& rOrig) const
+basegfx::B2DPoint Matrix3::transform(const basegfx::B2DPoint& rOrig) const
 {
     double x = rOrig.getX(), y = rOrig.getY();
-    return DevicePoint(x * f[0] + y * f[2] + f[4], x * f[1] + y * f[3] + f[5]);
+    return basegfx::B2DPoint(x * f[0] + y * f[2] + f[4], x * f[1] + y * f[3] + f[5]);
 }
 
 void Matrix3::skew(double alpha, double beta)

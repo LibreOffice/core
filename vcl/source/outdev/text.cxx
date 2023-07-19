@@ -170,7 +170,7 @@ void OutputDevice::ImplDrawTextRect( tools::Long nBaseX, tools::Long nBaseY,
 void OutputDevice::ImplDrawTextBackground( const SalLayout& rSalLayout )
 {
     const double nWidth = rSalLayout.GetTextWidth();
-    const DevicePoint aBase = rSalLayout.DrawBase();
+    const basegfx::B2DPoint aBase = rSalLayout.DrawBase();
     const tools::Long nX = aBase.getX();
     const tools::Long nY = aBase.getY();
 
@@ -189,7 +189,7 @@ void OutputDevice::ImplDrawTextBackground( const SalLayout& rSalLayout )
 
 tools::Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout ) const
 {
-    DevicePoint aPoint = rSalLayout.GetDrawPosition();
+    basegfx::B2DPoint aPoint = rSalLayout.GetDrawPosition();
     tools::Long nX = aPoint.getX();
     tools::Long nY = aPoint.getY();
 
@@ -231,7 +231,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     tools::Long nY = rSalLayout.DrawBase().getY();
 
     tools::Rectangle aBoundRect;
-    rSalLayout.DrawBase() = DevicePoint( 0, 0 );
+    rSalLayout.DrawBase() = basegfx::B2DPoint( 0, 0 );
     rSalLayout.DrawOffset() = Point( 0, 0 );
     if (!rSalLayout.GetBoundRect(aBoundRect))
     {
@@ -348,7 +348,7 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
     Color       aOldOverlineColor   = GetOverlineColor();
     FontRelief  eRelief             = maFont.GetRelief();
 
-    DevicePoint aOrigPos = rSalLayout.DrawBase();
+    basegfx::B2DPoint aOrigPos = rSalLayout.DrawBase();
     if ( eRelief != FontRelief::NONE )
     {
         Color   aReliefColor( COL_LIGHTGRAY );
@@ -416,9 +416,9 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
             else
                 SetTextColor( COL_BLACK );
             ImplInitTextColor();
-            rSalLayout.DrawBase() += DevicePoint( nOff, nOff );
+            rSalLayout.DrawBase() += basegfx::B2DPoint( nOff, nOff );
             ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.DrawBase() -= DevicePoint( nOff, nOff );
+            rSalLayout.DrawBase() -= basegfx::B2DPoint( nOff, nOff );
             SetTextColor( aOldColor );
             SetTextLineColor( aOldTextLineColor );
             SetOverlineColor( aOldOverlineColor );
@@ -430,21 +430,21 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
 
         if ( maFont.IsOutline() )
         {
-            rSalLayout.DrawBase() = aOrigPos + DevicePoint(-1,-1);
+            rSalLayout.DrawBase() = aOrigPos + basegfx::B2DPoint(-1,-1);
             ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.DrawBase() = aOrigPos + DevicePoint(+1,+1);
+            rSalLayout.DrawBase() = aOrigPos + basegfx::B2DPoint(+1,+1);
             ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.DrawBase() = aOrigPos + DevicePoint(-1,+0);
+            rSalLayout.DrawBase() = aOrigPos + basegfx::B2DPoint(-1,+0);
             ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.DrawBase() = aOrigPos + DevicePoint(-1,+1);
+            rSalLayout.DrawBase() = aOrigPos + basegfx::B2DPoint(-1,+1);
             ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.DrawBase() = aOrigPos + DevicePoint(+0,+1);
+            rSalLayout.DrawBase() = aOrigPos + basegfx::B2DPoint(+0,+1);
             ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.DrawBase() = aOrigPos + DevicePoint(+0,-1);
+            rSalLayout.DrawBase() = aOrigPos + basegfx::B2DPoint(+0,-1);
             ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.DrawBase() = aOrigPos + DevicePoint(+1,-1);
+            rSalLayout.DrawBase() = aOrigPos + basegfx::B2DPoint(+1,-1);
             ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.DrawBase() = aOrigPos + DevicePoint(+1,+0);
+            rSalLayout.DrawBase() = aOrigPos + basegfx::B2DPoint(+1,+0);
             ImplDrawTextDirect( rSalLayout, mbTextLines );
             rSalLayout.DrawBase() = aOrigPos;
 
@@ -471,7 +471,7 @@ void OutputDevice::ImplDrawText( SalLayout& rSalLayout )
     if( mbInitTextColor )
         ImplInitTextColor();
 
-    rSalLayout.DrawBase() += DevicePoint(mnTextOffX, mnTextOffY);
+    rSalLayout.DrawBase() += basegfx::B2DPoint(mnTextOffX, mnTextOffY);
 
     if( IsTextFillColor() )
         ImplDrawTextBackground( rSalLayout );
@@ -1401,7 +1401,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
     else
     {
         Point aDevicePos = ImplLogicToDevicePixel(rLogicalPos);
-        pSalLayout->DrawBase() = DevicePoint(aDevicePos.X(), aDevicePos.Y());
+        pSalLayout->DrawBase() = basegfx::B2DPoint(aDevicePos.X(), aDevicePos.Y());
     }
 
     // adjust to right alignment if necessary
@@ -2328,7 +2328,7 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
         if( bRet )
         {
             Point aRotatedOfs( mnTextOffX, mnTextOffY );
-            DevicePoint aPos = pSalLayout->GetDrawPosition(DevicePoint(nXOffset, 0));
+            basegfx::B2DPoint aPos = pSalLayout->GetDrawPosition(basegfx::B2DPoint(nXOffset, 0));
             aRotatedOfs -= Point(aPos.getX(), aPos.getY());
             aPixelRect += aRotatedOfs;
             rRect = PixelToLogic( aPixelRect );
@@ -2397,8 +2397,8 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
 
             if (nXOffset || mnTextOffX || mnTextOffY)
             {
-                DevicePoint aRotatedOfs(mnTextOffX, mnTextOffY);
-                aRotatedOfs -= pSalLayout->GetDrawPosition(DevicePoint(nXOffset, 0));
+                basegfx::B2DPoint aRotatedOfs(mnTextOffX, mnTextOffY);
+                aRotatedOfs -= pSalLayout->GetDrawPosition(basegfx::B2DPoint(nXOffset, 0));
                 aMatrix.translate( aRotatedOfs.getX(), aRotatedOfs.getY() );
             }
 

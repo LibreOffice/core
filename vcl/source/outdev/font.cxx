@@ -950,7 +950,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     tools::Long nEmphasisHeight2 = nEmphasisHeight / 2;
     aOffset += Point( nEmphasisWidth2, nEmphasisHeight2 );
 
-    DevicePoint aOutPoint;
+    basegfx::B2DPoint aOutPoint;
     tools::Rectangle aRectangle;
     const GlyphItem* pGlyph;
     const LogicalFontInstance* pGlyphFont;

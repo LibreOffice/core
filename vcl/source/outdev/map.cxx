@@ -1132,7 +1132,7 @@ Point OutputDevice::PixelToLogic( const Point& rDevicePt ) const
                                     maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY ) - maMapRes.mnMapOfsY - mnOutOffLogicY );
 }
 
-Point OutputDevice::SubPixelToLogic(const DevicePoint& rDevicePt) const
+Point OutputDevice::SubPixelToLogic(const basegfx::B2DPoint& rDevicePt) const
 {
     if (!mbMap)
     {
@@ -1865,12 +1865,12 @@ double OutputDevice::ImplLogicHeightToDeviceSubPixel(tools::Long nHeight) const
                                maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY);
 }
 
-DevicePoint OutputDevice::ImplLogicToDeviceSubPixel(const Point& rPoint) const
+basegfx::B2DPoint OutputDevice::ImplLogicToDeviceSubPixel(const Point& rPoint) const
 {
     if (!mbMap)
-        return DevicePoint(rPoint.X() + mnOutOffX, rPoint.Y() + mnOutOffY);
+        return basegfx::B2DPoint(rPoint.X() + mnOutOffX, rPoint.Y() + mnOutOffY);
 
-    return DevicePoint(ImplLogicToSubPixel(rPoint.X() + maMapRes.mnMapOfsX, mnDPIX,
+    return basegfx::B2DPoint(ImplLogicToSubPixel(rPoint.X() + maMapRes.mnMapOfsX, mnDPIX,
                                            maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX)
                                            + mnOutOffX + mnOutOffOrigX,
                        ImplLogicToSubPixel(rPoint.Y() + maMapRes.mnMapOfsY, mnDPIY,

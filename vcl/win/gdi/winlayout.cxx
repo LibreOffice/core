@@ -83,7 +83,7 @@ bool ExTextOutRenderer::operator()(GenericSalLayout const& rLayout, SalGraphics&
                                    HDC hDC, bool /*bRenderingModeNatural*/)
 {
     int nStart = 0;
-    DevicePoint aPos;
+    basegfx::B2DPoint aPos;
     const GlyphItem* pGlyph;
     const WinFontInstance* pWinFont = static_cast<const WinFontInstance*>(&rLayout.GetFont());
     UINT nTextAlign = GetTextAlign(hDC);
