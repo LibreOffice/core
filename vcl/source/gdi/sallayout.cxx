@@ -439,33 +439,57 @@ void GenericSalLayout::ApplyAsianKerning(std::u16string_view rStr)
     }
 }
 
-void GenericSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray ) const
+void GenericSalLayout::GetCaretPositions(std::vector<double>& rCaretPositions,
+                                         const OUString& rStr) const
 {
-    // initialize result array
-    for (int i = 0; i < nMaxIndex; ++i)
-        pCaretXArray[i] = -1;
+    const int nCaretPositions = (mnEndCharPos - mnMinCharPos) * 2;
+
+    rCaretPositions.clear();
+    rCaretPositions.resize(nCaretPositions, -1);
+
+    if (m_GlyphItems.empty())
+        return;
+
+    std::vector<double> aCharWidths;
+    GetCharWidths(aCharWidths, rStr);
 
     // calculate caret positions using glyph array
     for (auto const& aGlyphItem : m_GlyphItems)
     {
-        tools::Long nXPos = aGlyphItem.linearPos().getX();
-        tools::Long nXRight = nXPos + aGlyphItem.origWidth();
-        int n = aGlyphItem.charPos();
-        int nCurrIdx = 2 * (n - mnMinCharPos);
-        // tdf#86399 if this is not the start of a cluster, don't overwrite the caret bounds of the cluster start
-        if (aGlyphItem.IsInCluster() && pCaretXArray[nCurrIdx] != -1)
-            continue;
-        if (!aGlyphItem.IsRTLGlyph() )
+        auto nCurrX = aGlyphItem.linearPos().getX() - aGlyphItem.xOffset();
+        auto nCharStart = aGlyphItem.charPos();
+        auto nCharEnd = nCharStart + aGlyphItem.charCount() - 1;
+        if (!aGlyphItem.IsRTLGlyph())
         {
-            // normal positions for LTR case
-            pCaretXArray[ nCurrIdx ]   = nXPos;
-            pCaretXArray[ nCurrIdx+1 ] = nXRight;
+            // unchanged positions for LTR case
+            for (int i = nCharStart; i <= nCharEnd; i++)
+            {
+                int n = i - mnMinCharPos;
+                int nCurrIdx = 2 * n;
+
+                auto nLeft = nCurrX;
+                nCurrX += aCharWidths[n];
+                auto nRight = nCurrX;
+
+                rCaretPositions[nCurrIdx] = nLeft;
+                rCaretPositions[nCurrIdx + 1] = nRight;
+            }
         }
         else
         {
             // reverse positions for RTL case
-            pCaretXArray[ nCurrIdx ]   = nXRight;
-            pCaretXArray[ nCurrIdx+1 ] = nXPos;
+            for (int i = nCharEnd; i >= nCharStart; i--)
+            {
+                int n = i - mnMinCharPos;
+                int nCurrIdx = 2 * n;
+
+                auto nRight = nCurrX;
+                nCurrX += aCharWidths[n];
+                auto nLeft = nCurrX;
+
+                rCaretPositions[nCurrIdx] = nLeft;
+                rCaretPositions[nCurrIdx + 1] = nRight;
+            }
         }
     }
 }
@@ -1054,21 +1078,29 @@ double MultiSalLayout::FillDXArray( std::vector<double>* pCharWidths, const OUSt
     return GetTextWidth();
 }
 
-void MultiSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray ) const
+void MultiSalLayout::GetCaretPositions(std::vector<double>& rCaretPositions,
+                                       const OUString& rStr) const
 {
-    SalLayout& rLayout = *mpLayouts[ 0 ];
-    rLayout.GetCaretPositions( nMaxIndex, pCaretXArray );
+    // prepare merging of fallback levels
+    std::vector<double> aTempPos;
+    const int nCaretPositions = (mnEndCharPos - mnMinCharPos) * 2;
+    rCaretPositions.clear();
+    rCaretPositions.resize(nCaretPositions, -1);
 
-    if( mnLevel <= 1 )
-        return;
-
-    std::unique_ptr<sal_Int32[]> const pTempPos(new sal_Int32[nMaxIndex]);
-    for( int n = 1; n < mnLevel; ++n )
+    for (int n = mnLevel; --n >= 0;)
     {
-        mpLayouts[ n ]->GetCaretPositions( nMaxIndex, pTempPos.get() );
-        for( int i = 0; i < nMaxIndex; ++i )
-            if( pTempPos[i] >= 0 )
-                pCaretXArray[i] = pTempPos[i];
+        // query every fallback level
+        mpLayouts[n]->GetCaretPositions(aTempPos, rStr);
+
+        // calculate virtual char widths using most probable fallback layout
+        for (int i = 0; i < nCaretPositions; ++i)
+        {
+            // one char cannot be resolved from different fallbacks
+            if (rCaretPositions[i] != -1)
+                continue;
+            if (aTempPos[i] >= 0)
+                rCaretPositions[i] = aTempPos[i];
+        }
     }
 }
 

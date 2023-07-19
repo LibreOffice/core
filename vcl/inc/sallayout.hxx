@@ -64,7 +64,7 @@ public:
     sal_Int32       GetTextBreak(double nMaxWidth, double nCharExtra, int nFactor) const override;
     double          GetTextWidth() const final override;
     double          FillDXArray(std::vector<double>* pDXArray, const OUString& rStr) const override;
-    void            GetCaretPositions(int nArraySize, sal_Int32* pCaretXArray) const override;
+    void            GetCaretPositions(std::vector<double>& rCaretPositions, const OUString& rStr) const override;
     bool            GetNextGlyph(const GlyphItem** pGlyph, basegfx::B2DPoint& rPos, int& nStart,
                                  const LogicalFontInstance** ppGlyphFont = nullptr) const override;
     bool            GetOutline(basegfx::B2DPolyPolygonVector&) const override;
@@ -120,7 +120,7 @@ public:
     double          GetTextWidth() const final override;
     double          FillDXArray(std::vector<double>* pDXArray, const OUString& rStr) const final override;
     sal_Int32       GetTextBreak(double nMaxWidth, double nCharExtra, int nFactor) const final override;
-    void            GetCaretPositions(int nArraySize, sal_Int32* pCaretXArray) const final override;
+    void            GetCaretPositions(std::vector<double>& rCaretPositions, const OUString& rStr) const override;
 
     // used by display layers
     LogicalFontInstance& GetFont() const

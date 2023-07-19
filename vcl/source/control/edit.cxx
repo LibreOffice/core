@@ -473,20 +473,9 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
     const OUString aText = ImplGetText();
     const sal_Int32 nLen = aText.getLength();
 
-    sal_Int32 nDXBuffer[256];
-    std::unique_ptr<sal_Int32[]> pDXBuffer;
-    sal_Int32* pDX = nDXBuffer;
-
+    KernArray aDX;
     if (nLen)
-    {
-        if (o3tl::make_unsigned(2 * nLen) > SAL_N_ELEMENTS(nDXBuffer))
-        {
-            pDXBuffer.reset(new sal_Int32[2 * (nLen + 1)]);
-            pDX = pDXBuffer.get();
-        }
-
-        GetOutDev()->GetCaretPositions(aText, pDX, 0, nLen);
-    }
+        GetOutDev()->GetCaretPositions(aText, aDX, 0, nLen);
 
     tools::Long nTH = GetTextHeight();
     Point aPos(mnXOffset, ImplGetTextYPosition());
@@ -548,8 +537,8 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
         for(sal_Int32 i = 0; i < nLen; ++i)
         {
             tools::Rectangle aRect(aPos, Size(10, nTH));
-            aRect.SetLeft( pDX[2 * i] + mnXOffset + ImplGetExtraXOffset() );
-            aRect.SetRight( pDX[2 * i + 1] + mnXOffset + ImplGetExtraXOffset() );
+            aRect.SetLeft( aDX[2 * i] + mnXOffset + ImplGetExtraXOffset() );
+            aRect.SetRight( aDX[2 * i + 1] + mnXOffset + ImplGetExtraXOffset() );
             aRect.Normalize();
             bool bHighlight = false;
             if (i >= aTmpSel.Min() && i < aTmpSel.Max())
@@ -626,8 +615,8 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
                     while (nIndex < mpIMEInfos->nLen && mpIMEInfos->pAttribs[nIndex] == nAttr)  // #112631# check nIndex before using it
                     {
                         tools::Rectangle aRect( aPos, Size( 10, nTH ) );
-                        aRect.SetLeft( pDX[2 * (nIndex + mpIMEInfos->nPos)] + mnXOffset + ImplGetExtraXOffset() );
-                        aRect.SetRight( pDX[2 * (nIndex + mpIMEInfos->nPos) + 1] + mnXOffset + ImplGetExtraXOffset() );
+                        aRect.SetLeft( aDX[2 * (nIndex + mpIMEInfos->nPos)] + mnXOffset + ImplGetExtraXOffset() );
+                        aRect.SetRight( aDX[2 * (nIndex + mpIMEInfos->nPos) + 1] + mnXOffset + ImplGetExtraXOffset() );
                         aRect.Normalize();
                         aClip.Union(aRect);
                         nIndex++;
@@ -1072,24 +1061,15 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
 
     tools::Long nTextPos = 0;
 
-    sal_Int32   nDXBuffer[256];
-    std::unique_ptr<sal_Int32[]> pDXBuffer;
-    sal_Int32*  pDX = nDXBuffer;
-
     if( !aText.isEmpty() )
     {
-        if( o3tl::make_unsigned(2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
-        {
-            pDXBuffer.reset(new sal_Int32[2*(aText.getLength()+1)]);
-            pDX = pDXBuffer.get();
-        }
-
-        GetOutDev()->GetCaretPositions( aText, pDX, 0, aText.getLength() );
+        KernArray aDX;
+        GetOutDev()->GetCaretPositions(aText, aDX, 0, aText.getLength());
 
         if( maSelection.Max() < aText.getLength() )
-            nTextPos = pDX[ 2*maSelection.Max() ];
+            nTextPos = aDX[ 2*maSelection.Max() ];
         else
-            nTextPos = pDX[ 2*aText.getLength()-1 ];
+            nTextPos = aDX[ 2*aText.getLength()-1 ];
     }
 
     tools::Long nCursorWidth = 0;
@@ -1196,31 +1176,26 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
     sal_Int32 nIndex = EDIT_NOLIMIT;
     OUString aText = ImplGetText();
 
-    sal_Int32   nDXBuffer[256];
-    std::unique_ptr<sal_Int32[]> pDXBuffer;
-    sal_Int32*  pDX = nDXBuffer;
-    if( o3tl::make_unsigned(2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
-    {
-        pDXBuffer.reset(new sal_Int32[2*(aText.getLength()+1)]);
-        pDX = pDXBuffer.get();
-    }
+    if (aText.isEmpty())
+        return nIndex;
 
-    GetOutDev()->GetCaretPositions( aText, pDX, 0, aText.getLength() );
+    KernArray aDX;
+    GetOutDev()->GetCaretPositions(aText, aDX, 0, aText.getLength());
     tools::Long nX = rWindowPos.X() - mnXOffset - ImplGetExtraXOffset();
     for (sal_Int32 i = 0; i < aText.getLength(); aText.iterateCodePoints(&i))
     {
-        if( (pDX[2*i] >= nX && pDX[2*i+1] <= nX) ||
-            (pDX[2*i+1] >= nX && pDX[2*i] <= nX))
+        if( (aDX[2*i] >= nX && aDX[2*i+1] <= nX) ||
+            (aDX[2*i+1] >= nX && aDX[2*i] <= nX))
         {
             nIndex = i;
-            if( pDX[2*i] < pDX[2*i+1] )
+            if( aDX[2*i] < aDX[2*i+1] )
             {
-                if( nX > (pDX[2*i]+pDX[2*i+1])/2 )
+                if( nX > (aDX[2*i]+aDX[2*i+1])/2 )
                     aText.iterateCodePoints(&nIndex);
             }
             else
             {
-                if( nX < (pDX[2*i]+pDX[2*i+1])/2 )
+                if( nX < (aDX[2*i]+aDX[2*i+1])/2 )
                     aText.iterateCodePoints(&nIndex);
             }
             break;
@@ -1230,7 +1205,7 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
     {
         nIndex = 0;
         sal_Int32 nFinalIndex = 0;
-        tools::Long nDiff = std::abs( pDX[0]-nX );
+        tools::Long nDiff = std::abs( aDX[0]-nX );
         sal_Int32 i = 0;
         if (!aText.isEmpty())
         {
@@ -1238,7 +1213,7 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
         }
         while (i < aText.getLength())
         {
-            tools::Long nNewDiff = std::abs( pDX[2*i]-nX );
+            tools::Long nNewDiff = std::abs( aDX[2*i]-nX );
 
             if( nNewDiff < nDiff )
             {
@@ -1250,7 +1225,7 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
 
             aText.iterateCodePoints(&i);
         }
-        if (nIndex == nFinalIndex && std::abs( pDX[2*nIndex+1] - nX ) < nDiff)
+        if (nIndex == nFinalIndex && std::abs( aDX[2*nIndex+1] - nX ) < nDiff)
             nIndex = EDIT_NOLIMIT;
     }
 
@@ -2162,9 +2137,8 @@ void Edit::Command( const CommandEvent& rCEvt )
         if (mpIMEInfos && mpIMEInfos->nLen > 0)
         {
             OUString aText = ImplGetText();
-            std::vector<sal_Int32> aDX(2*(aText.getLength()+1));
-
-            GetOutDev()->GetCaretPositions( aText, aDX.data(), 0, aText.getLength() );
+            KernArray aDX;
+            GetOutDev()->GetCaretPositions(aText, aDX, 0, aText.getLength());
 
             tools::Long    nTH = GetTextHeight();
             Point   aPos( mnXOffset, ImplGetTextYPosition() );

@@ -1035,7 +1035,7 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, KernArray* pKernAr
     return basegfx::fround(nWidth);
 }
 
-void OutputDevice::GetCaretPositions( const OUString& rStr, sal_Int32* pCaretXArray,
+void OutputDevice::GetCaretPositions( const OUString& rStr, KernArray& rCaretXArray,
                                       sal_Int32 nIndex, sal_Int32 nLen,
                                       const SalLayoutGlyphs* pGlyphs ) const
 {
@@ -1045,45 +1045,59 @@ void OutputDevice::GetCaretPositions( const OUString& rStr, sal_Int32* pCaretXAr
     if( nIndex+nLen >= rStr.getLength() )
         nLen = rStr.getLength() - nIndex;
 
-    // layout complex text
+    sal_Int32 nCaretPos = nLen * 2;
+    std::vector<sal_Int32>& rCaretPos = rCaretXArray.get_subunit_array();
+    rCaretPos.resize(nCaretPos);
+
+    // do layout
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, Point(0, 0), 0, {}, {},
                                                        eDefaultLayout, nullptr, pGlyphs);
     if( !pSalLayout )
     {
-        std::fill(pCaretXArray, pCaretXArray + nLen * 2, -1);
+        std::fill(rCaretPos.begin(), rCaretPos.end(), -1);
         return;
     }
 
-    pSalLayout->GetCaretPositions( 2*nLen, pCaretXArray );
-    double nWidth = pSalLayout->GetTextWidth();
+    std::vector<double> aCaretPixelPos;
+    pSalLayout->GetCaretPositions(aCaretPixelPos, rStr);
 
     // fixup unknown caret positions
     int i;
-    for( i = 0; i < 2 * nLen; ++i )
-        if( pCaretXArray[ i ] >= 0 )
+    for (i = 0; i < nCaretPos; ++i)
+        if (aCaretPixelPos[i] >= 0)
             break;
-    tools::Long nXPos = (i < 2 * nLen) ? pCaretXArray[i] : -1;
-    for( i = 0; i < 2 * nLen; ++i )
+    tools::Long nXPos = (i < nCaretPos) ? aCaretPixelPos[i] : -1;
+    for (i = 0; i < nCaretPos; ++i)
     {
-        if( pCaretXArray[ i ] >= 0 )
-            nXPos = pCaretXArray[ i ];
+        if (aCaretPixelPos[i] >= 0)
+            nXPos = aCaretPixelPos[i];
         else
-            pCaretXArray[ i ] = nXPos;
+            aCaretPixelPos[i] = nXPos;
     }
 
     // handle window mirroring
     if( IsRTLEnabled() )
     {
-        for( i = 0; i < 2 * nLen; ++i )
-            pCaretXArray[i] = nWidth - pCaretXArray[i] - 1;
+        double nWidth = pSalLayout->GetTextWidth();
+        for (i = 0; i < nCaretPos; ++i)
+            aCaretPixelPos[i] = nWidth - aCaretPixelPos[i] - 1;
     }
 
+    int nSubPixelFactor = rCaretXArray.get_factor();
     // convert from font units to logical units
     if( mbMap )
     {
-        for( i = 0; i < 2*nLen; ++i )
-            pCaretXArray[i] = ImplDevicePixelToLogicWidth( pCaretXArray[i] );
+        for (i = 0; i < nCaretPos; ++i)
+            aCaretPixelPos[i] = ImplDevicePixelToLogicWidth(aCaretPixelPos[i] * nSubPixelFactor);
     }
+    else if (nSubPixelFactor)
+    {
+        for (i = 0; i < nCaretPos; ++i)
+            aCaretPixelPos[i] *= nSubPixelFactor;
+    }
+
+    for (i = 0; i < nCaretPos; ++i)
+        rCaretPos[i] = basegfx::fround(aCaretPixelPos[i]);
 }
 
 void OutputDevice::DrawStretchText( const Point& rStartPt, sal_Int32 nWidth,

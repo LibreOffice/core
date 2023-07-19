@@ -96,7 +96,7 @@ public:
     virtual sal_Int32 GetTextBreak(double nMaxWidth, double nCharExtra, int nFactor) const = 0;
     virtual double  FillDXArray( std::vector<double>* pDXArray, const OUString& rStr ) const = 0;
     virtual double  GetTextWidth() const { return FillDXArray( nullptr, {} ); }
-    virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const = 0;
+    virtual void    GetCaretPositions( std::vector<double>& rCaretPositions, const OUString& rStr ) const = 0;
     virtual bool    IsKashidaPosValid ( int /*nCharPos*/, int /*nNextCharPos*/ ) const = 0; // i60594
 
     // methods using glyph indexing
