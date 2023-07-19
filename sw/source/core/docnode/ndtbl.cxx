@@ -635,6 +635,16 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
                 return nullptr;
     }
 
+    if (GetIDocumentUndoRedo().DoesUndo())
+    {
+        GetIDocumentUndoRedo().StartUndo(SwUndoId::TEXTTOTABLE, nullptr);
+    }
+
+    // tdf#153115 first, remove all redlines; splitting them at cell boundaries
+    // would be tricky to implement, and it's unclear what the value of
+    // existing redlines is once it's been converted to a table
+    getIDocumentRedlineAccess().AcceptRedline(rRange, true);
+
     // Save first node in the selection if it is a context node
     SwContentNode * pSttContentNd = pStt->GetNode().GetContentNode();
 
@@ -645,7 +655,6 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     SwUndoTextToTable* pUndo = nullptr;
     if( GetIDocumentUndoRedo().DoesUndo() )
     {
-        GetIDocumentUndoRedo().StartUndo( SwUndoId::TEXTTOTABLE, nullptr );
         pUndo = new SwUndoTextToTable( aOriginal, rInsTableOpts, cCh,
                     o3tl::narrowing<sal_uInt16>(eAdjust), pTAFormat );
         GetIDocumentUndoRedo().AppendUndo( std::unique_ptr<SwUndo>(pUndo) );
