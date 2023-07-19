@@ -50,7 +50,7 @@ FloatingWindow::ImplData::ImplData()
     mpBox = nullptr;
 }
 
-tools::Rectangle& FloatingWindow::ImplGetItemEdgeClipRect()
+tools::Rectangle FloatingWindow::ImplGetItemEdgeClipRect() const
 {
     return mpImplData->maItemEdgeClipRect;
 }

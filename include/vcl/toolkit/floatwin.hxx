@@ -100,7 +100,7 @@ public:
                    static tools::Rectangle ImplConvertToAbsPos(vcl::Window* pReference, const tools::Rectangle& rRect);
                    static tools::Rectangle ImplConvertToRelPos(vcl::Window* pReference, const tools::Rectangle& rRect);
     SAL_DLLPRIVATE void             ImplEndPopupMode( FloatWinPopupEndFlags nFlags, const VclPtr<vcl::Window>& xFocusId );
-    SAL_DLLPRIVATE tools::Rectangle&       ImplGetItemEdgeClipRect();
+    SAL_DLLPRIVATE tools::Rectangle ImplGetItemEdgeClipRect() const;
     SAL_DLLPRIVATE bool             ImplIsInPrivatePopupMode() const { return mbInPopupMode; }
     virtual        void             doDeferredInit(WinBits nBits) override;
                    void             PixelInvalidate(const tools::Rectangle* pRectangle) override;
