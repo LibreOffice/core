@@ -708,12 +708,12 @@ awt::Rectangle VCLXAccessibleComponent::implGetBounds()
     VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
-        tools::Rectangle aRect = pWindow->GetWindowExtentsRelative( nullptr );
+        tools::Rectangle aRect = pWindow->GetWindowExtentsAbsolute();
         aBounds = AWTRectangle( aRect );
         vcl::Window* pParent = pWindow->GetAccessibleParentWindow();
         if ( pParent )
         {
-            tools::Rectangle aParentRect = pParent->GetWindowExtentsRelative( nullptr );
+            tools::Rectangle aParentRect = pParent->GetWindowExtentsAbsolute();
             awt::Point aParentScreenLoc = AWTPoint( aParentRect.TopLeft() );
             aBounds.X -= aParentScreenLoc.X;
             aBounds.Y -= aParentScreenLoc.Y;
@@ -730,7 +730,7 @@ awt::Point VCLXAccessibleComponent::getLocationOnScreen(  )
     awt::Point aPos;
     if ( GetWindow() )
     {
-        tools::Rectangle aRect = GetWindow()->GetWindowExtentsRelative( nullptr );
+        tools::Rectangle aRect = GetWindow()->GetWindowExtentsAbsolute();
         aPos.X = aRect.Left();
         aPos.Y = aRect.Top();
     }

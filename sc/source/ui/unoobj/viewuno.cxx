@@ -1902,7 +1902,7 @@ uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const OUString& aPropertyName 
             vcl::Window* pActiveWin = rViewData.GetActiveWin();
             if ( pActiveWin )
             {
-                tools::Rectangle aRect = pActiveWin->GetWindowExtentsRelative( nullptr );
+                tools::Rectangle aRect = pActiveWin->GetWindowExtentsAbsolute();
                 aRet <<= AWTRectangle( aRect );
             }
         }

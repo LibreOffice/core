@@ -281,7 +281,7 @@ void Control::AppendLayoutData( const Control& rSubControl ) const
     for( n = 1; n < nLines; n++ )
         mxLayoutData->m_aLineIndices.push_back( rSubControl.mxLayoutData->m_aLineIndices[n] + nCurrentIndex );
     int nRectangles = rSubControl.mxLayoutData->m_aUnicodeBoundRects.size();
-    tools::Rectangle aRel = rSubControl.GetWindowExtentsRelative(this);
+    tools::Rectangle aRel = rSubControl.GetWindowExtentsRelative(*this);
     for( n = 0; n < nRectangles; n++ )
     {
         tools::Rectangle aRect = rSubControl.mxLayoutData->m_aUnicodeBoundRects[n];

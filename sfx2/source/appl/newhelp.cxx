@@ -2276,7 +2276,7 @@ void SfxHelpWindow_Impl::SaveConfig()
 
     aViewOpt.SetVisible( bIndex );
     VclPtr<vcl::Window> pScreenWin = VCLUnoHelper::GetWindow( xWindow );
-    aWinPos = pScreenWin->GetWindowExtentsRelative( nullptr ).TopLeft();
+    aWinPos = pScreenWin->GetWindowExtentsAbsolute().TopLeft();
     if (bSplit)
         nIndexSize = round(m_xContainer->get_position() * 100.0 / nWidth);
     const OUString aUserData = OUString::number( nIndexSize )

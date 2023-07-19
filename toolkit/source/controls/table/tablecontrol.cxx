@@ -479,9 +479,14 @@ namespace svt::table
             m_pImpl->commitTableEvent( i_eventID, i_newValue, i_oldValue );
     }
 
-    tools::Rectangle TableControl::GetWindowExtentsRelative(const vcl::Window *pRelativeWindow) const
+    tools::Rectangle TableControl::GetWindowExtentsAbsolute() const
     {
-        return Control::GetWindowExtentsRelative( pRelativeWindow );
+        return Control::GetWindowExtentsAbsolute();
+    }
+
+    tools::Rectangle TableControl::GetWindowExtentsRelative(const vcl::Window& rRelativeWindow) const
+    {
+        return Control::GetWindowExtentsRelative( rRelativeWindow );
     }
 
     void TableControl::GrabFocus()

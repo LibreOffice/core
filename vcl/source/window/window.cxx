@@ -2913,13 +2913,18 @@ tools::Rectangle Window::ImplUnmirroredAbsoluteScreenToOutputPixel( const tools:
 }
 
 
-tools::Rectangle Window::GetWindowExtentsRelative(const vcl::Window *pRelativeWindow) const
+// with decoration
+tools::Rectangle Window::GetWindowExtentsRelative(const vcl::Window & rRelativeWindow) const
 {
-    // with decoration
-    return ImplGetWindowExtentsRelative( pRelativeWindow );
+    tools::Rectangle aRect = GetWindowExtentsAbsolute();
+    // #106399# express coordinates relative to borderwindow
+    const vcl::Window *pRelWin = rRelativeWindow.mpWindowImpl->mpBorderWindow ? rRelativeWindow.mpWindowImpl->mpBorderWindow.get() : &rRelativeWindow;
+    aRect.SetPos( pRelWin->AbsoluteScreenToOutputPixel( aRect.GetPos() ) );
+    return aRect;
 }
 
-tools::Rectangle Window::ImplGetWindowExtentsRelative(const vcl::Window *pRelativeWindow) const
+// with decoration
+tools::Rectangle Window::GetWindowExtentsAbsolute() const
 {
     // make sure we use the extent of our border window,
     // otherwise we miss a few pixels
@@ -2935,12 +2940,6 @@ tools::Rectangle Window::ImplGetWindowExtentsRelative(const vcl::Window *pRelati
         aPos.AdjustY( -sal_Int32(g.topDecoration()) );
         aSize.AdjustWidth(g.leftDecoration() + g.rightDecoration() );
         aSize.AdjustHeight(g.topDecoration() + g.bottomDecoration() );
-    }
-    if( pRelativeWindow )
-    {
-        // #106399# express coordinates relative to borderwindow
-        const vcl::Window *pRelWin = pRelativeWindow->mpWindowImpl->mpBorderWindow ? pRelativeWindow->mpWindowImpl->mpBorderWindow.get() : pRelativeWindow;
-        aPos = pRelWin->AbsoluteScreenToOutputPixel( aPos );
     }
     return tools::Rectangle( aPos, aSize );
 }

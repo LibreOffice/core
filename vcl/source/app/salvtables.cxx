@@ -597,7 +597,7 @@ bool SalInstanceWidget::get_extents_relative_to(const Widget& rRelative, int& x,
                                                 int& height) const
 {
     tools::Rectangle aRect(m_xWidget->GetWindowExtentsRelative(
-        dynamic_cast<const SalInstanceWidget&>(rRelative).getWidget()));
+        *dynamic_cast<const SalInstanceWidget&>(rRelative).getWidget()));
     x = aRect.Left();
     y = aRect.Top();
     width = aRect.GetWidth();

@@ -125,7 +125,7 @@ OUString SAL_CALL AccessibleGridControlHeaderCell::getImplementationName()
 tools::Rectangle AccessibleGridControlHeaderCell::implGetBoundingBox()
 {
     vcl::Window* pParent = m_aTable.GetAccessibleParentWindow();
-    tools::Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( pParent ) );
+    tools::Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( *pParent ) );
     sal_Int32 nIndex = getAccessibleIndexInParent();
     tools::Rectangle aCellRect;
     if(m_eObjType == TCTYPE_COLUMNHEADERCELL)
@@ -138,7 +138,7 @@ tools::Rectangle AccessibleGridControlHeaderCell::implGetBoundingBox()
 
 tools::Rectangle AccessibleGridControlHeaderCell::implGetBoundingBoxOnScreen()
 {
-    tools::Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( nullptr ) );
+    tools::Rectangle aGridRect( m_aTable.GetWindowExtentsAbsolute() );
     sal_Int32 nIndex = getAccessibleIndexInParent();
     tools::Rectangle aCellRect;
     if(m_eObjType == TCTYPE_COLUMNHEADERCELL)

@@ -189,7 +189,7 @@ Sequence< sal_Int8 > SAL_CALL AccessibleGridControlHeader::getImplementationId()
 tools::Rectangle AccessibleGridControlHeader::implGetBoundingBox()
 {
     vcl::Window* pParent = m_aTable.GetAccessibleParentWindow();
-    tools::Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( pParent ) );
+    tools::Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( *pParent ) );
     tools::Rectangle aHeaderRect (m_aTable.calcHeaderRect(isColumnBar()));
     if(isColumnBar())
         return tools::Rectangle(aGridRect.TopLeft(), Size(aGridRect.getOpenWidth(),aHeaderRect.getOpenHeight()));
@@ -200,7 +200,7 @@ tools::Rectangle AccessibleGridControlHeader::implGetBoundingBox()
 
 tools::Rectangle AccessibleGridControlHeader::implGetBoundingBoxOnScreen()
 {
-    tools::Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( nullptr ) );
+    tools::Rectangle aGridRect( m_aTable.GetWindowExtentsAbsolute() );
     tools::Rectangle aHeaderRect (m_aTable.calcHeaderRect(isColumnBar()));
     if(isColumnBar())
         return tools::Rectangle(aGridRect.TopLeft(), Size(aGridRect.getOpenWidth(),aHeaderRect.getOpenHeight()));

@@ -327,7 +327,7 @@ namespace accessibility
     {
         vcl::Window* pParent = m_aTable.GetAccessibleParentWindow();
         DBG_ASSERT( pParent, "implGetBoundingBox - missing parent window" );
-        tools::Rectangle aGridRect = m_aTable.GetWindowExtentsRelative( pParent );
+        tools::Rectangle aGridRect = m_aTable.GetWindowExtentsRelative( *pParent );
         sal_Int64 nIndex = getAccessibleIndexInParent();
         tools::Rectangle aCellRect = m_aTable.calcCellRect(nIndex%m_aTable.GetColumnCount(), nIndex/m_aTable.GetColumnCount());
         tools::Long nX = aGridRect.Left() + aCellRect.Left();
@@ -338,7 +338,7 @@ namespace accessibility
 
     tools::Rectangle AccessibleGridControlTableCell::implGetBoundingBoxOnScreen()
     {
-        tools::Rectangle aGridRect = m_aTable.GetWindowExtentsRelative( nullptr );
+        tools::Rectangle aGridRect = m_aTable.GetWindowExtentsAbsolute();
         sal_Int64 nIndex = getAccessibleIndexInParent();
         tools::Rectangle aCellRect = m_aTable.calcCellRect(nIndex%m_aTable.GetColumnCount(), nIndex/m_aTable.GetColumnCount());
         tools::Long nX = aGridRect.Left() + aCellRect.Left();

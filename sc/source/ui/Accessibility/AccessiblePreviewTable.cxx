@@ -586,7 +586,7 @@ tools::Rectangle ScAccessiblePreviewTable::GetBoundingBoxOnScreen() const
         vcl::Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
         {
-            tools::Rectangle aRect = pWindow->GetWindowExtentsRelative(nullptr);
+            tools::Rectangle aRect = pWindow->GetWindowExtentsAbsolute();
             aCellRect.Move(aRect.Left(), aRect.Top());
         }
     }

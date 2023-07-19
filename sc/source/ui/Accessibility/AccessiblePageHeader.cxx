@@ -309,7 +309,7 @@ tools::Rectangle ScAccessiblePageHeader::GetBoundingBoxOnScreen() const
         vcl::Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
         {
-            tools::Rectangle aRect = pWindow->GetWindowExtentsRelative(nullptr);
+            tools::Rectangle aRect = pWindow->GetWindowExtentsAbsolute();
             aCellRect.Move(aRect.Left(), aRect.Top());
         }
     }
@@ -331,7 +331,7 @@ tools::Rectangle ScAccessiblePageHeader::GetBoundingBox() const
         tools::Rectangle aClipRect(Point(0, 0), aRect.GetSize());
         vcl::Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
-            aClipRect = pWindow->GetWindowExtentsRelative(pWindow->GetAccessibleParentWindow());
+            aClipRect = pWindow->GetWindowExtentsRelative(*pWindow->GetAccessibleParentWindow());
         aRect = aClipRect.GetIntersection(aRect);
     }
     if (aRect.IsEmpty())

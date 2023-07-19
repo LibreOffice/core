@@ -181,13 +181,13 @@ tools::Rectangle AccessibleBrowseBox::implGetBoundingBox()
 {
     vcl::Window* pParent = mpBrowseBox->GetAccessibleParentWindow();
     OSL_ENSURE( pParent, "implGetBoundingBox - missing parent window" );
-    return mpBrowseBox->GetWindowExtentsRelative( pParent );
+    return mpBrowseBox->GetWindowExtentsRelative( *pParent );
 }
 
 
 tools::Rectangle AccessibleBrowseBox::implGetBoundingBoxOnScreen()
 {
-    return mpBrowseBox->GetWindowExtentsRelative( nullptr );
+    return mpBrowseBox->GetWindowExtentsAbsolute();
 }
 
 // internal helper methods

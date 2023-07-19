@@ -340,7 +340,7 @@ tools::Rectangle AccessibleGridControlTable::implGetBoundingBox()
 {
     vcl::Window* pParent = m_aTable.GetAccessibleParentWindow();
     DBG_ASSERT( pParent, "implGetBoundingBox - missing parent window" );
-    tools::Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( pParent ));
+    tools::Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( *pParent ));
     tools::Rectangle aTableRect( m_aTable.calcTableRect() );
     tools::Long nX = aGridRect.Left() + aTableRect.Left();
     tools::Long nY = aGridRect.Top() + aTableRect.Top();
@@ -352,7 +352,7 @@ tools::Rectangle AccessibleGridControlTable::implGetBoundingBox()
 
 tools::Rectangle AccessibleGridControlTable::implGetBoundingBoxOnScreen()
 {
-    tools::Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( nullptr ));
+    tools::Rectangle aGridRect( m_aTable.GetWindowExtentsAbsolute());
     tools::Rectangle aTableRect( m_aTable.calcTableRect() );
     tools::Long nX = aGridRect.Left() + aTableRect.Left();
     tools::Long nY = aGridRect.Top() + aTableRect.Top();

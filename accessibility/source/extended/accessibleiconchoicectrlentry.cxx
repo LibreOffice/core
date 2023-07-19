@@ -116,7 +116,7 @@ namespace accessibility
         {
             aRect = m_pIconCtrl->GetBoundingBox( pEntry );
             Point aTopLeft = aRect.TopLeft();
-            aTopLeft += m_pIconCtrl->GetWindowExtentsRelative( nullptr ).TopLeft();
+            aTopLeft += m_pIconCtrl->GetWindowExtentsAbsolute().TopLeft();
             aRect = tools::Rectangle( aTopLeft, aRect.GetSize() );
         }
 

@@ -127,7 +127,8 @@ namespace svt::table
 
 
         // IAccessibleTable
-        virtual tools::Rectangle GetWindowExtentsRelative(const vcl::Window *pRelativeWindow) const override;
+        virtual tools::Rectangle GetWindowExtentsAbsolute() const override;
+        virtual tools::Rectangle GetWindowExtentsRelative(const vcl::Window& rRelativeWindow) const override;
         virtual void GrabFocus() override;
         virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible() override;
         virtual vcl::Window* GetAccessibleParentWindow() const override;

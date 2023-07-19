@@ -1332,7 +1332,7 @@ sal_Int32 ComboBox::GetTopEntry() const
 tools::Rectangle ComboBox::GetDropDownPosSizePixel() const
 {
     return m_pImpl->m_pFloatWin
-        ? m_pImpl->m_pFloatWin->GetWindowExtentsRelative(this)
+        ? m_pImpl->m_pFloatWin->GetWindowExtentsRelative(*this)
         : tools::Rectangle();
 }
 
@@ -1389,7 +1389,7 @@ void ComboBox::SetNoSelection()
 tools::Rectangle ComboBox::GetBoundingRectangle( sal_Int32 nItem ) const
 {
     tools::Rectangle aRect = GetMainWindow()->GetBoundingRectangle( nItem );
-    tools::Rectangle aOffset = GetMainWindow()->GetWindowExtentsRelative( static_cast<vcl::Window*>(const_cast<ComboBox *>(this)) );
+    tools::Rectangle aOffset = GetMainWindow()->GetWindowExtentsRelative( *static_cast<vcl::Window*>(const_cast<ComboBox *>(this)) );
     aRect.Move( aOffset.Left(), aOffset.Top() );
     return aRect;
 }

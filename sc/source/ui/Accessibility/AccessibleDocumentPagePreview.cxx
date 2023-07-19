@@ -1494,7 +1494,7 @@ tools::Rectangle ScAccessibleDocumentPagePreview::GetBoundingBoxOnScreen() const
     {
         vcl::Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
-            aRect = pWindow->GetWindowExtentsRelative(nullptr);
+            aRect = pWindow->GetWindowExtentsAbsolute();
     }
     return aRect;
 }
@@ -1506,7 +1506,7 @@ tools::Rectangle ScAccessibleDocumentPagePreview::GetBoundingBox() const
     {
         vcl::Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
-            aRect = pWindow->GetWindowExtentsRelative(pWindow->GetAccessibleParentWindow());
+            aRect = pWindow->GetWindowExtentsRelative(*pWindow->GetAccessibleParentWindow());
     }
     return aRect;
 }

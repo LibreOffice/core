@@ -192,7 +192,8 @@ public:
     virtual bool                    GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, std::vector< tools::Rectangle >& rVector ) override;
 
     // Window
-    virtual tools::Rectangle        GetWindowExtentsRelative(const vcl::Window *pRelativeWindow) const override;
+    virtual tools::Rectangle        GetWindowExtentsAbsolute() const override;
+    virtual tools::Rectangle        GetWindowExtentsRelative(const vcl::Window& rRelativeWindow) const override;
     virtual void                    GrabFocus() override;
     virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible() override;
     /** Creates and returns the accessible object of the whole BrowseBox. */

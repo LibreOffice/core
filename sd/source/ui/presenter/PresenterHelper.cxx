@@ -458,7 +458,7 @@ awt::Rectangle PresenterHelper::getWindowExtentsRelative (
     VclPtr<vcl::Window> pParentWindow = VCLUnoHelper::GetWindow(rxParentWindow);
     if (pChildWindow && pParentWindow)
     {
-        ::tools::Rectangle aBox (pChildWindow->GetWindowExtentsRelative(pParentWindow));
+        ::tools::Rectangle aBox (pChildWindow->GetWindowExtentsRelative(*pParentWindow));
         return awt::Rectangle(aBox.Left(),aBox.Top(),aBox.GetWidth(),aBox.GetHeight());
     }
     else

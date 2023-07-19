@@ -1121,7 +1121,7 @@ bool ListBox::IsInDropDown() const
 tools::Rectangle ListBox::GetBoundingRectangle( sal_Int32 nItem ) const
 {
     tools::Rectangle aRect = mpImplLB->GetMainWindow()->GetBoundingRectangle( nItem );
-    tools::Rectangle aOffset = mpImplLB->GetMainWindow()->GetWindowExtentsRelative( static_cast<vcl::Window*>(const_cast<ListBox *>(this)) );
+    tools::Rectangle aOffset = mpImplLB->GetMainWindow()->GetWindowExtentsRelative( *static_cast<vcl::Window*>(const_cast<ListBox *>(this)) );
     aRect.Move( aOffset.Left(), aOffset.Top() );
     return aRect;
 }
@@ -1375,7 +1375,7 @@ sal_uInt16 ListBox::GetDisplayLineCount() const
 
 tools::Rectangle ListBox::GetDropDownPosSizePixel() const
 {
-    return mpFloatWin ? mpFloatWin->GetWindowExtentsRelative(this) : tools::Rectangle();
+    return mpFloatWin ? mpFloatWin->GetWindowExtentsRelative(*this) : tools::Rectangle();
 }
 
 const Wallpaper& ListBox::GetDisplayBackground() const

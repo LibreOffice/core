@@ -1326,7 +1326,7 @@ tools::Rectangle ScAccessibleSpreadsheet::GetBoundingBoxOnScreen() const
     {
         vcl::Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWindow)
-            aRect = pWindow->GetWindowExtentsRelative(nullptr);
+            aRect = pWindow->GetWindowExtentsAbsolute();
     }
     return aRect;
 }
@@ -1339,7 +1339,7 @@ tools::Rectangle ScAccessibleSpreadsheet::GetBoundingBox() const
         vcl::Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWindow)
             //#101986#; extends to the same window, because the parent is the document and it has the same window
-            aRect = pWindow->GetWindowExtentsRelative(pWindow);
+            aRect = pWindow->GetWindowExtentsRelative(*pWindow);
     }
     return aRect;
 }

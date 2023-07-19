@@ -73,7 +73,8 @@ public:
             AccessibleTableControlObjType eObjType ) const= 0;
 
     // Window
-    virtual tools::Rectangle GetWindowExtentsRelative(const vcl::Window *pRelativeWindow) const = 0;
+    virtual tools::Rectangle GetWindowExtentsAbsolute() const = 0;
+    virtual tools::Rectangle GetWindowExtentsRelative(const vcl::Window& rRelativeWindow) const = 0;
     virtual void GrabFocus()= 0;
     virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible()= 0;
     virtual vcl::Window* GetAccessibleParentWindow() const= 0;

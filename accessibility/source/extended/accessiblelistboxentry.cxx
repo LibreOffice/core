@@ -151,7 +151,7 @@ namespace accessibility
         {
             aRect = m_pTreeListBox->GetBoundingRect( pEntry );
             Point aTopLeft = aRect.TopLeft();
-            aTopLeft += m_pTreeListBox->GetWindowExtentsRelative( nullptr ).TopLeft();
+            aTopLeft += m_pTreeListBox->GetWindowExtentsAbsolute().TopLeft();
             aRect = tools::Rectangle( aTopLeft, aRect.GetSize() );
         }
 

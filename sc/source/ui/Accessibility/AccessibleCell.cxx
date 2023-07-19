@@ -162,7 +162,7 @@ tools::Rectangle ScAccessibleCell::GetBoundingBoxOnScreen() const
         vcl::Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWindow)
         {
-            tools::Rectangle aRect = pWindow->GetWindowExtentsRelative(nullptr);
+            tools::Rectangle aRect = pWindow->GetWindowExtentsAbsolute();
             aCellRect.Move(aRect.Left(), aRect.Top());
         }
     }
@@ -183,7 +183,7 @@ tools::Rectangle ScAccessibleCell::GetBoundingBox() const
         vcl::Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWindow)
         {
-            tools::Rectangle aRect(pWindow->GetWindowExtentsRelative(pWindow->GetAccessibleParentWindow()));
+            tools::Rectangle aRect(pWindow->GetWindowExtentsRelative(*pWindow->GetAccessibleParentWindow()));
             aRect.Move(-aRect.Left(), -aRect.Top());
             aCellRect = aRect.Intersection(aCellRect);
         }

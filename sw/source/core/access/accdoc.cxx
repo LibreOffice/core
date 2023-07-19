@@ -231,7 +231,7 @@ awt::Rectangle SAL_CALL SwAccessibleDocumentBase::getBounds()
             throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
         }
 
-        tools::Rectangle aPixBounds( pWin->GetWindowExtentsRelative( pWin->GetAccessibleParentWindow() ) );
+        tools::Rectangle aPixBounds( pWin->GetWindowExtentsRelative( *pWin->GetAccessibleParentWindow() ) );
         awt::Rectangle aBox( aPixBounds.Left(), aPixBounds.Top(),
                              aPixBounds.GetWidth(), aPixBounds.GetHeight() );
 
@@ -253,7 +253,7 @@ awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
         throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
     }
 
-    Point aPixPos( pWin->GetWindowExtentsRelative( pWin->GetAccessibleParentWindow() ).TopLeft() );
+    Point aPixPos( pWin->GetWindowExtentsRelative( *pWin->GetAccessibleParentWindow() ).TopLeft() );
     awt::Point aLoc( aPixPos.getX(), aPixPos.getY() );
 
     return aLoc;
@@ -269,7 +269,7 @@ css::awt::Point SAL_CALL SwAccessibleDocumentBase::getLocationOnScreen()
         throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
     }
 
-    Point aPixPos( pWin->GetWindowExtentsRelative( nullptr ).TopLeft() );
+    Point aPixPos( pWin->GetWindowExtentsAbsolute().TopLeft() );
     awt::Point aLoc( aPixPos.getX(), aPixPos.getY() );
 
     return aLoc;
@@ -285,7 +285,7 @@ css::awt::Size SAL_CALL SwAccessibleDocumentBase::getSize()
         throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
     }
 
-    Size aPixSize( pWin->GetWindowExtentsRelative( nullptr ).GetSize() );
+    Size aPixSize( pWin->GetWindowExtentsAbsolute().GetSize() );
     awt::Size aSize( aPixSize.Width(), aPixSize.Height() );
 
     return aSize;
@@ -302,7 +302,7 @@ sal_Bool SAL_CALL SwAccessibleDocumentBase::containsPoint(
         throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
     }
 
-    tools::Rectangle aPixBounds( pWin->GetWindowExtentsRelative( nullptr ) );
+    tools::Rectangle aPixBounds( pWin->GetWindowExtentsAbsolute() );
     aPixBounds.Move(-aPixBounds.Left(), -aPixBounds.Top());
 
     Point aPixPoint( aPoint.X, aPoint.Y );
@@ -327,7 +327,7 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleDocumentBase::getAccessibleAt
             return nullptr;
 
         Point aPixPoint( aPoint.X, aPoint.Y ); // px rel to window
-        if( mpChildWin->GetWindowExtentsRelative( pWin ).Contains( aPixPoint ) )
+        if( mpChildWin->GetWindowExtentsRelative( *pWin ).Contains( aPixPoint ) )
             return mpChildWin->GetAccessible();
     }
 

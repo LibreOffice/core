@@ -565,7 +565,7 @@ awt::Point PresenterCanvas::GetOffset (const Reference<awt::XWindow>& rxBaseWind
         VclPtr<vcl::Window> pSharedWindow = VCLUnoHelper::GetWindow(rxBaseWindow);
         if (pWindow && pSharedWindow)
         {
-            ::tools::Rectangle aBox = pWindow->GetWindowExtentsRelative(pSharedWindow);
+            ::tools::Rectangle aBox = pWindow->GetWindowExtentsRelative(*pSharedWindow);
 
             // Calculate offset of this canvas with respect to the shared
             // canvas.
@@ -591,7 +591,7 @@ awt::Point PresenterCanvas::GetOffset (const Reference<awt::XWindow>& rxBaseWind
     // Get the bounding box of the window and create a range in the
     // coordinate system of the child window.
     // Use the window extents.
-    ::tools::Rectangle aLocalClip = pWindow->GetWindowExtentsRelative(pSharedWindow);
+    ::tools::Rectangle aLocalClip = pWindow->GetWindowExtentsRelative(*pSharedWindow);
 
     // The local clip rectangle is used to clip the view state clipping
     // polygon.

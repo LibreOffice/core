@@ -99,7 +99,7 @@ void MenuFloatingWindow::doShutdown()
     // so this can be taken into account if the commandhandler performs a scroll operation
     if( GetParent() )
     {
-        tools::Rectangle aInvRect( GetWindowExtentsRelative( GetParent() ) );
+        tools::Rectangle aInvRect( GetWindowExtentsRelative( *GetParent() ) );
         GetParent()->Invalidate( aInvRect );
     }
     pMenu = nullptr;

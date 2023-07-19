@@ -189,13 +189,13 @@ tools::Rectangle AccessibleGridControl::implGetBoundingBox()
 {
     vcl::Window* pParent = m_aTable.GetAccessibleParentWindow();
     OSL_ENSURE( pParent, "implGetBoundingBox - missing parent window" );
-    return m_aTable.GetWindowExtentsRelative( pParent );
+    return m_aTable.GetWindowExtentsRelative( *pParent );
 }
 
 
 tools::Rectangle AccessibleGridControl::implGetBoundingBoxOnScreen()
 {
-    return m_aTable.GetWindowExtentsRelative( nullptr );
+    return m_aTable.GetWindowExtentsAbsolute();
 }
 // internal helper methods ----------------------------------------------------
 

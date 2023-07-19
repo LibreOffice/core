@@ -1958,9 +1958,15 @@ tools::Rectangle BrowseBox::calcHeaderRect(bool _bIsColumnBar, bool _bOnScreen)
     {
         aTopLeft.setY( GetDataRowHeight() );
         nWidth = GetColumnWidth(0);
-        nHeight = GetWindowExtentsRelative( pParent ).GetHeight() - aTopLeft.Y() - GetControlArea().GetSize().Height();
+        if (pParent)
+            nHeight = GetWindowExtentsRelative( *pParent ).GetHeight() - aTopLeft.Y() - GetControlArea().GetSize().Height();
+        else
+            nHeight = GetWindowExtentsAbsolute().GetHeight() - aTopLeft.Y() - GetControlArea().GetSize().Height();
     }
-    aTopLeft += GetWindowExtentsRelative( pParent ).TopLeft();
+    if (pParent)
+        aTopLeft += GetWindowExtentsRelative( *pParent ).TopLeft();
+    else
+        aTopLeft += GetWindowExtentsAbsolute().TopLeft();
     return tools::Rectangle(aTopLeft,Size(nWidth,nHeight));
 }
 
@@ -1970,7 +1976,11 @@ tools::Rectangle BrowseBox::calcTableRect(bool _bOnScreen)
     if ( !_bOnScreen )
         pParent = GetAccessibleParentWindow();
 
-    tools::Rectangle aRect( GetWindowExtentsRelative( pParent ) );
+    tools::Rectangle aRect;
+    if (pParent)
+        aRect = GetWindowExtentsRelative( *pParent );
+    else
+        aRect = GetWindowExtentsAbsolute();
     tools::Rectangle aRowBar = calcHeaderRect(false, pParent == nullptr);
 
     tools::Long nX = aRowBar.Right() - aRect.Left();
@@ -1989,7 +1999,10 @@ tools::Rectangle BrowseBox::GetFieldRectPixelAbs( sal_Int32 _nRowId, sal_uInt16 
     tools::Rectangle aRect = GetFieldRectPixel(_nRowId,_nColId,_bOnScreen);
 
     Point aTopLeft = aRect.TopLeft();
-    aTopLeft += GetWindowExtentsRelative( pParent ).TopLeft();
+    if (pParent)
+        aTopLeft += GetWindowExtentsRelative( *pParent ).TopLeft();
+    else
+        aTopLeft += GetWindowExtentsAbsolute().TopLeft();
 
     return tools::Rectangle(aTopLeft,aRect.GetSize());
 }

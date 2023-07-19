@@ -756,19 +756,17 @@ tools::Rectangle SvHeaderTabListBox::calcHeaderRect( bool _bIsColumnBar, bool _b
         if ( !_bOnScreen )
             pParent = m_pImpl->m_pHeaderBar->GetAccessibleParentWindow();
 
-        aRect = m_pImpl->m_pHeaderBar->GetWindowExtentsRelative( pParent );
+        aRect = m_pImpl->m_pHeaderBar->GetWindowExtentsRelative( *pParent );
     }
     return aRect;
 }
 
 tools::Rectangle SvHeaderTabListBox::calcTableRect( bool _bOnScreen )
 {
-    vcl::Window* pParent = nullptr;
-    if ( !_bOnScreen )
-        pParent = GetAccessibleParentWindow();
-
-    tools::Rectangle aRect( GetWindowExtentsRelative( pParent ) );
-    return aRect;
+    if ( _bOnScreen )
+        return GetWindowExtentsAbsolute();
+    else
+        return GetWindowExtentsRelative( *GetAccessibleParentWindow() );
 }
 
 tools::Rectangle SvHeaderTabListBox::GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 _nColumn, bool _bIsHeader, bool _bOnScreen )
@@ -785,11 +783,11 @@ tools::Rectangle SvHeaderTabListBox::GetFieldRectPixelAbs( sal_Int32 _nRow, sal_
         aTopLeft.setX( aItemRect.Left() );
         Size aSize = aItemRect.GetSize();
         aRect = tools::Rectangle( aTopLeft, aSize );
-        vcl::Window* pParent = nullptr;
-        if ( !_bOnScreen )
-            pParent = GetAccessibleParentWindow();
         aTopLeft = aRect.TopLeft();
-        aTopLeft += GetWindowExtentsRelative( pParent ).TopLeft();
+        if (_bOnScreen)
+            aTopLeft += GetWindowExtentsAbsolute().TopLeft();
+        else
+            aTopLeft += GetWindowExtentsRelative( *GetAccessibleParentWindow() ).TopLeft();
         aRect = tools::Rectangle( aTopLeft, aRect.GetSize() );
     }
 
@@ -1035,9 +1033,14 @@ bool SvHeaderTabListBox::GetGlyphBoundRects( const Point& rOrigin, const OUStrin
     return GetOutDev()->GetGlyphBoundRects( rOrigin, rStr, nIndex, nLen, rVector );
 }
 
-tools::Rectangle SvHeaderTabListBox::GetWindowExtentsRelative(const vcl::Window *pRelativeWindow) const
+tools::Rectangle SvHeaderTabListBox::GetWindowExtentsAbsolute() const
 {
-    return Control::GetWindowExtentsRelative( pRelativeWindow );
+    return Control::GetWindowExtentsAbsolute();
+}
+
+tools::Rectangle SvHeaderTabListBox::GetWindowExtentsRelative(const vcl::Window& rRelativeWindow) const
+{
+    return Control::GetWindowExtentsRelative( rRelativeWindow );
 }
 
 void SvHeaderTabListBox::GrabFocus()
