@@ -950,7 +950,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyAnchorKeepWithNext)
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyNoFooterOverlap)
 {
     // Given a document with 2 pages, a floating table on both pages:
-    createSwDoc("floattable-no-footer-overlap.docx");
+    createSwDoc("floattable-no-footer-overlap.doc");
 
     // When calculating the layout:
     calcLayout();
@@ -960,6 +960,13 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyNoFooterOverlap)
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
     CPPUNIT_ASSERT(pPage1);
+    CPPUNIT_ASSERT(pPage1->GetSortedObjs());
+    const SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. part of the second table was on page 1.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
     auto pPage2 = dynamic_cast<SwPageFrame*>(pPage1->GetNext());
     // Without the accompanying fix in place, this test would have failed, there was no page 2, both
     // floating tables were on page 1.
