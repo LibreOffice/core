@@ -666,17 +666,20 @@ public:
             auto nParagraphLength = pTextNode->GetText().getLength();
             if (nParagraphLength == 0)
                 return;
-            if (aSwAttrSet.HasItem(RES_CHRATR_WEIGHT) || aSwAttrSet.HasItem(RES_CHRATR_CJK_WEIGHT)
-                || aSwAttrSet.HasItem(RES_CHRATR_CTL_WEIGHT)
-                || aSwAttrSet.HasItem(RES_CHRATR_POSTURE)
-                || aSwAttrSet.HasItem(RES_CHRATR_CJK_POSTURE)
-                || aSwAttrSet.HasItem(RES_CHRATR_CTL_POSTURE)
-                || aSwAttrSet.HasItem(RES_CHRATR_SHADOWED) || aSwAttrSet.HasItem(RES_CHRATR_COLOR)
-                || aSwAttrSet.HasItem(RES_CHRATR_EMPHASIS_MARK)
-                || aSwAttrSet.HasItem(RES_CHRATR_UNDERLINE)
-                || aSwAttrSet.HasItem(RES_CHRATR_OVERLINE)
-                || aSwAttrSet.HasItem(RES_CHRATR_CROSSEDOUT)
-                || aSwAttrSet.HasItem(RES_CHRATR_RELIEF) || aSwAttrSet.HasItem(RES_CHRATR_CONTOUR))
+            if (aSwAttrSet.GetItem(RES_CHRATR_WEIGHT, false)
+                || aSwAttrSet.GetItem(RES_CHRATR_CJK_WEIGHT, false)
+                || aSwAttrSet.GetItem(RES_CHRATR_CTL_WEIGHT, false)
+                || aSwAttrSet.GetItem(RES_CHRATR_POSTURE, false)
+                || aSwAttrSet.GetItem(RES_CHRATR_CJK_POSTURE, false)
+                || aSwAttrSet.GetItem(RES_CHRATR_CTL_POSTURE, false)
+                || aSwAttrSet.GetItem(RES_CHRATR_SHADOWED, false)
+                || aSwAttrSet.GetItem(RES_CHRATR_COLOR, false)
+                || aSwAttrSet.GetItem(RES_CHRATR_EMPHASIS_MARK, false)
+                || aSwAttrSet.GetItem(RES_CHRATR_UNDERLINE, false)
+                || aSwAttrSet.GetItem(RES_CHRATR_OVERLINE, false)
+                || aSwAttrSet.GetItem(RES_CHRATR_CROSSEDOUT, false)
+                || aSwAttrSet.GetItem(RES_CHRATR_RELIEF, false)
+                || aSwAttrSet.GetItem(RES_CHRATR_CONTOUR, false))
             {
                 auto pIssue
                     = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_FORMATTING_CONVEYS_MEANING),
