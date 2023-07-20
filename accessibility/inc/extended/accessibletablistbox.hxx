@@ -80,6 +80,11 @@ public:
         return AccessibleBrowseBox::getHeaderBar( AccessibleBrowseBoxObjType::ColumnHeaderBar );
     }
 
+    css::uno::Reference<css::accessibility::XAccessible> getTable() override
+    {
+        return implGetTable();
+    }
+
 private:
     /** dtor() */
     virtual ~AccessibleTabListBox() override;

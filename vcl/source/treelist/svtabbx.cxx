@@ -804,10 +804,10 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleCell( sal_Int32 _nR
     bool bIsCheckBox = IsCellCheckBox( _nRow, _nColumnPos, eState );
     if ( bIsCheckBox )
         xChild = m_pImpl->m_aFactoryAccess.getFactory().createAccessibleCheckBoxCell(
-                m_pAccessible->getHeaderBar(), *this, nullptr, _nRow, _nColumnPos, eState, false );
+                m_pAccessible->getTable(), *this, nullptr, _nRow, _nColumnPos, eState, false );
     else
         xChild = m_pImpl->m_aFactoryAccess.getFactory().createAccessibleBrowseBoxTableCell(
-                m_pAccessible->getHeaderBar(), *this, nullptr, _nRow, _nColumnPos, OFFSET_NONE );
+                m_pAccessible->getTable(), *this, nullptr, _nRow, _nColumnPos, OFFSET_NONE );
 
     return xChild;
 }

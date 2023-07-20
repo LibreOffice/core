@@ -148,6 +148,10 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessible >
         getHeaderBar() = 0;
 
+    /** Returns the accessible object for the table.
+     */
+    virtual css::uno::Reference< css::accessibility::XAccessible> getTable() = 0;
+
 protected:
     ~IAccessibleTabListBox() {}
 };
