@@ -25,6 +25,7 @@
 #include <svx/svdlayer.hxx>
 #include <svx/svdograf.hxx>
 #include <sfx2/zoomitem.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <svx/svdpagv.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>
@@ -64,7 +65,10 @@
 #include <slideshow.hxx>
 #include <annotationmanager.hxx>
 #include <DrawController.hxx>
+#include <unomodel.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/lok.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <LayerTabBar.hxx>
 
 #include <memory>
@@ -130,6 +134,12 @@ DrawViewShell::DrawViewShell( ViewShellBase& rViewShellBase, vcl::Window* pParen
     ConfigureAppBackgroundColor();
     SD_MOD()->GetColorConfig().AddListener(this);
     maViewOptions.mnDocBackgroundColor = SD_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        SdXImpressDocument* pModel = comphelper::getFromUnoTunnel<SdXImpressDocument>(rViewShellBase.GetCurrentDocument());
+        SfxLokHelper::notifyViewRenderState(&rViewShellBase, pModel);
+    }
 }
 
 DrawViewShell::~DrawViewShell()

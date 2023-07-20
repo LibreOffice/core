@@ -87,6 +87,7 @@
 #include <pview.hxx>
 #include <swdtflvr.hxx>
 #include <prtopt.hxx>
+#include <unotxdoc.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/scanner/ScannerContext.hpp>
@@ -106,6 +107,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <svtools/embedhlp.hxx>
@@ -1091,6 +1093,12 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         m_pWrtShell->InvalidateOutlineContentVisibility();
 
     GetViewFrame()->GetWindow().AddChildEventListener( LINK( this, SwView, WindowChildEventListener ) );
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        SwXTextDocument* pModel = comphelper::getFromUnoTunnel<SwXTextDocument>(GetCurrentDocument());
+        SfxLokHelper::notifyViewRenderState(this, pModel);
+    }
 }
 
 SwViewGlueDocShell::SwViewGlueDocShell(SwView& rView, SwDocShell& rDocSh)

@@ -1805,6 +1805,12 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
             pInputHdl->SetMode(SC_INPUT_NONE);
         }
     }
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(GetCurrentDocument());
+        SfxLokHelper::notifyViewRenderState(this, pModel);
+    }
 }
 
 ScTabViewShell::~ScTabViewShell()
