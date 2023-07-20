@@ -96,7 +96,6 @@ cmd/32/insertobjectchartfromfile.png cmd/32/open.png
 cmd/32/insertobjectstarmath.png cmd/32/insertmath.png
 cmd/32/insertpagefield.png cmd/32/insertpagenumberfield.png
 cmd/32/insertpagenumber.png cmd/32/insertpagenumberfield.png
-cmd/32/insertpagenumberwizard.png cmd/32/insertpagenumberfield.png
 cmd/32/insertpagesfield.png cmd/32/insertpagecountfield.png
 cmd/32/insertpagetitlefield.png cmd/32/inserttitlefield.png
 cmd/32/insertpatternfield.png cmd/32/patternfield.png
@@ -112,6 +111,7 @@ cmd/32/inserttimefieldfix.png cmd/32/timefield.png
 cmd/32/inserttimefieldvar.png cmd/32/timefield.png
 cmd/32/inserttoolbox.png cmd/32/drawchart.png
 cmd/32/insobjctrl.png cmd/32/newdoc.png
+cmd/32/pagenumberwizard.png cmd/32/insertpagenumberfield.png
 cmd/32/repaginate.png cmd/32/insertpagenumberfield.png
 cmd/32/showchanges.png cmd/32/addwatch.png
 cmd/32/tracechangemode.png cmd/32/trackchanges.png
@@ -145,7 +145,6 @@ cmd/lc_insertobjectchartfromfile.png cmd/lc_open.png
 cmd/lc_insertobjectstarmath.png cmd/lc_insertmath.png
 cmd/lc_insertpagefield.png cmd/lc_insertpagenumberfield.png
 cmd/lc_insertpagenumber.png cmd/lc_insertpagenumberfield.png
-cmd/lc_insertpagenumberwizard.png cmd/lc_insertpagenumberfield.png
 cmd/lc_insertpagesfield.png cmd/lc_insertpagecountfield.png
 cmd/lc_insertpagetitlefield.png cmd/lc_inserttitlefield.png
 cmd/lc_insertpatternfield.png cmd/lc_patternfield.png
@@ -162,6 +161,7 @@ cmd/lc_inserttimefieldfix.png cmd/lc_timefield.png
 cmd/lc_inserttimefieldvar.png cmd/lc_timefield.png
 cmd/lc_inserttoolbox.png cmd/lc_drawchart.png
 cmd/lc_insobjctrl.png cmd/lc_newdoc.png
+cmd/lc_pagenumberwizard.png cmd/lc_insertpagenumberfield.png
 cmd/lc_repaginate.png cmd/lc_insertpagenumberfield.png
 cmd/lc_showchanges.png cmd/lc_addwatch.png
 cmd/lc_tracechangemode.png cmd/lc_trackchanges.png
@@ -195,7 +195,6 @@ cmd/sc_insertobjectchartfromfile.png cmd/sc_open.png
 cmd/sc_insertobjectstarmath.png cmd/sc_insertmath.png
 cmd/sc_insertpagefield.png cmd/sc_insertpagenumberfield.png
 cmd/sc_insertpagenumber.png cmd/sc_insertpagenumberfield.png
-cmd/sc_insertpagenumberwizard.png cmd/sc_insertpagenumberfield.png
 cmd/sc_insertpagesfield.png cmd/sc_insertpagecountfield.png
 cmd/sc_insertpagetitlefield.png cmd/sc_inserttitlefield.png
 cmd/sc_insertpatternfield.png cmd/sc_patternfield.png
@@ -212,6 +211,7 @@ cmd/sc_inserttimefieldfix.png cmd/sc_timefield.png
 cmd/sc_inserttimefieldvar.png cmd/sc_timefield.png
 cmd/sc_inserttoolbox.png cmd/sc_drawchart.png
 cmd/sc_insobjctrl.png cmd/sc_newdoc.png
+cmd/sc_pagenumberwizard.png cmd/sc_insertpagenumberfield.png
 cmd/sc_repaginate.png cmd/sc_insertpagenumberfield.png
 cmd/sc_showchanges.png cmd/sc_addwatch.png
 cmd/sc_tracechangemode.png cmd/sc_trackchanges.png
