@@ -30,9 +30,11 @@ WorkbookFragmentBase::WorkbookFragmentBase(
 {
 }
 
+// tdf142905: Change mbEnableTrimSpace default value is false,
+// because it will not trim members that do not have an attribute.
 WorksheetFragmentBase::WorksheetFragmentBase(
         const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
-    FragmentHandler2( rHelper.getOoxFilter(), rFragmentPath ),
+    FragmentHandler2( rHelper.getOoxFilter(), rFragmentPath, false ),
     WorksheetHelper( rHelper )
 {
 }
