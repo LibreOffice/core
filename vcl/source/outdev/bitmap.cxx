@@ -358,7 +358,7 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
 
         // we need to make sure Skia never reaches this slow code path
         // (but do not fail in no-op cases)
-        assert(!SkiaHelper::isVCLSkiaEnabled()
+        assert(!SkiaHelper::isVCLSkiaEnabled() || !SkiaHelper::isAlphaMaskBlendingEnabled()
             || tools::Rectangle(Point(), rBmp.GetSizePixel())
                 .Intersection(tools::Rectangle(rSrcPtPixel, rSrcSizePixel)).IsEmpty()
             || mpAlphaVDev->LogicToPixel(mpAlphaVDev->GetOutputSizePixel()).IsEmpty());

@@ -19,6 +19,7 @@ namespace SkiaHelper
 {
 VCL_DLLPUBLIC bool isVCLSkiaEnabled();
 VCL_DLLPUBLIC OUString readLog();
+VCL_DLLPUBLIC bool isAlphaMaskBlendingEnabled();
 
 #if HAVE_FEATURE_SKIA
 

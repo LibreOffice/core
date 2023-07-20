@@ -18,6 +18,7 @@
 namespace SkiaHelper
 {
 bool isVCLSkiaEnabled() { return false; }
+bool isAlphaMaskBlendingEnabled() { return false; }
 
 } // namespace
 
@@ -368,6 +369,8 @@ bool isVCLSkiaEnabled()
 
     return bRet;
 }
+
+bool isAlphaMaskBlendingEnabled() { return false; }
 
 static RenderMethod methodToUse = RenderRaster;
 
