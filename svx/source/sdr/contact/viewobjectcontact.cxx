@@ -350,6 +350,99 @@ bool ViewObjectContact::isExportPDFTags() const
     return GetObjectContact().isExportTaggedPDF();
 }
 
+/** Check if we need to embed to a StructureTagPrimitive2D, too. This
+    was done at ImplRenderPaintProc::createRedirectedPrimitive2DSequence before
+*/
+void ViewObjectContact::createStructureTag(drawinglayer::primitive2d::Primitive2DContainer & rNewPrimitiveSequence) const
+{
+    SdrObject *const pSdrObj(mrViewContact.TryToGetSdrObject());
+
+    // Check if we need to embed to a StructureTagPrimitive2D, too. This
+    // was done at ImplRenderPaintProc::createRedirectedPrimitive2DSequence before
+    if (!rNewPrimitiveSequence.empty() && isExportPDFTags()
+        // ISO 14289-1:2014, Clause: 7.3
+        && (!pSdrObj || pSdrObj->getParentSdrObjectFromSdrObject() == nullptr))
+    {
+        if (nullptr != pSdrObj && !pSdrObj->IsDecorative())
+        {
+            vcl::PDFWriter::StructElement eElement(vcl::PDFWriter::NonStructElement);
+            const SdrInventor nInventor(pSdrObj->GetObjInventor());
+            const SdrObjKind nIdentifier(pSdrObj->GetObjIdentifier());
+            const bool bIsTextObj(nullptr != DynCastSdrTextObj(pSdrObj));
+
+            // Note: SwFlyDrawObj/SwVirtFlyDrawObj have SdrInventor::Swg - these
+            // are *not* handled here because not all of them are painted
+            // completely with primitives, so a tag here does not encapsulate them.
+            // The tag must be created by SwTaggedPDFHelper until this is fixed.
+            if ( nInventor == SdrInventor::Default )
+            {
+                if ( nIdentifier == SdrObjKind::Group )
+                    eElement = vcl::PDFWriter::Figure;
+                else if (nIdentifier == SdrObjKind::Table)
+                    eElement = vcl::PDFWriter::Table;
+                else if (nIdentifier == SdrObjKind::Media)
+                    eElement = vcl::PDFWriter::Annot;
+                else if ( nIdentifier == SdrObjKind::TitleText )
+                    eElement = vcl::PDFWriter::Heading;
+                else if ( nIdentifier == SdrObjKind::OutlineText )
+                    eElement = vcl::PDFWriter::Division;
+                else if ( !bIsTextObj || !static_cast<const SdrTextObj&>(*pSdrObj).HasText() )
+                    eElement = vcl::PDFWriter::Figure;
+                else
+                    eElement = vcl::PDFWriter::Division;
+            }
+
+            if(vcl::PDFWriter::NonStructElement != eElement)
+            {
+                SdrPage* pSdrPage(pSdrObj->getSdrPageFromSdrObject());
+
+                if(pSdrPage)
+                {
+                    const bool bBackground(pSdrPage->IsMasterPage());
+                    const bool bImage(SdrObjKind::Graphic == pSdrObj->GetObjIdentifier());
+                    // note: there must be output device here, in PDF export
+                    void const* pAnchorKey(nullptr);
+                    if (auto const pUserCall = pSdrObj->GetUserCall())
+                    {
+                        pAnchorKey = pUserCall->GetPDFAnchorStructureElementKey(*pSdrObj);
+                    }
+
+                    ::std::vector<sal_Int32> annotIds;
+                    if (eElement == vcl::PDFWriter::Annot
+                        && !static_cast<SdrMediaObj*>(pSdrObj)->getURL().isEmpty())
+                    {
+                        auto const pPDFExtOutDevData(GetObjectContact().GetPDFExtOutDevData());
+                        assert(pPDFExtOutDevData);
+                        annotIds = pPDFExtOutDevData->GetScreenAnnotIds(pSdrObj);
+                    }
+
+                    drawinglayer::primitive2d::Primitive2DReference xReference(
+                        new drawinglayer::primitive2d::StructureTagPrimitive2D(
+                            eElement,
+                            bBackground,
+                            bImage,
+                            std::move(rNewPrimitiveSequence),
+                            pAnchorKey,
+                            &annotIds));
+                    rNewPrimitiveSequence = drawinglayer::primitive2d::Primitive2DContainer { xReference };
+                }
+            }
+        }
+        else
+        {
+            // page backgrounds etc should be tagged as artifacts:
+            rNewPrimitiveSequence = drawinglayer::primitive2d::Primitive2DContainer {
+                    new drawinglayer::primitive2d::StructureTagPrimitive2D(
+                        // lies to force silly VclMetafileProcessor2D to emit NonStructElement
+                        vcl::PDFWriter::Division,
+                        true,
+                        true,
+                        std::move(rNewPrimitiveSequence))
+                };
+        }
+    }
+}
+
 drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
 {
     // only some of the top-level apps are any good at reliably invalidating us (e.g. writer is not)
@@ -394,88 +487,7 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
         }
     }
 
-    // Check if we need to embed to a StructureTagPrimitive2D, too. This
-    // was done at ImplRenderPaintProc::createRedirectedPrimitive2DSequence before
-    if (!xNewPrimitiveSequence.empty() && isExportPDFTags())
-    {
-        if (nullptr != pSdrObj && !pSdrObj->IsDecorative())
-        {
-            vcl::PDFWriter::StructElement eElement(vcl::PDFWriter::NonStructElement);
-            const SdrInventor nInventor(pSdrObj->GetObjInventor());
-            const SdrObjKind nIdentifier(pSdrObj->GetObjIdentifier());
-            const bool bIsTextObj(nullptr != DynCastSdrTextObj(pSdrObj));
-
-            // Note: SwFlyDrawObj/SwVirtFlyDrawObj have SdrInventor::Swg - these
-            // are *not* handled here because not all of them are painted
-            // completely with primitives, so a tag here does not encapsulate them.
-            // The tag must be created by SwTaggedPDFHelper until this is fixed.
-            if ( nInventor == SdrInventor::Default )
-            {
-                if ( nIdentifier == SdrObjKind::Group )
-                    eElement = vcl::PDFWriter::Section;
-                else if (nIdentifier == SdrObjKind::Table)
-                    eElement = vcl::PDFWriter::Table;
-                else if (nIdentifier == SdrObjKind::Media)
-                    eElement = vcl::PDFWriter::Annot;
-                else if ( nIdentifier == SdrObjKind::TitleText )
-                    eElement = vcl::PDFWriter::Heading;
-                else if ( nIdentifier == SdrObjKind::OutlineText )
-                    eElement = vcl::PDFWriter::Division;
-                else if ( !bIsTextObj || !static_cast<const SdrTextObj&>(*pSdrObj).HasText() )
-                    eElement = vcl::PDFWriter::Figure;
-                else
-                    eElement = vcl::PDFWriter::Division;
-            }
-
-            if(vcl::PDFWriter::NonStructElement != eElement)
-            {
-                SdrPage* pSdrPage(pSdrObj->getSdrPageFromSdrObject());
-
-                if(pSdrPage)
-                {
-                    const bool bBackground(pSdrPage->IsMasterPage());
-                    const bool bImage(SdrObjKind::Graphic == pSdrObj->GetObjIdentifier());
-                    // note: there must be output device here, in PDF export
-                    void const* pAnchorKey(nullptr);
-                    if (auto const pUserCall = pSdrObj->GetUserCall())
-                    {
-                        pAnchorKey = pUserCall->GetPDFAnchorStructureElementKey(*pSdrObj);
-                    }
-
-                    ::std::vector<sal_Int32> annotIds;
-                    if (eElement == vcl::PDFWriter::Annot
-                        && !static_cast<SdrMediaObj*>(pSdrObj)->getURL().isEmpty())
-                    {
-                        auto const pPDFExtOutDevData(GetObjectContact().GetPDFExtOutDevData());
-                        assert(pPDFExtOutDevData);
-                        annotIds = pPDFExtOutDevData->GetScreenAnnotIds(pSdrObj);
-                    }
-
-                    drawinglayer::primitive2d::Primitive2DReference xReference(
-                        new drawinglayer::primitive2d::StructureTagPrimitive2D(
-                            eElement,
-                            bBackground,
-                            bImage,
-                            std::move(xNewPrimitiveSequence),
-                            pAnchorKey,
-                            &annotIds));
-                    xNewPrimitiveSequence = drawinglayer::primitive2d::Primitive2DContainer { xReference };
-                }
-            }
-        }
-        else
-        {
-            // page backgrounds etc should be tagged as artifacts:
-            xNewPrimitiveSequence = drawinglayer::primitive2d::Primitive2DContainer {
-                    new drawinglayer::primitive2d::StructureTagPrimitive2D(
-                        // lies to force silly VclMetafileProcessor2D to emit NonStructElement
-                        vcl::PDFWriter::Division,
-                        true,
-                        true,
-                        std::move(xNewPrimitiveSequence))
-                };
-        }
-    }
+    createStructureTag(xNewPrimitiveSequence);
 
     // Local up-to-date checks. New list different from local one?
     // This is the important point where it gets decided if the current or the new

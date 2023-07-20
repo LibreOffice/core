@@ -116,6 +116,8 @@ public:
     // This method will not handle included hierarchies and not check visibility.
     drawinglayer::primitive2d::Primitive2DContainer const & getPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const;
 
+    void createStructureTag(drawinglayer::primitive2d::Primitive2DContainer & rNewPrimitiveSequence) const;
+
     /// check if getPrimitive2DSequence() should create tag
     virtual bool isExportPDFTags() const;
 

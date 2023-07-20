@@ -397,8 +397,9 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf148000_EOLinCurvedText)
 
         xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
 
-        OString aBasePath
-            = "/primitive2D/objectinfo[4]/unhandled/unhandled/polypolygoncolor/polypolygon/";
+        // this is a group shape, hence 2 nested objectinfo
+        OString aBasePath = "/primitive2D/objectinfo[4]/objectinfo/unhandled/unhandled/"
+                            "polypolygoncolor/polypolygon/";
 
         // The text is: "O" + eop + "O" + eol + "O"
         // It should be displayed as 3 line of text. (1 "O" letter in every line)
