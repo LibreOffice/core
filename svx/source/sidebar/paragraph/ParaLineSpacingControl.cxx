@@ -32,6 +32,8 @@
 
 #include <ParaLineSpacingPopup.hxx>
 
+#include <vcl/commandinfoprovider.hxx>
+
 #define DEFAULT_LINE_SPACING  200
 #define FIX_DIST_DEF          283
 #define LINESPACE_1           100
@@ -134,7 +136,12 @@ void ParaLineSpacingControl::Initialize()
     if( bItemStateSet && (eState == SfxItemState::DEFAULT || eState == SfxItemState::SET) )
     {
         const SvxLineSpacingItem* currSPItem = pItem;
-        MapUnit eUnit = pCurrent->GetPool().GetMetric(currSPItem->Which());
+        // It seems draw/impress and writer require different MapUnit values for fixed line spacing
+        // metric values to be correctly calculated.
+        MapUnit eUnit = MapUnit::Map100thMM; // works for draw/impress
+        if (vcl::CommandInfoProvider::GetModuleIdentifier(pCurrent->GetFrame().GetFrameInterface())
+                == "com.sun.star.text.TextDocument")
+            eUnit = MapUnit::MapTwip; // works for writer
         meLNSpaceUnit = eUnit;
 
         switch( currSPItem->GetLineSpaceRule() )
