@@ -87,6 +87,7 @@
 #include <pview.hxx>
 #include <swdtflvr.hxx>
 #include <prtopt.hxx>
+#include <unotxdoc.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/scanner/ScannerContext.hpp>
@@ -106,6 +107,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <svtools/embedhlp.hxx>
@@ -1113,6 +1115,12 @@ SwView::SwView(SfxViewFrame& _rFrame, SfxViewShell* pOldSh)
     m_aBringToAttentionBlinkTimer.SetInvokeHandler(
                 LINK(this, SwView, BringToAttentionBlinkTimerHdl));
     m_aBringToAttentionBlinkTimer.SetTimeout(350);
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        SwXTextDocument* pModel = comphelper::getFromUnoTunnel<SwXTextDocument>(GetCurrentDocument());
+        SfxLokHelper::notifyViewRenderState(this, pModel);
+    }
 }
 
 SwViewGlueDocShell::SwViewGlueDocShell(SwView& rView, SwDocShell& rDocSh)
