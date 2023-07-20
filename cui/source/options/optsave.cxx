@@ -38,7 +38,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/docfilt.hxx>
-#include <svtools/restartdialog.hxx>
 #include <unotools/optionsdlg.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/diagnose_ex.hxx>
@@ -239,7 +238,7 @@ void SvxSaveTabPage::DetectHiddenControls()
 bool SvxSaveTabPage::FillItemSet( SfxItemSet* rSet )
 {
     auto xChanges = comphelper::ConfigurationChanges::create();
-    bool bModified = false, bRequestRestart = false;
+    bool bModified = false;
     if (m_xLoadViewPosAnyUserCB->get_state_changed_from_saved())
     {
         officecfg::Office::Common::Load::ViewPositionForAnyUser::set(m_xLoadViewPosAnyUserCB->get_active(), xChanges);
@@ -348,14 +347,6 @@ bool SvxSaveTabPage::FillItemSet( SfxItemSet* rSet )
         aModuleOpt.SetFactoryDefaultFilter(SvtModuleOptions::EFactory::WRITERGLOBAL, pImpl->aDefaultArr[APP_WRITER_GLOBAL]);
 
     xChanges->commit();
-
-    if (bRequestRestart)
-    {
-        OfaTreeOptionsDialog* pParentDlg(static_cast<OfaTreeOptionsDialog*>(GetDialogController()));
-        if (pParentDlg)
-            pParentDlg->SetNeedsRestart(svtools::RESTART_REASON_SAVE);
-    }
-
     return bModified;
 }
 
