@@ -281,7 +281,7 @@ bool SvxSaveTabPage::FillItemSet( SfxItemSet* rSet )
     {
         rSet->Put( SfxBoolItem( SID_ATTR_AUTOSAVE,
                                m_xAutoSaveCB->get_active() ) );
-        bModified = bRequestRestart = true;
+        bModified = true;
     }
     if ( m_xWarnAlienFormatCB->get_state_changed_from_saved() )
     {
