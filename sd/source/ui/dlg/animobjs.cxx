@@ -516,7 +516,7 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
             ScopedVclPtrInstance< VirtualDevice > pVD;
             ::tools::Rectangle       aObjRect( pObject->GetCurrentBoundRect() );
             Size            aObjSize( aObjRect.GetSize() );
-            Point           aOrigin( Point( -aObjRect.Left(), -aObjRect.Top() ) );
+            Point           aOrigin( -aObjRect.Left(), -aObjRect.Top() );
             MapMode         aMap( pVD->GetMapMode() );
             aMap.SetMapUnit( MapUnit::Map100thMM );
             aMap.SetOrigin( aOrigin );

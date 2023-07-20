@@ -155,7 +155,7 @@ namespace sd
         int nInnerBottom = nOuterBottom - m_aBorder.Bottom() + 1;
 
         // Paint title bar background.
-        ::tools::Rectangle aTitleBarBox(::tools::Rectangle(nOuterLeft, 0, nOuterRight, nInnerTop - 1));
+        ::tools::Rectangle aTitleBarBox(nOuterLeft, 0, nOuterRight, nInnerTop - 1);
         rRenderContext.DrawRect(aTitleBarBox);
 
         if (nInnerLeft > nOuterLeft)

@@ -373,6 +373,15 @@ bool RedundantCast::VisitVarDecl(VarDecl const * varDecl) {
     if (!varDecl->getInit())
         return true;
     visitAssign(varDecl->getType(), varDecl->getInit());
+    if (varDecl->getInitStyle() != VarDecl::CInit
+        && isa<CXXTemporaryObjectExpr>(varDecl->getInit())
+        && !compiler.getSourceManager().isMacroBodyExpansion(varDecl->getInit()->getBeginLoc()))
+    {
+        report(
+            DiagnosticsEngine::Warning, "redundant functional cast",
+            varDecl->getBeginLoc())
+            << varDecl->getSourceRange();
+    }
     return true;
 }
 

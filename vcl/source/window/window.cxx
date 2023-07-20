@@ -1519,7 +1519,7 @@ void Window::ImplPosSizeWindow( tools::Long nX, tools::Long nY,
     if ( nFlags & PosSizeFlags::X )
     {
         tools::Long nOrgX = nX;
-        Point aPtDev( Point( nX+GetOutDev()->mnOutOffX, 0 ) );
+        Point aPtDev( nX+GetOutDev()->mnOutOffX, 0 );
         OutputDevice *pOutDev = GetOutDev();
         if( pOutDev->HasMirroredGraphics() )
         {

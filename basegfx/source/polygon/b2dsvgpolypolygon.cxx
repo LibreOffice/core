@@ -272,7 +272,7 @@ namespace basegfx::utils
 
                             // get first control point. It's the reflection of the PrevControlPoint
                             // of the last point. If not existent, use current point (see SVG)
-                            B2DPoint aPrevControl(B2DPoint(nLastX, nLastY));
+                            B2DPoint aPrevControl(nLastX, nLastY);
                             const sal_uInt32 nIndex(aCurrPoly.count() - 1);
 
                             if(aCurrPoly.areControlPointsUsed() && aCurrPoly.isPrevControlPointUsed(nIndex))
@@ -421,7 +421,7 @@ namespace basegfx::utils
 
                             // get first control point. It's the reflection of the PrevControlPoint
                             // of the last point. If not existent, use current point (see SVG)
-                            B2DPoint aPrevControl(B2DPoint(nLastX, nLastY));
+                            B2DPoint aPrevControl(nLastX, nLastY);
                             const sal_uInt32 nIndex(aCurrPoly.count() - 1);
                             const B2DPoint aPrevPoint(aCurrPoly.getB2DPoint(nIndex));
 

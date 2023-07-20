@@ -256,7 +256,7 @@ namespace emfio
 
         aFont.SetOrientation( Degree10(static_cast<sal_Int16>(rFont.lfEscapement)) );
 
-        Size aFontSize( Size( rFont.lfWidth, rFont.lfHeight ) );
+        Size aFontSize( rFont.lfWidth, rFont.lfHeight );
         if ( rFont.lfHeight > 0 )
         {
             // #i117968# VirtualDevice is not thread safe, but filter is used in multithreading

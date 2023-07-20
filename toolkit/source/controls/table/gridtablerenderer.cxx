@@ -444,7 +444,7 @@ namespace svt::table
 
     void GridTableRenderer::impl_paintCellImage( CellRenderContext const & i_context, Image const & i_image )
     {
-        Point imagePos( Point( i_context.aContentArea.Left(), i_context.aContentArea.Top() ) );
+        Point imagePos( i_context.aContentArea.Left(), i_context.aContentArea.Top() );
         Size imageSize = i_image.GetSizePixel();
         if ( i_context.aContentArea.GetWidth() > imageSize.Width() )
         {
