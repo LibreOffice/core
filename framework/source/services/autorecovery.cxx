@@ -575,8 +575,8 @@ private:
     void implts_readAutoSaveConfig();
 
     // TODO document me
-    void implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rInfo                ,
-                                      bool                     bRemoveIt = false);
+    void implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rInfo, bool bRemoveIt = false,
+                                bool bAllowAdd = true);
 
     // TODO document me
     void implts_startListening();
@@ -1981,7 +1981,8 @@ void AutoRecovery::implts_persistAllActiveViewNames()
     }
 }
 
-void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rInfo, bool bRemoveIt)
+void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rInfo, bool bRemoveIt,
+                                          bool bAllowAdd)
 {
     std::shared_ptr<comphelper::ConfigurationChanges> batch(
             comphelper::ConfigurationChanges::create());
@@ -2019,7 +2020,12 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
             css::uno::Reference< css::beans::XPropertySet > xSet;
             bool                                        bNew = !xCheck->hasByName(sID);
             if (bNew)
+            {
+                if (!bAllowAdd)
+                    return; // no change made, just exit
+
                 xSet.set(xCreate->createInstance(), css::uno::UNO_QUERY_THROW);
+            }
             else
                 xCheck->getByName(sID) >>= xSet;
 
@@ -2485,7 +2491,8 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
 
     } /* SAFE */
 
-    implts_flushConfigItem(aInfo);
+    // Even if the document is modified, we don't know if we have anything to recover, so don't add.
+    implts_flushConfigItem(aInfo, /*bRemoveIt=*/false, /*bAllowAdd=*/false);
     implts_startModifyListeningOnDoc(aInfo);
 
     aCacheLock.unlock();
@@ -3053,10 +3060,11 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
     // Because the last temp file is too old and does not include all changes.
     Reference< XDocumentRecovery > xDocRecover(rInfo.Document, css::uno::UNO_QUERY_THROW);
 
-    // safe the state about "trying to save"
+    // save the state about "trying to save"
     // ... we need it for recovery if e.g. a crash occurs inside next line!
     rInfo.DocumentState |= DocState::TrySave;
-    implts_flushConfigItem(rInfo);
+    // just update existing info: don't add any recovery record until recovery file created.
+    implts_flushConfigItem(rInfo, /*bRemoveIt=*/false, /*bAllowAdd=*/false);
 
     // If userautosave is enabled, first try to save the original file.
     // Note that we must do it *before* calling storeToRecoveryFile, so in case of failure here
@@ -3667,7 +3675,8 @@ void AutoRecovery::implts_resetHandleStates()
 
         // } /* SAFE */
         g.clear();
-        implts_flushConfigItem(info);
+        // just update existing records.
+        implts_flushConfigItem(info, /*bRemoveIt=*/false, /*bAllowAdd=*/false);
         g.reset();
         // /* SAFE */ {
     }
