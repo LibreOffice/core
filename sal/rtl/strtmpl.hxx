@@ -1540,7 +1540,7 @@ void doubleToString(rtl_tString** pResult, sal_Int32* pResultCapacity, sal_Int32
     // rtl_math_DecimalPlaces_Max was passed with rtl_math_StringFormat_F or
     // others, but we don't want to allocate/deallocate 2GB just to fill it
     // with trailing '0' characters..
-    nDecPlaces = std::clamp<sal_Int32>(nDecPlaces, -20, 20);
+    nDecPlaces = std::clamp<sal_Int32>(nDecPlaces, -309, 309);
 
     sal_Int32 nDigits = nDecPlaces + 1;
 
@@ -1566,9 +1566,9 @@ void doubleToString(rtl_tString** pResult, sal_Int32* pResultCapacity, sal_Int32
     sal_Int32 nBuf
         = (nDigits <= 0 ? std::max<sal_Int32>(nDecPlaces, std::abs(nExp)) : nDigits + nDecPlaces)
           + 10 + (pGroups ? std::abs(nDigits) * 2 : 0);
-    // max(nDigits) = max(nDecPlaces) + 1 + max(nExp) + 1 = 20 + 1 + 308 + 1 = 330
-    // max(nBuf) = max(nDigits) + max(nDecPlaces) + 10 + max(nDigits) * 2 = 330 * 3 + 20 + 10 = 1020
-    assert(nBuf <= 1024);
+    // max(nDigits) = max(nDecPlaces) + 1 + max(nExp) + 1 = 309 + 1 + 308 + 1 = 619
+    // max(nBuf) = max(nDigits) + max(nDecPlaces) + 10 + max(nDigits) * 2 = 619 * 3 + 309 + 10 = 2176
+    assert(nBuf <= 2176);
     auto* const pBuf = static_cast<Char_T<rtl_tString>*>(alloca(nBuf * sizeof(Char_T<rtl_tString>)));
     auto* p = pBuf;
     if (bSign)
