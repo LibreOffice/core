@@ -66,6 +66,7 @@
 #include <sfx2/zoomitem.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
+#include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include <sal/log.hxx>
@@ -700,6 +701,12 @@ bool CharInput(sal_uInt32 c, SmCursor& rCursor, OutputDevice& rDevice)
 
 bool SmGraphicWidget::KeyInput(const KeyEvent& rKEvt)
 {
+    if (rKEvt.GetKeyCode().GetCode() == KEY_F1)
+    {
+        GetView().StartMainHelp();
+        return true;
+    }
+
     if (!SmViewShell::IsInlineEditEnabled())
         return GetView().KeyInput(rKEvt);
 
@@ -2327,6 +2334,13 @@ bool SmViewShell::IsInlineEditEnabled()
 {
     return comphelper::LibreOfficeKit::isActive()
            || officecfg::Office::Common::Misc::ExperimentalMode::get();
+}
+
+void SmViewShell::StartMainHelp()
+{
+    Help* pHelp = Application::GetHelp();
+    if (pHelp)
+        pHelp->Start(HID_SMA_MAIN_HELP, GetViewFrame().GetFrameWeld());
 }
 
 void SmViewShell::ZoomByItemSet(const SfxItemSet *pSet)

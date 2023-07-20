@@ -288,6 +288,12 @@ bool SmEditTextWindow::Command(const CommandEvent& rCEvt)
 
 bool SmEditTextWindow::KeyInput(const KeyEvent& rKEvt)
 {
+    if (rKEvt.GetKeyCode().GetCode() == KEY_F1)
+    {
+        mrEditWindow.GetView()->StartMainHelp();
+        return true;
+    }
+
     if (rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE)
     {
         bool bCallBase = true;

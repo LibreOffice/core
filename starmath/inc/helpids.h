@@ -21,6 +21,7 @@
 
 #include <rtl/ustring.hxx>
 
+inline constexpr OUStringLiteral HID_SMA_MAIN_HELP = u"STARMATH_HID_SMA_MAIN_HELP";
 inline constexpr OUStringLiteral HID_SMA_WIN_DOCUMENT = u"STARMATH_HID_SMA_WIN_DOCUMENT";
 inline constexpr OUStringLiteral HID_SMA_COMMAND_WIN_EDIT = u"STARMATH_HID_SMA_COMMAND_WIN_EDIT";
 

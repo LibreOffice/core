@@ -348,6 +348,9 @@ public:
     }
     static bool IsInlineEditEnabled();
 
+    // Opens the main help page for the Math module
+    void StartMainHelp();
+
 private:
     void ZoomByItemSet(const SfxItemSet *pSet);
 };
