@@ -3875,6 +3875,138 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf135192)
     CPPUNIT_ASSERT_EQUAL(int(1), nTable);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf154955)
+{
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+
+    // Enable PDF/UA
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+    saveAsPDF(u"grouped-shape.fodt");
+
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    vcl::filter::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents");
+    CPPUNIT_ASSERT(pContents);
+    vcl::filter::PDFStreamElement* pStream = pContents->GetStream();
+    CPPUNIT_ASSERT(pStream);
+    SvMemoryStream& rObjectStream = pStream->GetMemory();
+    // Uncompress it.
+    SvMemoryStream aUncompressed;
+    ZCodec aZCodec;
+    aZCodec.BeginCompression();
+    rObjectStream.Seek(0);
+    aZCodec.Decompress(rObjectStream, aUncompressed);
+    CPPUNIT_ASSERT(aZCodec.EndCompression());
+
+    auto pStart = static_cast<const char*>(aUncompressed.GetData());
+    const char* const pEnd = pStart + aUncompressed.GetSize();
+
+    enum
+    {
+        Default,
+        Artifact,
+        Tagged
+    } state
+        = Default;
+
+    auto nLine(0);
+    auto nTagged(0);
+    auto nArtifacts(0);
+    while (true)
+    {
+        ++nLine;
+        auto const pLine = ::std::find(pStart, pEnd, '\n');
+        if (pLine == pEnd)
+        {
+            break;
+        }
+        std::string_view const line(pStart, pLine - pStart);
+        pStart = pLine + 1;
+        if (!line.empty() && line[0] != '%')
+        {
+            ::std::cerr << nLine << ": " << line << "\n";
+            if (o3tl::starts_with(line, "/Artifact "))
+            {
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("unexpected nesting", Default, state);
+                state = Artifact;
+                ++nArtifacts;
+            }
+            else if (o3tl::starts_with(line, "/Figure<</MCID "))
+            {
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("unexpected nesting", Default, state);
+                state = Tagged;
+                ++nTagged;
+            }
+            else if (line == "EMC")
+            {
+                CPPUNIT_ASSERT_MESSAGE("unexpected end", state != Default);
+                state = Default;
+            }
+            else if (nLine > 1) // first line is expected "0.1 w"
+            {
+                CPPUNIT_ASSERT_MESSAGE("unexpected content outside MCS", state != Default);
+            }
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("unclosed MCS", Default, state);
+    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nTagged)>(2), nTagged);
+    CPPUNIT_ASSERT(nArtifacts >= 1);
+
+    int nFigure(0);
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"));
+        if (pType && pType->GetValue() == "StructElem")
+        {
+            auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"));
+            if (pS && pS->GetValue() == "Figure")
+            {
+                switch (nFigure)
+                {
+                    case 0:
+                        CPPUNIT_ASSERT_EQUAL(OUString(u"Two rectangles - Grouped"),
+                                             ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
+                                                 *dynamic_cast<vcl::filter::PDFHexStringElement*>(
+                                                     pObject->Lookup("Alt"))));
+                        break;
+                    case 1:
+                        CPPUNIT_ASSERT_EQUAL(OUString(u"these ones are green"),
+                                             ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
+                                                 *dynamic_cast<vcl::filter::PDFHexStringElement*>(
+                                                     pObject->Lookup("Alt"))));
+                        break;
+                }
+
+                auto pParentRef
+                    = dynamic_cast<vcl::filter::PDFReferenceElement*>(pObject->Lookup("P"));
+                CPPUNIT_ASSERT(pParentRef);
+                auto pParent(pParentRef->LookupObject());
+                CPPUNIT_ASSERT(pParent);
+                auto pParentType
+                    = dynamic_cast<vcl::filter::PDFNameElement*>(pParent->Lookup("Type"));
+                CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pParentType->GetValue());
+                auto pParentS = dynamic_cast<vcl::filter::PDFNameElement*>(pParent->Lookup("S"));
+                CPPUNIT_ASSERT_EQUAL(OString("Standard"), pParentS->GetValue());
+
+                ++nFigure;
+            }
+        }
+    }
+    // the problem was that there were 4 shapes (the sub-shapes of the 2 groups)
+    CPPUNIT_ASSERT_EQUAL(int(2), nFigure);
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf155190)
 {
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");

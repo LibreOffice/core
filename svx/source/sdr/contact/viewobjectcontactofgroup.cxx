@@ -45,6 +45,8 @@ namespace sdr::contact
             if(!isPrimitiveVisible(rDisplayInfo))
                 return;
 
+            drawinglayer::primitive2d::Primitive2DContainer primitiveSequence;
+
             const sal_uInt32 nSubHierarchyCount(GetViewContact().GetObjectCount());
             if(nSubHierarchyCount)
             {
@@ -59,7 +61,7 @@ namespace sdr::contact
                 }
 
                 // visit object hierarchy
-                getPrimitive2DSequenceSubHierarchy(rDisplayInfo, rVisitor);
+                getPrimitive2DSequenceSubHierarchy(rDisplayInfo, primitiveSequence);
 
                 if(bDoGhostedDisplaying)
                 {
@@ -70,8 +72,15 @@ namespace sdr::contact
             {
                 // draw replacement object for group. This will use ViewContactOfGroup::createViewIndependentPrimitive2DSequence
                 // which creates the replacement primitives for an empty group
-                ViewObjectContactOfSdrObj::getPrimitive2DSequenceHierarchy(rDisplayInfo, rVisitor);
+                ViewObjectContactOfSdrObj::getPrimitive2DSequenceHierarchy(rDisplayInfo, primitiveSequence);
             }
+
+            primitiveSequence = GetViewContact().embedToObjectSpecificInformation(primitiveSequence);
+
+            // ISO 14289-1:2014, Clause: 7.3
+            createStructureTag(primitiveSequence);
+
+            rVisitor.visit(primitiveSequence);
         }
 
         bool ViewObjectContactOfGroup::isPrimitiveVisibleOnAnyLayer(const SdrLayerIDSet& aLayers) const
