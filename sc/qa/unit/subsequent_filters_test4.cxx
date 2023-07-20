@@ -1918,6 +1918,18 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf155402)
     CPPUNIT_ASSERT_EQUAL(OUString("/[tdf155402.xlsx]Sheet1"), aFilename);
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf142905)
+{
+    createScDoc("xlsx/tdf142905.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    // Without the fix, trims the spaces in cell C1 after reading the XLSX file.
+    // After recalculation it is fixed.
+    // - Expected: "     3M   "
+    // - Actual  : "3M"
+    CPPUNIT_ASSERT_EQUAL(OUString("     3M   "), pDoc->GetString(2, 0, 0));
+}
+
 ScFiltersTest4::ScFiltersTest4()
     : ScModelTestBase("sc/qa/unit/data")
 {
