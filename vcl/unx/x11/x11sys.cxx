@@ -46,13 +46,6 @@ unsigned int X11SalSystem::GetDisplayScreenCount()
            pSalDisp->GetXScreenCount();
 }
 
-bool X11SalSystem::IsUnifiedDisplay()
-{
-    SalDisplay* pSalDisp = vcl_sal::getSalDisplay(GetGenericUnixSalData());
-    unsigned int nScreenCount = pSalDisp->GetXScreenCount();
-    return pSalDisp->IsXinerama() || (nScreenCount == 1);
-}
-
 unsigned int X11SalSystem::GetDisplayBuiltInScreen()
 {
     SalDisplay* pSalDisp = vcl_sal::getSalDisplay(GetGenericUnixSalData());

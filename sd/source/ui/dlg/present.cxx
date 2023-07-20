@@ -191,7 +191,6 @@ void SdStartPresentationDlg::InitMonitorSettings()
         }
         else
         {
-            bool bUnifiedDisplay = Application::IsUnifiedDisplay();
             sal_Int32 nExternalIndex = Application::GetDisplayExternalScreen();
 
             sal_Int32 nSelectedIndex (-1);
@@ -225,12 +224,9 @@ void SdStartPresentationDlg::InitMonitorSettings()
                     nDefaultExternalIndex = nInsertedEntry;
             }
 
-            if( bUnifiedDisplay )
-            {
-                nInsertedEntry = InsertDisplayEntry( m_xAllMonitors->get_label(), -1 );
-                if( nDefaultSelectedDisplay == -1 )
-                    nSelectedIndex = nInsertedEntry;
-            }
+            nInsertedEntry = InsertDisplayEntry( m_xAllMonitors->get_label(), -1 );
+            if( nDefaultSelectedDisplay == -1 )
+                nSelectedIndex = nInsertedEntry;
 
             if (nSelectedIndex < 0)
             {

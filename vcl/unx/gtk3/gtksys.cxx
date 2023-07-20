@@ -197,15 +197,6 @@ unsigned int GtkSalSystem::GetDisplayScreenCount()
 #endif
 }
 
-bool GtkSalSystem::IsUnifiedDisplay()
-{
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    return gdk_display_get_n_screens (mpDisplay) == 1;
-#else
-    return true;
-#endif
-}
-
 unsigned int GtkSalSystem::GetDisplayBuiltInScreen()
 {
 #if GTK_CHECK_VERSION(4, 0, 0)

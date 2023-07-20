@@ -2883,7 +2883,7 @@ bool PopupMenu::PrepareRun(const VclPtr<vcl::Window>& pParentWin, tools::Rectang
     Size aSz = ImplCalcSize( pWin );
 
     tools::Rectangle aDesktopRect(pWin->GetDesktopRectPixel());
-    if( Application::GetScreenCount() > 1 && Application::IsUnifiedDisplay() )
+    if( Application::GetScreenCount() > 1 )
     {
         vcl::Window* pDeskW = pWindow->GetWindow( GetWindowType::RealParent );
         if( ! pDeskW )

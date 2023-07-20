@@ -567,15 +567,9 @@ OUString vcl::WindowData::toStr() const
 
 void SystemWindow::ImplMoveToScreen( tools::Long& io_rX, tools::Long& io_rY, tools::Long i_nWidth, tools::Long i_nHeight, vcl::Window const * i_pConfigureWin )
 {
-    tools::Rectangle aScreenRect;
-    if( !Application::IsUnifiedDisplay() )
-        aScreenRect = Application::GetScreenPosSizePixel( GetScreenNumber() );
-    else
-    {
-        aScreenRect = Application::GetScreenPosSizePixel( 0 );
-        for( unsigned int i = 1; i < Application::GetScreenCount(); i++ )
-            aScreenRect.Union( Application::GetScreenPosSizePixel( i ) );
-    }
+    tools::Rectangle aScreenRect = Application::GetScreenPosSizePixel( 0 );
+    for( unsigned int i = 1; i < Application::GetScreenCount(); i++ )
+        aScreenRect.Union( Application::GetScreenPosSizePixel( i ) );
     // unfortunately most of the time width and height are not really known
     if( i_nWidth < 1 )
         i_nWidth = 50;

@@ -26,7 +26,6 @@ public:
     virtual ~GtkSalSystem() override;
     static   GtkSalSystem *GetSingleton();
 
-    virtual bool          IsUnifiedDisplay() override;
     virtual unsigned int  GetDisplayScreenCount() override;
     virtual unsigned int  GetDisplayBuiltInScreen() override;
     virtual tools::Rectangle     GetDisplayScreenPosSizePixel   (unsigned int nScreen) override;

@@ -981,27 +981,9 @@ public:
     */
     static tools::Rectangle            GetScreenPosSizePixel( unsigned int nScreen );
 
-    /** Determines if the screens that make up a display are separate or
-     form one large display area.
-
-     @returns true when screens form up one large display area windows can be
-        moved between single screens (e.g. Xserver with Xinerama, Windows)
-        and false when different screens are separate and windows cannot be moved
-        between them (e.g. Xserver with multiple screens)
-
-     @see GetBestScreen, GetDisplayBuiltInScreen
-    */
-    static bool                 IsUnifiedDisplay();
-
     /** Get the "best" screen.
 
-     @returns If IsUnifiedDisplay() == true the return value will be
-       nearest screen of the target rectangle.
-
-       In case of IsUnifiedDisplay() == false the return value
-       will always be GetDisplayDefaultScreen().
-
-     @see IsUnifiedDisplay, GetDisplayBuiltInScreen
+     @returns the return value will be nearest screen of the target rectangle.
     */
     SAL_DLLPRIVATE static unsigned int GetBestScreen( const tools::Rectangle& );
 

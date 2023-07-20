@@ -255,7 +255,7 @@ Point FloatingWindow::ImplCalcPos(vcl::Window* pWindow,
     if( bRTL )
         // create a rect that can be compared to desktop coordinates
         devRectRTL = pW->ImplOutputToUnmirroredAbsoluteScreenPixel( normRect );
-    if( Application::GetScreenCount() > 1 && Application::IsUnifiedDisplay() )
+    if( Application::GetScreenCount() > 1 )
         aScreenRect = Application::GetScreenPosSizePixel(
             Application::GetBestScreen( bRTL ? devRectRTL : devRect ) );
 

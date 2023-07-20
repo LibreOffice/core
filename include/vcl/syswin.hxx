@@ -119,7 +119,7 @@ public:
     SAL_DLLPRIVATE bool isDeferredInit() const { return mbIsDeferredInit; }
 
 private:
-    SAL_DLLPRIVATE void ImplMoveToScreen( tools::Long& io_rX, tools::Long& io_rY, tools::Long i_nWidth, tools::Long i_nHeight, vcl::Window const * i_pConfigureWin );
+    static SAL_DLLPRIVATE void ImplMoveToScreen( tools::Long& io_rX, tools::Long& io_rY, tools::Long i_nWidth, tools::Long i_nHeight, vcl::Window const * i_pConfigureWin );
     SAL_DLLPRIVATE void setPosSizeOnContainee(Size aSize, Window &rBox);
     DECL_DLLPRIVATE_LINK( ImplHandleLayoutTimerHdl, Timer*, void );
 

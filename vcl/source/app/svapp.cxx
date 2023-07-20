@@ -1222,12 +1222,6 @@ unsigned int Application::GetScreenCount()
     return pSys ? pSys->GetDisplayScreenCount() : 0;
 }
 
-bool Application::IsUnifiedDisplay()
-{
-    SalSystem* pSys = ImplGetSalSystem();
-    return pSys == nullptr || pSys->IsUnifiedDisplay();
-}
-
 unsigned int Application::GetDisplayBuiltInScreen()
 {
     SalSystem* pSys = ImplGetSalSystem();
@@ -1285,9 +1279,6 @@ tools::Long calcDistSquare( const Point& i_rPoint, const tools::Rectangle& i_rRe
 
 unsigned int Application::GetBestScreen( const tools::Rectangle& i_rRect )
 {
-    if( !IsUnifiedDisplay() )
-        return GetDisplayBuiltInScreen();
-
     const unsigned int nScreens = GetScreenCount();
     unsigned int nBestMatchScreen = 0;
     unsigned long nOverlap = 0;
