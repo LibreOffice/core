@@ -578,7 +578,7 @@ OUString ScAccessiblePreviewTable::createAccessibleName()
     return sName;
 }
 
-tools::Rectangle ScAccessiblePreviewTable::GetBoundingBoxOnScreen() const
+AbsoluteScreenPixelRectangle ScAccessiblePreviewTable::GetBoundingBoxOnScreen() const
 {
     tools::Rectangle aCellRect(GetBoundingBox());
     if (mpViewShell)
@@ -586,11 +586,11 @@ tools::Rectangle ScAccessiblePreviewTable::GetBoundingBoxOnScreen() const
         vcl::Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
         {
-            tools::Rectangle aRect = pWindow->GetWindowExtentsAbsolute();
+            AbsoluteScreenPixelRectangle aRect = pWindow->GetWindowExtentsAbsolute();
             aCellRect.Move(aRect.Left(), aRect.Top());
         }
     }
-    return aCellRect;
+    return AbsoluteScreenPixelRectangle(aCellRect);
 }
 
 tools::Rectangle ScAccessiblePreviewTable::GetBoundingBox() const

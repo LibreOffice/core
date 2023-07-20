@@ -789,7 +789,7 @@ Document::retrieveParagraphBounds(Paragraph const * pParagraph,
 
     Point aOrig(0, 0);
     if (bAbsolute)
-        aOrig = m_rView.GetWindow()->OutputToAbsoluteScreenPixel(aOrig);
+        aOrig = Point(m_rView.GetWindow()->OutputToAbsoluteScreenPixel(aOrig));
 
     return css::awt::Rectangle(
         static_cast< ::sal_Int32 >(aOrig.X()),

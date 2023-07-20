@@ -1372,11 +1372,11 @@ void ImplStdBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, con
         if (pWin)
         {
             vcl::Region aClipRgn(aInRect);
-            tools::Rectangle aItemClipRect(pWin->ImplGetItemEdgeClipRect());
+            AbsoluteScreenPixelRectangle aItemClipRect(pWin->ImplGetItemEdgeClipRect());
             if (!aItemClipRect.IsEmpty())
             {
-                aItemClipRect.SetPos(pData->mpBorderWindow->AbsoluteScreenToOutputPixel(aItemClipRect.TopLeft()));
-                aClipRgn.Exclude(aItemClipRect);
+                tools::Rectangle aTmp(pData->mpBorderWindow->AbsoluteScreenToOutputPixel(aItemClipRect.TopLeft()), aItemClipRect.GetSize());
+                aClipRgn.Exclude(aTmp);
                 rRenderContext.SetClipRegion(aClipRgn);
             }
         }

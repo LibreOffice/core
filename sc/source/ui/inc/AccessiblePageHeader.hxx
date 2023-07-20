@@ -69,7 +69,7 @@ protected:
     virtual OUString createAccessibleDescription() override;
     virtual OUString createAccessibleName() override;
 
-    virtual tools::Rectangle GetBoundingBoxOnScreen() const override;
+    virtual AbsoluteScreenPixelRectangle GetBoundingBoxOnScreen() const override;
     virtual tools::Rectangle GetBoundingBox() const override;
 
 private:

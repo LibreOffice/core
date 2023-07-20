@@ -1458,8 +1458,8 @@ tools::Long ComboBox::GetIndexForPoint( const Point& rPoint, sal_Int32& rPos ) c
 
         // convert coordinates to ImplListBoxWindow pixel coordinate space
         Point aConvPoint = LogicToPixel( rPoint );
-        aConvPoint = OutputToAbsoluteScreenPixel( aConvPoint );
-        aConvPoint = rMain->AbsoluteScreenToOutputPixel( aConvPoint );
+        AbsoluteScreenPixelPoint aConvPointAbs = OutputToAbsoluteScreenPixel( aConvPoint );
+        aConvPoint = rMain->AbsoluteScreenToOutputPixel( aConvPointAbs );
         aConvPoint = rMain->PixelToLogic( aConvPoint );
 
         // try to find entry

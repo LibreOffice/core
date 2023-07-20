@@ -109,7 +109,7 @@ protected:
     virtual tools::Rectangle implGetBoundingBox() override;
     /** @attention  This method requires locked mutex's and a living object.
         @return  The bounding box (VCL rect.) in screen coordinates. */
-    virtual tools::Rectangle implGetBoundingBoxOnScreen() override;
+    virtual AbsoluteScreenPixelRectangle implGetBoundingBoxOnScreen() override;
 
     // internal helper methods
 

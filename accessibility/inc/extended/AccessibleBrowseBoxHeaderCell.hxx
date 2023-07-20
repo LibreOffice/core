@@ -61,7 +61,7 @@ namespace accessibility
     private:
         virtual tools::Rectangle implGetBoundingBox() override;
 
-        virtual tools::Rectangle implGetBoundingBoxOnScreen() override;
+        virtual AbsoluteScreenPixelRectangle implGetBoundingBoxOnScreen() override;
     };
 }
 

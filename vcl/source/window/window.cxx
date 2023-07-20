@@ -2796,9 +2796,9 @@ Point Window::GetPosPixel() const
     return mpWindowImpl->maPos;
 }
 
-tools::Rectangle Window::GetDesktopRectPixel() const
+AbsoluteScreenPixelRectangle Window::GetDesktopRectPixel() const
 {
-    tools::Rectangle rRect;
+    AbsoluteScreenPixelRectangle rRect;
     mpWindowImpl->mpFrameWindow->mpWindowImpl->mpFrame->GetWorkArea( rRect );
     return rRect;
 }
@@ -2852,27 +2852,27 @@ Point Window::NormalizedScreenToOutputPixel( const Point& rPos ) const
     return Point( rPos.X()-offx, rPos.Y() - GetOutDev()->mnOutOffY );
 }
 
-Point Window::OutputToAbsoluteScreenPixel( const Point& rPos ) const
+AbsoluteScreenPixelPoint Window::OutputToAbsoluteScreenPixel( const Point& rPos ) const
 {
     // relative to the screen
     Point p = OutputToScreenPixel( rPos );
     SalFrameGeometry g = mpWindowImpl->mpFrame->GetGeometry();
     p.AdjustX(g.x() );
     p.AdjustY(g.y() );
-    return p;
+    return AbsoluteScreenPixelPoint(p);
 }
 
-Point Window::AbsoluteScreenToOutputPixel( const Point& rPos ) const
+Point Window::AbsoluteScreenToOutputPixel( const AbsoluteScreenPixelPoint& rPos ) const
 {
     // relative to the screen
-    Point p = ScreenToOutputPixel( rPos );
+    Point p = ScreenToOutputPixel( Point(rPos) );
     SalFrameGeometry g = mpWindowImpl->mpFrame->GetGeometry();
     p.AdjustX( -(g.x()) );
     p.AdjustY( -(g.y()) );
     return p;
 }
 
-tools::Rectangle Window::ImplOutputToUnmirroredAbsoluteScreenPixel( const tools::Rectangle &rRect ) const
+AbsoluteScreenPixelRectangle Window::ImplOutputToUnmirroredAbsoluteScreenPixel( const tools::Rectangle &rRect ) const
 {
     // this method creates unmirrored screen coordinates to be compared with the desktop
     // and is used for positioning of RTL popup windows correctly on the screen
@@ -2888,20 +2888,20 @@ tools::Rectangle Window::ImplOutputToUnmirroredAbsoluteScreenPixel( const tools:
     p2.setX( g.x()+g.width()-p2.X() );
     p2.AdjustY(g.y() );
 
-    return tools::Rectangle( p1, p2 );
+    return AbsoluteScreenPixelRectangle( AbsoluteScreenPixelPoint(p1), AbsoluteScreenPixelPoint(p2) );
 }
 
-tools::Rectangle Window::ImplUnmirroredAbsoluteScreenToOutputPixel( const tools::Rectangle &rRect ) const
+tools::Rectangle Window::ImplUnmirroredAbsoluteScreenToOutputPixel( const AbsoluteScreenPixelRectangle &rRect ) const
 {
     // undo ImplOutputToUnmirroredAbsoluteScreenPixel
     SalFrameGeometry g = mpWindowImpl->mpFrame->GetUnmirroredGeometry();
 
-    Point p1 = rRect.TopRight();
+    Point p1( rRect.TopRight() );
     p1.AdjustY(-g.y() );
     p1.setX( g.x()+g.width()-p1.X() );
     p1 = ScreenToOutputPixel(p1);
 
-    Point p2 = rRect.BottomLeft();
+    Point p2( rRect.BottomLeft() );
     p2.AdjustY(-g.y());
     p2.setX( g.x()+g.width()-p2.X() );
     p2 = ScreenToOutputPixel(p2);
@@ -2913,21 +2913,22 @@ tools::Rectangle Window::ImplUnmirroredAbsoluteScreenToOutputPixel( const tools:
 // with decoration
 tools::Rectangle Window::GetWindowExtentsRelative(const vcl::Window & rRelativeWindow) const
 {
-    tools::Rectangle aRect = GetWindowExtentsAbsolute();
+    AbsoluteScreenPixelRectangle aRect = GetWindowExtentsAbsolute();
     // #106399# express coordinates relative to borderwindow
     const vcl::Window *pRelWin = rRelativeWindow.mpWindowImpl->mpBorderWindow ? rRelativeWindow.mpWindowImpl->mpBorderWindow.get() : &rRelativeWindow;
-    aRect.SetPos( pRelWin->AbsoluteScreenToOutputPixel( aRect.GetPos() ) );
-    return aRect;
+    return tools::Rectangle(
+        pRelWin->AbsoluteScreenToOutputPixel( aRect.GetPos() ),
+        aRect.GetSize() );
 }
 
 // with decoration
-tools::Rectangle Window::GetWindowExtentsAbsolute() const
+AbsoluteScreenPixelRectangle Window::GetWindowExtentsAbsolute() const
 {
     // make sure we use the extent of our border window,
     // otherwise we miss a few pixels
     const vcl::Window *pWin = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow : this;
 
-    Point aPos( pWin->OutputToAbsoluteScreenPixel( Point(0,0) ) );
+    AbsoluteScreenPixelPoint aPos( pWin->OutputToAbsoluteScreenPixel( Point(0,0) ) );
     Size aSize ( pWin->GetSizePixel() );
     // #104088# do not add decoration to the workwindow to be compatible to java accessibility api
     if( mpWindowImpl->mbFrame || (mpWindowImpl->mpBorderWindow && mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame && GetType() != WindowType::WORKWINDOW) )
@@ -2938,7 +2939,7 @@ tools::Rectangle Window::GetWindowExtentsAbsolute() const
         aSize.AdjustWidth(g.leftDecoration() + g.rightDecoration() );
         aSize.AdjustHeight(g.topDecoration() + g.bottomDecoration() );
     }
-    return tools::Rectangle( aPos, aSize );
+    return AbsoluteScreenPixelRectangle( aPos, aSize );
 }
 
 void Window::Scroll( tools::Long nHorzScroll, tools::Long nVertScroll, ScrollFlags nFlags )

@@ -136,16 +136,16 @@ tools::Rectangle AccessibleGridControlHeaderCell::implGetBoundingBox()
 }
 
 
-tools::Rectangle AccessibleGridControlHeaderCell::implGetBoundingBoxOnScreen()
+AbsoluteScreenPixelRectangle AccessibleGridControlHeaderCell::implGetBoundingBoxOnScreen()
 {
-    tools::Rectangle aGridRect( m_aTable.GetWindowExtentsAbsolute() );
+    AbsoluteScreenPixelRectangle aGridRect( m_aTable.GetWindowExtentsAbsolute() );
     sal_Int32 nIndex = getAccessibleIndexInParent();
     tools::Rectangle aCellRect;
     if (m_eObjType == AccessibleTableControlObjType::COLUMNHEADERCELL)
         aCellRect = m_aTable.calcHeaderCellRect(true, nIndex);
     else
         aCellRect = m_aTable.calcHeaderCellRect(false, nIndex);
-    return tools::Rectangle(Point(aGridRect.Left()+aCellRect.Left(),aGridRect.Top()+aCellRect.Top()), aCellRect.GetSize());
+    return AbsoluteScreenPixelRectangle(AbsoluteScreenPixelPoint(aGridRect.Left()+aCellRect.Left(),aGridRect.Top()+aCellRect.Top()), aCellRect.GetSize());
 }
 
 sal_Int64 SAL_CALL AccessibleGridControlHeaderCell::getAccessibleIndexInParent()

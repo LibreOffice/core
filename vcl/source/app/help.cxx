@@ -582,17 +582,17 @@ void ImplDestroyHelpWindow(ImplSVHelpData& rHelpData, bool bUpdateHideTime)
 void ImplSetHelpWindowPos( vcl::Window* pHelpWin, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle,
                            const Point& rPos, const tools::Rectangle& rHelpArea )
 {
-    Point       aPos;
-    Size        aSz = pHelpWin->GetSizePixel();
-    tools::Rectangle   aScreenRect = pHelpWin->ImplGetFrameWindow()->GetDesktopRectPixel();
+    AbsoluteScreenPixelPoint aPos;
+    AbsoluteScreenPixelSize aSz( pHelpWin->GetSizePixel() );
+    AbsoluteScreenPixelRectangle   aScreenRect = pHelpWin->ImplGetFrameWindow()->GetDesktopRectPixel();
     vcl::Window* pWindow = pHelpWin->GetParent()->ImplGetFrameWindow();
     // get mouse screen coords
-    Point aMousePos(pWindow->OutputToAbsoluteScreenPixel(pWindow->GetPointerPosPixel()));
+    AbsoluteScreenPixelPoint aMousePos(pWindow->OutputToAbsoluteScreenPixel(pWindow->GetPointerPosPixel()));
 
     if ( nStyle & QuickHelpFlags::NoAutoPos )
     {
         // convert help area to screen coords
-        tools::Rectangle devHelpArea(
+        AbsoluteScreenPixelRectangle devHelpArea(
             pWindow->OutputToAbsoluteScreenPixel( rHelpArea.TopLeft() ),
             pWindow->OutputToAbsoluteScreenPixel( rHelpArea.BottomRight() ) );
 
@@ -666,12 +666,12 @@ void ImplSetHelpWindowPos( vcl::Window* pHelpWin, sal_uInt16 nHelpWinStyle, Quic
         // the popup must not appear under the mouse
         // otherwise it would directly be closed due to a focus change...
         */
-        tools::Rectangle aHelpRect( aPos, aSz );
+        AbsoluteScreenPixelRectangle aHelpRect( aPos, aSz );
         if( aHelpRect.Contains( aMousePos ) )
         {
-            Point delta(2,2);
-            Point aSize( aSz.Width(), aSz.Height() );
-            Point aTest( aMousePos - aSize - delta );
+            AbsoluteScreenPixelPoint delta(2,2);
+            AbsoluteScreenPixelPoint aSize( aSz.Width(), aSz.Height() );
+            AbsoluteScreenPixelPoint aTest( aMousePos - aSize - delta );
             if( aTest.X() > aScreenRect.Left() && aTest.Y() > aScreenRect.Top() )
                 aPos = aTest;
             else
@@ -679,8 +679,8 @@ void ImplSetHelpWindowPos( vcl::Window* pHelpWin, sal_uInt16 nHelpWinStyle, Quic
         }
     }
 
-    aPos = pWindow->AbsoluteScreenToOutputPixel( aPos );
-    pHelpWin->SetPosPixel( aPos );
+    Point aPosOut = pWindow->AbsoluteScreenToOutputPixel( aPos );
+    pHelpWin->SetPosPixel( aPosOut );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

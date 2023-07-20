@@ -191,7 +191,7 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 //====  internal  =========================================================
 
-tools::Rectangle ScAccessiblePreviewCell::GetBoundingBoxOnScreen() const
+AbsoluteScreenPixelRectangle ScAccessiblePreviewCell::GetBoundingBoxOnScreen() const
 {
     tools::Rectangle aCellRect;
     if (mpViewShell)
@@ -200,11 +200,11 @@ tools::Rectangle ScAccessiblePreviewCell::GetBoundingBoxOnScreen() const
         vcl::Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
         {
-            tools::Rectangle aRect = pWindow->GetWindowExtentsAbsolute();
+            AbsoluteScreenPixelRectangle aRect = pWindow->GetWindowExtentsAbsolute();
             aCellRect.Move(aRect.Left(), aRect.Top());
         }
     }
-    return aCellRect;
+    return AbsoluteScreenPixelRectangle(aCellRect);
 }
 
 tools::Rectangle ScAccessiblePreviewCell::GetBoundingBox() const

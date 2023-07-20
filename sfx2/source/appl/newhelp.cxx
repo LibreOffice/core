@@ -2505,9 +2505,9 @@ void SfxHelpWindow_Impl::setContainerWindow( const Reference < css::awt::XWindow
     {
         VclPtr<vcl::Window> pScreenWin = VCLUnoHelper::GetWindow(xWindow);
         if (aWinSize.Width() && aWinSize.Height())
-            pScreenWin->SetPosSizePixel(aWinPos, aWinSize);
+            pScreenWin->SetPosSizePixel(Point(aWinPos), aWinSize);
         else
-            pScreenWin->SetPosPixel(aWinPos);
+            pScreenWin->SetPosPixel(Point(aWinPos));
     }
 }
 

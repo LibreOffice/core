@@ -38,18 +38,18 @@ unsigned int AquaSalSystem::GetDisplayScreenCount()
     return pScreens ? [pScreens count] : 1;
 }
 
-tools::Rectangle AquaSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
+AbsoluteScreenPixelRectangle AquaSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
 {
     if (Application::IsBitmapRendering())
     {
-        tools::Rectangle aRect;
+        AbsoluteScreenPixelRectangle aRect;
         if (nScreen == 0)
-            aRect = tools::Rectangle(Point(0,0), Size(1024, 768));
+            aRect = AbsoluteScreenPixelRectangle(AbsoluteScreenPixelPoint(0,0), AbsoluteScreenPixelSize(1024, 768));
         return aRect;
     }
 
     NSArray* pScreens = [NSScreen screens];
-    tools::Rectangle aRet;
+    AbsoluteScreenPixelRectangle aRet;
     NSScreen* pScreen = nil;
     if( pScreens && nScreen < [pScreens count] )
         pScreen = [pScreens objectAtIndex: nScreen];
@@ -59,8 +59,9 @@ tools::Rectangle AquaSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScre
     if( pScreen )
     {
         NSRect aFrame = [pScreen frame];
-        aRet = tools::Rectangle( Point( static_cast<tools::Long>(aFrame.origin.x), static_cast<tools::Long>(aFrame.origin.y) ),
-                          Size( static_cast<tools::Long>(aFrame.size.width), static_cast<tools::Long>(aFrame.size.height) ) );
+        aRet = AbsoluteScreenPixelRectangle(
+                   AbsoluteScreenPixelPoint( static_cast<tools::Long>(aFrame.origin.x), static_cast<tools::Long>(aFrame.origin.y) ),
+                   AbsoluteScreenPixelSize( static_cast<tools::Long>(aFrame.size.width), static_cast<tools::Long>(aFrame.size.height) ) );
     }
     return aRet;
 }

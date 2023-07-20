@@ -535,7 +535,7 @@ public:
     virtual bool get_resizable() const = 0;
     virtual Size get_size() const = 0;
     virtual Point get_position() const = 0;
-    virtual tools::Rectangle get_monitor_workarea() const = 0;
+    virtual AbsoluteScreenPixelRectangle get_monitor_workarea() const = 0;
     // center window on is parent
     //
     // bTrackGeometryRequests set to true tries to ensure the window will end
@@ -2370,7 +2370,7 @@ public:
 
     virtual a11yref get_accessible_parent() = 0;
     virtual a11yrelationset get_accessible_relation_set() = 0;
-    virtual Point get_accessible_location_on_screen() = 0;
+    virtual AbsoluteScreenPixelPoint get_accessible_location_on_screen() = 0;
 
 private:
     friend class ::LOKTrigger;

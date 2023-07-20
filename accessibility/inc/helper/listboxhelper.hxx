@@ -49,7 +49,7 @@ public:
 
     virtual tools::Rectangle       GetDropDownPosSizePixel() const override
     {
-        tools::Rectangle aTemp = m_aComboListBox.GetWindowExtentsAbsolute();
+        AbsoluteScreenPixelRectangle aTemp = m_aComboListBox.GetWindowExtentsAbsolute();
         tools::Rectangle aRet = m_aComboListBox.GetDropDownPosSizePixel();
         aRet.Move(aTemp.Left(), aTemp.Top());
         return aRet;
@@ -74,7 +74,7 @@ public:
         return aRect;
     }
 
-    virtual tools::Rectangle       GetWindowExtentsAbsolute() override
+    virtual AbsoluteScreenPixelRectangle GetWindowExtentsAbsolute() override
     {
         return m_aComboListBox.GetWindowExtentsAbsolute();
     }

@@ -19,21 +19,21 @@
 
 #include <tools/gen.hxx>
 
-void Point::RotateAround( Point& rPoint,
+void PointTemplateBase::RotateAround( PointTemplateBase& rPoint,
                           Degree10 nOrientation ) const
 {
-    tools::Long nX = rPoint.X();
-    tools::Long nY = rPoint.Y();
+    tools::Long nX = rPoint.mnA;
+    tools::Long nY = rPoint.mnB;
     RotateAround(nX, nY, nOrientation);
-    rPoint.setX(nX);
-    rPoint.setY(nY);
+    rPoint.mnA = nX;
+    rPoint.mnB = nY;
 }
 
-void Point::RotateAround( tools::Long& rX, tools::Long& rY,
+void PointTemplateBase::RotateAround( tools::Long& rX, tools::Long& rY,
                           Degree10 nOrientation ) const
 {
-    const tools::Long nOriginX = X();
-    const tools::Long nOriginY = Y();
+    const tools::Long nOriginX = mnA;
+    const tools::Long nOriginY = mnB;
 
     if ( (nOrientation >= 0_deg10) && !(nOrientation % 900_deg10) )
     {

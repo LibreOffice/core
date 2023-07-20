@@ -163,7 +163,7 @@ void BubbleWindow::Show( bool bVisible )
     Point aPos;
     aPos.setX( maTipPos.X() - aWindowSize.Width() + TIP_RIGHT_OFFSET );
     aPos.setY( maTipPos.Y() );
-    Point aScreenPos = GetParent()->OutputToAbsoluteScreenPixel( aPos );
+    AbsoluteScreenPixelPoint aScreenPos = GetParent()->OutputToAbsoluteScreenPixel( aPos );
     if ( aScreenPos.X() < 0 )
     {
         mnTipOffset = aScreenPos.X();

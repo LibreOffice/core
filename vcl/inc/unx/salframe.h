@@ -93,7 +93,7 @@ class X11SalFrame final : public SalFrame
     X11ShowState    nShowState_;        // show state
     int             nWidth_;            // client width
     int             nHeight_;           // client height
-    tools::Rectangle       maRestorePosSize;
+    AbsoluteScreenPixelRectangle maRestorePosSize;
     SalFrameStyleFlags nStyle_;
     SalExtStyle     mnExtStyle;
     bool            bAlwaysOnTop_;
@@ -133,10 +133,10 @@ class X11SalFrame final : public SalFrame
 
     bool mPendingSizeEvent;
 
-    void            GetPosSize( tools::Rectangle &rPosSize );
+    void            GetPosSize( AbsoluteScreenPixelRectangle &rPosSize );
     void            SetSize   ( const Size      &rSize );
     void            Center();
-    void            SetPosSize( const tools::Rectangle &rPosSize );
+    void            SetPosSize( const AbsoluteScreenPixelRectangle &rPosSize );
     void            Minimize();
     void            Maximize();
     void            Restore();
@@ -222,7 +222,7 @@ public:
     virtual void                SetMaxClientSize( tools::Long nWidth, tools::Long nHeight ) override;
     virtual void                SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt16 nFlags ) override;
     virtual void                GetClientSize( tools::Long& rWidth, tools::Long& rHeight ) override;
-    virtual void                GetWorkArea( tools::Rectangle& rRect ) override;
+    virtual void                GetWorkArea( AbsoluteScreenPixelRectangle& rRect ) override;
     virtual SalFrame*           GetParent() const override;
     virtual void SetWindowState(const vcl::WindowData*) override;
     virtual bool GetWindowState(vcl::WindowData*) override;

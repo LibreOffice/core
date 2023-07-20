@@ -1487,9 +1487,9 @@ OUString ScAccessibleDocumentPagePreview::createAccessibleName()
     return sName;
 }
 
-tools::Rectangle ScAccessibleDocumentPagePreview::GetBoundingBoxOnScreen() const
+AbsoluteScreenPixelRectangle ScAccessibleDocumentPagePreview::GetBoundingBoxOnScreen() const
 {
-    tools::Rectangle aRect;
+    AbsoluteScreenPixelRectangle aRect;
     if (mpViewShell)
     {
         vcl::Window* pWindow = mpViewShell->GetWindow();

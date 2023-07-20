@@ -222,9 +222,9 @@ OUString ScAccessiblePageHeaderArea::createAccessibleName()
     return sName;
 }
 
-tools::Rectangle ScAccessiblePageHeaderArea::GetBoundingBoxOnScreen() const
+AbsoluteScreenPixelRectangle ScAccessiblePageHeaderArea::GetBoundingBoxOnScreen() const
 {
-    tools::Rectangle aRect;
+    AbsoluteScreenPixelRectangle aRect;
     if (mxParent.is())
     {
         uno::Reference<XAccessibleContext> xContext = mxParent->getAccessibleContext();
@@ -232,7 +232,9 @@ tools::Rectangle ScAccessiblePageHeaderArea::GetBoundingBoxOnScreen() const
         if (xComp.is())
         {
             // has the same size and position on screen like the parent
-            aRect = tools::Rectangle(VCLPoint(xComp->getLocationOnScreen()), VCLRectangle(xComp->getBounds()).GetSize());
+            aRect = AbsoluteScreenPixelRectangle(
+                        AbsoluteScreenPixelPoint(VCLPoint(xComp->getLocationOnScreen())),
+                        AbsoluteScreenPixelSize(VCLRectangle(xComp->getBounds()).GetSize()));
         }
     }
     return aRect;

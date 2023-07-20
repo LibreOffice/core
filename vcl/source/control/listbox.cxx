@@ -661,8 +661,8 @@ tools::Long ListBox::GetIndexForPoint( const Point& rPoint, sal_Int32& rPos ) co
 
         // Convert coordinates to ImplListBoxWindow pixel coordinate space
         Point aConvPoint = LogicToPixel( rPoint );
-        aConvPoint = OutputToAbsoluteScreenPixel( aConvPoint );
-        aConvPoint = rMain->AbsoluteScreenToOutputPixel( aConvPoint );
+        AbsoluteScreenPixelPoint aConvPointAbs = OutputToAbsoluteScreenPixel( aConvPoint );
+        aConvPoint = rMain->AbsoluteScreenToOutputPixel( aConvPointAbs );
         aConvPoint = rMain->PixelToLogic( aConvPoint );
 
         // Try to find entry
@@ -674,8 +674,8 @@ tools::Long ListBox::GetIndexForPoint( const Point& rPoint, sal_Int32& rPos ) co
             {
                 // Convert to impl window pixel coordinates
                 aConvPoint = LogicToPixel( rPoint );
-                aConvPoint = OutputToAbsoluteScreenPixel( aConvPoint );
-                aConvPoint = mpImplWin->AbsoluteScreenToOutputPixel( aConvPoint );
+                aConvPointAbs = OutputToAbsoluteScreenPixel( aConvPoint );
+                aConvPoint = mpImplWin->AbsoluteScreenToOutputPixel( aConvPointAbs );
 
                 // Check whether converted point is inside impl window
                 Size aImplWinSize = mpImplWin->GetOutputSizePixel();

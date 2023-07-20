@@ -979,13 +979,13 @@ public:
 
      @see GetScreenCount
     */
-    static tools::Rectangle            GetScreenPosSizePixel( unsigned int nScreen );
+    static AbsoluteScreenPixelRectangle GetScreenPosSizePixel( unsigned int nScreen );
 
     /** Get the "best" screen.
 
      @returns the return value will be nearest screen of the target rectangle.
     */
-    SAL_DLLPRIVATE static unsigned int GetBestScreen( const tools::Rectangle& );
+    SAL_DLLPRIVATE static unsigned int GetBestScreen( const AbsoluteScreenPixelRectangle& );
 
     /** Get the built-in screen.
 

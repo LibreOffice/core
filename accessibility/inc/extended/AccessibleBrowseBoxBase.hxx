@@ -241,7 +241,7 @@ protected:
     /** Derived classes return the bounding box in screen coordinates.
         @attention  This method requires locked mutex's and a living object.
         @return  The bounding box (VCL rect.) in screen coordinates. */
-    virtual tools::Rectangle implGetBoundingBoxOnScreen() = 0;
+    virtual AbsoluteScreenPixelRectangle implGetBoundingBoxOnScreen() = 0;
 
     /** Creates a bitset of states of the
         current object. This method calls FillStateSet at the BrowseBox which
@@ -268,7 +268,7 @@ protected:
         @return  The bounding box (VCL rect.) in screen coordinates.
         @throws css::lang::DisposedException
     */
-    tools::Rectangle getBoundingBoxOnScreen();
+    AbsoluteScreenPixelRectangle getBoundingBoxOnScreen();
 
     ::comphelper::AccessibleEventNotifier::TClientId getClientId() const { return m_aClientId; }
     void setClientId(::comphelper::AccessibleEventNotifier::TClientId _aNewClientId) { m_aClientId = _aNewClientId; }

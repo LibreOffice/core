@@ -339,14 +339,14 @@ namespace accessibility
         return aCell;
     }
 
-    tools::Rectangle AccessibleGridControlTableCell::implGetBoundingBoxOnScreen()
+    AbsoluteScreenPixelRectangle AccessibleGridControlTableCell::implGetBoundingBoxOnScreen()
     {
-        tools::Rectangle aGridRect = m_aTable.GetWindowExtentsAbsolute();
+        AbsoluteScreenPixelRectangle aGridRect = m_aTable.GetWindowExtentsAbsolute();
         sal_Int64 nIndex = getAccessibleIndexInParent();
         tools::Rectangle aCellRect = m_aTable.calcCellRect(nIndex%m_aTable.GetColumnCount(), nIndex/m_aTable.GetColumnCount());
         tools::Long nX = aGridRect.Left() + aCellRect.Left();
         tools::Long nY = aGridRect.Top() + aCellRect.Top();
-        tools::Rectangle aCell( Point( nX, nY ), aCellRect.GetSize());
+        AbsoluteScreenPixelRectangle aCell( AbsoluteScreenPixelPoint( nX, nY ), aCellRect.GetSize());
         return aCell;
     }
 }

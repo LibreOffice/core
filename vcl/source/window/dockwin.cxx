@@ -925,11 +925,11 @@ Point DockingWindow::GetFloatingPos() const
             vcl::WindowData aData;
             aData.setMask(vcl::WindowDataMask::Pos);
             pWrapper->mpFloatWin->GetWindowState( aData );
-            Point aPos(aData.x(), aData.y());
+            AbsoluteScreenPixelPoint aPos(aData.x(), aData.y());
             // LOK needs logic coordinates not absolute screen position for autofilter menu
             if (!comphelper::LibreOfficeKit::isActive() || get_id() != "check_list_menu")
-                aPos = pWrapper->mpFloatWin->GetParent()->ImplGetFrameWindow()->AbsoluteScreenToOutputPixel( aPos );
-            return aPos;
+                return pWrapper->mpFloatWin->GetParent()->ImplGetFrameWindow()->AbsoluteScreenToOutputPixel( aPos );
+            return Point(aPos);
         }
         else
             return maFloatPos;
@@ -940,9 +940,8 @@ Point DockingWindow::GetFloatingPos() const
         vcl::WindowData aData;
         aData.setMask(vcl::WindowDataMask::Pos);
         mpFloatWin->GetWindowState( aData );
-        Point aPos(aData.x(), aData.y());
-        aPos = mpFloatWin->GetParent()->ImplGetFrameWindow()->AbsoluteScreenToOutputPixel( aPos );
-        return aPos;
+        AbsoluteScreenPixelPoint aPos(aData.x(), aData.y());
+        return mpFloatWin->GetParent()->ImplGetFrameWindow()->AbsoluteScreenToOutputPixel( aPos );
     }
     else
         return maFloatPos;
@@ -989,7 +988,7 @@ void DockingWindow::setOptimalLayoutSize()
     //resize DockingWindow to fit requisition on initial show
     Size aSize = get_preferred_size();
 
-    Size aMax(bestmaxFrameSizeForScreenSize(GetDesktopRectPixel().GetSize()));
+    Size aMax(bestmaxFrameSizeForScreenSize(Size(GetDesktopRectPixel().GetSize())));
 
     aSize.setWidth( std::min(aMax.Width(), aSize.Width()) );
     aSize.setHeight( std::min(aMax.Height(), aSize.Height()) );

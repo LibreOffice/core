@@ -1604,7 +1604,7 @@ Size SalInstanceWindow::get_size() const { return m_xWindow->GetSizePixel(); }
 
 Point SalInstanceWindow::get_position() const { return m_xWindow->GetPosPixel(); }
 
-tools::Rectangle SalInstanceWindow::get_monitor_workarea() const
+AbsoluteScreenPixelRectangle SalInstanceWindow::get_monitor_workarea() const
 {
     return m_xWindow->GetDesktopRectPixel();
 }
@@ -6286,7 +6286,7 @@ a11yrelationset SalInstanceDrawingArea::get_accessible_relation_set()
     return pRelationSetHelper;
 }
 
-Point SalInstanceDrawingArea::get_accessible_location_on_screen()
+AbsoluteScreenPixelPoint SalInstanceDrawingArea::get_accessible_location_on_screen()
 {
     return m_xDrawingArea->OutputToAbsoluteScreenPixel(Point());
 }

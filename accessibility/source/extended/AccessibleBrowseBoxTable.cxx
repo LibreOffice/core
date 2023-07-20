@@ -195,9 +195,9 @@ tools::Rectangle AccessibleBrowseBoxTable::implGetBoundingBox()
     return mpBrowseBox->calcTableRect(false);
 }
 
-tools::Rectangle AccessibleBrowseBoxTable::implGetBoundingBoxOnScreen()
+AbsoluteScreenPixelRectangle AccessibleBrowseBoxTable::implGetBoundingBoxOnScreen()
 {
-    return mpBrowseBox->calcTableRect();
+    return AbsoluteScreenPixelRectangle(mpBrowseBox->calcTableRect());
 }
 
 // internal helper methods ----------------------------------------------------

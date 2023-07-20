@@ -402,7 +402,7 @@ void AquaSalFrame::initShow()
     mbInitShow = false;
     if( ! mbPositioned && ! mbFullScreen )
     {
-        tools::Rectangle aScreenRect;
+        AbsoluteScreenPixelRectangle aScreenRect;
         GetWorkArea( aScreenRect );
         if( mpParent ) // center relative to parent
         {
@@ -1613,12 +1613,12 @@ void AquaSalFrame::SetPosSize(
     }
 }
 
-void AquaSalFrame::GetWorkArea( tools::Rectangle& rRect )
+void AquaSalFrame::GetWorkArea( AbsoluteScreenPixelRectangle& rRect )
 {
     if (!mpNSWindow)
     {
         if (Application::IsBitmapRendering())
-            rRect = tools::Rectangle(Point(0, 0), Size(1024, 768));
+            rRect = AbsoluteScreenPixelRectangle(AbsoluteScreenPixelPoint(0, 0), AbsoluteScreenPixelSize(1024, 768));
         return;
     }
 

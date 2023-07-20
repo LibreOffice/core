@@ -74,7 +74,7 @@ namespace accessibility
         virtual css::lang::Locale               implGetLocale() override;
         virtual void                            implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex ) override final;
         virtual tools::Rectangle implGetBoundingBox() override;
-        virtual tools::Rectangle implGetBoundingBoxOnScreen() override;
+        virtual AbsoluteScreenPixelRectangle implGetBoundingBoxOnScreen() override;
 
     public:
         AccessibleGridControlTableCell( const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,

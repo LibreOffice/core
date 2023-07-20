@@ -989,7 +989,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::getDesktopWindow(  )
 css::awt::Rectangle VCLXToolkit::getWorkArea(  )
 {
     sal_Int32 nDisplay = Application::GetDisplayBuiltInScreen();
-    tools::Rectangle aWorkRect = Application::GetScreenPosSizePixel( nDisplay );
+    AbsoluteScreenPixelRectangle aWorkRect = Application::GetScreenPosSizePixel( nDisplay );
     css::awt::Rectangle aNotherRect;
     aNotherRect.X = aWorkRect.Left();
     aNotherRect.Y = aWorkRect.Top();

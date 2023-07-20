@@ -337,7 +337,7 @@ public:
     virtual int CaptureMouse( SalFrame* pFrame );
 
     SalX11Screen GetDefaultXScreen() { return m_pSys->GetDisplayDefaultXScreen(); }
-    Size         GetScreenSize( int nDisplayScreen );
+    AbsoluteScreenPixelSize GetScreenSize( int nDisplayScreen );
 
     void startupNotificationCompleted() { m_bStartupCompleted = true; }
 

@@ -629,7 +629,7 @@ public:
 
         if (weld::DrawingArea* pDrawingArea = m_pController->GetDrawingArea())
         {
-            Point aPos = pDrawingArea->get_accessible_location_on_screen();
+            AbsoluteScreenPixelPoint aPos = pDrawingArea->get_accessible_location_on_screen();
             aScreenLoc.X = aPos.X();
             aScreenLoc.Y = aPos.Y();
         }

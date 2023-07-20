@@ -2227,17 +2227,17 @@ void GtkSalFrame::GetClientSize( tools::Long& rWidth, tools::Long& rHeight )
         rWidth = rHeight = 0;
 }
 
-void GtkSalFrame::GetWorkArea( tools::Rectangle& rRect )
+void GtkSalFrame::GetWorkArea( AbsoluteScreenPixelRectangle& rRect )
 {
     GdkRectangle aRect;
 #if !GTK_CHECK_VERSION(4, 0, 0)
     GdkScreen  *pScreen = gtk_widget_get_screen(m_pWindow);
-    tools::Rectangle aRetRect;
+    AbsoluteScreenPixelRectangle aRetRect;
     int max = gdk_screen_get_n_monitors (pScreen);
     for (int i = 0; i < max; ++i)
     {
         gdk_screen_get_monitor_workarea(pScreen, i, &aRect);
-        tools::Rectangle aMonitorRect(aRect.x, aRect.y, aRect.x+aRect.width, aRect.y+aRect.height);
+        AbsoluteScreenPixelRectangle aMonitorRect(aRect.x, aRect.y, aRect.x+aRect.width, aRect.y+aRect.height);
         aRetRect.Union(aMonitorRect);
     }
     rRect = aRetRect;
@@ -2246,7 +2246,7 @@ void GtkSalFrame::GetWorkArea( tools::Rectangle& rRect )
     GdkSurface* gdkWindow = widget_get_surface(m_pWindow);
     GdkMonitor* pMonitor = gdk_display_get_monitor_at_surface(pDisplay, gdkWindow);
     gdk_monitor_get_geometry(pMonitor, &aRect);
-    rRect = tools::Rectangle(aRect.x, aRect.y, aRect.x+aRect.width, aRect.y+aRect.height);
+    rRect = AbsoluteScreenPixelRectangle(aRect.x, aRect.y, aRect.x+aRect.width, aRect.y+aRect.height);
 #endif
 }
 
@@ -3940,7 +3940,7 @@ void GtkSalFrame::signalRealize(GtkWidget*, gpointer frame)
         swapDirection(menu_anchor);
     }
 
-    tools::Rectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(pVclParent, pThis->m_aFloatRect);
+    AbsoluteScreenPixelRectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(pVclParent, pThis->m_aFloatRect);
     if (gdk_window_get_window_type(widget_get_surface(pThis->m_pParent->m_pWindow)) != GDK_WINDOW_TOPLEVEL)
     {
         // See tdf#152155 for an example
@@ -6086,10 +6086,10 @@ gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint 
     return true;
 }
 
-Size GtkSalDisplay::GetScreenSize( int nDisplayScreen )
+AbsoluteScreenPixelSize GtkSalDisplay::GetScreenSize( int nDisplayScreen )
 {
-    tools::Rectangle aRect = m_pSys->GetDisplayScreenPosSizePixel( nDisplayScreen );
-    return Size( aRect.GetWidth(), aRect.GetHeight() );
+    AbsoluteScreenPixelRectangle aRect = m_pSys->GetDisplayScreenPosSizePixel( nDisplayScreen );
+    return AbsoluteScreenPixelSize( aRect.GetWidth(), aRect.GetHeight() );
 }
 
 sal_uIntPtr GtkSalFrame::GetNativeWindowHandle(GtkWidget *pWidget)

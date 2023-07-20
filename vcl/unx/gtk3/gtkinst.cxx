@@ -2259,7 +2259,7 @@ namespace
         {
             // this is the relatively unusual case where pParent is the toplevel GtkSalFrame and not a stock GtkWidget
             // so use the same style of logic as GtkSalMenu::ShowNativePopupMenu to get the right position
-            tools::Rectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(pFrame->GetWindow(), rInRect);
+            AbsoluteScreenPixelRectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(pFrame->GetWindow(), rInRect);
             aFloatRect.Move(-pFrame->maGeometry.x(), -pFrame->maGeometry.y());
 
             rOutRect = GdkRectangle{static_cast<int>(aFloatRect.Left()), static_cast<int>(aFloatRect.Top()),
@@ -6220,7 +6220,7 @@ namespace
 #endif
     }
 
-    tools::Rectangle get_monitor_workarea(GtkWidget* pWindow)
+    AbsoluteScreenPixelRectangle get_monitor_workarea(GtkWidget* pWindow)
     {
         GdkRectangle aRect;
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -6233,7 +6233,7 @@ namespace
         GdkMonitor* pMonitor = gdk_display_get_monitor_at_surface(pDisplay, gdkWindow);
         gdk_monitor_get_geometry(pMonitor, &aRect);
 #endif
-        return tools::Rectangle(aRect.x, aRect.y, aRect.x + aRect.width, aRect.y + aRect.height);
+        return AbsoluteScreenPixelRectangle(aRect.x, aRect.y, aRect.x + aRect.width, aRect.y + aRect.height);
     }
 
 
@@ -6402,7 +6402,7 @@ public:
         GtkInstanceContainer::hide();
     }
 
-    virtual tools::Rectangle get_monitor_workarea() const override
+    virtual AbsoluteScreenPixelRectangle get_monitor_workarea() const override
     {
         return ::get_monitor_workarea(GTK_WIDGET(m_pWindow));
     }
@@ -18651,7 +18651,7 @@ public:
         return uno::Reference<css::accessibility::XAccessibleRelationSet>();
     }
 
-    virtual Point get_accessible_location_on_screen() override
+    virtual AbsoluteScreenPixelPoint get_accessible_location_on_screen() override
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
         AtkObject* pAtkObject = default_drawing_area_get_accessible(m_pWidget);
@@ -18661,7 +18661,7 @@ public:
         if (pAtkObject && ATK_IS_COMPONENT(pAtkObject))
             atk_component_get_extents(ATK_COMPONENT(pAtkObject), &x, &y, nullptr, nullptr, ATK_XY_SCREEN);
 #endif
-        return Point(x, y);
+        return AbsoluteScreenPixelPoint(x, y);
     }
 
     virtual void set_accessible_name(const OUString& rName) override

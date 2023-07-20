@@ -306,9 +306,9 @@ tools::Rectangle AccessibleBrowseBoxHeaderBar::implGetBoundingBox()
     return mpBrowseBox->calcHeaderRect(isColumnBar(), false);
 }
 
-tools::Rectangle AccessibleBrowseBoxHeaderBar::implGetBoundingBoxOnScreen()
+AbsoluteScreenPixelRectangle AccessibleBrowseBoxHeaderBar::implGetBoundingBoxOnScreen()
 {
-    return mpBrowseBox->calcHeaderRect(isColumnBar());
+    return AbsoluteScreenPixelRectangle(mpBrowseBox->calcHeaderRect(isColumnBar()));
 }
 
 sal_Int32 AccessibleBrowseBoxHeaderBar::implGetRowCount() const

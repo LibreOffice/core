@@ -65,8 +65,8 @@ sal_uLong ScViewFunctionSet::CalcUpdateInterval( const Size& rWinSize, const Poi
 {
     sal_uLong nUpdateInterval = SELENG_AUTOREPEAT_INTERVAL_MAX;
     vcl::Window* pWin = m_pEngine->GetWindow();
-    tools::Rectangle aScrRect = pWin->GetDesktopRectPixel();
-    Point aRootPos = pWin->OutputToAbsoluteScreenPixel(Point(0,0));
+    AbsoluteScreenPixelRectangle aScrRect = pWin->GetDesktopRectPixel();
+    AbsoluteScreenPixelPoint aRootPos = pWin->OutputToAbsoluteScreenPixel(Point(0,0));
     if (bRightScroll)
     {
         double nWinRight = rWinSize.getWidth() + aRootPos.getX();

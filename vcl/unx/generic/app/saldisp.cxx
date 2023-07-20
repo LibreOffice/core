@@ -376,7 +376,7 @@ SalDisplay::initScreen( SalX11Screen nXScreen ) const
 
     Screen* pScreen = ScreenOfDisplay( pDisp_, nXScreen.getXScreen() );
 
-    pSD->m_aSize = Size( WidthOfScreen( pScreen ), HeightOfScreen( pScreen ) );
+    pSD->m_aSize = AbsoluteScreenPixelSize( WidthOfScreen( pScreen ), HeightOfScreen( pScreen ) );
     pSD->m_aRoot = RootWindow( pDisp_, nXScreen.getXScreen() );
     pSD->m_aVisual = SalVisual( &aVI );
     pSD->m_aColormap = SalColormap( this, aColMap, nXScreen );
@@ -2194,13 +2194,13 @@ void SalDisplay::addXineramaScreenUnique( int i, tools::Long i_nX, tools::Long i
                 m_aXineramaScreens[n].GetHeight() < i_nHeight )
             {
                 m_aXineramaScreenIndexMap[i] = n;
-                m_aXineramaScreens[n].SetSize( Size( i_nWidth, i_nHeight ) );
+                m_aXineramaScreens[n].SetSize( AbsoluteScreenPixelSize( i_nWidth, i_nHeight ) );
             }
             return;
         }
     }
     m_aXineramaScreenIndexMap[i] = m_aXineramaScreens.size();
-    m_aXineramaScreens.emplace_back( Point( i_nX, i_nY ), Size( i_nWidth, i_nHeight ) );
+    m_aXineramaScreens.emplace_back( AbsoluteScreenPixelPoint( i_nX, i_nY ), AbsoluteScreenPixelSize( i_nWidth, i_nHeight ) );
 }
 
 void SalDisplay::InitXinerama()
@@ -2220,7 +2220,7 @@ void SalDisplay::InitXinerama()
 
     if( nFramebuffers > 1 )
     {
-        m_aXineramaScreens = std::vector<tools::Rectangle>();
+        m_aXineramaScreens = std::vector<AbsoluteScreenPixelRectangle>();
         m_aXineramaScreenIndexMap = std::vector<int>(nFramebuffers);
         for( int i = 0; i < nFramebuffers; i++ )
         {

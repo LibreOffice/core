@@ -195,7 +195,7 @@ tools::Rectangle AccessibleGridControl::implGetBoundingBox()
 }
 
 
-tools::Rectangle AccessibleGridControl::implGetBoundingBoxOnScreen()
+AbsoluteScreenPixelRectangle AccessibleGridControl::implGetBoundingBoxOnScreen()
 {
     return m_aTable.GetWindowExtentsAbsolute();
 }

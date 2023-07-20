@@ -321,11 +321,11 @@ tools::Rectangle AccessibleGridControlBase::getBoundingBox()
     return aRect;
 }
 
-tools::Rectangle AccessibleGridControlBase::getBoundingBoxOnScreen()
+AbsoluteScreenPixelRectangle AccessibleGridControlBase::getBoundingBoxOnScreen()
 {
     SolarMutexGuard aSolarGuard;
     ensureIsAlive();
-    tools::Rectangle aRect = implGetBoundingBoxOnScreen();
+    AbsoluteScreenPixelRectangle aRect = implGetBoundingBoxOnScreen();
     if ( aRect.Left() == 0 && aRect.Top() == 0 && aRect.Right() == 0 && aRect.Bottom() == 0 )
     {
         SAL_WARN( "accessibility", "rectangle doesn't exist" );

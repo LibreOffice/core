@@ -26,10 +26,10 @@
 // Horrible hack
 static int viewWidth = 1, viewHeight = 1;
 
-void AndroidSalInstance::GetWorkArea(tools::Rectangle& rRect)
+void AndroidSalInstance::GetWorkArea(AbsoluteScreenPixelRectangle& rRect)
 {
-    rRect = tools::Rectangle( Point( 0, 0 ),
-                       Size( viewWidth, viewHeight ) );
+    rRect = AbsoluteScreenPixelRectangle( AbsoluteScreenPixelPoint( 0, 0 ),
+                       AbsoluteScreenPixelSize( viewWidth, viewHeight ) );
 }
 
 AndroidSalInstance *AndroidSalInstance::getInstance()
@@ -106,7 +106,7 @@ public:
             SetPosSize(0, 0, viewWidth, viewHeight, SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT);
     }
 
-    virtual void GetWorkArea(tools::Rectangle& rRect)
+    virtual void GetWorkArea(AbsoluteScreenPixelRectangle& rRect)
     {
         AndroidSalInstance::getInstance()->GetWorkArea( rRect );
     }

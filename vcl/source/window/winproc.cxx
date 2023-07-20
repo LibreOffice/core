@@ -2612,10 +2612,7 @@ static void ImplHandleSalQueryCharPosition( vcl::Window *pWindow,
 {
     pEvt->mbValid = false;
     pEvt->mbVertical = false;
-    pEvt->mnCursorBoundX = 0;
-    pEvt->mnCursorBoundY = 0;
-    pEvt->mnCursorBoundWidth = 0;
-    pEvt->mnCursorBoundHeight = 0;
+    pEvt->maCursorBound = AbsoluteScreenPixelRectangle();
 
     ImplSVData* pSVData = ImplGetSVData();
     vcl::Window* pChild = pSVData->mpWinData->mpExtTextInputWin;
@@ -2641,11 +2638,8 @@ static void ImplHandleSalQueryCharPosition( vcl::Window *pWindow,
     const OutputDevice *pChildOutDev = pChild->GetOutDev();
     const tools::Rectangle& aRect = pWinData->mpCompositionCharRects[ pEvt->mnCharPos ];
     tools::Rectangle aDeviceRect = pChildOutDev->ImplLogicToDevicePixel( aRect );
-    Point aAbsScreenPos = pChild->OutputToAbsoluteScreenPixel( pChild->ScreenToOutputPixel(aDeviceRect.TopLeft()) );
-    pEvt->mnCursorBoundX = aAbsScreenPos.X();
-    pEvt->mnCursorBoundY = aAbsScreenPos.Y();
-    pEvt->mnCursorBoundWidth = aDeviceRect.GetWidth();
-    pEvt->mnCursorBoundHeight = aDeviceRect.GetHeight();
+    AbsoluteScreenPixelPoint aAbsScreenPos = pChild->OutputToAbsoluteScreenPixel( pChild->ScreenToOutputPixel(aDeviceRect.TopLeft()) );
+    pEvt->maCursorBound = AbsoluteScreenPixelRectangle(aAbsScreenPos, aDeviceRect.GetSize());
     pEvt->mbVertical = pWinData->mbVertical;
     pEvt->mbValid = true;
 }

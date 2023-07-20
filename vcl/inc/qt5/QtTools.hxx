@@ -62,6 +62,11 @@ inline QRect toQRect(const tools::Rectangle& rRect, const qreal fScale)
     return QRect(floor(rRect.Left() * fScale), floor(rRect.Top() * fScale),
                  ceil(rRect.GetWidth() * fScale), ceil(rRect.GetHeight() * fScale));
 }
+inline QRect toQRect(const AbsoluteScreenPixelRectangle& rRect, const qreal fScale)
+{
+    return QRect(floor(rRect.Left() * fScale), floor(rRect.Top() * fScale),
+                 ceil(rRect.GetWidth() * fScale), ceil(rRect.GetHeight() * fScale));
+}
 
 inline QRect scaledQRect(const QRect& rRect, const qreal fScale)
 {

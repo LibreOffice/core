@@ -141,8 +141,8 @@ namespace dbaui
         Reference< XAccessible > aRet;
         if(m_pTable && !m_pTable->isDisposed())
         {
-            Point aPoint(_aPoint.X,_aPoint.Y);
-            tools::Rectangle aRect(m_pTable->GetDesktopRectPixel());
+            AbsoluteScreenPixelPoint aPoint(_aPoint.X,_aPoint.Y);
+            AbsoluteScreenPixelRectangle aRect(m_pTable->GetDesktopRectPixel());
             if( aRect.Contains(aPoint) )
                 aRet = this;
             else if( m_pTable->GetListBox()->GetDesktopRectPixel().Contains(aPoint))

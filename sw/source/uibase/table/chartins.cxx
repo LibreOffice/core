@@ -60,10 +60,10 @@ Point SwGetChartDialogPos( const vcl::Window *pParentWin, const Size& rDialogSiz
     if (pParentWin)
     {
         tools::Rectangle aObjPixel = pParentWin->LogicToPixel( rLogicChart, pParentWin->GetMapMode() );
-        tools::Rectangle aObjAbs( pParentWin->OutputToAbsoluteScreenPixel( aObjPixel.TopLeft() ),
+        AbsoluteScreenPixelRectangle aObjAbs( pParentWin->OutputToAbsoluteScreenPixel( aObjPixel.TopLeft() ),
                            pParentWin->OutputToAbsoluteScreenPixel( aObjPixel.BottomRight() ) );
 
-        tools::Rectangle aDesktop = pParentWin->GetDesktopRectPixel();
+        AbsoluteScreenPixelRectangle aDesktop = pParentWin->GetDesktopRectPixel();
         Size aSpace = pParentWin->LogicToPixel(Size(8, 12), MapMode(MapUnit::MapAppFont));
 
         bool bCenterHor = false;

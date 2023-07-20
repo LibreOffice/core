@@ -41,11 +41,11 @@ unsigned int SvpSalSystem::GetDisplayScreenCount()
     return 1;
 }
 
-tools::Rectangle SvpSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
+AbsoluteScreenPixelRectangle SvpSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
 {
-    tools::Rectangle aRect;
+    AbsoluteScreenPixelRectangle aRect;
     if( nScreen == 0 )
-        aRect = tools::Rectangle( Point(0,0), Size(VIRTUAL_DESKTOP_WIDTH,VIRTUAL_DESKTOP_HEIGHT) );
+        aRect = AbsoluteScreenPixelRectangle( AbsoluteScreenPixelPoint(0,0), AbsoluteScreenPixelSize(VIRTUAL_DESKTOP_WIDTH,VIRTUAL_DESKTOP_HEIGHT) );
     return aRect;
 }
 

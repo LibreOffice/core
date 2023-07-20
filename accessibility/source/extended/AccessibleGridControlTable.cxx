@@ -356,7 +356,7 @@ tools::Rectangle AccessibleGridControlTable::implGetBoundingBox()
     return aTable;
 }
 
-tools::Rectangle AccessibleGridControlTable::implGetBoundingBoxOnScreen()
+AbsoluteScreenPixelRectangle AccessibleGridControlTable::implGetBoundingBoxOnScreen()
 {
     tools::Rectangle aGridRect( m_aTable.GetWindowExtentsAbsolute());
     tools::Rectangle aTableRect( m_aTable.calcTableRect() );
@@ -364,7 +364,7 @@ tools::Rectangle AccessibleGridControlTable::implGetBoundingBoxOnScreen()
     tools::Long nY = aGridRect.Top() + aTableRect.Top();
     tools::Long nWidth = aGridRect.GetSize().Width()-aTableRect.Left();
     tools::Long nHeight = aGridRect.GetSize().Height()-aTableRect.Top();
-    tools::Rectangle aTable( Point( nX, nY ), Size( nWidth, nHeight ));
+    AbsoluteScreenPixelRectangle aTable( AbsoluteScreenPixelPoint( nX, nY ), AbsoluteScreenPixelSize( nWidth, nHeight ));
     return aTable;
 }
 // internal helper methods ----------------------------------------------------

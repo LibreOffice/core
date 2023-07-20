@@ -437,7 +437,7 @@ friend class SfxHelpIndexWindow_Impl;
     bool                bSplit;
     int                 nWidth;
     int                 nIndexSize;
-    Point               aWinPos;
+    AbsoluteScreenPixelPoint aWinPos;
     Size                aWinSize;
     OUString            sTitle;
 

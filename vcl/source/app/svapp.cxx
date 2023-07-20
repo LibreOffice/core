@@ -1251,25 +1251,25 @@ unsigned int Application::GetDisplayExternalScreen()
     return nExternal;
 }
 
-tools::Rectangle Application::GetScreenPosSizePixel( unsigned int nScreen )
+AbsoluteScreenPixelRectangle Application::GetScreenPosSizePixel( unsigned int nScreen )
 {
     SalSystem* pSys = ImplGetSalSystem();
     if (!pSys)
     {
         SAL_WARN("vcl", "Requesting screen size/pos for screen #" << nScreen << " failed");
         assert(false);
-        return tools::Rectangle();
+        return AbsoluteScreenPixelRectangle();
     }
-    tools::Rectangle aRect = pSys->GetDisplayScreenPosSizePixel(nScreen);
+    AbsoluteScreenPixelRectangle aRect = pSys->GetDisplayScreenPosSizePixel(nScreen);
     if (aRect.GetHeight() == 0)
         SAL_WARN("vcl", "Requesting screen size/pos for screen #" << nScreen << " returned 0 height.");
     return aRect;
 }
 
 namespace {
-tools::Long calcDistSquare( const Point& i_rPoint, const tools::Rectangle& i_rRect )
+tools::Long calcDistSquare( const AbsoluteScreenPixelPoint& i_rPoint, const AbsoluteScreenPixelRectangle& i_rRect )
 {
-    const Point aRectCenter( (i_rRect.Left() + i_rRect.Right())/2,
+    const AbsoluteScreenPixelPoint aRectCenter( (i_rRect.Left() + i_rRect.Right())/2,
                        (i_rRect.Top() + i_rRect.Bottom())/ 2 );
     const tools::Long nDX = aRectCenter.X() - i_rPoint.X();
     const tools::Long nDY = aRectCenter.Y() - i_rPoint.Y();
@@ -1277,19 +1277,19 @@ tools::Long calcDistSquare( const Point& i_rPoint, const tools::Rectangle& i_rRe
 }
 }
 
-unsigned int Application::GetBestScreen( const tools::Rectangle& i_rRect )
+unsigned int Application::GetBestScreen( const AbsoluteScreenPixelRectangle& i_rRect )
 {
     const unsigned int nScreens = GetScreenCount();
     unsigned int nBestMatchScreen = 0;
     unsigned long nOverlap = 0;
     for( unsigned int i = 0; i < nScreens; i++ )
     {
-        const tools::Rectangle aCurScreenRect( GetScreenPosSizePixel( i ) );
+        const AbsoluteScreenPixelRectangle aCurScreenRect( GetScreenPosSizePixel( i ) );
         // if a screen contains the rectangle completely it is obviously the best screen
         if( aCurScreenRect.Contains( i_rRect ) )
             return i;
         // next the screen which contains most of the area of the rect is the best
-        tools::Rectangle aIntersection( aCurScreenRect.GetIntersection( i_rRect ) );
+        AbsoluteScreenPixelRectangle aIntersection( aCurScreenRect.GetIntersection( i_rRect ) );
         if( ! aIntersection.IsEmpty() )
         {
             const unsigned long nCurOverlap( aIntersection.GetWidth() * aIntersection.GetHeight() );
@@ -1304,12 +1304,12 @@ unsigned int Application::GetBestScreen( const tools::Rectangle& i_rRect )
         return nBestMatchScreen;
 
     // finally the screen which center is nearest to the rect is the best
-    const Point aCenter( (i_rRect.Left() + i_rRect.Right())/2,
+    const AbsoluteScreenPixelPoint aCenter( (i_rRect.Left() + i_rRect.Right())/2,
                          (i_rRect.Top() + i_rRect.Bottom())/2 );
     tools::Long nDist = std::numeric_limits<tools::Long>::max();
     for( unsigned int i = 0; i < nScreens; i++ )
     {
-        const tools::Rectangle aCurScreenRect( GetScreenPosSizePixel( i ) );
+        const AbsoluteScreenPixelRectangle aCurScreenRect( GetScreenPosSizePixel( i ) );
         const tools::Long nCurDist( calcDistSquare( aCenter, aCurScreenRect ) );
         if( nCurDist < nDist )
         {

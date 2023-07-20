@@ -200,14 +200,14 @@ tools::Rectangle AccessibleGridControlHeader::implGetBoundingBox()
 
 }
 
-tools::Rectangle AccessibleGridControlHeader::implGetBoundingBoxOnScreen()
+AbsoluteScreenPixelRectangle AccessibleGridControlHeader::implGetBoundingBoxOnScreen()
 {
-    tools::Rectangle aGridRect( m_aTable.GetWindowExtentsAbsolute() );
+    AbsoluteScreenPixelRectangle aGridRect( m_aTable.GetWindowExtentsAbsolute() );
     tools::Rectangle aHeaderRect (m_aTable.calcHeaderRect(isColumnBar()));
     if(isColumnBar())
-        return tools::Rectangle(aGridRect.TopLeft(), Size(aGridRect.getOpenWidth(),aHeaderRect.getOpenHeight()));
+        return AbsoluteScreenPixelRectangle(aGridRect.TopLeft(), Size(aGridRect.getOpenWidth(),aHeaderRect.getOpenHeight()));
     else
-        return tools::Rectangle(aGridRect.TopLeft(), Size(aHeaderRect.getOpenWidth(),aGridRect.getOpenHeight()));
+        return AbsoluteScreenPixelRectangle(aGridRect.TopLeft(), Size(aHeaderRect.getOpenWidth(),aGridRect.getOpenHeight()));
 }
 
 // internal helper methods ----------------------------------------------------

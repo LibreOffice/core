@@ -215,7 +215,7 @@ private:
     virtual sal_Bool SAL_CALL unselectColumn( sal_Int32 column ) override;
 
     /// Return the object's current bounding box relative to the desktop.
-    virtual tools::Rectangle GetBoundingBoxOnScreen() const override;
+    virtual AbsoluteScreenPixelRectangle GetBoundingBoxOnScreen() const override;
 
     /// Return the object's current bounding box relative to the parent object.
     virtual tools::Rectangle GetBoundingBox() const override;

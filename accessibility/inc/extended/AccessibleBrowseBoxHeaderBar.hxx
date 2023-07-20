@@ -163,7 +163,7 @@ private:
     virtual tools::Rectangle implGetBoundingBox() override;
     /** @attention  This method requires locked mutex's and a living object.
         @return  The bounding box (VCL rect.) in screen coordinates. */
-    virtual tools::Rectangle implGetBoundingBoxOnScreen() override;
+    virtual AbsoluteScreenPixelRectangle implGetBoundingBoxOnScreen() override;
 
     /** @attention  This method requires locked mutex's and a living object.
         @return  The count of used rows. */

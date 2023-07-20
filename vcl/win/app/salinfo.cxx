@@ -65,9 +65,9 @@ bool WinSalSystem::handleMonitorCallback( sal_IntPtr hMonitor, sal_IntPtr, sal_I
         if( it != m_aDeviceNameToMonitor.end() )
         {
             DisplayMonitor& rMon( m_aMonitors[ it->second ] );
-            rMon.m_aArea = tools::Rectangle( Point( aInfo.rcMonitor.left,
+            rMon.m_aArea = AbsoluteScreenPixelRectangle( AbsoluteScreenPixelPoint( aInfo.rcMonitor.left,
                                              aInfo.rcMonitor.top ),
-                                      Size( aInfo.rcMonitor.right - aInfo.rcMonitor.left,
+                                      AbsoluteScreenPixelSize( aInfo.rcMonitor.right - aInfo.rcMonitor.left,
                                             aInfo.rcMonitor.bottom - aInfo.rcMonitor.top ) );
             if( (aInfo.dwFlags & MONITORINFOF_PRIMARY) != 0 )
                 m_nPrimary = it->second;
@@ -92,8 +92,8 @@ bool WinSalSystem::initMonitors()
     {
         int w = GetSystemMetrics( SM_CXSCREEN );
         int h = GetSystemMetrics( SM_CYSCREEN );
-        m_aMonitors.push_back( DisplayMonitor( OUString(),
-                                               tools::Rectangle( Point(), Size( w, h ) ) ) );
+        AbsoluteScreenPixelRectangle aRect(AbsoluteScreenPixelPoint(), AbsoluteScreenPixelSize( w, h ));
+        m_aMonitors.push_back( DisplayMonitor( OUString(), aRect ) );
         m_aDeviceNameToMonitor[ OUString() ] = 0;
         m_nPrimary = 0;
     }
@@ -115,7 +115,7 @@ bool WinSalSystem::initMonitors()
                 aDeviceStringCount[ aDeviceString ]++;
                 m_aDeviceNameToMonitor[ aDeviceName ] = m_aMonitors.size();
                 m_aMonitors.push_back( DisplayMonitor( aDeviceString,
-                                                       tools::Rectangle() ) );
+                                                       AbsoluteScreenPixelRectangle() ) );
             }
         }
         HDC aDesktopRC = GetDC( nullptr );
@@ -151,7 +151,7 @@ unsigned int WinSalSystem::GetDisplayBuiltInScreen()
     return m_nPrimary;
 }
 
-tools::Rectangle WinSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
+AbsoluteScreenPixelRectangle WinSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
 {
     initMonitors();
     if (nScreen >= m_aMonitors.size())
@@ -159,7 +159,7 @@ tools::Rectangle WinSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScree
         SAL_WARN("vcl", "Requested screen size/pos for screen #"
                             << nScreen << ", but only " << m_aMonitors.size() << " screens found.");
         assert(false);
-        return tools::Rectangle();
+        return AbsoluteScreenPixelRectangle();
     }
     return m_aMonitors[nScreen].m_aArea;
 }

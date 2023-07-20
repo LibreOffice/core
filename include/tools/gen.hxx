@@ -73,34 +73,77 @@ inline bool equal(Pair const & p1, Pair const & p2)
 
 // Point
 
-class Size;
-class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Point final : protected Pair
-{
-public:
-    constexpr Point() {}
-    constexpr Point( tools::Long nX, tools::Long nY ) : Pair( nX, nY ) {}
+class RectangleTemplateBase;
 
+class TOOLS_DLLPUBLIC PointTemplateBase : protected Pair
+{
+friend class RectangleTemplateBase;
+public:
+    PointTemplateBase() = default;
+protected:
+    constexpr PointTemplateBase( tools::Long nX, tools::Long nY ) : Pair( nX, nY ) {}
+    // Rotate parameter point using This as origin; store result back into parameter point
+    void                RotateAround( tools::Long& rX, tools::Long& rY, Degree10 nOrientation ) const;
+    void                RotateAround( PointTemplateBase&, Degree10 nOrientation ) const;
+
+public:
     constexpr tools::Long      X() const { return mnA; }
     constexpr tools::Long      Y() const { return mnB; }
+};
 
-    void                Move( tools::Long nHorzMove, tools::Long nVertMove );
-    void                Move( Size const & s );
+template<class PointT, class SizeT>
+class PointTemplate : public PointTemplateBase
+{
+public:
+    constexpr PointTemplate() {}
+    constexpr PointTemplate( tools::Long nX, tools::Long nY ) : PointTemplateBase( nX, nY ) {}
+
+    using PointTemplateBase::X;
+    using PointTemplateBase::Y;
+
+    void Move( tools::Long nHorzMove, tools::Long nVertMove )
+    {
+        mnA += nHorzMove;
+        mnB += nVertMove;
+    }
+    void Move( SizeT const & s )
+    {
+        AdjustX(s.Width());
+        AdjustY(s.Height());
+    }
+
     tools::Long                AdjustX( tools::Long nHorzMove ) { mnA += nHorzMove; return mnA; }
     tools::Long                AdjustY( tools::Long nVertMove ) { mnB += nVertMove; return mnB; }
 
-    // Rotate parameter point using This as origin; store result back into parameter point
-    void                RotateAround( tools::Long& rX, tools::Long& rY, Degree10 nOrientation ) const;
-    void                RotateAround( Point&, Degree10 nOrientation ) const;
+    void                RotateAround( tools::Long& rX, tools::Long& rY, Degree10 nOrientation ) const
+    { PointTemplateBase::RotateAround(rX, rY, nOrientation); }
+    void                RotateAround( PointT& p, Degree10 nOrientation ) const
+    { PointTemplateBase::RotateAround(p, nOrientation); }
 
-    Point&              operator += ( const Point& rPoint );
-    Point&              operator -= ( const Point& rPoint );
-    Point&              operator *= ( const tools::Long nVal );
-    Point&              operator /= ( const tools::Long nVal );
-
-    friend inline Point operator+( const Point &rVal1, const Point &rVal2 );
-    friend inline Point operator-( const Point &rVal1, const Point &rVal2 );
-    friend inline Point operator*( const Point &rVal1, const tools::Long nVal2 );
-    friend inline Point operator/( const Point &rVal1, const tools::Long nVal2 );
+    PointT& operator+=( const PointT& rPoint )
+    {
+        mnA += rPoint.mnA;
+        mnB += rPoint.mnB;
+        return reinterpret_cast<PointT&>(*this);
+    }
+    PointT& operator-=( const PointT& rPoint )
+    {
+        mnA -= rPoint.mnA;
+        mnB -= rPoint.mnB;
+        return reinterpret_cast<PointT&>(*this);
+    }
+    PointT& operator*=( const tools::Long nVal )
+    {
+        mnA *= nVal;
+        mnB *= nVal;
+        return reinterpret_cast<PointT&>(*this);
+    }
+    PointT& operator/=( const tools::Long nVal )
+    {
+        mnA /= nVal;
+        mnB /= nVal;
+        return reinterpret_cast<PointT&>(*this);
+    }
 
     constexpr tools::Long      getX() const { return X(); }
     constexpr tools::Long      getY() const { return Y(); }
@@ -111,68 +154,83 @@ public:
     Pair &              toPair() { return *this; }
 
     // Scales relative to 0,0
-    constexpr inline Point scale(sal_Int64 nMulX, sal_Int64 nDivX,
-                                 sal_Int64 nMulY, sal_Int64 nDivY) const;
+    constexpr PointT scale(sal_Int64 nMulX, sal_Int64 nDivX,
+                                 sal_Int64 nMulY, sal_Int64 nDivY) const
+    {
+        return PointT(o3tl::convert(getX(), nMulX, nDivX),
+                    o3tl::convert(getY(), nMulY, nDivY));
+    }
 
     using Pair::toString;
     using Pair::GetHashValue;
 };
 
-inline void Point::Move( tools::Long nHorzMove, tools::Long nVertMove )
-{
-    mnA += nHorzMove;
-    mnB += nVertMove;
-}
+class Size;
+class AbsoluteScreenPixelSize;
+class Point;
+class AbsoluteScreenPixelPoint;
+namespace tools { class Rectangle; }
+class AbsoluteScreenPixelRectangle;
 
-inline Point& Point::operator += ( const Point& rPoint )
+class SAL_WARN_UNUSED Point : public PointTemplate<::Point, ::Size>
 {
-    mnA += rPoint.mnA;
-    mnB += rPoint.mnB;
-    return *this;
-}
+public:
+    constexpr Point() {}
+    constexpr Point( tools::Long nX, tools::Long nY ) : PointTemplate( nX, nY ) {}
+    // TODO delete this to expose more problems
+    constexpr explicit Point(const AbsoluteScreenPixelPoint&);
+};
 
-inline Point& Point::operator -= ( const Point& rPoint )
-{
-    mnA -= rPoint.mnA;
-    mnB -= rPoint.mnB;
-    return *this;
-}
-
-inline Point& Point::operator *= ( const tools::Long nVal )
-{
-    mnA *= nVal;
-    mnB *= nVal;
-    return *this;
-}
-
-inline Point& Point::operator /= ( const tools::Long nVal )
-{
-    mnA /= nVal;
-    mnB /= nVal;
-    return *this;
-}
+// A point relative to top-level parent or screen, in screen pixels
+class AbsoluteScreenPixelSize;
+class SAL_WARN_UNUSED AbsoluteScreenPixelPoint : public PointTemplate<AbsoluteScreenPixelPoint, AbsoluteScreenPixelSize> {
+public:
+    constexpr AbsoluteScreenPixelPoint() {}
+    constexpr AbsoluteScreenPixelPoint( tools::Long nX, tools::Long nY ) : PointTemplate( nX, nY ) {}
+    constexpr explicit AbsoluteScreenPixelPoint(const Point & pt) : PointTemplate(pt.X(), pt.Y()) {}
+};
 
 inline Point operator+( const Point &rVal1, const Point &rVal2 )
 {
-    return Point( rVal1.mnA+rVal2.mnA, rVal1.mnB+rVal2.mnB );
+    return Point( rVal1.X()+rVal2.X(), rVal1.Y()+rVal2.Y() );
+}
+inline AbsoluteScreenPixelPoint operator+( const AbsoluteScreenPixelPoint &rVal1, const AbsoluteScreenPixelPoint &rVal2 )
+{
+    return AbsoluteScreenPixelPoint( rVal1.X()+rVal2.X(), rVal1.Y()+rVal2.Y() );
 }
 
 inline Point operator-( const Point &rVal1, const Point &rVal2 )
 {
-    return Point( rVal1.mnA-rVal2.mnA, rVal1.mnB-rVal2.mnB );
+    return Point( rVal1.X()-rVal2.X(), rVal1.Y()-rVal2.Y() );
+}
+inline AbsoluteScreenPixelPoint operator-( const AbsoluteScreenPixelPoint &rVal1, const AbsoluteScreenPixelPoint &rVal2 )
+{
+    return AbsoluteScreenPixelPoint( rVal1.X()-rVal2.X(), rVal1.Y()-rVal2.Y() );
 }
 
 inline Point operator*( const Point &rVal1, const tools::Long nVal2 )
 {
-    return Point( rVal1.mnA*nVal2, rVal1.mnB*nVal2 );
+    return Point( rVal1.X()*nVal2, rVal1.Y()*nVal2 );
+}
+inline AbsoluteScreenPixelPoint operator*( const AbsoluteScreenPixelPoint &rVal1, const tools::Long nVal2 )
+{
+    return AbsoluteScreenPixelPoint( rVal1.X()*nVal2, rVal1.Y()*nVal2 );
 }
 
 inline Point operator/( const Point &rVal1, const tools::Long nVal2 )
 {
-    return Point( rVal1.mnA/nVal2, rVal1.mnB/nVal2 );
+    return Point( rVal1.X()/nVal2, rVal1.Y()/nVal2 );
+}
+inline AbsoluteScreenPixelPoint operator/( const AbsoluteScreenPixelPoint &rVal1, const tools::Long nVal2 )
+{
+    return AbsoluteScreenPixelPoint( rVal1.X()/nVal2, rVal1.Y()/nVal2 );
 }
 
 inline bool operator ==(Point const & p1, Point const & p2)
+{
+    return tools::detail::equal(p1.toPair(), p2.toPair());
+}
+inline bool operator ==(AbsoluteScreenPixelPoint const & p1, AbsoluteScreenPixelPoint const & p2)
 {
     return tools::detail::equal(p1.toPair(), p2.toPair());
 }
@@ -181,41 +239,54 @@ inline bool operator !=(Point const & p1, Point const & p2)
 {
     return !(p1 == p2);
 }
-
-constexpr inline Point Point::scale(sal_Int64 nMulX, sal_Int64 nDivX, sal_Int64 nMulY, sal_Int64 nDivY) const
+inline bool operator !=(AbsoluteScreenPixelPoint const & p1, AbsoluteScreenPixelPoint const & p2)
 {
-    return Point(o3tl::convert(getX(), nMulX, nDivX),
-                 o3tl::convert(getY(), nMulY, nDivY));
+    return !(p1 == p2);
 }
+
+
+constexpr Point::Point(const AbsoluteScreenPixelPoint& p) : Point(p.X(), p.Y()) {}
 
 namespace o3tl
 {
-
 constexpr Point convert(const Point& rPoint, o3tl::Length eFrom, o3tl::Length eTo)
 {
     const auto [num, den] = o3tl::getConversionMulDiv(eFrom, eTo);
     return rPoint.scale(num, den, num, den);
 }
-
-} // end o3tl
+constexpr AbsoluteScreenPixelPoint convert(const AbsoluteScreenPixelPoint& rPoint, o3tl::Length eFrom, o3tl::Length eTo)
+{
+    const auto [num, den] = o3tl::getConversionMulDiv(eFrom, eTo);
+    return rPoint.scale(num, den, num, den);
+}
+} // namespace o3tl
 
 template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(
-    std::basic_ostream<charT, traits> & stream, const Point& point )
+    std::basic_ostream<charT, traits> & stream, const PointTemplateBase& point )
 {
     return stream << point.X() << ',' << point.Y();
 }
 
 // Size
 
-class SAL_WARN_UNUSED Size final : protected Pair
+class SizeTemplateBase : protected Pair
 {
 public:
-    constexpr Size() {}
-    constexpr Size( tools::Long nWidth, tools::Long nHeight ) : Pair( nWidth, nHeight ) {}
+    constexpr SizeTemplateBase() = default;
+    constexpr SizeTemplateBase( tools::Long nWidth, tools::Long nHeight ) : Pair( nWidth, nHeight ) {}
 
     constexpr tools::Long  Width() const  { return mnA; }
     constexpr tools::Long  Height() const { return mnB; }
+
+};
+
+template<class SizeT>
+class SizeTemplate : public SizeTemplateBase
+{
+public:
+    constexpr SizeTemplate() {}
+    constexpr SizeTemplate( tools::Long nWidth, tools::Long nHeight ) : SizeTemplateBase( nWidth, nHeight ) {}
 
     tools::Long            AdjustWidth( tools::Long n ) { mnA += n; return mnA; }
     tools::Long            AdjustHeight( tools::Long n ) { mnB += n; return mnB; }
@@ -239,22 +310,64 @@ public:
     using Pair::toString;
     using Pair::GetHashValue;
 
-    Size&              operator += ( const Size& rSize );
-    Size&              operator -= ( const Size& rSize );
-    Size&              operator *= ( const tools::Long nVal );
-    Size&              operator /= ( const tools::Long nVal );
+    SizeT&              operator += ( const SizeT& rSize )
+    {
+        mnA += rSize.mnA;
+        mnB += rSize.mnB;
+        return reinterpret_cast<SizeT&>(*this);
+    }
+    SizeT&              operator -= ( const SizeT& rSize )
+    {
+        mnA -= rSize.mnA;
+        mnB -= rSize.mnB;
+        return reinterpret_cast<SizeT&>(*this);
+    }
+    SizeT&              operator *= ( const tools::Long nVal )
+    {
+        mnA *= nVal;
+        mnB *= nVal;
+        return reinterpret_cast<SizeT&>(*this);
+    }
+    SizeT&              operator /= ( const tools::Long nVal )
+    {
+        mnA /= nVal;
+        mnB /= nVal;
+        return reinterpret_cast<SizeT&>(*this);
+    }
 
-    friend inline Size operator+( const Size &rVal1, const Size &rVal2 );
-    friend inline Size operator-( const Size &rVal1, const Size &rVal2 );
-    friend inline Size operator*( const Size &rVal1, const tools::Long nVal2 );
-    friend inline Size operator/( const Size &rVal1, const tools::Long nVal2 );
-
-    constexpr inline Size scale(sal_Int64 nMulX, sal_Int64 nDivX,
-                                sal_Int64 nMulY, sal_Int64 nDivY) const;
-
+    constexpr SizeT scale(sal_Int64 nMulX, sal_Int64 nDivX,
+                        sal_Int64 nMulY, sal_Int64 nDivY) const
+    {
+        return SizeT(o3tl::convert(Width(), nMulX, nDivX),
+                    o3tl::convert(Height(), nMulY, nDivY));
+    }
 };
 
+class SAL_WARN_UNUSED Size : public SizeTemplate<::Size>
+{
+public:
+    constexpr Size() {}
+    constexpr Size( tools::Long nWidth, tools::Long nHeight ) : SizeTemplate( nWidth, nHeight ) {}
+    // TODO delete to find more problems
+    constexpr explicit Size(const AbsoluteScreenPixelSize& pt);
+};
+
+// Screen pixels
+class SAL_WARN_UNUSED AbsoluteScreenPixelSize : public SizeTemplate<AbsoluteScreenPixelSize>
+{
+public:
+    constexpr AbsoluteScreenPixelSize() {}
+    constexpr AbsoluteScreenPixelSize( tools::Long nWidth, tools::Long nHeight ) : SizeTemplate( nWidth, nHeight ) {}
+    constexpr explicit AbsoluteScreenPixelSize(const Size & pt) : SizeTemplate(pt.Width(), pt.Height()) {}
+};
+
+constexpr Size::Size(const AbsoluteScreenPixelSize& pt) : SizeTemplate(pt.Width(), pt.Height()) {}
+
 inline bool operator ==(Size const & s1, Size const & s2)
+{
+    return tools::detail::equal(s1.toPair(), s2.toPair());
+}
+inline bool operator ==(AbsoluteScreenPixelSize const & s1, AbsoluteScreenPixelSize const & s2)
 {
     return tools::detail::equal(s1.toPair(), s2.toPair());
 }
@@ -263,60 +376,45 @@ inline bool operator !=(Size const & s1, Size const & s2)
 {
     return !(s1 == s2);
 }
-
-inline Size& Size::operator += ( const Size& rSize )
+inline bool operator !=(AbsoluteScreenPixelSize const & s1, AbsoluteScreenPixelSize const & s2)
 {
-    mnA += rSize.mnA;
-    mnB += rSize.mnB;
-    return *this;
-}
-
-inline Size& Size::operator -= ( const Size& rSize )
-{
-    mnA -= rSize.mnA;
-    mnB -= rSize.mnB;
-    return *this;
-}
-
-inline Size& Size::operator *= ( const tools::Long nVal )
-{
-    mnA *= nVal;
-    mnB *= nVal;
-    return *this;
-}
-
-inline Size& Size::operator /= ( const tools::Long nVal )
-{
-    mnA /= nVal;
-    mnB /= nVal;
-    return *this;
+    return !(s1 == s2);
 }
 
 inline Size operator+( const Size &rVal1, const Size &rVal2 )
 {
-    return Size( rVal1.mnA+rVal2.mnA, rVal1.mnB+rVal2.mnB );
+    return Size( rVal1.Width()+rVal2.Width(), rVal1.Height()+rVal2.Height() );
+}
+inline AbsoluteScreenPixelSize operator+( const AbsoluteScreenPixelSize &rVal1, const AbsoluteScreenPixelSize &rVal2 )
+{
+    return AbsoluteScreenPixelSize( rVal1.Width()+rVal2.Width(), rVal1.Height()+rVal2.Height() );
 }
 
 inline Size operator-( const Size &rVal1, const Size &rVal2 )
 {
-    return Size( rVal1.mnA-rVal2.mnA, rVal1.mnB-rVal2.mnB );
+    return Size( rVal1.Width()-rVal2.Width(), rVal1.Height()-rVal2.Height() );
+}
+inline AbsoluteScreenPixelSize operator-( const AbsoluteScreenPixelSize &rVal1, const AbsoluteScreenPixelSize &rVal2 )
+{
+    return AbsoluteScreenPixelSize( rVal1.Width()-rVal2.Width(), rVal1.Height()-rVal2.Height() );
 }
 
 inline Size operator*( const Size &rVal1, const tools::Long nVal2 )
 {
-    return Size( rVal1.mnA*nVal2, rVal1.mnB*nVal2 );
+    return Size( rVal1.Width()*nVal2, rVal1.Height()*nVal2 );
+}
+inline AbsoluteScreenPixelSize operator*( const AbsoluteScreenPixelSize &rVal1, const tools::Long nVal2 )
+{
+    return AbsoluteScreenPixelSize( rVal1.Width()*nVal2, rVal1.Height()*nVal2 );
 }
 
 inline Size operator/( const Size &rVal1, const tools::Long nVal2 )
 {
-    return Size( rVal1.mnA/nVal2, rVal1.mnB/nVal2 );
+    return Size( rVal1.Width()/nVal2, rVal1.Height()/nVal2 );
 }
-
-constexpr inline Size Size::scale(sal_Int64 nMulX, sal_Int64 nDivX,
-                                  sal_Int64 nMulY, sal_Int64 nDivY) const
+inline AbsoluteScreenPixelSize operator/( const AbsoluteScreenPixelSize &rVal1, const tools::Long nVal2 )
 {
-    return Size(o3tl::convert(Width(), nMulX, nDivX),
-                o3tl::convert(Height(), nMulY, nDivY));
+    return AbsoluteScreenPixelSize( rVal1.Width()/nVal2, rVal1.Height()/nVal2 );
 }
 
 namespace o3tl
@@ -327,20 +425,19 @@ constexpr Size convert(const Size& rSize, o3tl::Length eFrom, o3tl::Length eTo)
     const auto [num, den] = o3tl::getConversionMulDiv(eFrom, eTo);
     return rSize.scale(num, den, num, den);
 }
+constexpr AbsoluteScreenPixelSize convert(const AbsoluteScreenPixelSize& rSize, o3tl::Length eFrom, o3tl::Length eTo)
+{
+    const auto [num, den] = o3tl::getConversionMulDiv(eFrom, eTo);
+    return rSize.scale(num, den, num, den);
+}
 
 } // end o3tl
 
 template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(
-    std::basic_ostream<charT, traits> & stream, const Size& size )
+    std::basic_ostream<charT, traits> & stream, const SizeTemplateBase& size )
 {
     return stream << size.Width() << 'x' << size.Height();
-}
-
-inline void Point::Move( Size const & s )
-{
-    AdjustX(s.Width());
-    AdjustY(s.Height());
 }
 
 // Range
@@ -480,22 +577,28 @@ inline std::basic_ostream<charT, traits> & operator <<(
 ///
 /// (Eventually you might notice, that the same engineer was also working on
 /// Qt at some point; see documentation on QRect::bottom / QRect::right ;-).
-namespace tools
-{
-class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Rectangle final
-{
-    static constexpr short RECT_EMPTY = -32767;
-public:
-    constexpr Rectangle() = default;
-    constexpr Rectangle( const Point& rLT, const Point& rRB );
-    constexpr Rectangle( tools::Long mnLeft, tools::Long mnTop,
-                         tools::Long mnRight, tools::Long mnBottom );
-    /// Constructs an empty Rectangle, with top/left at the specified params
-    constexpr Rectangle( tools::Long mnLeft, tools::Long mnTop );
-    /// Constructs a closed interval rectangle
-    constexpr Rectangle( const Point& rLT, const Size& rSize );
 
-    constexpr inline static Rectangle Normalize(const Point& rLT, const Point& rRB);
+class TOOLS_DLLPUBLIC RectangleTemplateBase
+{
+public:
+    static constexpr short RECT_EMPTY = -32767;
+
+    constexpr RectangleTemplateBase() = default;
+    constexpr RectangleTemplateBase( tools::Long nLeft, tools::Long nTop,
+                         tools::Long nRight, tools::Long nBottom )
+        : mnLeft( nLeft ), mnTop( nTop ), mnRight( nRight ), mnBottom( nBottom )
+    {}
+    /// Constructs an empty Rectangle, with top/left at the specified params
+    constexpr RectangleTemplateBase( tools::Long nLeft, tools::Long nTop )
+        : mnLeft(nLeft), mnTop(nTop)
+    {}
+    /// Constructs a closed interval rectangle
+    constexpr RectangleTemplateBase( const PointTemplateBase& rLT, const SizeTemplateBase& rSize )
+        : mnLeft( rLT.X())
+        , mnTop( rLT.Y())
+        , mnRight(rSize.Width() ? mnLeft + (rSize.Width() + (rSize.Width() > 0 ? -1 : 1)) : RECT_EMPTY)
+        , mnBottom(rSize.Height() ? mnTop + (rSize.Height() + (rSize.Height() > 0 ? -1 : 1)) : RECT_EMPTY)
+    {}
 
     constexpr tools::Long Left() const { return mnLeft; }
     constexpr tools::Long Right() const { return IsWidthEmpty() ? mnLeft : mnRight; }
@@ -507,66 +610,12 @@ public:
     constexpr void SetTop(tools::Long v) { mnTop = v; }
     constexpr void SetBottom(tools::Long v) { mnBottom = v; }
 
-    constexpr Point TopLeft() const { return { Left(), Top() }; }
-    constexpr Point TopRight() const { return { Right(), Top() }; }
-    constexpr Point TopCenter() const { return { (Left() + Right()) / 2, Top() }; }
-    constexpr Point BottomLeft() const { return { Left(), Bottom() }; }
-    constexpr Point BottomRight() const { return { Right(), Bottom() }; }
-    constexpr Point BottomCenter() const { return { (Left() + Right()) / 2, Bottom() }; }
-    constexpr Point LeftCenter() const { return { Left(), (Top() + Bottom()) / 2 }; }
-    constexpr Point RightCenter() const { return { Right(), (Top() + Bottom()) / 2 }; }
-    constexpr Point Center() const { return { (Left() + Right()) / 2, (Top() + Bottom()) / 2 }; }
-
-    /// Move the top and left edges by a delta, preserving width and height
-    inline void         Move( tools::Long nHorzMoveDelta, tools::Long nVertMoveDelta );
-    void                Move( Size const & s ) { Move(s.Width(), s.Height()); }
-    tools::Long         AdjustLeft( tools::Long nHorzMoveDelta ) { mnLeft += nHorzMoveDelta; return mnLeft; }
-    tools::Long         AdjustRight( tools::Long nHorzMoveDelta );
-    tools::Long         AdjustTop( tools::Long nVertMoveDelta ) { mnTop += nVertMoveDelta; return mnTop; }
-    tools::Long         AdjustBottom( tools::Long nVertMoveDelta );
-    /// Set the left edge of the rectangle to x, preserving the width
-    inline void SetPosX(tools::Long x);
-    /// Set the top edge of the rectangle to y, preserving the height
-    inline void SetPosY(tools::Long y);
-    inline void         SetPos( const Point& rPoint );
-    inline void SetWidth(tools::Long);
-    inline void SetHeight(tools::Long);
-    inline void SetSize(const Size&);
-
-    constexpr Point GetPos() const { return TopLeft(); }
-    constexpr Size GetSize() const { return { GetWidth(), GetHeight() }; }
-
-    /// Returns the difference between right and left, assuming the range is inclusive.
-    constexpr inline tools::Long GetWidth() const;
-    /// Returns the difference between bottom and top, assuming the range is inclusive.
-    constexpr inline tools::Long GetHeight() const;
-
-    tools::Rectangle&          Union( const tools::Rectangle& rRect );
-    tools::Rectangle&          Intersection( const tools::Rectangle& rRect );
-    inline tools::Rectangle    GetUnion( const tools::Rectangle& rRect ) const;
-    inline tools::Rectangle    GetIntersection( const tools::Rectangle& rRect ) const;
-
-    void                Normalize();
-
-    bool                Contains( const Point& rPOINT ) const;
-    bool                Contains( const tools::Rectangle& rRect ) const;
-    bool                Overlaps( const tools::Rectangle& rRect ) const;
-
     void                SetEmpty() { mnRight = mnBottom = RECT_EMPTY; }
-    void                SetWidthEmpty() { mnRight = RECT_EMPTY; }
-    void                SetHeightEmpty() { mnBottom = RECT_EMPTY; }
     constexpr bool IsEmpty() const { return IsWidthEmpty() || IsHeightEmpty(); }
     constexpr bool IsWidthEmpty() const { return mnRight == RECT_EMPTY; }
     constexpr bool IsHeightEmpty() const { return mnBottom == RECT_EMPTY; }
-
-    inline bool         operator == ( const tools::Rectangle& rRect ) const;
-    inline bool         operator != ( const tools::Rectangle& rRect ) const;
-
-    inline tools::Rectangle&   operator += ( const Point& rPt );
-    inline tools::Rectangle&   operator -= ( const Point& rPt );
-
-    friend inline tools::Rectangle operator + ( const tools::Rectangle& rRect, const Point& rPt );
-    friend inline tools::Rectangle operator - ( const tools::Rectangle& rRect, const Point& rPt );
+    void                SetWidthEmpty() { mnRight = RECT_EMPTY; }
+    void                SetHeightEmpty() { mnBottom = RECT_EMPTY; }
 
     tools::Long         getX() const { return mnLeft; }
     tools::Long         getY() const { return mnTop; }
@@ -576,8 +625,83 @@ public:
     tools::Long getOpenHeight() const { return Bottom() - Top(); }
     void                setWidth( tools::Long n ) { mnRight = mnLeft + n; }
     void                setHeight( tools::Long n ) { mnBottom = mnTop + n; }
-    /// Returns the string representation of the rectangle, format is "x, y, width, height".
-    rtl::OString        toString() const;
+
+    /// Returns the difference between right and left, assuming the range is inclusive.
+    constexpr tools::Long GetWidth() const
+    {
+        tools::Long n = 0;
+
+        if (!IsWidthEmpty())
+        {
+            n = mnRight - mnLeft;
+            if (n < 0)
+                n--;
+            else
+                n++;
+        }
+
+        return n;
+    }
+    /// Returns the difference between bottom and top, assuming the range is inclusive.
+    constexpr tools::Long GetHeight() const
+    {
+        tools::Long n = 0;
+
+        if (!IsHeightEmpty())
+        {
+            n = mnBottom - mnTop;
+            if (n < 0)
+                n--;
+            else
+                n++;
+        }
+
+        return n;
+    }
+
+
+    tools::Long         AdjustLeft( tools::Long nHorzMoveDelta ) { mnLeft += nHorzMoveDelta; return mnLeft; }
+    tools::Long         AdjustRight( tools::Long nHorzMoveDelta );
+    tools::Long         AdjustTop( tools::Long nVertMoveDelta ) { mnTop += nVertMoveDelta; return mnTop; }
+    tools::Long         AdjustBottom( tools::Long nVertMoveDelta );
+    /// Set the left edge of the rectangle to x, preserving the width
+    void SetPosX(tools::Long x)
+    {
+        if (!IsWidthEmpty())
+            mnRight += x - mnLeft;
+        mnLeft = x;
+    }
+    /// Set the top edge of the rectangle to y, preserving the height
+    void SetPosY(tools::Long y)
+    {
+        if (!IsHeightEmpty())
+            mnBottom += y - mnTop;
+        mnTop = y;
+    }
+
+    void                SaturatingSetPosX(tools::Long x);
+    void                SaturatingSetPosY(tools::Long y);
+
+    void SetWidth(tools::Long nWidth)
+    {
+        if (nWidth < 0)
+            mnRight = mnLeft + nWidth + 1;
+        else if (nWidth > 0)
+            mnRight = mnLeft + nWidth - 1;
+        else
+            SetWidthEmpty();
+    }
+    void SetHeight(tools::Long nHeight)
+    {
+        if (nHeight < 0)
+            mnBottom = mnTop + nHeight + 1;
+        else if (nHeight > 0)
+            mnBottom = mnTop + nHeight - 1;
+        else
+            SetHeightEmpty();
+    }
+
+    void                Normalize();
 
     /**
      * Expands the rectangle in all directions by the input value.
@@ -585,210 +709,201 @@ public:
     void expand(tools::Long nExpandBy);
     void shrink(tools::Long nShrinkBy);
 
-    /**
-     * Sanitizing variants for handling data from the outside
-     */
-    void                SaturatingSetSize(const Size& rSize);
-    void                SaturatingSetPosX(tools::Long x);
-    void                SaturatingSetPosY(tools::Long y);
+    /// Move the top and left edges by a delta, preserving width and height
+    void Move( tools::Long nHorzMoveDelta, tools::Long nVertMoveDelta )
+    {
+        mnLeft += nHorzMoveDelta;
+        mnTop  += nVertMoveDelta;
+        if (!IsWidthEmpty())
+            mnRight += nHorzMoveDelta;
+        if (!IsHeightEmpty())
+            mnBottom += nVertMoveDelta;
+    }
 
-    // Scales relative to 0,0
-    constexpr inline tools::Rectangle scale(sal_Int64 nMulX, sal_Int64 nDivX,
-                                            sal_Int64 nMulY, sal_Int64 nDivY) const;
+    /// Returns the string representation of the rectangle, format is "x, y, width, height".
+    rtl::OString        toString() const;
 
-private:
+protected:
+    void SaturatingSetSize(const SizeTemplateBase& rSize);
+    void Union( const RectangleTemplateBase& rRect );
+    void Intersection( const RectangleTemplateBase& rRect );
+    bool Contains( const PointTemplateBase& rPOINT ) const;
+    bool Contains( const RectangleTemplateBase& rRect ) const;
+    bool Overlaps( const RectangleTemplateBase& rRect ) const;
+
     tools::Long mnLeft = 0;
     tools::Long mnTop = 0;
     tools::Long mnRight = RECT_EMPTY;
     tools::Long mnBottom = RECT_EMPTY;
 };
-}
 
-constexpr inline tools::Rectangle::Rectangle( const Point& rLT, const Point& rRB )
-    : Rectangle(rLT.X(), rLT.Y(), rRB.X(), rRB.Y())
-{}
-
-constexpr inline tools::Rectangle::Rectangle( tools::Long nLeft,  tools::Long nTop,
-                             tools::Long nRight, tools::Long nBottom )
-    : mnLeft( nLeft )
-    , mnTop( nTop )
-    , mnRight( nRight )
-    , mnBottom( nBottom )
-{}
-
-constexpr inline tools::Rectangle::Rectangle( tools::Long nLeft,  tools::Long nTop )
-    : mnLeft(nLeft)
-    , mnTop(nTop)
-{}
-
-constexpr inline tools::Rectangle::Rectangle( const Point& rLT, const Size& rSize )
-    : mnLeft( rLT.X())
-    , mnTop( rLT.Y())
-    , mnRight(rSize.Width() ? mnLeft + (rSize.Width() + (rSize.Width() > 0 ? -1 : 1)) : RECT_EMPTY)
-    , mnBottom(rSize.Height() ? mnTop + (rSize.Height() + (rSize.Height() > 0 ? -1 : 1)) : RECT_EMPTY)
-{}
-
-constexpr inline tools::Rectangle tools::Rectangle::Normalize(const Point& rLT, const Point& rRB)
+template<class RectangleT, class PointT, class SizeT>
+class RectangleTemplate : public RectangleTemplateBase
 {
-    const std::pair<tools::Long, tools::Long> aLeftRight = std::minmax(rLT.X(), rRB.X());
-    const std::pair<tools::Long, tools::Long> aTopBottom = std::minmax(rLT.Y(), rRB.Y());
-    return { aLeftRight.first, aTopBottom.first, aLeftRight.second, aTopBottom.second };
-}
+friend class ::tools::Rectangle;
+friend class AbsoluteScreenPixelRectangle;
+public:
+    using PointType = PointT;
+    using SizeType = SizeT;
 
-inline void tools::Rectangle::Move( tools::Long nHorzMove, tools::Long nVertMove )
-{
-    mnLeft += nHorzMove;
-    mnTop  += nVertMove;
-    if (!IsWidthEmpty())
-        mnRight += nHorzMove;
-    if (!IsHeightEmpty())
-        mnBottom += nVertMove;
-}
+public:
+    constexpr RectangleTemplate() = default;
+    constexpr RectangleTemplate( const PointT& rLT, const PointT& rRB )
+        : RectangleTemplate(rLT.X(), rLT.Y(), rRB.X(), rRB.Y()) {}
+    constexpr RectangleTemplate( tools::Long nLeft, tools::Long nTop,
+                         tools::Long nRight, tools::Long nBottom )
+        : RectangleTemplateBase(nLeft, nTop, nRight, nBottom )
+    {}
+    /// Constructs an empty Rectangle, with top/left at the specified params
+    constexpr RectangleTemplate( tools::Long nLeft, tools::Long nTop )
+        : RectangleTemplateBase(nLeft, nTop)
+    {}
+    /// Constructs a closed interval rectangle
+    constexpr RectangleTemplate( const PointT& rLT, const SizeT& rSize )
+        : RectangleTemplateBase( rLT, rSize )
+    {}
 
-inline void tools::Rectangle::SetPosX(tools::Long x)
-{
-    if (!IsWidthEmpty())
-        mnRight += x - mnLeft;
-    mnLeft = x;
-}
-
-inline void tools::Rectangle::SetPosY(tools::Long y)
-{
-    if (!IsHeightEmpty())
-        mnBottom += y - mnTop;
-    mnTop = y;
-}
-
-inline void tools::Rectangle::SetPos( const Point& rPoint )
-{
-    SetPosX(rPoint.X());
-    SetPosY(rPoint.Y());
-}
-
-inline void tools::Rectangle::SetWidth(tools::Long nWidth)
-{
-    if (nWidth < 0)
-        mnRight = mnLeft + nWidth + 1;
-    else if (nWidth > 0)
-        mnRight = mnLeft + nWidth - 1;
-    else
-        SetWidthEmpty();
-}
-
-inline void tools::Rectangle::SetHeight(tools::Long nHeight)
-{
-    if (nHeight < 0)
-        mnBottom = mnTop + nHeight + 1;
-    else if (nHeight > 0)
-        mnBottom = mnTop + nHeight - 1;
-    else
-        SetHeightEmpty();
-}
-
-inline void tools::Rectangle::SetSize(const Size& rSize)
-{
-    SetWidth(rSize.Width());
-    SetHeight(rSize.Height());
-}
-
-constexpr inline tools::Long tools::Rectangle::GetWidth() const
-{
-    tools::Long n = 0;
-
-    if (!IsWidthEmpty())
+    using RectangleTemplateBase::Normalize;
+    constexpr static RectangleT Normalize(const PointT& rLT, const PointT& rRB)
     {
-        n = mnRight - mnLeft;
-        if (n < 0)
-            n--;
-        else
-            n++;
+        const std::pair<tools::Long, tools::Long> aLeftRight = std::minmax(rLT.X(), rRB.X());
+        const std::pair<tools::Long, tools::Long> aTopBottom = std::minmax(rLT.Y(), rRB.Y());
+        return { aLeftRight.first, aTopBottom.first, aLeftRight.second, aTopBottom.second };
     }
 
-    return n;
-}
+    constexpr PointT TopLeft() const { return { Left(), Top() }; }
+    constexpr PointT TopRight() const { return { Right(), Top() }; }
+    constexpr PointT TopCenter() const { return { (Left() + Right()) / 2, Top() }; }
+    constexpr PointT BottomLeft() const { return { Left(), Bottom() }; }
+    constexpr PointT BottomRight() const { return { Right(), Bottom() }; }
+    constexpr PointT BottomCenter() const { return { (Left() + Right()) / 2, Bottom() }; }
+    constexpr PointT LeftCenter() const { return { Left(), (Top() + Bottom()) / 2 }; }
+    constexpr PointT RightCenter() const { return { Right(), (Top() + Bottom()) / 2 }; }
+    constexpr PointT Center() const { return { (Left() + Right()) / 2, (Top() + Bottom()) / 2 }; }
 
-constexpr inline tools::Long tools::Rectangle::GetHeight() const
-{
-    tools::Long n = 0;
-
-    if (!IsHeightEmpty())
+    using RectangleTemplateBase::Move;
+    void                Move( SizeT const & s ) { Move(s.Width(), s.Height()); }
+    void SetPos( const PointT& rPoint )
     {
-        n = mnBottom - mnTop;
-        if (n < 0)
-            n--;
-        else
-            n++;
+        SetPosX(rPoint.X());
+        SetPosY(rPoint.Y());
+    }
+    void SetSize(const SizeT& rSize)
+    {
+        SetWidth(rSize.Width());
+        SetHeight(rSize.Height());
     }
 
-    return n;
-}
+    constexpr PointT GetPos() const { return TopLeft(); }
+    constexpr SizeT GetSize() const { return { GetWidth(), GetHeight() }; }
 
-inline tools::Rectangle tools::Rectangle::GetUnion( const tools::Rectangle& rRect ) const
-{
-    tools::Rectangle aTmpRect( *this );
-    return aTmpRect.Union( rRect );
-}
+    RectangleT&          Union( const RectangleT& rRect ) { RectangleTemplateBase::Union(rRect); return reinterpret_cast<RectangleT&>(*this); }
+    RectangleT&          Intersection( const RectangleT& rRect ) { RectangleTemplateBase::Intersection(rRect); return reinterpret_cast<RectangleT&>(*this); }
+    RectangleT    GetUnion( const RectangleT& rRect ) const
+    {
+        RectangleT aTmpRect( reinterpret_cast<const RectangleT&>(*this) );
+        return aTmpRect.Union( rRect );
+    }
+    RectangleT    GetIntersection( const RectangleT& rRect ) const
+    {
+        RectangleT aTmpRect( reinterpret_cast<const RectangleT&>(*this) );
+        return aTmpRect.Intersection( rRect );
+    }
 
-inline tools::Rectangle tools::Rectangle::GetIntersection( const tools::Rectangle& rRect ) const
-{
-    tools::Rectangle aTmpRect( *this );
-    return aTmpRect.Intersection( rRect );
-}
+    bool                Contains( const PointT& rPt ) const { return RectangleTemplateBase::Contains(rPt); }
+    bool                Contains( const RectangleT& rRect ) const { return RectangleTemplateBase::Contains(rRect); }
+    bool                Overlaps( const RectangleT& rRect ) const { return RectangleTemplateBase::Overlaps(rRect); }
 
-inline bool tools::Rectangle::operator == ( const tools::Rectangle& rRect ) const
-{
-    return (mnLeft   == rRect.mnLeft   ) &&
-           (mnTop    == rRect.mnTop    ) &&
-           (mnRight  == rRect.mnRight  ) &&
-           (mnBottom == rRect.mnBottom );
-}
+    bool         operator == ( const RectangleT& rRect ) const
+    {
+        return (mnLeft   == rRect.mnLeft   ) &&
+               (mnTop    == rRect.mnTop    ) &&
+               (mnRight  == rRect.mnRight  ) &&
+               (mnBottom == rRect.mnBottom );
+    }
+    bool         operator != ( const RectangleT& rRect ) const
+    {
+        return (mnLeft   != rRect.mnLeft   ) ||
+               (mnTop    != rRect.mnTop    ) ||
+               (mnRight  != rRect.mnRight  ) ||
+               (mnBottom != rRect.mnBottom );
+    }
 
-inline bool tools::Rectangle::operator != ( const tools::Rectangle& rRect ) const
-{
-    return (mnLeft   != rRect.mnLeft   ) ||
-           (mnTop    != rRect.mnTop    ) ||
-           (mnRight  != rRect.mnRight  ) ||
-           (mnBottom != rRect.mnBottom );
-}
+    RectangleT&   operator += ( const PointT& rPt )
+    {
+        Move(rPt.X(), rPt.Y());
+        return reinterpret_cast<RectangleT&>(*this);
+    }
+    RectangleT&   operator -= ( const PointT& rPt )
+    {
+        Move(-rPt.X(), -rPt.Y());
+        return reinterpret_cast<RectangleT&>(*this);
+    }
 
-inline tools::Rectangle& tools::Rectangle::operator +=( const Point& rPt )
-{
-    Move(rPt.X(), rPt.Y());
-    return *this;
-}
+    RectangleT operator+( const Point& rPt ) const
+    {
+        RectangleT aTmp(mnLeft, mnTop, mnRight, mnBottom);
+        aTmp += rPt;
+        return aTmp;
+    }
+    RectangleT operator-( const Point& rPt ) const
+    {
+        RectangleT aTmp(mnLeft, mnTop, mnRight, mnBottom);
+        aTmp -= rPt;
+        return aTmp;
+    }
 
-inline tools::Rectangle& tools::Rectangle::operator -= ( const Point& rPt )
-{
-    Move(-rPt.X(), -rPt.Y());
-    return *this;
-}
+    /**
+     * Sanitizing variants for handling data from the outside
+     */
+    void                SaturatingSetSize(const SizeT& rSize) { RectangleTemplateBase::SaturatingSetSize(rSize); }
+
+    // Scales relative to 0,0
+    constexpr RectangleT scale(sal_Int64 nMulX, sal_Int64 nDivX,
+                                            sal_Int64 nMulY, sal_Int64 nDivY) const
+    {
+        // 1. Create an empty rectangle with correct left and top
+        RectangleT aRect(o3tl::convert(Left(), nMulX, nDivX),
+                               o3tl::convert(Top(), nMulY, nDivY));
+        // 2. If source has width/height, set respective right and bottom
+        if (!IsWidthEmpty())
+            aRect.SetRight(o3tl::convert(Right(), nMulX, nDivX));
+        if (!IsHeightEmpty())
+            aRect.SetBottom(o3tl::convert(Bottom(), nMulY, nDivY));
+        return aRect;
+    }
+};
 
 namespace tools
 {
-inline Rectangle operator + ( const Rectangle& rRect, const Point& rPt )
+class SAL_WARN_UNUSED Rectangle final : public RectangleTemplate<Rectangle, Point, Size>
 {
-    return Rectangle{ rRect }.operator+=(rPt);
-}
+public:
+    using RectangleTemplate::RectangleTemplate;
+    // TODO remove this to find more issues
+    constexpr Rectangle(const AbsoluteScreenPixelPoint& pt, const Size& sz) : RectangleTemplate(Point(pt.X(), pt.Y()), sz) {}
+    // TODO remove this to find more issues
+    constexpr Rectangle(const Point& pt, const AbsoluteScreenPixelSize& sz) : RectangleTemplate(pt, Size(sz.Width(), sz.Height())) {}
+    // TODO remove this to find more issues
+    constexpr explicit Rectangle(const AbsoluteScreenPixelRectangle & r);
+};
 
-inline Rectangle operator - ( const Rectangle& rRect, const Point& rPt )
+} // namespace tools
+
+
+// A rectangle relative to top-level screen, in screen pixels
+class SAL_WARN_UNUSED AbsoluteScreenPixelRectangle : public RectangleTemplate<AbsoluteScreenPixelRectangle, AbsoluteScreenPixelPoint, AbsoluteScreenPixelSize> {
+public:
+    using RectangleTemplate::RectangleTemplate;
+    // TODO remove
+    constexpr explicit AbsoluteScreenPixelRectangle(const tools::Rectangle & r) : RectangleTemplate(r.mnLeft, r.mnTop, r.mnRight, r.mnBottom) {}
+    // TODO remove
+    constexpr AbsoluteScreenPixelRectangle(const AbsoluteScreenPixelPoint& pt, const Size& sz) : RectangleTemplate(pt, AbsoluteScreenPixelSize(sz.Width(), sz.Height())) {}
+};
+
+namespace tools
 {
-    return Rectangle{ rRect }.operator-=(rPt);
-}
-
-}
-
-constexpr inline tools::Rectangle tools::Rectangle::scale(sal_Int64 nMulX, sal_Int64 nDivX,
-                                                          sal_Int64 nMulY, sal_Int64 nDivY) const
-{
-    // 1. Create an empty rectangle with correct left and top
-    tools::Rectangle aRect(o3tl::convert(Left(), nMulX, nDivX),
-                           o3tl::convert(Top(), nMulY, nDivY));
-    // 2. If source has width/height, set respective right and bottom
-    if (!IsWidthEmpty())
-        aRect.SetRight(o3tl::convert(Right(), nMulX, nDivX));
-    if (!IsHeightEmpty())
-        aRect.SetBottom(o3tl::convert(Bottom(), nMulY, nDivY));
-    return aRect;
+    constexpr Rectangle::Rectangle(const AbsoluteScreenPixelRectangle & r) : RectangleTemplate(r.mnLeft, r.mnTop, r.mnRight, r.mnBottom) {}
 }
 
 namespace o3tl
@@ -799,21 +914,23 @@ constexpr tools::Rectangle convert(const tools::Rectangle& rRectangle, o3tl::Len
     const auto [num, den] = o3tl::getConversionMulDiv(eFrom, eTo);
     return rRectangle.scale(num, den, num, den);
 }
+constexpr AbsoluteScreenPixelRectangle convert(const AbsoluteScreenPixelRectangle& rRectangle, o3tl::Length eFrom, o3tl::Length eTo)
+{
+    const auto [num, den] = o3tl::getConversionMulDiv(eFrom, eTo);
+    return rRectangle.scale(num, den, num, den);
+}
 
 } // end o3tl
 
-namespace tools
-{
 template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(
-    std::basic_ostream<charT, traits> & stream, const tools::Rectangle& rectangle )
+    std::basic_ostream<charT, traits> & stream, const RectangleTemplateBase& rectangle )
 {
     if (rectangle.IsEmpty())
         return stream << "EMPTY";
     else
         return stream << rectangle.GetWidth() << 'x' << rectangle.GetHeight()
                       << "@(" << rectangle.getX() << ',' << rectangle.getY() << ")";
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

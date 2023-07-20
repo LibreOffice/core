@@ -60,9 +60,9 @@ namespace accessibility
         return mpBrowseBox->GetFieldRectPixel( m_nRowPos, m_nColPos, false, /*bOnScreen*/false );
     }
 
-    ::tools::Rectangle AccessibleBrowseBoxCell::implGetBoundingBoxOnScreen()
+    AbsoluteScreenPixelRectangle AccessibleBrowseBoxCell::implGetBoundingBoxOnScreen()
     {
-        return mpBrowseBox->GetFieldRectPixel( m_nRowPos, m_nColPos, false, /*bOnScreen*/true );
+        return AbsoluteScreenPixelRectangle(mpBrowseBox->GetFieldRectPixel( m_nRowPos, m_nColPos, false, /*bOnScreen*/true ));
     }
 }   // namespace accessibility
 

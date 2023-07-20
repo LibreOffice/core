@@ -33,6 +33,7 @@
 #include <cppuhelper/implbase1.hxx>
 
 namespace tools { class Rectangle; }
+class AbsoluteScreenPixelRectangle;
 
 /** @descr
         This base class provides an implementation of the
@@ -203,7 +204,7 @@ protected:
     /// Return the object's current bounding box relative to the desktop.
     ///
     /// @throws css::uno::RuntimeException
-    virtual tools::Rectangle GetBoundingBoxOnScreen() const;
+    virtual AbsoluteScreenPixelRectangle GetBoundingBoxOnScreen() const;
 
     /// Return the object's current bounding box relative to the parent object.
     ///

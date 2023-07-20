@@ -1319,9 +1319,9 @@ void SAL_CALL ScAccessibleSpreadsheet::addAccessibleEventListener(const uno::Ref
 
 //====  internal  =========================================================
 
-tools::Rectangle ScAccessibleSpreadsheet::GetBoundingBoxOnScreen() const
+AbsoluteScreenPixelRectangle ScAccessibleSpreadsheet::GetBoundingBoxOnScreen() const
 {
-    tools::Rectangle aRect;
+    AbsoluteScreenPixelRectangle aRect;
     if (mpViewShell)
     {
         vcl::Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);

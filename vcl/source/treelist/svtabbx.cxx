@@ -776,7 +776,7 @@ tools::Rectangle SvHeaderTabListBox::calcHeaderRect( bool _bIsColumnBar, bool _b
 tools::Rectangle SvHeaderTabListBox::calcTableRect( bool _bOnScreen )
 {
     if ( _bOnScreen )
-        return GetWindowExtentsAbsolute();
+        return tools::Rectangle(GetWindowExtentsAbsolute());
     else
         return GetWindowExtentsRelative( *GetAccessibleParentWindow() );
 }
@@ -797,7 +797,7 @@ tools::Rectangle SvHeaderTabListBox::GetFieldRectPixel( sal_Int32 _nRow, sal_uIn
         aRect = tools::Rectangle( aTopLeft, aSize );
         aTopLeft = aRect.TopLeft();
         if (_bOnScreen)
-            aTopLeft += GetWindowExtentsAbsolute().TopLeft();
+            aTopLeft += Point(GetWindowExtentsAbsolute().TopLeft());
         else
             aTopLeft += GetWindowExtentsRelative( *GetAccessibleParentWindow() ).TopLeft();
         aRect = tools::Rectangle( aTopLeft, aRect.GetSize() );
@@ -1048,7 +1048,7 @@ bool SvHeaderTabListBox::GetGlyphBoundRects( const Point& rOrigin, const OUStrin
     return GetOutDev()->GetGlyphBoundRects( rOrigin, rStr, nIndex, nLen, rVector );
 }
 
-tools::Rectangle SvHeaderTabListBox::GetWindowExtentsAbsolute() const
+AbsoluteScreenPixelRectangle SvHeaderTabListBox::GetWindowExtentsAbsolute() const
 {
     return Control::GetWindowExtentsAbsolute();
 }

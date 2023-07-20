@@ -567,7 +567,7 @@ OUString vcl::WindowData::toStr() const
 
 void SystemWindow::ImplMoveToScreen( tools::Long& io_rX, tools::Long& io_rY, tools::Long i_nWidth, tools::Long i_nHeight, vcl::Window const * i_pConfigureWin )
 {
-    tools::Rectangle aScreenRect = Application::GetScreenPosSizePixel( 0 );
+    AbsoluteScreenPixelRectangle aScreenRect = Application::GetScreenPosSizePixel( 0 );
     for( unsigned int i = 1; i < Application::GetScreenCount(); i++ )
         aScreenRect.Union( Application::GetScreenPosSizePixel( i ) );
     // unfortunately most of the time width and height are not really known
@@ -662,7 +662,7 @@ void SystemWindow::SetWindowState(const vcl::WindowData& rData)
         if( !((rData.mask() & vcl::WindowDataMask::State) && (nState & vcl::WindowState::Maximized)) )
             if (rData.mask() & vcl::WindowDataMask::PosSize)
             {
-                tools::Rectangle aDesktop = GetDesktopRectPixel();
+                AbsoluteScreenPixelRectangle aDesktop = GetDesktopRectPixel();
                 ImplSVData *pSVData = ImplGetSVData();
                 vcl::Window *pWin = pSVData->maFrameData.mpFirstFrame;
                 bool bWrapped = false;
@@ -1069,7 +1069,7 @@ void SystemWindow::setOptimalLayoutSize(bool bAllowWindowShrink)
 
     Size aSize = get_preferred_size();
 
-    Size aMax(bestmaxFrameSizeForScreenSize(GetDesktopRectPixel().GetSize()));
+    Size aMax(bestmaxFrameSizeForScreenSize(Size(GetDesktopRectPixel().GetSize())));
 
     aSize.setWidth( std::min(aMax.Width(), aSize.Width()) );
     aSize.setHeight( std::min(aMax.Height(), aSize.Height()) );

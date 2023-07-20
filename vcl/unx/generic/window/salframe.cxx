@@ -472,9 +472,9 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
                                    GetDisplay()->GetRootWindow( m_nXScreen ),
                                    &aRoot, &aChild,
                                    &root_x, &root_y, &lx, &ly, &mask );
-                    const std::vector< tools::Rectangle >& rScreens = GetDisplay()->GetXineramaScreens();
+                    const std::vector< AbsoluteScreenPixelRectangle >& rScreens = GetDisplay()->GetXineramaScreens();
                     for(const auto & rScreen : rScreens)
-                        if( rScreen.Contains( Point( root_x, root_y ) ) )
+                        if( rScreen.Contains( AbsoluteScreenPixelPoint( root_x, root_y ) ) )
                         {
                             x = rScreen.Left();
                             y = rScreen.Top();
@@ -1232,7 +1232,7 @@ void X11SalFrame::ToTop( SalFrameToTop nFlags )
     }
 }
 
-void X11SalFrame::GetWorkArea( tools::Rectangle& rWorkArea )
+void X11SalFrame::GetWorkArea( AbsoluteScreenPixelRectangle& rWorkArea )
 {
     rWorkArea = pDisplay_->getWMAdaptor()->getWorkArea( 0 );
 }
@@ -1263,8 +1263,8 @@ void X11SalFrame::GetClientSize( tools::Long &rWidth, tools::Long &rHeight )
 void X11SalFrame::Center( )
 {
     int             nX, nY;
-    Size aRealScreenSize(GetDisplay()->getDataForScreen(m_nXScreen).m_aSize);
-    tools::Rectangle aScreen({ 0, 0 }, aRealScreenSize);
+    AbsoluteScreenPixelSize aRealScreenSize(GetDisplay()->getDataForScreen(m_nXScreen).m_aSize);
+    AbsoluteScreenPixelRectangle aScreen({ 0, 0 }, aRealScreenSize);
 
     if( GetDisplay()->IsXinerama() )
     {
@@ -1286,9 +1286,9 @@ void X11SalFrame::Center( )
                            &root_x, &root_y,
                            &x, &y,
                            &mask );
-        const std::vector< tools::Rectangle >& rScreens = GetDisplay()->GetXineramaScreens();
+        const std::vector< AbsoluteScreenPixelRectangle >& rScreens = GetDisplay()->GetXineramaScreens();
         for(const auto & rScreen : rScreens)
-            if( rScreen.Contains( Point( root_x, root_y ) ) )
+            if( rScreen.Contains( AbsoluteScreenPixelPoint( root_x, root_y ) ) )
             {
                 aScreen.SetPos(rScreen.GetPos());
                 aRealScreenSize = rScreen.GetSize();
@@ -1303,9 +1303,9 @@ void X11SalFrame::Center( )
             pFrame = pFrame->mpParent;
         if( pFrame->maGeometry.width() < 1  || pFrame->maGeometry.height() < 1 )
         {
-            tools::Rectangle aRect;
+            AbsoluteScreenPixelRectangle aRect;
             pFrame->GetPosSize( aRect );
-            pFrame->maGeometry.setPosSize(aRect);
+            pFrame->maGeometry.setPosSize(tools::Rectangle(aRect));
         }
 
         if( pFrame->nStyle_ & SalFrameStyleFlags::PLUG )
@@ -1322,7 +1322,7 @@ void X11SalFrame::Center( )
             aScreen = {{ nScreenX, nScreenY }, Size(nScreenWidth, nScreenHeight)};
         }
         else
-            aScreen = pFrame->maGeometry.posSize();
+            aScreen = AbsoluteScreenPixelRectangle(pFrame->maGeometry.posSize());
     }
 
     if( mpParent && mpParent->nShowState_ == X11ShowState::Normal )
@@ -1363,8 +1363,8 @@ void X11SalFrame::updateScreenNumber()
 {
     if( GetDisplay()->IsXinerama() && GetDisplay()->GetXineramaScreens().size() > 1 )
     {
-        Point aPoint( maGeometry.x(), maGeometry.y() );
-        const std::vector<tools::Rectangle>& rScreenRects( GetDisplay()->GetXineramaScreens() );
+        AbsoluteScreenPixelPoint aPoint( maGeometry.x(), maGeometry.y() );
+        const std::vector<AbsoluteScreenPixelRectangle>& rScreenRects( GetDisplay()->GetXineramaScreens() );
         size_t nScreens = rScreenRects.size();
         for( size_t i = 0; i < nScreens; i++ )
         {
@@ -1385,7 +1385,7 @@ void X11SalFrame::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth
         return;
 
     // relative positioning in X11SalFrame::SetPosSize
-    tools::Rectangle aPosSize( Point( maGeometry.x(), maGeometry.y() ), Size( maGeometry.width(), maGeometry.height() ) );
+    AbsoluteScreenPixelRectangle aPosSize( AbsoluteScreenPixelPoint( maGeometry.x(), maGeometry.y() ), AbsoluteScreenPixelSize( maGeometry.width(), maGeometry.height() ) );
     aPosSize.Normalize();
 
     if( ! ( nFlags & SAL_FRAME_POSSIZE_X ) )
@@ -1405,13 +1405,13 @@ void X11SalFrame::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth
     if( ! ( nFlags & SAL_FRAME_POSSIZE_HEIGHT ) )
         nHeight = aPosSize.GetHeight();
 
-    aPosSize = tools::Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) );
+    aPosSize = AbsoluteScreenPixelRectangle( AbsoluteScreenPixelPoint( nX, nY ), AbsoluteScreenPixelSize( nWidth, nHeight ) );
 
     if( ! ( nFlags & ( SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y ) ) )
     {
         if( bDefaultPosition_ )
         {
-            maGeometry.setSize(aPosSize.GetSize());
+            maGeometry.setSize(Size(aPosSize.GetSize()));
             Center();
         }
         else
@@ -1478,7 +1478,7 @@ void X11SalFrame::SetWindowState( const vcl::WindowData *pState )
         else
         {
             bool bDoAdjust = false;
-            tools::Rectangle aPosSize;
+            AbsoluteScreenPixelRectangle aPosSize;
             // initialize with current geometry
             if ((pState->mask() & vcl::WindowDataMask::PosSize) != vcl::WindowDataMask::PosSize)
                 GetPosSize(aPosSize);
@@ -1509,7 +1509,7 @@ void X11SalFrame::SetWindowState( const vcl::WindowData *pState )
                 bDoAdjust = true;
             }
 
-            const Size& aScreenSize = pDisplay_->getDataForScreen( m_nXScreen ).m_aSize;
+            const AbsoluteScreenPixelSize& aScreenSize = pDisplay_->getDataForScreen( m_nXScreen ).m_aSize;
 
             if( bDoAdjust && aPosSize.GetWidth() <= aScreenSize.Width()
                 && aPosSize.GetHeight() <= aScreenSize.Height() )
@@ -1562,7 +1562,7 @@ void X11SalFrame::SetWindowState( const vcl::WindowData *pState )
             bool bVert(pState->state() & vcl::WindowState::MaximizedVert);
             GetDisplay()->getWMAdaptor()->maximizeFrame( this, bHorz, bVert );
         }
-        maRestorePosSize = pState->posSize();
+        maRestorePosSize = AbsoluteScreenPixelRectangle(pState->posSize());
     }
     else if( mbMaximizedHorz || mbMaximizedVert )
         GetDisplay()->getWMAdaptor()->maximizeFrame( this, false, false );
@@ -1587,7 +1587,7 @@ bool X11SalFrame::GetWindowState( vcl::WindowData* pState )
     else
         pState->setState(vcl::WindowState::Normal);
 
-    tools::Rectangle aPosSize;
+    AbsoluteScreenPixelRectangle aPosSize;
     if( maRestorePosSize.IsEmpty() )
         GetPosSize( aPosSize );
     else
@@ -1598,7 +1598,7 @@ bool X11SalFrame::GetWindowState( vcl::WindowData* pState )
     if( mbMaximizedVert )
         pState->rState() |= vcl::WindowState::MaximizedVert;
 
-    pState->setPosSize(aPosSize);
+    pState->setPosSize(tools::Rectangle(aPosSize));
     pState->setMask(vcl::WindowDataMask::PosSizeState);
 
     if (! maRestorePosSize.IsEmpty() )
@@ -1619,19 +1619,19 @@ void X11SalFrame::SetMenu( SalMenu* )
 {
 }
 
-void X11SalFrame::GetPosSize( tools::Rectangle &rPosSize )
+void X11SalFrame::GetPosSize( AbsoluteScreenPixelRectangle &rPosSize )
 {
     if( maGeometry.width() < 1 || maGeometry.height() < 1 )
     {
-        const Size& aScreenSize = pDisplay_->getDataForScreen( m_nXScreen ).m_aSize;
+        const AbsoluteScreenPixelSize& aScreenSize = pDisplay_->getDataForScreen( m_nXScreen ).m_aSize;
         tools::Long w = aScreenSize.Width()  - maGeometry.leftDecoration() - maGeometry.rightDecoration();
         tools::Long h = aScreenSize.Height() - maGeometry.topDecoration() - maGeometry.bottomDecoration();
 
-        rPosSize = tools::Rectangle( Point( maGeometry.x(), maGeometry.y() ), Size( w, h ) );
+        rPosSize = AbsoluteScreenPixelRectangle( AbsoluteScreenPixelPoint( maGeometry.x(), maGeometry.y() ), AbsoluteScreenPixelSize( w, h ) );
     }
     else
-        rPosSize = tools::Rectangle( Point( maGeometry.x(), maGeometry.y() ),
-                              Size( maGeometry.width(), maGeometry.height() ) );
+        rPosSize = AbsoluteScreenPixelRectangle( AbsoluteScreenPixelPoint( maGeometry.x(), maGeometry.y() ),
+                              AbsoluteScreenPixelSize( maGeometry.width(), maGeometry.height() ) );
 }
 
 void X11SalFrame::SetSize( const Size &rSize )
@@ -1677,7 +1677,7 @@ void X11SalFrame::SetSize( const Size &rSize )
         mpInputContext->SetICFocus ( this );
 }
 
-void X11SalFrame::SetPosSize( const tools::Rectangle &rPosSize )
+void X11SalFrame::SetPosSize( const AbsoluteScreenPixelRectangle &rPosSize )
 {
     XWindowChanges values;
     values.x        = rPosSize.Left();
@@ -1906,17 +1906,17 @@ void X11SalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
             return;
         if( bFullScreen )
         {
-            maRestorePosSize = maGeometry.posSize();
-            tools::Rectangle aRect;
+            maRestorePosSize = AbsoluteScreenPixelRectangle(maGeometry.posSize());
+            AbsoluteScreenPixelRectangle aRect;
             if( nScreen < 0 || o3tl::make_unsigned(nScreen) >= GetDisplay()->GetXineramaScreens().size() )
-                aRect = tools::Rectangle( Point(0,0), GetDisplay()->GetScreenSize( m_nXScreen ) );
+                aRect = AbsoluteScreenPixelRectangle( AbsoluteScreenPixelPoint(0,0), GetDisplay()->GetScreenSize( m_nXScreen ) );
             else
                 aRect = GetDisplay()->GetXineramaScreens()[nScreen];
             m_bIsPartialFullScreen = true;
             bool bVisible = bMapped_;
             if( bVisible )
                 Show( false );
-            maGeometry.setPosSize(aRect);
+            maGeometry.setPosSize(tools::Rectangle(aRect));
             mbMaximizedHorz = mbMaximizedVert = false;
             mbFullScreen = true;
             createNewWindow( None, m_nXScreen );
@@ -1933,8 +1933,8 @@ void X11SalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
             mbFullScreen = false;
             m_bIsPartialFullScreen = false;
             bool bVisible = bMapped_;
-            tools::Rectangle aRect = maRestorePosSize;
-            maRestorePosSize = tools::Rectangle();
+            AbsoluteScreenPixelRectangle aRect = maRestorePosSize;
+            maRestorePosSize = AbsoluteScreenPixelRectangle();
             if( bVisible )
                 Show( false );
             createNewWindow( None, m_nXScreen );
@@ -3488,7 +3488,7 @@ bool X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
     // #i81311# do this only for sizable frames
     if( nStyle_ & SalFrameStyleFlags::SIZEABLE )
     {
-        Size aScreenSize = GetDisplay()->GetScreenSize( m_nXScreen );
+        AbsoluteScreenPixelSize aScreenSize = GetDisplay()->GetScreenSize( m_nXScreen );
         int nScreenWidth  = aScreenSize.Width();
         int nScreenHeight = aScreenSize.Height();
         int nFrameWidth   = maGeometry.width() + maGeometry.leftDecoration() + maGeometry.rightDecoration();

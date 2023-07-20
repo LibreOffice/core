@@ -607,11 +607,11 @@ IMPL_LINK_NOARG(ButtonPressRepeater, RepeatTimerHdl, Timer*, void)
 weld::Window* GetPopupParent(vcl::Window& rOutWin, tools::Rectangle& rRect)
 {
     rRect.SetPos(rOutWin.OutputToScreenPixel(rRect.TopLeft()));
-    rRect = FloatingWindow::ImplConvertToAbsPos(&rOutWin, rRect);
+    AbsoluteScreenPixelRectangle aRectAbs = FloatingWindow::ImplConvertToAbsPos(&rOutWin, rRect);
 
     vcl::Window* pWin = rOutWin.GetFrameWindow();
 
-    rRect = FloatingWindow::ImplConvertToRelPos(pWin, rRect);
+    rRect = FloatingWindow::ImplConvertToRelPos(pWin, aRectAbs);
     rRect.SetPos(pWin->ScreenToOutputPixel(rRect.TopLeft()));
 
     return rOutWin.GetFrameWeld();

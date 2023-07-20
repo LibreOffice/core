@@ -293,10 +293,10 @@ void SvpSalFrame::GetClientSize( tools::Long& rWidth, tools::Long& rHeight )
     rHeight = maGeometry.height();
 }
 
-void SvpSalFrame::GetWorkArea( tools::Rectangle& rRect )
+void SvpSalFrame::GetWorkArea( AbsoluteScreenPixelRectangle& rRect )
 {
-    rRect = tools::Rectangle( Point( 0, 0 ),
-                       Size( VIRTUAL_DESKTOP_WIDTH, VIRTUAL_DESKTOP_HEIGHT ) );
+    rRect = AbsoluteScreenPixelRectangle( AbsoluteScreenPixelPoint( 0, 0 ),
+                       AbsoluteScreenPixelSize( VIRTUAL_DESKTOP_WIDTH, VIRTUAL_DESKTOP_HEIGHT ) );
 }
 
 SalFrame* SvpSalFrame::GetParent() const

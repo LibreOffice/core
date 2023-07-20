@@ -1966,7 +1966,7 @@ tools::Rectangle BrowseBox::calcHeaderRect(bool _bIsColumnBar, bool _bOnScreen)
     if (pParent)
         aTopLeft += GetWindowExtentsRelative( *pParent ).TopLeft();
     else
-        aTopLeft += GetWindowExtentsAbsolute().TopLeft();
+        aTopLeft += Point(GetWindowExtentsAbsolute().TopLeft());
     return tools::Rectangle(aTopLeft,Size(nWidth,nHeight));
 }
 
@@ -1980,7 +1980,7 @@ tools::Rectangle BrowseBox::calcTableRect(bool _bOnScreen)
     if (pParent)
         aRect = GetWindowExtentsRelative( *pParent );
     else
-        aRect = GetWindowExtentsAbsolute();
+        aRect = tools::Rectangle(GetWindowExtentsAbsolute());
     tools::Rectangle aRowBar = calcHeaderRect(false, pParent == nullptr);
 
     tools::Long nX = aRowBar.Right() - aRect.Left();
@@ -2002,7 +2002,7 @@ tools::Rectangle BrowseBox::GetFieldRectPixel( sal_Int32 _nRowId, sal_uInt16 _nC
     if (pParent)
         aTopLeft += GetWindowExtentsRelative( *pParent ).TopLeft();
     else
-        aTopLeft += GetWindowExtentsAbsolute().TopLeft();
+        aTopLeft += Point(GetWindowExtentsAbsolute().TopLeft());
 
     return tools::Rectangle(aTopLeft,aRect.GetSize());
 }

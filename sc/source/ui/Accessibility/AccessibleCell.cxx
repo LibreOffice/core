@@ -154,15 +154,15 @@ void SAL_CALL ScAccessibleCell::grabFocus(  )
     }
 }
 
-tools::Rectangle ScAccessibleCell::GetBoundingBoxOnScreen() const
+AbsoluteScreenPixelRectangle ScAccessibleCell::GetBoundingBoxOnScreen() const
 {
-    tools::Rectangle aCellRect(GetBoundingBox());
+    AbsoluteScreenPixelRectangle aCellRect(GetBoundingBox());
     if (mpViewShell)
     {
         vcl::Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWindow)
         {
-            tools::Rectangle aRect = pWindow->GetWindowExtentsAbsolute();
+            AbsoluteScreenPixelRectangle aRect = pWindow->GetWindowExtentsAbsolute();
             aCellRect.Move(aRect.Left(), aRect.Top());
         }
     }

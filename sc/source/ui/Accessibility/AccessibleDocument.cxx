@@ -2011,7 +2011,7 @@ Point ScAccessibleDocument::LogicToPixel (const Point& rPoint) const
     if (pWin)
     {
         aPoint = pWin->LogicToPixel(rPoint, pWin->GetDrawMapMode());
-        aPoint += pWin->GetWindowExtentsAbsolute().TopLeft();
+        aPoint += Point(pWin->GetWindowExtentsAbsolute().TopLeft());
     }
     return aPoint;
 }
@@ -2054,9 +2054,9 @@ OUString
     return sName;
 }
 
-tools::Rectangle ScAccessibleDocument::GetBoundingBoxOnScreen() const
+AbsoluteScreenPixelRectangle ScAccessibleDocument::GetBoundingBoxOnScreen() const
 {
-    tools::Rectangle aRect;
+    AbsoluteScreenPixelRectangle aRect;
     if (mpViewShell)
     {
         vcl::Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);

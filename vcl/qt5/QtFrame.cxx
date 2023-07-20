@@ -591,7 +591,7 @@ void QtFrame::GetClientSize(tools::Long& rWidth, tools::Long& rHeight)
     rHeight = round(m_pQWidget->height() * devicePixelRatioF());
 }
 
-void QtFrame::GetWorkArea(tools::Rectangle& rRect)
+void QtFrame::GetWorkArea(AbsoluteScreenPixelRectangle& rRect)
 {
     if (!isWindow())
         return;
@@ -600,7 +600,7 @@ void QtFrame::GetWorkArea(tools::Rectangle& rRect)
         return;
 
     QSize aSize = pScreen->availableVirtualSize() * devicePixelRatioF();
-    rRect = tools::Rectangle(0, 0, aSize.width(), aSize.height());
+    rRect = AbsoluteScreenPixelRectangle(0, 0, aSize.width(), aSize.height());
 }
 
 SalFrame* QtFrame::GetParent() const { return m_pParent; }

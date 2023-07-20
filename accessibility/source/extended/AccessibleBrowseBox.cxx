@@ -185,7 +185,7 @@ tools::Rectangle AccessibleBrowseBox::implGetBoundingBox()
 }
 
 
-tools::Rectangle AccessibleBrowseBox::implGetBoundingBoxOnScreen()
+AbsoluteScreenPixelRectangle AccessibleBrowseBox::implGetBoundingBoxOnScreen()
 {
     return mpBrowseBox->GetWindowExtentsAbsolute();
 }

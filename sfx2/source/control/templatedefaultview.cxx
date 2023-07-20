@@ -25,7 +25,7 @@ TemplateDefaultView::TemplateDefaultView(std::unique_ptr<weld::ScrolledWindow> x
                                          std::unique_ptr<weld::Menu> xMenu)
     : TemplateLocalView(std::move(xWindow), std::move(xMenu))
 {
-    tools::Rectangle aScreen = Application::GetScreenPosSizePixel(Application::GetDisplayBuiltInScreen());
+    AbsoluteScreenPixelRectangle aScreen = Application::GetScreenPosSizePixel(Application::GetDisplayBuiltInScreen());
     tools::Long nItemMaxSize = std::min(aScreen.GetWidth(),aScreen.GetHeight()) > 800 ? 256 : 192;
     ThumbnailView::setItemDimensions( nItemMaxSize, nItemMaxSize, gnTextHeight, gnItemPadding );
     updateThumbnailDimensions(nItemMaxSize);

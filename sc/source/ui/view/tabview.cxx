@@ -1898,10 +1898,10 @@ Point ScTabView::GetChartDialogPos( const Size& rDialogSize, const tools::Rectan
     {
         MapMode aDrawMode = pWin->GetDrawMapMode();
         tools::Rectangle aObjPixel = pWin->LogicToPixel( rLogicChart, aDrawMode );
-        tools::Rectangle aObjAbs( pWin->OutputToAbsoluteScreenPixel( aObjPixel.TopLeft() ),
+        AbsoluteScreenPixelRectangle aObjAbs( pWin->OutputToAbsoluteScreenPixel( aObjPixel.TopLeft() ),
                            pWin->OutputToAbsoluteScreenPixel( aObjPixel.BottomRight() ) );
 
-        tools::Rectangle aDesktop = pWin->GetDesktopRectPixel();
+        AbsoluteScreenPixelRectangle aDesktop = pWin->GetDesktopRectPixel();
         Size aSpace = pWin->LogicToPixel( Size(8, 12), MapMode(MapUnit::MapAppFont));
 
         ScDocument& rDoc = aViewData.GetDocument();

@@ -3006,7 +3006,7 @@ Point SwAccessibleMap::LogicToPixel( const Point& rPoint ) const
         MapMode aMapMode;
         GetMapMode( aPoint, aMapMode );
         aPoint = pWin->LogicToPixel( aPoint, aMapMode );
-        aPoint = pWin->OutputToAbsoluteScreenPixel( aPoint );
+        aPoint = Point(pWin->OutputToAbsoluteScreenPixel( aPoint ));
     }
 
     return aPoint;

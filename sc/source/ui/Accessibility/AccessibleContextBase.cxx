@@ -452,10 +452,10 @@ void ScAccessibleContextBase::CommitFocusLost() const
     CommitChange(aEvent);
 }
 
-tools::Rectangle ScAccessibleContextBase::GetBoundingBoxOnScreen() const
+AbsoluteScreenPixelRectangle ScAccessibleContextBase::GetBoundingBoxOnScreen() const
 {
     OSL_FAIL("not implemented");
-    return tools::Rectangle();
+    return AbsoluteScreenPixelRectangle();
 }
 
 tools::Rectangle ScAccessibleContextBase::GetBoundingBox() const

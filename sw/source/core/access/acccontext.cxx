@@ -950,8 +950,8 @@ awt::Point SAL_CALL SwAccessibleContext::getLocationOnScreen()
         throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
     }
 
-    aPixPos = pWin->OutputToAbsoluteScreenPixel(aPixPos);
-    awt::Point aPoint(aPixPos.getX(), aPixPos.getY());
+    AbsoluteScreenPixelPoint aPixPosAbs = pWin->OutputToAbsoluteScreenPixel(aPixPos);
+    awt::Point aPoint(aPixPosAbs.getX(), aPixPosAbs.getY());
 
     return aPoint;
 }

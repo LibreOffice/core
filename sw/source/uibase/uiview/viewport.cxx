@@ -405,8 +405,8 @@ void SwView::Scroll( const tools::Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt
         tools::Rectangle aDlgRect;
         if (pCareDialog->get_extents_relative_to(*GetEditWin().GetFrameWeld(), x, y, width, height))
         {
-            Point aTopLeft(GetEditWin().GetSystemWindow()->OutputToAbsoluteScreenPixel(Point(x, y)));
-            aTopLeft = GetEditWin().AbsoluteScreenToOutputPixel(aTopLeft);
+            AbsoluteScreenPixelPoint aTopLeftAbs(GetEditWin().GetSystemWindow()->OutputToAbsoluteScreenPixel(Point(x, y)));
+            Point aTopLeft = GetEditWin().AbsoluteScreenToOutputPixel(aTopLeftAbs);
             aDlgRect = GetEditWin().PixelToLogic(tools::Rectangle(aTopLeft, Size(width, height)));
         }
 

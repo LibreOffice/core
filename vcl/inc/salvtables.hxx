@@ -478,7 +478,7 @@ public:
 
     virtual Point get_position() const override;
 
-    virtual tools::Rectangle get_monitor_workarea() const override;
+    virtual AbsoluteScreenPixelRectangle get_monitor_workarea() const override;
 
     virtual void set_centered_on_parent(bool /*bTrackGeometryRequests*/) override;
 
@@ -1330,7 +1330,7 @@ public:
 
     virtual a11yrelationset get_accessible_relation_set() override;
 
-    virtual Point get_accessible_location_on_screen() override;
+    virtual AbsoluteScreenPixelPoint get_accessible_location_on_screen() override;
 
     virtual void enable_drag_source(rtl::Reference<TransferDataContainer>& rHelper,
                                     sal_uInt8 eDNDConstants) override;

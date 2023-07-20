@@ -399,12 +399,12 @@ tools::Rectangle AccessibleBrowseBoxBase::getBoundingBox()
     return aRect;
 }
 
-tools::Rectangle AccessibleBrowseBoxBase::getBoundingBoxOnScreen()
+AbsoluteScreenPixelRectangle AccessibleBrowseBoxBase::getBoundingBoxOnScreen()
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
 
-    tools::Rectangle aRect = implGetBoundingBoxOnScreen();
+    AbsoluteScreenPixelRectangle aRect = implGetBoundingBoxOnScreen();
     if ( aRect.Left() == 0 && aRect.Top() == 0 && aRect.Right() == 0 && aRect.Bottom() == 0 )
     {
         SAL_WARN( "accessibility", "rectangle doesn't exist" );

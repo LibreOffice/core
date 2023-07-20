@@ -885,7 +885,7 @@ bool QtMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangle& r
     mpQMenu->setTearOffEnabled(bool(nFlags & FloatWinPopupFlags::AllowTearOff));
 
     const VclPtr<vcl::Window> xParent = pWin->ImplGetWindowImpl()->mpRealParent;
-    tools::Rectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(xParent, rRect);
+    AbsoluteScreenPixelRectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(xParent, rRect);
 
     // tdf#154447 Menu bar height has to be added
     QtFrame* pFrame = static_cast<QtFrame*>(pWin->ImplGetFrame());

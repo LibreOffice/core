@@ -2907,15 +2907,15 @@ bool PopupMenu::PrepareRun(const VclPtr<vcl::Window>& pParentWin, tools::Rectang
 
     Size aSz = ImplCalcSize( pWin );
 
-    tools::Rectangle aDesktopRect(pWin->GetDesktopRectPixel());
+    AbsoluteScreenPixelRectangle aDesktopRect(pWin->GetDesktopRectPixel());
     if( Application::GetScreenCount() > 1 )
     {
         vcl::Window* pDeskW = pWindow->GetWindow( GetWindowType::RealParent );
         if( ! pDeskW )
             pDeskW = pWindow;
-        Point aDesktopTL(pDeskW->OutputToAbsoluteScreenPixel(rRect.TopLeft()));
+        AbsoluteScreenPixelPoint aDesktopTL(pDeskW->OutputToAbsoluteScreenPixel(rRect.TopLeft()));
         aDesktopRect = Application::GetScreenPosSizePixel(
-            Application::GetBestScreen(tools::Rectangle(aDesktopTL, rRect.GetSize())));
+            Application::GetBestScreen(AbsoluteScreenPixelRectangle(aDesktopTL, rRect.GetSize())));
     }
 
     tools::Long nMaxHeight = aDesktopRect.GetHeight();
@@ -2930,7 +2930,7 @@ bool PopupMenu::PrepareRun(const VclPtr<vcl::Window>& pParentWin, tools::Rectang
         if ( pRef->GetParent() )
             pRef = pRef->GetParent();
 
-        tools::Rectangle devRect(pRef->OutputToAbsoluteScreenPixel(rRect.TopLeft()),
+        AbsoluteScreenPixelRectangle devRect(pRef->OutputToAbsoluteScreenPixel(rRect.TopLeft()),
                                  pRef->OutputToAbsoluteScreenPixel(rRect.BottomRight()));
 
         tools::Long nHeightAbove = devRect.Top() - aDesktopRect.Top();

@@ -66,7 +66,7 @@ namespace accessibility
         css::uno::Reference< css::accessibility::XAccessible > m_xParent;
 
         tools::Rectangle               GetBoundingBox_Impl() const;
-        tools::Rectangle               GetBoundingBoxOnScreen_Impl() const;
+        AbsoluteScreenPixelRectangle   GetBoundingBoxOnScreen_Impl() const;
         bool                IsAlive_Impl() const;
         bool                IsShowing_Impl() const;
 
@@ -75,7 +75,7 @@ namespace accessibility
         tools::Rectangle               GetBoundingBox();
         /// @throws css::lang::DisposedException
         /// @throws css::uno::RuntimeException
-        tools::Rectangle               GetBoundingBoxOnScreen();
+        AbsoluteScreenPixelRectangle   GetBoundingBoxOnScreen();
         /// @throws css::lang::DisposedException
         void                    EnsureIsAlive() const;
 

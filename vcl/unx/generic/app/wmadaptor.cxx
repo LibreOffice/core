@@ -234,8 +234,8 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
 
     // default desktops
     m_nDesktops = 1;
-    m_aWMWorkAreas = ::std::vector< tools::Rectangle >
-        ( 1, tools::Rectangle( Point(), m_pSalDisplay->GetScreenSize( m_pSalDisplay->GetDefaultXScreen() ) ) );
+    m_aWMWorkAreas = ::std::vector< AbsoluteScreenPixelRectangle >
+        ( 1, AbsoluteScreenPixelRectangle( AbsoluteScreenPixelPoint(), m_pSalDisplay->GetScreenSize( m_pSalDisplay->GetDefaultXScreen() ) ) );
     m_bEqualWorkAreas = true;
 
     memset( m_aWMAtoms, 0, sizeof( m_aWMAtoms ) );
@@ -464,15 +464,15 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                 && nItems == 4*static_cast<unsigned>(m_nDesktops)
                 )
             {
-                m_aWMWorkAreas = ::std::vector< tools::Rectangle > ( m_nDesktops );
+                m_aWMWorkAreas = ::std::vector< AbsoluteScreenPixelRectangle > ( m_nDesktops );
                 tools::Long* pValues = reinterpret_cast<long*>(pProperty);
                 for( int i = 0; i < m_nDesktops; i++ )
                 {
-                    Point aPoint( pValues[4*i],
+                    AbsoluteScreenPixelPoint aPoint( pValues[4*i],
                                   pValues[4*i+1] );
-                    Size aSize( pValues[4*i+2],
+                    AbsoluteScreenPixelSize aSize( pValues[4*i+2],
                                 pValues[4*i+3] );
-                    tools::Rectangle aWorkArea( aPoint, aSize );
+                    AbsoluteScreenPixelRectangle aWorkArea( aPoint, aSize );
                     m_aWMWorkAreas[i] = aWorkArea;
                     if( aWorkArea != m_aWMWorkAreas[0] )
                         m_bEqualWorkAreas = false;
@@ -1137,11 +1137,11 @@ void NetWMAdaptor::setNetWMState( X11SalFrame* pFrame ) const
         if( nCurrent < 0 )
             nCurrent = 0;
     }
-    tools::Rectangle aPosSize = m_aWMWorkAreas[nCurrent];
+    AbsoluteScreenPixelRectangle aPosSize = m_aWMWorkAreas[nCurrent];
     const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
-    aPosSize = tools::Rectangle( Point( aPosSize.Left() + rGeom.leftDecoration(),
+    aPosSize = AbsoluteScreenPixelRectangle( AbsoluteScreenPixelPoint( aPosSize.Left() + rGeom.leftDecoration(),
                                  aPosSize.Top()  + rGeom.topDecoration() ),
-                          Size( aPosSize.GetWidth()
+                          AbsoluteScreenPixelSize( aPosSize.GetWidth()
                                 - rGeom.leftDecoration()
                                 - rGeom.rightDecoration(),
                                 aPosSize.GetHeight()
@@ -1225,11 +1225,11 @@ void GnomeWMAdaptor::setGnomeWMState( X11SalFrame* pFrame ) const
         if( nCurrent < 0 )
             nCurrent = 0;
     }
-    tools::Rectangle aPosSize = m_aWMWorkAreas[nCurrent];
+    AbsoluteScreenPixelRectangle aPosSize = m_aWMWorkAreas[nCurrent];
     const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
-    aPosSize = tools::Rectangle( Point( aPosSize.Left() + rGeom.leftDecoration(),
+    aPosSize = AbsoluteScreenPixelRectangle( AbsoluteScreenPixelPoint( aPosSize.Left() + rGeom.leftDecoration(),
                                  aPosSize.Top()  + rGeom.topDecoration() ),
-                          Size( aPosSize.GetWidth()
+                          AbsoluteScreenPixelSize( aPosSize.GetWidth()
                                 - rGeom.leftDecoration()
                                 - rGeom.rightDecoration(),
                                 aPosSize.GetHeight()
@@ -1441,12 +1441,12 @@ void WMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bVert
 
     if( bHorizontal || bVertical )
     {
-        Size aScreenSize( m_pSalDisplay->GetScreenSize( pFrame->GetScreenNumber() ) );
-        Point aTL( rGeom.leftDecoration(), rGeom.topDecoration() );
+        AbsoluteScreenPixelSize aScreenSize( m_pSalDisplay->GetScreenSize( pFrame->GetScreenNumber() ) );
+        AbsoluteScreenPixelPoint aTL( rGeom.leftDecoration(), rGeom.topDecoration() );
         if( m_pSalDisplay->IsXinerama() )
         {
-            Point aMed( aTL.X() + rGeom.width()/2, aTL.Y() + rGeom.height()/2 );
-            const std::vector< tools::Rectangle >& rScreens = m_pSalDisplay->GetXineramaScreens();
+            AbsoluteScreenPixelPoint aMed( aTL.X() + rGeom.width()/2, aTL.Y() + rGeom.height()/2 );
+            const std::vector< AbsoluteScreenPixelRectangle >& rScreens = m_pSalDisplay->GetXineramaScreens();
             for(const auto & rScreen : rScreens)
                 if( rScreen.Contains( aMed ) )
                 {
@@ -1455,13 +1455,13 @@ void WMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bVert
                     break;
                 }
         }
-        tools::Rectangle aTarget( aTL,
-                           Size( aScreenSize.Width() - rGeom.leftDecoration() - rGeom.topDecoration(),
+        AbsoluteScreenPixelRectangle aTarget( aTL,
+                           AbsoluteScreenPixelSize( aScreenSize.Width() - rGeom.leftDecoration() - rGeom.topDecoration(),
                                  aScreenSize.Height() - rGeom.topDecoration() - rGeom.bottomDecoration() )
                            );
 
-        const tools::Rectangle aReferenceGeometry = !pFrame->maRestorePosSize.IsEmpty() ?
-                                                    pFrame->maRestorePosSize : rGeom.posSize();
+        const AbsoluteScreenPixelRectangle aReferenceGeometry = !pFrame->maRestorePosSize.IsEmpty() ?
+                                                    pFrame->maRestorePosSize : AbsoluteScreenPixelRectangle(rGeom.posSize());
         if( ! bHorizontal )
         {
             aTarget.SetSize({ aReferenceGeometry.GetWidth(), aTarget.GetHeight() });
@@ -1473,7 +1473,7 @@ void WMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bVert
             aTarget.SetTop(aReferenceGeometry.Top());
         }
 
-        tools::Rectangle aRestore(rGeom.posSize());
+        AbsoluteScreenPixelRectangle aRestore(rGeom.posSize());
         if( pFrame->bMapped_ )
         {
             XSetInputFocus( m_pDisplay,
@@ -1501,7 +1501,7 @@ void WMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bVert
     else
     {
         pFrame->SetPosSize( pFrame->maRestorePosSize );
-        pFrame->maRestorePosSize = tools::Rectangle();
+        pFrame->maRestorePosSize = AbsoluteScreenPixelRectangle();
         pFrame->nWidth_             = rGeom.width();
         pFrame->nHeight_            = rGeom.height();
     }
@@ -1562,12 +1562,12 @@ void NetWMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bV
             setNetWMState( pFrame );
         }
         if( !bHorizontal && !bVertical )
-            pFrame->maRestorePosSize = tools::Rectangle();
+            pFrame->maRestorePosSize = AbsoluteScreenPixelRectangle();
         else if( pFrame->maRestorePosSize.IsEmpty() )
         {
             const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
             pFrame->maRestorePosSize =
-                tools::Rectangle( Point( rGeom.x(), rGeom.y() ), Size( rGeom.width(), rGeom.height() ) );
+                AbsoluteScreenPixelRectangle( AbsoluteScreenPixelPoint( rGeom.x(), rGeom.y() ), AbsoluteScreenPixelSize( rGeom.width(), rGeom.height() ) );
         }
     }
     else
@@ -1616,12 +1616,12 @@ void GnomeWMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool 
             setGnomeWMState( pFrame );
 
         if( !bHorizontal && !bVertical )
-            pFrame->maRestorePosSize = tools::Rectangle();
+            pFrame->maRestorePosSize = AbsoluteScreenPixelRectangle();
         else if( pFrame->maRestorePosSize.IsEmpty() )
         {
             const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
             pFrame->maRestorePosSize =
-                tools::Rectangle( Point( rGeom.x(), rGeom.y() ), Size( rGeom.width(), rGeom.height() ) );
+                AbsoluteScreenPixelRectangle( AbsoluteScreenPixelPoint( rGeom.x(), rGeom.y() ), AbsoluteScreenPixelSize( rGeom.width(), rGeom.height() ) );
         }
     }
     else
@@ -1797,15 +1797,15 @@ int NetWMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEv
         }
 
         if( ! (pFrame->mbMaximizedHorz || pFrame->mbMaximizedVert ) )
-            pFrame->maRestorePosSize = tools::Rectangle();
+            pFrame->maRestorePosSize = AbsoluteScreenPixelRectangle();
         else
         {
             const SalFrameGeometry& rGeom = pFrame->GetUnmirroredGeometry();
             // the current geometry may already be changed by the corresponding
             // ConfigureNotify, but this cannot be helped
             pFrame->maRestorePosSize =
-                tools::Rectangle( Point( rGeom.x(), rGeom.y() ),
-                           Size( rGeom.width(), rGeom.height() ) );
+                AbsoluteScreenPixelRectangle( AbsoluteScreenPixelPoint( rGeom.x(), rGeom.y() ),
+                           AbsoluteScreenPixelSize( rGeom.width(), rGeom.height() ) );
         }
     }
     else if( pEvent->atom == m_aWMAtoms[ NET_WM_DESKTOP ] )
@@ -1860,15 +1860,15 @@ int GnomeWMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* p
         }
 
         if( ! (pFrame->mbMaximizedHorz || pFrame->mbMaximizedVert ) )
-            pFrame->maRestorePosSize = tools::Rectangle();
+            pFrame->maRestorePosSize = AbsoluteScreenPixelRectangle();
         else
         {
             const SalFrameGeometry& rGeom = pFrame->GetUnmirroredGeometry();
             // the current geometry may already be changed by the corresponding
             // ConfigureNotify, but this cannot be helped
             pFrame->maRestorePosSize =
-                tools::Rectangle( Point( rGeom.x(), rGeom.y() ),
-                           Size( rGeom.width(), rGeom.height() ) );
+                AbsoluteScreenPixelRectangle( AbsoluteScreenPixelPoint( rGeom.x(), rGeom.y() ),
+                           AbsoluteScreenPixelSize( rGeom.width(), rGeom.height() ) );
         }
     }
     else if( pEvent->atom == m_aWMAtoms[ NET_WM_DESKTOP ] )
@@ -1945,20 +1945,20 @@ void NetWMAdaptor::showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const
                 m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
                 &aRoot, &aChild,
                 &root_x, &root_y, &lx, &ly, &mask );
-                const std::vector< tools::Rectangle >& rScreens = m_pSalDisplay->GetXineramaScreens();
-                Point aMousePoint( root_x, root_y );
+                const std::vector< AbsoluteScreenPixelRectangle >& rScreens = m_pSalDisplay->GetXineramaScreens();
+                AbsoluteScreenPixelPoint aMousePoint( root_x, root_y );
                 for(const auto & rScreen : rScreens)
                 {
                     if( rScreen.Contains( aMousePoint ) )
                     {
-                        pFrame->maGeometry.setPosSize(rScreen);
+                        pFrame->maGeometry.setPosSize(tools::Rectangle(rScreen));
                         break;
                     }
                 }
             }
             else
             {
-                Size aSize = m_pSalDisplay->GetScreenSize( pFrame->GetScreenNumber() );
+                AbsoluteScreenPixelSize aSize = m_pSalDisplay->GetScreenSize( pFrame->GetScreenNumber() );
                 pFrame->maGeometry.setPosSize({ { 0, 0 }, aSize });
             }
             pFrame->CallCallback( SalEvent::MoveResize, nullptr );

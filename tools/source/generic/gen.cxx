@@ -42,7 +42,7 @@ size_t Pair::GetHashValue() const
     return hash;
 }
 
-void tools::Rectangle::SaturatingSetSize(const Size& rSize)
+void RectangleTemplateBase::SaturatingSetSize(const SizeTemplateBase& rSize)
 {
     if (rSize.Width() < 0)
         mnRight = o3tl::saturating_add(mnLeft, (rSize.Width() + 1));
@@ -59,24 +59,24 @@ void tools::Rectangle::SaturatingSetSize(const Size& rSize)
         SetHeightEmpty();
 }
 
-void tools::Rectangle::SaturatingSetPosX(tools::Long x)
+void RectangleTemplateBase::SaturatingSetPosX(tools::Long x)
 {
     if (!IsWidthEmpty())
         mnRight = o3tl::saturating_add(mnRight, x - mnLeft);
     mnLeft = x;
 }
 
-void tools::Rectangle::SaturatingSetPosY(tools::Long y)
+void RectangleTemplateBase::SaturatingSetPosY(tools::Long y)
 {
     if (!IsHeightEmpty())
         mnBottom = o3tl::saturating_add(mnBottom, y - mnTop);
     mnTop = y;
 }
 
-tools::Rectangle& tools::Rectangle::Union( const tools::Rectangle& rRect )
+void RectangleTemplateBase::Union( const RectangleTemplateBase& rRect )
 {
     if ( rRect.IsEmpty() )
-        return *this;
+        return;
 
     if ( IsEmpty() )
         *this = rRect;
@@ -85,22 +85,20 @@ tools::Rectangle& tools::Rectangle::Union( const tools::Rectangle& rRect )
         std::tie(mnLeft, mnRight) = std::minmax({ mnLeft, rRect.mnLeft, mnRight, rRect.mnRight });
         std::tie(mnTop, mnBottom) = std::minmax({ mnTop, rRect.mnTop, mnBottom, rRect.mnBottom });
     }
-
-    return *this;
 }
 
-tools::Rectangle& tools::Rectangle::Intersection( const tools::Rectangle& rRect )
+void RectangleTemplateBase::Intersection( const RectangleTemplateBase& rRect )
 {
     if ( IsEmpty() )
-        return *this;
+        return;
     if ( rRect.IsEmpty() )
     {
         *this = tools::Rectangle();
-        return *this;
+        return;
     }
 
     // Normalize rectangle
-    tools::Rectangle aTmpRect( rRect );
+    RectangleTemplateBase aTmpRect( rRect );
     Normalize();
     aTmpRect.Normalize();
 
@@ -113,11 +111,9 @@ tools::Rectangle& tools::Rectangle::Intersection( const tools::Rectangle& rRect 
     // Determine if intersection is empty
     if ( mnRight < mnLeft || mnBottom < mnTop )
         *this = tools::Rectangle();
-
-    return *this;
 }
 
-void tools::Rectangle::Normalize()
+void RectangleTemplateBase::Normalize()
 {
     if ((mnRight < mnLeft) && (!IsWidthEmpty()))
     {
@@ -130,7 +126,7 @@ void tools::Rectangle::Normalize()
     }
 }
 
-bool tools::Rectangle::Contains( const Point& rPoint ) const
+bool RectangleTemplateBase::Contains( const PointTemplateBase& rPoint ) const
 {
     if ( IsEmpty() )
         return false;
@@ -158,18 +154,21 @@ bool tools::Rectangle::Contains( const Point& rPoint ) const
     return true;
 }
 
-bool tools::Rectangle::Contains( const tools::Rectangle& rRect ) const
+bool RectangleTemplateBase::Contains( const RectangleTemplateBase& rRect ) const
 {
-    return Contains( rRect.TopLeft() ) && Contains( rRect.BottomRight() );
+    return Contains( PointTemplateBase{ rRect.Left(), rRect.Top() } )
+        && Contains( PointTemplateBase{ rRect.Right(), rRect.Bottom() } );
 }
 
-bool tools::Rectangle::Overlaps( const tools::Rectangle& rRect ) const
+bool RectangleTemplateBase::Overlaps( const RectangleTemplateBase& rRect ) const
 {
     // If there's no intersection, they don't overlap
-    return !GetIntersection( rRect ).IsEmpty();
+    RectangleTemplateBase aTmp(*this);
+    aTmp.Intersection(rRect);
+    return !aTmp.IsEmpty();
 }
 
-OString tools::Rectangle::toString() const
+OString RectangleTemplateBase::toString() const
 {
     // Note that this is not just used for debugging output but the
     // format is parsed by external code (passed in callbacks to
@@ -180,7 +179,7 @@ OString tools::Rectangle::toString() const
             + OString::number(getOpenHeight());
 }
 
-void tools::Rectangle::expand(tools::Long nExpandBy)
+void RectangleTemplateBase::expand(tools::Long nExpandBy)
 {
     AdjustLeft(-nExpandBy);
     AdjustTop(-nExpandBy);
@@ -188,7 +187,7 @@ void tools::Rectangle::expand(tools::Long nExpandBy)
     AdjustBottom(nExpandBy);
 }
 
-void tools::Rectangle::shrink(tools::Long nShrinkBy)
+void RectangleTemplateBase::shrink(tools::Long nShrinkBy)
 {
     mnLeft   += nShrinkBy;
     mnTop    += nShrinkBy;
@@ -198,7 +197,7 @@ void tools::Rectangle::shrink(tools::Long nShrinkBy)
         mnBottom -= nShrinkBy;
 }
 
-tools::Long tools::Rectangle::AdjustRight(tools::Long nHorzMoveDelta)
+tools::Long RectangleTemplateBase::AdjustRight(tools::Long nHorzMoveDelta)
 {
     if (IsWidthEmpty())
         mnRight = mnLeft + nHorzMoveDelta - 1;
@@ -207,7 +206,7 @@ tools::Long tools::Rectangle::AdjustRight(tools::Long nHorzMoveDelta)
     return mnRight;
 }
 
-tools::Long tools::Rectangle::AdjustBottom( tools::Long nVertMoveDelta )
+tools::Long RectangleTemplateBase::AdjustBottom( tools::Long nVertMoveDelta )
 {
     if (IsHeightEmpty())
         mnBottom = mnTop + nVertMoveDelta - 1;

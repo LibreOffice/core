@@ -874,7 +874,7 @@ uno::Reference< frame::XFrame > const & DocumentHolder::GetDocFrame()
         {
             sal_Int32 nDisplay = Application::GetDisplayBuiltInScreen();
 
-            tools::Rectangle aWorkRect = Application::GetScreenPosSizePixel( nDisplay );
+            AbsoluteScreenPixelRectangle aWorkRect = Application::GetScreenPosSizePixel( nDisplay );
             awt::Rectangle aWindowRect = xHWindow->getPosSize();
 
             if (( aWindowRect.Width < aWorkRect.GetWidth()) && ( aWindowRect.Height < aWorkRect.GetHeight() ))

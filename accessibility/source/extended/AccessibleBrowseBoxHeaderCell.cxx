@@ -134,9 +134,9 @@ tools::Rectangle AccessibleBrowseBoxHeaderCell::implGetBoundingBox()
 }
 
 
-tools::Rectangle AccessibleBrowseBoxHeaderCell::implGetBoundingBoxOnScreen()
+AbsoluteScreenPixelRectangle AccessibleBrowseBoxHeaderCell::implGetBoundingBoxOnScreen()
 {
-    return getRectangle(mpBrowseBox,m_nColumnRowId,true,isRowBarCell());
+    return AbsoluteScreenPixelRectangle(getRectangle(mpBrowseBox,m_nColumnRowId,true,isRowBarCell()));
 }
 
 sal_Int64 SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleIndexInParent()

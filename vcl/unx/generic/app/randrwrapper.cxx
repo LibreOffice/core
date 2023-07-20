@@ -159,7 +159,7 @@ void SalDisplay::processRandREvent( XEvent* pEvent )
                       rScreen.m_aSize.Width() != pTargetSize->width ||
                       rScreen.m_aSize.Height() != pTargetSize->height;
 
-            rScreen.m_aSize = Size( pTargetSize->width, pTargetSize->height );
+            rScreen.m_aSize = AbsoluteScreenPixelSize( pTargetSize->width, pTargetSize->height );
 
             pWrapper->XRRFreeScreenConfigInfo( pConfig );
 

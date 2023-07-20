@@ -479,7 +479,7 @@ namespace svt::table
             m_pImpl->commitTableEvent( i_eventID, i_newValue, i_oldValue );
     }
 
-    tools::Rectangle TableControl::GetWindowExtentsAbsolute() const
+    AbsoluteScreenPixelRectangle TableControl::GetWindowExtentsAbsolute() const
     {
         return Control::GetWindowExtentsAbsolute();
     }

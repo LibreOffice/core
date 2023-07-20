@@ -793,7 +793,7 @@ static void ImplSalCalcFullScreenSize( const WinSalFrame* pFrame,
 
     try
     {
-        tools::Rectangle aRect;
+        AbsoluteScreenPixelRectangle aRect;
         sal_Int32 nMonitors = Application::GetScreenCount();
         if( (pFrame->mnDisplay >= 0) && (pFrame->mnDisplay < nMonitors) )
         {
@@ -920,7 +920,7 @@ void WinSalFrame::updateScreenNumber()
     {
         const std::vector<WinSalSystem::DisplayMonitor>& rMonitors =
             pSys->getMonitors();
-        Point aPoint(maGeometry.pos());
+        AbsoluteScreenPixelPoint aPoint(maGeometry.pos());
         size_t nMon = rMonitors.size();
         for( size_t i = 0; i < nMon; i++ )
         {
@@ -1587,7 +1587,7 @@ void WinSalFrame::SetPluginParent( SystemParentData* pNewParent )
     WinSalFrame::mbInReparent = false;
 }
 
-void WinSalFrame::GetWorkArea( tools::Rectangle &rRect )
+void WinSalFrame::GetWorkArea( AbsoluteScreenPixelRectangle &rRect )
 {
     RECT aRect;
 
@@ -1785,8 +1785,8 @@ void WinSalFrame::SetScreenNumber( unsigned int nNewScreen )
         size_t nMon = rMonitors.size();
         if( nNewScreen < nMon )
         {
-            Point aOldMonPos, aNewMonPos( rMonitors[nNewScreen].m_aArea.TopLeft() );
-            Point aCurPos(maGeometry.pos());
+            AbsoluteScreenPixelPoint aOldMonPos, aNewMonPos( rMonitors[nNewScreen].m_aArea.TopLeft() );
+            AbsoluteScreenPixelPoint aCurPos(maGeometry.pos());
             for( size_t i = 0; i < nMon; i++ )
             {
                 if( rMonitors[i].m_aArea.Contains( aCurPos ) )
@@ -5560,17 +5560,17 @@ static LRESULT ImplHandleIMEQueryCharPosition( HWND hWnd, LPARAM lParam ) {
     {
         // For vertical writing, the base line is left edge of the rectangle
         // and the target position is top-right corner.
-        pQueryCharPosition->pt.x = aEvt.mnCursorBoundX + aEvt.mnCursorBoundWidth;
-        pQueryCharPosition->pt.y = aEvt.mnCursorBoundY;
-        pQueryCharPosition->cLineHeight = aEvt.mnCursorBoundWidth;
+        pQueryCharPosition->pt.x = aEvt.maCursorBound.getX() + aEvt.maCursorBound.GetWidth();
+        pQueryCharPosition->pt.y = aEvt.maCursorBound.getY();
+        pQueryCharPosition->cLineHeight = aEvt.maCursorBound.GetWidth();
     }
     else
     {
         // For horizontal writing, the base line is the bottom edge of the rectangle.
         // and the target position is top-left corner.
-        pQueryCharPosition->pt.x = aEvt.mnCursorBoundX;
-        pQueryCharPosition->pt.y = aEvt.mnCursorBoundY;
-        pQueryCharPosition->cLineHeight = aEvt.mnCursorBoundHeight;
+        pQueryCharPosition->pt.x = aEvt.maCursorBound.getX();
+        pQueryCharPosition->pt.y = aEvt.maCursorBound.getY();
+        pQueryCharPosition->cLineHeight = aEvt.maCursorBound.GetHeight();
     }
 
     // Currently not supported but many IMEs usually ignore them.

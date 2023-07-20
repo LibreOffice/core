@@ -686,8 +686,8 @@ private:
 
     SAL_DLLPRIVATE static void          ImplHandleScroll(Scrollable* pHScrl, double nX, Scrollable* pVScrl, double nY);
 
-    SAL_DLLPRIVATE tools::Rectangle     ImplOutputToUnmirroredAbsoluteScreenPixel( const tools::Rectangle& rRect ) const;
-    SAL_DLLPRIVATE tools::Rectangle     ImplUnmirroredAbsoluteScreenToOutputPixel( const tools::Rectangle& rRect ) const;
+    SAL_DLLPRIVATE AbsoluteScreenPixelRectangle ImplOutputToUnmirroredAbsoluteScreenPixel( const tools::Rectangle& rRect ) const;
+    SAL_DLLPRIVATE tools::Rectangle     ImplUnmirroredAbsoluteScreenToOutputPixel( const AbsoluteScreenPixelRectangle& rRect ) const;
     SAL_DLLPRIVATE tools::Long          ImplGetUnmirroredOutOffX() const;
 
     // retrieves the list of owner draw decorated windows for this window hierarchy
@@ -942,13 +942,13 @@ public:
     //  the normalized screen methods work independent from UI mirroring
     Point                               OutputToNormalizedScreenPixel( const Point& rPos ) const;
     Point                               NormalizedScreenToOutputPixel( const Point& rPos ) const;
-    Point                               OutputToAbsoluteScreenPixel( const Point& rPos ) const;
-    Point                               AbsoluteScreenToOutputPixel( const Point& rPos ) const;
-    tools::Rectangle                    GetDesktopRectPixel() const;
+    AbsoluteScreenPixelPoint            OutputToAbsoluteScreenPixel( const Point& rPos ) const;
+    Point                               AbsoluteScreenToOutputPixel( const AbsoluteScreenPixelPoint& rPos ) const;
+    AbsoluteScreenPixelRectangle        GetDesktopRectPixel() const;
     //  window extents including border and decoration, relative to passed in window
     tools::Rectangle                    GetWindowExtentsRelative(const vcl::Window& rRelativeWindow) const;
     //  window extents including border and decoration, in absolute screen coordinates
-    tools::Rectangle                    GetWindowExtentsAbsolute() const;
+    AbsoluteScreenPixelRectangle        GetWindowExtentsAbsolute() const;
 
     bool                                IsScrollable() const;
     virtual void                        Scroll( tools::Long nHorzScroll, tools::Long nVertScroll,

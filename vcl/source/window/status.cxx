@@ -502,8 +502,8 @@ void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, cons
             else
             {
                 // restore transparent background
-                Point aTL(pWindow->OutputToAbsoluteScreenPixel(rFramePosSize.TopLeft()));
-                aTL = pEraseWindow->AbsoluteScreenToOutputPixel(aTL);
+                AbsoluteScreenPixelPoint aTL1(pWindow->OutputToAbsoluteScreenPixel(rFramePosSize.TopLeft()));
+                Point aTL = pEraseWindow->AbsoluteScreenToOutputPixel(aTL1);
                 tools::Rectangle aRect(aTL, rFramePosSize.GetSize());
                 pEraseWindow->Invalidate(aRect, InvalidateFlags::NoChildren     |
                                                 InvalidateFlags::NoClipChildren |

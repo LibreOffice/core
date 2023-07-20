@@ -301,7 +301,7 @@ OUString ScAccessiblePageHeader::createAccessibleName()
     return sName.replaceFirst("%1", ScResId(SCSTR_UNKNOWN));
 }
 
-tools::Rectangle ScAccessiblePageHeader::GetBoundingBoxOnScreen() const
+AbsoluteScreenPixelRectangle ScAccessiblePageHeader::GetBoundingBoxOnScreen() const
 {
     tools::Rectangle aCellRect(GetBoundingBox());
     if (mpViewShell)
@@ -309,11 +309,11 @@ tools::Rectangle ScAccessiblePageHeader::GetBoundingBoxOnScreen() const
         vcl::Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
         {
-            tools::Rectangle aRect = pWindow->GetWindowExtentsAbsolute();
+            AbsoluteScreenPixelRectangle aRect = pWindow->GetWindowExtentsAbsolute();
             aCellRect.Move(aRect.Left(), aRect.Top());
         }
     }
-    return aCellRect;
+    return AbsoluteScreenPixelRectangle(aCellRect);
 }
 
 tools::Rectangle ScAccessiblePageHeader::GetBoundingBox() const

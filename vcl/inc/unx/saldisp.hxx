@@ -212,7 +212,7 @@ public:
 
         ::Window            m_aRoot;
         ::Window            m_aRefWindow;
-        Size                m_aSize;
+        AbsoluteScreenPixelSize m_aSize;
         SalVisual           m_aVisual;
         SalColormap         m_aColormap;
         GC                  m_aMonoGC;
@@ -265,7 +265,7 @@ protected:
     std::unique_ptr<vcl_sal::WMAdaptor> m_pWMAdaptor;
 
     bool            m_bXinerama;
-    std::vector< tools::Rectangle > m_aXineramaScreens;
+    std::vector< AbsoluteScreenPixelRectangle > m_aXineramaScreens;
     std::vector< int > m_aXineramaScreenIndexMap;
     std::list<SalObject*> m_aSalObjects;
 
@@ -325,7 +325,7 @@ public:
     ::Window         GetDrawable( SalX11Screen nXScreen ) const { return getDataForScreen( nXScreen ).m_aRefWindow; }
     Display        *GetDisplay() const { return pDisp_; }
     const SalX11Screen& GetDefaultXScreen() const { return m_nXDefaultScreen; }
-    const Size&     GetScreenSize( SalX11Screen nXScreen ) const { return getDataForScreen( nXScreen ).m_aSize; }
+    const AbsoluteScreenPixelSize& GetScreenSize( SalX11Screen nXScreen ) const { return getDataForScreen( nXScreen ).m_aSize; }
     srv_vendor_t    GetServerVendor() const { return meServerVendor; }
     bool            IsDisplay() const { return !!pXLib_; }
     const SalColormap&    GetColormap( SalX11Screen nXScreen ) const { return getDataForScreen(nXScreen).m_aColormap; }
@@ -341,7 +341,7 @@ public:
     { mpKbdExtension = pKbdExtension; }
     ::vcl_sal::WMAdaptor* getWMAdaptor() const { return m_pWMAdaptor.get(); }
     bool            IsXinerama() const { return m_bXinerama; }
-    const std::vector< tools::Rectangle >& GetXineramaScreens() const { return m_aXineramaScreens; }
+    const std::vector< AbsoluteScreenPixelRectangle >& GetXineramaScreens() const { return m_aXineramaScreens; }
     ::Window        GetRootWindow( SalX11Screen nXScreen ) const
             { return getDataForScreen( nXScreen ).m_aRoot; }
     unsigned int GetXScreenCount() const { return m_aScreens.size(); }

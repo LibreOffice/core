@@ -488,7 +488,7 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
 #if GTK_CHECK_VERSION(3,22,0)
     if (gtk_check_version(3, 22, 0) == nullptr)
     {
-        tools::Rectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(xParent, rRect);
+        AbsoluteScreenPixelRectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(xParent, rRect);
         aFloatRect.Move(-mpFrame->maGeometry.x(), -mpFrame->maGeometry.y());
         GdkRectangle rect {static_cast<int>(aFloatRect.Left()), static_cast<int>(aFloatRect.Top()),
                            static_cast<int>(aFloatRect.GetWidth()), static_cast<int>(aFloatRect.GetHeight())};
@@ -539,10 +539,10 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
         // (see code in FloatingWindow::StartPopupMode)
         sal_uInt16 nArrangeIndex;
         Point aPos = FloatingWindow::ImplCalcPos(pWin, rRect, nFlags, nArrangeIndex);
-        aPos = FloatingWindow::ImplConvertToAbsPos(xParent, aPos);
+        AbsoluteScreenPixelPoint aPosAbs = FloatingWindow::ImplConvertToAbsPos(xParent, aPos);
 
         gtk_menu_popup(GTK_MENU(mpMenuWidget), nullptr, nullptr, MenuPositionFunc,
-                       &aPos, nButton, nTime);
+                       &aPosAbs, nButton, nTime);
     }
 #endif
 

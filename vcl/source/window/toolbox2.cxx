@@ -790,14 +790,14 @@ Point ToolBox::ImplGetPopupPosition( const tools::Rectangle& rRect ) const
     Point aPos;
     if( !rRect.IsEmpty() )
     {
-        tools::Rectangle aScreen = GetDesktopRectPixel();
+        AbsoluteScreenPixelRectangle aScreen = GetDesktopRectPixel();
 
         // the popup should be positioned so that it will not cover
         // the item rect and that it fits the desktop
         // the preferred direction is always towards the center of
         // the application window
 
-        Point devPos;           // the position in device coordinates for screen comparison
+        AbsoluteScreenPixelPoint devPos; // the position in device coordinates for screen comparison
         switch( meAlign )
         {
             case WindowAlign::Top:

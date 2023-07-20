@@ -28,17 +28,17 @@
 
 namespace {
 
-Point ImplTaskPaneListGetPos( const vcl::Window *w )
+AbsoluteScreenPixelPoint ImplTaskPaneListGetPos( const vcl::Window *w )
 {
-    Point pos;
+    AbsoluteScreenPixelPoint pos;
     if( w->IsDockingWindow() )
     {
-        pos = static_cast<const DockingWindow*>(w)->GetPosPixel();
+        Point pos1 = static_cast<const DockingWindow*>(w)->GetPosPixel();
         vcl::Window *pF = static_cast<const DockingWindow*>(w)->GetFloatingWindow();
         if( pF )
-            pos = pF->OutputToAbsoluteScreenPixel( pF->ScreenToOutputPixel( pos ) );
+            pos = pF->OutputToAbsoluteScreenPixel( pF->ScreenToOutputPixel( pos1 ) );
         else
-            pos = w->OutputToAbsoluteScreenPixel( pos );
+            pos = w->OutputToAbsoluteScreenPixel( pos1 );
     }
     else
         pos = w->OutputToAbsoluteScreenPixel( w->GetPosPixel() );

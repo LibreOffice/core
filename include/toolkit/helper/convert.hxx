@@ -36,7 +36,7 @@ inline ::Size VCLSize( const css::awt::Size& rAWTSize )
     return ::Size( rAWTSize.Width, rAWTSize.Height );
 }
 
-inline css::awt::Point AWTPoint( const ::Point& rVCLPoint )
+inline css::awt::Point AWTPoint( const PointTemplateBase& rVCLPoint )
 {
     return css::awt::Point( rVCLPoint.X(), rVCLPoint.Y() );
 }
@@ -46,7 +46,7 @@ inline ::Point VCLPoint( const css::awt::Point& rAWTPoint )
     return ::Point( rAWTPoint.X, rAWTPoint.Y );
 }
 
-inline css::awt::Rectangle AWTRectangle( const ::tools::Rectangle& rVCLRect )
+inline css::awt::Rectangle AWTRectangle( const RectangleTemplateBase& rVCLRect )
 {
     return css::awt::Rectangle( rVCLRect.Left(), rVCLRect.Top(), rVCLRect.GetWidth(), rVCLRect.GetHeight() );
 }

@@ -40,7 +40,7 @@ public:
     ImplData();
 
     VclPtr<ToolBox> mpBox;
-    tools::Rectangle       maItemEdgeClipRect; // used to clip the common edge between a toolbar item and the border of this window
+    AbsoluteScreenPixelRectangle maItemEdgeClipRect; // used to clip the common edge between a toolbar item and the border of this window
     Point maPos; // position of the floating window wrt. parent
     Point maLOKTwipsPos; ///< absolute position of the floating window in the document - in twips (for toplevel floating windows).
 };
@@ -50,7 +50,7 @@ FloatingWindow::ImplData::ImplData()
     mpBox = nullptr;
 }
 
-tools::Rectangle FloatingWindow::ImplGetItemEdgeClipRect() const
+AbsoluteScreenPixelRectangle FloatingWindow::ImplGetItemEdgeClipRect()
 {
     return mpImplData->maItemEdgeClipRect;
 }
@@ -233,9 +233,9 @@ Point FloatingWindow::ImplCalcPos(vcl::Window* pWindow,
                                   sal_uInt16& rArrangeIndex, Point* pLOKTwipsPos)
 {
     // get window position
-    Point       aPos;
+    AbsoluteScreenPixelPoint aPos;
     Size        aSize = ::isLayoutEnabled(pWindow) ? pWindow->get_preferred_size() : pWindow->GetSizePixel();
-    tools::Rectangle   aScreenRect = pWindow->ImplGetFrameWindow()->GetDesktopRectPixel();
+    AbsoluteScreenPixelRectangle aScreenRect = pWindow->ImplGetFrameWindow()->GetDesktopRectPixel();
     FloatingWindow *pFloatingWindow = dynamic_cast<FloatingWindow*>( pWindow );
 
     // convert...
@@ -248,10 +248,10 @@ Point FloatingWindow::ImplCalcPos(vcl::Window* pWindow,
 
     bool bRTL = AllSettings::GetLayoutRTL();
 
-    tools::Rectangle devRect(  pW->OutputToAbsoluteScreenPixel( normRect.TopLeft() ),
+    AbsoluteScreenPixelRectangle devRect(  pW->OutputToAbsoluteScreenPixel( normRect.TopLeft() ),
                         pW->OutputToAbsoluteScreenPixel( normRect.BottomRight() ) );
 
-    tools::Rectangle devRectRTL( devRect );
+    AbsoluteScreenPixelRectangle devRectRTL( devRect );
     if( bRTL )
         // create a rect that can be compared to desktop coordinates
         devRectRTL = pW->ImplOutputToUnmirroredAbsoluteScreenPixel( normRect );
@@ -261,7 +261,7 @@ Point FloatingWindow::ImplCalcPos(vcl::Window* pWindow,
 
     FloatWinPopupFlags nArrangeAry[5];
     sal_uInt16 nArrangeAttempts = 5;
-    Point             e1,e2;  // the common edge between the item rect and the floating window
+    AbsoluteScreenPixelPoint e1,e2;  // the common edge between the item rect and the floating window
 
     if ( nFlags & FloatWinPopupFlags::Left )
     {
@@ -445,13 +445,13 @@ Point FloatingWindow::ImplCalcPos(vcl::Window* pWindow,
 
     rArrangeIndex = nArrangeIndex;
 
-    aPos = pW->AbsoluteScreenToOutputPixel( aPos );
+    Point aPosOut = pW->AbsoluteScreenToOutputPixel( aPos );
 
     // store a cliprect that can be used to clip the common edge of the itemrect and the floating window
     if( pFloatingWindow && pFloatingWindow->mpImplData->mpBox )
     {
         pFloatingWindow->mpImplData->maItemEdgeClipRect =
-            tools::Rectangle( e1, e2 );
+            AbsoluteScreenPixelRectangle( e1, e2 );
     }
 
     if (bLOKActive && pLOKTwipsPos)
@@ -466,44 +466,41 @@ Point FloatingWindow::ImplCalcPos(vcl::Window* pWindow,
             // and anyway the following is what we already do in
             // ScGridWindow::LogicInvalidate when map mode is not enabled.
 
-            *pLOKTwipsPos = pW->PixelToLogic(aPos, MapMode(MapUnit::MapTwip));
+            *pLOKTwipsPos = pW->PixelToLogic(aPosOut, MapMode(MapUnit::MapTwip));
         }
         else
         {
-            *pLOKTwipsPos = OutputDevice::LogicToLogic(aPos, pW->GetMapMode(), MapMode(MapUnit::MapTwip));
+            *pLOKTwipsPos = OutputDevice::LogicToLogic(aPosOut, pW->GetMapMode(), MapMode(MapUnit::MapTwip));
         }
     }
 
     // caller expects coordinates relative to top-level win
-    return pW->OutputToScreenPixel( aPos );
+    return pW->OutputToScreenPixel( aPosOut );
 }
 
-Point FloatingWindow::ImplConvertToAbsPos(vcl::Window* pReference, const Point& rPos)
+AbsoluteScreenPixelPoint FloatingWindow::ImplConvertToAbsPos(vcl::Window* pReference, const Point& rPos)
 {
-    Point aAbsolute( rPos );
-
     const OutputDevice *pWindowOutDev = pReference->GetOutDev();
 
     // compare coordinates in absolute screen coordinates
     if ( pWindowOutDev->HasMirroredGraphics() && !comphelper::LibreOfficeKit::isActive() )
     {
+        Point aTmp(rPos);
         if(!pReference->IsRTLEnabled() )
-            pWindowOutDev->ReMirror( aAbsolute );
+            pWindowOutDev->ReMirror( aTmp );
 
-        tools::Rectangle aRect( pReference->ScreenToOutputPixel(aAbsolute), Size(1,1) ) ;
-        aRect = pReference->ImplOutputToUnmirroredAbsoluteScreenPixel( aRect );
-        aAbsolute = aRect.TopLeft();
+        tools::Rectangle aRect( pReference->ScreenToOutputPixel(aTmp), Size(1,1) ) ;
+        aRect = tools::Rectangle(pReference->ImplOutputToUnmirroredAbsoluteScreenPixel( aRect ));
+        return AbsoluteScreenPixelPoint(aRect.TopLeft());
     }
     else
-        aAbsolute = pReference->OutputToAbsoluteScreenPixel(
+        return pReference->OutputToAbsoluteScreenPixel(
             pReference->ScreenToOutputPixel(rPos) );
-
-    return aAbsolute;
 }
 
-tools::Rectangle FloatingWindow::ImplConvertToAbsPos(vcl::Window* pReference, const tools::Rectangle& rRect)
+AbsoluteScreenPixelRectangle FloatingWindow::ImplConvertToAbsPos(vcl::Window* pReference, const tools::Rectangle& rRect)
 {
-    tools::Rectangle aFloatRect = rRect;
+    AbsoluteScreenPixelRectangle aFloatRect;
 
     const OutputDevice *pParentWinOutDev = pReference->GetOutDev();
 
@@ -511,21 +508,24 @@ tools::Rectangle FloatingWindow::ImplConvertToAbsPos(vcl::Window* pReference, co
     // Keep in sync with FloatingWindow::ImplFloatHitTest, e.g. fdo#33509
     if( pParentWinOutDev->HasMirroredGraphics() && !comphelper::LibreOfficeKit::isActive() )
     {
+        tools::Rectangle aScreenRect(rRect);
         if(!pReference->IsRTLEnabled() )
-            pParentWinOutDev->ReMirror(aFloatRect);
+            pParentWinOutDev->ReMirror(aScreenRect);
 
-        aFloatRect.SetPos(pReference->ScreenToOutputPixel(aFloatRect.TopLeft()));
-        aFloatRect = pReference->ImplOutputToUnmirroredAbsoluteScreenPixel(aFloatRect);
+        tools::Rectangle aOutRect(pReference->ScreenToOutputPixel(aScreenRect.TopLeft()), aScreenRect.GetSize());
+        aFloatRect = pReference->ImplOutputToUnmirroredAbsoluteScreenPixel(aOutRect);
     }
     else
-        aFloatRect.SetPos(pReference->OutputToAbsoluteScreenPixel(pReference->ScreenToOutputPixel(rRect.TopLeft())));
+        aFloatRect = AbsoluteScreenPixelRectangle(
+            pReference->OutputToAbsoluteScreenPixel(pReference->ScreenToOutputPixel(rRect.TopLeft())),
+            rRect.GetSize());
 
     return aFloatRect;
 }
 
-tools::Rectangle FloatingWindow::ImplConvertToRelPos(vcl::Window* pReference, const tools::Rectangle& rRect)
+tools::Rectangle FloatingWindow::ImplConvertToRelPos(vcl::Window* pReference, const AbsoluteScreenPixelRectangle& rRect)
 {
-    tools::Rectangle aFloatRect = rRect;
+    tools::Rectangle aFloatRect;
 
     const OutputDevice *pParentWinOutDev = pReference->GetOutDev();
 
@@ -533,7 +533,7 @@ tools::Rectangle FloatingWindow::ImplConvertToRelPos(vcl::Window* pReference, co
     // Keep in sync with FloatingWindow::ImplFloatHitTest, e.g. fdo#33509
     if( pParentWinOutDev->HasMirroredGraphics()  )
     {
-        aFloatRect = pReference->ImplUnmirroredAbsoluteScreenToOutputPixel(aFloatRect);
+        aFloatRect = pReference->ImplUnmirroredAbsoluteScreenToOutputPixel(rRect);
         aFloatRect.SetPos(pReference->OutputToScreenPixel(aFloatRect.TopLeft()));
 
         if(!pReference->IsRTLEnabled() )
@@ -550,7 +550,7 @@ FloatingWindow* FloatingWindow::ImplFloatHitTest( vcl::Window* pReference, const
     FloatingWindow* pWin = this;
     rbHitTestInsideRect = false;
 
-    Point aAbsolute(FloatingWindow::ImplConvertToAbsPos(pReference, rPos));
+    AbsoluteScreenPixelPoint aAbsolute(FloatingWindow::ImplConvertToAbsPos(pReference, rPos));
 
     do
     {
@@ -562,7 +562,7 @@ FloatingWindow* FloatingWindow::ImplFloatHitTest( vcl::Window* pReference, const
             break;
 
         // the top-left corner in output coordinates ie (0,0)
-        tools::Rectangle devRect( pBorderWin->ImplOutputToUnmirroredAbsoluteScreenPixel( tools::Rectangle( Point(), pBorderWin->GetSizePixel()) ) ) ;
+        AbsoluteScreenPixelRectangle devRect( pBorderWin->ImplOutputToUnmirroredAbsoluteScreenPixel( tools::Rectangle( Point(), pBorderWin->GetSizePixel()) ) ) ;
         if ( devRect.Contains( aAbsolute ) )
         {
             // inside the window
