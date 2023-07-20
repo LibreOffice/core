@@ -1005,6 +1005,7 @@ void SvHeaderTabListBox::FillAccessibleStateSet( sal_Int64& _rStateSet, Accessib
 
 void SvHeaderTabListBox::FillAccessibleStateSetForCell( sal_Int64& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumn ) const
 {
+    _rStateSet |= AccessibleStateType::FOCUSABLE;
     _rStateSet |= AccessibleStateType::SELECTABLE;
     _rStateSet |= AccessibleStateType::TRANSIENT;
 
@@ -1017,6 +1018,8 @@ void SvHeaderTabListBox::FillAccessibleStateSetForCell( sal_Int64& _rStateSet, s
     if ( IsRowSelected( _nRow ) )
     {
         _rStateSet |= AccessibleStateType::ACTIVE;
+        if (HasChildPathFocus())
+            _rStateSet |= AccessibleStateType::FOCUSED;
         _rStateSet |= AccessibleStateType::SELECTED;
     }
     if ( IsEnabled() )
