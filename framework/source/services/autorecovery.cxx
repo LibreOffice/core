@@ -998,6 +998,7 @@ private:
 constexpr OUStringLiteral CFG_PACKAGE_RECOVERY = u"/org.openoffice.Office.Recovery";
 
 const char CFG_ENTRY_AUTOSAVE_ENABLED[] = "AutoSave/Enabled";
+const char CFG_ENTRY_AUTOSAVE_USERAUTOSAVE_ENABLED[] = "AutoSave/UserAutoSaveEnabled";
 
 constexpr OUStringLiteral CFG_ENTRY_REALDEFAULTFILTER = u"ooSetupFactoryActualFilter";
 
@@ -1637,6 +1638,17 @@ void SAL_CALL AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEven
                     m_eJob       &= ~Job::AutoSave;
                     m_eTimerType  = AutoRecovery::E_DONT_START_TIMER;
                 }
+            }
+        }
+        else if (sPath == CFG_ENTRY_AUTOSAVE_USERAUTOSAVE_ENABLED)
+        {
+            bool bEnabled = false;
+            if (pChanges[i].Element >>= bEnabled)
+            {
+                if (bEnabled)
+                    m_eJob |= Job::UserAutoSave;
+                else
+                    m_eJob &= ~Job::UserAutoSave;
             }
         }
     }
