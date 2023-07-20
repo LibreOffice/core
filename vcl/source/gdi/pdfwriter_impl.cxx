@@ -3642,7 +3642,7 @@ bool PDFWriterImpl::emitScreenAnnotations()
         // End Action dictionary.
         aLine.append("/OP 0 >>");
 
-        if (0 < rScreen.m_nStructParent)
+        if (-1 != rScreen.m_nStructParent)
         {
             aLine.append("\n/StructParent ");
             aLine.append(rScreen.m_nStructParent);
@@ -3875,7 +3875,7 @@ we check in the following sequence:
             }
             aLine.append( ">>\n" );
         }
-        if( rLink.m_nStructParent > 0 )
+        if (rLink.m_nStructParent != -1)
         {
             aLine.append( "/StructParent " );
             aLine.append( rLink.m_nStructParent );
@@ -4664,7 +4664,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                     iRectMargin = 1;
                 }
 
-                if (0 < rWidget.m_nStructParent)
+                if (-1 != rWidget.m_nStructParent)
                 {
                     aLine.append("/StructParent ");
                     aLine.append(rWidget.m_nStructParent);
