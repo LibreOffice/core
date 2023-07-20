@@ -133,7 +133,7 @@ $(eval $(call gb_Library_add_defs,vclplug_gen,\
 endif
 
 ## handle Xinerama
-ifneq ($(USE_XINERAMA),)
+ifneq ($(USING_X11),)
 $(eval $(call gb_Library_add_defs,vclplug_gen,\
     -DUSE_XINERAMA_XORG \
 ))
@@ -146,7 +146,7 @@ $(eval $(call gb_Library_add_libs,vclplug_gen,\
     -Wl$(COMMA)-Bstatic -lXinerama -Wl$(COMMA)-Bdynamic \
 ))
 endif
-endif # USE_XINERAMA
+endif # USING_X11
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,vclplug_gen,\

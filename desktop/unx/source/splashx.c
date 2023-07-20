@@ -16,7 +16,7 @@
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
 
-#ifdef USE_XINERAMA
+#ifdef USING_X11
 #include <X11/extensions/Xinerama.h>
 #endif
 
@@ -406,7 +406,7 @@ static int splash_init_display( struct splash* splash, int argc, char** argv )
 {
     char *display_name = NULL;
     int i;
-#ifdef USE_XINERAMA
+#ifdef USING_X11
     int n_xinerama_screens = 1;
     XineramaScreenInfo* p_screens = NULL;
 #endif
@@ -442,7 +442,7 @@ static int splash_init_display( struct splash* splash, int argc, char** argv )
     splash->display_x_pos = 0;
     splash->display_y_pos = 0;
 
-#ifdef USE_XINERAMA
+#ifdef USING_X11
     p_screens = XineramaQueryScreens( splash->display, &n_xinerama_screens );
     if( p_screens )
     {

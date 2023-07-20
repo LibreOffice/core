@@ -13572,7 +13572,7 @@ fi
 AC_SUBST(ENABLE_SILENT_MSI)
 
 AC_MSG_CHECKING([whether and how to use Xinerama])
-if test "$_os" = "Linux" -o "$_os" = "FreeBSD"; then
+if test "$USING_X11" = TRUE; then
     if test "$x_libraries" = "default_x_libraries"; then
         XINERAMALIB=`$PKG_CONFIG --variable=libdir xinerama`
         if test "x$XINERAMALIB" = x; then
@@ -13626,14 +13626,13 @@ if test "$_os" = "Linux" -o "$_os" = "FreeBSD"; then
         AC_CHECK_LIB([Xinerama], [XineramaIsActive], [:],
             [AC_MSG_ERROR(Xinerama not functional?)], [$XINERAMA_EXTRA_LIBS])
     else
-        AC_MSG_RESULT([no, libXinerama not found or wrong architecture.])
+        AC_MSG_ERROR([libXinerama not found or wrong architecture.])
     fi
 else
     USE_XINERAMA=
     XINERAMA_LINK=none
     AC_MSG_RESULT([no])
 fi
-AC_SUBST(USE_XINERAMA)
 AC_SUBST(XINERAMA_LINK)
 
 AC_MSG_CHECKING([whether to use non-standard RGBA32 cairo pixel order])

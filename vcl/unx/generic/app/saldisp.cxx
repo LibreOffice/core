@@ -39,10 +39,7 @@
 #endif
 #include <X11/keysym.h>
 #include <X11/Xatom.h>
-
-#ifdef USE_XINERAMA_XORG
 #include <X11/extensions/Xinerama.h>
-#endif
 
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>
@@ -2213,7 +2210,6 @@ void SalDisplay::InitXinerama()
         m_bXinerama = false;
         return; // multiple screens mean no xinerama
     }
-#if defined(USE_XINERAMA_XORG)
     if( !XineramaIsActive( pDisp_ ) )
         return;
 
@@ -2236,7 +2232,6 @@ void SalDisplay::InitXinerama()
         m_bXinerama = m_aXineramaScreens.size() > 1;
     }
     XFree( pScreens );
-#endif
 #if OSL_DEBUG_LEVEL > 1
     if( m_bXinerama )
     {
