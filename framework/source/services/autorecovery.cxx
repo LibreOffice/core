@@ -3076,6 +3076,15 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
     {
     }
 
+    // DocState::Modified status cannot be trusted to be accurate, but at least attempt to be so,
+    // since this rInfo will eventually get assigned to m_lDocCache as the authoritative status.
+    const Reference<css::util::XModifiable> xModify(rInfo.Document, UNO_QUERY);
+    const bool bModified = xModify.is() && xModify->isModified();
+    if (bModified)
+        rInfo.DocumentState |= DocState::Modified;
+    else if (xModify.is())
+        rInfo.DocumentState &= ~DocState::Modified;
+
     sal_Int32 nRetry = RETRY_STORE_ON_FULL_DISC_FOREVER;
     bool  bError = false;
     do
