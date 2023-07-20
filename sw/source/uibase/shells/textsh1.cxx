@@ -2128,26 +2128,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
         rWrtSh.StartUndo(SwUndoId::UI_REPLACE, &aRewriter);
         rWrtSh.StartAction();
 
-        // if there is a comment inside the original word, don't delete it:
-        // but keep it at the end of the replacement
-        // TODO: keep all the comments with a recursive function
-
-        if (SwPaM *pPaM = rWrtSh.GetCursor())
-        {
-            sal_Int32 nCommentPos(pPaM->GetText().indexOf(OUStringChar(CH_TXTATR_INWORD)));
-            if ( nCommentPos > -1 )
-            {
-
-                // delete the original word after the comment
-                pPaM->GetPoint()->AdjustContent(nCommentPos + 1);
-                rWrtSh.Replace(OUString(), false);
-                // and select only the remaining part before the comment
-                pPaM->GetPoint()->AdjustContent(-(nCommentPos + 1));
-                pPaM->GetMark()->AdjustContent(-1);
-            }
-        }
-
-        rWrtSh.Replace(aTmp, false);
+        // keep comments at the end of the replacement in case spelling correction is
+        // invoked via the context menu. The spell check dialog does the correction in edlingu.cxx.
+        rWrtSh.ReplaceKeepComments(aTmp);
 
         rWrtSh.EndAction();
         rWrtSh.EndUndo();

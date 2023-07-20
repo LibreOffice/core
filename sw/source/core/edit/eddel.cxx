@@ -359,6 +359,52 @@ bool SwEditShell::Replace( const OUString& rNewStr, bool bRegExpRplc )
     return bRet;
 }
 
+/** Replace a selected area in a text node with a given string.
+ *
+ * Method to replace a text selection with a new string while
+ * keeping possible comments (they will be moved to the end
+ * of the selection).
+ *
+ * @param rNewStr     the new string which the selected area is to be replaced with
+ * @return            true, if something has been replaced, false otherwise.
+ */
+bool SwEditShell::ReplaceKeepComments( const OUString& rNewStr)
+{
+    bool bRet       = false;
+    SwPaM *pCursor  = GetCursor();
+
+    if(pCursor != nullptr)
+    {
+        // go sure that the text selection pointed to by pCursor is valid
+        if(pCursor->HasMark())
+        {
+            // preserve comments inside of the number by deleting number portions starting from the back
+            OUString aSelectedText = pCursor->GetText();
+            sal_Int32 nCommentPos(aSelectedText.lastIndexOf(CH_TXTATR_INWORD));
+            // go sure that we have a valid selection and a comment has been found
+            while((nCommentPos > -1) && (aSelectedText.getLength() > 0) && (pCursor->HasMark()))
+            {
+                // select the part of the text after the last found comment
+                // selection start:
+                pCursor->GetPoint()->AdjustContent(nCommentPos + 1);
+                // selection end ist left where it is -> will be adjusted later on
+                // delete the part of the word after the last found comment
+                Replace(OUString(), false);
+                // put the selection start back to the beginning of the word
+                pCursor->GetPoint()->AdjustContent(-(nCommentPos + 1));
+                // adjust the selection end, so that the last comment is no longer selected:
+                pCursor->GetMark()->AdjustContent(-1);
+                // search for the next possible comment
+                aSelectedText = pCursor->GetText();
+                nCommentPos = aSelectedText.lastIndexOf(CH_TXTATR_INWORD);
+            }
+            bRet = Replace(rNewStr, false);
+        }
+    }
+
+    return bRet;
+}
+
 /// special method for JOE's wizards
 bool SwEditShell::DelFullPara()
 {

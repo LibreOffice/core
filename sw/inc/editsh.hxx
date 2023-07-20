@@ -172,6 +172,10 @@ public:
            --> "xx\t<Tab>..zzz..&" */
     bool Replace( const OUString& rNewStr, bool bRegExpRplc );
 
+    /** Replace a selected range in a TextNode by given string.
+     Possible comments will be kept (moved to the end of the selection). */
+    bool ReplaceKeepComments( const OUString& rNewStr);
+
     /** Delete content of all ranges.
      If whole nodes are selected, these nodes get deleted. */
     bool Delete(bool isArtificialSelection = false);
