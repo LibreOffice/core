@@ -296,7 +296,6 @@ cmd/32/insertpagefield.png cmd/32/insertpagenumberfield.png
 cmd/32/insertpagefooter.png cmd/32/insertfooter.png
 cmd/32/insertpageheader.png cmd/32/insertheader.png
 cmd/32/insertpagenumber.png cmd/32/insertpagenumberfield.png
-cmd/32/insertpagenumberwizard.png cmd/32/insertpagenumberfield.png
 cmd/32/insertpagesfield.png cmd/32/insertpagecountfield.png
 cmd/32/insertpagetitlefield.png cmd/32/inserttitlefield.png
 cmd/32/insertpatternfield.png cmd/32/patternfield.png
@@ -390,6 +389,7 @@ cmd/32/outlineup.png cmd/32/moveup.png
 cmd/32/pagecolumndialog.png cmd/32/formatcolumns.png
 cmd/32/pagedown.png cmd/32/nextpage.png
 cmd/32/pageformatdialog.png cmd/32/pagedialog.png
+cmd/32/pagenumberwizard.png cmd/32/insertpagenumberfield.png
 cmd/32/pagesetup.png cmd/32/pagedialog.png
 cmd/32/pageup.png cmd/32/previouspage.png
 cmd/32/paragraphdialog-more.png cmd/32/controlproperties.png
@@ -963,7 +963,6 @@ cmd/lc_insertpagefield.png cmd/lc_insertpagenumberfield.png
 cmd/lc_insertpagefooter.png cmd/lc_insertfooter.png
 cmd/lc_insertpageheader.png cmd/lc_insertheader.png
 cmd/lc_insertpagenumber.png cmd/lc_insertpagenumberfield.png
-cmd/lc_insertpagenumberwizard.png cmd/lc_insertpagenumberfield.png
 cmd/lc_insertpagesfield.png cmd/lc_insertpagecountfield.png
 cmd/lc_insertpagetitlefield.png cmd/lc_inserttitlefield.png
 cmd/lc_insertpatternfield.png cmd/lc_patternfield.png
@@ -1036,6 +1035,7 @@ cmd/lc_outlineup.png cmd/lc_moveup.png
 cmd/lc_pagecolumndialog.png cmd/lc_formatcolumns.png
 cmd/lc_pagedown.png cmd/lc_nextpage.png
 cmd/lc_pageformatdialog.png cmd/lc_pagedialog.png
+cmd/lc_pagenumberwizard.png cmd/lc_insertpagenumberfield.png
 cmd/lc_pagesetup.png cmd/lc_pagedialog.png
 cmd/lc_pageup.png cmd/lc_previouspage.png
 cmd/lc_paragraphdialog-more.png cmd/lc_controlproperties.png
@@ -1381,7 +1381,6 @@ cmd/sc_insertpagefield.png cmd/sc_insertpagenumberfield.png
 cmd/sc_insertpagefooter.png cmd/sc_insertfooter.png
 cmd/sc_insertpageheader.png cmd/sc_insertheader.png
 cmd/sc_insertpagenumber.png cmd/sc_insertpagenumberfield.png
-cmd/sc_insertpagenumberwizard.png cmd/sc_insertpagenumberfield.png
 cmd/sc_insertpagesfield.png cmd/sc_insertpagecountfield.png
 cmd/sc_insertpagetitlefield.png cmd/sc_inserttitlefield.png
 cmd/sc_insertpatternfield.png cmd/sc_patternfield.png
@@ -1455,6 +1454,7 @@ cmd/sc_outlineup.png cmd/sc_moveup.png
 cmd/sc_pagecolumndialog.png cmd/sc_formatcolumns.png
 cmd/sc_pagedown.png cmd/sc_nextpage.png
 cmd/sc_pageformatdialog.png cmd/sc_pagedialog.png
+cmd/sc_pagenumberwizard.png cmd/sc_insertpagenumberfield.png
 cmd/sc_pagesetup.png cmd/sc_pagedialog.png
 cmd/sc_pageup.png cmd/sc_previouspage.png
 cmd/sc_paragraphdialog-more.png cmd/sc_controlproperties.png
