@@ -354,7 +354,7 @@ std::u16string_view SvTabListBox::GetToken( std::u16string_view sStr, sal_Int32&
 
 OUString SvTabListBox::GetTabEntryText( sal_uInt32 nPos, sal_uInt16 nCol ) const
 {
-    SvTreeListEntry* pEntry = SvTreeListBox::GetEntry( nPos );
+    SvTreeListEntry* pEntry = GetEntryOnPos( nPos );
     DBG_ASSERT( pEntry, "GetTabEntryText(): Invalid entry " );
     OUStringBuffer aResult;
     if ( pEntry )
@@ -701,7 +701,7 @@ void SvHeaderTabListBox::SelectAll()
 
 void SvHeaderTabListBox::SelectRow( sal_Int32 _nRow, bool _bSelect, bool )
 {
-    Select( GetEntry( _nRow ), _bSelect );
+    Select( GetEntryOnPos( _nRow ), _bSelect );
 }
 
 void SvHeaderTabListBox::SelectColumn( sal_uInt16, bool )
@@ -720,7 +720,7 @@ sal_Int32 SvHeaderTabListBox::GetSelectedColumnCount() const
 
 bool SvHeaderTabListBox::IsRowSelected( sal_Int32 _nRow ) const
 {
-    SvTreeListEntry* pEntry = GetEntry( _nRow );
+    SvTreeListEntry* pEntry = GetEntryOnPos( _nRow );
     return ( pEntry && IsSelected( pEntry ) );
 }
 
