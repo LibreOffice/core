@@ -729,8 +729,20 @@ bool SvHeaderTabListBox::IsColumnSelected( sal_Int32 ) const
     return false;
 }
 
-void SvHeaderTabListBox::GetAllSelectedRows( css::uno::Sequence< sal_Int32 >& ) const
+void SvHeaderTabListBox::GetAllSelectedRows(css::uno::Sequence<sal_Int32 >& rRowIndices) const
 {
+    const sal_Int32 nCount = GetSelectedRowCount();
+    rRowIndices.realloc(nCount);
+    auto pRows = rRowIndices.getArray();
+    SvTreeListEntry* pEntry = FirstSelected();
+    sal_Int32 nIndex = 0;
+    while (nIndex < nCount && pEntry)
+    {
+        pRows[nIndex] = GetEntryPos(pEntry);
+        pEntry = NextSelected( pEntry );
+        ++nIndex;
+    }
+    assert(nIndex == nCount && "Mismatch between GetSelectedRowCount() and count of selected rows when iterating.");
 }
 
 void SvHeaderTabListBox::GetAllSelectedColumns( css::uno::Sequence< sal_Int32 >& ) const
