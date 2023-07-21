@@ -237,10 +237,10 @@ namespace accessibility
             SvTreeListEntry* pEntry = m_pTabListBox->FirstSelected();
             while ( pEntry )
             {
-                ++nRow;
                 if ( nRow == nSelRow )
                     return m_pTabListBox->GetEntryPos( pEntry );
                 pEntry = m_pTabListBox->NextSelected( pEntry );
+                ++nRow;
             }
         }
 
@@ -324,8 +324,9 @@ namespace accessibility
         if ( nRows == 0 )
             throw IndexOutOfBoundsException();
 
-        sal_Int32 nRow = implGetSelRow( nSelectedChildIndex % nRows );
-        sal_Int32 nColumn = nSelectedChildIndex / nRows;
+        const sal_Int32 nColCount = implGetColumnCount();
+        const sal_Int32 nRow = implGetSelRow(nSelectedChildIndex / nColCount);
+        const sal_Int32 nColumn = nSelectedChildIndex % nColCount;
         return getAccessibleCellAt( nRow, nColumn );
     }
 
