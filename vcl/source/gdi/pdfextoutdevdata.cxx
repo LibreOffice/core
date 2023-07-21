@@ -104,7 +104,6 @@ struct GlobalSyncData
      */
     sal_Int32                   mCurId;
     std::vector< sal_Int32 >    mParaIds;
-    std::vector< sal_Int32 >    mStructIdMap;
     std::map<void const*, sal_Int32> mSEMap;
 
     sal_Int32                   mCurrentStructElement;
@@ -114,7 +113,6 @@ struct GlobalSyncData
             mCurrentStructElement( 0 )
     {
         mStructParents.push_back(0); // because PDFWriterImpl has a dummy root
-        mStructIdMap.push_back( 0 );
     }
     void PlayGlobalActions( PDFWriter& rWriter );
 };
