@@ -41,25 +41,25 @@ namespace drawinglayer::processor2d
 {
         HitTestProcessor2D::HitTestProcessor2D(const geometry::ViewInformation2D& rViewInformation,
             const basegfx::B2DPoint& rLogicHitPosition,
-            const basegfx::B2DVector& rLogicHitTolerance,
+            const basegfx::B2DVector& rLogicHitTolerancePerAxis,
             bool bHitTextOnly)
         :   BaseProcessor2D(rViewInformation),
-            maDiscreteHitTolerance(rLogicHitTolerance),
+            maDiscreteHitTolerancePerAxis(rLogicHitTolerancePerAxis),
             mbCollectHitStack(false),
             mbHit(false),
             mbHitTextOnly(bHitTextOnly)
         {
             // ensure input parameters for hit tolerance is >= 0.0
-            if (maDiscreteHitTolerance.getX() < 0.0)
-                maDiscreteHitTolerance.setX(0.0);
-            if (maDiscreteHitTolerance.getY() < 0.0)
-                maDiscreteHitTolerance.setY(0.0);
+            if (maDiscreteHitTolerancePerAxis.getX() < 0.0)
+                maDiscreteHitTolerancePerAxis.setX(0.0);
+            if (maDiscreteHitTolerancePerAxis.getY() < 0.0)
+                maDiscreteHitTolerancePerAxis.setY(0.0);
 
-            if (!maDiscreteHitTolerance.equalZero())
+            if (!maDiscreteHitTolerancePerAxis.equalZero())
             {
                 // generate discrete hit tolerance
-                maDiscreteHitTolerance
-                    = getViewInformation2D().getObjectToViewTransformation() * rLogicHitTolerance;
+                maDiscreteHitTolerancePerAxis
+                    = getViewInformation2D().getObjectToViewTransformation() * rLogicHitTolerancePerAxis;
             }
 
             // generate discrete hit position
@@ -72,7 +72,7 @@ namespace drawinglayer::processor2d
 
         bool HitTestProcessor2D::checkHairlineHitWithTolerance(
             const basegfx::B2DPolygon& rPolygon,
-            const basegfx::B2DVector& rDiscreteHitTolerance) const
+            const basegfx::B2DVector& rDiscreteHitTolerancePerAxis) const
         {
             basegfx::B2DPolygon aLocalPolygon(rPolygon);
             aLocalPolygon.transform(getViewInformation2D().getObjectToViewTransformation());
@@ -80,9 +80,9 @@ namespace drawinglayer::processor2d
             // get discrete range
             basegfx::B2DRange aPolygonRange(aLocalPolygon.getB2DRange());
 
-            if(rDiscreteHitTolerance.getX() > 0 || rDiscreteHitTolerance.getY() > 0)
+            if(rDiscreteHitTolerancePerAxis.getX() > 0 || rDiscreteHitTolerancePerAxis.getY() > 0)
             {
-                aPolygonRange.grow(rDiscreteHitTolerance);
+                aPolygonRange.grow(rDiscreteHitTolerancePerAxis);
             }
 
             // do rough range test first
@@ -92,7 +92,7 @@ namespace drawinglayer::processor2d
                 return basegfx::utils::isInEpsilonRange(
                     aLocalPolygon,
                     getDiscreteHitPosition(),
-                    std::max(rDiscreteHitTolerance.getX(), rDiscreteHitTolerance.getY()));
+                    std::max(rDiscreteHitTolerancePerAxis.getX(), rDiscreteHitTolerancePerAxis.getY()));
             }
 
             return false;
@@ -100,7 +100,7 @@ namespace drawinglayer::processor2d
 
         bool HitTestProcessor2D::checkFillHitWithTolerance(
             const basegfx::B2DPolyPolygon& rPolyPolygon,
-            const basegfx::B2DVector& rDiscreteHitTolerance) const
+            const basegfx::B2DVector& rDiscreteHitTolerancePerAxis) const
         {
             bool bRetval(false);
             basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolyPolygon);
@@ -109,12 +109,12 @@ namespace drawinglayer::processor2d
             // get discrete range
             basegfx::B2DRange aPolygonRange(aLocalPolyPolygon.getB2DRange());
 
-            const bool bDiscreteHitToleranceUsed(rDiscreteHitTolerance.getX() > 0
-                                                 || rDiscreteHitTolerance.getY() > 0);
+            const bool bDiscreteHitToleranceUsed(rDiscreteHitTolerancePerAxis.getX() > 0
+                                                 || rDiscreteHitTolerancePerAxis.getY() > 0);
 
             if (bDiscreteHitToleranceUsed)
             {
-                aPolygonRange.grow(rDiscreteHitTolerance);
+                aPolygonRange.grow(rDiscreteHitTolerancePerAxis);
             }
 
             // do rough range test first
@@ -125,7 +125,7 @@ namespace drawinglayer::processor2d
                     basegfx::utils::isInEpsilonRange(
                         aLocalPolyPolygon,
                         getDiscreteHitPosition(),
-                        std::max(rDiscreteHitTolerance.getX(), rDiscreteHitTolerance.getY())))
+                        std::max(rDiscreteHitTolerancePerAxis.getX(), rDiscreteHitTolerancePerAxis.getY())))
                 {
                     bRetval = true;
                 }
