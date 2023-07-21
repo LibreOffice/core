@@ -936,7 +936,7 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, TogglePDFVersionOrUniversalAccessibilityHa
     // set the security page status (and its controls as well)
     ImpPDFTabSecurityPage* pSecPage = mpParent ? mpParent->getSecurityPage() : nullptr;
     if (pSecPage)
-        pSecPage->ImplPDFASecurityControl(!bIsPDFA);
+        pSecPage->ImplPDFASecurityControl();
 
     mxCbTaggedPDF->set_sensitive(
         !bIsPDFA && !bIsPDFUA && !IsReadOnlyProperty("UseTaggedPDF"));
@@ -1315,6 +1315,7 @@ ImpPDFTabSecurityPage::ImpPDFTabSecurityPage(weld::Container* pPage, weld::Dialo
     , mxCbEnableCopy(m_xBuilder->weld_check_button("enablecopy"))
     , mxCbEnableAccessibility(m_xBuilder->weld_check_button("enablea11y"))
     , mxPasswordTitle(m_xBuilder->weld_label("setpasswordstitle"))
+    , mxPermissionTitle(m_xBuilder->weld_label("label2"))
 {
     msStrSetPwd = mxPasswordTitle->get_label();
     mxPbSetPwd->connect_clicked(LINK(this, ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl));
@@ -1411,7 +1412,7 @@ void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* pParent
     ImpPDFTabGeneralPage* pGeneralPage = pParent->getGeneralPage();
 
     if (pGeneralPage)
-        ImplPDFASecurityControl(!pGeneralPage->IsPdfaSelected());
+        ImplPDFASecurityControl();
 }
 
 IMPL_LINK_NOARG(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl, weld::Button&, void)
@@ -1479,6 +1480,8 @@ void ImpPDFTabSecurityPage::enablePermissionControls()
     {
         mxCbEnableAccessibility->set_active(true);
     }
+    mxPermissionTitle->set_sensitive(!bIsPDFASel);
+    mxPbSetPwd->set_sensitive(!bIsPDFASel);
     mxCbEnableAccessibility->set_sensitive(!bIsPDFUASel);
     if (bIsPDFASel)
     {
@@ -1532,9 +1535,8 @@ void ImpPDFTabSecurityPage::enablePermissionControls()
 
 // This tab page is under control of the PDF/A-1a checkbox:
 // TODO: implement a method to do it.
-void ImpPDFTabSecurityPage::ImplPDFASecurityControl( bool bEnableSecurity )
+void ImpPDFTabSecurityPage::ImplPDFASecurityControl()
 {
-    m_xContainer->set_sensitive(bEnableSecurity);
     // after enable, check the status of control as if the dialog was initialized
     enablePermissionControls();
 }

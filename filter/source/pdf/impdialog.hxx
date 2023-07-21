@@ -355,6 +355,7 @@ class ImpPDFTabSecurityPage : public SfxTabPage
     std::unique_ptr<weld::CheckButton> mxCbEnableCopy;
     std::unique_ptr<weld::CheckButton> mxCbEnableAccessibility;
     std::unique_ptr<weld::Label> mxPasswordTitle;
+    std::unique_ptr<weld::Label> mxPermissionTitle;
 
     std::shared_ptr< SfxPasswordDialog > mpPasswordDialog;
     std::shared_ptr< weld::MessageDialog > mpUnsupportedMsgDialog;
@@ -371,7 +372,7 @@ public:
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem( const ImpPDFTabDialog* paParent );
-    void                        ImplPDFASecurityControl( bool bEnableSecurity );
+    void                        ImplPDFASecurityControl();
     bool                        hasPassword() const { return mbHaveOwnerPassword || mbHaveUserPassword; }
 };
 
