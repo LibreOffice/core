@@ -231,7 +231,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
     }
 }
 
-void SfxApplication::SetOptions_Nbc(const SfxItemSet& rSet)
+void SfxApplication::SetOptions(const SfxItemSet &rSet)
 {
     std::shared_ptr< comphelper::ConfigurationChanges > batch(
         comphelper::ConfigurationChanges::create());
@@ -332,12 +332,6 @@ void SfxApplication::SetOptions_Nbc(const SfxItemSet& rSet)
 
     // Store changed data
     batch->commit();
-}
-
-
-void SfxApplication::SetOptions(const SfxItemSet &rSet)
-{
-    SetOptions_Nbc( rSet );
 }
 
 

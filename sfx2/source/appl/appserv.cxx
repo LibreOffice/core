@@ -325,7 +325,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_SETOPTIONS:
         {
             if( rReq.GetArgs() )
-                SetOptions_Nbc( *rReq.GetArgs() );
+                SetOptions( *rReq.GetArgs() );
             break;
         }
 

@@ -164,7 +164,6 @@ public:
     SAL_DLLPRIVATE SfxDispatcher* GetAppDispatcher_Impl();
     SAL_DLLPRIVATE SfxDispatcher* GetDispatcher_Impl();
 
-    SAL_DLLPRIVATE static void  SetOptions_Nbc(const SfxItemSet &);
     SAL_DLLPRIVATE void         Initialize_Impl();
 
     SAL_DLLPRIVATE SfxAppData_Impl* Get_Impl() const { return pImpl.get(); }
