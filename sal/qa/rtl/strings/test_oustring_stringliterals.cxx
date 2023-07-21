@@ -432,6 +432,9 @@ void test::oustring::StringLiterals::checkOstr() {
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), u""_ustr.getLength());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), u"foobar"_ustr.getLength());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(7), u"foo\0bar"_ustr.getLength());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, rtl::OUString(""_tstr));
+    CPPUNIT_ASSERT_EQUAL(u"foobar"_ustr, rtl::OUString("foobar"_tstr));
+    CPPUNIT_ASSERT_EQUAL(u"foo\0bar"_ustr, rtl::OUString("foo\0bar"_tstr));
 #endif
 }
 

@@ -186,6 +186,18 @@ private:
     rtl_String* pData;
 };
 
+#if __cplusplus >= 202002L
+
+namespace detail {
+
+template<OStringLiteral L> struct OStringHolder {
+    static constexpr auto & literal = L;
+};
+
+}
+
+#endif
+
 #endif
 
 /* ======================================================================= */
@@ -382,6 +394,12 @@ public:
         pData(const_cast<rtl_String *>(&literal.str)) {}
     template<std::size_t N> OString(OStringLiteral<N> &&) = delete;
     /// @endcond
+#endif
+
+#if defined LIBO_INTERNAL_ONLY && __cplusplus >= 202002L
+    // For operator ""_tstr:
+    template<OStringLiteral L> constexpr OString(detail::OStringHolder<L> const & holder):
+        pData(const_cast<rtl_String *>(&holder.literal.str)) {}
 #endif
 
 #if defined LIBO_INTERNAL_ONLY
@@ -2275,18 +2293,6 @@ inline bool operator !=(StringConcatenation<char> const & lhs, OString const & r
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 
-#if __cplusplus >= 202002L
-
-namespace detail {
-
-template<OStringLiteral L> struct OStringHolder {
-    static constexpr auto & literal = L;
-};
-
-}
-
-#endif
-
 /**
  @internal
 */
@@ -2407,6 +2413,27 @@ operator ""_ostr() {
         rtl
 #endif
         ::detail::OStringHolder<L>::literal;
+}
+
+template<
+#if defined RTL_STRING_UNITTEST
+    rtlunittest::
+#endif
+    OStringLiteral L>
+constexpr
+#if defined RTL_STRING_UNITTEST
+rtlunittest
+#else
+rtl
+#endif
+::detail::OStringHolder<L> operator ""_tstr() {
+    return
+#if defined RTL_STRING_UNITTEST
+        rtlunittest
+#else
+        rtl
+#endif
+        ::detail::OStringHolder<L>();
 }
 
 #endif

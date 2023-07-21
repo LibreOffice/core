@@ -175,6 +175,18 @@ private:
     rtl_uString* pData;
 };
 
+#if __cplusplus >= 202002L
+
+namespace detail {
+
+template<OUStringLiteral L> struct OUStringHolder {
+    static constexpr auto & literal = L;
+};
+
+}
+
+#endif
+
 /// @endcond
 #endif
 
@@ -438,6 +450,19 @@ public:
         pData(const_cast<rtl_uString *>(&literal.str)) {}
     template<std::size_t N> OUString(OUStringLiteral<N> &&) = delete;
     /// @endcond
+#endif
+
+#if defined LIBO_INTERNAL_ONLY && __cplusplus >= 202002L
+    // For operator ""_tstr:
+    template<OStringLiteral L> OUString(detail::OStringHolder<L> const & holder) {
+        pData = nullptr;
+        if (holder.literal.getLength() == 0) {
+            rtl_uString_new(&pData);
+        } else {
+            rtl_uString_newFromLiteral(
+                &pData, holder.literal.getStr(), holder.literal.getLength(), 0);
+        }
+    }
 #endif
 
     /**
@@ -3413,18 +3438,6 @@ inline bool operator !=(StringConcatenation<char16_t> const & lhs, OUString cons
 
 #if defined LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 /// @cond INTERNAL
-
-#if __cplusplus >= 202002L
-
-namespace detail {
-
-template<OUStringLiteral L> struct OUStringHolder {
-    static constexpr auto & literal = L;
-};
-
-}
-
-#endif
 
 /**
  @internal
