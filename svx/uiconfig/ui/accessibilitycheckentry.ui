@@ -37,6 +37,7 @@
         <property name="receives-default">True</property>
         <property name="halign">start</property>
         <property name="hexpand">True</property>
+        <property name="wrap">True</property>
         <property name="relief">none</property>
       </object>
       <packing>
