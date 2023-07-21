@@ -126,9 +126,9 @@ end if
 
 -- now only check whether the path is really from [PRODUCTNAME]
 try
-	do shell script "mdls --raw --name kMDItemFSName --name kMDItemVersion " & quoted form of (choice as string) & " | xargs -0 | fgrep '[PRODUCTNAME].app [PRODUCTVERSION]'"
+	do shell script "grep '^ProductKey=[PRODUCTNAME] [PRODUCTVERSION]$' " & quoted form of (choice as string) & "/Contents/Resources/bootstraprc"
 on error
-	display dialog (choice as string) & appInvalid buttons {InstallLabel} default button 1 with icon 0
+	display dialog (choice as string) & " " & appInvalid buttons {OKLabel} default button 1 with icon 0
 	return 3 --wrong target-directory
 end try
 
