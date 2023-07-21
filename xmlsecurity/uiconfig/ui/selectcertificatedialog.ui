@@ -253,7 +253,7 @@
                 <property name="primary-icon-stock">gtk-find</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="searchbox-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="selectcertificatedialog|extended_tip|searchbox">Type certificate for searching.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="selectcertificatedialog|extended_tip|searchbox">Search for certificate by issuer name or email.</property>
                   </object>
                 </child>
               </object>
