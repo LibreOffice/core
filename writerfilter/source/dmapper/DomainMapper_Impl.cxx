@@ -8420,10 +8420,11 @@ void DomainMapper_Impl::StartOrEndBookmark( const OUString& rId )
                 // then  move the bookmark-End to the earlier paragraph
                 if (IsOutsideAParagraph())
                 {
-                    // keep bookmark range
+                    // keep bookmark range, if it doesn't exceed cell boundary
                     uno::Reference< text::XTextRange > xStart = xCursor->getStart();
                     xCursor->goLeft( 1, false );
-                    xCursor->gotoRange(xStart, true );
+                    if (m_nTableDepth == 0 || !m_bFirstParagraphInCell)
+                        xCursor->gotoRange(xStart, true );
                 }
                 uno::Reference< container::XNamed > xBkmNamed( xBookmark, uno::UNO_QUERY_THROW );
                 SAL_WARN_IF(aBookmarkIter->second.m_sBookmarkName.isEmpty(), "writerfilter.dmapper", "anonymous bookmark");
