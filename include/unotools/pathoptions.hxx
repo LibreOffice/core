@@ -103,28 +103,9 @@ public:
     const OUString& GetClassificationPath() const;
 
     // set the paths
-    void            SetAddinPath( const OUString& rPath );
-    void            SetAutoCorrectPath( const OUString& rPath );
     void            SetAutoTextPath( const OUString& rPath );
-    void            SetBackupPath( const OUString& rPath );
     void            SetBasicPath( const OUString& rPath );
-    void            SetBitmapPath( const OUString& rPath );
-    void            SetConfigPath( const OUString& rPath );
-    void            SetDictionaryPath( const OUString& rPath );
-    void            SetFavoritesPath( const OUString& rPath );
-    void            SetFilterPath( const OUString& rPath );
-    void            SetGalleryPath( const OUString& rPath );
-    void            SetGraphicPath( const OUString& rPath );
-    void            SetHelpPath( const OUString& rPath );
-    void            SetLinguisticPath( const OUString& rPath );
-    void            SetModulePath( const OUString& rPath );
-    void            SetPalettePath( const OUString& rPath );
-    void            SetPluginPath( const OUString& rPath );
-    void            SetStoragePath( const OUString& rPath );
     void            SetTempPath( const OUString& rPath );
-    void            SetTemplatePath( const OUString& rPath );
-    void            SetUserConfigPath( const OUString& rPath );
-    void            SetWorkPath( const OUString& rPath );
 
     OUString        SubstituteVariable( const OUString& rVar ) const;
     OUString        ExpandMacros( const OUString& rPath ) const;

@@ -119,28 +119,9 @@ class SvtPathOptions_Impl
 
         // set the paths
         void            SetPath( SvtPathOptions::Paths, const OUString& rNewPath );
-        void            SetAddinPath( const OUString& rPath ) { SetPath( SvtPathOptions::Paths::AddIn, rPath ); }
-        void            SetAutoCorrectPath( const OUString& rPath ) { SetPath( SvtPathOptions::Paths::AutoCorrect, rPath ); }
         void            SetAutoTextPath( const OUString& rPath ) { SetPath( SvtPathOptions::Paths::AutoText, rPath ); }
-        void            SetBackupPath( const OUString& rPath ) { SetPath( SvtPathOptions::Paths::Backup, rPath ); }
         void            SetBasicPath( const OUString& rPath ) { SetPath( SvtPathOptions::Paths::Basic, rPath ); }
-        void            SetBitmapPath( const OUString& rPath ) { SetPath( SvtPathOptions::Paths::Bitmap, rPath ); }
-        void            SetConfigPath( const OUString& rPath ) { SetPath( SvtPathOptions::Paths::Config, rPath ); }
-        void            SetDictionaryPath( const OUString& rPath ) { SetPath( SvtPathOptions::Paths::Dictionary, rPath ); }
-        void            SetFavoritesPath( const OUString& rPath ) { SetPath( SvtPathOptions::Paths::Favorites, rPath ); }
-        void            SetFilterPath( const OUString& rPath ) { SetPath( SvtPathOptions::Paths::Filter, rPath ); }
-        void            SetGalleryPath( const OUString& rPath ) { SetPath( SvtPathOptions::Paths::Gallery, rPath ); }
-        void            SetGraphicPath( const OUString& rPath ) { SetPath( SvtPathOptions::Paths::Graphic, rPath ); }
-        void            SetHelpPath( const OUString& rPath ) { SetPath( SvtPathOptions::Paths::Help, rPath ); }
-        void            SetLinguisticPath( const OUString& rPath ) { SetPath( SvtPathOptions::Paths::Linguistic, rPath ); }
-        void            SetModulePath( const OUString& rPath ) { SetPath( SvtPathOptions::Paths::Module, rPath ); }
-        void            SetPalettePath( const OUString& rPath ) { SetPath( SvtPathOptions::Paths::Palette, rPath ); }
-        void            SetPluginPath( const OUString& rPath ) { SetPath( SvtPathOptions::Paths::Plugin, rPath ); }
-        void            SetStoragePath( const OUString& rPath ) { SetPath( SvtPathOptions::Paths::Storage, rPath ); }
         void            SetTempPath( const OUString& rPath ) { SetPath( SvtPathOptions::Paths::Temp, rPath ); }
-        void            SetTemplatePath( const OUString& rPath ) { SetPath( SvtPathOptions::Paths::Template, rPath ); }
-        void            SetUserConfigPath( const OUString& rPath ) { SetPath( SvtPathOptions::Paths::UserConfig, rPath ); }
-        void            SetWorkPath( const OUString& rPath ) { SetPath( SvtPathOptions::Paths::Work, rPath ); }
 
         OUString   SubstVar( const OUString& rVar ) const;
         OUString   ExpandMacros( const OUString& rPath ) const;
@@ -593,24 +574,9 @@ const OUString& SvtPathOptions::GetClassificationPath() const
     return pImpl->GetClassificationPath();
 }
 
-void SvtPathOptions::SetAddinPath( const OUString& rPath )
-{
-    pImpl->SetAddinPath( rPath );
-}
-
-void SvtPathOptions::SetAutoCorrectPath( const OUString& rPath )
-{
-    pImpl->SetAutoCorrectPath( rPath );
-}
-
 void SvtPathOptions::SetAutoTextPath( const OUString& rPath )
 {
     pImpl->SetAutoTextPath( rPath );
-}
-
-void SvtPathOptions::SetBackupPath( const OUString& rPath )
-{
-    pImpl->SetBackupPath( rPath );
 }
 
 void SvtPathOptions::SetBasicPath( const OUString& rPath )
@@ -618,89 +584,9 @@ void SvtPathOptions::SetBasicPath( const OUString& rPath )
     pImpl->SetBasicPath( rPath );
 }
 
-void SvtPathOptions::SetBitmapPath( const OUString& rPath )
-{
-    pImpl->SetBitmapPath( rPath );
-}
-
-void SvtPathOptions::SetConfigPath( const OUString& rPath )
-{
-    pImpl->SetConfigPath( rPath );
-}
-
-void SvtPathOptions::SetDictionaryPath( const OUString& rPath )
-{
-    pImpl->SetDictionaryPath( rPath );
-}
-
-void SvtPathOptions::SetFavoritesPath( const OUString& rPath )
-{
-    pImpl->SetFavoritesPath( rPath );
-}
-
-void SvtPathOptions::SetFilterPath( const OUString& rPath )
-{
-    pImpl->SetFilterPath( rPath );
-}
-
-void SvtPathOptions::SetGalleryPath( const OUString& rPath )
-{
-    pImpl->SetGalleryPath( rPath );
-}
-
-void SvtPathOptions::SetGraphicPath( const OUString& rPath )
-{
-    pImpl->SetGraphicPath( rPath );
-}
-
-void SvtPathOptions::SetHelpPath( const OUString& rPath )
-{
-    pImpl->SetHelpPath( rPath );
-}
-
-void SvtPathOptions::SetLinguisticPath( const OUString& rPath )
-{
-    pImpl->SetLinguisticPath( rPath );
-}
-
-void SvtPathOptions::SetModulePath( const OUString& rPath )
-{
-    pImpl->SetModulePath( rPath );
-}
-
-void SvtPathOptions::SetPalettePath( const OUString& rPath )
-{
-    pImpl->SetPalettePath( rPath );
-}
-
-void SvtPathOptions::SetPluginPath( const OUString& rPath )
-{
-    pImpl->SetPluginPath( rPath );
-}
-
-void SvtPathOptions::SetStoragePath( const OUString& rPath )
-{
-    pImpl->SetStoragePath( rPath );
-}
-
 void SvtPathOptions::SetTempPath( const OUString& rPath )
 {
     pImpl->SetTempPath( rPath );
-}
-
-void SvtPathOptions::SetTemplatePath( const OUString& rPath )
-{
-    pImpl->SetTemplatePath( rPath );
-}
-
-void SvtPathOptions::SetUserConfigPath( const OUString& rPath )
-{
-    pImpl->SetUserConfigPath( rPath );
-}
-
-void SvtPathOptions::SetWorkPath( const OUString& rPath )
-{
-    pImpl->SetWorkPath( rPath );
 }
 
 OUString SvtPathOptions::SubstituteVariable( const OUString& rVar ) const
