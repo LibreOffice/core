@@ -2638,10 +2638,10 @@ void DesktopLOKTest::testRunMacro()
     bool bGoodMacro, bNonExistentMacro;
 
     // Tools macros come pre-installed in system share/basic folder,
-    bGoodMacro = aOffice.m_pOfficeClass->runMacro(&aOffice, OString("macro:///Tools.Debug.ActivateReadOnlyFlag()").getStr());
+    bGoodMacro = aOffice.m_pOfficeClass->runMacro(&aOffice, "macro:///Tools.Debug.ActivateReadOnlyFlag()");
     CPPUNIT_ASSERT(bGoodMacro);
 
-    bNonExistentMacro = aOffice.m_pOfficeClass->runMacro(&aOffice, OString("macro:///I.Am.Not(There)").getStr());
+    bNonExistentMacro = aOffice.m_pOfficeClass->runMacro(&aOffice, "macro:///I.Am.Not(There)");
     CPPUNIT_ASSERT(!bNonExistentMacro);
 }
 

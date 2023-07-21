@@ -1100,7 +1100,7 @@ DECLARE_DUMP_TEST( PivotChartDataButtonTest, Chart2DumpTest, false )
                                                               {
                                                                   return xShapeNode->getShapeType() == "com.sun.star.drawing.TextShape";
                                                               } );
-    CPPUNIT_ASSERT_MESSAGE( OString( "Cannot find Data button shape" ).getStr(), xButton.is() );
+    CPPUNIT_ASSERT_MESSAGE( "Cannot find Data button shape", xButton.is() );
 
     // Make sure that there is no arrow shape with the Data button
     uno::Reference<drawing::XShape> xArrow = getShapeByName( xShapes, "FieldButton.Row.8",
@@ -1108,7 +1108,7 @@ DECLARE_DUMP_TEST( PivotChartDataButtonTest, Chart2DumpTest, false )
                                                              {
                                                                  return xShapeNode->getShapeType() == "com.sun.star.drawing.PolyPolygonShape";
                                                              } );
-    CPPUNIT_ASSERT_MESSAGE( OString( "Arrow shape should not be present for the Data button" ).getStr(), !xArrow.is() );
+    CPPUNIT_ASSERT_MESSAGE( "Arrow shape should not be present for the Data button", !xArrow.is() );
 
     // Assert the background color of the Data button
     util::Color aButtonFillColor = 0;

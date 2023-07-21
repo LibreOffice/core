@@ -191,6 +191,8 @@ public:
 
     bool VisitCallExpr(CallExpr const * expr);
 
+    bool VisitCXXMemberCallExpr(CXXMemberCallExpr const * expr);
+
     bool VisitCXXConstructExpr(CXXConstructExpr const * expr);
 
     bool VisitReturnStmt(ReturnStmt const * stmt);
@@ -852,6 +854,47 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
             break;
         }
         return true;
+    }
+    return true;
+}
+
+bool StringConstant::VisitCXXMemberCallExpr(CXXMemberCallExpr const * expr) {
+    if (ignoreLocation(expr)) {
+        return true;
+    }
+    FunctionDecl const * fdecl = expr->getDirectCallee();
+    if (fdecl == nullptr) {
+        return true;
+    }
+    auto const c = loplugin::DeclCheck(fdecl).Function("getStr");
+    if ((c.Class("OString").Namespace("rtl").GlobalNamespace()
+         || c.Class("OUString").Namespace("rtl").GlobalNamespace())
+        && fdecl->getNumParams() == 0)
+    {
+        auto const e1 = expr->getImplicitObjectArgument()->IgnoreImplicit()->IgnoreParens();
+        if (auto const e2 = dyn_cast<CXXTemporaryObjectExpr>(e1)) {
+            if (e2->getNumArgs() != 0) {
+                return true;
+            }
+            report(
+                DiagnosticsEngine::Warning,
+                "in call of '%0', replace default-constructed %1 directly with an empty %select{ordinary|UTF-16}2 string literal",
+                expr->getExprLoc())
+                << fdecl->getQualifiedNameAsString() << e2->getType() << bool(loplugin::TypeCheck(e2->getType()).Class("OUString")) << expr->getSourceRange();
+            return true;
+        }
+        if (auto const e2 = dyn_cast<CXXFunctionalCastExpr>(e1)) {
+            auto const e3 = dyn_cast<clang::StringLiteral>(e2->getSubExprAsWritten()->IgnoreParens());
+            if (e3 == nullptr) {
+                return true;
+            }
+            report(
+                DiagnosticsEngine::Warning,
+                "in call of '%0', replace %1 constructed from a string literal directly with %select{the|a UTF-16}2 string literal",
+                expr->getExprLoc())
+                << fdecl->getQualifiedNameAsString() << e2->getType() << (loplugin::TypeCheck(e2->getType()).Class("OUString") && !e3->isUTF16()) << expr->getSourceRange();
+            return true;
+        }
     }
     return true;
 }

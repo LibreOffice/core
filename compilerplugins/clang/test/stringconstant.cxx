@@ -128,6 +128,19 @@ int main() {
     ub.append(static_cast<char const *>(sc2)); // at runtime: append "foo"
     ub.append(static_cast<char const *>(sc3)); // at runtime: assert
     ub.append(static_cast<char const *>(sc4)); // at runtime: UB
+
+    // expected-error-re@+1 {{in call of 'rtl::OString::getStr', replace default-constructed '{{(rtl::)?}}OString' directly with an empty ordinary string literal}}
+    OString().getStr();
+    // expected-error-re@+1 {{in call of 'rtl::OString::getStr', replace '{{(rtl::)?}}OString' constructed from a string literal directly with the string literal}}
+    OString("foo").getStr();
+    // expected-error-re@+1 {{in call of 'rtl::OString::getStr', replace '{{(rtl::)?}}OString' constructed from a string literal directly with the string literal}}
+    (OString(("foo"))).getStr();
+    // expected-error-re@+1 {{in call of 'rtl::OUString::getStr', replace default-constructed '{{(rtl::)?}}OUString' directly with an empty UTF-16 string literal}}
+    OUString().getStr();
+    // expected-error-re@+1 {{in call of 'rtl::OUString::getStr', replace '{{(rtl::)?}}OUString' constructed from a string literal directly with a UTF-16 string literal}}
+    OUString("foo").getStr();
+    // expected-error-re@+1 {{in call of 'rtl::OUString::getStr', replace '{{(rtl::)?}}OUString' constructed from a string literal directly with the string literal}}
+    OUString(u"foo").getStr();
 }
 
 
