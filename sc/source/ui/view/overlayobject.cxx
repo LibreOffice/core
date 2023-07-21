@@ -24,6 +24,7 @@
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonMarkerPrimitive2D.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <vcl/settings.hxx>
 
 using sdr::overlay::OverlayObject;
 using sdr::overlay::OverlayManager;
@@ -34,7 +35,10 @@ ScOverlayDashedBorder::ScOverlayDashedBorder(const ::basegfx::B2DRange& rRange, 
     OverlayObject(rColor),
     mbToggle(true)
 {
-    mbAllowsAnimation = officecfg::Office::Common::VCL::AnimationsEnabled::get();
+    // tdf#155414 include system "reduce animation" preferences
+    // Allow the system's "reduce animation" preferences to disable the
+    // Calc animated border when copying a selection of cells.
+    mbAllowsAnimation = (officecfg::Office::Common::VCL::AnimationsEnabled::get() && !MiscSettings::GetUseReducedAnimation());
     maRange = rRange;
 }
 
