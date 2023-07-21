@@ -1478,7 +1478,7 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
     LayoutStrings(bPixelToLogic);
 }
 
-tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic)
+void ScOutputData::LayoutStrings(bool bPixelToLogic)
 {
     bool bOrigIsInLayoutStrings = mpDoc->IsInLayoutStrings();
     mpDoc->SetLayoutStrings(true);
@@ -2167,8 +2167,6 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic)
     }
     if ( bProgress )
         ScProgress::DeleteInterpretProgress();
-
-    return tools::Rectangle();
 }
 
 std::unique_ptr<ScFieldEditEngine> ScOutputData::CreateOutputEditEngine()

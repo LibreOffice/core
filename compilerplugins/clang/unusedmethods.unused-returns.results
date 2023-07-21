@@ -152,7 +152,7 @@ include/svx/dlgctrl.hxx:99
     Point SvxRectCtl::SetActualRPWithoutInvalidate(enum RectPoint)
 include/svx/framelink.hxx:159
     svx::frame::Style & svx::frame::Style::MirrorSelf()
-include/svx/PaletteManager.hxx:85
+include/svx/PaletteManager.hxx:86
     _Bool PaletteManager::GetLumModOff(unsigned short,unsigned short,short &,short &)
 include/test/a11y/AccessibilityTools.hxx:118
     com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessibleContext> AccessibilityTools::getAccessibleObjectForName(const com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessibleContext> &,const short,std::basic_string_view<char16_t>,type-parameter-?-?...)
@@ -240,6 +240,8 @@ sc/source/ui/inc/drawview.hxx:159
     _Bool ScDrawView::calculateGridOffsetForSdrObject(SdrObject &,basegfx::B2DVector &) const
 sc/source/ui/inc/drawview.hxx:162
     _Bool ScDrawView::calculateGridOffsetForB2DRange(const basegfx::B2DRange &,basegfx::B2DVector &) const
+sc/source/ui/inc/output.hxx:348
+    tools::Rectangle ScOutputData::LayoutStrings(_Bool)
 sc/source/ui/inc/select.hxx:71
     _Bool ScViewFunctionSet::SetCursorAtCell(short,int,_Bool)
 sc/source/ui/vba/vbaformat.hxx:69
@@ -300,7 +302,7 @@ svx/inc/galleryfilestorageentry.hxx:56
     std::unique_ptr<GalleryTheme> & GalleryFileStorageEntry::getCachedTheme(std::unique_ptr<GalleryTheme> &)
 sw/inc/calc.hxx:125
     SwSbxValue & SwSbxValue::MakeDouble()
-sw/inc/crsrsh.hxx:600
+sw/inc/crsrsh.hxx:601
     _Bool SwCursorShell::TrySelectOuterTable()
 sw/inc/docary.hxx:300
     _Bool SwExtraRedlineTable::DeleteAllTableRedlines(SwDoc &,const SwTable &,_Bool,enum RedlineType)
@@ -348,11 +350,11 @@ vcl/inc/font/FeatureCollector.hxx:45
     _Bool vcl::font::FeatureCollector::collect()
 vcl/inc/impgraph.hxx:187
     _Bool ImpGraphic::swapOutGraphic(SvStream &)
-vcl/inc/pdf/pdfwriter_impl.hxx:1334
+vcl/inc/pdf/pdfwriter_impl.hxx:1338
     _Bool vcl::PDFWriterImpl::setCurrentStructureElement(int)
-vcl/inc/pdf/pdfwriter_impl.hxx:1335
+vcl/inc/pdf/pdfwriter_impl.hxx:1339
     _Bool vcl::PDFWriterImpl::setStructureAttribute(enum vcl::PDFWriter::StructAttribute,enum vcl::PDFWriter::StructAttributeValue)
-vcl/inc/pdf/pdfwriter_impl.hxx:1336
+vcl/inc/pdf/pdfwriter_impl.hxx:1340
     _Bool vcl::PDFWriterImpl::setStructureAttributeNumerical(enum vcl::PDFWriter::StructAttribute,int)
 vcl/inc/qt5/QtClipboard.hxx:36
     QString QtClipboard::tr(const char *,const char *,int)
@@ -374,18 +376,10 @@ vcl/inc/qt5/QtMainWindow.hxx:29
     QString QtMainWindow::tr(const char *,const char *,int)
 vcl/inc/qt5/QtMainWindow.hxx:29
     QString QtMainWindow::trUtf8(const char *,const char *,int)
-vcl/inc/qt5/QtMenu.hxx:42
-    QString QtMenu::tr(const char *,const char *,int)
-vcl/inc/qt5/QtMenu.hxx:42
-    QString QtMenu::trUtf8(const char *,const char *,int)
 vcl/inc/qt5/QtObject.hxx:35
     QString QtObject::tr(const char *,const char *,int)
 vcl/inc/qt5/QtObject.hxx:35
     QString QtObject::trUtf8(const char *,const char *,int)
-vcl/inc/qt5/QtTimer.hxx:27
-    QString QtTimer::tr(const char *,const char *,int)
-vcl/inc/qt5/QtTimer.hxx:27
-    QString QtTimer::trUtf8(const char *,const char *,int)
 vcl/inc/salgdi.hxx:362
     _Bool SalGraphics::UpdateSettings(AllSettings &)
 vcl/inc/salgdi.hxx:364
@@ -396,7 +390,7 @@ vcl/inc/salinst.hxx:177
     _Bool SalInstance::CallEventCallback(const void *,int)
 vcl/inc/salprn.hxx:113
     _Bool SalPrinter::EndJob()
-vcl/inc/salvtables.hxx:1771
+vcl/inc/salvtables.hxx:1772
     _Bool SalInstanceTreeView::get_iter_abs_pos(weld::TreeIter &,int) const
 vcl/inc/unx/gtk/gtkdata.hxx:337
     int GtkSalDisplay::CaptureMouse(SalFrame *)
@@ -406,6 +400,18 @@ vcl/source/fontsubset/sft.cxx:122
     _Bool vcl::(anonymous namespace)::HexFmt::Flush()
 vcl/source/fontsubset/ttcr.hxx:106
     int vcl::TrueTypeTable::GetRawData(struct vcl::TableEntry *)
+vcl/unx/kf5/KFFilePicker.hxx:29
+    QString KFFilePicker::tr(const char *,const char *,int)
+vcl/unx/kf5/KFFilePicker.hxx:29
+    QString KFFilePicker::trUtf8(const char *,const char *,int)
+workdir/../vcl/inc/qt5/QtMenu.hxx:42
+    QString QtMenu::tr(const char *,const char *,int)
+workdir/../vcl/inc/qt5/QtMenu.hxx:42
+    QString QtMenu::trUtf8(const char *,const char *,int)
+workdir/../vcl/inc/qt5/QtTimer.hxx:27
+    QString QtTimer::tr(const char *,const char *,int)
+workdir/../vcl/inc/qt5/QtTimer.hxx:27
+    QString QtTimer::trUtf8(const char *,const char *,int)
 workdir/../vcl/inc/qt5/QtWidget.hxx:36
     QString QtWidget::tr(const char *,const char *,int)
 workdir/../vcl/inc/qt5/QtWidget.hxx:36
@@ -414,9 +420,5 @@ workdir/../vcl/inc/qt5/QtXAccessible.hxx:27
     QString QtXAccessible::tr(const char *,const char *,int)
 workdir/../vcl/inc/qt5/QtXAccessible.hxx:27
     QString QtXAccessible::trUtf8(const char *,const char *,int)
-workdir/../vcl/unx/kf5/KFFilePicker.hxx:29
-    QString KFFilePicker::tr(const char *,const char *,int)
-workdir/../vcl/unx/kf5/KFFilePicker.hxx:29
-    QString KFFilePicker::trUtf8(const char *,const char *,int)
 writerfilter/source/dmapper/TagLogger.hxx:59
     typename enable_if<std::is_integral_v<T>, void>::type writerfilter::TagLogger::attribute(const std::basic_string<char> &,type-parameter-?-?)
