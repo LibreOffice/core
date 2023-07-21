@@ -2589,6 +2589,24 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf155747)
     assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 1);
 }
 
+#ifndef DBG_UTIL
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf149498)
+{
+    // load a table, and delete the first column with enabled change tracking:
+    // now the column is not deleted silently, but keeps the deleted cell content,
+    // and only accepting it will result the deletion of the table column.
+    createSwDoc("tdf149498.docx");
+
+    // select table, copy, paste and Undo
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    // this would crash due to bookmark over cell boundary
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+}
+#endif
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf150673_RedlineTableColumnDeletionWithExport)
 {
     // load a table, and delete the first column with enabled change tracking:
