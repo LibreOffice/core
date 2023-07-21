@@ -42,7 +42,7 @@ namespace drawinglayer::processor2d
             basegfx::B2DPoint           maDiscreteHitPosition;
 
             /// discrete HitTolerance
-            basegfx::B2DVector          maDiscreteHitTolerance;
+            basegfx::B2DVector          maDiscreteHitTolerancePerAxis;
 
             /// stack of HitPrimitives, taken care of during HitTest run
             primitive2d::Primitive2DContainer        maHitStack;
@@ -60,17 +60,17 @@ namespace drawinglayer::processor2d
             void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate) override;
             bool checkHairlineHitWithTolerance(
                 const basegfx::B2DPolygon& rPolygon,
-                const basegfx::B2DVector& rDiscreteHitTolerance) const;
+                const basegfx::B2DVector& rDiscreteHitTolerancePerAxis) const;
             bool checkFillHitWithTolerance(
                 const basegfx::B2DPolyPolygon& rPolyPolygon,
-                const basegfx::B2DVector& rDiscreteHitTolerance) const;
+                const basegfx::B2DVector& rDiscreteHitTolerancePerAxis) const;
             void check3DHit(const primitive2d::ScenePrimitive2D& rCandidate);
 
         public:
             HitTestProcessor2D(
                 const geometry::ViewInformation2D& rViewInformation,
                 const basegfx::B2DPoint& rLogicHitPosition,
-                const basegfx::B2DVector& rLogicHitTolerance,
+                const basegfx::B2DVector& rLogicHitTolerancePerAxis,
                 bool bHitTextOnly);
             virtual ~HitTestProcessor2D() override;
 
@@ -83,7 +83,7 @@ namespace drawinglayer::processor2d
 
             /// data read access
             const basegfx::B2DPoint& getDiscreteHitPosition() const { return maDiscreteHitPosition; }
-            const basegfx::B2DVector& getDiscreteHitTolerance() const { return maDiscreteHitTolerance; }
+            const basegfx::B2DVector& getDiscreteHitTolerance() const { return maDiscreteHitTolerancePerAxis; }
             bool getCollectHitStack() const { return mbCollectHitStack; }
             bool getHit() const { return mbHit; }
             bool getHitTextOnly() const { return mbHitTextOnly; }
