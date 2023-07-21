@@ -1309,6 +1309,11 @@ bool AquaSalFrame::GetUseDarkMode() const
     return bUseDarkMode;
 }
 
+bool AquaSalFrame::GetUseReducedAnimation() const
+{
+    return [[NSWorkspace sharedWorkspace] accessibilityDisplayShouldReduceMotion];
+}
+
 // on OSX-Aqua the style settings are independent of the frame, so it does
 // not really belong here. Since the connection to the Appearance_Manager
 // is currently done in salnativewidgets.cxx this would be a good place.

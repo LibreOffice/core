@@ -2822,6 +2822,14 @@ void MiscSettings::SetAppColorMode(int nMode)
     batch->commit();
 }
 
+bool MiscSettings::GetUseReducedAnimation()
+{
+    vcl::Window* pDefWindow = ImplGetDefaultWindow();
+    if (pDefWindow == nullptr)
+        return false;
+    return pDefWindow->ImplGetFrame()->GetUseReducedAnimation();
+}
+
 HelpSettings::HelpSettings()
     : mxData(std::make_shared<ImplHelpData>())
 {

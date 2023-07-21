@@ -557,6 +557,18 @@ IMPL_LINK( ScCellShell, ClipboardChanged, TransferableDataHelper*, pDataHelper, 
     rBindings.Invalidate( SID_PASTE_AS_LINK );
     rBindings.Invalidate( SID_PASTE_TEXTIMPORT_DIALOG );
     rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
+
+    // Fix failure to stop the animated border when a copy action is
+    // performed in a different document by cancelling the animated border.
+    // This transferable has lost ownership of the system clipboard so,
+    // in essence, the previous copy action that created this transferable
+    // has been cancelled.
+    if ( !GetViewData().IsAnyFillMode() )
+    {
+        GetViewData().SetPasteMode( ScPasteFlags::NONE );
+        // Clear CopySourceOverlay in each window of a split/frozen tabview
+        GetViewData().GetView()->UpdateCopySourceOverlay();
+    }
 }
 
 namespace {

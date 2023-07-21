@@ -165,6 +165,7 @@ public:
     virtual void EndSetClipRegion() override;
     virtual void UpdateDarkMode() override;
     virtual bool GetUseDarkMode() const override;
+    virtual bool GetUseReducedAnimation() const override;
 
     void UpdateFrameGeometry();
 

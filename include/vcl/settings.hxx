@@ -655,6 +655,8 @@ public:
     static bool                     GetUseDarkMode();
     static void                     SetAppColorMode(int nMode);
     static int                      GetAppColorMode();
+    // return true if system preferences are set to use reduced animation
+    static bool                     GetUseReducedAnimation();
     bool                            operator ==( const MiscSettings& rSet ) const;
     bool                            operator !=( const MiscSettings& rSet ) const;
 };
