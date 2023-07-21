@@ -773,7 +773,7 @@ tools::Rectangle SvHeaderTabListBox::GetFieldRectPixelAbs( sal_Int32 _nRow, sal_
 {
     DBG_ASSERT( !_bIsHeader || 0 == _nRow, "invalid parameters" );
     tools::Rectangle aRect;
-    SvTreeListEntry* pEntry = GetEntry( _nRow );
+    SvTreeListEntry* pEntry = GetEntryOnPos(_nRow );
     if ( pEntry )
     {
         aRect = _bIsHeader ? calcHeaderRect( true, false ) : GetBoundingRect( pEntry );
