@@ -613,7 +613,7 @@ void SvHeaderTabListBox::RecalculateAccessibleChildren()
 bool SvHeaderTabListBox::IsCellCheckBox( sal_Int32 _nRow, sal_uInt16 _nColumn, TriState& _rState ) const
 {
     bool bRet = false;
-    SvTreeListEntry* pEntry = GetEntry( _nRow );
+    SvTreeListEntry* pEntry = GetEntryOnPos( _nRow );
     if ( pEntry )
     {
         sal_uInt16 nItemCount = pEntry->ItemCount();
@@ -653,7 +653,7 @@ sal_Int32 SvHeaderTabListBox::GetCurrRow() const
         sal_uInt32 nCount = GetEntryCount();
         for ( sal_uInt32 i = 0; i < nCount; ++i )
         {
-            if ( pEntry == GetEntry(i) )
+            if ( pEntry == GetEntryOnPos(i) )
             {
                 nRet = i;
                 break;
