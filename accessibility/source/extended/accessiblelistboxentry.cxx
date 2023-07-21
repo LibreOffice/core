@@ -319,36 +319,33 @@ namespace accessibility
     Reference< XAccessible > AccessibleListBoxEntry::implGetParentAccessible( ) const
     {
         Reference< XAccessible > xParent;
-        if ( !xParent.is() )
-        {
-            assert( m_aEntryPath.size() ); // invalid path
-            if ( m_aEntryPath.size() == 1 )
-            {   // we're a top level entry
-                // -> our parent is the tree listbox itself
-                if ( m_pTreeListBox )
-                    xParent = m_pTreeListBox->GetAccessible( );
-            }
-            else
-            {   // we have an entry as parent -> get its accessible
+        assert( m_aEntryPath.size() ); // invalid path
+        if ( m_aEntryPath.size() == 1 )
+        {   // we're a top level entry
+            // -> our parent is the tree listbox itself
+            if ( m_pTreeListBox )
+                xParent = m_pTreeListBox->GetAccessible( );
+        }
+        else
+        {   // we have an entry as parent -> get its accessible
 
-                // shorten our access path by one
-                std::deque< sal_Int32 > aParentPath( m_aEntryPath );
-                aParentPath.pop_back();
+            // shorten our access path by one
+            std::deque< sal_Int32 > aParentPath( m_aEntryPath );
+            aParentPath.pop_back();
 
-                // get the entry for this shortened access path
-                SvTreeListEntry* pParentEntry = m_pTreeListBox->GetEntryFromPath( aParentPath );
-                OSL_ENSURE( pParentEntry, "AccessibleListBoxEntry::implGetParentAccessible: could not obtain a parent entry!" );
+            // get the entry for this shortened access path
+            SvTreeListEntry* pParentEntry = m_pTreeListBox->GetEntryFromPath( aParentPath );
+            OSL_ENSURE( pParentEntry, "AccessibleListBoxEntry::implGetParentAccessible: could not obtain a parent entry!" );
 
-                if ( pParentEntry )
-                    pParentEntry = m_pTreeListBox->GetParent(pParentEntry);
-                if ( pParentEntry )
-                {
-                    uno::Reference<XAccessible> xListBox(m_wListBox);
-                    assert(xListBox.is());
-                    return m_rListBox.implGetAccessible(*pParentEntry);
-                    // the AccessibleListBoxEntry class will create its parent
-                    // when needed
-                }
+            if ( pParentEntry )
+                pParentEntry = m_pTreeListBox->GetParent(pParentEntry);
+            if ( pParentEntry )
+            {
+                uno::Reference<XAccessible> xListBox(m_wListBox);
+                assert(xListBox.is());
+                return m_rListBox.implGetAccessible(*pParentEntry);
+                // the AccessibleListBoxEntry class will create its parent
+                // when needed
             }
         }
 
