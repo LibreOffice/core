@@ -84,8 +84,6 @@ namespace
     class SaveODFItem: public utl::ConfigItem
     {
     private:
-        sal_Int16 m_nODF;
-
         virtual void ImplCommit() override;
 
     public:
@@ -96,7 +94,7 @@ namespace
     void SaveODFItem::ImplCommit() {}
     void SaveODFItem::Notify( const css::uno::Sequence< OUString >& ) {}
 
-    SaveODFItem::SaveODFItem(): utl::ConfigItem("Office.Common/Save"), m_nODF(0)
+    SaveODFItem::SaveODFItem(): utl::ConfigItem("Office.Common/Save")
     {
         OUString sDef("ODF/DefaultVersion");
         Sequence< css::uno::Any > aValues = GetProperties( Sequence<OUString>(&sDef,1) );
@@ -110,8 +108,6 @@ namespace
             throw uno::RuntimeException(
                 "[xmlsecurity]SaveODFItem::SaveODFItem(): Wrong Type!",
                 nullptr );
-
-        m_nODF = nTmp;
     }
 
     std::vector<std::u16string_view>& GetGUIServers()

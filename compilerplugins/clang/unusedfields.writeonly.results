@@ -556,7 +556,7 @@ include/svx/srchdlg.hxx:167
     SvxSearchDialog pOptionsController std::unique_ptr<SvxSearchController>
 include/svx/svdmrkv.hxx:99
     SdrMarkView mpMarkingSubSelectionOverlay std::unique_ptr<MarkingSubSelectionOverlay>
-include/svx/tbcontrl.hxx:266
+include/svx/tbcontrl.hxx:265
     SvxCurrencyToolBoxControl::SvxCurrencyData m_onlyIsoCode _Bool
 include/svx/theme/ThemeColorPaletteManager.hxx:43
     svx::ThemePaletteColorData maBaseColor Color
@@ -710,12 +710,12 @@ sc/inc/scmod.hxx:100
     ScModule m_pErrorHdl std::unique_ptr<SfxErrorHandler>
 sc/inc/tabopparams.hxx:37
     ScInterpreterTableOpParams bValid _Bool
-sc/qa/unit/subsequent_export_test.cxx:2161
-    (unnamed struct at /home/noel/libo-plugin/sc/qa/unit/subsequent_export_test.cxx:2159:18) mnRow SCROW
-sc/qa/unit/subsequent_export_test.cxx:2162
-    (unnamed struct at /home/noel/libo-plugin/sc/qa/unit/subsequent_export_test.cxx:2159:18) mnStyle SvxBorderLineStyle
-sc/qa/unit/subsequent_export_test.cxx:2163
-    (unnamed struct at /home/noel/libo-plugin/sc/qa/unit/subsequent_export_test.cxx:2159:18) mnWidth tools::Long
+sc/qa/unit/subsequent_export_test.cxx:2167
+    (unnamed struct at /home/noel/libo-plugin/sc/qa/unit/subsequent_export_test.cxx:2165:18) mnRow SCROW
+sc/qa/unit/subsequent_export_test.cxx:2168
+    (unnamed struct at /home/noel/libo-plugin/sc/qa/unit/subsequent_export_test.cxx:2165:18) mnStyle SvxBorderLineStyle
+sc/qa/unit/subsequent_export_test.cxx:2169
+    (unnamed struct at /home/noel/libo-plugin/sc/qa/unit/subsequent_export_test.cxx:2165:18) mnWidth tools::Long
 sc/source/core/data/column4.cxx:1449
     (anonymous namespace)::StartListeningFormulaCellsHandler mnStartRow SCROW
 sc/source/core/data/column.cxx:1312
@@ -864,7 +864,7 @@ sd/source/ui/slidesorter/controller/SlsListener.hxx:140
     sd::slidesorter::controller::Listener mpModelChangeLock std::shared_ptr<SlideSorterController::ModelChangeLock>
 sd/source/ui/slidesorter/inc/controller/SlsClipboard.hxx:114
     sd::slidesorter::controller::Clipboard mxUndoContext std::unique_ptr<UndoContext>
-sd/source/ui/view/ToolBarManager.cxx:317
+sd/source/ui/view/ToolBarManager.cxx:318
     sd::ToolBarManager::Implementation mpAsynchronousLayouterLock ::std::unique_ptr<LayouterLock>
 sfx2/inc/commandpopup/CommandPopup.hxx:108
     CommandPopupHandler mpListBox std::unique_ptr<CommandListBox>
@@ -872,7 +872,7 @@ sfx2/inc/notebookbar/NotebookbarTabControl.hxx:42
     NotebookbarTabControl m_pListener css::uno::Reference<css::ui::XUIConfigurationListener>
 sfx2/source/appl/fileobj.hxx:40
     SvFileObject mxDelMed tools::SvRef<SfxMedium>
-sfx2/source/doc/sfxbasemodel.cxx:457
+sfx2/source/doc/sfxbasemodel.cxx:471
     (anonymous namespace)::SfxSaveGuard m_pFramesLock std::unique_ptr<SfxOwnFramesLocker>
 sfx2/source/inc/appdata.hxx:68
     SfxAppData_Impl maDocTopics std::vector<SfxDdeDocTopic_Impl *>
@@ -930,6 +930,8 @@ store/source/storbios.cxx:52
     (anonymous namespace)::OStoreSuperBlock m_aMarked L
 svgio/inc/svgcharacternode.hxx:84
     svgio::svgreader::SvgTextPosition maY ::std::vector<double>
+svgio/inc/svgdocument.hxx:38
+    svgio::svgreader::SvgDocument maOrphanNodes SvgNodeVector
 svgio/inc/svgsvgnode.hxx:41
     svgio::svgreader::SvgSvgNode maVersion SvgNumber
 svgio/inc/svgsymbolnode.hxx:32
@@ -1004,7 +1006,7 @@ svx/source/inc/docrecovery.hxx:132
     svx::DocRecovery::TURLInfo Module OUString
 svx/source/inc/StylesPreviewToolBoxControl.hxx:33
     StylesPreviewToolBoxControl m_xWeldBox std::unique_ptr<StylesPreviewWindow_Base>
-svx/source/inc/StylesPreviewWindow.hxx:105
+svx/source/inc/StylesPreviewWindow.hxx:106
     StylesPreviewWindow_Base m_pStylePoolChangeListener std::unique_ptr<StylePoolChangeListener>
 svx/source/sdr/attribute/sdrformtextattribute.cxx:152
     drawinglayer::attribute::ImpSdrFormTextAttribute mnFormTextShdwTransp sal_uInt16
@@ -1073,24 +1075,22 @@ svx/source/sidebar/text/TextPropertyPanel.hxx:53
 svx/source/sidebar/text/TextPropertyPanel.hxx:55
     svx::sidebar::TextPropertyPanel mxFontAdjustDispatch std::unique_ptr<ToolbarUnoDispatcher>
 svx/source/sidebar/text/TextPropertyPanel.hxx:57
-    svx::sidebar::TextPropertyPanel mxToolBoxFontColorSwDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/text/TextPropertyPanel.hxx:59
     svx::sidebar::TextPropertyPanel mxToolBoxFontColorDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/text/TextPropertyPanel.hxx:61
+svx/source/sidebar/text/TextPropertyPanel.hxx:59
     svx::sidebar::TextPropertyPanel mxToolBoxBackgroundColorDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/text/TextPropertyPanel.hxx:63
+svx/source/sidebar/text/TextPropertyPanel.hxx:61
     svx::sidebar::TextPropertyPanel mxResetBarDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/text/TextPropertyPanel.hxx:65
+svx/source/sidebar/text/TextPropertyPanel.hxx:63
     svx::sidebar::TextPropertyPanel mxDefaultBarDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/text/TextPropertyPanel.hxx:67
+svx/source/sidebar/text/TextPropertyPanel.hxx:65
     svx::sidebar::TextPropertyPanel mxPositionBarDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/text/TextPropertyPanel.hxx:69
+svx/source/sidebar/text/TextPropertyPanel.hxx:67
     svx::sidebar::TextPropertyPanel mxSpacingBarDispatch std::unique_ptr<ToolbarUnoDispatcher>
 svx/source/sidebar/textcolumns/TextColumnsPropertyPanel.hxx:40
     svx::sidebar::TextColumnsPropertyPanel maColumnsNumberController sfx2::sidebar::ControllerItem
 svx/source/sidebar/textcolumns/TextColumnsPropertyPanel.hxx:41
     svx::sidebar::TextColumnsPropertyPanel maColumnsSpacingController sfx2::sidebar::ControllerItem
-svx/source/tbxctrls/tbcontrl.cxx:339
+svx/source/tbxctrls/tbcontrl.cxx:337
     (anonymous namespace)::SvxFontNameBox_Base m_aOwnFontList ::std::unique_ptr<FontList>
 sw/inc/accmap.hxx:95
     SwAccessibleMap mvShapes SwShapeList_Impl
@@ -1256,24 +1256,12 @@ vcl/inc/unx/gtk/gtkframe.hxx:82
     GtkSalFrame::IMHandler::PreviousKeyPress send_event gint8
 vcl/inc/unx/gtk/gtkframe.hxx:83
     GtkSalFrame::IMHandler::PreviousKeyPress time guint32
-vcl/inc/unx/saldisp.hxx:79
-    SalVisual eRGBMode_ SalRGB
-vcl/inc/unx/saldisp.hxx:80
-    SalVisual nRedShift_ int
-vcl/inc/unx/saldisp.hxx:81
-    SalVisual nGreenShift_ int
-vcl/inc/unx/saldisp.hxx:82
-    SalVisual nBlueShift_ int
-vcl/inc/unx/saldisp.hxx:83
-    SalVisual nRedBits_ int
-vcl/inc/unx/saldisp.hxx:84
-    SalVisual nGreenBits_ int
-vcl/inc/unx/saldisp.hxx:85
-    SalVisual nBlueBits_ int
 vcl/source/components/dtranscomp.cxx:210
     vcl::(anonymous namespace)::GenericDragSource m_xTrans css::uno::Reference<css::datatransfer::XTransferable>
 vcl/source/fontsubset/sft.cxx:109
     vcl::(anonymous namespace)::TTGlyphMetrics lsb sal_Int16
+vcl/source/gdi/pdfextoutdevdata.cxx:107
+    vcl::GlobalSyncData mStructIdMap std::vector<sal_Int32>
 vcl/unx/generic/app/wmadaptor.cxx:1268
     _mwmhints deco unsigned long
 vcl/unx/generic/app/wmadaptor.cxx:1268
@@ -1306,7 +1294,7 @@ vcl/workben/vcldemo.cxx:1741
     (anonymous namespace)::DemoWin mxThread rtl::Reference<RenderThread>
 writerfilter/source/dmapper/DocumentProtection.hxx:50
     writerfilter::dmapper::DocumentProtection m_sRedlineProtectionKey OUString
-writerfilter/source/dmapper/DomainMapperTableHandler.cxx:242
+writerfilter/source/dmapper/DomainMapperTableHandler.cxx:245
     writerfilter::dmapper::TableInfo aTablePropertyIds std::vector<PropertyIds>
 writerfilter/source/dmapper/PropertyMap.hxx:220
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
@@ -1330,20 +1318,22 @@ xmloff/qa/unit/uxmloff.cxx:109
     (unnamed struct at /home/noel/libo-plugin/xmloff/qa/unit/uxmloff.cxx:106:12) result const sal_uInt16
 xmloff/source/draw/ximpstyl.hxx:215
     SdXMLMasterStylesContext maMasterPageList std::vector<rtl::Reference<SdXMLMasterPageContext> >
-xmloff/source/forms/elementexport.hxx:46
+xmloff/source/forms/elementexport.hxx:45
     xmloff::OElementExport m_pXMLElement std::unique_ptr<SvXMLElementExport>
-xmloff/source/forms/elementexport.hxx:103
+xmloff/source/forms/elementexport.hxx:102
     xmloff::OControlExport m_pOuterElement std::unique_ptr<SvXMLElementExport>
 xmloff/source/forms/officeforms.hxx:68
     xmloff::OFormsRootExport m_pImplElement std::unique_ptr<SvXMLElementExport>
 xmloff/source/text/txtimp.cxx:104
     XMLTextImportHelper::Impl m_xFrameImpPrMap rtl::Reference<SvXMLImportPropertyMapper>
-xmlsecurity/inc/certificatechooser.hxx:53
+xmlsecurity/inc/certificatechooser.hxx:55
     CertificateChooser mvUserData std::vector<std::shared_ptr<UserData> >
 xmlsecurity/inc/certificateviewer.hxx:51
     CertificateViewer mxGeneralPage std::unique_ptr<CertificateViewerGeneralTP>
 xmlsecurity/inc/certificateviewer.hxx:52
     CertificateViewer mxDetailsPage std::unique_ptr<CertificateViewerDetailsTP>
+xmlsecurity/source/dialogs/digitalsignaturesdialog.cxx:87
+    (anonymous namespace)::SaveODFItem m_nODF sal_Int16
 xmlsecurity/source/helper/pdfsignaturehelper.cxx:237
     (anonymous namespace)::PageChecksum m_nPageContent BitmapChecksum
 xmlsecurity/source/helper/pdfsignaturehelper.cxx:238

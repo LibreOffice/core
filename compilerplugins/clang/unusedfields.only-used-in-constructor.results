@@ -16,7 +16,7 @@ binaryurp/source/writer.hxx:135
     binaryurp::Writer state_ WriterState
 canvas/source/tools/surfaceproxy.hxx:104
     canvas::SurfaceProxy mpPageManager PageManagerSharedPtr
-canvas/source/vcl/impltools.hxx:114
+canvas/source/vcl/impltools.hxx:119
     vclcanvas::tools::LocalGuard aSolarGuard SolarMutexGuard
 chart2/source/controller/accessibility/AccessibleChartShape.hxx:78
     chart::AccessibleChartShape m_aShapeTreeInfo ::accessibility::AccessibleShapeTreeInfo
@@ -140,7 +140,7 @@ cppu/source/uno/check.cxx:267
     (anonymous namespace)::Char4 chars Char3
 cui/source/dialogs/colorpicker.cxx:748
     cui::(anonymous namespace)::ColorPickerDialog m_aColorPrevious ColorPreviewControl
-cui/source/factory/dlgfact.cxx:1240
+cui/source/factory/dlgfact.cxx:1245
     (anonymous namespace)::SvxMacroAssignDialog_Impl m_aItems SfxItemSet
 cui/source/inc/AdditionsDialog.hxx:47
     AdditionInfo sReleaseVersion OUString
@@ -586,9 +586,9 @@ sc/inc/token.hxx:402
     SingleDoubleRefModifier aDub ScComplexRefData
 sc/qa/unit/tiledrendering/tiledrendering.cxx:439
     (anonymous namespace)::ViewCallback m_callbackWrapper TestLokCallbackWrapper
-sc/source/core/data/document.cxx:1252
+sc/source/core/data/document.cxx:1217
     (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aSwitch sc::AutoCalcSwitch
-sc/source/core/data/document.cxx:1253
+sc/source/core/data/document.cxx:1218
     (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aBulk ScBulkBroadcast
 sc/source/core/data/table2.cxx:812
     (anonymous namespace)::TransClipHandler mnEndRow size_t
@@ -810,7 +810,7 @@ svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1098
     (anonymous namespace)::ExpressionGrammar::definition identifier ::boost::spirit::classic::rule<ScannerT>
 svx/source/dialog/contimp.hxx:75
     SvxSuperContourDlg aContourItem SvxContourDlgItem
-svx/source/dialog/framelinkarray.cxx:520
+svx/source/dialog/framelinkarray.cxx:515
     svx::frame::(anonymous namespace)::MergedCellIterator mnFirstRow sal_Int32
 svx/source/dialog/imapwnd.hxx:88
     IMapWindow maItemInfos SfxItemInfo[1]
@@ -832,8 +832,6 @@ sw/inc/unosett.hxx:144
     SwXNumberingRules m_pImpl ::sw::UnoImplPtr<Impl>
 sw/qa/core/test_ToxTextGenerator.cxx:140
     (anonymous namespace)::ToxTextGeneratorWithMockedChapterField mChapterFieldType SwChapterFieldType
-sw/qa/extras/rtfimport/rtfimport.cxx:73
-    Test m_aSavedSettings AllSettings
 sw/qa/extras/uiwriter/uiwriter5.cxx:66
     SwUiWriterTest5 m_aSavedSettings AllSettings
 sw/qa/extras/uiwriter/uiwriter7.cxx:2286
@@ -878,8 +876,6 @@ sw/source/uibase/inc/uivwimp.hxx:95
     SwView_Impl m_xTmpSelDocShell SfxObjectShellLock
 sw/source/uibase/inc/unodispatch.hxx:43
     SwXDispatchProviderInterceptor::DispatchMutexLock_Impl aGuard SolarMutexGuard
-sw/source/uibase/sidebar/A11yCheckIssuesPanel.hxx:91
-    sw::sidebar::A11yCheckIssuesPanel m_getIssueCollection std::function<sfx::AccessibilityIssueCollection (void)>
 toolkit/source/awt/stylesettings.cxx:74
     toolkit::(anonymous namespace)::StyleMethodGuard m_aGuard SolarMutexGuard
 ucb/source/ucp/gio/gio_mount.hxx:73
@@ -896,7 +892,7 @@ vcl/inc/graphic/Manager.hxx:42
     vcl::graphic::Manager maSwapOutTimer Timer
 vcl/inc/headless/BitmapHelper.hxx:32
     BitmapHelper aTmpBmp SvpSalBitmap
-vcl/inc/jsdialog/jsdialogbuilder.hxx:702
+vcl/inc/jsdialog/jsdialogbuilder.hxx:716
     JSToolbar m_pPopovers std::map<sal_uInt16, weld::Widget *>
 vcl/inc/pdf/pdfbuildin_fonts.hxx:34
     vcl::pdf::BuildinFont m_nAscent const int
@@ -906,9 +902,9 @@ vcl/inc/pdf/pdfbuildin_fonts.hxx:42
     vcl::pdf::BuildinFont m_aWidths const int[256]
 vcl/inc/salprn.hxx:45
     SalPrinterQueueInfo moPortName std::optional<OUString>
-vcl/inc/salvtables.hxx:615
+vcl/inc/salvtables.hxx:616
     SalInstanceEntry m_aTextFilter WeldTextFilter
-vcl/inc/salvtables.hxx:1006
+vcl/inc/salvtables.hxx:1007
     SalInstanceComboBoxWithEdit m_aTextFilter WeldTextFilter
 vcl/inc/sft.hxx:177
     vcl::TTGlobalFontInfo_ fsSelection sal_uInt16
@@ -928,27 +924,11 @@ vcl/inc/unx/i18n_ic.hxx:45
     SalI18N_InputContext maSwitchIMCallback XIMCallback
 vcl/inc/unx/i18n_ic.hxx:46
     SalI18N_InputContext maDestroyCallback XIMCallback
-vcl/inc/unx/saldisp.hxx:79
-    SalVisual eRGBMode_ SalRGB
-vcl/inc/unx/saldisp.hxx:80
-    SalVisual nRedShift_ int
-vcl/inc/unx/saldisp.hxx:81
-    SalVisual nGreenShift_ int
-vcl/inc/unx/saldisp.hxx:82
-    SalVisual nBlueShift_ int
-vcl/inc/unx/saldisp.hxx:83
-    SalVisual nRedBits_ int
-vcl/inc/unx/saldisp.hxx:84
-    SalVisual nGreenBits_ int
-vcl/inc/unx/saldisp.hxx:85
-    SalVisual nBlueBits_ int
-vcl/inc/unx/saldisp.hxx:116
+vcl/inc/unx/saldisp.hxx:104
     SalColormap m_aPalette std::vector<Color>
-vcl/inc/unx/saldisp.hxx:119
-    SalColormap m_aLookupTable std::vector<sal_uInt16>
-vcl/inc/unx/saldisp.hxx:122
+vcl/inc/unx/saldisp.hxx:109
     SalColormap m_nUsed Pixel
-vcl/source/app/salvtables.cxx:247
+vcl/source/app/salvtables.cxx:246
     SalFlashAttention m_aOrigBackground Wallpaper
 vcl/source/fontsubset/ttcr.hxx:40
     vcl::longHorMetrics aw sal_uInt16
@@ -958,6 +938,8 @@ vcl/source/gdi/jobset.cxx:39
     (anonymous namespace)::ImplOldJobSetupData cDeviceName char[32]
 vcl/source/gdi/jobset.cxx:40
     (anonymous namespace)::ImplOldJobSetupData cPortName char[32]
+vcl/source/gdi/pdfextoutdevdata.cxx:107
+    vcl::GlobalSyncData mStructIdMap std::vector<sal_Int32>
 vcl/source/pdf/PDFiumLibrary.cxx:430
     vcl::pdf::(anonymous namespace)::PDFiumDocumentImpl m_aFormCallbacks FPDF_FORMFILLINFO
 vcl/unx/gtk3/a11y/atkhypertext.cxx:31
@@ -990,3 +972,5 @@ xmloff/inc/XMLThemeContext.hxx:46
     XMLThemeColorsContext m_aColorScheme std::vector<css::util::Color>
 xmloff/source/text/XMLTextListBlockContext.hxx:40
     XMLTextListBlockContext mbSetDefaults _Bool
+xmlsecurity/source/dialogs/digitalsignaturesdialog.cxx:87
+    (anonymous namespace)::SaveODFItem m_nODF sal_Int16

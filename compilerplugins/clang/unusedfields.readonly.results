@@ -262,7 +262,7 @@ extensions/source/propctrlr/eformshelper.hxx:60
     pcr::EFormsHelper m_aSubmissionUINames MapStringToPropertySet
 extensions/source/propctrlr/eformshelper.hxx:62
     pcr::EFormsHelper m_aBindingUINames MapStringToPropertySet
-extensions/source/update/check/updatehdl.hxx:90
+extensions/source/update/check/updatehdl.hxx:89
     UpdateHandler mbStringsLoaded _Bool
 filter/source/graphicfilter/icgm/chart.hxx:48
     DataNode nBoxX1 sal_Int16
@@ -520,11 +520,13 @@ sc/source/filter/inc/stylesbuffer.hxx:777
     oox::xls::CellStyleBuffer maBuiltinStyles CellStyleVector
 sc/source/filter/inc/stylesbuffer.hxx:778
     oox::xls::CellStyleBuffer maUserStyles CellStyleVector
-sc/source/filter/inc/XclExpChangeTrack.hxx:348
+sc/source/filter/inc/XclExpChangeTrack.hxx:349
     XclExpChTrAction pAddAction std::unique_ptr<XclExpChTrAction>
 sc/source/filter/inc/xepage.hxx:121
     XclExpChartPageSettings maData XclPageData
-sc/source/filter/inc/xestyle.hxx:380
+sc/source/filter/inc/xestyle.hxx:352
+    XclExpCellBorder maComplexColorDiagonal model::ComplexColor
+sc/source/filter/inc/xestyle.hxx:386
     XclExpCellArea maBackgroundComplexColor model::ComplexColor
 sc/source/filter/inc/xistyle.hxx:518
     XclImpXFBuffer maBuiltinStyles XclImpStyleList
@@ -664,6 +666,8 @@ sw/inc/swmodule.hxx:91
     SwModule m_pAccessibilityOptions std::unique_ptr<SvtAccessibilityOptions>
 sw/inc/swmodule.hxx:92
     SwModule m_pCTLOptions std::unique_ptr<SvtCTLOptions>
+sw/qa/api/SwXHeadFootText.cxx:72
+    (anonymous namespace)::SwXHeadFootTextText mxTextContent Reference<text::XTextContent>
 sw/source/core/access/accfrmobjmap.hxx:100
     SwAccessibleChildMap maMap std::map<key_type, mapped_type, key_compare>
 sw/source/core/access/acchypertextdata.hxx:40
@@ -676,9 +680,9 @@ sw/source/core/access/accmap.cxx:625
     SwAccessibleEventMap_Impl maMap std::map<key_type, mapped_type, key_compare>
 sw/source/core/access/accmap.cxx:669
     SwAccessibleSelectedParas_Impl maMap std::map<key_type, mapped_type, key_compare>
-sw/source/core/doc/swstylemanager.cxx:61
-    (anonymous namespace)::SwStyleManager m_aAutoCharPool StylePool
 sw/source/core/doc/swstylemanager.cxx:62
+    (anonymous namespace)::SwStyleManager m_aAutoCharPool StylePool
+sw/source/core/doc/swstylemanager.cxx:63
     (anonymous namespace)::SwStyleManager m_aAutoParaPool StylePool
 sw/source/core/inc/swblocks.hxx:69
     SwImpBlocks m_bInPutMuchBlocks _Bool
@@ -806,7 +810,7 @@ vcl/inc/svdata.hxx:327
     ImplSVNWFData mbNoFrameJunctionForPopups _Bool
 vcl/inc/toolbox.h:109
     vcl::ToolBoxLayoutData m_aLineItemIds std::vector<ToolBoxItemId>
-vcl/inc/unx/saldisp.hxx:261
+vcl/inc/unx/saldisp.hxx:248
     SalDisplay m_aInvalidScreenData ScreenData
 vcl/inc/widgetdraw/WidgetDefinition.hxx:224
     vcl::WidgetDefinitionStyle maDefaultButtonTextColor Color

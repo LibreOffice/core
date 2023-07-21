@@ -8,7 +8,7 @@ basic/qa/cppunit/test_global_as_new.cxx:25
     (anonymous namespace)::GlobalAsNewTest lib BasicDLL
 canvas/source/vcl/canvasbitmap.hxx:113
     vclcanvas::CanvasBitmap mxDevice css::uno::Reference<css::rendering::XGraphicDevice>
-canvas/source/vcl/impltools.hxx:114
+canvas/source/vcl/impltools.hxx:119
     vclcanvas::tools::LocalGuard aSolarGuard SolarMutexGuard
 chart2/source/controller/inc/dlg_DataEditor.hxx:55
     chart::DataEditor m_xContext css::uno::Reference<css::uno::XComponentContext>
@@ -390,13 +390,13 @@ sc/inc/mtvelements.hxx:171
     sc::ColumnBlockConstPosition miSparklinePos SparklineStoreType::const_iterator
 sc/inc/SolverSettings.hxx:168
     sc::SolverSettings SolverCodesToLOEngines std::map<OUString, OUString>
-sc/source/core/data/document.cxx:1252
+sc/source/core/data/document.cxx:1217
     (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aSwitch sc::AutoCalcSwitch
-sc/source/core/data/document.cxx:1253
+sc/source/core/data/document.cxx:1218
     (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aBulk ScBulkBroadcast
 sc/source/filter/inc/sheetdatacontext.hxx:50
     oox::xls::SheetDataContext aReleaser SolarMutexReleaser
-sc/source/ui/inc/docsh.hxx:456
+sc/source/ui/inc/docsh.hxx:457
     ScDocShellModificator mpProtector std::unique_ptr<ScRefreshTimerProtector>
 sc/source/ui/inc/PivotLayoutTreeListBase.hxx:47
     ScPivotLayoutTreeListBase maDropTargetHelper ScPivotLayoutTreeDropTarget
@@ -478,8 +478,6 @@ svx/source/sidebar/fontwork/FontworkPropertyPanel.hxx:41
     svx::sidebar::FontworkPropertyPanel m_xToolbar std::unique_ptr<ToolbarUnoDispatcher>
 svx/source/tbxctrls/layctrl.cxx:432
     (anonymous namespace)::ColumnsWindow mxControl rtl::Reference<SvxColumnsToolBoxControl>
-sw/qa/extras/rtfimport/rtfimport.cxx:73
-    Test m_aSavedSettings AllSettings
 sw/qa/extras/uiwriter/uiwriter5.cxx:66
     SwUiWriterTest5 m_aSavedSettings AllSettings
 sw/source/core/crsr/crbm.cxx:62
@@ -508,12 +506,12 @@ sw/source/uibase/inc/pagenumberdlg.hxx:31
     SwPageNumberDlg m_xCancel std::unique_ptr<weld::Button>
 sw/source/uibase/inc/swuicnttab.hxx:243
     SwTokenWindow m_aAdjustPositionsIdle Idle
+sw/source/uibase/inc/titlepage.hxx:34
+    SwTitlePageDlg m_xInsertNewPagesRB std::unique_ptr<weld::RadioButton>
 sw/source/uibase/inc/uivwimp.hxx:95
     SwView_Impl m_xTmpSelDocShell SfxObjectShellLock
 sw/source/uibase/inc/unodispatch.hxx:43
     SwXDispatchProviderInterceptor::DispatchMutexLock_Impl aGuard SolarMutexGuard
-sw/source/uibase/sidebar/A11yCheckIssuesPanel.hxx:91
-    sw::sidebar::A11yCheckIssuesPanel m_getIssueCollection std::function<sfx::AccessibilityIssueCollection (void)>
 sw/source/uibase/sidebar/ThemePanel.hxx:41
     sw::sidebar::ThemePanel mxListBoxFonts std::unique_ptr<weld::TreeView>
 toolkit/source/awt/stylesettings.cxx:74
@@ -524,7 +522,7 @@ unoidl/source/unoidlprovider.cxx:676
     unoidl::detail::(anonymous namespace)::UnoidlCursor reference2_ rtl::Reference<UnoidlModuleEntity>
 uui/source/openlocked.hxx:36
     vcl::OpenLockedQueryBox mxQuestionMarkImage std::unique_ptr<weld::Image>
-vcl/inc/jsdialog/jsdialogbuilder.hxx:702
+vcl/inc/jsdialog/jsdialogbuilder.hxx:716
     JSToolbar m_pPopovers std::map<sal_uInt16, weld::Widget *>
 vcl/inc/pdf/pdfbuildin_fonts.hxx:34
     vcl::pdf::BuildinFont m_nAscent const int
@@ -536,9 +534,7 @@ vcl/inc/salprn.hxx:45
     SalPrinterQueueInfo moPortName std::optional<OUString>
 vcl/inc/sft.hxx:177
     vcl::TTGlobalFontInfo_ fsSelection sal_uInt16
-vcl/inc/unx/saldisp.hxx:119
-    SalColormap m_aLookupTable std::vector<sal_uInt16>
-vcl/source/app/salvtables.cxx:247
+vcl/source/app/salvtables.cxx:246
     SalFlashAttention m_aOrigBackground Wallpaper
 vcl/source/fontsubset/ttcr.hxx:40
     vcl::longHorMetrics aw sal_uInt16
