@@ -344,7 +344,7 @@ void AccessibleGridControlBase::commitEvent(
             return;
 
     // build an event object
-    AccessibleEventObject aEvent(*this, _nEventId, _rOldValue, _rNewValue, -1);
+    AccessibleEventObject aEvent(*this, _nEventId, _rNewValue, _rOldValue, -1);
 
     // let the notifier handle this event
 
