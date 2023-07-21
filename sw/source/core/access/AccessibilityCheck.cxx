@@ -1224,6 +1224,50 @@ private:
     int m_prevLevel = 0;
 };
 
+/// Checking content controls in header or footer
+class ContentControlCheck : public NodeCheck
+{
+private:
+    // Boolean indicating if content controls in header or footer warning is already triggered.
+    bool m_bPrevPassed;
+
+public:
+    ContentControlCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
+        : NodeCheck(rIssueCollection)
+        , m_bPrevPassed(true)
+    {
+    }
+
+    void check(SwNode* pCurrent) override
+    {
+        if (!m_bPrevPassed)
+            return;
+
+        const SwTextNode* pTextNode = pCurrent->GetTextNode();
+        if (pTextNode)
+        {
+            if (pCurrent->FindHeaderStartNode() || pCurrent->FindFooterStartNode())
+            {
+                const SwpHints* pHts = pTextNode->GetpSwpHints();
+                if (pHts)
+                {
+                    for (size_t i = 0; i < pHts->Count(); ++i)
+                    {
+                        const SwTextAttr* pHt = pHts->Get(i);
+                        if (pHt->Which() == RES_TXTATR_CONTENTCONTROL)
+                        {
+                            m_bPrevPassed = false;
+                            lclAddIssue(m_rIssueCollection,
+                                        SwResId(STR_CONTENT_CONTROL_IN_HEADER_OR_FOOTER));
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+};
+
 class DocumentCheck : public BaseCheck
 {
 public:
@@ -1458,6 +1502,7 @@ void AccessibilityCheck::init()
         m_aNodeChecks.emplace_back(new SpaceSpacingCheck(m_aIssueCollection));
         m_aNodeChecks.emplace_back(new FakeFootnoteCheck(m_aIssueCollection));
         m_aNodeChecks.emplace_back(new FakeCaptionCheck(m_aIssueCollection));
+        m_aNodeChecks.emplace_back(new ContentControlCheck(m_aIssueCollection));
     }
 }
 

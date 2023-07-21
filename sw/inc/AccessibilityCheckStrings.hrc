@@ -37,6 +37,7 @@
 #define STR_HEADING_START               NC_("STR_HEADING_START", "Outline levels should start with level 1, instead of level %LEVEL_CURRENT%.")
 #define STR_FONTWORKS                   NC_("STR_FONTWORKS", "Avoid Fontwork objects in your documents. Make sure you use it for samples or other meaningless text.")
 #define STR_TABLE_FORMATTING            NC_("STR_TABLE_FORMATTING", "Avoid using empty table cells for formatting.")
+#define STR_CONTENT_CONTROL_IN_HEADER_OR_FOOTER NC_("STR_CONTENT_CONTROL_IN_HEADER", "Avoid content controls in header or footer.")
 
 #define STR_DOCUMENT_DEFAULT_LANGUAGE   NC_("STR_DOCUMENT_DEFAULT_LANGUAGE", "Document default language is not set.")
 #define STR_STYLE_NO_LANGUAGE           NC_("STR_STYLE_NO_LANGUAGE", "Style “%STYLE_NAME%” has no language set.")
