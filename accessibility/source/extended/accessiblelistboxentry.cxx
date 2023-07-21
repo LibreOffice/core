@@ -335,10 +335,7 @@ namespace accessibility
 
             // get the entry for this shortened access path
             SvTreeListEntry* pParentEntry = m_pTreeListBox->GetEntryFromPath( aParentPath );
-            OSL_ENSURE( pParentEntry, "AccessibleListBoxEntry::implGetParentAccessible: could not obtain a parent entry!" );
-
-            if ( pParentEntry )
-                pParentEntry = m_pTreeListBox->GetParent(pParentEntry);
+            assert(pParentEntry && "AccessibleListBoxEntry::implGetParentAccessible: could not obtain a parent entry!");
             if ( pParentEntry )
             {
                 uno::Reference<XAccessible> xListBox(m_wListBox);
