@@ -291,7 +291,7 @@ namespace drawinglayer::processor2d
                             {
                                 // for all other B2DLINEJOIN_* do a hairline HitTest with expanded tolerance
                                 const basegfx::B2DVector aDiscreteHalfLineVector(getViewInformation2D().getObjectToViewTransformation()
-                                    * basegfx::B2DVector(rLineAttribute.getWidth() * 0.5, 0.0));
+                                    * basegfx::B2DVector(rLineAttribute.getWidth() * 0.5, rLineAttribute.getWidth() * 0.5));
                                 mbHit = checkHairlineHitWithTolerance(
                                     rPolygonCandidate.getB2DPolygon(),
                                     getDiscreteHitTolerance() + aDiscreteHalfLineVector);
@@ -328,7 +328,7 @@ namespace drawinglayer::processor2d
                         }
 
                         const basegfx::B2DVector aDiscreteHalfLineVector(getViewInformation2D().getObjectToViewTransformation()
-                            * basegfx::B2DVector(fLogicHitTolerance, 0.0));
+                            * basegfx::B2DVector(fLogicHitTolerance, fLogicHitTolerance));
 
                         mbHit = checkHairlineHitWithTolerance(
                             rPolygonCandidate.getB2DPolygon(),
