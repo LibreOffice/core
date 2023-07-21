@@ -1297,7 +1297,7 @@ bool SkiaSalGraphicsImpl::blendAlphaBitmap(const SalTwoRect& rPosAry,
                                            const SalBitmap& rMaskBitmap,
                                            const SalBitmap& rAlphaBitmap)
 {
-    // tdf#156361 use slow blending path if alpha mask blending is diabled
+    // tdf#156361 use slow blending path if alpha mask blending is disabled
     // SkiaSalGraphicsImpl::blendBitmap() fails unexpectedly in the following
     // cases so return false and use the non-Skia alpha mask blending code:
     // - Unexpected white areas when running a slideshow or printing:
