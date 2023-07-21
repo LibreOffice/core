@@ -211,7 +211,7 @@ namespace accessibility
     void AccessibleTabListBoxTable::implSelectRow( sal_Int32 _nRow, bool _bSelect )
     {
         if ( m_pTabListBox )
-            m_pTabListBox->Select( m_pTabListBox->GetEntry( _nRow ), _bSelect );
+            m_pTabListBox->SelectRow(_nRow, _bSelect);
     }
 
     sal_Int32 AccessibleTabListBoxTable::implGetRowCount() const
@@ -280,7 +280,7 @@ namespace accessibility
         ensureIsAlive();
         ensureValidIndex( nChildIndex );
 
-        return m_pTabListBox && m_pTabListBox->IsSelected( m_pTabListBox->GetEntry( implGetRow( nChildIndex ) ) );
+        return m_pTabListBox && m_pTabListBox->IsRowSelected(implGetRow(nChildIndex));
     }
 
     void SAL_CALL AccessibleTabListBoxTable::clearAccessibleSelection(  )
