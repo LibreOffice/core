@@ -960,6 +960,13 @@ void SalInstanceMenu::insert_separator(int pos, const OUString& rId)
     auto nInsertPos = pos == -1 ? MENU_APPEND : pos;
     m_xMenu->InsertSeparator(rId, nInsertPos);
 }
+
+// Defines the help id of the item in a given position
+void SalInstanceMenu::set_item_help_id(const OUString& rIdent, const OUString& rHelpId)
+{
+    m_xMenu->SetHelpId(m_xMenu->GetItemId(rIdent), rHelpId);
+}
+
 void SalInstanceMenu::remove(const OUString& rId)
 {
     m_xMenu->RemoveItem(m_xMenu->GetItemPos(m_xMenu->GetItemId(rId)));

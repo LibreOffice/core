@@ -11665,6 +11665,11 @@ public:
         return get_n_children();
     }
 
+    virtual void set_item_help_id(const OUString& rIdent, const OUString& rHelpId) override
+    {
+        ::set_help_id(GTK_WIDGET(m_aMap[rIdent]), rHelpId);
+    }
+
     void remove(const OUString& rIdent) override
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)

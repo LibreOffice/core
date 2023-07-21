@@ -169,6 +169,7 @@ public:
                         const css::uno::Reference<css::graphic::XGraphic>& rImage,
                         TriState eCheckRadioFalse) override;
     virtual void insert_separator(int pos, const OUString& rId) override;
+    virtual void set_item_help_id(const OUString& rIdent, const OUString& rHelpId) override;
     virtual void remove(const OUString& rId) override;
     virtual OUString get_id(int pos) const override;
     virtual int n_children() const override;

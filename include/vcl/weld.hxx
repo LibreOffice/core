@@ -2419,6 +2419,7 @@ public:
                         TriState eCheckRadioFalse)
         = 0;
 
+    virtual void set_item_help_id(const OUString& rIdent, const OUString& rHelpId) = 0;
     virtual void remove(const OUString& rId) = 0;
 
     virtual void clear() = 0;

@@ -19,6 +19,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <sfx2/doctempl.hxx>
+#include <helpids.h>
 #include <bitmaps.hlst>
 
 TemplateDlgLocalView::TemplateDlgLocalView(std::unique_ptr<weld::ScrolledWindow> xWindow,
@@ -112,6 +113,15 @@ void TemplateDlgLocalView::createContextMenu(const bool bIsDefault, const bool b
     mxContextMenu->append_separator("separator2");
     mxContextMenu->append("move", SfxResId(STR_MOVE), BMP_MENU_MOVE);
     mxContextMenu->append("export", SfxResId(STR_EXPORT), BMP_MENU_EXPORT);
+
+    // Set the help IDs of all context menu entries
+    mxContextMenu->set_item_help_id("open", HID_TEMPLATEDLG_OPEN);
+    mxContextMenu->set_item_help_id("edit", HID_TEMPLATEDLG_EDIT);
+    mxContextMenu->set_item_help_id("default", HID_TEMPLATEDLG_DEFAULT);
+    mxContextMenu->set_item_help_id("rename", HID_TEMPLATEDLG_RENAME);
+    mxContextMenu->set_item_help_id("delete", HID_TEMPLATEDLG_DELETE);
+    mxContextMenu->set_item_help_id("move", HID_TEMPLATEDLG_MOVE);
+    mxContextMenu->set_item_help_id("export", HID_TEMPLATEDLG_EXPORT);
 
     if (!bIsSingleSel)
     {
