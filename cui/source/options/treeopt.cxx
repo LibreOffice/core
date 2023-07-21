@@ -1143,7 +1143,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
             SfxItemSetFixed<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER> aOptSet(SfxGetpApp()->GetPool());
             aOptSet.Put(rSet);
             if(aOptSet.Count())
-                SfxGetpApp()->SetOptions( aOptSet );
+                SfxApplication::SetOptions( aOptSet );
             // get dispatcher anew, because SetOptions() might have destroyed the dispatcher
             SfxViewFrame *pViewFrame = SfxViewFrame::Current();
 
@@ -1193,7 +1193,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
         break;
         case SID_INET_DLG :
         case SID_FILTER_DLG:
-            SfxGetpApp()->SetOptions( rSet );
+            SfxApplication::SetOptions( rSet );
         break;
 
         case SID_SB_STARBASEOPTIONS:

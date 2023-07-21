@@ -32,8 +32,6 @@
 
 #include <sfx2/sfxsids.hrc>
 
-#include <svl/isethint.hxx>
-
 #include <officecfg/Inet.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Recovery.hxx>
@@ -340,9 +338,6 @@ void SfxApplication::SetOptions_Nbc(const SfxItemSet& rSet)
 void SfxApplication::SetOptions(const SfxItemSet &rSet)
 {
     SetOptions_Nbc( rSet );
-
-    // Undo-Count
-    Broadcast( SfxItemSetHint( rSet ) );
 }
 
 

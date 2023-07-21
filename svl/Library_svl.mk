@@ -165,7 +165,6 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/misc/urihelper \
     svl/source/notify/SfxBroadcaster \
     svl/source/notify/broadcast \
-    svl/source/notify/isethint \
     svl/source/notify/listener \
     svl/source/notify/lstner \
     svl/source/numbers/currencytable \

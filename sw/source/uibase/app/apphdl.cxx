@@ -29,7 +29,6 @@
 #include <svtools/restartdialog.hxx>
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
-#include <svl/isethint.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/fcontnr.hxx>

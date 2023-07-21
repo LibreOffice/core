@@ -5640,7 +5640,6 @@ include/svl/inethist.hxx
 include/svl/instrm.hxx
 include/svl/int64item.hxx
 include/svl/intitem.hxx
-include/svl/isethint.hxx
 include/svl/itempool.hxx
 include/svl/itemprop.hxx
 include/svl/itemset.hxx

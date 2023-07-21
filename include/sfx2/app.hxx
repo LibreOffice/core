@@ -155,7 +155,7 @@ public:
 
     // misc.
     static void                 GetOptions(SfxItemSet &);
-    void                        SetOptions(const SfxItemSet &);
+    static void                 SetOptions(const SfxItemSet &);
     virtual void                Invalidate(sal_uInt16 nId = 0) override;
     void                        NotifyEvent(const SfxEventHint& rEvent, bool bSynchron = true );
     bool                        IsDowning() const;
