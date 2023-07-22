@@ -397,7 +397,7 @@ private:
     OUString aNames[SdLinkTargetType::Count];
 
 public:
-    SdDocLinkTargets( SdXImpressDocument&   rMyModel ) noexcept;
+    SdDocLinkTargets(SdXImpressDocument& rMyModel);
     virtual ~SdDocLinkTargets() noexcept override;
 
     // XNameAccess
@@ -429,7 +429,7 @@ class SdDocLinkTargetType final : public ::cppu::WeakImplHelper< css::document::
     OUString maName;
 
 public:
-    SdDocLinkTargetType(SdXImpressDocument* pModel, sal_uInt16 nT) noexcept;
+    SdDocLinkTargetType(SdXImpressDocument* pModel, sal_uInt16 nT);
 
     // css::document::XLinkTargetSupplier
     virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getLinks() override;

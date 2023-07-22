@@ -3390,9 +3390,8 @@ uno::Sequence< OUString > SAL_CALL SdMasterPagesAccess::getSupportedServiceNames
     return { "com.sun.star.drawing.MasterPages" };
 }
 
-
-SdDocLinkTargets::SdDocLinkTargets( SdXImpressDocument& rMyModel ) noexcept
-: mpModel( &rMyModel )
+SdDocLinkTargets::SdDocLinkTargets(SdXImpressDocument& rMyModel)
+    : mpModel(&rMyModel)
 {
     for (sal_uInt16 i=0; i < SdLinkTargetType::Count; i++)
         aNames[i] = SdResId(aTypeResIds[i]);
@@ -3508,7 +3507,7 @@ uno::Sequence< OUString > SAL_CALL SdDocLinkTargets::getSupportedServiceNames()
     return { "com.sun.star.document.LinkTargets" };
 }
 
-SdDocLinkTargetType::SdDocLinkTargetType(SdXImpressDocument* pModel, sal_uInt16 nT) noexcept
+SdDocLinkTargetType::SdDocLinkTargetType(SdXImpressDocument* pModel, sal_uInt16 nT)
     : mpModel(pModel)
     , mnType(nT)
 {
