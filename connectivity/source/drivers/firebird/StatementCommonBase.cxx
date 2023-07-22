@@ -453,6 +453,7 @@ sal_Int32 OStatementCommonBase::getStatementChangeCount()
             aDesiredInfoType = isc_info_req_delete_count;
             break;
         case isc_info_sql_stmt_exec_procedure:
+        case isc_info_sql_stmt_ddl:
             return 0; // cannot determine
         default:
             throw SQLException(); // TODO: better error message?
