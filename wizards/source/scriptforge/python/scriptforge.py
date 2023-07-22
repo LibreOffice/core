@@ -1127,8 +1127,8 @@ class SFScriptForge:
         def FileExists(self, filename):
             return self.ExecMethod(self.vbMethod, 'FileExists', filename)
 
-        def Files(self, foldername, filter = ''):
-            return self.ExecMethod(self.vbMethod, 'Files', foldername, filter)
+        def Files(self, foldername, filter = '', includesubfolders = False):
+            return self.ExecMethod(self.vbMethod, 'Files', foldername, filter, includesubfolders)
 
         def FolderExists(self, foldername):
             return self.ExecMethod(self.vbMethod, 'FolderExists', foldername)
@@ -1185,8 +1185,8 @@ class SFScriptForge:
         def PickFolder(self, defaultfolder = ScriptForge.cstSymEmpty, freetext = ''):
             return self.ExecMethod(self.vbMethod, 'PickFolder', defaultfolder, freetext)
 
-        def SubFolders(self, foldername, filter = ''):
-            return self.ExecMethod(self.vbMethod, 'SubFolders', foldername, filter)
+        def SubFolders(self, foldername, filter = '', includesubfolders = False):
+            return self.ExecMethod(self.vbMethod, 'SubFolders', foldername, filter, includesubfolders)
 
         @classmethod
         def _ConvertFromUrl(cls, filename):

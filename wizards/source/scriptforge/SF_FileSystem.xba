@@ -84,6 +84,11 @@ Const cstForAppending			=	8
 &apos;&apos;&apos;	Document file system
 Const DOCFILESYSTEM				=	&quot;vnd.sun.star.tdoc:/&quot;
 
+&apos;&apos;&apos;	Folders and files scanning
+Const cstSEPARATOR				=	&quot;//;&quot;	&apos;	Separates folders or files in the accumulators
+Const cstFILES					=	1		&apos;	Caler = Files()
+Const cstFOLDERS				=	2		&apos;	Caller = SubFolders()
+
 REM ===================================================== CONSTRUCTOR/DESTRUCTOR
 
 REM -----------------------------------------------------------------------------
@@ -762,11 +767,15 @@ End Function    &apos;   ScriptForge.SF_FileSystem.FileExists
 REM -----------------------------------------------------------------------------
 Public Function Files(Optional ByVal FolderName As Variant _
 						, Optional ByVal Filter As Variant _
+						, Optional ByVal IncludeSubfolders As Variant _
 						) As Variant
 &apos;&apos;&apos;	Return an array of the FileNames stored in the given folder. The folder must exist
+&apos;&apos;&apos;	Subfolders may be optionally explored too.
+&apos;&apos;&apos;	If the number of files exceeds a reasonable amount (&gt; 1000 ?), the process time may become long.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		FolderName: the folder to explore
 &apos;&apos;&apos;		Filter: contains wildcards (&quot;?&quot; and &quot;*&quot;) to limit the list to the relevant files (default = &quot;&quot;)
+&apos;&apos;&apos;		IncludeSubfolders: when True (default = False), subfolders are explored too.
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		An array of strings, each entry is the FileName of an existing file
 &apos;&apos;&apos;	Exceptions:
@@ -775,58 +784,36 @@ Public Function Files(Optional ByVal FolderName As Variant _
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		Dim a As Variant
 &apos;&apos;&apos;			FSO.FileNaming = &quot;SYS&quot;
-&apos;&apos;&apos;			a = FSO.Files(&quot;C:\Windows\&quot;)
+&apos;&apos;&apos;			a = FSO.Files(&quot;C:\Windows\&quot;, IncludeSubfolders := True)
 
 Dim vFiles As Variant			&apos;	Return value
 Dim oSfa As Object				&apos;	com.sun.star.ucb.SimpleFileAccess
-Dim sFolderName As String		&apos;	URL lias for FolderName
-Dim sFile As String				&apos;	Single file
-Dim bDocFileSystem As Boolean	&apos;	When True, a document file system is being explored
+Dim sFilesColl As String		&apos;	cstSEPARATOR delimited string of list of files (FileNaming notation)
 Dim i As Long
 
 Const cstThisSub = &quot;FileSystem.Files&quot;
-Const cstSubArgs = &quot;FolderName, [Filter=&quot;&quot;&quot;&quot;]&quot;
+Const cstSubArgs = &quot;FolderName, [Filter=&quot;&quot;&quot;&quot;], [IncludeSubfolders=False]&quot;
 
 	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
 	vFiles = Array()
 
 Check:
 	If IsMissing(Filter) Or IsEmpty(Filter) Then Filter = &quot;&quot;
+	If IsMissing(IncludeSubfolders) Or IsEmpty(IncludeSubfolders) Then IncludeSubfolders = False
 	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not SF_Utils._ValidateFile(FolderName, &quot;FolderName&quot;) Then GoTo Finally
 		If Not SF_Utils._Validate(Filter, &quot;Filter&quot;, V_STRING) Then GoTo Finally
+		If Not SF_Utils._Validate(IncludeSubfolders, &quot;IncludeSubfolders&quot;, V_BOOLEAN) Then GoTo Finally
 	End If
-	sFolderName = SF_FileSystem._ConvertToUrl(FolderName)
 	If SF_FileSystem.FileExists(FolderName) Then GoTo CatchFile				&apos; Must not be a file
 	If Not SF_FileSystem.FolderExists(FolderName) Then GoTo CatchFolder		&apos; Folder must exist
 
-	bDocFileSystem = SF_String.StartsWith(sFolderName, DOCFILESYSTEM)
-
 Try:
-	&apos;	Get files
+	sFilesColl = &quot;&quot;
 	Set oSfa = SF_Utils._GetUnoService(&quot;FileAccess&quot;)
-	vFiles = oSfa.getFolderContents(sFolderName, False)	&apos;	NB: The False argument is ignored in document file systems
-	&apos;	Adjust notations
-	For i = 0 To UBound(vFiles)
-		sFile = SF_FileSystem._ConvertFromUrl(vFiles(i))
-		vFiles(i) = sFile
-	Next i
+	SF_FileSystem._ScanFolder(cstFiles, sFilesColl, FolderName, oSfa, Filter, IncludeSubfolders)
 
-	&apos;	Reduce list to valid items:
-		&apos;	- those passing the filter
-		&apos;	- files only, not folders: in documents file systems, the False argument of getFolderContents() is ignored.
-	If Len(Filter) &gt; 0 Or bDocFileSystem Then
-		For i = 0 To UBound(vFiles)
-			sFile = SF_FileSystem.GetName(vFiles(i))
-			If Len(Filter) &gt; 0 Then
-				If Not SF_String.IsLike(sFile, Filter) Then vFiles(i) = &quot;&quot;
-			End If
-			If bDocFileSystem Then
-				If oSfa.isFolder(ConvertToUrl(vFiles(i))) Then vFiles(i) = &quot;&quot;
-			End If
-		Next i
-		vFiles = Sf_Array.TrimArray(vFiles)
-	End If
+	If Len(sFilesColl) &gt; Len(cstSEPARATOR) Then vFiles() = Split(Mid(sFilesColl, Len(cstSEPARATOR) + 1), cstSEPARATOR)
 
 Finally:
 	Files = vFiles
@@ -1025,7 +1012,7 @@ End Function    &apos;   ScriptForge.SF_FileSystem.GetFileLen
 REM -----------------------------------------------------------------------------
 Public Function GetFileModified(Optional ByVal FileName As Variant) As Variant
 &apos;&apos;&apos;	Returns the last modified date for the given file
-&apos;&apos;&apos;	The method is not supported for document&apos;s internal file systems.
+&apos;&apos;&apos;	The method is not supporte for document&apos;s internal file systems.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		FileName: a string representing an existing file
 &apos;&apos;&apos;	Returns:
@@ -1253,7 +1240,7 @@ Public Function HashFile(Optional ByVal FileName As Variant _
 							) As String
 &apos;&apos;&apos;	Return an hexadecimal string representing a checksum of the given file
 &apos;&apos;&apos;	Next algorithms are supported: MD5, SHA1, SHA224, SHA256, SHA384 and SHA512
-&apos;&apos;&apos;	The method is not supported for document&apos;s internal file systems.
+&apos;&apos;&apos;	The method is not supporte for document&apos;s internal file systems.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		FileName: a string representing a file
 &apos;&apos;&apos;		Algorithm: The hashing algorithm to use
@@ -1602,7 +1589,7 @@ Public Function PickFile(Optional ByVal DefaultFile As Variant _
 &apos;&apos;&apos;	The mode, OPEN or SAVE, and the filter may be preset
 &apos;&apos;&apos;	If mode = SAVE and the picked file exists, a warning message will be displayed
 &apos;&apos;&apos;	Modified from Andrew Pitonyak&apos;s Base Macro Programming §10.4
-&apos;&apos;&apos;	The method is not supported for document&apos;s internal file systems.
+&apos;&apos;&apos;	The method is not supporte for document&apos;s internal file systems.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		DefaultFile:	Folder part: the FolderName from which to start. Default = the last selected folder
 &apos;&apos;&apos;						File part: the default file to open or save
@@ -1699,7 +1686,7 @@ Public Function PickFolder(Optional ByVal DefaultFolder As Variant _
 							, Optional ByVal FreeText As Variant _
 							) As String
 &apos;&apos;&apos;	Display a FolderPicker dialog box
-&apos;&apos;&apos;	The method is not supported for document&apos;s internal file systems.
+&apos;&apos;&apos;	The method is not supporte for document&apos;s internal file systems.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		DefaultFolder: the FolderName from which to start. Default = the last selected folder
 &apos;&apos;&apos;		FreeText: text to display in the dialog. Default = &quot;&quot;
@@ -1813,11 +1800,14 @@ End Function	&apos;	ScriptForge.SF_FileSystem.SetProperty
 REM -----------------------------------------------------------------------------
 Public Function SubFolders(Optional ByVal FolderName As Variant _
 								, Optional ByVal Filter As Variant _
+								, Optional ByVal IncludeSubfolders As Variant _
 								) As Variant
-&apos;&apos;&apos;	Return an array of the FolderNames stored in the given folder. The folder must exist
+&apos;&apos;&apos;	Return an array of the FolderNames stored in the given folder. The folder must exist,
+&apos;&apos;&apos;	Subfolders may be optionally explored too.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		FolderName: the folder to explore
 &apos;&apos;&apos;		Filter: contains wildcards (&quot;?&quot; and &quot;*&quot;) to limit the list to the relevant folders (default = &quot;&quot;)
+&apos;&apos;&apos;		IncludeSubfolders: when True (default = False), subfolders are explored too.
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		An array of strings, each entry is the FolderName of an existing folder
 &apos;&apos;&apos;	Exceptions:
@@ -1826,45 +1816,36 @@ Public Function SubFolders(Optional ByVal FolderName As Variant _
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		Dim a As Variant
 &apos;&apos;&apos;			FSO.FileNaming = &quot;SYS&quot;
-&apos;&apos;&apos;			a = FSO.SubFolders(&quot;C:\Windows\&quot;)
+&apos;&apos;&apos;			a = FSO.SubFolders(&quot;C:\Windows\&quot;, IncludeSubfolders := True)
 
 Dim vSubFolders As Variant		&apos;	Return value
 Dim oSfa As Object				&apos;	com.sun.star.ucb.SimpleFileAccess
-Dim sFolderName As String		&apos;	URL lias for FolderName
-Dim sFolder As String			&apos;	Single folder
+Dim sFoldersColl As String		&apos;	cstSEPARATOR delimited string of list of folders (FileNaming notation)
 Dim i As Long
 
 Const cstThisSub = &quot;FileSystem.SubFolders&quot;
-Const cstSubArgs = &quot;FolderName, [Filter=&quot;&quot;&quot;&quot;]&quot;
+Const cstSubArgs = &quot;FolderName, [Filter=&quot;&quot;&quot;&quot;], [IncludeSubfolders=False]&quot;
 
 	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
 	vSubFolders = Array()
 
 Check:
 	If IsMissing(Filter) Or IsEmpty(Filter) Then Filter = &quot;&quot;
+	If IsMissing(IncludeSubfolders) Or IsEmpty(IncludeSubfolders) Then IncludeSubfolders = False
 	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not SF_Utils._ValidateFile(FolderName, &quot;FolderName&quot;) Then GoTo Finally
 		If Not SF_Utils._Validate(Filter, &quot;Filter&quot;, V_STRING) Then GoTo Finally
+		If Not SF_Utils._Validate(IncludeSubfolders, &quot;IncludeSubfolders&quot;, V_BOOLEAN) Then GoTo Finally
 	End If
-	sFolderName = SF_FileSystem._ConvertToUrl(FolderName)
 	If SF_FileSystem.FileExists(FolderName) Then GoTo CatchFile				&apos; Must not be a file
-	If Not SF_FileSystem.FolderExists(FolderName) Then GoTo CatchFolder		&apos; Folder must exist
+	If Not SF_FileSystem.FolderExists(FolderName) Then GoTo CatchFolder		&apos; Top folder must exist
 
 Try:
-	&apos;	Get SubFolders
+	sFoldersColl = &quot;&quot;
 	Set oSfa = SF_Utils._GetUnoService(&quot;FileAccess&quot;)
-	vSubFolders = oSfa.getFolderContents(sFolderName, True)
-	&apos;	List includes files; remove them or adjust notations of folders
-	For i = 0 To UBound(vSubFolders)
-		sFolder = SF_FileSystem._ConvertFromUrl(vSubFolders(i) &amp; &quot;/&quot;)
-		If SF_FileSystem.FileExists(sFolder) Then vSubFolders(i) = &quot;&quot; Else vSubFolders(i) = sFolder
-		&apos;	Reduce list to those passing the filter
-		If Len(Filter) &gt; 0 And Len(vSubFolders(i)) &gt; 0 Then
-			sFolder = SF_FileSystem.GetName(vSubFolders(i))
-			If Not SF_String.IsLike(sFolder, Filter) Then vSubFolders(i) = &quot;&quot;
-		End If
-	Next i
-	vSubFolders = SF_Array.TrimArray(vSubFolders)
+	SF_FileSystem._ScanFolder(cstFolders, sFoldersColl, FolderName, oSfa, Filter, IncludeSubfolders)
+
+	If Len(sFoldersColl) &gt; Len(cstSEPARATOR) Then vSubFolders() = Split(Mid(sFoldersColl, Len(cstSEPARATOR) + 1), cstSEPARATOR)
 
 Finally:
 	SubFolders = vSubFolders
@@ -2238,6 +2219,115 @@ Public Function _IsDocFileSystem(psFile As String) As Boolean
 	_IsDocFileSystem = SF_String.StartsWith(psFile, DOCFILESYSTEM, CaseSensitive := True)
 
 End Function	&apos;	ScriptForge.SF_FileSystem._IsDocFileSystem
+
+REM -----------------------------------------------------------------------------
+Private Sub _ScanFolder(ByVal piTarget As Integer _
+							, ByRef psItemsColl As String _
+							, ByVal psFolderName As String _
+							, ByRef poSfa As Object _
+							, ByVal psFilter As String _
+							, ByVal pbIncludeSubFolders As Boolean _
+							)
+&apos;&apos;&apos;	Scan a folder and, when requested, its subfolders recursively.
+&apos;&apos;&apos;	The psItemsColl in-out argument concatenates, depending on the target,
+&apos;&apos;&apos;	either all files or all folders found.
+&apos;&apos;&apos;	The Sub calls itself recursively when relevant.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		piTarget: 1 when caller routine = Files(), 2 when caller routine = SubFolders()
+&apos;&apos;&apos;			It determines the type of items to collect: files or folders
+&apos;&apos;&apos;		psItemsColl: the current and future list of folders or files (FileNaming format) separated with cstSEPARATOR
+&apos;&apos;&apos;		psFolderName: the folder to scan (FileNaming format)
+&apos;&apos;&apos;		poSfa: com.sun.star.ucb.SimpleFileAccess
+&apos;&apos;&apos;		psFilter: contains wildcards (&quot;?&quot; and &quot;*&quot;) to limit the list to the relevant folders or files.
+&apos;&apos;&apos;			Zero-length string when not applicable.
+&apos;&apos;&apos;		pbIncludeSubfolders: when True, subfolders are explored too.
+
+Dim vSubFolders As Variant			&apos;	Array of subfolders 1st level in URL notation
+Dim vFiles As Variant				&apos;	Array of files present in psFolderName in FileNaming notation
+Dim lFiles As Long					&apos;	Number of files found passing the filter
+Dim sFolderName As String			&apos;	URL lias for psFolderName
+Dim sItem As String					&apos;	Single folder or single file in FileNaming notation
+Dim sItemName As String				&apos;	Base name of sItem
+Dim bFolder As Boolean				&apos;	When True, the considered string points to a folder, not a file
+Dim bFilter As Boolean				&apos;	When True, no filter or the filter is passed
+Dim i As Long		
+
+Check:
+	On Local Error Goto catch
+
+Try:
+	With poSfa
+
+		&apos;	Get SubFolders, initialize files list
+		sFolderName = SF_FileSystem._ConvertToUrl(psFolderName)
+		vSubFolders = .getFolderContents(sFolderName, True)
+		If UBound(vSubFolders) &lt; 0 Then Exit Sub
+		vFiles = Array()
+		If piTarget = cstFiles Then
+			lFiles = 0
+			ReDim vFiles(0 To UBound(vSubFolders))
+		End If
+
+		&apos;	List includes files: remove them or adjust notations of folders
+		&apos;	When piTarget = cstFiles, the list of files is stored in the vFiles() array
+		For i = 0 To UBound(vSubFolders)
+			sItem = SF_FileSystem._ConvertFromUrl(vSubFolders(i))
+			bFolder = .isFolder(vSubFolders(i))
+			Select Case piTarget
+				Case cstFiles
+					If bFolder Then
+						vSubFolders(i) = sItem &amp; &quot;/&quot;
+					Else
+						&apos;	Build list of files passing the filter
+						bFilter = ( Len(psFilter) = 0 )
+						If Not bFilter Then
+							sItemName = SF_FileSystem.GetName(sItem)
+							bFilter = SF_String.IsLike(sItemName, psFilter)
+						End If
+						If bFilter Then			&apos;	Copy files from folders + files list
+							vFiles(lFiles) = sItem
+							lFiles = lFiles + 1
+						End If
+						vSubFolders(i) = &quot;&quot;		&apos;	Keep folders only
+					End If
+				Case cstFolders
+					If bFolder Then vSubFolders(i) = sItem &amp; &quot;/&quot; Else vSubFolders(i) = &quot;&quot;
+					&apos;	Reduce list to those passing the filter
+					If Len(psFilter) &gt; 0 And Len(vSubFolders(i)) &gt; 0 Then
+						sItemName = SF_FileSystem.GetName(sItem)
+						If Not SF_String.IsLike(sItemName, psFilter) Then vSubFolders(i) = &quot;&quot;
+					End If
+			End Select
+		Next i
+		vSubFolders = SF_Array.TrimArray(vSubFolders)
+
+		&apos;	Store the list of either files or subfolders in the global collection
+		Select Case piTarget
+			Case cstFiles
+				If lFiles &gt; 0 Then
+					ReDim Preserve vFiles(0 To lFiles - 1)
+					psItemsColl = psItemsColl &amp; cstSEPARATOR &amp; Join(vFiles, cstSEPARATOR)
+				End If
+			Case cstFolders
+				If UBound(vSubFolders) &gt;= 0 Then psItemsColl = psItemsColl &amp; cstSEPARATOR &amp; Join(vSubFolders, cstSEPARATOR)
+		End Select
+
+		&apos;	Scan each subfolder when relevant
+		If pbIncludeSubfolders Then
+			For i = 0 To UBound(vSubFolders)
+				_ScanFolder(piTarget, psItemsColl, vSubFolders(i), poSfa, psFilter, True)
+			Next i
+		End If
+
+	End With
+
+Finally:
+	Exit Sub
+Catch:
+	SF_Exception.Clear()
+	psItemsColl = &quot;&quot;
+	GoTo Finally
+End Sub			&apos;	ScriptForge.SF_FileSystem._ScanFolder
 
 REM -----------------------------------------------------------------------------
 Public Function _ParseUrl(psUrl As String) As Object
