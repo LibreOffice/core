@@ -1928,7 +1928,8 @@ void SwDoc::DelTable(SwTableNode *const pTableNd)
 {
     {
         // tdf#156267 remove DdeBookmarks before deleting nodes
-        SwDataChanged aTmp(SwPaM(*pTableNd, *pTableNd->EndOfSectionNode()));
+        SwPaM aTmpPaM(*pTableNd, *pTableNd->EndOfSectionNode());
+        SwDataChanged aTmp(aTmpPaM);
     }
 
     bool bNewTextNd = false;
