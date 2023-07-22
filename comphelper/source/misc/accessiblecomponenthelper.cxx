@@ -121,12 +121,7 @@ namespace comphelper
             return;
 
         // build an event object
-        AccessibleEventObject aEvent;
-        aEvent.Source = *this;
-        aEvent.EventId = _nEventId;
-        aEvent.OldValue = _rOldValue;
-        aEvent.NewValue = _rNewValue;
-        aEvent.IndexHint = nIndexHint;
+        AccessibleEventObject aEvent(*this, _nEventId, _rNewValue, _rOldValue, nIndexHint);
 
         // let the notifier handle this event
         AccessibleEventNotifier::addEvent( m_nClientId, aEvent );
