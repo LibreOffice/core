@@ -320,11 +320,11 @@ namespace accessibility
 
         ensureIsAlive();
 
-        sal_Int32 nRows = implGetSelRowCount();
-        if ( nRows == 0 )
+        const sal_Int32 nColCount = implGetColumnCount();
+
+        if (nColCount == 0)
             throw IndexOutOfBoundsException();
 
-        const sal_Int32 nColCount = implGetColumnCount();
         const sal_Int32 nRow = implGetSelRow(nSelectedChildIndex / nColCount);
         const sal_Int32 nColumn = nSelectedChildIndex % nColCount;
         return getAccessibleCellAt( nRow, nColumn );
