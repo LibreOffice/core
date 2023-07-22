@@ -306,12 +306,12 @@ namespace
 
     Sequence< PropertyValue > lcl_appendFileNameToDescriptor( const ::comphelper::NamedValueCollection& _rDescriptor, const OUString& _rURL )
     {
+        if ( _rURL.isEmpty() )
+            return _rDescriptor.getPropertyValues();
+
         ::comphelper::NamedValueCollection aMutableDescriptor( _rDescriptor );
-        if ( !_rURL.isEmpty() )
-        {
-            aMutableDescriptor.put( "FileName", _rURL );
-            aMutableDescriptor.put( "URL", _rURL );
-        }
+        aMutableDescriptor.put( "FileName", _rURL );
+        aMutableDescriptor.put( "URL", _rURL );
         return aMutableDescriptor.getPropertyValues();
     }
 }
