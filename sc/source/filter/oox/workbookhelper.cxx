@@ -226,6 +226,8 @@ private:
     /** Finalizes the filter process (sets some needed document properties). */
     void                finalize();
 
+    void                ImplDestroy();
+
 private:
     typedef ::std::unique_ptr< ScEditEngineDefaulter >    EditEngineDefaulterPtr;
     typedef ::std::unique_ptr< FormulaBuffer >          FormulaBufferPtr;
@@ -308,10 +310,15 @@ WorkbookGlobals::WorkbookGlobals( ExcelFilter& rFilter ) :
     initialize();
 }
 
-WorkbookGlobals::~WorkbookGlobals()
+void WorkbookGlobals::ImplDestroy()
 {
     finalize();
     mrExcelFilter.unregisterWorkbookGlobals();
+}
+
+WorkbookGlobals::~WorkbookGlobals()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 ScDocumentImport& WorkbookGlobals::getDocImport()
