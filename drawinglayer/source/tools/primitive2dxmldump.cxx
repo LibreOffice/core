@@ -925,7 +925,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
                     for (size_t iDx = 0; iDx < aDx.size(); ++iDx)
                     {
                         OString sName = "dx" + OString::number(iDx);
-                        rWriter.attribute(sName, OUString::number(aDx[iDx]));
+                        rWriter.attribute(sName, OString::number(aDx[iDx]));
                     }
                 }
                 rWriter.endElement();
@@ -1207,7 +1207,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
             default:
             {
-                OString aName("unhandled");
+                const char* aName = "unhandled";
                 switch (nId)
                 {
                     case PRIMITIVE2D_ID_RANGE_SVX | 14: // PRIMITIVE2D_ID_SDRCELLPRIMITIVE2D
