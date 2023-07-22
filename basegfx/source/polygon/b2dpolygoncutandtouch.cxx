@@ -884,7 +884,7 @@ namespace basegfx::utils
                 if(nCount == 1)
                 {
                     // remove self intersections
-                    aRetval.append(addPointsAtCutsAndTouches(rCandidate.getB2DPolygon(0)));
+                    aRetval.append(addPointsAtCutsAndTouches(rCandidate.getB2DPolygon(0), pPointLimit));
                 }
                 else
                 {
