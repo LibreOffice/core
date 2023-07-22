@@ -21,6 +21,7 @@
 
 #include <comphelper/newarray.hxx>
 #include <unotools/configmgr.hxx>
+#include <sal/log.hxx>
 #include <tools/long.hxx>
 
 #include <assert.h>
@@ -490,7 +491,11 @@ bool Picture::Read(HWPFile & hwpf)
            if (nBlock != nReadBlock)
                break;
            if (nMaxAllowedDecompression && follow.size() > nMaxAllowedDecompression)
-               break;
+           {
+               SAL_WARN("filter.hwp", "too much decompression, abandoning");
+               follow.clear();
+               return false;
+           }
         }
         follow_block_size = follow.size();
 
