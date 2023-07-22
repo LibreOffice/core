@@ -323,7 +323,7 @@ schema:
 
 opt_schema_element_list:
 			{$$ = SQL_NEW_RULE;}
-	|       schema_glement_list
+	|       schema_element_list
 	;
 
 schema_element_list:
