@@ -616,8 +616,7 @@ public:
                 default:
                 {
                     rWriter.startElement("unhandled");
-                    rWriter.attribute("id",
-                                      OUStringToOString(sCurrentElementTag, RTL_TEXTENCODING_UTF8));
+                    rWriter.attribute("id", sCurrentElementTag);
                     rWriter.attribute("idNumber", nId);
 
                     drawinglayer::geometry::ViewInformation3D aViewInformation3D;
@@ -1217,8 +1216,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
                     }
                 }
                 rWriter.startElement(aName);
-                rWriter.attribute("id",
-                                  OUStringToOString(sCurrentElementTag, RTL_TEXTENCODING_UTF8));
+                rWriter.attribute("id", sCurrentElementTag);
                 rWriter.attribute("idNumber", nId);
 
                 auto pBufferedDecomposition
