@@ -2245,7 +2245,7 @@ Private Sub _ScanFolder(ByVal piTarget As Integer _
 Dim vSubFolders As Variant			&apos;	Array of subfolders 1st level in URL notation
 Dim vFiles As Variant				&apos;	Array of files present in psFolderName in FileNaming notation
 Dim lFiles As Long					&apos;	Number of files found passing the filter
-Dim sFolderName As String			&apos;	URL lias for psFolderName
+Dim sFolderName As String			&apos;	URL alias for psFolderName
 Dim sItem As String					&apos;	Single folder or single file in FileNaming notation
 Dim sItemName As String				&apos;	Base name of sItem
 Dim bFolder As Boolean				&apos;	When True, the considered string points to a folder, not a file
