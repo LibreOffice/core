@@ -1,0 +1,16 @@
+--- include/frozen/map.h	2023-07-22 20:20:19.580400347 +0100
++++ include/frozen/map.h	2023-07-22 20:25:44.893704485 +0100
+@@ -94,11 +94,11 @@
+ 
+ public:
+   /* constructors */
+-  constexpr map(container_type items, Compare const &compare)
++  constexpr map(const container_type& items, Compare const &compare)
+       : less_than_{compare}
+       , items_{bits::quicksort(items, less_than_)} {}
+ 
+-  explicit constexpr map(container_type items)
++  explicit constexpr map(const container_type& items)
+       : map{items, Compare{}} {}
+ 
+   constexpr map(std::initializer_list<value_type> items, Compare const &compare)
