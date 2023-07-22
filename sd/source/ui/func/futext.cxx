@@ -720,17 +720,19 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
     ForcePointer(&rMEvt);
     mpWindow->ReleaseMouse();
-    sal_uInt16 nDrgLog1 = sal_uInt16 ( mpWindow->PixelToLogic(Size(mpView->GetDragThresholdPixels(),0)).Width() );
 
-    if ( mpView && !mpView->AreObjectsMarked() &&
-         std::abs(aMDPos.X() - aPnt.X()) < nDrgLog1 &&
-         std::abs(aMDPos.Y() - aPnt.Y()) < nDrgLog1 &&
-         !rMEvt.IsShift() && !rMEvt.IsMod2() )
+    if ( mpView && !mpView->AreObjectsMarked() )
     {
-        SdrPageView* pPV2 = mpView->GetSdrPageView();
-        SdrViewEvent aVEvt;
-        mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
-        mpView->MarkObj(aVEvt.mpRootObj, pPV2);
+        sal_uInt16 nDrgLog1 = sal_uInt16 ( mpWindow->PixelToLogic(Size(mpView->GetDragThresholdPixels(),0)).Width() );
+        if ( std::abs(aMDPos.X() - aPnt.X()) < nDrgLog1 &&
+             std::abs(aMDPos.Y() - aPnt.Y()) < nDrgLog1 &&
+             !rMEvt.IsShift() && !rMEvt.IsMod2() )
+        {
+            SdrPageView* pPV2 = mpView->GetSdrPageView();
+            SdrViewEvent aVEvt;
+            mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
+            mpView->MarkObj(aVEvt.mpRootObj, pPV2);
+        }
     }
 
     if ( !mxTextObj.get().is() && mpView )
