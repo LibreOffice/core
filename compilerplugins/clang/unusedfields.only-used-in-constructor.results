@@ -910,6 +910,8 @@ vcl/inc/sft.hxx:177
     vcl::TTGlobalFontInfo_ fsSelection sal_uInt16
 vcl/inc/svimpbox.hxx:118
     SvImpLBox m_aFctSet ImpLBSelEng
+vcl/inc/unx/glyphcache.hxx:146
+    FreetypeFont mnLoadFlags FT_Int
 vcl/inc/unx/i18n_ic.hxx:40
     SalI18N_InputContext maPreeditStartCallback XIMCallback
 vcl/inc/unx/i18n_ic.hxx:41
@@ -938,8 +940,6 @@ vcl/source/gdi/jobset.cxx:39
     (anonymous namespace)::ImplOldJobSetupData cDeviceName char[32]
 vcl/source/gdi/jobset.cxx:40
     (anonymous namespace)::ImplOldJobSetupData cPortName char[32]
-vcl/source/gdi/pdfextoutdevdata.cxx:107
-    vcl::GlobalSyncData mStructIdMap std::vector<sal_Int32>
 vcl/source/pdf/PDFiumLibrary.cxx:430
     vcl::pdf::(anonymous namespace)::PDFiumDocumentImpl m_aFormCallbacks FPDF_FORMFILLINFO
 vcl/unx/gtk3/a11y/atkhypertext.cxx:31
@@ -972,5 +972,3 @@ xmloff/inc/XMLThemeContext.hxx:46
     XMLThemeColorsContext m_aColorScheme std::vector<css::util::Color>
 xmloff/source/text/XMLTextListBlockContext.hxx:40
     XMLTextListBlockContext mbSetDefaults _Bool
-xmlsecurity/source/dialogs/digitalsignaturesdialog.cxx:87
-    (anonymous namespace)::SaveODFItem m_nODF sal_Int16

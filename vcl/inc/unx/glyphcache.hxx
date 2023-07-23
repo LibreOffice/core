@@ -143,7 +143,6 @@ private:
     int                     mnWidth;
     int                     mnPrioAntiAlias;
     std::shared_ptr<FreetypeFontInfo> mxFontInfo;
-    FT_Int                  mnLoadFlags;
     double                  mfStretch;
     FT_FaceRec_*            maFaceFT;
     FT_SizeRec_*            maSizeFT;

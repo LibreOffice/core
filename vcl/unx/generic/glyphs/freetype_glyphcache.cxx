@@ -394,13 +394,10 @@ FreetypeFont::FreetypeFont(FreetypeFontInstance& rFontInstance, std::shared_ptr<
     mnSin( 0 ),
     mnPrioAntiAlias(nDefaultPrioAntiAlias),
     mxFontInfo(std::move(xFI)),
-    mnLoadFlags( 0 ),
     maFaceFT( nullptr ),
     maSizeFT( nullptr ),
     mbFaceOk( false )
 {
-    int nPrioEmbedded = nDefaultPrioEmbedded;
-
     maFaceFT = mxFontInfo->GetFaceFT();
 
     const vcl::font::FontSelectPattern& rFSD = rFontInstance.GetFontSelectPattern();
@@ -442,12 +439,6 @@ FreetypeFont::FreetypeFont(FreetypeFontInstance& rFontInstance, std::shared_ptr<
     /*FT_Error rc = */ FT_Set_Pixel_Sizes( maFaceFT, mnWidth, rFSD.mnHeight );
 
     mbFaceOk = true;
-
-    // TODO: query GASP table for load flags
-    mnLoadFlags = FT_LOAD_DEFAULT | FT_LOAD_IGNORE_TRANSFORM;
-
-    if( ((mnCos != 0) && (mnSin != 0)) || (nPrioEmbedded <= 0) )
-        mnLoadFlags |= FT_LOAD_NO_BITMAP;
 }
 
 namespace

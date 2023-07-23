@@ -1248,6 +1248,8 @@ vcl/inc/svdata.hxx:464
     ImplSVEvent mpInstanceRef VclPtr<vcl::Window>
 vcl/inc/toolbarvalue.hxx:47
     ToolbarValue mbIsTopDockingArea _Bool
+vcl/inc/unx/glyphcache.hxx:146
+    FreetypeFont mnLoadFlags FT_Int
 vcl/inc/unx/gtk/gtkdata.hxx:226
     DocumentFocusListener m_aRefList o3tl::sorted_vector<css::uno::Reference<css::uno::XInterface> >
 vcl/inc/unx/gtk/gtkframe.hxx:81
@@ -1260,8 +1262,6 @@ vcl/source/components/dtranscomp.cxx:210
     vcl::(anonymous namespace)::GenericDragSource m_xTrans css::uno::Reference<css::datatransfer::XTransferable>
 vcl/source/fontsubset/sft.cxx:109
     vcl::(anonymous namespace)::TTGlyphMetrics lsb sal_Int16
-vcl/source/gdi/pdfextoutdevdata.cxx:107
-    vcl::GlobalSyncData mStructIdMap std::vector<sal_Int32>
 vcl/unx/generic/app/wmadaptor.cxx:1268
     _mwmhints deco unsigned long
 vcl/unx/generic/app/wmadaptor.cxx:1268
@@ -1332,8 +1332,6 @@ xmlsecurity/inc/certificateviewer.hxx:51
     CertificateViewer mxGeneralPage std::unique_ptr<CertificateViewerGeneralTP>
 xmlsecurity/inc/certificateviewer.hxx:52
     CertificateViewer mxDetailsPage std::unique_ptr<CertificateViewerDetailsTP>
-xmlsecurity/source/dialogs/digitalsignaturesdialog.cxx:87
-    (anonymous namespace)::SaveODFItem m_nODF sal_Int16
 xmlsecurity/source/helper/pdfsignaturehelper.cxx:237
     (anonymous namespace)::PageChecksum m_nPageContent BitmapChecksum
 xmlsecurity/source/helper/pdfsignaturehelper.cxx:238
